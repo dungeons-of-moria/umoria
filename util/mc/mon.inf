@@ -1,0 +1,349 @@
+class antlion {
+	speed: 1;
+	move: move_normal, random_20;
+	defense: animal, frost, fire;
+	cchar: "A";
+	treasure: ~carry_obj;
+	sleep: 40;
+	special: eats_other;
+};
+
+creature "Giant Grey Ant Lion": antlion {
+	level: 26;	xp: 90;		hd: 19 d 8;
+	radius: 10;	ac: 40;
+	attack: bites for 2 d 12 of normal_damage;
+};
+
+creature "Giant White Ant Lion": antlion {
+	level: 30;	xp: 175;	hd: 20 d 8;
+	radius: 12;	ac: 45;
+	attack: bites for 3 d 10 of cold_damage;
+	defense: ~frost;
+};
+
+creature "Giant Black Ant Lion": antlion {
+	level: 31;	xp: 170;	hd: 23 d 8;
+	radius: 14;	ac: 45;
+	attack: bites for 2 d 12 of normal_damage,
+		spits for 3 d 6 of acid_damage;
+};
+
+creature "Giant Red Ant Lion": antlion {
+	level: 35;	xp: 350;	hd: 23 d 8;
+	radius: 14;	ac: 48;
+	attack: bites for 3 d 12 of fire_damage;
+	defense: ~fire, infra;
+};
+
+creature "Giant Mottled Ant Lion": antlion {
+	level: 36;	xp: 350;	hd: 24 d 8;
+	radius: 14;	ac: 50;
+	attack: bites for 2 d 10 of normal_damage;
+};
+
+class ant {
+	speed: 1;
+	move: move_normal;
+	defense: animal;
+	cchar: "a";
+	treasure: ~carry_obj;
+};
+
+creature "Giant Black Ant": ant {
+	level: 2;	xp: 8;		hd: 3 d 6;
+	radius: 14;	ac: 20;		sleep: 40;
+	move: random_20;
+	attack: bites for 1 d 4 of normal_damage;
+};
+
+creature "Giant White Ant": ant {
+	level: 3;	xp: 7;		hd: 3 d 6;
+	radius: 8;	ac: 16;		sleep: 80;
+	attack: hits for 1 d 4 of normal_damage;
+};
+
+creature "Giant Red Ant": ant {
+	level: 9;	xp: 22;		hd: 4 d 8;
+	radius: 12;	ac: 34;		sleep: 60;
+	attack: bites for 1 d 4 of normal_damage,
+		stings for 1 d 4 of lose_str;
+};
+
+creature "Giant Clear Ant": ant {
+	level: 12;	xp: 24;		hd: 3 d 7;
+	radius: 12;	ac: 18;		sleep: 60;
+	special: invisible;
+	attack: bites for 1 d 4 of normal_damage;
+};
+
+creature "Giant Ebony Ant": ant {
+	level: 15;	xp: 3;		hd: 3 d 4;
+	radius: 12;	ac: 24;		sleep: 60;
+	attack: bites for 2 d 3 of normal_damage;
+	special: multiply;
+};
+
+creature "Giant Silver Ant": ant {
+	level: 23;	xp: 45;		hd: 6 d 8;
+	radius: 15;	ac: 38;		sleep: 60;
+	move: random_20;
+	attack: bites for 4 d 4 of acid_damage;
+};
+
+creature "Giant Static Ant": ant {
+	level: 30;	xp: 80;		hd: 8 d 8;
+	radius: 10;	ac: 40;		sleep: 60;
+	move: random_20;
+	attack: bites for 5 d 5 of lightning_damage;
+};
+
+creature "Giant Hunter Ant": ant {
+	level: 32;	xp: 150;	hd: 12 d 8;
+	radius: 16;	ac: 40;		sleep: 1;
+	attack: bites for 4 d 8 of normal_damage;
+};
+
+class centipede {
+	speed: 1;
+	move: move_normal;
+	defense: ~animal;
+	cchar: "c";
+	treasure: ~carry_obj;
+	sleep: 50;
+};
+
+creature "Giant Yellow Centipede" : centipede {
+	level: 1;
+	xp: 2;
+	ac: 12;
+	radius: 8;
+	hd: 2 d 6;
+	attack: bites for 1 d 3 of normal_damage,
+		bites for 1 d 3 of normal_damage;
+};
+
+creature "Giant White Centipede" : centipede {
+	level: 1;
+	xp: 2;
+	ac: 10;
+	radius: 7;
+	hd: 3 d 5;
+	move: random_20;
+	attack: bites for 1 d 2 of normal_damage,
+		bites for 1 d 2 of normal_damage;
+};
+
+creature "Metallic Green Centipede" : centipede {
+	speed: 2;
+	level: 2;
+	xp: 3;
+	ac: 4;
+	radius: 5;
+	hd: 4 d 4;
+	move: random_40;
+	attack: crawls_on for 1 d 1 of normal_damage;
+};
+
+creature "Metallic Blue Centipede" : centipede {
+	speed: 2;
+	level: 3;
+	xp: 7;
+	ac: 6;
+	radius: 6;
+	hd: 4 d 5;
+	move: random_40;
+	attack: crawls_on for 1 d 2 of normal_damage;
+};
+
+creature "Metallic Red Centipede" : centipede {
+	speed: 2;
+	level: 3;
+	xp: 12;
+	ac: 9;
+	radius: 9;
+	hd: 4 d 8;
+	move: random_20;
+	attack: crawls_on for 1 d 2 of normal_damage;
+};
+
+creature "Giant Black Centipede" : centipede {
+	level: 4;
+	xp: 11;
+	ac: 20;
+	radius: 8;
+	hd: 5 d 8;
+	move: random_75;
+	attack: bites for 1 d 2 of normal_damage,
+		stings for 1 d 2 of normal_damage;
+};
+
+creature "Giant Blue Centipede" : centipede {
+	level: 4;
+	xp: 10;
+	ac: 20;
+	radius: 8;
+	hd: 4 d 8;
+	attack: bites for 1 d 3 of normal_damage,
+		stings for 1 d 4 of normal_damage;
+};
+
+creature "Giant Red Centipede" : centipede {
+	level: 10;
+	speed: 2;
+	xp: 24;
+	ac: 26;
+	radius: 12;
+	hd: 3 d 8;
+	attack: bites for 1 d 2 of normal_damage,
+		stings for 1 d 2 of poison;
+};
+
+#
+# here be the dragons
+#
+
+class dragon {
+	defense: evil, dragon, infra;
+	treasure: carry_obj, carry_gold, has_random_60,
+		has_random_90, has_1d2_obj;
+	spell: fear;
+	move: move_normal, random_20;
+	radius: 20;
+	sleep: 50;
+};
+
+class young_dragon: dragon {
+	ac: 50;		spell 10%:;		speed: 1;	cchar: "d";
+	attack: claws for 1 d 4 of normal_damage,
+		claws for 1 d 4 of normal_damage,
+		bites for 1 d 6 of normal_damage;
+};
+
+class mature_dragon: dragon {
+	spell 10%:;		speed: 1;	cchar: "d";
+	defense: max_hp;
+	treasure: ~has_1d2_obj, has_2d2_obj;
+};
+
+creature "Young Blue Dragon": young_dragon {
+	level: 29;	xp: 300;	hd: 33 d 8;
+	breath: light;
+};
+
+creature "Young White Dragon": young_dragon {
+	level: 29;	xp: 275;	hd: 32 d 8;
+	defense: fire;
+	breath: frost;
+};
+
+creature "Young Green Dragon": young_dragon {
+	level: 29;	xp: 290;	hd: 32 d 8;
+	breath: gas;
+};
+
+creature "Young Black Dragon" : young_dragon {
+	level: 35;	xp: 600;	hd: 32 d 8;		ac: 55;
+	defense: max_hp;
+	breath: acid;
+	attack: claws for 1 d 5 of normal_damage,
+		claws for 1 d 5 of normal_damage,
+		bites for 1 d 6 of normal_damage;
+};
+
+creature "Young Red Dragon" : young_dragon {
+	level: 35;	xp: 650;	hd: 36 d 8;		ac: 60;
+	defense: max_hp, frost;
+	breath: fire;
+	attack: claws for 1 d 8 of normal_damage,
+		claws for 1 d 8 of normal_damage,
+		bites for 2 d 8 of normal_damage;
+};
+
+creature "Mature White Dragon" : mature_dragon {
+	level: 35;	xp: 1000;	hd: 48 d 8;		ac: 65;
+	attack: claws for 1 d 8 of normal_damage,
+		claws for 1 d 8 of normal_damage,
+		bites for 2 d 8 of normal_damage;
+};
+
+class ghost {
+	move: move_normal;
+	defense: undead, evil, no_sleep;
+	cchar: "G";
+	spell 7%:;
+	special: invisible, phase, picks_up;
+	treasure: carry_obj, carry_gold;
+};
+
+creature "Poltergeist": ghost {
+	level: 3;	xp: 6;		hd: 2 d 5;
+	treasure: has_random_60, has_random_90;
+	move: random_75, random_40, random_20;
+	spell: tel_short;
+	sleep: 75;	radius: 8;	ac: 15; 	speed: 3;
+	attack: hits for 1 d 1 of cause_fear;
+};
+
+creature "Green Glutton Ghost": ghost {
+	level: 5;	xp: 15;		hd: 3 d 6;
+	treasure: has_random_60, has_random_90;
+	move: random_75, random_40;
+	spell: tel_short, tel_long;
+	sleep: 10;	radius: 10;	ac: 20;		speed: 3;
+	attack: slimes for 1 d 1 of eat_food;
+};
+
+creature "Lost Soul": ghost {
+	level: 7;	xp: 18;		hd: 2 d 8;
+	treasure: has_random_60, has_random_90;
+	move: random_40, random_20;
+	spell: drain_mana, tel_long;
+	sleep: 10;	radius: 4;	ac: 10;		speed: 1;
+	attack: hits for 2 d 2 of normal_damage,
+		touches for 0 d 0 of lose_wis;
+};
+
+creature "Moaning Spirit": ghost {
+	level: 12;	xp: 44;		hd: 4 d 8;
+	treasure: has_random_60, has_random_90;
+	move: random_40, random_20;
+	spell: drain_mana, tel_long;
+	sleep: 30;	radius: 6;	ac: 20;		speed: 1;
+	attack: wails for 0 d 0 of cause_fear,
+		touches for 1 d 8 of lose_dex;
+};
+
+creature "Banshee": ghost {
+	level: 24;	xp: 60;		hd: 6 d 8;
+	treasure: has_random_60, has_random_90;
+	move: random_40;
+	spell: drain_mana, tel_long;
+	sleep: 10;	radius: 20;	ac: 24;		speed: 2;
+	attack: wails for 0 d 0 of cause_fear,
+		touches for 14 d 8 of lose_exp;
+};
+
+creature "Ghost": ghost {
+	level: 31;	xp: 350;	hd: 13 d 8;
+	treasure: has_1d2_obj, has_random_60;
+	move: random_20;
+	spell: drain_mana, tel_long;
+	sleep: 10;	radius: 20;	ac: 30;		speed: 2;
+	defense: max_hp;
+	attack: wails for 0 d 0 of cause_fear,
+		touches for 22 d 8 of lose_exp,
+		claws for 1 d 10 of lose_int;
+};
+
+creature "Spirit Troll": ghost {
+	level: 34;	xp: 425;	hd: 15 d 8;
+	treasure: has_1d2_obj, has_random_60;
+	move: random_20;
+	spell: drain_mana, tel_long;
+	sleep: 10;	radius: 20;	ac: 56;		speed: 1;
+	defense: max_hp;
+	attack: claws for 1 d 5 of normal_damage,
+		claws for 1 d 5 of normal_damage,
+		bites for 1 d 6 of normal_damage,
+		touches for 0 d 0 of lose_wis;
+};

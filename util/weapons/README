@@ -1,0 +1,250 @@
+
+>
+> Here's a question for all of you who have had experiences with HA's.  Is a
+> dagger a better weapon than say, a war hammer or an axe?  I've found a
+> bodkin [+8,+8] and a war hammer [+7,+8], and found that the dagger sold
+> for more in the stores.  Why?  Just because it is one up on To-Hit??  To me,
+> it would seem like the war hammer is a way better weapon...  Well, the
+> difference between the prices is about 1000 gp.
+>
+
+
+
+ok, here are some spoilers.
+
+
+1) dont trust what the store will buy or sell things for as being a
+   good indicator of its true value.  they basis it only on the base
+   value of a weapon, the to-hit and to-damage, and the special
+   abilities it has.  these are _not_ always what makes a weapon
+   really good, and what might be good for one character may be bad
+   for another.
+
+2) when in doubt, keep the dagger.  daggers are probably best for all
+   types of characters (mages, warriors etc) until you get your
+   strength and dexterity up real high.
+
+
+a detail explanation of how things work follows...
+
+
+the amount of damage that a weapon will do is based on the following things:
+
+   * the weight of the weapon.  the lighter it is the more likely you
+     will get two hits in for each attack.  on the other hand, the
+     heavier the weapon, the more likely you are to get a critical hit
+     (good, excellent, great hits).
+
+   * the basic amount of damage the weapon does.  most daggers do 1d4,
+     two handed swords (Zweihander) do 4d6.
+
+   * your total to-hit.  this includes the pluses that come with your
+     weapon, the minuses that your armor does, any rings of to-hit or
+     slaying, etc.  the higher your total to-hit is, the more likely
+     you are to get a critical blow.
+
+   * your total to-damage.  like your total to-hit, this includes
+     everything.  when you get a really good character, this will
+     usually dominate over the weapons basic damage.
+
+   * your current strength.  the stronger you are the easier it is for
+     you to get several hits per attack.
+
+   * your current dexterity.  the more dextrous you are the more hits
+     per attack you are capable of.
+
+   * the level of your character.  the more experience you have the
+     more likely you are to get a "good (x2)" or "excellent (x3)" hit.
+
+
+all of these things are mixed together in a rather complicated way.  i
+had to write a program that takes all of these factors into account
+and gives a true indication of which weapon is better.  (i had two
+HA's that i couldnt decide between.  it turned out that depending on
+my current strength and dex either one could be much better than the
+other.  i ended up keeping both of them until both my str and dex were
+18/100.)
+
+
+the chance that you actually hit the monster is based on:
+
+   * your "base to hit".  this is based on what race your character is
+     and ranges from -10 for Halflings to 20 for Half-Trolls.  it also
+     depends on what "class" your character is and these bonuses range
+     from 20 for mages to 70 for paladin's.  (warriors arent much
+     behind with a bonus of 68).  a human mage will have a "base to
+     hit" of 20, a half troll warrior will have a "base to hit" of 88.
+
+   * your current level.  the more experience you have, the more likely
+     you are to hit the monster.  going up one level is equivalent to
+     enchanting your weapon's to-hit by one.
+
+   * your total to-hit.  the higher your total to-hit, the more likely
+     you are to hit the monster
+
+   * the monsters ac (armor class).  the higher the monster's ac, the
+     less likely you are to hit the monster.  this varies a lot from
+     monster to monster.  most worm masses, mushrooms, jellies and
+     stuff have ac's under 10.  most of the ancient dragons have ac's
+     in the 80-100 range.  the balrog has an ac of 125, the highest of
+     any monster.  iron golems have an ac of 99, which can give you
+     some idea of how hard it would be to hit a ancient dragon without
+     taking too many risks.  most of the other monsters seem to to be
+     in the 30-60 range.
+
+   the formula for this is:
+
+      val = bth + 3*level + 3*tohit
+
+      if a random number between 1 and val is greater than the
+      monsters ac, then you hit, otherwise you miss.
+
+   you will always hit one out of 20 times, even if your weapon is too
+   heavy for you to wield.
+
+i dont have anything to calculate calculate your chances to hit
+monsters because there are just too many different cases.  a level 40
+half-troll warrior with a total to hit of 30 would have a two out of
+three chance of hitting a AMHD.  everyone else is going to going to be
+well under 50-50.
+
+
+
+The program "calc_hits" can help you figure out which weapon is better
+for you now, and as your strength and dexterity goes up.  it is based
+on the source code to moria so it should be basically correct.
+calc_hits isnt a fancy program and it handles errors by stopping the
+program.  it is designed to be used by the person who wrote it. :->
+
+
+probably the best way to explain how to run the program is simply to
+give you an example run comparing a bastard sword, a dagger (stiletto)
+and a two handed great flail.  all of them will be (+3,+4) giving you
+a total to-hit of 2 and a total to-damage of 4.
+
+the results are given in a table form with the following field:
+
+Mblow is the maximum number of blows you can get per attack.  it is
+      based only on your dex.
+
+Blows is the number of plows you can get with your current strength
+      based on the Mblows, and strength/weight ratio.
+
+wt ratio is your strength to weight of weapon ratio.  a ratio above 10
+      doesnt do you any more good than a ratio of 10.  if the ratio is
+      under 2, you can only get one blow no matter what your dex is.
+
+dam   is the amount of damage that you get, on the average if you hit
+      with every blow and dont get a critical hit.
+
+w/ critical is the amount of damage you get on the average if you
+      include the possibilities of getting a critical hit.  for low
+      level characters, this rarely makes a difference.  for high
+      level characters, this can make a real difference.
+
+(wayne 6) % calc_hits
+Enter level of your character: 12
+Enter number of weapons: 3
+Enter weight, weapon_dam, to_hit, to_dam for weapon #0: 140 3d4 2 4
+Enter weight, weapon_dam, to_hit, to_dam for weapon #1: 12 1d4 2 4
+Enter weight, weapon_dam, to_hit, to_dam for weapon #2: 280 3d6 2 4
+Enter cstr, cdex: 11 14
+| Weapon | Max blows | Blows | weight ratio | hp of dam | w/ critical |
+|    0   |      2    |    1  |        0     |     11    |       12    |
+|    1   |      2    |    2  |        9     |     13    |       13    |
+|    2   |      0    |    0  |        0     |      0    |        0    |
+
+Enter cstr, cdex: 17 18
+| Weapon | Max blows | Blows | weight ratio | hp of dam | w/ critical |
+|    0   |      2    |    1  |        1     |     11    |       12    |
+|    1   |      2    |    2  |       14     |     13    |       13    |
+|    2   |      0    |    0  |        0     |      0    |        0    |
+
+Enter cstr, cdex: 18/20 18/10
+| Weapon | Max blows | Blows | weight ratio | hp of dam | w/ critical |
+|    0   |      3    |    2  |        2     |     23    |       25    |
+|    1   |      3    |    3  |       31     |     19    |       19    |
+|    2   |      3    |    1  |        1     |     14    |       17    |
+
+Enter cstr, cdex: 18/100 18/100
+| Weapon | Max blows | Blows | weight ratio | hp of dam | w/ critical |
+|    0   |      6    |    4  |        8     |     46    |       50    |
+|    1   |      6    |    5  |       98     |     32    |       32    |
+|    2   |      6    |    3  |        4     |     43    |       52    |
+
+Enter cstr, cdex:
+(wayne 7) % exit
+
+
+
+
+
+there is a second program called "mk_all_weapon" that generates a list
+of how much damage all weapons will do given a certain character.  it
+is useful for getting a feel of which weapons are good and why.
+
+
+for low level characters, the following are the top 5 weapons:
+
+character level of 12
+total to-hit and to-damage of +7
+strength of 11.  these numbers wont change much until you get above 18
+dexterity of 17.  these numbers will be the same unless your dex is
+                  above 18/01 or below 10.
+
+          Name                | Mblow | Blows | wt ratio | dam | w/ critical |
+Dagger (Stiletto)             |   2   |    2  |    9     |  19 |       19    |
+Dagger (Misercorde)           |   2   |    2  |    7     |  19 |       19    |
+Dagger (Bodkin)               |   2   |    2  |    5     |  19 |       19    |
+Morningstar                   |   2   |    1  |    0     |  14 |       15    |
+Katana                        |   2   |    1  |    0     |  14 |       15    |
+
+the bottom 5 for a low level character:
+
+Fauchard                      |   0   |    0  |    0     |   0 |        0    |
+Executioner's Sword           |   0   |    0  |    0     |   0 |        0    |
+Beaked Axe                    |   0   |    0  |    0     |   0 |        0    |
+Battle Axe (European)         |   0   |    0  |    0     |   0 |        0    |
+Battle Axe (Balestarius)      |   0   |    0  |    0     |   0 |        0    |
+
+
+
+for high level characters, the following are the top 5 weapons:
+
+character level of 36
+total to-hit and to-damage of +20
+strength of 18/100.
+dexterity of 18/100.
+
+          Name                | Mblow | Blows | wt ratio | dam | w/ critical |
+Katana                        |   6   |    5  |    9     | 137 |      161    |
+War Hammer                    |   6   |    5  |    9     | 130 |      153    |
+Lucerne Hammer                |   6   |    5  |    9     | 130 |      153    |
+Two Handed Sword (Claymore)   |   6   |    4  |    5     | 122 |      151    |
+Two Handed Sword (No-Dachi)   |   6   |    4  |    5     | 120 |      149    |
+
+the bottom 5
+
+Two Handed Great Flail        |   6   |    3  |    4     |  91 |      120    |
+Ball and Chain                |   6   |    4  |    7     | 100 |      120    |
+Awl-Pike                      |   6   |    4  |    7     |  98 |      118    |
+Lance                         |   6   |    3  |    3     |  87 |      117    |
+Fauchard                      |   6   |    4  |    6     |  84 |      102    |
+
+
+
+the katana tends to be at or near the top for all characters at all
+times.  if you get even a poor katana (HA) or (DF), keep it and enchant
+it.
+
+
+one of the biggest mistakes people do is get rid of the weapon that
+the start with and try to get a "bigger meaner" weapon.  dont.  just
+enchant your original weapon until you get something really good.  i
+dont consider the (FT), (FB), (SD), (SE) and (SU) as "really good".  i
+consider the "(SM)" good, only if i dont already have something of see
+invisible.  (HA) and (DF)'s i keep if they are better than the ones i
+already have.
+
+
+-wayne

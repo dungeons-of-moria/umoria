@@ -1,0 +1,28 @@
+If you're building Moria on a VAX/VMS system, you'll need a C compiler
+that understands the 'defined()' macro.
+
+	Notes on VMS files:
+
+	cbreak.c - simple do-nothing stubs for the cbreak() and nocbreak()
+		unix calls.
+
+	getch.c - single character input routine from terminal.
+
+	uexit.c	- shell for the exit() call, to prevent -NOMSG messages
+		from appearing when exiting the Moria program.
+
+	makefile.vms - for use if you have a Make utility.  I use Todd
+		Aven's VMSMAKE (with the unix options)
+
+	moria.opt - the options file for linking Moria.  (You do a
+		'link moria/opt' command to link the program)
+
+	compileit.com - for those without make, does all the compiles and
+		the final link of the program.
+
+
+In the config.h file, the files that moria uses are defined to be
+on the logical device 'moria:'.  This will need to be defined before
+you can run Moria.
+
+Sorry about the sparse docs.  I think that this is all that's required.

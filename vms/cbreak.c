@@ -1,0 +1,9 @@
+cbreak()
+{
+	return;
+}
+
+nocbreak()
+{
+	return;
+}

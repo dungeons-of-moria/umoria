@@ -1,0 +1,10 @@
+
+Requires a version of curses (a screen management package) for the Atari ST.
+
+The most common curses for the Atari ST has some variable definitions in
+curses.h.  The easiest way to handle this is to precompile curses.o, and
+delete the declarations from curses.h before compiling umoria.
+
+The sets.c and undef.c files have some #pragma lines which will have
+to be deleted or commented out, as the MWC preprocessor does not understand
+them.

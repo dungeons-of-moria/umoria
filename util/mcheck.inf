@@ -1,0 +1,161 @@
+
+Goal: write a little program that will check the monster file for consistency,
+	since I am tired of doing this manually; the comments below detail
+	everything that the program will verify
+
+****************
+
+Creature classification scheme
+
+dragon: d, D
+	never invisible, can't open doors, never phase, never eats others,
+	never pick up objects, never multiply, carry objects/gold, breath
+	weapons, cast spells, hurt by slay dragon, hurt by slay evil, can be
+	slept, seen by infravision, young/mature 20% random movement
+
+humanoid: h, H, k, n, o, p, P, T, U, y, Y
+	can open doors, never eats others, all that carry treasure pick up obj,
+	never multiply, h/U/Y and some people don't carry treasure,
+	some cast spells, no breath weapons, all except some humans evil,
+	hurt by slay evil, can be slept, seen by infravision, never random
+	movement (except 0 level humans which are all 20% random)
+
+undead: G, L, M, s, V, W, Z
+	only G invisible, all except s/Z open doors, only G/W phase,
+	never eats others, only G picks up objects, never multiply,
+	only s/Z do not carry objects/gold, some cast spells,
+	no breath weapons, all evil except s/Z, hurt by slay evil,
+	hurt by slay undead, can't be slept, never seen by infravision,
+	G very random movement, W 20% random movement, others never random
+	movement
+
+animal: a, A, b, c, f, F, j, K, l, r, R, S, t, w
+	only one of a/c invisible, can't open doors, never phase,
+	only A eats others, never pick up objects, only a/b/F/l/r/w multiply,
+	never carry objects or gold, never cast spells, some breath weapons,
+	not evil, hurt by slay animal, can be slept, mammals seen by
+	infravision, most have 20% random movement
+
+demons: B, p(Evil Iggy), q
+	always invisible, only B can phase, only B eats others, always pick up
+	objects, never multiply, carry objects/gold, cast spells, only B
+	breath weapon, all evil, hurt by slay evil, can not be slept, not seen
+	by infravision, never random movement
+
+quylthulg: Q
+	in a class by itself, almost exactly the same as demon except not
+	evil and does not carry objects/gold, should be in class other
+
+other: C, e, E, g, i, J, m, O, X, $, ','
+	some can be invisible, never open doors, only X phase,
+	only C/E/i/O eats others, only C/E/i/O pick up objects, only
+	O/',' multiply, only C/i/O carry objects/gold, $ carries only
+	gold, no breath weapons, not evil (all brainless
+	creatures), not hurt by any special weapon, can't be slept,
+	never seen with infravision, brainless creatures,
+	some drain mana/exp/etc., fire/air elementals (includes invisible
+	stalker) move quickly, golems are animated and should never move
+	randomly, the rest never move or move slowly/randomly if they do
+
+Miscellaneous overriding factors:
+	if invisible, not seen by infravision
+	if invisible, not hurt by blue light
+	if frost attack, not seen by infravion
+	if frost attack, not hurt by cold
+	if frost attack, hurt by fire
+	if fire attack, seen by infravision
+	if fire attack, not hurt by fire
+	if fire attack, hurt by frost
+	if fire&frost attack, not hurt by fire nor cold, infravision depends
+		on class
+	if acid attack, not hurt by acid
+	if poison/corrosion gas attack, not hurt by poison
+	if lightning attack, not hurt by blue light
+	if lungless, can not breathe/spit damage
+	if invisible can not gaze damage
+	if stone-to-mud hurt, not cold/fire hurt
+	if not move and brainless, in general, not carry objects/gold
+	if move and brainless, in general, carry objects/gold only if pick
+		up objects
+
+Possible changes:
+	examine vulnerability list for errors, changes, things that don't
+		make sense, additions, etc...
+	need to classify lungless creatures here somewhere
+	creatures without limbs should not claw for damage
+	creatures without mouths should not bite for damage
+
+Special vulnerabilities for each class:
+a: none
+A: cold, fire
+b: fire, poison, blue light
+B: none
+c: none
+C: fire
+d: none
+D: none
+e: blue light
+E: cold(fire), fire(water), stone-to-mud(earth), none (stalker,air)
+f: acid, fire
+F: cold, fire, poison
+g: cold, fire, acid, blue light(flesh)
+g: stone-to-mud (clay/stone)
+g: acid (iron)
+G: none
+h: cold, fire
+H: cold, fire
+i: none
+I: {no monster}
+j: cold, fire
+J: fire, acid, blue light
+k: cold, fire
+K: none
+l: cold, fire, acid, poison, blue light
+L: none
+m: fire, acid
+M: fire
+n: fire, poison, acid
+N: {no monster}
+o: cold, fire
+O: fire, acid
+p: fire, cold
+P: stone-to-mud (stone)
+P: cold, fire (all except stone)
+q: none
+Q: none
+r: cold, fire, poison
+R: cold, fire, acid
+s: none
+S: none
+t: fire
+T: fire
+u: {no monster}
+U: fire, blue light
+v: {no monster}
+V: fire, blue light
+w: cold, fire, acid, blue light
+W: fire, blue light
+x: {no monster}
+X: stone-to-mud
+y: cold, fire
+Y: fire
+z: fire
+Z: {no monster}
+$: none
+,: fire, acid
+
+Obvious errors in monster.c file:
+Here is a list of errors in the monster.c file, assuming that the above
+classification scheme is used.	I have not examined the entire list.
+
+squint-eyed rogue should move 20% randomly
+
+spirit troll should not be type 'T',
+	since this is not an undead type, should carry objects depending on
+		which type it is changed to
+	if make zombie must remove phase ability
+	if make ghost must make invisible
+
+creeping coins: touch for normal damage, bite for poison damage
+
+depends: pick_up_obj, movement

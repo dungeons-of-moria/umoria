@@ -1,0 +1,94 @@
+
+Every breath weapon does 1/3 of the monster's current hit points,
+except lightning, which does 1/4.
+
+Acid damage is then halved if you have any armor to corrode, or
+divided by 4 if you have resist acid and some armor.
+
+Cold or fire damage is divided by 3 if you have permanent resistance
+(from a ring, armor, or weapon) or temporary resistance (from a potion
+or priest spell), and by 9 if you have both.
+
+Lightning damage is divided by 3 if you have resistance.
+
+Gas damage always has full effect.
+
+
+Ancient Multi-Hued Dragon:  (40/276)
+      2080 total hit points
+      lightning:  520/173
+      acid:       693/347/173
+      fire/cold:  693/231/77
+      gas:        693
+
+Even a 40th level half-troll warrior with 18/100 constitution,
+heroism, and superheroism would probably not have 693 hit points.
+Thus you must never fight AMHD's if you are giving them any
+opportunity to breathe on you.  I don't like to go down to level 40
+unless I have 231 hit points and resistance, so that I can survive 4
+out of 5 breaths from off-screen AMHD's.
+
+Ancient Green Dragon:  (39/269)
+      720 total hit points
+      gas:        240
+
+Ancient White Dragon:  (38/263)
+      704 total hit points
+      cold:       235/78/26
+
+Ancient Blue Dragon:  (39/268)
+      696 total hit points
+      lightning:  174/58
+
+Ancient Black Dragon:  (39/270)
+      720 total hit points
+      acid:       240/120/60
+
+Ancient Red Dragon:  (40/273)
+      840 total hit points
+      fire:       280/93/31
+
+Balrog:
+      3000 total hit points
+      fire:       1000/333/111
+
+Thus a mage with less than 333 hp can be killed by one breath from the
+Balrog, before he gets a chance to drink invulnerability potions.  For
+a mage to get 333 hp, he must be human, and he must use the grape
+jelly trick.
+
+
+Mature Multi-Hued Dragon:  (38/262)
+      640 total hit points
+      lightning:  160/53
+      acid:       213/107/53
+      fire/cold:  213/71/24
+      gas:        213
+
+Mature Green Dragon:  (36/256)
+      384 total hit points
+      gas:        128
+
+Mature White Dragon:  (35/250)
+      384 total hit points
+      cold:       128/43/14
+
+Mature Blue Dragon:  (36/255)
+      384 total hit points
+      lightning:  96/32
+
+Mature Black Dragon:  (37/261)
+      464 total hit points
+      acid:       155/77/39
+
+Mature Red Dragon:  (37/260)
+      480 total hit points
+      fire:       160/53/18
+
+Young Multi-Hued Dragon:  (36/254)
+      320 total hit points
+      lightning:  80/27
+      acid:       107/53/27
+      fire/cold:  107/36/12
+      gas:        107
+

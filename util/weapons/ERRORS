@@ -1,0 +1,8 @@
+the program is a bit simplistic, as it does not consider monster AC,
+and does not correctly handle weapons that are too heavy to wield properly
+
+the README, dragon.inf, and weapons.lst files are probably out of date,
+and need to be updated
+
+the README and dragon.inf files contain info that doesn't belong here,
+perhaps create a hints file in the doc directory that contains this info?

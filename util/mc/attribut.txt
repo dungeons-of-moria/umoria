@@ -1,0 +1,126 @@
+
+DEFENSE attributes:
+
+	dragon
+	animal
+	evil
+	undead
+	frost
+	fire
+	poison
+	acid
+	light
+	stone
+	bit_9
+	bit_10
+	no_sleep
+	infra
+	max_hp
+	bit_15
+
+MOVE attributes:
+
+	attack_only
+	move_normal
+	bit_2
+	random_20
+	random_40
+	random_75
+
+SPECIAL attributes:
+
+	invisible
+	open_door
+	phase
+	eats_other
+	picks_up
+	multiply
+	win_creature
+
+TREASURE attributes:
+
+	carry_obj
+	carry_gold
+	has_random_60
+	has_random_90
+	has_1d2_obj
+	has_2d2_obj
+	has_4d2_obj
+
+SPELL attributes:
+
+	tel_short
+	tel_long
+	tel_to
+	lght_wnd
+	ser_wnd
+	hold_per
+	blind
+	confuse
+	fear
+	summon_mon
+	summon_und
+	slow_per
+	drain_mana
+	bit_17
+	bit_18
+
+BREATH attributes:
+
+	light
+	gas
+	acid
+	frost
+	fire
+
+ATTACK TYPES:
+
+	normal_damage
+	lose_str
+	confusion
+	cause_fear
+	fire_damage
+	acid_damage
+	cold_damage
+	lightning_damage
+	corrosion
+	cause_blindness
+	cause_paralysis
+	steal_money
+	steal_obj
+	poison
+	lose_dex
+	lose_con
+	lose_int
+	lose_wis
+	lose_exp
+	aggravation
+	disenchant
+	eat_food
+	eat_light
+	eat_charges
+	blank
+
+ATTACK DESCRIPTIONS:
+
+	hits
+	bites
+	claws
+	stings
+	touches
+	kicks
+	gazes
+	breathes
+	spits
+	wails
+	embraces
+	crawls_on
+	releases_spores
+	begs_for_money
+	slimes
+	crushes
+	tramples
+	drools_on
+	insults
+	is_repelled
+

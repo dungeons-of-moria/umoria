@@ -1,76 +1,44 @@
 
-This copy of umoria includes the first three patch files (upto u487.p3).
+This is the source for Umoria 5.2, a dungeon exploration game.  This is my
+second major release of the game.  These sources have been compiled
+successfully at least once in the following environments: UNIX (4.2 BSD,
+4.3 BSD, SYS V, Xenix, and many similar systems), IBM-PC (MSC 5.0,
+Turbo C 4.0), Mac (MPW 3.0), Atari ST (MWC, GCC).  VMS and Mac (Think C 4.0)
+ports are in progress.
 
-Please report problems to wilson@ji.Berkeley.EDU  (ucbvax!ucbji!wilson).
+I consider these to be beta sources.  That means they will probably work
+on your system, but there are no guarantees.  Also, I reserve the right to
+change game features at any time, with no advance notice, as I am still
+tuning various features in the game.  However, I will not make any major
+changes affecting savefiles, so old 5.x savefiles will continue to be
+accepted.
 
-This is the second official release of umoria.
-There have been a couple hundred bug fixes and minor enhancements.
-Major notables:
-  all core dumping problems should be fixed (I've said this before though...)
-  character rerolling is implemented
-  program is much faster: makes fewer refresh() calls
-	                  was profiled and optimized
-                          zillions of register declarations added
-  create food does not destroy object under you
-  the run '.' command stops when the screen scrolls
-  can repeatedly hit ^P to display last twenty messages
-  store inventories turn over more often, store inventories change after a
-	save/restore of character
-  several cheating tricks involving signals no longer work
-        scores from panic saved games are not added to the scoreboard
-	but can be played normally otherwise
-Still buggy:
-  stats are still truncated at 18/100, wearing/wielding an object that would
-	raise a stat over 18/100 results in a permanent loss in that stat
-	when object taken off
-  look, throw only in 8 cardinal directions
-  etc...
-See the PROBLEMS file for all the gory info.
+People who are accustomed to Umoria 4.87 MUST read the file doc/FEATURES.NEW
+which documents many of the user visible features.  Don't send me bug reports
+unless you have read the file.
 
-Save files from 4.85 can be read by 4.87 without problems (this compatibility
-is why some bugs were not fixed, namely the stat problem above).
+Umoria 5.x does not understand Umoria 4.87 savefiles.  The changes to the
+game are so great, that supporting the old savefile format is not worth
+the effort.  Implementing a savefile conversion program will be an almost
+impossible task, and at least two people have tried and not succeeded.
 
-No work on MS-DOS portability has been done in the last six months.
-This will be a top priority for the next version.
-And, of course, fixing the many bugs that STILL remain.
+You may distribute modified copies of this game.  However, you must clearly
+indicate the extent and purpose of the changes.  Also, if the changes are
+extensive, I request that you call your sources something other than
+`umoria' so that they won't be confused with my version of the game.
+I would also appreciate receiving a copy of your changes, so that good ideas
+can be added back into my version.
 
-----------------------------------------------------------
+Jim Wilson
+1619 Josephine St., Apt #C
+Berkeley, CA  94703
+USA
 
-UNIX Moria 4.85
+internet electronic mail address: wilson@ernie.Berkeley.EDU
 
-Moria is a dungeon adventure game in the manner of rogue, but
-not descended from rogue.  Moria is to VMS systems, as rogue
-is to UNIX.
+If the above addresses fail, then try contacting the alumni organizations
+of Case Western Reserve Univ (Cleveland, OH) or Univ California at Berkeley
+for my current address.  This address is expected to remain valid until 1992.
 
--------------------------------------------------------------
-
-This is my first official release.  Work is still in progress.
-This project started in February '87, and play testing started in early April.
-Bug reports from my playtesters have become relatively infrequent,
-so the game should be relatively stable now.
-
-Please send bug reports and/or fixes to wilson@ernie.Berkeley.EDU
-Save file formats may change again.
-
-This version of Moria is based on the original 4.8 VMS Pascal sources
-written by Robert Koeneke, Jimmey Todd, Gary McAdoo and others at
-the University of Oklahoma.  I have converted the program into C
-for BSD Unix.  The program has since been slowly diverging from the
-original game as I have 'fixed' things that didn't seem to be right.
-Major changes of note are incompatible save file formats (who cares?)
-and an optional rogue-like user interface for my UNIX version as opposed
-to a numeric keypad interface for the VMS version.
-
-To avoid confusion, please refer to this game as UNIX moria, or umoria
-for short.
-
-Don Kneller has ported the program to the IBM PC, and is calling it PCMORIA.
-
-My thanks to Dave Chin and Dave desJardins of Berkeley for playtesting the
-early versions and making many suggestions.  Thanks also to Craig Norborg
-of Purdue for rewritting the setuid/scoreboard code in a more rational
-manner.
-
-					Jim Wilson
-					wilson@ernie.Berkeley.EDU
-					ucbvax!ucbernie!wilson
+First revision (alpha): February 28, 1990
+Second revision (beta): May 4, 1990

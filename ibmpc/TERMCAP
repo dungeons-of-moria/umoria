@@ -1,0 +1,60 @@
+# Termcap file for PC MORIA.  This file will only be necessary if you
+# are using the "ANSI" option in MORIA.CNF (see README for details).
+# For PCs, ATs and clones, there is no reason to use the "ANSI" option
+# and this file can be safely discarded.  For DEC Rainbow users, this
+# file is required.  It must be either in the current directory, in
+# directory \ETC, or somewhere on the PATH for MORIA to find it
+#
+# Monochrome IBMPC.
+#	This is a termcap for the NANSI.SYS device driver.
+#	It is the same as the ANSI termcap, except NANSI supports
+#	line insert (al) and delete (dl) while ANSI does not.
+#
+ibmpc-mono:\
+	:co#80:\
+	:li#24:\
+	:cl=\E[2J:\
+	:bs:\
+	:ho=\E[H:\
+	:cm=\E[%i%2;%2H:\
+	:up=\E[A:\
+	:xd=\E[B:\
+	:nd=\E[C:\
+	:bc=\E[D:\
+	:ce=\E[K:\
+	:ti=\E[m:\
+	:te=\E[m:\
+	:so=\E[1m:\
+	:se=\E[m:\
+	:us=\E[1m:\
+	:ue=\E[m:\
+	:al=\E[L:\
+	:dl=\E[M:
+#
+# Color IBMPC.
+#	This is a termcap for the NANSI.SYS device driver.
+#	It is the same as the ANSI termcap, except NANSI supports
+#	line insert (al) and delete (dl) while ANSI does not.
+#
+#	Gratiously supplied by Darren Friedlein.
+#
+ibmpc-color:\
+	:co#80:\
+	:li#24:\
+	:cl=\E[2J:\
+	:bs:\
+	:ho=\E[H:\
+	:cm=\E[%i%2;%2H:\
+	:up=\E[A:\
+	:xd=\E[B:\
+	:nd=\E[C:\
+	:bc=\E[D:\
+	:ce=\E[K:\
+	:ti=\E[44;37m\E1m:\
+	:te=\E[0m:\
+	:so=\E[31m:\
+	:se=\E[37m:\
+	:us=\E[33m:\
+	:ue=\E[37m:\
+	:al=\E[L:\
+	:dl=\E[M:

@@ -1,0 +1,12 @@
+before calling writecreatures in main(), should call a subroutine
+verifycreatures, i.e. check to make sure no conflicting bits are set
+
+would prefer 'a' for cchar instead of "a"
+
+prefer exp over xp
+
+prefer 2d4 instead of 2 d 4
+
+should be able to specify none/void or similar for empty slots
+
+need descriptions for all of the monsters

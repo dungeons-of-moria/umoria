@@ -1,0 +1,19 @@
+			 *********************
+			 **   Umoria 5.2    **
+			 *********************
+		 Copyright (c) 1985 Robert Alan Koeneke
+		   Copyright (c) 1989 James E. Wilson
+
+Programmers : Robert Alan Koeneke / University of Oklahoma
+	      Jimmey Wayne Todd	 / University of Oklahoma
+
+UNIX Port : James E. Wilson    / UC Berkeley
+
+Macintosh Port : Curtis W. McCauley / University of Michigan
+
+This is a beta release of Umoria 5.2.  Please send bug reports to
+wilson@ernie.berkeley.EDU or to the USENET newsgroup rec.games.moria.
+
+Please read the file doc/FEATURES.NEW.  In particular, note the new commands
+'G' for learning spells, and '=' for setting options.  Also, to attack
+invisible creatures in walls, you must tunnel.

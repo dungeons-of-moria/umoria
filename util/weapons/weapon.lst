@@ -1,0 +1,66 @@
+         Name                Symbol   Price  Weight   Damage  Level
+           V                   V        V      V	V       V
+Awl-Pike                      '/'      340    160      1d8	8
+Backsword                     '|'       60     95      1d9	7
+Ball and Chain                '\'      200    150      2d4     20
+Bastard Sword                 '|'      350    140      3d4     14
+Battle Axe (Balestarius)      '\'      500    180      2d8     30
+Battle Axe (European)         '\'      334    170      3d4     13
+Beaked Axe                    '/'      408    180      2d6     15
+Broad Axe                     '\'      304    160      2d6     17
+Broadsword                    '|'      255    150      2d5	9
+Cat-O-Nine Tails              '\'       14     40      1d4	3
+Cutlass                       '|'       85    110      1d7	7
+Dagger (Bodkin)               '|'       10     20      1d4	1
+Dagger (Main Gauche)          '|'       25     30      1d5	2
+Dagger (Misercorde)           '|'       10     15      1d4	0
+Dagger (Stiletto)             '|'       10     12      1d4	0
+Executioner's Sword           '|'      850    260      4d5     40
+Fauchard                      '/'      376    170      1d10    17
+Flail                         '\'      353    150      2d6     12
+Foil                          '|'       35     30      1d5	2
+Glaive                        '/'      363    190      2d6     20
+Halberd                       '/'      430    190      3d4     22
+Javelin                       '/'       18     30      1d4	4
+Katana                        '|'      400    120      3d4     18
+Lance                         '/'      230    300      2d8     10
+Longsword                     '|'      300    130      1d10    12
+Lucerne Hammer                '/'      376    120      2d5     11
+Mace                          '\'      130    120      2d4	6
+Mace (Lead filled)            '\'      502    180      3d4     15
+Morningstar                   '\'      396    150      2d6     10
+Pike                          '/'      358    160      2d5     15
+Rapier                        '|'       42     40      1d6	4
+Sabre                         '|'       50     50      1d7	5
+Small Sword                   '|'       48     75      1d6	5
+Spear                         '/'       36     50      1d6	5
+Thrusting Sword (Baselard)    '|'       80    100      1d7	5
+Thrusting Sword (Bilbo)       '|'       60     80      1d6	4
+Two Handed Great Flail        '\'      590    280      3d6     45
+Two Handed Sword (Claymore)   '|'      775    200      3d6     30
+Two Handed Sword (Espadon)    '|'      655    180      3d6     35
+Two Handed Sword (Flamberge)  '|'     1000    240      4d5     45
+Two Handed Sword (No-Dachi)   '|'      675    200      4d4     45
+Two Handed Sword (Zweihander) '|'     1000    280      4d6     50
+War Hammer                    '\'      225    120      3d3	5
+Wooden Club                   '\'        1    100      1d3	0
+
+
+
+Holy Avenger:  (HA)
+increase strength (P1), slay evil, slay undead, sustain stat (P1),
+see invisible
+
+Defender:  (DF)
+stealth, regeneration, resist fire, resist acid, resist cold,
+resist lightning, free action, see invisible, feather fall
+
+Slay Monster:  (SM)
+slay monster, see invisible
+
+Helmet of the Magi:  (0x01380008)
+increase intelligence (P1), resist fire, resist acid, resist cold,
+see invisible
+
+Amulet of the Magi:  (0x01800040)
+free action, see invisible, searching

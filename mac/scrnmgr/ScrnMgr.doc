@@ -1,0 +1,286 @@
+Copyright (C) Curtis McCauley, 1989.  All rights reserved.
+
+You may copy this subroutine package freely, modify it as you desire, and distribute it at will, as long as the copyright notice in the source material is not disturbed, excepting that no one may use this package or any part of it for commercial purposes of any kind without the express written consent of its author.
+
+This document describes a package of subroutines I have decided to call the Screen Manager.
+
+Enclosed files:
+
+ScrnMgr.doc		What you are reading
+
+ScrnMgr.c		The source for the subroutine package
+ScrnMgr.r		Resources used by the subroutines
+ScrnMgr.h		Include file for applications
+
+ScrnMgr.rsrc	The Rez output from ScrnMgr.r (if you do not have Rez)
+
+ScrnTest.c		A test application
+ScrnTest.r		Resources used by the test application
+
+MakeFile		What the name implies
+
+The package is pretty heavily built around MPW.  It is specifically tailored for version 3.0, but should work with 2.0.2.  The only thing I think you would have to modify for the older version is the SIZE resource.  Porting the package to other environments is not something I would recommend.
+
+The make file recognizes two primary targets:  ScrnTest - which will build the test application along with the subroutine package object file, and Install - which will copy the object files to appropriate directories.  If you have a non-standard MPW directory structure, you will want to modify the rules for Install.
+
+I initially built the subroutine package around a model of the IBM PC screen BIOS calls.  The idea was to take a public domain curses package for the PC and replace all the BIOS calls with calls to my package.  Since my ultimate goal was to port the UNIX moria program which relied on curses, and the only copy of curses I had was the PC version, this strategy initially seemed to make sense.  Moria, as it turns out, only calls a few of the curses routines, so I never had to actually port the whole PC curses
+
+
+ package.  It was a lot easier to just replace the curses calls in moria with direct calls to my subroutine package.  By reducing the number of software layers I achieved better performance, anyway.
+
+Still, the internal structure of the package resembles the PC BIOS.  I keep two large byte arrays to hold the entire screen, one with the characters, the other with the attributes.  The attributes are foreground and background color (the eight original quickdraw colors), underlined, and italicized.  The bulk of the package, at least in number of functions, is taken up with routines to manipulate these buffers, either to put data in or take data out.  Whenever the contents of the buffers are changed, the w
+
+
+indow is not immediately updated to reflect the change.  Instead, I "invalidate" the portion of the window changed.  This is done by using InvalRect(), which causes the area to be accumulated in the update region of the window, or by adding the area to an internal representation of the dirty area of the screen.  This internal representation is less precise than the region which is kept by quickdraw calls to InvalRect().  It consists of the beginning and ending dirty area on each screen line.  The latter me
+
+
+thXod is faster, but the screen changes will only be noticed when a call to update the screen is explicitly made, as opposed to the idle routine (see below) catching an update event.  There are two sets of routines, then, to change the screen buffers.  The ones prefixed with a 'D' (for delayed update) use the later method.
+
+A program which uses this package, at a minimum, has to call InitScreenMgr() at the beginning to open the window, call IdleScreenMgr() frequently in the middle to handle all the standard mac events (mouse and keyboard events, especially, but also the MultiFinder stuff as well), and call CloseScreenMgr() at the end.  The best time to call the idle routine is whenever your program is waiting for a keystroke.  Another good time is at regular intervals in a heavy compute loop.  If you do this, you can actuall
+
+
+y get your program to run in the background, but all the idle calls will, of course, slow things down some.  In heavy compute passages, then, you might instead want to bracket the code with calls to BeginScreenWait() and EndScreenWait() to change the mouse cursor to a spinning watch.
+
+A description of each routine in the package follows --
+
+int InitScreenMgr(int h, int v, char *title,
+	char *resFile, OSType rfCreator, OSType rfType,
+	void (*fileMenuProc)(int item),
+	void (*appMenuProc)(int item),
+	int multiColorFlag);
+
+This routine initializes the package, allocates buffers, and puts the window on the monitor.  H and v are the dimensions of the screen in characters.  Title is the window title.  ResFile, rfCreator, and rfType describe the file to contain the configuration information.  This file will be maintained in the system folder.  It remembers the position and size of the window, the font size selected, and, if the screen is only two colors, the user's choices for foreground and background color.  FileMenuProc poin
+
+
+ts to a routine to be called when a selection from the file menu is made.  A click in the window's close box is considered like a selection from the menu, resulting in a call to fileMenuProc with the item number equal to the constant closeBoxItem.  AppMenuProc points to a routine to be called when a selection from the application menu is made.  Both can be NULL, in which case the subroutine package will handle them as best it can.  MultiColorFlag is non-zero when more than two colors will be displayed on t
+
+
+heX screen.
+
+void IdleScreenMgr(void);
+
+This routine handles the macintosh event queue.  It must be called frequently, or the user will not be able to select from menus, switch to another program or desk accessory, etc.  It also blinks the screen cursor.
+
+void ShowScreen(int visible);
+
+Shows or hides the screen window, depending upon the visible flag.
+
+void CloseScreenMgr(void);
+
+Closes the window, deallocates buffers.
+
+void SetScreenQuitProc(void (*quitProc)(void), int willReturnFlag);
+
+Tells the package what routine to call when quit is chosen.  If the routine pointed to by quitProc will always return (as opposed to doing something like ExitToShell()), willReturnFlag should be non-zero.
+
+void SetScreenAboutProc(void (*aboutProc)(void));
+
+Allows the standard about box to be overridden.  AboutProc points to a routine which should be called when the about item is chosen from the apple menu.
+
+The following routines all manipulate the screen buffers.  Calls beginning with 'Set' do not move the screen cursor and need to be told where to begin the operation.  Calls beginning with 'Write' move the cursor and begin the operation at the current cursor location.  All of these routines can be prefixed with a 'D' to make changes to the internal dirty area instead of calling InvalRect().  The internal dirty area is updated only when a call to UpdateScreen() is made or some external update event is gener
+
+
+ated and caught by the idle routine.
+
+The screen cells are indicated by column (h) and row (v) numbers which increase from left to right and top to bottom.  Hence the upper left of the screen is (0, 0) and the bottom right is (h, v) as set by the call to InitScreenMgr().
+
+void SetScreenChar(char c, int h, int v);
+
+void SetScreenCharAttr(char c, char a, int h, int v);
+
+void WriteScreenChar(char c);
+
+void WriteScreenCharAttr(char c, char a);
+
+Sets the character at (h, v) to c and the attribute to a.
+
+void SetScreenBuffer(char *buffer, int rowBytes,
+	Rect *area, int h, int v);
+
+void SetScreenBufferAttr(char *buffer, char a,
+	int rowBytes, Rect *area, int h, int v);
+
+void WriteScreenBuffer(char *buffer, int rowBytes, Rect *area);
+
+void WriteScreenBufferAttr(char *buffer, char a,
+	int rowBytes, Rect *area);
+
+Sets the block of characters at (h, v) to the contents of buffer and all the attributes to a.  RowBytes indicates the number of bytes in a row in buffer.  Area indicates the block of characters to copy, assuming that the first byte in buffer is at (0, 0).  Note:  This means that the area rectangle is in buffer coordinates, not screen coordinates.
+
+void SetScreenString(char *str, int h, int v);
+
+void SetScreenStringAttr(char *str, char a, int h, int v);
+
+void WriteScreenString(char *str);
+
+void WriteScreenStringAttr(char *str, char a);
+
+Sets the characters at (h, v) and following to the contents of string and all the attributes to a.
+
+void SetScreenImage(char *c, char *a, int rowBytes,
+	Rect *area, int h, int v);
+
+void WriteScreenImage(char *c, char *a,
+	int rowBytes, Rect *area);
+
+Sets the block of characters at (h, v) to the contents of c and the attributes to the contents of a.  RowBytes indicates the number of bytes in a row in the c and a buffers.  Area indicates the block of bytes to copy, assuming that the first byte in the buffers is at (0, 0).  Note:  This means that the area rectangle is in buffer coordinates, not screen coordinates.
+
+void FillScreen(char c, char a, Rect *area);
+
+Fills the part of the screen indicated by area with the character c and the attribute a.  Area is in screen coordinates.
+
+void EraseScreen(Rect *area);
+
+Fills the part of the screen indicated by area with the blank character (0x20) and the normal attribute (attrNormal).  Area is in screen coordinates.
+
+void ScrollScreen(int dh, int dv, Rect *area, char a);
+
+Scrolls the part of the screen indicated by area the distance indicated by dh and dv (which may be negative).  The leftover space is filled with the blank character (0x20) and the normal attribute (attrNormal).  Area is in screen coordinates.
+
+void MoveScreenCursor(int dh, int dv);
+
+Moves the screen cursor by the number of character cells indicated by dh and dv (which may be negative).
+
+void SetScreenCursor(int h, int v);
+
+Positions the screen cursor at the character cell indicated by h and v.
+
+void DefineScreenCursor(int color, int lines, int blinkRate);
+
+Defines the screen cursor.  Color indicates what you would expect, lines indicates the height of the cursor in pixels (up to the height of the character cell, so lines = 32767 will probably give you a block cursor), and blinkRate indicates the number of clock ticks between cursor blinks or zero for a non-blinking cursor (a really friendly program will use GetCaretTime() to set this).  The default cursor uses black, 2 lines, and no blinks.  It is initially hidden.
+
+void HideScreenCursor(void);
+
+void ShowScreenCursor(void);
+
+An internal counter is used to keep track of whether the cursor is to be shown on the screen.  When it is less than or equal to zero, the cursor is hidden.  Otherwise it is shown.  The hide routine decrements this counter.  Show increments it.
+
+void UpdateScreen(void);
+
+Immediately draws the dirty portion of the screen.  The dirty portion includes the update region of the window and the internal dirty area maintained by the 'D' buffer manipulation routines.
+
+In addition to the macintosh event queue, this package maintains a buffer of keystrokes and mouse clicks.  Whenever the idle routine is called, the events are pulled out of the macintosh queue and put into the internal buffer.
+
+void FlushScreenKeys(void);
+
+Flushes the internal buffer of keystrokes and the macintosh event queue.
+
+int CountScreenKeys(void);
+
+Counts the number of entries in the internal keystroke buffer.
+
+int GetScreenKeys(char *keyCode, char *modifiers, char *ascii,
+	int *h, int *v);
+
+Pulls the top element off the internal buffer.  KeyCode contains the keycode as described in the IM Event Manager documentation.  Modifiers contains bits which indicate the state of the control keys (command, shift, caps lock, option, and control) and whether the event is a mouse click.  There are masks defined in ScrnMgr.h that indicate the exact bit for each.  In the case of a mouse click, h and v will be set.  If you are not interested in mouse clicks, you can pass NULLs for both.  Ascii will get the a
+
+
+scii code of the key hit.  If the keyboard in use has a control key, the ascii value is taken right from the event which will contain the appropriate control code.  If the keyboard does not have a control key, a test is made to see if the command modifier key is down. If so, the ascii value is converted to the appropriate control code.  See the discussion on MENU resources below to see how command key equivalents work on machines without a control key.
+
+void EnableScreenMouse(int flag);
+
+Enables or disables the queuing of mouse clicks in the internal buffer, according to flag.  Initially, mouse clicks are disabled.
+
+void ClipScreenMouse(Rect *clip);
+
+Limits the detection of mouse clicks to the area indicated by clip, measured in character cells on the screen.
+
+void GetScreenCharAttr(char *c, char *a, int h, int v);
+
+Returns in c and a the character and attribute at (h, v).
+
+void GetScreenImage(char *c, char *a, int rowBytes,
+	Rect *area, int h, int v);
+
+Returns in c and a the block of characters and attributes beginning at (h, v).  RowBytes indicates the number of bytes in a row in the c and a buffers.  Area indicates the block of bytes to copy, assuming that the first byte in the buffers is at (0, 0).  Note:  This means that the area rectangle is in buffer coordinates, not screen coordinates.
+
+void GetScreenCursor(int *h, int *v);
+
+Returns the screen coordinates of the cursor.
+
+The next few routines help with dialogs.  They are designed to work with multi-monitor systems.  On such systems, the active monitor is chosen by the current mouse location, arguably not a good choice, but probably a choice as good as any other.
+
+int YesOrNo(char *question);
+
+Puts up a dialog box with the string pointed to by question, a button for yes (the default), and a button for no.  Returns true if yes is selected.  The box will be centered horizontally on the active monitor, one-third of the way from the top.
+
+int DoScreenALRT(int id, int kind, Fixed hRatio, Fixed vRatio);
+
+Puts up the alert indicated by id.  Kind specifies the type of alert (normal, stop, note, or caution).  There are constants defined in ScrnMgr.h for each of these kinds.  The alert will be centered hRatio of the way from the left and vRatio of the way from the top of the active monitor.  (I.e., if hRatio = vRatio = .5, the alert will be exactly in the middle of the screen.)  ScrnMgr.h contains fixed constants for common ratios.  See IM for a general discussion of fixed numbers.  Returns the item number of
+
+
+ the button pressed.
+
+void CenterScreenDLOG(int id, Fixed hRatio, Fixed vRatio,
+	int *h, int *v);
+
+Given a DLOG, which does not have to be currently shown on the screen, indicated by id, and hRatio and vRatio, returns where to position its top left corner in h and v.  See DoScreenALRT for an explanation of hRatio and vRatio.  This routine is generally used prior to calling GetNewDialog().  You should declare your DLOG to be invisible, call MoveWindow() using h and v to center it, and then call ShowWindow().
+
+void GetScreenBounds(Rect *bounds);
+
+Returns the bounds in global coordinates of the active monitor, less the menu bar if it is on this monitor.
+
+pascal void DrawDefaultBorder();
+
+pascal void DrawGroupRect();
+
+Two handy routines for installing in dialog userItems.
+
+void ConfigScreenMgr(int force, ResType theType, int theID,
+	int (*configProc)(Handle theData));
+
+A routine to manipulate resources in the configuration file.  Checks for the presence of the resource indicated by theType and theID.  If this resource is not found, it does nothing.  If the resource is found somewhere other than in the configuration file (see InitScreenMgr()), this routine assumes that some action needs to be taken.  The usual place other the the configuration file to find this kind of resource is in the program file itself and logically represents default values.  If some action needs t
+
+
+o be taken or force is non-zero, the routine pointed to by configProc is called.  TheData contains a handle to the resource found as described above.  ConfigProc should generally put up a dialog box to change the data in theHandle.  If it does change the data, configProc should return true.  Otherwise, false.  If configProc returns true, the handle is marked changed so that it is added to the configuration file.  A nice time to call this routine is at the start of your program with force false, so that ini
+
+
+tiXal configuration information can be obtained from the user.  Then provide a menu item in the application menu to allow the user to change it later, calling this routine with force true.
+
+void BeginScreenWait(int rate);
+
+Changes the cursor to a spinning wristwatch.  Rate indicates the number of ticks between each spin.
+
+void EndScreenWait(void);
+
+Returns the cursor to the standard arrow.
+
+Handle GetFileMHandle(void);
+
+Handle GetAppMHandle(void);
+
+Returns a handle to the file or application menu.
+
+int PushScreen();
+
+Saves the current screen buffer (characters, attributes, and cursor location) on a stack.  Allocates a significant amount of memory.  Returns 0 if successful.
+
+void PopScreen()
+
+Sets the screen contents to the last screen saved by PushScreen().  If there are no saved screens on the stack, does nothing.
+
+You should include in your application all the resources found in the file ScrnMgr.rsrc.  This file is produced from ScrnMgr.r by the MPW tool Rez.  The best way to do this, assuming you have Rez, is to include at the beginning of your program's .r file, the line 'include "ScrnMgr.rsrc";'
+
+This package assumes that your program will have 4 or 5 menus: the Apple, File, Edit, Screen (FontSize), and optionally an "application" menu.  You can override the standard file menu, if you provide a fileMenuProc in the InitScreenMgr() call.  If you do override, you should provide two menu resources to replace the default ones in ScrnMgr.rsrc.  The first must be MENU(129).  The second, MENU(229), must be a copy of the first, except for not having any command key equivalents.  It will be used on machines
+
+
+ without a control key.  In other words, machines without a control key on the keyboard cannot use command key equivalents.  If you want to implement an application menu, you must provide an appMenuProc to the initialization routine, along with MENU(133) and MENU(233).  The first menu is the application menu with command key equivalents, the second without.
+
+You will probably want to override the STR(128) resource which contains the title of the first item in the apple menu (i.e, the about item).  If you override the DLOG(128) and DITL(128) resources, you can rely on the package to put up your customized about box.  Otherwise, you can call SetScreenAboutProc() to really customize things.  The default about box mentions the version of this package and its programmer.
+
+The STR(129) resource contains the name of the font the package should use.  Any true monospaced font should work.  Be forewarned that very few fonts are completely monospaced.  Many have a few odd characters whose width is not the same as most others.  Since this package relies on GetFontInfo() and the returned widMax to setup the screen, even the presence of one extra wide character in the font will cause funny things to happen.
+
+You will probably want to override the INFO(1) resource.  This resource contains the window size, position, font size, and colors.  A copy of it is made the first time your program is run in the configuration file and is thereafter kept up to date.  Hence, the copy you keep in you application file should contain the default initial values.  The window size and position are indicated by a rectangle in global coordinates.  Since ResEdit does not provide a template for this kind of resource, you will have to
+
+
+ at least look at the ScrnMgr.r file to see the format of the resource if you want to use ResEdit to modify it.
+
+Finally, you will want to supply a SIZE resource to make your program MultiFinder friendly.
+
+I am somewhat ambivalent about releasing this package to the public.  I do not think that it is particularly well-written.  And I certainly do not think that it does justice to what the mac is all about.  It is probably full of bugs.  The only real testing that it has had is in the moria port, which doesn't call all of the routines available.  Hence, I do not provide an express or implied warranty of any kind.  You use the package at your own risk.  If you have any questions, I can be reached at 73230.224
+
+
+@compuserve.com or at 73230,224 on CIS.
+
+Curtis McCauley
+22 July 1989

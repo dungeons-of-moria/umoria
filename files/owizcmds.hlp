@@ -1,0 +1,15 @@
+:  - Map area.
+^A - Remove Curse and Cure all maladies.
+^B - Print random objects sample.
+^D - Down/Up n levels.
+^E - Change character.
+^F - Delete monsters.
+^G - Allocate treasures.
+^H - Wizard Help.
+^I - Identify.
+^J - Gain experience.
+^L - Wizard light.
+^T - Teleport player.
+^U  - Summon monster.
+^W - Wizard password on/off.
+@ - Create any object *CAN CAUSE FATAL ERROR*

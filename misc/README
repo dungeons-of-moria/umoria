@@ -1,0 +1,44 @@
+stuff that isn't part of Umoria, but would be nice if it was
+
+nomacio.c is a mac-less io.c file, with the mac port using
+mac/macio.c instead, don't know whether or not this is a good idea...
+
+funckeys.h, funckeys.c, mabbrev are (mama) Liz's code for handling SUN keypads
+
+shading is joseph n hall's ideas on how to efficiently calculate multiple
+lines of sight
+
+haggle.sug, moria.msg, and mail.msg are some interesting mail messages
+about moria which suggest changes or additions
+
+flock.c is Christopher Stuart's implementation of flock() for non BSD
+systems
+
+rick.msg is a mail message from the author of VMS Moria 6.0, which lists
+the changes he was working on, VMS Moria 6.0 seems to be defunctEND_OF_FILE
+if test 697 -ne `wc -c <'misc/README'`; then
+    echo shar: \"'misc/README'\" unpacked with wrong size!
+fi
+# end of 'misc/README'
+fi
+if test -f 'util/mc/Makefile' -a "${1}" != "-c" ; then
+  echo shar: Will not clobber existing file \"'util/mc/Makefile'\"
+else
+echo shar: Extracting \"'util/mc/Makefile'\" \(326 characters\)
+sed "s/^X//" >'util/mc/Makefile' <<'END_OF_FILE'
+CFLAGS = -g
+
+mc : creaturec.o symtab.o
+	cc creaturec.o symtab.o -o mc -lm
+
+creaturec.o : creaturec.y st.h generic.h
+	yacc creaturec.y
+	cc -c $(CFLAGS) y.tab.c
+	rm y.tab.c
+	mv y.tab.o creaturec.o
+
+symtab.o : symtab.c st.h generic.h
+	cc -c $(CFLAGS) symtab.c
+
+lintout : symtab.c creaturec.y
+	lint symtab.c creaturec.y > lintout

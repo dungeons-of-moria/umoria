@@ -1,0 +1,19 @@
+map.c is obsolete print map to file code from 4.87
+
+mc is the monster compiler by Joseph N Hall, eventually, this will be
+used to generate the monster.c file, which should be more maintainable than
+the current method
+
+mcheck.inf: my and David J. Grabiner's ideas on monster consistency, and
+checks that should be added to the monster compiler
+
+monster.cng: a list of some of the changes to the monster.c file, is this
+still needed?
+
+printit.c: some code which would pretty print item/monster descriptions for
+umoria 4.87, by Carl Hommel, obsolete
+
+showmon.c: obsolete code from 4.87 for printing the monster dictionary,
+superceded by the monster memories
+
+weapons: a program which roughly indicates which weapons are best
