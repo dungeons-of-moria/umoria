@@ -1,4 +1,5 @@
 #include "constants.h"
+#include "config.h"
 #include "types.h"
 #include "externs.h"
 
@@ -10,10 +11,10 @@ pray()
   int choice, chance, result;
   int dumy, y_dumy, x_dumy;
   int redraw;
-  spell_type *s_ptr;
-  struct misc *m_ptr;
-  struct flags *f_ptr;
-  treasure_type *i_ptr;
+  register spell_type *s_ptr;
+  register struct misc *m_ptr;
+  register struct flags *f_ptr;
+  register treasure_type *i_ptr;
 
   reset_flag = TRUE;
   if (py.flags.blind > 0)

@@ -1,7 +1,8 @@
 #include "constants.h"
+#include "config.h"
 
 int set_1_2(element)
-int element;
+register int element;
 {
   if ((element == 1) || (element == 2))
     return(TRUE);
@@ -9,7 +10,7 @@ int element;
 }
 
 int set_1_2_4(element)
-int element;
+register int element;
 {
   if ((element == 1) || (element == 2) || (element == 4))
     return(TRUE);
@@ -31,7 +32,6 @@ int element;
     {
     case 23: case 33: case 34: case 35: case 65:
       return(TRUE);
-      break;
     }
   return(FALSE);
 }
@@ -45,14 +45,13 @@ int element;
     case 12: case 20: case 21: case 22: case 30: case 31: case 32:
     case 36: case 55: case 70: case 71:
       return(TRUE);
-      break;
     }
   return(FALSE);
 }
 
 
 int set_frost_destroy(element)
-int element;
+register int element;
 {
   if ((element == 75) || (element == 76))
     return(TRUE);
@@ -68,7 +67,6 @@ int element;
     case 1: case 2: case 11: case 12: case 20: case 21: case 22:
     case 30: case 31: case 32: case 36:
       return(TRUE);
-      break;
     }
   return(FALSE);
 }
@@ -80,7 +78,6 @@ int set_floor(element)
     {
     case 1: case 2: case 4: case 5: case 6: case 7:
       return(TRUE);
-      break;
     }
   return(FALSE);
 }
@@ -92,10 +89,9 @@ int element;
   switch(element)
     {
     case 45: case 60: case 65:
-      return(FALSE);
-      break;
+      return(TRUE);
     }
-  return(TRUE);
+  return(FALSE);
 }
 
 
@@ -116,7 +112,6 @@ int element;
     case 34: case 35: case 36: case 55: case 70: case 71: case 80: case 104:
     case 105:
       return(TRUE);
-      break;
     }
   return(FALSE);
 }
@@ -131,7 +126,6 @@ int element;
     case 55: case 70: case 71: case 75: case 76: case 80: case 104:
     case 105:
       return(TRUE);
-      break;
     }
   return(FALSE);
 }
@@ -144,7 +138,6 @@ int element;
     {
     case 25: case 30: case 32: case 80: case 77: case 15: case 13:
       return(TRUE);
-      break;
     }
   return(FALSE);
 }
@@ -157,7 +150,6 @@ int element;
     {
     case 30: case 31: case 33: case 34: case 35: case 36:
       return(TRUE);
-      break;
     }
   return(FALSE);
 }
@@ -170,7 +162,6 @@ int element;
     {
     case 10: case 11: case 12: case 20: case 21: case 22: case 23:
       return(TRUE);
-      break;
     }
   return(FALSE);
 }
@@ -183,7 +174,6 @@ int element;
     {
     case 21: case 70: case 71: case 75: case 76: case 91:
       return(TRUE);
-      break;
     }
   return(FALSE);
 }
@@ -196,7 +186,6 @@ int element;
     {
     case 70: case 71: case 75: case 76:
       return(TRUE);
-      break;
     }
   return(FALSE);
 }
@@ -210,7 +199,6 @@ int element;
     case 40: case 45: case 55: case 65: case 70: case 71:
     case 75: case 76: case 90:
       return(TRUE);
-      break;
     }
   return(FALSE);
 }
@@ -223,7 +211,6 @@ int element;
     {
     case 10: case 11: case 12:
       return(TRUE);
-      break;
     }
   return(FALSE);
 }
@@ -236,14 +223,13 @@ int element;
     {
     case 10: case 11: case 12: case 15:
       return(TRUE);
-      break;
     }
   return(FALSE);
 }
 
 
 int set_corr(element)
-int element;
+register int element;
 {
   if ((element == 4) || (element == 5))
     return(TRUE);
@@ -258,7 +244,6 @@ int element;
     {
     case 101: case 102: case 109: case 110:
       return(TRUE);
-      break;
     }
   return(FALSE);
 }
@@ -272,7 +257,6 @@ int element;
     case 102: case 103: case 104: case 105:
     case 107: case 108: case 109: case 110:
       return(TRUE);
-      break;
     }
   return(FALSE);
 }

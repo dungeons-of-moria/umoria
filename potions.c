@@ -1,4 +1,5 @@
 #include "constants.h"
+#include "config.h"
 #include "types.h"
 #include "externs.h"
 
@@ -7,13 +8,13 @@
 quaff()
 {
   unsigned int i;
-  int j, k, l, m, item_val;
+  int j, k, l, item_val;
   int redraw, ident;
-  treasure_type *i_ptr;
-  struct misc *m_ptr;
-  struct flags *f_ptr;
-  struct stats *s_ptr;
-  class_type *c_ptr;
+  register treasure_type *i_ptr;
+  register struct misc *m_ptr;
+  register struct flags *f_ptr;
+  register struct stats *s_ptr;
+  register class_type *c_ptr;
 
   reset_flag = TRUE;
   if (inven_ctr > 0)
@@ -44,6 +45,8 @@ quaff()
 		      msg_print("Wow!  What bulging muscles!");
 		      prt_strength();
 		      ident = TRUE;
+		      /* adjust misc stats */
+		      py_bonuses(blank_treasure, 0);
 		      break;
 		    case 2:
 		      ident = lose_str();
@@ -54,6 +57,8 @@ quaff()
 		      msg_print("You feel warm all over.");
 		      prt_strength();
 		      ident = TRUE;
+		      /* adjust misc stats */
+		      py_bonuses(blank_treasure, 0);
 		      break;
 		    case 4:
 		      s_ptr = &py.stats;
@@ -146,9 +151,9 @@ quaff()
 		      break;
 		    case 18:
 		      m_ptr = &py.misc;
-		      m = (m_ptr->exp / 2) + 10;
-		      if (m > 100000)  m = 100000;
-		      m_ptr->exp += m;
+		      l = (m_ptr->exp / 2) + 10;
+		      if (l > 100000)  l = 100000;
+		      m_ptr->exp += l;
 		      msg_print("You feel more experienced.");
 		      prt_experience();
 		      ident = TRUE;
@@ -199,6 +204,8 @@ quaff()
 		      msg_print("You feel more limber!");
 		      prt_dexterity();
 		      ident = TRUE;
+		      /* adjust misc stats */
+		      py_bonuses(blank_treasure, 0);
 		      break;
 		    case 27:
 		      s_ptr = &py.stats;
@@ -208,6 +215,8 @@ quaff()
 			  msg_print("You feel less clumsy.");
 			  prt_dexterity();
 			  ident = TRUE;
+			  /* adjust misc stats */
+			  py_bonuses(blank_treasure, 0);
 			}
 		      break;
 		    case 28:
@@ -242,14 +251,17 @@ quaff()
 		      break;
 		    case 33:
 		      msg_print("You feel your memories fade...");
-		      msg_print("");
+		      /* avoid randint(0) call */
 		      l = (py.misc.exp/5.0);
-		      lose_exp(randint(l)+l);
+		      if (l == 0)
+			lose_exp(1);
+		      else
+			lose_exp(randint(l)+l);
 		      ident = TRUE;
 		      break;
 		    case 34:
 		      f_ptr = &py.flags;
-		      f_ptr->poisoned = 0;
+		      (void) cure_poison();
 		      if (f_ptr->food > 150)  f_ptr->food = 150;
 		      f_ptr->paralysis = 4;
 		      msg_print("The potion makes you vomit!");

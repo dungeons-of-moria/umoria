@@ -1,22 +1,32 @@
 #include <stdio.h>
+
+#include "constants.h"
+#include "config.h"
+#include "types.h"
+#include "externs.h"
+
 #ifdef USG
 #include <string.h>
 #else
 #include <strings.h>
 #endif
 
-#include "constants.h"
-#include "types.h"
-#include "externs.h"
-
 #ifdef sun   /* correct SUN stupidity in the stdio.h file */
 char *sprintf();
+#endif
+
+#ifdef USG
+unsigned sleep();
+#endif
+
+#ifdef ultrix
+void sleep();
 #endif
 
 /* Generates character's stats				-JWT-	*/
 int get_stat()
 {
-  int i;
+  register int i;
 
   i = randint(4) + randint(4) + randint(4) + 5;
   return(i);
@@ -28,7 +38,7 @@ byteint change_stat(cur_stat, amount)
 byteint cur_stat;
 int amount;
 {
-  int i;
+  register int i;
 
   if (amount < 0)
     for (i = 0; i > amount; i--)
@@ -40,15 +50,60 @@ int amount;
 }
 
 
+/* generate all stats and modify for race... needed in a separate module so
+   looping of character selection would be allowed     -RGM- */
+void get_stats ()
+{
+  register player_type *p_ptr;
+  register race_type *r_ptr;
+
+  p_ptr = &py;
+  r_ptr = &race[p_ptr->misc.prace];
+  p_ptr->stats.str    = get_stat();
+  p_ptr->stats.intel  = get_stat();
+  p_ptr->stats.wis    = get_stat();
+  p_ptr->stats.dex    = get_stat();
+  p_ptr->stats.con    = get_stat();
+  p_ptr->stats.chr    = get_stat();
+  p_ptr->stats.str    = change_stat(p_ptr->stats.str, r_ptr->str_adj);
+  p_ptr->stats.intel  = change_stat(p_ptr->stats.intel, r_ptr->int_adj);
+  p_ptr->stats.wis    = change_stat(p_ptr->stats.wis, r_ptr->wis_adj);
+  p_ptr->stats.dex    = change_stat(p_ptr->stats.dex, r_ptr->dex_adj);
+  p_ptr->stats.con    = change_stat(p_ptr->stats.con, r_ptr->con_adj);
+  p_ptr->stats.chr    = change_stat(p_ptr->stats.chr, r_ptr->chr_adj);
+  p_ptr->stats.cstr   = p_ptr->stats.str;
+  p_ptr->stats.cint   = p_ptr->stats.intel;
+  p_ptr->stats.cwis   = p_ptr->stats.wis;
+  p_ptr->stats.cdex   = p_ptr->stats.dex;
+  p_ptr->stats.ccon   = p_ptr->stats.con;
+  p_ptr->stats.cchr   = p_ptr->stats.chr;
+  p_ptr->misc.srh    = r_ptr->srh;
+  p_ptr->misc.bth    = r_ptr->bth;
+  p_ptr->misc.bthb   = r_ptr->bthb;
+  p_ptr->misc.fos    = r_ptr->fos;
+  p_ptr->misc.stl    = r_ptr->stl;
+  p_ptr->misc.save   = r_ptr->bsav;
+  p_ptr->misc.hitdie = r_ptr->bhitdie;
+  p_ptr->misc.lev    = 1;
+  p_ptr->misc.ptodam = todam_adj();
+  p_ptr->misc.ptohit = tohit_adj();
+  p_ptr->misc.ptoac  = 0;
+  p_ptr->misc.pac    = toac_adj();
+  p_ptr->misc.expfact = r_ptr->b_exp;
+  p_ptr->flags.see_infra = r_ptr->infra;
+}
+
+
 /* Allows player to select a race			-JWT-	*/
 int choose_race()
 {
-  int j, k, l, m;
+  register int j, k;
+  int l, m;
   char s;
   int exit_flag;
   char tmp_str[80];
-  player_type *p_ptr;
-  race_type *r_ptr;
+  register player_type *p_ptr;
+  register race_type *r_ptr;
   int res;
 
   j = 0;
@@ -56,7 +111,9 @@ int choose_race()
   l = 2;
   m = 21;
   clear_screen(20, 0);
-  prt("Choose a race (? for Help):", 20, 2);
+/*  help is unimplemented */
+/*  prt("Choose a race (? for Help):", 20, 2); */
+  prt("Choose a race:", 20, 2);
   do
     {
       (void) sprintf(tmp_str, "%c) %s", k+97, race[j].trace);
@@ -65,18 +122,19 @@ int choose_race()
       l += 15;
       if (l > 70)
 	{
-	  l = 3;
+	  l = 2;
 	  m++;
 	}
       j++;
     }
   while (j < MAX_RACES);
-  (void) strcpy(py.misc.race, "");
-  put_buffer("", 20, 29);
+  /* clear race string */
+  py.misc.race[0] = '\0';
+  move_cursor (20, 18);
   exit_flag = FALSE;
   do
     {
-      inkey_flush(&s);
+      inkey(&s);
       j = s - 97;
       if ((j < MAX_RACES) && (j >= 0))
 	{
@@ -84,39 +142,8 @@ int choose_race()
 	  r_ptr = &race[j];
 	  p_ptr->misc.prace  = j;
 	  (void) strcpy(p_ptr->misc.race, r_ptr->trace);
-	  p_ptr->stats.str    = get_stat();
-	  p_ptr->stats.intel  = get_stat();
-	  p_ptr->stats.wis    = get_stat();
-	  p_ptr->stats.dex    = get_stat();
-	  p_ptr->stats.con    = get_stat();
-	  p_ptr->stats.chr    = get_stat();
-	  p_ptr->stats.str    = change_stat(p_ptr->stats.str, r_ptr->str_adj);
-	  p_ptr->stats.intel  = change_stat(p_ptr->stats.intel, r_ptr->int_adj);
-	  p_ptr->stats.wis    = change_stat(p_ptr->stats.wis, r_ptr->wis_adj);
-	  p_ptr->stats.dex    = change_stat(p_ptr->stats.dex, r_ptr->dex_adj);
-	  p_ptr->stats.con    = change_stat(p_ptr->stats.con, r_ptr->con_adj);
-	  p_ptr->stats.chr    = change_stat(p_ptr->stats.chr, r_ptr->chr_adj);
-	  p_ptr->stats.cstr   = p_ptr->stats.str;
-	  p_ptr->stats.cint   = p_ptr->stats.intel;
-	  p_ptr->stats.cwis   = p_ptr->stats.wis;
-	  p_ptr->stats.cdex   = p_ptr->stats.dex;
-	  p_ptr->stats.ccon   = p_ptr->stats.con;
-	  p_ptr->stats.cchr   = p_ptr->stats.chr;
-	  p_ptr->misc.srh    = r_ptr->srh;
-	  p_ptr->misc.bth    = r_ptr->bth;
-	  p_ptr->misc.bthb   = r_ptr->bthb;
-	  p_ptr->misc.fos    = r_ptr->fos;
-	  p_ptr->misc.stl    = r_ptr->stl;
-	  p_ptr->misc.save   = r_ptr->bsav;
-	  p_ptr->misc.hitdie = r_ptr->bhitdie;
-	  p_ptr->misc.lev    = 1;
-	  p_ptr->misc.ptodam = todam_adj();
-	  p_ptr->misc.ptohit = tohit_adj();
-	  p_ptr->misc.ptoac  = 0;
-	  p_ptr->misc.pac    = toac_adj();
-	  p_ptr->misc.expfact = r_ptr->b_exp;
-	  p_ptr->flags.see_infra = r_ptr->infra;
-	  exit_flag = TRUE;
+	  get_stats();                  /* We don't need the code twice. */
+	  exit_flag = TRUE;             /* so use function get_stats -RGM- */
 	  res = TRUE;
 	  put_buffer(py.misc.race, 3, 14);
 	}
@@ -129,7 +156,7 @@ int choose_race()
 /* Will print the history of a character			-JWT-	*/
 print_history()
 {
-  int i;
+  register int i;
 
   put_buffer("Character Background", 13, 27);
   for(i = 0; i < 5; i++)
@@ -144,12 +171,12 @@ print_history()
 get_history()
 {
   int hist_ptr, cur_ptr, test_roll;
-  int start_pos, end_pos, cur_len;
+  register int start_pos, end_pos, cur_len;
   int line_ctr, new_start, social_class;
   char history_block[400];
   vtype tmp_str;
   int flag;
-  background_type *b_ptr;
+  register background_type *b_ptr;
 
   /* Get a block of history text				*/
   hist_ptr = py.misc.prace*3 + 1;
@@ -230,12 +257,14 @@ int get_sex()
 
   py.misc.sex[0] = '\0';
   clear_screen(20, 0);
-  prt("Choose a sex (? for Help):", 20, 2);
+/* help is unimplemented */
+/*  prt("Choose a sex (? for Help):", 20, 2); */
+  prt("Choose a sex:", 20, 2);
   prt("m) Male       f) Female", 21, 2);
-  prt("", 20, 28);
+  move_cursor (20, 16);
   do
     {
-      inkey_flush(&s);
+      inkey(&s);
       switch(s)
 	{
 	case 'f': case 'F':
@@ -252,6 +281,7 @@ int get_sex()
 	  break;
 	default:
 	  sex = FALSE;
+	  exit_flag = FALSE;
 	  break;
 	}
     }
@@ -263,7 +293,7 @@ int get_sex()
 /* Computes character's age, height, and weight		-JWT-	*/
 get_ahw()
 {
-  int i;
+  register int i;
 
   i = py.misc.prace;
   py.misc.age = race[i].b_age + randint((int)race[i].m_age);
@@ -285,13 +315,14 @@ get_ahw()
 /* Gets a character class				-JWT-	*/
 int get_class()
 {
-  int i, j, k, l, m;
+  register int i, j;
+  int k, l, m;
   int cl[MAX_CLASS];
   char s;
   int exit_flag;
   int res;
-  struct misc *m_ptr;
-  player_type *p_ptr;
+  register struct misc *m_ptr;
+  register player_type *p_ptr;
   char tmp_str[80];
 
   for (j = 0; j < MAX_CLASS; j++)
@@ -302,7 +333,9 @@ int get_class()
   l = 2;
   m = 21;
   clear_screen(20, 0);
-  prt("Choose a class (? for Help):", 20, 2);
+/* help is unimplemented */
+/* prt("Choose a class (? for Help):", 20, 2); */
+  prt("Choose a class:", 20, 2);
   do
     {
       if (race[i].tclass & bit_array[j])
@@ -313,7 +346,7 @@ int get_class()
 	  l += 15;
 	  if (l > 70)
 	    {
-	      l = 3;
+	      l = 2;
 	      m++;
 	    }
 	  k++;
@@ -322,11 +355,11 @@ int get_class()
     }
   while (j < MAX_CLASS);
   py.misc.pclass = 0;
-  put_buffer("", 20, 30);
+  move_cursor (20, 19);
   exit_flag = FALSE;
   do
     {
-      inkey_flush(&s);
+      inkey(&s);
       j = s - 97;
       if ((j < k) && (j >= 0))
 	{
@@ -336,19 +369,6 @@ int get_class()
 	  res = TRUE;
 	  clear_screen(20, 0);
 	  put_buffer(py.misc.tclass, 5, 14);
-	  m_ptr = &py.misc;
-	  m_ptr->hitdie += class[m_ptr->pclass].adj_hd;
-	  m_ptr->mhp = con_adj() + m_ptr->hitdie;
-	  m_ptr->chp = (double)m_ptr->mhp;
-	  m_ptr->bth += class[m_ptr->pclass].mbth;
-	  m_ptr->bthb += class[m_ptr->pclass].mbthb;	/*RAK*/
-	  m_ptr->srh += class[m_ptr->pclass].msrh;
-	  m_ptr->disarm += class[m_ptr->pclass].mdis;
-	  m_ptr->fos += class[m_ptr->pclass].mfos;
-	  m_ptr->stl += class[m_ptr->pclass].mstl;
-	  m_ptr->save += class[m_ptr->pclass].msav;
-	  (void) strcat(m_ptr->title, player_title[m_ptr->pclass][0]);
-	  m_ptr->expfact += class[m_ptr->pclass].m_exp;
 
 	  /* Adjust the stats for the class adjustment		-RAK-	*/
 	  p_ptr = &py;
@@ -378,6 +398,23 @@ int get_class()
 	  p_ptr->misc.dis_th = p_ptr->misc.ptohit;
 	  p_ptr->misc.dis_tac= p_ptr->misc.ptoac;
 	  p_ptr->misc.dis_ac = p_ptr->misc.pac;
+
+	  /* now set misc stats, do this after setting stats because
+	     of con_adj() for hitpoints */
+	  m_ptr = &py.misc;
+	  m_ptr->hitdie += class[m_ptr->pclass].adj_hd;
+	  m_ptr->mhp = con_adj() + m_ptr->hitdie;
+	  m_ptr->chp = (double)m_ptr->mhp;
+	  m_ptr->bth += class[m_ptr->pclass].mbth;
+	  m_ptr->bthb += class[m_ptr->pclass].mbthb;	/*RAK*/
+	  m_ptr->srh += class[m_ptr->pclass].msrh;
+	  m_ptr->disarm += class[m_ptr->pclass].mdis;
+	  m_ptr->fos += class[m_ptr->pclass].mfos;
+	  m_ptr->stl += class[m_ptr->pclass].mstl;
+	  m_ptr->save += class[m_ptr->pclass].msav;
+	  (void) strcat(m_ptr->title, player_title[m_ptr->pclass][0]);
+	  m_ptr->expfact += class[m_ptr->pclass].m_exp;
+
 	}
     }
   while (!exit_flag);
@@ -387,9 +424,9 @@ int get_class()
 
 get_money()
 {
-  int tmp;
-  struct stats *p_ptr;
-  struct misc *m_ptr;
+  register int tmp;
+  register struct stats *p_ptr;
+  register struct misc *m_ptr;
 
   p_ptr = &py.stats;
   tmp = p_ptr->cstr + p_ptr->cint + p_ptr->cwis +
@@ -397,7 +434,7 @@ get_money()
   m_ptr = &py.misc;
   m_ptr->au = m_ptr->sc*6 + randint(25) + 325;	/* Social Class adj	*/
   m_ptr->au = m_ptr->au - tmp;			/* Stat adj		*/
-  m_ptr->au = m_ptr->au + py.stats.cchr;		/* Charisma adj		*/
+  m_ptr->au = m_ptr->au + p_ptr->cchr;		/* Charisma adj	*/
   if (m_ptr->au < 80)  m_ptr->au = 80;		/* Minimum		*/
 }
 
@@ -406,25 +443,50 @@ get_money()
 /*							-JWT-	*/
 create_character()
 {
-  do
-    {
-      put_character();
-    }
-  while (!choose_race());
-  while (!get_sex())
-    put_character();
+  char s;
+  register int exit_flag = 1;
+
+  put_character();
+  (void) choose_race();
+  (void) get_sex();
+
+  /* here we start a loop giving a player a choice of characters -RGM- */
+  get_stats ();
   get_history();
   get_ahw();
+  put_character();
   print_history();
   put_misc1();
   put_stats();
-  while (!get_class())
+  exit_flag = 1;
+  do
     {
-      put_character();
-      print_history();
-      put_misc1();
-      put_stats();
-    }
+      prt("Hit space to reroll or ESC to accept characteristics: ", 20, 2);
+      inkey(&s);
+      switch (s)
+	{
+	case 27:
+	  exit_flag = 0;
+	  break;
+	case ' ':
+	  get_stats ();
+	  get_history();
+	  get_ahw();
+	  put_character();
+	  print_history();
+	  put_misc1();
+	  put_stats();
+#ifdef SLOW
+	  (void) sleep (0);
+#endif
+	  break;
+	default:
+	  break;
+	}
+    }               /* done with stats generation */
+  while (exit_flag == 1);
+
+  (void) get_class();
   get_money();
   put_stats();
   put_misc2();

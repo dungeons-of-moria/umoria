@@ -1,20 +1,22 @@
 #include <stdio.h>
-#ifdef USG
-#include <string.h>
-#include <fcntl.h>
-#else
-#include <strings.h>
-#endif
 #include <pwd.h>
 #include <time.h>
 #include <ctype.h>
 #include <sys/types.h>
 #include <sys/file.h>
 
-#include "config.h"
 #include "constants.h"
+#include "config.h"
 #include "types.h"
 #include "externs.h"
+
+#ifdef USG
+#include <string.h>
+#include <fcntl.h>
+#else
+#include <strings.h>
+#endif
+
 #define MIN(a, b)	((a < b) ? a : b)
 
 #ifdef sun   /* correct SUN stupidity in the stdio.h file */
@@ -51,7 +53,7 @@ long time();
 date(day)
 char *day;
 {
-  char *tmp;
+  register char *tmp;
   long clock;
 
   clock = time((long *) 0);
@@ -82,7 +84,7 @@ dprint(str, row)
 char *str;
 int row;
 {
-  int i, j, nblanks, xpos;
+  register int i, j, nblanks, xpos;
   vtype prt_str;
   char tmp_str[2];
 
@@ -120,7 +122,7 @@ int row;
 	  (void) strcat(prt_str, tmp_str);
 	}
     }
-  if (xpos > 0)
+  if (xpos >= 0)
     put_buffer(prt_str, row, xpos);
 }
 
@@ -150,8 +152,6 @@ display_scores()
   put_buffer("Points Name           Race      Class     Lv   Killed By                Dun Lv", 0, 0);
   for (j = 0; j < i; j++)
     put_buffer(list[j], j + 1, 0);
-  put_buffer("", j + 1, 0);
-  put_qio();
   pause_line(23);
 }
 
@@ -163,7 +163,7 @@ print_tomb()
   vtype fnam;
   char command;
   FILE *f1;
-  int i;
+  register int i;
   char day[11];
   int flag;
   char tmp_str[80];
@@ -181,15 +181,15 @@ print_tomb()
   (void) sprintf(str7, "Died on Level : %d", dun_level);
   (void) strcpy(str7, fill_str(str7));
   (void) strcpy(str8, fill_str(died_from));
-  (void) strcpy(dstr[0], " ");
+  dstr[0][0] = '\0';
   (void) strcpy(dstr[1], "               _______________________");
   (void) strcpy(dstr[2], "              /                       \\         ___");
   (void) strcpy(dstr[3],
-		"             /                         \\ ___   /   \\      ___");
+	"             /                         \\ ___   /   \\      ___");
   (void) strcpy(dstr[4],
-		"            /            RIP            \\   \\  :   :     /   \\");
+	"            /            RIP            \\   \\  :   :     /   \\");
   (void) strcpy(dstr[5],
-		"           /                             \\  : _;,,,;_    :   :");
+	"           /                             \\  : _;,,,;_    :   :");
   (void) sprintf(dstr[6], "          /%s\\,;_          _;,,,;_", str1);
   (void) strcpy(dstr[7], "         |               the               |   ___");
   (void) sprintf(dstr[8], "         | %s |  /   \\", str2);
@@ -204,7 +204,7 @@ print_tomb()
   (void) sprintf(dstr[17], "         |           %s           |", day);
   (void) strcpy(dstr[18], "        *|   *     *     *    *   *     *  | *");
   (void) strcpy(dstr[19],
-		      "________)/\\\\_)_/___(\\/___(//_\\)/_\\//__\\\\(/_|_)_______");
+	      "________)/\\\\_)_/___(\\/___(//_\\)/_\\//__\\\\(/_|_)_______");
   clear_screen(0, 0);
   for (i = 0; i <= 19; i++)
     dprint(dstr[i], i);
@@ -261,9 +261,19 @@ top_twenty()
   high_scores scores[20], myscore;
   char *tmp;
 
+  clear_screen(0, 0);
+
   if (wizard1)
     exit_game();
-  clear_screen(0, 0);
+
+  if (panic_save == 1)
+    {
+      msg_print("Sorry, scores for games restored from panic save files are not saved.");
+      /* make sure player sees message before display_scores erases it */
+      msg_print (" ");
+      display_scores ();
+      exit_game();
+    }
 
   myscore.points = (long)total_points();
   myscore.dun_level = dun_level;
@@ -370,7 +380,7 @@ top_twenty()
 /* Change the player into a King!			-RAK-	 */
 kingly()
 {
-  struct misc *p_ptr;
+  register struct misc *p_ptr;
 
   /* Change the character attributes...		 */
   dun_level = 0;
@@ -408,7 +418,10 @@ kingly()
   dprint("                        *#########*#########*", 12);
   dprint("                          Veni, Vidi, Vici!", 15);
   dprint("                     I came, I saw, I conquered!", 16);
-  dprint("                      All Hail the Mighty King!", 17);
+  if (p_ptr->sex[0] == 'M')
+    dprint("                      All Hail the Mighty King!", 17);
+  else
+    dprint("                      All Hail the Mighty Queen!", 17);
   flush();
   pause_line(23);
 }

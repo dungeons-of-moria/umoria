@@ -1,37 +1,57 @@
 To compile the program, edit the config.h file to change the
-names of the files the game uses and the wizard info.  For USG systems,
-copy Makefile.USG to Makefile.  For Ultrix (and 4.2BSD), copy Makefile.ultrix
-to Makefile.  For 4.3BSD and SUNS copy Makefile.43 to Makefile.  Type make
+names of the files the game uses and the wizard info.  Also, uncomment the
+appropriate line for the system you are compiling on. Type make
 to compile the game.  You may want to edit the 'Moria_hours' file
 to indicate during what hours people are allowed to play the game.
+
 The game needs to be installed setuid for the scoreboard to work.
 Use the command 'chmod 4511 moria' to do this.
+The file Highscores should be mode 644 with the same owner as moria.
+The files Moria_hours and Moria_news must be publicly readable with
+mode 444.
 (Or just type 'make install' after setting BINDIR and LIBDIR in the
 Makefile to appropriate values.)
 
 There are two choices for the key bindings, the original style and
 a rogue-like style.  You can choose which one is to be the default
-by changing the value of CFLAGS
-  -DKEY_BINDINGS=ORIGINAL for the original style
-  -DKEY_BINDINGS=ROGUE_LIKE for the rogue-like style
+by changing the value of KEY_BINDINGS in config.h.
 
+If the display does not look right, try defining BUGGY_CURSES in config.h.
+Delete io.o, touch *.o, and then recompile.
 
-If the display does not look right, try adding -DBUGGY_CURSES to CFLAGS
-(as in the ultrix Makefile).  Delete io.o and moria.o, and then recompile.
+For the IBM PC-RT, 3B1, 3B2, 3B20, and perhaps others, you must
+define NO_SIGNED_CHARS in config.h.
 
-For the IBM PC-RT, 3B2, 3B20, and perhaps others, you must
-add -DNO_SIGNED_CHARS to CFLAGS.
+Moria may not compile properly on SYS III machines(?)
 
-You can choose which default key bindings you wish to have by
-changing the definition of KEY_BINDINGS in the Makefile.
-  For rogue like -DKEY_BINDINGS=ROGUE_LIKE
-  For original style -DKEY_BINDINGS=ORIGINAL
+Some versions of the SUN4 compiler will dump core while compiling moria2.c
+with the -O flag.  Just compile without the -O flag if this happens.
 
-The game has been successfully compiled on a VAX running 4.3BSD,
-SUN 3/50 running UNIX 4.2 Release 3.2, and a microvax running ULTRIX 2.0.
-The program assumes that ints are 32 bits, and that
-sizeof(char *) == sizeof(int).  The program passes lint
+If you use the Gnu C Compiler, you must also use the -fwritable-strings
+options.
+
+If your compiler has a seven character identifier limit, the Flexnames
+sed file should solve the problem for you.
+
+There is a patch file which attempts to eliminate the 32bit int assumptions
+of umoria called Int16bit.patch.  This file should enable systems with
+16 bit integers (such as Xenix) to compile umoria.  It has not been
+extensively tested though.
+
+There is an obsolete patch file included for Xenix.  This is a patch for an
+older version of moria, 4.85, and may not work correctly on the new version.
+(I haven't tried it.)  I recommend using the In16bit.patch file first, and
+then referencing this file if you still have problems.
+Use the -N option of patch to avoid unfixing bugs that have already been
+fixed.
+
+I have successfully compiled the game on a VAX running 4.3BSD,
+SUN 3/50 running UNIX 4.2 Release 3.2, a microvax running ULTRIX 2.0,
+and an NCR Tower running SYS Vr2
+The program assumes that ints are 32 bits. The program passes lint
 so further porting should not be too hard.
 BSD/UNIX dependencies are(?) limited to the files io.c, save.c, and
 signals.c.
 
+The documentation file was split into two parts for usenet distribution.
+Build a single doc file with the command "cat Moria.doc.? >Moria.doc".

@@ -1,13 +1,15 @@
 #include <stdio.h>
+
+#include "constants.h"
+#include "config.h"
+#include "types.h"
+#include "externs.h"
+
 #ifdef USG
 #include <string.h>
 #else
 #include <strings.h>
 #endif
-
-#include "constants.h"
-#include "types.h"
-#include "externs.h"
 
 #ifdef sun   /* correct SUN stupidity in the stdio.h file */
 char *sprintf();
@@ -27,13 +29,16 @@ extern int light_flag;        /* used in move_light */
 
 /* Changes stats up or down for magic items		-RAK-	*/
 change_stat_factor(stat, amount, factor)
-byteint *stat;
+register byteint *stat;
 int amount, factor;
 {
-  int i, j, k;
+  register int i, j, k;
 
   j = amount * factor;
-  k = abs(amount);
+  if (amount < 0)
+    k = -amount;
+  else
+    k = amount;
   for (i = 0; i < k; i++)
     if (j < 0)
       *stat = de_statt(*stat);
@@ -47,9 +52,9 @@ int amount, factor;
 /*       change the speed of all the monsters.  This greatly     */
 /*       simplified the logic...                                 */
 change_speed(num)
-int num;
+register int num;
 {
-  int i;
+  register int i;
 
   py.flags.speed += num;
   i = muptr;
@@ -68,13 +73,15 @@ py_bonuses(tobj, factor)
 treasure_type tobj;
 int factor;
 {
-  unsigned int item_flags;
-  int i, old_dis_ac;
-  struct flags *p_ptr;
-  struct misc *m_ptr;
-  treasure_type *i_ptr;
+  register unsigned int item_flags;
+  int old_dis_ac;
+  register struct flags *p_ptr;
+  register struct misc *m_ptr;
+  register treasure_type *i_ptr;
+  register int i;
 
   p_ptr = &py.flags;
+  m_ptr = &py.misc;
   if (p_ptr->slow_digest)
     p_ptr->food_digested++;
   if (p_ptr->regenerate)
@@ -135,11 +142,11 @@ int factor;
     }
   if (0x00000040 & tobj.flags)
     {
-      py.misc.srh += (tobj.p1 * factor);
-      py.misc.fos -= (tobj.p1 * factor);
+      m_ptr->srh += (tobj.p1 * factor);
+      m_ptr->fos -= (tobj.p1 * factor);
     }
   if (0x00000100 & tobj.flags)
-    py.misc.stl += 2*factor;
+    m_ptr->stl += 2*factor;
   if (0x00001000 & tobj.flags)
     {
       i = tobj.p1*factor;
@@ -147,13 +154,13 @@ int factor;
     }
   if (0x08000000 & tobj.flags)
     if (factor > 0)
-      py.flags.blind += 1000;
+      p_ptr->blind += 1000;
   if (0x10000000 & tobj.flags)
     if (factor > 0)
-      py.flags.afraid += 50;
+      p_ptr->afraid += 50;
   if (0x40000000 & tobj.flags)
-    py.flags.see_infra += (tobj.p1 * factor);
-  m_ptr = &py.misc;
+    p_ptr->see_infra += (tobj.p1 * factor);
+
   old_dis_ac = m_ptr->dis_ac;
   m_ptr->ptohit  = tohit_adj();       /* Real To Hit   */
   m_ptr->ptodam  = todam_adj();       /* Real To Dam   */
@@ -187,7 +194,6 @@ int factor;
   m_ptr->dis_ac += m_ptr->dis_tac;
 
   /* Add in temporary spell increases	*/
-  p_ptr = &py.flags;
   if (p_ptr->invuln > 0)
     {
       m_ptr->pac += 100;
@@ -211,27 +217,27 @@ int factor;
       item_flags |= i_ptr->flags;
     }
   if (0x00000080 & item_flags)
-    py.flags.slow_digest = TRUE;
+    p_ptr->slow_digest = TRUE;
   if (0x00000200 & item_flags)
-    py.flags.aggravate = TRUE;
+    p_ptr->aggravate = TRUE;
   if (0x00000400 & item_flags)
-    py.flags.teleport = TRUE;
+    p_ptr->teleport = TRUE;
   if (0x00000800 & item_flags)
-    py.flags.regenerate = TRUE;
+    p_ptr->regenerate = TRUE;
   if (0x00080000 & item_flags)
-    py.flags.fire_resist = TRUE;
+    p_ptr->fire_resist = TRUE;
   if (0x00100000 & item_flags)
-    py.flags.acid_resist = TRUE;
+    p_ptr->acid_resist = TRUE;
   if (0x00200000 & item_flags)
-    py.flags.cold_resist = TRUE;
+    p_ptr->cold_resist = TRUE;
   if (0x00800000 & item_flags)
-    py.flags.free_act = TRUE;
+    p_ptr->free_act = TRUE;
   if (0x01000000 & item_flags)
-    py.flags.see_inv = TRUE;
+    p_ptr->see_inv = TRUE;
   if (0x02000000 & item_flags)
-    py.flags.lght_resist = TRUE;
+    p_ptr->lght_resist = TRUE;
   if (0x04000000 & item_flags)
-    py.flags.ffall = TRUE;
+    p_ptr->ffall = TRUE;
 
   for (i = 22; i < INVEN_MAX-2; i++)
     {
@@ -239,17 +245,16 @@ int factor;
       if (0x00400000 & i_ptr->flags)
 	switch(i_ptr->p1)
 	  {
-	  case 1: py.flags.sustain_str = TRUE; break;
-	  case 2: py.flags.sustain_int = TRUE; break;
-	  case 3: py.flags.sustain_wis = TRUE; break;
-	  case 4: py.flags.sustain_con = TRUE; break;
-	  case 5: py.flags.sustain_dex = TRUE; break;
-	  case 6: py.flags.sustain_chr = TRUE; break;
+	  case 1: p_ptr->sustain_str = TRUE; break;
+	  case 2: p_ptr->sustain_int = TRUE; break;
+	  case 3: p_ptr->sustain_wis = TRUE; break;
+	  case 4: p_ptr->sustain_con = TRUE; break;
+	  case 5: p_ptr->sustain_dex = TRUE; break;
+	  case 6: p_ptr->sustain_chr = TRUE; break;
 	  default: break;
 	  }
     }
 
-  p_ptr = &py.flags;
   if (p_ptr->slow_digest)
     p_ptr->food_digested--;
   if (p_ptr->regenerate)
@@ -262,7 +267,7 @@ int factor;
 char cur_char1(item_val)
 int item_val;
 {
-  treasure_type *i_ptr;
+  register treasure_type *i_ptr;
 
   i_ptr = &inventory[item_val];
   if ((0x80000000 & i_ptr->flags) == 0)
@@ -278,7 +283,7 @@ int item_val;
 char cur_char2(item_val)
 int item_val;
 {
-  treasure_type *i_ptr;
+  register treasure_type *i_ptr;
 
   i_ptr = &inventory[item_val];
   if ((0x80000000 & i_ptr->flags) == 0)
@@ -289,13 +294,17 @@ int item_val;
 
 
 /* inventory functions, define some global variables here */
+/* scr_state == 0 : normal screen (i.e. map of dungeon)
+		     or partial inventory list, (calling function sets redraw)
+   scr_state == 1 : inventory is displayed on the screen
+   scr_state == 2 : equipment list is displayed on the screen */
 int scr_state;
 
 /* Displays inventory items from r1 to r2	-RAK-	*/
 show_inven(r1, r2)
-int r1, r2;
+register int r1, r2;
 {
-  int i;
+  register int i;
   vtype tmp_val, out_val;
 
   if (r1 >= 0)                       /* R1 == 0 dummy call     */
@@ -314,14 +323,14 @@ int r1, r2;
 
 /* Displays equipment items from r1 to end	-RAK-	*/
 show_equip(r1)
-int r1;
+register int r1;
 {
-  int i, j;
+  register int i, j;
   vtype prt1, prt2, out_val;
-  treasure_type *i_ptr;
+  register treasure_type *i_ptr;
 
   if (r1 >= equip_ctr)       /* Last item gone                */
-    prt("", equip_ctr+2, 0);
+    prt("", equip_ctr+2, 0);  /* clear the line */
   else if (r1 >= 0)          /* R1 == 0 dummy call             */
     {
       j = 0;
@@ -378,10 +387,10 @@ int r1;
 int remove(item_val)
 int item_val;
 {
-  int i, j, typ;
+  register int i, j, typ;
   vtype out_val, prt1, prt2;
   int flag;
-  treasure_type *i_ptr;
+  register treasure_type *i_ptr;
 
   i = 0;
   flag = FALSE;
@@ -427,8 +436,8 @@ int item_val;
 /* Unwear routine,  remove a piece of equipment	-RAK-	*/
 unwear()
 {
-  int i, j, com_val;
-  int exit_flag, test_flag;
+  register int i, j;
+  int exit_flag, test_flag, com_val;
   char command;
   vtype out_val;
 
@@ -493,7 +502,10 @@ unwear()
       else if (equip_ctr == 0)
 	exit_flag = TRUE;
       else if (inven_ctr > 21)
-	exit_flag = TRUE;
+	{
+	  exit_flag = TRUE;
+	  show_equip(0);
+	}
       else if (!exit_flag)
 	show_equip(0);
     }
@@ -509,12 +521,13 @@ unwear()
 /* Wear routine, wear or wield an item		-RAK-	*/
 wear()
 {
-  int com_val, i, j, k, tmp;
+  register int i, j, k;
+  int com_val, tmp;
   vtype out_val, prt1, prt2;
   treasure_type unwear_obj;
   int exit_flag, test_flag;
   char command;
-  treasure_type *i_ptr;
+  register treasure_type *i_ptr;
 
   if (scr_state == 2)
     {
@@ -576,10 +589,10 @@ wear()
 	    case 36: i = 25; break;
 	    case 40: i = 24; break;
 	    case 45:
-	      if (inventory[28].tval == 0)       /* Rings */
-	        i = 28;
+	      if (inventory[INVEN_RIGHT].tval == 0)       /* Rings */
+	        i = INVEN_RIGHT;
 	      else
-	        i = 29;
+	        i = INVEN_LEFT;
 	      break;
             default:
 	      msg_print("I don't see how you can use that.");
@@ -614,7 +627,9 @@ wear()
 	      }
 	  if (test_flag)
 	    {
+	      /* save old item */
 	      unwear_obj = inventory[i];
+	      /* now wear/wield new object */
 	      inventory[i] = inventory[com_val];
 	      i_ptr = &inventory[i];
 	      /* Fix for torches       */
@@ -627,14 +642,18 @@ wear()
 	      inven_weight += i_ptr->weight*i_ptr->number;
 	      inven_destroy(com_val);     /* Subtracts weight      */
 	      equip_ctr++;
-	      py_bonuses(inventory[i], 1);
+	      /* subtract bonuses for old item before add bonuses for new */
+	      /* must do this after inven_destroy, otherwise inventory
+		 may increase to 23 items thus destroying INVEN_WIELD */
 	      if (unwear_obj.tval != 0)
 		{
 		  inventory[INVEN_MAX] = unwear_obj;
+		  /* decrements equip_ctr, and calls py_bonuses with -1 */
 		  tmp = remove(INVEN_MAX);
 		  if (tmp < com_val)
 		    com_val = tmp;
 		}
+	      py_bonuses(inventory[i], 1);
 	      switch(i)
 		{
 		case 22: (void) strcpy(prt1, "You are wielding "); break;
@@ -675,9 +694,9 @@ switch_weapon()
   vtype prt1, prt2;
   treasure_type tmp_obj;
 
-  if (0x80000000 & inventory[22].flags)
+  if (0x80000000 & inventory[INVEN_WIELD].flags)
     {
-      objdes(prt1, 22, FALSE);
+      objdes(prt1, INVEN_WIELD, FALSE);
       (void) sprintf(prt2,
 		     "The %s you are wielding appears to be cursed.", prt1);
       msg_print(prt2);
@@ -686,27 +705,30 @@ switch_weapon()
     {
       /* Switch weapons        */
       reset_flag = FALSE;
-      tmp_obj = inventory[33];
-      inventory[33] = inventory[22];
-      inventory[22] = tmp_obj;
-      py_bonuses(inventory[33], -1);     /* Subtract bonuses      */
-      py_bonuses(inventory[22], 1);      /* Add bonuses           */
-      if (inventory[22].tval != 0)
+      tmp_obj = inventory[INVEN_AUX];
+      inventory[INVEN_AUX] = inventory[INVEN_WIELD];
+      inventory[INVEN_WIELD] = tmp_obj;
+      py_bonuses(inventory[INVEN_AUX], -1);     /* Subtract bonuses      */
+      py_bonuses(inventory[INVEN_WIELD], 1);      /* Add bonuses           */
+      if (inventory[INVEN_WIELD].tval != 0)
 	{
 	  (void) strcpy(prt1, "Primary weapon   : ");
-	  objdes(prt2, 22, TRUE);
+	  objdes(prt2, INVEN_WIELD, TRUE);
 	  msg_print(strcat(prt1, prt2));
+	  if (py.stats.cstr * 15 < inventory[INVEN_WIELD].weight)
+	    msg_print("You have trouble wielding such a heavy weapon.");
 	}
-      if (inventory[33].tval != 0)
+      if (inventory[INVEN_AUX].tval != 0)
 	{
 	  (void) strcpy(prt1, "Secondary weapon : ");
-	  objdes(prt2, 33, TRUE);
+	  objdes(prt2, INVEN_AUX, TRUE);
 	  msg_print(strcat(prt1, prt2));
 	}
     }
   if (scr_state != 0)
     {
-      msg_print("");
+      /* make sure player sees last message */
+      msg_print(" ");
       clear_screen(0, 0);
       prt("You are currently using -", 0, 0);
       show_equip(0);
@@ -722,9 +744,8 @@ int inven_command(command, r1, r2)
 char command;
 int r1, r2;
 {
-  int com_val;
-  int exit_flag, test_flag;
-  int inven;
+  register int com_val, inven;
+  register int exit_flag, test_flag;
 
   /* Main logic for INVEN_COMMAND			-RAK-	*/
   inven = FALSE;
@@ -769,9 +790,9 @@ int r1, r2;
 	    wear();     /* May set scr_state to 1        */
 	  break;
 	case 'x':
-	  if (inventory[22].tval != 0)
+	  if (inventory[INVEN_WIELD].tval != 0)
 	    switch_weapon();
-	  else if (inventory[33].tval != 0)
+	  else if (inventory[INVEN_AUX].tval != 0)
 	    switch_weapon();
 	  else
 	    msg_print("But you are wielding no weapons.");
@@ -816,7 +837,7 @@ int r1, r2;
 		}
 	    }
 	  while (!test_flag);
-	  prt("", 23, 0);
+	  prt("", 23, 0);   /* clear the line containing command list */
 	}
       else
 	exit_flag = TRUE;
@@ -837,8 +858,7 @@ int i, j;
 {
   char command;
   vtype out_val;
-  int test_flag;
-  int item;
+  register int test_flag, item;
 
   item = FALSE;
   *com_val = 0;
@@ -876,7 +896,7 @@ int i, j;
 	    }
 	}
       while (!test_flag);
-      erase_line(msg_line, msg_line);
+      erase_line(MSG_LINE, 0);
     }
   else
     msg_print("You are not carrying anything.");
@@ -915,8 +935,8 @@ panel_bounds()
 int get_panel(y, x)
 int y, x;
 {
-  int prow, pcol;
-  int panel;
+  register int prow, pcol;
+  register int panel;
 
   prow = panel_row;
   pcol = panel_col;
@@ -939,6 +959,9 @@ int y, x;
       panel_bounds();
       panel = TRUE;
       cave_flag = TRUE;
+      /* stop movement if any */
+      if (find_flag)
+	find_flag = FALSE;  /* no need to call move_light () */
     }
   else
     panel = FALSE;
@@ -951,7 +974,7 @@ int y, x;
 int panel_contains(y, x)
 int y, x;
 {
-  int panel;
+  register int panel;
 
   if ((y >= panel_row_min) && (y <= panel_row_max))
     if ((x >= panel_col_min) && (x <= panel_col_max))
@@ -967,8 +990,8 @@ int y, x;
 /* Returns true if player has no light			-RAK-	*/
 int no_light()
 {
-  int light;
-  cave_type *c_ptr;
+  register int light;
+  register cave_type *c_ptr;
 
   light = FALSE;
   c_ptr = &cave[char_row][char_col];
@@ -981,42 +1004,34 @@ int no_light()
 
 /* map rogue_like direction commands into numbers */
 int map_roguedir(comval)
-int *comval;
+register int *comval;
 {
   switch(*comval)
     {
     case 'h':
       *comval = '4';
       return(4);
-      break;
     case 'y':
       *comval = '7';
       return(7);
-      break;
     case 'k':
       *comval = '8';
       return(8);
-      break;
     case 'u':
       *comval = '9';
       return(9);
-      break;
     case 'l':
       *comval = '6';
       return(6);
-      break;
     case 'n':
       *comval = '3';
       return(3);
-      break;
     case 'j':
       *comval = '2';
       return(2);
-      break;
     case 'b':
       *comval = '1';
       return(1);
-      break;
     }
   return(*comval - 48);
 }
@@ -1062,10 +1077,9 @@ int *dir, *com_val, *y, *x;
 }
 
 
-
 /* Moves creature record from one space to another	-RAK-	*/
 move_rec(y1, x1, y2, x2)
-int y1, x1, y2, x2;
+register int y1, x1, y2, x2;
 {
   if ((y1 != y2) || (x1 != x2))
     {
@@ -1078,7 +1092,7 @@ int y1, x1, y2, x2;
 find_light(y1, x1, y2, x2)
 int y1, x1, y2, x2;
 {
-  int i, j, k, l;
+  register int i, j, k, l;
 
   for (i = y1; i <= y2; i++)
     for (j = x1; j <= x2; j++)
@@ -1096,13 +1110,13 @@ int y1, x1, y2, x2;
 light_room(y, x)
 int y, x;
 {
+  register cave_type *c_ptr;
+  register int i, j;
   int tmp1, tmp2;
-  int start_row, start_col;
-  int end_row, end_col;
-  int i, j;
+  int start_row, end_row;
+  register int start_col, end_col;
   int ypos, xpos;
   vtype floor_str, tmp_str;
-  cave_type *c_ptr;
 
   tmp1 = (SCREEN_HEIGHT/2);
   tmp2 = (SCREEN_WIDTH /2);
@@ -1141,24 +1155,22 @@ int y, x;
 
 /* Lights up given location				-RAK-	*/
 lite_spot(y, x)
-int y, x;
+register int y, x;
 {
-  vtype spot_char;
   char temp[2];
 
   temp[1] = '\0';
   if (panel_contains(y, x))
     {
       loc_symbol(y, x, temp);
-      (void) strcpy(spot_char, temp);
-      print(spot_char, y, x);
+      print(temp, y, x);
       }
 }
 
 
 /* Blanks out given location				-RAK-	*/
 unlite_spot(y, x)
-int y, x;
+register int y, x;
 {
   if (panel_contains(y, x))
     print(" ", y, x);
@@ -1167,9 +1179,9 @@ int y, x;
 
 /* Minimum of a maximum				-RAK-	*/
 int minmax(x, y, z)
-int x, y, z;
+register int x, y, z;
 {
-  int max;
+  register int max;
 
   max = ( y > x ? y : x) + 1;
   return((max > z ? z : max));
@@ -1177,9 +1189,9 @@ int x, y, z;
 
 /* Maximum of a minimum				-RAK-	*/
 int maxmin(x, y, z)
-int x, y, z;
+register int x, y, z;
 {
-  int min;
+  register int min;
 
   min = (x > y ? y : x) - 1;
   return((min > z ? min : z));
@@ -1190,13 +1202,14 @@ int x, y, z;
 draw_block(y1, x1, y2, x2)
 int y1, x1, y2, x2;
 {
-  int i, j, xpos;
+  register cave_type *c_ptr;
+  register int i, j;
+  int xpos;
   int topp, bott, left, righ;
   int new_topp, new_bott, new_left, new_righ;
   vtype floor_str, save_str;
   char tmp_char[2];
   int flag;
-  cave_type *c_ptr;
 
   tmp_char[1] = '\0';    /* This is supposed to be a one */
   /* From uppermost to bottom most lines player was on...  */
@@ -1270,9 +1283,10 @@ int y1, x1, y2, x2;
 
 /* Normal movement					*/
 sub1_move_light(y1, x1, y2, x2)
-int y1, x1, y2, x2;
+register int x1, x2;
+int y1, y2;
 {
-  int i, j;
+  register int i, j;
 
   light_flag = TRUE;
   for (i = y1-1; i <= y1+1; i++)       /* Turn off lamp light   */
@@ -1288,11 +1302,12 @@ int y1, x1, y2, x2;
 sub2_move_light(y1, x1, y2, x2)
 int y1, x1, y2, x2;
 {
-  int i, j, xpos;
+  register int i, j;
+  int xpos;
   vtype floor_str, save_str;
   char tmp_char[2];
   int flag;
-  cave_type *c_ptr;
+  register cave_type *c_ptr;
 
   tmp_char[1] = '\0';
   if (light_flag)
@@ -1359,9 +1374,10 @@ int y1, x1, y2, x2;
 
 /* When blinded,  move only the player symbol...		*/
 sub3_move_light(y1, x1, y2, x2)
-int y1, x1, y2, x2;
+register int x1, y1;
+int x2, y2;
 {
-  int i, j;
+  register int i, j;
 
   if (light_flag)
     {
@@ -1376,9 +1392,10 @@ int y1, x1, y2, x2;
 
 /* With no light,  movement becomes involved...		*/
 sub4_move_light(y1, x1, y2, x2)
-int y1, x1, y2, x2;
+register y1, x1;
+int y2, x2;
 {
-  int i, j;
+  register int i, j;
 
   light_flag = TRUE;
   if (cave[y1][x1].tl)
@@ -1418,7 +1435,7 @@ int y1, x1, y2, x2;
 
 /* Returns random co-ordinates				-RAK-	*/
 new_spot(y, x)
-int *y, *x;
+register int *y, *x;
 {
   do
     {
@@ -1444,7 +1461,7 @@ search_off()
 {
   search_flag = FALSE;
   find_flag = FALSE;
-  move_char(5);
+  move_light (char_row, char_col, char_row, char_col);
   change_speed(-1);
   py.flags.status &= 0xFFFFFEFF;
   prt_search();
@@ -1474,7 +1491,10 @@ rest()
       put_qio();
     }
   else
-    erase_line(msg_line, msg_line);
+    {
+      erase_line(MSG_LINE, 0);
+      reset_flag = TRUE;
+    }
 }
 
 rest_off()
@@ -1491,7 +1511,7 @@ rest_off()
 int test_hit(bth, level, pth, ac)
 int bth, level, pth, ac;
 {
-  int i;
+  register int i;
   int test;
 
   if (search_flag)
@@ -1524,6 +1544,11 @@ char *hit_from;
   py.misc.chp -= (double)damage;
   if (search_flag)  search_off();
   if (py.flags.rest > 0)  rest_off();
+  if (find_flag)
+    {
+      find_flag = FALSE;
+      move_light (char_row, char_col, char_row, char_col);
+    }
   flush();
   if (py.misc.chp <= -1)
     {
@@ -1546,21 +1571,22 @@ char *hit_from;
 int movement_rate(speed)
 int speed;
 {
-  int rate;
-
   if (speed > 0)
-    if (py.flags.rest > 0)
-      rate = 1;
-    else
-      rate = speed;
+    {
+      if (py.flags.rest > 0)
+	return 1;
+      else
+	return speed;
+    }
   else
     {
-      if ((turn % (abs(speed) + 2)) == 0)
-	rate = 1;
+      /* speed must be negative here */
+      return ((turn % (2 - speed)) == 0);
+/*    if ((turn % (2 - speed)) == 0)
+	return 1;
       else
-	rate = 0;
+	return 0;  */
     }
-  return(rate);
 }
 
 
@@ -1568,7 +1594,7 @@ int speed;
 regenhp(percent)
 double percent;
 {
-  struct misc *p_ptr;
+  register struct misc *p_ptr;
 
   p_ptr = &py.misc;
   p_ptr->chp += p_ptr->mhp*percent + PLAYER_REGEN_HPBASE;
@@ -1579,7 +1605,8 @@ double percent;
 regenmana(percent)
 double percent;
 {
-  struct misc *p_ptr;
+  register struct misc *p_ptr;
+
   p_ptr = &py.misc;
   p_ptr->cmana += p_ptr->mana*percent + PLAYER_REGEN_MNBASE;
 }
@@ -1588,15 +1615,16 @@ double percent;
 /* Change a trap from invisible to visible		-RAK-	*/
 /* Note: Secret doors are handled here                           */
 change_trap(y, x)
-int y, x;
+register int y, x;
 {
-  int k;
-  cave_type *c_ptr;
+  register int k;
+  register cave_type *c_ptr;
 
   c_ptr = &cave[y][x];
   if ((t_list[c_ptr->tptr].tval == 101) || (t_list[c_ptr->tptr].tval == 109))
     {
       k = c_ptr->tptr;
+      /* subtract one, since zeroth item has subval of one */
       place_trap(y, x, 2, t_list[k].subval-1);
       pusht(k);
       lite_spot(y, x);
@@ -1608,17 +1636,17 @@ int y, x;
 search(y, x, chance)
 int y, x, chance;
 {
-  int i, j;
-  struct flags *p_ptr;
-  cave_type *c_ptr;
-  treasure_type *t_ptr;
+  register int i, j;
+  register cave_type *c_ptr;
+  register treasure_type *t_ptr;
+  register struct flags *p_ptr;
   vtype tmp_str;
 
   p_ptr = &py.flags;
   if (p_ptr->confused+p_ptr->blind > 0)
-    chance /= 10.0;
+    chance = chance / 10.0;
   else if (no_light())
-    chance /= 5.0;
+    chance = chance / 5.0;
   for (i = (y - 1); i <= (y + 1); i++)
     for (j = (x - 1); j <= (x + 1); j++)
       if (in_bounds(i, j))
@@ -1636,7 +1664,11 @@ int y, x, chance;
 		      (void) sprintf(tmp_str,"You have found %s.",t_ptr->name);
 		      msg_print(tmp_str);
 		      change_trap(i, j);
-		      find_flag = FALSE;
+		      if (find_flag)
+			{
+			  find_flag = FALSE;
+			  move_light (char_row, char_col, char_row, char_col);
+			}
 		    }
 		  /* Secret door?                  */
 		  else if (t_ptr->tval == 109)
@@ -1644,22 +1676,26 @@ int y, x, chance;
 		      msg_print("You have found a secret door.");
 		      c_ptr->fval = corr_floor2.ftval;
 		      change_trap(i, j);
-		      find_flag = FALSE;
+		      if (find_flag)
+			{
+			  find_flag = FALSE;
+			  move_light (char_row, char_col, char_row, char_col);
+			}
 		    }
 		  /* Chest is trapped?             */
 		  else if (t_ptr->tval == 2)
 		    {
-		      if (t_ptr->flags > 1)
+		      /* mask out the treasure bits */
+		      if ((t_ptr->flags & 0x00FFFFFF) > 1)
 			if (index(t_ptr->name, '^') != 0)
 			  {
 			    known2(t_ptr->name);
-		         msg_print("You have discovered a trap on the chest!");
+			 msg_print("You have discovered a trap on the chest!");
 			  }
-		      else
-			{
-			  msg_print("The chest is empty.");
-			  known2(t_ptr->name);
-			}
+			else
+			  {
+			    msg_print("The chest is trapped!");
+			  }
 		    }
 		}
 	    }
@@ -1673,15 +1709,19 @@ area_affect(dir, y, x)
 int dir, y, x;
 {
   int z[3];
-  int i, row, col;
-  cave_type *c_ptr;
+  register int i;
+  int row, col;
+  register cave_type *c_ptr;
   monster_type *m_ptr;
 
   if (cave[y][x].fval == 4)
     {
       i = 0;
       if (next_to4(y, x, 4, 5, 6) > 2)
-	find_flag = FALSE;
+	{
+	  find_flag = FALSE;  /* no need to call move_light () */
+	  return;
+	}
     }
   if ((find_flag) && (py.flags.blind < 1))
     {
@@ -1737,7 +1777,10 @@ int dir, y, x;
 	      c_ptr = &cave[row][col];
 	      /* Empty doorways        */
 	      if (c_ptr->fval == 5)
-		find_flag = FALSE;
+		{
+		  find_flag = FALSE;  /* no need to call move_light () */
+		  return;
+		}
 	      /* Objects player can see*/
 	      /* Including doors       */
 	      if (find_flag)
@@ -1746,13 +1789,19 @@ int dir, y, x;
 		    if (c_ptr->tptr != 0)
 		      if ((t_list[c_ptr->tptr].tval != 101) &&
 			  (t_list[c_ptr->tptr].tval != 109))
-			find_flag = FALSE;
+			{
+			  find_flag = FALSE;  /* no need to call move_light */
+			  return;
+			}
 		  }
 		else if ((c_ptr->tl) || (c_ptr->pl) || (c_ptr->fm))
 		  if (c_ptr->tptr != 0)
 		    if ((t_list[c_ptr->tptr].tval != 101) &&
 			(t_list[c_ptr->tptr].tval != 109))
-		      find_flag = FALSE;
+		      {
+			find_flag = FALSE;  /* no need to call move_light */
+			return;
+		      }
 	      /* Creatures             */
 	      if (find_flag)
 		if ((c_ptr->tl) || (c_ptr->pl) || (player_light))
@@ -1760,11 +1809,15 @@ int dir, y, x;
 		    {
 		      m_ptr = &m_list[c_ptr->cptr];
 		      if (m_ptr->ml)
-			find_flag = FALSE;
+			{
+			  find_flag = FALSE;  /* no need to call move_light */
+			  return;
+			}
 		    }
 	    }
 	}
     }
+  return;
 }
 
 
@@ -1773,8 +1826,8 @@ int pick_dir(dir)
 int dir;
 {
   int z[2];
-  int i, y, x;
-  int pick;
+  register int i, pick;
+  int y, x;
 
   if ((find_flag) && (next_to4(char_row, char_col, 4, 5, -1) == 2))
     {
@@ -1840,36 +1893,42 @@ int dir;
 int minus_ac(typ_dam)
 int typ_dam;
 {
-  int i, j;
-  int tmp[5];
+  register int i, j;
+  int tmp[6];
   int minus;
-  treasure_type *i_ptr;
+  register treasure_type *i_ptr;
   vtype out_val, tmp_str;
 
   i = 0;
-  if (inventory[25].tval != 0)
+  if (inventory[INVEN_BODY].tval != 0)
     {
-      tmp[i] = 25;
+      tmp[i] = INVEN_BODY;
       i++;
     }
-  if (inventory[26].tval != 0)
+  if (inventory[INVEN_ARM].tval != 0)
     {
-      tmp[i] = 26;
+      tmp[i] = INVEN_ARM;
       i++;
     }
-  if (inventory[31].tval != 0)
+  if (inventory[INVEN_OUTER].tval != 0)
     {
-      tmp[i] = 31;
+      tmp[i] = INVEN_OUTER;
       i++;
     }
-  if (inventory[27].tval != 0)
+  if (inventory[INVEN_HANDS].tval != 0)
     {
-      tmp[i] = 27;
+      tmp[i] = INVEN_HANDS;
       i++;
     }
-  if (inventory[23].tval != 0)
+  if (inventory[INVEN_HEAD].tval != 0)
     {
-      tmp[i] = 23;
+      tmp[i] = INVEN_HEAD;
+      i++;
+    }
+  /* also affect boots */
+  if (inventory[INVEN_FEET].tval != 0)
+    {
+      tmp[i] = INVEN_FEET;
       i++;
     }
   minus = FALSE;
@@ -1931,9 +1990,9 @@ char *kb_str;
   int set_flammable();
 
   if (py.flags.fire_resist)
-    dam /= 3;
+    dam = dam / 3;
   if (py.flags.resist_heat > 0)
-    dam /= 3;
+    dam = dam / 3;
   take_hit(dam, kb_str);
   print_stat |= 0x0080;
   if (inven_damage(set_flammable, 3) > 0)
@@ -1949,9 +2008,9 @@ char *kb_str;
   int set_frost_destroy();
 
   if (py.flags.cold_resist)
-    dam /= 3;
+    dam = dam / 3;
   if (py.flags.resist_cold > 0)
-    dam /= 3;
+    dam = dam / 3;
   take_hit(dam, kb_str);
   print_stat |= 0x0080;
   if (inven_damage(set_frost_destroy, 5) > 0)

@@ -1,19 +1,20 @@
+#include "constants.h"
+#include "config.h"
+#include "types.h"
+#include "externs.h"
+
 #ifdef USG
 #include <string.h>
 #else
 #include <strings.h>
 #endif
 
-#include "constants.h"
-#include "types.h"
-#include "externs.h"
-
 int search_list(x1, x2)
 byteint x1;
 int x2;
 {
-  int i, j;
-  treasure_type *o_ptr;
+  register int i, j;
+  register treasure_type *o_ptr;
 
   i = 0;
   j = 0;
@@ -33,8 +34,8 @@ int x2;
 int item_value(item)
 treasure_type item;
 {
-  int value;
-  treasure_type *i_ptr;
+  register int value;
+  register treasure_type *i_ptr;
 
   i_ptr = &item;
   value = i_ptr->cost;
@@ -95,6 +96,7 @@ treasure_type item;
   else if ((i_ptr->tval == 40) || (i_ptr->tval == 45))
     {	/* Rings and amulets	*/
       if (index(i_ptr->name, '|') != 0)
+	/* player does not know what type of ring/amulet this is */
 	switch(i_ptr->tval)
 	  {
 	  case 40: value = 45; break;
@@ -102,6 +104,9 @@ treasure_type item;
 	  default: break;
 	  }
       else if (index(i_ptr->name, '^') != 0)
+	/* player knows what type of ring, but does not know whether it is
+	   cursed or not, if refuse to buy cursed objects here, then
+	   player can use this to 'identify' cursed objects */
 	value = abs(i_ptr->cost);
     }
   else if ((i_ptr->tval == 55) || (i_ptr->tval == 60) || (i_ptr->tval == 65))
@@ -129,8 +134,8 @@ int snum;
 int *max_sell, *min_sell;
 treasure_type item;
 {
-  int i;
-  store_type *s_ptr;
+  register int i;
+  register store_type *s_ptr;
 
   s_ptr = &store[snum];
   i = item_value(item);
@@ -156,10 +161,10 @@ treasure_type item;
 int store_check_num(store_num)
 int store_num;
 {
-  int store_check;
-  int i;
-  store_type *s_ptr;
-  treasure_type *i_ptr;
+  register int store_check;
+  register int i;
+  register store_type *s_ptr;
+  register treasure_type *i_ptr;
 
   store_check = FALSE;
   s_ptr = &store[store_num];
@@ -180,10 +185,11 @@ int store_num;
 
 /* Insert INVEN_MAX at given location	*/
 insert_store(store_num, pos, icost)
-int store_num, pos, icost;
+register int pos;
+int store_num, icost;
 {
-  int i;
-  store_type *s_ptr;
+  register int i;
+  register store_type *s_ptr;
 
   s_ptr = &store[store_num];
   for (i = s_ptr->store_ctr-1; i >= pos; i--)
@@ -200,10 +206,10 @@ int store_num;
 int *ipos;
 {
   int item_num, item_val;
-  int typ, subt, icost, dummy;
-  int flag;
-  treasure_type *i_ptr;
-  store_type *s_ptr;
+  register int typ, subt;
+  int icost, dummy, flag;
+  register treasure_type *i_ptr;
+  register store_type *s_ptr;
 
   *ipos = 0;
   identify(inventory[INVEN_MAX]);
@@ -254,9 +260,9 @@ store_destroy(store_num, item_val, one_of)
 int store_num, item_val;
 int one_of;
 {
-  int j;
-  store_type *s_ptr;
-  treasure_type *i_ptr;
+  register int j;
+  register store_type *s_ptr;
+  register treasure_type *i_ptr;
 
   s_ptr = &store[store_num];
   inventory[INVEN_MAX] = s_ptr->store_inven[item_val].sitem;
@@ -280,8 +286,8 @@ int one_of;
 /* Initializes the stores with owners			-RAK-	*/
 store_init()
 {
-  int i, j, k;
-  store_type *s_ptr;
+  register int i, j, k;
+  register store_type *s_ptr;
 
   i = MAX_OWNERS / MAX_STORES;
   for (j = 0; j < MAX_STORES; j++)
@@ -304,9 +310,10 @@ store_init()
 store_create(store_num)
 int store_num;
 {
-  int i, tries, cur_pos, dummy;
-  store_type *s_ptr;
-  treasure_type *t_ptr;
+  register int i, tries;
+  int cur_pos, dummy;
+  register store_type *s_ptr;
+  register treasure_type *t_ptr;
 
   tries = 0;
   popt(&cur_pos);
@@ -314,7 +321,9 @@ int store_num;
   do
     {
       i = store_choice[store_num][randint(STORE_CHOICES)-1];
-      t_list[cur_pos] = inventory_init[i];
+      /* this index is one more than it should be, so subtract one */
+      /* see store_choice in variables.c */
+      t_list[cur_pos] = inventory_init[i-1];
       magic_treasure(cur_pos, OBJ_TOWN_LEVEL);
       inventory[INVEN_MAX] = t_list[cur_pos];
       if (store_check_num(store_num))
@@ -337,8 +346,8 @@ int store_num;
 /* Initialize and up-keep the store's inventory.		-RAK-	*/
 store_maint()
 {
-  int i, j;
-  store_type *s_ptr;
+  register int i, j;
+  register store_type *s_ptr;
 
   for (i = 0; i < MAX_STORES; i++)
     {

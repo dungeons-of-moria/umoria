@@ -1,20 +1,21 @@
 #include <time.h>
 #include <math.h>
 #include <stdio.h>
-#ifdef USG
-#include <string.h>
-#else
-#include <strings.h>
-#endif
 #include <sys/types.h>
 
-#include "config.h"
 #include "constants.h"
+#include "config.h"
 #include "types.h"
 /* SUN4 has a variable called class in the include file <math.h>
    avoid a conflict by not defining my class in the file externs.h */
 #define DONT_DEFINE_CLASS
 #include "externs.h"
+
+#ifdef USG
+#include <string.h>
+#else
+#include <strings.h>
+#endif
 
 long time();
 struct tm *localtime();
@@ -34,7 +35,9 @@ uid_t getegid();
 #endif
 
 #ifdef USG
-void srand();
+long lrand48();
+void srand48();
+unsigned short *seed48();
 #else
 long random();
 char *initstate();
@@ -48,8 +51,8 @@ void srandom();
 /* gets a new random seed for the random number generator */
 init_seeds()
 {
-  long clock;
-  int euid;
+  register long clock;
+  register int euid;
 
   /* in case game is setuid root */
   if ((euid = geteuid()) == 0)
@@ -58,7 +61,7 @@ init_seeds()
   clock = time((long *)0);
   clock = clock * getpid() * euid;
 #ifdef USG
-  /* can't do this, sigh */
+  /* only uses randes_seed */
 #else
   (void) initstate((unsigned int)clock, randes_state, STATE_SIZE);
 #endif
@@ -67,22 +70,34 @@ init_seeds()
   clock = time((long *)0);
   clock = clock * getpid() * euid;
 #ifdef USG
-  /* can't do this */
+  /* only uses town_seed */
 #else
   (void) initstate((unsigned int)clock, town_state, STATE_SIZE);
 #endif
   town_seed = (unsigned int)clock;
 
   clock = time((long *)0);
+#if 0
   clock = clock * getpid() * euid * getuid();
+#endif
 #ifdef USG
-  /* can't do this, do fake it */
-  srand((unsigned int)clock);
+  /* can't do this, so fake it */
+  srand48(clock);
+  /* make it a little more random */
+  for (clock = randint(100); clock >= 0; clock--)
+    (void) lrand48();
 #else
   (void) initstate((unsigned int)clock, norm_state, STATE_SIZE);
+  /* make it a little more random */
+  for (clock = randint(100); clock >= 0; clock--)
+    (void) random();
 #endif
 }
 
+#ifdef USG
+/* special array for restoring the SYS V number generator */
+unsigned short oldseed[3];
+#endif
 
 /* change to different random number generator state */
 /*ARGSUSED*/
@@ -91,7 +106,17 @@ char *state;
 int seed;
 {
 #ifdef USG
-  srand((unsigned)seed);
+  register unsigned short *pointer;
+
+  /* make phony call to get pointer to old value of seed */
+  pointer = seed48(oldseed);
+  /* copy old seed into oldseed */
+  oldseed[0] = pointer[0];
+  oldseed[1] = pointer[1];
+  oldseed[2] = pointer[2];
+
+  /* want reproducible state here, so call srand48 */
+  srand48((long)seed);
 #else
   (void) setstate(state);
   /* want reproducible state here, so call srandom */
@@ -104,8 +129,11 @@ int seed;
 reset_seed()
 {
 #ifdef USG
+  (void) seed48(oldseed);
+#if 0
   /* can't do this, so just call srand() with the current time */
-  srand((unsigned int)(time ((long *)0)));
+  srand48((unsigned int)(time ((long *)0)));
+#endif
 #else
   (void) setstate(norm_state);
 #endif
@@ -116,7 +144,7 @@ reset_seed()
 int day_num()
 {
   long clock;
-  struct tm *time_struct;
+  register struct tm *time_struct;
 
   clock = time((long *)0);
   time_struct = localtime(&clock);
@@ -128,7 +156,7 @@ int day_num()
 int hour_num()
 {
   long clock;
-  struct tm *time_struct;
+  register struct tm *time_struct;
 
   clock = time((long *)0);
   time_struct = localtime(&clock);
@@ -151,12 +179,12 @@ int check_time()
 int randint(maxval)
 int maxval;
 {
-  long randval;
+  register long randval;
 
 #ifdef USG
-  randval = rand(); /* only returns numbers from 0 to 2**15-1 */
+  randval = lrand48();
 #else
-  randval = random() >> 16;
+  randval = random();
 #endif
   return ((randval % maxval) + 1);
 }
@@ -166,8 +194,8 @@ int rand_rep(num, die)
 int num;
 int die;
 {
-  int sum = 0;
-  int i;
+  register int sum = 0;
+  register int i;
 
   for (i = 0; i < num; i++)
     sum += randint(die);
@@ -189,8 +217,8 @@ int stand;
 int bit_pos(test)
 unsigned int *test;
 {
-  int i;
-  int mask = 0x1;
+  register int i;
+  register int mask = 0x1;
 
   for (i = 0; i < sizeof(int)*8; i++) {
     if (*test & mask) {
@@ -216,23 +244,28 @@ int y, x;
 
 
 /* Distance between two points				-RAK-	*/
+/* there is a bessel function names y1 in the math library, ignore warning */
 int distance(y1, x1, y2, x2)
 int y1, x1, y2, x2;
 {
-  int dy, dx;
+  register int dy, dx;
 
-  dy = abs(y1 - y2);
-  dx = abs(x1 - x2);
+  dy = y1 - y2;
+  if (dy < 0)
+    dy = -dy;
+  dx = x1 - x2;
+  if (dx < 0)
+    dx = -dx;
 
   return( (2 * (dy + dx) - (dy > dx ? dx : dy)) / 2);
 }
 
 /* Checks points north, south, east, and west for a type -RAK-	*/
 int next_to4(y, x, elem_a, elem_b, elem_c)
-int y, x;
+register int y, x;
 int elem_a, elem_b, elem_c;
 {
-  int i;
+  register int i;
 
   i = 0;
   if (y > 0)
@@ -257,10 +290,10 @@ int elem_a, elem_b, elem_c;
 
 /* Checks all adjacent spots for elements		-RAK-	*/
 int next_to8(y, x, elem_a, elem_b, elem_c)
-int y, x;
+register int y, x;
 int elem_a, elem_b, elem_c;
 {
-  int i, j, k;
+  register int k, j, i;
 
   i = 0;
   for (j = (y - 1); j <= (y + 1); j++)
@@ -276,7 +309,7 @@ int elem_a, elem_b, elem_c;
 /* Link all free space in treasure list together 		*/
 tlink()
 {
-  int i;
+  register int i;
 
   for (i = 0; i < MAX_TALLOC; i++)
     {
@@ -290,7 +323,7 @@ tlink()
 /* Link all free space in monster list together			*/
 mlink()
 {
-  int i;
+  register int i;
 
   for (i = 0; i < MAX_MALLOC; i++)
     {
@@ -306,7 +339,7 @@ mlink()
 /* Initializes M_LEVEL array for use with PLACE_MONSTER	-RAK-	*/
 init_m_level()
 {
-  int i, j, k;
+  register int i, j, k;
 
   i = 0;
   j = 0;
@@ -328,11 +361,11 @@ init_m_level()
 /* Initializes T_LEVEL array for use with PLACE_OBJECT	-RAK-	*/
 init_t_level()
 {
-  int i, j;
+  register int i, j;
 
   i = 0;
   j = 0;
-  while ((j < MAX_OBJ_LEVEL) && (i < MAX_OBJECTS))
+  while ((j <= MAX_OBJ_LEVEL) && (i < MAX_OBJECTS))
     {
       while ((i < MAX_OBJECTS) && (object_list[i].level == j))
 	{
@@ -341,7 +374,7 @@ init_t_level()
 	}
       j++;
     }
-  for (i = 1; i < MAX_OBJ_LEVEL; i++)
+  for (i = 1; i <= MAX_OBJ_LEVEL; i++)
     t_level[i] += t_level[i-1];
 }
 
@@ -349,7 +382,7 @@ init_t_level()
 /* Adjust prices of objects				-RAK-	*/
 price_adjust()
 {
-  int i;
+  register int i;
 
   for (i = 0; i < MAX_OBJECTS; i++)
     object_list[i].cost = object_list[i].cost*COST_ADJ + 0.99;
@@ -373,10 +406,12 @@ char *dice;
 
 
 /* Returns true if no obstructions between two given points -RAK-*/
+/* there is a bessel function names y1 in the math library, ignore warning */
 int los(y1, x1, y2, x2)
 int y1, x1, y2, x2;
 {
-  int ty, tx, stepy, stepx, p1, p2;
+  register int ty, tx, stepy, stepx;
+  int aty, atx, p1, p2;
   double slp, tmp;
   int flag;
 
@@ -386,13 +421,25 @@ int y1, x1, y2, x2;
   if ((ty != 0) || (tx != 0))
     {
       if (ty < 0)
-	stepy = -1;
+	{
+	  stepy = -1;
+	  aty = -ty;
+	}
       else
-	stepy = 1;
+	{
+	  stepy = 1;
+	  aty = ty;
+	}
       if (tx < 0)
-	stepx = -1;
+	{
+	  stepx = -1;
+	  atx = -tx;
+	}
       else
-	stepx = 1;
+	{
+	  stepx = 1;
+	  atx = tx;
+	}
       if (ty == 0)
 	{
 	  do
@@ -411,9 +458,9 @@ int y1, x1, y2, x2;
 	    }
 	  while((y1 != y2) && (flag));
 	}
-      else if (abs(ty) > abs(tx))
+      else if (aty > atx)
 	{
-	  slp = fabs((double)tx / (double)ty) * stepx;
+	  slp = ((double)atx / (double)aty) * stepx;
 	  tmp = x2;
 	  do
 	    {
@@ -429,7 +476,7 @@ int y1, x1, y2, x2;
 	}
       else
 	{
-	  slp = fabs((double)ty / (double)tx) * stepy;
+	  slp = ((double)aty / (double)atx) * stepy;
 	  tmp = y2;
 	  do
 	    {
@@ -453,8 +500,8 @@ loc_symbol(y, x, sym)
 int y, x;
 char *sym;
 {
-  cave_type *cave_ptr;
-  monster_type *mon_ptr;
+  register cave_type *cave_ptr;
+  register monster_type *mon_ptr;
 
   cave_ptr = &cave[y][x];
   if ((cave_ptr->cptr == 1) && (!find_flag))
@@ -491,7 +538,7 @@ char *sym;
 int test_light(y, x)
 int y, x;
 {
-  cave_type *cave_ptr;
+  register cave_type *cave_ptr;
 
   cave_ptr = &cave[y][x];
   if ((cave_ptr->pl) || (cave_ptr->fm) || (cave_ptr->tl))
@@ -504,14 +551,15 @@ int y, x;
 /* Prints the map of the dungeon 			-RAK-	*/
 prt_map()
 {
-  int i, j, k, l, m;
+  register int i, j, k;
+  int l, m;
   int ypos, isp;
   /* this eliminates lint warning: xpos may be used before set */
   int xpos = 0;
   vtype floor_str;
   char tmp_char[2];
   int flag;
-  cave_type *cave_ptr;
+  register cave_type *cave_ptr;
 
   k = 0;                          /* Used for erasing dirty lines  */
   l = 13;                         /* Erasure starts in this column */
@@ -530,7 +578,7 @@ prt_map()
       for (j = panel_col_min; j <= panel_col_max; j++)  /* Left to right */
 	{
 	  cave_ptr = &cave[i][j];    /* Get character for location    */
-	  if (test_light(i, j))
+	  if (cave_ptr->pl || cave_ptr->fm || cave_ptr->tl)
 	    loc_symbol(i, j, tmp_char);
 	  else if ((cave_ptr->cptr == 1) && (!find_flag))
 	    tmp_char[0] = '@';
@@ -541,6 +589,9 @@ prt_map()
 	      tmp_char[0] = ' ';
 	  else
 	    tmp_char[0] = ' ';
+	  if (py.flags.image > 0)
+	    if (randint(12) == 1)
+	      tmp_char[0] = (randint(95) + 31);
 	  if (tmp_char[0] == ' ') /* If blank...                   */
 	    {
 	      if (flag)       /* If floor_str != ""        */
@@ -585,9 +636,10 @@ prt_map()
 /* Compact monsters					-RAK-	*/
 compact_monsters()
 {
-  int i, j, k, cur_dis;
+  register int i, j, k;
+  int cur_dis;
   int delete_1, delete_any;
-  monster_type *mon_ptr;
+  register monster_type *mon_ptr;
 
   cur_dis = 66;
   delete_any = FALSE;
@@ -629,7 +681,7 @@ compact_monsters()
 
 /* Returns a pointer to next free space			-RAK-	*/
 popm(x)
-int *x;
+register int *x;
 {
   if (mfptr <= 1)
     compact_monsters();
@@ -640,7 +692,7 @@ int *x;
 
 /* Pushs a record back onto free space list		-RAK-	*/
 pushm(x)
-int x;
+register int x;
 {
   m_list[x] = blank_monster;
   m_list[x].nptr = mfptr;
@@ -661,11 +713,11 @@ char *hp_str;
 
 /* Places a monster at given location			-RAK-	*/
 place_monster(y, x, z, slp)
-int y, x, z;
+register int y, x, z;
 int slp;
 {
   int cur_pos;
-  monster_type *mon_ptr;
+  register monster_type *mon_ptr;
 
   popm(&cur_pos);
   mon_ptr = &m_list[cur_pos];
@@ -698,8 +750,8 @@ int slp;
 place_win_monster()
 {
   int cur_pos;
-  int y, x;
-  monster_type *mon_ptr;
+  register int y, x;
+  register monster_type *mon_ptr;
 
   if (!total_winner)
     {
@@ -739,7 +791,7 @@ int (*alloc_set)();
 int num, dis;
 int slp;
 {
-  int y, x, i, j, k;
+  register int y, x, i, j, k;
 
   for (i = 0; i < num; i++)
     {
@@ -758,7 +810,9 @@ int slp;
 	j = randint(m_level[MAX_MONS_LEVEL]) - 1 + m_level[0];
       else if (randint(MON_NASTY) == 1)
 	{
-	  j = dun_level + abs(randnor(0, 4)) + 1;
+	  /* abs may be a macro, don't call it with randnor as a parameter */
+	  k = randnor(0, 4);
+	  j = dun_level + abs(k) + 1;
 	  if (j > MAX_MONS_LEVEL)
 	    j = MAX_MONS_LEVEL;
 	  k = m_level[j] - m_level[j-1];
@@ -776,8 +830,9 @@ int summon_monster(y, x, slp)
 int *y, *x;
 int slp;
 {
-  int i, j, k, l, m;
-  cave_type *cave_ptr;
+  register int i, j, k;
+  int l, m;
+  register cave_type *cave_ptr;
   int summon;
 
   i = 0;
@@ -821,9 +876,10 @@ int slp;
 int summon_undead(y, x)
 int *y, *x;
 {
-  int i, j, k, l, m, ctr;
+  register int i, j, k;
+  int l, m, ctr;
   int summon;
-  cave_type *cave_ptr;
+  register cave_type *cave_ptr;
 
   i = 0;
   summon = FALSE;
@@ -879,10 +935,11 @@ int *y, *x;
 /* If too many objects on floor level, delete some of them-RAK-	*/
 compact_objects()
 {
-  int i, j, ctr, cur_dis;
+  register int i, j;
+  int ctr, cur_dis;
   int flag;
-  cave_type *cave_ptr;
-  treasure_type *t_ptr;
+  register cave_type *cave_ptr;
+  register treasure_type *t_ptr;
 
   ctr = 0;
   cur_dis = 66;
@@ -910,9 +967,14 @@ compact_objects()
 		      flag = TRUE;
 		      break;
 		    case 104: case 105:
+		      /* doors */
 		      if (randint(4) == 1)  flag = TRUE;
 		      break;
 		    case 107: case 108:
+		      /* stairs, don't delete them */
+		      break;
+		    case 110:
+		      /* shop doors, don't delete them */
 		      break;
 		    default:
 		      if (randint(8) == 1)  flag = TRUE;
@@ -949,7 +1011,7 @@ int *x;
 
 /* Pushs a record back onto free space list		-RAK-	*/
 pusht(x)
-int x;
+register int x;
 {
   t_list[x] = blank_treasure;
   t_list[x].p1 = tcptr;
@@ -960,7 +1022,7 @@ int x;
 /* Order the treasure list by level			-RAK-	*/
 sort_objects()
 {
-  int i, j, k, gap;
+  register int i, j, k, gap;
   treasure_type tmp;
 
   gap = MAX_OBJECTS / 2;
@@ -983,7 +1045,7 @@ sort_objects()
 	      j -= gap;
 	    }
 	}
-      gap /= 2;
+      gap = gap / 2;
     }
 }
 
@@ -1003,12 +1065,15 @@ int chance;
 int m_bonus(base, max_std, level)
 int base, max_std, level;
 {
-  int x, stand_dev;
+  register int x, stand_dev;
+  register int tmp;
 
   stand_dev = (OBJ_STD_ADJ*level) + OBJ_STD_MIN;
   if (stand_dev > max_std)
     stand_dev = max_std;
-  x = (abs(randnor(0, stand_dev))/10.0) + base;
+  /* abs may be a macro, don't call it with randnor as a parameter */
+  tmp = randnor(0, stand_dev);
+  x = (abs(tmp)/10.0) + base;
   if (x < base)
     return(base);
   else
@@ -1021,8 +1086,8 @@ int base, max_std, level;
 magic_treasure(x, level)
 int x, level;
 {
-  int chance, special, cursed, i;
-  treasure_type *t_ptr;
+  register treasure_type *t_ptr;
+  register int chance, special, cursed, i;
 
   chance = OBJ_BASE_MAGIC + level;
   if (chance > OBJ_BASE_MAX)
@@ -1091,8 +1156,9 @@ int x, level;
 		t_ptr->tohit += 5;
 		t_ptr->todam += 5;
 		t_ptr->toac  = randint(4);
-		t_ptr->p1    = randint(4) - 1;
-		(void) strcat(t_ptr->name, " (HA)");
+		/* the value in p1 is used for strength increase */
+		t_ptr->p1    = randint(4);
+		(void) strcat(t_ptr->name, " [%P4] (HA) (%P1 to STR)");
 		t_ptr->cost += t_ptr->p1*500;
 		t_ptr->cost += 10000;
 		break;
@@ -1102,6 +1168,7 @@ int x, level;
 		t_ptr->todam += 3;
 		t_ptr->toac  = 5 + randint(5);
 		(void) strcat(t_ptr->name, " [%P4] (DF)");
+		/* note that the value in p1 is unused */
 		t_ptr->p1    = randint(3);
 		t_ptr->cost += t_ptr->p1*500;
 		t_ptr->cost += 7500;
@@ -1200,7 +1267,7 @@ int x, level;
 	      case 2:
 		t_ptr->tohit = 1 + randint(3);
 		t_ptr->todam = 1 + randint(3);
-		(void) strcat(t_ptr->name, " of Slaying");
+		(void) strcat(t_ptr->name, " of Slaying (%P2,%P3)");
 		t_ptr->cost += (t_ptr->tohit+t_ptr->todam)*250;
 		break;
 	      }
@@ -1243,7 +1310,8 @@ int x, level;
 		break;
 	      case 2: case 3: case 4: case 5:
 		t_ptr->flags |= 0x00000100;
-		(void) strcat(t_ptr->name, " of Stealth");
+		t_ptr->p1 = randint(3);
+		(void) strcat(t_ptr->name, " of Stealth (%P1)");
 		t_ptr->cost += 500;
 		break;
 	      default:
@@ -1269,7 +1337,7 @@ int x, level;
 	  case 3:
 	    t_ptr->flags |= 0x80000000;
 	    (void) strcat(t_ptr->name, " of Great Mass");
-	    t_ptr->weight *= 5;
+	    t_ptr->weight = t_ptr->weight * 5;
 	    break;
 	  }
 	t_ptr->cost = 0;
@@ -1290,19 +1358,19 @@ int x, level;
 		  case 1:
 		    t_ptr->p1 = randint(2);
 		    t_ptr->flags |= 0x00000008;
-		    (void) strcat(t_ptr->name, " of Intelligence");
+		    (void) strcat(t_ptr->name, " of Intelligence (%P1)");
 		    t_ptr->cost += t_ptr->p1*500;
 		    break;
 		  case 2:
 		    t_ptr->p1 = randint(2);
 		    t_ptr->flags |= 0x00000010;
-		      (void) strcat(t_ptr->name, " of Wisdom");
+		      (void) strcat(t_ptr->name, " of Wisdom (%P1)");
 		    t_ptr->cost += t_ptr->p1*500;
 		    break;
 		  case 3:
 		    t_ptr->p1 = 1 + randint(4);
 		    t_ptr->flags |= 0x40000000;
-		    (void) strcat(t_ptr->name, " of Infra-Vision");
+		    (void) strcat(t_ptr->name, " of Infra-Vision (%P1)");
 		    t_ptr->cost += t_ptr->p1*250;
 		    break;
 		  }
@@ -1313,31 +1381,31 @@ int x, level;
 		  case 1:
 		    t_ptr->p1 = randint(3);
 		    t_ptr->flags |= 0x00800007;
-		    (void) strcat(t_ptr->name, " of Might");
+		    (void) strcat(t_ptr->name, " of Might (%P1)");
 		    t_ptr->cost += 1000 + t_ptr->p1*500;
 		    break;
 		  case 2:
 		    t_ptr->p1 = randint(3);
 		    t_ptr->flags |= 0x00000030;
-		    (void) strcat(t_ptr->name, " of Lordliness");
+		    (void) strcat(t_ptr->name, " of Lordliness (%P1)");
 		    t_ptr->cost += 1000 + t_ptr->p1*500;
 		    break;
 		  case 3:
 		    t_ptr->p1 = randint(3);
 		    t_ptr->flags |= 0x01380008;
-		    (void) strcat(t_ptr->name, " of the Magi");
+		    (void) strcat(t_ptr->name, " of the Magi (%P1)");
 		    t_ptr->cost += 3000 + t_ptr->p1*500;
 		    break;
 		  case 4:
 		    t_ptr->p1 = randint(3);
 		    t_ptr->flags |= 0x00000020;
-		    (void) strcat(t_ptr->name, " of Beauty");
+		    (void) strcat(t_ptr->name, " of Beauty (%P1)");
 		    t_ptr->cost += 750;
 		    break;
 		  case 5:
 		    t_ptr->p1 = 1 + randint(4);
 		    t_ptr->flags |= 0x01000040;
-		    (void) strcat(t_ptr->name, " of Seeing");
+		    (void) strcat(t_ptr->name, " of Seeing (%P1)");
 		    t_ptr->cost += 1000 + t_ptr->p1*100;
 		    break;
 		  case 6:
@@ -1389,7 +1457,7 @@ int x, level;
 		  (void) strcat(t_ptr->name, " of Ugliness");
 		  break;
 		}
-	      t_ptr->p1 *= randint(5);
+	      t_ptr->p1 = t_ptr->p1 * randint (5);
 	    }
 	}
       break;
@@ -1436,7 +1504,7 @@ int x, level;
 	  break;
 	case 23:     /* Increase To-Hit       */
 	  t_ptr->tohit = m_bonus(1, 20, level);
-	  t_ptr->cost += t_ptr->todam*100;
+	  t_ptr->cost += t_ptr->tohit*100;
 	  if (magik(cursed))
 	    {
 	      t_ptr->tohit = -t_ptr->tohit;
@@ -1446,7 +1514,7 @@ int x, level;
 	  break;
 	case 24:     /* Protection            */
 	  t_ptr->toac = m_bonus(1, 20, level);
-	  t_ptr->cost += t_ptr->todam*100;
+	  t_ptr->cost += t_ptr->toac*100;
 	  if (magik(cursed))
 	    {
 	      t_ptr->toac = -t_ptr->toac;
@@ -1584,21 +1652,18 @@ int x, level;
 	      case 1:
 		(void) strcat(t_ptr->name, " of Protection");
 		t_ptr->toac = m_bonus(2, 40, level);
-		t_ptr->cost += 250 + t_ptr->toac*100;
+		t_ptr->cost += 250;
 		break;
 	      case 2:
 		t_ptr->toac = m_bonus(1, 20, level);
 		t_ptr->p1 = randint(3);
 		t_ptr->flags |= 0x00000100;
 		(void) strcat(t_ptr->name, " of Stealth (%P1)");
-		t_ptr->cost += t_ptr->p1*500 + t_ptr->toac*100;
+		t_ptr->cost += 500;
 		break;
 	      }
 	  else
-	    {
-	      t_ptr->toac = m_bonus(1, 20, level);
-	      t_ptr->cost += t_ptr->toac+100;
-	    }
+	    t_ptr->toac = m_bonus(1, 20, level);
 	}
       else if (magik(cursed))
 	switch(randint(3))
@@ -1735,7 +1800,7 @@ int x, level;
       for (i = 0; i < 7; i++)
 	t_ptr->number += randint(6);
       missile_ctr++;
-      if (missile_ctr > 65534)
+      if (missile_ctr > 65000)
 	missile_ctr = 1;
       t_ptr->subval = missile_ctr + 512;
       break;

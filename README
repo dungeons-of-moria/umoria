@@ -1,6 +1,42 @@
+
+This copy of umoria includes the first three patch files (upto u487.p3).
+
+Please report problems to wilson@ji.Berkeley.EDU  (ucbvax!ucbji!wilson).
+
+This is the second official release of umoria.
+There have been a couple hundred bug fixes and minor enhancements.
+Major notables:
+  all core dumping problems should be fixed (I've said this before though...)
+  character rerolling is implemented
+  program is much faster: makes fewer refresh() calls
+	                  was profiled and optimized
+                          zillions of register declarations added
+  create food does not destroy object under you
+  the run '.' command stops when the screen scrolls
+  can repeatedly hit ^P to display last twenty messages
+  store inventories turn over more often, store inventories change after a
+	save/restore of character
+  several cheating tricks involving signals no longer work
+        scores from panic saved games are not added to the scoreboard
+	but can be played normally otherwise
+Still buggy:
+  stats are still truncated at 18/100, wearing/wielding an object that would
+	raise a stat over 18/100 results in a permanent loss in that stat
+	when object taken off
+  look, throw only in 8 cardinal directions
+  etc...
+See the PROBLEMS file for all the gory info.
+
+Save files from 4.85 can be read by 4.87 without problems (this compatibility
+is why some bugs were not fixed, namely the stat problem above).
+
+No work on MS-DOS portability has been done in the last six months.
+This will be a top priority for the next version.
+And, of course, fixing the many bugs that STILL remain.
+
+----------------------------------------------------------
+
 UNIX Moria 4.85
-(Differences from 4.85 to 4.84 are mostly minor bug fixes, and better
- portability.)
 
 Moria is a dungeon adventure game in the manner of rogue, but
 not descended from rogue.  Moria is to VMS systems, as rogue
@@ -25,13 +61,8 @@ Major changes of note are incompatible save file formats (who cares?)
 and an optional rogue-like user interface for my UNIX version as opposed
 to a numeric keypad interface for the VMS version.
 
-To avoid confusion, you may want to refer to this as UNIX Moria,
-or perhaps wilson moria.
-
-Mike Callahan at the University of Oklahoma (seismo!okstate!uokmax!mikec)
-also is working on a Unix version of Moria and is planning on posting
-it to the net when it is finished.  This will probably be more official
-than my version, but I have not heard from him in a while.
+To avoid confusion, please refer to this game as UNIX moria, or umoria
+for short.
 
 Don Kneller has ported the program to the IBM PC, and is calling it PCMORIA.
 
@@ -40,19 +71,6 @@ early versions and making many suggestions.  Thanks also to Craig Norborg
 of Purdue for rewritting the setuid/scoreboard code in a more rational
 manner.
 
-There exists another port of Moria to UNIX that was done by wex@MCC.COM.
-Hopefully, our two versions can be merged, but don't expect to see the result
-for a while.
-
 					Jim Wilson
 					wilson@ernie.Berkeley.EDU
 					ucbvax!ucbernie!wilson
-
-The program has three options.  The -r option changes the game to
-use a rogue like user interface.  The -o option forces the game to use
-the original user interface.  The -s option prints the scoreboard
-and exits.
-
-There is no man page yet, and the original VMS Moria docs should be rewritten
-to take into account some of the changes.
-

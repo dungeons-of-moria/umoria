@@ -1,13 +1,15 @@
 #include <stdio.h>
+
+#include "constants.h"
+#include "config.h"
+#include "types.h"
+#include "externs.h"
+
 #ifdef USG
 #include <string.h>
 #else
 #include <strings.h>
 #endif
-
-#include "constants.h"
-#include "types.h"
-#include "externs.h"
 
 #ifdef sun   /* correct SUN stupidity in the stdio.h file */
 char *sprintf();
@@ -28,9 +30,9 @@ char cur_char1();
 teleport(dis)
 int dis;
 {
-  int y, x;
+  register int y, x;
   cave_type *c_ptr;
-  int i, j;
+  register int i, j;
 
   do
     {
@@ -68,12 +70,16 @@ int *y, *x;
 {
   int i, ty, tx;
   int dam;
-  cave_type *c_ptr;
-  struct misc *p_ptr;
+  register cave_type *c_ptr;
+  register struct misc *p_ptr;
 
   change_trap(*y, *x);
   lite_spot(char_row, char_col);
-  find_flag = FALSE;
+  if (find_flag)
+    {
+      find_flag = FALSE;
+      move_light (char_row, char_col, char_row, char_col);
+    }
   c_ptr = &cave[*y][*x];
   p_ptr = &py.misc;
   dam = damroll(t_list[c_ptr->tptr].damage);
@@ -105,6 +111,7 @@ int *y, *x;
       break;
     case 4: /* Trap door*/
       msg_print("You fell through a trap door!");
+      /* make sure player reads message before new level drawn! */
       msg_print(" ");
       moria_flag = TRUE;
       dun_level++;
@@ -141,6 +148,8 @@ int *y, *x;
 	      take_hit(dam, "a dart trap.");
 	      print_stat |= 0x0001;
 	      msg_print("A small dart weakens you!");
+	      /* adjust misc stats */
+	      py_bonuses(blank_treasure, 0);
 	    }
 	  else
 	    msg_print("A small dart hits you.");
@@ -153,10 +162,10 @@ int *y, *x;
       msg_print("You hit a teleport trap!");
       break;
     case 9: /* Rockfall*/
-      take_hit(dam, "falling rock.");
+      take_hit(dam, "a falling rock.");
       pusht((int)c_ptr->tptr);
       place_rubble(*y, *x);
-      msg_print("You are hit by falling rock");
+      msg_print("You are hit by a falling rock");
       break;
     case 10: /* Corrode gas*/
       corrode_gas("corrosion gas.");
@@ -262,10 +271,10 @@ int *sn, *sc;
 int *redraw;
 {
   unsigned int j;
-  int i, k;
+  register int i, k;
   spl_type spell;
   int cast;
-  spell_type *s_ptr;
+  register spell_type *s_ptr;
 
   cast = -1;
   i = 0;
@@ -286,7 +295,11 @@ int *redraw;
     }
   while (j != 0);
   if (i > 0)
-    cast = get_spell(spell, i, sn, sc, prompt, redraw);
+    {
+      cast = get_spell(spell, i, sn, sc, prompt, redraw);
+      if (cast && magic_spell[py.misc.pclass][*sn].smana > py.misc.cmana)
+	cast = confirm();
+    }
   if (*redraw)
     draw_cave();
   return(cast);
@@ -296,9 +309,9 @@ int *redraw;
 /* Finds range of item in inventory list 		-RAK-	*/
 int find_range(item1, item2, j, k)
 int item1, item2;
-int *j, *k;
+register int *j, *k;
 {
-  int i;
+  register int i;
   int flag;
 
   i = 0;
@@ -332,8 +345,8 @@ examine_book()
   int redraw, flag;
   char dummy;
   vtype out_val;
-  treasure_type *i_ptr;
-  spell_type *s_ptr;
+  register treasure_type *i_ptr;
+  register spell_type *s_ptr;
 
   redraw = FALSE;
   if (!find_range(90, 91, &i, &k))
@@ -386,7 +399,7 @@ examine_book()
 			prt(out_val, i+1, 0);
 		      }
 		    else
-		      prt("", i+1, 0);
+		      prt("", i+1, 0);  /* clear the line */
 		    i++;
 		  }
 	    }
@@ -408,10 +421,14 @@ int y, x;
 {
   int item_val;
   vtype out_val, tmp_str;
-  cave_type *c_ptr;
-  treasure_type *i_ptr;
+  register cave_type *c_ptr;
+  register treasure_type *i_ptr;
 
-  find_flag = FALSE;
+  if (find_flag)
+    {
+      find_flag = FALSE;
+      move_light (char_row, char_col, char_row, char_col);
+    }
   c_ptr = &cave[y][x];
   inventory[INVEN_MAX] = t_list[c_ptr->tptr];
   /* There's GOLD in them thar hills!      */
@@ -461,24 +478,23 @@ drop()
   int com_val;
   int redraw;
   vtype out_val, tmp_str;
-  cave_type *c_ptr;
+  register cave_type *c_ptr;
 
   redraw = FALSE;
+  reset_flag = TRUE;
   if (inven_ctr > 0)
     {
-      if (get_item(&com_val, "Which one? ", &redraw, 0, inven_ctr-1))
+      c_ptr = &cave[char_row][char_col];
+      if (c_ptr->tptr != 0)
+	msg_print("There is something there already.");
+      else if (get_item(&com_val, "Which one? ", &redraw, 0, inven_ctr-1))
 	{
+	  reset_flag = FALSE;
 	  if (redraw)  draw_cave();
-	  c_ptr = &cave[char_row][char_col];
-	  if (c_ptr->tptr != 0)
-	    msg_print("There is something there already.");
-	  else
-	    {
-	      inven_drop(com_val, char_row, char_col);
-	      objdes(tmp_str, INVEN_MAX, TRUE);
-	      (void) sprintf(out_val, "Dropped %s", tmp_str);
-	      msg_print(out_val);
-	    }
+	  inven_drop(com_val, char_row, char_col);
+	  objdes(tmp_str, INVEN_MAX, TRUE);
+	  (void) sprintf(out_val, "Dropped %s", tmp_str);
+	  msg_print(out_val);
 	}
       else if (redraw)
 	draw_cave();
@@ -492,9 +508,9 @@ drop()
 delete_monster(j)
 int j;
 {
-  int i, k;
-  cave_type *c_ptr;
-  monster_type *m_ptr;
+  register int i, k;
+  register cave_type *c_ptr;
+  register monster_type *m_ptr;
 
   i = muptr;
   k = m_list[j].nptr;
@@ -515,8 +531,8 @@ int j;
 	lite_spot((int)m_ptr->fy, (int)m_ptr->fx);
       else
 	unlite_spot((int)m_ptr->fy, (int)m_ptr->fx);
-      pushm(j);
     }
+  pushm(j);
   if (mon_tot_mult > 0)
     mon_tot_mult--;
 }
@@ -524,9 +540,9 @@ int j;
 
 /* Makes sure new creature gets lit up			-RAK-	*/
 check_mon_lite(y, x)
-int y, x;
+register int y, x;
 {
-  cave_type *c_ptr;
+  register cave_type *c_ptr;
 
   c_ptr = &cave[y][x];
   if (c_ptr->cptr > 1)
@@ -546,8 +562,8 @@ multiply_monster(y, x, z, slp)
 int y, x, z;
 int slp;
 {
-  int i, j, k;
-  cave_type *c_ptr;
+  register int i, j, k;
+  register cave_type *c_ptr;
 
   i = 0;
   do
@@ -594,8 +610,8 @@ int slp;
 summon_object(y, x, num, typ)
 int y, x, num, typ;
 {
-  int i, j, k;
-  cave_type *c_ptr;
+  register int i, j, k;
+  register cave_type *c_ptr;
 
   do
     {
@@ -642,8 +658,8 @@ int y, x, num, typ;
 int delete_object(y, x)
 int y, x;
 {
-  int delete;
-  cave_type *c_ptr;
+  register int delete;
+  register cave_type *c_ptr;
 
   delete = FALSE;
   c_ptr = &cave[y][x];
@@ -670,9 +686,9 @@ int y, x;
 /* based on flags set in the main creature record                */
 monster_death(y, x, flags)
 int y, x;
-unsigned int flags;
+register unsigned int flags;
 {
-  int i;
+  register int i;
 
   if (flags & 0x01000000)
     i = 1;
@@ -707,11 +723,11 @@ unsigned int flags;
 int mon_take_hit(monptr, dam)
 int monptr, dam;
 {
-  int i;
+  register int i;
   double acc_tmp;
-  monster_type *m_ptr;
-  struct misc *p_ptr;
-  creature_type *c_ptr;
+  register monster_type *m_ptr;
+  register struct misc *p_ptr;
+  register creature_type *c_ptr;
   int m_take_hit;
 
   m_ptr = &m_list[monptr];
@@ -744,11 +760,11 @@ int monptr, dam;
 /* Special damage due to magical abilities of object	-RAK-	*/
 int tot_dam(item, tdam, monster)
 treasure_type item;
-int tdam;
+register int tdam;
 creature_type monster;
 {
-  treasure_type *i_ptr;
-  creature_type *m_ptr;
+  register treasure_type *i_ptr;
+  register creature_type *m_ptr;
 
   i_ptr = &item;
   if (((i_ptr->tval >= 10) && (i_ptr->tval <= 12)) ||
@@ -758,22 +774,22 @@ creature_type monster;
       m_ptr = &monster;
       /* Slay Dragon  */
       if ((m_ptr->cdefense & 0x0001) && (i_ptr->flags & 0x00002000))
-	tdam *= 4;
+	tdam = tdam * 4;
       /* Slay Undead  */
       else if ((m_ptr->cdefense & 0x0008) && (i_ptr->flags & 0x00010000))
-	tdam *= 3;
+	tdam = tdam * 3;
       /* Slay Monster  */
       else if ((m_ptr->cdefense & 0x0002) && (i_ptr->flags & 0x00004000))
-	tdam *= 2;
+	tdam = tdam * 2;
       /* Slay Evil     */
       else if ((m_ptr->cdefense & 0x0004) && (i_ptr->flags & 0x00008000))
-	tdam *= 2;
+	tdam = tdam * 2;
       /* Frost         */
       else if ((m_ptr->cdefense & 0x0010) && (i_ptr->flags & 0x00020000))
-	tdam = (tdam*1.5);
+	tdam = tdam * 1.5;
       /* Fire         */
       else if ((m_ptr->cdefense & 0x0020) && (i_ptr->flags & 0x00040000))
-	tdam = (tdam*1.5);
+	tdam = tdam * 1.5;
     }
   return(tdam);
 }
@@ -783,11 +799,11 @@ creature_type monster;
 int py_attack(y, x)
 int y, x;
 {
-  int attack;
-  int i, j, k, blows, tot_tohit;
+  register int k, blows;
+  int i, j, tot_tohit, attack;
   vtype m_name, out_val;
-  treasure_type *i_ptr;
-  struct misc *p_ptr;
+  register treasure_type *i_ptr;
+  register struct misc *p_ptr;
 
   attack = FALSE;
   i = cave[y][x].cptr;
@@ -802,14 +818,14 @@ int y, x;
     (void) strcpy(m_name, "it");
   else
     (void) sprintf(m_name, "the %s", c_list[j].name);
-  if (inventory[22].tval != 0)         /* Proper weapon */
-    blows = attack_blows((int)inventory[22].weight, &tot_tohit);
+  if (inventory[INVEN_WIELD].tval != 0)         /* Proper weapon */
+    blows = attack_blows((int)inventory[INVEN_WIELD].weight, &tot_tohit);
   else                                    /* Bare hands?   */
     {
       blows = 2;
       tot_tohit = -3;
     }
-  if ((inventory[22].tval >= 10) && (inventory[22].tval <= 12))
+  if ((inventory[INVEN_WIELD].tval >= 10) && (inventory[INVEN_WIELD].tval <= 12))
     /* Fix for arrows */
     blows = 1;
   tot_tohit += py.misc.ptohit;
@@ -821,11 +837,11 @@ int y, x;
 	{
 	  (void) sprintf(out_val, "You hit %s.", m_name);
 	  msg_print(out_val);
-	  i_ptr = &inventory[22];
+	  i_ptr = &inventory[INVEN_WIELD];
 	  if (i_ptr->tval != 0)           /* Weapon?       */
 	    {
 	      k = damroll(i_ptr->damage);
-	      k = tot_dam(inventory[22], k, c_list[j]);
+	      k = tot_dam(inventory[INVEN_WIELD], k, c_list[j]);
 	      k = critical_blow((int)i_ptr->weight, tot_tohit, k);
 	    }
 	  else                        /* Bare hands!?  */
@@ -845,7 +861,7 @@ int y, x;
 	    }
 	  else
 	    attack = TRUE;  /* If creature hit,  but alive...*/
-	  i_ptr = &inventory[22];
+	  i_ptr = &inventory[INVEN_WIELD];
 	  if ((i_ptr->tval >= 10) && (i_ptr->tval <= 12)) /* Use missiles up*/
 	    {
 	      i_ptr->number--;
@@ -853,8 +869,8 @@ int y, x;
 		{
 		  inven_weight = inven_weight - i_ptr->weight;
 		  equip_ctr--;
-		  inventory[INVEN_MAX] = inventory[22];
-		  inventory[22] = blank_treasure;
+		  inventory[INVEN_MAX] = inventory[INVEN_WIELD];
+		  inventory[INVEN_WIELD] = blank_treasure;
 		  py_bonuses(inventory[INVEN_MAX], -1);
 		}
 	    }
@@ -877,8 +893,8 @@ move_char(dir)
 int dir;
 {
   int test_row, test_col;
-  int i, j;
-  cave_type *c_ptr, *d_ptr;
+  register int i, j;
+  register cave_type *c_ptr, *d_ptr;
 
   test_row = char_row;
   test_col = char_col;
@@ -887,7 +903,7 @@ int dir;
       if (dir != 5)                   /* Never random if sitting*/
 	{
 	  dir = randint(9);
-	  find_flag = FALSE;
+	  find_flag = FALSE; /* no need for move_light () */
 	}
   if (move(dir, &test_row, &test_col))    /* Legal move?           */
     {
@@ -906,7 +922,9 @@ int dir;
 		area_affect(dir, test_row, test_col);
 	      /* Check to see if he notices something  */
 	      if (py.flags.blind < 1)
-		if ((randint(py.misc.fos) == 1) || (search_flag))
+		/* fos may be negative if have good rings of searching */
+		if ((py.misc.fos <= 1) || (randint(py.misc.fos) == 1) ||
+		    (search_flag))
 		  search(test_row, test_col, py.misc.srh);
 	      /* An object is beneath him...           */
 	      if (c_ptr->tptr != 0)
@@ -945,7 +963,7 @@ int dir;
 		if (find_flag)
 		  {
 		    find_flag = FALSE;
-		    move_char(5);
+		    move_light (char_row, char_col, char_row, char_col);
 		  }
 		else if (c_ptr->tptr != 0)
 		  {
@@ -980,8 +998,9 @@ int dir;
 chest_trap(y, x)
 int y, x;
 {
-  int i, j, k;
-  treasure_type *t_ptr;
+  register int i;
+  int j, k;
+  register treasure_type *t_ptr;
 
   t_ptr = &t_list[cave[y][x].tptr];
   if (0x00000010 & t_ptr->flags)
@@ -993,6 +1012,8 @@ int y, x;
 	  take_hit(damroll("1d4"), "a poison needle.");
 	  print_stat |= 0x0001;
 	  msg_print("You feel weakened!");
+	  /* adjust misc stats */
+	  py_bonuses(blank_treasure, 0);
 	}
       else
 	msg_print("You are unaffected.");
@@ -1038,9 +1059,9 @@ openobject()
   int y, x, tmp;
   int flag;
   char *tmp_str;
-  cave_type *c_ptr;
-  treasure_type *t_ptr;
-  struct misc *p_ptr;
+  register cave_type *c_ptr;
+  register treasure_type *t_ptr;
+  register struct misc *p_ptr;
 
   y = char_row;
   x = char_col;
@@ -1137,7 +1158,7 @@ closeobject()
 {
   int y, x, tmp;
   vtype out_val;
-  cave_type *c_ptr;
+  register cave_type *c_ptr;
 
   y = char_row;
   x = char_col;
@@ -1165,14 +1186,14 @@ closeobject()
 	  msg_print("I do not see anything you can close there.");
       else
 	msg_print("I do not see anything you can close there.");
-	}
+    }
 }
 
 
 /* Go up one level					-RAK-	*/
 go_up()
 {
-  cave_type *c_ptr;
+  register cave_type *c_ptr;
 
   c_ptr = &cave[char_row][char_col];
   if (c_ptr->tptr != 0)
@@ -1193,7 +1214,7 @@ go_up()
 /* Go down one level					-RAK-	*/
 go_down()
 {
-  cave_type *c_ptr;
+  register cave_type *c_ptr;
 
   c_ptr = &cave[char_row][char_col];
   if (c_ptr->tptr != 0)
@@ -1217,7 +1238,7 @@ int twall(y, x, t1, t2)
 int y, x, t1, t2;
 {
   int res;
-  cave_type *c_ptr;
+  register cave_type *c_ptr;
 
   res = FALSE;
   c_ptr = &cave[y][x];
@@ -1253,17 +1274,17 @@ int y, x, t1, t2;
 tunnel(y, x)
 int y, x;
 {
-  int i, tabil;
-  cave_type *c_ptr;
-  treasure_type *i_ptr;
+  register int i, tabil;
+  register cave_type *c_ptr;
+  register treasure_type *i_ptr;
 
   c_ptr = &cave[y][x];
   /* Compute the digging ability of player; based on       */
   /* strength, and type of tool used                       */
   tabil = py.stats.cstr;
-  if (inventory[22].tval != 0)
+  if (inventory[INVEN_WIELD].tval != 0)
     {
-      i_ptr = &inventory[22];
+      i_ptr = &inventory[INVEN_WIELD];
       if (0x20000000 & i_ptr->flags)
 	tabil += 25 + i_ptr->p1*50;
       /* Regular walls; Granite, magma intrusion, quartz vein  */
@@ -1341,8 +1362,8 @@ disarm_trap()
 {
   int y, x, i, tdir;
   int tot, t1, t2, t3, t4, t5;
-  cave_type *c_ptr;
-  treasure_type *i_ptr;
+  register cave_type *c_ptr;
+  register treasure_type *i_ptr;
   char *tmp_str;
 
   y = char_row;
@@ -1358,11 +1379,11 @@ disarm_trap()
 	  t4 = int_adj();        /* Intelligence adjustment*/
 	  tot = t1 + t2 + t3 + t4;
 	  if (py.flags.blind > 0)
-	    tot /= 5.0;
+	    tot = tot / 5.0;
 	  else if (no_light())
-	    tot /= 2.0;
+	    tot = tot / 2.0;
 	  if (py.flags.confused > 0)
-	    tot /= 3.0;
+	    tot = tot / 3.0;
 	  i = t_list[c_ptr->tptr].tval;
 	  t5 = t_list[c_ptr->tptr].level;
 	  if (i == 102)             /* Floor trap    */
@@ -1379,7 +1400,8 @@ disarm_trap()
 		  lite_spot(y, x);
 		  prt_experience();
 		}
-	      else if (randint(tot) > 5)
+	      /* avoid randint(0) call */
+	      else if ((tot > 5) && (randint(tot) > 5))
 		msg_print("You failed to disarm the trap.");
 	      else
 		{
@@ -1409,7 +1431,7 @@ disarm_trap()
 		      py.misc.exp += t5;
 		      prt_experience();
 		    }
-		  else if (randint(tot) > 5)
+		  else if ((tot > 5) && (randint(tot) > 5))
 		    msg_print("You failed to disarm the chest.");
 		  else
 		    {
@@ -1434,11 +1456,12 @@ disarm_trap()
 /* Note: Looking is a free move,  see where invoked...            */
 look()
 {
-  int i, j, y, x;
+  register int i, j;
+  int y, x;
   int dir, dummy;
   int flag;
   char fchar;
-  cave_type *c_ptr;
+  register cave_type *c_ptr;
   vtype out_val, tmp_str;
 
   flag = FALSE;
@@ -1507,17 +1530,19 @@ look()
 add_food(num)
 int num;
 {
-  struct flags *p_ptr;
+  register struct flags *p_ptr;
 
   p_ptr = &py.flags;
   if (p_ptr->food < 0)  p_ptr->food = 0;
   p_ptr->food += num;
-  if (p_ptr->food > PLAYER_FOOD_FULL)  msg_print("You are full.");
   if (p_ptr->food > PLAYER_FOOD_MAX)
     {
-      msg_print("You're getting fat from eating so much.");
+      msg_print("You are bloated from overeating.");
+      p_ptr->slow = (p_ptr->food - PLAYER_FOOD_MAX) / 50;
       p_ptr->food = PLAYER_FOOD_MAX;
     }
+  else if (p_ptr->food > PLAYER_FOOD_FULL)
+    msg_print("You are full.");
 }
 
 
@@ -1525,7 +1550,7 @@ int num;
 desc_charges(item_val)
 int item_val;
 {
-  int rem_num;
+  register int rem_num;
   vtype out_val;
 
   if (index(inventory[item_val].name, '^') == 0)
@@ -1542,7 +1567,7 @@ desc_remain(item_val)
 int item_val;
 {
   vtype out_val, tmp_str;
-  treasure_type *i_ptr;
+  register treasure_type *i_ptr;
 
   inventory[INVEN_MAX] = inventory[item_val];
   i_ptr = &inventory[INVEN_MAX];
@@ -1557,7 +1582,7 @@ int item_val;
 inven_throw(item_val)
 int item_val;
 {
-  treasure_type *i_ptr;
+  register treasure_type *i_ptr;
 
   inventory[INVEN_MAX] = inventory[item_val];
   inventory[INVEN_MAX].number = 1;
@@ -1575,8 +1600,8 @@ int item_val;
 facts(tbth, tpth, tdam, tdis)
 int *tbth, *tpth, *tdam, *tdis;
 {
-  int tmp_weight;
-  treasure_type *i_ptr;
+  register int tmp_weight;
+  register treasure_type *i_ptr;
 
   i_ptr = &inventory[INVEN_MAX];
   if (i_ptr->weight < 1)
@@ -1592,14 +1617,14 @@ int *tbth, *tpth, *tdam, *tdis;
   if (*tdis > 10)  *tdis = 10;
 
   /* Using Bows,  slings,  or crossbows	*/
-  if (inventory[22].tval == 20)
-    switch(inventory[22].p1)
+  if (inventory[INVEN_WIELD].tval == 20)
+    switch(inventory[INVEN_WIELD].p1)
       {
       case 1:
 	if (i_ptr->tval == 10)        /* Sling and Bullet       */
 	  {
 	    *tbth = py.misc.bthb;
-	    *tpth += inventory[22].tohit;
+	    *tpth += inventory[INVEN_WIELD].tohit;
 	    *tdam += 2;
 	    *tdis = 20;
 	  }
@@ -1608,7 +1633,7 @@ int *tbth, *tpth, *tdam, *tdis;
 	if (i_ptr->tval == 12)        /* Short Bow and Arrow    */
 	  {
 	    *tbth = py.misc.bthb;
-	    *tpth += inventory[22].tohit;
+	    *tpth += inventory[INVEN_WIELD].tohit;
 	    *tdam += 2;
 	    *tdis = 25;
 	  }
@@ -1617,7 +1642,7 @@ int *tbth, *tpth, *tdam, *tdis;
 	if (i_ptr->tval == 12)        /* Long Bow and Arrow     */
 	  {
 	    *tbth = py.misc.bthb;
-	    *tpth += inventory[22].tohit;
+	    *tpth += inventory[INVEN_WIELD].tohit;
 	    *tdam += 3;
 	    *tdis = 30;
 	  }
@@ -1626,7 +1651,7 @@ int *tbth, *tpth, *tdam, *tdis;
 	if (i_ptr->tval == 12)        /* Composite Bow and Arrow*/
 	  {
 	    *tbth = py.misc.bthb;
-	    *tpth += inventory[22].tohit;
+	    *tpth += inventory[INVEN_WIELD].tohit;
 	    *tdam += 4;
 	    *tdis = 35;
 	  }
@@ -1635,7 +1660,7 @@ int *tbth, *tpth, *tdam, *tdis;
 	if (i_ptr->tval == 11)        /* Light Crossbow and Bolt*/
 	  {
 	    *tbth = py.misc.bthb;
-	    *tpth += inventory[22].tohit;
+	    *tpth += inventory[INVEN_WIELD].tohit;
 	    *tdam += 2;
 	    *tdis = 25;
 	  }
@@ -1644,7 +1669,7 @@ int *tbth, *tpth, *tdam, *tdis;
 	if (i_ptr->tval == 11)        /* Heavy Crossbow and Bolt*/
 	  {
 	    *tbth = py.misc.bthb;
-	    *tpth += inventory[22].tohit;
+	    *tpth += inventory[INVEN_WIELD].tohit;
 	    *tdam += 4;
 	    *tdis = 35;
 	    break;
@@ -1656,10 +1681,10 @@ int *tbth, *tpth, *tdam, *tdis;
 drop_throw(y, x)
 int y, x;
 {
-  int i, j, k, cur_pos;
-  int flag;
+  register int i, j, k;
+  int flag, cur_pos;
   vtype out_val, tmp_str;
-  cave_type *c_ptr;
+  register cave_type *c_ptr;
 
   flag = FALSE;
   i = y;
@@ -1707,15 +1732,16 @@ int y, x;
 /*       with correct weapon.  I.E.  wield bow and throw arrow.  */
 throw_object()
 {
-  int item_val, tbth, tpth, tdam, tdis, i;
+  int item_val, tbth, tpth, tdam, tdis;
   int y_dumy, x_dumy, dumy;
   int y, x, oldy, oldx, dir, cur_dis;
   int redraw, flag;
   char tchar[2];
-  vtype out_val, tmp_str;
-  treasure_type *i_ptr;
-  cave_type *c_ptr;
-  monster_type *m_ptr;
+  vtype out_val, tmp_str, m_name;
+  register treasure_type *i_ptr;
+  register cave_type *c_ptr;
+  register monster_type *m_ptr;
+  register int i;
 
   redraw = FALSE;
   if (inven_ctr == 0)
@@ -1742,6 +1768,8 @@ throw_object()
 	  inven_throw(item_val);
 	  facts(&tbth, &tpth, &tdam, &tdis);
 	  i_ptr = &inventory[INVEN_MAX];
+	  tchar[0] = i_ptr->tchar;
+	  tchar[1] = '\0';
 	  flag = FALSE;
 	  y = char_row;
 	  x = char_col;
@@ -1768,18 +1796,29 @@ throw_object()
 			{
 			  i = m_ptr->mptr;
 			  objdes(tmp_str, INVEN_MAX, FALSE);
-			  (void) sprintf(out_val,"The %s hits the %s.",tmp_str,
-				  c_list[i].name);
+			  /* Does the player know what he's fighting?      */
+			  if ((0x10000 & c_list[i].cmove) &&
+			      (!py.flags.see_inv))
+			    (void) strcpy(m_name, "it");
+			  else if (py.flags.blind > 0)
+			    (void) strcpy(m_name, "it");
+			  else if (!m_ptr->ml)
+			    (void) strcpy(m_name, "it");
+			  else
+			    (void) sprintf(m_name, "the %s", c_list[i].name);
+
+			  (void) sprintf(out_val,"The %s hits %s.", tmp_str,
+				  m_name);
 			  msg_print(out_val);
 			  tdam = tot_dam(inventory[INVEN_MAX], tdam,
 					 c_list[i]);
 			  i_ptr = &inventory[INVEN_MAX];
 			  tdam = critical_blow((int)i_ptr->weight, tpth, tdam);
 			  i = mon_take_hit((int)c_ptr->cptr, tdam);
-			  if (i > 0)
+			  if (i >= 0)
 			    {
-			      (void) sprintf(out_val,"You have killed the %s.",
-				      c_list[i].name);
+			      (void) sprintf(out_val,"You have killed %s.",
+				      m_name);
 			      msg_print(out_val);
 			    }
 			}
@@ -1788,10 +1827,12 @@ throw_object()
 		    }
 		  else
 		    {
-		      tchar[0] = '\0';
 		      if (panel_contains(y, x))
 			if (test_light(y, x))
-			  print(tchar, y, x);
+			  {
+			    print(tchar, y, x);
+			    put_qio();
+			  }
 		    }
 		}
 	      else
@@ -1818,10 +1859,10 @@ bash()
   int y, x, tmp;
   int old_ptodam, old_ptohit, old_bth;
   vtype tmp_str, m_name;
-  cave_type *c_ptr;
-  treasure_type *i_ptr, *t_ptr;
-  player_type *p_ptr;
-  monster_type *m_ptr;
+  register cave_type *c_ptr;
+  register treasure_type *i_ptr, *t_ptr;
+  register player_type *p_ptr;
+  register monster_type *m_ptr;
 
   y = char_row;
   x = char_col;
@@ -1835,13 +1876,13 @@ bash()
 	  else
 	    {
 	      /* Save old values of attacking  */
-	      inventory[INVEN_MAX] = inventory[22];
+	      inventory[INVEN_MAX] = inventory[INVEN_WIELD];
 	      old_ptohit = py.misc.ptohit;
 	      old_ptodam = py.misc.ptodam;
 	      old_bth    = py.misc.bth;
 	      /* Use these values              */
-	      inventory[22] = blank_treasure;
-	      i_ptr = &inventory[22];
+	      inventory[INVEN_WIELD] = blank_treasure;
+	      i_ptr = &inventory[INVEN_WIELD];
 	      (void) strcpy(i_ptr->damage, inventory[26].damage);
 	      i_ptr->weight = py.stats.cstr;
 	      i_ptr->tval   = 1;
@@ -1853,7 +1894,7 @@ bash()
 	      if (py_attack(y, x))
 		{
 		  m_ptr = &m_list[c_ptr->cptr];
-		  m_ptr->stunned = randint(2) + 1;
+		  m_ptr->stunned += randint(2) + 1;
 		  if (m_ptr->stunned > 24)  m_ptr->stunned = 24;
 		  /* Does the player know what he's fighting?      */
 		  if ((0x10000 & c_list[m_ptr->mptr].cmove) &&
@@ -1870,7 +1911,7 @@ bash()
 		  msg_print(tmp_str);
 		}
 	      /* Restore old values            */
-	      inventory[22] = inventory[INVEN_MAX];
+	      inventory[INVEN_WIELD] = inventory[INVEN_MAX];
 	      py.misc.ptohit = old_ptohit;
 	      py.misc.ptodam = old_ptodam;
 	      py.misc.bth    = old_bth;
@@ -1933,8 +1974,8 @@ jamdoor()
 {
   int y, x, tmp;
   int i, j;
-  cave_type *c_ptr;
-  treasure_type *t_ptr, *i_ptr;
+  register cave_type *c_ptr;
+  register treasure_type *t_ptr, *i_ptr;
   char tmp_str[80];
 
   y = char_row;
@@ -1981,17 +2022,28 @@ jamdoor()
 /* Refill the players lamp				-RAK-	*/
 refill_lamp()
 {
-  int i, j, k;
-  treasure_type *i_ptr;
+  int i, j;
+  register int k;
+  register treasure_type *i_ptr;
 
   k = inventory[32].subval;
   if ((k > 0) && (k < 10))
     if (find_range(77, -1, &i, &j))
       {
-	msg_print("Your lamp is full.");
 	i_ptr = &inventory[32];
 	i_ptr->p1 += inventory[i].p1;
-	if (i_ptr->p1 > OBJ_LAMP_MAX)  i_ptr->p1 = OBJ_LAMP_MAX;
+	if (i_ptr->p1 > OBJ_LAMP_MAX)
+	  {
+	    i_ptr->p1 = OBJ_LAMP_MAX;
+	    msg_print ("Your lamp overflows, spilling oil on the ground.");
+	    msg_print("Your lamp is full.");
+	  }
+	else if (i_ptr->p1 > OBJ_LAMP_MAX/2)
+	  msg_print ("Your lamp is more than half full.");
+	else if (i_ptr->p1 == OBJ_LAMP_MAX/2)
+	  msg_print ("Your lamp is half full.");
+	else
+	  msg_print ("Your lamp is less than half full.");
 	desc_remain(i);
 	inven_destroy(i);
       }

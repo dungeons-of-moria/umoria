@@ -1,3 +1,4 @@
+:::::1987 Fixes:::::
 Fixes before 5/1
 fixed moving into column one
 tunnel through permanent rock prints tunnel through air? message
@@ -180,29 +181,433 @@ control-c puts you in scoreboard only after character generation complete
 changed all USG savetty/resetty to saveterm/resetterm, it still seems to work
 changed version number to 4.85 for distribution purposes
   started mailing to comp.sources.games
+---------------------------  10/27
+moved clear_screen in top_twenty to before the wizard1 test
+in wizard_restore, don't exit if can't chmod the save file
+when save file in wizard mode, leave it readable, this is necessary
+  to allow the wiazrd to restore other player's 'touch'ed save files
+fixed up the install option in the makefile, added comments to INSTALL
+it is possible to get 'final offer = 0' when selling an object,
+  fixed by making sure that min_buy and max_buy are >= 1
+----------------------------  10/29
+fixed breath, was calling poison_gas with dam = 0
+put note into MISC_NOTES on how to restore touched save files
+finished mailing to comp.sources.games
+  all bug fixes listed above are included in 4.85
+---------------------------------  11/7
+more fixes for SYSV shell out problem
+
+:::::1988 Fixes:::::
+--------------------------------- 1/11
+fixed "You are too confused to scanf..." message
+--------------------------------- 1/14
+for SYS V, replaced rand() with lrand(), also fixed init_seeds, set_seed,
+   reset_seed
+fixed randint, it now returns 32 bits for both BSD & SYS V
+replaced st_ctime with st_atime in save.c
+deleted "? for help" messages during character creation
+check_pswd now accepts CR or LF to end password, affected those who
+  used BUGGY_CURSES option
+when ^C to quit, now get "killed by quitting" message
+fixed searching of trapped chests, printed wrong message
+if control-C while resting, don't get asked if want to quit
+added setgid(getgid) to main.c
+remove extraneous refresh/putqio calls from io.c, greatly reduce CPU usage
+casting blind monster on a monster that normally doesn't move,
+  causes it to start moving, fixed
+problem if control-C during -more- prompt fixed
+after fork, close open file descriptors (scoreboard)
+--------------------------------  1/15
+after change of dex/str, misc stats are updated
+checked all randint for possible randint(0) calls
+remove bonuses for old object before adding bonus for new object in wear()
+  this affected increase stat rings mostly
+deleted unneccesary loop from restore_levels in spells.c
+fixed 'no more' message for items that don't start with ampersand, in desc.c
+fixed dprint in death.c, not printing last line of tombstone
+fixed special effects (bolt, ball, breath) in spells.c by adding put_qio calls
+locked chests were treated as trapped during searching in moria1.c
+C command to file showed equipment list starting with b), files.c
+when 21 items in inventory, equip list was not updated after removing an
+   item,  unwear() in moria1.c
+------------------------------1/18
+fixed test of py.misc.fos in moria2.c, this number could go negative
+in io.c, clear_screen cleared all used_line flags instead of just the ones
+  actually cleared
+in io.c, change loops that modify used_line to stop at 22, not 23
+----------------------------- 1/22
+in scrolls.c, tmp[] was accessed starting at index one instead of zero
+in store2.c, when 12 items in store, offered to sell a-m instead of a-l
+----------------------------  2/6
+added check of characters hit point in get_char, this ensures that dead
+  characters will not be given a chance to restore their hit points
+  dead characters can be saved by a signal
+config.h was non-ansi, macro expanding inside of string constants not allowed
+---------------------------  2/7
+fixed speed monster problem, infinite loop if point wand at wall
+---------------------------  2/12
+compact_objects will no longer delete doors if are on the town level
+in store_create, index to inven_init was off by one, this will fix store
+	inventories
+made init_seeds generate a more random initial setup
+removed Public Domain messages, contradicted the 'all rights reserved' phrase
+changed all msg_line, msg_line places to msg_line, 0
+changed pause_exit in io.c, so that ESC does not quit game, this is
+	inconsistent with rest of game, expecially get_char
+quart_height, quart_width, msg_line changed to be constants
+changed turn and store_open to be longs, before store_open was a short which
+	meant that stores could not become locked after 64K turns
+another spelling check of all files
+fixed sell_haggle and purchase_haggle so that prices will not go the wrong
+   way, i.e. no more negative numbers while selling
+changed time check in save.c to 5 secs so that it matched sleeping time
+------------------------------2/14
+changed inner loop of print_map to use strcat instead of sprintf,
+	this gives a big time savings here!!
+-----------------------------2/15
+changed inner loop of printf_map to index a character pointer instead
+	of using strcat
+removed strcpy from lite_spot
+delete unused code from rest check in dungeon.c, no longer refreshes screen
+removed refresh from msg_print
+eliminated most abs calls, speed up commonly called routines
+speed up many of the most commonly used functions
+eliminate test_light call in prt_map in misc1.c, inline the code
+image avoided by typing ^R
+changed rogue-like summon monster from ^U to ^S
+fixed throw_object, did not draw object on screen as it moved
+---------------------------- 2/18
+fixed print_objects in files.c, had an exclamation mark before the get_string
+---------------------------------2/19
+ooze bug?, cursor disappears, invulnerability, fixed by changing delete
+	monster so that pushm() is ALWAYS called
+no more silver bug, changed all object definitions so that 'number' is 1
+player_save did not take level into account, two calls did not add it in
+get_hitdie could return a negative number for increase in hit points
+add rerolling of characters
+---------------------- 2/21
+changed superb before excellent in likert() in misc1.c to be superb
+  after excellent
+--------------------- 2/27
+fixed some signal problems upon forking a subprocess
+stone-to-mud that kills a creature now prints death message
+added ' of' to name of infra-vision potion
+can now enchant boots with enchant armor scroll
+removed caps for 'Some' in treasure1.c
+strip 'some' at start of string in objdes when pref is false
+------------------  3/5
+always treat boots as armor, fixed scrolls.c, minus_ac in moria1.c
+ask for confirmation if try to cast spell without enough mana
+fix msg_print, put flush if -more- had been printed back in
+fix control-c handler, add test for 0 in get_com of io.c
+------------------ 3/7
+many grammar/spelling errors fixed, complements Col Sicherman
+------------------ 3/17
+noticed that character rerolling has somehow disappeared?!?!?
+------------------ 3/28
+exit find mode if character takes damage (for any reason)
+flush input, exit search/rest modes if creature attacks
+broke up line in place_object, misc2.c to avoid reported compiler bug
+fixed problem with range attacks vs filthy urchin, mon_take_hit returns
+	-1 if no monster dies not 0 as before
+if monster in unlit area lit by ranged attack then teleports, symbol not
+	cleared, set in mon_spell_cast, set cast to TRUE when cast
+------------------- 3/31
+set_lightning_destroy was returning the inverse set
+in generate.c, change "doorptr <= 100" to "doorptr < 100", so that
+	array doorstk[100] accessed correctly
+------------------ 4/6
+off by one error in place_trap call in vault_trap in generate.c
+------------------ 4/16
+increase dam/increase ac rings were setting cost incorrectly in misc1.c
+------------------ 5/1
+salt water not clear POISONED message, call cure_poison instead of clearing
+	poisoned flag
+lose_exp takes off one too many mana points, wasn't rounding correctly
+in death.c, print out 'mighty Queen' if female character
+can 'kill' the program twice to get two save files, added var that only allows
+	one signal handler to execute
+fixed use of reset_flag for free moves, for many commands
+cure blindness does not redraw monsters, added creatures(FALSE) call to
+	dungeon.c
+eliminate any abs that calls randnor (misc1.c), since abs may be defined
+	as a macro
+off by one bug for all player_exp references, could not reach level40,
+con_adj() used before class adjustments to abilities made in create.c,
+	so I moved it afterwards
+bless prints max hit points, dungeon.c, the calls were deleted
+------------------------  5/4
+changed version number to 4.86, first diffs sent out
+-----------------------  5/6
+fixed recharge in spells.c, did not redraw srceen properly
+-----------------------  5/7
+in dungeon.c, moria1.c, moria2.c, scrolls.c, substituted INVEN_* constants
+in dungeon.c, fast code called msg_print before slowing player, creative
+    killing could make character permanently hasted
+------------------------- 5/10
+after save character, set a global so that will not save again if
+	catch a signal
+exchange x command should report 'can not wield heavy weapon'
+gain_level problem, could reach level 41 with ^J, change player_max_exp in
+	main.c so that this won't happen, also changed player_exp[39] in var.c
+------------------------ 5/17
+fix typos in misc2.c, io.c, dungeon.c, store2.c, moria2.c to get program
+	to compile
+------------------------- 5/18
+fixed typo 'of' -> 'or' in dungeon.c
+another savefile/signal problem, set char_saved before sleep
+more 'do action before calling msg_print' bugs in dungeon.c fixed, see 5/7
+level 50 objects never created, make t_level 51 element array instead of 50
+bashing effects (stunned) not cumulative
+------------------------- 5/20
+added some SYS III notes to INSTALL
+lamp fill messages added to moria2.c, to make it more informative
+when player overeats, he is temporarily slowed
+modified objects in treasure1.c and magic_treasure() in misc1.c
+     so that all object pluses are part of name
+changed subval of mush so that it is not same as slime mold
+cast which spell? message does not go away if hit escape, fixed get_spell
+erase_line now clear msg_flag if row == 0
+now save stack of last ten messages, changes to io.c and dungeon.c
+original commands changed, wiz pass ^P -> ^W, last message ^M -> ^P,
+	create object ^W -> ^Q,   ^M did not work on Ultrix for last message
+cloaks incorrectly priced, misc1.c was adding 100*to_ac to cost,
+	this add is done in store1.c
+treat boots like other armor, add to disenchant list in creature.c
+turn over store contents every 1000 turns, if not on town level
+------------------------- 5/21
+only print monster name if visible, moria2.c: throw_object()
+	creature.c: confuse monster check in make_move()
+	spells.c: sleep_monster1(), fire_bolt(), hp_monster(), drain_life(),
+		speed_monster(), confuse_creature(), sleep_monster(),
+		wall_to_mud(), poly_monster(), speed_monsters(),
+		sleep_monsters2(), dispel_creature(), turn_undead(),
+		lite_line()
+cast which spell? prompt cleared when ask for list of spells, misc2.c
+fix spells.c so that all spells return TRUE when they should
+create food no longer destroys object under player
+------------------------- 5/22
+add -cont.- message to store display, store2.c
+``There is something there already'' *before* asking which drop item, moria2.c
+------------------------- 5/24
+added panic_save, don't save scores for games from panic save files
+    modified death.c save.c signals.c
+could 'ESC' from learn_spell without learning a spell, misc2.c
+area_affect() moria1.c, exit immediately if clear find_flag
+------------------------- 5/25
+change prt_field in misc2.c to only pad to 13 char, avoid Ultrix display prob
+delete unnecessary space in prt_num in misc2.c, avoid Ultrix display prob
+more mods to the repeat old message code
+change create object command from ^Q to @ because of problems with control-flow
+----------------------- 5/26
+don't flush keyboard buffer in create.c, inkey_flush no longer used anywhere
+ifdefs SLOW around sleeping code, so that it is optional
+allow much longer names to be entered to create command, wizard.c
+clear store -more- message when number of items drop below 12
+eliminate large number of uses of the strings " " and ""
+looking at shop entrance was giving:
+    you see no more The entrance to the magic shop..
+changed version number to 4.87
+increased stack to 20 messages
+fixed spacing of equipment list header in file_character(), files.c
+stop run at edge of screen, changed get_panel in moria1.c
+add store_maint() call when restore save file, one for every day the file
+	is old
+------------------------- 5/27
+fixed *enchant armor* so that it randomly picks an object to enchant, scrolls.c
+fix town_gen() of generate.c so that stairs always put in same place
+in msg_print() of io.c, clear find flag to terminate a run
+made sure that documentation race/stat class/stat adjustments corresponded
+	with the program
+the save adjustments based on classes were all wrong
+mages fos (i.e. perception) was too high (i.e. bad)
+added range adjustments to stealth and perception, so that display of this
+	abilities gave better results, misc2.c files.c
+------------------------- 5/28
+added character rerolling again to create.c
+fixed indentation of race and class choices in create.c
+added zillions of register declarations
+eliminated the three different Makefile, put all configurable stuff
+	in config.h
+------------------------- 6/1
+when spell casters lose exp, they lose spells too quickly
+	lose spell when: not high enough level, num spells more than int allows
+	should lose spells when lose int/wis
+brought all miscellaneous documentation files up to date
+store_open and turn changed back to worlint/int for save file compatibility
+	reasons
+put new version on ucbarpa, and announced it on the net
+----------------------- 6/3
+when removing item in wear() moria1.c, do it after inven_destroy, otherwise
+	inventory may increase to 23 objects thereby overwritting wielded obj
+add message about void/int declaration of signal() to signals.c
+---------------------- 6/4
+added message about gcc needing -fwritable-strings to Makefile and INSTALL
+reworked Makefile to make it easier to use
+---------------------- 6/6
+fix check_pwsd in misc2.c, was strcpy 12 char (13 with \0) into 12 char array
+----------------------- 6/9
+added separate SYS_III and SYS_V defines to config.h
+added indirection to function call in spells.c, damage() -> (*damage)()
+fixed initialization of damstring in gold_list, treasure2.c
+------------------------ 6/14
+updated README and INSTALL documentation
+new Flexnames sed file for 4.87 umoria, created by shortc
+add refresh call to shell_out, move duplicate code in dungeon.c into shell_out
+SYS_III compiler gives register allocation errors for *= and /= operators
+   only 23 of them, so I removed them all
+---------------------- 6/27
+treasure1.c: rings of weakness are now initially cursed
+spells.c: cdefense & 0x80000000 should be cmove, correct comments
+many files, check places where find_flag cleared and make sure move_char(5)
+	is called if necessary, particularly msg_print caused a problem
+--------------------- 6/28
+Makefile: updated dependency list for .c files
+many files: change move_char(5) to move_light(char_row, char_col, char_row,
+	char_col), avoid problems with potential recursive calls to move_char()
+
+Working on:
+
+Cheating/Tricks:
+should potion stat increase (in_statp) be based on cstr (including ring plus)
+	or on the characters base str (without ring plus)
+  presently cstr which allows cheating by manipulation of cstr
+  should de_statp be changed also?
+should de_statt followed by in_statt increase stat to next 18/xx mod 10?
+grape jelly trick, restore levels take you back to old hit point levels
+  or give new levels based on current stats?
+can circle monsters, by only using diagonals in a diamond shape
 
 Things to be fixed:
+
+check plurals "~" in object names, esp. Pint in treasure2.c
+make get_panel run stops user customizable?
+objects in outside corners do not stop run
+moria1.c: area_affect does not need to check "if (find_flag)"
+carefully check everyplace that clears find_flag, there are a lot
+	of unnecessary checks, perhaps even some recursive calls to move_char
+check setting of moria_flag in dungeon.c, esp. after restore_char ()
+add "moria ^file" option to automatically do wizard restore,
+   do the umask calls in the program instead of forcing user to type them
+don't ask for quit on char '\0', should instead ignore it
+check for EOF when reading characters
+complaint that a hangup (kill -1) results in a game whose
+	score will no longer be posted to the scoreboard
+resting should have small but finite chance of waking a monster
+  perhaps check once every 10 turns against randint(6) > stealth
+cursor should be positioned somewhere before each inkey call
+all npc spells should print descriptive message
+allow rerolling after choose race/class
+remove "clear" from random potion names?
+pad should take a char not a string
+print a number with the repeat_msg command
+Message line overextending into second line should be erased
+identify staffs/wands as having zero charges, when they run out
+``can't carry that much weight'' before ``that many items'' is wrong?
+   I like it the way it is now, though
+still too slow on i/o, perhaps rewrite to avoid refresh() calls?
+	perhaps use only motion optimization stuff?
+Dot tunneling command
+encrypt info before writing it to the save file
+   perhaps xor with stat buffer
+dprint in death.c is stupid!!
+prt_map in misc1.c is stupid!!
+draw_block and sub2_move_light is pretty stupid also, in moria1.c!!
+problems reported with many calls to detect_sdoors, I think this is a result
+	of the vault_trap bug fixed 4/6
+subval, missile_ctr could be short ints
+note that some armor can decrease to-hit values in docs,
+	should these be displayed in name?
+missing amulets, 1-4 strength, constitution, intelligence, dexterity
+missing rings 5-6 gain wisdom, gain charisma
+	note that missing rings/amulets are disjoint
+missing staff 9 genocide
+missing staff 24 mass_genocide
+high level offensive spells give have a far lower damage/mana ratio than
+	magic missiles
+how to abort run on systems without ^C?
+	perhaps some ifdefed code which does no-blocking I/O for them?
+add death due to starvation
+wielding heavy wepaons, fix + to hit on screen?
+don't let dragons breathe on first attack, AMHD is nasty
+	especially after the screen changes to the next panel
+checking both ((!m_ptr->ml) or (!see_invis && mon invis)) is probably
+	redundant when determining whether or not player can see a monster
+list of spell books not cleared when get cast which spell? prompt
+should we call m_name if spell only applies to visible creatures?
+many spells do not print desciptive comment, aggravate_monster for instance
+stores: haggling gets very boring
+  add prompt to fix price of all objects with same starting price
+  always go to minimum price after player has exhibited his excellence at
+       haggling
+when moving on objects, say what character moved onto (like rogue)
+be able to move onto objects without picking them up (like rogue)
+for throw command, ask for direction first (like rogue)
+SYS V does not lock scoreboard when changing it
+compressing save files would make many people happy
+it is pretty easy to defeat the file protection mechanism, should I toughen
+	it up?
 if amulet raises stat over 118, stat will be lowered (more than it should be)
-	when take amulet off
-loss of strength doesn't force you to drop items
-what if can't write into current directory? (saves files, etc.)
+	when take amulet off, fix this by having 4 values for each stat
 this file should be in reverse chronological order!
-it is possible to get 'final offer = 0' when selling an object
+clonning shimmering molds, one droppped a chest, went over to search chest,
+	panic save, get panic save everytime restore character, this
+	may be related to old trap generation problem fixed 4/6
+weight problem reported, character can not pick anything up?
+what if can't write into current directory? (saves files, etc.)
+should detect monster work on invisible creatures if have see invisible
+	ability from ring/sword/etc.?
+does not understand ~ in path names
+loss of strength doesn't force you to drop items
+in general, loss of an ability should have many affects, non of which are
+	implemented, for example, lose of intelligence should cause a mage
+	to lose spells
+cases of permanent slowness reported?
+add user name to scoreboard?
+also add points and experience to scoreboard
+change cost in sell_haggle to a long
+change item_value to return a long
+change turn to a long
+store_open should be a long
+use of reset_flag for free moves still a little inconsistent
+fix save files to include obj desc, then only need one random number
+	generator which can use table program
+replace magic numbers with constants
+name objects if use did not identify them
+
+add a pull-back map command like the PC version, display entire map on screen
+   only showing important features, like stairs
+
+Very Hard things to add:
+recenter character on screen?
+can't look in any direction, only in the 8 dirs
+can't cast in any direction,
 
 Long term stuff, enhancement suggestions:
-use environment variables, for example to specify rogue-like keys
-and option to restore files from default save filename
+give player something to do with money, i.e. 1Million gp for a HA +10 +10 sword
+'flavor' the levels, dragons on one level, undead on another, etc.
+what's been discovered list
+use environment variables to specify rogue-like/original keys
+use environment variable for default save file
+add option to restore files from default save filename
 commands not close enough to rogue style
+fixed item lettering in inventory, in-line/cmd-line options?
 scoreboard have all scores, not top twenty
 command line option to print out times open
-strange streatment of cursed armor
-can't drop or identify items in equipment list
+can't drop, identify, pick up, or throw  items in equipment list
+Y destroy command, allow destroy from equipment list
 let o, c, D commands automatically pick direction when they can
-SYS V does not lock scoreboard when changing it
-it is too slow?  spends about half of its time doing screen i/o
-replace magic numbers with constants
-remove trailing blanks from every line
-for throw command, ask for direction first (like rogue)
-don't change letters of items in inventory (like rogue, again)
-be able to move onto objects without picking them up (like rogue)
-when moving on objects, say what character moved onto (like rogue)
+give rogue's a chance to steal, e.g. let monsters carry items that they
+  pick up
+give magic users a chance at pre identifying scrolls
+could use a help system, like VMS version
+make scroll of identify more common, to help non-MU character classes
+
+Features:
+hero/superhero do not subtract hit points when effect wears off
+WOR scroll can save you with minus hit points!!
+detect monster does not detect invisible monsters (normally)
+can hit monsters in walls, but can not cast at them
+can not enchant something with negative numbers (i.e. cursed items)
+how does armor protect against breath/gas? it doesn't!!!
+run stops one character before room lights, because it is supposed to

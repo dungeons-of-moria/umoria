@@ -1,0 +1,58 @@
+.if '\*(Bd'' .ds Bd moria
+.TH MORIA 6 "" "Local"
+.SH NAME
+moria \- a dungeon game
+.SH SYNOPSIS
+.B \*(Bd
+[
+.ie '\*O'ROGUE_LIKE' .B \-o
+.el .B \-r
+] [
+.B \-s
+] [ savefile ]
+.SH DESCRIPTION
+.I Moria\^
+plays a dungeon game with you.
+It generates a character for you,
+lets you buy equipment,
+and lets you wander in a fathomless dungeon
+while finding treasure and being attacked by monsters
+and fellow adventurers.
+Typing
+.B ?
+gives you a list of commands.
+.PP
+The ultimate object of
+.I moria
+is to kill the Balrog,
+which dwells on the 50th level of the
+dungeon, 2,500 feet underground.
+Most players never even reach the Balrog,
+and those that do seldom live to tell about it.
+.PP
+You move in various directions
+.ie '\*O'ROGUE_LIKE' the same way you do in \fIrogue\fP(6).
+.el by pressing the numeric keypad keys, VMS-style.
+If you specify
+.ie '\*O'ROGUE_LIKE' \fB\-o\fP, you move by pressing the numeric keypad keys, VMS-style.
+.el \fB\-r\fP, you move the same way you do in \fIrogue\fP(6).
+.PP
+If you specify
+.BR \-s ,
+.I moria
+prints a list of the twenty top scorers and exits.
+.SH AUTHORS
+The original version of Moria was written for VMS by Robert
+Alan Koeneke, Jimmey Wayne Todd,
+Gary McAdoo, and others at the University of Oklahoma.
+This Unix version was written by Jim Wilson (ucbernie\^!\^wilson).
+.SH BUGS
+.PP
+The SYS V version does not lock the scoreboard, if two processes try
+to modify it at the same time, it may become corrupted.
+
+Wearing an amulet or ring that would raise a stat over 18/100 actually only
+raises the stat to 18/100.  When the amulet is removed, the stat drops to
+a value below its original value.
+
+Probably infinite (although countably infinite).

@@ -1,13 +1,15 @@
 #include <stdio.h>
+
+#include "constants.h"
+#include "config.h"
+#include "types.h"
+#include "externs.h"
+
 #ifdef USG
 #include <string.h>
 #else
 #include <strings.h>
 #endif
-
-#include "constants.h"
-#include "types.h"
-#include "externs.h"
 
 #ifdef sun   /* correct SUN stupidity in the stdio.h file */
 char *sprintf();
@@ -22,9 +24,9 @@ int monptr;
 {
   int flag;
   char tmp_str[2];
-  cave_type *c_ptr;
-  monster_type *m_ptr;
-  creature_type *r_ptr;
+  register cave_type *c_ptr;
+  register monster_type *m_ptr;
+  register creature_type *r_ptr;
 
   m_ptr = &m_list[monptr];
   c_ptr = &cave[m_ptr->fy][m_ptr->fx];
@@ -69,7 +71,7 @@ int monptr;
 	  if (find_flag)
 	    {
 	      find_flag = FALSE;
-	      move_char(5);
+	      move_light (char_row, char_col, char_row, char_col);
 	    }
 	}
     }
@@ -88,20 +90,29 @@ int monptr;
 /* Choose correct directions for monster movement	-RAK-	*/
 get_moves(monptr, mm)
 int monptr;
-int *mm;
+register int *mm;
 {
   int y, ay, x, ax, move_val;
 
   y = m_list[monptr].fy - char_row;
   x = m_list[monptr].fx - char_col;
-  ay = abs(y);
-  ax = abs(x);
   if (y < 0)
-    move_val = 8;
+    {
+      move_val = 8;
+      ay = -y;
+    }
   else
-    move_val = 0;
+    {
+      move_val = 0;
+      ay = y;
+    }
   if (x > 0)
-    move_val += 4;
+    {
+      move_val += 4;
+      ax = x;
+    }
+  else
+    ax = -x;
   if (ay > (ax*1.7321))
     move_val += 2;
   else if (ax > (ay*1.7321))
@@ -258,11 +269,11 @@ int monptr;
   vtype cdesc, ddesc, tmp_str;
   dtype damstr;
   int flag;
-  creature_type *c_ptr;
+  register creature_type *c_ptr;
   monster_type *m_ptr;
-  struct misc *p_ptr;
-  struct flags *f_ptr;
-  treasure_type *i_ptr;
+  register struct misc *p_ptr;
+  register struct flags *f_ptr;
+  register treasure_type *i_ptr;
   char *string;
 
   m_ptr = &m_list[monptr];
@@ -469,7 +480,6 @@ int monptr;
 	    {
 	    case 1:    /*Normal attack  */
 	      dam = damroll(damstr);
-	      p_ptr = &py.misc;
 	      dam -= (int)((((p_ptr->pac+p_ptr->ptoac)/200.0)*dam)+.5);
 	      take_hit(dam, ddesc);
 	      prt_chp();
@@ -483,6 +493,8 @@ int monptr;
 		  msg_print("You feel weaker.");
 		  py.stats.cstr = de_statp(py.stats.cstr);
 		  prt_strength();
+		  /* adjust misc stats */
+		  py_bonuses(blank_treasure, 0);
 		}
 	      prt_chp();
 	      break;
@@ -543,7 +555,6 @@ int monptr;
 		{
 		  f_ptr->blind += 10 + randint((int)c_ptr->level);
 		  msg_print("Your eyes begin to sting.");
-		  msg_print(" ");
 		}
 	      f_ptr->blind += 5;
 	      prt_chp();
@@ -566,7 +577,6 @@ int monptr;
 	      prt_chp();
 	      break;
 	    case 12:    /*Steal Money     */
-	      p_ptr = &py.misc;
 	      if ((randint(124) < py.stats.cdex) && (py.flags.paralysis < 1))
 		msg_print("You quickly protect your money pouch!");
 	      else
@@ -617,6 +627,8 @@ int monptr;
 		  msg_print("You feel more clumsy.");
 		  py.stats.cdex = de_statp(py.stats.cdex);
 		  prt_dexterity();
+		  /* adjust misc stats */
+		  py_bonuses(blank_treasure, 0);
 		}
 	      prt_chp();
 	      break;
@@ -672,7 +684,7 @@ int monptr;
 	      break;
 	    case 21:    /*Disenchant       */
 	      flag = FALSE;
-	      switch(randint(6))
+	      switch(randint(7))
 		{
 		case 1: i = INVEN_WIELD; break;
 		case 2: i = INVEN_BODY;  break;
@@ -680,6 +692,7 @@ int monptr;
 		case 4: i = INVEN_OUTER; break;
 		case 5: i = INVEN_HANDS; break;
 		case 6: i = INVEN_HEAD;  break;
+		case 7: i = INVEN_FEET;  break;
 		}
 	      i_ptr = &inventory[i];
 	      if (i_ptr->tohit > 0)
@@ -755,11 +768,12 @@ int *mm;
   unsigned int movebits;
   int flag, tflag;
   int res;
-  cave_type *c_ptr;
-  monster_type *m_ptr;
-  treasure_type *t_ptr;
-  creature_type *r_ptr;
+  register cave_type *c_ptr;
+  register monster_type *m_ptr;
+  register treasure_type *t_ptr;
+  register creature_type *r_ptr;
   char tmp_str[80];
+  vtype m_name;
 
   i = 0;
   flag = FALSE;
@@ -809,7 +823,7 @@ int *mm;
 			}
 		      else if (t_ptr->p1 < 0)          /* Stuck doors   */
 			{
-			  if (randint(m_ptr->hp) > (10+abs(t_ptr->p1)))
+			  if (randint(m_ptr->hp+1) > (10+abs(t_ptr->p1)))
 			    t_ptr->p1 = 0;
 			}
 		      break;
@@ -874,11 +888,14 @@ int *mm;
 	      {
 		if (!m_list[monptr].ml)
 		  update_mon(monptr);
+		if (search_flag)  search_off();
+		if (py.flags.rest > 0)  rest_off();
 		if (find_flag)
 		  {
 		    find_flag = FALSE;
-		    move_char(5);
+		    move_light (char_row, char_col, char_row, char_col);
 		  }
+		flush();
 		make_attack(monptr);
 		/* Player has read a Confuse Monster?    */
 		/* Monster gets a saving throw...        */
@@ -888,17 +905,27 @@ int *mm;
 		    r_ptr = &c_list[m_ptr->mptr];
 		    msg_print("Your hands stop glowing.");
 		    py.flags.confuse_monster = FALSE;
+
+		    /* Does the player know what he's fighting?      */
+		    if ((0x10000 & r_ptr->cmove) && (!py.flags.see_inv))
+		      (void) strcpy(m_name, "It");
+		    else if (py.flags.blind > 0)
+		      (void) strcpy(m_name, "It");
+		    else if (!m_ptr->ml)
+		      (void) strcpy(m_name, "It");
+		    else
+		      (void) sprintf(m_name, "The %s", r_ptr->name);
 		    if ((randint(MAX_MONS_LEVEL) < r_ptr->level) ||
 			(0x1000 & r_ptr->cdefense))
 		      {
-			(void) sprintf(tmp_str, "The %s is unaffected.",
-				r_ptr->name);
+			(void) sprintf(tmp_str, "%s is unaffected.",
+				m_name);
 			msg_print(tmp_str);
 		      }
 		    else
 		      {
-			(void) sprintf(tmp_str, "The %s appears confused.",
-				       r_ptr->name);
+			(void) sprintf(tmp_str, "%s appears confused.",
+				       m_name);
 			msg_print(tmp_str);
 			m_ptr->confused = TRUE;
 		      }
@@ -954,14 +981,15 @@ int monptr;
 int *took_turn;
 {
   unsigned int i;
-  int j, k, y, x;
+  int y, x;
+  register int k;
   int chance, thrown_spell;
   double r1;
   int spell_choice[30];
   vtype cdesc, ddesc, outval;
   int flag;
-  monster_type *m_ptr;
-  creature_type *r_ptr;
+  register monster_type *m_ptr;
+  register creature_type *r_ptr;
   int cast;
 
   m_ptr = &m_list[monptr];
@@ -988,7 +1016,7 @@ int *took_turn;
   else  /* Creature is going to cast a spell     */
     {
       *took_turn  = TRUE;
-      cast = FALSE;
+      cast = TRUE;
       /* Describe the attack                           */
       flag = TRUE;
       if (!m_ptr->ml)
@@ -1017,8 +1045,7 @@ int *took_turn;
       k = 0;
       while (i != 0)
 	{
-	  j = bit_pos(&i);
-	  spell_choice[k] = j;
+	  spell_choice[k] = bit_pos(&i);
 	  k++;
 	}
       /* Choose a spell to cast                        */
@@ -1036,13 +1063,12 @@ int *took_turn;
 	case 7:  /*Teleport To   */
 	  (void) strcat(cdesc, "casts a spell.");
 	  msg_print(cdesc);
-	  msg_print(" ");
 	  teleport_to((int)m_ptr->fy, (int)m_ptr->fx);
 	  break;
 	case 8:  /*Light Wound   */
 	  (void) strcat(cdesc, "casts a spell.");
 	  msg_print(cdesc);
-	  if (player_saves((int)(wis_adj()+py.misc.lev)))
+	  if (player_saves(wis_adj()))
 	    msg_print("You resist the effects of the spell.");
 	  else
 	    take_hit(damroll("3d8"), ddesc);
@@ -1050,7 +1076,7 @@ int *took_turn;
 	case 9:  /*Serious Wound */
 	  (void) strcat(cdesc, "casts a spell.");
 	  msg_print(cdesc);
-	  if (player_saves((int)(wis_adj()+py.misc.lev)))
+	  if (player_saves(wis_adj()))
 	    msg_print("You resist the effects of the spell.");
 	  else
 	    take_hit(damroll("8d8"), ddesc);
@@ -1060,7 +1086,7 @@ int *took_turn;
 	  msg_print(cdesc);
 	  if (py.flags.free_act)
 	    msg_print("You are unaffected...");
-	  else if (player_saves((int)(wis_adj()+py.misc.lev)))
+	  else if (player_saves(wis_adj()))
 	    msg_print("You resist the effects of the spell.");
 	  else if (py.flags.paralysis > 0)
 	    py.flags.paralysis += 2;
@@ -1070,20 +1096,17 @@ int *took_turn;
 	case 11:  /*Cause Blindness*/
 	  (void) strcat(cdesc, "casts a spell.");
 	  msg_print(cdesc);
-	  if (player_saves((int)(wis_adj()+py.misc.lev)))
+	  if (player_saves(wis_adj()))
 	    msg_print("You resist the effects of the spell.");
 	  else if (py.flags.blind > 0)
 	    py.flags.blind += 6;
 	  else
-	    {
-	      py.flags.blind += 12 + randint(3);
-	      msg_print(" ");
-	    }
+	    py.flags.blind += 12 + randint(3);
 	  break;
 	case 12:  /*Cause Confuse */
 	  (void) strcat(cdesc, "casts a spell.");
 	  msg_print(cdesc);
-	  if (player_saves((int)(wis_adj()+py.misc.lev)))
+	  if (player_saves(wis_adj()))
 	    msg_print("You resist the effects of the spell.");
 	  else if (py.flags.confused > 0)
 	    py.flags.confused += 2;
@@ -1093,7 +1116,7 @@ int *took_turn;
 	case 13:  /*Cause Fear    */
 	  (void) strcat(cdesc, "casts a spell.");
 	  msg_print(cdesc);
-	  if (player_saves((int)(wis_adj()+py.misc.lev)))
+	  if (player_saves(wis_adj()))
 	    msg_print("You resist the effects of the spell.");
 	  else if (py.flags.afraid > 0)
 	    py.flags.afraid += 2;
@@ -1121,7 +1144,7 @@ int *took_turn;
 	  msg_print(cdesc);
 	  if (py.flags.free_act)
 	    msg_print("You are unaffected...");
-	  else if (player_saves((int)(wis_adj()+py.misc.lev)))
+	  else if (player_saves(wis_adj()))
 	    msg_print("You resist the effects of the spell.");
 	  else if (py.flags.slow > 0)
 	    py.flags.slow += 2;
@@ -1183,11 +1206,12 @@ int *took_turn;
 int mon_move(monptr)
 int monptr;
 {
-  int i, j, k;
+  register int i, j;
+  int k;
   int move_test;
   int movem;
-  creature_type *c_ptr;
-  monster_type *m_ptr;
+  register creature_type *c_ptr;
+  register monster_type *m_ptr;
   int mm[5];
 
   /* Main procedure for monster movement (MON_MOVE)	-RAK-	*/
@@ -1223,7 +1247,9 @@ int monptr;
       mm[2] = randint(9);
       mm[3] = randint(9);
       mm[4] = randint(9);
-      movem = make_move(monptr, mm);
+      /* don't move him if he is not supposed to move! */
+      if (!(c_ptr->cmove & 0x00000001))
+	movem = make_move(monptr, mm);
       if (randint(8) == 1)
 	m_list[monptr].confused = FALSE;
       move_test = TRUE;
@@ -1297,8 +1323,9 @@ int monptr;
 creatures(attack)
 int attack;
 {
-  int i, j, k, moldy, moldx;
-  monster_type *m_ptr;
+  register int i, j, k;
+  int moldy, moldx;
+  register monster_type *m_ptr;
   /* Main procedure for creatures				-RAK-	*/
 
   /* Process the monsters  */

@@ -1,4 +1,5 @@
 #include "constants.h"
+#include "config.h"
 #include "types.h"
 #include "externs.h"
 
@@ -10,8 +11,8 @@ use()
   int j, k, item_val, chance;
   int y, x;
   int redraw, ident;
-  struct misc *m_ptr;
-  treasure_type *i_ptr;
+  register struct misc *m_ptr;
+  register treasure_type *i_ptr;
 
   reset_flag = TRUE;
   if (inven_ctr > 0)
@@ -27,7 +28,7 @@ use()
 	      m_ptr = &py.misc;
 	      chance = m_ptr->save + m_ptr->lev + int_adj() - i_ptr->level - 5;
 	      if (py.flags.confused > 0)
-		chance /= 2.0;
+		chance = chance / 2.0;
 	      if (chance <= 0)  chance = 1;
 	      if (randint(chance) < USE_DEVICE)
 		msg_print("You failed to use the staff properly.");

@@ -1,0 +1,1803 @@
+
+This (obsolete) XENIX patch is for umoria 4.85.  It is not guaranteed to work
+for umoria 4.87, but should provide a good starting point.
+
+You will probably have better luck if you use the Int16bit.patch file first,
+and then reference this file if you still have problems.
+
+Jim Wilson
+wilson@ji.Berkeley.EDU
+
+
+From ucbvax!agate!ig!uwmcsd1!leah!itsgw!batcomputer!cornell!rochester!ur-tut!sunybcs!boulder!hao!oddjob!gargoyle!jpusa1!news Thu Jan 21 12:54:27 PST 1988
+Status: RO
+
+Article 725 of comp.sources.bugs:
+Path: ucbvax!agate!ig!uwmcsd1!leah!itsgw!batcomputer!cornell!rochester!ur-tut!sunybcs!boulder!hao!oddjob!gargoyle!jpusa1!news
+>From: news@jpusa1.UUCP (usenet)
+Newsgroups: comp.sources.bugs,rec.games.moria
+Subject: xenix moria again
+Message-ID: <661@jpusa1.UUCP>
+Date: 21 Jan 88 07:43:08 GMT
+Reply-To: stu@jpusa1.UUCP (Stu Heiss)
+Organization: JPUSA - Chicago, IL
+Lines: 13
+Xref: ucbvax comp.sources.bugs:725 rec.games.moria:180
+
+One detail I forgot concerning the patch I posted for moria to
+run on xenix is potential problems with ld.  If you have the
+2.2 os update, your ld is broken.  I never noticed any trouble
+unitil I ported moria to xenix but there is a known (to sco) bug
+in the ld that comes with the 2.2 update.  You do need this ld
+to link the kernel, but get out the ld that comes with 2.1.4
+to link moria.  btw, I'm still trying to get nethack to link
+properly, although it is very low on the priority list just now.
+If anyone has managed to come up with a workaround, I'd like
+to hear from you.  If your nethack cordumps when you select 'W'
+for wizard, you have the same problem I do.
+--
+Stu Heiss {gargoyle,ihnp4}!jpusa1!stu
+
+
+From ucbvax!decvax!tektronix!tekgen!tekred!games-request Thu Jan 21 12:53:35 PST 1988
+Status: RO
+
+Article 263 of comp.sources.games:
+Path: ucbvax!decvax!tektronix!tekgen!tekred!games-request
+>From: games-request@tekred.TEK.COM
+Newsgroups: comp.sources.games
+Subject: v03i064:  umoria - diffs for Xenix V
+Message-ID: <2088@tekred.TEK.COM>
+Date: 20 Jan 88 18:35:15 GMT
+Sender: billr@tekred.TEK.COM
+Lines: 1746
+Approved: billr@tekred.TEK.COM
+
+Submitted by: jpusa1!stu@ihnp4 (Stu Heiss)
+Comp.sources.games: Volume 3, Issue 64
+Archive-name: umoria/xenix_diff
+
+	[Here are diffs to get umoria running on Xenix and other
+	'sizeof int = 16' os'es.  This is being posted here at
+	the request of the submitter so it can be part of the
+	archive (he also posted this to comp.sources.bugs).  -br]
+
+#! /bin/sh
+# This is a shell archive.  Remove anything before this line, then unpack
+# it by saving it into a file and typing "sh file".  To overwrite existing
+# files, type "sh file -c".  You can also feed this as standard input via
+# unshar, or by typing "sh <file", e.g..  If this archive is complete, you
+# will see the following message at the end:
+#		"End of shell archive."
+# Contents:  Makefile clashes.h diffs.xenix
+# Wrapped by billr@tekred on Wed Jan 20 10:33:20 1988
+PATH=/bin:/usr/bin:/usr/ucb ; export PATH
+if test -f Makefile -a "${1}" != "-c" ; then
+  echo shar: Will not over-write existing file \"Makefile\"
+else
+echo shar: Extracting \"Makefile\" \(3830 characters\)
+sed "s/^X//" >Makefile <<'END_OF_Makefile'
+X# BINDIR is the directory where the moria binary while be put
+X# LIBDIR is where the other files (scoreboard, news, hours) will be put
+X#  LIBDIR must be the same directory defined in config.h
+XBINDIR = /usr/local/games
+XLIBDIR = /usr/local/lib/moria
+X
+XDEFS = -DXENIX -DUSG -DKEY_BINDINGS=ROGUE_LIKE -DBUGGY_CURSES
+XOPTIM= # -O
+XMODEL= -Mel2
+XCFLAGS = $(MODEL) $(OPTIM) $(DEFS)
+XLDFLAGS = $(MODEL) -F 4000
+XCC=cc
+XCCL=cc -LARGE
+XSEG= # -SEG 1000
+XLIBS= -lm -lcurses -ltermcap
+X#LIBS= -lm -lcurses -ltermcap -lx
+X
+XSRCS = main.c misc1.c misc2.c store1.c files.c io.c create.c desc.c\
+X	generate.c sets.c dungeon.c creature.c death.c eat.c help.c magic.c\
+X	potions.c prayer.c save.c staffs.c wands.c scrolls.c spells.c\
+X	wizard.c store2.c signals.c moria1.c moria2.c monsters.c\
+X	treasure1.c treasure2.c variables.c
+X
+XxOBJS = main.o misc1.o misc2.o store1.o files1.o files2.o io.o create1.o create2.o desc.o\
+X	generate.o sets.o dungeon.o creature.o death.o eat.o help.o magic.o\
+X	potions.o prayer.o save.o staffs.o wands.o scrolls.o spells.o\
+X	wizard1.o wizard2.o store2.o signals.o moria1.o moria2.o monsters.o\
+X 	treasure1.o treasure2.o variables.o
+X
+XdOBJS = monsters.o treasure1.o treasure2.o variables.o
+X
+XcOBJS = main.o misc1.o misc2.o store1.o files1.o files2.o io.o create1.o create2.o desc.o\
+X	generate.o sets.o dungeon.o creature.o death.o eat.o help.o magic.o\
+X	potions.o prayer.o save.o staffs.o wands.o scrolls.o spells.o\
+X	wizard1.o wizard2.o store2.o signals.o moria1.o moria2.o
+X
+X#OBJS= /lib/Lsignal.o $(dOBJS) $(cOBJS)
+XOBJS=  $(xOBJS)
+X
+Xmoria : $(OBJS)
+X	$(CC) -o moria $(LDFLAGS) $(OBJS) $(SEG) $(LIBS)
+X
+Xmonsters.o:	monsters.c
+X	$(CC) $(CFLAGS) -ND monsters -c monsters.c
+X
+Xtreasure1.o:	treasure1.c
+X	$(CC) $(CFLAGS) -ND treasure1 -c treasure1.c
+X
+Xtreasure2.o:	treasure2.c
+X	$(CC) $(CFLAGS) -ND treasure2 -c treasure2.c
+X
+Xvariables.o:	variables.c
+X	$(CC) $(CFLAGS) -ND variables -c variables.c
+X
+Xmisc1.o:	misc1.c
+X	$(CCL) $(CFLAGS) -c misc1.c
+X
+Xfiles1.o:	files.c
+X	cc $(CFLAGS) -c -DPASS1 files.c
+X	mv files.o files1.o
+X
+Xfiles2.o:	files.c
+X	cc $(CFLAGS) -c files.c
+X	mv files.o files2.o
+X
+Xcreate1.o:	create.c
+X	cc $(CFLAGS) -c -DPASS1 create.c
+X	mv create.o create1.o
+X
+Xcreate2.o:	create.c
+X	cc $(CFLAGS) -c create.c
+X	mv create.o create2.o
+X
+Xwizard1.o:	wizard.c
+X	cc $(CFLAGS) -c -DPASS1 wizard.c
+X	mv wizard.o wizard1.o
+X
+Xwizard2.o:	wizard.c
+X	cc $(CFLAGS) -c wizard.c
+X	mv wizard.o wizard2.o
+X
+Xlintout : $(SRCS)
+X	lint -DUSG $(SRCS) -lm -lcurses -ltermcap > lintout
+X
+XTAGS : $(SRCS)
+X	ctags -x $(SRCS) > TAGS
+X
+Xinstall:
+X	cp moria $(BINDIR)
+X	cp Moria_hours $(LIBDIR)
+X	cp Moria_news $(LIBDIR)
+X	cp Highscores $(LIBDIR)
+X	chmod 4511 $(BINDIR)/moria
+X	chmod 644 $(LIBDIR)/Highscores
+X	chmod 444 $(LIBDIR)/Moria_news
+X	chmod 444 $(LIBDIR)/Moria_hours
+X	chmod 555 $(LIBDIR)
+X
+Xcreate.o: constants.h types.h externs.h
+Xcreature.o: constants.h types.h externs.h
+Xdeath.o: config.h constants.h types.h externs.h
+Xdesc.o: constants.h types.h externs.h
+Xdungeon.o: constants.h types.h externs.h
+Xeat.o: constants.h types.h externs.h
+Xfiles.o: config.h constants.h types.h externs.h
+Xgenerate.o: constants.h types.h externs.h
+Xhelp.o: constants.h types.h externs.h
+Xio.o: constants.h types.h externs.h
+Xmagic.o: constants.h types.h externs.h
+Xmain.o: constants.h types.h
+Xmisc1.o: constants.h types.h externs.h
+Xmisc2.o: config.h constants.h types.h externs.h
+Xmoria1.o: constants.h types.h externs.h
+Xmoria2.o: constants.h types.h externs.h
+Xpotions.o: constants.h types.h externs.h
+Xprayer.o: constants.h types.h externs.h
+Xsave.o: constants.h types.h externs.h
+Xscrolls.o: constants.h types.h externs.h
+Xsets.o: constants.h
+Xsignals.o: constants.h types.h externs.h
+Xspells.o: constants.h types.h externs.h
+Xstaffs.o: constants.h types.h externs.h
+Xstore1.o: constants.h types.h externs.h
+Xstore2.o: constants.h types.h externs.h
+Xwands.o: constants.h types.h externs.h
+Xwizard.o: constants.h types.h externs.h
+END_OF_Makefile
+if test 3830 -ne `wc -c <Makefile`; then
+    echo shar: \"Makefile\" unpacked with wrong size!
+fi
+# end of overwriting check
+fi
+if test -f clashes.h -a "${1}" != "-c" ; then
+  echo shar: Will not over-write existing file \"clashes.h\"
+else
+echo shar: Extracting \"clashes.h\" \(4801 characters\)
+sed "s/^X//" >clashes.h <<'END_OF_clashes.h'
+X#define aggravate_monster _fix0
+X#define background_type _fix1
+X#define build_type1 _fix2
+X#define build_type2 _fix3
+X#define build_type3 _fix4
+X#define change_name _fix5
+X#define change_speed _fix6
+X#define change_stat_factor _fix7
+X#define char_tmp _fix8
+X#define compact_monsters _fix9
+X#define confuse _fix10
+X#define confuse_monster _fix11
+X#define confused _fix12
+X#define corr_floor1 _fix13
+X#define corr_floor2 _fix14
+X#define corr_floor3 _fix15
+X#define creature_type _fix16
+X#define creatures _fix17
+X#define critical_blow _fix18
+X#define cur_char1 _fix19
+X#define de_statp _fix20
+X#define delete_1 _fix21
+X#define delete_monster _fix22
+X#define delete_object _fix23
+X#define destroy _fix24
+X#define destroy2 _fix25
+X#define detect_evil _fix26
+X#define detect_inv2 _fix27
+X#define detect_invisible _fix28
+X#define detect_monsters _fix29
+X#define detect_object _fix30
+X#define detect_sdoor _fix31
+X#define detect_trap _fix32
+X#define detect_treasure _fix33
+X#define display_commands _fix34
+X#define display_cost _fix35
+X#define display_inventory _fix36
+X#define generate _fix37
+X#define haggle_commands _fix38
+X#define haggle_insults _fix39
+X#define history _fix40
+X#define in_statp _fix41
+X#define increase_insults _fix42
+X#define insert_inv _fix43
+X#define insert_str _fix44
+X#define insult_cur _fix45
+X#define insult_max _fix46
+X#define inven_carry _fix47
+X#define inven_check_num _fix48
+X#define inven_check_weight _fix49
+X#define inven_ctr _fix50
+X#define inven_destroy _fix51
+X#define inven_drop _fix52
+X#define inventory _fix53
+X#define item_value _fix54
+X#define magic_spell _fix55
+X#define max_panel_rows _fix56
+X#define monster_death _fix57
+X#define monster_type _fix58
+X#define new_spells _fix59
+X#define next_to _fix60
+X#define next_to4 _fix61
+X#define object_ident _fix62
+X#define object_list _fix63
+X#define object_str _fix64
+X#define old_ptodam _fix65
+X#define original_commands _fix66
+X#define original_help _fix67
+X#define out_val _fix68
+X#define out_val1 _fix69
+X#define out_val2 _fix70
+X#define panel_col _fix71
+X#define panel_col_max _fix72
+X#define panel_col_min _fix73
+X#define panel_col_prt _fix74
+X#define panel_row _fix75
+X#define panel_row_max _fix76
+X#define panel_row_min _fix77
+X#define password1 _fix78
+X#define place_door _fix79
+X#define place_down_stairs _fix80
+X#define place_open_door _fix81
+X#define place_secret_door _fix82
+X#define place_streamer _fix83
+X#define place_stuck_door _fix84
+X#define player_exp _fix85
+X#define player_light _fix86
+X#define player_max_exp _fix87
+X#define player_saves _fix88
+X#define player_title _fix89
+X#define player_type _fix90
+X#define print_map _fix91
+X#define prt_comment1 _fix92
+X#define prt_comment2 _fix93
+X#define prt_comment3 _fix94
+X#define prt_comment4 _fix95
+X#define prt_comment5 _fix96
+X#define prt_constitution _fix97
+X#define prt_stat _fix98
+X#define purchase_haggle _fix99
+X#define put_misc1 _fix100
+X#define put_misc2 _fix101
+X#define randes_state _fix102
+X#define receive_offer _fix103
+X#define remove_curse _fix104
+X#define remove_fear _fix105
+X#define resist_heat _fix106
+X#define restore_level _fix107
+X#define rock_wall1 _fix108
+X#define rock_wall2 _fix109
+X#define rock_wall3 _fix110
+X#define rogue_like_commands _fix111
+X#define rogue_like_help _fix112
+X#define search_flag _fix113
+X#define search_off _fix114
+X#define search_on _fix115
+X#define set_1_2 _fix116
+X#define set_acid_affect _fix117
+X#define set_corrodes _fix118
+X#define set_lightning_destroy _fix119
+X#define signal_save_core _fix120
+X#define signal_save_no_core _fix121
+X#define sleep_monster _fix122
+X#define sleep_monsters1 _fix123
+X#define speed_monster _fix124
+X#define store_carry _fix125
+X#define store_check _fix126
+X#define store_check_num _fix127
+X#define store_create _fix128
+X#define store_ctr _fix129
+X#define store_inven _fix130
+X#define store_prt_gold _fix131
+X#define summon_monster _fix132
+X#define sustain_con _fix133
+X#define sustain_dex _fix134
+X#define sustain_int _fix135
+X#define sustain_str _fix136
+X#define sustain_wis _fix137
+X#define td_destroy _fix138
+X#define teleport _fix139
+X#define teleport_away _fix140
+X#define teleport_flag _fix141
+X#define teleport_monster _fix142
+X#define teleport_to _fix143
+X#define trap_lista _fix144
+X#define turn_undead _fix145
+X#define unlight_area _fix146
+X#define weight_limit _fix147
+X#define wizard_light _fix148
+X#define cbreak crmode
+X#define nocbreak nocrmode
+X#define saveterm savetty
+X#define resetterm resetty
+X#define change_character _fix149
+X#define change_stat _fix150
+X#define change_trap _fix151
+X#define create_character _fix152
+X#define create_food _fix153
+X#define disarm_all _fix154
+X#define disarm_trap _fix155
+X#define display_char _fix156
+X#define display_scores _fix157
+X#define display_store _fix158
+X#define insert_num _fix159
+X#define insert_store _fix160
+X#define place_boundary _fix161
+X#define place_broken_door _fix162
+X#define store_destroy _fix163
+X#define summon_object _fix164
+X#define summon_undead _fix165
+END_OF_clashes.h
+if test 4801 -ne `wc -c <clashes.h`; then
+    echo shar: \"clashes.h\" unpacked with wrong size!
+fi
+# end of overwriting check
+fi
+if test -f diffs.xenix -a "${1}" != "-c" ; then
+  echo shar: Will not over-write existing file \"diffs.xenix\"
+else
+echo shar: Extracting \"diffs.xenix\" \(35406 characters\)
+sed "s/^X//" >diffs.xenix <<'END_OF_diffs.xenix'
+XIndex: constants.h
+XRCS file: RCS/constants.h,v
+Xretrieving revision 1.1
+Xdiff -c3 -r1.1 constants.h
+X*** /tmp/,RCSt1a02655	Mon Jan 18 10:27:46 1988
+X--- constants.h	Sun Dec  6 14:54:41 1987
+X***************
+X*** 1,3
+X  /*Note to the Wizard:                                            */
+X  /*       Tweaking these constants can *GREATLY* change the game. */
+X  /*       Two years of constant tuning have generated these       */
+X
+X--- 1,4 -----
+X+ #include "clashes.h"
+X  /*Note to the Wizard:                                            */
+X  /*       Tweaking these constants can *GREATLY* change the game. */
+X  /*       Two years of constant tuning have generated these       */
+XIndex: create.c
+XRCS file: RCS/create.c,v
+Xretrieving revision 1.1
+Xdiff -c3 -r1.1 create.c
+X*** /tmp/,RCSt1a02660	Mon Jan 18 10:27:55 1988
+X--- create.c	Mon Dec  7 16:40:40 1987
+X***************
+X*** 13,18
+X  char *sprintf();
+X  #endif
+X
+X  /* Generates character's stats				-JWT-	*/
+X  int get_stat()
+X  {
+X
+X--- 13,19 -----
+X  char *sprintf();
+X  #endif
+X
+X+ #ifdef PASS1
+X  /* Generates character's stats				-JWT-	*/
+X  int get_stat()
+X  {
+X***************
+X*** 39,44
+X    return(cur_stat);
+X  }
+X
+X
+X  /* Allows player to select a race			-JWT-	*/
+X  int choose_race()
+X
+X--- 40,46 -----
+X    return(cur_stat);
+X  }
+X
+X+ #else /* PASS1 */
+X
+X  /* Allows player to select a race			-JWT-	*/
+X  int choose_race()
+X***************
+X*** 305,311
+X    prt("Choose a class (? for Help):", 20, 2);
+X    do
+X      {
+X!       if (race[i].tclass & bit_array[j])
+X  	{
+X  	  (void) sprintf(tmp_str, "%c) %s", k+97, class[j].title);
+X  	  put_buffer(tmp_str, m, l);
+X
+X--- 307,313 -----
+X    prt("Choose a class (? for Help):", 20, 2);
+X    do
+X      {
+X!       if (race[i].rtclass & bit_array[j])
+X  	{
+X  	  (void) sprintf(tmp_str, "%c) %s", k+97, class[j].title);
+X  	  put_buffer(tmp_str, m, l);
+X***************
+X*** 437,439
+X    pause_exit(23, PLAYER_EXIT_PAUSE);
+X  }
+X
+X
+X--- 439,442 -----
+X    pause_exit(23, PLAYER_EXIT_PAUSE);
+X  }
+X
+X+ #endif /* PASS1 */
+XIndex: creature.c
+XRCS file: RCS/creature.c,v
+Xretrieving revision 1.1
+Xdiff -c3 -r1.1 creature.c
+X*** /tmp/,RCSt1a02665	Mon Jan 18 10:28:08 1988
+X--- creature.c	Wed Dec  9 11:52:05 1987
+X***************
+X*** 663,668
+X  	      prt_chp();
+X  	      break;
+X  	    case 19:    /*Lose experience  */
+X  	      msg_print("You feel your life draining away!");
+X  	      i = damroll(damstr) + (py.misc.exp / 100)*MON_DRAIN_LIFE;
+X  	      lose_exp(i);
+X
+X--- 663,670 -----
+X  	      prt_chp();
+X  	      break;
+X  	    case 19:    /*Lose experience  */
+X+ 	      {
+X+ 	      bigint_t m;
+X  	      msg_print("You feel your life draining away!");
+X  	      m = damroll(damstr) + (py.misc.exp / 100)*MON_DRAIN_LIFE;
+X  	      lose_exp(m);
+X***************
+X*** 664,671
+X  	      break;
+X  	    case 19:    /*Lose experience  */
+X  	      msg_print("You feel your life draining away!");
+X! 	      i = damroll(damstr) + (py.misc.exp / 100)*MON_DRAIN_LIFE;
+X! 	      lose_exp(i);
+X  	      break;
+X  	    case 20:    /*Aggravate monster*/
+X  	      (void) aggravate_monster(5);
+X
+X--- 666,673 -----
+X  	      {
+X  	      bigint_t m;
+X  	      msg_print("You feel your life draining away!");
+X! 	      m = damroll(damstr) + (py.misc.exp / 100)*MON_DRAIN_LIFE;
+X! 	      lose_exp(m);
+X  	      break;
+X  	      }
+X  	    case 20:    /*Aggravate monster*/
+X***************
+X*** 667,672
+X  	      i = damroll(damstr) + (py.misc.exp / 100)*MON_DRAIN_LIFE;
+X  	      lose_exp(i);
+X  	      break;
+X  	    case 20:    /*Aggravate monster*/
+X  	      (void) aggravate_monster(5);
+X  	      break;
+X
+X--- 669,675 -----
+X  	      m = damroll(damstr) + (py.misc.exp / 100)*MON_DRAIN_LIFE;
+X  	      lose_exp(m);
+X  	      break;
+X+ 	      }
+X  	    case 20:    /*Aggravate monster*/
+X  	      (void) aggravate_monster(5);
+X  	      break;
+X***************
+X*** 752,758
+X  int *mm;
+X  {
+X    int i, j, newy, newx;
+X!   unsigned int movebits;
+X    int flag, tflag;
+X    int res;
+X    cave_type *c_ptr;
+X
+X--- 755,761 -----
+X  int *mm;
+X  {
+X    int i, j, newy, newx;
+X!   bitset_t movebits;
+X    int flag, tflag;
+X    int res;
+X    cave_type *c_ptr;
+X***************
+X*** 953,959
+X  int monptr;
+X  int *took_turn;
+X  {
+X!   unsigned int i;
+X    int j, k, y, x;
+X    int chance, thrown_spell;
+X    double r1;
+X
+X--- 956,962 -----
+X  int monptr;
+X  int *took_turn;
+X  {
+X!   bitset_t i;
+X    int j, k, y, x;
+X    int chance, thrown_spell;
+X    double r1;
+XIndex: death.c
+XRCS file: RCS/death.c,v
+Xretrieving revision 1.1
+Xdiff -c3 -r1.1 death.c
+X*** /tmp/,RCSt1a02670	Mon Jan 18 10:28:20 1988
+X--- death.c	Mon Dec  7 16:52:51 1987
+X***************
+X*** 174,180
+X    (void) strcpy(str3, fill_str(py.misc.tclass));
+X    (void) sprintf(str4, "Level : %d", (int)py.misc.lev);
+X    (void) strcpy(str4, fill_str(str4));
+X!   (void) sprintf(str5, "%d Exp", py.misc.exp);
+X    (void) strcpy(str5, fill_str(str5));
+X    (void) sprintf(str6, "%d Au", py.misc.au);
+X    (void) strcpy(str6, fill_str(str6));
+X
+X--- 174,180 -----
+X    (void) strcpy(str3, fill_str(py.misc.tclass));
+X    (void) sprintf(str4, "Level : %d", (int)py.misc.lev);
+X    (void) strcpy(str4, fill_str(str4));
+X!   (void) sprintf(str5, "%ld Exp", (long)py.misc.exp);
+X    (void) strcpy(str5, fill_str(str5));
+X    (void) sprintf(str6, "%d Au", py.misc.au);
+X    (void) strcpy(str6, fill_str(str6));
+X***************
+X*** 248,254
+X
+X
+X  /* Calculates the total number of points earned		-JWT-	 */
+X! int total_points()
+X  {
+X    return (py.misc.max_exp + (100 * py.misc.max_lev));
+X  }
+X
+X--- 248,254 -----
+X
+X
+X  /* Calculates the total number of points earned		-JWT-	 */
+X! long total_points()
+X  {
+X    return (py.misc.max_exp + (100 * py.misc.max_lev));
+X  }
+X***************
+X*** 265,271
+X      exit_game();
+X    clear_screen(0, 0);
+X
+X!   myscore.points = (long)total_points();
+X    myscore.dun_level = dun_level;
+X    myscore.lev = py.misc.lev;
+X    myscore.max_lev = py.misc.max_lev;
+X
+X--- 265,271 -----
+X      exit_game();
+X    clear_screen(0, 0);
+X
+X!   myscore.points = total_points();
+X    myscore.dun_level = dun_level;
+X    myscore.lev = py.misc.lev;
+X    myscore.max_lev = py.misc.max_lev;
+XIndex: eat.c
+XRCS file: RCS/eat.c,v
+Xretrieving revision 1.1
+Xdiff -c3 -r1.1 eat.c
+X*** /tmp/,RCSt1a02675	Mon Jan 18 10:28:28 1988
+X--- eat.c	Wed Dec  9 11:53:34 1987
+X***************
+X*** 6,12
+X  /* Eat some food...					-RAK-	*/
+X  eat()
+X  {
+X!   unsigned int i;
+X    int j, k, item_val;
+X    int redraw, ident;
+X    struct flags *f_ptr;
+X
+X--- 6,12 -----
+X  /* Eat some food...					-RAK-	*/
+X  eat()
+X  {
+X!   bitset_t i;
+X    int j, k, item_val;
+X    int redraw, ident;
+X    struct flags *f_ptr;
+XIndex: externs.h
+XRCS file: RCS/externs.h,v
+Xretrieving revision 1.1
+Xdiff -c3 -r1.1 externs.h
+X*** /tmp/,RCSt1a02680	Mon Jan 18 10:28:35 1988
+X--- externs.h	Wed Dec  9 11:42:38 1987
+X***************
+X*** 1,6
+X  extern int character_generated;  /* don't save score until char gen finished */
+X  extern int highscore_fd;	/* High score file descriptor */
+X! extern int player_max_exp;	/* Max exp possible    */
+X  extern char norm_state[STATE_SIZE];	/* Contains seed #     */
+X  extern char randes_state[STATE_SIZE];
+X  extern int randes_seed;	    /* For encoding colors */
+X
+X--- 1,6 -----
+X  extern int character_generated;  /* don't save score until char gen finished */
+X  extern int highscore_fd;	/* High score file descriptor */
+X! extern bigint_t player_max_exp;	/* Max exp possible    */
+X  extern char norm_state[STATE_SIZE];	/* Contains seed #     */
+X  extern char randes_state[STATE_SIZE];
+X  extern int randes_seed;	    /* For encoding colors */
+X***************
+X*** 32,38
+X  extern int closing_flag;	/* Used for closing   */
+X
+X  /* Bit testing array						*/
+X! extern unsigned int bit_array[32];
+X
+X  /*  Following are calculated from max dungeon sizes		*/
+X  extern int max_panel_rows, max_panel_cols;
+X
+X--- 32,38 -----
+X  extern int closing_flag;	/* Used for closing   */
+X
+X  /* Bit testing array						*/
+X! extern bitset_t bit_array[32];
+X
+X  /*  Following are calculated from max dungeon sizes		*/
+X  extern int max_panel_rows, max_panel_cols;
+X***************
+X*** 43,49
+X  extern int panel_col_prt, panel_row_prt;
+X
+X  /*  Following are all floor definitions				*/
+X! extern cave_type cave[MAX_HEIGHT][MAX_WIDTH];
+X  extern cave_type blank_floor;
+X  extern floor_type dopen_floor;
+X  extern floor_type lopen_floor;
+X
+X--- 43,49 -----
+X  extern int panel_col_prt, panel_row_prt;
+X
+X  /*  Following are all floor definitions				*/
+X! extern cave_type huge cave[MAX_HEIGHT][MAX_WIDTH];
+X  extern cave_type blank_floor;
+X  extern floor_type dopen_floor;
+X  extern floor_type lopen_floor;
+X***************
+X*** 59,65
+X  /* Following are player variables				*/
+X  extern player_type py;
+X  extern btype player_title[MAX_CLASS][MAX_PLAYER_LEVEL];
+X! extern int player_exp[MAX_PLAYER_LEVEL];
+X  extern double acc_exp;	                  /* Accumulator for fractional exp*/
+X  extern dtype bare_hands;
+X  extern int char_row;
+X
+X--- 59,65 -----
+X  /* Following are player variables				*/
+X  extern player_type py;
+X  extern btype player_title[MAX_CLASS][MAX_PLAYER_LEVEL];
+X! extern bigint_t player_exp[MAX_PLAYER_LEVEL];
+X  extern double acc_exp;	                  /* Accumulator for fractional exp*/
+X  extern dtype bare_hands;
+X  extern int char_row;
+XIndex: files.c
+XRCS file: RCS/files.c,v
+Xretrieving revision 1.1
+Xdiff -c3 -r1.1 files.c
+X*** /tmp/,RCSt1a02685	Mon Jan 18 10:28:44 1988
+X--- files.c	Mon Dec  7 16:54:33 1987
+X***************
+X*** 20,25
+X  void exit();
+X  #endif
+X
+X  /*
+X   *  init_scorefile
+X   *  Open the score file while we still have the setuid privileges.  Later
+X
+X--- 20,28 -----
+X  void exit();
+X  #endif
+X
+X+ #ifdef PASS1   /* first half */
+X+
+X+
+X  /*
+X   *  init_scorefile
+X   *  Open the score file while we still have the setuid privileges.  Later
+X***************
+X*** 308,315
+X  	      (void) strcpy(out_val, c_ptr->name);
+X  	      (void) strcat(out_val, "                              ");
+X  	      (void) fprintf(file1, "%d  %s     (%c)\n", i, out_val, c_ptr->cchar);
+X! 	      (void) fprintf(file1, "     Speed ==%d  Level     ==%d  Exp ==%d\n",
+X! 		      c_ptr->speed, c_ptr->level, (int)c_ptr->mexp);
+X  	      (void) fprintf(file1, "     AC    ==%d  Eye-sight ==%d  HD  ==%s\n",
+X  		      c_ptr->ac, c_ptr->aaf, c_ptr->hd);
+X  	      if (0x80000000 & c_ptr->cmove)
+X
+X--- 311,318 -----
+X  	      (void) strcpy(out_val, c_ptr->name);
+X  	      (void) strcat(out_val, "                              ");
+X  	      (void) fprintf(file1, "%d  %s     (%c)\n", i, out_val, c_ptr->cchar);
+X! 	      (void) fprintf(file1, "     Speed ==%d  Level     ==%d  Exp ==%ld\n",
+X! 		      c_ptr->speed, c_ptr->level, (long)c_ptr->mexp);
+X  	      (void) fprintf(file1, "     AC    ==%d  Eye-sight ==%d  HD  ==%s\n",
+X  		      c_ptr->ac, c_ptr->aaf, c_ptr->hd);
+X  	      if (0x80000000 & c_ptr->cmove)
+X***************
+X*** 610,615
+X      }
+X  }
+X
+X
+X  /* Print the character to a file or device		-RAK-	 */
+X  file_character()
+X
+X--- 613,619 -----
+X      }
+X  }
+X
+X+ #else /* PASS1 */
+X
+X  /* Print the character to a file or device		-RAK-	 */
+X  file_character()
+X***************
+X*** 669,675
+X  	  (void) fprintf(file1, "     Level      :%6d", (int)py.misc.lev);
+X  	  (void) fprintf(file1, "     Max Hit Points :%6d\n", py.misc.mhp);
+X  	  (void) fprintf(file1, "  + To Damage :%6d", py.misc.dis_td);
+X! 	  (void) fprintf(file1, "     Experience :%6d", py.misc.exp);
+X  	  (void) fprintf(file1, "     Cur Hit Points :%6d\n", (int) (py.misc.chp));
+X  	  (void) fprintf(file1, "  + To AC     :%6d", py.misc.dis_tac);
+X  	  (void) fprintf(file1, "     Gold       :%6d", py.misc.au);
+X
+X--- 673,679 -----
+X  	  (void) fprintf(file1, "     Level      :%6d", (int)py.misc.lev);
+X  	  (void) fprintf(file1, "     Max Hit Points :%6d\n", py.misc.mhp);
+X  	  (void) fprintf(file1, "  + To Damage :%6d", py.misc.dis_td);
+X! 	  (void) fprintf(file1, "     Experience :%6ld", (long)py.misc.exp);
+X  	  (void) fprintf(file1, "     Cur Hit Points :%6d\n", (int) (py.misc.chp));
+X  	  (void) fprintf(file1, "  + To AC     :%6d", py.misc.dis_tac);
+X  	  (void) fprintf(file1, "     Gold       :%6d", py.misc.au);
+X***************
+X*** 799,801
+X  	}
+X      }
+X  }
+X
+X--- 803,806 -----
+X  	}
+X      }
+X  }
+X+ #endif /* PASS1 */
+XIndex: misc1.c
+XRCS file: RCS/misc1.c,v
+Xretrieving revision 1.1
+Xdiff -c3 -r1.1 misc1.c
+X*** /tmp/,RCSt1a02690	Mon Jan 18 10:28:57 1988
+X--- misc1.c	Wed Dec  9 12:51:20 1987
+X***************
+X*** 179,186
+X  int mean;
+X  int stand;
+X  {
+X!   return ((int)((sqrt(-2.0*log(randint((int)9999999)/10000000.0))*
+X! 		 cos(6.283*(randint((int)9999999)/10000000.0))*stand) + mean));
+X  }
+X
+X
+X
+X--- 179,187 -----
+X  int mean;
+X  int stand;
+X  {
+X!   /* randint returns number < 2**16; used to divide by 10000000! --peterw 11/87 */
+X!   return ((int)((sqrt(-2.0*log(randint((int)49999)/50000.0))*
+X! 		 cos(6.283*(randint((int)49999)/50000.0))*stand) + mean));
+X  }
+X
+X
+X***************
+X*** 187,193
+X  /* Returns position of first set bit			-RAK-	*/
+X  /*     and clears that bit */
+X  int bit_pos(test)
+X! unsigned int *test;
+X  {
+X    int i;
+X    int mask = 0x1;
+X
+X--- 188,194 -----
+X  /* Returns position of first set bit			-RAK-	*/
+X  /*     and clears that bit */
+X  int bit_pos(test)
+X! bitset_t *test;
+X  {
+X    int i;
+X    int mask = 0x1;
+X***************
+X*** 192,198
+X    int i;
+X    int mask = 0x1;
+X
+X!   for (i = 0; i < sizeof(int)*8; i++) {
+X      if (*test & mask) {
+X        *test &= ~mask;
+X        return(i);
+X
+X--- 193,199 -----
+X    int i;
+X    int mask = 0x1;
+X
+X!   for (i = 0; i < sizeof(*test)*8; i++) {
+X      if (*test & mask) {
+X        *test &= ~mask;
+X        return(i);
+XIndex: misc2.c
+XRCS file: RCS/misc2.c,v
+Xretrieving revision 1.1
+Xdiff -c3 -r1.1 misc2.c
+X*** /tmp/,RCSt1a02695	Mon Jan 18 10:29:11 1988
+X--- misc2.c	Wed Dec  9 12:47:19 1987
+X***************
+X*** 453,458
+X  }
+X
+X
+X  /* Print number with header at given row, column 	-RAK-	*/
+X  prt_num(header, num, row, column)
+X  vtype header;
+X
+X--- 453,471 -----
+X  }
+X
+X
+X+ /* Print long number with header at given row, column 	-RAK-	*/
+X+ prt_lnum(header, num, row, column)
+X+ vtype header;
+X+ long num;
+X+ int row, column;
+X+ {
+X+   vtype out_val;
+X+
+X+   (void) sprintf(out_val, "%s%6ld ", header, num);
+X+   put_buffer(out_val, row, column);
+X+ }
+X+
+X+
+X  /* Print number with header at given row, column 	-RAK-	*/
+X  prt_num(header, num, row, column)
+X  vtype header;
+X***************
+X*** 923,929
+X    prt_stat("CON : ", py.stats.ccon,        10, stat_column);
+X    prt_stat("CHR : ", py.stats.cchr,        11, stat_column);
+X    prt_num( "LEV : ", (int)py.misc.lev,    13, stat_column);
+X!   prt_num( "EXP : ", py.misc.exp,         14, stat_column);
+X    prt_num( "MANA: ", (int)(py.misc.cmana), 15, stat_column);
+X    prt_num( "MHP : ", py.misc.mhp,         16, stat_column);
+X    prt_num( "CHP : ", (int)(py.misc.chp),  17, stat_column);
+X
+X--- 936,942 -----
+X    prt_stat("CON : ", py.stats.ccon,        10, stat_column);
+X    prt_stat("CHR : ", py.stats.cchr,        11, stat_column);
+X    prt_num( "LEV : ", (int)py.misc.lev,    13, stat_column);
+X!   prt_lnum( "EXP : ", (long)py.misc.exp,         14, stat_column);
+X    prt_num( "MANA: ", (int)(py.misc.cmana), 15, stat_column);
+X    prt_num( "MHP : ", py.misc.mhp,         16, stat_column);
+X    prt_num( "CHP : ", (int)(py.misc.chp),  17, stat_column);
+X***************
+X*** 1018,1024
+X  put_misc2()
+X  {
+X    prt_num("Level      : ", (int)py.misc.lev, 9, 30);
+X!   prt_num("Experience : ", py.misc.exp, 10, 30);
+X    prt_num("Gold       : ", py.misc.au, 11, 30);
+X    prt_num("Max Hit Points : ", py.misc.mhp, 9, 53);
+X    prt_num("Cur Hit Points : ", (int)py.misc.chp, 10, 53);
+X
+X--- 1031,1037 -----
+X  put_misc2()
+X  {
+X    prt_num("Level      : ", (int)py.misc.lev, 9, 30);
+X!   prt_lnum("Experience : ", (long)py.misc.exp, 10, 30);
+X    prt_num("Gold       : ", py.misc.au, 11, 30);
+X    prt_num("Max Hit Points : ", py.misc.mhp, 9, 53);
+X    prt_num("Cur Hit Points : ", (int)py.misc.chp, 10, 53);
+X***************
+X*** 1392,1398
+X  int learn_spell(redraw)
+X  int *redraw;
+X  {
+X!   unsigned int j;
+X    int i, k, sn, sc;
+X    int new_spells;
+X    unsigned int spell_flag;
+X
+X--- 1405,1411 -----
+X  int learn_spell(redraw)
+X  int *redraw;
+X  {
+X!   bitset_t j;
+X    int i, k, sn, sc;
+X    int new_spells;
+X    bitset_t spell_flag;
+X***************
+X*** 1395,1401
+X    unsigned int j;
+X    int i, k, sn, sc;
+X    int new_spells;
+X!   unsigned int spell_flag;
+X    spl_type spell;
+X    int learn;
+X    spell_type *s_ptr;
+X
+X--- 1408,1414 -----
+X    bitset_t j;
+X    int i, k, sn, sc;
+X    int new_spells;
+X!   bitset_t spell_flag;
+X    spl_type spell;
+X    int learn;
+X    spell_type *s_ptr;
+X***************
+X*** 1467,1473
+X  {
+X    int i, j, k, l, new_spell;
+X    int test_array[32];
+X!   unsigned int spell_flag;
+X    int learn;
+X    spell_type *s_ptr;
+X
+X
+X--- 1480,1486 -----
+X  {
+X    int i, j, k, l, new_spell;
+X    int test_array[32];
+X!   bitset_t int spell_flag;
+X    int learn;
+X    spell_type *s_ptr;
+X
+X***************
+X*** 1582,1588
+X  /* Increases hit points and level			-RAK-	*/
+X  gain_level()
+X  {
+X!   int nhp, dif_exp, need_exp;
+X    int redraw;
+X    vtype out_val;
+X    struct misc *p_ptr;
+X
+X--- 1595,1602 -----
+X  /* Increases hit points and level			-RAK-	*/
+X  gain_level()
+X  {
+X!   bigint_t dif_exp, need_exp;
+X!   int nhp;
+X    int redraw;
+X    vtype out_val;
+X    struct misc *p_ptr;
+X***************
+X*** 1640,1646
+X        if (p_ptr->exp > p_ptr->max_exp)
+X  	p_ptr->max_exp = p_ptr->exp;
+X      }
+X!   prt_num("", py.misc.exp, 14, stat_column+6);
+X  }
+X
+X
+X
+X--- 1654,1660 -----
+X        if (p_ptr->exp > p_ptr->max_exp)
+X  	p_ptr->max_exp = p_ptr->exp;
+X      }
+X!   prt_lnum("", (long)py.misc.exp, 14, stat_column+6);
+X  }
+X
+X
+X***************
+X*** 1648,1653
+X  insert_str(object_str, mtc_str, insert)
+X  char *object_str, *mtc_str, *insert;
+X  {
+X    int mtc_len, obj_len;
+X    int bound, pc, i;
+X    char *temp_obj, *temp_mtc;
+X
+X--- 1662,1668 -----
+X  insert_str(object_str, mtc_str, insert)
+X  char *object_str, *mtc_str, *insert;
+X  {
+X+ #ifdef XENIX
+X    int mtc_len, obj_len;
+X    char *bound, *pc;
+X    int i;
+X***************
+X*** 1649,1654
+X  char *object_str, *mtc_str, *insert;
+X  {
+X    int mtc_len, obj_len;
+X    int bound, pc, i;
+X    char *temp_obj, *temp_mtc;
+X    char out_val[80];
+X
+X--- 1664,1698 -----
+X  {
+X  #ifdef XENIX
+X    int mtc_len, obj_len;
+X+   char *bound, *pc;
+X+   int i;
+X+   char *temp_obj, *temp_mtc;
+X+   char out_val[80];
+X+
+X+   mtc_len = strlen(mtc_str);
+X+   obj_len = strlen(object_str);
+X+   bound = object_str + obj_len - mtc_len;
+X+   for (pc = object_str; pc <= bound; pc++)
+X+     {
+X+       temp_obj = pc;
+X+       temp_mtc = mtc_str;
+X+       for (i = 0; i < mtc_len; i++)
+X+ 	if (*temp_obj++ != *temp_mtc++)
+X+ 	  break;
+X+       if (i == mtc_len)
+X+ 	break;
+X+     }
+X+
+X+   if (pc <= bound)
+X+     {
+X+       (void) strncpy(out_val, object_str, pc-object_str);
+X+       out_val[pc-object_str] = '\0';
+X+       (void) strcat(out_val, insert);
+X+       (void) strcat(out_val, pc+mtc_len);
+X+       (void) strcpy(object_str, out_val);
+X+     }
+X+ #else
+X+   int mtc_len, obj_len;
+X    int bound, pc, i;
+X    char *temp_obj, *temp_mtc;
+X    char out_val[80];
+X***************
+X*** 1675,1680
+X        (void) strcat(out_val, (char *)(pc+mtc_len));
+X        (void) strcpy(object_str, out_val);
+X      }
+X  }
+X
+X
+X
+X--- 1719,1725 -----
+X        (void) strcat(out_val, (char *)(pc+mtc_len));
+X        (void) strcpy(object_str, out_val);
+X      }
+X+ #endif XENIX
+X  }
+X
+X
+X***************
+X*** 1742,1747
+X        inkey(&x);
+X        switch(x)
+X  	{
+X  	case 13:
+X  	  break;
+X  	default:
+X
+X--- 1787,1796 -----
+X        inkey(&x);
+X        switch(x)
+X  	{
+X+ #ifdef BUGGY_CURSES
+X+ 	case 10:
+X+ 	  x = 13;
+X+ #endif BUGGY_CURSES
+X  	case 13:
+X  	  break;
+X  	default:
+XIndex: moria1.c
+XRCS file: RCS/moria1.c,v
+Xretrieving revision 1.1
+Xdiff -c3 -r1.1 moria1.c
+X*** /tmp/,RCSt1a02700	Mon Jan 18 10:29:33 1988
+X--- moria1.c	Wed Dec  9 11:48:00 1987
+X***************
+X*** 68,74
+X  treasure_type tobj;
+X  int factor;
+X  {
+X!   unsigned int item_flags;
+X    int i, old_dis_ac;
+X    struct flags *p_ptr;
+X    struct misc *m_ptr;
+X
+X--- 68,74 -----
+X  treasure_type tobj;
+X  int factor;
+X  {
+X!   bitset_t item_flags;
+X    int i, old_dis_ac;
+X    struct flags *p_ptr;
+X    struct misc *m_ptr;
+XIndex: moria2.c
+XRCS file: RCS/moria2.c,v
+Xretrieving revision 1.1
+Xdiff -c3 -r1.1 moria2.c
+X*** /tmp/,RCSt1a02705	Mon Jan 18 10:29:49 1988
+X--- moria2.c	Wed Dec  9 11:47:16 1987
+X***************
+X*** 261,267
+X  int *sn, *sc;
+X  int *redraw;
+X  {
+X!   unsigned int j;
+X    int i, k;
+X    spl_type spell;
+X    int cast;
+X
+X--- 261,267 -----
+X  int *sn, *sc;
+X  int *redraw;
+X  {
+X!   bitset_t j;
+X    int i, k;
+X    spl_type spell;
+X    int cast;
+X***************
+X*** 327,333
+X  /* Examine a Book					-RAK-	*/
+X  examine_book()
+X  {
+X!   unsigned int j;
+X    int i, k, item_val;
+X    int redraw, flag;
+X    char dummy;
+X
+X--- 327,333 -----
+X  /* Examine a Book					-RAK-	*/
+X  examine_book()
+X  {
+X!   bitset_t j;
+X    int i, k, item_val;
+X    int redraw, flag;
+X    char dummy;
+X***************
+X*** 670,676
+X  /* based on flags set in the main creature record                */
+X  monster_death(y, x, flags)
+X  int y, x;
+X! unsigned int flags;
+X  {
+X    int i;
+X
+X
+X--- 670,676 -----
+X  /* based on flags set in the main creature record                */
+X  monster_death(y, x, flags)
+X  int y, x;
+X! bitset_t flags;
+X  {
+X    int i;
+X
+XIndex: potions.c
+XRCS file: RCS/potions.c,v
+Xretrieving revision 1.1
+Xdiff -c3 -r1.1 potions.c
+X*** /tmp/,RCSt1a02710	Mon Jan 18 10:30:05 1988
+X--- potions.c	Wed Dec  9 11:44:23 1987
+X***************
+X*** 6,13
+X  /* Potions for the quaffing				-RAK-	*/
+X  quaff()
+X  {
+X!   unsigned int i;
+X!   int j, k, l, m, item_val;
+X    int redraw, ident;
+X    treasure_type *i_ptr;
+X    struct misc *m_ptr;
+X
+X--- 6,14 -----
+X  /* Potions for the quaffing				-RAK-	*/
+X  quaff()
+X  {
+X!   bitset_t i;
+X!   bigint_t l, m;
+X!   int j, k, item_val;
+X    int redraw, ident;
+X    treasure_type *i_ptr;
+X    struct misc *m_ptr;
+X***************
+X*** 244,250
+X  		      msg_print("You feel your memories fade...");
+X  		      msg_print("");
+X  		      l = (py.misc.exp/5.0);
+X! 		      lose_exp(randint(l)+l);
+X  		      ident = TRUE;
+X  		      break;
+X  		    case 34:
+X
+X--- 245,251 -----
+X  		      msg_print("You feel your memories fade...");
+X  		      msg_print("");
+X  		      l = (py.misc.exp/5.0);
+X! 		      lose_exp((bigint_t)randint((int)l)+l);
+X  		      ident = TRUE;
+X  		      break;
+X  		    case 34:
+X***************
+X*** 347,353
+X  	      if (i_ptr->flags != 0)
+X  		{
+X  		  m_ptr = &py.misc;
+X! 		  m_ptr->exp += (int)(i_ptr->level/m_ptr->lev + 0.5);
+X  		  prt_experience();
+X  		}
+X  	      add_food(i_ptr->p1);
+X
+X--- 348,354 -----
+X  	      if (i_ptr->flags != 0)
+X  		{
+X  		  m_ptr = &py.misc;
+X! 		  m_ptr->exp += (bigint_t)(i_ptr->level/m_ptr->lev + 0.5);
+X  		  prt_experience();
+X  		}
+X  	      add_food(i_ptr->p1);
+XIndex: scrolls.c
+XRCS file: RCS/scrolls.c,v
+Xretrieving revision 1.1
+Xdiff -c3 -r1.1 scrolls.c
+X*** /tmp/,RCSt1a02715	Mon Jan 18 10:30:14 1988
+X--- scrolls.c	Wed Dec  9 11:43:34 1987
+X***************
+X*** 14,20
+X  /* Scrolls for the reading				-RAK-	*/
+X  read_scroll()
+X  {
+X!   unsigned int i;
+X    int j, k, l, item_val;
+X    int y, x;
+X    int tmp[5];
+X
+X--- 14,20 -----
+X  /* Scrolls for the reading				-RAK-	*/
+X  read_scroll()
+X  {
+X!   bitset_t i;
+X    int j, k, l, item_val;
+X    int y, x;
+X    int tmp[5];
+XIndex: spells.c
+XRCS file: RCS/spells.c,v
+Xretrieving revision 1.1
+Xdiff -c3 -r1.1 spells.c
+X*** /tmp/,RCSt1a02720	Mon Jan 18 10:30:26 1988
+X--- spells.c	Wed Dec  9 11:43:08 1987
+X***************
+X*** 649,655
+X  /* Return flags for given type area affect		-RAK-	*/
+X  get_flags(typ, weapon_type, harm_type, destroy)
+X  int typ;
+X! int *weapon_type, *harm_type;
+X  int (**destroy)();
+X  {
+X    int set_null(), set_fire_destroy(), set_frost_destroy();
+X
+X--- 649,656 -----
+X  /* Return flags for given type area affect		-RAK-	*/
+X  get_flags(typ, weapon_type, harm_type, destroy)
+X  int typ;
+X! bitset_t *weapon_type;
+X! int *harm_type;
+X  int (**destroy)();
+X  {
+X    int set_null(), set_fire_destroy(), set_frost_destroy();
+X***************
+X*** 701,707
+X  ctype bolt_typ;
+X  {
+X    int i, oldy, oldx, dist;
+X!   int weapon_type, harm_type;
+X    int flag;
+X    int (*dummy)();
+X    cave_type *c_ptr;
+X
+X--- 702,709 -----
+X  ctype bolt_typ;
+X  {
+X    int i, oldy, oldx, dist;
+X!   bitset_t weapon_type;
+X!   int harm_type;
+X    int flag;
+X    int (*dummy)();
+X    cave_type *c_ptr;
+X***************
+X*** 782,788
+X    int i, j, k;
+X    int dam, max_dis, thit, tkill;
+X    int oldy, oldx, dist;
+X!   int weapon_type, harm_type;
+X    int flag;
+X    int (*destroy)();
+X    cave_type *c_ptr;
+X
+X--- 784,791 -----
+X    int i, j, k;
+X    int dam, max_dis, thit, tkill;
+X    int oldy, oldx, dist;
+X!   bitset_t weapon_type;
+X!   int harm_type;
+X    int flag;
+X    int (*destroy)();
+X    cave_type *c_ptr;
+X***************
+X*** 830,836
+X  			{
+X  			  c_ptr = &cave[i][j];
+X  			  if (c_ptr->tptr != 0)
+X! 			    if (destroy(t_list[c_ptr->tptr].tval))
+X  			      (void) delete_object(i, j);
+X  			  if (c_ptr->fopen)
+X  			    {
+X
+X--- 833,839 -----
+X  			{
+X  			  c_ptr = &cave[i][j];
+X  			  if (c_ptr->tptr != 0)
+X! 			    if ((*destroy)(t_list[c_ptr->tptr].tval))
+X  			      (void) delete_object(i, j);
+X  			  if (c_ptr->fopen)
+X  			    {
+X***************
+X*** 920,926
+X  {
+X    int i, j;
+X    int dam, max_dis;
+X!   int weapon_type, harm_type;
+X    int (*destroy)();
+X    cave_type *c_ptr;
+X    monster_type *m_ptr;
+X
+X--- 923,930 -----
+X  {
+X    int i, j;
+X    int dam, max_dis;
+X!   bitset_t weapon_type;
+X!   int harm_type;
+X    int (*destroy)();
+X    cave_type *c_ptr;
+X    monster_type *m_ptr;
+X***************
+X*** 935,941
+X  	  {
+X  	    c_ptr = &cave[i][j];
+X  	    if (c_ptr->tptr != 0)
+X! 	      if (destroy(t_list[c_ptr->tptr].tval))
+X  		(void) delete_object(i, j);
+X  	    if (c_ptr->fopen)
+X  	      {
+X
+X--- 939,945 -----
+X  	  {
+X  	    c_ptr = &cave[i][j];
+X  	    if (c_ptr->tptr != 0)
+X! 	      if ((*destroy)(t_list[c_ptr->tptr].tval))
+X  		(void) delete_object(i, j);
+X  	    if (c_ptr->fopen)
+X  	      {
+X***************
+X*** 2229,2235
+X
+X  /* Lose experience					-RAK-	*/
+X  lose_exp(amount)
+X! int amount;
+X  {
+X    int i, j;
+X    int av_hp, lose_hp;
+X
+X--- 2233,2239 -----
+X
+X  /* Lose experience					-RAK-	*/
+X  lose_exp(amount)
+X! bigint_t amount;
+X  {
+X    int i, j;
+X    int av_hp, lose_hp;
+XIndex: staffs.c
+XRCS file: RCS/staffs.c,v
+Xretrieving revision 1.1
+Xdiff -c3 -r1.1 staffs.c
+X*** /tmp/,RCSt1a02725	Mon Jan 18 10:30:49 1988
+X--- staffs.c	Wed Dec  9 11:54:00 1987
+X***************
+X*** 6,12
+X  /* Use a staff...					-RAK-	*/
+X  use()
+X  {
+X!   unsigned int i;
+X    int j, k, item_val, chance;
+X    int y, x;
+X    int redraw, ident;
+X
+X--- 6,12 -----
+X  /* Use a staff...					-RAK-	*/
+X  use()
+X  {
+X!   bitset_t i;
+X    int j, k, item_val, chance;
+X    int y, x;
+X    int redraw, ident;
+XIndex: store2.c
+XRCS file: RCS/store2.c,v
+Xretrieving revision 1.1
+Xdiff -c3 -r1.1 store2.c
+X*** /tmp/,RCSt1a02730	Mon Jan 18 10:30:56 1988
+X--- store2.c	Sun Dec  6 14:54:57 1987
+X***************
+X*** 948,954
+X        (void) sprintf(out_val, "Selling %s (%c)", tmp_str, item_val+97);
+X        msg_print(out_val);
+X        msg_print(" ");
+X!       if ((store_buy[store_num])(inventory[INVEN_MAX].tval))
+X  	if (store_check_num(store_num))
+X  	  switch(sell_haggle(store_num, &price, inventory[INVEN_MAX]))
+X  	    {
+X
+X--- 948,954 -----
+X        (void) sprintf(out_val, "Selling %s (%c)", tmp_str, item_val+97);
+X        msg_print(out_val);
+X        msg_print(" ");
+X!       if ((*store_buy[store_num])(inventory[INVEN_MAX].tval))
+X  	if (store_check_num(store_num))
+X  	  switch(sell_haggle(store_num, &price, inventory[INVEN_MAX]))
+X  	    {
+XIndex: types.h
+XRCS file: RCS/types.h,v
+Xretrieving revision 1.1
+Xdiff -c3 -r1.1 types.h
+X*** /tmp/,RCSt1a02735	Mon Jan 18 10:31:08 1988
+X--- types.h	Wed Dec  9 11:44:00 1987
+X***************
+X*** 1,3
+X  typedef unsigned char byteint;
+X  #ifdef NO_SIGNED_CHARS
+X  typedef short bytlint;
+X
+X--- 1,5 -----
+X+ typedef unsigned long bitset_t;
+X+ typedef unsigned long bigint_t;
+X  typedef unsigned char byteint;
+X  #ifdef NO_SIGNED_CHARS
+X  typedef short bytlint;
+X***************
+X*** 19,26
+X  typedef struct creature_type
+X  {
+X    ctype name;           /* Descrip of creature	*/
+X!   unsigned int cmove;	/* Bit field		*/
+X!   unsigned int spells;  /* Creature spells	*/
+X    wordint cdefense;	/* Bit field		*/
+X    worlint sleep;	/* Inactive counter	*/
+X    wordint mexp; 	/* Exp value for kill	*/
+X
+X--- 21,28 -----
+X  typedef struct creature_type
+X  {
+X    ctype name;           /* Descrip of creature	*/
+X!   bitset_t cmove;	/* Bit field		*/
+X!   bitset_t spells;  /* Creature spells	*/
+X    wordint cdefense;	/* Bit field		*/
+X    worlint sleep;	/* Inactive counter	*/
+X    wordint mexp; 	/* Exp value for kill	*/
+X***************
+X*** 54,60
+X    ttype name;	        /* Object name		*/
+X    byteint tval;	        /* Category number	*/
+X    char tchar;		/* Character representation*/
+X!   unsigned int flags;	/* Special flags		*/
+X    int p1;	        /* Misc. use variable	*/
+X    int cost;	        /* Cost of item		*/
+X    int subval;	        /* Sub-category number	*/
+X
+X--- 56,62 -----
+X    ttype name;	        /* Object name		*/
+X    byteint tval;	        /* Category number	*/
+X    char tchar;		/* Character representation*/
+X!   bitset_t flags;	/* Special flags		*/
+X    int p1;	        /* Misc. use variable	*/
+X    int cost;	        /* Cost of item		*/
+X    int subval;	        /* Sub-category number	*/
+X***************
+X*** 77,84
+X        vtype sex;	/* Sex of character	*/
+X        vtype title;	/* Character's title	*/
+X        vtype tclass;	/* Character's class	*/
+X!       int max_exp;	/* Max experience*/
+X!       int exp;	        /* Cur experience	*/
+X        int au;	        /* Gold		*/
+X        wordint age;	/* Characters age*/
+X        wordint ht;	/* Height	*/
+X
+X--- 79,86 -----
+X        vtype sex;	/* Sex of character	*/
+X        vtype title;	/* Character's title	*/
+X        vtype tclass;	/* Character's class	*/
+X!       bigint_t max_exp;	/* Max experience*/
+X!       bigint_t exp;	        /* Cur experience	*/
+X        int au;	        /* Gold		*/
+X        wordint age;	/* Characters age*/
+X        wordint ht;	/* Height	*/
+X***************
+X*** 128,134
+X      } stats;
+X    struct flags
+X      {
+X!       unsigned int status;	/* Status of player    */
+X        int rest;	                /* Rest counter	      */
+X        int blind;	        /* Blindness counter   */
+X        int paralysis;	        /* Paralysis counter   */
+X
+X--- 130,136 -----
+X      } stats;
+X    struct flags
+X      {
+X!       bitset_t status;	/* Status of player    */
+X        int rest;	                /* Rest counter	      */
+X        int blind;	        /* Blindness counter   */
+X        int paralysis;	        /* Paralysis counter   */
+X***************
+X*** 221,227
+X    bytlint bsav;         /* Race base for saving throw	*/
+X    bytlint bhitdie;      /* Base hit points for race	*/
+X    bytlint infra;        /* See infra-red		*/
+X!   unsigned int tclass;  /* Bit field for class types	*/
+X  } race_type;
+X
+X  typedef struct class_type
+X
+X--- 223,229 -----
+X    bytlint bsav;         /* Race base for saving throw	*/
+X    bytlint bhitdie;      /* Base hit points for race	*/
+X    bytlint infra;        /* See infra-red		*/
+X!   bitset_t rtclass;  /* Bit field for class types	*/
+X  } race_type;
+X
+X  typedef struct class_type
+X***************
+X*** 270,275
+X    int fm;          /* used for hidden objects */
+X    int pl;
+X    int tl;
+X  } cave_type;
+X
+X  typedef struct owner_type
+X
+X--- 272,279 -----
+X    int fm;          /* used for hidden objects */
+X    int pl;
+X    int tl;
+X+   int __pad1;	/* pad to 16 bytes */
+X+   int __pad2;	/* pad to 16 bytes */
+X  } cave_type;
+X
+X  typedef struct owner_type
+XIndex: variables.c
+XRCS file: RCS/variables.c,v
+Xretrieving revision 1.1
+Xdiff -c3 -r1.1 variables.c
+X*** /tmp/,RCSt1a02740	Mon Jan 18 10:31:18 1988
+X--- variables.c	Wed Dec  9 11:44:15 1987
+X***************
+X*** 3,9
+X
+X  int character_generated = 0;    /* don't save score until char gen finished */
+X  int highscore_fd;	        /* File descriptor to high score file */
+X! int player_max_exp;	        /* Max exp possible    */
+X  char norm_state[STATE_SIZE];	/* normal seed */
+X  char randes_state[STATE_SIZE];	/* For encoding colors */
+X  int randes_seed;                /* for restarting randes_state */
+X
+X--- 3,9 -----
+X
+X  int character_generated = 0;    /* don't save score until char gen finished */
+X  int highscore_fd;	        /* File descriptor to high score file */
+X! bigint_t player_max_exp;	        /* Max exp possible    */
+X  char norm_state[STATE_SIZE];	/* normal seed */
+X  char randes_state[STATE_SIZE];	/* For encoding colors */
+X  int randes_seed;                /* for restarting randes_state */
+X***************
+X*** 48,54
+X  int closing_flag = 0;	         /* Used for closing   */
+X
+X  /* Bit testing array						*/
+X! unsigned int bit_array[32] = {0x00000001, 0x00000002, 0x00000004, 0x00000008,
+X  				0x00000010, 0x00000020, 0x00000040, 0x00000080,
+X  				0x00000100, 0x00000200, 0x00000400, 0x00000800,
+X  				0x00001000, 0x00002000, 0x00004000, 0x00008000,
+X
+X--- 48,54 -----
+X  int closing_flag = 0;	         /* Used for closing   */
+X
+X  /* Bit testing array						*/
+X! bitset_t bit_array[32] = {0x00000001, 0x00000002, 0x00000004, 0x00000008,
+X  				0x00000010, 0x00000020, 0x00000040, 0x00000080,
+X  				0x00000100, 0x00000200, 0x00000400, 0x00000800,
+X  				0x00001000, 0x00002000, 0x00004000, 0x00008000,
+X***************
+X*** 66,72
+X  int panel_col_prt,panel_row_prt;
+X
+X  /*  Following are all floor definitions				*/
+X! cave_type cave[MAX_HEIGHT][MAX_WIDTH];
+X  /* Values for floor types					*/
+X  /* if fval is more than 4 bits then the save file routines must be changed */
+X  cave_type blank_floor = { 0, 0, 0, FALSE, FALSE, FALSE, FALSE};
+X
+X--- 66,72 -----
+X  int panel_col_prt,panel_row_prt;
+X
+X  /*  Following are all floor definitions				*/
+X! cave_type huge cave[MAX_HEIGHT][MAX_WIDTH];
+X  /* Values for floor types					*/
+X  /* if fval is more than 4 bits then the save file routines must be changed */
+X  cave_type blank_floor = { 0, 0, 0, FALSE, FALSE, FALSE, FALSE};
+X***************
+X*** 155,161
+X  };
+X
+X  /* Base experience levels, may be adjusted up for race and/or class*/
+X! int player_exp[MAX_PLAYER_LEVEL] = {
+X       10,     25,     45,     70,    100,    140,    200,    280,    380,   500,
+X      650,    850,   1100,   1400,   1800,   2300,   2900,   3600,   4400,  5400,
+X     6800,   8400,  10200,  12500,  17500,  25000,  35000,  50000,  75000,100000,
+X
+X--- 155,161 -----
+X  };
+X
+X  /* Base experience levels, may be adjusted up for race and/or class*/
+X! bigint_t player_exp[MAX_PLAYER_LEVEL] = {
+X       10,     25,     45,     70,    100,    140,    200,    280,    380,   500,
+X      650,    850,   1100,   1400,   1800,   2300,   2900,   3600,   4400,  5400,
+X     6800,   8400,  10200,  12500,  17500,  25000,  35000,  50000,  75000,100000,
+XIndex: wands.c
+XRCS file: RCS/wands.c,v
+Xretrieving revision 1.1
+Xdiff -c3 -r1.1 wands.c
+X*** /tmp/,RCSt1a02745	Mon Jan 18 10:31:30 1988
+X--- wands.c	Wed Dec  9 11:54:30 1987
+X***************
+X*** 6,12
+X  /* Wands for the aiming...				*/
+X  aim()
+X  {
+X!   unsigned int i;
+X    int j, k, l, chance;
+X    int dir, item_val;
+X    int dumy, y_dumy, x_dumy;
+X
+X--- 6,12 -----
+X  /* Wands for the aiming...				*/
+X  aim()
+X  {
+X!   bitset_t i;
+X    int j, k, l, chance;
+X    int dir, item_val;
+X    int dumy, y_dumy, x_dumy;
+XIndex: wizard.c
+XRCS file: RCS/wizard.c,v
+Xretrieving revision 1.1
+Xdiff -c3 -r1.1 wizard.c
+X*** /tmp/,RCSt1a02750	Mon Jan 18 10:31:38 1988
+X--- wizard.c	Sun Dec  6 14:55:08 1987
+X***************
+X*** 13,18
+X  char *sprintf();
+X  #endif
+X
+X
+X  /* Print Moria credits					-RAK-	*/
+X  game_version()
+X
+X--- 13,19 -----
+X  char *sprintf();
+X  #endif
+X
+X+ #ifdef PASS1 /* First pass */
+X
+X  /* Print Moria credits					-RAK-	*/
+X  game_version()
+X***************
+X*** 239,244
+X    py_bonuses(blank_treasure, 0);
+X  }
+X
+X
+X  /* Wizard routine for creating objects			-RAK-	*/
+X  wizard_create()
+X
+X--- 240,246 -----
+X    py_bonuses(blank_treasure, 0);
+X  }
+X
+X+ #else /* PASS1 */
+X
+X  /* Wizard routine for creating objects			-RAK-	*/
+X  wizard_create()
+X***************
+X*** 375,377
+X        }
+X    inventory[INVEN_MAX] = blank_treasure;
+X  }
+X
+X--- 377,380 -----
+X        }
+X    inventory[INVEN_MAX] = blank_treasure;
+X  }
+X+ #endif /* PASS1 */
+END_OF_diffs.xenix
+if test 35406 -ne `wc -c <diffs.xenix`; then
+    echo shar: \"diffs.xenix\" unpacked with wrong size!
+fi
+# end of overwriting check
+fi
+echo shar: End of shell archive.
+exit 0
+
+

@@ -1,4 +1,5 @@
 #include "constants.h"
+#include "config.h"
 #include "types.h"
 #include "externs.h"
 
@@ -11,8 +12,8 @@ aim()
   int dir, item_val;
   int dumy, y_dumy, x_dumy;
   int redraw, ident;
-  treasure_type *i_ptr;
-  struct misc *m_ptr;
+  register treasure_type *i_ptr;
+  register struct misc *m_ptr;
 
   redraw = FALSE;
   reset_flag = TRUE;
@@ -44,7 +45,7 @@ aim()
 		  m_ptr = &py.misc;
 		  chance = m_ptr->save + m_ptr->lev + int_adj() - i_ptr->level;
 		  if (py.flags.confused > 0)
-		    chance /= 2.0;
+		    chance = chance / 2.0;
 		  if (chance <= 0)  chance = 1;
 		  if (randint(chance) < USE_DEVICE)
 		    msg_print("You failed to use the wand properly.");

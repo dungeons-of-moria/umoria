@@ -1,5 +1,4 @@
 /* Moria Version 4.8	COPYRIGHT (c) Robert Alan Koeneke		*/
-/*                       Public Domain                                   */
 /*                                                                       */
 /*       I lovingly dedicate this game to hackers and adventurers        */
 /*       everywhere...                                                   */
@@ -26,21 +25,25 @@
 /*                                                                       */
 
 #include <curses.h>
+#include <sys/types.h>
+
+#include "constants.h"
+#include "config.h"
+#include "types.h"
+#include "externs.h"
+
 #ifdef USG
 #include <string.h>
 #else
 #include <strings.h>
 #endif
-#include <sys/types.h>
-
-#include "constants.h"
-#include "types.h"
-#include "externs.h"
 
 #if defined(ultrix) || defined(sun) || defined(USG)
 int getuid();
+int getgid();
 #else
 uid_t getuid();
+uid_t getgid();
 #endif
 
 #if defined(ultrix) || defined(USG)
@@ -62,6 +65,11 @@ char *argv[];
   if (0 != setuid(getuid()))
     {
       perror("Gack!  Can't set permissions correctly!  Exiting!\n");
+      exit(0);
+    }
+  if (0 != setgid(getgid()))
+    {
+      perror("Gack!  Can't set group id correctly!  Exiting!\n");
       exit(0);
     }
 
@@ -106,10 +114,7 @@ char *argv[];
     intro("");
 
   /* Some necessary initializations		*/
-  msg_line       = 0;
-  quart_height   = SCREEN_HEIGHT / 4;
-  quart_width    = SCREEN_WIDTH / 4;
-  dun_level      = 0;
+  /* all made into constants or initialized in variables.c */
 
   /* Grab a random seed from the clock		*/
   init_seeds();
@@ -153,7 +158,9 @@ char *argv[];
 
   /* Begin the game				*/
   /*    This determines the maximum player level    */
-  player_max_exp = (player_exp[MAX_PLAYER_LEVEL-1]*py.misc.expfact);
+  /* must be one less than real value so that prt_experience will work
+     correctly, otherwise it is possible to reach level 41 */
+  player_max_exp = player_exp[MAX_PLAYER_LEVEL-1] * py.misc.expfact - 1;
   clear_screen(0, 0);
   prt_stat_block();
   /* prevent ^c quit from entering score into scoreboard until this point */

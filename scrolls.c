@@ -1,6 +1,7 @@
 #include <stdio.h>
 
 #include "constants.h"
+#include "config.h"
 #include "types.h"
 #include "externs.h"
 
@@ -17,11 +18,11 @@ read_scroll()
   unsigned int i;
   int j, k, l, item_val;
   int y, x;
-  int tmp[5];
+  int tmp[6];
   vtype out_val, tmp_str;
   int redraw, ident, first, flag;
-  treasure_type *i_ptr;
-  struct misc *m_ptr;
+  register treasure_type *i_ptr;
+  register struct misc *m_ptr;
 
   first = TRUE;
   reset_flag = TRUE;
@@ -35,7 +36,7 @@ read_scroll()
 	else if (py.flags.confused > 0)
 	  {
 	    msg_print("The text seems to swim about the page!");
-	    msg_print("You are too confused to scanf...");
+	    msg_print("You are too confused to read...");
 	  }
 	else
 	  {
@@ -64,10 +65,10 @@ read_scroll()
 		    switch(j)
 		      {
 		      case 1:
-			i_ptr = &inventory[22];
+			i_ptr = &inventory[INVEN_WIELD];
 			if (i_ptr->tval != 0)
 			  {
-			    objdes(tmp_str, 22, FALSE);
+			    objdes(tmp_str, INVEN_WIELD, FALSE);
 			    (void) sprintf(out_val, "Your %s glows faintly!",
 					   tmp_str);
 			    msg_print(out_val);
@@ -82,10 +83,10 @@ read_scroll()
 			ident = TRUE;
 			break;
 		      case 2:
-			i_ptr = &inventory[22];
+			i_ptr = &inventory[INVEN_WIELD];
 			if (i_ptr->tval != 0)
 			  {
-			    objdes(tmp_str, 22, FALSE);
+			    objdes(tmp_str, INVEN_WIELD, FALSE);
 			    (void) sprintf(out_val, "Your %s glows faintly!",
 					   tmp_str);
 			    msg_print(out_val);
@@ -102,48 +103,42 @@ read_scroll()
 		      case 3:
 			k = 0;
 			l = 0;
-			if (inventory[25].tval != 0)
-			  {
-			    k++;
-			    tmp[k] = 25;
-			  }
-			if (inventory[26].tval != 0)
-			  {
-			    k++;
-			    tmp[k] = 26;
-			  }
-			if (inventory[31].tval != 0)
-			  {
-			    k++;
-			    tmp[k] = 31;
-			  }
-			if (inventory[27].tval != 0)
-			  {
-			    k++;
-			    tmp[k] = 27;
-			  }
-			if (inventory[23].tval != 0)
-			  {
-			    k++;
-			    tmp[k] = 23;
-			  }
-			if (k > 0)  l = tmp[randint(k)];
-			if (0x80000000 & inventory[25].flags)
-			  l = 25;
-			else if (0x80000000 & inventory[26].flags)
-			  l = 26;
-			else if (0x80000000 & inventory[31].flags)
-			  l = 31;
-			else if (0x80000000 & inventory[23].flags)
-			  l = 23;
-			else if (0x80000000 & inventory[27].flags)
-			  l = 27;
+			if (inventory[INVEN_BODY].tval != 0)
+			  tmp[k++] = INVEN_BODY;
+			if (inventory[INVEN_ARM].tval != 0)
+			  tmp[k++] = INVEN_ARM;
+			if (inventory[INVEN_OUTER].tval != 0)
+			  tmp[k++] = INVEN_OUTER;
+			if (inventory[INVEN_HANDS].tval != 0)
+			  tmp[k++] = INVEN_HANDS;
+			if (inventory[INVEN_HEAD].tval != 0)
+			  tmp[k++] = INVEN_HEAD;
+			/* also enchant boots */
+			if (inventory[INVEN_FEET].tval != 0)
+			  tmp[k++] = INVEN_FEET;
+
+			if (k > 0)  l = tmp[randint(k)-1];
+
+			if (0x80000000 & inventory[INVEN_BODY].flags)
+			  l = INVEN_BODY;
+			else if (0x80000000 & inventory[INVEN_ARM].flags)
+			  l = INVEN_ARM;
+			else if (0x80000000 & inventory[INVEN_OUTER].flags)
+			  l = INVEN_OUTER;
+			else if (0x80000000 & inventory[INVEN_HEAD].flags)
+			  l = INVEN_HEAD;
+			else if (0x80000000 & inventory[INVEN_HANDS].flags)
+			  l = INVEN_HANDS;
+			else if (0x80000000 & inventory[INVEN_FEET].flags)
+			  l = INVEN_FEET;
+
 			if (l > 0)
 			  {
 			    i_ptr = &inventory[l];
 			    objdes(tmp_str, l, FALSE);
 			    (void) sprintf(out_val, "Your %s glows faintly!",
 					   tmp_str);
+			    msg_print(out_val);
 			    if (enchant(&i_ptr->toac))
 			      {
 				i_ptr->flags &= 0x7FFFFFFF;
@@ -151,12 +146,13 @@ read_scroll()
 			      }
 			    else
 			      msg_print("The enchantment fails...");
+			    ident = TRUE;
 			  }
-			ident = TRUE;
 			break;
 		      case 4:
 			identify(inventory[item_val]);
 			msg_print("This is an identify scroll");
+			/* make sure player sees message before ident_spell */
 			msg_print(" ");
 			if (ident_spell())  first = FALSE;
 			break;
@@ -222,7 +218,6 @@ read_scroll()
 			break;
 		      case 19:
 			msg_print("This is a mass genocide scroll.");
-			msg_print(" ");
 			ident = mass_genocide();
 			break;
 		      case 20:
@@ -244,11 +239,13 @@ read_scroll()
 		      case 25:
 			identify(inventory[item_val]);
 			msg_print("This is a Recharge-Item scroll.");
+			/* make sure player see message before recharge */
 			msg_print(" ");
 			if (recharge(60))  first = FALSE;
 			break;
 		      case 26:
 			msg_print("This is a genocide scroll.");
+			/* make sure player sees message before genocide() */
 			msg_print(" ");
 			ident = genocide();
 			break;
@@ -269,10 +266,10 @@ read_scroll()
 			ident = TRUE;
 			break;
 		      case 32:
-			i_ptr = &inventory[22];
+			i_ptr = &inventory[INVEN_WIELD];
 			if (i_ptr->tval != 0)
 			  {
-			    objdes(tmp_str, 22, FALSE);
+			    objdes(tmp_str, INVEN_WIELD, FALSE);
 			    (void) sprintf(out_val, "Your %s glows brightly!",
 				    tmp_str);
 			    msg_print(out_val);
@@ -290,15 +287,15 @@ read_scroll()
 			      }
 			    else
 			      msg_print("The enchantment fails...");
+			    ident = TRUE;
 			  }
-			ident = TRUE;
 			break;
 		      case 33:
-			i_ptr = &inventory[22];
+			i_ptr = &inventory[INVEN_WIELD];
 			if (i_ptr->tval != 0)
 			  {
-			    inventory[INVEN_MAX] = inventory[22];
-			    objdes(tmp_str, 22, FALSE);
+			    inventory[INVEN_MAX] = inventory[INVEN_WIELD];
+			    objdes(tmp_str, INVEN_WIELD, FALSE);
 			    (void)sprintf(out_val,"Your %s glows black, fades",
 				    tmp_str);
 			    msg_print(out_val);
@@ -310,30 +307,41 @@ read_scroll()
 			  }
 			break;
 		      case 34:
-			if (0x80000000 & inventory[25].flags)
-			  k = 25;
-			else if (0x80000000 & inventory[26].flags)
-			  k = 26;
-			else if (0x80000000 & inventory[31].flags)
-			  k = 31;
-			else if (0x80000000 & inventory[23].flags)
-			  k = 23;
-			else if (0x80000000 & inventory[27].flags)
-			  k = 27;
-			else if (inventory[25].tval != 0)
-			  k = 25;
-			else if (inventory[26].tval !=0)
-			  k = 26;
-			else if (inventory[23].tval != 0)
-			  k = 23;
-			else if (inventory[27].tval != 0)
-			  k = 27;
-			else
-			  k = 0;
-			if (k > 0)
+			k = 0;
+			l = 0;
+			if (inventory[INVEN_BODY].tval != 0)
+			  tmp[k++] = INVEN_BODY;
+			if (inventory[INVEN_ARM].tval != 0)
+			  tmp[k++] = INVEN_ARM;
+			if (inventory[INVEN_OUTER].tval != 0)
+			  tmp[k++] = INVEN_OUTER;
+			if (inventory[INVEN_HANDS].tval != 0)
+			  tmp[k++] = INVEN_HANDS;
+			if (inventory[INVEN_HEAD].tval != 0)
+			  tmp[k++] = INVEN_HEAD;
+			/* also enchant boots */
+			if (inventory[INVEN_FEET].tval != 0)
+			  tmp[k++] = INVEN_FEET;
+
+			if (k > 0)  l = tmp[randint(k)-1];
+
+			if (0x80000000 & inventory[INVEN_BODY].flags)
+			  l = INVEN_BODY;
+			else if (0x80000000 & inventory[INVEN_ARM].flags)
+			  l = INVEN_ARM;
+			else if (0x80000000 & inventory[INVEN_OUTER].flags)
+			  l = INVEN_OUTER;
+			else if (0x80000000 & inventory[INVEN_HEAD].flags)
+			  l = INVEN_HEAD;
+			else if (0x80000000 & inventory[INVEN_HANDS].flags)
+			  l = INVEN_HANDS;
+			else if (0x80000000 & inventory[INVEN_FEET].flags)
+			  l = INVEN_FEET;
+
+			if (l > 0)
 			  {
-			    i_ptr = &inventory[k];
-			    objdes(tmp_str, k, FALSE);
+			    i_ptr = &inventory[l];
+			    objdes(tmp_str, l, FALSE);
 			    (void) sprintf(out_val,"Your %s glows brightly!",
 					   tmp_str);
 			    msg_print(out_val);
@@ -348,30 +356,34 @@ read_scroll()
 			      }
 			    else
 			      msg_print("The enchantment fails...");
+			    ident = TRUE;
 			  }
-			ident = TRUE;
 			break;
 		      case 35:
-			if ((inventory[25].tval != 0) && (randint(4) == 1))
-			  k = 25;
-			else if ((inventory[26].tval != 0) && (randint(3) ==1))
-			  k = 26;
-			else if ((inventory[31].tval != 0) && (randint(3) ==1))
-			  k = 31;
-			else if ((inventory[23].tval != 0) && (randint(3) ==1))
-			  k = 23;
-			else if ((inventory[27].tval != 0) && (randint(3) ==1))
-			  k = 27;
-			else if (inventory[25].tval != 0)
-			  k = 25;
-			else if (inventory[26].tval != 0)
-			  k = 26;
-			else if (inventory[31].tval != 0)
-			  k = 31;
-			else if (inventory[23].tval != 0)
-			  k = 23;
-			else if (inventory[27].tval != 0)
-			  k = 27;
+			if ((inventory[INVEN_BODY].tval != 0) && (randint(4) == 1))
+			  k = INVEN_BODY;
+			else if ((inventory[INVEN_ARM].tval != 0) && (randint(3) ==1))
+			  k = INVEN_ARM;
+			else if ((inventory[INVEN_OUTER].tval != 0) && (randint(3) ==1))
+			  k = INVEN_OUTER;
+			else if ((inventory[INVEN_HEAD].tval != 0) && (randint(3) ==1))
+			  k = INVEN_HEAD;
+			else if ((inventory[INVEN_HANDS].tval != 0) && (randint(3) ==1))
+			  k = INVEN_HANDS;
+			else if ((inventory[INVEN_FEET].tval != 0) && (randint(3) ==1))
+			  k = INVEN_FEET;
+			else if (inventory[INVEN_BODY].tval != 0)
+			  k = INVEN_BODY;
+			else if (inventory[INVEN_ARM].tval != 0)
+			  k = INVEN_ARM;
+			else if (inventory[INVEN_OUTER].tval != 0)
+			  k = INVEN_OUTER;
+			else if (inventory[INVEN_HEAD].tval != 0)
+			  k = INVEN_HEAD;
+			else if (inventory[INVEN_HANDS].tval != 0)
+			  k = INVEN_HANDS;
+			else if (inventory[INVEN_FEET].tval != 0)
+			  k = INVEN_FEET;
 			else
 			  k = 0;
 			if (k > 0)

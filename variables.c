@@ -1,7 +1,9 @@
 #include "constants.h"
+#include "config.h"
 #include "types.h"
 
 int character_generated = 0;    /* don't save score until char gen finished */
+int character_saved = 0;        /* prevents save on kill after save_char() */
 int highscore_fd;	        /* File descriptor to high score file */
 int player_max_exp;	        /* Max exp possible    */
 char norm_state[STATE_SIZE];	/* normal seed */
@@ -10,11 +12,9 @@ int randes_seed;                /* for restarting randes_state */
 char town_state[STATE_SIZE];	/* Seed for town genera*/
 int town_seed;                  /* for restarting town_seed */
 int cur_height,cur_width;	/* Cur dungeon size    */
-int dun_level;	                /* Cur dungeon level   */
+int dun_level = 0;	                /* Cur dungeon level   */
 int missile_ctr = 0;             /* Counter for missiles */
-int msg_line;	                /* Contains message txt*/
 int msg_flag;	                /* Set with first msg  */
-vtype old_msg;	                /* Last message	      */
 int generate;	                /* Generate next level */
 int death = FALSE;	        /* True if died	      */
 vtype died_from;	        /* What killed him     */
@@ -25,13 +25,16 @@ unsigned int print_stat = 0;	/* Flag for stats      */
 int turn = 0;	                /* Cur turn of game    */
 int wizard1 = FALSE;	        /* Wizard flag	      */
 int wizard2 = FALSE;	        /* Wizard flag	      */
+int panic_save = 0;             /* this is true if playing from a panic save */
 /* keeps track of whether or not line has characters on it */
 /*  avoid unneccesary clearing of lines */
 int used_line[23] = { FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE,
-			FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE,
-			FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE};
+		      FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE,
+		      FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE};
 char password1[12];
 char password2[12];
+
+int wait_for_more = 0;
 
 int key_bindings;
 
@@ -59,7 +62,6 @@ unsigned int bit_array[32] = {0x00000001, 0x00000002, 0x00000004, 0x00000008,
 
 /*  Following are calculated from max dungeon sizes		*/
 int max_panel_rows,max_panel_cols;
-int quart_height,quart_width;
 int panel_row,panel_col;
 int panel_row_min,panel_row_max;
 int panel_col_min,panel_col_max;
@@ -159,7 +161,7 @@ int player_exp[MAX_PLAYER_LEVEL] = {
      10,     25,     45,     70,    100,    140,    200,    280,    380,   500,
     650,    850,   1100,   1400,   1800,   2300,   2900,   3600,   4400,  5400,
    6800,   8400,  10200,  12500,  17500,  25000,  35000,  50000,  75000,100000,
- 150000, 200000, 300000, 400000, 500000, 750000,1500000,2500000,5000000,9999999
+150000, 200000, 300000, 400000, 500000, 750000,1500000,2500000,5000000,10000000
 };
 
 double acc_exp = 0.0;	                  /* Accumulator for fractional exp*/
@@ -179,7 +181,7 @@ race_type race[MAX_RACES] = {
     },
    {"Half-Elf", -1,  1,  0,  1, -1,  1,
       24, 16, 66,  6,130, 15, 62,  6,100, 10, 1.10,
-      2,  6,  1, -1,  0,  5,  3,  9,  0,  0x3F,
+      2,  6,  1, -1, -1,  5,  3,  9,  0,  0x3F,
     },
    {"Elf",      -1,  2,  1,  1, -2,  1,
       75, 75, 60,  4,100,  6, 54,  4, 80,  6, 1.20,
@@ -195,7 +197,7 @@ race_type race[MAX_RACES] = {
     },
    {"Dwarf",     2, -3,  1, -2,  2, -3,
       35, 15, 48,  3,150, 10, 46,  3,120, 10, 1.20,
-      2,  7,  0,  0, 15,  0,  9,  9,  5,  0x05,
+      2,  7,  -1,  0, 15,  0,  9,  9,  5,  0x05,
     },
    {"Half-Orc",  2, -1,  0,  0,  1, -4,
       11,  4, 66,  1,150,  5, 62,  1,120,  5, 1.10,
@@ -222,7 +224,7 @@ background_type background[MAX_BACKGROUND] = {
 {"of a Royal Blood Line.  ",                                    100, 2, 3, 90},
 {"You are the black sheep of the family.  ",                     20, 3,50,-30},
 {"You are a credit to the family.  ",                            80, 3,50,  5},
-{"You are a well liked child.  ",                               100, 3,50, 10},
+{"You are a well-liked child.  ",                               100, 3,50, 10},
 {"Your mother was a Green-Elf.  ",                               40, 4, 1,  0},
 {"Your father was a Green-Elf.  ",                               75, 4, 1,  5},
 {"Your mother was a Grey-Elf.  ",                                90, 4, 1,  5},
@@ -294,7 +296,7 @@ background_type background[MAX_BACKGROUND] = {
 {"brown hair, ",                                                 70,52,53,  0},
 {"auburn hair, ",                                                80,52,53,  0},
 {"red hair, ",                                                   90,52,53,  0},
-{"blonde hair, ",                                               100,52,53,  0},
+{"blond hair, ",                                               100,52,53,  0},
 {"and a very dark complexion.",                                  10,53,-1,  0},
 {"and a dark complexion.",                                       30,53,-1,  0},
 {"and an average complexion.",                                   80,53,-1,  0},
@@ -307,7 +309,7 @@ background_type background[MAX_BACKGROUND] = {
 {"wavy ",                                                      100,55,56,  0},
 {"black hair, and a fair complexion.",                           75,56,-1,  0},
 {"brown hair, and a fair complexion.",                           85,56,-1,  0},
-{"blonde hair, and a fair complexion.",                          95,56,-1,  0},
+{"blond hair, and a fair complexion.",                          95,56,-1,  0},
 {"silver hair, and a fair complexion.",                         100,56,-1,  0},
 {"You have dark brown eyes, ",                                   99,57,58,  0},
 {"You have glowing red eyes, ",                                 100,57,58, 10},
@@ -315,10 +317,10 @@ background_type background[MAX_BACKGROUND] = {
 {"wavy ",                                                      100,58,59,  0},
 {"black hair, ",                                                 75,59,60,  0},
 {"brown hair, ",                                                100,59,60,  0},
-{"a one foot beard, ",                                           25,60,61,  0},
-{"a two foot beard, ",                                           60,60,61,  1},
-{"a three foot beard, ",                                         90,60,61,  3},
-{"a four foot beard, ",                                         100,60,61,  5},
+{"a one-foot beard, ",                                           25,60,61,  0},
+{"a two-foot beard, ",                                           60,60,61,  1},
+{"a three-foot beard, ",                                         90,60,61,  3},
+{"a four-foot beard, ",                                         100,60,61,  5},
 {"and a dark complexion.",                                      100,61,-1,  0},
 {"You have slime green eyes, ",                                  60,62,63,  0},
 {"You have puke yellow eyes, ",                                  85,62,63,  0},
@@ -355,12 +357,13 @@ double rgold_adj[MAX_RACES][MAX_RACES] = {
 
 /* Classes...							*/
 class_type class[MAX_CLASS] = {
-{"Warrior", 0.00,  9, 25, 14, 1, 38, 68, 55,30, 5,-2,-2, 2, 2,-1, FALSE,FALSE},
-{"Mage",    0.30,  0, 30, 16, 2, 36, 34, 20,20,-5, 3, 0, 0,-2, 0, FALSE,TRUE },
-{"Priest",  0.10,  3, 25, 16, 2, 32, 48, 35,20, 0,-3, 3,-1, 1, 2, TRUE ,FALSE},
-{"Rogue",   0.00,  6, 45, 32, 4, 16, 60, 66,30, 3, 1,-2, 3, 2,-1, FALSE,TRUE },
-{"Ranger",  0.40,  4, 30, 24, 3, 24, 56, 72,25, 2, 2, 0, 1, 1, 1, FALSE,TRUE },
-{"Paladin", 0.35,  6, 20, 12, 1, 38, 70, 40,25, 3,-3, 1, 0, 2, 2, TRUE ,FALSE}
+/*          Exp  HP Dis Src Stl Fos bth btb sve S  I  W  D Co Ch  Pray  Mag */
+{"Warrior", 0.00, 9, 25, 14, 1, 38, 68, 55, 18, 5,-2,-2, 2, 2,-1, FALSE,FALSE},
+{"Mage",    0.30, 0, 30, 16, 2, 20, 34, 20, 36,-5, 3, 0, 0,-2, 0, FALSE,TRUE },
+{"Priest",  0.10, 3, 25, 16, 2, 32, 48, 35, 30, 0,-3, 3,-1, 1, 2, TRUE ,FALSE},
+{"Rogue",   0.00, 6, 45, 32, 4, 16, 60, 66, 30, 3, 1,-2, 3, 2,-1, FALSE,TRUE },
+{"Ranger",  0.40, 4, 30, 24, 3, 24, 56, 72, 30, 2, 2, 0, 1, 1, 1, FALSE,TRUE },
+{"Paladin", 0.35, 6, 20, 12, 1, 38, 70, 40, 24, 3,-3, 1, 0, 2, 2, TRUE ,FALSE}
 };
 
 
@@ -569,7 +572,7 @@ class_type class[MAX_CLASS] = {
  };
 
 treasure_type mush = {"& pint~ of fine grade mush",  80, ',', 0x00000000,
-			1500, 0, 308, 1, 1, 0, 0, 0, 0, "1d1", 1};
+			1500, 0, 306, 1, 1, 0, 0, 0, 0, "1d1", 1};
 
 /* Each type of character starts out with a few provisions...	*/
 /* Note the the entries refer to array elements of INVENTORY_INIT array*/
@@ -631,20 +634,22 @@ store_type store[MAX_STORES];
 
 /* Stores are just special traps 		*/
 treasure_type store_door[MAX_STORES] = {
-{"The entrance to the General Store."              , 110, '1',0x00000000,
-    0,      0, 101,   0,   0,   0,   0,   0,   0, "0d0"  ,  0},
-{"The entrance to the Armory."                     , 110, '2',0x00000000,
-    0,      0, 102,   0,   0,   0,   0,   0,   0, "0d0"  ,  0},
-{"The entrance to the Weapon Smiths."              , 110, '3',0x00000000,
-    0,      0, 103,   0,   0,   0,   0,   0,   0, "0d0"  ,  0},
-{"The entrance to the Temple."                     , 110, '4',0x00000000,
-    0,      0, 104,   0,   0,   0,   0,   0,   0, "0d0"  ,  0},
-{"The entrance to the Alchemy Shop."               , 110, '5',0x00000000,
-    0,      0, 105,   0,   0,   0,   0,   0,   0, "0d0"  ,  0},
-{"The entrance to the Magic Shop."                 , 110, '6',0x00000000,
-    0,      0, 106,   0,   0,   0,   0,   0,   0, "0d0"  ,  0}
+{"the entrance to the General Store"              , 110, '1',0x00000000,
+    0,      0, 101,   0,   1,   0,   0,   0,   0, "0d0"  ,  0},
+{"the entrance to the Armory"                     , 110, '2',0x00000000,
+    0,      0, 102,   0,   1,   0,   0,   0,   0, "0d0"  ,  0},
+{"the entrance to the Weapon Smiths"              , 110, '3',0x00000000,
+    0,      0, 103,   0,   1,   0,   0,   0,   0, "0d0"  ,  0},
+{"the entrance to the Temple"                     , 110, '4',0x00000000,
+    0,      0, 104,   0,   1,   0,   0,   0,   0, "0d0"  ,  0},
+{"the entrance to the Alchemy Shop"               , 110, '5',0x00000000,
+    0,      0, 105,   0,   1,   0,   0,   0,   0, "0d0"  ,  0},
+{"the entrance to the Magic Shop"                 , 110, '6',0x00000000,
+    0,      0, 106,   0,   1,   0,   0,   0,   0, "0d0"  ,  0}
 };
 
+/* caution!! this indices are all one greater than they should be,
+   see store_create in store1.c */
 int store_choice[MAX_STORES][STORE_CHOICES] = {
 	/* General Store */
 {105,104,103,102,102,104,42,105,104,27,26,5,4,3,3,2,2,2,1,1,1,1,1,1,1,1
@@ -715,7 +720,7 @@ atype mushrooms[MAX_MUSH] = {
 atype woods[MAX_WOODS] = {
   "Applewood","Ashen","Aspen","Avocado wood",
   "Balsa","Banyan","Birch","Cedar","Cherrywood",
-  "Cinnibar","Cottonwood","Cypress","Dogwood",
+  "Cinnabar","Cottonwood","Cypress","Dogwood",
   "Driftwood","Ebony","Elm wood","Eucalyptus",
   "Grapevine","Hawthorn","Hemlock","Hickory",
   "Ironwood","Juniper","Locust","Mahogany",
@@ -731,9 +736,9 @@ atype metals[MAX_METALS] = {
   "Magnesium","Molybdenum","Nickel",
   "Pewter","Rusty","Silver","Steel","Tin",
   "Titanium","Tungsten","Zirconium","Zinc",
-  "Aluminum Plated","Brass Plated","Copper Plated",
-  "Gold Plated","Nickel Plated","Silver Plated",
-  "Steel Plated","Tin Plated","Zinc Plated"
+  "Aluminum-Plated","Brass-Plated","Copper-Plated",
+  "Gold-Plated","Nickel-Plated","Silver-Plated",
+  "Steel-Plated","Tin-Plated","Zinc-Plated"
 };
 
 atype rocks[MAX_ROCKS] = {
@@ -742,7 +747,7 @@ atype rocks[MAX_ROCKS] = {
   "Calcite","Carnelian","Coral","Corundum","Cryolite",
   "Diamond","Diorite","Emerald","Flint","Fluorite",
   "Gabbro","Garnet","Granite","Gypsum","Hematite","Jade",
-  "Jasper","Kryptonite","Lapus lazuli","Limestone",
+  "Jasper","Kryptonite","Lapis lazuli","Limestone",
   "Malachite","Manganite","Marble","Moonstone",
   "Neptunite","Obsidian","Onyx","Opal","Pearl","Pyrite",
   "Quartz","Quartzite","Rhodonite","Rhyolite","Ruby",

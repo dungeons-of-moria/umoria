@@ -1,4 +1,5 @@
 #include "constants.h"
+#include "config.h"
 #include "types.h"
 #include "externs.h"
 
@@ -9,10 +10,10 @@ eat()
   unsigned int i;
   int j, k, item_val;
   int redraw, ident;
-  struct flags *f_ptr;
-  struct misc *m_ptr;
-  struct stats *s_ptr;
-  treasure_type *i_ptr;
+  register struct flags *f_ptr;
+  register struct misc *m_ptr;
+  register struct stats *s_ptr;
+  register treasure_type *i_ptr;
 
   reset_flag = TRUE;
   if (inven_ctr > 0)
@@ -105,6 +106,8 @@ eat()
 			  msg_print("You feel your strength returning.");
 			  prt_strength();
 			  ident = TRUE;
+			  /* adjust misc stats */
+			  py_bonuses(blank_treasure, 0);
 			}
 		      break;
 		    case 17:
@@ -145,6 +148,8 @@ eat()
 			  msg_print("You feel more dextrous.");
 			  prt_dexterity();
 			  ident = TRUE;
+			  /* adjust misc stats */
+			  py_bonuses(blank_treasure, 0);
 			}
 		      break;
 		    case 21:
@@ -152,44 +157,44 @@ eat()
 		      if (s_ptr->chr > s_ptr->cchr)
 			{
 			  s_ptr->cchr = s_ptr->chr;
-			  msg_print("Your skins starts itching.");
+			  msg_print("Your skin starts itching.");
 			  prt_charisma();
 			  ident = TRUE;
 			}
 		      break;
 		    case 22:
-		      ident = hp_player(randint(3), "poisonness food.");
+		      ident = hp_player(randint(3), "poisonous food.");
 		      break;
 		    case 23:
-		      ident = hp_player(randint(6), "poisonness food.");
+		      ident = hp_player(randint(6), "poisonous food.");
 		      break;
 		    case 24:
-		      ident = hp_player(randint(12), "poisonness food.");
+		      ident = hp_player(randint(12), "poisonous food.");
 		      break;
 		    case 25:
-		      ident = hp_player(damroll("3d6"), "poisonness food.");
+		      ident = hp_player(damroll("3d6"), "poisonous food.");
 		      break;
 		    case 26:
-		      ident = hp_player(damroll("3d12"), "poisonness food.");
+		      ident = hp_player(damroll("3d12"), "poisonous food.");
 		      break;
 		    case 27:
-		      ident = hp_player(-randint(4), "poisonness food.");
+		      ident = hp_player(-randint(4), "poisonous food.");
 		      break;
 		    case 28:
-		      ident = hp_player(-randint(8), "poisonness food.");
+		      ident = hp_player(-randint(8), "poisonous food.");
 		      break;
 		    case 29:
-		      ident = hp_player(-damroll("2d8"), "poisonness food.");
+		      ident = hp_player(-damroll("2d8"), "poisonous food.");
 		      break;
 		    case 30:
-		      ident = hp_player(-damroll("3d8"), "poisonness food.");
+		      ident = hp_player(-damroll("3d8"), "poisonous food.");
 		      break;
 		    case 31:
 		      m_ptr = &py.misc;
 		      m_ptr->mhp--;
 		      if (m_ptr->mhp < m_ptr->chp)
 			m_ptr->chp = (double)m_ptr->mhp;
-		      take_hit(1, "poisonness food.");
+		      take_hit(1, "poisonous food.");
 		      prt_mhp();
 		      prt_chp();
 		      ident = TRUE;

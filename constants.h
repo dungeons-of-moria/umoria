@@ -8,11 +8,7 @@
 /*       cause errors.                                           */
 
 /* Current version number of Moria				*/
-#define CUR_VERSION 4.85
-
-#ifdef USG
-#define index strchr
-#endif
+#define CUR_VERSION 4.87
 
 #ifndef TRUE
 #define TRUE 1
@@ -27,11 +23,19 @@
 #define ORIGINAL 0          /* uses keypad for directions */
 #define ROGUE_LIKE 1        /* uses 'rogue' style keys for directions */
 
+/* message line location */
+#define MSG_LINE  0
+
+/* number of messages to save in a buffer */
+#define SAVED_MSGS 20
+
 /* Dungeon size parameters					*/
 #define MAX_HEIGHT  66      /* Multiple of 11; >= 22 */
 #define MAX_WIDTH  198    /* Multiple of 33; >= 66 */
 #define SCREEN_HEIGHT  22
 #define SCREEN_WIDTH   66
+#define QUART_HEIGHT (SCREEN_HEIGHT / 4)
+#define QUART_WIDTH  (SCREEN_WIDTH / 4)
 
 /* Output dungeon section sizes					*/
 #define OUTPAGE_HEIGHT 44     /* 44 lines of dungeon per section       */
@@ -165,4 +169,3 @@
 #define INVEN_OUTER 31
 #define INVEN_LIGHT 32
 #define INVEN_AUX   33
-

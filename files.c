@@ -1,4 +1,10 @@
 #include <stdio.h>
+
+#include "constants.h"
+#include "config.h"
+#include "types.h"
+#include "externs.h"
+
 #ifdef USG
 #include <string.h>
 #include <fcntl.h>
@@ -6,11 +12,6 @@
 #include <strings.h>
 #include <sys/file.h>
 #endif
-
-#include "config.h"
-#include "constants.h"
-#include "types.h"
-#include "externs.h"
 
 #ifdef sun   /* correct SUN stupidity in the stdio.h file */
 char *sprintf();
@@ -31,7 +32,7 @@ init_scorefile()
 {
   if (1 > (highscore_fd = open(MORIA_TOP, O_RDWR | O_CREAT, 0644)))
     {
-      (void) fprintf(stderr, "Can't open score file!\n");
+      (void) fputs("Can't open score file!\n", stderr);
       exit(1);
     }
 }
@@ -41,10 +42,10 @@ init_scorefile()
 intro(finam)
 char *finam;
 {
-  int xpos, i;
+  register int xpos, i;
   vtype in_line;
   FILE *file1;
-  char *string;
+  register char *string;
 
   /* Attempt to read hours.dat.  If it does not exist,     */
   /* inform the user so he can tell the wizard about it	 */
@@ -115,15 +116,19 @@ char *finam;
 /* Prints dungeon map to external file			-RAK-	 */
 print_map()
 {
-  int i, j, k, l, m, n, i7, i8;
+  register int i, j, m, n;
+  register k, l;
+  register i7, i8;
   char dun_line[MAX_WIDTH];
+  char *dun_ptr;
   vtype filename1;
-  char tmp;
   char tmp_str[80];
   FILE *file1;
   int page_width = OUTPAGE_WIDTH;
   int page_height = OUTPAGE_HEIGHT;
 
+  /* this allows us to strcat each character in the inner loop,
+     instead of using the expensive sprintf */
   prt("File name: ", 0, 0);
   if (get_string(filename1, 0, 11, 64))
     {
@@ -171,23 +176,20 @@ print_map()
 	      i8++;
 	      (void) fprintf(file1, "%c\n", 12);
 	      (void) fprintf(file1, "Section[%d,%d];     ", i7, i8);
-	      (void) fprintf(file1, "Depth : %d (feet)\n", (dun_level * 50));
-	      (void) fprintf(file1, "\n");
-	      (void) fprintf(file1, "   ");
+	      (void) fprintf(file1, "Depth : %d (feet)\n\n   ",
+			     (dun_level * 50));
 	      for (m = j; m <= l; m++)
 		{
 		  n = (m / 100);
 		  (void) fprintf(file1, "%d", n);
 		}
-	      (void) fprintf(file1, "\n");
-	      (void) fprintf(file1, "   ");
+	      (void) fputs("\n   ", file1);
 	      for (m = j; m <= l; m++)
 		{
 		  n = (m / 10) - (m / 100) * 10;
 		  (void) fprintf(file1, "%d", n);
 		}
-	      (void) fprintf(file1, "\n");
-	      (void) fprintf(file1, "   ");
+	      (void) fputs("\n   ", file1);
 	      for (m = j; m <= l; m++)
 		{
 		  n = m - (m / 10) * 10;
@@ -197,15 +199,16 @@ print_map()
 	      for (m = i; m <= k; m++)
 		{
 		  (void) sprintf(dun_line, "%2d ", m);
+		  dun_ptr = &dun_line[3];
 		  for (n = j; n <= l; n++)
 		    {
 		      if (test_light(m, n))
-			loc_symbol(m, n, &tmp);
+			loc_symbol(m, n, dun_ptr++);
 		      else
-			tmp = ' ';
-		      (void) sprintf(dun_line, "%s%c", dun_line, tmp);
+			*dun_ptr++ = ' ';
 		    }
-		  (void) fprintf(file1, "%s\n", dun_line);
+		  *dun_ptr++ = '\n';
+		  (void) fputs(dun_line, file1);
 		}
 	      j += page_width;
 	    }
@@ -224,10 +227,11 @@ print_map()
 /* be expected to appear on that level.                          */
 print_objects()
 {
-  int nobj, i, j, level;
+  register int i;
+  int nobj, j, level;
   vtype filename1, tmp_str;
-  FILE *file1;
-  treasure_type *i_ptr;
+  register FILE *file1;
+  register treasure_type *i_ptr;
 
   prt("Produce objects on what level?: ", 0, 0);
   level = 0;
@@ -235,7 +239,7 @@ print_objects()
     (void) sscanf(tmp_str, "%d", &level);
   prt("Produce how many objects?: ", 0, 0);
   nobj = 0;
-  if (!get_string(tmp_str, 0, 27, 10))
+  if (get_string(tmp_str, 0, 27, 10))
     (void) sscanf(tmp_str, "%d", &nobj);
   if ((nobj > 0) && (level > -1) && (level < 1201))
     {
@@ -283,13 +287,14 @@ print_objects()
 /* Prints a listing of monsters				-RAK-	 */
 print_monsters()
 {
-  int i, j, xpos, attype, adesc;
-  FILE *file1;
+  register int i;
+  int j, xpos, attype, adesc;
+  register FILE *file1;
   vtype out_val, filename1;
   vtype attstr, attx;
   dtype damstr;
-  creature_type *c_ptr;
-  char *string;
+  register creature_type *c_ptr;
+  register char *string;
 
   prt("File name: ", 0, 0);
   if (get_string(filename1, 0, 11, 64))
@@ -363,7 +368,7 @@ print_monsters()
 	      if (0x40000000 & c_ptr->cmove)
 		(void) fprintf(file1, "       Has 4d2 object(s)/gold.\n");
 	      /*
-	       * Creature casts spells / Breaths Dragon
+	       * Creature casts spells / Breathes Dragon
 	       * breath...
 	       */
 	      if (c_ptr->spells != 0)
@@ -402,15 +407,15 @@ print_monsters()
 		  if (0x00040000 & c_ptr->spells)
 		    (void) fprintf(file1, "       **Unknown spell value**\n");
 		  if (0x00080000 & c_ptr->spells)
-		    (void) fprintf(file1, "       Breaths Lightning Dragon Breath.\n");
+		    (void) fprintf(file1, "       Breathes Lightning Dragon Breath.\n");
 		  if (0x00100000 & c_ptr->spells)
-		    (void) fprintf(file1, "       Breaths Gas Dragon Breath.\n");
+		    (void) fprintf(file1, "       Breathes Gas Dragon Breath.\n");
 		  if (0x00200000 & c_ptr->spells)
-		    (void) fprintf(file1, "       Breaths Acid Dragon Breath.\n");
+		    (void) fprintf(file1, "       Breathes Acid Dragon Breath.\n");
 		  if (0x00400000 & c_ptr->spells)
-		    (void) fprintf(file1, "       Breaths Frost Dragon Breath.\n");
+		    (void) fprintf(file1, "       Breathes Frost Dragon Breath.\n");
 		  if (0x00800000 & c_ptr->spells)
-		    (void) fprintf(file1, "       Breaths Fire Dragon Breath.\n");
+		    (void) fprintf(file1, "       Breathes Fire Dragon Breath.\n");
 		}
 	      /* Movement for creature                                 */
 	      (void) fprintf(file1, "   --Movement ==\n");
@@ -447,10 +452,10 @@ print_monsters()
 		  else
 		    {
 		      (void) strcpy(attx, attstr);
-		      (void) strcpy(attstr, "");
+		      attstr[0] = '\0';
 		    }
 		  (void) sscanf(attx, "%d%d%s", &attype, &adesc, damstr);
-		  (void) strcpy(out_val, "");
+		  out_val[0] = '\0';
 		  switch (adesc)
 		    {
 		    case 1:
@@ -614,14 +619,14 @@ print_monsters()
 /* Print the character to a file or device		-RAK-	 */
 file_character()
 {
-  int i, j, xbth, xbthb, xfos, xsrh, xstl, xdis;
-  int xsave, xdev;
+  register int i;
+  int j, xbth, xbthb, xfos, xsrh, xstl, xdis, xsave, xdev;
   vtype xinfra;
-  FILE *file1;
+  register FILE *file1;
   vtype out_val, filename1, prt1, prt2;
   stat_type out_str, out_int, out_wis, out_dex, out_con, out_chr;
-  struct misc *p_ptr;
-  treasure_type *i_ptr;
+  register struct misc *p_ptr;
+  register treasure_type *i_ptr;
 
   prt("File name: ", 0, 0);
   if (get_string(filename1, 0, 11, 64))
@@ -685,11 +690,13 @@ file_character()
 	    p_ptr->ptohit * BTH_PLUS_ADJ;
 	  xbthb = p_ptr->bthb + p_ptr->lev * BTH_LEV_ADJ +
 	    p_ptr->ptohit * BTH_PLUS_ADJ;
-	  xfos = 27 - p_ptr->fos;
+	  /* this results in a range from 0 to 29 */
+	  xfos = 40 - p_ptr->fos;
 	  if (xfos < 0)
 	    xfos = 0;
 	  xsrh = p_ptr->srh + int_adj();
-	  xstl = p_ptr->stl;
+	  /* this results in a range from 0 to 9 */
+	  xstl = p_ptr->stl + 1;
 	  xdis = p_ptr->disarm + p_ptr->lev + 2 * todis_adj() + int_adj();
 	  xsave = p_ptr->save + p_ptr->lev + wis_adj();
 	  xdev = p_ptr->save + p_ptr->lev + int_adj();
@@ -704,7 +711,7 @@ file_character()
 	  (void) fprintf(file1, "  Disarming   : %s", pad(likert(xdis, 8), " ", 10));
 	  (void) fprintf(file1, "  Searching   : %s\n", pad(likert(xsrh, 6), " ", 10));
 	  (void) fprintf(file1, "  Saving Throw: %s", pad(likert(xsave, 6), " ", 10));
-	  (void) fprintf(file1, "  Magic Device: %s", pad(likert(xdev, 7), " ", 10));
+	  (void) fprintf(file1, "  Magic Device: %s", pad(likert(xdev, 6), " ", 10));
 	  (void) fprintf(file1, "  Infra-Vision: %s\n", pad(xinfra, " ", 10));
 	  /* Write out the character's history     */
 	  (void) fprintf(file1, "\n");
@@ -714,8 +721,8 @@ file_character()
 	    (void) fprintf(file1, "%s\n", pad(py.misc.history[i], " ", 71));
 	  /* Write out the equipment list...       */
 	  j = 0;
-	  (void) fprintf(file1, " ");
-	  (void) fprintf(file1, " ");
+	  (void) fprintf(file1, "\n");
+	  (void) fprintf(file1, "\n");
 	  (void) fprintf(file1, "  [Character's Equipment List]\n");
 	  (void) fprintf(file1, "\n");
 	  if (equip_ctr == 0)
@@ -768,10 +775,10 @@ file_character()
 			(void) strcpy(prt1, ") *Unknown value*    : ");
 			break;
 		      }
-		    j++;
 		    objdes(prt2, i, TRUE);
 		    (void) sprintf(out_val, "  %c%s%s", j + 97, prt1, prt2);
 		    (void) fprintf(file1, "%s\n", out_val);
+		    j++;
 		  }
 	      }
 

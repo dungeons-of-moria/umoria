@@ -1,13 +1,15 @@
 #include <stdio.h>
+
+#include "constants.h"
+#include "config.h"
+#include "types.h"
+#include "externs.h"
+
 #ifdef USG
 #include <string.h>
 #else
 #include <strings.h>
 #endif
-
-#include "constants.h"
-#include "types.h"
-#include "externs.h"
 
 #ifdef sun   /* correct SUN stupidity in the stdio.h file */
 char *sprintf();
@@ -26,7 +28,7 @@ prt_comment1()
     case 2: msg_print("Accepted!"); break;
     case 3: msg_print("Fine..."); break;
     case 4: msg_print("Agreed!"); break;
-    case 5: msg_print("Ok..."); break;
+    case 5: msg_print("Okay..."); break;
     case 6: msg_print("Taken!"); break;
     case 7: msg_print("You drive a hard bargain, but taken..."); break;
     case 8: msg_print("You'll force me bankrupt, but it's a deal..."); break;
@@ -35,7 +37,7 @@ prt_comment1()
     case 11: msg_print("Finally!  I accept..."); break;
     case 12: msg_print("Robbed again..."); break;
     case 13: msg_print("A pleasure to do business with you!"); break;
-    case 14: msg_print("My spouse shall skin me, but accepted."); break;
+    case 14: msg_print("My spouse will skin me, but accepted."); break;
     }
 }
 
@@ -64,27 +66,27 @@ int offer, asking, final;
       {
       case 1:
 	(void) strcpy(comment,
-		      "%A1 for such a fine item?  HA!  No less than %A2.");
+		      "%A1 for such a fine item?  HAH!  No less than %A2.");
 	break;
       case 2:
 	(void) strcpy(comment, "%A1 is an insult!  Try %A2 gold pieces...");
 	break;
       case 3:
 	(void) strcpy(comment,
-		      "%A1???  Thou would rob my poor starving children?");
+		      "%A1???  Thou wouldst rob my poor starving children?");
 	break;
       case 4:
-	(void) strcpy(comment, "Why I'll take no less than %A2 gold pieces.");
+	(void) strcpy(comment, "Why, I'll take no less than %A2 gold pieces.");
 	break;
       case 5:
 	(void) strcpy(comment, "Ha!  No less than %A2 gold pieces.");
 	break;
       case 6:
 	(void) strcpy(comment,
-		      "Thou blackheart!  No less than %A2 gold pieces.");
+		      "Thou knave!  No less than %A2 gold pieces.");
 	break;
       case 7:
-	(void) strcpy(comment, "%A1 is far too little, how about %A2?");
+	(void) strcpy(comment, "%A1 is far too little; how about %A2?");
 	break;
       case 8:
 	(void) strcpy(comment, "I paid more than %A1 for it myself, try %A2.");
@@ -99,7 +101,7 @@ int offer, asking, final;
 	break;
       case 11:
 	(void) strcpy(comment,
-		      "May fleas of a 1000 orcs molest you.  I want %A2.");
+		      "May the fleas of 1000 orcs molest you.  I want %A2.");
 	break;
       case 12:
 	(void) strcpy(comment,
@@ -111,7 +113,7 @@ int offer, asking, final;
 	break;
       case 14:
 	(void) strcpy(comment,
-		      "Sell this for such a pittance.  Give me %A2 gold.");
+		      "Sell this for such a pittance?  Give me %A2 gold.");
 	break;
       case 15:
 	(void) strcpy(comment,
@@ -185,7 +187,7 @@ prt_comment3(offer, asking, final)
 	(void) strcpy(comment, "*CHOKE* For that!?  Let's say %A1.");
 	break;
       case 12:
-	(void) strcpy(comment, "How about %A1.");
+	(void) strcpy(comment, "How about %A1?");
 	break;
       case 13:
 	(void) strcpy(comment, "That looks war surplus!  Say %A1 gold.");
@@ -194,7 +196,7 @@ prt_comment3(offer, asking, final)
 	(void) strcpy(comment, "I'll buy it as scrap for %A1.");
 	break;
       case 15:
-	(void) strcpy(comment, "%A2 is too much, let us say %A1 gold.");
+	(void) strcpy(comment, "%A2 is too much; let us say %A1 gold.");
 	break;
       }
   insert_num(comment, "%A1", offer, FALSE);
@@ -210,31 +212,28 @@ prt_comment4()
   switch(randint(5))
     {
     case 1:
-      msg_print("ENOUGH!  Thou hath abused me once too often!");
+      msg_print("ENOUGH!  Thou hast abused me once too often!");
       msg_print("Out of my place!");
-      msg_print(" ");
       break;
     case 2:
       msg_print("THAT DOES IT!  You shall waste my time no more!");
       msg_print("out... Out... OUT!!!");
-      msg_print(" ");
       break;
     case 3:
-      msg_print("This is getting no where...  I'm going home!");
+      msg_print("This is getting nowhere...  I'm going home!");
       msg_print("Come back tomorrow...");
-      msg_print(" ");
       break;
     case 4:
       msg_print("BAH!  No more shall you insult me!");
       msg_print("Leave my place...  Begone!");
-      msg_print(" ");
       break;
     case 5:
       msg_print("Begone!  I have had enough abuse for one day.");
       msg_print("Come back when thou art richer...");
-      msg_print(" ");
       break;
     }
+  /* make sure player sees last message, before he is kicked out of store */
+  msg_print(" ");
   msg_flag = FALSE;
 }
 
@@ -249,7 +248,7 @@ prt_comment5()
     case 4: msg_print("Hah!  Try again..."); break;
     case 5: msg_print("Ridiculous!"); break;
     case 6: msg_print("You've got to be kidding!"); break;
-    case 7: msg_print("You better be kidding!!"); break;
+    case 7: msg_print("You'd better be kidding!!"); break;
     case 8: msg_print("You try my patience."); break;
     case 9: msg_print("I don't hear you."); break;
     case 10: msg_print("Hmmm, nice weather we're having..."); break;
@@ -261,7 +260,7 @@ prt_comment6()
 {
   switch(randint(5))
     {
-    case 1: msg_print("I must of heard you wrong..."); break;
+    case 1: msg_print("I must have heard you wrong..."); break;
     case 2: msg_print("What was that?"); break;
     case 3: msg_print("I'm sorry, say that again..."); break;
     case 4: msg_print("What did you say?"); break;
@@ -290,7 +289,7 @@ int typ;
   else
     prt("Specify an offer in gold pieces.", 21, 0);
   prt("ESC) Quit Haggling.", 22, 0);
-  prt("", 23, 0);
+  prt("", 23, 0);  /* clear last line */
 }
 
 
@@ -298,10 +297,10 @@ int typ;
 display_inventory(store_num, start)
 int store_num, start;
 {
-  int i, j, stop;
+  register store_type *s_ptr;
+  register treasure_type *i_ptr;
+  register int i, j, stop;
   vtype out_val1, out_val2;
-  store_type *s_ptr;
-  treasure_type *i_ptr;
 
   s_ptr = &store[store_num];
   i = (start % 12);
@@ -315,7 +314,7 @@ int store_num, start;
 	i_ptr->number = 1;
       objdes(out_val1, INVEN_MAX, TRUE);
       (void) sprintf(out_val2, "%c) %s", 97+i, out_val1);
-      prt(out_val2, i+6, 0);
+      prt(out_val2, i+5, 0);
       if (s_ptr->store_inven[start].scost <= 0)
 	{
 	  j = abs(s_ptr->store_inven[start].scost);
@@ -326,13 +325,17 @@ int store_num, start;
 	}
       else
 	(void) sprintf(out_val2,"%9d [Fixed]",s_ptr->store_inven[start].scost);
-      prt(out_val2, i+6, 59);
+      prt(out_val2, i+5, 59);
       i++;
       start++;
     }
   if (i < 12)
     for (j = 0; j < (11 - i + 1); j++)
-      prt("", j+i+6, 0);
+      prt("", j+i+5, 0);  /* clear remaining lines */
+  if (s_ptr->store_ctr > 12)
+    prt("- cont. -", 17, 60);
+  else
+    prt("", 17, 60);  /* clear the line */
 }
 
 
@@ -340,9 +343,9 @@ int store_num, start;
 display_cost(store_num, pos)
 int store_num, pos;
 {
-  int i, j;
+  register int i, j;
   vtype out_val;
-  store_type *s_ptr;
+  register store_type *s_ptr;
 
   s_ptr = &store[store_num];
   i = (pos % 12);
@@ -354,7 +357,7 @@ int store_num, pos;
     }
   else
     (void) sprintf(out_val, "%9d [Fixed]", s_ptr->store_inven[pos].scost);
-  prt(out_val, i+6, 59);
+  prt(out_val, i+5, 59);
 }
 
 
@@ -372,7 +375,7 @@ store_prt_gold()
 display_store(store_num, cur_top)
 int store_num, cur_top;
 {
-  store_type *s_ptr;
+  register store_type *s_ptr;
 
   s_ptr = &store[store_num];
   really_clear_screen();
@@ -389,11 +392,11 @@ int store_num, cur_top;
 int get_store_item(com_val, pmt, i, j)
 int *com_val;
 char *pmt;
-int i, j;
+register int i, j;
 {
   char command;
   vtype out_val;
-  int flag;
+  register int flag;
 
   *com_val = -1;
   flag = TRUE;
@@ -410,7 +413,7 @@ int i, j;
 	}
     }
   msg_flag = FALSE;
-  erase_line(msg_line, msg_line);
+  erase_line(MSG_LINE, 0);
   return(flag);
 }
 
@@ -419,8 +422,8 @@ int i, j;
 int increase_insults(store_num)
 int store_num;
 {
-  int increase;
-  store_type *s_ptr;
+  register int increase;
+  register store_type *s_ptr;
 
   increase = FALSE;
   s_ptr = &store[store_num];
@@ -440,7 +443,7 @@ int store_num;
 decrease_insults(store_num)
 int store_num;
 {
-  store_type *s_ptr;
+  register store_type *s_ptr;
 
   s_ptr = &store[store_num];
   s_ptr->insult_cur -= 2;
@@ -452,7 +455,7 @@ int store_num;
 int haggle_insults(store_num)
 int store_num;
 {
-  int haggle;
+  register int haggle;
 
   haggle = FALSE;
   if (increase_insults(store_num))
@@ -467,9 +470,9 @@ int get_haggle(comment, num)
 char *comment;
 int *num;
 {
-  int i, clen;
+  int i;
   vtype out_val;
-  int flag;
+  register int flag, clen;
 
   flag = TRUE;
   i = 0;
@@ -481,7 +484,7 @@ int *num;
       if (!get_string(out_val, 0, clen, 40))
 	{
 	  flag = FALSE;
-	  erase_line(msg_line, msg_line);
+	  erase_line(MSG_LINE, 0);
 	}
       (void) sscanf(out_val, "%d", &i);
     }
@@ -497,8 +500,8 @@ char *comment;
 int *new_offer;
 int last_offer, factor;
 {
-  int flag;
-  int receive;
+  register int flag;
+  register int receive;
 
   receive = 0;
   flag = FALSE;
@@ -536,11 +539,11 @@ treasure_type item;
   int last_offer, new_offer, final_flag, x3;
   double x1, x2;
   double min_per, max_per;
-  int flag, loop_flag;
+  register int flag, loop_flag;
   vtype out_val, comment;
   int purchase;
-  store_type *s_ptr;
-  owner_type *o_ptr;
+  register store_type *s_ptr;
+  register owner_type *o_ptr;
 
   flag = FALSE;
   purchase = 0;
@@ -614,6 +617,9 @@ treasure_type item;
 	    }
 	  x2 = (x1 + (randint(5) - 3)/100.0);
 	  x3 = ((cur_ask-new_offer)*x2) + 1;
+	  /* don't let the price go up */
+	  if (x3 < 0)
+	    x3 = 0;
 	  cur_ask -= x3;
 	  if (cur_ask < final_ask)
 	    {
@@ -637,7 +643,7 @@ treasure_type item;
 	  if (!flag)
 	    {
 	      last_offer = new_offer;
-	      prt("", 1, 0);
+	      prt("", 1, 0);  /* clear the line */
 	      (void) sprintf(out_val, "Your last offer : %d", last_offer);
 	      put_buffer(out_val, 1, 39);
 	      prt_comment2(last_offer, cur_ask, final_flag);
@@ -645,7 +651,7 @@ treasure_type item;
 	}
     }
   while (!flag);
-  prt("", 1, 0);
+  prt("", 1, 0);  /* clear the line */
   display_commands();
   return(purchase);
 }
@@ -663,10 +669,10 @@ treasure_type item;
   int max_gold;
   double x1, x2;
   double min_per, max_per;
-  int flag, loop_flag;
+  register int flag, loop_flag;
   vtype comment, out_val;
-  store_type *s_ptr;
-  owner_type *o_ptr;
+  register store_type *s_ptr;
+  register owner_type *o_ptr;
   int sell;
 
   flag = FALSE;
@@ -707,6 +713,7 @@ treasure_type item;
 	  cur_ask   = max_gold;
 	  final_ask = max_gold;
  msg_print("I am sorry, but I have not the money to afford such a fine item.");
+	  /* make sure player see the message */
 	  msg_print(" ");
 	}
       else
@@ -767,12 +774,15 @@ treasure_type item;
 		{
 		  if (x1 > max_per)
 		    {
-		      x1 *= 0.75;
+		      x1 = x1 * 0.75;
 		      if (x1 < max_per)  x1 = max_per;
 		    }
 		}
 	      x2 = (x1 + (randint(5) - 3)/100.0);
 	      x3 = ((new_offer-cur_ask)*x2) + 1;
+	      /* don't let the price go down */
+	      if (x3 < 0)
+		x3 = 0;
 	      cur_ask += x3;
 	      if (cur_ask > final_ask)
 		{
@@ -796,7 +806,7 @@ treasure_type item;
 	      if (!flag)
 		{
 		  last_offer = new_offer;
-		  prt("", 1, 0);
+		  prt("", 1, 0);  /* clear the line */
 		  (void) sprintf(out_val, "Your last bid %d", last_offer);
 		  put_buffer(out_val, 1, 39);
 		  prt_comment3(cur_ask, last_offer, final_flag);
@@ -804,7 +814,7 @@ treasure_type item;
 	    }
 	}
       while (!flag);
-      prt("", 1, 0);
+      prt("", 1, 0);  /* clear the line */
       display_commands();
     }
   return(sell);
@@ -820,9 +830,9 @@ int *cur_top;
   int item_new, choice;
   int save_number;
   vtype out_val, tmp_str;
-  store_type *s_ptr;
-  treasure_type *i_ptr;
-  inven_record *r_ptr;
+  register store_type *s_ptr;
+  register treasure_type *i_ptr;
+  register inven_record *r_ptr;
   int purchase;
 
   purchase = FALSE;
@@ -831,7 +841,7 @@ int *cur_top;
   if (*cur_top == 12)
     i = s_ptr->store_ctr - 1 - 12;
   else if (s_ptr->store_ctr > 11)
-    i = 12;
+    i = 11;
   else
     i = s_ptr->store_ctr - 1;
   if (s_ptr->store_ctr < 1)
@@ -913,7 +923,7 @@ int *cur_top;
 	      default:
 		break;
 	      }
-	    prt("", 1, 0);
+	    prt("", 1, 0);  /* clear the line */
 	  }
 	else
 	  prt("You cannot carry that many different items.", 0, 0);
@@ -932,8 +942,8 @@ int store_num, cur_top;
   int item_pos, price;
   int redraw;
   vtype out_val, tmp_str;
-  treasure_type *i_ptr;
-  int sell;
+  register treasure_type *i_ptr;
+  register int sell;
 
   sell = FALSE;
   redraw = FALSE;
@@ -947,6 +957,7 @@ int store_num, cur_top;
       objdes(tmp_str, INVEN_MAX, TRUE);
       (void) sprintf(out_val, "Selling %s (%c)", tmp_str, item_val+97);
       msg_print(out_val);
+      /* make sure player sees the message */
       msg_print(" ");
       if ((store_buy[store_num])(inventory[INVEN_MAX].tval))
 	if (store_check_num(store_num))
@@ -995,8 +1006,8 @@ int store_num;
 {
   int com_val, cur_top;
   char command;
-  int exit_flag;
-  store_type *s_ptr;
+  register int exit_flag;
+  register store_type *s_ptr;
 
   s_ptr = &store[store_num];
   if (s_ptr->store_open < turn)

@@ -1,4 +1,5 @@
 #include "constants.h"
+#include "config.h"
 #include "types.h"
 #include "externs.h"
 
@@ -13,7 +14,7 @@ int doorptr;
 /* Always picks a correct direction		*/
 correct_dir(rdir, cdir, y1, x1, y2, x2)
 int *rdir, *cdir;
-int y1, x1, y2, x2;
+register int y1, x1, y2, x2;
 {
   if (y1 < y2)
     *rdir =  1;
@@ -74,11 +75,13 @@ int chance;
 /* Blanks out entire cave				-RAK-	*/
 blank_cave()
 {
-  int i, j;
+  register int i, j;
+  register cave_type *c_ptr;
 
+  c_ptr = &cave[0][0];
   for (i = 0; i < MAX_HEIGHT; i++)
     for (j = 0; j < MAX_WIDTH; j++)
-      cave[i][j] = blank_floor;
+      *c_ptr++ = blank_floor;
 }
 
 
@@ -87,8 +90,8 @@ blank_cave()
 fill_cave(fill)
 floor_type fill;
 {
-  int i, j;
-  cave_type *c_ptr;
+  register int i, j;
+  register cave_type *c_ptr;
 
   for (i = 1; i < cur_height-1; i++)
     for (j = 1; j < cur_width-1; j++)
@@ -106,7 +109,7 @@ floor_type fill;
 /* Places indestructible rock around edges of dungeon	-RAK-	*/
 place_boundary()
 {
-  int i;
+  register int i;
 
   for (i = 0; i < cur_height; i++)
     {
@@ -130,9 +133,10 @@ place_streamer(rock, treas_chance)
 floor_type rock;
 int treas_chance;
 {
-  int i, y, x, dir, ty, tx, t1, t2;
+  register int i, tx, ty;
+  int y, x, dir, t1, t2;
   int flag;
-  cave_type *c_ptr;
+  register cave_type *c_ptr;
 
   /* Choose starting point and direction		*/
   y = (cur_height/2.0) + 11 - randint(23);
@@ -175,9 +179,9 @@ int treas_chance;
 vault_trap(y, x, yd, xd, num)
 int y, x, yd, xd, num;
 {
-  int count, y1, x1, i;
-  int flag;
-  cave_type *c_ptr;
+  register int count, y1, x1;
+  int i, flag;
+  register cave_type *c_ptr;
 
   for (i = 0; i < num; i++)
     {
@@ -191,7 +195,7 @@ int y, x, yd, xd, num;
 	  if ((c_ptr->fval > 0) && (c_ptr->fval < 8) && (c_ptr->fval != 3))
 	    if (c_ptr->tptr == 0)
 	      {
-		place_trap(y1, x1, 1, randint(MAX_TRAPA));
+		place_trap(y1, x1, 1, randint(MAX_TRAPA)-1);
 		flag = TRUE;
 	      }
 	  count++;
@@ -205,7 +209,8 @@ int y, x, yd, xd, num;
 vault_monster(y, x, num)
 int y, x, num;
 {
-  int i, y1, x1;
+  register int i;
+  int y1, x1;
 
   for (i = 0; i < num; i++)
     {
@@ -220,9 +225,9 @@ int y, x, num;
 build_room(yval, xval)
 int yval, xval;
 {
-  int y_height, y_depth;
-  int x_left, x_right;
-  int i, j;
+  register int i, j;
+  register int y_height, y_depth;
+  register int x_left, x_right;
   floor_type cur_floor;
 
   if (dun_level <= randint(25))
@@ -263,9 +268,9 @@ int yval, xval;
 {
   int y_height, y_depth;
   int x_left, x_right;
-  int i0, i, j;
+  register int i0, i, j;
   floor_type cur_floor;
-  cave_type *c_ptr;
+  register cave_type *c_ptr;
 
   if (dun_level <= randint(25))
     cur_floor = lopen_floor;	/* Floor with light	*/
@@ -327,9 +332,9 @@ int yval, xval;
 build_type2(yval, xval)
 int yval, xval;
 {
-  int y_height, y_depth;
-  int x_left, x_right;
-  int i, j;
+  register int i, j;
+  register int y_height, y_depth;
+  register int x_left, x_right;
   floor_type cur_floor;
 
   if (dun_level <= randint(30))
@@ -543,9 +548,9 @@ int yval, xval;
 {
   int y_height, y_depth;
   int x_left, x_right;
-  int i0, i, j;
+  register int i0, i, j;
   floor_type cur_floor;
-  cave_type *c_ptr;
+  register cave_type *c_ptr;
 
   if (dun_level <= randint(25))
     cur_floor = lopen_floor;	/* Floor with light	*/
@@ -691,9 +696,9 @@ int yval, xval;
 build_tunnel(row1, col1, row2, col2)
 int row1, col1, row2, col2;
 {
-  int tmp_row, tmp_col;
+  register int tmp_row, tmp_col;
   int row_dir, col_dir;
-  int i, j;
+  register int i, j;
   coords tunstk[1000];
   coords wallstk[1000];
   int tunptr;
@@ -744,7 +749,7 @@ int row1, col1, row2, col2;
 	  col1 = tmp_col;
 	  if (!door_flag)
 	    {
-	      if (doorptr <= 100)
+	      if (doorptr < 100)
 		{
 		  doorstk[doorptr].y = row1;
 		  doorstk[doorptr].x = col1;
@@ -795,7 +800,7 @@ int row1, col1, row2, col2;
 
 
 int next_to(y, x)
-int y, x;
+register int y, x;
 {
   int next;
 
@@ -815,7 +820,7 @@ int y, x;
 
 /* Places door at y, x position if at least 2 walls found	*/
 try_door(y, x)
-int y, x;
+register int y, x;
 {
   if (randint(100) > DUN_TUN_JCT)
     if (cave[y][x].fval == corr_floor1.ftval)
@@ -833,7 +838,7 @@ cave_gen()
       int endy;
     };
   int room_map[20][20];
-  int i, j, k, l;
+  register int i, j, k;
   int y1, x1, y2, x2;
   int pick1, pick2;
   int row_rooms, col_rooms;
@@ -857,8 +862,8 @@ cave_gen()
     for (j = 0; j < col_rooms; j++)
       if (room_map[i][j] == TRUE)
 	{
-	  yloc[k] = i * (quart_height * 2 + 1) + quart_height;
-	  xloc[k] = j * (quart_width * 2 + 1) + quart_width;
+	  yloc[k] = i * (QUART_HEIGHT * 2 + 1) + QUART_HEIGHT;
+	  xloc[k] = j * (QUART_WIDTH * 2 + 1) + QUART_WIDTH;
 	  if (dun_level > randint(DUN_UNUSUAL))
 	    switch(randint(3))
 	      {
@@ -870,7 +875,7 @@ cave_gen()
 	    build_room(yloc[k], xloc[k]);
 	  k++;
 	}
-  for (l = 0; l < k; l++)
+  for (i = 0; i < k; i++)
     {
       pick1 = randint(k) - 1;
       pick2 = randint(k) - 1;
@@ -882,12 +887,12 @@ cave_gen()
       xloc[pick2] = x1;
       }
   doorptr = 0;
-  for (l = 0; l < k-1; l++)
+  for (i = 0; i < k-1; i++)
     {
-      y1 = yloc[l];
-      x1 = xloc[l];
-      y2 = yloc[l+1];
-      x2 = xloc[l+1];
+      y1 = yloc[i];
+      x1 = xloc[i];
+      y2 = yloc[i+1];
+      x2 = xloc[i+1];
       build_tunnel(y2, x2, y1, x1);
       }
   fill_cave(rock_wall1);
@@ -927,8 +932,9 @@ int store_num, y, x;
 {
   int yval, y_height, y_depth;
   int xval, x_left, x_right;
-  int i, j, cur_pos;
-  cave_type *c_ptr;
+  register int i, j;
+  int cur_pos;
+  register cave_type *c_ptr;
 
   yval	   = y*10 + 5;
   xval     = x*16 + 16;
@@ -973,7 +979,7 @@ int store_num, y, x;
 /* Town logic flow for generation of new town		*/
 town_gen()
 {
-  int i, j, k, l, m;
+  register int i, j, k, l, m;
   int rooms[6];
 
   int set_1_2();
@@ -992,6 +998,8 @@ town_gen()
 	l--;
       }
   fill_cave(dopen_floor);
+  /* make stairs before reset_seed, so that they don't move around */
+  place_stairs(2, 1, 0);
   place_boundary();
   reset_seed();
   if (0x1 & (turn / 5000))
@@ -1000,19 +1008,16 @@ town_gen()
 	for (j = 0; j < cur_width; j++)
 	  if (cave[i][j].fval != dopen_floor.ftval)
 	    cave[i][j].pl = TRUE;
-      place_stairs(2, 1, 0);
       alloc_monster(set_1_2, MIN_MALLOC_TN, 3, TRUE);
-      store_maint();
     }
   else
     {		/* Day	*/
       for (i = 0; i < cur_height; i++)
 	for (j = 0; j < cur_width; j++)
 	  cave[i][j].pl = TRUE;
-      place_stairs(2, 1, 0);
       alloc_monster(set_1_2, MIN_MALLOC_TD, 3, TRUE);
-      store_maint();
     }
+  store_maint();
 }
 
 
@@ -1051,3 +1056,4 @@ generate_cave()
       cave_gen();
     }
 }
+

@@ -1,15 +1,16 @@
 #include <stdio.h>
+#include <sys/types.h>
+
+#include "constants.h"
+#include "config.h"
+#include "types.h"
+#include "externs.h"
+
 #ifdef USG
 #include <string.h>
 #else
 #include <strings.h>
 #endif
-#include <sys/types.h>
-
-#include "config.h"
-#include "constants.h"
-#include "types.h"
-#include "externs.h"
 
 #ifdef sun   /* correct SUN stupidity in the stdio.h file */
 char *sprintf();
@@ -43,7 +44,7 @@ place_rubble(y, x)
 int y, x;
 {
   int cur_pos;
-  cave_type *cave_ptr;
+  register cave_type *cave_ptr;
 
   popt(&cur_pos);
   cave_ptr = &cave[y][x];
@@ -57,7 +58,7 @@ place_open_door(y, x)
 int y, x;
 {
   int cur_pos;
-  cave_type *cave_ptr;
+  register cave_type *cave_ptr;
 
   popt(&cur_pos);
   cave_ptr = &cave[y][x];
@@ -72,7 +73,7 @@ place_broken_door(y, x)
 int y, x;
 {
   int cur_pos;
-  cave_type *cave_ptr;
+  register cave_type *cave_ptr;
 
   popt(&cur_pos);
   cave_ptr = &cave[y][x];
@@ -88,7 +89,7 @@ place_closed_door(y, x)
 int y, x;
 {
   int cur_pos;
-  cave_type *cave_ptr;
+  register cave_type *cave_ptr;
 
   popt(&cur_pos);
   cave_ptr = &cave[y][x];
@@ -103,7 +104,7 @@ place_locked_door(y, x)
 int y, x;
 {
   int cur_pos;
-  cave_type *cave_ptr;
+  register cave_type *cave_ptr;
 
   popt(&cur_pos);
   cave_ptr = &cave[y][x];
@@ -119,7 +120,7 @@ place_stuck_door(y, x)
 int y, x;
 {
   int cur_pos;
-  cave_type *cave_ptr;
+  register cave_type *cave_ptr;
 
   popt(&cur_pos);
   cave_ptr = &cave[y][x];
@@ -135,7 +136,7 @@ place_secret_door(y, x)
 int y, x;
 {
   int cur_pos;
-  cave_type *cave_ptr;
+  register cave_type *cave_ptr;
 
   popt(&cur_pos);
   cave_ptr = &cave[y][x];
@@ -187,7 +188,7 @@ place_up_stairs(y, x)
 int y, x;
 {
   int cur_pos;
-  cave_type *cave_ptr;
+  register cave_type *cave_ptr;
 
   cave_ptr = &cave[y][x];
   if (cave_ptr->tptr != 0)
@@ -197,7 +198,7 @@ int y, x;
       cave_ptr->fopen = TRUE;
     }
   popt(&cur_pos);
-  cave[y][x].tptr = cur_pos;
+  cave_ptr->tptr = cur_pos;
   t_list[cur_pos] = up_stair;
 }
 
@@ -207,7 +208,7 @@ place_down_stairs(y, x)
 int y, x;
 {
   int cur_pos;
-  cave_type *cave_ptr;
+  register cave_type *cave_ptr;
 
   cave_ptr = &cave[y][x];
   if (cave_ptr->tptr != 0)
@@ -217,7 +218,7 @@ int y, x;
       cave_ptr->fopen = TRUE;
     }
   popt(&cur_pos);
-  cave[y][x].tptr = cur_pos;
+  cave_ptr->tptr = cur_pos;
   t_list[cur_pos] = down_stair;
 }
 
@@ -225,9 +226,10 @@ int y, x;
 place_stairs(typ, num, walls)
 int typ, num, walls;
 {
-  int i, j, y1, x1, y2, x2;
+  register cave_type *cave_ptr;
+  int i, j;
+  register int y1, x1, y2, x2;
   int flag;
-  cave_type *cave_ptr;
 
   for (i = 0; i < num; i++)
     {
@@ -283,8 +285,9 @@ int typ, num, walls;
 place_gold(y, x)
 int y, x;
 {
-  int cur_pos, i;
-  treasure_type *t_ptr;
+  int cur_pos;
+  register int i;
+  register treasure_type *t_ptr;
 
   popt(&cur_pos);
   i = ((randint(dun_level+2)+2)/2.0) - 1;
@@ -303,12 +306,12 @@ int y, x;
 int get_obj_num(level)
 int level;
 {
-  int i;
+  register int i;
 
-  if (level >= MAX_OBJ_LEVEL)
-    level = MAX_OBJ_LEVEL - 1;
+  if (level > MAX_OBJ_LEVEL)
+    level = MAX_OBJ_LEVEL;
   if (randint(OBJ_GREAT) == 1)
-    level = MAX_OBJ_LEVEL - 1;
+    level = MAX_OBJ_LEVEL;
   if (level == 0)
     i = randint(t_level[0]) - 1;
   else
@@ -322,10 +325,15 @@ place_object(y, x)
 int y, x;
 {
   int cur_pos;
+  int tmp;
+  treasure_type tr_tmp;;
 
   popt(&cur_pos);
   cave[y][x].tptr = cur_pos;
-  t_list[cur_pos] = object_list[get_obj_num(dun_level)];
+  /* split this line up to avoid a reported compiler bug */
+  tmp = get_obj_num(dun_level);
+  tr_tmp = object_list[tmp];
+  t_list[cur_pos] = tr_tmp;
   magic_treasure(cur_pos, dun_level);
 }
 
@@ -335,7 +343,7 @@ alloc_object(alloc_set, typ, num)
 int (*alloc_set)();
 int typ, num;
 {
-  int i, j, k;
+  register int i, j, k;
 
   for (k = 0; k < num; k++)
     {
@@ -372,8 +380,8 @@ int typ, num;
 random_object(y, x, num)
 int y, x, num;
 {
-  int i, j, k;
-  cave_type *cave_ptr;
+  register int i, j, k;
+  register cave_type *cave_ptr;
 
   do
     {
@@ -407,7 +415,7 @@ byteint stat;
 char *out_val;
 {
   vtype tmp_str;
-  int part1, part2;
+  register int part1, part2;
 
   if (stat > 18)
     {
@@ -445,11 +453,12 @@ int row, column;
 
 
 /* Print character info in given row, column		-RAK-	*/
+/* the longest title is 13 characters, so only pad to 13 */
 prt_field(info, row, column)
 vtype info;
 int row, column;
 {
-  put_buffer(pad(info, " ", 14), row, column);
+  put_buffer(pad(info, " ", 13), row, column);
 }
 
 
@@ -460,7 +469,7 @@ int num, row, column;
 {
   vtype out_val;
 
-  (void) sprintf(out_val, "%s%6d ", header, num);
+  (void) sprintf(out_val, "%s%6d", header, num);
   put_buffer(out_val, row, column);
 }
 
@@ -525,25 +534,24 @@ double chr_adj()
   else
     switch(py.stats.cchr)
       {
-      case 18:  return(0.00);  break;
-      case 17:  return(0.01);  break;
-      case 16:  return(0.02);  break;
-      case 15:  return(0.03);  break;
-      case 14:  return(0.04);  break;
-      case 13:  return(0.06);  break;
-      case 12:  return(0.08);  break;
-      case 11:  return(0.10);  break;
-      case 10:  return(0.12);  break;
-      case 9:  return(0.14);  break;
-      case 8:  return(0.16);  break;
-      case 7:  return(0.18);  break;
-      case 6:  return(0.20);  break;
-      case 5:  return(0.22);  break;
-      case 4:  return(0.24);  break;
-      case 3:  return(0.25);  break;
-      default: return(0.00);  break;   /* Error trap    */
+      case 18:  return(0.00);
+      case 17:  return(0.01);
+      case 16:  return(0.02);
+      case 15:  return(0.03);
+      case 14:  return(0.04);
+      case 13:  return(0.06);
+      case 12:  return(0.08);
+      case 11:  return(0.10);
+      case 10:  return(0.12);
+      case 9:  return(0.14);
+      case 8:  return(0.16);
+      case 7:  return(0.18);
+      case 6:  return(0.20);
+      case 5:  return(0.22);
+      case 4:  return(0.24);
+      case 3:  return(0.25);
+      default: return(0.00);     /* Error trap    */
       }
-  return(0.00);
 }
 
 
@@ -574,7 +582,13 @@ int con_adj()
 /* Calculates hit points for each level that is gained.	-RAK-	*/
 int get_hitdie()
 {
-  return(randint((int)py.misc.hitdie) + con_adj());
+  register int hitpoints;
+
+  hitpoints = randint((int)py.misc.hitdie) + con_adj();
+  /* always give 'em at least one point */
+  if (hitpoints < 1)
+    hitpoints = 1;
+  return(hitpoints);
 }
 
 
@@ -673,7 +687,7 @@ prt_gold()
 prt_depth()
 {
   vtype depths;
-  int depth;
+  register int depth;
 
   depth = dun_level*50;
   if (depth == 0)
@@ -765,7 +779,7 @@ prt_winner()
 
 /* Increases a stat by one randomized level		-RAK-	*/
 byteint in_statp(stat)
-byteint stat;
+register byteint stat;
 {
   if (stat < 18)
     stat++;
@@ -783,7 +797,7 @@ byteint stat;
 
 /* Decreases a stat by one randomized level		-RAK-	*/
 byteint de_statp(stat)
-byteint stat;
+register byteint stat;
 {
   if (stat < 19)
     stat--;
@@ -803,7 +817,7 @@ byteint stat;
 
 /* Increases a stat by one true level			-RAK-	*/
 byteint in_statt(stat)
-byteint stat;
+register byteint stat;
 {
   if (stat < 18)
     stat++;
@@ -819,7 +833,7 @@ byteint stat;
 
 /* Decreases a stat by true level			-RAK-	*/
 byteint de_statt(stat)
-byteint stat;
+register byteint stat;
 {
   if (stat > 27)
     stat -= 10;
@@ -838,24 +852,26 @@ byteint stat;
 /* Returns a character's adjustment to hit.              -JWT-   */
 int tohit_adj()
 {
-  int total;
+  register int total;
+  register struct stats *s_ptr;
 
-  if      (py.stats.cdex <   4)  total = -3;
-  else if (py.stats.cdex <   6)  total = -2;
-  else if (py.stats.cdex <   8)  total = -1;
-  else if (py.stats.cdex <  16)  total =  0;
-  else if (py.stats.cdex <  17)  total =  1;
-  else if (py.stats.cdex <  18)  total =  2;
-  else if (py.stats.cdex <  69)  total =  3;
-  else if (py.stats.cdex < 118)  total =  4;
+  s_ptr = &py.stats;
+  if      (s_ptr->cdex <   4)  total = -3;
+  else if (s_ptr->cdex <   6)  total = -2;
+  else if (s_ptr->cdex <   8)  total = -1;
+  else if (s_ptr->cdex <  16)  total =  0;
+  else if (s_ptr->cdex <  17)  total =  1;
+  else if (s_ptr->cdex <  18)  total =  2;
+  else if (s_ptr->cdex <  69)  total =  3;
+  else if (s_ptr->cdex < 118)  total =  4;
   else                          total =  5;
-  if      (py.stats.cstr <   4)  total -= 3;
-  else if (py.stats.cstr <   5)  total -= 2;
-  else if (py.stats.cstr <   7)  total -= 1;
-  else if (py.stats.cstr <  18)  total -= 0;
-  else if (py.stats.cstr <  94)  total += 1;
-  else if (py.stats.cstr < 109)  total += 2;
-  else if (py.stats.cstr < 117)  total += 3;
+  if      (s_ptr->cstr <   4)  total -= 3;
+  else if (s_ptr->cstr <   5)  total -= 2;
+  else if (s_ptr->cstr <   7)  total -= 1;
+  else if (s_ptr->cstr <  18)  total -= 0;
+  else if (s_ptr->cstr <  94)  total += 1;
+  else if (s_ptr->cstr < 109)  total += 2;
+  else if (s_ptr->cstr < 117)  total += 3;
   else                          total += 4;
   return(total);
 }
@@ -864,15 +880,18 @@ int tohit_adj()
 /* Returns a character's adjustment to armor class       -JWT-   */
 int toac_adj()
 {
-  if      (py.stats.cdex <   4)  return(-4);
-  else if (py.stats.cdex ==  4)  return(-3);
-  else if (py.stats.cdex ==  5)  return(-2);
-  else if (py.stats.cdex ==  6)  return(-1);
-  else if (py.stats.cdex <  15)  return( 0);
-  else if (py.stats.cdex <  18)  return( 1);
-  else if (py.stats.cdex <  59)  return( 2);
-  else if (py.stats.cdex <  94)  return( 3);
-  else if (py.stats.cdex < 117)  return( 4);
+  register struct stats *s_ptr;
+
+  s_ptr = &py.stats;
+  if      (s_ptr->cdex <   4)  return(-4);
+  else if (s_ptr->cdex ==  4)  return(-3);
+  else if (s_ptr->cdex ==  5)  return(-2);
+  else if (s_ptr->cdex ==  6)  return(-1);
+  else if (s_ptr->cdex <  15)  return( 0);
+  else if (s_ptr->cdex <  18)  return( 1);
+  else if (s_ptr->cdex <  59)  return( 2);
+  else if (s_ptr->cdex <  94)  return( 3);
+  else if (s_ptr->cdex < 117)  return( 4);
   else                          return( 5);
 }
 
@@ -880,17 +899,20 @@ int toac_adj()
 /* Returns a character's adjustment to disarm            -RAK-   */
 int todis_adj()
 {
-  if      (py.stats.cdex ==  3)  return(-8);
-  else if (py.stats.cdex ==  4)  return(-6);
-  else if (py.stats.cdex ==  5)  return(-4);
-  else if (py.stats.cdex ==  6)  return(-2);
-  else if (py.stats.cdex ==  7)  return(-1);
-  else if (py.stats.cdex <  13)  return( 0);
-  else if (py.stats.cdex <  16)  return( 1);
-  else if (py.stats.cdex <  18)  return( 2);
-  else if (py.stats.cdex <  59)  return( 4);
-  else if (py.stats.cdex <  94)  return( 5);
-  else if (py.stats.cdex < 117)  return( 6);
+  register struct stats *s_ptr;
+
+  s_ptr = &py.stats;
+  if      (s_ptr->cdex ==  3)  return(-8);
+  else if (s_ptr->cdex ==  4)  return(-6);
+  else if (s_ptr->cdex ==  5)  return(-4);
+  else if (s_ptr->cdex ==  6)  return(-2);
+  else if (s_ptr->cdex ==  7)  return(-1);
+  else if (s_ptr->cdex <  13)  return( 0);
+  else if (s_ptr->cdex <  16)  return( 1);
+  else if (s_ptr->cdex <  18)  return( 2);
+  else if (s_ptr->cdex <  59)  return( 4);
+  else if (s_ptr->cdex <  94)  return( 5);
+  else if (s_ptr->cdex < 117)  return( 6);
   else                          return( 8);
 }
 
@@ -898,14 +920,17 @@ int todis_adj()
 /* Returns a character's adjustment to damage            -JWT-   */
 int todam_adj()
 {
-  if      (py.stats.cstr <   4)  return(-2);
-  else if (py.stats.cstr <   5)  return(-1);
-  else if (py.stats.cstr <  16)  return( 0);
-  else if (py.stats.cstr <  17)  return( 1);
-  else if (py.stats.cstr <  18)  return( 2);
-  else if (py.stats.cstr <  94)  return( 3);
-  else if (py.stats.cstr < 109)  return( 4);
-  else if (py.stats.cstr < 117)  return( 5);
+  register struct stats *s_ptr;
+
+  s_ptr = &py.stats;
+  if      (s_ptr->cstr <   4)  return(-2);
+  else if (s_ptr->cstr <   5)  return(-1);
+  else if (s_ptr->cstr <  16)  return( 0);
+  else if (s_ptr->cstr <  17)  return( 1);
+  else if (s_ptr->cstr <  18)  return( 2);
+  else if (s_ptr->cstr <  94)  return( 3);
+  else if (s_ptr->cstr < 109)  return( 4);
+  else if (s_ptr->cstr < 117)  return( 5);
   else                          return( 6);
 }
 
@@ -913,36 +938,43 @@ int todam_adj()
 /* Prints character-screen info				-RAK-	*/
 prt_stat_block()
 {
-  prt_field(py.misc.race,                  2, stat_column);
-  prt_field(py.misc.tclass,                3, stat_column);
-  prt_field(py.misc.title,                 4, stat_column);
-  prt_stat("STR : ", py.stats.cstr,         6, stat_column);
-  prt_stat("INT : ", py.stats.cint,         7, stat_column);
-  prt_stat("WIS : ", py.stats.cwis,         8, stat_column);
-  prt_stat("DEX : ", py.stats.cdex,         9, stat_column);
-  prt_stat("CON : ", py.stats.ccon,        10, stat_column);
-  prt_stat("CHR : ", py.stats.cchr,        11, stat_column);
-  prt_num( "LEV : ", (int)py.misc.lev,    13, stat_column);
-  prt_num( "EXP : ", py.misc.exp,         14, stat_column);
-  prt_num( "MANA: ", (int)(py.misc.cmana), 15, stat_column);
-  prt_num( "MHP : ", py.misc.mhp,         16, stat_column);
-  prt_num( "CHP : ", (int)(py.misc.chp),  17, stat_column);
-  prt_num( "AC  : ", py.misc.dis_ac,      19, stat_column);
-  prt_num( "GOLD: ", py.misc.au,          20, stat_column);
+  register int status;
+  register struct stats *s_ptr;
+  register struct misc *m_ptr;
+
+  s_ptr = &py.stats;
+  m_ptr = &py.misc;
+  prt_field(m_ptr->race,                  2, stat_column);
+  prt_field(m_ptr->tclass,                3, stat_column);
+  prt_field(m_ptr->title,                 4, stat_column);
+  prt_stat("STR : ", s_ptr->cstr,         6, stat_column);
+  prt_stat("INT : ", s_ptr->cint,         7, stat_column);
+  prt_stat("WIS : ", s_ptr->cwis,         8, stat_column);
+  prt_stat("DEX : ", s_ptr->cdex,         9, stat_column);
+  prt_stat("CON : ", s_ptr->ccon,        10, stat_column);
+  prt_stat("CHR : ", s_ptr->cchr,        11, stat_column);
+  prt_num( "LEV : ", (int)m_ptr->lev,    13, stat_column);
+  prt_num( "EXP : ", m_ptr->exp,         14, stat_column);
+  prt_num( "MANA: ", (int)(m_ptr->cmana), 15, stat_column);
+  prt_num( "MHP : ", m_ptr->mhp,         16, stat_column);
+  prt_num( "CHP : ", (int)(m_ptr->chp),  17, stat_column);
+  prt_num( "AC  : ", m_ptr->dis_ac,      19, stat_column);
+  prt_num( "GOLD: ", m_ptr->au,          20, stat_column);
   if (total_winner)  prt_winner();
-  if (0x000003 & py.flags.status)
+  status = py.flags.status;
+  if (0x000003 & status)
     prt_hunger();
-  if (0x000004 & py.flags.status)
+  if (0x000004 & status)
     prt_blind();
-  if (0x000008 & py.flags.status)
+  if (0x000008 & status)
     prt_confused();
-  if (0x000010 & py.flags.status)
+  if (0x000010 & status)
     prt_afraid();
-  if (0x000020 & py.flags.status)
+  if (0x000020 & status)
     prt_poisoned();
-  if (0x000100 & py.flags.status)
+  if (0x000100 & status)
     prt_search();
-  if (0x000200 & py.flags.status)
+  if (0x000200 & status)
     prt_rest();
 }
 
@@ -961,28 +993,35 @@ draw_cave()
 put_character()
 {
   char tmp_str[80];
+  register struct misc *m_ptr;
 
+  m_ptr = &py.misc;
   clear_screen(0, 0);
-  prt(strcat(strcpy(tmp_str, "Name      : "), py.misc.name), 2, 2);
-  prt(strcat(strcpy(tmp_str, "Race      : "), py.misc.race), 3, 2);
-  prt(strcat(strcpy(tmp_str, "Sex       : "), py.misc.sex), 4, 2);
-  prt(strcat(strcpy(tmp_str, "Class     : "), py.misc.tclass), 5, 2);
+  prt(strcat(strcpy(tmp_str, "Name      : "), m_ptr->name), 2, 2);
+  prt(strcat(strcpy(tmp_str, "Race      : "), m_ptr->race), 3, 2);
+  prt(strcat(strcpy(tmp_str, "Sex       : "), m_ptr->sex), 4, 2);
+  prt(strcat(strcpy(tmp_str, "Class     : "), m_ptr->tclass), 5, 2);
 }
 
 
 /* Prints the following information on the screen.	-JWT-	*/
 put_stats()
 {
-  prt_stat("STR : ", py.stats.cstr, 2, 64);
-  prt_stat("INT : ", py.stats.cint, 3, 64);
-  prt_stat("WIS : ", py.stats.cwis, 4, 64);
-  prt_stat("DEX : ", py.stats.cdex, 5, 64);
-  prt_stat("CON : ", py.stats.ccon, 6, 64);
-  prt_stat("CHR : ", py.stats.cchr, 7, 64);
-  prt_num("+ To Hit   : ", py.misc.dis_th,  9, 3);
-  prt_num("+ To Damage: ", py.misc.dis_td, 10, 3);
-  prt_num("+ To AC    : ", py.misc.dis_tac, 11, 3);
-  prt_num("  Total AC : ", py.misc.dis_ac, 12, 3);
+  register struct stats *s_ptr;
+  register struct misc *m_ptr;
+
+  m_ptr = &py.misc;
+  s_ptr = &py.stats;
+  prt_stat("STR : ", s_ptr->cstr, 2, 64);
+  prt_stat("INT : ", s_ptr->cint, 3, 64);
+  prt_stat("WIS : ", s_ptr->cwis, 4, 64);
+  prt_stat("DEX : ", s_ptr->cdex, 5, 64);
+  prt_stat("CON : ", s_ptr->ccon, 6, 64);
+  prt_stat("CHR : ", s_ptr->cchr, 7, 64);
+  prt_num("+ To Hit   : ", m_ptr->dis_th,  9, 3);
+  prt_num("+ To Damage: ", m_ptr->dis_td, 10, 3);
+  prt_num("+ To AC    : ", m_ptr->dis_tac, 11, 3);
+  prt_num("  Total AC : ", m_ptr->dis_ac, 12, 3);
 }
 
 
@@ -998,8 +1037,8 @@ int x, y;
       case 3: case 4:            return("Fair");
       case  5:                   return("Good");
       case 6:                    return("Very Good");
-      case 7: case 8:            return("Superb");
-      default:                   return("Excellent");
+      case 7: case 8:            return("Excellent");
+      default:                   return("Superb");
       }
 }
 
@@ -1007,23 +1046,29 @@ int x, y;
 /* Prints age, height, weight, and SC			-JWT-	*/
 put_misc1()
 {
-  prt_num("Age          : ", (int)py.misc.age, 2, 39);
-  prt_num("Height       : ", (int)py.misc.ht, 3, 39);
-  prt_num("Weight       : ", (int)py.misc.wt, 4, 39);
-  prt_num("Social Class : ", (int)py.misc.sc, 5, 39);
+  register struct misc *m_ptr;
+
+  m_ptr = &py.misc;
+  prt_num("Age          : ", (int)m_ptr->age, 2, 39);
+  prt_num("Height       : ", (int)m_ptr->ht, 3, 39);
+  prt_num("Weight       : ", (int)m_ptr->wt, 4, 39);
+  prt_num("Social Class : ", (int)m_ptr->sc, 5, 39);
 }
 
 
 /* Prints the following information on the screen.	-JWT-	*/
 put_misc2()
 {
-  prt_num("Level      : ", (int)py.misc.lev, 9, 30);
-  prt_num("Experience : ", py.misc.exp, 10, 30);
-  prt_num("Gold       : ", py.misc.au, 11, 30);
-  prt_num("Max Hit Points : ", py.misc.mhp, 9, 53);
-  prt_num("Cur Hit Points : ", (int)py.misc.chp, 10, 53);
-  prt_num("Max Mana       : ", py.misc.mana, 11, 53);
-  prt_num("Cur Mana       : ", (int)py.misc.cmana, 12, 53);
+  register struct misc *m_ptr;
+
+  m_ptr = &py.misc;
+  prt_num("Level      : ", (int)m_ptr->lev, 9, 30);
+  prt_num("Experience : ", m_ptr->exp, 10, 30);
+  prt_num("Gold       : ", m_ptr->au, 11, 30);
+  prt_num("Max Hit Points : ", m_ptr->mhp, 9, 53);
+  prt_num("Cur Hit Points : ", (int)m_ptr->chp, 10, 53);
+  prt_num("Max Mana       : ", m_ptr->mana, 11, 53);
+  prt_num("Cur Mana       : ", (int)m_ptr->cmana, 12, 53);
 }
 
 
@@ -1032,17 +1077,19 @@ put_misc3()
 {
   int xbth, xbthb, xfos, xsrh, xstl, xdis, xsave, xdev;
   vtype xinfra;
-  struct misc *p_ptr;
+  register struct misc *p_ptr;
   char tmp_str[80];
 
   clear_screen(13, 0);
   p_ptr = &py.misc;
   xbth  = p_ptr->bth + p_ptr->lev*BTH_LEV_ADJ + p_ptr->ptohit*BTH_PLUS_ADJ;
   xbthb = p_ptr->bthb + p_ptr->lev*BTH_LEV_ADJ + p_ptr->ptohit*BTH_PLUS_ADJ;
-  xfos  = 27 - p_ptr->fos;
+  /* this results in a range from 0 to 29 */
+  xfos  = 40 - p_ptr->fos;
   if (xfos < 0)  xfos = 0;
   xsrh  = p_ptr->srh + int_adj();
-  xstl  = p_ptr->stl;
+  /* this results in a range from 0 to 9 */
+  xstl  = p_ptr->stl + 1;
   xdis  = p_ptr->disarm + p_ptr->lev + 2*todis_adj() + int_adj();
   xsave = p_ptr->save + p_ptr->lev + wis_adj();
   xdev  = p_ptr->save + p_ptr->lev + int_adj();
@@ -1060,7 +1107,7 @@ put_misc3()
   put_buffer(strcat(strcpy(tmp_str, "Disarming   : "),
 		    likert(xdis, 8)), 17, 26);
   put_buffer(strcat(strcpy(tmp_str, "Magic Device: "),
-		    likert(xdev, 7)), 18, 26);
+		    likert(xdev, 6)), 18, 26);
   put_buffer(strcat(strcpy(tmp_str, "Perception  : "),
 		    likert(xfos, 3)), 16, 51);
   put_buffer(strcat(strcpy(tmp_str, "Searching   : "),
@@ -1129,8 +1176,8 @@ bpswd()
 inven_destroy(item_val)
 int item_val;
 {
-  int j;
-  treasure_type *i_ptr;
+  register int j;
+  register treasure_type *i_ptr;
 
   inventory[INVEN_MAX] = inventory[item_val];
   i_ptr = &inventory[item_val];
@@ -1156,7 +1203,7 @@ inven_drop(item_val, y, x)
 int item_val, y, x;
 {
   int i;
-  cave_type *cave_ptr;
+  register cave_type *cave_ptr;
 
   cave_ptr = &cave[y][x];
   if (cave_ptr->tptr != 0)
@@ -1171,9 +1218,9 @@ int item_val, y, x;
 /* Destroys a type of item on a given percent chance	-RAK-	*/
 int inven_damage(typ, perc)
 int (*typ)();
-int perc;
+register int perc;
 {
-  int i, j;
+  register int i, j;
 
   j = 0;
   for (i = 0; i < inven_ctr; i++)
@@ -1190,7 +1237,7 @@ int perc;
 /* Computes current weight limit 			-RAK-	*/
 int weight_limit()
 {
-  int weight_cap;
+  register int weight_cap;
 
   weight_cap = py.stats.cstr * PLAYER_WEIGHT_CAP + py.misc.wt;
   if (weight_cap > 3000)  weight_cap = 3000;
@@ -1201,8 +1248,8 @@ int weight_limit()
 /* Check inventory for too much weight			-RAK-	*/
 int inven_check_weight()
 {
-  int item_wgt, max_weight;
-  int check_weight;
+  register int item_wgt, max_weight;
+  register int check_weight;
 
   check_weight = FALSE;
   max_weight = weight_limit();
@@ -1217,8 +1264,8 @@ int inven_check_weight()
 /* Check to see if he will be carrying too many objects	-RAK-	*/
 int inven_check_num()
 {
-  int i;
-  int check_num;
+  register int i;
+  register int check_num;
 
   check_num = FALSE;
   if (inven_ctr < 22)
@@ -1236,7 +1283,7 @@ int inven_check_num()
 insert_inv(pos, wgt)
 int pos, wgt;
 {
-  int i;
+  register int i;
 
   for (i = inven_ctr-1; i >= pos; i--)
     inventory[i+1] = inventory[i];
@@ -1252,9 +1299,9 @@ inven_carry(item_val)
 int *item_val;
 {
   int item_num, wgt;
-  int typ, subt;
+  register int typ, subt;
   int flag;
-  treasure_type *i_ptr;
+  register treasure_type *i_ptr;
 
   /* Now, check to see if player can carry object  */
   *item_val = 0;
@@ -1298,9 +1345,9 @@ int *item_val;
 
 /* Returns spell chance of failure for spell		-RAK-	*/
 spell_chance(spell)
-spl_rec *spell;
+register spl_rec *spell;
 {
-  spell_type *s_ptr;
+  register spell_type *s_ptr;
 
   s_ptr = &magic_spell[py.misc.pclass][spell->splnum];
   spell->splchn = s_ptr->sfail - 3*(py.misc.lev-s_ptr->slevel);
@@ -1320,15 +1367,15 @@ spl_rec *spell;
 /* Print list of spells					-RAK-	*/
 print_new_spells(spell, num, redraw)
 spl_type spell;
-int num;
+register int num;
 int *redraw;
 {
-  int i;
+  register int i;
   vtype out_val;
-  spell_type *s_ptr;
+  register spell_type *s_ptr;
 
   *redraw = TRUE;
-  clear_screen(0, 0);
+  clear_screen(1, 0);
   prt("   Name                          Level  Mana  %Failure", 1, 0);
   for (i = 0; i < num; i++)
     {
@@ -1345,8 +1392,8 @@ int *redraw;
 /* Returns spell pointer 				-RAK-	*/
 int get_spell(spell, num, sn, sc, prompt, redraw)
 spl_type spell;
-int num;
-int *sn, *sc;
+register int num;
+register int *sn, *sc;
 vtype prompt;
 int *redraw;
 {
@@ -1358,9 +1405,9 @@ int *redraw;
   flag = TRUE;
   (void) sprintf(out_val1, "(Spells a-%c, *==List, <ESCAPE>=exit) %s",
 	  num+96, prompt);
+  prt(out_val1, 0, 0);
   while (((*sn < 0) || (*sn >= num)) && (flag))
     {
-      prt(out_val1, 0, 0);
       inkey(&choice);
       *sn = (choice);
       switch(*sn)
@@ -1377,6 +1424,7 @@ int *redraw;
 	  break;
 	}
     }
+  erase_line(MSG_LINE, 0);
   msg_flag = FALSE;
   if (flag)
     {
@@ -1393,12 +1441,12 @@ int learn_spell(redraw)
 int *redraw;
 {
   unsigned int j;
-  int i, k, sn, sc;
-  int new_spells;
+  register int i, k, new_spells;
+  int sn, sc;
   unsigned int spell_flag;
   spl_type spell;
   int learn;
-  spell_type *s_ptr;
+  register spell_type *s_ptr;
 
   learn = FALSE;
   switch(int_adj())
@@ -1445,18 +1493,17 @@ int *redraw;
 	    {
 	      magic_spell[py.misc.pclass][sn].learned = TRUE;
 	      learn = TRUE;
+	      new_spells--;
 	      if (py.misc.mana == 0)
 		{
 		  py.misc.mana  = 1;
 		  py.misc.cmana = 1.0;
 		}
 	    }
-	  else
-	    new_spells = 0;
+	  /* else do nothing if get_spell fails */
 	}
       else
 	new_spells = 0;
-      new_spells--;
     }
   return(learn);
 }
@@ -1465,11 +1512,12 @@ int *redraw;
 /* Learn some prayers (Priest)				-RAK-	*/
 int learn_prayer()
 {
-  int i, j, k, l, new_spell;
+  register int i, j, k, l;
+  int new_spell;
   int test_array[32];
   unsigned int spell_flag;
   int learn;
-  spell_type *s_ptr;
+  register spell_type *s_ptr;
 
   i = 0;
   spell_flag = 0;
@@ -1520,6 +1568,7 @@ int learn_prayer()
 	msg_print("You learned new prayers!");
       else
 	msg_print("You learned a new prayer!");
+      /* make sure player see the message when game starts */
       if (py.misc.exp == 0)  msg_print(" ");
       if (py.misc.mana == 0)
 	{
@@ -1538,8 +1587,8 @@ int learn_prayer()
 gain_mana(amount)
 int amount;
 {
-  int i, new_mana;
-  int knows_spell;
+  register int i, new_mana;
+  register int knows_spell;
 
   knows_spell = FALSE;
   for (i = 0; i < 31; i++)
@@ -1585,23 +1634,25 @@ gain_level()
   int nhp, dif_exp, need_exp;
   int redraw;
   vtype out_val;
-  struct misc *p_ptr;
-  class_type *c_ptr;
+  register struct misc *p_ptr;
+  register class_type *c_ptr;
 
   p_ptr = &py.misc;
   nhp = get_hitdie();
   p_ptr->mhp += nhp;
   p_ptr->chp += (double)nhp;
   p_ptr->lev++;
-  need_exp = (player_exp[p_ptr->lev]*p_ptr->expfact);
+  need_exp = (player_exp[p_ptr->lev-1] * p_ptr->expfact);
   if (py.misc.exp > need_exp)
     {
+      /* lose some of the 'extra' exp when gain a level */
       dif_exp = py.misc.exp - need_exp;
       py.misc.exp = need_exp + (dif_exp / 2);
     }
   (void) strcpy(p_ptr->title, player_title[p_ptr->pclass][p_ptr->lev-1]);
   (void) sprintf(out_val, "Welcome to level %d.", (int)p_ptr->lev);
   msg_print(out_val);
+  /* make sure player sees message, before learn_spell erases it */
   msg_print(" ");
   msg_flag = FALSE;
   prt_mhp();
@@ -1628,14 +1679,14 @@ gain_level()
 /* Prints experience					-RAK-	*/
 prt_experience()
 {
-  struct misc *p_ptr;
+  register struct misc *p_ptr;
 
   p_ptr = &py.misc;
   if (p_ptr->exp > player_max_exp)
     p_ptr->exp = player_max_exp;
   if (p_ptr->lev < MAX_PLAYER_LEVEL)
     {
-      while ((player_exp[p_ptr->lev]*p_ptr->expfact) <= p_ptr->exp)
+      while ((player_exp[p_ptr->lev-1] * p_ptr->expfact) <= p_ptr->exp)
 	gain_level();
       if (p_ptr->exp > p_ptr->max_exp)
 	p_ptr->max_exp = p_ptr->exp;
@@ -1648,17 +1699,18 @@ prt_experience()
 insert_str(object_str, mtc_str, insert)
 char *object_str, *mtc_str, *insert;
 {
-  int mtc_len, obj_len;
-  int bound, pc, i;
-  char *temp_obj, *temp_mtc;
+  int obj_len;
+  char *bound, *pc;
+  register int i, mtc_len;
+  register char *temp_obj, *temp_mtc;
   char out_val[80];
 
   mtc_len = strlen(mtc_str);
   obj_len = strlen(object_str);
-  bound = (int)object_str + obj_len - mtc_len;
-  for (pc = (int)object_str; pc <= bound; pc++)
+  bound = object_str + obj_len - mtc_len;
+  for (pc = object_str; pc <= bound; pc++)
     {
-      temp_obj = (char *)pc;
+      temp_obj = pc;
       temp_mtc = mtc_str;
       for (i = 0; i < mtc_len; i++)
 	if (*temp_obj++ != *temp_mtc++)
@@ -1669,8 +1721,8 @@ char *object_str, *mtc_str, *insert;
 
   if (pc <= bound)
     {
-      (void) strncpy(out_val, object_str, (pc-(int)object_str));
-      out_val[(pc-(int)object_str)] = '\0';
+      (void) strncpy(out_val, object_str, (pc-object_str));
+      out_val[(pc-object_str)] = '\0';
       (void) strcat(out_val, insert);
       (void) strcat(out_val, (char *)(pc+mtc_len));
       (void) strcpy(object_str, out_val);
@@ -1681,13 +1733,13 @@ char *object_str, *mtc_str, *insert;
 /* Inserts a number into a string				*/
 insert_num(object_str, mtc_str, number, show_sign)
 char *object_str;
-char *mtc_str;
+register char *mtc_str;
 int number;
 int show_sign;
 {
   int pos, mlen;
   vtype str1, str2;
-  char *string, *tmp_str;
+  register char *string, *tmp_str;
   int flag;
 
   flag = 1;
@@ -1726,22 +1778,23 @@ int show_sign;
 /* Checks to see if user is a wizard			-RAK-	*/
 int check_pswd()
 {
-  int i;
+  register int i;
   char x;
   char tpw[12];
-  int check;
+  register int check;
 
   check = FALSE;
   if (getuid() != UID)
     return(FALSE);
   i = 0;
-  (void) strcpy(tpw, "            ");
+  tpw[0] = '\0';
   prt("Password : ", 0, 0);
   do
     {
       inkey(&x);
       switch(x)
 	{
+	case 10:
 	case 13:
 	  break;
 	default:
@@ -1750,7 +1803,7 @@ int check_pswd()
 	  break;
 	}
     }
-  while ((i != 12) && (x != 13));
+  while ((i != 12) && (x != 13) && (x != 10));
   tpw[i] = '\0';
   if (!strcmp(tpw, password1))
     {
@@ -1764,7 +1817,7 @@ int check_pswd()
       check = TRUE;
     }
   msg_flag = FALSE;
-  erase_line(msg_line, msg_line);
+  erase_line(MSG_LINE, 0);
   return(check);
 }
 
@@ -1774,8 +1827,8 @@ int attack_blows(weight, wtohit)
 int weight;
 int *wtohit;
 {
-  int adj_weight, blows;
-  struct stats *p_ptr;
+  register int adj_weight, blows;
+  register struct stats *p_ptr;
 
   blows  = 1;
   *wtohit = 0;
@@ -1805,9 +1858,9 @@ int *wtohit;
 
 /* Critical hits, Nasty way to die...			-RAK-	*/
 int critical_blow(weight, plus, dam)
-int weight, plus, dam;
+register int weight, plus, dam;
 {
-  int critical;
+  register int critical;
 
   critical = dam;
   /* Weight of weapon, plusses to hit, and character level all      */
@@ -1843,9 +1896,9 @@ int weight, plus, dam;
 /* Given direction "dir", returns new row, column location -RAK- */
 int move(dir, y, x)
 int dir;
-int *y, *x;
+register int *y, *x;
 {
-  int new_row, new_col;
+  register int new_row, new_col;
   int bool;
 
   switch(dir)
@@ -1902,7 +1955,7 @@ int *y, *x;
 int player_saves(adjust)
 int adjust;
 {
-  if (randint(100) <= (py.misc.save + adjust))
+  if (randint(100) <= (py.misc.save + py.misc.lev + adjust))
     return(TRUE);
   else
     return(FALSE);
@@ -1912,7 +1965,8 @@ int adjust;
 /* Init players with some belongings			-RAK-	*/
 char_inven_init()
 {
-  int i, j, dummy;
+  register int i, j;
+  int dummy;
 
   /* this is needed for bash to work right, it can't hurt anyway */
   for (i = 0; i < INVEN_ARRAY_SIZE; i++)

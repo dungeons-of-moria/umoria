@@ -1,13 +1,15 @@
 #include <stdio.h>
+
+#include "constants.h"
+#include "config.h"
+#include "types.h"
+#include "externs.h"
+
 #ifdef USG
 #include <string.h>
 #else
 #include <strings.h>
 #endif
-
-#include "constants.h"
-#include "types.h"
-#include "externs.h"
 
 #ifdef sun   /* correct SUN stupidity in the stdio.h file */
 char *sprintf();
@@ -49,7 +51,7 @@ game_version()
   put_buffer("This version is based on the VMS version 4.8", 6, 0);
   put_buffer("but is no longer identical to the original VMS program.", 7, 0);
   put_buffer("Please use care when referring to this program.", 8, 0);
-  put_buffer("Please call it 'wilson MORIA' or 'UNIX MORIA' or something", 9, 0);
+  put_buffer("Please call it 'umoria' or 'UNIX MORIA' or something", 9, 0);
   put_buffer("similar to avoid confusion.", 10, 0);
   pause_line(23);
   draw_cave();
@@ -59,9 +61,9 @@ game_version()
 /* Light up the dungeon					-RAK-	*/
 wizard_light()
 {
-  int i, j, k, l;
+  register cave_type *c_ptr;
+  register int k, l, i, j;
   int flag;
-  cave_type *c_ptr;
 
   if (cave[char_row][char_col].pl)
     flag = FALSE;
@@ -87,8 +89,8 @@ change_character()
 {
   int tmp_val;
   vtype tmp_str;
-  struct stats *s_ptr;
-  struct misc *m_ptr;
+  register struct stats *s_ptr;
+  register struct misc *m_ptr;
 
   s_ptr = &py.stats;
   prt("(3 - 118) Strength     == ", 0, 0);
@@ -235,7 +237,7 @@ change_character()
       prt_gold();
     }
 
-  erase_line(msg_line, msg_line);
+  erase_line(MSG_LINE, 0);
   py_bonuses(blank_treasure, 0);
 }
 
@@ -245,17 +247,18 @@ wizard_create()
 {
   int tmp_val;
   vtype tmp_str;
-  int flag;
-  treasure_type *i_ptr;
-  cave_type *c_ptr;
+  register int flag;
+  register treasure_type *i_ptr;
+  register cave_type *c_ptr;
   char command;
 
   msg_print("Warning: This routine can cause fatal error.");
+  /* make sure player sees the message */
   msg_print(" ");
   msg_flag = FALSE;
   i_ptr = &inventory[INVEN_MAX];
   prt("Name   : ", 0, 0);
-  if (get_string(tmp_str, 0, 9, 40))
+  if (get_string(tmp_str, 0, 9, 80))
     (void) strcpy(i_ptr->name, tmp_str);
   else
     (void) strcpy(i_ptr->name, "& Wizard Object!");

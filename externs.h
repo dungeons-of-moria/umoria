@@ -1,4 +1,5 @@
 extern int character_generated;  /* don't save score until char gen finished */
+extern int character_saved;      /* prevents save on kill after save_char() */
 extern int highscore_fd;	/* High score file descriptor */
 extern int player_max_exp;	/* Max exp possible    */
 extern char norm_state[STATE_SIZE];	/* Contains seed #     */
@@ -9,9 +10,7 @@ extern int town_seed;	    /* Seed for town genera*/
 extern int cur_height, cur_width;	/* Cur dungeon size    */
 extern int dun_level;	/* Cur dungeon level   */
 extern int missile_ctr;	/* Counter for missiles */
-extern int msg_line;	/* Contains message txt*/
 extern int msg_flag;	/* Set with first msg  */
-extern vtype old_msg;	/* Last message	      */
 extern int generate;	/* Generate next level */
 extern int death;	/* True if died	      */
 extern vtype died_from;	/* What killed him     */
@@ -22,9 +21,12 @@ extern unsigned int print_stat;	/* Flag for stats      */
 extern int turn;	/* Cur trun of game    */
 extern int wizard1;	/* Wizard flag	      */
 extern int wizard2;	/* Wizard flag	      */
+extern int panic_save;  /* this is true if playing from a panic save */
 extern int used_line[23];
 extern char password1[12];
 extern char password2[12];
+
+extern int wait_for_more;
 
 extern int key_bindings;
 
@@ -36,7 +38,6 @@ extern unsigned int bit_array[32];
 
 /*  Following are calculated from max dungeon sizes		*/
 extern int max_panel_rows, max_panel_cols;
-extern int quart_height, quart_width;
 extern int panel_row, panel_col;
 extern int panel_row_min, panel_row_max;
 extern int panel_col_min, panel_col_max;

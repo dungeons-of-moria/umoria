@@ -1,13 +1,15 @@
 #include <stdio.h>
+
+#include "constants.h"
+#include "config.h"
+#include "types.h"
+#include "externs.h"
+
 #ifdef USG
 #include <string.h>
 #else
 #include <strings.h>
 #endif
-
-#include "constants.h"
-#include "types.h"
-#include "externs.h"
 
 #ifdef sun   /* correct SUN stupidity in the stdio.h file */
 char *sprintf();
@@ -23,19 +25,16 @@ char ch;
     case 'a': case 'e': case 'i': case 'o': case 'u':
     case 'A': case 'E': case 'I': case 'O': case 'U':
       return(TRUE);
-      break;
     default:
       return(FALSE);
-      break;
     }
-  return(FALSE);
 }
 
 
 /* Randomize colors, woods, and metals				*/
 randes()
 {
-  int i, j;
+  register int i, j;
   vtype tmp;
 
   for (i = 0; i < MAX_COLORS; i++)
@@ -87,7 +86,7 @@ randes()
 rantitle(title)
 char *title;
 {
-  int i, j, k;
+  register int i, j, k;
 
   k = randint(2) + 1;
   (void) strcpy(title, "Titled \"");
@@ -105,7 +104,7 @@ char *title;
 /* Initialize all Potions, wands, staves, scrolls, ect...	*/
 magic_init()
 {
-  int i, tmpv;
+  register int i, tmpv;
   vtype tmps;
 
   set_seed(randes_state, randes_seed);
@@ -158,9 +157,9 @@ magic_init()
 known1(object_str)
 char *object_str;
 {
-  int pos;
+  register int pos;
   vtype str1, str2;
-  char *string;
+  register char *string;
 
   string = index(object_str, '|');
   if (string)
@@ -181,9 +180,9 @@ char *object_str;
 known2(object_str)
 char *object_str;
 {
-  int pos;
+  register int pos;
   vtype str1, str2;
-  char *string;
+  register char *string;
 
   string = index(object_str, '^');
   if (string)
@@ -204,9 +203,9 @@ char *object_str;
 unquote(object_str)
 char *object_str;
 {
-  int pos0, pos1, pos2;
+  register int pos0, pos1, pos2;
   vtype str1, str2;
-  char *string;
+  register char *string;
 
   string = index(object_str, '\"');
   if (string)
@@ -237,8 +236,8 @@ char *object_str;
 identify(item)
 treasure_type item;
 {
-  int i, x1, x2;
-  treasure_type *t_ptr;
+  register int i, x1, x2;
+  register treasure_type *t_ptr;
   char *string;
 
   x1 = item.tval;
@@ -287,15 +286,16 @@ treasure_type item;
 
 
 /* Returns a description of item for inventory			*/
+/* pref indicates that there should be an article added (prefix) */
 objdes(out_val, ptr, pref)
 char *out_val;
 int ptr;
 int pref;
 {
-  int pos;
+  register int pos;
   vtype tmp_val;
-  treasure_type *i_ptr;
-  char *string;
+  register treasure_type *i_ptr;
+  register char *string;
 
   i_ptr = &inventory[ptr];
   (void) strcpy(tmp_val, i_ptr->name);
@@ -356,6 +356,16 @@ int pref;
 	  else
 	    (void) sprintf(out_val, "a%s", tmp_val);
 	}
+      /* handle 'no more' case specially */
+      else if (i_ptr->number < 1)
+	{
+	  /* check for "some" at start */
+	  if (!strncmp("some", tmp_val, 4))
+	    (void) sprintf(out_val, "no more %s", &tmp_val[5]);
+	  /* here if no article */
+	  else
+	    (void) sprintf(out_val, "no more %s", tmp_val);
+	}
       else
 	(void) strcpy(out_val, tmp_val);
       (void) strcat(out_val, ".");
@@ -363,6 +373,9 @@ int pref;
   else
     {
       insert_str(tmp_val, "& ", "");
-      (void) strcpy(out_val, tmp_val);
+      if (!strncmp("some", tmp_val, 4))
+	(void) strcpy(out_val, &tmp_val[5]);
+      else
+	(void) strcpy(out_val, tmp_val);
     }
 }

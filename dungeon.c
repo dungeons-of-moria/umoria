@@ -1,13 +1,15 @@
 #include <stdio.h>
+
+#include "constants.h"
+#include "config.h"
+#include "types.h"
+#include "externs.h"
+
 #ifdef USG
 #include <string.h>
 #else
 #include <strings.h>
 #endif
-
-#include "constants.h"
-#include "types.h"
-#include "externs.h"
 
 #ifdef sun   /* correct SUN stupidity in the stdio.h file */
 char *sprintf();
@@ -29,6 +31,9 @@ int player_light;      /* Player carrying light */
 int cave_flag;         /* used in get_panel */
 int light_flag;        /* used in move_light */
 
+/* value of msg_flag at start of turn */
+int save_msg_flag;
+
 /* Moria game module					-RAK-	*/
 /* The code in this section has gone through many revisions, and */
 /* some of it could stand some more hard work...  -RAK-          */
@@ -37,17 +42,16 @@ dungeon()
   int old_chp, old_cmana;      /* Detect change         */
   double regen_amount;         /* Regenerate hp and mana*/
   char command;         /* Last command          */
-  int save_msg_flag;      /* Msg flag after INKEY  */
-  struct misc *p_ptr;
-  treasure_type *i_ptr;
-  struct flags *f_ptr;
+  register struct misc *p_ptr;
+  register treasure_type *i_ptr;
+  register struct flags *f_ptr;
   int set_floor();
 
   /* Main procedure for dungeon... 			-RAK-	*/
   /* Note: There is a lot of preliminary magic going on here at first*/
 
   /* Check light status for setup          */
-  i_ptr = &inventory[32];
+  i_ptr = &inventory[INVEN_LIGHT];
   if (i_ptr->p1 > 0)
     player_light = TRUE;
   else
@@ -92,7 +96,8 @@ dungeon()
 		  rest_off();
 		find_flag = FALSE;
 		msg_print("The gates to Moria are now closed.");
-		msg_print("");
+		/* make sure player sees the message */
+		msg_print(" ");
 		do
 		  {
 		    save_char(TRUE, FALSE);
@@ -106,12 +111,17 @@ dungeon()
 		if (py.flags.rest > 0)
 		  rest_off();
 		find_flag = FALSE;
-		move_char(5);
+		move_light (char_row, char_col, char_row, char_col);
 		closing_flag++;
 		msg_print("The gates to Moria are closing...");
 		msg_print("Please finish up or save your game.");
-		msg_print("");
+		/* make sure the player sees the message */
+		msg_print(" ");
 	      }
+
+      /* turn over the store contents every, say, 1000 turns */
+      if ((dun_level != 0) && ((turn % 1000) == 0))
+	store_maint();
 
       /* Check for creature generation 		*/
       if (randint(MAX_MALLOC_CHANCE) == 1)
@@ -141,16 +151,16 @@ dungeon()
 	    prt_level();
 	}
       /* Check light status                            */
-      i_ptr = &inventory[32];
+      i_ptr = &inventory[INVEN_LIGHT];
       if (player_light)
 	if (i_ptr->p1 > 0)
 	  {
 	    i_ptr->p1--;
 	    if (i_ptr->p1 == 0)
 	      {
-		msg_print("Your light has gone out!");
 		player_light = FALSE;
 		find_flag = FALSE;
+		msg_print("Your light has gone out!");
 		move_light(char_row, char_col, char_row, char_col);
 	      }
 	    else if (i_ptr->p1 < 40)
@@ -198,7 +208,7 @@ dungeon()
 		  if (find_flag)
 		    {
 		      find_flag = FALSE;
-		      move_char(5);
+		      move_light (char_row, char_col, char_row, char_col);
 		    }
 		  prt_hunger();
 		}
@@ -210,7 +220,7 @@ dungeon()
 		    if (find_flag)
 		      {
 			find_flag = FALSE;
-			move_char(5);
+			move_light (char_row, char_col, char_row, char_col);
 		      }
 		  }
 	    }
@@ -223,7 +233,7 @@ dungeon()
 		  if (find_flag)
 		    {
 		      find_flag = FALSE;
-		      move_char(5);
+		      move_light (char_row, char_col, char_row, char_col);
 		    }
 		  prt_hunger();
 		}
@@ -238,8 +248,8 @@ dungeon()
 	f_ptr->food -= f_ptr->food_digested;
       /* Regenerate            */
       p_ptr = &py.misc;
-      if (f_ptr->regenerate)  regen_amount *= 1.5;
-      if (f_ptr->rest > 0)    regen_amount *= 2;
+      if (f_ptr->regenerate)  regen_amount = regen_amount * 1.5;
+      if (f_ptr->rest > 0)    regen_amount = regen_amount * 2;
       if (py.flags.poisoned < 1)
 	if (p_ptr->chp < p_ptr->mhp)
 	  regenhp(regen_amount);
@@ -269,6 +279,8 @@ dungeon()
 		}
 	      /* turn light back on */
 	      move_char(5);
+	      /* light creatures */
+	      creatures(FALSE);
 	    }
 	}
       /* Confusion             */
@@ -288,7 +300,7 @@ dungeon()
 	      if (find_flag)
 		{
 		  find_flag = FALSE;
-		  move_char(5);
+		  move_light (char_row, char_col, char_row, char_col);
 		}
 	    }
 	}
@@ -316,7 +328,7 @@ dungeon()
 	      if (find_flag)
 		{
 		  find_flag = FALSE;
-		  move_char(5);
+		  move_light (char_row, char_col, char_row, char_col);
 		}
 	    }
 	}
@@ -337,7 +349,7 @@ dungeon()
 	      if (find_flag)
 		{
 		  find_flag = FALSE;
-		  move_char(5);
+		  move_light (char_row, char_col, char_row, char_col);
 		}
 	    }
 	  else
@@ -377,24 +389,24 @@ dungeon()
 	  if ((0x00000040 & f_ptr->status) == 0)
 	    {
 	      f_ptr->status |= 0x00000040;
-	      msg_print("You feel yourself moving faster.");
 	      change_speed(-1);
+	      msg_print("You feel yourself moving faster.");
 	      if (find_flag)
 		{
 		  find_flag = FALSE;
-		  move_char(5);
+		  move_light (char_row, char_col, char_row, char_col);
 		}
 	    }
 	  f_ptr->fast--;
 	  if (f_ptr->fast == 0)
 	    {
 	      f_ptr->status &= 0xFFFFFFBF;
-	      msg_print("You feel yourself slow down.");
 	      change_speed(1);
+	      msg_print("You feel yourself slow down.");
 	      if (find_flag)
 		{
 		  find_flag = FALSE;
-		  move_char(5);
+		  move_light (char_row, char_col, char_row, char_col);
 		}
 	    }
 	}
@@ -404,48 +416,41 @@ dungeon()
 	  if ((0x00000080 & f_ptr->status) == 0)
 	    {
 	      f_ptr->status |= 0x00000080;
-	      msg_print("You feel yourself moving slower.");
 	      change_speed(1);
+	      msg_print("You feel yourself moving slower.");
 	      if (find_flag)
 		{
 		  find_flag = FALSE;
-		  move_char(5);
+		  move_light (char_row, char_col, char_row, char_col);
 		}
 	    }
 	  f_ptr->slow--;
 	  if (f_ptr->slow == 0)
 	    {
 	      f_ptr->status &= 0xFFFFFF7F;
-	      msg_print("You feel yourself speed up.");
 	      change_speed(-1);
+	      msg_print("You feel yourself speed up.");
 	      if (find_flag)
 		{
 		  find_flag = FALSE;
-		  move_char(5);
+		  move_light (char_row, char_col, char_row, char_col);
 		}
 	    }
 	}
       /* Resting is over?      */
       if (f_ptr->rest > 0)
 	{
+#ifdef SLOW
 	  /* Hibernate every 20 iterations so that process does  */
 	  /* not eat up system...                                */
-	  /* NOTE: Remove comments for VMS version 4.0 or greater*/
-	  /*       INKEY_DELAY takes care of hibernation for     */
-	  /*       VMS 3.7 or less                               */
 	  if ((f_ptr->rest % 20) == 1)  (void) sleep(1);
+#endif
 	  f_ptr->rest--;
-	  /* Test for any key being hit to abort rest.  Also,    */
-	  /* this will do a PUT_QIO which updates the screen...  */
-	  /* One more side benefit; since inkey_delay hibernates */
-	  /* small amount before executing, this makes resting   */
-	  /* less CPU intensive...                               */
-/*	  inkey_delay(&command, 0);  */
-	  put_qio();
+	  /* do not need to refresh screen here, if any movement/hit occurs
+	     update_mon/take_hit will turn off resting and screen refreshes */
+	  /* put_qio(); */
 	  if (f_ptr->rest == 0)               /* Resting over          */
 	    rest_off();
-/*	  else if (command != '\0') */ /*  Resting aborted       */
-/*	    rest_off();  */
 	}
       /* Hallucinating?  (Random characters appear!)*/
       if (f_ptr->image > 0)
@@ -457,6 +462,7 @@ dungeon()
       /* Paralysis             */
       if (f_ptr->paralysis > 0)
 	{
+	  /* when paralysis true, you can not see any movement that occurs */
 	  f_ptr->paralysis--;
 	  if (f_ptr->rest > 0)
 	    rest_off();
@@ -474,12 +480,12 @@ dungeon()
 	      if (find_flag)
 		{
 		  find_flag = FALSE;
-		  move_char(5);
+		  move_light (char_row, char_col, char_row, char_col);
 		}
-	      msg_print("Your skin turns into steel!");
 	      py.misc.pac += 100;
 	      py.misc.dis_ac += 100;
 	      prt_pac();
+	      msg_print("Your skin turns into steel!");
 	    }
 	  f_ptr->invuln--;
 	  if (f_ptr->invuln == 0)
@@ -488,12 +494,12 @@ dungeon()
 	      if (find_flag)
 		{
 		  find_flag = FALSE;
-		  move_char(5);
+		  move_light (char_row, char_col, char_row, char_col);
 		}
-	      msg_print("Your skin returns to normal...");
 	      py.misc.pac -= 100;
 	      py.misc.dis_ac -= 100;
 	      prt_pac();
+	      msg_print("Your skin returns to normal...");
 	    }
 	}
       /* Heroism       */
@@ -505,7 +511,7 @@ dungeon()
 	      if (find_flag)
 		{
 		  find_flag = FALSE;
-		  move_char(5);
+		  move_light (char_row, char_col, char_row, char_col);
 		}
 	      p_ptr = &py.misc;
 	      p_ptr->mhp += 10;
@@ -522,7 +528,7 @@ dungeon()
 	      if (find_flag)
 		{
 		  find_flag = FALSE;
-		  move_char(5);
+		  move_light (char_row, char_col, char_row, char_col);
 		}
 	      p_ptr = &py.misc;
 	      p_ptr->mhp -= 10;
@@ -542,7 +548,7 @@ dungeon()
 	      if (find_flag)
 		{
 		  find_flag = FALSE;
-		  move_char(5);
+		  move_light (char_row, char_col, char_row, char_col);
 		}
 	      p_ptr = &py.misc;
 	      p_ptr->mhp += 20;
@@ -559,7 +565,7 @@ dungeon()
 	      if (find_flag)
 		{
 		  find_flag = FALSE;
-		  move_char(5);
+		  move_light (char_row, char_col, char_row, char_col);
 		}
 	      p_ptr = &py.misc;
 	      p_ptr->mhp -= 20;
@@ -579,7 +585,7 @@ dungeon()
 	      if (find_flag)
 		{
 		  find_flag = FALSE;
-		  move_char(5);
+		  move_light (char_row, char_col, char_row, char_col);
 		}
 	      p_ptr = &py.misc;
 	      p_ptr->bth += 5;
@@ -587,7 +593,6 @@ dungeon()
 	      p_ptr->pac += 2;
 	      p_ptr->dis_ac+= 2;
 	      msg_print("You feel righteous!");
-	      prt_mhp();
 	      prt_pac();
 	    }
 	  f_ptr->blessed--;
@@ -597,7 +602,7 @@ dungeon()
 	      if (find_flag)
 		{
 		  find_flag = FALSE;
-		  move_char(5);
+		  move_light (char_row, char_col, char_row, char_col);
 		}
 	      p_ptr = &py.misc;
 	      p_ptr->bth -= 5;
@@ -605,7 +610,6 @@ dungeon()
 	      p_ptr->pac -= 2;
 	      p_ptr->dis_ac -= 2;
 	      msg_print("The prayer has expired.");
-	      prt_mhp();
 	      prt_pac();
 	    }
 	}
@@ -648,19 +652,19 @@ dungeon()
       if (f_ptr->word_recall > 0)
 	if (f_ptr->word_recall == 1)
 	  {
-	    if (dun_level > 0)
-	      {
-		msg_print("You feel yourself yanked upwards!");
-		dun_level = 0;
-	      }
-	    else if (py.misc.max_lev != 0)
-	      {
-		msg_print("You feel yourself yanked downwards!");
-		dun_level = py.misc.max_lev;
-	      }
 	    moria_flag = TRUE;
 	    f_ptr->paralysis++;
 	    f_ptr->word_recall = 0;
+	    if (dun_level > 0)
+	      {
+		dun_level = 0;
+		msg_print("You feel yourself yanked upwards!");
+	      }
+	    else if (py.misc.max_lev != 0)
+	      {
+		dun_level = py.misc.max_lev;
+		msg_print("You feel yourself yanked downwards!");
+	      }
 	  }
 	else
 	  f_ptr->word_recall--;
@@ -699,11 +703,12 @@ dungeon()
 	      if (py.flags.teleport)
 		if (randint(100) == 1)
 		  {
-		    find_flag = FALSE;
+		    find_flag = FALSE; /* no need for move_char(5) */
 		    teleport(40);
 		  }
 	      if (!find_flag)
 		{
+		  /* move the cursor to the players character */
 		  print("", char_row, char_col);
 		  save_msg_flag = msg_flag;
 		  do
@@ -711,7 +716,7 @@ dungeon()
 		      inkey(&command);
 		    }
 		  while (command == ' ');
-		  if (save_msg_flag)  erase_line(msg_line, msg_line);
+		  if (save_msg_flag)  erase_line(MSG_LINE, 0);
 		  global_com_val = (command);
 		}
 	      /* Commands are executed in following subroutines     */
@@ -741,8 +746,8 @@ int *com_val;
   char command;
   int i;
   vtype out_val, tmp_str;
-  struct stats *s_ptr;
-  struct flags *f_ptr;
+  register struct stats *s_ptr;
+  register struct flags *f_ptr;
   int set_floor();
 
   switch(*com_val)
@@ -763,17 +768,16 @@ int *com_val;
 	  }
       reset_flag = TRUE;
       break;
-    case 13:                               /*^M == repeat  */
-      msg_print(old_msg);
+    case 16:                               /*^P == repeat  */
+      repeat_msg ();
       reset_flag = TRUE;
       break;
-    case 16:
-      if (wizard1)                        /*^P == password*/
+    case 23:
+      if (wizard1)                        /*^W == password*/
 	{
-	  msg_print("Wizard mode off.");
 	  wizard1 = FALSE;
 	  wizard2 = FALSE;
-	  reset_flag = TRUE;
+	  msg_print("Wizard mode off.");
 	}
       else
 	{
@@ -781,15 +785,15 @@ int *com_val;
 	    {
 	      msg_print("Wizard mode on.");
 	    }
-	  reset_flag = TRUE;
 	}
+      reset_flag = TRUE;
       break;
     case 18:                               /*^R == redraw  */
       really_clear_screen();
       draw_cave();
       reset_flag = TRUE;
       break;
-    case 24:                               /*^Z == save    */
+    case 24:                               /*^X == save    */
       if (total_winner)
 	{
 	  msg_print("You are a Total Winner,  your character must be retired...");
@@ -800,16 +804,13 @@ int *com_val;
 	  if (search_flag)  search_off();
 	  save_char(TRUE, FALSE);
 	}
+      reset_flag = TRUE;
       break;
     case 32:                                /*SPACE do nothing */
       reset_flag = TRUE;
       break;
     case '!':                                /*!  == Shell   */
-      clear_screen(0, 0);
-      prt("[Entering shell, type 'exit' to resume your game]\n",0,0);
       shell_out();
-      clear_screen(0, 0);
-      draw_cave();
       reset_flag = TRUE;
       break;
     case 46:                                   /*. == find     */
@@ -839,7 +840,9 @@ int *com_val;
       break;
     case 53:                          /* Rest one turn */
       move_char(*com_val - 48);
+#ifdef SLOW
       (void) sleep(0);     /* Sleep 1/10 a second*/
+#endif
       flush();
       break;
     case 54:
@@ -864,16 +867,6 @@ int *com_val;
       original_help();
       reset_flag = TRUE;   /* Free move     */
       break;
-  /*  case 65:   /* Debug feature for weight
-      x = 0;
-      for (i = 0; i < INVEN_MAX; i++)
-	{
-	  i_ptr = &inventory[i];
-	  x += i_ptr->weight*i_ptr->number;
-	  (void) sprintf(out_val, "%d | %d", inven_weight, x);
-	  msg_print(out_val);
-	}
-      break;                             */
     case 66:
       bash();                                   /*B == bash     */
       break;
@@ -903,7 +896,6 @@ int *com_val;
       refill_lamp();                            /*F == refill   */
       break;
     case 76:                                   /*L == location */
-      reset_flag = TRUE;   /* Free move     */
       if ((py.flags.blind > 0) || (no_light()))
 	msg_print("You can't see your map.");
       else
@@ -915,13 +907,14 @@ int *com_val;
 			 char_row, char_col);
 	  msg_print(out_val);
 	}
+      reset_flag = TRUE;   /* Free move     */
       break;
     case 80:                                   /*P == print map*/
-      reset_flag = TRUE;   /* Free move     */
       if ((py.flags.blind > 0) || (no_light()))
 	msg_print("You can't see to draw a map.");
       else
 	print_map();
+      reset_flag = TRUE;   /* Free move     */
       break;
     case 82:
       rest();                                   /*R == rest     */
@@ -953,6 +946,7 @@ int *com_val;
       break;
     case 98:
       examine_book();                           /*b == browse   */
+      reset_flag = TRUE;
       break;
     case 99:
       closeobject();                            /*c == close    */
@@ -967,11 +961,13 @@ int *com_val;
     case 102:
       throw_object();                           /*f == throw    */
       break;
-  /*    case 104:                                 /*h == moria hlp
+#if 0
+    case 104:                                 /*h == moria hlp */
       moria_help("");
       draw_cave();
-      reset_flag = TRUE;   /* Free move
-      break;                      */
+      reset_flag = TRUE;   /* Free move   */
+      break;
+#endif
     case 105:                                /*i == inventory*/
       reset_flag = TRUE;   /* Free move     */
       if (inven_command('i', 0, 0))  draw_cave();
@@ -1013,6 +1009,7 @@ int *com_val;
       break;
     case 118:
       game_version();                           /*v == version  */
+      reset_flag = TRUE;
       break;
     case 119:                                 /*w == wear     */
       reset_flag = TRUE;
@@ -1046,7 +1043,9 @@ int *com_val;
 		f_ptr->slow = 1;
 	      if (f_ptr->image > 1)
 		f_ptr->image = 1;
-	      put_qio();
+	      /* put_qio(); */
+	      /* adjust misc stats */
+	      py_bonuses(blank_treasure, 0);
 	      break;
 	    case 2:
 	      print_objects();                  /*^B == objects */
@@ -1064,7 +1063,7 @@ int *com_val;
 		  moria_flag = TRUE;
 		}
 	      else
-		erase_line(msg_line, msg_line);
+		erase_line(MSG_LINE, 0);
 	      break;
 	    case 8:
 	      original_wizard_help();           /*^H == wizhelp */
@@ -1095,17 +1094,17 @@ int *com_val;
 		    break;
 		  case 6:
 		    (void) mass_genocide();     /*^F == genocide*/
-		    put_qio();
+		    /* put_qio(); */
 		    break;
 		  case 7:                       /*^G == treasure*/
 		    alloc_object(set_floor, 5, 10);
-		    put_qio();
+		    /* put_qio(); */
 		    break;
 		  case 10:                      /*^J == gain exp*/
 		    if (py.misc.exp == 0)
 		      py.misc.exp = 1;
 		    else
-		      py.misc.exp *= 2;
+		      py.misc.exp = py.misc.exp * 2;
 		    prt_experience();
 		    break;
 		  case 21:                    /*^U == summon  */
@@ -1114,15 +1113,15 @@ int *com_val;
 		    (void) summon_monster(&y, &x, TRUE);
 		    creatures(FALSE);
 		    break;
-		  case 23:
-		    wizard_create();          /*^W == create  */
+		  case '@':
+		    wizard_create();          /*^Q == create  */
 		    break;
 		  default:
-		    prt("Type '?' for help...", 0, 0);
+		    prt("Type '?' or '^H' for help...", 0, 0);
 		    break;
 		  }
 	      else
-		prt("Type '?' for help...", 0, 0);
+		prt("Type '?' or '^H' for help...", 0, 0);
 	    }
 	}
       else
@@ -1141,8 +1140,8 @@ int *com_val;
   char command;
   int i;
   vtype out_val, tmp_str;
-  struct stats *s_ptr;
-  struct flags *f_ptr;
+  register struct stats *s_ptr;
+  register struct flags *f_ptr;
   int set_floor();
 
   switch(*com_val)
@@ -1164,16 +1163,15 @@ int *com_val;
       reset_flag = TRUE;
       break;
     case 16:                               /*^P == repeat  */
-      msg_print(old_msg);
+      repeat_msg ();
       reset_flag = TRUE;
       break;
     case 23:
       if (wizard1)                        /*^W == password*/
 	{
-	  msg_print("Wizard mode off.");
 	  wizard1 = FALSE;
 	  wizard2 = FALSE;
-	  reset_flag = TRUE;
+	  msg_print("Wizard mode off.");
 	}
       else
 	{
@@ -1181,8 +1179,8 @@ int *com_val;
 	    {
 	      msg_print("Wizard mode on.");
 	    }
-	  reset_flag = TRUE;
 	}
+      reset_flag = TRUE;
       break;
     case 18:                               /*^R == redraw  */
       really_clear_screen();
@@ -1200,16 +1198,13 @@ int *com_val;
 	  if (search_flag)  search_off();
 	  save_char(TRUE, FALSE);
 	}
+      reset_flag = TRUE;
       break;
     case ' ':                                /*SPACE do nothing */
       reset_flag = TRUE;
       break;
     case '!':                                /*!  == Shell   */
-      clear_screen(0, 0);
-      prt("[Entering shell, type '^D' to resume your game]\n",0,0);
       shell_out();
-      clear_screen(0, 0);
-      draw_cave();
       reset_flag = TRUE;
       break;
     case 'b':
@@ -1287,7 +1282,9 @@ int *com_val;
     case '5':                          /* Rest one turn */
     case '.':
       move_char(5);
+#ifdef SLOW
       (void) sleep(0);     /* Sleep 1/10 a second*/
+#endif
       flush();
       break;
     case '6':
@@ -1312,16 +1309,6 @@ int *com_val;
       rogue_like_help();
       reset_flag = TRUE;   /* Free move     */
       break;
-  /*  case 65:   /* Debug feature for weight
-      x = 0;
-      for (i = 0; i < INVEN_MAX; i++)
-	{
-	  i_ptr = &inventory[i];
-	  x += i_ptr->weight*i_ptr->number;
-	  (void) sprintf(out_val, "%d | %d", inven_weight, x);
-	  msg_print(out_val);
-	}
-      break;                             */
     case 'f':
       bash();                                   /*f == bash     */
       break;
@@ -1351,7 +1338,6 @@ int *com_val;
       refill_lamp();                            /*F == refill   */
       break;
     case 'W':                                   /*W == location */
-      reset_flag = TRUE;   /* Free move     */
       if ((py.flags.blind > 0) || (no_light()))
 	msg_print("You can't see your map.");
       else
@@ -1363,13 +1349,14 @@ int *com_val;
 			 char_row, char_col);
 	  msg_print(out_val);
 	}
+      reset_flag = TRUE;   /* Free move     */
       break;
     case 'M':                                   /*M == print map*/
-      reset_flag = TRUE;   /* Free move     */
       if ((py.flags.blind > 0) || (no_light()))
 	msg_print("You can't see to draw a map.");
       else
 	print_map();
+      reset_flag = TRUE;   /* Free move     */
       break;
     case 'R':
       rest();                                   /*R == rest     */
@@ -1441,6 +1428,7 @@ int *com_val;
       break;
     case 'P':
       examine_book();                           /*P == browse   */
+      reset_flag = TRUE;
       break;
     case 'c':
       closeobject();                            /*c == close    */
@@ -1455,11 +1443,13 @@ int *com_val;
     case 't':
       throw_object();                           /*t == throw    */
       break;
-  /*    case 104:                                 /*h == moria hlp
+#if 0
+    case 104:                                 /*h == moria hlp */
       moria_help("");
       draw_cave();
-      reset_flag = TRUE;   /* Free move
-      break;                      */
+      reset_flag = TRUE;   /* Free move    */
+      break;
+#endif
     case 'i':                                /*i == inventory*/
       reset_flag = TRUE;   /* Free move     */
       if (inven_command('i', 0, 0))  draw_cave();
@@ -1501,6 +1491,7 @@ int *com_val;
       break;
     case 'v':
       game_version();                           /*v == version  */
+      reset_flag = TRUE;
       break;
     case 'w':                                 /*w == wear     */
       reset_flag = TRUE;
@@ -1534,7 +1525,9 @@ int *com_val;
 		f_ptr->slow = 1;
 	      if (f_ptr->image > 1)
 		f_ptr->image = 1;
-	      put_qio();
+	      /* put_qio(); */
+	      /* adjust misc stats */
+	      py_bonuses(blank_treasure, 0);
 	      break;
 	    case 15:
 	      print_objects();                  /*^O == objects */
@@ -1552,7 +1545,7 @@ int *com_val;
 		  moria_flag = TRUE;
 		}
 	      else
-		erase_line(msg_line, msg_line);
+		erase_line(MSG_LINE, 0);
 	      break;
 	    case 127: /* ^? DEL */
 	      rogue_like_wizard_help();         /*DEL == wizhelp */
@@ -1583,34 +1576,34 @@ int *com_val;
 		    break;
 		  case 6:
 		    (void) mass_genocide();     /*^F == genocide*/
-		    put_qio();
+		    /* put_qio(); */
 		    break;
 		  case 7:                       /*^G == treasure*/
 		    alloc_object(set_floor, 5, 10);
-		    put_qio();
+		    /* put_qio(); */
 		    break;
 		  case '+':                      /*+ == gain exp*/
 		    if (py.misc.exp == 0)
 		      py.misc.exp = 1;
 		    else
-		      py.misc.exp *= 2;
+		      py.misc.exp = py.misc.exp * 2;
 		    prt_experience();
 		    break;
-		  case 21:                    /*^U == summon  */
+		  case 19:                    /*^S == summon  */
 		    y = char_row;
 		    x = char_col;
 		    (void) summon_monster(&y, &x, TRUE);
 		    creatures(FALSE);
 		    break;
-		  case 17:
+		  case '@':
 		    wizard_create();          /*^Q == create  */
 		    break;
 		  default:
-		    prt("Type '?' for help...", 0, 0);
+		    prt("Type '?' or DELETE for help...", 0, 0);
 		    break;
 		  }
 	      else
-		prt("Type '?' for help...", 0, 0);
+		prt("Type '?' or DELETE for help...", 0, 0);
 	    }
 	}
       else

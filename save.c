@@ -1,15 +1,17 @@
 #include <stdio.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+
+#include "constants.h"
+#include "config.h"
+#include "types.h"
+#include "externs.h"
+
 #ifdef USG
 #include <string.h>
 #else
 #include <strings.h>
 #endif
-#include <sys/types.h>
-#include <sys/stat.h>
-
-#include "constants.h"
-#include "types.h"
-#include "externs.h"
 
 #ifdef sun   /* correct SUN stupidity in the stdio.h file */
 char *sprintf();
@@ -34,8 +36,8 @@ unsigned sleep();
 restore_char()
 {
   vtype fnam;
-  int i, j;
-  FILE *f1;
+  register int i, j;
+  register FILE *f1;
   int error;
   vtype temp;
   double version;
@@ -57,14 +59,12 @@ restore_char()
     {
       (void) sprintf(temp, "Can not change file mode for %s", fnam);
       prt(temp, 0, 0);
-      prt("", 1, 0);
     }
 
   if ((f1 = fopen(fnam, "r")) == NULL)
     {
-      (void) sprintf(temp, "Error Opening> %s", fnam);
+      (void) sprintf(temp, "Cannot open file %s for reading.", fnam);
       prt(temp, 0, 0);
-      prt("", 1, 0);
       return(FALSE);
     }
 
@@ -146,6 +146,14 @@ restore_char()
   error |= !fread((char *)town_state, sizeof(town_state), 1, f1);
   error |= !fread((char *)&town_seed, sizeof(town_seed), 1, f1);
 
+  if (version >= 4.87)
+    {
+      error |= !fread((char *)&panic_save, sizeof(panic_save), 1, f1);
+      /* clear the panic_save condition, which is used to indicate
+	 cheating */
+      panic_save = 0;
+    }
+
   error |= fclose(f1);
 
   controlz();
@@ -176,13 +184,13 @@ save_char(exit, no_ask)
 int exit;
 int no_ask;
 {
-  int i, j;
+  register int i, j;
   int flag;
   int error;
   vtype fnam, temp;
   double version;
   struct stat buf;
-  FILE *f1;
+  register FILE *f1;
   char char_tmp;
   register cave_type *c_ptr;
 
@@ -274,7 +282,12 @@ int no_ask;
   error |= !fwrite((char *)town_state, sizeof(town_state), 1, f1);
   error |= !fwrite((char *)&town_seed, sizeof(town_seed), 1, f1);
 
+  /* this indicates 'cheating' if it is a one */
+  error |= !fwrite((char *)&panic_save, sizeof(panic_save), 1, f1);
+
   error |= fclose(f1);
+
+  character_saved = 1;
 
   if (!wizard1)
     if (chmod(fnam, 0) == -1)
@@ -308,8 +321,8 @@ int no_ask;
 get_char(fnam)
 char *fnam;
 {
-  int i, j;
-  FILE *f1;
+  register int i, j;
+  register FILE *f1;
   int error;
   vtype temp;
   double version;
@@ -321,6 +334,7 @@ char *fnam;
   char char_tmp;
   char char_tmp_array[3];
   register cave_type *c_ptr;
+  long age;
 
   clear_screen(0, 0);
 
@@ -335,7 +349,6 @@ char *fnam;
     {
       (void) sprintf(temp, "Cannot stat file %s", fnam);
       prt(temp, 0, 0);
-      prt("", 1, 0);
       exit_game();
     }
 
@@ -346,7 +359,6 @@ char *fnam;
     {
       (void) sprintf(temp, "Cannot restore from symbolic link %s", fnam);
       prt(temp, 0, 0);
-      prt("", 1, 0);
       exit_game();
     }
 #endif
@@ -355,7 +367,6 @@ char *fnam;
     {
       (void) sprintf(temp, "Too many links to file %s", fnam);
       prt(temp, 0, 0);
-      prt("", 1, 0);
       exit_game();
     }
 
@@ -363,14 +374,12 @@ char *fnam;
     {
       (void) sprintf(temp, "Can not change file mode for %s", fnam);
       prt(temp, 0, 0);
-      prt("", 1, 0);
     }
 
   if ((f1 = fopen(fnam, "r")) == NULL)
     {
-      (void) sprintf(temp, "Error Opening> %s", fnam);
+      (void) sprintf(temp, "Cannot open file %s for reading", fnam);
       prt(temp, 0, 0);
-      prt("", 1, 0);
       exit_game();
     }
 
@@ -452,15 +461,19 @@ char *fnam;
   error |= !fread((char *)town_state, sizeof(town_state), 1, f1);
   error |= !fread((char *)&town_seed, sizeof(town_seed), 1, f1);
 
+  if (version >= 4.87)
+    {
+      error |= !fread((char *)&panic_save, sizeof(panic_save), 1, f1);
+    }
+
   error |= fclose(f1);
 
   controlz();
 
-  if (buf.st_ctime >= buf2.st_ctime + 10)
+  if (buf.st_atime >= buf2.st_atime + 5)
     {
       (void) sprintf(temp, "File %s has been touched, sorry.", fnam);
       prt(temp, 0, 0);
-      prt("", 1, 0);
       exit_game();
     }
 
@@ -470,6 +483,23 @@ char *fnam;
       prt(temp, 0, 0);
       exit_game();
     }
+
+  /* rotate store inventory, depending on how old the save file is */
+  /* foreach day or fraction thereof old, call store_maint once */
+  /* must do this before delete file */
+  if (stat (fnam, &buf2) == -1)
+    {
+      (void) sprintf(temp, "Cannot stat file %s?", fnam);
+      prt(temp, 0, 0);
+    }
+  else
+    {
+      age = (long)buf2.st_atime - (long)buf.st_atime;  /* age in seconds */
+      age = (age / 86400) + 1;  /* age in days */
+      for (i = 0; i < age; i++)
+	store_maint();
+    }
+
   if (unlink(fnam) == -1)
     {
       (void) sprintf(temp, "Cannot delete file %s", fnam);
@@ -477,11 +507,29 @@ char *fnam;
       exit_game();
     }
 
+  if (panic_save == 1)
+    {
+      (void) sprintf(temp, "This game is from a panic save.  Score will not be added to scoreboard.");
+      msg_print (temp);
+      /* make sure player will see message before change_name is called */
+      msg_print (" ");
+    }
+
   /* reidentify objects */
   /* very inefficient, should write new routine perhaps? */
   for (i = 0; i < MAX_OBJECTS; i++)
     if (object_ident[i] == TRUE)
       identify(object_list[i]);
+
+  /* in case restoring a dead character, this can happen if a signal
+     is caught after a characters hit points go below zero, but before
+     the game ends */
+  if (py.misc.chp <= -1)
+    {
+      prt("Your character has already died.", 23, 0);
+      (void) strcpy(died_from, "Unknown.");
+      death = 1;
+    }
 
   return(FALSE);
 }

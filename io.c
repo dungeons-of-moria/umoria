@@ -1,4 +1,13 @@
 #include <curses.h>
+#include <sys/types.h>
+#include <sys/ioctl.h>
+#include <sys/file.h>
+
+#include "constants.h"
+#include "config.h"
+#include "types.h"
+#include "externs.h"
+
 #ifdef USG
 #include <string.h>
 #else
@@ -6,13 +15,6 @@
 #include <sgtty.h>
 #include <sys/wait.h>
 #endif
-#include <sys/types.h>
-#include <sys/ioctl.h>
-#include <sys/file.h>
-
-#include "constants.h"
-#include "types.h"
-#include "externs.h"
 
 #ifdef sun   /* correct SUN stupidity in the stdio.h file */
 char *sprintf();
@@ -21,6 +23,14 @@ char *sprintf();
 vtype pad_output;   /* static output string for the pad function */
 
 char *getenv();
+
+vtype old_msg[SAVED_MSGS];      /* Last messages      */
+int last_message = 0;           /* Number of last msg generated in old_msg */
+int last_displayed_msg = 0;     /* Number of last msg printed (^M) */
+int repeating_old_msg = 0;      /* flag which lets repeat_msg call msg_print */
+
+/* value of msg flag at start of turn */
+extern int save_msg_flag;
 
 #ifdef USG
 void exit();
@@ -59,7 +69,7 @@ init_curses()
 #ifdef USG
   saveterm();
 #endif
-#ifdef ultrix
+#if defined(ultrix)
   crmode();
 #else
   cbreak();
@@ -97,14 +107,13 @@ int row, col;
     {
       (void) sprintf(tmp_str, "error row = %d col = %d\n", row, col);
       prt(tmp_str, 0, 0);
+      /* wait so user can see error */
       (void) sleep(2);
     }
-  refresh();
 }
 
 
 /* Dump the IO buffer to terminal			-RAK-	*/
-/* NOTE: Source is PUTQIO.MAR					*/
 put_qio()
 {
   refresh();
@@ -121,24 +130,33 @@ shell_out()
   struct ltchars buf;
 #endif
 
+  /* clear screen and print 'exit' message */
+  clear_screen(0, 0);
+  prt("[Entering shell, type 'exit' to resume your game]\n",0,0);
+  put_qio();
+
 #ifndef BUGGY_CURSES
   nl();
 #endif
-#ifdef ultrix
+#if defined(ultrix)
   nocrmode();
 #else
   nocbreak();
 #endif
   echo();
+  ignore_signals();
   val = fork();
   if (val == 0)
     {
+      default_signals();
 #ifdef USG
       /* no local special characters */
       resetterm();
 #else
       (void) ioctl(0, TIOCSLTC, (char *)&save_special_chars);
 #endif
+      /* close scoreboard descriptor */
+      (void) close(highscore_fd);
       if (str = getenv("SHELL"))
 	(void) execl(str, str, (char *) 0);
       else
@@ -156,8 +174,11 @@ shell_out()
 #else
   (void) wait((union wait *) 0);
 #endif
+  restore_signals();
+  /* restore the cave to the screen */
   really_clear_screen();
-#ifdef ultrix
+  draw_cave();
+#if defined(ultrix)
   crmode();
 #else
   cbreak();
@@ -190,7 +211,7 @@ exit_game()
 #ifndef BUGGY_CURSES
   nl();
 #endif
-#ifdef ultrix
+#if defined(ultrix)
   nocrmode();
 #else
   nocbreak();
@@ -226,21 +247,19 @@ flush()
   arg = FREAD;
   (void) ioctl(0, TIOCFLUSH, (char *)&arg);   /* flush all input */
 #endif
-
-  /* Now flush				*/
-  refresh();
 }
 
 
+#if 0
+/* this is no longer used anywhere */
 /* Flush buffer before input				-RAK-	*/
 inkey_flush(x)
 char *x;
 {
-  put_qio();	/* Dup the IO buffer	*/
   if (!wizard1)  flush();
   inkey(x);
 }
-
+#endif
 
 /* Clears given line of text				-RAK-	*/
 erase_line(row, col)
@@ -249,7 +268,8 @@ int col;
 {
   move(row, col);
   clrtoeol();
-  refresh();
+  if (row == MSG_LINE)
+    msg_flag = FALSE;
 }
 
 
@@ -257,13 +277,12 @@ int col;
 clear_screen(row, col)
 int row, col;
 {
-  int i;
+  register int i;
 
-  for (i = 1; i <= 23; i++)
+  for (i = row; i < 23; i++)
     used_line[i] = FALSE;
   move(row, col);
   clrtobot();
-  put_qio();	/* Dump the Clear Sequence	*/
   msg_flag = FALSE;
 }
 
@@ -272,12 +291,11 @@ int row, col;
    does not know about */
 really_clear_screen()
 {
-  int i;
+  register int i;
 
-  for (i = 1; i <= 23; i++)
+  for (i = 1; i < 23; i++)
     used_line[i] = FALSE;
   clear();
-  put_qio();	/* Dump the Clear Sequence	*/
   msg_flag = FALSE;
 }
 
@@ -307,30 +325,79 @@ int col;
 }
 
 
+/* move cursor to a given y, x position */
+move_cursor(row, col)
+int row, col;
+{
+  move (row, col);
+}
+
+
 /* Outputs message to top line of screen				*/
 msg_print(str_buff)
 char *str_buff;
 {
-  int old_len;
+  register int old_len;
   char in_char;
+  register int do_flush = 0;
+
+  /* stop the character if s/he is in a run */
+  if (find_flag)
+    {
+      find_flag = FALSE;
+      move_light (char_row, char_col, char_row, char_col);
+    }
 
   if (msg_flag)
     {
-      old_len = strlen(old_msg) + 1;
-      put_buffer(" -more-", msg_line, old_len);
+      old_len = strlen(old_msg[last_message]) + 1;
+      put_buffer(" -more-", MSG_LINE, old_len);
+      /* let sigint handler know that we are waiting for a space */
+      wait_for_more = 1;
       do
 	{
 	  inkey(&in_char);
 	}
       while ((in_char != ' ') && (in_char != '\033'));
+      wait_for_more = 0;
+      do_flush = 1;
     }
-  move(msg_line, msg_line);
+  move(MSG_LINE, 0);
   clrtoeol();
-  put_buffer(str_buff, msg_line, msg_line);
-  (void) strcpy(old_msg, str_buff);
+  if (do_flush)
+    put_qio();
+  put_buffer(str_buff, MSG_LINE, 0);
+
+  if (!repeating_old_msg)
+    {
+      /* increment last message pointer */
+      last_message++;
+      if (last_message == SAVED_MSGS)
+	last_message = 0;
+      last_displayed_msg = last_message;
+      (void) strcpy(old_msg[last_message], str_buff);
+    }
   msg_flag = TRUE;
 }
 
+
+/* repeat an old message */
+repeat_msg ()
+{
+  repeating_old_msg = 1;
+  /* if message still visible, decrement counter to display previous one */
+  if (save_msg_flag)
+    {
+      if (last_displayed_msg == 0)
+	last_displayed_msg = SAVED_MSGS;
+      last_displayed_msg--;
+      msg_flag = FALSE;
+      msg_print (old_msg[last_displayed_msg]);
+    }
+  else  /* display current message */
+    msg_print (old_msg[last_displayed_msg]);
+  repeating_old_msg = 0;
+}
 
 /* Prompts (optional) and returns ord value of input char	*/
 /* Function returns false if <ESCAPE> is input	*/
@@ -347,14 +414,14 @@ char *command;
   com_val = (*command);
   switch(com_val)
     {
-    case 27:
+    case 0: case 27:
       res = FALSE;
       break;
     default:
       res = TRUE;
       break;
     }
-  erase_line(msg_line, msg_line);
+  erase_line(MSG_LINE, 0);
   msg_flag = FALSE;
   return(res);
 }
@@ -366,14 +433,15 @@ int get_string(in_str, row, column, slen)
 char *in_str;
 int row, column, slen;
 {
-  int start_col, end_col, i;
+  register int start_col, end_col, i;
   char x;
-  vtype tmp;
+  char tmp[2];
   int flag, abort;
 
   abort = FALSE;
   flag  = FALSE;
   in_str[0] = '\0';
+  tmp[1] = '\0';
   put_buffer(pad(in_str, " ", slen), row, column);
   put_buffer("\0", row, column);
   start_col = column;
@@ -398,7 +466,7 @@ int row, column, slen;
 	    }
 	  break;
 	default:
-	  (void) sprintf(tmp, "%c", x);
+	  tmp[0] = x;
 	  put_buffer(tmp, row, column);
 	  (void) strcat(in_str, tmp);
 	  column++;
@@ -462,11 +530,11 @@ int delay;
 {
   char dummy;
 
-  prt("[Press any key to continue, or ESC to exit]", prt_line, 10);
+  prt("[Press any key to continue, or Q to exit]", prt_line, 10);
   inkey(&dummy);
   switch(dummy)
     {
-    case 27:
+    case 'Q':
       erase_line(prt_line, 0);
       if (delay > 0)  (void) sleep((unsigned)delay);
       exit_game();
@@ -484,8 +552,7 @@ char *string;
 char *fill;
 int filllength;
 {
-  int length;
-  int i;
+  register int length, i;
 
   (void) strcpy(pad_output, string);
   length = strlen(pad_output);
@@ -494,3 +561,20 @@ int filllength;
   pad_output[i] = '\0';
   return(pad_output);
 }
+
+int confirm()
+{
+  char command;
+
+  if (get_com("Are you sure?", &command))
+    switch(command)
+      {
+      case 'y': case 'Y':
+	return TRUE;
+
+      default:
+	return FALSE;
+      }
+  return FALSE;
+}
+

@@ -1,4 +1,5 @@
 #include "constants.h"
+#include "config.h"
 #include "types.h"
 #include "externs.h"
 
@@ -86,7 +87,7 @@ ident_char()
       case 'i': prt("i - Icky Thing.", 0, 0); break;
       case 'j': prt("j - Jackal.", 0, 0); break;
       case 'k': prt("k - Kobold.", 0, 0); break;
-      case 'l': prt("l - Giant Lice.", 0, 0); break;
+      case 'l': prt("l - Giant Louse.", 0, 0); break;
       case 'm': prt("m - Mold.", 0, 0); break;
       case 'n': prt("n - Naga.", 0, 0); break;
       case 'o': prt("o - Orc or Ogre.", 0, 0); break;
@@ -94,10 +95,10 @@ ident_char()
       case 'q': prt("q - Quasit.", 0, 0); break;
       case 'r': prt("r - Rodent.", 0, 0); break;
       case 's': prt("s - Skeleton.", 0, 0); break;
-      case 't': prt("t - Gaint tick.", 0, 0); break;
+      case 't': prt("t - Giant Tick.", 0, 0); break;
 	/* case 'u': prt("u - Not used.", 0, 0); break; */
 	/* case 'v': prt("v - Not used.", 0, 0); break; */
-      case 'w': prt("w - Worm(s).", 0, 0); break;
+      case 'w': prt("w - Worm or Worm Mass.", 0, 0); break;
 	/* case 'x': prt("x - Not used.", 0, 0); break; */
       case 'y': prt("y - Yeek.", 0, 0); break;
       case 'z': prt("z - Zombie.", 0, 0); break;
@@ -125,7 +126,7 @@ original_help()
   prt("S       Search Mode.          |  /        Identify a character.", 8,0);
   prt("T <Dir> Tunnel.               |  ?        Display this panel.", 9, 0);
   prt("a       Aim and fire a wand.  |", 10, 0);
-  prt("b       Browse a book.        |  ^M       Repeat the last message.",
+  prt("b       Browse a book.        |  ^P       Repeat the last message.",
       11, 0);
   prt("c <Dir> Close a door.         |  ^R       Redraw the screen.", 12, 0);
   prt("d       Drop an item.         |  ^K       Quit the game.", 13, 0);
@@ -199,10 +200,11 @@ original_wizard_help()
       prt("^U - Summon monster.", 9, 0);
       prt("^L - Wizard light.", 10, 0);
       prt("^N - Print monster dictionary.", 11, 0);
-      prt("^P - Wizard password on/off.", 12, 0);
-      prt("^T - Teleport player.", 13, 0);
+      prt("^W - Wizard password on/off.", 12, 0);
+      prt("^T - Teleport self.", 13, 0);
       prt("^V - Restore lost character.", 14, 0);
-      prt("^W - Create any object *CAN CAUSE FATAL ERROR*", 15, 0);
+      /* starting to run out of characters here!! */
+      prt("@  - Create any object *CAN CAUSE FATAL ERROR*", 15, 0);
     }
   else
     {
@@ -213,8 +215,8 @@ original_wizard_help()
       prt("^I - Identify.", 4, 0);
       prt("^L - Wizard light.", 5, 0);
       prt("^N - Print monster dictionary.", 6, 0);
-      prt("^P - Wizard password on/off.", 7, 0);
-      prt("^T - Teleport player.", 8, 0);
+      prt("^W - Wizard password on/off.", 7, 0);
+      prt("^T - Teleport self.", 8, 0);
       prt("^V - Restore lost character.", 9, 0);
     }
   pause_line(23);
@@ -237,13 +239,14 @@ rogue_like_wizard_help()
       prt("^? - Wizard Help.", 6, 0);
       prt("^I - Identify.", 7, 0);
       prt("+  - Gain experience.", 8, 0);
-      prt("^U - Summon monster.", 9, 0);
+      prt("^S - Summon monster.", 9, 0);
       prt("*  - Wizard light.", 10, 0);
       prt("^M - Print monster dictionary.", 11, 0);
       prt("^W - Wizard password on/off.", 12, 0);
-      prt("^T - Teleport player.", 13, 0);
+      prt("^T - Teleport self.", 13, 0);
       prt("^V - Restore lost character.", 14, 0);
-      prt("^Q - Create any object *CAN CAUSE FATAL ERROR*", 15, 0);
+      /* starting to run out of characters here!! */
+      prt("@  - Create any object *CAN CAUSE FATAL ERROR*", 15, 0);
     }
   else
     {
@@ -255,7 +258,7 @@ rogue_like_wizard_help()
       prt("*  - Wizard light.", 5, 0);
       prt("^M - Print monster dictionary.", 6, 0);
       prt("^W - Wizard password on/off.", 7, 0);
-      prt("^T - Teleport player.", 8, 0);
+      prt("^T - Teleport self.", 8, 0);
       prt("^V - Restore lost character.", 9, 0);
     }
   pause_line(23);
