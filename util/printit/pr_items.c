@@ -1,4 +1,12 @@
-/* written by Carlton Hommel */
+/* util/printit/pr_items.c: pretty print item/treasure info
+
+   Copyright (c) 1990-1991: Carlton Hommel, James E. Wilson
+
+   This software may be copied and distributed for educational, research, and
+   not for profit purposes provided that this copyright and statement are
+   included in all such copies. */
+
+#include "config.h"
 #include "constant.h"
 #include "types.h"
 
@@ -9,7 +17,8 @@ main()
     int i;
     treasure_type *t;
 
-    printf("[tval,sub] p1\tLvl   $ lbs\t  Dam [+, +]\t[AC,+]\tChar Name\tFlags\n");
+    printf("[tval,sub] p1\tLvl   $ lbs\t  Dam [+, +]\t[AC,+]\tChar Name");
+    printf("\tFlags\n");
     for (i=0; i<MAX_OBJECTS; i++) {
 	t = &object_list[i];
 	call_it(t);

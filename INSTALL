@@ -1,13 +1,18 @@
 
 First, you have to put every file in the 'source' directory, and every file
-in your machine/OS specific directory into a common directory.  If you are on a
-UNIX machine and running csh, the following works nicely if typed from this
+in your machine/OS specific directory into a common directory.  If you are on
+a UNIX machine and running csh, the following works nicely if typed from this
 directory.
-*****
+******
 foreach i (source/* unix/*)
 ln -s $i $i:t
 end
 ******
+(If you wish to build the program in a temporary directory, the same command
+will work, but you will have to give full pathnames for the source and
+unix directories.  If you build the program in a different filesystem than
+the one containing the sources, then 'ln -s' will only work if you have
+BSD or SYSVR4.    If the 'ln -s' fails, you can use 'ln' or 'cp' instead.)
 
 To compile the program, edit the config.h file to change the
 names of the files the game uses.  Also, uncomment the appropriate
@@ -18,7 +23,6 @@ micro versions don't use this file.)
 
 The game needs to be installed setuid on UNIX systems for the scoreboard
 to work.  Use the command 'chmod 4511 moria' to do this.
-N.B. The scoreboard is currently not implemented, so this doesn't matter.
 The file scores should be mode 644 with the same owner as moria.
 The files hours and news must be publicly readable with mode 444.
 (Or just type 'make install' after setting BINDIR and LIBDIR in the
@@ -28,8 +32,8 @@ There are two choices for the key bindings, the original style and
 a rogue-like style.  You can choose which one is to be the default
 by changing the value of ROGUE_LIKE in config.h.
 
-Moria only has partial support for SYS III and VMS.  It probably won't
-compile and run under these systems without a bit of work.
+Moria only has partial support for SYS III.  It probably won't
+compile and run under this system without a bit of work.
 
 If your compiler has a seven character identifier limit, the shortnam.sed
-file will solve the problem nicely.
+file should solve the problem nicely.

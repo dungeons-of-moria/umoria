@@ -1,0 +1,119 @@
+Addendum to the Moria manual
+
+Proposed Contribution.  Written by Mike Marcelais
+                                   North Carolina School of
+                                         Science And Math
+                                   mrm@odin.ncssm.edu
+                                   games@odin.ncssm.edu
+
+1.  Experience
+
+All characters receive experience during the game.  Experience
+determines your level, which determines hit points, mana points,
+spells, abilities, etc.  The amount of experience required to 
+advance a level is a base value (shown below) plus a penalty
+for race and class.
+
+1.1  Calculating Experience Levels
+
+Base Experience
+
+Lv   Exp to Adv     Lv   Exp to Adv     Lv   Exp to Adv
+ 1      10          14    1,400         27      35,000
+ 2      25          15    1,800         28      50,000
+ 3      45          16    2,300         29      75,000
+ 4      70          17    2,900         30     100,000
+ 5     100          18    3,600         31     150,000
+ 6     140          19    4,400         32     200,000
+ 7     200          20    5,400         33     300,000
+ 8     280          21    6,800         34     400,000
+ 9     380          22    8,400         35     500,000
+10     500          23   10,200         36     750,000
+11     650          24   12,500         37   1,500,000
+12     850          25   17,500         38   2,500,000
+13   1,100          26   25,000         39   5,000,000
+
+Maximum level is 40 and maximum experience is 9,999,999
+
+There are percent penalties for various races and classes to
+help even them out.  The table below lists all the penalties.
+
+      Human       0%     Warrior    0%
+      Half-Elf   10%     Mage      30%
+      Elf        20%     Priest    20%
+      Halfling   10%     Rogue      0%
+      Gnome      25%     Ranger    40%
+      Dwarf      20%     Paladin   35%
+      Half-Orc   10%
+      Half-Troll 20%
+
+For example:  For a 10'th level Gnomish Mage to achieve 11'th level
+needs:
+           500 *  1.25 * 1.30 = 812.5
+         (base) (gnome) (mage)
+
+Note:  Even for the worst case (Gnomish Ranger) it is still possible
+to achieve the 40th level.  (5,000,000*1.25*1.40=8,750,000 experience)
+
+The program internally keeps experience out to the fourth decimal place
+even though it only displays the integer portion on the screen.
+
+1.2  Getting Experience
+
+There are many ways to gain experience.  This list shows a few.
+
+1.  Defeating monsters
+2.  Disarming traps
+3.  Picking locks
+4.  Using a scroll, potion, staff, wand, or rod for the first time
+      and discovering what it did.
+5.  Casting a spell successfully for the first time.
+6.  Drinking a potion of gain experience or gain level
+
+1.3  Titles
+
+Each experience level has a title which is displayed under your name
+and class.  Below is a listing of all the titles for each level and
+class.
+
+   Warrior      Mage         Priest       Rogue        Ranger       Paladin
+ 1 Rookie       Novice       Believer     Vagabond     Runner(1st)  Gallant
+ 2 Private      Apprentice   Acolyte(1st) Footpad      Runner(2nd)  Keeper(1st)
+ 3 Soldier      Trickster-1  Acolyte(2nd) Cutpurse     Runner(3rd)  Keeper(2nd)
+ 4 Mercenary    Trickster-2  Acolyte(3rd) Robber       Strider(1st) Keeper(3rd)
+ 5 Veteran(1st) Trickster-3  Adept(1st)   Burglar      Strider(2nd) Keeper(4th)
+ 6 Veteran(2nd) Cabalist-1   Adept(2nd)   Filcher      Strider(3rd) Keeper(5th)
+ 7 Veteran(3rd) Cabalist-2   Adept(3rd)   Sharper      Scout(1st)   Keeper(6th)
+ 8 Warrior(1st) Cabalist-3   Priest(1st)  Magsman      Scout(2nd)   Keeper(7th)
+ 9 Warrior(2nd) Visionist    Priest(2nd)  Common Rogue Scout(3rd)   Keeper(8th)
+10 Warrior(3rd) Phantasmist  Priest(3rd)  Rogue(1st)   Scout(4th)   Keeper(9th)
+11 Warrior(4th) Shadowist    Priest(4th)  Rogue(2nd)   Scout(5th)   Protector-1
+12 Swordsman-1  Spellbinder  Priest(5th)  Rogue(3rd)   Courser(1st) Protector-2
+13 Swordsman-2  Illusionist  Priest(6th)  Rogue(4th)   Courser(2nd) Protector-3
+14 Swordsman-3  Evoker(1st)  Priest(7th)  Rogue(5th)   Courser(3rd) Protector-4
+15 Hero         Evoker(2nd)  Priest(8th)  Rogue(6th)   Courser(4th) Protector-5
+16 Swashbuckler Evoker(3rd)  Priest(9th)  Rogue(7th)   Courser(5th) Protector-6
+17 Myrmidon     Evoker(4th)  Curate(1st)  Rogue(8th)   Tracker(1st) Protector-7
+18 Champion-1   Conjurer     Curate(2nd)  Rogue(9th)   Tracker(2nd) Protector-8
+19 Champion-2   Theurgist    Curate(3rd)  Master Rogue Tracker(3rd) Defender-1
+20 Champion-3   Thaumaturge  Curate(4th)  Expert Rogue Tracker(4th) Defender-2
+21 Superhero    Magician     Curate(5th)  Senior Rogue Tracker(5th) Defender-3
+22 Knight       Enchanter    Curate(6th)  Chief Rogue  Tracker(6th) Defender-4
+23 Superior Knt Warlock      Curate(7th)  Prime Rogue  Tracker(7th) Defender-5
+24 Gallant Knt Sorcerer     Curate(8th)  Low Thief    Tracker(8th) Defender-6
+25 Knt Errant   Necromancer  Curate(9th)  Thief(1st)   Tracker(9th) Defender-7
+26 Guardian Knt Mage(1st)    Canon(1st)   Thief(2nd)   Guide(1st)   Defender-8
+27 Baron        Mage(2nd)    Canon(2nd)   Thief(3rd)   Guide(2nd)   Warder(1st)
+28 Duke         Mage(3rd)    Canon(3rd)   Thief(4th)   Guide(3rd)   Warder(2nd)
+29 Lord(1st)    Mage(4th)    Canon(4th)   Thief(5th)   Guide(4th)   Warder(3rd)
+30 Lord(2nd)    Mage(5th)    Canon(5th)   Thief(6th)   Guide(5th)   Warder(4th)
+31 Lord(3rd)    Wizard(1st)  Low Lama     Thief(7th)   Guide(6th)   Warder(5th)
+32 Lord(4th)    Wizard(2nd)  Lama-1       Thief(8th)   Guide(7th)   Warder(6th)
+33 Lord(5th)    Wizard(3rd)  Lama-2       Thief(9th)   Guide(8th)   Warder(7th)
+34 Lord(6th)    Wizard(4th)  Lama-3       High Thief   Guide(9th)   Warder(8th)
+35 Lord(7th)    Wizard(5th)  High Lama    Master Thief Pathfinder-1 Warder(9th)
+36 Lord(8th)    Wizard(6th)  Great Lama   Executioner  Pathfinder-2 Guardian
+37 Lord(9th)    Wizard(7th)  Patriarch    Low Assassin Pathfinder-3 Chevalier
+38 Lord Gallant Wizard(8th)  High Priest  Assassin     Ranger       Justiciar
+39 Lord Keeper  Wizard(9th)  Great Priest High AssassinHigh Ranger  Paladin
+40 Lord Noble   Wizard Lord  Noble Priest Guildmaster  Ranger Lord  High Lord

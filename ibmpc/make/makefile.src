@@ -1,0 +1,80 @@
+CFLAG =	$(FLAG)
+
+INC =	\
+	config.h\
+	constant.h\
+	externs.h\
+	types.h
+
+.c.$(OBJ):
+	cl -c $(CFLAG) -Fo$*.$(OBJ) $*.c > $*.$(REDIR)
+	..\ccthru $* $(OBJ)
+
+create.$(OBJ):		create.c $(INC)
+
+creature.$(OBJ):	creature.c $(INC)
+
+death.$(OBJ):		death.c $(INC)
+
+desc.$(OBJ):		desc.c $(INC)
+
+dungeon.$(OBJ):		dungeon.c $(INC)
+
+eat.$(OBJ):		eat.c $(INC)
+
+files.$(OBJ):		files.c $(INC)
+
+generate.$(OBJ):	generate.c $(INC)
+
+help.$(OBJ):		help.c $(INC)
+
+io.$(OBJ):		io.c $(INC)
+
+magic.$(OBJ):		magic.c $(INC)
+
+main.$(OBJ):		main.c $(INC)
+
+misc1.$(OBJ):		misc1.c $(INC)
+
+misc2.$(OBJ):		misc2.c $(INC)
+
+monsters.$(OBJ):	monsters.c $(INC)
+
+moria1.$(OBJ):		moria1.c $(INC)
+
+moria2.$(OBJ):		moria2.c $(INC)
+
+potions.$(OBJ):		potions.c $(INC)
+
+prayer.$(OBJ):		prayer.c $(INC)
+
+recall.$(OBJ):		recall.c $(INC)
+
+rnd.$(OBJ):		rnd.c $(INC)
+
+save.$(OBJ):		save.c $(INC)
+
+scrolls.$(OBJ):		scrolls.c $(INC)
+
+sets.$(OBJ):		sets.c $(INC)
+
+signals.$(OBJ):		signals.c $(INC)
+
+spells.$(OBJ):		spells.c $(INC)
+
+staffs.$(OBJ):		staffs.c $(INC)
+
+store1.$(OBJ):		store1.c $(INC)
+
+store2.$(OBJ):		store2.c $(INC)
+
+treasure.$(OBJ):	treasure.c $(INC)
+
+undef.$(OBJ):		undef.c $(INC)
+
+variable.$(OBJ):	variable.c $(INC)
+
+wands.$(OBJ):		wands.c $(INC)
+
+wizard.$(OBJ):		wizard.c $(INC)
+

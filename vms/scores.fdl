@@ -1,0 +1,19 @@
+IDENT   "12-JUL-1990 11:05:15   VAX-11 FDL Editor"
+
+SYSTEM
+        SOURCE                  "VAX/VMS"
+
+FILE
+        BEST_TRY_CONTIGUOUS     no
+        CLUSTER_SIZE            3
+        CONTIGUOUS              no
+        EXTENSION               0
+        FILE_MONITORING         no
+        GLOBAL_BUFFER_COUNT     0
+        ORGANIZATION            sequential
+        PROTECTION              (system:RWED, owner:RWED, group:, world:RW)
+
+RECORD
+        BLOCK_SPAN              yes
+        CARRIAGE_CONTROL        carriage_return
+        FORMAT                  stream_LF

@@ -1,13 +1,13 @@
-/* eat.c: food code
+/* source/eat.c: food code
 
-   Copyright (c) 1989 James E. Wilson, Robert A. Koeneke
+   Copyright (c) 1989-91 James E. Wilson, Robert A. Koeneke
 
    This software may be copied and distributed for educational, research, and
    not for profit purposes provided that this copyright and statement are
    included in all such copies. */
 
-#include "constant.h"
 #include "config.h"
+#include "constant.h"
 #include "types.h"
 #include "externs.h"
 
@@ -25,13 +25,16 @@ void eat()
   register struct flags *f_ptr;
   register struct misc *m_ptr;
   register inven_type *i_ptr;
+#ifdef ATARIST_MWC
+  int32u holder;
+#endif
 
   free_turn_flag = TRUE;
   if (inven_ctr == 0)
     msg_print("But you are not carrying anything.");
   else if (!find_range(TV_FOOD, TV_NEVER, &j, &k))
     msg_print("You are not carrying any food.");
-  else if (get_item(&item_val, "Eat what?", j, k))
+  else if (get_item(&item_val, "Eat what?", j, k, CNIL, CNIL))
     {
       i_ptr = &inventory[item_val];
       free_turn_flag = FALSE;
@@ -216,7 +219,11 @@ void eat()
       else if (!known1_p(i_ptr))
 	sample (i_ptr);
       add_food(i_ptr->p1);
+#ifdef ATARIST_MWC
+      py.flags.status &= ~(holder = PY_WEAK|PY_HUNGRY);
+#else
       py.flags.status &= ~(PY_WEAK|PY_HUNGRY);
+#endif
       prt_hunger();
       desc_remain(item_val);
       inven_destroy(item_val);

@@ -4,6 +4,11 @@
           The Dungeons of Moria                                Page 18
 
 
+               hard, therefore hard to dig through, and contains  no  valu-
+               able  metals.   Magma  and Quartz veins are softer and some-
+               times bear valuable metals and gems, shown as a `$' or a `*'
+               character.   You  can tell if the metal or gems are embedded
+               into the wall by trying to move onto  them.   If  you  can't
                move  over  them,  you'll have to dig them out.  There is an
                option which causes magma and quartz to  be  displayed  dif-
                ferently than other rock types.
@@ -17,7 +22,8 @@
 
           V  - View scoreboard.
                This command will display the contents of the score board on
-               the screen.
+               the  screen.   On  a multiuser system, typing `V' again will
+               show only those scores from the score board that are yours.
 
           a <Dir> - Aim a wand. {z - zap}
                Wands must be aimed in a direction to be  used.   Wands  are
@@ -53,12 +59,6 @@
                dropping one or all of them.  It  is  possible  to  directly
                drop things which you are wielding or wearing.
 
-          e  - Display a list of equipment being used.
-               Use the Equipment command  to  display  a  list  of  objects
-               currently  being  used by your character.  Each object has a
-               specific place where it is placed, and that only one  object
-               of each type may be used at any one time, excepting rings of
-
 
 
 
@@ -70,6 +70,11 @@
           The Dungeons of Moria                                Page 19
 
 
+          e  - Display a list of equipment being used.
+               Use the Equipment command  to  display  a  list  of  objects
+               currently  being  used by your character.  Each object has a
+               specific place where it is placed, and that only one  object
+               of each type may be used at any one time, excepting rings of
                which two can be worn, one on each hand.
 
           f <Dir> - Fire/Throw an object/use a missile weapon. {t - throw}
@@ -119,11 +124,6 @@
                object or creature shown on the screen.  Also, if a creature
                is on top of an object, the look command will describe both.
                You  can  see  creatures and objects up to 200 feet away (20
-               spaces).  You may freely use the Look  command  without  the
-               creatures getting a move on you.
-
-               Looking in a particular direction sees everything  within  a
-               cone  of  vision  which  just  overlaps the cones of the two
 
 
 
@@ -136,6 +136,11 @@
           The Dungeons of Moria                                Page 20
 
 
+               spaces).  You may freely use the Look  command  without  the
+               creatures getting a move on you.
+
+               Looking in a particular direction sees everything  within  a
+               cone  of  vision  which  just  overlaps the cones of the two
                adjacent directions.  Looking with the  null  direction  `5'
                (or `.') sees everything which there is to be seen.
 
@@ -151,8 +156,8 @@
                which the spell may be read.  Each spell  has  a  chance  of
                failure  which  starts  out  fairly large but decreases as a
                character gains levels.  If a character does not have enough
-               mana, the chance of failed is greatly increased, and he gam-
-               bles on  losing  a  point  of  constitution.   You  will  be
+               mana,  the  chance  of  failure is greatly increased, and he
+               gambles on losing a point  of  constitution.   You  will  be
                prompted for confirmation before trying to cast a spell when
                you don't have enough mana.  Since a character must read the
                spell from a book, he cannot be blind or confused when cast-
@@ -185,11 +190,6 @@
                immediately noticed, or they may be subtle and unnoticed.
 
           r  - Read a scroll.
-               To read a scroll use the Read command.  A scroll  spell  has
-               an  area  affect,  except  in  a  few cases such as identify
-               scrolls which act on other objects.  Two scrolls, the  iden-
-               tify  scroll  and the recharge scroll, have titles which can
-               be read without setting them off, and by pressing ESCAPE can
 
 
 
@@ -202,6 +202,11 @@
           The Dungeons of Moria                                Page 21
 
 
+               To read a scroll use the Read command.  A scroll  spell  has
+               an  area  affect,  except  in  a  few cases such as identify
+               scrolls which act on other objects.  Two scrolls, the  iden-
+               tify  scroll  and the recharge scroll, have titles which can
+               be read without setting them off, and by pressing ESCAPE can
                be saved for future use.
 
           s  - Search general area one turn.
@@ -251,11 +256,6 @@
                Use the identify  command  to  find  out  what  a  character
                displayed on the screen stands for.  For instance, by press-
                ing `/.', you can find out that the `.' stands for  a  floor
-               spot.   When used with a creature, the identify command will
-               tell you only what class of creature the symbol stands  for,
-               not  the  specific  creature, therefore use the look command
-               for this information.
-
 
 
 
@@ -267,6 +267,11 @@
 
           The Dungeons of Moria                                Page 22
 
+
+               spot.   When used with a creature, the identify command will
+               tell you only what class of creature the symbol stands  for,
+               not  the  specific  creature, therefore use the look command
+               for this information.
 
                If you identify the character for a creature in your monster
                memory,  you  are  also prompted to ask if you wish to see a
@@ -317,11 +322,6 @@
                such  cases  with  a description of the object to see if you
                really want to take it.
 
-           (7) Rogue like command set.  This option  controls  the  command
-               set in use.  It is off by default.
-
-           (8) Show weights in inventory.  This is off by default:  switch-
-               ing  it  on  causes  the inventory and equipment listings to
 
 
 
@@ -334,6 +334,11 @@
           The Dungeons of Moria                                Page 23
 
 
+           (7) Rogue like command set.  This option  controls  the  command
+               set in use.  It is off by default.
+
+           (8) Show weights in inventory.  This is off by default:  switch-
+               ing  it  on  causes  the inventory and equipment listings to
                include the weight of all objects.  This may  be  useful  to
                know if your pack is getting too heavy.
 
@@ -344,6 +349,19 @@
                which are subsequently displayed.  To display all  minerals,
                just  move  the  map  around  a  bit  with  the  `Where' (or
                `Locate') command.
+
+           (10)Beep for invalid character.  This is on  by  default.   When
+               on,  the program will beep for most invalid characters, such
+               as trying to choose a spell that you  haven't  learned  yet.
+               When off, there are no such beeps.
+
+           (11)Display rest/repeat counts.  This is on  by  default.   When
+               on,  the  program  will  progessively  display the remaining
+               turns left while resting, and for  repeated  commands.   For
+               those  trying to play over a 2400 bps or less connection, or
+               for those playing on very slow microcomputers, turning  this
+               off  will  make resting and repeated commands work much fas-
+               ter.
 
                The setting of all these options persist in  your  savefile,
                even after you die.
@@ -370,6 +388,18 @@
 
           {  - Inscribe an object.
                This command can be used to inscribe any short string on  an
+
+
+
+
+
+
+
+
+
+          The Dungeons of Moria                                Page 24
+
+
                object.  Inscriptions are limited to twelve characters.  The
                inscription applies only to the particular object, it is not
                automatically  transferred  to  all  similar objects.  Under
@@ -388,18 +418,6 @@
           <  - Go up an up staircase.
                If you move onto an up staircase you may use the `<' command
                to  go up one level.  There is always one staircase going up
-
-
-
-
-
-
-
-
-
-          The Dungeons of Moria                                Page 24
-
-
                on every level except for the town level (this does not mean
                it's  easy  to find).  Going up a staircase will always take
                you to a new dungeon area except for the town  level,  which
@@ -436,6 +454,18 @@
                options.  If it is set, then you move diagonally through the
                corner.  This gives you maximum speed (as is nice if you are
                fleeing a hidden creature).  On the other hand, this  option
+
+
+
+
+
+
+
+
+
+          The Dungeons of Moria                                Page 25
+
+
                should not be set if you want more careful coverage (as when
                you are searching) so that you take two  moves  through  the
                corner.
@@ -454,17 +484,6 @@
                if the "stop when map changes" option is set, you will stop.
                Again,  this  is  an  option for nervous players, after all,
                there may be a dragon on the new screen.
-
-
-
-
-
-
-
-
-
-          The Dungeons of Moria                                Page 25
-
 
           (7)  Anything typed during a run causes the  run  to  stop.   The
                character  causing  this to occur is ignored.  It is best to
@@ -503,6 +522,16 @@
           on the town level.
 
 
+
+
+
+
+
+
+
+          The Dungeons of Moria                                Page 26
+
+
           6.2.  Supplies
 
           Your character  will  begin  his  adventure  with  some  supplies
@@ -519,22 +548,12 @@
           enter prices you will pay (or accept) for some object.   You  can
           either enter the absolute amount, or precede a number with a plus
           or minus sign to give a positive or negative  increment  on  your
-          previous  offer.   But  be  warned  that the owners can easily be
-
-
-
-
-
-
-
-
-
-          The Dungeons of Moria                                Page 26
-
-
-          insulted, and may even throw you out for a while  if  you  insult
-          them  too often.  To enter a store, simply move onto the entrance
-          represented by the numbers 1 through 6.
+          previous  offer.   If  you  have previously given an increment or
+          decrement amount, you can just type RETURN, and the program  will
+          use the last increment amount that you typed.  But be warned that
+          the owners can easily be insulted, and may even throw you out for
+          a  while  if you insult them too often.  To enter a store, simply
+          move onto the entrance represented by the numbers 1 through 6.
 
           If you consistently bargain well in a store, that is,  you  reach
           the  final  offer  much more often than not, then the store owner
@@ -567,6 +586,18 @@
           If  it is a good object, they will add it to their inventory.  If
           it was a bad bargain, they simply throw the item  away.   In  any
           case,  you  may  receive some knowledge of the item if another is
+
+
+
+
+
+
+
+
+
+          The Dungeons of Moria                                Page 27
+
+
           encountered.
 
           The General Store
@@ -586,17 +617,6 @@
                fashioned.   Hand  and  missile weapons may be purchased and
                sold  here,  along  with  arrows,  bolts,  and  shots.   The
                entrance to the Weaponsmith's is a `3'.
-
-
-
-
-
-
-
-
-
-          The Dungeons of Moria                                Page 27
-
 
           The Temple
                The Temple deals in healing and restoration potions, as well
@@ -632,6 +652,18 @@
           A character must wield a torch or lamp in order to supply his own
           light.   Once  a  torch  or  lamp  has only 50 or less turns left
           before burning out, the message "Your  light  is  growing  faint"
+
+
+
+
+
+
+
+
+
+          The Dungeons of Moria                                Page 28
+
+
           will  be  displayed  at  random intervals.  Once a torch is burnt
           out, it is useless and can be dropped.  A lamp or lantern can  be
           refilled  with  oil  by  using the Fill `F' command.  You must of
@@ -652,18 +684,6 @@
           creature in a wall normally though by trying  to  move  into  the
           wall  space containing the creature.  However, in order to attack
           an invisible creature in a wall, you must tunnel  into  the  wall
-
-
-
-
-
-
-
-
-
-          The Dungeons of Moria                                Page 28
-
-
           containing  the creature.  If you just try to move into the wall,
           you will bump your head and look quite silly.
 
@@ -697,8 +717,20 @@
           difficult to keep track of the capabilities of various creatures.
           Rather than forcing you to keep notes, moria automatically  keeps
           track  of  your  experiences with a particular creature.  This is
-          called the monster memory.  You monster memory recalls  the  par-
-          ticular  attacks  of  each creature (whether or not technically a
+          called the  monster  memory.   You  monster  memory  recalls  the
+
+
+
+
+
+
+
+
+
+          The Dungeons of Moria                                Page 29
+
+
+          particular attacks of each creature (whether or not technically a
           monster) which you have suffered, as well  as  recalling  if  you
           have  observed  them  to  multiply  or  move erratically, or drop
           treasure, or many other attributes.
@@ -718,18 +750,6 @@
           wield  a  weapon  before  it can be used in a fight.  A secondary
           weapon can be kept by wielding it and  then  using  the  exchange
           command.   A  secondary  weapon is not in use, simply ready to be
-
-
-
-
-
-
-
-
-
-          The Dungeons of Moria                                Page 29
-
-
           switched with the current weapon if needed.
 
           Weapons have two main characteristics, their ability to  hit  and
@@ -754,13 +774,27 @@
 
           Missile booster weapons, such as bows, have their characteristics
           added  to those of the missile used, if the proper weapon/missile
-          combination is used.
+          combination is used.  Also, these weapons will multiply the  base
+          damage  of  the missile by a number from 2 to 4, depending on the
+          strength of the weapon.  This multiplier is displayed as `(*#)'.
 
           Although you receive any magical bonuses an  unidentified  weapon
           may possess when you wield it, those bonuses will not be added in
           to the displayed values of to-hit and to-dam  on  your  character
           sheet.   You must identify the weapon before the displayed values
           reflect the real values used.
+
+
+
+
+
+
+
+
+
+
+          The Dungeons of Moria                                Page 30
+
 
           Finally, some rare weapons have  special  abilities.   These  are
           called  ego  weapons,  and  are feared by great and meek.  An ego
@@ -784,18 +818,6 @@
                the normal damage when used against a heat based creature.
 
           FT - Flame Tongue.
-
-
-
-
-
-
-
-
-
-          The Dungeons of Moria                                Page 30
-
-
                A magical weapon of flame that delivers a heat  critical  to
                cold  based creatures.  It will inflict one and a half times
                the normal damage when used against cold based  or  inflamm-
@@ -828,6 +850,18 @@
                This will inflict twice the normal  amount  of  damage  when
                used against an animal.
 
+
+
+
+
+
+
+
+
+
+          The Dungeons of Moria                                Page 31
+
+
           SU - Slay Undead.
                A Slay Undead weapon is a special purpose weapon whose  sole
                intent  is  to  destroy all forms of undead.  This weapon is
@@ -850,18 +884,6 @@
           Chests too may be bashed open, but be warned  that  the  careless
           smashing  of  a  chest  often ruins the contents.  Bashing open a
           chest will not disarm any traps it may contain,  but  does  allow
-
-
-
-
-
-
-
-
-
-          The Dungeons of Moria                                Page 31
-
-
           the strong and ignorant to see what is inside.
 
           Finally, a creature may be bashed.   If  a  shield  is  currently
@@ -894,6 +916,18 @@
           with their description.  Armor that is found within  the  dungeon
           must  be  identified  before these values will be displayed.  All
           armor always has the base armor class  displayed,  to  which  the
+
+
+
+
+
+
+
+
+
+          The Dungeons of Moria                                Page 32
+
+
           bonus is added.  It is always possible to figure this out anyway,
           by watching the effect it has on your displayed armor class.
 
@@ -916,18 +950,6 @@
 
           RC - Resist Cold.
                A character using a resist cold object will  take  only  one
-
-
-
-
-
-
-
-
-
-          The Dungeons of Moria                                Page 32
-
-
                third damage from frost and cold.
 
           RF - Resist Fire.
@@ -960,6 +982,18 @@
                have  an  increased  intelligence,  and  will  also be given
                resistance against fire, frost, acid, and lightning.
 
+
+
+
+
+
+
+
+
+
+          The Dungeons of Moria                                Page 33
+
+
           Crown of Lordliness
                This is the great crown of the  priests.   The  wearer  will
                have an increased wisdom and charisma.
@@ -979,19 +1013,6 @@
           Crown of Beauty
                This  crown  looks  impressive,  and  will   increase   your
                charisma, but is otherwise not useful.
-
-
-
-
-
-
-
-
-
-
-
-
-          The Dungeons of Moria                                Page 33
 
 
           9.  Objects Found In The Dungeon
@@ -1027,6 +1048,18 @@
           first  be  able  to  carry an object before you can use it.  Some
           objects, such as chests, are very complex.  Chests contain  other
           objects  and  may  be  trapped,  and/or locked.  Read the list of
+
+
+
+
+
+
+
+
+
+          The Dungeons of Moria                                Page 34
+
+
           player commands carefully for a further understanding of chests.
 
           One item in particular will be discussed  here.   The  scroll  of
@@ -1048,18 +1081,6 @@
           "damned".   Also,  occasionally you will notice that something in
           your inventory or equipment list seems to be magical.  High level
           characters  are  much  more  likely to notice this than beginning
-
-
-
-
-
-
-
-
-
-          The Dungeons of Moria                                Page 34
-
-
           characters.  When you do notice this, the item in  question  will
           be inscribed with "magik".
 
@@ -1094,6 +1115,17 @@
           ability of the tool.  A pick or shovel also has pluses to hit and
           damage, and can be used as a weapon.
 
+
+
+
+
+
+
+
+
+          The Dungeons of Moria                                Page 35
+
+
           When a vein of quartz or magma is located, the  character  should
           wield  his  pick or shovel and begin digging out a section.  When
           that section is removed, he should locate another section of  the
@@ -1111,19 +1143,6 @@
           dungeon  by  using  various magical spells and items.  So it is a
           very good idea to always carry some kind of  digging  tool,  even
           when you are not planning on tunneling for treasure.
-
-
-
-
-
-
-
-
-
-
-
-
-          The Dungeons of Moria                                Page 35
 
 
           9.3.  Staircases, Secret Doors, Passages, and Rooms
@@ -1161,6 +1180,18 @@
           the Balrog.  The Balrog will appear on most  levels  after  level
           49, so don't go down there until you are ready for him.
 
+
+
+
+
+
+
+
+
+
+          The Dungeons of Moria                                Page 36
+
+
           The Balrog cannot be killed in some of the easier methods used on
           normal  creatures.   Because  of  the  Balrog's  cunning, he will
           teleport away to another level if a spell such as destruction  is
@@ -1180,18 +1211,6 @@
 
           If your character falls below 0 hit points, he has died and  can-
           not  be  restored.   A  tombstone  showing information about your
-
-
-
-
-
-
-
-
-
-          The Dungeons of Moria                                Page 36
-
-
           character will be displayed.  You are also  permitted  to  get  a
           record  of  your  character,  and all your equipment (identified)
           either on the screen or in a file.
@@ -1208,25 +1227,6 @@
           There are rumors of moria Wizards which,  if  asked  nicely,  can
           explain  details  of  the  moria  game  that  seem complicated to
           beginners.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

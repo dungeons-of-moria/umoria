@@ -1,9 +1,0 @@
-cbreak()
-{
-	return;
-}
-
-nocbreak()
-{
-	return;
-}

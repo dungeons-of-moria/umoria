@@ -28,7 +28,11 @@
 
 	a.	Set the directory to "{NewDir}"
 	b.	Build (cmd-B) "Moria" (or execute "BuildProgram Moria").
-	c.  If Moria doesn't seem to work right, it is probably because
+	c.	If Moria doesn't seem to work right, it is probably because
 		the resource and text files weren't appended to the application.
 		Either delete the file Moria and rebuild, or else execute by hand
 		the commands which append the resources and text files.
+
+*********
+
+Moria can also be built with Think C now.

@@ -1,11 +1,12 @@
-/* rnd.c: random number generator
+/* source/rnd.c: random number generator
 
-   Copyright (c) 1989 James E. Wilson
+   Copyright (c) 1989-91 James E. Wilson
 
    This software may be copied and distributed for educational, research, and
    not for profit purposes provided that this copyright and statement are
    included in all such copies. */
 
+#include "config.h"
 #include "constant.h"
 #include "types.h"
 
@@ -45,8 +46,8 @@
    as m can be represented as an integer.
  */
 
-/* a good random number generator, correct on any machine with 32 bit integers,
-   this algorithm is from:
+/* a good random number generator, correct on any machine with 32 bit
+   integers, this algorithm is from:
 
 Stephen K. Park and Keith W. Miller, "Random Number Generators:
 	Good ones are hard to find", Communications of the ACM, October 1988,

@@ -1,11 +1,24 @@
+/* mac/macconf.c: configuration routines
+
+   Copyright (c) 1989-1991 Curtis McCauley, James E. Wilson
+
+   This software may be copied and distributed for educational, research, and
+   not for profit purposes provided that this copyright and statement are
+   included in all such copies. */
+
+#ifndef THINK_C
 #include <Types.h>
 #include <Quickdraw.h>
 #include <Controls.h>
 #include <Dialogs.h>
 
 #include <ScrnMgr.h>
+#else
+#include "ScrnMgr.h"
+#endif
 
 #include "constant.h"
+#include "types.h"
 
 #define rogueFlag				'-r\0\0'
 #define originalFlag			'-o\0\0'
@@ -24,8 +37,14 @@
 #define teGrpRect				8
 #define teDfltBrdr				10
 
-int GetCommandSet(hndl)
-int **hndl;
+#ifdef THINK_C
+/* Cover up error in THINK C library.  */
+#define ok	OK
+#define cancel	Cancel
+#endif
+
+int32 GetCommandSet(hndl)
+int32 **hndl;
 
 {
 	DialogPtr theDialog;
@@ -35,7 +54,7 @@ int **hndl;
 	short itsType;
 	Handle itsHandle;
 	Rect itsRect;
-	int h, v;
+	int32 h, v;
 
 	theDialog = GetNewDialog(cmdsetDlgID, nil, (WindowPtr) -1);
 
@@ -45,10 +64,12 @@ int **hndl;
 	GetDItem(theDialog, ok, &itsType, &itsHandle, &itsRect);
 	InsetRect(&itsRect, -4, -4);
 
-	SetDItem(theDialog, cmdsetDfltBrdr, userItem, (Handle) DrawDefaultBorder, &itsRect);
+	SetDItem(theDialog, cmdsetDfltBrdr, userItem,
+		 (Handle) DrawDefaultBorder, &itsRect);
 
 	GetDItem(theDialog, cmdsetGrpRect, &itsType, &itsHandle, &itsRect);
-	SetDItem(theDialog, cmdsetGrpRect, itsType, (Handle) DrawGroupRect, &itsRect);
+	SetDItem(theDialog, cmdsetGrpRect, itsType, (Handle) DrawGroupRect,
+		 &itsRect);
 
 	theItem = (**hndl == originalFlag) ? cmdsetOriginal : cmdsetRogue;
 	GetDItem(theDialog, theItem, &itsType, &theHandle, &itsRect);
@@ -58,7 +79,8 @@ int **hndl;
 
 	do {
 		ModalDialog(nil, &itemHit);
-		if ( (itemHit != theItem) && ((itemHit == cmdsetOriginal) || (itemHit == cmdsetRogue)) ) {
+		if ((itemHit != theItem)
+		    && ((itemHit == cmdsetOriginal) || (itemHit == cmdsetRogue))) {
 			SetCtlValue((ControlHandle) theHandle, false);
 			theItem = itemHit;
 			GetDItem(theDialog, theItem, &itsType, &theHandle, &itsRect);
@@ -74,8 +96,8 @@ int **hndl;
 	return(itemHit == ok);
 }
 
-int GetTextEditor(hndl)
-int **hndl;
+int32 GetTextEditor(hndl)
+int32 **hndl;
 
 {
 	DialogPtr theDialog;
@@ -85,10 +107,10 @@ int **hndl;
 	short itsType;
 	Handle itsHandle;
 	Rect itsRect;
-	int h, v;
+	int32 h, v;
 	char *p, *q;
 	Str255 fc;
-	static int editors[teFCCount-1] = { 'MACA', 'MSWD' };
+	static int32 editors[teFCCount-1] = { 'MACA', 'MSWD' };
 
 	theDialog = GetNewDialog(teDlgID, nil, (WindowPtr) -1);
 
@@ -98,7 +120,8 @@ int **hndl;
 	GetDItem(theDialog, ok, &itsType, &itsHandle, &itsRect);
 	InsetRect(&itsRect, -4, -4);
 
-	SetDItem(theDialog, teDfltBrdr, userItem, (Handle) DrawDefaultBorder, &itsRect);
+	SetDItem(theDialog, teDfltBrdr, userItem, (Handle) DrawDefaultBorder,
+		 &itsRect);
 
 	GetDItem(theDialog, teGrpRect, &itsType, &itsHandle, &itsRect);
 	SetDItem(theDialog, teGrpRect, itsType, (Handle) DrawGroupRect, &itsRect);
@@ -114,7 +137,7 @@ int **hndl;
 	SetCtlValue((ControlHandle) theHandle, true);
 
 	if (theItem == teFCLast) {
-		p = fc;
+		p = (char *)fc;
 		q = (char *) *hndl;
 		*p++ = 4;
 		*p++ = *q++;
@@ -130,7 +153,8 @@ int **hndl;
 
 		do {
 			ModalDialog(nil, &itemHit);
-			if ( (itemHit != theItem) && (itemHit >= teFCFirst) && (itemHit <= teFCLast) ) {
+			if ( (itemHit != theItem) && (itemHit >= teFCFirst)
+			    && (itemHit <= teFCLast) ) {
 				SetCtlValue((ControlHandle) theHandle, false);
 				theItem = itemHit;
 				GetDItem(theDialog, theItem, &itsType, &theHandle, &itsRect);
@@ -144,7 +168,7 @@ int **hndl;
 			else {
 				GetIText(fcHandle, fc);
 				p = (char *) *hndl;
-				q = fc + 1;
+				q = (char *)fc + 1;
 				*p++ = (fc[0] > 0) ? *q++ : ' ';
 				*p++ = (fc[0] > 1) ? *q++ : ' ';
 				*p++ = (fc[0] > 2) ? *q++ : ' ';

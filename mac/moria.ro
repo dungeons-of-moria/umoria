@@ -1,0 +1,560 @@
+/NOSCROLL
+MacMoria.rsrc
+RSRCMRIA
+
+* #include "Types.r"
+
+INCLUDE ScrnMgr.rsrc
+INCLUDE MacMoria.dump.rsrc
+INCLUDE MacMoria.misc.rsrc
+
+* type 'MRIA' as 'STR ';
+
+* type 'CNFG' (256 : 257) {
+* 	longint;
+* };
+
+*type 'TEXT' {
+*	string;
+*};
+
+*resource 'MRIA' (0) {
+*	"Moria 5.4 for the Macintosh"
+*};
+
+TYPE MRIA = GNRL
+ , 0
+.P
+Moria 5.4 for the Macintosh
+
+
+TYPE BNDL
+MRIA, 128 (32)
+MRIA 0
+ICN#
+0 128 1 129 2 130
+FREF
+0 128 1 129 2 130 3 131 4 132
+			;;/* [1] Appilication */
+			;;/* [2] Save file */
+			;;/* [3] Info files */
+			;;/* [4] Score file */
+			;;/* [5] Config file */
+
+TYPE FREF
+Application, 128 (32)
+APPL 0
+
+TYPE FREF
+Save Files, 129 (32)
+SAVE 1
+
+TYPE FREF
+Info Files, 130 (32)
+TEXT 2
+
+TYPE FREF
+Score File, 131 (32)
+SCOR 2
+
+TYPE FREF
+Config File, 132 (32)
+CNFG 2
+
+
+TYPE ICON = GNRL
+Application, 128 (32)
+.H
+ 0001 0000 0002 8000 0004 4000 0008 2000
+ 0010 1000 0022 0800 0045 0400 0088 8200
+ 0105 1500 0202 A880 0440 4040 08A8 8020
+ 1115 0010 248A 0028 4051 3F44 9120 C08A
+ 4000 8051 2441 3022 1001 C814 091E 7F8F
+ 0402 3007 0241 0007 0100 8007 0080 6007
+ 0040 1FE7 0020 021F 0010 0407 0008 0800
+ 0004 1000 0002 2000 0001 4000 0000 8000
+
+
+TYPE ICON = GNRL
+Command Set, 256 (32)
+.H
+ 0000 0000 0000 0000 0000 0000 0000 0000
+ 0000 0000 0000 0000 0000 0000 0000 0000
+ 0000 0000 7FFF FFFE 8000 0001 9AAA AAA9
+ 8000 0001 9555 5559 8000 0001 9AAA AAA9
+ 8000 0001 857F FF51 8000 0001 8000 0001
+ 7FFF FFFE 0000 0000 0000 0000 0000 0000
+ 0000 0000 0000 0000 0000 0000 0000 0000
+ 0000 0000 0000 0000 0000 0000 0000 0000
+
+
+TYPE ICON = GNRL
+TEXT Editor, 257 (32)
+.H
+ 0FFF FE00 0800 0300 0800 0280 0800 0240
+ 0800 0220 0800 0210 0800 03F8 0800 0008
+ 0800 0008 0807 C008 080F E008 0818 3008
+ 0830 1808 0820 1808 0800 1808 0800 3008
+ 0800 6008 0800 C008 0801 8008 0801 8008
+ 0801 8008 0801 8008 0800 0008 0801 8008
+ 0803 C008 0801 8008 0800 0008 0800 0008
+ 0800 0008 0800 0008 0800 0008 0FFF FFF8
+
+
+TYPE ICN# = GNRL
+Application, 128 (32)
+.H
+*		/* [1] */
+ 0001 0000 0002 8000 0004 4000 0008 2000
+ 0010 1000 0022 0800 0045 0400 0088 8200
+ 0105 1500 0202 A880 0440 4040 08A8 8020
+ 1115 0010 248A 0028 4051 3F44 9120 C08A
+ 4000 8051 2441 3022 1001 C814 091E 7F8F
+ 0402 3007 0241 0007 0100 8007 0080 6007
+ 0040 1FE7 0020 021F 0010 0407 0008 0800
+ 0004 1000 0002 2000 0001 4000 0000 8000
+*		/* [2] */
+ 0001 0000 0003 8000 0007 C000 000F E000
+ 001F F000 003F F800 007F FC00 00FF FE00
+ 01FF FF00 03FF FF80 07FF FFC0 0FFF FFE0
+ 1FFF FFF0 3FFF FFF8 7FFF FFFC FFFF FFFE
+ 7FFF FFFF 3FFF FFFE 1FFF FFFC 0FFF FFFF
+ 07FF FFFF 03FF FFFF 01FF FFFF 00FF FFFF
+ 007F FFFF 003F FE1F 001F FC07 000F F800
+ 0007 F000 0003 E000 0001 C000 0000 8000
+
+TYPE ICN# = GNRL
+Save Files, 129 (32)
+.H
+*		/* [1] */
+ 0FFF FE00 0800 0300 0800 0280 0800 0240
+ 0800 0220 0800 0210 0800 03F8 0800 0008
+ 0800 0008 087F FE08 08FF FF08 0980 0188
+ 099F F988 09B0 0988 09B1 2988 0992 A988
+ 0991 2988 09B0 4988 09B0 0988 099F F988
+ 0980 0188 09FF FF88 09FF FF88 0980 0188
+ 0800 0008 0912 6488 09B5 5548 0955 65C8
+ 0915 5548 0912 5548 0800 0008 0FFF FFF8
+*		/* [2] */
+ 0FFF FE00 0FFF FF00 0FFF FF80 0FFF FFC0
+ 0FFF FFE0 0FFF FFF0 0FFF FFF8 0FFF FFF8
+ 0FFF FFF8 0FFF FFF8 0FFF FFF8 0FFF FFF8
+ 0FFF FFF8 0FFF FFF8 0FFF FFF8 0FFF FFF8
+ 0FFF FFF8 0FFF FFF8 0FFF FFF8 0FFF FFF8
+ 0FFF FFF8 0FFF FFF8 0FFF FFF8 0FFF FFF8
+ 0FFF FFF8 0FFF FFF8 0FFF FFF8 0FFF FFF8
+ 0FFF FFF8 0FFF FFF8 0FFF FFF8 0FFF FFF8
+
+TYPE ICN# = GNRL
+Aux Files, 130 (32)
+.H
+*		/* [1] */
+ 0FFF FE00 0800 0300 0800 0280 09FB AE40
+ 0800 0220 0800 0210 09F7 7BF8 0800 0008
+ 0800 0008 09BB EDC8 0800 0008 0800 0008
+ 09F7 B7C8 0800 0008 0800 0008 09B5 FDC8
+ 0800 0008 0800 0008 0977 B6C8 0800 0008
+ 0800 0008 09EB B748 0800 0008 0800 0008
+ 0800 0008 0912 6488 09B5 5548 0955 65C8
+ 0915 5548 0912 5548 0800 0008 0FFF FFF8
+*		/* [2] */
+ 0FFF FE00 0FFF FF00 0FFF FF80 0FFF FFC0
+ 0FFF FFE0 0FFF FFF0 0FFF FFF8 0FFF FFF8
+ 0FFF FFF8 0FFF FFF8 0FFF FFF8 0FFF FFF8
+ 0FFF FFF8 0FFF FFF8 0FFF FFF8 0FFF FFF8
+ 0FFF FFF8 0FFF FFF8 0FFF FFF8 0FFF FFF8
+ 0FFF FFF8 0FFF FFF8 0FFF FFF8 0FFF FFF8
+ 0FFF FFF8 0FFF FFF8 0FFF FFF8 0FFF FFF8
+ 0FFF FFF8 0FFF FFF8 0FFF FFF8 0FFF FFF8
+
+
+TYPE DLOG
+About, 128 (32)
+About UMoria
+46 26 304 274
+Invisible NoGoAway
+0
+0
+128
+
+
+TYPE DITL
+About, 128
+4
+
+button
+224 192 247 235
+OK
+
+userItem disabled
+232 224 241 233
+
+staticText disabled
+16 8 248 184
+^0\0D\0D++
+Programmers:\0D++
+  Robert Alan Koeneke\0D++
+  Jimmey Wayne Todd\0D\0D++
+UNIX Port:\0D++
+  James E. Wilson\0D\0D++
+Macintosh Port:\0D++
+  Curtis W. McCauley\0D++
+  Benjamin E. Schreiber
+
+iconItem disabled
+16 195 48 227
+128
+
+
+TYPE STR
+About Title, 128
+About Moria\C9
+
+
+TYPE CNFG = GNRL
+Command Set, 256 (32)
+.S
+-o\00\00
+
+
+TYPE DLOG
+Command Set, 256 (32)
+Command Set
+42 34 218 404
+Invisible NoGoAway
+0
+0
+256
+
+
+TYPE DITL
+Command Set, 256 (32)
+9
+
+button
+24 296 48 352
+OK
+
+button
+64 296 88 352
+Cancel
+
+radioButton
+40 24 56 200
+Rogue-Like Commands
+
+radioButton
+64 24 80 200
+Original Commands
+
+staticText disabled
+112 72 168 352
+Choose the desired command set.  The change will take effect when you start the next game.
+
+userItem disabled
+16 16 96 232
+
+staticText
+8 24 24 104
+Choose one
+
+userItem disabled
+32 336 40 344
+
+iconItem disabled
+112 16 144 48
+256
+
+
+TYPE CNFG = GNRL
+TEXT Editor, 257 (32)
+.S
+MACA
+
+
+TYPE DLOG
+TEXT Editor, 257 (32)
+TEXT Editor
+42 34 226 426
+Invisible NoGoAway
+0
+0
+257
+
+
+TYPE DITL
+TEXT Editor, 257 (32)
+11
+
+button
+24 320 48 376
+OK
+
+button
+64 320 88 376
+Cancel
+
+radioButton
+40 24 56 200
+MacWrite
+
+radioButton
+64 24 80 176
+Microsoft Word
+
+radioButton
+88 24 104 176
+Other:  File Creator
+
+editText disabled
+88 176 104 240
+
+
+staticText disabled
+136 72 176 376
+Choose what kind of documents you want Moria to create ++
+when it prints to a file
+
+userItem disabled
+16 8 120 264
+
+staticText
+8 24 24 104
+Choose One
+
+userItem disabled
+32 360 40 368
+
+iconItem disabled
+136 16 168 48
+257
+
+
+TYPE DLOG
+Save Quit or Cancel, 258 (32)
+Save Quit or Cancel
+40 40 168 318
+Invisible NoGoAway
+0
+0
+258
+
+
+TYPE DITL
+Save Quit or Cancel, 258 (32)
+6
+
+button
+64 16 84 76
+Save
+
+button
+96 16 116 76
+Quit
+
+button
+96 200 116 260
+Cancel
+
+userItem disabled
+64 200 80 216
+
+staticText disabled
+8 56 48 264
+What do you want to do with the game in progress?
+
+iconItem disabled
+8 16 40 48
+0
+
+
+
+TYPE MENU
+File, 129
+File
+New/N
+Open\C9/O
+(-
+Save/S
+Save As\C9
+(-
+Quit/Q
+
+
+TYPE MENU
+File (No Keys), 229
+File
+New
+Open\C9
+(-
+Save
+Save As\C9
+(-
+Quit
+
+
+TYPE MENU
+Moria, 133
+Moria
+Help\C9/H
+Command Set\C9
+TEXT Editor\C9
+(-
+High Scores\C9
+
+
+TYPE MENU
+Moria (No keys), 233
+Moria
+Help\C9
+Command Set\C9
+TEXT Editor\C9
+(-
+High Scores\C9
+
+
+TYPE DLOG
+Mac Help, 512 (32)
+Help
+40 34 310 496
+Invisible NoGoAway
+0
+0
+512
+
+
+TYPE DITL
+Mac Help, 512 (32)
+6
+
+button
+16 392 36 452
+OK
+
+userItem disabled
+24 432 32 440
+
+userItem disabled
+48 8 264 440
+
+ctrlItem
+48 439 264 455
+512
+
+staticText Disabled
+8 52 40 380
+^0
+
+iconItem disabled
+8 8 40 40
+128
+
+
+TYPE CNTL
+Mac Help Scroll Bar, 512 (32)
+Scroll
+0 0 216 16
+Visible
+16
+0
+0 0 0
+
+
+*type 'DFPR' {
+*	unsigned hex integer = $600A;					/* branch around header */
+*	unsigned hex integer;							/* flags */
+*	unsigned literal longint;						/* resource type */
+*	integer;										/* resource id */
+*	integer;										/* version */
+*	unsigned hex integer = $4EF9;					/* jump instruction */
+*	unsigned hex longint = $0;						/* target address for jump */
+*};
+
+*type 'LDEF' as 'DFPR';
+
+TYPE LDEF = GNRL
+High Scores, 514 (32)
+.H
+600A
+0000
+.S
+LDEF
+.I
+514
+0
+.H
+4EF9
+0000
+
+
+TYPE DLOG
+High Scores, 514 (32)
+High Scores
+40 34 327 526
+Invisible NoGoAway
+0
+0
+514
+
+TYPE DITL
+High Scores, 514 (32)
+5
+
+button
+15 422 35 482
+OK
+
+userItem Disabled
+24 464 32 472
+
+userItem Disabled
+48 2 281 490
+
+staticText Disabled
+8 56 40 336
+Moria High Scores\0D Positions ^0 to ^1
+
+iconItem Disabled
+8 8 40 40
+128
+
+
+TYPE ALRT
+General Error, 1024 (32)
+42 42 148 416
+1024
+7777
+
+TYPE DITL
+General Error, 1024 (32)
+2
+
+button
+80 304 100 364
+OK
+
+staticText Disabled
+7 68 71 364
+^0
+
+
+*resource 'SIZE' (-1) {
+*	dontSaveScreen,
+*	acceptSuspendResumeEvents,
+*	enableOptionSwitch,
+*	canBackground,
+*	multiFinderAware,
+*	backgroundAndForeground,
+*	dontGetFrontClicks,
+*	ignoreChildDiedEvents,
+*	not32BitCompatible,
+*	reserved,
+*	reserved,
+*	reserved,
+*	reserved,
+*	reserved,
+*	reserved,
+*	reserved,
+*	375 * 1024,
+*	375 * 1024
+*};

@@ -1,12 +1,21 @@
+/* mac/macrsrc.c: code for handling C data as resources
+
+   Copyright (c) 1989-91 Curtis McCauley, James E. Wilson
+
+   This software may be copied and distributed for educational, research, and
+   not for profit purposes provided that this copyright and statement are
+   included in all such copies. */
+
 #include <stdio.h>
 
-#include "constant.h"
 #include "config.h"
+#include "constant.h"
 #include "types.h"
 #include "externs.h"
 #include "macrsrc.h"
 
 restable_type restable[MAX_RESOURCES] = {
+#ifndef RSRC_PART2
 	{
 		#ifdef RSRC
 			(char *) object_list, "Object List",
@@ -17,15 +26,17 @@ restable_type restable[MAX_RESOURCES] = {
 		MAX_OBJECTS, sizeof(treasure_type),
 		treasure_strproc,
 		TRUE									},
+#endif
+#ifndef RSRC_PART1
 	{
 		#ifdef RSRC
-			(char *) c_list, "Creature List",
+			(char *) background, "Background Table",
 		#else
-			(char **) &c_list, NULL,
+			(char **) &background, NULL,
 		#endif
-		monsterRsrc, c_list_id,
-		MAX_CREATURES, sizeof(creature_type),
-		creature_strproc,
+		backgroundRsrc, background_id,
+		MAX_BACKGROUND, sizeof(background_type),
+		background_strproc,
 		TRUE									},
 	{
 		#ifdef RSRC
@@ -39,6 +50,16 @@ restable_type restable[MAX_RESOURCES] = {
 		TRUE									},
 	{
 		#ifdef RSRC
+			(char *) player_title, "Player Titles",
+		#else
+			(char **) &player_title, NULL,
+		#endif
+		charPtrRsrc, player_title_id,
+		MAX_CLASS * MAX_PLAYER_LEVEL, sizeof(char *),
+		char_ptr_strproc,
+		TRUE									},
+	{
+		#ifdef RSRC
 			(char *) race, "Race List",
 		#else
 			(char **) &race, NULL,
@@ -49,13 +70,13 @@ restable_type restable[MAX_RESOURCES] = {
 		TRUE									},
 	{
 		#ifdef RSRC
-			(char *) background, "Background Table",
+			(char *) c_list, "Creature List",
 		#else
-			(char **) &background, NULL,
+			(char **) &c_list, NULL,
 		#endif
-		backgroundRsrc, background_id,
-		MAX_BACKGROUND, sizeof(background_type),
-		background_strproc,
+		monsterRsrc, c_list_id,
+		MAX_CREATURES, sizeof(creature_type),
+		creature_strproc,
 		TRUE									},
 	{
 		#ifdef RSRC
@@ -66,16 +87,6 @@ restable_type restable[MAX_RESOURCES] = {
 		ownerRsrc, owners_id,
 		MAX_OWNERS, sizeof(owner_type),
 		owner_strproc,
-		TRUE									},
-	{
-		#ifdef RSRC
-			(char *) player_title, "Player Titles",
-		#else
-			(char **) &player_title, NULL,
-		#endif
-		charPtrRsrc, player_title_id,
-		MAX_CLASS * MAX_PLAYER_LEVEL, sizeof(char *),
-		char_ptr_strproc,
 		TRUE									},
 	{
 		#ifdef RSRC
@@ -146,9 +157,11 @@ restable_type restable[MAX_RESOURCES] = {
 		charPtrRsrc, syllables_id,
 		MAX_SYLLABLES, sizeof(char *),
 		char_ptr_strproc,
-		TRUE									}
+		TRUE								}
+#endif
 };
 
+#ifdef MACGAME
 memtable_type memtable[MAX_PTRS] = {
 	{ (char **) &cave,
 		MAX_HEIGHT * MAX_WIDTH, sizeof(cave_type),
@@ -160,7 +173,9 @@ memtable_type memtable[MAX_PTRS] = {
 		MAX_CREATURES, sizeof(recall_type),
 		TRUE										},
 };
+#endif
 
+#ifndef RSRC_PART1
 restart_type restart_vars[MAX_RESTART] = {
 
 	/* treasure.c */
@@ -171,7 +186,6 @@ restart_type restart_vars[MAX_RESTART] = {
 	/* variable.c */
 	{ (char *) &weapon_heavy, 			sizeof(weapon_heavy)			},
 	{ (char *) &pack_heavy, 			sizeof(pack_heavy)				},
-	{ (char *) &log_index, 				sizeof(log_index)				},
 	{ (char *) &total_winner, 			sizeof(total_winner)			},
 	{ (char *) &character_generated,	sizeof(character_generated)		},
 	{ (char *) &character_saved, 		sizeof(character_saved)			},
@@ -194,8 +208,7 @@ restart_type restart_vars[MAX_RESTART] = {
 	{ (char *) &find_ignore_doors, 		sizeof(find_ignore_doors)		},
 	{ (char *) &doing_inven, 			sizeof(doing_inven)				},
 	{ (char *) &screen_change, 			sizeof(screen_change)			},
-	{ (char *) &search_flag, 			sizeof(search_flag)				},
-	{ (char *) &eof_flag, 				sizeof(eof_flag)				},
+	{ (char *) &eof_flag,				sizeof (eof_flag)				},
 	{ (char *) &wait_for_more, 			sizeof(wait_for_more)			},
 	{ (char *) &spell_learned, 			sizeof(spell_learned)			},
 	{ (char *) &spell_worked, 			sizeof(spell_worked)			},
@@ -206,7 +219,9 @@ restart_type restart_vars[MAX_RESTART] = {
 	{ (char *) &light_flag,				sizeof(light_flag)				}
 
 };
+#endif
 
+#ifdef MACGAME
 clrtable_type clrtable[MAX_CLRS] = {
 
 	/* these are not initialized, but probably ought to be */
@@ -230,9 +245,11 @@ clrtable_type clrtable[MAX_CLRS] = {
 	{ (char *) &panel_col_max, 			sizeof(panel_col_max)			},
 	{ (char *) &panel_row_prt, 			sizeof(panel_row_prt)			},
 	{ (char *) &panel_col_prt, 			sizeof(panel_col_prt)			},
-	{ (char *) &py,						sizeof(py)						}
+	{ (char *) &py,						sizeof(py)						},
+	{ (char *) &max_score,				sizeof (max_score)				}
 
 };
+#endif
 
 /* String procs are used by the DumpRes package to make sure that	*/
 /* char *'s imbedded in the stucts are dumped or loaded properly.	*/

@@ -3,7 +3,7 @@ Received: from hp-sde.sde.hp.com by ernie.Berkeley.EDU (5.61/1.36)
 	id AA19235; Tue, 27 Feb 90 08:03:44 -0800
 Received: from hp-lvld.lvld.hp.com by hp-sde.sde.hp.com with SMTP
 	(15.11.1.3/15.5+IOS 3.13) id AA03131; Tue, 27 Feb 90 08:03:15 pst
-Received: from hplvla.HP.COM by hplisa.lvld.hp.com; Tue, 27 Feb 90 09:04:05 mst
+Received: from hplvla.HP.COM by hplisa.lvld.hp.com; Tue, 27 Feb 90 09:04:05mst
 Received: from hplvre.HP.COM by hplvla.HP.COM; Tue, 27 Feb 90 09:04:43 mst
 Received: by hplvre.HP.COM; Tue, 27 Feb 90 09:04:41 mst
 Date: Tue, 27 Feb 90 09:04:41 mst
@@ -20,7 +20,7 @@ Status: RO
 > > the first.
 >
 > This is a possibility.  However, it has to be done carefully to avoid
-> problems.  There must be a limit on how high digging ability can be increased,
+> problems.  There must be a limit on how high digging ability can be increase
 > just like weapons/armor are effectively limited to +10.  I think +10 is
 > ridiculously high for digging though, perhaps limiting it to 5 would be OK.
 
@@ -62,24 +62,24 @@ attributes.
 
 Art Boyne, boyne@hplvla.hp.com
 
-From ucbvax!decwrl!ames!think!samsung!usc!cs.utexas.edu!tut.cis.ohio-state.edu!pt.cs.cmu.edu!dsl.pitt.edu!pitt!unix.cis.pitt.edu!dtate Tue Feb 27 11:26:40 PST 1990
+From ucbvax!decwrl!ames!think!samsung!usc!cs.utexas.edu!tut.cis.ohio-state.ed
 Status: RO
 
 Article 4487 of rec.games.moria:
-Path: ucbvax!decwrl!ames!think!samsung!usc!cs.utexas.edu!tut.cis.ohio-state.edu!pt.cs.cmu.edu!dsl.pitt.edu!pitt!unix.cis.pitt.edu!dtate
+Path: ucbvax!decwrl!ames!think!samsung!usc!cs.utexas.edu!tut.cis.ohio-state.e
 >From: dtate@unix.cis.pitt.edu (David M Tate)
 Newsgroups: rec.games.moria
 Subject: Re: Enhancements to Umoria5.0 : the One Ring
 Keywords: One Ring
 Message-ID: <22578@unix.cis.pitt.edu>
 Date: 27 Feb 90 16:46:31 GMT
-References: <1990Feb22.005217.22427@cs.rochester.edu> <562@auvax.AthabascaU.CA>
+References: <1990Feb22.005217.22427@cs.rochester.edu> <562@auvax.AthabascaU.CA
 Reply-To: dtate@unix.cis.pitt.edu (David M Tate)
 Distribution: all
 Organization: Univ. of Pittsburgh, Comp & Info Services
 Lines: 47
 
-In article <562@auvax.AthabascaU.CA> kevinc@cs.AthabascaU.CA (Kevin Crocker) writes:
+In article <562@auvax.AthabascaU.CA> kevinc@cs.AthabascaU.CA (Kevin Crocker)
 >
 >Remember, at least some of the Elven rings still existed, the Dwarven
 >rings are presumably lost in the Mines of Moria, HINT!, HINT!, and of
@@ -91,10 +91,10 @@ Actually, if I remember my Ring-lore correctly, the seven were all taken by
 Sauron.  The last was the ring of Thrain, which was taken from Thror (or was
 it Thrain?) by Sauron in the dungeons of Dol Guldor.  No more Rings of Power
 floating around in Moria.  The only rings still "available" are the three
-rings (Narya, Nenya, Vilya) of the Elves, made by Celebrimbor.  But I'm getting
+rings (Narya, Nenya, Vilya) of the Elves, made by Celebrimbor. But I'm getting
 pedantic...
 
-I, too, would love to see an even-more-Tolkienish descendant of Moria... if you
+I, too, would love to see an even-more-Tolkienish descendant of Moria...if you
 get tired of Moria, maybe you could bash your way across Mirkwood to deal with
 Smaug or the Necromancer.  Having Nazgul would add some spice, too.  And for
 artifacts, you could find a palantir, which would let you look at any desired

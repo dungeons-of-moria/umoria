@@ -1,13 +1,17 @@
-/* recall.c: print out monster memory info			-CJS-
+/* source/recall.c: print out monster memory info			-CJS-
 
-   Copyright (c) 1989 James E. Wilson, Christopher J. Stuart
+   Copyright (c) 1989-91 James E. Wilson, Christopher J. Stuart
 
    This software may be copied and distributed for educational, research, and
    not for profit purposes provided that this copyright and statement are
    included in all such copies. */
 
-#include "constant.h"
+#ifdef __TURBOC__
+#include	<stdio.h>
+#endif /* __TURBOC__ */
+ 
 #include "config.h"
+#include "constant.h"
 #include "types.h"
 #include "externs.h"
 
@@ -155,12 +159,14 @@ int mon_num;
   register creature_type *cp;
   register int i, k;
   register int32u j;
+  int32 templong;
   int mspeed;
   int32u rcmove, rspells;
   int16u rcdefense;
   recall_type save_mem;
 #ifdef ATARIST_MWC
   int32u holder;
+  int32u holder2;
 #endif
 
   mp = &c_recall[mon_num];
@@ -192,10 +198,14 @@ int mon_num;
       pu = cp->damage;
       while (*pu != 0 && j < 4)
 	{
-	  mp->r_attacks[j] = MAX_UCHAR;
+	  /* Turbo C needs a 16 bit int for the array index.  */
+	  mp->r_attacks[(int)j] = MAX_UCHAR;
 	  j++;
 	  pu++;
 	}
+      /* A little hack to enable the display of info for Quylthulgs.  */
+      if (mp->r_cmove & CM_ONLY_MAGIC)
+	mp->r_attacks[0] = MAX_UCHAR;
     }
   roffpline = 0;
   roffp = roffbuf;
@@ -249,14 +259,18 @@ int mon_num;
     }
   else if (mp->r_kills)
     {
+      /* The Balrog is a level 100 monster, but appears at 50 feet.  */
+      i = cp->level;
+      if (i > WIN_MON_APPEAR)
+	i = WIN_MON_APPEAR;
       (void) sprintf(temp, " It is normally found at depths of %d feet",
-		     cp->level*50);
+		     i * 50);
       roff(temp);
       k = TRUE;
     }
   /* the c_list speed value is 10 greater, so that it can be a int8u */
   mspeed = cp->speed - 10;
-  if ((rcmove & CM_ALL_MV_FLAGS) || (rcmove & CM_RANDOM_MOVE))
+  if (rcmove & CM_ALL_MV_FLAGS)
     {
       if (k)
 	roff(", and");
@@ -268,7 +282,8 @@ int mon_num;
       roff(" moves");
       if (rcmove & CM_RANDOM_MOVE)
 	{
-	  roff(desc_howmuch[(rcmove & CM_RANDOM_MOVE) >> 3]);
+	  /* Turbo C needs a 16 bit int for the array index.  */
+	  roff(desc_howmuch[(int)((rcmove & CM_RANDOM_MOVE) >> 3)]);
 	  roff(" erratically");
 	}
       if (mspeed == 1)
@@ -306,6 +321,17 @@ int mon_num;
 	}
       roff(" does not deign to chase intruders");
     }
+  if (rcmove & CM_ONLY_MAGIC)
+    {
+      if (k)
+	roff (", but");
+      else
+	{
+	  roff (" It");
+	  k = TRUE;
+	}
+      roff (" always moves and attacks by using magic");
+    }
   if(k)
     roff(".");
   /* Kill it once to know experience, and quality (evil, undead, monsterous).
@@ -320,15 +346,16 @@ int mon_num;
       if (cp->cdefense & CD_UNDEAD)
 	roff(" undead");
 
-      /* calculate the integer exp part */
-      i = (long)cp->mexp * cp->level / py.misc.lev;
+      /* calculate the integer exp part, can be larger than 64K when first
+	 level character looks at Balrog info, so must store in long */
+      templong = (long)cp->mexp * cp->level / py.misc.lev;
       /* calculate the fractional exp part scaled by 100,
 	 must use long arithmetic to avoid overflow */
       j = (((long)cp->mexp * cp->level % py.misc.lev) * (long)1000 /
 	   py.misc.lev+5) / 10;
 
-      (void) sprintf(temp, " creature is worth %d.%02ld point%s", i,
-		     j, (i == 1 && j == 0 ? "" : "s"));
+      (void) sprintf(temp, " creature is worth %ld.%02ld point%s", templong,
+		     j, (templong == 1 && j == 0 ? "" : "s"));
       roff(temp);
 
       if (py.misc.lev / 10 == 1) p = "th";
@@ -349,17 +376,35 @@ int mon_num;
   /* Spells known, if have been used against us. */
   k = TRUE;
   j = rspells;
+#ifdef ATARIST_MWC
+  holder = CS_BREATHE;
+  holder2 = CS_BR_LIGHT;
+  for (i = 0; j & holder; i++)
+#else
   for (i = 0; j & CS_BREATHE; i++)
+#endif
     {
+#ifdef ATARIST_MWC
+      if (j & (holder2 << i))
+#else
       if (j & (CS_BR_LIGHT << i))
+#endif
 	{
+#ifdef ATARIST_MWC
+	  j &= ~(holder2 << i);
+#else
 	  j &= ~(CS_BR_LIGHT << i);
+#endif
 	  if (k)
 	    {
 	      roff(" It can breathe ");
 	      k = FALSE;
 	    }
+#ifdef ATARIST_MWC
+	  else if (j & holder)
+#else
 	  else if (j & CS_BREATHE)
+#endif
 	    roff(", ");
 	  else
 	    roff(" and ");
@@ -379,7 +424,12 @@ int mon_num;
 	  j &= ~(CS_TEL_SHORT << i);
 	  if (k)
 	    {
+#ifdef ATARIST_MWC
+	      holder2 = CS_BREATHE;
+	      if (rspells & holder2)
+#else
 	      if (rspells & CS_BREATHE)
+#endif
 		roff(", and is also");
 	      else
 		roff(" It is");
@@ -397,7 +447,12 @@ int mon_num;
 	  roff(desc_spell[i]);
 	}
     }
+#ifdef ATARIST_MWC
+  holder = CS_BREATHE|CS_SPELLS;
+  if (rspells & holder)
+#else
   if (rspells & (CS_BREATHE|CS_SPELLS))
+#endif
     {
       if ((mp->r_spells & CS_FREQ) > 5)
 	{	/* Could offset by level */
@@ -419,17 +474,35 @@ int mon_num;
   /* Do we know how clever they are? Special abilities. */
   k = TRUE;
   j = rcmove;
+#ifdef ATARIST_MWC
+  holder = CM_SPECIAL;
+  holder2 = CM_INVISIBLE;
+  for (i = 0; j & holder; i++)
+#else
   for (i = 0; j & CM_SPECIAL; i++)
+#endif
     {
+#ifdef ATARIST_MWC
+      if (j & (holder2 << i))
+#else
       if (j & (CM_INVISIBLE << i))
+#endif
 	{
+#ifdef ATARIST_MWC
+	  j &= ~(holder2 << i);
+#else
 	  j &= ~(CM_INVISIBLE << i);
+#endif
 	  if (k)
 	    {
 	      roff(" It can ");
 	      k = FALSE;
 	    }
+#ifdef ATARIST_MWC
+	  else if (j & holder)
+#else
 	  else if (j & CM_SPECIAL)
+#endif
 	    roff(", ");
 	  else
 	    roff(" and ");
@@ -504,7 +577,12 @@ int mon_num;
       roff(temp);
     }
   /* Do we know what it might carry? */
+#ifdef ATARIST_MWC
+  holder = CM_CARRY_OBJ|CM_CARRY_BOLD;
+  if (rcmove & holder)
+#else
   if (rcmove & (CM_CARRY_OBJ|CM_CARRY_GOLD))
+#endif
     {
       roff(" It may");
 #ifdef ATARIST_MWC
@@ -541,10 +619,18 @@ int mon_num;
 	  (void) sprintf(temp, " up to %ld", j);
 	  roff(temp);
 	}
+#ifdef ATARIST_MWC
+      if (rcmove & (holder = CM_CARRY_OBJ))
+#else
       if (rcmove & CM_CARRY_OBJ)
+#endif
 	{
 	  roff(p);
+#ifdef ATARIST_MWC
+	  if (rcmove & (holder = CM_CARRY_GOLD))
+#else
 	  if (rcmove & CM_CARRY_GOLD)
+#endif
 	    {
 	      roff(" or treasure");
 	      if (j > 1)
@@ -562,7 +648,8 @@ int mon_num;
   /* k is the total number of known attacks, used for punctuation */
   k = 0;
   for (j = 0; j < 4; j++)
-    if (mp->r_attacks[j])
+    /* Turbo C needs a 16 bit int for the array index.  */
+    if (mp->r_attacks[(int)j])
       k++;
   pu = cp->damage;
   /* j counts the attacks as printed, used for punctuation */

@@ -1,0 +1,38 @@
+This directory contains two simple utilities for dealing with score files.
+
+The first, prscore, will simply print a list of every score in the given
+scorefile to standard output.  The second, delscore, will send a copy of the
+scorefile to standard output, except that the nth entry will be deleted.
+
+If you wish to delete an entry from your scorefile, use them as follows.
+Run "prscore scorefile" to see every entry in the scorefile.  Note the index
+(i.e. rank) of the entry you want to delete.  Then run "delscore scorefile
+n > tmp.score" where 'n' is the number of the entry you want to delete.
+Then run "prscore tmp.score" to ensure that the scorefile is OK.  You
+can then copy the tmp.score file over your current scorefile.
+
+Note: do not try to run "delscore scorefile n > scorefile".  You will lose
+your scorefile if you do this.
+
+ERRORS:
+1) This has not been well tested.  It may not work for everyone.  It probably
+   won't compile on every machine that umoria currently supports without
+   a few changes.
+
+2) If people are playing umoria while you use these utilties to edit the
+   scorefile, you may lose an entry when copying the new scorefile over the
+   old.  These utilities really should lock the scorefile, and then do their
+   work inplace.  Meanwhile, to be safe, only do this when no one is playing
+   (you can use the hours file to force this), or else do this really really
+   fast.
+
+3) It includes parts of save.c to make compilation easier.  This may cause
+   this to fail if save.c is modified and these programs aren't.  It really
+   should be linked with save.o.
+
+4) It should prompt for the output file name, and then verify that the output
+   file and the input file are different, to prevent people from accidently
+   destroying their scorefile.  (Or, this can also be fixed by doing all work
+   in place.)
+
+

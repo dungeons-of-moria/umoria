@@ -1,0 +1,12 @@
+CFLAG =	$(FLAG)
+
+INC =	ms_ansi.h
+
+.c.$(OBJ):
+	cl -c $(CFLAG) -Fo$*.$(OBJ) $*.c > $*.$(REDIR)
+	..\ccthru $* $(OBJ)
+
+ms_ansi.$(OBJ):		ms_ansi.c $(INC)
+
+ms_misc.$(OBJ):		ms_misc.c $(INC)
+

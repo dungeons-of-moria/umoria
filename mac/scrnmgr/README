@@ -1,0 +1,5 @@
+The *.r files are input files for MPW's Rez program.
+The *.ro files are input files for the old resource compiler distributed
+with Think C.
+
+The *.r files are better than the *.ro files.

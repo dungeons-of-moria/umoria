@@ -1,7 +1,7 @@
 
 
 
-          MORIA(6)                       AIX                       MORIA(6)
+          MORIA(6)                                                 MORIA(6)
 
 
 
@@ -9,7 +9,7 @@
                moria - a dungeon game
 
           SYNOPSIS
-               moria [ -o ] [ -r ] [ -s ] [ -n ] [ -w ] [ savefile ]
+               moria [ -o ] [ -r ] [ -s ] [ -S ] [ -n ] [ -w ] [ savefile ]
 
           DESCRIPTION
                Moria plays a dungeon game with you.  It lets you generate a
@@ -48,16 +48,16 @@
                ride defaults stored in the savefile.  If these options are
                given multiple times, only the last one will take effect.
 
-               If you specify -s, moria prints a list of the twenty top
-               scorers and exits.
+               If you specify -s, moria prints all of the scores in the
+               score file and exits.  On a multiuser system, if you specify
+               -S, moria prints prints only those scores belonging to you
+               and then exits.
 
                If you specify -w, moria will start up in wizard mode.  You
                can resurrect a dead character by using this option when
                starting the game.  Resurrected characters are teleported to
                the town level and given zero hitpoints.  Wizard mode is
                intended for debugging the game, and for experimenting with
-               new features.  Any other use is considered cheating.  Games
-               played with wizard mode are not scored.
 
 
           Rev.                                                       Page 1
@@ -67,9 +67,12 @@
 
 
 
-          MORIA(6)                       AIX                       MORIA(6)
+          MORIA(6)                                                 MORIA(6)
 
 
+
+               new features.  Any other use is considered cheating.  Games
+               played with wizard mode are not scored.
 
           AUTHORS
                The original version of Moria was written in VMS/Pascal by
@@ -79,18 +82,15 @@
                Berkeley.
 
           BUGS
-               Occasionally, invisible invincible monsters are created.
-               This happens most often when fighting oozes.
-
                A suspended game that gets a hangup signal will die without
                creating a save file.
-
-               The score file is not implemented.
 
                Rerolling with a % at the class prompt not implemented.
 
                For a more comprehensive list, see the ERRORS file in the
                source distribution.
+
+
 
 
 

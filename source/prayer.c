@@ -1,13 +1,13 @@
-/* prayer.c: code for priest spells
+/* source/prayer.c: code for priest spells
 
-   Copyright (c) 1989 James E. Wilson, Robert A. Koeneke
+   Copyright (c) 1989-91 James E. Wilson, Robert A. Koeneke
 
    This software may be copied and distributed for educational, research, and
    not for profit purposes provided that this copyright and statement are
    included in all such copies. */
 
-#include "constant.h"
 #include "config.h"
+#include "constant.h"
 #include "types.h"
 #include "externs.h"
 
@@ -21,6 +21,9 @@ void pray()
   register struct misc *m_ptr;
   register struct flags *f_ptr;
   register inven_type *i_ptr;
+#ifdef ATARIST_MWC
+  int32u holder;
+#endif
 
   free_turn_flag = TRUE;
   if (py.flags.blind > 0)
@@ -35,7 +38,7 @@ void pray()
     msg_print ("But you are not carrying anything!");
   else if (!find_range(TV_PRAYER_BOOK, TV_NEVER, &i, &j))
     msg_print ("You are not carrying any Holy Books!");
-  else if (get_item(&item_val, "Use which Holy Book?", i, j))
+  else if (get_item(&item_val, "Use which Holy Book?", i, j, CNIL, CNIL))
     {
       result = cast_spell("Recite which prayer?", item_val, &choice, &chance);
       if (result < 0)
@@ -77,7 +80,7 @@ void pray()
 		  (void) slow_poison();
 		  break;
 		case 9:
-		  if (get_dir(NULL, &dir))
+		  if (get_dir(CNIL, &dir))
 		    (void) confuse_monster(dir, char_row, char_col);
 		  break;
 		case 10:
@@ -102,7 +105,11 @@ void pray()
 		      /* only clear flag for items that are wielded or worn */
 		      if (i_ptr->tval >= TV_MIN_WEAR
 			  && i_ptr->tval <= TV_MAX_WEAR)
+#ifdef ATARIST_MWC
+			i_ptr->flags &= ~(holder = TR_CURSED);
+#else
 			i_ptr->flags &= ~TR_CURSED;
+#endif
 		    }
 		  break;
 		case 16:
@@ -114,7 +121,7 @@ void pray()
 		  (void) cure_poison();
 		  break;
 		case 18:
-		  if (get_dir(NULL, &dir))
+		  if (get_dir(CNIL, &dir))
 		    fire_ball(GF_HOLY_ORB, dir, char_row, char_col,
 			      (int)(damroll(3, 6)+py.misc.lev),
 			      "Black Sphere");

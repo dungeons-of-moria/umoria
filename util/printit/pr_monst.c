@@ -1,4 +1,12 @@
-/* written by Carlton Hommel */
+/* util/printit/pr_monst.c: pretty print monster info
+
+   Copyright (c) 1990-1991 Carlton Hommel, James E. Wilson
+
+   This software may be copied and distributed for educational, research, and
+   not for profit purposes provided that this copyright and statement are
+   included in all such copies. */
+
+#include "config.h"
 #include "constant.h"
 #include "types.h"
 
@@ -9,7 +17,8 @@ main()
     int i;
     creature_type *c;
 
-    printf("     Lvl(Ep) [  HD, AC]\tspd aaf/{sleep}\t\t    Name\tDamage(special) <Defense> {Moves} /* Spells */\n");
+    printf("     Lvl(Ep) [  HD, AC]\tspd aaf/{sleep}\t\t    Name");
+    printf("\tDamage(special) <Defense> {Moves} /* Spells */\n");
     for (i=0; i<MAX_CREATURES; i++) {
       c = &c_list[i];
       call_it(c);

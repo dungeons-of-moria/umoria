@@ -1,17 +1,14 @@
 
-This is the source for Umoria 5.2, a dungeon exploration game.  This is my
+This is the source for Umoria 5.4, a dungeon exploration game.  This is my
 second major release of the game.  These sources have been compiled
 successfully at least once in the following environments: UNIX (4.2 BSD,
 4.3 BSD, SYS V, Xenix, and many similar systems), IBM-PC (MSC 5.0,
-Turbo C 2.0), Mac (MPW 3.0), Atari ST (MWC, GCC).  VMS and Mac (Think C 4.0)
-ports are in progress.
+Turbo C 2.0), Mac (MPW 3.0, Think C 4.0), Atari ST (MWC, GCC, TC 2.0),
+Amiga (Aztec C 5.0), and VMS.
 
-I consider these to be beta sources.  That means they will probably work
-on your system, but there are no guarantees.  Also, I reserve the right to
-change game features at any time, with no advance notice, as I am still
-tuning various features in the game.  However, I will not make any major
-changes affecting savefiles, so old 5.x savefiles will continue to be
-accepted.
+I consider these to be production sources.  They should work without trouble
+on all of the systems mentioned above.  Some minor bugs must surely remain,
+but there should be no major program bugs encountered.
 
 People who are accustomed to Umoria 4.87 MUST read the file doc/FEATURES.NEW
 which documents many of the user visible features.  Don't send me bug reports
@@ -30,15 +27,17 @@ I would also appreciate receiving a copy of your changes, so that good ideas
 can be added back into my version.
 
 Jim Wilson
-1619 Josephine St., Apt #C
-Berkeley, CA  94703
+856 University Ave.
+Palo Alto, CA  94301
 USA
 
-internet electronic mail address: wilson@ernie.Berkeley.EDU
+internet electronic mail address: wilson@kithrup.com
 
 If the above addresses fail, then try contacting the alumni organizations
 of Case Western Reserve Univ (Cleveland, OH) or Univ California at Berkeley
-for my current address.  This address is expected to remain valid until 1992.
+for my current address.  These addresses are expected to remain valid for
+an unknown length of time.
 
 First revision (alpha): February 28, 1990
 Second revision (beta): May 4, 1990
+Third revision (production): March 25, 1991

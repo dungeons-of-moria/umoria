@@ -1,0 +1,295 @@
+From grabiner@zariski.harvard.edu Sun Nov 18 11:55:11 1990
+Received: from ernie.Berkeley.EDU by ylem.berkeley.edu (5.61/1.34)
+	id AA19024; Sun, 18 Nov 90 11:55:09 -0800
+Received: from brauer.harvard.edu by ernie.Berkeley.EDU (5.63/1.41)
+	id AA04665; Sun, 18 Nov 90 12:02:59 -0800
+Date: Sun, 18 Nov 90 15:03:18 EST
+From: grabiner@zariski.harvard.edu (David Grabiner)
+Message-Id: <9011182003.AA02675@brauer.harvard.edu>
+To: wilson@ernie.Berkeley.EDU
+Subject: Patch file fixed; now it compiles
+Status: RO
+
+
+I made some stupid typos in the patch file I sent you Friday.  Now
+I have compiled the program with the revise patch file, and checked
+that it works.  Here is the corrected patch file.
+
+*** misc2.c.~1~	Fri Nov 16 22:08:51 1990
+--- misc2.c	Sat Nov 17 00:10:07 1990
+***************
+*** 981,987 ****
+  	}
+      }
+    prt_num("+ To Hit    ", m_ptr->dis_th,  9, 1);
+!   prt_num("+ To Damage ", m_ptr->dis_td, 10, 1);
+    prt_num("+ To AC     ", m_ptr->dis_tac, 11, 1);
+    prt_num("  Total AC  ", m_ptr->dis_ac, 12, 1);
+  }
+--- 981,987 ----
+  	}
+      }
+    prt_num("+ To Hit    ", m_ptr->dis_th,  9, 1);
+!   prt_num("Damage Bonus", m_ptr->dis_td, 10, 1);
+    prt_num("+ To AC     ", m_ptr->dis_tac, 11, 1);
+    prt_num("  Total AC  ", m_ptr->dis_ac, 12, 1);
+  }
+***************
+*** 2253,2260 ****
+--- 2253,2273 ----
+      }
+  }
+
++ /* Add damage bonus to weapon damage			-DJG-	*/
++ /* Damage bonuses have greater effect on larger weapon damages,
++    so that daggers are not the best weapons in the game.	*/
++ int add_dam_bonus(dam, bonus)
++ register int dam, bonus;
++ {
++   /* Add 2 to dam, multiply by 1+(bonus/9), round off, subtract 2;
++      thus bonus is added unchanged to a damage of 7 points, halved
++      on 1d4 damage, and nearly doubled on 4d6 damage */
++   return ((((dam+2) * (18+(2*bonus)) + 9) / 18) - 2);
++ }
+
+  /* Special damage due to magical abilities of object	-RAK-	*/
++ /* Multipliers have been reduced here, but they now apply to
++    magical bonuses as well				-DJG-	*/
+  int tot_dam(i_ptr, tdam, monster)
+  register inven_type *i_ptr;
+  register int tdam;
+***************
+*** 2280,2286 ****
+        /* Slay Dragon  */
+        if ((m_ptr->cdefense & CD_DRAGON) && (i_ptr->flags & TR_SLAY_DRAGON))
+  	{
+! 	  tdam = tdam * 4;
+  	  r_ptr->r_cdefense |= CD_DRAGON;
+  	}
+        /* Slay Undead  */
+--- 2293,2299 ----
+        /* Slay Dragon  */
+        if ((m_ptr->cdefense & CD_DRAGON) && (i_ptr->flags & TR_SLAY_DRAGON))
+  	{
+! 	  tdam = tdam * 5 / 2;
+  	  r_ptr->r_cdefense |= CD_DRAGON;
+  	}
+        /* Slay Undead  */
+***************
+*** 2292,2298 ****
+  	       && (i_ptr->flags & TR_SLAY_UNDEAD))
+  #endif
+  	{
+! 	  tdam = tdam * 3;
+  	  r_ptr->r_cdefense |= CD_UNDEAD;
+  	}
+        /* Slay Animal  */
+--- 2305,2311 ----
+  	       && (i_ptr->flags & TR_SLAY_UNDEAD))
+  #endif
+  	{
+! 	  tdam = tdam * 2;
+  	  r_ptr->r_cdefense |= CD_UNDEAD;
+  	}
+        /* Slay Animal  */
+***************
+*** 2299,2311 ****
+        else if ((m_ptr->cdefense & CD_ANIMAL)
+  	       && (i_ptr->flags & TR_SLAY_ANIMAL))
+  	{
+! 	  tdam = tdam * 2;
+  	  r_ptr->r_cdefense |= CD_ANIMAL;
+  	}
+        /* Slay Evil     */
+        else if ((m_ptr->cdefense & CD_EVIL) && (i_ptr->flags & TR_SLAY_EVIL))
+  	{
+! 	  tdam = tdam * 2;
+  	  r_ptr->r_cdefense |= CD_EVIL;
+  	}
+        /* Frost	       */
+--- 2312,2324 ----
+        else if ((m_ptr->cdefense & CD_ANIMAL)
+  	       && (i_ptr->flags & TR_SLAY_ANIMAL))
+  	{
+! 	  tdam = tdam * 3 / 2;
+  	  r_ptr->r_cdefense |= CD_ANIMAL;
+  	}
+        /* Slay Evil     */
+        else if ((m_ptr->cdefense & CD_EVIL) && (i_ptr->flags & TR_SLAY_EVIL))
+  	{
+! 	  tdam = tdam * 3 / 2;
+  	  r_ptr->r_cdefense |= CD_EVIL;
+  	}
+        /* Frost	       */
+***************
+*** 2317,2323 ****
+  	       && (i_ptr->flags & TR_FROST_BRAND))
+  #endif
+  	{
+! 	  tdam = tdam * 3 / 2;
+  	  r_ptr->r_cdefense |= CD_FROST;
+  	}
+        /* Fire	      */
+--- 2330,2336 ----
+  	       && (i_ptr->flags & TR_FROST_BRAND))
+  #endif
+  	{
+! 	  tdam = tdam * 5 / 4;
+  	  r_ptr->r_cdefense |= CD_FROST;
+  	}
+        /* Fire	      */
+***************
+*** 2329,2335 ****
+  	       && (i_ptr->flags & TR_FLAME_TONGUE))
+  #endif
+  	{
+! 	  tdam = tdam * 3 / 2;
+  	  r_ptr->r_cdefense |= CD_FIRE;
+  	}
+      }
+--- 2342,2348 ----
+  	       && (i_ptr->flags & TR_FLAME_TONGUE))
+  #endif
+  	{
+! 	  tdam = tdam * 5 / 4;
+  	  r_ptr->r_cdefense |= CD_FIRE;
+  	}
+      }
+*** moria2.c.~1~	Fri Nov 16 21:59:04 1990
+--- moria2.c	Sat Nov 17 00:10:04 1990
+***************
+*** 751,756 ****
+--- 751,757 ----
+  	  if (i_ptr->tval != TV_NOTHING)
+  	    {
+  	      k = pdamroll(i_ptr->damage);
++ 	      k = add_dam_bonus(k, p_ptr->ptodam);
+  	      k = tot_dam(i_ptr, k, monptr);
+  	      k = critical_blow((int)i_ptr->weight, tot_tohit, k, CLA_BTH);
+  	    }
+***************
+*** 757,765 ****
+  	  else			      /* Bare hands!?  */
+  	    {
+  	      k = damroll(1, 1);
+  	      k = critical_blow(1, 0, k, CLA_BTH);
+  	    }
+- 	  k += p_ptr->ptodam;
+  	  if (k < 0)  k = 0;
+
+  	  if (py.flags.confuse_monster)
+--- 758,766 ----
+  	  else			      /* Bare hands!?  */
+  	    {
+  	      k = damroll(1, 1);
++ 	      k = add_dam_bonus(k, p_ptr->ptodam);
+  	      k = critical_blow(1, 0, k, CLA_BTH);
+  	    }
+  	  if (k < 0)  k = 0;
+
+  	  if (py.flags.confuse_monster)
+*** treasure.c.~1~	Fri Nov 16 23:53:35 1990
+--- treasure.c	Sat Nov 17 00:10:06 1990
+***************
+*** 169,175 ****
+  {"& Small Sword"		,0x00000000L,	TV_SWORD, '|',	/* 49*/
+      0,	  48,	22,   1,  75,	0,   0,	 0,   0, {1,6}	,  5},
+  {"& Two-Handed Sword (Zweihander)",0x00000000L,	TV_SWORD, '|',	/* 50*/
+!     0,	1000,	23,   1, 280,	0,   0,	 0,   0, {4,6}	, 50},
+  {"& Broken sword"		,0x00000000L,	TV_SWORD, '|',	/* 51*/
+      0,	   0,	24,   1,  75,  -2,  -2,	 0,   0, {1,1}	,  0},
+  {"& Ball and Chain"		,0x00000000L,	TV_HAFTED, '\\',/* 52*/
+--- 169,175 ----
+  {"& Small Sword"		,0x00000000L,	TV_SWORD, '|',	/* 49*/
+      0,	  48,	22,   1,  75,	0,   0,	 0,   0, {1,6}	,  5},
+  {"& Two-Handed Sword (Zweihander)",0x00000000L,	TV_SWORD, '|',	/* 50*/
+!     0,	1500,	23,   1, 280,	0,   0,	 0,   0, {4,6}	, 50},
+  {"& Broken sword"		,0x00000000L,	TV_SWORD, '|',	/* 51*/
+      0,	   0,	24,   1,  75,  -2,  -2,	 0,   0, {1,1}	,  0},
+  {"& Ball and Chain"		,0x00000000L,	TV_HAFTED, '\\',/* 52*/
+
+From grabiner@math.harvard.edu Sun Nov 25 14:41:25 1990
+Received: from zariski.harvard.edu by ylem.berkeley.edu (5.61/1.34)
+	id AA01764; Sun, 25 Nov 90 14:41:22 -0800
+Date: Sun, 25 Nov 90 17:52:59 EST
+From: grabiner@math.harvard.edu (David Grabiner)
+Message-Id: <9011252252.AA04462@zariski.harvard.edu>
+To: wilson@ylem.berkeley.edu
+Subject: Re:  When damage bonuses get added in
+Status: RO
+
+>	In this patch, I also rewrote the damage code to add all bonuses and
+>	then multiply, and compensated for the strengthening of ego weapons by
+>	halving the extra multiplier; thus, in my patch, a SD weapon does 2.5x
+>	damage, instead of 4x, and a FT does 1.25x, not 1.5x.
+>
+>This instantly makes all current spoilers obsolete, and will confuse a hell
+>of a lot of people.
+
+These same people have been confused by the present system.  Until I
+checked the source code two weeks ago, I assumed that 2x damage meant 2x
+damage, so that a blow which would have done 15 would do 45 if the
+weapon was SU.  I proposed this change in order to keep the actual
+effects, rather than the multipliers, comparable.
+
+>On the other hand, reducing the pluses for EGO weapons
+>seems less confusing since it won't obsolete the spoilers list and is less
+>noticable to the players.  I would like a good reason before making your
+>change; I will have to think about this.  A change of this magnutude
+>should probably include a change to the minor version number, i.e. 5.3.0
+>to make it easier to remember where the change occurs.
+
+If the pluses for ego weapons are reduced, the effect won't be that
+great, because you can always enchant an ego weapon up to about +8.
+Also, strength and ring of increase damage bonuses will still be
+multiplied.
+
+In particular, SU and SD will become much more powerful no matter what
+is done.  A typical SD, say 2d6, +8, does 15 normally, 36 to dragons,
+under the old system.  It would do 36 to dragons under the new system
+even if its damage bonus were reduced to +2 (adding -3 instead of +3
+when the ego weapon was generated), and at +2, it would be very easy to
+enchant.  And this does not even consider the fact that SD weapons are
+usually wielded by players who have high strength and damage bonuses
+from other items.
+
+It would be possible just to weaken ego weapons by removing all of their
+extra bonuses to hit and damage, except for DF's, which aren't helped by
+the change at all and thus should keep their bonuses, and HA's, which
+might keep +2 to hit and +2 to damage.  This would still strengthen all
+ego weapons except DF's significantly.  We might compensate for such a
+change by removing the 3/2 multiplier for the chance of ego weapons, but
+we have still given a great reward to the player who finds a HA.
+
+The only sensible alternative I can see is to leave the old system for
+calculating damage, and to compute the added damage bonus with my
+function, then multiply for ego weapons and critical hits, and then add
+in the added damage bonus.
+
+>Also, your patch makes it much harder for people to figure out how two
+>weapons compare, because the damage formula is now more complicated,
+>and can not be easily calculated from the info available on screen.
+>Fixing the damage shown by the 'C' command would help, that should be easy.
+
+The damage should probably be displayed as
+
+Damage Bonus: +8(+12)
+
+with the +8 the sum of all your bonuses, and the +12 the rounded-off
+bonus as it applies to the average damage of your current weapon (or
+to 1d1 if you have no weapon wielded).
+
+>Or maybe use a simpler formula, for example a +1 weapons does 10% more
+>damage than normal (minimum of 1 extra damage point), and a +10 weapon
+>does twice normal damage, although this is probably far too much of a
+>difference between light and heavy weapons.
+
+I thought of this before, and rejected it because this had too great an
+effect on daggers.  That's why I included the 2-point offset, so that a
++9 weapon doubles the quantity (damage+2).
+
+David Grabiner, grabiner@zariski.harvard.edu
+"We are sorry, but the number you have dialed is imaginary."
+"Please rotate your phone 90 degrees and try again."
+Disclaimer: I speak for no one and no one speaks for me...
+

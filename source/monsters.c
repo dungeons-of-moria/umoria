@@ -1,13 +1,13 @@
-/* monsters.c: monster definitions
+/* source/monsters.c: monster definitions
 
-   Copyright (c) 1989 James E. Wilson, Robert A. Koeneke
+   Copyright (c) 1989-91 James E. Wilson, Robert A. Koeneke
 
    This software may be copied and distributed for educational, research, and
    not for profit purposes provided that this copyright and statement are
    included in all such copies. */
 
-#include "constant.h"
 #include "config.h"
+#include "constant.h"
 #include "types.h"
 
 /* Following are creature arrays and variables			*/
@@ -198,7 +198,7 @@ creature_type c_list[MAX_CREATURES] = {
   20,  16, 11, 'p', {9,4}   , {6,0,0,0}			,    2},
 {"Novice Rogue"		    ,0x07020002L,0x00000000L,0x2034,    6,   5,
   20,  12, 11, 'p', {8,4}   , {5,148,0,0}		,    2},
-{"Novice Priest"	    ,0x07020002L,0x0000108CL,0x2030,    7,  10,
+{"Novice Priest"	    ,0x07020002L,0x0000108CL,0x2030,    7,   5,
   20,  10, 11, 'p', {7,4}   , {4,0,0,0}			,    2},
 {"Novice Mage"		    ,0x07020002L,0x0000089CL,0x2030,    7,   5,
   20,	6, 11, 'p', {6,4}   , {3,0,0,0}			,    2},
@@ -498,7 +498,7 @@ creature_type c_list[MAX_CREATURES] = {
   12,  46, 11, 'K', {18,8}  , {44,0,0,0}		,   19},
 {"Red Mold"		    ,0x00000001L,0x00000000L,0x3090,   64,  70,
    2,  16, 11, 'm', {17,8}  , {108,0,0,0}		,   19},
-{"Quylthulg"		    ,0x00010000L,0x00002017L,0x5000,  200,   0,
+{"Quylthulg"		    ,0x00010004L,0x00002017L,0x5000,  200,   0,
   10,	1, 11, 'Q', {4,8}   , {0,0,0,0}			,   20},
 {"Giant Red Bat"	    ,0x00000012L,0x00000000L,0x2162,   40,  20,
   12,  24, 12, 'b', {5,8}   , {30,51,51,0}		,   20},
@@ -601,7 +601,7 @@ creature_type c_list[MAX_CREATURES] = {
   15,  34, 12, 'b', {8,8}   , {133,53,53,0}		,   30},
 {"Giant Static Ant"	    ,0x0000000AL,0x00000000L,0x0002,   80,  60,
   10,  40, 11, 'a', {8,8}   , {134,0,0,0}		,   30},
-{"Grave Wight"		    ,0x0F02000AL,0x0000190AL,0x512C,  325,  30,
+{"Grave Wight"		    ,0x0F02000AL,0x0000110AL,0x512C,  325,  30,
   20,  35, 11, 'W', {12,8}  , {6,6,191,0}		,   30},
 {"Killer Slicer Beetle"	    ,0x0000000AL,0x00000000L,0x0002,  200,  30,
   14,  55, 11, 'K', {22,8}  , {48,0,0,0}		,   30},
@@ -697,7 +697,7 @@ creature_type c_list[MAX_CREATURES] = {
   10,  30,  9, 'O', {12,8}  , {128,0,0,0}		,   40},
 {"Disenchanter Worm"	    ,0x00200022L,0x00000000L,0x01B2,   30,  10,
    7,	5, 10, 'w', {10,8}  , {208,0,0,0}		,   40},
-{"Rotting Quylthulg"	    ,0x00010000L,0x00004014L,0x5000, 1000,   0,
+{"Rotting Quylthulg"	    ,0x00010004L,0x00004014L,0x5000, 1000,   0,
   20,	1, 12, 'Q', {12,8}  , {0,0,0,0}			,   40},
 {"Ancient Red Dragon"	    ,0x6F000002L,0x00801E06L,0x6015, 2750,  70,
   20, 100, 12, 'D', {105,8} , {56,56,40,0}		,   40},

@@ -1,12 +1,11 @@
-/* unix.c: UNIX dependent code.					-CJS-
+/* unix/unix.c: UNIX dependent code.					-CJS-
 
-   Copyright (c) 1989 James E. Wilson, Christopher J. Stuart
+   Copyright (c) 1989-91 James E. Wilson, Christopher J. Stuart
 
    This software may be copied and distributed for educational, research, and
    not for profit purposes provided that this copyright and statement are
    included in all such copies. */
 
-#ifdef unix
 
 /* defines NULL */
 #include <stdio.h>
@@ -15,10 +14,11 @@
 /* defines TRUE and FALSE */
 #include <curses.h>
 
-#include "constant.h"
 #include "config.h"
+#include "constant.h"
 #include "types.h"
-#include "externs.h"
+
+#ifdef unix
 
 #if defined(SYS_V) && defined(lint)
 /* for AIX, prevent hundreds of unnecessary lint errors, must define before
@@ -30,7 +30,10 @@ typedef struct { int stuff; } fpvmach;
 #include <signal.h>
 
 #ifdef M_XENIX
+#include <sys/types.h>
 #include <sys/select.h>
+/* For various selects from TCP/IP.  */
+#define bzero(addr,n)	memset((char *)addr, 0, n)
 #endif
 
 #ifndef USG
@@ -42,7 +45,12 @@ typedef struct { int stuff; } fpvmach;
 
 #ifdef USG
 #include <string.h>
+#if 0
+/* Used to include termio.h here, but this is unnecessary because it is
+   included in curses.h, and some systems fail when it gets included
+   twice.  */
 #include <termio.h>
+#endif
 #include <fcntl.h>
 #else
 #include <strings.h>
@@ -52,6 +60,11 @@ typedef struct { int stuff; } fpvmach;
 #include <sys/wait.h>
 #endif
 #endif
+
+/* This must be included after fcntl.h, which has a prototype for `open'
+   on some systems.  Otherwise, the `open' prototype conflicts with the
+   `topen' declaration.  */
+#include "externs.h"
 
 #include <pwd.h>
 #include <sys/errno.h>
@@ -276,7 +289,8 @@ char *buf;
     (void) strcpy(buf, "X");	/* Gotta have some name */
 }
 
-/* expands a tilde at the beginning of a file name to a users home directory */
+/* expands a tilde at the beginning of a file name to a users home
+   directory */
 int tilde(file, exp)
 char *file, *exp;
 {

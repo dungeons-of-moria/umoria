@@ -1,13 +1,18 @@
-/* desc.c: handle object descriptions, mostly string handling code
+/* source/desc.c: handle object descriptions, mostly string handling code
 
-   Copyright (c) 1989 James E. Wilson, Robert A. Koeneke
+   Copyright (c) 1989-91 James E. Wilson, Robert A. Koeneke
 
    This software may be copied and distributed for educational, research, and
    not for profit purposes provided that this copyright and statement are
    included in all such copies. */
 
-#include "constant.h"
+#ifdef __TURBOC__
+#include	<stdio.h>
+#include	<stdlib.h>
+#endif /* __TURBOC__ */
+ 
 #include "config.h"
+#include "constant.h"
 #include "types.h"
 #include "externs.h"
 
@@ -20,11 +25,14 @@
 #endif
 
 #if defined(LINT_ARGS)
-static void randes(void);
-static void rantitle(char *);
-static void unsample(char *);
+static void unsample(struct inven_type *);
 #else
 static void unsample();
+#endif
+
+#ifdef ATARIST_TC
+/* Include this to get prototypes for standard library functions.  */
+#include <stdlib.h>
 #endif
 
 char titles[MAX_TITLES][10];
@@ -159,8 +167,10 @@ inven_type *i_ptr;
   int16 offset;
   int8u indexx;
 
+  /* Items which don't have a 'color' are always known1, so that they can
+     be carried in order in the inventory.  */
   if ((offset = object_offset(i_ptr)) < 0)
-    return FALSE;
+    return OD_KNOWN1;
   if (store_bought_p(i_ptr))
     return OD_KNOWN1;
   offset <<= 6;
@@ -248,10 +258,17 @@ int *item;
   register int i, x1, x2;
   int j;
   register inven_type *i_ptr, *t_ptr;
+#ifdef ATARIST_MWC
+  int32u holder;
+#endif
 
   i_ptr = &inventory[*item];
 
+#ifdef ATARIST_MWC
+  if (i_ptr->flags & (holder = TR_CURSED))
+#else
   if (i_ptr->flags & TR_CURSED)
+#endif
     add_inscribe(i_ptr, ID_DAMD);
 
   if (!known1_p(i_ptr))
@@ -316,14 +333,15 @@ int pref;
   register char *basenm, *modstr;
   bigvtype tmp_val;
   vtype tmp_str, damstr;
-  int indexx, p1_use, modify;
+  int indexx, p1_use, modify, append_name, tmp;
 
   indexx = i_ptr->subval & (ITEM_SINGLE_STACK_MIN - 1);
   basenm = object_list[i_ptr->index].name;
-  modstr = NULL;
+  modstr = CNIL;
   damstr[0] = '\0';
   p1_use = IGNORED;
   modify = (known1_p(i_ptr) ? FALSE : TRUE);
+  append_name = FALSE;
   switch(i_ptr->tval)
     {
     case  TV_MISC:
@@ -338,7 +356,17 @@ int pref;
       p1_use = LIGHT;
       break;
     case  TV_SPIKE:
+      break;
     case  TV_BOW:
+      if (i_ptr->p1 == 1 || i_ptr->p1 == 2)
+	tmp = 2;
+      else if (i_ptr->p1 == 3 || i_ptr->p1 == 5)
+	tmp = 3;
+      else if (i_ptr->p1 == 4 || i_ptr->p1 == 6)
+	tmp = 4;
+      else
+	tmp = -1;
+      (void) sprintf (damstr, " (x%d)", tmp);
       break;
     case  TV_HAFTED:
     case  TV_POLEARM:
@@ -365,7 +393,10 @@ int pref;
 	  modstr = amulets[indexx];
 	}
       else
-	basenm = "& Amulet";
+	{
+	  basenm = "& Amulet";
+	  append_name = TRUE;
+	}
       p1_use = PLUSSES;
       break;
     case  TV_RING:
@@ -375,7 +406,10 @@ int pref;
 	  modstr = rocks[indexx];
 	}
       else
-	basenm = "& Ring";
+	{
+	  basenm = "& Ring";
+	  append_name = TRUE;
+	}
       p1_use = PLUSSES;
       break;
     case  TV_STAFF:
@@ -385,7 +419,10 @@ int pref;
 	  modstr = woods[indexx];
 	}
       else
-	basenm = "& Staff";
+	{
+	  basenm = "& Staff";
+	  append_name = TRUE;
+	}
       p1_use = CHARGES;
       break;
     case  TV_WAND:
@@ -395,7 +432,10 @@ int pref;
 	  modstr = metals[indexx];
 	}
       else
-	basenm = "& Wand";
+	{
+	  basenm = "& Wand";
+	  append_name = TRUE;
+	}
       p1_use = CHARGES;
       break;
     case  TV_SCROLL1:
@@ -406,7 +446,10 @@ int pref;
 	  modstr = titles[indexx];
 	}
       else
-	basenm = "& Scroll~";
+	{
+	  basenm = "& Scroll~";
+	  append_name = TRUE;
+	}
       break;
     case  TV_POTION1:
     case  TV_POTION2:
@@ -416,7 +459,10 @@ int pref;
 	  modstr = colors[indexx];
 	}
       else
-	basenm = "& Potion~";
+	{
+	  basenm = "& Potion~";
+	  append_name = TRUE;
+	}
       break;
     case  TV_FLASK:
       break;
@@ -431,10 +477,16 @@ int pref;
 	    modstr = mushrooms[indexx];
 	}
       else
-	if (indexx <= 15)
-	  basenm = "& Mushroom~";
-	else if (indexx <= 20)
-	  basenm = "& Hairy Mold~";
+	{
+	  append_name = TRUE;
+	  if (indexx <= 15)
+	    basenm = "& Mushroom~";
+	  else if (indexx <= 20)
+	    basenm = "& Hairy Mold~";
+	  else
+	    /* Ordinary food does not have a name appended.  */
+	    append_name = FALSE;
+	}
       break;
     case  TV_MAGIC_BOOK:
       modstr = basenm;
@@ -465,11 +517,11 @@ int pref;
       (void) strcpy(out_val, "Error in objdes()");
       return;
     }
-  if (modstr != NULL)
+  if (modstr != CNIL)
     (void) sprintf(tmp_val, basenm, modstr);
   else
     (void) strcpy(tmp_val, basenm);
-  if (known1_p(i_ptr))
+  if (append_name)
     {
       (void) strcat(tmp_val, " of ");
       (void) strcat(tmp_val, object_list[i_ptr->index].name);
@@ -480,7 +532,7 @@ int pref;
       insert_str(tmp_val, "~", "s");
     }
   else
-    insert_str(tmp_val, "~", NULL);
+    insert_str(tmp_val, "~", CNIL);
   if (!pref)
     {
       if (!strncmp("some", tmp_val, 4))

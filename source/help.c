@@ -1,13 +1,13 @@
-/* help.c: identify a symbol
+/* source/help.c: identify a symbol
 
-   Copyright (c) 1989 James E. Wilson, Robert A. Koeneke
+   Copyright (c) 1989-91 James E. Wilson, Robert A. Koeneke
 
    This software may be copied and distributed for educational, research, and
    not for profit purposes provided that this copyright and statement are
    included in all such copies. */
 
-#include "constant.h"
 #include "config.h"
+#include "constant.h"
 #include "types.h"
 #include "externs.h"
 
@@ -97,7 +97,7 @@ void ident_char()
       case 'c': prt("c - Giant Centipede.", 0, 0); break;
       case 'd': prt("d - Dragon.", 0, 0); break;
       case 'e': prt("e - Floating Eye.", 0, 0); break;
-      case 'f': prt("f - Giant Frog", 0, 0); break;
+      case 'f': prt("f - Giant Frog.", 0, 0); break;
       case 'g': prt("g - Golem.", 0, 0); break;
       case 'h': prt("h - Harpy.", 0, 0); break;
       case 'i': prt("i - Icky Thing.", 0, 0); break;

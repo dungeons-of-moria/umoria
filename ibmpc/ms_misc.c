@@ -1,34 +1,45 @@
-/* ms_misc.c: MSDOS dependant code
+/* ibmpc/ms_misc.c: MSDOS support code
 
-   Copyright (c) 1989 James E. Wilson, Don Kneller
+   Copyright (c) 1989-91 James E. Wilson, Don Kneller
 
    This software may be copied and distributed for educational, research, and
    not for profit purposes provided that this copyright and statement are
    included in all such copies. */
 
-#ifdef MSDOS
-#include <curses.h>
-#ifdef ANSI
-#include "ms_ansi.h"
-#endif
+#ifdef __TURBOC__
+#include	<conio.h>
+#endif /* __TURBOC__ */
+ 
 #include <string.h>
 #include <ctype.h>
 #include <time.h>
 #include <fcntl.h>
 #include <stdio.h>
+
 #include "config.h"
 #include "constant.h"
 #include "types.h"
 #include "externs.h"
 
+#ifdef MSDOS
+#ifndef USING_TCIO
+/* We don't want to include curses.h when using the tcio.c file.  */
+#include <curses.h>
+#endif
+#ifdef ANSI
+#include "ms_ansi.h"
+#endif
+
 #ifdef LINT_ARGS
 void exit(int);
-static	unsigned int ioctl(int ,int ,unsigned int );
 static FILE *fopenp(char *, char *, char *);
+static	unsigned int ioctl(int ,int ,unsigned int );
 #else
 void exit();
 static unsigned int ioctl();
 #endif
+
+extern char *getenv();
 
 #define PATHLEN	80
 char	moriatop[PATHLEN];
@@ -50,7 +61,6 @@ char	*
 getlogin()
 {
 	char	*cp;
-	char	*getenv();
 
 	if ((cp = getenv("USER")) == NULL)
 		cp = "player";
@@ -71,6 +81,10 @@ int	secs;
 }
 #endif
 
+#ifdef OLD
+/* This is the old code.  It is not strictly correct; it is retained in
+   case the correct code below is not portable.  You will also have to
+   change the declarations for these functions in externs.h.  */
 void
 error(fmt, a1, a2, a3, a4)
 char	*fmt;
@@ -91,6 +105,33 @@ int	a1, a2, a3, a4;
 	fprintf(stderr, fmt, a1, a2, a3, a4);
 	(void) sleep(2);
 }
+#else
+
+#include <stdarg.h>
+
+void
+error (char *fmt, ...)
+{
+  va_list p_arg;
+
+  va_start (p_arg, ftm);
+  fprintf (stderr, "Moria error: ");
+  vfprintf (stderr, fmt, p_arg);
+  sleep (2);
+  exit (1);
+}
+
+void
+warn(char *fmt, ...)
+{
+  va_list p_arg;
+
+  va_start(p_arg, fmt);
+  fprintf(stderr, "MORIA warning: ");
+  vfprintf(stderr, fmt, p_arg);
+  sleep(2);
+}
+#endif
 
 /* Search the path for a file of name "name".  The directory is
  * filled in with the directory part of the path.
@@ -105,7 +146,8 @@ char *name, *mode, directory[];
 	/* Try the default directory first.  If the file can't be opened,
 	 * start looking along the path.
 	 */
-	if (fp = fopen(name, mode)) {
+	fp = fopen (name, mode);
+	if (fp) {
 		directory[0] = '\0';
 		return fp;
 	}
@@ -117,7 +159,8 @@ char *name, *mode, directory[];
 		if (lastch != '\\' && lastch != '/' && lastch != ':')
 			*dp++ = '\\';
 		(void) strcpy(dp, name);
-		if (fp = fopen(directory, mode)) {
+		fp = fopen (directory, mode);
+		if (fp) {
 			*dp = '\0';
 			return fp;
 		}
@@ -155,20 +198,22 @@ msdos_init()
 			continue;
 
 		cnt = sscanf(buf, "%s", opt);
-		/* Turbo C will incorrectly read a newline from an empty line,
-		   MSC will read correctly read a NULL character */
-		if (cnt == 0 || opt[0] == '\0' || opt[0] == '\n')
+		/* Turbo C will return EOF when reading an empty line,
+		   MSC will correctly read a NULL character */
+		if (cnt == 0 ||
+#ifdef __TURBOC__
+		    cnt == EOF ||
+#endif
+		    opt[0] == '\0')
 			continue;
 
 		/* Go through possible variables
 		 */
 		if (strcmpi(opt, "GRAPHICS") == 0) {
-			cnt = sscanf(buf, "%*s%d%d\n", &arg1, &arg2);
+			cnt = sscanf(buf, "%*s%d %d\n", &arg1, &arg2);
 			if (cnt != 2)
 				warn("GRAPHICS did not contain 2 values\n");
 			else {
-				int i;
-
 				wallsym = (int8u) arg1;
 				floorsym = (int8u) arg2;
 
@@ -181,7 +226,8 @@ msdos_init()
 			if (cnt == 0)
 				warn("SAVE option requires a filename\n");
 			else {
-				if (bp = strchr(opt, ';')) {
+			        bp = strchr (opt, ';');
+				if (bp) {
 					*bp++ = '\0';
 					if (*bp == 'n' || *bp == 'N')
 						saveprompt = FALSE;
@@ -380,6 +426,9 @@ msdos_getch()
 	return ch;
 }
 
+#if 0
+/* This intro message deleted because it is obsolete.  */
+
 /* Hardcode the introductory message in */
 void
 msdos_intro()
@@ -402,15 +451,17 @@ msdos_intro()
         wmove(stdscr,6,0);
 	waddstr(stdscr,"              Jimmey Wayne Todd   / University of Oklahoma");
         wmove(stdscr,8,0);
-	waddstr(stdscr,"UNIX Port   : James E. Wilson     / UC Berkeley");
+	waddstr(stdscr,"UNIX Port   : James E. Wilson     / Cygnus Support");
         wmove(stdscr,10,0);
 	waddstr(stdscr,"MSDOS Port  : Don Kneller         / 1349 - 10th ave");
         wmove(stdscr,11,0);
-	waddstr(stdscr,"                                  / San Francisco, CA 94122");
+	waddstr(stdscr,
+		"                                  / San Francisco, CA 94122");
         wmove(stdscr,12,0);
 	waddstr(stdscr,"                                  / Dec 12, 1988");
 	pause_line(23);
 }
+#endif
 
 #ifdef PC_CURSES
 /* Seems to be a bug in PCcurses whereby it won't really clear the screen

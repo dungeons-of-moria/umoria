@@ -1,0 +1,73 @@
+Macintosh Build Instructions:
+=============================
+
+MPW C:
+------
+For MPW C, see Install.hqx (decompress it first, though).
+
+
+THINK C 4.0:
+------------
+
+Make sure the directories are organized as follows:
+
+           UMoria
+              |
+     +-----+-----+------+
+     |     |     |      |
+  files   doc   mac  source
+                 |
+             +-------+
+             |       |
+          dumpres  scrnmgr
+
+1) Unpack DumpRes1.hqx, DumpRes2.hqx, MacMoria.hqx (the project) and 
+   miscrsrc.hqx, and put them in the UMoria folder (or a folder above it).
+
+2) Build the dumped resources:
+	a) Exit :UMoria:source:config.h as follows:
+		- Uncomment #define RSRC
+		- Uncomment #define RSRC_PART1
+	b) Build DumpRes1, and run it.  When given a command line, (ccommand
+	   dialog) enter parameter MacMoria.dump.rsrc
+	c) Recomment RSRC_PART1 and uncomment RSRC_PART2, and repeat b) with
+	   DumpRes2.
+	d) Recomment all resource '#define's so that the application can be
+	   built.
+
+3) Build standard resources:
+	a) Duplicate the files :UMoria:mac:scrnmgr:scrnmgr.ro and 
+	   :UMoria:mac:moria.ro, and put the copies in the same folder as
+	   the project files.
+	b) Use RMaker (which comes with THINK C) to compile scrnmgr.ro and
+	   then moria.ro (the copies of them, that is).
+
+4) Build the application: Load and build the project MacMoria.  Then
+   build the application from it.
+
+5) Add the help files to the application's data fork:
+	a) Use ResEdit to change the type of MacMoria (the application)
+	   to 'TEXT'.
+	b) Make sure you have no active virus protection (GateKeeper Aid
+	   gave me trouble at this stage).
+	c) Load the MacMoria application into THINK C as a document.  It
+	   should be blank.
+	d) Place a copy of the contents of each of the files from 
+	   :UMoria:files in this file.  Precede each one with a line of 
+	   the form #<filename> (<filename> is just the base file name, eg
+	   news or roglcmds.hlp).
+	e) Use ResEdit to set the type back to 'APPL'.
+	f) If you are experimenting with modifications, you can avoid this
+	   lengthy process by changing the conditional in :UMoria:mac:mac.c,
+	   function mac_helpfile() to #if 0, and create a seperate text
+	   only file as described in d), named MacMoria.files.
+
+6) Prepare manual:
+	If you wish, you can load the manual (from :UMoria:doc) into a word-
+	processor, and save it more neatly formatted.
+
+
+If you have any trouble with these procedures, contact bs@cs.brandeis.edu
+(Benjamin Schreiber).
+
+	   

@@ -1,6 +1,6 @@
-/* ms_ansi.h: ANSI definitions for MSDOS
+/* ibmpc/ms_ansi.h: ANSI definitions for MSDOS
 
-   Copyright (c) 1989 James E. Wilson, Don Kneller
+   Copyright (c) 1989-91 James E. Wilson, Don Kneller
 
    This software may be copied and distributed for educational, research, and
    not for profit purposes provided that this copyright and statement are
@@ -30,6 +30,7 @@ int	(*output_nonl)(void);
 int	(*output_nl)(void);
 int	(*output_noecho)(void);
 int	(*output_echo)(void);
+int	ansi_prep (int, int, int);
 #else
 extern int	(*output_addch)();
 extern int	(*output_mvaddstr)();
@@ -49,6 +50,7 @@ extern int	(*output_nonl)();
 extern int	(*output_nl)();
 extern int	(*output_noecho)();
 extern int	(*output_echo)();
+extern int	ansi_prep();
 #endif
 
 extern int	ansi;

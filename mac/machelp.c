@@ -1,3 +1,12 @@
+/* mac/machelp.c -- support code for mac like help system
+
+   Copyright (c) 1989-1991 Curtis McCauley, James E. Wilson
+
+   This software may be copied and distributed for educational, research, and
+   not for profit purposes provided that this copyright and statement are
+   included in all such copies. */
+
+#ifndef THINK_C
 #include <Types.h>
 #include <Resources.h>
 #include <Events.h>
@@ -7,6 +16,14 @@
 #include <Dialogs.h>
 
 #include <ScrnMgr.h>
+#else
+#include <stddef.h>
+#include "ScrnMgr.h"
+#endif
+
+#include "config.h"
+#include "constant.h"
+#include "types.h"
 
 #define textType				'TEXT'
 #define textID					512
@@ -18,6 +35,12 @@
 
 #define codeEnter				0x03
 #define codeReturn				0x0D
+
+#ifdef THINK_C
+/* Cover up error in THINK C library.  */
+#define ok	OK
+#define cancel	Cancel
+#endif
 
 static ControlHandle okButton;
 
@@ -172,11 +195,12 @@ void DoMacHelp()
 	DialogPtr theDialog;
 	Handle itsHandle;
 	Handle textHandle;
+	Handle versionHandle;
 	short itemHit;
 	short itsType;
 	Rect itsRect;
 	Rect textRect;
-	int h, v;
+	int32 h, v;
 
 	theDialog = GetNewDialog(macHelpDlgID, nil, (WindowPtr) -1);
 
@@ -189,7 +213,8 @@ void DoMacHelp()
 	GetDItem(theDialog, ok, &itsType, (Handle *) &okButton, &itsRect);
 	InsetRect(&itsRect, -4, -4);
 
-	SetDItem(theDialog, dfltBorder, userItem, (Handle) DrawDefaultBorder, &itsRect);
+	SetDItem(theDialog, dfltBorder, userItem, (Handle) DrawDefaultBorder,
+		 &itsRect);
 
 	GetDItem(theDialog, scrollBar, &itsType, (Handle *) &myScrollBar, &itsRect);
 
@@ -203,6 +228,8 @@ void DoMacHelp()
 	DetachResource(textHandle);
 
 	(*myTEHandle)->hText = textHandle;
+	(*myTEHandle)->txFont = monaco;
+	(*myTEHandle)->txSize = 9;
 	TECalText(myTEHandle);
 
 	pageLines = (textRect.bottom - textRect.top) / (*myTEHandle)->lineHeight;
@@ -214,12 +241,18 @@ void DoMacHelp()
 	SetCtlMin(myScrollBar, scrollMin);
 	SetCtlMax(myScrollBar, scrollMax);
 
+	/* Get the version string.  */
+	versionHandle = GetResource(MORIA_FCREATOR, 0);
+	HLock(versionHandle);
+	ParamText(*versionHandle, NULL, NULL, NULL);
+
 	ShowWindow((WindowPtr) theDialog);
 
 	do {
 		ModalDialog(MacHelpFilter, &itemHit);
 	} while (itemHit != ok);
 
+	HUnlock(versionHandle);
 	TEDispose(myTEHandle);
 
 	SetPort(oldPort);

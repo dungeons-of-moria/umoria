@@ -1,114 +1,138 @@
 # COPTS = /nowarning
 COPTS =
 
-OBJS1 = create.o creature.o death.o desc.o dungeon.o eat.o files.o generate.o help.o io.o magic.o main.o misc1.o misc2.o monsters.o moria1.o moria2.o
-OBJS2 = potions.o prayer.o save.o scrolls.o sets.o signals.o spells.o staffs.o store1.o store2.o treasure1.o treasure2.o variables.o uexit.o wands.o wizard.o
-OBJS3 = cbreak.o getch.o
+OBJS1 = create.obj creature.obj death.obj desc.obj dungeon.obj eat.obj \
+	files.obj generate.obj getch.obj help.obj io.obj magic.obj main.obj \
+	misc1.obj misc2.obj misc3.obj misc4.obj monsters.obj
+OBJS2 = moria1.obj moria2.obj moria3.obj moria4.obj player.obj potions.obj \
+	prayer.obj recall.obj rnd.obj save.obj scrolls.obj sets.obj \
+	signals.obj spells.obj staffs.obj store1.obj store2.obj tables.obj
+OBJS3 =  treasure.obj uexit.obj variable.obj wands.obj wizard.obj
 
 moria : $(OBJS1) $(OBJS2) $(OBJS3)
 	link moria/opt
 
-cbreak.o : cbreak.c
-	cc $(COPTS) cbreak.c /obj=cbreak.o
+create.obj : create.c constant.h types.h externs.h config.h
+	cc $(COPTS) create.c /obj=create.obj
 
-create.o : create.c constants.h types.h externs.h config.h
-	cc $(COPTS) create.c /obj=create.o
+creature.obj : creature.c constant.h types.h externs.h config.h
+	cc $(COPTS) creature.c /obj=creature.obj
 
-creature.o : creature.c constants.h types.h externs.h config.h
-	cc $(COPTS) creature.c /obj=creature.o
+death.obj : death.c constant.h types.h externs.h config.h
+	cc $(COPTS) death.c /obj=death.obj
 
-death.o : death.c constants.h types.h externs.h config.h
-	cc $(COPTS) death.c /obj=death.o
+desc.obj : desc.c constant.h types.h externs.h config.h
+	cc $(COPTS) desc.c /obj=desc.obj
 
-desc.o : desc.c constants.h types.h externs.h config.h
-	cc $(COPTS) desc.c /obj=desc.o
+dungeon.obj : dungeon.c constant.h types.h externs.h config.h
+	cc $(COPTS) dungeon.c /obj=dungeon.obj
 
-dungeon.o : dungeon.c constants.h types.h externs.h config.h
-	cc $(COPTS) dungeon.c /obj=dungeon.o
+eat.obj : eat.c constant.h types.h externs.h config.h
+	cc $(COPTS) eat.c /obj=eat.obj
 
-eat.o : eat.c constants.h types.h externs.h config.h
-	cc $(COPTS) eat.c /obj=eat.o
+files.obj : files.c constant.h types.h externs.h config.h
+	cc $(COPTS) files.c /obj=files.obj
 
-files.o : files.c constants.h types.h externs.h config.h
-	cc $(COPTS) files.c /obj=files.o
+generate.obj : generate.c constant.h types.h externs.h config.h
+	cc $(COPTS) generate.c /obj=generate.obj
 
-generate.o : generate.c constants.h types.h externs.h config.h
-	cc $(COPTS) generate.c /obj=generate.o
+getch.obj : getch.c
+	cc $(COPTS) getch.c /obj=getch.obj
 
-getch.o : getch.c
-	cc $(COPTS) getch.c /obj=getch.o
+help.obj : help.c constant.h types.h externs.h config.h
+	cc $(COPTS) help.c /obj=help.obj
 
-help.o : help.c constants.h types.h externs.h config.h
-	cc $(COPTS) help.c /obj=help.o
+io.obj : io.c constant.h types.h externs.h config.h
+	cc $(COPTS) io.c /obj=io.obj
 
-io.o : io.c constants.h types.h externs.h config.h
-	cc $(COPTS) io.c /obj=io.o
+magic.obj : magic.c constant.h types.h externs.h config.h
+	cc $(COPTS) magic.c /obj=magic.obj
 
-magic.o : magic.c constants.h types.h externs.h config.h
-	cc $(COPTS) magic.c /obj=magic.o
+main.obj : main.c constant.h types.h externs.h config.h
+	cc $(COPTS) main.c /obj=main.obj
 
-main.o : main.c constants.h types.h externs.h config.h
-	cc $(COPTS) main.c /obj=main.o
+misc1.obj : misc1.c constant.h types.h externs.h config.h
+	cc $(COPTS) misc1.c /obj=misc1.obj
 
-misc1.o : misc1.c constants.h types.h externs.h config.h
-	cc $(COPTS) misc1.c /obj=misc1.o
+misc2.obj : misc2.c constant.h types.h externs.h config.h
+	cc $(COPTS) misc2.c /obj=misc2.obj
 
-misc2.o : misc2.c constants.h types.h externs.h config.h
-	cc $(COPTS) misc2.c /obj=misc2.o
+misc3.obj : misc3.c constant.h types.h externs.h config.h
+	cc $(COPTS) misc3.c /obj=misc3.obj
 
-monsters.o : monsters.c constants.h types.h config.h
-	cc $(COPTS) monsters.c /obj=monsters.o
+misc4.obj : misc4.c constant.h types.h externs.h config.h
+	cc $(COPTS) misc4.c /obj=misc4.obj
 
-moria1.o : moria1.c constants.h types.h externs.h config.h
-	cc $(COPTS) moria1.c /obj=moria1.o
+monsters.obj : monsters.c constant.h types.h config.h
+	cc $(COPTS) monsters.c /obj=monsters.obj
 
-moria2.o : moria2.c constants.h types.h externs.h config.h
-	cc $(COPTS) moria2.c /obj=moria2.o
+moria1.obj : moria1.c constant.h types.h externs.h config.h
+	cc $(COPTS) moria1.c /obj=moria1.obj
 
-potions.o : potions.c constants.h types.h externs.h config.h
-	cc $(COPTS) potions.c /obj=potions.o
+moria2.obj : moria2.c constant.h types.h externs.h config.h
+	cc $(COPTS) moria2.c /obj=moria2.obj
 
-prayer.o : prayer.c constants.h types.h externs.h config.h
-	cc $(COPTS) prayer.c /obj=prayer.o
+moria3.obj : moria3.c constant.h types.h externs.h config.h
+	cc $(COPTS) moria3.c /obj=moria3.obj
 
-save.o : save.c constants.h types.h externs.h config.h
-	cc $(COPTS) save.c /obj=save.o
+moria4.obj : moria4.c constant.h types.h externs.h config.h
+	cc $(COPTS) moria4.c /obj=moria4.obj
 
-scrolls.o : scrolls.c constants.h types.h externs.h config.h
-	cc $(COPTS) scrolls.c /obj=scrolls.o
+player.obj : player.c constant.h types.h config.h
+	cc $(COPTS) player.c /obj=player.obj
 
-sets.o : sets.c constants.h config.h
-	cc $(COPTS) sets.c /obj=sets.o
+potions.obj : potions.c constant.h types.h externs.h config.h
+	cc $(COPTS) potions.c /obj=potions.obj
 
-signals.o : signals.c constants.h types.h externs.h config.h
-	cc $(COPTS) signals.c /obj=signals.o
+prayer.obj : prayer.c constant.h types.h externs.h config.h
+	cc $(COPTS) prayer.c /obj=prayer.obj
 
-spells.o : spells.c constants.h types.h externs.h config.h
-	cc $(COPTS) spells.c /obj=spells.o
+recall.obj : recall.c constant.h types.h externs.h config.h
+	cc $(COPTS) recall.c /obj=recall.obj
 
-staffs.o : staffs.c constants.h types.h externs.h config.h
-	cc $(COPTS) staffs.c /obj=staffs.o
+rnd.obj : rnd.c constant.h types.h
+	cc $(COPTS) rnd.c /obj=rnd.obj
 
-store1.o : store1.c constants.h types.h externs.h config.h
-	cc $(COPTS) store1.c /obj=store1.o
+save.obj : save.c constant.h types.h externs.h config.h
+	cc $(COPTS) save.c /obj=save.obj
 
-store2.o : store2.c constants.h types.h externs.h config.h
-	cc $(COPTS) store2.c /obj=store2.o
+scrolls.obj : scrolls.c constant.h types.h externs.h config.h
+	cc $(COPTS) scrolls.c /obj=scrolls.obj
 
-treasure1.o : treasure1.c constants.h types.h config.h
-	cc $(COPTS) treasure1.c /obj=treasure1.o
+sets.obj : sets.c constant.h config.h
+	cc $(COPTS) sets.c /obj=sets.obj
 
-treasure2.o : treasure2.c constants.h types.h config.h
-	cc $(COPTS) treasure2.c /obj=treasure2.o
+signals.obj : signals.c constant.h types.h externs.h config.h
+	cc $(COPTS) signals.c /obj=signals.obj
 
-variables.o : variables.c constants.h types.h config.h
-	cc $(COPTS) variables.c /obj=variables.o
+spells.obj : spells.c constant.h types.h externs.h config.h
+	cc $(COPTS) spells.c /obj=spells.obj
 
-wands.o : wands.c constants.h types.h externs.h config.h
-	cc $(COPTS) wands.c /obj=wands.o
+staffs.obj : staffs.c constant.h types.h externs.h config.h
+	cc $(COPTS) staffs.c /obj=staffs.obj
 
-wizard.o : wizard.c constants.h types.h externs.h config.h
-	cc $(COPTS) wizard.c /obj=wizard.o
+store1.obj : store1.c constant.h types.h externs.h config.h
+	cc $(COPTS) store1.c /obj=store1.obj
 
-uexit.o : uexit.c
-	cc $(COPTS) uexit.c /obj=uexit.o
+store2.obj : store2.c constant.h types.h externs.h config.h
+	cc $(COPTS) store2.c /obj=store2.obj
+
+tables.obj : tables.c constant.h types.h config.h
+	cc $(COPTS) tables.c /obj=tables.obj
+
+treasure.obj : treasure.c constant.h types.h config.h
+	cc $(COPTS) treasure.c /obj=treasure.obj
+
+uexit.obj : uexit.c constant.h types.h config.h
+	cc $(COPTS) uexit.c /obj=uexit.obj
+
+variable.obj : variable.c constant.h types.h externs.h config.h
+	cc $(COPTS) variable.c /obj=variable.obj
+
+wands.obj : wands.c constant.h types.h externs.h config.h
+	cc $(COPTS) wands.c /obj=wands.obj
+
+wizard.obj : wizard.c constant.h types.h externs.h config.h
+	cc $(COPTS) wizard.c /obj=wizard.obj
+
+

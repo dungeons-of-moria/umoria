@@ -1,3 +1,5 @@
+# The MWC Makefile.
+
 # BINDIR is the directory where the moria binary will be put
 # LIBDIR is where the other files (scoreboard, news, hours) will be put
 # LIBDIR must be the same directory defined in config.h
@@ -8,19 +10,19 @@ LIBDIR = /usr/public/moriadir/
 CFLAGS = -A -V -VCSD
 CC = cc
 
-SRCS = main.c misc1.c misc2.c store1.c files.c io.c create.c desc.c\
-	generate.c sets.c dungeon.c creature.c death.c eat.c help.c magic.c\
-	potions.c prayer.c save.c staffs.c wands.c scrolls.c spells.c\
-	wizard.c store2.c signals.c moria1.c moria2.c monsters.c\
-	treasure.c variable.c rnd.c recall.c atarist.c undef.c\
-	player.c tables.c
+SRCS = main.c misc1.c misc2.c misc3.c misc4.c store1.c files.c io.c \
+	create.c desc.c generate.c sets.c dungeon.c creature.c death.c \
+	eat.c help.c magic.c potions.c prayer.c save.c staffs.c wands.c \
+	scrolls.c spells.c wizard.c store2.c signals.c moria1.c moria2.c \
+	moria3.c moria4.c monsters.c treasure.c variable.c rnd.c recall.c \
+	atarist.c player.c tables.c
 
-OBJS = main.o misc1.o misc2.o store1.o files.o io.o create.o desc.o\
-	generate.o sets.o dungeon.o creature.o death.o eat.o help.o magic.o\
-	potions.o prayer.o save.o staffs.o wands.o scrolls.o spells.o\
-	wizard.o store2.o signals.o moria1.o moria2.o monsters.o\
-	treasure.o variable.o rnd.o recall.o atarist.o undef.o curses.o\
-	player.o tables.o
+OBJS = main.o misc1.o misc2.o misc3.o misc4.o store1.o files.o io.o \
+	create.o desc.o generate.o sets.o dungeon.o creature.o death.o \
+	eat.o help.o magic.o potions.o prayer.o save.o staffs.o wands.o \
+	scrolls.o spells.o wizard.o store2.o signals.o moria1.o moria2.o \
+	moria3.o moria4.o monsters.o treasure.o variable.o rnd.o recall.o \
+	atarist.o curses.o player.o tables.o
 
 LIBFILES = moria_hours moria_help moria_orig_help moria_wiz_help \
 	moria_orig_wiz_help moria_man
@@ -83,9 +85,13 @@ magic.o: constant.h types.h externs.h config.h
 main.o: constant.h types.h externs.h config.h
 misc1.o: constant.h types.h externs.h config.h
 misc2.o: constant.h types.h externs.h config.h
+misc3.o: constant.h types.h externs.h config.h
+misc4.o: constant.h types.h externs.h config.h
 monsters.o: constant.h types.h config.h
 moria1.o: constant.h types.h externs.h config.h
 moria2.o: constant.h types.h externs.h config.h
+moria3.o: constant.h types.h externs.h config.h
+moria4.o: constant.h types.h externs.h config.h
 player.o: constant.h types.h config.h
 potions.o: constant.h types.h externs.h config.h
 prayer.o: constant.h types.h externs.h config.h

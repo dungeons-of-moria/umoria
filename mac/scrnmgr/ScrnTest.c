@@ -1,50 +1,58 @@
-/*	Copyright (C) Curtis McCauley, 1989.  All rights reserved.
+/* mac/scrnmgr/ScrnTest.c: test driver for scrnmgr code
 
-	You may copy this subroutine package freely, modify it as you desire,
-	and distribute it at will, as long as the copyright notice in the source
-	material is not disturbed, excepting that no one may use this package or
-	any part of it for commercial purposes of any kind without the express
-	written consent of its author. */
+   Copyright (c) 1989-1991 Curtis McCauley, James E. Wilson
+
+   You may copy this subroutine package freely, modify it as you desire,
+   and distribute it at will, as long as the copyright notice in the source
+   material is not disturbed, excepting that no one may use this package or
+   any part of it for commercial purposes of any kind without the express
+   written consent of its author. */
 
 /* Mac interface files required only for the call to TickCount() */
 
+#ifndef THINK_C
 #include <Types.h>
 #include <Quickdraw.h>
 #include <Events.h>
+#else
+#define NULL 0
+#endif
 
 #include "ScrnMgr.h"
 
-static int done;
+static long done;
 
 /*	This routine handles the items in the application menu.  It gets called
 	by the screen manager whenever the user selects from that menu with the
 	appropriate item number. */
 
-/* 	Spins the watch cursor for n seconds, rotating the hands 4 times a second. */
+/* 	Spins the watch cursor for n seconds, rotating the hands 4 times a
+	second. */
 
 static void Wait(n)
 int n;
 
 {
-	int tick;
+	long tick;
 
-	tick = TickCount() + n * 60;
+	tick = TickCount() + n * 60L;
 
 	BeginScreenWait(15);
-	while (TickCount() < tick);
+	while (TickCount() < tick)
+	  SystemTask ();
 	EndScreenWait();
 
 	return;
 }
 
 static void DoAppMenu(theItem)
-int theItem;
+long theItem;
 
 {
-	int i;
+	long i;
 #ifndef USE_PUSH
 	char save_chars[80*25], save_attrs[80*25];
-	int save_cursor_h, save_cursor_v;
+	long save_cursor_h, save_cursor_v;
 	Rect screen;
 #endif
 
@@ -106,7 +114,7 @@ static void Quit()
 static void RunSomeTests()
 
 {
-	int i;
+	long i;
 	Rect area;
 	char msg[80];
 
@@ -121,11 +129,15 @@ static void RunSomeTests()
 	SetScreenCursor(0, 0);
 	WriteScreenString("Hello, world --");
 	SetScreenCursor(10, 2);
-	WriteScreenStringAttr("This is a test", MakeAttr(attrColorRed, attrColorWhite) | attrUnderlined);
+	WriteScreenStringAttr("This is a test",
+			      MakeAttr(attrColorRed,
+				       attrColorWhite) | attrUnderlined);
 	WriteScreenString(" of the Screen Manager.");
 	SetScreenCursor(10, 3);
 	WriteScreenString("This is only a ");
-	WriteScreenStringAttr("test", MakeAttr(attrColorWhite, attrColorBlack) | attrItalicized);
+	WriteScreenStringAttr("test",
+			      MakeAttr(attrColorWhite,
+				       attrColorBlack) | attrItalicized);
 	WriteScreenString(".  If this had been");
 	SetScreenCursor(10, 4);
 	WriteScreenString("an actual run, the program would bomb.");
@@ -135,16 +147,19 @@ static void RunSomeTests()
 	for (i = 0; i < 8; i++)
 		WriteScreenCharAttr('a'+i, MakeAttr(i, attrColorBlack));
 
-	/* Fill a subsection of the screen with white asterisks on a red background. */
+	/* Fill a subsection of the screen with white asterisks on a red
+	   background. */
 	area.left = 11;
 	area.top = 11;
 	area.right = 16;
 	area.bottom = 16;
 	FillScreen('*', MakeAttr(attrColorWhite, attrColorRed), &area);
 
-	/* Show the pixel bounds of the entire display screen, minus the menu bar. */
+	/* Show the pixel bounds of the entire display screen, minus the
+	   menu bar. */
 	GetScreenBounds(&area);
-	sprintf(msg, "Bounds: %d %d %d %d", area.top, area.left, area.bottom, area.right);
+	sprintf(msg, "Bounds: %d %d %d %d", area.top, area.left,
+		area.bottom, area.right);
 	SetScreenString(msg, 0, 18);
 
 	return;
@@ -157,7 +172,7 @@ int main()
 {
 	char keycode, modifiers, ascii;
 	int h, v;
-	int i;
+	long i;
 	Rect scrollRect1, scrollRect2;
 	char coords[6], hex[6];
 
@@ -199,8 +214,9 @@ int main()
 
 	while (!done) {
 
-		/* Very important.  Allows screen manager to update the screen if any characters
-		have been stuffed in the buffer, to pull any keystrokes off the event queue, etc. */
+		/* Very important.  Allows screen manager to update the
+		   screen if any characters have been stuffed in the buffer,
+		   to pull any keystrokes off the event queue, etc. */
 		IdleScreenMgr();
 
 		/* Look for keyboard or mouse input. */
@@ -208,17 +224,24 @@ int main()
 
 			/* Is is not a mouse click?  Then it is a keystroke. */
 			if (!(modifiers & maskModMouse)) {
-				/* Scroll top line one char to the left.  Filling in with white on green. */
-				ScrollScreen(-1, 0, &scrollRect1, MakeAttr(attrColorWhite, attrColorGreen));
+				/* Scroll top line one char to the left.
+				   Filling in with white on green. */
+				ScrollScreen(-1, 0, &scrollRect1,
+					     MakeAttr(attrColorWhite,
+						      attrColorGreen));
 				/* Put the character on the screen to the top right. */
 				SetScreenChar(ascii, 69, 0);
 				/* If top line has been filled, scroll lines down. */
 				if (!(++i % 10)) {
-					ScrollScreen(0, 1, &scrollRect2, MakeAttr(attrColorWhite, attrColorGreen));
+					ScrollScreen(0, 1, &scrollRect2,
+						     MakeAttr(attrColorWhite,
+							      attrColorGreen));
 					UpdateScreen();
 				}
 				/* Show the keycodes entered. */
-				sprintf(hex, "%2.2X %2.2X", (unsigned char) ascii, (unsigned char) keycode);
+				sprintf(hex, "%2.2X %2.2X",
+					(int)(unsigned char) ascii,
+					(int)(unsigned char) keycode);
 				SetScreenString(hex, 40, 24);
 				/* If the char 'D' has been typed, go into a wait.  Notice that the D does
 				not appear on the screen until the wait has ended, at the IdleScreenMgr

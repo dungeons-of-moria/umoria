@@ -1,6 +1,16 @@
+/* mac/dumpres/TestDR.c: test driver for resource dumping code
+
+   Copyright (c) 1989-1991 Curtis McCauley, James E. Wilson
+
+   This software may be copied and distributed for educational, research, and
+   not for profit purposes provided that this copyright and statement are
+   included in all such copies. */
+
 #include <StdIO.h>
 
+#ifndef THINK_C
 #include <Resources.h>
+#endif
 
 #include "DumpRes.h"
 
@@ -32,7 +42,7 @@ main()
 
 {
 	short resFile;
-	int i, rc;
+	long i, rc;
 
 	DumpRes(
 		"DumpResTest.rsrc",
@@ -48,7 +58,7 @@ main()
 		data = NULL;
 
 		rc = LoadRes(
-			&((char *) data),
+			(char **) &data),
 			'TEST', 256,
 			5, sizeof(Test),
 			MyStrProc
@@ -56,7 +66,9 @@ main()
 
 		if (rc)
 			for (i = 0; i < 5; i++)
-				fprintf(stderr, "%s : %d %d %d\n", data[i].name, data[i].x, data[i].y, data[i].z);
+				fprintf(stderr, "%s : %d %d %d\n",
+					data[i].name, data[i].x, data[i].y,
+					data[i].z);
 
 		else
 			fprintf(stderr, "LoadRes failed.\n");

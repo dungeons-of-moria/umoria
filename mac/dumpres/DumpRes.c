@@ -1,13 +1,32 @@
+/* mac/dumpres/DumpRes.c: convert C data to resources and dump to file
+
+   Copyright (c) 1989-1991 Curtis McCauley, James E. Wilson
+
+   This software may be copied and distributed for educational, research, and
+   not for profit purposes provided that this copyright and statement are
+   included in all such copies. */
+
 #include <StdIO.h>
 #include <String.h>
+#ifndef THINK_C
 #include <Strings.h>
+#endif
 #include <SetJmp.h>
 
+#ifndef THINK_C
 #include <Types.h>
 #include <Memory.h>
 #include <OSUtils.h>
 #include <Resources.h>
 #include <Files.h>
+#endif
+
+#include "DumpRes.h"
+
+#ifdef THINK_C
+#define p2cstr(x)	(char *)PtoCstr((char *)x)
+#define c2pstr(x)	(char *)CtoPstr((char *)x)
+#endif
 
 #define rsrcCreator					'RSED'
 #define rsrcType					'rsrc'
@@ -34,7 +53,7 @@ static char *errtab[7] = {
 
 static jmp_buf abort;
 
-static unsigned strLen;
+static unsigned long strLen;
 static short strCount;
 static char *strLoc;
 
@@ -75,14 +94,15 @@ char **ptr;
 	return;
 }
 
-void DumpRes(fileName, resType, resID, resName, resAttrs, elemPtr, elemCnt, elemSiz, strProc)
+void DumpRes(fileName, resType, resID, resName, resAttrs, elemPtr, elemCnt,
+	     elemSiz, strProc)
 char *fileName;
 long resType;
-int resID;
+long resID;
 char *resName;
-int resAttrs;
+long resAttrs;
 char *elemPtr;
-unsigned elemCnt, elemSiz;
+unsigned long elemCnt, elemSiz;
 void (*strProc)(char *elem, void (*proc)(char **str));
 
 {
@@ -91,20 +111,21 @@ void (*strProc)(char *elem, void (*proc)(char **str));
 	Str255 pFileName, pResName;
 	short resFile;
 	char *anElem;
-	int errno;
-	unsigned i;
+	long errno;
+	unsigned long i;
 
 	if ((errno = setjmp(abort)) != 0) {
-		fprintf(stderr, "Error dumping to resource %s to file %s.\n", resName, fileName);
+		fprintf(stderr, "Error dumping to resource %s to file %s.\n",
+			resName, fileName);
 		fprintf(stderr, "%s\n", errtab[errno - 1]);
 		exit(1);
 	}
 
-	strncpy(pFileName, fileName, 255);
+	strncpy((char *)pFileName, fileName, 255);
 	pFileName[255] = '\0';
 	c2pstr(pFileName);
 
-	strncpy(pResName, resName, 255);
+	strncpy((char *)pResName, resName, 255);
 	pResName[255] = '\0';
 	c2pstr(pResName);
 
@@ -176,18 +197,18 @@ void (*strProc)(char *elem, void (*proc)(char **str));
 	return;
 }
 
-int LoadRes(memPtr, resType, resID, elemCnt, elemSiz, strProc)
+long LoadRes(memPtr, resType, resID, elemCnt, elemSiz, strProc)
 char **memPtr;
-int resType;
-int resID;
-unsigned elemCnt, elemSiz;
+long resType;
+long resID;
+unsigned long elemCnt, elemSiz;
 void (*strProc)(char *elem, void (*proc)(char **str));
 
 {
 	Handle dataHandle, strHandle;
-	unsigned dataLen, strLen;
+	unsigned long dataLen, strLen;
 	char *elemPtr, *anElem;
-	int i;
+	long i;
 
 	dataHandle = GetResource(resType, resID);
 	if (dataHandle == NULL) return(false);

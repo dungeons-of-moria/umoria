@@ -29,7 +29,7 @@
 
 
 
-May 7, 1990
+September 26, 1990
 
 
 
@@ -1159,6 +1159,11 @@ May 7, 1990
                It is also possible to rest by typing the count  first,  and
                using either the Rest or the null movement command.
 
+               If you type `*' for the rest count, your character will rest
+               until  both  hp  and  mana  reach  their maximum values.  As
+               above,  you  will  immediately  stop  resting  if   anything
+               interesting happens.
+
           S  - Search mode toggle. {#}
                The Searching toggle will take you into and  out  of  search
                mode.   When  first  pressed,  the  message "Searching" will
@@ -1175,11 +1180,6 @@ May 7, 1990
                kinds  of  rock  present in the dungeons of moria: Permanent
                Rock, Granite Rock, Magma Intrusion, and Quartz Veins.  Per-
                manent  Rock  is  exactly  that, permanent.  Granite is very
-               hard, therefore hard to dig through, and contains  no  valu-
-               able  metals.   Magma  and Quartz veins are softer and some-
-               times bear valuable metals and gems, shown as a `$' or a `*'
-               character.   You  can tell if the metal or gems are embedded
-               into the wall by trying to move onto  them.   If  you  can't
 
 
 

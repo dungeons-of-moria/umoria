@@ -1,13 +1,17 @@
-/* scrolls.c: scroll code
+/* source/scrolls.c: scroll code
 
-   Copyright (c) 1989 James E. Wilson, Robert A. Koeneke
+   Copyright (c) 1989-91 James E. Wilson, Robert A. Koeneke
 
    This software may be copied and distributed for educational, research, and
    not for profit purposes provided that this copyright and statement are
    included in all such copies. */
 
-#include "constant.h"
+#ifdef __TURBOC__
+#include	<stdio.h>
+#endif /* __TURBOC__ */
+ 
 #include "config.h"
+#include "constant.h"
 #include "types.h"
 #include "externs.h"
 
@@ -27,6 +31,9 @@ void read_scroll()
   register int ident, l;
   register inven_type *i_ptr;
   register struct misc *m_ptr;
+#ifdef ATARIST_MWC
+  int32u holder = TR_CURSED;
+#endif
 
   free_turn_flag = TRUE;
   if (py.flags.blind > 0)
@@ -39,7 +46,7 @@ void read_scroll()
     msg_print("You are not carrying anything!");
   else if (!find_range(TV_SCROLL1, TV_SCROLL2, &j, &k))
     msg_print ("You are not carrying any scrolls!");
-  else if (get_item(&item_val, "Read which scroll?", j, k))
+  else if (get_item(&item_val, "Read which scroll?", j, k, CNIL, CNIL))
     {
       i_ptr = &inventory[item_val];
       free_turn_flag = FALSE;
@@ -65,7 +72,11 @@ void read_scroll()
 		  msg_print(out_val);
 		  if (enchant(&i_ptr->tohit))
 		    {
+#ifdef ATARIST_MWC
+		      i_ptr->flags &= ~holder;
+#else
 		      i_ptr->flags &= ~TR_CURSED;
+#endif
 		      calc_bonuses();
 		    }
 		  else
@@ -82,7 +93,11 @@ void read_scroll()
 		  msg_print(out_val);
 		  if (enchant(&i_ptr->todam))
 		    {
+#ifdef ATARIST_MWC
+		      i_ptr->flags &= ~holder;
+#else
 		      i_ptr->flags &= ~TR_CURSED;
+#endif
 		      calc_bonuses ();
 		    }
 		  else
@@ -108,6 +123,20 @@ void read_scroll()
 		tmp[k++] = INVEN_FEET;
 
 	      if (k > 0)  l = tmp[randint(k)-1];
+#ifdef ATARIST_MWC
+	      if (holder & inventory[INVEN_BODY].flags)
+		l = INVEN_BODY;
+	      else if (holder & inventory[INVEN_ARM].flags)
+		l = INVEN_ARM;
+	      else if (holder & inventory[INVEN_OUTER].flags)
+		l = INVEN_OUTER;
+	      else if (holder & inventory[INVEN_HEAD].flags)
+		l = INVEN_HEAD;
+	      else if (holder & inventory[INVEN_HANDS].flags)
+		l = INVEN_HANDS;
+	      else if (holder & inventory[INVEN_FEET].flags)
+		l = INVEN_FEET;
+#else
 	      if (TR_CURSED & inventory[INVEN_BODY].flags)
 		l = INVEN_BODY;
 	      else if (TR_CURSED & inventory[INVEN_ARM].flags)
@@ -120,6 +149,7 @@ void read_scroll()
 		l = INVEN_HANDS;
 	      else if (TR_CURSED & inventory[INVEN_FEET].flags)
 		l = INVEN_FEET;
+#endif
 
 	      if (l > 0)
 		{
@@ -129,7 +159,11 @@ void read_scroll()
 		  msg_print(out_val);
 		  if (enchant(&i_ptr->toac))
 		    {
+#ifdef ATARIST_MWC
+		      i_ptr->flags &= ~holder;
+#else
 		      i_ptr->flags &= ~TR_CURSED;
+#endif
 		      calc_bonuses ();
 		    }
 		  else
@@ -142,18 +176,14 @@ void read_scroll()
 	      ident = TRUE;
 	      used_up = ident_spell();
 
-	      /* the identify may merge objects, causing the identify scroll
-		 to move to a different place.	Check for that here. */
-	      if (i_ptr->tval != TV_SCROLL1 || i_ptr->flags != 0x00000008)
+	      /* The identify may merge objects, causing the identify scroll
+		 to move to a different place.	Check for that here.  It can
+		 move arbitrarily far if an identify scroll was used on
+		 another identify scroll, but it always moves down. */
+	      while (i_ptr->tval != TV_SCROLL1 || i_ptr->flags != 0x00000008)
 		{
 		  item_val--;
 		  i_ptr = &inventory[item_val];
-		  if (i_ptr->tval != TV_SCROLL1 || i_ptr->flags != 0x00000008)
-		    {
-		      msg_print("internal error with identify spell.");
-		      msg_print("Please tell the wizard!");
-		      return;
-		    }
 		}
 	      break;
 	    case 5:
@@ -279,7 +309,11 @@ void read_scroll()
 		      flag = TRUE;
 		  if (flag)
 		    {
+#ifdef ATARIST_MWC
+		      i_ptr->flags &= ~holder;
+#else
 		      i_ptr->flags &= ~TR_CURSED;
+#endif
 		      calc_bonuses ();
 		    }
 		  else
@@ -297,8 +331,11 @@ void read_scroll()
 		  unmagic_name(i_ptr);
 		  i_ptr->tohit = -randint(5) - randint(5);
 		  i_ptr->todam = -randint(5) - randint(5);
-		  i_ptr->flags = TR_CURSED;
+		  /* Must call py_bonuses() before set (clear) flags, and
+		     must call calc_bonuses() after set (clear) flags, so that
+		     all attributes will be properly turned off. */
 		  py_bonuses(i_ptr, -1);
+		  i_ptr->flags = TR_CURSED;
 		  calc_bonuses ();
 		  ident = TRUE;
 		}
@@ -321,6 +358,20 @@ void read_scroll()
 		tmp[k++] = INVEN_FEET;
 
 	      if (k > 0)  l = tmp[randint(k)-1];
+#ifdef ATARIST_MWC
+	      if (holder & inventory[INVEN_BODY].flags)
+		l = INVEN_BODY;
+	      else if (holder & inventory[INVEN_ARM].flags)
+		l = INVEN_ARM;
+	      else if (holder & inventory[INVEN_OUTER].flags)
+		l = INVEN_OUTER;
+	      else if (holder & inventory[INVEN_HEAD].flags)
+		l = INVEN_HEAD;
+	      else if (holder & inventory[INVEN_HANDS].flags)
+		l = INVEN_HANDS;
+	      else if (holder & inventory[INVEN_FEET].flags)
+		l = INVEN_FEET;
+#else
 	      if (TR_CURSED & inventory[INVEN_BODY].flags)
 		l = INVEN_BODY;
 	      else if (TR_CURSED & inventory[INVEN_ARM].flags)
@@ -333,6 +384,7 @@ void read_scroll()
 		l = INVEN_HANDS;
 	      else if (TR_CURSED & inventory[INVEN_FEET].flags)
 		l = INVEN_FEET;
+#endif
 
 	      if (l > 0)
 		{
@@ -346,7 +398,11 @@ void read_scroll()
 		      flag = TRUE;
 		  if (flag)
 		    {
+#ifdef ATARIST_MWC
+		      i_ptr->flags &= ~holder;
+#else
 		      i_ptr->flags &= ~TR_CURSED;
+#endif
 		      calc_bonuses ();
 		    }
 		  else

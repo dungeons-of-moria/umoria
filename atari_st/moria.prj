@@ -1,0 +1,57 @@
+moria.tos          ; name of executable program is topmost window
+
+=                  ; list of modules follows...
+
+TCSTART.O          ; startup code
+
+; all modules are compiled with -P -G except for those marked here
+;   with just -G. HPP 24/12/90
+
+create.c    (constant.h,types.h,externs.h,config.h)
+creature.c  (constant.h,types.h,externs.h,config.h)
+death.c     (constant.h,types.h,externs.h,config.h)
+desc.c      (constant.h,types.h,externs.h,config.h)
+dungeon.c   (constant.h,types.h,externs.h,config.h)
+eat.c       (constant.h,types.h,externs.h,config.h)
+files.c     (constant.h,types.h,externs.h,config.h)
+generate.c  (constant.h,types.h,externs.h,config.h)
+help.c      (constant.h,types.h,externs.h,config.h)
+io.c        (constant.h,types.h,externs.h,config.h)
+magic.c     (constant.h,types.h,externs.h,config.h)
+main.c      (constant.h,types.h,externs.h,config.h)
+misc1.c     (constant.h,types.h,externs.h,config.h)
+misc2.c     (constant.h,types.h,externs.h,config.h)
+misc3.c     (constant.h,types.h,externs.h,config.h)
+misc4.c     (constant.h,types.h,externs.h,config.h)
+monsters.c  (constant.h,types.h,config.h)           [-G]
+moria1.c    (constant.h,types.h,externs.h,config.h)
+moria2.c    (constant.h,types.h,externs.h,config.h)
+moria3.c    (constant.h,types.h,externs.h,config.h)
+moria4.c    (constant.h,types.h,externs.h,config.h)
+player.c    (constant.h,types.h,config.h)           [-G]
+potions.c   (constant.h,types.h,externs.h,config.h)
+prayer.c    (constant.h,types.h,externs.h,config.h)
+recall.c    (constant.h,config.h,types.h,externs.h)
+rnd.c       (constant.h,types.h)                    [-G]
+save.c      (constant.h,types.h,externs.h,config.h)
+scrolls.c   (constant.h,types.h,externs.h,config.h)
+sets.c      (constant.h,config.h)                   [-G]
+signals.c   (constant.h,types.h,externs.h,config.h) [-G]
+spells.c    (constant.h,types.h,externs.h,config.h)
+staffs.c    (constant.h,types.h,externs.h,config.h)
+store1.c    (constant.h,types.h,externs.h,config.h)
+store2.c    (constant.h,types.h,externs.h,config.h)
+tables.c    (constant.h,types.h,config.h)           [-G]
+treasure.c  (constant.h,types.h,config.h)           [-G]
+atarist.c   (constant.h,config.h,types.h,externs.h) [-G]
+variable.c  (constant.h,types.h,config.h)           [-G]
+wands.c     (constant.h,types.h,externs.h,config.h)
+wizard.c    (constant.h,types.h,externs.h,config.h)
+
+curses.c    (cursinc.h)                             [-G]
+
+TCSTDLIB.LIB       ; standard library
+TCEXTLIB.LIB       ; extended library
+TCTOSLIB.LIB       ; TOS library
+
+

@@ -1,4 +1,6 @@
 the two files Makefile and Makefile.XNX are obsolete, and need to be
 updated
 
-the config.doc file is obsolete, and needs to be updated
+document the -DLINT_ARGS option for prototypes someplace
+
+fix up the new makefiles in make/

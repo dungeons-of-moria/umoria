@@ -1,7 +1,6 @@
-/* UNIX Moria Version 5.0
-   main.c: initialization, main() function and main loop
-
-   Copyright (c) 1989 James E. Wilson, Robert A. Koeneke
+/* UNIX Moria Version 5.x
+   source/main.c: initialization, main() function and main loop
+   Copyright (c) 1989-91 James E. Wilson, Robert A. Koeneke
 
    This software may be copied and distributed for educational, research, and
    not for profit purposes provided that this copyright and statement are
@@ -27,8 +26,7 @@
 /*									 */
 /*	 UNIX Port		 : James E. Wilson			 */
 /*				   UC Berkeley				 */
-/*				   wilson@ernie.Berkeley.EDU		 */
-/*				   ucbvax!ucbernie!wilson		 */
+/*				   wilson@kithrup.com			 */
 /*									 */
 /*	 MSDOS Port		 : Don Kneller				 */
 /*				   1349 - 10th ave			 */
@@ -42,23 +40,31 @@
 /*				   Melbourne, Victoria, AUSTRALIA	 */
 /*				   cjs@moncsbruce.oz			 */
 /*									 */
+/*       Amiga Port              : Corey Gehman                          */
+/*                                 Clemson University                    */
+/*                                 cg377170@eng.clemson.edu              */
+/*                                                                       */
 /*	 Moria may be copied and modified freely as long as the above	 */
 /*	 credits are retained.	No one who-so-ever may sell or market	 */
 /*	 this software in any form without the expressed written consent */
 /*	 of the author Robert Alan Koeneke.				 */
 /*									 */
 
+#ifdef __TURBOC__
+#include	<io.h>
+#include	<stdio.h>
+#include	<stdlib.h>
+#endif /* __TURBOC__ */
+ 
 #include "config.h"
+#include "constant.h"
+#include "types.h"
+#include "externs.h"
 
-/* include before constant, because param.h defines NULL incorrectly */
 #ifndef USG
 #include <sys/types.h>
 #include <sys/param.h>
 #endif
-
-#include "constant.h"
-#include "types.h"
-#include "externs.h"
 
 #ifdef USG
 #ifndef ATARIST_MWC
@@ -78,16 +84,21 @@
 #include <time.h>
 #endif
 
+#ifndef VMS
 #ifndef MAC
 #ifndef GEMDOS
+#ifndef AMIGA
 long time();
+#endif
 #endif
 char *getenv();
 #endif
+#endif
 
 #ifndef MAC
+#ifndef AMIGA
 #ifdef USG
-#ifndef MSDOS
+#if !defined(MSDOS) && !defined(ATARIST_TC)
 unsigned short getuid(), getgid();
 #endif
 #else
@@ -96,6 +107,7 @@ unsigned short getuid(), getgid();
 uid_t getuid(), getgid();
 #else  /* other BSD versions */
 int getuid(), getgid();
+#endif
 #endif
 #endif
 #endif
@@ -116,6 +128,12 @@ void exit();
 #endif
 #endif
 #endif
+
+/*
+#if defined(atarist) && defined(__GNUC__)
+long _stksize = 64*1024;
+#endif
+*/
 
 #ifdef ATARIST_MWC
 long _stksize = 18000;		/*(SAJ) for MWC	*/
@@ -164,7 +182,6 @@ char *argv[];
   int new_game = FALSE;
   int force_rogue_like = FALSE;
   int force_keys_to;
-  char string[80];
 
   /* default command set defined in config.h file */
   rogue_like_commands = ROGUE_LIKE;
@@ -181,12 +198,10 @@ char *argv[];
   /* and prepare things to relinquish setuid privileges */
   init_scorefile();
 
-/* Call this routine to grab a file pointer to the log files and
-   start the backup process before relinquishing setuid privileges */
-  init_files();
-
 #ifndef SECURE
 #if !defined(MSDOS) && !defined(ATARIST_MWC) && !defined(MAC)
+#if !defined(AMIGA) && !defined(ATARIST_TC)
+#if !defined(atarist)
   if (0 != setuid(getuid()))
     {
       perror("Can't set permissions correctly!  Setuid call failed.\n");
@@ -199,9 +214,17 @@ char *argv[];
     }
 #endif
 #endif
+#endif
+#endif
 
   /* use curses */
   init_curses();
+
+#ifdef VMS
+  /* Bizarre, but yes this really is needed to make moria work correctly
+     under VMS.  */
+  restore_screen ();
+#endif
 
   /* catch those nasty signals */
   /* must come after init_curses as some of the signal handlers use curses */
@@ -227,8 +250,8 @@ char *argv[];
 	force_keys_to = TRUE;
 	break;
 #ifndef MAC
-      case 'S':
-      case 's': display_scores(0, TRUE); exit_game();
+      case 'S': display_scores(TRUE); exit_game();
+      case 's': display_scores(FALSE); exit_game();
       case 'W':
       case 'w':
 	to_be_wizard = TRUE;
@@ -270,15 +293,19 @@ char *argv[];
      hence, this code is not necessary */
 
   /* Auto-restart of saved file */
-  if (argv[0] != NULL)
+  if (argv[0] != CNIL)
     (void) strcpy (savefile, argv[0]);
-  else if (p = getenv("MORIA_SAV"))
+  else if ((p = getenv("MORIA_SAV")) != CNIL)
     (void) strcpy(savefile, p);
-  else if (p = getenv("HOME"))
-#ifdef ATARIST_MWC
+  else if ((p = getenv("HOME")) != CNIL)
+#if defined(ATARIST_MWC) || defined(ATARIST_TC)
     (void) sprintf(savefile, "%s\\%s", p, MORIA_SAV);
 #else
+#ifdef VMS
+    (void) sprintf(savefile, "%s%s", p, MORIA_SAV);
+#else
     (void) sprintf(savefile, "%s/%s", p, MORIA_SAV);
+#endif
 #endif
   else
     (void) strcpy(savefile, MORIA_SAV);
@@ -289,18 +316,21 @@ char *argv[];
    (if you are the wizard). In this case, it returns true, but also sets the
    parameter "generate" to true, as it does not recover any cave details. */
 
-  result = get_char(&generate);
+  result = FALSE;
+#ifdef MAC
+  if ((new_game == FALSE) && get_char(&generate))
+#else
+  if ((new_game == FALSE) && !access(savefile, 0) && get_char(&generate))
+#endif
+    result = TRUE;
+
   /* enter wizard mode before showing the character display, but must wait
      until after get_char in case it was just a resurrection */
   if (to_be_wizard)
     if (!enter_wiz_mode())
       exit_game();
 
-#ifdef MAC
-  if ((new_game == FALSE) && result)
-#else
-  if ((new_game == FALSE) && !access(savefile, 0) && result)
-#endif
+  if (result)
     {
       change_name();
 
@@ -311,6 +341,11 @@ char *argv[];
   else
     {	  /* Create character	   */
       create_character();
+#ifdef MAC
+      birth_date = time ((time_t *)0);
+#else
+      birth_date = time ((long *)0);
+#endif
       char_inven_init();
       py.flags.food = 7500;
       py.flags.food_digested = 2;
@@ -325,12 +360,6 @@ char *argv[];
 	  calc_spells(A_WIS);
 	  clear_screen(); /* force out the 'learn prayer' message */
 	  calc_mana(A_WIS);
-	}
-      if (!_new_log())
-	{
-	  (void) sprintf(string, "Can't get at log file \"%s\".", MORIA_LOG);
-	  msg_print(string);
-	  exit_game();
 	}
       /* prevent ^c quit from entering score into scoreboard,
 	 and prevent signal from creating panic save until this point,
@@ -419,7 +448,11 @@ static void init_m_level()
     m_level[c_list[i].level]++;
 
   for (i = 1; i <= MAX_MONS_LEVEL; i++)
+#ifdef AMIGA  /* fix a stupid MANX Aztec C 5.0 bug again */
+    m_level[i] = m_level[i] + m_level[i-1];
+#else
     m_level[i] += m_level[i-1];
+#endif
 }
 
 
@@ -434,7 +467,11 @@ static void init_t_level()
   for (i = 0; i < MAX_DUNGEON_OBJ; i++)
     t_level[object_list[i].level]++;
   for (i = 1; i <= MAX_OBJ_LEVEL; i++)
+#ifdef AMIGA  /* fix a stupid MANX Aztec C 5.0 bug again */
+    t_level[i] = t_level[i] + t_level[i-1];
+#else
     t_level[i] += t_level[i-1];
+#endif
 
   /* now produce an array with object indexes sorted by level, by using
      the info in t_level, this is an O(n) sort! */

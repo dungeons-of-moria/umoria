@@ -1,0 +1,82 @@
+MODEL =		L
+
+OP =		M
+
+REDIR =		w$(OP)
+
+OPFLAG =	-DMSDOS=1 -DPC_CURSES=1 -DANSI=1
+
+OBJ =		o$(OP)
+
+FLAG =		-A$(MODEL) -Zp -W3 -Os -Gs -Gt32 -I.. $(OPFLAG)
+
+CFLAG =		$(FLAG)
+
+LFLAG =		/STACK:16383 /E $(MODEL)curses
+
+SRC1 =	\
+	ibmpc\ms_ansi.c\
+	ibmpc\ms_misc.c\
+	misc\flock.c\
+	misc\funckeys.c\
+	misc\nomacio.c\
+	source\create.c\
+	source\creature.c\
+	source\death.c\
+	source\desc.c\
+	source\dungeon.c
+
+SRC2 =	\
+	source\eat.c\
+	source\files.c\
+	source\generate.c\
+	source\help.c\
+	source\io.c\
+	source\magic.c\
+	source\main.c\
+	source\misc1.c\
+	source\misc2.c\
+	source\monsters.c
+
+SRC3 =	\
+	source\moria1.c\
+	source\moria2.c\
+	source\potions.c\
+	source\prayer.c\
+	source\recall.c\
+	source\rnd.c\
+	source\save.c\
+	source\scrolls.c\
+	source\sets.c\
+	source\signals.c
+
+SRC4 =	\
+	source\spells.c\
+	source\staffs.c\
+	source\store1.c\
+	source\store2.c\
+	source\treasure.c\
+	source\undef.c\
+	source\variable.c\
+	source\wands.c\
+	source\wizard.c
+
+tags:	$(SRC1) $(SRC2) $(SRC3) $(SRC4)
+	ctags -o sgat ibmpc\*.c misc\*.c source\*.c
+	sort -u sgat > tags
+	rm -f sgat
+
+all:
+	cd ibmpc
+	make MODEL=$(MODEL) OP=$(OP) OBJ=$(OBJ) REDIR=$(REDIR) \
+		FLAG="$(FLAG)" ibmpc.mak
+	cd ..\misc
+	make MODEL=$(MODEL) OP=$(OP) OBJ=$(OBJ) REDIR=$(REDIR) \
+		FLAG="$(FLAG)" misc.mak
+	cd ..\source
+	make MODEL=$(MODEL) OP=$(OP) OBJ=$(OBJ) REDIR=$(REDIR) \
+		FLAG="$(FLAG)" source.mak
+	cd ..\$(OBJ)
+	cl $(CFLAG) -Feumoria.exe *.$(OBJ) /link $(LFLAG);
+	cd ..
+

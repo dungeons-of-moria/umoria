@@ -1,7 +1,12 @@
-/* Stuff for the Macintosh to make Moria work */
-/* Needs to be better organized:  Maybe split into several files */
-/* Contains some used routines from 4.87 */
+/* mac/mac.c: mac support code
 
+   Copyright (c) 1989-1991 Curtis McCauley, James E. Wilson
+
+   This software may be copied and distributed for educational, research, and
+   not for profit purposes provided that this copyright and statement are
+   included in all such copies. */
+
+#ifndef THINK_C
 #include <types.h>
 #include <controls.h>
 #include <dialogs.h>
@@ -17,35 +22,46 @@
 #include <scrnmgr.h>
 #include <dumpres.h>
 
+#else
+
+#include "ScrnMgr.h"
+#include "DumpRes.h"
+
+#define c2pstr(x)	(char *)CtoPstr((char *)x)
+#define p2cstr(x)	(char *)PtoCstr((char *)x)
+
+#endif
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#ifndef THINK_C
 #include <strings.h>
+#endif
 #include <setjmp.h>
 
-#include "constant.h"
 #include "config.h"
+#include "constant.h"
 #include "types.h"
 #include "externs.h"
 #include "macrsrc.h"
 
-int GetCommandSet(Handle theData);
-int GetTextEditor(Handle theData);
+long GetCommandSet(Handle theData);
+long GetTextEditor(Handle theData);
 
 void DoMacHelp(void), DoKillsDlg(void);
 
-static int game_flag;
-static int exit_code;
+static long game_flag;
+static long exit_code;
 
 static short savedir, applvrefnum;
 
 static char **save_chars, **save_attrs;
-static int save_cursor_h, save_cursor_v;
-
-/* global flags */
-extern int search_flag;		/* Player is searching	*/
+static long save_cursor_h, save_cursor_v;
 
 #define PATHLEN					256
+
+#define TAB_WIDTH				8
 
 #define CODE_IGNORE				0
 #define CODE_PASSTHRU			1
@@ -84,9 +100,11 @@ static unsigned char codetable[0x80] = {
 
 #define SPIN_TICKS				15
 
-static int editor, cmdsetopt;
+static long editor, cmdsetopt;
 
 static jmp_buf jb;
+
+#define ABOUT_DLOG_ID			128
 
 #define FM_NEW					1
 #define FM_OPEN					2
@@ -110,7 +128,7 @@ static jmp_buf jb;
 #define NEXT_WAIT				4
 #define NEXT_QUIT				5
 
-int savefileset;
+long savefileset;
 char savefilename[64];
 short savefilevol;
 
@@ -128,8 +146,8 @@ short savefilevol;
 static short sqcdefault_item;
 static Handle sqcdefault_handle;
 
-static int save_cmd_level, file_menu_level, app_menu_level;
-static int save_cmd_enabled, file_menu_enabled, app_menu_enabled;
+static long save_cmd_level, file_menu_level, app_menu_level;
+static long save_cmd_enabled, file_menu_enabled, app_menu_enabled;
 
 #if 0
 /* this stuff is no longer used */
@@ -145,7 +163,8 @@ void init_malloc_zone()
 
 	theOldZone = GetZone();
 
-	InitZone(NULL, 64, (Ptr)((int) malloc_zone + malloc_zone_size), (Ptr) malloc_zone);
+	InitZone(NULL, 64, (Ptr)((long) malloc_zone + malloc_zone_size),
+		 (Ptr) malloc_zone);
 
 	SetZone(theOldZone);
 
@@ -191,12 +210,12 @@ void *p;
 
 #endif
 
-int mac_time()
+long mac_time()
 
 {
-	int now;
+	long now;
 
-	GetDateTime((unsigned int *) &now);
+	GetDateTime((unsigned long *) &now);
 	return(now);
 }
 
@@ -206,7 +225,7 @@ char *message;
 {
 	Str255 pstr;
 
-	strncpy(pstr, message, 255);
+	strncpy((char *)pstr, message, 255);
 	pstr[255] = '\0';
 	(void) c2pstr(pstr);
 
@@ -247,7 +266,7 @@ short wid;
 void idle()
 
 {
-	int redraw;
+	long redraw;
 
 	redraw = FALSE;
 
@@ -296,13 +315,14 @@ int nowait;
 
 {
 	char keycode, modifiers, ascii;
-	int h, v;
+	short h, v;
 
 	do {
 
 		if (nowait) {
 			idle();
-			if (!GetScreenKeys(&keycode, &modifiers, &ascii, &h, &v)) return(FALSE);
+			if (!GetScreenKeys(&keycode, &modifiers, &ascii, &h, &v))
+				return(FALSE);
 		}
 		else {
 			do {
@@ -310,7 +330,8 @@ int nowait;
 			} while (!GetScreenKeys(&keycode, &modifiers, &ascii, &h, &v));
 		}
 
-	} while ( (modifiers & maskModMouse) || (codetable[keycode] == CODE_IGNORE) );
+	} while ( (modifiers & maskModMouse) ||
+			  (codetable[keycode] == CODE_IGNORE) );
 
 	if (ascii > 0x7F) ascii = KEY_UNKNOWN;
 
@@ -371,7 +392,7 @@ int *shift_flag;
 int *ctrl_flag;
 
 {
-	int rc;
+	long rc;
 
 	if ((ch & 0xF0) == KEY_DIR) {
 		*shift_flag = FALSE;
@@ -421,7 +442,7 @@ void mac_restore_screen()
 
 {
 	Rect screen;
-	int v;
+	long v;
 	char chars[SCRN_COLS], attrs[SCRN_COLS];
 	char *c, *a, *c1, *c2, *a1, *a2;
 
@@ -505,7 +526,7 @@ void macendwait()
 OSErr GetDirID(wdVRefNum, vRefNum, dirID)
 short wdVRefNum;
 short *vRefNum;
-int *dirID;
+long *dirID;
 
 {
 	OSErr err;
@@ -528,13 +549,13 @@ int *dirID;
 
 OSErr MakePath(vRefNum, dirID, fName, pathName)
 short vRefNum;
-int dirID;
+long dirID;
 char *fName;
 char *pathName;
 
 {
 	char buf[PATHLEN], *bufptr;
-	int len;
+	long len;
 	OSErr err;
 	Str255 vNameBuf;
 	CInfoPBRec cipb;
@@ -558,7 +579,7 @@ char *pathName;
 		if (!err) {
 			*--bufptr = ':';
 			len = strlen(p2cstr(vNameBuf));
-			strncpy(bufptr -= len, vNameBuf, len);
+			strncpy(bufptr -= len, (char *)vNameBuf, len);
 			dirID = cipb.dirInfo.ioDrParID;
 		}
 	} while ( (!err) && (dirID != fsRtParID) );
@@ -571,23 +592,47 @@ char *pathName;
 void checkdebugger()
 
 {
+#ifndef THINK_C
+#if 1
+	char keys[128];
+
+	GetKeys ((KeyMap *) &keys);
+	if (keys[4] & 0x80) Debugger();		/* if command key is down */
+#else
 	if (((char *) KeyMapLM)[6] & 0x80) Debugger();			/* if command key is down */
+#endif
+#endif
 
 	return;
 }
 
-void getstack(request)
-int request;
+static void getstack(request)
+long request;
 
 {
-	int cursize;
-	int newlimit;
+	long cursize;
+#ifdef THINK_C
+	Ptr newlimit;
+#else
+	long newlimit;
+#endif
 
+	/* An extra level of indirection is apparently needed by MPW C
+	   for accessing system globals.  */
+#ifdef THINK_C
+	cursize = (((long *) CurStackBase) - ((long *) ApplLimit)) - 8;
+	if (cursize < request) {
+		newlimit = (Ptr)(((long *) CurStackBase - request) - 8);
+		if (newlimit > HeapEnd)
+			ApplLimit = newlimit;
+	}
+#else
 	cursize = (*((int *) CurStackBase) - *((int *) ApplLimit)) - 8;
 	if (cursize < request) {
 		newlimit = (*((int *) CurStackBase) - request) - 8;
 		if (newlimit > *((int *) HeapEnd)) *((int *) ApplLimit) = newlimit;
 	}
+#endif
 
 	return;
 }
@@ -597,16 +642,21 @@ short vrefnum;
 
 {
 	short v;
-	int d;
+	long d;
 
 	GetDirID(vrefnum, &v, &d);
+#ifdef THINK_C
+	SFSaveDisk = -v;
+	CurDirStore = d;
+#else
 	*((short *) SFSaveDisk) = -v;
 	*((int *) CurDirStore) = d;
+#endif
 
 	return;
 }
 
-int doputfile(prompt, fname, vrefnum)
+long doputfile(prompt, fname, vrefnum)
 char *prompt;
 char *fname;
 short *vrefnum;
@@ -615,7 +665,7 @@ short *vrefnum;
 	char p[256], f[256];
 	SFReply reply;
 	Point loc;
-	int h, v;
+	long h, v;
 
 	CenterScreenDLOG(putDlgID, fixHalf, fixThird, &h, &v);
 
@@ -633,7 +683,7 @@ short *vrefnum;
 
 	if (reply.good) {
 		p2cstr(reply.fName);
-		strcpy(fname, reply.fName);
+		strcpy(fname, (char *)reply.fName);
 		*vrefnum = reply.vRefNum;
 	}
 
@@ -677,7 +727,7 @@ short *vrefnum;
 	SFTypeList types;
 	SFReply reply;
 	Point loc;
-	int h, v;
+	long h, v;
 
 	CenterScreenDLOG(getDlgID, fixHalf, fixThird, &h, &v);
 
@@ -690,7 +740,7 @@ short *vrefnum;
 
 	if (reply.good) {
 		p2cstr(reply.fName);
-		strcpy(fname, reply.fName);
+		strcpy(fname, (char *)reply.fName);
 		*vrefnum = reply.vRefNum;
 	}
 
@@ -759,26 +809,33 @@ char *filename;
 int wait;
 
 {
-	Str255 temp;
+	Str255 temp, temp2;	/* Buffer for line and tab-expanded line.  */
 	short apRefNum;
 	Handle apParam;
 	FILE *file;
-	int i, done;
+	int i, j, done;
 	char ch;
+	char *cp;		/* Source for tab expansion.  */
 	Rect area;
 
 	GetAppParms(temp, &apRefNum, &apParam);
 
 	appldirectory();
+	/* Ordinarily, the misc files are stored in the data fork of
+	   the application.  */
+#if 1
 	file = fopen(p2cstr(temp), "r");
+#else
+	file = fopen("MacMoria.files", "r");
+#endif
 	restoredirectory();
 
 	if (file != NULL) {
 
 		while (!feof(file))
-			if (fgets (temp, 255, file) != NULL)
+			if (fgets ((char *)temp, 255, file) != NULL)
 				if (temp[0] == '#')
-					if (strstr(temp, filename) != NULL)
+					if (strstr((char *)temp, filename) != NULL)
 						break;
 
 		if (feof(file)) {
@@ -789,7 +846,7 @@ int wait;
 	}
 
 	if (file == NULL) {
-		sprintf(temp, "Cannot find text file: %s", filename);
+		sprintf((char *)temp, "Cannot find text file: %s", filename);
 		alert_error(temp);
 	}
 
@@ -807,8 +864,26 @@ int wait;
 		while ((!done) && (!feof(file))) {
 			DEraseScreen(&area);
 			for (i = 0; (!done) && (i < SCRN_ROWS - 1); i++)
-				if ((fgets(temp, 255, file) != NULL) && (temp[0] != '#'))
-					DSetScreenString(temp, 0, i);
+				if ((fgets((char *)temp, 255, file) != NULL) && (temp[0] != '#')) {
+					/* Remove the trailing \n and
+					   expand tabs.  */
+				  	for (cp = (char *) temp, j = 0;
+					     *cp != '\n'; cp++)
+					  {
+					    if ((temp2[j] = *cp) == '\t')
+					      {
+						do
+						  {
+						    temp2[j++] = ' ';
+						  }
+						while (j % TAB_WIDTH != 0);
+					      }
+					    else
+					      j++;
+					  }
+					temp2[j] = '\0';
+					DSetScreenString((char *)temp2, 0, i);
+					}
 				else
 					done = TRUE;
 			if (wait) {
@@ -849,11 +924,11 @@ char **loc;
 
 #if 0
 /* no longer used */
-int allocmalloczone(restart)
-int restart;
+long allocmalloczone(restart)
+long restart;
 
 {
-	int rc;
+	long rc;
 
 	if (!restart) {
 		malloc_zone = (THz) NewPtr(malloc_zone_size);
@@ -987,6 +1062,7 @@ int restart;
 	return(TRUE);
 }
 
+#ifndef THINK_C
 unsigned sleep(time)
 unsigned time;
 
@@ -995,6 +1071,7 @@ unsigned time;
 	idle();
 	return(0);
 }
+#endif
 
 char *makefilename(buffer, suffix, append)
 char *buffer, *suffix;
@@ -1002,7 +1079,7 @@ int append;
 
 
 {
-	int len;
+	long len;
 	char *p;
 
 	len = strlen(py.misc.name) + ((append) ? strlen(suffix)+3 : 0);
@@ -1080,13 +1157,13 @@ int getfinderfile()
 	return(i <= count);
 }
 
-int setfileinfo(fname, vrefnum, ftype)
+long setfileinfo(fname, vrefnum, ftype)
 char *fname;
 short vrefnum;
-int ftype;
+long ftype;
 
 {
-	int fcreator;
+	long fcreator;
 	char temp[64];
 	FileParam pb;
 	OSErr err;
@@ -1097,7 +1174,7 @@ int ftype;
 	(void) c2pstr(temp);
 
 	pb.ioCompletion = NULL;
-	pb.ioNamePtr = temp;
+	pb.ioNamePtr = (unsigned char *)temp;
 	pb.ioVRefNum = vrefnum;
 	pb.ioFVersNum = 0;
 	pb.ioFDirIndex = 0;
@@ -1114,7 +1191,7 @@ int ftype;
 }
 
 #if 0
-int getfileage(fname, vrefnum)
+long getfileage(fname, vrefnum)
 char *fname;
 short vrefnum;
 
@@ -1122,7 +1199,7 @@ short vrefnum;
 	char temp[64];
 	FileParam pb;
 	OSErr err;
-	int age;
+	long age;
 
 	strcpy(temp, fname);
 	(void) c2pstr(temp);
@@ -1136,7 +1213,7 @@ short vrefnum;
 	err = PBGetFInfo((ParmBlkPtr) &pb, FALSE);
 
 	if (err == noErr) {
-		GetDateTime((unsigned int *) &age);
+		GetDateTime((unsigned long *) &age);
 		age -= pb.ioFlMdDat;
 	}
 	else
@@ -1232,8 +1309,8 @@ int next;
 	short itemhit;
 	short itstype;
 	Rect itsrect;
-	int h, v;
-	int saveOk, dialogFinished;
+	long h, v;
+	long saveOk, dialogFinished;
 
 	thedialog = GetNewDialog(sqc_dlg_id, nil, (WindowPtr) -1);
 
@@ -1252,7 +1329,8 @@ int next;
 	GetDItem(thedialog, sqcdefault_item, &itstype, &sqcdefault_handle, &itsrect);
 	InsetRect(&itsrect, -4, -4);
 
-	SetDItem(thedialog, sqc_defbrd_item, userItem, (Handle) DrawDefaultBorder, &itsrect);
+	SetDItem(thedialog, sqc_defbrd_item, userItem,
+		 (Handle) DrawDefaultBorder, &itsrect);
 
 	ShowWindow((WindowPtr) thedialog);
 
@@ -1260,9 +1338,11 @@ int next;
 		ModalDialog(sqcfilter, &itemhit);
 		if ( (!saveOk) && (itemhit == sqc_save_item) ) {
 			if (total_winner)
-				alert_error("Sorry.  Since you are a total winner, you cannot save this game.  Your character must be retired.");
+				alert_error("Sorry.  Since you are a total \
+winner, you cannot save this game.  Your character must be retired.");
 			else
-				alert_error("Sorry.  You cannot save at this point in the game.  It must be your turn to move in order to save.");
+				alert_error("Sorry.  You cannot save at this \
+point in the game.  It must be your turn to move in order to save.");
 			dialogFinished = false;
 		}
 		else
@@ -1313,7 +1393,7 @@ int next;
 }
 
 void loaddata(restart)
-
+int restart;
 {
 	if (
 #if 0
@@ -1341,7 +1421,7 @@ int startfinder()
 {
 	int next;
 	int argc;
-	int local_cmdsetopt;
+	long local_cmdsetopt;
 	char *argv[2];
 
 	if ((next = setjmp(jb)) != 0) return(next);
@@ -1368,7 +1448,7 @@ int startnew()
 {
 	int next;
 	int argc;
-	int local_cmdsetopt, local_newgameopt;
+	long local_cmdsetopt, local_newgameopt;
 	char *argv[3];
 
 	if ((next = setjmp(jb)) != 0) return(next);
@@ -1397,7 +1477,7 @@ int startopen()
 {
 	int next;
 	int argc;
-	int local_cmdsetopt;
+	long local_cmdsetopt;
 	char *argv[2];
 
 	if ((next = setjmp(jb)) != 0) return(next);
@@ -1478,7 +1558,8 @@ int ask;
 
 {
 	if (game_flag && character_generated && total_winner) {
-		alert_error("Sorry.  Since you are a total winner, you cannot save this game.  Your character must be retired.");
+		alert_error("Sorry.  Since you are a total winner, you cannot\
+ save this game.  Your character must be retired.");
 		HiliteMenu(0);
 	}
 	else if (game_flag && character_generated && asksavegame(ask)) {
@@ -1513,7 +1594,7 @@ void dofmquit()
 }
 
 void dofilemenu(item)
-int item;
+long item;
 
 {
 	switch (item) {
@@ -1545,7 +1626,7 @@ int item;
 }
 
 void doappmenu(item)
-int item;
+long item;
 
 {
 	switch (item) {
@@ -1554,15 +1635,16 @@ int item;
 							UnloadSeg(DoMacHelp);
 							break;
 
-		case AM_CMD_SET:	ConfigScreenMgr(TRUE, CMDSET_TYPE, CMDSET_ID, GetCommandSet);
+		case AM_CMD_SET:	ConfigScreenMgr(TRUE, CMDSET_TYPE,
+							CMDSET_ID, GetCommandSet);
 							UnloadSeg(GetCommandSet);
-							cmdsetopt = **((int **) GetResource(CMDSET_TYPE, CMDSET_ID));
+							cmdsetopt = **((long **) GetResource(CMDSET_TYPE, CMDSET_ID));
 							HiliteMenu(0);
 							break;
 
 		case AM_TEXT_ED:	ConfigScreenMgr(TRUE, TE_TYPE, TE_ID, GetTextEditor);
 							UnloadSeg(GetTextEditor);
-							editor = **((int **) GetResource(TE_TYPE, TE_ID));
+							editor = **((long **) GetResource(TE_TYPE, TE_ID));
 							HiliteMenu(0);
 							break;
 
@@ -1581,6 +1663,7 @@ int item;
 void unloadsegments()
 
 {
+#ifndef THINK_C
 	extern void create_character(),
 		creatures(),
 		exit_game(),
@@ -1616,6 +1699,7 @@ void unloadsegments()
 	UnloadSeg(store_init);					/* Store			*/
 	UnloadSeg(aim);							/* Wands			*/
 	UnloadSeg(wizard_light);				/* Wizard			*/
+#endif
 
 	return;
 }
@@ -1630,13 +1714,17 @@ int main()
 
 {
 	int next, savedgame, restart_flag;
+#ifndef THINK_C
 	extern void _DataInit();
+#endif
 
 	checkdebugger();
 
+#ifndef THINK_C
 	UnloadSeg(_DataInit);
+#endif
 
-	getstack(0x7000);
+	getstack(0x7000L);
 
   	MaxApplZone();
 
@@ -1654,12 +1742,16 @@ int main()
 	/* Otherwise, they will be loaded from the preferences file */
 
 	ConfigScreenMgr(FALSE, CMDSET_TYPE, CMDSET_ID, GetCommandSet);
+#ifndef THINK_C
 	UnloadSeg(GetCommandSet);
-	cmdsetopt = **((int **) GetResource(CMDSET_TYPE, CMDSET_ID));
+#endif
+	cmdsetopt = **((long **) GetResource(CMDSET_TYPE, CMDSET_ID));
 
 	ConfigScreenMgr(FALSE, TE_TYPE, TE_ID, GetTextEditor);
+#ifndef THINK_C
 	UnloadSeg(GetTextEditor);
-	editor = **((int **) GetResource(TE_TYPE, TE_ID));
+#endif
+	editor = **((long **) GetResource(TE_TYPE, TE_ID));
 
 	DefineScreenCursor(attrColorFore, 2, GetCaretTime());
 	ShowScreenCursor();
@@ -1716,6 +1808,10 @@ int main()
 				break;
 			case NEXT_WAIT:
 				next = waitforchoice();
+				break;
+			default:
+				msg_print("What was that?");
+				next = NEXT_WAIT;
 				break;
 		}
 	} while (next != NEXT_QUIT);

@@ -15,6 +15,8 @@ moria \- a dungeon game
 ] [
 .B \-s
 ] [
+.B \-S
+] [
 .B \-n
 ] [
 .B \-w
@@ -69,7 +71,8 @@ You move in various directions
 .ie '\*O'ROGUE_LIKE' the same way you do in \fIrogue\fP(6).
 .el by pressing the numeric keypad keys, VMS-style.
 If you specify
-.ie '\*O'ROGUE_LIKE' \fB\-o\fP, you move by pressing the numeric keypad keys, VMS-style.
+.if '\*O'ROGUE_LIKE' \fB\-o\fP, you move by pressing the numeric keypad
+.ie '\*O'ROGUE_LIKE' keys, VMS-style.
 .el \fB\-r\fP, you move the same way you do in \fIrogue\fP(6).
 You can also specify
 .ie '\*O'ROGUE_LIKE' \fB\-r\fP to force the \fIrogue\fP(6) like command set.
@@ -80,7 +83,11 @@ options are given multiple times, only the last one will take effect.
 If you specify
 .BR \-s ,
 .I moria
-prints a list of the twenty top scorers and exits.
+prints all of the scores in the score file and exits.
+On a multiuser system, if you specify
+.BR \-S ,
+.I moria
+prints prints only those scores belonging to you and then exits.
 .PP
 If you specify \fB\-w\fP,
 .I moria
@@ -99,13 +106,8 @@ This version was written by Jim Wilson at the University of California,
 Berkeley.
 .SH BUGS
 .PP
-Occasionally, invisible invincible monsters are created.  This happens
-most often when fighting oozes.
-
 A suspended game that gets a hangup signal will die without creating a
 save file.
-
-The score file is not implemented.
 
 Rerolling with a % at the class prompt not implemented.
 

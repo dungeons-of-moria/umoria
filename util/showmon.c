@@ -25,8 +25,10 @@ print_monsters()
 	    {
 	      c_ptr = &c_list[i];
 	      /* Begin writing to file				       */
-	      (void) fprintf(file1, "--------------------------------------------\n");
-	      (void) fprintf(file1, "%3d  %-31s     (%c)\n", i, c_ptr->name, c_ptr->cchar);
+	      (void) fprintf(file1, "------------------------------------");
+	      (void) fprintf(file1, "--------\n");
+	      (void) fprintf(file1, "%3d  %-31s     (%c)\n", i, c_ptr->name,
+			     c_ptr->cchar);
 	      (void) fprintf(file1, "     Speed =%3d  Level     =%3d  Exp =%6u\n",
 		      c_ptr->speed-10, c_ptr->level, c_ptr->mexp);
 	      (void) fprintf(file1, "     AC    =%3d  Eye-sight =%3d  HD  =%6s\n",

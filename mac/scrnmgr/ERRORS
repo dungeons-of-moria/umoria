@@ -1,0 +1,12 @@
+ScrnMgr.c:
+
+WNETest(), the THINK C code always returns false, hence the code is not
+	multifinder friendly
+AdjustPortBounds(), the THINK C code does not work right for color and/or
+	multiple monitors
+GetScreenBounds(), the THINK C code does not handle multiple monitors
+
+ScrnTest.ro:
+
+doesn't have the multifinder SIZE resource, hence not multifinder friendly
+

@@ -1,0 +1,3 @@
+
+The game tends to crash with an out of memory error if run for a very
+long time.  This has been reported as happening after about 2 hours.

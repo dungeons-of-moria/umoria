@@ -21,8 +21,8 @@ moria1.ms, moria2.ms
 	is the document "The Dungeons of Moria".  It is a complete description
 	of the game.  You may want to adjust the margin and line length
 	values at the beginning.  To view it, use the command
-	'tbl moria1.ms moria2.ms | nroff -ms'.  It is split into two
-	parts so that it can be easily mailed.
+	'tbl moria1.ms moria1.ms | nroff -ms'.  It is split into two parts
+	so that it can be easily mailed.
 
 moria1.txt, moria2.txt
 	is an already processed copy of the document "The Dungeons of Moria"
@@ -33,6 +33,9 @@ moria1.txt, moria2.txt
 pronounc
 	explains how to pronounce the name moria.
 
-versions.inf
-	explains the differences between some of the many different
-	versions of moria, and also gives info on how to obtain them.
+spoilers
+	lists spell damages.  Much of this info should really be incorporated
+	into the manual.
+
+where.inf
+	gives info on how to obtain the various versions of moria.

@@ -1,0 +1,56 @@
+CURSES.TXT - some documentation for ST-Curses.
+
+This text should come together with three other files :
+  CURSES.C  - C code for the ST-Curses package
+  CURSES.H  - include file for programs using curses
+  CURSINC.H - include file for CURSES.C
+  
+Curses is a computer and terminal-independent screen package for character-
+based programs. Curses originated in the UNIX world and many programs written
+for UNIX require a version of curses. This is ST-curses, a port of Curses for
+the Atari ST in monochrome or medium resolution. This text has been written by
+Hildo Biersma (address below), but I did not originally write the ST-Curses
+package. However, I did an almost complete rewrite for reasons of clarity and
+speed; I am therefore including some documentation with it, too.
+
+This version was written for use with Turbo-C 2.0; some changes may be needed
+if you intend to use it with Mark Williams C, GNU C or other compiler.
+Throughout all of the code in CURSES.C I have included a number of comments that
+should make the code understandable and therefore (I hope) maintainable.
+You should take special notice of the explanation of the *WINDOW data structure
+that appears as a header in CURSES.C.
+
+ST-Curses was originally written by :
+  Rene van't Veen
+  Debussystraat 27
+  1817 GL Alkmaar
+  The Netherlands
+whom I do not personally know. Thanks, Rene.
+
+Rene made ST-Curses available as a shareware program. That is, you can use it
+for own programs as long as you do not remove the copyright. For commercial use
+you are supposed to make a donation of US $5 or equivalent. Please read the
+header in CURSES.C for more details. Also note that the copyright remains with
+Rene, even though the code has been extensively modified by me.
+
+Some bugs may remain in the code; especially the wgetstr routine looks suspect.
+I used ST-Curses in a version of the game Moria and can assure you that all
+routines used by Moria work fine. Modifications to the code have mostly been to
+use pointers and more pointers instead of array dereferencing. The net result
+has been that the compiled code is some 200 bytes smaller and, depending on the 
+routine, 2 through 10 times faster. I also ensured that the routine type (void,
+integer etc) was more in line with the original ('real') UNIX curses. For an
+idea of what I've done, I included the old version of the routine wrefresh()
+along with the new code (commented out in CURSES.C).
+
+Please note that I do not take any responsibility for this code. It may or may
+not contain any bugs; it may or may not have been optimized completely. In my
+own opinion, it works pretty good and quite fast enough for my purposes.
+Should you have any problems with the code or discover any bugs, please contact
+me - I'll do what I can to help. 
+
+Good luck and greetings from :
+  Hildo Biersma
+  Tollensstraat 138
+  2513 GE Den Haag
+  Holland (Europe).

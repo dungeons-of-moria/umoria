@@ -1,3 +1,14 @@
+/* mac/macscore.c: scorefile code
+
+   Copyright (c) 1989-1991 Curtis McCauley, James E. Wilson
+
+   This software may be copied and distributed for educational, research, and
+   not for profit purposes provided that this copyright and statement are
+   included in all such copies. */
+
+#include <stdio.h>
+
+#ifndef THINK_C
 #include <Types.h>
 #include <Resources.h>
 #include <Events.h>
@@ -12,14 +23,24 @@
 #include <SysEqu.h>
 #include <Errors.h>
 
-#include <StdIO.h>
 #include <String.h>
 #include <Strings.h>
 
 #include <ScrnMgr.h>
 
-#include "constant.h"
+#else
+
+#include <string.h>
+
+#include "ScrnMgr.h"
+
+#define p2cstr(x)	(char *)PtoCstr((char *)x)
+#define c2pstr(x)	(char *)CtoPstr((char *)x)
+
+#endif
+
 #include "config.h"
+#include "constant.h"
 #include "types.h"
 #include "externs.h"
 
@@ -38,14 +59,24 @@
 #define codeEnter				0x03
 #define codeReturn				0x0D
 
+#ifdef THINK_C
+/* Cover up error in THINK C library.  */
+#define ok	OK
+#define cancel	Cancel
+#endif
+
 typedef struct LDEFRec {
 	short braInstruction;
 	short flags;
-	int resType;
+	int32 resType;
 	short resID;
 	short version;
 	short jmpInstuction;
+#ifdef THINK_C
+	void (*defProc)();
+#else
 	pascal void (*defProc)();
+#endif
 } LDEFRec, *LDEFPtr, **LDEFHandle;
 
 static short scoresRefNum;
@@ -63,7 +94,7 @@ void CreateScoreFile()
 	Str255 fileName;
 	OSErr err;
 
-	strncpy(fileName, MORIA_TOP, 255);
+	strncpy((char *)fileName, MORIA_TOP, 255);
 	fileName[255] = '\0';
 	(void) c2pstr(fileName);
 
@@ -76,21 +107,22 @@ void CreateScoreFile()
 	restoredirectory();
 
 	if (err != noErr)
-		alert_error("Ooops!  Could not create the high scores file.  Disk may be locked.");
+		alert_error("Ooops!  Could not create the high scores \
+file.  Disk may be locked.");
 
 	return;
 }
 
 void EnterScoreFile(theScore)
-int *theScore;
+int32 *theScore;
 
 {
 #if 0
 	Str255 fileName;
 	OSErr err;
 	Boolean bump, append;
-	int i, pos, count;
-	int prev, next;
+	int32 i, pos, count;
+	int32 prev, next;
 	char message[80];
 
 	strncpy(fileName, MORIA_TOP, 255);
@@ -111,9 +143,9 @@ int *theScore;
 
 	prev = *theScore;
 
-	for (i = 0, pos = 0; i < maxEntries; pos += sizeof(int), i++) {
+	for (i = 0, pos = 0; i < maxEntries; pos += sizeof(int32), i++) {
 
-		count = sizeof(int);
+		count = sizeof(int32);
 		err = FSRead(scoresRefNum, &count, (Ptr) &next);
 
 		if (err == noErr)
@@ -127,7 +159,7 @@ int *theScore;
 
 		SetFPos(scoresRefNum, fsFromStart, pos);
 
-		count = sizeof(int);
+		count = sizeof(int32);
 		err = FSWrite(scoresRefNum, &count, (Ptr) &prev);
 
 		if ( (err != noErr) || (append) ) break;
@@ -177,7 +209,7 @@ ListHandle list;
 }
 
 static void Draw(scoreptr, clip, indent)
-int *scoreptr;
+int32 *scoreptr;
 Rect *clip;
 Point indent;
 
@@ -189,9 +221,9 @@ Point indent;
 
 	if (scoreptr != NULL) {
 		(void) sprintf(line, "%-7d%-15.15s%-10.10s%-10.10s%-5d%-25.25s%5d",
-						(int) scoreptr->points, scoreptr->name,
+						(int32) scoreptr->points, scoreptr->name,
 						race[scoreptr->prace].trace, class[scoreptr->pclass].title,
-						(int) scoreptr->lev, scoreptr->died_from, scoreptr->dun_level);
+						(int32) scoreptr->lev, scoreptr->died_from, scoreptr->dun_level);
 		(void) c2pstr(line);
 	}
 	else
@@ -220,7 +252,8 @@ Point indent;
 #endif
 }
 
-static pascal void HighScoresLDEF(msg, select, clip, cno, dataOffset, dataLen, list)
+static pascal void HighScoresLDEF(msg, select, clip, cno, dataOffset,
+				  dataLen, list)
 short msg;
 Boolean select;
 Rect *clip;
@@ -229,10 +262,12 @@ short dataOffset, dataLen;
 ListHandle list;
 
 {
+#ifndef THINK_C
 	#pragma unused(select, cno, dataLen)
+#endif
 	short offset;
-	int count;
-	int score;
+	int32 count;
+	int32 score;
 
 	switch (msg) {
 
@@ -246,8 +281,8 @@ ListHandle list;
 				Draw(NULL, clip, (*list)->indent);
 			}
 			else {
-				count = sizeof(int);
-				(void) SetFPos(scoresRefNum, fsFromStart, (int) offset);
+				count = sizeof(int32);
+				(void) SetFPos(scoresRefNum, fsFromStart, (int32) offset);
 				(void) FSRead(scoresRefNum, &count, (Ptr) &score);
 				Draw(&score, clip, (*list)->indent);
 			}
@@ -266,7 +301,8 @@ static void InvalScoreRange()
 
 	first = (*theList)->visible.top + 1;
 	last = (*theList)->visible.bottom;
-	if (last > (*theList)->dataBounds.bottom) last = (*theList)->dataBounds.bottom;
+	if (last > (*theList)->dataBounds.bottom)
+	  last = (*theList)->dataBounds.bottom;
 
 	NumToString(first, from);
 	NumToString(last, to);
@@ -351,8 +387,10 @@ short theItem;
 	TextFont(monaco);
 	TextSize(9);
 
-	MoveTo(itsRect.left + (*theList)->indent.h + 1, itsRect.top + (*theList)->indent.v);
-	DrawString("\pPoints Name           Race      Class     Lv   Killed By                Dun Lv");
+	MoveTo(itsRect.left + (*theList)->indent.h + 1,
+	       itsRect.top + (*theList)->indent.v);
+	DrawString("\pPoints Name           Race      Class     Lv   Killed \
+By                Dun Lv");
 
 	TextFont(saveFont);
 	TextSize(saveSize);
@@ -371,7 +409,7 @@ void DoScoresDlg()
 {
 	Str255 fileName;
 	OSErr err;
-	int bytes;
+	int32 bytes;
 	short entries;
 	GrafPtr oldPort;
 	FontInfo fi;
@@ -384,14 +422,14 @@ void DoScoresDlg()
 	Rect itsRect;
 	Rect listRect, cellRect;
 	Point cellSize;
-	int i;
-	int h, v;
+	int32 i;
+	int32 h, v;
 	Point cno;
 	short offset;
 
 	CreateScoreFile();
 
-	strncpy(fileName, MORIA_TOP, 255);
+	strncpy((char *)fileName, MORIA_TOP, 255);
 	fileName[255] = '\0';
 	(void) c2pstr(fileName);
 
@@ -405,7 +443,7 @@ void DoScoresDlg()
 	}
 
 	(void) GetEOF(scoresRefNum, &bytes);
-	entries = bytes / sizeof(int);
+	entries = bytes / sizeof(int32);
 
 	theDialog = GetNewDialog(scoresDlgID, nil, (WindowPtr) -1);
 
@@ -429,13 +467,15 @@ void DoScoresDlg()
 	GetDItem(theDialog, ok, &itsType, (Handle *) &okButton, &itsRect);
 	InsetRect(&itsRect, -4, -4);
 
-	SetDItem(theDialog, dfltBorder, userItem, (Handle) DrawDefaultBorder, &itsRect);
+	SetDItem(theDialog, dfltBorder, userItem, (Handle) DrawDefaultBorder,
+		 &itsRect);
 
 	GetDItem(theDialog, titleBox, &itsType, &itsHandle, &titleRect);
 
 	GetDItem(theDialog, listBox, &itsType, &itsHandle, &listRect);
 
-	SetPt(&cellSize, listRect.right - listRect.left - 2, fi.ascent + fi.descent + fi.leading);
+	SetPt(&cellSize, listRect.right - listRect.left - 2,
+	      fi.ascent + fi.descent + fi.leading);
 
 	listRect.bottom =
 		listRect.top +
@@ -467,7 +507,7 @@ void DoScoresDlg()
 		LSetCell((Ptr) &offset, (short) sizeof(offset), cno, theList);
 	}
 	else {
-		for (i = 0, offset = 0; i < entries; i++, offset += sizeof(int)) {
+		for (i = 0, offset = 0; i < entries; i++, offset += sizeof(int32)) {
 			SetPt(&cno, 0, i);
 			LSetCell((Ptr) &offset, (short) sizeof(offset), cno, theList);
 		}

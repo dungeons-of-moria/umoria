@@ -1,0 +1,15 @@
+mac.c:
+check_debugger(): all code commented out for THINK_C
+unloadsegments(): all code commented out for THINK_C
+main(): code for unloading the screenmanager is commented out for THINK_C
+
+macio.c:
+get_check(): change x,y to short?
+
+macmoria.r: no SIZE resource, and no help text
+the help text, as a precompiled resource, is available in the file
+miscrsrc.hqx  This resource has incorrect version numbers, so you should
+edit it before you use it to change the version numbers from 5.2.2 to
+5.3.
+
+There should not be any version numbers as text in any Mac file.

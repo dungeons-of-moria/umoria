@@ -1,28 +1,40 @@
-/* This program creates the initialized global data resources.		*/
-/* It is compiled as an MPW tool.									*/
+/* mac/macdata.c: this program creates the initialized global data resources
 
-/* Monsters.c, player.c, tables.c, treasure.c, and variables.c are included.*/
-/* But, when this program is built, the compiler is instructed to	*/
-/* actually include the initialized global data.  We just copy it	*/
-/* into resource handles and dump them to the executable.			*/
+   Copyright (c) 1989-91 Curtis McCauley, James E. Wilson
 
-/* Why do this?  MPW handles >32K global data ok (otherwise, this	*/
-/* program could not compile).  However, we have to pay the price	*/
-/* in efficiency.  The code hacks to keep the global data in		*/
-/* resources are trivial, mainly redefining the variable to be a	*/
-/* pointer instead of an array.  This scheme has the added			*/
-/* advantage of providing a means for re-initialization of the		*/
-/* global data.  MacMoria, which is "restartable" requires this.	*/
+   This software may be copied and distributed for educational, research, and
+   not for profit purposes provided that this copyright and statement are
+   included in all such copies. */
 
-/* See macrsrc.c for a list of variables involved.					*/
+/* Monsters.c, player.c, tables.c, treasure.c, and variables.c are included.
+   But, when this program is built, the compiler is instructed to
+   actually include the initialized global data.  We just copy it
+   into resource handles and dump them to the executable.	*/
+
+/* Why do this?  MPW handles >32K global data ok (otherwise, this
+   program could not compile).  However, we have to pay the price
+   in efficiency.  The code hacks to keep the global data in
+   resources are trivial, mainly redefining the variable to be a
+   pointer instead of an array.  This scheme has the added
+   advantage of providing a means for re-initialization of the
+   global data.  MacMoria, which is "restartable" requires this.	*/
+
+/* See macrsrc.c for a list of variables involved.			*/
 
 #include <stdio.h>
 
+#ifndef THINK_C
 #include <types.h>
 #include <memory.h>
 
 #include <dumpres.h>
+#else
+#include <console.h>
 
+#include "DumpRes.h"
+#endif
+
+#include "config.h"
 #include "macrsrc.h"
 
 #define RES_ATTRS				0
@@ -36,6 +48,10 @@ char *argv[];
 	unsigned size, temp;
 	char *p, *q;
 	restable_type *r;
+
+#ifdef THINK_C
+	argc = ccommand(&argv);
+#endif
 
 	if (argc != 2) {
 		fprintf(stderr, "### %s: Usage - %s targetFileName\n", argv[0], argv[0]);
@@ -53,6 +69,7 @@ char *argv[];
 
 	}
 
+#ifndef RSRC_PART1
 	size = 0;
 	for (i = 0; i < MAX_RESTART; i++) size += restart_vars[i].size;
 
@@ -74,7 +91,9 @@ char *argv[];
 		p, 1, size,
 		NULL
 	);
+#endif
 
+#ifndef THINK_C
 	printf("restable info --\n");
 	for (i = 0, size = 0; i < MAX_RESOURCES; ++i) {
 		size += (temp = restable[i].elemCnt * restable[i].elemSiz);
@@ -90,6 +109,7 @@ char *argv[];
 	}
 	printf("     --------\n");
 	printf("     %8d\n\n", size);
+#endif
 
 	return(0);
 }

@@ -1,67 +1,137 @@
 
 A History of Moria: written by Jim Wilson
-	this history is somewhat biased towards the Umoria versions because
-	those are the versions that I am most familiar with, info for the
-	VMS versions may be inaccurate
+	This history is somewhat biased towards the Umoria versions because
+	those are the versions that I am most familiar with; info for the
+	VMS versions, in particular, may be inaccurate.
 
-VMS Moria 4.8: last version by original authors, R.A. Koeneke, etc.,
-	developed at Univ Oklahoma in VMS Pascal
+Moria 4.8:
+	The last version developed by the original authors, R.A. Koeneke,
+	etc., at the Univ Oklahoma.  This is written in VMS Pascal, and
+	is only available for VAX/VMS systems.  All other versions of moria
+	are based on this program.  (Sometimes referred to as VMS Moria	4.8.)
 
-VMS Moria 5.0: developed at Univ Buffalo, VMS Pascal; has a Black
-	Market where one can purchase enchanted magic items at 100 times
-	normal value, a few bug fixes over 4.8 Moria, some new monsters
+Moria UB 5.0:
+	This version was developed at Univ Buffalo, hence the UB in the name.
+	This is also written in VMS Pascal, and is only available for VAX/VMS
+	systems.  Some of the distinguishing features of this version are:
+	a Black Market where one can purchase highly enchanted magic items at
+	100 times normal value, monsters on the town level worth negative
+	experience (Mother and Baby, Small Child), `shadow' Balrogs start
+	appearing at level 50 with the `real' Balrog at level 1200 (this makes
+	it a bit difficult to win).  There are also some new items, and many
+	more new monsters.  (Sometimes referred to as VMS Moria 5.0 or
+	Moria 5.0.  Should not be confused with Umoria 5.x.)  This is based
+	on the Moria 4.8 sources.
+Moria UB 5.1:
+	The latest version of UB Moria.  This version is not available outside
+	Univ Buffalo as yet, and I do not know what any of the new features
+	are.  Only available for VAX/VMS systems.
 
-VMS Moria 6.0: under development at Villanova by Rick Greene; some more
-	bug fixes over VMS 5.0 (some borrowed from Umoria 4.87), more new
-	monsters, reduced map display (borrowed from PC-Moria),
-	this version was never finished and is apparently defunct
+VMS Moria 6.0:
+	This version was under development at Villanova by Rick Greene.
+	However, it was never completed and was never released.  I believe
+	that it was abandoned because Rick lost computer and/or network access.
+	This was based on the Moria UB 5.0 sources.
 
-UMoria 4.87: developed by Jim Wilson at UC Berkeley;
-	very many bugs and inconsistencies in 4.8 fixed, rewritten
-	in C for better portability, Atari/Mac/UNIX versions identical,
-	character rerolling, no help facility like the VMS versions, etc.
+Imoria:
+	This version was developed at the Univ. Washington.  It is written
+	in VMS Pascal, and is only available for VAX/VMX systems.  This
+	version has never been officially released outside U. Washington.
+	I know very little about this version, but have been told by people
+	at U Washington that it is far superior to any other Moria version
+	that currently exists.  It has many new monsters, new objects,
+	new races, new classes, new terrain types (like water), etc.
+	Unfortunately, the authors have never shown any serious intent
+	to release the sources, they are simply unavailable.  I believe
+	that it is based on the Moria 4.8 sources.
+Imoria 4.9:
+	The latest version of Imoria.  I do not know anything about this
+	version.
 
-PC-Moria 4.873: developed by Don Kneller; same as Umoria 4.87 except the
-	sources will compile on machines with 16 bit integers, reduced map
-	display
+PC-Moria 4.00+:
+	This version is a port of the Moria 4.8 Pascal sources to the IBM-PC
+	by John W. DeBoskey.  This is a faithful port of the original game,
+	unfortunately, this version has quite a few bugs and hence is not
+	as good as the unrelated PC-Moria 4.87 version.
 
-Amiga Moria v3.0: bitmapped graphics unlike ascii graphics of other versions,
-	has weapons of Godly Might and other changes that make it far far
-	easier than all other Moria versions
+Umoria (UNIX Moria) 4.83/4.85/4.87:
+	This version was developed by Jim Wilson at UC Berkeley.
+	It is written in UNIX/C and is much more portable than the original
+	sources.  These sources, at one time or another, were ported to VMS,
+	IBM-PC, Atari ST, Amiga, Macintosh, Apple IIGS, VM/SP, Archimedes,
+	are probably others too.  This version fixes very many bugs, spelling
+	errors, and inconsistencies in the original Moria 4.8 sources.
+	This version has no help facility like the original program.  It has
+	character rerolling (in the later versions), but few other changes
+	from the original game.  (This version has many names, e.g.
+	Umoria 4.87, UNIX Moria 4.87, PC-Moria 4.83, PC-Moria 4.873, Mac Moria
+	4.87, etc.  Just about anything with a .83/.85/.87 in the name is
+	a version of this program.)  This is based on the Moria 4.8 sources.
 
-BRUCE Moria: developed by Christopher J. Stuart at Monash University,
-	somewhere in Australia; monster memories, look any direction code,
+PC-Moria 4.83/4.873:
+	This version was developed by Don Kneller, based on the Umoria sources.
+	These sources are identical except that they will compile on machines
+	with 16 bit integers, had many changes to reduce program size,
+	and introduced the reduced map display.  (Note: PC-Moria 4.83 is
+	extremely buggy, and is unplayable.  I strongly recommend that you
+	upgrade to a newer version if you are still playing it.)
+
+Amiga Moria v3.0:
+	This version was written by Richard and Bryan Henderson of Kettering,
+	Ohio.  It is based on the Umoria 4.85 sources.  This version
+	has bitmapped graphics, unlike the ascii graphics of all other
+	versions.  It has weapons of Godly Might (which make one practically
+	invicible) and some other changes that make it far far easier than
+	all other Moria versions.  It also has several new monsters, such
+	as Lavender Leprechauns.  Sources for this version were never
+	released.
+
+BRUCE Moria:
+	This version was developed by Christopher J. Stuart at Monash
+	University, Clayton, Victoria Australia.  This version has many
+	great new features: monster memories, look any direction code,
 	settable options, better run/find code, can center character on
 	screen, stat code rewritten to fix bugs, rudimentory help facility
-	added, plus many other enhancements, experimental version,
-	source never publicly released
+	added, plus many other enhancements.  This was considered an
+	experimental version, and source never publicly released.  This
+	was based on the Umoria 4.85 sources.
 
-UMoria 5.0: under developement by Jim Wilson at UC Berkeley; unified source
-	for UNIX/IBM-PC/Atari/Mac/VMS, many new features
-	borrowed from BRUCE Moria, more bug fixes, all floating point code
-	eliminated, many changes that affect play balance (hopefully for
-	the better), many type/structure changes
+UMoria 5.x:
+	This version is under developement by Jim Wilson at Cygnus Support.
+	It has unified source for the UNIX/IBM-PC/Atari/Mac/VMS/Amiga ports
+	of Umoria 4.87.  It includes many new features borrowed from BRUCE
+	Moria, many more bug fixes, all floating point code eliminated,
+	many changes that affect play balance (hopefully for the better),
+	many type/structure changes to reduce game size and allow fixes for
+	pervasive bugs.  See the doc/FEATURES.NEW file for a list of most
+	user visible changes.  (Sometimes called Umoria 5.0, Moria 5.0,
+	Moria 5.x.  Should not be confused with Moria UB 5.0.)
+Umoria 5.4:
+	The latest version of Umoria 5.x.
 
 Vertical position indicates roughly when the versions were made available,
 although the scale is not very accurate.
 
 
-1983				Moria 1.0 (VMS)
-				   |
-1985				Moria 4.8 (VMS)
-				  /  \
-1987		UMoria 4.83 ------    ----------------
-		   /  \				      \
-		  /    --------- PC-Moria 4.83	       |
-	    UMoria 4.85		     |		       |
-	      /	 | \		     |		  Moria UB 5.0 (VMS)
-1988   /------	 |  ------	     |		       |
-      /		 |	UMoria 4.87  |		       |
-     |	     BRUCE Moria	\    |		       |
- Amiga Moria	   \		PC-Moria 4.873	       |
-1989		    --------\	  |		       |
-			     \	  |		       |
-			      \	  |		       |
-1990			    Umoria 5.0		       |
-						       |
-						?? Moria 6.0 (VMS) ??
+1983                            Moria 1.0
+                                   |
+1985                            Moria 4.8
+                                  /  \
+1987            UMoria 4.83 ------    ----------------------\
+                   /  \                       |              \
+                  /    ------- PC-Moria 4.83  |              |
+            UMoria 4.85            |          |              |
+              /  | \               |          |         Moria UB 5.0
+1988   /------   |  ------         |          |              |
+      /          |    UMoria 4.87  |          |              |
+     |       BRUCE Moria  |   \    |          |              |
+ Amiga Moria     |        |   PC-Moria 4.873  |              |---\
+ (surviving)     |     	  |      /            |              |    \
+1989             |   /----------/             |              |  VMS Moria 6.0
+                 |  /                         |              |   (defunct)
+1990         Umoria 5.0	       	              |              |
+                 |                       Imoria 4.9     Moria UB 5.1
+                 |                            |              |
+             Umoria 5.2.2             (alive and well)  (alive and well)
+                 |
+           (alive and well)

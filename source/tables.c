@@ -1,13 +1,13 @@
-/* tables.c: store/attack/RNG/etc tables and variables
+/* source/tables.c: store/attack/RNG/etc tables and variables
 
-   Copyright (c) 1989 James E. Wilson, Robert A. Koeneke
+   Copyright (c) 1989-91 James E. Wilson, Robert A. Koeneke
 
    This software may be copied and distributed for educational, research, and
    not for profit purposes provided that this copyright and statement are
    included in all such copies. */
 
-#include "constant.h"
 #include "config.h"
+#include "constant.h"
 #include "types.h"
 
 #ifdef MORIA_HOU
@@ -92,8 +92,8 @@ int16u store_choice[MAX_STORES][STORE_CHOICES] = {
 {366,365,364,84,84,365,123,366,365,350,349,348,347,346,346,345,345,345,
 	344,344,344,344,344,344,344,344},
 	/* Armory	 */
-{95,96,97,103,104,105,106,110,111,112,119,121,124,125,126,127,129,95,103,
-	104,124,125,92,93,95,96},
+{94,95,96,109,103,104,105,106,110,111,112,114,116,124,125,126,127,129,103,
+	104,124,125,91,92,95,96},
 	/* Weaponsmith	 */
 {29,30,34,37,45,49,57,58,59,65,67,68,73,74,75,77,79,80,81,83,29,30,80,83,
 	80,83},

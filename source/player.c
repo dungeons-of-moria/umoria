@@ -1,13 +1,13 @@
-/* player.c: player specific variable definitions
+/* source/player.c: player specific variable definitions
 
-   Copyright (c) 1989 James E. Wilson, Robert A. Koeneke
+   Copyright (c) 1989-91 James E. Wilson, Robert A. Koeneke
 
    This software may be copied and distributed for educational, research, and
    not for profit purposes provided that this copyright and statement are
    included in all such copies. */
 
-#include "constant.h"
 #include "config.h"
+#include "constant.h"
 #include "types.h"
 
 /* Player record for most player related info */
@@ -132,18 +132,6 @@ race_type race[MAX_RACES] = {
     }
  };
 #endif
-
-/* 5 char race for printing scores. */
-char *dsp_race[MAX_RACES] = {
-  "Human",
-  "H-Elf",
-  "Elf  ",
-  "Hobbt",
-  "Gnome",
-  "Dwarf",
-  "H-Orc",
-  "H-Tro"
-};
 
 /* Background information					*/
 #ifdef MACGAME
@@ -509,13 +497,14 @@ char *spell_names[62] = {
 
 /* Each type of character starts out with a few provisions.	*/
 /* Note that the entries refer to elements of the object_list[] array*/
-/* 344 = Food Ration, 365 = Wooden Torch, 123 = Cloak, 30 = Stiletto,
-   103 = Soft Leather Armor, 318 = Beginners-Majik, 322 = Beginners Handbook */
+/* 344 = Food Ration, 365 = Wooden Torch, 123 = Cloak, 318 = Beginners-Majik,
+   103 = Soft Leather Armor, 30 = Stiletto, 322 = Beginners Handbook */
+
 int16u player_init[MAX_CLASS][5] = {
 		{ 344, 365, 123,  30, 103},	/* Warrior	 */
 		{ 344, 365, 123,  30, 318},	/* Mage		 */
 		{ 344, 365, 123,  30, 322},	/* Priest	 */
-		{ 344, 365,  30, 103, 318},	/* Rogue	 */
+		{ 344, 365, 123,  30, 318},	/* Rogue	 */
 		{ 344, 365, 123,  30, 318},	/* Ranger	 */
 		{ 344, 365, 123,  30, 322}	/* Paladin	 */
 };

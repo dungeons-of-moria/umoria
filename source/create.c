@@ -1,13 +1,17 @@
-/* create.c: create a player character
+/* source/create.c: create a player character
 
-   Copyright (c) 1989 James E. Wilson, Robert A. Koeneke
+   Copyright (c) 1989-91 James E. Wilson, Robert A. Koeneke
 
    This software may be copied and distributed for educational, research, and
    not for profit purposes provided that this copyright and statement are
    included in all such copies. */
 
-#include "constant.h"
+#ifdef __TURBOC__
+#include	<stdio.h>
+#endif /* __TURBOC__ */
+ 
 #include "config.h"
+#include "constant.h"
 #include "types.h"
 #include "externs.h"
 
@@ -21,7 +25,7 @@
 
 #if defined(LINT_ARGS)
 static void get_stats(void);
-static void change_stat(int, int8);
+static void change_stat(int, int16);
 static void get_all_stats(void);
 static void choose_race(void);
 static void print_history(void);
@@ -32,7 +36,6 @@ static void get_class(void);
 static int monval(int8u);
 static void get_money(void);
 #endif
-
 
 /* Generates character's stats				-JWT-	*/
 static void get_stats()
@@ -442,8 +445,12 @@ static void get_class()
 	    {
 	      for (i = 1; i < MAX_PLAYER_LEVEL; i++)
 		{
+#ifdef AMIGA		/* Stupid Aztec C 5.0 bug work around CBG */
+		  player_hp[i] = player_hp[i-1] + randint ((int)m_ptr->hitdie);
+#else
 		  player_hp[i] = randint((int)m_ptr->hitdie);
 		  player_hp[i] += player_hp[i-1];
+#endif
 		}
 	    }
 	  while ((player_hp[MAX_PLAYER_LEVEL-1] < min_value) ||
@@ -472,7 +479,7 @@ static void get_class()
 static int monval (i)
 int8u i;
 {
-  return 5 * (i - 10);
+  return 5 * ((int)i - 10);
 }
 
 

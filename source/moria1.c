@@ -1,16 +1,20 @@
-/* moria1.c: misc code, mainly to handle player movement, inventory, etc.
+/* source/moria1.c: misc code, mainly handles player movement, inventory, etc
 
-   Copyright (c) 1989 James E. Wilson, Robert A. Koeneke
+   Copyright (c) 1989-91 James E. Wilson, Robert A. Koeneke
 
    This software may be copied and distributed for educational, research, and
    not for profit purposes provided that this copyright and statement are
    included in all such copies. */
 
+#ifdef __TURBOC__
+#include	<stdlib.h>
+#endif
+
 #include <stdio.h>
 #include <ctype.h>
 
-#include "constant.h"
 #include "config.h"
+#include "constant.h"
 #include "types.h"
 #include "externs.h"
 
@@ -30,10 +34,11 @@ static void inven_screen(int);
 static char map_roguedir(char);
 static void sub1_move_light(int, int, int, int);
 static void sub3_move_light(int, int, int, int);
-static int see_wall(int, int, int);
-static int see_nothing(int, int, int);
-#else
-static int see_wall();
+#endif
+
+#ifdef ATARIST_TC
+/* Include this to get prototypes for standard library functions.  */
+#include <stdlib.h>
 #endif
 
 /* Changes speed of monsters relative to player		-RAK-	*/
@@ -44,9 +49,16 @@ void change_speed(num)
 register int num;
 {
   register int i;
+#ifdef ATARIST_MWC
+  int32u holder;
+#endif
 
   py.flags.speed += num;
+#ifdef ATARIST_MWC
+  py.flags.status |= (holder = PY_SPEED);
+#else
   py.flags.status |= PY_SPEED;
+#endif
   for (i = mfptr - 1; i >= MIN_MONIX; i--)
       m_list[i].cspeed += num;
 }
@@ -56,12 +68,15 @@ register int num;
 /* When an item is worn or taken off, this re-adjusts the player */
 /* bonuses.  Factor=1 : wear; Factor=-1 : removed		 */
 /* Only calculates properties with cumulative effect.  Properties that
-   depend on everything being worn are recalculated by calc_bonuses() -CJS - */
+   depend on everything being worn are recalculated by calc_bonuses() -CJS- */
 void py_bonuses(t_ptr, factor)
 register inven_type *t_ptr;
 register int factor;
 {
   register int i, amount;
+#ifdef ATARIST_MWC
+  int32u holder;
+#endif
 
   amount = t_ptr->p1 * factor;
   if (t_ptr->flags & TR_STATS)
@@ -79,12 +94,21 @@ register int factor;
     py.misc.stl += amount;
   if (TR_SPEED & t_ptr->flags)
     change_speed(-amount);
+#ifdef ATARIST_MWC
+  if (((holder = TR_BLIND) & t_ptr->flags) && (factor > 0))
+    py.flags.blind += 1000;
+  if (((holder = TR_TIMID) & t_ptr->flags) && (factor > 0))
+    py.flags.afraid += 50;
+  if ((holder = TR_INFRA) & t_ptr->flags)
+    py.flags.see_infra += amount;
+#else
   if ((TR_BLIND & t_ptr->flags) && (factor > 0))
     py.flags.blind += 1000;
   if ((TR_TIMID & t_ptr->flags) && (factor > 0))
     py.flags.afraid += 50;
   if (TR_INFRA & t_ptr->flags)
     py.flags.see_infra += amount;
+#endif
 }
 
 /* Recalculate the effect of all the stuff we use.		  -CJS- */
@@ -138,22 +162,23 @@ void calc_bonuses()
       i_ptr = &inventory[i];
       if (i_ptr->tval != TV_NOTHING)
 	{
-	  if ((TR_CURSED & i_ptr->flags) == 0)
-	    {
-	      m_ptr->pac += i_ptr->ac;
-	      m_ptr->dis_ac += i_ptr->ac;
-	    }
 	  m_ptr->ptohit += i_ptr->tohit;
 	  if (i_ptr->tval != TV_BOW)		/* Bows can't damage. -CJS- */
 	    m_ptr->ptodam += i_ptr->todam;
 	  m_ptr->ptoac	+= i_ptr->toac;
+	  m_ptr->pac += i_ptr->ac;
 	  if (known2_p(i_ptr))
 	    {
 	      m_ptr->dis_th  += i_ptr->tohit;
 	      if (i_ptr->tval != TV_BOW)
 		m_ptr->dis_td  += i_ptr->todam;	/* Bows can't damage. -CJS- */
 	      m_ptr->dis_tac += i_ptr->toac;
+	      m_ptr->dis_ac += i_ptr->ac;
 	    }
+	  else if (! (TR_CURSED & i_ptr->flags))
+	    /* Base AC values should always be visible, as long as the item
+	       is not cursed.  */
+	    m_ptr->dis_ac += i_ptr->ac;
 	}
     }
   m_ptr->dis_ac += m_ptr->dis_tac;
@@ -178,7 +203,11 @@ void calc_bonuses()
 
   /* can't print AC here because might be in a store */
   if (old_dis_ac != m_ptr->dis_ac)
+#ifdef ATARIST_MWC
+    p_ptr->status |= (holder = PY_ARMOR);
+#else
     p_ptr->status |= PY_ARMOR;
+#endif
 
   item_flags = 0;
   i_ptr = &inventory[INVEN_WIELD];
@@ -250,7 +279,11 @@ void calc_bonuses()
   i_ptr = &inventory[INVEN_WIELD];
   for (i = INVEN_WIELD; i < INVEN_LIGHT; i++)
     {
+#ifdef ATARIST_MWC
+      if ((holder = TR_SUST_STAT) & i_ptr->flags)
+#else
       if (TR_SUST_STAT & i_ptr->flags)
+#endif
 	switch(i_ptr->p1)
 	  {
 	  case 1: p_ptr->sustain_str = TRUE; break;
@@ -275,12 +308,15 @@ void calc_bonuses()
 /* Designed to keep the display as far to the right as possible.  The  -CJS-
    parameter col gives a column at which to start, but if the display does
    not fit, it may be moved left.  The return value is the left edge used. */
-int show_inven(r1, r2, weight, col)
+/* If mask is non-zero, then only display those items which have a non-zero
+   entry in the mask array.  */
+int show_inven(r1, r2, weight, col, mask)
 register int r1, r2;
 int weight, col;
+char *mask;
 {
   register int i;
-  int total_weight, len, l, lim;
+  int total_weight, len, l, lim, current_line;
   bigvtype tmp_val;
   vtype out_val[23];
 
@@ -292,33 +328,41 @@ int weight, col;
 
   for (i = r1; i <= r2; i++)		 /* Print the items	  */
     {
-      objdes(tmp_val, &inventory[i], TRUE);
-      tmp_val[lim] = 0;	 /* Truncate if too long. */
-      (void) sprintf(out_val[i], "  %c) %s", 'a'+i, tmp_val);
-      l = strlen(out_val[i]);
-      if (weight)
-	l += 9;
-      if (l > len)
-	len = l;
+      if (mask == CNIL || mask[i])
+	{
+	  objdes(tmp_val, &inventory[i], TRUE);
+	  tmp_val[lim] = 0;	 /* Truncate if too long. */
+	  (void) sprintf(out_val[i], "  %c) %s", 'a'+i, tmp_val);
+	  l = strlen(out_val[i]);
+	  if (weight)
+	    l += 9;
+	  if (l > len)
+	    len = l;
+	}
     }
 
   col = 79 - len;
   if (col < 0)
     col = 0;
 
+  current_line = 1;
   for (i = r1; i <= r2; i++)
     {
-      /* don't need first two spaces if in first column */
-      if (col == 0)
-	prt(&out_val[i][2], 1+i-r1, col);
-      else
-	prt(out_val[i], 1+i-r1, col);
-      if (weight)
+      if (mask == CNIL || mask[i])
 	{
-	  total_weight = inventory[i].weight*inventory[i].number;
-	  (void) sprintf (tmp_val, "%3d.%d lb",
-			  (total_weight) / 10, (total_weight) % 10);
-	  prt (tmp_val, 1+i-r1, 71);
+	  /* don't need first two spaces if in first column */
+	  if (col == 0)
+	    prt(&out_val[i][2], current_line, col);
+	  else
+	    prt(out_val[i], current_line, col);
+	  if (weight)
+	    {
+	      total_weight = inventory[i].weight*inventory[i].number;
+	      (void) sprintf (tmp_val, "%3d.%d lb",
+			      (total_weight) / 10, (total_weight) % 10);
+	      prt (tmp_val, current_line, 71);
+	    }
+	  current_line++;
 	}
     }
   return col;
@@ -468,11 +512,18 @@ int item_val, posn;
   register char *p;
   bigvtype out_val, prt2;
   register inven_type *t_ptr;
+#ifdef ATARIST_MWC
+  int32u holder;
+#endif
 
   equip_ctr--;
   t_ptr = &inventory[item_val];
   inven_weight -= t_ptr->weight*t_ptr->number;
+#ifdef ATARIST_MWC
+  py.flags.status |= (holder = PY_STR_WGT);
+#else
   py.flags.status |= PY_STR_WGT;
+#endif
 
   if (item_val == INVEN_WIELD || item_val == INVEN_AUX)
     p = "Was wielding ";
@@ -573,11 +624,13 @@ int new_scr;
 	  line = 7;
 	  break;
 	case INVEN_SCR:
-	  scr_left = show_inven(0, inven_ctr - 1, show_weight_flag, scr_left);
+	  scr_left = show_inven(0, inven_ctr - 1, show_weight_flag, scr_left,
+				CNIL);
 	  line = inven_ctr;
 	  break;
 	case WEAR_SCR:
-	  scr_left = show_inven(wear_low, wear_high,show_weight_flag,scr_left);
+	  scr_left = show_inven(wear_low, wear_high, show_weight_flag,
+				scr_left, CNIL);
 	  line = wear_high - wear_low + 1;
 	  break;
 	case EQUIP_SCR:
@@ -609,6 +662,9 @@ char command;
   bigvtype prt1, prt2;
   register inven_type *i_ptr;
   inven_type tmp_obj;
+#ifdef ATARIST_MWC
+  int32u holder;
+#endif
 
   free_turn_flag = TRUE;
   save_screen();
@@ -715,7 +771,11 @@ char command;
 	  if (inventory[INVEN_WIELD].tval == TV_NOTHING &&
 	      inventory[INVEN_AUX].tval == TV_NOTHING)
 	    msg_print("But you are wielding no weapons.");
+#ifdef ATARIST_MWC
+	  else if ((holder = TR_CURSED) & inventory[INVEN_WIELD].flags)
+#else
 	  else if (TR_CURSED & inventory[INVEN_WIELD].flags)
+#endif
 	    {
 	      objdes(prt1, &inventory[INVEN_WIELD], FALSE);
 	      (void) sprintf(prt2,
@@ -732,7 +792,6 @@ char command;
 		scr_left = show_equip(show_weight_flag, scr_left);
 	      py_bonuses(&inventory[INVEN_AUX], -1);	 /* Subtract bonuses */
 	      py_bonuses(&inventory[INVEN_WIELD], 1);	   /* Add bonuses    */
-	      check_strength();
 	      if (inventory[INVEN_WIELD].tval != TV_NOTHING)
 		{
 		  (void) strcpy(prt1, "Primary weapon   : ");
@@ -741,6 +800,9 @@ char command;
 		}
 	      else
 		msg_print("No primary weapon.");
+	      /* this is a new weapon, so clear the heavy flag */
+	      weapon_heavy = FALSE;
+	      check_strength();
 	    }
 	  break;
 	case ' ':	/* Dummy command to return again to main prompt. */
@@ -857,7 +919,11 @@ char command;
 		      while (tmp >= 0);
 		      if (isupper((int)which) && !verify(prompt, item))
 			item = -1;
+#ifdef ATARIST_MWC
+		      else if ((holder = TR_CURSED) & inventory[item].flags)
+#else
 		      else if (TR_CURSED & inventory[item].flags)
+#endif
 			{
 			  msg_print("Hmmm, it seems to be cursed.");
 			  item = -1;
@@ -878,7 +944,13 @@ char command;
 		      if (item >= 0)
 			{
 			  if (command == 'r')
-			    inven_drop(item, TRUE);
+			    {
+			      inven_drop(item, TRUE);
+			      /* As a safety measure, set the player's inven
+				 weight to 0, when the last object is dropped*/
+			      if (inven_ctr == 0 && equip_ctr == 0)
+				inven_weight = 0;
+			    }
 			  else
 			    {
 			      slot = inven_carry(&inventory[item]);
@@ -900,7 +972,7 @@ char command;
 			{ /* Slot for equipment	   */
 			case TV_SLING_AMMO: case TV_BOLT: case TV_ARROW:
 			case TV_BOW: case TV_HAFTED: case TV_POLEARM:
-			case TV_SWORD: case TV_DIGGING:
+			case TV_SWORD: case TV_DIGGING: case TV_SPIKE:
 			  slot = INVEN_WIELD; break;
 			case TV_LIGHT: slot = INVEN_LIGHT; break;
 			case TV_BOOTS: slot = INVEN_FEET; break;
@@ -954,7 +1026,11 @@ char command;
 			}
 		      if (item >= 0 && inventory[slot].tval != TV_NOTHING)
 			{
+#ifdef ATARIST_MWC
+			  if ((holder = TR_CURSED) & inventory[slot].flags)
+#else
 			  if (TR_CURSED & inventory[slot].flags)
+#endif
 			    {
 			      objdes(prt1, &inventory[slot], FALSE);
 			      (void) sprintf(prt2, "The %s you are ", prt1);
@@ -1030,8 +1106,15 @@ char command;
 			  (void) sprintf(prt1, "%s %s (%c)", string, prt2,
 					 'a'+item);
 			  msg_print(prt1);
+			  /* this is a new weapon, so clear the heavy flag */
+			  if (slot == INVEN_WIELD)
+			    weapon_heavy = FALSE;
 			  check_strength();
+#ifdef ATARIST_MWC
+			  if (i_ptr->flags & (holder = TR_CURSED))
+#else
 			  if (i_ptr->flags & TR_CURSED)
+#endif
 			    {
 			      msg_print("Oops! It feels deathly cold!");
 			      add_inscribe(i_ptr, ID_DAMD);
@@ -1069,6 +1152,10 @@ char command;
 			  check_strength();
 			}
 		      selecting = FALSE;
+		      /* As a safety measure, set the player's inven weight
+			 to 0, when the last object is dropped.  */
+		      if (inven_ctr == 0 && equip_ctr == 0)
+			inven_weight = 0;
 		    }
 		  if (free_turn_flag == FALSE && scr_state == BLANK_SCR)
 		    selecting = FALSE;
@@ -1085,7 +1172,7 @@ char command;
 	  else
 	    doing_inven = ' ';	/* A dummy command to recover screen. */
 	  /* flush last message before clearing screen_change and exiting */
-	  msg_print(NULL);
+	  msg_print(CNIL);
 	  screen_change = FALSE;/* This lets us know if the world changes */
 	  command = ESCAPE;
 	}
@@ -1094,10 +1181,17 @@ char command;
 	  /* Put an appropriate header. */
 	  if (scr_state == INVEN_SCR)
 	    {
-	      (void) sprintf(prt1,
-		  "You are carrying %d.%d pounds. In your pack there is %s",
-		  inven_weight / 10, inven_weight % 10,
-		  (inven_ctr == 0 ? "nothing." : "-"));
+	      if (! show_weight_flag || inven_ctr == 0)
+		(void) sprintf(prt1,
+		    "You are carrying %d.%d pounds. In your pack there is %s",
+			       inven_weight / 10, inven_weight % 10,
+			       (inven_ctr == 0 ? "nothing." : "-"));
+	      else
+		(void) sprintf (prt1,
+	"You are carrying %d.%d pounds. Your capacity is %d.%d pounds. %s",
+				inven_weight / 10, inven_weight % 10,
+				weight_limit () / 10, weight_limit () % 10,
+				"In your pack is -");
 	      prt(prt1, 0, 0);
 	    }
 	  else if (scr_state == WEAR_SCR)
@@ -1130,10 +1224,12 @@ char command;
 
 
 /* Get the ID of an item and return the CTR value of it	-RAK-	*/
-int get_item(com_val, pmt, i, j)
+int get_item(com_val, pmt, i, j, mask, message)
 int *com_val;
 char *pmt;
 int i, j;
+char *mask;
+char *message;
 {
   vtype out_val;
   char which;
@@ -1165,7 +1261,7 @@ int i, j;
 	  if (redraw)
 	    {
 	      if (i_scr > 0)
-		(void) show_inven (i, j, FALSE, 80);
+		(void) show_inven (i, j, FALSE, 80, mask);
 	      else
 		(void) show_equip (FALSE, 80);
 	    }
@@ -1256,7 +1352,8 @@ int i, j;
 		    *com_val = which - 'A';
 		  else
 		    *com_val = which - 'a';
-		  if ((*com_val >= i) && (*com_val <= j))
+		  if ((*com_val >= i) && (*com_val <= j)
+		      && (mask == CNIL || mask[*com_val]))
 		    {
 		      if (i_scr == 0)
 			{
@@ -1280,6 +1377,12 @@ int i, j;
 		      test_flag = TRUE;
 		      item = TRUE;
 		      i_scr = -1;
+		    }
+		  else if (message)
+		    {
+		      msg_print (message);
+		      /* Set test_flag to force redraw of the question.  */
+		      test_flag = TRUE;
 		    }
 		  else
 		    bell();
@@ -1367,7 +1470,7 @@ int *dir;
       *dir = prev_dir;
       return TRUE;
     }
-  if (prompt == NULL)
+  if (prompt == CNIL)
     prompt = "Which direction?";
   for (;;)
     {
@@ -1447,6 +1550,7 @@ int y, x;
   register int i, j, start_col, end_col;
   int tmp1, tmp2, start_row, end_row;
   register cave_type *c_ptr;
+  int tval;
 
   tmp1 = (SCREEN_HEIGHT/2);
   tmp2 = (SCREEN_WIDTH /2);
@@ -1458,11 +1562,17 @@ int y, x;
     for (j = start_col; j <= end_col; j++)
       {
 	c_ptr = &cave[i][j];
-	if (c_ptr->lr & !c_ptr->pl)
+	if (c_ptr->lr && ! c_ptr->pl)
 	  {
+	    c_ptr->pl = TRUE;
 	    if (c_ptr->fval == DARK_FLOOR)
 	      c_ptr->fval = LIGHT_FLOOR;
-	    c_ptr->pl = TRUE;
+	    if (! c_ptr->fm && c_ptr->tptr != 0)
+	      {
+		tval = t_list[c_ptr->tptr].tval;
+		if (tval >= TV_MIN_VISIBLE && tval <= TV_MAX_VISIBLE)
+		  c_ptr->fm = TRUE;
+	      }
 	    print(loc_symbol(i, j), i, j);
 	  }
       }
@@ -1561,7 +1671,7 @@ int y2, x2;
 	  }
       light_flag = FALSE;
     }
-  else
+  else if (!find_flag || find_prself)
     print(loc_symbol(y1, x1), y1, x1);
 
   if (!find_flag || find_prself)
@@ -1588,9 +1698,9 @@ void disturb(s, l)
 int s, l;
 {
   command_count = 0;
-  if (s && search_flag)
+  if (s && (py.flags.status & PY_SEARCH))
     search_off();
-  if (py.flags.rest > 0)
+  if (py.flags.rest != 0)
     rest_off();
   if (l || find_flag)
     {
@@ -1604,7 +1714,6 @@ int s, l;
 /* Search Mode enhancement				-RAK-	*/
 void search_on()
 {
-  search_flag = TRUE;
   change_speed(1);
   py.flags.status |= PY_SEARCH;
   prt_state();
@@ -1614,10 +1723,17 @@ void search_on()
 
 void search_off()
 {
-  search_flag = FALSE;
+#ifdef ATARIST_MWC
+  int32u holder;
+#endif
+
   check_view();
   change_speed(-1);
+#ifdef ATARIST_MWC
+  py.flags.status &= ~(holder = PY_SEARCH);
+#else
   py.flags.status &= ~PY_SEARCH;
+#endif
   prt_state();
   prt_speed();
   py.flags.food_digested--;
@@ -1640,11 +1756,19 @@ void rest()
       prt("Rest for how long? ", 0, 0);
       rest_num = 0;
       if (get_string(rest_str, 0, 19, 5))
-	rest_num = atoi(rest_str);
+	{
+	  if (rest_str[0] == '*')
+	    rest_num = -MAX_SHORT;
+	  else
+	    rest_num = atoi(rest_str);
+	}
     }
-  if (rest_num > 0)
+  /* check for reasonable value, must be positive number in range of a
+     short, or must be -MAX_SHORT */
+  if ((rest_num == -MAX_SHORT)
+      || (rest_num > 0) && (rest_num < MAX_SHORT))
     {
-      if (search_flag)
+      if (py.flags.status & PY_SEARCH)
 	search_off();
       py.flags.rest = rest_num;
       py.flags.status |= PY_REST;
@@ -1655,6 +1779,8 @@ void rest()
     }
   else
     {
+      if (rest_num != 0)
+	msg_print ("Invalid rest count.");
       erase_line(MSG_LINE, 0);
       free_turn_flag = TRUE;
     }
@@ -1662,10 +1788,18 @@ void rest()
 
 void rest_off()
 {
+#ifdef ATARIST_MWC
+  int32u holder;
+#endif
+
   py.flags.rest = 0;
+#ifdef ATARIST_MWC
+  py.flags.status &= ~(holder = PY_REST);
+#else
   py.flags.status &= ~PY_REST;
+#endif
   prt_state();
-  msg_print(NULL); /* flush last message, or delete "press any key" message */
+  msg_print(CNIL); /* flush last message, or delete "press any key" message */
   py.flags.food_digested++;
 }
 
@@ -1710,673 +1844,4 @@ char *hit_from;
     }
   else
     prt_chp();
-}
-
-
-/* Change a trap from invisible to visible		-RAK-	*/
-/* Note: Secret doors are handled here				 */
-void change_trap(y, x)
-register int y, x;
-{
-  register cave_type *c_ptr;
-  register inven_type *t_ptr;
-
-  c_ptr = &cave[y][x];
-  t_ptr = &t_list[c_ptr->tptr];
-  if (t_ptr->tval == TV_INVIS_TRAP)
-    {
-      t_ptr->tval = TV_VIS_TRAP;
-      lite_spot(y, x);
-    }
-  else if (t_ptr->tval == TV_SECRET_DOOR)
-    {
-      /* change secret door to closed door */
-      t_ptr->index = OBJ_CLOSED_DOOR;
-      t_ptr->tval = object_list[OBJ_CLOSED_DOOR].tval;
-      t_ptr->tchar = object_list[OBJ_CLOSED_DOOR].tchar;
-      lite_spot(y, x);
-    }
-}
-
-
-/* Searches for hidden things.			-RAK-	*/
-void search(y, x, chance)
-int y, x, chance;
-{
-  register int i, j;
-  register cave_type *c_ptr;
-  register inven_type *t_ptr;
-  register struct flags *p_ptr;
-  bigvtype tmp_str, tmp_str2;
-
-  p_ptr = &py.flags;
-  if (p_ptr->confused > 0)
-    chance = chance / 10;
-  if ((p_ptr->blind > 0) || no_light())
-    chance = chance / 10;
-  if (p_ptr->image > 0)
-    chance = chance / 10;
-  for (i = (y - 1); i <= (y + 1); i++)
-    for (j = (x - 1); j <= (x + 1); j++)
-      if (randint(100) < chance)	/* always in_bounds here */
-	{
-	  c_ptr = &cave[i][j];
-	  /* Search for hidden objects		   */
-	  if (c_ptr->tptr != 0)
-	    {
-	      t_ptr = &t_list[c_ptr->tptr];
-	      /* Trap on floor?		       */
-	      if (t_ptr->tval == TV_INVIS_TRAP)
-		{
-		  objdes(tmp_str2, t_ptr, TRUE);
-		  (void) sprintf(tmp_str,"You have found %s",tmp_str2);
-		  msg_print(tmp_str);
-		  change_trap(i, j);
-		  end_find();
-		}
-	      /* Secret door?		       */
-	      else if (t_ptr->tval == TV_SECRET_DOOR)
-		{
-		  msg_print("You have found a secret door.");
-		  change_trap(i, j);
-		  end_find();
-		}
-	      /* Chest is trapped?	       */
-	      else if (t_ptr->tval == TV_CHEST)
-		{
-		  /* mask out the treasure bits */
-		  if ((t_ptr->flags & CH_TRAPPED) > 1)
-		    if (!known2_p(t_ptr))
-		      {
-			known2(t_ptr);
-			msg_print("You have discovered a trap on the chest!");
-		      }
-		    else
-		      msg_print("The chest is trapped!");
-		}
-	    }
-	}
-}
-
-
-/* The running algorithm:			-CJS-
-
-   Overview: You keep moving until something interesting happens.
-   If you are in an enclosed space, you follow corners. This is
-   the usual corridor scheme. If you are in an open space, you go
-   straight, but stop before entering enclosed space. This is
-   analogous to reaching doorways. If you have enclosed space on
-   one side only (that is, running along side a wall) stop if
-   your wall opens out, or your open space closes in. Either case
-   corresponds to a doorway.
-
-   What happens depends on what you can really SEE. (i.e. if you
-   have no light, then running along a dark corridor is JUST like
-   running in a dark room.) The algorithm works equally well in
-   corridors, rooms, mine tailings, earthquake rubble, etc, etc.
-
-   These conditions are kept in static memory:
-	find_openarea	 You are in the open on at least one
-			 side.
-	find_breakleft	 You have a wall on the left, and will
-			 stop if it opens
-	find_breakright	 You have a wall on the right, and will
-			 stop if it opens
-
-   To initialize these conditions is the task of find_init. If
-   moving from the square marked @ to the square marked . (in the
-   two diagrams below), then two adjacent sqares on the left and
-   the right (L and R) are considered. If either one is seen to
-   be closed, then that side is considered to be closed. If both
-   sides are closed, then it is an enclosed (corridor) run.
-
-	 LL		L
-	@.	       L.R
-	 RR	       @R
-
-   Looking at more than just the immediate squares is
-   significant. Consider the following case. A run along the
-   corridor will stop just before entering the center point,
-   because a choice is clearly established. Running in any of
-   three available directions will be defined as a corridor run.
-   Note that a minor hack is inserted to make the angled corridor
-   entry (with one side blocked near and the other side blocked
-   further away from the runner) work correctly. The runner moves
-   diagonally, but then saves the previous direction as being
-   straight into the gap. Otherwise, the tail end of the other
-   entry would be perceived as an alternative on the next move.
-
-	   #.#
-	  ##.##
-	  .@...
-	  ##.##
-	   #.#
-
-   Likewise, a run along a wall, and then into a doorway (two
-   runs) will work correctly. A single run rightwards from @ will
-   stop at 1. Another run right and down will enter the corridor
-   and make the corner, stopping at the 2.
-
-	#@	  1
-	########### ######
-	2	    #
-	#############
-	#
-
-   After any move, the function area_affect is called to
-   determine the new surroundings, and the direction of
-   subsequent moves. It takes a location (at which the runner has
-   just arrived) and the previous direction (from which the
-   runner is considered to have come). Moving one square in some
-   direction places you adjacent to three or five new squares
-   (for straight and diagonal moves) to which you were not
-   previously adjacent.
-
-       ...!	  ...	       EG Moving from 1 to 2.
-       .12!	  .1.!		  . means previously adjacent
-       ...!	  ..2!		  ! means newly adjacent
-		   !!!
-
-   You STOP if you can't even make the move in the chosen
-   direction. You STOP if any of the new squares are interesting
-   in any way: usually containing monsters or treasure. You STOP
-   if any of the newly adjacent squares seem to be open, and you
-   are also looking for a break on that side. (i.e. find_openarea
-   AND find_break) You STOP if any of the newly adjacent squares
-   do NOT seem to be open and you are in an open area, and that
-   side was previously entirely open.
-
-   Corners: If you are not in the open (i.e. you are in a
-   corridor) and there is only one way to go in the new squares,
-   then turn in that direction. If there are more than two new
-   ways to go, STOP. If there are two ways to go, and those ways
-   are separated by a square which does not seem to be open, then
-   STOP.
-
-   Otherwise, we have a potential corner. There are two new open
-   squares, which are also adjacent. One of the new squares is
-   diagonally located, the other is straight on (as in the
-   diagram). We consider two more squares further out (marked
-   below as ?).
-	  .X
-	 @.?
-	  #?
-   If they are both seen to be closed, then it is seen that no
-   benefit is gained from moving straight. It is a known corner.
-   To cut the corner, go diagonally, otherwise go straight, but
-   pretend you stepped diagonally into that next location for a
-   full view next time. Conversely, if one of the ? squares is
-   not seen to be closed, then there is a potential choice. We check
-   to see whether it is a potential corner or an intersection/room entrance.
-   If the square two spaces straight ahead, and the space marked with 'X'
-   are both blank, then it is a potential corner and enter if find_examine
-   is set, otherwise must stop because it is not a corner. */
-
-/* The cycle lists the directions in anticlockwise order, for	-CJS-
-   over two complete cycles. The chome array maps a direction on
-   to its position in the cycle.
-*/
-static int cycle[] = { 1, 2, 3, 6, 9, 8, 7, 4, 1, 2, 3, 6, 9, 8, 7, 4, 1 };
-static int chome[] = { -1, 8, 9, 10, 7, -1, 11, 6, 5, 4 };
-static int find_openarea, find_breakright, find_breakleft, find_prevdir;
-static int find_direction; /* Keep a record of which way we are going. */
-
-void find_init(dir)
-int dir;
-{
-  int row, col, deepleft, deepright;
-  register int i, shortleft, shortright;
-
-  row = char_row;
-  col = char_col;
-  if (!mmove(dir, &row, &col))
-    find_flag = FALSE;
-  else
-    {
-      find_direction = dir;
-      find_flag = 1;
-      find_breakright = find_breakleft = FALSE;
-      find_prevdir = dir;
-      if (py.flags.blind < 1)
-	{
-	  i = chome[dir];
-	  deepleft = deepright = FALSE;
-	  shortright = shortleft = FALSE;
-	  if (see_wall(cycle[i+1], char_row, char_col))
-	    {
-	      find_breakleft = TRUE;
-	      shortleft = TRUE;
-	    }
-	  else if (see_wall(cycle[i+1], row, col))
-	    {
-	      find_breakleft = TRUE;
-	      deepleft = TRUE;
-	    }
-	  if (see_wall(cycle[i-1], char_row, char_col))
-	    {
-	      find_breakright = TRUE;
-	      shortright = TRUE;
-	    }
-	  else if (see_wall(cycle[i-1], row, col))
-	    {
-	      find_breakright = TRUE;
-	      deepright = TRUE;
-	    }
-	  if (find_breakleft && find_breakright)
-	    {
-	      find_openarea = FALSE;
-	      if (dir & 1)
-		{		/* a hack to allow angled corridor entry */
-		  if (deepleft && !deepright)
-		    find_prevdir = cycle[i-1];
-		  else if (deepright && !deepleft)
-		    find_prevdir = cycle[i+1];
-		}
-	      /* else if there is a wall two spaces ahead and seem to be in a
-		 corridor, then force a turn into the side corridor, must
-		 be moving straight into a corridor here */
-	      else if (see_wall(cycle[i], row, col))
-		{
-		  if (shortleft && !shortright)
-		    find_prevdir = cycle[i-2];
-		  else if (shortright && !shortleft)
-		    find_prevdir = cycle[i+2];
-		}
-	    }
-	  else
-	    find_openarea = TRUE;
-	}
-    }
-  move_char(dir, TRUE);
-  if (find_flag == FALSE)
-    command_count = 0;
-}
-
-void find_run()
-{
-  /* prevent infinite loops in find mode, will stop after moving 100 times */
-  if (find_flag++ > 100)
-    {
-      msg_print("You stop running to catch your breath.");
-      end_find();
-    }
-  else
-    move_char(find_direction, TRUE);
-}
-
-/* Switch off the run flag - and get the light correct. -CJS- */
-void end_find()
-{
-  if (find_flag)
-    {
-      find_flag = FALSE;
-      move_light(char_row, char_col, char_row, char_col);
-    }
-}
-
-/* Do we see a wall? Used in running.		-CJS- */
-static int see_wall(dir, y, x)
-int dir, y, x;
-{
-  char c;
-
-  if (!mmove(dir, &y, &x))	/* check to see if movement there possible */
-    return TRUE;
-#ifdef MSDOS
-  else if ((c = loc_symbol(y, x)) == wallsym || c == '%')
-#else
-#ifdef ATARIST_MWC
-  else if ((c = loc_symbol(y, x)) == (unsigned char)240 || c == '%')
-#else
-  else if ((c = loc_symbol(y, x)) == '#' || c == '%')
-#endif
-#endif
-    return TRUE;
-  else
-    return FALSE;
-}
-
-/* Do we see anything? Used in running.		-CJS- */
-static int see_nothing(dir, y, x)
-int dir, y, x;
-{
-  if (!mmove(dir, &y, &x))	/* check to see if movement there possible */
-    return FALSE;
-  else if (loc_symbol(y, x) == ' ')
-    return TRUE;
-  else
-    return FALSE;
-}
-
-
-/* Determine the next direction for a run, or if we should stop.  -CJS- */
-void area_affect(dir, y, x)
-int dir, y, x;
-{
-  int newdir, t, inv, check_dir, row, col;
-  register int i, max, option, option2;
-  register cave_type *c_ptr;
-
-  if (py.flags.blind < 1)
-    {
-      option = 0;
-      option2 = 0;
-      dir = find_prevdir;
-      max = (dir & 1) + 1;
-      /* Look at every newly adjacent square. */
-      for(i = -max; i <= max; i++)
-	{
-	  newdir = cycle[chome[dir]+i];
-	  row = y;
-	  col = x;
-	  if (mmove(newdir, &row, &col))
-	    {
-	      /* Objects player can see (Including doors?) cause a stop. */
-	      c_ptr = &cave[row][col];
-	      if (player_light || c_ptr->tl || c_ptr->pl || c_ptr->fm)
-		{
-		  if (c_ptr->tptr != 0)
-		    {
-		      t = t_list[c_ptr->tptr].tval;
-		      if (t != TV_INVIS_TRAP && t != TV_SECRET_DOOR
-			  && (t != TV_OPEN_DOOR || !find_ignore_doors))
-			{
-			  end_find();
-			  return;
-			}
-		    }
-		  /* Also Creatures		*/
-		  /* the monster should be visible since update_mon() checks
-		     for the special case of being in find mode */
-		  if (c_ptr->cptr > 1 && m_list[c_ptr->cptr].ml)
-		    {
-		      end_find();
-		      return;
-		    }
-		  inv = FALSE;
-		}
-	      else
-		inv = TRUE;	/* Square unseen. Treat as open. */
-
-	      if (c_ptr->fval <= MAX_OPEN_SPACE || inv)
-		{
-		  if (find_openarea)
-		    {
-		      /* Have we found a break? */
-		      if (i < 0)
-			{
-			  if (find_breakright)
-			    {
-			      end_find();
-			      return;
-			    }
-			}
-		      else if (i > 0)
-			{
-			  if (find_breakleft)
-			    {
-			      end_find();
-			      return;
-			    }
-			}
-		    }
-		  else if (option == 0)
-		    option = newdir;	/* The first new direction. */
-		  else if (option2 != 0)
-		    {
-		      end_find();	/* Three new directions. STOP. */
-		      return;
-		    }
-		  else if (option != cycle[chome[dir]+i-1])
-		    {
-		      end_find();	/* If not adjacent to prev, STOP */
-		      return;
-		    }
-		  else
-		    {
-		      /* Two adjacent choices. Make option2 the diagonal,
-			 and remember the other diagonal adjacent to the first
-			 option. */
-		      if ((newdir & 1) == 1)
-			{
-			  check_dir = cycle[chome[dir]+i-2];
-			  option2 = newdir;
-			}
-		      else
-			{
-			  check_dir = cycle[chome[dir]+i+1];
-			  option2 = option;
-			  option = newdir;
-			}
-		    }
-		}
-	      else if (find_openarea)
-		{
-		  /* We see an obstacle. In open area, STOP if on a side
-		     previously open. */
-		  if (i < 0)
-		    {
-		      if (find_breakleft)
-			{
-			  end_find();
-			  return;
-			}
-		      find_breakright = TRUE;
-		    }
-		  else if (i > 0)
-		    {
-		      if (find_breakright)
-			{
-			  end_find();
-			  return;
-			}
-		      find_breakleft = TRUE;
-		    }
-		}
-	    }
-	}
-
-      if (find_openarea == FALSE)
-	{	/* choose a direction. */
-	  if (option2 == 0 || (find_examine && !find_cut))
-	    {
-	      /* There is only one option, or if two, then we always examine
-		 potential corners and never cur known corners, so you step
-		 into the straight option. */
-	      if (option != 0)
-		find_direction = option;
-	      if (option2 == 0)
-		find_prevdir = option;
-	      else
-		find_prevdir = option2;
-	    }
-	  else
-	    {
-	      /* Two options! */
-	      row = y;
-	      col = x;
-	      (void) mmove(option, &row, &col);
-	      if (!see_wall(option, row, col)
-		  || !see_wall(check_dir, row, col))
-		{
-		  /* Don't see that it is closed off.  This could be a
-		     potential corner or an intersection. */
-		  if (find_examine && see_nothing(option, row, col)
-		      && see_nothing(option2, row, col))
-		    /* Can not see anything ahead and in the direction we are
-		       turning, assume that it is a potential corner. */
-		    {
-		      find_direction = option;
-		      find_prevdir = option2;
-		    }
-		  else
-		    /* STOP: we are next to an intersection or a room */
-		    end_find();
-		}
-	      else if (find_cut)
-		{
-		  /* This corner is seen to be enclosed; we cut the corner. */
-		  find_direction = option2;
-		  find_prevdir = option2;
-		}
-	      else
-		{
-		  /* This corner is seen to be enclosed, and we deliberately
-		     go the long way. */
-		  find_direction = option;
-		  find_prevdir = option2;
-		}
-	    }
-	}
-    }
-}
-
-
-/* AC gets worse					-RAK-	*/
-/* Note: This routine affects magical AC bonuses so that stores	  */
-/*	 can detect the damage.					 */
-int minus_ac(typ_dam)
-int32u typ_dam;
-{
-  register int i, j;
-  int tmp[6], minus;
-  register inven_type *i_ptr;
-  bigvtype out_val, tmp_str;
-
-  i = 0;
-  if (inventory[INVEN_BODY].tval != TV_NOTHING)
-    {
-      tmp[i] = INVEN_BODY;
-      i++;
-    }
-  if (inventory[INVEN_ARM].tval != TV_NOTHING)
-    {
-      tmp[i] = INVEN_ARM;
-      i++;
-    }
-  if (inventory[INVEN_OUTER].tval != TV_NOTHING)
-    {
-      tmp[i] = INVEN_OUTER;
-      i++;
-    }
-  if (inventory[INVEN_HANDS].tval != TV_NOTHING)
-    {
-      tmp[i] = INVEN_HANDS;
-      i++;
-    }
-  if (inventory[INVEN_HEAD].tval != TV_NOTHING)
-    {
-      tmp[i] = INVEN_HEAD;
-      i++;
-    }
-  /* also affect boots */
-  if (inventory[INVEN_FEET].tval != TV_NOTHING)
-    {
-      tmp[i] = INVEN_FEET;
-      i++;
-    }
-  minus = FALSE;
-  if (i > 0)
-    {
-      j = tmp[randint(i) - 1];
-      i_ptr = &inventory[j];
-      if (i_ptr->flags & typ_dam)
-	{
-	  objdes(tmp_str, &inventory[j], FALSE);
-	  (void) sprintf(out_val, "Your %s resists damage!", tmp_str);
-	  msg_print(out_val);
-	  minus = TRUE;
-	}
-      else if ((i_ptr->ac+i_ptr->toac) > 0)
-	{
-	  objdes(tmp_str, &inventory[j], FALSE);
-	  (void) sprintf(out_val, "Your %s is damaged!", tmp_str);
-	  msg_print(out_val);
-	  i_ptr->toac--;
-	  calc_bonuses();
-	  minus = TRUE;
-	}
-    }
-  return(minus);
-}
-
-
-/* Corrode the unsuspecting person's armor		 -RAK-	 */
-void corrode_gas(kb_str)
-char *kb_str;
-{
-  if (!minus_ac((int32u) TR_RES_ACID))
-    take_hit(randint(8), kb_str);
-  if (inven_damage(set_corrodes, 5) > 0)
-    msg_print("There is an acrid smell coming from your pack.");
-}
-
-
-/* Poison gas the idiot.				-RAK-	*/
-void poison_gas(dam, kb_str)
-int dam;
-char *kb_str;
-{
-  take_hit(dam, kb_str);
-  py.flags.poisoned += 12 + randint(dam);
-}
-
-
-/* Burn the fool up.					-RAK-	*/
-void fire_dam(dam, kb_str)
-int dam;
-char *kb_str;
-{
-  if (py.flags.fire_resist)
-    dam = dam / 3;
-  if (py.flags.resist_heat > 0)
-    dam = dam / 3;
-  take_hit(dam, kb_str);
-  if (inven_damage(set_flammable, 3) > 0)
-    msg_print("There is smoke coming from your pack!");
-}
-
-
-/* Freeze him to death.				-RAK-	*/
-void cold_dam(dam, kb_str)
-int dam;
-char *kb_str;
-{
-  if (py.flags.cold_resist)
-    dam = dam / 3;
-  if (py.flags.resist_cold > 0)
-    dam = dam / 3;
-  take_hit(dam, kb_str);
-  if (inven_damage(set_frost_destroy, 5) > 0)
-    msg_print("Something shatters inside your pack!");
-}
-
-
-/* Lightning bolt the sucker away.			-RAK-	*/
-void light_dam(dam, kb_str)
-int dam;
-char *kb_str;
-{
-  if (py.flags.lght_resist)
-    take_hit((dam / 3), kb_str);
-  else
-    take_hit(dam, kb_str);
-}
-
-
-/* Throw acid on the hapless victim			-RAK-	*/
-void acid_dam(dam, kb_str)
-int dam;
-char *kb_str;
-{
-  register int flag;
-
-  flag = 0;
-  if (minus_ac((int32u) TR_RES_ACID))
-    flag = 1;
-  if (py.flags.acid_resist)
-    flag += 2;
-  take_hit (dam / (flag + 1), kb_str);
-  if (inven_damage(set_acid_affect, 3) > 0)
-    msg_print("There is an acrid smell coming from your pack!");
 }

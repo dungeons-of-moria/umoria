@@ -1,6 +1,6 @@
-/* constants.h: global constants used by Moria
+/* source/constant.h: global constants used by Moria
 
-   Copyright (c) 1989 James E. Wilson, Robert A. Koeneke
+   Copyright (c) 1989-91 James E. Wilson, Robert A. Koeneke
 
    This software may be copied and distributed for educational, research, and
    not for profit purposes provided that this copyright and statement are
@@ -21,10 +21,16 @@
   uses the number, the program may stop working correctly.  Modify the
   constants at your own risk. */
 
+#define CONSTANT_H_INCLUDED
+#ifndef CONFIG_H_INCLUDED
+Constant.h should always be included after config.h, because it uses
+some of the system defines set up there.
+#endif
+
 /* Current version number of Moria				*/
-#define CUR_VERSION_MAJ 5 /* version 5.2 */
-#define CUR_VERSION_MIN 2
-#define PATCH_LEVEL 1
+#define CUR_VERSION_MAJ 5 /* version 5.4 */
+#define CUR_VERSION_MIN 4
+#define PATCH_LEVEL 0
 
 #ifndef TRUE
 #define TRUE 1
@@ -150,11 +156,13 @@
 #define WIN_MON_APPEAR	   50 /* Level where winning creatures begin   */
 #define MON_SUMMON_ADJ	    2 /* Adjust level of summoned creatures    */
 #define MON_DRAIN_LIFE	    2 /* Percent of player exp drained per hit */
-#define MAX_MON_NATTACK	    4 /* Max num attacks (used in mons memory) -CJS- */
+#define MAX_MON_NATTACK	    4 /* Max num attacks (used in mons memory) -CJS-*/
 #define MIN_MONIX	    2 /* Minimum index in m_list (1 = py, 0 = no mon)*/
 
 /* Trap constants						*/
 #define MAX_TRAP	 18  /* Number of defined traps		      */
+
+#define SCARE_MONSTER	99
 
 /* Descriptive constants					*/
 #define MAX_COLORS     49     /* Used with potions     */
@@ -227,10 +235,16 @@
 #undef CTRL
 #define CTRL(x)		(x & 0x1F)
 #define DELETE		0x7f
-#define ESCAPE	      '\033'	/* ESCAPE character -CJS- */
+#ifdef VMS
+#define ESCAPE        '\032'	/* Use CTRL-Z instead of ESCAPE.  */
+#else
+#define ESCAPE	      '\033'	/* ESCAPE character -CJS-  */
+#endif
 
-#ifndef NULL
-#define NULL (char *)0
+/* This used to be NULL, but that was technically incorrect.  CNIL is used
+   instead of null to help avoid lint errors.  */
+#ifndef CNIL
+#define CNIL (char *)0
 #endif
 
 /* Fval definitions: these describe the various types of dungeon floors and
@@ -357,9 +371,11 @@
 #define CH_SUMMON	0x00000100L
 
 /* definitions for creatures, cmove field */
-#define CM_ALL_MV_FLAGS	0x0000003BL
+#define CM_ALL_MV_FLAGS	0x0000003FL
 #define CM_ATTACK_ONLY	0x00000001L
 #define CM_MOVE_NORMAL	0x00000002L
+/* For Quylthulgs, which have no physical movement.  */
+#define CM_ONLY_MAGIC	0x00000004L
 
 #define CM_RANDOM_MOVE	0x00000038L
 #define CM_20_RANDOM	0x00000008L
@@ -589,3 +605,6 @@
 #define GF_FROST	4
 #define GF_FIRE		5
 #define GF_HOLY_ORB	6
+
+/* Number of entries allowed in the scorefile.  */
+#define SCOREFILE_SIZE	1000

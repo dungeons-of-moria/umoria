@@ -1,50 +1,71 @@
-/* files.c: misc code to access files used by Moria
+/* source/files.c: misc code to access files used by Moria
 
-   Copyright (c) 1989 James E. Wilson, Robert A. Koeneke
+   Copyright (c) 1989-91 James E. Wilson, Robert A. Koeneke
 
    This software may be copied and distributed for educational, research, and
    not for profit purposes provided that this copyright and statement are
    included in all such copies. */
 
 #include <stdio.h>
-#include <errno.h>
 
-#include "constant.h"
-#include "config.h"
-#include "types.h"
-#include "externs.h"
-
-#ifdef MSDOS
-extern int errno;
+#ifndef STDIO_LOADED
+#define STDIO_LOADED
 #endif
 
-#if defined(GEMDOS) && (__STDC__ == 0)
+#if 0
+/* moved to externs.h to avoid VMS 'psect' problem */
+#include <errno.h>
+#endif
+
+#ifdef __TURBOC__
+#include	<io.h>
+#include	<stdlib.h>
+#endif /* __TURBOC__ */
+ 
+#include "config.h"
+#include "constant.h"
+#include "types.h"
+
+#if defined(GEMDOS) && (__STDC__ == 0) && !defined(ATARIST_TC)
 #include <access.h>
 char *strcat();
 #endif
 
+#ifdef VMS
+#include <string.h>
+#include <file.h>
+#else
 #ifdef USG
 #ifndef ATARIST_MWC
 #include <string.h>
+#ifndef ATARIST_TC
 #include <fcntl.h>
+#endif
 #endif
 #else
 #include <strings.h>
-#ifndef VMS
 #include <sys/file.h>
-#else
-#include <file.h>
 #endif
-#endif
-
-#ifndef VMS
 #if defined(ultrix) || defined(USG)
 void exit();
 #endif
 #endif
 
-#if 0
-/* Not touched for Mac port */
+/* This must be included after fcntl.h, which has a prototype for `open'
+   on some systems.  Otherwise, the `open' prototype conflicts with the
+   `topen' declaration.  */
+#include "externs.h"
+
+#ifdef ATARIST_TC
+/* Include this to get prototypes for standard library functions.  */
+#include <stdlib.h>
+#endif
+
+#ifdef MAC
+#include "ScrnMgr.h"
+#define GNRL_ALRT	1024
+#endif
+
 /*
  *  init_scorefile
  *  Open the score file while we still have the setuid privileges.  Later
@@ -52,34 +73,52 @@ void exit();
  *  so we don't have multiple people trying to write to it at the same time.
  *  Craig Norborg (doc)		Mon Aug 10 16:41:59 EST 1987
  */
-init_scorefile()
+void init_scorefile()
 {
-#ifndef VMS
-#ifndef ATARIST_MWC
-  if (1 > (highscore_fd = open(MORIA_TOP, O_RDWR | O_CREAT, 0644)))
-#else
-  if (1 > (highscore_fd = open(MORIA_TOP, 2)))
+#ifdef MAC
+  appldirectory ();
 #endif
+
+#if defined(atarist) || defined(ATARI_ST) || defined(MAC)
+  highscore_fp = fopen(MORIA_TOP, "rb+");
+#else
+  highscore_fp = fopen(MORIA_TOP, "r+");
+#endif
+
+  if (highscore_fp == NULL)
     {
+#ifdef MAC
+      highscore_fp = fopen (MORIA_TOP, "wb");	/* Create it if not there.  */
+      if (highscore_fp == NULL)
+	{
+	  ParamText ("\pCan't create score file!", NULL, NULL, NULL);
+	  DoScreenALRT (GNRL_ALRT, akStop, fixHalf, fixThird);
+	  ExitToShell ();
+	}
+      setfileinfo (MORIA_TOP, currentdirectory (), SCORE_FTYPE);
+#else
       (void) fprintf (stderr, "Can't open score file \"%s\"\n", MORIA_TOP);
       exit(1);
-    }
 #endif
-#ifdef MSDOS
-  /* can't leave it open, since this causes problems on networked machines,
+    }
+#if defined(MSDOS) || defined(VMS) || defined(MAC)
+  /* can't leave it open, since this causes problems on networked PCs and VMS,
      we DO want to check to make sure we can open the file, though */
-  close (highscore_fd);
+  fclose (highscore_fp);
+#endif
+
+#ifdef MAC
+  restoredirectory ();
 #endif
 }
-#endif
 
 #ifndef MAC
 /* Attempt to open the intro file			-RAK-	 */
 /* This routine also checks the hours file vs. what time it is	-Doc */
 void read_times()
 {
-  register int i;
   vtype in_line;
+  register int i;
   FILE *file1;
 
 #ifdef MORIA_HOU
@@ -87,7 +126,7 @@ void read_times()
   /* inform the user so he can tell the wizard about it	 */
   if ((file1 = fopen(MORIA_HOU, "r")) != NULL)
     {
-      while (fgets(in_line, 80, file1) != NULL)
+      while (fgets(in_line, 80, file1) != CNIL)
 	if (strlen(in_line) > 3)
 	  {
 	    if (!strncmp(in_line, "SUN:", 4))
@@ -110,7 +149,9 @@ void read_times()
   else
     {
       restore_term();
-      (void) fprintf(stderr, "There is no hours file \"%s\".\nPlease inform the wizard, %s, so he can correct this!\n", MORIA_HOU, WIZARD);
+      (void) fprintf(stderr, "There is no hours file \"%s\".\n", MORIA_HOU);
+      (void) fprintf(stderr, "Please inform the wizard, %s, so he ", WIZARD);
+      (void) fprintf(stderr, "can correct this!\n");
       exit(1);
     }
 
@@ -120,27 +161,30 @@ void read_times()
       if ((file1 = fopen(MORIA_HOU, "r")) != NULL)
 	{
 	  clear_screen();
-	  for (i = 0; fgets(in_line, 80, file1) != NULL; i++)
+#ifdef VMS
+	  restore_screen();
+#endif
+	  for (i = 0; fgets(in_line, 80, file1) != CNIL; i++)
 	    put_buffer(in_line, i, 0);
+	  pause_line (23);
 	  (void) fclose(file1);
 	}
       exit_game();
     }
 #endif
 
-#ifdef MSDOS
-  msdos_intro();			/* Print a canned message */
-#else
   /* Print the introduction message, news, etc.		 */
   if ((file1 = fopen(MORIA_MOR, "r")) != NULL)
     {
       clear_screen();
-      for (i = 0; fgets(in_line, 80, file1) != NULL; i++)
+#ifdef VMS
+      restore_screen();
+#endif
+      for (i = 0; fgets(in_line, 80, file1) != CNIL; i++)
 	put_buffer(in_line, i, 0);
       pause_line(23);
       (void) fclose(file1);
     }
-#endif
 }
 #endif
 
@@ -173,7 +217,7 @@ char *filename;
     {
       clear_screen();
       for (i = 0; i < 23; i++)
-	if (fgets (tmp_str, BIGVTYPESIZ-1, file) != NULL)
+	if (fgets (tmp_str, BIGVTYPESIZ-1, file) != CNIL)
 	  put_buffer (tmp_str, i, 0);
       prt("[Press any key to continue.]", 23, 23);
       input = inkey();
@@ -198,6 +242,9 @@ void print_objects()
   register inven_type *i_ptr;
 #ifdef MAC
   short vrefnum;
+#endif
+#ifdef ATARIST_MWC
+  int32u holder;
 #endif
 
   prt("Produce objects on what level?: ", 0, 0);
@@ -229,6 +276,10 @@ void print_objects()
 #endif
 	  if ((file1 = fopen(filename1, "w")) != NULL)
 	    {
+#ifdef MAC
+	      macbeginwait ();
+#endif
+
 	      (void) sprintf(tmp_str, "%d", nobj);
 	      prt(strcat(tmp_str, " random objects being produced..."), 0, 0);
 	      put_qio();
@@ -244,7 +295,11 @@ void print_objects()
 		  magic_treasure(j, level);
 		  i_ptr = &t_list[j];
 		  store_bought(i_ptr);
+#ifdef ATARIST_MWC
+		  if (i_ptr->flags & (holder = TR_CURSED))
+#else
 		  if (i_ptr->flags & TR_CURSED)
+#endif
 		    add_inscribe(i_ptr, ID_DAMD);
 		  objdes(tmp_str, i_ptr, TRUE);
 		  (void) fprintf(file1, "%d %s\n", i_ptr->level, tmp_str);
@@ -253,6 +308,7 @@ void print_objects()
 	      (void) fclose(file1);
 #ifdef MAC
 	      setfileinfo(filename1, vrefnum, INFO_FTYPE);
+	      macendwait ();
 #endif
 	      prt("Completed.", 0, 0);
 	    }
@@ -297,17 +353,20 @@ char *filename1;
     return (FALSE);
 #endif
 
+#ifndef VMS
+  /* VMS creates a new version of a file, so no need to check for rewrite. */
 #ifdef MAC
   changedirectory(vrefnum);
   fd = open (filename1, O_WRONLY|O_CREAT|O_TRUNC);
   restoredirectory();
+  macbeginwait ();
 #else
-#if defined(GEMDOS) && (__STDC__ == 0)
+#if defined(GEMDOS) && (__STDC__ == 0) && !defined(ATARIST_TC)
   if (!access(filename1, AREAD))
     {
       (void) sprintf(out_val, "Replace existing file %s?", filename1);
       if (get_check(out_val))
-	fd = creat(filname1, 1);
+	fd = creat(filename1, 1);
     }
   else
     fd = creat (filename1, 1);
@@ -330,6 +389,10 @@ char *filename1;
     }
   else
     file1 = NULL;
+#else /* VMS */
+  fd = -1;
+  file1 = fopen (filename1, "w");
+#endif
 
   if (file1 != NULL)
     {
@@ -346,7 +409,8 @@ char *filename1;
       (void) fprintf(file1, " Age%11s %6d", colon, (int)py.misc.age);
       cnv_stat(py.stats.use_stat[A_STR], prt1);
       (void) fprintf(file1, "   STR : %s\n", prt1);
-      (void) fprintf(file1, " Race%9s %-23s", colon,race[py.misc.prace].trace);
+      (void) fprintf(file1, " Race%9s %-23s", colon,
+		     race[py.misc.prace].trace);
       (void) fprintf(file1, " Height%8s %6d", colon, (int)py.misc.ht);
       cnv_stat(py.stats.use_stat[A_INT], prt1);
       (void) fprintf(file1, "   INT : %s\n", prt1);
@@ -376,11 +440,18 @@ char *filename1;
       (void) fprintf(file1, "%8sExperience : %6ld", blank, py.misc.exp);
       (void) fprintf(file1, "    Cur Hit Points : %6d\n", py.misc.chp);
       (void) fprintf(file1, " + To AC     : %6d", py.misc.dis_tac);
-      (void) fprintf(file1, "%8sGold%8s %6ld", blank, colon, py.misc.au);
+      (void) fprintf(file1, "%8sMax Exp    : %6ld", blank, py.misc.max_exp);
       (void) fprintf(file1, "    Max Mana%8s %6d\n", colon, py.misc.mana);
       (void) fprintf(file1, "   Total AC  : %6d", py.misc.dis_ac);
-      (void) fprintf(file1, "%27s", blank);
-      (void) fprintf(file1, "    Cur Mana%8s %6d\n\n", colon, py.misc.cmana);
+      if (py.misc.lev == MAX_PLAYER_LEVEL)
+	(void) fprintf (file1, "%8sExp to Adv : ******", blank);
+      else
+	(void) fprintf(file1, "%8sExp to Adv : %6ld", blank,
+		       (int32)(player_exp[py.misc.lev-1]
+			       * py.misc.expfact / 100));
+      (void) fprintf(file1, "    Cur Mana%8s %6d\n", colon, py.misc.cmana);
+      (void) fprintf(file1, "%29sGold%8s %6ld\n\n", blank, colon,
+		     py.misc.au);
 
       p_ptr = &py.misc;
       xbth = p_ptr->bth + p_ptr->ptohit * BTH_PLUS_ADJ
@@ -473,6 +544,7 @@ char *filename1;
       (void) fclose(file1);
 #ifdef MAC
       setfileinfo(filename1, vrefnum, INFO_FTYPE);
+      macendwait ();
 #endif
       prt("Completed.", 0, 0);
       return TRUE;

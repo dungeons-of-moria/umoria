@@ -1,19 +1,21 @@
-/* death.c: code executed when player dies
+/* source/death.c: code executed when player dies
 
-   Copyright (c) 1989 James E. Wilson, Robert A. Koeneke
+   Copyright (c) 1989-91 James E. Wilson, Robert A. Koeneke
 
    This software may be copied and distributed for educational, research, and
    not for profit purposes provided that this copyright and statement are
    included in all such copies. */
 
-/* some incorrectly define NULL as integer constant, so load this before
-   local includes */
+/* Must read this before externs.h, as some global declarations use FILE. */
 #include <stdio.h>
 
-#include "constant.h"
+#ifndef STDIO_LOADED
+#define STDIO_LOADED
+#endif
+
 #include "config.h"
+#include "constant.h"
 #include "types.h"
-#include "externs.h"
 
 #ifdef Pyramid
 #include <sys/time.h>
@@ -33,7 +35,8 @@
 #ifdef MSDOS
 #include <io.h>
 #else
-#if !defined(ATARIST_MWC) && !defined(MAC)
+#if !defined(ATARIST_MWC) && !defined(MAC) && !defined(AMIGA)
+#if !defined(ATARIST_TC)
 #ifndef VMS
 #include <pwd.h>
 #else
@@ -41,44 +44,66 @@
 #endif
 #endif
 #endif
+#endif
+
+#ifdef VMS
+unsigned int getuid(), getgid();
+#else
+#ifdef unix
+#ifdef USG
+unsigned short getuid(), getgid();
+#else
+#ifndef SECURE
+#ifdef BSD4_3
+uid_t getuid(), getgid();
+#else  /* other BSD versions */
+int getuid(), getgid();
+#endif
+#endif
+#endif
+#endif
+#endif
 
 #ifdef USG
 #ifndef ATARIST_MWC
 #include <string.h>
+#ifndef VMS
+#ifndef ATARIST_TC
 #include <fcntl.h>
+#endif
+#endif
 #endif
 #else
 #include <strings.h>
 #endif
 
-#ifndef MIN
-#define MIN(a, b)	((a < b) ? a : b)
-#endif
+/* This must be included after fcntl.h, which has a prototype for `open'
+   on some systems.  Otherwise, the `open' prototype conflicts with the
+   `topen' declaration.  */
+#include "externs.h"
 
 #ifndef BSD4_3
+#ifndef ATARIST_TC
 long lseek();
+#endif /* ATARTIST_TC */
 #else
 off_t lseek();
 #endif
 
-#if defined(USG) || defined(VMS)
+#if defined(USG) || defined(VMS) || defined(atarist)
 #ifndef L_SET
 #define L_SET 0
+#endif
+#ifndef L_INCR
+#define L_INCR 1
 #endif
 #endif
 
 #ifndef VMS
 #ifndef MAC
 #if defined(ultrix) || defined(USG)
-void perror();
 void exit ();
 #endif
-#endif
-#endif
-
-#ifndef MAC
-#ifdef SYS_V
-struct passwd *getpwuid();
 #endif
 #endif
 
@@ -89,10 +114,16 @@ static void print_tomb(void);
 static void kingly(void);
 #endif
 
+#ifdef ATARIST_TC
+/* Include this to get prototypes for standard library functions.  */
+#include <stdlib.h>
+#endif
+
+#ifndef VMS
 #ifndef MAC
-char *getlogin();
-#ifndef ATARIST_MWC
+#if !defined(ATARIST_MWC) && !defined(AMIGA)
 long time();
+#endif
 #endif
 #endif
 
@@ -101,17 +132,17 @@ char *day;
 {
   register char *tmp;
 #ifdef MAC
-  time_t clock;
+  time_t clockvar;
 #else
-  long clock;
+  long clockvar;
 #endif
 
 #ifdef MAC
-  clock = time((time_t *) 0);
+  clockvar = time((time_t *) 0);
 #else
-  clock = time((long *) 0);
+  clockvar = time((long *) 0);
 #endif
-  tmp = ctime(&clock);
+  tmp = ctime(&clockvar);
   tmp[10] = '\0';
   (void) strcpy(day, tmp);
 }
@@ -130,46 +161,266 @@ char *in_str;
 }
 
 
-#if 0
-/* Not touched for Mac port */
-static void display_scores()
-{
-  register int i = 0, j;
-  int fd;
-  high_scores score;
-  char list[20][128];
-  char string[100];
+#ifndef __TURBOC__
+#if (defined(USG) || defined(atarist)) && !defined(VMS)
+#if !defined(AMIGA) && !defined(MAC) && !defined(ATARIST_TC)
 
-#ifndef ATARIST_MWC
-  if (1 > (fd = open(MORIA_TOP, O_RDONLY, 0644)))
+#include <sys/stat.h>
+#include <errno.h>
+
+/* The following code is provided especially for systems which		-CJS-
+   have no flock system call. It has never been tested.		*/
+
+#define LOCK_EX	1
+#define LOCK_SH	2
+#define LOCK_NB	4
+#define LOCK_UN	8
+
+/* An flock HACK.  LOCK_SH and LOCK_EX are not distinguished.  DO NOT release
+   a lock which you failed to set!  ALWAYS release a lock you set! */
+static int flock(f, l)
+int f, l;
+{
+  struct stat sbuf;
+  char lockname[80];
+
+  if (fstat (f, &sbuf) < 0)
+    return -1;
+#ifdef atarist
+  (void) sprintf (lockname, (char *)prefix_file((char *)"moria.%d"),
+		  sbuf.st_ino);
 #else
-  if (1 > (fd = open(MORIA_TOP, 2)))
+  (void) sprintf (lockname, "/tmp/moria.%d", sbuf.st_ino);
+#endif
+  if (l & LOCK_UN)
+    return unlink(lockname);
+
+  while (open (lockname, O_WRONLY|O_CREAT|O_EXCL, 0644) < 0)
+    {
+      if (errno != EEXIST)
+	return -1;
+      if (stat(lockname, &sbuf) < 0)
+	return -1;
+      /* Locks which last more than 10 seconds get deleted. */
+      if (time((long *)0) - sbuf.st_mtime > 10)
+	{
+	  if (unlink(lockname) < 0)
+	    return -1;
+	}
+      else if (l & LOCK_NB)
+	return -1;
+      else
+	(void) sleep(1);
+    }
+  return 0;
+}
+#endif
+#endif
+#endif
+
+void display_scores(show_player)
+int show_player;
+{
+  register int i, rank;
+  high_scores score;
+  char input;
+  char string[100];
+  int8u version_maj, version_min, patch_level;
+#if defined(unix) || defined(VMS)
+  int16 player_uid;
+#endif
+
+#if defined(MSDOS) || defined(VMS) || defined(AMIGA) || defined(MAC)
+#if defined(MAC) || defined(MSDOS)
+  if ((highscore_fp = fopen(MORIA_TOP, "rb")) == NULL)
+#else
+  if ((highscore_fp = fopen(MORIA_TOP, "r")) == NULL)
 #endif
     {
       (void) sprintf (string, "Error opening score file \"%s\"\n", MORIA_TOP);
-      prt(string, 0, 0);
-      return ;
+      msg_print(string);
+      msg_print(CNIL);
+      return;
     }
-#ifdef MSDOS
-  (void) setmode(fd, O_BINARY);
 #endif
 
-  while (0 < read(fd, (char *)&score, sizeof(high_scores)))
+#ifndef BSD4_3
+  (void) fseek(highscore_fp, (long)0, L_SET);
+#else
+  (void) fseek(highscore_fp, (off_t)0, L_SET);
+#endif
+
+  /* Read version numbers from the score file, and check for validity.  */
+  version_maj = getc (highscore_fp);
+  version_min = getc (highscore_fp);
+  patch_level = getc (highscore_fp);
+  /* Support score files from 5.2.2 to present.  */
+  if (feof (highscore_fp))
+    /* An empty score file. */
+    ;
+  else if ((version_maj != CUR_VERSION_MAJ)
+	   || (version_min > CUR_VERSION_MIN)
+	   || (version_min == CUR_VERSION_MIN && patch_level > PATCH_LEVEL)
+	   || (version_min == 2 && patch_level < 2)
+	   || (version_min < 2))
     {
-      (void) sprintf(list[i], "%-7ld%-15.15s%-10.10s%-10.10s%-5d%-25.25s%5d",
-		    score.points, score.name,
-		    race[score.prace].trace, class[score.pclass].title,
-		    (int)score.lev, score.died_from, score.dun_level);
-      i++;
+      msg_print("Sorry. This scorefile is from a different version of \
+umoria.");
+      msg_print (CNIL);
+#if defined(MSDOS) || defined(VMS) || defined(AMIGA) || defined(MAC)
+      (void) fclose (highscore_fp);
+#endif
+      return;
     }
 
-  controlz();
-  put_buffer("Points Name           Race      Class     Lv   Killed By                Dun Lv", 0, 0);
-  for (j = 0; j < i; j++)
-    put_buffer(list[j], j + 1, 0);
-  pause_line(23);
-}
+#ifdef unix
+  player_uid = getuid ();
+#else
+#ifdef VMS
+  player_uid = (getgid()*1000) + getuid();
+#else
+  /* Otherwise player_uid is not used.  */
 #endif
+#endif
+
+  /* set the static fileptr in save.c to the highscore file pointer */
+  set_fileptr(highscore_fp);
+
+  rank = 1;
+  rd_highscore(&score);
+  while (!feof(highscore_fp))
+    {
+      i = 1;
+      clear_screen();
+      /* Put twenty scores on each page, on lines 2 through 21. */
+      while (!feof(highscore_fp) && i < 21)
+	{
+	  /* Only show the entry if show_player false, or if the entry
+	     belongs to the current player.  */
+	  if (! show_player ||
+#if defined(unix) || defined(VMS)
+	      score.uid == player_uid
+#else
+	      /* Assume microcomputers should always show every entry. */
+	      TRUE
+#endif
+	      )
+	    {
+	      (void) sprintf(string,
+			   "%-4d%8ld %-19.19s %c %-10.10s %-7.7s%3d %-22.22s",
+			     rank, score.points, score.name, score.sex,
+			     race[score.race].trace, class[score.class].title,
+			     score.lev, score.died_from);
+	      prt(string, ++i, 0);
+	    }
+	  rank++;
+	  rd_highscore(&score);
+	}
+      prt("Rank  Points Name              Sex Race       Class  Lvl Killed By"
+	  , 0, 0);
+      erase_line (1, 0);
+      prt("[Press any key to continue.]", 23, 23);
+      input = inkey();
+      if (input == ESCAPE)
+	break;
+    }
+#if defined(MSDOS) || defined(VMS) || defined(AMIGA) || defined(MAC)
+  (void) fclose (highscore_fp);
+#endif
+}
+
+
+int duplicate_character ()
+{
+  /* Only check for duplicate characters under unix and VMS.  */
+#if !defined (unix) && !defined(VMS)
+  return FALSE;
+
+#else /* ! unix && ! VMS */
+
+  high_scores score;
+  int8u version_maj, version_min, patch_level;
+  int16 player_uid;
+#if defined(MSDOS) || defined(VMS) || defined(AMIGA) || defined(MAC)
+  char string[80];
+#endif
+
+#if defined(MSDOS) || defined(VMS) || defined(AMIGA) || defined(MAC)
+#if defined(MAC) || defined(MSDOS)
+  if ((highscore_fp = fopen(MORIA_TOP, "rb")) == NULL)
+#else
+  if ((highscore_fp = fopen(MORIA_TOP, "r")) == NULL)
+#endif
+    {
+      (void) sprintf (string, "Error opening score file \"%s\"\n", MORIA_TOP);
+      msg_print(string);
+      msg_print(CNIL);
+      return FALSE;
+    }
+#endif
+
+#ifndef BSD4_3
+  (void) fseek(highscore_fp, (long)0, L_SET);
+#else
+  (void) fseek(highscore_fp, (off_t)0, L_SET);
+#endif
+
+  /* Read version numbers from the score file, and check for validity.  */
+  version_maj = getc (highscore_fp);
+  version_min = getc (highscore_fp);
+  patch_level = getc (highscore_fp);
+  /* Support score files from 5.2.2 to present.  */
+  if (feof (highscore_fp))
+    /* An empty score file.  */
+    return FALSE;
+  if ((version_maj != CUR_VERSION_MAJ)
+      || (version_min > CUR_VERSION_MIN)
+      || (version_min == CUR_VERSION_MIN && patch_level > PATCH_LEVEL)
+      || (version_min == 2 && patch_level < 2)
+      || (version_min < 2))
+    {
+      msg_print("Sorry. This scorefile is from a different version of \
+umoria.");
+      msg_print (CNIL);
+#if defined(MSDOS) || defined(VMS) || defined(AMIGA) || defined(MAC)
+      (void) fclose (highscore_fp);
+#endif
+      return FALSE;
+    }
+
+  /* set the static fileptr in save.c to the highscore file pointer */
+  set_fileptr(highscore_fp);
+
+#ifdef unix
+  player_uid = getuid ();
+#else
+#ifdef VMS
+  player_uid = (getgid()*1000) + getuid();
+#else
+  player_uid = 0;
+#endif
+#endif
+
+  rd_highscore(&score);
+  while (!feof(highscore_fp))
+    {
+      if (score.uid == player_uid && score.birth_date == birth_date
+	  && score.class == py.misc.pclass && score.race == py.misc.prace
+	  && score.sex == (py.misc.male ? 'M' : 'F')
+	  && strcmp (score.died_from, "(saved)"))
+	return TRUE;
+
+      rd_highscore(&score);
+    }
+#if defined(MSDOS) || defined(VMS) || defined(AMIGA) || defined(MAC)
+  (void) fclose (highscore_fp);
+#endif
+
+  return FALSE;
+#endif  /* ! unix && ! VMS */
+}
+
+
 
 /* Prints the gravestone of the character		-RAK-	 */
 static void print_tomb()
@@ -213,7 +464,8 @@ static void print_tomb()
   (void) sprintf(str,"| %s | _;,,,;_   ____", center_string (tmp_str, p));
   put_buffer (str, 10, 9);
   (void) sprintf (str, "Level : %d", (int) py.misc.lev);
-  (void) sprintf (str,"| %s |          /    \\", center_string (tmp_str, str));
+  (void) sprintf (str,"| %s |          /    \\",
+		  center_string (tmp_str, str));
   put_buffer (str, 11, 9);
   (void) sprintf(str, "%ld Exp", py.misc.exp);
   (void) sprintf(str,"| %s |          :    :", center_string (tmp_str, str));
@@ -244,7 +496,8 @@ static void print_tomb()
 #ifdef MAC
   /* On Mac, file_character() gets file name via std file dialog */
   /* So, the prompt for character record cannot be made to do double duty */
-  put_buffer ("('F' - Save record in file / 'Y' - Display record on screen / 'N' - Abort)", 23, 0);
+  put_buffer ("('F' - Save record in file / 'Y' - Display record on screen \
+/ 'N' - Abort)", 23, 0);
   put_buffer ("Character record [F/Y/N]?", 22, 0);
   do
     {
@@ -272,7 +525,8 @@ static void print_tomb()
   while (!ok);
   if (func != 'N')
 #else
-  put_buffer ("(ESC to abort, return to print on screen, or file name)", 23, 0);
+  put_buffer ("(ESC to abort, return to print on screen, or file name)",
+	      23, 0);
   put_buffer ("Character record?", 22, 0);
   if (get_string (str, 22, 18, 60))
 #endif
@@ -308,8 +562,8 @@ static void print_tomb()
 	      (void) show_equip (TRUE, 0);
 	      msg_print ("You are carrying:");
 	      clear_from (1);
-	      (void) show_inven (0, inven_ctr-1, TRUE, 0);
-	      msg_print (NULL);
+	      (void) show_inven (0, inven_ctr-1, TRUE, 0, CNIL);
+	      msg_print (CNIL);
 	    }
 	}
     }
@@ -317,51 +571,69 @@ static void print_tomb()
 
 
 /* Calculates the total number of points earned		-JWT-	 */
-#if 0
-/* Not touched for Mac port */
-long total_points()
+int32 total_points()
 {
-  return (py.misc.max_exp + (100 * py.misc.max_lev));
+  int32 total;
+  int i;
+
+  total = py.misc.max_exp + (100 * py.misc.max_dlv);
+  total += py.misc.au / 100;
+  for (i = 0; i < INVEN_ARRAY_SIZE; i++)
+    total += item_value(&inventory[i]);
+  total += dun_level*50;
+
+  /* Don't ever let the score decrease from one save to the next.  */
+  if (max_score > total)
+    return max_score;
+
+  return total;
 }
-#endif
 
 
 /* Enters a players name on the top twenty list		-JWT-	 */
-#if 0
-/* Not touched for mac port */
-top_twenty()
+static void highscores()
 {
-  register int i, j, k;
-  high_scores scores[20], myscore;
-#ifdef MSDOS
+  high_scores old_entry, new_entry, entry;
+  int i;
+  char *tmp;
+  int8u version_maj, version_min, patch_level;
+  long curpos;
+#if defined(VMS) || defined(MSDOS) || defined(AMIGA) || defined(MAC)
   char string[100];
 #endif
-  char *tmp;
 
-  clear_screen(0, 0);
+  clear_screen();
 
-  if (wizard)
-    exit_game();
+  if (noscore)
+    return;
 
   if (panic_save == 1)
     {
-      msg_print("Sorry, scores for games restored from panic save files are not saved.");
-      display_scores ();
-      exit_game();
+      msg_print("Sorry, scores for games restored from panic save files \
+are not saved.");
+      return;
     }
 
-  myscore.points = total_points();
-  myscore.dun_level = dun_level;
-  myscore.lev = py.misc.lev;
-  myscore.max_lev = py.misc.max_lev;
-  myscore.mhp = py.misc.mhp;
-  myscore.chp = py.misc.chp;
-  myscore.uid = -1;
-  /* First character of sex, lower case */
-  myscore.sex = tolower(py.misc.sex[0]);
-  myscore.prace = py.misc.prace;
-  myscore.pclass = py.misc.pclass;
-  (void) strcpy(myscore.name, py.misc.name);
+  new_entry.points = total_points();
+  new_entry.birth_date = birth_date;
+#ifdef unix
+  new_entry.uid = getuid();
+#else
+#ifdef VMS
+  new_entry.uid = (getgid()*1000) + getuid();
+#else
+  new_entry.uid = 0;
+#endif
+#endif
+  new_entry.mhp = py.misc.mhp;
+  new_entry.chp = py.misc.chp;
+  new_entry.dun_level = dun_level;
+  new_entry.lev = py.misc.lev;
+  new_entry.max_dlv = py.misc.max_dlv;
+  new_entry.sex = (py.misc.male ? 'M' : 'F');
+  new_entry.race = py.misc.prace;
+  new_entry.class = py.misc.pclass;
+  (void) strcpy(new_entry.name, py.misc.name);
   tmp = died_from;
   if ('a' == *tmp)
     {
@@ -374,105 +646,209 @@ top_twenty()
 	  tmp++;
 	}
     }
-  (void) strncpy(myscore.died_from, tmp, strlen(tmp) - 1);
-  myscore.died_from[strlen(tmp) - 1] = '\0';
-  /* Get rid of '.' at end of death description */
+  (void) strcpy(new_entry.died_from, tmp);
 
   /*  First, get a lock on the high score file so no-one else tries */
-  /*  to write to it while we are using it */
-#ifdef USG
-  /* no flock sytem call, ignore the problem for now */
+  /*  to write to it while we are using it, on VMS and IBMPCs only one
+      process can have the file open at a time, so we just open it here */
+#if defined(MSDOS) || defined(VMS) || defined(AMIGA) || defined(MAC)
+#if defined(MAC) || defined(MSDOS)
+  if ((highscore_fp = fopen(MORIA_TOP, "rb+")) == NULL)
 #else
-#ifndef VMS
-  if (0 != flock(highscore_fd, LOCK_EX))
-    {
-      perror("Error gaining lock for score file");
-      exit_game();
-    }
-#else
-  if (1 > (highscore_fd = open(MORIA_TOP, O_RDWR | O_CREAT, 0644)))
+  if ((highscore_fp = fopen(MORIA_TOP, "r+")) == NULL)
+#endif
     {
       (void) sprintf (string, "Error opening score file \"%s\"\n", MORIA_TOP);
-      prt(string, 0, 0);
+      msg_print(string);
+      msg_print(CNIL);
+      return;
+    }
+#else
+#ifdef ATARIST_TC
+  /* 'lock' always succeeds on the Atari ST */
+#else
+  if (0 != flock((int)fileno(highscore_fp), LOCK_EX))
+    {
+      msg_print("Error gaining lock for score file");
+      msg_print(CNIL);
       return;
     }
 #endif
 #endif
 
-#ifdef MSDOS
-  /* open the scorefile here */
-  if (1 > (highscore_fd = open(MORIA_TOP, O_RDWR | O_CREAT, 0644)))
-    {
-      (void) sprintf (string, "Error opening score file \"%s\"\n", MORIA_TOP);
-      prt(string, 0, 0);
-      return;
-    }
-  (void) setmode(highscore_fd, O_BINARY);
+  /* Search file to find where to insert this character, if uid != 0 and
+     find same uid/sex/race/class combo then exit without saving this score */
+  /* Seek to the beginning of the file just to be safe. */
+#ifndef BSD4_3
+  (void) fseek(highscore_fp, (long)0, L_SET);
+#else
+  (void) fseek(highscore_fp, (off_t)0, L_SET);
 #endif
 
-  /*  Check to see if this score is a high one and where it goes */
+  /* Read version numbers from the score file, and check for validity.  */
+  version_maj = getc (highscore_fp);
+  version_min = getc (highscore_fp);
+  patch_level = getc (highscore_fp);
+  /* If this is a new scorefile, it should be empty.  Write the current
+     version numbers to the score file.  */
+  if (feof (highscore_fp))
+    {
+      /* Seek to the beginning of the file just to be safe. */
+#ifndef BSD4_3
+      (void) fseek(highscore_fp, (long)0, L_SET);
+#else
+      (void) fseek(highscore_fp, (off_t)0, L_SET);
+#endif
+
+      (void) putc (CUR_VERSION_MAJ, highscore_fp);
+      (void) putc (CUR_VERSION_MIN, highscore_fp);
+      (void) putc (PATCH_LEVEL, highscore_fp);
+
+      /* must fseek() before can change read/write mode */
+#ifndef BSD4_3
+#ifdef ATARIST_TC
+      /* no fseek relative to current position allowed */
+      (void) fseek (highscore_fp, (long)ftell (highscore_fp), L_SET);
+#else
+      (void) fseek(highscore_fp, (long)0, L_INCR);
+#endif
+#else
+      (void) fseek(highscore_fp, (off_t)0, L_INCR);
+#endif
+    }
+  /* Support score files from 5.2.2 to present.  */
+  else if ((version_maj != CUR_VERSION_MAJ)
+	   || (version_min > CUR_VERSION_MIN)
+	   || (version_min == CUR_VERSION_MIN && patch_level > PATCH_LEVEL)
+	   || (version_min == 2 && patch_level < 2)
+	   || (version_min < 2))
+    {
+      /* No need to print a message, a subsequent call to display_scores()
+	 will print a message.  */
+#if defined(MSDOS) || defined(VMS) || defined(AMIGA) || defined(MAC)
+      (void) fclose (highscore_fp);
+#endif
+      return;
+    }
+
+  /* set the static fileptr in save.c to the highscore file pointer */
+  set_fileptr(highscore_fp);
+
   i = 0;
-#ifndef BSD4_3
-  (void) lseek(highscore_fd, (long)0, L_SET);
-#else
-  (void) lseek(highscore_fd, (off_t)0, L_SET);
-#endif
-  while ((i < 20)
-	&& (0 != read(highscore_fd, (char *)&scores[i], sizeof(high_scores))))
+  curpos = ftell (highscore_fp);
+  rd_highscore(&old_entry);
+  while (!feof(highscore_fp))
     {
-      i++;
+      if (new_entry.points >= old_entry.points)
+	break;
+      /* under unix and VMS, only allow one sex/race/class combo per person,
+	 on single user system, allow any number of entries, but try to
+	 prevent multiple entries per character by checking for case when
+	 birthdate/sex/race/class are the same, and died_from of scorefile
+	 entry is "(saved)" */
+      else if (((new_entry.uid != 0 && new_entry.uid == old_entry.uid)
+		|| (new_entry.uid == 0 &&!strcmp(old_entry.died_from,"(saved)")
+		    && new_entry.birth_date == old_entry.birth_date))
+	       && new_entry.sex == old_entry.sex
+	       && new_entry.race == old_entry.race
+	       && new_entry.class == old_entry.class)
+	{
+#if defined(MSDOS) || defined(VMS) || defined(AMIGA) || defined(MAC)
+	  (void) fclose (highscore_fp);
+#endif
+	  return;
+	}
+      else if (++i >= SCOREFILE_SIZE)
+	{
+	  /* only allow one thousand scores in the score file */
+#if defined(MSDOS) || defined(VMS) || defined(AMIGA) || defined(MAC)
+	  (void) fclose (highscore_fp);
+#endif
+	  return;
+	}
+      curpos = ftell (highscore_fp);
+      rd_highscore(&old_entry);
     }
 
-  j = 0;
-  while (j < i && (scores[j].points >= myscore.points))
+  if (feof(highscore_fp))
     {
-      j++;
-    }
-  /* i is now how many scores we have, and j is where we put this score */
-
-  /* If its the first score, or it gets appended to the file */
-  if (0 == i || (i == j && j < 20))
-    {
+      /* write out new_entry at end of file */
 #ifndef BSD4_3
-      (void) lseek(highscore_fd, (long)(j * sizeof(high_scores)), L_SET);
+      (void) fseek (highscore_fp, curpos, L_SET);
 #else
-      (void) lseek(highscore_fd, (off_t)(j * sizeof(high_scores)), L_SET);
+      (void) fseek (highscore_fp, (off_t)curpos, L_SET);
 #endif
-      (void) write(highscore_fd, (char *)&myscore, sizeof(high_scores));
+      wr_highscore(&new_entry);
     }
-  else if (j < i)
+  else
     {
-      /* If it gets inserted in the middle */
-      /* Bump all the scores up one place */
-      for (k = MIN(i, 19); k > j ; k--)
+      entry = new_entry;
+      while (!feof(highscore_fp))
 	{
 #ifndef BSD4_3
-	  (void) lseek(highscore_fd, (long)(k * sizeof(high_scores)), L_SET);
+#ifdef ATARIST_TC || defined(__TURBOC__)
+	  /* No fseek with negative offset allowed.  */
+	  (void) fseek(highscore_fp, (long)ftell(highscore_fp) -
+		       sizeof(high_scores) - sizeof (char), L_SET);
 #else
-	  (void) lseek(highscore_fd, (off_t)(k * sizeof(high_scores)), L_SET);
+	  (void) fseek(highscore_fp,
+		       -(long)sizeof(high_scores)-(long)sizeof(char),
+		       L_INCR);
 #endif
-	  (void) write(highscore_fd, (char *)&scores[k - 1], sizeof(high_scores));
-	}
-      /* Write out your score */
+#else
+	  (void) fseek(highscore_fp,
+		       -(off_t)sizeof(high_scores)-(off_t)sizeof(char),
+		       L_INCR);
+#endif
+	  wr_highscore(&entry);
+	  /* under unix and VMS, only allow one sex/race/class combo per
+	     person, on single user system, allow any number of entries, but
+	     try to prevent multiple entries per character by checking for
+	     case when birthdate/sex/race/class are the same, and died_from of
+	     scorefile entry is "(saved)" */
+	  if (((new_entry.uid != 0 && new_entry.uid == old_entry.uid)
+		|| (new_entry.uid == 0 &&!strcmp(old_entry.died_from,"(saved)")
+		    && new_entry.birth_date == old_entry.birth_date))
+	      && new_entry.sex == old_entry.sex
+	      && new_entry.race == old_entry.race
+	      && new_entry.class == old_entry.class)
+	    break;
+	  entry = old_entry;
+	  /* must fseek() before can change read/write mode */
 #ifndef BSD4_3
-      (void) lseek(highscore_fd, (long)(j * sizeof(high_scores)), L_SET);
+#ifdef ATARIST_TC
+	  /* No fseek relative to current position allowed.  */
+	  (void) fseek(highscore_fp, (long)ftell(highscore_fp), L_SET);
 #else
-      (void) lseek(highscore_fd, (off_t)(j * sizeof(high_scores)), L_SET);
+	  (void) fseek(highscore_fp, (long)0, L_INCR);
 #endif
-      (void) write(highscore_fd, (char *)&myscore, sizeof(high_scores));
+#else
+	  (void) fseek(highscore_fp, (off_t)0, L_INCR);
+#endif
+	  curpos = ftell (highscore_fp);
+	  rd_highscore(&old_entry);
+	}
+      if (feof(highscore_fp))
+	{
+#ifndef BSD4_3
+	  (void) fseek (highscore_fp, curpos, L_SET);
+#else
+	  (void) fseek (highscore_fp, (off_t)curpos, L_SET);
+#endif
+	  wr_highscore(&entry);
+	}
     }
 
-#ifdef USG
-  /* no flock sytem call, ignore the problem for now */
+#if !defined(VMS) && !defined(MSDOS) && !defined(AMIGA) && !defined(MAC)
+#ifdef ATARIST_TC
+  /* Flock never called for Atari ST with TC.  */
 #else
-#ifndef VMS
-  (void) flock(highscore_fd, LOCK_UN);
+  (void) flock((int)fileno(highscore_fp), LOCK_UN);
 #endif
+#else
+  (void) fclose (highscore_fp);
 #endif
-  (void) close(highscore_fd);
-  display_scores();
 }
-#endif
 
 
 /* Change the player into a King!			-RAK-	 */
@@ -520,38 +896,41 @@ static void kingly()
 /* Handles the gravestone end top-twenty routines	-RAK-	 */
 void exit_game ()
 {
-  register int i;
-
 #ifdef MAC
   /* Prevent strange things from happening */
   enablefilemenu(FALSE);
 #endif
 
   /* What happens upon dying.				-RAK-	 */
-  msg_print(NULL);
+  msg_print(CNIL);
   flush ();  /* flush all input */
   nosignals ();	 /* Can't interrupt or suspend. */
   /* If the game has been saved, then save sets turn back to -1, which
-     inhibits the printing of the tomb.	 Save also finishes up the log. */
-  /* Don't log anyone who has not even started. */
+     inhibits the printing of the tomb.	 */
   if (turn >= 0)
     {
       if (total_winner)
 	kingly();
       print_tomb();
     }
-  i = log_index;
+  if (character_generated && !character_saved)
 #ifdef MAC
-  (void) save_char (TRUE);	/* Save the memory at least. */
+    (void) save_char (TRUE);		/* Save the memory at least. */
 #else
-  (void) save_char ();		/* Save the memory at least. */
+    (void) save_char ();		/* Save the memory at least. */
 #endif
-  if (i > 0)
-    display_scores (i, TRUE);
+  /* add score to scorefile if applicable */
+  if (character_generated)
+    {
+      /* Clear character_saved, strange thing to do, but it prevents inkey()
+	 from recursively calling exit_game() when there has been an eof
+	 on stdin detected.  */
+      character_saved = FALSE;
+      highscores();
+      display_scores (TRUE);
+    }
   erase_line (23, 0);
-#ifndef __TURBOC__
   restore_term ();
-#endif
 #ifdef MAC
   /* Undo what has been done */
   enablefilemenu(TRUE);

@@ -1,13 +1,18 @@
-/* creature.c: handle monster movement and attacks
+/* source/creature.c: handle monster movement and attacks
 
-   Copyright (c) 1989 James E. Wilson, Robert A. Koeneke
+   Copyright (c) 1989-91 James E. Wilson, Robert A. Koeneke
 
    This software may be copied and distributed for educational, research, and
    not for profit purposes provided that this copyright and statement are
    included in all such copies. */
 
-#include "constant.h"
+#ifdef __TURBOC__
+#include	<stdio.h>
+#include	<stdlib.h>
+#endif /* __TURBOC__ */
+ 
 #include "config.h"
+#include "constant.h"
 #include "types.h"
 #include "externs.h"
 
@@ -23,12 +28,18 @@ char *strcpy();
 #endif
 
 #if defined(LINT_ARGS)
+static int movement_rate(int16);
+static int check_mon_lite(int, int);
 static void get_moves(int, int *);
 static void make_attack(int);
 static void make_move(int, int *, int32u *);
 static void mon_cast_spell(int, int *);
 static void mon_move(int, int32u *);
-static int check_mon_lite(int, int);
+#endif
+
+#ifdef ATARIST_TC
+/* Include this to get prototypes for standard library functions.  */
+#include <stdlib.h>
 #endif
 
 
@@ -112,12 +123,12 @@ int monptr;
 /* Given speed,	 returns number of moves this turn.	-RAK-	*/
 /* NOTE: Player must always move at least once per iteration,	  */
 /*	 a slowed player is handled by moving monsters faster	 */
-int movement_rate(speed)
+static int movement_rate(speed)
 register int16 speed;
 {
   if (speed > 0)
     {
-      if (py.flags.rest > 0)
+      if (py.flags.rest != 0)
 	return 1;
       else
 	return speed;
@@ -847,6 +858,8 @@ int monptr;
 		{
 		  m_ptr->hp += j*i_ptr->p1;
 		  i_ptr->p1 = 0;
+		  if (! known2_p (i_ptr))
+		    add_inscribe (i_ptr, ID_EMPTY);
 		  msg_print("Energy drains from your pack!");
 		}
 	      else
@@ -860,9 +873,10 @@ int monptr;
 	      break;
 	    }
 
-	  /* moved here from mon_move, so that monster only confused if it
-	     actually hits */
-	  if (py.flags.confuse_monster)
+	  /* Moved here from mon_move, so that monster only confused if it
+	     actually hits.  A monster that has been repelled has not hit
+	     the player, so it should not be confused.  */
+	  if (py.flags.confuse_monster && adesc != 99)
 	    {
 	      msg_print("Your hands stop glowing.");
 	      py.flags.confuse_monster = FALSE;
@@ -998,7 +1012,7 @@ int32u *rcmove;
 		    {
 		      invcopy(t_ptr, OBJ_OPEN_DOOR);
 		      if (stuck_door) /* 50% chance of breaking door */
-			t_ptr->p1 = randint(2) - 1;
+			t_ptr->p1 = 1 - randint(2);
 		      c_ptr->fval = CORR_FLOOR;
 		      lite_spot(newy, newx);
 #ifdef ATARIST_MWC
@@ -1019,7 +1033,7 @@ int32u *rcmove;
 			{
 			  invcopy(t_ptr, OBJ_OPEN_DOOR);
 			  /* 50% chance of breaking door */
-			  t_ptr->p1 = randint(2) - 1;
+			  t_ptr->p1 = 1 - randint(2);
 			  c_ptr->fval = CORR_FLOOR;
 			  lite_spot(newy, newx);
 			  msg_print ("You hear a door burst open!");
@@ -1195,7 +1209,12 @@ int *took_turn;
       /* End DIED_FROM		       */
 
       /* Extract all possible spells into spell_choice */
+#ifdef ATARIST_MWC
+      holder = ~CS_FREQ;
+      i = (r_ptr->spells & holder);
+#else
       i = (r_ptr->spells & ~CS_FREQ);
+#endif
       k = 0;
       while (i != 0)
 	{
@@ -1380,6 +1399,7 @@ int monptr;
 {
   register int i, j, k;
   register cave_type *c_ptr;
+  int result;
 #ifdef ATARIST_MWC
   int32u holder;
 #endif
@@ -1421,8 +1441,11 @@ int monptr;
 
 		      /* in case compact_monster() is called,it needs monptr */
 		      hack_monptr = monptr;
-		      place_monster(j, k, cr_index, FALSE);
+		      /* Place_monster() may fail if monster list full.  */
+		      result = place_monster(j, k, cr_index, FALSE);
 		      hack_monptr = -1;
+		      if (! result)
+			return FALSE;
 		      mon_tot_mult++;
 		      return check_mon_lite(j, k);
 		    }
@@ -1432,8 +1455,11 @@ int monptr;
 		{
 		  /* in case compact_monster() is called,it needs monptr */
 		  hack_monptr = monptr;
-		  place_monster(j, k, cr_index, FALSE);
+		  /* Place_monster() may fail if monster list full.  */
+		  result = place_monster(j, k, cr_index, FALSE);
 		  hack_monptr = -1;
+		  if (! result)
+		    return FALSE;
 		  mon_tot_mult++;
 		  return check_mon_lite(j, k);
 		}
@@ -1453,23 +1479,31 @@ int32u *rcmove;
 {
   register int i, j;
   int k, move_test, dir;
+#ifdef M_XENIX
+  /* Avoid 'register' bug.  */
+  creature_type *r_ptr;
+#else
   register creature_type *r_ptr;
+#endif
   register monster_type *m_ptr;
   int mm[9];
 #ifdef ATARIST_MWC
   int32u holder;
 #endif
+  int rest_val;
 
   m_ptr = &m_list[monptr];
   r_ptr = &c_list[m_ptr->mptr];
   /* Does the critter multiply?				   */
+  /* rest could be negative, to be safe, only use mod with positive values. */
+  rest_val = abs (py.flags.rest);
 #ifdef ATARIST_MWC
   holder = CM_MULTIPLY;
   if ((r_ptr->cmove & holder) && (MAX_MON_MULT >= mon_tot_mult) &&
 #else
   if ((r_ptr->cmove & CM_MULTIPLY) && (MAX_MON_MULT >= mon_tot_mult) &&
 #endif
-      ((py.flags.rest % MON_MULT_ADJ) == 0))
+      ((rest_val % MON_MULT_ADJ) == 0))
     {
       k = 0;
       for (i = m_ptr->fy-1; i <= m_ptr->fy+1; i++)
@@ -1500,11 +1534,20 @@ int32u *rcmove;
 #endif
       (cave[m_ptr->fy][m_ptr->fx].fval >= MIN_CAVE_WALL))
     {
+      /* If the monster is already dead, don't kill it again!
+	 This can happen for monsters moving faster than the player.  They
+	 will get multiple moves, but should not if they die on the first
+	 move.  This is only a problem for monsters stuck in rock.  */
+      if (m_ptr->hp < 0)
+	return;
+
       k = 0;
       dir = 1;
-      /* note direction of for loops matches direction of keypad from 1 to 9 */
+      /* note direction of for loops matches direction of keypad from 1 to 9*/
       /* do not allow attack against the player */
-      for (i = m_ptr->fy+1; i >= m_ptr->fy-1; i--)
+      /* Must cast fy-1 to signed int, so that a nagative value of i will
+	 fail the comparison.  */
+      for (i = m_ptr->fy+1; i >= (int)(m_ptr->fy-1); i--)
 	for (j = m_ptr->fx-1; j <= m_ptr->fx+1; j++)
 	  {
 	    if ((dir != 5) && (cave[i][j].fval <= MAX_OPEN_SPACE)
@@ -1614,18 +1657,28 @@ int32u *rcmove;
 	  make_move(monptr, mm, rcmove);
 	}
       /* Attack, but don't move */
-      else if ((r_ptr->cmove & CM_ATTACK_ONLY) && (m_ptr->cdis < 2))
+      else if (r_ptr->cmove & CM_ATTACK_ONLY)
 	{
-	  get_moves(monptr, mm);
-	  *rcmove |= CM_ATTACK_ONLY;
-	  make_move(monptr, mm, rcmove);
+	  if (m_ptr->cdis < 2)
+	    {
+	      get_moves(monptr, mm);
+	      make_move(monptr, mm, rcmove);
+	    }
+	  else
+	    /* Learn that the monster does does not move when it should have
+	       moved, but didn't.  */
+	    *rcmove |= CM_ATTACK_ONLY;
 	}
-      else if ((r_ptr->cmove & CM_ALL_MV_FLAGS) == 0 && (m_ptr->cdis < 2))
+      else if ((r_ptr->cmove & CM_ONLY_MAGIC) && (m_ptr->cdis < 2))
 	{
-	  /* little hack for Quylthulgs, so that will eventually notice that
-	     they have no physical attacks */
+	  /* A little hack for Quylthulgs, so that one will eventually notice
+	     that they have no physical attacks.  */
 	  if (c_recall[m_ptr->mptr].r_attacks[0] < MAX_UCHAR)
 	    c_recall[m_ptr->mptr].r_attacks[0]++;
+	  /* Another little hack for Quylthulgs, so that one can eventually
+	     learn their speed.  */
+	  if (c_recall[m_ptr->mptr].r_attacks[0] > 20)
+	    c_recall[m_ptr->mptr].r_cmove |= CM_ONLY_MAGIC;
 	}
     }
 }
@@ -1641,6 +1694,9 @@ int attack;
   int32u notice, rcmove;
   int wake, ignore;
   vtype cdesc;
+#ifdef ATARIST_MWC
+  int32u holder;
+#endif
 
   /* Process the monsters  */
   for (i = mfptr - 1; i >= MIN_MONIX && !death; i--)
@@ -1669,16 +1725,24 @@ int attack;
 		wake = FALSE;
 		ignore = FALSE;
 		rcmove = 0;
-		if (m_ptr->ml || (m_ptr->cdis <= c_list[m_ptr->mptr].aaf))
+		if (m_ptr->ml || (m_ptr->cdis <= c_list[m_ptr->mptr].aaf)
+		    /* Monsters trapped in rock must be given a turn also,
+		       so that they will die/dig out immediately.  */
+#ifdef ATARIST_MWC
+		    || ((! (c_list[m_ptr->mptr].cmove & (holder = CM_PHASE)))
+#else
+		    || ((! (c_list[m_ptr->mptr].cmove & CM_PHASE))
+#endif
+			&& cave[m_ptr->fy][m_ptr->fx].fval >= MIN_CAVE_WALL))
 		  {
 		    if (m_ptr->csleep > 0)
 		      if (py.flags.aggravate)
 			m_ptr->csleep = 0;
-		      else if ((py.flags.rest < 1 && py.flags.paralysis < 1)
+		      else if ((py.flags.rest == 0 && py.flags.paralysis < 1)
 			       || (randint(50) == 1))
 			{
 			  notice = randint(1024);
-			  if (notice*notice*notice <= 1L << (29 - py.misc.stl))
+			  if (notice*notice*notice <= (1L << (29 - py.misc.stl)))
 			    {
 			      m_ptr->csleep -= (100 / m_ptr->cdis);
 			      if (m_ptr->csleep > 0)
@@ -1714,6 +1778,7 @@ int attack;
 		    if ((m_ptr->csleep == 0) && (m_ptr->stunned == 0))
 		      mon_move (i, &rcmove);
 		  }
+
 		update_mon(i);
 		if (m_ptr->ml)
 		  {

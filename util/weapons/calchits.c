@@ -1,3 +1,11 @@
+/* util/weapons/calchits.c: calculates relative weapon effectiveness
+
+   Copyright (c) 1989-1991 Wayne Schlitt, James E. Wilson
+
+   This software may be copied and distributed for educational, research, and
+   not for profit purposes provided that this copyright and statement are
+   included in all such copies. */
+
 #include <stdio.h>
 
 #define	max(a,b)	( (a) > (b) ? (a) : (b) )
@@ -208,7 +216,8 @@ int main()
 	if( cstr == 0 && cdex == 0 )
 	    break;
 
-	printf( "| Weapon | Max blows | Blows | weight ratio | hp of dam | w/ critical |\n" );
+	printf( "  Weapon | Max blows | Blows | weight ratio | hp of dam |");
+	printf( " w/ critical |\n" );
 
 	for( i = 0; i < num_weapons; i++ )
 	{
@@ -232,7 +241,7 @@ int main()
 	    critical += (int) real_blows*to_dam[i];
 #endif
 
-	    printf( "| %4d   | %6d    | %4d  | %8d     | %6g    |  %7g    |\n",
+	    printf( "  %4d   | %6d    | %4d  | %8d     | %6g    |  %7g    |\n",
 		   i, max_blows, real_blows, adj_weight, avg_dam, critical );
 	}
 	printf( "\n" );

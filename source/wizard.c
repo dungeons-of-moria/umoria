@@ -1,13 +1,18 @@
-/* wizard.c: Version history and info, and wizard mode debugging aids.
+/* source/wizard.c: Version history and info, and wizard mode debugging aids.
 
-   Copyright (c) 1989 James E. Wilson, Robert A. Koeneke
+   Copyright (c) 1989-91 James E. Wilson, Robert A. Koeneke
 
    This software may be copied and distributed for educational, research, and
    not for profit purposes provided that this copyright and statement are
    included in all such copies. */
 
-#include "constant.h"
+#ifdef __TURBOC__
+#include	<stdio.h>
+#include	<stdlib.h>
+#endif /* __TURBOC__ */
+ 
 #include "config.h"
+#include "constant.h"
 #include "types.h"
 #include "externs.h"
 
@@ -17,6 +22,11 @@
 #endif
 #else
 #include <strings.h>
+#endif
+
+#ifdef ATARIST_TC
+/* Include this to get prototypes for standard library functions.  */
+#include <stdlib.h>
 #endif
 
 long atol();
@@ -242,7 +252,8 @@ void change_character()
   else
     return;
 
-  (void) sprintf(tmp_str, "Current=%d  (0-200) Bows/Throwing = ", m_ptr->bthb);
+  (void) sprintf(tmp_str, "Current=%d  (0-200) Bows/Throwing = ",
+		 m_ptr->bthb);
   tmp_val = strlen(tmp_str);
   prt(tmp_str, 0, 0);
   if (get_string(tmp_str, 0, tmp_val, 3))

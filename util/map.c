@@ -34,14 +34,16 @@ print_map()
 	  prt(dun_line, 0, 0);
 	  return;
 	}
-      (void) sprintf(tmp_str, "section width (default = %d char):", page_width);
+      (void) sprintf(tmp_str, "section width (default = %d char):",
+		     page_width);
       prt(tmp_str, 0, 0);
       (void) get_string(tmp_str, 0, strlen(tmp_str), 10);
       page_width = atoi(tmp_str);
       if (page_width < 10)
 	page_width = 10;
 
-      (void) sprintf(tmp_str, "section height (default = %d lines):", page_height);
+      (void) sprintf(tmp_str, "section height (default = %d lines):",
+		     page_height);
       prt(tmp_str, 0, 0);
       (void) get_string(tmp_str, 0, strlen(tmp_str), 10);
       page_height = atoi(tmp_str);

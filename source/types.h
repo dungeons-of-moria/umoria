@@ -1,6 +1,6 @@
-/* types.h: global type declarations
+/* source/types.h: global type declarations
 
-   Copyright (c) 1989 James E. Wilson, Robert A. Koeneke
+   Copyright (c) 1989-91 James E. Wilson, Robert A. Koeneke
 
    This software may be copied and distributed for educational, research, and
    not for profit purposes provided that this copyright and statement are
@@ -133,12 +133,13 @@ typedef struct inven_type
   int8u ident;		/* Identify information */
 } inven_type;
 
+#define PLAYER_NAME_SIZE 27
 
 typedef struct player_type
 {
   struct misc
     {
-      char name[27];	/* Name of character	*/
+      char name[PLAYER_NAME_SIZE];	/* Name of character	*/
       int8u male;	/* Sex of character	*/
       int32 au;		/* Gold			*/
       int32 max_exp;	/* Max experience	*/
@@ -307,9 +308,16 @@ typedef struct background_type
 
 typedef struct cave_type
 {
+#ifdef AMIGA
+  /* This reduces the size from 64 bits to 32 bits. */
+  unsigned int cptr : 8;
+  unsigned int tptr : 8;
+  unsigned int fval : 8;
+#else
   int8u cptr;
   int8u tptr;
   int8u fval;
+#endif
 #if !defined(MSDOS) && !defined(ATARIST_MWC)
   unsigned int lr : 1;  /* room should be lit with perm light, walls with
 			   this set should be perm lit after tunneled out */
@@ -363,20 +371,20 @@ typedef struct store_type
   inven_record store_inven[STORE_INVEN_MAX];
 } store_type;
 
-#if 0
+/* 64 bytes for this structure */
 typedef struct high_scores
 {
   int32 points;
-  int16u lev;
-  int16u max_lev;
+  int32 birth_date;
+  int16 uid;
   int16 mhp;
   int16 chp;
-  int16 uid;
-  int16 dun_level;
+  int8u dun_level;
+  int8u lev;
+  int8u max_dlv;
   int8u sex;
-  vtype name;
-  vtype died_from;
-  int8u pclass;
-  int8u prace;
+  int8u race;
+  int8u class;
+  char name[PLAYER_NAME_SIZE];
+  char died_from[25];
 } high_scores;
-#endif

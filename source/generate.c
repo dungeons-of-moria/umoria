@@ -1,24 +1,34 @@
-/* generate.c: initialize/create a dungeon or town level
+/* source/generate.c: initialize/create a dungeon or town level
 
-   Copyright (c) 1989 James E. Wilson, Robert A. Koeneke
+   Copyright (c) 1989-91 James E. Wilson, Robert A. Koeneke
 
    This software may be copied and distributed for educational, research, and
    not for profit purposes provided that this copyright and statement are
    included in all such copies. */
 
-#include "constant.h"
 #include "config.h"
+#include "constant.h"
 #include "types.h"
 #include "externs.h"
 
-#ifdef USG
-#if !defined(ATARIST_MWC)
-#ifndef __TURBOC__
+#if defined(USG) && !defined(VMS) && !defined(MAC)
+#if !defined(ATARIST_MWC) && !defined(AMIGA)
+#if !defined(__TURBOC__)
 #include <memory.h>
 #else
+#ifndef ATARIST_TC
 #include <mem.h>
 #endif
 #endif
+#endif
+#endif
+
+#if defined(MAC)
+#include <string.h>
+#endif
+
+#ifdef ATARIST_TC
+#include <string.h>
 #endif
 
 typedef struct coords {
@@ -31,7 +41,7 @@ static void rand_dir(int *,int *);
 static void blank_cave(void);
 static void fill_cave(int);
 static void place_boundary(void);
-static void place_streamer(struct floor_type, int);
+static void place_streamer(int, int);
 static void place_open_door(int, int);
 static void place_broken_door(int, int);
 static void place_closed_door(int, int);
@@ -51,12 +61,12 @@ static void build_type3(int, int);
 static void build_tunnel(int, int, int, int);
 static int next_to(int, int);
 static void try_door(int, int);
+static void new_spot(int16 *, int16 *);
 static void cave_gen(void);
 static void build_store(int, int, int);
 static void tlink(void);
 static void mlink(void);
 static void town_gen(void);
-static void new_spot(int16 *, int16 *);
 #endif
 
 static coords doorstk[100];
@@ -118,7 +128,8 @@ static void blank_cave()
 #else
 #ifdef MAC
   /* On the mac, cave is a pointer, so sizeof(cave) = 4! */
-  (void)memset((char *)&cave[0][0], 0, sizeof(cave_type)*MAX_HEIGHT*MAX_WIDTH);
+  (void)memset((char *)&cave[0][0], 0,
+	       (long) sizeof(cave_type) * MAX_HEIGHT * MAX_WIDTH);
 #else
   (void)memset((char *)&cave[0][0], 0, sizeof (cave));
 #endif
@@ -506,8 +517,8 @@ int yval, xval;
   x_left   = xval - randint(11);
   x_right  = xval + randint(11);
 
-  /* the x dim of rooms tends to be much larger than the y dim, so don't bother
-     rewriting the y loop */
+  /* the x dim of rooms tends to be much larger than the y dim, so don't
+     bother rewriting the y loop */
 
   for (i = y_height; i <= y_depth; i++)
     {
@@ -640,8 +651,8 @@ int yval, xval;
   x_left   = xval - 11;
   x_right  = xval + 11;
 
-  /* the x dim of rooms tends to be much larger than the y dim, so don't bother
-     rewriting the y loop */
+  /* the x dim of rooms tends to be much larger than the y dim, so don't
+     bother rewriting the y loop */
 
   for (i = y_height; i <= y_depth; i++)
     {
@@ -1270,6 +1281,9 @@ static void cave_gen()
 	  else
 	    build_room(yloc[k], xloc[k]);
 	  k++;
+#ifdef MAC
+	  SystemTask ();
+#endif
 	}
   for (i = 0; i < k; i++)
     {
@@ -1293,7 +1307,10 @@ static void cave_gen()
       y2 = yloc[i+1];
       x2 = xloc[i+1];
       build_tunnel(y2, x2, y1, x1);
-      }
+    }
+#ifdef MAC
+  SystemTask ();
+#endif
   fill_cave(GRANITE_WALL);
   for (i = 0; i < DUN_STR_MAG; i++)
     place_streamer(MAGMA_WALL, DUN_STR_MC);
@@ -1308,6 +1325,9 @@ static void cave_gen()
       try_door(doorstk[i].y-1, doorstk[i].x);
       try_door(doorstk[i].y+1, doorstk[i].x);
     }
+#ifdef MAC
+  SystemTask ();
+#endif
   alloc_level = (dun_level/3);
   if (alloc_level < 2)
     alloc_level = 2;
@@ -1427,6 +1447,9 @@ static void town_gen()
 		c_ptr->pl = TRUE;
 	      c_ptr++;
 	    }
+#ifdef MAC
+	  SystemTask ();
+#endif
 	}
       alloc_monster(MIN_MALLOC_TN, 3, TRUE);
     }
@@ -1440,6 +1463,9 @@ static void town_gen()
 	      c_ptr->pl = TRUE;
 	      c_ptr++;
 	    }
+#ifdef MAC
+	  SystemTask ();
+#endif
 	}
       alloc_monster(MIN_MALLOC_TD, 3, TRUE);
     }
@@ -1456,6 +1482,10 @@ void generate_cave()
   panel_col_max	= 0;
   char_row = -1;
   char_col = -1;
+
+#ifdef MAC
+  macbeginwait ();
+#endif
 
   tlink();
   mlink();
@@ -1481,4 +1511,7 @@ void generate_cave()
       panel_col = max_panel_cols;
       cave_gen();
     }
+#ifdef MAC
+  macendwait ();
+#endif
 }

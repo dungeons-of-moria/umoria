@@ -1,0 +1,20 @@
+FLAGS = -1 -c -w-
+DEFS = -DUSG -DMSDOS
+CC = \tc\bin\tcc
+PROGRAM = moria.exe
+LINKER = \tc\bin\tlink
+
+OBJS		= create.obj creature.obj death.c desc.obj dungeon.obj \
+		  eat.obj files.obj generate.obj help.obj io.obj rnd.obj \
+		  magic.obj main.obj misc1.obj misc2.obj misc2.obj misc4.obj \
+		  monsters.obj moria1.obj moria2.obj moria3.obj moria4.obj \
+		  ms_ansi.obj ms_misc.obj potions.obj \
+		  prayer.obj save.obj scrolls.obj sets.obj signals.obj \
+		  spells.obj staffs.obj store1.obj store2.obj treasure.obj \
+		  variable.obj wands.obj wizard.obj
+
+.c.obj:
+	$(CC) $(FLAGS) $(DEFS) $*
+
+$(PROGRAM):   $(OBJS)
+		$(LINKER) $(OBJS), $(PROGRAM),,

@@ -1,3 +1,11 @@
+/* mac/macrsrc.h: definitions for code handling C data as resources
+
+   Copyright (c) 1989-1991 Curtis McCauley, James E. Wilson
+
+   This software may be copied and distributed for educational, research, and
+   not for profit purposes provided that this copyright and statement are
+   included in all such copies. */
+
 #define treasureRsrc		'TREA'
 #define monsterRsrc			'MONS'
 #define spellRsrc			'SPLL'
@@ -34,19 +42,29 @@ typedef struct restable_type {
 		char **memPtr;
 	#endif
 	char *resName;
-	int resType, resID;
-	unsigned elemCnt, elemSiz;
+	long resType, resID;
+	unsigned long elemCnt, elemSiz;
 	void (*strProc)(char *ptr, void (*proc)(char **str));
 	int restartFlag;
 } restable_type;
 
+/* THINK C can't handle data > 32K, so we need to do this in 2 parts.  */
+
+#ifdef RSRC_PART1
+#define MAX_RESOURCES			1
+#else
+#ifdef RSRC_PART2
+#define MAX_RESOURCES			13
+#else
 #define MAX_RESOURCES			14
+#endif
+#endif
 
 extern restable_type restable[MAX_RESOURCES];
 
 typedef struct memtable_type {
 	char **memPtr;
-	unsigned elemCnt, elemSiz;
+	unsigned long elemCnt, elemSiz;
 	int restartFlag;
 } memtable_type;
 
@@ -56,19 +74,19 @@ extern memtable_type memtable[MAX_PTRS];
 
 typedef struct restart_type {
 	char *ptr;
-	unsigned size;
+	unsigned long size;
 } restart_type;
 
-#define MAX_RESTART				37
+#define MAX_RESTART				34
 
 extern restart_type restart_vars[MAX_RESTART];
 
 typedef struct clrtable_type {
 	char *ptr;
-	unsigned size;
+	unsigned long size;
 } clrtable_type;
 
-#define MAX_CLRS				15
+#define MAX_CLRS				16
 
 extern clrtable_type clrtable[MAX_CLRS];
 

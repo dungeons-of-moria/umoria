@@ -45,8 +45,8 @@ of junk and still up (down, via my algorythm) your counter, even though you
 didn't need the item.  I really don't have a solution, other than expanding
 the code so that each price range (increments of about a hundred, so the
 first few would be 10-100, 11-200, 201-300 and the last few would be 801-900
-and 901-1000 or 901-999, however you work it) gets a separate counter.  Nat-
-urally, this would have to be accompanied by a decrease of the original counter
+and 901-1000 or 901-999, however you work it) gets a separate counter.  Natur-
+ally, this would have to be accompanied by a decrease of the original counter
 value to 10 or 5 or so (or a different value for each range, since players
 will buy a lot more items in the 10-100 range).
 

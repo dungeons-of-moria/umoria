@@ -1,13 +1,13 @@
-/* treasure.c: dungeon object definitions
+/* source/treasure.c: dungeon object definitions
 
-   Copyright (c) 1989 James E. Wilson, Robert A. Koeneke
+   Copyright (c) 1989-91 James E. Wilson, Robert A. Koeneke
 
    This software may be copied and distributed for educational, research, and
    not for profit purposes provided that this copyright and statement are
    included in all such copies. */
 
-#include "constant.h"
 #include "config.h"
+#include "constant.h"
 #include "types.h"
 
 /* Following are treasure arrays	and variables			*/
@@ -63,7 +63,7 @@
 
 /* Object list (All objects must be defined here)		 */
 
-#ifdef MACGAME
+#if defined(MACGAME) || defined(RSRC_PART2)
 treasure_type *object_list;
 #else
 treasure_type object_list[MAX_OBJECTS] = {
@@ -579,7 +579,7 @@ treasure_type object_list[MAX_OBJECTS] = {
     0,	 300,	92,   1,   4,	0,   0,	 0,   0, {1,1}	, 40},
 {"Restore Constitution"		,0x68000000L,	TV_POTION1, '!',/*253*/
     0,	 300,	93,   1,   4,	0,   0,	 0,   0, {1,1}	, 40},
-{"Lose Memories"		,0x00000002L,	TV_POTION2, '!',/*254*/
+{"Lose Experience"		,0x00000002L,	TV_POTION2, '!',/*254*/
     0,	   0,	95,   1,   4,	0,   0,	 0,   0, {1,1}	, 10},
 {"Salt Water"			,0x00000004L,	TV_POTION2, '!',/*255*/
     0,	   0,	96,   1,   4,	0,   0,	 0,   0, {1,1}	,  0},
@@ -816,7 +816,7 @@ treasure_type object_list[MAX_OBJECTS] = {
     0,	   0,	1,   1,   0,	0,   0,	 0,   0, {1,1}	,  0},
 {"& closed door"		,0x00000000L, TV_CLOSED_DOOR, '+',
     0,	   0,	19,   1,   0,	0,   0,	 0,   0, {1,1}	,  0},
-#ifdef ATARIST_MWC
+#ifdef ATARI_ST
 {"& secret door"		,0x00000000L, TV_SECRET_DOOR,
    (unsigned char)240, /* 369 */
 #else
@@ -942,7 +942,7 @@ treasure_type object_list[MAX_OBJECTS] = {
 #endif
 
 char *special_names[SN_ARRAY_SIZE] = {
-	NULL,			"(R)",			"(RA)",
+	CNIL,			"(R)",			"(RA)",
 	"(RF)",			"(RC)",			"(RL)",
 	"(HA)",			"(DF)",			"(SA)",
 	"(SD)",			"(SE)",			"(SU)",
@@ -963,6 +963,8 @@ char *special_names[SN_ARRAY_SIZE] = {
 	"(Unlocked)",		"of Slay Animal"
 };
 
+/* Pairing things down for THINK C.  */
+#ifndef RSRC_PART2
 int16 sorted_objects[MAX_DUNGEON_OBJ];
 
 /* Identified objects flags					*/
@@ -970,6 +972,7 @@ int8u object_ident[OBJECT_IDENT_SIZE];
 int16 t_level[MAX_OBJ_LEVEL+1];
 inven_type t_list[MAX_TALLOC];
 inven_type inventory[INVEN_ARRAY_SIZE];
+#endif
 
 /* Treasure related values					*/
 int16 inven_ctr = 0;		/* Total different obj's	*/

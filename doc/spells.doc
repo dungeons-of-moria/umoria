@@ -1,0 +1,237 @@
+Addendum to the manual for Moria.
+
+Proposed contribution written by Mike Marcelais
+                                 North Carolina School of
+                                       Science And Math
+                                 mrm@odin.ncssm.edu
+                                 games@odin.ncssm.edu
+
+1.  Magic Spells
+
+All player characters except Warriors are able to learn some form of
+magic spells.  There are two kinds of magic, Magic spells, which Mages,
+Rogues, and Rangers get, and prayers, which Priests and Paladins have.
+Each spell has a minimum level required for learning it, a mana score,
+which is the mana points required to cast it, and a failure percentage.
+
+Mana points are determined by your experience level, and the level of
+your key stat.  For Mages, Rogues, and Rangers, the key stat is intelligence,
+for Priests and Paladins the key stat is wisdom.  The effect of your key
+stat is shown by the following table.
+
+             Stat Level                 Factor
+                3-7                       0
+                8-17                      1
+               18-18/49                  3/2
+            18/50-18/69                   2
+            18/70-18/89                  5/2
+            18/90-18/99                   3
+               18/100                     4
+
+Your Mana score is the Factor times your experience level plus 1.
+If your key stat is 7 or less, your Mana score will be zero (not one)
+and you will not be able to use any spells.  If you attempt to cast a
+spell that calls for more Mana than you have, the rate of failure is much
+greater than normal, you will faint for a few turns afterward, and you stand
+the chance of damaging your health.
+
+1.1  Priest Spells
+
+Priest spells are received from the character's deity.  When the 'G'
+command is issued to learn new spells, spells are chosen randomly from
+the spells that you are able to cast.  You need not
+have the book the spell is in to learn it, because your God gave it to you,
+but you do need the book to cast the spell.  Failure percentages and spell
+effectiveness are based on Wisdom for priests and paladins.
+
+1.1.1  Priest spell levels and Mana
+
+This is a table of all the spells, with the mana and level of achievement
+for Priests and Paladins.
+                           Priest    Paladin
+(Beginner's Handbook)     Lv  Mana   Lv  Mana
+A  Detect Evil             1   1      1   1
+B  Cure Light Wounds       1   2      2   2
+C  Bless                   1   2      3   3
+D  Remove Fear             1   2      5   3
+E  Call Light              3   2      5   4
+F  Find Traps              3   3      7   5
+G  Detect Doors/Stairs     3   3      7   5
+H  Slow Poison             3   3      9   7
+
+(Words of Wisdom)
+A  Blind Creature          5   4      9   7
+B  Portal                  5   4      9   8
+C  Cure Medium Wounds      5   4     11   9
+D  Chant                   5   5     11  10
+E  Sanctuary               7   5     11  10
+F  Create Food             7   5     13  10
+G  Remove Curse            7   6     13  11
+H  Resist Heat and Cold    7   7     15  13
+
+(Chants and Blessings)
+A  Neutralize Poison       9   6     15  15
+B  Orb of Draining         9   7     17  15
+C  Cure Serious Wounds     9   7     17  15
+D  Sense Invisible        11   8     19  15
+E  Protection from Evil   11   8     19  15
+F  Earthquake             11   9     21  17
+G  Sense Surroundings     13  10     23  17
+H  Cure Critical Wounds   13  11     25  20
+I  Turn Undead            15  12     27  21
+
+(Exorcisms and Dispellings)
+A  Prayer                 15  14     29  22
+B  Dispel Undead         17  14     31  24
+C  Heal                   21  16     33  28
+D  Dispel Evil           25  20     35  32
+E  Glyph of Warding       33  24     37  36
+F  Holy Word              39  32     39  38
+
+1.1.2  Priest Spell Descriptions
+
+This is a short description of each of the spells, listed alphabetically.
+
+Bless - Improves armor class and fighting ability for a short period of time.
+Blind Creature - Blinds a creature for a short period of time.
+Call Light - Lights up an area.
+Chant - Improves armor class and fighting ability for a medium period of time.
+Create Food - Causes a food item to be dropped at your feet.
+Cure Critical Wounds - Cures a very large number of hit points.
+Cure Light Wounds - Cures a small number of hit points.
+Cure Medium Wounds - Cures a medium number of hit points.
+Cure Serious Wounds - Cures a large number of hit points.
+Detect Doors/Stairs - Finds all the doors and stairs on the screen.
+Detect Evil - Finds all the evil creatures on the screen.
+Dispel Evil - Attempts to destroy the evil creature.
+Dispel Undead - Attempts to destroy the undead creature.
+Earthquake - Randomly toggles corridors into walls and vice versa.
+Find Traps - Locates all the traps on the screen.
+Glyph of Warding - Leaves a 'Glyph' that monsters won't pass over.
+Heal - Restores 200 Hit Points.
+Holy Word - Dispels evil, removes fear, cures poison, and restores 1000 HPs.
+Neutralize Poison - Cures you of poison.
+Orb of Draining - Offensive spell that drains levels from monsters.
+Portal - Teleports you a short distance away.
+Prayer - Improves armor class and fighting ability for a long period of time.
+Protection from Evil - Causes evil creatures to do less damage to you.
+Remove Curse - Removes {damned} objects that you are welding.
+Remove Fear - Negates the fear placed on you by an enemy.
+Resist Heat and Cold - Reduce damage you suffer from heat or cold attacks.
+Sanctuary - Causes neighboring monsters to fall asleep for a while.
+Sense Invisible - Finds all invisible creatures on the screen.
+Sense Surroundings - Maps the dungeon appearing on the screen.
+Slow Poison - Reduces the rate HP are lost due to poison.
+Turn Undead - Attempts to cause undead creatures to flee.
+
+1.2  Mage Spells
+
+Mage Spells are more powerful and offensive in nature than Priest
+spells.  This offsets the fact that magicians are generally weaker
+than any other class.  Because mage spells are learned though
+study, you must have the correct Magic book to learn and cast a
+spell.  Learning spells can be banked up.  For example:  You are a
+second level Mage who had learned Magic Missile and can learn one
+more spell.  You do not wish to learn Detect Monsters, Phase Door
+or Light Area.  You can wait until you are third level and learn
+both the Cure Light Wounds and Stinking Cloud, both third level
+spells.  Spell failure and effectiveness is based on intelligence
+for Mages, Rangers, and Rogues.  Rangers can learn all but the most
+powerful offensive spell.  Rogues can not learn any offensive spell.
+
+1.2.1  Mage Spell levels and Mana
+
+                                  Mage       Ranger      Rogue
+(Beginners-Magik)               Lv  Mana    Lv  Mana    Lv  Mana
+A  Magic Missile                 1   1       3   1      --  --
+B  Detect Monsters               1   1       3   2       5   1
+C  Phase Door                    1   2       3   2       7   2
+D  Light Area                    1   2       5   3       9   3
+E  Cure Light Wounds             3   3       5   3      11   4
+F  Find Hidden Traps/Doors       3   3       5   4      13   5
+G  Stinking Cloud                3   3       7   5      --  --
+
+(Magik I)
+A  Confusion                     3   4       7   6      15   6
+B  Lightning Bolt                5   4       9   7      --  --
+C  Trap/Door Destruction         5   5       9   8      17   7
+D  Sleep I                       5   5      11   8      19   8
+E  Cure Poison                   5   5      11   9      21   9
+F  Teleport Self                 7   6      13  10      --  --
+G  Remove Curse                  7   6      13  11      23  10
+H  Frost Bolt                    7   6      15  12      --  --
+I  Turn Stone to Mud             9   7      15  13      --  --
+
+(Magik II)
+A  Create Food                   9   7      17  17      25  12
+B  Recharge Item I               9   7      17  17      27  15
+C  Sleep II                      9   7      21  17      --  --
+D  Polymorph Other              11   7      21  19      --  --
+E  Identify                     11   7      23  25      29  18
+F  Sleep III                    13   7      23  20      --  --
+G  Fire Bolt                    15   9      25  20      --  --
+H  Slow Monster                 17   9      25  21      --  --
+
+(Mages Guide to Power)
+A  Frost Ball                   19  12      27  21      --  --
+B  Recharge Item II             21  12      29  23      --  --
+C  Teleport Other               23  12      31  25      --  --
+D  Haste Self                   25  12      33  25      --  --
+E  Fire Ball                    29  18      35  25      --  --
+F  Word of Destruction          33  21      37  30      --  --
+G  Genocide                     37  25      --  --      --  --
+
+Note:  Rangers don't get spells until 3'rd level, Rogues 5'th level.
+
+1.2.2  Mage Spell Descriptions
+
+Confusion - Confuses a monster for a short time.
+Create Food - Causes a food item to be dropped at your feet.
+Cure Light Wounds - Restores a small number of hit points.
+Cure Poison - Neutralizes the poison running through your veins.
+Detect Monsters - Displays all the monsters on the screen.
+Find Hidden Traps/Doors - Locates all the secret traps and doors.
+Fire Ball - Shoots a ball of flame toward a monster.
+Fire Bolt - Shoots a bolt of flame toward a monster.
+Frost Ball - Shoots a ball of frost toward a monster.
+Frost Bolt - Shoots a bolt of frost toward a monster.
+Genocide - Destroys a particular monster on the level.
+Haste Self - Causes you to move faster temporarily.
+Identify - Identifies an unknown object in your pack.
+Light Area - Illuminates the area you are in with light.
+Lightning Bolt - Shoots a bolt of lightning at your enemy.
+Magic Missile - Traditional bolt of magic used to damage enemies.
+Phase Door - Teleports you a short distance.
+Polymorph Other - Polymorphs a monster into a different creature.
+Recharge Item I and II - Recharges a staff, rod, or wand.
+Remove Curse - Allows you to unwield {damned} items.
+Sleep I - Causes a monster of your choosing to fall asleep.
+Sleep II - Causes neighboring monsters to fall asleep.
+Sleep III - Causes all monsters in range to fall asleep.
+Slow Monster - Causes a monster to move slower.
+Stinking Cloud - Shoots a ball of noxious vapors to do damage.
+Teleport Self - Teleports you to a new place on the level.
+Teleport Other - Teleports an enemy to a new place on the level.
+Trap/Door Destruction - Destroys all neighboring doors and traps.
+Turn Stone to Mud - Causes a wall (or other stone object) to melt.
+Word of Destruction - Destroys the entire screen.
+
+For spells that come in numbered versions (Sleep I, II, III, etc), the
+higher numbers have a higher effectiveness, but greater change
+of spell failure and greater Mana cost.
+
+1.3  Using Offensive Spells Against Monsters
+
+Monsters have a chance to save themselves from damage caused by
+offensive spells, just like the player has a chanced to be saved from
+damage by monster spells.  This chance is greater for higher level
+monsters than for lower level monsters.  Also, some spells will never
+work against monsters whose level is higher than the character's
+experience level.
+
+Many monsters are immune to certain kinds of attack, and will little
+or no damage from such attacks.  For example, a fire breathing dragon will
+suffer little damage from a fire ball, but will suffer greatly from a
+frost ball.  Also, Undead creatures will not be affected by sleep spells,
+since they never sleep.
+

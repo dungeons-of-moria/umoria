@@ -881,6 +881,10 @@ as a command.
 .sp
 It is also possible to rest by typing the count first, and using
 either the Rest or the null movement command.
+.sp
+If you type `*' for the rest count, your character will rest until both
+hp and mana reach their maximum values.  As above, you will immediately
+stop resting if anything interesting happens.
 .IP "S  - Search mode toggle. {#}"
 The Searching toggle will take you into and out of
 search mode.  When first pressed, the message \*QSearching\*U will
@@ -912,7 +916,8 @@ than normal, and a good strength also helps.
 Tunneling can have a count.
 .IP "V  - View scoreboard."
 This command will display the contents of the score board on the
-screen.
+screen.  On a multiuser system, typing `V' again will show only those
+scores from the score board that are yours.
 .IP "a <Dir> - Aim a wand. {z - zap}"
 Wands must be aimed in a direction to be used.  Wands are
 magical devices and therefore use the Magical Devices ability of
@@ -1008,7 +1013,7 @@ and must also have in the inventory a magical book from which the
 spell may be read.
 Each spell has a chance of failure which starts out fairly large
 but decreases as a character gains levels.  If a character does
-not have enough mana, the chance of failed is greatly increased,
+not have enough mana, the chance of failure is greatly increased,
 and he gambles on losing a point of constitution.  You will be
 prompted for confirmation before trying to cast a spell when you
 don't have enough mana.  Since a
@@ -1146,6 +1151,16 @@ This is handy when mining.
 Setting this option does not immediately highlight all minerals,
 but only those which are subsequently displayed.  To display all minerals,
 just move the map around a bit with the `Where' (or `Locate') command.
+.IP " (10)"
+Beep for invalid character.  This is on by default.  When on, the program
+will beep for most invalid characters, such as trying to choose a spell
+that you haven't learned yet.  When off, there are no such beeps.
+.IP " (11)"
+Display rest/repeat counts.  This is on by default.  When on, the program
+will progessively display the remaining turns left while resting, and
+for repeated commands.  For those trying to play over a 2400 bps or less
+connection, or for those playing on very slow microcomputers, turning this
+off will make resting and repeated commands work much faster.
 .IP
 The setting of all these options persist in your savefile, even after you
 die.

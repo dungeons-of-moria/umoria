@@ -1,13 +1,18 @@
-/* spells.c: code for player and creature spells, breaths, wands, scrolls, etc.
+/* source/spells.c: player/creature spells, breaths, wands, scrolls, etc. code
 
-   Copyright (c) 1989 James E. Wilson, Robert A. Koeneke
+   Copyright (c) 1989-91 James E. Wilson, Robert A. Koeneke
 
    This software may be copied and distributed for educational, research, and
    not for profit purposes provided that this copyright and statement are
    included in all such copies. */
 
-#include "constant.h"
+#ifdef __TURBOC__
+#include	<stdio.h>
+#include	<stdlib.h>
+#endif /* __TURBOC__ */
+ 
 #include "config.h"
+#include "constant.h"
 #include "types.h"
 #include "externs.h"
 
@@ -16,15 +21,13 @@
 #include <string.h>
 #endif
 #else
-#ifndef VMS
 #include <strings.h>
-#endif
 #endif
 
 #if defined(LINT_ARGS)
 static void replace_spot(int, int, int);
 #else
-void replace_spot();
+static void replace_spot();
 #endif
 
 /* Following are spell procedure/functions			-RAK-	*/
@@ -210,13 +213,20 @@ int detect_invisible()
 {
   register int i, flag;
   register monster_type *m_ptr;
+#ifdef ATARIST_MWC
+  int32u holder;
+#endif
 
   flag = FALSE;
   for (i = mfptr - 1; i >= MIN_MONIX; i--)
     {
       m_ptr = &m_list[i];
       if (panel_contains((int)m_ptr->fy, (int)m_ptr->fx) &&
+#ifdef ATARIST_MWC
+	  ((holder = CM_INVISIBLE) & c_list[m_ptr->mptr].cmove))
+#else
 	  (CM_INVISIBLE & c_list[m_ptr->mptr].cmove))
+#endif
 	{
 	  m_ptr->ml = TRUE;
 	  /* works correctly even if hallucinating */
@@ -228,7 +238,7 @@ int detect_invisible()
   if (flag)
     {
       msg_print("You sense the presence of invisible creatures!");
-      msg_print(NULL);
+      msg_print(CNIL);
       /* must unlight every monster just lighted */
       creatures(FALSE);
     }
@@ -237,7 +247,7 @@ int detect_invisible()
 
 
 /* Light an area: 1.  If corridor  light immediate area -RAK-*/
-/*		  2.  If room  light entire room.	     */
+/*		  2.  If room  light entire room plus immediate area.     */
 int light_area(y, x)
 register int y, x;
 {
@@ -248,13 +258,14 @@ register int y, x;
   light = TRUE;
   if (cave[y][x].lr && (dun_level > 0))
     light_room(y, x);
-  else
-    for (i = y-1; i <= y+1; i++)
-      for (j = x-1; j <=  x+1; j++)
-	{
-	  cave[i][j].pl = TRUE;
-	  lite_spot(i, j);
-	}
+  /* Must always light immediate area, because one might be standing on
+     the edge of a room, or next to a destroyed area, etc.  */
+  for (i = y-1; i <= y+1; i++)
+    for (j = x-1; j <=  x+1; j++)
+      {
+	cave[i][j].pl = TRUE;
+	lite_spot(i, j);
+      }
   return(light);
 }
 
@@ -282,7 +293,7 @@ int y, x;
 	  for (j = start_col; j <= end_col; j++)
 	    {
 	      c_ptr = &cave[i][j];
-	      if (c_ptr->fval <= MAX_CAVE_ROOM)
+	      if (c_ptr->lr && c_ptr->fval <= MAX_CAVE_FLOOR)
 		{
 		  c_ptr->pl = FALSE;
 		  c_ptr->fval = DARK_FLOOR;
@@ -351,7 +362,8 @@ int ident_spell()
   register inven_type *i_ptr;
 
   ident = FALSE;
-  if (get_item(&item_val, "Item you wish identified?", 0, INVEN_ARRAY_SIZE))
+  if (get_item(&item_val, "Item you wish identified?", 0, INVEN_ARRAY_SIZE,
+	       CNIL, CNIL))
     {
       ident = TRUE;
       identify(&item_val);
@@ -405,6 +417,12 @@ int trap_creation()
   for (i = char_row-1; i <= char_row+1; i++)
     for (j = char_col-1; j <= char_col+1; j++)
       {
+	/* Don't put a trap under the player, since this can lead to
+	   strange situations, e.g. falling through a trap door while
+	   trying to rest, setting off a falling rock trap and ending
+	   up under the rock.  */
+	if (i == char_row && j == char_col)
+	  continue;
 	c_ptr = &cave[i][j];
 	if (c_ptr->fval <= MAX_CAVE_FLOOR)
 	  {
@@ -475,7 +493,7 @@ int td_destroy()
 	      {
 		/* destroy traps on chest and unlock */
 		t_list[c_ptr->tptr].flags &= ~(CH_TRAPPED|CH_LOCKED);
-		t_list[c_ptr->tptr].name2 = SN_DISARMED;
+		t_list[c_ptr->tptr].name2 = SN_UNLOCKED;
 		msg_print ("You have disarmed the chest.");
 		known2(&t_list[c_ptr->tptr]);
 		destroy = TRUE;
@@ -491,13 +509,20 @@ int detect_monsters()
 {
   register int i, detect;
   register monster_type *m_ptr;
+#ifdef ATARIST_MWC
+  int32u holder;
+#endif
 
   detect = FALSE;
   for (i = mfptr - 1; i >= MIN_MONIX; i--)
     {
       m_ptr = &m_list[i];
       if (panel_contains((int)m_ptr->fy, (int)m_ptr->fx) &&
+#ifdef ATARIST_MWC
+	  (((holder = CM_INVISIBLE) & c_list[m_ptr->mptr].cmove) == 0))
+#else
 	  ((CM_INVISIBLE & c_list[m_ptr->mptr].cmove) == 0))
+#endif
 	{
 	  m_ptr->ml = TRUE;
 	  /* works correctly even if hallucinating */
@@ -509,7 +534,7 @@ int detect_monsters()
   if (detect)
     {
       msg_print("You sense the presence of monsters!");
-      msg_print(NULL);
+      msg_print(CNIL);
       /* must unlight every monster just lighted */
       creatures(FALSE);
     }
@@ -836,7 +861,7 @@ char *descrip;
 		    {
 		      c_ptr = &cave[i][j];
 		      if ((c_ptr->tptr != 0) &&
-			  (*destroy)(t_list[c_ptr->tptr].tval))
+			  (*destroy)(&t_list[c_ptr->tptr]))
 			(void) delete_object(i, j);
 		      if (c_ptr->fval <= MAX_OPEN_SPACE)
 			{
@@ -934,6 +959,9 @@ int monptr;
   register cave_type *c_ptr;
   register monster_type *m_ptr;
   register creature_type *r_ptr;
+#ifdef ATARIST_MWC
+  int32u holder;
+#endif
 
   max_dis = 2;
   get_flags(typ, &weapon_type, &harm_type, &destroy);
@@ -944,7 +972,7 @@ int monptr;
 	{
 	  c_ptr = &cave[i][j];
 	  if ((c_ptr->tptr != 0) &&
-	      (*destroy)(t_list[c_ptr->tptr].tval))
+	      (*destroy)(&t_list[c_ptr->tptr]))
 	    (void) delete_object(i, j);
 	  if (c_ptr->fval <= MAX_OPEN_SPACE)
 	    {
@@ -973,12 +1001,22 @@ int monptr;
 					    r_ptr->cmove);
 		      if (m_ptr->ml)
 			{
+#ifdef ATARIST_MWC
+			  holder = CM_TREASURE;
+			  tmp = (c_recall[m_ptr->mptr].r_cmove & holder)
+			    >> CM_TR_SHIFT;
+			  if (tmp > ((treas & holder) >> CM_TR_SHIFT))
+			    treas = (treas & ~holder)|(tmp << CM_TR_SHIFT);
+			  c_recall[m_ptr->mptr].r_cmove = treas |
+			    (c_recall[m_ptr->mptr].r_cmove & ~holder);
+#else
 			  tmp = (c_recall[m_ptr->mptr].r_cmove & CM_TREASURE)
 			    >> CM_TR_SHIFT;
 			  if (tmp > ((treas & CM_TREASURE) >> CM_TR_SHIFT))
 			    treas = (treas & ~CM_TREASURE)|(tmp<<CM_TR_SHIFT);
 			  c_recall[m_ptr->mptr].r_cmove = treas |
 			    (c_recall[m_ptr->mptr].r_cmove & ~CM_TREASURE);
+#endif
 			}
 
 		      /* It ate an already processed monster.Handle normally.*/
@@ -1031,14 +1069,22 @@ register int num;
   res = FALSE;
   if (!find_range(TV_STAFF, TV_WAND, &i, &j))
     msg_print("You have nothing to recharge.");
-  else if (get_item(&item_val, "Recharge which item?", i, j))
+  else if (get_item(&item_val, "Recharge which item?", i, j, CNIL, CNIL))
     {
       i_ptr = &inventory[item_val];
       res = TRUE;
       /* recharge I = recharge(20) = 1/6 failure for empty 10th level wand */
-      /* recharge II = recharge(60) = 1/10 failure for empty 10th level wand */
-      /* make it harder to recharge high level, and highly charged wands */
-      if (randint((num + 50 - (int)i_ptr->level - i_ptr->p1)/10) == 1)
+      /* recharge II = recharge(60) = 1/10 failure for empty 10th level wand*/
+      /* make it harder to recharge high level, and highly charged wands, note
+	 that i can be negative, so check its value before trying to call
+	 randint().  */
+      i = num + 50 - (int)i_ptr->level - i_ptr->p1;
+      if (i < 19)
+	i = 1;	/* Automatic failure.  */
+      else
+	i = randint (i/10);
+
+      if (i == 1)
 	{
 	  msg_print("There is a bright flash of light.");
 	  inven_destroy(item_val);
@@ -1200,6 +1246,7 @@ int dir, y, x, spd;
 	    }
 	  else
 	    {
+	      m_ptr->csleep = 0;
 	      (void) sprintf(out_val, "%s is unaffected.", m_name);
 	      msg_print(out_val);
 	    }
@@ -1241,6 +1288,10 @@ int dir, y, x;
 	    {
 	      if (m_ptr->ml && (r_ptr->cdefense & CD_NO_SLEEP))
 		c_recall[m_ptr->mptr].r_cdefense |= CD_NO_SLEEP;
+	      /* Monsters which resisted the attack should wake up.
+		 Monsters with inane resistence ignore the attack.  */
+	      if (! (CD_NO_SLEEP & r_ptr->cdefense))
+		m_ptr->csleep = 0;
 	      (void) sprintf(out_val, "%s is unaffected.", m_name);
 	      msg_print(out_val);
 	    }
@@ -1359,23 +1410,21 @@ int dir, y, x;
 	  if (CD_STONE & r_ptr->cdefense)
 	    {
 	      monster_name (m_name, m_ptr, r_ptr);
-	      flag = m_ptr->ml;
 	      i = mon_take_hit((int)c_ptr->cptr, 100);
-	      if (flag)
+	      /* Should get these messages even if the monster is not
+		 visible.  */
+	      if (i >= 0)
 		{
-		  if (i >= 0)
-		    {
-		      c_recall[i].r_cdefense |= CD_STONE;
-		      (void) sprintf(out_val, "%s dissolves!", m_name);
-		      msg_print(out_val);
-		      prt_experience(); /* print msg before calling prt_exp */
-		    }
-		  else
-		    {
-		      c_recall[m_ptr->mptr].r_cdefense |= CD_STONE;
-		      (void) sprintf(out_val, "%s grunts in pain!",m_name);
-		      msg_print(out_val);
-		    }
+		  c_recall[i].r_cdefense |= CD_STONE;
+		  (void) sprintf(out_val, "%s dissolves!", m_name);
+		  msg_print(out_val);
+		  prt_experience(); /* print msg before calling prt_exp */
+		}
+	      else
+		{
+		  c_recall[m_ptr->mptr].r_cdefense |= CD_STONE;
+		  (void) sprintf(out_val, "%s grunts in pain!",m_name);
+		  msg_print(out_val);
 		}
 	      flag = TRUE;
 	    }
@@ -1405,9 +1454,8 @@ int dir, y, x;
       if (c_ptr->tptr != 0)
 	{
 	  t_ptr = &t_list[c_ptr->tptr];
-	  if ((t_ptr->tval == TV_CHEST) || (t_ptr->tval == TV_INVIS_TRAP) ||
-	      (t_ptr->tval == TV_VIS_TRAP) || (t_ptr->tval == TV_OPEN_DOOR) ||
-	      (t_ptr->tval == TV_CLOSED_DOOR)
+	  if ((t_ptr->tval == TV_INVIS_TRAP) || (t_ptr->tval == TV_CLOSED_DOOR)
+	      || (t_ptr->tval == TV_VIS_TRAP) || (t_ptr->tval == TV_OPEN_DOOR)
 	      || (t_ptr->tval == TV_SECRET_DOOR))
 	    {
 	      if (delete_object(y, x))
@@ -1415,6 +1463,14 @@ int dir, y, x;
 		  msg_print("There is a bright flash of light!");
 		  destroy2 = TRUE;
 		}
+	    }
+	  else if (t_ptr->tval == TV_CHEST)
+	    {
+	      msg_print("Click!");
+	      t_ptr->flags &= ~(CH_TRAPPED|CH_LOCKED);
+	      destroy2 = TRUE;
+	      t_ptr->name2 = SN_UNLOCKED;
+	      known2(t_ptr);
 	    }
 	}
     }
@@ -1452,10 +1508,12 @@ int dir, y, x;
 	    {
 	      flag = TRUE;
 	      delete_monster((int)c_ptr->cptr);
-	      place_monster(y, x, randint(m_level[MAX_MONS_LEVEL]-m_level[0])
-			    - 1 + m_level[0], FALSE);
+	      /* Place_monster() should always return TRUE here.  */
+	      poly = place_monster(y, x,
+				   randint(m_level[MAX_MONS_LEVEL]-m_level[0])
+				   - 1 + m_level[0], FALSE);
 	      /* don't test c_ptr->fm here, only pl/tl */
-	      if (panel_contains(y, x) && (c_ptr->tl || c_ptr->pl))
+	      if (poly && panel_contains(y, x) && (c_ptr->tl || c_ptr->pl))
 		poly = TRUE;
 	    }
 	  else
@@ -1481,6 +1539,9 @@ int dir, y, x;
   register monster_type *m_ptr;
   register creature_type *r_ptr;
   vtype m_name, out_val;
+#ifdef ATARIST_MWC
+  int32u holder;
+#endif
 
   build = FALSE;
   dist = 0;
@@ -1503,7 +1564,11 @@ int dir, y, x;
 	      m_ptr = &m_list[c_ptr->cptr];
 	      r_ptr = &c_list[m_ptr->mptr];
 
+#ifdef ATARIST_MWC
+	      if (!(r_ptr->cmove & (holder = CM_PHASE)))
+#else
 	      if (!(r_ptr->cmove & CM_PHASE))
+#endif
 		{
 		  /* monster does not move, can't escape the wall */
 		  if (r_ptr->cmove & CM_ATTACK_ONLY)
@@ -1532,6 +1597,8 @@ int dir, y, x;
 	    }
 	  c_ptr->fval  = MAGMA_WALL;
 	  c_ptr->fm = FALSE;
+	  /* Permanently light this wall if it is lit by player's lamp.  */
+	  c_ptr->pl = (c_ptr->tl || c_ptr->pl);
 	  lite_spot(y, x);
 	  i++;
 	  build = TRUE;
@@ -1628,7 +1695,8 @@ int ny, nx;
 	  dis++;
 	}
     }
-  while ((cave[y][x].fval >= MIN_CLOSED_SPACE) || (cave[y][x].cptr >= 2));
+  while (!in_bounds(y, x) || (cave[y][x].fval >= MIN_CLOSED_SPACE)
+	 || (cave[y][x].cptr >= 2));
   move_rec(char_row, char_col, y, x);
   for (i = char_row-1; i <= char_row+1; i++)
     for (j = char_col-1; j <= char_col+1; j++)
@@ -1682,13 +1750,21 @@ int mass_genocide()
   register int i, result;
   register monster_type *m_ptr;
   register creature_type *r_ptr;
+#ifdef ATARIST_MWC
+  int32u holder;
+#endif
 
   result = FALSE;
   for (i = mfptr - 1; i >= MIN_MONIX; i--)
     {
       m_ptr = &m_list[i];
       r_ptr = &c_list[m_ptr->mptr];
+#ifdef ATARIST_MWC
+      if ((m_ptr->cdis <= MAX_SIGHT) &&
+	  ((r_ptr->cmove & (holder = CM_WIN)) == 0))
+#else
       if ((m_ptr->cdis <= MAX_SIGHT) && ((r_ptr->cmove & CM_WIN) == 0))
+#endif
 	{
 	  delete_monster(i);
 	  result = TRUE;
@@ -1707,6 +1783,9 @@ int genocide()
   register monster_type *m_ptr;
   register creature_type *r_ptr;
   vtype out_val;
+#ifdef ATARIST_MWC
+  int32u holder;
+#endif
 
   killed = FALSE;
   if (get_com("Which type of creature do you wish exterminated?", &typ))
@@ -1715,7 +1794,11 @@ int genocide()
 	m_ptr = &m_list[i];
 	r_ptr = &c_list[m_ptr->mptr];
 	if (typ == c_list[m_ptr->mptr].cchar)
+#ifdef ATARIST_MWC
+	  if ((r_ptr->cmove & (holder = CM_WIN)) == 0)
+#else
 	  if ((r_ptr->cmove & CM_WIN) == 0)
+#endif
 	    {
 	      delete_monster(i);
 	      killed = TRUE;
@@ -1777,6 +1860,7 @@ int spd;
 	}
       else if (m_ptr->ml)
 	{
+	  m_ptr->csleep = 0;
 	  (void) sprintf(out_val, "%s is unaffected.", m_name);
 	  msg_print(out_val);
 	}
@@ -1836,6 +1920,9 @@ int mass_poly()
   int y, x, mass;
   register monster_type *m_ptr;
   register creature_type *r_ptr;
+#ifdef ATARIST_MWC
+  int32u holder;
+#endif
 
   mass = FALSE;
   for (i = mfptr - 1; i >= MIN_MONIX; i--)
@@ -1844,14 +1931,19 @@ int mass_poly()
       if (m_ptr->cdis < MAX_SIGHT)
 	{
 	  r_ptr = &c_list[m_ptr->mptr];
+#ifdef ATARIST_MWC
+	  if ((r_ptr->cmove & (holder = CM_WIN)) == 0)
+#else
 	  if ((r_ptr->cmove & CM_WIN) == 0)
+#endif
 	    {
 	      y = m_ptr->fy;
 	      x = m_ptr->fx;
 	      delete_monster(i);
-	      place_monster(y, x, randint(m_level[MAX_MONS_LEVEL]-m_level[0])
-			    - 1 + m_level[0], FALSE);
-	      mass = TRUE;
+	      /* Place_monster() should always return TRUE here.  */
+	      mass = place_monster(y, x,
+				   randint(m_level[MAX_MONS_LEVEL]-m_level[0])
+				   - 1 + m_level[0], FALSE);
 	    }
 	}
     }
@@ -1882,7 +1974,7 @@ int detect_evil()
   if (flag)
     {
       msg_print("You sense the presence of evil!");
-      msg_print(NULL);
+      msg_print(CNIL);
       /* must unlight every monster just lighted */
       creatures(FALSE);
     }
@@ -2000,8 +2092,11 @@ void earthquake()
   register cave_type *c_ptr;
   register monster_type *m_ptr;
   register creature_type *r_ptr;
-  int kill, damage, tmp, y, x;
+  int damage, tmp;
   vtype out_val, m_name;
+#ifdef ATARIST_MWC
+  int32u holder;
+#endif
 
   for (i = char_row-8; i <= char_row+8; i++)
     for (j = char_col-8; j <= char_col+8; j++)
@@ -2016,26 +2111,17 @@ void earthquake()
 	      m_ptr = &m_list[c_ptr->cptr];
 	      r_ptr = &c_list[m_ptr->mptr];
 
+#ifdef ATARIST_MWC
+	      if (!(r_ptr->cmove & (holder = CM_PHASE)))
+#else
 	      if (!(r_ptr->cmove & CM_PHASE))
+#endif
 		{
-		  if ((movement_rate (m_ptr->cspeed) == 0) ||
-		      (r_ptr->cmove & CM_ATTACK_ONLY))
-		    /* monster can not move to escape the wall */
-		    kill = TRUE;
-		  else
-		    {
-		      /* only kill if there is nowhere for the monster to
-			 escape to */
-		      kill = TRUE;
-		      for (y = i-1; y <= i+1; y++)
-			for (x = j-1; x <= j+1; x++)
-			  if (cave[y][x].fval >= MIN_CLOSED_SPACE)
-			    kill = FALSE;
-		    }
-		  if (kill)
-		    damage = 3000;  /* this will kill everything */
+		  if(r_ptr->cmove & CM_ATTACK_ONLY)
+		    damage = 3000; /* this will kill everything */
 		  else
 		    damage = damroll (4, 8);
+
 		  monster_name (m_name, m_ptr, r_ptr);
 		  (void) sprintf (out_val, "%s wails out in pain!", m_name);
 		  msg_print (out_val);
@@ -2047,6 +2133,12 @@ void earthquake()
 		      msg_print (out_val);
 		      prt_experience();
 		    }
+		}
+	      else if (r_ptr->cchar == 'E' || r_ptr->cchar == 'X')
+		{
+		  /* must be an earth elemental or an earth spirit, or a Xorn
+		     increase its hit points */
+		  m_ptr->hp += damroll(4, 8);
 		}
 	    }
 
@@ -2117,7 +2209,7 @@ int cflag;
 int damage;
 {
   register int i;
-  int k, dispel, visible;
+  int k, dispel;
   register monster_type *m_ptr;
   register creature_type *r_ptr;
   vtype out_val, m_name;
@@ -2132,17 +2224,15 @@ int damage;
 	  r_ptr = &c_list[m_ptr->mptr];
 	  c_recall[m_ptr->mptr].r_cdefense |= cflag;
 	  monster_name (m_name, m_ptr, r_ptr);
-	  visible = m_ptr->ml;  /* set this before call mon_take_hit */
 	  k = mon_take_hit (i, randint(damage));
-	  if (visible)
-	    {
-	      if (k >= 0)
-		(void) sprintf(out_val, "%s dissolves!", m_name);
-	      else
-		(void) sprintf(out_val, "%s shudders.", m_name);
-	      msg_print(out_val);
-	      dispel = TRUE;
-	    }
+	  /* Should get these messages even if the monster is not
+	     visible.  */
+	  if (k >= 0)
+	    (void) sprintf(out_val, "%s dissolves!", m_name);
+	  else
+	    (void) sprintf(out_val, "%s shudders.", m_name);
+	  msg_print(out_val);
+	  dispel = TRUE;
 	  if (k >= 0)
 	    prt_experience();
 	}
@@ -2458,14 +2548,25 @@ int remove_curse()
 {
   register int i, result;
   register inven_type *i_ptr;
+#ifdef ATARIST_MWC
+  int32u holder = TR_CURSED;
+#endif
 
   result = FALSE;
   for (i = INVEN_WIELD; i <= INVEN_OUTER; i++)
     {
       i_ptr = &inventory[i];
+#ifdef ATARIST_MWC
+      if (holder & i_ptr->flags)
+#else
       if (TR_CURSED & i_ptr->flags)
+#endif
 	{
+#ifdef ATARIST_MWC
+	  i_ptr->flags &= ~holder;
+#else
 	  i_ptr->flags &= ~TR_CURSED;
+#endif
 	  calc_bonuses();
 	  result = TRUE;
 	}

@@ -1,6 +1,6 @@
-/* ms_ansi.c: a set of routines to provide either PCcurses or ANSI output
+/* ibmpc/ms_ansi.c: a set of routines to provide either PCcurses or ANSI output
 
-   Copyright (c) 1989 James E. Wilson, Don Kneller
+   Copyright (c) 1989-91 James E. Wilson, Don Kneller
 
    This software may be copied and distributed for educational, research, and
    not for profit purposes provided that this copyright and statement are
@@ -12,6 +12,7 @@
 #if defined(MSDOS) && defined(ANSI)
 
 #ifdef LINT_ARGS
+static int curses_move(int, int);
 static char *getent(char *,char * *,int );
 static void initansistr(void);
 static int ansi_initscr(void);
@@ -35,6 +36,10 @@ static int	ansi_addch(), ansi_mvaddstr(), ansi_mvprintw(), ansi_move(),
 		ansi_refresh(), ansi_clear(), ansi_noop(), ansi_initscr();
 int ansi_prep();
 #endif
+
+extern char *tgetstr();
+extern char *getenv();
+extern char *tgoto();
 
 /* Must supply a functional form of the PCcurses "move" routine */
 static int
@@ -79,7 +84,7 @@ getent(str, tbufp, need)
 char	*str, **tbufp;
 int	need;
 {
-	char	*value, *tgetstr();
+	char	*value;
 
 	if ((value = tgetstr(str, tbufp)) == NULL && need == NEED)
 		error("termcap:  Moria needs %s\n", str);
@@ -91,7 +96,6 @@ initansistr()
 {
 	static	char tbuf[512];
 	char	temp[1024], *tbufp, *term;
-	char	*getenv();
 
 	if ((term = getenv("TERM")) == NULL)
 		term = "ibmpc-mono";
@@ -257,8 +261,6 @@ int	row, col;
 			fputs(BC, stdout), curcol--;
 	}
 	else {
-		extern char	*tgoto();
-
 		fputs(tgoto(CM, col, row), stdout);
 	}
 	currow = row;
@@ -269,9 +271,6 @@ int	row, col;
 static int
 ansi_clrtobot()
 {
-	/* no easy way to do this */
-	int	i;
-
 	ansi_clrtoeol();
 	ansi_move(++currow, 0);
 	ansi_clrtoeol();

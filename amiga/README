@@ -1,0 +1,38 @@
+This is the readme file for the Amiga port of Umoria.  Please keep this file
+with any distribution of Umoria for the Amiga.
+
+Version 5.3.1:   changed display to use Simon John Raybould's curses.  The
+    version of the curses that was used in the binary distribution was 1.22
+    with some modifications.  Because of this some of the bugs may be fixed
+    and new bugs may have been created.  Please send any bug reports to me
+    at (cgehman@hubcap.clemson.edu) or post on usenet in rec.games.moria.
+
+The game detachs from the cli.  This was done so that the program can set
+its own stack size.  You no longer have to set the stack higher.  I have
+compiled the binary distribution with stack depth checking, if anyone
+EVER gets the error "stack overflow!" tell me and I'll increase the stack
+size.  As far as I can tell the program only uses about 20000 bytes and
+I have set the stack to 30000, so it should be fine.
+
+This game will work on 1 MB amigas with one disk drive.
+
+For the game to work properly you must:
+
+1)  The game looks for the amiga environment variables.  If you don't have
+    env: set, you'll get a requester asking for it.
+
+2)  If umoria is install on a hard disk, assign moria: to the directory where
+    the binary and all of the support files are.  If the files are in
+    "dh1:games/moria" type "assign moria: dh1:games/moria".
+
+
+To compile the game:
+
+1)  You must have Aztec C 5.0d.
+
+2)  Copy all of the files in the subdirectories "amiga" & "source" together
+    and type "make".  You must have the environment setup so that Aztec will
+    find the include files and the large code libraries (cl.lib & ml.lib).
+
+3)  If you do not want to use the assignment "moria:" to find the game, then
+    you will have to change variables in "config.h" and "makefile".

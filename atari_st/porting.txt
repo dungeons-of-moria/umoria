@@ -1,0 +1,56 @@
+
+Items marked '*' should no longer be necessary.
+Items marked '?' should be unnecessary, but probably aren't.  I don't
+  understand why they were necessary in the first place.  - Jim Wilson
+
+---------------
+
+Porting the new version of Moria to the Atari ST with TC - by Hildo Biersma
+
+I : Preliminary work
+1) Get the new archive through FTP
+2) Split in files to get it on 720K disks
+3) Reassembly, uncompress, untar
+4) Make a copy of the sources to the MORIATRY folder
+
+II : Starting to do the port
+*1) Build a project file from the file MAKEFILE.TC => MORIA.PRJ
+2) Build a TC configuration file with standard macro GEMDOS,
+    standard options -P -G, linker stack size 16K => TC_MORIA.CFG
+3) Filter all files through UNIX-to-DOS, or load/save from Tempus
+?4) In order to make use of compiler warning level 2, build a list of
+    proper ANSI-C prototypes in EXTERNS.H => EXTERNS.H
+5) Edit CONFIG.H to define ATARIST_TC
+*6) Change fseed in DEATH.C to fseek (typing error)
+?7) Edit all files that use static functions to add proper ANSI-C prototypes
+    (the semi-prototypes at #if defined(LINT_ARGS) are a good template for
+    doing this). This is needed in the following files :
+    CREATE.C, CREATURE.C, DEATH.C, DESC.C, DUNGEON.C,
+    GENERATE.C, MAIN.C, MISC1.C, MISC2.C, MORIA1.C, MORIA2.C,
+    RECALL.C, SAVE.C, SPELLS.C, STORE1.C and STORE2.C
+*8) Edit files to add #include <stdlib.h> to make sure functions
+    like abs() are prototyped. This is needed for :
+    CREATURE.C, DEATH.C, DESC.C, DUNGEON.C, FILES.C, IO.C,
+    MORIA1.C, MORIA2.C, STORE2.C, WIZARD.C and ATARIST.TC
+   This can of course best be done with an #ifdef ATARIST_TC
+*9) GENERATE.C needs an #include <string.h> to prototype memset()
+*10) IO.C gives two compile-time errors; this is because mwaddstr and
+      mwaddch are macro's that don't properly return values. The checks
+      that are done, if (mwaddstr(..) == ERR) and if (mwaddch(..) == ERR)
+      are not needed, as both functions never return an error on the ST 
+      anyway. So you can do an #ifdef ATARIST_TC and use just the function 
+      call; the if, error message and exit stuff can all be removed.
+*12) IO.C needs to have <ext.h> included to define sleep()
+*13) In CONFIG.H, the "#define index strchr" is not done for the Atari ST;
+      it should be, so add "|| ATARIST_TC" to the #ifdef just above.
+*14) In SAVE.C, there is a #ifdef MSDOS before the definition of t_ptr
+      in lines 127-128. This should of course be :
+      #if defined(MSDOS) || defined(ATARI_ST)
+    Same thing in line 681. Also, around line 722, where savefile ownership
+      is checked, there is an ATARIST_MWC which should be an ATARI_ST, as
+      chmod is a dummy function on both the ATARI TC and ATARI MWC versions.
+    Finally, time.h must be included to prototype time().
+?15) Add a #define ATARIST_MWC in SIGNALS.C to avoid using signals in
+      the same way as the MWC version.
+15) Now do a make to compile and link Moria. You now have a working copy of
+      Moria. Finishing and polishing make take a while longer. 

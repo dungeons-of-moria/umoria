@@ -1,13 +1,13 @@
-/* magic.c: code for mage spells
+/* source/magic.c: code for mage spells
 
-   Copyright (c) 1989 James E. Wilson, Robert A. Koeneke
+   Copyright (c) 1989-91 James E. Wilson, Robert A. Koeneke
 
    This software may be copied and distributed for educational, research, and
    not for profit purposes provided that this copyright and statement are
    included in all such copies. */
 
-#include "constant.h"
 #include "config.h"
+#include "constant.h"
 #include "types.h"
 #include "externs.h"
 
@@ -21,6 +21,9 @@ void cast()
   register struct misc *p_ptr;
   register inven_type *i_ptr;
   register spell_type *m_ptr;
+#ifdef ATARIST_MWC
+  int32u holder;
+#endif
 
   free_turn_flag = TRUE;
   if (py.flags.blind > 0)
@@ -33,7 +36,7 @@ void cast()
     msg_print("You can't cast spells!");
   else if (!find_range(TV_MAGIC_BOOK, TV_NEVER, &i, &j))
     msg_print("But you are not carrying any spell-books!");
-  else if (get_item(&item_val, "Use which spell-book?", i, j))
+  else if (get_item(&item_val, "Use which spell-book?", i, j, CNIL, CNIL))
     {
       result = cast_spell("Cast which spell?", item_val, &choice, &chance);
       if (result < 0)
@@ -51,7 +54,7 @@ void cast()
 	      switch(choice+1)
 		{
 		case 1:
-		  if (get_dir(NULL, &dir))
+		  if (get_dir(CNIL, &dir))
 		    fire_bolt(GF_MAGIC_MISSILE, dir, char_row, char_col,
 			      damroll(2, 6), spell_names[0]);
 		  break;
@@ -72,16 +75,16 @@ void cast()
 		  (void) detect_trap();
 		  break;
 		case 7:
-		  if (get_dir(NULL, &dir))
+		  if (get_dir(CNIL, &dir))
 		    fire_ball(GF_POISON_GAS, dir, char_row, char_col, 12,
 			      spell_names[6]);
 		  break;
 		case 8:
-		  if (get_dir(NULL, &dir))
+		  if (get_dir(CNIL, &dir))
 		    (void) confuse_monster(dir, char_row, char_col);
 		  break;
 		case 9:
-		  if (get_dir(NULL, &dir))
+		  if (get_dir(CNIL, &dir))
 		    fire_bolt(GF_LIGHTNING, dir, char_row, char_col,
 			      damroll(4, 8), spell_names[8]);
 		  break;
@@ -89,7 +92,7 @@ void cast()
 		  (void) td_destroy();
 		  break;
 		case 11:
-		  if (get_dir(NULL, &dir))
+		  if (get_dir(CNIL, &dir))
 		    (void) sleep_monster(dir, char_row, char_col);
 		  break;
 		case 12:
@@ -102,16 +105,20 @@ void cast()
 		  for (i = 22; i < INVEN_ARRAY_SIZE; i++)
 		    {
 		      i_ptr = &inventory[i];
+#ifdef ATARIST_MWC
+		      i_ptr->flags = (i_ptr->flags & ~(holder = TR_CURSED));
+#else
 		      i_ptr->flags = (i_ptr->flags & ~TR_CURSED);
+#endif
 		    }
 		  break;
 		case 15:
-		  if (get_dir(NULL, &dir))
+		  if (get_dir(CNIL, &dir))
 		    fire_bolt(GF_FROST, dir, char_row, char_col,
 			      damroll(6, 8), spell_names[14]);
 		  break;
 		case 16:
-		  if (get_dir(NULL, &dir))
+		  if (get_dir(CNIL, &dir))
 		    (void) wall_to_mud(dir, char_row, char_col);
 		  break;
 		case 17:
@@ -124,7 +131,7 @@ void cast()
 		  (void) sleep_monsters1(char_row, char_col);
 		  break;
 		case 20:
-		  if (get_dir(NULL, &dir))
+		  if (get_dir(CNIL, &dir))
 		    (void) poly_monster(dir, char_row, char_col);
 		  break;
 		case 21:
@@ -134,16 +141,16 @@ void cast()
 		  (void) sleep_monsters2();
 		  break;
 		case 23:
-		  if (get_dir(NULL, &dir))
+		  if (get_dir(CNIL, &dir))
 		    fire_bolt(GF_FIRE, dir, char_row, char_col,
 			      damroll(9, 8), spell_names[22]);
 		  break;
 		case 24:
-		  if (get_dir(NULL, &dir))
+		  if (get_dir(CNIL, &dir))
 		    (void)speed_monster(dir, char_row, char_col, -1);
 		  break;
 		case 25:
-		  if (get_dir(NULL, &dir))
+		  if (get_dir(CNIL, &dir))
 		    fire_ball(GF_FROST, dir, char_row, char_col, 48,
 			      spell_names[24]);
 		  break;
@@ -151,7 +158,7 @@ void cast()
 		  (void) recharge(60);
 		  break;
 		case 27:
-		  if (get_dir(NULL, &dir))
+		  if (get_dir(CNIL, &dir))
 		    (void) teleport_monster(dir, char_row, char_col);
 		  break;
 		case 28:
@@ -159,7 +166,7 @@ void cast()
 		  f_ptr->fast += randint(20) + py.misc.lev;
 		  break;
 		case 29:
-		  if (get_dir(NULL, &dir))
+		  if (get_dir(CNIL, &dir))
 		    fire_ball(GF_FIRE, dir, char_row, char_col, 72,
 			      spell_names[28]);
 		  break;

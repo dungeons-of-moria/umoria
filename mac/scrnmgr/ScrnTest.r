@@ -1,10 +1,12 @@
-/*	Copyright (C) Curtis McCauley, 1989.  All rights reserved.
+/* mac/scrnmgr/ScrnTest.r: resources for scrnmgr test driver
 
-	You may copy this subroutine package freely, modify it as you desire,
-	and distribute it at will, as long as the copyright notice in the source
-	material is not disturbed, excepting that no one may use this package or
-	any part of it for commercial purposes of any kind without the express
-	written consent of its author. */
+   Copyright (C) 1989-1991 Curtis McCauley, James E. Wilson
+
+   You may copy this subroutine package freely, modify it as you desire,
+   and distribute it at will, as long as the copyright notice in the source
+   material is not disturbed, excepting that no one may use this package or
+   any part of it for commercial purposes of any kind without the express
+   written consent of its author. */
 
 #include "Types.r"
 

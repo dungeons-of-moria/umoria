@@ -1,0 +1,986 @@
+:::::1987 Fixes:::::
+87 fixes deleted, see the 4.85 or 4.87 sources
+:::::1988 Fixes:::::
+88 fixes deleted, see the 4.88 sources
+:::::1989 Fixes:::::
+---------------------  2/26
+all files: merged the umoria and PC-Moria sources
+creature.c: get_moves(), 12 numbers were wrong for monster movement
+wizard.c: a few more int to bigint_t changes needed in wizard mode commands
+files.c: fix columns in monster dictionary so that everything lines up
+misc2.c, moria2.c: line up columns for print_new_spells() and examine_book()
+8 files: replace == with = in comments and strings
+magic.c, misc1.c, misc2.c, moria2.c, signals.c: missing/misplaced breaks
+monsters.c: 2 grey snakes, renamed one to green
+misc1.c: compact_objects, stmt which decrements cur_dis in wrong place
+spells.c: disarm_all should not set traps to zero, should just clear trap
+	bits
+moria2.c: in jamdoor() i_ptr->p1 should be t_ptr->p1
+moria2.c: in place_trap(), covered pits should transform to open pits
+moria2.c: mon_take_hit(), int i should be bigint_t i
+io.c: more prompt will now accept space/escape/return/linefeed
+io.c: EOF code did not work on machine with unsigned characters
+------------------------ 2/27
+save.c: missing controlz calls on error returns
+creature.c: don't let non-moving creature move if glyph prevented it
+	from attacking
+creature.c: give monsters a chance to recover from Bash, depends on
+	square of monster level
+moria2.c: give monsters a chance to ignore bash, function of hitpoints
+	and level
+spells.c: fixed restore_level, needed while loop
+moria2.c: monster_multiply(), i=18 statement in wrong place, would not
+	always multiply monster when it should
+--------------------- 3/2
+moria1.c: get_panel(), add one to y and x on lines 945/950, prevent scrolling
+	while inside rooms
+--------------------- 3/9
+wizard.c: tmp_val = -999; for gold changed to tmp_lval
+signals.c: added SIGXCPU to list of signals that cause panic save
+spells.c: call monster_name before mon_take_hit in fire_bolt()
+moria2.c: move_char (), stop before attacking a creature
+dungeon.c: added move_char (5) to see_infra and see_invis setting and clearing
+--------------------- 3/10
+creature.c: added take_hit (0, ddesc) line to every monster spell, ensure
+	that player leaves resting/find/search modes
+potions.c: remove chp += mhp code from gain const potion, now chp = mhp
+moria2.c: change monster_death(), summon_object 4d2 instead of 4d3
+	so that comments match code
+creature.c: make_move(), prevent monster from moving again after opening
+	a door, also, make chance of opening locked door dependant on monster
+	level
+monsters.c: giant red ant lion, not hurt by fire, move&attack normally
+--------------------- 5/5
+generate.c: fixed error in generation of type 3 (subtype 3) rooms
+misc2.c, config.c: added alternate wizard code/definitions
+treasur1.c: restore mana potion made more valuable (35 -> 350)
+	    staff of speed value increased   (800 -> 1000)
+	    ring of sustain charisma level changed (7 -> 44)
+	    ring of stupidity level decreased  (20 -> 7)
+	    potion of gain strength value increased  (200 -> 300)
+variable.c: halfling clan elder had 0% chance
+	    gave warrior higher base to hit chance than paladin
+store1.c: digging tools must be identified before price is adjusted
+misc1.c:  do not adjust cost of digging tools based on value of p1
+	  change all mods to fields toac/todam/tohit to be += or -=
+	  several items (mostly cursed items) needed %P1 added to name
+	  for digging tools, inc p1 instead of replacing it, so that tools
+	     will still have same minimum values as specified in treasur1.c
+monsters.c: Forest Wight should be able to open doors.
+	    Grey Wraith should not drain mana
+moria1.c: fix stealth so that it uses the value of p1
+treasur2.c: change 'a's to '&'s for doors
+spells.c: word of destruction should not put wall over character
+	  Could not use wand of drain life at a distance
+moria2.c: when in find mode, attack if run into creature only if can't see it
+-------------------------5/7
+moria1.c,moria2.c: remove heavy weapon message from test_hit and put it in
+  py_attack instead
+spells.c: teleport_away now calls unlite_spot if necessary, fixes bug that
+    I thought had been fixed 3/28/88
+save.c: for MSDOS: when restore save file, must search object list for secret
+    doors/traps, and convert the '#/.' char to wallsym/floorsym, when save
+    file, must do the reverse translation
+spells.c: unlight_area() was really messed up, is much shorter now, will
+	always print "darkness" message now if it should
+misc1.c: cleaned up prt_map(), probably much faster now
+moria1.c: cleaned up light_room(), draw_block(), sub2_move_light(),
+	they are probably much faster now
+all:  changed print(char *, int, int) to print(char, int, int) in io.c
+misc1.c: crown of the magi, now has RL instead of see invisible
+---------------------- 5/8
+all: checked uses of fm/pl/tl for consistency,eliminate extra parens/tests/etc
+death.c: changed call to exit(1) to exit_game instead,
+io.c, dungeon.c: new function move_cursor_relative to position cursor on map
+--------------------- 5/13
+Moria.doc: added changes to bring it up-to-date, ran through Spell again
+--------------------- 5/18
+spells.c: polymorph monster spell incorrect, missing an else flag = TRUE line
+moria2.c: fix setting of reset_flag in find mode in move_char() routine
+Moria.doc: created MacWrite version for Macintosh, plus some more editing
+	corrections
+--------------------- 5/29
+death.c, externs.h, files.c, io.c, misc2.c, moria2.c: eliminated the function
+	pad, replaced most calls with printf %-30s formats
+death.c: rewrote fill_str and renamed it to center_string, previously was
+	returning pointer to local variable
+death.c: eliminated dprint, replaced it with calls to put_buffer
+signals.c: suspend handler now saves/restore special local chars (^R, ^W, etc)
+generate.c: rewrote blank_cave, should be a bit faster now
+externs.h, io.c, misc1.c, variable.c: eliminate used_line array, no longer
+	call erase_line in prt_map in misc1.c
+misc2.c, moria1.c, store2.c: make sure cursor is always in the right
+	place after an inkey call
+create.c, misc2.c: rewrite put_character and associated routines, line up
+	columns, eliminate strcat/strcpy calls
+files.c: rewrote file_character so that it matches put_character, etc.
+io.c: fixed put_buffer so that it won't print past right edge of screen
+files.c, misc1.c, moria1.c, ms_misc1.c: loc_symbol rewritten, now checks
+	values of pl/tl/fm, did not correctly handle monsters which were
+	visible, but were not in a lighted spot
+moria1.c, io.c: rest() only erases MSG_LINE now if original 'hit ... to quit'
+	message displayed, new function in io.c erase_non_msg does this
+misc1.c: magic_treasure(), fixed helms which had wrong else level of cursed
+	items, added cursed rings of searching, set p1 value for amulet of magi
+---------------------- 5/30
+treasure1.c, treasure2.c: three axes changed from type 21 to 22, this prevents
+	the Priest shop from buying these weapons
+--------------------- 6/2
+creature.c, moria1.c, moria2.c, spells.c, types.h: massive reorganization
+	of the way that visible monsters are handled, now ml is set if and
+	only if the creature is visible on screen
+creature.c, externs.h, moria2.c: procedure check_mon_lite removed, calls to
+	it replaced by calls to update_mon ()
+misc1.c: delete unused code
+creature.c, moria2.c: two places needed to test fm in addition to pl and tl
+spells.c: need to set fm/tl/pl before call to lite_spot/change_trap, eliminate
+	some unncessary calls to lite_spot, eliminate unneccsary clearing of fm
+------------------------- 6/8
+dungeon.c, moria1.c, moria2.c: allow searching while blind, decrease chance of
+	successs if blind or have no light
+moria1.c, moria2.c, store2.c: change prt("", x, y) to erase_line (x, y)
+misc2.c: replace all "\0" with just ""
+io.c, moria2.c, scrolls.c, store2.c: add '.' to end of sentences
+dungeon.c, misc2.c, moria2.c, scrolls.c, store2.c: add msg_flag = FALSE after
+	lots of msg_prints, to make sure never get " -more" message line
+creature.c, dungeon.c, spells.c, staff.c: don't print 'light' message if blind
+moria2.c: disarm_trap(), make no_light and blind same penalty, increase
+	blind/no_light and confused penalties
+moria1.c: rewrote area_affect, delete redundant code, don't stop at doorway
+	if no_light and it is unlit
+generate.c: fixed error in build_tunnel, stack points could overrun stack
+------------------------ 6/9
+moria1.c: change test_hit so that always miss 1/20, and always hit 1/20
+moria1.c, moria2.c, spells.c: changed fval incorrectly when manipulating
+	doors, only change to corr_floor2 if next_to4 a room space
+creature.c: in get_moves, change 1.732 to 2, makes it faster, also can no
+	longer circle monsters by moving in a diamond shape
+death.c, io.c, files.c, main.c: for MSDOS, don't leave the highscore_fd file
+	open permanently
+save.c: save value of total_winner, in case of a forced call to save_char()
+all, types.h: deleted MSDOS ifdefs, the bytlint/byteint/wordint/worlint type
+	definitions were confusing, so changed all to int8/int8u/int16u/int16
+generate.c: rewrote loops to try to speed up level generation
+---------------- 6/12
+misc1.c: for items with duplicates in treasure1.c, set level of all equal
+	to that of lowest
+treasur2.c: several items did not match same item in treasure1.c
+----------------- 6/13
+treasur2.c: wands/staffs in store now have same level as those in dungeon
+dungeon.c, misc2.c, moria1.c, ms_misc.c, store2.c: removed some ASCII
+	dependencies
+------------------ 6/16
+externs.h, constants.c, generate.c, misc1.c: fixes to make level generation
+	faster, rearrange order build_tunnel makes comparisons, call
+	correct_dir directly instead of through rand_dir, rewrite loops,
+	rewrite next_to4, rewrite next_to8
+externs.h, files.c, misc1.c, moria1.c, ms_misc.c: loc_symbol returns char
+== the following are due to CJS (Bruce Moria)
+create.c: in get_money(), charisma was subtracted and added, now only add
+desc.c: unquote() did not work at all, rewrote the whole thing
+	in identify, string[0] == 'T' should be string[1]
+moria1.c: area_affect, for direction 1, the 3 should be a 2
+misc2.c, moria2.c, scrolls.c, spells.c, store2.c: change msg_print(" ") to ""
+store2.c: eliminate erase_line/display_commands at end of purchase_haggle
+config.h: for defined(Pyramid), define ultrix
+eat.c: py.stats.intel to s_ptr->intel
+creature.c:  in make_move(), set m_ptr at begining of function,
+	  in mon_move(), set m_ptr at begining of function,
+	test cmove before calling randint in mon_move()
+	change if (randint(10) > py.misc.stl) to && (randint(...))
+dungeon.c: move random teleport outside innermost loop, put with other checks
+== end CJS fixes ==
+creature.c: collapse a large number of if (...) if (...) constructions
+	to if (... && ...)
+constant.h, desc.c, externs.h, generate.c, misc1.c, rnd.c, save.c,variables.c:
+	all versions now use rnd(), rnd does not use SYSV calling conventions
+	anymore	BSD random() states eliminated
+generate.c: added code to build_tunnel to prevent infinite loops
+--------------- 6/19
+*.c: collapse a large number of if (...) if (...) constructions
+	to if (... && ...), delete unneeded braces
+---------------- 6/21
+creature.c, spells.c: build_wall and earthquake, now kill monster if it can
+	not move through walls, and it can not move out of the way of the new
+	wall, also, does more damage to those that escape, in creature.c,
+	if in wall, must escape to empty space
+----------------- 7/17
+main.c: added a setbuf call, for buffered output
+------------------ 8/4
+merging changes due to Christopher J Stuart...zillions of changes
+stat structure changed
+externs.h: move functions definitions for lint to here
+create.c: help functions sorta' added, money now more dependent on stats,
+	  really good/bad characters eliminated, etc...
+------------------ 8/8
+creature.c: new function disturb used, stop attacks if player dead, add
+	message for two attacks which had no message, confuse-monster only
+	works if monster actually hits, door bashing different and noisy too!,
+	creatures only eat lower level creatures, monster drawing changed,
+	monster memory added, etc...
+------------------ 8/9
+desc.c: eliminate lots of unnecessary strcpy/strlen/etc calls, can inscribe
+	objects, store/dungeon objects will be merged in the inventory when
+	objects are identified, if curse a special object it loses its
+	special ability, %d code for damage, %a code for armor, etc...
+eat.c: misc changes...
+----------------- 8/11
+help.c: moved help text into files, added monster recall info, etc...
+----------------- 8/14
+Moria.doc: editing changes, removed lots of unnecessary hyphens
+io.c: rebuilt it (accidentally deleted current version)
+death.c: scoring procedures moved elsewhere, print_tomb more efficient and
+	uses far less stack, final char display different, upon_death
+	changed to exit_game, etc...
+generate.c: added STATIC and void
+magic.c: reduce indentation, increase spell damage, 7 dam/mana for Magic
+	Missle, 4 d/m for balls, 5 d/m for bolts, etc...
+misc1.c: crowns higher chance of magic, monster dist changed to increase
+	chance of higher level monsters, unnecessary uid/eid calls deleted,
+	m_level changed to include level[0] monsters, highlighting for ores,
+	disappear percentages for objects in compact_obj() modified, '!'
+	char added to magic descriptions, damage added to bows
+------------------- 8/15
+misc2.c: print message if gold/object created under player, stat handling
+	completely changed, new func title_strings, search/rest/paralysis/count
+	message print changed, new func prt_speed(), new stat functions, can
+	hide stat changes if unknown, get_name uses loginname if none entered,
+	change_name can print to file, inven drop/carry/etc changed to be
+	a little simpler, new func join_names, spell_chance/learn_spell/etc
+	chnaged to be a little simpler, get_spell with capital letter verifies
+	choice, etc...
+---------------------- 8/16
+monsters.c: no change
+treasure1.c: %d added to weapons, %a added to armor, plus to dam added to
+	bows, mage's guide should be mages' guide?? appostrophe removed
+---------------------- 8/17
+treasure2.c: change & in traps to a/an, scroll/potion subvals changed to 200
+	plus value in treasure1.c, etc...
+potions.c: every potion prints message, ident true only if something noticable
+	happens, greatly reduce indentation, stat handling different, etc...
+prayer.c: reduce indentation greatly, use up mana if prayer fails, etc...
+scrolls.c: reduce indentation, only ident if something noticable happens,
+	for identify must search for new location of scroll, etc...
+sets.c: ifdef out unused functions
+dungeon.c: add command counts, use new func disturb(), double regen if
+	searching, damage if really hungry, messages for protevil resist_heat
+	and resist_cold, new code for quiting rest mode, move teleport code
+	outside inner loop, add code to check strength/weight, find mode
+	done differently now, allow ^char for control characters, all
+	command chars translated to rogue_like chars, new commands = (options)
+	{ (inscribe) V (view scores) M deleted but W improved : (map area)
+	rogue-like summon ^S -> &, etc...
+---------------------- 8/24
+files.c: init_scorefile deleted, intro->read_times, don't modify argv,
+	new func helpfile, print_map deleted, print_monsters deleted,
+	file_character now takes filename as argument, etc...
+io.c: lint defs, new suspend function, much better curses handling,
+	new func moriaterm and restore_term, inkey does refresh on ^R, flush
+	should work now, new funct get_check, save_screen, restore_screen,
+	etc...
+constant.h: add defs for STATIC, ESCAPE, stats, increase treasure in
+	streamers, change store min and turnaround amount, MAX_MON_NATTACK,
+	MAX_EXP
+wands.c: inscribe wand if empty, reduce indentation, etc...
+staffs.c: inscribe staff if empty, reduce indentation, etc...
+spells.c: identify- update stats if affected, allow ident of equip items;
+	better light_line messages; when set pl false, must set fm false also;
+	misc, etc...
+------------------- 8/29
+moria1.c: new function enchanted(), part of py_bonuses split into
+	calc_bonuses, cur_char1/2 deleted, complete rewrite of inven_command
+	routines, new functions check_weight/verify, can display weights,
+	get_item can show either inven or equip, options added, run code
+	completely rewritten, misc, etc...
+--------------- 8/30
+store1.c: item_value has *item->number removed, many routines changed to pass
+	item pointer, identify removed from store_carry, known1/2 put in
+	store_create, store_maint alg changed, etc...
+store2.c: clean up handling of msg_flag, incremental haggling in get_haggle(),
+	display_command moved from purchase/sell_haggle to store_purchase/sell,
+	enter_store code cleaned up, etc...
+config.h: misc...
+externs.h: add new variables, delete old variables, rearrange stuff, etc...
+types.h: added logging structure and recall structure, etc...
+variables.c: add new variables, delete old variables, rearrange stuff,
+	remove learn from spell structure, change titles so none shared
+	between classes, etc...
+-------------- 8/31
+moria2.c: weight bug fixed, py_attack did not decrement inven_weight when
+	inven_wield was a missile, and the player was carrying more than one
+	of them
+-------------- 9/1
+moria2.c: carry has pickup option, new functions for inscribing objects,
+	summon_objects returns type/number of objects created, ditto
+	monster death, new function check_view, add todam for using bow/arrow,
+	bashing changes, new sub py_bash extracted from old bash code,
+	jamdoor p1 values changed successive spikes have smaller effect,
+	etc...
+------------- 9/2
+main.c: add bruce moria comment, new options, read environment variables, etc.
+wizard.c: wizard can change weight and speed of character, etc...
+unix.c: new file, contains UNIX specific code for user_name, check_input, and
+	system()
+signals.c: completely rewritten to be much nicer, same functionality
+recall.c: new file, for printing out monster memory info
+save.c: completely rewritten, same functionality, I think
+------------- 9/7
+lint on mips machine
+------------- 9/8
+lint on AIX (SYS V)
+------------- 9/9
+lint on ultrix
+------------- 9/11
+fix anonymous errors in order to get the program to compile...
+io.c, ms_misc.c: put screen_map in io.c, and made it a default feature
+signals.c, main.c, io.c: on EOF, the program now returns ESCAPE char until
+	exits dungeon(), then saves with no penalty
+------------ 9/12
+externs.h, desc.c, variables.c, types.h: mushrooms/colors/rocks/etc changed to
+	char pointers instead of char arrays, saves space, make random init
+	faster, change player title to char pointers also
+moria1.c, potions.c, misc2.c, eat.c, dungeon.c, creature.c: cleanup handling
+	of chp and cmana, call prt_c* only once every time they change
+dungeon.c: set pointers only once at start of procedure
+eat.c: reduce indentation
+io.c, dungeon.c: remove msg_flag = FALSE line from inkey and put it in
+	dungeon.c where get command
+------------ 9/14
+creature.c: change put_qio calls to just setting screen_change to true
+dungeon.c: remove superfluous erase_line and put_qio calls
+many: make character numbers more clear, 'a' for 97, DELETE for 127, etc...
+desc.c: objdes() bug with ins_buf handling, now clear ins_buf if none
+many, moria1.c: made "Which dir?" default for get_dir()
+-------------- 9/15
+misc1.c, monsters.c, treasur[12].c, many others: changed all hit ponts from
+	strings to a char array of size two, changed damroll to take two
+	characters instead of a string, this eliminates most all scanf calls
+-------------- 9/18
+monsters.c, creature.c, types.h: replaced strings containing monster attacks
+	with 4 byte array containing index into a monster attack table,
+	this eliminates the rest of the scanf calls, and saves space
+creature.c: many duplicate damroll calls in make_attack collapsed into
+	a single damroll call
+moria2.c: in chest_trap(), moved exploding chest trap to end to avoid
+	dangling pointer problem; in twall, only light spot if c_ptr->tl
+	is true;
+wizard.c, recall.c, desc.c, files.c: changes to fix handling of new damage
+	types for monsters and weapons
+---------------- 9/19
+many files: eliminated redundant trap_lista, fixed place_trap so that it
+	no longer takes a typ parameter, change_type no longer calls
+	place_trap, negative level values for traps all made positive
+	and diasrm_object() changed appropriately
+externs.h, dungeon.c, misc2.c, moria1.c, variables.c: eliminated print_stat
+	variable since it was not used very much
+---------------- 9/21
+create.c, externs.h, variable.c: eliminated bit_array variable
+variable.c: eliminated names of unused Rogue class spells
+many files...: changed the floor/wall definitions from variables to constants,
+	changed the values to make tests easier, all fval comparisons now use
+	manifest constants, door type floors eliminated since new find/run
+	code made them unnecessary
+constant.h, misc2.c, externs.h, variable.c: changed var stat_column to
+	constant, eliminated password variables
+many files: changed moria_flag to new_level_flag, and reset_flag to
+	free_turn_flag
+------------- 9/23
+merged Xenix diffs and Atari ST diffs
+treasure1.c: potion of sleep no longer cures blindness
+wands.c: wand of wonder was wrong had 2 << randint() instead of 1 << randint()
+eat.c, potions.c, scrolls.c, staffs.c, treasur2.c, wands.c: added store
+	bought flag 0x80000000 to all food/potion/scroll/staff/wand objects
+	in treasure2.c, modifed the code so that these objects do not give
+	experience when used
+all files: removed all floating point code except for randnor() and los()
+many files: hp_player(-damage,"") calls did not work, change them all to
+	direct calls to take_hit(damage),  hp_player string parameter
+	removed since no longer used
+------------- 9/25
+constant.h, config.h, externs.h, variable.c, misc1.c, misc2.c, potions.c:
+	floating point randnor code replaced by integer on that uses a table,
+	definition of MAXINT removed so there are now no differences between
+	16 bit and 32 bit versions of moria, MAXSHORT and MAXLONG defined
+Makefile, misc1.c, externs.h: calls to floor removed, math library no longer
+	used!!, DONT_DEFINE_CLASS def for SUN4 no longer needed
+------------- 9/27
+misc1.c: replaced los code with an integer arithmetic version by jnh (Joseph
+	Hall), moria now uses no floating point numbers
+dungeon.c, files.c, moria1.c, store2.c, wizard.c: removed all sscanf calls
+	except for those in ms_misc.c, and one "%lx" in wizard.c
+------------ 9/28
+treasure1.c, treasure2.c, types.h: change subval and number to 8 bit integers,
+	move flags after name, move number before weight, save 12 bytes per
+constants.h, etc: INVEN_MAX definition removed, INVEN_ARRAY_SIZE 1 smaller
+variable.c: store_choice now array of 8 bit integers
+monsters.c, treasure2.c: change t_level and m_level to array of 16 bit ints
+many: interpretation of subval changed to fit it into byte, new range uses
+	p1 to decide whether stacking permitted, torches can now stack
+create.c, types.h: changed size of history from 400 to 240 characters,
+	also print as lines of 60 instead of lines of 70
+variable.c, misc2.c, types.h: changed definition of spell_type from 12 to 6
+	bytes, new array spell_names to prevent duplicate strings,
+	no longer have entry for warriors
+variable.c, types.h: human female too light, made 150 from 120, also changed
+	every base/mod field from 16 bits to 8 bits
+types.h, variable.c: in background_type, change next and bonus fields to
+	8 bit integers, added 50 to bonus to make it positive
+----------------- 9/29
+monsters.c: massive changes to monster file to fix inconsistencies
+----------------- 9/30
+set.c: make flasks of oil vulnerable to frost and fire, like potions
+moria2.c: if set off a trap, temp set confused to zero to ensure that player
+	will move onto the trap instead of in random direction
+io.c, externs.h: confirm() no longer used, deleted
+treasur1.c, treasur2.c: give non overlapping subvals to potions/scrolls,
+	duplicate ones caused problems for giving random names
+desc.c, treasur1.c: %M for mushrooms changed to %m
+recall.c: fix printing of monster hit points, two numbers instead of a string
+moria2.c: new look code from bruce moria, look in arcs so that can see
+	anything on the screen, allows access to monster memories
+generate.c, misc2.c, moria1.c, moria2.c: various fixes to reduce code size,
+	increase speed, etc...
+misc1.c, etc...: popm and popt no longer take a pointer, instead return int,
+	pusht takes an int8u now instead of an int as a parameter
+---------------- 10/1
+all: added copyright notice to every *.[ch] file
+--------------- 10/3
+config.h, creature.c, recall.c, save.c: fixed a few bugs picked up by the
+	ultrix compiler
+dungeon.c: disabled the save command
+-------------- 10/6
+create.c, files.c, dungeon.c, main.c, save.c: wrote helpfile function,
+	changed calling sequence so that caller does not have to do anything
+constant.h, desc.c, variables.c: eliminated lots of excess colors/rocks/etc.
+	eliminated all duplicates except between potions and mushrooms
+types.h: fixed _frac problem with exp and chp, had to be unsigned shorts
+misc1.c: made traps invisible again
+moria1.c, moria2.c, store2.c: replaced strcpy(string, "constant") code with
+	p = "constant" where possible
+treasure1.c, treasure2.c: changed subvals for wands/staffs/amulets so that
+	they start at zero, and don't have any missing numbers
+spells.c: teleport_away() must clear m_ptr->ml before calling update_mon()
+moria1.c, spells.c: check lite_spot() calls, eliminate unnecessary ones
+death.c, misc2.c, wizard.c: eliminated lots of unnecessary blanks in string
+	constants
+--------------- 10/7
+misc1.c, moria2.c, treasure1.c, treasure2.c: fixed lamp/torch subvals, again
+	can not let torches have subval >= 64, the torch wield code will
+	not work
+store1.c: don't let items with subval >= 192 stack in stores, they are
+	always handled as a group anyways
+spells.c: fire_bolt and fire_ball fixed in regards creature lighting
+variable.c: store_choice for temple wrong because broad aze renumbered
+	earlier, changed 13-15 to 12-14
+constant.h, dungeon.c, moria1.c: added print ac flag to status field,
+	calc_bonus sets flag, prevent printing AC while in store
+create.c: dis_ac must have dis_tac added to it
+spells.c: detect_monster evil and insivible now set m_ptr->ml when
+	print monster on screen, then creature() will correctly erase them
+--------------------- 10/8
+types.h: fixed _frac problem with cmana, had to be unsigned short
+moria1.c: in inven_command wear code, print 'too heavy' message after
+	print wielding message
+store1.c: item_value, must multiply value by item->number before returning
+store1.c: sell_price return zero if item should not be put into store
+monsters.c: disenchanter bat sleep set from 0 to 1
+all: eliminated all unnecessary elipses
+constants.h, creature.c, dungeon.c, eat.c: new defines for the creature
+	move, spell, and defense fields, eliminated all hex constants from
+	the 3 c files
+------------ 10/9
+moria2.c: fixed falling rock trap in move_char(), step back so that
+	player is not under the rubble
+variable.c: put copyright message in string, so that it appears in executable
+spells.c: create_trap modified to light up trap, in case it is an open pit
+all:replace prt calls with put_buffer where ever possible, because it's faster
+externs.h, io.c, signals.c: put ignore/default/restore_signal code back in
+wizard.c: rewrote the version info
+dungeon.c, moria2.c, signals.c: modified to use get_check() for consistency
+------------ 10/10
+several spelling errors in CJS code
+misc1.c: forgot to change magic_treasure code when changed subvals a couple
+	of days ago for wands/staffs/amulets/rings
+externs.h, files.c, misc2.c, types.h: wrote new stat code, all stat bugs
+	fixed now, 6 stat values now, get_dis_stat() eliminated, new function
+	modify_stat(),
+misc2.c: get_obj_num changed, to increase probability of getting higher
+	level objects
+misc1.c, treasur1.c: had to change gain stat bits, the low 6 order bits of
+	treasure flags, because changed the order earlier
+---------------- 10/11
+all: changed all 4 or less case switch statements except for one large one
+	in generate.c to nested if statements, this is smaller and faster
+---------------- 10/12
+dungeon.c, generate.c, moria1.c: new_spot moved from dungeon to generate
+	because alloc_mon and place_win_mon use character position, fixed
+	minor new_spot bug
+constants.c, misc2.c, dungeon.c: bst_stat() can not call prt_stat, changed
+	to set py.flags.status, new stat change flags defined, and stat
+	print code added to dungeon.c
+creature.c: many duplicate disturb/strcat/msg_print brought outside the
+	switch statement in mon_cast_spell
+all: changed all unlite_spot() calls to lite_spot() calls, changed
+	'if (test_light()) lite_spot()' code to just call lite_spot, this
+	fixes many subtle bugs, mostly dealing with mon vis to infravision,
+	unlite_spot code deleted
+files.c, misc2.c: added stat_adj(A_INT) to srh which was wrong
+misc2.c, spells.c, moria1.c, types.h: id_stat() and hid_stat[] eliminated
+	no more hidden stat values, display arg dropped from bst_stat()
+files.c, misc2.c: hex values replaced with constants
+----------------- 10/14
+constants.h, store1.c: increased store turn around from 4 (avg 2.5)
+	to 9 (avg 5), changed store_main() to always call store create/destroy
+	regardless of bounds, lowered values of bounds MIN and MAX
+--------------- 10/18
+moria2.c: when open chest, clear TR_CURSED flag, which just also happens to be
+	monster win flag, to prevent easy wins
+constants.h, misc1.c->wizard.c: replaced remaining hex magic numbers with
+	manifest constants
+dungeon.c: added code that gives a player a chance of noticing that items
+	in inventory/equipment list are magical, the chance is much higher
+	for warriors than for magi
+--------------- 10/19
+dungeon.c: ^P^P did not clear the line with the pause_line message
+misc2.c: prt_state() did not clear all 3 digits of repeat counts
+all: moved lots of procedures around to increase number of static fuctions,
+	also made sure every C file less than 60K
+create.c, extern.h, misc2.c, spells.c, variables.c: change way that mhp
+	are calculated, new function calc_hitpoints(), new array player_hp[]
+	which contains player mhp for each level
+extern.h, main.c, misc2.c, potions.c, spells.c: change way that cmana are
+	calculated, new function calc_mana(), called whenever gain level,
+	lose level, or learn/forget spells
+extern.h, main.c, misc2.c, spells.c: change the way that spells are learned
+	and lost, learn_spell/learn_prayer deleted, new function calc_spells,
+	new spell type state forgotten, new var spell_forgotten, etc.
+-------------------- 10/20
+monsters.c: made spirit troll into 'G', made invisible, pickup, carrys obj,
+	added drain wisdom attack, added drain intelligence attack to green
+	glutton ghost
+all: moved all msg_print(NULL) calls into io.c, specifically, clear_screen(),
+	erase_line() and prt()
+moria2.c, spells.c: two places that called test_light to see if monster or
+	moving object lit were wrong, changed to eliminate check of fm
+creature.c: update_mon() failed when hallucinating, changed print(cchar,...)
+	to lite_spot() call
+variables.c: adjusted call stat adjustments, mainly to make priest harder,
+	gave priest negative str adjust, inc expfact from 10% to 20%
+misc2.c: new funcs prt_int() and prt_long(), same as prt_num/prt_lnum()
+	except no string argument, ": " moved into prt_num/prt_lnum string
+spells.c: all wands now have limits on range
+monsters.c: doubled Balrog eye sight from 20->40, evil iggy from 20->30
+eat.c: increase hp gain for 22/23/24, increase hp loss for 27
+constant.c, eat.c, potions.c, scrolls.c, staffs.c, treasur2.c wands.c:
+	eliminate store bought flag, only gain exp when use an item if the
+	use identifies the item
+----------------- 10/23
+magic.c, wands.c: spell/wand damage did not match
+creature.c: monster stuck door bashing got sign of i_ptr->p1 wrong
+recall.c: change corrosive gases to poison gases
+externs.h, moria1.c: draw_block(), minmax(), maxmin() deleted, minmax and
+	maxmin calls were unnecessary, draw_block only called from one
+	place, sub2_move_light combined with sub1_move_light,
+	sub4_move_light combined with sub3_move_light,
+creature.c: fix mon_move() so that creatures that never move increment their
+	r_attack[0] when standing next to the player, for Quylthulgs
+spells.c: detect object and detect treasure set tl, which could also light up
+	monsters, they now set fm
+----------------- 10/24
+spells.c: can not gain exp by disarming traps created by a scroll
+types.h, magic.c, prayer.c, variable.c, misc2.c, constant.h: removed sname
+	from spell_type since it was a trivial value, changed sexp from 16
+	bits to 8 by dividing value by 4, saves about 310 bytes
+many files: eliminated long stretches of blanks in strings, remove repeated
+	chars from strings, typically " : ", saves over 1K of data size
+--------------- 10/25
+spells.c: aiming a ball type wand/spell at a 1-thick wall resulted in damage
+	to creatures on the other side of the wall, now it doesn't
+misc2.c: inc_stat changed so that player gains 1/6 to 1/3 of the distance
+	from the max 18/100 stat, 0 to 100 takes 13 gain stat potions,
+	dec_stat changed so that player loses 1/4 to 1/2 of the distance
+	from the max 18/100 stat, 100 to 0 takes 13 lose stat potions
+misc2.c: print_spells() modified so that spell are always listed with the
+	same letter, i.e. the letter does not depend on whether or not
+	you know the spells that precede it
+--------------- 10/26
+death.c: day string was size 11 should be 12
+dungeon.c: make 'magik' detect same chance for each class, need to set
+	i_ptr = &inventory[INVEN_LIGHT] before testing player_light,
+	this could cause the light to go off permanently
+misc2.c: calc_mana and calc_spells use p_prt->lev - class[].first_spell_lev-1
+	instead of just the player lev
+types.h, variable.c: add new field to class info, first level in which the
+	player can learn a spell, used immediately above
+variable.c: green glutton ghost no longer drains int
+misc2.c: print 'welcome to level message' before learning spells
+--------------- 10/28
+config.h, externs.h, dungeon.c, wizard.c: version info put in a help file,
+	game_version() function deleted
+files.c: removed obsolete print_map() and print_monster() code
+treasur1.c: made ring of WOE decrease wisdom, to balance ring of stupidity,
+	removed trailing ^ secret symbols which made no sense, changed
+	constant values from known2 to known1, such as ring of lordly protect
+	armor class values
+store1.c, store2.c, externs.h, types.h: add storenice feature by Dan Berstein,
+	if (good bargain > 3 * bad bagains + 20) then always get final price
+	in that store, two new functions, noneedtobargain() and updatebargain()
+moria1.c: fixed wear command so that it prints inven letter of item removed,
+	and equip letter of item worn, added extra param to remove()
+generate.c, moria1.c, moria2.c, types.h: added an 'lr' flag to cave_type,
+	this is set for every space in or next to a room, lr is true for
+	lit rooms, and false for dark rooms, find_light() function deleted
+	as it was no longer necessary, twall lights spots that have lr set
+moria1.c, moria2.c: decrease search chances if hallucinating, decrease
+	disarm chances if hallucinating, look fails completely
+eat.c: print message "You feel drugged." for mushroom of hallucination
+moria1.c: eliminate unnecessary in_bounds() calls
+io.c: check to make sure tabs are all 8 character apart
+treasur2.c: made object_ident array bss
+misc2.c, moria1.c: fix calc_bonuses() so that it when wielding heavy bonuses,
+	it subtracts the weight penalty from dis_th (display to hit),
+	check_strength() modified to call calc_bonuses()
+misc1.c: fixed compact_objects() and compact_monster() so that they update
+	screen when deleting objects/monsters
+creature.c, spells.c: put message in aggravate_monster(), took out redundant
+	mesasge in creature.c
+moria2.c: modify py_attack(), inven_throw() and py_bash() to make it more
+	difficult to hit monsters which are not lit
+---------------- 10/31
+moria1.c: sub3_move_light() modified so that it does not print @ when in find
+	mode
+recall.c: had an 'i == 11 | i == 18' which should have been a ||
+	printed out 11st,12nd,13rd levels incorrectly, now uses 'th'
+moria1.c: fix see_wall, it assumed walls are # which is not true for PC/Atari
+spells.c: breath() could do damage on the other side of walls, added an los()
+	call to prevent this
+moria1.c: area_affect treated 'potential corner' and 'branching side corridor'
+	identically, which is wrong, added see_nothing() so that these could
+	be handled separately
+---------------------- 11/1
+moria1.c: when wearing object and must remove current object, fix code to
+	use inven_check_num to see it is possible; in wear code, when remove
+	old object check to see if inven_ctr increases before actually
+	increasing wear_high
+constants.h, misc2.c, moria1.c, store1.c, store2.c, treasure1.c, treasure2.c:
+	change definition of subval 192 so it can be used for torches, it
+	only stacks with others if have same p1 value, but it is always
+	treated as a single object, change ITEM_* definitions in constant.h
+	to match new definition, fix all code fragments that test subvals
+desc.c: change to use new ITEM_ definition
+moria1.c: fixed the potential corner/corridor intersection bug in the find
+	code again, except this time it works better than the original code
+------------------------------ 11/3
+variables.c: decrease priestly HP bonus from 3 to 2
+moria1.c: fixed wear code bug, called inven_check_num() with item not slot
+----------------- 11/4
+moria2.c: in tunnel(), print message if player tries to dig with hands
+moria2.c: several places where object/treasure picked up did not clear
+	c_ptr->fm, this is necessary since it might be set by detect spell
+--------------- 11/7
+moria1.c: fixed find_init so that moves straight into a corner would
+	correctly run around the corner
+moria1.c: changed the examine potential corner code in area_affect(), it
+	would run into rooms if corridor entrance next to a wall, at least
+	it doesn't do that for lighted rooms anymore
+----------------- 11/8
+prayer.c: in remove curse spell, only clear flag for items that are
+	wielded or worn
+io.c: truncate strings at col 79 instead of 80 if BUGGY_CURSES defined
+moria1.c: print weights in show_inven and show_equip at col 71 not 72
+io.c, misc1.c, moria1.c: change highlight mode for walls to display '%'
+	instead, this is much more portable that original code that used
+	standout mode and the high character bit, changed print(),loc_symbol(),
+	and see_wall()
+help.c: change help documentation for % character
+wizard.c: modify wizard_create and change_character functions, add whitespace,
+	exit if get_string fails (i.e. typing ESCAPE exits), modify get_string
+	limits to more reasonable values, remove switch for setting tchar
+moria_wiz_help, moria_owiz_help: correct errors in command list
+death.c: add msg_print(NULL) after show_inven() in print_tomb() so that
+	inventory can't	accidentally scroll of screen before exiting
+creature.c, moria2.c, spells.c: can't call prt_experience() in mon_take_hit()
+	as this gives "new level" message before "killed monster", move prt_exp
+	calls to after msg_print at everyplace that calls mon_take_hit()
+dungeon.c: modified repeat count code so that can edit the number entered
+	leave cursor on msg line while entering repeat count
+moria2.c: change summon_object() so that it will only create objects within
+	los of point where monster dies
+--------------- 11/9
+store1.c: stacking code in store_check_num() and store_carry() did not
+	handle torches correctly, changed to be the same as inven_check_num
+	code in moria2.c
+wizard.c: fixed mistake in change_character(), put *tmp_str != '\0' test
+	in inside if statement, not outside one
+externs.h, misc2.c, moria2.c: fix printing of spell characters from get_spell,
+	print_spells changed consec TRUE to nonconsec == -1 for consecutive
+	case, otherwise spells start with nonconsec=='a', added new arg to
+	get_spells() first_spell which becomes nonconsec when call print_spell
+wizard.c: move 'gold' from end of change_character to right after 'mana'
+	since it is more frequently used than the rest
+misc2.c: alloc_object(), fix it so that objects are not created underneath
+	the player, this was a problem for rubble and traps
+misc1.c: allow sling ammo to be enchanted in magic_treasure()
+store1.c: fix search_list() call for ammo in item_value(), was passing 1 ?!?
+	instead of correct subval
+treasur2.c: subval for spike wrong, change from 192 to 193
+misc1.c: remove see invisible from slay monster arrows, since it doesn't make
+	sense
+variable.c: change blows_table entry for STR/W .5-.7 and DEX 10-18 from one
+	to two, the value of one made things too difficult for low level mages
+monsters.c: for all monsters which used to be sleep value of 1 (old style),
+	change their new style sleep values from 0 to 1
+recall.c: stupid typo, change CM_CARRY_OBJ|CM_CARRY_OBJ to ..OBJ|CM_CARRY_GOLD
+---------------- 11/10
+moria2.c: disarm() had signs switched for trap chances, "tot - 100 + level"
+	changed to "tot + 100 - level"
+variable.c: change "tin plated" to "tin-plated" and etc.
+----------------- 11/13
+save.c: changes to get the save code working again
+moria2.c: when move onto a trap, instead of restoring confused count, should
+	increment it by the old value, since the trap may have set it
+generate.c: for type 2 rooms, make them dark below level 25, not 30
+moria2.c: when close a door, print "Something" instead of monster name if
+	the monster blocking the door is invisible
+moria2.c: in tunnel(), make the digging chance for non digging weapons equal
+	to their max damage + tohit bonus instead of proportional to weight,
+	the old code made lances better for digging than shovels
+moria2.c: change py_bash() chance, make it a function of monster hp +
+	monsters average max hp instead of level
+--------------- 11/15
+save.c, undef.c: restore_stats function eliminated, replaced by call to read
+	py.stats from file, other fixes to get restore code working
+creature.c: if creature never moves, kill it if it happens to be in a wall
+	instead of moving it out of the wall
+generate.c: everywhere that TMP1_WALL is used, must also set fopen FALSE
+	so that place_object(), vault_monster() etc will work correctly
+prayer.c: removed cure_blindness() and cure_confusion() from Holy Word spell,
+	since could not pray while blind/confused
+signals.c, io.c, externs.h: eliminate redundant definition of signal() in
+	signals.c, also eliminate suspend_handler and assignment to it from
+	signal(), make suspend() non-static
+moria2.c: in look(), put blind and image tests before get_alldir()
+moria2.c: in look() change [y to recall] to [(r)ecall]
+creature.c, externs.h, generate.c, misc1.c, monsters.c, moria1.c, moria2.c,
+	save.c, spells.c, types.h, constant.h: change m_list from linked list
+	to a linear list, muptr deleted, monster_type nptr field deleted,
+	function pushm deleted, now all scans of m_list go from mfptr (which
+	always points at last element) to MON_MINIX == 2
+misc1.c: compact_monster no longer calls prt_map(), which is unnecessary
+--------------- 11/16
+eat.c: fixed restore charisma mushroom, print 'stops' instead of 'starts'
+moria2.c: fix calculation of avg_max_hp in py_bash(), didn't check CD_MAX_HP
+monsters.c: spirit troll too hard to hit when can't be seen, lower AC 56->40
+treasure2.c: fixed scare_monster trap, the subtype value was wrong 63->99,
+	and the level needed 100 added to it
+misc2.: fix get_spells(), must add first_spell to *sn instead of subtracting
+	from spell[i]
+creature.c: in mon_move, return immediately if creature is killed because it
+	is in rock
+---------- 11/17
+externs.h, spells.c, scrolls.c, prayer.c, staffs.c: change dispell_creature()
+	to dispel_creature()
+spells.c: dispel_creature uses m_ptr->ml after calling mon_take_hit() which
+	is wrong, now save value before calling mon_take_hit()
+moria2.c: turn find_flag into a counter, when it reaches 100, exit find mode
+	with message "You stop running to catch your breath.", prevents
+	infinite loop
+generate.c: fixes to help prevent isolated rooms, in build_tunnel() make
+	sure tunnel has gone at least 10 spaces from start before stop it,
+	in cave_gen(), copy [yx]loc[0] to [yx]loc[k] so that can build tunnel
+	from last room to first
+spells.c: light_line() called lower_monster_name() which is wrong, change
+	to monster_name() call
+externs.h, creature.c, moria2.c, spells.c: removed seen argument from
+	mon_take_hit, as it was used inconsistently, only get credit for a
+	kill if monster is visible when killed
+save.c, dungeon.c: call disturb in save_char() to turn off searching and
+	resting, remove search_off call in dungeon.c as is no longer needed
+variable.c: remove initialized data for py and old_msg since were (mostly)
+	zero, set f_ptr->food and f_ptr->food_digested in main.c
+constant.h: delete some unused constants, rearrange the order of a few others
+------------ 11/18
+variables.c, externs.h, monsters.c, treasure2.c, save.c: every variable
+	written to save file needs definate size, can not be just 'int',
+	also spell_forgotten now read/written
+-------------- 11/20
+spells.c: sleep_monsters1() did not set NO_SLEEP info for monster memory
+externs.h, moria1.c: changed new_spot to accept short pointers since
+	char_row and char_col are now shorts
+creatures.c, spells.c: multiply_monster(), removed slp parameter since it was
+	always FALSE, added monptr, to fix the m_list bug
+creatures.c: new m_list code fails when call delete monster from within
+	creatures(), fixed it by changing some calls to delete_monster()
+	to call delete_monster() only if the dead monster is between the
+	current monster and mfptr, otherwise, call fix1_delete_monster()
+externs.h, creatures.c, spells.c: breath() has new argument monptr, to fix
+	the m_list bug
+externs.h, creatures.c, spells.c: two new functions, fix1_delete_monster()
+	and fix2_delete_monster() which together equal delete_monster,
+	these are called from within creatures() when a monster is killed
+many: eliminate the fopen field since I had 5 bitfields in the cave structure,
+	and it is much easier to only save 4, added a BLOCKED_CORR case for
+	secret/closed/locked/stuck doors and rubble, all code that used
+	to test fopen now tests fval, most code that used to set fopen is
+	now gone since it was redundant with fval setting code
+moria2.c: fixed disarm() so that if there is a valid trap to disarm, it will
+	print "Something/monster_name is in the way!" just like close door."
+generate.c: place_stairs() could place them on the boundary, make sure
+	that x/y can never be 0 or cur_xx-1, also, in town_gen(), call place_
+	boundary() before place_stairs(), looks better, though not necessary
+moria2.c: fixed openobject() so that if there is something to open, it will
+	print an message just like closeobject if there is a monster in the way
+save.c: fix another save file problem, noscorefile defined as int in get_char,
+	just eliminated it and use noscore instead
+--------------------------- 11/22
+moria2.c: fix1_delete_monster() has to set m_ptr->hp to -1
+creature.c: monster eating code checked monster exp wrong, was using cptr
+	to index into the c_list
+creature.c: in creatures(), call fix2_delete_monster if hp < 0
+moria2.c, spells.c: dragon breath, wand bolts, wand balls, and thrown objects
+	were visible even when blind, added checks, only print them if can see
+moria2.c: tunnel(), print message "* is in the way" if there is a monster
+	in the spot where the player is trying to tunnel
+-------------- 11/23
+save.c: player_hp was not saved/restored, total_winner and panic_save were not
+	restored
+------------- 11/27
+moria2.c: in tunnel, add the weapon damage to its digging ability
+create.c: get_history(), clear the history strings before writing them with
+	new values, to get rid of old strings
+variable.c: for background strings, change "1st child" to "first child"
+store2.c: add parameter to get_haggle() last_offer, in sell_haggle and
+	purchase_haggle must set new_offer to 0, in get_haggle only allow
+	incremental bid if new_offer == last_offer, i.e. at least one previous
+	bid has been made
+dungeon.c: in main loop, call creatures(FALSE) to light/unlight creatures
+	when ever player_light value changes
+---------- 11/28
+save.c: new save code, to reduce size of save file, and to make the savefiles
+	portable
+constant.h, desc.c, generate.c, misc1.c, misc2.c, moria2.c, save.c:
+	changed the t_list from a linked list into a linear array of entries,
+	just like the previous m_list change, new constant MIN_TRIX,
+	all pusht calls changed to delete_object where ever appropriate, etc.
+---------- 11/29
+misc1.c: increase p1 value for crowns of seeing by multiplying by 5
+----------- 12/4
+creatures.c: change stealth code, instead of randint(10) < stl, it now cubes
+	randint(64) and compares against 1 << (17 - stl), the result is that
+	a change of one in stl always decreases monster notice chance by 80%,
+	and perfect stealth is impossible
+wizard.c: allow wizard to enter any stealth between -1 and 17
+save.c: extensive changes to save code competed, save files are now xor
+	encrypted, and are supposedly portable, all savefile protection code
+	is gone
+---------- 12/5
+save.c, undef.c, misc1.c: fix a few lint errors
+changed version number to 5.0.8 and release the sources
+creature.c: changed stealth code, amount monster woken by from 100 to 125
+	(used to be 75 before 12/4)
+-------- 12/6
+spells.c, creature.c: changed the way wall building wands work again,
+	kill creature if it never moves, otherwise do a little damage,
+	if creature can not move out of rock in mon_move, then do more damage
+	and remove the wall ontop of the creature
+various: check use of "?", especially in get_check() and verify() prompts,
+	verify changed to replace the period with a question mark
+spells.c, creature.c, misc1.c: breath(), update_mon(), and loc_symbol()
+	changed to use blind status bit instead of blind counter, this
+	helps make the display look better, i.e. nothing disappears until
+	blindness takes affect in dungeon.c
+monsters.c: more monster fixes from DJG
+monsters.c, misc1.c, moria2.c, treasur1.c: change (SM) to (SA),
+	slay monster to slay animal
+monsters.c: set the new 'animal' bit correctly for all monsters
+recall.c: change 'unnatural creature' to 'natural creature', change a few
+	constants to defines
+save.c: add error exits to every loop/array index in the get_char()
+	routine to prevent crashes due to bad save files
+store1.c: in item_value, set value to zero if known cursed, this prevents
+	store from buying known cursed items
+------------ 12/7
+store2.c: remove switches in prt_comment*() functions, replace with table
+	look up to get proper string, saves much code space
+creature.c: changed stealth code again, if resting/paralyzed monster has a
+	chance of noticing once every 50 turns instead of never like before,
+	change 64 to 1024, and 17 to 29 for a better distribution
+constant.h, save.c: read noscore variable from savefile of dead character, now
+	only read/write noscore for live characters, changed patch_level to
+	9 so that old savefiles can still be read
+save.c: in get_char(), the loop error prevention code was missing two gotos
+store2.c: get_haggle(), when check for valid first use of incremental haggle,
+	ignore leading spaces in the string
+moria2.c: add_food() should increment slow value, not just set it when bloated
+save.c: when can't create savefile, test for from_savefile before giving
+	wizard message "Overwrite old?", when exit in wizard mode do the
+	"readable to all?" check after closing the file
+save.c: from_savefile set wrong, should always be set if have read from a file
+	not just when a complete character is read
+moria2.c: bash(), do not put character off balance if bash is successful
+misc2.c: get_spell(), instead of beeping for unknown spell, print a message
+recall.c: for monsters with sleep value of 0, could never learn that fact,
+	change it so that this will be known if have killed 10 of them
+-----12/9
+dungeon.c: call disturb when player takes poison damage, or starvation
+	damage
+variable.c: change the three doors from 'a ...' to '& ...', needed because
+	of wall-to-mud wand
+wizard.c: create_object wrong, was calling popt() then delete_object() then
+	setting c_ptr->tptr, this fails because the delete objects will move
+	the location (in t_list) of the just created object will change
+treasur2.c: change 'nothing' item to be stackable, so that it can be safely
+	picked up
+save.c: was calling store_maint before objects were reidentified, this caused
+	stores to end up with multple entries for stackable identified items
+externs.h, misc2.c: new function inven_check_weight(), check toosee whether
+	picking up an object will change the players speed
+moria2.c: carry(), if picking up an object would slow you down, prompt with
+	question "Exceed your weight limit?" to give player a choice
+moria2.c, misc1.c: only show rock types in look() if highlight_seams option
+	is set, also change option text from "highlight" to "HL and notice"
+spells.c: in fire_bolt() and fire_ball(), set recall info if monster takes
+	extra damage because of weakness or reduced damage because of breath,
+	in dispel_creature() set EVIL/UNDEAD flag if creature hurt,
+	in turn_undead() set UNDEAD if creature hurt, in drain_life() set
+	CD_UNDEAD if creature not hurt
+recall.c: "may carry one or two treasures" needs the plural, but the others
+	remain singular/collective
+------------- 12/11
+creature.c: stealth value changed again from 125 to 100
+wizard.c, variable.c: change rogue base stealth from 4 to 5, let wizard set
+	stealth to 18
+monster.c: white worm mass sleep value from 10 to 1, crystal ooze 60 -> 1
+creature.c: in drain mana spell, if r1 greater than cmana, then set r1
+	equal to cmana to limit creature's hp gain
+recall.c: when print out creature attacks, exit loop if i >= 4, caused
+	problems for umber hulk, etc. which have 4 attacks
+store1.c: instead of destroying all single stackable objects, only destroy
+	one half on average (randint(number)), makes store 1 and 5 inventories
+	look better, oil is much more common, identify a little more common
+treasure2.c: accidentally change blank_treasure tval earlier, set tval
+	back to 0, and set subval to 64
+store1.c: change store_carry(), for group items, must update scost; for any
+	stackable item, set ipos so that inventory will scroll to show it;
+	let group items (except torches) stack over 24 since each group is
+	created with a set number to begin with; ipos must be set to -1 at
+	start not 0;
+store2.c: store_sell(), pass a pointer to cur_top instead of just its value,
+	if sold object not on the page shown, scroll to show the object
+------------ 12/13
+recall.c: only print out known attacks, i.e. check r_attack, change i to count
+	from 0 to 3, fixes bug with knowdamage(), add variable j to count
+	attacks actually printed out
+save.c: put limit on number of times store inventory changed in get_char()
+store2.c: rewrite incremental haggle code again, add new parameter 'num_offer'
+	to receive_offer, change get_offer parm last_offer to num_offer, only
+	allow inc haggle if num_offer != 0; must reset new_offer after
+	rejected offer in recieve_offer and sell/purchase_haggle
+------------ 12/14
+misc2.c, lots: change way spell learning works, new command 'G'ain magic
+	spells, new function gain_spells() in misc2.c formerly part of
+	calc_spells(), new status flag PY_STUDY controls printing of 'Study'
+	in status line, new field py.flags.new_spells number of spells can
+	learn
+origcmds.hlp, roglcmds.hlp: document the 'M'ap and 'G'ain magic commands
+variables.c, potions.c: remove potion of learning as it is no longer useful

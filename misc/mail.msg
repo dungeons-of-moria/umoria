@@ -102,7 +102,7 @@ A few opinions about PC Moria 4.873 that might influence Umoria 5.0:
    penalized for "running" since all I'm doing is speeding up the game, not
    trying to "tire out" the character.)
 
--------------------------------------------------------------------------------
+------------------------------------------------------------------------------
 Greg Flint 	  Math G-169   (317) 494-1787   UUCP:  purdue!klaatu.cc!afc
   Purdue Univ.	  Purdue University	    INTERNET:  afc@klaatu.cc.purdue.edu
   Computing Ctr.  West Lafayette, IN 47907    BITNET:  flint@purccvm.bitnet
@@ -167,11 +167,11 @@ things as one progresses.
              addictive I know.
 Dale Forsyth (45 yr-old game addict)  qqc@h.cc.purdue.edu
 
-From ucbvax!tut.cis.ohio-state.edu!cs.utexas.edu!yale!cs.yale.edu!berman-andrew Wed Jan 24 08:40:49 PST 1990
+From ucbvax!tut.cis.ohio-state.edu!cs.utexas.edu!yale!cs.yale.edu
 Status: RO
 
 Article 4187 of rec.games.moria:
-Path: ucbvax!tut.cis.ohio-state.edu!cs.utexas.edu!yale!cs.yale.edu!berman-andrew
+Path: ucbvax!tut.cis.ohio-state.edu!cs.utexas.edu!yale!cs.yale.edu!
 >From: berman-andrew@CS.Yale.EDU (Andrew Berman)
 Newsgroups: rec.games.moria
 Subject: Possible Enhancements
@@ -231,11 +231,11 @@ a 5% chance of being a grasp for double drain..
 Any comments?
 
 
-From ucbvax!decwrl!lll-winken!uwm.edu!cs.utexas.edu!tut.cis.ohio-state.edu!pt.cs.cmu.edu!andrew.cmu.edu!mf2t+ Wed Jan 24 08:41:39 PST 1990
+From ucbvax!decwrl!lll-winken!uwm.edu!cs.utexas.edu!tut.cis.ohio-state.edu
 Status: RO
 
 Article 4188 of rec.games.moria:
-Path: ucbvax!decwrl!lll-winken!uwm.edu!cs.utexas.edu!tut.cis.ohio-state.edu!pt.cs.cmu.edu!andrew.cmu.edu!mf2t+
+Path: ucbvax!decwrl!lll-winken!uwm.edu!cs.utexas.edu!tut.cis.ohio-state.edu
 >From: mf2t+@andrew.cmu.edu (Matthew David Fletcher)
 Newsgroups: rec.games.moria
 Subject: Re: Possible Enhancements
@@ -283,11 +283,11 @@ gets zapped.
 				Fletch
 
 
-From ucbvax!tut.cis.ohio-state.edu!zaphod.mps.ohio-state.edu!unix.cis.pitt.edu!dtate Wed Jan 24 10:41:20 PST 1990
+From ucbvax!tut.cis.ohio-state.edu!zaphod.mps.ohio-state.edu!unix.cis.p
 Status: RO
 
 Article 4193 of rec.games.moria:
-Path: ucbvax!tut.cis.ohio-state.edu!zaphod.mps.ohio-state.edu!unix.cis.pitt.edu!dtate
+Path: ucbvax!tut.cis.ohio-state.edu!zaphod.mps.ohio-state.edu!unix.cis.
 >From: dtate@unix.cis.pitt.edu (David M Tate)
 Newsgroups: rec.games.moria
 Subject: Re: Possible Enhancements
@@ -309,27 +309,29 @@ sword or Executioner's Sword.  No matter how strong a mage gets, he should not
 be able to fight effectively with anything heavy, nor able to cast spells
 effectively while wearing heavy armor.
 
-One way to reduce the mage/ranger advantage would be to implement a "setup cost"
-for the switch between magic mode and fighting mode: you can't cast a spell in
-the round immediately following a slash/fire move.  This makes some sense, as
-one would in general have to "prepare" a spell before casting it.  Similarly,
-one would expect the act of praying to take some finite time.  (For that matter,eating should take some time--a character interrupted while eating would have
-the option of finishing the meal (while getting stomped) or abandoning it (in
-which case the remainder is lost--trampled in battle, or some such).
+One way to reduce the mage/ranger advantage would be to implement a "setup
+cost" for the switch between magic mode and fighting mode: you can't cast a
+spell in the round immediately following a slash/fire move.  This makes some
+sense, as one would in general have to "prepare" a spell before casting it.
+Similarly, one would expect the act of praying to take some finite time.
+(For that matter,eating should take some time--a character interrupted while
+eating would have the option of finishing the meal (while getting stomped) or
+abandoning it (in which case the remainder is lost--trampled in battle, or
+some such).
 
 One touch of realism that I would like to see is more more NPC's to pick up
-things.  I know this can be done, because ghosts do it already.  Can you really
-imagine a hobgoblin coming into a room and *not* picking up the gold and gems?
-This would add the challenge of preserving items to the character.
+things.  I know this can be done, because ghosts do it already.  Can you
+really imagine a hobgoblin coming into a room and *not* picking up the gold
+and gems?  This would add the challenge of preserving items to the character.
 
-Similarly, why can't you get your stolen gold back from a dead rogue?  What did
-he do with it?  Hide it?  If you're a rogue yourself, you should be able to
-(a) keep him from picking your pocket, and (b) find where he hid it.
+Similarly, why can't you get your stolen gold back from a dead rogue?  What
+did he do with it?  Hide it?  If you're a rogue yourself, you should be able
+to (a) keep him from picking your pocket, and (b) find where he hid it.
 
 Just a few ramblings...
 
 --
-===============================================================================
+==============================================================================
           David M. Tate        | "I do not know which to prefer: the beauty
     dtate@unix.cis.pitt.edu    |  of inflections, or the beauty of innuendoes;
                                |  the blackbird whistling, or just after..."
@@ -350,68 +352,69 @@ Status: RO
 To: >INTERNET:wilson@ernie.Berkeley.EDU
 I mailed you the sources either Monday or Tuesday of last week.  I can't
 remember which day for sure.  I used regular mail, so it may take some time.
-The mailing required two diskettes, one for the source, the other for a compiled
-version of the game.  Do you have access to MPW 3.0?  You will need it to
-compile.  I don't think that THINK C could be used very easily in place of MPW.
-I rely pretty heavily on the MPW environment to make the program.
+The mailing required two diskettes, one for the source, the other for a
+compiled version of the game.  Do you have access to MPW 3.0?  You will need
+it to compile.  I don't think that THINK C could be used very easily in place
+of MPW.  I rely pretty heavily on the MPW environment to make the program.
 
-While I'm thinking about it, there are a couple of principles which, if observed
-in all parts of the code, would make the mac port easier and less of a hack:
+While I'm thinking about it, there are a couple of principles which, if
+observed in all parts of the code, would make the mac port easier and less
+of a hack:
 
-1)  Don't modify a variable which is initialized in its declaration (e.g., "int
-foo_flag = TRUE").  I had to try to find all of these in order to make the game
-restartable.
+1)  Don't modify a variable which is initialized in its declaration (e.g.,
+"int foo_flag = TRUE").  I had to try to find all of these in order to make
+the game restartable.
 
 2)  Don't rely on the value of a variable which is not initialized in its
-declaration being zero.  For example, get_panel() forces the panel to be redrawn
-the first time it is called in the course of a game because
+declaration being zero.  For example, get_panel() forces the panel to be
+redrawn the first time it is called in the course of a game because
 panel_[row/col]_[min/max] are all zero.  In the mac version, when the game is
-restarted, these variables have the values left over from the previous game.  I
-do with them what I do with the variables which fall under 1 above:  I keep
+restarted, these variables have the values left over from the previous game.
+I do with them what I do with the variables which fall under 1 above:  I keep
 their "initialized" value in a resource and restore them each time a game is
 restarted.
 
-3) 	(This follows a fortiori from 1 above.)  Don't modify a private variable
+3)  (This follows a fortiori from 1 above.)  Don't modify a private variable
 which is initialized in its declaration.  These I had to move from the source
-files in which they were declared to variables.c and externs.h in order to make
-them accessible for the routines which build the restart resource and copy the
-saved data when a new game is started.
+files in which they were declared to variables.c and externs.h in order to
+make them accessible for the routines which build the restart resource and
+copy the saved data when a new game is started.
 
-Admittedly, there is some inconvience involved in following these rules.  It's a
-judgement call.
+Admittedly, there is some inconvience involved in following these rules.  It's
+a judgement call.
 
 The version I have given you "hilights" the veins instead of using '%'.  I
 didn't discover that you had given up on hilighting until after I had ported
-io.c to allow it.  So I figured I'd leave it in.  I discovered after I had sent
-you the game that this causes the map command to screw up because it doesn't
-know how to handle -'#'.  What do you think?  Remove the hilighting capability
-or fix the map command to handle it?
+io.c to allow it.  So I figured I'd leave it in.  I discovered after I had
+sent you the game that this causes the map command to screw up because it
+doesn't know how to handle -'#'.  What do you think?  Remove the hilighting
+capability or fix the map command to handle it?
 
-You might want to consider the possibility of having two mac file types for save
-files:  one for living characters, another for dead characters' memories.  This
-way the two files will be distinguishable by their icons.  (Perhaps a tombstone
-as the latter type of icon.)
+You might want to consider the possibility of having two mac file types for
+save files:  one for living characters, another for dead characters' memories.
+This way the two files will be distinguishable by their icons.  (Perhaps a
+tombstone as the latter type of icon.)
 
 Do we want to get a new application signature from Apple?  I'd prefer not to,
 but there likely will be problems for people who try to keep the old version
-around on their disks.  For example, I am not certain which program will come up
-if the user double clicks on a save file from the finder when he has both copies
-of the game on his disk.  Maybe this can be handled by simply telling the player
-to throw away his old version in the mac help text.
+around on their disks.  For example, I am not certain which program will come
+up if the user double clicks on a save file from the finder when he has both
+copies of the game on his disk.  Maybe this can be handled by simply telling
+the player to throw away his old version in the mac help text.
 
 I do not like the way the game "flows" at the end, particularly the standard
 file dialog which prompts for saving the player's memories.  It seems kind of
 intrusive.  I do not know how things will change when the top ten is added.
 Also, there is a problem with the prompt in this dialog box.  In save_char() I
-try to say "Save your memories as:" instead of "Save the game as:" when I think
-the player has died or quit.  This doesn't always work right.  Sometimes it says
-"memories" when it should say "game".  This always happens when ^X is used to
-save the game.  I have fixed that problem since I sent you the source.  Another
-problem remains:  I rely upon the variable death to decide which prompt to
-choose.  This will not work when the player quits the character.  Death is not
-set, yet only the memories will get saved, right?  In the version you have, I
-have the two prompts switched in save_char().  So, you get the "memories" prompt
-when you quit and the "game" prompt when you are killed.
+try to say "Save your memories as:" instead of "Save the game as:" when I
+think the player has died or quit.  This doesn't always work right.  Sometimes
+it says "memories" when it should say "game".  This always happens when ^X is
+used to save the game.  I have fixed that problem since I sent you the source.
+Another problem remains:  I rely upon the variable death to decide which
+prompt to choose.  This will not work when the player quits the character.
+Death is not set, yet only the memories will get saved, right?  In the version
+you have, I have the two prompts switched in save_char().  So, you get the
+"memories" prompt when you quit and the "game" prompt when you are killed.
 
 Finally, do female dwarves really have beards?  Ugh.
 
@@ -430,7 +433,7 @@ From: saj@chinet.chi.il.us (Stephen Jacobs)
 Subject: Source arrived today
 To: ernie.Berkeley.EDU!wilson@gargoyle.uchicago.edu  (James E. Wilson)
 Date: Tue, 6 Feb 90 0:27:26 CST
-In-Reply-To: <9002020111.AA22413@ernie.Berkeley.EDU>; from "James E. Wilson" at Feb 1, 90 5:11 pm
+In-Reply-To: <9002020111.AA22413@ernie.Berkeley.EDU>; from "James E. Wilson"
 X-Mailer: ELM [version 2.2 PL16]
 Status: RO
 

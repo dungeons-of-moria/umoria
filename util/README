@@ -1,8 +1,9 @@
-map.c is obsolete print map to file code from 4.87
+map.c is obsolete `print map to file' code from 4.87, superceded by
+the reduced map display, and the improved Where/Locate code
 
-mc is the monster compiler by Joseph N Hall, eventually, this will be
-used to generate the monster.c file, which should be more maintainable than
-the current method
+mc is a monster compiler by Joseph N Hall.  It would be nice if this
+was used to generate the monster.c file.  This would be more maintainable
+that the current method.
 
 mcheck.inf: my and David J. Grabiner's ideas on monster consistency, and
 checks that should be added to the monster compiler
@@ -12,6 +13,9 @@ still needed?
 
 printit.c: some code which will pretty print item/monster descriptions,
 written by Carl Hommel
+
+scores: two standalone programs for dealing with scorefiles, one to print
+scorefiles, and another to delete a single record from a scorefile
 
 showmon.c: obsolete code from 4.87 for printing the monster dictionary,
 superceded by the monster memories

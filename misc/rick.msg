@@ -25,8 +25,8 @@ Here are the changes incorporated to date in the upgrade from V5.0 to V6.0:
       having four or more different people work on it before.
 
     o Creation of a new high score list.  Early in Moria's time at my node,
-      many people had found out the Wizard mode password (this was for versions
-      4.3 and then 4.8), so I have created a Wizard Mode Top Twenty list.  Part
+      many people had found out the Wizard mode password (this was for version
+      4.3 and then 4.8), so I have created a Wizard Mode Top Twenty list. Part
       of this has been creating 2 new fields in the player character record to
       enable Moria to remember if your character ever entered Wizard or God
       modes.  If you used Wizard mode at any point, you are eligible for the
@@ -41,12 +41,12 @@ Here are the changes incorporated to date in the upgrade from V5.0 to V6.0:
       by adding two more new fields to the character record, to keep track of
       the birthdate and birthtime of the character, taken from the system time
       at the same point that the stats are rolled.  When a character dies, his
-      birthdate/time is recorded in the high score file, and whenever that same
+      birthdate/time is recorded in the highscore file, and whenever that same
       userid kills another character, it checks to see if the birthdate/times
       match, if so, then it assumes a clone, and doesn't post the score to the
       list.  The game does tell you what you had earned in this case.
 
-    o The game now saves the userid of the character's creator in the character
+    o The game now saves the userid of the character's creator in the
       save file.  This prevents one person making a strong character, then
       giving it to someone else to use to finish off the Balrog.
 
@@ -73,7 +73,7 @@ Here are the changes incorporated to date in the upgrade from V5.0 to V6.0:
       widths.  All fields, when re-printed, wipe out any extra digits from the
       previous value.  If you have more than 9,999,999 in gold, the string
       "$$$$$$$" is printed.  If more than 9,999,999 experience points are
-      earned, the string "*******" is printed.  If you have more than 999 mana,
+      earned, the string "*******" is printed.  If you have more than 999 mana
       then the string "###/###" will be printed.
 
     o The God mode function ^C (Make Nice Character) now checks to see if the
@@ -117,11 +117,11 @@ Here are the changes incorporated to date in the upgrade from V5.0 to V6.0:
       as the other stores do.
 
     o A bug involving the Wizard Mode Light Dungeon function and using a torch
-      has been repaired so that the tunnel floors remain lit after passing over
-      them.
+      has been repaired so that the tunnel floors remain lit after passing
+      over them.
 
-    o Caps/Helms of Intelligence/Wisdom bought in the Black Market now correctly
-      increase the relevant stat.
+    o Caps/Helms of Intelligence/Wisdom bought in the Black Market now
+      correctly increase the relevant stat.
 
     o A bug involving certain area-affect spells (Light Area, any Ball-type
       spell, etc) and the right-hand and bottom edges of the town level has
@@ -132,16 +132,16 @@ Here are the changes incorporated to date in the upgrade from V5.0 to V6.0:
       each one was coming up short of the 64 actual possible slots that are
       available by using two Tval values.
 
-    o The problem with the special Magic and Prayer books from the Black Market
-      has been fixed so that they appear as separate items in your inventory
-      and are not added with the normal books.
+    o The problem with the special Magic and Prayer books from the Black
+      Market has been fixed so that they appear as separate items in your
+      inventory and are not added with the normal books.
 
     o The bug concerning enchanting items bought from the Black Market and the
-      new values never being seen was been repaired, so that the name string of
-      the item will be displayed properly.
+      new values never being seen was been repaired, so that the name string
+      of the item will be displayed properly.
 
     o The Control-Y exit command has been changed so the user has to hit Q to
-      exit instead of Y.  This is to make it more fool-proof and more accident-
+      exit instead of Y.  This is to make it more fool-proof and more accident
       proof (but not totally).
 
     o Three new monster attacks: Lose Mana (different from the monster spell),
@@ -163,9 +163,9 @@ Here are the changes incorporated to date in the upgrade from V5.0 to V6.0:
       inventory turn over rate.  This was done partially to work the Black
       Market in more properly.
 
-    o A bug involving the running function ('.' and a direction) has been fixed
-      so that if you are attacked in any form, either via a physical hit or a
-      spell, you will stop running at that point.
+    o A bug involving the running function ('.' and a direction) has been
+      fixed so that if you are attacked in any form, either via a physical
+      hit or a spell, you will stop running at that point.
 
     o New monster defense: cloning on death.  A new value has been added to
       the CDEFENSE flag so that certain monsters can try to clone themselves
@@ -175,8 +175,8 @@ Here are the changes incorporated to date in the upgrade from V5.0 to V6.0:
       the critter, he isn't as likely to clone himself).
 
     o The \ function has been fixed up a bit, mainly in formatting control,
-      with an added piece to watch for the end of the screen and page it out as
-      needed.  Also, it has been renamed to ^U, and is now a Wizard mode
+      with an added piece to watch for the end of the screen and page it out
+      as needed.  Also, it has been renamed to ^U, and is now a Wizard mode
       function, just as creating the Monster Dictionary is.
 
     o The Create Food spell/scroll has been fixed.  If an item is under you

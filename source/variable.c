@@ -1,15 +1,20 @@
-/* variable.c: Global variables */
+/* source/variable.c: Global variables */
 
 char *copyright[5] = {
-"Copyright (c) 1989 James E. Wilson, Robert A. Keoneke",
+"Copyright (c) 1989-91 James E. Wilson, Robert A. Keoneke",
 "",
 "This software may be copied and distributed for educational, research, and",
 "not for profit purposes provided that this copyright and statement are",
 "included in all such copies."};
 
-#include "constant.h"
+#include <stdio.h>
+
 #include "config.h"
+#include "constant.h"
 #include "types.h"
+
+/* Save the store's last increment value.  */
+int16 last_store_inc;
 
 /* a horrible hack: needed because compact_monster() can be called from
    creatures() via summon_monster() and place_monster() */
@@ -17,15 +22,16 @@ int hack_monptr = -1;
 
 int weapon_heavy = FALSE;
 int pack_heavy = FALSE;
-int16 log_index = -1;		/* Index to log file. (<= 0 means no log) */
 vtype died_from;
+int32 birth_date;
 
 vtype savefile;			/* The savefile to use. */
 
 int16 total_winner = FALSE;
+int32 max_score = 0;
 int character_generated = 0;	/* don't save score until char gen finished */
 int character_saved = 0;	/* prevents save on kill after save_char() */
-int highscore_fd;		/* File descriptor to high score file */
+FILE *highscore_fp;		/* File pointer to high score file */
 int32u randes_seed;		/* for restarting randes_state */
 int32u town_seed;		/* for restarting town_seed */
 int16 cur_height,cur_width;	/* Cur dungeon size    */
@@ -56,6 +62,8 @@ int prompt_carry_flag = FALSE;
 int show_weight_flag = FALSE;
 int highlight_seams = FALSE;
 int find_ignore_doors = FALSE;
+int sound_beep_flag = TRUE;
+int display_counts = TRUE;
 
 char doing_inven = FALSE;	/* Track inventory commands. -CJS- */
 int screen_change = FALSE;	/* Track screen updates for inven_commands. */
@@ -63,7 +71,6 @@ char last_command = ' ';  	/* Memory of previous command. */
 
 /* these used to be in dungeon.c */
 int new_level_flag;		/* Next level when true	 */
-int search_flag = FALSE;	/* Player is searching	 */
 int teleport_flag;		/* Handle teleport traps  */
 int player_light;		/* Player carrying light */
 int eof_flag = FALSE;		/* Used to signal EOF/HANGUP condition */
@@ -89,4 +96,9 @@ cave_type cave[MAX_HEIGHT][MAX_WIDTH];
 recall_type *c_recall;
 #else
 recall_type c_recall[MAX_CREATURES];	/* Monster memories */
+#endif
+
+/* See atarist/st-stuff.c */
+#if defined(atarist) && defined(__GNUC__)
+char extended_file_name[80];
 #endif

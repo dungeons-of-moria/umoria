@@ -1,13 +1,13 @@
-/* staffs.c: staff code
+/* source/staffs.c: staff code
 
-   Copyright (c) 1989 James E. Wilson, Robert A. Koeneke
+   Copyright (c) 1989-91 James E. Wilson, Robert A. Koeneke
 
    This software may be copied and distributed for educational, research, and
    not for profit purposes provided that this copyright and statement are
    included in all such copies. */
 
-#include "constant.h"
 #include "config.h"
+#include "constant.h"
 #include "types.h"
 #include "externs.h"
 
@@ -32,7 +32,7 @@ void use()
     msg_print("But you are not carrying anything.");
   else if (!find_range(TV_STAFF, TV_NEVER, &j, &k))
     msg_print("You are not carrying any staffs.");
-  else if (get_item(&item_val, "Use which staff?", j, k))
+  else if (get_item(&item_val, "Use which staff?", j, k, CNIL, CNIL))
     {
       i_ptr = &inventory[item_val];
       free_turn_flag = FALSE;

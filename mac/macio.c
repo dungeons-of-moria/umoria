@@ -1,21 +1,25 @@
-/* macio.c: terminal I/O code for the macintosh
+/* mac/macio.c: terminal I/O code for the macintosh
 
-   Copyright (c) 1989 James E. Wilson, Robert A. Koeneke
+   Copyright (c) 1989-91 James E. Wilson, Robert A. Koeneke
 
    This software may be copied and distributed for educational, research, and
    not for profit purposes provided that this copyright and statement are
    included in all such copies. */
 
+#ifdef THINK_C
+#include "ScrnMgr.h"
+#else
 #include <scrnmgr.h>
+#endif
 
 #include <ctype.h>
+#include <string.h>
 
-#include "constant.h"
 #include "config.h"
+#include "constant.h"
 #include "types.h"
 #include "externs.h"
 
-#include <string.h>
 
 void exit();
 unsigned sleep();
@@ -57,7 +61,7 @@ int row, col;
 /* Dump the IO buffer to terminal			-RAK-	*/
 void put_qio()
 {
-  screen_change = TRUE;	    /* Let inven_command know something has changed. */
+  screen_change = TRUE;	   /* Let inven_command know something has changed. */
   UpdateScreen();
 }
 
@@ -328,7 +332,7 @@ int get_check(prompt)
 char *prompt;
 {
   int res;
-  int x, y;
+  long x, y;
 
   prt(prompt, 0, 0);
   GetScreenCursor(&x, &y);
@@ -496,6 +500,8 @@ void restore_screen()
 void bell()
 {
   put_qio();
+  if (! sound_beep_flag)
+    return;
   mac_beep();
 }
 
@@ -550,7 +556,7 @@ void screen_map()
 	    {
 	      DSetScreenCursor(0, orow+1);
 	      DWriteScreenCharAttr(border[VE], ATTR_NORMAL);
-	      DWriteScreenString(map);
+	      DWriteScreenString((char *)map);
 	      DWriteScreenCharAttr(border[VE], ATTR_NORMAL);
 	    }
 	  for (j = 0; j < MAX_WIDTH / RATIO; j++)
@@ -578,7 +584,7 @@ void screen_map()
     {
       DSetScreenCursor(0, orow+1);
       DWriteScreenCharAttr(border[VE], ATTR_NORMAL);
-      DWriteScreenString(map);
+      DWriteScreenString((char *)map);
       DWriteScreenCharAttr(border[VE], ATTR_NORMAL);
     }
   DSetScreenCursor(0, orow + 2);

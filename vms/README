@@ -1,0 +1,40 @@
+NOTE: ESCAPE is defined as Control-Z in constant.h to be more like the
+original VMS moria, this is not documented anyplace, so whenever the
+doc/program says escape type control_Z instead.   If you don't like this,
+delete the define for escape in constant.h (but you will probably have to
+hit escape twice for it to work).
+
+If you're building Moria on a VAX/VMS system, you'll need a C compiler
+that understands the 'defined()' macro.
+
+	Notes on VMS files:
+
+	getch.c - single character terminal input and related routines.
+
+	uexit.c	- shell for the exit() call, to prevent -NOMSG messages
+		from appearing when exiting the Moria program.
+
+	makefile. - for use if you have a Make utility.  I use Todd
+		Aven's VMSMAKE (with the unix options)
+
+	moria.opt - the options file for linking Moria.  (You do a
+		'link moria/opt' command to link the program)
+
+	descrip.mms - builds moria if you have the mms utility. (You do a
+		'mms/description=descrip.mms' to build it.)
+
+	debug.mms - builds moria to run under debug if you have the mms
+		utility. (You do a 'mms/description=debug.mms' to build
+		the debugger version.)
+
+	make.com - for those without make or mms, does all the compiles
+		and the final link of the program.
+
+        scores.fdl - file intended for use with CONVERT/FDL; the score
+                file needs to be created empty, then converted using
+                scores.fdl.  This is because moria expects it to be
+                stream/LF format.
+
+In the config.h file, the files that moria uses are defined to be
+on the logical device 'moria:'.  This will need to be defined before
+you can run Moria.

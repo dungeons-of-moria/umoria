@@ -1,4 +1,4 @@
-			  VMS Moria Version 4.8
+                          VMS Moria Version 4.8
 Version 0.1  : 03/25/83
 Version 1.0  : 05/01/84
 Version 2.0  : 07/10/84
@@ -6,44 +6,54 @@ Version 3.0  : 11/20/84
 Version 4.0  : 01/20/85
 
 Modules :
-     V1.0  Dungeon Generator	  - RAK
-	   Character Generator	  - RAK & JWT
-	   Moria Module		  - RAK
-	   Miscellaneous	  - RAK & JWT
-     V2.0  Town Level & Misc	  - RAK
-     V3.0  Internal Help & Misc	  - RAK
+     V1.0  Dungeon Generator      - RAK
+           Character Generator    - RAK & JWT
+           Moria Module           - RAK
+           Miscellaneous          - RAK & JWT
+     V2.0  Town Level & Misc      - RAK
+     V3.0  Internal Help & Misc   - RAK
      V4.0  Source Release Version - RAK
 
-Robert Alan Koeneke		  Jimmey Wayne Todd Jr.
-Student/University of Oklahoma	  Student/University of Oklahoma
+Robert Alan Koeneke               Jimmey Wayne Todd Jr.
+Student/University of Oklahoma    Student/University of Oklahoma
 
 
 
 
 
-			Umoria Version 5.2 (formerly UNIX Moria)
-Version 4.83 :	5/14/87
+                        Umoria Version 5.4 (formerly UNIX Moria)
+Version 4.83 :  5/14/87
 Version 4.85 : 10/26/87
-Version 4.87 :	5/27/88
-Version 5.0  :	11/2/89
+Version 4.87 :  5/27/88
+Version 5.0  :  11/2/89
 Version 5.2  :   5/9/90
+Version 5.3  :  3/25/91
+Version 5.4  : 10/12/91
 
-James E. Wilson, U.C. Berkeley
-		 wilson@ernie.Berkeley.EDU
-		 ...!ucbvax!ucbernie!wilson
+James E. Wilson, Cygnus Support
+		 wilson@kithrup.com
 
 Other contributors:
-D. G. Kneller	      - MSDOS Moria port
-Christopher J. Stuart - recall, options, inventory, and running code
-Curtis McCauley	      - Macintosh Moria port
-Stephen A. Jacobs     - Atari ST Moria port
-William Setzer	      - object naming code
-David J. Grabiner     - numerous bug reports, and consistency checking
-Dan Bernstein	      - UNIX hangup signal fix, many bug fixes
-and many others...
+D. G. Kneller         - MSDOS Moria port, reduced map display, 16 bit integers
+Christopher J. Stuart - recall, options, inventory, running code, etc.
+Curtis McCauley       - Macintosh Moria port for MPW C
+Stephen A. Jacobs     - Atari ST Moria port for MW C
+William Setzer        - object naming code
+David J. Grabiner     - numerous bug reports, consistency checks, etc
+Dan Bernstein         - UNIX hangup signal fix, many bug fixes
 
 
 
+Other contributors:
+Corey Gehman          - Amiga Moria port
+Ralph Waters          - VMS support code, IBM-PC Turbo C bug fixes
+Johsua Delahunty      - VMS support code
+Todd Pierzina         - VMS support code
+Joseph Hall           - line of sight code, monster compiler
+Eric Vaitl            - PC-Curses replacement for Turbo C
+Scott Kolodzieski     - Atari ST port for Gnu C
+Hildo Biersma         - Atari ST port for Turbo C
+Ben Schreiber         - Macintosh port for Think C
 
 
 
@@ -52,4 +62,4 @@ Copyright (c) 1989 James E. Wilson, Robert A. Keoneke
   not for profit purposes provided that this copyright and statement are
   included in all such copies.
 
-Umoria Version 5.2, patch level 1
+Umoria Version 5.4, patch level 0

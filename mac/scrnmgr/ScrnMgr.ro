@@ -1,0 +1,393 @@
+ScrnMgr.rsrc
+????????
+
+*/*	Copyright (C) Curtis McCauley, 1989.  All rights reserved.
+*
+*	You may copy this subroutine package freely, modify it as you desire,
+*	and distribute it at will, as long as the copyright notice in the source
+*	material is not disturbed, excepting that no one may use this package or
+*	any part of it for commercial purposes of any kind without the express
+*	written consent of its author. */
+*
+* TC 4.0 Version by Benjamin Schreiber, 1991
+*
+*#include "Types.r"
+*
+*type 'INFO'	{
+*	rect;
+*	integer;
+*	longint white, black, red, green, blue, cyan, magenta, yellow;
+*	longint white, black, red, green, blue, cyan, magenta, yellow;
+*};
+*
+*type 'acur' {
+*	integer = $$Countof(cursors);
+*	integer = 0;
+*	array cursors {
+*		integer;
+*		integer = 0;
+*	};
+*};
+
+TYPE acur = GNRL
+Rotating Watch, 128
+.I
+8
+0
+256 0  ;; union { struct { short id, fill; }; Handle cursHandle };
+257 0
+258 0
+259 0
+260 0
+261 0
+262 0
+263 0
+
+
+TYPE CURS = GNRL
+	,256
+.H
+ 3F00 3F00 3F00 3F00 4080 8440 8440 8460
+ 9C60 8040 8040 4080 3F00 3F00 3F00 3F00
+ 3F00 3F00 3F00 3F00 7F80 FFC0 FFC0 FFC0
+ FFC0 FFC0 FFC0 7F80 3F00 3F00 3F00 3F00
+.I
+8 8
+
+
+TYPE CURS = GNRL
+	,257
+.H
+ 3F00 3F00 3F00 3F00 4080 8040 8140 8260
+ 9C60 8040 8040 4080 3F00 3F00 3F00 3F00
+ 3F00 3F00 3F00 3F00 7F80 FFC0 FFC0 FFC0
+ FFC0 FFC0 FFC0 7F80 3F00 3F00 3F00 3F00
+.I
+8 8
+
+
+TYPE CURS = GNRL
+	,258
+.H
+ 3F00 3F00 3F00 3F00 4080 8040 8040 8060
+ 9F60 8040 8040 4080 3F00 3F00 3F00 3F00
+ 3F00 3F00 3F00 3F00 7F80 FFC0 FFC0 FFC0
+ FFC0 FFC0 FFC0 7F80 3F00 3F00 3F00 3F00
+.I
+8 8
+
+
+TYPE CURS = GNRL
+	,259
+.H
+ 3F00 3F00 3F00 3F00 4080 8040 8040 8060
+ 9C60 8240 8040 4080 3F00 3F00 3F00 3F00
+ 3F00 3F00 3F00 3F00 7F80 FFC0 FFC0 FFC0
+ FFC0 FFC0 FFC0 7F80 3F00 3F00 3F00 3F00
+.I
+8 8
+
+
+TYPE CURS = GNRL
+	,260
+.H
+ 3F00 3F00 3F00 3F00 4080 8040 8040 8060
+ 9C60 8440 8440 4080 3F00 3F00 3F00 3F00
+ 3F00 3F00 3F00 3F00 7F80 FFC0 FFC0 FFC0
+ FFC0 FFC0 FFC0 7F80 3F00 3F00 3F00 3F00
+.I
+8 8
+
+
+TYPE CURS = GNRL
+	,261
+.H
+ 3F00 3F00 3F00 3F00 4080 8040 8040 8060
+ 9C60 8840 9040 4080 3F00 3F00 3F00 3F00
+ 3F00 3F00 3F00 3F00 7F80 FFC0 FFC0 FFC0
+ FFC0 FFC0 FFC0 7F80 3F00 3F00 3F00 3F00
+.I
+8 8
+
+
+TYPE CURS = GNRL
+	,262
+.H
+ 3F00 3F00 3F00 3F00 4080 8040 8040 8060
+ BC60 8040 8040 4080 3F00 3F00 3F00 3F00
+ 3F00 3F00 3F00 3F00 7F80 FFC0 FFC0 FFC0
+ FFC0 FFC0 FFC0 7F80 3F00 3F00 3F00 3F00
+.I
+8 8
+
+
+TYPE CURS = GNRL
+	,263
+.H
+ 3F00 3F00 3F00 3F00 4080 8040 9040 8860
+ 9C60 8040 8040 4080 3F00 3F00 3F00 3F00
+ 3F00 3F00 3F00 3F00 7F80 FFC0 FFC0 FFC0
+ FFC0 FFC0 FFC0 7F80 3F00 3F00 3F00 3F00
+.I
+8 8
+
+
+TYPE STR
+About Title, 128 (32)
+About ScrnMgr\C9
+
+TYPE STR
+Font Name, 129 (32)
+Monaco
+
+TYPE DLOG
+"About", 128
+"About ScrnMgr"		;; Huh?
+44 26 162 314
+Invisible NoGoAway
+0					;; dBoxProc (I think)
+0					;; Refcon
+128					;; DITL ID
+
+TYPE DLOG
+Colors, 129
+Colors
+56 32 228 364
+Invisible NoGoAway
+0
+0
+129
+
+TYPE DLOG
+Yes or No, 130 (32)
+Yes or No
+40 40 142 300
+Invisible NoGoAway
+0
+0
+130
+
+TYPE DITL
+About, 128 (32)
+4
+
+button
+73 103 97 191
+OK
+
+userItem disabled
+80 158 89 167
+
+staticText
+16 8 32 273
+ScrnMgr: Version 1.0.1 b1 4 January 1991
+
+staticText
+40 8 56 273
+Curtis McCauley, Benjamin Schreiber
+
+
+TYPE DITL
+Colors, 129 (32)
+23
+
+button
+40 256 60 316
+OK
+
+button
+88 256 108 316
+Cancel
+
+radioButton
+32 32 48 112
+White
+
+radioButton
+48 32 64 112
+Black
+
+radioButton
+64 32 80 112
+Red
+
+radioButton
+80 32 96 112
+Greed
+
+radioButton
+96 32 112 112
+Blue
+
+radioButton
+112 32 128 112
+Cyan
+
+radioButton
+128 32 144 112
+Magenta
+
+radioButton
+144 32 160 112
+Yellow
+
+radioButton
+32 152 48 232
+White
+
+radioButton
+48 152 64 232
+Black
+
+radioButton
+64 152 80 232
+Red
+
+radioButton
+80 152 96 232
+Green
+
+radioButton
+96 152 112 232
+Blue
+
+radioButton
+112 152 128 232
+Cyan
+
+radioButton
+128 152 144 232
+Magenta
+
+radioButton
+144 152 160 232
+Yellow
+
+userItem disabled
+16 16 168 120
+
+userItem disabled
+16 136 168 240
+
+staticText disabled
+8 24 24 104
+Foreground
+
+staticText disabled
+8 144 24 224
+Background
+
+userItem disabled
+48 296 56 304
+
+
+TYPE DITL
+Yes or No, 130 (32)
+5
+
+button
+16 184 36 244
+Yes
+
+button
+64 184 84 244
+No
+
+userItem disabled
+19 227 33 241
+
+staticText disabled
+9 48 89 168
+Are you sure?
+
+iconItem disabled
+8 8 40 40
+0
+
+
+TYPE MENU
+Apple, 128
+\14
+About ScrnMgr\C9
+(-
+
+
+TYPE MENU
+File, 129
+File
+Open/O
+Close/W
+(-
+Quit/Q
+
+
+TYPE MENU
+Edit, 130
+Edit
+(Undo/Z
+(-
+(Cut/X
+(Copy/C
+(Paste/V
+(Clear
+
+
+TYPE MENU
+File (No Keys), 229
+File
+Open
+Close
+(-
+Quit
+
+
+TYPE MENU
+Edit (No Keys), 230
+Edit
+(Undo
+(-
+(Cut
+(Copy
+(Paste
+(Clear
+
+
+TYPE MENU
+Screen, 131
+Screen
+Colors\C9
+(-
+
+
+TYPE MENU
+FontSize, 132
+FontSize
+
+
+TYPE MBAR = GNRL
+Main Menu, 128
+.I
+3    ;; 3 items
+128  ;; apple
+129  ;; file
+130  ;; edit
+
+
+TYPE MBAR = GNRL
+Main Menu (No Keys), 228
+.I
+3
+128
+229
+230
+
+
+TYPE INFO = GNRL
+Screen Info, 1
+.I
+46 4 333 507    ;; Size of window - this will give 24x80 in monaco 9 pt
+9               ;; Point size to use (font in 'STR ' 129)
+.L
+0 				;; Black (Foreground)
+1				;; White (Background)
+

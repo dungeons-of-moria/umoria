@@ -1,14 +1,32 @@
-/* io.c: terminal I/O code, uses the curses package
+/* source/io.c: terminal I/O code, uses the curses package
 
-   Copyright (c) 1989 James E. Wilson, Robert A. Koeneke
+   Copyright (c) 1989-91 James E. Wilson, Robert A. Koeneke
 
    This software may be copied and distributed for educational, research, and
    not for profit purposes provided that this copyright and statement are
    included in all such copies. */
 
-#ifdef MSDOS
 #include <stdio.h>
+#ifndef STDIO_LOADED
+#define STDIO_LOADED
+#endif
+
+#include "config.h"
+
+#if defined(atarist) && defined(__GNUC__)
+#include <osbind.h>
+#endif
+
+#ifdef MSDOS
 #include <process.h>
+#endif
+
+#ifdef AMIGA
+/* detach from cli process */
+long _stack = 30000;
+long _priority = 0;
+long _BackGroundIO = 1;
+char *_procname = "Moria";
 #endif
 
 #if defined(NLS) && defined(lint)
@@ -18,20 +36,30 @@
 
 #if !defined(GEMDOS)
 #ifdef MAC
+#ifdef THINK_C
+#include "ScrnMgr.h"
+#else
 #include <scrnmgr.h>
+#endif
 #else
 #include <curses.h>
 #endif
-#else
-#define ATARIST_MWC
+#else	/* GEMDOS i.e. Atari ST */
 #include "curses.h"
 long wgetch();
-#include <osbind.h>
+#ifdef ATARIST_TC
+#include <tos.h>	/* TC */
+#include <ext.h>
+#else
+#include <osbind.h>	/* MWC */
+#endif
 char *getenv();
 #endif
 
+/* These are included after curses.h to avoid redefintion warnings for
+   TRUE, FALSE, and NULL.  */
+
 #include "constant.h"
-#include "config.h"
 #include "types.h"
 #include "externs.h"
 
@@ -49,7 +77,7 @@ typedef struct { int stuff; } fpvmach;
 #include "ms_ansi.h"
 #endif
 #else /* not msdos */
-#if !defined(ATARIST_MWC) && !defined(MAC)
+#if !defined(ATARI_ST) && !defined(MAC) && !defined(AMIGA)
 #ifndef VMS
 #include <sys/ioctl.h>
 #endif
@@ -65,16 +93,21 @@ typedef struct { int stuff; } fpvmach;
 #endif
 
 #ifdef USG
-#ifndef ATARIST_MWC
+#ifndef ATARI_ST
 #include <string.h>
 #else
 #include "string.h"
 #endif
-#if !defined(MAC) && !defined(MSDOS) && !defined(ATARIST_MWC)
+#if 0
+/* Used to include termio.h here, but that caused problems on some systems,
+   as curses.h includes it also above.  */
+#if !defined(MAC) && !defined(MSDOS) && !defined(ATARI_ST)
+#if !defined(AMIGA) && !defined(VMS)
 #include <termio.h>
 #endif
-#else
-#ifndef VMS
+#endif
+#endif
+#else /* ! USG */
 #include <strings.h>
 #if defined(atarist) && defined(__GNUC__)
 /* doesn't have sys/wait.h */
@@ -82,6 +115,10 @@ typedef struct { int stuff; } fpvmach;
 #include <sys/wait.h>
 #endif
 #endif
+
+#ifdef ATARIST_TC
+/* Include this to get prototypes for standard library functions.  */
+#include <stdlib.h>
 #endif
 
 #if defined(SYS_V) && defined(lint)
@@ -136,10 +173,14 @@ char *getenv();
 
 #ifdef USG
 void exit();
-#ifdef __TURBOC__
+#if defined(__TURBOC__)
 void sleep();
 #else
+#ifndef VMS
+#ifndef AMIGA
 unsigned sleep();
+#endif
+#endif
 #endif
 #endif
 #ifdef ultrix
@@ -147,11 +188,11 @@ void exit();
 void sleep();
 #endif
 
-#if !defined(MAC) && !defined(MSDOS) && !defined(ATARIST_MWC)
+#if !defined(MAC) && !defined(MSDOS) && !defined(ATARI_ST) && !defined(VMS)
+#ifndef AMIGA
 #ifdef USG
 static struct termio save_termio;
 #else
-#ifndef VMS
 static struct ltchars save_special_chars;
 static struct sgttyb save_ttyb;
 static struct tchars save_tchars;
@@ -162,7 +203,10 @@ static int save_local_chars;
 
 #ifndef MAC
 static int curses_on = FALSE;
-static WINDOW *savescr;		/* Spare window for saving the screen. -CJS- */
+static WINDOW *savescr;		/* Spare window for saving the screen. -CJS-*/
+#ifdef VMS
+static WINDOW *tempscr;		/* Spare window for VMS CTRL('R'). */
+#endif
 #endif
 
 #ifdef MAC
@@ -193,14 +237,18 @@ int suspend()
   (void) ioctl(0, TIOCGETP, (char *)&tbuf);
   (void) ioctl(0, TIOCGETC, (char *)&cbuf);
   (void) ioctl(0, TIOCGLTC, (char *)&lcbuf);
+#if !defined(atarist) && !defined(__GNUC__)
   (void) ioctl(0, TIOCLGET, (char *)&lbuf);
+#endif
   restore_term();
   (void) kill(0, SIGSTOP);
   curses_on = TRUE;
   (void) ioctl(0, TIOCSETP, (char *)&tbuf);
   (void) ioctl(0, TIOCSETC, (char *)&cbuf);
   (void) ioctl(0, TIOCSLTC, (char *)&lcbuf);
+#if !defined(atarist) && !defined(__GNUC__)
   (void) ioctl(0, TIOCLSET, (char *)&lbuf);
+#endif
   (void) wrefresh(curscr);
   py.misc.male &= ~2;
 #endif
@@ -227,27 +275,34 @@ void init_curses()
 {
   int i, y, x;
 
+#ifdef AMIGA
+  if (opentimer() == 0)
+    {
+      (void) printf ("Could not open timer device.\n");
+      exit (1);
+    }
+#endif
+
 #ifndef USG
   (void) ioctl(0, TIOCGLTC, (char *)&save_special_chars);
   (void) ioctl(0, TIOCGETP, (char *)&save_ttyb);
   (void) ioctl(0, TIOCGETC, (char *)&save_tchars);
+#if !defined(atarist) && !defined(__GNUC__)
   (void) ioctl(0, TIOCLGET, (char *)&save_local_chars);
+#endif
 #else
-#if !defined(VMS) && !defined(MSDOS) && !defined(ATARIST_MWC)
+#if !defined(VMS) && !defined(MSDOS) && !defined(ATARI_ST)
+#ifndef AMIGA
   (void) ioctl(0, TCGETA, (char *)&save_termio);
 #endif
 #endif
+#endif
 
-#ifdef ATARIST_MWC
-  WINDOW *newwin();
-  initscr();
-  if (ERR)
-#else
-#if defined(USG) && !defined(PC_CURSES)	/* PC curses returns ERR */
+  /* PC curses returns ERR */
+#if defined(USG) && !defined(PC_CURSES) && !defined(AMIGA)
   if (initscr() == NULL)
 #else
   if (initscr() == ERR)
-#endif
 #endif
     {
       (void) printf("Error allocating screen in curses package.\n");
@@ -259,9 +314,18 @@ void init_curses()
       exit (1);
     }
 #ifdef SIGTSTP
+#if defined(atarist) && defined(__GNUC__)
+  (void) signal (SIGTSTP, (__Sigfunc)suspend);
+#else
   (void) signal (SIGTSTP, suspend);
 #endif
-  if ((savescr = newwin (0, 0, 0, 0)) == NULL)
+#endif
+  if (((savescr = newwin (0, 0, 0, 0)) == NULL)
+#ifdef VMS
+      || ((tempscr = newwin (0, 0, 0, 0)) == NULL))
+#else
+    )
+#endif
     {
       (void) printf ("Out of memory in starting up curses.\n");
       exit_game();
@@ -271,18 +335,10 @@ void init_curses()
   moriaterm ();
 
   /* check tab settings, exit with error if they are not 8 spaces apart */
-#ifdef ATARIST_MWC
-  move(0, 0);
-#else
   (void) move(0, 0);
-#endif
   for (i = 1; i < 10; i++)
     {
-#ifdef ATARIST_MWC
-      addch('\t');
-#else
       (void) addch('\t');
-#endif
       getyx(stdscr, y, x);
       if (y != 0 || x != i*8)
 	break;
@@ -303,7 +359,8 @@ void moriaterm()
 }
 #else
 {
-#if !defined(MSDOS) && !defined(ATARIST_MWC)
+#if !defined(MSDOS) && !defined(ATARI_ST) && !defined(VMS)
+#ifndef AMIGA
 #ifdef USG
   struct termio tbuf;
 #else
@@ -311,19 +368,30 @@ void moriaterm()
   struct tchars buf;
 #endif
 #endif
+#endif
 
   curses_on = TRUE;
 #ifndef BSD4_3
   use_value crmode();
 #else
+#ifdef VMS
+  use_value vms_crmode ();
+#else
   use_value cbreak();
+#endif
 #endif
   use_value noecho();
   /* can not use nonl(), because some curses do not handle it correctly */
 #ifdef MSDOS
   msdos_raw();
 #else
-#if !defined(ATARIST_MWC)
+#ifdef AMIGA
+  init_color (0,   0,   0,   0);	/* pen 0 - black */
+  init_color (1,1000,1000,1000);	/* pen 1 - white */
+  init_color (2,   0, 300, 700);	/* pen 2 - blue */
+  init_color (3,1000, 500,   0);	/* pen 3 - orange */
+#else
+#if !defined(ATARI_ST) && !defined(VMS)
 #ifdef USG
   (void) ioctl(0, TCGETA, (char *)&tbuf);
   /* disable all of the normal special control characters */
@@ -335,7 +403,9 @@ void moriaterm()
 
   /* don't know what these are for */
   tbuf.c_cc[VEOL] = (char)-1;
+#ifdef VEOL2
   tbuf.c_cc[VEOL2] = (char)-1;
+#endif
 
   /* stuff needed when !icanon, i.e. cbreak/raw mode */
   tbuf.c_cc[VMIN] = 1;  /* Input should wait for at least 1 char */
@@ -343,7 +413,6 @@ void moriaterm()
 
   (void) ioctl(0, TCSETA, (char *)&tbuf);
 #else
-#ifndef VMS
   /* disable all of the special characters except the suspend char, interrupt
      char, and the control flow start/stop characters */
   (void) ioctl(0, TIOCGLTC, (char *)&lbuf);
@@ -366,6 +435,10 @@ void moriaterm()
 #endif
 #endif
 #endif
+#endif
+
+#ifdef ATARIST_TC
+  raw ();
 #endif
 }
 #endif
@@ -392,12 +465,7 @@ int row, col;
   (void) strncpy (tmp_str, out_str, 79 - col);
   tmp_str [79 - col] = '\0';
 
-#ifndef ATARIST_MWC
   if (mvaddstr(row, col, tmp_str) == ERR)
-#else
-  mvaddstr(row, col, out_str);
-  if (ERR)
-#endif
     {
       abort();
       /* clear msg_flag to avoid problems with unflushed messages */
@@ -416,7 +484,7 @@ int row, col;
 /* Dump the IO buffer to terminal			-RAK-	*/
 void put_qio()
 {
-  screen_change = TRUE;	    /* Let inven_command know something has changed. */
+  screen_change = TRUE;	   /* Let inven_command know something has changed. */
 #ifdef MAC
   UpdateScreen();
 #else
@@ -432,6 +500,10 @@ void restore_term()
 }
 #else
 {
+#ifdef AMIGA
+  closetimer ();
+#endif
+
   if (!curses_on)
     return;
   put_qio();  /* Dump any remaining buffer */
@@ -439,29 +511,28 @@ void restore_term()
   (void) sleep(2);   /* And let it be read. */
 #endif
 #ifdef VMS
+  clear_screen();
   pause_line(15);
 #endif
   /* this moves curses to bottom right corner */
-  mvcur(curscr->_cury, curscr->_curx, LINES-1, 0);
-#ifdef VMS
-  pause_line(15);
-#endif
+  mvcur(stdscr->_cury, stdscr->_curx, LINES-1, 0);
   endwin();  /* exit curses */
   (void) fflush (stdout);
 #ifdef MSDOS
   msdos_noraw();
-  (void) clear();
 #endif
   /* restore the saved values of the special chars */
 #ifdef USG
-#if !defined(MSDOS) && !defined(ATARIST_MWC)
+#if !defined(MSDOS) && !defined(ATARI_ST) && !defined(VMS)
+#ifndef AMIGA
   (void) ioctl(0, TCSETA, (char *)&save_termio);
 #endif
+#endif
 #else
-#ifndef VMS
   (void) ioctl(0, TIOCSLTC, (char *)&save_special_chars);
   (void) ioctl(0, TIOCSETP, (char *)&save_ttyb);
   (void) ioctl(0, TIOCSETC, (char *)&save_tchars);
+#if !defined(atarist) && !defined(__GNUC__)
   (void) ioctl(0, TIOCLSET, (char *)&save_local_chars);
 #endif
 #endif
@@ -471,14 +542,83 @@ void restore_term()
 
 
 void shell_out()
+#if defined(atarist) && defined(__GNUC__)
+{ char fail_message[80], arg_list[1], *p;
+  int  escape_code;
+
+  save_screen();
+  clear_screen();
+  use_value nocbreak();         /* Must remember to reset terminal modes   */
+  use_value echo();             /* or shell i/o will be quite messed up!   */
+
+  p = (char *)getenv("SHELL");
+  if (p != (char *)NULL)
+    { put_buffer("Escaping to Shell\n",0,0);
+      put_qio();
+      arg_list[0]=0;
+      escape_code = Pexec(0,p,arg_list,0);   /* Launch the shell.          */
+
+      if (escape_code != 0)
+         { sprintf(fail_message,"Pexec() error code = %d\n",escape_code);
+           put_buffer(fail_message,0,0);
+           put_qio();
+	   sleep(5);
+	 }
+    }
+  use_value cbreak();        /* Reset the terminal back to CBREAK/NOECHO   */
+  use_value noecho();
+  clear_screen();            /* Do not want shell data on screen.          */
+  restore_screen();
+}
+
+#else
+
 #ifdef MAC
 {
   alert_error("This command is not implemented on the Macintosh.");
 }
 #else
+#if defined(AMIGA) || defined(ATARIST_TC)
+{
+  put_buffer("This command is not implemented.\n", 0, 0);
+}
+#else
+#ifdef VMS /* TPP */
+{
+  int val, istat;
+  char *str;
+
+  save_screen();
+  /* clear screen and print 'exit' message */
+  clear_screen();
+  put_buffer("[Entering subprocess, type 'EOJ' to resume your game.]\n",
+	     0, 0);
+  put_qio();
+
+  use_value vms_nocrmode();
+  use_value echo();
+  ignore_signals();
+
+  istat = lib$spawn();
+  if (!istat)
+    lib$signal (istat);
+
+  restore_signals();
+  use_value vms_crmode();
+  use_value noecho();
+  /* restore the cave to the screen */
+  restore_screen();
+  put_buffer("Welcome back to UMoria.\n", 0, 0);
+  save_screen();
+  clear_screen();
+  put_qio();
+  restore_screen();
+  (void) wrefresh(curscr);
+}
+#else
 {
 #ifdef USG
-#if !defined(MSDOS) && !defined(ATARIST_MWC)
+#if !defined(MSDOS) && !defined(ATARI_ST) && !defined(AMIGA)
   struct termio tbuf;
 #endif
 #else
@@ -490,7 +630,7 @@ void shell_out()
 #ifdef MSDOS
   char	*comspec, key;
 #else
-#ifdef ATARIST_MWC
+#ifdef ATARI_ST
   char comstr[80];
   char *str;
   extern char **environ;
@@ -503,7 +643,7 @@ void shell_out()
   save_screen();
   /* clear screen and print 'exit' message */
   clear_screen();
-#ifndef ATARIST_MWC
+#ifndef ATARI_ST
   put_buffer("[Entering shell, type 'exit' to resume your game.]\n",0,0);
 #else
   put_buffer("[Escaping to shell]\n",0,0);
@@ -511,22 +651,24 @@ void shell_out()
   put_qio();
 
 #ifdef USG
-#if !defined(MSDOS) && !defined(ATARIST_MWC)
+#if !defined(MSDOS) && !defined(ATARI_ST) && !defined(AMIGA)
   (void) ioctl(0, TCGETA, (char *)&tbuf);
 #endif
 #else
-#ifndef VMS
   (void) ioctl(0, TIOCGETP, (char *)&tbuf);
   (void) ioctl(0, TIOCGETC, (char *)&cbuf);
   (void) ioctl(0, TIOCGLTC, (char *)&lcbuf);
   (void) ioctl(0, TIOCLGET, (char *)&lbuf);
 #endif
-#endif
   /* would call nl() here if could use nl()/nonl(), see moriaterm() */
 #ifndef BSD4_3
   use_value nocrmode();
 #else
+#ifdef VMS
+  use_value vms_nocrmode ();
+#else
   use_value nocbreak();
+#endif
 #endif
 #ifdef MSDOS
   use_value msdos_noraw();
@@ -534,8 +676,8 @@ void shell_out()
   use_value echo();
   ignore_signals();
 #ifdef MSDOS		/*{*/
-  if ((comspec = getenv("COMSPEC")) == NULL
-  ||  spawnl(P_WAIT, comspec, comspec, (char *) NULL) < 0) {
+  if ((comspec = getenv("COMSPEC")) == CNIL
+  ||  spawnl(P_WAIT, comspec, comspec, CNIL) < 0) {
 	clear_screen();	/* BOSS key if shell failed */
 	put_buffer("M:\\> ", 0, 0);
 	do {
@@ -544,44 +686,39 @@ void shell_out()
   }
 
 #else		/* MSDOS }{*/
-#ifndef ATARIST_MWC
+#ifndef ATARI_ST
   val = fork();
   if (val == 0)
     {
 #endif
       default_signals();
 #ifdef USG
-#if !defined(MSDOS) && !defined(ATARIST_MWC)
+#if !defined(MSDOS) && !defined(ATARI_ST) && !defined(AMIGA)
       (void) ioctl(0, TCSETA, (char *)&save_termio);
 #endif
 #else
-#ifndef VMS
       (void) ioctl(0, TIOCSLTC, (char *)&save_special_chars);
       (void) ioctl(0, TIOCSETP, (char *)&save_ttyb);
       (void) ioctl(0, TIOCSETC, (char *)&save_tchars);
       (void) ioctl(0, TIOCLSET, (char *)&save_local_chars);
 #endif
-#endif
 #ifndef MSDOS
       /* close scoreboard descriptor */
       /* it is not open on MSDOS machines */
-#if 0
-      /* this file is not open now, see init_file() in files.c */
-      (void) close(highscore_fd);
-#endif
+      (void) fclose(highscore_fp);
 #endif
       if (str = getenv("SHELL"))
-#ifndef ATARIST_MWC
+#ifndef ATARI_ST
 	(void) execl(str, str, (char *) 0);
 #else
 	system(str);
 #endif
       else
-#ifndef ATARIST_MWC
+#ifndef ATARI_ST
 	(void) execl("/bin/sh", "sh", (char *) 0);
 #endif
       msg_print("Cannot execute shell.");
-#ifndef ATARIST_MWC
+#ifndef ATARI_ST
       exit(1);
     }
   if (val == -1)
@@ -594,7 +731,7 @@ void shell_out()
 #else
   (void) wait((union wait *) 0);
 #endif
-#endif /* ATARIST_MWC */
+#endif /* ATARI_ST */
 #endif		 /* MSDOS }*/
   restore_signals();
   /* restore the cave to the screen */
@@ -602,7 +739,11 @@ void shell_out()
 #ifndef BSD4_3
   use_value crmode();
 #else
+#ifdef VMS
+  use_value vms_crmode ();
+#else
   use_value cbreak();
+#endif
 #endif
   use_value noecho();
   /* would call nonl() here if could use nl()/nonl(), see moriaterm() */
@@ -612,21 +753,21 @@ void shell_out()
   /* disable all of the local special characters except the suspend char */
   /* have to disable ^Y for tunneling */
 #ifdef USG
-#if !defined(MSDOS) && !defined(ATARIST_MWC)
+#if !defined(MSDOS) && !defined(ATARI_ST)
   (void) ioctl(0, TCSETA, (char *)&tbuf);
 #endif
 #else
-#ifndef VMS
   (void) ioctl(0, TIOCSLTC, (char *)&lcbuf);
   (void) ioctl(0, TIOCSETP, (char *)&tbuf);
   (void) ioctl(0, TIOCSETC, (char *)&cbuf);
   (void) ioctl(0, TIOCLSET, (char *)&lbuf);
 #endif
-#endif
   (void) wrefresh(curscr);
 }
 #endif
-
+#endif
+#endif
+#endif
 
 /* Returns a single character input from the terminal.	This silently -CJS-
    consumes ^R to redraw the screen and reset the terminal, so that this
@@ -659,6 +800,9 @@ char inkey()
 #else
 {
   int i;
+#ifdef VMS
+  vtype tmp_str;
+#endif
 
   put_qio();			/* Dump IO buffer		*/
   command_count = 0;  /* Just to be safe -CJS- */
@@ -667,8 +811,49 @@ char inkey()
 #ifdef MSDOS
       i = msdos_getch();
 #else
+#ifdef VMS
+      i = vms_getch ();
+#else
       i = getch();
+#if defined(atarist) && defined(__GNUC__)
+/* for some reason a keypad number produces an initial negative number. */
+      if (i<0) i = getch();
 #endif
+#endif
+#endif
+
+#ifdef VMS
+      if (i == 27) /* if ESCAPE key, then we probably have a keypad key */
+	{
+	  i = vms_getch();
+	  if (i == 'O') /* Now it is definitely a numeric keypad key */
+	    {
+	      i = vms_getch();
+	      switch (i)
+		{
+		  case 'p': i = '0'; break;
+		  case 'q' : i = '1'; break;
+		  case 'r' : i = '2'; break;
+		  case 's' : i = '3'; break;
+		  case 't' : i = '4'; break;
+		  case 'u' : i = '5'; break;
+		  case 'v' : i = '6'; break;
+		  case 'w' : i = '7'; break;
+		  case 'x' : i = '8'; break;
+		  case 'y' : i = '9'; break;
+		  case 'm' : i = '-'; break;
+		  case 'M' : i = 10; break; /* Enter = RETURN */
+		  case 'n' : i = '.'; break;
+		  default : while (kbhit()) (void) vms_getch();
+		  }
+	    }
+	  else
+	    {
+	      while (kbhit())
+		(void) vms_getch();
+	    }
+	}
+#endif /* VMS */
 
       /* some machines may not sign extend. */
       if (i == EOF)
@@ -698,6 +883,15 @@ char inkey()
 	}
       if (i != CTRL('R'))
 	return (char)i;
+#ifdef VMS
+      /* Refresh does not work right under VMS, so use a brute force. */
+      overwrite (stdscr, tempscr);
+      clear_screen();
+      put_qio();
+      overwrite (tempscr, stdscr);
+      touchwin (stdscr);
+      (void) wrefresh (stdscr);
+#endif
       (void) wrefresh (curscr);
       moriaterm();
     }
@@ -767,9 +961,13 @@ void flush()
 }
 #else
 {
-#ifdef MSDOS
+#if defined(MSDOS)
   while (kbhit())
 	(void) getch();
+#else
+#ifdef VMS
+  while (kbhit ())
+    (void) vms_getch();
 #else
   /* the code originally used ioctls, TIOCDRAIN, or TIOCGETP/TIOCSETP, or
      TCGETA/TCSETAF, however this occasionally resulted in loss of output,
@@ -778,6 +976,7 @@ void flush()
   /* wierd things happen on EOF, don't try to flush input in that case */
   if (!eof_flag)
     while (check_input(0));
+#endif
 #endif
 
   /* used to call put_qio() here to drain output, but it is not necessary */
@@ -794,7 +993,7 @@ int col;
   Rect line;
 
   if (row == MSG_LINE && msg_flag)
-    msg_print(NULL);
+    msg_print(CNIL);
 
   line.left = col;
   line.top = row;
@@ -805,7 +1004,7 @@ int col;
 #else
 {
   if (row == MSG_LINE && msg_flag)
-    msg_print(NULL);
+    msg_print(CNIL);
   (void) move(row, col);
   clrtoeol();
 }
@@ -819,7 +1018,7 @@ void clear_screen()
   Rect area;
 
   if (msg_flag)
-    msg_print(NULL);
+    msg_print(CNIL);
 
   area.left = area.top = 0;
   area.right = SCRN_COLS;
@@ -829,8 +1028,15 @@ void clear_screen()
 #else
 {
   if (msg_flag)
-    msg_print(NULL);
+    msg_print(CNIL);
+#ifdef VMS
+  /* Clear doesn't work right under VMS, so use brute force. */
+  (void) clearok (stdscr, TRUE);
+  (void) wclear(stdscr);
+  (void) clearok (stdscr, FALSE);
+#else
   (void) clear();
+#endif
 }
 #endif
 
@@ -871,7 +1077,9 @@ int col;
 
   /* If char is already set, ignore op */
   if ((cnow != ch) || (anow != ATTR_NORMAL))
-    DSetScreenCharAttr(cnew, anew, col, row);
+    DSetScreenCharAttr(ch & 0x7F,
+		       (ch & 0x80) ? attrReversed : attrNormal,
+		       col, row);
 }
 #else
 {
@@ -879,21 +1087,18 @@ int col;
 
   row -= panel_row_prt;/* Real co-ords convert to screen positions */
   col -= panel_col_prt;
-#if defined(ATARIST_MWC)
-  mvaddch (row, col, ch);
-#else
   if (mvaddch (row, col, ch) == ERR)
     {
       abort();
       /* clear msg_flag to avoid problems with unflushed messages */
       msg_flag = 0;
-      (void) sprintf(tmp_str, "error in print, row = %d col = %d\n", row, col);
+      (void) sprintf(tmp_str, "error in print, row = %d col = %d\n",
+		     row, col);
       prt(tmp_str, 0, 0);
       bell ();
       /* wait so user can see error */
       (void) sleep(2);
     }
-#endif
 }
 #endif
 
@@ -920,7 +1125,9 @@ int col;
       abort();
       /* clear msg_flag to avoid problems with unflushed messages */
       msg_flag = 0;
-      (void) sprintf(tmp_str, "error in move_cursor_relative, row = %d col = %d\n", row, col);
+      (void) sprintf(tmp_str,
+		     "error in move_cursor_relative, row = %d col = %d\n",
+		     row, col);
       prt(tmp_str, 0, 0);
       bell();
       /* wait so user can see error */
@@ -952,7 +1159,7 @@ int col;
   Rect line;
 
   if (row == MSG_LINE && msg_flag)
-    msg_print(NULL);
+    msg_print(CNIL);
 
   line.left = col;
   line.top = row;
@@ -965,7 +1172,7 @@ int col;
 #else
 {
   if (row == MSG_LINE && msg_flag)
-    msg_print(NULL);
+    msg_print(CNIL);
   (void) move(row, col);
   clrtoeol();
   put_buffer(str_buff, row, col);
@@ -992,7 +1199,8 @@ int row, col;
 void msg_print(str_buff)
 char *str_buff;
 {
-  register int old_len;
+  register int old_len, new_len;
+  int combine_messages = FALSE;
   char in_char;
 #ifdef MAC
   Rect line;
@@ -1001,42 +1209,74 @@ char *str_buff;
   if (msg_flag)
     {
       old_len = strlen(old_msg[last_msg]) + 1;
-      /* ensure that the complete -more- message is visible. */
-      if (old_len > 73)
-	old_len = 73;
-      put_buffer(" -more-", MSG_LINE, old_len);
-      /* let sigint handler know that we are waiting for a space */
-      wait_for_more = 1;
-      do
+
+      /* If the new message and the old message are short enough, we want
+	 display them together on the same line.  So we don't flush the old
+	 message in this case.  */
+	 
+      if (str_buff)
+	new_len = strlen (str_buff);
+      else
+	new_len = 0;
+
+      if (! str_buff || (new_len + old_len + 2 >= 73))
 	{
-	  in_char = inkey();
+	  /* ensure that the complete -more- message is visible. */
+	  if (old_len > 73)
+	    old_len = 73;
+	  put_buffer(" -more-", MSG_LINE, old_len);
+	  /* let sigint handler know that we are waiting for a space */
+	  wait_for_more = 1;
+	  do
+	    {
+	      in_char = inkey();
+	    }
+	  while ((in_char != ' ') && (in_char != ESCAPE) && (in_char != '\n')
+		 && (in_char != '\r'));
+	  wait_for_more = 0;
 	}
-      while ((in_char != ' ') && (in_char != ESCAPE) && (in_char != '\n') &&
-	     (in_char != '\r'));
-      wait_for_more = 0;
+      else
+	combine_messages = TRUE;
     }
+
+  if (! combine_messages)
+    {
 #ifdef MAC
-  line.left = 0;
-  line.top = MSG_LINE;
-  line.right = SCRN_COLS;
-  line.bottom = MSG_LINE+1;
-  DEraseScreen(&line);
+      line.left = 0;
+      line.top = MSG_LINE;
+      line.right = SCRN_COLS;
+      line.bottom = MSG_LINE+1;
+      DEraseScreen(&line);
 #else
-  (void) move(MSG_LINE, 0);
-  clrtoeol();
+      (void) move(MSG_LINE, 0);
+      clrtoeol();
 #endif
+    }
 
   /* Make the null string a special case.  -CJS- */
   if (str_buff)
     {
-      put_buffer(str_buff, MSG_LINE, 0);
       command_count = 0;
-      last_msg++;
-      if (last_msg >= MAX_SAVE_MSG)
-	last_msg = 0;
-      (void) strncpy(old_msg[last_msg], str_buff, VTYPESIZ);
-      old_msg[last_msg][VTYPESIZ - 1] = '\0';
       msg_flag = TRUE;
+
+      /* If the new message and the old message are short enough, display
+	 them on the same line.  */
+      
+      if (combine_messages)
+	{
+	  put_buffer (str_buff, MSG_LINE, old_len + 2);
+	  strcat (old_msg[last_msg], "  ");
+	  strcat (old_msg[last_msg], str_buff);
+	}
+      else
+	{
+	  put_buffer(str_buff, MSG_LINE, 0);
+	  last_msg++;
+	  if (last_msg >= MAX_SAVE_MSG)
+	    last_msg = 0;
+	  (void) strncpy(old_msg[last_msg], str_buff, VTYPESIZ);
+	  old_msg[last_msg][VTYPESIZ - 1] = '\0';
+	}
     }
   else
     msg_flag = FALSE;
@@ -1048,7 +1288,11 @@ int get_check(prompt)
 char *prompt;
 {
   int res;
+#ifdef MAC
+  long y, x;		/* ??? Should change to int or short.  */
+#else
   int y, x;
+#endif
 
   prt(prompt, 0, 0);
 #ifdef MAC
@@ -1066,11 +1310,7 @@ char *prompt;
 #endif
 
   if (x > 73)
-#ifdef ATARIST_MWC
-    move(0, 73);
-#else
     (void) move(0, 73);
-#endif
 #ifdef MAC
   DWriteScreenStringAttr(" [y/n]", ATTR_NORMAL);
 #else
@@ -1099,7 +1339,7 @@ char *command;
   if (prompt)
     prt(prompt, 0, 0);
   *command = inkey();
-  if (*command == 0 || *command == ESCAPE)
+  if (*command == ESCAPE)
     res = FALSE;
   else
     res = TRUE;
@@ -1118,7 +1358,7 @@ char *command;
   if (prompt)
     prt(prompt, 0, 0);
   *command = inkeydir();
-  if (*command == 0 || *command == ESCAPE)
+  if (*command == ESCAPE)
     res = FALSE;
   else
     res = TRUE;
@@ -1279,6 +1519,11 @@ void restore_screen()
 void bell()
 {
   put_qio();
+
+  /* The player can turn off beeps if he/she finds them annoying.  */
+  if (! sound_beep_flag)
+    return;
+
 #ifdef MAC
   mac_beep();
 #else
@@ -1333,7 +1578,11 @@ void screen_map()
   priority[wallsym] = -5;
   priority[floorsym] = -10;
 #else
+#ifndef ATARI_ST
   priority['#'] = -5;
+#else
+  priority[(unsigned char)240] = -5;
+#endif
   priority['.'] = -10;
 #endif
   priority['\''] = -3;
@@ -1365,7 +1614,7 @@ void screen_map()
 #ifdef MAC
 	      DSetScreenCursor(0, orow+1);
 	      DWriteScreenCharAttr(CH(VE), ATTR_NORMAL);
-	      DWriteScreenString(map);
+	      DWriteScreenString((char *) map);
 	      DWriteScreenCharAttr(CH(VE), ATTR_NORMAL);
 #else
 	      /* can not use mvprintw() on ibmpc, because PC-Curses is horribly
@@ -1397,7 +1646,7 @@ void screen_map()
 #ifdef MAC
       DSetScreenCursor(0, orow+1);
       DWriteScreenCharAttr(CH(VE), ATTR_NORMAL);
-      DWriteScreenString(map);
+      DWriteScreenString((char *) map);
       DWriteScreenCharAttr(CH(VE), ATTR_NORMAL);
 #else
       (void) sprintf(prntscrnbuf,"%c%s%c",CH(VE), map, CH(VE));

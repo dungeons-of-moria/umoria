@@ -1,17 +1,31 @@
-/* save.c: save and restore games and monster memory info
+/* source/save.c: save and restore games and monster memory info
 
-   Copyright (c) 1989 James E. Wilson, Robert A. Koeneke
+   Copyright (c) 1989-91 James E. Wilson, Robert A. Koeneke
 
    This software may be copied and distributed for educational, research, and
    not for profit purposes provided that this copyright and statement are
    included in all such copies. */
 
+/* For debugging the savefile code on systems with broken compilers.  */
+#if 0
+#define DEBUG(x)	x
+#else
+#define DEBUG(x)
+#endif
+
 #include <stdio.h>
 
+#ifndef STDIO_LOADED
+#define STDIO_LOADED
+#endif
+
+#ifdef __TURBOC__
+#include	<io.h>
+#endif /* __TURBOC__ */
+ 
 #include "config.h"
 #include "constant.h"
 #include "types.h"
-#include "externs.h"
 
 #ifndef USG
 /* stuff only needed for Berkeley UNIX */
@@ -20,16 +34,34 @@
 #include <sys/param.h>
 #endif
 
+#ifdef VMS
+#include <string.h>
+#include <file.h>
+#else
 #ifdef USG
 #ifndef ATARIST_MWC
 #include <string.h>
+#ifndef ATARIST_TC
 #include <fcntl.h>
+#endif
 #else
 #include "string.h"
 #endif
 #else
 #include <strings.h>
 #endif
+#endif
+
+/* This must be included after fcntl.h, which has a prototype for `open'
+   on some systems.  Otherwise, the `open' prototype conflicts with the
+   `topen' declaration.  */
+#include "externs.h"
+
+#ifdef ATARIST_TC
+#include <time.h>
+#endif
+
+DEBUG(static FILE *logfile);
 
 #if defined(LINT_ARGS)
 static int sv_write(void);
@@ -104,7 +136,7 @@ static int sv_write()
   register struct flags *f_ptr;
   store_type *st_ptr;
   struct misc *m_ptr;
-#ifdef MSDOS
+#if defined(MSDOS) || defined(ATARI_ST)
   inven_type *t_ptr;
 #endif
 
@@ -115,25 +147,31 @@ static int sv_write()
 
   l = 0;
   if (find_cut)
-    l |= 1;
+    l |= 0x1;
   if (find_examine)
-    l |= 2;
+    l |= 0x2;
   if (find_prself)
-    l |= 4;
+    l |= 0x4;
   if (find_bound)
-    l |= 8;
+    l |= 0x8;
   if (prompt_carry_flag)
-    l |= 16;
+    l |= 0x10;
   if (rogue_like_commands)
-    l |= 32;
+    l |= 0x20;
   if (show_weight_flag)
-    l |= 64;
+    l |= 0x40;
   if (highlight_seams)
-    l |= 128;
+    l |= 0x80;
   if (find_ignore_doors)
-    l |= 256;
+    l |= 0x100;
+  if (sound_beep_flag)
+    l |= 0x200;
+  if (display_counts)
+    l |= 0x400;
   if (death)
     l |= 0x80000000L;	/* Sign bit */
+  if (total_winner)
+    l |= 0x40000000L;
 
   for (i = 0; i < MAX_CREATURES; i++)
     {
@@ -155,7 +193,6 @@ static int sv_write()
     }
   wr_short((int16u)0xFFFF); /* sentinel to indicate no more monster info */
 
-  wr_short((int16u)log_index);
   wr_long(l);
 
   m_ptr = &py.misc;
@@ -310,6 +347,13 @@ static int sv_write()
   /* starting with 5.2, put died_from string in savefile */
   wr_string(died_from);
 
+  /* starting with 5.2.2, put the max_score in the savefile */
+  l = total_points ();
+  wr_long (l);
+
+  /* starting with 5.2.2, put the birth_date in the savefile */
+  wr_long ((int32u) birth_date);
+
   /* only level specific info follows, this allows characters to be
      resurrected, the dungeon level info is not needed for a resurrection */
   if (death)
@@ -376,15 +420,24 @@ static int sv_write()
   wr_byte((int8u)count);
   wr_byte(prev_char);
 
-#ifdef MSDOS
+#if defined(MSDOS) || defined(ATARI_ST)
   /* must change graphics symbols for walls and floors back to default chars,
      this is necessary so that if the user changes the graphics line, the
-     program will be able change all existing walls/floors to the new symbol */
+     program will be able change all existing walls and floors to the new
+     symbol */
+  /* Or if the user moves the savefile from one machine to another, we
+     must have a consistent representation here.  */
   t_ptr = &t_list[tcptr - 1];
   for (i = tcptr - 1; i >= MIN_TRIX; i--)
     {
+#ifdef MSDOS
       if (t_ptr->tchar == wallsym)
 	t_ptr->tchar = '#';
+#endif
+#ifdef ATARI_ST
+      if (t_ptr->tchar == (unsigned char)240)
+	t_ptr->tchar = '#';
+#endif
       t_ptr--;
     }
 #endif
@@ -414,7 +467,7 @@ int always_ask;
   int16 vrefnum;
 
   /* cannot rely on _save_char to do this because we may put up a dialog */
-  if (log_index < 0) return(TRUE);
+  if (character_saved) return(TRUE);
 
   enablefilemenu(FALSE);
 
@@ -498,7 +551,7 @@ char *fnam;
   register int ok, fd;
   int8u char_tmp;
 
-  if (log_index < 0)
+  if (character_saved)
     return TRUE;	/* Nothing to save. */
 
   nosignals();
@@ -507,12 +560,17 @@ char *fnam;
   change_speed(-pack_heavy);	/* Fix the speed */
   pack_heavy = 0;
   ok = FALSE;
-#ifndef ATARIST_MWC
+  /* VMS files have version numbers, so don't worry about overwriting
+     the old save file. */
+#if !defined(ATARIST_MWC) && !defined(VMS)
   fd = -1;
   fileptr = NULL;		/* Do not assume it has been init'ed */
-#ifdef MAC
+#if defined(MAC) || defined(AMIGA)
   /* The Mac version automatically overwrites */
   fd = open(fnam, O_RDWR|O_CREAT|O_TRUNC);
+#ifdef MAC
+  macbeginwait ();
+#endif
 #else
   fd = open(fnam, O_RDWR|O_CREAT|O_EXCL, 0600);
   if (fd < 0 && access(fnam, 0) >= 0 &&
@@ -526,21 +584,20 @@ char *fnam;
   if (fd >= 0)
     {
       (void) close(fd);
-#endif /* ATARIST_MWC */
+#endif /* !ATARIST_MWC && !VMS */
       /* GCC for atari st defines atarist */
-#if defined(atarist) || defined(ATARIST_MWC)
+#if defined(atarist) || defined(ATARI_ST) || defined(THINK_C) || defined(MSDOS)
       fileptr = fopen(savefile, "wb");
 #else
       fileptr = fopen(savefile, "w");
 #endif
-#ifndef ATARIST_MWC
+#if !defined(ATARIST_MWC) && !defined(VMS)
     }
 #endif
+  DEBUG(logfile = fopen("IO_LOG", "a"));
+  DEBUG(fprintf (logfile, "Saving data to %s\n", savefile));
   if (fileptr != NULL)
     {
-#ifdef MSDOS
-      (void) setmode(fileno(fileptr), O_BINARY);
-#endif
       xor_byte = 0;
       wr_byte((int8u)CUR_VERSION_MAJ);
       xor_byte = 0;
@@ -554,9 +611,15 @@ char *fnam;
 
       ok = sv_write();
 
+      DEBUG(fclose (logfile));
+
       if (fclose(fileptr) == EOF)
 	ok = FALSE;
     }
+
+#ifdef MAC
+  macendwait ();
+#endif
 
   if (!ok)
     {
@@ -574,8 +637,6 @@ char *fnam;
     character_saved = 1;
 
   turn = -1;
-  log_index = -1;
-
   signals();
 
   return TRUE;
@@ -626,7 +687,7 @@ int *generate;
   store_type *st_ptr;
   int8u char_tmp, ychar, xchar, count;
   int8u version_maj, version_min, patch_level;
-#ifdef MSDOS
+#if defined(MSDOS) || defined(ATARI_ST)
   inven_type *t_ptr;
 #endif
 
@@ -639,15 +700,14 @@ int *generate;
   fd = -1;
 
 #ifndef MAC
-  if (access(savefile, 0) < 0)
+  /* Not required for Mac, because the file name is obtained through a dialog.
+     There is no way for a non existnat file to be specified.  -BS-	*/
+  if (access(savefile, 0) != 0)
     {
       signals();
       msg_print("Savefile does not exist.");
       return FALSE;	/* Don't bother with messages here. File absent. */
     }
-#else
-  if (access (savefile, 0) < 0)
-    return FALSE;
 #endif
 
   clear_screen();
@@ -658,13 +718,13 @@ int *generate;
   if (turn >= 0)
     msg_print("IMPOSSIBLE! Attempt to restore while still alive!");
 
-  /* Allow restoring a file belonging to someone else - if we can delete it. */
+  /* Allow restoring a file belonging to someone else, if we can delete it. */
   /* Hence first try to read without doing a chmod. */
 
-#ifdef MAC
+#if defined(MAC) || defined(AMIGA)
   else if ((fd = open(savefile, O_RDONLY)) < 0)
 #else
-#ifdef ATARIST_MWC
+#ifdef ATARI_ST
   else if (FALSE)
 #else
   else if ((fd = open(savefile, O_RDONLY, 0)) < 0
@@ -676,12 +736,11 @@ int *generate;
   else
     {
       turn = -1;
-      log_index = -1;
       ok = TRUE;
 
       (void) close(fd);
       /* GCC for atari st defines atarist */
-#if defined(atarist) || defined(ATARIST_MWC)
+#if defined(atarist) || defined(ATARI_ST) || defined(THINK_C) || defined(MSDOS)
       fileptr = fopen(savefile, "rb");
 #else
       fileptr = fopen(savefile, "r");
@@ -689,12 +748,15 @@ int *generate;
       if (fileptr == NULL)
 	goto error;
 
+#ifdef MAC
+      macbeginwait ();
+#endif
+
       prt("Restoring Memory...", 0, 0);
       put_qio();
 
-#ifdef MSDOS
-  (void) setmode(fileno(fileptr), O_BINARY);
-#endif
+      DEBUG(logfile = fopen("IO_LOG", "a"));
+      DEBUG(fprintf (logfile, "Reading data from %s\n", savefile));
 
       xor_byte = 0;
       rd_byte(&version_maj);
@@ -708,8 +770,13 @@ int *generate;
       /* COMPAT support savefiles from 5.0.14 to 5.0.17 */
       /* support savefiles from 5.1.0 to present */
       if ((version_maj != CUR_VERSION_MAJ)
+#if 0
+	  /* As of version 5.4, accept savefiles even if they have higher
+	     version numbers.  The savefile format was frozen as of version
+	     5.2.2.  */
 	  || (version_min > CUR_VERSION_MIN)
 	  || (version_min == CUR_VERSION_MIN && patch_level > PATCH_LEVEL)
+#endif
 	  || (version_min == 0 && patch_level < 14))
 	{
 	  prt("Sorry. This savefile is from a different version of umoria.",
@@ -733,47 +800,74 @@ int *generate;
 	  rd_bytes(r_ptr->r_attacks, MAX_MON_NATTACK);
 	  rd_short(&int16u_tmp);
 	}
-      rd_short((int16u *)&log_index);
+
+      /* for save files before 5.2.2, read and ignore log_index (sic) */
+      if ((version_min < 2) || (version_min == 2 && patch_level < 2))
+	rd_short(&int16u_tmp);
       rd_long(&l);
 
-      if (l & 1)
+      if (l & 0x1)
 	find_cut = TRUE;
       else
 	find_cut = FALSE;
-      if (l & 2)
+      if (l & 0x2)
 	find_examine = TRUE;
       else
 	find_examine = FALSE;
-      if (l & 4)
+      if (l & 0x4)
 	find_prself = TRUE;
       else
 	find_prself = FALSE;
-      if (l & 8)
+      if (l & 0x8)
 	find_bound = TRUE;
       else
 	find_bound = FALSE;
-      if (l & 16)
+      if (l & 0x10)
 	prompt_carry_flag = TRUE;
       else
 	prompt_carry_flag = FALSE;
-      if (l & 32)
+      if (l & 0x20)
 	rogue_like_commands = TRUE;
       else
 	rogue_like_commands = FALSE;
-      if (l & 64)
+      if (l & 0x40)
 	show_weight_flag = TRUE;
       else
 	show_weight_flag = FALSE;
-      if (l & 128)
+      if (l & 0x80)
 	highlight_seams = TRUE;
       else
 	highlight_seams = FALSE;
-      if (l & 256)
+      if (l & 0x100)
 	find_ignore_doors = TRUE;
       else
 	find_ignore_doors = FALSE;
-      if (to_be_wizard && (l & 0x80000000L)
-	  && get_check("Resurrect a dead character?"))
+      /* save files before 5.2.2 don't have sound_beep_flag, set it on
+	 for compatibility */
+      if ((version_min < 2) || (version_min == 2 && patch_level < 2))
+	sound_beep_flag = TRUE;
+      else if (l & 0x200)
+	sound_beep_flag = TRUE;
+      else
+	sound_beep_flag = FALSE;
+      /* save files before 5.2.2 don't have display_counts, set it on
+	 for compatibility */
+      if ((version_min < 2) || (version_min == 2 && patch_level < 2))
+	display_counts = TRUE;
+      else if (l & 0x400)
+	display_counts = TRUE;
+      else
+	display_counts = FALSE;
+
+      /* Don't allow resurrection of total_winner characters.  It causes
+	 problems because the character level is out of the allowed range.  */
+      if (to_be_wizard && (l & 0x40000000L))
+	{
+	  msg_print ("Sorry, this character is retired from moria.");
+	  msg_print ("You can not resurrect a retired character.");
+	}
+      else if (to_be_wizard && (l & 0x80000000L)
+	       && get_check("Resurrect a dead character?"))
 	l &= ~0x80000000L;
       if ((l & 0x80000000L) == 0)
 	{
@@ -923,6 +1017,22 @@ int *generate;
 
 	  if (version_min >= 2)
 	    rd_string(died_from);
+
+	  if ((version_min >= 3)
+	      || (version_min == 2 && patch_level >= 2))
+	    rd_long ((int32u *)&max_score);
+	  else
+	    max_score = 0;
+
+	  if ((version_min >= 3)
+	      || (version_min == 2 && patch_level >= 2))
+	    rd_long ((int32u *)&birth_date);
+	  else
+#ifdef MAC
+	    birth_date = time((time_t *)0);
+#else
+	    birth_date = time((long *)0);
+#endif
 	}
       if ((c = getc(fileptr)) == EOF || (l & 0x80000000L))
 	{
@@ -951,13 +1061,12 @@ int *generate;
 	    }
 	  else
 	    {
-	      prt("Restoring Memory of a departed spirit...", 0, 0);
+	      /* Make sure that this message is seen, since it is a bit
+		 more interesting than the other messages.  */
+	      msg_print("Restoring Memory of a departed spirit...");
 	      turn = -1;
 	    }
 	  put_qio();
-	  /* The log_index of the previous incarnation is here if later version
-	     want to use it. For now, throw it away and get a new log. */
-	  log_index = -1;
 	  goto closefiles;
 	}
       if (ungetc(c, fileptr) == EOF)
@@ -1036,13 +1145,19 @@ int *generate;
       for (i = MIN_MONIX; i < mfptr; i++)
 	rd_monster(&m_list[i]);
 
-#ifdef MSDOS
+#if defined(MSDOS) || defined(ATARI_ST)
       /* change walls and floors to graphic symbols */
       t_ptr = &t_list[tcptr - 1];
       for (i = tcptr - 1; i >= MIN_TRIX; i--)
 	{
+#ifdef MSDOS
 	  if (t_ptr->tchar == '#')
 	    t_ptr->tchar = wallsym;
+#endif
+#ifdef ATARI_ST
+	  if (t_ptr->tchar == '#')
+	    t_ptr->tchar = (unsigned char) 240;
+#endif
 	  t_ptr--;
 	}
 #endif
@@ -1091,6 +1206,8 @@ int *generate;
 
     closefiles:
 
+      DEBUG(fclose (logfile));
+
       if (fileptr != NULL)
 	{
 	  if (fclose(fileptr) < 0)
@@ -1099,10 +1216,12 @@ int *generate;
       if (fd >= 0)
 	(void) close(fd);
 
+#ifdef MAC
+      macendwait ();
+#endif
+
       if (!ok)
 	msg_print("Error during reading of file.");
-      else if (turn >= 0 && !_new_log())
-	msg_print("Can't log player in the log file.");
       else
 	{
 	  /* let the user overwrite the old savefile when save/quit */
@@ -1112,8 +1231,16 @@ int *generate;
 
 	  if (panic_save == 1)
 	    {
-	      (void) sprintf(temp, "This game is from a panic save.  Score will not be added to scoreboard.");
+	      (void) sprintf(temp, "This game is from a panic save.  \
+Score will not be added to scoreboard.");
 	      msg_print (temp);
+	    }
+	  else if ((!noscore & 0x04) && duplicate_character ())
+	    {
+	      (void) sprintf (temp, "This character is already on the \
+scoreboard; it will not be scored again.");
+	      msg_print (temp);
+	      noscore |= 0x4;
 	    }
 
 	  if (turn >= 0)
@@ -1151,8 +1278,8 @@ int *generate;
 	      (void) sprintf(temp,
 			     "Save file version %d.%d %s on game version %d.%d.",
 			     version_maj, version_min,
-			     version_maj == CUR_VERSION_MAJ
-			     ? "accepted" : "very risky" ,
+			     version_min <= CUR_VERSION_MIN
+			     ? "accepted" : "risky" ,
 			     CUR_VERSION_MAJ, CUR_VERSION_MIN);
 	      msg_print(temp);
 	    }
@@ -1164,7 +1291,6 @@ int *generate;
 	}
     }
   turn = -1;
-  log_index = -1;
   prt("Please try again without that savefile.", 1, 0);
   signals();
 #ifdef MAC
@@ -1181,6 +1307,7 @@ int8u c;
 {
   xor_byte ^= c;
   (void) putc((int)xor_byte, fileptr);
+  DEBUG(fprintf (logfile, "BYTE:  %02X = %d\n", (int) xor_byte, (int) c));
 }
 
 static void wr_short(s)
@@ -1188,8 +1315,10 @@ int16u s;
 {
   xor_byte ^= (s & 0xFF);
   (void) putc((int)xor_byte, fileptr);
+  DEBUG(fprintf (logfile, "SHORT: %02X", (int) xor_byte));
   xor_byte ^= ((s >> 8) & 0xFF);
   (void) putc((int)xor_byte, fileptr);
+  DEBUG(fprintf (logfile, " %02X = %d\n", (int) xor_byte, (int) s));
 }
 
 static void wr_long(l)
@@ -1197,12 +1326,16 @@ register int32u l;
 {
   xor_byte ^= (l & 0xFF);
   (void) putc((int)xor_byte, fileptr);
+  DEBUG(fprintf (logfile, "LONG:  %02X", (int) xor_byte));
   xor_byte ^= ((l >> 8) & 0xFF);
   (void) putc((int)xor_byte, fileptr);
+  DEBUG(fprintf (logfile, " %02X", (int) xor_byte));
   xor_byte ^= ((l >> 16) & 0xFF);
   (void) putc((int)xor_byte, fileptr);
+  DEBUG(fprintf (logfile, " %02X", (int) xor_byte));
   xor_byte ^= ((l >> 24) & 0xFF);
   (void) putc((int)xor_byte, fileptr);
+  DEBUG(fprintf (logfile, " %02X = %ld\n", (int) xor_byte, (long) l));
 }
 
 static void wr_bytes(c, count)
@@ -1212,24 +1345,32 @@ register int count;
   register int i;
   register int8u *ptr;
 
+  DEBUG(fprintf (logfile, "%d BYTES:", count));
   ptr = c;
   for (i = 0; i < count; i++)
     {
       xor_byte ^= *ptr++;
       (void) putc((int)xor_byte, fileptr);
+      DEBUG(fprintf (logfile, "  %02X = %d", (int) xor_byte,
+		     (int) (ptr[-1])));
     }
+  DEBUG(fprintf (logfile, "\n"));
 }
 
 static void wr_string(str)
 register char *str;
 {
+  DEBUG(char *s = str);
+  DEBUG(fprintf (logfile, "STRING:"));
   while (*str != '\0')
     {
       xor_byte ^= *str++;
       (void) putc((int)xor_byte, fileptr);
+      DEBUG(fprintf (logfile, " %02X", (int) xor_byte));
     }
   xor_byte ^= *str;
   (void) putc((int)xor_byte, fileptr);
+  DEBUG(fprintf (logfile, " %02X = \"%s\"\n", (int) xor_byte, s));
 }
 
 static void wr_shorts(s, count)
@@ -1239,19 +1380,24 @@ register int count;
   register int i;
   register int16u *sptr;
 
+  DEBUG(fprintf (logfile, "%d SHORTS:", count));
   sptr = s;
   for (i = 0; i < count; i++)
     {
       xor_byte ^= (*sptr & 0xFF);
       (void) putc((int)xor_byte, fileptr);
+      DEBUG(fprintf (logfile, "  %02X", (int) xor_byte));
       xor_byte ^= ((*sptr++ >> 8) & 0xFF);
       (void) putc((int)xor_byte, fileptr);
+      DEBUG(fprintf (logfile, " %02X = %d", (int) xor_byte, (int) sptr[-1]));
     }
+  DEBUG(fprintf (logfile, "\n"));
 }
 
 static void wr_item(item)
 register inven_type *item;
 {
+  DEBUG(fprintf (logfile, "ITEM:\n"));
   wr_short(item->index);
   wr_byte(item->name2);
   wr_string(item->inscrip);
@@ -1275,6 +1421,7 @@ register inven_type *item;
 static void wr_monster(mon)
 register monster_type *mon;
 {
+  DEBUG(fprintf (logfile, "MONSTER:\n"));
   wr_short((int16u)mon->hp);
   wr_short((int16u)mon->csleep);
   wr_short((int16u)mon->cspeed);
@@ -1295,6 +1442,7 @@ int8u *ptr;
   c = getc(fileptr) & 0xFF;
   *ptr = c ^ xor_byte;
   xor_byte = c;
+  DEBUG(fprintf (logfile, "BYTE:  %02X = %d\n", (int) c, (int) *ptr));
 }
 
 static void rd_short(ptr)
@@ -1308,6 +1456,8 @@ int16u *ptr;
   xor_byte = (getc(fileptr) & 0xFF);
   s |= (int16u)(c ^ xor_byte) << 8;
   *ptr = s;
+  DEBUG(fprintf (logfile, "SHORT: %02X %02X = %d\n", (int) c, (int) xor_byte,\
+		 (int) s));
 }
 
 static void rd_long(ptr)
@@ -1320,11 +1470,14 @@ int32u *ptr;
   l = c ^ xor_byte;
   xor_byte = (getc(fileptr) & 0xFF);
   l |= (int32u)(c ^ xor_byte) << 8;
+  DEBUG(fprintf (logfile, "LONG:  %02X %02X ", (int) c, (int) xor_byte));
   c = (getc(fileptr) & 0xFF);
   l |= (int32u)(c ^ xor_byte) << 16;
   xor_byte = (getc(fileptr) & 0xFF);
   l |= (int32u)(c ^ xor_byte) << 24;
   *ptr = l;
+  DEBUG(fprintf (logfile, "%02X %02X = %ld\n", (int) c, (int) xor_byte,\
+		 (long) l));
 }
 
 static void rd_bytes(ch_ptr, count)
@@ -1335,13 +1488,16 @@ register int count;
   register int8u *ptr;
   register int8u c;
 
+  DEBUG(fprintf (logfile, "%d BYTES:", count));
   ptr = ch_ptr;
   for (i = 0; i < count; i++)
     {
       c = (getc(fileptr) & 0xFF);
       *ptr++ = c ^ xor_byte;
       xor_byte = c;
+      DEBUG(fprintf (logfile, "  %02X = %d", (int) c, (int) ptr[-1]));
     }
+  DEBUG(fprintf (logfile, "\n"));
 }
 
 static void rd_string(str)
@@ -1349,13 +1505,17 @@ char *str;
 {
   register int8u c;
 
+  DEBUG(char *s = str);
+  DEBUG(fprintf (logfile, "STRING: "));
   do
     {
       c = (getc(fileptr) & 0xFF);
       *str = c ^ xor_byte;
       xor_byte = c;
+      DEBUG(fprintf (logfile, "%02X ", (int) c));
     }
   while (*str++ != '\0');
+  DEBUG(fprintf (logfile, "= \"%s\"\n", s));
 }
 
 static void rd_shorts(ptr, count)
@@ -1367,6 +1527,7 @@ register int count;
   register int16u s;
   int8u c;
 
+  DEBUG(fprintf (logfile, "%d SHORTS:", count));
   sptr = ptr;
   for (i = 0; i < count; i++)
     {
@@ -1375,12 +1536,16 @@ register int count;
       xor_byte = (getc(fileptr) & 0xFF);
       s |= (int16u)(c ^ xor_byte) << 8;
       *sptr++ = s;
+      DEBUG(fprintf (logfile, "  %02X %02X = %d", (int) c, (int) xor_byte,\
+		     (int) s));
     }
+  DEBUG(fprintf (logfile, "\n"));
 }
 
 static void rd_item(item)
 register inven_type *item;
 {
+  DEBUG(fprintf (logfile, "ITEM:\n"));
   rd_short(&item->index);
   rd_byte(&item->name2);
   rd_string(item->inscrip);
@@ -1404,6 +1569,7 @@ register inven_type *item;
 static void rd_monster(mon)
 register monster_type *mon;
 {
+  DEBUG(fprintf (logfile, "MONSTER:\n"));
   rd_short((int16u *)&mon->hp);
   rd_short((int16u *)&mon->csleep);
   rd_short((int16u *)&mon->cspeed);
@@ -1414,4 +1580,61 @@ register monster_type *mon;
   rd_byte(&mon->ml);
   rd_byte(&mon->stunned);
   rd_byte(&mon->confused);
+}
+
+/* functions called from death.c to implement the score file */
+
+/* set the local fileptr to the scorefile fileptr */
+void set_fileptr(file)
+FILE *file;
+{
+  fileptr = file;
+}
+
+void wr_highscore(score)
+high_scores *score;
+{
+  DEBUG(logfile = fopen ("IO_LOG", "a"));
+  DEBUG(fprintf (logfile, "Saving score:\n"));
+  /* Save the encryption byte for robustness.  */
+  wr_byte(xor_byte);
+
+  wr_long((int32u) score->points);
+  wr_long((int32u) score->birth_date);
+  wr_short((int16u) score->uid);
+  wr_short((int16u) score->mhp);
+  wr_short((int16u) score->chp);
+  wr_byte(score->dun_level);
+  wr_byte(score->lev);
+  wr_byte(score->max_dlv);
+  wr_byte(score->sex);
+  wr_byte(score->race);
+  wr_byte(score->class);
+  wr_bytes((int8u *)score->name, PLAYER_NAME_SIZE);
+  wr_bytes((int8u *)score->died_from, 25);
+  DEBUG(fclose (logfile));
+}
+
+void rd_highscore(score)
+high_scores *score;
+{
+  DEBUG(logfile = fopen ("IO_LOG", "a"));
+  DEBUG(fprintf (logfile, "Reading score:\n"));
+  /* Read the encryption byte.  */
+  rd_byte (&xor_byte);
+
+  rd_long((int32u *)&score->points);
+  rd_long((int32u *)&score->birth_date);
+  rd_short((int16u *)&score->uid);
+  rd_short((int16u *)&score->mhp);
+  rd_short((int16u *)&score->chp);
+  rd_byte(&score->dun_level);
+  rd_byte(&score->lev);
+  rd_byte(&score->max_dlv);
+  rd_byte(&score->sex);
+  rd_byte(&score->race);
+  rd_byte(&score->class);
+  rd_bytes((int8u *)score->name, PLAYER_NAME_SIZE);
+  rd_bytes((int8u *)score->died_from, 25);
+  DEBUG(fclose (logfile));
 }

@@ -1,0 +1,75 @@
+ScrnTest.rsrc
+????????
+
+*/*	Copyright (C) Curtis McCauley, 1989.  All rights reserved.
+*
+*	You may copy this subroutine package freely, modify it as you desire,
+*	and distribute it at will, as long as the copyright notice in the source
+*	material is not disturbed, excepting that no one may use this package or
+*	any part of it for commercial purposes of any kind without the express
+*	written consent of its author. */
+*
+*#include "Types.r"
+
+
+INCLUDE ScrnMgr.rsrc
+
+
+TYPE STR
+About Title, 128
+About ScrnTest\C9
+
+
+TYPE DITL
+Dummy Alert, 1024
+2
+
+button
+88 224 108 284
+OK
+
+staticText disabled
+8 64 72 288
+This is a dummy alert.
+
+
+TYPE ALRT
+Dummy Alert, 1024
+40 42 158 352
+1024
+5555
+
+TYPE MENU
+ScrnTest, 133
+ScrnTest
+X Out
+Dummy Alert/A
+
+
+TYPE MENU
+ScrnTest (No Keys), 233
+ScrnTest
+X Out
+Dummy Alert
+
+
+*resource 'SIZE' (-1) {
+*	dontSaveScreen,
+*	acceptSuspendResumeEvents,
+*	enableOptionSwitch,
+*	canBackground,
+*	multiFinderAware,
+*	backgroundAndForeground,
+*	dontGetFrontClicks,
+*	ignoreChildDiedEvents,
+*	not32BitCompatible,
+*	reserved,
+*	reserved,
+*	reserved,
+*	reserved,
+*	reserved,
+*	reserved,
+*	reserved,
+*	128 * 1024,
+*	128 * 1024
+*};

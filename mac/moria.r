@@ -1,3 +1,11 @@
+/* mac/moria.r: MacMoria resources, for Mac functionality
+
+   Copyright (c) 1989-91 Curtis McCauley, James E. Wilson
+
+   This software may be copied and distributed for educational, research, and
+   not for profit purposes provided that this copyright and statement are
+   included in all such copies. */
+
 #include "Types.r"
 
 include "ScrnMgr.rsrc";
@@ -13,7 +21,7 @@ type 'TEXT' {
 };
 
 resource 'MRIA' (0) {
-	"Moria 5.2.1 for the Macintosh: Implementation 2.0b1"
+	"Moria 5.4 for the Macintosh"
 };
 
 resource 'BNDL' (128, purgeable) {
@@ -205,8 +213,7 @@ resource 'DITL' (128, "About", purgeable) {
 		StaticText {
 			disabled,
 			"Moria for the Macintosh\n"
-			"Version 5.2.1\n"
-			"Implementation 2.0b1\n\n\n"
+			"Version 5.4\n"
 			"Programmers:\n"
 			"Robert Alan Koeneke\n"
 			"Jimmey Wayne Todd\n\n"
@@ -560,7 +567,7 @@ resource 'DITL' (512, "Mac Help", purgeable) {
 		{8, 52, 40, 380},
 		StaticText {
 			disabled,
-			"Moria for the Macintosh Version 5.2.1"
+			"Moria for the Macintosh Version 5.4"
 		},
 		/* [6] */
 		{8, 8, 40, 40},
@@ -584,22 +591,21 @@ resource 'CNTL' (512, "Mac Help Scroll Bar", purgeable) {
 
 resource 'TEXT' (512, "Mac Help", purgeable) {
 	"This is an beta version of Mac Moria, implementation 2.0b1, which is "
-	"based on the Umoria 5.2.1 sources.  Please send comments and bug repor"
-	"ts to wilson@ernie.Berkeley.EDU (Jim Wilson) or 73230.224@compuserve.c"
-	"om (Curtis McCauley).\n\n"
+	"based on the Umoria 5.4 sources.  Please send comments and bug repor"
+	"ts to wilson@toad.com (Jim Wilson).\n\n"
 	"Users of previous versions o"
 	"f Mac Moria should discard the old program.  Otherwise, the Finder mig"
 	"ht get confused when you double-click on a saved game to start Moria.\n"
 	"\n*****************************\n\nMoria is a dungeon exploration game.  "
-	"The name comes from \322The Lord of the Rings\323 trilogy written by J. R. R"
-	". Tolkien.  Moria is pronounced with the accent on the first syllable,"
+	"The name comes from \322The Lord of the Rings\323 trilogy written by J. R"
+	". R. Tolkien.  Moria is pronounced with the accent on the first syllable,"
 	" e.g. MORE-ee-ah.  For details on the game itself, please read the Mor"
 	"ia Docs file that is distributed along with Moria.\n\nMoria was original"
 	"ly written for VAX/VMS systems.  As such,  it is heavily dependent on "
 	"the keyboard for game play.  The mouse is not used at all, except for "
 	"standard things like menus and dialogs.  To get a list of the availabl"
-	"e keyboard commands, hit the \324?\325 key while playing the game.\n\nSome of "
-	"the commands are specified as being control characters, i.e.  saving t"
+	"e keyboard commands, hit the \324?\325 key while playing the game.\n\nSome"
+	" of the commands are specified as being control characters, i.e.  saving t"
 	"he game is ^X.  To type these characters hold down the control key and"
 	" then press the appropriate character key.  If you do not have a contr"
 	"ol key, use the command key (apple/cloverleaf key) instead of the cont"
@@ -618,9 +624,9 @@ resource 'TEXT' (512, "Mac Help", purgeable) {
 	" The Quit option, of course, is used to exit the game.\n\nA game can onl"
 	"y be saved at the point where it is your turn to move.  At all other t"
 	"imes the Save command will not be available.\n\nThe File Menu is disable"
-	"d while saving and restoring games.  There is no cause for alarm if yo"
-	"u see this occur.  After the operation is completed, there will be a p"
-	"rompt that says \322press any key to continue\323.  After you press a key, t"
+	"d while saving and restoring games.  There is no cause for alarm if you "
+	"see this occur.  After the operation is completed, there will be a prompt"
+	" that says \322press any key to continue\323.  After you press a key, t"
 	"he File Menu will be reenabled.\n\nIf your character dies, or you decide"
 	" to stop running him, you will be prompted via a standard file dialog "
 	"for the name of a file in which to save his memories.  Pressing cancel"
@@ -633,9 +639,9 @@ resource 'TEXT' (512, "Mac Help", purgeable) {
 	"size that you want to use.  The menu will list every point size availa"
 	"ble on your Macintosh for the Monaco font.\n\nAdvanced users can choose "
 	"a different font by using ResEdit or a similar program to edit the STR"
-	" \"Font Name\" resource.\n\nMoria Menu\n\nHelp brings up this dialog.\n\nComma"
-	"nd Set allows you to choose between the original Moria command set and"
-	" an optional command set similar to the UNIX game Rogue.  The main dif"
+	" \"Font Name\" resource.\n\nMoria Menu\n\nHelp brings up this dialog.\n\n"
+	"Command Set allows you to choose between the original Moria command set "
+	"and an optional command set similar to the UNIX game Rogue.  The main dif"
 	"ference between the two is that the original command set uses the nume"
 	"ric keypad for movement, whereas the Rogue-like command set uses the \324"
 	"hjkl\325 keys for, respectively, left down up and right.  The program wil"

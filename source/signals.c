@@ -1,6 +1,6 @@
-/* signals.c: signal handlers
+/* source/signals.c: signal handlers
 
-   Copyright (c) 1989 James E. Wilson
+   Copyright (c) 1989-91 James E. Wilson, Christopher J. Stuart
 
    This software may be copied and distributed for educational, research, and
    not for profit purposes provided that this copyright and statement are
@@ -8,6 +8,13 @@
 
 /* This signal package was brought to you by		-JEW-  */
 /* Completely rewritten by				-CJS- */
+
+/* To find out what system we're on.  */
+
+#include <stdio.h>
+
+#include "config.h"
+#include "constant.h"
 
 /* Signals have no significance on the Mac */
 
@@ -27,22 +34,17 @@ void init_signals()
 
 #else /* a non-Mac system */
 
-#include <stdio.h>
-
 #ifdef ATARIST_MWC
 /* need these for atari st, but for unix, must include signals.h first,
    or else suspend won't be properly declared */
-#include "config.h"
-#include "constant.h"
 #include "types.h"
 #include "externs.h"
 #endif
 
 /* skip most of the file on an ATARI ST */
-#ifndef ATARIST_MWC
-
-/* to get the SYS_V def if needed */
-#include "config.h"
+/* commented away most single handling for Atari ST TC too, as this
+   doesn't work as it should.  */
+#if !defined(ATARIST_MWC) && !defined(ATARIST_TC)
 
 #if defined(SYS_V) && defined(lint)
 /* for AIX, prevent hundreds of unnecessary lint errors, define before
@@ -54,7 +56,6 @@ typedef struct { int stuff; } fpvmach;
 /* must include before externs.h, because that uses SIGTSTP */
 #include <signal.h>
 
-#include "constant.h"
 #include "types.h"
 #include "externs.h"
 
@@ -69,9 +70,7 @@ typedef struct { int stuff; } fpvmach;
 #include <string.h>
 #endif
 #else
-#ifndef VMS
 #include <strings.h>
-#endif
 #endif
 
 #ifdef USG
@@ -79,7 +78,9 @@ void exit();
 #ifdef __TURBOC__
 void sleep();
 #else
+#ifndef VMS
 unsigned sleep();
+#endif
 #endif
 #endif
 
@@ -96,15 +97,15 @@ struct sigcontext *scp;
 
   smask = sigsetmask(0) | (1 << sig);
 #else
-#ifdef __TURBOC__
+#if defined(__TURBOC__) || defined(AMIGA)
 static void signal_handler(sig)
 #else
 static int signal_handler(sig)
 #endif
 int sig;
 {
-
 #endif
+
   if(error_sig >= 0)	/* Ignore all second signals. */
     {
       if(++signal_count > 10)	/* Be safe. We will die if persistent enough. */
@@ -115,7 +116,7 @@ int sig;
 
   /* Allow player to think twice. Wizard may force a core dump. */
   if (sig == SIGINT
-#ifndef MSDOS
+#if !defined(MSDOS) && !defined(AMIGA) && !defined(ATARIST_TC)
       || sig == SIGQUIT
 #endif
       )
@@ -172,7 +173,7 @@ int sig;
       (void) _save_char(savefile);	/* Quietly save the memory anyway. */
     }
   restore_term();
-#ifndef MSDOS
+#if !defined(MSDOS) && !defined(AMIGA) && !defined(ATARIST_TC)
   /* always generate a core dump */
   (void) signal(sig, SIG_DFL);
   (void) kill(getpid(), sig);
@@ -181,11 +182,7 @@ int sig;
   exit(1);
 }
 
-#endif /* ATARIST_MWC */
-
-#ifdef ATARIST_MWC
-static int error_sig = -1;
-#endif
+#endif /* ATARIST_MWC, ATARIST_TC */
 
 #ifndef USG
 static int mask;
@@ -193,9 +190,13 @@ static int mask;
 
 void nosignals()
 {
-#if !defined(ATARIST_MWC)
+#if !defined(ATARIST_MWC) && !defined(ATARIST_TC)
 #ifdef SIGTSTP
+#if defined(atarist) && defined(__GNUC__)
+  (void) signal(SIGTSTP, (__Sigfunc)SIG_IGN);
+#else
   (void) signal(SIGTSTP, SIG_IGN);
+#endif
 #ifndef USG
   mask = sigsetmask(0);
 #endif
@@ -207,9 +208,13 @@ void nosignals()
 
 void signals()
 {
-#if !defined(ATARIST_MWC)
+#if !defined(ATARIST_MWC) && !defined(ATARIST_TC)
 #ifdef SIGTSTP
+#if defined(atarist) && defined(__GNUC__)
+  (void) signal(SIGTSTP, (__Sigfunc)suspend);
+#else
   (void) signal(SIGTSTP, suspend);
+#endif
 #ifndef USG
   (void) sigsetmask(mask);
 #endif
@@ -222,12 +227,48 @@ void signals()
 
 void init_signals()
 {
-#ifndef ATARIST_MWC
+#if !defined(ATARIST_MWC) && !defined(ATARIST_TC)
+  /* No signals for Atari ST compiled with MWC or TC.  */
+  (void) signal(SIGINT, signal_handler);
+
+#if defined(atarist) && defined(__GNUC__)
+  /* Atari ST compiled with GNUC has most signals, but we need a cast
+     in every call to signal.  */
+  (void) signal(SIGINT, (__Sigfunc)signal_handler);
+  (void) signal(SIGQUIT, (__Sigfunc)signal_handler);
+  (void) signal(SIGTSTP,(__Sigfunc)SIG_IGN);
+  (void) signal(SIGILL, (__Sigfunc)signal_handler);
+  (void) signal(SIGHUP, (__Sigfunc)SIG_IGN);
+  (void) signal(SIGTRAP,(__Sigfunc)signal_handler);
+  (void) signal(SIGIOT, (__Sigfunc)signal_handler);
+  (void) signal(SIGEMT, (__Sigfunc)signal_handler);
+  (void) signal(SIGKILL, (__Sigfunc)signal_handler);
+  (void) signal(SIGBUS, (__Sigfunc)signal_handler);
+  (void) signal(SIGSEGV, (__Sigfunc)signal_handler);
+  (void) signal(SIGSYS, (__Sigfunc)signal_handler);
+  (void) signal(SIGTERM,(__Sigfunc)signal_handler);
+  (void) signal(SIGPIPE, (__Sigfunc)signal_handler);
+
+#else
+  /* Everybody except the atari st.  */
   (void) signal(SIGINT, signal_handler);
   (void) signal(SIGFPE, signal_handler);
-#ifdef MSDOS
+
+#if defined(MSDOS)
   /* many fewer signals under MSDOS */
 #else
+
+#ifdef AMIGA
+/*  (void) signal(SIGINT, signal_handler); */
+  (void) signal(SIGTERM, signal_handler);
+  (void) signal(SIGABRT, signal_handler);
+/*  (void) signal(SIGFPE, signal_handler); */
+  (void) signal(SIGILL, signal_handler);
+  (void) signal(SIGSEGV, signal_handler);
+
+#else
+
+  /* Everybody except Atari, MSDOS, and Amiga.  */
   /* Ignore HANGUP, and let the EOF code take care of this case. */
   (void) signal(SIGHUP, SIG_IGN);
   (void) signal(SIGQUIT, signal_handler);
@@ -251,6 +292,8 @@ void init_signals()
 #endif
 #ifdef SIGPWR /* SYSV */
   (void) signal(SIGPWR, signal_handler);
+#endif
+#endif
 #endif
 #endif
 #endif
@@ -279,9 +322,17 @@ void default_signals()
 void restore_signals()
 {
 #if !defined(ATARIST_MWC)
+#if defined(atarist) && defined(__GNUC__)
+  (void) signal(SIGINT, (__Sigfunc)signal_handler);
+#else
   (void) signal(SIGINT, signal_handler);
+#endif
 #ifdef SIGQUIT
+#if defined(atarist) && defined(__GNUC__)
+  (void) signal(SIGQUIT, (__Sigfunc)signal_handler);
+#else
   (void) signal(SIGQUIT, signal_handler);
+#endif
 #endif
 #endif
 }

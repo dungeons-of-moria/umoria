@@ -1,10 +1,6 @@
-/*
- * st_symtab.c
+/* util/mc/st_symtab.c: routines for managing symbol tables
  *
- * routines for managing symbol tables -- reasonably fast and reasonably
- * efficient, but not very much of either
- *
- * Copyright 1989 by Joseph Hall.
+ * Copyright (c) 1989 by Joseph Hall.
  * All rights reserved except as stated below.
  *
  * Jim Wilson and any other holders of copyright on substantial portions
@@ -173,7 +169,8 @@ int size;
      strncpy(st_P->name, name, ST_MAX_SYM_LEN - 1);
     st_P->name[ST_MAX_SYM_LEN - 1] = 0;
     st_P->size = size;
-    st_P->tab_A = (st_Entry_Pt *) calloc((unsigned) size, sizeof(st_Entry_Pt));
+    st_P->tab_A = (st_Entry_Pt *) calloc((unsigned) size,
+					 sizeof(st_Entry_Pt));
     st_P->entryCt = 0;
 
     /*

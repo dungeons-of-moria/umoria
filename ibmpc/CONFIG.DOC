@@ -1,10 +1,11 @@
 
-                  The Dungeons of MORIA version 4.872
+                   The Dungeons of MORIA version 5.x
                    COPYRIGHT (c) Robert Alan Koeneke
 
-                      MSDOS port by D. G. Kneller
+                 MSDOS port, v4.873, by D. G. Kneller
                              Nov 1, 1988
-
+               Updated for Umoria 5.x by James E. Wilson
+                             Mar 24, 1991
 
 
 
@@ -54,7 +55,6 @@ Table of contents
 
 
 
-
                                  - i -
 
 
@@ -64,18 +64,18 @@ INTRODUCTION
 
 This README file describes the requirements and setup necessary to get
 MORIA running on your MSDOS computer.  The actual game documentation is
-in MORIA.DOC.  Some of the game documentation will be wrong if you
-choose the Rogue-like command set.
+in MORIA.DOC.
 
 
 1. USAGE
 
-     Usage:  moria [ -nors ] [ savefile ]
+     Usage:  moria [ -norsw ] [ savefile ]
 
      Where:  -n starts a new game, ignoring any existing save files.
              -o selects the original (VMS) command set.
              -r selects the Rogue-like command set.
              -s prints the score file and exits.
+             -w will try to resurrect a dead character
 
 2. REQUIREMENTS
 
@@ -92,7 +92,7 @@ choose the Rogue-like command set.
 
 MORIA is very easy to configure.  The biggest problem is that there is
 not enough room on a single 360K floppy disk to hold the DOS system
-files, MORIA.EXE (about 340K) and a MORIA save file (about 80K or so).
+files, MORIA.EXE (about 340K) and a MORIA save file (about 20K or so).
 To install MORIA, some files must be copied and 2 options in MORIA.CNF
 must be set.  Options and the MORIA.CNF are described more fully in the
 section entitled OPTIONS.  Here are a few methods of configuration.
@@ -334,16 +334,16 @@ seen yet.  Please report them to me so I can fix them.
 
 If you have any questions or bug reports please contact me at:
 
-     D. G. Kneller
-     1349  10th avenue
-     San Francisco, CA 94122
+     James E. Wilson
+     856 University Ave.
+     Palo Alto, CA  94301
      USA
 
      or by electronic mail at:
 
-     ARPA:   kneller@cgl.ucsf.edu
-     BITNET: kneller@ucsfcgl.bitnet
-     UUCP:   ...ucbvax!ucsfcgl!kneller
+     ARPA:   wilson@kithrup.com
+
+
 
 
 

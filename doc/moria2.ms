@@ -44,7 +44,9 @@ barter with the owner for items you can afford.
 When bartering, you enter prices you will pay (or accept) for
 some object.  You can either enter the absolute amount, or
 precede a number with a plus or minus sign to give a positive or negative
-increment on your previous offer.
+increment on your previous offer.  If you have previously given an
+increment or decrement amount, you can just type RETURN, and the program
+will use the last increment amount that you typed.
 But be warned
 that the owners can easily be insulted, and may even throw you
 out for a while if you insult them too often.  To enter a store,
@@ -229,7 +231,9 @@ several hits in one turn.
 .LP
 Missile booster weapons, such as bows, have their characteristics added
 to those of the missile used, if the proper weapon/missile combination
-is used.
+is used.  Also, these weapons will multiply the base damage of the missile
+by a number from 2 to 4, depending on the strength of the weapon.  This
+multiplier is displayed as `(*#)'.
 .LP
 Although you receive any magical bonuses an unidentified
 weapon may possess when you wield it, those bonuses will not be
@@ -379,8 +383,8 @@ Some crowns also have special magical abilities that improve
 your chances in a battle.
 .IP "Crown of Might"
 This is the great crown of the warriors.  The wearer will
-have an increased strength, dexterity, and constituion, and will also be immune
-to any foe's attempt to slow or paralyze him or her.
+have an increased strength, dexterity, and constituion, and will also be
+immune to any foe's attempt to slow or paralyze him or her.
 .IP "Crown of the Magi"
  This is the great crown of the wizards.  The wearer will have
 an increased intelligence, and will also be given resistance against

@@ -1,41 +1,8 @@
 
-Currently, I know of versions of Moria for UNIX (BSD/SYS V/Xenix), VMS,
-IBM-PC, Atari ST, Amiga, Macintosh, Apple IIGS, VM/SP, and Archimedes
-(a British micro).  There may be other versions that I do not know of.
+Much of the data in this file is about 2 years out of date and may no longer
+be true.
 
-First of all, here is a short summary of the major Moria versions
-that I know of.  Note that these are all different games, although they
-are all recognizable as Moria.
-
-Moria 4.8: last version of the game by the original authors, R.A. Koeneke
-	et al of the Univ. Oklahoma, written in VMS/Pascal
-
-Moria UB 5.0: VMS/Pascal, contains a Black Market, more monsters, from
-	Univ. Buffalo (SUNY Buffalo?), considered the current VMS version,
-	based on Moria 4.8
-
-Imoria: from Univ. Washington, never officially released outside of UW,
-	VMS/Pascal, I do not know much about this version
-
-PC-Moria 4.00+: an IBM-PC/Pascal port of Moria 4.8, by John W. DeBoskey,
-	I do not know much about this version, probably more faithful to
-	the original program than PC-Moria 4.873, can run in 512K,
-	for more info contact mcnc!rti!sas!jwd@rutgers.edu
-
-Umoria 4.87: a UNIX/C version by Jim Wilson of UC Berkeley, based on
-	Moria 4.8, this	has since been ported to many other environments
-	(PC, Mac, Atari ST, Apple IIGS, Amiga, VM/SP, Archimedes), 4.83 based
-	versions (PC-Moria 4.83 and Apple IIGS 4.83) are very buggy,
-	4.85 versions are OK, 4.87 versions are best, there are two PC
-	versions: PC-Moria for MSC which requires 640K and tc-moria for Turbo
-	C which	can run in 512K (the standard version is PC-Moria)
-
-Amiga Moria v3.0: based on Umoria 4.85, adds graphics, monsters, and the
-	infamous Godly-Might weapons
-
-Umoria 5.x: successor of umoria 4.87, adds monster memory (recall), look any
-	direction, stat bugs fixes, and many other changes, one source
-	version which supports UNIX, IBM-PC, Mac, Atari ST, and VMS.
+********
 
 How to get a copy depends on which version you want, and what network and
 other resources you have access too.  It is far too involved to include
@@ -65,8 +32,9 @@ Apple IIGS: husc6.harvard.edu
 MacMoria: sumex.stanford.edu
 
 In addition, I have a moria ftp archive on kukulcan.Berkeley.EDU (Internet
-number 128.32.131.190), which has a copy of everything listed at the top
-except for Imoria, PC-Moria 4.00+ and the VM/SP and Archimedes ports of umoria.
+number 128.32.131.190), which has a copy of everything listed in the history
+file except for Imoria, PC-Moria 4.00+ and the VM/SP and Archimedes ports of
+umoria.
 
 ***************
 
@@ -102,6 +70,3 @@ binaries: PC-Moria 4.873, TC-Moria 4.873 (512K and 640K), Amiga Moria v3.0,
 I do not email Moria sources/binaries.
 
 **************************
-
-Jim Wilson
-wilson@ernie.Berkeley.EDU
