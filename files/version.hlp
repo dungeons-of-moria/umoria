@@ -46,7 +46,6 @@ Stephen A. Jacobs     - Atari ST Moria port for MW C
 
 Other contributors:
 William Setzer        - object naming code
-David J. Grabiner     - numerous bug reports, consistency checks, etc
 Dan Bernstein         - UNIX hangup signal fix, many bug fixes
 Corey Gehman          - Amiga Moria port
 Ralph Waters          - VMS support code, IBM-PC Turbo C bug fixes
@@ -62,9 +61,10 @@ Ben Schreiber         - Macintosh port for Think C
 
 
 
-Copyright (c) 1989-92 James E. Wilson, Robert A. Keoneke
+
+Copyright (c) 1989-94 James E. Wilson, Robert A. Keoneke
   This software may be copied and distributed for educational, research, and
   not for profit purposes provided that this copyright and statement are
   included in all such copies.
 
-Umoria Version 5.5, patch level 0
+Umoria Version 5.5, patch level 1

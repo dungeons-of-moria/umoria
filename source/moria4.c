@@ -1,6 +1,6 @@
 /* source/moria4.c: misc code, mainly to handle player commands
 
-   Copyright (c) 1989-92 James E. Wilson, Robert A. Koeneke
+   Copyright (c) 1989-94 James E. Wilson, Robert A. Koeneke
 
    This software may be copied and distributed for educational, research, and
    not for profit purposes provided that this copyright and statement are
@@ -171,7 +171,7 @@ int dir;
 		      msg_print("You have removed the rubble.");
 		      if (randint(10) == 1)
 			{
-			  place_object(y, x);
+			  place_object(y, x, FALSE);
 			  if (test_light(y, x))
 			    msg_print("You have found something!");
 			}

@@ -1,6 +1,6 @@
 /* source/rnd.c: random number generator
 
-   Copyright (c) 1989-92 James E. Wilson
+   Copyright (c) 1989-94 James E. Wilson
 
    This software may be copied and distributed for educational, research, and
    not for profit purposes provided that this copyright and statement are

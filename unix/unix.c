@@ -1,6 +1,6 @@
 /* unix/unix.c: UNIX dependent code.					-CJS-
 
-   Copyright (c) 1989-92 James E. Wilson, Christopher J. Stuart
+   Copyright (c) 1989-91 James E. Wilson, Christopher J. Stuart
 
    This software may be copied and distributed for educational, research, and
    not for profit purposes provided that this copyright and statement are
@@ -41,6 +41,12 @@ typedef struct { int stuff; } fpvmach;
 #include <sys/resource.h>
 #include <sys/types.h>
 #include <sys/param.h>
+#endif
+
+#ifdef __linux__
+#include <sys/time.h>
+#include <sys/types.h>
+#include <unistd.h>
 #endif
 
 #ifdef USG
@@ -115,12 +121,12 @@ static Ioctl(i, l, p) char *p; { return 0; }
 int check_input(microsec)
 int microsec;
 {
-#if defined(USG) && !defined(M_XENIX)
+#if defined(USG) && !defined(M_XENIX) && !defined(__linux__)
   int arg, result;
 #else
   struct timeval tbuf;
   int ch;
-#if defined(BSD4_3) || defined(M_XENIX)
+#if defined(BSD4_3) || defined(M_XENIX) || defined(__linux__)
   fd_set smask;
 #else
   int smask;
@@ -128,10 +134,10 @@ int microsec;
 #endif
 
   /* Return true if a read on descriptor 1 will not block. */
-#if !defined(USG) || defined(M_XENIX)
+#if !defined(USG) || defined(M_XENIX) || defined(__linux__)
   tbuf.tv_sec = 0;
   tbuf.tv_usec = microsec;
-#if defined(BSD4_3) || defined(M_XENIX)
+#if defined(BSD4_3) || defined(M_XENIX) || defined(__linux__)
   FD_ZERO(&smask);
   FD_SET(fileno(stdin), &smask);
   if (select(1, &smask, (fd_set *)0, (fd_set *)0, &tbuf) == 1)
@@ -271,7 +277,7 @@ void user_name(buf)
 char *buf;
 {
   extern char *getlogin();
-  char pwline[256];
+  struct passwd *pwline;
   register char *p;
 
   p = getlogin();
@@ -279,11 +285,9 @@ char *buf;
     (void) strcpy(buf, p);
   else
     {
-      (void) getpw((int)getuid(), pwline);
-      p = index(pwline, ':');
-      if (p)
-	*p = 0;
-      (void) strcpy(buf, pwline);
+      pwline = getpwuid((int)getuid());
+      if (pwline)
+	(void) strcpy(buf, pwline->pw_name);
     }
   if (!buf[0])
     (void) strcpy(buf, "X");	/* Gotta have some name */

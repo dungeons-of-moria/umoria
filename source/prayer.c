@@ -1,6 +1,6 @@
 /* source/prayer.c: code for priest spells
 
-   Copyright (c) 1989-92 James E. Wilson, Robert A. Koeneke
+   Copyright (c) 1989-94 James E. Wilson, Robert A. Koeneke
 
    This software may be copied and distributed for educational, research, and
    not for profit purposes provided that this copyright and statement are
@@ -163,10 +163,17 @@ void pray()
 		  warding_glyph();
 		  break;
 		case 31:
-		  (void) dispel_creature(CD_EVIL, (int)(4*py.misc.lev));
 		  (void) remove_fear();
 		  (void) cure_poison();
 		  (void) hp_player(1000);
+		  for (i=A_STR; i<=A_CHR; i++)
+		    (void) res_stat(i);
+		  (void) dispel_creature(CD_EVIL, (int)(4*py.misc.lev));
+		  (void) turn_undead();
+		  if (py.flags.invuln < 3)
+		    py.flags.invuln = 3;
+		  else
+		    py.flags.invuln++;
 		  break;
 		default:
 		  break;

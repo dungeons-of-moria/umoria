@@ -91,7 +91,7 @@ should transport from one mini/micro to another without any problems.
 
 If you are hallucinating, ^R won't help.
 
-Bows can have a pluses to damage.  These pluses only apply if you are
+Bows can have a plus to damage.  These pluses only apply if you are
 using the bow to fire the appropriate type of missile (arrow/bolt/etc).
 
 Can haggle incrementally in the stores, i.e. can increase bid by 10
@@ -133,9 +133,7 @@ it will not be referred to as spell 'a' if you do not know the first spell.
 
 When haggling, if you have reach the final offer much more often than you
 haven't, then the store will give you the benefit of the doubt and go
-directly to the final price.  The exact formula is (good > 3*bad + 20).
-Two sets of numbers are kept for every store, one for buying and one for
-selling.
+directly to the final price.
 
 When wielding a weapon that is too heavy, the to hit penalty will be shown
 by the 'C' command.
@@ -269,4 +267,16 @@ damage, instead of being fixed at 10 (there is a slight chance of
 enchantment beyond this level); thus daggers are no longer the best
 weapons for mid-level characters.
 
-last modified 8/12/92
+Umoria 5.5.1:
+
+If you inscribe an item with a single digit (using "{" to inscribe), you
+can refer to that item by the digit when it is in your inventory.  You
+can thus label your pick as item 1, and wield item 1 whenever you need
+the pick without checking which letter the pick is.
+
+The prayers Turn Undead and Holy Word have been strengthened.
+
+Creatures with fire attacks now resist your fire attacks, and you will
+learn this in the recall information.
+
+last modified 6/25/94

@@ -1,6 +1,6 @@
 /* source/constant.h: global constants used by Moria
 
-   Copyright (c) 1989-92 James E. Wilson, Robert A. Koeneke
+   Copyright (c) 1989-94 James E. Wilson, Robert A. Koeneke
 
    This software may be copied and distributed for educational, research, and
    not for profit purposes provided that this copyright and statement are
@@ -28,9 +28,9 @@ some of the system defines set up there.
 #endif
 
 /* Current version number of Moria				*/
-#define CUR_VERSION_MAJ 5 /* version 5.5 */
+#define CUR_VERSION_MAJ 5 /* version 5.5.1 */
 #define CUR_VERSION_MIN 5
-#define PATCH_LEVEL 0
+#define PATCH_LEVEL 1
 
 #ifndef TRUE
 #define TRUE 1
@@ -390,6 +390,7 @@ some of the system defines set up there.
 #define CM_PICKS_UP	0x00100000L
 #define CM_MULTIPLY	0x00200000L
 
+#define CM_SMALL_OBJ	0x00800000L
 #define CM_CARRY_OBJ	0x01000000L
 #define CM_CARRY_GOLD	0x02000000L
 #define CM_TREASURE	0x7C000000L
@@ -418,8 +419,8 @@ some of the system defines set up there.
 #define CS_SLOW_PER	0x00008000L
 #define CS_DRAIN_MANA	0x00010000L
 
-#define CS_BREATHE	0x00F80000L
-#define CS_BR_LIGHT	0x00080000L
+#define CS_BREATHE	0x00F80000L /* may also just indicate resistance */
+#define CS_BR_LIGHT	0x00080000L /* if no spell frequency set */
 #define CS_BR_GAS	0x00100000L
 #define CS_BR_ACID	0x00200000L
 #define CS_BR_FROST	0x00400000L

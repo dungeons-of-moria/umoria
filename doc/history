@@ -35,18 +35,14 @@ VMS Moria 6.0:
 
 Imoria:
 	This version was developed at the Univ. Washington.  It is written
-	in VMS Pascal, and is only available for VAX/VMX systems.  This
-	version has never been officially released outside U. Washington.
+	in VMS Pascal, and is only available for VAX/VMX systems.  
 	I know very little about this version, but have been told by people
 	at U Washington that it is far superior to any other Moria version
 	that currently exists.  It has many new monsters, new objects,
 	new races, new classes, new terrain types (like water), etc.
-	Unfortunately, the authors have never shown any serious intent
-	to release the sources, they are simply unavailable.  I believe
-	that it is based on the Moria 4.8 sources.
+	The sources are currently available from UBVMS.
 Imoria 4.9:
-	The latest version of Imoria.  I do not know anything about this
-	version.
+	The latest version of Imoria.
 
 PC-Moria 4.00+:
 	This version is a port of the Moria 4.8 Pascal sources to the IBM-PC
@@ -106,7 +102,7 @@ UMoria 5.x:
 	pervasive bugs.  See the doc/FEATURES.NEW file for a list of most
 	user visible changes.  (Sometimes called Umoria 5.0, Moria 5.0,
 	Moria 5.x.  Should not be confused with Moria UB 5.0.)
-Umoria 5.5:
+Umoria 5.5.1
 	The latest version of Umoria 5.x.
 
 Vertical position indicates roughly when the versions were made available,
@@ -132,6 +128,6 @@ although the scale is not very accurate.
 1990         Umoria 5.0	       	              |              |
                  |                       Imoria 4.9     Moria UB 5.1
                  |                            |              |
-1992         Umoria 5.5               (alive and well)  (alive and well)
+1994         Umoria 5.5.1             (alive and well)  (alive and well)
                  |
            (alive and well)

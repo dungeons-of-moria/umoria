@@ -1,6 +1,6 @@
 /* source/sets.c: code to emulate the original Pascal sets
 
-   Copyright (c) 1989-92 James E. Wilson
+   Copyright (c) 1989-94 James E. Wilson
 
    This software may be copied and distributed for educational, research, and
    not for profit purposes provided that this copyright and statement are
@@ -162,6 +162,22 @@ inven_type *item;
   return(FALSE);
 }
 
+int set_large(item) /* Items too large to fit in chests 	-DJG- */
+treasure_type *item; /* Use treasure_type since item not yet created */
+{
+  switch(item->tval)
+    {
+    case TV_CHEST: case TV_BOW: case TV_POLEARM: 
+    case TV_HARD_ARMOR: case TV_SOFT_ARMOR: case TV_STAFF:
+      return TRUE;
+    case TV_HAFTED: case TV_SWORD: case TV_DIGGING:
+      if (item->weight > 150)
+	return TRUE;
+      else
+	return FALSE;
+    }
+  return FALSE;
+}
 
 int general_store(element)
 int element;

@@ -1,6 +1,6 @@
 /* source/save.c: save and restore games and monster memory info
 
-   Copyright (c) 1989-92 James E. Wilson, Robert A. Koeneke
+   Copyright (c) 1989-94 James E. Wilson, Robert A. Koeneke
 
    This software may be copied and distributed for educational, research, and
    not for profit purposes provided that this copyright and statement are
@@ -739,6 +739,7 @@ int *generate;
       ok = TRUE;
 
       (void) close(fd);
+      fd = -1; /* Make sure it isn't closed again */
       /* GCC for atari st defines atarist */
 #if defined(atarist) || defined(ATARI_ST) || defined(THINK_C) || defined(MSDOS)
       fileptr = fopen(savefile, "rb");

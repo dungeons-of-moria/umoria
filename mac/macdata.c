@@ -1,6 +1,6 @@
 /* mac/macdata.c: this program creates the initialized global data resources
 
-   Copyright (c) 1989-92 Curtis McCauley, James E. Wilson
+   Copyright (c) 1989-94 Curtis McCauley, James E. Wilson
 
    This software may be copied and distributed for educational, research, and
    not for profit purposes provided that this copyright and statement are

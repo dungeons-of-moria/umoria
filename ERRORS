@@ -1,10 +1,21 @@
+
+black ooze should resist acid, but can't code this because it casts
+spells and would breathe acid if it were given acid resistance
+
+identifying items by one-digit inscriptions should work for items in
+equipment list as well as for items in inventory
+
+saving and restoring takes a turn, this can be fatal in combat
+
+----JEW's old ERRORS list, excluding things fixed by DJG
+
 stores probably should buy items which have been marked {damned} by being worn
 and then cleared via remove curse, after all they buy unident damned items
 
 creating traps can destroy staircases
 
-chests should create treasure appropriate to the level they were found on,
-not the level that they are opened on
+chests should create treasure appropriate to the level they were found
+on, or to the level of the chest, not the level that they are opened on
 
 color MacMoria bugs: the colors dialog box says greed not green
 	the help dialog lists the wrong versions
@@ -150,9 +161,6 @@ IBMPC
 
 run under Saber C to see if that turns up any bugs
 
-- when read curse weapon on a HA/DF weapon, the code does not clear the AC
-  bonus of the weapon, cursed gauntlets of slaying don't lose +tohit/+todam,
-  and other cases should be fixed also
 - if you curse a special magic item (HA, RF, etc), it retains its very high
   value, its cost should be reset to the value in object_list[index]
 - if you curse a special cursed object (noise, irritation), it will lose its
@@ -238,8 +246,7 @@ certain that the staff will work on AMHD's
 
 should mac port have a separate io.c file?
 
-invisible monsters, and 'headless' monsters should not glare when recovering
-from a bash
+'headless' monsters should not glare when recovering from a bash
 
 version.inf file should not contain version number/copyright, these should
 be printed from the variable values
@@ -705,7 +712,7 @@ have a routine which cats 3 strings together, or 2 strings and an int
 age characters before killing them of Ripe-Old-Age
 
 these commands which take a dir should not work when confused,
-   bash, closeobject, jamdoor, openobject
+   closeobject, jamdoor, openobject
 
 monsters need a 'not carry large object' flag in CMOVE, have all chests (type
 2), polearms (type 22) and staffs (type 55) be large objects, these should

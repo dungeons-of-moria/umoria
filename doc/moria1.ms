@@ -1,10 +1,10 @@
-\"This is a very modified version of the documentation
-\"for the original VMS game.  Changes were made to reflect differences
-\"found in the UNIX port by James E. Wilson.
-\"
-\" "tbl moria1.ms moria2.ms | nroff -ms"
-\"
-\" You might wanna change these two values:
+.\"This is a very modified version of the documentation
+.\"for the original VMS game.  Changes were made to reflect differences
+.\"found in the UNIX port by James E. Wilson.
+.\"
+.\" "tbl moria1.ms moria2.ms | nroff -ms"
+.\"
+.\" You might wanna change these two values:
 .RP
 .nr PO 1i
 .nr LL 6.5i
@@ -210,11 +210,11 @@ Infravision is the ability to see heat sources.  Since most
 of the dungeon is cool or cold, infravision will not allow the
 player to see walls and objects.  Infravision will allow a
 character to see any warm-blooded creatures up to a certain
-distance.  This ability works equally well with or with out a
+distance.  This ability works equally well with or without a
 light source.  The majority of \fImoria\fP's creatures are
 cold-blooded, and will not be detected unless lit up by a light
-source.  All non human races have innate infravision ability.
-Human can gain infravision only if it is magically enhanced.
+source.  All non-human races have innate infravision ability.
+Humans can gain infravision only if it is magically enhanced.
 
 .NH 2
 Choosing A Race
@@ -309,7 +309,7 @@ Half-Orc^+2^\-1^0^0^+1^\-4^10^+10%
 Half-Troll^+4^\-4^\-2^\-4^+3^\-6^12^+20%
 .TE
 .KE
-Racial abilities as compared to each other, with
+Racial abilities as compared to each other, with 
 1 the lowest, or worst, and 10 the highest, or best,
 are listed in the following table.
 .KS
@@ -356,13 +356,13 @@ throw to resist effects of spells cast at him.  Intelligence and
 Dexterity are his primary stats.  There is no rule that says a
 mage cannot become a good fighter, but spells are his true realm.
 .IP "Priest    "
-A Priest is a character of holy devotion.  They explore the
+A Priest is a character of holy devotion.  He explores the
 dungeon only to destroy the evil that lurks within, and if
-treasure just happens to fall into their packs, well, so much
-more to the glory of their church!  Priests receive their spells
-from a deity, and therefore do not choose which spells they will
-learn.  They are familiar with magical devices, preferring to call
-them instruments of god, but are not as good as a mage in their
+treasure just happens to fall into his pack, well, so much
+more to the glory of his temple!  A priest receives his spells
+from a deity, and therefore does not choose which spells he will
+learn.  He is familiar with magical devices, preferring to call
+them instruments of god, but Is not as good as a mage in their
 use.  Priests have good saving throws, and make decent fighters,
 preferring blunt weapons over edged ones.  Wisdom and Charisma
 are the priest's primary stats.
@@ -374,8 +374,8 @@ to overcome.  A rogue has a high stealth allowing him to sneak
 around many creatures without having to fight, or sneak up and
 get the first blow.  A rogue's perception is higher than any
 other class, and many times he will notice a trap or secret door
-before having to search.  A rogue is better than warriors or
-paladins with magical devices, but still can not rely on their
+before having to search.  A rogue is better than a warrior or
+paladin with magical devices, but still can not rely on their
 performance.  Rogues can also learn a few spells, but not the powerful
 offensive spells mages can use.  A rogue's primary stats are
 Intelligence and Dexterity.
@@ -392,7 +392,7 @@ His primary stats are Intelligence and Dexterity.
 A Paladin is a warrior/priest.  He is a very good fighter,
 second only to the warrior class, but not very good at missile
 weapons.  He receives prayers at a slower pace then the priest,
-and can receive all but the most powerful prayer.  Because a
+but can eventually learn all the prayers.  Because a
 paladin is really a dual class character, it requires more
 experience to advance him.  A paladin lacks much in the way of
 abilities.  He is poor at stealth, perception, searching, and
@@ -462,10 +462,10 @@ Symbols On Your Map
 .LP
 Symbols on your map can be broken down into three
 categories: Features of the dungeon such as walls, floor, doors,
-and traps; Objects which can be picked up such as treasure,
+and traps; objects which can be picked up such as treasure,
 weapons, magical devices, etc; and creatures which may or may not
 move about the dungeon, but are mostly harmful to your
-character's well being.
+character's well-being.
 .LP
 Some symbols can be in more than one category.
 Also note that treasure may be embedded in a wall, and the wall
@@ -546,7 +546,7 @@ s^Skeleton^S^Scorpion
 t^Giant Tick^T^Troll
 u^^U^Umber Hulk
 v^^V^Vampire
-w^Worm or Worm Mass^W^Wight or Wraith.
+w^Worm or Worm Mass^W^Wight or Wraith
 x^^X^Xorn
 y^Yeek^Y^Yeti
 z^Zombie^Z^
@@ -693,7 +693,7 @@ Original Directions
 \-\0 4^ ^6\&\0\0\-
 .sp
 1^2^3
-\0/\0\&^\0|\&\0^\0\&\\\\
+\0/\0\&^\0|\&\0^\0\&\\\\\&
 .TE
 .KE
 .KS
@@ -709,7 +709,7 @@ y\&^k\&^u\&
 \-\0 h\&^ ^l\&\0\0\-
 .sp
 b\&^j\&^n\&
-\0/\0\&^\0|\&\0^\0\&\\\\
+\0/\0\&^\0|\&\0^\0\&\\\\\&
 .TE
 .KE
 .RE
@@ -768,16 +768,19 @@ Selection of objects.
 Many commands will also prompt for a particular object to be used.
 For example, the command to read a scroll will ask you which of the scrolls
 that you are carrying that you wish to read.
-In such cases, the selection is made by typing a letter of the alphabet.
+In such cases, the selection is made by typing a letter of the alphabet;
+if you are selecting from your pack, you may also type a digit to select
+the item whose inscription is that digit.
 The prompt will indicate the possible letters, and will also allow you
 to type the key `*', which causes all of the available options to
 be described.
 .LP
 The particular object may be selected by an upper case or a lower case
-letter.  If lower case is used, the selection takes place immediately.
-If upper case is used, then the particular option is described, and you
-are given the option of confirming or retracting that choice.
-Upper case selection is thus safer, but requires an extra key stroke.
+letter.  If lower case or a digit is used, the selection takes place
+immediately.  If upper case is used, then the particular option is
+described, and you are given the option of confirming or retracting that
+choice.  Upper case selection is thus safer, but requires an extra key
+stroke.
 
 .NH 2
 Command descriptions
@@ -829,8 +832,8 @@ finding it with the search command.  This command can have a count.
 A character must eat occasionally to remain effective.  As a
 character grows hungry, a message will appear at the bottom of
 the screen saying \*QHungry\*U.  If a character remains hungry long
-enough, he will become weak and eventually start fainting.
-Eventually, you will die of starvation if you do not eat.
+enough, he will become weak, eventually start fainting, and finally die
+of starvation.
 .IP "F  - Fill a lamp or lantern with oil."
 If your character is currently using a lamp for light, and
 if he has a flask of oil in inventory, he may refill the lamp by
@@ -843,9 +846,10 @@ will appear on the status line at the bottom of the screen.
 Mages, rogues, and rangers must have the magic books containing
 new spells to be able to learn them.  Priests and Paladins are
 given their prayers by their gods, and hence do not need a holy
-book before learning the spells in it.
+book before learning the prayers in it.  They do need the book 
+in order to use the prayers.
 .IP "L  - Location on map. {W - where}"
-The location command allows you to look at all parts of the
+The location command allows you to look at all parts of the 
 current dungeon level.  The displayed view of the dungeon is
 shifted to bring your current position as close to the center
 as possible.  You may then shift the displayed map in any of the eight
@@ -869,7 +873,7 @@ Resting will continue until the specified duration has expired,
 or something to wake the character happens, such as a creature
 wandering by, or getting hungry, or some disability like
 blindness expiring.
-It is sometimes a good idea to rest a beat up
+It is sometimes a good idea to rest a beat-up
 character until he regains some of his hit points, but be sure to
 have plenty of food if you rest often.
 .sp
@@ -923,7 +927,7 @@ Wands must be aimed in a direction to be used.  Wands are
 magical devices and therefore use the Magical Devices ability of
 the player.  They will either affect the first object/creature
 encountered, or affect anything in a given direction, depending
-upon the wand.  An obstruction such as door or wall will generally
+upon the wand.  An obstruction such as a door or wall will generally
 stop the effects of a wand from traveling further.
 .IP "b  - Browse a book. {P - peruse}"
 You can only read a book if you are of its realm.
@@ -960,16 +964,16 @@ room or drop down beside you.  If you throw an object such as an
 arrow, only one will be used at a time.
 .sp
 If you throw at a creature, your chance of hitting the
-creature is determined by your pluses to hit, your ability at
-throwing, and the object's pluses to hit.  Once the creature is
+creature is determined by your plusses to hit, your ability at
+throwing, and the object's plusses to hit.  Once the creature is
 hit, the object may or may not do any actual damage to it.
 Certain objects in the dungeon can do great amounts of damage
 when thrown, but it's for you to figure out the obscure ones.
-Oil flasks are considered to be lit before thrown, therefore they
+Oil flasks are considered to be lit before thrown; therefore, they
 will do fire damage to a creature if they hit it.
 .sp
 To use a bow with arrows, simply wield the bow and throw the
-arrows.  Extra pluses to damage and hitting are gained by
+arrows.  Extra plusses to damage and hitting are gained by
 wielding the proper weapon and throwing the corresponding ammo.
 A heavy crossbow with bolts for example, is a killer...
 .IP "i  - Display a list of objects being carried."
@@ -1003,7 +1007,7 @@ of vision which just overlaps the cones of the two adjacent directions.
 Looking with the null direction `5' (or `.') sees everything which there
 is to be seen.
 .sp
-You are also able to access your monster memories with this command.
+You are also able to access you monster memories with this command.
 If you see a creature, you are prompted to ask if you wish to see
 a short paragraph of information about your experiences with that
 creature.  See also the section on being attacked.
@@ -1021,13 +1025,13 @@ character must read the spell from a book, he cannot be blind or
 confused when casting a spell, and there must be some light
 present.
 .IP "o <Dir> - Open a door, chest, or lock."
-To open an object such as a door or chest you must use the
+To open an object such as a door or chest, you must use the
 Open command.  If the object is locked, the Open command will
 attempt to pick the lock, based on your ability at disarming.
 If an object is trapped and you open it, the trap will
 be set off.
-This command can be counted, you may need several tries to get it
-open.
+This command can be counted, because you may need several tries to 
+get a locked door or chest open.
 .IP "p  - Read a prayer."
 To pay effectively, a character must have learned the prayer,
 and must also have in the inventory a holy book from which
@@ -1046,9 +1050,9 @@ To drink a potion use the Quaff command.  A potion affects
 the player in some manner.  The effects of the potion may be
 immediately noticed, or they may be subtle and unnoticed.
 .IP "r  - Read a scroll."
-To read a scroll use the Read command.  A scroll spell has
-an area affect, except in a few cases such as identify scrolls
-which act on other objects.  Two scrolls, the identify
+To read a scroll use the Read command.  Most scroll spells either
+affect the player or the area around the player; a few cases such as
+identify scrolls act on other objects.  Two scrolls, the identify
 scroll and the recharge scroll, have titles which can be read
 without setting them off, and by pressing ESCAPE can be saved
 for future use.
@@ -1068,7 +1072,7 @@ cursed item which cannot be removed.  Cursed items are always
 bad, and can only be taken off after removing the curse.
 .IP "u  - Use a staff. {Z - Zap}"
 The Use command will activate a staff.  Like scrolls, most
-staffs have an area affect.  Because staffs are generally more
+staffs have an area effect.  Because staffs are generally more
 powerful than most other items, they are also harder to use
 correctly.
 .IP "v  - Display current version of game."
@@ -1076,8 +1080,9 @@ The Version command displays the credits for the current
 version of \fImoria\fP.
 .IP "w  - Wear or wield an item being carried."
 To wear or wield an object in your inventory, use the
-Wear/Wield command.  If an object is already in use for the same
-function, it is automatically removed first.  An
+Wear/Wield command.  If another object is already in use for the same
+function, it is automatically removed first; if you are wearing two
+rings, you are given a choice of which one to remove.  An
 object's bonuses cannot be gained until it is worn or wielded.
 .IP "x  - Exchange primary and secondary weapons. {X}"
 A secondary weapon is any weapon which may be needed often.
@@ -1094,7 +1099,7 @@ displayed on the screen stands for.  For instance, by
 pressing `/.', you can find out that the `.' stands for a floor spot.
 When used with a creature, the identify command will tell you
 only what class of creature the symbol stands for, not the
-specific creature, therefore use the look command for this
+specific creature; therefore, use the look command for this
 information.
 .sp
 If you identify the character for a creature in your monster memory,
@@ -1120,8 +1125,8 @@ look for doors in the extremity of every corner.
 .IP " (2)"
 Examine potential corners when running.  This is on by default, and allows
 you to run along an unknown curving corridor.  If, however, you are running
-from a creature, and wish to stop at an unknown corner to make a considered
-decision, then you may wish to switch this option off.
+from a creature, you may wish to switch this option off, because the
+creature will cut the corner.
 .IP " (3)"
 Print self during a run.  This is off by default, which gives faster screen
 updating.
@@ -1131,7 +1136,7 @@ on if you wish to stop running whenever a new part of the dungeon appears
 in view.
 .IP " (5)"
 Treat open doors as empty space while running.  This is off by default, in
-which case you stop when ever you run up to an open door.
+which case you stop whenever you run up to an open door.
 .IP " (6)"
 Prompt to pick up objects.  This is off by default, in which case stepping
 over an object automatically causes you to pick it up.  With the option
@@ -1145,8 +1150,9 @@ Show weights in inventory.  This is off by default: switching it on causes
 the inventory and equipment listings to include the weight of all objects.
 This may be useful to know if your pack is getting too heavy.
 .IP " (9)"
-Highlight mineral seams.  This is off by default.  Switching it on causes
-quartz and magma to be displayed as `%' instead of `#'.
+Highlight and notice mineral seams.  This is off by default.  Switching
+it on causes quartz and magma to be displayed as `%' instead of `#';
+also, it causes the look command to treat them as interesting objects.
 This is handy when mining.
 Setting this option does not immediately highlight all minerals,
 but only those which are subsequently displayed.  To display all minerals,
@@ -1157,7 +1163,7 @@ will beep for most invalid characters, such as trying to choose a spell
 that you haven't learned yet.  When off, there are no such beeps.
 .IP " (11)"
 Display rest/repeat counts.  This is on by default.  When on, the program
-will progessively display the remaining turns left while resting, and
+will progressively display the remaining turns left while resting, and
 for repeated commands.  For those trying to play over a 2400 bps or less
 connection, or for those playing on very slow microcomputers, turning this
 off will make resting and repeated commands work much faster.
@@ -1192,10 +1198,16 @@ have been discovered to be cursed or enchanted, or if they have been
 sampled without being identified.
 In this last case, \fImoria\fP does in fact carefully inscribe every such
 item.
+.sp
+If the inscription on an item is a single digit, that digit can be used
+to refer to it when using, wearing, or wielding an item from your pack.
+For example, if you keep a pick in your pack with the inscription 1, you
+can switch to the pick by wielding item 1 without checking your full
+inventory list to find out which item the pick is.
 .IP "!  - Shell out of game."
 Use the Shell command `!' to temporarily exit the game to
 execute UNIX or MSDOS commands.  You may reenter the game by typing exit
-to end the spawned process.  This is not implemented in the
+to end the spawned process.  This is not implemented in the 
 Macintosh version.
 .IP "<  - Go up an up staircase."
 If you move onto an up staircase you may use the `<' command
@@ -1214,7 +1226,7 @@ area.
 The Run command will move you in the indicated
 direction until either you have to make a choice as between two
 directions, or something interesting happens.  There are options
-which determine behaviour at corners, and at screen boundaries.
+which determine behavior at corners, and at screen boundaries.
 More precisely, the conditions which stop a run are as follows:
 .IP (1)
 A creature appears on the screen, one already on the screen moves,
@@ -1225,6 +1237,14 @@ You move next to an object, or a feature such as a door or trap.
 You come to the end of open space, or the end of a passage, or
 a junction of passages, or a hole in a wall.
 .IP (4)
+Anything typed during a run causes the run to stop.  The character
+causing this to occur is ignored.  It is best to use a space,
+which is ignored as a command, just in case the run stops just before
+you type the character.
+.IP (5)
+Various changes of state, such as recovery from fear or loss of heroism,
+will stop a run.
+.sp
 Corners are more complex.  A corner allows a choice between adjacent
 rectangular and diagonal directions.  If you can see walls which ensure
 that the diagonal gives a faster traversal, then action is determined
@@ -1234,7 +1254,7 @@ you maximum speed (as is nice if you are fleeing a hidden creature).
 On the other hand, this option should not be set if you want
 more careful coverage (as when you are searching) so that you
 take two moves through the corner.
-.IP (5)
+.sp
 At a potential corner, where walls are not yet visible ahead of the
 rectangular direction, the \*Qexamine corners\*U option is considered.
 If set, you will move straight into the corner, which will light up
@@ -1242,17 +1262,9 @@ all the corner and so determine where you can go from there.  This
 allows you to follow corners in new passages.  If the option is not set,
 you stop.  This allows highly cautious running where you want to stop
 at all potential choice points.
-.IP (6)
+.sp
 If you move off the screen while running, then a new section of the dungeon
-is display and the run continues.  However, if the \*Qstop when
+is displayed and the run continues.  However, if the \*Qstop when
 map changes\*U option
-is set, you will stop.  Again, this is an option for nervous players, after
+is set, you will stop.  Again, this is an option for nervous players; after
 all, there may be a dragon on the new screen.
-.IP (7)
-Anything typed during a run causes the run to stop.  The character
-causing this to occur is ignored.  It is best to use a space,
-which is ignored as a command, just in case the run stops just before
-you type the character.
-.IP (8)
-Various changes of state, such as recovery from fear or loss of heroism,
-will stop a run.

@@ -30,10 +30,10 @@ moria1.ms, moria2.ms
 	'tbl moria1.ms moria1.ms | nroff -ms'.  It is split into two parts
 	so that it can be easily mailed.
 
-moria1.txt, moria2.txt, moria3.txt, moria4.txt
+moria1.txt, moria2.txt
 	is an already processed copy of the document "The Dungeons of Moria"
 	(with bold and underlined characters removed) for those without
-	the nroff program.  It is split into four parts so that it can be
+	the nroff program.  It is split into two parts so that it can be
 	easily mailed.
 
 pronounc
@@ -41,10 +41,6 @@ pronounc
 
 spells.doc
 	Documents how spells work.  Should be part of the manual.
-
-spoilers
-	Answers most frequently asked questions.  Most of this info should
-	really be incorporated into the manual.
 
 where.inf
 	gives info on how to obtain the various versions of moria.

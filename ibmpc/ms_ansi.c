@@ -1,6 +1,6 @@
 /* ibmpc/ms_ansi.c: a set of routines to provide either PCcurses or ANSI output
 
-   Copyright (c) 1989-92 James E. Wilson, Don Kneller
+   Copyright (c) 1989-94 James E. Wilson, Don Kneller
 
    This software may be copied and distributed for educational, research, and
    not for profit purposes provided that this copyright and statement are

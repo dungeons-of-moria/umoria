@@ -1,6 +1,6 @@
 /* source/creature.c: handle monster movement and attacks
 
-   Copyright (c) 1989-92 James E. Wilson, Robert A. Koeneke
+   Copyright (c) 1989-94 James E. Wilson, Robert A. Koeneke
 
    This software may be copied and distributed for educational, research, and
    not for profit purposes provided that this copyright and statement are
@@ -886,7 +886,10 @@ int monptr;
 	      else
 		{
 		  (void) sprintf(tmp_str, "%sappears confused.", cdesc);
-		  m_ptr->confused = TRUE;
+		  if (m_ptr->confused)
+		    m_ptr->confused += 3;
+		  else
+		    m_ptr->confused = 2 + randint(16);
 		}
 	      msg_print(tmp_str);
 	      if (visible && !death && randint(4) == 1)
@@ -1587,23 +1590,39 @@ int32u *rcmove;
 	}
       return;  /* monster movement finished */
     }
-  /* Creature is confused?  Chance it becomes un-confused  */
+  /* Creature is confused or undead turned? */
   else if (m_ptr->confused)
     {
-      mm[0] = randint(9);
-      mm[1] = randint(9);
-      mm[2] = randint(9);
-      mm[3] = randint(9);
-      mm[4] = randint(9);
+      if (r_ptr->cdefense & CD_UNDEAD) /* Undead only get confused from
+					  turn undead, so they should flee */
+	{
+	  get_moves(monptr,mm);
+	  mm[0] = 10-mm[0];
+	  mm[1] = 10-mm[1];
+	  mm[2] = 10-mm[2];
+	  mm[3] = randint(9); /* May attack only if cornered */
+	  mm[4] = randint(9);
+	}
+      else
+	{
+	  mm[0] = randint(9);
+	  mm[1] = randint(9);
+	  mm[2] = randint(9);
+	  mm[3] = randint(9);
+	  mm[4] = randint(9);
+	}
       /* don't move him if he is not supposed to move! */
       if (!(r_ptr->cmove & CM_ATTACK_ONLY))
 	make_move(monptr, mm, rcmove);
-      if (randint(8) == 1)
-	m_ptr->confused = FALSE;
+      m_ptr->confused--;
       move_test = TRUE;
     }
   /* Creature may cast a spell */
-  else if (r_ptr->spells != 0)
+#ifdef ATARIST_MWC
+  else if (r_ptr->spells & (holder = CS_FREQ))
+#else
+  else if (r_ptr->spells & CS_FREQ)
+#endif
     mon_cast_spell(monptr, &move_test);
   if (!move_test)
     {
@@ -1766,13 +1785,13 @@ int attack;
 			  m_ptr->stunned--;
 			if (m_ptr->stunned == 0)
 			  {
-			    if (!m_ptr->ml)
-			      (void) strcpy(cdesc, "It ");
-			    else
-			      (void) sprintf(cdesc, "The %s ",
-					     c_list[m_ptr->mptr].name);
-			    msg_print(strcat(cdesc,
-					     "recovers and glares at you."));
+			    if (m_ptr->ml)
+			      {
+				(void) sprintf(cdesc, "The %s ",
+					       c_list[m_ptr->mptr].name);
+				msg_print(strcat(cdesc,
+					       "recovers and glares at you."));
+			      }
 			  }
 		      }
 		    if ((m_ptr->csleep == 0) && (m_ptr->stunned == 0))

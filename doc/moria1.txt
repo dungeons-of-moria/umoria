@@ -29,7 +29,7 @@
 
 
 
-September 26, 1990
+June 25, 1994
 
 
 
@@ -312,12 +312,12 @@ September 26, 1990
                of  the  dungeon is cool or cold, infravision will not allow
                the player to see walls and objects.  Infravision will allow
                a  character  to see any warm-blooded creatures up to a cer-
-               tain distance.  This ability works equally well with or with
-               out  a  light source.  The majority of moria's creatures are
-               cold-blooded, and will not be detected unless lit  up  by  a
-               light  source.   All non human races have innate infravision
-               ability.  Human can gain infravision only if it is magically
-               enhanced.
+               tain distance.  This ability  works  equally  well  with  or
+               without  a  light source.  The majority of moria's creatures
+               are cold-blooded, and will not be detected unless lit up  by
+               a light source.  All non-human races have innate infravision
+               ability.  Humans can gain infravision only if  it  is  magi-
+               cally enhanced.
 
 
 
@@ -510,16 +510,16 @@ September 26, 1990
                fighter, but spells are his true realm.
 
           Priest
-               A Priest is a character of holy devotion.  They explore  the
+               A Priest is a character of holy devotion.  He  explores  the
                dungeon  only  to destroy the evil that lurks within, and if
-               treasure just happens to fall into  their  packs,  well,  so
-               much  more  to  the  glory of their church!  Priests receive
-               their spells from a deity, and therefore do not choose which
-               spells they will learn.  They are familiar with magical dev-
-               ices, preferring to call them instruments of  god,  but  are
-               not  as good as a mage in their use.  Priests have good sav-
-               ing throws,  and  make  decent  fighters,  preferring  blunt
-               weapons  over  edged  ones.   Wisdom  and  Charisma  are the
+               treasure just happens to fall into his pack, well,  so  much
+               more  to  the  glory  of  his temple!  A priest receives his
+               spells from a deity, and therefore  does  not  choose  which
+               spells  he will learn.  He is familiar with magical devices,
+               preferring to call them instruments of god, but  Is  not  as
+               good  as  a  mage  in  their  use.  Priests have good saving
+               throws, and make decent fighters, preferring  blunt  weapons
+               over  edged  ones.   Wisdom  and  Charisma  are the priest's
 
 
 
@@ -532,7 +532,7 @@ September 26, 1990
           The Dungeons of Moria                                 Page 8
 
 
-               priest's primary stats.
+               primary stats.
 
           Rogue
                A Rogue is a character that prefers to live by his  cunning,
@@ -543,7 +543,7 @@ September 26, 1990
                or sneak up and get the first blow.  A rogue's perception is
                higher than any other class, and many times he will notice a
                trap  or  secret  door  before having to search.  A rogue is
-               better than warriors or paladins with magical  devices,  but
+               better than a warrior or paladin with magical  devices,  but
                still  can  not  rely on their performance.  Rogues can also
                learn a few spells, but not the  powerful  offensive  spells
                mages can use.  A rogue's primary stats are Intelligence and
@@ -564,13 +564,13 @@ September 26, 1990
                A Paladin is a warrior/priest.  He is a very  good  fighter,
                second  only to the warrior class, but not very good at mis-
                sile weapons.  He receives prayers at a slower pace then the
-               priest,  and  can  receive all but the most powerful prayer.
-               Because a paladin is  really  a  dual  class  character,  it
-               requires  more  experience  to advance him.  A paladin lacks
-               much in the way of abilities.  He is poor at  stealth,  per-
-               ception,  searching,  and  magical devices.  He has a decent
-               saving throw due to his divine alliance.  His primary  stats
-               are Strength and Charisma.
+               priest, but can eventually learn all the prayers.  Because a
+               paladin is really a dual class character, it  requires  more
+               experience  to advance him.  A paladin lacks much in the way
+               of abilities.  He is poor at stealth, perception, searching,
+               and  magical  devices.   He has a decent saving throw due to
+               his divine alliance.  His primary  stats  are  Strength  and
+               Charisma.
 
 
           2.5.1.  Race Versus Class
@@ -648,9 +648,9 @@ September 26, 1990
 
           Symbols on your map can be broken  down  into  three  categories:
           Features  of  the dungeon such as walls, floor, doors, and traps;
-          Objects which can be picked up such as treasure, weapons, magical
+          objects which can be picked up such as treasure, weapons, magical
           devices,  etc;  and creatures which may or may not move about the
-          dungeon, but are mostly harmful to your character's well being.
+          dungeon, but are mostly harmful to your character's well-being.
 
 
 
@@ -755,7 +755,7 @@ September 26, 1990
                     t   Giant Tick          T   Troll
                     u                       U   Umber Hulk
                     v                       V   Vampire
-                    w   Worm or Worm Mass   W   Wight or Wraith.
+                    w   Worm or Worm Mass   W   Wight or Wraith
                     x                       X   Xorn
                     y   Yeek                Y   Yeti
                     z   Zombie              Z
@@ -906,13 +906,13 @@ September 26, 1990
 
                Original Directions
 
-                 \     |      /
-                  7    8     9
+                      |       /
+                  7    8      9
 
-               -  4          6  -
+               -  4           6  -
 
-                  1    2     3
-                 /     |      \
+                  1    2      3
+                 /     |
 
 
 
@@ -931,13 +931,13 @@ September 26, 1990
 
                Rogue-like Directions
 
-                 \      |       /
-                  y     k      u
+                       |        /
+                  y     k       u
 
-               -  h            l  -
+               -  h             l  -
 
-                  b     j      n
-                 /      |       \
+                  b     j       n
+                 /      |
 
 
           Movement is accomplished by specifying a  direction  immediately.
@@ -1007,16 +1007,18 @@ September 26, 1990
           used.   For  example,  the  command to read a scroll will ask you
           which of the scrolls that you are carrying that you wish to read.
           In  such  cases,  the selection is made by typing a letter of the
-          alphabet.  The prompt will indicate  the  possible  letters,  and
-          will  also allow you to type the key `*', which causes all of the
-          available options to be described.
+          alphabet; if you are selecting from your pack, you may also  type
+          a  digit to select the item whose inscription is that digit.  The
+          prompt will indicate the possible letters, and  will  also  allow
+          you  to  type  the  key  `*',  which  causes all of the available
+          options to be described.
 
           The particular object may be selected by an upper case or a lower
-          case  letter.   If  lower case is used, the selection takes place
-          immediately.  If upper case is used, then the  particular  option
-          is  described,  and  you  are  given  the option of confirming or
-          retracting that choice.  Upper case selection is thus safer,  but
-          requires an extra key stroke.
+          case  letter.   If  lower  case or a digit is used, the selection
+          takes place immediately.  If upper case is used, then the partic-
+          ular  option  is  described, and you are given the option of con-
+          firming or retracting that choice.  Upper case selection is  thus
+          safer, but requires an extra key stroke.
 
 
           5.5.  Command descriptions
@@ -1046,8 +1048,6 @@ September 26, 1990
                creatures  such  as  ancient  dragons  will  be difficult or
                impossible to bash successfully.
 
-               A player automatically performs a shield bash instead  of  a
-               body  bash,  if  he is currently wearing a shield.  A shield
 
 
 
@@ -1060,6 +1060,8 @@ September 26, 1990
           The Dungeons of Moria                                Page 16
 
 
+               A player automatically performs a shield bash instead  of  a
+               body  bash,  if  he is currently wearing a shield.  A shield
                bash adds the damage of a shield to that of the bash, so  it
                is more effective.  Size and material both affect the damage
                that a shield will do.
@@ -1085,9 +1087,8 @@ September 26, 1990
                A character must eat occasionally to remain effective.  As a
                character  grows hungry, a message will appear at the bottom
                of the screen  saying  "Hungry".   If  a  character  remains
-               hungry long enough, he will become weak and eventually start
-               fainting.  Eventually, you will die of starvation if you  do
-               not eat.
+               hungry  long  enough,  he will become weak, eventually start
+               fainting, and finally die of starvation.
 
           F  - Fill a lamp or lantern with oil.
                If your character is currently using a lamp for  light,  and
@@ -1103,7 +1104,8 @@ September 26, 1990
                Mages,  rogues,  and  rangers must have the magic books con-
                taining new spells to be able to learn  them.   Priests  and
                Paladins are given their prayers by their gods, and hence do
-               not need a holy book before learning the spells in it.
+               not need a holy book before  learning  the  prayers  in  it.
+               They do need the book in order to use the prayers.
 
           L  - Location on map. {W - where}
                The location command allows you to look at all parts of  the
@@ -1112,8 +1114,6 @@ September 26, 1990
                center as possible.  You may then shift the displayed map in
                any of the eight possible directions.  Each shift moves your
                view  point by one half screen.  The top line displays a map
-               section number, each map section having a height  and  width
-               one half that of the display, and indicates the direction of
 
 
 
@@ -1126,6 +1126,8 @@ September 26, 1990
           The Dungeons of Moria                                Page 17
 
 
+               section number, each map section having a height  and  width
+               one half that of the display, and indicates the direction of
                the display from your current position.  If  you  exit  this
                command  while  you are not on the display, then the display
                is centered again.
@@ -1146,7 +1148,7 @@ September 26, 1990
                fied duration has expired, or something to wake the  charac-
                ter  happens,  such  as  a creature wandering by, or getting
                hungry, or some disability like blindness expiring.   It  is
-               sometimes  a  good idea to rest a beat up character until he
+               sometimes  a  good idea to rest a beat-up character until he
                regains some of his hit points, but be sure to  have  plenty
                of food if you rest often.
 
@@ -1178,8 +1180,9 @@ September 26, 1990
           T <Dir> - Tunnel through rock. {control-<Dir>}
                Tunneling (Mining) is a very useful  art.   There  are  four
                kinds  of  rock  present in the dungeons of moria: Permanent
-               Rock, Granite Rock, Magma Intrusion, and Quartz Veins.  Per-
-               manent  Rock  is  exactly  that, permanent.  Granite is very
+
+
+
 
 
 

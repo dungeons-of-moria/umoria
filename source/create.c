@@ -1,6 +1,6 @@
 /* source/create.c: create a player character
 
-   Copyright (c) 1989-92 James E. Wilson, Robert A. Koeneke
+   Copyright (c) 1989-94 James E. Wilson, Robert A. Koeneke
 
    This software may be copied and distributed for educational, research, and
    not for profit purposes provided that this copyright and statement are
@@ -117,6 +117,7 @@ static void get_all_stats ()
   change_stat (A_DEX, r_ptr->dex_adj);
   change_stat (A_CON, r_ptr->con_adj);
   change_stat (A_CHR, r_ptr->chr_adj);
+  p_ptr->misc.lev = 1;
   for (j = 0; j < 6; j++)
     {
       py.stats.cur_stat[j] = py.stats.max_stat[j];
@@ -130,7 +131,6 @@ static void get_all_stats ()
   p_ptr->misc.stl    = r_ptr->stl;
   p_ptr->misc.save   = r_ptr->bsav;
   p_ptr->misc.hitdie = r_ptr->bhitdie;
-  p_ptr->misc.lev    = 1;
   p_ptr->misc.ptodam = todam_adj();
   p_ptr->misc.ptohit = tohit_adj();
   p_ptr->misc.ptoac  = 0;

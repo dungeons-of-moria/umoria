@@ -1,6 +1,6 @@
 /* source/generate.c: initialize/create a dungeon or town level
 
-   Copyright (c) 1989-92 James E. Wilson, Robert A. Koeneke
+   Copyright (c) 1989-94 James E. Wilson, Robert A. Koeneke
 
    This software may be copied and distributed for educational, research, and
    not for profit purposes provided that this copyright and statement are
@@ -745,7 +745,7 @@ int yval, xval;
       /* Place an object in the treasure vault	*/
       tmp = randint(10);
       if (tmp > 2)
-	place_object(yval, xval);
+	place_object(yval, xval, FALSE);
       else if (tmp == 2)
 	place_down_stairs(yval, xval);
       else
@@ -814,8 +814,8 @@ int yval, xval;
 	  cave[yval][xval+5].fval = TMP1_WALL;
 	  place_secret_door(yval-3+(randint(2)<<1), xval-3);
 	  place_secret_door(yval-3+(randint(2)<<1), xval+3);
-	  if (randint(3) == 1)	place_object(yval, xval-2);
-	  if (randint(3) == 1)	place_object(yval, xval+2);
+	  if (randint(3) == 1)	place_object(yval, xval-2, FALSE);
+	  if (randint(3) == 1)	place_object(yval, xval+2, FALSE);
 	  vault_monster(yval, xval-2, randint(2));
 	  vault_monster(yval, xval+2, randint(2));
 	}
@@ -1005,7 +1005,7 @@ int yval, xval;
 	place_secret_door(yval, xval-7+(tmp<<1));
 
       /* Place a treasure in the vault		*/
-      place_object(yval, xval);
+      place_object(yval, xval, FALSE);
       /* Let's guard the treasure well.	*/
       vault_monster(yval, xval, 2+randint(2));
       /* Traps naturally			*/

@@ -1,6 +1,6 @@
 /* UNIX Moria Version 5.x
    source/main.c: initialization, main() function and main loop
-   Copyright (c) 1989-92 James E. Wilson, Robert A. Koeneke
+   Copyright (c) 1989-94 James E. Wilson, Robert A. Koeneke
 
    This software may be copied and distributed for educational, research, and
    not for profit purposes provided that this copyright and statement are
@@ -145,6 +145,21 @@ long _stksize = 18000;		/*(SAJ) for MWC	*/
 
 #ifdef __TURBOC__
 unsigned _stklen = 0x3fff;	/* increase stack from 4K to 16K */
+#endif
+#ifdef AMIGA
+\/* detach from cli process */
+
+#ifdef LATTICE
+#define NEAR	near
+#else
+#define NEAR
+#endif
+
+long NEAR _stack = 30000;
+long NEAR _priority = 0;
+long NEAR _BackGroundIO = 1;
+char * NEAR _procname = "Moria";
+
 #endif
 
 #if defined(LINT_ARGS)
@@ -452,7 +467,8 @@ static void init_m_level()
     m_level[c_list[i].level]++;
 
   for (i = 1; i <= MAX_MONS_LEVEL; i++)
-#ifdef AMIGA  /* fix a stupid MANX Aztec C 5.0 bug again */
+#if defined(AMIGA) && !defined(LATTICE) 
+    /* fix a stupid MANX Aztec C 5.0 bug again */
     m_level[i] = m_level[i] + m_level[i-1];
 #else
     m_level[i] += m_level[i-1];
@@ -471,7 +487,8 @@ static void init_t_level()
   for (i = 0; i < MAX_DUNGEON_OBJ; i++)
     t_level[object_list[i].level]++;
   for (i = 1; i <= MAX_OBJ_LEVEL; i++)
-#ifdef AMIGA  /* fix a stupid MANX Aztec C 5.0 bug again */
+#if defined(AMIGA) && !defined(LATTICE) 
+    /* fix a stupid MANX Aztec C 5.0 bug again */
     t_level[i] = t_level[i] + t_level[i-1];
 #else
     t_level[i] += t_level[i-1];

@@ -3,10 +3,10 @@
 # LIBDIR must be the same directory defined in config.h
 # OWNER is who you want the game to be chown to.
 # GROUP is who you wnat the game to be chgrp to.
-BINDIR = /usr/public
-LIBDIR = /usr/public/morialib
-OWNER = wilson
-GROUP = wilson
+BINDIR = /home/zariski/grabiner/moria
+LIBDIR = /home/zariski/grabiner/moria/files
+OWNER = grabiner
+GROUP = grad
 
 # For testing and debugging the program, it is best to use this line.
 # CFLAGS = -g

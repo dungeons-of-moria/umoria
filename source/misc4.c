@@ -1,6 +1,6 @@
 /* source/misc4.c: misc code for maintaining the dungeon, printing player info
 
-   Copyright (c) 1989-92 James E. Wilson, Robert A. Koeneke
+   Copyright (c) 1989-94 James E. Wilson, Robert A. Koeneke
 
    This software may be copied and distributed for educational, research, and
    not for profit purposes provided that this copyright and statement are
@@ -48,7 +48,7 @@ void scribe_object()
 	  else
 	    (void) strcpy(out_val, "Inscription: ");
 	  j = 78 - strlen(tmp_str);
-	  if (j > 24)
+	  if (j > 12)
 	    j = 12;
 	  prt(out_val, 0, 0);
 	  if (get_string(out_val, 0, (int)strlen(out_val), j))

@@ -1,6 +1,6 @@
 /* source/death.c: code executed when player dies
 
-   Copyright (c) 1989-92 James E. Wilson, Robert A. Koeneke
+   Copyright (c) 1989-94 James E. Wilson, Robert A. Koeneke
 
    This software may be copied and distributed for educational, research, and
    not for profit purposes provided that this copyright and statement are
@@ -30,6 +30,10 @@
 #include <sys/param.h>
 #include <sys/types.h>
 #include <sys/file.h>
+#else
+#ifdef SYS_V /* XENIX and SYSV seem to need this */
+#include <sys/types.h>
+#endif
 #endif
 
 #ifdef MSDOS
@@ -190,7 +194,11 @@ int f, l;
   (void) sprintf (lockname, (char *)prefix_file((char *)"moria.%d"),
 		  sbuf.st_ino);
 #else
+#ifdef __linux__
+  (void) sprintf (lockname, "/tmp/moria.%ld", sbuf.st_ino);
+#else
   (void) sprintf (lockname, "/tmp/moria.%d", sbuf.st_ino);
+#endif
 #endif
   if (l & LOCK_UN)
     return unlink(lockname);
@@ -230,7 +238,7 @@ int show_player;
   int16 player_uid;
 #endif
 
-#if defined(MSDOS) || defined(VMS) || defined(AMIGA) || defined(MAC)
+#if defined(MSDOS) || defined(VMS) || defined(AMIGA) || defined(MAC) || defined(APOLLO)
 #if defined(MAC) || defined(MSDOS)
   if ((highscore_fp = fopen(MORIA_TOP, "rb")) == NULL)
 #else
@@ -324,7 +332,7 @@ umoria.");
       if (input == ESCAPE)
 	break;
     }
-#if defined(MSDOS) || defined(VMS) || defined(AMIGA) || defined(MAC)
+#if defined(MSDOS) || defined(VMS) || defined(AMIGA) || defined(MAC) || defined(APOLLO)
   (void) fclose (highscore_fp);
 #endif
 }
@@ -341,11 +349,11 @@ int duplicate_character ()
   high_scores score;
   int8u version_maj, version_min, patch_level;
   int16 player_uid;
-#if defined(MSDOS) || defined(VMS) || defined(AMIGA) || defined(MAC)
+#if defined(MSDOS) || defined(VMS) || defined(AMIGA) || defined(MAC) || defined(APOLLO)
   char string[80];
 #endif
 
-#if defined(MSDOS) || defined(VMS) || defined(AMIGA) || defined(MAC)
+#if defined(MSDOS) || defined(VMS) || defined(AMIGA) || defined(MAC) || defined(APOLLO)
 #if defined(MAC) || defined(MSDOS)
   if ((highscore_fp = fopen(MORIA_TOP, "rb")) == NULL)
 #else
@@ -382,7 +390,7 @@ int duplicate_character ()
       msg_print("Sorry. This scorefile is from a different version of \
 umoria.");
       msg_print (CNIL);
-#if defined(MSDOS) || defined(VMS) || defined(AMIGA) || defined(MAC)
+#if defined(MSDOS) || defined(VMS) || defined(AMIGA) || defined(MAC) || defined(APOLLO)
       (void) fclose (highscore_fp);
 #endif
       return FALSE;
@@ -599,7 +607,7 @@ static void highscores()
   char *tmp;
   int8u version_maj, version_min, patch_level;
   long curpos;
-#if defined(VMS) || defined(MSDOS) || defined(AMIGA) || defined(MAC)
+#if defined(VMS) || defined(MSDOS) || defined(AMIGA) || defined(MAC) || defined(APOLLO)
   char string[100];
 #endif
 
@@ -754,7 +762,7 @@ are not saved.");
 	       && new_entry.race == old_entry.race
 	       && new_entry.class == old_entry.class)
 	{
-#if defined(MSDOS) || defined(VMS) || defined(AMIGA) || defined(MAC)
+#if defined(MSDOS) || defined(VMS) || defined(AMIGA) || defined(MAC) || defined(APOLLO)
 	  (void) fclose (highscore_fp);
 #endif
 	  return;
@@ -787,7 +795,7 @@ are not saved.");
       while (!feof(highscore_fp))
 	{
 #ifndef BSD4_3
-#ifdef ATARIST_TC || defined(__TURBOC__)
+#if defined(ATARIST_TC) || defined(__TURBOC__)
 	  /* No fseek with negative offset allowed.  */
 	  (void) fseek(highscore_fp, (long)ftell(highscore_fp) -
 		       sizeof(high_scores) - sizeof (char), L_SET);
@@ -840,7 +848,7 @@ are not saved.");
 	}
     }
 
-#if !defined(VMS) && !defined(MSDOS) && !defined(AMIGA) && !defined(MAC)
+#if !defined(VMS) && !defined(MSDOS) && !defined(AMIGA) && !defined(MAC) || !defined(APOLLO)
 #ifdef ATARIST_TC
   /* Flock never called for Atari ST with TC.  */
 #else

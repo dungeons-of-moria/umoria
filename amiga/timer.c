@@ -1,14 +1,20 @@
 /* amiga/timer.c: high level io commands for the timer.device
 
-   Copyright (c) 1990-92 Corey Gehman, James E. Wilson
+   Copyright (c) 1990-94 Corey Gehman, James E. Wilson
 
    This software may be copied and distributed for educational, research, and
    not for profit purposes provided that this copyright and statement are
    included in all such copies. */
 
+#include <exec/types.h>
 #include <exec/memory.h>
 #include <devices/timer.h>
+
+#ifdef LATTICE
+#include <clib/all_protos.h>
+#else
 #include <functions.h>
+#endif
 
 extern UBYTE *malloc();
 

@@ -1,6 +1,6 @@
 /* source/store2.c: store code, entering, command interpreter, buying, selling
 
-   Copyright (c) 1989-92 James E. Wilson, Robert A. Koeneke
+   Copyright (c) 1989-94 James E. Wilson, Robert A. Koeneke
 
    This software may be copied and distributed for educational, research, and
    not for profit purposes provided that this copyright and statement are
@@ -436,7 +436,7 @@ int num_offer;
       prt(comment, 0, 0);
       if (num_offer && last_store_inc != 0)
 	{
-	  (void) sprintf (default_offer, "[%c%d] ",
+	  (void) sprintf (default_offer, "[%c%ld] ",
 			  (last_store_inc < 0) ? '-' : '+',
 			  abs (last_store_inc));
 	  prt (default_offer, 0, orig_clen);

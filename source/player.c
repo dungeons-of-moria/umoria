@@ -1,6 +1,6 @@
 /* source/player.c: player specific variable definitions
 
-   Copyright (c) 1989-92 James E. Wilson, Robert A. Koeneke
+   Copyright (c) 1989-94 James E. Wilson, Robert A. Koeneke
 
    This software may be copied and distributed for educational, research, and
    not for profit purposes provided that this copyright and statement are
@@ -370,7 +370,7 @@ spell_type magic_spell[MAX_CLASS-1][31] = {
      { 21, 16, 60,  38},
      { 25, 20, 70,  75},
      { 33, 24, 90, 125},
-     { 39, 32, 99, 200}
+     { 39, 32, 80, 200}
    },
    {		  /* Rogue	   */
      { 99, 99,	0,   0},
@@ -469,7 +469,7 @@ spell_type magic_spell[MAX_CLASS-1][31] = {
      { 33, 28, 60,  31},
      { 35, 32, 70,  38},
      { 37, 36, 90,  50},
-     { 39, 38, 95, 100}
+     { 39, 38, 90, 100}
    }
  };
 #endif

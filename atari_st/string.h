@@ -1,6 +1,6 @@
 /* atari_st/string.h: string include file for MWC
 
-   Copyright (c) 1989-92 Stephen A Jacobs, James E. Wilson
+   Copyright (c) 1989-94 Stephen A Jacobs, James E. Wilson
 
    This software may be copied and distributed for educational, research, and
    not for profit purposes provided that this copyright and statement are

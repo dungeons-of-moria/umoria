@@ -1,6 +1,6 @@
 /* source/files.c: misc code to access files used by Moria
 
-   Copyright (c) 1989-92 James E. Wilson, Robert A. Koeneke
+   Copyright (c) 1989-94 James E. Wilson, Robert A. Koeneke
 
    This software may be copied and distributed for educational, research, and
    not for profit purposes provided that this copyright and statement are
@@ -101,7 +101,7 @@ void init_scorefile()
       exit(1);
 #endif
     }
-#if defined(MSDOS) || defined(VMS) || defined(MAC)
+#if defined(MSDOS) || defined(VMS) || defined(MAC) || defined(APOLLO)
   /* can't leave it open, since this causes problems on networked PCs and VMS,
      we DO want to check to make sure we can open the file, though */
   fclose (highscore_fp);
@@ -236,7 +236,7 @@ char *filename;
 void print_objects()
 {
   register int i;
-  int nobj, j, level;
+  int nobj, j, level, small;
   vtype filename1; bigvtype tmp_str;
   register FILE *file1;
   register inven_type *i_ptr;
@@ -257,6 +257,7 @@ void print_objects()
   if (!get_string(tmp_str, 0, 27, 10))
     return;
   nobj = atoi(tmp_str);
+  small = get_check("Small objects only?");
   if ((nobj > 0) && (level > -1) && (level < 1201))
     {
       if (nobj > 10000)
@@ -291,7 +292,8 @@ void print_objects()
 	      j = popt();
 	      for (i = 0; i < nobj; i++)
 		{
-		  invcopy(&t_list[j], sorted_objects[get_obj_num(level)]);
+		  invcopy(&t_list[j], 
+			  sorted_objects[get_obj_num(level,small)]);
 		  magic_treasure(j, level);
 		  i_ptr = &t_list[j];
 		  store_bought(i_ptr);

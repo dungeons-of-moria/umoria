@@ -1,6 +1,6 @@
 /* source/store1.c: store code, updating store inventory, pricing objects
 
-   Copyright (c) 1989-92 James E. Wilson, Robert A. Koeneke
+   Copyright (c) 1989-94 James E. Wilson, Robert A. Koeneke
 
    This software may be copied and distributed for educational, research, and
    not for profit purposes provided that this copyright and statement are
@@ -160,7 +160,7 @@ inven_type *item;
       if (i < 1)  i = 1;
       *max_sell = i * owners[s_ptr->owner].max_inflate / 100;
       *min_sell = i * owners[s_ptr->owner].min_inflate / 100;
-      if (min_sell > max_sell)	min_sell = max_sell;
+      if (*min_sell > *max_sell) *min_sell = *max_sell;
       return(i);
     }
   else
@@ -419,11 +419,16 @@ int store_num;
 int32 minprice;
 {
   register int flagnoneed;
+  int bargain_record;
   register store_type *s_ptr;
 
   s_ptr = &store[store_num];
-  flagnoneed = ((s_ptr->good_buy == MAX_SHORT)
-		|| (s_ptr->good_buy > 3 * s_ptr->bad_buy + 5 + minprice/50));
+  if (s_ptr->good_buy == MAX_SHORT)
+    return TRUE;
+  bargain_record = (s_ptr->good_buy - 3 * s_ptr->bad_buy - 5);
+  flagnoneed = ((bargain_record > 0)
+		&& ((long)bargain_record * (long)bargain_record
+		    > minprice/50));
   return (flagnoneed);
 }
 

@@ -1,6 +1,6 @@
 /* source/recall.c: print out monster memory info			-CJS-
 
-   Copyright (c) 1989-92 James E. Wilson, Christopher J. Stuart
+   Copyright (c) 1989-94 James E. Wilson, Christopher J. Stuart
 
    This software may be copied and distributed for educational, research, and
    not for profit purposes provided that this copyright and statement are
@@ -193,7 +193,14 @@ int mon_num;
       mp->r_cmove = (cp->cmove & ~CM_TREASURE) | (j << CM_TR_SHIFT);
 #endif
       mp->r_cdefense = cp->cdefense;
-      mp->r_spells = cp->spells | CS_FREQ;
+#ifdef ATARIST_MWC
+      if (cp->spells & (holder = CS_FREQ))
+#else
+      if (cp->spells & CS_FREQ)
+#endif
+	mp->r_spells = cp->spells | CS_FREQ;
+      else
+	mp->r_spells = cp->spells;
       j = 0;
       pu = cp->damage;
       while (*pu != 0 && j < 4)
@@ -373,7 +380,9 @@ int mon_num;
       (void) sprintf(temp, " for a%s %d%s level character.", q, i, p);
       roff(temp);
     }
-  /* Spells known, if have been used against us. */
+  /* Spells known, if have been used against us.
+     Breath weapons or resistance might be known only because we cast spells 
+     at it. */
   k = TRUE;
   j = rspells;
 #ifdef ATARIST_MWC
@@ -397,7 +406,15 @@ int mon_num;
 #endif
 	  if (k)
 	    {
-	      roff(" It can breathe ");
+#ifdef ATARIST_MWC
+	      holder2 = CS_FREQ;
+	      if (mp->r_spells & holder2)
+#else
+	      if (mp->r_spells & CS_FREQ)
+#endif
+		roff(" It can breathe ");
+	      else
+		roff(" It is resistant to ");
 	      k = FALSE;
 	    }
 #ifdef ATARIST_MWC
@@ -609,9 +626,26 @@ int mon_num;
 			    (CM_60_RANDOM|CM_90_RANDOM)))
 	roff (" often");
       roff(" carry");
-      p = " objects";
+#ifdef ATARIST_MWC
+      holder = CM_SMALL_OBJ;
+      if (rcmove & holder)
+#else
+      if (rcmove & CM_SMALL_OBJ)
+#endif
+	p = " small objects";
+      else
+	p = " objects";
       if (j == 1)
-	p = " an object";
+	{
+#ifdef ATARIST_MWC
+	  if (rcmove & holder)
+#else
+	  if (rcmove & CM_SMALL_OBJ)
+#endif
+	    p = " a small object";
+	  else
+	    p = " an object";
+	}
       else if (j == 2)
 	roff(" one or two");
       else

@@ -1,6 +1,6 @@
 /* source/moria3.c: misc code, mainly to handle player commands
 
-   Copyright (c) 1989-92 James E. Wilson, Robert A. Koeneke
+   Copyright (c) 1989-94 James E. Wilson, Robert A. Koeneke
 
    This software may be copied and distributed for educational, research, and
    not for profit purposes provided that this copyright and statement are
@@ -109,7 +109,7 @@ int y, x;
       break;
     case 6: /* Hid Obj*/
       (void) delete_object(y, x);
-      place_object(y, x);
+      place_object(y, x, FALSE);
       msg_print("Hmmm, there was something under this rock.");
       break;
     case 7:  /* STR Dart*/
@@ -436,7 +436,7 @@ int y, x, num, typ;
   register cave_type *c_ptr;
   int real_typ, res;
 
-  if (typ == 1)
+  if ((typ == 1) || (typ == 5))
     real_typ = 1; /* typ == 1 -> objects */
   else
     real_typ = 256; /* typ == 2 -> gold */
@@ -453,7 +453,8 @@ int y, x, num, typ;
 	      c_ptr = &cave[j][k];
 	      if (c_ptr->fval <= MAX_OPEN_SPACE && (c_ptr->tptr == 0))
 		{
-		  if (typ == 3) /* typ == 3 -> 50% objects, 50% gold */
+		  if ((typ == 3) || (typ == 7))
+		    /* typ == 3 -> 50% objects, 50% gold */
 		    {
 		      if (randint(100) < 50)
 			real_typ = 1;
@@ -461,7 +462,7 @@ int y, x, num, typ;
 			real_typ = 256;
 		    }
 		  if (real_typ == 1)
-		    place_object(j, k);
+		    place_object(j, k, (typ >= 4));
 		  else
 		    place_gold(j, k);
 		  lite_spot(j, k);
@@ -524,6 +525,8 @@ register int32u flags;
     i = 0;
   if (flags & CM_CARRY_GOLD)
     i += 2;
+  if (flags & CM_SMALL_OBJ)
+    i += 4;
 
   number = 0;
   if ((flags & CM_60_RANDOM) && (randint(100) < 60))
@@ -549,6 +552,9 @@ register int32u flags;
   holder = CM_CARRY_GOLD;
   if (flags & holder)
     i += 2;
+  holder = CM_SMALL_OBJ;
+  if (flags & holder)
+    i += 4;
 
   number = 0;
   holder = CM_60_RANDOM;
@@ -580,12 +586,13 @@ register int32u flags;
 #else
   if (flags & CM_WIN)
 #endif
-    {
-      total_winner = TRUE;
-      prt_winner();
-      msg_print("*** CONGRATULATIONS *** You have won the game.");
-      msg_print("You cannot save this game, but you may retire when ready.");
-    }
+    if (!death) /* maybe the player died in mid-turn */
+      {
+	total_winner = TRUE;
+	prt_winner();
+	msg_print("*** CONGRATULATIONS *** You have won the game.");
+	msg_print("You cannot save this game, but you may retire when ready.");
+      }
 
   if (dump)
     {
@@ -594,10 +601,16 @@ register int32u flags;
 #ifdef ATARIST_MWC
 	{
 	  holder = CM_CARRY_OBJ;
+	  if (i & 0x04)
+	    holder = CM_CARRY_OBJ|CM_SMALL_OBJ;
 	  res |= holder;
 	}
 #else
-        res |= CM_CARRY_OBJ;
+        {
+	  res |= CM_CARRY_OBJ;
+	  if (i & 0x04)
+	    res |= CM_SMALL_OBJ;
+	}
 #endif
       if (dump >= 256)
 #ifdef ATARIST_MWC
@@ -770,7 +783,10 @@ int y, x;
 	      else
 		{
 		  (void) sprintf(out_val, "%s appears confused.", m_name);
-		  m_list[crptr].confused = TRUE;
+		  if (m_list[crptr].confused)
+		    m_list[crptr].confused += 3;
+		  else
+		    m_list[crptr].confused = 2 + randint(16);
 		}
 	      msg_print(out_val);
 	      if (m_list[crptr].ml && randint(4) == 1)

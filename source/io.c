@@ -1,6 +1,6 @@
 /* source/io.c: terminal I/O code, uses the curses package
 
-   Copyright (c) 1989-92 James E. Wilson, Robert A. Koeneke
+   Copyright (c) 1989-94 James E. Wilson, Robert A. Koeneke
 
    This software may be copied and distributed for educational, research, and
    not for profit purposes provided that this copyright and statement are
@@ -12,6 +12,10 @@
 #endif
 
 #include "config.h"
+
+#ifdef HPUX
+#include <sys/bsdtty.h>
+#endif
 
 #if defined(atarist) && defined(__GNUC__)
 #include <osbind.h>
@@ -56,12 +60,6 @@ long wgetch();
 char *getenv();
 #endif
 
-/* These are included after curses.h to avoid redefintion warnings for
-   TRUE, FALSE, and NULL.  */
-
-#include "constant.h"
-#include "types.h"
-#include "externs.h"
 
 #include <ctype.h>
 
@@ -105,6 +103,10 @@ typedef struct { int stuff; } fpvmach;
 #if !defined(AMIGA) && !defined(VMS)
 #include <termio.h>
 #endif
+#ifdef HPUX
+/* Needs termio.h because curses.h doesn't include it */
+#include <termio.h>
+#endif
 #endif
 #endif
 #else /* ! USG */
@@ -120,6 +122,13 @@ typedef struct { int stuff; } fpvmach;
 /* Include this to get prototypes for standard library functions.  */
 #include <stdlib.h>
 #endif
+
+/* These are included after other includes (particularly curses.h)
+   to avoid redefintion warnings. */
+
+#include "constant.h"
+#include "types.h"
+#include "externs.h"
 
 #if defined(SYS_V) && defined(lint)
 struct screen { int dumb; };
@@ -192,7 +201,11 @@ void sleep();
 #if !defined(MAC) && !defined(MSDOS) && !defined(ATARI_ST) && !defined(VMS)
 #ifndef AMIGA
 #ifdef USG
+#ifdef __linux__
+static struct termios save_termio;
+#else
 static struct termio save_termio;
+#endif
 #else
 static struct ltchars save_special_chars;
 static struct sgttyb save_ttyb;
@@ -318,7 +331,11 @@ void init_curses()
 #if defined(atarist) && defined(__GNUC__)
   (void) signal (SIGTSTP, (__Sigfunc)suspend);
 #else
+#ifdef  __386BSD__
+  (void) signal (SIGTSTP, (sig_t)suspend);
+#else
   (void) signal (SIGTSTP, suspend);
+#endif
 #endif
 #endif
   if (((savescr = newwin (0, 0, 0, 0)) == NULL)
@@ -368,7 +385,11 @@ void moriaterm()
 #if !defined(MSDOS) && !defined(ATARI_ST) && !defined(VMS)
 #ifndef AMIGA
 #ifdef USG
+#ifdef __linux__
+  struct termios tbuf;
+#else
   struct termio tbuf;
+#endif
 #else
   struct ltchars lbuf;
   struct tchars buf;
@@ -625,7 +646,11 @@ void shell_out()
 {
 #ifdef USG
 #if !defined(MSDOS) && !defined(ATARI_ST) && !defined(AMIGA)
+#ifdef __linux__
+  struct termios tbuf;
+#else
   struct termio tbuf;
+#endif
 #endif
 #else
   struct sgttyb tbuf;
@@ -732,7 +757,7 @@ void shell_out()
       msg_print("Fork failed. Try again.");
       return;
     }
-#ifdef USG
+#if defined(USG) || defined(__386BSD__)
   (void) wait((int *) 0);
 #else
   (void) wait((union wait *) 0);

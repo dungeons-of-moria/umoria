@@ -1,15 +1,18 @@
-First, a general guideline for posters; when you post any question
+Frequently Asked Questions for rec.games.roguelike.moria
+Last changes: 6/25/94 (Moria 5.5.1) 
+              6/21/94 (changed RTFM archive name)
+
+First, a general guideline for posters.  When you post any question
 related to playing or debugging the game, please give the version
 number, which you can get during the game by pressing "v".
 
 These are the questions in the Moria Frequently Asked Questions list.
 Quick answers to some questions are given in parentheses; more detailed
-answers are in the list which follows.
+answers to those questions with numbers are in the list which follows.
 
 The answers below are separated by form feeds, so that in most news
 readers, you can get the answer you want without looking at the rest of
-the spoilers.  Each question is repeated before its answer, so you can
-search for the questions.
+the spoilers.  (Search for the string "Q5", for example.)
 
 Many of the answers are only correct for Umoria versions (4.87 and 5.x);
 I don't know much about the other versions of Moria.
@@ -17,10 +20,22 @@ I don't know much about the other versions of Moria.
 Please send any corrections or other suggested questions to me at
 grabiner@math.harvard.edu.
 
+A current copy of this FAQ may be obtained by FTP from the RTFM archive,
+
+rtfm.mit.edu:/pub/usenet/rec.games.roguelike.moria/rec.games.roguelike.moria_Frequently_Asked_Questions
+
+or by using the mailserver on RTFM.  To use the mailserver, send a
+message to mail-server@rtfm.mit.edu containing the line
+"send /pub/usenet/rec.games.roguelike.moria/rec.games.roguelike.moria_Frequently_Asked_Questions"
+
 The most common questions, asked by both beginners and others:
 
-How do I get the Moria sources/executables/documentation? 
-(FTP from ftp.cis.ksu.edu, or from kukulcan.berkeley.edu.)
+Q1. How do I get the Moria sources/executables/documentation? 
+(FTP from ftp.cis.ksu.edu; there is also a mailserver.)
+
+Q2. I can't get Moria/Angband set up on my machine; is there a server on
+another machine that I can use?  (Yes; telnet bbs.runet.edu and
+login as bbs.)
 
 What does this item do?  (Answer is below with the spoilers.)
 
@@ -30,95 +45,184 @@ Why do most winning characters carry several copies of spell books?
 What does the (-2) in Chain Mail (-2) [14,+2] mean?  (It's a penalty to
 hit, caused by the heavy armor.)
 
-How do I use wizard mode, and what can I do in it?  (In 5.x, just type
+Q3. How do I use wizard mode, and what can I do in it?  (In 5.x, just type
 control-W.)
 
 Non-spoiler questions:
 
-How does resistance work?  Are two items of resistance cumulative?  (Not
-if both are worn items.)
+Q4. How does resistance work?  Are two items of resistance cumulative?
+(Not if both are worn items.)
 
-How does speed work?  Do you get faster if you are already Very Fast and
-get another speed item?  (Yes.)
+Q5. How does speed work?  Do you get faster if you are already Very Fast
+and get another speed item?  (Yes.)
 
-I'm playing Moria version V; how does that compare to the current version?
-Is it compatible?
+Q6. I'm playing Moria version V; how does that compare to the current
+version?  Is it compatible?
 
-I think I've found a bug; what should I do?  (Report it with the version
-number and system.)
+Q7. I think I've found a bug; what should I do?  (Report it with the
+version number and system.) 
 
 Common spoiler requests:
 
-What are the special abilities of ego weapons?  Crowns?  Amulet of the
-Magi?  Cloak of Protection?
+Q8. What are the special abilities of ego weapons?  Crowns?  Amulet of
+the Magi?  Cloak of Protection? 
 
-How much damage do spells and wands do?
+Q9. How much damage do spells and wands do?
 
-What does spell Y do?
+Q10. What does spell Y do?
 
-On what level do you find X?  (Level 25 is best for gain stat potions.)
+Q11. On what level do you find X?  (Level 25 is best for gain stat potions.) 
 
-How do you kill an ancient multi-hued dragon?  (Usually, you don't.)
+Q12. How many attacks can I get with this weapon?
 
-How do you kill an emperor lich?  (With speed and spells.)
+Q13. How do you kill an ancient multi-hued dragon?  (Usually, you don't.)
 
-What is the grape jelly trick?  Does it work in Umoria 5.x?  (No.)
+Q14. How do you kill an emperor lich?  (With speed and spells.)
+
+Q15. What is the grape jelly trick?  Does it work in Umoria 5.x?  (No.)
 
 Questions related to the source code:
 
-I don't like haggling; can I change the source code to turn it off?
+Q16. I don't like haggling; can I change the source code to turn it off?
 
-How do you create objects in wizard mode?
+Q17. How do you create objects in wizard mode?
 
-How do I get the Moria sources/executables/documentation? 
+Q1. How do I get the Moria sources/executables/documentation? 
 
-The following Umoria files are available by anonymous FTP from
-kukulcan.berkeley.edu (IP address 128.32.121.190), or from
-ftp.cis.ksu.edu (IP address 129.130.10.80).  The kukulcan archive is no
-longer supported, but it is still listed here because it has some files
-which are not available on KSU.
+The following Moria files are available by anonymous FTP from
+ftp.cis.ksu.edu (IP address 129.130.10.80) or ftp.engg.ksu.edu (IP
+address 129.130.41.83).  They should also be available by gopher from
+gopher.cis.ksu.edu or gopher.engg.ksu.edu, or from the WWW
+server at KSU:
 
-Kukulcan: /pub/wilson/umoria_5/[machine name]
-KSU: /pub/Games/Moria/[machine name]
+xmosaic http://www.engg.ksu.edu/welcome.html
+
+If you don't have FTP access, there is a mailserver which gives access
+to ftp.cis.ksu.edu; see below.  If you can't use the mailserver, see
+further below for a BBS which has the files.  
+
+The sources for Umoria 5.5.0 were also posted to comp.sources.games, so
+they should be available (in compressed shar form) on any site which
+archives comp.sources.games, such as ftp.uu.net.
+
+/pub/Games/Moria/[machine name]
 Executables for the Amiga, Atari ST, IBM PC, and Mac; look at the README
 files in these directories for more information.  Some of these files
 may need to be transferred in binary mode; type "binary" before
 transferring the files.  KSU has both color and monochrome executables
-for the IBM PC.
+for the IBM PC.  European users can also get Mac binaries from jyu.fi,
+in a file /maclib/game/moria.sit.bin.
 
-Kukulcan: /pub/wilson/umoria_5/um5.5.tar.Z
-KSU: /pub/Games/Moria/source/um5.5.tar.Z
+/pub/Games/Moria/source/um5.5.1.tar.Z 
 A compressed tar file containing the entire source, for use on any
 system; if you have tar on your system, this is probably the file that
-you want.  (If you don't have compress, you can ftp it as well; it is
-/pub/wilson/compress.tar.)  This file must be transferred in binary
-mode; type "binary" before getting the file.  Once you have the tar.Z
-file, type "zcat um5.5.tar.Z | tar xf -" to extract the files, and
-read the README files for help in installing.
+you want.  (If you don't have compress, you can FTP it from ftp.uu.net;
+it is compress.tar.)  This file must be transferred in binary mode; type
+"binary" before getting the file.  Once you have the tar.Z file, type
+"zcat um5.5.1.tar.Z | tar xf -" to extract the files, and read the README
+files for help in installing.
 
-Kukulcan only: /pub/wilson/umoria_5/um5.5.shar
-A shar file containing the source.
+/pub/Games/Moria/pc/src/mor55src.zip
+A ZIP file containing the source.
 
-Kukulcan only: /pub/wilson/umoria_5/umoria
-The source distribution in plain text.  If you need just the
-documentation, copy the files in the directory /pub/wilson/umoria_5/doc;
-if you need the auxilliary files (help files, high scores), copy the
-files in /pub/wilson/umoria_5/files.
+/pub/Games/Moria/XMoria/xm1.07.tar.Z
+The source to Moria for X Windows.
 
-KSU only: /pub/Games/Moria/doc
-The documentation for Moria 5.4, including the official documentation,
+/pub/Games/Moria/doc
+The documentation for Moria 5.5, including the official documentation,
 the FAQ file, and a complete monster list.
 
-KSU only: /pub/Games/Moria/pc/color and /pc/mono
-The auxilliary files are in these directories; you may need them if you
+/pub/Games/Moria/pc/mono5.5 
+The auxilliary files are in this directory; you may need them if you
 have an executable without them.
 
-Kukulcan: /pub/wilson/vms_moria (tar files and plain text)
-KSU: /pub/wilson/vms (tar files only)
-The source distribution, in Pascal, for BOSS, and for VMS Moria 4.8 and
-5.0.  Umoria 5.x will also work on VMS machines.
+/pub/Games/Angband
+The source to Angband for UNIX, and source and executable for the PC and
+Mac.
+
+/pub/Games/Moria/boss
+The source distribution, in Pascal, for BOSS.
+
+/pub/Games/Moria/vms
+The source discribution, in Pascal, for VMS Moria 4.8 and 5.0.  Umoria
+5.x will also work on VMS machines.
+
+/pub/Games/Moria/unofficial
+Other unofficial modifications of Moria, including the druid version for
+the PC, and the sources for Morgul and Pmoria.
+
+VMS sources for Imoria are available on ubvms.cc.buffalo.edu, in a
+directory /maslib/games/imoria.  VMS Moria 4.8 and 5.0 sources are also
+there.
+
+Mailserver instructions (from Karl Hagen <greyhelm@cis.ksu.edu>):
+
+For all those unfortunates who don't have Internet ftp access, I've
+setup a mailserver to provide access to the archives on
+ftp.cis.ksu.edu.
+
+This mailserver can be contacted via mail one of the following
+addresses:
+
+...!rutgers!depot!mailserver  (UUCP)
+mailserver@cis.ksu.edu        (Internet)
+mailserver@engg.ksu.edu       (Internet)
+
+The server accepts commands given in the body of the mail messages;
+help is available with the command "help".  
+
+A listing of the files in
+the story archive may be obtained by "dir -l /pub/Games/Moria".
+
+Since the files archive consists of binary files, they must
+be uuencoded before they are sent on their way.  To specify this mode,
+use the command "encode uuencode"  To retrieve the files, use the
+"send" command (ex:  send /pub/Games/Moria/pc/mor55-286.zip
+
+If you have a system which cannot handle ZIP files, you may use
+the "unzip" filter ("encode unzip") 
+which will send you the uncompressed (but not uuencoded) version of the file.
+
+Here is an example mail message:
+
+% Mail mailserver@cis.ksu.edu
+~Subject: request 
+help
+encode uue     
+send /pub/Games/Moria/pc/mor55-286.zip
+^D
+%
+
+Please note that this is completely experimental and is not bug free.
+Questions and problems about this mailserver may be directed to
+"greyhelm@engg.ksu.edu".
+
+BBS instructions (from Tom Sorensen <gt0040a@prism.gatech.edu>):
+
+I've been making the source code, DOS and OS/2 executables, and all the
+spoilers I have available on:
+
+Ravishing Nook
+(404)368-9949
+2400-14.4k (V.32bis)
+Downloads should be available on first call.
+
 
-How do I use wizard mode, and what can I do in it?  
+Q2. I can't get Moria/Angband set up on my machine; is there a server on
+another machine that I can use?  
+
+There is a bbs at bbs.runet.edu which has Moria and Angband installed.
+To play either game, telnet to bbs.runet.edu, and login as bbs to set up
+an account.
+
+If possible, please try to set up Moria or Angband yourself first, to
+avoid overloading the BBS.  The game will also play better on your own
+machine, because there will be no network delays.
+
+This BBS is maintained by Brian Kirouac, bri@ltpsun.gsfc.nasa.gov;
+please mail any questions or problems to him, not to me.
+
+Q3. How do I use wizard mode, and what can I do in it?  
 
 In Umoria 5.x, anyone can use wizard mode by typing ^W.  However,
 characters who play in wizard mode are permanently barred from the
@@ -127,7 +231,7 @@ experimenting.
 
 In 4.87 on Unix systems, only the person who installed the game can use
 wizard mode; if you are the installer, the passwords are in the source
-file constant.h.
+file constants.h.
 
 In PC-Moria 4.8x, you need to know the passwords to use wizard mode, and
 the password will depend on who compiled your game.
@@ -141,7 +245,7 @@ your character, creating objects, deleting monsters, and similar things.
 In wizard mode, ^H or DELETE will give you a list of the available
 commands.
 
-How does resistance work?  Are two items of resistance cumulative?  
+Q4. How does resistance work?  Are two items of resistance cumulative?
 
 Resist heat/cold potions and spells give temporary resistance to heat or
 cold.  All other resistance items give permanent resistance.  Two
@@ -155,8 +259,8 @@ resistance but no armor, and 1/4 if you have resistance and armor.
 Lightning does 1/3 damage if you have resistance.
 There is no resistance against poison gas.
 
-How does speed work?  Do you get faster if you are already Very Fast and
-get another speed item?  
+Q5. How does speed work?  Do you get faster if you are already Very Fast
+and get another speed item?  
 
 Very Fast is the highest speed that can be displayed, but if you are
 fortunate enough to find several speed items, you can get still faster.
@@ -165,16 +269,16 @@ speed (potions, spells, and staffs) can add one more point to your
 speed.  Multiple uses of temporary speed are cumulative only in
 duration.
 
-I'm playing Moria version V; how does that compare to the current version?
-Is it compatible?
+Q6. I'm playing Moria version V; how does that compare to the current
+version?  Is it compatible?
 
 Moria versions:
 
-Umoria 5.5.0: This is the current version of Umoria.  It will accept
+Umoria 5.5.1: This is the current version of Umoria.  It will accept
 characters from all Umoria 5.x versions.
 
-Umoria 5.3.1/5.4.0: These are essentially identical to 5.5.0, and
-compatible with it, although 5.5.0 fixes a few bugs, and there have been
+Umoria 5.3.1-5.5.0: These are essentially identical to 5.5.1, and
+compatible with it, although 5.5.1 fixes a few bugs, and there have been
 a few minor changes.
 
 Umoria 5.2.2/5.3.0: These are in good condition, and compatible with the
@@ -212,7 +316,9 @@ UB Moria 5.0: Also known as VMS Moria 5.0, this is the current version
 of VMS Moria.  It has more monsters, a Black Market, and other features.
 
 Imoria 4.9: This is apparently a very good game, with new character
-classes and other features, but it hasn't been released outside of UW.
+classes and other features.  It hasn't been released widely outside of the
+University of Washington, but it is now available from the University of
+Buffalo; see the FTP instructions.  It is available only for VMS.
 
 Amiga Moria 3.0: Although this version was originally based on 4.85, it
 has many added monsters, features, and bugs (including items which make
@@ -220,22 +326,34 @@ you virtually invincible).
 
 BOSS: This game changes the setting of Moria, but keeps many of the
 items.  It is based on VMS Moria 5.0.
+
+Pmoria: A version of Moria based on 5.5.0, with many enhancements.
+
+Morgul: An expanded version of Moria, keeping a similar setting.  It is
+based on Umoria 5.5.0.
+
+Angband: Another expanded version of Moria with a similar setting.  It
+is based on Umoria 5.2.1; current versions include some of the bug fixes
+from later versions.
 
-I think I've found a bug; what should I do?  
+Q7. I think I've found a bug; what should I do?   
 
 When you are reporting a suspected bug, make sure to give the version
 number and the system.  The bug report can be posted here or sent to me.
-If you report a bug by Email, you may want to send a copy of the bug
-report to the author of Moria, wilson@toad.com.
+If someone else maintains the game on your machine, the bug report
+should also be sent to him or her; the bug may be in a change on your
+machine but not in my code.
 
-I'm not the official maintainer of the source code, but I am reasonably
-familiar with it.  If you report a bug which has been fixed in the
-current version, I may be able to send you a patch, or at least tell you
-that you can fix the bug by upgrading.  If the bug hasn't been fixed, a
-good bug report may make it easy to fix.
+If you have a patch for the bug, it would be best to send the patch by
+Email, so that I can check the patch before releasing it.
+
+If you report a bug which has been fixed in the current version, I may
+be able to send you a patch, or at least tell you that you can fix the
+bug by upgrading.  If the bug hasn't been fixed, a good bug report may
+make it easy to fix.
 
-What are the special abilities of ego weapons?  Crowns?  Amulet of the
-Magi?  Cloak of Protection?
+Q8. What are the special abilities of ego weapons?  Crowns?  Amulet of
+the Magi?  Cloak of Protection? 
 
 All version-dependent changes are marked in brackets.
 
@@ -276,7 +394,7 @@ normal rate, but also makes you use up food much more quickly.
 
 Free action prevents you from being slowed or paralyzed by monsters.
 
-How much damage do spells and wands do?
+Q9. How much damage do spells and wands do?
 
 Spell Name              4.87 damage     5.1.0 and later damage
 Magic Missile           2d6             2d6
@@ -312,7 +430,7 @@ from a wand, and 1 point more if cast by a mage.
 All ball spells do full damage for a direct hit, half damage one space
 away, and 1/3 damage two spaces away.
 
-What does spell Y do?
+Q10. What does spell Y do?
 
 Non-obvious spell effects:
 
@@ -342,7 +460,8 @@ Protection from Evil: prevents any evil creature of the player's level
 Earthquake: causes random walls and ceilings in the area to collapse,
 	    possibly injuring anything nearby.
 Turn Undead: all undead of the player's level or lower, and some of
-	     higher level, will be temporarily confused.
+	     higher level, will attempt to flee [in 5.5.0 and earlier
+             versions, they will be confused]
 Prayer: quadruple duration Bless.
 Dispel Undead/Evil: affects all undead/evil within line of sight (even
 		    invisble ones in 5.x versions), damage is from 1
@@ -350,9 +469,10 @@ Dispel Undead/Evil: affects all undead/evil within line of sight (even
 Glyph of Warding: creates a glyph which monsters cannot enter, but have 
 		  a small chance of breaking.
 Holy Word: heals player completely, cures poison and fear, and dispels
-	   evil for 1 to 4x player's level. 
+	   evil for 1 to 4x player's level.  In 5.5.1, also restores 
+	   all stats, and makes player invulnerable for 3 turns.
 
-On what level do you find X?  
+Q11. On what level do you find X?   
 
 Where important objects are found:
 
@@ -388,7 +508,30 @@ Staff of destruction		50
 Wand of clone monster		15 [2 in 4.87]
 Wand of drain life		50
 
-How do you kill an ancient multi-hued dragon?  
+Q12. How many attacks can I get with this weapon?
+
+Here is the table (for 5.x) for the number of blows for a given strength
+and dexterity.  If your strength or dexterity is 18+xx, that is stored
+as 18/xx; thus, for example, you need an 18/90 strength to use the
+bottom row of the table with a katana (12 pounds).
+
+If you don't know the weight of a weapon, set the option "Show weights
+in inventory."
+
+/* used to calculate the number of blows the player gets in combat */
+int8u blows_table[7][6] = {
+/* STR/W:	   9  18  67 107 117 118   : DEX */
+/* <2 */	{  1,  1,  1,  1,  1,  1 },
+/* <3 */	{  1,  1,  1,  1,  2,  2 },
+/* <4 */	{  1,  1,  1,  2,  2,  3 },
+/* <5 */	{  1,  1,  2,  2,  3,  3 },
+/* <7 */	{  1,  2,  2,  3,  3,  4 },
+/* <9 */	{  1,  2,  2,  3,  4,  4 },
+/* >9 */	{  2,  2,  3,  3,  4,  4 }
+};
+
+
+Q13. How do you kill an ancient multi-hued dragon?  
 
 Usually, you don't want to try; one gas breath from a full-strength AMHD
 does 693 damage, with no resistance.
@@ -408,7 +551,7 @@ The dragon can't see you, so it won't breathe, and will instead chase
 you to another side.  Now attack once, and hide again, and so on until
 the dragon is finished.
 
-How do you kill an emperor lich?  
+Q14. How do you kill an emperor lich?  
 
 You can kill an emperor lich if you can get to speed 2, which is its
 speed.  A mage or ranger can do this with the spell of haste self;
@@ -468,7 +611,7 @@ just fight, move back, fight, move back, and so on.  You will still need
 a lot of cure wounds potions, unless you let it chase you around a
 pillar, as in the AMHD technique.
 
-What is the grape jelly trick?  Does it work in Umoria 5.x?  
+Q15. What is the grape jelly trick?  Does it work in Umoria 5.x?  
 
 The Grape Jelly trick is a spoiler/workaround/trick which is no longer
 necessary in 5.1 and later versions.  
@@ -480,7 +623,7 @@ grape jellies are otherwise harmless) drain you to a low level, and then
 drink restore life levels potions to go back up with the increased
 stats.
 
-I don't like haggling; can I change the source code to turn it off?
+Q16. I don't like haggling; can I change the source code to turn it off?
 
 If you have the source code for any 5.x version, you can turn off
 haggling with a simple change.  Here is the change you would need to make.
@@ -488,29 +631,34 @@ haggling with a simple change.  Here is the change you would need to make.
 
 In the source file store1.c, this is the routine for determining whether
 you need to haggle.  You can change the function, or simply change the
-return(flagnoneed) to return(TRUE) to eliminate all haggling.
+return(flagnoneed) to return(TRUE) to eliminate all haggling.  The code
+here is from version 5.5.1; the text of the function is slightly different
+in earlier versions.
 
 int noneedtobargain(store_num, minprice)
 int store_num;
 int32 minprice;
 {
   register int flagnoneed;
+  int bargain_record;
   register store_type *s_ptr;
 
   s_ptr = &store[store_num];
-  flagnoneed = ((s_ptr->good_buy == MAX_SHORT)
-		|| ((s_ptr->good_buy > 3 * s_ptr->bad_buy + 20) &&
-		    (minprice < 1000)));
-
+  if (s_ptr->good_buy == MAX_SHORT)
+    return TRUE;
+  bargain_record = (s_ptr->good_buy - 3 * s_ptr->bad_buy - 5);
+  flagnoneed = ((bargain_record > 0)
+		&& ((long)bargain_record * (long)bargain_record
+		    > minprice/50));
   return (flagnoneed);
 }
 
-How do you create objects in wizard mode?
+Q17. How do you create objects in wizard mode?
 
 You will need the source; if you have only executables, get the source
-files constant.h and treasure.c from kukulcan.berkeley.edu, which
-contain the necessary definitions.  This is an explanation of some of
-the parameters.
+files constant.h and treasure.c from ftp.cis.ksu.edu, which contain the
+necessary definitions.  This is an explanation of some of the
+parameters.
 
 Tval: This is defined in constant.h; it is the value for the item type.
 For example, TV_WAND is 65.
@@ -530,9 +678,12 @@ Weight: In tenths of a pound.
 P1: Used for all special bonuses which don't appear elsewhere:
 bonus to stats/searching/stealth/speed, which stat to sustain (warning:
 constitution is 4 and dexterity 5), tunneling value, food value, light
-value of a lamp, torch, or flask of oil.  For missiles, different values
-of P1 distinguish different groups of missiles; use small negative
-numbers if you create groups as a wizard.
+value of a lamp, torch, or flask of oil.  
+For missiles, different values of P1 distinguish different groups of
+missiles; use small negative numbers if you create groups as a wizard.
+For bows, slings, and crossbows, the values identify the weapon type;
+use the same value that is used for the corresponding weapon in
+treasure.c.
 
 Flags: A hexadecimal number which contains:
 for wearable items, all special effects (bits beginning with TR_ in

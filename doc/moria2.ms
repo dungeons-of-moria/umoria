@@ -2,8 +2,8 @@
 The Town Level
 .LP
 The town level is where you will begin your adventure.  The
-town consists of six buildings each with an entrance, some
-towns people, and a wall which surrounds the town.  The first time
+town consists of six buildings, each with an entrance, some
+townspeople, and a wall which surrounds the town.  The first time
 you are in town it will be daytime, but you may return to find
 that darkness has fallen.  (Note that some spells may act
 differently in the town level.)
@@ -18,10 +18,10 @@ Blubbering Idiots are a constant annoyance, but not harmful.
 Public drunks wander about the town singing, and are of no
 threat to anyone.  Sneaky rogues hang about watching for a
 likely victim to mug.  And finally, what town would be complete
-without a swarm of half drunk warriors, who take offense or
+without a swarm of half-drunk warriors, who take offense or
 become annoyed just for the fun of it.
 .LP
-Most of the towns people should be avoided by the largest
+Most of the townspeople should be avoided by the largest
 possible distance when you wander from store to store.  Fights
 will break out though, so be prepared.  Since your character grew
 up in this world of intrigue, no experience is awarded for
@@ -59,8 +59,6 @@ eventually recognize that you are a superb haggler, and will go directly
 to the final offer instead of haggling with you.  Items which cost
 less than 10 gold pieces do not count, as haggling well with these items
 is usually either very easy or almost impossible.
-Also, the store owner will always haggle for items costing more than
-1000 gold pieces, because of the amount of money involved.
 .LP
 Once inside a store, the store inventory will appear on the screen
 along with a set of options for your character.  You may browse
@@ -72,7 +70,7 @@ exchange commands which will also work, but were excluded to keep
 the options simple.
 .LP
 Stores do not always have everything in stock.  As the game
-progresses, they may get new items so check from time to time.
+progresses, they may get new items, so check from time to time.
 Also, if you sell them an item, it may get sold to a customer
 while you are adventuring, so don't always expect to be able to
 get back everything you have sold.
@@ -103,7 +101,7 @@ Weaponsmith's is a `3'.
 The Temple deals in healing and restoration potions, as well
 as bless scrolls, word of recall scrolls, some approved priestly
 weapons, etc.  The entrance to the Temple is a `4'.
-.IP "The Alchemy shop"
+.IP "The Alchemy Shop"
 The Alchemy Shop deals in all manner of potions and scrolls.
 The entrance to the Alchemy Shop is a `5'.
 .IP "The Magic User\'s Shop"
@@ -122,8 +120,8 @@ passes through a one-way door.  He is now on the first level of
 the dungeon (50 feet), and must survive many horrible and
 challenging encounters to find the treasure lying about.
 .LP
-There are two sources for light once inside the dungeon.
-Permanent light which has been magically placed within rooms, and
+There are two sources for light once inside the dungeon:
+permanent light which has been magically placed within rooms, and
 a light source carried by the player.  If neither is present, the
 character will be unable to map or see any attackers.  Lack of
 light will also affect searching, picking locks, and disarming.
@@ -140,9 +138,9 @@ course be carrying extra oil to refill a lantern.
 Attacking and Being Attacked
 .LP
 Attacking is simple in \fImoria\fP.  If you move into a creature,
-you attack him.  You can attack from a distance by firing a
+you attack it.  You can attack from a distance by firing a
 missile, or by magical means such as aiming a wand.  Creatures
-attack in the same way, if they move into you, they attack you.
+attack in the same way; if they move into you, they attack you.
 Some creatures can also cast spells from a distance, and others
 can breathe fire or worse on you from a distance.
 .LP
@@ -155,7 +153,7 @@ just try to move into the wall, you will bump your head and look quite
 silly.
 .LP
 If you are wielding a weapon, the damage for the weapon is
-used when you hit a creature.  Otherwise
+used when you hit a creature.  Otherwise,
 you get two fist strikes.  Very strong creatures can do
 a lot of damage with their fists...  You may have a
 primary weapon, and a secondary weapon which is kept on your
@@ -178,7 +176,7 @@ Higher armor classes
 make it harder to do damage, and so lead to more misses.
 
 .NH 2
-Monster Memories.
+Monster Memories
 .LP
 There are hundreds of different creatures in the mines of \fImoria\fP,
 many of which look the same on the screen.
@@ -186,11 +184,10 @@ The exact species of a creature can be discovered by looking at it.
 It is also very difficult to keep track of the capabilities of
 various creatures.  Rather than forcing you to keep notes, \fImoria\fP
 automatically keeps track of your experiences with a particular
-creature.  This is called the monster memory.  Your monster memory
-recalls the particular attacks of each creature (whether or not
-technically a monster) which you have suffered, as well as recalling
-if you have observed them to multiply or move erratically, or drop
-treasure, or many other attributes.
+creature.  This is called the monster memory.  You monster memory
+recalls the particular attacks of each creature which you have suffered,
+as well as recalling if you have observed them to multiply or move
+erratically, or drop treasure, or many other attributes.
 .LP
 If you have killed enough of a particular creature, or suffered
 enough attacks, recalling the monster memory may also provide you with
@@ -233,7 +230,7 @@ Missile booster weapons, such as bows, have their characteristics added
 to those of the missile used, if the proper weapon/missile combination
 is used.  Also, these weapons will multiply the base damage of the missile
 by a number from 2 to 4, depending on the strength of the weapon.  This
-multiplier is displayed as `(*#)'.
+multiplier is displayed as `(x#)'.
 .LP
 Although you receive any magical bonuses an unidentified
 weapon may possess when you wield it, those bonuses will not be
@@ -247,13 +244,13 @@ sword must be wielded to receive benefit of its abilities.
 .LP
 Special weapons are denoted by the following abbreviations:
 .IP "DF - Defender."
-A magical weapon that actually helps the wielder defend
+A magical weapon that helps the wielder defend
 himself, thus increasing his/her armor class, and protecting him/her
 against damage from fire, frost, acid, lightning, and falls.
 This weapon also will increase your stealth, let you see invisible
 creatures, protect you from paralyzation attacks, and help you
 regenerate hit points and mana faster.  As a result of the
-regerenation ability, you will use up food faster than normal
+regeneration ability, you will use up food faster than normal
 while wielding such a weapon.
 .IP "FB - Frost Brand."
 A magical weapon of ice that delivers a cold critical to
@@ -270,6 +267,13 @@ A Holy Avenger will increase your strength and your armor class.
 This weapon will do extra damage when used against evil and undead
 creatures, and will also give you the ability to see invisible
 creatures.
+.IP "SA - Slay Animal."
+A Slay Animal weapon is a special purpose weapon whose
+sole intent is to destroy all the dangerous animals in the world.
+An animal is any creature natural to the world.
+Therefore an orc would not be an animal, but a giant snake would
+be.  This will inflict twice the normal amount of damage when
+used against an animal.
 .IP "SD - Slay Dragon."
 A Slay Dragon weapon is a special purpose weapon whose
 sole intent is to destroy dragon-kind.  Therefore, when used
@@ -280,13 +284,6 @@ A Slay Evil weapon is a special purpose weapon whose
 sole intent is to destroy all forms of evil.  When used
 against an evil creature, either alive or undead, the damage
 done twice the normal amount.
-.IP "SM - Slay Animal."
-A Slay Animal weapon is a special purpose weapon whose
-sole intent is to destroy all the dangerous animals in the world.
-An animal is any creature natural to the world.
-Therefore an orc would not be an animal, but a giant snake would
-be.  This will inflict twice the normal amount of damage when
-used against an animal.
 .IP "SU - Slay Undead."
 A Slay Undead weapon is a special purpose weapon whose
 sole intent is to destroy all forms of undead.  This weapon
@@ -340,7 +337,7 @@ must for surviving the lower levels of \fImoria\fP.
 .LP
 Each piece of armor has an armor class adjustment, and a
 magical bonus.  Armor bought in town will have these values
-displayed with their description.  Armor that is found within the
+displayed with its description.  Armor that is found within the
 dungeon must be identified before these values will be displayed.
 All armor always has the base armor class displayed, to which the
 bonus is added.  It is always possible to figure this out anyway,
@@ -353,24 +350,26 @@ second number is the magical bonus of the item which is only
 displayed if known, and will always
 have a sign preceding the value.  There are a few cases where the
 form `[+#]' is used, meaning the object has no armor class, only
-a magical armor bonus if worn.
+a magical armor bonus if worn.  Body armor may also have a (-#)
+displayed in parentheses; this is a penalty to hit, because the bulk of
+the armor makes it more difficult to swing a weapon freely.
 .LP
 Some pieces of armor will possess special abilities denoted
 by the following abbreviations:
 .IP "RA - Resist Acid."
-A character using such an object will take only one third normal
+A character using such an object will take only one-third normal
 damage from any acid thrown upon him.  In addition, armor so
 enchanted will resist the acid's effects and not be damaged
 by it.
 .IP "RC - Resist Cold."
 A character using a resist cold object will take only
-one third damage from frost and cold.
+one-third damage from frost and cold.
 .IP "RF - Resist Fire."
-A character using a resist fire object will take only one
-third damage from heat and fire.
+A character using a resist fire object will take only one-third 
+damage from heat and fire. 
 .IP "RL - Resist Lightning."
 A character using a resist lightning object will take only
-one third damage from electrical attacks.
+one-third damage from electrical attacks.
 .IP "R - Resistance."
 A character wearing armor with this ability will have
 resistance to Acid, Cold, Fire, and Lightning as explained in
@@ -382,11 +381,11 @@ Crowns
 Some crowns also have special magical abilities that improve
 your chances in a battle.
 .IP "Crown of Might"
-This is the great crown of the warriors.  The wearer will
-have an increased strength, dexterity, and constituion, and will also be
+This is the great crown of the warriors.  The wearer will have an
+increased strength, dexterity, and constitution, and will also be
 immune to any foe's attempt to slow or paralyze him or her.
 .IP "Crown of the Magi"
- This is the great crown of the wizards.  The wearer will have
+This is the great crown of the wizards.  The wearer will have
 an increased intelligence, and will also be given resistance against
 fire, frost, acid, and lightning.
 .IP "Crown of Lordliness"
@@ -419,7 +418,7 @@ who enjoy a good joke when it gets you killed.
 You pick up objects by moving on top of them.  You can carry
 up to 22 different items in your backpack while wearing and
 wielding many others.  Although you are limited to 22
-different items, you may be carrying several items of each kind
+different items, you may be carrying several items of each kind,
 restricted only by the amount of weight your character can carry.
 Your weight limit is determined by your strength.
 Only one object may occupy a given floor location, which
@@ -433,7 +432,7 @@ be asked whether you really want to pick it up.  It is a good idea
 to leave the object alone if you are fleeing from a monster.
 .LP
 Many objects found within the dungeon have special commands
-for their use.  Wands must be Aimed, staves must be Used, scrolls
+for their use.  Wands must be Aimed, staffs must be Used, scrolls
 must be Read, and potions must be Quaffed.  In any case, you must
 first be able to carry an object before you can use it.  Some
 objects, such as chests, are very complex.  Chests contain other
@@ -441,14 +440,14 @@ objects and may be trapped, and/or locked.  Read the list of
 player commands carefully for a further understanding of chests.
 .LP
 One item in particular will be discussed here.  The scroll
-of \*QWord of Recall\*U can be found within the dungeon, or bought at
+of \*QWord-of-Recall\*U can be found within the dungeon, or bought at
 the temple in town.  It acts in two manners, depending upon your
 current location.  If read within the dungeon, it will teleport
 you back to town.  If read in town, it will teleport you back
-down to the deepest level of the dungeon one which your character
+down to the deepest level of the dungeon on which your character
 has previously been.  This makes the scroll very useful for
 getting back to the deeper levels of \fImoria\fP.  Once the scroll has
-been read it takes a while for the spell to act, so don't expect
+been read, it takes a while for the spell to act, so don't expect
 it to save you in a crisis.
 .LP
 The game provides some automatic inscriptions to help you keep track
@@ -489,7 +488,7 @@ have some hordes hidden within.
 Mining is virtually impossible without a pick or shovel.
 Picks and shovels have an additional magical ability expressed as `(+#)'.
 The higher the number, the better the magical digging
-ability of the tool.  A pick or shovel also has pluses
+ability of the tool.  A pick or shovel also has plusses
 to hit and damage, and can be used as a weapon.
 .LP
 When a vein of quartz or magma is located, the character
@@ -550,10 +549,10 @@ The Balrog cannot be killed in some of the easier methods
 used on normal creatures.  Because of the Balrog's cunning, he
 will teleport away to another level if a spell such as destruction
 is used upon him, and the Balrog cannot be polymorphed, slept,
-charmed, or genocided.
-Magical spells like coldball are effective against him
-as are weapons, but he is difficult to kill and if allowed to
-escape for a time can heal himself.
+confused, or genocided.
+Magical spells like coldball are effective against him,
+as are weapons, but he is difficult to kill, and if allowed to
+escape to another level can heal himself.
 .LP
 If you should actually survive the attempt of killing the
 Balrog, you will receive the status of WINNER.  Since you have

@@ -109,7 +109,8 @@ Earthquake - Randomly toggles corridors into walls and vice versa.
 Find Traps - Locates all the traps on the screen.
 Glyph of Warding - Leaves a 'Glyph' that monsters won't pass over.
 Heal - Restores 200 Hit Points.
-Holy Word - Dispels evil, removes fear, cures poison, and restores 1000 HPs.
+Holy Word - Dispels evil, removes fear, cures poison, restores 1000 HPs,
+	    restores all stats, and invulnerability for 3 turns.
 Neutralize Poison - Cures you of poison.
 Orb of Draining - Offensive spell that drains levels from monsters.
 Portal - Teleports you a short distance away.

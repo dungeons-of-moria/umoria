@@ -1,6 +1,6 @@
 /* source/dungeon.c: the main command interpreter, updating player status
 
-   Copyright (c) 1989-92 James E. Wilson, Robert A. Koeneke
+   Copyright (c) 1989-94 James E. Wilson, Robert A. Koeneke
 
    This software may be copied and distributed for educational, research, and
    not for profit purposes provided that this copyright and statement are
@@ -193,6 +193,80 @@ void dungeon()
 	}
 
       /* Update counters and messages			*/
+      /* Heroism (must precede anything that can damage player)      */
+      if (f_ptr->hero > 0)
+	{
+	  if ((PY_HERO & f_ptr->status) == 0)
+	    {
+	      f_ptr->status |= PY_HERO;
+	      disturb (0, 0);
+	      p_ptr->mhp += 10;
+	      p_ptr->chp += 10;
+	      p_ptr->bth += 12;
+	      p_ptr->bthb+= 12;
+	      msg_print("You feel like a HERO!");
+	      prt_mhp();
+	      prt_chp();
+	    }
+	  f_ptr->hero--;
+	  if (f_ptr->hero == 0)
+	    {
+#ifdef ATARIST_MWC
+	      f_ptr->status &= ~(holder = PY_HERO);
+#else
+	      f_ptr->status &= ~PY_HERO;
+#endif
+	      disturb (0, 0);
+	      p_ptr->mhp -= 10;
+	      if (p_ptr->chp > p_ptr->mhp)
+		{
+		  p_ptr->chp = p_ptr->mhp;
+		  p_ptr->chp_frac = 0;
+		  prt_chp();
+		}
+	      p_ptr->bth -= 12;
+	      p_ptr->bthb-= 12;
+	      msg_print("The heroism wears off.");
+	      prt_mhp();
+	    }
+	}
+      /* Super Heroism */
+      if (f_ptr->shero > 0)
+	{
+	  if ((PY_SHERO & f_ptr->status) == 0)
+	    {
+	      f_ptr->status |= PY_SHERO;
+	      disturb (0, 0);
+	      p_ptr->mhp += 20;
+	      p_ptr->chp += 20;
+	      p_ptr->bth += 24;
+	      p_ptr->bthb+= 24;
+	      msg_print("You feel like a SUPER HERO!");
+	      prt_mhp();
+	      prt_chp();
+	    }
+	  f_ptr->shero--;
+	  if (f_ptr->shero == 0)
+	    {
+#ifdef ATARIST_MWC
+	      f_ptr->status &= ~(holder = PY_SHERO);
+#else
+	      f_ptr->status &= ~PY_SHERO;
+#endif
+	      disturb (0, 0);
+	      p_ptr->mhp -= 20;
+	      if (p_ptr->chp > p_ptr->mhp)
+		{
+		  p_ptr->chp = p_ptr->mhp;
+		  p_ptr->chp_frac = 0;
+		  prt_chp();
+		}
+	      p_ptr->bth -= 24;
+	      p_ptr->bthb-= 24;
+	      msg_print("The super heroism wears off.");
+	      prt_mhp();
+	    }
+	}
       /* Check food status	       */
       regen_amount = PLAYER_REGEN_NORMAL;
       if (f_ptr->food < PLAYER_FOOD_ALERT)
@@ -503,80 +577,6 @@ void dungeon()
 	      py.misc.dis_ac -= 100;
 	      prt_pac();
 	      msg_print("Your skin returns to normal.");
-	    }
-	}
-      /* Heroism       */
-      if (f_ptr->hero > 0)
-	{
-	  if ((PY_HERO & f_ptr->status) == 0)
-	    {
-	      f_ptr->status |= PY_HERO;
-	      disturb (0, 0);
-	      p_ptr->mhp += 10;
-	      p_ptr->chp += 10;
-	      p_ptr->bth += 12;
-	      p_ptr->bthb+= 12;
-	      msg_print("You feel like a HERO!");
-	      prt_mhp();
-	      prt_chp();
-	    }
-	  f_ptr->hero--;
-	  if (f_ptr->hero == 0)
-	    {
-#ifdef ATARIST_MWC
-	      f_ptr->status &= ~(holder = PY_HERO);
-#else
-	      f_ptr->status &= ~PY_HERO;
-#endif
-	      disturb (0, 0);
-	      p_ptr->mhp -= 10;
-	      if (p_ptr->chp > p_ptr->mhp)
-		{
-		  p_ptr->chp = p_ptr->mhp;
-		  p_ptr->chp_frac = 0;
-		  prt_chp();
-		}
-	      p_ptr->bth -= 12;
-	      p_ptr->bthb-= 12;
-	      msg_print("The heroism wears off.");
-	      prt_mhp();
-	    }
-	}
-      /* Super Heroism */
-      if (f_ptr->shero > 0)
-	{
-	  if ((PY_SHERO & f_ptr->status) == 0)
-	    {
-	      f_ptr->status |= PY_SHERO;
-	      disturb (0, 0);
-	      p_ptr->mhp += 20;
-	      p_ptr->chp += 20;
-	      p_ptr->bth += 24;
-	      p_ptr->bthb+= 24;
-	      msg_print("You feel like a SUPER HERO!");
-	      prt_mhp();
-	      prt_chp();
-	    }
-	  f_ptr->shero--;
-	  if (f_ptr->shero == 0)
-	    {
-#ifdef ATARIST_MWC
-	      f_ptr->status &= ~(holder = PY_SHERO);
-#else
-	      f_ptr->status &= ~PY_SHERO;
-#endif
-	      disturb (0, 0);
-	      p_ptr->mhp -= 20;
-	      if (p_ptr->chp > p_ptr->mhp)
-		{
-		  p_ptr->chp = p_ptr->mhp;
-		  p_ptr->chp_frac = 0;
-		  prt_chp();
-		}
-	      p_ptr->bth -= 24;
-	      p_ptr->bthb-= 24;
-	      msg_print("The super heroism wears off.");
-	      prt_mhp();
 	    }
 	}
       /* Blessed       */

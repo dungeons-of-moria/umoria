@@ -1,6 +1,6 @@
 /* source/scrolls.c: scroll code
 
-   Copyright (c) 1989-92 James E. Wilson, Robert A. Koeneke
+   Copyright (c) 1989-94 James E. Wilson, Robert A. Koeneke
 
    This software may be copied and distributed for educational, research, and
    not for profit purposes provided that this copyright and statement are
@@ -257,15 +257,16 @@ void read_scroll()
 	      break;
 	    case 19:
 	      msg_print("This is a mass genocide scroll.");
-	      ident = mass_genocide();
+	      (void) mass_genocide();
+	      ident = TRUE;
 	      break;
 	    case 20:
 	      ident = detect_invisible();
 	      break;
 	    case 21:
-	      ident = aggravate_monster(20);
-	      if (ident)
-		msg_print("There is a high pitched humming noise.");
+	      msg_print("There is a high pitched humming noise.");
+	      (void) aggravate_monster(20);
+	      ident = TRUE;
 	      break;
 	    case 22:
 	      ident = trap_creation();
@@ -283,7 +284,8 @@ void read_scroll()
 	      break;
 	    case 26:
 	      msg_print("This is a genocide scroll.");
-	      ident = genocide();
+	      (void) genocide();
+	      ident = TRUE;
 	      break;
 	    case 27:
 	      ident = unlight_area(char_row, char_col);
@@ -341,6 +343,7 @@ void read_scroll()
 		  unmagic_name(i_ptr);
 		  i_ptr->tohit = -randint(5) - randint(5);
 		  i_ptr->todam = -randint(5) - randint(5);
+		  i_ptr->toac = 0;
 		  /* Must call py_bonuses() before set (clear) flags, and
 		     must call calc_bonuses() after set (clear) flags, so that
 		     all attributes will be properly turned off. */
@@ -462,6 +465,8 @@ void read_scroll()
 		  msg_print(out_val);
 		  unmagic_name(i_ptr);
 		  i_ptr->flags = TR_CURSED;
+		  i_ptr->tohit = 0;
+		  i_ptr->todam = 0;
 		  i_ptr->toac = -randint(5) - randint(5);
 		  calc_bonuses ();
 		  ident = TRUE;

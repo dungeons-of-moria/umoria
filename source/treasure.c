@@ -1,6 +1,6 @@
 /* source/treasure.c: dungeon object definitions
 
-   Copyright (c) 1989-92 James E. Wilson, Robert A. Koeneke
+   Copyright (c) 1989-94 James E. Wilson, Robert A. Koeneke
 
    This software may be copied and distributed for educational, research, and
    not for profit purposes provided that this copyright and statement are
@@ -723,17 +723,17 @@ treasure_type object_list[MAX_OBJECTS] = {
     0,	 300,	66,   1,  30,   0,   0,	 0,   0, {1,1}	, 40},
 {"[Exorcism and Dispelling]"	,0x7E000000L,	TV_PRAYER_BOOK, '?',/*325*/
     0,	 900,	67,   1,  30,   0,   0,	 0,   0, {1,1}	, 40},
-{"& Small wooden chest"		,0x0F000000L,	 TV_CHEST, '&',	/*326*/
+{"& Small wooden chest"		,0x0F800000L,	 TV_CHEST, '&',	/*326*/
     0,	  20,	1,   1, 250,	0,   0,	 0,   0, {2,3}	,  7},
-{"& Large wooden chest"		,0x15000000L,	 TV_CHEST, '&',	/*327*/
+{"& Large wooden chest"		,0x15800000L,	 TV_CHEST, '&',	/*327*/
     0,	  60,	4,   1, 500,	0,   0,	 0,   0, {2,5}	, 15},
-{"& Small iron chest"		,0x0F000000L,	 TV_CHEST, '&',	/*328*/
+{"& Small iron chest"		,0x0F800000L,	 TV_CHEST, '&',	/*328*/
     0,	 100,	7,   1, 300,	0,   0,	 0,   0, {2,4}	, 25},
-{"& Large iron chest"		,0x1F000000L,	 TV_CHEST, '&',	/*329*/
+{"& Large iron chest"		,0x1F800000L,	 TV_CHEST, '&',	/*329*/
     0,	 150,	10,   1,1000,	0,   0,	 0,   0, {2,6}	, 35},
-{"& Small steel chest"		,0x0F000000L,	 TV_CHEST, '&',	/*330*/
+{"& Small steel chest"		,0x0F800000L,	 TV_CHEST, '&',	/*330*/
     0,	 200,	13,   1, 500,	0,   0,	 0,   0, {2,4}	, 45},
-{"& Large steel chest"		,0x23000000L,	 TV_CHEST, '&',	/*331*/
+{"& Large steel chest"		,0x23800000L,	 TV_CHEST, '&',	/*331*/
     0,	 250,	16,   1,1000,	0,   0,	 0,   0, {2,6}	, 50},
 {"& Rat Skeleton"		,0x00000000L,	 TV_MISC, 's',	/*332*/
     0,	   0,	1,   1,  10,	0,   0,	 0,   0, {1,1}	,  1},
@@ -825,7 +825,7 @@ treasure_type object_list[MAX_OBJECTS] = {
     0,	   0,	19,   1,   0,	0,   0,	 0,   0, {1,1}	,  0},
 /* end doors */
 /* stairs */
-{"an up staircase "		,0x00000000L, TV_UP_STAIR, '<',	/* 370 */
+{"an up staircase"		,0x00000000L, TV_UP_STAIR, '<',	/* 370 */
     0,	   0,	1,   1,   0,	0,   0,	 0,   0, {1,1}	,  0},
 {"a down staircase"		,0x00000000L, TV_DOWN_STAIR, '>',/* 371 */
     0,	   0,	1,   1,   0,	0,   0,	 0,   0, {1,1}	,  0},

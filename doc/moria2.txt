@@ -1,9 +1,8 @@
-
-
-
           The Dungeons of Moria                                Page 18
 
 
+               Rock, Granite Rock, Magma Intrusion, and Quartz Veins.  Per-
+               manent  Rock  is  exactly  that, permanent.  Granite is very
                hard, therefore hard to dig through, and contains  no  valu-
                able  metals.   Magma  and Quartz veins are softer and some-
                times bear valuable metals and gems, shown as a `$' or a `*'
@@ -31,8 +30,8 @@
                ity of the  player.   They  will  either  affect  the  first
                object/creature  encountered,  or affect anything in a given
                direction, depending upon the wand.  An obstruction such  as
-               door  or wall will generally stop the effects of a wand from
-               traveling further.
+               a  door  or  wall  will generally stop the effects of a wand
+               from traveling further.
 
           b  - Browse a book. {P - peruse}
                You can only read a book if you are of its realm.  Therefore
@@ -56,8 +55,6 @@
                floor  spot  does  not already contain an object.  Doors and
                traps are considered objects in this  sense.   If  you  have
                several  objects  of the same kind, you will be prompted for
-               dropping one or all of them.  It  is  possible  to  directly
-               drop things which you are wielding or wearing.
 
 
 
@@ -69,6 +66,9 @@
 
           The Dungeons of Moria                                Page 19
 
+
+               dropping one or all of them.  It  is  possible  to  directly
+               drop things which you are wielding or wearing.
 
           e  - Display a list of equipment being used.
                Use the Equipment command  to  display  a  list  of  objects
@@ -84,17 +84,17 @@
                as an arrow, only one will be used at a time.
 
                If you throw at a  creature,  your  chance  of  hitting  the
-               creature  is  determined by your pluses to hit, your ability
-               at throwing, and the  object's  pluses  to  hit.   Once  the
+               creature  is determined by your plusses to hit, your ability
+               at throwing, and the object's  plusses  to  hit.   Once  the
                creature  is  hit,  the  object may or may not do any actual
                damage to it.  Certain objects in the dungeon can  do  great
                amounts  of  damage  when thrown, but it's for you to figure
                out the obscure ones.  Oil flasks are considered to  be  lit
-               before  thrown,  therefore  they  will  do  fire damage to a
+               before  thrown;  therefore,  they  will  do fire damage to a
                creature if they hit it.
 
                To use a bow with arrows, simply wield the bow and throw the
-               arrows.   Extra  pluses  to damage and hitting are gained by
+               arrows.   Extra  plusses to damage and hitting are gained by
                wielding the proper weapon and  throwing  the  corresponding
                ammo.   A  heavy  crossbow  with  bolts  for  example,  is a
                killer...
@@ -121,9 +121,6 @@
 
           l <Dir> - Look in a direction. {x - examine}
                The Look command is useful in identifying the exact type  of
-               object or creature shown on the screen.  Also, if a creature
-               is on top of an object, the look command will describe both.
-               You  can  see  creatures and objects up to 200 feet away (20
 
 
 
@@ -136,6 +133,9 @@
           The Dungeons of Moria                                Page 20
 
 
+               object or creature shown on the screen.  Also, if a creature
+               is on top of an object, the look command will describe both.
+               You  can  see  creatures and objects up to 200 feet away (20
                spaces).  You may freely use the Look  command  without  the
                creatures getting a move on you.
 
@@ -144,7 +144,7 @@
                adjacent directions.  Looking with the  null  direction  `5'
                (or `.') sees everything which there is to be seen.
 
-               You are also able to access your monster memories  with this
+               You are also able to access you monster memories  with  this
                command.   If you see a creature, you are prompted to ask if
                you wish to see a short paragraph of information about  your
                experiences  with  that  creature.   See also the section on
@@ -164,12 +164,13 @@
                ing a spell, and there must be some light present.
 
           o <Dir> - Open a door, chest, or lock.
-               To open an object such as a door or chest you must  use  the
+               To open an object such as a door or chest, you must use  the
                Open  command.   If  the  object is locked, the Open command
                will attempt to pick the lock,  based  on  your  ability  at
                disarming.   If  an  object  is trapped and you open it, the
-               trap will be set off.  This command can be counted, you  may
-               need several tries to get it open.
+               trap will be set off.  This command can be counted,  because
+               you  may  need  several  tries to get a locked door or chest
+               open.
 
           p  - Read a prayer.
                To pay  effectively,  a  character  must  have  learned  the
@@ -186,10 +187,6 @@
 
           q  - Quaff a potion.
                To drink a potion use the Quaff command.  A  potion  affects
-               the player in some manner.  The effects of the potion may be
-               immediately noticed, or they may be subtle and unnoticed.
-
-          r  - Read a scroll.
 
 
 
@@ -202,12 +199,16 @@
           The Dungeons of Moria                                Page 21
 
 
-               To read a scroll use the Read command.  A scroll  spell  has
-               an  area  affect,  except  in  a  few cases such as identify
-               scrolls which act on other objects.  Two scrolls, the  iden-
-               tify  scroll  and the recharge scroll, have titles which can
-               be read without setting them off, and by pressing ESCAPE can
-               be saved for future use.
+               the player in some manner.  The effects of the potion may be
+               immediately noticed, or they may be subtle and unnoticed.
+
+          r  - Read a scroll.
+               To read a scroll use the Read command.  Most  scroll  spells
+               either  affect  the  player or the area around the player; a
+               few cases such as identify scrolls  act  on  other  objects.
+               Two  scrolls,  the  identify scroll and the recharge scroll,
+               have titles which can be read without setting them off,  and
+               by pressing ESCAPE can be saved for future use.
 
           s  - Search general area one turn.
                The Search command can be used to locate  hidden  traps  and
@@ -227,7 +228,7 @@
 
           u  - Use a staff. {Z - Zap}
                The Use command will activate a staff.  Like  scrolls,  most
-               staffs  have  an  area affect.  Because staffs are generally
+               staffs  have  an  area effect.  Because staffs are generally
                more powerful than most other items, they are also harder to
                use correctly.
 
@@ -237,10 +238,11 @@
 
           w  - Wear or wield an item being carried.
                To wear or wield  an  object  in  your  inventory,  use  the
-               Wear/Wield  command.  If an object is already in use for the
-               same  function,  it  is  automatically  removed  first.   An
-               object's  bonuses  cannot  be  gained  until  it  is worn or
-               wielded.
+               Wear/Wield command.  If another object is already in use for
+               the same function, it is automatically removed first; if you
+               are  wearing  two rings, you are given a choice of which one
+               to remove.  An object's bonuses cannot be gained until it is
+               worn or wielded.
 
           x  - Exchange primary and secondary weapons. {X}
                A secondary weapon is any weapon which may be needed  often.
@@ -251,11 +253,6 @@
                exchange command to make it the secondary weapon, then wield
                your bow.  If the sword was suddenly needed, simply use  the
                exchange command to switch between the bow and the sword.
-
-          /  - Identify a character shown on screen.
-               Use the identify  command  to  find  out  what  a  character
-               displayed on the screen stands for.  For instance, by press-
-               ing `/.', you can find out that the `.' stands for  a  floor
 
 
 
@@ -268,9 +265,13 @@
           The Dungeons of Moria                                Page 22
 
 
+          /  - Identify a character shown on screen.
+               Use the identify  command  to  find  out  what  a  character
+               displayed on the screen stands for.  For instance, by press-
+               ing `/.', you can find out that the `.' stands for  a  floor
                spot.   When used with a creature, the identify command will
                tell you only what class of creature the symbol stands  for,
-               not  the  specific  creature, therefore use the look command
+               not  the  specific creature; therefore, use the look command
                for this information.
 
                If you identify the character for a creature in your monster
@@ -301,9 +302,9 @@
 
            (2) Examine potential corners  when  running.   This  is  on  by
                default, and allows you to run along an unknown curving cor-
-               ridor.  If, however, you are running from  a  creature,  and
-               wish to stop at an unknown corner to make a considered deci-
-               sion, then you may wish to switch this option off.
+               ridor.  If, however, you are running from  a  creature,  you
+               may  wish  to  switch  this option off, because the creature
+               will cut the corner.
 
            (3) Print self during a run.  This  is  off  by  default,  which
                gives faster screen updating.
@@ -313,15 +314,11 @@
                new part of the dungeon appears in view.
 
            (5) Treat open doors as empty space while running.  This is  off
-               by  default,  in which case you stop when ever you run up to
-               an open door.
+               by default, in which case you stop whenever you run up to an
+               open door.
 
            (6) Prompt to pick up objects.  This is off by default, in which
                case  stepping  over  an  object automatically causes you to
-               pick it up.  With the option on, you  get  prompted  in  all
-               such  cases  with  a description of the object to see if you
-               really want to take it.
-
 
 
 
@@ -334,6 +331,10 @@
           The Dungeons of Moria                                Page 23
 
 
+               pick it up.  With the option on, you  get  prompted  in  all
+               such  cases  with  a description of the object to see if you
+               really want to take it.
+
            (7) Rogue like command set.  This option  controls  the  command
                set in use.  It is off by default.
 
@@ -342,13 +343,14 @@
                include the weight of all objects.  This may  be  useful  to
                know if your pack is getting too heavy.
 
-           (9) Highlight mineral seams.  This is off by default.  Switching
-               it on causes quartz and magma to be displayed as `%' instead
-               of `#'.  This is handy when  mining.   Setting  this  option
-               does  not immediately highlight all minerals, but only those
-               which are subsequently displayed.  To display all  minerals,
-               just  move  the  map  around  a  bit  with  the  `Where' (or
-               `Locate') command.
+           (9) Highlight and notice mineral seams.  This is off by default.
+               Switching  it  on causes quartz and magma to be displayed as
+               `%' instead of `#'; also, it  causes  the  look  command  to
+               treat  them as interesting objects.  This is handy when min-
+               ing.  Setting this option does not immediately highlight all
+               minerals,  but  only those which are subsequently displayed.
+               To display all minerals, just move the map around a bit with
+               the `Where' (or `Locate') command.
 
            (10)Beep for invalid character.  This is on  by  default.   When
                on,  the program will beep for most invalid characters, such
@@ -356,7 +358,7 @@
                When off, there are no such beeps.
 
            (11)Display rest/repeat counts.  This is on  by  default.   When
-               on,  the  program  will  progessively  display the remaining
+               on,  the  program  will  progressively display the remaining
                turns left while resting, and for  repeated  commands.   For
                those  trying to play over a 2400 bps or less connection, or
                for those playing on very slow microcomputers, turning  this
@@ -383,11 +385,6 @@
                To save your game so that it can be restarted later, use the
                Control-X command.  Save files will also be generated if the
                game crashes due to a system error.  When you die, a reduced
-               save  file  is produced containing only your monster memory,
-               and your option settings.
-
-          {  - Inscribe an object.
-               This command can be used to inscribe any short string on  an
 
 
 
@@ -400,6 +397,11 @@
           The Dungeons of Moria                                Page 24
 
 
+               save  file  is produced containing only your monster memory,
+               and your option settings.
+
+          {  - Inscribe an object.
+               This command can be used to inscribe any short string on  an
                object.  Inscriptions are limited to twelve characters.  The
                inscription applies only to the particular object, it is not
                automatically  transferred  to  all  similar objects.  Under
@@ -408,6 +410,13 @@
                if they have been sampled without being identified.  In this
                last  case, moria does in fact carefully inscribe every such
                item.
+
+               If the inscription on an item is a single digit, that  digit
+               can  be used to refer to it when using, wearing, or wielding
+               an item from your pack.  For example, if you keep a pick  in
+               your pack with the inscription 1, you can switch to the pick
+               by wielding item 1 without checking your full inventory list
+               to find out which item the pick is.
 
           !  - Shell out of game.
                Use the Shell command `!' to temporarily exit  the  game  to
@@ -434,7 +443,7 @@
                The Run command will move you  in  the  indicated  direction
                until either you have to make a choice as between two direc-
                tions, or something interesting happens.  There are  options
-               which  determine  behaviour  at corners, and at screen boun-
+               which  determine  behavior  at  corners, and at screen boun-
                daries.  More precisely, the conditions which stop a run are
                as follows:
 
@@ -442,18 +451,6 @@
                moves, or a creature attacks you or casts a spell at you.
 
           (2)  You move next to an object, or a feature such as a  door  or
-               trap.
-
-          (3)  You come to the end of open space, or the end of a  passage,
-               or a junction of passages, or a hole in a wall.
-
-          (4)  Corners are more complex.  A corner allows a choice  between
-               adjacent  rectangular  and  diagonal directions.  If you can
-               see walls which ensure that  the  diagonal  gives  a  faster
-               traversal,  then  action  is determined by the "cut corners"
-               options.  If it is set, then you move diagonally through the
-               corner.  This gives you maximum speed (as is nice if you are
-               fleeing a hidden creature).  On the other hand, this  option
 
 
 
@@ -466,11 +463,31 @@
           The Dungeons of Moria                                Page 25
 
 
+               trap.
+
+          (3)  You come to the end of open space, or the end of a  passage,
+               or a junction of passages, or a hole in a wall.
+
+          (4)  Anything typed during a run causes the  run  to  stop.   The
+               character  causing  this to occur is ignored.  It is best to
+               use a space, which is ignored as a command, just in case the
+               run stops just before you type the character.
+
+          (5)  Various changes of state, such as recovery from fear or loss
+               of heroism, will stop a run.
+
+               Corners are more complex.  A corner allows a choice  between
+               adjacent  rectangular  and  diagonal directions.  If you can
+               see walls which ensure that  the  diagonal  gives  a  faster
+               traversal,  then  action  is determined by the "cut corners"
+               options.  If it is set, then you move diagonally through the
+               corner.  This gives you maximum speed (as is nice if you are
+               fleeing a hidden creature).  On the other hand, this  option
                should not be set if you want more careful coverage (as when
                you are searching) so that you take two  moves  through  the
                corner.
 
-          (5)  At a potential corner, where walls are not yet visible ahead
+               At a potential corner, where walls are not yet visible ahead
                of  the  rectangular direction, the "examine corners" option
                is considered.  If set, you  will  move  straight  into  the
                corner,  which will light up all the corner and so determine
@@ -479,24 +496,16 @@
                stop.  This allows highly cautious running where you want to
                stop at all potential choice points.
 
-          (6)  If you move off the screen while running, then a new section
-               of  the  dungeon is display and the run continues.  However,
+               If you move off the screen while running, then a new section
+               of the dungeon is displayed and the run continues.  However,
                if the "stop when map changes" option is set, you will stop.
-               Again,  this  is  an  option for nervous players, after all,
+               Again,  this  is  an  option for nervous players; after all,
                there may be a dragon on the new screen.
-
-          (7)  Anything typed during a run causes the  run  to  stop.   The
-               character  causing  this to occur is ignored.  It is best to
-               use a space, which is ignored as a command, just in case the
-               run stops just before you type the character.
-
-          (8)  Various changes of state, such as recovery from fear or loss
-               of heroism, will stop a run.
 
           6.  The Town Level
 
           The town level is where you will begin your adventure.  The  town
-          consists  of six buildings each with an entrance, some towns peo-
+          consists  of six buildings, each with an entrance, some townspeo-
           ple, and a wall which surrounds the town.  The first time you are
           in town it will be daytime, but you may return to find that dark-
           ness has fallen.  (Note that some spells may act  differently  in
@@ -508,18 +517,6 @@
           The town contains many different kinds of people.  There are  the
           street  urchins,  young  children  who will mob an adventurer for
           money, and seem  to  come  out  of  the  woodwork  when  excited.
-          Blubbering  Idiots  are  a  constant  annoyance, but not harmful.
-          Public drunks wander about the town singing, and are of no threat
-          to anyone.  Sneaky rogues hang about watching for a likely victim
-          to mug.  And finally, what town would be complete without a swarm
-          of  half  drunk warriors, who take offense or become annoyed just
-          for the fun of it.
-
-          Most of the towns people should be avoided by the largest  possi-
-          ble  distance  when  you wander from store to store.  Fights will
-          break out though, so be prepared.  Since your character  grew  up
-          in  this  world of intrigue, no experience is awarded for killing
-          on the town level.
 
 
 
@@ -530,6 +527,20 @@
 
 
           The Dungeons of Moria                                Page 26
+
+
+          Blubbering  Idiots  are  a  constant  annoyance, but not harmful.
+          Public drunks wander about the town singing, and are of no threat
+          to anyone.  Sneaky rogues hang about watching for a likely victim
+          to mug.  And finally, what town would be complete without a swarm
+          of  half-drunk  warriors, who take offense or become annoyed just
+          for the fun of it.
+
+          Most of the townspeople should be avoided by the largest possible
+          distance  when you wander from store to store.  Fights will break
+          out though, so be prepared.  Since your character grew up in this
+          world  of  intrigue,  no experience is awarded for killing on the
+          town level.
 
 
           6.2.  Supplies
@@ -561,9 +572,7 @@
           go  directly  to  the  final  offer instead of haggling with you.
           Items which cost less than 10 gold pieces do not count,  as  hag-
           gling well with these items is usually either very easy or almost
-          impossible.  Also, the store owner will always haggle  for  items
-          costing  more  than  1000  gold  pieces, because of the amount of
-          money involved.
+          impossible.
 
           Once inside a store, the  store  inventory  will  appear  on  the
           screen  along  with a set of options for your character.  You may
@@ -574,18 +583,6 @@
           wear, take off, and exchange commands which will also  work,  but
           were excluded to keep the options simple.
 
-          Stores do not always have  everything  in  stock.   As  the  game
-          progresses,  they  may  get new items so check from time to time.
-          Also, if you sell them an item, it may get  sold  to  a  customer
-          while  you  are adventuring, so don't always expect to be able to
-          get back everything you have sold.
-
-          Store owners will not buy harmful or useless items.  If an object
-          is  unidentified, they will pay you some base price for it.  Once
-          they have bought it they will immediately  identify  the  object.
-          If  it is a good object, they will add it to their inventory.  If
-          it was a bad bargain, they simply throw the item  away.   In  any
-          case,  you  may  receive some knowledge of the item if another is
 
 
 
@@ -598,6 +595,18 @@
           The Dungeons of Moria                                Page 27
 
 
+          Stores do not always have  everything  in  stock.   As  the  game
+          progresses,  they  may get new items, so check from time to time.
+          Also, if you sell them an item, it may get  sold  to  a  customer
+          while  you  are adventuring, so don't always expect to be able to
+          get back everything you have sold.
+
+          Store owners will not buy harmful or useless items.  If an object
+          is  unidentified, they will pay you some base price for it.  Once
+          they have bought it they will immediately  identify  the  object.
+          If  it is a good object, they will add it to their inventory.  If
+          it was a bad bargain, they simply throw the item  away.   In  any
+          case,  you  may  receive some knowledge of the item if another is
           encountered.
 
           The General Store
@@ -623,7 +632,7 @@
                as bless scrolls, word of recall scrolls, some approved pri-
                estly weapons, etc.  The entrance to the Temple is a `4'.
 
-          The Alchemy shop
+          The Alchemy Shop
                The Alchemy Shop deals in all manner of potions and scrolls.
                The entrance to the Alchemy Shop is a `5'.
 
@@ -640,18 +649,6 @@
           top of the `>' symbol and use the down `>' command.  Your charac-
           ter  enters  a  maze  of  interconnecting  staircases and finally
           passes through a one-way door.  He is now on the first  level  of
-          the  dungeon  (50 feet), and must survive many horrible and chal-
-          lenging encounters to find the treasure lying about.
-
-          There are two sources for light once inside  the  dungeon.   Per-
-          manent  light which has been magically placed within rooms, and a
-          light source carried by the player.  If neither is  present,  the
-          character  will  be  unable to map or see any attackers.  Lack of
-          light will also affect searching, picking locks, and disarming.
-
-          A character must wield a torch or lamp in order to supply his own
-          light.   Once  a  torch  or  lamp  has only 50 or less turns left
-          before burning out, the message "Your  light  is  growing  faint"
 
 
 
@@ -664,6 +661,18 @@
           The Dungeons of Moria                                Page 28
 
 
+          the  dungeon  (50 feet), and must survive many horrible and chal-
+          lenging encounters to find the treasure lying about.
+
+          There are two sources for light once  inside  the  dungeon:  per-
+          manent  light which has been magically placed within rooms, and a
+          light source carried by the player.  If neither is  present,  the
+          character  will  be  unable to map or see any attackers.  Lack of
+          light will also affect searching, picking locks, and disarming.
+
+          A character must wield a torch or lamp in order to supply his own
+          light.   Once  a  torch  or  lamp  has only 50 or less turns left
+          before burning out, the message "Your  light  is  growing  faint"
           will  be  displayed  at  random intervals.  Once a torch is burnt
           out, it is useless and can be dropped.  A lamp or lantern can  be
           refilled  with  oil  by  using the Fill `F' command.  You must of
@@ -673,9 +682,9 @@
           8.  Attacking and Being Attacked
 
           Attacking is simple in moria.  If you move into a  creature,  you
-          attack  him.  You can attack from a distance by firing a missile,
+          attack  it.   You can attack from a distance by firing a missile,
           or by magical means such as aiming a wand.  Creatures  attack  in
-          the  same  way,  if  they  move  into you, they attack you.  Some
+          the  same  way;  if  they  move  into you, they attack you.  Some
           creatures can also cast spells from a distance,  and  others  can
           breathe fire or worse on you from a distance.
 
@@ -688,7 +697,7 @@
           you will bump your head and look quite silly.
 
           If you are wielding a weapon, the damage for the weapon  is  used
-          when  you  hit  a  creature.  Otherwise you get two fist strikes.
+          when  you  hit  a creature.  Otherwise, you get two fist strikes.
           Very strong creatures can do a lot of damage with their  fists...
           You  may  have  a primary weapon, and a secondary weapon which is
           kept on your belt or shoulder for immediate use.  You can  switch
@@ -706,18 +715,6 @@
           Hits and misses are determined by ability  to  hit  versus  armor
           class.   A  hit  is a strike that does some damage; a miss may in
           fact reach a target, but fails to do any  damage.   Higher  armor
-          classes make it harder to do damage, and so lead to more misses.
-
-
-          8.1.  Monster Memories.
-
-          There are hundreds of different creatures in the mines of  moria,
-          many  of which look the same on the screen.  The exact species of
-          a creature can be discovered by looking at it.  It is  also  very
-          difficult to keep track of the capabilities of various creatures.
-          Rather than forcing you to keep notes, moria automatically  keeps
-          track  of  your  experiences with a particular creature.  This is
-          called the  monster  memory.   Your monster  memory  recalls  the
 
 
 
@@ -730,10 +727,21 @@
           The Dungeons of Moria                                Page 29
 
 
-          particular attacks of each creature (whether or not technically a
-          monster) which you have suffered, as well  as  recalling  if  you
-          have  observed  them  to  multiply  or  move erratically, or drop
-          treasure, or many other attributes.
+          classes make it harder to do damage, and so lead to more misses.
+
+
+          8.1.  Monster Memories
+
+          There are hundreds of different creatures in the mines of  moria,
+          many  of which look the same on the screen.  The exact species of
+          a creature can be discovered by looking at it.  It is  also  very
+          difficult to keep track of the capabilities of various creatures.
+          Rather than forcing you to keep notes, moria automatically  keeps
+          track  of  your  experiences with a particular creature.  This is
+          called the monster memory.  You monster memory recalls  the  par-
+          ticular attacks of each creature which you have suffered, as well
+          as recalling if you have observed them to multiply or move errat-
+          ically, or drop treasure, or many other attributes.
 
           If you have killed enough of a particular creature,  or  suffered
           enough attacks, recalling the monster memory may also provide you
@@ -773,17 +781,6 @@
           in one turn.
 
           Missile booster weapons, such as bows, have their characteristics
-          added  to those of the missile used, if the proper weapon/missile
-          combination is used.  Also, these weapons will multiply the  base
-          damage  of  the missile by a number from 2 to 4, depending on the
-          strength of the weapon.  This multiplier is displayed as `(*#)'.
-
-          Although you receive any magical bonuses an  unidentified  weapon
-          may possess when you wield it, those bonuses will not be added in
-          to the displayed values of to-hit and to-dam  on  your  character
-          sheet.   You must identify the weapon before the displayed values
-          reflect the real values used.
-
 
 
 
@@ -796,6 +793,17 @@
           The Dungeons of Moria                                Page 30
 
 
+          added  to those of the missile used, if the proper weapon/missile
+          combination is used.  Also, these weapons will multiply the  base
+          damage  of  the missile by a number from 2 to 4, depending on the
+          strength of the weapon.  This multiplier is displayed as `(x#)'.
+
+          Although you receive any magical bonuses an  unidentified  weapon
+          may possess when you wield it, those bonuses will not be added in
+          to the displayed values of to-hit and to-dam  on  your  character
+          sheet.   You must identify the weapon before the displayed values
+          reflect the real values used.
+
           Finally, some rare weapons have  special  abilities.   These  are
           called  ego  weapons,  and  are feared by great and meek.  An ego
           sword must be wielded to receive benefit of its abilities.
@@ -803,14 +811,14 @@
           Special weapons are denoted by the following abbreviations:
 
           DF - Defender.
-               A magical weapon that actually helps the wielder defend him-
-               self,  thus  increasing  his/her armor class, and protecting
-               him/her against damage from fire,  frost,  acid,  lightning,
-               and falls.  This weapon also will increase your stealth, let
-               you see invisible creatures, protect you  from  paralyzation
-               attacks, and help you regenerate hit points and mana faster.
-               As a result of the regerenation ability,  you  will  use  up
-               food faster than normal while wielding such a weapon.
+               A magical weapon that helps the wielder defend himself, thus
+               increasing  his/her  armor  class,  and  protecting  him/her
+               against damage from fire, frost, acid, lightning, and falls.
+               This  weapon  also  will  increase your stealth, let you see
+               invisible creatures, protect you from paralyzation  attacks,
+               and  help  you  regenerate hit points and mana faster.  As a
+               result of the regeneration ability, you  will  use  up  food
+               faster than normal while wielding such a weapon.
 
           FB - Frost Brand.
                A magical weapon of ice that delivers  a  cold  critical  to
@@ -830,19 +838,7 @@
                evil  and undead creatures, and will also give you the abil-
                ity to see invisible creatures.
 
-          SD - Slay Dragon.
-               A Slay Dragon weapon is a special purpose weapon whose  sole
-               intent  is  to  destroy  dragon-kind.   Therefore, when used
-               against a dragon, the amount of damage done  is  four  times
-               the normal amount.
-
-          SE - Slay Evil.
-               A Slay Evil weapon is a special purpose  weapon  whose  sole
-               intent  is  to destroy all forms of evil.  When used against
-               an evil creature, either alive or undead,  the  damage  done
-               twice the normal amount.
-
-          SM - Slay Animal.
+          SA - Slay Animal.
                A Slay Animal weapon is a special purpose weapon whose  sole
                intent is to destroy all the dangerous animals in the world.
                An animal is any creature natural to the  world.   Therefore
@@ -850,6 +846,7 @@
                This will inflict twice the normal  amount  of  damage  when
                used against an animal.
 
+          SD - Slay Dragon.
 
 
 
@@ -861,6 +858,17 @@
 
           The Dungeons of Moria                                Page 31
 
+
+               A Slay Dragon weapon is a special purpose weapon whose  sole
+               intent  is  to  destroy  dragon-kind.   Therefore, when used
+               against a dragon, the amount of damage done  is  four  times
+               the normal amount.
+
+          SE - Slay Evil.
+               A Slay Evil weapon is a special purpose  weapon  whose  sole
+               intent  is  to destroy all forms of evil.  When used against
+               an evil creature, either alive or undead,  the  damage  done
+               twice the normal amount.
 
           SU - Slay Undead.
                A Slay Undead weapon is a special purpose weapon whose  sole
@@ -905,17 +913,6 @@
           tive armor class would actually help get you hit.  Armor protects
           you in three manners.  One, it makes you harder  to  be  hit  for
           damage.   A  hit  for no damage is the same as a miss.  Two, good
-          armor will absorb some of the damage that  your  character  would
-          have  taken.  An armor class of 30 would absorb 15% of any damage
-          meant for him.  Three, acid damage is  reduced  by  wearing  body
-          armor.   It is obvious that a high armor class is a must for sur-
-          viving the lower levels of moria.
-
-          Each piece of armor has an armor class adjustment, and a  magical
-          bonus.   Armor  bought  in  town will have these values displayed
-          with their description.  Armor that is found within  the  dungeon
-          must  be  identified  before these values will be displayed.  All
-          armor always has the base armor class  displayed,  to  which  the
 
 
 
@@ -928,6 +925,17 @@
           The Dungeons of Moria                                Page 32
 
 
+          armor will absorb some of the damage that  your  character  would
+          have  taken.  An armor class of 30 would absorb 15% of any damage
+          meant for him.  Three, acid damage is  reduced  by  wearing  body
+          armor.   It is obvious that a high armor class is a must for sur-
+          viving the lower levels of moria.
+
+          Each piece of armor has an armor class adjustment, and a  magical
+          bonus.   Armor  bought  in  town will have these values displayed
+          with its description.  Armor that is  found  within  the  dungeon
+          must  be  identified  before these values will be displayed.  All
+          armor always has the base armor class  displayed,  to  which  the
           bonus is added.  It is always possible to figure this out anyway,
           by watching the effect it has on your displayed armor class.
 
@@ -937,28 +945,30 @@
           is only displayed if known, and will always have a sign preceding
           the value.  There are a few cases where the form `[+#]' is  used,
           meaning the object has no armor class, only a magical armor bonus
-          if worn.
+          if  worn.   Body  armor  may  also  have  a  (-#)  displayed   in
+          parentheses;  this  is  a penalty to hit, because the bulk of the
+          armor makes it more difficult to swing a weapon freely.
 
           Some pieces of armor will possess special  abilities  denoted  by
           the following abbreviations:
 
           RA - Resist Acid.
-               A character using such an object will take  only  one  third
+               A character using such an object will  take  only  one-third
                normal  damage  from any acid thrown upon him.  In addition,
                armor so enchanted will resist the acid's effects and not be
                damaged by it.
 
           RC - Resist Cold.
-               A character using a resist cold object will  take  only  one
+               A character using a resist cold object will take  only  one-
                third damage from frost and cold.
 
           RF - Resist Fire.
-               A character using a resist fire object will  take  only  one
+               A character using a resist fire object will take  only  one-
                third damage from heat and fire.
 
           RL - Resist Lightning.
                A character using a resist lightning object will  take  only
-               one third damage from electrical attacks.
+               one-third damage from electrical attacks.
 
           R - Resistance.
                A character wearing armor with this ability will have resis-
@@ -969,19 +979,6 @@
           8.5.  Crowns
 
           Some crowns also have special magical abilities that improve your
-          chances in a battle.
-
-          Crown of Might
-               This is the great crown of the warriors.   The  wearer  will
-               have  an increased strength, dexterity, and constituion, and
-               will also be immune to any foe's attempt to slow or paralyze
-               him or her.
-
-          Crown of the Magi
-                This is the great crown of the wizards.   The  wearer  will
-               have  an  increased  intelligence,  and  will  also be given
-               resistance against fire, frost, acid, and lightning.
-
 
 
 
@@ -993,6 +990,19 @@
 
           The Dungeons of Moria                                Page 33
 
+
+          chances in a battle.
+
+          Crown of Might
+               This is the great crown of the warriors.   The  wearer  will
+               have an increased strength, dexterity, and constitution, and
+               will also be immune to any foe's attempt to slow or paralyze
+               him or her.
+
+          Crown of the Magi
+               This is the great crown of the  wizards.   The  wearer  will
+               have  an  increased  intelligence,  and  will  also be given
+               resistance against fire, frost, acid, and lightning.
 
           Crown of Lordliness
                This is the great crown of the  priests.   The  wearer  will
@@ -1028,26 +1038,13 @@
           You pick up objects by moving on top of them.  You can  carry  up
           to 22 different items in your backpack while wearing and wielding
           many others.  Although you are limited to 22 different items, you
-          may be carrying several items of each kind restricted only by the
-          amount of weight your character can carry.  Your weight limit  is
-          determined  by your strength.  Only one object may occupy a given
-          floor location, which may or may not also contain  one  creature.
-          Doors, traps, and staircases are considered objects for this pur-
-          pose.
+          may  be  carrying  several items of each kind, restricted only by
+          the amount of weight your character can carry.  Your weight limit
+          is  determined  by  your  strength.  Only one object may occupy a
+          given floor location, which may  or  may  not  also  contain  one
+          creature.   Doors,  traps,  and staircases are considered objects
+          for this purpose.
 
-          If you try to carry more weight than your limit,  you  will  move
-          more  slowly  than  normal  until  you drop the extra weight.  If
-          picking up an object would take you over your weight limit,  then
-          you will be asked whether you really want to pick it up.  It is a
-          good idea to leave the object alone if you  are  fleeing  from  a
-          monster.
-
-          Many objects found within the dungeon have special  commands  for
-          their  use.   Wands  must  be Aimed, staves must be Used, scrolls
-          must be Read, and potions must be Quaffed.  In any case, you must
-          first  be  able  to  carry an object before you can use it.  Some
-          objects, such as chests, are very complex.  Chests contain  other
-          objects  and  may  be  trapped,  and/or locked.  Read the list of
 
 
 
@@ -1060,17 +1057,30 @@
           The Dungeons of Moria                                Page 34
 
 
+          If you try to carry more weight than your limit,  you  will  move
+          more  slowly  than  normal  until  you drop the extra weight.  If
+          picking up an object would take you over your weight limit,  then
+          you will be asked whether you really want to pick it up.  It is a
+          good idea to leave the object alone if you  are  fleeing  from  a
+          monster.
+
+          Many objects found within the dungeon have special  commands  for
+          their  use.   Wands  must  be Aimed, staffs must be Used, scrolls
+          must be Read, and potions must be Quaffed.  In any case, you must
+          first  be  able  to  carry an object before you can use it.  Some
+          objects, such as chests, are very complex.  Chests contain  other
+          objects  and  may  be  trapped,  and/or locked.  Read the list of
           player commands carefully for a further understanding of chests.
 
           One item in particular will be discussed  here.   The  scroll  of
-          "Word  of  Recall"  can be found within the dungeon, or bought at
+          "Word-of-Recall"  can  be  found within the dungeon, or bought at
           the temple in town.  It acts in two manners, depending upon  your
           current  location.   If read within the dungeon, it will teleport
           you back to town.  If read in town, it  will  teleport  you  back
-          down to the deepest level of the dungeon one which your character
+          down  to the deepest level of the dungeon on which your character
           has previously been.  This makes the scroll very useful for  get-
           ting  back  to  the  deeper levels of moria.  Once the scroll has
-          been read it takes a while for the spell to act, so don't  expect
+          been read, it takes a while for the spell to act, so don't expect
           it to save you in a crisis.
 
           The game provides some automatic inscriptions to  help  you  keep
@@ -1101,19 +1111,6 @@
           something wrong.  The item will also be inscribed "damned".
 
 
-          9.2.  Mining
-
-          Much of the treasure within the dungeon can be found only by min-
-          ing  it  out  of  the walls.  Many rich strikes exist within each
-          level, but must  be  found  and  mined.   Quartz  veins  are  the
-          richest,  yielding the most metals and gems, but magma veins will
-          have some hordes hidden within.
-
-          Mining is virtually impossible without a pick or  shovel.   Picks
-          and  shovels  have  an  additional  magical  ability expressed as
-          `(+#)'.  The higher the number, the better  the  magical  digging
-          ability of the tool.  A pick or shovel also has pluses to hit and
-          damage, and can be used as a weapon.
 
 
 
@@ -1125,6 +1122,20 @@
 
           The Dungeons of Moria                                Page 35
 
+
+          9.2.  Mining
+
+          Much of the treasure within the dungeon can be found only by min-
+          ing  it  out  of  the walls.  Many rich strikes exist within each
+          level, but must  be  found  and  mined.   Quartz  veins  are  the
+          richest,  yielding the most metals and gems, but magma veins will
+          have some hordes hidden within.
+
+          Mining is virtually impossible without a pick or  shovel.   Picks
+          and  shovels  have  an  additional  magical  ability expressed as
+          `(+#)'.  The higher the number, the better  the  magical  digging
+          ability  of  the  tool.  A pick or shovel also has plusses to hit
+          and damage, and can be used as a weapon.
 
           When a vein of quartz or magma is located, the  character  should
           wield  his  pick or shovel and begin digging out a section.  When
@@ -1166,6 +1177,18 @@
           simply hide small empty closets or even dead ends.
 
           Creatures in the dungeon will generally know and use these secret
+
+
+
+
+
+
+
+
+
+          The Dungeons of Moria                                Page 36
+
+
           doors.   If  they  leave  one  open, you will be able to go right
           through it.  If they close it behind them you will have to search
           for  the  catch first.  Once a secret door has been discovered by
@@ -1180,25 +1203,13 @@
           the Balrog.  The Balrog will appear on most  levels  after  level
           49, so don't go down there until you are ready for him.
 
-
-
-
-
-
-
-
-
-
-          The Dungeons of Moria                                Page 36
-
-
           The Balrog cannot be killed in some of the easier methods used on
           normal  creatures.   Because  of  the  Balrog's  cunning, he will
           teleport away to another level if a spell such as destruction  is
-          used  upon  him,  and  the  Balrog  cannot be polymorphed, slept,
-          charmed, or genocided.  Magical spells like coldball  are  effec-
-          tive  against him as are weapons, but he is difficult to kill and
-          if allowed to escape for a time can heal himself.
+          used  upon him, and the Balrog cannot be polymorphed, slept, con-
+          fused, or genocided.  Magical spells like coldball are  effective
+          against  him, as are weapons, but he is difficult to kill, and if
+          allowed to escape to another level can heal himself.
 
           If you should actually survive the attempt of killing the Balrog,
           you  will  receive the status of WINNER.  Since you have defeated
@@ -1227,20 +1238,6 @@
           There are rumors of moria Wizards which,  if  asked  nicely,  can
           explain  details  of  the  moria  game  that  seem complicated to
           beginners.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

@@ -1,6 +1,6 @@
 /* source/spells.c: player/creature spells, breaths, wands, scrolls, etc. code
 
-   Copyright (c) 1989-92 James E. Wilson, Robert A. Koeneke
+   Copyright (c) 1989-94 James E. Wilson, Robert A. Koeneke
 
    This software may be copied and distributed for educational, research, and
    not for profit purposes provided that this copyright and statement are
@@ -489,7 +489,8 @@ int td_destroy()
 		if (delete_object(i, j))
 		  destroy = TRUE;
 	      }
-	    else if (t_list[c_ptr->tptr].tval == TV_CHEST)
+	    else if ((t_list[c_ptr->tptr].tval == TV_CHEST) 
+		     && (t_list[c_ptr->tptr].flags != 0))
 	      {
 		/* destroy traps on chest and unlock */
 		t_list[c_ptr->tptr].flags &= ~(CH_TRAPPED|CH_LOCKED);
@@ -1293,7 +1294,7 @@ int dir, y, x;
 	      if (m_ptr->ml && (r_ptr->cdefense & CD_NO_SLEEP))
 		c_recall[m_ptr->mptr].r_cdefense |= CD_NO_SLEEP;
 	      /* Monsters which resisted the attack should wake up.
-		 Monsters with inane resistence ignore the attack.  */
+		 Monsters with innate resistence ignore the attack.  */
 	      if (! (CD_NO_SLEEP & r_ptr->cdefense))
 		m_ptr->csleep = 0;
 	      (void) sprintf(out_val, "%s is unaffected.", m_name);
@@ -1301,7 +1302,10 @@ int dir, y, x;
 	    }
 	  else
 	    {
-	      m_ptr->confused = TRUE;
+	      if (m_ptr->confused)
+		m_ptr->confused += 3;
+	      else
+		m_ptr->confused = 2 + randint(16);
 	      confuse = TRUE;
 	      m_ptr->csleep = 0;
 	      (void) sprintf(out_val, "%s appears confused.", m_name);
@@ -1405,7 +1409,18 @@ int dir, y, x;
 	      msg_print(out_val);
 	      wall = TRUE;
 	    }
-	  (void) delete_object(y, x);
+	  if (t_list[c_ptr->tptr].tval == TV_RUBBLE)
+	      {
+		(void) delete_object(y, x);
+		if (randint(10) == 1)
+		  {
+		    place_object(y, x, FALSE);
+		    if (test_light(y, x))
+		      msg_print("You have found something!");
+		  }
+		lite_spot(y, x);
+	      }
+	      else (void) delete_object(y, x);
 	}
       if (c_ptr->cptr > 1)
 	{
@@ -1468,7 +1483,7 @@ int dir, y, x;
 		  destroy2 = TRUE;
 		}
 	    }
-	  else if (t_ptr->tval == TV_CHEST)
+	  else if ((t_ptr->tval == TV_CHEST) && (t_ptr->flags != 0))
 	    {
 	      msg_print("Click!");
 	      t_ptr->flags &= ~(CH_TRAPPED|CH_LOCKED);
@@ -2202,7 +2217,7 @@ void create_food()
     }
   else
     {
-      place_object(char_row, char_col);
+      place_object(char_row, char_col, FALSE);
       invcopy(&t_list[c_ptr->tptr], OBJ_MUSH);
     }
 }
@@ -2276,7 +2291,7 @@ int turn_undead()
 		  turn_und = TRUE;
 		  c_recall[m_ptr->mptr].r_cdefense |= CD_UNDEAD;
 		}
-	      m_ptr->confused = TRUE;
+	      m_ptr->confused = py.misc.lev;
 	    }
 	  else if (m_ptr->ml)
 	    {

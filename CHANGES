@@ -295,3 +295,107 @@ doc/faq: remove old spoilers file, and put current FAQ here instead
 *: change copyright date in all source files to 1992
 ---------- 8/13
 release umoria 5.5.0
+---------- 10/26
+doc/moria[12].[ms,txt]: correct some typos, and make changes for 5.5.0
+---------- 10/31
+misc4.c: scribe_object() allowed inscriptions longer than 12 characters
+	if 13-24 characters availble for inscription, could overwrite
+	other data
+::::::: 1994 ::::::::
+---------- 6/6
+scrolls.c: aggravate monster should give "humming noise" before "stirring"
+scrolls.c: always identify scrolls which print a message
+unix/unix.c: change from obsolete getpw() to getpwuid() to get UID
+death.c: #include<sys/types.h> seems to be needed on XENIX and SYSV
+death.c: fix #ifdef (...) || defined(...)
+save.c: set fd=-1 after closing file to prevent double close
+dungeon.c: move hero/superhero to first status check so that player's HP won't
+	go below 0 in mid-turn (killing him) and then become positive
+doc/moria[12].ms: fixes so that file works with groff
+store1.c: sell_price(), check for consistent sale prices compared
+	pointers rather than values
+create.c: get_all_stats(), set player level to 1 before calling set_use_stat
+	with constitution (which used level to check hit points)
+misc3.c: misspelled variable "holderr" in MWC-specific code
+misc3.c: prt_experience(), put check against max level in while loop
+	so that level gain is never tested if player is max level
+misc3.c: gain_level(), corrected comment for loss of extra experience
+	when player gains multiple levels
+moria3.c: monster_death(), don't make player a winner if already dead
+store2.c: get_haggle(), %d should be %ld
+misc3.c: todis_adj(), case of dexterity 3 was omitted
+spells.c: wall_to_mud(), may find objects in rubble as with tunneling
+---------- 6/7
+io.c, signals.c: included changes from Andrew Chernov for 386BSD support
+io.c, config.h: included changes from Berthold Gunreben for HP-UX support
+config.h, death.c, files.c: added patches for HP Apollo, which doesn't allow
+	multiple processes to use the same file
+config.h: defined MORIA_LIB to contain pathname for moria/files, to 
+	simplify configuration
+moria1.c: inven_command(), get_item(), added code from Harry Johnston 
+	which allows use of 0-9 to specify an item with the 
+	corresponding inscription
+doc/moria[12].ms: documented above change
+files/version.hlp: my name appeared both as author and "other contributor"
+scrolls.c: set AC bonus on cursed weapon, hit/dam bonuses on cursed armor
+	to zero (in case HA/DF/gauntlets of slaying had bonus)
+creature.c: don't print message when invisible monsters recover from bash
+creature.c, moria3.c, spells.c: reworked monster confusion, monster's
+	confused value now gives duration, turn_undead has guaranteed
+	duration equal to player's level, other confusion random
+creature.c: undead which have been turned will flee rather than moving
+	randomly, attack only if cornered
+recall.c: print "It is resistant to" if monster has not cast any spells 
+        but breath flag is known (because monster resisted an attack)
+monsters.c: allow monsters to resist attacks if they have no breath
+	weapon but use the attack type (so fire giants resist fire)
+sets.c: new function set_large(), identifies objects too large to fit in
+	a chest or be carried by small creatures
+misc3.c: get_obj_num(), new parameter must_be_small to generate only
+	small objects when appropriate; place_object() passes it
+files.c: random object sample passes must_be_small
+constant.h, treasure.c, monsters.c, moria3.c, recall.c: new constant 
+	CM_SMALL_OBJ for chests, and for monsters carrying only small
+	objects, check it in monster_death() by setting a bit in
+	treasure type, allow it to be recalled
+moria3.c: summon_object(), object must be small if bit flagged above
+many: change all other calls to place_object to set must_be_small to FALSE
+externs.h: fix declaration of get_obj_num(), place_object(), add set_large()
+store1.c: noneedtobargain(), change scale again, (good-3*bad-5) must be
+	positive and its square must be at least price/50, this allows
+	high-level characters to become good bargainers for expensive
+	items
+---------- 6/8
+lint all above changes, fix assorted typos
+recall.c: recalled spell frequency for non-spellcasters in wizard mode
+monsters.c: checked small objects/resistances for consistency, fixed error
+creature.c: creatures given resistance by setting of breath bits tried
+	to cast spell, calling randint(0)
+moria3.c: error in testing type caused all monsters which should drop
+	both objects and gold to drop only gold
+creature.c: turned undead must call get_moves so they know which way to flee
+---------- 6/9
+moria1.c: inven_command(), get_item(), print 0-9 in prompt message when
+	appropriate 
+moria[12].ms: clarified that digit inscriptions work only on items in pack
+prayer.c: strengthened Holy Word
+player.c: reduced failure chance for Holy Word 
+check all changes, fixed more typos
+---------- 6/10
+moria1.c: inven_command(), get_item(), 0-9 was printed in wrong place
+---------- 6/22
+spells.c: td_destroy(), td_destroy2(), don't disarm/unlock chests that
+	are already empty
+treasure.c: up staircase had extra space after name
+doc/moria[12].ms: proofread, fix many typos
+---------- 6/25
+monsters.c: allow thieves to pick up objects on the floor
+main.c,config.h,amiga/amiga.c,amiga/timer.c: included changes from
+	Ronald Cook for Lattice C support on Amiga 
+death.c,io.c,signals.c,unix.c,config.h: included changes from Brian
+	Johnson for Linux support
+changed version number to 5.5.1
+fix more lint errors
+util/mergemem: code from Eric Bazin to merge monster memories
+*: changed all copyright dates to 1994
+released version 5.5.1

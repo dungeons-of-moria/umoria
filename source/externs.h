@@ -1,6 +1,6 @@
 /* source/externs.h: declarations for global variables and initialized data
 
-   Copyright (c) 1989-92 James E. Wilson, Robert A. Koeneke
+   Copyright (c) 1989-94 James E. Wilson, Robert A. Koeneke
 
    This software may be copied and distributed for educational, research, and
    not for profit purposes provided that this copyright and statement are
@@ -409,8 +409,8 @@ void set_options(void);
 void place_trap(int, int, int);
 void place_rubble(int, int);
 void place_gold(int, int);
-int get_obj_num(int);
-void place_object(int, int);
+int get_obj_num(int, int);
+void place_object(int, int, int);
 void alloc_object(int (*)(), int, int);
 void random_object(int, int, int);
 void cnv_stat(int8u, char *);
@@ -622,6 +622,7 @@ int set_lightning_destroy(inven_type *);
 int set_null(inven_type *);
 int set_acid_destroy(inven_type *);
 int set_fire_destroy(inven_type *);
+int set_large(inven_type *);
 int general_store(int);
 int armory(int);
 int weaponsmith(int);
@@ -1136,6 +1137,7 @@ int set_lightning_destroy();
 int set_null();
 int set_acid_destroy();
 int set_fire_destroy();
+int set_large();
 int general_store();
 int armory();
 int weaponsmith();

@@ -1,6 +1,6 @@
 /* ibmpc/tcio.c: terminal I/O code for Turbo C
 
-   Copyright (c) 1989-92 James E. Wilson, Eric Vaitl
+   Copyright (c) 1989-94 James E. Wilson, Eric Vaitl
 
    This software may be copied and distributed for educational, research, and
    not for profit purposes provided that this copyright and statement are

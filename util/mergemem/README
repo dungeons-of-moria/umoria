@@ -1,0 +1,85 @@
+AUTHOR
+   Eric W. Bazin (currently bazin@carolus.cma.fr)
+
+Welcome !
+If you read this, you must have successfully uncompressed, uudecoded
+and detared the MMM directory.
+
+
+MMM stands for Monster Memory Mixing.
+This package consists in 4 files :
+  moriadecode.c,
+  moriaencode.c,
+  moriamerge.c,
+and this README file.
+
+License :
+You may distribute and/or modify copies of this tool, provided that :
+ a) you always include the 4 files composing MMM, and in particular 
+    the reference to there author
+ b) you clearely indicate the extent and purpose of the changes.
+I would also appreciate receiving a copy of your changes, so that good
+ideas can be added back into my version.
+
+
+  
+
+The corresponding programs allows to mix the monster memories from
+two character (each one beeing either saved, dead or having quited)
+into the memorie of one of the characters.
+Of course, by repeating the process, every combination is possible.
+
+
+moriadecode is a filter (read inputs on stdin and write outputs on
+stdout) which transforms a savefile from umoria (typically :
+moria.sav) in an equivallent decoded file (as umoria savefiles are
+encoded).
+
+moriaencode is the reverse program (also a filter).
+
+moriamerge takes two arguments (let's call them file1 and file2) that
+represents decoded savefiles from umoria (i.e. the result of
+moriadecode on umoria savefiles) and produce on stdout a decoded moria
+file corresponding to the character described in file1, but with the
+additional memory of the character decribed in file2.
+
+So, if character1 is saved in moria1.sav, if character2 is saved in
+moria2.sav, and if we want to lear character1 what character2 knows,
+we would do :
+
+moriadecode < moria1.sav > tmp1 
+ to produce a decoded file tmp1 corresponding to character1
+
+moriadecode < moria2.sav > tmp2
+ to produce a decoded file tmp2 corresponding to character2
+
+moriamerge tmp1 tmp2 > tmp3
+ to produce a decoded file tmp3 corresponding to character1
+ *with the additional memory of character2*
+
+moriaencode < tmp3 > moria1.sav 
+ to produce the new umoria savefile corresponding to character1 with
+ the additional memory from character2.
+
+(Of course, if one wanted also that character2 learn what character1
+knows, one would do :
+moriamerge tmp2 tmp1 > tmp4
+moriaencode < tmp4 > moria2.sav
+).
+
+
+Warnings/Bugs :
+a) Theses programs have been writen and tested on Unix system, and on
+HPS300 computers. I suppose they would work, on other system and
+computers.
+b) Theses programs don't check the version of the files submited to
+them. They have been tested with umoria 5.5 files. I suppose they
+would work with files from earlier version provided that theses
+versions are compatibles with umoria 5.5
+c) Theses programs don't check if they are "feeded" with encoded or
+decoded umoria files, so take care of what you do with them.
+d) The mixing of memory adds the known information of the two
+characters. In particular, if you mix character with himself, he knows
+the same monsters, but he will be credited from double kills (and
+double deaths).
+Thus, if you want to cheat, go ahead; otherwise, stay righteous !

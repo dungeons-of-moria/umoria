@@ -1,6 +1,6 @@
 /* source/misc3.c: misc code for maintaining the dungeon, printing player info
 
-   Copyright (c) 1989-92 James E. Wilson, Robert A. Koeneke
+   Copyright (c) 1989-94 James E. Wilson, Robert A. Koeneke
 
    This software may be copied and distributed for educational, research, and
    not for profit purposes provided that this copyright and statement are
@@ -101,8 +101,8 @@ int y, x;
 
 
 /* Returns the array number of a random object		-RAK-	*/
-int get_obj_num(level)
-int level;
+int get_obj_num(level,must_be_small)
+int level,must_be_small;
 {
   register int i, j;
 
@@ -124,39 +124,44 @@ int level;
 	 objects less than or equal to the dungeon level.  This distribution
 	 makes a level n objects occur approx 2/n% of the time on level n,
 	 and 1/2n are 0th level. */
-
-      if (randint(2) == 1)
-	i = randint(t_level[level]) - 1;
-      else /* Choose three objects, pick the highest level. */
+      do
 	{
-	  i = randint(t_level[level]) - 1;
-	  j = randint(t_level[level]) - 1;
-	  if (i < j)
-	    i = j;
-	  j = randint(t_level[level]) - 1;
-	  if (i < j)
-	    i = j;
-	  j = object_list[sorted_objects[i]].level;
-	  if (j == 0)
-	    i = randint(t_level[0]) - 1;
-	  else
-	    i = randint(t_level[j]-t_level[j-1]) - 1 + t_level[j-1];
+	  if (randint(2) == 1)
+	    i = randint(t_level[level]) - 1;
+	  else	
+	    /* Choose three objects, pick the highest level. */
+	    {
+	      i = randint(t_level[level]) - 1;
+	      j = randint(t_level[level]) - 1;
+	      if (i < j)
+		i = j;
+	      j = randint(t_level[level]) - 1;
+	      if (i < j)
+		i = j;
+	      j = object_list[sorted_objects[i]].level;
+	      if (j == 0)
+		i = randint(t_level[0]) - 1;
+	      else
+		i = randint(t_level[j]-t_level[j-1]) - 1 + t_level[j-1];
+	    }
 	}
+      while ((must_be_small) 
+	     && (set_large(&object_list[sorted_objects[i]])));
     }
   return(i);
 }
 
 
 /* Places an object at given row, column co-ordinate	-RAK-	*/
-void place_object(y, x)
-int y, x;
+void place_object(y, x, must_be_small)
+int y, x, must_be_small;
 {
   register int cur_pos, tmp;
 
   cur_pos = popt();
   cave[y][x].tptr = cur_pos;
   /* split this line up to avoid a reported compiler bug */
-  tmp = get_obj_num(dun_level);
+  tmp = get_obj_num(dun_level, must_be_small);
   invcopy(&t_list[cur_pos], sorted_objects[tmp]);
   magic_treasure(cur_pos, dun_level);
   if (cave[y][x].cptr == 1)
@@ -187,7 +192,7 @@ int typ, num;
 	else	      place_rubble(i, j); /* typ == 3 */
       } else {
 	if (typ == 4) place_gold(i, j); /* typ == 4 */
-	else	      place_object(i, j); /* typ == 5 */
+	else	      place_object(i, j, FALSE); /* typ == 5 */
       }
     }
 }
@@ -212,7 +217,7 @@ int y, x, num;
 	      && (cave_ptr->tptr == 0))
 	    {
 	      if (randint(100) < 75)
-		place_object(j, k);
+		place_object(j, k, FALSE);
 	      else
 		place_gold(j, k);
 	      i = 9;
@@ -863,7 +868,7 @@ int todis_adj()
   register int stat;
 
   stat = py.stats.use_stat[A_DEX];
-  if	  (stat <   3)	return(-8);
+  if	  (stat <   4)	return(-8);
   else if (stat ==  4)	return(-6);
   else if (stat ==  5)	return(-4);
   else if (stat ==  6)	return(-2);
@@ -2017,7 +2022,7 @@ static void gain_level()
   need_exp = player_exp[p_ptr->lev-1] * p_ptr->expfact / 100;
   if (p_ptr->exp > need_exp)
     {
-      /* lose some of the 'extra' exp when gain a level */
+      /* lose some of the 'extra' exp when gaining several levels at once */
       dif_exp = p_ptr->exp - need_exp;
       p_ptr->exp = need_exp + (dif_exp / 2);
     }
@@ -2045,9 +2050,9 @@ void prt_experience()
   if (p_ptr->exp > MAX_EXP)
     p_ptr->exp = MAX_EXP;
 
-  if (p_ptr->lev < MAX_PLAYER_LEVEL)
-    while ((player_exp[p_ptr->lev-1] * p_ptr->expfact / 100) <= p_ptr->exp)
-      gain_level();
+  while ((p_ptr->lev < MAX_PLAYER_LEVEL) && 
+	 (player_exp[p_ptr->lev-1] * p_ptr->expfact / 100) <= p_ptr->exp)
+    gain_level();
 
   if (p_ptr->exp > p_ptr->max_exp)
     p_ptr->max_exp = p_ptr->exp;
@@ -2319,7 +2324,7 @@ int monster;
       /* Slay Undead  */
 #ifdef ATARIST_MWC
       else if ((m_ptr->cdefense & CD_UNDEAD)
-	       && (i_ptr->flags & (holderr = TR_SLAY_UNDEAD)))
+	       && (i_ptr->flags & (holder = TR_SLAY_UNDEAD)))
 #else
       else if ((m_ptr->cdefense & CD_UNDEAD)
 	       && (i_ptr->flags & TR_SLAY_UNDEAD))

@@ -8,6 +8,9 @@ that the current method.
 mcheck.inf: my and David J. Grabiner's ideas on monster consistency, and
 checks that should be added to the monster compiler
 
+mergemem: code from Eric W. Bazin to merge monster memory from different
+savefiles
+
 monster.cng: a list of some of the changes to the monster.c file, is this
 still needed?
 

@@ -1,6 +1,6 @@
 /* source/signals.c: signal handlers
 
-   Copyright (c) 1989-92 James E. Wilson, Christopher J. Stuart
+   Copyright (c) 1989-94 James E. Wilson, Christopher J. Stuart
 
    This software may be copied and distributed for educational, research, and
    not for profit purposes provided that this copyright and statement are
@@ -89,7 +89,11 @@ static int signal_count = 0;
 
 /*ARGSUSED*/
 #ifndef USG
+#ifdef __386BSD__
+static void signal_handler(sig, code, scp)
+#else
 static int signal_handler(sig, code, scp)
+#endif
 int sig, code;
 struct sigcontext *scp;
 {
@@ -213,7 +217,11 @@ void signals()
 #if defined(atarist) && defined(__GNUC__)
   (void) signal(SIGTSTP, (__Sigfunc)suspend);
 #else
+#ifdef  __386BSD__
+  (void) signal(SIGTSTP, (sig_t)suspend);
+#else
   (void) signal(SIGTSTP, suspend);
+#endif
 #endif
 #ifndef USG
   (void) sigsetmask(mask);
@@ -284,7 +292,9 @@ void init_signals()
   (void) signal(SIGKILL, signal_handler);
   (void) signal(SIGBUS, signal_handler);
   (void) signal(SIGSEGV, signal_handler);
+#ifdef SIGSYS
   (void) signal(SIGSYS, signal_handler);
+#endif
   (void) signal(SIGTERM, signal_handler);
   (void) signal(SIGPIPE, signal_handler);
 #ifdef SIGXCPU	/* BSD */

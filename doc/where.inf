@@ -1,72 +1,122 @@
 
-Much of the data in this file is about 2 years out of date and may no longer
-be true.
+This is the information from the FAQ on getting a copy of Moria.  It is
+current as of 6/25/94.
 
-********
+The following Moria files are available by anonymous FTP from
+ftp.cis.ksu.edu (IP address 129.130.10.80) or ftp.engg.ksu.edu (IP
+address 129.130.41.83).  They should also be available by gopher from
+gopher.cis.ksu.edu or gopher.engg.ksu.edu, or from the WWW
+server at KSU:
 
-How to get a copy depends on which version you want, and what network and
-other resources you have access too.  It is far too involved to include
-every case here.  If none of these apply, you can send me mail.  Be specific
-about what you want.
+xmosaic http://www.engg.ksu.edu/welcome.html
 
-*********
+If you don't have FTP access, there is a mailserver which gives access
+to ftp.cis.ksu.edu; see below.  If you can't use the mailserver, see
+further below for a BBS which has the files.  
 
-From BITNET/EUNET:
+The sources for Umoria 5.5.0 were also posted to comp.sources.games, so
+they should be available (in compressed shar form) on any site which
+archives comp.sources.games, such as ftp.uu.net.
 
-The PC and Apple II GS versions are available from the LISTSERV at UTARLVM1.
-The UNIX and VM/SP versions are available from the LISTSERV at BLEKUL11.
-The Mac version is available from the info-mac archives.  There is a server
-at PUCC, I believe, that handles this.
+/pub/Games/Moria/[machine name]
+Executables for the Amiga, Atari ST, IBM PC, and Mac; look at the README
+files in these directories for more information.  Some of these files
+may need to be transferred in binary mode; type "binary" before
+transferring the files.  KSU has both color and monochrome executables
+for the IBM PC.  European users can also get Mac binaries from jyu.fi,
+in a file /maclib/game/moria.sit.bin.
 
-**************
+/pub/Games/Moria/source/um5.5.1.tar.Z 
+A compressed tar file containing the entire source, for use on any
+system; if you have tar on your system, this is probably the file that
+you want.  (If you don't have compress, you can FTP it from ftp.uu.net;
+it is compress.tar.)  This file must be transferred in binary mode; type
+"binary" before getting the file.  Once you have the tar.Z file, type
+"zcat um5.5.1.tar.Z | tar xf -" to extract the files, and read the README
+files for help in installing.
 
-From Internet:
+/pub/Games/Moria/pc/src/mor55src.zip
+A ZIP file containing the source.
 
-Here are some anonymous ftp sites where you can get Moria from...
-UNIX: uunet.uu.net (North America), sunic.sunet.se (Europe), in the directory
-	comp.sources.games/volume5/umoria2
-Atari ST: terminator.cc.umich.edu
-Amiga Moria v3.0: jyu.fi
-PCMoria 4.00+: hotel.cis.ksu.edu (contact jwd to get more recent versions)
-Apple IIGS: husc6.harvard.edu
-MacMoria: sumex.stanford.edu
+/pub/Games/Moria/XMoria/xm1.07.tar.Z
+The source to Moria for X Windows.
 
-In addition, I have a moria ftp archive on kukulcan.Berkeley.EDU (Internet
-number 128.32.131.190), which has a copy of everything listed in the history
-file except for Imoria, PC-Moria 4.00+ and the VM/SP and Archimedes ports of
-umoria.
+/pub/Games/Moria/doc
+The documentation for Moria 5.5, including the official documentation,
+the FAQ file, and a complete monster list.
 
-***************
+/pub/Games/Moria/pc/mono5.5 
+The auxilliary files are in this directory; you may need them if you
+have an executable without them.
 
-The UNIX sources are available via anonymous UUCP from various places in
-the US.  Tell me where you are, and I can tell you the nearest UUCP site.
+/pub/Games/Angband
+The source to Angband for UNIX, and source and executable for the PC and
+Mac.
 
-**************
+/pub/Games/Moria/boss
+The source distribution, in Pascal, for BOSS.
 
-Check with local user groups or commercial services.  For example, I know
-that BCS, BMUG, Genie, and Compuserve all have copies of MacMoria 4.87.
+/pub/Games/Moria/vms
+The source discribution, in Pascal, for VMS Moria 4.8 and 5.0.  Umoria
+5.x will also work on VMS machines.
 
-Also, try posting a request to rec.games.moria with a local distribution.
-Someone nearby may already have a copy.
+/pub/Games/Moria/unofficial
+Other unofficial modifications of Moria, including the druid version for
+the PC, and the sources for Morgul and Pmoria.
 
-*********************
+VMS sources for Imoria are available on ubvms.cc.buffalo.edu, in a
+directory /maslib/games/imoria.  VMS Moria 4.8 and 5.0 sources are also
+there.
 
-If all else fails, you can get a copy from me via the mail.
-I can put anything on a Mac floppy, I can put everything onto a 9-track
-tape in UNIX tar format, I can put the IBM-PC version onto PC diskettes
-(I can put other things onto IBM-PC versions but there will be a delay,
-as I have to find time to do the download).  Send me email for more
-info.
+Mailserver instructions (from Karl Hagen <greyhelm@cis.ksu.edu>):
 
-I have copies of the following:
-sources: Moria 4.8 (VMS/Pascal), Moria 5.0 (VMS/Pascal), Umoria 4.87 (C),
-	PC-Moria 4.873 (MSC), TC-Moria 4.873 (Turbo C), Atari ST 4.85 (MWC,
-	diffs from Umoria 4.85), Umoria 5.x (C)
-binaries: PC-Moria 4.873, TC-Moria 4.873 (512K and 640K), Amiga Moria v3.0,
-	Amiga Umoria 4.85, MacMoria 4.87, Apple II GS 4.83
+For all those unfortunates who don't have Internet ftp access, I've
+setup a mailserver to provide access to the archives on
+ftp.cis.ksu.edu.
 
-***********************
+This mailserver can be contacted via mail one of the following
+addresses:
 
-I do not email Moria sources/binaries.
+...!rutgers!depot!mailserver  (UUCP)
+mailserver@cis.ksu.edu        (Internet)
+mailserver@engg.ksu.edu       (Internet)
 
-**************************
+The server accepts commands given in the body of the mail messages;
+help is available with the command "help".  
+
+A listing of the files in
+the story archive may be obtained by "dir -l /pub/Games/Moria".
+
+Since the files archive consists of binary files, they must
+be uuencoded before they are sent on their way.  To specify this mode,
+use the command "encode uuencode"  To retrieve the files, use the
+"send" command (ex:  send /pub/Games/Moria/pc/mor55-286.zip
+
+If you have a system which cannot handle ZIP files, you may use
+the "unzip" filter ("encode unzip") 
+which will send you the uncompressed (but not uuencoded) version of the file.
+
+Here is an example mail message:
+
+% Mail mailserver@cis.ksu.edu
+~Subject: request 
+help
+encode uue     
+send /pub/Games/Moria/pc/mor55-286.zip
+^D
+%
+
+Please note that this is completely experimental and is not bug free.
+Questions and problems about this mailserver may be directed to
+"greyhelm@engg.ksu.edu".
+
+BBS instructions (from Tom Sorensen <gt0040a@prism.gatech.edu>):
+
+I've been making the source code, DOS and OS/2 executables, and all the
+spoilers I have available on:
+
+Ravishing Nook
+(404)368-9949
+2400-14.4k (V.32bis)
+Downloads should be available on first call.
+
