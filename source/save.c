@@ -70,7 +70,11 @@ static void rd_monster();
 #endif
 
 #if !defined(ATARIST_MWC)
+#ifdef MAC
+#include <time.h>
+#else
 long time();
+#endif
 #else
 char *malloc();
 #endif
@@ -491,7 +495,7 @@ int _save_char(fnam)
 char *fnam;
 {
   vtype temp;
-  register int i, ok, fd;
+  register int ok, fd;
   int8u char_tmp;
 
   if (log_index < 0)
@@ -641,6 +645,9 @@ int *generate;
       msg_print("Savefile does not exist.");
       return FALSE;	/* Don't bother with messages here. File absent. */
     }
+#else
+  if (access (savefile, 0) < 0)
+    return FALSE;
 #endif
 
   clear_screen();

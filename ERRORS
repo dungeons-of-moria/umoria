@@ -1,3 +1,23 @@
+on some unknown version of Sun OS, with some unknown compiler version,
+on a Sun 3/80, umoria core dumps while restoring a savefile if compiled
+with -O2, works if compiled with -O1
+
+mac version does not clear screen properly when running a second
+character, try looking for variables which should be cleared but aren't,
+especially the race display, and object pointers
+
+typing escape to the wizard mode change character prompts does not
+clear the message line
+
+can actually get the 'internal error in identify scroll' message, user had
+two(one?) unidentified identify scrolls, and one known identify scroll,
+read the known one, identified the unknown ones, got the combining message,
+and then got the internal error message
+
+need to clear the heavy_weapon state everytime a new weapon is wielded,
+so that you don't get 'can wield' message when going from heavy to light,
+but you do get a 'can't' wield' message when going from heavy to heavy
+
 for Atari ST, find and fix rest of the &/| long constant problems, esp. see
 moria1.c
 
@@ -13,10 +33,6 @@ why is errno ifdefed out for MSDOS in externs.h, I can't remember why
 I did this, note the def of errno in files.c for MSDOS
 
 clock in misc1.c needs to be changed, Mac (TC?) defines this
-
-i believe it is possible for two oozes to eat each other, and this
-will cause problems; there definitely IS a bug in the m_list code
-somewhere
 
 a few routines still equate '\0' with ESCAPE, such as get_com(),
 fix them to ignore NULL characters?,  also get_com() should echo "escape"

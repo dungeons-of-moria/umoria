@@ -1,4 +1,4 @@
-/* treasur1.c: dungeon object definitions
+/* treasure.c: dungeon object definitions
 
    Copyright (c) 1989 James E. Wilson, Robert A. Koeneke
 

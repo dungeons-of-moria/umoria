@@ -257,7 +257,7 @@ static void print_tomb()
 	  break;
 	case 'y': case 'Y':
 	  func = 'Y';
-	  ok = true;
+	  ok = TRUE;
 	  break;
 	case 'n': case 'N':
 	  func = 'N';
@@ -549,7 +549,9 @@ void exit_game ()
   if (i > 0)
     display_scores (i, TRUE);
   erase_line (23, 0);
+#ifndef __TURBOC__
   restore_term ();
+#endif
 #ifdef MAC
   /* Undo what has been done */
   enablefilemenu(TRUE);

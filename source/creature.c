@@ -905,7 +905,7 @@ int monptr;
 	attackn++;
       else
 	break;
-   }
+    }
 }
 
 
@@ -1389,7 +1389,9 @@ int monptr;
     {
       j = y - 2 + randint(3);
       k = x - 2 + randint(3);
-      if (in_bounds(j, k))
+      /* don't create a new creature on top of the old one, that causes
+	 invincible/invisible creatures to appear */
+      if (in_bounds(j, k) && (j != y || k != x))
 	{
 	  c_ptr = &cave[j][k];
 	  if ((c_ptr->fval <= MAX_OPEN_SPACE) && (c_ptr->tptr == 0) &&

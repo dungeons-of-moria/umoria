@@ -24,7 +24,7 @@
 /* Current version number of Moria				*/
 #define CUR_VERSION_MAJ 5 /* version 5.2 */
 #define CUR_VERSION_MIN 2
-#define PATCH_LEVEL 0
+#define PATCH_LEVEL 1
 
 #ifndef TRUE
 #define TRUE 1

@@ -2308,9 +2308,11 @@ register int *y, *x;
 /* Saving throws for player character.		-RAK-	*/
 int player_saves()
 {
+  /* MPW C couldn't handle the expression, so split it into two parts */
+  int16 temp = class_level_adj[py.misc.pclass][CLA_SAVE];
+
   if (randint(100) <= (py.misc.save + stat_adj(A_WIS)
-		       + (class_level_adj[py.misc.pclass][CLA_SAVE]
-			  * py.misc.lev / 3)))
+		       + (temp * py.misc.lev / 3)))
     return(TRUE);
   else
     return(FALSE);

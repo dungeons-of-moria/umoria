@@ -121,6 +121,10 @@ void exit();
 long _stksize = 18000;		/*(SAJ) for MWC	*/
 #endif
 
+#ifdef __TURBOC__
+unsigned _stklen = 0x3fff;	/* increase stack from 4K to 16K */
+#endif
+
 #if defined(LINT_ARGS)
 static void char_inven_init(void);
 static void init_m_level(void);

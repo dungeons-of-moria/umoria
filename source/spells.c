@@ -437,12 +437,12 @@ int door_creation()
 	  if (c_ptr->fval <= MAX_CAVE_FLOOR)
 	    {
 	      door = TRUE;
-	      k = popt();
 	      if (c_ptr->tptr != 0)
 		(void) delete_object(i, j);
+	      k = popt();
 	      c_ptr->fval = BLOCKED_FLOOR;
 	      c_ptr->tptr = k;
-	     invcopy(&t_list[k], OBJ_CLOSED_DOOR);
+	      invcopy(&t_list[k], OBJ_CLOSED_DOOR);
 	      lite_spot(i, j);
 	    }
 	}

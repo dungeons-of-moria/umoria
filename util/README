@@ -10,10 +10,12 @@ checks that should be added to the monster compiler
 monster.cng: a list of some of the changes to the monster.c file, is this
 still needed?
 
-printit.c: some code which would pretty print item/monster descriptions for
-umoria 4.87, by Carl Hommel, obsolete
+printit.c: some code which will pretty print item/monster descriptions,
+written by Carl Hommel
 
 showmon.c: obsolete code from 4.87 for printing the monster dictionary,
 superceded by the monster memories
 
-weapons: a program which roughly indicates which weapons are best
+weapons: a program which roughly indicates which weapons are best, written
+by Wayne Schlitt
+

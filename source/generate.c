@@ -13,7 +13,7 @@
 
 #ifdef USG
 #if !defined(ATARIST_MWC)
-#ifndef IBMPC_TURBO_C
+#ifndef __TURBOC__
 #include <memory.h>
 #else
 #include <mem.h>

@@ -82,8 +82,6 @@ void dungeon()
   find_count = 0;
   new_level_flag    = FALSE;
   find_flag	= FALSE;
-  if (search_flag)
-    search_off();
   teleport_flag = FALSE;
   mon_tot_mult	= 0;
   cave[char_row][char_col].cptr = 1;
@@ -91,6 +89,11 @@ void dungeon()
   panel_row = panel_col = -1;
   /* Light up the area around character	   */
   check_view ();
+  /* must do this after panel_row/col set to -1, because search_off() will call
+     check_view(), and so the panel_* variables must be valid before
+     search_off() is called */
+  if (search_flag)
+    search_off();
   /* Light,  but do not move critters	    */
   creatures(FALSE);
   /* Print the depth			   */

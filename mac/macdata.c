@@ -1,7 +1,7 @@
 /* This program creates the initialized global data resources.		*/
 /* It is compiled as an MPW tool.									*/
 
-/* Monsters.c, treasur1.c, treasur2.c, variable.c are included.		*/
+/* Monsters.c, player.c, tables.c, treasure.c, and variables.c are included.*/
 /* But, when this program is built, the compiler is instructed to	*/
 /* actually include the initialized global data.  We just copy it	*/
 /* into resource handles and dump them to the executable.			*/

@@ -602,3 +602,55 @@ scrnmgr.r, scrntest.r: these files had control characters also, changed
 resource.hqx: recompiled the mac resource files
 macscore.c, mac.c: changed control characters '...' to \311
 all: distribute version 5.2.0
+----------- 5/14
+death.c, externs.h, io.c, ms_misc.c: Turbo C changes, void sleep() instead
+	of unsigned sleep(), don't call reset_term() before exiting, ifdef
+	out definition of sleep() in ms_misc.c, declare signal handler as
+	void not int
+generate.c, types.h: change IBMPC_TURBO_C defines to the proper TURBOC define
+io.c: shell_out(), MSDOS code parameter to inkey() call deleted
+externs.h: count_msg_print() changed from (int) to (char *)
+io.c: get_check(), add code to use 'y' if LINT_ARGS defined, pause_exit()
+	add code to use 'delay' for MSDOS machines
+ms_misc.c: clear_screen(0,0) changed to clear_screen()
+main.c: set stack size for TURBOC by declaring the _stksize variable
+misc2.c: player_saves(), split expression up because MPW C couldn't handle it
+save.c: include time.h for for the Mac, delete var 'i' in save_char (unused),
+	get_char() add code for MAC to return FALSE if savefile doesn't exist
+mac.c: add call to initsavedefaults() in main()
+mac/ERRORS: document problem with mac Makefile
+-------- 5/15
+externs.h: remove decl of py_bash(), which is in moria2.c and static
+--------- 5/17
+dungeon.c: move search_off() call after check_view(), as panel_* variables
+	must be valid before search_off() is called
+-------- 5/18
+all: 7 files did not end with newlines, 5 hqx files, and origcmds.hlp,
+	misc/README also did not end with a newline
+-------- 5/21
+constant.h, version.hlp, moria.r: change version number to 5.2.1
+ScrnMgr.doc: split all lines greater than 80 characters, to make the file
+	more portable
+--------- 5/22
+death.c: in mac sources, there was a 'true' instead of a 'TRUE'
+ms_misc.c: Turbo C sscanf() incorrectly reads a newline from a blank line,
+	add check for newline to code that reads configuration file
+spells.c: door_creation(), called popt() before calling delete_object()
+	which could then invalidate the value returned by popt, moved
+	popt() call after the delete_object() call
+----------- 5/25
+creature.c: fix the invincible/invisible monster bug, multiply_monster()
+	was creating children on top of the parent, thus killing the parent
+	for carnivorous monsters
+death.c, externs.h, generate.c, io.c, main.c, ms_misc.c, signals.c, types.h:
+	change all TURBOC defines to __TURBOC__
+util/printit: new version of the printit program by Carl Hommel, fixed up
+	to be somewhat more portable and to use only moria defined constants
+-------- 5/27
+player.c, tables.c, variable.c: Turbo C can not accept any file with more than
+	64K global variables, so variable.c split into three parts, also
+	updated all makefiles to refer to all three files
+mac files: all three mac Makefiles modified to delete obsolete references to
+	CInterface.o and CRuntime.o, scrnmgr Makefile modified to automatically
+	combine the two ScrnMgr.c parts, README updated to document a problem
+	with the Makefile not appending resources and text files sometimes

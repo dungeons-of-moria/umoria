@@ -136,7 +136,11 @@ char *getenv();
 
 #ifdef USG
 void exit();
+#ifdef __TURBOC__
+void sleep();
+#else
 unsigned sleep();
+#endif
 #endif
 #ifdef ultrix
 void exit();
@@ -535,7 +539,7 @@ void shell_out()
 	clear_screen();	/* BOSS key if shell failed */
 	put_buffer("M:\\> ", 0, 0);
 	do {
-	  key = inkey(key);
+	  key = inkey();
 	} while (key != '!');
   }
 
@@ -1055,6 +1059,10 @@ char *prompt;
   /* prevent message 'warning: y is unused' */
   x = y;
 #endif
+#ifdef LINT_ARGS
+  /* prevent message about y never used for MSDOS systems */
+  res = y;
+#endif
 #endif
 
   if (x > 73)
@@ -1230,6 +1238,9 @@ int delay;
       erase_line(prt_line, 0);
 #ifndef MSDOS		/* PCs are slow enough as is  -dgk */
       if (delay > 0)  (void) sleep((unsigned)delay);
+#else
+      /* prevent message about delay unused */
+      dummy = delay;
 #endif
 #ifdef MAC
       enablefilemenu(FALSE);

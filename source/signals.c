@@ -76,7 +76,11 @@ typedef struct { int stuff; } fpvmach;
 
 #ifdef USG
 void exit();
+#ifdef __TURBOC__
+void sleep();
+#else
 unsigned sleep();
+#endif
 #endif
 
 static int error_sig = -1;
@@ -92,7 +96,11 @@ struct sigcontext *scp;
 
   smask = sigsetmask(0) | (1 << sig);
 #else
+#ifdef __TURBOC__
+static void signal_handler(sig)
+#else
 static int signal_handler(sig)
+#endif
 int sig;
 {
 

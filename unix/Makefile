@@ -11,13 +11,15 @@ SRCS = main.c misc1.c misc2.c store1.c files.c io.c create.c desc.c\
 	generate.c sets.c dungeon.c creature.c death.c eat.c help.c magic.c\
 	potions.c prayer.c save.c staffs.c wands.c scrolls.c spells.c\
 	wizard.c store2.c signals.c moria1.c moria2.c monsters.c\
-	treasure.c variable.c rnd.c recall.c unix.c undef.c
+	treasure.c variable.c rnd.c recall.c unix.c undef.c\
+	player.c tables.c
 
 OBJS = main.o misc1.o misc2.o store1.o files.o io.o create.o desc.o\
 	generate.o sets.o dungeon.o creature.o death.o eat.o help.o magic.o\
 	potions.o prayer.o save.o staffs.o wands.o scrolls.o spells.o\
 	wizard.o store2.o signals.o moria1.o moria2.o monsters.o\
-	treasure.o variable.o rnd.o recall.o unix.o undef.o
+	treasure.o variable.o rnd.o recall.o unix.o undef.o\
+	player.o tables.o
 
 LIBFILES = hours news origcmds.hlp owizcmds.hlp roglcmds.hlp rwizcmds.hlp \
 	scores version.hlp welcome.hlp
@@ -66,6 +68,7 @@ misc2.o: constant.h types.h externs.h config.h
 monsters.o: constant.h types.h config.h
 moria1.o: constant.h types.h externs.h config.h
 moria2.o: constant.h types.h externs.h config.h
+player.o: constant.h types.h config.h
 potions.o: constant.h types.h externs.h config.h
 prayer.o: constant.h types.h externs.h config.h
 recall.o: constant.h config.h types.h externs.h
@@ -78,6 +81,7 @@ spells.o: constant.h types.h externs.h config.h
 staffs.o: constant.h types.h externs.h config.h
 store1.o: constant.h types.h externs.h config.h
 store2.o: constant.h types.h externs.h config.h
+tables.o: constant.h types.h config.h
 treasure.o: constant.h types.h config.h
 unix.o: constant.h config.h types.h externs.h
 variable.o: constant.h types.h config.h

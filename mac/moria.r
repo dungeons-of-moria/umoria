@@ -13,7 +13,7 @@ type 'TEXT' {
 };
 
 resource 'MRIA' (0) {
-	"Moria 5.2.0 for the Macintosh: Implementation 2.0b1"
+	"Moria 5.2.1 for the Macintosh: Implementation 2.0b1"
 };
 
 resource 'BNDL' (128, purgeable) {
@@ -205,7 +205,7 @@ resource 'DITL' (128, "About", purgeable) {
 		StaticText {
 			disabled,
 			"Moria for the Macintosh\n"
-			"Version 5.2.0\n"
+			"Version 5.2.1\n"
 			"Implementation 2.0b1\n\n\n"
 			"Programmers:\n"
 			"Robert Alan Koeneke\n"
@@ -560,7 +560,7 @@ resource 'DITL' (512, "Mac Help", purgeable) {
 		{8, 52, 40, 380},
 		StaticText {
 			disabled,
-			"Moria for the Macintosh Version 5.2.0"
+			"Moria for the Macintosh Version 5.2.1"
 		},
 		/* [6] */
 		{8, 8, 40, 40},
@@ -584,7 +584,7 @@ resource 'CNTL' (512, "Mac Help Scroll Bar", purgeable) {
 
 resource 'TEXT' (512, "Mac Help", purgeable) {
 	"This is an beta version of Mac Moria, implementation 2.0b1, which is "
-	"based on the Umoria 5.2.0 sources.  Please send comments and bug repor"
+	"based on the Umoria 5.2.1 sources.  Please send comments and bug repor"
 	"ts to wilson@ernie.Berkeley.EDU (Jim Wilson) or 73230.224@compuserve.c"
 	"om (Curtis McCauley).\n\n"
 	"Users of previous versions o"

@@ -2,7 +2,7 @@ main.o,misc1.o,misc2.o,store1.o,files.o,io.o,create.o,desc.o, -
 generate.o,sets.o,dungeon.o,creature.o,death.o,eat.o,help.o,magic.o, -
 potions.o,prayer.o,save.o,staffs.o,wands.o,scrolls.o,spells.o, -
 wizard.o,store2.o,signals.o,moria1.o,moria2.o,monsters.o, -
-treasure1.o,treasure2.o,variables.o, -
+treasure1.o,treasure2.o,variables.o,player.o,tables.o -
 getch.o,cbreak.o,uexit.o,sys$library:vaxcrtl/share
 ! ^ char input
 !         ^ small stubs for cbreak(), nocbreak()

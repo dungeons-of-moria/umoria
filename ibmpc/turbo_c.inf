@@ -1,17 +1,3 @@
-From n245bq@tamunix.tamu.edu Thu Mar  8 11:02:59 1990
-Received: from TAMUNIX.TAMU.EDU by ernie.Berkeley.EDU (5.61/1.36)
-	id AA08447; Thu, 8 Mar 90 11:02:39 -0800
-Received: by tamunix (AA29123); Thu, 8 Mar 90 13:00:35 cst
-Date: Thu, 8 Mar 90 13:00:35 cst
-From: n245bq@tamunix.tamu.edu (Keith Perkins)
-Message-Id: <9003081900.AA29123@tamunix>
-To: wilson@ernie.Berkeley.EDU
-Status: RO
-
-Jim,
-     I have gotten Umoria 5.1.0 and 5.1.1 to compile in TurboC. The amount
-of changes from your code is minimal, which is a tribute to the good job
-you did in coding. I did find some bugs, but they are all minor.
 
 Compiler Stats :
 TurboC on Compaq 386sx w/ 1Meg memory & 20Meg HD
@@ -19,63 +5,13 @@ C calling convention
 80286 code generation
 HUGE model used
 optimized for size
-Compiler Defines : MSDOS;DEBUG;TURBOC (did not compile ANSI because of
-                                        errors (see BUGS #3))
-Using PC-Curses 1.4 (got it from your machine) compiled using TC and TASM
+Compiler Defines : MSDOS;DEBUG
 
-BUGS :
-1. The header for *fopenp in externs.h is different from the one in
-        ms_misc.c. Since *fopenp is used only in ms_misc.c I deleted
-        its header in externs.h.
-2. I added a void to the signal_handler(sig), so it now looks like
-        static void signal_handler(sig)
-        This change was in signals.c. All of the other signal_handler()
-        references had the void in their declarations.
-3. Added #include <stdio.h> to ms_ansi.c due to the fact that Global
-        variables like NULL were not defined otherwise. I still get
-        errors in the second pass of the linker asking for tgetnum,
-        tgetent, tgetstr, and tgoto. I think these might have been
-        defined in earlier versions of curses because I checked every
-        *.c file and *.h file, including my TurboC header files.
-        No luck. Any suggestions here would be appreciated!
+When compiling PC-Curses, make sure the .obj code is the same model as the
+source code for Umoria.  Also, a size modifier letter must start the name
+of the .lib file (HCURSES.LIB for instance).
 
-Stuff that TurboC didn't like :
-1. I was getting an error in the header of cave[MAX_HEIGHT][MAX_WIDTH]
-        in externs.h like "array out of bounds", which, it seems, means
-        that the array would be eating up too much memory (according
-        to the online help which isn't very helpful). My solution here
-        was to go into types.h and change the structure cave_type.
-        I changed the four lines that start
-        unsigned char lr : 1;
-        to
-        unsigned lr : 1;
-        and it seems to work. I have not had any problems running the
-        game, and this stopgate stopped the error in externs.h.
-2. In generate.c I changed the #if DEBUG to #ifdef DEBUG. TurboC does
-        not seem to have a DEBUG flag.
-3. Changed #include "memory.h" to #include <mem.h> in generate.c.
-4. PC-Curses reset_term() does not work right on my machine when I
-        exit the game in exit_game() in death.c. I get a machine lockup
-        and a bunch of fat, horizontal green lines across the screen.
-        I just commented this line out until I can come up with a better
-        solution.
-5. TurboC was complaining about "Too much Global data in variable.c",
-        so I broke variable.c into 4 smaller files.
-6. If someone else is interested, when compiling PC-Curses make sure
-        the .obj code is the same model as the source code for Umoria.
-        Also, a size modifier letter must start the name of the .lib
-        file (mine is HCURSES.LIB for instance).
-
-A couple of suggestions for Umoria 5
-1. Multiply the damage of the missle + missle weapon combo instead of
-        adding. It would give the characters without offensive spell
-        capability a fighting chance against those creatures that
-        you really would not like to fight hand to hand (eg. Liches,
-        disenchanter molds, etc..).
-2. Add a Staff of Identify.
-
-Thanks for the great game!
-Keith Perkins
-Texas A&M University
-Bitnet: KDP9565@TAMVENUS
-Internet: n245bq@tamunix.tamu.edu
+Note that reset_term() is commented out in death.c and io.c.  This is
+because calling this function causes moria to die horribly when moria is
+compiled by Turbo C.  I do know what the problem is, so, for now, reset_term()
+is never called for the Turbo C version.

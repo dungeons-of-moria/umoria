@@ -1674,6 +1674,8 @@ int main()
 
 	restart_flag = FALSE;
 
+	initsavedefaults ();
+
 	/* Find out if user has started from a saved game */
 	savedgame = getfinderfile();
 

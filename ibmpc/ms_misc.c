@@ -57,6 +57,7 @@ getlogin()
 	return cp;
 }
 
+#ifndef __TURBOC__
 unsigned int
 sleep(secs)
 int	secs;
@@ -68,6 +69,7 @@ int	secs;
 		/* nothing */;
 	return 0;
 }
+#endif
 
 void
 error(fmt, a1, a2, a3, a4)
@@ -153,7 +155,9 @@ msdos_init()
 			continue;
 
 		cnt = sscanf(buf, "%s", opt);
-		if (cnt == 0 || opt[0] == '\0')
+		/* Turbo C will incorrectly read a newline from an empty line,
+		   MSC will read correctly read a NULL character */
+		if (cnt == 0 || opt[0] == '\0' || opt[0] == '\n')
 			continue;
 
 		/* Go through possible variables
@@ -382,7 +386,7 @@ msdos_intro()
 {
         char buf[80];
 
-	clear_screen(0, 0);
+	clear_screen();
         wmove(stdscr,0,0);
 	waddstr(stdscr,"                         *********************");
 	wmove(stdscr,1,0);

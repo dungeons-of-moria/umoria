@@ -3,7 +3,7 @@ This is the source for Umoria 5.2, a dungeon exploration game.  This is my
 second major release of the game.  These sources have been compiled
 successfully at least once in the following environments: UNIX (4.2 BSD,
 4.3 BSD, SYS V, Xenix, and many similar systems), IBM-PC (MSC 5.0,
-Turbo C 4.0), Mac (MPW 3.0), Atari ST (MWC, GCC).  VMS and Mac (Think C 4.0)
+Turbo C 2.0), Mac (MPW 3.0), Atari ST (MWC, GCC).  VMS and Mac (Think C 4.0)
 ports are in progress.
 
 I consider these to be beta sources.  That means they will probably work

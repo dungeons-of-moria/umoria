@@ -297,7 +297,7 @@ void clear_screen(void);
 void clear_from(int);
 void print(char, int, int);
 void move_cursor_relative(int, int);
-void count_msg_print(int);
+void count_msg_print(char *);
 void prt(char *, int, int);
 void move_cursor(int, int);
 void msg_print(char *);
@@ -494,12 +494,15 @@ void disarm_trap(void);
 void look(void);
 void throw_object(void);
 void bash(void);
-void py_bash(int, int);
 
 #ifdef MSDOS
 /* ms_misc.c */
 char *getlogin(void);
+#ifdef __TURBOC__
+void sleep(int);
+#else
 unsigned int sleep(int );
+#endif
 void error(char *, ...);
 void warn(char *, ...);
 void msdos_init(void);
@@ -952,12 +955,15 @@ void disarm_trap();
 void look();
 void throw_object();
 void bash();
-void py_bash();
 
 #ifdef MSDOS
 /* ms_misc.c */
 char *getlogin();
+#ifdef __TURBOC__
+void sleep();
+#else
 unsigned int sleep();
+#endif
 void error();
 void warn();
 void msdos_init();

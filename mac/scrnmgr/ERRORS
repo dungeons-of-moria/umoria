@@ -1,3 +1,0 @@
-the file ScrnMgr.c was greater than 60K, so it was split into two parts,
-ScrnMgr1.c and ScrnMgr2.c, so that it could be posted to comp.sources.games,
-the MakeFile needs to be fixed to handle this
