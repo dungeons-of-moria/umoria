@@ -56,8 +56,8 @@ Can abort rest/repeated command by hitting any character.
 Every duration affect prints a command when it wears off previously
 resist heat and resist cold, and perhaps others did not.
 
-New find/run algorithm which is much better than the old one.  Also, better
-handling of dangerous conditions that occur during repeat commands/runs.
+New find/run algorithm which is much better than the old one.  Also,
+better handling of dangerous conditions that occur during repeat commands/runs.
 An attack will always stop a repeated command and find/run mode.
 
 Can inscribe names onto objects.  Some inscriptions are automatic:
@@ -122,15 +122,14 @@ Additional spikes make a door harder to open, in a progressively decreasing
 sequence, that is, the more spikes you add, the less effect each additional
 spike has.
 
-When a stat changes, all abilities that depend on the stat will immediately
-change.	 For example, if your CON increases, then your hit points will
-increase, if your INT/WIS increases then your mana will immediately increase
-and you will immediately learn new spells/prayers.  This makes the Grape Jelly
-trick completely unnecessary, and, in fact, it will has no effect.
+When a stat changes, all abilities/etc that depend on the stat will immediately
+change.	 For example, if you CON increases, then your hit points will increase,
+if your INT/WIS increases then your mana will immediately increase and you
+will immediately learn new spells/prayers.  This makes the Grape Jelly trick
+completely unnecessary, and, in fact, it will has no effect.
 
-Spell/prayer letters never change, i.e. if you know the second spell of a
-book, it will not be referred to as spell 'a' if you do not know the first
-spell.
+Spell/prayer letters never change, i.e. if you know the second spell of a book,
+it will not be referred to as spell 'a' if you do not know the first spell.
 
 When haggling, if you have reach the final offer much more often than you
 haven't, then the store will give you the benefit of the doubt and go
@@ -197,14 +196,13 @@ bolt: light crossbow = 3x, heavy crossbow = 4x
 Arrows and bolts appear more often deep in the dungeon.
 Magical missile weapon prices are more reasonable.
 
-The miscellaneous abilities 'fighting', 'bows/throw', 'saving throw',
-'disarm', and 'magical device' are all level dependent, i.e. they improve
-as you gain levels.  Formerly, the rate of improvement was independent of
-class, now, however, the learning rate is class dependent.  For example,
-warriors gain proficiency at fighting twice as fast as mages/priests now.
-As a result, high level warriors are better fighters than before, and high
-level mages/priests do not fight as well as they used to.  The complete table
-is as follows:
+The miscellaneous abilities 'fighting', 'bows/throw', 'saving throw', 'disarm',
+and 'magical device' are all level dependent, i.e. they improve as you gain
+levels.  Formerly, the rate of improvement was independent of class, now,
+however, the learning rate is clas dependent.  For example, warriors gain
+proficiency at fighting twice as fast as mages/priests now.  As a result,
+high level warriors are better fighters than before, and high level
+mages/priests do not fight as well as they used to.  The complete table is:
 			      Magic	     Saving
 	     Fighting  Bows  Devices  Disarm  Throw
 Warrior		4	4	2	2	3
@@ -262,6 +260,13 @@ amount used.
 
 Umoria 5.4:
 
-Prints multiple sentences on the message line if they are short enough
+Prints multiple sentences on the message line if they are short enough.
 
-last modified 10/6/91
+Umoria 5.5:
+
+The maximum damage enchantment for a weapon is now equal to its maximum
+damage, instead of being fixed at 10 (there is a slight chance of
+enchantment beyond this level); thus daggers are no longer the best
+weapons for mid-level characters.
+
+last modified 8/12/92

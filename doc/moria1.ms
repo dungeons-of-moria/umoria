@@ -1003,7 +1003,7 @@ of vision which just overlaps the cones of the two adjacent directions.
 Looking with the null direction `5' (or `.') sees everything which there
 is to be seen.
 .sp
-You are also able to access you monster memories with this command.
+You are also able to access your monster memories with this command.
 If you see a creature, you are prompted to ask if you wish to see
 a short paragraph of information about your experiences with that
 creature.  See also the section on being attacked.

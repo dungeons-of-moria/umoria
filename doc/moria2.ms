@@ -186,7 +186,7 @@ The exact species of a creature can be discovered by looking at it.
 It is also very difficult to keep track of the capabilities of
 various creatures.  Rather than forcing you to keep notes, \fImoria\fP
 automatically keeps track of your experiences with a particular
-creature.  This is called the monster memory.  You monster memory
+creature.  This is called the monster memory.  Your monster memory
 recalls the particular attacks of each creature (whether or not
 technically a monster) which you have suffered, as well as recalling
 if you have observed them to multiply or move erratically, or drop

@@ -1,6 +1,6 @@
 /* mac/moria.r: MacMoria resources, for Mac functionality
 
-   Copyright (c) 1989-91 Curtis McCauley, James E. Wilson
+   Copyright (c) 1989-92 Curtis McCauley, James E. Wilson
 
    This software may be copied and distributed for educational, research, and
    not for profit purposes provided that this copyright and statement are

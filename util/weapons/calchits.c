@@ -1,6 +1,6 @@
 /* util/weapons/calchits.c: calculates relative weapon effectiveness
 
-   Copyright (c) 1989-1991 Wayne Schlitt, James E. Wilson
+   Copyright (c) 1989-1992 Wayne Schlitt, James E. Wilson
 
    This software may be copied and distributed for educational, research, and
    not for profit purposes provided that this copyright and statement are

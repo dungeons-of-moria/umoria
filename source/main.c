@@ -1,6 +1,6 @@
 /* UNIX Moria Version 5.x
    source/main.c: initialization, main() function and main loop
-   Copyright (c) 1989-91 James E. Wilson, Robert A. Koeneke
+   Copyright (c) 1989-92 James E. Wilson, Robert A. Koeneke
 
    This software may be copied and distributed for educational, research, and
    not for profit purposes provided that this copyright and statement are
@@ -43,6 +43,10 @@
 /*       Amiga Port              : Corey Gehman                          */
 /*                                 Clemson University                    */
 /*                                 cg377170@eng.clemson.edu              */
+/*									 */
+/*	 Version 5.5		 : David Grabiner			 */
+/*				   Harvard University			 */
+/*				   grabiner@math.harvard.edu		 */
 /*                                                                       */
 /*	 Moria may be copied and modified freely as long as the above	 */
 /*	 credits are retained.	No one who-so-ever may sell or market	 */

@@ -1,6 +1,6 @@
 /* source/staffs.c: staff code
 
-   Copyright (c) 1989-91 James E. Wilson, Robert A. Koeneke
+   Copyright (c) 1989-92 James E. Wilson, Robert A. Koeneke
 
    This software may be copied and distributed for educational, research, and
    not for profit purposes provided that this copyright and statement are
@@ -41,6 +41,8 @@ void use()
 	+ (class_level_adj[m_ptr->pclass][CLA_DEVICE] * m_ptr->lev / 3);
       if (py.flags.confused > 0)
 	chance = chance / 2;
+      if ((chance < USE_DEVICE) && (randint(USE_DEVICE - chance + 1) == 1))
+	chance = USE_DEVICE; /* Give everyone a slight chance */
       if (chance <= 0)	chance = 1;
       if (randint(chance) < USE_DEVICE)
 	msg_print("You failed to use the staff properly.");

@@ -1,6 +1,6 @@
 /* source/spells.c: player/creature spells, breaths, wands, scrolls, etc. code
 
-   Copyright (c) 1989-91 James E. Wilson, Robert A. Koeneke
+   Copyright (c) 1989-92 James E. Wilson, Robert A. Koeneke
 
    This software may be copied and distributed for educational, research, and
    not for profit purposes provided that this copyright and statement are
@@ -774,12 +774,14 @@ char *bolt_typ;
 	      if (harm_type & r_ptr->cdefense)
 		{
 		  dam = dam*2;
-		  c_recall[m_ptr->mptr].r_cdefense |= harm_type;
+		  if (m_ptr->ml)
+		    c_recall[m_ptr->mptr].r_cdefense |= harm_type;
 		}
 	      else if (weapon_type & r_ptr->spells)
 		{
 		  dam = dam / 4;
-		  c_recall[m_ptr->mptr].r_spells |= weapon_type;
+		  if (m_ptr->ml)
+		    c_recall[m_ptr->mptr].r_spells |= weapon_type;
 		}
 	      monster_name(m_name, m_ptr, r_ptr);
 	      i = mon_take_hit((int)c_ptr->cptr, dam);
@@ -881,12 +883,14 @@ char *descrip;
 			      if (harm_type & r_ptr->cdefense)
 				{
 				  dam = dam*2;
-				  c_recall[m_ptr->mptr].r_cdefense |=harm_type;
+				  if (m_ptr->ml)
+				    c_recall[m_ptr->mptr].r_cdefense |=harm_type;
 				}
 			      else if (weapon_type & r_ptr->spells)
 				{
 				  dam = dam / 4;
-				  c_recall[m_ptr->mptr].r_spells |=weapon_type;
+				  if (m_ptr->ml)
+				    c_recall[m_ptr->mptr].r_spells |=weapon_type;
 				}
 			      dam = (dam/(distance(i, j, y, x)+1));
 			      k = mon_take_hit((int)c_ptr->cptr, dam);
@@ -911,14 +915,14 @@ char *descrip;
 	      if (thit == 1)
 		{
 		  (void) sprintf(out_val,
-				 "The %s envelopes a creature!",
+				 "The %s envelops a creature!",
 				 descrip);
 		  msg_print(out_val);
 		}
 	      else if (thit > 1)
 		{
 		  (void) sprintf(out_val,
-				 "The %s envelopes several creatures!",
+				 "The %s envelops several creatures!",
 				 descrip);
 		  msg_print(out_val);
 		}
@@ -1833,7 +1837,8 @@ int spd;
       r_ptr = &c_list[m_ptr->mptr];
       monster_name (m_name, m_ptr, r_ptr);
 
-      if (!los(char_row, char_col, (int)m_ptr->fy, (int)m_ptr->fx))
+      if ((m_ptr->cdis > MAX_SIGHT) ||
+	  !los(char_row, char_col, (int)m_ptr->fy, (int)m_ptr->fx))
 	/* do nothing */
 	;
       else if (spd > 0)
@@ -1883,7 +1888,8 @@ int sleep_monsters2()
       m_ptr = &m_list[i];
       r_ptr = &c_list[m_ptr->mptr];
       monster_name (m_name, m_ptr, r_ptr);
-      if (!los(char_row, char_col, (int)m_ptr->fy, (int)m_ptr->fx))
+      if ((m_ptr->cdis > MAX_SIGHT) || 
+	  !los(char_row, char_col, (int)m_ptr->fy, (int)m_ptr->fx))
 	/* do nothing */
 	;
       else if ((randint(MAX_MONS_LEVEL) < r_ptr->level) ||
@@ -1928,7 +1934,7 @@ int mass_poly()
   for (i = mfptr - 1; i >= MIN_MONIX; i--)
     {
       m_ptr = &m_list[i];
-      if (m_ptr->cdis < MAX_SIGHT)
+      if (m_ptr->cdis <= MAX_SIGHT)
 	{
 	  r_ptr = &c_list[m_ptr->mptr];
 #ifdef ATARIST_MWC
@@ -2218,7 +2224,8 @@ int damage;
   for (i = mfptr - 1; i >= MIN_MONIX; i--)
     {
       m_ptr = &m_list[i];
-      if ((cflag & c_list[m_ptr->mptr].cdefense) &&
+      if ((m_ptr->cdis <= MAX_SIGHT) &&
+	  (cflag & c_list[m_ptr->mptr].cdefense) &&
 	  los(char_row, char_col, (int)m_ptr->fy, (int)m_ptr->fx))
 	{
 	  r_ptr = &c_list[m_ptr->mptr];
@@ -2254,8 +2261,9 @@ int turn_undead()
     {
       m_ptr = &m_list[i];
       r_ptr = &c_list[m_ptr->mptr];
-      if ((CD_UNDEAD & r_ptr->cdefense)
-	  && (los(char_row, char_col, (int)m_ptr->fy, (int)m_ptr->fx)))
+      if ((m_ptr->cdis <= MAX_SIGHT) &&
+	  (CD_UNDEAD & r_ptr->cdefense) &&
+	  (los(char_row, char_col, (int)m_ptr->fy, (int)m_ptr->fx)))
 	{
 	  monster_name (m_name, m_ptr, r_ptr);
 	  if (((py.misc.lev+1) > r_ptr->level) ||
@@ -2497,11 +2505,12 @@ register int y, x;
     {
       for (i = (y-15); i <= (y+15); i++)
 	for (j = (x-15); j <= (x+15); j++)
-	  if (in_bounds(i, j) && (cave[i][j].fval != BOUNDARY_WALL) &&
-	      ((i != y) || (j != x)))
+	  if (in_bounds(i, j) && (cave[i][j].fval != BOUNDARY_WALL))
 	    {
 	      k = distance(i, j, y, x);
-	      if (k < 13)
+	      if (k == 0) /* clear player's spot, but don't put wall there */
+		replace_spot(i, j, 1);
+	      else if (k < 13)
 		replace_spot(i, j, randint(6));
 	      else if (k < 16)
 		replace_spot(i, j, randint(9));
@@ -2513,28 +2522,24 @@ register int y, x;
 
 
 /* Enchants a plus onto an item.			-RAK-	*/
-int enchant(plusses)
+int enchant(plusses, limit)
 int16 *plusses;
+int16 limit; /* maximum bonus allowed; usually 10, but weapon's maximum damage
+		when enchanting melee weapons to damage */
 {
   register int chance, res;
-
+  
+  if (limit <= 0) /* avoid randint(0) call */
+    return(FALSE);
   chance = 0;
   res = FALSE;
   if (*plusses > 0)
-    switch(*plusses)
-      {
-      case 1:  chance = 040; break;
-      case 2:  chance = 100; break;
-      case 3:  chance = 200; break;
-      case 4:  chance = 400; break;
-      case 5:  chance = 600; break;
-      case 6:  chance = 700; break;
-      case 7:  chance = 800; break;
-      case 8:  chance = 900; break;
-      case 9:  chance = 950; break;
-      default: chance = 995; break;
-      }
-  if (randint(1000) > chance)
+    {
+      chance = *plusses;
+      if (randint(100) == 1) /* very rarely allow enchantment over limit */
+	chance = randint(chance) - 1;
+    }
+  if (randint(limit) > chance)
     {
       *plusses += 1;
       res = TRUE;

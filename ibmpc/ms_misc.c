@@ -1,6 +1,6 @@
 /* ibmpc/ms_misc.c: MSDOS support code
 
-   Copyright (c) 1989-91 James E. Wilson, Don Kneller
+   Copyright (c) 1989-92 James E. Wilson, Don Kneller
 
    This software may be copied and distributed for educational, research, and
    not for profit purposes provided that this copyright and statement are
@@ -114,7 +114,7 @@ error (char *fmt, ...)
 {
   va_list p_arg;
 
-  va_start (p_arg, ftm);
+  va_start (p_arg, fmt);
   fprintf (stderr, "Moria error: ");
   vfprintf (stderr, fmt, p_arg);
   sleep (2);

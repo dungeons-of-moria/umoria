@@ -1,6 +1,6 @@
 /* vms/uexit.c: special exit command, to exit cleanly from VMS program.
 
-   Copyright (c) 1990-91 Joshua Delahunty, James E. Wilson
+   Copyright (c) 1990-92 Joshua Delahunty, James E. Wilson
 
    This software may be copied and distributed for educational, research, and
    not for profit purposes provided that this copyright and statement are
@@ -14,7 +14,7 @@
 
 	So, we convert 0 exit codes to 1's, leaving all others alone.  */
 
-uexit(exitcode)
+void uexit(exitcode)
 int exitcode;
 {
 	if (exitcode == 0)	/* On Unix, clean, on VMS, yeech! */

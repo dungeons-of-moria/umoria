@@ -1,6 +1,6 @@
 /* atari_st/st-stuff.c: Atari ST support code for GCC
 
-   Copyright (c) 1990-91 Scott Kolodzieski, James E. Wilson
+   Copyright (c) 1990-92 Scott Kolodzieski, James E. Wilson
 
    This software may be copied and distributed for educational, research, and
    not for profit purposes provided that this copyright and statement are

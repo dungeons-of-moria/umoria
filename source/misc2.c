@@ -1,6 +1,6 @@
 /* source/misc2.c: misc utility and initialization code, magic objects code
 
-   Copyright (c) 1989-91 James E. Wilson, Robert A. Koeneke
+   Copyright (c) 1989-92 James E. Wilson, Robert A. Koeneke
 
    This software may be copied and distributed for educational, research, and
    not for profit purposes provided that this copyright and statement are
@@ -118,7 +118,9 @@ int x, level;
       if (magik(chance))
 	{
 	  t_ptr->tohit += m_bonus(0, 40, level);
-	  t_ptr->todam += m_bonus(0, 40, level);
+	  /* Magical damage bonus now proportional to weapon base damage */
+	  tmp = t_ptr->damage[0] * t_ptr->damage[1];
+	  t_ptr->todam += m_bonus(0, 4*tmp, tmp*level/10);
 	  /* the 3*special/2 is needed because weapons are not as common as
 	     before change to treasure distribution, this helps keep same
 	     number of ego weapons same as before, see also missiles */
@@ -221,7 +223,9 @@ int x, level;
       else if (magik(cursed))
 	{
 	  t_ptr->tohit -= m_bonus(1, 55, level);
-	  t_ptr->todam -= m_bonus(1, 55, level);
+	  /* Magical damage bonus now proportional to weapon base damage */
+	  tmp = t_ptr->damage[0] * t_ptr->damage[1];
+	  t_ptr->todam -= m_bonus(1, 11*tmp/2, tmp*level/10);
 #ifdef ATARIST_MWC
 	  t_ptr->flags |= (holder = TR_CURSED);
 #else

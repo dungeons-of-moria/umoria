@@ -1,95 +1,96 @@
 
 
 
-          MORIA(6)                                                 MORIA(6)
+MORIA(6)                 GAMES AND DEMOS                 MORIA(6)
 
 
 
-          NAME
-               moria - a dungeon game
+NAME
+     moria - a dungeon game
 
-          SYNOPSIS
-               moria [ -o ] [ -r ] [ -s ] [ -S ] [ -n ] [ -w ] [ savefile ]
+SYNOPSIS
+     moria [ -o ] [ -r ] [ -s ] [ -S ] [ -n ] [ -w ] [ savefile ]
 
-          DESCRIPTION
-               Moria plays a dungeon game with you.  It lets you generate a
-               character, lets you buy equipment, and lets you wander in a
-               fathomless dungeon while finding treasure and being attacked
-               by monsters and fellow adventurers.  Typing ? gives you a
-               list of commands.
+DESCRIPTION
+     Moria plays a dungeon game with you.  It lets you generate a
+     character,  lets you buy equipment, and lets you wander in a
+     fathomless dungeon while finding treasure and being attacked
+     by  monsters  and  fellow adventurers.  Typing ? gives you a
+     list of commands.
 
-               The ultimate object of moria is to kill the Balrog, which
-               dwells on the 50th level of the dungeon, 2,500 feet under-
-               ground.  Most players never even reach the Balrog, and those
-               that do seldom live to tell about it.
+     The ultimate object of moria is to kill  the  Balrog,  which
+     dwells  on  the 50th level of the dungeon, 2,500 feet under-
+     ground.  Most players never even reach the Balrog, and those
+     that do seldom live to tell about it.
 
-               For a more complete description of the game, read the doc-
-               ument The Dungeons of Moria.
+     For a more complete description of the game, read the  docu-
+     ment The Dungeons of Moria.
 
-               By default, moria will save and restore games from a file
-               called moria.save in your home directory.  If the environ-
-               ment variable MORIA_SAV is defined, then moria will use that
-               file name instead of the default.  If MORIA_SAV is not a
-               complete path name, then the savefile will be created or
-               restored from the current directory.  You can also expli-
-               citly specify a savefile on the command line.
+     By default, moria will save and restore games  from  a  file
+     called  moria.save  in your home directory.  If the environ-
+     ment variable MORIA_SAV is defined, then moria will use that
+     file  name  instead  of  the default.  If MORIA_SAV is not a
+     complete path name, then the savefile  will  be  created  or
+     restored  from  the  current directory.  You can also expli-
+     citly specify a savefile on the command line.
 
-               If you use the -n option, moria will create a new game,
-               ignoring any savefile which may already exist.  This works
-               best when a savefile name is specified on the command line,
-               as this will prevent moria from trying to overwrite the
-               default savefile (if it exists) when you try to save your
-               game.
+     If you use the -n option, moria  will  create  a  new  game,
+     ignoring  any  savefile which may already exist.  This works
+     best when a savefile name is specified on the command  line,
+     as  this  will  prevent  moria  from trying to overwrite the
+     default savefile (if it exists) when you try  to  save  your
+     game.
 
-               You move in various directions by pressing the numeric
-               keypad keys, VMS-style.  If you specify -r, you move the
-               same way you do in rogue(6).  You can also specify -o to
-               force the VMS-style command set.  These options will over-
-               ride defaults stored in the savefile.  If these options are
-               given multiple times, only the last one will take effect.
+     You move in  various  directions  by  pressing  the  numeric
+     keypad  keys,  VMS-style.   If  you specify -r, you move the
+     same way you do in rogue(6).  You can  also  specify  -o  to
+     force  the  VMS-style command set.  These options will over-
+     ride defaults stored in the savefile.  If these options  are
+     given multiple times, only the last one will take effect.
 
-               If you specify -s, moria prints all of the scores in the
-               score file and exits.  On a multiuser system, if you specify
-               -S, moria prints prints only those scores belonging to you
-               and then exits.
+     If you specify -s, moria prints all of  the  scores  in  the
+     score file and exits.  On a multiuser system, if you specify
+     -S, moria prints prints only those scores belonging  to  you
+     and then exits.
 
-               If you specify -w, moria will start up in wizard mode.  You
-               can resurrect a dead character by using this option when
-               starting the game.  Resurrected characters are teleported to
-               the town level and given zero hitpoints.  Wizard mode is
-               intended for debugging the game, and for experimenting with
+     If you specify -w, moria will start up in wizard mode.   You
+     can  resurrect  a  dead  character by using this option when
+     starting the game.  Resurrected characters are teleported to
+     the  town  level  and  given zero hitpoints.  Wizard mode is
 
 
-          Rev.                                                       Page 1
 
+Local                     Last change:                          1
 
 
 
 
 
-          MORIA(6)                                                 MORIA(6)
 
+MORIA(6)                 GAMES AND DEMOS                 MORIA(6)
 
 
-               new features.  Any other use is considered cheating.  Games
-               played with wizard mode are not scored.
 
-          AUTHORS
-               The original version of Moria was written in VMS/Pascal by
-               Robert Alan Koeneke, Jimmey Wayne Todd, Gary McAdoo, and
-               others at the University of Oklahoma.  This version was
-               written by Jim Wilson at the University of California,
-               Berkeley.
+     intended for debugging the game, and for experimenting  with
+     new  features.  Any other use is considered cheating.  Games
+     played with wizard mode are not scored.
 
-          BUGS
-               A suspended game that gets a hangup signal will die without
-               creating a save file.
+AUTHORS
+     The original version of Moria was written in  VMS/Pascal  by
+     Robert  Alan  Koeneke,  Jimmey  Wayne Todd, Gary McAdoo, and
+     others at the University  of  Oklahoma.   This  version  was
+     written  by  Jim  Wilson  at  the  University of California,
+     Berkeley, and released with minor revisions  by  David  Gra-
+     biner at Harvard University.
 
-               Rerolling with a % at the class prompt not implemented.
+BUGS
+     A suspended game that gets a hangup signal will die  without
+     creating a save file.
 
-               For a more comprehensive list, see the ERRORS file in the
-               source distribution.
+     Rerolling with a % at the class prompt not implemented.
 
+     For a more comprehensive list, see the ERRORS  file  in  the
+     source distribution.
 
 
 
@@ -125,8 +126,7 @@
 
 
 
-
-          Rev.                                                       Page 2
+Local                     Last change:                          2
 
 
 

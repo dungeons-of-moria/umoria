@@ -21,7 +21,7 @@ Student/University of Oklahoma    Student/University of Oklahoma
 
 
 
-                        Umoria Version 5.4 (formerly UNIX Moria)
+                        Umoria Version 5.5 (formerly UNIX Moria)
 Version 4.83 :  5/14/87
 Version 4.85 : 10/26/87
 Version 4.87 :  5/27/88
@@ -29,7 +29,10 @@ Version 5.0  :  11/2/89
 Version 5.2  :   5/9/90
 Version 5.3  :  3/25/91
 Version 5.4  : 10/12/91
+Version 5.5  :  8/12/92
 
+David J. Grabiner, Harvard University
+		   grabiner@math.harvard.edu
 James E. Wilson, Cygnus Support
 		 wilson@kithrup.com
 
@@ -38,13 +41,13 @@ D. G. Kneller         - MSDOS Moria port, reduced map display, 16 bit integers
 Christopher J. Stuart - recall, options, inventory, running code, etc.
 Curtis McCauley       - Macintosh Moria port for MPW C
 Stephen A. Jacobs     - Atari ST Moria port for MW C
-William Setzer        - object naming code
-David J. Grabiner     - numerous bug reports, consistency checks, etc
-Dan Bernstein         - UNIX hangup signal fix, many bug fixes
 
 
 
 Other contributors:
+William Setzer        - object naming code
+David J. Grabiner     - numerous bug reports, consistency checks, etc
+Dan Bernstein         - UNIX hangup signal fix, many bug fixes
 Corey Gehman          - Amiga Moria port
 Ralph Waters          - VMS support code, IBM-PC Turbo C bug fixes
 Johsua Delahunty      - VMS support code
@@ -57,9 +60,11 @@ Ben Schreiber         - Macintosh port for Think C
 
 
 
-Copyright (c) 1989 James E. Wilson, Robert A. Keoneke
+
+
+Copyright (c) 1989-92 James E. Wilson, Robert A. Keoneke
   This software may be copied and distributed for educational, research, and
   not for profit purposes provided that this copyright and statement are
   included in all such copies.
 
-Umoria Version 5.4, patch level 0
+Umoria Version 5.5, patch level 0

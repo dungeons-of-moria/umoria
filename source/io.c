@@ -1,6 +1,6 @@
 /* source/io.c: terminal I/O code, uses the curses package
 
-   Copyright (c) 1989-91 James E. Wilson, Robert A. Koeneke
+   Copyright (c) 1989-92 James E. Wilson, Robert A. Koeneke
 
    This software may be copied and distributed for educational, research, and
    not for profit purposes provided that this copyright and statement are
@@ -171,18 +171,19 @@ int Use_value2;
 char *getenv();
 #endif
 
+#ifndef VMS
 #ifdef USG
 void exit();
 #if defined(__TURBOC__)
 void sleep();
 #else
-#ifndef VMS
 #ifndef AMIGA
 unsigned sleep();
 #endif
 #endif
 #endif
 #endif
+
 #ifdef ultrix
 void exit();
 void sleep();
@@ -334,6 +335,10 @@ void init_curses()
   (void) refresh();
   moriaterm ();
 
+#if 0
+  /* This assumes that the terminal is 80 characters wide, which is not
+     guaranteed to be true.  */
+
   /* check tab settings, exit with error if they are not 8 spaces apart */
   (void) move(0, 0);
   for (i = 1; i < 10; i++)
@@ -348,6 +353,7 @@ void init_curses()
       msg_print("Tabs must be set 8 spaces apart.");
       exit_game();
     }
+#endif
 }
 #endif
 

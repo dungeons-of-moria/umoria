@@ -1,6 +1,6 @@
 /* source/constant.h: global constants used by Moria
 
-   Copyright (c) 1989-91 James E. Wilson, Robert A. Koeneke
+   Copyright (c) 1989-92 James E. Wilson, Robert A. Koeneke
 
    This software may be copied and distributed for educational, research, and
    not for profit purposes provided that this copyright and statement are
@@ -28,8 +28,8 @@ some of the system defines set up there.
 #endif
 
 /* Current version number of Moria				*/
-#define CUR_VERSION_MAJ 5 /* version 5.4 */
-#define CUR_VERSION_MIN 4
+#define CUR_VERSION_MAJ 5 /* version 5.5 */
+#define CUR_VERSION_MIN 5
 #define PATCH_LEVEL 0
 
 #ifndef TRUE

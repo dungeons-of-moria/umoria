@@ -217,15 +217,11 @@ what exactly does the damned flag mean, should it be on for all except known2
 items, or should it be on when an item is known to be cursed?
 
 add ptodam to damage before calling critical_hits
-- adjust ptodam by max_swings/real_swings,this eliminates much of the adv
-of light weapons, since they no longer get more effect from to_dam bonuses
-- compute damage bonus as (base damage + 2) * (ptodam / 9) - 2, so that
-dagger bonuses are halfed, and two handed sword bonuses are doubled
-- increase cost of zweihander to 1500, to make it more than flamberge
 - modify C command to print to dam bonuses modified by weapon, should
   print both the unmodified bonus, and the modified bonus
 - should take about 10 slay dragon arrows to kill AMHD, check this after
   ptodam code is changed, may need to increase damages from +3?
+- also check other ego weapons for play balance, maybe reduce ego multipliers
 
 when rogues list Beginners Majik spell book, spells are listed 'a'-'e',
 when cast from the spell book, spells are listed 'b'-'f', the spell casting
@@ -327,15 +323,6 @@ town level?
 instead of printing 'it can hit to attack and hit to attack' print
 'it can hit to attack twice' in monster descriptions?
 
-can cheat by buying/selling a single object 20 times, and then have
-auto-haggle mode kick in, solution: set a bit in each individual object when
-it is first bought/sold so that it can only count once, will this work?
-
-change haggling so that number of good bargains needed depends on price of
-object, for example, 10+(price/50), so that only 10 bargains needed for
-objects that cost less than 50gp, but 30 needed for objects that cost 1000gp
-if go immediately to final offer, then don't count it as a good or bad bargain
-items less than 10gp should perhaps always go to final offer?
 - change haggling so that initial price depends on how many good bargains
 you have had
 - add key to accept price, instead of forcing player to type in price
@@ -345,7 +332,6 @@ asking for any prompt, bad idea if someone mistypes a letter
 haggling, give prices that are always, say, 30% above the minimum
 - add store commands to buy/sell without haggling, with price say, 20%,
 less/greater than asking price
-- have haggling kick in sooner, use good_buy > 2 * bad_buy + 5
 
 improve map command (see nethack), define an array of special characters,
 one for each type of composite wall, say, and then let end users specify
@@ -375,8 +361,6 @@ tunnel/room graph before trying to build tunnels?
 
 can not use counted commands while bashing a door, because of the
 paralyzation that sometimes occurs always stops a counted command
-
-does noneedtobargain() kick in too late??
 
 allow character building, by allocation of a limited number of stat points,
 instead of random rerolling??
@@ -582,8 +566,8 @@ retrieve the objects
 create a safe haven for the player, where hp regen faster, poison/disease
 cure faster, and player must be in to win
 
-add amulet of poison resistance, make it a help level item, people would
-have to take off a amulet of the magi to wear it
+add amulet of poison resistance, make it a high level item, people would
+have to take off amulet of the magi to wear it
 
 add another set of gain stat potions, at about 1550 feet, to encourage
 people to go deeper in search of them

@@ -219,3 +219,79 @@ config.h: force `unix' to be defined for unix systems, since some stupid
 externs.h, moria4.c, ms_misc.c: correct typos discovered under MSDOS
 --------- 10/19
 spells.doc, exp.doc: New documentation files.
+--------- 10/26
+vms/uexit.c, externs.h, io.c, signals.c: Define uexit as void, and ifdef out
+	exit declarations when VMS.
+vms/moria.opt: add misc[34].obj and moria[34].obj
+ibmpc/ms_misc.c: correct typo in error()
+pr_items.c, pr_monst.c: main now returns 0
+CONFIG.DOC, TERMCAP, ms_ansi.c: use le/do instead of obsolete bc/xd
+dragon.inf: moved from util/weapons to doc, and updated it to be accurate
+spoilers: Update from USENET FAQ posting.
+--------- 11/17
+io.c: ifdef out code checking for 8 char TABS, because it assumes that the
+	screen is exactly 80 characters wide
+moria[12].[ms/txt]: Correct a few typos.
+*: Fix all file permissions.
+::::::: 1992 ::::::::
+Maintenance taken over by David Grabiner
+--------- 7/16
+moria4.c: bash(), use random direction if player is confused
+spells.c: fire_ball(), fire_bolt(), don't update recall if monster not lit;
+	this can happen if bolt hits an invisible monster
+spells.c: speed_monsters(), sleep_monsters2(), dispel_creature(), 
+	turn_undead(), only affect creatures within MAX_SIGHT 
+spells.c: mass_poly(), area of effect should be <= MAX_SIGHT, was <
+spells.c: destroy_area(), remove light from player's spot
+spells.c: enchant(), add new variable limit, chance of failure is now
+	(plusses/limit), with very slight chance of success over limit
+scrolls.c: when enchanting melee weapons to damage, set limit to weapon's
+	maximum damage, otherwise use 10 to give behavior similar to old method
+misc2.c: magic_treasure(), make standard deviation of damage bonus on a melee 
+	weapon proportional to weapon's maximum damage; these changes mean
+	that daggers can no longer become powerful weapons
+treasure.c: the Zweihander has now become a great weapon, value increased from
+	1000 to 1500
+externs.h: fix declaration for enchant()
+staffs.c, wands.c: give everyone a slight chance to use difficult wands and
+	staffs, otherwise a warrior will never be able to use many items
+--------- 7/23
+death.c: print_tomb(), insert msg_print(CNIL) so that "You are using:" and
+	"You are carrying:" don't get combined as one message; this made it
+	impossible to see the equipment list
+store2.c: haggle_insults(), insert msg_print(CNIL) so that insult is always
+	recognizable
+store2.c: purchase_haggle() and sell_haggle(), new variable didnt_haggle,
+	don't call updatebargain if no haggle
+store1.c: noneedtobargain(), changed to sliding scale, (good-3*bad) must
+	be more than 5 + (price/50) to skip haggling, so that haggling for
+	cheap items is over quickly, but can still eventually skip
+	haggle for all items
+store1.c: updatebargain(), now update for all items worth >9 gold, instead
+	of just 10-999, since it is now possible to skip haggling for more
+	valuable items as well
+--------- 7/25
+moria4.c: bash(), unsuccessful bash takes a turn; otherwise, you can
+	attempt to bash in different directions while confused or to locate
+	invisible monsters; eliminate variable no_bash
+--------- 7/27
+check all above changes
+moria4.c: bash(), get "You bash at empty space" method when bashing a
+	wall, corrected to "nothing interesting	happens"; this also
+	prevents bashing from locating a secret door
+--------- 8/9
+merge in all changes from 5.4.0 to 5.4.1
+creature.c: update attack information only if monster is visible; update
+	death information even if monster is not visible, since
+	information will be on tombstone
+*: change version number to 5.5.0
+--------- 8/12
+spells.c: enchant(), guard against randint(0) if called with limit of 0
+	(it shouldn't be).
+moria4.c: throw_object(), py_bash(), don't do negative damage
+shortnam.sed, spells.c: fire_ball(), fix spelling of "envelops"
+doc/faq: remove old spoilers file, and put current FAQ here instead
+*: put my name (DJG) in credits as contact
+*: change copyright date in all source files to 1992
+---------- 8/13
+release umoria 5.5.0

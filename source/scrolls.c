@@ -1,6 +1,6 @@
 /* source/scrolls.c: scroll code
 
-   Copyright (c) 1989-91 James E. Wilson, Robert A. Koeneke
+   Copyright (c) 1989-92 James E. Wilson, Robert A. Koeneke
 
    This software may be copied and distributed for educational, research, and
    not for profit purposes provided that this copyright and statement are
@@ -70,7 +70,7 @@ void read_scroll()
 		  objdes(tmp_str, i_ptr, FALSE);
 		  (void) sprintf(out_val, "Your %s glows faintly!", tmp_str);
 		  msg_print(out_val);
-		  if (enchant(&i_ptr->tohit))
+		  if (enchant(&i_ptr->tohit, 10))
 		    {
 #ifdef ATARIST_MWC
 		      i_ptr->flags &= ~holder;
@@ -91,7 +91,12 @@ void read_scroll()
 		  objdes(tmp_str, i_ptr, FALSE);
 		  (void) sprintf(out_val, "Your %s glows faintly!", tmp_str);
 		  msg_print(out_val);
-		  if (enchant(&i_ptr->todam))
+		  if ((i_ptr->tval >= TV_HAFTED)&&(i_ptr->tval <= TV_DIGGING))
+		    j = i_ptr->damage[0] * i_ptr->damage[1];
+		  else /* Bows' and arrows' enchantments should not be limited
+			  by their low base damages */
+		    j = 10; 
+		  if (enchant(&i_ptr->todam, j))
 		    {
 #ifdef ATARIST_MWC
 		      i_ptr->flags &= ~holder;
@@ -157,7 +162,7 @@ void read_scroll()
 		  objdes(tmp_str, i_ptr, FALSE);
 		  (void) sprintf(out_val, "Your %s glows faintly!", tmp_str);
 		  msg_print(out_val);
-		  if (enchant(&i_ptr->toac))
+		  if (enchant(&i_ptr->toac, 10))
 		    {
 #ifdef ATARIST_MWC
 		      i_ptr->flags &= ~holder;
@@ -302,10 +307,15 @@ void read_scroll()
 		  msg_print(out_val);
 		  flag = FALSE;
 		  for (k = 0; k < randint(2); k++)
-		    if (enchant(&i_ptr->tohit))
+		    if (enchant(&i_ptr->tohit, 10))
 		      flag = TRUE;
+		  if ((i_ptr->tval >= TV_HAFTED)&&(i_ptr->tval <= TV_DIGGING))
+		    j = i_ptr->damage[0] * i_ptr->damage[1];
+		  else /* Bows' and arrows' enchantments should not be limited
+			  by their low base damages */
+		    j = 10; 
 		  for (k = 0; k < randint(2); k++)
-		    if (enchant(&i_ptr->todam))
+		    if (enchant(&i_ptr->todam, j))
 		      flag = TRUE;
 		  if (flag)
 		    {
@@ -394,7 +404,7 @@ void read_scroll()
 		  msg_print(out_val);
 		  flag = FALSE;
 		  for (k = 0; k < randint(2) + 1; k++)
-		    if (enchant(&i_ptr->toac))
+		    if (enchant(&i_ptr->toac, 10))
 		      flag = TRUE;
 		  if (flag)
 		    {

@@ -1,6 +1,6 @@
 /* util/printit/pr_monst.c: pretty print monster info
 
-   Copyright (c) 1990-1991 Carlton Hommel, James E. Wilson
+   Copyright (c) 1990-1992 Carlton Hommel, James E. Wilson
 
    This software may be copied and distributed for educational, research, and
    not for profit purposes provided that this copyright and statement are
@@ -23,6 +23,7 @@ main()
       c = &c_list[i];
       call_it(c);
     }
+    return 0;
 }
 
 call_it(c)

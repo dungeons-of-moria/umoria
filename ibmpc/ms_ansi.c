@@ -1,6 +1,6 @@
 /* ibmpc/ms_ansi.c: a set of routines to provide either PCcurses or ANSI output
 
-   Copyright (c) 1989-91 James E. Wilson, Don Kneller
+   Copyright (c) 1989-92 James E. Wilson, Don Kneller
 
    This software may be copied and distributed for educational, research, and
    not for profit purposes provided that this copyright and statement are
@@ -75,7 +75,7 @@ int	LI;
 #define	NEED		1
 
 static int	moveopt = 1;
-static char	*BC, *CE, *CL, *CM, *ND, *TE, *TI, *UP, *XD;
+static char	*CE, *CL, *CM, *DO, *LE, *ND, *TE, *TI, *UP;
 static int	currow = 0;
 static int	curcol = LEFTFIELD;
 
@@ -102,7 +102,7 @@ initansistr()
 	if (tgetent(temp, term) < 1)
 		error("Unknown terminal type: %s.", term);
 	tbufp = tbuf;
-	BC = getent("bc", &tbufp, NEED);
+	LE = getent("le", &tbufp, NEED);
 	CE = getent("ce", &tbufp, NEED);
 	CL = getent("cl", &tbufp, NEED);
 	CM = getent("cm", &tbufp, NEED);
@@ -110,7 +110,7 @@ initansistr()
 	TE = getent("te", &tbufp, !NEED);
 	TI = getent("ti", &tbufp, !NEED);
 	UP = getent("up", &tbufp, NEED);
-	XD = getent("xd", &tbufp, NEED);
+	DO = getent("do", &tbufp, NEED);
 	LI = tgetnum("li");
 	if (LI <= 0)
 		LI = 24;
@@ -230,13 +230,13 @@ int	row, col;
 {
 	if (moveopt && abs(currow - row) < 3 && abs(curcol - col) < 3) {
 		while (row > currow)
-			fputs(XD, stdout), currow++;
+			fputs(DO, stdout), currow++;
 		while (row < currow)
 			fputs(UP, stdout), currow--;
 		while (col > curcol)
 			fputs(ND, stdout), curcol++;
 		while (col < curcol)
-			fputs(BC, stdout), curcol--;
+			fputs(LE, stdout), curcol--;
 	}
 	else
 		fprintf(stdout, "\033[%d;%dH\0__cursor motion__", row+1,col+1);
@@ -252,13 +252,13 @@ int	row, col;
 {
 	if (moveopt && abs(currow - row) < 3 && abs(curcol - col) < 3) {
 		while (row > currow)
-			fputs(XD, stdout), currow++;
+			fputs(DO, stdout), currow++;
 		while (row < currow)
 			fputs(UP, stdout), currow--;
 		while (col > curcol)
 			fputs(ND, stdout), curcol++;
 		while (col < curcol)
-			fputs(BC, stdout), curcol--;
+			fputs(LE, stdout), curcol--;
 	}
 	else {
 		fputs(tgoto(CM, col, row), stdout);
@@ -275,7 +275,7 @@ ansi_clrtobot()
 	ansi_move(++currow, 0);
 	ansi_clrtoeol();
 	for (; currow <= LI; currow++) {
-		fputs(XD, stdout);
+		fputs(DO, stdout);
 		ansi_clrtoeol();
 	}
 	curcol = LEFTFIELD;

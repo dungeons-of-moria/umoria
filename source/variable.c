@@ -1,7 +1,7 @@
 /* source/variable.c: Global variables */
 
 char *copyright[5] = {
-"Copyright (c) 1989-91 James E. Wilson, Robert A. Keoneke",
+"Copyright (c) 1989-92 James E. Wilson, Robert A. Keoneke",
 "",
 "This software may be copied and distributed for educational, research, and",
 "not for profit purposes provided that this copyright and statement are",

@@ -1,6 +1,6 @@
 /* source/store2.c: store code, entering, command interpreter, buying, selling
 
-   Copyright (c) 1989-91 James E. Wilson, Robert A. Koeneke
+   Copyright (c) 1989-92 James E. Wilson, Robert A. Koeneke
 
    This software may be copied and distributed for educational, research, and
    not for profit purposes provided that this copyright and statement are
@@ -404,7 +404,10 @@ int store_num;
   if (increase_insults(store_num))
     haggle = TRUE;
   else
-    prt_comment5();
+    {
+      prt_comment5();
+      msg_print (CNIL); /* keep insult separate from rest of haggle */
+    }
   return(haggle);
 }
 
@@ -540,7 +543,7 @@ inven_type *item;
   register int flag, loop_flag;
   char *comment;
   vtype out_val;
-  int purchase, num_offer, final_flag;
+  int purchase, num_offer, final_flag, didnt_haggle;
   register store_type *s_ptr;
   register owner_type *o_ptr;
 
@@ -548,6 +551,7 @@ inven_type *item;
   purchase = 0;
   *price = 0;
   final_flag = 0;
+  didnt_haggle = FALSE;
   s_ptr = &store[store_num];
   o_ptr = &owners[s_ptr->owner];
   cost = sell_price(store_num, &max_sell, &min_sell, item);
@@ -575,6 +579,7 @@ inven_type *item;
       msg_print("After a long bargaining session, you agree upon the price.");
       cur_ask = min_sell;
       comment = "Final offer";
+      didnt_haggle = TRUE;
 
       /* Set up automatic increment, so that a return will accept the
 	 final price.  */
@@ -677,7 +682,7 @@ inven_type *item;
   while (!flag);
 
   /* update bargaining info */
-  if (purchase == 0)
+  if ((purchase == 0) && (!didnt_haggle))
     updatebargain(store_num, *price, final_ask);
 
   return(purchase);
@@ -701,12 +706,13 @@ inven_type *item;
   vtype out_val;
   register store_type *s_ptr;
   register owner_type *o_ptr;
-  int sell, num_offer, final_flag;
+  int sell, num_offer, final_flag, didnt_haggle;
 
   flag = FALSE;
   sell = 0;
   *price = 0;
   final_flag = 0;
+  didnt_haggle = FALSE;
   s_ptr = &store[store_num];
   cost = item_value(item);
   if (cost < 1)
@@ -745,6 +751,7 @@ inven_type *item;
 	  final_ask = max_gold;
 	  msg_print("I am sorry, but I have not the money to afford such \
 a fine item.");
+	  didnt_haggle = TRUE;
 	}
       else
 	{
@@ -761,6 +768,7 @@ a fine item.");
 the price.");
               cur_ask = final_ask;
 	      comment = "Final offer";
+	      didnt_haggle = TRUE;
 
 	      /* Set up automatic increment, so that a return will accept the
 		 final price.  */
@@ -868,7 +876,7 @@ the price.");
     }
 
   /* update bargaining info */
-  if (sell == 0)
+  if ((sell == 0) && (!didnt_haggle))
     updatebargain(store_num, *price, final_ask);
 
   return(sell);

@@ -1,6 +1,6 @@
 /* source/moria4.c: misc code, mainly to handle player commands
 
-   Copyright (c) 1989-91 James E. Wilson, Robert A. Koeneke
+   Copyright (c) 1989-92 James E. Wilson, Robert A. Koeneke
 
    This software may be copied and distributed for educational, research, and
    not for profit purposes provided that this copyright and statement are
@@ -944,6 +944,7 @@ void throw_object()
 			  tdam = tot_dam(&throw_obj, tdam, i);
 			  tdam = critical_blow((int)throw_obj.weight,
 					       tpth, tdam, CLA_BTHB);
+			  if (tdam < 0) tdam = 0;
 			  i = mon_take_hit((int)c_ptr->cptr, tdam);
 			  if (i >= 0)
 			    {
@@ -1020,6 +1021,7 @@ int y, x;
       k = critical_blow((int)(inventory[INVEN_ARM].weight / 4
 			      + py.stats.use_stat[A_STR]), 0, k, CLA_BTH);
       k += py.misc.wt/60 + 3;
+      if (k < 0) k = 0;
 
       /* See if we done it in.				     */
       if (mon_take_hit(monster, k) >= 0)
@@ -1085,7 +1087,7 @@ int y, x;
    non-secret door. */
 void bash()
 {
-  int y, x, dir, tmp, no_bash;
+  int y, x, dir, tmp;
   register cave_type *c_ptr;
   register inven_type *t_ptr;
 
@@ -1093,7 +1095,15 @@ void bash()
   x = char_col;
   if (get_dir(CNIL, &dir))
     {
-      no_bash = FALSE;
+      if (py.flags.confused > 0)
+	{
+	  msg_print("You are confused.");
+	  do
+	    {
+	      dir = randint(9);
+	    }
+	  while (dir == 5);
+	}
       (void) mmove(dir, &y, &x);
       c_ptr = &cave[y][x];
       if (c_ptr->cptr > 1)
@@ -1147,16 +1157,18 @@ void bash()
 	      else
 		count_msg_print("The chest holds firm.");
 	    }
-	  else
-	    no_bash = TRUE;
+	  else 
+	    /* Can't give free turn, or else player could try directions
+	       until he found invisible creature */
+	    msg_print("You bash it, but nothing interesting happens.");
 	}
       else
-	no_bash = TRUE;
-
-      if (no_bash)
 	{
-	  msg_print("I do not see anything you can bash there.");
-	  free_turn_flag = TRUE;
+	  if (c_ptr->fval < MIN_CAVE_WALL)
+	    msg_print("You bash at empty space.");
+	  else
+	    /* same message for wall as for secret door */
+	    msg_print("You bash it, but nothing interesting happens.");
 	}
     }
 }

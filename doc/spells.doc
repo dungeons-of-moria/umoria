@@ -229,7 +229,7 @@ monsters than for lower level monsters.  Also, some spells will never
 work against monsters whose level is higher than the character's
 experience level.
 
-Many monsters are immune to certain kinds of attack, and will little
+Many monsters are immune to certain kinds of attack, and will suffer little
 or no damage from such attacks.  For example, a fire breathing dragon will
 suffer little damage from a fire ball, but will suffer greatly from a
 frost ball.  Also, Undead creatures will not be affected by sleep spells,

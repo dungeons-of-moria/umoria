@@ -106,7 +106,7 @@ UMoria 5.x:
 	pervasive bugs.  See the doc/FEATURES.NEW file for a list of most
 	user visible changes.  (Sometimes called Umoria 5.0, Moria 5.0,
 	Moria 5.x.  Should not be confused with Moria UB 5.0.)
-Umoria 5.4:
+Umoria 5.5:
 	The latest version of Umoria 5.x.
 
 Vertical position indicates roughly when the versions were made available,
@@ -132,6 +132,6 @@ although the scale is not very accurate.
 1990         Umoria 5.0	       	              |              |
                  |                       Imoria 4.9     Moria UB 5.1
                  |                            |              |
-             Umoria 5.2.2             (alive and well)  (alive and well)
+1992         Umoria 5.5               (alive and well)  (alive and well)
                  |
            (alive and well)

@@ -1,6 +1,6 @@
 /* source/creature.c: handle monster movement and attacks
 
-   Copyright (c) 1989-91 James E. Wilson, Robert A. Koeneke
+   Copyright (c) 1989-92 James E. Wilson, Robert A. Koeneke
 
    This software may be copied and distributed for educational, research, and
    not for profit purposes provided that this copyright and statement are
@@ -894,16 +894,16 @@ int monptr;
 		  CD_NO_SLEEP;
 	    }
 
-	  /* increase number of attacks if notice true, or if had
+	  /* increase number of attacks if notice true, or if visible and had
 	     previously noticed the attack (in which case all this does is
 	     help player learn damage), note that in the second case do
 	     not increase attacks if creature repelled (no damage done) */
 	  if ((notice ||
-	       (c_recall[m_ptr->mptr].r_attacks[attackn] != 0 &&
+	       (visible && c_recall[m_ptr->mptr].r_attacks[attackn] != 0 &&
 		attype != 99))
 	      && c_recall[m_ptr->mptr].r_attacks[attackn] < MAX_UCHAR)
 	    c_recall[m_ptr->mptr].r_attacks[attackn]++;
-	  if (visible && death && c_recall[m_ptr->mptr].r_deaths < MAX_SHORT)
+	  if (death && c_recall[m_ptr->mptr].r_deaths < MAX_SHORT)
 	    c_recall[m_ptr->mptr].r_deaths++;
 	}
       else

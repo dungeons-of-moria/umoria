@@ -1,0 +1,555 @@
+First, a general guideline for posters; when you post any question
+related to playing or debugging the game, please give the version
+number, which you can get during the game by pressing "v".
+
+These are the questions in the Moria Frequently Asked Questions list.
+Quick answers to some questions are given in parentheses; more detailed
+answers are in the list which follows.
+
+The answers below are separated by form feeds, so that in most news
+readers, you can get the answer you want without looking at the rest of
+the spoilers.  Each question is repeated before its answer, so you can
+search for the questions.
+
+Many of the answers are only correct for Umoria versions (4.87 and 5.x);
+I don't know much about the other versions of Moria.
+
+Please send any corrections or other suggested questions to me at
+grabiner@math.harvard.edu.
+
+The most common questions, asked by both beginners and others:
+
+How do I get the Moria sources/executables/documentation? 
+(FTP from ftp.cis.ksu.edu, or from kukulcan.berkeley.edu.)
+
+What does this item do?  (Answer is below with the spoilers.)
+
+Why do most winning characters carry several copies of spell books?
+(In case one gets stolen or burned.)
+
+What does the (-2) in Chain Mail (-2) [14,+2] mean?  (It's a penalty to
+hit, caused by the heavy armor.)
+
+How do I use wizard mode, and what can I do in it?  (In 5.x, just type
+control-W.)
+
+Non-spoiler questions:
+
+How does resistance work?  Are two items of resistance cumulative?  (Not
+if both are worn items.)
+
+How does speed work?  Do you get faster if you are already Very Fast and
+get another speed item?  (Yes.)
+
+I'm playing Moria version V; how does that compare to the current version?
+Is it compatible?
+
+I think I've found a bug; what should I do?  (Report it with the version
+number and system.)
+
+Common spoiler requests:
+
+What are the special abilities of ego weapons?  Crowns?  Amulet of the
+Magi?  Cloak of Protection?
+
+How much damage do spells and wands do?
+
+What does spell Y do?
+
+On what level do you find X?  (Level 25 is best for gain stat potions.)
+
+How do you kill an ancient multi-hued dragon?  (Usually, you don't.)
+
+How do you kill an emperor lich?  (With speed and spells.)
+
+What is the grape jelly trick?  Does it work in Umoria 5.x?  (No.)
+
+Questions related to the source code:
+
+I don't like haggling; can I change the source code to turn it off?
+
+How do you create objects in wizard mode?
+
+How do I get the Moria sources/executables/documentation? 
+
+The following Umoria files are available by anonymous FTP from
+kukulcan.berkeley.edu (IP address 128.32.121.190), or from
+ftp.cis.ksu.edu (IP address 129.130.10.80).  The kukulcan archive is no
+longer supported, but it is still listed here because it has some files
+which are not available on KSU.
+
+Kukulcan: /pub/wilson/umoria_5/[machine name]
+KSU: /pub/Games/Moria/[machine name]
+Executables for the Amiga, Atari ST, IBM PC, and Mac; look at the README
+files in these directories for more information.  Some of these files
+may need to be transferred in binary mode; type "binary" before
+transferring the files.  KSU has both color and monochrome executables
+for the IBM PC.
+
+Kukulcan: /pub/wilson/umoria_5/um5.5.tar.Z
+KSU: /pub/Games/Moria/source/um5.5.tar.Z
+A compressed tar file containing the entire source, for use on any
+system; if you have tar on your system, this is probably the file that
+you want.  (If you don't have compress, you can ftp it as well; it is
+/pub/wilson/compress.tar.)  This file must be transferred in binary
+mode; type "binary" before getting the file.  Once you have the tar.Z
+file, type "zcat um5.5.tar.Z | tar xf -" to extract the files, and
+read the README files for help in installing.
+
+Kukulcan only: /pub/wilson/umoria_5/um5.5.shar
+A shar file containing the source.
+
+Kukulcan only: /pub/wilson/umoria_5/umoria
+The source distribution in plain text.  If you need just the
+documentation, copy the files in the directory /pub/wilson/umoria_5/doc;
+if you need the auxilliary files (help files, high scores), copy the
+files in /pub/wilson/umoria_5/files.
+
+KSU only: /pub/Games/Moria/doc
+The documentation for Moria 5.4, including the official documentation,
+the FAQ file, and a complete monster list.
+
+KSU only: /pub/Games/Moria/pc/color and /pc/mono
+The auxilliary files are in these directories; you may need them if you
+have an executable without them.
+
+Kukulcan: /pub/wilson/vms_moria (tar files and plain text)
+KSU: /pub/wilson/vms (tar files only)
+The source distribution, in Pascal, for BOSS, and for VMS Moria 4.8 and
+5.0.  Umoria 5.x will also work on VMS machines.
+
+How do I use wizard mode, and what can I do in it?  
+
+In Umoria 5.x, anyone can use wizard mode by typing ^W.  However,
+characters who play in wizard mode are permanently barred from the
+scoreboard; wizard mode should be used only for debugging and
+experimenting.
+
+In 4.87 on Unix systems, only the person who installed the game can use
+wizard mode; if you are the installer, the passwords are in the source
+file constant.h.
+
+In PC-Moria 4.8x, you need to know the passwords to use wizard mode, and
+the password will depend on who compiled your game.
+
+4.87 has both wizard and god modes; 5.x's wizard mode is equivalent to
+the old god mode.  The 4.87 wizard mode allows you to do only things
+related to the game (cure all problems, teleport, identify).  The 5.x
+wizard mode and 4.87 god mode allow you to test the program by editing
+your character, creating objects, deleting monsters, and similar things.
+
+In wizard mode, ^H or DELETE will give you a list of the available
+commands.
+
+How does resistance work?  Are two items of resistance cumulative?  
+
+Resist heat/cold potions and spells give temporary resistance to heat or
+cold.  All other resistance items give permanent resistance.  Two
+permanent resistances are not cumulative, and two temporary resistances
+are cumulative only in duration.
+
+Fire and cold do 1/3 damage if you have single resistance, 1/9 if you
+have double.
+Acid does 1/2 damage if you have any armor to corrode, 1/3 if you have
+resistance but no armor, and 1/4 if you have resistance and armor.
+Lightning does 1/3 damage if you have resistance.
+There is no resistance against poison gas.
+
+How does speed work?  Do you get faster if you are already Very Fast and
+get another speed item?  
+
+Very Fast is the highest speed that can be displayed, but if you are
+fortunate enough to find several speed items, you can get still faster.
+Permanent speed items (rings and boots) are cumulative, and temporary
+speed (potions, spells, and staffs) can add one more point to your
+speed.  Multiple uses of temporary speed are cumulative only in
+duration.
+
+I'm playing Moria version V; how does that compare to the current version?
+Is it compatible?
+
+Moria versions:
+
+Umoria 5.5.0: This is the current version of Umoria.  It will accept
+characters from all Umoria 5.x versions.
+
+Umoria 5.3.1/5.4.0: These are essentially identical to 5.5.0, and
+compatible with it, although 5.5.0 fixes a few bugs, and there have been
+a few minor changes.
+
+Umoria 5.2.2/5.3.0: These are in good condition, and compatible with the
+current version.  One bug: don't rest more than 10,000 turns in place,
+and leave the level if you start seeing lots of "Compacting monsters..."
+messages, or the game may lock up.
+
+Umoria 5.2.1: This is playable, but has no high scores file; you
+probably want to upgrade if possible.
+
+Umoria 5.1.0-5.2.0: These versions can be played, but are somewhat
+buggy.  If you run into an invisible, invincible monster which doesn't
+move or attack, get off the level.  If you can FTP the sources or
+executables, you should upgrade.
+
+The U is often omitted from the names of the following Umoria versions.
+
+Umoria 4.87/PC-Moria 4.87x: This version is based on the old VMS Moria.
+It is relatively bug-free, but it doesn't have the features of the 5.x
+versions, such as monster memory.  The save file format is incompatible
+with 5.x, and several people have failed in attempts to write a
+conversion program.
+
+Umoria 4.85: A moderately buggy version, also based on VMS Moria.
+
+Umoria/PC-Moria 4.83: An extremely buggy version, based on VMS Moria.
+This version is essentially unplayable (see invisible doesn't work,
+stores all close after 32768 turns, etc.)
+
+The following versions are not compatible with Umoria, and Umoria
+spoiler files may not apply to them.  I don't know much about these
+versions.
+
+UB Moria 5.0: Also known as VMS Moria 5.0, this is the current version
+of VMS Moria.  It has more monsters, a Black Market, and other features.
+
+Imoria 4.9: This is apparently a very good game, with new character
+classes and other features, but it hasn't been released outside of UW.
+
+Amiga Moria 3.0: Although this version was originally based on 4.85, it
+has many added monsters, features, and bugs (including items which make
+you virtually invincible).
+
+BOSS: This game changes the setting of Moria, but keeps many of the
+items.  It is based on VMS Moria 5.0.
+
+I think I've found a bug; what should I do?  
+
+When you are reporting a suspected bug, make sure to give the version
+number and the system.  The bug report can be posted here or sent to me.
+If you report a bug by Email, you may want to send a copy of the bug
+report to the author of Moria, wilson@toad.com.
+
+I'm not the official maintainer of the source code, but I am reasonably
+familiar with it.  If you report a bug which has been fixed in the
+current version, I may be able to send you a patch, or at least tell you
+that you can fix the bug by upgrading.  If the bug hasn't been fixed, a
+good bug report may make it easy to fix.
+
+What are the special abilities of ego weapons?  Crowns?  Amulet of the
+Magi?  Cloak of Protection?
+
+All version-dependent changes are marked in brackets.
+
+Amulet of the Magi    free action, see invisible, searching, +3 AC.
+                      [no searching bonus in 4.87]
+Cloak of Protection   no special ability, just a larger bonus than usual.
+
+Ego weapons:
+
+(HA) Holy Avenger   +(1-4) str, +(1-4) AC, (SE), (SU), sustain stat,
+                    see invisible.
+(DF) Defender       stealth, regeneration, free action, see invisible,
+                    feather fall, RF, RC, RL, RA, +(6-10) to AC
+(SM) Slay Monster   Damage (x 2) vs. monsters, see invisible. [found in
+                    4.87 only]
+(SA) Slay Animal    Damage (x 2) vs. animals, [does not exist in 4.87;
+                    has see invisible through 5.1.4]
+(SD) Slay Dragon    Damage (x 4) vs. dragons.
+(SE) Slay Evil      Damage (x 2) vs. evil monsters.
+(SU) Slay Undead    Damage (x 3) vs. undead, [see invisible in 5.1.5 and later]
+(FT) Flame Tongue   Damage (x 1.5) vs. monsters harmed by fire.
+(FB) Frost Brand    Damage (x 1.5) vs. monsters harmed by cold.
+
+A HA which is +1 to strength sustains strength; +2, intelligence; +3,
+wisdom; +4, constitution (not dexterity).
+
+Crown of the Magi     +(1-3) int, (RF), (RC), (RA), (RL)
+                      [In 4.87, it had see invisible instead of RL]
+Crown of Lordliness   +(1-3) wis, chr.
+Crown of Might        +(1-3) str, dex, con, free action.
+Crown of Seeing       see invisible, +(10-25) searching.
+                      [+(2-5) to seach in 4.87]
+Crown of Regeneration Regeneration.
+Crown of Beauty       +(1-3) charisma.
+
+Regeneration lets you recover mana and hit points at 1.5 times the
+normal rate, but also makes you use up food much more quickly.
+
+Free action prevents you from being slowed or paralyzed by monsters.
+
+How much damage do spells and wands do?
+
+Spell Name              4.87 damage     5.1.0 and later damage
+Magic Missile           2d6             2d6
+Stinking Cloud          8               12
+Lightning Bolt          3d8             4d8
+Lightning Ball          24              32
+Frost Bolt              4d8             6d8
+Frost/Cold Ball         32              48
+Acid Ball               40              60
+Fire Bolt               6d8             9d8
+Fire Ball               48              72
+Wand of Drain Life      50              75 [in 5.1.4 and later]
+
+In 5.x only, a wand of wall building will do 4d8 damage to any creature
+buried in the wall (except one that moves through walls), and will kill
+any immobile creature.  On the creature's next turn, it will attempt to
+move out of the wall, and if it is unable to do so, it will take 10d8
+damage and dig its way out.
+
+Everything below is the same in all versions.
+Wand of Light/Staff of  2d8 (if sensitive)
+Starlight               
+Stone to Mud		100 (if sensitive)
+Orb of Draining         3d6 + caster's level, double to evil creatures
+Dispel Undead/Evil      1-60 from scroll or staff; 1 up to triple
+                        caster's level from spell
+Holy Word               Dispel evil for 1 up to quadruple caster's level
+
+Notes:
+
+All mage spells in 4.87 do the damage listed in the table above if cast
+from a wand, and 1 point more if cast by a mage.
+All ball spells do full damage for a direct hit, half damage one space
+away, and 1/3 damage two spaces away.
+
+What does spell Y do?
+
+Non-obvious spell effects:
+
+Mage spells:
+
+Phase Door: short-range teleport.
+Find Hidden Traps/Doors: also detects stairs.
+Sleep I: sleep one monster in a given direction.
+Recharge Item I: fewer charges than Recharge Item II, and more likely to
+		 fail. 
+Sleep II: sleep all monsters adjacent to player.
+Sleep III: sleep all monsters with a line of sight to player (including
+	   invisible ones). 
+Word of Destruction: obliterates everything within 15 spaces of the
+		     player; Balrog will teleport to another level.
+
+Priest spells:
+
+Bless: +2 to AC, and +5 to chance to hit (equivalent to +1-2/3 bonus on
+       weapon) for a short time.
+Blind Creature: blinded creatures wander around confused until they recover.
+Portal: medium-range teleport.
+Chant: double duration Bless.
+Sanctuary: sleep creatures adjacent to player.
+Protection from Evil: prevents any evil creature of the player's level
+		      or lower from attacking the player.
+Earthquake: causes random walls and ceilings in the area to collapse,
+	    possibly injuring anything nearby.
+Turn Undead: all undead of the player's level or lower, and some of
+	     higher level, will be temporarily confused.
+Prayer: quadruple duration Bless.
+Dispel Undead/Evil: affects all undead/evil within line of sight (even
+		    invisble ones in 5.x versions), damage is from 1
+		    up to 3x player's level, 1-60 from scroll or staff.
+Glyph of Warding: creates a glyph which monsters cannot enter, but have 
+		  a small chance of breaking.
+Holy Word: heals player completely, cures poison and fear, and dispels
+	   evil for 1 to 4x player's level. 
+
+On what level do you find X?  
+
+Where important objects are found:
+
+In 4.87, 1/20 of items are chosen as if you were on level 50.  In 5.1
+and all later versions, 1/12 of items are chosen as if you were on a
+deeper level, which has (current level/50) chance of being level 50, and
+is always level 1 in the town.
+
+Items become somewhat less common as you go deeper than the indicated
+levels; however, if you can survive down there, this is compensated for
+by the fact that there are more treasures on deeper levels.
+
+Item type			Level
+Ego weapons, special armor,	Progressively more common as you get
+boots, gloves, helmets		deeper, all the way to level 55
+Healing potion			12
+Gain stat potions		25
+Restore mana potion		25
+Invulnerability potion		40
+Gain experience potion		50
+Genocide scroll			35
+Destruction scroll		40
+Rune of Protection scroll	50
+Mass Genocide scroll		50
+Amulets of wisdom, charisma	20
+Gain str/int/dex/con rings	30
+Amulet of the magi		50
+Ring of speed			50
+Staff of speed			40
+Staff of mass polymorph		46
+Staff of dispel evil		49
+Staff of destruction		50
+Wand of clone monster		15 [2 in 4.87]
+Wand of drain life		50
+
+How do you kill an ancient multi-hued dragon?  
+
+Usually, you don't want to try; one gas breath from a full-strength AMHD
+does 693 damage, with no resistance.
+
+If you can get to speed 3 (one permanent speed item, and either another
+permanent speed item or a haste self spell or staff), you can try this
+technique.  First, create (or find in a maze room) a wall with one open
+space on all four sides.
+
+   .
+  .#.
+   .
+
+Stand on one side, with the dragon on the other side.  When the dragon
+moves adjacent to you, attack it once, and then hide behind the pillar.
+The dragon can't see you, so it won't breathe, and will instead chase
+you to another side.  Now attack once, and hide again, and so on until
+the dragon is finished.
+
+How do you kill an emperor lich?  
+
+You can kill an emperor lich if you can get to speed 2, which is its
+speed.  A mage or ranger can do this with the spell of haste self;
+anyone else needs a staff of speed, potion of haste self, or permanent
+speed item.  You will also need about 10 cure critical wounds or cure
+serious wounds potions, and some item giving you free action.
+
+You also need some ranged spell attack.  Liches take double damage from
+lightning in 5.x versions, so the spell of lightning bolt or wand of
+lightning balls is a good choice.  Rogues and warriors will need several
+wands, with a total of about 30 charges to guarantee that they can kill
+the lich with them.  A priest or paladin has Orb of Draining, which is
+even better.
+
+Now, try to line up with the lich while you are not adjacent to it,
+either in a room or a corridor.  This gives you a chance to cast your
+spell.  The lich will get one action.  If it cast a spell and you
+resisted, or the spell didn't do anything harmful, you have another
+chance.  If you were confused or blinded, drink a cure wounds potion;
+the lich isn't adjacent to you, so it can't hurt you.  If the lich moved
+and is now adjacent to you, move back.  Try to avoid getting cornered,
+and phase door or portal away if you are.  A priest can make this easier
+by putting down a glyph of warding, but this must be done *before* the
+lich chases you across the glyph.  (Don't stand on the glyph; it isn't
+foolproof.)
+
+If you run low on mana and don't have a wand, teleport out and come back
+later to finish the job.
+
+A priest with glyph of warding can also set up the following
+configuration (the exact length doesn't matter as long as you are within
+spell range):
+
+#L#####
+#^^...@
+#######
+
+The lich cannot cast spells from this position, because it cannot see
+you.  As long as it doesn't break the glyphs, you are safe, and can fire
+Orb of Draining down the corridor; the lich will take some damage each
+time.  If the lich breaks either glyph, run or teleport out, and
+continue the battle elsewhere.
+
+I do not advise trying this technique against an AMHD; it will probably
+break a glyph before the battle is over, and if your teleport spell
+fails, or if you haven't hasted yourself, the AMHD gets a chance to
+breathe.
+
+An emperor lich has 1520 hit points, plus anything additional that it
+gains by draining mana (6 points per mana point drained) and charges (40
+points per charge).  Never let it attack you in melee, because it can
+destroy your wands, healing itself in the process, as well as draining
+your experience and dexterity.
+
+If you can get to speed 3, faster than the lich, it is easy to kill;
+just fight, move back, fight, move back, and so on.  You will still need
+a lot of cure wounds potions, unless you let it chase you around a
+pillar, as in the AMHD technique.
+
+What is the grape jelly trick?  Does it work in Umoria 5.x?  
+
+The Grape Jelly trick is a spoiler/workaround/trick which is no longer
+necessary in 5.1 and later versions.  
+
+In 4.87, when your intelligence and constitution changed, your mana and
+hit points did not change.  Thus, in order to get the benefit of the
+increased values, you have to let a grape jelly (or other creature, but
+grape jellies are otherwise harmless) drain you to a low level, and then
+drink restore life levels potions to go back up with the increased
+stats.
+
+I don't like haggling; can I change the source code to turn it off?
+
+If you have the source code for any 5.x version, you can turn off
+haggling with a simple change.  Here is the change you would need to make.
+(Note: This is *not* an official patch.)
+
+In the source file store1.c, this is the routine for determining whether
+you need to haggle.  You can change the function, or simply change the
+return(flagnoneed) to return(TRUE) to eliminate all haggling.
+
+int noneedtobargain(store_num, minprice)
+int store_num;
+int32 minprice;
+{
+  register int flagnoneed;
+  register store_type *s_ptr;
+
+  s_ptr = &store[store_num];
+  flagnoneed = ((s_ptr->good_buy == MAX_SHORT)
+		|| ((s_ptr->good_buy > 3 * s_ptr->bad_buy + 20) &&
+		    (minprice < 1000)));
+
+  return (flagnoneed);
+}
+
+How do you create objects in wizard mode?
+
+You will need the source; if you have only executables, get the source
+files constant.h and treasure.c from kukulcan.berkeley.edu, which
+contain the necessary definitions.  This is an explanation of some of
+the parameters.
+
+Tval: This is defined in constant.h; it is the value for the item type.
+For example, TV_WAND is 65.
+
+Tchar: The character used to represent this object; it should usually be
+proper for the item type.
+
+Subval: This identifies the specific item.  If you are duplicating an
+item from the item list, use the same subval (and tval) as that item;
+otherwise, don't.  Use subvals 0-63 for items that shouldn't stack,
+64-127 for items that should always stack (potions and scrolls), 193 or
+more for items that are generated in a group, and should stack as that
+group (arrows).
+
+Weight: In tenths of a pound.
+
+P1: Used for all special bonuses which don't appear elsewhere:
+bonus to stats/searching/stealth/speed, which stat to sustain (warning:
+constitution is 4 and dexterity 5), tunneling value, food value, light
+value of a lamp, torch, or flask of oil.  For missiles, different values
+of P1 distinguish different groups of missiles; use small negative
+numbers if you create groups as a wizard.
+
+Flags: A hexadecimal number which contains:
+for wearable items, all special effects (bits beginning with TR_ in
+constant.h).
+for chests, trap flags (CH_ bits in constant.h) and treasure flags (CM_
+bits in constant.h).  The CM_WIN flag is cleared when you open a chest,
+so you can't create a chest with that bit set in order to get an instant
+win.
+for potions/scrolls/staffs/wands, the effects of using the item (see the
+items in treasure.c).  Many potions have multiple effects (cure light
+wounds also cures blindness). 
+for books, which spells are in the book (spell 1 is the units bit).
+
+Level: Level on which the item would be found.  This affects the
+difficulty of using wands and staffs.
+
+The object will have no name, except for the inscription {wizard item},
+and possibly a type name, such as "Potion of"; you can change the
+inscription.
+

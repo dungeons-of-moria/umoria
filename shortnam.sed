@@ -332,5 +332,5 @@ s/Ateleport long distances/teleport long distances/g
 s/Ateleport its prey/teleport its prey/g
 s/of these Bcreatures/of these creatures/g
 s/invisible Bcreatures!/invisible creatures!/g
-s/envelopes several Bcreatures!/envelopes several creatures!/g
+s/envelops several Bcreatures!/envelops several creatures!/g
 s/You are Bconfused/You are confused/g

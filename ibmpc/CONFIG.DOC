@@ -297,9 +297,9 @@ uses the following logical operations:
      cl      clear screen
      cm      cursor motion (only if use_tgoto is chosen)
      nd      cursor forward (non-destructive space)
-     bc      cursor back
+     le      cursor back (left)
      up      cursor up
-     xd      cursor down
+     do      cursor down
      li      number of lines on the screen
 
 MORIA can also use:
@@ -334,21 +334,21 @@ seen yet.  Please report them to me so I can fix them.
 
 If you have any questions or bug reports please contact me at:
 
+     David Grabiner
+     Department of Mathematics
+     Harvard University
+     Cambridge, MA 02138
+
+     or by electronic mail: grabiner@math.harvard.edu
+
+The original author can be reached at:
+
      James E. Wilson
      856 University Ave.
      Palo Alto, CA  94301
      USA
 
-     or by electronic mail at:
-
-     ARPA:   wilson@kithrup.com
-
-
-
-
-
-
-
+     or by electronic mail:   wilson@kithrup.com
 
                                  - 5 -
 

@@ -906,13 +906,13 @@ September 26, 1990
 
                Original Directions
 
-                      |      /
+                 \     |      /
                   7    8     9
 
                -  4          6  -
 
                   1    2     3
-                 /     |
+                 /     |      \
 
 
 
@@ -931,13 +931,13 @@ September 26, 1990
 
                Rogue-like Directions
 
-                       |       /
+                 \      |       /
                   y     k      u
 
                -  h            l  -
 
                   b     j      n
-                 /      |
+                 /      |       \
 
 
           Movement is accomplished by specifying a  direction  immediately.

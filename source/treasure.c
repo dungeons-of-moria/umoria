@@ -1,6 +1,6 @@
 /* source/treasure.c: dungeon object definitions
 
-   Copyright (c) 1989-91 James E. Wilson, Robert A. Koeneke
+   Copyright (c) 1989-92 James E. Wilson, Robert A. Koeneke
 
    This software may be copied and distributed for educational, research, and
    not for profit purposes provided that this copyright and statement are
@@ -169,7 +169,7 @@ treasure_type object_list[MAX_OBJECTS] = {
 {"& Small Sword"		,0x00000000L,	TV_SWORD, '|',	/* 49*/
     0,	  48,	22,   1,  75,	0,   0,	 0,   0, {1,6}	,  5},
 {"& Two-Handed Sword (Zweihander)",0x00000000L,	TV_SWORD, '|',	/* 50*/
-    0,	1000,	23,   1, 280,	0,   0,	 0,   0, {4,6}	, 50},
+    0,	1500,	23,   1, 280,	0,   0,	 0,   0, {4,6}	, 50},
 {"& Broken sword"		,0x00000000L,	TV_SWORD, '|',	/* 51*/
     0,	   0,	24,   1,  75,  -2,  -2,	 0,   0, {1,1}	,  0},
 {"& Ball and Chain"		,0x00000000L,	TV_HAFTED, '\\',/* 52*/

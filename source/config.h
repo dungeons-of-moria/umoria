@@ -1,6 +1,6 @@
 /* source/config.h: configuration definitions
 
-   Copyright (c) 1989-91 James E. Wilson
+   Copyright (c) 1989-92 James E. Wilson
 
    This software may be copied and distributed for educational, research, and
    not for profit purposes provided that this copyright and statement are
@@ -13,8 +13,8 @@ some of the system defines set up here.
 #endif
 
 /* Person to bother if something goes wrong.  */
-/* Recompile files.c if this changes.  */
-#define WIZARD	"Jim Wilson"
+/* Recompile files.c and misc2.c if this changes.  */
+#define WIZARD	"David Grabiner"
 /* The wizard password and wizard uid are no longer used.  */
 
 
@@ -190,22 +190,17 @@ some of the system defines set up here.
 
 #else
 
-/* This must be unix.  Some obnoxious compilers (particularly IBM compilers)
-   don't define this.  */
-#ifndef unix
-#define unix
-#endif
-
+/* This must be unix.  */
 #define MORIA_SAV	"moria.save"
-#define MORIA_HOU	"/usr/wilson/umoria/files/hours"
-#define MORIA_MOR	"/usr/wilson/umoria/files/news"
-#define MORIA_TOP	"/usr/wilson/umoria/files/scores"
-#define MORIA_HELP	"/usr/wilson/umoria/files/roglcmds.hlp"
-#define MORIA_ORIG_HELP	"/usr/wilson/umoria/files/origcmds.hlp"
-#define MORIA_WIZ_HELP	"/usr/wilson/umoria/files/rwizcmds.hlp"
-#define MORIA_OWIZ_HELP	"/usr/wilson/umoria/files/owizcmds.hlp"
-#define MORIA_WELCOME	"/usr/wilson/umoria/files/welcome.hlp"
-#define MORIA_VER	"/usr/wilson/umoria/files/version.hlp"
+#define MORIA_HOU	"/home/zariski/grabiner/moria/files/hours"
+#define MORIA_MOR	"/home/zariski/grabiner/moria/files/news"
+#define MORIA_TOP	"/home/zariski/grabiner/moria/files/scores"
+#define MORIA_HELP	"/home/zariski/grabiner/moria/files/roglcmds.hlp"
+#define MORIA_ORIG_HELP	"/home/zariski/grabiner/moria/files/origcmds.hlp"
+#define MORIA_WIZ_HELP	"/home/zariski/grabiner/moria/files/rwizcmds.hlp"
+#define MORIA_OWIZ_HELP	"/home/zariski/grabiner/moria/files/owizcmds.hlp"
+#define MORIA_WELCOME	"/home/zariski/grabiner/moria/files/welcome.hlp"
+#define MORIA_VER	"/home/zariski/grabiner/moria/files/version.hlp"
 
 #endif
 #endif
@@ -220,7 +215,7 @@ some of the system defines set up here.
    to FALSE; to use the rogue-like key bindings (vi style movement)
    set ROGUE_LIKE to TRUE.  */
 /* If you change this, you only need to recompile main.c.  */
-#define ROGUE_LIKE TRUE
+#define ROGUE_LIKE FALSE
 
 
 /* For the ANDREW distributed file system, define this to ensure that

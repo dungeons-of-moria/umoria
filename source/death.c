@@ -1,6 +1,6 @@
 /* source/death.c: code executed when player dies
 
-   Copyright (c) 1989-91 James E. Wilson, Robert A. Koeneke
+   Copyright (c) 1989-92 James E. Wilson, Robert A. Koeneke
 
    This software may be copied and distributed for educational, research, and
    not for profit purposes provided that this copyright and statement are
@@ -560,6 +560,7 @@ static void print_tomb()
 	      clear_screen ();
 	      msg_print ("You are using:");
 	      (void) show_equip (TRUE, 0);
+	      msg_print (CNIL);
 	      msg_print ("You are carrying:");
 	      clear_from (1);
 	      (void) show_inven (0, inven_ctr-1, TRUE, 0, CNIL);

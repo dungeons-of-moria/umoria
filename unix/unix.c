@@ -1,6 +1,6 @@
 /* unix/unix.c: UNIX dependent code.					-CJS-
 
-   Copyright (c) 1989-91 James E. Wilson, Christopher J. Stuart
+   Copyright (c) 1989-92 James E. Wilson, Christopher J. Stuart
 
    This software may be copied and distributed for educational, research, and
    not for profit purposes provided that this copyright and statement are

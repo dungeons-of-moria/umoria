@@ -18,9 +18,9 @@ ibmpc-mono:\
 	:ho=\E[H:\
 	:cm=\E[%i%2;%2H:\
 	:up=\E[A:\
-	:xd=\E[B:\
+	:do=\E[B:\
 	:nd=\E[C:\
-	:bc=\E[D:\
+	:le=\E[D:\
 	:ce=\E[K:\
 	:ti=\E[m:\
 	:te=\E[m:\
@@ -46,9 +46,9 @@ ibmpc-color:\
 	:ho=\E[H:\
 	:cm=\E[%i%2;%2H:\
 	:up=\E[A:\
-	:xd=\E[B:\
+	:do=\E[B:\
 	:nd=\E[C:\
-	:bc=\E[D:\
+	:le=\E[D:\
 	:ce=\E[K:\
 	:ti=\E[44;37m\E1m:\
 	:te=\E[0m:\
