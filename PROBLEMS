@@ -1,0 +1,208 @@
+Fixes before 5/1
+fixed moving into column one
+tunnel through permanent rock prints tunnel through air? message
+printing of 18/ stats
+^C stops find flag, resting, searching
+monsters bash doors with 0 hit points
+what if pto_hit is negative?
+test_hit, attack_blows, critical_blows are wrong
+mon_tot_mult bug fixed
+always have same stats when start
+enchant armor scroll
+wizard_create does not set level!!
+should treasure level be set to finding level?
+after cure blindness need a move_char(5) to restore light
+lose_exp in spells.c
+mass_genocide when there are no monsters
+drop_throw, throwing object against wall goes into infinite loop
+player titles for level wrong?
+td_destroy should unlock chests
+use of 8's in generate, set wallstk in build_tunnel
+door/trap destroy should replace doors with corr2.floor, delete_object
+when staff has 0 charges left, don't get warning message
+recharge spell
+-----   5/1
+injection from types of wands to metals
+extra space at end of scroll names
+printing numbers in a field of 6
+warning if wielding too heavy of a weapon
+attack_blows, penalty for wielding heavy weapon too severe,
+save routine, doesn't exit if you type ESCAPE, shouldn't if doing panic save
+selling items to stores, they are still unidentified
+item prices in stores line up on the right
+rogue_like key binding option
+spelling fixes
+fixed getlogin() call in death.c
+disable local special characters (^Y, ^R, ^W, ^V, ^O)
+-------------------  5/2
+fixed .<dir> problem caused above
+fixed problem with speed, only call search_off in signal.c if search_flag set
+food problems, fix initialization of py structure in variables.h
+-------------------  5/2.5
+after ^C, if type n, erase the line at top of screen
+put refresh in erase_line(), so that lines really do get erased
+monster 'o' Ogre Magi casting unknown spells
+m_level problems, not calculating right numbers for monster generation
+changed damroll/max_hd so that they no longer clear 'd' in strings
+increased size of dtype for damroll strings
+increased size of all defined strings, need one more char for the '\0'
+wands of wonder, not generating new flag correctly
+only print 'too heavy weapon' message if actually wielding weapon
+wand of heal monster, causes them to scream when hit
+put (void) before all sscanf calls
+implemented shell_out and (no_)controlz functions
+fixed build_tunnel, removed leftover fragment of earlier incorrect fix
+	to build_tunnel
+display_inventory doesn't clear last line when 12 items on one page 11 other
+store_purchase when over 12 items in store passed calculated wrong
+	count of number of items on second page
+should put priv_switch stuff back in, i.e. setuid
+game should be setuid
+------------------------- 5/3
+fixed equip list bug when taking off items
+changed shell escape command to '!'
+changed version number to 4.82
+restore terminal modes in signal.c before core dumping
+fixed bug in save.c, it was writting/reading too much for magic_spell
+refixed m_level code, m_level[0] must be added after the randint
+wrote convert program to fix old save files
+---------------------------- 5/4
+put sigsetmask in signals.c, now dumps core on QUIT signal
+fixed empty chests, set flags to zero so no treasure, if search
+	then identify it as empty
+missing break for amulets in magic_treasurein misc.c, caused cursed
+	amulets to have positive attributes
+dispell evil staffs gives segmentation fault, didn't check for muptr == 0
+------------------- 5/5
+your resist the affects -> you resist the effects
+only print "%s appears healthier" if can see the monster
+check all uses of muptr, make sure test it not zero before using
+cost for amulets of searching is too high
+evil iggy prints wierd messages when he hits, break missing
+----------------------------------- 5/6
+fixed index bug in misc.c objdes(), used 0 as null string pointer
+added sun to 'getuid' ifdefs in death.c and misc.c
+--------------------------- 5/8
+fixed help page for rogue mode, searching mode command is ^S
+when stun monster by bashing, now does not print name if can't see monster
+allow controlz again, except when setuid or accessing save files
+--------------------------- 5/10
+added break after cure_poison() in potions.c
+items sold in stores do not appear in the inventory when last on second	page
+signals.c should restore local special chars before core dump exit
+monsters bashing doors end up on top of them
+	can't hit the monsters, can't cast spells at them, etc.
+----------------------- 5/11
+fixed cast_spell, cast was not initialized to FALSE
+infravision in misc.c should be multiplied by 10
+food items become known in a more reasonable fashion
+----------------------- 5/13
+if cast from empty spell book, print error message
+the base height/weight for female/male characters were reversed
+---------------------- 5/14
+refixed empty spell book to distinguish the three cases, cas_spell
+	now has three return values
+removed the numbers (1 2 3 4 6 7 8 9) from get_dir prompt
+changed some % chars to %% in print_monster() in files.c
+changed HD from %d to %s in print_monster()
+fixed jamdoor() was setting i_ptr->p1 instead of t_ptr->p1
+redefine Search mode command for rogue_like option to #
+changed message for rest_on, press '^C' not 'any key'
+fixed potential infinite loop problem, must initialize curses before
+	install signal handlers
+extensive mods to the save routine, added protection mechanisms
+changed version number to 4.83
+minor fixes so that source passes lint, removed inkey_delay function
+in store2.c, fix display_inventory() and purchase_haggle() so that
+	items will not be listed with 0 price for high chr characters
+------------------------ 5/15
+check result of fopen for writing scoreboard in top_twenty()
+etc. misspelled in print_monsters()
+added 'drools' and 'insults' messages in print_monsters()
+more mods to save routine, compress cave before writing to save file
+wrote wizard restore_char() function
+fixed test for Nighttime in generate.c, should be turn/5000 not turn%5000
+set moria_flag true after a call to restore_char() in moria.c
+update game_version() to include info about me
+ran through spell again
+---------------------------- 5/16
+should call prt_stat_block after wizard restore command
+setuid code was just plain wrong, fixed it
+----------------------------
+Summer vacation!
+---------------------------  8/26
+checked every switch statement, found five missing breaks
+---------------------------  8/28
+changed use of geteuid() for random seeds, didn't work if setuid to root
+--------------------------- 9/4 - 9/6
+port to SYS V
+changed store type (and save file format) to avoid warning about nonportable
+  signed character comparison
+---------------------------  9/9
+added bug fixes from doc@s.cc.purdue.edu, mainly dealing with setuid code
+---------------------------- 9/11
+correct spelling of receive_offer() (was recieve)
+^R in store will 'really' clear screen now
+get_haggle will not accept negative numbers now
+disarm_all caused segment faults, missing level of braces after t_ptr = &...
+more spelling errors: Delila(+h) Slim(-e)y Smok(-e)y
+--------------------------- 9/16
+took out old compatibility code in save.c
+changed version number to 4.84
+changed clear_screen and really_clear_screen so that they set msg_flag FALSE
+-------------------------- 9/17
+removed loop_flag = FALSE after prt_comment6(), stops wierd behavior if
+  when buy/sell give a price greater/less than that offered
+put entry in scoreboard when quit
+modified get_char so that it will read 4.83 save files
+------------------------- 9/18
+fix code so that it passes lint on ultrix and sun
+fix curses bugs with Ultrix, by adding ifdefs for BUGGY_CURSES
+  remove calls to nl(), and nonl(), don't write chars in last column
+-------------------------- 9/19
+port to SYSTEM V again
+breakup all files so that they are less than 64K, except the doc file
+-------------------------- 10/??
+change all instances of (index(...) > 0) to (index(...) != 0)
+fixed three errors, calling randint with arg of 0
+fixed bug that allowed one to buy objects for negative gold pieces
+fixed many other errors, but forgot to document them (sorry!)
+-------------------------- 10/26
+add comment about defining _DNO_SIGNED_CHARS for 3Bx series computers
+SUN4 has variable class in math.h, added ifdefs to misc1.c and externs.h
+  to avoid the conflict
+make variables.h monsters.h treasure1.h and treasure2.h into c files
+  to avoid problems compiling the HUGE main.c file on a 3B20
+added an option '-o' to use the original style key bindings
+added compiler option to Makefile, so that installer can choose
+  which key binding style should be the default
+control-c puts you in scoreboard only after character generation complete
+changed all USG savetty/resetty to saveterm/resetterm, it still seems to work
+changed version number to 4.85 for distribution purposes
+  started mailing to comp.sources.games
+
+Things to be fixed:
+if amulet raises stat over 118, stat will be lowered (more than it should be)
+	when take amulet off
+loss of strength doesn't force you to drop items
+what if can't write into current directory? (saves files, etc.)
+this file should be in reverse chronological order!
+it is possible to get 'final offer = 0' when selling an object
+
+Long term stuff, enhancement suggestions:
+use environment variables, for example to specify rogue-like keys
+and option to restore files from default save filename
+commands not close enough to rogue style
+scoreboard have all scores, not top twenty
+command line option to print out times open
+strange streatment of cursed armor
+can't drop or identify items in equipment list
+let o, c, D commands automatically pick direction when they can
+SYS V does not lock scoreboard when changing it
+it is too slow?  spends about half of its time doing screen i/o
+replace magic numbers with constants
+remove trailing blanks from every line
+for throw command, ask for direction first (like rogue)
+don't change letters of items in inventory (like rogue, again)
+be able to move onto objects without picking them up (like rogue)
+when moving on objects, say what character moved onto (like rogue)

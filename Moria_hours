@@ -1,0 +1,12 @@
+    Moria operating hours are:
+    |    AM     |    PM     |
+    1         111         111
+    2123456789012123456789012
+SUN:XXXXXXXXXXXXXXXXXXXXXXXX
+MON:XXXXXXXX.........XXXXXXX
+TUE:XXXXXXXX.........XXXXXXX
+WED:XXXXXXXX.........XXXXXXX
+THU:XXXXXXXX.........XXXXXXX
+FRI:XXXXXXXX.........XXXXXXX
+SAT:XXXXXXXXXXXXXXXXXXXXXXXX
+       (X==Open; .==Closed)

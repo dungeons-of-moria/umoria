@@ -1,0 +1,37 @@
+To compile the program, edit the config.h file to change the
+names of the files the game uses and the wizard info.  For USG systems,
+copy Makefile.USG to Makefile.  For Ultrix (and 4.2BSD), copy Makefile.ultrix
+to Makefile.  For 4.3BSD and SUNS copy Makefile.43 to Makefile.  Type make
+to compile the game.  You may want to edit the 'Moria_hours' file
+to indicate during what hours people are allowed to play the game.
+The game needs to be installed setuid for the scoreboard to work.
+Use the command 'chmod 4511 moria' to do this.
+(Or just type 'make install' after setting BINDIR and LIBDIR in the
+Makefile to appropriate values.)
+
+There are two choices for the key bindings, the original style and
+a rogue-like style.  You can choose which one is to be the default
+by changing the value of CFLAGS
+  -DKEY_BINDINGS=ORIGINAL for the original style
+  -DKEY_BINDINGS=ROGUE_LIKE for the rogue-like style
+
+
+If the display does not look right, try adding -DBUGGY_CURSES to CFLAGS
+(as in the ultrix Makefile).  Delete io.o and moria.o, and then recompile.
+
+For the IBM PC-RT, 3B2, 3B20, and perhaps others, you must
+add -DNO_SIGNED_CHARS to CFLAGS.
+
+You can choose which default key bindings you wish to have by
+changing the definition of KEY_BINDINGS in the Makefile.
+  For rogue like -DKEY_BINDINGS=ROGUE_LIKE
+  For original style -DKEY_BINDINGS=ORIGINAL
+
+The game has been successfully compiled on a VAX running 4.3BSD,
+SUN 3/50 running UNIX 4.2 Release 3.2, and a microvax running ULTRIX 2.0.
+The program assumes that ints are 32 bits, and that
+sizeof(char *) == sizeof(int).  The program passes lint
+so further porting should not be too hard.
+BSD/UNIX dependencies are(?) limited to the files io.c, save.c, and
+signals.c.
+

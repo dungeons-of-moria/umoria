@@ -1,0 +1,58 @@
+UNIX Moria 4.85
+(Differences from 4.85 to 4.84 are mostly minor bug fixes, and better
+ portability.)
+
+Moria is a dungeon adventure game in the manner of rogue, but
+not descended from rogue.  Moria is to VMS systems, as rogue
+is to UNIX.
+
+-------------------------------------------------------------
+
+This is my first official release.  Work is still in progress.
+This project started in February '87, and play testing started in early April.
+Bug reports from my playtesters have become relatively infrequent,
+so the game should be relatively stable now.
+
+Please send bug reports and/or fixes to wilson@ernie.Berkeley.EDU
+Save file formats may change again.
+
+This version of Moria is based on the original 4.8 VMS Pascal sources
+written by Robert Koeneke, Jimmey Todd, Gary McAdoo and others at
+the University of Oklahoma.  I have converted the program into C
+for BSD Unix.  The program has since been slowly diverging from the
+original game as I have 'fixed' things that didn't seem to be right.
+Major changes of note are incompatible save file formats (who cares?)
+and an optional rogue-like user interface for my UNIX version as opposed
+to a numeric keypad interface for the VMS version.
+
+To avoid confusion, you may want to refer to this as UNIX Moria,
+or perhaps wilson moria.
+
+Mike Callahan at the University of Oklahoma (seismo!okstate!uokmax!mikec)
+also is working on a Unix version of Moria and is planning on posting
+it to the net when it is finished.  This will probably be more official
+than my version, but I have not heard from him in a while.
+
+Don Kneller has ported the program to the IBM PC, and is calling it PCMORIA.
+
+My thanks to Dave Chin and Dave desJardins of Berkeley for playtesting the
+early versions and making many suggestions.  Thanks also to Craig Norborg
+of Purdue for rewritting the setuid/scoreboard code in a more rational
+manner.
+
+There exists another port of Moria to UNIX that was done by wex@MCC.COM.
+Hopefully, our two versions can be merged, but don't expect to see the result
+for a while.
+
+					Jim Wilson
+					wilson@ernie.Berkeley.EDU
+					ucbvax!ucbernie!wilson
+
+The program has three options.  The -r option changes the game to
+use a rogue like user interface.  The -o option forces the game to use
+the original user interface.  The -s option prints the scoreboard
+and exits.
+
+There is no man page yet, and the original VMS Moria docs should be rewritten
+to take into account some of the changes.
+

@@ -1,0 +1,68 @@
+# BINDIR is the directory where the moria binary while be put
+# LIBDIR is where the other files (scoreboard, news, hours) will be put
+#  LIBDIR must be the same directory defined in config.h
+BINDIR = /usr/public/moria
+LIBDIR = /usr/public/moriadir
+
+CFLAGS = -O -DKEY_BINDINGS=ORIGINAL
+
+SRCS = main.c misc1.c misc2.c store1.c files.c io.c create.c desc.c\
+	generate.c sets.c dungeon.c creature.c death.c eat.c help.c magic.c\
+	potions.c prayer.c save.c staffs.c wands.c scrolls.c spells.c\
+	wizard.c store2.c signals.c moria1.c moria2.c monsters.c\
+	treasure1.c treasure2.c variables.c
+
+OBJS = main.o misc1.o misc2.o store1.o files.o io.o create.o desc.o\
+	generate.o sets.o dungeon.o creature.o death.o eat.o help.o magic.o\
+	potions.o prayer.o save.o staffs.o wands.o scrolls.o spells.o\
+	wizard.o store2.o signals.o moria1.o moria2.o monsters.o\
+  	treasure1.o treasure2.o variables.o
+
+moria : $(OBJS)
+	cc -o moria $(CFLAGS) $(OBJS) -lm -lcurses -ltermcap
+
+lintout : $(SRCS)
+	lint $(SRCS) -lm -lcurses -ltermcap > lintout
+
+TAGS : $(SRCS)
+	ctags -x $(SRCS) > TAGS
+
+install:
+	cp moria $(BINDIR)
+	cp Moria_hours $(LIBDIR)
+	cp Moria_news $(LIBDIR)
+	cp Highscores $(LIBDIR)
+	chmod 4511 $(BINDIR)/moria
+	chmod 644 $(LIBDIR)/Highscores
+	chmod 444 $(LIBDIR)/Moria_news
+	chmod 444 $(LIBDIR)/Moria_hours
+	chmod 555 $(LIBDIR)
+
+create.o: constants.h types.h externs.h
+creature.o: constants.h types.h externs.h
+death.o: config.h constants.h types.h externs.h
+desc.o: constants.h types.h externs.h
+dungeon.o: constants.h types.h externs.h
+eat.o: constants.h types.h externs.h
+files.o: config.h constants.h types.h externs.h
+generate.o: constants.h types.h externs.h
+help.o: constants.h types.h externs.h
+io.o: constants.h types.h externs.h
+magic.o: constants.h types.h externs.h
+main.o: constants.h types.h
+misc1.o: constants.h types.h externs.h
+misc2.o: config.h constants.h types.h externs.h
+moria1.o: constants.h types.h externs.h
+moria2.o: constants.h types.h externs.h
+potions.o: constants.h types.h externs.h
+prayer.o: constants.h types.h externs.h
+save.o: constants.h types.h externs.h
+scrolls.o: constants.h types.h externs.h
+sets.o: constants.h
+signals.o: constants.h types.h externs.h
+spells.o: constants.h types.h externs.h
+staffs.o: constants.h types.h externs.h
+store1.o: constants.h types.h externs.h
+store2.o: constants.h types.h externs.h
+wands.o: constants.h types.h externs.h
+wizard.o: constants.h types.h externs.h

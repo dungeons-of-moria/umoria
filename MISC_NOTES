@@ -1,0 +1,31 @@
+
+The most recent version of UNIX Moria can be obtained via
+anonymous ftp from ucbarpa.Berkeley.EDU at present.
+In the future, I shall try to keep the sources available on
+ucbarpa.Berkeley.EDU and/or ucbvax.Berkeley.EDU.
+
+The two parts of the moria manual should be concatenated together
+into a single file (i.e.: cat moria.doc.? >moria.orig.doc).
+Work is under way to create an updated troff form of the manual.
+
+The game needs to be installed setuid for the scoreboard to work.
+Use the command 'chmod 4511 moria' to do this.
+The file Highscores should be mode 644 with the same owner as moria.
+The files Moria_hours and Moria_news must be publicly readable with
+mode 444.
+
+Restoring touched save files is possible, but not very easy.
+The following is a rough outline of the steps necessary:
+1) User changes mode of save file so that wizard can read it.
+2) Wizard changes umask so that files created will be publicly writable
+    i.e. for csh type 'umask 0'
+   Also, the directory that this is done in must be publicly writable.
+3) Wizard uses 'wizard restore' command to read in touched save file.
+4) While still in wizard mode, save the game.
+5) User can then read in the new save file, deleting it in the process.
+6) Wizard changes umask back to original value, i.e. 'umask 22'.
+
+
+Jim Wilson
+wilson@ji.Berkeley.EDU
+ucbvax!ucbji!wilson
