@@ -1,10 +1,12 @@
 
-This is the source for Umoria 5.5, a dungeon exploration game.  This is my
-second major release of the game.  These sources have been compiled
-successfully at least once in the following environments: UNIX (4.2 BSD,
-4.3 BSD, SYS V, Xenix, and many similar systems), IBM-PC (MSC 5.0,
-Turbo C 2.0), Mac (MPW 3.0, Think C 4.0), Atari ST (MWC, GCC, TC 2.0),
-Amiga (Aztec C 5.0), and VMS.
+This is the source for Umoria 5.5.2, a dungeon exploration game.  This
+is my second major release of the game.  These sources have been
+compiled successfully at least once in the following environments: UNIX
+(4.2 BSD, 4.3 BSD, SYS V, Xenix, HP-UX, and many similar systems),
+IBM-PC (MSC 5.0, Turbo C 2.0), Mac (MPW 3.0, Think C 4.0), Atari ST
+(MWC, GCC, TC 2.0), Amiga (Aztec C 5.0), and VMS.  The following ports
+have been added but not tested other than by the people who sent them:
+386BSD, HP Apollo, Linux, Lattice C.
 
 I consider these to be production sources.  They should work without trouble
 on all of the systems mentioned above.  Some minor bugs must surely remain,

@@ -436,23 +436,23 @@ char *filename1;
       (void) fprintf(file1, "   CHR : %s\n\n", prt1);
 
       (void) fprintf(file1, " + To Hit    : %6d", py.misc.dis_th);
-      (void) fprintf(file1, "%8sLevel      : %6d", blank, (int)py.misc.lev);
+      (void) fprintf(file1, "%7sLevel      : %7d", blank, (int)py.misc.lev);
       (void) fprintf(file1, "    Max Hit Points : %6d\n", py.misc.mhp);
       (void) fprintf(file1, " + To Damage : %6d", py.misc.dis_td);
-      (void) fprintf(file1, "%8sExperience : %6ld", blank, py.misc.exp);
+      (void) fprintf(file1, "%7sExperience : %7ld", blank, py.misc.exp);
       (void) fprintf(file1, "    Cur Hit Points : %6d\n", py.misc.chp);
       (void) fprintf(file1, " + To AC     : %6d", py.misc.dis_tac);
-      (void) fprintf(file1, "%8sMax Exp    : %6ld", blank, py.misc.max_exp);
+      (void) fprintf(file1, "%7sMax Exp    : %7ld", blank, py.misc.max_exp);
       (void) fprintf(file1, "    Max Mana%8s %6d\n", colon, py.misc.mana);
       (void) fprintf(file1, "   Total AC  : %6d", py.misc.dis_ac);
-      if (py.misc.lev == MAX_PLAYER_LEVEL)
-	(void) fprintf (file1, "%8sExp to Adv : ******", blank);
+      if (py.misc.lev >= MAX_PLAYER_LEVEL)
+	(void) fprintf (file1, "%7sExp to Adv : *******", blank);
       else
-	(void) fprintf(file1, "%8sExp to Adv : %6ld", blank,
+	(void) fprintf(file1, "%7sExp to Adv : %7ld", blank,
 		       (int32)(player_exp[py.misc.lev-1]
 			       * py.misc.expfact / 100));
       (void) fprintf(file1, "    Cur Mana%8s %6d\n", colon, py.misc.cmana);
-      (void) fprintf(file1, "%29sGold%8s %6ld\n\n", blank, colon,
+      (void) fprintf(file1, "%28sGold%8s %7ld\n\n", blank, colon,
 		     py.misc.au);
 
       p_ptr = &py.misc;

@@ -103,11 +103,11 @@ typedef struct { int stuff; } fpvmach;
 #if !defined(AMIGA) && !defined(VMS)
 #include <termio.h>
 #endif
+#endif
+#endif /* 0 */
 #ifdef HPUX
 /* Needs termio.h because curses.h doesn't include it */
 #include <termio.h>
-#endif
-#endif
 #endif
 #else /* ! USG */
 #include <strings.h>

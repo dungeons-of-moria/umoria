@@ -18,4 +18,6 @@ is never called for the Turbo C version.
 
 The file tcio.c is an untested file meant to replace the source/io.c file.
 If you use tcio.c instead of source/io.c, you do not need PC-Curses.
-The result is a program a bit smaller, and perhaps a bit faster.
+The result is a program a bit smaller, and perhaps a bit faster.  You
+will also need to comment out the #include <curses.h> at the beginning
+of ms_ansi.c.

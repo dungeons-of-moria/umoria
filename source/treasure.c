@@ -98,17 +98,17 @@ treasure_type object_list[MAX_OBJECTS] = {
   500,	  20,	77,   1,   1,	0,   0,	 0,   0, {0,0}	,  7},
 {"Light Cures"			,0x00800000L,	TV_FOOD, ',',	/* 14*/
   500,	  30,	78,   1,   1,	0,   0,	 0,   0, {0,0}	, 10},
-{"Restoring"			,0x001F8040L,	TV_FOOD, ',',	/* 15*/
+{"Restoration"			,0x001F8000L,	TV_FOOD, ',',	/* 15*/
   500,	1000,	79,   1,   1,	0,   0,	 0,   0, {0,0}	, 30},
 {"Poison"			,0x00000001L,	TV_FOOD, ',',	/* 16*/
  1200,	   0,	80,   1,   1,	0,   0,	 0,   0, {0,0}	, 15},
-{"Hallucinations"		,0x00000010L,	TV_FOOD, ',',	/* 17*/
+{"Hallucination"		,0x00000010L,	TV_FOOD, ',',	/* 17*/
  1200,	   0,	81,   1,   1,	0,   0,	 0,   0, {0,0}	, 18},
 {"Cure Poison"			,0x00000020L,	TV_FOOD, ',',	/* 18*/
  1200,	  75,	82,   1,   1,	0,   0,	 0,   0, {0,0}	, 19},
-{"Unhealth"			,0x00000400L,	TV_FOOD, ',',	/* 19*/
- 1200,	  25,	83,   1,   1,	0,   0,	 0,   0, {6,8}	, 28},
-{"Cure Serious Wounds"		,0x02000000L,	TV_FOOD, ',',	/* 20*/
+{"Unhealth"			,0x04000400L,	TV_FOOD, ',',	/* 19*/
+ 1200,	  75,	83,   1,   1,	0,   0,	 0,   0, {10,12}, 28},
+{"Major Cures"			,0x02000000L,	TV_FOOD, ',',	/* 20*/
  1200,	  75,	84,   1,   2,	0,   0,	 0,   0, {0,0}	, 16},
 {"& Ration~ of Food"		,0x00000000L,	TV_FOOD, ',',	/* 21*/
  5000,	   3,	90,   1,  10,	0,   0,	 0,   0, {0,0}	,  0},
@@ -119,11 +119,11 @@ treasure_type object_list[MAX_OBJECTS] = {
 {"& Slime Mold~"		,0x00000000L,	TV_FOOD, ',',	/* 24*/
  3000,	   2,	91,   1,   5,	0,   0,	 0,   0, {0,0}	,  1},
 {"& Piece~ of Elvish Waybread"	,0x02000020L,	TV_FOOD, ',',	/* 25*/
- 7500,	  10,	92,   1,   3,	0,   0,	 0,   0, {0,0}	,  6},
+ 7500,	  25,	92,   1,   3,	0,   0,	 0,   0, {0,0}	,  6},
 {"& Piece~ of Elvish Waybread"	,0x02000020L,	TV_FOOD, ',',	/* 26*/
- 7500,	  10,	92,   1,   3,	0,   0,	 0,   0, {0,0}	, 12},
+ 7500,	  25,	92,   1,   3,	0,   0,	 0,   0, {0,0}	, 12},
 {"& Piece~ of Elvish Waybread"	,0x02000020L,	TV_FOOD, ',',	/* 27*/
- 7500,	  10,	92,   1,   3,	0,   0,	 0,   0, {0,0}	, 20},
+ 7500,	  25,	92,   1,   3,	0,   0,	 0,   0, {0,0}	, 20},
 {"& Dagger (Main Gauche)"	,0x00000000L,	TV_SWORD, '|',	/* 28*/
     0,	  25,	1,   1,  30,	0,   0,	 0,   0, {1,5}	,  2},
 {"& Dagger (Misericorde)"	,0x00000000L,	TV_SWORD, '|',	/* 29*/
@@ -132,10 +132,10 @@ treasure_type object_list[MAX_OBJECTS] = {
     0,	  10,	3,   1,  12,	0,   0,	 0,   0, {1,4}	,  0},
 {"& Dagger (Bodkin)"		,0x00000000L,	TV_SWORD, '|',	/* 31*/
     0,	  10,	4,   1,  20,	0,   0,	 0,   0, {1,4}	,  1},
-{"& Broken dagger"		,0x00000000L,	TV_SWORD, '|',	/* 32*/
+{"& Broken Dagger"		,0x00000000L,	TV_SWORD, '|',	/* 32*/
     0,	   0,	5,   1,  15,  -2,  -2,	 0,   0, {1,1}	,  0},
 {"& Backsword"			,0x00000000L,	TV_SWORD, '|',	/* 33*/
-    0,	  60,	6,   1,  95,	0,   0,	 0,   0, {1,9}	,  7},
+    0,	 150,	6,   1,  95,	0,   0,	 0,   0, {1,9}	,  7},
 {"& Bastard Sword"		,0x00000000L,	TV_SWORD, '|',	/* 34*/
     0,	 350,	7,   1, 140,	0,   0,	 0,   0, {3,4}	, 14},
 {"& Thrusting Sword (Bilbo)"	,0x00000000L,	TV_SWORD, '|',	/* 35*/
@@ -159,7 +159,7 @@ treasure_type object_list[MAX_OBJECTS] = {
 {"& Katana"			,0x00000000L,	TV_SWORD, '|',	/* 44*/
     0,	 400,	17,   1, 120,	0,   0,	 0,   0, {3,4}	, 18},
 {"& Longsword"			,0x00000000L,	TV_SWORD, '|',	/* 45*/
-    0,	 300,	18,   1, 130,	0,   0,	 0,   0, {1,10} , 12},
+    0,	 200,	18,   1, 130,	0,   0,	 0,   0, {1,10} , 12},
 {"& Two-Handed Sword (No-Dachi)",0x00000000L,	TV_SWORD, '|',	/* 46*/
     0,	 675,	19,   1, 200,	0,   0,	 0,   0, {4,4}	, 45},
 {"& Rapier"			,0x00000000L,	TV_SWORD, '|',	/* 47*/
@@ -170,11 +170,11 @@ treasure_type object_list[MAX_OBJECTS] = {
     0,	  48,	22,   1,  75,	0,   0,	 0,   0, {1,6}	,  5},
 {"& Two-Handed Sword (Zweihander)",0x00000000L,	TV_SWORD, '|',	/* 50*/
     0,	1500,	23,   1, 280,	0,   0,	 0,   0, {4,6}	, 50},
-{"& Broken sword"		,0x00000000L,	TV_SWORD, '|',	/* 51*/
+{"& Broken Sword"		,0x00000000L,	TV_SWORD, '|',	/* 51*/
     0,	   0,	24,   1,  75,  -2,  -2,	 0,   0, {1,1}	,  0},
 {"& Ball and Chain"		,0x00000000L,	TV_HAFTED, '\\',/* 52*/
     0,	 200,	1,   1, 150,	0,   0,	 0,   0, {2,4}	, 20},
-{"& Cat-O-Nine Tails"		,0x00000000L,	TV_HAFTED, '\\',/* 53*/
+{"& Cat-o'-Nine-Tails"		,0x00000000L,	TV_HAFTED, '\\',/* 53*/
     0,	  14,	2,   1,  40,	0,   0,	 0,   0, {1,4}	,  3},
 {"& Wooden Club"		,0x00000000L,	TV_HAFTED, '\\',/* 54*/
     0,	  10,	3,   1, 100,	0,   0,	 0,   0, {1,3}	,  0},
@@ -188,14 +188,14 @@ treasure_type object_list[MAX_OBJECTS] = {
     0,	 130,	7,   1, 120,	0,   0,	 0,   0, {2,4}	,  6},
 {"& War Hammer"			,0x00000000L,	TV_HAFTED, '\\',/* 59*/
     0,	 225,	8,   1, 120,	0,   0,	 0,   0, {3,3}	,  5},
-{"& Mace (Lead-filled)"		,0x00000000L,	TV_HAFTED, '\\',/* 60*/
+{"& Lead-Filled Mace"		,0x00000000L,	TV_HAFTED, '\\',/* 60*/
     0,	 502,	9,   1, 180,	0,   0,	 0,   0, {3,4}	, 15},
 {"& Awl-Pike"			,0x00000000L,	TV_POLEARM, '/',/* 61*/
-    0,	 340,	1,   1, 160,	0,   0,	 0,   0, {1,8}	,  8},
+    0,	 200,	1,   1, 160,	0,   0,	 0,   0, {1,8}	,  8},
 {"& Beaked Axe"			,0x00000000L,	TV_POLEARM, '/',/* 62*/
     0,	 408,	2,   1, 180,	0,   0,	 0,   0, {2,6}	, 15},
 {"& Fauchard"			,0x00000000L,	TV_POLEARM, '/',/* 63*/
-    0,	 376,	3,   1, 170,	0,   0,	 0,   0, {1,10} , 17},
+    0,	 326,	3,   1, 170,	0,   0,	 0,   0, {1,10} , 17},
 {"& Glaive"			,0x00000000L,	TV_POLEARM, '/',/* 64*/
     0,	 363,	4,   1, 190,	0,   0,	 0,   0, {2,6}	, 20},
 {"& Halberd"			,0x00000000L,	TV_POLEARM, '/',/* 65*/
@@ -269,9 +269,9 @@ treasure_type object_list[MAX_OBJECTS] = {
 {"& Silver Crown"		,0x00000000L,	TV_HELM, ']',	/* 99*/
     0,	 500,	6,   1,  20,	0,   0,	 0,   0, {1,1}	, 44},
 {"& Golden Crown"		,0x00000000L,	TV_HELM, ']',	/*100*/
-    0,	1000,	7,   1,  30,	0,   0,	 0,   0, {1,1}	, 47},
+    0,	1000,	7,   1,  30,	0,   0,	 0,   0, {1,2}	, 47},
 {"& Jewel-Encrusted Crown"	,0x00000000L,	TV_HELM, ']',	/*101*/
-    0,	2000,	8,   1,  40,	0,   0,	 0,   0, {1,1}	, 50},
+    0,	2000,	8,   1,  40,	0,   0,	 0,   0, {1,3}	, 50},
 {"& Robe"			,0x00000000L,	TV_SOFT_ARMOR, '(',/*102*/
     0,	   4,	1,   1,  20,	0,   0,	 2,   0, {0,0}	,  1},
 {"Soft Leather Armor"		,0x00000000L,	TV_SOFT_ARMOR, '(',/*103*/
@@ -295,7 +295,7 @@ treasure_type object_list[MAX_OBJECTS] = {
 {"Chain Mail"			,0x00000000L,	TV_HARD_ARMOR, '[',/*112*/
     0,	 530,	2,   1, 220,  -2,   0,	14,   0, {1,4}	, 26},
 {"Rusty Chain Mail"		,0x00000000L,	TV_HARD_ARMOR, '[',/*113*/
-    0,	   0,	3,   1, 200,  -5,   0,	14,  -8, {1,4}	, 26},
+    0,	   0,	3,   1, 220,  -5,   0,	14,  -8, {1,4}	, 26},
 {"Double Chain Mail"		,0x00000000L,	TV_HARD_ARMOR, '[',/*114*/
     0,	 630,	4,   1, 260,  -2,   0,	15,   0, {1,4}	, 28},
 {"Augmented Chain Mail"		,0x00000000L,	TV_HARD_ARMOR, '[',/*115*/
@@ -307,7 +307,7 @@ treasure_type object_list[MAX_OBJECTS] = {
 {"Laminated Armor"		,0x00000000L,	TV_HARD_ARMOR, '[',/*118*/
     0,	 825,	8,   1, 300,  -3,   0,	20,   0, {1,4}	, 38},
 {"Partial Plate Armor"		,0x00000000L,	TV_HARD_ARMOR, '[',/*119*/
-    0,	 900,	9,   1, 260,  -3,   0,	22,   0, {1,6}	, 42},
+    0,	 900,	9,   1, 320,  -3,   0,	22,   0, {1,6}	, 42},
 {"Metal Lamellar Armor"		,0x00000000L,	TV_HARD_ARMOR, '[',/*120*/
     0,	 950,	10,   1, 340,  -3,   0,	23,   0, {1,6}	, 44},
 {"Full Plate Armor"		,0x00000000L,	TV_HARD_ARMOR, '[',/*121*/
@@ -332,14 +332,14 @@ treasure_type object_list[MAX_OBJECTS] = {
     0,	 125,	5,   1,  90,	0,   0,	 4,   0, {1,3}	, 20},
 {"& Large Metal Shield"		,0x00000000L,	TV_SHIELD, ')',	/*131*/
     0,	 200,	6,   1, 120,	0,   0,	 5,   0, {1,3}	, 30},
-{"Gain Strength"		,0x00000001L,	TV_RING, '=',	/*132*/
+{"Strength"			,0x00000001L,	TV_RING, '=',	/*132*/
     0,	 400,	0,   1,   2,	0,   0,	 0,   0, {0,0}	, 30},
-{"Gain Dexterity"		,0x00000008L,	TV_RING, '=',	/*133*/
+{"Dexterity"			,0x00000008L,	TV_RING, '=',	/*133*/
     0,	 400,	1,   1,   2,	0,   0,	 0,   0, {0,0}	, 30},
-{"Gain Constitution"		,0x00000010L,	TV_RING, '=',	/*134*/
+{"Constitution"			,0x00000010L,	TV_RING, '=',	/*134*/
     0,	 400,	2,   1,   2,	0,   0,	 0,   0, {0,0}	, 30},
-{"Gain Intelligence"		,0x00000002L,	TV_RING, '=',	/*135*/
-    0,	 350,	3,   1,   2,	0,   0,	 0,   0, {0,0}	, 30},
+{"Intelligence"			,0x00000002L,	TV_RING, '=',	/*135*/
+    0,	 400,	3,   1,   2,	0,   0,	 0,   0, {0,0}	, 30},
 {"Speed"			,0x00001000L,	TV_RING, '=',	/*136*/
     0,	3000,	4,   1,   2,	0,   0,	 0,   0, {0,0}	, 50},
 {"Searching"			,0x00000040L,	TV_RING, '=',	/*137*/
@@ -347,7 +347,7 @@ treasure_type object_list[MAX_OBJECTS] = {
 {"Teleportation"		,0x80000400L,	TV_RING, '=',	/*138*/
     0,	   0,	6,   1,   2,	0,   0,	 0,   0, {0,0}	,  7},
 {"Slow Digestion"		,0x00000080L,	TV_RING, '=',	/*139*/
-    0,	 250,	7,   1,   2,	0,   0,	 0,   0, {0,0}	,  7},
+    0,	 200,	7,   1,   2,	0,   0,	 0,   0, {0,0}	,  7},
 {"Resist Fire"			,0x00080000L,	TV_RING, '=',	/*140*/
     0,	 250,	8,   1,   2,	0,   0,	 0,   0, {0,0}	, 14},
 {"Resist Cold"			,0x00200000L,	TV_RING, '=',	/*141*/
@@ -380,7 +380,7 @@ treasure_type object_list[MAX_OBJECTS] = {
 {"Aggravate Monster"		,0x80000200L,	TV_RING, '=',	/*154*/
     0,	   0,	22,   1,   2,	0,   0,	 0,   0, {0,0}	,  7},
 {"See Invisible"		,0x01000000L,	TV_RING, '=',	/*155*/
-    0,	 340,	23,   1,   2,	0,   0,	 0,   0, {0,0}	, 40},
+    0,	 500,	23,   1,   2,	0,   0,	 0,   0, {0,0}	, 40},
 {"Sustain Strength"		,0x00400000L,	TV_RING, '=',	/*156*/
     1,	 750,	24,   1,   2,	0,   0,	 0,   0, {0,0}	, 44},
 {"Sustain Intelligence"		,0x00400000L,	TV_RING, '=',	/*157*/
@@ -406,7 +406,7 @@ treasure_type object_list[MAX_OBJECTS] = {
 {"Slow Digestion"		,0x00000080L,	TV_AMULET, '"',	/*167*/
     0,	 200,	4,   1,   3,	0,   0,	 0,   0, {0,0}	, 14},
 {"Resist Acid"			,0x00100000L,	TV_AMULET, '"',	/*168*/
-    0,	 300,	5,   1,   3,	0,   0,	 0,   0, {0,0}	, 24},
+    0,	 250,	5,   1,   3,	0,   0,	 0,   0, {0,0}	, 24},
 {"Adornment"			,0x00000000L,	TV_AMULET, '"',	/*169*/
     0,	  20,	6,   1,   3,	0,   0,	 0,   0, {0,0}	, 16},
 /* was an amulet of adornment here, subval = 7 */
@@ -489,7 +489,7 @@ treasure_type object_list[MAX_OBJECTS] = {
 {"Darkness"			,0x04000000L,	TV_SCROLL1, '?',/*208*/
     0,	   0,	90,   1,   5,	0,   0,	 0,   0, {0,0}	,  1},
 {"Protection from Evil"		,0x08000000L,	TV_SCROLL1, '?',/*209*/
-    0,	  50,	91,   1,   5,	0,   0,	 0,   0, {0,0}	, 30},
+    0,	 100,	91,   1,   5,	0,   0,	 0,   0, {0,0}	, 30},
 {"Create Food"			,0x10000000L,	TV_SCROLL1, '?',/*210*/
     0,	  10,	92,   1,   5,	0,   0,	 0,   0, {0,0}	,  5},
 {"Dispel Undead"		,0x20000000L,	TV_SCROLL1, '?',/*211*/
@@ -513,7 +513,7 @@ treasure_type object_list[MAX_OBJECTS] = {
 {"Word-of-Recall"		,0x00000100L,	TV_SCROLL2, '?',/*220*/
     0,	 150, 102,   1,   5,	0,   0,	 0,   0, {0,0}	,  5},
 {"*Destruction*"		,0x00000200L,	TV_SCROLL2, '?',/*221*/
-    0,	 250, 103,   1,   5,	0,   0,	 0,   0, {0,0}	, 40},
+    0,	 750, 103,   1,   5,	0,   0,	 0,   0, {0,0}	, 40},
 /* SMJ, AJ, Water must be subval 64-66 resp. for objdes to work */
 {"Slime Mold Juice"		,0x30000000L,	TV_POTION1, '!',/*222*/
   400,	   2,	64,   1,   4,	0,   0,	 0,   0, {1,1}	,  0},
@@ -521,19 +521,19 @@ treasure_type object_list[MAX_OBJECTS] = {
   250,	   1,	65,   1,   4,	0,   0,	 0,   0, {1,1}	,  0},
 {"Water"			,0x00000000L,	TV_POTION1, '!',/*224*/
   200,	   0,	66,   1,   4,	0,   0,	 0,   0, {1,1}	,  0},
-{"Gain Strength"		,0x00000001L,	TV_POTION1, '!',/*225*/
-    0,	 300,	67,   1,   4,	0,   0,	 0,   0, {1,1}	, 25},
+{"Strength"			,0x00000001L,	TV_POTION1, '!',/*225*/
+   50,	 300,	67,   1,   4,	0,   0,	 0,   0, {1,1}	, 25},
 {"Weakness"			,0x00000002L,	TV_POTION1, '!',/*226*/
     0,	   0,	68,   1,   4,	0,   0,	 0,   0, {1,1}	,  3},
 {"Restore Strength"		,0x00000004L,	TV_POTION1, '!',/*227*/
     0,	 300,	69,   1,   4,	0,   0,	 0,   0, {1,1}	, 40},
-{"Gain Intelligence"		,0x00000008L,	TV_POTION1, '!',/*228*/
+{"Intelligence"			,0x00000008L,	TV_POTION1, '!',/*228*/
     0,	 300,	70,   1,   4,	0,   0,	 0,   0, {1,1}	, 25},
 {"Lose Intelligence"		,0x00000010L,	TV_POTION1, '!',/*229*/
     0,	   0,	71,   1,   4,	0,   0,	 0,   0, {1,1}	, 25},
 {"Restore Intelligence"		,0x00000020L,	TV_POTION1, '!',/*230*/
     0,	 300,	72,   1,   4,	0,   0,	 0,   0, {1,1}	, 40},
-{"Gain Wisdom"			,0x00000040L,	TV_POTION1, '!',/*231*/
+{"Wisdom"			,0x00000040L,	TV_POTION1, '!',/*231*/
     0,	 300,	73,   1,   4,	0,   0,	 0,   0, {1,1}	, 25},
 {"Lose Wisdom"			,0x00000080L,	TV_POTION1, '!',/*232*/
     0,	   0,	74,   1,   4,	0,   0,	 0,   0, {1,1}	, 25},
@@ -557,8 +557,8 @@ treasure_type object_list[MAX_OBJECTS] = {
   100,	 100,	81,   1,   4,	0,   0,	 0,   0, {1,1}	,  5},
 {"Healing"			,0x70008000L,	TV_POTION1, '!',/*242*/
   200,	 200,	82,   1,   4,	0,   0,	 0,   0, {1,1}	, 12},
-{"Gain Constitution"		,0x00010000L,	TV_POTION1, '!',/*243*/
-    0,	 300,	83,   1,   4,	0,   0,	 0,   0, {1,1}	, 25},
+{"Constitution"			,0x00010000L,	TV_POTION1, '!',/*243*/
+   50,	 300,	83,   1,   4,	0,   0,	 0,   0, {1,1}	, 25},
 {"Gain Experience"		,0x00020000L,	TV_POTION1, '!',/*244*/
     0,	2500,	84,   1,   4,	0,   0,	 0,   0, {1,1}	, 50},
 {"Sleep"			,0x00040000L,	TV_POTION1, '!',/*245*/
@@ -573,7 +573,7 @@ treasure_type object_list[MAX_OBJECTS] = {
     0,	  75,	89,   1,   4,	0,   0,	 0,   0, {1,1}	,  1},
 {"Slowness"			,0x00800000L,	TV_POTION1, '!',/*250*/
    50,	   0,	90,   1,   4,	0,   0,	 0,   0, {1,1}	,  1},
-{"Gain Dexterity"		,0x02000000L,	TV_POTION1, '!',/*251*/
+{"Dexterity"			,0x02000000L,	TV_POTION1, '!',/*251*/
     0,	 300,	91,   1,   4,	0,   0,	 0,   0, {1,1}	, 25},
 {"Restore Dexterity"		,0x04000000L,	TV_POTION1, '!',/*252*/
     0,	 300,	92,   1,   4,	0,   0,	 0,   0, {1,1}	, 40},
@@ -584,7 +584,7 @@ treasure_type object_list[MAX_OBJECTS] = {
 {"Salt Water"			,0x00000004L,	TV_POTION2, '!',/*255*/
     0,	   0,	96,   1,   4,	0,   0,	 0,   0, {1,1}	,  0},
 {"Invulnerability"		,0x00000008L,	TV_POTION2, '!',/*256*/
-    0,	 250,	97,   1,   4,	0,   0,	 0,   0, {1,1}	, 40},
+    0,	1000,	97,   1,   4,	0,   0,	 0,   0, {1,1}	, 40},
 {"Heroism"			,0x00000010L,	TV_POTION2, '!',/*257*/
     0,	  35,	98,   1,   4,	0,   0,	 0,   0, {1,1}	,  1},
 {"Super Heroism"		,0x00000020L,	TV_POTION2, '!',/*258*/
@@ -607,7 +607,7 @@ treasure_type object_list[MAX_OBJECTS] = {
     0,	 350, 107,   1,   4,	0,   0,	 0,   0, {1,1}	, 25},
 {"Infra-Vision"			,0x00004000L,	TV_POTION2, '!',/*267*/
     0,	  20, 108,   1,   4,	0,   0,	 0,   0, {1,1}	,  3},
-{"& Flask~ of oil"		,0x00040000L,	TV_FLASK, '!',	/*268*/
+{"& Flask~ of Oil"		,0x00040000L,	TV_FLASK, '!',	/*268*/
  7500,	   3,	64,   1,  10,	0,   0,	 0,   0, {2,6}	,  1},
 {"Light"			,0x00000001L,	TV_WAND, '-',	/*269*/
     0,	 200,	0,   1,  10,	0,   0,	 0,   0, {1,1}	,  2},
@@ -634,7 +634,7 @@ treasure_type object_list[MAX_OBJECTS] = {
 {"Drain Life"			,0x00000800L,	TV_WAND, '-',	/*280*/
     0,	1200,	11,   1,  10,	0,   0,	 0,   0, {1,1}	, 50},
 {"Trap/Door Destruction"	,0x00001000L,	TV_WAND, '-',	/*281*/
-    0,	 100,	12,   1,  10,	0,   0,	 0,   0, {1,1}	, 12},
+    0,	 500,	12,   1,  10,	0,   0,	 0,   0, {1,1}	, 12},
 {"Magic Missile"		,0x00002000L,	TV_WAND, '-',	/*282*/
     0,	 200,	13,   1,  10,	0,   0,	 0,   0, {1,1}	,  2},
 {"Wall Building"		,0x00004000L,	TV_WAND, '-',	/*283*/
@@ -644,7 +644,7 @@ treasure_type object_list[MAX_OBJECTS] = {
 {"Teleport Away"		,0x00010000L,	TV_WAND, '-',	/*285*/
     0,	 350,	16,   1,  10,	0,   0,	 0,   0, {1,1}	, 20},
 {"Disarming"			,0x00020000L,	TV_WAND, '-',	/*286*/
-    0,	 700,	17,   1,  10,	0,   0,	 0,   0, {1,1}	, 20},
+    0,	 500,	17,   1,  10,	0,   0,	 0,   0, {1,1}	, 20},
 {"Lightning Balls"		,0x00040000L,	TV_WAND, '-',	/*287*/
     0,	1200,	18,   1,  10,	0,   0,	 0,   0, {1,1}	, 35},
 {"Cold Balls"			,0x00080000L,	TV_WAND, '-',	/*288*/
@@ -668,7 +668,7 @@ treasure_type object_list[MAX_OBJECTS] = {
 {"Object Location"		,0x00000010L,	TV_STAFF, '_',	/*297*/
     0,	 200,	4,   1,  50,	0,   0,	 0,   0, {1,2}	,  5},
 {"Teleportation"		,0x00000020L,	TV_STAFF, '_',	/*298*/
-    0,	 400,	5,   1,  50,	0,   0,	 0,   0, {1,2}	, 20},
+    0,	 800,	5,   1,  50,	0,   0,	 0,   0, {1,2}	, 20},
 {"Earthquakes"			,0x00000040L,	TV_STAFF, '_',	/*299*/
     0,	 350,	6,   1,  50,	0,   0,	 0,   0, {1,2}	, 40},
 {"Summoning"			,0x00000080L,	TV_STAFF, '_',	/*300*/
@@ -678,7 +678,7 @@ treasure_type object_list[MAX_OBJECTS] = {
 {"*Destruction*"		,0x00000200L,	TV_STAFF, '_',	/*302*/
     0,	2500,	8,   1,  50,	0,   0,	 0,   0, {1,2}	, 50},
 {"Starlight"			,0x00000400L,	TV_STAFF, '_',	/*303*/
-    0,	 800,	9,   1,  50,	0,   0,	 0,   0, {1,2}	, 20},
+    0,	 400,	9,   1,  50,	0,   0,	 0,   0, {1,2}	, 20},
 {"Haste Monsters"		,0x00000800L,	TV_STAFF, '_',	/*304*/
     0,	   0,	10,   1,  50,	0,   0,	 0,   0, {1,2}	, 10},
 {"Slow Monsters"		,0x00001000L,	TV_STAFF, '_',	/*305*/
@@ -686,7 +686,7 @@ treasure_type object_list[MAX_OBJECTS] = {
 {"Sleep Monsters"		,0x00002000L,	TV_STAFF, '_',	/*306*/
     0,	 700,	12,   1,  50,	0,   0,	 0,   0, {1,2}	, 10},
 {"Cure Light Wounds"		,0x00004000L,	TV_STAFF, '_',	/*307*/
-    0,	 350,	13,   1,  50,	0,   0,	 0,   0, {1,2}	,  5},
+    0,	 200,	13,   1,  50,	0,   0,	 0,   0, {1,2}	,  5},
 {"Detect Invisible"		,0x00008000L,	TV_STAFF, '_',	/*308*/
     0,	 200,	14,   1,  50,	0,   0,	 0,   0, {1,2}	,  5},
 {"Speed"			,0x00010000L,	TV_STAFF, '_',	/*309*/
@@ -707,48 +707,48 @@ treasure_type object_list[MAX_OBJECTS] = {
     0,	   0,	22,   1,  50,	0,   0,	 0,   0, {1,2}	, 50},
 {"Darkness"			,0x01000000L,	TV_STAFF, '_',	/*317*/
     0,	   0,	22,   1,  50,	0,   0,	 0,   0, {1,2}	,  5},
-{"[Beginners-Magik]"		,0x0000007FL,	TV_MAGIC_BOOK, '?',/*318*/
+{"[Beginners-Magick]"		,0x0000007FL,	TV_MAGIC_BOOK, '?',/*318*/
     0,	  25,	64,   1,  30,   0,   0,	 0,   0, {1,1}	, 40},
-{"[Magik I]"			,0x0000FF80L,	TV_MAGIC_BOOK, '?',/*319*/
+{"[Magick I]"			,0x0000FF80L,	TV_MAGIC_BOOK, '?',/*319*/
     0,	 100,	65,   1,  30,   0,   0,	 0,   0, {1,1}	, 40},
-{"[Magik II]"			,0x00FF0000L,	TV_MAGIC_BOOK, '?',/*320*/
+{"[Magick II]"			,0x00FF0000L,	TV_MAGIC_BOOK, '?',/*320*/
     0,	 400,	66,   1,  30,   0,   0,	 0,   0, {1,1}	, 40},
-{"[The Mages Guide to Power]"	,0x7F000000L,	TV_MAGIC_BOOK, '?',/*321*/
+{"[The Mages' Guide to Power]"	,0x7F000000L,	TV_MAGIC_BOOK, '?',/*321*/
     0,	 800,	67,   1,  30,   0,   0,	 0,   0, {1,1}	, 40},
 {"[Beginners Handbook]"		,0x000000FFL,	TV_PRAYER_BOOK, '?',/*322*/
     0,	  25,	64,   1,  30,   0,   0,	 0,   0, {1,1}	, 40},
 {"[Words of Wisdom]"		,0x0000FF00L,	TV_PRAYER_BOOK, '?',/*323*/
     0,	 100,	65,   1,  30,   0,   0,	 0,   0, {1,1}	, 40},
 {"[Chants and Blessings]"	,0x01FF0000L,	TV_PRAYER_BOOK, '?',/*324*/
-    0,	 300,	66,   1,  30,   0,   0,	 0,   0, {1,1}	, 40},
-{"[Exorcism and Dispelling]"	,0x7E000000L,	TV_PRAYER_BOOK, '?',/*325*/
-    0,	 900,	67,   1,  30,   0,   0,	 0,   0, {1,1}	, 40},
-{"& Small wooden chest"		,0x0F800000L,	 TV_CHEST, '&',	/*326*/
+    0,	 400,	66,   1,  30,   0,   0,	 0,   0, {1,1}	, 40},
+{"[Exorcisms and Dispellings]"	,0x7E000000L,	TV_PRAYER_BOOK, '?',/*325*/
+    0,	 800,	67,   1,  30,   0,   0,	 0,   0, {1,1}	, 40},
+{"& Small Wooden Chest"		,0x13800000L,	 TV_CHEST, '&',	/*326*/
     0,	  20,	1,   1, 250,	0,   0,	 0,   0, {2,3}	,  7},
-{"& Large wooden chest"		,0x15800000L,	 TV_CHEST, '&',	/*327*/
+{"& Large Wooden Chest"		,0x17800000L,	 TV_CHEST, '&',	/*327*/
     0,	  60,	4,   1, 500,	0,   0,	 0,   0, {2,5}	, 15},
-{"& Small iron chest"		,0x0F800000L,	 TV_CHEST, '&',	/*328*/
-    0,	 100,	7,   1, 300,	0,   0,	 0,   0, {2,4}	, 25},
-{"& Large iron chest"		,0x1F800000L,	 TV_CHEST, '&',	/*329*/
+{"& Small Iron Chest"		,0x17800000L,	 TV_CHEST, '&',	/*328*/
+    0,	 100,	7,   1, 500,	0,   0,	 0,   0, {2,4}	, 25},
+{"& Large Iron Chest"		,0x23800000L,	 TV_CHEST, '&',	/*329*/
     0,	 150,	10,   1,1000,	0,   0,	 0,   0, {2,6}	, 35},
-{"& Small steel chest"		,0x0F800000L,	 TV_CHEST, '&',	/*330*/
+{"& Small Steel Chest"		,0x1B800000L,	 TV_CHEST, '&',	/*330*/
     0,	 200,	13,   1, 500,	0,   0,	 0,   0, {2,4}	, 45},
-{"& Large steel chest"		,0x23800000L,	 TV_CHEST, '&',	/*331*/
+{"& Large Steel Chest"		,0x33800000L,	 TV_CHEST, '&',	/*331*/
     0,	 250,	16,   1,1000,	0,   0,	 0,   0, {2,6}	, 50},
 {"& Rat Skeleton"		,0x00000000L,	 TV_MISC, 's',	/*332*/
     0,	   0,	1,   1,  10,	0,   0,	 0,   0, {1,1}	,  1},
 {"& Giant Centipede Skeleton"	,0x00000000L,	 TV_MISC, 's',	/*333*/
     0,	   0,	2,   1,  25,	0,   0,	 0,   0, {1,1}	,  1},
-{"some filthy rags"		,0x00000000L,	TV_SOFT_ARMOR, '~',/*334*/
+{"some Filthy Rags"		,0x00000000L,	TV_SOFT_ARMOR, '~',/*334*/
     0,	   0,	63,   1,  20,	0,   0,	 1,   0, {0,0}	,  0},
 {"& empty bottle"		,0x00000000L,	 TV_MISC, '!',	/*335*/
     0,	   0,	4,   1,   2,	0,   0,	 0,   0, {1,1}	,  0},
 {"some shards of pottery"	,0x00000000L,	 TV_MISC, '~',	/*336*/
     0,	   0,	5,   1,   5,	0,   0,	 0,   0, {1,1}	,  0},
 {"& Human Skeleton"		,0x00000000L,	 TV_MISC, 's',	/*337*/
-    0,	   0,	7,   1,  50,	0,   0,	 0,   0, {1,1}	,  1},
+    0,	   0,	7,   1,  60,	0,   0,	 0,   0, {1,1}	,  1},
 {"& Dwarf Skeleton"		,0x00000000L,	 TV_MISC, 's',	/*338*/
-    0,	   0,	8,   1,  60,	0,   0,	 0,   0, {1,1}	,  1},
+    0,	   0,	8,   1,  50,	0,   0,	 0,   0, {1,1}	,  1},
 {"& Elf Skeleton"		,0x00000000L,	 TV_MISC, 's',	/*339*/
     0,	   0,	9,   1,  40,	0,   0,	 0,   0, {1,1}	,  1},
 {"& Gnome Skeleton"		,0x00000000L,	 TV_MISC, 's',	/*340*/
@@ -767,7 +767,7 @@ treasure_type object_list[MAX_OBJECTS] = {
 {"& Hard Biscuit~"		,0x00000000L,	TV_FOOD, ',',	/*345*/
   500,	   1,	93,   5,   2,	0,   0,	 0,   0, {0,0}	,  0},
 {"& Strip~ of Beef Jerky"	,0x00000000L,	TV_FOOD, ',',	/*346*/
- 1750,	   2,	94,   5,   2,	0,   0,	 0,   0, {0,0}	,  0},
+ 1750,	   2,	94,   5,   4,	0,   0,	 0,   0, {0,0}	,  0},
 {"& Pint~ of Fine Ale"		,0x00000000L,	TV_FOOD, ',',	/*347*/
   500,	   1,	95,   3,  10,	0,   0,	 0,   0, {0,0}	,  0},
 {"& Pint~ of Fine Wine"		,0x00000000L,	TV_FOOD, ',',	/*348*/
@@ -806,7 +806,7 @@ treasure_type object_list[MAX_OBJECTS] = {
  7500,	  35,	0,   1,  50,	0,   0,	 0,   0, {1,1}	,  1},
 {"& Wooden Torch~"		,0x00000000L,	TV_LIGHT, '~',	/*365*/
  4000,	   2, 192,   5,  30,	0,   0,	 0,   0, {1,1}	,  1},
-{"& Flask~ of oil"		,0x00040000L,	TV_FLASK, '!',	/*366*/
+{"& Flask~ of Oil"		,0x00040000L,	TV_FLASK, '!',	/*366*/
  7500,	   3,	64,   5,  10,	0,   0,	 0,   0, {2,6}	,  1},
 /* end store items */
 /* start doors */
@@ -887,8 +887,8 @@ treasure_type object_list[MAX_OBJECTS] = {
 {"some rubble"			,0x00000000L, TV_RUBBLE, ':',	/* 396 */
     0,	   0,	1,   1,   0,	0,   0,	 0,   0, {0,0}	,  0},
 /* mush */
-{"& pint~ of fine grade mush"	,0x00000000L, TV_FOOD, ',',	/* 397 */
- 1500,	   0,  97,   1,   1,   0,   0,   0,   0, {1,1}  ,  1},
+{"& Pint~ of Fine Grade Mush"	,0x00000000L, TV_FOOD, ',',	/* 397 */
+ 1500,	   1,  97,   1,   1,   0,   0,   0,   0, {1,1}  ,  1},
 /* Special trap	*/
 {"a strange rune"		,0x00000000L, TV_VIS_TRAP, '^',	/* 398 */
     0,	   0,	99,   1,   0,	0,   0,	 0,   0, {0,0}	, 10},

@@ -34,6 +34,7 @@ char *index();
 
 #if defined(LINT_ARGS)
 static void prt_lnum(char *, int32, int, int);
+static void prt_7lnum(char *, int32, int, int);
 static void prt_num(char *, int, int, int);
 static void prt_long(int32, int, int);
 static void prt_int(int, int, int);
@@ -283,6 +284,18 @@ int row, column;
   vtype out_val;
 
   (void) sprintf(out_val, "%s: %6ld", header, num);
+  put_buffer(out_val, row, column);
+}
+
+/* Print long number (7 digits of space) with header at given row, column */
+static void prt_7lnum(header, num, row, column)
+char *header;
+int32 num;
+int row, column;
+{
+  vtype out_val;
+
+  (void) sprintf(out_val, "%s: %7ld", header, num);
   put_buffer(out_val, row, column);
 }
 
@@ -1037,15 +1050,15 @@ void put_misc2()
   register struct misc *m_ptr;
 
   m_ptr = &py.misc;
-  prt_num("Level      ", (int)m_ptr->lev, 9, 29);
-  prt_lnum("Experience ", m_ptr->exp, 10, 29);
-  prt_lnum("Max Exp    ", m_ptr->max_exp, 11, 29);
-  if (m_ptr->lev == MAX_PLAYER_LEVEL)
-    prt ("Exp to Adv.: ******", 12, 29);
+  prt_7lnum("Level      ", (int32)m_ptr->lev, 9, 28);
+  prt_7lnum("Experience ", m_ptr->exp, 10, 28);
+  prt_7lnum("Max Exp    ", m_ptr->max_exp, 11, 28);
+  if (m_ptr->lev >= MAX_PLAYER_LEVEL)
+    prt ("Exp to Adv.: *******", 12, 28);
   else
-    prt_lnum("Exp to Adv.", (int32)(player_exp[m_ptr->lev-1]
-				    * m_ptr->expfact / 100), 12, 29);
-  prt_lnum("Gold       ", m_ptr->au, 13, 29);
+    prt_7lnum("Exp to Adv.", (int32)(player_exp[m_ptr->lev-1]
+				    * m_ptr->expfact / 100), 12, 28);
+  prt_7lnum("Gold       ", m_ptr->au, 13, 28);
   prt_num("Max Hit Points ", m_ptr->mhp, 9, 52);
   prt_num("Cur Hit Points ", m_ptr->chp, 10, 52);
   prt_num("Max Mana       ", m_ptr->mana, 11, 52);

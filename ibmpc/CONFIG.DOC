@@ -265,8 +265,8 @@ need to use this option and you can safely ignore the rest of this
 section.
 
 The ANSI option takes three optional arguments:  check_ansi, move_opt and
-use_tgoto.  If no arguments aren't given, they are assumed to be Y (yes),
-Y and N (no), respectively.  The usage is
+use_tgoto.  If no arguments are given, they are assumed to be Y (yes), Y,
+and N (no), respectively.  The usage is
 
      ANSI [ check_ansi [ move_opt [ use_tgoto ] ] ]
 

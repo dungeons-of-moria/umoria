@@ -28,9 +28,9 @@ some of the system defines set up there.
 #endif
 
 /* Current version number of Moria				*/
-#define CUR_VERSION_MAJ 5 /* version 5.5.1 */
+#define CUR_VERSION_MAJ 5 /* version 5.5.2 */
 #define CUR_VERSION_MIN 5
-#define PATCH_LEVEL 1
+#define PATCH_LEVEL 2
 
 #ifndef TRUE
 #define TRUE 1

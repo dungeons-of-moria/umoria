@@ -399,3 +399,29 @@ fix more lint errors
 util/mergemem: code from Eric Bazin to merge monster memories
 *: changed all copyright dates to 1994
 released version 5.5.1
+---------- 7/5
+death.c: || !defined(APOLLO) should be &&
+---------- 7/11
+store2.c: get_haggle, changed %ld back to %d since variable is 16 bits
+---------- 7/20
+treasure.c: fixed many inconsistencies, mostly prices and names
+misc2.c: magic_treasure(), fixed values of SU and SA, which weren't
+	changed when see invisible was moved from SA to SU; also changed
+	magical bonuses for these weapons
+store2.c: increase_insults(), don't clear out haggling record if player
+	is thrown out (it might be worse than zero), just penalize as
+	for bad bargain 
+---------- 7/21
+treasure.c: fixed a few more inconsistencies with items
+files.c, misc32.c: file_character(), put_misc2(), don't print "Exp to
+	Adv" if over max_level (i.e., winner) 
+files.c: file_character(), leave enough space for printing 8-digit
+	experience points 
+misc3.c: put_misc2(), make display consistent with above change
+misc3.c: new function prt_8lnum(), print a long variable in 8 digits of
+	space, needed by revised put_misc2() above
+death.c: need flock hack for HPUX
+io.c: #include <termio.h> for HPUX was inside #if 0
+ibmpc/*: fix several typos in PC-specific files, also one in config.h
+changed version to 5.5.2
+released version 5.5.2

@@ -373,8 +373,7 @@ int store_num;
     {
       prt_comment4();
       s_ptr->insult_cur = 0;
-      s_ptr->good_buy = 0;
-      s_ptr->bad_buy = 0;
+      s_ptr->bad_buy++;
       s_ptr->store_open = turn + 2500 + randint(2500);
       increase = TRUE;
     }
@@ -436,7 +435,7 @@ int num_offer;
       prt(comment, 0, 0);
       if (num_offer && last_store_inc != 0)
 	{
-	  (void) sprintf (default_offer, "[%c%ld] ",
+	  (void) sprintf (default_offer, "[%c%d] ",
 			  (last_store_inc < 0) ? '-' : '+',
 			  abs (last_store_inc));
 	  prt (default_offer, 0, orig_clen);

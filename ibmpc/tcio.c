@@ -7,7 +7,8 @@
    included in all such copies. */
 
 /* This I/O module doesn't need PCcurses.  You may also need to make some
-   changes to ms_misc.c.  */
+   changes to ms_misc.c; in particular, you need to comment out the #include
+   of curses.h. */
 
 #include <alloc.h>  /* malloc() */
 #include <ctype.h>

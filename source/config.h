@@ -229,7 +229,7 @@ some of the system defines set up here.
 
 /* For the ANDREW distributed file system, define this to ensure that
    the program is secure with respect to the setuid code, this prohibits
-   inferior shells.  It also does not relinquish setuid priviledges at the
+   inferior shells.  It also does not relinquish setuid privileges at the
    start, but instead calls the ANDREW library routines bePlayer(), beGames(),
    and Authenticate().  */
 /* #define SECURE */

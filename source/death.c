@@ -166,7 +166,7 @@ char *in_str;
 
 
 #ifndef __TURBOC__
-#if (defined(USG) || defined(atarist)) && !defined(VMS)
+#if (defined(USG) || defined(atarist) || defined(HPUX)) && !defined(VMS)
 #if !defined(AMIGA) && !defined(MAC) && !defined(ATARIST_TC)
 
 #include <sys/stat.h>
@@ -848,7 +848,7 @@ are not saved.");
 	}
     }
 
-#if !defined(VMS) && !defined(MSDOS) && !defined(AMIGA) && !defined(MAC) || !defined(APOLLO)
+#if !defined(VMS) && !defined(MSDOS) && !defined(AMIGA) && !defined(MAC) && !defined(APOLLO)
 #ifdef ATARIST_TC
   /* Flock never called for Atari ST with TC.  */
 #else

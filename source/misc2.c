@@ -166,10 +166,10 @@ int x, level;
 		break;
 	      case 3: case 4:	 /* Slay Animal  */
 		t_ptr->flags |= TR_SLAY_ANIMAL;
-		t_ptr->tohit += 3;
-		t_ptr->todam += 3;
+		t_ptr->tohit += 2;
+		t_ptr->todam += 2;
 		t_ptr->name2 = SN_SA;
-		t_ptr->cost += 5000;
+		t_ptr->cost += 3000;
 		break;
 	      case 5: case 6:	/* Slay Dragon	 */
 		t_ptr->flags |= TR_SLAY_DRAGON;
@@ -191,10 +191,10 @@ int x, level;
 #else
 		t_ptr->flags |= (TR_SEE_INVIS|TR_SLAY_UNDEAD);
 #endif
-		t_ptr->tohit += 2;
-		t_ptr->todam += 2;
+		t_ptr->tohit += 3;
+		t_ptr->todam += 3;
 		t_ptr->name2 = SN_SU;
-		t_ptr->cost += 3000;
+		t_ptr->cost += 5000;
 		break;
 	      case 11: case 12: case 13:   /* Flame Tongue  */
 #ifdef ATARIST_MWC

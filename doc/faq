@@ -1,5 +1,6 @@
 Frequently Asked Questions for rec.games.roguelike.moria
-Last changes: 6/25/94 (Moria 5.5.1) 
+Last changes: 7/21/94 (Moria 5.5.2) 
+              6/25/94 (Moria 5.5.1)
               6/21/94 (changed RTFM archive name)
 
 First, a general guideline for posters.  When you post any question
@@ -113,13 +114,13 @@ transferring the files.  KSU has both color and monochrome executables
 for the IBM PC.  European users can also get Mac binaries from jyu.fi,
 in a file /maclib/game/moria.sit.bin.
 
-/pub/Games/Moria/source/um5.5.1.tar.Z 
+/pub/Games/Moria/source/um5.5.2.tar.Z 
 A compressed tar file containing the entire source, for use on any
 system; if you have tar on your system, this is probably the file that
 you want.  (If you don't have compress, you can FTP it from ftp.uu.net;
 it is compress.tar.)  This file must be transferred in binary mode; type
 "binary" before getting the file.  Once you have the tar.Z file, type
-"zcat um5.5.1.tar.Z | tar xf -" to extract the files, and read the README
+"zcat um5.5.2.tar.Z | tar xf -" to extract the files, and read the README
 files for help in installing.
 
 /pub/Games/Moria/pc/src/mor55src.zip
@@ -274,12 +275,13 @@ version?  Is it compatible?
 
 Moria versions:
 
-Umoria 5.5.1: This is the current version of Umoria.  It will accept
+Umoria 5.5.2: This is the current version of Umoria.  It will accept
 characters from all Umoria 5.x versions.
 
-Umoria 5.3.1-5.5.0: These are essentially identical to 5.5.1, and
-compatible with it, although 5.5.1 fixes a few bugs, and there have been
-a few minor changes.
+Umoria 5.3.1-5.5.1: These are essentially identical to 5.5.2, and
+compatible with it, although 5.5.2 fixes a few bugs, and there have been
+a few minor changes.  Upgrading from 5.5.1 to 5.5.2 is probably not
+necessary.
 
 Umoria 5.2.2/5.3.0: These are in good condition, and compatible with the
 current version.  One bug: don't rest more than 10,000 turns in place,
@@ -632,8 +634,8 @@ haggling with a simple change.  Here is the change you would need to make.
 In the source file store1.c, this is the routine for determining whether
 you need to haggle.  You can change the function, or simply change the
 return(flagnoneed) to return(TRUE) to eliminate all haggling.  The code
-here is from version 5.5.1; the text of the function is slightly different
-in earlier versions.
+here is from versions 5.5.1 and 5.5.2; the text of the function is
+slightly different in earlier versions.
 
 int noneedtobargain(store_num, minprice)
 int store_num;
