@@ -21,8 +21,9 @@
 
           V  - View scoreboard.
                This command will display the contents of the score board on
-               the  screen.   On  a multiuser system, typing `V' again will
-               show only those scores from the score board that are yours.
+               the screen.  On a multiuser system,  typing  `V'  the  first
+               time  will  show only those scores from the score board that
+               are yours, and typing `V' again will show all users' scores.
 
           a <Dir> - Aim a wand. {z - zap}
                Wands must be aimed in a direction to be  used.   Wands  are

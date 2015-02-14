@@ -1,5 +1,5 @@
                          *********************
-                         **   Umoria 5.5    **
+                         **   Umoria 5.6    **
                          *********************
                  Copyright (c) 1985 Robert Alan Koeneke
                    Copyright (c) 1989-94 James E. Wilson
@@ -7,12 +7,16 @@
 Programmers : Robert Alan Koeneke / University of Oklahoma
               Jimmey Wayne Todd  / University of Oklahoma
 UNIX Port : James E. Wilson    / Cygnus Support
-Version 5.5 : David J. Grabiner / Harvard University
+Versions 5.5-5.6 : David J. Grabiner 
 
-Please send bug reports to grabiner@math.harvard.edu or to the USENET
+Umoria 5.6 is free software, and you are welcome to distribute it
+under certain conditions; for details, type control-V after starting a
+character.  
+Umoria 5.6 comes with ABSOLUTELY NO WARRANTY; for details,
+type control-V and view sections 15-17 of the License.
+
+Please send bug reports to grabiner@alumni.princeton.edu or to the USENET
 newsgroup rec.games.roguelike.moria.
 
-Please read the file doc/FEATURES.NEW.  Note that you can now inscribe
-an item with a single digit, and refer to it by that digit when it is in
-your inventory.
+Moria 4.8x users, please read doc/FEATURES.NEW for information on changes.
 

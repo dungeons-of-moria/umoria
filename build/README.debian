@@ -1,0 +1,23 @@
+moria for DEBIAN
+----------------------
+
+NOTE: Although the package name is "moria" this is actually "umoria 5.5.2",
+which is the UNIX port of moria.
+
+moria is a single player roguelike game that has been around for quite a
+while, and is the predecessor of variants such as angband.  It features
+scrolling maps, and an infinite (constantly regenerated) dungeon.
+
+Moria's dungeons are populated by monsters, some of which are inspired by
+J.R.R. Tolkien's books.  The goal of the game is to find and kill the
+Balrog, whereupon the player is crowned King.  Your player can be created
+from a combination of 8 races (human, half-elf, elf, halfling, gnome,
+dwarf, half-orc, half-troll) and 6 classes (warrior, mage, priest, rogue,
+ranger, paladin), and is measured by 6 attributes (strength, dexterity,
+intelligence, wisdom, constitution, and charisma).
+
+See http://math.la.asu.edu/~grabiner/moria.html for more details about
+moria, and sites like http://www.mo.himolde.no/~knan/roguelike/index.html or
+http://www.skoardy.demon.co.uk/rlnews/ for generic roguelike info.
+
+Rene Weber <rene_debmaint@elvenlord.com>, Sat, 14 Oct 2000 10:25:23 -0700

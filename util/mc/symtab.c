@@ -1,7 +1,27 @@
 /* util/mc/st_symtab.c: routines for managing symbol tables
  *
  * Copyright (c) 1989 by Joseph Hall.
- * All rights reserved except as stated below.
+ 
+   This file is part of Umoria.
+
+   Umoria is free software; you can redistribute it and/or modify 
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation, either version 3 of the License, or
+   (at your option) any later version.
+
+   Umoria is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of 
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU Genral Public License for more details.
+
+   You should have received a copy of the GNU General Public License 
+   along with Umoria.  If not, see <http://www.gnu.org/licenses/>. */
+
+/* This file was also released as part of an independent program, and
+   may be redistributed and/or modified under the authors' original terms,
+   which are given below.*/
+
+/* All rights reserved except as stated below.
  *
  * Jim Wilson and any other holders of copyright on substantial portions
  * of Moria are granted rights to use, modify, and distribute this program

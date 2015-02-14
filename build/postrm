@@ -1,0 +1,14 @@
+#!/bin/sh -e
+
+# Shamelessly stolen from Joey Hess' bsdgames-2.12-9
+
+SCOREFILES="
+	/var/games/moria/scores"
+
+# Remove high score files on purge.
+if [ "$1" = "purge" ]; then
+	rm -f $SCOREFILES
+	rmdir /var/games/moria /var/games 2>/dev/null || true 
+fi
+
+#DEBHELPER#

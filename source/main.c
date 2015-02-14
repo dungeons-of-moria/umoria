@@ -1,13 +1,26 @@
 /* UNIX Moria Version 5.x
    source/main.c: initialization, main() function and main loop
-   Copyright (c) 1989-94 James E. Wilson, Robert A. Koeneke
+   Copyright (C) 1989-2008 James E. Wilson, Robert A. Koeneke, 
+                           David J. Grabiner
 
-   This software may be copied and distributed for educational, research, and
-   not for profit purposes provided that this copyright and statement are
-   included in all such copies. */
+   This file is part of Umoria.
+
+   Umoria is free software; you can redistribute it and/or modify 
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation, either version 3 of the License, or
+   (at your option) any later version.
+
+   Umoria is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of 
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+
+   You should have received a copy of the GNU General Public License 
+   along with Umoria.  If not, see <http://www.gnu.org/licenses/>. */
 
 
-/* Original copyright message follows. */
+/* Original copyright message follows; included for historical reasons
+   but no longer valid. */
 
 /* Moria Version 4.8	COPYRIGHT (c) Robert Alan Koeneke		*/
 /*									 */
@@ -44,21 +57,16 @@
 /*                                 Clemson University                    */
 /*                                 cg377170@eng.clemson.edu              */
 /*									 */
-/*	 Version 5.5		 : David Grabiner			 */
-/*				   Harvard University			 */
-/*				   grabiner@math.harvard.edu		 */
+/*	 Version 5.6		 : David Grabiner			 */
+/*                                 grabiner@alumni.princeton.edu         */
 /*                                                                       */
-/*	 Moria may be copied and modified freely as long as the above	 */
-/*	 credits are retained.	No one who-so-ever may sell or market	 */
-/*	 this software in any form without the expressed written consent */
-/*	 of the author Robert Alan Koeneke.				 */
-/*									 */
 
 #ifdef __TURBOC__
 #include	<io.h>
+#endif /* __TURBOC__ */
+
 #include	<stdio.h>
 #include	<stdlib.h>
-#endif /* __TURBOC__ */
  
 #include "config.h"
 #include "constant.h"

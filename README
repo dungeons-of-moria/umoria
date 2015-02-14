@@ -1,12 +1,25 @@
+   Umoria is free software; you can redistribute it and/or modify 
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation, either version 3 of the License, or
+   (at your option) any later version.
 
-This is the source for Umoria 5.5.2, a dungeon exploration game.  This
-is my second major release of the game.  These sources have been
-compiled successfully at least once in the following environments: UNIX
-(4.2 BSD, 4.3 BSD, SYS V, Xenix, HP-UX, and many similar systems),
-IBM-PC (MSC 5.0, Turbo C 2.0), Mac (MPW 3.0, Think C 4.0), Atari ST
-(MWC, GCC, TC 2.0), Amiga (Aztec C 5.0), and VMS.  The following ports
-have been added but not tested other than by the people who sent them:
-386BSD, HP Apollo, Linux, Lattice C.
+   Umoria is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of 
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+
+   You should have received a copy of the GNU General Public License 
+   along with Umoria, in the files/COPYING file.  If not, see 
+   <http://www.gnu.org/licenses/>. 
+
+This is the source for Umoria 5.6, a dungeon exploration game.  This
+is based on James Wilson's second major release of the game.  These
+sources have been compiled successfully at least once in the following
+environments: UNIX (4.2 BSD, 4.3 BSD, SYS V, Xenix, HP-UX, and many
+similar systems), IBM-PC (MSC 5.0, Turbo C 2.0), Mac (MPW 3.0, Think C
+4.0), Atari ST (MWC, GCC, TC 2.0), Amiga (Aztec C 5.0), and VMS.  The
+following ports have been added but not tested other than by the
+people who sent them: 386BSD, HP Apollo, Linux, Lattice C.
 
 I consider these to be production sources.  They should work without trouble
 on all of the systems mentioned above.  Some minor bugs must surely remain,
@@ -29,11 +42,8 @@ I would also appreciate receiving a copy of your changes, so that good ideas
 can be added back into my version.
 
 David Grabiner
-Department of Mathematics
-Harvard University
-Cambridge, MA 02138
 
-Internet electronic mail addess: grabiner@math.harvard.edu
+Internet electronic mail addess: grabiner@alumni.princeton.edu
 
 Jim Wilson
 856 University Ave.

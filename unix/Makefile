@@ -1,22 +1,42 @@
+# Edited for Debian GNU/Linux.
+DESTDIR =
+
+# DEBIAN NOTE: This file diverges significantly from the original Makefile
+#   for obvious reasons.  The original Makefile is Makefile.unix and should
+#   be used on non-Linux systems.
+
+
 # BINDIR is the directory where the moria binary while be put
 # LIBDIR is where the other files (score, news, hours) will be put
 # LIBDIR must be the same directory defined in config.h
+# Edited for Debian GNU/Linux: Next 4 lines are for the FHS
+# Edited for Debian GNU/Linux: LIBDIR is retired
+# Edited for Debian GNU/Linux: ETCDIR is where the hours file is kept
+# Edited for Debian GNU/Linux: LIBSTATICDIR is where help files are kept
+# Edited for Debian GNU/Linux: LIBVARDIR is where the score file is kept
 # OWNER is who you want the game to be chown to.
 # GROUP is who you wnat the game to be chgrp to.
-BINDIR = /home/zariski/grabiner/moria
-LIBDIR = /home/zariski/grabiner/moria/files
-OWNER = grabiner
-GROUP = grad
+BINDIR = $(DESTDIR)/usr/games
+ETCDIR = $(DESTDIR)/etc
+LIBSTATICDIR = $(DESTDIR)/usr/lib/games/moria
+LIBVARDIR = $(DESTDIR)/var/games/moria
+OWNER = root
+GROUP = games
 
 # For testing and debugging the program, it is best to use this line.
 # CFLAGS = -g
 # For playing the game, you may want to use this line
-CFLAGS = -O
+CFLAGS = -O2
+
+# Debian GNU/Linux addition
+ifneq (,$(findstring debug,$(DEB_BUILD_OPTIONS)))
+CFLAGS += -g
+endif
 
 # For BSD Systems
-CURSES = -lcurses -ltermcap
+# CURSES = -lcurses -ltermcap
 # For SYS V Systems
-# CURSES = -lcurses
+CURSES = -lcurses
 # For XENIX, some XENIX systems may need -ltinfo
 # CURSES = -ltcap -ltermcap -lx
 
@@ -42,7 +62,7 @@ OBJS = main.o misc1.o misc2.o misc3.o misc4.o store1.o files.o io.o \
 	moria3.o moria4.o monsters.o treasure.o variable.o rnd.o recall.o \
 	unix.o player.o tables.o
 
-LIBFILES = hours news origcmds.hlp owizcmds.hlp roglcmds.hlp rwizcmds.hlp \
+LIBSTATICFILES = news origcmds.hlp owizcmds.hlp roglcmds.hlp rwizcmds.hlp \
 	version.hlp welcome.hlp
 
 moria : $(OBJS)
@@ -62,21 +82,26 @@ TAGS : $(SRCS)
 install:
 	chmod 755 $(BINDIR)
 	cp moria $(BINDIR)
-	chmod 4711 $(BINDIR)/moria
-	chmod 711 $(LIBDIR)
-	(cd files; cp $(LIBFILES) $(LIBDIR))
-	(cd $(LIBDIR); chmod 444 $(LIBFILES))
-	(cd $(LIBDIR); touch scores; chmod 644 scores)
 	chown $(OWNER) $(BINDIR)/moria
 	chgrp $(GROUP) $(BINDIR)/moria
-	(cd $(LIBDIR); chown $(OWNER) $(LIBFILES) scores)
-	(cd $(LIBDIR); chgrp $(GROUP) $(LIBFILES) scores)
+	chmod 2755 $(BINDIR)/moria
+	chmod 755 $(LIBSTATICDIR)
+	# No longer chmod 755 $(LIBVARDIR)
+	(cd files; cp $(LIBSTATICFILES) $(LIBSTATICDIR))
+	(cd $(LIBSTATICDIR); chmod 444 $(LIBSTATICFILES))
+	# No longer (cd $(LIBVARDIR); touch scores; chmod 664 scores)
+	# No longer (cd $(LIBVARDIR); chown $(OWNER) . scores; chgrp $(GROUP) . scores)
+	(cd files; cp hours $(ETCDIR)/moria-hours)
+	chmod 644 $(ETCDIR)/moria-hours
+	(cd $(LIBSTATICDIR); chown $(OWNER) $(LIBSTATICFILES))
+	(cd $(LIBSTATICDIR); chgrp $(GROUP) $(LIBSTATICFILES))
 # If you are short on disk space, or aren't interested in debugging moria.
-#	strip $(BINDIR)/moria
+	# This is handled by dh_strip, so let's not override its' decision.
+	# strip $(BINDIR)/moria
 
 clean:
 	rm -r *.o
-	rm -i moria
+	rm -f moria
 
 create.o: constant.h types.h externs.h config.h
 creature.o: constant.h types.h externs.h config.h

@@ -1,0 +1,2 @@
+?package(moria):needs=text section=Games/Adventure\
+  title="Moria" command="/usr/games/moria"

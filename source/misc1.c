@@ -1,19 +1,29 @@
 /* source/misc1.c: misc utility and initialization code, magic objects code
 
-   Copyright (c) 1989-94 James E. Wilson, Robert A. Koeneke
+   Copyright (C) 1989-2008 James E. Wilson, Robert A. Koeneke, 
+                           David J. Grabiner
 
-   This software may be copied and distributed for educational, research, and
-   not for profit purposes provided that this copyright and statement are
-   included in all such copies. */
+   This file is part of Umoria.
+
+   Umoria is free software; you can redistribute it and/or modify 
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation, either version 3 of the License, or
+   (at your option) any later version.
+
+   Umoria is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of 
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+
+   You should have received a copy of the GNU General Public License 
+   along with Umoria.  If not, see <http://www.gnu.org/licenses/>. */
 
 #include "config.h"
 #include "constant.h"
 #include "types.h"
 #include "externs.h"
 
-#ifdef __TURBOC__
 #include	<stdlib.h>
-#endif
 
 #ifdef Pyramid
 #include <sys/time.h>

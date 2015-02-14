@@ -1,10 +1,23 @@
 /* source/config.h: configuration definitions
 
-   Copyright (c) 1989-94 James E. Wilson
+   Copyright (C) 1989-2008 James E. Wilson, Robert A. Koeneke, 
+                           David J. Grabiner
 
-   This software may be copied and distributed for educational, research, and
-   not for profit purposes provided that this copyright and statement are
-   included in all such copies. */
+   This file is part of Umoria.
+
+   Umoria is free software; you can redistribute it and/or modify 
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation, either version 3 of the License, or
+   (at your option) any later version.
+
+   Umoria is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of 
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+
+   You should have received a copy of the GNU General Public License 
+   along with Umoria.  If not, see <http://www.gnu.org/licenses/>. */
+
 
 #define CONFIG_H_INCLUDED
 #ifdef CONSTANT_H_INCLUDED
@@ -14,7 +27,7 @@ some of the system defines set up here.
 
 /* Person to bother if something goes wrong.  */
 /* Recompile files.c and misc2.c if this changes.  */
-#define WIZARD	"David Grabiner"
+#define WIZARD	"David Grabiner <grabiner@alumni.princeton.edu>"
 /* The wizard password and wizard uid are no longer used.  */
 
 
@@ -25,6 +38,10 @@ some of the system defines set up here.
 /* Unless you're on a system, like an HP Apollo, that doesn't let
    more than one machine access a file at a time; then define this.  */
 /* #define APOLLO */
+
+/* If compiling on Debian (also works on other versions of Linux), 
+   define this. */
+#define DEBIAN_LINUX
 
 /* If you are compiling on an ultrix/4.2BSD/Dynix/etc. version of UNIX,
    define this.  It is not needed for SUNs.  */
@@ -92,6 +109,7 @@ some of the system defines set up here.
 #define MORIA_SAV	moriasav
 #define MORIA_TOP	moriatop
 #define MORIA_MOR	"news"
+#define MORIA_GPL	"COPYING"
 #define MORIA_TOP_NAME	"scores"
 #define MORIA_SAV_NAME	"MORIA.SAV"
 #define MORIA_CNF_NAME	"MORIA.CNF"
@@ -108,6 +126,7 @@ some of the system defines set up here.
 /* These files are concatenated into the data fork of the app */
 /* The names are retained to find the appropriate text */
 #define MORIA_MOR	"news"
+#define MORIA_GPL	"COPYING"
 #define MORIA_HELP	"roglcmds.hlp"
 #define MORIA_ORIG_HELP	"origcmds.hlp"
 #define MORIA_WIZ_HELP	"rwizcmds.hlp"
@@ -145,6 +164,7 @@ some of the system defines set up here.
    they are *.DAT files or anything else equally wierd. */
 #define MORIA_HOU	"moria:hours."
 #define MORIA_MOR	"moria:news."
+#define MORIA_GPL	"moria:COPYING."
 #define MORIA_TOP	"moria:scores."
 #define MORIA_HELP	"moria:roglcmds.hlp"
 #define MORIA_ORIG_HELP "moria:origcmds.hlp"
@@ -159,6 +179,7 @@ some of the system defines set up here.
 #define MORIA_SAV 	"moria.sav"
 #define MORIA_HOU	"moria:hours"
 #define MORIA_MOR	"moria:news"
+#define MORIA_GPL	"moria:COPYING"
 #define MORIA_TOP	"moria:scores"
 #define MORIA_HELP	"moria:roglcmds.hlp"
 #define MORIA_ORIG_HELP "moria:origcmds.hlp"
@@ -173,6 +194,7 @@ some of the system defines set up here.
 #define MORIA_SAV	"moria.sav"
 #define MORIA_HOU	"files\\hours"
 #define MORIA_MOR	"files\\news"
+#define MORIA_GPL	"files\\COPYING"
 #define MORIA_TOP	"files\\scores"
 #define MORIA_HELP	"files\\roglcmds.hlp"
 #define MORIA_ORIG_HELP	"files\\origcmds.hlp"
@@ -188,6 +210,7 @@ some of the system defines set up here.
 #define MORIA_SAV	"moria.save"
 #define MORIA_HOU	(char *)prefix_file("files/hours")
 #define MORIA_MOR	(char *)prefix_file("files/news")
+#define MORIA_GPL	(char *)prefix_file("files/COPYING")
 #define MORIA_TOP	(char *)prefix_file("files/scores")
 #define MORIA_HELP	(char *)prefix_file("files/roglcmds.hlp")
 #define MORIA_ORIG_HELP	(char *)prefix_file("files/origcmds.hlp")
@@ -198,19 +221,38 @@ some of the system defines set up here.
 
 #else
 
-/* This must be unix; change MORIA_LIB as appropriate.  */
-#define MORIA_SAV	"moria.save"
-#define MORIA_LIB(xxx)  "/home/math/grabiner/moria/files/xxx"
-#define MORIA_HOU	MORIA_LIB(hours)
-#define MORIA_MOR	MORIA_LIB(news)
-#define MORIA_TOP	MORIA_LIB(scores)
-#define MORIA_HELP	MORIA_LIB(roglcmds.hlp)
-#define MORIA_ORIG_HELP	MORIA_LIB(origcmds.hlp)
-#define MORIA_WIZ_HELP	MORIA_LIB(rwizcmds.hlp)
-#define MORIA_OWIZ_HELP	MORIA_LIB(owizcmds.hlp)
-#define MORIA_WELCOME	MORIA_LIB(welcome.hlp)
-#define MORIA_VER	MORIA_LIB(version.hlp)
+#if 0
+/* Debian standards for file location */
+/* This must be unix; change file names as appropriate.  */
+#define MORIA_SAV	".moria-save"
+#define MORIA_HOU	"/etc/moria-hours"
+#define MORIA_MOR	"/usr/lib/games/moria/news"
+#define MORIA_GPL	"/usr/lib/games/moria/COPYING"
+#define MORIA_TOP	"/var/games/moria/scores"
+#define MORIA_HELP	"/usr/lib/games/moria/roglcmds.hlp"
+#define MORIA_ORIG_HELP	"/usr/lib/games/moria/origcmds.hlp"
+#define MORIA_WIZ_HELP	"/usr/lib/games/moria/rwizcmds.hlp"
+#define MORIA_OWIZ_HELP	"/usr/lib/games/moria/owizcmds.hlp"
+#define MORIA_WELCOME	"/usr/lib/games/moria/welcome.hlp"
+#define MORIA_VER	"/usr/lib/games/moria/version.hlp"
 
+#else
+
+/* Generic UNIX */
+/* This must be unix; change file names as appropriate.  */
+#define MORIA_SAV	"moria-save"
+#define MORIA_HOU	"/home/dgrabiner/moria-5.6/files/hours"
+#define MORIA_MOR	"/home/dgrabiner/moria-5.6/files/news"
+#define MORIA_GPL	"/home/dgrabiner/moria-5.6/files/COPYING"
+#define MORIA_TOP	"/home/dgrabiner/moria-5.6/files/scores"
+#define MORIA_HELP	"/home/dgrabiner/moria-5.6/files/roglcmds.hlp"
+#define MORIA_ORIG_HELP	"/home/dgrabiner/moria-5.6/files/origcmds.hlp"
+#define MORIA_WIZ_HELP	"/home/dgrabiner/moria-5.6/files/rwizcmds.hlp"
+#define MORIA_OWIZ_HELP	"/home/dgrabiner/moria-5.6/files/owizcmds.hlp"
+#define MORIA_WELCOME	"/home/dgrabiner/moria-5.6/files/welcome.hlp"
+#define MORIA_VER	"/home/dgrabiner/moria-5.6/files/version.hlp"
+
+#endif
 #endif
 #endif
 #endif
@@ -235,13 +277,12 @@ some of the system defines set up here.
 /* #define SECURE */
 
 
-
 /* System dependent defines follow.  You should not need to change anything
    below.  */
 
 #ifdef ATARIST_TC
 #define USG
-#include <stdio.h>	/* Needed for TC ...printf */
+  /* #include <stdio.h>	 Needed for TC ...printf but now universal */
 #endif
 
 #if defined(ATARIST_TC) || defined(ATARIST_MWC)

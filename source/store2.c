@@ -1,15 +1,25 @@
 /* source/store2.c: store code, entering, command interpreter, buying, selling
 
-   Copyright (c) 1989-94 James E. Wilson, Robert A. Koeneke
+   Copyright (C) 1989-2008 James E. Wilson, Robert A. Koeneke, 
+                           David J. Grabiner
 
-   This software may be copied and distributed for educational, research, and
-   not for profit purposes provided that this copyright and statement are
-   included in all such copies. */
+   This file is part of Umoria.
 
-#ifdef __TURBOC__
+   Umoria is free software; you can redistribute it and/or modify 
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation, either version 3 of the License, or
+   (at your option) any later version.
+
+   Umoria is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of 
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+
+   You should have received a copy of the GNU General Public License 
+   along with Umoria.  If not, see <http://www.gnu.org/licenses/>. */
+
 #include	<stdio.h>
 #include	<stdlib.h>
-#endif /* __TURBOC__ */
  
 #include "config.h"
 #include "constant.h"

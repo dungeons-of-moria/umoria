@@ -1,15 +1,24 @@
 /* source/io.c: terminal I/O code, uses the curses package
 
-   Copyright (c) 1989-94 James E. Wilson, Robert A. Koeneke
+   Copyright (C) 1989-2008 James E. Wilson, Robert A. Koeneke, 
+                           David J. Grabiner
 
-   This software may be copied and distributed for educational, research, and
-   not for profit purposes provided that this copyright and statement are
-   included in all such copies. */
+   This file is part of Umoria.
+
+   Umoria is free software; you can redistribute it and/or modify 
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation, either version 3 of the License, or
+   (at your option) any later version.
+
+   Umoria is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of 
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+
+   You should have received a copy of the GNU General Public License 
+   along with Umoria.  If not, see <http://www.gnu.org/licenses/>. */
 
 #include <stdio.h>
-#ifndef STDIO_LOADED
-#define STDIO_LOADED
-#endif
 
 #include "config.h"
 
@@ -46,7 +55,7 @@ char *_procname = "Moria";
 #include <scrnmgr.h>
 #endif
 #else
-#include <curses.h>
+#include <ncurses.h>
 #endif
 #else	/* GEMDOS i.e. Atari ST */
 #include "curses.h"
@@ -118,9 +127,14 @@ typedef struct { int stuff; } fpvmach;
 #endif
 #endif
 
-#ifdef ATARIST_TC
-/* Include this to get prototypes for standard library functions.  */
 #include <stdlib.h>
+
+#ifdef DEBIAN_LINUX
+#include <termios.h>
+#endif
+
+#if defined(unix) || defined(__linux__) || defined(DEBIAN_LINUX)
+#include <unistd.h> /* prototype for execl */ 
 #endif
 
 /* These are included after other includes (particularly curses.h)
@@ -334,7 +348,13 @@ void init_curses()
 #ifdef  __386BSD__
   (void) signal (SIGTSTP, (sig_t)suspend);
 #else
+#ifdef DEBIAN_LINUX
+  /* (void) signal (SIGTSTP, (sig_t)suspend); */
+  /* RENMOD: libc6 defaults to BSD, this expects SYSV */
+  (void) sysv_signal (SIGTSTP, suspend);
+#else
   (void) signal (SIGTSTP, suspend);
+#endif
 #endif
 #endif
 #endif

@@ -8,10 +8,6 @@
 
 #include <stdio.h>
 
-#ifndef STDIO_LOADED
-#define STDIO_LOADED
-#endif
-
 #if 0
 /* moved to externs.h to avoid VMS 'psect' problem */
 #include <errno.h>

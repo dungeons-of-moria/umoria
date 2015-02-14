@@ -1,0 +1,15 @@
+#!/bin/sh -e
+
+SCOREFILES="
+	/var/games/moria/scores"
+
+# If the score file is not extant, touch it into existence.
+for file in $SCOREFILES; do
+	if [ ! -e $file ]; then
+		touch $file
+		chown root.games $file
+		chmod 664 $file
+	fi
+done
+
+#DEBHELPER#

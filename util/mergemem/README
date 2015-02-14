@@ -14,15 +14,22 @@ This package consists in 4 files :
 and this README file.
 
 License :
-You may distribute and/or modify copies of this tool, provided that :
- a) you always include the 4 files composing MMM, and in particular 
-    the reference to there author
- b) you clearely indicate the extent and purpose of the changes.
-I would also appreciate receiving a copy of your changes, so that good
-ideas can be added back into my version.
+ 
+   This file is part of Umoria.
 
+   Umoria is free software; you can redistribute it and/or modify 
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation, either version 3 of the License, or
+   (at your option) any later version.
 
-  
+   Umoria is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of 
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU Genral Public License for more details.
+
+   You should have received a copy of the GNU General Public License 
+   along with Umoria.  If not, see <http://www.gnu.org/licenses/>.
+
 
 The corresponding programs allows to mix the monster memories from
 two character (each one beeing either saved, dead or having quited)

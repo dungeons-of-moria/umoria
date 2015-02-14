@@ -1,0 +1,43 @@
+moria for DEBIAN
+----------------------
+
+*** THE BUILD DIRECTORY IS SUBJECT TO BEING DELETED WHEN MORIA IS BUILT ***
+
+NOTE: Although the package name is "moria" this is actually "umoria 5.5.2",
+which is the UNIX port of moria.
+
+
+SPECIAL NOTE FOR PEOPLE WORKING WITH THE SOURCE
+
+    Do NOT change anything in the moria-5.5.2/build directory (if it exists
+for you).  Read on for rationale.
+
+    Due to the fact that upstream uses a somewhat unusual method of having
+the user make symbolic links depending on what operating system they are
+building, there is a significant oddity to how it is built for Debian.
+
+    The main issue is that dpkg-source, one of the tools for building
+Debian packages (and which is called by dpkg-buildpackage) cannot handle the
+appearance of symbolic links; however, the autobuilders require that the
+links either be present or automatically generated.
+
+    The compromise I have made is that I have written a stub Makefile in the
+main moria directory, which creates a "build" directory (called "build/" by
+default, although customizable in that Makefile) and populates it with the
+required symlinks.  This satisfies the requirements for autobuilders, except
+that the build directory persists after the build is complete so a "rebuild"
+will fail with dpkg-source complaining that there are unrepresentable
+changes in the build directory.  To get around this, I have made a "clean"
+target in my stub makefile which will "rm -f build/", and placed a check in
+debian/rules that exits with an error (and instructions to run make clean)
+if the build directory exists.
+
+    The practical upshot of this is that anything in moria-5.5.2/build
+(where "build" is the build directory as defined in moria-5.5.2/Makefile) is
+subject to (almost) automatic deletion.  If you are modifying the source, do
+NOT do it in the build directory, but rather do it in the src/ and unix/
+directories to which the symlinks point.
+
+*** THE BUILD DIRECTORY IS SUBJECT TO BEING DELETED WHEN MORIA IS BUILT ***
+
+Rene Weber <rene_debmaint@elvenlord.com>, Sun, 12 Nov 2000 12:50:32 -0500

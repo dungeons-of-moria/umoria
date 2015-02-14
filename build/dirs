@@ -1,0 +1,4 @@
+var/games/moria
+usr/lib/games/moria
+etc
+usr/games

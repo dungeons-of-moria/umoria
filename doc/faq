@@ -1,8 +1,9 @@
 Frequently Asked Questions for rec.games.roguelike.moria
-Last changes: 7/21/94 (Moria 5.5.2) 
-              6/25/94 (Moria 5.5.1)
-              6/21/94 (changed RTFM archive name)
 
+Last changes:   6/7/06: (Bug fix for compiling on 64-bit systems)
+		4/21/05 (Color Moria for PC no longer available)
+		2/7/05 (Mac OS X Moria available)
+		
 First, a general guideline for posters.  When you post any question
 related to playing or debugging the game, please give the version
 number, which you can get during the game by pressing "v".
@@ -19,29 +20,46 @@ Many of the answers are only correct for Umoria versions (4.87 and 5.x);
 I don't know much about the other versions of Moria.
 
 Please send any corrections or other suggested questions to me at
-grabiner@math.harvard.edu.
+grabiner@alumni.princeton.edu
 
-A current copy of this FAQ may be obtained by FTP from the RTFM archive,
+The FAQ is now maintained on the Web at
 
-rtfm.mit.edu:/pub/usenet/rec.games.roguelike.moria/rec.games.roguelike.moria_Frequently_Asked_Questions
+<http://remarque.org/~grabiner/moriafaq.html>
+
+A copy of the FAQ as it was last posted may be obtained by FTP from the
+RTFM archive,
+
+ftp://rtfm.mit.edu/pub/usenet/rec.games.roguelike.moria/rec.games.roguelike.moria_Frequently_Asked_Questions
 
 or by using the mailserver on RTFM.  To use the mailserver, send a
 message to mail-server@rtfm.mit.edu containing the line
 "send /pub/usenet/rec.games.roguelike.moria/rec.games.roguelike.moria_Frequently_Asked_Questions"
 
+There is also a WWW page for Moria, with links to the spoilers, newsgroup,
+this FAQ, and the FTP site.  It is
+
+<http://www.ecst.csuchico.edu/~beej/moria/>
+
 The most common questions, asked by both beginners and others:
 
 Q1. How do I get the Moria sources/executables/documentation? 
-(FTP from ftp.cis.ksu.edu; there is also a mailserver.)
+(PC executables are available at
+<http://www3.ns.sympatico.ca/dmswaine/m552-386.zip>, 
+<http://www.geocities.com/lhelgeland/umoria.html>
+Linux source is available at
+<http://packages.debian.org/moria>.
+FreeBSD Moria is at
+<http://www.freebsd.org/cgi/ports.cgi?query=Moria&stype=all>.
+Sources and other executables are on the main archive at
+<ftp://ftp.greyhelm.com/pub/Games/Moria>.) 
 
 Q2. I can't get Moria/Angband set up on my machine; is there a server on
-another machine that I can use?  (Yes; telnet bbs.runet.edu and
-login as bbs.)
+another machine that I can use?  (Yes; telnet://chungkuo.org)
 
 What does this item do?  (Answer is below with the spoilers.)
 
 Why do most winning characters carry several copies of spell books?
-(In case one gets stolen or burned.)
+(In case one gets stolen.)
 
 What does the (-2) in Chain Mail (-2) [14,+2] mean?  (It's a penalty to
 hit, caused by the heavy armor.)
@@ -60,8 +78,8 @@ and get another speed item?  (Yes.)
 Q6. I'm playing Moria version V; how does that compare to the current
 version?  Is it compatible?
 
-Q7. I think I've found a bug; what should I do?  (Report it with the
-version number and system.) 
+Q7. I think I've found a bug; what should I do?  (Check that it isn't
+already known, then report it with the version number and system.) 
 
 Common spoiler requests:
 
@@ -88,23 +106,63 @@ Q16. I don't like haggling; can I change the source code to turn it off?
 
 Q17. How do you create objects in wizard mode?
 
-Q1. How do I get the Moria sources/executables/documentation? 
+Q1. How do I get the Moria sources/executables/documentation?  
 
-The following Moria files are available by anonymous FTP from
-ftp.cis.ksu.edu (IP address 129.130.10.80) or ftp.engg.ksu.edu (IP
-address 129.130.41.83).  They should also be available by gopher from
-gopher.cis.ksu.edu or gopher.engg.ksu.edu, or from the WWW
-server at KSU:
 
-xmosaic http://www.engg.ksu.edu/welcome.html
+A working version of UMoria 5.5.2 is now available for the PC; it's also
+available at the main Moria archive, but this URL is more likely to
+work.
 
-If you don't have FTP access, there is a mailserver which gives access
-to ftp.cis.ksu.edu; see below.  If you can't use the mailserver, see
-further below for a BBS which has the files.  
+http://www3.ns.sympatico.ca/dmswaine/m552-386.zip
+
+A version with a few additional features is available at:
+
+http://www.geocities.com/lhelgeland/umoria.html
+
+Linux sources (designed for Debian, but they also work on Red Hat at
+least) are at
+
+http://packages.debian.org/moria
+
+Sources for FreeBSD are at
+
+http://www.freebsd.org/cgi/ports.cgi?query=Moria&stype=all.
+
+UMoria 5.5.2 is available for Mac OS X (search for "Moria")
+
+http://fink.sourceforge.net
+
+Umoria 5.5.2 has been ported to the PalmOS at
+
+http://roguelike-palm.sourceforge.net/kMoria/index.php
+
+The main Moria archive has moved to a new home; it makes files available
+by anoymous FTP:
+
+ftp://ftp.greyhelm.com/pub/Games/Moria
+
+Three near-complete mirrors are available.
+
+ftp://ftp.funet.fi/pub/unix/games/moria/
+ftp://ftp.planetmirror.com/pub/roguelike/moria/ (in Australia)
+(The third is a slow connection; please do not use it if you can get to
+another site.)
+http://www.piratehaven.org/~beej/moria/mirror/Games/Moria/
+
+Use the pathnames listed below, ignoring the leading /pub/Games/Moria.
+Some files on the mirrors may be compressed with different compression
+programs such as gzip.
+
+The documentation, including the official manual and this FAQ, is
+available at
+http://www2.ecst.csuchico.edu/~beej/moria/
 
 The sources for Umoria 5.5.0 were also posted to comp.sources.games, so
 they should be available (in compressed shar form) on any site which
 archives comp.sources.games, such as ftp.uu.net.
+
+The following paths give the structure of the Moria archive; they will
+probably be maintained when the archive moves somewhere else.
 
 /pub/Games/Moria/[machine name]
 Executables for the Amiga, Atari ST, IBM PC, and Mac; look at the README
@@ -114,17 +172,29 @@ transferring the files.  KSU has both color and monochrome executables
 for the IBM PC.  European users can also get Mac binaries from jyu.fi,
 in a file /maclib/game/moria.sit.bin.
 
+/pub/Games/Moria/pc/80386-5.5.2/m552-386.zip
+This is the 5.5.2 executable for the PC.
+
 /pub/Games/Moria/source/um5.5.2.tar.Z 
 A compressed tar file containing the entire source, for use on any
 system; if you have tar on your system, this is probably the file that
-you want.  (If you don't have compress, you can FTP it from ftp.uu.net;
-it is compress.tar.)  This file must be transferred in binary mode; type
-"binary" before getting the file.  Once you have the tar.Z file, type
-"zcat um5.5.2.tar.Z | tar xf -" to extract the files, and read the README
-files for help in installing.
+you want.  (If you don't have compress, you can FTP it as well; it is
+/pub/Games/Moria/compress.tar.)  This file must be transferred in binary
+mode; type "binary" before getting the file.  Once you have the tar.Z
+file, type "zcat um5.5.2.tar.Z | tar xf -" to extract the files, and
+read the README files for help in installing.
 
-/pub/Games/Moria/pc/src/mor55src.zip
+/pub/Games/Moria/pc/zip-arc/mor55src.zip
 A ZIP file containing the source.
+
+/pub/Games/Moria/pc/zip-arc/wmoria10.zip_exec
+/pub/Games/Moria/pc/zip-arc/wmoria10.zip_source
+Source and Modula-2 executables for Wmoria 1.0, a port of Umoria 5.5.0 to
+Windows 3.1.
+
+/pub/Games/Moria/patches
+Patches for upgrading Moria from one version the the next version, and
+for modifications.
 
 /pub/Games/Moria/XMoria/xm1.07.tar.Z
 The source to Moria for X Windows.
@@ -146,82 +216,37 @@ The source distribution, in Pascal, for BOSS.
 
 /pub/Games/Moria/vms
 The source discribution, in Pascal, for VMS Moria 4.8 and 5.0.  Umoria
-5.x will also work on VMS machines.
+5.x will also work on VMS machines.  (Note that VMS Moria 5.0 is not a
+version of Umoria 5.x.)
 
 /pub/Games/Moria/unofficial
-Other unofficial modifications of Moria, including the druid version for
-the PC, and the sources for Morgul and Pmoria.
+Other unofficial modifications of Moria, including JAMoria, the druid
+version for the PC, and the sources for Morgul and Pmoria.
+
+/pub/Games/Moria/utils/calchits.shar.Z
+A program for calculating the average damage done with various weapons,
+allowing you to compare them.
 
 VMS sources for Imoria are available on ubvms.cc.buffalo.edu, in a
 directory /maslib/games/imoria.  VMS Moria 4.8 and 5.0 sources are also
 there.
 
-Mailserver instructions (from Karl Hagen <greyhelm@cis.ksu.edu>):
+Linux code for Imoria is available from
+http://www.angelfire.com/games3/imoria/imoria.html.
 
-For all those unfortunates who don't have Internet ftp access, I've
-setup a mailserver to provide access to the archives on
-ftp.cis.ksu.edu.
-
-This mailserver can be contacted via mail one of the following
-addresses:
-
-...!rutgers!depot!mailserver  (UUCP)
-mailserver@cis.ksu.edu        (Internet)
-mailserver@engg.ksu.edu       (Internet)
-
-The server accepts commands given in the body of the mail messages;
-help is available with the command "help".  
-
-A listing of the files in
-the story archive may be obtained by "dir -l /pub/Games/Moria".
-
-Since the files archive consists of binary files, they must
-be uuencoded before they are sent on their way.  To specify this mode,
-use the command "encode uuencode"  To retrieve the files, use the
-"send" command (ex:  send /pub/Games/Moria/pc/mor55-286.zip
-
-If you have a system which cannot handle ZIP files, you may use
-the "unzip" filter ("encode unzip") 
-which will send you the uncompressed (but not uuencoded) version of the file.
-
-Here is an example mail message:
-
-% Mail mailserver@cis.ksu.edu
-~Subject: request 
-help
-encode uue     
-send /pub/Games/Moria/pc/mor55-286.zip
-^D
-%
-
-Please note that this is completely experimental and is not bug free.
-Questions and problems about this mailserver may be directed to
-"greyhelm@engg.ksu.edu".
-
-BBS instructions (from Tom Sorensen <gt0040a@prism.gatech.edu>):
-
-I've been making the source code, DOS and OS/2 executables, and all the
-spoilers I have available on:
-
-Ravishing Nook
-(404)368-9949
-2400-14.4k (V.32bis)
-Downloads should be available on first call.
 
 
 Q2. I can't get Moria/Angband set up on my machine; is there a server on
-another machine that I can use?  
+another machine that I can use?  (Yes; telnet://chungkuo.org)
 
-There is a bbs at bbs.runet.edu which has Moria and Angband installed.
-To play either game, telnet to bbs.runet.edu, and login as bbs to set up
-an account.
+There is a BBS at telnet://chungkuo.org which has Moria and many
+other Roguelike games.  Telnet to this site, or see the Web page
+http://chungkuo.50megs.com/gnet.html for more information.
 
-If possible, please try to set up Moria or Angband yourself first, to
-avoid overloading the BBS.  The game will also play better on your own
-machine, because there will be no network delays.
+Note that the standard telnet client in Windows is buggy, and will cause
+problems with this BBS.  The maintainer of the BBS recommends Mtelnet
+and makes it available on the Web page.
 
-This BBS is maintained by Brian Kirouac, bri@ltpsun.gsfc.nasa.gov;
-please mail any questions or problems to him, not to me.
 
 Q3. How do I use wizard mode, and what can I do in it?  
 
@@ -278,14 +303,14 @@ Moria versions:
 Umoria 5.5.2: This is the current version of Umoria.  It will accept
 characters from all Umoria 5.x versions.
 
-Umoria 5.3.1-5.5.1: These are essentially identical to 5.5.2, and
+Umoria 5.3.0-5.5.1: These are essentially identical to 5.5.2, and
 compatible with it, although 5.5.2 fixes a few bugs, and there have been
 a few minor changes.  Upgrading from 5.5.1 to 5.5.2 is probably not
-necessary.
+necessary; upgrading from earlier versions is recommended.
 
-Umoria 5.2.2/5.3.0: These are in good condition, and compatible with the
-current version.  One bug: don't rest more than 10,000 turns in place,
-and leave the level if you start seeing lots of "Compacting monsters..."
+Umoria 5.2.2: This is in good condition, and compatible with the current
+version.  One bug: don't rest more than 10,000 turns in place, and leave
+the level if you start seeing lots of "Compacting monsters..."
 messages, or the game may lock up.
 
 Umoria 5.2.1: This is playable, but has no high scores file; you
@@ -318,9 +343,8 @@ UB Moria 5.0: Also known as VMS Moria 5.0, this is the current version
 of VMS Moria.  It has more monsters, a Black Market, and other features.
 
 Imoria 4.9: This is apparently a very good game, with new character
-classes and other features.  It hasn't been released widely outside of the
-University of Washington, but it is now available from the University of
-Buffalo; see the FTP instructions.  It is available only for VMS.
+classes and other features.  It is now available for VMS and Linux only;
+it has not yet been ported to DOS or other Unix platforms.
 
 Amiga Moria 3.0: Although this version was originally based on 4.85, it
 has many added monsters, features, and bugs (including items which make
@@ -336,7 +360,9 @@ based on Umoria 5.5.0.
 
 Angband: Another expanded version of Moria with a similar setting.  It
 is based on Umoria 5.2.1; current versions include some of the bug fixes
-from later versions.
+from later versions.  Although the basic game structure is similar to
+Moria's, there have been many enhancements.  For more information, read
+the USENET group rec.games.roguelike.angband.
 
 Q7. I think I've found a bug; what should I do?   
 
@@ -353,6 +379,59 @@ If you report a bug which has been fixed in the current version, I may
 be able to send you a patch, or at least tell you that you can fix the
 bug by upgrading.  If the bug hasn't been fixed, a good bug report may
 make it easy to fix.
+
+The following bugs have been reported with some frequency.  Fixes are
+included where known; for 5.x versions, and 4.8x if you don't have a
+character you need to preserve, the best fix is to upgrade.  All
+versions are Umoria unless indicated otherwise.
+
+All versions compiled with 64-bit compilers (common on Linux): Stores
+sell items for 4 billion gold pieces.  To fix this, edit types.h and
+change "long" to "int" in the first two typedefs:
+
+typedef unsigned int   int32u;
+typedef int	       int32;
+
+All versions: Occasional rooms are created with no exit.  The only
+attempt to fix this bug introduced others and had to be undone.
+
+4.87-5.2.2: The game locks up if you wait in place for about 10,000
+turns.  This can be fixed in the source; in the function
+compact_monsters() in misc1.c, change "if (cur_dis > m_ptr.cdis)" to
+"if (cur_dis < m_ptr.cdis)".  If you can't fix the bug, leave the level
+if you see lots of "Compacting monsters..." messages.
+
+4.87-5.2.1: Your carrying capacity decreases.  This cannot be fixed for
+an individual character without hacking the savefile, or modifying the
+program to fix the savefile.  To avoid it, don't use spikes, and don't
+fight while wielding arrows in 4.87.
+
+5.1.0-5.2.0: Invisible monsters which don't move or attack are sometimes
+created.  Get off the level if you see one.
+
+4.87: Monsters sometimes chase you in the wrong direction.  
+
+4.87: Wands/spells of polymorph and drain life work only when you are
+adjacent to the monster.
+
+4.85: Several annoying bugs still exist, but this version is at least
+playable.
+
+4.83: Many bugs.  Upgrade.
+
+Druid: Potions of Healing can heal you above your maximum hit points.
+
+OS/2 Moria: Erick the Honest takes over all the stores eventually, and
+refuses to stock expensive items.  This cannot be fixed by transferring
+a character from OS/2 to other versions.
+
+Amiga Moria 3.0: Some items make you extremely fast (and hungry).
+
+Amiga Moria 3.0: The system crashes when you leave the game, because it
+tries to close the screen without deactivating it.  Jump to the
+workbench screen _instantly_ as the save (or exit) commences via [left
+amiga + N] and activate the workbench screen via a mouseclick or [alt +
+left amiga] (the keyboard shortcut for a mouse-click).
 
 Q8. What are the special abilities of ego weapons?  Crowns?  Amulet of
 the Magi?  Cloak of Protection? 
@@ -471,8 +550,9 @@ Dispel Undead/Evil: affects all undead/evil within line of sight (even
 Glyph of Warding: creates a glyph which monsters cannot enter, but have 
 		  a small chance of breaking.
 Holy Word: heals player completely, cures poison and fear, and dispels
-	   evil for 1 to 4x player's level.  In 5.5.1, also restores 
-	   all stats, and makes player invulnerable for 3 turns.
+	   evil for 1 to 4x player's level.  [In 5.5.1 and later
+	   versions, also restores all stats, and makes player
+	   invulnerable for 3 turns.]
 
 Q11. On what level do you find X?   
 
@@ -480,8 +560,9 @@ Where important objects are found:
 
 In 4.87, 1/20 of items are chosen as if you were on level 50.  In 5.1
 and all later versions, 1/12 of items are chosen as if you were on a
-deeper level, which has (current level/50) chance of being level 50, and
-is always level 1 in the town.
+deeper level, which has (current level/50) chance of being level 50;
+this check is not made in town.  This affects only the type of item, not
+its enchantment.
 
 Items become somewhat less common as you go deeper than the indicated
 levels; however, if you can survive down there, this is compensated for
@@ -658,7 +739,7 @@ int32 minprice;
 Q17. How do you create objects in wizard mode?
 
 You will need the source; if you have only executables, get the source
-files constant.h and treasure.c from ftp.cis.ksu.edu, which contain the
+files constant.h and treasure.c from the archive, which contain the
 necessary definitions.  This is an explanation of some of the
 parameters.
 

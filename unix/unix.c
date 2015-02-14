@@ -2,9 +2,20 @@
 
    Copyright (c) 1989-91 James E. Wilson, Christopher J. Stuart
 
-   This software may be copied and distributed for educational, research, and
-   not for profit purposes provided that this copyright and statement are
-   included in all such copies. */
+   This file is part of Umoria.
+
+   Umoria is free software; you can redistribute it and/or modify 
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation, either version 3 of the License, or
+   (at your option) any later version.
+
+   Umoria is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of 
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+
+   You should have received a copy of the GNU General Public License 
+   along with Umoria.  If not, see <http://www.gnu.org/licenses/>. */
 
 
 /* defines NULL */
@@ -12,7 +23,7 @@
 /* defines CTRL */
 #include <sys/ioctl.h>
 /* defines TRUE and FALSE */
-#include <curses.h>
+#include <ncurses.h>
 
 #include "config.h"
 #include "constant.h"
@@ -260,6 +271,7 @@ char *p;
 }
 #endif
 
+#ifndef DEBIAN_LINUX
 #ifdef USG
 unsigned short getuid();
 #else
@@ -268,6 +280,7 @@ unsigned short getuid();
 uid_t getuid();
 #else  /* other BSD versions */
 int getuid();
+#endif
 #endif
 #endif
 #endif

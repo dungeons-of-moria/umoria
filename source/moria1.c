@@ -1,14 +1,24 @@
 /* source/moria1.c: misc code, mainly handles player movement, inventory, etc
 
-   Copyright (c) 1989-94 James E. Wilson, Robert A. Koeneke
+   Copyright (C) 1989-2008 James E. Wilson, Robert A. Koeneke, 
+                           David J. Grabiner
 
-   This software may be copied and distributed for educational, research, and
-   not for profit purposes provided that this copyright and statement are
-   included in all such copies. */
+   This file is part of Umoria.
 
-#ifdef __TURBOC__
+   Umoria is free software; you can redistribute it and/or modify 
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation, either version 3 of the License, or
+   (at your option) any later version.
+
+   Umoria is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of 
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+
+   You should have received a copy of the GNU General Public License 
+   along with Umoria.  If not, see <http://www.gnu.org/licenses/>. */
+
 #include	<stdlib.h>
-#endif
 
 #include <stdio.h>
 #include <ctype.h>
@@ -332,8 +342,8 @@ char *mask;
 	{
 	  objdes(tmp_val, &inventory[i], TRUE);
 	  tmp_val[lim] = 0;	 /* Truncate if too long. */
-	  (void) sprintf(out_val[i], "  %c) %s", 'a'+i, tmp_val);
-	  l = strlen(out_val[i]);
+	  (void) sprintf(out_val[i], "%c) %s", 'a'+i, tmp_val);
+	  l = strlen(out_val[i]) + 2;
 	  if (weight)
 	    l += 9;
 	  if (l > len)
@@ -352,9 +362,12 @@ char *mask;
 	{
 	  /* don't need first two spaces if in first column */
 	  if (col == 0)
-	    prt(&out_val[i][2], current_line, col);
-	  else
 	    prt(out_val[i], current_line, col);
+	  else
+	    {
+	      put_buffer("  ", current_line, col);
+	      prt(out_val[i], current_line, col+2);
+	    }
 	  if (weight)
 	    {
 	      total_weight = inventory[i].weight*inventory[i].number;
@@ -466,9 +479,9 @@ int weight, col;
 	    }
 	  objdes(prt2, &inventory[i], TRUE);
 	  prt2[lim] = 0; /* Truncate if necessary */
-	  (void) sprintf(out_val[line], "  %c) %-14s: %s", line+'a',
+	  (void) sprintf(out_val[line], "%c) %-14s: %s", line+'a',
 			 prt1, prt2);
-	  l = strlen(out_val[line]);
+	  l = strlen(out_val[line]) + 2;
 	  if (weight)
 	    l += 9;
 	  if (l > len)
@@ -488,9 +501,12 @@ int weight, col;
 	{
 	  /* don't need first two spaces when using whole screen */
 	  if (col == 0)
-	    prt(&out_val[line][2], line+1, col);
-	  else
 	    prt(out_val[line], line+1, col);
+	  else
+	    {
+	      put_buffer("  ", line+1, col);
+	      prt(out_val[line], line+1, col+2);
+	    }
 	  if (weight)
 	    {
 	      total_weight = i_ptr->weight*i_ptr->number;

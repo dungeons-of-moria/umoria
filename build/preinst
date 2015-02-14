@@ -1,0 +1,33 @@
+#!/bin/sh -e
+
+# Shamelessly stolen from Joey Hess' bsdgames-2.12-9
+
+SCOREFILES="
+	/var/games/moria/scores"
+
+# We used to keep score files in /var/lib/games, and if files are there,
+# move them into the new location.
+if [ -d /var/lib/games ]; then
+
+	# Have to set up directory hierarchy, since this is running as a
+	# preinst.
+	mkdir -p /var/games/moria
+	chown root.games /var/games/moria
+	chmod g+rws /var/games/moria
+
+	for file in $SCOREFILES; do
+		oldfile=`echo $file | sed s:/var/games/:/var/lib/games/:`
+		if [ -e $oldfile ]; then
+			if [ ! -e $file ]; then
+				mv -f $oldfile $file
+			else
+				rm -f $oldfile
+			fi
+		fi
+	done
+	
+	# Delete the old directory hierarchy.
+	rm -rf /var/lib/games/moria
+fi
+
+#DEBHELPER#

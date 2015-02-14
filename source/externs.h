@@ -1,10 +1,24 @@
 /* source/externs.h: declarations for global variables and initialized data
 
-   Copyright (c) 1989-94 James E. Wilson, Robert A. Koeneke
+   Copyright (C) 1989-2008 James E. Wilson, Robert A. Koeneke, 
+                           David J. Grabiner
 
-   This software may be copied and distributed for educational, research, and
-   not for profit purposes provided that this copyright and statement are
-   included in all such copies. */
+   This file is part of Umoria.
+
+   Umoria is free software; you can redistribute it and/or modify 
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation, either version 3 of the License, or
+   (at your option) any later version.
+
+   Umoria is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of 
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+
+   You should have received a copy of the GNU General Public License 
+   along with Umoria.  If not, see <http://www.gnu.org/licenses/>. */
+
+#include<stdio.h>
 
 /* VMS requires that this be in externs.h, not files.c; this prevents a
    'psect' error for the variable errno */
@@ -77,9 +91,7 @@ extern int screen_change;	/* Screen changes (used in inven_commands) */
 
 extern int character_generated;	 /* don't save score until char gen finished*/
 extern int character_saved;	 /* prevents save on kill after save_char() */
-#if defined(STDIO_LOADED)
 extern FILE *highscore_fp;	/* High score file pointer */
-#endif
 extern int command_count;	/* Repetition of commands. -CJS- */
 extern int default_dir;		/* Use last direction in repeated commands */
 extern int16 noscore;		/* Don't score this game. -CJS- */
@@ -601,9 +613,7 @@ int save_char(void);
 #endif
 int _save_char(char *);
 int get_char(int *);
-#if defined(STDIO_LOADED)
 void set_fileptr(FILE *);
-#endif
 void wr_highscore(high_scores *);
 void rd_highscore(high_scores *);
 
@@ -747,11 +757,7 @@ int system_cmd(char *);
 #endif
 void user_name(char *);
 int tilde(char *, char *);
-/* only declare this if stdio.h has been previously included, STDIO_LOADED
-   is defined after stdio.h is included */
-#if defined(STDIO_LOADED)
 FILE *tfopen(char *, char *);
-#endif
 int topen(char *, int, int);
 #endif
 
@@ -1116,9 +1122,7 @@ int32 rnd();
 int save_char();
 int _save_char();
 int get_char();
-#if defined(STDIO_LOADED)
 void set_fileptr();
-#endif
 void wr_highscore();
 void rd_highscore();
 
@@ -1261,11 +1265,7 @@ int system_cmd();
 #endif
 void user_name();
 int tilde();
-/* only declare this if stdio.h has been previously included, STDIO_LOADED
-   is defined after stdio.h is included  */
-#if defined(STDIO_LOADED)
 FILE *tfopen();
-#endif
 int topen();
 #endif
 

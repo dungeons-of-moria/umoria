@@ -1,17 +1,25 @@
 /* source/death.c: code executed when player dies
 
-   Copyright (c) 1989-94 James E. Wilson, Robert A. Koeneke
+   Copyright (C) 1989-2008 James E. Wilson, Robert A. Koeneke, 
+                           David J. Grabiner
 
-   This software may be copied and distributed for educational, research, and
-   not for profit purposes provided that this copyright and statement are
-   included in all such copies. */
+   This file is part of Umoria.
+
+   Umoria is free software; you can redistribute it and/or modify 
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation, either version 3 of the License, or
+   (at your option) any later version.
+
+   Umoria is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of 
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+
+   You should have received a copy of the GNU General Public License 
+   along with Umoria.  If not, see <http://www.gnu.org/licenses/>. */
 
 /* Must read this before externs.h, as some global declarations use FILE. */
 #include <stdio.h>
-
-#ifndef STDIO_LOADED
-#define STDIO_LOADED
-#endif
 
 #include "config.h"
 #include "constant.h"
@@ -175,8 +183,19 @@ char *in_str;
 /* The following code is provided especially for systems which		-CJS-
    have no flock system call. It has never been tested.		*/
 
+/* DEBIAN_LINUX defined because fcntlbits.h defines EX and SH the       -RJW-
+ * other way.  The comment below indicates that they're not
+ * distinguished anyways, so this should be harmless, and this does
+ * seem to be the prevailing order (c.f. IRIX 6.5) but just in case,
+ * they've been ifdef'ed. */
+
+#ifdef DEBIAN_LINUX
+#define LOCK_SH 1
+#define LOCK_EX 2
+#else /* DEBIAN_LINUX */
 #define LOCK_EX	1
 #define LOCK_SH	2
+#endif /* DEBIAN_LINUX */
 #define LOCK_NB	4
 #define LOCK_UN	8
 

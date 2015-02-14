@@ -1,16 +1,46 @@
 /* source/types.h: global type declarations
 
-   Copyright (c) 1989-94 James E. Wilson, Robert A. Koeneke
+   Copyright (C) 1989-2008 James E. Wilson, Robert A. Koeneke, 
+                           David J. Grabiner
 
-   This software may be copied and distributed for educational, research, and
-   not for profit purposes provided that this copyright and statement are
-   included in all such copies. */
+   This file is part of Umoria.
 
-typedef unsigned long  int32u;
-typedef long	       int32;
-typedef unsigned short int16u;
-typedef short	       int16;
+   Umoria is free software; you can redistribute it and/or modify 
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation, either version 3 of the License, or
+   (at your option) any later version.
+
+   Umoria is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of 
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+
+   You should have received a copy of the GNU General Public License 
+   along with Umoria.  If not, see <http://www.gnu.org/licenses/>. */
+
+/* Use ISO C99 standard declarations to get correct lengths; if you
+   have an old compiler; #define NO_STDINT. */
+#if defined(NO_STDINT)
+#include<limits.h>
 typedef unsigned char  int8u;
+typedef short          int16;
+typedef unsigned short int16u;
+#if (UINT_MAX>0xFFFF)
+typedef int            int32;
+typedef unsigned int   int32u;
+#else
+typedef long           int32;
+typedef unsigned long  int32u;
+#endif
+#else
+#include<stdint.h>
+typedef uint_least8_t  int8u;
+typedef int_least16_t  int16;
+typedef uint_least16_t int16u;
+typedef int_least32_t  int32;
+typedef uint_least32_t int32u;
+#endif
+
 /* some machines will not accept 'signed char' as a type, and some accept it
    but still treat it like an unsigned character, let's just avoid it,
    any variable which can ever hold a negative value must be 16 or 32 bits */

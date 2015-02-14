@@ -2,10 +2,13 @@
 First, you have to put every file in the 'source' directory, and every file
 in your machine/OS specific directory into a common directory.  If you are on
 a UNIX machine and running csh, the following works nicely if typed from this
-directory.
+directory; note that unix/Makefile is built for Debian, so you need the
+original UNIX Makefile to make on other Unix systems.
 ******
 foreach i (source/* unix/*)
 ln -s $i $i:t
+rm Makefile
+ln -s unix/Makefile.unix Makefile
 end
 ******
 (If you wish to build the program in a temporary directory, the same command
@@ -14,7 +17,7 @@ unix directories.  If you build the program in a different filesystem than
 the one containing the sources, then 'ln -s' will only work if you have
 BSD or SYSVR4.    If the 'ln -s' fails, you can use 'ln' or 'cp' instead.)
 
-To compile the program, edit the config.h file to change the
+To compile the program, edit the config.h file and Makefile to change the
 names of the files the game uses.  Also, uncomment the appropriate
 line for the system you are compiling on. Type make (or build
 or whatever) to compile the game.  You may want to edit the 'files/hours' file

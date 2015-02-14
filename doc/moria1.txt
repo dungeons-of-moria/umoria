@@ -12,27 +12,27 @@
 
                        Robert Alan Koeneke
                          James E. Wilson
+                        David J. Grabiner
+
+     Umoria is free software; you can redistribute it and/or
+     modify it under the terms of the GNU General Public
+     License as published by the Free Software Foundation,
+     either version 3 of the License, or (at your option)
+     any later version.
+
+     Umoria is distributed in the hope that it will be
+     useful, but WITHOUT ANY WARRANTY; without even the
+     implied warranty of MERCHANTABILITY or FITNESS FOR A
+     PARTICULAR PURPOSE.  See the GNU General Public License
+     for more details.
+
+     You should have received a copy of the GNU General
+     Public License along with Umoria.  If not, see
+     <http://www.gnu.org/licenses/>.
 
 
 
-
-          Moria may be copied and modified freely,  but  may
-     not be sold or marketed IN ANY FORM without the permis-
-     sion and written consent of  the  authors  Robert  Alan
-     Koeneke  and James E. Wilson.  We retain all copyrights
-     to this program, in either  the  original  or  modified
-     forms,  and  no  violation,  deletion, or change of the
-     copyright notice is allowed.  Furthermore, we will have
-     no liability or responsibility to any user with respect
-     to loss or damage caused directly or indirectly by this
-     program.
-
-
-
-June 25, 1994
-
-
-
+October 13, 2008
 
 
 
@@ -78,7 +78,7 @@ June 25, 1994
 
                                  Robert Alan Koeneke
                                    James E. Wilson
-
+                                  David J. Grabiner
 
 
 

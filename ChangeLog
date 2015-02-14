@@ -1,0 +1,97 @@
+2008-10-13  David Grabiner  <dgrabiner@asselstine.com>
+
+	* All: Update all copyright/license notices to GPL; Files in
+	atari_st/curscomp and mac/scrnmgr still refer to old licenses as
+	they are stand-alone programs.
+
+2008-09-01  David Grabiner  <dgrabiner@asselstine.com>
+
+	* config.h: Add new LICENSE file for GPL.
+	* dungeon.c (do_command,original_commands), origcmds.hlp,
+	roglgmds.hlp: New command ^V to view the GPL.
+	* files/news: Added reference to GPL.
+
+2008-06-01  David Grabiner  <grabiner@alumni.princeton.edu>
+
+	* config.h, externs.h, *.c: Include stdio.h and stdlib.h
+	unconditionally rather than guarding them and sometimes dealing
+	with incorrect prototypes
+	* io.c: Include unistd.h for execl() on Unix and linux systems.
+	
+2008-05-26  David Grabiner  <grabiner@alumni.princeton.edu>
+
+	* config.h: Gave up on ## because it is so ugly in ANSI C.
+	
+2008-02-22  David Grabiner  <grabiner@alumni.princeton.edu>
+
+	* types.h: use stdint.h to get guaranteed 16-bit and 32-bit types
+	rather than relying on the length of a long, which varies by
+	compiler.  
+
+	* config.h: use ## operator so that MORIA_LIB works
+	correctly.  
+
+	* INSTALL: Note that default install is for Debian, so
+	UNIX install needs to copy the Makefile.
+	
+moria (5.5.2-5) unstable; urgency=low
+
+  * Changed location of score file from /var/lib/games/moria/scores to
+    /var/games/moria/scores per FHS.  (Closes: #115849)
+  * Fixed handling of score file on upgrades (do not null it out!).
+  * Applied fixes to a few buffer overflows.  (Thanks to Lars Helgeland for
+    noticing the overflows and supplying the patches.)  (Closes: #115745)
+  * Upgraded policy to version 3.5.6.0.
+
+ -- Rene Weber <rene_debmaint@elvenlord.com>  Wed, 24 Oct 2001 22:44:05 -0400
+
+moria (5.5.2-4) unstable; urgency=low
+
+  * Fixed dependencies (was compiled against libncurses4, what was I doing
+    that day?).
+  * Corrected explanation of the 'V' command in moria2.txt (but not in the
+    nroff source for that documentation).
+  * Removed use of dh_suidregister.
+
+ -- Rene Weber <rene_debmaint@elvenlord.com>  Mon,  9 Jul 2001 23:31:01 -0400
+
+moria (5.5.2-3) unstable; urgency=low
+
+  * Added a Build-Depends line.
+  * Changed the handling of the build directory for the convenience of
+    porters (should have no impact on users).
+  * Changed short description so that it does not include the name of the
+    package.
+  * Corrected path to /usr/games/moria binary in the menu.  Closes: #81353
+
+ -- Rene Weber <rene_debmaint@elvenlord.com>  Sat,  6 Jan 2001 02:47:02 -0700
+
+moria (5.5.2-2) unstable; urgency=low
+
+  * Fixed typos in the control/README.debian file
+  * Updated the author's e-mail address in the copyright file
+  * Updated the author's web page listed in the README.debian
+  * Installed a new version of the FAQ (reflecting the author's move)
+
+ -- Rene Weber <rene_debmaint@elvenlord.com>  Sat, 14 Oct 2000 10:23:48 -0700
+
+moria (5.5.2-1) unstable; urgency=low
+
+  * Initial Release.
+  * Added DEBIAN_LINUX #define to handle code customizations.
+  * Needed to include termios.h in io.c
+  * All instances of signal() changed to sysv_signal() since libc6 defaults
+    to BSD semantics.
+  * Instead of redefining getuid, just ifdeffed it out of unix.c
+  * Changed LOCK_EX and LOCK_SH definitions in death.c (to avoid
+    redefinition warnings).
+  * Library files are in /usr/lib/games/moria except for the scores file
+    which is in /var/lib/games/moria and the hours file which has been
+    renamed to /etc/moria-hours
+  * Makefile changed to make the binary setgid instead of setuid, as
+    required by Debian Policy 5.10.  None of the code itself needed to be
+    touched, since it already relinquished uid and gid in the original code.
+  * Saved game file is named ".moria-save" not "moria-save"
+
+ -- Rene Weber <rene_debmaint@elvenlord.com>  Sun, 28 May 2000 16:35:38 -0400
+
