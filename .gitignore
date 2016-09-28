@@ -1,0 +1,13 @@
++*.exe
++*.o
++*.opensdf
++*.sav
++*.sdf
++*.suo
++*.user
++windows/dist
++windows/scores
++windows/vs2013/Debug
++windows/vs2013/packages
++windows/vs2013/Release
+.idea
