@@ -293,7 +293,7 @@ int row, column;
 {
   vtype out_val;
 
-  (void) sprintf(out_val, "%s: %6ld", header, num);
+  (void) sprintf(out_val, "%s: %6d", header, num);
   put_buffer(out_val, row, column);
 }
 
@@ -305,7 +305,7 @@ int row, column;
 {
   vtype out_val;
 
-  (void) sprintf(out_val, "%s: %7ld", header, num);
+  (void) sprintf(out_val, "%s: %7d", header, num);
   put_buffer(out_val, row, column);
 }
 
@@ -327,7 +327,7 @@ int row, column;
 {
   vtype out_val;
 
-  (void) sprintf(out_val, "%6ld", num);
+  (void) sprintf(out_val, "%6d", num);
   put_buffer(out_val, row, column);
 }
 
@@ -2249,9 +2249,9 @@ int show_sign;
       str1[string - object_str] = '\0';
       (void) strcpy(str2, string + mlen);
       if ((number >= 0) && (show_sign))
-	(void) sprintf(object_str, "%s+%ld%s", str1, number, str2);
+	(void) sprintf(object_str, "%s+%d%s", str1, number, str2);
       else
-	(void) sprintf(object_str, "%s%ld%s", str1, number, str2);
+	(void) sprintf(object_str, "%s%d%s", str1, number, str2);
     }
 }
 

@@ -334,7 +334,7 @@ umoria.");
 	      )
 	    {
 	      (void) sprintf(string,
-			   "%-4d%8ld %-19.19s %c %-10.10s %-7.7s%3d %-22.22s",
+			   "%-4d%8d %-19.19s %c %-10.10s %-7.7s%3d %-22.22s",
 			     rank, score.points, score.name, score.sex,
 			     race[score.race].trace, class[score.class].title,
 			     score.lev, score.died_from);
@@ -494,10 +494,10 @@ static void print_tomb()
   (void) sprintf (str,"| %s |          /    \\",
 		  center_string (tmp_str, str));
   put_buffer (str, 11, 9);
-  (void) sprintf(str, "%ld Exp", py.misc.exp);
+  (void) sprintf(str, "%d Exp", py.misc.exp);
   (void) sprintf(str,"| %s |          :    :", center_string (tmp_str, str));
   put_buffer (str, 12, 9);
-  (void) sprintf(str, "%ld Au", py.misc.au);
+  (void) sprintf(str, "%d Au", py.misc.au);
   (void) sprintf(str,"| %s |          :    :", center_string (tmp_str, str));
   put_buffer (str, 13, 9);
   (void) sprintf(str, "Died on Level : %d", dun_level);

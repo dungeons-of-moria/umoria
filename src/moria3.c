@@ -320,7 +320,7 @@ int pickup;
 	  py.misc.au += i_ptr->cost;
 	  objdes(tmp_str, i_ptr, TRUE);
 	  (void) sprintf(out_val,
-			 "You have found %ld gold pieces worth of %s",
+			 "You have found %d gold pieces worth of %s",
 			 i_ptr->cost, tmp_str);
 	  prt_gold();
 	  (void) delete_object(y, x);
