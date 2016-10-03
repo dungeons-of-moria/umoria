@@ -31,7 +31,6 @@
 #undef NLS
 #endif
 
-#if !defined(GEMDOS)
 #ifdef MAC
 #ifdef THINK_C
 #include "ScrnMgr.h"
@@ -41,13 +40,6 @@
 #else
 #include <ncurses.h>
 #endif
-#else	/* GEMDOS i.e. Atari ST */
-#include "curses.h"
-long wgetch();
-#include <osbind.h>	/* MWC */
-char *getenv();
-#endif
-
 
 #include <ctype.h>
 

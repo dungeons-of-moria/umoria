@@ -48,9 +48,7 @@
 
 #ifndef VMS
 #ifndef MAC
-#ifndef GEMDOS
 long time();
-#endif
 char *getenv();
 #endif
 #endif

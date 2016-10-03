@@ -29,11 +29,6 @@
 #include "constant.h"
 #include "types.h"
 
-#if defined(GEMDOS) && (__STDC__ == 0)
-#include <access.h>
-char *strcat();
-#endif
-
 #ifdef VMS
 #include <file.h>
 #include <string.h>
@@ -364,16 +359,6 @@ int file_character(filename1) char *filename1;
     restoredirectory();
     macbeginwait();
 #else
-#if defined(GEMDOS) && (__STDC__ == 0)
-    if (!access(filename1, AREAD)) {
-        (void)sprintf(out_val, "Replace existing file %s?", filename1);
-        if (get_check(out_val)) {
-            fd = creat(filename1, 1);
-        }
-    } else {
-        fd = creat(filename1, 1);
-    }
-#else
     fd = open(filename1, O_WRONLY | O_CREAT | O_EXCL, 0644);
     if (fd < 0 && errno == EEXIST) {
         (void)sprintf(out_val, "Replace existing file %s?", filename1);
@@ -381,7 +366,6 @@ int file_character(filename1) char *filename1;
             fd = open(filename1, O_WRONLY, 0644);
         }
     }
-#endif
 #endif
     if (fd >= 0) {
         /* on some non-unix machines, fdopen() is not reliable, hence must call

@@ -135,22 +135,6 @@ Constant.h should always be included after config.h,
 #else // else VMS
 
 
-#if defined(GEMDOS)
-/* Atari ST */
-#define MORIA_SAV "moria.sav"
-#define MORIA_HOU "files\\hours"
-#define MORIA_MOR "files\\news"
-#define MORIA_GPL "files\\COPYING"
-#define MORIA_TOP "files\\scores"
-#define MORIA_HELP "files\\roglcmds.hlp"
-#define MORIA_ORIG_HELP "files\\origcmds.hlp"
-#define MORIA_WIZ_HELP "files\\rwizcmds.hlp"
-#define MORIA_OWIZ_HELP "files\\owizcmds.hlp"
-#define MORIA_WELCOME "files\\welcome.hlp"
-#define MORIA_VER "files\\version.hlp"
-#else // else GEMDOS
-
-
 #if 0
 /* Debian standards for file location */
 /* This must be unix; change file names as appropriate.  */
@@ -183,7 +167,6 @@ Constant.h should always be included after config.h,
 #define MORIA_VER "/home/michael/moria-56/files/version.hlp"
 
 #endif // end DEBIAN standard.
-#endif // end GEMDOS
 #endif // end VMS
 #endif // end MAC
 
