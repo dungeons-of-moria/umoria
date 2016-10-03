@@ -84,25 +84,7 @@ Constant.h should always be included after config.h,
 
 /* Files used by moria, set these to valid pathnames for your system.  */
 
-#ifdef MSDOS
-/* Files which can be in a varying place */
-#define MORIA_SAV moriasav
-#define MORIA_TOP moriatop
-#define MORIA_MOR "news"
-#define MORIA_GPL "COPYING"
-#define MORIA_TOP_NAME "scores"
-#define MORIA_SAV_NAME "MORIA.SAV"
-#define MORIA_CNF_NAME "MORIA.CNF"
-#define MORIA_HELP "roglcmds.hlp"
-#define MORIA_ORIG_HELP "origcmds.hlp"
-#define MORIA_WIZ_HELP "rwizcmds.hlp"
-#define MORIA_OWIZ_HELP "owizcmds.hlp"
-#define MORIA_WELCOME "welcome.hlp"
-#define MORIA_VER "version.hlp"
-
-#else
 #ifdef MAC
-
 /* These files are concatenated into the data fork of the app */
 /* The names are retained to find the appropriate text */
 #define MORIA_MOR "news"
@@ -121,7 +103,6 @@ Constant.h should always be included after config.h,
 #define INFO_FTYPE 'TEXT'
 #define SCORE_FTYPE 'SCOR'
 #define CONFIG_FTYPE 'CNFG'
-
 /* Options for building resources:
    THINK C doesn't have -D switch, so we need to define this stuff here.
    Uncomment RSRC when building DumpRes1 or DumpRes2; uncomment RSRC_PARTn
@@ -129,14 +110,13 @@ Constant.h should always be included after config.h,
    I don't think any of this is necessary for MPW C -- BS.  */
 #ifdef THINK_C
 /* #define RSRC */ /* This copy is for creating resources.  */
-
 /* THINK C can only take 32K data, so we need to dump the resources in
    two parts.  */
 /* #define RSRC_PART1 */
 /* #define RSRC_PART2 */
 #endif
+#else // else MAC
 
-#else
 
 #ifdef VMS
 #define MORIA_SAV "moria.sav"
@@ -152,8 +132,8 @@ Constant.h should always be included after config.h,
 #define MORIA_OWIZ_HELP "moria:owizcmds.hlp"
 #define MORIA_WELCOME "moria:welcome.hlp"
 #define MORIA_VER "moria:version.hlp"
+#else // else VMS
 
-#else
 
 #ifdef AMIGA
 #define MORIA_SAV "moria.sav"
@@ -167,8 +147,9 @@ Constant.h should always be included after config.h,
 #define MORIA_OWIZ_HELP "moria:owizcmds.hlp"
 #define MORIA_WELCOME "moria:welcome.hlp"
 #define MORIA_VER "moria:version.hlp"
+#else // else AMIGA
 
-#else
+
 #if defined(GEMDOS)
 /* Atari ST */
 #define MORIA_SAV "moria.sav"
@@ -182,8 +163,8 @@ Constant.h should always be included after config.h,
 #define MORIA_OWIZ_HELP "files\\owizcmds.hlp"
 #define MORIA_WELCOME "files\\welcome.hlp"
 #define MORIA_VER "files\\version.hlp"
+#else // else GEMDOS
 
-#else
 
 #if 0
 /* Debian standards for file location */
@@ -199,7 +180,9 @@ Constant.h should always be included after config.h,
 #define MORIA_OWIZ_HELP "/usr/lib/games/moria/owizcmds.hlp"
 #define MORIA_WELCOME "/usr/lib/games/moria/welcome.hlp"
 #define MORIA_VER "/usr/lib/games/moria/version.hlp"
-#else
+#else // else DEBIAN standard.
+
+
 /* Generic UNIX */
 /* This must be unix; change file names as appropriate.  */
 #define MORIA_SAV "moria-save"
@@ -213,13 +196,13 @@ Constant.h should always be included after config.h,
 #define MORIA_OWIZ_HELP "/home/michael/moria-56/files/owizcmds.hlp"
 #define MORIA_WELCOME "/home/michael/moria-56/files/welcome.hlp"
 #define MORIA_VER "/home/michael/moria-56/files/version.hlp"
-#endif
 
-#endif
-#endif
-#endif
-#endif
-#endif
+#endif // end DEBIAN standard.
+#endif // end GEMDOS
+#endif // end AMIGA
+#endif // end VMS
+#endif // end MAC
+
 
 /* This sets the default user interface.  */
 /* To use the original key bindings (keypad for movement) set ROGUE_LIKE
@@ -243,7 +226,7 @@ Constant.h should always be included after config.h,
 #endif
 
 /* Substitute strchr for index on USG versions of UNIX.  */
-#if defined(SYS_V) || defined(MSDOS) || defined(MAC) || defined(VMS)
+#if defined(SYS_V) || defined(MAC) || defined(VMS)
 #define index strchr
 #endif
 #if (defined(AMIGA) && defined(LATTICE))
@@ -257,7 +240,7 @@ Constant.h should always be included after config.h,
 
 /* Define USG for many systems, this is basically to select SYS V style
    system calls (as opposed to BSD style).  */
-#if defined(SYS_III) || defined(SYS_V) || defined(MSDOS) || defined(MAC)
+#if defined(SYS_III) || defined(SYS_V) || defined(MAC)
 #ifndef USG
 #define USG
 #endif

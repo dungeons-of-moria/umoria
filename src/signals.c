@@ -124,7 +124,7 @@ static int signal_handler(sig)
 
     /* Allow player to think twice. Wizard may force a core dump. */
     if (sig == SIGINT
-#if !defined(MSDOS) && !defined(AMIGA)
+#if !defined(AMIGA)
         || sig == SIGQUIT
 #endif
         ) {
@@ -181,7 +181,7 @@ static int signal_handler(sig)
         (void)_save_char(savefile);
     }
     restore_term();
-#if !defined(MSDOS) && !defined(AMIGA)
+#if !defined(AMIGA)
     /* always generate a core dump */
     (void)MSIGNAL(sig, SIG_DFL);
     (void)kill(getpid(), sig);
@@ -227,9 +227,6 @@ void init_signals() {
     (void)MSIGNAL(SIGINT, signal_handler);
     (void)MSIGNAL(SIGFPE, signal_handler);
 
-#if defined(MSDOS)
-/* many fewer signals under MSDOS */
-#else // not MSDOS
 #ifdef AMIGA
     /*  (void) MSIGNAL(SIGINT, signal_handler); */
     (void)MSIGNAL(SIGTERM, signal_handler);
@@ -238,7 +235,7 @@ void init_signals() {
     (void)MSIGNAL(SIGILL, signal_handler);
     (void)MSIGNAL(SIGSEGV, signal_handler);
 #else // not AMIGA
-    /* Everybody except Atari, MSDOS, and Amiga. */
+    /* Everybody except Atari and Amiga. */
     /* Ignore HANGUP, and let the EOF code take care of this case. */
     (void)MSIGNAL(SIGHUP, SIG_IGN);
     (void)MSIGNAL(SIGQUIT, signal_handler);
@@ -266,7 +263,6 @@ void init_signals() {
     (void)MSIGNAL(SIGPWR, signal_handler);
 #endif
 #endif // end AMIGA check
-#endif // end MSDOS
 }
 
 void ignore_signals() {

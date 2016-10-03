@@ -60,9 +60,7 @@ char *getenv();
 #ifndef MAC
 #ifndef AMIGA
 #ifdef USG
-#if !defined(MSDOS)
 unsigned short getuid(), getgid();
-#endif
 #else
 #ifndef SECURE
 #ifdef BSD4_3
@@ -154,16 +152,12 @@ char *argv[];
     Authenticate();
 #endif
 
-#ifdef MSDOS
-    msdos_init(); /* find out where everything is */
-#endif
-
     /* call this routine to grab a file pointer to the highscore file */
     /* and prepare things to relinquish setuid privileges */
     init_scorefile();
 
 #ifndef SECURE
-#if !defined(MSDOS) && !defined(MAC)
+#if !defined(MAC)
 #if !defined(AMIGA)
     if (0 != setuid(getuid())) {
         perror("Can't set permissions correctly!  Setuid call failed.\n");

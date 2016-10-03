@@ -243,12 +243,6 @@ extern char last_command; /* Memory of previous command. */
 /* Track if temporary light about player. */
 extern int light_flag;
 
-#ifdef MSDOS
-extern int8u floorsym, wallsym;
-extern int ansi, saveprompt;
-extern char moriatop[], moriasav[];
-#endif
-
 /* function return values */
 
 /* only extern functions declared here, static functions declared inside
@@ -558,23 +552,6 @@ void disarm_trap(void);
 void look(void);
 void throw_object(void);
 void bash(void);
-
-#ifdef MSDOS
-/* ms_misc.c */
-void user_name(char *);
-char *getlogin(void);
-unsigned int sleep(int);
-void error(char *, ...);
-void warn(char *, ...);
-void msdos_init(void);
-void msdos_raw(void);
-void msdos_noraw(void);
-int bios_getch(void);
-int msdos_getch(void);
-void bios_clear(void);
-void msdos_intro(void);
-void bios_clear(void);
-#endif
 
 /* potions.c */
 void quaff(void);
@@ -1051,32 +1028,6 @@ void disarm_trap();
 void look();
 void throw_object();
 void bash();
-
-#ifdef MSDOS
-/* ms_misc.c */
-void user_name();
-char *getlogin();
-unsigned int sleep();
-
-#if 0
-void error();
-void warn();
-#else
-/* Because an empty parameter list in a declaration can not match a parameter
-   list with an elipsis in a definition. */
-void error(char *fmt, ...);
-void warn(char *fmt, ...);
-#endif
-
-void msdos_init();
-void msdos_raw();
-void msdos_noraw();
-int bios_getch();
-int msdos_getch();
-void bios_clear();
-void msdos_intro();
-void bios_clear();
-#endif
 
 /* potions.c */
 void quaff();

@@ -95,7 +95,7 @@ void init_scorefile() {
 #endif
     }
 
-#if defined(MSDOS) || defined(VMS) || defined(MAC) || defined(APOLLO)
+#if defined(VMS) || defined(MAC) || defined(APOLLO)
     /* can't leave it open, since this causes problems on networked PCs and VMS,
        we DO want to check to make sure we can open the file, though */
     fclose(highscore_fp);

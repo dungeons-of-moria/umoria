@@ -45,15 +45,11 @@
 #endif
 #endif
 
-#ifdef MSDOS
-#include <io.h>
-#else
 #if !defined(MAC) && !defined(AMIGA)
 #ifndef VMS
 #include <pwd.h>
 #else
 #include <file.h>
-#endif
 #endif
 #endif
 
@@ -244,8 +240,8 @@ void display_scores(show_player) int show_player;
     int16 player_uid;
 #endif
 
-#if defined(MSDOS) || defined(VMS) || defined(AMIGA) || defined(MAC) || defined(APOLLO)
-#if defined(MAC) || defined(MSDOS)
+#if defined(VMS) || defined(AMIGA) || defined(MAC) || defined(APOLLO)
+#if defined(MAC)
     if ((highscore_fp = fopen(MORIA_TOP, "rb")) == NULL)
 #else
     if ((highscore_fp = fopen(MORIA_TOP, "r")) == NULL)
@@ -279,7 +275,7 @@ void display_scores(show_player) int show_player;
         msg_print("Sorry. This scorefile is from a different version of umoria.");
         msg_print(CNIL);
 
-#if defined(MSDOS) || defined(VMS) || defined(AMIGA) || defined(MAC)
+#if defined(VMS) || defined(AMIGA) || defined(MAC)
         (void)fclose(highscore_fp);
 #endif
 
@@ -334,7 +330,7 @@ void display_scores(show_player) int show_player;
         }
     }
 
-#if defined(MSDOS) || defined(VMS) || defined(AMIGA) || defined(MAC) || defined(APOLLO)
+#if defined(VMS) || defined(AMIGA) || defined(MAC) || defined(APOLLO)
     (void)fclose(highscore_fp);
 #endif
 }
@@ -350,12 +346,12 @@ int duplicate_character() {
     int8u version_maj, version_min, patch_level;
     int16 player_uid;
 
-#if defined(MSDOS) || defined(VMS) || defined(AMIGA) || defined(MAC) || defined(APOLLO)
+#if defined(VMS) || defined(AMIGA) || defined(MAC) || defined(APOLLO)
     char string[80];
 #endif
 
-#if defined(MSDOS) || defined(VMS) || defined(AMIGA) || defined(MAC) || defined(APOLLO)
-#if defined(MAC) || defined(MSDOS)
+#if defined(VMS) || defined(AMIGA) || defined(MAC) || defined(APOLLO)
+#if defined(MAC)
     if ((highscore_fp = fopen(MORIA_TOP, "rb")) == NULL)
 #else
     if ((highscore_fp = fopen(MORIA_TOP, "r")) == NULL)
@@ -390,7 +386,7 @@ int duplicate_character() {
         msg_print("Sorry. This scorefile is from a different version of umoria.");
         msg_print(CNIL);
 
-#if defined(MSDOS) || defined(VMS) || defined(AMIGA) || defined(MAC) || defined(APOLLO)
+#if defined(VMS) || defined(AMIGA) || defined(MAC) || defined(APOLLO)
         (void)fclose(highscore_fp);
 #endif
 
@@ -422,7 +418,7 @@ int duplicate_character() {
         rd_highscore(&score);
     }
 
-#if defined(MSDOS) || defined(VMS) || defined(AMIGA) || defined(MAC)
+#if defined(VMS) || defined(AMIGA) || defined(MAC)
     (void)fclose(highscore_fp);
 #endif
 
@@ -600,7 +596,7 @@ static void highscores() {
     int8u version_maj, version_min, patch_level;
     long curpos;
 
-#if defined(VMS) || defined(MSDOS) || defined(AMIGA) || defined(MAC) || defined(APOLLO)
+#if defined(VMS) || defined(AMIGA) || defined(MAC) || defined(APOLLO)
     char string[100];
 #endif
 
@@ -651,8 +647,8 @@ static void highscores() {
 /*  First, get a lock on the high score file so no-one else tries */
 /*  to write to it while we are using it, on VMS and IBMPCs only one
     process can have the file open at a time, so we just open it here */
-#if defined(MSDOS) || defined(VMS) || defined(AMIGA) || defined(MAC)
-#if defined(MAC) || defined(MSDOS)
+#if defined(VMS) || defined(AMIGA) || defined(MAC)
+#if defined(MAC)
     if ((highscore_fp = fopen(MORIA_TOP, "rb+")) == NULL)
 #else
     if ((highscore_fp = fopen(MORIA_TOP, "r+")) == NULL)
@@ -713,7 +709,7 @@ static void highscores() {
              (version_min == 2 && patch_level < 2) || (version_min < 2)) {
 /* No need to print a message, a subsequent call to display_scores()
    will print a message. */
-#if defined(MSDOS) || defined(VMS) || defined(AMIGA) || defined(MAC)
+#if defined(VMS) || defined(AMIGA) || defined(MAC)
         (void)fclose(highscore_fp);
 #endif
         return;
@@ -741,14 +737,14 @@ static void highscores() {
                    new_entry.sex == old_entry.sex &&
                    new_entry.race == old_entry.race &&
                    new_entry.class == old_entry.class) {
-#if defined(MSDOS) || defined(VMS) || defined(AMIGA) || defined(MAC) || defined(APOLLO)
+#if defined(VMS) || defined(AMIGA) || defined(MAC) || defined(APOLLO)
             (void)fclose(highscore_fp);
 #endif
             return;
         } else if (++i >= SCOREFILE_SIZE) {
             /* only allow one thousand scores in the score file */
 
-#if defined(MSDOS) || defined(VMS) || defined(AMIGA) || defined(MAC)
+#if defined(VMS) || defined(AMIGA) || defined(MAC)
             (void)fclose(highscore_fp);
 #endif
 
@@ -816,7 +812,7 @@ static void highscores() {
         }
     }
 
-#if !defined(VMS) && !defined(MSDOS) && !defined(AMIGA) && !defined(MAC) && !defined(APOLLO)
+#if !defined(VMS) && !defined(AMIGA) && !defined(MAC) && !defined(APOLLO)
     (void)flock((int)fileno(highscore_fp), LOCK_UN);
 #else
     (void)fclose(highscore_fp);

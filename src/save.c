@@ -127,10 +127,6 @@ static int sv_write() {
     store_type *st_ptr;
     struct misc *m_ptr;
 
-#if defined(MSDOS)
-    inven_type *t_ptr;
-#endif
-
     /* clear the death flag when creating a HANGUP save file, so that player
        can see tombstone when restart */
     if (eof_flag) {
@@ -430,24 +426,6 @@ static int sv_write() {
     wr_byte((int8u)count);
     wr_byte(prev_char);
 
-#if defined(MSDOS)
-    /* must change graphics symbols for walls and floors back to default chars,
-       this is necessary so that if the user changes the graphics line, the
-       program will be able change all existing walls and floors to the new
-       symbol */
-    /* Or if the user moves the savefile from one machine to another, we
-       must have a consistent representation here. */
-    t_ptr = &t_list[tcptr - 1];
-    for (i = tcptr - 1; i >= MIN_TRIX; i--) {
-#ifdef MSDOS
-        if (t_ptr->tchar == wallsym) {
-            t_ptr->tchar = '#';
-        }
-#endif
-        t_ptr--;
-    }
-#endif
-
     wr_short((int16u)tcptr);
     for (i = MIN_TRIX; i < tcptr; i++) {
         wr_item(&t_list[i]);
@@ -596,7 +574,7 @@ char *fnam;
     if (fd >= 0) {
         (void)close(fd);
 #endif /* !VMS */
-#if defined(THINK_C) || defined(MSDOS)
+#if defined(THINK_C)
         fileptr = fopen(savefile, "wb");
 #else
         fileptr = fopen(savefile, "w");
@@ -698,10 +676,6 @@ int get_char(generate) int *generate;
     int8u char_tmp, ychar, xchar, count;
     int8u version_maj, version_min, patch_level;
 
-#if defined(MSDOS)
-    inven_type *t_ptr;
-#endif
-
 #ifdef MAC
     *exit_flag = FALSE;
 #endif
@@ -744,7 +718,7 @@ int get_char(generate) int *generate;
 
         (void)close(fd);
         fd = -1; /* Make sure it isn't closed again */
-#if defined(THINK_C) || defined(MSDOS)
+#if defined(THINK_C)
         fileptr = fopen(savefile, "rb");
 #else
         fileptr = fopen(savefile, "r");
@@ -1172,19 +1146,6 @@ int get_char(generate) int *generate;
         for (i = MIN_MONIX; i < mfptr; i++) {
             rd_monster(&m_list[i]);
         }
-
-#if defined(MSDOS)
-        /* change walls and floors to graphic symbols */
-        t_ptr = &t_list[tcptr - 1];
-        for (i = tcptr - 1; i >= MIN_TRIX; i--) {
-#ifdef MSDOS
-            if (t_ptr->tchar == '#') {
-                t_ptr->tchar = wallsym;
-            }
-#endif
-            t_ptr--;
-        }
-#endif
 
         *generate = FALSE; /* We have restored a cave - no need to generate. */
 

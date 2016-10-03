@@ -474,15 +474,12 @@ void dungeon() {
         }
 #else
         if ((command_count > 0 || find_flag || f_ptr->rest != 0)
-#if defined(MSDOS) || defined(VMS)
+#if defined(VMS)
             && kbhit()
 #else
             && (check_input(find_flag ? 0 : 10000))
 #endif
                 ) {
-#ifdef MSDOS
-            (void)msdos_getch();
-#endif
 #ifdef VMS
             /* Get and ignore the key used to interrupt resting/running. */
             (void)vms_getch();

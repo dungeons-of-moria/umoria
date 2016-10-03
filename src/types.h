@@ -346,22 +346,12 @@ typedef struct cave_type {
     int8u tptr;
     int8u fval;
 #endif
-#if !defined(MSDOS)
     unsigned int lr : 1;      /* room should be lit with perm light, walls with
                                  this set should be perm lit after tunneled out */
     unsigned int fm : 1;      /* field mark, used for traps/doors/stairs, object is
                                  hidden if fm is FALSE */
     unsigned int pl : 1;      /* permanent light, used for walls and lighted rooms */
     unsigned int tl : 1;      /* temporary light, used for player's lamp light,etc.*/
-#else
-    /* this is not legal ANSI C, this is a MSC extension, which will use 1 byte
-       for the bitfields whereas MSC uses 2 bytes for the bitfields above */
-    /* this is also a MWC extension on the Atari ST */
-    unsigned char lr : 1;
-    unsigned char fm : 1;
-    unsigned char pl : 1;
-    unsigned char tl : 1;
-#endif
 } cave_type;
 
 typedef struct owner_type {
