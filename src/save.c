@@ -414,10 +414,6 @@ int save_char() {
     int i;
     vtype temp;
 
-#ifdef SECURE
-    bePlayer();
-#endif
-
     while (!_save_char(savefile)) {
         (void)sprintf(temp, "Savefile '%s' fails.", savefile);
         msg_print(temp);
@@ -440,10 +436,6 @@ int save_char() {
         (void)sprintf(temp, "Saving with %s...", savefile);
         prt(temp, 0, 0);
     }
-
-#ifdef SECURE
-    beGames();
-#endif
 
     return TRUE;
 }

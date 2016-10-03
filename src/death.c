@@ -45,15 +45,13 @@
 #ifdef USG
 unsigned short getuid(), getgid();
 #else
-#ifndef SECURE
 #ifdef BSD4_3
 uid_t getuid(), getgid();
 #else /* other BSD versions */
 int getuid(), getgid();
 #endif
-#endif // SECURE
-#endif // USG
-#endif // unix
+#endif
+#endif
 
 
 #ifdef USG

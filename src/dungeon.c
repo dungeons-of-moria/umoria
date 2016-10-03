@@ -1218,12 +1218,7 @@ char com_val;
         break;
     case '!': /* (!) escape to the shell */
     case '$':
-#ifdef SECURE
-        msg_print("Sorry, inferior shells are not allowed from Moria.");
-#else
         shell_out();
-#endif
-
         free_turn_flag = TRUE;
         break;
     case ESCAPE: /* (ESC)   do nothing. */

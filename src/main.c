@@ -47,14 +47,12 @@ char *getenv();
 #ifdef USG
 unsigned short getuid(), getgid();
 #else
-#ifndef SECURE
 #ifdef BSD4_3
 uid_t getuid(), getgid();
 #else /* other BSD versions */
 int getuid(), getgid();
 #endif
 #endif
-#endif // end USG
 
 #if defined(USG)
 void perror();
@@ -89,15 +87,10 @@ char *argv[];
     /* default command set defined in config.h file */
     rogue_like_commands = ROGUE_LIKE;
 
-#ifdef SECURE
-    Authenticate();
-#endif
-
     /* call this routine to grab a file pointer to the highscore file */
     /* and prepare things to relinquish setuid privileges */
     init_scorefile();
 
-#ifndef SECURE
     if (0 != setuid(getuid())) {
         perror("Can't set permissions correctly!  Setuid call failed.\n");
         exit(0);
@@ -106,7 +99,6 @@ char *argv[];
         perror("Can't set permissions correctly!  Setgid call failed.\n");
         exit(0);
     }
-#endif
 
     /* use curses */
     init_curses();

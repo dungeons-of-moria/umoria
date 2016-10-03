@@ -22,25 +22,30 @@
 #define CONFIG_H_INCLUDED
 #ifdef CONSTANT_H_INCLUDED
 Constant.h should always be included after config.h,
-    because it uses some of the system defines set up here.
+because it uses some of the system defines set up here.
 #endif
 
-/* Person to bother if something goes wrong.  */
-/* Recompile files.c and misc2.c if this changes.  */
+/* NOTE: the wizard password and wizard uid are no longer used.
+ *
+ * Person to bother if something goes wrong.
+ * Recompile files.c and misc2.c if this changes.
+ */
 #define WIZARD "David Grabiner <grabiner@alumni.princeton.edu>"
-/* The wizard password and wizard uid are no longer used.  */
 
-/* System definitions.  You must define one of these as appropriate for
-   the system you are compiling moria on.  */
+/*
+ * System definitions.
+ *
+ * You must define one of these as appropriate for the system
+ * you are compiling moria on.
+ */
 
-/* If compiling on Debian (also works on other versions of Linux),
-   define this. */
+/* If compiling on Debian (also works on other versions of Linux), define this. */
 #define DEBIAN_LINUX
 
-/* If you are compiling on a SYS V version of UNIX, define this.  */
+/* If you are compiling on a SYS V version of UNIX, define this. */
 /* #define SYS_V */
 
-/* For Xenix systems, define SYS_V and unix.  */
+/* For Xenix systems, define SYS_V and unix. */
 #ifdef M_XENIX
 #define SYS_V
 #define unix
@@ -51,12 +56,12 @@ Constant.h should always be included after config.h,
 #define HPUX
 #endif
 
-/* Files used by moria, set these to valid pathnames for your system.  */
+/* Files used by moria, set these to valid pathnames for your system. */
 
 #if 0
 
 /* Debian standards for file location */
-/* This must be unix; change file names as appropriate.  */
+/* This must be unix; change file names as appropriate. */
 #define MORIA_SAV ".moria-save"
 #define MORIA_HOU "/etc/moria-hours"
 #define MORIA_MOR "/usr/lib/games/moria/news"
@@ -69,10 +74,10 @@ Constant.h should always be included after config.h,
 #define MORIA_WELCOME "/usr/lib/games/moria/welcome.hlp"
 #define MORIA_VER "/usr/lib/games/moria/version.hlp"
 
-#else // else DEBIAN standard.
+#else
 
 /* Generic UNIX */
-/* This must be unix; change file names as appropriate.  */
+/* This must be unix; change file names as appropriate. */
 #define MORIA_SAV "moria-save"
 #define MORIA_HOU "/home/michael/moria-56/files/hours"
 #define MORIA_MOR "/home/michael/moria-56/files/news"
@@ -85,45 +90,36 @@ Constant.h should always be included after config.h,
 #define MORIA_WELCOME "/home/michael/moria-56/files/welcome.hlp"
 #define MORIA_VER "/home/michael/moria-56/files/version.hlp"
 
-#endif // end DEBIAN standard.
+#endif
 
-
-/* This sets the default user interface.  */
-/* To use the original key bindings (keypad for movement) set ROGUE_LIKE
-   to FALSE; to use the rogue-like key bindings (vi style movement)
-   set ROGUE_LIKE to TRUE.  */
-/* If you change this, you only need to recompile main.c.  */
+/* This sets the default user interface.
+ * To use the original key bindings (keypad for movement) set ROGUE_LIKE to FALSE;
+ * to use the rogue-like key bindings (vi style movement) set ROGUE_LIKE to TRUE.
+ * If you change this, you only need to recompile main.c.
+ */
 #define ROGUE_LIKE FALSE
 
-/* For the ANDREW distributed file system, define this to ensure that
-   the program is secure with respect to the setuid code, this prohibits
-   inferior shells.  It also does not relinquish setuid privileges at the
-   start, but instead calls the ANDREW library routines bePlayer(), beGames(),
-   and Authenticate().  */
-/* #define SECURE */
+/*
+ * System dependent defines follow.
+ *
+ * You should not need to change anything below.
+ */
 
-/* System dependent defines follow.  You should not need to change anything
-   below.  */
-
-#if defined(__linux__) /* Linux supports System V */
+/* Linux supports System V */
+#if defined(__linux__)
 #define SYS_V
 #endif
 
-/* Substitute strchr for index on USG versions of UNIX.  */
+/* Substitute strchr for index on USG versions of UNIX. */
 #if defined(SYS_V)
 #define index strchr
 #endif
 
 /* Define USG for many systems, this is basically to select SYS V style
-   system calls (as opposed to BSD style).  */
+ * system calls (as opposed to BSD style).
+ */
 #if defined(SYS_V)
 #ifndef USG
 #define USG
 #endif
-#endif
-
-#ifdef SECURE
-extern int PlayerUID;
-#define getuid() PlayerUID
-#define geteuid() PlayerUID
 #endif
