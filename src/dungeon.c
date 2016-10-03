@@ -126,8 +126,6 @@ void dungeon() {
         /* Increment turn counter */
         turn++;
 
-#ifndef MAC
-        /* The Mac ignores the game hours file */
         /* Check for game hours */
         if (((turn % 250) == 1) && !check_time()) {
             if (closing_flag > 4) {
@@ -145,7 +143,6 @@ void dungeon() {
                 msg_print("Please finish up or save your game.");
             }
         }
-#endif
 
         /* turn over the store contents every, say, 1000 turns */
         if ((dun_level != 0) && ((turn % 1000) == 0)) {
@@ -462,21 +459,9 @@ void dungeon() {
         }
 
         /* Check for interrupts to find or rest. */
-
-#ifdef MAC
-        /* On Mac, checking for input is expensive, since it involves handling
-           events, so we only check in multiples of 16 turns. */
-        if (!(turn & 0xF) &&
-            ((command_count > 0) || find_flag || (f_ptr->rest != 0))) {
-            if (macgetkey(CNIL, TRUE)) {
-                disturb(0, 0);
-            }
-        }
-#else
         if ((command_count > 0 || find_flag || f_ptr->rest != 0) && (check_input(find_flag ? 0 : 10000))) {
             disturb(0, 0);
         }
-#endif
 
         /* Hallucinating?   (Random characters appear!)*/
         if (f_ptr->image > 0) {
@@ -745,15 +730,7 @@ void dungeon() {
                         default_dir = TRUE;
                     } else {
                         msg_flag = FALSE;
-
-#ifdef MAC
-                        unloadsegments();
-                        enablesavecmd(TRUE);
-                        command = inkeydir();
-                        enablesavecmd(FALSE);
-#else
                         command = inkey();
-#endif
 
                         i = 0;
 
@@ -784,12 +761,7 @@ void dungeon() {
                                 } else {
                                     break;
                                 }
-
-#ifdef MAC
-                                command = inkeydir();
-#else
                                 command = inkey();
-#endif
                             }
 
                             if (i == 0) {
@@ -801,12 +773,7 @@ void dungeon() {
                             /* a special hack to allow numbers as commands */
                             if (command == ' ') {
                                 prt("Command:", 0, 20);
-
-#ifdef MAC
-                                command = inkeydir();
-#else
                                 command = inkey();
-#endif
                             }
                         }
 
@@ -1244,15 +1211,9 @@ char com_val;
             (void)strcpy(died_from, "(saved)");
             msg_print("Saving game...");
 
-#ifdef MAC
-            if (save_char(TRUE)) {
-                exit_game();
-            }
-#else
             if (save_char()) {
                 exit_game();
             }
-#endif
 
             (void)strcpy(died_from, "(alive and well)");
         }

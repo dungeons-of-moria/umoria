@@ -45,9 +45,7 @@
 #endif
 #endif
 
-#if !defined(MAC)
 #include <pwd.h>
-#endif
 
 #ifdef unix
 #ifdef USG
@@ -91,10 +89,8 @@ off_t lseek();
 #endif
 #endif
 
-#ifndef MAC
 #if defined(ultrix) || defined(USG)
 void exit();
-#endif
 #endif
 
 #if defined(LINT_ARGS)
@@ -104,26 +100,15 @@ static void print_tomb(void);
 static void kingly(void);
 #endif
 
-#ifndef MAC
 long time();
-#endif
 
 static void date(day)
 char *day;
 {
     register char *tmp;
-
-#ifdef MAC
-    time_t clockvar;
-#else
     long clockvar;
-#endif
 
-#ifdef MAC
-    clockvar = time((time_t *)0);
-#else
     clockvar = time((long *)0);
-#endif
     tmp = ctime(&clockvar);
     tmp[10] = '\0';
     (void)strcpy(day, tmp);
@@ -143,8 +128,6 @@ char *in_str;
 }
 
 #if (defined(USG) || defined(HPUX))
-#if !defined(MAC)
-
 #include <errno.h>
 #include <sys/stat.h>
 
@@ -211,7 +194,6 @@ int f, l;
     return 0;
 }
 #endif
-#endif
 
 void display_scores(show_player) int show_player;
 {
@@ -225,13 +207,8 @@ void display_scores(show_player) int show_player;
     int16 player_uid;
 #endif
 
-#if defined(MAC) || defined(APOLLO)
-#if defined(MAC)
-    if ((highscore_fp = fopen(MORIA_TOP, "rb")) == NULL)
-#else
-    if ((highscore_fp = fopen(MORIA_TOP, "r")) == NULL)
-#endif
-    {
+#if defined(APOLLO)
+    if ((highscore_fp = fopen(MORIA_TOP, "r")) == NULL) {
         (void)sprintf(string, "Error opening score file \"%s\"\n", MORIA_TOP);
         msg_print(string);
         msg_print(CNIL);
@@ -259,10 +236,6 @@ void display_scores(show_player) int show_player;
                (version_min == 2 && patch_level < 2) || (version_min < 2)) {
         msg_print("Sorry. This scorefile is from a different version of umoria.");
         msg_print(CNIL);
-
-#if defined(MAC)
-        (void)fclose(highscore_fp);
-#endif
 
         return;
     }
@@ -311,7 +284,7 @@ void display_scores(show_player) int show_player;
         }
     }
 
-#if defined(MAC) || defined(APOLLO)
+#if defined(APOLLO)
     (void)fclose(highscore_fp);
 #endif
 }
@@ -326,17 +299,12 @@ int duplicate_character() {
     int8u version_maj, version_min, patch_level;
     int16 player_uid;
 
-#if defined(MAC) || defined(APOLLO)
+#if defined(APOLLO)
     char string[80];
 #endif
 
-#if defined(MAC) || defined(APOLLO)
-#if defined(MAC)
-    if ((highscore_fp = fopen(MORIA_TOP, "rb")) == NULL)
-#else
-    if ((highscore_fp = fopen(MORIA_TOP, "r")) == NULL)
-#endif
-    {
+#if defined(APOLLO)
+    if ((highscore_fp = fopen(MORIA_TOP, "r")) == NULL) {
         (void)sprintf(string, "Error opening score file \"%s\"\n", MORIA_TOP);
         msg_print(string);
         msg_print(CNIL);
@@ -366,7 +334,7 @@ int duplicate_character() {
         msg_print("Sorry. This scorefile is from a different version of umoria.");
         msg_print(CNIL);
 
-#if defined(MAC) || defined(APOLLO)
+#if defined(APOLLO)
         (void)fclose(highscore_fp);
 #endif
 
@@ -394,10 +362,6 @@ int duplicate_character() {
         rd_highscore(&score);
     }
 
-#if defined(MAC)
-    (void)fclose(highscore_fp);
-#endif
-
     return FALSE;
 #endif /* ! unix */
 }
@@ -408,11 +372,6 @@ static void print_tomb() {
     register int i;
     char day[11];
     register char *p;
-
-#ifdef MAC
-    char func;
-    int ok;
-#endif
 
     clear_screen();
     put_buffer("_______________________", 1, 15);
@@ -473,60 +432,21 @@ static void print_tomb() {
 retry:
     flush();
 
-#ifdef MAC
-    /* On Mac, file_character() gets file name via std file dialog */
-    /* So, the prompt for character record cannot be made to do double duty */
-    put_buffer("('F' - Save record in file / 'Y' - Display record on screen / 'N' - Abort)", 23, 0);
-    put_buffer("Character record [F/Y/N]?", 22, 0);
-    do {
-        func = inkey();
-        switch (func) {
-        case 'f':
-        case 'F':
-            func = 'F';
-            ok = TRUE;
-            break;
-        case 'y':
-        case 'Y':
-            func = 'Y';
-            ok = TRUE;
-            break;
-        case 'n':
-        case 'N':
-            func = 'N';
-            ok = TRUE;
-            break;
-        default:
-            bell();
-            ok = FALSE;
-            break;
-        }
-    } while (!ok);
-    if (func != 'N')
-#else
     put_buffer("(ESC to abort, return to print on screen, or file name)", 23, 0);
     put_buffer("Character record?", 22, 0);
-    if (get_string(str, 22, 18, 60))
-#endif
-    {
+    if (get_string(str, 22, 18, 60)) {
         for (i = 0; i < INVEN_ARRAY_SIZE; i++) {
             known1(&inventory[i]);
             known2(&inventory[i]);
         }
+
         calc_bonuses();
-#ifdef MAC
-        if (func == 'F') {
-            if (!file_character())
-                goto retry;
-        }
-#else
+
         if (str[0]) {
             if (!file_character(str)) {
                 goto retry;
             }
-        }
-#endif
-        else {
+        } else {
             clear_screen();
             display_char();
             put_buffer("Type ESC to skip the inventory:", 23, 0);
@@ -572,7 +492,7 @@ static void highscores() {
     int8u version_maj, version_min, patch_level;
     long curpos;
 
-#if defined(MAC) || defined(APOLLO)
+#if defined(APOLLO)
     char string[100];
 #endif
 
@@ -616,32 +536,18 @@ static void highscores() {
     }
     (void)strcpy(new_entry.died_from, tmp);
 
-/*  First, get a lock on the high score file so no-one else tries */
-/*  to write to it while we are using it, on IBMPCs only one
-    process can have the file open at a time, so we just open it here */
-#if defined(MAC)
-#if defined(MAC)
-    if ((highscore_fp = fopen(MORIA_TOP, "rb+")) == NULL)
-#else
-    if ((highscore_fp = fopen(MORIA_TOP, "r+")) == NULL)
-#endif
-    {
-        (void)sprintf(string, "Error opening score file \"%s\"\n", MORIA_TOP);
-        msg_print(string);
-        msg_print(CNIL);
-        return;
-    }
-#else
+    /*  First, get a lock on the high score file so no-one else tries */
+    /*  to write to it while we are using it, on IBMPCs only one
+        process can have the file open at a time, so we just open it here */
     if (0 != flock((int)fileno(highscore_fp), LOCK_EX)) {
         msg_print("Error gaining lock for score file");
         msg_print(CNIL);
         return;
     }
-#endif
 
-/* Search file to find where to insert this character, if uid != 0 and
-   find same uid/sex/race/class combo then exit without saving this score */
-/* Seek to the beginning of the file just to be safe. */
+    /* Search file to find where to insert this character, if uid != 0 and
+       find same uid/sex/race/class combo then exit without saving this score */
+    /* Seek to the beginning of the file just to be safe. */
 #ifndef BSD4_3
     (void)fseek(highscore_fp, (long)0, L_SET);
 #else
@@ -678,12 +584,10 @@ static void highscores() {
     else if ((version_maj != CUR_VERSION_MAJ) ||
              (version_min > CUR_VERSION_MIN) ||
              (version_min == CUR_VERSION_MIN && patch_level > PATCH_LEVEL) ||
-             (version_min == 2 && patch_level < 2) || (version_min < 2)) {
-/* No need to print a message, a subsequent call to display_scores()
-   will print a message. */
-#if defined(MAC)
-        (void)fclose(highscore_fp);
-#endif
+             (version_min == 2 && patch_level < 2) || (version_min < 2))
+    {
+        /* No need to print a message, a subsequent call to display_scores()
+           will print a message. */
         return;
     }
 
@@ -708,17 +612,12 @@ static void highscores() {
                    new_entry.sex == old_entry.sex &&
                    new_entry.race == old_entry.race &&
                    new_entry.class == old_entry.class) {
-#if defined(MAC) || defined(APOLLO)
+#if defined(APOLLO)
             (void)fclose(highscore_fp);
 #endif
             return;
         } else if (++i >= SCOREFILE_SIZE) {
             /* only allow one thousand scores in the score file */
-
-#if defined(MAC)
-            (void)fclose(highscore_fp);
-#endif
-
             return;
         }
         curpos = ftell(highscore_fp);
@@ -783,7 +682,7 @@ static void highscores() {
         }
     }
 
-#if !defined(MAC) && !defined(APOLLO)
+#if !defined(APOLLO)
     (void)flock((int)fileno(highscore_fp), LOCK_UN);
 #else
     (void)fclose(highscore_fp);
@@ -833,16 +732,13 @@ static void kingly() {
 
 /* Handles the gravestone end top-twenty routines  -RAK- */
 void exit_game() {
-
-#ifdef MAC
-    /* Prevent strange things from happening */
-    enablefilemenu(FALSE);
-#endif
-
     /* What happens upon dying.        -RAK- */
+
     msg_print(CNIL);
+
     flush();     /* flush all input */
     nosignals(); /* Can't interrupt or suspend. */
+
     /* If the game has been saved, then save sets turn back to -1, which
        inhibits the printing of the tomb. */
     if (turn >= 0) {
@@ -851,35 +747,24 @@ void exit_game() {
         }
         print_tomb();
     }
+
     if (character_generated && !character_saved) {
-
-#ifdef MAC
-        (void)save_char(TRUE); /* Save the memory at least. */
-#else
-        (void)save_char(); /* Save the memory at least. */
+        /* Save the memory at least. */
+        (void)save_char();
     }
-#endif
 
-        /* add score to scorefile if applicable */
-        if (character_generated) {
-            /* Clear character_saved, strange thing to do, but it prevents inkey()
-               from recursively calling exit_game() when there has been an eof
-               on stdin detected.
-            */
-            character_saved = FALSE;
-            highscores();
-            display_scores(TRUE);
-        }
-        erase_line(23, 0);
-        restore_term();
+    /* add score to scorefile if applicable */
+    if (character_generated) {
+        /* Clear character_saved, strange thing to do, but it prevents inkey()
+           from recursively calling exit_game() when there has been an eof
+           on stdin detected.
+        */
+        character_saved = FALSE;
+        highscores();
+        display_scores(TRUE);
+    }
+    erase_line(23, 0);
+    restore_term();
 
-#ifdef MAC
-        /* Undo what has been done */
-        enablefilemenu(TRUE);
-        /* Long jump back into the Mac wrapper, in lieu of exit () */
-        goback();
-#else
     exit(0);
-#endif
-
 }

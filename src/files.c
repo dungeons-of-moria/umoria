@@ -45,11 +45,6 @@ void exit();
    `topen' declaration. */
 #include "externs.h"
 
-#ifdef MAC
-#include "ScrnMgr.h"
-#define GNRL_ALRT 1024
-#endif
-
 /*
  *  init_scorefile
  *  Open the score file while we still have the setuid privileges.  Later
@@ -58,45 +53,20 @@ void exit();
  *  Craig Norborg (doc)    Mon Aug 10 16:41:59 EST 1987
  */
 void init_scorefile() {
-
-#ifdef MAC
-    appldirectory();
-#endif
-
-#if defined(MAC)
-    highscore_fp = fopen(MORIA_TOP, "rb+");
-#else
     highscore_fp = fopen(MORIA_TOP, "r+");
-#endif
 
     if (highscore_fp == NULL) {
-#ifdef MAC
-        /* Create it if not there. */
-        highscore_fp = fopen(MORIA_TOP, "wb");
-        if (highscore_fp == NULL) {
-            ParamText("\pCan't create score file!", NULL, NULL, NULL);
-            DoScreenALRT(GNRL_ALRT, akStop, fixHalf, fixThird);
-            ExitToShell();
-        }
-        setfileinfo(MORIA_TOP, currentdirectory(), SCORE_FTYPE);
-#else
         (void)fprintf(stderr, "Can't open score file \"%s\"\n", MORIA_TOP);
         exit(1);
-#endif
     }
 
-#if defined(MAC) || defined(APOLLO)
+#if defined(APOLLO)
     /* can't leave it open, since this causes problems on networked PCs,
        we DO want to check to make sure we can open the file, though */
     fclose(highscore_fp);
 #endif
-
-#ifdef MAC
-    restoredirectory();
-#endif
 }
 
-#ifndef MAC
 /* Attempt to open the intro file      -RAK- */
 /* This routine also checks the hours file vs. what time it is  -Doc */
 void read_times() {
@@ -162,17 +132,9 @@ void read_times() {
         (void)fclose(file1);
     }
 }
-#endif
 
 /* File perusal.      -CJS-
    primitive, but portable */
-#ifdef MAC
-void helpfile(filename)
-char *filename;
-{
-    mac_helpfile(filename, TRUE);
-}
-#else
 void helpfile(filename)
 char *filename;
 {
@@ -207,7 +169,6 @@ char *filename;
     (void)fclose(file);
     restore_screen();
 }
-#endif
 
 /* Prints a list of random objects to a file.  Note that -RAK- */
 /* the objects produced is a sampling of objects which */
@@ -219,10 +180,6 @@ void print_objects() {
     bigvtype tmp_str;
     register FILE *file1;
     register inven_type *i_ptr;
-
-#ifdef MAC
-    short vrefnum;
-#endif
 
     prt("Produce objects on what level?: ", 0, 0);
     level = 0;
@@ -242,28 +199,13 @@ void print_objects() {
             nobj = 10000;
         }
 
-#ifdef MAC
-        (void)strcpy(filename1, "Objects");
-        if (doputfile("Save objects in:", filename1, &vrefnum))
-#else
         prt("File name: ", 0, 0);
-        if (get_string(filename1, 0, 11, 64))
-#endif
-        {
+        if (get_string(filename1, 0, 11, 64)) {
             if (strlen(filename1) == 0) {
                 return;
             }
 
-#ifdef MAC
-            changedirectory(vrefnum);
-#endif
-
             if ((file1 = fopen(filename1, "w")) != NULL) {
-
-#ifdef MAC
-                macbeginwait();
-#endif
-
                 (void)sprintf(tmp_str, "%d", nobj);
                 prt(strcat(tmp_str, " random objects being produced..."), 0, 0);
                 put_qio();
@@ -288,20 +230,10 @@ void print_objects() {
                 }
                 pusht((int8u)j);
                 (void)fclose(file1);
-
-#ifdef MAC
-                setfileinfo(filename1, vrefnum, INFO_FTYPE);
-                macendwait();
-#endif
-
                 prt("Completed.", 0, 0);
             } else {
                 prt("File could not be opened.", 0, 0);
             }
-
-#ifdef MAC
-            restoredirectory();
-#endif
         }
     } else {
         prt("Parameters no good.", 0, 0);
@@ -309,11 +241,8 @@ void print_objects() {
 }
 
 /* Print the character to a file or device    -RAK- */
-#ifdef MAC
-int file_character()
-#else
-int file_character(filename1) char *filename1;
-#endif
+int file_character(filename1)
+char *filename1;
 {
     register int i;
     int j, xbth, xbthb, xfos, xsrh, xstl, xdis, xsave, xdev;
@@ -326,24 +255,6 @@ int file_character(filename1) char *filename1;
     vtype out_val, prt1;
     char *p, *colon, *blank;
 
-#ifdef MAC
-    vtype filename1;
-    short vrefnum;
-#endif
-
-#ifdef MAC
-    (void)makefilename(filename1, "Stats", TRUE);
-    if (!doputfile("Save character description in:", filename1, &vrefnum)) {
-        return (FALSE);
-    }
-#endif
-
-#ifdef MAC
-    changedirectory(vrefnum);
-    fd = open(filename1, O_WRONLY | O_CREAT | O_TRUNC);
-    restoredirectory();
-    macbeginwait();
-#else
     fd = open(filename1, O_WRONLY | O_CREAT | O_EXCL, 0644);
     if (fd < 0 && errno == EEXIST) {
         (void)sprintf(out_val, "Replace existing file %s?", filename1);
@@ -351,7 +262,7 @@ int file_character(filename1) char *filename1;
             fd = open(filename1, O_WRONLY, 0644);
         }
     }
-#endif
+
     if (fd >= 0) {
         /* on some non-unix machines, fdopen() is not reliable, hence must call
            close() and then fopen() */
@@ -367,11 +278,7 @@ int file_character(filename1) char *filename1;
         colon = ":";
         blank = " ";
 
-#ifdef MAC
-        (void)fprintf(file1, "\n\n");
-#else
         (void)fprintf(file1, "%c\n\n", CTRL('L'));
-#endif
 
         (void)fprintf(file1, " Name%9s %-23s", colon, py.misc.name);
         (void)fprintf(file1, " Age%11s %6d", colon, (int)py.misc.age);
@@ -514,12 +421,8 @@ int file_character(filename1) char *filename1;
             }
         }
 
-/* Write out the character's inventory. */
-#ifdef MAC
-        (void)fprintf(file1, "\n\n");
-#else
+        /* Write out the character's inventory. */
         (void)fprintf(file1, "%c\n\n", CTRL('L'));
-#endif
 
         (void)fprintf(file1, "  [General Inventory List]\n\n");
         if (inven_ctr == 0) {
@@ -531,16 +434,8 @@ int file_character(filename1) char *filename1;
             }
         }
 
-#ifndef MAC
         (void)fprintf(file1, "%c", CTRL('L'));
-#endif
-
         (void)fclose(file1);
-
-#ifdef MAC
-        setfileinfo(filename1, vrefnum, INFO_FTYPE);
-        macendwait();
-#endif
 
         prt("Completed.", 0, 0);
         return TRUE;

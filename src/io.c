@@ -31,15 +31,7 @@
 #undef NLS
 #endif
 
-#ifdef MAC
-#ifdef THINK_C
-#include "ScrnMgr.h"
-#else
-#include <scrnmgr.h>
-#endif
-#else
 #include <ncurses.h>
-#endif
 
 #include <ctype.h>
 
@@ -50,10 +42,8 @@
 typedef struct { int stuff; } fpvmach;
 #endif
 
-#if !defined(MAC)
 #include <sys/ioctl.h>
 #include <signal.h>
-#endif
 
 #ifndef USG
 /* only needed for Berkeley UNIX */
@@ -67,9 +57,7 @@ typedef struct { int stuff; } fpvmach;
 
 #if 0
 /* Used to include termio.h here, but that caused problems on some systems, as curses.h includes it also above.  */
-#if !defined(MAC)
 #include <termio.h>
-#endif
 #endif /* 0 */
 
 #ifdef HPUX
@@ -107,7 +95,6 @@ struct screen { int dumb; };
    ioctl is sometimes called with just two arguments. The
    following definition keeps lint happy. It may need to be
    reset for different systems.	 */
-#ifndef MAC
 #ifdef lint
 #ifdef Pyramid
 /* Pyramid makes constants greater than 65535 into long! Gakk! -CJS- */
@@ -118,9 +105,9 @@ static Ioctl(i, l, p) long l; char *p; { return 0; }
 /*ARGSUSED*/
 /*VARARGS2*/
 static Ioctl(i, l, p) char *p; { return 0; }
-#endif
+#endif // end Pyramid
 #define ioctl	    Ioctl
-#endif
+#endif // end lint
 
 #if !defined(USG) && defined(lint)
 /* This use_value hack is for curses macros which return a value,
@@ -142,11 +129,7 @@ int Use_value2;
 #define use_value2
 #endif
 
-#endif
-
-#ifndef MAC
 char *getenv();
-#endif
 
 #ifdef USG
 void exit();
@@ -158,7 +141,6 @@ void exit();
 void sleep();
 #endif
 
-#if !defined(MAC)
 #ifdef USG
 #ifdef __linux__
 static struct termios save_termio;
@@ -171,27 +153,17 @@ static struct sgttyb save_ttyb;
 static struct tchars save_tchars;
 static int save_local_chars;
 #endif
-#endif
 
-#ifndef MAC
 static int curses_on = FALSE;
 static WINDOW *savescr;		/* Spare window for saving the screen. -CJS-*/
-#endif
 
-#ifdef MAC
-/* Attributes of normal and hilighted characters */
-#define ATTR_NORMAL	attrNormal
-#define ATTR_HILITED	attrReversed
-#endif
 
-#ifndef MAC
 #ifdef SIGTSTP
 /* suspend()							   -CJS-
    Handle the stop and start signals. This ensures that the log
    is up to date, and that the terminal is fully reset and
    restored.  */
-int suspend()
-{
+int suspend() {
 #ifdef USG
   /* for USG systems with BSDisms that have SIGTSTP defined, but don't
      actually implement it */
@@ -220,24 +192,10 @@ int suspend()
   return 0;
 }
 #endif
-#endif
+
 
 /* initializes curses routines */
-void init_curses()
-#ifdef MAC
-{
-  /* Primary initialization is done in mac.c since game is restartable */
-  /* Only need to clear the screen here */
-  Rect scrn;
-
-  scrn.left = scrn.top = 0;
-  scrn.right = SCRN_COLS;
-  scrn.bottom = SCRN_ROWS;
-  EraseScreen(&scrn);
-  UpdateScreen();
-}
-#else
-{
+void init_curses() {
   int i, y, x;
 
 #ifndef USG
@@ -247,7 +205,7 @@ void init_curses()
   (void) ioctl(0, TIOCLGET, (char *)&save_local_chars);
 #else
   (void) ioctl(0, TCGETA, (char *)&save_termio);
-#endif
+#endif // end USG
 
   /* PC curses returns ERR */
 #if defined(USG) && !defined(PC_CURSES)
@@ -277,7 +235,7 @@ void init_curses()
   (void) signal (SIGTSTP, suspend);
 #endif // end DEBIAN_LINUX
 #endif // end __386BSD__
-#endif
+#endif // end SIGTSTP
 
   if (((savescr = newwin (0, 0, 0, 0)) == NULL)) {
       (void) printf ("Out of memory in starting up curses.\n");
@@ -306,19 +264,11 @@ void init_curses()
       msg_print("Tabs must be set 8 spaces apart.");
       exit_game();
     }
-#endif
+#endif // end `0`
 }
-#endif
 
 /* Set up the terminal into a suitable state for moria.	 -CJS- */
-void moriaterm()
-#ifdef MAC
-/* Nothing to do on Mac */
-{
-}
-#else
-{
-
+void moriaterm() {
 #ifdef USG
 #ifdef __linux__
   struct termios tbuf;
@@ -379,20 +329,12 @@ void moriaterm()
   (void) ioctl(0, TIOCSETC, (char *)&buf);
 #endif // end USG
 }
-#endif
 
 
 /* Dump IO to buffer					-RAK-	*/
 void put_buffer(out_str, row, col)
 char *out_str;
 int row, col;
-#ifdef MAC
-{
-  /* The screen manager handles writes past the edge ok */
-  DSetScreenCursor(col, row);
-  DWriteScreenStringAttr(out_str, ATTR_NORMAL);
-}
-#else
 {
   vtype tmp_str;
 
@@ -416,28 +358,17 @@ int row, col;
       (void) sleep(2);
     }
 }
-#endif
 
 
 /* Dump the IO buffer to terminal			-RAK-	*/
 void put_qio()
 {
   screen_change = TRUE;	   /* Let inven_command know something has changed. */
-#ifdef MAC
-  UpdateScreen();
-#else
   (void) refresh();
-#endif
 }
 
 /* Put the terminal in the original mode.			   -CJS- */
-void restore_term()
-#ifdef MAC
-/* Nothing to do on Mac */
-{
-}
-#else
-{
+void restore_term() {
 
   if (!curses_on)
     return;
@@ -458,19 +389,9 @@ void restore_term()
 #endif
   curses_on = FALSE;
 }
-#endif
 
 
-void shell_out()
-#ifdef MAC
-{
-  alert_error("This command is not implemented on the Macintosh.");
-}
-#else // not MAC
-
-
-
-{
+void shell_out() {
 #ifdef USG
 #ifdef __linux__
   struct termios tbuf;
@@ -571,39 +492,14 @@ void shell_out()
 
   (void) wrefresh(curscr);
 }
-#endif // end MAC
+
 
 
 /* Returns a single character input from the terminal.	This silently -CJS-
    consumes ^R to redraw the screen and reset the terminal, so that this
    operation can always be performed at any input prompt.  inkey() never
    returns ^R.	*/
-char inkey()
-#ifdef MAC
-/* The Mac does not need ^R, so it just consumes it */
-/* This routine does nothing special with direction keys */
-/* Just returns their keypad ascii value (e.g. '0'-'9') */
-/* Compare with inkeydir() below */
-{
-  char ch;
-  int dir;
-  int shift_flag, ctrl_flag;
-
-  put_qio();
-  command_count = 0;
-
-  do {
-    macgetkey(&ch, FALSE);
-  } while (ch == CTRL('R'));
-
-  dir = extractdir(ch, &shift_flag, &ctrl_flag);
-  if (dir != -1)
-    ch = '0' + dir;
-
-  return(ch);
-}
-#else
-{
+char inkey() {
   int i;
 
   put_qio();			/* Dump IO buffer		*/
@@ -643,71 +539,9 @@ char inkey()
       moriaterm();
     }
 }
-#endif
-
-
-#ifdef MAC
-char inkeydir()
-/* The Mac does not need ^R, so it just consumes it */
-/* This routine translates the direction keys in rogue-like mode */
-/* Compare with inkeydir() below */
-{
-  char ch;
-  int dir;
-  int shift_flag, ctrl_flag;
-  static char tab[9] = {
-	'b',		'j',		'n',
-	'h',		'.',		'l',
-	'y',		'k',		'u'
-  };
-  static char shifttab[9] = {
-	'B',		'J',		'N',
-	'H',		'.',		'L',
-	'Y',		'K',		'U'
-  };
-  static char ctrltab[9] = {
-	CTRL('B'),	CTRL('J'),	CTRL('N'),
-	CTRL('H'),	'.',		CTRL('L'),
-	CTRL('Y'),	CTRL('K'),	CTRL('U')
-  };
-
-  put_qio();
-  command_count = 0;
-
-  do {
-    macgetkey(&ch, FALSE);
-  } while (ch == CTRL('R'));
-
-  dir = extractdir(ch, &shift_flag, &ctrl_flag);
-
-  if (dir != -1) {
-    if (!rogue_like_commands) {
-      ch = '0' + dir;
-    }
-    else {
-      if (ctrl_flag)
-	ch = ctrltab[dir - 1];
-      else if (shift_flag)
-	ch = shifttab[dir - 1];
-      else
-	ch = tab[dir - 1];
-    }
-  }
-
-  return(ch);
-}
-#endif
-
 
 /* Flush the buffer					-RAK-	*/
-void flush()
-#ifdef MAC
-{
-/* Removed put_qio() call.  Reduces flashing.  Doesn't seem to hurt. */
-  FlushScreenKeys();
-}
-#else
-{
+void flush() {
   /* the code originally used ioctls, TIOCDRAIN, or TIOCGETP/TIOCSETP, or
      TCGETA/TCSETAF, however this occasionally resulted in loss of output,
      the happened especially often when rlogin from BSD to SYS_V machine,
@@ -720,76 +554,34 @@ void flush()
 
   /* used to call put_qio() here to drain output, but it is not necessary */
 }
-#endif
 
 
 /* Clears given line of text				-RAK-	*/
 void erase_line(row, col)
 int row;
-int col;
-#ifdef MAC
-{
-  Rect line;
-
-  if (row == MSG_LINE && msg_flag)
-    msg_print(CNIL);
-
-  line.left = col;
-  line.top = row;
-  line.right = SCRN_COLS;
-  line.bottom = row + 1;
-  DEraseScreen(&line);
-}
-#else
-{
+int col; {
   if (row == MSG_LINE && msg_flag)
     msg_print(CNIL);
   (void) move(row, col);
   clrtoeol();
 }
-#endif
+
 
 
 /* Clears screen */
-void clear_screen()
-#ifdef MAC
-{
-  Rect area;
-
-  if (msg_flag)
-    msg_print(CNIL);
-
-  area.left = area.top = 0;
-  area.right = SCRN_COLS;
-  area.bottom = SCRN_ROWS;
-  DEraseScreen(&area);
-}
-#else
-{
+void clear_screen() {
   if (msg_flag)
     msg_print(CNIL);
   (void) clear();
 }
-#endif
+
 
 void clear_from (row)
-int row;
-#ifdef MAC
-{
-  Rect area;
-
-  area.left = 0;
-  area.top = row;
-  area.right = SCRN_COLS;
-  area.bottom = SCRN_ROWS;
-  DEraseScreen(&area);
-}
-#else
-{
+int row; {
   (void) move(row, 0);
   clrtobot();
 }
-#endif
+
 
 
 /* Outputs a char to a given interpolated y, x position	-RAK-	*/
@@ -798,22 +590,6 @@ void print(ch, row, col)
 char ch;
 int row;
 int col;
-#ifdef MAC
-{
-  char cnow, anow;
-
-  row -= panel_row_prt;/* Real co-ords convert to screen positions */
-  col -= panel_col_prt;
-
-  GetScreenCharAttr(&cnow, &anow, col, row);	/* Check current */
-
-  /* If char is already set, ignore op */
-  if ((cnow != ch) || (anow != ATTR_NORMAL))
-    DSetScreenCharAttr(ch & 0x7F,
-		       (ch & 0x80) ? attrReversed : attrNormal,
-		       col, row);
-}
-#else
 {
   vtype tmp_str;
 
@@ -832,21 +608,13 @@ int col;
       (void) sleep(2);
     }
 }
-#endif
+
 
 
 /* Moves the cursor to a given interpolated y, x position	-RAK-	*/
 void move_cursor_relative(row, col)
 int row;
 int col;
-#ifdef MAC
-{
-  row -= panel_row_prt;/* Real co-ords convert to screen positions */
-  col -= panel_col_prt;
-
-  DSetScreenCursor(col, row);
-}
-#else
 {
   vtype tmp_str;
 
@@ -866,7 +634,7 @@ int col;
       (void) sleep(2);
     }
 }
-#endif
+
 
 
 /* Print a message so as not to interrupt a counted command. -CJS- */
@@ -886,22 +654,6 @@ void prt(str_buff, row, col)
 char *str_buff;
 int row;
 int col;
-#ifdef MAC
-{
-  Rect line;
-
-  if (row == MSG_LINE && msg_flag)
-    msg_print(CNIL);
-
-  line.left = col;
-  line.top = row;
-  line.right = SCRN_COLS;
-  line.bottom = row + 1;
-  DEraseScreen(&line);
-
-  put_buffer(str_buff, row, col);
-}
-#else
 {
   if (row == MSG_LINE && msg_flag)
     msg_print(CNIL);
@@ -909,21 +661,16 @@ int col;
   clrtoeol();
   put_buffer(str_buff, row, col);
 }
-#endif
+
 
 
 /* move cursor to a given y, x position */
 void move_cursor(row, col)
 int row, col;
-#ifdef MAC
-{
-  DSetScreenCursor(col, row);
-}
-#else
 {
   (void) move (row, col);
 }
-#endif
+
 
 
 /* Outputs message to top line of screen				*/
@@ -934,9 +681,6 @@ char *str_buff;
   register int old_len, new_len;
   int combine_messages = FALSE;
   char in_char;
-#ifdef MAC
-  Rect line;
-#endif
 
   if (msg_flag)
     {
@@ -971,18 +715,9 @@ char *str_buff;
 	combine_messages = TRUE;
     }
 
-  if (! combine_messages)
-    {
-#ifdef MAC
-      line.left = 0;
-      line.top = MSG_LINE;
-      line.right = SCRN_COLS;
-      line.bottom = MSG_LINE+1;
-      DEraseScreen(&line);
-#else
+  if (! combine_messages) {
       (void) move(MSG_LINE, 0);
       clrtoeol();
-#endif
     }
 
   /* Make the null string a special case.  -CJS- */
@@ -1020,16 +755,9 @@ int get_check(prompt)
 char *prompt;
 {
   int res;
-#ifdef MAC
-  long y, x;		/* ??? Should change to int or short.  */
-#else
   int y, x;
-#endif
 
   prt(prompt, 0, 0);
-#ifdef MAC
-  GetScreenCursor(&x, &y);
-#else
   getyx(stdscr, y, x);
 #if defined(lint)
   /* prevent message 'warning: y is unused' */
@@ -1039,15 +767,12 @@ char *prompt;
   /* prevent message about y never used for MSDOS systems */
   res = y;
 #endif
-#endif
 
   if (x > 73)
     (void) move(0, 73);
-#ifdef MAC
-  DWriteScreenStringAttr(" [y/n]", ATTR_NORMAL);
-#else
+
   (void) addstr(" [y/n]");
-#endif
+
   do
     {
       res = inkey();
@@ -1079,27 +804,6 @@ char *command;
   return(res);
 }
 
-#ifdef MAC
-/* Same as get_com(), but translates direction keys from keypad */
-int get_comdir(prompt, command)
-char *prompt;
-char *command;
-{
-  int res;
-
-  if (prompt)
-    prt(prompt, 0, 0);
-  *command = inkeydir();
-  if (*command == ESCAPE)
-    res = FALSE;
-  else
-    res = TRUE;
-  erase_line(MSG_LINE, 0);
-  return(res);
-}
-#endif
-
-
 /* Gets a string terminated by <RETURN>		*/
 /* Function returns false if <ESCAPE> is input	*/
 int get_string(in_str, row, column, slen)
@@ -1109,33 +813,25 @@ int row, column, slen;
   register int start_col, end_col, i;
   char *p;
   int flag, aborted;
-#ifdef MAC
-  Rect area;
-#endif
 
   aborted = FALSE;
   flag	= FALSE;
-#ifdef MAC
-  area.left = column;
-  area.top = row;
-  area.right = column + slen;
-  area.bottom = row + 1;
-  DEraseScreen(&area);
-  DSetScreenCursor(column, row);
-#else
   (void) move(row, column);
+
   for (i = slen; i > 0; i--)
     (void) addch(' ');
+
   (void) move(row, column);
-#endif
   start_col = column;
   end_col = column + slen - 1;
+
   if (end_col > 79)
     {
       slen = 80 - column;
       end_col = 79;
     }
   p = in_str;
+
   do
     {
       i = inkey();
@@ -1161,12 +857,7 @@ int row, column, slen;
 	    bell();
 	  else
 	    {
-#ifdef MAC
-	      DSetScreenCursor(column, row);
-	      DWriteScreenCharAttr((char) i, ATTR_NORMAL);
-#else
 	      use_value2 mvaddch(row, column, (char)i);
-#endif
 	      *p++ = i;
 	      column++;
 	    }
@@ -1213,28 +904,11 @@ int delay;
         (void) sleep((unsigned)delay);
       }
 
-#ifdef MAC
-      enablefilemenu(FALSE);
       exit_game();
-      enablefilemenu(TRUE);
-#else
-      exit_game();
-#endif
     }
   erase_line(prt_line, 0);
 }
 
-#ifdef MAC
-void save_screen()
-{
-  mac_save_screen();
-}
-
-void restore_screen()
-{
-  mac_restore_screen();
-}
-#else
 void save_screen()
 {
   overwrite(stdscr, savescr);
@@ -1245,7 +919,7 @@ void restore_screen()
   overwrite(savescr, stdscr);
   touchwin(stdscr);
 }
-#endif
+
 
 void bell()
 {
@@ -1255,11 +929,7 @@ void bell()
   if (! sound_beep_flag)
     return;
 
-#ifdef MAC
-  mac_beep();
-#else
   (void) write(1, "\007", 1);
-#endif
 }
 
 /* definitions used by screen_map() */
@@ -1288,9 +958,7 @@ void screen_map()
   int8u tmp;
   int priority[256];
   int row, orow, col, myrow, mycol = 0;
-#ifndef MAC
   char prntscrnbuf[80];
-#endif
 
   for (i = 0; i < 256; i++)
     priority[i] = 0;
@@ -1304,20 +972,15 @@ void screen_map()
 
   save_screen();
   clear_screen();
-#ifdef MAC
-  DSetScreenCursor(0, 0);
-  DWriteScreenCharAttr(CH(TL), ATTR_NORMAL);
-  for (i = 0; i < MAX_WIDTH / RATIO; i++)
-    DWriteScreenCharAttr(CH(HE), ATTR_NORMAL);
-  DWriteScreenCharAttr(CH(TR), ATTR_NORMAL);
-#else
   use_value2 mvaddch(0, 0, CH(TL));
+
   for (i = 0; i < MAX_WIDTH / RATIO; i++)
     (void) addch(CH(HE));
+
   (void) addch(CH(TR));
-#endif
   orow = -1;
   map[MAX_WIDTH / RATIO] = '\0';
+
   for (i = 0; i < MAX_HEIGHT; i++)
     {
       row = i / RATIO;
@@ -1325,18 +988,11 @@ void screen_map()
 	{
 	  if (orow >= 0)
 	    {
-#ifdef MAC
-	      DSetScreenCursor(0, orow+1);
-	      DWriteScreenCharAttr(CH(VE), ATTR_NORMAL);
-	      DWriteScreenString((char *) map);
-	      DWriteScreenCharAttr(CH(VE), ATTR_NORMAL);
-#else
 	      /* can not use mvprintw() on ibmpc, because PC-Curses is horribly
 		 written, and mvprintw() causes the fp emulation library to be
 		 linked with PC-Moria, makes the program 10K bigger */
 	      (void) sprintf(prntscrnbuf,"%c%s%c",CH(VE), map, CH(VE));
 	      use_value2 mvaddstr(orow+1, 0, prntscrnbuf);
-#endif
 	    }
 	  for (j = 0; j < MAX_WIDTH / RATIO; j++)
 	    map[j] = ' ';
@@ -1357,39 +1013,20 @@ void screen_map()
     }
   if (orow >= 0)
     {
-#ifdef MAC
-      DSetScreenCursor(0, orow+1);
-      DWriteScreenCharAttr(CH(VE), ATTR_NORMAL);
-      DWriteScreenString((char *) map);
-      DWriteScreenCharAttr(CH(VE), ATTR_NORMAL);
-#else
       (void) sprintf(prntscrnbuf,"%c%s%c",CH(VE), map, CH(VE));
       use_value2 mvaddstr(orow+1, 0, prntscrnbuf);
-#endif
     }
-#ifdef MAC
-  DSetScreenCursor(0, orow + 2);
-  DWriteScreenCharAttr(CH(BL), ATTR_NORMAL);
-  for (i = 0; i < MAX_WIDTH / RATIO; i++)
-    DWriteScreenCharAttr(CH(HE), ATTR_NORMAL);
-  DWriteScreenCharAttr(CH(BR), ATTR_NORMAL);
-#else
   use_value2 mvaddch(orow + 2, 0, CH(BL));
+
   for (i = 0; i < MAX_WIDTH / RATIO; i++)
     (void) addch(CH(HE));
-  (void) addch(CH(BR));
-#endif
 
-#ifdef MAC
-  DSetScreenCursor(23, 23);
-  DWriteScreenStringAttr("Hit any key to continue", ATTR_NORMAL);
-  if (mycol > 0)
-    DSetScreenCursor(mycol, myrow);
-#else
+  (void) addch(CH(BR));
+
   use_value2 mvaddstr(23, 23, "Hit any key to continue");
   if (mycol > 0)
     (void) move(myrow, mycol);
-#endif
+
   (void) inkey();
   restore_screen();
 }

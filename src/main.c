@@ -46,12 +46,9 @@
 #include <time.h>
 #endif
 
-#ifndef MAC
 long time();
 char *getenv();
-#endif
 
-#ifndef MAC
 #ifdef USG
 unsigned short getuid(), getgid();
 #else
@@ -63,18 +60,13 @@ int getuid(), getgid();
 #endif
 #endif
 #endif // end USG
-#endif
 
-#ifndef MAC
 #if defined(ultrix) || defined(USG)
 void perror();
 #endif
-#endif
 
-#ifndef MAC
 #ifdef USG
 void exit();
-#endif
 #endif
 
 #if defined(LINT_ARGS)
@@ -94,24 +86,14 @@ static void price_adjust();
 #endif
 
 /* Initialize, restore, and get the ball rolling.  -RAK- */
-#ifdef MAC
-/* This is just a subroutine for the Mac version */
-/* only options passed in are -orn */
-/* save file name is never passed */
-int moria_main(argc, argv) int argc;
+int main(argc, argv)
+int argc;
 char *argv[];
-#else
-int main(argc, argv) int argc;
-char *argv[];
-#endif
 {
     int32u seed;
     int generate;
     int result;
-
-#ifndef MAC
     char *p;
-#endif
 
     int new_game = FALSE;
     int force_rogue_like = FALSE;
@@ -129,7 +111,6 @@ char *argv[];
     init_scorefile();
 
 #ifndef SECURE
-#if !defined(MAC)
     if (0 != setuid(getuid())) {
         perror("Can't set permissions correctly!  Setuid call failed.\n");
         exit(0);
@@ -138,7 +119,6 @@ char *argv[];
         perror("Can't set permissions correctly!  Setgid call failed.\n");
         exit(0);
     }
-#endif
 #endif
 
     /* use curses */
@@ -165,7 +145,6 @@ char *argv[];
             force_rogue_like = TRUE;
             force_keys_to = TRUE;
             break;
-#ifndef MAC
         case 'S':
             display_scores(TRUE);
             exit_game();
@@ -182,15 +161,12 @@ char *argv[];
         default:
             (void)printf("Usage: moria [-norsw] [savefile]\n");
             exit_game();
-#endif
         }
     }
 
-#ifndef MAC
     /* Check operating hours */
     /* If not wizard  No_Control_Y */
     read_times();
-#endif
 
 /* Some necessary initializations */
 /* all made into constants or initialized in variables.c */
@@ -209,8 +185,6 @@ char *argv[];
     /* Init the store inventories */
     store_init();
 
-#ifndef MAC
-    /* On Mac, if -n is passed, no savefile is used */
     /* If -n is not passed, the calling routine will know savefile name,
        hence, this code is not necessary */
 
@@ -224,7 +198,6 @@ char *argv[];
     } else {
         (void)strcpy(savefile, MORIA_SAV);
     }
-#endif
 
     /* This restoration of a saved character may get ONLY the monster memory. In
        this case, get_char returns false. It may also resurrect a dead character
@@ -233,15 +206,9 @@ char *argv[];
 
     result = FALSE;
 
-#ifdef MAC
-    if ((new_game == FALSE) && get_char(&generate)) {
-        result = TRUE;
-    }
-#else
     if ((new_game == FALSE) && !access(savefile, 0) && get_char(&generate)) {
         result = TRUE;
     }
-#endif
 
     /* enter wizard mode before showing the character display, but must wait
        until after get_char in case it was just a resurrection */
@@ -261,11 +228,7 @@ char *argv[];
     } else { /* Create character */
         create_character();
 
-#ifdef MAC
-        birth_date = time((time_t *)0);
-#else
         birth_date = time((long *)0);
-#endif
 
         char_inven_init();
         py.flags.food = 7500;
@@ -307,7 +270,6 @@ char *argv[];
     while (!death) {
         dungeon(); /* Dungeon logic */
 
-#ifndef MAC
         /* check for eof here, see inkey() in io.c */
         /* eof can occur if the process gets a HANGUP signal */
         if (eof_flag) {
@@ -319,7 +281,6 @@ char *argv[];
             /* should not reach here, but if we do, this guarantees exit */
             death = TRUE;
         }
-#endif
 
         if (!death) {
             /* New level */

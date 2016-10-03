@@ -29,20 +29,6 @@
 #include "config.h"
 #include "constant.h"
 
-/* Signals have no significance on the Mac */
-
-#ifdef MAC
-
-void nosignals() {
-}
-
-void signals() {
-}
-
-void init_signals() {
-}
-
-#else /* a non-Mac system */
 
 /* Since libc6, linux (Debian, at least) defaults to BSD signal().  This */
 /* expects SYSV.  Thus, DEBIAN_LINUX uses the sysv_signal call, everyone */
@@ -264,5 +250,3 @@ void restore_signals() {
     (void)MSIGNAL(SIGQUIT, signal_handler);
 #endif
 }
-
-#endif /* big Mac conditional */

@@ -37,17 +37,10 @@ char days[7][29] = {
 };
 #endif
 
-#ifdef MAC
-store_type *store;
-#else
 store_type store[MAX_STORES];
-#endif
 
 /* Store owners have different characteristics for pricing and haggling*/
 /* Note: Store owners should be added in groups, one for each store */
-#ifdef MACGAME
-owner_type *owners;
-#else
 owner_type owners[MAX_OWNERS] = {
     {"Erick the Honest       (Human)      General Store",   250, 175, 108, 4, 0, 12},
     {"Mauglin the Grumpy     (Dwarf)      Armory",        32000, 200, 112, 4, 5,  5},
@@ -68,7 +61,6 @@ owner_type owners[MAX_OWNERS] = {
     {"Wizzle the Chaotic     (Halfling)   Alchemist",     10000, 190, 110, 6, 3,  8},
     {"Inglorian the Mage     (Human?)     Magic Shop",    32000, 200, 110, 7, 0, 10},
 };
-#endif
 
 /* Buying and selling adjustments for character race VS store owner race */
 int8u rgold_adj[MAX_RACES][MAX_RACES] = {
@@ -105,9 +97,6 @@ int16u store_choice[MAX_STORES][STORE_CHOICES] = {
      270, 282, 286, 287, 292, 293, 294, 295, 308, 269, 290, 319, 282},
 };
 
-#ifndef MAC
-/* MPW doesn't seem to handle this very well, so replace store_buy array
-   with a function call on mac */
 /* functions defined in sets.c */
 extern int general_store(), armory(), weaponsmith(), temple(), alchemist(), magic_shop();
 
@@ -120,22 +109,8 @@ int (*store_buy[MAX_STORES])() = {
     alchemist,
     magic_shop,
 };
-#endif
 
 /* Following are arrays for descriptive pieces */
-
-#ifdef MACGAME
-
-char **colors;
-char **mushrooms;
-char **woods;
-char **metals;
-char **rocks;
-char **amulets;
-char **syllables;
-
-#else
-
 char *colors[MAX_COLORS] = {
     /* Do not move the first three */
     "Icky Green",  "Light Brown",  "Clear",
@@ -201,7 +176,6 @@ char *syllables[MAX_SYLLABLES] = {
     "um",   "un",   "uni",  "ur",   "val",  "viv", "vly",  "vom", "wah",
     "wed",  "werg", "wex",  "whon", "wun",  "x",   "yerg", "yp",  "zun",
 };
-#endif
 
 /* used to calculate the number of blows the player gets in combat */
 int8u blows_table[7][6] = {

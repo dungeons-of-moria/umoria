@@ -31,13 +31,9 @@
 #else
 #include <time.h>
 #endif
-#if !defined(MAC)
 #include <sys/types.h>
-#endif
 
-#if !defined(MAC)
 long time();
-#endif
 struct tm *localtime();
 
 #if defined(LINT_ARGS)
@@ -51,11 +47,7 @@ int32u seed;
     register int32u clock_var;
 
     if (seed == 0) {
-#ifdef MAC
-        clock_var = time((time_t *)0);
-#else
         clock_var = time((long *)0);
-#endif
     } else {
         clock_var = seed;
     }
@@ -95,11 +87,7 @@ int check_time() {
 #ifdef MORIA_HOU
     long clock_var;
     register struct tm *tp;
-#ifdef MAC
-    clock_var = time((time_t *)0);
-#else
     clock_var = time((long *)0);
-#endif
     tp = localtime(&clock_var);
     if (days[tp->tm_wday][tp->tm_hour + 4] == 'X') {
         return TRUE;

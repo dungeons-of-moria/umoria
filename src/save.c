@@ -91,11 +91,7 @@ static void rd_item();
 static void rd_monster();
 #endif
 
-#ifdef MAC
-#include <time.h>
-#else
 long time();
-#endif
 
 /* these are used for the save file, to avoid having to pass them to every
    procedure */
@@ -330,11 +326,7 @@ static int sv_write() {
     }
 
 /* save the current time in the savefile */
-#ifdef MAC
-    l = time((time_t *)0);
-#else
     l = time((long *)0);
-#endif
 
     if (l < start_time) {
         /* someone is messing with the clock!, assume that we have been playing for 1 day */
@@ -436,58 +428,8 @@ static int sv_write() {
     return TRUE;
 }
 
-#ifdef MAC
 
 /* Set up prior to actual save, do the save, then clean up */
-/* Notice that Mac version of this function takes a parameter */
-/* To do a "save as" set always_ask */
-/* To do a "save" clear always_ask */
-
-int save_char(always_ask)
-int always_ask;
-{
-    int rc, already_set, proceed;
-    int16 vrefnum;
-
-    /* cannot rely on _save_char to do this because we may put up a dialog */
-    if (character_saved) {
-        return (TRUE);
-    }
-
-    enablefilemenu(FALSE);
-
-    already_set = getsavedefaults(savefile, &vrefnum);
-
-    if (!already_set || always_ask) {
-        /* Here if always_ask or user has not yet specified a save file */
-        /* User specifies a save file when he restarts a previous one */
-        sfposition(vrefnum);
-        proceed = doputfile(death ? "Save memories as:" : "Save game as:", savefile, &vrefnum);
-    } else {
-        proceed = TRUE;
-    }
-
-    if (proceed) {
-        changedirectory(vrefnum);
-        rc = _save_char(savefile);
-        restoredirectory();
-    } else {
-        rc = FALSE;
-    }
-
-    if (rc) {
-        (void)setfileinfo(savefile, vrefnum, SAVE_FTYPE);
-    }
-
-    enablefilemenu(TRUE);
-
-    return (rc);
-}
-
-#else
-
-/* The Mac has different logic here -- See above */
-
 int save_char() {
     int i;
     vtype temp;
@@ -525,7 +467,6 @@ int save_char() {
 
     return TRUE;
 }
-#endif
 
 int _save_char(fnam)
 char *fnam;
@@ -548,28 +489,15 @@ char *fnam;
     fd = -1;
     fileptr = NULL; /* Do not assume it has been init'ed */
 
-#if defined(MAC)
-    /* The Mac version automatically overwrites */
-    fd = open(fnam, O_RDWR | O_CREAT | O_TRUNC);
-#ifdef MAC
-    macbeginwait();
-#endif
-#else // else MAC
     fd = open(fnam, O_RDWR | O_CREAT | O_EXCL, 0600);
     if (fd < 0 && access(fnam, 0) >= 0 && (from_savefile || (wizard && get_check("Can't make new savefile. Overwrite old?")))) {
         (void)chmod(fnam, 0600);
         fd = open(fnam, O_RDWR | O_TRUNC, 0600);
     }
-#endif // end MAC
 
     if (fd >= 0) {
         (void)close(fd);
-
-#if defined(THINK_C)
-        fileptr = fopen(savefile, "wb");
-#else
         fileptr = fopen(savefile, "w");
-#endif
     }
 
     DEBUG(logfile = fopen("IO_LOG", "a"));
@@ -596,10 +524,6 @@ char *fnam;
         }
     }
 
-#ifdef MAC
-    macendwait();
-#endif
-
     if (!ok) {
         if (fd >= 0) {
             (void)unlink(fnam);
@@ -622,34 +546,9 @@ char *fnam;
     return TRUE;
 }
 
-#ifdef MAC
-/* Wrapper to set the appropriate directory */
+/* Certain checks are ommitted for the wizard. -CJS- */
 int get_char(generate)
 int *generate;
-{
-    int rc, exit_flag;
-    int16 vrefnum;
-
-    (void)getsavedefaults(savefile, &vrefnum);
-
-    changedirectory(vrefnum);
-    rc = _get_char(generate, &exit_flag);
-    restoredirectory();
-
-    if (exit_flag)
-        exit_game();
-
-    return (rc);
-}
-#endif
-
-/* Certain checks are ommitted for the wizard. -CJS- */
-
-#ifdef MAC
-int _get_char(generate, exit_flag) int *generate, *exit_flag;
-#else
-int get_char(generate) int *generate;
-#endif
 {
     register int i, j;
     int fd, c, ok, total_count;
@@ -665,15 +564,10 @@ int get_char(generate) int *generate;
     int8u char_tmp, ychar, xchar, count;
     int8u version_maj, version_min, patch_level;
 
-#ifdef MAC
-    *exit_flag = FALSE;
-#endif
-
     nosignals();
     *generate = TRUE;
     fd = -1;
 
-#ifndef MAC
     /* Not required for Mac, because the file name is obtained through a dialog.
        There is no way for a non existnat file to be specified.  -BS- */
     if (access(savefile, 0) != 0) {
@@ -681,25 +575,19 @@ int get_char(generate) int *generate;
         msg_print("Savefile does not exist.");
         return FALSE; /* Don't bother with messages here. File absent. */
     }
-#endif
 
     clear_screen();
 
     (void)sprintf(temp, "Savefile %s present. Attempting restore.", savefile);
     put_buffer(temp, 23, 0);
 
-    // FIXME: check this if/else logic!
+    // FIXME: check this if/else logic! -- MRC
     if (turn >= 0) {
         msg_print("IMPOSSIBLE! Attempt to restore while still alive!");
-
-/* Allow restoring a file belonging to someone else, if we can delete it. */
-/* Hence first try to read without doing a chmod. */
-
-#if defined(MAC)
-    } else if ((fd = open(savefile, O_RDONLY)) < 0) {
-#else
     } else if ((fd = open(savefile, O_RDONLY, 0)) < 0 && (chmod(savefile, 0400) < 0 || (fd = open(savefile, O_RDONLY, 0)) < 0)) {
-#endif
+        /* Allow restoring a file belonging to someone else, if we can delete it. */
+        /* Hence first try to read without doing a chmod. */
+
         msg_print("Can't open file for reading.");
     } else {
         turn = -1;
@@ -707,18 +595,10 @@ int get_char(generate) int *generate;
 
         (void)close(fd);
         fd = -1; /* Make sure it isn't closed again */
-#if defined(THINK_C)
-        fileptr = fopen(savefile, "rb");
-#else
         fileptr = fopen(savefile, "r");
-#endif
         if (fileptr == NULL) {
             goto error;
         }
-
-#ifdef MAC
-        macbeginwait();
-#endif
 
         prt("Restoring Memory...", 0, 0);
         put_qio();
@@ -747,8 +627,7 @@ int get_char(generate) int *generate;
 #endif
             || (version_min == 0 && patch_level < 14))
         {
-            prt("Sorry. This savefile is from a different version of umoria.",
-                2, 0);
+            prt("Sorry. This savefile is from a different version of umoria.", 2, 0);
             goto error;
         }
 
@@ -1011,11 +890,7 @@ int get_char(generate) int *generate;
             if ((version_min >= 3) || (version_min == 2 && patch_level >= 2)) {
                 rd_long((int32u *)&birth_date);
             } else {
-#ifdef MAC
-                birth_date = time((time_t *)0);
-#else
                 birth_date = time((long *)0);
-#endif
             }
         }
 
@@ -1192,10 +1067,6 @@ int get_char(generate) int *generate;
             (void)close(fd);
         }
 
-#ifdef MAC
-        macendwait();
-#endif
-
         if (!ok) {
             msg_print("Error during reading of file.");
         } else {
@@ -1220,14 +1091,10 @@ int get_char(generate) int *generate;
                 pack_heavy = 0;
                 check_strength();
 
-/* rotate store inventory, depending on how old the save file */
-/* is foreach day old (rounded up), call store_maint */
-/* calculate age in seconds */
-#ifdef MAC
-                start_time = time((time_t *)0);
-#else
+                /* rotate store inventory, depending on how old the save file */
+                /* is foreach day old (rounded up), call store_maint */
+                /* calculate age in seconds */
                 start_time = time((long *)0);
-#endif
 
                 /* check for reasonable values of time here ... */
                 if (start_time < time_saved) {
@@ -1272,13 +1139,9 @@ int get_char(generate) int *generate;
     prt("Please try again without that savefile.", 1, 0);
     signals();
 
-#ifdef MAC
-    *exit_flag = TRUE;
-#else
     exit_game();
-#endif
 
-    return FALSE; /* not reached, unless on mac */
+    return FALSE; /* not reached */
 }
 
 static void wr_byte(c)

@@ -36,9 +36,6 @@ int16 char_col;
 int16u player_hp[MAX_PLAYER_LEVEL];
 
 /* Class titles for different levels */
-#ifdef MACGAME
-char *(*player_title)[MAX_PLAYER_LEVEL];
-#else
 char *player_title[MAX_CLASS][MAX_PLAYER_LEVEL] = {
     /* Warrior */
     {"Rookie",       "Private",      "Soldier",      "Mercenary",
@@ -107,7 +104,6 @@ char *player_title[MAX_CLASS][MAX_PLAYER_LEVEL] = {
      "Warder (7th)", "Warder (8th)", "Warder (9th)", "Guardian",
      "Chevalier",    "Justiciar",    "Paladin",      "High Lord"},
 };
-#endif
 
 /* Base experience levels, may be adjusted up for race and/or class*/
 int32u player_exp[MAX_PLAYER_LEVEL] = {
@@ -124,9 +120,6 @@ int32u player_exp[MAX_PLAYER_LEVEL] = {
  *      dis, srh, stl, fos, bth, bthb, bsav, hitdie,
  *      infra, exp base, choice-classes
  */
-#ifdef MACGAME
-race_type *race;
-#else
 race_type race[MAX_RACES] = {
     {
         "Human", 0,  0,  0,  0,  0,  0,
@@ -169,12 +162,8 @@ race_type race[MAX_RACES] = {
         -5, -1, -2,  5, 20,-10, -8, 12,  3, 120, 0x05,
     },
 };
-#endif
 
 /* Background information */
-#ifdef MACGAME
-background_type *background;
-#else
 background_type background[MAX_BACKGROUND] = {
     {"You are the illegitimate and unacknowledged child ",  10,  1,  2,  25},
     {"You are the illegitimate but acknowledged child ",    20,  1,  2,  35},
@@ -305,7 +294,6 @@ background_type background[MAX_BACKGROUND] = {
     {"leprous skin.",                                       100, 66, 0,  50},
     {"of a Royal Blood Line.  ",                            100, 2,  3,  140},
 };
-#endif
 
 /* Classes. */
 class_type class[MAX_CLASS] = {
@@ -342,9 +330,6 @@ int8u  spell_order[32];     /* order spells learned/remembered/forgotten */
  * Note that this means you must always subtract one from the
  * py.misc.pclass before indexing into magic_spell[].
  */
-#ifdef MACGAME
-spell_type (*magic_spell)[31];
-#else
 spell_type magic_spell[MAX_CLASS - 1][31] = {
     {
         /* Mage */
@@ -517,7 +502,6 @@ spell_type magic_spell[MAX_CLASS - 1][31] = {
         { 39, 38, 90, 100}
     }
 };
-#endif
 
 char *spell_names[62] = {
     /* Mage Spells */

@@ -60,14 +60,6 @@ Constant.h should always be included after config.h,
    The SYS_III support may not be complete.  I do not know if this works.  */
 /* #define SYS_III */
 
-/* If you are compiling on a Macintosh with MPW C 3.0, define this.  */
-/* #define MAC */
-
-/* If we are in Think C, then we must be on a mac.  */
-#ifdef THINK_C
-#define MAC
-#endif
-
 /* For Xenix systems, define SYS_V and unix.  */
 #ifdef M_XENIX
 #define SYS_V
@@ -81,42 +73,8 @@ Constant.h should always be included after config.h,
 
 /* Files used by moria, set these to valid pathnames for your system.  */
 
-#ifdef MAC
-/* These files are concatenated into the data fork of the app */
-/* The names are retained to find the appropriate text */
-#define MORIA_MOR "news"
-#define MORIA_GPL "COPYING"
-#define MORIA_HELP "roglcmds.hlp"
-#define MORIA_ORIG_HELP "origcmds.hlp"
-#define MORIA_WIZ_HELP "rwizcmds.hlp"
-#define MORIA_OWIZ_HELP "owizcmds.hlp"
-#define MORIA_WELCOME "welcome.hlp"
-#define MORIA_VER "version.hlp"
-/* Do not know what will happen with these yet */
-#define MORIA_TOP "Moria High Scores"
-/* File types and creators for the Mac */
-#define MORIA_FCREATOR 'MRIA'
-#define SAVE_FTYPE 'SAVE'
-#define INFO_FTYPE 'TEXT'
-#define SCORE_FTYPE 'SCOR'
-#define CONFIG_FTYPE 'CNFG'
-/* Options for building resources:
-   THINK C doesn't have -D switch, so we need to define this stuff here.
-   Uncomment RSRC when building DumpRes1 or DumpRes2; uncomment RSRC_PARTn
-   as appropriate.  When building application, comment all of them.
-   I don't think any of this is necessary for MPW C -- BS.  */
-#ifdef THINK_C
-/* #define RSRC */ /* This copy is for creating resources.  */
-/* THINK C can only take 32K data, so we need to dump the resources in
-   two parts.  */
-/* #define RSRC_PART1 */
-/* #define RSRC_PART2 */
-#endif
-#else // else MAC
-
-
-
 #if 0
+
 /* Debian standards for file location */
 /* This must be unix; change file names as appropriate.  */
 #define MORIA_SAV ".moria-save"
@@ -130,8 +88,8 @@ Constant.h should always be included after config.h,
 #define MORIA_OWIZ_HELP "/usr/lib/games/moria/owizcmds.hlp"
 #define MORIA_WELCOME "/usr/lib/games/moria/welcome.hlp"
 #define MORIA_VER "/usr/lib/games/moria/version.hlp"
-#else // else DEBIAN standard.
 
+#else // else DEBIAN standard.
 
 /* Generic UNIX */
 /* This must be unix; change file names as appropriate.  */
@@ -148,7 +106,6 @@ Constant.h should always be included after config.h,
 #define MORIA_VER "/home/michael/moria-56/files/version.hlp"
 
 #endif // end DEBIAN standard.
-#endif // end MAC
 
 
 /* This sets the default user interface.  */
@@ -173,7 +130,7 @@ Constant.h should always be included after config.h,
 #endif
 
 /* Substitute strchr for index on USG versions of UNIX.  */
-#if defined(SYS_V) || defined(MAC)
+#if defined(SYS_V)
 #define index strchr
 #endif
 
@@ -184,7 +141,7 @@ Constant.h should always be included after config.h,
 
 /* Define USG for many systems, this is basically to select SYS V style
    system calls (as opposed to BSD style).  */
-#if defined(SYS_III) || defined(SYS_V) || defined(MAC)
+#if defined(SYS_III) || defined(SYS_V)
 #ifndef USG
 #define USG
 #endif
@@ -199,20 +156,6 @@ Constant.h should always be included after config.h,
 #define register /* MSC 4.0 still has a problem with register bugs ... */
 #endif
 
-#ifdef MAC
-#ifdef RSRC
-#define MACRSRC /* Defined if we are building the resources.  */
-#else
-#define MACGAME /* Defined if we are building the game.  */
-#endif
-#endif
-
-#ifdef MAC
-/* Screen dimensions */
-#define SCRN_ROWS 24
-#define SCRN_COLS 80
-#endif
-
 #if defined(SYS_V) && defined(lint)
 /* Define this to prevent <string.h> from including <NLchar.h> on a PC/RT
    running AIX.  This prevents a bunch of lint errors.  */
@@ -223,15 +166,4 @@ Constant.h should always be included after config.h,
 extern int PlayerUID;
 #define getuid() PlayerUID
 #define geteuid() PlayerUID
-#endif
-
-#ifdef THINK_C
-/* Apparently, THINK C is only happy if this is defined.  This can not
- * be defined in general, because some systems have include files which
- * merely test whether STDC is defined, they do not test the value.
- */
-/* Check how standard we are: Some code tests value of __STDC__.  */
-#ifndef __STDC__
-#define __STDC__ 0
-#endif
 #endif

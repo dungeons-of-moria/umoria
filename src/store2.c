@@ -994,12 +994,7 @@ int store_num, *cur_top;
     last_item = -1;
 
     for (counter = 0; counter < inven_ctr; counter++) {
-
-#ifdef MAC
-        flag = store_buy(store_num, (inventory[counter].tval));
-#else
         flag = (*store_buy[store_num])(inventory[counter].tval);
-#endif
 
         mask[counter] = flag;
         if (flag) {

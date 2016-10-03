@@ -163,9 +163,6 @@
                             "notice" the player.
  */
 
-#ifdef MACGAME
-creature_type *c_list;
-#else
 creature_type c_list[MAX_CREATURES] = {
 {"Filthy Street Urchin"     ,0x0012000AL,0x00000000L,0x2034,    0,  40,
    4,   1, 11, 'p', {1,4}   , {72,148,0,0}      ,    0},
@@ -733,7 +730,6 @@ creature_type c_list[MAX_CREATURES] = {
 {"Balrog"           ,0xFF1F0002L,0x0081C743L,0x5004,55000L,   0,
   40, 125, 13, 'B', {75,40} , {104,78,214,0}        ,  100}
 };
-#endif
 
 /* ERROR: attack #35 is no longer used */
 struct m_attack_type monster_attacks[N_MONS_ATTS] = {

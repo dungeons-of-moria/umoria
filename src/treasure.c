@@ -77,9 +77,6 @@
 
 /* Object list (All objects must be defined here) */
 
-#if defined(MACGAME) || defined(RSRC_PART2)
-treasure_type *object_list;
-#else
 /* Dungeon items from 0 to MAX_DUNGEON_OBJ */
 treasure_type object_list[MAX_OBJECTS] = {
 /*  0*/ {"Poison",                          0x00000001L, TV_FOOD,        ',', 500,  0,    64,  1, 1,    0,  0, 0,   0, {0, 0}, 7},
@@ -537,7 +534,6 @@ treasure_type object_list[MAX_OBJECTS] = {
 /* 418 */ {"& ruined chest",                0x00000000L, TV_CHEST,    '&', 0, 0, 0, 1, 250, 0, 0, 0, 0, {0, 0}, 0},
 /* 419 */ {"",                              0x00000000L, TV_NOTHING,  ' ', 0, 0, 0, 0,   0, 0, 0, 0, 0, {0, 0}, 0}
 };
-#endif
 
 char *special_names[SN_ARRAY_SIZE] = {
     CNIL,                "(R)",              "(RA)",
@@ -561,8 +557,6 @@ char *special_names[SN_ARRAY_SIZE] = {
     "(Unlocked)",        "of Slay Animal"
 };
 
-/* Pairing things down for THINK C. */
-#ifndef RSRC_PART2
 int16 sorted_objects[MAX_DUNGEON_OBJ];
 
 /* Identified objects flags */
@@ -570,7 +564,6 @@ int8u object_ident[OBJECT_IDENT_SIZE];
 int16 t_level[MAX_OBJ_LEVEL + 1];
 inven_type t_list[MAX_TALLOC];
 inven_type inventory[INVEN_ARRAY_SIZE];
-#endif
 
 /* Treasure related values */
 int16 inven_ctr = 0;    /* Total different obj's */
