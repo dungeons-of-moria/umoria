@@ -33,10 +33,6 @@ void cast() {
     register inven_type *i_ptr;
     register spell_type *m_ptr;
 
-#ifdef ATARIST_MWC
-    int32u holder;
-#endif
-
     free_turn_flag = TRUE;
     if (py.flags.blind > 0) {
         msg_print("You can't see to read your spell book!");
@@ -114,11 +110,7 @@ void cast() {
                 case 14:
                     for (i = 22; i < INVEN_ARRAY_SIZE; i++) {
                         i_ptr = &inventory[i];
-#ifdef ATARIST_MWC
-                        i_ptr->flags = (i_ptr->flags & ~(holder = TR_CURSED));
-#else
                         i_ptr->flags = (i_ptr->flags & ~TR_CURSED);
-#endif
                     }
                     break;
                 case 15:

@@ -25,19 +25,13 @@
    'psect' error for the variable errno */
 #include <errno.h>
 
-/* Atari TC requires prototypes, but does not have __STDC__.
-   Hence, we check for ATARIST_TC here, and define LINT_ARGS if true. */
-#ifdef ATARIST_TC
-#define LINT_ARGS
-#endif
-
 /* This causes more trouble than it is worth, and very few systems still
    have this bug in their include files. */
 #if 0
 /* many systems don't define these anywhere */
 #ifndef NeXT
 #ifndef AMIGA
-#if !defined(atarist) || !defined(__GNUC__)
+#if !defined(__GNUC__)
 #ifndef __TURBOC__
 #if defined(USG) || defined(DGUX)
 extern int sprintf();
@@ -269,14 +263,6 @@ extern char moriatop[], moriasav[];
  * specifically how to handle promotion of parameters.  In my reading of
  * the standard, I believe that Gnu C's behaviour is correct.
  */
-
-#ifdef ATARI_ST
-/* atarist.c */
-int check_input(int microsec);
-void user_name(char *buf);
-int access(char *name, int dum);
-void chmod(char *name, int mode); /* dummy function */
-#endif
 
 /* create.c */
 void create_character(void);
@@ -778,14 +764,6 @@ void wizard_create(void);
 
 #else
 /* !defined (LINT_ARGS) */
-
-#ifdef ATARI_ST
-/* atarist.c */
-int check_input();
-void user_name();
-int access();
-void chmod();
-#endif
 
 /* create.c */
 void create_character();
@@ -1290,9 +1268,4 @@ void wizard_create();
 /* call functions which expand tilde before calling open/fopen */
 #define open topen
 #define fopen tfopen
-#endif
-
-/* st-stuff.c for the atari ST */
-#if defined(atarist) && defined(__GNUC__)
-extern char extended_file_name[80];
 #endif

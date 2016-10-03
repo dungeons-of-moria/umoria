@@ -26,10 +26,6 @@
 #include <sys/bsdtty.h>
 #endif
 
-#if defined(atarist) && defined(__GNUC__)
-#include <osbind.h>
-#endif
-
 #ifdef MSDOS
 #include <process.h>
 #endif
@@ -60,12 +56,7 @@ char *_procname = "Moria";
 #else	/* GEMDOS i.e. Atari ST */
 #include "curses.h"
 long wgetch();
-#ifdef ATARIST_TC
-#include <tos.h>	/* TC */
-#include <ext.h>
-#else
 #include <osbind.h>	/* MWC */
-#endif
 char *getenv();
 #endif
 
@@ -84,7 +75,7 @@ typedef struct { int stuff; } fpvmach;
 #include "ms_ansi.h"
 #endif
 #else /* not msdos */
-#if !defined(ATARI_ST) && !defined(MAC) && !defined(AMIGA)
+#if !defined(MAC) && !defined(AMIGA)
 #ifndef VMS
 #include <sys/ioctl.h>
 #endif
@@ -100,15 +91,11 @@ typedef struct { int stuff; } fpvmach;
 #endif
 
 #ifdef USG
-#ifndef ATARI_ST
 #include <string.h>
-#else
-#include "string.h"
-#endif
 #if 0
 /* Used to include termio.h here, but that caused problems on some systems,
    as curses.h includes it also above.  */
-#if !defined(MAC) && !defined(MSDOS) && !defined(ATARI_ST)
+#if !defined(MAC) && !defined(MSDOS)
 #if !defined(AMIGA) && !defined(VMS)
 #include <termio.h>
 #endif
@@ -120,11 +107,7 @@ typedef struct { int stuff; } fpvmach;
 #endif
 #else /* ! USG */
 #include <strings.h>
-#if defined(atarist) && defined(__GNUC__)
-/* doesn't have sys/wait.h */
-#else
 #include <sys/wait.h>
-#endif
 #endif
 
 #include <stdlib.h>
@@ -212,7 +195,7 @@ void exit();
 void sleep();
 #endif
 
-#if !defined(MAC) && !defined(MSDOS) && !defined(ATARI_ST) && !defined(VMS)
+#if !defined(MAC) && !defined(MSDOS) && !defined(VMS)
 #ifndef AMIGA
 #ifdef USG
 #ifdef __linux__
@@ -265,18 +248,14 @@ int suspend()
   (void) ioctl(0, TIOCGETP, (char *)&tbuf);
   (void) ioctl(0, TIOCGETC, (char *)&cbuf);
   (void) ioctl(0, TIOCGLTC, (char *)&lcbuf);
-#if !defined(atarist) && !defined(__GNUC__)
   (void) ioctl(0, TIOCLGET, (char *)&lbuf);
-#endif
   restore_term();
   (void) kill(0, SIGSTOP);
   curses_on = TRUE;
   (void) ioctl(0, TIOCSETP, (char *)&tbuf);
   (void) ioctl(0, TIOCSETC, (char *)&cbuf);
   (void) ioctl(0, TIOCSLTC, (char *)&lcbuf);
-#if !defined(atarist) && !defined(__GNUC__)
   (void) ioctl(0, TIOCLSET, (char *)&lbuf);
-#endif
   (void) wrefresh(curscr);
   py.misc.male &= ~2;
 #endif
@@ -315,11 +294,9 @@ void init_curses()
   (void) ioctl(0, TIOCGLTC, (char *)&save_special_chars);
   (void) ioctl(0, TIOCGETP, (char *)&save_ttyb);
   (void) ioctl(0, TIOCGETC, (char *)&save_tchars);
-#if !defined(atarist) && !defined(__GNUC__)
   (void) ioctl(0, TIOCLGET, (char *)&save_local_chars);
-#endif
 #else
-#if !defined(VMS) && !defined(MSDOS) && !defined(ATARI_ST)
+#if !defined(VMS) && !defined(MSDOS)
 #ifndef AMIGA
   (void) ioctl(0, TCGETA, (char *)&save_termio);
 #endif
@@ -332,19 +309,17 @@ void init_curses()
 #else
   if (initscr() == ERR)
 #endif
-    {
-      (void) printf("Error allocating screen in curses package.\n");
-      exit(1);
-    }
-  if (LINES < 24 || COLS < 80)	 /* Check we have enough screen. -CJS- */
-    {
+  {
+    (void) printf("Error allocating screen in curses package.\n");
+    exit(1);
+  }
+  /* Check we have enough screen. -CJS- */
+  if (LINES < 24 || COLS < 80) {
       (void) printf("Screen too small for moria.\n");
       exit (1);
     }
+
 #ifdef SIGTSTP
-#if defined(atarist) && defined(__GNUC__)
-  (void) signal (SIGTSTP, (__Sigfunc)suspend);
-#else
 #ifdef  __386BSD__
   (void) signal (SIGTSTP, (sig_t)suspend);
 #else
@@ -354,20 +329,19 @@ void init_curses()
   (void) sysv_signal (SIGTSTP, suspend);
 #else
   (void) signal (SIGTSTP, suspend);
+#endif // end DEBIAN_LINUX
+#endif // end __386BSD__
 #endif
-#endif
-#endif
-#endif
+
   if (((savescr = newwin (0, 0, 0, 0)) == NULL)
 #ifdef VMS
-      || ((tempscr = newwin (0, 0, 0, 0)) == NULL))
-#else
-    )
+      || ((tempscr = newwin (0, 0, 0, 0)) == NULL)
 #endif
-    {
+  ) {
       (void) printf ("Out of memory in starting up curses.\n");
       exit_game();
-    }
+  }
+
   (void) clear();
   (void) refresh();
   moriaterm ();
@@ -402,7 +376,7 @@ void moriaterm()
 }
 #else
 {
-#if !defined(MSDOS) && !defined(ATARI_ST) && !defined(VMS)
+#if !defined(MSDOS) && !defined(VMS)
 #ifndef AMIGA
 #ifdef USG
 #ifdef __linux__
@@ -438,7 +412,7 @@ void moriaterm()
   init_color (2,   0, 300, 700);	/* pen 2 - blue */
   init_color (3,1000, 500,   0);	/* pen 3 - orange */
 #else
-#if !defined(ATARI_ST) && !defined(VMS)
+#if !defined(VMS)
 #ifdef USG
   (void) ioctl(0, TCGETA, (char *)&tbuf);
   /* disable all of the normal special control characters */
@@ -482,10 +456,6 @@ void moriaterm()
 #endif
 #endif
 #endif
-#endif
-
-#ifdef ATARIST_TC
-  raw ();
 #endif
 }
 #endif
@@ -570,7 +540,7 @@ void restore_term()
 #endif
   /* restore the saved values of the special chars */
 #ifdef USG
-#if !defined(MSDOS) && !defined(ATARI_ST) && !defined(VMS)
+#if !defined(MSDOS) && !defined(VMS)
 #ifndef AMIGA
   (void) ioctl(0, TCSETA, (char *)&save_termio);
 #endif
@@ -579,9 +549,7 @@ void restore_term()
   (void) ioctl(0, TIOCSLTC, (char *)&save_special_chars);
   (void) ioctl(0, TIOCSETP, (char *)&save_ttyb);
   (void) ioctl(0, TIOCSETC, (char *)&save_tchars);
-#if !defined(atarist) && !defined(__GNUC__)
   (void) ioctl(0, TIOCLSET, (char *)&save_local_chars);
-#endif
 #endif
   curses_on = FALSE;
 }
@@ -589,47 +557,24 @@ void restore_term()
 
 
 void shell_out()
-#if defined(atarist) && defined(__GNUC__)
-{ char fail_message[80], arg_list[1], *p;
-  int  escape_code;
-
-  save_screen();
-  clear_screen();
-  use_value nocbreak();         /* Must remember to reset terminal modes   */
-  use_value echo();             /* or shell i/o will be quite messed up!   */
-
-  p = (char *)getenv("SHELL");
-  if (p != (char *)NULL)
-    { put_buffer("Escaping to Shell\n",0,0);
-      put_qio();
-      arg_list[0]=0;
-      escape_code = Pexec(0,p,arg_list,0);   /* Launch the shell.          */
-
-      if (escape_code != 0)
-         { sprintf(fail_message,"Pexec() error code = %d\n",escape_code);
-           put_buffer(fail_message,0,0);
-           put_qio();
-	   sleep(5);
-	 }
-    }
-  use_value cbreak();        /* Reset the terminal back to CBREAK/NOECHO   */
-  use_value noecho();
-  clear_screen();            /* Do not want shell data on screen.          */
-  restore_screen();
-}
-
-#else
-
 #ifdef MAC
 {
   alert_error("This command is not implemented on the Macintosh.");
 }
-#else
-#if defined(AMIGA) || defined(ATARIST_TC)
+#else // not MAC
+
+
+
+
+#if defined(AMIGA)
 {
   put_buffer("This command is not implemented.\n", 0, 0);
 }
-#else
+#else // not AMIGA
+
+
+
+
 #ifdef VMS /* TPP */
 {
   int val, istat;
@@ -662,55 +607,53 @@ void shell_out()
   restore_screen();
   (void) wrefresh(curscr);
 }
-#else
+#else // not VMS
+
+
+
+
 {
 #ifdef USG
-#if !defined(MSDOS) && !defined(ATARI_ST) && !defined(AMIGA)
+#if !defined(MSDOS) && !defined(AMIGA)
 #ifdef __linux__
   struct termios tbuf;
 #else
   struct termio tbuf;
 #endif
 #endif
-#else
+#else // not USG
   struct sgttyb tbuf;
   struct ltchars lcbuf;
   struct tchars cbuf;
   int lbuf;
-#endif
+#endif  // end USG
+
 #ifdef MSDOS
   char	*comspec, key;
-#else
-#ifdef ATARI_ST
-  char comstr[80];
-  char *str;
-  extern char **environ;
 #else
   int val;
   char *str;
 #endif
-#endif
 
   save_screen();
+
   /* clear screen and print 'exit' message */
   clear_screen();
-#ifndef ATARI_ST
   put_buffer("[Entering shell, type 'exit' to resume your game.]\n",0,0);
-#else
-  put_buffer("[Escaping to shell]\n",0,0);
-#endif
   put_qio();
 
+
 #ifdef USG
-#if !defined(MSDOS) && !defined(ATARI_ST) && !defined(AMIGA)
+#if !defined(MSDOS) && !defined(AMIGA)
   (void) ioctl(0, TCGETA, (char *)&tbuf);
 #endif
-#else
+#else // else USG
   (void) ioctl(0, TIOCGETP, (char *)&tbuf);
   (void) ioctl(0, TIOCGETC, (char *)&cbuf);
   (void) ioctl(0, TIOCGLTC, (char *)&lcbuf);
   (void) ioctl(0, TIOCLGET, (char *)&lbuf);
-#endif
+#endif // end USG
+
   /* would call nl() here if could use nl()/nonl(), see moriaterm() */
 #ifndef BSD4_3
   use_value nocrmode();
@@ -720,60 +663,50 @@ void shell_out()
 #else
   use_value nocbreak();
 #endif
-#endif
+#endif // end BSD4_3
+
 #ifdef MSDOS
   use_value msdos_noraw();
 #endif
   use_value echo();
   ignore_signals();
-#ifdef MSDOS		/*{*/
-  if ((comspec = getenv("COMSPEC")) == CNIL
-  ||  spawnl(P_WAIT, comspec, comspec, CNIL) < 0) {
-	clear_screen();	/* BOSS key if shell failed */
-	put_buffer("M:\\> ", 0, 0);
-	do {
-	  key = inkey();
-	} while (key != '!');
-  }
 
+#ifdef MSDOS		/*{*/
+  if ((comspec = getenv("COMSPEC")) == CNIL ||  spawnl(P_WAIT, comspec, comspec, CNIL) < 0) {
+  	clear_screen();	/* BOSS key if shell failed */
+  	put_buffer("M:\\> ", 0, 0);
+  	do {
+  	  key = inkey();
+  	} while (key != '!');
+  }
 #else		/* MSDOS }{*/
-#ifndef ATARI_ST
   val = fork();
-  if (val == 0)
-    {
-#endif
+  if (val == 0) {
       default_signals();
 #ifdef USG
-#if !defined(MSDOS) && !defined(ATARI_ST) && !defined(AMIGA)
+#if !defined(MSDOS) && !defined(AMIGA)
       (void) ioctl(0, TCSETA, (char *)&save_termio);
 #endif
-#else
+#else // else USG
       (void) ioctl(0, TIOCSLTC, (char *)&save_special_chars);
       (void) ioctl(0, TIOCSETP, (char *)&save_ttyb);
       (void) ioctl(0, TIOCSETC, (char *)&save_tchars);
       (void) ioctl(0, TIOCLSET, (char *)&save_local_chars);
-#endif
+#endif // end USG
 #ifndef MSDOS
       /* close scoreboard descriptor */
       /* it is not open on MSDOS machines */
       (void) fclose(highscore_fp);
 #endif
-      if (str = getenv("SHELL"))
-#ifndef ATARI_ST
-	(void) execl(str, str, (char *) 0);
-#else
-	system(str);
-#endif
-      else
-#ifndef ATARI_ST
-	(void) execl("/bin/sh", "sh", (char *) 0);
-#endif
+      if (str = getenv("SHELL")) {
+      	(void) execl(str, str, (char *) 0);
+      } else {
+      	(void) execl("/bin/sh", "sh", (char *) 0);
+      }
       msg_print("Cannot execute shell.");
-#ifndef ATARI_ST
       exit(1);
     }
-  if (val == -1)
-    {
+  if (val == -1) {
       msg_print("Fork failed. Try again.");
       return;
     }
@@ -782,11 +715,12 @@ void shell_out()
 #else
   (void) wait((union wait *) 0);
 #endif
-#endif /* ATARI_ST */
 #endif		 /* MSDOS }*/
+
   restore_signals();
   /* restore the cave to the screen */
   restore_screen();
+
 #ifndef BSD4_3
   use_value crmode();
 #else
@@ -795,16 +729,18 @@ void shell_out()
 #else
   use_value cbreak();
 #endif
-#endif
+#endif // end BSD4_3
+
   use_value noecho();
   /* would call nonl() here if could use nl()/nonl(), see moriaterm() */
 #ifdef MSDOS
   msdos_raw();
 #endif
+
   /* disable all of the local special characters except the suspend char */
   /* have to disable ^Y for tunneling */
 #ifdef USG
-#if !defined(MSDOS) && !defined(ATARI_ST)
+#if !defined(MSDOS)
   (void) ioctl(0, TCSETA, (char *)&tbuf);
 #endif
 #else
@@ -812,13 +748,15 @@ void shell_out()
   (void) ioctl(0, TIOCSETP, (char *)&tbuf);
   (void) ioctl(0, TIOCSETC, (char *)&cbuf);
   (void) ioctl(0, TIOCLSET, (char *)&lbuf);
-#endif
+#endif // end USG
+
   (void) wrefresh(curscr);
 }
-#endif
-#endif
-#endif
-#endif
+
+#endif // end VMS
+#endif // end AMIGA
+#endif // end MAC
+
 
 /* Returns a single character input from the terminal.	This silently -CJS-
    consumes ^R to redraw the screen and reset the terminal, so that this
@@ -857,8 +795,7 @@ char inkey()
 
   put_qio();			/* Dump IO buffer		*/
   command_count = 0;  /* Just to be safe -CJS- */
-  while (TRUE)
-    {
+  while (TRUE) {
 #ifdef MSDOS
       i = msdos_getch();
 #else
@@ -866,10 +803,6 @@ char inkey()
       i = vms_getch ();
 #else
       i = getch();
-#if defined(atarist) && defined(__GNUC__)
-/* for some reason a keypad number produces an initial negative number. */
-      if (i<0) i = getch();
-#endif
 #endif
 #endif
 
@@ -1629,11 +1562,7 @@ void screen_map()
   priority[wallsym] = -5;
   priority[floorsym] = -10;
 #else
-#ifndef ATARI_ST
   priority['#'] = -5;
-#else
-  priority[(unsigned char)240] = -5;
-#endif
   priority['.'] = -10;
 #endif
   priority['\''] = -3;

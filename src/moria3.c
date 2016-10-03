@@ -27,9 +27,7 @@
 #include "externs.h"
 
 #ifdef USG
-#ifndef ATARIST_MWC
 #include <string.h>
-#endif
 #else
 #include <strings.h>
 #endif
@@ -503,11 +501,6 @@ register int32u flags;
     register int i, number;
     int32u dump, res;
 
-#if defined(ATARIST_MWC)
-    int32u holder; /* avoid a compiler bug */
-#endif
-
-#if !defined(ATARIST_MWC)
     if (flags & CM_CARRY_OBJ) {
         i = 1;
     } else {
@@ -541,57 +534,8 @@ register int32u flags;
     } else {
         dump = 0;
     }
-#else
-    holder = CM_CARRY_OBJ;
-    if (flags & holder){
-        i = 1;
-    } else {
-        i = 0;
-    }
-    holder = CM_CARRY_GOLD;
-    if (flags & holder) {
-        i += 2;
-    }
-    holder = CM_SMALL_OBJ;
-    if (flags & holder) {
-        i += 4;
-    }
 
-    number = 0;
-    holder = CM_60_RANDOM;
-    if ((flags & holder) && (randint(100) < 60)) {
-        number++;
-    }
-    holder = CM_90_RANDOM;
-    if ((flags & holder) && (randint(100) < 90)) {
-        number++;
-    }
-    holder = CM_1D2_OBJ;
-    if (flags & holder) {
-        number += randint(2);
-    }
-    holder = CM_2D2_OBJ;
-    if (flags & holder) {
-        number += damroll(2, 2);
-    }
-    holder = CM_4D2_OBJ;
-    if (flags & holder) {
-        number += damroll(4, 2);
-    }
-    if (number > 0) {
-        dump = summon_object(y, x, number, i);
-    } else {
-        dump = 0;
-    }
-#endif
-
-#if defined(ATARIST_MWC)
-    holder = CM_WIN;
-    if (flags & holder)
-#else
-    if (flags & CM_WIN)
-#endif
-    {
+    if (flags & CM_WIN) {
         /* maybe the player died in mid-turn */
         if (!death) {
             total_winner = TRUE;
@@ -604,27 +548,14 @@ register int32u flags;
     if (dump) {
         res = 0;
         if (dump & 255) {
-#ifdef ATARIST_MWC
-            holder = CM_CARRY_OBJ;
-            if (i & 0x04) {
-                holder = CM_CARRY_OBJ | CM_SMALL_OBJ;
-            }
-            res |= holder;
-#else
             res |= CM_CARRY_OBJ;
             if (i & 0x04) {
                 res |= CM_SMALL_OBJ;
             }
-#endif
         }
 
         if (dump >= 256) {
-#ifdef ATARIST_MWC
-            holder = CM_CARRY_GOLD;
-            res |= holder;
-#else
             res |= CM_CARRY_GOLD;
-#endif
         }
 
         dump = (dump % 256) + (dump / 256); /* number of items */
@@ -649,36 +580,19 @@ int monptr, dam;
     int m_take_hit;
     int32u tmp;
 
-#ifdef ATARIST_MWC
-    int32u holder;
-#endif
-
     m_ptr = &m_list[monptr];
     m_ptr->hp -= dam;
     m_ptr->csleep = 0;
     if (m_ptr->hp < 0) {
         i = monster_death((int)m_ptr->fy, (int)m_ptr->fx, c_list[m_ptr->mptr].cmove);
 
-#ifdef ATARIST_MWC
-        if ((py.flags.blind < 1 && m_ptr->ml) || (c_list[m_ptr->mptr].cmove & (holder = CM_WIN)))
-#else
-        if ((py.flags.blind < 1 && m_ptr->ml) || (c_list[m_ptr->mptr].cmove & CM_WIN))
-#endif
-        {
-#ifdef ATARIST_MWC
-            holder = CM_TREASURE;
-            tmp = (c_recall[m_ptr->mptr].r_cmove & holder) >> CM_TR_SHIFT;
-            if (tmp > ((i & holder) >> CM_TR_SHIFT)) {
-                i = (i & ~holder) | (tmp << CM_TR_SHIFT);
-            }
-            c_recall[m_ptr->mptr].r_cmove = (c_recall[m_ptr->mptr].r_cmove & ~holder) | i;
-#else
+        if ((py.flags.blind < 1 && m_ptr->ml) || (c_list[m_ptr->mptr].cmove & CM_WIN)) {
             tmp = (c_recall[m_ptr->mptr].r_cmove & CM_TREASURE) >> CM_TR_SHIFT;
+
             if (tmp > ((i & CM_TREASURE) >> CM_TR_SHIFT)) {
                 i = (i & ~CM_TREASURE) | (tmp << CM_TR_SHIFT);
             }
             c_recall[m_ptr->mptr].r_cmove = (c_recall[m_ptr->mptr].r_cmove & ~CM_TREASURE) | i;
-#endif
 
             if (c_recall[m_ptr->mptr].r_kills < MAX_SHORT) {
                 c_recall[m_ptr->mptr].r_kills++;
@@ -730,10 +644,6 @@ int y, x;
     vtype m_name, out_val;
     register inven_type *i_ptr;
     register struct misc *p_ptr;
-
-#ifdef ATARIST_MWC
-    int32u holder;
-#endif
 
     crptr = cave[y][x].cptr;
     monptr = m_list[crptr].mptr;
@@ -826,12 +736,7 @@ int y, x;
             {
                 i_ptr->number--;
                 inven_weight -= i_ptr->weight;
-
-#ifdef ATARIST_MWC
-                py.flags.status |= (holder = PY_STR_WGT);
-#else
                 py.flags.status |= PY_STR_WGT;
-#endif
 
                 if (i_ptr->number == 0) {
                     equip_ctr--;
@@ -957,7 +862,7 @@ int dir, do_pickup;
                 }
             } else {
                 /*Can't move onto floor space*/
-                
+
                 if (!find_flag && (c_ptr->tptr != 0)) {
                     if (t_list[c_ptr->tptr].tval == TV_RUBBLE) {
                         msg_print("There is rubble blocking your way.");
@@ -971,10 +876,10 @@ int dir, do_pickup;
             }
         } else {
             /* Attacking a creature! */
-            
+
             old_find_flag = find_flag;
             end_find();
-            
+
             /* if player can see monster, and was in find mode, then nothing */
             if (m_list[c_ptr->cptr].ml && old_find_flag) {
                 /* did not do anything this turn */
@@ -1048,10 +953,6 @@ void openobject() {
     register struct misc *p_ptr;
     register monster_type *m_ptr;
     vtype m_name, out_val;
-
-#ifdef ATARIST_MWC
-    int32u holder;
-#endif
 
     y = char_row;
     x = char_col;
@@ -1144,11 +1045,7 @@ void openobject() {
                 if (flag) {
                     /* clear the cursed chest/monster win flag, so that people
                        can not win by opening a cursed chest */
-#ifdef ATARIST_MWC
-                    t_list[c_ptr->tptr].flags &= ~(holder = TR_CURSED);
-#else
                     t_list[c_ptr->tptr].flags &= ~TR_CURSED;
-#endif
                     (void)monster_death(y, x, t_list[c_ptr->tptr].flags);
                     t_list[c_ptr->tptr].flags = 0;
                 }

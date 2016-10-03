@@ -28,9 +28,7 @@
 #include "externs.h"
 
 #ifdef USG
-#ifndef ATARIST_MWC
 #include <string.h>
-#endif
 #else
 #include <strings.h>
 #endif
@@ -220,21 +218,11 @@ int detect_invisible() {
     register int i, flag;
     register monster_type *m_ptr;
 
-#ifdef ATARIST_MWC
-    int32u holder;
-#endif
-
     flag = FALSE;
 
     for (i = mfptr - 1; i >= MIN_MONIX; i--) {
         m_ptr = &m_list[i];
-        if (panel_contains((int)m_ptr->fy, (int)m_ptr->fx) &&
-#ifdef ATARIST_MWC
-            ((holder = CM_INVISIBLE) & c_list[m_ptr->mptr].cmove)
-#else
-            (CM_INVISIBLE & c_list[m_ptr->mptr].cmove)
-#endif
-        ) {
+        if (panel_contains((int)m_ptr->fy, (int)m_ptr->fx) && (CM_INVISIBLE & c_list[m_ptr->mptr].cmove)) {
             m_ptr->ml = TRUE;
             /* works correctly even if hallucinating */
             print((char)c_list[m_ptr->mptr].cchar, (int)m_ptr->fy, (int)m_ptr->fx);
@@ -529,21 +517,11 @@ int detect_monsters() {
     register int i, detect;
     register monster_type *m_ptr;
 
-#ifdef ATARIST_MWC
-    int32u holder;
-#endif
-
     detect = FALSE;
 
     for (i = mfptr - 1; i >= MIN_MONIX; i--) {
         m_ptr = &m_list[i];
-        if (panel_contains((int)m_ptr->fy, (int)m_ptr->fx) &&
-#ifdef ATARIST_MWC
-            (((holder = CM_INVISIBLE) & c_list[m_ptr->mptr].cmove) == 0)
-#else
-            ((CM_INVISIBLE & c_list[m_ptr->mptr].cmove) == 0)
-#endif
-        ) {
+        if (panel_contains((int)m_ptr->fy, (int)m_ptr->fx) && ((CM_INVISIBLE & c_list[m_ptr->mptr].cmove) == 0)) {
             m_ptr->ml = TRUE;
             /* works correctly even if hallucinating */
             print((char)c_list[m_ptr->mptr].cchar, (int)m_ptr->fy, (int)m_ptr->fx);
@@ -685,7 +663,7 @@ int dir, y, x;
         }
         (void)mmove(dir, &y, &x);
     } while ((dist <= OBJ_BOLT_RANGE) && c_ptr->fval <= MAX_OPEN_SPACE);
-    
+
     return (disarm);
 }
 
@@ -785,7 +763,7 @@ char *bolt_typ;
                 lower_monster_name(m_name, m_ptr, r_ptr);
                 (void)sprintf(out_val, "The %s strikes %s.", bolt_typ, m_name);
                 msg_print(out_val);
-                
+
                 if (harm_type & r_ptr->cdefense) {
                     dam = dam * 2;
                     if (m_ptr->ml) {
@@ -897,10 +875,10 @@ char *descrip;
                                             c_recall[m_ptr->mptr].r_spells |= weapon_type;
                                         }
                                     }
-                                    
+
                                     dam = (dam / (distance(i, j, y, x) + 1));
                                     k = mon_take_hit((int)c_ptr->cptr, dam);
-                                    
+
                                     if (k >= 0) {
                                         tkill++;
                                     }
@@ -945,7 +923,7 @@ char *descrip;
                 /* End ball hitting. */
             } else if (panel_contains(y, x) && (py.flags.blind < 1)) {
                 print('*', y, x);
-                
+
                 /* show bolt */
                 put_qio();
             }
@@ -970,10 +948,6 @@ int monptr;
     register cave_type *c_ptr;
     register monster_type *m_ptr;
     register creature_type *r_ptr;
-
-#ifdef ATARIST_MWC
-    int32u holder;
-#endif
 
     max_dis = 2;
     get_flags(typ, &weapon_type, &harm_type, &destroy);
@@ -1017,20 +991,11 @@ int monptr;
                             treas = monster_death((int)m_ptr->fy, (int)m_ptr->fx, r_ptr->cmove);
 
                             if (m_ptr->ml) {
-#ifdef ATARIST_MWC
-                                holder = CM_TREASURE;
-                                tmp = (c_recall[m_ptr->mptr].r_cmove & holder) >> CM_TR_SHIFT;
-                                if (tmp > ((treas & holder) >> CM_TR_SHIFT)) {
-                                    treas = (treas & ~holder) | (tmp << CM_TR_SHIFT);
-                                }
-                                c_recall[m_ptr->mptr].r_cmove = treas | (c_recall[m_ptr->mptr].r_cmove & ~holder);
-#else
                                 tmp = (c_recall[m_ptr->mptr].r_cmove & CM_TREASURE) >> CM_TR_SHIFT;
                                 if (tmp > ((treas & CM_TREASURE) >> CM_TR_SHIFT)) {
                                     treas = (treas & ~CM_TREASURE) | (tmp << CM_TR_SHIFT);
                                 }
                                 c_recall[m_ptr->mptr].r_cmove = treas | (c_recall[m_ptr->mptr].r_cmove & ~CM_TREASURE);
-#endif
                             }
 
                             /* It ate an already processed monster.Handle
@@ -1559,10 +1524,6 @@ int dir, y, x;
     register creature_type *r_ptr;
     vtype m_name, out_val;
 
-#ifdef ATARIST_MWC
-    int32u holder;
-#endif
-
     build = FALSE;
     dist = 0;
     flag = FALSE;
@@ -1585,12 +1546,7 @@ int dir, y, x;
                 m_ptr = &m_list[c_ptr->cptr];
                 r_ptr = &c_list[m_ptr->mptr];
 
-#ifdef ATARIST_MWC
-                if (!(r_ptr->cmove & (holder = CM_PHASE)))
-#else
-                if (!(r_ptr->cmove & CM_PHASE))
-#endif
-                {
+                if (!(r_ptr->cmove & CM_PHASE)) {
                     /* monster does not move, can't escape the wall */
                     if (r_ptr->cmove & CM_ATTACK_ONLY) {
                         /* this will kill everything */
@@ -1767,22 +1723,13 @@ int mass_genocide() {
     register monster_type *m_ptr;
     register creature_type *r_ptr;
 
-#ifdef ATARIST_MWC
-    int32u holder;
-#endif
-
     result = FALSE;
 
     for (i = mfptr - 1; i >= MIN_MONIX; i--) {
         m_ptr = &m_list[i];
         r_ptr = &c_list[m_ptr->mptr];
 
-#ifdef ATARIST_MWC
-        if ((m_ptr->cdis <= MAX_SIGHT) && ((r_ptr->cmove & (holder = CM_WIN)) == 0))
-#else
-        if ((m_ptr->cdis <= MAX_SIGHT) && ((r_ptr->cmove & CM_WIN) == 0))
-#endif
-        {
+        if ((m_ptr->cdis <= MAX_SIGHT) && ((r_ptr->cmove & CM_WIN) == 0)) {
             delete_monster(i);
             result = TRUE;
         }
@@ -1801,10 +1748,6 @@ int genocide() {
     register creature_type *r_ptr;
     vtype out_val;
 
-#ifdef ATARIST_MWC
-    int32u holder;
-#endif
-
     killed = FALSE;
 
     if (get_com("Which type of creature do you wish exterminated?", &typ)) {
@@ -1812,12 +1755,7 @@ int genocide() {
             m_ptr = &m_list[i];
             r_ptr = &c_list[m_ptr->mptr];
             if (typ == c_list[m_ptr->mptr].cchar) {
-#ifdef ATARIST_MWC
-                if ((r_ptr->cmove & (holder = CM_WIN)) == 0)
-#else
-                if ((r_ptr->cmove & CM_WIN) == 0)
-#endif
-                {
+                if ((r_ptr->cmove & CM_WIN) == 0) {
                     delete_monster(i);
                     killed = TRUE;
                 } else {
@@ -1926,22 +1864,13 @@ int mass_poly() {
     register monster_type *m_ptr;
     register creature_type *r_ptr;
 
-#ifdef ATARIST_MWC
-    int32u holder;
-#endif
-
     mass = FALSE;
     for (i = mfptr - 1; i >= MIN_MONIX; i--) {
         m_ptr = &m_list[i];
         if (m_ptr->cdis <= MAX_SIGHT) {
             r_ptr = &c_list[m_ptr->mptr];
 
-#ifdef ATARIST_MWC
-            if ((r_ptr->cmove & (holder = CM_WIN)) == 0)
-#else
-            if ((r_ptr->cmove & CM_WIN) == 0)
-#endif
-            {
+            if ((r_ptr->cmove & CM_WIN) == 0) {
                 y = m_ptr->fy;
                 x = m_ptr->fx;
                 delete_monster(i);
@@ -2091,10 +2020,6 @@ void earthquake() {
     int damage, tmp;
     vtype out_val, m_name;
 
-#ifdef ATARIST_MWC
-    int32u holder;
-#endif
-
     for (i = char_row - 8; i <= char_row + 8; i++) {
         for (j = char_col - 8; j <= char_col + 8; j++) {
             if (((i != char_row) || (j != char_col)) && in_bounds(i, j) && (randint(8) == 1)) {
@@ -2108,12 +2033,7 @@ void earthquake() {
                     m_ptr = &m_list[c_ptr->cptr];
                     r_ptr = &c_list[m_ptr->mptr];
 
-#ifdef ATARIST_MWC
-                    if (!(r_ptr->cmove & (holder = CM_PHASE)))
-#else
-                    if (!(r_ptr->cmove & CM_PHASE))
-#endif
-                    {
+                    if (!(r_ptr->cmove & CM_PHASE)) {
                         if (r_ptr->cmove & CM_ATTACK_ONLY) {
                             /* this will kill everything */
                             damage = 3000;
@@ -2523,27 +2443,12 @@ int remove_curse() {
     register int i, result;
     register inven_type *i_ptr;
 
-#ifdef ATARIST_MWC
-    int32u holder = TR_CURSED;
-#endif
-
     result = FALSE;
     for (i = INVEN_WIELD; i <= INVEN_OUTER; i++) {
         i_ptr = &inventory[i];
 
-#ifdef ATARIST_MWC
-        if (holder & i_ptr->flags)
-#else
-        if (TR_CURSED & i_ptr->flags)
-#endif
-        {
-
-#ifdef ATARIST_MWC
-            i_ptr->flags &= ~holder;
-#else
+        if (TR_CURSED & i_ptr->flags) {
             i_ptr->flags &= ~TR_CURSED;
-#endif
-
             calc_bonuses();
             result = TRUE;
         }

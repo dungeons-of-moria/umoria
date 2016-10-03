@@ -28,9 +28,7 @@
 #include "externs.h"
 
 #ifdef USG
-#ifndef ATARIST_MWC
 #include <string.h>
-#endif
 #else
 #include <strings.h>
 #endif
@@ -58,11 +56,6 @@ static int purchase_haggle(int, int32 *, struct inven_type *);
 static int sell_haggle(int, int32 *, struct inven_type *);
 static int store_purchase(int, int *);
 static int store_sell(int, int *);
-#endif
-
-#ifdef ATARIST_TC
-/* Include this to get prototypes for standard library functions. */
-#include <stdlib.h>
 #endif
 
 long atol();

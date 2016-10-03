@@ -462,12 +462,7 @@ treasure_type object_list[MAX_OBJECTS] = {
 /* Secret door must have same subval as closed door in */  /* TRAP_LISTB.  See CHANGE_TRAP. Must use & because of stone_to_mud. */
 /* 367 */ {"& open door",                   0x00000000L, TV_OPEN_DOOR,   '\'', 0, 0,  1, 1, 0, 0, 0, 0, 0, {1, 1}, 0},
 /* 368 */ {"& closed door",                 0x00000000L, TV_CLOSED_DOOR,  '+', 0, 0, 19, 1, 0, 0, 0, 0, 0, {1, 1}, 0},
-
-#ifdef ATARI_ST
-/* 369 */ {"& secret door",                 0x00000000L, TV_SECRET_DOOR, (unsigned char)240, 0, 0, 19, 1, 0, 0, 0, 0, 0, {1, 1}, 0},
-#else
 /* 369 */ {"& secret door",                 0x00000000L, TV_SECRET_DOOR,  '#', 0, 0, 19, 1, 0, 0, 0, 0, 0, {1, 1}, 0},
-#endif
 /* end doors */
 
 /* stairs */

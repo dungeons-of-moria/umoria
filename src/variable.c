@@ -109,8 +109,3 @@ recall_type *c_recall;
 #else
 recall_type c_recall[MAX_CREATURES]; /* Monster memories */
 #endif
-
-/* See atarist/st-stuff.c */
-#if defined(atarist) && defined(__GNUC__)
-char extended_file_name[80];
-#endif

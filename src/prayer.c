@@ -33,10 +33,6 @@ void pray() {
     register struct flags *f_ptr;
     register inven_type *i_ptr;
 
-#ifdef ATARIST_MWC
-    int32u holder;
-#endif
-
     free_turn_flag = TRUE;
     if (py.flags.blind > 0) {
         msg_print("You can't see to read your prayer!");
@@ -112,11 +108,7 @@ void pray() {
                         i_ptr = &inventory[i];
                         /* only clear flag for items that are wielded or worn */
                         if (i_ptr->tval >= TV_MIN_WEAR && i_ptr->tval <= TV_MAX_WEAR) {
-#ifdef ATARIST_MWC
-                            i_ptr->flags &= ~(holder = TR_CURSED);
-#else
                             i_ptr->flags &= ~TR_CURSED;
-#endif
                         }
                     }
                     break;

@@ -48,13 +48,11 @@
 #ifdef MSDOS
 #include <io.h>
 #else
-#if !defined(ATARIST_MWC) && !defined(MAC) && !defined(AMIGA)
-#if !defined(ATARIST_TC)
+#if !defined(MAC) && !defined(AMIGA)
 #ifndef VMS
 #include <pwd.h>
 #else
 #include <file.h>
-#endif
 #endif
 #endif
 #endif
@@ -78,13 +76,9 @@ int getuid(), getgid();
 #endif
 
 #ifdef USG
-#ifndef ATARIST_MWC
 #include <string.h>
 #ifndef VMS
-#ifndef ATARIST_TC
 #include <fcntl.h>
-#endif
-#endif
 #endif
 #else
 #include <strings.h>
@@ -96,14 +90,12 @@ int getuid(), getgid();
 #include "externs.h"
 
 #ifndef BSD4_3
-#ifndef ATARIST_TC
 long lseek();
-#endif /* ATARTIST_TC */
 #else
 off_t lseek();
 #endif
 
-#if defined(USG) || defined(VMS) || defined(atarist)
+#if defined(USG) || defined(VMS)
 #ifndef L_SET
 #define L_SET 0
 #endif
@@ -127,14 +119,9 @@ static void print_tomb(void);
 static void kingly(void);
 #endif
 
-#ifdef ATARIST_TC
-/* Include this to get prototypes for standard library functions. */
-#include <stdlib.h>
-#endif
-
 #ifndef VMS
 #ifndef MAC
-#if !defined(ATARIST_MWC) && !defined(AMIGA)
+#if !defined(AMIGA)
 long time();
 #endif
 #endif
@@ -175,8 +162,8 @@ char *in_str;
 }
 
 #ifndef __TURBOC__
-#if (defined(USG) || defined(atarist) || defined(HPUX)) && !defined(VMS)
-#if !defined(AMIGA) && !defined(MAC) && !defined(ATARIST_TC)
+#if (defined(USG) || defined(HPUX)) && !defined(VMS)
+#if !defined(AMIGA) && !defined(MAC)
 
 #include <errno.h>
 #include <sys/stat.h>
@@ -213,14 +200,10 @@ int f, l;
         return -1;
     }
 
-#ifdef atarist
-    (void)sprintf(lockname, (char *)prefix_file((char *)"moria.%d"), sbuf.st_ino);
-#else
 #ifdef __linux__
     (void)sprintf(lockname, "/tmp/moria.%ld", sbuf.st_ino);
 #else
     (void)sprintf(lockname, "/tmp/moria.%d", sbuf.st_ino);
-#endif
 #endif
 
     if (l & LOCK_UN) {
@@ -683,15 +666,11 @@ static void highscores() {
         return;
     }
 #else
-#ifdef ATARIST_TC
-/* 'lock' always succeeds on the Atari ST */
-#else
     if (0 != flock((int)fileno(highscore_fp), LOCK_EX)) {
         msg_print("Error gaining lock for score file");
         msg_print(CNIL);
         return;
     }
-#endif
 #endif
 
 /* Search file to find where to insert this character, if uid != 0 and
@@ -724,12 +703,7 @@ static void highscores() {
 
 /* must fseek() before can change read/write mode */
 #ifndef BSD4_3
-#ifdef ATARIST_TC
-        /* no fseek relative to current position allowed */
-        (void)fseek(highscore_fp, (long)ftell(highscore_fp), L_SET);
-#else
         (void)fseek(highscore_fp, (long)0, L_INCR);
-#endif
 #else
         (void)fseek(highscore_fp, (off_t)0, L_INCR);
 #endif
@@ -802,7 +776,7 @@ static void highscores() {
 
 #ifndef BSD4_3
 
-#if defined(ATARIST_TC) || defined(__TURBOC__)
+#if defined(__TURBOC__)
             /* No fseek with negative offset allowed. */
             (void)fseek(highscore_fp, (long)ftell(highscore_fp) - sizeof(high_scores) - sizeof(char), L_SET);
 #else
@@ -832,12 +806,7 @@ static void highscores() {
             /* must fseek() before can change read/write mode */
 
 #ifndef BSD4_3
-#ifdef ATARIST_TC
-            /* No fseek relative to current position allowed. */
-            (void)fseek(highscore_fp, (long)ftell(highscore_fp), L_SET);
-#else
             (void)fseek(highscore_fp, (long)0, L_INCR);
-#endif
 #else
             (void)fseek(highscore_fp, (off_t)0, L_INCR);
 #endif
@@ -855,11 +824,7 @@ static void highscores() {
     }
 
 #if !defined(VMS) && !defined(MSDOS) && !defined(AMIGA) && !defined(MAC) && !defined(APOLLO)
-#ifdef ATARIST_TC
-/* Flock never called for Atari ST with TC. */
-#else
     (void)flock((int)fileno(highscore_fp), LOCK_UN);
-#endif
 #else
     (void)fclose(highscore_fp);
 #endif

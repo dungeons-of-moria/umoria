@@ -38,7 +38,7 @@ Constant.h should always be included after config.h,
    more than one machine access a file at a time; then define this.  */
 /* #define APOLLO */
 
-/* If compiling on Debian (also works on other versions of Linux), 
+/* If compiling on Debian (also works on other versions of Linux),
    define this. */
 #define DEBIAN_LINUX
 
@@ -59,15 +59,6 @@ Constant.h should always be included after config.h,
 /* If you are compiling on a SYS III version of UNIX, define this.
    The SYS_III support may not be complete.  I do not know if this works.  */
 /* #define SYS_III */
-
-/* If you are compiling on an ATARI ST with Mark Williams C, define this.  */
-/* #define ATARIST_MWC */
-
-/* If you are compiling on an Atari ST with GCC, you do not need to define
-   anything.  */
-
-/* If you are compiling on an Atari ST with TC, define this.  */
-/* #define ATARIST_TC */
 
 /* If you are compiling on a Macintosh with MPW C 3.0, define this.  */
 /* #define MAC */
@@ -203,22 +194,6 @@ Constant.h should always be included after config.h,
 #define MORIA_VER "files\\version.hlp"
 
 #else
-#if defined(atarist) && defined(__GNUC__)
-/* atari-st compiled with gnu-c  */
-
-#define MORIA_SAV "moria.save"
-#define MORIA_HOU (char *)prefix_file("files/hours")
-#define MORIA_MOR (char *)prefix_file("files/news")
-#define MORIA_GPL (char *)prefix_file("files/COPYING")
-#define MORIA_TOP (char *)prefix_file("files/scores")
-#define MORIA_HELP (char *)prefix_file("files/roglcmds.hlp")
-#define MORIA_ORIG_HELP (char *)prefix_file("files/origcmds.hlp")
-#define MORIA_WIZ_HELP (char *)prefix_file("files/rwizcmds.hlp")
-#define MORIA_OWIZ_HELP (char *)prefix_file("files/owizcmds.hlp")
-#define MORIA_WELCOME (char *)prefix_file("files/welcome.hlp")
-#define MORIA_VER (char *)prefix_file("files/version.hlp")
-
-#else
 
 #if 0
 /* Debian standards for file location */
@@ -234,9 +209,7 @@ Constant.h should always be included after config.h,
 #define MORIA_OWIZ_HELP "/usr/lib/games/moria/owizcmds.hlp"
 #define MORIA_WELCOME "/usr/lib/games/moria/welcome.hlp"
 #define MORIA_VER "/usr/lib/games/moria/version.hlp"
-
 #else
-
 /* Generic UNIX */
 /* This must be unix; change file names as appropriate.  */
 #define MORIA_SAV "moria-save"
@@ -250,9 +223,8 @@ Constant.h should always be included after config.h,
 #define MORIA_OWIZ_HELP "/home/michael/moria-56/files/owizcmds.hlp"
 #define MORIA_WELCOME "/home/michael/moria-56/files/welcome.hlp"
 #define MORIA_VER "/home/michael/moria-56/files/version.hlp"
+#endif
 
-#endif
-#endif
 #endif
 #endif
 #endif
@@ -276,15 +248,6 @@ Constant.h should always be included after config.h,
 /* System dependent defines follow.  You should not need to change anything
    below.  */
 
-#ifdef ATARIST_TC
-#define USG
-// #include <stdio.h>  /* Needed for TC ...printf but now universal */
-#endif
-
-#if defined(ATARIST_TC) || defined(ATARIST_MWC)
-#define ATARI_ST
-#endif
-
 #if defined(__linux__) /* Linux supports System V */
 #define SYS_V
 #endif
@@ -293,7 +256,7 @@ Constant.h should always be included after config.h,
 #if defined(SYS_V) || defined(MSDOS) || defined(MAC) || defined(VMS)
 #define index strchr
 #endif
-#if defined(ATARIST_TC) || (defined(AMIGA) && defined(LATTICE))
+#if (defined(AMIGA) && defined(LATTICE))
 #define index strchr
 #endif
 
@@ -310,7 +273,7 @@ Constant.h should always be included after config.h,
 #endif
 #endif
 
-#if defined(ATARIST_MWC) || defined(AMIGA) || defined(VMS)
+#if defined(AMIGA) || defined(VMS)
 #define USG
 #endif
 

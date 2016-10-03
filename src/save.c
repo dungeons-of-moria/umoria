@@ -48,14 +48,8 @@
 #include <string.h>
 #else
 #ifdef USG
-#ifndef ATARIST_MWC
 #include <string.h>
-#ifndef ATARIST_TC
 #include <fcntl.h>
-#endif
-#else
-#include "string.h"
-#endif
 #else
 #include <strings.h>
 #endif
@@ -65,10 +59,6 @@
    on some systems.  Otherwise, the `open' prototype conflicts with the
    `topen' declaration. */
 #include "externs.h"
-
-#ifdef ATARIST_TC
-#include <time.h>
-#endif
 
 DEBUG(static FILE *logfile);
 
@@ -110,14 +100,10 @@ static void rd_item();
 static void rd_monster();
 #endif
 
-#if !defined(ATARIST_MWC)
 #ifdef MAC
 #include <time.h>
 #else
 long time();
-#endif
-#else
-char *malloc();
 #endif
 
 /* these are used for the save file, to avoid having to pass them to every
@@ -145,7 +131,7 @@ static int sv_write() {
     store_type *st_ptr;
     struct misc *m_ptr;
 
-#if defined(MSDOS) || defined(ATARI_ST)
+#if defined(MSDOS)
     inven_type *t_ptr;
 #endif
 
@@ -448,7 +434,7 @@ static int sv_write() {
     wr_byte((int8u)count);
     wr_byte(prev_char);
 
-#if defined(MSDOS) || defined(ATARI_ST)
+#if defined(MSDOS)
     /* must change graphics symbols for walls and floors back to default chars,
        this is necessary so that if the user changes the graphics line, the
        program will be able change all existing walls and floors to the new
@@ -459,11 +445,6 @@ static int sv_write() {
     for (i = tcptr - 1; i >= MIN_TRIX; i--) {
 #ifdef MSDOS
         if (t_ptr->tchar == wallsym) {
-            t_ptr->tchar = '#';
-        }
-#endif
-#ifdef ATARI_ST
-        if (t_ptr->tchar == (unsigned char)240) {
             t_ptr->tchar = '#';
         }
 #endif
@@ -597,7 +578,7 @@ char *fnam;
 
 /* VMS files have version numbers, so don't worry about overwriting
    the old save file. */
-#if !defined(ATARIST_MWC) && !defined(VMS)
+#if !defined(VMS)
     fd = -1;
     fileptr = NULL; /* Do not assume it has been init'ed */
 #if defined(MAC) || defined(AMIGA)
@@ -618,14 +599,13 @@ char *fnam;
 
     if (fd >= 0) {
         (void)close(fd);
-#endif /* !ATARIST_MWC && !VMS */
-       /* GCC for atari st defines atarist */
-#if defined(atarist) || defined(ATARI_ST) || defined(THINK_C) || defined(MSDOS)
+#endif /* !VMS */
+#if defined(THINK_C) || defined(MSDOS)
         fileptr = fopen(savefile, "wb");
 #else
         fileptr = fopen(savefile, "w");
 #endif
-#if !defined(ATARIST_MWC) && !defined(VMS)
+#if !defined(VMS)
     }
 #endif
 
@@ -722,7 +702,7 @@ int get_char(generate) int *generate;
     int8u char_tmp, ychar, xchar, count;
     int8u version_maj, version_min, patch_level;
 
-#if defined(MSDOS) || defined(ATARI_ST)
+#if defined(MSDOS)
     inven_type *t_ptr;
 #endif
 
@@ -759,13 +739,7 @@ int get_char(generate) int *generate;
 #if defined(MAC) || defined(AMIGA)
     } else if ((fd = open(savefile, O_RDONLY)) < 0) {
 #else
-#ifdef ATARI_ST
-    } else if (FALSE) {
-#else
-    } else if ((fd = open(savefile, O_RDONLY, 0)) < 0 &&
-               (chmod(savefile, 0400) < 0 ||
-                (fd = open(savefile, O_RDONLY, 0)) < 0)) {
-#endif
+    } else if ((fd = open(savefile, O_RDONLY, 0)) < 0 && (chmod(savefile, 0400) < 0 || (fd = open(savefile, O_RDONLY, 0)) < 0)) {
 #endif
         msg_print("Can't open file for reading.");
     } else {
@@ -774,8 +748,7 @@ int get_char(generate) int *generate;
 
         (void)close(fd);
         fd = -1; /* Make sure it isn't closed again */
-                 /* GCC for atari st defines atarist */
-#if defined(atarist) || defined(ATARI_ST) || defined(THINK_C) || defined(MSDOS)
+#if defined(THINK_C) || defined(MSDOS)
         fileptr = fopen(savefile, "rb");
 #else
         fileptr = fopen(savefile, "r");
@@ -1176,11 +1149,9 @@ int get_char(generate) int *generate;
             rd_byte(&count);
             rd_byte(&char_tmp);
             for (i = count; i > 0; i--) {
-#ifndef ATARIST_MWC
                 if (c_ptr >= &cave[MAX_HEIGHT][0]) {
                     goto error;
                 }
-#endif
                 c_ptr->fval = char_tmp & 0xF;
                 c_ptr->lr = (char_tmp >> 4) & 0x1;
                 c_ptr->fm = (char_tmp >> 5) & 0x1;
@@ -1206,18 +1177,13 @@ int get_char(generate) int *generate;
             rd_monster(&m_list[i]);
         }
 
-#if defined(MSDOS) || defined(ATARI_ST)
+#if defined(MSDOS)
         /* change walls and floors to graphic symbols */
         t_ptr = &t_list[tcptr - 1];
         for (i = tcptr - 1; i >= MIN_TRIX; i--) {
 #ifdef MSDOS
             if (t_ptr->tchar == '#') {
                 t_ptr->tchar = wallsym;
-            }
-#endif
-#ifdef ATARI_ST
-            if (t_ptr->tchar == '#') {
-                t_ptr->tchar = (unsigned char)240;
             }
 #endif
             t_ptr--;

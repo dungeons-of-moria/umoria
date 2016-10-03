@@ -34,11 +34,7 @@
 #endif
 
 #ifdef USG
-#ifndef ATARIST_MWC
 #include <string.h>
-#else
-char *index();
-#endif
 #else
 #include <strings.h>
 #endif
@@ -565,15 +561,7 @@ void prt_poisoned() {
 void prt_state() {
     char tmp[16];
 
-#ifdef ATARIST_MWC
-    int32u holder;
-#endif
-
-#ifdef ATARIST_MWC
-    py.flags.status &= ~(holder = PY_REPEAT);
-#else
     py.flags.status &= ~PY_REPEAT;
-#endif
 
     if (py.flags.paralysis > 1) {
         put_buffer("Paralysed", 23, 38);
@@ -593,11 +581,7 @@ void prt_state() {
             (void)strcpy(tmp, "Repeat");
         }
 
-#ifdef ATARIST_MWC
-        py.flags.status |= holder;
-#else
         py.flags.status |= PY_REPEAT;
-#endif
 
         put_buffer(tmp, 23, 38);
         if (PY_SEARCH & py.flags.status) {
@@ -636,16 +620,7 @@ void prt_speed() {
 }
 
 void prt_study() {
-
-#ifdef ATARIST_MWC
-    int32u holder;
-#endif
-
-#ifdef ATARIST_MWC
-    py.flags.status &= ~(holder = PY_STUDY);
-#else
     py.flags.status &= ~PY_STUDY;
-#endif
 
     if (py.flags.new_spells == 0) {
         put_buffer(&blank_string[BLANK_LENGTH - 5], 23, 59);
@@ -709,19 +684,10 @@ int16 amount;
 void set_use_stat(stat)
 int stat;
 {
-
-#ifdef ATARIST_MWC
-    int32u holder;
-#endif
-
     py.stats.use_stat[stat] = modify_stat(stat, py.stats.mod_stat[stat]);
 
     if (stat == A_STR) {
-#ifdef ATARIST_MWC
-        py.flags.status |= (holder = PY_STR_WGT);
-#else
         py.flags.status |= PY_STR_WGT;
-#endif
         calc_bonuses();
     } else if (stat == A_DEX) {
         calc_bonuses();
@@ -817,21 +783,12 @@ int stat;
 void bst_stat(stat, amount)
 int stat, amount;
 {
-
-#ifdef ATARIST_MWC
-    int32u holder;
-#endif
-
     py.stats.mod_stat[stat] += amount;
 
     set_use_stat(stat);
 
     /* can not call prt_stat() here, may be in store, may be in inven_command */
-#ifdef ATARIST_MWC
-    py.flags.status |= ((holder = PY_STR) << stat);
-#else
     py.flags.status |= (PY_STR << stat);
-#endif
 }
 
 /* Returns a character's adjustment to hit.     -JWT- */
@@ -1264,10 +1221,6 @@ int item_val;
     register int j;
     register inven_type *i_ptr;
 
-#ifdef ATARIST_MWC
-    int32u holder;
-#endif
-
     i_ptr = &inventory[item_val];
     if ((i_ptr->number > 1) && (i_ptr->subval <= ITEM_SINGLE_STACK_MAX)) {
         i_ptr->number--;
@@ -1280,12 +1233,7 @@ int item_val;
         invcopy(&inventory[inven_ctr - 1], OBJ_NOTHING);
         inven_ctr--;
     }
-
-#ifdef ATARIST_MWC
-    py.flags.status |= (holder = PY_STR_WGT);
-#else
     py.flags.status |= PY_STR_WGT;
-#endif
 }
 
 /* Copies the object in the second argument over the first argument.
@@ -1307,10 +1255,6 @@ register int item_val, drop_all;
     int i;
     register inven_type *i_ptr;
     bigvtype prt1, prt2;
-
-#ifdef ATARIST_MWC
-    int32u holder;
-#endif
 
     if (cave[char_row][char_col].tptr != 0) {
         (void)delete_object(char_row, char_col);
@@ -1341,12 +1285,7 @@ register int item_val, drop_all;
         (void)sprintf(prt2, "Dropped %s", prt1);
         msg_print(prt2);
     }
-
-#ifdef ATARIST_MWC
-    py.flags.status |= (holder = PY_STR_WGT);
-#else
     py.flags.status |= PY_STR_WGT;
-#endif
 }
 
 /* Destroys a type of item on a given percent chance  -RAK- */
@@ -1431,10 +1370,6 @@ void check_strength() {
     register int i;
     register inven_type *i_ptr;
 
-#ifdef ATARIST_MWC
-    int32u holder;
-#endif
-
     i_ptr = &inventory[INVEN_WIELD];
     if (i_ptr->tval != TV_NOTHING &&
         (py.stats.use_stat[A_STR] * 15 < i_ptr->weight)) {
@@ -1467,12 +1402,7 @@ void check_strength() {
         change_speed(i - pack_heavy);
         pack_heavy = i;
     }
-
-#ifdef ATARIST_MWC
-    py.flags.status &= ~(holder = PY_STR_WGT);
-#else
     py.flags.status &= ~PY_STR_WGT;
-#endif
 }
 
 /* Add an item to players inventory.  Return the */
@@ -1485,10 +1415,6 @@ register inven_type *i_ptr;
     register int typ, subt;
     register inven_type *t_ptr;
     int known1p, always_known1p;
-
-#ifdef ATARIST_MWC
-    int32u holder;
-#endif
 
     typ = i_ptr->tval;
     subt = i_ptr->subval;
@@ -1521,12 +1447,7 @@ register inven_type *i_ptr;
     }
 
     inven_weight += i_ptr->number * i_ptr->weight;
-
-#ifdef ATARIST_MWC
-    py.flags.status |= (holder = PY_STR_WGT);
-#else
     py.flags.status |= PY_STR_WGT;
-#endif
 
     return locn;
 }
@@ -2016,10 +1937,6 @@ int stat;
     register struct misc *p_ptr;
     register int32 value;
 
-#ifdef ATARIST_MWC
-    int32u holder;
-#endif
-
     p_ptr = &py.misc;
 
     if (spell_learned != 0) {
@@ -2070,24 +1987,14 @@ int stat;
             p_ptr->mana = new_mana;
 
             /* can't print mana here, may be in store or inventory mode */
-#ifdef ATARIST_MWC
-            py.flags.status |= (holder = PY_MANA);
-#else
             py.flags.status |= PY_MANA;
-#endif
-
         }
     } else if (p_ptr->mana != 0) {
         p_ptr->mana = 0;
         p_ptr->cmana = 0;
 
         /* can't print mana here, may be in store or inventory mode */
-#ifdef ATARIST_MWC
-        py.flags.status |= (holder = PY_MANA);
-#else
         py.flags.status |= PY_MANA;
-#endif
-
     }
 }
 
@@ -2151,10 +2058,6 @@ void calc_hitpoints() {
     register struct misc *p_ptr;
     register int32 value;
 
-#ifdef ATARIST_MWC
-    int32u holder;
-#endif
-
     p_ptr = &py.misc;
     hitpoints = player_hp[p_ptr->lev - 1] + (con_adj() * p_ptr->lev);
 
@@ -2181,12 +2084,7 @@ void calc_hitpoints() {
         p_ptr->mhp = hitpoints;
 
         /* can't print hit points here, may be in store or inventory mode */
-#ifdef ATARIST_MWC
-        py.flags.status |= (holder = PY_HP);
-#else
         py.flags.status |= PY_HP;
-#endif
-
     }
 }
 
@@ -2400,15 +2298,7 @@ int monster;
     register creature_type *m_ptr;
     register recall_type *r_ptr;
 
-#ifdef ATARIST_MWC
-    int32u holder;
-#endif
-
-#ifdef ATARIST_MWC
-    if ((i_ptr->flags & (holder = TR_EGO_WEAPON)) &&
-#else
     if ((i_ptr->flags & TR_EGO_WEAPON) &&
-#endif
         (((i_ptr->tval >= TV_SLING_AMMO) && (i_ptr->tval <= TV_ARROW)) ||
          ((i_ptr->tval >= TV_HAFTED) && (i_ptr->tval <= TV_SWORD)) ||
          (i_ptr->tval == TV_FLASK)))
@@ -2421,13 +2311,7 @@ int monster;
 
             tdam = tdam * 4;
             r_ptr->r_cdefense |= CD_DRAGON;
-        }
-#ifdef ATARIST_MWC
-        else if ((m_ptr->cdefense & CD_UNDEAD) && (i_ptr->flags & (holder = TR_SLAY_UNDEAD)))
-#else
-        else if ((m_ptr->cdefense & CD_UNDEAD) && (i_ptr->flags & TR_SLAY_UNDEAD))
-#endif
-        {
+        } else if ((m_ptr->cdefense & CD_UNDEAD) && (i_ptr->flags & TR_SLAY_UNDEAD)) {
             /* Slay Undead */
 
             tdam = tdam * 3;
@@ -2442,24 +2326,12 @@ int monster;
 
             tdam = tdam * 2;
             r_ptr->r_cdefense |= CD_EVIL;
-        }
-#ifdef ATARIST_MWC
-        else if ((m_ptr->cdefense & CD_FROST) && (i_ptr->flags & (holder = TR_FROST_BRAND)))
-#else
-        else if ((m_ptr->cdefense & CD_FROST) && (i_ptr->flags & TR_FROST_BRAND))
-#endif
-        {
+        } else if ((m_ptr->cdefense & CD_FROST) && (i_ptr->flags & TR_FROST_BRAND)) {
             /* Frost */
 
             tdam = tdam * 3 / 2;
             r_ptr->r_cdefense |= CD_FROST;
-        }
-#ifdef ATARIST_MWC
-        else if ((m_ptr->cdefense & CD_FIRE) && (i_ptr->flags & (holder = TR_FLAME_TONGUE)))
-#else
-        else if ((m_ptr->cdefense & CD_FIRE) && (i_ptr->flags & TR_FLAME_TONGUE))
-#endif
-        {
+        } else if ((m_ptr->cdefense & CD_FIRE) && (i_ptr->flags & TR_FLAME_TONGUE)) {
             /* Fire */
 
             tdam = tdam * 3 / 2;

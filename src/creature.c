@@ -28,12 +28,7 @@
 #include "externs.h"
 
 #ifdef USG
-#ifndef ATARIST_MWC
 #include <string.h>
-#else
-char *strcat();
-char *strcpy();
-#endif
 #else
 #include <strings.h>
 #endif
@@ -48,11 +43,6 @@ static void mon_cast_spell(int, int *);
 static void mon_move(int, int32u *);
 #endif
 
-#ifdef ATARIST_TC
-/* Include this to get prototypes for standard library functions. */
-#include <stdlib.h>
-#endif
-
 /* Updates screen when monsters move about    -RAK- */
 void update_mon(monptr)
 int monptr;
@@ -61,10 +51,6 @@ int monptr;
     register cave_type *c_ptr;
     register monster_type *m_ptr;
     register creature_type *r_ptr;
-
-#ifdef ATARIST_MWC
-    int32u holder;
-#endif
 
     m_ptr = &m_list[monptr];
     flag = FALSE;
@@ -78,21 +64,11 @@ int monptr;
             c_ptr = &cave[m_ptr->fy][m_ptr->fx];
             r_ptr = &c_list[m_ptr->mptr];
             if (c_ptr->pl || c_ptr->tl || (find_flag && m_ptr->cdis < 2 && player_light)) {
-#ifdef ATARIST_MWC
-                holder = CM_INVISIBLE;
-                if ((holder & r_ptr->cmove) == 0)
-#else
-                if ((CM_INVISIBLE & r_ptr->cmove) == 0)
-#endif
-                {
+                if ((CM_INVISIBLE & r_ptr->cmove) == 0) {
                     flag = TRUE;
                 } else if (py.flags.see_inv) {
                     flag = TRUE;
-#ifdef ATARIST_MWC
-                    c_recall[m_ptr->mptr].r_cmove |= holder;
-#else
                     c_recall[m_ptr->mptr].r_cmove |= CM_INVISIBLE;
-#endif
                 }
             } else if ((py.flags.see_infra > 0) && (m_ptr->cdis <= py.flags.see_infra) && (CD_INFRA & r_ptr->cdefense)) {
                 /* Infra vision. */
@@ -320,10 +296,6 @@ int monptr;
     register struct flags *f_ptr;
     register inven_type *i_ptr;
 
-#ifdef ATARIST_MWC
-    int32u holder;
-#endif
-
     /* don't beat a dead body! */
     if (death) {
         return;
@@ -338,13 +310,7 @@ int monptr;
     }
 
     /* For "DIED_FROM" string */
-#ifdef ATARIST_MWC
-    holder = CM_WIN;
-    if (holder & r_ptr->cmove)
-#else
-    if (CM_WIN & r_ptr->cmove)
-#endif
-    {
+    if (CM_WIN & r_ptr->cmove) {
         (void)sprintf(ddesc, "The %s", r_ptr->name);
     } else if (is_a_vowel(r_ptr->name[0])) {
         (void)sprintf(ddesc, "an %s", r_ptr->name);
@@ -994,10 +960,6 @@ int32u *rcmove;
     register monster_type *m_ptr;
     register inven_type *t_ptr;
 
-#ifdef ATARIST_MWC
-    int32u holder;
-#endif
-
     i = 0;
     do_turn = FALSE;
     do_move = FALSE;
@@ -1013,30 +975,18 @@ int32u *rcmove;
             /* Floor is open? */
             if (c_ptr->fval <= MAX_OPEN_SPACE) {
                 do_move = TRUE;
-            }
-#ifdef ATARIST_MWC
-            else if (movebits & (holder = CM_PHASE))
-#else
-            else if (movebits & CM_PHASE)
-#endif
-            { /* Creature moves through walls? */
-                do_move = TRUE;
+            } else if (movebits & CM_PHASE) {
+                /* Creature moves through walls? */
 
-#ifdef ATARIST_MWC
-                *rcmove |= holder;
-#else
+                do_move = TRUE;
                 *rcmove |= CM_PHASE;
-#endif
-            } else if (c_ptr->tptr != 0) { /* Creature can open doors? */
+            } else if (c_ptr->tptr != 0) {
+                /* Creature can open doors? */
+
                 t_ptr = &t_list[c_ptr->tptr];
 
                 /* Creature can open doors. */
-#ifdef ATARIST_MWC
-                if (movebits & (holder = CM_OPEN_DOOR))
-#else
-                if (movebits & CM_OPEN_DOOR)
-#endif
-                {
+                if (movebits & CM_OPEN_DOOR) {
                     stuck_door = FALSE;
                     if (t_ptr->tval == TV_CLOSED_DOOR) {
                         do_turn = TRUE;
@@ -1076,13 +1026,7 @@ int32u *rcmove;
                         }
                         c_ptr->fval = CORR_FLOOR;
                         lite_spot(newy, newx);
-
-#ifdef ATARIST_MWC
-                        *rcmove |= holder;
-#else
                         *rcmove |= CM_OPEN_DOOR;
-#endif
-
                         do_move = FALSE;
                     }
                 } else {
@@ -1142,18 +1086,9 @@ int32u *rcmove;
                     /* Creature is attempting to move on other creature? */
 
                     /* Creature eats other creatures? */
-#ifdef ATARIST_MWC
-                    if ((movebits & (holder = CM_EATS_OTHER)) && (c_list[m_ptr->mptr].mexp >= c_list[m_list[c_ptr->cptr].mptr].mexp))
-#else
-                    if ((movebits & CM_EATS_OTHER) && (c_list[m_ptr->mptr].mexp >= c_list[m_list[c_ptr->cptr].mptr].mexp))
-#endif
-                    {
+                    if ((movebits & CM_EATS_OTHER) && (c_list[m_ptr->mptr].mexp >= c_list[m_list[c_ptr->cptr].mptr].mexp)) {
                         if (m_list[c_ptr->cptr].ml) {
-#ifdef ATARIST_MWC
-                            *rcmove |= holder;
-#else
                             *rcmove |= CM_EATS_OTHER;
-#endif
                         }
 
                         /* It ate an already processed monster. Handle normally. */
@@ -1174,20 +1109,11 @@ int32u *rcmove;
             /* Creature has been allowed move. */
             if (do_move) {
                 /* Pick up or eat an object */
-#ifdef ATARIST_MWC
-                if (movebits & (holder = CM_PICKS_UP))
-#else
-                if (movebits & CM_PICKS_UP)
-#endif
-                {
+                if (movebits & CM_PICKS_UP) {
                     c_ptr = &cave[newy][newx];
 
                     if ((c_ptr->tptr != 0) && (t_list[c_ptr->tptr].tval <= TV_MAX_OBJECT)) {
-#ifdef ATARIST_MWC
-                        *rcmove |= holder;
-#else
                         *rcmove |= CM_PICKS_UP;
-#endif
                         (void)delete_object(newy, newx);
                     }
                 }
@@ -1225,10 +1151,6 @@ int *took_turn;
     register monster_type *m_ptr;
     register creature_type *r_ptr;
 
-#ifdef ATARIST_MWC
-    int32u holder;
-#endif
-
     if (death) {
         return;
     }
@@ -1239,19 +1161,19 @@ int *took_turn;
 
     if (randint(chance) != 1) {
         /* 1 in x chance of casting spell */
-        
+
         *took_turn = FALSE;
     } else if (m_ptr->cdis > MAX_SPELL_DIS) {
         /* Must be within certain range */
-        
+
         *took_turn = FALSE;
     } else if (!los(char_row, char_col, (int)m_ptr->fy, (int)m_ptr->fx)) {
         /* Must have unobstructed Line-Of-Sight */
-        
+
         *took_turn = FALSE;
     } else {
         /* Creature is going to cast a spell */
-        
+
         *took_turn = TRUE;
 
         /* Check to see if monster should be lit. */
@@ -1265,13 +1187,7 @@ int *took_turn;
         }
 
         /* For "DIED_FROM" string */
-#ifdef ATARIST_MWC
-        holder = CM_WIN;
-        if (holder & r_ptr->cmove)
-#else
-        if (CM_WIN & r_ptr->cmove)
-#endif
-        {
+        if (CM_WIN & r_ptr->cmove) {
             (void)sprintf(ddesc, "The %s", r_ptr->name);
         } else if (is_a_vowel(r_ptr->name[0])) {
             (void)sprintf(ddesc, "an %s", r_ptr->name);
@@ -1281,12 +1197,7 @@ int *took_turn;
         /* End DIED_FROM */
 
         /* Extract all possible spells into spell_choice */
-#ifdef ATARIST_MWC
-        holder = ~CS_FREQ;
-        i = (r_ptr->spells & holder);
-#else
         i = (r_ptr->spells & ~CS_FREQ);
-#endif
 
         k = 0;
         while (i != 0) {
@@ -1481,10 +1392,6 @@ int monptr;
     register cave_type *c_ptr;
     int result;
 
-#ifdef ATARIST_MWC
-    int32u holder;
-#endif
-
     i = 0;
     do {
         j = y - 2 + randint(3);
@@ -1498,14 +1405,10 @@ int monptr;
                 /* Creature there already? */
                 if (c_ptr->cptr > 1) {
                     /* Some critters are cannibalistic! */
-#ifdef ATARIST_MWC
-                    holder = CM_EATS_OTHER;
-                    if ((c_list[cr_index].cmove & holder)
-#else
                     if ((c_list[cr_index].cmove & CM_EATS_OTHER)
-#endif
                         /* Check the experience level -CJS- */
-                        && c_list[cr_index].mexp >= c_list[m_list[c_ptr->cptr].mptr].mexp) {
+                        && c_list[cr_index].mexp >= c_list[m_list[c_ptr->cptr].mptr].mexp)
+                    {
                         /* It ate an already processed monster.Handle * normally.*/
                         if (monptr < c_ptr->cptr) {
                             delete_monster((int)c_ptr->cptr);
@@ -1530,7 +1433,7 @@ int monptr;
                     }
                 } else {
                     /* All clear,  place a monster */
-                    
+
                     /* in case compact_monster() is called,it needs monptr */
                     hack_monptr = monptr;
 
@@ -1567,11 +1470,6 @@ int32u *rcmove;
 
     register monster_type *m_ptr;
     int mm[9];
-
-#ifdef ATARIST_MWC
-    int32u holder;
-#endif
-
     int rest_val;
 
     m_ptr = &m_list[monptr];
@@ -1581,13 +1479,7 @@ int32u *rcmove;
     /* rest could be negative, to be safe, only use mod with positive values. */
     rest_val = abs(py.flags.rest);
 
-#ifdef ATARIST_MWC
-    holder = CM_MULTIPLY;
-    if ((r_ptr->cmove & holder) && (MAX_MON_MULT >= mon_tot_mult) && ((rest_val % MON_MULT_ADJ) == 0))
-#else
-    if ((r_ptr->cmove & CM_MULTIPLY) && (MAX_MON_MULT >= mon_tot_mult) && ((rest_val % MON_MULT_ADJ) == 0))
-#endif
-    {
+    if ((r_ptr->cmove & CM_MULTIPLY) && (MAX_MON_MULT >= mon_tot_mult) && ((rest_val % MON_MULT_ADJ) == 0)) {
         k = 0;
         for (i = m_ptr->fy - 1; i <= m_ptr->fy + 1; i++) {
             for (j = m_ptr->fx - 1; j <= m_ptr->fx + 1; j++) {
@@ -1604,24 +1496,14 @@ int32u *rcmove;
         }
         if ((k < 4) && (randint(k * MON_MULT_ADJ) == 1)) {
             if (multiply_monster((int)m_ptr->fy, (int)m_ptr->fx, (int)m_ptr->mptr, monptr)) {
-#ifdef ATARIST_MWC
-                *rcmove |= holder;
-#else
                 *rcmove |= CM_MULTIPLY;
-#endif
             }
         }
     }
     move_test = FALSE;
 
-/* if in wall, must immediately escape to a clear area */
-#ifdef ATARIST_MWC
-    holder = CM_PHASE;
-    if (!(r_ptr->cmove & holder) && (cave[m_ptr->fy][m_ptr->fx].fval >= MIN_CAVE_WALL))
-#else
-    if (!(r_ptr->cmove & CM_PHASE) && (cave[m_ptr->fy][m_ptr->fx].fval >= MIN_CAVE_WALL))
-#endif
-    {
+    /* if in wall, must immediately escape to a clear area */
+    if (!(r_ptr->cmove & CM_PHASE) && (cave[m_ptr->fy][m_ptr->fx].fval >= MIN_CAVE_WALL)) {
         /* If the monster is already dead, don't kill it again!
            This can happen for monsters moving faster than the player.  They
            will get multiple moves, but should not if they die on the first
@@ -1699,13 +1581,7 @@ int32u *rcmove;
         }
         m_ptr->confused--;
         move_test = TRUE;
-    }
-#ifdef ATARIST_MWC
-    else if (r_ptr->spells & (holder = CS_FREQ))
-#else
-    else if (r_ptr->spells & CS_FREQ)
-#endif
-    {
+    } else if (r_ptr->spells & CS_FREQ) {
         /* Creature may cast a spell */
         mon_cast_spell(monptr, &move_test);
     }
@@ -1754,7 +1630,7 @@ int32u *rcmove;
             make_move(monptr, mm, rcmove);
         } else if (r_ptr->cmove & CM_ATTACK_ONLY) {
             /* Attack, but don't move */
-            
+
             if (m_ptr->cdis < 2) {
                 get_moves(monptr, mm);
                 make_move(monptr, mm, rcmove);
@@ -1790,10 +1666,6 @@ int attack;
     int wake, ignore;
     vtype cdesc;
 
-#ifdef ATARIST_MWC
-    int32u holder;
-#endif
-
     /* Process the monsters */
     for (i = mfptr - 1; i >= MIN_MONIX && !death; i--) {
         m_ptr = &m_list[i];
@@ -1819,16 +1691,8 @@ int attack;
                     ignore = FALSE;
                     rcmove = 0;
 
-                    /* Monsters trapped in rock must be given a turn also,
-                       so that they will die/dig out immediately. */
-                    if (m_ptr->ml || (m_ptr->cdis <= c_list[m_ptr->mptr].aaf)
-#ifdef ATARIST_MWC
-                        || ((!(c_list[m_ptr->mptr].cmove & (holder = CM_PHASE)))
-#else
-                        || ((!(c_list[m_ptr->mptr].cmove & CM_PHASE))
-#endif
-                         && cave[m_ptr->fy][m_ptr->fx].fval >= MIN_CAVE_WALL))
-                    {
+                    /* Monsters trapped in rock must be given a turn also, so that they will die/dig out immediately. */
+                    if (m_ptr->ml || (m_ptr->cdis <= c_list[m_ptr->mptr].aaf) || ((!(c_list[m_ptr->mptr].cmove & CM_PHASE)) && cave[m_ptr->fy][m_ptr->fx].fval >= MIN_CAVE_WALL)) {
                         if (m_ptr->csleep > 0) {
                             if (py.flags.aggravate) {
                                 m_ptr->csleep = 0;

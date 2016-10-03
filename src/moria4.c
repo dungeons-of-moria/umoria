@@ -28,9 +28,7 @@
 #include "externs.h"
 
 #ifdef USG
-#ifndef ATARIST_MWC
 #include <string.h>
-#endif
 #else
 #include <strings.h>
 #endif
@@ -59,10 +57,6 @@ void tunnel(dir) int dir;
     int y, x;
     monster_type *m_ptr;
     vtype out_val, m_name;
-
-#ifdef ATARIST_MWC
-    int32u holder;
-#endif
 
     if ((py.flags.confused > 0) && /* Confused? */
         (randint(4) > 1))          /* 75% random movement */
@@ -115,12 +109,7 @@ void tunnel(dir) int dir;
         }
     } else if (i_ptr->tval != TV_NOTHING) {
 
-#ifdef ATARIST_MWC
-        if ((holder = TR_TUNNEL) & i_ptr->flags)
-#else
-        if (TR_TUNNEL & i_ptr->flags)
-#endif
-        {
+        if (TR_TUNNEL & i_ptr->flags) {
             tabil += 25 + i_ptr->p1 * 50;
         } else {
             tabil += (i_ptr->damage[0] * i_ptr->damage[1]) + i_ptr->tohit + i_ptr->todam;
@@ -703,23 +692,13 @@ inven_type *t_ptr;
 {
     register inven_type *i_ptr;
 
-#ifdef ATARIST_MWC
-    int32u holder;
-#endif
-
     i_ptr = &inventory[item_val];
     *t_ptr = *i_ptr;
     if (i_ptr->number > 1) {
         t_ptr->number = 1;
         i_ptr->number--;
         inven_weight -= i_ptr->weight;
-
-#ifdef ATARIST_MWC
-        py.flags.status |= (holder = PY_STR_WGT);
-#else
         py.flags.status |= PY_STR_WGT;
-#endif
-
     } else {
         inven_destroy(item_val);
     }

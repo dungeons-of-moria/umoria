@@ -38,10 +38,6 @@ void eat() {
     register struct misc *m_ptr;
     register inven_type *i_ptr;
 
-#ifdef ATARIST_MWC
-    int32u holder;
-#endif
-
     free_turn_flag = TRUE;
     if (inven_ctr == 0) {
         msg_print("But you are not carrying anything.");
@@ -220,11 +216,7 @@ void eat() {
             sample(i_ptr);
         }
         add_food(i_ptr->p1);
-#ifdef ATARIST_MWC
-        py.flags.status &= ~(holder = PY_WEAK | PY_HUNGRY);
-#else
         py.flags.status &= ~(PY_WEAK | PY_HUNGRY);
-#endif
         prt_hunger();
         desc_remain(item_val);
         inven_destroy(item_val);

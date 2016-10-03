@@ -71,11 +71,7 @@ typedef struct { int stuff; } fpvmach;
 #include <fcntl.h>
 #else
 #include <strings.h>
-#if defined(atarist) && defined(__GNUC__)
-/* doesn't have <sys/wait.h> */
-#else
 #include <sys/wait.h>
-#endif
 #endif
 
 /* This must be included after fcntl.h, which has a prototype for `open'

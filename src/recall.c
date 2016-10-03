@@ -182,11 +182,6 @@ int roff_recall(mon_num) int mon_num;
     int16u rcdefense;
     recall_type save_mem;
 
-#ifdef ATARIST_MWC
-    int32u holder;
-    int32u holder2;
-#endif
-
     mp = &c_recall[mon_num];
     cp = &c_list[mon_num];
     if (wizard) {
@@ -194,31 +189,16 @@ int roff_recall(mon_num) int mon_num;
         mp->r_kills = MAX_SHORT;
         mp->r_wake = mp->r_ignore = MAX_UCHAR;
 
-#ifdef ATARIST_MWC
-        j = (((cp->cmove & (holder = CM_4D2_OBJ)) != 0) * 8) +
-            (((cp->cmove & (holder = CM_2D2_OBJ)) != 0) * 4) +
-            (((cp->cmove & (holder = CM_1D2_OBJ)) != 0) * 2) +
-            ((cp->cmove & (holder = CM_90_RANDOM)) != 0) +
-            ((cp->cmove & (holder = CM_60_RANDOM)) != 0);
-        holder = CM_TREASURE;
-        mp->r_cmove = (cp->cmove & ~holder) | (j << CM_TR_SHIFT);
-#else
         j = (((cp->cmove & CM_4D2_OBJ) != 0) * 8) +
             (((cp->cmove & CM_2D2_OBJ) != 0) * 4) +
             (((cp->cmove & CM_1D2_OBJ) != 0) * 2) +
             ((cp->cmove & CM_90_RANDOM) != 0) +
             ((cp->cmove & CM_60_RANDOM) != 0);
-        mp->r_cmove = (cp->cmove & ~CM_TREASURE) | (j << CM_TR_SHIFT);
-#endif
 
+        mp->r_cmove = (cp->cmove & ~CM_TREASURE) | (j << CM_TR_SHIFT);
         mp->r_cdefense = cp->cdefense;
 
-#ifdef ATARIST_MWC
-        if (cp->spells & (holder = CS_FREQ))
-#else
-        if (cp->spells & CS_FREQ)
-#endif
-        {
+        if (cp->spells & CS_FREQ) {
             mp->r_spells = cp->spells | CS_FREQ;
         } else {
             mp->r_spells = cp->spells;
@@ -241,17 +221,10 @@ int roff_recall(mon_num) int mon_num;
     roffpline = 0;
     roffp = roffbuf;
 
-#ifdef ATARIST_MWC
-    holder = ~CS_FREQ;
-    rspells = mp->r_spells & cp->spells & holder;
-    /* the CM_WIN property is always known, set it if a win monster */
-    holder = CM_WIN;
-    rcmove = mp->r_cmove | (holder & cp->cmove);
-#else
     rspells = mp->r_spells & cp->spells & ~CS_FREQ;
+
     /* the CM_WIN property is always known, set it if a win monster */
     rcmove = mp->r_cmove | (CM_WIN & cp->cmove);
-#endif
 
     rcdefense = mp->r_cdefense & cp->cdefense;
     (void)sprintf(temp, "The %s:\n", cp->name);
@@ -419,48 +392,18 @@ int roff_recall(mon_num) int mon_num;
     k = TRUE;
     j = rspells;
 
-#ifdef ATARIST_MWC
-    holder = CS_BREATHE;
-    holder2 = CS_BR_LIGHT;
-    for (i = 0; j & holder; i++)
-#else
-    for (i = 0; j & CS_BREATHE; i++)
-#endif
-    {
-
-#ifdef ATARIST_MWC
-        if (j & (holder2 << i))
-#else
-        if (j & (CS_BR_LIGHT << i))
-#endif
-        {
-
-#ifdef ATARIST_MWC
-            j &= ~(holder2 << i);
-#else
+    for (i = 0; j & CS_BREATHE; i++) {
+        if (j & (CS_BR_LIGHT << i)) {
             j &= ~(CS_BR_LIGHT << i);
-#endif
 
             if (k) {
-#ifdef ATARIST_MWC
-                holder2 = CS_FREQ;
-                if (mp->r_spells & holder2)
-#else
-                if (mp->r_spells & CS_FREQ)
-#endif
-                {
+                if (mp->r_spells & CS_FREQ) {
                     roff(" It can breathe ");
                 } else {
                     roff(" It is resistant to ");
                 }
                 k = FALSE;
-            }
-#ifdef ATARIST_MWC
-            else if (j & holder)
-#else
-            else if (j & CS_BREATHE)
-#endif
-            {
+            } else if (j & CS_BREATHE) {
                 roff(", ");
             } else {
                 roff(" and ");
@@ -471,37 +414,19 @@ int roff_recall(mon_num) int mon_num;
 
     k = TRUE;
 
-#ifdef ATARIST_MWC
-    holder = CS_SPELLS;
-    for (i = 0; j & holder; i++)
-#else
-    for (i = 0; j & CS_SPELLS; i++)
-#endif
-    {
+    for (i = 0; j & CS_SPELLS; i++) {
         if (j & (CS_TEL_SHORT << i)) {
             j &= ~(CS_TEL_SHORT << i);
 
             if (k) {
-#ifdef ATARIST_MWC
-                holder2 = CS_BREATHE;
-                if (rspells & holder2)
-#else
-                if (rspells & CS_BREATHE)
-#endif
-                {
+                if (rspells & CS_BREATHE) {
                     roff(", and is also");
                 } else {
                     roff(" It is");
                 }
                 roff(" magical, casting spells which ");
                 k = FALSE;
-            }
-#ifdef ATARIST_MWC
-            else if (j & holder)
-#else
-            else if (j & CS_SPELLS)
-#endif
-            {
+            } else if (j & CS_SPELLS) {
                 roff(", ");
             } else {
                 roff(" or ");
@@ -510,14 +435,7 @@ int roff_recall(mon_num) int mon_num;
         }
     }
 
-#ifdef ATARIST_MWC
-    holder = CS_BREATHE | CS_SPELLS;
-    if (rspells & holder)
-#else
-    if (rspells & (CS_BREATHE | CS_SPELLS))
-#endif
-    {
-
+    if (rspells & (CS_BREATHE | CS_SPELLS)) {
         /* Could offset by level */
         if ((mp->r_spells & CS_FREQ) > 5) {
             (void)sprintf(temp, "; 1 time in %ld", cp->spells & CS_FREQ);
@@ -540,38 +458,14 @@ int roff_recall(mon_num) int mon_num;
     k = TRUE;
     j = rcmove;
 
-#ifdef ATARIST_MWC
-    holder = CM_SPECIAL;
-    holder2 = CM_INVISIBLE;
-    for (i = 0; j & holder; i++)
-#else
-    for (i = 0; j & CM_SPECIAL; i++)
-#endif
-    {
-
-#ifdef ATARIST_MWC
-        if (j & (holder2 << i))
-#else
-        if (j & (CM_INVISIBLE << i))
-#endif
-        {
-
-#ifdef ATARIST_MWC
-            j &= ~(holder2 << i);
-#else
+    for (i = 0; j & CM_SPECIAL; i++) {
+        if (j & (CM_INVISIBLE << i)) {
             j &= ~(CM_INVISIBLE << i);
-#endif
 
             if (k) {
                 roff(" It can ");
                 k = FALSE;
-            }
-#ifdef ATARIST_MWC
-            else if (j & holder)
-#else
-            else if (j & CM_SPECIAL)
-#endif
-            {
+            } else if (j & CM_SPECIAL) {
                 roff(", ");
             } else {
                 roff(" and ");
@@ -655,63 +549,30 @@ int roff_recall(mon_num) int mon_num;
     }
 
 /* Do we know what it might carry? */
-#ifdef ATARIST_MWC
-    holder = CM_CARRY_OBJ | CM_CARRY_BOLD;
-    if (rcmove & holder)
-#else
-    if (rcmove & (CM_CARRY_OBJ | CM_CARRY_GOLD))
-#endif
-    {
+    if (rcmove & (CM_CARRY_OBJ | CM_CARRY_GOLD)) {
         roff(" It may");
-
-#ifdef ATARIST_MWC
-        j = (rcmove & (holder = CM_TREASURE)) >> CM_TR_SHIFT;
-#else
         j = (rcmove & CM_TREASURE) >> CM_TR_SHIFT;
-#endif
 
         if (j == 1) {
-#ifdef ATARIST_MWC
-            if ((cp->cmove & (holder = CM_TREASURE)) == CM_60_RANDOM)
-#else
-            if ((cp->cmove & CM_TREASURE) == CM_60_RANDOM)
-#endif
-            {
+            if ((cp->cmove & CM_TREASURE) == CM_60_RANDOM) {
                 roff(" sometimes");
             } else {
                 roff(" often");
             }
-        }
-#ifdef ATARIST_MWC
-        else if ((j == 2) && ((cp->cmove & (holder = CM_TREASURE)) == (CM_60_RANDOM | CM_90_RANDOM)))
-#else
-        else if ((j == 2) && ((cp->cmove & CM_TREASURE) == (CM_60_RANDOM | CM_90_RANDOM)))
-#endif
-        {
+        } else if ((j == 2) && ((cp->cmove & CM_TREASURE) == (CM_60_RANDOM | CM_90_RANDOM))) {
             roff(" often");
         }
 
         roff(" carry");
 
-#ifdef ATARIST_MWC
-        holder = CM_SMALL_OBJ;
-        if (rcmove & holder)
-#else
-        if (rcmove & CM_SMALL_OBJ)
-#endif
-        {
+        if (rcmove & CM_SMALL_OBJ) {
             p = " small objects";
         } else {
             p = " objects";
         }
 
         if (j == 1) {
-#ifdef ATARIST_MWC
-            if (rcmove & holder)
-#else
-            if (rcmove & CM_SMALL_OBJ)
-#endif
-            {
+            if (rcmove & CM_SMALL_OBJ) {
                 p = " a small object";
             } else {
                 p = " an object";
@@ -723,19 +584,9 @@ int roff_recall(mon_num) int mon_num;
             roff(temp);
         }
 
-#ifdef ATARIST_MWC
-        if (rcmove & (holder = CM_CARRY_OBJ))
-#else
-        if (rcmove & CM_CARRY_OBJ)
-#endif
-        {
+        if (rcmove & CM_CARRY_OBJ) {
             roff(p);
-#ifdef ATARIST_MWC
-            if (rcmove & (holder = CM_CARRY_GOLD))
-#else
-            if (rcmove & CM_CARRY_GOLD)
-#endif
-            {
+            if (rcmove & CM_CARRY_GOLD) {
                 roff(" or treasure");
                 if (j > 1) {
                     roff("s");
@@ -822,12 +673,7 @@ int roff_recall(mon_num) int mon_num;
     }
 
     /* Always know the win creature. */
-#ifdef ATARIST_MWC
-    if (cp->cmove & (holder = CM_WIN))
-#else
-    if (cp->cmove & CM_WIN)
-#endif
-    {
+    if (cp->cmove & CM_WIN) {
         roff(" Killing one of these wins the game!");
     }
 

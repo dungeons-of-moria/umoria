@@ -25,22 +25,16 @@
 #include "externs.h"
 
 #if defined(USG) && !defined(VMS) && !defined(MAC)
-#if !defined(ATARIST_MWC) && !defined(AMIGA)
+#if !defined(AMIGA)
 #if !defined(__TURBOC__)
 #include <memory.h>
 #else
-#ifndef ATARIST_TC
 #include <mem.h>
-#endif
 #endif
 #endif
 #endif
 
 #if defined(MAC)
-#include <string.h>
-#endif
-
-#ifdef ATARIST_TC
 #include <string.h>
 #endif
 

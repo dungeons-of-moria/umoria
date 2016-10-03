@@ -34,7 +34,7 @@
 #include "constant.h"
 #include "types.h"
 
-#if defined(GEMDOS) && (__STDC__ == 0) && !defined(ATARIST_TC)
+#if defined(GEMDOS) && (__STDC__ == 0)
 #include <access.h>
 char *strcat();
 #endif
@@ -44,12 +44,8 @@ char *strcat();
 #include <string.h>
 #else
 #ifdef USG
-#ifndef ATARIST_MWC
 #include <string.h>
-#ifndef ATARIST_TC
 #include <fcntl.h>
-#endif
-#endif
 #else
 #include <strings.h>
 #include <sys/file.h>
@@ -63,11 +59,6 @@ void exit();
    on some systems.  Otherwise, the `open' prototype conflicts with the
    `topen' declaration. */
 #include "externs.h"
-
-#ifdef ATARIST_TC
-/* Include this to get prototypes for standard library functions. */
-#include <stdlib.h>
-#endif
 
 #ifdef MAC
 #include "ScrnMgr.h"
@@ -87,7 +78,7 @@ void init_scorefile() {
     appldirectory();
 #endif
 
-#if defined(atarist) || defined(ATARI_ST) || defined(MAC)
+#if defined(MAC)
     highscore_fp = fopen(MORIA_TOP, "rb+");
 #else
     highscore_fp = fopen(MORIA_TOP, "r+");
@@ -256,10 +247,6 @@ void print_objects() {
     short vrefnum;
 #endif
 
-#ifdef ATARIST_MWC
-    int32u holder;
-#endif
-
     prt("Produce objects on what level?: ", 0, 0);
     level = 0;
     if (!get_string(tmp_str, 0, 32, 10)) {
@@ -315,15 +302,9 @@ void print_objects() {
                     i_ptr = &t_list[j];
                     store_bought(i_ptr);
 
-#ifdef ATARIST_MWC
-                    if (i_ptr->flags & (holder = TR_CURSED)) {
-                        add_inscribe(i_ptr, ID_DAMD);
-                    }
-#else
                     if (i_ptr->flags & TR_CURSED) {
                         add_inscribe(i_ptr, ID_DAMD);
                     }
-#endif
 
                     objdes(tmp_str, i_ptr, TRUE);
                     (void)fprintf(file1, "%d %s\n", i_ptr->level, tmp_str);
@@ -388,7 +369,7 @@ int file_character(filename1) char *filename1;
     restoredirectory();
     macbeginwait();
 #else
-#if defined(GEMDOS) && (__STDC__ == 0) && !defined(ATARIST_TC)
+#if defined(GEMDOS) && (__STDC__ == 0)
     if (!access(filename1, AREAD)) {
         (void)sprintf(out_val, "Replace existing file %s?", filename1);
         if (get_check(out_val)) {

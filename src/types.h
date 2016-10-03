@@ -346,7 +346,7 @@ typedef struct cave_type {
     int8u tptr;
     int8u fval;
 #endif
-#if !defined(MSDOS) && !defined(ATARIST_MWC)
+#if !defined(MSDOS)
     unsigned int lr : 1;      /* room should be lit with perm light, walls with
                                  this set should be perm lit after tunneled out */
     unsigned int fm : 1;      /* field mark, used for traps/doors/stairs, object is

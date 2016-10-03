@@ -342,11 +342,7 @@ int dir, y, x;
 #ifdef MSDOS
     } else if ((c = loc_symbol(y, x)) == wallsym || c == '%') {
 #else
-#ifdef ATARI_ST
-    } else if ((c = loc_symbol(y, x)) == (unsigned char)240 || c == '%') {
-#else
     } else if ((c = loc_symbol(y, x)) == '#' || c == '%') {
-#endif
 #endif
         return TRUE;
     } else {
@@ -571,21 +567,12 @@ int32u typ_dam;
 }
 
 /* Corrode the unsuspecting person's armor     -RAK- */
-void corrode_gas(kb_str) char *kb_str;
+void corrode_gas(kb_str)
+char *kb_str;
 {
-#ifdef ATARIST_MWC
-    int32u holder;
-#endif
-
-#ifdef ATARIST_MWC
-    if (!minus_ac((int32u)(holder = TR_RES_ACID))) {
-        take_hit(randint(8), kb_str);
-    }
-#else
     if (!minus_ac((int32u)TR_RES_ACID)) {
         take_hit(randint(8), kb_str);
     }
-#endif
 
     if (inven_damage(set_corrodes, 5) > 0) {
         msg_print("There is an acrid smell coming from your pack.");
@@ -593,7 +580,8 @@ void corrode_gas(kb_str) char *kb_str;
 }
 
 /* Poison gas the idiot.        -RAK- */
-void poison_gas(dam, kb_str) int dam;
+void poison_gas(dam, kb_str)
+int dam;
 char *kb_str;
 {
     take_hit(dam, kb_str);
@@ -601,7 +589,8 @@ char *kb_str;
 }
 
 /* Burn the fool up.          -RAK- */
-void fire_dam(dam, kb_str) int dam;
+void fire_dam(dam, kb_str)
+int dam;
 char *kb_str;
 {
     if (py.flags.fire_resist) {
@@ -617,7 +606,8 @@ char *kb_str;
 }
 
 /* Freeze him to death.       -RAK- */
-void cold_dam(dam, kb_str) int dam;
+void cold_dam(dam, kb_str)
+int dam;
 char *kb_str;
 {
     if (py.flags.cold_resist) {
@@ -633,7 +623,8 @@ char *kb_str;
 }
 
 /* Lightning bolt the sucker away.      -RAK- */
-void light_dam(dam, kb_str) int dam;
+void light_dam(dam, kb_str)
+int dam;
 char *kb_str;
 {
     if (py.flags.lght_resist) {
@@ -647,27 +638,16 @@ char *kb_str;
 }
 
 /* Throw acid on the hapless victim     -RAK- */
-void acid_dam(dam, kb_str) int dam;
+void acid_dam(dam, kb_str)
+int dam;
 char *kb_str;
 {
     register int flag;
 
-#ifdef ATARIST_MWC
-    int32u holder;
-#endif
-
     flag = 0;
-
-#ifdef ATARIST_MWC
-    if (minus_ac((int32u)(holder = TR_RES_ACID))) {
-        flag = 1;
-    }
-#else
     if (minus_ac((int32u)TR_RES_ACID)) {
         flag = 1;
     }
-#endif
-
     if (py.flags.acid_resist) {
         flag += 2;
     }

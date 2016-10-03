@@ -39,7 +39,7 @@
 #endif
 #endif
 
-#if !defined(ATARIST_MWC) && !defined(MAC) && !defined(VMS) && !defined(AMIGA)
+#if !defined(MAC) && !defined(VMS) && !defined(AMIGA)
 long time();
 #endif
 struct tm *localtime();
@@ -578,11 +578,7 @@ int y, x;
 #ifdef MSDOS
         return wallsym;
 #else
-#ifndef ATARI_ST
         return '#';
-#else
-        return (unsigned char)240;
-#endif
 #endif
     } else {
         /* Originally set highlight bit, but that is not portable, now use the
@@ -634,10 +630,6 @@ int compact_monsters() {
     int cur_dis, delete_any;
     register monster_type *mon_ptr;
 
-#ifdef ATARIST_MWC
-    int32 holder;
-#endif
-
     msg_print("Compacting monsters...");
 
     cur_dis = 66;
@@ -647,12 +639,7 @@ int compact_monsters() {
             mon_ptr = &m_list[i];
             if ((cur_dis < mon_ptr->cdis) && (randint(3) == 1)) {
                 /* Never compact away the Balrog!! */
-#ifdef ATARIST_MWC
-                if (c_list[mon_ptr->mptr].cmove & (holder = CM_WIN))
-#else
-                if (c_list[mon_ptr->mptr].cmove & CM_WIN)
-#endif
-                {
+                if (c_list[mon_ptr->mptr].cmove & CM_WIN) {
                     ; /* Do nothing */
                 } else if (hack_monptr < i) {
                     /* in case this is called from within creatures(), this is a

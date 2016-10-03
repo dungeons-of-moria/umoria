@@ -37,11 +37,7 @@
 #endif
 
 #ifdef USG
-#ifndef ATARIST_MWC
 #include <string.h>
-#else
-#include "string.h"
-#endif
 #else
 #include <strings.h>
 #endif
@@ -68,7 +64,7 @@ char *getenv();
 #ifndef MAC
 #ifndef AMIGA
 #ifdef USG
-#if !defined(MSDOS) && !defined(ATARIST_TC)
+#if !defined(MSDOS)
 unsigned short getuid(), getgid();
 #endif
 #else
@@ -97,16 +93,6 @@ void perror();
 void exit();
 #endif
 #endif
-#endif
-
-/*
-#if defined(atarist) && defined(__GNUC__)
-long _stksize = 64*1024;
-#endif
-*/
-
-#ifdef ATARIST_MWC
-long _stksize = 18000; /*(SAJ) for MWC */
 #endif
 
 #ifdef __TURBOC__
@@ -184,9 +170,8 @@ char *argv[];
     init_scorefile();
 
 #ifndef SECURE
-#if !defined(MSDOS) && !defined(ATARIST_MWC) && !defined(MAC)
-#if !defined(AMIGA) && !defined(ATARIST_TC)
-#if !defined(atarist)
+#if !defined(MSDOS) && !defined(MAC)
+#if !defined(AMIGA)
     if (0 != setuid(getuid())) {
         perror("Can't set permissions correctly!  Setuid call failed.\n");
         exit(0);
@@ -195,7 +180,6 @@ char *argv[];
         perror("Can't set permissions correctly!  Setgid call failed.\n");
         exit(0);
     }
-#endif
 #endif
 #endif
 #endif
@@ -285,14 +269,10 @@ char *argv[];
     } else if ((p = getenv("MORIA_SAV")) != CNIL) {
         (void)strcpy(savefile, p);
     } else if ((p = getenv("HOME")) != CNIL) {
-#if defined(ATARIST_MWC) || defined(ATARIST_TC)
-        (void)sprintf(savefile, "%s\\%s", p, MORIA_SAV);
-#else
 #ifdef VMS
         (void)sprintf(savefile, "%s%s", p, MORIA_SAV);
 #else
         (void)sprintf(savefile, "%s/%s", p, MORIA_SAV);
-#endif
 #endif
     } else {
         (void)strcpy(savefile, MORIA_SAV);

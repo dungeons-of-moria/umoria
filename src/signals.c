@@ -54,18 +54,6 @@ void init_signals() {
 #define MSIGNAL signal
 #endif
 
-#ifdef ATARIST_MWC
-/* need these for atari st, but for unix, must include signals.h first,
-   or else suspend won't be properly declared */
-#include "types.h"
-#include "externs.h"
-#endif
-
-/* skip most of the file on an ATARI ST */
-/* commented away most single handling for Atari ST TC too, as this
-   doesn't work as it should. */
-#if !defined(ATARIST_MWC) && !defined(ATARIST_TC)
-
 #if defined(SYS_V) && defined(lint)
 /* for AIX, prevent hundreds of unnecessary lint errors, define before
    signal.h is included */
@@ -86,9 +74,7 @@ typedef struct { int stuff; } fpvmach;
 #endif
 
 #ifdef USG
-#ifndef ATARIST_MWC
 #include <string.h>
-#endif
 #else
 #include <strings.h>
 #endif
@@ -142,7 +128,7 @@ static int signal_handler(sig)
 
     /* Allow player to think twice. Wizard may force a core dump. */
     if (sig == SIGINT
-#if !defined(MSDOS) && !defined(AMIGA) && !defined(ATARIST_TC)
+#if !defined(MSDOS) && !defined(AMIGA)
         || sig == SIGQUIT
 #endif
         ) {
@@ -199,7 +185,7 @@ static int signal_handler(sig)
         (void)_save_char(savefile);
     }
     restore_term();
-#if !defined(MSDOS) && !defined(AMIGA) && !defined(ATARIST_TC)
+#if !defined(MSDOS) && !defined(AMIGA)
     /* always generate a core dump */
     (void)MSIGNAL(sig, SIG_DFL);
     (void)kill(getpid(), sig);
@@ -208,20 +194,13 @@ static int signal_handler(sig)
     exit(1);
 }
 
-#endif /* ATARIST_MWC, ATARIST_TC */
-
 #ifndef USG
 static int mask;
 #endif
 
 void nosignals() {
-#if !defined(ATARIST_MWC) && !defined(ATARIST_TC)
 #ifdef SIGTSTP
-#if defined(atarist) && defined(__GNUC__)
-    (void)MSIGNAL(SIGTSTP, (__Sigfunc)SIG_IGN);
-#else
     (void)MSIGNAL(SIGTSTP, SIG_IGN);
-#endif
 #ifndef USG
     mask = sigsetmask(0);
 #endif
@@ -229,20 +208,14 @@ void nosignals() {
     if (error_sig < 0) {
         error_sig = 0;
     }
-#endif
 }
 
 void signals() {
-#if !defined(ATARIST_MWC) && !defined(ATARIST_TC)
 #ifdef SIGTSTP
-#if defined(atarist) && defined(__GNUC__)
-    (void)MSIGNAL(SIGTSTP, (__Sigfunc)suspend);
-#else
 #ifdef __386BSD__
     (void)MSIGNAL(SIGTSTP, (sig_t)suspend);
 #else
     (void)MSIGNAL(SIGTSTP, suspend);
-#endif
 #endif
 #ifndef USG
     (void)sigsetmask(mask);
@@ -251,41 +224,16 @@ void signals() {
     if (error_sig == 0) {
         error_sig = -1;
     }
-#endif
 }
 
 void init_signals() {
-#if !defined(ATARIST_MWC) && !defined(ATARIST_TC)
-    /* No signals for Atari ST compiled with MWC or TC. */
     (void)MSIGNAL(SIGINT, signal_handler);
-
-#if defined(atarist) && defined(__GNUC__)
-    /* Atari ST compiled with GNUC has most signals, but we need a cast
-       in every call to signal. */
-    (void)MSIGNAL(SIGINT, (__Sigfunc)signal_handler);
-    (void)MSIGNAL(SIGQUIT, (__Sigfunc)signal_handler);
-    (void)MSIGNAL(SIGTSTP, (__Sigfunc)SIG_IGN);
-    (void)MSIGNAL(SIGILL, (__Sigfunc)signal_handler);
-    (void)MSIGNAL(SIGHUP, (__Sigfunc)SIG_IGN);
-    (void)MSIGNAL(SIGTRAP, (__Sigfunc)signal_handler);
-    (void)MSIGNAL(SIGIOT, (__Sigfunc)signal_handler);
-    (void)MSIGNAL(SIGEMT, (__Sigfunc)signal_handler);
-    (void)MSIGNAL(SIGKILL, (__Sigfunc)signal_handler);
-    (void)MSIGNAL(SIGBUS, (__Sigfunc)signal_handler);
-    (void)MSIGNAL(SIGSEGV, (__Sigfunc)signal_handler);
-    (void)MSIGNAL(SIGSYS, (__Sigfunc)signal_handler);
-    (void)MSIGNAL(SIGTERM, (__Sigfunc)signal_handler);
-    (void)MSIGNAL(SIGPIPE, (__Sigfunc)signal_handler);
-
-#else
-    /* Everybody except the atari st. */
     (void)MSIGNAL(SIGINT, signal_handler);
     (void)MSIGNAL(SIGFPE, signal_handler);
 
 #if defined(MSDOS)
 /* many fewer signals under MSDOS */
-#else
-
+#else // not MSDOS
 #ifdef AMIGA
     /*  (void) MSIGNAL(SIGINT, signal_handler); */
     (void)MSIGNAL(SIGTERM, signal_handler);
@@ -293,9 +241,7 @@ void init_signals() {
     /*  (void) MSIGNAL(SIGFPE, signal_handler); */
     (void)MSIGNAL(SIGILL, signal_handler);
     (void)MSIGNAL(SIGSEGV, signal_handler);
-
-#else
-
+#else // not AMIGA
     /* Everybody except Atari, MSDOS, and Amiga. */
     /* Ignore HANGUP, and let the EOF code take care of this case. */
     (void)MSIGNAL(SIGHUP, SIG_IGN);
@@ -323,44 +269,28 @@ void init_signals() {
 #ifdef SIGPWR /* SYSV */
     (void)MSIGNAL(SIGPWR, signal_handler);
 #endif
-#endif
-#endif
-#endif
-#endif
+#endif // end AMIGA check
+#endif // end MSDOS
 }
 
 void ignore_signals() {
-#if !defined(ATARIST_MWC)
     (void)MSIGNAL(SIGINT, SIG_IGN);
 #ifdef SIGQUIT
     (void)MSIGNAL(SIGQUIT, SIG_IGN);
 #endif
-#endif
 }
 
 void default_signals() {
-#if !defined(ATARIST_MWC)
     (void)MSIGNAL(SIGINT, SIG_DFL);
 #ifdef SIGQUIT
     (void)MSIGNAL(SIGQUIT, SIG_DFL);
 #endif
-#endif
 }
 
 void restore_signals() {
-#if !defined(ATARIST_MWC)
-#if defined(atarist) && defined(__GNUC__)
-    (void)MSIGNAL(SIGINT, (__Sigfunc)signal_handler);
-#else
     (void)MSIGNAL(SIGINT, signal_handler);
-#endif
 #ifdef SIGQUIT
-#if defined(atarist) && defined(__GNUC__)
-    (void)MSIGNAL(SIGQUIT, (__Sigfunc)signal_handler);
-#else
     (void)MSIGNAL(SIGQUIT, signal_handler);
-#endif
-#endif
 #endif
 }
 
