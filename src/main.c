@@ -19,10 +19,6 @@
  * along with Umoria.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifdef __TURBOC__
-#include <io.h>
-#endif /* __TURBOC__ */
-
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -95,9 +91,6 @@ void exit();
 #endif
 #endif
 
-#ifdef __TURBOC__
-unsigned _stklen = 0x3fff; /* increase stack from 4K to 16K */
-#endif
 #ifdef AMIGA
 /* detach from cli process */
 

@@ -25,11 +25,6 @@
 #include <errno.h>
 #endif
 
-#ifdef __TURBOC__
-#include <io.h>
-#include <stdlib.h>
-#endif /* __TURBOC__ */
-
 #include "config.h"
 #include "constant.h"
 #include "types.h"

@@ -82,11 +82,7 @@ typedef struct { int stuff; } fpvmach;
 #ifndef VMS
 #ifdef USG
 void exit();
-#ifdef __TURBOC__
-void sleep();
-#else
 unsigned sleep();
-#endif
 #endif
 #endif
 
@@ -107,7 +103,7 @@ struct sigcontext *scp;
 
     smask = sigsetmask(0) | (1 << sig);
 #else
-#if defined(__TURBOC__) || defined(AMIGA)
+#if defined(AMIGA)
 static void signal_handler(sig)
 #else
 static int signal_handler(sig)

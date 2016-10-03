@@ -26,11 +26,7 @@
 
 #if defined(USG) && !defined(VMS) && !defined(MAC)
 #if !defined(AMIGA)
-#if !defined(__TURBOC__)
 #include <memory.h>
-#else
-#include <mem.h>
-#endif
 #endif
 #endif
 

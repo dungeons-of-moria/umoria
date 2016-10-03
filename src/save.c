@@ -28,10 +28,6 @@
 
 #include <stdio.h>
 
-#ifdef __TURBOC__
-#include <io.h>
-#endif /* __TURBOC__ */
-
 #include "config.h"
 #include "constant.h"
 #include "types.h"

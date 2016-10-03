@@ -1,21 +1,21 @@
 /* source/io.c: terminal I/O code, uses the curses package
 
-   Copyright (C) 1989-2008 James E. Wilson, Robert A. Koeneke, 
+   Copyright (C) 1989-2008 James E. Wilson, Robert A. Koeneke,
                            David J. Grabiner
 
    This file is part of Umoria.
 
-   Umoria is free software; you can redistribute it and/or modify 
+   Umoria is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
    the Free Software Foundation, either version 3 of the License, or
    (at your option) any later version.
 
    Umoria is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of 
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
    GNU General Public License for more details.
 
-   You should have received a copy of the GNU General Public License 
+   You should have received a copy of the GNU General Public License
    along with Umoria.  If not, see <http://www.gnu.org/licenses/>. */
 
 #include <stdio.h>
@@ -117,7 +117,7 @@ typedef struct { int stuff; } fpvmach;
 #endif
 
 #if defined(unix) || defined(__linux__) || defined(DEBIAN_LINUX)
-#include <unistd.h> /* prototype for execl */ 
+#include <unistd.h> /* prototype for execl */
 #endif
 
 /* These are included after other includes (particularly curses.h)
@@ -180,12 +180,8 @@ char *getenv();
 #ifndef VMS
 #ifdef USG
 void exit();
-#if defined(__TURBOC__)
-void sleep();
-#else
 #ifndef AMIGA
 unsigned sleep();
-#endif
 #endif
 #endif
 #endif
@@ -1197,7 +1193,7 @@ char *str_buff;
       /* If the new message and the old message are short enough, we want
 	 display them together on the same line.  So we don't flush the old
 	 message in this case.  */
-	 
+
       if (str_buff)
 	new_len = strlen (str_buff);
       else
@@ -1245,7 +1241,7 @@ char *str_buff;
 
       /* If the new message and the old message are short enough, display
 	 them on the same line.  */
-      
+
       if (combine_messages)
 	{
 	  put_buffer (str_buff, MSG_LINE, old_len + 2);

@@ -161,7 +161,6 @@ char *in_str;
     return centered_str;
 }
 
-#ifndef __TURBOC__
 #if (defined(USG) || defined(HPUX)) && !defined(VMS)
 #if !defined(AMIGA) && !defined(MAC)
 
@@ -230,7 +229,6 @@ int f, l;
     }
     return 0;
 }
-#endif
 #endif
 #endif
 
@@ -776,12 +774,7 @@ static void highscores() {
 
 #ifndef BSD4_3
 
-#if defined(__TURBOC__)
-            /* No fseek with negative offset allowed. */
-            (void)fseek(highscore_fp, (long)ftell(highscore_fp) - sizeof(high_scores) - sizeof(char), L_SET);
-#else
             (void)fseek(highscore_fp, -(long)sizeof(high_scores) - (long)sizeof(char), L_INCR);
-#endif
 #else
             (void)fseek(highscore_fp, -(off_t)sizeof(high_scores) - (off_t)sizeof(char), L_INCR);
 #endif

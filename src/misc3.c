@@ -2116,12 +2116,7 @@ char *object_str, *mtc_str, *insert;
     }
 
     if (pc <= bound) {
-#ifdef __TURBOC__
-        /* Avoid complaint about possible loss of significance. */
-        (void)strncpy(out_val, object_str, (size_t)(pc - object_str));
-#else
         (void)strncpy(out_val, object_str, (pc - object_str));
-#endif
         /* Turbo C needs int for array index. */
         out_val[(int)(pc - object_str)] = '\0';
         if (insert) {
@@ -2162,12 +2157,7 @@ int show_sign;
     } while (flag);
 
     if (string) {
-#ifdef __TURBOC__
-        /* Avoid complaint about possible loss of significance. */
-        (void)strncpy(str1, object_str, (size_t)(string - object_str));
-#else
         (void)strncpy(str1, object_str, string - object_str);
-#endif
         /* Turbo C needs int for array index. */
         str1[(int)(string - object_str)] = '\0';
         (void)strcpy(str2, string + mlen);

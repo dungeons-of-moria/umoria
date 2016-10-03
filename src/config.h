@@ -82,16 +82,6 @@ Constant.h should always be included after config.h,
 /* If you are compiling under VMS, define this.  */
 /* #define VMS */
 
-/* If you are using the tcio.c file instead of io.c, then define this.
- * The tcio.c file uses TURBO C builtin functions instead of curses library
- * calls.  It only works if you are using TURBO C.
- * The default is to assume you are using it if you are using TURBO C
- * on an IBM-PC.
- */
-#if defined(MSDOS) && defined(__TURBOC__)
-#define USING_TCIO
-#endif
-
 /* Files used by moria, set these to valid pathnames for your system.  */
 
 #ifdef MSDOS

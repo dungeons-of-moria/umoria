@@ -32,12 +32,10 @@
 #ifndef NeXT
 #ifndef AMIGA
 #if !defined(__GNUC__)
-#ifndef __TURBOC__
 #if defined(USG) || defined(DGUX)
 extern int sprintf();
 #else
 extern char *sprintf();
-#endif
 #endif
 #endif
 #endif
@@ -565,11 +563,7 @@ void bash(void);
 /* ms_misc.c */
 void user_name(char *);
 char *getlogin(void);
-#ifdef __TURBOC__
-void sleep(unsigned);
-#else
 unsigned int sleep(int);
-#endif
 void error(char *, ...);
 void warn(char *, ...);
 void msdos_init(void);
@@ -1062,11 +1056,8 @@ void bash();
 /* ms_misc.c */
 void user_name();
 char *getlogin();
-#ifdef __TURBOC__
-void sleep();
-#else
 unsigned int sleep();
-#endif
+
 #if 0
 void error();
 void warn();
@@ -1076,6 +1067,7 @@ void warn();
 void error(char *fmt, ...);
 void warn(char *fmt, ...);
 #endif
+
 void msdos_init();
 void msdos_raw();
 void msdos_noraw();

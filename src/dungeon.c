@@ -19,10 +19,6 @@
  * along with Umoria.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifdef __TURBOC__
-#include <conio.h>
-#endif /* __TURBOC__ */
-
 #include <stdio.h>
 #include <stdlib.h>
 

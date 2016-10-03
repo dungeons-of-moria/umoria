@@ -136,10 +136,6 @@ inven_type *item;
     }
 }
 
-    /*ARGSUSED*/ /* to shut up lint about unused argument */
-#ifdef __TURBOC__
-#pragma argused
-#endif
 int set_null(item) inven_type *item;
 #if defined(MAC) && !defined(THINK_C)
 #pragma unused(item)

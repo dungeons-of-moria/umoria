@@ -354,7 +354,6 @@ typedef struct cave_type {
     unsigned int pl : 1;      /* permanent light, used for walls and lighted rooms */
     unsigned int tl : 1;      /* temporary light, used for player's lamp light,etc.*/
 #else
-#ifndef __TURBOC__
     /* this is not legal ANSI C, this is a MSC extension, which will use 1 byte
        for the bitfields whereas MSC uses 2 bytes for the bitfields above */
     /* this is also a MWC extension on the Atari ST */
@@ -362,12 +361,6 @@ typedef struct cave_type {
     unsigned char fm : 1;
     unsigned char pl : 1;
     unsigned char tl : 1;
-#else
-    unsigned lr : 1;
-    unsigned fm : 1;
-    unsigned pl : 1;
-    unsigned tl : 1;
-#endif
 #endif
 } cave_type;
 
