@@ -39,16 +39,11 @@
 #include <sys/types.h>
 #endif
 
-#ifdef VMS
-#include <file.h>
-#include <string.h>
-#else
 #ifdef USG
 #include <string.h>
 #include <fcntl.h>
 #else
 #include <strings.h>
-#endif
 #endif
 
 /* This must be included after fcntl.h, which has a prototype for `open'
@@ -550,38 +545,32 @@ char *fnam;
     pack_heavy = 0;
     ok = FALSE;
 
-/* VMS files have version numbers, so don't worry about overwriting
-   the old save file. */
-#if !defined(VMS)
     fd = -1;
     fileptr = NULL; /* Do not assume it has been init'ed */
+
 #if defined(MAC)
     /* The Mac version automatically overwrites */
     fd = open(fnam, O_RDWR | O_CREAT | O_TRUNC);
 #ifdef MAC
     macbeginwait();
 #endif
-#else
+#else // else MAC
     fd = open(fnam, O_RDWR | O_CREAT | O_EXCL, 0600);
-    if (fd < 0 && access(fnam, 0) >= 0 &&
-        (from_savefile ||
-         (wizard && get_check("Can't make new savefile. Overwrite old?")))) {
+    if (fd < 0 && access(fnam, 0) >= 0 && (from_savefile || (wizard && get_check("Can't make new savefile. Overwrite old?")))) {
         (void)chmod(fnam, 0600);
         fd = open(fnam, O_RDWR | O_TRUNC, 0600);
     }
-#endif
+#endif // end MAC
 
     if (fd >= 0) {
         (void)close(fd);
-#endif /* !VMS */
+
 #if defined(THINK_C)
         fileptr = fopen(savefile, "wb");
 #else
         fileptr = fopen(savefile, "w");
 #endif
-#if !defined(VMS)
     }
-#endif
 
     DEBUG(logfile = fopen("IO_LOG", "a"));
     DEBUG(fprintf(logfile, "Saving data to %s\n", savefile));

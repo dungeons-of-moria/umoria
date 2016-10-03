@@ -473,17 +473,7 @@ void dungeon() {
             }
         }
 #else
-        if ((command_count > 0 || find_flag || f_ptr->rest != 0)
-#if defined(VMS)
-            && kbhit()
-#else
-            && (check_input(find_flag ? 0 : 10000))
-#endif
-                ) {
-#ifdef VMS
-            /* Get and ignore the key used to interrupt resting/running. */
-            (void)vms_getch();
-#endif
+        if ((command_count > 0 || find_flag || f_ptr->rest != 0) && (check_input(find_flag ? 0 : 10000))) {
             disturb(0, 0);
         }
 #endif

@@ -79,11 +79,9 @@ typedef struct { int stuff; } fpvmach;
 #include <strings.h>
 #endif
 
-#ifndef VMS
 #ifdef USG
 void exit();
 unsigned sleep();
-#endif
 #endif
 
 static int error_sig = -1;

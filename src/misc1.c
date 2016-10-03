@@ -32,14 +32,10 @@
 #include <time.h>
 #endif
 #if !defined(MAC)
-#ifndef VMS
 #include <sys/types.h>
-#else
-#include <types.h>
-#endif
 #endif
 
-#if !defined(MAC) && !defined(VMS)
+#if !defined(MAC)
 long time();
 #endif
 struct tm *localtime();

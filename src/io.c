@@ -51,9 +51,7 @@ typedef struct { int stuff; } fpvmach;
 #endif
 
 #if !defined(MAC)
-#ifndef VMS
 #include <sys/ioctl.h>
-#endif
 #include <signal.h>
 #endif
 
@@ -70,9 +68,7 @@ typedef struct { int stuff; } fpvmach;
 #if 0
 /* Used to include termio.h here, but that caused problems on some systems, as curses.h includes it also above.  */
 #if !defined(MAC)
-#if !defined(VMS)
 #include <termio.h>
-#endif
 #endif
 #endif /* 0 */
 
@@ -152,11 +148,9 @@ int Use_value2;
 char *getenv();
 #endif
 
-#ifndef VMS
 #ifdef USG
 void exit();
 unsigned sleep();
-#endif
 #endif
 
 #ifdef ultrix
@@ -164,7 +158,7 @@ void exit();
 void sleep();
 #endif
 
-#if !defined(MAC) && !defined(VMS)
+#if !defined(MAC)
 #ifdef USG
 #ifdef __linux__
 static struct termios save_termio;
@@ -182,9 +176,6 @@ static int save_local_chars;
 #ifndef MAC
 static int curses_on = FALSE;
 static WINDOW *savescr;		/* Spare window for saving the screen. -CJS-*/
-#ifdef VMS
-static WINDOW *tempscr;		/* Spare window for VMS CTRL('R'). */
-#endif
 #endif
 
 #ifdef MAC
@@ -255,9 +246,7 @@ void init_curses()
   (void) ioctl(0, TIOCGETC, (char *)&save_tchars);
   (void) ioctl(0, TIOCLGET, (char *)&save_local_chars);
 #else
-#if !defined(VMS)
   (void) ioctl(0, TCGETA, (char *)&save_termio);
-#endif
 #endif
 
   /* PC curses returns ERR */
@@ -290,11 +279,7 @@ void init_curses()
 #endif // end __386BSD__
 #endif
 
-  if (((savescr = newwin (0, 0, 0, 0)) == NULL)
-#ifdef VMS
-      || ((tempscr = newwin (0, 0, 0, 0)) == NULL)
-#endif
-  ) {
+  if (((savescr = newwin (0, 0, 0, 0)) == NULL)) {
       (void) printf ("Out of memory in starting up curses.\n");
       exit_game();
   }
@@ -334,7 +319,6 @@ void moriaterm()
 #else
 {
 
-#if !defined(VMS)
 #ifdef USG
 #ifdef __linux__
   struct termios tbuf;
@@ -345,21 +329,15 @@ void moriaterm()
   struct ltchars lbuf;
   struct tchars buf;
 #endif
-#endif
 
   curses_on = TRUE;
 #ifndef BSD4_3
   use_value crmode();
 #else
-#ifdef VMS
-  use_value vms_crmode ();
-#else
   use_value cbreak();
-#endif
 #endif
   use_value noecho();
   /* can not use nonl(), because some curses do not handle it correctly */
-#if !defined(VMS)
 #ifdef USG
   (void) ioctl(0, TCGETA, (char *)&tbuf);
   /* disable all of the normal special control characters */
@@ -400,7 +378,6 @@ void moriaterm()
   buf.t_brkc = (char)-1;
   (void) ioctl(0, TIOCSETC, (char *)&buf);
 #endif // end USG
-#endif // end !VMS
 }
 #endif
 
@@ -465,19 +442,14 @@ void restore_term()
   if (!curses_on)
     return;
   put_qio();  /* Dump any remaining buffer */
-#ifdef VMS
-  clear_screen();
-  pause_line(15);
-#endif
+
   /* this moves curses to bottom right corner */
   mvcur(stdscr->_cury, stdscr->_curx, LINES-1, 0);
   endwin();  /* exit curses */
   (void) fflush (stdout);
   /* restore the saved values of the special chars */
 #ifdef USG
-#if !defined(VMS)
   (void) ioctl(0, TCSETA, (char *)&save_termio);
-#endif
 #else
   (void) ioctl(0, TIOCSLTC, (char *)&save_special_chars);
   (void) ioctl(0, TIOCSETP, (char *)&save_ttyb);
@@ -495,43 +467,6 @@ void shell_out()
   alert_error("This command is not implemented on the Macintosh.");
 }
 #else // not MAC
-
-
-
-#ifdef VMS /* TPP */
-{
-  int val, istat;
-  char *str;
-
-  save_screen();
-  /* clear screen and print 'exit' message */
-  clear_screen();
-  put_buffer("[Entering subprocess, type 'EOJ' to resume your game.]\n",
-	     0, 0);
-  put_qio();
-
-  use_value vms_nocrmode();
-  use_value echo();
-  ignore_signals();
-
-  istat = lib$spawn();
-  if (!istat)
-    lib$signal (istat);
-
-  restore_signals();
-  use_value vms_crmode();
-  use_value noecho();
-  /* restore the cave to the screen */
-  restore_screen();
-  put_buffer("Welcome back to UMoria.\n", 0, 0);
-  save_screen();
-  clear_screen();
-  put_qio();
-  restore_screen();
-  (void) wrefresh(curscr);
-}
-#else // not VMS
-
 
 
 
@@ -573,11 +508,7 @@ void shell_out()
 #ifndef BSD4_3
   use_value nocrmode();
 #else
-#ifdef VMS
-  use_value vms_nocrmode ();
-#else
   use_value nocbreak();
-#endif
 #endif // end BSD4_3
 
   use_value echo();
@@ -621,11 +552,7 @@ void shell_out()
 #ifndef BSD4_3
   use_value crmode();
 #else
-#ifdef VMS
-  use_value vms_crmode ();
-#else
   use_value cbreak();
-#endif
 #endif // end BSD4_3
 
   use_value noecho();
@@ -644,8 +571,6 @@ void shell_out()
 
   (void) wrefresh(curscr);
 }
-
-#endif // end VMS
 #endif // end MAC
 
 
@@ -680,55 +605,14 @@ char inkey()
 #else
 {
   int i;
-#ifdef VMS
-  vtype tmp_str;
-#endif
 
   put_qio();			/* Dump IO buffer		*/
   command_count = 0;  /* Just to be safe -CJS- */
   while (TRUE) {
-#ifdef VMS
-      i = vms_getch ();
-#else
       i = getch();
-#endif
-
-#ifdef VMS
-      if (i == 27) /* if ESCAPE key, then we probably have a keypad key */
-	{
-	  i = vms_getch();
-	  if (i == 'O') /* Now it is definitely a numeric keypad key */
-	    {
-	      i = vms_getch();
-	      switch (i)
-		{
-		  case 'p': i = '0'; break;
-		  case 'q' : i = '1'; break;
-		  case 'r' : i = '2'; break;
-		  case 's' : i = '3'; break;
-		  case 't' : i = '4'; break;
-		  case 'u' : i = '5'; break;
-		  case 'v' : i = '6'; break;
-		  case 'w' : i = '7'; break;
-		  case 'x' : i = '8'; break;
-		  case 'y' : i = '9'; break;
-		  case 'm' : i = '-'; break;
-		  case 'M' : i = 10; break; /* Enter = RETURN */
-		  case 'n' : i = '.'; break;
-		  default : while (kbhit()) (void) vms_getch();
-		  }
-	    }
-	  else
-	    {
-	      while (kbhit())
-		(void) vms_getch();
-	    }
-	}
-#endif /* VMS */
 
       /* some machines may not sign extend. */
-      if (i == EOF)
-	{
+      if (i == EOF) {
 	  eof_flag++;
 	  /* avoid infinite loops while trying to call inkey() for a -more-
 	     prompt. */
@@ -752,17 +636,9 @@ char inkey()
 	    }
 	  return ESCAPE;
 	}
-      if (i != CTRL('R'))
-	return (char)i;
-#ifdef VMS
-      /* Refresh does not work right under VMS, so use a brute force. */
-      overwrite (stdscr, tempscr);
-      clear_screen();
-      put_qio();
-      overwrite (tempscr, stdscr);
-      touchwin (stdscr);
-      (void) wrefresh (stdscr);
-#endif
+      if (i != CTRL('R')) {
+      	return (char)i;
+      }
       (void) wrefresh (curscr);
       moriaterm();
     }
@@ -832,18 +708,15 @@ void flush()
 }
 #else
 {
-#ifdef VMS
-  while (kbhit ())
-    (void) vms_getch();
-#else
   /* the code originally used ioctls, TIOCDRAIN, or TIOCGETP/TIOCSETP, or
      TCGETA/TCSETAF, however this occasionally resulted in loss of output,
      the happened especially often when rlogin from BSD to SYS_V machine,
      using check_input makes the desired effect a bit clearer */
   /* wierd things happen on EOF, don't try to flush input in that case */
-  if (!eof_flag)
+  if (!eof_flag) {
     while (check_input(0));
-#endif
+  }
+
 
   /* used to call put_qio() here to drain output, but it is not necessary */
 }
@@ -895,14 +768,7 @@ void clear_screen()
 {
   if (msg_flag)
     msg_print(CNIL);
-#ifdef VMS
-  /* Clear doesn't work right under VMS, so use brute force. */
-  (void) clearok (stdscr, TRUE);
-  (void) wclear(stdscr);
-  (void) clearok (stdscr, FALSE);
-#else
   (void) clear();
-#endif
 }
 #endif
 

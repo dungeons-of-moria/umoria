@@ -40,10 +40,7 @@ extern char *sprintf();
 #endif
 #endif
 
-/* to avoid 'psect' problem with VMS declaration of errno */
-#ifndef VMS
 extern int errno;
-#endif
 
 extern char *copyright[5];
 
@@ -307,17 +304,6 @@ int file_character(char *);
 
 /* generate.c */
 void generate_cave(void);
-
-#ifdef VMS
-/* getch.c */
-int kbhit(void);
-void user_name(char *);
-void vms_crmode(void);
-void vms_nocrmode(void);
-int opengetch(void);
-int closegetch(void);
-char vms_getch(void);
-#endif
 
 /* help.c */
 void ident_char(void);
@@ -704,11 +690,6 @@ void enter_store(int);
 
 /* treasur2.c */
 
-#ifdef VMS
-/* uexit.c */
-void uexit(int);
-#endif
-
 #ifdef unix
 /* unix.c */
 int check_input(int);
@@ -783,17 +764,6 @@ int file_character();
 
 /* generate.c */
 void generate_cave();
-
-#ifdef VMS
-/* getch.c */
-int kbhit();
-void user_name();
-void vms_crmode();
-void vms_nocrmode();
-int opengetch();
-int closegetch();
-char vms_getch();
-#endif
 
 /* help.c */
 void ident_char();
@@ -1175,11 +1145,6 @@ void enter_store();
 /* treasur1.c */
 
 /* treasur2.c */
-
-#ifdef VMS
-/* uexit.c */
-void uexit();
-#endif
 
 #ifdef unix
 /* unix.c */

@@ -24,7 +24,7 @@
 #include "types.h"
 #include "externs.h"
 
-#if defined(USG) && !defined(VMS) && !defined(MAC)
+#if defined(USG) && !defined(MAC)
 #include <memory.h>
 #endif
 

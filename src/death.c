@@ -46,16 +46,9 @@
 #endif
 
 #if !defined(MAC)
-#ifndef VMS
 #include <pwd.h>
-#else
-#include <file.h>
-#endif
 #endif
 
-#ifdef VMS
-unsigned int getuid(), getgid();
-#else
 #ifdef unix
 #ifdef USG
 unsigned short getuid(), getgid();
@@ -66,16 +59,14 @@ uid_t getuid(), getgid();
 #else /* other BSD versions */
 int getuid(), getgid();
 #endif
-#endif
-#endif
-#endif
-#endif
+#endif // SECURE
+#endif // USG
+#endif // unix
+
 
 #ifdef USG
 #include <string.h>
-#ifndef VMS
 #include <fcntl.h>
-#endif
 #else
 #include <strings.h>
 #endif
@@ -91,7 +82,7 @@ long lseek();
 off_t lseek();
 #endif
 
-#if defined(USG) || defined(VMS)
+#if defined(USG)
 #ifndef L_SET
 #define L_SET 0
 #endif
@@ -100,11 +91,9 @@ off_t lseek();
 #endif
 #endif
 
-#ifndef VMS
 #ifndef MAC
 #if defined(ultrix) || defined(USG)
 void exit();
-#endif
 #endif
 #endif
 
@@ -115,10 +104,8 @@ static void print_tomb(void);
 static void kingly(void);
 #endif
 
-#ifndef VMS
 #ifndef MAC
 long time();
-#endif
 #endif
 
 static void date(day)
@@ -155,7 +142,7 @@ char *in_str;
     return centered_str;
 }
 
-#if (defined(USG) || defined(HPUX)) && !defined(VMS)
+#if (defined(USG) || defined(HPUX))
 #if !defined(MAC)
 
 #include <errno.h>
@@ -234,11 +221,11 @@ void display_scores(show_player) int show_player;
     char string[100];
     int8u version_maj, version_min, patch_level;
 
-#if defined(unix) || defined(VMS)
+#if defined(unix)
     int16 player_uid;
 #endif
 
-#if defined(VMS) || defined(MAC) || defined(APOLLO)
+#if defined(MAC) || defined(APOLLO)
 #if defined(MAC)
     if ((highscore_fp = fopen(MORIA_TOP, "rb")) == NULL)
 #else
@@ -273,7 +260,7 @@ void display_scores(show_player) int show_player;
         msg_print("Sorry. This scorefile is from a different version of umoria.");
         msg_print(CNIL);
 
-#if defined(VMS) || defined(MAC)
+#if defined(MAC)
         (void)fclose(highscore_fp);
 #endif
 
@@ -283,11 +270,7 @@ void display_scores(show_player) int show_player;
 #ifdef unix
     player_uid = getuid();
 #else
-#ifdef VMS
-    player_uid = (getgid() * 1000) + getuid();
-#else
-/* Otherwise player_uid is not used. */
-#endif
+    // FIXME: when not on VMS, this message was given: `Otherwise player_uid is not used.`
 #endif
 
     /* set the static fileptr in save.c to the highscore file pointer */
@@ -301,7 +284,7 @@ void display_scores(show_player) int show_player;
         /* Put twenty scores on each page, on lines 2 through 21. */
         while (!feof(highscore_fp) && i < 21) {
             /* Only show the entry if show_player false, or */
-#if defined(unix) || defined(VMS)
+#if defined(unix)
             /* if the entry belongs to the current player. */
             if (!show_player || score.uid == player_uid)
 #else
@@ -328,27 +311,26 @@ void display_scores(show_player) int show_player;
         }
     }
 
-#if defined(VMS) || defined(MAC) || defined(APOLLO)
+#if defined(MAC) || defined(APOLLO)
     (void)fclose(highscore_fp);
 #endif
 }
 
 int duplicate_character() {
-/* Only check for duplicate characters under unix and VMS. */
-#if !defined(unix) && !defined(VMS)
+/* Only check for duplicate characters under unix. */
+#if !defined(unix)
     return FALSE;
-
-#else /* ! unix && ! VMS */
+#else /* ! unix */
 
     high_scores score;
     int8u version_maj, version_min, patch_level;
     int16 player_uid;
 
-#if defined(VMS) || defined(MAC) || defined(APOLLO)
+#if defined(MAC) || defined(APOLLO)
     char string[80];
 #endif
 
-#if defined(VMS) || defined(MAC) || defined(APOLLO)
+#if defined(MAC) || defined(APOLLO)
 #if defined(MAC)
     if ((highscore_fp = fopen(MORIA_TOP, "rb")) == NULL)
 #else
@@ -384,7 +366,7 @@ int duplicate_character() {
         msg_print("Sorry. This scorefile is from a different version of umoria.");
         msg_print(CNIL);
 
-#if defined(VMS) || defined(MAC) || defined(APOLLO)
+#if defined(MAC) || defined(APOLLO)
         (void)fclose(highscore_fp);
 #endif
 
@@ -397,11 +379,7 @@ int duplicate_character() {
 #ifdef unix
     player_uid = getuid();
 #else
-#ifdef VMS
-    player_uid = (getgid() * 1000) + getuid();
-#else
     player_uid = 0;
-#endif
 #endif
 
     rd_highscore(&score);
@@ -416,12 +394,12 @@ int duplicate_character() {
         rd_highscore(&score);
     }
 
-#if defined(VMS) || defined(MAC)
+#if defined(MAC)
     (void)fclose(highscore_fp);
 #endif
 
     return FALSE;
-#endif /* ! unix && ! VMS */
+#endif /* ! unix */
 }
 
 /* Prints the gravestone of the character    -RAK- */
@@ -594,7 +572,7 @@ static void highscores() {
     int8u version_maj, version_min, patch_level;
     long curpos;
 
-#if defined(VMS) || defined(MAC) || defined(APOLLO)
+#if defined(MAC) || defined(APOLLO)
     char string[100];
 #endif
 
@@ -615,11 +593,7 @@ static void highscores() {
 #ifdef unix
     new_entry.uid = getuid();
 #else
-#ifdef VMS
-    new_entry.uid = (getgid() * 1000) + getuid();
-#else
     new_entry.uid = 0;
-#endif
 #endif
 
     new_entry.mhp = py.misc.mhp;
@@ -643,9 +617,9 @@ static void highscores() {
     (void)strcpy(new_entry.died_from, tmp);
 
 /*  First, get a lock on the high score file so no-one else tries */
-/*  to write to it while we are using it, on VMS and IBMPCs only one
+/*  to write to it while we are using it, on IBMPCs only one
     process can have the file open at a time, so we just open it here */
-#if defined(VMS) || defined(MAC)
+#if defined(MAC)
 #if defined(MAC)
     if ((highscore_fp = fopen(MORIA_TOP, "rb+")) == NULL)
 #else
@@ -707,7 +681,7 @@ static void highscores() {
              (version_min == 2 && patch_level < 2) || (version_min < 2)) {
 /* No need to print a message, a subsequent call to display_scores()
    will print a message. */
-#if defined(VMS) || defined(MAC)
+#if defined(MAC)
         (void)fclose(highscore_fp);
 #endif
         return;
@@ -722,8 +696,7 @@ static void highscores() {
     while (!feof(highscore_fp)) {
         if (new_entry.points >= old_entry.points) {
             break;
-            /* under unix and VMS, only allow one sex/race/class combo per
-               person,
+            /* under unix, only allow one sex/race/class combo per person,
                on single user system, allow any number of entries, but try to
                prevent multiple entries per character by checking for case when
                birthdate/sex/race/class are the same, and died_from of scorefile
@@ -735,14 +708,14 @@ static void highscores() {
                    new_entry.sex == old_entry.sex &&
                    new_entry.race == old_entry.race &&
                    new_entry.class == old_entry.class) {
-#if defined(VMS) || defined(MAC) || defined(APOLLO)
+#if defined(MAC) || defined(APOLLO)
             (void)fclose(highscore_fp);
 #endif
             return;
         } else if (++i >= SCOREFILE_SIZE) {
             /* only allow one thousand scores in the score file */
 
-#if defined(VMS) || defined(MAC)
+#if defined(MAC)
             (void)fclose(highscore_fp);
 #endif
 
@@ -774,7 +747,7 @@ static void highscores() {
 #endif
 
             wr_highscore(&entry);
-            /* under unix and VMS, only allow one sex/race/class combo per
+            /* under unix, only allow one sex/race/class combo per
                person, on single user system, allow any number of entries, but
                try to prevent multiple entries per character by checking for
                case when birthdate/sex/race/class are the same, and died_from of
@@ -810,7 +783,7 @@ static void highscores() {
         }
     }
 
-#if !defined(VMS) && !defined(MAC) && !defined(APOLLO)
+#if !defined(MAC) && !defined(APOLLO)
     (void)flock((int)fileno(highscore_fp), LOCK_UN);
 #else
     (void)fclose(highscore_fp);

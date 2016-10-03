@@ -29,10 +29,6 @@
 #include "constant.h"
 #include "types.h"
 
-#ifdef VMS
-#include <file.h>
-#include <string.h>
-#else
 #ifdef USG
 #include <string.h>
 #include <fcntl.h>
@@ -42,7 +38,6 @@
 #endif
 #if defined(ultrix) || defined(USG)
 void exit();
-#endif
 #endif
 
 /* This must be included after fcntl.h, which has a prototype for `open'
@@ -90,8 +85,8 @@ void init_scorefile() {
 #endif
     }
 
-#if defined(VMS) || defined(MAC) || defined(APOLLO)
-    /* can't leave it open, since this causes problems on networked PCs and VMS,
+#if defined(MAC) || defined(APOLLO)
+    /* can't leave it open, since this causes problems on networked PCs,
        we DO want to check to make sure we can open the file, though */
     fclose(highscore_fp);
 #endif
@@ -146,10 +141,6 @@ void read_times() {
         if ((file1 = fopen(MORIA_HOU, "r")) != NULL) {
             clear_screen();
 
-#ifdef VMS
-            restore_screen();
-#endif
-
             for (i = 0; fgets(in_line, 80, file1) != CNIL; i++) {
                 put_buffer(in_line, i, 0);
             }
@@ -163,10 +154,6 @@ void read_times() {
     /* Print the introduction message, news, etc. */
     if ((file1 = fopen(MORIA_MOR, "r")) != NULL) {
         clear_screen();
-
-#ifdef VMS
-        restore_screen();
-#endif
 
         for (i = 0; fgets(in_line, 80, file1) != CNIL; i++) {
             put_buffer(in_line, i, 0);
@@ -351,8 +338,6 @@ int file_character(filename1) char *filename1;
     }
 #endif
 
-#ifndef VMS
-/* VMS creates a new version of a file, so no need to check for rewrite. */
 #ifdef MAC
     changedirectory(vrefnum);
     fd = open(filename1, O_WRONLY | O_CREAT | O_TRUNC);
@@ -375,10 +360,6 @@ int file_character(filename1) char *filename1;
     } else {
         file1 = NULL;
     }
-#else /* VMS */
-    fd = -1;
-    file1 = fopen(filename1, "w");
-#endif
 
     if (file1 != NULL) {
         prt("Writing character sheet...", 0, 0);

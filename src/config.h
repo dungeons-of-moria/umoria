@@ -79,9 +79,6 @@ Constant.h should always be included after config.h,
 #define HPUX
 #endif
 
-/* If you are compiling under VMS, define this.  */
-/* #define VMS */
-
 /* Files used by moria, set these to valid pathnames for your system.  */
 
 #ifdef MAC
@@ -118,22 +115,6 @@ Constant.h should always be included after config.h,
 #else // else MAC
 
 
-#ifdef VMS
-#define MORIA_SAV "moria.sav"
-/* These 3 files need a dot at the end to prevent VMS from deciding that
-   they are *.DAT files or anything else equally wierd. */
-#define MORIA_HOU "moria:hours."
-#define MORIA_MOR "moria:news."
-#define MORIA_GPL "moria:COPYING."
-#define MORIA_TOP "moria:scores."
-#define MORIA_HELP "moria:roglcmds.hlp"
-#define MORIA_ORIG_HELP "moria:origcmds.hlp"
-#define MORIA_WIZ_HELP "moria:rwizcmds.hlp"
-#define MORIA_OWIZ_HELP "moria:owizcmds.hlp"
-#define MORIA_WELCOME "moria:welcome.hlp"
-#define MORIA_VER "moria:version.hlp"
-#else // else VMS
-
 
 #if 0
 /* Debian standards for file location */
@@ -167,7 +148,6 @@ Constant.h should always be included after config.h,
 #define MORIA_VER "/home/michael/moria-56/files/version.hlp"
 
 #endif // end DEBIAN standard.
-#endif // end VMS
 #endif // end MAC
 
 
@@ -193,7 +173,7 @@ Constant.h should always be included after config.h,
 #endif
 
 /* Substitute strchr for index on USG versions of UNIX.  */
-#if defined(SYS_V) || defined(MAC) || defined(VMS)
+#if defined(SYS_V) || defined(MAC)
 #define index strchr
 #endif
 
@@ -208,10 +188,6 @@ Constant.h should always be included after config.h,
 #ifndef USG
 #define USG
 #endif
-#endif
-
-#if defined(VMS)
-#define USG
 #endif
 
 /* Pyramid runs 4.2BSD-like UNIX version */
@@ -235,14 +211,6 @@ Constant.h should always be included after config.h,
 /* Screen dimensions */
 #define SCRN_ROWS 24
 #define SCRN_COLS 80
-#endif
-
-#ifdef VMS
-#define unlink delete
-#define index strchr
-#define exit uexit
-/* In constants.h, ESCAPE is defined to be the CTRL-Z key, instead of the
-   escape key.  */
 #endif
 
 #if defined(SYS_V) && defined(lint)

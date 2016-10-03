@@ -46,11 +46,9 @@
 #include <time.h>
 #endif
 
-#ifndef VMS
 #ifndef MAC
 long time();
 char *getenv();
-#endif
 #endif
 
 #ifndef MAC
@@ -67,19 +65,15 @@ int getuid(), getgid();
 #endif // end USG
 #endif
 
-#ifndef VMS
 #ifndef MAC
 #if defined(ultrix) || defined(USG)
 void perror();
 #endif
 #endif
-#endif
 
-#ifndef VMS
 #ifndef MAC
 #ifdef USG
 void exit();
-#endif
 #endif
 #endif
 
@@ -149,12 +143,6 @@ char *argv[];
 
     /* use curses */
     init_curses();
-
-#ifdef VMS
-    /* Bizarre, but yes this really is needed to make moria work correctly
-       under VMS. */
-    restore_screen();
-#endif
 
     /* catch those nasty signals */
     /* must come after init_curses as some of the signal handlers use curses */
@@ -232,11 +220,7 @@ char *argv[];
     } else if ((p = getenv("MORIA_SAV")) != CNIL) {
         (void)strcpy(savefile, p);
     } else if ((p = getenv("HOME")) != CNIL) {
-#ifdef VMS
-        (void)sprintf(savefile, "%s%s", p, MORIA_SAV);
-#else
         (void)sprintf(savefile, "%s/%s", p, MORIA_SAV);
-#endif
     } else {
         (void)strcpy(savefile, MORIA_SAV);
     }
