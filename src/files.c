@@ -36,7 +36,7 @@
 #include <strings.h>
 #include <sys/file.h>
 #endif
-#if defined(ultrix) || defined(USG)
+#if defined(USG)
 void exit();
 #endif
 

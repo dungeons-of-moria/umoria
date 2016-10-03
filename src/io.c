@@ -129,11 +129,6 @@ void exit();
 unsigned sleep();
 #endif
 
-#ifdef ultrix
-void exit();
-void sleep();
-#endif
-
 #ifdef USG
 #ifdef __linux__
 static struct termios save_termio;

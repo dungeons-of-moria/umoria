@@ -37,12 +37,6 @@ Constant.h should always be included after config.h,
    define this. */
 #define DEBIAN_LINUX
 
-/* If you are compiling on an ultrix/4.2BSD/Dynix/etc. version of UNIX,
-   define this.  It is not needed for SUNs.  */
-/* #ifndef ultrix
-#define ultrix
-#endif */
-
 /* If you are compiling on a SYS V version of UNIX, define this.  */
 /* #define SYS_V */
 

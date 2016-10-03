@@ -83,7 +83,7 @@ off_t lseek();
 #endif
 #endif
 
-#if defined(ultrix) || defined(USG)
+#if defined(USG)
 void exit();
 #endif
 
