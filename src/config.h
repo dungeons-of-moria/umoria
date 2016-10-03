@@ -33,11 +33,6 @@ Constant.h should always be included after config.h,
 /* System definitions.  You must define one of these as appropriate for
    the system you are compiling moria on.  */
 
-/* No system definition is needed for 4.3BSD, SUN OS, DG/UX.  */
-/* Unless you're on a system, like an HP Apollo, that doesn't let
-   more than one machine access a file at a time; then define this.  */
-/* #define APOLLO */
-
 /* If compiling on Debian (also works on other versions of Linux),
    define this. */
 #define DEBIAN_LINUX
@@ -48,17 +43,8 @@ Constant.h should always be included after config.h,
 #define ultrix
 #endif */
 
-/* If you are compiling under IBM's AIX 3.0, then you can either define
-   SYS_V, or you can define nothing (thus compiling as if on a BSD system)
-   but you must comment out the AIX LFLAG line in the Makefile so that
-   moria will be linked with -lbsd.  */
-
 /* If you are compiling on a SYS V version of UNIX, define this.  */
 /* #define SYS_V */
-
-/* If you are compiling on a SYS III version of UNIX, define this.
-   The SYS_III support may not be complete.  I do not know if this works.  */
-/* #define SYS_III */
 
 /* For Xenix systems, define SYS_V and unix.  */
 #ifdef M_XENIX
@@ -134,22 +120,12 @@ Constant.h should always be included after config.h,
 #define index strchr
 #endif
 
-#ifdef SYS_III
-    char *
-    index();
-#endif
-
 /* Define USG for many systems, this is basically to select SYS V style
    system calls (as opposed to BSD style).  */
-#if defined(SYS_III) || defined(SYS_V)
+#if defined(SYS_V)
 #ifndef USG
 #define USG
 #endif
-#endif
-
-/* Pyramid runs 4.2BSD-like UNIX version */
-#if defined(Pyramid)
-#define ultrix
 #endif
 
 #if defined(_MSC_VER) && (_MSC_VER < 600)

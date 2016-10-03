@@ -39,12 +39,7 @@
 #endif
 
 #include <ctype.h>
-
-#ifdef Pyramid
-#include <sys/time.h>
-#else
 #include <time.h>
-#endif
 
 long time();
 char *getenv();

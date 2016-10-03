@@ -26,11 +26,9 @@
 
 #include <stdlib.h>
 
-#ifdef Pyramid
-#include <sys/time.h>
-#else
 #include <time.h>
-#endif
+
+// FIXME: should this be removed?
 #include <sys/types.h>
 
 long time();

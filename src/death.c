@@ -25,13 +25,7 @@
 #include "config.h"
 #include "constant.h"
 #include "types.h"
-
-#ifdef Pyramid
-#include <sys/time.h>
-#else
 #include <time.h>
-#endif
-
 #include <ctype.h>
 
 #ifndef USG
@@ -207,15 +201,6 @@ void display_scores(show_player) int show_player;
     int16 player_uid;
 #endif
 
-#if defined(APOLLO)
-    if ((highscore_fp = fopen(MORIA_TOP, "r")) == NULL) {
-        (void)sprintf(string, "Error opening score file \"%s\"\n", MORIA_TOP);
-        msg_print(string);
-        msg_print(CNIL);
-        return;
-    }
-#endif
-
 #ifndef BSD4_3
     (void)fseek(highscore_fp, (long)0, L_SET);
 #else
@@ -283,10 +268,6 @@ void display_scores(show_player) int show_player;
             break;
         }
     }
-
-#if defined(APOLLO)
-    (void)fclose(highscore_fp);
-#endif
 }
 
 int duplicate_character() {
@@ -298,19 +279,6 @@ int duplicate_character() {
     high_scores score;
     int8u version_maj, version_min, patch_level;
     int16 player_uid;
-
-#if defined(APOLLO)
-    char string[80];
-#endif
-
-#if defined(APOLLO)
-    if ((highscore_fp = fopen(MORIA_TOP, "r")) == NULL) {
-        (void)sprintf(string, "Error opening score file \"%s\"\n", MORIA_TOP);
-        msg_print(string);
-        msg_print(CNIL);
-        return FALSE;
-    }
-#endif
 
 #ifndef BSD4_3
     (void)fseek(highscore_fp, (long)0, L_SET);
@@ -333,10 +301,6 @@ int duplicate_character() {
         (version_min == 2 && patch_level < 2) || (version_min < 2)) {
         msg_print("Sorry. This scorefile is from a different version of umoria.");
         msg_print(CNIL);
-
-#if defined(APOLLO)
-        (void)fclose(highscore_fp);
-#endif
 
         return FALSE;
     }
@@ -492,10 +456,6 @@ static void highscores() {
     int8u version_maj, version_min, patch_level;
     long curpos;
 
-#if defined(APOLLO)
-    char string[100];
-#endif
-
     clear_screen();
 
     if (noscore) {
@@ -611,10 +571,8 @@ static void highscores() {
                      new_entry.birth_date == old_entry.birth_date)) &&
                    new_entry.sex == old_entry.sex &&
                    new_entry.race == old_entry.race &&
-                   new_entry.class == old_entry.class) {
-#if defined(APOLLO)
-            (void)fclose(highscore_fp);
-#endif
+                   new_entry.class == old_entry.class)
+        {
             return;
         } else if (++i >= SCOREFILE_SIZE) {
             /* only allow one thousand scores in the score file */
@@ -682,11 +640,7 @@ static void highscores() {
         }
     }
 
-#if !defined(APOLLO)
     (void)flock((int)fileno(highscore_fp), LOCK_UN);
-#else
-    (void)fclose(highscore_fp);
-#endif
 }
 
 /* Change the player into a King!      -RAK- */

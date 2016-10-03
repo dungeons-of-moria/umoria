@@ -59,12 +59,6 @@ void init_scorefile() {
         (void)fprintf(stderr, "Can't open score file \"%s\"\n", MORIA_TOP);
         exit(1);
     }
-
-#if defined(APOLLO)
-    /* can't leave it open, since this causes problems on networked PCs,
-       we DO want to check to make sure we can open the file, though */
-    fclose(highscore_fp);
-#endif
 }
 
 /* Attempt to open the intro file      -RAK- */
