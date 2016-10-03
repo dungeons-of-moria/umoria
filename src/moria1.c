@@ -35,13 +35,6 @@
 #include <strings.h>
 #endif
 
-#if defined(LINT_ARGS)
-static void inven_screen(int);
-static char map_roguedir(char);
-static void sub1_move_light(int, int, int, int);
-static void sub3_move_light(int, int, int, int);
-#endif
-
 /* Changes speed of monsters relative to player    -RAK- */
 /* Note: When the player is sped up or slowed down, I simply */
 /*   change the speed of all the monsters.  This greatly */

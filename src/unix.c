@@ -31,13 +31,6 @@
 
 #ifdef unix
 
-#if defined(SYS_V) && defined(lint)
-/* for AIX, prevent hundreds of unnecessary lint errors, must define before
-   signal.h is included */
-#define _h_IEEETRAP
-typedef struct { int stuff; } fpvmach;
-#endif
-
 #include <signal.h>
 
 #ifdef M_XENIX
@@ -85,21 +78,6 @@ typedef struct { int stuff; } fpvmach;
 #ifdef USG
 struct passwd *getpwuid();
 struct passwd *getpwnam();
-#endif
-
-#if defined(SYS_V) && defined(lint)
-struct screen {int dumb; };
-#endif
-
-/* Fooling lint. Unfortunately, c defines all the TIO constants to be long,
-   and lint expects them to be int. Also, ioctl is sometimes called with just
-   two arguments. The following definition keeps lint happy. It may need to be
-   reset for different systems. */
-#ifdef lint
-/*ARGSUSED*/
-/*VARARGS2*/
-static Ioctl(i, l, p) char *p; { return 0; }
-#define ioctl Ioctl
 #endif
 
 /* Provides for a timeout on input. Does a non-blocking read, consuming the

@@ -87,13 +87,6 @@ off_t lseek();
 void exit();
 #endif
 
-#if defined(LINT_ARGS)
-static void date(char *);
-static char *center_string(char *, char *);
-static void print_tomb(void);
-static void kingly(void);
-#endif
-
 long time();
 
 static void date(day)

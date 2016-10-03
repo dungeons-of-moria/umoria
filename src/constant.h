@@ -260,8 +260,8 @@ some of the system defines set up there.
 #define DELETE    0x7f
 #define ESCAPE    '\033'  /* ESCAPE character -CJS- */
 
-/* This used to be NULL, but that was technically incorrect.  CNIL is used
- * instead of null to help avoid lint errors.
+/* This used to be NULL, but that was technically incorrect.
+ * CNIL is used instead of null to help avoid lint errors.
  */
 #ifndef CNIL
 #define CNIL (char *)0

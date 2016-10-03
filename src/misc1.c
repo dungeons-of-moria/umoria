@@ -34,10 +34,6 @@
 long time();
 struct tm *localtime();
 
-#if defined(LINT_ARGS)
-static void compact_objects(void);
-#endif
-
 /* gets a new random seed for the random number generator */
 void init_seeds(seed)
 int32u seed;

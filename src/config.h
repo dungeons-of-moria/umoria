@@ -122,16 +122,6 @@ Constant.h should always be included after config.h,
 #endif
 #endif
 
-#if defined(_MSC_VER) && (_MSC_VER < 600)
-#define register /* MSC 4.0 still has a problem with register bugs ... */
-#endif
-
-#if defined(SYS_V) && defined(lint)
-/* Define this to prevent <string.h> from including <NLchar.h> on a PC/RT
-   running AIX.  This prevents a bunch of lint errors.  */
-#define RTPC_NO_NLS
-#endif
-
 #ifdef SECURE
 extern int PlayerUID;
 #define getuid() PlayerUID

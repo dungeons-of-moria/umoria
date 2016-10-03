@@ -33,11 +33,7 @@
 #include <strings.h>
 #endif
 
-#if defined(LINT_ARGS)
-static void replace_spot(int, int, int);
-#else
 static void replace_spot();
-#endif
 
 /* Following are spell procedure/functions      -RAK- */
 /* These routines are commonly used in the scroll, potion, wands, and */

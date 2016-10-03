@@ -33,19 +33,6 @@
 #include <strings.h>
 #endif
 
-#if defined(LINT_ARGS)
-static char original_commands(char);
-static void do_command(char);
-static int valid_countcommand(char);
-static void regenhp(int);
-static void regenmana(int);
-static int enchanted(inven_type *);
-static void examine_book(void);
-static void go_up(void);
-static void go_down(void);
-static void jamdoor(void);
-static void refill_lamp(void);
-#else
 static char original_commands();
 static void do_command();
 static int valid_countcommand();
@@ -57,7 +44,6 @@ static void go_up();
 static void go_down();
 static void jamdoor();
 static void refill_lamp();
-#endif
 
 /* Moria game module          -RAK- */
 /* The code in this section has gone through many revisions, and */

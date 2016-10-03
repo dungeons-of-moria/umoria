@@ -32,20 +32,6 @@
 #include <strings.h>
 #endif
 
-#if defined(LINT_ARGS)
-static void get_stats(void);
-static void change_stat(int, int16);
-static void get_all_stats(void);
-static void choose_race(void);
-static void print_history(void);
-static void get_history(void);
-static void get_sex(void);
-static void get_ahw(void);
-static void get_class(void);
-static int monval(int8u);
-static void get_money(void);
-#endif
-
 /* Generates character's stats        -JWT- */
 static void get_stats() {
     register int i, tot;

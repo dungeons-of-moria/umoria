@@ -35,17 +35,8 @@
 
 #include <ctype.h>
 
-#if defined(LINT_ARGS)
-static int look_ray(int, int, int);
-static int look_see(int, int, int *);
-static void inven_throw(int, struct inven_type *);
-static void facts(struct inven_type *, int *, int *, int *, int *);
-static void drop_throw(int, int, struct inven_type *);
-static void py_bash(int, int);
-#else
 static int look_ray();
 static int look_see();
-#endif
 
 /* Tunnels through rubble and walls      -RAK- */
 /* Must take into account: secret doors,  special tools */

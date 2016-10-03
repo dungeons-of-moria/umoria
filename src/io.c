@@ -26,22 +26,9 @@
 #include <sys/bsdtty.h>
 #endif
 
-#if defined(NLS) && defined(lint)
-/* for AIX, don't let curses include the NL stuff */
-#undef NLS
-#endif
-
 #include <ncurses.h>
 
 #include <ctype.h>
-
-#if defined(SYS_V) && defined(lint)
-/* for AIX, prevent hundreds of unnecessary lint errors, must define before
-   signal.h is included */
-#define _h_IEEETRAP
-typedef struct { int stuff; } fpvmach;
-#endif
-
 #include <sys/ioctl.h>
 #include <signal.h>
 
@@ -86,41 +73,8 @@ typedef struct { int stuff; } fpvmach;
 #include "types.h"
 #include "externs.h"
 
-#if defined(SYS_V) && defined(lint)
-struct screen { int dumb; };
-#endif
-
-/* Fooling lint. Unfortunately, c defines all the TIO.	  -CJS-
-   constants to be long, and lint expects them to be int. Also,
-   ioctl is sometimes called with just two arguments. The
-   following definition keeps lint happy. It may need to be
-   reset for different systems.	 */
-#ifdef lint
-/*ARGSUSED*/
-/*VARARGS2*/
-static Ioctl(i, l, p) char *p; { return 0; }
-#define ioctl	    Ioctl
-#endif // end lint
-
-#if !defined(USG) && defined(lint)
-/* This use_value hack is for curses macros which return a value,
-   but don't shut up about it when you try to tell them (void).	 */
-/* only needed for Berkeley UNIX */
-int Use_value;
-#define use_value   Use_value +=
-#else
 #define use_value
-#endif
-
-#if defined(SYS_V) && defined(lint)
-/* This use_value2 hack is for curses macros which use a conditional
-   expression, and which say null effect even if you cast to (void). */
-/* only needed for SYS V */
-int Use_value2;
-#define use_value2  Use_value2 +=
-#else
 #define use_value2
-#endif
 
 char *getenv();
 
@@ -746,14 +700,6 @@ char *prompt;
 
   prt(prompt, 0, 0);
   getyx(stdscr, y, x);
-#if defined(lint)
-  /* prevent message 'warning: y is unused' */
-  x = y;
-#endif
-#ifdef LINT_ARGS
-  /* prevent message about y never used for MSDOS systems */
-  res = y;
-#endif
 
   if (x > 73)
     (void) move(0, 73);

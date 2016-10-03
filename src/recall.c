@@ -26,11 +26,7 @@
 #include "types.h"
 #include "externs.h"
 
-#if defined(LINT_ARGS)
-static void roff(char *);
-#else
 static void roff();
-#endif
 
 static char *desc_atype[] = {
     "do something undefined",

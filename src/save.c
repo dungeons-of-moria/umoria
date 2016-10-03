@@ -53,25 +53,6 @@
 
 DEBUG(static FILE *logfile);
 
-#if defined(LINT_ARGS)
-static int sv_write(void);
-static void wr_byte(int8u);
-static void wr_short(int16u);
-static void wr_long(int32u);
-static void wr_bytes(int8u *, int);
-static void wr_string(char *);
-static void wr_shorts(int16u *, int);
-static void wr_item(inven_type *);
-static void wr_monster(monster_type *);
-static void rd_byte(int8u *);
-static void rd_short(int16u *);
-static void rd_long(int32u *);
-static void rd_bytes(int8u *, int);
-static void rd_string(char *);
-static void rd_shorts(int16u *, int);
-static void rd_item(inven_type *);
-static void rd_monster(monster_type *);
-#else
 static int sv_write();
 static void wr_byte();
 static void wr_short();
@@ -89,7 +70,6 @@ static void rd_string();
 static void rd_shorts();
 static void rd_item();
 static void rd_monster();
-#endif
 
 long time();
 

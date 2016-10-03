@@ -39,15 +39,6 @@
 #include <strings.h>
 #endif
 
-#if defined(LINT_ARGS)
-static void prt_lnum(char *, int32, int, int);
-static void prt_7lnum(char *, int32, int, int);
-static void prt_num(char *, int, int, int);
-static void prt_long(int32, int, int);
-static void prt_int(int, int, int);
-static void gain_level(void);
-#endif
-
 static char *stat_names[] = {
     "STR : ", "INT : ", "WIS : ",
     "DEX : ", "CON : ", "CHR : ",

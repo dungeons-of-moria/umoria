@@ -32,12 +32,6 @@
 #include <strings.h>
 #endif
 
-#if defined(LINT_ARGS)
-static void hit_trap(int, int);
-static void carry(int, int, int);
-static int summon_object(int, int, int, int);
-#endif
-
 /* Player hit a trap.  (Chuckle)      -RAK- */
 static void hit_trap(y, x)
 int y, x;

@@ -26,12 +26,7 @@
 #include "types.h"
 #include "externs.h"
 
-#if defined(LINT_ARGS)
-static int see_wall(int, int, int);
-static int see_nothing(int, int, int);
-#else
 static int see_wall();
-#endif
 
 /* Change a trap from invisible to visible    -RAK- */
 /* Note: Secret doors are handled here */

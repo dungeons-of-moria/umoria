@@ -64,20 +64,12 @@ void perror();
 void exit();
 #endif
 
-#if defined(LINT_ARGS)
-static void char_inven_init(void);
-static void init_m_level(void);
-static void init_t_level(void);
-#if (COST_ADJ != 100)
-static void price_adjust(void);
-#endif
-#else
 static void char_inven_init();
 static void init_m_level();
 static void init_t_level();
+
 #if (COST_ADJ != 100)
 static void price_adjust();
-#endif
 #endif
 
 /* Initialize, restore, and get the ball rolling.  -RAK- */

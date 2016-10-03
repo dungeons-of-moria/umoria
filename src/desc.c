@@ -32,11 +32,7 @@
 #include <strings.h>
 #endif
 
-#if defined(LINT_ARGS)
-static void unsample(struct inven_type *);
-#else
 static void unsample();
-#endif
 
 char titles[MAX_TITLES][10];
 

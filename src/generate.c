@@ -32,45 +32,12 @@ typedef struct coords {
     int x, y;
 } coords;
 
-#if defined(LINT_ARGS)
-static void correct_dir(int *, int *, int, int, int, int);
-static void rand_dir(int *, int *);
-static void blank_cave(void);
-static void fill_cave(int);
-static void place_boundary(void);
-static void place_streamer(int, int);
-static void place_open_door(int, int);
-static void place_broken_door(int, int);
-static void place_closed_door(int, int);
-static void place_locked_door(int, int);
-static void place_stuck_door(int, int);
-static void place_secret_door(int, int);
-static void place_door(int, int);
-static void place_up_stairs(int, int);
-static void place_down_stairs(int, int);
-static void place_stairs(int, int, int);
-static void vault_trap(int, int, int, int, int);
-static void vault_monster(int, int, int);
-static void build_room(int, int);
-static void build_type1(int, int);
-static void build_type2(int, int);
-static void build_type3(int, int);
-static void build_tunnel(int, int, int, int);
-static int next_to(int, int);
-static void try_door(int, int);
-static void new_spot(int16 *, int16 *);
-static void cave_gen(void);
-static void build_store(int, int, int);
-static void tlink(void);
-static void mlink(void);
-static void town_gen(void);
-#endif
-
 static coords doorstk[100];
 static int doorindex;
 
 /* Always picks a correct direction */
-static void correct_dir(rdir, cdir, y1, x1, y2, x2) int *rdir, *cdir;
+static void correct_dir(rdir, cdir, y1, x1, y2, x2)
+int *rdir, *cdir;
 register int y1, x1, y2, x2;
 {
     if (y1 < y2) {

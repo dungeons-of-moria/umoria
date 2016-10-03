@@ -33,16 +33,6 @@
 #include <strings.h>
 #endif
 
-#if defined(LINT_ARGS)
-static int movement_rate(int16);
-static int check_mon_lite(int, int);
-static void get_moves(int, int *);
-static void make_attack(int);
-static void make_move(int, int *, int32u *);
-static void mon_cast_spell(int, int *);
-static void mon_move(int, int32u *);
-#endif
-
 /* Updates screen when monsters move about    -RAK- */
 void update_mon(monptr)
 int monptr;
