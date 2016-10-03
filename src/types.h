@@ -336,16 +336,10 @@ typedef struct background_type {
 } background_type;
 
 typedef struct cave_type {
-#ifdef AMIGA
-    /* This reduces the size from 64 bits to 32 bits. */
-    unsigned int cptr : 8;
-    unsigned int tptr : 8;
-    unsigned int fval : 8;
-#else
     int8u cptr;
     int8u tptr;
     int8u fval;
-#endif
+
     unsigned int lr : 1;      /* room should be lit with perm light, walls with
                                  this set should be perm lit after tunneled out */
     unsigned int fm : 1;      /* field mark, used for traps/doors/stairs, object is

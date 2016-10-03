@@ -31,7 +31,7 @@
 #else
 #include <time.h>
 #endif
-#if !defined(GEMDOS) && !defined(MAC) && !defined(AMIGA)
+#if !defined(GEMDOS) && !defined(MAC)
 #ifndef VMS
 #include <sys/types.h>
 #else
@@ -39,7 +39,7 @@
 #endif
 #endif
 
-#if !defined(MAC) && !defined(VMS) && !defined(AMIGA)
+#if !defined(MAC) && !defined(VMS)
 long time();
 #endif
 struct tm *localtime();

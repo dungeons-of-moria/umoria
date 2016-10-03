@@ -26,14 +26,6 @@
 #include <sys/bsdtty.h>
 #endif
 
-#ifdef AMIGA
-/* detach from cli process */
-long _stack = 30000;
-long _priority = 0;
-long _BackGroundIO = 1;
-char *_procname = "Moria";
-#endif
-
 #if defined(NLS) && defined(lint)
 /* for AIX, don't let curses include the NL stuff */
 #undef NLS
@@ -66,7 +58,7 @@ char *getenv();
 typedef struct { int stuff; } fpvmach;
 #endif
 
-#if !defined(MAC) && !defined(AMIGA)
+#if !defined(MAC)
 #ifndef VMS
 #include <sys/ioctl.h>
 #endif
@@ -82,15 +74,16 @@ typedef struct { int stuff; } fpvmach;
 
 #ifdef USG
 #include <string.h>
+
 #if 0
-/* Used to include termio.h here, but that caused problems on some systems,
-   as curses.h includes it also above.  */
+/* Used to include termio.h here, but that caused problems on some systems, as curses.h includes it also above.  */
 #if !defined(MAC)
-#if !defined(AMIGA) && !defined(VMS)
+#if !defined(VMS)
 #include <termio.h>
 #endif
 #endif
 #endif /* 0 */
+
 #ifdef HPUX
 /* Needs termio.h because curses.h doesn't include it */
 #include <termio.h>
@@ -170,9 +163,7 @@ char *getenv();
 #ifndef VMS
 #ifdef USG
 void exit();
-#ifndef AMIGA
 unsigned sleep();
-#endif
 #endif
 #endif
 
@@ -182,7 +173,6 @@ void sleep();
 #endif
 
 #if !defined(MAC) && !defined(VMS)
-#ifndef AMIGA
 #ifdef USG
 #ifdef __linux__
 static struct termios save_termio;
@@ -194,7 +184,6 @@ static struct ltchars save_special_chars;
 static struct sgttyb save_ttyb;
 static struct tchars save_tchars;
 static int save_local_chars;
-#endif
 #endif
 #endif
 
@@ -268,14 +257,6 @@ void init_curses()
 {
   int i, y, x;
 
-#ifdef AMIGA
-  if (opentimer() == 0)
-    {
-      (void) printf ("Could not open timer device.\n");
-      exit (1);
-    }
-#endif
-
 #ifndef USG
   (void) ioctl(0, TIOCGLTC, (char *)&save_special_chars);
   (void) ioctl(0, TIOCGETP, (char *)&save_ttyb);
@@ -283,14 +264,12 @@ void init_curses()
   (void) ioctl(0, TIOCLGET, (char *)&save_local_chars);
 #else
 #if !defined(VMS)
-#ifndef AMIGA
   (void) ioctl(0, TCGETA, (char *)&save_termio);
-#endif
 #endif
 #endif
 
   /* PC curses returns ERR */
-#if defined(USG) && !defined(PC_CURSES) && !defined(AMIGA)
+#if defined(USG) && !defined(PC_CURSES)
   if (initscr() == NULL)
 #else
   if (initscr() == ERR)
@@ -362,8 +341,8 @@ void moriaterm()
 }
 #else
 {
+
 #if !defined(VMS)
-#ifndef AMIGA
 #ifdef USG
 #ifdef __linux__
   struct termios tbuf;
@@ -373,7 +352,6 @@ void moriaterm()
 #else
   struct ltchars lbuf;
   struct tchars buf;
-#endif
 #endif
 #endif
 
@@ -389,13 +367,6 @@ void moriaterm()
 #endif
   use_value noecho();
   /* can not use nonl(), because some curses do not handle it correctly */
-
-#ifdef AMIGA
-  init_color (0,   0,   0,   0);	/* pen 0 - black */
-  init_color (1,1000,1000,1000);	/* pen 1 - white */
-  init_color (2,   0, 300, 700);	/* pen 2 - blue */
-  init_color (3,1000, 500,   0);	/* pen 3 - orange */
-#else
 #if !defined(VMS)
 #ifdef USG
   (void) ioctl(0, TCGETA, (char *)&tbuf);
@@ -438,7 +409,6 @@ void moriaterm()
   (void) ioctl(0, TIOCSETC, (char *)&buf);
 #endif // end USG
 #endif // end !VMS
-#endif // end AMIGA
 }
 #endif
 
@@ -499,9 +469,6 @@ void restore_term()
 }
 #else
 {
-#ifdef AMIGA
-  closetimer ();
-#endif
 
   if (!curses_on)
     return;
@@ -517,9 +484,7 @@ void restore_term()
   /* restore the saved values of the special chars */
 #ifdef USG
 #if !defined(VMS)
-#ifndef AMIGA
   (void) ioctl(0, TCSETA, (char *)&save_termio);
-#endif
 #endif
 #else
   (void) ioctl(0, TIOCSLTC, (char *)&save_special_chars);
@@ -538,16 +503,6 @@ void shell_out()
   alert_error("This command is not implemented on the Macintosh.");
 }
 #else // not MAC
-
-
-
-
-#if defined(AMIGA)
-{
-  put_buffer("This command is not implemented.\n", 0, 0);
-}
-#else // not AMIGA
-
 
 
 
@@ -590,12 +545,10 @@ void shell_out()
 
 {
 #ifdef USG
-#if !defined(AMIGA)
 #ifdef __linux__
   struct termios tbuf;
 #else
   struct termio tbuf;
-#endif
 #endif
 #else // not USG
   struct sgttyb tbuf;
@@ -616,9 +569,7 @@ void shell_out()
 
 
 #ifdef USG
-#if !defined(AMIGA)
   (void) ioctl(0, TCGETA, (char *)&tbuf);
-#endif
 #else // else USG
   (void) ioctl(0, TIOCGETP, (char *)&tbuf);
   (void) ioctl(0, TIOCGETC, (char *)&cbuf);
@@ -644,9 +595,7 @@ void shell_out()
   if (val == 0) {
       default_signals();
 #ifdef USG
-#if !defined(AMIGA)
       (void) ioctl(0, TCSETA, (char *)&save_termio);
-#endif
 #else // else USG
       (void) ioctl(0, TIOCSLTC, (char *)&save_special_chars);
       (void) ioctl(0, TIOCSETP, (char *)&save_ttyb);
@@ -705,7 +654,6 @@ void shell_out()
 }
 
 #endif // end VMS
-#endif // end AMIGA
 #endif // end MAC
 
 

@@ -103,11 +103,7 @@ struct sigcontext *scp;
 
     smask = sigsetmask(0) | (1 << sig);
 #else
-#if defined(AMIGA)
-static void signal_handler(sig)
-#else
-static int signal_handler(sig)
-#endif
+    static int signal_handler(sig)
     int sig;
 {
 #endif
@@ -123,11 +119,7 @@ static int signal_handler(sig)
     error_sig = sig;
 
     /* Allow player to think twice. Wizard may force a core dump. */
-    if (sig == SIGINT
-#if !defined(AMIGA)
-        || sig == SIGQUIT
-#endif
-        ) {
+    if (sig == SIGINT || sig == SIGQUIT) {
         if (death) {
             /* Can't quit after death. */
             (void)MSIGNAL(sig, SIG_IGN);
@@ -181,12 +173,11 @@ static int signal_handler(sig)
         (void)_save_char(savefile);
     }
     restore_term();
-#if !defined(AMIGA)
+
     /* always generate a core dump */
     (void)MSIGNAL(sig, SIG_DFL);
     (void)kill(getpid(), sig);
     (void)sleep(5);
-#endif
     exit(1);
 }
 
@@ -227,15 +218,6 @@ void init_signals() {
     (void)MSIGNAL(SIGINT, signal_handler);
     (void)MSIGNAL(SIGFPE, signal_handler);
 
-#ifdef AMIGA
-    /*  (void) MSIGNAL(SIGINT, signal_handler); */
-    (void)MSIGNAL(SIGTERM, signal_handler);
-    (void)MSIGNAL(SIGABRT, signal_handler);
-    /*  (void) MSIGNAL(SIGFPE, signal_handler); */
-    (void)MSIGNAL(SIGILL, signal_handler);
-    (void)MSIGNAL(SIGSEGV, signal_handler);
-#else // not AMIGA
-    /* Everybody except Atari and Amiga. */
     /* Ignore HANGUP, and let the EOF code take care of this case. */
     (void)MSIGNAL(SIGHUP, SIG_IGN);
     (void)MSIGNAL(SIGQUIT, signal_handler);
@@ -262,7 +244,6 @@ void init_signals() {
 #ifdef SIGPWR /* SYSV */
     (void)MSIGNAL(SIGPWR, signal_handler);
 #endif
-#endif // end AMIGA check
 }
 
 void ignore_signals() {

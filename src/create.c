@@ -425,12 +425,8 @@ static void get_class() {
             player_hp[0] = m_ptr->hitdie;
             do {
                 for (i = 1; i < MAX_PLAYER_LEVEL; i++) {
-#ifdef AMIGA /* Stupid Aztec C 5.0 bug work around CBG */
-                    player_hp[i] = player_hp[i - 1] + randint((int)m_ptr->hitdie);
-#else
                     player_hp[i] = randint((int)m_ptr->hitdie);
                     player_hp[i] += player_hp[i - 1];
-#endif
                 }
             } while ((player_hp[MAX_PLAYER_LEVEL - 1] < min_value) ||
                      (player_hp[MAX_PLAYER_LEVEL - 1] > max_value));

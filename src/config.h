@@ -135,21 +135,6 @@ Constant.h should always be included after config.h,
 #else // else VMS
 
 
-#ifdef AMIGA
-#define MORIA_SAV "moria.sav"
-#define MORIA_HOU "moria:hours"
-#define MORIA_MOR "moria:news"
-#define MORIA_GPL "moria:COPYING"
-#define MORIA_TOP "moria:scores"
-#define MORIA_HELP "moria:roglcmds.hlp"
-#define MORIA_ORIG_HELP "moria:origcmds.hlp"
-#define MORIA_WIZ_HELP "moria:rwizcmds.hlp"
-#define MORIA_OWIZ_HELP "moria:owizcmds.hlp"
-#define MORIA_WELCOME "moria:welcome.hlp"
-#define MORIA_VER "moria:version.hlp"
-#else // else AMIGA
-
-
 #if defined(GEMDOS)
 /* Atari ST */
 #define MORIA_SAV "moria.sav"
@@ -199,7 +184,6 @@ Constant.h should always be included after config.h,
 
 #endif // end DEBIAN standard.
 #endif // end GEMDOS
-#endif // end AMIGA
 #endif // end VMS
 #endif // end MAC
 
@@ -229,9 +213,6 @@ Constant.h should always be included after config.h,
 #if defined(SYS_V) || defined(MAC) || defined(VMS)
 #define index strchr
 #endif
-#if (defined(AMIGA) && defined(LATTICE))
-#define index strchr
-#endif
 
 #ifdef SYS_III
     char *
@@ -246,14 +227,8 @@ Constant.h should always be included after config.h,
 #endif
 #endif
 
-#if defined(AMIGA) || defined(VMS)
+#if defined(VMS)
 #define USG
-#endif
-
-#ifdef AMIGA
-#ifndef ultrix
-#define ultrix
-#endif
 #endif
 
 /* Pyramid runs 4.2BSD-like UNIX version */

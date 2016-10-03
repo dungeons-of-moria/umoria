@@ -25,9 +25,7 @@
 #include "externs.h"
 
 #if defined(USG) && !defined(VMS) && !defined(MAC)
-#if !defined(AMIGA)
 #include <memory.h>
-#endif
 #endif
 
 #if defined(MAC)

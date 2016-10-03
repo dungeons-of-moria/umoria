@@ -555,7 +555,7 @@ char *fnam;
 #if !defined(VMS)
     fd = -1;
     fileptr = NULL; /* Do not assume it has been init'ed */
-#if defined(MAC) || defined(AMIGA)
+#if defined(MAC)
     /* The Mac version automatically overwrites */
     fd = open(fnam, O_RDWR | O_CREAT | O_TRUNC);
 #ifdef MAC
@@ -706,7 +706,7 @@ int get_char(generate) int *generate;
 /* Allow restoring a file belonging to someone else, if we can delete it. */
 /* Hence first try to read without doing a chmod. */
 
-#if defined(MAC) || defined(AMIGA)
+#if defined(MAC)
     } else if ((fd = open(savefile, O_RDONLY)) < 0) {
 #else
     } else if ((fd = open(savefile, O_RDONLY, 0)) < 0 && (chmod(savefile, 0400) < 0 || (fd = open(savefile, O_RDONLY, 0)) < 0)) {

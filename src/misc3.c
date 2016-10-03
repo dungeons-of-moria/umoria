@@ -1148,7 +1148,7 @@ void get_name() {
     prt("Enter your player's name  [press <RETURN> when finished]", 21, 2);
     put_buffer(&blank_string[BLANK_LENGTH - 23], 2, 15);
 
-#if defined(MAC) || defined(AMIGA)
+#if defined(MAC)
     /* Force player to give a name, would be nice to get name from chooser
        (STR -16096), but that name might be too long */
     while (!get_string(py.misc.name, 2, 15, 23) || py.misc.name[0] == 0) {

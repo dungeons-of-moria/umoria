@@ -30,13 +30,11 @@
 #if 0
 /* many systems don't define these anywhere */
 #ifndef NeXT
-#ifndef AMIGA
 #if !defined(__GNUC__)
 #if defined(USG) || defined(DGUX)
 extern int sprintf();
 #else
 extern char *sprintf();
-#endif
 #endif
 #endif
 #endif

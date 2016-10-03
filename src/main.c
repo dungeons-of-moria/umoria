@@ -49,16 +49,13 @@
 #ifndef VMS
 #ifndef MAC
 #ifndef GEMDOS
-#ifndef AMIGA
 long time();
-#endif
 #endif
 char *getenv();
 #endif
 #endif
 
 #ifndef MAC
-#ifndef AMIGA
 #ifdef USG
 unsigned short getuid(), getgid();
 #else
@@ -69,8 +66,7 @@ uid_t getuid(), getgid();
 int getuid(), getgid();
 #endif
 #endif
-#endif
-#endif
+#endif // end USG
 #endif
 
 #ifndef VMS
@@ -87,22 +83,6 @@ void perror();
 void exit();
 #endif
 #endif
-#endif
-
-#ifdef AMIGA
-/* detach from cli process */
-
-#ifdef LATTICE
-#define NEAR near
-#else
-#define NEAR
-#endif
-
-long NEAR _stack = 30000;
-long NEAR _priority = 0;
-long NEAR _BackGroundIO = 1;
-char *NEAR _procname = "Moria";
-
 #endif
 
 #if defined(LINT_ARGS)
@@ -158,7 +138,6 @@ char *argv[];
 
 #ifndef SECURE
 #if !defined(MAC)
-#if !defined(AMIGA)
     if (0 != setuid(getuid())) {
         perror("Can't set permissions correctly!  Setuid call failed.\n");
         exit(0);
@@ -167,7 +146,6 @@ char *argv[];
         perror("Can't set permissions correctly!  Setgid call failed.\n");
         exit(0);
     }
-#endif
 #endif
 #endif
 
@@ -414,16 +392,9 @@ static void init_m_level() {
         m_level[c_list[i].level]++;
     }
 
-#if defined(AMIGA) && !defined(LATTICE)
-    for (i = 1; i <= MAX_MONS_LEVEL; i++) {
-        /* fix a stupid MANX Aztec C 5.0 bug again */
-        m_level[i] = m_level[i] + m_level[i - 1];
-    }
-#else
     for (i = 1; i <= MAX_MONS_LEVEL; i++) {
         m_level[i] += m_level[i - 1];
     }
-#endif
 }
 
 /* Initializes T_LEVEL array for use with PLACE_OBJECT  -RAK- */
@@ -439,16 +410,9 @@ static void init_t_level() {
         t_level[object_list[i].level]++;
     }
 
-#if defined(AMIGA) && !defined(LATTICE)
-    for (i = 1; i <= MAX_OBJ_LEVEL; i++) {
-        /* fix a stupid MANX Aztec C 5.0 bug again */
-        t_level[i] = t_level[i] + t_level[i - 1];
-    }
-#else
     for (i = 1; i <= MAX_OBJ_LEVEL; i++) {
         t_level[i] += t_level[i - 1];
     }
-#endif
 
     /* now produce an array with object indexes sorted by level, by using
        the info in t_level, this is an O(n) sort! */
