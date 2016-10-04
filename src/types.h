@@ -19,29 +19,13 @@
  * along with Umoria.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/* Use ISO C99 standard declarations to get correct lengths; if you
- * have an old compiler; #define NO_STDINT.
- */
-#if defined(NO_STDINT)
-#include <limits.h>
-typedef unsigned char int8u;
-typedef short int16;
-typedef unsigned short int16u;
-#if (UINT_MAX > 0xFFFF)
-typedef int int32;
-typedef unsigned int int32u;
-#else
-typedef long int32;
-typedef unsigned long int32u;
-#endif
-#else
+/* Use ISO C99 standard declarations to get correct lengths. */
 #include <stdint.h>
 typedef uint_least8_t int8u;
 typedef int_least16_t int16;
 typedef uint_least16_t int16u;
 typedef int_least32_t int32;
 typedef uint_least32_t int32u;
-#endif
 
 /* some machines will not accept 'signed char' as a type, and some accept it
    but still treat it like an unsigned character, let's just avoid it,
