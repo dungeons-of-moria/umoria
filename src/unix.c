@@ -239,7 +239,7 @@ char *p;
 
 #ifndef DEBIAN_LINUX
 #ifdef USG
-unsigned short getuid();
+uint16_t getuid();
 #else
 #ifdef BSD4_3
 uid_t getuid();

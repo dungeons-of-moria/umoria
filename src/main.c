@@ -45,7 +45,7 @@ long time();
 char *getenv();
 
 #ifdef USG
-unsigned short getuid(), getgid();
+uint16_t getuid(), getgid();
 #else
 #ifdef BSD4_3
 uid_t getuid(), getgid();
