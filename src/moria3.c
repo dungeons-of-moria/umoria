@@ -596,8 +596,8 @@ int monptr, dam;
         c_ptr = &c_list[m_ptr->mptr];
         p_ptr = &py.misc;
 
-        new_exp = ((long)c_ptr->mexp * c_ptr->level) / p_ptr->lev;
-        new_exp_frac = ((((long)c_ptr->mexp * c_ptr->level) % p_ptr->lev) *
+        new_exp = ((int32)c_ptr->mexp * c_ptr->level) / p_ptr->lev;
+        new_exp_frac = ((((int32)c_ptr->mexp * c_ptr->level) % p_ptr->lev) *
                         0x10000L / p_ptr->lev) +
                        p_ptr->exp_frac;
 

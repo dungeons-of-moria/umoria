@@ -241,11 +241,7 @@ char *p;
 #ifdef USG
 uint16_t getuid();
 #else
-#ifdef BSD4_3
 uid_t getuid();
-#else /* other BSD versions */
-int getuid();
-#endif
 #endif
 #endif
 

@@ -95,7 +95,7 @@ int y, x;
     cave[y][x].tptr = cur_pos;
     invcopy(&t_list[cur_pos], OBJ_GOLD_LIST + i);
     t_ptr = &t_list[cur_pos];
-    t_ptr->cost += (8L * (long)randint((int)t_ptr->cost)) + randint(8);
+    t_ptr->cost += (8L * (int32)randint((int)t_ptr->cost)) + randint(8);
     if (cave[y][x].cptr == 1) {
         msg_print("You feel something roll beneath your feet.");
     }
@@ -1946,7 +1946,7 @@ int stat;
             if (p_ptr->mana != 0) {
                 /* change current mana proportionately to change of max mana,
                    divide first to avoid overflow, little loss of accuracy */
-                value = (((long)p_ptr->cmana << 16) + p_ptr->cmana_frac) / p_ptr->mana * new_mana;
+                value = (((int32)p_ptr->cmana << 16) + p_ptr->cmana_frac) / p_ptr->mana * new_mana;
                 p_ptr->cmana = value >> 16;
                 p_ptr->cmana_frac = value & 0xFFFF;
             } else {
@@ -2047,7 +2047,7 @@ void calc_hitpoints() {
     if ((hitpoints != p_ptr->mhp) && (p_ptr->mhp != 0)) {
         /* change current hit points proportionately to change of mhp,
            divide first to avoid overflow, little loss of accuracy */
-        value = (((long)p_ptr->chp << 16) + p_ptr->chp_frac) / p_ptr->mhp * hitpoints;
+        value = (((int32)p_ptr->chp << 16) + p_ptr->chp_frac) / p_ptr->mhp * hitpoints;
         p_ptr->chp = value >> 16;
         p_ptr->chp_frac = value & 0xFFFF;
         p_ptr->mhp = hitpoints;

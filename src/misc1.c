@@ -97,7 +97,7 @@ int check_time() {
 int randint(maxval)
 int maxval;
 {
-    long randval;
+    int32 randval;
 
     randval = rnd();
     return ((int)(randval % maxval) + 1);

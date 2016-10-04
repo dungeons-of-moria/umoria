@@ -47,11 +47,7 @@ char *getenv();
 #ifdef USG
 uint16_t getuid(), getgid();
 #else
-#ifdef BSD4_3
 uid_t getuid(), getgid();
-#else /* other BSD versions */
-int getuid(), getgid();
-#endif
 #endif
 
 #if defined(USG)

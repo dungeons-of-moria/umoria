@@ -95,7 +95,7 @@ int32u seedval;
 
 /* returns a pseudo-random number from set 1, 2, ..., RNG_M - 1 */
 int32 rnd() {
-    long low, high, test;
+    int32 low, high, test;
 
     high = rnd_seed / RNG_Q;
     low = rnd_seed % RNG_Q;
@@ -111,7 +111,7 @@ int32 rnd() {
 #ifdef TEST_RNG
 
 main() {
-    long i, random;
+    int32 i, random;
 
     set_rnd_seed(0L);
 

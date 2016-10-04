@@ -424,7 +424,7 @@ int32 minprice;
     }
     bargain_record = (s_ptr->good_buy - 3 * s_ptr->bad_buy - 5);
     flagnoneed =
-        ((bargain_record > 0) && ((long)bargain_record * (long)bargain_record > minprice / 50));
+        ((bargain_record > 0) && ((int32)bargain_record * (int32)bargain_record > minprice / 50));
 
     return (flagnoneed);
 }

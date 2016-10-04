@@ -45,11 +45,7 @@
 #ifdef USG
 uint16_t getuid(), getgid();
 #else
-#ifdef BSD4_3
 uid_t getuid(), getgid();
-#else /* other BSD versions */
-int getuid(), getgid();
-#endif
 #endif
 #endif
 
@@ -66,11 +62,7 @@ int getuid(), getgid();
    `topen' declaration. */
 #include "externs.h"
 
-#ifndef BSD4_3
-long lseek();
-#else
 off_t lseek();
-#endif
 
 #if defined(USG)
 #ifndef L_SET
@@ -192,11 +184,7 @@ void display_scores(show_player) int show_player;
     int16 player_uid;
 #endif
 
-#ifndef BSD4_3
-    (void)fseek(highscore_fp, (long)0, L_SET);
-#else
     (void)fseek(highscore_fp, (off_t)0, L_SET);
-#endif
 
     /* Read version numbers from the score file, and check for validity. */
     version_maj = getc(highscore_fp);
@@ -271,11 +259,7 @@ int duplicate_character() {
     int8u version_maj, version_min, patch_level;
     int16 player_uid;
 
-#ifndef BSD4_3
-    (void)fseek(highscore_fp, (long)0, L_SET);
-#else
     (void)fseek(highscore_fp, (off_t)0, L_SET);
-#endif
 
     /* Read version numbers from the score file, and check for validity. */
     version_maj = getc(highscore_fp);
@@ -445,7 +429,7 @@ static void highscores() {
     int i;
     char *tmp;
     int8u version_maj, version_min, patch_level;
-    long curpos;
+    off_t curpos;
 
     clear_screen();
 
@@ -499,11 +483,7 @@ static void highscores() {
     /* Search file to find where to insert this character, if uid != 0 and
        find same uid/sex/race/class combo then exit without saving this score */
     /* Seek to the beginning of the file just to be safe. */
-#ifndef BSD4_3
-    (void)fseek(highscore_fp, (long)0, L_SET);
-#else
     (void)fseek(highscore_fp, (off_t)0, L_SET);
-#endif
 
     /* Read version numbers from the score file, and check for validity. */
     version_maj = getc(highscore_fp);
@@ -513,30 +493,20 @@ static void highscores() {
     /* If this is a new scorefile, it should be empty.  Write the current
        version numbers to the score file. */
     if (feof(highscore_fp)) {
-/* Seek to the beginning of the file just to be safe. */
-#ifndef BSD4_3
-        (void)fseek(highscore_fp, (long)0, L_SET);
-#else
+        /* Seek to the beginning of the file just to be safe. */
         (void)fseek(highscore_fp, (off_t)0, L_SET);
-#endif
 
         (void)putc(CUR_VERSION_MAJ, highscore_fp);
         (void)putc(CUR_VERSION_MIN, highscore_fp);
         (void)putc(PATCH_LEVEL, highscore_fp);
 
-/* must fseek() before can change read/write mode */
-#ifndef BSD4_3
-        (void)fseek(highscore_fp, (long)0, L_INCR);
-#else
+        /* must fseek() before can change read/write mode */
         (void)fseek(highscore_fp, (off_t)0, L_INCR);
-#endif
-    }
-    /* Support score files from 5.2.2 to present. */
-    else if ((version_maj != CUR_VERSION_MAJ) ||
+    } else if ((version_maj != CUR_VERSION_MAJ) ||
              (version_min > CUR_VERSION_MIN) ||
              (version_min == CUR_VERSION_MIN && patch_level > PATCH_LEVEL) ||
              (version_min == 2 && patch_level < 2) || (version_min < 2))
-    {
+    { /* Support score files from 5.2.2 to present. */
         /* No need to print a message, a subsequent call to display_scores()
            will print a message. */
         return;
@@ -575,24 +545,13 @@ static void highscores() {
 
     if (feof(highscore_fp)) {
         /* write out new_entry at end of file */
-
-#ifndef BSD4_3
-        (void)fseek(highscore_fp, curpos, L_SET);
-#else
         (void)fseek(highscore_fp, (off_t)curpos, L_SET);
-#endif
 
         wr_highscore(&new_entry);
     } else {
         entry = new_entry;
         while (!feof(highscore_fp)) {
-
-#ifndef BSD4_3
-
-            (void)fseek(highscore_fp, -(long)sizeof(high_scores) - (long)sizeof(char), L_INCR);
-#else
             (void)fseek(highscore_fp, -(off_t)sizeof(high_scores) - (off_t)sizeof(char), L_INCR);
-#endif
 
             wr_highscore(&entry);
             /* under unix, only allow one sex/race/class combo per
@@ -612,21 +571,13 @@ static void highscores() {
             entry = old_entry;
 
             /* must fseek() before can change read/write mode */
-
-#ifndef BSD4_3
-            (void)fseek(highscore_fp, (long)0, L_INCR);
-#else
             (void)fseek(highscore_fp, (off_t)0, L_INCR);
-#endif
+
             curpos = ftell(highscore_fp);
             rd_highscore(&old_entry);
         }
         if (feof(highscore_fp)) {
-#ifndef BSD4_3
-            (void)fseek(highscore_fp, curpos, L_SET);
-#else
             (void)fseek(highscore_fp, (off_t)curpos, L_SET);
-#endif
             wr_highscore(&entry);
         }
     }

@@ -497,14 +497,14 @@ int y, from, to;
        that (2x-1)/x < from/GRADF <=> x > GRADF(2x-1)/from. This may
        be called with y=0 whence x will be set to 0. Thus we need a
        special fix. */
-    x = (int)((long)GRADF * (2 * y - 1) / from + 1);
+    x = (int)((int32_t)GRADF * (2 * y - 1) / from + 1);
     if (x <= 0) {
         x = 1;
     }
 
     /* Find last visible location along this line.
        Maximum x such that (2x+1)/x > to/GRADF <=> x < GRADF(2x+1)/to */
-    max_x = (int)(((long)GRADF * (2 * y + 1) - 1) / to);
+    max_x = (int)(((int32_t)GRADF * (2 * y + 1) - 1) / to);
     if (max_x > MAX_SIGHT) {
         max_x = MAX_SIGHT;
     }
@@ -533,7 +533,7 @@ int y, from, to;
 
     for (;;) {
         /* Look down the window we've found. */
-        if (look_ray(y + 1, from, (int)((2 * y + 1) * (long)GRADF / x))) {
+        if (look_ray(y + 1, from, (int)((2 * y + 1) * (int32_t)GRADF / x))) {
             return TRUE;
         }
         /* Find the start of next window. */
@@ -543,7 +543,7 @@ int y, from, to;
             }
 
             /* See if this seals off the scan. (If y is zero, then it will.) */
-            from = (int)((2 * y - 1) * (long)GRADF / x);
+            from = (int)((2 * y - 1) * (int32_t)GRADF / x);
             if (from <= to) {
                 return FALSE;
             }
