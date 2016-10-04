@@ -37,10 +37,10 @@
 void update_mon(monptr)
 int monptr;
 {
-    register int flag;
-    register cave_type *c_ptr;
-    register monster_type *m_ptr;
-    register creature_type *r_ptr;
+     int flag;
+     cave_type *c_ptr;
+     monster_type *m_ptr;
+     creature_type *r_ptr;
 
     m_ptr = &m_list[monptr];
     flag = FALSE;
@@ -95,7 +95,7 @@ int monptr;
 /* NOTE: Player must always move at least once per iteration, */
 /*   a slowed player is handled by moving monsters faster */
 static int movement_rate(speed)
-register int16 speed;
+ int16 speed;
 {
     if (speed > 0) {
         if (py.flags.rest != 0) {
@@ -113,7 +113,7 @@ register int16 speed;
 static int check_mon_lite(y, x)
 int y, x;
 {
-    register int monptr;
+     int monptr;
 
     monptr = cave[y][x].cptr;
     if (monptr <= 1) {
@@ -127,7 +127,7 @@ int y, x;
 /* Choose correct directions for monster movement  -RAK- */
 static void get_moves(monptr, mm)
 int monptr;
-register int *mm;
+ int *mm;
 {
     int y, ay, x, ax, move_val;
 
@@ -280,11 +280,11 @@ int monptr;
     int32 gold;
     int8u *attstr;
     vtype cdesc, tmp_str, ddesc;
-    register creature_type *r_ptr;
+     creature_type *r_ptr;
     monster_type *m_ptr;
-    register struct misc *p_ptr;
-    register struct flags *f_ptr;
-    register inven_type *i_ptr;
+     struct misc *p_ptr;
+     struct flags *f_ptr;
+     inven_type *i_ptr;
 
     /* don't beat a dead body! */
     if (death) {
@@ -946,9 +946,9 @@ int32u *rcmove;
 {
     int i, newy, newx, do_turn, do_move, stuck_door;
     int32u movebits;
-    register cave_type *c_ptr;
-    register monster_type *m_ptr;
-    register inven_type *t_ptr;
+     cave_type *c_ptr;
+     monster_type *m_ptr;
+     inven_type *t_ptr;
 
     i = 0;
     do_turn = FALSE;
@@ -1135,11 +1135,11 @@ int *took_turn;
 {
     int32u i;
     int y, x, chance, thrown_spell, r1;
-    register int k;
+     int k;
     int spell_choice[30];
     vtype cdesc, outval, ddesc;
-    register monster_type *m_ptr;
-    register creature_type *r_ptr;
+     monster_type *m_ptr;
+     creature_type *r_ptr;
 
     if (death) {
         return;
@@ -1378,8 +1378,8 @@ int multiply_monster(y, x, cr_index, monptr)
 int y, x, cr_index;
 int monptr;
 {
-    register int i, j, k;
-    register cave_type *c_ptr;
+     int i, j, k;
+     cave_type *c_ptr;
     int result;
 
     i = 0;
@@ -1448,17 +1448,17 @@ static void mon_move(monptr, rcmove)
 int monptr;
 int32u *rcmove;
 {
-    register int i, j;
+     int i, j;
     int k, move_test, dir;
 
 #ifdef M_XENIX
-    /* Avoid 'register' bug. */
+    /* Avoid '' bug. */
     creature_type *r_ptr;
 #else
-    register creature_type *r_ptr;
+     creature_type *r_ptr;
 #endif
 
-    register monster_type *m_ptr;
+     monster_type *m_ptr;
     int mm[9];
     int rest_val;
 
@@ -1649,8 +1649,8 @@ int32u *rcmove;
 void creatures(attack)
 int attack;
 {
-    register int i, k;
-    register monster_type *m_ptr;
+     int i, k;
+     monster_type *m_ptr;
     recall_type *r_ptr;
     int32u notice, rcmove;
     int wake, ignore;

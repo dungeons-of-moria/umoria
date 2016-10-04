@@ -37,8 +37,8 @@ long atol();
 
 /* Light up the dungeon          -RAK- */
 void wizard_light() {
-    register cave_type *c_ptr;
-    register int k, l, i, j;
+    cave_type *c_ptr;
+    int k, l, i, j;
     int flag;
 
     if (cave[char_row][char_col].pl) {
@@ -66,11 +66,11 @@ void wizard_light() {
 
 /* Wizard routine for gaining on stats      -RAK- */
 void change_character() {
-    register int tmp_val;
-    register int32 tmp_lval;
+    int tmp_val;
+    int32 tmp_lval;
     int8u *a_ptr;
     vtype tmp_str;
-    register struct misc *m_ptr;
+    struct misc *m_ptr;
 
     a_ptr = py.stats.max_stat;
     prt("(3 - 118) Strength     = ", 0, 0);
@@ -278,12 +278,12 @@ void change_character() {
 
 /* Wizard routine for creating objects      -RAK- */
 void wizard_create() {
-    register int tmp_val;
+    int tmp_val;
     int32 tmp_lval;
     vtype tmp_str;
-    register inven_type *i_ptr;
+    inven_type *i_ptr;
     inven_type forge;
-    register cave_type *c_ptr;
+    cave_type *c_ptr;
     char pattern[4];
 
     msg_print("Warning: This routine can cause a fatal error.");

@@ -88,13 +88,13 @@ static int32u start_time; /* time that play started */
 
 static int sv_write() {
     int32u l;
-    register int i, j;
+    int i, j;
     int count;
     int8u char_tmp, prev_char;
-    register cave_type *c_ptr;
-    register recall_type *r_ptr;
+    cave_type *c_ptr;
+    recall_type *r_ptr;
     struct stats *s_ptr;
-    register struct flags *f_ptr;
+    struct flags *f_ptr;
     store_type *st_ptr;
     struct misc *m_ptr;
 
@@ -444,7 +444,7 @@ int _save_char(fnam)
 char *fnam;
 {
     vtype temp;
-    register int ok, fd;
+    int ok, fd;
     int8u char_tmp;
 
     if (character_saved) {
@@ -522,16 +522,16 @@ char *fnam;
 int get_char(generate)
 int *generate;
 {
-    register int i, j;
+    int i, j;
     int fd, c, ok, total_count;
     int32u l, age, time_saved;
     vtype temp;
     int16u int16u_tmp;
-    register cave_type *c_ptr;
-    register recall_type *r_ptr;
+    cave_type *c_ptr;
+    recall_type *r_ptr;
     struct misc *m_ptr;
     struct stats *s_ptr;
-    register struct flags *f_ptr;
+    struct flags *f_ptr;
     store_type *st_ptr;
     int8u char_tmp, ychar, xchar, count;
     int8u version_maj, version_min, patch_level;
@@ -1136,7 +1136,7 @@ int16u s;
 }
 
 static void wr_long(l)
-register int32u l;
+int32u l;
 {
     xor_byte ^= (l & 0xFF);
     (void)putc((int)xor_byte, fileptr);
@@ -1154,10 +1154,10 @@ register int32u l;
 
 static void wr_bytes(c, count)
 int8u *c;
-register int count;
+int count;
 {
-    register int i;
-    register int8u *ptr;
+    int i;
+    int8u *ptr;
 
     DEBUG(fprintf(logfile, "%d BYTES:", count));
     ptr = c;
@@ -1170,7 +1170,7 @@ register int count;
 }
 
 static void wr_string(str)
-register char *str;
+char *str;
 {
     DEBUG(char *s = str);
     DEBUG(fprintf(logfile, "STRING:"));
@@ -1186,10 +1186,10 @@ register char *str;
 
 static void wr_shorts(s, count)
 int16u *s;
-register int count;
+int count;
 {
-    register int i;
-    register int16u *sptr;
+    int i;
+    int16u *sptr;
 
     DEBUG(fprintf(logfile, "%d SHORTS:", count));
     sptr = s;
@@ -1205,7 +1205,7 @@ register int count;
 }
 
 static void wr_item(item)
-register inven_type *item;
+inven_type *item;
 {
     DEBUG(fprintf(logfile, "ITEM:\n"));
     wr_short(item->index);
@@ -1229,7 +1229,7 @@ register inven_type *item;
 }
 
 static void wr_monster(mon)
-register monster_type *mon;
+monster_type *mon;
 {
     DEBUG(fprintf(logfile, "MONSTER:\n"));
     wr_short((int16u)mon->hp);
@@ -1273,8 +1273,8 @@ int16u *ptr;
 static void rd_long(ptr)
 int32u *ptr;
 {
-    register int32u l;
-    register int8u c;
+    int32u l;
+    int8u c;
 
     c = (getc(fileptr) & 0xFF);
     l = c ^ xor_byte;
@@ -1292,11 +1292,11 @@ int32u *ptr;
 
 static void rd_bytes(ch_ptr, count)
 int8u *ch_ptr;
-register int count;
+int count;
 {
-    register int i;
-    register int8u *ptr;
-    register int8u c;
+    int i;
+    int8u *ptr;
+    int8u c;
 
     DEBUG(fprintf(logfile, "%d BYTES:", count));
     ptr = ch_ptr;
@@ -1312,7 +1312,7 @@ register int count;
 static void rd_string(str)
 char *str;
 {
-    register int8u c;
+    int8u c;
 
     DEBUG(char *s = str);
     DEBUG(fprintf(logfile, "STRING: "));
@@ -1327,11 +1327,11 @@ char *str;
 
 static void rd_shorts(ptr, count)
 int16u *ptr;
-register int count;
+int count;
 {
-    register int i;
-    register int16u *sptr;
-    register int16u s;
+    int i;
+    int16u *sptr;
+    int16u s;
     int8u c;
 
     DEBUG(fprintf(logfile, "%d SHORTS:", count));
@@ -1349,7 +1349,7 @@ register int count;
 }
 
 static void rd_item(item)
-register inven_type *item;
+inven_type *item;
 {
     DEBUG(fprintf(logfile, "ITEM:\n"));
     rd_short(&item->index);
@@ -1373,7 +1373,7 @@ register inven_type *item;
 }
 
 static void rd_monster(mon)
-register monster_type *mon;
+monster_type *mon;
 {
     DEBUG(fprintf(logfile, "MONSTER:\n"));
     rd_short((int16u *)&mon->hp);

@@ -52,8 +52,8 @@ char ch;
 
 /* Initialize all Potions, wands, staves, scrolls, etc. */
 void magic_init() {
-    register int h, i, j, k;
-    register char *tmp;
+    int h, i, j, k;
+    char *tmp;
     vtype string;
 
     set_seed(randes_seed);
@@ -251,9 +251,9 @@ inven_type *i_ptr;
 void identify(item)
 int *item;
 {
-    register int i, x1, x2;
+    int i, x1, x2;
     int j;
-    register inven_type *i_ptr, *t_ptr;
+    inven_type *i_ptr, *t_ptr;
 
     i_ptr = &inventory[*item];
 
@@ -313,11 +313,11 @@ inven_type *i_ptr;
    always be called with a bigvtype as the first paramter */
 void objdes(out_val, i_ptr, pref)
 char *out_val;
-register inven_type *i_ptr;
+inven_type *i_ptr;
 int pref;
 {
     /* base name, modifier string*/
-    register char *basenm, *modstr;
+    char *basenm, *modstr;
     bigvtype tmp_val;
     vtype tmp_str, damstr;
     int indexx, p1_use, modify, append_name, tmp;
@@ -626,10 +626,10 @@ int pref;
 }
 
 void invcopy(to, from_index)
-register inven_type *to;
+inven_type *to;
 int from_index;
 {
-    register treasure_type *from;
+    treasure_type *from;
 
     from = &object_list[from_index];
 
@@ -658,7 +658,7 @@ int from_index;
 void desc_charges(item_val)
 int item_val;
 {
-    register int rem_num;
+    int rem_num;
     vtype out_val;
 
     if (known2_p(&inventory[item_val])) {
@@ -673,7 +673,7 @@ void desc_remain(item_val)
 int item_val;
 {
     bigvtype out_val, tmp_str;
-    register inven_type *i_ptr;
+    inven_type *i_ptr;
 
     i_ptr = &inventory[item_val];
     i_ptr->number--;

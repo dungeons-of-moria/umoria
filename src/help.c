@@ -28,7 +28,7 @@
 
 void ident_char() {
     char command, query;
-    register int i, n;
+    int i, n;
 
     if (get_com("Enter character to be identified :", &command)) {
         // every printing ASCII character is listed here, in the

@@ -28,10 +28,10 @@
 void pray() {
     int i, j, item_val, dir;
     int choice, chance, result;
-    register spell_type *s_ptr;
-    register struct misc *m_ptr;
-    register struct flags *f_ptr;
-    register inven_type *i_ptr;
+    spell_type *s_ptr;
+    struct misc *m_ptr;
+    struct flags *f_ptr;
+    inven_type *i_ptr;
 
     free_turn_flag = TRUE;
     if (py.flags.blind > 0) {

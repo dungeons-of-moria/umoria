@@ -38,7 +38,7 @@ struct tm *localtime();
 void init_seeds(seed)
 int32u seed;
 {
-    register int32u clock_var;
+    int32u clock_var;
 
     if (seed == 0) {
         clock_var = time((long *)0);
@@ -80,7 +80,7 @@ void reset_seed() {
 int check_time() {
 #ifdef MORIA_HOU
     long clock_var;
-    register struct tm *tp;
+    struct tm *tp;
     clock_var = time((long *)0);
     tp = localtime(&clock_var);
     if (days[tp->tm_wday][tp->tm_hour + 4] == 'X') {
@@ -97,7 +97,7 @@ int check_time() {
 int randint(maxval)
 int maxval;
 {
-    register long randval;
+    long randval;
 
     randval = rnd();
     return ((int)(randval % maxval) + 1);
@@ -107,7 +107,7 @@ int maxval;
 int randnor(mean, stand)
 int mean, stand;
 {
-    register int tmp, offset, low, iindex, high;
+    int tmp, offset, low, iindex, high;
 
 #if 0
   /* alternate randnor code, slower but much smaller since no table */
@@ -172,8 +172,8 @@ int mean, stand;
 int bit_pos(test)
 int32u *test;
 {
-    register int i;
-    register int32u mask = 0x1;
+    int i;
+    int32u mask = 0x1;
 
     for (i = 0; i < sizeof(*test) * 8; i++) {
         if (*test & mask) {
@@ -214,8 +214,8 @@ void panel_bounds() {
 int get_panel(y, x, force)
 int y, x, force;
 {
-    register int prow, pcol;
-    register int panel;
+    int prow, pcol;
+    int panel;
 
     prow = panel_row;
     pcol = panel_col;
@@ -253,7 +253,7 @@ int y, x, force;
 /* Tests a given point to see if it is within the screen -RAK- */
 /* boundaries. */
 int panel_contains(y, x)
-register int y, x;
+int y, x;
 {
     if ((y >= panel_row_min) && (y <= panel_row_max) && (x >= panel_col_min) &&
         (x <= panel_col_max)) {
@@ -267,7 +267,7 @@ register int y, x;
 int distance(y1, x1, y2, x2)
 int y1, x1, y2, x2;
 {
-    register int dy, dx;
+    int dy, dx;
 
     dy = y1 - y2;
     if (dy < 0) {
@@ -285,10 +285,10 @@ int y1, x1, y2, x2;
 /* note that y,x is always in_bounds(), i.e. 0 < y < cur_height-1, and
    0 < x < cur_width-1 */
 int next_to_walls(y, x)
-register int y, x;
+int y, x;
 {
-    register int i;
-    register cave_type *c_ptr;
+    int i;
+    cave_type *c_ptr;
 
     i = 0;
     c_ptr = &cave[y - 1][x];
@@ -315,10 +315,10 @@ register int y, x;
 /* note that y, x is always in_bounds(), hence no need to check that
    j, k are in_bounds(), even if they are 0 or cur_x-1 is still works */
 int next_to_corr(y, x)
-register int y, x;
+int y, x;
 {
-    register int k, j, i;
-    register cave_type *c_ptr;
+    int k, j, i;
+    cave_type *c_ptr;
 
     i = 0;
     for (j = y - 1; j <= (y + 1); j++) {
@@ -340,7 +340,7 @@ register int y, x;
 int damroll(num, sides)
 int num, sides;
 {
-    register int i, sum = 0;
+    int i, sum = 0;
 
     for (i = 0; i < num; i++) {
         sum += randint(sides);
@@ -375,7 +375,7 @@ int8u *array;
 int los(fromY, fromX, toY, toX)
 int fromY, fromX, toY, toX;
 {
-    register int tmp, deltaX, deltaY;
+    int tmp, deltaX, deltaY;
 
     deltaX = toX - fromX;
     deltaY = toY - fromY;
@@ -387,7 +387,7 @@ int fromY, fromX, toY, toX;
 
     /* Handle the cases where deltaX or deltaY == 0. */
     if (deltaX == 0) {
-        register int p_y; /* y position -- loop variable */
+        int p_y; /* y position -- loop variable */
 
         if (deltaY < 0) {
             tmp = fromY;
@@ -402,7 +402,7 @@ int fromY, fromX, toY, toX;
         }
         return TRUE;
     } else if (deltaY == 0) {
-        register int px; /* x position -- loop variable */
+        int px; /* x position -- loop variable */
 
         if (deltaX < 0) {
             tmp = fromX;
@@ -424,7 +424,7 @@ int fromY, fromX, toY, toX;
        integer arithmetic. */
 
     {
-        register int px,        /* x position */
+        int px,        /* x position */
                      p_y,       /* y position */
                      scale2;    /* above scale factor / 2 */
                  int scale,     /* above scale factor */
@@ -441,7 +441,7 @@ int fromY, fromX, toY, toX;
            the longer axis. */
 
         if (abs(deltaX) >= abs(deltaY)) {
-            register int dy; /* "fractional" y position */
+            int dy; /* "fractional" y position */
             /* We start at the border between the first and second tiles,
              * where the y offset = .5 * slope.  Remember the scale
              * factor.  We have:
@@ -486,7 +486,7 @@ int fromY, fromX, toY, toX;
             }
             return TRUE;
         } else {
-            register int dx; /* "fractional" x position */
+            int dx; /* "fractional" x position */
             dx = deltaX * deltaX;
             m = dx << 1;
 
@@ -527,8 +527,8 @@ int fromY, fromX, toY, toX;
 unsigned char loc_symbol(y, x)
 int y, x;
 {
-    register cave_type *cave_ptr;
-    register struct flags *f_ptr;
+    cave_type *cave_ptr;
+    struct flags *f_ptr;
 
     cave_ptr = &cave[y][x];
     f_ptr = &py.flags;
@@ -561,7 +561,7 @@ int y, x;
 int test_light(y, x)
 int y, x;
 {
-    register cave_type *cave_ptr;
+    cave_type *cave_ptr;
 
     cave_ptr = &cave[y][x];
     if (cave_ptr->pl || cave_ptr->tl || cave_ptr->fm) {
@@ -573,8 +573,8 @@ int y, x;
 
 /* Prints the map of the dungeon      -RAK- */
 void prt_map() {
-    register int i, j, k;
-    register unsigned char tmp_char;
+    int i, j, k;
+    unsigned char tmp_char;
 
     k = 0;
 
@@ -596,9 +596,9 @@ void prt_map() {
 /* Compact monsters          -RAK- */
 /* Return TRUE if any monsters were deleted, FALSE if could not delete any monsters. */
 int compact_monsters() {
-    register int i;
+    int i;
     int cur_dis, delete_any;
-    register monster_type *mon_ptr;
+    monster_type *mon_ptr;
 
     msg_print("Compacting monsters...");
 
@@ -641,8 +641,8 @@ int compact_monsters() {
 void add_food(num)
 int num;
 {
-    register struct flags *p_ptr;
-    register int extra, penalty;
+    struct flags *p_ptr;
+    int extra, penalty;
 
     p_ptr = &py.flags;
     if (p_ptr->food < 0) {
@@ -693,11 +693,11 @@ int8u *array;
 
 /* Places a monster at given location      -RAK- */
 int place_monster(y, x, z, slp)
-register int y, x, z;
+int y, x, z;
 int slp;
 {
-    register int cur_pos;
-    register monster_type *mon_ptr;
+    int cur_pos;
+    monster_type *mon_ptr;
 
     cur_pos = popm();
     if (cur_pos == -1) {
@@ -736,8 +736,8 @@ int slp;
 
 /* Places a monster at given location      -RAK- */
 void place_win_monster() {
-    register int y, x, cur_pos;
-    register monster_type *mon_ptr;
+    int y, x, cur_pos;
+    monster_type *mon_ptr;
 
     if (!total_winner) {
         cur_pos = popm();
@@ -779,7 +779,7 @@ void place_win_monster() {
 int get_mons_num(level)
 int level;
 {
-    register int i, j, num;
+    int i, j, num;
 
     if (level == 0) {
         i = randint(m_level[0]) - 1;
@@ -819,7 +819,7 @@ void alloc_monster(num, dis, slp)
 int num, dis;
 int slp;
 {
-    register int y, x, i;
+    int y, x, i;
     int l;
 
     for (i = 0; i < num; i++) {
@@ -849,9 +849,9 @@ int summon_monster(y, x, slp)
 int *y, *x;
 int slp;
 {
-    register int i, j, k;
+    int i, j, k;
     int l, summon;
-    register cave_type *cave_ptr;
+    cave_type *cave_ptr;
 
     i = 0;
     summon = FALSE;
@@ -883,9 +883,9 @@ int slp;
 int summon_undead(y, x)
 int *y, *x;
 {
-    register int i, j, k;
+    int i, j, k;
     int l, m, ctr, summon;
-    register cave_type *cave_ptr;
+    cave_type *cave_ptr;
 
     i = 0;
     summon = FALSE;
@@ -933,9 +933,9 @@ int *y, *x;
 
 /* If too many objects on floor level, delete some of them-RAK- */
 static void compact_objects() {
-    register int i, j;
+    int i, j;
     int ctr, cur_dis, chance;
-    register cave_type *cave_ptr;
+    cave_type *cave_ptr;
 
     msg_print("Compacting objects...");
 
@@ -999,9 +999,9 @@ int popt() {
 /* Delete_object() should always be called instead, unless the object in
    question is not in the dungeon, e.g. in store1.c and files.c */
 void pusht(x)
-register int8u x;
+int8u x;
 {
-    register int i, j;
+    int i, j;
 
     if (x != tcptr - 1) {
         t_list[x] = t_list[tcptr - 1];
@@ -1034,7 +1034,7 @@ int chance;
 int m_bonus(base, max_std, level)
 int base, max_std, level;
 {
-    register int x, stand_dev, tmp;
+    int x, stand_dev, tmp;
 
     stand_dev = (OBJ_STD_ADJ * level / 100) + OBJ_STD_MIN;
 

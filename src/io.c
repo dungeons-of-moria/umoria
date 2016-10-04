@@ -632,7 +632,7 @@ int row, col;
 void msg_print(str_buff)
 char *str_buff;
 {
-    register int old_len, new_len;
+    int old_len, new_len;
     int combine_messages = FALSE;
     char in_char;
 
@@ -762,7 +762,7 @@ int get_string(in_str, row, column, slen)
 char *in_str;
 int row, column, slen;
 {
-    register int start_col, end_col, i;
+    int start_col, end_col, i;
     char *p;
     int flag, aborted;
 
@@ -897,7 +897,7 @@ void bell() {
 #define RATIO 3
 
 void screen_map() {
-    register int i, j;
+    int i, j;
 
     static int8u screen_border[2][6] = {
         {'+', '+', '+', '+', '-', '|'}, /* normal chars */

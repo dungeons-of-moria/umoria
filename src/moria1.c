@@ -40,9 +40,9 @@
 /*   change the speed of all the monsters.  This greatly */
 /*   simplified the logic. */
 void change_speed(num)
-register int num;
+int num;
 {
-    register int i;
+    int i;
 
     py.flags.speed += num;
     py.flags.status |= PY_SPEED;
@@ -62,10 +62,10 @@ register int num;
  * depend on everything being worn are recalculated by calc_bonuses() -CJS-
  */
 void py_bonuses(t_ptr, factor)
-register inven_type *t_ptr;
-register int factor;
+inven_type *t_ptr;
+int factor;
 {
-    register int i, amount;
+    int i, amount;
 
     amount = t_ptr->p1 * factor;
     if (t_ptr->flags & TR_STATS) {
@@ -98,12 +98,12 @@ register int factor;
 
 /* Recalculate the effect of all the stuff we use.      -CJS- */
 void calc_bonuses() {
-    register int32u item_flags;
+    int32u item_flags;
     int old_dis_ac;
-    register struct flags *p_ptr;
-    register struct misc *m_ptr;
-    register inven_type *i_ptr;
-    register int i;
+    struct flags *p_ptr;
+    struct misc *m_ptr;
+    inven_type *i_ptr;
+    int i;
 
     p_ptr = &py.flags;
     m_ptr = &py.misc;
@@ -277,11 +277,11 @@ void calc_bonuses() {
 /* If mask is non-zero, then only display those items which have a non-zero
    entry in the mask array. */
 int show_inven(r1, r2, weight, col, mask)
-register int r1, r2;
+int r1, r2;
 int weight, col;
 char *mask;
 {
-    register int i;
+    int i;
     int total_weight, len, l, lim, current_line;
     bigvtype tmp_val;
     vtype out_val[23];
@@ -341,9 +341,9 @@ char *mask;
 
 /* Return a string describing how a given equipment item is carried. -CJS- */
 char *describe_use(i)
-register int i;
+int i;
 {
-    register char *p;
+    char *p;
 
     switch (i) {
     case INVEN_WIELD:
@@ -394,12 +394,12 @@ register int i;
 int show_equip(weight, col)
 int weight, col;
 {
-    register int i, line;
+    int i, line;
     int total_weight, l, len, lim;
-    register char *prt1;
+    char *prt1;
     bigvtype prt2;
     vtype out_val[INVEN_ARRAY_SIZE - INVEN_WIELD];
-    register inven_type *i_ptr;
+    inven_type *i_ptr;
 
     line = 0;
     len = 79 - col;
@@ -509,9 +509,9 @@ int weight, col;
 void takeoff(item_val, posn)
 int item_val, posn;
 {
-    register char *p;
+    char *p;
     bigvtype out_val, prt2;
-    register inven_type *t_ptr;
+    inven_type *t_ptr;
 
     equip_ctr--;
     t_ptr = &inventory[item_val];
@@ -600,7 +600,7 @@ static int wear_low, wear_high;
 static void inven_screen(new_scr)
 int new_scr;
 {
-    register int line;
+    int line;
 
     if (new_scr != scr_state) {
         scr_state = new_scr;
@@ -651,12 +651,12 @@ int new_scr;
 void inven_command(command)
 char command;
 {
-    register int slot, item;
+    int slot, item;
     int tmp, tmp2, selecting, from, to;
     char *prompt, *swap, *disp, *string;
     char which, query;
     bigvtype prt1, prt2;
-    register inven_type *i_ptr;
+    inven_type *i_ptr;
     inven_type tmp_obj;
 
     free_turn_flag = TRUE;
@@ -887,7 +887,7 @@ char command;
                 } else {
                     if ((which >= '0') && (which <= '9') && (command != 'r') && (command != 't')) {
                         /* look for item whose inscription matches "which" */
-                        register int m;
+                        int m;
                         for (m = from;
                              m <= to && ((inventory[m].inscrip[0] != which) ||
                                          (inventory[m].inscrip[1] != '\0'));
@@ -1223,7 +1223,7 @@ char *message;
 {
     vtype out_val;
     char which;
-    register int test_flag, item;
+    int test_flag, item;
     int full, i_scr, redraw;
 
     item = FALSE;
@@ -1323,7 +1323,7 @@ char *message;
                 default:
                     /* look for item whose inscription matches "which" */
                     if ((which >= '0') && (which <= '9') && (i_scr != 0)) {
-                        register int m;
+                        int m;
                         for (m = i; (m < INVEN_WIELD) && ((inventory[m].inscrip[0] != which) || (inventory[m].inscrip[1] != '\0')); m++) {
                             ;
                         }
@@ -1391,7 +1391,7 @@ char *message;
 
 /* Returns true if player has no light      -RAK- */
 int no_light() {
-    register cave_type *c_ptr;
+    cave_type *c_ptr;
 
     c_ptr = &cave[char_row][char_col];
     if (!c_ptr->tl && !c_ptr->pl) {
@@ -1402,7 +1402,7 @@ int no_light() {
 
 /* map rogue_like direction commands into numbers */
 static char map_roguedir(comval)
-register char comval;
+char comval;
 {
     switch (comval) {
     case 'h':
@@ -1508,7 +1508,7 @@ int *dir;
 
 /* Moves creature record from one space to another  -RAK- */
 void move_rec(y1, x1, y2, x2)
-register int y1, x1, y2, x2;
+int y1, x1, y2, x2;
 {
     int tmp;
 
@@ -1522,9 +1522,9 @@ register int y1, x1, y2, x2;
 void light_room(y, x)
 int y, x;
 {
-    register int i, j, start_col, end_col;
+    int i, j, start_col, end_col;
     int tmp1, tmp2, start_row, end_row;
-    register cave_type *c_ptr;
+    cave_type *c_ptr;
     int tval;
 
     tmp1 = (SCREEN_HEIGHT / 2);
@@ -1558,7 +1558,7 @@ int y, x;
 
 /* Lights up given location        -RAK- */
 void lite_spot(y, x)
-register int y, x;
+int y, x;
 {
     if (panel_contains(y, x)) {
         print(loc_symbol(y, x), y, x);
@@ -1568,11 +1568,11 @@ register int y, x;
 /* Normal movement */
 /* When FIND_FLAG,  light only permanent features */
 static void sub1_move_light(y1, x1, y2, x2)
-register int x1, x2;
+int x1, x2;
 int y1, y2;
 {
-    register int i, j;
-    register cave_type *c_ptr;
+    int i, j;
+    cave_type *c_ptr;
     int tval, top, left, bottom, right;
 
     if (light_flag) {
@@ -1634,10 +1634,10 @@ int y1, y2;
 /* When blinded,  move only the player symbol. */
 /* With no light,  movement becomes involved. */
 static void sub3_move_light(y1, x1, y2, x2)
-register int y1, x1;
+int y1, x1;
 int y2, x2;
 {
-    register int i, j;
+    int i, j;
 
     if (light_flag) {
         for (i = y1 - 1; i <= y1 + 1; i++) {
@@ -1762,7 +1762,7 @@ void rest_off() {
 int test_hit(bth, level, pth, ac, attack_type)
 int bth, level, pth, ac, attack_type;
 {
-    register int i, die;
+    int i, die;
 
     disturb(1, 0);
     i = bth + pth * BTH_PLUS_ADJ + (level * class_level_adj[py.misc.pclass][attack_type]);

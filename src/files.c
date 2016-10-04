@@ -65,7 +65,7 @@ void init_scorefile() {
 /* This routine also checks the hours file vs. what time it is  -Doc */
 void read_times() {
     vtype in_line;
-    register int i;
+    int i;
     FILE *file1;
 
 #ifdef MORIA_HOU
@@ -168,12 +168,12 @@ char *filename;
 /* the objects produced is a sampling of objects which */
 /* be expected to appear on that level. */
 void print_objects() {
-    register int i;
+    int i;
     int nobj, j, level, small;
     vtype filename1;
     bigvtype tmp_str;
-    register FILE *file1;
-    register inven_type *i_ptr;
+    FILE *file1;
+    inven_type *i_ptr;
 
     prt("Produce objects on what level?: ", 0, 0);
     level = 0;
@@ -238,14 +238,14 @@ void print_objects() {
 int file_character(filename1)
 char *filename1;
 {
-    register int i;
+    int i;
     int j, xbth, xbthb, xfos, xsrh, xstl, xdis, xsave, xdev;
     vtype xinfra;
     int fd;
-    register FILE *file1;
+    FILE *file1;
     bigvtype prt2;
-    register struct misc *p_ptr;
-    register inven_type *i_ptr;
+    struct misc *p_ptr;
+    inven_type *i_ptr;
     vtype out_val, prt1;
     char *p, *colon, *blank;
 

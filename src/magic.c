@@ -28,10 +28,10 @@
 void cast() {
     int i, j, item_val, dir;
     int choice, chance, result;
-    register struct flags *f_ptr;
-    register struct misc *p_ptr;
-    register inven_type *i_ptr;
-    register spell_type *m_ptr;
+    struct flags *f_ptr;
+    struct misc *p_ptr;
+    inven_type *i_ptr;
+    spell_type *m_ptr;
 
     free_turn_flag = TRUE;
     if (py.flags.blind > 0) {

@@ -37,9 +37,9 @@ static void hit_trap(y, x)
 int y, x;
 {
     int i, ty, tx, num, dam;
-    register cave_type *c_ptr;
-    register struct misc *p_ptr;
-    register inven_type *t_ptr;
+    cave_type *c_ptr;
+    struct misc *p_ptr;
+    inven_type *t_ptr;
     bigvtype tmp;
 
     end_find();
@@ -236,9 +236,9 @@ int item_val;
 int *sn, *sc;
 {
     int32u j;
-    register int i, k;
+    int i, k;
     int spell[31], result, first_spell;
-    register spell_type *s_ptr;
+    spell_type *s_ptr;
 
     result = -1;
     i = 0;
@@ -278,10 +278,10 @@ static void carry(y, x, pickup)
 int y, x;
 int pickup;
 {
-    register int locn, i;
+    int locn, i;
     bigvtype out_val, tmp_str;
-    register cave_type *c_ptr;
-    register inven_type *i_ptr;
+    cave_type *c_ptr;
+    inven_type *i_ptr;
 
     c_ptr = &cave[y][x];
     i_ptr = &t_list[c_ptr->tptr];
@@ -348,7 +348,7 @@ int pickup;
 void delete_monster(j)
 int j;
 {
-    register monster_type *m_ptr;
+    monster_type *m_ptr;
 
     m_ptr = &m_list[j];
     cave[m_ptr->fy][m_ptr->fx].cptr = 0;
@@ -378,7 +378,7 @@ int j;
 void fix1_delete_monster(j)
 int j;
 {
-    register monster_type *m_ptr;
+    monster_type *m_ptr;
 
     m_ptr = &m_list[j];
 
@@ -400,7 +400,7 @@ int j;
 void fix2_delete_monster(j)
 int j;
 {
-    register monster_type *m_ptr;
+    monster_type *m_ptr;
 
     if (j != mfptr - 1) {
         m_ptr = &m_list[mfptr - 1];
@@ -415,8 +415,8 @@ int j;
 static int summon_object(y, x, num, typ)
 int y, x, num, typ;
 {
-    register int i, j, k;
-    register cave_type *c_ptr;
+    int i, j, k;
+    cave_type *c_ptr;
     int real_typ, res;
 
     if ((typ == 1) || (typ == 5)) {
@@ -464,8 +464,8 @@ int y, x, num, typ;
 int delete_object(y, x)
 int y, x;
 {
-    register int delete;
-    register cave_type *c_ptr;
+    int delete;
+    cave_type *c_ptr;
 
     c_ptr = &cave[y][x];
     if (c_ptr->fval == BLOCKED_FLOOR) {
@@ -490,9 +490,9 @@ int y, x;
    monster is seen to have dropped.  This may be added to monster memory. */
 int32u monster_death(y, x, flags)
 int y, x;
-register int32u flags;
+int32u flags;
 {
-    register int i, number;
+    int i, number;
     int32u dump, res;
 
     if (flags & CM_CARRY_OBJ) {
@@ -566,11 +566,11 @@ register int32u flags;
 int mon_take_hit(monptr, dam)
 int monptr, dam;
 {
-    register int32u i;
+    int32u i;
     int32 new_exp, new_exp_frac;
-    register monster_type *m_ptr;
-    register struct misc *p_ptr;
-    register creature_type *c_ptr;
+    monster_type *m_ptr;
+    struct misc *p_ptr;
+    creature_type *c_ptr;
     int m_take_hit;
     int32u tmp;
 
@@ -633,11 +633,11 @@ int monptr, dam;
 void py_attack(y, x)
 int y, x;
 {
-    register int k, blows;
+    int k, blows;
     int crptr, monptr, tot_tohit, base_tohit;
     vtype m_name, out_val;
-    register inven_type *i_ptr;
-    register struct misc *p_ptr;
+    inven_type *i_ptr;
+    struct misc *p_ptr;
 
     crptr = cave[y][x].cptr;
     monptr = m_list[crptr].mptr;
@@ -754,8 +754,8 @@ int dir, do_pickup;
 {
     int old_row, old_col, old_find_flag;
     int y, x;
-    register int i, j;
-    register cave_type *c_ptr, *d_ptr;
+    int i, j;
+    cave_type *c_ptr, *d_ptr;
 
     if ((py.flags.confused > 0) && /* Confused? */
         (randint(4) > 1) &&        /* 75% random movement */
@@ -895,9 +895,9 @@ int dir, do_pickup;
 void chest_trap(y, x)
 int y, x;
 {
-    register int i;
+    int i;
     int j, k;
-    register inven_type *t_ptr;
+    inven_type *t_ptr;
 
     t_ptr = &t_list[cave[y][x].tptr];
     if (CH_LOSE_STR & t_ptr->flags) {
@@ -942,10 +942,10 @@ int y, x;
 void openobject() {
     int y, x, i, dir;
     int flag, no_object;
-    register cave_type *c_ptr;
-    register inven_type *t_ptr;
-    register struct misc *p_ptr;
-    register monster_type *m_ptr;
+    cave_type *c_ptr;
+    inven_type *t_ptr;
+    struct misc *p_ptr;
+    monster_type *m_ptr;
     vtype m_name, out_val;
 
     y = char_row;
@@ -1061,8 +1061,8 @@ void openobject() {
 void closeobject() {
     int y, x, dir, no_object;
     vtype out_val, m_name;
-    register cave_type *c_ptr;
-    register monster_type *m_ptr;
+    cave_type *c_ptr;
+    monster_type *m_ptr;
 
     y = char_row;
     x = char_col;
@@ -1111,8 +1111,8 @@ void closeobject() {
 int twall(y, x, t1, t2)
 int y, x, t1, t2;
 {
-    register int i, j;
-    register cave_type *c_ptr;
+    int i, j;
+    cave_type *c_ptr;
     int res, found;
 
     res = FALSE;

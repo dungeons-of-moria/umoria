@@ -24,7 +24,7 @@
 #include "types.h"
 
 int set_room(element)
-register int element;
+int element;
 {
     if ((element == DARK_FLOOR) || (element == LIGHT_FLOOR)) {
         return (TRUE);
@@ -33,7 +33,7 @@ register int element;
 }
 
 int set_corr(element)
-register int element;
+int element;
 {
     if (element == CORR_FLOOR || element == BLOCKED_FLOOR) {
         return (TRUE);

@@ -34,7 +34,7 @@
 
 /* Generates character's stats        -JWT- */
 static void get_stats() {
-    register int i, tot;
+     int i, tot;
     int dice[18];
 
     do {
@@ -57,8 +57,8 @@ static void change_stat(stat, amount)
 int stat;
 int16 amount;
 {
-    register int i;
-    register int tmp_stat;
+     int i;
+     int tmp_stat;
 
     tmp_stat = py.stats.max_stat[stat];
     if (amount < 0) {
@@ -95,9 +95,9 @@ int16 amount;
 /* generate all stats and modify for race. needed in a separate module so
    looping of character selection would be allowed     -RGM- */
 static void get_all_stats() {
-    register player_type *p_ptr;
-    register race_type *r_ptr;
-    register int j;
+     player_type *p_ptr;
+     race_type *r_ptr;
+     int j;
 
     p_ptr = &py;
     r_ptr = &race[p_ptr->misc.prace];
@@ -131,12 +131,12 @@ static void get_all_stats() {
 
 /* Allows player to select a race      -JWT- */
 static void choose_race() {
-    register int j, k;
+     int j, k;
     int l, m, exit_flag;
     char s;
     char tmp_str[80];
-    register player_type *p_ptr;
-    register race_type *r_ptr;
+     player_type *p_ptr;
+     race_type *r_ptr;
 
     j = 0;
     k = 0;
@@ -181,7 +181,7 @@ static void choose_race() {
 
 /* Will print the history of a character      -JWT- */
 static void print_history() {
-    register int i;
+     int i;
 
     put_buffer("Character Background", 14, 27);
     for (i = 0; i < 4; i++) {
@@ -196,10 +196,10 @@ static void print_history() {
  */
 static void get_history() {
     int hist_ptr, cur_ptr, test_roll, flag;
-    register int start_pos, end_pos, cur_len;
+     int start_pos, end_pos, cur_len;
     int line_ctr, new_start, social_class;
     char history_block[240];
-    register background_type *b_ptr;
+     background_type *b_ptr;
 
     /* Get a block of history text */
     hist_ptr = py.misc.prace * 3 + 1;
@@ -277,7 +277,7 @@ static void get_history() {
 
 /* Gets the character's sex        -JWT- */
 static void get_sex() {
-    register int exit_flag;
+     int exit_flag;
     char c;
 
     exit_flag = FALSE;
@@ -306,7 +306,7 @@ static void get_sex() {
 
 /* Computes character's age, height, and weight    -JWT- */
 static void get_ahw() {
-    register int i;
+     int i;
 
     i = py.misc.prace;
     py.misc.age = race[i].b_age + randint((int)race[i].m_age);
@@ -322,11 +322,11 @@ static void get_ahw() {
 
 /* Gets a character class        -JWT- */
 static void get_class() {
-    register int i, j;
+     int i, j;
     int k, l, m, min_value, max_value;
     int cl[MAX_CLASS], exit_flag;
-    register struct misc *m_ptr;
-    register player_type *p_ptr;
+     struct misc *m_ptr;
+     player_type *p_ptr;
     class_type *c_ptr;
     char tmp_str[80], s;
     int32u mask;
@@ -443,8 +443,8 @@ int8u i;
 }
 
 static void get_money() {
-    register int tmp, gold;
-    register int8u *a_ptr;
+     int tmp, gold;
+     int8u *a_ptr;
 
     a_ptr = py.stats.max_stat;
     tmp = monval(a_ptr[A_STR]) +
@@ -473,8 +473,8 @@ static void get_money() {
 /* ---------- M A I N  for Character Creation Routine ---------- */
 /*              -JWT- */
 void create_character() {
-    register int exit_flag = 1;
-    register char c;
+     int exit_flag = 1;
+     char c;
 
     put_character();
     choose_race();

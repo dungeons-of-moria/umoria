@@ -179,7 +179,7 @@ int final;
 
 /* Kick 'da bum out.          -RAK- */
 static void prt_comment4() {
-    register int tmp;
+    int tmp;
 
     tmp = randint(5) - 1;
     msg_print(comment4a[tmp]);
@@ -219,9 +219,9 @@ int typ;
 static void display_inventory(store_num, start)
 int store_num, start;
 {
-    register store_type *s_ptr;
-    register inven_type *i_ptr;
-    register int i, j, stop;
+    store_type *s_ptr;
+    inven_type *i_ptr;
+    int i, j, stop;
     bigvtype out_val1, out_val2;
     int32 x;
 
@@ -275,10 +275,10 @@ int store_num, start;
 static void display_cost(store_num, pos)
 int store_num, pos;
 {
-    register int i;
-    register int32 j;
+    int i;
+    int32 j;
     vtype out_val;
-    register store_type *s_ptr;
+    store_type *s_ptr;
 
     s_ptr = &store[store_num];
     i = (pos % 12);
@@ -304,7 +304,7 @@ static void store_prt_gold() {
 static void display_store(store_num, cur_top)
 int store_num, cur_top;
 {
-    register store_type *s_ptr;
+    store_type *s_ptr;
 
     s_ptr = &store[store_num];
     clear_screen();
@@ -320,11 +320,11 @@ int store_num, cur_top;
 static int get_store_item(com_val, pmt, i, j)
 int *com_val;
 char *pmt;
-register int i, j;
+int i, j;
 {
     char command;
     vtype out_val;
-    register int flag;
+    int flag;
 
     *com_val = -1;
     flag = FALSE;
@@ -347,8 +347,8 @@ register int i, j;
 static int increase_insults(store_num)
 int store_num;
 {
-    register int increase;
-    register store_type *s_ptr;
+    int increase;
+    store_type *s_ptr;
 
     increase = FALSE;
     s_ptr = &store[store_num];
@@ -367,7 +367,7 @@ int store_num;
 static void decrease_insults(store_num)
 int store_num;
 {
-    register store_type *s_ptr;
+    store_type *s_ptr;
 
     s_ptr = &store[store_num];
     if (s_ptr->insult_cur != 0) {
@@ -379,7 +379,7 @@ int store_num;
 static int haggle_insults(store_num)
 int store_num;
 {
-    register int haggle;
+    int haggle;
 
     haggle = FALSE;
     if (increase_insults(store_num)) {
@@ -396,11 +396,11 @@ char *comment;
 int32 *new_offer;
 int num_offer;
 {
-    register int32 i;
+    int32 i;
     vtype out_val, default_offer;
-    register int flag, clen;
+    int flag, clen;
     int orig_clen;
-    register char *p;
+    char *p;
     int increment;
 
     flag = TRUE;
@@ -473,11 +473,11 @@ int num_offer;
 static int receive_offer(store_num, comment, new_offer, last_offer, num_offer, factor)
 int store_num;
 char *comment;
-register int32 *new_offer, last_offer;
+int32 *new_offer, last_offer;
 int num_offer, factor;
 {
-    register int flag;
-    register int receive;
+    int flag;
+    int receive;
 
     receive = 0;
     flag = FALSE;
@@ -513,12 +513,12 @@ inven_type *item;
     int32 last_offer, new_offer;
     int32 x1, x2, x3;
     int32 min_per, max_per;
-    register int flag, loop_flag;
+    int flag, loop_flag;
     char *comment;
     vtype out_val;
     int purchase, num_offer, final_flag, didnt_haggle;
-    register store_type *s_ptr;
-    register owner_type *o_ptr;
+    store_type *s_ptr;
+    owner_type *o_ptr;
 
     flag = FALSE;
     purchase = 0;
@@ -677,11 +677,11 @@ inven_type *item;
     int32 max_gold;
     int32 x1, x2, x3;
     int32 min_per, max_per;
-    register int flag, loop_flag;
+    int flag, loop_flag;
     char *comment;
     vtype out_val;
-    register store_type *s_ptr;
-    register owner_type *o_ptr;
+    store_type *s_ptr;
+    owner_type *o_ptr;
     int sell, num_offer, final_flag, didnt_haggle;
 
     flag = FALSE;
@@ -869,11 +869,11 @@ int store_num;
 int *cur_top;
 {
     int32 price;
-    register int i, choice;
+    int i, choice;
     bigvtype out_val, tmp_str;
-    register store_type *s_ptr;
+    store_type *s_ptr;
     inven_type sell_obj;
-    register inven_record *r_ptr;
+    inven_record *r_ptr;
     int item_val, item_new, purchase;
 
     purchase = FALSE;
@@ -960,7 +960,7 @@ int store_num, *cur_top;
     int32 price;
     bigvtype out_val, tmp_str;
     inven_type sold_obj;
-    register int sell, choice, flag;
+    int sell, choice, flag;
     char mask[INVEN_WIELD];
     int counter, first_item, last_item;
 
@@ -1051,8 +1051,8 @@ int store_num;
 {
     int cur_top, tmp_chr;
     char command;
-    register int exit_flag;
-    register store_type *s_ptr;
+    int exit_flag;
+    store_type *s_ptr;
 
     s_ptr = &store[store_num];
     if (s_ptr->store_open < turn) {

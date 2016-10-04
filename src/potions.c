@@ -35,13 +35,13 @@ void quaff() {
     int32u i, l;
     int j, k, item_val;
     int ident;
-    register inven_type *i_ptr;
-    register struct misc *m_ptr;
-    register struct flags *f_ptr;
+    inven_type *i_ptr;
+    struct misc *m_ptr;
+    struct flags *f_ptr;
 
 #if 0
   /* used by ifdefed out learn_spell potion */
-  register class_type *c_ptr;
+  class_type *c_ptr;
 #endif
 
     free_turn_flag = TRUE;

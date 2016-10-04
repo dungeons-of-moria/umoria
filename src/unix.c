@@ -255,7 +255,7 @@ char *buf;
 {
     extern char *getlogin();
     struct passwd *pwline;
-    register char *p;
+    char *p;
 
     p = getlogin();
     if (p && p[0]) {

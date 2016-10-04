@@ -38,9 +38,9 @@ void read_scroll() {
     int j, k, item_val, y, x;
     int tmp[6], flag, used_up;
     bigvtype out_val, tmp_str;
-    register int ident, l;
-    register inven_type *i_ptr;
-    register struct misc *m_ptr;
+    int ident, l;
+    inven_type *i_ptr;
+    struct misc *m_ptr;
 
     free_turn_flag = TRUE;
     if (py.flags.blind > 0) {

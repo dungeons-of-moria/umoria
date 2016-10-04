@@ -31,10 +31,10 @@ static int see_wall();
 /* Change a trap from invisible to visible    -RAK- */
 /* Note: Secret doors are handled here */
 void change_trap(y, x)
-register int y, x;
+int y, x;
 {
-    register cave_type *c_ptr;
-    register inven_type *t_ptr;
+    cave_type *c_ptr;
+    inven_type *t_ptr;
 
     c_ptr = &cave[y][x];
     t_ptr = &t_list[c_ptr->tptr];
@@ -53,10 +53,10 @@ register int y, x;
 /* Searches for hidden things.      -RAK- */
 void search(y, x, chance) int y, x, chance;
 {
-    register int i, j;
-    register cave_type *c_ptr;
-    register inven_type *t_ptr;
-    register struct flags *p_ptr;
+    int i, j;
+    cave_type *c_ptr;
+    inven_type *t_ptr;
+    struct flags *p_ptr;
     bigvtype tmp_str, tmp_str2;
 
     p_ptr = &py.flags;
@@ -234,7 +234,7 @@ void find_init(dir)
 int dir;
 {
     int row, col, deepleft, deepright;
-    register int i, shortleft, shortright;
+    int i, shortleft, shortright;
 
     row = char_row;
     col = char_col;
@@ -359,8 +359,8 @@ void area_affect(dir, y, x)
 int dir, y, x;
 {
     int newdir, t, inv, check_dir, row, col;
-    register int i, max, option, option2;
-    register cave_type *c_ptr;
+    int i, max, option, option2;
+    cave_type *c_ptr;
 
     if (py.flags.blind < 1) {
         option = 0;
@@ -505,9 +505,9 @@ int dir, y, x;
 int minus_ac(typ_dam)
 int32u typ_dam;
 {
-    register int i, j;
+    int i, j;
     int tmp[6], minus;
-    register inven_type *i_ptr;
+    inven_type *i_ptr;
     bigvtype out_val, tmp_str;
 
     i = 0;
@@ -633,7 +633,7 @@ void acid_dam(dam, kb_str)
 int dam;
 char *kb_str;
 {
-    register int flag;
+    int flag;
 
     flag = 0;
     if (minus_ac((int32u)TR_RES_ACID)) {

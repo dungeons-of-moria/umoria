@@ -84,8 +84,8 @@ char *str;
 
 /* We need to reset the view of things.			-CJS- */
 void check_view() {
-    register int i, j;
-    register cave_type *c_ptr, *d_ptr;
+    int i, j;
+    cave_type *c_ptr, *d_ptr;
 
     c_ptr = &cave[char_row][char_col];
     /* Check for new panel		   */

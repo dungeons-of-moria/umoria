@@ -55,9 +55,9 @@ void dungeon() {
     int find_count, i;
     int regen_amount; /* Regenerate hp and mana*/
     char command;     /* Last command */
-    register struct misc *p_ptr;
-    register inven_type *i_ptr;
-    register struct flags *f_ptr;
+    struct misc *p_ptr;
+    inven_type *i_ptr;
+    struct flags *f_ptr;
 
     /* Main procedure for dungeon.      -RAK- */
     /* Note: There is a lot of preliminary magic going on here at first*/
@@ -1074,7 +1074,7 @@ char com_val;
     int dir_val, do_pickup;
     int y, x, i, j;
     vtype out_val, tmp_str;
-    register struct flags *f_ptr;
+    struct flags *f_ptr;
 
     /* hack for move without pickup.  Map '-' to a movement command. */
     if (com_val == '-') {
@@ -1711,8 +1711,8 @@ char c;
 static void regenhp(percent)
 int percent;
 {
-    register struct misc *p_ptr;
-    register int32 new_chp, new_chp_frac;
+    struct misc *p_ptr;
+    int32 new_chp, new_chp_frac;
     int old_chp;
 
     p_ptr = &py.misc;
@@ -1751,8 +1751,8 @@ int percent;
 static void regenmana(percent)
 int percent;
 {
-    register struct misc *p_ptr;
-    register int32 new_mana, new_mana_frac;
+    struct misc *p_ptr;
+    int32 new_mana, new_mana_frac;
     int old_cmana;
 
     p_ptr = &py.misc;
@@ -1790,7 +1790,7 @@ int percent;
 /* Is an item an enchanted weapon or armor and we don't know?  -CJS- */
 /* only returns true if it is a good enchantment */
 static int enchanted(t_ptr)
-register inven_type *t_ptr;
+inven_type *t_ptr;
 {
     if (t_ptr->tval < TV_MIN_ENCHANT || t_ptr->tval > TV_MAX_ENCHANT || t_ptr->flags & TR_CURSED) {
         return FALSE;
@@ -1820,8 +1820,8 @@ static void examine_book() {
     int32u j;
     int i, k, item_val, flag;
     int spell_index[31];
-    register inven_type *i_ptr;
-    register spell_type *s_ptr;
+    inven_type *i_ptr;
+    spell_type *s_ptr;
 
     if (!find_range(TV_MAGIC_BOOK, TV_PRAYER_BOOK, &i, &k)) {
         msg_print("You are not carrying any books.");
@@ -1869,8 +1869,8 @@ static void examine_book() {
 
 /* Go up one level          -RAK- */
 static void go_up() {
-    register cave_type *c_ptr;
-    register int no_stairs = FALSE;
+    cave_type *c_ptr;
+    int no_stairs = FALSE;
 
     c_ptr = &cave[char_row][char_col];
     if (c_ptr->tptr != 0) {
@@ -1894,8 +1894,8 @@ static void go_up() {
 
 /* Go down one level          -RAK- */
 static void go_down() {
-    register cave_type *c_ptr;
-    register int no_stairs = FALSE;
+    cave_type *c_ptr;
+    int no_stairs = FALSE;
 
     c_ptr = &cave[char_row][char_col];
     if (c_ptr->tptr != 0) {
@@ -1920,8 +1920,8 @@ static void go_down() {
 /* Jam a closed door          -RAK- */
 static void jamdoor() {
     int y, x, dir, i, j;
-    register cave_type *c_ptr;
-    register inven_type *t_ptr, *i_ptr;
+    cave_type *c_ptr;
+    inven_type *t_ptr, *i_ptr;
     char tmp_str[80];
 
     free_turn_flag = TRUE;
@@ -1977,8 +1977,8 @@ static void jamdoor() {
 /* Refill the players lamp        -RAK- */
 static void refill_lamp() {
     int i, j;
-    register int k;
-    register inven_type *i_ptr;
+    int k;
+    inven_type *i_ptr;
 
     free_turn_flag = TRUE;
     k = inventory[INVEN_LIGHT].subval;

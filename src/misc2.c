@@ -31,8 +31,8 @@
 void magic_treasure(x, level)
 int x, level;
 {
-    register inven_type *t_ptr;
-    register int chance, special, cursed, i;
+    inven_type *t_ptr;
+    int chance, special, cursed, i;
     int tmp;
 
     chance = OBJ_BASE_MAGIC + level;
@@ -884,7 +884,7 @@ static struct opt_desc { char *o_prompt; int *o_var; } options[] = {
 
 /* Set or unset various boolean options.    -CJS- */
 void set_options() {
-    register int i, max;
+    int i, max;
     vtype string;
 
     prt("  ESC when finished, y/n to set options, <return> or - to move cursor", 0, 0);

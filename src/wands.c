@@ -35,10 +35,10 @@
 /* Wands for the aiming. */
 void aim() {
     int32u i;
-    register int l, ident;
+    int l, ident;
     int item_val, j, k, chance, dir;
-    register inven_type *i_ptr;
-    register struct misc *m_ptr;
+    inven_type *i_ptr;
+    struct misc *m_ptr;
 
     free_turn_flag = TRUE;
     if (inven_ctr == 0) {

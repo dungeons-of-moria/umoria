@@ -42,9 +42,9 @@ static int look_see();
 /* Must take into account: secret doors,  special tools */
 void tunnel(dir) int dir;
 {
-    register int i, tabil;
-    register cave_type *c_ptr;
-    register inven_type *i_ptr;
+    int i, tabil;
+    cave_type *c_ptr;
+    inven_type *i_ptr;
     int y, x;
     monster_type *m_ptr;
     vtype out_val, m_name;
@@ -187,9 +187,9 @@ void tunnel(dir) int dir;
 /* Disarms a trap          -RAK- */
 void disarm_trap() {
     int y, x, level, tmp, dir, no_disarm;
-    register int tot, i;
-    register cave_type *c_ptr;
-    register inven_type *i_ptr;
+    int tot, i;
+    cave_type *c_ptr;
+    inven_type *i_ptr;
     monster_type *m_ptr;
     vtype m_name, out_val;
 
@@ -373,7 +373,7 @@ static int map_diag2[] = {2, 1, 0, 4, 3};
  */
 
 void look() {
-    register int i, abort;
+    int i, abort;
     int dir, dummy;
 
     if (py.flags.blind > 0) {
@@ -484,7 +484,7 @@ void look() {
 static int look_ray(y, from, to)
 int y, from, to;
 {
-    register int max_x, x;
+    int max_x, x;
     int transparent;
 
     /* from is the larger angle of the ray, since we scan towards the
@@ -569,12 +569,12 @@ int y, from, to;
 }
 
 static int look_see(x, y, transparent)
-register int x, y;
+int x, y;
 int *transparent;
 {
     char *dstring, *string, query;
-    register cave_type *c_ptr;
-    register int j;
+    cave_type *c_ptr;
+    int j;
     bigvtype out_val, tmp_str;
 
     if (x < 0 || y < 0 || y > x) {
@@ -681,7 +681,7 @@ static void inven_throw(item_val, t_ptr)
 int item_val;
 inven_type *t_ptr;
 {
-    register inven_type *i_ptr;
+    inven_type *i_ptr;
 
     i_ptr = &inventory[item_val];
     *t_ptr = *i_ptr;
@@ -698,10 +698,10 @@ inven_type *t_ptr;
 /* Obtain the hit and damage bonuses and the maximum distance for a
    thrown missile. */
 static void facts(i_ptr, tbth, tpth, tdam, tdis)
-register inven_type *i_ptr;
+inven_type *i_ptr;
 int *tbth, *tpth, *tdam, *tdis;
 {
-    register int tmp_weight;
+    int tmp_weight;
 
     if (i_ptr->weight < 1) {
         tmp_weight = 1;
@@ -792,10 +792,10 @@ static void drop_throw(y, x, t_ptr)
 int y, x;
 inven_type *t_ptr;
 {
-    register int i, j, k;
+    int i, j, k;
     int flag, cur_pos;
     bigvtype out_val, tmp_str;
-    register cave_type *c_ptr;
+    cave_type *c_ptr;
 
     flag = FALSE;
     i = y;
@@ -840,9 +840,9 @@ void throw_object() {
     int flag, visible;
     bigvtype out_val, tmp_str;
     inven_type throw_obj;
-    register cave_type *c_ptr;
-    register monster_type *m_ptr;
-    register int i;
+    cave_type *c_ptr;
+    monster_type *m_ptr;
+    int i;
     char tchar;
 
     if (inven_ctr == 0) {
@@ -958,8 +958,8 @@ static void py_bash(y, x)
 int y, x;
 {
     int monster, k, avg_max_hp, base_tohit;
-    register creature_type *c_ptr;
-    register monster_type *m_ptr;
+    creature_type *c_ptr;
+    monster_type *m_ptr;
     vtype m_name, out_val;
 
     monster = cave[y][x].cptr;
@@ -1055,8 +1055,8 @@ int y, x;
    non-secret door. */
 void bash() {
     int y, x, dir, tmp;
-    register cave_type *c_ptr;
-    register inven_type *t_ptr;
+    cave_type *c_ptr;
+    inven_type *t_ptr;
 
     y = char_row;
     x = char_col;

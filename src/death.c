@@ -90,7 +90,7 @@ long time();
 static void date(day)
 char *day;
 {
-    register char *tmp;
+    char *tmp;
     long clockvar;
 
     clockvar = time((long *)0);
@@ -104,7 +104,7 @@ static char *center_string(centered_str, in_str)
 char *centered_str;
 char *in_str;
 {
-    register int i, j;
+    int i, j;
 
     i = strlen(in_str);
     j = 15 - i / 2;
@@ -182,7 +182,7 @@ int f, l;
 
 void display_scores(show_player) int show_player;
 {
-    register int i, rank;
+    int i, rank;
     high_scores score;
     char input;
     char string[100];
@@ -324,9 +324,9 @@ int duplicate_character() {
 /* Prints the gravestone of the character    -RAK- */
 static void print_tomb() {
     vtype str, tmp_str;
-    register int i;
+    int i;
     char day[11];
-    register char *p;
+    char *p;
 
     clear_screen();
     put_buffer("_______________________", 1, 15);
@@ -636,8 +636,8 @@ static void highscores() {
 
 /* Change the player into a King!      -RAK- */
 static void kingly() {
-    register struct misc *p_ptr;
-    register char *p;
+    struct misc *p_ptr;
+    char *p;
 
     /* Change the character attributes. */
     dun_level = 0;

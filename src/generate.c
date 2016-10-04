@@ -38,7 +38,7 @@ static int doorindex;
 /* Always picks a correct direction */
 static void correct_dir(rdir, cdir, y1, x1, y2, x2)
 int *rdir, *cdir;
-register int y1, x1, y2, x2;
+int y1, x1, y2, x2;
 {
     if (y1 < y2) {
         *rdir = 1;
@@ -67,7 +67,7 @@ register int y1, x1, y2, x2;
 static void rand_dir(rdir, cdir)
 int *rdir, *cdir;
 {
-    register int tmp;
+    int tmp;
 
     tmp = randint(4);
     if (tmp < 3) {
@@ -90,10 +90,10 @@ static void blank_cave() {
 
 /* Fills in empty spots with desired rock    -RAK- */
 /* Note: 9 is a temporary value. */
-static void fill_cave(fval) register int fval;
+static void fill_cave(fval) int fval;
 {
-    register int i, j;
-    register cave_type *c_ptr;
+    int i, j;
+    cave_type *c_ptr;
 
     /* no need to check the border of the cave */
 
@@ -115,8 +115,8 @@ static void fill_cave(fval) register int fval;
 
 /* Places indestructible rock around edges of dungeon  -RAK- */
 static void place_boundary() {
-    register int i;
-    register cave_type *top_ptr, *bottom_ptr;
+    int i;
+    cave_type *top_ptr, *bottom_ptr;
     cave_type(*left_ptr)[MAX_WIDTH];
     cave_type(*right_ptr)[MAX_WIDTH];
 
@@ -156,9 +156,9 @@ static void place_streamer(fval, treas_chance)
 int fval;
 int treas_chance;
 {
-    register int i, tx, ty;
+    int i, tx, ty;
     int y, x, t1, t2, dir;
-    register cave_type *c_ptr;
+    cave_type *c_ptr;
 
     /* Choose starting point and direction */
     y = (cur_height / 2) + 11 - randint(23);
@@ -192,8 +192,8 @@ int treas_chance;
 static void place_open_door(y, x)
 int y, x;
 {
-    register int cur_pos;
-    register cave_type *cave_ptr;
+    int cur_pos;
+    cave_type *cave_ptr;
 
     cur_pos = popt();
     cave_ptr = &cave[y][x];
@@ -205,8 +205,8 @@ int y, x;
 static void place_broken_door(y, x)
 int y, x;
 {
-    register int cur_pos;
-    register cave_type *cave_ptr;
+    int cur_pos;
+    cave_type *cave_ptr;
 
     cur_pos = popt();
     cave_ptr = &cave[y][x];
@@ -219,8 +219,8 @@ int y, x;
 static void place_closed_door(y, x)
 int y, x;
 {
-    register int cur_pos;
-    register cave_type *cave_ptr;
+    int cur_pos;
+    cave_type *cave_ptr;
 
     cur_pos = popt();
     cave_ptr = &cave[y][x];
@@ -232,8 +232,8 @@ int y, x;
 static void place_locked_door(y, x)
 int y, x;
 {
-    register int cur_pos;
-    register cave_type *cave_ptr;
+    int cur_pos;
+    cave_type *cave_ptr;
 
     cur_pos = popt();
     cave_ptr = &cave[y][x];
@@ -246,8 +246,8 @@ int y, x;
 static void place_stuck_door(y, x)
 int y, x;
 {
-    register int cur_pos;
-    register cave_type *cave_ptr;
+    int cur_pos;
+    cave_type *cave_ptr;
 
     cur_pos = popt();
     cave_ptr = &cave[y][x];
@@ -260,8 +260,8 @@ int y, x;
 static void place_secret_door(y, x)
 int y, x;
 {
-    register int cur_pos;
-    register cave_type *cave_ptr;
+    int cur_pos;
+    cave_type *cave_ptr;
 
     cur_pos = popt();
     cave_ptr = &cave[y][x];
@@ -273,7 +273,7 @@ int y, x;
 static void place_door(y, x)
 int y, x;
 {
-    register int tmp;
+    int tmp;
 
     tmp = randint(3);
     if (tmp == 1) {
@@ -300,8 +300,8 @@ int y, x;
 static void place_up_stairs(y, x)
 int y, x;
 {
-    register int cur_pos;
-    register cave_type *cave_ptr;
+    int cur_pos;
+    cave_type *cave_ptr;
 
     cave_ptr = &cave[y][x];
     if (cave_ptr->tptr != 0) {
@@ -316,8 +316,8 @@ int y, x;
 static void place_down_stairs(y, x)
 int y, x;
 {
-    register int cur_pos;
-    register cave_type *cave_ptr;
+    int cur_pos;
+    cave_type *cave_ptr;
 
     cave_ptr = &cave[y][x];
     if (cave_ptr->tptr != 0) {
@@ -332,9 +332,9 @@ int y, x;
 static void place_stairs(typ, num, walls)
 int typ, num, walls;
 {
-    register cave_type *cave_ptr;
+    cave_type *cave_ptr;
     int i, j, flag;
-    register int y1, x1, y2, x2;
+    int y1, x1, y2, x2;
 
     for (i = 0; i < num; i++) {
         flag = FALSE;
@@ -377,9 +377,9 @@ int typ, num, walls;
 static void vault_trap(y, x, yd, xd, num)
 int y, x, yd, xd, num;
 {
-    register int count, y1, x1;
+    int count, y1, x1;
     int i, flag;
-    register cave_type *c_ptr;
+    cave_type *c_ptr;
 
     for (i = 0; i < num; i++) {
         flag = FALSE;
@@ -401,7 +401,7 @@ int y, x, yd, xd, num;
 static void vault_monster(y, x, num)
 int y, x, num;
 {
-    register int i;
+    int i;
     int y1, x1;
 
     for (i = 0; i < num; i++) {
@@ -414,10 +414,10 @@ int y, x, num;
 /* Builds a room at a row, column coordinate    -RAK- */
 static void build_room(yval, xval) int yval, xval;
 {
-    register int i, j, y_depth, x_right;
+    int i, j, y_depth, x_right;
     int y_height, x_left;
     int8u floor;
-    register cave_type *c_ptr, *d_ptr;
+    cave_type *c_ptr, *d_ptr;
 
     if (dun_level <= randint(25)) {
         floor = LIGHT_FLOOR; /* Floor with light */
@@ -471,9 +471,9 @@ int yval, xval;
 {
     int y_height, y_depth;
     int x_left, x_right, limit;
-    register int i0, i, j;
+    int i0, i, j;
     int8u floor;
-    register cave_type *c_ptr, *d_ptr;
+    cave_type *c_ptr, *d_ptr;
 
     if (dun_level <= randint(25)) {
         floor = LIGHT_FLOOR; /* Floor with light */
@@ -540,10 +540,10 @@ int yval, xval;
 static void build_type2(yval, xval)
 int yval, xval;
 {
-    register int i, j, y_height, x_left;
+    int i, j, y_height, x_left;
     int y_depth, x_right, tmp;
     int8u floor;
-    register cave_type *c_ptr, *d_ptr;
+    cave_type *c_ptr, *d_ptr;
 
     if (dun_level <= randint(25)) {
         floor = LIGHT_FLOOR; /* Floor with light */
@@ -824,9 +824,9 @@ int yval, xval;
 {
     int y_height, y_depth;
     int x_left, x_right;
-    register int tmp, i, j;
+    int tmp, i, j;
     int8u floor;
-    register cave_type *c_ptr;
+    cave_type *c_ptr;
 
     if (dun_level <= randint(25)) {
         floor = LIGHT_FLOOR; /* Floor with light */
@@ -977,8 +977,8 @@ int yval, xval;
 static void build_tunnel(row1, col1, row2, col2)
 int row1, col1, row2, col2;
 {
-    register int tmp_row, tmp_col, i, j;
-    register cave_type *c_ptr;
+    int tmp_row, tmp_col, i, j;
+    cave_type *c_ptr;
     cave_type *d_ptr;
     coords tunstk[1000], wallstk[1000];
     coords *tun_ptr;
@@ -1112,9 +1112,9 @@ int row1, col1, row2, col2;
 }
 
 static int next_to(y, x)
-register int y, x;
+int y, x;
 {
-    register int next;
+    int next;
 
     if (next_to_corr(y, x) > 2) {
         if ((cave[y - 1][x].fval >= MIN_CAVE_WALL) &&
@@ -1134,7 +1134,7 @@ register int y, x;
 
 /* Places door at y, x position if at least 2 walls found */
 static void try_door(y, x)
-register int y, x;
+int y, x;
 {
     if ((cave[y][x].fval == CORR_FLOOR) && (randint(100) > DUN_TUN_JCT) &&
         next_to(y, x)) {
@@ -1146,8 +1146,8 @@ register int y, x;
 static void new_spot(y, x)
 int16 *y, *x;
 {
-    register int i, j;
-    register cave_type *c_ptr;
+    int i, j;
+    cave_type *c_ptr;
 
     do {
         i = randint(cur_height - 2);
@@ -1167,7 +1167,7 @@ static void cave_gen() {
     };
 
     int room_map[20][20];
-    register int i, j, k;
+    int i, j, k;
     int y1, x1, y2, x2, pick1, pick2, tmp;
     int row_rooms, col_rooms, alloc_level;
     int16 yloc[400], xloc[400];
@@ -1277,9 +1277,9 @@ int store_num, y, x;
 {
     int yval, y_height, y_depth;
     int xval, x_left, x_right;
-    register int i, j;
+    int i, j;
     int cur_pos, tmp;
-    register cave_type *c_ptr;
+    cave_type *c_ptr;
 
     yval = y * 10 + 5;
     xval = x * 16 + 16;
@@ -1320,7 +1320,7 @@ int store_num, y, x;
 
 /* Link all free space in treasure list together */
 static void tlink() {
-    register int i;
+    int i;
 
     for (i = 0; i < MAX_TALLOC; i++) {
         invcopy(&t_list[i], OBJ_NOTHING);
@@ -1330,7 +1330,7 @@ static void tlink() {
 
 /* Link all free space in monster list together */
 static void mlink() {
-    register int i;
+    int i;
 
     for (i = 0; i < MAX_MALLOC; i++) {
         m_list[i] = blank_monster;
@@ -1340,8 +1340,8 @@ static void mlink() {
 
 /* Town logic flow for generation of new town */
 static void town_gen() {
-    register int i, j, l, m;
-    register cave_type *c_ptr;
+    int i, j, l, m;
+    cave_type *c_ptr;
     int rooms[6], k;
 
     set_seed(town_seed);

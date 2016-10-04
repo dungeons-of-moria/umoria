@@ -143,8 +143,8 @@ static int roffpline; /* Place to print line now being loaded. */
 /* Do we know anything about this monster? */
 int bool_roff_recall(mon_num) int mon_num;
 {
-    register recall_type *mp;
-    register int i;
+    recall_type *mp;
+    int i;
 
     if (wizard) {
         return TRUE;
@@ -168,10 +168,10 @@ int roff_recall(mon_num) int mon_num;
     char *p, *q;
     int8u *pu;
     vtype temp;
-    register recall_type *mp;
-    register creature_type *cp;
-    register int i, k;
-    register int32u j;
+    recall_type *mp;
+    creature_type *cp;
+    int i, k;
+    int32u j;
     int32 templong;
     int mspeed;
     int32u rcmove, rspells;
@@ -684,9 +684,9 @@ int roff_recall(mon_num) int mon_num;
 
 /* Print out strings, filling up lines as we go. */
 static void roff(p)
-register char *p;
+char *p;
 {
-    register char *q, *r;
+    char *q, *r;
 
     while (*p) {
         *roffp = *p;

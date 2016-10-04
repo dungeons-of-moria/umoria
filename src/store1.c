@@ -35,9 +35,9 @@ static void store_create();
 
 /* Returns the value for any given object    -RAK- */
 int32 item_value(i_ptr)
-register inven_type *i_ptr;
+inven_type *i_ptr;
 {
-    register int32 value;
+    int32 value;
 
     value = i_ptr->cost;
 
@@ -153,8 +153,8 @@ int snum;
 int32 *max_sell, *min_sell;
 inven_type *item;
 {
-    register int32 i;
-    register store_type *s_ptr;
+    int32 i;
+    store_type *s_ptr;
 
     s_ptr = &store[snum];
     i = item_value(item);
@@ -183,9 +183,9 @@ int store_check_num(t_ptr, store_num)
 inven_type *t_ptr;
 int store_num;
 {
-    register int store_check, i;
-    register store_type *s_ptr;
-    register inven_type *i_ptr;
+    int store_check, i;
+    store_type *s_ptr;
+    inven_type *i_ptr;
 
     store_check = FALSE;
     s_ptr = &store[store_num];
@@ -209,13 +209,13 @@ int store_num;
 
 /* Insert INVEN_MAX at given location */
 static void insert_store(store_num, pos, icost, i_ptr)
-register int pos;
+int pos;
 int store_num;
 int32 icost;
 inven_type *i_ptr;
 {
-    register int i;
-    register store_type *s_ptr;
+    int i;
+    store_type *s_ptr;
 
     s_ptr = &store[store_num];
     for (i = s_ptr->store_ctr - 1; i >= pos; i--) {
@@ -234,10 +234,10 @@ int *ipos;
 inven_type *t_ptr;
 {
     int item_num, item_val, flag;
-    register int typ, subt;
+    int typ, subt;
     int32 icost, dummy;
-    register inven_type *i_ptr;
-    register store_type *s_ptr;
+    inven_type *i_ptr;
+    store_type *s_ptr;
 
     *ipos = -1;
     if (sell_price(store_num, &icost, &dummy, t_ptr) > 0) {
@@ -292,9 +292,9 @@ void store_destroy(store_num, item_val, one_of)
 int store_num, item_val;
 int one_of;
 {
-    register int j, number;
-    register store_type *s_ptr;
-    register inven_type *i_ptr;
+    int j, number;
+    store_type *s_ptr;
+    inven_type *i_ptr;
 
     s_ptr = &store[store_num];
     i_ptr = &s_ptr->store_inven[item_val].sitem;
@@ -327,8 +327,8 @@ int one_of;
 
 /* Initializes the stores with owners      -RAK- */
 void store_init() {
-    register int i, j, k;
-    register store_type *s_ptr;
+    int i, j, k;
+    store_type *s_ptr;
 
     i = MAX_OWNERS / MAX_STORES;
     for (j = 0; j < MAX_STORES; j++) {
@@ -350,10 +350,10 @@ void store_init() {
 /* Creates an item and inserts it into store's inven  -RAK- */
 static void store_create(store_num) int store_num;
 {
-    register int i, tries;
+    int i, tries;
     int cur_pos, dummy;
-    register store_type *s_ptr;
-    register inven_type *t_ptr;
+    store_type *s_ptr;
+    inven_type *t_ptr;
 
     tries = 0;
     cur_pos = popt();
@@ -381,8 +381,8 @@ static void store_create(store_num) int store_num;
 
 /* Initialize and up-keep the store's inventory.    -RAK- */
 void store_maint() {
-    register int i, j;
-    register store_type *s_ptr;
+    int i, j;
+    store_type *s_ptr;
 
     for (i = 0; i < MAX_STORES; i++) {
         s_ptr = &store[i];
@@ -414,9 +414,9 @@ int noneedtobargain(store_num, minprice)
 int store_num;
 int32 minprice;
 {
-    register int flagnoneed;
+    int flagnoneed;
     int bargain_record;
-    register store_type *s_ptr;
+    store_type *s_ptr;
 
     s_ptr = &store[store_num];
     if (s_ptr->good_buy == MAX_SHORT) {
@@ -433,7 +433,7 @@ int32 minprice;
 void updatebargain(store_num, price, minprice) int store_num;
 int32 price, minprice;
 {
-    register store_type *s_ptr;
+    store_type *s_ptr;
 
     s_ptr = &store[store_num];
     if (minprice > 9) {

@@ -95,7 +95,7 @@ int32u seedval;
 
 /* returns a pseudo-random number from set 1, 2, ..., RNG_M - 1 */
 int32 rnd() {
-    register long low, high, test;
+    long low, high, test;
 
     high = rnd_seed / RNG_Q;
     low = rnd_seed % RNG_Q;

@@ -275,7 +275,7 @@ char *argv[];
 
 /* Init players with some belongings      -RAK- */
 static void char_inven_init() {
-    register int i, j;
+    int i, j;
     inven_type inven_init;
 
     /* this is needed for bash to work right, it can't hurt anyway */
@@ -303,7 +303,7 @@ static void char_inven_init() {
 
 /* Initializes M_LEVEL array for use with PLACE_MONSTER  -RAK- */
 static void init_m_level() {
-    register int i, k;
+    int i, k;
 
     for (i = 0; i <= MAX_MONS_LEVEL; i++) {
         m_level[i] = 0;
@@ -321,7 +321,7 @@ static void init_m_level() {
 
 /* Initializes T_LEVEL array for use with PLACE_OBJECT  -RAK- */
 static void init_t_level() {
-    register int i, l;
+    int i, l;
     int tmp[MAX_OBJ_LEVEL + 1];
 
     for (i = 0; i <= MAX_OBJ_LEVEL; i++) {
@@ -353,7 +353,7 @@ static void init_t_level() {
 #if (COST_ADJ != 100)
 /* Adjust prices of objects        -RAK- */
 static void price_adjust() {
-    register int i;
+    int i;
 
     /* round half-way cases up */
     for (i = 0; i < MAX_OBJECTS; i++)
