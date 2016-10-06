@@ -638,7 +638,7 @@ int roff_recall(mon_num) int mon_num;
 
         roff(desc_amethod[att_how]);
 
-        if (att_type != 1 || d1 > 0 && d2 > 0) {
+        if (att_type != 1 || (d1 > 0 && d2 > 0)) {
             roff(" to ");
             if (att_type > 24) {
                 att_type = 0;

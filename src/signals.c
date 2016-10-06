@@ -25,6 +25,7 @@
 /* To find out what system we're on. */
 
 #include <stdio.h>
+#include <unistd.h>
 
 #include "config.h"
 #include "constant.h"
@@ -91,7 +92,7 @@ struct sigcontext *scp;
         if (++signal_count > 10) {
             (void)MSIGNAL(sig, SIG_DFL);
         }
-        return;
+        return 0;
     }
     error_sig = sig;
 
@@ -121,7 +122,7 @@ struct sigcontext *scp;
                 put_qio();
 
                 /* OK. We don't quit. */
-                return;
+                return 0;
             }
             (void)strcpy(died_from, "Interrupting");
         } else {

@@ -9,7 +9,7 @@ OWNER = michael
 GROUP = michael
 
 # For testing and debugging the program, it is best to use this line.
-CFLAGS = -g
+CFLAGS = -g -Wall -std=gnu11
 
 # NOTE: the -O flag currently crashes the game when running! -- MRC (2016-09-30)
 # For playing the game, you may want to use this line
@@ -28,7 +28,7 @@ CURSES = -lcurses -ltermcap
 # Normal systems don't require anything here.
 LFLAGS =
 
-CC = cc
+CC = clang
 
 SRCS = main.c misc1.c misc2.c misc3.c misc4.c store1.c files.c io.c \
 	create.c desc.c generate.c sets.c dungeon.c creature.c death.c \

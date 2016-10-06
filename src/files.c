@@ -19,6 +19,8 @@
  */
 
 #include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
 
 #if 0
 /* moved to externs.h to avoid VMS 'psect' problem */

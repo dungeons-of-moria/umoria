@@ -27,6 +27,8 @@
 #endif
 
 #include <stdio.h>
+#include <unistd.h> // for close
+#include "sys/stat.h" // for chmod
 
 #include "config.h"
 #include "constant.h"

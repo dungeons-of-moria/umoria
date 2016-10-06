@@ -21,6 +21,8 @@
 
 /* Must read this before externs.h, as some global declarations use FILE. */
 #include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
 
 #include "config.h"
 #include "constant.h"
@@ -42,11 +44,8 @@
 #include <pwd.h>
 
 #ifdef unix
-#ifdef USG
-uint16_t getuid(), getgid();
-#else
-uid_t getuid(), getgid();
-#endif
+uid_t getuid();
+uid_t getgid();
 #endif
 
 

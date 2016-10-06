@@ -238,11 +238,8 @@ char *p;
 #endif
 
 #ifndef DEBIAN_LINUX
-#ifdef USG
-uint16_t getuid();
-#else
 uid_t getuid();
-#endif
+uid_t getgid();
 #endif
 
 /* Find a default user name from the system. */

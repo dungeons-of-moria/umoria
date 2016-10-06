@@ -594,7 +594,9 @@ int pref;
         tmp_str[0] = '\0';
 
         if ((indexx = object_offset(i_ptr)) >= 0) {
-            indexx = (indexx <<= 6) + (i_ptr->subval & (ITEM_SINGLE_STACK_MIN - 1));
+            indexx <<= 6;
+            indexx = indexx + (i_ptr->subval & (ITEM_SINGLE_STACK_MIN - 1));
+
             /* don't print tried string for store bought items */
             if ((object_ident[indexx] & OD_TRIED) && !store_bought_p(i_ptr)) {
                 (void)strcat(tmp_str, "tried ");

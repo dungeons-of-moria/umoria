@@ -20,6 +20,8 @@
  */
 
 #include <stdio.h>
+#include <stdlib.h>
+#include <sys/wait.h>
 
 #include "config.h"
 
@@ -54,8 +56,6 @@
 #include <strings.h>
 #include <sys/wait.h>
 #endif
-
-#include <stdlib.h>
 
 #ifdef DEBIAN_LINUX
 #include <termios.h>
@@ -139,8 +139,6 @@ int suspend() {
 
 /* initializes curses routines */
 void init_curses() {
-    int i, y, x;
-
 #ifndef USG
     (void)ioctl(0, TIOCGLTC, (char *)&save_special_chars);
     (void)ioctl(0, TIOCGETP, (char *)&save_ttyb);
@@ -173,7 +171,7 @@ void init_curses() {
 #ifdef DEBIAN_LINUX
     /* (void) signal (SIGTSTP, (sig_t)suspend); */
     /* RENMOD: libc6 defaults to BSD, this expects SYSV */
-    (void)sysv_signal(SIGTSTP, suspend);
+    //XXXX (void)sysv_signal(SIGTSTP, suspend);
 #else
     (void)signal(SIGTSTP, suspend);
 #endif
@@ -194,8 +192,10 @@ void init_curses() {
        guaranteed to be true. */
 
     /* check tab settings, exit with error if they are not 8 spaces apart */
+    int y, x;
+
     (void)move(0, 0);
-    for (i = 1; i < 10; i++) {
+    for (int i = 1; i < 10; i++) {
         (void)addch('\t');
         getyx(stdscr, y, x);
         if (y != 0 || x != i * 8) {
@@ -403,7 +403,8 @@ void shell_out() {
         /* close scoreboard descriptor */
         (void)fclose(highscore_fp);
 
-        if (str = getenv("SHELL")) {
+        str = getenv("SHELL");
+        if (str) {
             (void)execl(str, str, (char *)0);
         } else {
             (void)execl("/bin/sh", "sh", (char *)0);

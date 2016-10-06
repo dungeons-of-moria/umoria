@@ -24,7 +24,7 @@
 #include "types.h"
 
 #ifdef MORIA_HOU
-/* Operating hours for Moria        -RAK-1
+/* Operating hours for Moria        -RAK-1 */
 /*   X = Open; . = Closed */
 char days[7][29] = {
     "SUN:XXXXXXXXXXXXXXXXXXXXXXXX",

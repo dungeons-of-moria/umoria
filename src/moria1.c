@@ -1729,7 +1729,7 @@ void rest() {
     }
     /* check for reasonable value, must be positive number in range of a
        short, or must be -MAX_SHORT */
-    if ((rest_num == -MAX_SHORT) || (rest_num > 0) && (rest_num < MAX_SHORT)) {
+    if ( (rest_num == -MAX_SHORT) || ((rest_num > 0) && (rest_num < MAX_SHORT)) ) {
         if (py.flags.status & PY_SEARCH) {
             search_off();
         }

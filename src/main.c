@@ -41,14 +41,12 @@
 #include <ctype.h>
 #include <time.h>
 
+#include <unistd.h>
+uid_t getuid();
+uid_t getgid();
+
 long time();
 char *getenv();
-
-#ifdef USG
-uint16_t getuid(), getgid();
-#else
-uid_t getuid(), getgid();
-#endif
 
 #if defined(USG)
 void perror();
