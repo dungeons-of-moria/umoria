@@ -19,29 +19,15 @@
  * along with Umoria.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <stdio.h>
-#include <stdlib.h>
+#include "standard_library.h"
 
 #include "config.h"
 #include "constant.h"
 #include "types.h"
+
 #include "externs.h"
 
-#ifndef USG
-#include <sys/param.h>
-#include <sys/types.h>
-#endif
-
-#ifdef USG
-#include <string.h>
-#else
-#include <strings.h>
-#endif
-
-#include <ctype.h>
-#include <time.h>
-
-#include <unistd.h>
+// from the <unistd.h> library
 uid_t getuid();
 uid_t getgid();
 

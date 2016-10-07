@@ -24,39 +24,21 @@
 
 /* To find out what system we're on. */
 
-#include <stdio.h>
-#include <unistd.h>
+#include "standard_library.h"
 
 #include "config.h"
 #include "constant.h"
+#include "types.h"
 
+#include "externs.h"
 
 /* Since libc6, linux (Debian, at least) defaults to BSD signal().  This */
 /* expects SYSV.  Thus, DEBIAN_LINUX uses the sysv_signal call, everyone */
 /* else uses just signal.  RJW 00_0528 */
-
 #ifdef DEBIAN_LINUX
 #define MSIGNAL sysv_signal
 #else
 #define MSIGNAL signal
-#endif
-
-/* must include before externs.h, because that uses SIGTSTP */
-#include <signal.h>
-
-#include "types.h"
-#include "externs.h"
-
-#ifndef USG
-/* only needed for Berkeley UNIX */
-#include <sys/param.h>
-#include <sys/types.h>
-#endif
-
-#ifdef USG
-#include <string.h>
-#else
-#include <strings.h>
 #endif
 
 #ifdef USG

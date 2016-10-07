@@ -19,14 +19,13 @@
  * along with Umoria.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "standard_library.h"
+
 #include "config.h"
 #include "constant.h"
 #include "types.h"
-#include "externs.h"
 
-#if defined(USG)
-#include <memory.h>
-#endif
+#include "externs.h"
 
 typedef struct coords {
     int x, y;

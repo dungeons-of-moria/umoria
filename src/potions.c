@@ -19,16 +19,13 @@
  * along with Umoria.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "standard_library.h"
+
 #include "config.h"
 #include "constant.h"
 #include "types.h"
-#include "externs.h"
 
-#ifdef USG
-#include <string.h>
-#else
-#include <strings.h>
-#endif
+#include "externs.h"
 
 /* Potions for the quaffing        -RAK- */
 void quaff() {

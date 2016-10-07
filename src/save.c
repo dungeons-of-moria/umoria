@@ -19,39 +19,20 @@
  * along with Umoria.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "standard_library.h"
+
+#include "config.h"
+#include "constant.h"
+#include "types.h"
+
+#include "externs.h"
+
 /* For debugging the savefile code on systems with broken compilers. */
 #if 0
 #define DEBUG(x) x
 #else
 #define DEBUG(x)
 #endif
-
-#include <stdio.h>
-#include <unistd.h> // for close
-#include "sys/stat.h" // for chmod
-
-#include "config.h"
-#include "constant.h"
-#include "types.h"
-
-#ifndef USG
-/* stuff only needed for Berkeley UNIX */
-#include <sys/file.h>
-#include <sys/param.h>
-#include <sys/types.h>
-#endif
-
-#ifdef USG
-#include <string.h>
-#include <fcntl.h>
-#else
-#include <strings.h>
-#endif
-
-/* This must be included after fcntl.h, which has a prototype for `open'
-   on some systems.  Otherwise, the `open' prototype conflicts with the
-   `topen' declaration. */
-#include "externs.h"
 
 DEBUG(static FILE *logfile);
 

@@ -19,12 +19,6 @@
  * along with Umoria.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <stdio.h>
-
-/* VMS requires that this be in externs.h, not files.c; this prevents a
-   'psect' error for the variable errno */
-#include <errno.h>
-
 /* This causes more trouble than it is worth, and very few systems still
    have this bug in their include files. */
 #if 0

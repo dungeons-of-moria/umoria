@@ -18,34 +18,20 @@
  * along with Umoria.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
-
-#if 0
-/* moved to externs.h to avoid VMS 'psect' problem */
-#include <errno.h>
-#endif
+#include "standard_library.h"
 
 #include "config.h"
 #include "constant.h"
 #include "types.h"
 
-#ifdef USG
-#include <string.h>
-#include <fcntl.h>
-#else
-#include <strings.h>
-#include <sys/file.h>
-#endif
-#if defined(USG)
-void exit();
-#endif
-
 /* This must be included after fcntl.h, which has a prototype for `open'
    on some systems.  Otherwise, the `open' prototype conflicts with the
    `topen' declaration. */
 #include "externs.h"
+
+#if defined(USG)
+void exit();
+#endif
 
 /*
  *  init_scorefile

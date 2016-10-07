@@ -19,57 +19,16 @@
  * along with Umoria.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <sys/wait.h>
+#include "standard_library.h"
 
-#include "config.h"
-
-#ifdef HPUX
-#include <sys/bsdtty.h>
-#endif
-
+// NOTE: do not include in standard_library.h just yet.
+// defines TRUE and FALSE, which conflicts with our definition.
 #include <ncurses.h>
 
-#include <ctype.h>
-#include <signal.h>
-#include <sys/ioctl.h>
-
-#ifndef USG
-/* only needed for Berkeley UNIX */
-#include <sys/file.h>
-#include <sys/param.h>
-#include <sys/types.h>
-#endif
-
-#ifdef USG
-#include <string.h>
-#if 0
-/* Used to include termio.h here, but that caused problems on some systems, as curses.h includes it also above. */
-#include <termio.h>
-#endif /* 0 */
-#ifdef HPUX
-/* Needs termio.h because curses.h doesn't include it */
-#include <termio.h>
-#endif
-#else /* ! USG */
-#include <strings.h>
-#include <sys/wait.h>
-#endif
-
-#ifdef DEBIAN_LINUX
-#include <termios.h>
-#endif
-
-#if defined(unix) || defined(__linux__) || defined(DEBIAN_LINUX)
-#include <unistd.h> /* prototype for execl */
-#endif
-
-/* These are included after other includes (particularly curses.h)
-   to avoid redefintion warnings. */
-
+#include "config.h"
 #include "constant.h"
 #include "types.h"
+
 #include "externs.h"
 
 #define use_value

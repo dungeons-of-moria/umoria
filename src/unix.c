@@ -18,62 +18,23 @@
  * along with Umoria.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/* defines NULL */
-#include <stdio.h>
-/* defines CTRL */
-#include <sys/ioctl.h>
-/* defines TRUE and FALSE */
+#include "standard_library.h"
+
+// NOTE: do not include in standard_library.h just yet.
 #include <ncurses.h>
 
 #include "config.h"
 #include "constant.h"
 #include "types.h"
 
+#include "externs.h"
+
 #ifdef unix
 
-#include <signal.h>
-
 #ifdef M_XENIX
-#include <sys/select.h>
-#include <sys/types.h>
 /* For various selects from TCP/IP. */
 #define bzero(addr, n) memset((char *)addr, 0, n)
 #endif
-
-#ifndef USG
-#include <sys/param.h>
-#include <sys/resource.h>
-#include <sys/time.h>
-#include <sys/types.h>
-#endif
-
-#ifdef __linux__
-#include <sys/time.h>
-#include <sys/types.h>
-#include <unistd.h>
-#endif
-
-#ifdef USG
-#include <string.h>
-#if 0
-/* Used to include termio.h here, but this is unnecessary because it is
-   included in curses.h, and some systems fail when it gets included
-   twice. */
-#include <termio.h>
-#endif
-#include <fcntl.h>
-#else
-#include <strings.h>
-#include <sys/wait.h>
-#endif
-
-/* This must be included after fcntl.h, which has a prototype for `open'
-   on some systems.  Otherwise, the `open' prototype conflicts with the
-   `topen' declaration. */
-#include "externs.h"
-
-#include <pwd.h>
-#include <sys/errno.h>
 
 #ifdef USG
 struct passwd *getpwuid();

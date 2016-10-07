@@ -19,9 +19,12 @@
  * along with Umoria.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "standard_library.h"
+
 #include "config.h"
 #include "constant.h"
 #include "types.h"
+
 #include "externs.h"
 
 /* Pray like HELL.          -RAK- */

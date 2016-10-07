@@ -19,21 +19,13 @@
  * along with Umoria.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <stdlib.h>
-
-#include <ctype.h>
-#include <stdio.h>
+#include "standard_library.h"
 
 #include "config.h"
 #include "constant.h"
 #include "types.h"
-#include "externs.h"
 
-#ifdef USG
-#include <string.h>
-#else
-#include <strings.h>
-#endif
+#include "externs.h"
 
 /* Changes speed of monsters relative to player    -RAK- */
 /* Note: When the player is sped up or slowed down, I simply */

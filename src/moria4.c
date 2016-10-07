@@ -19,21 +19,13 @@
  * along with Umoria.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <stdio.h>
-#include <stdlib.h>
+#include "standard_library.h"
 
 #include "config.h"
 #include "constant.h"
 #include "types.h"
+
 #include "externs.h"
-
-#ifdef USG
-#include <string.h>
-#else
-#include <strings.h>
-#endif
-
-#include <ctype.h>
 
 static int look_ray();
 static int look_see();

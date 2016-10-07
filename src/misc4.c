@@ -19,25 +19,13 @@
  * along with Umoria.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <stdio.h>
+#include "standard_library.h"
 
 #include "config.h"
 #include "constant.h"
-
-// NOTE: types.g must be included before externs.h
 #include "types.h"
+
 #include "externs.h"
-
-#ifndef USG
-#include <sys/param.h>
-#include <sys/types.h>
-#endif
-
-#ifdef USG
-#include <string.h>
-#else
-#include <strings.h>
-#endif
 
 /* Add a comment to an object description.		-CJS- */
 void scribe_object() {

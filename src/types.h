@@ -19,8 +19,9 @@
  * along with Umoria.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "standard_library.h"
+
 /* Use ISO C99 standard declarations to get correct lengths. */
-#include <stdint.h>
 typedef uint_least8_t int8u;
 typedef int_least16_t int16;
 typedef uint_least16_t int16u;

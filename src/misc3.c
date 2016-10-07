@@ -19,25 +19,13 @@
  * along with Umoria.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <stdio.h>
+#include "standard_library.h"
 
 #include "config.h"
 #include "constant.h"
 #include "types.h"
+
 #include "externs.h"
-
-#include <ctype.h>
-
-#ifndef USG
-#include <sys/param.h>
-#include <sys/types.h>
-#endif
-
-#ifdef USG
-#include <string.h>
-#else
-#include <strings.h>
-#endif
 
 static char *stat_names[] = {
     "STR : ", "INT : ", "WIS : ",

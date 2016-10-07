@@ -19,47 +19,18 @@
  * along with Umoria.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/* Must read this before externs.h, as some global declarations use FILE. */
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
+#include "standard_library.h"
 
 #include "config.h"
 #include "constant.h"
 #include "types.h"
-#include <time.h>
-#include <ctype.h>
 
-#ifndef USG
-/* only needed for Berkeley UNIX */
-#include <sys/file.h>
-#include <sys/param.h>
-#include <sys/types.h>
-#else
-#ifdef SYS_V /* XENIX and SYSV seem to need this */
-#include <sys/types.h>
-#endif
-#endif
-
-#include <pwd.h>
+#include "externs.h"
 
 #ifdef unix
 uid_t getuid();
 uid_t getgid();
 #endif
-
-
-#ifdef USG
-#include <string.h>
-#include <fcntl.h>
-#else
-#include <strings.h>
-#endif
-
-/* This must be included after fcntl.h, which has a prototype for `open'
-   on some systems.  Otherwise, the `open' prototype conflicts with the
-   `topen' declaration. */
-#include "externs.h"
 
 off_t lseek();
 
@@ -104,9 +75,6 @@ char *in_str;
 }
 
 #if (defined(USG) || defined(HPUX))
-#include <errno.h>
-#include <sys/stat.h>
-
 /* The following code is provided especially for systems which    -CJS-
  * have no flock system call. It has never been tested.
 */
@@ -129,7 +97,7 @@ char *in_str;
 
 /* An flock HACK.  LOCK_SH and LOCK_EX are not distinguished.  DO NOT release
    a lock which you failed to set!  ALWAYS release a lock you set! */
-static int flock(f, l)
+int flock(f, l)
 int f, l;
 {
     struct stat sbuf;
