@@ -31,91 +31,26 @@
 
 #include "externs.h"
 
-#define use_value
 #define use_value2
 
-char *getenv();
-
-#ifdef USG
-void exit();
-unsigned sleep();
-#endif
-
-#ifdef USG
-#ifdef __linux__
-static struct termios save_termio;
-#else
-static struct termio save_termio;
-#endif
-#else
-static struct ltchars save_special_chars;
-static struct sgttyb save_ttyb;
-static struct tchars save_tchars;
-static int save_local_chars;
-#endif
-
 static int curses_on = FALSE;
-static WINDOW *savescr; /* Spare window for saving the screen. -CJS-*/
 
-#ifdef SIGTSTP
+/* Spare window for saving the screen. -CJS-*/
+static WINDOW *savescr;
+
 /* suspend()                 -CJS-
    Handle the stop and start signals. This ensures that the log
    is up to date, and that the terminal is fully reset and
    restored. */
 int suspend() {
-#ifdef USG
-/* for USG systems with BSDisms that have SIGTSTP defined, but don't
-   actually implement it */
-#else
-    struct sgttyb tbuf;
-    struct ltchars lcbuf;
-    struct tchars cbuf;
-    int lbuf;
-    long time();
-
-    py.misc.male |= 2;
-
-    (void)ioctl(0, TIOCGETP, (char *)&tbuf);
-    (void)ioctl(0, TIOCGETC, (char *)&cbuf);
-    (void)ioctl(0, TIOCGLTC, (char *)&lcbuf);
-    (void)ioctl(0, TIOCLGET, (char *)&lbuf);
-
-    restore_term();
-    (void)kill(0, SIGSTOP);
-
-    curses_on = TRUE;
-
-    (void)ioctl(0, TIOCSETP, (char *)&tbuf);
-    (void)ioctl(0, TIOCSETC, (char *)&cbuf);
-    (void)ioctl(0, TIOCSLTC, (char *)&lcbuf);
-    (void)ioctl(0, TIOCLSET, (char *)&lbuf);
-    (void)wrefresh(curscr);
-    py.misc.male &= ~2;
-#endif
+    // for USG systems with BSDisms that have SIGTSTP defined,
+    // but don't actually implement it.
     return 0;
 }
-#endif
 
 /* initializes curses routines */
 void init_curses() {
-#ifndef USG
-    (void)ioctl(0, TIOCGLTC, (char *)&save_special_chars);
-    (void)ioctl(0, TIOCGETP, (char *)&save_ttyb);
-    (void)ioctl(0, TIOCGETC, (char *)&save_tchars);
-    (void)ioctl(0, TIOCLGET, (char *)&save_local_chars);
-#else
-    (void)ioctl(0, TCGETA, (char *)&save_termio);
-#endif
-
-#if defined(USG)
-    if (initscr() == NULL)
-#else
-    if (initscr() == ERR)
-#endif
-    {
-        (void)printf("Error allocating screen in curses package.\n");
-        exit(1);
-    }
+    initscr();
 
     /* Check we have enough screen. -CJS- */
     if (LINES < 24 || COLS < 80) {
@@ -123,128 +58,32 @@ void init_curses() {
         exit(1);
     }
 
-#ifdef SIGTSTP
-#ifdef __386BSD__
-    (void)signal(SIGTSTP, (sig_t)suspend);
-#else
-#ifdef DEBIAN_LINUX
-    /* (void) signal (SIGTSTP, (sig_t)suspend); */
-    /* RENMOD: libc6 defaults to BSD, this expects SYSV */
-    //XXXX (void)sysv_signal(SIGTSTP, suspend);
-#else
-    (void)signal(SIGTSTP, suspend);
-#endif
-#endif
-#endif
-
-    if (((savescr = newwin(0, 0, 0, 0)) == NULL)) {
+    savescr = newwin(0, 0, 0, 0);
+    if (savescr == NULL) {
         (void)printf("Out of memory in starting up curses.\n");
         exit_game();
     }
 
-    (void)clear();
-    (void)refresh();
     moriaterm();
 
-#if 0
-    /* This assumes that the terminal is 80 characters wide, which is not
-       guaranteed to be true. */
-
-    /* check tab settings, exit with error if they are not 8 spaces apart */
-    int y, x;
-
-    (void)move(0, 0);
-    for (int i = 1; i < 10; i++) {
-        (void)addch('\t');
-        getyx(stdscr, y, x);
-        if (y != 0 || x != i * 8) {
-            break;
-        }
-    }
-    if (i != 10) {
-        msg_print("Tabs must be set 8 spaces apart.");
-        exit_game();
-    }
-#endif
+    (void)clear();
+    (void)refresh();
 }
 
 /* Set up the terminal into a suitable state for moria.   -CJS- */
 void moriaterm() {
-#ifdef USG
-#ifdef __linux__
-    struct termios tbuf;
-#else
-    struct termio tbuf;
-#endif
-#else
-    struct ltchars lbuf;
-    struct tchars buf;
-#endif
+    cbreak();
+    noecho();
+
+    nonl();
+    intrflush(stdscr, FALSE);
+    keypad(stdscr, TRUE);
 
     curses_on = TRUE;
-
-#ifndef BSD4_3
-    use_value crmode();
-#else
-    use_value cbreak();
-#endif
-
-    use_value noecho();
-    /* can not use nonl(), because some curses do not handle it correctly */
-
-#ifdef USG
-    (void)ioctl(0, TCGETA, (char *)&tbuf);
-    /* disable all of the normal special control characters */
-    tbuf.c_cc[VINTR] = (char)3; /* control-C */
-    tbuf.c_cc[VQUIT] = (char)-1;
-    tbuf.c_cc[VERASE] = (char)-1;
-    tbuf.c_cc[VKILL] = (char)-1;
-    tbuf.c_cc[VEOF] = (char)-1;
-
-    /* don't know what these are for */
-    tbuf.c_cc[VEOL] = (char)-1;
-#ifdef VEOL2
-    tbuf.c_cc[VEOL2] = (char)-1;
-#endif
-
-    /* stuff needed when !icanon, i.e. cbreak/raw mode */
-    tbuf.c_cc[VMIN] = 1;  /* Input should wait for at least 1 char */
-    tbuf.c_cc[VTIME] = 0; /* no matter how long that takes. */
-
-    (void)ioctl(0, TCSETA, (char *)&tbuf);
-
-#else // else USG
-
-    /* disable all of the special characters except the suspend char,
-       interrupt char, and the control flow start/stop characters */
-    (void)ioctl(0, TIOCGLTC, (char *)&lbuf);
-
-    lbuf.t_suspc = (char)26; /* control-Z */
-    lbuf.t_dsuspc = (char)-1;
-    lbuf.t_rprntc = (char)-1;
-    lbuf.t_flushc = (char)-1;
-    lbuf.t_werasc = (char)-1;
-    lbuf.t_lnextc = (char)-1;
-
-    (void)ioctl(0, TIOCSLTC, (char *)&lbuf);
-    (void)ioctl(0, TIOCGETC, (char *)&buf);
-
-    buf.t_intrc = (char)3;   /* control-C */
-    buf.t_quitc = (char)-1;
-    buf.t_startc = (char)17; /* control-Q */
-    buf.t_stopc = (char)19;  /* control-S */
-    buf.t_eofc = (char)-1;
-    buf.t_brkc = (char)-1;
-
-    (void)ioctl(0, TIOCSETC, (char *)&buf);
-#endif // end USG
 }
 
 /* Dump IO to buffer          -RAK- */
-void put_buffer(out_str, row, col)
-char *out_str;
-int row, col;
-{
+void put_buffer(char *out_str, int row, int col) {
     vtype tmp_str;
 
     /* truncate the string, to make sure that it won't go past right edge of screen */
@@ -271,6 +110,7 @@ int row, col;
 void put_qio() {
     /* Let inven_command know something has changed. */
     screen_change = TRUE;
+
     (void)refresh();
 }
 
@@ -284,137 +124,28 @@ void restore_term() {
     put_qio();
 
     /* this moves curses to bottom right corner */
-    mvcur(stdscr->_cury, stdscr->_curx, LINES - 1, 0);
+    int y = 0;
+    int x = 0;
+    getyx(stdscr, y, x);
+    mvcur(y, x, LINES - 1, 0);
 
     /* exit curses */
     endwin();
     (void)fflush(stdout);
 
-    /* restore the saved values of the special chars */
-#ifdef USG
-    (void)ioctl(0, TCSETA, (char *)&save_termio);
-#else
-    (void)ioctl(0, TIOCSLTC, (char *)&save_special_chars);
-    (void)ioctl(0, TIOCSETP, (char *)&save_ttyb);
-    (void)ioctl(0, TIOCSETC, (char *)&save_tchars);
-    (void)ioctl(0, TIOCLSET, (char *)&save_local_chars);
-#endif
-
     curses_on = FALSE;
 }
 
 void shell_out() {
-#ifdef USG
-#ifdef __linux__
-    struct termios tbuf;
-#else
-    struct termio tbuf;
-#endif
-#else
-    struct sgttyb tbuf;
-    struct ltchars lcbuf;
-    struct tchars cbuf;
-    int lbuf;
-#endif
-
-    int val;
-    char *str;
-
-    save_screen();
-
-    /* clear screen and print 'exit' message */
-    clear_screen();
-    put_buffer("[Entering shell, type 'exit' to resume your game.]\n", 0, 0);
-    put_qio();
-
-#ifdef USG
-    (void)ioctl(0, TCGETA, (char *)&tbuf);
-#else
-    (void)ioctl(0, TIOCGETP, (char *)&tbuf);
-    (void)ioctl(0, TIOCGETC, (char *)&cbuf);
-    (void)ioctl(0, TIOCGLTC, (char *)&lcbuf);
-    (void)ioctl(0, TIOCLGET, (char *)&lbuf);
-#endif
-
-/* would call nl() here if could use nl()/nonl(), see moriaterm() */
-#ifndef BSD4_3
-    use_value nocrmode();
-#else
-    use_value nocbreak();
-#endif
-
-    use_value echo();
-    ignore_signals();
-    val = fork();
-
-    if (val == 0) {
-        default_signals();
-
-#ifdef USG
-        (void)ioctl(0, TCSETA, (char *)&save_termio);
-#else
-        (void)ioctl(0, TIOCSLTC, (char *)&save_special_chars);
-        (void)ioctl(0, TIOCSETP, (char *)&save_ttyb);
-        (void)ioctl(0, TIOCSETC, (char *)&save_tchars);
-        (void)ioctl(0, TIOCLSET, (char *)&save_local_chars);
-#endif
-
-        /* close scoreboard descriptor */
-        (void)fclose(highscore_fp);
-
-        str = getenv("SHELL");
-        if (str) {
-            (void)execl(str, str, (char *)0);
-        } else {
-            (void)execl("/bin/sh", "sh", (char *)0);
-        }
-
-        msg_print("Cannot execute shell.");
-        exit(1);
-    }
-
-    if (val == -1) {
-        msg_print("Fork failed. Try again.");
-        return;
-    }
-
-#if defined(USG) || defined(__386BSD__)
-    (void)wait((int *)0);
-#else
-    (void)wait((union wait *)0);
-#endif
-
-    restore_signals();
-    /* restore the cave to the screen */
-    restore_screen();
-
-#ifndef BSD4_3
-    use_value crmode();
-#else
-    use_value cbreak();
-#endif
-
-    use_value noecho();
-    /* would call nonl() here if could use nl()/nonl(), see moriaterm() */
-
-    /* disable all of the local special characters except the suspend char */
-    /* have to disable ^Y for tunneling */
-#ifdef USG
-    (void)ioctl(0, TCSETA, (char *)&tbuf);
-#else
-    (void)ioctl(0, TIOCSLTC, (char *)&lcbuf);
-    (void)ioctl(0, TIOCSETP, (char *)&tbuf);
-    (void)ioctl(0, TIOCSETC, (char *)&cbuf);
-    (void)ioctl(0, TIOCLSET, (char *)&lbuf);
-#endif
-
-    (void)wrefresh(curscr);
+    put_buffer("[Opening new shells is not currently supported]\n", 0, 0);
 }
 
-/* Returns a single character input from the terminal.  This silently -CJS-
-   consumes ^R to redraw the screen and reset the terminal, so that this
-   operation can always be performed at any input prompt.  inkey() never
-   returns ^R. */
+/* Returns a single character input from the terminal.              -CJS-
+ *
+ * This silently consumes ^R to redraw the screen and reset the terminal,
+ * so that this operation can always be performed at any input prompt.
+ * inkey() never returns ^R.
+ */
 char inkey() {
     int i;
 
@@ -426,9 +157,10 @@ char inkey() {
 
         /* some machines may not sign extend. */
         if (i == EOF) {
-            eof_flag++;
             /* avoid infinite loops while trying to call inkey() for a -more- prompt. */
             msg_flag = FALSE;
+
+            eof_flag++;
 
             (void)refresh();
 
@@ -441,6 +173,7 @@ char inkey() {
             if (eof_flag > 100) {
                 /* just in case, to make sure that the process eventually dies */
                 panic_save = 1;
+
                 (void)strcpy(died_from, "(end of input: panic saved)");
                 if (!save_char()) {
                     (void)strcpy(died_from, "panic: unexpected eof");
@@ -462,28 +195,19 @@ char inkey() {
 
 /* Flush the buffer          -RAK- */
 void flush() {
-    /* the code originally used ioctls, TIOCDRAIN, or TIOCGETP/TIOCSETP, or
-       TCGETA/TCSETAF, however this occasionally resulted in loss of output,
-       the happened especially often when rlogin from BSD to SYS_V machine,
-       using check_input makes the desired effect a bit clearer */
-    /* wierd things happen on EOF, don't try to flush input in that case */
     if (!eof_flag) {
         while (check_input(0)) {
             ;
         }
     }
-
-    /* used to call put_qio() here to drain output, but it is not necessary */
 }
 
 /* Clears given line of text        -RAK- */
-void erase_line(row, col)
-int row;
-int col;
-{
+void erase_line(int row, int col) {
     if (row == MSG_LINE && msg_flag) {
         msg_print(CNIL);
     }
+
     (void)move(row, col);
     clrtoeol();
 }
@@ -496,31 +220,26 @@ void clear_screen() {
     (void)clear();
 }
 
-void clear_from(row)
-int row;
-{
+void clear_from(int row) {
     (void)move(row, 0);
     clrtobot();
 }
 
 /* Outputs a char to a given interpolated y, x position  -RAK- */
 /* sign bit of a character used to indicate standout mode. -CJS */
-void print(ch, row, col)
-char ch;
-int row;
-int col;
-{
+void print(char ch, int row, int col) {
     vtype tmp_str;
 
     /* Real co-ords convert to screen positions */
     row -= panel_row_prt;
     col -= panel_col_prt;
-    
+
     if (mvaddch(row, col, ch) == ERR) {
         abort();
 
         /* clear msg_flag to avoid problems with unflushed messages */
         msg_flag = 0;
+
         (void)sprintf(tmp_str, "error in print, row = %d col = %d\n", row, col);
         prt(tmp_str, 0, 0);
         bell();
@@ -531,20 +250,18 @@ int col;
 }
 
 /* Moves the cursor to a given interpolated y, x position  -RAK- */
-void move_cursor_relative(row, col)
-int row;
-int col;
-{
+void move_cursor_relative(int row, int col) {
     vtype tmp_str;
 
     /* Real co-ords convert to screen positions */
     row -= panel_row_prt;
     col -= panel_col_prt;
-    
+
     if (move(row, col) == ERR) {
         abort();
         /* clear msg_flag to avoid problems with unflushed messages */
         msg_flag = 0;
+
         (void)sprintf(tmp_str, "error in move_cursor_relative, row = %d col = %d\n", row, col);
         prt(tmp_str, 0, 0);
         bell();
@@ -555,9 +272,7 @@ int col;
 }
 
 /* Print a message so as not to interrupt a counted command. -CJS- */
-void count_msg_print(p)
-char *p;
-{
+void count_msg_print(char *p) {
     int i;
 
     i = command_count;
@@ -566,11 +281,7 @@ char *p;
 }
 
 /* Outputs a line to a given y, x position    -RAK- */
-void prt(str_buff, row, col)
-char *str_buff;
-int row;
-int col;
-{
+void prt(char *str_buff, int row, int col) {
     if (row == MSG_LINE && msg_flag) {
         msg_print(CNIL);
     }
@@ -581,17 +292,13 @@ int col;
 }
 
 /* move cursor to a given y, x position */
-void move_cursor(row, col)
-int row, col;
-{
+void move_cursor(int row, int col) {
     (void)move(row, col);
 }
 
 /* Outputs message to top line of screen */
 /* These messages are kept for later reference. */
-void msg_print(str_buff)
-char *str_buff;
-{
+void msg_print(char *str_buff) {
     int old_len, new_len;
     int combine_messages = FALSE;
     char in_char;
@@ -619,6 +326,7 @@ char *str_buff;
 
             /* let sigint handler know that we are waiting for a space */
             wait_for_more = 1;
+
             do {
                 in_char = inkey();
             } while ((in_char != ' ') && (in_char != ESCAPE) && (in_char != '\n') && (in_char != '\r'));
@@ -663,9 +371,7 @@ char *str_buff;
 }
 
 /* Used to verify a choice - user gets the chance to abort choice.  -CJS- */
-int get_check(prompt)
-char *prompt;
-{
+int get_check(char *prompt) {
     int res;
     int y, x;
 
@@ -693,10 +399,7 @@ char *prompt;
 
 /* Prompts (optional) and returns ord value of input char */
 /* Function returns false if <ESCAPE> is input */
-int get_com(prompt, command)
-char *prompt;
-char *command;
-{
+int get_com(char *prompt, char *command) {
     int res;
 
     if (prompt) {
@@ -718,10 +421,7 @@ char *command;
 
 /* Gets a string terminated by <RETURN> */
 /* Function returns false if <ESCAPE> is input */
-int get_string(in_str, row, column, slen)
-char *in_str;
-int row, column, slen;
-{
+int get_string(char *in_str, int row, int column, int slen) {
     int start_col, end_col, i;
     char *p;
     int flag, aborted;
@@ -789,9 +489,7 @@ int row, column, slen;
 }
 
 /* Pauses for user response before returning    -RAK- */
-void pause_line(prt_line)
-int prt_line;
-{
+void pause_line(int prt_line) {
     prt("[Press any key to continue.]", prt_line, 23);
     (void)inkey();
     erase_line(prt_line, 0);
@@ -800,10 +498,7 @@ int prt_line;
 /* Pauses for user response before returning    -RAK- */
 /* NOTE: Delay is for players trying to roll up "perfect" */
 /*  characters.  Make them wait a bit. */
-void pause_exit(prt_line, delay)
-int prt_line;
-int delay;
-{
+void pause_exit(int prt_line, int delay) {
     char dummy;
 
     prt("[Press any key to continue, or Q to exit.]", prt_line, 10);

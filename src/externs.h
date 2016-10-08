@@ -19,19 +19,6 @@
  * along with Umoria.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/* This causes more trouble than it is worth, and very few systems still
-   have this bug in their include files. */
-#if 0
-/* many systems don't define these anywhere */
-#if !defined(__GNUC__)
-#if defined(USG) || defined(DGUX)
-extern int sprintf();
-#else
-extern char *sprintf();
-#endif
-#endif
-#endif
-
 extern int errno;
 
 extern char *copyright[5];
@@ -243,9 +230,7 @@ void generate_cave();
 void ident_char();
 
 /* io.c */
-#ifdef SIGTSTP
 int suspend();
-#endif
 void init_curses();
 void moriaterm();
 void put_buffer();
@@ -257,7 +242,7 @@ void flush();
 void erase_line();
 void clear_screen();
 void clear_from();
-void print();
+void print(char, int, int);
 void move_cursor_relative();
 void count_msg_print();
 void prt();
@@ -517,14 +502,6 @@ int temple();
 int alchemist();
 int magic_shop();
 
-/* signals.c */
-void nosignals();
-void signals();
-void init_signals();
-void ignore_signals();
-void default_signals();
-void restore_signals();
-
 /* spells.c */
 void monster_name();
 void lower_monster_name();
@@ -617,17 +594,12 @@ void enter_store();
 
 /* treasur2.c */
 
-#ifdef unix
 /* unix.c */
 int check_input();
-#if 0
-int system_cmd();
-#endif
-void user_name();
+void user_name(char *);
 int tilde();
 FILE *tfopen();
 int topen();
-#endif
 
 /* variable.c */
 

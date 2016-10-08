@@ -57,40 +57,17 @@ because it uses some of the system defines set up here.
 #endif
 
 /* Files used by moria, set these to valid pathnames for your system. */
-
-#if 0
-
-/* Debian standards for file location */
-/* This must be unix; change file names as appropriate. */
-#define MORIA_SAV ".moria-save"
-#define MORIA_HOU "/etc/moria-hours"
-#define MORIA_MOR "/usr/lib/games/moria/news"
-#define MORIA_GPL "/usr/lib/games/moria/COPYING"
-#define MORIA_TOP "/var/games/moria/scores"
-#define MORIA_HELP "/usr/lib/games/moria/roglcmds.hlp"
-#define MORIA_ORIG_HELP "/usr/lib/games/moria/origcmds.hlp"
-#define MORIA_WIZ_HELP "/usr/lib/games/moria/rwizcmds.hlp"
-#define MORIA_OWIZ_HELP "/usr/lib/games/moria/owizcmds.hlp"
-#define MORIA_WELCOME "/usr/lib/games/moria/welcome.hlp"
-#define MORIA_VER "/usr/lib/games/moria/version.hlp"
-
-#else
-
-/* Generic UNIX */
-/* This must be unix; change file names as appropriate. */
 #define MORIA_SAV "moria-save"
-#define MORIA_HOU "/home/michael/moria-56/files/hours"
-#define MORIA_MOR "/home/michael/moria-56/files/news"
-#define MORIA_GPL "/home/michael/moria-56/files/COPYING"
-#define MORIA_TOP "/home/michael/moria-56/files/scores"
-#define MORIA_HELP "/home/michael/moria-56/files/roglcmds.hlp"
-#define MORIA_ORIG_HELP "/home/michael/moria-56/files/origcmds.hlp"
-#define MORIA_WIZ_HELP "/home/michael/moria-56/files/rwizcmds.hlp"
-#define MORIA_OWIZ_HELP "/home/michael/moria-56/files/owizcmds.hlp"
-#define MORIA_WELCOME "/home/michael/moria-56/files/welcome.hlp"
-#define MORIA_VER "/home/michael/moria-56/files/version.hlp"
-
-#endif
+// #define MORIA_HOU "files/hours"
+#define MORIA_MOR "files/news"
+#define MORIA_GPL "files/COPYING"
+#define MORIA_TOP "files/scores"
+#define MORIA_HELP "files/roglcmds.hlp"
+#define MORIA_ORIG_HELP "files/origcmds.hlp"
+#define MORIA_WIZ_HELP "files/rwizcmds.hlp"
+#define MORIA_OWIZ_HELP "files/owizcmds.hlp"
+#define MORIA_WELCOME "files/welcome.hlp"
+#define MORIA_VER "files/version.hlp"
 
 /* This sets the default user interface.
  * To use the original key bindings (keypad for movement) set ROGUE_LIKE to FALSE;

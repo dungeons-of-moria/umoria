@@ -83,10 +83,6 @@ char *argv[];
     /* use curses */
     init_curses();
 
-    /* catch those nasty signals */
-    /* must come after init_curses as some of the signal handlers use curses */
-    init_signals();
-
     seed = 0; /* let wizard specify rng seed */
     /* check for user interface option */
     for (--argc, ++argv; argc > 0 && argv[0][0] == '-'; --argc, ++argv) {
@@ -127,8 +123,8 @@ char *argv[];
     /* If not wizard  No_Control_Y */
     read_times();
 
-/* Some necessary initializations */
-/* all made into constants or initialized in variables.c */
+    /* Some necessary initializations */
+    /* all made into constants or initialized in variables.c */
 
 #if (COST_ADJ != 100)
     price_adjust();

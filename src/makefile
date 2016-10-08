@@ -3,10 +3,10 @@
 # LIBDIR must be the same directory defined in config.h
 # OWNER is who you want the game to be chown to.
 # GROUP is who you wnat the game to be chgrp to.
-BINDIR = /home/michael/moria-56
-LIBDIR = /home/michael/moria-56/files
+BINDIR = ~/moria-56
+LIBDIR = ~/moria-56/files
 OWNER = michael
-GROUP = michael
+GROUP = staff
 
 # For testing and debugging the program, it is best to use this line.
 CFLAGS = -g -Wall -std=gnu11
@@ -15,17 +15,8 @@ CFLAGS = -g -Wall -std=gnu11
 # For playing the game, you may want to use this line
 # CFLAGS = -O
 
-# For BSD Systems
-CURSES = -lcurses -ltermcap
-# For SYS V Systems
-# CURSES = -lcurses
-# For XENIX, some XENIX systems may need -ltinfo
-# CURSES = -ltcap -ltermcap -lx
+CURSES = -lncurses
 
-# For AIX systems, compiling in the BSD world; SYS_V must not be defined in
-# config.h if you use this.
-#LFLAGS = -lbsd
-# Normal systems don't require anything here.
 LFLAGS =
 
 CC = clang
@@ -33,18 +24,18 @@ CC = clang
 SRCS = main.c misc1.c misc2.c misc3.c misc4.c store1.c files.c io.c \
 	create.c desc.c generate.c sets.c dungeon.c creature.c death.c \
 	eat.c help.c magic.c potions.c prayer.c save.c staffs.c wands.c \
-	scrolls.c spells.c wizard.c store2.c signals.c moria1.c moria2.c \
+	scrolls.c spells.c wizard.c store2.c moria1.c moria2.c \
 	moria3.c moria4.c monsters.c treasure.c variable.c rnd.c recall.c \
 	unix.c player.c tables.c
 
 OBJS = main.o misc1.o misc2.o misc3.o misc4.o store1.o files.o io.o \
 	create.o desc.o generate.o sets.o dungeon.o creature.o death.o \
 	eat.o help.o magic.o potions.o prayer.o save.o staffs.o wands.o \
-	scrolls.o spells.o wizard.o store2.o signals.o moria1.o moria2.o \
+	scrolls.o spells.o wizard.o store2.o moria1.o moria2.o \
 	moria3.o moria4.o monsters.o treasure.o variable.o rnd.o recall.o \
 	unix.o player.o tables.o
 
-LIBFILES = hours news origcmds.hlp owizcmds.hlp roglcmds.hlp rwizcmds.hlp \
+LIBFILES = COPYING hours news origcmds.hlp owizcmds.hlp roglcmds.hlp rwizcmds.hlp \
 	version.hlp welcome.hlp
 
 moria : $(OBJS)
@@ -109,7 +100,6 @@ rnd.o: constant.h types.h
 save.o: constant.h types.h externs.h config.h
 scrolls.o: constant.h types.h externs.h config.h
 sets.o: constant.h config.h
-signals.o: constant.h types.h externs.h config.h
 spells.o: constant.h types.h externs.h config.h
 staffs.o: constant.h types.h externs.h config.h
 store1.o: constant.h types.h externs.h config.h
