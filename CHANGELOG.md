@@ -1,6 +1,11 @@
 # Umoria Changelog
 
 
+ `2016-10-09`
+
+ - Default ncurses ESCDELAY on macOS is 1 second! Reduced to just 50ms.
+
+
  `2016-10-08`
 
  - Compiles and runs on Mac OS X! [WIP]
