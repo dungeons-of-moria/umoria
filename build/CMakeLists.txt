@@ -3,8 +3,8 @@ project(moria)
 
 # Version number
 set (moria_VERSION_MAJOR 5)
-set (moria_VERSION_MINOR 5)
-set (moria_VERSION_PATCH 2)
+set (moria_VERSION_MINOR 7)
+set (moria_VERSION_PATCH 0)
 
 # configure a header file to pass some of the CMake settings to the source code
 # configure_file("${PROJECT_BINARY_DIR}/src/constants.h")

@@ -42,10 +42,10 @@ Constant.h should always be included after config.h, because it uses
 some of the system defines set up there.
 #endif
 
-/* Current version number of Moria - set in Cmake */
+/* Current version number of Moria */
 #define CUR_VERSION_MAJ  5
-#define CUR_VERSION_MIN  5
-#define PATCH_LEVEL      2
+#define CUR_VERSION_MIN  7
+#define PATCH_LEVEL      0
 
 #ifndef TRUE
 #define TRUE 1
