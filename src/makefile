@@ -5,8 +5,10 @@
 # GROUP is who you wnat the game to be chgrp to.
 BINDIR = ~/moria-56
 LIBDIR = ~/moria-56/files
-OWNER = michael
-GROUP = staff
+
+# We're installing to home directory so no need for these settings
+# OWNER = michael
+# GROUP = staff
 
 # For testing and debugging the program, it is best to use this line.
 CFLAGS = -g -Wall -std=gnu11
@@ -54,16 +56,16 @@ TAGS : $(SRCS)
 # assumes that BINDIR and LIBDIR exist
 install:
 	chmod 755 $(BINDIR)
-	cp moria $(BINDIR)
+	cp -f moria $(BINDIR)
 	chmod 4711 $(BINDIR)/moria
 	chmod 711 $(LIBDIR)
-	(cd ../files; cp $(LIBFILES) $(LIBDIR))
+	(cd ../files; cp -f $(LIBFILES) $(LIBDIR))
 	(cd $(LIBDIR); chmod 444 $(LIBFILES))
 	(cd $(LIBDIR); touch scores; chmod 644 scores)
-	chown $(OWNER) $(BINDIR)/moria
-	chgrp $(GROUP) $(BINDIR)/moria
-	(cd $(LIBDIR); chown $(OWNER) $(LIBFILES) scores)
-	(cd $(LIBDIR); chgrp $(GROUP) $(LIBFILES) scores)
+	# chown $(OWNER) $(BINDIR)/moria
+	# chgrp $(GROUP) $(BINDIR)/moria
+	# (cd $(LIBDIR); chown $(OWNER) $(LIBFILES) scores)
+	# (cd $(LIBDIR); chgrp $(GROUP) $(LIBFILES) scores)
 # If you are short on disk space, or aren't interested in debugging moria.
 #	strip $(BINDIR)/moria
 
