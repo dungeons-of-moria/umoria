@@ -27,10 +27,8 @@
 
 #include "externs.h"
 
-#ifdef unix
 uid_t getuid();
 uid_t getgid();
-#endif
 
 off_t lseek();
 
@@ -147,9 +145,7 @@ void display_scores(show_player) int show_player;
     char string[100];
     int8u version_maj, version_min, patch_level;
 
-#if defined(unix)
     int16 player_uid;
-#endif
 
     (void)fseek(highscore_fp, (off_t)0, L_SET);
 
@@ -171,11 +167,7 @@ void display_scores(show_player) int show_player;
         return;
     }
 
-#ifdef unix
     player_uid = getuid();
-#else
-    // FIXME: when not on VMS, this message was given: `Otherwise player_uid is not used.`
-#endif
 
     /* set the static fileptr in save.c to the highscore file pointer */
     set_fileptr(highscore_fp);
@@ -188,14 +180,9 @@ void display_scores(show_player) int show_player;
         /* Put twenty scores on each page, on lines 2 through 21. */
         while (!feof(highscore_fp) && i < 21) {
             /* Only show the entry if show_player false, or */
-#if defined(unix)
+
             /* if the entry belongs to the current player. */
-            if (!show_player || score.uid == player_uid)
-#else
-            /* Assume microcomputers should always show every entry. */
-            if (!show_player || TRUE)
-#endif
-            {
+            if (!show_player || score.uid == player_uid) {
                 (void)sprintf(string,
                               "%-4d%8d %-19.19s %c %-10.10s %-7.7s%3d %-22.22s",
                               rank, score.points, score.name, score.sex,
@@ -217,59 +204,8 @@ void display_scores(show_player) int show_player;
 }
 
 int duplicate_character() {
-/* Only check for duplicate characters under unix. */
-#if !defined(unix)
+    /* Only check for duplicate characters under unix. */
     return FALSE;
-#else /* ! unix */
-
-    high_scores score;
-    int8u version_maj, version_min, patch_level;
-    int16 player_uid;
-
-    (void)fseek(highscore_fp, (off_t)0, L_SET);
-
-    /* Read version numbers from the score file, and check for validity. */
-    version_maj = getc(highscore_fp);
-    version_min = getc(highscore_fp);
-    patch_level = getc(highscore_fp);
-
-    /* Support score files from 5.2.2 to present. */
-    if (feof(highscore_fp)) {
-        /* An empty score file. */
-        return FALSE;
-    }
-    if ((version_maj != CUR_VERSION_MAJ) || (version_min > CUR_VERSION_MIN) ||
-        (version_min == CUR_VERSION_MIN && patch_level > PATCH_LEVEL) ||
-        (version_min == 2 && patch_level < 2) || (version_min < 2)) {
-        msg_print("Sorry. This scorefile is from a different version of umoria.");
-        msg_print(CNIL);
-
-        return FALSE;
-    }
-
-    /* set the static fileptr in save.c to the highscore file pointer */
-    set_fileptr(highscore_fp);
-
-#ifdef unix
-    player_uid = getuid();
-#else
-    player_uid = 0;
-#endif
-
-    rd_highscore(&score);
-    while (!feof(highscore_fp)) {
-        if (score.uid == player_uid && score.birth_date == birth_date &&
-            score.class == py.misc.pclass && score.race == py.misc.prace &&
-            score.sex == (py.misc.male ? 'M' : 'F') &&
-            strcmp(score.died_from, "(saved)")) {
-            return TRUE;
-        }
-
-        rd_highscore(&score);
-    }
-
-    return FALSE;
-#endif /* ! unix */
 }
 
 /* Prints the gravestone of the character    -RAK- */
@@ -412,11 +348,7 @@ static void highscores() {
     new_entry.points = total_points();
     new_entry.birth_date = birth_date;
 
-#ifdef unix
     new_entry.uid = getuid();
-#else
-    new_entry.uid = 0;
-#endif
 
     new_entry.mhp = py.misc.mhp;
     new_entry.chp = py.misc.chp;

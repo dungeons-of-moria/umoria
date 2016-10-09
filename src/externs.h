@@ -611,8 +611,6 @@ void change_character();
 void wizard_create();
 
 
-#ifdef unix
 /* call functions which expand tilde before calling open/fopen */
 #define open topen
 #define fopen tfopen
-#endif

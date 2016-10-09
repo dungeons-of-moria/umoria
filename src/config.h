@@ -48,7 +48,6 @@ because it uses some of the system defines set up here.
 /* For Xenix systems, define SYS_V and unix. */
 #ifdef M_XENIX
 #define SYS_V
-#define unix
 #endif
 
 /* Files used by moria, set these to valid pathnames for your system. */
