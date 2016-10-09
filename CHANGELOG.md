@@ -1,19 +1,22 @@
 # Umoria Changelog
 
 
- `2016-10-09`
+`2016-10-09`
 
- - Default ncurses ESCDELAY on macOS is 1 second! Reduced to just 50ms.
-
-
- `2016-10-08`
-
- - Compiles and runs on Mac OS X! [WIP]
+- Default ncurses `ESCDELAY` on macOS is 1 second! Reduced to just 50ms.
+- Removes play time restrictions (`MORIA_HOU`)
+- Remove deprecated `index()` and use standard `strchr()`.
+- Removes support for `HPUX`, `M_XENIX` systems, and the `unix` specific defines.
 
 
- `2016-10-07`
+`2016-10-08`
 
- - Moves all standard library includes into one header file.
+- Compiles and runs on Mac OS X! [WIP]
+
+
+`2016-10-07`
+
+- Moves all standard library includes into one header file.
 
 
 `2016-10-06`
