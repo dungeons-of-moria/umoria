@@ -74,19 +74,8 @@ void reset_seed() {
 
 /* Check the day-time strings to see if open    -RAK- */
 int check_time() {
-#ifdef MORIA_HOU
-    long clock_var;
-    struct tm *tp;
-    clock_var = time((long *)0);
-    tp = localtime(&clock_var);
-    if (days[tp->tm_wday][tp->tm_hour + 4] == 'X') {
-        return TRUE;
-    } else {
-        return FALSE;
-    }
-#else
+    // Play the game any time of day you like!
     return TRUE;
-#endif
 }
 
 /* Generates a random integer x where 1<=X<=MAXVAL  -RAK- */

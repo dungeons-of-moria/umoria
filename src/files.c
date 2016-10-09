@@ -56,53 +56,6 @@ void read_times() {
     int i;
     FILE *file1;
 
-#ifdef MORIA_HOU
-    /* Attempt to read hours.dat.   If it does not exist, */
-    /* inform the user so he can tell the wizard about it */
-    if ((file1 = fopen(MORIA_HOU, "r")) != NULL) {
-        while (fgets(in_line, 80, file1) != CNIL) {
-            if (strlen(in_line) > 3) {
-                if (!strncmp(in_line, "SUN:", 4)) {
-                    (void)strcpy(days[0], in_line);
-                } else if (!strncmp(in_line, "MON:", 4)) {
-                    (void)strcpy(days[1], in_line);
-                } else if (!strncmp(in_line, "TUE:", 4)) {
-                    (void)strcpy(days[2], in_line);
-                } else if (!strncmp(in_line, "WED:", 4)) {
-                    (void)strcpy(days[3], in_line);
-                } else if (!strncmp(in_line, "THU:", 4)) {
-                    (void)strcpy(days[4], in_line);
-                } else if (!strncmp(in_line, "FRI:", 4)) {
-                    (void)strcpy(days[5], in_line);
-                } else if (!strncmp(in_line, "SAT:", 4)) {
-                    (void)strcpy(days[6], in_line);
-                }
-            }
-        }
-        (void)fclose(file1);
-    } else {
-        restore_term();
-        (void)fprintf(stderr, "There is no hours file \"%s\".\n", MORIA_HOU);
-        (void)fprintf(stderr, "Please inform the wizard, %s, so he ", WIZARD);
-        (void)fprintf(stderr, "can correct this!\n");
-        exit(1);
-    }
-
-    /* Check the hours, if closed  then exit. */
-    if (!check_time()) {
-        if ((file1 = fopen(MORIA_HOU, "r")) != NULL) {
-            clear_screen();
-
-            for (i = 0; fgets(in_line, 80, file1) != CNIL; i++) {
-                put_buffer(in_line, i, 0);
-            }
-            pause_line(23);
-            (void)fclose(file1);
-        }
-        exit_game();
-    }
-#endif
-
     /* Print the introduction message, news, etc. */
     if ((file1 = fopen(MORIA_MOR, "r")) != NULL) {
         clear_screen();

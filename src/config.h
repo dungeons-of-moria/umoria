@@ -53,7 +53,6 @@ because it uses some of the system defines set up here.
 
 /* Files used by moria, set these to valid pathnames for your system. */
 #define MORIA_SAV "moria-save"
-// #define MORIA_HOU "files/hours"
 #define MORIA_MOR "files/news"
 #define MORIA_GPL "files/COPYING"
 #define MORIA_TOP "files/scores"
