@@ -37,13 +37,6 @@
   #include <sys/types.h>
 #endif // end USG
 
-#ifdef HPUX
-  #include <sys/bsdtty.h>
-
-  /* Needs termio.h because curses.h doesn't include it */
-  #include <termio.h>
-#endif
-
 #ifdef M_XENIX
   #include <sys/select.h>
   #include <sys/types.h>

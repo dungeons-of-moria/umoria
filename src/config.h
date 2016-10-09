@@ -51,11 +51,6 @@ because it uses some of the system defines set up here.
 #define unix
 #endif
 
-/* If on HP-UX, define the name as we use it. */
-#ifdef __hpux
-#define HPUX
-#endif
-
 /* Files used by moria, set these to valid pathnames for your system. */
 #define MORIA_SAV "moria-save"
 // #define MORIA_HOU "files/hours"

@@ -74,7 +74,7 @@ char *in_str;
     return centered_str;
 }
 
-#if (defined(USG) || defined(HPUX))
+#if defined(USG)
 /* The following code is provided especially for systems which    -CJS-
  * have no flock system call. It has never been tested.
 */
