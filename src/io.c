@@ -60,7 +60,7 @@ void init_curses() {
     (void)refresh();
 }
 
-/* Set up the terminal into a suitable state for moria.   -CJS- */
+// Set up the terminal into a suitable state -MRC-
 void moriaterm() {
     cbreak();
     noecho();
@@ -68,6 +68,9 @@ void moriaterm() {
     nonl();
     intrflush(stdscr, FALSE);
     keypad(stdscr, TRUE);
+
+    // Default delay on macOS is 1 second, let's do something about that!
+    set_escdelay(50);
 
     curses_on = TRUE;
 }
