@@ -1,5 +1,15 @@
 # Umoria Changelog
 
+## HEAD - v5.7.0-beta
+
+### Notable Changes
+
+- Supported platforms: **macOS** and **Ubuntu** (Debian Linux).
+- Remove support for all other platforms E.g. Atari ST, Amiga,
+  MS DOS, "Classic" Mac OS (pre OS X), etc., etc.
+
+
+### All Changes
 
 `2016-10-09`
 
