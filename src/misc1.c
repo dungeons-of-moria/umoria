@@ -94,13 +94,11 @@ int mean, stand;
 {
     int tmp, offset, low, iindex, high;
 
-#if 0
-  /* alternate randnor code, slower but much smaller since no table */
-  /* 2 per 1,000,000 will be > 4*SD, max is 5*SD */
-  tmp = damroll(8, 99);   /* mean 400, SD 81 */
-  tmp = (tmp - 400) * stand / 81;
-  return tmp + mean;
-#endif
+    /* alternate randnor code, slower but much smaller since no table */
+    /* 2 per 1,000,000 will be > 4*SD, max is 5*SD */
+    // tmp = damroll(8, 99);   /* mean 400, SD 81 */
+    // tmp = (tmp - 400) * stand / 81;
+    // return tmp + mean;
 
     tmp = randint(MAX_SHORT);
 

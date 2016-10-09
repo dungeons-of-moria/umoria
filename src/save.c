@@ -28,11 +28,7 @@
 #include "externs.h"
 
 /* For debugging the savefile code on systems with broken compilers. */
-#if 0
-#define DEBUG(x) x
-#else
 #define DEBUG(x)
-#endif
 
 DEBUG(static FILE *logfile);
 
@@ -565,18 +561,12 @@ int *generate;
         xor_byte = 0;
         rd_byte(&xor_byte);
 
-        /* COMPAT support savefiles from 5.0.14 to 5.0.17 */
-        /* support savefiles from 5.1.0 to present */
-        if ((version_maj != CUR_VERSION_MAJ)
-#if 0
-            /* As of version 5.4, accept savefiles even if they have higher
-               version numbers.  The savefile format was frozen as of version
-               5.2.2. */
-            || (version_min > CUR_VERSION_MIN)
-            || (version_min == CUR_VERSION_MIN && patch_level > PATCH_LEVEL)
-#endif
-            || (version_min == 0 && patch_level < 14))
-        {
+        /* COMPAT support savefiles from 5.0.14 to 5.0.17.
+         * Support savefiles from 5.1.0 to present.
+         * As of version 5.4, accept savefiles even if they have higher version numbers.
+         * The savefile format was frozen as of version 5.2.2.
+         */
+        if ((version_maj != CUR_VERSION_MAJ) || (version_min == 0 && patch_level < 14)) {
             prt("Sorry. This savefile is from a different version of umoria.", 2, 0);
             goto error;
         }
