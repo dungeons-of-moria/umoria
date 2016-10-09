@@ -230,7 +230,6 @@ void generate_cave();
 void ident_char();
 
 /* io.c */
-int suspend();
 void init_curses();
 void moriaterm();
 void put_buffer();

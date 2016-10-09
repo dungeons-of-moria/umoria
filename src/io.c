@@ -38,16 +38,6 @@ static int curses_on = FALSE;
 /* Spare window for saving the screen. -CJS-*/
 static WINDOW *savescr;
 
-/* suspend()                 -CJS-
-   Handle the stop and start signals. This ensures that the log
-   is up to date, and that the terminal is fully reset and
-   restored. */
-int suspend() {
-    // for USG systems with BSDisms that have SIGTSTP defined,
-    // but don't actually implement it.
-    return 0;
-}
-
 /* initializes curses routines */
 void init_curses() {
     initscr();

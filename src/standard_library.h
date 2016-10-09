@@ -5,7 +5,6 @@
 #include <ctype.h>
 #include <errno.h>
 #include <pwd.h>
-#include <signal.h>
 #include <stdint.h>
 #include <stdio.h> // defines NULL
 #include <stdlib.h>
