@@ -45,11 +45,6 @@ because it uses some of the system defines set up here.
 /* If you are compiling on a SYS V version of UNIX, define this. */
 /* #define SYS_V */
 
-/* For Xenix systems, define SYS_V and unix. */
-#ifdef M_XENIX
-#define SYS_V
-#endif
-
 /* Files used by moria, set these to valid pathnames for your system. */
 #define MORIA_SAV "moria-save"
 #define MORIA_MOR "files/news"

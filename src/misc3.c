@@ -64,13 +64,7 @@ void place_gold(y, x)
 int y, x;
 {
     int i, cur_pos;
-
-#ifdef M_XENIX
-    /* Avoid 'register' bug. */
     inven_type *t_ptr;
-#else
-    inven_type *t_ptr;
-#endif
 
     cur_pos = popt();
     i = ((randint(dun_level + 2) + 2) / 2) - 1;

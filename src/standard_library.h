@@ -36,8 +36,3 @@
   #include <sys/resource.h>
   #include <sys/types.h>
 #endif // end USG
-
-#ifdef M_XENIX
-  #include <sys/select.h>
-  #include <sys/types.h>
-#endif

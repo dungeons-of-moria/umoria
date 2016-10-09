@@ -29,11 +29,6 @@
 
 #include "externs.h"
 
-#ifdef M_XENIX
-/* For various selects from TCP/IP. */
-#define bzero(addr, n) memset((char *)addr, 0, n)
-#endif
-
 #ifdef USG
 struct passwd *getpwuid();
 struct passwd *getpwnam();
@@ -58,12 +53,12 @@ struct passwd *getpwnam();
 int check_input(microsec)
 int microsec;
 {
-#if defined(USG) && !defined(M_XENIX) && !defined(__linux__)
+#if defined(USG) && !defined(__linux__)
     int arg, result;
 #else
     struct timeval tbuf;
     int ch;
-#if defined(BSD4_3) || defined(M_XENIX) || defined(__linux__)
+#if defined(BSD4_3) || defined(__linux__)
     fd_set smask;
 #else
     int smask;
@@ -71,10 +66,10 @@ int microsec;
 #endif
 
 /* Return true if a read on descriptor 1 will not block. */
-#if !defined(USG) || defined(M_XENIX) || defined(__linux__)
+#if !defined(USG) || defined(__linux__)
     tbuf.tv_sec = 0;
     tbuf.tv_usec = microsec;
-#if defined(BSD4_3) || defined(M_XENIX) || defined(__linux__)
+#if defined(BSD4_3) || defined(__linux__)
     FD_ZERO(&smask);
     FD_SET(fileno(stdin), &smask);
     if (select(1, &smask, (fd_set *)0, (fd_set *)0, &tbuf) == 1)

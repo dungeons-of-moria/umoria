@@ -1442,17 +1442,12 @@ static void mon_move(monptr, rcmove)
 int monptr;
 int32u *rcmove;
 {
-     int i, j;
+    int i, j;
     int k, move_test, dir;
 
-#ifdef M_XENIX
-    /* Avoid '' bug. */
     creature_type *r_ptr;
-#else
-     creature_type *r_ptr;
-#endif
 
-     monster_type *m_ptr;
+    monster_type *m_ptr;
     int mm[9];
     int rest_val;
 
