@@ -50,7 +50,7 @@ static void rd_shorts();
 static void rd_item();
 static void rd_monster();
 
-long time();
+time_t time();
 
 /* these are used for the save file, to avoid having to pass them to every
    procedure */
@@ -285,7 +285,7 @@ static int sv_write() {
     }
 
 /* save the current time in the savefile */
-    l = time((long *)0);
+    l = time((time_t *)0);
 
     if (l < start_time) {
         /* someone is messing with the clock!, assume that we have been playing for 1 day */
@@ -830,7 +830,7 @@ int *generate;
             if ((version_min >= 3) || (version_min == 2 && patch_level >= 2)) {
                 rd_long((uint32_t *)&birth_date);
             } else {
-                birth_date = time((long *)0);
+                birth_date = time((time_t *)0);
             }
         }
 
@@ -1032,7 +1032,7 @@ int *generate;
                 /* rotate store inventory, depending on how old the save file */
                 /* is foreach day old (rounded up), call store_maint */
                 /* calculate age in seconds */
-                start_time = time((long *)0);
+                start_time = time((time_t *)0);
 
                 /* check for reasonable values of time here ... */
                 if (start_time < time_saved) {

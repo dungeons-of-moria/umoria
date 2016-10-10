@@ -27,7 +27,7 @@
 
 #include "externs.h"
 
-long time();
+time_t time();
 struct tm *localtime();
 
 /* gets a new random seed for the random number generator */
@@ -37,7 +37,7 @@ uint32_t seed;
     uint32_t clock_var;
 
     if (seed == 0) {
-        clock_var = time((long *)0);
+        clock_var = time((time_t *)0);
     } else {
         clock_var = seed;
     }

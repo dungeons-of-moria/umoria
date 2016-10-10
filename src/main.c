@@ -31,7 +31,7 @@
 uid_t getuid();
 uid_t getgid();
 
-long time();
+time_t time();
 char *getenv();
 
 #if defined(USG)
@@ -183,7 +183,7 @@ char *argv[];
     } else { /* Create character */
         create_character();
 
-        birth_date = time((long *)0);
+        birth_date = time((time_t *)0);
 
         char_inven_init();
         py.flags.food = 7500;

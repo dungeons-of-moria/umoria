@@ -45,7 +45,7 @@ off_t lseek();
 void exit();
 #endif
 
-long time();
+time_t time();
 
 static void date(day)
 char *day;
@@ -53,7 +53,7 @@ char *day;
     char *tmp;
     long clockvar;
 
-    clockvar = time((long *)0);
+    clockvar = time((time_t *)0);
     tmp = ctime(&clockvar);
     tmp[10] = '\0';
     (void)strcpy(day, tmp);
@@ -123,7 +123,7 @@ int f, l;
             return -1;
         }
         /* Locks which last more than 10 seconds get deleted. */
-        if (time((long *)0) - sbuf.st_mtime > 10) {
+        if (time((time_t *)0) - sbuf.st_mtime > 10) {
             if (unlink(lockname) < 0) {
                 return -1;
             }
