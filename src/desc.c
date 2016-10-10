@@ -38,9 +38,9 @@ char ch;
     switch (ch) {
     case 'a': case 'e': case 'i': case 'o': case 'u':
     case 'A': case 'E': case 'I': case 'O': case 'U':
-        return (TRUE);
+        return (true);
     default:
-        return (FALSE);
+        return (false);
     }
 }
 
@@ -321,8 +321,8 @@ int pref;
     modstr = CNIL;
     damstr[0] = '\0';
     p1_use = IGNORED;
-    modify = (known1_p(i_ptr) ? FALSE : TRUE);
-    append_name = FALSE;
+    modify = (known1_p(i_ptr) ? false : true);
+    append_name = false;
     switch (i_ptr->tval) {
     case TV_MISC: case TV_CHEST:
         break;
@@ -363,7 +363,7 @@ int pref;
             modstr = amulets[indexx];
         } else {
             basenm = "& Amulet";
-            append_name = TRUE;
+            append_name = true;
         }
         p1_use = PLUSSES;
         break;
@@ -373,7 +373,7 @@ int pref;
             modstr = rocks[indexx];
         } else {
             basenm = "& Ring";
-            append_name = TRUE;
+            append_name = true;
         }
         p1_use = PLUSSES;
         break;
@@ -383,7 +383,7 @@ int pref;
             modstr = woods[indexx];
         } else {
             basenm = "& Staff";
-            append_name = TRUE;
+            append_name = true;
         }
         p1_use = CHARGES;
         break;
@@ -393,7 +393,7 @@ int pref;
             modstr = metals[indexx];
         } else {
             basenm = "& Wand";
-            append_name = TRUE;
+            append_name = true;
         }
         p1_use = CHARGES;
         break;
@@ -403,7 +403,7 @@ int pref;
             modstr = titles[indexx];
         } else {
             basenm = "& Scroll~";
-            append_name = TRUE;
+            append_name = true;
         }
         break;
     case TV_POTION1: case TV_POTION2:
@@ -412,7 +412,7 @@ int pref;
             modstr = colors[indexx];
         } else {
             basenm = "& Potion~";
-            append_name = TRUE;
+            append_name = true;
         }
         break;
     case TV_FLASK:
@@ -428,14 +428,14 @@ int pref;
                 modstr = mushrooms[indexx];
             }
         } else {
-            append_name = TRUE;
+            append_name = true;
             if (indexx <= 15) {
                 basenm = "& Mushroom~";
             } else if (indexx <= 20) {
                 basenm = "& Hairy Mold~";
             } else {
                 /* Ordinary food does not have a name appended. */
-                append_name = FALSE;
+                append_name = false;
             }
         }
         break;
@@ -673,7 +673,7 @@ int item_val;
 
     i_ptr = &inventory[item_val];
     i_ptr->number--;
-    objdes(tmp_str, i_ptr, TRUE);
+    objdes(tmp_str, i_ptr, true);
     i_ptr->number++;
     /* the string already has a dot at the end. */
     (void)sprintf(out_val, "You have %s", tmp_str);

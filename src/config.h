@@ -58,11 +58,11 @@ because it uses some of the system defines set up here.
 #define MORIA_VER "files/version.hlp"
 
 /* This sets the default user interface.
- * To use the original key bindings (keypad for movement) set ROGUE_LIKE to FALSE;
- * to use the rogue-like key bindings (vi style movement) set ROGUE_LIKE to TRUE.
+ * To use the original key bindings (keypad for movement) set ROGUE_LIKE to false;
+ * to use the rogue-like key bindings (vi style movement) set ROGUE_LIKE to true.
  * If you change this, you only need to recompile main.c.
  */
-#define ROGUE_LIKE FALSE
+#define ROGUE_LIKE false
 
 /*
  * System dependent defines follow.

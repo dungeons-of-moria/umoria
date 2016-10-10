@@ -2,6 +2,7 @@
  * This is not 1994 anymore, so let's include all standard libraries in one file!
  */
 
+#include <stdbool.h>
 #include <ctype.h>
 #include <errno.h>
 #include <pwd.h>

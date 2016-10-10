@@ -51,14 +51,14 @@ int16_t last_store_inc;
    creatures() via summon_monster() and place_monster() */
 int hack_monptr                 = -1;
 
-int weapon_heavy                = FALSE;
-int pack_heavy                  = FALSE;
+int weapon_heavy                = false;
+int pack_heavy                  = false;
 vtype died_from;
 int32_t birth_date;
 
 vtype savefile; /* The savefile to use. */
 
-int16_t total_winner            = FALSE;
+int16_t total_winner            = false;
 int32_t max_score               = 0;
 int character_generated         = 0;        /* don't save score until char gen finished */
 int character_saved             = 0;        /* prevents save on kill after save_char() */
@@ -71,44 +71,44 @@ int16_t missile_ctr             = 0;        /* Counter for missiles */
 int msg_flag;                               /* Set with first msg */
 vtype old_msg[MAX_SAVE_MSG];                /* Last message */
 int16_t last_msg                = 0;        /* Where last is held */
-int death                       = FALSE;    /* True if died */
+int death                       = false;    /* True if died */
 int find_flag;                              /* Used in MORIA for .(dir) */
 int free_turn_flag;                         /* Used in MORIA, do not move creatures */
 int command_count;                          /* Gives repetition of commands. -CJS- */
-int default_dir                 = FALSE;    /* Use last direction for repeated command */
+int default_dir                 = false;    /* Use last direction for repeated command */
 int32_t turn                    = -1;       /* Cur turn of game */
-int wizard                      = FALSE;    /* Wizard flag */
-int to_be_wizard                = FALSE;    /* used during startup, when -w option used */
-int16_t panic_save              = FALSE;    /* this is true if playing from a panic save */
-int16_t noscore                 = FALSE;    /* Don't log the game. -CJS- */
+int wizard                      = false;    /* Wizard flag */
+int to_be_wizard                = false;    /* used during startup, when -w option used */
+int16_t panic_save              = false;    /* this is true if playing from a panic save */
+int16_t noscore                 = false;    /* Don't log the game. -CJS- */
 
 int rogue_like_commands; /* set in config.h/main.c */
 
 /* options set via the '=' command */
-int find_cut                    = TRUE;
-int find_examine                = TRUE;
-int find_bound                  = FALSE;
-int find_prself                 = FALSE;
-int prompt_carry_flag           = FALSE;
-int show_weight_flag            = FALSE;
-int highlight_seams             = FALSE;
-int find_ignore_doors           = FALSE;
-int sound_beep_flag             = TRUE;
-int display_counts              = TRUE;
+int find_cut                    = true;
+int find_examine                = true;
+int find_bound                  = false;
+int find_prself                 = false;
+int prompt_carry_flag           = false;
+int show_weight_flag            = false;
+int highlight_seams             = false;
+int find_ignore_doors           = false;
+int sound_beep_flag             = true;
+int display_counts              = true;
 
-char doing_inven                = FALSE;  /* Track inventory commands. -CJS- */
-int screen_change               = FALSE;  /* Track screen updates for inven_commands. */
+char doing_inven                = false;  /* Track inventory commands. -CJS- */
+int screen_change               = false;  /* Track screen updates for inven_commands. */
 char last_command               = ' ';    /* Memory of previous command. */
 
 /* these used to be in dungeon.c */
 int new_level_flag;                       /* Next level when true */
 int teleport_flag;                        /* Handle teleport traps */
 int player_light;                         /* Player carrying light */
-int eof_flag                    = FALSE;  /* Used to signal EOF/HANGUP condition */
-int light_flag                  = FALSE;  /* Track if temporary light about player. */
+int eof_flag                    = false;  /* Used to signal EOF/HANGUP condition */
+int light_flag                  = false;  /* Track if temporary light about player. */
 
-int wait_for_more               = FALSE;  /* used when ^C hit during -more- prompt */
-int closing_flag                = FALSE;  /* Used for closing */
+int wait_for_more               = false;  /* used when ^C hit during -more- prompt */
+int closing_flag                = false;  /* Used for closing */
 
 /*  Following are calculated from max dungeon sizes */
 int16_t max_panel_rows, max_panel_cols;

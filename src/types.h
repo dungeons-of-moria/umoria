@@ -321,7 +321,7 @@ typedef struct cave_type {
     unsigned int lr : 1;      /* room should be lit with perm light, walls with
                                  this set should be perm lit after tunneled out */
     unsigned int fm : 1;      /* field mark, used for traps/doors/stairs, object is
-                                 hidden if fm is FALSE */
+                                 hidden if fm is false */
     unsigned int pl : 1;      /* permanent light, used for walls and lighted rooms */
     unsigned int tl : 1;      /* temporary light, used for player's lamp light,etc.*/
 } cave_type;

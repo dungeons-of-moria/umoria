@@ -66,10 +66,10 @@ void tunnel(dir) int dir;
                               t_list[c_ptr->tptr].tval != TV_SECRET_DOOR))) {
         if (c_ptr->tptr == 0) {
             msg_print("Tunnel through what?  Empty air?!?");
-            free_turn_flag = TRUE;
+            free_turn_flag = true;
         } else {
             msg_print("You can't tunnel through that.");
-            free_turn_flag = TRUE;
+            free_turn_flag = true;
         }
         return;
     }
@@ -149,7 +149,7 @@ void tunnel(dir) int dir;
                         (void)delete_object(y, x);
                         msg_print("You have removed the rubble.");
                         if (randint(10) == 1) {
-                            place_object(y, x, FALSE);
+                            place_object(y, x, false);
                             if (test_light(y, x)) {
                                 msg_print("You have found something!");
                             }
@@ -191,7 +191,7 @@ void disarm_trap() {
     if (get_dir(CNIL, &dir)) {
         (void)mmove(dir, &y, &x);
         c_ptr = &cave[y][x];
-        no_disarm = FALSE;
+        no_disarm = false;
         if (c_ptr->cptr > 1 && c_ptr->tptr != 0 &&
             (t_list[c_ptr->tptr].tval == TV_VIS_TRAP ||
              t_list[c_ptr->tptr].tval == TV_CHEST)) {
@@ -228,7 +228,7 @@ void disarm_trap() {
                     /* make sure we move onto the trap even if confused */
                     tmp = py.flags.confused;
                     py.flags.confused = 0;
-                    move_char(dir, FALSE);
+                    move_char(dir, false);
                     py.flags.confused = tmp;
                     prt_experience();
                 } else if ((tot > 5) && (randint(tot) > 5)) {
@@ -240,13 +240,13 @@ void disarm_trap() {
                     /* make sure we move onto the trap even if confused */
                     tmp = py.flags.confused;
                     py.flags.confused = 0;
-                    move_char(dir, FALSE);
+                    move_char(dir, false);
                     py.flags.confused += tmp;
                 }
             } else if (i == TV_CHEST) {
                 if (!known2_p(i_ptr)) {
                     msg_print("I don't see a trap.");
-                    free_turn_flag = TRUE;
+                    free_turn_flag = true;
                 } else if (CH_TRAPPED & i_ptr->flags) {
                     if ((tot - level) > randint(100)) {
                         i_ptr->flags &= ~CH_TRAPPED;
@@ -268,18 +268,18 @@ void disarm_trap() {
                     }
                 } else {
                     msg_print("The chest was not trapped.");
-                    free_turn_flag = TRUE;
+                    free_turn_flag = true;
                 }
             } else {
-                no_disarm = TRUE;
+                no_disarm = true;
             }
         } else {
-            no_disarm = TRUE;
+            no_disarm = true;
         }
 
         if (no_disarm) {
             msg_print("I do not see anything to disarm there.");
-            free_turn_flag = TRUE;
+            free_turn_flag = true;
         }
     }
 }
@@ -373,18 +373,18 @@ void look() {
     } else if (py.flags.image > 0) {
         msg_print("You can't believe what you are seeing! It's like a dream!");
     } else if (get_alldir("Look which direction?", &dir)) {
-        abort = FALSE;
+        abort = false;
         gl_nseen = 0;
         gl_rock = 0;
 
         /* Have to set this up for the look_see */
-        gl_noquery = FALSE;
+        gl_noquery = false;
 
         if (look_see(0, 0, &dummy)) {
-            abort = TRUE;
+            abort = true;
         } else {
             do {
-                abort = FALSE;
+                abort = false;
                 if (dir == 5) {
                     for (i = 1; i <= 4; i++) {
                         gl_fxx = set_fxx[i];
@@ -392,13 +392,13 @@ void look() {
                         gl_fxy = set_fxy[i];
                         gl_fyy = set_fyy[i];
                         if (look_ray(0, 2 * GRADF - 1, 1)) {
-                            abort = TRUE;
+                            abort = true;
                             break;
                         }
                         gl_fxy = -gl_fxy;
                         gl_fyy = -gl_fyy;
                         if (look_ray(0, 2 * GRADF, 2)) {
-                            abort = TRUE;
+                            abort = true;
                             break;
                         }
                     }
@@ -411,7 +411,7 @@ void look() {
                     gl_fxy = set_fxy[i];
                     gl_fyy = set_fyy[i];
                     if (look_ray(0, GRADF, 1)) {
-                        abort = TRUE;
+                        abort = true;
                     } else {
                         gl_fxy = -gl_fxy;
                         gl_fyy = -gl_fyy;
@@ -424,7 +424,7 @@ void look() {
                     gl_fxy = -set_fxy[i];
                     gl_fyy = -set_fyy[i];
                     if (look_ray(1, 2 * GRADF, GRADF)) {
-                        abort = TRUE;
+                        abort = true;
                     } else {
                         i = map_diag2[dir >> 1];
                         gl_fxx = set_fxx[i];
@@ -434,7 +434,7 @@ void look() {
                         abort = look_ray(1, 2 * GRADF - 1, GRADF);
                     }
                 }
-            } while (abort == FALSE && highlight_seams && (++gl_rock < 2));
+            } while (abort == false && highlight_seams && (++gl_rock < 2));
 
             if (abort) {
                 msg_print("--Aborting look--");
@@ -482,7 +482,7 @@ int y, from, to;
     /* from is the larger angle of the ray, since we scan towards the
        center line. If from is smaller, then the ray does not exist. */
     if (from <= to || y > MAX_SIGHT) {
-        return FALSE;
+        return false;
     }
 
     /* Find first visible location along this line. Minimum x such
@@ -501,7 +501,7 @@ int y, from, to;
         max_x = MAX_SIGHT;
     }
     if (max_x < x) {
-        return FALSE;
+        return false;
     }
 
     /* gl_noquery is a HACK to prevent doubling up on direct lines of
@@ -509,15 +509,15 @@ int y, from, to;
        stuff along the direct line of sight, but we do have to see
        what is opaque for the purposes of obscuring other objects. */
     if ((y == 0 && to > 1) || (y == x && from < GRADF * 2)) {
-        gl_noquery = TRUE;
+        gl_noquery = true;
     } else {
-        gl_noquery = FALSE;
+        gl_noquery = false;
     }
     if (look_see(x, y, &transparent)) {
-        return TRUE;
+        return true;
     }
     if (y == x) {
-        gl_noquery = FALSE;
+        gl_noquery = false;
     }
     if (transparent) {
         goto init_transparent;
@@ -526,22 +526,22 @@ int y, from, to;
     for (;;) {
         /* Look down the window we've found. */
         if (look_ray(y + 1, from, (int)((2 * y + 1) * (int32_t)GRADF / x))) {
-            return TRUE;
+            return true;
         }
         /* Find the start of next window. */
         do {
             if (x == max_x) {
-                return FALSE;
+                return false;
             }
 
             /* See if this seals off the scan. (If y is zero, then it will.) */
             from = (int)((2 * y - 1) * (int32_t)GRADF / x);
             if (from <= to) {
-                return FALSE;
+                return false;
             }
             x++;
             if (look_see(x, y, &transparent)) {
-                return TRUE;
+                return true;
             }
         } while (!transparent);
 
@@ -554,7 +554,7 @@ int y, from, to;
             }
             x++;
             if (look_see(x, y, &transparent)) {
-                return TRUE;
+                return true;
             }
         } while (transparent);
     }
@@ -584,15 +584,15 @@ int *transparent;
     y = char_row + gl_fyx * x + gl_fyy * y;
     x = j;
     if (!panel_contains(y, x)) {
-        *transparent = FALSE;
-        return FALSE;
+        *transparent = false;
+        return false;
     }
 
     c_ptr = &cave[y][x];
     *transparent = c_ptr->fval <= MAX_OPEN_SPACE;
 
     if (gl_noquery) {
-        return FALSE; /* Don't look at a direct line of sight. A hack. */
+        return false; /* Don't look at a direct line of sight. A hack. */
     }
 
     out_val[0] = 0;
@@ -618,7 +618,7 @@ int *transparent;
                 goto granite;
             }
             if (gl_rock == 0 && t_list[c_ptr->tptr].tval != TV_INVIS_TRAP) {
-                objdes(tmp_str, &t_list[c_ptr->tptr], TRUE);
+                objdes(tmp_str, &t_list[c_ptr->tptr], true);
                 (void)sprintf(out_val, "%s %s ---pause---", dstring, tmp_str);
                 dstring = "It is in";
                 prt(out_val, 0, 0);
@@ -662,11 +662,11 @@ int *transparent;
     if (out_val[0]) {
         gl_nseen++;
         if (query == ESCAPE) {
-            return TRUE;
+            return true;
         }
     }
 
-    return FALSE;
+    return false;
 }
 
 static void inven_throw(item_val, t_ptr)
@@ -789,7 +789,7 @@ inven_type *t_ptr;
     bigvtype out_val, tmp_str;
     cave_type *c_ptr;
 
-    flag = FALSE;
+    flag = false;
     i = y;
     j = x;
     k = 0;
@@ -799,7 +799,7 @@ inven_type *t_ptr;
             if (in_bounds(i, j)) {
                 c_ptr = &cave[i][j];
                 if (c_ptr->fval <= MAX_OPEN_SPACE && c_ptr->tptr == 0) {
-                    flag = TRUE;
+                    flag = true;
                 }
             }
             if (!flag) {
@@ -816,7 +816,7 @@ inven_type *t_ptr;
         t_list[cur_pos] = *t_ptr;
         lite_spot(i, j);
     } else {
-        objdes(tmp_str, t_ptr, FALSE);
+        objdes(tmp_str, t_ptr, false);
         (void)sprintf(out_val, "The %s disappears.", tmp_str);
         msg_print(out_val);
     }
@@ -839,7 +839,7 @@ void throw_object() {
 
     if (inven_ctr == 0) {
         msg_print("But you are not carrying anything.");
-        free_turn_flag = TRUE;
+        free_turn_flag = true;
     } else if (get_item(&item_val, "Fire/Throw which one?", 0, inven_ctr - 1, CNIL, CNIL)) {
         if (get_dir(CNIL, &dir)) {
             desc_remain(item_val);
@@ -852,7 +852,7 @@ void throw_object() {
             inven_throw(item_val, &throw_obj);
             facts(&throw_obj, &tbth, &tpth, &tdam, &tdis);
             tchar = throw_obj.tchar;
-            flag = FALSE;
+            flag = false;
             y = char_row;
             x = char_col;
             oldy = char_row;
@@ -864,13 +864,13 @@ void throw_object() {
                 cur_dis++;
                 lite_spot(oldy, oldx);
                 if (cur_dis > tdis) {
-                    flag = TRUE;
+                    flag = true;
                 }
 
                 c_ptr = &cave[y][x];
                 if ((c_ptr->fval <= MAX_OPEN_SPACE) && (!flag)) {
                     if (c_ptr->cptr > 1) {
-                        flag = TRUE;
+                        flag = true;
                         m_ptr = &m_list[c_ptr->cptr];
                         tbth = tbth - cur_dis;
 
@@ -888,7 +888,7 @@ void throw_object() {
                         if (test_hit(tbth, (int)py.misc.lev, tpth,
                                      (int)c_list[m_ptr->mptr].ac, CLA_BTHB)) {
                             i = m_ptr->mptr;
-                            objdes(tmp_str, &throw_obj, FALSE);
+                            objdes(tmp_str, &throw_obj, false);
 
                             /* Does the player know what he's fighting? */
                             if (!m_ptr->ml) {
@@ -896,11 +896,11 @@ void throw_object() {
                                     out_val,
                                     "You hear a cry as the %s finds a mark.",
                                     tmp_str);
-                                visible = FALSE;
+                                visible = false;
                             } else {
                                 (void)sprintf(out_val, "The %s hits the %s.",
                                               tmp_str, c_list[i].name);
-                                visible = TRUE;
+                                visible = true;
                             }
                             msg_print(out_val);
                             tdam = tot_dam(&throw_obj, tdam, i);
@@ -934,7 +934,7 @@ void throw_object() {
                         }
                     }
                 } else {
-                    flag = TRUE;
+                    flag = true;
                     drop_throw(oldy, oldx, &throw_obj);
                 }
                 oldy = y;
@@ -1082,7 +1082,7 @@ void bash() {
                         1 - randint(2); /* 50% chance of breaking door */
                     c_ptr->fval = CORR_FLOOR;
                     if (py.flags.confused == 0) {
-                        move_char(dir, FALSE);
+                        move_char(dir, false);
                     } else {
                         lite_spot(y, x);
                     }

@@ -35,14 +35,14 @@ void use() {
     struct misc *m_ptr;
     inven_type *i_ptr;
 
-    free_turn_flag = TRUE;
+    free_turn_flag = true;
     if (inven_ctr == 0) {
         msg_print("But you are not carrying anything.");
     } else if (!find_range(TV_STAFF, TV_NEVER, &j, &k)) {
         msg_print("You are not carrying any staffs.");
     } else if (get_item(&item_val, "Use which staff?", j, k, CNIL, CNIL)) {
         i_ptr = &inventory[item_val];
-        free_turn_flag = FALSE;
+        free_turn_flag = false;
         m_ptr = &py.misc;
         chance = m_ptr->save + stat_adj(A_INT) - (int)i_ptr->level - 5 +
                  (class_level_adj[m_ptr->pclass][CLA_DEVICE] * m_ptr->lev / 3);
@@ -59,7 +59,7 @@ void use() {
             msg_print("You failed to use the staff properly.");
         } else if (i_ptr->p1 > 0) {
             i = i_ptr->flags;
-            ident = FALSE;
+            ident = false;
             (i_ptr->p1)--;
             while (i != 0) {
                 j = bit_pos(&i) + 1;
@@ -82,26 +82,26 @@ void use() {
                     break;
                 case 6:
                     teleport(100);
-                    ident = TRUE;
+                    ident = true;
                     break;
                 case 7:
-                    ident = TRUE;
+                    ident = true;
                     earthquake();
                     break;
                 case 8:
-                    ident = FALSE;
+                    ident = false;
                     for (k = 0; k < randint(4); k++) {
                         y = char_row;
                         x = char_col;
-                        ident |= summon_monster(&y, &x, FALSE);
+                        ident |= summon_monster(&y, &x, false);
                     }
                     break;
                 case 10:
-                    ident = TRUE;
+                    ident = true;
                     destroy_area(char_row, char_col);
                     break;
                 case 11:
-                    ident = TRUE;
+                    ident = true;
                     starlite(char_row, char_col);
                     break;
                 case 12:
@@ -121,13 +121,13 @@ void use() {
                     break;
                 case 17:
                     if (py.flags.fast == 0) {
-                        ident = TRUE;
+                        ident = true;
                     }
                     py.flags.fast += randint(30) + 15;
                     break;
                 case 18:
                     if (py.flags.slow == 0) {
-                        ident = TRUE;
+                        ident = true;
                     }
                     py.flags.slow += randint(30) + 15;
                     break;
@@ -139,7 +139,7 @@ void use() {
                         if (py.flags.blind < 1) {
                             msg_print("The staff glows blue for a moment..");
                         }
-                        ident = TRUE;
+                        ident = true;
                     }
                     break;
                 case 21:
@@ -148,7 +148,7 @@ void use() {
                 case 22:
                     if ((cure_blindness()) || (cure_poison()) ||
                         (cure_confusion())) {
-                        ident = TRUE;
+                        ident = true;
                     }
                     break;
                 case 23:

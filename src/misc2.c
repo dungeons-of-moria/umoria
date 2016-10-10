@@ -917,7 +917,7 @@ void set_options() {
             break;
         case 'y': case 'Y':
             put_buffer("yes", i + 1, 40);
-            *options[i].o_var = TRUE;
+            *options[i].o_var = true;
             if (i + 1 < max) {
                 i++;
             } else {
@@ -926,7 +926,7 @@ void set_options() {
             break;
         case 'n': case 'N':
             put_buffer("no ", i + 1, 40);
-            *options[i].o_var = FALSE;
+            *options[i].o_var = false;
             if (i + 1 < max) {
                 i++;
             } else {

@@ -35,7 +35,7 @@ void scribe_object() {
     if (inven_ctr > 0 || equip_ctr > 0) {
         if (get_item(&item_val, "Which one? ", 0, INVEN_ARRAY_SIZE, CNIL,
                      CNIL)) {
-            objdes(tmp_str, &inventory[item_val], TRUE);
+            objdes(tmp_str, &inventory[item_val], true);
             (void)sprintf(out_val, "Inscribing %s", tmp_str);
             msg_print(out_val);
             if (inventory[item_val].inscrip[0] != '\0') {
@@ -77,7 +77,7 @@ void check_view() {
 
     c_ptr = &cave[char_row][char_col];
     /* Check for new panel		   */
-    if (get_panel(char_row, char_col, FALSE)) {
+    if (get_panel(char_row, char_col, false)) {
         prt_map();
     }
     /* Move the light source		   */

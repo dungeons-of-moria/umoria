@@ -160,7 +160,7 @@ void print_objects() {
                         add_inscribe(i_ptr, ID_DAMD);
                     }
 
-                    objdes(tmp_str, i_ptr, TRUE);
+                    objdes(tmp_str, i_ptr, true);
                     (void)fprintf(file1, "%d %s\n", i_ptr->level, tmp_str);
                 }
                 pusht((uint8_t)j);
@@ -349,7 +349,7 @@ char *filename1;
                         p = "*Unknown value*";
                         break;
                     }
-                    objdes(prt2, &inventory[i], TRUE);
+                    objdes(prt2, &inventory[i], true);
                     (void)fprintf(file1, "  %c) %-19s: %s\n", j + 'a', p, prt2);
                     j++;
                 }
@@ -364,7 +364,7 @@ char *filename1;
             (void)fprintf(file1, "  Character has no objects in inventory.\n");
         } else {
             for (i = 0; i < inven_ctr; i++) {
-                objdes(prt2, &inventory[i], TRUE);
+                objdes(prt2, &inventory[i], true);
                 (void)fprintf(file1, "%c) %s\n", i + 'a', prt2);
             }
         }
@@ -373,13 +373,13 @@ char *filename1;
         (void)fclose(file1);
 
         prt("Completed.", 0, 0);
-        return TRUE;
+        return true;
     } else {
         if (fd >= 0) {
             (void)close(fd);
         }
         (void)sprintf(out_val, "Can't open file %s:", filename1);
         msg_print(out_val);
-        return FALSE;
+        return false;
     }
 }

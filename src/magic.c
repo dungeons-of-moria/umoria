@@ -36,7 +36,7 @@ void cast() {
     inven_type *i_ptr;
     spell_type *m_ptr;
 
-    free_turn_flag = TRUE;
+    free_turn_flag = true;
     if (py.flags.blind > 0) {
         msg_print("You can't see to read your spell book!");
     } else if (no_light()) {
@@ -53,7 +53,7 @@ void cast() {
             msg_print("You don't know any spells in that book.");
         } else if (result > 0) {
             m_ptr = &magic_spell[py.misc.pclass - 1][choice];
-            free_turn_flag = FALSE;
+            free_turn_flag = false;
 
             if (randint(100) < chance) {
                 msg_print("You failed to get the spell off!");

@@ -148,19 +148,19 @@ int bool_roff_recall(mon_num) int mon_num;
     int i;
 
     if (wizard) {
-        return TRUE;
+        return true;
     }
     mp = &c_recall[mon_num];
     if (mp->r_cmove || mp->r_cdefense || mp->r_kills || mp->r_spells ||
         mp->r_deaths) {
-        return TRUE;
+        return true;
     }
     for (i = 0; i < 4; i++) {
         if (mp->r_attacks[i]) {
-            return TRUE;
+            return true;
         }
     }
-    return FALSE;
+    return false;
 }
 
 /* Print out what we have discovered about this monster. */
@@ -251,10 +251,10 @@ int roff_recall(mon_num) int mon_num;
     }
 
     /* Immediately obvious. */
-    k = FALSE;
+    k = false;
     if (cp->level == 0) {
         roff(" It lives in the town");
-        k = TRUE;
+        k = true;
     } else if (mp->r_kills) {
         /* The Balrog is a level 100 monster, but appears at 50 feet. */
         i = cp->level;
@@ -263,7 +263,7 @@ int roff_recall(mon_num) int mon_num;
         }
         (void)sprintf(temp, " It is normally found at depths of %d feet", i * 50);
         roff(temp);
-        k = TRUE;
+        k = true;
     }
 
     /* the c_list speed value is 10 greater, so that it can be a uint8_t */
@@ -273,7 +273,7 @@ int roff_recall(mon_num) int mon_num;
             roff(", and");
         } else {
             roff(" It");
-            k = TRUE;
+            k = true;
         }
         roff(" moves");
         if (rcmove & CM_RANDOM_MOVE) {
@@ -310,7 +310,7 @@ int roff_recall(mon_num) int mon_num;
             roff(", but");
         } else {
             roff(" It");
-            k = TRUE;
+            k = true;
         }
         roff(" does not deign to chase intruders");
     }
@@ -320,7 +320,7 @@ int roff_recall(mon_num) int mon_num;
             roff(", but");
         } else {
             roff(" It");
-            k = TRUE;
+            k = true;
         }
         roff(" always moves and attacks by using magic");
     }
@@ -385,7 +385,7 @@ int roff_recall(mon_num) int mon_num;
     /* Spells known, if have been used against us.
        Breath weapons or resistance might be known only because we cast spells
        at it. */
-    k = TRUE;
+    k = true;
     j = rspells;
 
     for (i = 0; j & CS_BREATHE; i++) {
@@ -398,7 +398,7 @@ int roff_recall(mon_num) int mon_num;
                 } else {
                     roff(" It is resistant to ");
                 }
-                k = FALSE;
+                k = false;
             } else if (j & CS_BREATHE) {
                 roff(", ");
             } else {
@@ -408,7 +408,7 @@ int roff_recall(mon_num) int mon_num;
         }
     }
 
-    k = TRUE;
+    k = true;
 
     for (i = 0; j & CS_SPELLS; i++) {
         if (j & (CS_TEL_SHORT << i)) {
@@ -421,7 +421,7 @@ int roff_recall(mon_num) int mon_num;
                     roff(" It is");
                 }
                 roff(" magical, casting spells which ");
-                k = FALSE;
+                k = false;
             } else if (j & CS_SPELLS) {
                 roff(", ");
             } else {
@@ -451,7 +451,7 @@ int roff_recall(mon_num) int mon_num;
     }
 
     /* Do we know how clever they are? Special abilities. */
-    k = TRUE;
+    k = true;
     j = rcmove;
 
     for (i = 0; j & CM_SPECIAL; i++) {
@@ -460,7 +460,7 @@ int roff_recall(mon_num) int mon_num;
 
             if (k) {
                 roff(" It can ");
-                k = FALSE;
+                k = false;
             } else if (j & CM_SPECIAL) {
                 roff(", ");
             } else {
@@ -475,14 +475,14 @@ int roff_recall(mon_num) int mon_num;
     }
 
     /* Do we know its special weaknesses? Most cdefense flags. */
-    k = TRUE;
+    k = true;
     j = rcdefense;
     for (i = 0; j & CD_WEAKNESS; i++) {
         if (j & (CD_FROST << i)) {
             j &= ~(CD_FROST << i);
             if (k) {
                 roff(" It is susceptible to ");
-                k = FALSE;
+                k = false;
             } else if (j & CD_WEAKNESS) {
                 roff(", ");
             } else {

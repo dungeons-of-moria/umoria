@@ -36,7 +36,7 @@ void pray() {
     struct flags *f_ptr;
     inven_type *i_ptr;
 
-    free_turn_flag = TRUE;
+    free_turn_flag = true;
     if (py.flags.blind > 0) {
         msg_print("You can't see to read your prayer!");
     } else if (no_light()) {
@@ -55,7 +55,7 @@ void pray() {
             msg_print("You don't know any prayers in that book.");
         } else if (result > 0) {
             s_ptr = &magic_spell[py.misc.pclass - 1][choice];
-            free_turn_flag = FALSE;
+            free_turn_flag = false;
 
             if (randint(100) < chance) {
                 msg_print("You lost your concentration!");

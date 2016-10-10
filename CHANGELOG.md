@@ -13,6 +13,7 @@
 
 `2016-10-10`
 
+- Use the `_Bool` standard type in place of those `TRUE`/`FALSE`.
 - Replaces custom types `int8u`, `int16`, `int16u`, `int32`, and `int32u`
   with their equivalent C _standard types_, such as `uint16_t`.
 - Replace `unsigned char` with standard `uint8_t` type.

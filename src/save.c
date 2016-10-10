@@ -80,7 +80,7 @@ static int sv_write() {
     /* clear the death flag when creating a HANGUP save file, so that player
        can see tombstone when restart */
     if (eof_flag) {
-        death = FALSE;
+        death = false;
     }
 
     l = 0;
@@ -307,9 +307,9 @@ static int sv_write() {
        resurrected, the dungeon level info is not needed for a resurrection */
     if (death) {
         if (ferror(fileptr) || fflush(fileptr) == EOF) {
-            return FALSE;
+            return false;
         }
-        return TRUE;
+        return true;
     }
 
     wr_short((uint16_t)dun_level);
@@ -382,9 +382,9 @@ static int sv_write() {
     }
 
     if (ferror(fileptr) || (fflush(fileptr) == EOF)) {
-        return FALSE;
+        return false;
     }
-    return TRUE;
+    return true;
 }
 
 
@@ -406,7 +406,7 @@ int save_char() {
             }
             prt("New Savefile [ESC to give up]:", 0, 0);
             if (!get_string(temp, 0, 31, 45)) {
-                return FALSE;
+                return false;
             }
             if (temp[0]) {
                 (void)strcpy(savefile, temp);
@@ -416,7 +416,7 @@ int save_char() {
         prt(temp, 0, 0);
     }
 
-    return TRUE;
+    return true;
 }
 
 int _save_char(fnam)
@@ -427,14 +427,14 @@ char *fnam;
     uint8_t char_tmp;
 
     if (character_saved) {
-        return TRUE; /* Nothing to save. */
+        return true; /* Nothing to save. */
     }
 
     put_qio();
     disturb(1, 0);             /* Turn off resting and searching. */
     change_speed(-pack_heavy); /* Fix the speed */
     pack_heavy = 0;
-    ok = FALSE;
+    ok = false;
 
     fd = -1;
     fileptr = NULL; /* Do not assume it has been init'ed */
@@ -470,7 +470,7 @@ char *fnam;
         DEBUG(fclose(logfile));
 
         if (fclose(fileptr) == EOF) {
-            ok = FALSE;
+            ok = false;
         }
     }
 
@@ -484,14 +484,14 @@ char *fnam;
             (void)sprintf(temp, "Can't create new file %s", fnam);
         }
         msg_print(temp);
-        return FALSE;
+        return false;
     } else {
         character_saved = 1;
     }
 
     turn = -1;
 
-    return TRUE;
+    return true;
 }
 
 /* Certain checks are ommitted for the wizard. -CJS- */
@@ -512,14 +512,14 @@ int *generate;
     uint8_t char_tmp, ychar, xchar, count;
     uint8_t version_maj, version_min, patch_level;
 
-    *generate = TRUE;
+    *generate = true;
     fd = -1;
 
     /* Not required for Mac, because the file name is obtained through a dialog.
        There is no way for a non existnat file to be specified.  -BS- */
     if (access(savefile, 0) != 0) {
         msg_print("Savefile does not exist.");
-        return FALSE; /* Don't bother with messages here. File absent. */
+        return false; /* Don't bother with messages here. File absent. */
     }
 
     clear_screen();
@@ -537,7 +537,7 @@ int *generate;
         msg_print("Can't open file for reading.");
     } else {
         turn = -1;
-        ok = TRUE;
+        ok = true;
 
         (void)close(fd);
         fd = -1; /* Make sure it isn't closed again */
@@ -595,67 +595,67 @@ int *generate;
         rd_long(&l);
 
         if (l & 0x1) {
-            find_cut = TRUE;
+            find_cut = true;
         } else {
-            find_cut = FALSE;
+            find_cut = false;
         }
         if (l & 0x2) {
-            find_examine = TRUE;
+            find_examine = true;
         } else {
-            find_examine = FALSE;
+            find_examine = false;
         }
         if (l & 0x4) {
-            find_prself = TRUE;
+            find_prself = true;
         } else {
-            find_prself = FALSE;
+            find_prself = false;
         }
         if (l & 0x8) {
-            find_bound = TRUE;
+            find_bound = true;
         } else {
-            find_bound = FALSE;
+            find_bound = false;
         }
         if (l & 0x10) {
-            prompt_carry_flag = TRUE;
+            prompt_carry_flag = true;
         } else {
-            prompt_carry_flag = FALSE;
+            prompt_carry_flag = false;
         }
         if (l & 0x20) {
-            rogue_like_commands = TRUE;
+            rogue_like_commands = true;
         } else {
-            rogue_like_commands = FALSE;
+            rogue_like_commands = false;
         }
         if (l & 0x40) {
-            show_weight_flag = TRUE;
+            show_weight_flag = true;
         } else {
-            show_weight_flag = FALSE;
+            show_weight_flag = false;
         }
         if (l & 0x80) {
-            highlight_seams = TRUE;
+            highlight_seams = true;
         } else {
-            highlight_seams = FALSE;
+            highlight_seams = false;
         }
         if (l & 0x100) {
-            find_ignore_doors = TRUE;
+            find_ignore_doors = true;
         } else {
-            find_ignore_doors = FALSE;
+            find_ignore_doors = false;
         }
         /* save files before 5.2.2 don't have sound_beep_flag, set it on
            for compatibility */
         if ((version_min < 2) || (version_min == 2 && patch_level < 2)) {
-            sound_beep_flag = TRUE;
+            sound_beep_flag = true;
         } else if (l & 0x200) {
-            sound_beep_flag = TRUE;
+            sound_beep_flag = true;
         } else {
-            sound_beep_flag = FALSE;
+            sound_beep_flag = false;
         }
         /* save files before 5.2.2 don't have display_counts, set it on
            for compatibility */
         if ((version_min < 2) || (version_min == 2 && patch_level < 2)) {
-            display_counts = TRUE;
+            display_counts = true;
         } else if (l & 0x400) {
-            display_counts = TRUE;
+            display_counts = true;
         } else {
-            display_counts = FALSE;
+            display_counts = false;
         }
 
         /* Don't allow resurrection of total_winner characters.  It causes
@@ -860,7 +860,7 @@ int *generate;
 
                 /* set noscore to indicate a resurrection, and don't enter
                    wizard mode */
-                to_be_wizard = FALSE;
+                to_be_wizard = false;
                 noscore |= 0x1;
             } else {
                 /* Make sure that this message is seen, since it is a bit
@@ -951,7 +951,7 @@ int *generate;
             rd_monster(&m_list[i]);
         }
 
-        *generate = FALSE; /* We have restored a cave - no need to generate. */
+        *generate = false; /* We have restored a cave - no need to generate. */
 
         if ((version_min == 1 && patch_level < 3) || (version_min == 0)) {
             for (i = 0; i < MAX_STORES; i++) {
@@ -985,7 +985,7 @@ int *generate;
 
         if (turn < 0) {
         error:
-            ok = FALSE; /* Assume bad data. */
+            ok = false; /* Assume bad data. */
         } else {
             /* don't overwrite the killed by string if character is dead */
             if (py.misc.chp >= 0) {
@@ -1000,7 +1000,7 @@ int *generate;
 
         if (fileptr != NULL) {
             if (fclose(fileptr) < 0) {
-                ok = FALSE;
+                ok = false;
             }
         }
         if (fd >= 0) {
@@ -1025,7 +1025,7 @@ int *generate;
             }
 
             if (turn >= 0) { /* Only if a full restoration. */
-                weapon_heavy = FALSE;
+                weapon_heavy = false;
                 pack_heavy = 0;
                 check_strength();
 
@@ -1067,9 +1067,9 @@ int *generate;
             }
 
             if (turn >= 0) {
-                return TRUE;
+                return true;
             } else {
-                return FALSE; /* Only restored options and monster memory. */
+                return false; /* Only restored options and monster memory. */
             }
         }
     }
@@ -1078,7 +1078,7 @@ int *generate;
 
     exit_game();
 
-    return FALSE; /* not reached */
+    return false; /* not reached */
 }
 
 static void wr_byte(c)

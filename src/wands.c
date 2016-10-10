@@ -35,14 +35,14 @@ void aim() {
     inven_type *i_ptr;
     struct misc *m_ptr;
 
-    free_turn_flag = TRUE;
+    free_turn_flag = true;
     if (inven_ctr == 0) {
         msg_print("But you are not carrying anything.");
     } else if (!find_range(TV_WAND, TV_NEVER, &j, &k)) {
         msg_print("You are not carrying any wands.");
     } else if (get_item(&item_val, "Aim which wand?", j, k, CNIL, CNIL)) {
         i_ptr = &inventory[item_val];
-        free_turn_flag = FALSE;
+        free_turn_flag = false;
         if (get_dir(CNIL, &dir)) {
             if (py.flags.confused > 0) {
                 msg_print("You are confused.");
@@ -50,7 +50,7 @@ void aim() {
                     dir = randint(9);
                 } while (dir == 5);
             }
-            ident = FALSE;
+            ident = false;
             m_ptr = &py.misc;
             chance =
                 m_ptr->save + stat_adj(A_INT) - (int)i_ptr->level +
@@ -79,22 +79,22 @@ void aim() {
                     case 1:
                         msg_print("A line of blue shimmering light appears.");
                         light_line(dir, char_row, char_col);
-                        ident = TRUE;
+                        ident = true;
                         break;
                     case 2:
                         fire_bolt(GF_LIGHTNING, dir, k, l, damroll(4, 8),
                                   spell_names[8]);
-                        ident = TRUE;
+                        ident = true;
                         break;
                     case 3:
                         fire_bolt(GF_FROST, dir, k, l, damroll(6, 8),
                                   spell_names[14]);
-                        ident = TRUE;
+                        ident = true;
                         break;
                     case 4:
                         fire_bolt(GF_FIRE, dir, k, l, damroll(9, 8),
                                   spell_names[22]);
-                        ident = TRUE;
+                        ident = true;
                         break;
                     case 5:
                         ident = wall_to_mud(dir, k, l);
@@ -126,7 +126,7 @@ void aim() {
                     case 14:
                         fire_bolt(GF_MAGIC_MISSILE, dir, k, l, damroll(2, 6),
                                   spell_names[0]);
-                        ident = TRUE;
+                        ident = true;
                         break;
                     case 15:
                         ident = build_wall(dir, k, l);
@@ -143,23 +143,23 @@ void aim() {
                     case 19:
                         fire_ball(GF_LIGHTNING, dir, k, l, 32,
                                   "Lightning Ball");
-                        ident = TRUE;
+                        ident = true;
                         break;
                     case 20:
                         fire_ball(GF_FROST, dir, k, l, 48, "Cold Ball");
-                        ident = TRUE;
+                        ident = true;
                         break;
                     case 21:
                         fire_ball(GF_FIRE, dir, k, l, 72, spell_names[28]);
-                        ident = TRUE;
+                        ident = true;
                         break;
                     case 22:
                         fire_ball(GF_POISON_GAS, dir, k, l, 12, spell_names[6]);
-                        ident = TRUE;
+                        ident = true;
                         break;
                     case 23:
                         fire_ball(GF_ACID, dir, k, l, 60, "Acid Ball");
-                        ident = TRUE;
+                        ident = true;
                         break;
                     case 24:
                         i = 1L << (randint(23) - 1);

@@ -184,10 +184,10 @@ int store_num;
     store_type *s_ptr;
     inven_type *i_ptr;
 
-    store_check = FALSE;
+    store_check = false;
     s_ptr = &store[store_num];
     if (s_ptr->store_ctr < STORE_INVEN_MAX) {
-        store_check = TRUE;
+        store_check = true;
     } else if (t_ptr->subval >= ITEM_SINGLE_STACK_MIN) {
         for (i = 0; i < s_ptr->store_ctr; i++) {
             i_ptr = &s_ptr->store_inven[i].sitem;
@@ -197,7 +197,7 @@ int store_num;
             if (i_ptr->tval == t_ptr->tval && i_ptr->subval == t_ptr->subval &&
                 ((int)i_ptr->number + (int)t_ptr->number < 256) &&
                 (t_ptr->subval < ITEM_GROUP_MIN || (i_ptr->p1 == t_ptr->p1))) {
-                store_check = TRUE;
+                store_check = true;
             }
         }
     }
@@ -241,7 +241,7 @@ inven_type *t_ptr;
         s_ptr = &store[store_num];
         item_val = 0;
         item_num = t_ptr->number;
-        flag = FALSE;
+        flag = false;
         typ = t_ptr->tval;
         subt = t_ptr->subval;
         do {
@@ -265,11 +265,11 @@ inven_type *t_ptr;
                            since there may be more than 24 in the group */
                         i_ptr->number = 24;
                     }
-                    flag = TRUE;
+                    flag = true;
                 }
             } else if (typ > i_ptr->tval) { /* Insert into list */
                 insert_store(store_num, item_val, icost, t_ptr);
-                flag = TRUE;
+                flag = true;
                 *ipos = item_val;
             }
             item_val++;
@@ -390,7 +390,7 @@ void store_maint() {
                 j += 1 + s_ptr->store_ctr - STORE_MAX_INVEN;
             }
             while (--j >= 0) {
-                store_destroy(i, randint((int)s_ptr->store_ctr) - 1, FALSE);
+                store_destroy(i, randint((int)s_ptr->store_ctr) - 1, false);
             }
         }
 
@@ -417,7 +417,7 @@ int32_t minprice;
 
     s_ptr = &store[store_num];
     if (s_ptr->good_buy == MAX_SHORT) {
-        return TRUE;
+        return true;
     }
     bargain_record = (s_ptr->good_buy - 3 * s_ptr->bad_buy - 5);
     flagnoneed =

@@ -51,7 +51,7 @@ void ident_char() {
             prt("$ - Treasure.", 0, 0);
             break;
         case '%':
-            if (highlight_seams == TRUE) {
+            if (highlight_seams == true) {
                 prt("% - A magma or quartz vein.", 0, 0);
             } else {
                 prt("% - Not used.", 0, 0);

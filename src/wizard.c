@@ -36,9 +36,9 @@ void wizard_light() {
     int flag;
 
     if (cave[char_row][char_col].pl) {
-        flag = FALSE;
+        flag = false;
     } else {
-        flag = TRUE;
+        flag = true;
     }
     for (i = 0; i < cur_height; i++) {
         for (j = 0; j < cur_width; j++) {
@@ -48,7 +48,7 @@ void wizard_light() {
                         c_ptr = &cave[k][l];
                         c_ptr->pl = flag;
                         if (!flag) {
-                            c_ptr->fm = FALSE;
+                            c_ptr->fm = false;
                         }
                     }
                 }

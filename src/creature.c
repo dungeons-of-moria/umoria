@@ -37,27 +37,27 @@ int monptr;
      creature_type *r_ptr;
 
     m_ptr = &m_list[monptr];
-    flag = FALSE;
+    flag = false;
     if ((m_ptr->cdis <= MAX_SIGHT) && !(py.flags.status & PY_BLIND) &&
         (panel_contains((int)m_ptr->fy, (int)m_ptr->fx))) {
         if (wizard) {
             /* Wizard sight. */
-            flag = TRUE;
+            flag = true;
         } else if (los(char_row, char_col, (int)m_ptr->fy, (int)m_ptr->fx)) {
             /* Normal sight. */
             c_ptr = &cave[m_ptr->fy][m_ptr->fx];
             r_ptr = &c_list[m_ptr->mptr];
             if (c_ptr->pl || c_ptr->tl || (find_flag && m_ptr->cdis < 2 && player_light)) {
                 if ((CM_INVISIBLE & r_ptr->cmove) == 0) {
-                    flag = TRUE;
+                    flag = true;
                 } else if (py.flags.see_inv) {
-                    flag = TRUE;
+                    flag = true;
                     c_recall[m_ptr->mptr].r_cmove |= CM_INVISIBLE;
                 }
             } else if ((py.flags.see_infra > 0) && (m_ptr->cdis <= py.flags.see_infra) && (CD_INFRA & r_ptr->cdefense)) {
                 /* Infra vision. */
 
-                flag = TRUE;
+                flag = true;
                 c_recall[m_ptr->mptr].r_cdefense |= CD_INFRA;
             }
         }
@@ -68,20 +68,20 @@ int monptr;
 
         if (!m_ptr->ml) {
             disturb(1, 0);
-            m_ptr->ml = TRUE;
+            m_ptr->ml = true;
             lite_spot((int)m_ptr->fy, (int)m_ptr->fx);
 
             /* notify inven_command */
-            screen_change = TRUE;
+            screen_change = true;
         }
     } else if (m_ptr->ml) {
         /* Turn it off. */
 
-        m_ptr->ml = FALSE;
+        m_ptr->ml = false;
         lite_spot((int)m_ptr->fy, (int)m_ptr->fx);
 
         /* notify inven_command */
-        screen_change = TRUE;
+        screen_change = true;
     }
 }
 
@@ -111,7 +111,7 @@ int y, x;
 
     monptr = cave[y][x].cptr;
     if (monptr <= 1) {
-        return FALSE;
+        return false;
     } else {
         update_mon(monptr);
         return m_list[monptr].ml;
@@ -311,7 +311,7 @@ int monptr;
         adice = monster_attacks[*attstr].attack_dice;
         asides = monster_attacks[*attstr].attack_sides;
         attstr++;
-        flag = FALSE;
+        flag = false;
         if ((py.flags.protevil > 0) && (r_ptr->cdefense & CD_EVIL) &&
             ((py.misc.lev + 1) > r_ptr->level)) {
             if (m_ptr->ml) {
@@ -327,138 +327,138 @@ int monptr;
         case 1: /*Normal attack */
             if (test_hit(60, (int)r_ptr->level, 0, p_ptr->pac + p_ptr->ptoac,
                          CLA_MISC_HIT)) {
-                flag = TRUE;
+                flag = true;
             }
             break;
         case 2: /*Lose Strength*/
             if (test_hit(-3, (int)r_ptr->level, 0, p_ptr->pac + p_ptr->ptoac,
                          CLA_MISC_HIT)) {
-                flag = TRUE;
+                flag = true;
             }
             break;
         case 3: /*Confusion attack*/
             if (test_hit(10, (int)r_ptr->level, 0, p_ptr->pac + p_ptr->ptoac,
                          CLA_MISC_HIT)) {
-                flag = TRUE;
+                flag = true;
             }
             break;
         case 4: /*Fear attack */
             if (test_hit(10, (int)r_ptr->level, 0, p_ptr->pac + p_ptr->ptoac,
                          CLA_MISC_HIT)) {
-                flag = TRUE;
+                flag = true;
             }
             break;
         case 5: /*Fire attack */
             if (test_hit(10, (int)r_ptr->level, 0, p_ptr->pac + p_ptr->ptoac,
                          CLA_MISC_HIT)) {
-                flag = TRUE;
+                flag = true;
             }
             break;
         case 6: /*Acid attack */
             if (test_hit(0, (int)r_ptr->level, 0, p_ptr->pac + p_ptr->ptoac,
                          CLA_MISC_HIT)) {
-                flag = TRUE;
+                flag = true;
             }
             break;
         case 7: /*Cold attack */
             if (test_hit(10, (int)r_ptr->level, 0, p_ptr->pac + p_ptr->ptoac,
                          CLA_MISC_HIT)) {
-                flag = TRUE;
+                flag = true;
             }
             break;
         case 8: /*Lightning attack*/
             if (test_hit(10, (int)r_ptr->level, 0, p_ptr->pac + p_ptr->ptoac,
                          CLA_MISC_HIT)) {
-                flag = TRUE;
+                flag = true;
             }
             break;
         case 9: /*Corrosion attack*/
             if (test_hit(0, (int)r_ptr->level, 0, p_ptr->pac + p_ptr->ptoac,
                          CLA_MISC_HIT)) {
-                flag = TRUE;
+                flag = true;
             }
             break;
         case 10: /*Blindness attack*/
             if (test_hit(2, (int)r_ptr->level, 0, p_ptr->pac + p_ptr->ptoac,
                          CLA_MISC_HIT)) {
-                flag = TRUE;
+                flag = true;
             }
             break;
         case 11: /*Paralysis attack*/
             if (test_hit(2, (int)r_ptr->level, 0, p_ptr->pac + p_ptr->ptoac,
                          CLA_MISC_HIT)) {
-                flag = TRUE;
+                flag = true;
             }
             break;
         case 12: /*Steal Money */
             if ((test_hit(5, (int)r_ptr->level, 0, (int)py.misc.lev,
                           CLA_MISC_HIT)) &&
                 (py.misc.au > 0)) {
-                flag = TRUE;
+                flag = true;
             }
             break;
         case 13: /*Steal Object */
             if ((test_hit(2, (int)r_ptr->level, 0, (int)py.misc.lev,
                           CLA_MISC_HIT)) &&
                 (inven_ctr > 0)) {
-                flag = TRUE;
+                flag = true;
             }
             break;
         case 14: /*Poison */
             if (test_hit(5, (int)r_ptr->level, 0, p_ptr->pac + p_ptr->ptoac,
                          CLA_MISC_HIT)) {
-                flag = TRUE;
+                flag = true;
             }
             break;
         case 15: /*Lose dexterity*/
             if (test_hit(0, (int)r_ptr->level, 0, p_ptr->pac + p_ptr->ptoac,
                          CLA_MISC_HIT)) {
-                flag = TRUE;
+                flag = true;
             }
             break;
         case 16: /*Lose constitution*/
             if (test_hit(0, (int)r_ptr->level, 0, p_ptr->pac + p_ptr->ptoac,
                          CLA_MISC_HIT)) {
-                flag = TRUE;
+                flag = true;
             }
             break;
         case 17: /*Lose intelligence*/
             if (test_hit(2, (int)r_ptr->level, 0, p_ptr->pac + p_ptr->ptoac,
                          CLA_MISC_HIT)) {
-                flag = TRUE;
+                flag = true;
             }
             break;
         case 18: /*Lose wisdom*/
             if (test_hit(2, (int)r_ptr->level, 0, p_ptr->pac + p_ptr->ptoac,
                          CLA_MISC_HIT)) {
-                flag = TRUE;
+                flag = true;
             }
             break;
         case 19: /*Lose experience*/
             if (test_hit(5, (int)r_ptr->level, 0, p_ptr->pac + p_ptr->ptoac,
                          CLA_MISC_HIT)) {
-                flag = TRUE;
+                flag = true;
             }
             break;
         case 20: /*Aggravate monsters*/
-            flag = TRUE;
+            flag = true;
             break;
         case 21: /*Disenchant */
             if (test_hit(20, (int)r_ptr->level, 0, p_ptr->pac + p_ptr->ptoac,
                          CLA_MISC_HIT)) {
-                flag = TRUE;
+                flag = true;
             }
             break;
         case 22: /*Eat food */
             if (test_hit(5, (int)r_ptr->level, 0, p_ptr->pac + p_ptr->ptoac,
                          CLA_MISC_HIT)) {
-                flag = TRUE;
+                flag = true;
             }
             break;
         case 23: /*Eat light */
             if (test_hit(5, (int)r_ptr->level, 0, p_ptr->pac + p_ptr->ptoac,
                          CLA_MISC_HIT)) {
-                flag = TRUE;
+                flag = true;
             }
             break;
         case 24: /*Eat charges */
@@ -466,11 +466,11 @@ int monptr;
             if ((test_hit(15, (int)r_ptr->level, 0, p_ptr->pac + p_ptr->ptoac,
                           CLA_MISC_HIT)) &&
                 (inven_ctr > 0)) {
-                flag = TRUE;
+                flag = true;
             }
             break;
         case 99:
-            flag = TRUE;
+            flag = true;
             break;
         default:
             break;
@@ -578,16 +578,16 @@ int monptr;
                 break;
             }
 
-            notice = TRUE;
+            notice = true;
 
             /* always fail to notice attack if creature invisible, set notice
                and visible here since creature may be visible when attacking
                and then teleport afterwards (becoming effectively invisible) */
             if (!m_ptr->ml) {
-                visible = FALSE;
-                notice = FALSE;
+                visible = false;
+                notice = false;
             } else {
-                visible = TRUE;
+                visible = true;
             }
 
             damage = damroll(adice, asides);
@@ -606,7 +606,7 @@ int monptr;
                     msg_print("You feel weaker.");
                     (void)dec_stat(A_STR);
                 } else {
-                    notice = FALSE;
+                    notice = false;
                 }
                 break;
             case 3: /*Confusion attack*/
@@ -617,11 +617,11 @@ int monptr;
                         msg_print("You feel confused.");
                         f_ptr->confused += randint((int)r_ptr->level);
                     } else {
-                        notice = FALSE;
+                        notice = false;
                     }
                     f_ptr->confused += 3;
                 } else {
-                    notice = FALSE;
+                    notice = false;
                 }
                 break;
             case 4: /*Fear attack */
@@ -634,7 +634,7 @@ int monptr;
                     f_ptr->afraid += 3 + randint((int)r_ptr->level);
                 } else {
                     f_ptr->afraid += 3;
-                    notice = FALSE;
+                    notice = false;
                 }
                 break;
             case 5: /*Fire attack */
@@ -666,7 +666,7 @@ int monptr;
                     msg_print("Your eyes begin to sting.");
                 } else {
                     f_ptr->blind += 5;
-                    notice = FALSE;
+                    notice = false;
                 }
                 break;
             case 11: /*Paralysis attack*/
@@ -682,7 +682,7 @@ int monptr;
                         msg_print("You are paralyzed.");
                     }
                 } else {
-                    notice = FALSE;
+                    notice = false;
                 }
                 break;
             case 12: /*Steal Money */
@@ -772,7 +772,7 @@ int monptr;
                 (void)aggravate_monster(20);
                 break;
             case 21: /*Disenchant */
-                flag = FALSE;
+                flag = false;
                 switch (randint(7)) {
                 case 1:
                     i = INVEN_WIELD;
@@ -804,7 +804,7 @@ int monptr;
                     if (i_ptr->tohit < 0) {
                         i_ptr->tohit = 0;
                     }
-                    flag = TRUE;
+                    flag = true;
                 }
                 if (i_ptr->todam > 0) {
                     i_ptr->todam -= randint(2);
@@ -813,7 +813,7 @@ int monptr;
                     if (i_ptr->todam < 0) {
                         i_ptr->todam = 0;
                     }
-                    flag = TRUE;
+                    flag = true;
                 }
                 if (i_ptr->toac > 0) {
                     i_ptr->toac -= randint(2);
@@ -822,13 +822,13 @@ int monptr;
                     if (i_ptr->toac < 0) {
                         i_ptr->toac = 0;
                     }
-                    flag = TRUE;
+                    flag = true;
                 }
                 if (flag) {
                     msg_print("There is a static feeling in the air.");
                     calc_bonuses();
                 } else {
-                    notice = FALSE;
+                    notice = false;
                 }
                 break;
             case 22: /*Eat food */
@@ -836,7 +836,7 @@ int monptr;
                     inven_destroy(i);
                     msg_print("It got at your rations!");
                 } else {
-                    notice = FALSE;
+                    notice = false;
                 }
                 break;
             case 23: /*Eat light */
@@ -849,10 +849,10 @@ int monptr;
                     if (py.flags.blind < 1) {
                         msg_print("Your light dims.");
                     } else {
-                        notice = FALSE;
+                        notice = false;
                     }
                 } else {
-                    notice = FALSE;
+                    notice = false;
                 }
                 break;
             case 24: /*Eat charges */
@@ -868,14 +868,14 @@ int monptr;
                     }
                     msg_print("Energy drains from your pack!");
                 } else {
-                    notice = FALSE;
+                    notice = false;
                 }
                 break;
             case 99:
-                notice = FALSE;
+                notice = false;
                 break;
             default:
-                notice = FALSE;
+                notice = false;
                 break;
             }
 
@@ -884,7 +884,7 @@ int monptr;
                the player, so it should not be confused. */
             if (py.flags.confuse_monster && adesc != 99) {
                 msg_print("Your hands stop glowing.");
-                py.flags.confuse_monster = FALSE;
+                py.flags.confuse_monster = false;
                 if ((randint(MAX_MONS_LEVEL) < r_ptr->level) ||
                     (CD_NO_SLEEP & r_ptr->cdefense)) {
                     (void)sprintf(tmp_str, "%sis unaffected.", cdesc);
@@ -945,8 +945,8 @@ uint32_t *rcmove;
      inven_type *t_ptr;
 
     i = 0;
-    do_turn = FALSE;
-    do_move = FALSE;
+    do_turn = false;
+    do_move = false;
     m_ptr = &m_list[monptr];
     movebits = c_list[m_ptr->mptr].cmove;
     do {
@@ -958,11 +958,11 @@ uint32_t *rcmove;
         if (c_ptr->fval != BOUNDARY_WALL) {
             /* Floor is open? */
             if (c_ptr->fval <= MAX_OPEN_SPACE) {
-                do_move = TRUE;
+                do_move = true;
             } else if (movebits & CM_PHASE) {
                 /* Creature moves through walls? */
 
-                do_move = TRUE;
+                do_move = true;
                 *rcmove |= CM_PHASE;
             } else if (c_ptr->tptr != 0) {
                 /* Creature can open doors? */
@@ -971,14 +971,14 @@ uint32_t *rcmove;
 
                 /* Creature can open doors. */
                 if (movebits & CM_OPEN_DOOR) {
-                    stuck_door = FALSE;
+                    stuck_door = false;
                     if (t_ptr->tval == TV_CLOSED_DOOR) {
-                        do_turn = TRUE;
+                        do_turn = true;
 
                         if (t_ptr->p1 == 0) {
                             /* Closed doors */
 
-                            do_move = TRUE;
+                            do_move = true;
                         } else if (t_ptr->p1 > 0) {
                             /* Locked doors */
 
@@ -993,13 +993,13 @@ uint32_t *rcmove;
                                 40 * (m_ptr->hp - 10 + t_ptr->p1)) {
                                 msg_print("You hear a door burst open!");
                                 disturb(1, 0);
-                                stuck_door = TRUE;
-                                do_move = TRUE;
+                                stuck_door = true;
+                                do_move = true;
                             }
                         }
                     } else if (t_ptr->tval == TV_SECRET_DOOR) {
-                        do_turn = TRUE;
-                        do_move = TRUE;
+                        do_turn = true;
+                        do_move = true;
                     }
                     if (do_move) {
                         invcopy(t_ptr, OBJ_OPEN_DOOR);
@@ -1011,13 +1011,13 @@ uint32_t *rcmove;
                         c_ptr->fval = CORR_FLOOR;
                         lite_spot(newy, newx);
                         *rcmove |= CM_OPEN_DOOR;
-                        do_move = FALSE;
+                        do_move = false;
                     }
                 } else {
                     /* Creature can not open doors, must bash them */
 
                     if (t_ptr->tval == TV_CLOSED_DOOR) {
-                        do_turn = TRUE;
+                        do_turn = true;
                         if (randint((m_ptr->hp + 1) * (80 + abs(t_ptr->p1))) <
                             40 * (m_ptr->hp - 20 - abs(t_ptr->p1))) {
                             invcopy(t_ptr, OBJ_OPEN_DOOR);
@@ -1043,13 +1043,13 @@ uint32_t *rcmove;
                     }
                     (void)delete_object(newy, newx);
                 } else {
-                    do_move = FALSE;
+                    do_move = false;
 
                     /* If the creature moves only to attack, */
                     /* don't let it move if the glyph prevents */
                     /* it from attacking */
                     if (movebits & CM_ATTACK_ONLY) {
-                        do_turn = TRUE;
+                        do_turn = true;
                     }
                 }
             }
@@ -1064,8 +1064,8 @@ uint32_t *rcmove;
                         update_mon(monptr);
                     }
                     make_attack(monptr);
-                    do_move = FALSE;
-                    do_turn = TRUE;
+                    do_move = false;
+                    do_turn = true;
                 } else if ((c_ptr->cptr > 1) && ((newy != m_ptr->fy) || (newx != m_ptr->fx))) {
                     /* Creature is attempting to move on other creature? */
 
@@ -1085,7 +1085,7 @@ uint32_t *rcmove;
                             fix1_delete_monster((int)c_ptr->cptr);
                         }
                     } else {
-                        do_move = FALSE;
+                        do_move = false;
                     }
                 }
             }
@@ -1105,13 +1105,13 @@ uint32_t *rcmove;
                 /* Move creature record */
                 move_rec((int)m_ptr->fy, (int)m_ptr->fx, newy, newx);
                 if (m_ptr->ml) {
-                    m_ptr->ml = FALSE;
+                    m_ptr->ml = false;
                     lite_spot((int)m_ptr->fy, (int)m_ptr->fx);
                 }
                 m_ptr->fy = newy;
                 m_ptr->fx = newx;
                 m_ptr->cdis = distance(char_row, char_col, newy, newx);
-                do_turn = TRUE;
+                do_turn = true;
             }
         }
         i++;
@@ -1146,19 +1146,19 @@ int *took_turn;
     if (randint(chance) != 1) {
         /* 1 in x chance of casting spell */
 
-        *took_turn = FALSE;
+        *took_turn = false;
     } else if (m_ptr->cdis > MAX_SPELL_DIS) {
         /* Must be within certain range */
 
-        *took_turn = FALSE;
+        *took_turn = false;
     } else if (!los(char_row, char_col, (int)m_ptr->fy, (int)m_ptr->fx)) {
         /* Must have unobstructed Line-Of-Sight */
 
-        *took_turn = FALSE;
+        *took_turn = false;
     } else {
         /* Creature is going to cast a spell */
 
-        *took_turn = TRUE;
+        *took_turn = true;
 
         /* Check to see if monster should be lit. */
         update_mon(monptr);
@@ -1275,7 +1275,7 @@ int *took_turn;
 
             /* in case compact_monster() is called,it needs monptr */
             hack_monptr = monptr;
-            (void)summon_monster(&y, &x, FALSE);
+            (void)summon_monster(&y, &x, false);
             hack_monptr = -1;
             update_mon((int)cave[y][x].cptr);
             break;
@@ -1407,10 +1407,10 @@ int monptr;
                         hack_monptr = monptr;
 
                         /* Place_monster() may fail if monster list full. */
-                        result = place_monster(j, k, cr_index, FALSE);
+                        result = place_monster(j, k, cr_index, false);
                         hack_monptr = -1;
                         if (!result) {
-                            return FALSE;
+                            return false;
                         }
                         mon_tot_mult++;
                         return check_mon_lite(j, k);
@@ -1422,10 +1422,10 @@ int monptr;
                     hack_monptr = monptr;
 
                     /* Place_monster() may fail if monster list full. */
-                    result = place_monster(j, k, cr_index, FALSE);
+                    result = place_monster(j, k, cr_index, false);
                     hack_monptr = -1;
                     if (!result) {
-                        return FALSE;
+                        return false;
                     }
                     mon_tot_mult++;
                     return check_mon_lite(j, k);
@@ -1434,7 +1434,7 @@ int monptr;
         }
         i++;
     } while (i <= 18);
-    return FALSE;
+    return false;
 }
 
 /* Move the critters about the dungeon      -RAK- */
@@ -1479,7 +1479,7 @@ uint32_t *rcmove;
             }
         }
     }
-    move_test = FALSE;
+    move_test = false;
 
     /* if in wall, must immediately escape to a clear area */
     if (!(r_ptr->cmove & CM_PHASE) && (cave[m_ptr->fy][m_ptr->fx].fval >= MIN_CAVE_WALL)) {
@@ -1559,7 +1559,7 @@ uint32_t *rcmove;
             make_move(monptr, mm, rcmove);
         }
         m_ptr->confused--;
-        move_test = TRUE;
+        move_test = true;
     } else if (r_ptr->spells & CS_FREQ) {
         /* Creature may cast a spell */
         mon_cast_spell(monptr, &move_test);
@@ -1666,8 +1666,8 @@ int attack;
             } else {
                 while (k > 0) {
                     k--;
-                    wake = FALSE;
-                    ignore = FALSE;
+                    wake = false;
+                    ignore = false;
                     rcmove = 0;
 
                     /* Monsters trapped in rock must be given a turn also, so that they will die/dig out immediately. */
@@ -1680,9 +1680,9 @@ int attack;
                                 if (notice * notice * notice <= (1L << (29 - py.misc.stl))) {
                                     m_ptr->csleep -= (100 / m_ptr->cdis);
                                     if (m_ptr->csleep > 0) {
-                                        ignore = TRUE;
+                                        ignore = true;
                                     } else {
-                                        wake = TRUE;
+                                        wake = true;
 
                                         /* force it to be exactly zero */
                                         m_ptr->csleep = 0;

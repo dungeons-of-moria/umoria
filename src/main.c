@@ -60,8 +60,8 @@ char *argv[];
     int result;
     char *p;
 
-    int new_game = FALSE;
-    int force_rogue_like = FALSE;
+    int new_game = false;
+    int force_rogue_like = false;
     int force_keys_to;
 
     /* default command set defined in config.h file */
@@ -88,26 +88,26 @@ char *argv[];
     for (--argc, ++argv; argc > 0 && argv[0][0] == '-'; --argc, ++argv) {
         switch (argv[0][1]) {
         case 'N': case 'n':
-            new_game = TRUE;
+            new_game = true;
             break;
         case 'O': case 'o':
             /* rogue_like_commands may be set in get_char(), so delay this
                until after read savefile if any */
-            force_rogue_like = TRUE;
-            force_keys_to = FALSE;
+            force_rogue_like = true;
+            force_keys_to = false;
             break;
         case 'R': case 'r':
-            force_rogue_like = TRUE;
-            force_keys_to = TRUE;
+            force_rogue_like = true;
+            force_keys_to = true;
             break;
         case 'S':
-            display_scores(TRUE);
+            display_scores(true);
             exit_game();
         case 's':
-            display_scores(FALSE);
+            display_scores(false);
             exit_game();
         case 'W': case 'w':
-            to_be_wizard = TRUE;
+            to_be_wizard = true;
 
             if (isdigit((int)argv[0][2])) {
                 seed = atoi(&argv[0][2]);
@@ -159,10 +159,10 @@ char *argv[];
        (if you are the wizard). In this case, it returns true, but also sets the
        parameter "generate" to true, as it does not recover any cave details. */
 
-    result = FALSE;
+    result = false;
 
-    if ((new_game == FALSE) && !access(savefile, 0) && get_char(&generate)) {
-        result = TRUE;
+    if ((new_game == false) && !access(savefile, 0) && get_char(&generate)) {
+        result = true;
     }
 
     /* enter wizard mode before showing the character display, but must wait
@@ -178,7 +178,7 @@ char *argv[];
 
         /* could be restoring a dead character after a signal or HANGUP */
         if (py.misc.chp < 0) {
-            death = TRUE;
+            death = true;
         }
     } else { /* Create character */
         create_character();
@@ -205,7 +205,7 @@ char *argv[];
            and prevent signal from creating panic save until this point,
            all info needed for save file is now valid */
         character_generated = 1;
-        generate = TRUE;
+        generate = true;
     }
 
     if (force_rogue_like) {
@@ -234,7 +234,7 @@ char *argv[];
             }
 
             /* should not reach here, but if we do, this guarantees exit */
-            death = TRUE;
+            death = true;
         }
 
         if (!death) {

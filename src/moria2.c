@@ -80,7 +80,7 @@ void search(y, x, chance) int y, x, chance;
                     t_ptr = &t_list[c_ptr->tptr];
                     /* Trap on floor? */
                     if (t_ptr->tval == TV_INVIS_TRAP) {
-                        objdes(tmp_str2, t_ptr, TRUE);
+                        objdes(tmp_str2, t_ptr, true);
                         (void)sprintf(tmp_str, "You have found %s", tmp_str2);
                         msg_print(tmp_str);
                         change_trap(i, j);
@@ -240,32 +240,32 @@ int dir;
     row = char_row;
     col = char_col;
     if (!mmove(dir, &row, &col)) {
-        find_flag = FALSE;
+        find_flag = false;
     } else {
         find_direction = dir;
         find_flag = 1;
-        find_breakright = find_breakleft = FALSE;
+        find_breakright = find_breakleft = false;
         find_prevdir = dir;
         if (py.flags.blind < 1) {
             i = chome[dir];
-            deepleft = deepright = FALSE;
-            shortright = shortleft = FALSE;
+            deepleft = deepright = false;
+            shortright = shortleft = false;
             if (see_wall(cycle[i + 1], char_row, char_col)) {
-                find_breakleft = TRUE;
-                shortleft = TRUE;
+                find_breakleft = true;
+                shortleft = true;
             } else if (see_wall(cycle[i + 1], row, col)) {
-                find_breakleft = TRUE;
-                deepleft = TRUE;
+                find_breakleft = true;
+                deepleft = true;
             }
             if (see_wall(cycle[i - 1], char_row, char_col)) {
-                find_breakright = TRUE;
-                shortright = TRUE;
+                find_breakright = true;
+                shortright = true;
             } else if (see_wall(cycle[i - 1], row, col)) {
-                find_breakright = TRUE;
-                deepright = TRUE;
+                find_breakright = true;
+                deepright = true;
             }
             if (find_breakleft && find_breakright) {
-                find_openarea = FALSE;
+                find_openarea = false;
 
                 /* a hack to allow angled corridor entry */
                 if (dir & 1) {
@@ -287,14 +287,14 @@ int dir;
                     }
                 }
             } else {
-                find_openarea = TRUE;
+                find_openarea = true;
             }
         }
     }
 
     /* We must erase the player symbol '@' here, because sub3_move_light()
        does not erase the previous location of the player when in find mode
-       and when find_prself is FALSE.  The player symbol is not draw at all
+       and when find_prself is false.  The player symbol is not draw at all
        in this case while moving, so the only problem is on the first turn
        of find mode, when the initial position of the character must be erased.
        Hence we must do the erasure here. */
@@ -302,8 +302,8 @@ int dir;
         print(loc_symbol(char_row, char_col), char_row, char_col);
     }
 
-    move_char(dir, TRUE);
-    if (find_flag == FALSE) {
+    move_char(dir, true);
+    if (find_flag == false) {
         command_count = 0;
     }
 }
@@ -314,14 +314,14 @@ void find_run() {
         msg_print("You stop running to catch your breath.");
         end_find();
     } else {
-        move_char(find_direction, TRUE);
+        move_char(find_direction, true);
     }
 }
 
 /* Switch off the run flag - and get the light correct. -CJS- */
 void end_find() {
     if (find_flag) {
-        find_flag = FALSE;
+        find_flag = false;
         move_light(char_row, char_col, char_row, char_col);
     }
 }
@@ -332,15 +332,15 @@ int dir, y, x;
 {
     /* check to see if movement there possible */
     if (!mmove(dir, &y, &x)) {
-        return TRUE;
+        return true;
     }
 
     uint8_t c = loc_symbol(y, x);
     if (c == '#' || c == '%') {
-        return TRUE;
+        return true;
     }
 
-    return FALSE;
+    return false;
 }
 
 /* Do we see anything? Used in running.   -CJS- */
@@ -348,11 +348,11 @@ static int see_nothing(dir, y, x)
 int dir, y, x;
 {
     if (!mmove(dir, &y, &x)) { /* check to see if movement there possible */
-        return FALSE;
+        return false;
     } else if (loc_symbol(y, x) == ' ') {
-        return TRUE;
+        return true;
     } else {
-        return FALSE;
+        return false;
     }
 }
 
@@ -394,9 +394,9 @@ int dir, y, x;
                         end_find();
                         return;
                     }
-                    inv = FALSE;
+                    inv = false;
                 } else {
-                    inv = TRUE; /* Square unseen. Treat as open. */
+                    inv = true; /* Square unseen. Treat as open. */
                 }
 
                 if (c_ptr->fval <= MAX_OPEN_SPACE || inv) {
@@ -442,20 +442,20 @@ int dir, y, x;
                             end_find();
                             return;
                         }
-                        find_breakright = TRUE;
+                        find_breakright = true;
                     } else if (i > 0) {
                         if (find_breakright) {
                             end_find();
                             return;
                         }
-                        find_breakleft = TRUE;
+                        find_breakleft = true;
                     }
                 }
             }
         }
 
         /* choose a direction. */
-        if (find_openarea == FALSE) {
+        if (find_openarea == false) {
             if (option2 == 0 || (find_examine && !find_cut)) {
                 /* There is only one option, or if two, then we always examine
                    potential corners and never cur known corners, so you step
@@ -538,22 +538,22 @@ uint32_t typ_dam;
         tmp[i] = INVEN_FEET;
         i++;
     }
-    minus = FALSE;
+    minus = false;
     if (i > 0) {
         j = tmp[randint(i) - 1];
         i_ptr = &inventory[j];
         if (i_ptr->flags & typ_dam) {
-            objdes(tmp_str, &inventory[j], FALSE);
+            objdes(tmp_str, &inventory[j], false);
             (void)sprintf(out_val, "Your %s resists damage!", tmp_str);
             msg_print(out_val);
-            minus = TRUE;
+            minus = true;
         } else if ((i_ptr->ac + i_ptr->toac) > 0) {
-            objdes(tmp_str, &inventory[j], FALSE);
+            objdes(tmp_str, &inventory[j], false);
             (void)sprintf(out_val, "Your %s is damaged!", tmp_str);
             msg_print(out_val);
             i_ptr->toac--;
             calc_bonuses();
-            minus = TRUE;
+            minus = true;
         }
     }
     return (minus);

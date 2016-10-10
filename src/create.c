@@ -153,14 +153,14 @@ static void choose_race() {
         j++;
     } while (j < MAX_RACES);
 
-    exit_flag = FALSE;
+    exit_flag = false;
 
     do {
         move_cursor(20, 30);
         s = inkey();
         j = s - 'a';
         if ((j < MAX_RACES) && (j >= 0)) {
-            exit_flag = TRUE;
+            exit_flag = true;
         } else if (s == '?') {
             helpfile(MORIA_WELCOME);
         } else {
@@ -202,7 +202,7 @@ static void get_history() {
     social_class = randint(4);
     cur_ptr = 0;
     do {
-        flag = FALSE;
+        flag = false;
         do {
             if (background[cur_ptr].chart == hist_ptr) {
                 test_roll = randint(100);
@@ -216,7 +216,7 @@ static void get_history() {
                     cur_ptr = 0;
                 }
                 hist_ptr = b_ptr->next;
-                flag = TRUE;
+                flag = true;
             } else {
                 cur_ptr++;
             }
@@ -232,7 +232,7 @@ static void get_history() {
     start_pos = 0;
     end_pos = strlen(history_block) - 1;
     line_ctr = 0;
-    flag = FALSE;
+    flag = false;
     while (history_block[end_pos] == ' ') {
         end_pos--;
     }
@@ -252,7 +252,7 @@ static void get_history() {
                 cur_len--;
             }
         } else {
-            flag = TRUE;
+            flag = true;
         }
 
         (void)strncpy(py.misc.history[line_ctr], &history_block[start_pos], cur_len);
@@ -275,7 +275,7 @@ static void get_sex() {
      int exit_flag;
     char c;
 
-    exit_flag = FALSE;
+    exit_flag = false;
     clear_from(20);
     put_buffer("Choose a sex (? for Help):", 20, 2);
     put_buffer("m) Male       f) Female", 21, 2);
@@ -284,13 +284,13 @@ static void get_sex() {
         /* speed not important here */
         c = inkey();
         if (c == 'f' || c == 'F') {
-            py.misc.male = FALSE;
+            py.misc.male = false;
             put_buffer("Female", 4, 15);
-            exit_flag = TRUE;
+            exit_flag = true;
         } else if (c == 'm' || c == 'M') {
-            py.misc.male = TRUE;
+            py.misc.male = true;
             put_buffer("Male", 4, 15);
-            exit_flag = TRUE;
+            exit_flag = true;
         } else if (c == '?') {
             helpfile(MORIA_WELCOME);
         } else {
@@ -356,7 +356,7 @@ static void get_class() {
     } while (j < MAX_CLASS);
 
     py.misc.pclass = 0;
-    exit_flag = FALSE;
+    exit_flag = false;
 
     do {
         move_cursor(20, 31);
@@ -365,7 +365,7 @@ static void get_class() {
         if ((j < k) && (j >= 0)) {
             py.misc.pclass = cl[j];
             c_ptr = &class[py.misc.pclass];
-            exit_flag = TRUE;
+            exit_flag = true;
             clear_from(20);
             put_buffer(c_ptr->title, 5, 15);
 

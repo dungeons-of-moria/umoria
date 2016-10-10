@@ -22,7 +22,7 @@
 #include "standard_library.h"
 
 // NOTE: do not include in standard_library.h just yet.
-// defines TRUE and FALSE, which conflicts with our definition.
+// defines true and false, which conflicts with our definition.
 #include <ncurses.h>
 
 #include "config.h"
@@ -33,7 +33,7 @@
 
 #define use_value2
 
-static int curses_on = FALSE;
+static int curses_on = false;
 
 /* Spare window for saving the screen. -CJS-*/
 static WINDOW *savescr;
@@ -66,13 +66,13 @@ void moriaterm() {
     noecho();
 
     nonl();
-    intrflush(stdscr, FALSE);
-    keypad(stdscr, TRUE);
+    intrflush(stdscr, false);
+    keypad(stdscr, true);
 
     // Default delay on macOS is 1 second, let's do something about that!
     set_escdelay(50);
 
-    curses_on = TRUE;
+    curses_on = true;
 }
 
 /* Dump IO to buffer          -RAK- */
@@ -102,7 +102,7 @@ void put_buffer(char *out_str, int row, int col) {
 /* Dump the IO buffer to terminal      -RAK- */
 void put_qio() {
     /* Let inven_command know something has changed. */
-    screen_change = TRUE;
+    screen_change = true;
 
     (void)refresh();
 }
@@ -126,7 +126,7 @@ void restore_term() {
     endwin();
     (void)fflush(stdout);
 
-    curses_on = FALSE;
+    curses_on = false;
 }
 
 void shell_out() {
@@ -145,13 +145,13 @@ char inkey() {
     put_qio();         /* Dump IO buffer */
     command_count = 0; /* Just to be safe -CJS- */
 
-    while (TRUE) {
+    while (true) {
         i = getch();
 
         /* some machines may not sign extend. */
         if (i == EOF) {
             /* avoid infinite loops while trying to call inkey() for a -more- prompt. */
-            msg_flag = FALSE;
+            msg_flag = false;
 
             eof_flag++;
 
@@ -170,7 +170,7 @@ char inkey() {
                 (void)strcpy(died_from, "(end of input: panic saved)");
                 if (!save_char()) {
                     (void)strcpy(died_from, "panic: unexpected eof");
-                    death = TRUE;
+                    death = true;
                 }
                 exit_game();
             }
@@ -293,7 +293,7 @@ void move_cursor(int row, int col) {
 /* These messages are kept for later reference. */
 void msg_print(char *str_buff) {
     int old_len, new_len;
-    int combine_messages = FALSE;
+    int combine_messages = false;
     char in_char;
 
     if (msg_flag) {
@@ -326,7 +326,7 @@ void msg_print(char *str_buff) {
 
             wait_for_more = 0;
         } else {
-            combine_messages = TRUE;
+            combine_messages = true;
         }
     }
 
@@ -338,7 +338,7 @@ void msg_print(char *str_buff) {
     /* Make the null string a special case.  -CJS- */
     if (str_buff) {
         command_count = 0;
-        msg_flag = TRUE;
+        msg_flag = true;
 
         /* If the new message and the old message are short enough, display
            them on the same line. */
@@ -359,7 +359,7 @@ void msg_print(char *str_buff) {
             old_msg[last_msg][VTYPESIZ - 1] = '\0';
         }
     } else {
-        msg_flag = FALSE;
+        msg_flag = false;
     }
 }
 
@@ -384,9 +384,9 @@ int get_check(char *prompt) {
     erase_line(0, 0);
 
     if (res == 'Y' || res == 'y') {
-        return TRUE;
+        return true;
     } else {
-        return FALSE;
+        return false;
     }
 }
 
@@ -402,9 +402,9 @@ int get_com(char *prompt, char *command) {
     *command = inkey();
 
     if (*command == ESCAPE) {
-        res = FALSE;
+        res = false;
     } else {
-        res = TRUE;
+        res = true;
     }
 
     erase_line(MSG_LINE, 0);
@@ -419,8 +419,8 @@ int get_string(char *in_str, int row, int column, int slen) {
     char *p;
     int flag, aborted;
 
-    aborted = FALSE;
-    flag = FALSE;
+    aborted = false;
+    flag = false;
     (void)move(row, column);
 
     for (i = slen; i > 0; i--) {
@@ -443,10 +443,10 @@ int get_string(char *in_str, int row, int column, int slen) {
 
         switch (i) {
         case ESCAPE:
-            aborted = TRUE;
+            aborted = true;
             break;
         case CTRL('J'): case CTRL('M'):
-            flag = TRUE;
+            flag = true;
             break;
         case DELETE: case CTRL('H'):
             if (column > start_col) {
@@ -469,7 +469,7 @@ int get_string(char *in_str, int row, int column, int slen) {
     } while ((!flag) && (!aborted));
 
     if (aborted) {
-        return (FALSE);
+        return (false);
     }
 
     /* Remove trailing blanks */
@@ -478,7 +478,7 @@ int get_string(char *in_str, int row, int column, int slen) {
     }
     *p = '\0';
 
-    return (TRUE);
+    return (true);
 }
 
 /* Pauses for user response before returning    -RAK- */

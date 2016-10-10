@@ -36,7 +36,7 @@ void quaff() {
     struct misc *m_ptr;
     struct flags *f_ptr;
 
-    free_turn_flag = TRUE;
+    free_turn_flag = true;
     if (inven_ctr == 0) {
         msg_print("But you are not carrying anything.");
     } else if (!find_range(TV_POTION1, TV_POTION2, &j, &k)) {
@@ -44,11 +44,11 @@ void quaff() {
     } else if (get_item(&item_val, "Quaff which potion?", j, k, CNIL, CNIL)) {
         i_ptr = &inventory[item_val];
         i = i_ptr->flags;
-        free_turn_flag = FALSE;
-        ident = FALSE;
+        free_turn_flag = false;
+        ident = false;
         if (i == 0) {
             msg_print("You feel less thirsty.");
-            ident = TRUE;
+            ident = true;
         } else {
             while (i != 0) {
                 j = bit_pos(&i) + 1;
@@ -60,65 +60,65 @@ void quaff() {
                 case 1:
                     if (inc_stat(A_STR)) {
                         msg_print("Wow!  What bulging muscles!");
-                        ident = TRUE;
+                        ident = true;
                     }
                     break;
                 case 2:
-                    ident = TRUE;
+                    ident = true;
                     lose_str();
                     break;
                 case 3:
                     if (res_stat(A_STR)) {
                         msg_print("You feel warm all over.");
-                        ident = TRUE;
+                        ident = true;
                     }
                     break;
                 case 4:
                     if (inc_stat(A_INT)) {
                         msg_print("Aren't you brilliant!");
-                        ident = TRUE;
+                        ident = true;
                     }
                     break;
                 case 5:
-                    ident = TRUE;
+                    ident = true;
                     lose_int();
                     break;
                 case 6:
                     if (res_stat(A_INT)) {
                         msg_print("You have have a warm feeling.");
-                        ident = TRUE;
+                        ident = true;
                     }
                     break;
                 case 7:
                     if (inc_stat(A_WIS)) {
                         msg_print("You suddenly have a profound thought!");
-                        ident = TRUE;
+                        ident = true;
                     }
                     break;
                 case 8:
-                    ident = TRUE;
+                    ident = true;
                     lose_wis();
                     break;
                 case 9:
                     if (res_stat(A_WIS)) {
                         msg_print("You feel your wisdom returning.");
-                        ident = TRUE;
+                        ident = true;
                     }
                     break;
                 case 10:
                     if (inc_stat(A_CHR)) {
                         msg_print("Gee, ain't you cute!");
-                        ident = TRUE;
+                        ident = true;
                     }
                     break;
                 case 11:
-                    ident = TRUE;
+                    ident = true;
                     lose_chr();
                     break;
                 case 12:
                     if (res_stat(A_CHR)) {
                         msg_print("You feel your looks returning.");
-                        ident = TRUE;
+                        ident = true;
                     }
                     break;
                 case 13:
@@ -136,7 +136,7 @@ void quaff() {
                 case 17:
                     if (inc_stat(A_CON)) {
                         msg_print("You feel tingly for a moment.");
-                        ident = TRUE;
+                        ident = true;
                     }
                     break;
                 case 18:
@@ -149,7 +149,7 @@ void quaff() {
                         m_ptr->exp += l;
                         msg_print("You feel more experienced.");
                         prt_experience();
-                        ident = TRUE;
+                        ident = true;
                     }
                     break;
                 case 19:
@@ -158,14 +158,14 @@ void quaff() {
                         /* paralysis must == 0, otherwise could not drink potion */
                         msg_print("You fall asleep.");
                         f_ptr->paralysis += randint(4) + 4;
-                        ident = TRUE;
+                        ident = true;
                     }
                     break;
                 case 20:
                     f_ptr = &py.flags;
                     if (f_ptr->blind == 0) {
                         msg_print("You are covered by a veil of darkness.");
-                        ident = TRUE;
+                        ident = true;
                     }
                     f_ptr->blind += randint(100) + 100;
                     break;
@@ -173,7 +173,7 @@ void quaff() {
                     f_ptr = &py.flags;
                     if (f_ptr->confused == 0) {
                         msg_print("Hey!  This is good stuff!  * Hick! *");
-                        ident = TRUE;
+                        ident = true;
                     }
                     f_ptr->confused += randint(20) + 12;
                     break;
@@ -181,38 +181,38 @@ void quaff() {
                     f_ptr = &py.flags;
                     if (f_ptr->poisoned == 0) {
                         msg_print("You feel very sick.");
-                        ident = TRUE;
+                        ident = true;
                     }
                     f_ptr->poisoned += randint(15) + 10;
                     break;
                 case 23:
                     if (py.flags.fast == 0) {
-                        ident = TRUE;
+                        ident = true;
                     }
                     py.flags.fast += randint(25) + 15;
                     break;
                 case 24:
                     if (py.flags.slow == 0) {
-                        ident = TRUE;
+                        ident = true;
                     }
                     py.flags.slow += randint(25) + 15;
                     break;
                 case 26:
                     if (inc_stat(A_DEX)) {
                         msg_print("You feel more limber!");
-                        ident = TRUE;
+                        ident = true;
                     }
                     break;
                 case 27:
                     if (res_stat(A_DEX)) {
                         msg_print("You feel less clumsy.");
-                        ident = TRUE;
+                        ident = true;
                     }
                     break;
                 case 28:
                     if (res_stat(A_CON)) {
                         msg_print("You feel your health returning!");
-                        ident = TRUE;
+                        ident = true;
                     }
                     break;
                 case 29:
@@ -239,7 +239,7 @@ void quaff() {
                             m += randint((int)py.misc.exp) / 5;
                         }
                         lose_exp(m);
-                        ident = TRUE;
+                        ident = true;
                     }
                     break;
                 case 35:
@@ -250,23 +250,23 @@ void quaff() {
                     }
                     f_ptr->paralysis = 4;
                     msg_print("The potion makes you vomit!");
-                    ident = TRUE;
+                    ident = true;
                     break;
                 case 36:
                     if (py.flags.invuln == 0) {
-                        ident = TRUE;
+                        ident = true;
                     }
                     py.flags.invuln += randint(10) + 10;
                     break;
                 case 37:
                     if (py.flags.hero == 0) {
-                        ident = TRUE;
+                        ident = true;
                     }
                     py.flags.hero += randint(25) + 25;
                     break;
                 case 38:
                     if (py.flags.shero == 0) {
-                        ident = TRUE;
+                        ident = true;
                     }
                     py.flags.shero += randint(25) + 25;
                     break;
@@ -279,20 +279,20 @@ void quaff() {
                 case 41:
                     f_ptr = &py.flags;
                     if (f_ptr->resist_heat == 0) {
-                        ident = TRUE;
+                        ident = true;
                     }
                     f_ptr->resist_heat += randint(10) + 10;
                     break;
                 case 42:
                     f_ptr = &py.flags;
                     if (f_ptr->resist_cold == 0) {
-                        ident = TRUE;
+                        ident = true;
                     }
                     f_ptr->resist_cold += randint(10) + 10;
                     break;
                 case 43:
                     if (py.flags.detect_inv == 0) {
-                        ident = TRUE;
+                        ident = true;
                     }
                     detect_inv2(randint(12) + 12);
                     break;
@@ -306,7 +306,7 @@ void quaff() {
                     m_ptr = &py.misc;
                     if (m_ptr->cmana < m_ptr->mana) {
                         m_ptr->cmana = m_ptr->mana;
-                        ident = TRUE;
+                        ident = true;
                         msg_print("Your feel your head clear.");
                         prt_cmana();
                     }
@@ -315,7 +315,7 @@ void quaff() {
                     f_ptr = &py.flags;
                     if (f_ptr->tim_infra == 0) {
                         msg_print("Your eyes begin to tingle.");
-                        ident = TRUE;
+                        ident = true;
                     }
                     f_ptr->tim_infra += 100 + randint(100);
                     break;

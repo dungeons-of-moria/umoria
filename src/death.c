@@ -205,7 +205,7 @@ void display_scores(show_player) int show_player;
 
 int duplicate_character() {
     /* Only check for duplicate characters under unix. */
-    return FALSE;
+    return false;
 }
 
 /* Prints the gravestone of the character    -RAK- */
@@ -295,11 +295,11 @@ retry:
             if (inkey() != ESCAPE) {
                 clear_screen();
                 msg_print("You are using:");
-                (void)show_equip(TRUE, 0);
+                (void)show_equip(true, 0);
                 msg_print(CNIL);
                 msg_print("You are carrying:");
                 clear_from(1);
-                (void)show_inven(0, inven_ctr - 1, TRUE, 0, CNIL);
+                (void)show_inven(0, inven_ctr - 1, true, 0, CNIL);
                 msg_print(CNIL);
             }
         }
@@ -553,9 +553,9 @@ void exit_game() {
            from recursively calling exit_game() when there has been an eof
            on stdin detected.
         */
-        character_saved = FALSE;
+        character_saved = false;
         highscores();
-        display_scores(TRUE);
+        display_scores(true);
     }
     erase_line(23, 0);
     restore_term();
