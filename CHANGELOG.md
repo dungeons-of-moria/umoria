@@ -11,6 +11,13 @@
 
 ### All Changes
 
+`2016-10-10`
+
+- Replaces custom types `int8u`, `int16`, `int16u`, `int32`, and `int32u`
+  with their equivalent C _standard types_, such as `uint16_t`.
+- Replace `unsigned char` with standard `uint8_t` type.
+
+
 `2016-10-09`
 
 - Default ncurses `ESCDELAY` on macOS is 1 second! Reduced to just 50ms.
