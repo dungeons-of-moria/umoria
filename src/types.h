@@ -23,7 +23,6 @@
 
 /* Use ISO C99 standard declarations to get correct lengths. */
 typedef int_least16_t int16;
-typedef uint_least16_t int16u;
 typedef int_least32_t int32;
 typedef uint_least32_t int32u;
 
@@ -56,8 +55,8 @@ typedef struct creature_type {
     char *name;         /* Descrip of creature */
     int32u cmove;       /* Bit field */
     int32u spells;      /* Creature spells */
-    int16u cdefense;    /* Bit field */
-    int16u mexp;        /* Exp value for kill */
+    uint16_t cdefense;  /* Bit field */
+    uint16_t mexp;      /* Exp value for kill */
     uint8_t sleep;      /* Inactive counter/10 */
     uint8_t aaf;        /* Area affect radius */
     uint8_t ac;         /* AC */
@@ -80,8 +79,8 @@ typedef struct m_attack_type {
 typedef struct recall_type {
     int32u r_cmove;
     int32u r_spells;
-    int16u r_kills, r_deaths;
-    int16u r_cdefense;
+    uint16_t r_kills, r_deaths;
+    uint16_t r_cdefense;
     uint8_t r_wake, r_ignore;
     uint8_t r_attacks[MAX_MON_NATTACK];
 } recall_type;
@@ -90,7 +89,7 @@ typedef struct monster_type {
     int16 hp;         /* Hit points */
     int16 csleep;     /* Inactive counter */
     int16 cspeed;     /* Movement speed */
-    int16u mptr;      /* Pointer into creature*/
+    uint16_t mptr;    /* Pointer into creature*/
 
     /* Note: fy, fx, and cdis constrain dungeon size to less than 256 by 256 */
     uint8_t fy;       /* Y Pointer into map */
@@ -111,7 +110,7 @@ typedef struct treasure_type {
     int32 cost;         /* Cost of item */
     uint8_t subval;     /* Sub-category number */
     uint8_t number;     /* Number of items */
-    int16u weight;      /* Weight */
+    uint16_t weight;    /* Weight */
     int16 tohit;        /* Plusses to hit */
     int16 todam;        /* Plusses to damage */
     int16 ac;           /* Normal AC */
@@ -131,7 +130,7 @@ typedef struct treasure_type {
  */
 #define INSCRIP_SIZE 13 /* notice alignment, must be 4*x + 1 */
 typedef struct inven_type {
-    int16u index;                   /* Index to object_list */
+    uint16_t index;                 /* Index to object_list */
     uint8_t name2;                  /* Object special name */
     char inscrip[INSCRIP_SIZE];     /* Object inscription */
     int32u flags;                   /* Special flags */
@@ -141,7 +140,7 @@ typedef struct inven_type {
     int32 cost;                     /* Cost of item */
     uint8_t subval;                 /* Sub-category number */
     uint8_t number;                 /* Number of items */
-    int16u weight;                  /* Weight */
+    uint16_t weight;                /* Weight */
     int16 tohit;                    /* Plusses to hit */
     int16 todam;                    /* Plusses to damage */
     int16 ac;                       /* Normal AC */
@@ -160,12 +159,12 @@ typedef struct player_type {
         int32 au;                     /* Gold */
         int32 max_exp;                /* Max experience */
         int32 exp;                    /* Cur experience */
-        int16u exp_frac;              /* Cur exp fraction * 2^16 */
-        int16u age;                   /* Characters age */
-        int16u ht;                    /* Height */
-        int16u wt;                    /* Weight */
-        int16u lev;                   /* Level */
-        int16u max_dlv;               /* Max level explored */
+        uint16_t exp_frac;            /* Cur exp fraction * 2^16 */
+        uint16_t age;                 /* Characters age */
+        uint16_t ht;                  /* Height */
+        uint16_t wt;                  /* Weight */
+        uint16_t lev;                 /* Level */
+        uint16_t max_dlv;             /* Max level explored */
         int16 srh;                    /* Chance in search */
         int16 fos;                    /* Frenq of search */
         int16 bth;                    /* Base to hit */
@@ -189,9 +188,9 @@ typedef struct player_type {
         uint8_t hitdie;               /* Char hit die */
         uint8_t expfact;              /* Experience factor */
         int16 cmana;                  /* Cur mana pts */
-        int16u cmana_frac;            /* Cur mana fraction * 2^16 */
+        uint16_t cmana_frac;          /* Cur mana fraction * 2^16 */
         int16 chp;                    /* Cur hit pts */
-        int16u chp_frac;              /* Cur hit fraction * 2^16 */
+        uint16_t chp_frac;            /* Cur hit fraction * 2^16 */
         char history[4][60];          /* History record */
     } misc;
 
@@ -352,8 +351,8 @@ typedef struct store_type {
     int16 insult_cur;
     uint8_t owner;
     uint8_t store_ctr;
-    int16u good_buy;
-    int16u bad_buy;
+    uint16_t good_buy;
+    uint16_t bad_buy;
     inven_record store_inven[STORE_INVEN_MAX];
 } store_type;
 

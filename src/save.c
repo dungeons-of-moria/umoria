@@ -130,7 +130,7 @@ static int sv_write() {
         if (r_ptr->r_cmove || r_ptr->r_cdefense || r_ptr->r_kills ||
             r_ptr->r_spells || r_ptr->r_deaths || r_ptr->r_attacks[0] ||
             r_ptr->r_attacks[1] || r_ptr->r_attacks[2] || r_ptr->r_attacks[3]) {
-            wr_short((int16u)i);
+            wr_short((uint16_t)i);
             wr_long(r_ptr->r_cmove);
             wr_long(r_ptr->r_spells);
             wr_short(r_ptr->r_kills);
@@ -143,7 +143,7 @@ static int sv_write() {
     }
 
     /* sentinel to indicate no more monster info */
-    wr_short((int16u)0xFFFF);
+    wr_short((uint16_t)0xFFFF);
 
     wr_long(l);
 
@@ -159,31 +159,31 @@ static int sv_write() {
     wr_short(m_ptr->wt);
     wr_short(m_ptr->lev);
     wr_short(m_ptr->max_dlv);
-    wr_short((int16u)m_ptr->srh);
-    wr_short((int16u)m_ptr->fos);
-    wr_short((int16u)m_ptr->bth);
-    wr_short((int16u)m_ptr->bthb);
-    wr_short((int16u)m_ptr->mana);
-    wr_short((int16u)m_ptr->mhp);
-    wr_short((int16u)m_ptr->ptohit);
-    wr_short((int16u)m_ptr->ptodam);
-    wr_short((int16u)m_ptr->pac);
-    wr_short((int16u)m_ptr->ptoac);
-    wr_short((int16u)m_ptr->dis_th);
-    wr_short((int16u)m_ptr->dis_td);
-    wr_short((int16u)m_ptr->dis_ac);
-    wr_short((int16u)m_ptr->dis_tac);
-    wr_short((int16u)m_ptr->disarm);
-    wr_short((int16u)m_ptr->save);
-    wr_short((int16u)m_ptr->sc);
-    wr_short((int16u)m_ptr->stl);
+    wr_short((uint16_t)m_ptr->srh);
+    wr_short((uint16_t)m_ptr->fos);
+    wr_short((uint16_t)m_ptr->bth);
+    wr_short((uint16_t)m_ptr->bthb);
+    wr_short((uint16_t)m_ptr->mana);
+    wr_short((uint16_t)m_ptr->mhp);
+    wr_short((uint16_t)m_ptr->ptohit);
+    wr_short((uint16_t)m_ptr->ptodam);
+    wr_short((uint16_t)m_ptr->pac);
+    wr_short((uint16_t)m_ptr->ptoac);
+    wr_short((uint16_t)m_ptr->dis_th);
+    wr_short((uint16_t)m_ptr->dis_td);
+    wr_short((uint16_t)m_ptr->dis_ac);
+    wr_short((uint16_t)m_ptr->dis_tac);
+    wr_short((uint16_t)m_ptr->disarm);
+    wr_short((uint16_t)m_ptr->save);
+    wr_short((uint16_t)m_ptr->sc);
+    wr_short((uint16_t)m_ptr->stl);
     wr_byte(m_ptr->pclass);
     wr_byte(m_ptr->prace);
     wr_byte(m_ptr->hitdie);
     wr_byte(m_ptr->expfact);
-    wr_short((int16u)m_ptr->cmana);
+    wr_short((uint16_t)m_ptr->cmana);
     wr_short(m_ptr->cmana_frac);
-    wr_short((int16u)m_ptr->chp);
+    wr_short((uint16_t)m_ptr->chp);
     wr_short(m_ptr->chp_frac);
     for (i = 0; i < 4; i++) {
         wr_string(m_ptr->history[i]);
@@ -192,35 +192,35 @@ static int sv_write() {
     s_ptr = &py.stats;
     wr_bytes(s_ptr->max_stat, 6);
     wr_bytes(s_ptr->cur_stat, 6);
-    wr_shorts((int16u *)s_ptr->mod_stat, 6);
+    wr_shorts((uint16_t *)s_ptr->mod_stat, 6);
     wr_bytes(s_ptr->use_stat, 6);
 
     f_ptr = &py.flags;
     wr_long(f_ptr->status);
-    wr_short((int16u)f_ptr->rest);
-    wr_short((int16u)f_ptr->blind);
-    wr_short((int16u)f_ptr->paralysis);
-    wr_short((int16u)f_ptr->confused);
-    wr_short((int16u)f_ptr->food);
-    wr_short((int16u)f_ptr->food_digested);
-    wr_short((int16u)f_ptr->protection);
-    wr_short((int16u)f_ptr->speed);
-    wr_short((int16u)f_ptr->fast);
-    wr_short((int16u)f_ptr->slow);
-    wr_short((int16u)f_ptr->afraid);
-    wr_short((int16u)f_ptr->poisoned);
-    wr_short((int16u)f_ptr->image);
-    wr_short((int16u)f_ptr->protevil);
-    wr_short((int16u)f_ptr->invuln);
-    wr_short((int16u)f_ptr->hero);
-    wr_short((int16u)f_ptr->shero);
-    wr_short((int16u)f_ptr->blessed);
-    wr_short((int16u)f_ptr->resist_heat);
-    wr_short((int16u)f_ptr->resist_cold);
-    wr_short((int16u)f_ptr->detect_inv);
-    wr_short((int16u)f_ptr->word_recall);
-    wr_short((int16u)f_ptr->see_infra);
-    wr_short((int16u)f_ptr->tim_infra);
+    wr_short((uint16_t)f_ptr->rest);
+    wr_short((uint16_t)f_ptr->blind);
+    wr_short((uint16_t)f_ptr->paralysis);
+    wr_short((uint16_t)f_ptr->confused);
+    wr_short((uint16_t)f_ptr->food);
+    wr_short((uint16_t)f_ptr->food_digested);
+    wr_short((uint16_t)f_ptr->protection);
+    wr_short((uint16_t)f_ptr->speed);
+    wr_short((uint16_t)f_ptr->fast);
+    wr_short((uint16_t)f_ptr->slow);
+    wr_short((uint16_t)f_ptr->afraid);
+    wr_short((uint16_t)f_ptr->poisoned);
+    wr_short((uint16_t)f_ptr->image);
+    wr_short((uint16_t)f_ptr->protevil);
+    wr_short((uint16_t)f_ptr->invuln);
+    wr_short((uint16_t)f_ptr->hero);
+    wr_short((uint16_t)f_ptr->shero);
+    wr_short((uint16_t)f_ptr->blessed);
+    wr_short((uint16_t)f_ptr->resist_heat);
+    wr_short((uint16_t)f_ptr->resist_cold);
+    wr_short((uint16_t)f_ptr->detect_inv);
+    wr_short((uint16_t)f_ptr->word_recall);
+    wr_short((uint16_t)f_ptr->see_infra);
+    wr_short((uint16_t)f_ptr->tim_infra);
     wr_byte(f_ptr->see_inv);
     wr_byte(f_ptr->teleport);
     wr_byte(f_ptr->free_act);
@@ -241,17 +241,17 @@ static int sv_write() {
     wr_byte(f_ptr->confuse_monster);
     wr_byte(f_ptr->new_spells);
 
-    wr_short((int16u)missile_ctr);
+    wr_short((uint16_t)missile_ctr);
     wr_long((int32u)turn);
-    wr_short((int16u)inven_ctr);
+    wr_short((uint16_t)inven_ctr);
     for (i = 0; i < inven_ctr; i++) {
         wr_item(&inventory[i]);
     }
     for (i = INVEN_WIELD; i < INVEN_ARRAY_SIZE; i++) {
         wr_item(&inventory[i]);
     }
-    wr_short((int16u)inven_weight);
-    wr_short((int16u)equip_ctr);
+    wr_short((uint16_t)inven_weight);
+    wr_short((uint16_t)equip_ctr);
     wr_long(spell_learned);
     wr_long(spell_worked);
     wr_long(spell_forgotten);
@@ -259,21 +259,21 @@ static int sv_write() {
     wr_bytes(object_ident, OBJECT_IDENT_SIZE);
     wr_long(randes_seed);
     wr_long(town_seed);
-    wr_short((int16u)last_msg);
+    wr_short((uint16_t)last_msg);
     for (i = 0; i < MAX_SAVE_MSG; i++) {
         wr_string(old_msg[i]);
     }
 
     /* this indicates 'cheating' if it is a one */
-    wr_short((int16u)panic_save);
-    wr_short((int16u)total_winner);
-    wr_short((int16u)noscore);
+    wr_short((uint16_t)panic_save);
+    wr_short((uint16_t)total_winner);
+    wr_short((uint16_t)noscore);
     wr_shorts(player_hp, MAX_PLAYER_LEVEL);
 
     for (i = 0; i < MAX_STORES; i++) {
         st_ptr = &store[i];
         wr_long((int32u)st_ptr->store_open);
-        wr_short((int16u)st_ptr->insult_cur);
+        wr_short((uint16_t)st_ptr->insult_cur);
         wr_byte(st_ptr->owner);
         wr_byte(st_ptr->store_ctr);
         wr_short(st_ptr->good_buy);
@@ -312,14 +312,14 @@ static int sv_write() {
         return TRUE;
     }
 
-    wr_short((int16u)dun_level);
-    wr_short((int16u)char_row);
-    wr_short((int16u)char_col);
-    wr_short((int16u)mon_tot_mult);
-    wr_short((int16u)cur_height);
-    wr_short((int16u)cur_width);
-    wr_short((int16u)max_panel_rows);
-    wr_short((int16u)max_panel_cols);
+    wr_short((uint16_t)dun_level);
+    wr_short((uint16_t)char_row);
+    wr_short((uint16_t)char_col);
+    wr_short((uint16_t)mon_tot_mult);
+    wr_short((uint16_t)cur_height);
+    wr_short((uint16_t)cur_width);
+    wr_short((uint16_t)max_panel_rows);
+    wr_short((uint16_t)max_panel_cols);
 
     for (i = 0; i < MAX_HEIGHT; i++) {
         for (j = 0; j < MAX_WIDTH; j++) {
@@ -372,11 +372,11 @@ static int sv_write() {
     wr_byte((uint8_t)count);
     wr_byte(prev_char);
 
-    wr_short((int16u)tcptr);
+    wr_short((uint16_t)tcptr);
     for (i = MIN_TRIX; i < tcptr; i++) {
         wr_item(&t_list[i]);
     }
-    wr_short((int16u)mfptr);
+    wr_short((uint16_t)mfptr);
     for (i = MIN_MONIX; i < mfptr; i++) {
         wr_monster(&m_list[i]);
     }
@@ -502,7 +502,7 @@ int *generate;
     int fd, c, ok, total_count;
     int32u l, age, time_saved;
     vtype temp;
-    int16u int16u_tmp;
+    uint16_t uint16_t_tmp;
     cave_type *c_ptr;
     recall_type *r_ptr;
     struct misc *m_ptr;
@@ -571,12 +571,12 @@ int *generate;
             goto error;
         }
 
-        rd_short(&int16u_tmp);
-        while (int16u_tmp != 0xFFFF) {
-            if (int16u_tmp >= MAX_CREATURES) {
+        rd_short(&uint16_t_tmp);
+        while (uint16_t_tmp != 0xFFFF) {
+            if (uint16_t_tmp >= MAX_CREATURES) {
                 goto error;
             }
-            r_ptr = &c_recall[int16u_tmp];
+            r_ptr = &c_recall[uint16_t_tmp];
             rd_long(&r_ptr->r_cmove);
             rd_long(&r_ptr->r_spells);
             rd_short(&r_ptr->r_kills);
@@ -585,12 +585,12 @@ int *generate;
             rd_byte(&r_ptr->r_wake);
             rd_byte(&r_ptr->r_ignore);
             rd_bytes(r_ptr->r_attacks, MAX_MON_NATTACK);
-            rd_short(&int16u_tmp);
+            rd_short(&uint16_t_tmp);
         }
 
         /* for save files before 5.2.2, read and ignore log_index (sic) */
         if ((version_min < 2) || (version_min == 2 && patch_level < 2)) {
-            rd_short(&int16u_tmp);
+            rd_short(&uint16_t_tmp);
         }
         rd_long(&l);
 
@@ -681,31 +681,31 @@ int *generate;
             rd_short(&m_ptr->wt);
             rd_short(&m_ptr->lev);
             rd_short(&m_ptr->max_dlv);
-            rd_short((int16u *)&m_ptr->srh);
-            rd_short((int16u *)&m_ptr->fos);
-            rd_short((int16u *)&m_ptr->bth);
-            rd_short((int16u *)&m_ptr->bthb);
-            rd_short((int16u *)&m_ptr->mana);
-            rd_short((int16u *)&m_ptr->mhp);
-            rd_short((int16u *)&m_ptr->ptohit);
-            rd_short((int16u *)&m_ptr->ptodam);
-            rd_short((int16u *)&m_ptr->pac);
-            rd_short((int16u *)&m_ptr->ptoac);
-            rd_short((int16u *)&m_ptr->dis_th);
-            rd_short((int16u *)&m_ptr->dis_td);
-            rd_short((int16u *)&m_ptr->dis_ac);
-            rd_short((int16u *)&m_ptr->dis_tac);
-            rd_short((int16u *)&m_ptr->disarm);
-            rd_short((int16u *)&m_ptr->save);
-            rd_short((int16u *)&m_ptr->sc);
-            rd_short((int16u *)&m_ptr->stl);
+            rd_short((uint16_t *)&m_ptr->srh);
+            rd_short((uint16_t *)&m_ptr->fos);
+            rd_short((uint16_t *)&m_ptr->bth);
+            rd_short((uint16_t *)&m_ptr->bthb);
+            rd_short((uint16_t *)&m_ptr->mana);
+            rd_short((uint16_t *)&m_ptr->mhp);
+            rd_short((uint16_t *)&m_ptr->ptohit);
+            rd_short((uint16_t *)&m_ptr->ptodam);
+            rd_short((uint16_t *)&m_ptr->pac);
+            rd_short((uint16_t *)&m_ptr->ptoac);
+            rd_short((uint16_t *)&m_ptr->dis_th);
+            rd_short((uint16_t *)&m_ptr->dis_td);
+            rd_short((uint16_t *)&m_ptr->dis_ac);
+            rd_short((uint16_t *)&m_ptr->dis_tac);
+            rd_short((uint16_t *)&m_ptr->disarm);
+            rd_short((uint16_t *)&m_ptr->save);
+            rd_short((uint16_t *)&m_ptr->sc);
+            rd_short((uint16_t *)&m_ptr->stl);
             rd_byte(&m_ptr->pclass);
             rd_byte(&m_ptr->prace);
             rd_byte(&m_ptr->hitdie);
             rd_byte(&m_ptr->expfact);
-            rd_short((int16u *)&m_ptr->cmana);
+            rd_short((uint16_t *)&m_ptr->cmana);
             rd_short(&m_ptr->cmana_frac);
-            rd_short((int16u *)&m_ptr->chp);
+            rd_short((uint16_t *)&m_ptr->chp);
             rd_short(&m_ptr->chp_frac);
             for (i = 0; i < 4; i++) {
                 rd_string(m_ptr->history[i]);
@@ -714,35 +714,35 @@ int *generate;
             s_ptr = &py.stats;
             rd_bytes(s_ptr->max_stat, 6);
             rd_bytes(s_ptr->cur_stat, 6);
-            rd_shorts((int16u *)s_ptr->mod_stat, 6);
+            rd_shorts((uint16_t *)s_ptr->mod_stat, 6);
             rd_bytes(s_ptr->use_stat, 6);
 
             f_ptr = &py.flags;
             rd_long(&f_ptr->status);
-            rd_short((int16u *)&f_ptr->rest);
-            rd_short((int16u *)&f_ptr->blind);
-            rd_short((int16u *)&f_ptr->paralysis);
-            rd_short((int16u *)&f_ptr->confused);
-            rd_short((int16u *)&f_ptr->food);
-            rd_short((int16u *)&f_ptr->food_digested);
-            rd_short((int16u *)&f_ptr->protection);
-            rd_short((int16u *)&f_ptr->speed);
-            rd_short((int16u *)&f_ptr->fast);
-            rd_short((int16u *)&f_ptr->slow);
-            rd_short((int16u *)&f_ptr->afraid);
-            rd_short((int16u *)&f_ptr->poisoned);
-            rd_short((int16u *)&f_ptr->image);
-            rd_short((int16u *)&f_ptr->protevil);
-            rd_short((int16u *)&f_ptr->invuln);
-            rd_short((int16u *)&f_ptr->hero);
-            rd_short((int16u *)&f_ptr->shero);
-            rd_short((int16u *)&f_ptr->blessed);
-            rd_short((int16u *)&f_ptr->resist_heat);
-            rd_short((int16u *)&f_ptr->resist_cold);
-            rd_short((int16u *)&f_ptr->detect_inv);
-            rd_short((int16u *)&f_ptr->word_recall);
-            rd_short((int16u *)&f_ptr->see_infra);
-            rd_short((int16u *)&f_ptr->tim_infra);
+            rd_short((uint16_t *)&f_ptr->rest);
+            rd_short((uint16_t *)&f_ptr->blind);
+            rd_short((uint16_t *)&f_ptr->paralysis);
+            rd_short((uint16_t *)&f_ptr->confused);
+            rd_short((uint16_t *)&f_ptr->food);
+            rd_short((uint16_t *)&f_ptr->food_digested);
+            rd_short((uint16_t *)&f_ptr->protection);
+            rd_short((uint16_t *)&f_ptr->speed);
+            rd_short((uint16_t *)&f_ptr->fast);
+            rd_short((uint16_t *)&f_ptr->slow);
+            rd_short((uint16_t *)&f_ptr->afraid);
+            rd_short((uint16_t *)&f_ptr->poisoned);
+            rd_short((uint16_t *)&f_ptr->image);
+            rd_short((uint16_t *)&f_ptr->protevil);
+            rd_short((uint16_t *)&f_ptr->invuln);
+            rd_short((uint16_t *)&f_ptr->hero);
+            rd_short((uint16_t *)&f_ptr->shero);
+            rd_short((uint16_t *)&f_ptr->blessed);
+            rd_short((uint16_t *)&f_ptr->resist_heat);
+            rd_short((uint16_t *)&f_ptr->resist_cold);
+            rd_short((uint16_t *)&f_ptr->detect_inv);
+            rd_short((uint16_t *)&f_ptr->word_recall);
+            rd_short((uint16_t *)&f_ptr->see_infra);
+            rd_short((uint16_t *)&f_ptr->tim_infra);
             rd_byte(&f_ptr->see_inv);
             rd_byte(&f_ptr->teleport);
             rd_byte(&f_ptr->free_act);
@@ -763,9 +763,9 @@ int *generate;
             rd_byte(&f_ptr->confuse_monster);
             rd_byte(&f_ptr->new_spells);
 
-            rd_short((int16u *)&missile_ctr);
+            rd_short((uint16_t *)&missile_ctr);
             rd_long((int32u *)&turn);
-            rd_short((int16u *)&inven_ctr);
+            rd_short((uint16_t *)&inven_ctr);
             if (inven_ctr > INVEN_WIELD) {
                 goto error;
             }
@@ -775,8 +775,8 @@ int *generate;
             for (i = INVEN_WIELD; i < INVEN_ARRAY_SIZE; i++) {
                 rd_item(&inventory[i]);
             }
-            rd_short((int16u *)&inven_weight);
-            rd_short((int16u *)&equip_ctr);
+            rd_short((uint16_t *)&inven_weight);
+            rd_short((uint16_t *)&equip_ctr);
             rd_long(&spell_learned);
             rd_long(&spell_worked);
             rd_long(&spell_forgotten);
@@ -784,21 +784,21 @@ int *generate;
             rd_bytes(object_ident, OBJECT_IDENT_SIZE);
             rd_long(&randes_seed);
             rd_long(&town_seed);
-            rd_short((int16u *)&last_msg);
+            rd_short((uint16_t *)&last_msg);
             for (i = 0; i < MAX_SAVE_MSG; i++) {
                 rd_string(old_msg[i]);
             }
 
-            rd_short((int16u *)&panic_save);
-            rd_short((int16u *)&total_winner);
-            rd_short((int16u *)&noscore);
+            rd_short((uint16_t *)&panic_save);
+            rd_short((uint16_t *)&total_winner);
+            rd_short((uint16_t *)&noscore);
             rd_shorts(player_hp, MAX_PLAYER_LEVEL);
 
             if ((version_min >= 2) || (version_min == 1 && patch_level >= 3)) {
                 for (i = 0; i < MAX_STORES; i++) {
                     st_ptr = &store[i];
                     rd_long((int32u *)&st_ptr->store_open);
-                    rd_short((int16u *)&st_ptr->insult_cur);
+                    rd_short((uint16_t *)&st_ptr->insult_cur);
                     rd_byte(&st_ptr->owner);
                     rd_byte(&st_ptr->store_ctr);
                     rd_short(&st_ptr->good_buy);
@@ -881,14 +881,14 @@ int *generate;
         /* only level specific info should follow, not present for dead
            characters */
 
-        rd_short((int16u *)&dun_level);
-        rd_short((int16u *)&char_row);
-        rd_short((int16u *)&char_col);
-        rd_short((int16u *)&mon_tot_mult);
-        rd_short((int16u *)&cur_height);
-        rd_short((int16u *)&cur_width);
-        rd_short((int16u *)&max_panel_rows);
-        rd_short((int16u *)&max_panel_cols);
+        rd_short((uint16_t *)&dun_level);
+        rd_short((uint16_t *)&char_row);
+        rd_short((uint16_t *)&char_col);
+        rd_short((uint16_t *)&mon_tot_mult);
+        rd_short((uint16_t *)&cur_height);
+        rd_short((uint16_t *)&cur_width);
+        rd_short((uint16_t *)&max_panel_rows);
+        rd_short((uint16_t *)&max_panel_cols);
 
         /* read in the creature ptr info */
         rd_byte(&char_tmp);
@@ -936,14 +936,14 @@ int *generate;
             total_count += count;
         }
 
-        rd_short((int16u *)&tcptr);
+        rd_short((uint16_t *)&tcptr);
         if (tcptr > MAX_TALLOC) {
             goto error;
         }
         for (i = MIN_TRIX; i < tcptr; i++) {
             rd_item(&t_list[i]);
         }
-        rd_short((int16u *)&mfptr);
+        rd_short((uint16_t *)&mfptr);
         if (mfptr > MAX_MALLOC) {
             goto error;
         }
@@ -957,7 +957,7 @@ int *generate;
             for (i = 0; i < MAX_STORES; i++) {
                 st_ptr = &store[i];
                 rd_long((int32u *)&st_ptr->store_open);
-                rd_short((int16u *)&st_ptr->insult_cur);
+                rd_short((uint16_t *)&st_ptr->insult_cur);
                 rd_byte(&st_ptr->owner);
                 rd_byte(&st_ptr->store_ctr);
                 rd_short(&st_ptr->good_buy);
@@ -1090,7 +1090,7 @@ uint8_t c;
 }
 
 static void wr_short(s)
-int16u s;
+uint16_t s;
 {
     xor_byte ^= (s & 0xFF);
     (void)putc((int)xor_byte, fileptr);
@@ -1150,11 +1150,11 @@ char *str;
 }
 
 static void wr_shorts(s, count)
-int16u *s;
+uint16_t *s;
 int count;
 {
     int i;
-    int16u *sptr;
+    uint16_t *sptr;
 
     DEBUG(fprintf(logfile, "%d SHORTS:", count));
     sptr = s;
@@ -1179,15 +1179,15 @@ inven_type *item;
     wr_long(item->flags);
     wr_byte(item->tval);
     wr_byte(item->tchar);
-    wr_short((int16u)item->p1);
+    wr_short((uint16_t)item->p1);
     wr_long((int32u)item->cost);
     wr_byte(item->subval);
     wr_byte(item->number);
     wr_short(item->weight);
-    wr_short((int16u)item->tohit);
-    wr_short((int16u)item->todam);
-    wr_short((int16u)item->ac);
-    wr_short((int16u)item->toac);
+    wr_short((uint16_t)item->tohit);
+    wr_short((uint16_t)item->todam);
+    wr_short((uint16_t)item->ac);
+    wr_short((uint16_t)item->toac);
     wr_bytes(item->damage, 2);
     wr_byte(item->level);
     wr_byte(item->ident);
@@ -1197,9 +1197,9 @@ static void wr_monster(mon)
 monster_type *mon;
 {
     DEBUG(fprintf(logfile, "MONSTER:\n"));
-    wr_short((int16u)mon->hp);
-    wr_short((int16u)mon->csleep);
-    wr_short((int16u)mon->cspeed);
+    wr_short((uint16_t)mon->hp);
+    wr_short((uint16_t)mon->csleep);
+    wr_short((uint16_t)mon->cspeed);
     wr_short(mon->mptr);
     wr_byte(mon->fy);
     wr_byte(mon->fx);
@@ -1221,15 +1221,15 @@ uint8_t *ptr;
 }
 
 static void rd_short(ptr)
-int16u *ptr;
+uint16_t *ptr;
 {
     uint8_t c;
-    int16u s;
+    uint16_t s;
 
     c = (getc(fileptr) & 0xFF);
     s = c ^ xor_byte;
     xor_byte = (getc(fileptr) & 0xFF);
-    s |= (int16u)(c ^ xor_byte) << 8;
+    s |= (uint16_t)(c ^ xor_byte) << 8;
     *ptr = s;
     DEBUG(fprintf(logfile, "SHORT: %02X %02X = %d\n", (int)c, (int)xor_byte,
                   (int)s));
@@ -1291,12 +1291,12 @@ char *str;
 }
 
 static void rd_shorts(ptr, count)
-int16u *ptr;
+uint16_t *ptr;
 int count;
 {
     int i;
-    int16u *sptr;
-    int16u s;
+    uint16_t *sptr;
+    uint16_t s;
     uint8_t c;
 
     DEBUG(fprintf(logfile, "%d SHORTS:", count));
@@ -1305,7 +1305,7 @@ int count;
         c = (getc(fileptr) & 0xFF);
         s = c ^ xor_byte;
         xor_byte = (getc(fileptr) & 0xFF);
-        s |= (int16u)(c ^ xor_byte) << 8;
+        s |= (uint16_t)(c ^ xor_byte) << 8;
         *sptr++ = s;
         DEBUG(fprintf(logfile, "  %02X %02X = %d", (int)c, (int)xor_byte,
                       (int)s));
@@ -1323,15 +1323,15 @@ inven_type *item;
     rd_long(&item->flags);
     rd_byte(&item->tval);
     rd_byte(&item->tchar);
-    rd_short((int16u *)&item->p1);
+    rd_short((uint16_t *)&item->p1);
     rd_long((int32u *)&item->cost);
     rd_byte(&item->subval);
     rd_byte(&item->number);
     rd_short(&item->weight);
-    rd_short((int16u *)&item->tohit);
-    rd_short((int16u *)&item->todam);
-    rd_short((int16u *)&item->ac);
-    rd_short((int16u *)&item->toac);
+    rd_short((uint16_t *)&item->tohit);
+    rd_short((uint16_t *)&item->todam);
+    rd_short((uint16_t *)&item->ac);
+    rd_short((uint16_t *)&item->toac);
     rd_bytes(item->damage, 2);
     rd_byte(&item->level);
     rd_byte(&item->ident);
@@ -1341,9 +1341,9 @@ static void rd_monster(mon)
 monster_type *mon;
 {
     DEBUG(fprintf(logfile, "MONSTER:\n"));
-    rd_short((int16u *)&mon->hp);
-    rd_short((int16u *)&mon->csleep);
-    rd_short((int16u *)&mon->cspeed);
+    rd_short((uint16_t *)&mon->hp);
+    rd_short((uint16_t *)&mon->csleep);
+    rd_short((uint16_t *)&mon->cspeed);
     rd_short(&mon->mptr);
     rd_byte(&mon->fy);
     rd_byte(&mon->fx);
@@ -1373,9 +1373,9 @@ high_scores *score;
 
     wr_long((int32u)score->points);
     wr_long((int32u)score->birth_date);
-    wr_short((int16u)score->uid);
-    wr_short((int16u)score->mhp);
-    wr_short((int16u)score->chp);
+    wr_short((uint16_t)score->uid);
+    wr_short((uint16_t)score->mhp);
+    wr_short((uint16_t)score->chp);
     wr_byte(score->dun_level);
     wr_byte(score->lev);
     wr_byte(score->max_dlv);
@@ -1398,9 +1398,9 @@ high_scores *score;
 
     rd_long((int32u *)&score->points);
     rd_long((int32u *)&score->birth_date);
-    rd_short((int16u *)&score->uid);
-    rd_short((int16u *)&score->mhp);
-    rd_short((int16u *)&score->chp);
+    rd_short((uint16_t *)&score->uid);
+    rd_short((uint16_t *)&score->mhp);
+    rd_short((uint16_t *)&score->chp);
     rd_byte(&score->dun_level);
     rd_byte(&score->lev);
     rd_byte(&score->max_dlv);

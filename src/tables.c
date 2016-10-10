@@ -64,7 +64,7 @@ uint8_t rgold_adj[MAX_RACES][MAX_RACES] = {
 };
 
 /* object_list[] index of objects that may appear in the store */
-int16u store_choice[MAX_STORES][STORE_CHOICES] = {
+uint16_t store_choice[MAX_STORES][STORE_CHOICES] = {
     /* General Store */
     {366, 365, 364, 84,  84,  365, 123, 366, 365, 350, 349, 348, 347,
      346, 346, 345, 345, 345, 344, 344, 344, 344, 344, 344, 344, 344},
@@ -181,7 +181,7 @@ uint8_t blows_table[7][6] = {
  * the function randnor() in misc1.c, this is much faster than calling
  * transcendental function to calculate a true normal distribution.
  */
-int16u normal_table[NORMAL_TABLE_SIZE] = {
+uint16_t normal_table[NORMAL_TABLE_SIZE] = {
      206,     613,    1022,    1430,    1838,    2245,    2652,    3058,
     3463,    3867,    4271,    4673,    5075,    5475,    5874,    6271,
     6667,    7061,    7454,    7845,    8234,    8621,    9006,    9389,

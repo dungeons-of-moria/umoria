@@ -35,7 +35,7 @@ int16 char_col;
 /* calculated base hp values for player at each level, store them so that
  * drain life + restore life does not affect hit points
  */
-int16u player_hp[MAX_PLAYER_LEVEL];
+uint16_t player_hp[MAX_PLAYER_LEVEL];
 
 /* Class titles for different levels */
 char *player_title[MAX_CLASS][MAX_PLAYER_LEVEL] = {
@@ -538,7 +538,7 @@ char *spell_names[62] = {
  *       30 = Stiletto
  *      322 = Beginners Handbook
  */
-int16u player_init[MAX_CLASS][5] = {
+uint16_t player_init[MAX_CLASS][5] = {
     {344, 365, 123, 30, 103}, /* Warrior */
     {344, 365, 123, 30, 318}, /* Mage */
     {344, 365, 123, 30, 322}, /* Priest */

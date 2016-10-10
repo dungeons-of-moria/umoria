@@ -98,7 +98,7 @@ extern char *player_title[MAX_CLASS][MAX_PLAYER_LEVEL];
 extern race_type race[MAX_RACES];
 extern background_type background[MAX_BACKGROUND];
 extern int32u player_exp[MAX_PLAYER_LEVEL];
-extern int16u player_hp[MAX_PLAYER_LEVEL];
+extern uint16_t player_hp[MAX_PLAYER_LEVEL];
 extern int16 char_row;
 extern int16 char_col;
 
@@ -114,14 +114,14 @@ extern int32u spell_learned;        /* Bit field for spells learnt -CJS- */
 extern int32u spell_worked;         /* Bit field for spells tried -CJS- */
 extern int32u spell_forgotten;      /* Bit field for spells forgotten -JEW- */
 extern uint8_t spell_order[32];     /* remember order that spells are learned in */
-extern int16u player_init[MAX_CLASS][5];
+extern uint16_t player_init[MAX_CLASS][5];
 extern int16 total_winner;
 extern int32 max_score;
 
 /* Following are store definitions */
 extern owner_type owners[MAX_OWNERS];
 extern store_type store[MAX_STORES];
-extern int16u store_choice[MAX_STORES][STORE_CHOICES];
+extern uint16_t store_choice[MAX_STORES][STORE_CHOICES];
 extern int (*store_buy[MAX_STORES])();
 
 /* Following are treasure arrays  and variables */
@@ -158,7 +158,7 @@ extern char *syllables[MAX_SYLLABLES];
 
 extern uint8_t blows_table[7][6];
 
-extern int16u normal_table[NORMAL_TABLE_SIZE];
+extern uint16_t normal_table[NORMAL_TABLE_SIZE];
 
 /* Initialized data which had to be moved from some other file
  * Since these get modified, macrsrc.c must be able to access them

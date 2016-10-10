@@ -176,7 +176,7 @@ int roff_recall(mon_num) int mon_num;
     int32 templong;
     int mspeed;
     int32u rcmove, rspells;
-    int16u rcdefense;
+    uint16_t rcdefense;
     recall_type save_mem;
 
     mp = &c_recall[mon_num];
