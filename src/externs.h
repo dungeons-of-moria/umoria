@@ -281,7 +281,7 @@ int next_to_corr();
 int damroll();
 int pdamroll();
 int los();
-unsigned char loc_symbol();
+int8u loc_symbol();
 int test_light();
 void prt_map();
 int compact_monsters();

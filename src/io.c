@@ -553,7 +553,6 @@ void screen_map() {
     };
 
     int8u map[MAX_WIDTH / RATIO + 1];
-    int8u tmp;
     int priority[256];
     int row, orow, col, myrow, mycol = 0;
     char prntscrnbuf[80];
@@ -602,7 +601,7 @@ void screen_map() {
 
         for (j = 0; j < MAX_WIDTH; j++) {
             col = j / RATIO;
-            tmp = loc_symbol(i, j);
+            int8u tmp = loc_symbol(i, j);
 
             if (priority[map[col]] < priority[tmp]) {
                 map[col] = tmp;

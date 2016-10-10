@@ -507,7 +507,7 @@ int fromY, fromX, toY, toX;
 }
 
 /* Returns symbol for given row, column      -RAK- */
-unsigned char loc_symbol(y, x)
+int8u loc_symbol(y, x)
 int y, x;
 {
     cave_type *cave_ptr;
@@ -557,7 +557,6 @@ int y, x;
 /* Prints the map of the dungeon      -RAK- */
 void prt_map() {
     int i, j, k;
-    unsigned char tmp_char;
 
     k = 0;
 
@@ -568,9 +567,9 @@ void prt_map() {
 
         /* Left to right */
         for (j = panel_col_min; j <= panel_col_max; j++) {
-            tmp_char = loc_symbol(i, j);
-            if (tmp_char != ' ') {
-                print(tmp_char, i, j);
+            int8u tmp = loc_symbol(i, j);
+            if (tmp != ' ') {
+                print(tmp, i, j);
             }
         }
     }

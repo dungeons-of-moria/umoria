@@ -330,16 +330,17 @@ void end_find() {
 static int see_wall(dir, y, x)
 int dir, y, x;
 {
-    char c;
-
     /* check to see if movement there possible */
     if (!mmove(dir, &y, &x)) {
         return TRUE;
-    } else if ((c = loc_symbol(y, x)) == '#' || c == '%') {
-        return TRUE;
-    } else {
-        return FALSE;
     }
+
+    int8u c = loc_symbol(y, x);
+    if (c == '#' || c == '%') {
+        return TRUE;
+    }
+
+    return FALSE;
 }
 
 /* Do we see anything? Used in running.   -CJS- */
