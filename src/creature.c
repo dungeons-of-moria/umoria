@@ -272,13 +272,13 @@ int monptr;
     int attype, adesc, adice, asides;
     int i, j, damage, flag, attackn, notice, visible;
     int32 gold;
-    int8u *attstr;
+    uint8_t *attstr;
     vtype cdesc, tmp_str, ddesc;
-     creature_type *r_ptr;
+    creature_type *r_ptr;
     monster_type *m_ptr;
-     struct misc *p_ptr;
-     struct flags *f_ptr;
-     inven_type *i_ptr;
+    struct misc *p_ptr;
+    struct flags *f_ptr;
+    inven_type *i_ptr;
 
     /* don't beat a dead body! */
     if (death) {

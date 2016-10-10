@@ -326,7 +326,7 @@ int16 class_level_adj[MAX_CLASS][MAX_LEV_ADJ] = {
 int32u spell_learned   = 0; /* bit mask of spells learned */
 int32u spell_worked    = 0; /* bit mask of spells tried and worked */
 int32u spell_forgotten = 0; /* bit mask of spells learned but forgotten */
-int8u  spell_order[32];     /* order spells learned/remembered/forgotten */
+uint8_t  spell_order[32];   /* order spells learned/remembered/forgotten */
 
 /* Warriors don't have spells, so there is no entry for them.
  * Note that this means you must always subtract one from the

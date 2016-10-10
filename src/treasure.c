@@ -562,7 +562,7 @@ char *special_names[SN_ARRAY_SIZE] = {
 int16 sorted_objects[MAX_DUNGEON_OBJ];
 
 /* Identified objects flags */
-int8u object_ident[OBJECT_IDENT_SIZE];
+uint8_t object_ident[OBJECT_IDENT_SIZE];
 int16 t_level[MAX_OBJ_LEVEL + 1];
 inven_type t_list[MAX_TALLOC];
 inven_type inventory[INVEN_ARRAY_SIZE];

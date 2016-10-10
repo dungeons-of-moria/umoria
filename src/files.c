@@ -163,7 +163,7 @@ void print_objects() {
                     objdes(tmp_str, i_ptr, TRUE);
                     (void)fprintf(file1, "%d %s\n", i_ptr->level, tmp_str);
                 }
-                pusht((int8u)j);
+                pusht((uint8_t)j);
                 (void)fclose(file1);
                 prt("Completed.", 0, 0);
             } else {

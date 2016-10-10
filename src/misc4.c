@@ -61,7 +61,7 @@ void scribe_object() {
 /* Append an additional comment to an object description.	-CJS- */
 void add_inscribe(i_ptr, type)
 inven_type *i_ptr;
-int8u type;
+uint8_t type;
 { i_ptr->ident |= type; }
 
 /* Replace any existing comment in an object description with a new one. CJS*/

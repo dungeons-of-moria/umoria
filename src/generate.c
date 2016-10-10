@@ -415,7 +415,7 @@ static void build_room(yval, xval) int yval, xval;
 {
     int i, j, y_depth, x_right;
     int y_height, x_left;
-    int8u floor;
+    uint8_t floor;
     cave_type *c_ptr, *d_ptr;
 
     if (dun_level <= randint(25)) {
@@ -471,7 +471,7 @@ int yval, xval;
     int y_height, y_depth;
     int x_left, x_right, limit;
     int i0, i, j;
-    int8u floor;
+    uint8_t floor;
     cave_type *c_ptr, *d_ptr;
 
     if (dun_level <= randint(25)) {
@@ -541,7 +541,7 @@ int yval, xval;
 {
     int i, j, y_height, x_left;
     int y_depth, x_right, tmp;
-    int8u floor;
+    uint8_t floor;
     cave_type *c_ptr, *d_ptr;
 
     if (dun_level <= randint(25)) {
@@ -824,7 +824,7 @@ int yval, xval;
     int y_height, y_depth;
     int x_left, x_right;
     int tmp, i, j;
-    int8u floor;
+    uint8_t floor;
     cave_type *c_ptr;
 
     if (dun_level <= randint(25)) {

@@ -332,7 +332,7 @@ int num, sides;
 }
 
 int pdamroll(array)
-int8u *array;
+uint8_t *array;
 {
     return damroll((int)array[0], (int)array[1]);
 }
@@ -507,7 +507,7 @@ int fromY, fromX, toY, toX;
 }
 
 /* Returns symbol for given row, column      -RAK- */
-int8u loc_symbol(y, x)
+uint8_t loc_symbol(y, x)
 int y, x;
 {
     cave_type *cave_ptr;
@@ -567,7 +567,7 @@ void prt_map() {
 
         /* Left to right */
         for (j = panel_col_min; j <= panel_col_max; j++) {
-            int8u tmp = loc_symbol(i, j);
+            uint8_t tmp = loc_symbol(i, j);
             if (tmp != ' ') {
                 print(tmp, i, j);
             }
@@ -668,7 +668,7 @@ int popm() {
 
 /* Gives Max hit points          -RAK- */
 int max_hp(array)
-int8u *array;
+uint8_t *array;
 {
     return (array[0] * array[1]);
 }
@@ -697,7 +697,7 @@ int slp;
         mon_ptr->hp = pdamroll(c_list[z].hd);
     }
 
-    /* the c_list speed value is 10 greater, so that it can be a int8u */
+    /* the c_list speed value is 10 greater, so that it can be a uint8_t */
     mon_ptr->cspeed = c_list[z].speed - 10 + py.flags.speed;
     mon_ptr->stunned = 0;
     mon_ptr->cdis = distance(char_row, char_col, y, x);
@@ -746,7 +746,7 @@ void place_win_monster() {
             mon_ptr->hp = pdamroll(c_list[mon_ptr->mptr].hd);
         }
 
-        /* the c_list speed value is 10 greater, so that it can be a int8u */
+        /* the c_list speed value is 10 greater, so that it can be a uint8_t */
         mon_ptr->cspeed = c_list[mon_ptr->mptr].speed - 10 + py.flags.speed;
         mon_ptr->stunned = 0;
         mon_ptr->cdis = distance(char_row, char_col, y, x);
@@ -981,7 +981,7 @@ int popt() {
 /* Delete_object() should always be called instead, unless the object in
    question is not in the dungeon, e.g. in store1.c and files.c */
 void pusht(x)
-int8u x;
+uint8_t x;
 {
     int i, j;
 

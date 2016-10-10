@@ -373,7 +373,7 @@ static void store_create(store_num) int store_num;
         tries++;
     } while (tries <= 3);
 
-    pusht((int8u)cur_pos);
+    pusht((uint8_t)cur_pos);
 }
 
 /* Initialize and up-keep the store's inventory.    -RAK- */

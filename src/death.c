@@ -143,7 +143,7 @@ void display_scores(show_player) int show_player;
     high_scores score;
     char input;
     char string[100];
-    int8u version_maj, version_min, patch_level;
+    uint8_t version_maj, version_min, patch_level;
 
     int16 player_uid;
 
@@ -331,7 +331,7 @@ static void highscores() {
     high_scores old_entry, new_entry, entry;
     int i;
     char *tmp;
-    int8u version_maj, version_min, patch_level;
+    uint8_t version_maj, version_min, patch_level;
     off_t curpos;
 
     clear_screen();

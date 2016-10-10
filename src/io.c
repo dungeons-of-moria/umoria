@@ -547,12 +547,12 @@ void bell() {
 void screen_map() {
     int i, j;
 
-    static int8u screen_border[2][6] = {
+    static uint8_t screen_border[2][6] = {
         {'+', '+', '+', '+', '-', '|'}, /* normal chars */
         {201, 187, 200, 188, 205, 186}, /* graphics chars */
     };
 
-    int8u map[MAX_WIDTH / RATIO + 1];
+    uint8_t map[MAX_WIDTH / RATIO + 1];
     int priority[256];
     int row, orow, col, myrow, mycol = 0;
     char prntscrnbuf[80];
@@ -601,7 +601,7 @@ void screen_map() {
 
         for (j = 0; j < MAX_WIDTH; j++) {
             col = j / RATIO;
-            int8u tmp = loc_symbol(i, j);
+            uint8_t tmp = loc_symbol(i, j);
 
             if (priority[map[col]] < priority[tmp]) {
                 map[col] = tmp;

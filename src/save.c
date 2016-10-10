@@ -55,7 +55,7 @@ long time();
 /* these are used for the save file, to avoid having to pass them to every
    procedure */
 static FILE *fileptr;
-static int8u xor_byte;
+static uint8_t xor_byte;
 static int from_savefile; /* can overwrite old savefile when save */
 static int32u start_time; /* time that play started */
 
@@ -69,7 +69,7 @@ static int sv_write() {
     int32u l;
     int i, j;
     int count;
-    int8u char_tmp, prev_char;
+    uint8_t char_tmp, prev_char;
     cave_type *c_ptr;
     recall_type *r_ptr;
     struct stats *s_ptr;
@@ -325,29 +325,29 @@ static int sv_write() {
         for (j = 0; j < MAX_WIDTH; j++) {
             c_ptr = &cave[i][j];
             if (c_ptr->cptr != 0) {
-                wr_byte((int8u)i);
-                wr_byte((int8u)j);
+                wr_byte((uint8_t)i);
+                wr_byte((uint8_t)j);
                 wr_byte(c_ptr->cptr);
             }
         }
     }
 
     /* marks end of cptr info */
-    wr_byte((int8u)0xFF);
+    wr_byte((uint8_t)0xFF);
 
     for (i = 0; i < MAX_HEIGHT; i++) {
         for (j = 0; j < MAX_WIDTH; j++) {
             c_ptr = &cave[i][j];
             if (c_ptr->tptr != 0) {
-                wr_byte((int8u)i);
-                wr_byte((int8u)j);
+                wr_byte((uint8_t)i);
+                wr_byte((uint8_t)j);
                 wr_byte(c_ptr->tptr);
             }
         }
     }
 
     /* marks end of tptr info */
-    wr_byte((int8u)0xFF);
+    wr_byte((uint8_t)0xFF);
 
     /* must set counter to zero, note that code may write out two bytes unnecessarily */
     count = 0;
@@ -358,7 +358,7 @@ static int sv_write() {
             char_tmp = c_ptr->fval | (c_ptr->lr << 4) | (c_ptr->fm << 5) |
                        (c_ptr->pl << 6) | (c_ptr->tl << 7);
             if (char_tmp != prev_char || count == MAX_UCHAR) {
-                wr_byte((int8u)count);
+                wr_byte((uint8_t)count);
                 wr_byte(prev_char);
                 prev_char = char_tmp;
                 count = 1;
@@ -369,7 +369,7 @@ static int sv_write() {
     }
 
     /* save last entry */
-    wr_byte((int8u)count);
+    wr_byte((uint8_t)count);
     wr_byte(prev_char);
 
     wr_short((int16u)tcptr);
@@ -424,7 +424,7 @@ char *fnam;
 {
     vtype temp;
     int ok, fd;
-    int8u char_tmp;
+    uint8_t char_tmp;
 
     if (character_saved) {
         return TRUE; /* Nothing to save. */
@@ -455,11 +455,11 @@ char *fnam;
 
     if (fileptr != NULL) {
         xor_byte = 0;
-        wr_byte((int8u)CUR_VERSION_MAJ);
+        wr_byte((uint8_t)CUR_VERSION_MAJ);
         xor_byte = 0;
-        wr_byte((int8u)CUR_VERSION_MIN);
+        wr_byte((uint8_t)CUR_VERSION_MIN);
         xor_byte = 0;
-        wr_byte((int8u)PATCH_LEVEL);
+        wr_byte((uint8_t)PATCH_LEVEL);
         xor_byte = 0;
         char_tmp = randint(256) - 1;
         wr_byte(char_tmp);
@@ -509,8 +509,8 @@ int *generate;
     struct stats *s_ptr;
     struct flags *f_ptr;
     store_type *st_ptr;
-    int8u char_tmp, ychar, xchar, count;
-    int8u version_maj, version_min, patch_level;
+    uint8_t char_tmp, ychar, xchar, count;
+    uint8_t version_maj, version_min, patch_level;
 
     *generate = TRUE;
     fd = -1;
@@ -1082,7 +1082,7 @@ int *generate;
 }
 
 static void wr_byte(c)
-int8u c;
+uint8_t c;
 {
     xor_byte ^= c;
     (void)putc((int)xor_byte, fileptr);
@@ -1118,11 +1118,11 @@ int32u l;
 }
 
 static void wr_bytes(c, count)
-int8u *c;
+uint8_t *c;
 int count;
 {
     int i;
-    int8u *ptr;
+    uint8_t *ptr;
 
     DEBUG(fprintf(logfile, "%d BYTES:", count));
     ptr = c;
@@ -1210,9 +1210,9 @@ monster_type *mon;
 }
 
 static void rd_byte(ptr)
-int8u *ptr;
+uint8_t *ptr;
 {
-    int8u c;
+    uint8_t c;
 
     c = getc(fileptr) & 0xFF;
     *ptr = c ^ xor_byte;
@@ -1223,7 +1223,7 @@ int8u *ptr;
 static void rd_short(ptr)
 int16u *ptr;
 {
-    int8u c;
+    uint8_t c;
     int16u s;
 
     c = (getc(fileptr) & 0xFF);
@@ -1239,7 +1239,7 @@ static void rd_long(ptr)
 int32u *ptr;
 {
     int32u l;
-    int8u c;
+    uint8_t c;
 
     c = (getc(fileptr) & 0xFF);
     l = c ^ xor_byte;
@@ -1256,12 +1256,12 @@ int32u *ptr;
 }
 
 static void rd_bytes(ch_ptr, count)
-int8u *ch_ptr;
+uint8_t *ch_ptr;
 int count;
 {
     int i;
-    int8u *ptr;
-    int8u c;
+    uint8_t *ptr;
+    uint8_t c;
 
     DEBUG(fprintf(logfile, "%d BYTES:", count));
     ptr = ch_ptr;
@@ -1277,7 +1277,7 @@ int count;
 static void rd_string(str)
 char *str;
 {
-    int8u c;
+    uint8_t c;
 
     DEBUG(char *s = str);
     DEBUG(fprintf(logfile, "STRING: "));
@@ -1297,7 +1297,7 @@ int count;
     int i;
     int16u *sptr;
     int16u s;
-    int8u c;
+    uint8_t c;
 
     DEBUG(fprintf(logfile, "%d SHORTS:", count));
     sptr = ptr;
@@ -1382,8 +1382,8 @@ high_scores *score;
     wr_byte(score->sex);
     wr_byte(score->race);
     wr_byte(score->class);
-    wr_bytes((int8u *)score->name, PLAYER_NAME_SIZE);
-    wr_bytes((int8u *)score->died_from, 25);
+    wr_bytes((uint8_t *)score->name, PLAYER_NAME_SIZE);
+    wr_bytes((uint8_t *)score->died_from, 25);
     DEBUG(fclose(logfile));
 }
 
@@ -1407,7 +1407,7 @@ high_scores *score;
     rd_byte(&score->sex);
     rd_byte(&score->race);
     rd_byte(&score->class);
-    rd_bytes((int8u *)score->name, PLAYER_NAME_SIZE);
-    rd_bytes((int8u *)score->died_from, 25);
+    rd_bytes((uint8_t *)score->name, PLAYER_NAME_SIZE);
+    rd_bytes((uint8_t *)score->died_from, 25);
     DEBUG(fclose(logfile));
 }

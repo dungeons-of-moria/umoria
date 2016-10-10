@@ -335,7 +335,7 @@ int dir, y, x;
         return TRUE;
     }
 
-    int8u c = loc_symbol(y, x);
+    uint8_t c = loc_symbol(y, x);
     if (c == '#' || c == '%') {
         return TRUE;
     }

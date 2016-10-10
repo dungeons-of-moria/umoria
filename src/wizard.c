@@ -62,7 +62,7 @@ void wizard_light() {
 void change_character() {
     int tmp_val;
     int32 tmp_lval;
-    int8u *a_ptr;
+    uint8_t *a_ptr;
     vtype tmp_str;
     struct misc *m_ptr;
 

@@ -219,7 +219,7 @@ int y, x, num;
 
 /* Converts stat num into string      -RAK- */
 void cnv_stat(stat, out_val)
-int8u stat;
+uint8_t stat;
 char *out_val;
 {
     int part1, part2;
@@ -619,12 +619,12 @@ void prt_winner() {
     }
 }
 
-int8u modify_stat(stat, amount)
+uint8_t modify_stat(stat, amount)
 int stat;
 int16 amount;
 {
     int loop, i;
-    int8u tmp_stat;
+    uint8_t tmp_stat;
 
     tmp_stat = py.stats.cur_stat[stat];
 

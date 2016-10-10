@@ -22,7 +22,6 @@
 #include "standard_library.h"
 
 /* Use ISO C99 standard declarations to get correct lengths. */
-typedef uint_least8_t int8u;
 typedef int_least16_t int16;
 typedef uint_least16_t int16u;
 typedef int_least32_t int32;
@@ -59,22 +58,22 @@ typedef struct creature_type {
     int32u spells;      /* Creature spells */
     int16u cdefense;    /* Bit field */
     int16u mexp;        /* Exp value for kill */
-    int8u sleep;        /* Inactive counter/10 */
-    int8u aaf;          /* Area affect radius */
-    int8u ac;           /* AC */
-    int8u speed;        /* Movement speed+10 */
-    int8u cchar;        /* Character rep. */
-    int8u hd[2];        /* Creatures hit die */
-    int8u damage[4];    /* Type attack and damage*/
-    int8u level;        /* Level of creature */
+    uint8_t sleep;      /* Inactive counter/10 */
+    uint8_t aaf;        /* Area affect radius */
+    uint8_t ac;         /* AC */
+    uint8_t speed;      /* Movement speed+10 */
+    uint8_t cchar;      /* Character rep. */
+    uint8_t hd[2];      /* Creatures hit die */
+    uint8_t damage[4];  /* Type attack and damage*/
+    uint8_t level;      /* Level of creature */
 } creature_type;
 
 /* Monster attack and damage types */
 typedef struct m_attack_type {
-    int8u attack_type;
-    int8u attack_desc;
-    int8u attack_dice;
-    int8u attack_sides;
+    uint8_t attack_type;
+    uint8_t attack_desc;
+    uint8_t attack_dice;
+    uint8_t attack_sides;
 } m_attack_type;
 
 /* Monster memories. -CJS- */
@@ -83,8 +82,8 @@ typedef struct recall_type {
     int32u r_spells;
     int16u r_kills, r_deaths;
     int16u r_cdefense;
-    int8u r_wake, r_ignore;
-    int8u r_attacks[MAX_MON_NATTACK];
+    uint8_t r_wake, r_ignore;
+    uint8_t r_attacks[MAX_MON_NATTACK];
 } recall_type;
 
 typedef struct monster_type {
@@ -94,31 +93,31 @@ typedef struct monster_type {
     int16u mptr;      /* Pointer into creature*/
 
     /* Note: fy, fx, and cdis constrain dungeon size to less than 256 by 256 */
-    int8u fy;         /* Y Pointer into map */
-    int8u fx;         /* X Pointer into map */
-    int8u cdis;       /* Cur dis from player */
+    uint8_t fy;       /* Y Pointer into map */
+    uint8_t fx;       /* X Pointer into map */
+    uint8_t cdis;     /* Cur dis from player */
 
-    int8u ml;
-    int8u stunned;
-    int8u confused;
+    uint8_t ml;
+    uint8_t stunned;
+    uint8_t confused;
 } monster_type;
 
 typedef struct treasure_type {
     char *name;         /* Object name */
     int32u flags;       /* Special flags */
-    int8u tval;         /* Category number */
-    int8u tchar;        /* Character representation*/
+    uint8_t tval;       /* Category number */
+    uint8_t tchar;      /* Character representation*/
     int16 p1;           /* Misc. use variable */
     int32 cost;         /* Cost of item */
-    int8u subval;       /* Sub-category number */
-    int8u number;       /* Number of items */
+    uint8_t subval;     /* Sub-category number */
+    uint8_t number;     /* Number of items */
     int16u weight;      /* Weight */
     int16 tohit;        /* Plusses to hit */
     int16 todam;        /* Plusses to damage */
     int16 ac;           /* Normal AC */
     int16 toac;         /* Plusses to AC */
-    int8u damage[2];    /* Damage when hits */
-    int8u level;        /* Level item first found */
+    uint8_t damage[2];  /* Damage when hits */
+    uint8_t level;      /* Level item first found */
 } treasure_type;
 
 /* only damage, ac, and tchar are constant; level could possibly be made
@@ -133,23 +132,23 @@ typedef struct treasure_type {
 #define INSCRIP_SIZE 13 /* notice alignment, must be 4*x + 1 */
 typedef struct inven_type {
     int16u index;                   /* Index to object_list */
-    int8u name2;                    /* Object special name */
+    uint8_t name2;                  /* Object special name */
     char inscrip[INSCRIP_SIZE];     /* Object inscription */
     int32u flags;                   /* Special flags */
-    int8u tval;                     /* Category number */
-    int8u tchar;                    /* Character representation*/
+    uint8_t tval;                   /* Category number */
+    uint8_t tchar;                  /* Character representation*/
     int16 p1;                       /* Misc. use variable */
     int32 cost;                     /* Cost of item */
-    int8u subval;                   /* Sub-category number */
-    int8u number;                   /* Number of items */
+    uint8_t subval;                 /* Sub-category number */
+    uint8_t number;                 /* Number of items */
     int16u weight;                  /* Weight */
     int16 tohit;                    /* Plusses to hit */
     int16 todam;                    /* Plusses to damage */
     int16 ac;                       /* Normal AC */
     int16 toac;                     /* Plusses to AC */
-    int8u damage[2];                /* Damage when hits */
-    int8u level;                    /* Level item first found */
-    int8u ident;                    /* Identify information */
+    uint8_t damage[2];              /* Damage when hits */
+    uint8_t level;                  /* Level item first found */
+    uint8_t ident;                  /* Identify information */
 } inven_type;
 
 #define PLAYER_NAME_SIZE 27
@@ -157,7 +156,7 @@ typedef struct inven_type {
 typedef struct player_type {
     struct misc {
         char name[PLAYER_NAME_SIZE];  /* Name of character */
-        int8u male;                   /* Sex of character */
+        uint8_t male;                 /* Sex of character */
         int32 au;                     /* Gold */
         int32 max_exp;                /* Max experience */
         int32 exp;                    /* Cur experience */
@@ -185,10 +184,10 @@ typedef struct player_type {
         int16 save;                   /* Saving throw */
         int16 sc;                     /* Social Class */
         int16 stl;                    /* Stealth factor */
-        int8u pclass;                 /* # of class */
-        int8u prace;                  /* # of race */
-        int8u hitdie;                 /* Char hit die */
-        int8u expfact;                /* Experience factor */
+        uint8_t pclass;               /* # of class */
+        uint8_t prace;                /* # of race */
+        uint8_t hitdie;               /* Char hit die */
+        uint8_t expfact;              /* Experience factor */
         int16 cmana;                  /* Cur mana pts */
         int16u cmana_frac;            /* Cur mana fraction * 2^16 */
         int16 chp;                    /* Cur hit pts */
@@ -198,10 +197,10 @@ typedef struct player_type {
 
     /* Stats now kept in arrays, for more efficient access. -CJS- */
     struct stats {
-        int8u max_stat[6];            /* What is restored */
-        int8u cur_stat[6];            /* What is natural */
+        uint8_t max_stat[6];          /* What is restored */
+        uint8_t cur_stat[6];          /* What is natural */
         int16 mod_stat[6];            /* What is modified, may be +/- */
-        int8u use_stat[6];            /* What is used */
+        uint8_t use_stat[6];          /* What is used */
     } stats;
 
     struct flags {
@@ -230,34 +229,34 @@ typedef struct player_type {
         int16 word_recall;            /* Timed teleport level*/
         int16 see_infra;              /* See warm creatures */
         int16 tim_infra;              /* Timed infra vision */
-        int8u see_inv;                /* Can see invisible */
-        int8u teleport;               /* Random teleportation*/
-        int8u free_act;               /* Never paralyzed */
-        int8u slow_digest;            /* Lower food needs */
-        int8u aggravate;              /* Aggravate monsters */
-        int8u fire_resist;            /* Resistance to fire */
-        int8u cold_resist;            /* Resistance to cold */
-        int8u acid_resist;            /* Resistance to acid */
-        int8u regenerate;             /* Regenerate hit pts */
-        int8u lght_resist;            /* Resistance to light */
-        int8u ffall;                  /* No damage falling */
-        int8u sustain_str;            /* Keep strength */
-        int8u sustain_int;            /* Keep intelligence */
-        int8u sustain_wis;            /* Keep wisdom */
-        int8u sustain_con;            /* Keep constitution */
-        int8u sustain_dex;            /* Keep dexterity */
-        int8u sustain_chr;            /* Keep charisma */
-        int8u confuse_monster;        /* Glowing hands. */
-        int8u new_spells;             /* Number of spells can learn. */
+        uint8_t see_inv;              /* Can see invisible */
+        uint8_t teleport;             /* Random teleportation*/
+        uint8_t free_act;             /* Never paralyzed */
+        uint8_t slow_digest;          /* Lower food needs */
+        uint8_t aggravate;            /* Aggravate monsters */
+        uint8_t fire_resist;          /* Resistance to fire */
+        uint8_t cold_resist;          /* Resistance to cold */
+        uint8_t acid_resist;          /* Resistance to acid */
+        uint8_t regenerate;           /* Regenerate hit pts */
+        uint8_t lght_resist;          /* Resistance to light */
+        uint8_t ffall;                /* No damage falling */
+        uint8_t sustain_str;          /* Keep strength */
+        uint8_t sustain_int;          /* Keep intelligence */
+        uint8_t sustain_wis;          /* Keep wisdom */
+        uint8_t sustain_con;          /* Keep constitution */
+        uint8_t sustain_dex;          /* Keep dexterity */
+        uint8_t sustain_chr;          /* Keep charisma */
+        uint8_t confuse_monster;      /* Glowing hands. */
+        uint8_t new_spells;           /* Number of spells can learn. */
     } flags;
 } player_type;
 
 /* spell name is stored in spell_names[] array at index i, +31 if priest */
 typedef struct spell_type {
-    int8u slevel;
-    int8u smana;
-    int8u sfail;
-    int8u sexp;     /* 1/4 of exp gained for learning spell */
+    uint8_t slevel;
+    uint8_t smana;
+    uint8_t sfail;
+    uint8_t sexp;     /* 1/4 of exp gained for learning spell */
 } spell_type;
 
 typedef struct race_type {
@@ -268,16 +267,16 @@ typedef struct race_type {
     int16 dex_adj;
     int16 con_adj;
     int16 chr_adj;
-    int8u b_age;              /* Base age of character */
-    int8u m_age;              /* Maximum age of character */
-    int8u m_b_ht;             /* base height for males */
-    int8u m_m_ht;             /* mod height for males */
-    int8u m_b_wt;             /* base weight for males */
-    int8u m_m_wt;             /* mod weight for males */
-    int8u f_b_ht;             /* base height females */
-    int8u f_m_ht;             /* mod height for females */
-    int8u f_b_wt;             /* base weight for female */
-    int8u f_m_wt;             /* mod weight for females */
+    uint8_t b_age;            /* Base age of character */
+    uint8_t m_age;            /* Maximum age of character */
+    uint8_t m_b_ht;           /* base height for males */
+    uint8_t m_m_ht;           /* mod height for males */
+    uint8_t m_b_wt;           /* base weight for males */
+    uint8_t m_m_wt;           /* mod weight for males */
+    uint8_t f_b_ht;           /* base height females */
+    uint8_t f_m_ht;           /* mod height for females */
+    uint8_t f_b_wt;           /* base weight for female */
+    uint8_t f_m_wt;           /* mod weight for females */
     int16 b_dis;              /* base chance to disarm */
     int16 srh;                /* base chance for search */
     int16 stl;                /* Stealth of character */
@@ -285,45 +284,45 @@ typedef struct race_type {
     int16 bth;                /* adj base chance to hit */
     int16 bthb;               /* adj base to hit with bows */
     int16 bsav;               /* Race base for saving throw */
-    int8u bhitdie;            /* Base hit points for race */
-    int8u infra;              /* See infra-red */
-    int8u b_exp;              /* Base experience factor */
-    int8u rtclass;            /* Bit field for class types */
+    uint8_t bhitdie;          /* Base hit points for race */
+    uint8_t infra;            /* See infra-red */
+    uint8_t b_exp;            /* Base experience factor */
+    uint8_t rtclass;          /* Bit field for class types */
 } race_type;
 
 typedef struct class_type {
     char *title;              /* type of class */
-    int8u adj_hd;             /* Adjust hit points */
-    int8u mdis;               /* mod disarming traps */
-    int8u msrh;               /* modifier to searching */
-    int8u mstl;               /* modifier to stealth */
-    int8u mfos;               /* modifier to freq-of-search */
-    int8u mbth;               /* modifier to base to hit */
-    int8u mbthb;              /* modifier to base to hit - bows*/
-    int8u msav;               /* Class modifier to save */
+    uint8_t adj_hd;           /* Adjust hit points */
+    uint8_t mdis;             /* mod disarming traps */
+    uint8_t msrh;             /* modifier to searching */
+    uint8_t mstl;             /* modifier to stealth */
+    uint8_t mfos;             /* modifier to freq-of-search */
+    uint8_t mbth;             /* modifier to base to hit */
+    uint8_t mbthb;            /* modifier to base to hit - bows*/
+    uint8_t msav;             /* Class modifier to save */
     int16 madj_str;           /* Class modifier for strength */
     int16 madj_int;           /* Class modifier for intelligence*/
     int16 madj_wis;           /* Class modifier for wisdom */
     int16 madj_dex;           /* Class modifier for dexterity */
     int16 madj_con;           /* Class modifier for constitution*/
     int16 madj_chr;           /* Class modifier for charisma */
-    int8u spell;              /* class use mage spells */
-    int8u m_exp;              /* Class experience factor */
-    int8u first_spell_lev;    /* First level where class can use spells. */
+    uint8_t spell;            /* class use mage spells */
+    uint8_t m_exp;            /* Class experience factor */
+    uint8_t first_spell_lev;  /* First level where class can use spells. */
 } class_type;
 
 typedef struct background_type {
     char *info;               /* History information */
-    int8u roll;               /* Die roll needed for history */
-    int8u chart;              /* Table number */
-    int8u next;               /* Pointer to next table */
-    int8u bonus;              /* Bonus to the Social Class+50 */
+    uint8_t roll;             /* Die roll needed for history */
+    uint8_t chart;            /* Table number */
+    uint8_t next;             /* Pointer to next table */
+    uint8_t bonus;            /* Bonus to the Social Class+50 */
 } background_type;
 
 typedef struct cave_type {
-    int8u cptr;
-    int8u tptr;
-    int8u fval;
+    uint8_t cptr;
+    uint8_t tptr;
+    uint8_t fval;
 
     unsigned int lr : 1;      /* room should be lit with perm light, walls with
                                  this set should be perm lit after tunneled out */
@@ -336,11 +335,11 @@ typedef struct cave_type {
 typedef struct owner_type {
     char *owner_name;
     int16 max_cost;
-    int8u max_inflate;
-    int8u min_inflate;
-    int8u haggle_per;
-    int8u owner_race;
-    int8u insult_max;
+    uint8_t max_inflate;
+    uint8_t min_inflate;
+    uint8_t haggle_per;
+    uint8_t owner_race;
+    uint8_t insult_max;
 } owner_type;
 
 typedef struct inven_record {
@@ -351,8 +350,8 @@ typedef struct inven_record {
 typedef struct store_type {
     int32 store_open;
     int16 insult_cur;
-    int8u owner;
-    int8u store_ctr;
+    uint8_t owner;
+    uint8_t store_ctr;
     int16u good_buy;
     int16u bad_buy;
     inven_record store_inven[STORE_INVEN_MAX];
@@ -365,12 +364,12 @@ typedef struct high_scores {
     int16 uid;
     int16 mhp;
     int16 chp;
-    int8u dun_level;
-    int8u lev;
-    int8u max_dlv;
-    int8u sex;
-    int8u race;
-    int8u class;
+    uint8_t dun_level;
+    uint8_t lev;
+    uint8_t max_dlv;
+    uint8_t sex;
+    uint8_t race;
+    uint8_t class;
     char name[PLAYER_NAME_SIZE];
     char died_from[25];
 } high_scores;

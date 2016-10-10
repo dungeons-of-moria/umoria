@@ -51,7 +51,7 @@ owner_type owners[MAX_OWNERS] = {
 };
 
 /* Buying and selling adjustments for character race VS store owner race */
-int8u rgold_adj[MAX_RACES][MAX_RACES] = {
+uint8_t rgold_adj[MAX_RACES][MAX_RACES] = {
     /*                 Hum, HfE, Elf, Hal, Gno, Dwa, HfO, HfT */
     /* Human */      { 100, 105, 105, 110, 113, 115, 120, 125 },
     /* Half-Elf */   { 110, 100, 100, 105, 110, 120, 125, 130 },
@@ -166,7 +166,7 @@ char *syllables[MAX_SYLLABLES] = {
 };
 
 /* used to calculate the number of blows the player gets in combat */
-int8u blows_table[7][6] = {
+uint8_t blows_table[7][6] = {
     /* STR/W:   9  18  67  107 117 118  : DEX */
     /* <2 */  { 1,  1,  1,  1,  1,  1 },
     /* <3 */  { 1,  1,  1,  1,  2,  2 },

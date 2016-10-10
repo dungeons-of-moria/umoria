@@ -167,7 +167,7 @@ int bool_roff_recall(mon_num) int mon_num;
 int roff_recall(mon_num) int mon_num;
 {
     char *p, *q;
-    int8u *pu;
+    uint8_t *pu;
     vtype temp;
     recall_type *mp;
     creature_type *cp;
@@ -266,7 +266,7 @@ int roff_recall(mon_num) int mon_num;
         k = TRUE;
     }
 
-    /* the c_list speed value is 10 greater, so that it can be a int8u */
+    /* the c_list speed value is 10 greater, so that it can be a uint8_t */
     mspeed = cp->speed - 10;
     if (rcmove & CM_ALL_MV_FLAGS) {
         if (k) {

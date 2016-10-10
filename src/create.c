@@ -432,14 +432,14 @@ static void get_class() {
  * which affects the amount of gold a player has.
  */
 static int monval(i)
-int8u i;
+uint8_t i;
 {
     return 5 * ((int)i - 10);
 }
 
 static void get_money() {
      int tmp, gold;
-     int8u *a_ptr;
+     uint8_t *a_ptr;
 
     a_ptr = py.stats.max_stat;
     tmp = monval(a_ptr[A_STR]) +

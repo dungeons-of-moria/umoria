@@ -102,7 +102,7 @@ extern int16u player_hp[MAX_PLAYER_LEVEL];
 extern int16 char_row;
 extern int16 char_col;
 
-extern int8u rgold_adj[MAX_RACES][MAX_RACES];
+extern uint8_t rgold_adj[MAX_RACES][MAX_RACES];
 
 extern class_type class[MAX_CLASS];
 extern int16 class_level_adj[MAX_CLASS][MAX_LEV_ADJ];
@@ -113,7 +113,7 @@ extern char *spell_names[62];
 extern int32u spell_learned;        /* Bit field for spells learnt -CJS- */
 extern int32u spell_worked;         /* Bit field for spells tried -CJS- */
 extern int32u spell_forgotten;      /* Bit field for spells forgotten -JEW- */
-extern int8u spell_order[32];       /* remember order that spells are learned in */
+extern uint8_t spell_order[32];     /* remember order that spells are learned in */
 extern int16u player_init[MAX_CLASS][5];
 extern int16 total_winner;
 extern int32 max_score;
@@ -126,7 +126,7 @@ extern int (*store_buy[MAX_STORES])();
 
 /* Following are treasure arrays  and variables */
 extern treasure_type object_list[MAX_OBJECTS];
-extern int8u object_ident[OBJECT_IDENT_SIZE];
+extern uint8_t object_ident[OBJECT_IDENT_SIZE];
 extern int16 t_level[MAX_OBJ_LEVEL + 1];
 extern inven_type t_list[MAX_TALLOC];
 extern inven_type inventory[INVEN_ARRAY_SIZE];
@@ -156,7 +156,7 @@ extern char *rocks[MAX_ROCKS];
 extern char *amulets[MAX_AMULETS];
 extern char *syllables[MAX_SYLLABLES];
 
-extern int8u blows_table[7][6];
+extern uint8_t blows_table[7][6];
 
 extern int16u normal_table[NORMAL_TABLE_SIZE];
 
@@ -281,7 +281,7 @@ int next_to_corr();
 int damroll();
 int pdamroll();
 int los();
-int8u loc_symbol();
+uint8_t loc_symbol();
 int test_light();
 void prt_map();
 int compact_monsters();
@@ -335,7 +335,7 @@ void prt_state();
 void prt_speed();
 void prt_study();
 void prt_winner();
-int8u modify_stat();
+uint8_t modify_stat();
 void set_use_stat();
 int inc_stat();
 int dec_stat();
