@@ -67,7 +67,7 @@ void moriaterm() {
 
     nonl();
     intrflush(stdscr, false);
-    keypad(stdscr, true);
+    keypad(stdscr, false);
 
     // Default delay on macOS is 1 second, let's do something about that!
     set_escdelay(50);
