@@ -227,7 +227,7 @@ void quaff() {
                 // case 33: break; // this is no longer useful, now that there is a 'G'ain magic spells command
                 case 34:
                     if (py.misc.exp > 0) {
-                        int32 m, scale;
+                        int32_t m, scale;
                         msg_print("You feel your memories fade.");
                         /* Lose between 1/5 and 2/5 of your experience */
                         m = py.misc.exp / 5;

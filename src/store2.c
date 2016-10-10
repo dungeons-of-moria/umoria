@@ -138,7 +138,7 @@ static void prt_comment1() {
 
 /* %A1 is offer, %A2 is asking. */
 static void prt_comment2(offer, asking, final)
-int32 offer, asking;
+int32_t offer, asking;
 int final;
 {
     vtype comment;
@@ -155,7 +155,7 @@ int final;
 }
 
 static void prt_comment3(offer, asking, final)
-int32 offer, asking;
+int32_t offer, asking;
 int final;
 {
     vtype comment;
@@ -217,7 +217,7 @@ int store_num, start;
     inven_type *i_ptr;
     int i, j, stop;
     bigvtype out_val1, out_val2;
-    int32 x;
+    int32_t x;
 
     s_ptr = &store[store_num];
     i = (start % 12);
@@ -239,7 +239,7 @@ int store_num, start;
         prt(out_val2, i + 5, 0);
         x = s_ptr->store_inven[start].scost;
         if (x <= 0) {
-            int32 value = -x;
+            int32_t value = -x;
             value = value * chr_adj() / 100;
             if (value <= 0) {
                 value = 1;
@@ -270,7 +270,7 @@ static void display_cost(store_num, pos)
 int store_num, pos;
 {
     int i;
-    int32 j;
+    int32_t j;
     vtype out_val;
     store_type *s_ptr;
 
@@ -387,10 +387,10 @@ int store_num;
 
 static int get_haggle(comment, new_offer, num_offer)
 char *comment;
-int32 *new_offer;
+int32_t *new_offer;
 int num_offer;
 {
-    int32 i;
+    int32_t i;
     vtype out_val, default_offer;
     int flag, clen;
     int orig_clen;
@@ -467,7 +467,7 @@ int num_offer;
 static int receive_offer(store_num, comment, new_offer, last_offer, num_offer, factor)
 int store_num;
 char *comment;
-int32 *new_offer, last_offer;
+int32_t *new_offer, last_offer;
 int num_offer, factor;
 {
     int flag;
@@ -499,14 +499,14 @@ int num_offer, factor;
 /* Haggling routine          -RAK- */
 static int purchase_haggle(store_num, price, item)
 int store_num;
-int32 *price;
+int32_t *price;
 inven_type *item;
 {
-    int32 max_sell, min_sell, max_buy;
-    int32 cost, cur_ask, final_ask, min_offer;
-    int32 last_offer, new_offer;
-    int32 x1, x2, x3;
-    int32 min_per, max_per;
+    int32_t max_sell, min_sell, max_buy;
+    int32_t cost, cur_ask, final_ask, min_offer;
+    int32_t last_offer, new_offer;
+    int32_t x1, x2, x3;
+    int32_t min_per, max_per;
     int flag, loop_flag;
     char *comment;
     vtype out_val;
@@ -662,15 +662,15 @@ inven_type *item;
 /* Haggling routine          -RAK- */
 static int sell_haggle(store_num, price, item)
 int store_num;
-int32 *price;
+int32_t *price;
 inven_type *item;
 {
-    int32 max_sell, max_buy, min_buy;
-    int32 cost, cur_ask, final_ask, min_offer;
-    int32 last_offer, new_offer;
-    int32 max_gold;
-    int32 x1, x2, x3;
-    int32 min_per, max_per;
+    int32_t max_sell, max_buy, min_buy;
+    int32_t cost, cur_ask, final_ask, min_offer;
+    int32_t last_offer, new_offer;
+    int32_t max_gold;
+    int32_t x1, x2, x3;
+    int32_t min_per, max_per;
     int flag, loop_flag;
     char *comment;
     vtype out_val;
@@ -862,7 +862,7 @@ static int store_purchase(store_num, cur_top)
 int store_num;
 int *cur_top;
 {
-    int32 price;
+    int32_t price;
     int i, choice;
     bigvtype out_val, tmp_str;
     store_type *s_ptr;
@@ -951,7 +951,7 @@ static int store_sell(store_num, cur_top)
 int store_num, *cur_top;
 {
     int item_val, item_pos;
-    int32 price;
+    int32_t price;
     bigvtype out_val, tmp_str;
     inven_type sold_obj;
     int sell, choice, flag;

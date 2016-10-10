@@ -77,7 +77,7 @@ int y, x;
     cave[y][x].tptr = cur_pos;
     invcopy(&t_list[cur_pos], OBJ_GOLD_LIST + i);
     t_ptr = &t_list[cur_pos];
-    t_ptr->cost += (8L * (int32)randint((int)t_ptr->cost)) + randint(8);
+    t_ptr->cost += (8L * (int32_t)randint((int)t_ptr->cost)) + randint(8);
     if (cave[y][x].cptr == 1) {
         msg_print("You feel something roll beneath your feet.");
     }
@@ -261,7 +261,7 @@ int row, column;
 /* Print long number with header at given row, column */
 static void prt_lnum(header, num, row, column)
 char *header;
-int32 num;
+int32_t num;
 int row, column;
 {
     vtype out_val;
@@ -273,7 +273,7 @@ int row, column;
 /* Print long number (7 digits of space) with header at given row, column */
 static void prt_7lnum(header, num, row, column)
 char *header;
-int32 num;
+int32_t num;
 int row, column;
 {
     vtype out_val;
@@ -295,7 +295,7 @@ int num, row, column;
 
 /* Print long number at given row, column */
 static void prt_long(num, row, column)
-int32 num;
+int32_t num;
 int row, column;
 {
     vtype out_val;
@@ -1040,14 +1040,14 @@ void put_misc2() {
     struct misc *m_ptr;
 
     m_ptr = &py.misc;
-    prt_7lnum("Level      ", (int32)m_ptr->lev, 9, 28);
+    prt_7lnum("Level      ", (int32_t)m_ptr->lev, 9, 28);
     prt_7lnum("Experience ", m_ptr->exp, 10, 28);
     prt_7lnum("Max Exp    ", m_ptr->max_exp, 11, 28);
 
     if (m_ptr->lev >= MAX_PLAYER_LEVEL) {
         prt("Exp to Adv.: *******", 12, 28);
     } else {
-        prt_7lnum("Exp to Adv.", (int32)(player_exp[m_ptr->lev - 1] * m_ptr->expfact / 100), 12, 28);
+        prt_7lnum("Exp to Adv.", (int32_t)(player_exp[m_ptr->lev - 1] * m_ptr->expfact / 100), 12, 28);
     }
 
     prt_7lnum("Gold       ", m_ptr->au, 13, 28);
@@ -1886,7 +1886,7 @@ int stat;
 {
     int new_mana, levels;
     struct misc *p_ptr;
-    int32 value;
+    int32_t value;
 
     p_ptr = &py.misc;
 
@@ -1928,7 +1928,7 @@ int stat;
             if (p_ptr->mana != 0) {
                 /* change current mana proportionately to change of max mana,
                    divide first to avoid overflow, little loss of accuracy */
-                value = (((int32)p_ptr->cmana << 16) + p_ptr->cmana_frac) / p_ptr->mana * new_mana;
+                value = (((int32_t)p_ptr->cmana << 16) + p_ptr->cmana_frac) / p_ptr->mana * new_mana;
                 p_ptr->cmana = value >> 16;
                 p_ptr->cmana_frac = value & 0xFFFF;
             } else {
@@ -1951,7 +1951,7 @@ int stat;
 
 /* Increases hit points and level      -RAK- */
 static void gain_level() {
-    int32 dif_exp, need_exp;
+    int32_t dif_exp, need_exp;
     vtype out_val;
     struct misc *p_ptr;
     class_type *c_ptr;
@@ -2007,7 +2007,7 @@ void prt_experience() {
 void calc_hitpoints() {
     int hitpoints;
     struct misc *p_ptr;
-    int32 value;
+    int32_t value;
 
     p_ptr = &py.misc;
     hitpoints = player_hp[p_ptr->lev - 1] + (con_adj() * p_ptr->lev);
@@ -2029,7 +2029,7 @@ void calc_hitpoints() {
     if ((hitpoints != p_ptr->mhp) && (p_ptr->mhp != 0)) {
         /* change current hit points proportionately to change of mhp,
            divide first to avoid overflow, little loss of accuracy */
-        value = (((int32)p_ptr->chp << 16) + p_ptr->chp_frac) / p_ptr->mhp * hitpoints;
+        value = (((int32_t)p_ptr->chp << 16) + p_ptr->chp_frac) / p_ptr->mhp * hitpoints;
         p_ptr->chp = value >> 16;
         p_ptr->chp_frac = value & 0xFFFF;
         p_ptr->mhp = hitpoints;
@@ -2081,7 +2081,7 @@ char *object_str, *mtc_str, *insert;
 void insert_lnum(object_str, mtc_str, number, show_sign)
 char *object_str;
 char *mtc_str;
-int32 number;
+int32_t number;
 int show_sign;
 {
     int mlen;

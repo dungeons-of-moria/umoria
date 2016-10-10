@@ -2255,7 +2255,7 @@ void lose_chr() {
 
 /* Lose experience          -RAK- */
 void lose_exp(amount)
-int32 amount;
+int32_t amount;
 {
     int i;
     struct misc *m_ptr;

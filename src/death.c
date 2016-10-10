@@ -307,8 +307,8 @@ retry:
 }
 
 /* Calculates the total number of points earned    -JWT- */
-int32 total_points() {
-    int32 total;
+int32_t total_points() {
+    int32_t total;
     int i;
 
     total = py.misc.max_exp + (100 * py.misc.max_dlv);

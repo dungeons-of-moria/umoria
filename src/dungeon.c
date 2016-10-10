@@ -1704,12 +1704,12 @@ char c;
 /* Regenerate hit points        -RAK- */
 static void regenhp(int percent) {
     struct misc *p_ptr;
-    int32 new_chp, new_chp_frac;
+    int32_t new_chp, new_chp_frac;
     int old_chp;
 
     p_ptr = &py.misc;
     old_chp = p_ptr->chp;
-    new_chp = ((int32)p_ptr->mhp) * percent + PLAYER_REGEN_HPBASE;
+    new_chp = ((int32_t)p_ptr->mhp) * percent + PLAYER_REGEN_HPBASE;
 
     /* div 65536 */
     p_ptr->chp += new_chp >> 16;
@@ -1744,12 +1744,12 @@ static void regenmana(percent)
 int percent;
 {
     struct misc *p_ptr;
-    int32 new_mana, new_mana_frac;
+    int32_t new_mana, new_mana_frac;
     int old_cmana;
 
     p_ptr = &py.misc;
     old_cmana = p_ptr->cmana;
-    new_mana = ((int32)p_ptr->mana) * percent + PLAYER_REGEN_MNBASE;
+    new_mana = ((int32_t)p_ptr->mana) * percent + PLAYER_REGEN_MNBASE;
 
     /* div 65536 */
     p_ptr->cmana += new_mana >> 16;

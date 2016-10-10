@@ -61,7 +61,7 @@ void wizard_light() {
 /* Wizard routine for gaining on stats      -RAK- */
 void change_character() {
     int tmp_val;
-    int32 tmp_lval;
+    int32_t tmp_lval;
     uint8_t *a_ptr;
     vtype tmp_str;
     struct misc *m_ptr;
@@ -273,7 +273,7 @@ void change_character() {
 /* Wizard routine for creating objects      -RAK- */
 void wizard_create() {
     int tmp_val;
-    int32 tmp_lval;
+    int32_t tmp_lval;
     vtype tmp_str;
     inven_type *i_ptr;
     inven_type forge;

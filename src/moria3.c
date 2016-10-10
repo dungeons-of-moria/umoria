@@ -562,7 +562,7 @@ int mon_take_hit(monptr, dam)
 int monptr, dam;
 {
     uint32_t i;
-    int32 new_exp, new_exp_frac;
+    int32_t new_exp, new_exp_frac;
     monster_type *m_ptr;
     struct misc *p_ptr;
     creature_type *c_ptr;
@@ -591,8 +591,8 @@ int monptr, dam;
         c_ptr = &c_list[m_ptr->mptr];
         p_ptr = &py.misc;
 
-        new_exp = ((int32)c_ptr->mexp * c_ptr->level) / p_ptr->lev;
-        new_exp_frac = ((((int32)c_ptr->mexp * c_ptr->level) % p_ptr->lev) *
+        new_exp = ((int32_t)c_ptr->mexp * c_ptr->level) / p_ptr->lev;
+        new_exp_frac = ((((int32_t)c_ptr->mexp * c_ptr->level) % p_ptr->lev) *
                         0x10000L / p_ptr->lev) +
                        p_ptr->exp_frac;
 

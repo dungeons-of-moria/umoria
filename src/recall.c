@@ -173,7 +173,7 @@ int roff_recall(mon_num) int mon_num;
     creature_type *cp;
     int i, k;
     uint32_t j;
-    int32 templong;
+    int32_t templong;
     int mspeed;
     uint32_t rcmove, rspells;
     uint16_t rcdefense;
@@ -348,11 +348,11 @@ int roff_recall(mon_num) int mon_num;
 
         /* calculate the integer exp part, can be larger than 64K when first
            level character looks at Balrog info, so must store in long */
-        templong = (int32)cp->mexp * cp->level / py.misc.lev;
+        templong = (int32_t)cp->mexp * cp->level / py.misc.lev;
 
         /* calculate the fractional exp part scaled by 100,
            must use long arithmetic to avoid overflow */
-        j = (((int32)cp->mexp * cp->level % py.misc.lev) * (int32)1000 / py.misc.lev + 5) / 10;
+        j = (((int32_t)cp->mexp * cp->level % py.misc.lev) * (int32_t)1000 / py.misc.lev + 5) / 10;
 
         (void)sprintf(temp, " creature is worth %d.%02d point%s", templong, j, (templong == 1 && j == 0 ? "" : "s"));
         roff(temp);

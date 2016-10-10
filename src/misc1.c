@@ -41,10 +41,10 @@ uint32_t seed;
     } else {
         clock_var = seed;
     }
-    randes_seed = (int32)clock_var;
+    randes_seed = (int32_t)clock_var;
 
     clock_var += 8762;
-    town_seed = (int32)clock_var;
+    town_seed = (int32_t)clock_var;
 
     clock_var += 113452L;
     set_rnd_seed(clock_var);
@@ -82,7 +82,7 @@ int check_time() {
 int randint(maxval)
 int maxval;
 {
-    int32 randval;
+    int32_t randval;
 
     randval = rnd();
     return ((int)(randval % maxval) + 1);

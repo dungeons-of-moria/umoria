@@ -31,10 +31,10 @@ static void insert_store();
 static void store_create();
 
 /* Returns the value for any given object    -RAK- */
-int32 item_value(i_ptr)
+int32_t item_value(i_ptr)
 inven_type *i_ptr;
 {
-    int32 value;
+    int32_t value;
 
     value = i_ptr->cost;
 
@@ -145,12 +145,12 @@ inven_type *i_ptr;
 }
 
 /* Asking price for an item        -RAK- */
-int32 sell_price(snum, max_sell, min_sell, item)
+int32_t sell_price(snum, max_sell, min_sell, item)
 int snum;
-int32 *max_sell, *min_sell;
+int32_t *max_sell, *min_sell;
 inven_type *item;
 {
-    int32 i;
+    int32_t i;
     store_type *s_ptr;
 
     s_ptr = &store[snum];
@@ -208,7 +208,7 @@ int store_num;
 static void insert_store(store_num, pos, icost, i_ptr)
 int pos;
 int store_num;
-int32 icost;
+int32_t icost;
 inven_type *i_ptr;
 {
     int i;
@@ -232,7 +232,7 @@ inven_type *t_ptr;
 {
     int item_num, item_val, flag;
     int typ, subt;
-    int32 icost, dummy;
+    int32_t icost, dummy;
     inven_type *i_ptr;
     store_type *s_ptr;
 
@@ -409,7 +409,7 @@ void store_maint() {
 /* eliminate need to bargain if player has haggled well in the past   -DJB- */
 int noneedtobargain(store_num, minprice)
 int store_num;
-int32 minprice;
+int32_t minprice;
 {
     int flagnoneed;
     int bargain_record;
@@ -421,14 +421,14 @@ int32 minprice;
     }
     bargain_record = (s_ptr->good_buy - 3 * s_ptr->bad_buy - 5);
     flagnoneed =
-        ((bargain_record > 0) && ((int32)bargain_record * (int32)bargain_record > minprice / 50));
+        ((bargain_record > 0) && ((int32_t)bargain_record * (int32_t)bargain_record > minprice / 50));
 
     return (flagnoneed);
 }
 
 /* update the bargin info          -DJB- */
 void updatebargain(store_num, price, minprice) int store_num;
-int32 price, minprice;
+int32_t price, minprice;
 {
     store_type *s_ptr;
 

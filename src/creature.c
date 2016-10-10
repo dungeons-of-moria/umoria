@@ -271,7 +271,7 @@ int monptr;
 {
     int attype, adesc, adice, asides;
     int i, j, damage, flag, attackn, notice, visible;
-    int32 gold;
+    int32_t gold;
     uint8_t *attstr;
     vtype cdesc, tmp_str, ddesc;
     creature_type *r_ptr;

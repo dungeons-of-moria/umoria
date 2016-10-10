@@ -54,33 +54,33 @@ int hack_monptr                 = -1;
 int weapon_heavy                = FALSE;
 int pack_heavy                  = FALSE;
 vtype died_from;
-int32 birth_date;
+int32_t birth_date;
 
 vtype savefile; /* The savefile to use. */
 
-int16_t total_winner              = FALSE;
-int32 max_score                 = 0;
+int16_t total_winner            = FALSE;
+int32_t max_score               = 0;
 int character_generated         = 0;        /* don't save score until char gen finished */
 int character_saved             = 0;        /* prevents save on kill after save_char() */
 FILE *highscore_fp;                         /* File pointer to high score file */
 uint32_t randes_seed;                       /* for restarting randes_state */
 uint32_t town_seed;                         /* for restarting town_seed */
 int16_t cur_height, cur_width;              /* Cur dungeon size */
-int16_t dun_level                 = 0;      /* Cur dungeon level */
-int16_t missile_ctr               = 0;      /* Counter for missiles */
+int16_t dun_level               = 0;        /* Cur dungeon level */
+int16_t missile_ctr             = 0;        /* Counter for missiles */
 int msg_flag;                               /* Set with first msg */
 vtype old_msg[MAX_SAVE_MSG];                /* Last message */
-int16_t last_msg                  = 0;      /* Where last is held */
+int16_t last_msg                = 0;        /* Where last is held */
 int death                       = FALSE;    /* True if died */
 int find_flag;                              /* Used in MORIA for .(dir) */
 int free_turn_flag;                         /* Used in MORIA, do not move creatures */
 int command_count;                          /* Gives repetition of commands. -CJS- */
 int default_dir                 = FALSE;    /* Use last direction for repeated command */
-int32 turn                      = -1;       /* Cur turn of game */
+int32_t turn                    = -1;       /* Cur turn of game */
 int wizard                      = FALSE;    /* Wizard flag */
 int to_be_wizard                = FALSE;    /* used during startup, when -w option used */
-int16_t panic_save                = FALSE;  /* this is true if playing from a panic save */
-int16_t noscore                   = FALSE;  /* Don't log the game. -CJS- */
+int16_t panic_save              = FALSE;    /* this is true if playing from a panic save */
+int16_t noscore                 = FALSE;    /* Don't log the game. -CJS- */
 
 int rogue_like_commands; /* set in config.h/main.c */
 

@@ -1114,7 +1114,7 @@ uint32_t l;
     DEBUG(fprintf(logfile, " %02X", (int)xor_byte));
     xor_byte ^= ((l >> 24) & 0xFF);
     (void)putc((int)xor_byte, fileptr);
-    DEBUG(fprintf(logfile, " %02X = %ld\n", (int)xor_byte, (int32)l));
+    DEBUG(fprintf(logfile, " %02X = %ld\n", (int)xor_byte, (int32_t)l));
 }
 
 static void wr_bytes(c, count)
@@ -1252,7 +1252,7 @@ uint32_t *ptr;
     l |= (uint32_t)(c ^ xor_byte) << 24;
     *ptr = l;
     DEBUG(
-        fprintf(logfile, "%02X %02X = %ld\n", (int)c, (int)xor_byte, (int32)l));
+        fprintf(logfile, "%02X %02X = %ld\n", (int)c, (int)xor_byte, (int32_t)l));
 }
 
 static void rd_bytes(ch_ptr, count)

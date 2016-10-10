@@ -21,9 +21,6 @@
 
 #include "standard_library.h"
 
-/* Use ISO C99 standard declarations to get correct lengths. */
-typedef int_least32_t int32;
-
 /* some machines will not accept 'signed char' as a type, and some accept it
    but still treat it like an unsigned character, let's just avoid it,
    any variable which can ever hold a negative value must be 16 or 32 bits */
@@ -105,7 +102,7 @@ typedef struct treasure_type {
     uint8_t tval;       /* Category number */
     uint8_t tchar;      /* Character representation*/
     int16_t p1;         /* Misc. use variable */
-    int32 cost;         /* Cost of item */
+    int32_t cost;       /* Cost of item */
     uint8_t subval;     /* Sub-category number */
     uint8_t number;     /* Number of items */
     uint16_t weight;    /* Weight */
@@ -135,7 +132,7 @@ typedef struct inven_type {
     uint8_t tval;                   /* Category number */
     uint8_t tchar;                  /* Character representation*/
     int16_t p1;                     /* Misc. use variable */
-    int32 cost;                     /* Cost of item */
+    int32_t cost;                   /* Cost of item */
     uint8_t subval;                 /* Sub-category number */
     uint8_t number;                 /* Number of items */
     uint16_t weight;                /* Weight */
@@ -154,9 +151,9 @@ typedef struct player_type {
     struct misc {
         char name[PLAYER_NAME_SIZE];  /* Name of character */
         uint8_t male;                 /* Sex of character */
-        int32 au;                     /* Gold */
-        int32 max_exp;                /* Max experience */
-        int32 exp;                    /* Cur experience */
+        int32_t au;                   /* Gold */
+        int32_t max_exp;              /* Max experience */
+        int32_t exp;                  /* Cur experience */
         uint16_t exp_frac;            /* Cur exp fraction * 2^16 */
         uint16_t age;                 /* Characters age */
         uint16_t ht;                  /* Height */
@@ -340,12 +337,12 @@ typedef struct owner_type {
 } owner_type;
 
 typedef struct inven_record {
-    int32 scost;
+    int32_t scost;
     inven_type sitem;
 } inven_record;
 
 typedef struct store_type {
-    int32 store_open;
+    int32_t store_open;
     int16_t insult_cur;
     uint8_t owner;
     uint8_t store_ctr;
@@ -356,8 +353,8 @@ typedef struct store_type {
 
 /* 64 bytes for this structure */
 typedef struct high_scores {
-    int32 points;
-    int32 birth_date;
+    int32_t points;
+    int32_t birth_date;
     int16_t uid;
     int16_t mhp;
     int16_t chp;

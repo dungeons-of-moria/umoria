@@ -29,7 +29,7 @@ extern int hack_monptr;
 
 extern vtype died_from;
 extern vtype savefile;              /* The save file. -CJS- */
-extern int32 birth_date;
+extern int32_t birth_date;
 
 /* These are options, set with set_options command -CJS- */
 extern int rogue_like_commands;
@@ -70,7 +70,7 @@ extern int msg_flag;                /* Set with first msg */
 extern vtype old_msg[MAX_SAVE_MSG]; /* Last messages -CJS- */
 extern int16_t last_msg;            /* Where in the array is the last */
 extern int death;                   /* True if died */
-extern int32 turn;                  /* Cur trun of game */
+extern int32_t turn;                /* Cur trun of game */
 extern int wizard;                  /* Wizard flag */
 extern int to_be_wizard;
 extern int16_t panic_save;          /* this is true if playing from a panic save */
@@ -116,7 +116,7 @@ extern uint32_t spell_forgotten;    /* Bit field for spells forgotten -JEW- */
 extern uint8_t spell_order[32];     /* remember order that spells are learned in */
 extern uint16_t player_init[MAX_CLASS][5];
 extern int16_t total_winner;
-extern int32 max_score;
+extern int32_t max_score;
 
 /* Following are store definitions */
 extern owner_type owners[MAX_OWNERS];
@@ -187,7 +187,7 @@ void creatures();
 /* death.c */
 void display_scores();
 int duplicate_character();
-int32 total_points();
+int32_t total_points();
 void exit_game();
 
 /* desc.c */
@@ -468,7 +468,7 @@ int roff_recall();
 /* rnd.c */
 uint32_t get_rnd_seed();
 void set_rnd_seed();
-int32 rnd();
+int32_t rnd();
 
 /* save.c */
 int save_char();
@@ -576,8 +576,8 @@ int restore_level();
 void use();
 
 /* store1.c */
-int32 item_value();
-int32 sell_price();
+int32_t item_value();
+int32_t sell_price();
 int store_check_num();
 void store_carry();
 void store_destroy();
