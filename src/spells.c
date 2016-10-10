@@ -2397,9 +2397,9 @@ int y, x;
 
 /* Enchants a plus onto an item.      -RAK- */
 int enchant(plusses, limit)
-int16 *plusses;
-int16 limit; /* maximum bonus allowed; usually 10, but weapon's maximum
-                damage when enchanting melee weapons to damage */
+int16_t *plusses;
+int16_t limit; /* maximum bonus allowed; usually 10, but weapon's maximum
+                  damage when enchanting melee weapons to damage */
 {
     int chance, res;
 

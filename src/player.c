@@ -29,8 +29,8 @@
 player_type py;
 
 /* player location in dungeon */
-int16 char_row;
-int16 char_col;
+int16_t char_row;
+int16_t char_col;
 
 /* calculated base hp values for player at each level, store them so that
  * drain life + restore life does not affect hit points
@@ -313,7 +313,7 @@ class_type class[MAX_CLASS] = {
  * CLA_MISC_HIT is identical to CLA_SAVE, which takes advantage of
  * the fact that the save values are independent of the class.
  */
-int16 class_level_adj[MAX_CLASS][MAX_LEV_ADJ] = {
+int16_t class_level_adj[MAX_CLASS][MAX_LEV_ADJ] = {
     /*               bth    bthb   device disarm save/misc hit */
     /* Warrior */  { 4,     4,     2,     2,     3 },
     /* Mage    */  { 2,     2,     4,     3,     3 },

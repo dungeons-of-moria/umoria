@@ -128,7 +128,7 @@ static char *comment6[5] = {
     "Sorry, what was that again?",
 };
 
-extern int16 last_store_inc;
+extern int16_t last_store_inc;
 
 /* Comments vary.          -RAK- */
 /* Comment one : Finished haggling */

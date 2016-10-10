@@ -110,7 +110,7 @@ void magic_init() {
     reset_seed();
 }
 
-int16 object_offset(t_ptr)
+int16_t object_offset(t_ptr)
 inven_type *t_ptr;
 {
     switch (t_ptr->tval) {
@@ -142,7 +142,7 @@ inven_type *t_ptr;
 void known1(i_ptr)
 inven_type *i_ptr;
 {
-    int16 offset;
+    int16_t offset;
     uint8_t indexx;
 
     if ((offset = object_offset(i_ptr)) < 0) {
@@ -158,7 +158,7 @@ inven_type *i_ptr;
 int known1_p(i_ptr)
 inven_type *i_ptr;
 {
-    int16 offset;
+    int16_t offset;
     uint8_t indexx;
 
     /* Items which don't have a 'color' are always known1, so that they can
@@ -209,7 +209,7 @@ inven_type *i_ptr;
 static void unsample(i_ptr)
 inven_type *i_ptr;
 {
-    int16 offset;
+    int16_t offset;
     uint8_t indexx;
 
     /* used to clear ID_DAMD flag, but I think it should remain set */
@@ -228,7 +228,7 @@ inven_type *i_ptr;
 void sample(i_ptr)
 inven_type *i_ptr;
 {
-    int16 offset;
+    int16_t offset;
     uint8_t indexx;
 
     if ((offset = object_offset(i_ptr)) < 0) {

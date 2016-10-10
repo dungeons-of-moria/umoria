@@ -45,7 +45,7 @@ char *copyright[17] = {
     "along with Umoria.  If not, see <http://www.gnu.org/licenses/>."};
 
 /* Save the store's last increment value. */
-int16 last_store_inc;
+int16_t last_store_inc;
 
 /* a horrible hack: needed because compact_monster() can be called from
    creatures() via summon_monster() and place_monster() */
@@ -58,29 +58,29 @@ int32 birth_date;
 
 vtype savefile; /* The savefile to use. */
 
-int16 total_winner              = FALSE;
+int16_t total_winner              = FALSE;
 int32 max_score                 = 0;
-int character_generated         = 0;      /* don't save score until char gen finished */
-int character_saved             = 0;      /* prevents save on kill after save_char() */
-FILE *highscore_fp;                       /* File pointer to high score file */
-int32u randes_seed;                       /* for restarting randes_state */
-int32u town_seed;                         /* for restarting town_seed */
-int16 cur_height, cur_width;              /* Cur dungeon size */
-int16 dun_level                 = 0;      /* Cur dungeon level */
-int16 missile_ctr               = 0;      /* Counter for missiles */
-int msg_flag;                             /* Set with first msg */
-vtype old_msg[MAX_SAVE_MSG];              /* Last message */
-int16 last_msg                  = 0;      /* Where last is held */
-int death                       = FALSE;  /* True if died */
-int find_flag;                            /* Used in MORIA for .(dir) */
-int free_turn_flag;                       /* Used in MORIA, do not move creatures */
-int command_count;                        /* Gives repetition of commands. -CJS- */
-int default_dir                 = FALSE;  /* Use last direction for repeated command */
-int32 turn                      = -1;     /* Cur turn of game */
-int wizard                      = FALSE;  /* Wizard flag */
-int to_be_wizard                = FALSE;  /* used during startup, when -w option used */
-int16 panic_save                = FALSE;  /* this is true if playing from a panic save */
-int16 noscore                   = FALSE;  /* Don't log the game. -CJS- */
+int character_generated         = 0;        /* don't save score until char gen finished */
+int character_saved             = 0;        /* prevents save on kill after save_char() */
+FILE *highscore_fp;                         /* File pointer to high score file */
+int32u randes_seed;                         /* for restarting randes_state */
+int32u town_seed;                           /* for restarting town_seed */
+int16_t cur_height, cur_width;              /* Cur dungeon size */
+int16_t dun_level                 = 0;      /* Cur dungeon level */
+int16_t missile_ctr               = 0;      /* Counter for missiles */
+int msg_flag;                               /* Set with first msg */
+vtype old_msg[MAX_SAVE_MSG];                /* Last message */
+int16_t last_msg                  = 0;      /* Where last is held */
+int death                       = FALSE;    /* True if died */
+int find_flag;                              /* Used in MORIA for .(dir) */
+int free_turn_flag;                         /* Used in MORIA, do not move creatures */
+int command_count;                          /* Gives repetition of commands. -CJS- */
+int default_dir                 = FALSE;    /* Use last direction for repeated command */
+int32 turn                      = -1;       /* Cur turn of game */
+int wizard                      = FALSE;    /* Wizard flag */
+int to_be_wizard                = FALSE;    /* used during startup, when -w option used */
+int16_t panic_save                = FALSE;  /* this is true if playing from a panic save */
+int16_t noscore                   = FALSE;  /* Don't log the game. -CJS- */
 
 int rogue_like_commands; /* set in config.h/main.c */
 
@@ -111,7 +111,7 @@ int wait_for_more               = FALSE;  /* used when ^C hit during -more- prom
 int closing_flag                = FALSE;  /* Used for closing */
 
 /*  Following are calculated from max dungeon sizes */
-int16 max_panel_rows, max_panel_cols;
+int16_t max_panel_rows, max_panel_cols;
 int panel_row, panel_col;
 int panel_row_min, panel_row_max;
 int panel_col_min, panel_col_max;

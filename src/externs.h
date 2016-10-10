@@ -61,29 +61,29 @@ extern int character_saved;         /* prevents save on kill after save_char() *
 extern FILE *highscore_fp;          /* High score file pointer */
 extern int command_count;           /* Repetition of commands. -CJS- */
 extern int default_dir;             /* Use last direction in repeated commands */
-extern int16 noscore;               /* Don't score this game. -CJS- */
+extern int16_t noscore;             /* Don't score this game. -CJS- */
 extern int32u randes_seed;          /* For encoding colors */
 extern int32u town_seed;            /* Seed for town genera*/
-extern int16 dun_level;             /* Cur dungeon level */
-extern int16 missile_ctr;           /* Counter for missiles */
+extern int16_t dun_level;           /* Cur dungeon level */
+extern int16_t missile_ctr;         /* Counter for missiles */
 extern int msg_flag;                /* Set with first msg */
 extern vtype old_msg[MAX_SAVE_MSG]; /* Last messages -CJS- */
-extern int16 last_msg;              /* Where in the array is the last */
+extern int16_t last_msg;            /* Where in the array is the last */
 extern int death;                   /* True if died */
 extern int32 turn;                  /* Cur trun of game */
 extern int wizard;                  /* Wizard flag */
 extern int to_be_wizard;
-extern int16 panic_save;            /* this is true if playing from a panic save */
+extern int16_t panic_save;          /* this is true if playing from a panic save */
 
 extern int wait_for_more;
 
 extern char days[7][29];
 extern int closing_flag;            /* Used for closing */
 
-extern int16 cur_height, cur_width; /* Cur dungeon size */
+extern int16_t cur_height, cur_width; /* Cur dungeon size */
 
 /*  Following are calculated from max dungeon sizes */
-extern int16 max_panel_rows, max_panel_cols;
+extern int16_t max_panel_rows, max_panel_cols;
 extern int panel_row, panel_col;
 extern int panel_row_min, panel_row_max;
 extern int panel_col_min, panel_col_max;
@@ -99,13 +99,13 @@ extern race_type race[MAX_RACES];
 extern background_type background[MAX_BACKGROUND];
 extern int32u player_exp[MAX_PLAYER_LEVEL];
 extern uint16_t player_hp[MAX_PLAYER_LEVEL];
-extern int16 char_row;
-extern int16 char_col;
+extern int16_t char_row;
+extern int16_t char_col;
 
 extern uint8_t rgold_adj[MAX_RACES][MAX_RACES];
 
 extern class_type class[MAX_CLASS];
-extern int16 class_level_adj[MAX_CLASS][MAX_LEV_ADJ];
+extern int16_t class_level_adj[MAX_CLASS][MAX_LEV_ADJ];
 
 /* Warriors don't have spells, so there is no entry for them. */
 extern spell_type magic_spell[MAX_CLASS - 1][31];
@@ -115,7 +115,7 @@ extern int32u spell_worked;         /* Bit field for spells tried -CJS- */
 extern int32u spell_forgotten;      /* Bit field for spells forgotten -JEW- */
 extern uint8_t spell_order[32];     /* remember order that spells are learned in */
 extern uint16_t player_init[MAX_CLASS][5];
-extern int16 total_winner;
+extern int16_t total_winner;
 extern int32 max_score;
 
 /* Following are store definitions */
@@ -127,25 +127,25 @@ extern int (*store_buy[MAX_STORES])();
 /* Following are treasure arrays  and variables */
 extern treasure_type object_list[MAX_OBJECTS];
 extern uint8_t object_ident[OBJECT_IDENT_SIZE];
-extern int16 t_level[MAX_OBJ_LEVEL + 1];
+extern int16_t t_level[MAX_OBJ_LEVEL + 1];
 extern inven_type t_list[MAX_TALLOC];
 extern inven_type inventory[INVEN_ARRAY_SIZE];
 extern char *special_names[SN_ARRAY_SIZE];
-extern int16 sorted_objects[MAX_DUNGEON_OBJ];
-extern int16 inven_ctr;             /* Total different obj's */
-extern int16 inven_weight;          /* Cur carried weight */
-extern int16 equip_ctr;             /* Cur equipment ctr */
-extern int16 tcptr;                 /* Cur treasure heap ptr */
+extern int16_t sorted_objects[MAX_DUNGEON_OBJ];
+extern int16_t inven_ctr;           /* Total different obj's */
+extern int16_t inven_weight;        /* Cur carried weight */
+extern int16_t equip_ctr;           /* Cur equipment ctr */
+extern int16_t tcptr;               /* Cur treasure heap ptr */
 
 /* Following are creature arrays and variables */
 extern creature_type c_list[MAX_CREATURES];
 extern monster_type m_list[MAX_MALLOC];
-extern int16 m_level[MAX_MONS_LEVEL + 1];
+extern int16_t m_level[MAX_MONS_LEVEL + 1];
 extern m_attack_type monster_attacks[N_MONS_ATTS];
 extern recall_type c_recall[MAX_CREATURES];  /* Monster memories. -CJS- */
 extern monster_type blank_monster;           /* Blank monster values */
-extern int16 mfptr;                          /* Cur free monster ptr */
-extern int16 mon_tot_mult;                   /* # of repro's of creature */
+extern int16_t mfptr;                        /* Cur free monster ptr */
+extern int16_t mon_tot_mult;                 /* # of repro's of creature */
 
 /* Following are arrays for descriptive pieces */
 extern char *colors[MAX_COLORS];
@@ -193,7 +193,7 @@ void exit_game();
 /* desc.c */
 int is_a_vowel();
 void magic_init();
-int16 object_offset();
+int16_t object_offset();
 void known1();
 int known1_p();
 void known2();

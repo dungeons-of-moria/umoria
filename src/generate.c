@@ -1143,7 +1143,7 @@ int y, x;
 
 /* Returns random co-ordinates        -RAK- */
 static void new_spot(y, x)
-int16 *y, *x;
+int16_t *y, *x;
 {
     int i, j;
     cave_type *c_ptr;
@@ -1169,7 +1169,7 @@ static void cave_gen() {
     int i, j, k;
     int y1, x1, y2, x2, pick1, pick2, tmp;
     int row_rooms, col_rooms, alloc_level;
-    int16 yloc[400], xloc[400];
+    int16_t yloc[400], xloc[400];
 
     row_rooms = 2 * (cur_height / SCREEN_HEIGHT);
     col_rooms = 2 * (cur_width / SCREEN_WIDTH);

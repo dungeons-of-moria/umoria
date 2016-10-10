@@ -89,7 +89,7 @@ int monptr;
 /* NOTE: Player must always move at least once per iteration, */
 /*   a slowed player is handled by moving monsters faster */
 static int movement_rate(speed)
- int16 speed;
+ int16_t speed;
 {
     if (speed > 0) {
         if (py.flags.rest != 0) {

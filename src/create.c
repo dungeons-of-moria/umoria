@@ -50,7 +50,7 @@ static void get_stats() {
 /* Changes stats by given amount        -JWT- */
 static void change_stat(stat, amount)
 int stat;
-int16 amount;
+int16_t amount;
 {
      int i;
      int tmp_stat;

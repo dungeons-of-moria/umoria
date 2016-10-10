@@ -22,7 +22,6 @@
 #include "standard_library.h"
 
 /* Use ISO C99 standard declarations to get correct lengths. */
-typedef int_least16_t int16;
 typedef int_least32_t int32;
 typedef uint_least32_t int32u;
 
@@ -86,15 +85,15 @@ typedef struct recall_type {
 } recall_type;
 
 typedef struct monster_type {
-    int16 hp;         /* Hit points */
-    int16 csleep;     /* Inactive counter */
-    int16 cspeed;     /* Movement speed */
-    uint16_t mptr;    /* Pointer into creature*/
+    int16_t hp;         /* Hit points */
+    int16_t csleep;     /* Inactive counter */
+    int16_t cspeed;     /* Movement speed */
+    uint16_t mptr;      /* Pointer into creature*/
 
     /* Note: fy, fx, and cdis constrain dungeon size to less than 256 by 256 */
-    uint8_t fy;       /* Y Pointer into map */
-    uint8_t fx;       /* X Pointer into map */
-    uint8_t cdis;     /* Cur dis from player */
+    uint8_t fy;         /* Y Pointer into map */
+    uint8_t fx;         /* X Pointer into map */
+    uint8_t cdis;       /* Cur dis from player */
 
     uint8_t ml;
     uint8_t stunned;
@@ -106,15 +105,15 @@ typedef struct treasure_type {
     int32u flags;       /* Special flags */
     uint8_t tval;       /* Category number */
     uint8_t tchar;      /* Character representation*/
-    int16 p1;           /* Misc. use variable */
+    int16_t p1;         /* Misc. use variable */
     int32 cost;         /* Cost of item */
     uint8_t subval;     /* Sub-category number */
     uint8_t number;     /* Number of items */
     uint16_t weight;    /* Weight */
-    int16 tohit;        /* Plusses to hit */
-    int16 todam;        /* Plusses to damage */
-    int16 ac;           /* Normal AC */
-    int16 toac;         /* Plusses to AC */
+    int16_t tohit;      /* Plusses to hit */
+    int16_t todam;      /* Plusses to damage */
+    int16_t ac;         /* Normal AC */
+    int16_t toac;       /* Plusses to AC */
     uint8_t damage[2];  /* Damage when hits */
     uint8_t level;      /* Level item first found */
 } treasure_type;
@@ -136,15 +135,15 @@ typedef struct inven_type {
     int32u flags;                   /* Special flags */
     uint8_t tval;                   /* Category number */
     uint8_t tchar;                  /* Character representation*/
-    int16 p1;                       /* Misc. use variable */
+    int16_t p1;                     /* Misc. use variable */
     int32 cost;                     /* Cost of item */
     uint8_t subval;                 /* Sub-category number */
     uint8_t number;                 /* Number of items */
     uint16_t weight;                /* Weight */
-    int16 tohit;                    /* Plusses to hit */
-    int16 todam;                    /* Plusses to damage */
-    int16 ac;                       /* Normal AC */
-    int16 toac;                     /* Plusses to AC */
+    int16_t tohit;                  /* Plusses to hit */
+    int16_t todam;                  /* Plusses to damage */
+    int16_t ac;                     /* Normal AC */
+    int16_t toac;                   /* Plusses to AC */
     uint8_t damage[2];              /* Damage when hits */
     uint8_t level;                  /* Level item first found */
     uint8_t ident;                  /* Identify information */
@@ -165,31 +164,31 @@ typedef struct player_type {
         uint16_t wt;                  /* Weight */
         uint16_t lev;                 /* Level */
         uint16_t max_dlv;             /* Max level explored */
-        int16 srh;                    /* Chance in search */
-        int16 fos;                    /* Frenq of search */
-        int16 bth;                    /* Base to hit */
-        int16 bthb;                   /* BTH with bows */
-        int16 mana;                   /* Mana points */
-        int16 mhp;                    /* Max hit pts */
-        int16 ptohit;                 /* Plusses to hit */
-        int16 ptodam;                 /* Plusses to dam */
-        int16 pac;                    /* Total AC */
-        int16 ptoac;                  /* Magical AC */
-        int16 dis_th;                 /* Display +ToHit */
-        int16 dis_td;                 /* Display +ToDam */
-        int16 dis_ac;                 /* Display +ToAC */
-        int16 dis_tac;                /* Display +ToTAC */
-        int16 disarm;                 /* % to Disarm */
-        int16 save;                   /* Saving throw */
-        int16 sc;                     /* Social Class */
-        int16 stl;                    /* Stealth factor */
+        int16_t srh;                  /* Chance in search */
+        int16_t fos;                  /* Frenq of search */
+        int16_t bth;                  /* Base to hit */
+        int16_t bthb;                 /* BTH with bows */
+        int16_t mana;                 /* Mana points */
+        int16_t mhp;                  /* Max hit pts */
+        int16_t ptohit;               /* Plusses to hit */
+        int16_t ptodam;               /* Plusses to dam */
+        int16_t pac;                  /* Total AC */
+        int16_t ptoac;                /* Magical AC */
+        int16_t dis_th;               /* Display +ToHit */
+        int16_t dis_td;               /* Display +ToDam */
+        int16_t dis_ac;               /* Display +ToAC */
+        int16_t dis_tac;              /* Display +ToTAC */
+        int16_t disarm;               /* % to Disarm */
+        int16_t save;                 /* Saving throw */
+        int16_t sc;                   /* Social Class */
+        int16_t stl;                  /* Stealth factor */
         uint8_t pclass;               /* # of class */
         uint8_t prace;                /* # of race */
         uint8_t hitdie;               /* Char hit die */
         uint8_t expfact;              /* Experience factor */
-        int16 cmana;                  /* Cur mana pts */
+        int16_t cmana;                /* Cur mana pts */
         uint16_t cmana_frac;          /* Cur mana fraction * 2^16 */
-        int16 chp;                    /* Cur hit pts */
+        int16_t chp;                  /* Cur hit pts */
         uint16_t chp_frac;            /* Cur hit fraction * 2^16 */
         char history[4][60];          /* History record */
     } misc;
@@ -198,36 +197,36 @@ typedef struct player_type {
     struct stats {
         uint8_t max_stat[6];          /* What is restored */
         uint8_t cur_stat[6];          /* What is natural */
-        int16 mod_stat[6];            /* What is modified, may be +/- */
+        int16_t mod_stat[6];          /* What is modified, may be +/- */
         uint8_t use_stat[6];          /* What is used */
     } stats;
 
     struct flags {
         int32u status;                /* Status of player */
-        int16 rest;                   /* Rest counter */
-        int16 blind;                  /* Blindness counter */
-        int16 paralysis;              /* Paralysis counter */
-        int16 confused;               /* Confusion counter */
-        int16 food;                   /* Food counter */
-        int16 food_digested;          /* Food per round */
-        int16 protection;             /* Protection fr. evil */
-        int16 speed;                  /* Cur speed adjust */
-        int16 fast;                   /* Temp speed change */
-        int16 slow;                   /* Temp speed change */
-        int16 afraid;                 /* Fear */
-        int16 poisoned;               /* Poisoned */
-        int16 image;                  /* Hallucinate */
-        int16 protevil;               /* Protect VS evil */
-        int16 invuln;                 /* Increases AC */
-        int16 hero;                   /* Heroism */
-        int16 shero;                  /* Super Heroism */
-        int16 blessed;                /* Blessed */
-        int16 resist_heat;            /* Timed heat resist */
-        int16 resist_cold;            /* Timed cold resist */
-        int16 detect_inv;             /* Timed see invisible */
-        int16 word_recall;            /* Timed teleport level*/
-        int16 see_infra;              /* See warm creatures */
-        int16 tim_infra;              /* Timed infra vision */
+        int16_t rest;                 /* Rest counter */
+        int16_t blind;                /* Blindness counter */
+        int16_t paralysis;            /* Paralysis counter */
+        int16_t confused;             /* Confusion counter */
+        int16_t food;                 /* Food counter */
+        int16_t food_digested;        /* Food per round */
+        int16_t protection;           /* Protection fr. evil */
+        int16_t speed;                /* Cur speed adjust */
+        int16_t fast;                 /* Temp speed change */
+        int16_t slow;                 /* Temp speed change */
+        int16_t afraid;               /* Fear */
+        int16_t poisoned;             /* Poisoned */
+        int16_t image;                /* Hallucinate */
+        int16_t protevil;             /* Protect VS evil */
+        int16_t invuln;               /* Increases AC */
+        int16_t hero;                 /* Heroism */
+        int16_t shero;                /* Super Heroism */
+        int16_t blessed;              /* Blessed */
+        int16_t resist_heat;          /* Timed heat resist */
+        int16_t resist_cold;          /* Timed cold resist */
+        int16_t detect_inv;           /* Timed see invisible */
+        int16_t word_recall;          /* Timed teleport level*/
+        int16_t see_infra;            /* See warm creatures */
+        int16_t tim_infra;            /* Timed infra vision */
         uint8_t see_inv;              /* Can see invisible */
         uint8_t teleport;             /* Random teleportation*/
         uint8_t free_act;             /* Never paralyzed */
@@ -260,12 +259,12 @@ typedef struct spell_type {
 
 typedef struct race_type {
     char *trace;              /* Type of race */
-    int16 str_adj;            /* adjustments */
-    int16 int_adj;
-    int16 wis_adj;
-    int16 dex_adj;
-    int16 con_adj;
-    int16 chr_adj;
+    int16_t str_adj;          /* adjustments */
+    int16_t int_adj;
+    int16_t wis_adj;
+    int16_t dex_adj;
+    int16_t con_adj;
+    int16_t chr_adj;
     uint8_t b_age;            /* Base age of character */
     uint8_t m_age;            /* Maximum age of character */
     uint8_t m_b_ht;           /* base height for males */
@@ -276,13 +275,13 @@ typedef struct race_type {
     uint8_t f_m_ht;           /* mod height for females */
     uint8_t f_b_wt;           /* base weight for female */
     uint8_t f_m_wt;           /* mod weight for females */
-    int16 b_dis;              /* base chance to disarm */
-    int16 srh;                /* base chance for search */
-    int16 stl;                /* Stealth of character */
-    int16 fos;                /* frequency of auto search */
-    int16 bth;                /* adj base chance to hit */
-    int16 bthb;               /* adj base to hit with bows */
-    int16 bsav;               /* Race base for saving throw */
+    int16_t b_dis;            /* base chance to disarm */
+    int16_t srh;              /* base chance for search */
+    int16_t stl;              /* Stealth of character */
+    int16_t fos;              /* frequency of auto search */
+    int16_t bth;              /* adj base chance to hit */
+    int16_t bthb;             /* adj base to hit with bows */
+    int16_t bsav;             /* Race base for saving throw */
     uint8_t bhitdie;          /* Base hit points for race */
     uint8_t infra;            /* See infra-red */
     uint8_t b_exp;            /* Base experience factor */
@@ -299,12 +298,12 @@ typedef struct class_type {
     uint8_t mbth;             /* modifier to base to hit */
     uint8_t mbthb;            /* modifier to base to hit - bows*/
     uint8_t msav;             /* Class modifier to save */
-    int16 madj_str;           /* Class modifier for strength */
-    int16 madj_int;           /* Class modifier for intelligence*/
-    int16 madj_wis;           /* Class modifier for wisdom */
-    int16 madj_dex;           /* Class modifier for dexterity */
-    int16 madj_con;           /* Class modifier for constitution*/
-    int16 madj_chr;           /* Class modifier for charisma */
+    int16_t madj_str;         /* Class modifier for strength */
+    int16_t madj_int;         /* Class modifier for intelligence*/
+    int16_t madj_wis;         /* Class modifier for wisdom */
+    int16_t madj_dex;         /* Class modifier for dexterity */
+    int16_t madj_con;         /* Class modifier for constitution*/
+    int16_t madj_chr;         /* Class modifier for charisma */
     uint8_t spell;            /* class use mage spells */
     uint8_t m_exp;            /* Class experience factor */
     uint8_t first_spell_lev;  /* First level where class can use spells. */
@@ -333,7 +332,7 @@ typedef struct cave_type {
 
 typedef struct owner_type {
     char *owner_name;
-    int16 max_cost;
+    int16_t max_cost;
     uint8_t max_inflate;
     uint8_t min_inflate;
     uint8_t haggle_per;
@@ -348,7 +347,7 @@ typedef struct inven_record {
 
 typedef struct store_type {
     int32 store_open;
-    int16 insult_cur;
+    int16_t insult_cur;
     uint8_t owner;
     uint8_t store_ctr;
     uint16_t good_buy;
@@ -360,9 +359,9 @@ typedef struct store_type {
 typedef struct high_scores {
     int32 points;
     int32 birth_date;
-    int16 uid;
-    int16 mhp;
-    int16 chp;
+    int16_t uid;
+    int16_t mhp;
+    int16_t chp;
     uint8_t dun_level;
     uint8_t lev;
     uint8_t max_dlv;

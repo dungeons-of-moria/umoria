@@ -145,7 +145,7 @@ void display_scores(show_player) int show_player;
     char string[100];
     uint8_t version_maj, version_min, patch_level;
 
-    int16 player_uid;
+    int16_t player_uid;
 
     (void)fseek(highscore_fp, (off_t)0, L_SET);
 

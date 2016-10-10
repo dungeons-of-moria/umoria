@@ -965,10 +965,10 @@ struct m_attack_type monster_attacks[N_MONS_ATTS] = {
 };
 
 monster_type m_list[MAX_MALLOC];
-int16 m_level[MAX_MONS_LEVEL + 1];
+int16_t m_level[MAX_MONS_LEVEL + 1];
 
 /* Blank monster values */
 monster_type blank_monster = {0, 0, 0, 0, 0, 0, 0, FALSE, 0, FALSE};
 
-int16 mfptr;        /* Cur free monster ptr */
-int16 mon_tot_mult; /* # of repro's of creature */
+int16_t mfptr;        /* Cur free monster ptr */
+int16_t mon_tot_mult; /* # of repro's of creature */

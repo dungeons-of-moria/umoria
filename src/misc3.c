@@ -621,7 +621,7 @@ void prt_winner() {
 
 uint8_t modify_stat(stat, amount)
 int stat;
-int16 amount;
+int16_t amount;
 {
     int loop, i;
     uint8_t tmp_stat;
@@ -2333,7 +2333,7 @@ int *y, *x;
 /* Saving throws for player character.    -RAK- */
 int player_saves() {
     /* MPW C couldn't handle the expression, so split it into two parts */
-    int16 temp = class_level_adj[py.misc.pclass][CLA_SAVE];
+    int16_t temp = class_level_adj[py.misc.pclass][CLA_SAVE];
 
     if (randint(100) <= (py.misc.save + stat_adj(A_WIS) + (temp * py.misc.lev / 3))) {
         return (TRUE);
