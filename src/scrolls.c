@@ -29,7 +29,7 @@
 
 /* Scrolls for the reading              -RAK- */
 void read_scroll() {
-    int32u i;
+    uint32_t i;
     int j, k, item_val, y, x;
     int tmp[6], flag, used_up;
     bigvtype out_val, tmp_str;

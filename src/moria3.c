@@ -230,7 +230,7 @@ char *prompt;
 int item_val;
 int *sn, *sc;
 {
-    int32u j;
+    uint32_t j;
     int i, k;
     int spell[31], result, first_spell;
     spell_type *s_ptr;
@@ -483,12 +483,12 @@ int y, x;
 /* based on flags set in the main creature record */
 /* Returns a mask of bits from the given flags which indicates what the
    monster is seen to have dropped.  This may be added to monster memory. */
-int32u monster_death(y, x, flags)
+uint32_t monster_death(y, x, flags)
 int y, x;
-int32u flags;
+uint32_t flags;
 {
     int i, number;
-    int32u dump, res;
+    uint32_t dump, res;
 
     if (flags & CM_CARRY_OBJ) {
         i = 1;
@@ -561,13 +561,13 @@ int32u flags;
 int mon_take_hit(monptr, dam)
 int monptr, dam;
 {
-    int32u i;
+    uint32_t i;
     int32 new_exp, new_exp_frac;
     monster_type *m_ptr;
     struct misc *p_ptr;
     creature_type *c_ptr;
     int m_take_hit;
-    int32u tmp;
+    uint32_t tmp;
 
     m_ptr = &m_list[monptr];
     m_ptr->hp -= dam;

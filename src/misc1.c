@@ -32,9 +32,9 @@ struct tm *localtime();
 
 /* gets a new random seed for the random number generator */
 void init_seeds(seed)
-int32u seed;
+uint32_t seed;
 {
-    int32u clock_var;
+    uint32_t clock_var;
 
     if (seed == 0) {
         clock_var = time((long *)0);
@@ -55,11 +55,11 @@ int32u seed;
 }
 
 /* holds the previous rnd state */
-static int32u old_seed;
+static uint32_t old_seed;
 
 /* change to different random number generator state */
 void set_seed(seed)
-int32u seed;
+uint32_t seed;
 {
     old_seed = get_rnd_seed();
 
@@ -153,10 +153,10 @@ int mean, stand;
 /* Returns position of first set bit      -RAK- */
 /*     and clears that bit */
 int bit_pos(test)
-int32u *test;
+uint32_t *test;
 {
     int i;
-    int32u mask = 0x1;
+    uint32_t mask = 0x1;
 
     for (i = 0; i < sizeof(*test) * 8; i++) {
         if (*test & mask) {

@@ -324,7 +324,7 @@ static void get_class() {
      player_type *p_ptr;
     class_type *c_ptr;
     char tmp_str[80], s;
-    int32u mask;
+    uint32_t mask;
 
     for (j = 0; j < MAX_CLASS; j++) {
         cl[j] = 0;

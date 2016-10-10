@@ -56,8 +56,8 @@ long time();
    procedure */
 static FILE *fileptr;
 static uint8_t xor_byte;
-static int from_savefile; /* can overwrite old savefile when save */
-static int32u start_time; /* time that play started */
+static int from_savefile;   /* can overwrite old savefile when save */
+static uint32_t start_time; /* time that play started */
 
 /* This save package was brought to by      -JWT-
    and              -RAK-
@@ -66,7 +66,7 @@ static int32u start_time; /* time that play started */
 /* and completely rewritten again! for portability by -JEW- */
 
 static int sv_write() {
-    int32u l;
+    uint32_t l;
     int i, j;
     int count;
     uint8_t char_tmp, prev_char;
@@ -150,9 +150,9 @@ static int sv_write() {
     m_ptr = &py.misc;
     wr_string(m_ptr->name);
     wr_byte(m_ptr->male);
-    wr_long((int32u)m_ptr->au);
-    wr_long((int32u)m_ptr->max_exp);
-    wr_long((int32u)m_ptr->exp);
+    wr_long((uint32_t)m_ptr->au);
+    wr_long((uint32_t)m_ptr->max_exp);
+    wr_long((uint32_t)m_ptr->exp);
     wr_short(m_ptr->exp_frac);
     wr_short(m_ptr->age);
     wr_short(m_ptr->ht);
@@ -242,7 +242,7 @@ static int sv_write() {
     wr_byte(f_ptr->new_spells);
 
     wr_short((uint16_t)missile_ctr);
-    wr_long((int32u)turn);
+    wr_long((uint32_t)turn);
     wr_short((uint16_t)inven_ctr);
     for (i = 0; i < inven_ctr; i++) {
         wr_item(&inventory[i]);
@@ -272,14 +272,14 @@ static int sv_write() {
 
     for (i = 0; i < MAX_STORES; i++) {
         st_ptr = &store[i];
-        wr_long((int32u)st_ptr->store_open);
+        wr_long((uint32_t)st_ptr->store_open);
         wr_short((uint16_t)st_ptr->insult_cur);
         wr_byte(st_ptr->owner);
         wr_byte(st_ptr->store_ctr);
         wr_short(st_ptr->good_buy);
         wr_short(st_ptr->bad_buy);
         for (j = 0; j < st_ptr->store_ctr; j++) {
-            wr_long((int32u)st_ptr->store_inven[j].scost);
+            wr_long((uint32_t)st_ptr->store_inven[j].scost);
             wr_item(&st_ptr->store_inven[j].sitem);
         }
     }
@@ -301,7 +301,7 @@ static int sv_write() {
     wr_long(l);
 
     /* starting with 5.2.2, put the birth_date in the savefile */
-    wr_long((int32u)birth_date);
+    wr_long((uint32_t)birth_date);
 
     /* only level specific info follows, this allows characters to be
        resurrected, the dungeon level info is not needed for a resurrection */
@@ -500,7 +500,7 @@ int *generate;
 {
     int i, j;
     int fd, c, ok, total_count;
-    int32u l, age, time_saved;
+    uint32_t l, age, time_saved;
     vtype temp;
     uint16_t uint16_t_tmp;
     cave_type *c_ptr;
@@ -672,9 +672,9 @@ int *generate;
             m_ptr = &py.misc;
             rd_string(m_ptr->name);
             rd_byte(&m_ptr->male);
-            rd_long((int32u *)&m_ptr->au);
-            rd_long((int32u *)&m_ptr->max_exp);
-            rd_long((int32u *)&m_ptr->exp);
+            rd_long((uint32_t *)&m_ptr->au);
+            rd_long((uint32_t *)&m_ptr->max_exp);
+            rd_long((uint32_t *)&m_ptr->exp);
             rd_short(&m_ptr->exp_frac);
             rd_short(&m_ptr->age);
             rd_short(&m_ptr->ht);
@@ -764,7 +764,7 @@ int *generate;
             rd_byte(&f_ptr->new_spells);
 
             rd_short((uint16_t *)&missile_ctr);
-            rd_long((int32u *)&turn);
+            rd_long((uint32_t *)&turn);
             rd_short((uint16_t *)&inven_ctr);
             if (inven_ctr > INVEN_WIELD) {
                 goto error;
@@ -797,7 +797,7 @@ int *generate;
             if ((version_min >= 2) || (version_min == 1 && patch_level >= 3)) {
                 for (i = 0; i < MAX_STORES; i++) {
                     st_ptr = &store[i];
-                    rd_long((int32u *)&st_ptr->store_open);
+                    rd_long((uint32_t *)&st_ptr->store_open);
                     rd_short((uint16_t *)&st_ptr->insult_cur);
                     rd_byte(&st_ptr->owner);
                     rd_byte(&st_ptr->store_ctr);
@@ -807,7 +807,7 @@ int *generate;
                         goto error;
                     }
                     for (j = 0; j < st_ptr->store_ctr; j++) {
-                        rd_long((int32u *)&st_ptr->store_inven[j].scost);
+                        rd_long((uint32_t *)&st_ptr->store_inven[j].scost);
                         rd_item(&st_ptr->store_inven[j].sitem);
                     }
                 }
@@ -822,13 +822,13 @@ int *generate;
             }
 
             if ((version_min >= 3) || (version_min == 2 && patch_level >= 2)) {
-                rd_long((int32u *)&max_score);
+                rd_long((uint32_t *)&max_score);
             } else {
                 max_score = 0;
             }
 
             if ((version_min >= 3) || (version_min == 2 && patch_level >= 2)) {
-                rd_long((int32u *)&birth_date);
+                rd_long((uint32_t *)&birth_date);
             } else {
                 birth_date = time((long *)0);
             }
@@ -956,7 +956,7 @@ int *generate;
         if ((version_min == 1 && patch_level < 3) || (version_min == 0)) {
             for (i = 0; i < MAX_STORES; i++) {
                 st_ptr = &store[i];
-                rd_long((int32u *)&st_ptr->store_open);
+                rd_long((uint32_t *)&st_ptr->store_open);
                 rd_short((uint16_t *)&st_ptr->insult_cur);
                 rd_byte(&st_ptr->owner);
                 rd_byte(&st_ptr->store_ctr);
@@ -966,7 +966,7 @@ int *generate;
                     goto error;
                 }
                 for (j = 0; j < st_ptr->store_ctr; j++) {
-                    rd_long((int32u *)&st_ptr->store_inven[j].scost);
+                    rd_long((uint32_t *)&st_ptr->store_inven[j].scost);
                     rd_item(&st_ptr->store_inven[j].sitem);
                 }
             }
@@ -1101,7 +1101,7 @@ uint16_t s;
 }
 
 static void wr_long(l)
-int32u l;
+uint32_t l;
 {
     xor_byte ^= (l & 0xFF);
     (void)putc((int)xor_byte, fileptr);
@@ -1180,7 +1180,7 @@ inven_type *item;
     wr_byte(item->tval);
     wr_byte(item->tchar);
     wr_short((uint16_t)item->p1);
-    wr_long((int32u)item->cost);
+    wr_long((uint32_t)item->cost);
     wr_byte(item->subval);
     wr_byte(item->number);
     wr_short(item->weight);
@@ -1236,20 +1236,20 @@ uint16_t *ptr;
 }
 
 static void rd_long(ptr)
-int32u *ptr;
+uint32_t *ptr;
 {
-    int32u l;
+    uint32_t l;
     uint8_t c;
 
     c = (getc(fileptr) & 0xFF);
     l = c ^ xor_byte;
     xor_byte = (getc(fileptr) & 0xFF);
-    l |= (int32u)(c ^ xor_byte) << 8;
+    l |= (uint32_t)(c ^ xor_byte) << 8;
     DEBUG(fprintf(logfile, "LONG:  %02X %02X ", (int)c, (int)xor_byte));
     c = (getc(fileptr) & 0xFF);
-    l |= (int32u)(c ^ xor_byte) << 16;
+    l |= (uint32_t)(c ^ xor_byte) << 16;
     xor_byte = (getc(fileptr) & 0xFF);
-    l |= (int32u)(c ^ xor_byte) << 24;
+    l |= (uint32_t)(c ^ xor_byte) << 24;
     *ptr = l;
     DEBUG(
         fprintf(logfile, "%02X %02X = %ld\n", (int)c, (int)xor_byte, (int32)l));
@@ -1324,7 +1324,7 @@ inven_type *item;
     rd_byte(&item->tval);
     rd_byte(&item->tchar);
     rd_short((uint16_t *)&item->p1);
-    rd_long((int32u *)&item->cost);
+    rd_long((uint32_t *)&item->cost);
     rd_byte(&item->subval);
     rd_byte(&item->number);
     rd_short(&item->weight);
@@ -1371,8 +1371,8 @@ high_scores *score;
     /* Save the encryption byte for robustness. */
     wr_byte(xor_byte);
 
-    wr_long((int32u)score->points);
-    wr_long((int32u)score->birth_date);
+    wr_long((uint32_t)score->points);
+    wr_long((uint32_t)score->birth_date);
     wr_short((uint16_t)score->uid);
     wr_short((uint16_t)score->mhp);
     wr_short((uint16_t)score->chp);
@@ -1396,8 +1396,8 @@ high_scores *score;
     /* Read the encryption byte. */
     rd_byte(&xor_byte);
 
-    rd_long((int32u *)&score->points);
-    rd_long((int32u *)&score->birth_date);
+    rd_long((uint32_t *)&score->points);
+    rd_long((uint32_t *)&score->birth_date);
     rd_short((uint16_t *)&score->uid);
     rd_short((uint16_t *)&score->mhp);
     rd_short((uint16_t *)&score->chp);

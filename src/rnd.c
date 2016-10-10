@@ -82,14 +82,14 @@
 #define RNG_R   2836L       /* m mod a */
 
 /* 32 bit seed */
-static int32u rnd_seed;
+static uint32_t rnd_seed;
 
-int32u get_rnd_seed() {
+uint32_t get_rnd_seed() {
     return rnd_seed;
 }
 
 void set_rnd_seed(seedval)
-int32u seedval;
+uint32_t seedval;
 {
     /* set seed to value between 1 and m-1 */
     rnd_seed = (seedval % (RNG_M - 1)) + 1;

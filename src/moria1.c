@@ -90,7 +90,7 @@ int factor;
 
 /* Recalculate the effect of all the stuff we use.      -CJS- */
 void calc_bonuses() {
-    int32u item_flags;
+    uint32_t item_flags;
     int old_dis_ac;
     struct flags *p_ptr;
     struct misc *m_ptr;

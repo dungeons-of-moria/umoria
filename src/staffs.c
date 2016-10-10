@@ -29,7 +29,7 @@
 
 /* Use a staff.                 -RAK- */
 void use() {
-    int32u i;
+    uint32_t i;
     int j, k, item_val, chance, y, x;
     int ident;
     struct misc *m_ptr;

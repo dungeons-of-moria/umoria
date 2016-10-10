@@ -172,10 +172,10 @@ int roff_recall(mon_num) int mon_num;
     recall_type *mp;
     creature_type *cp;
     int i, k;
-    int32u j;
+    uint32_t j;
     int32 templong;
     int mspeed;
-    int32u rcmove, rspells;
+    uint32_t rcmove, rspells;
     uint16_t rcdefense;
     recall_type save_mem;
 

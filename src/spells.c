@@ -660,7 +660,7 @@ int dir, y, x;
 /* Return flags for given type area affect    -RAK- */
 void get_flags(typ, weapon_type, harm_type, destroy)
 int typ;
-int32u *weapon_type;
+uint32_t *weapon_type;
 int *harm_type;
 int (**destroy)();
 {
@@ -711,7 +711,7 @@ int typ, dir, y, x, dam;
 char *bolt_typ;
 {
     int i, oldy, oldx, dist, flag;
-    int32u weapon_type;
+    uint32_t weapon_type;
     int harm_type;
     int (*dummy)();
     cave_type *c_ptr;
@@ -798,7 +798,7 @@ char *descrip;
     int i, j;
     int dam, max_dis, thit, tkill, k, tmp;
     int oldy, oldx, dist, flag, harm_type;
-    int32u weapon_type;
+    uint32_t weapon_type;
     int (*destroy)();
     cave_type *c_ptr;
     monster_type *m_ptr;
@@ -932,8 +932,8 @@ int monptr;
 {
     int i, j;
     int dam, max_dis, harm_type;
-    int32u weapon_type;
-    int32u tmp, treas;
+    uint32_t weapon_type;
+    uint32_t tmp, treas;
     int (*destroy)();
     cave_type *c_ptr;
     monster_type *m_ptr;

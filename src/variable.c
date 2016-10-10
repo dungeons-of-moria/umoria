@@ -63,8 +63,8 @@ int32 max_score                 = 0;
 int character_generated         = 0;        /* don't save score until char gen finished */
 int character_saved             = 0;        /* prevents save on kill after save_char() */
 FILE *highscore_fp;                         /* File pointer to high score file */
-int32u randes_seed;                         /* for restarting randes_state */
-int32u town_seed;                           /* for restarting town_seed */
+uint32_t randes_seed;                       /* for restarting randes_state */
+uint32_t town_seed;                         /* for restarting town_seed */
 int16_t cur_height, cur_width;              /* Cur dungeon size */
 int16_t dun_level                 = 0;      /* Cur dungeon level */
 int16_t missile_ctr               = 0;      /* Counter for missiles */

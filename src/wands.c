@@ -29,7 +29,7 @@
 
 /* Wands for the aiming. */
 void aim() {
-    int32u i;
+    uint32_t i;
     int l, ident;
     int item_val, j, k, chance, dir;
     inven_type *i_ptr;

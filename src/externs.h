@@ -62,8 +62,8 @@ extern FILE *highscore_fp;          /* High score file pointer */
 extern int command_count;           /* Repetition of commands. -CJS- */
 extern int default_dir;             /* Use last direction in repeated commands */
 extern int16_t noscore;             /* Don't score this game. -CJS- */
-extern int32u randes_seed;          /* For encoding colors */
-extern int32u town_seed;            /* Seed for town genera*/
+extern uint32_t randes_seed;        /* For encoding colors */
+extern uint32_t town_seed;          /* Seed for town genera*/
 extern int16_t dun_level;           /* Cur dungeon level */
 extern int16_t missile_ctr;         /* Counter for missiles */
 extern int msg_flag;                /* Set with first msg */
@@ -97,7 +97,7 @@ extern player_type py;
 extern char *player_title[MAX_CLASS][MAX_PLAYER_LEVEL];
 extern race_type race[MAX_RACES];
 extern background_type background[MAX_BACKGROUND];
-extern int32u player_exp[MAX_PLAYER_LEVEL];
+extern uint32_t player_exp[MAX_PLAYER_LEVEL];
 extern uint16_t player_hp[MAX_PLAYER_LEVEL];
 extern int16_t char_row;
 extern int16_t char_col;
@@ -110,9 +110,9 @@ extern int16_t class_level_adj[MAX_CLASS][MAX_LEV_ADJ];
 /* Warriors don't have spells, so there is no entry for them. */
 extern spell_type magic_spell[MAX_CLASS - 1][31];
 extern char *spell_names[62];
-extern int32u spell_learned;        /* Bit field for spells learnt -CJS- */
-extern int32u spell_worked;         /* Bit field for spells tried -CJS- */
-extern int32u spell_forgotten;      /* Bit field for spells forgotten -JEW- */
+extern uint32_t spell_learned;      /* Bit field for spells learnt -CJS- */
+extern uint32_t spell_worked;       /* Bit field for spells tried -CJS- */
+extern uint32_t spell_forgotten;    /* Bit field for spells forgotten -JEW- */
 extern uint8_t spell_order[32];     /* remember order that spells are learned in */
 extern uint16_t player_init[MAX_CLASS][5];
 extern int16_t total_winner;
@@ -439,7 +439,7 @@ void delete_monster();
 void fix1_delete_monster();
 void fix2_delete_monster();
 int delete_object();
-int32u monster_death();
+uint32_t monster_death();
 int mon_take_hit();
 void py_attack();
 void move_char();
@@ -466,7 +466,7 @@ int bool_roff_recall();
 int roff_recall();
 
 /* rnd.c */
-int32u get_rnd_seed();
+uint32_t get_rnd_seed();
 void set_rnd_seed();
 int32 rnd();
 

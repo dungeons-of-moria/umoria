@@ -899,7 +899,7 @@ int todam_adj() {
 
 /* Prints character-screen info        -RAK- */
 void prt_stat_block() {
-    int32u status;
+    uint32_t status;
     struct misc *m_ptr;
     int i;
 
@@ -1596,8 +1596,8 @@ void calc_spells(stat)
 int stat;
 {
     int i;
-    int32u mask;
-    int32u spell_flag;
+    uint32_t mask;
+    uint32_t spell_flag;
     int j, offset;
     int num_allowed, new_spells, num_known, levels;
     vtype tmp_str;
@@ -1747,7 +1747,7 @@ void gain_spells() {
     int stat, diff_spells, new_spells;
     int spells[31], offset, last_known;
     int i, j;
-    int32u spell_flag, mask;
+    uint32_t spell_flag, mask;
     vtype tmp_str;
     struct misc *p_ptr;
     spell_type *msp_ptr;

@@ -505,7 +505,7 @@ int dir, y, x;
 /* Note: This routine affects magical AC bonuses so that stores */
 /*   can detect the damage. */
 int minus_ac(typ_dam)
-int32u typ_dam;
+uint32_t typ_dam;
 {
     int i, j;
     int tmp[6], minus;
@@ -563,7 +563,7 @@ int32u typ_dam;
 void corrode_gas(kb_str)
 char *kb_str;
 {
-    if (!minus_ac((int32u)TR_RES_ACID)) {
+    if (!minus_ac((uint32_t)TR_RES_ACID)) {
         take_hit(randint(8), kb_str);
     }
 
@@ -638,7 +638,7 @@ char *kb_str;
     int flag;
 
     flag = 0;
-    if (minus_ac((int32u)TR_RES_ACID)) {
+    if (minus_ac((uint32_t)TR_RES_ACID)) {
         flag = 1;
     }
     if (py.flags.acid_resist) {

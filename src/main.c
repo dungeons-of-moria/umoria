@@ -55,7 +55,7 @@ int main(argc, argv)
 int argc;
 char *argv[];
 {
-    int32u seed;
+    uint32_t seed;
     int generate;
     int result;
     char *p;

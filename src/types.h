@@ -23,7 +23,6 @@
 
 /* Use ISO C99 standard declarations to get correct lengths. */
 typedef int_least32_t int32;
-typedef uint_least32_t int32u;
 
 /* some machines will not accept 'signed char' as a type, and some accept it
    but still treat it like an unsigned character, let's just avoid it,
@@ -52,8 +51,8 @@ typedef char stat_type[7];
 
 typedef struct creature_type {
     char *name;         /* Descrip of creature */
-    int32u cmove;       /* Bit field */
-    int32u spells;      /* Creature spells */
+    uint32_t cmove;     /* Bit field */
+    uint32_t spells;    /* Creature spells */
     uint16_t cdefense;  /* Bit field */
     uint16_t mexp;      /* Exp value for kill */
     uint8_t sleep;      /* Inactive counter/10 */
@@ -76,8 +75,8 @@ typedef struct m_attack_type {
 
 /* Monster memories. -CJS- */
 typedef struct recall_type {
-    int32u r_cmove;
-    int32u r_spells;
+    uint32_t r_cmove;
+    uint32_t r_spells;
     uint16_t r_kills, r_deaths;
     uint16_t r_cdefense;
     uint8_t r_wake, r_ignore;
@@ -102,7 +101,7 @@ typedef struct monster_type {
 
 typedef struct treasure_type {
     char *name;         /* Object name */
-    int32u flags;       /* Special flags */
+    uint32_t flags;     /* Special flags */
     uint8_t tval;       /* Category number */
     uint8_t tchar;      /* Character representation*/
     int16_t p1;         /* Misc. use variable */
@@ -132,7 +131,7 @@ typedef struct inven_type {
     uint16_t index;                 /* Index to object_list */
     uint8_t name2;                  /* Object special name */
     char inscrip[INSCRIP_SIZE];     /* Object inscription */
-    int32u flags;                   /* Special flags */
+    uint32_t flags;                 /* Special flags */
     uint8_t tval;                   /* Category number */
     uint8_t tchar;                  /* Character representation*/
     int16_t p1;                     /* Misc. use variable */
@@ -202,7 +201,7 @@ typedef struct player_type {
     } stats;
 
     struct flags {
-        int32u status;                /* Status of player */
+        uint32_t status;              /* Status of player */
         int16_t rest;                 /* Rest counter */
         int16_t blind;                /* Blindness counter */
         int16_t paralysis;            /* Paralysis counter */

@@ -29,7 +29,7 @@
 
 /* Potions for the quaffing        -RAK- */
 void quaff() {
-    int32u i, l;
+    uint32_t i, l;
     int j, k, item_val;
     int ident;
     inven_type *i_ptr;

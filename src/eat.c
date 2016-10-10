@@ -29,7 +29,7 @@
 
 /* Eat some food.          -RAK- */
 void eat() {
-    int32u i;
+    uint32_t i;
     int j, k, item_val, ident;
     struct flags *f_ptr;
     struct misc *m_ptr;

@@ -1809,7 +1809,7 @@ inven_type *t_ptr;
 
 /* Examine a Book          -RAK- */
 static void examine_book() {
-    int32u j;
+    uint32_t j;
     int i, k, item_val, flag;
     int spell_index[31];
     inven_type *i_ptr;

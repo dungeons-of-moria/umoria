@@ -108,7 +108,7 @@ char *player_title[MAX_CLASS][MAX_PLAYER_LEVEL] = {
 };
 
 /* Base experience levels, may be adjusted up for race and/or class*/
-int32u player_exp[MAX_PLAYER_LEVEL] = {
+uint32_t player_exp[MAX_PLAYER_LEVEL] = {
      10,      25,      45,      70,      100,      140,      200,       280,
     380,     500,     650,     850,     1100,     1400,     1800,      2300,
    2900,    3600,    4400,    5400,     6800,     8400,    10200,     12500,
@@ -323,10 +323,10 @@ int16_t class_level_adj[MAX_CLASS][MAX_LEV_ADJ] = {
     /* Paladin */  { 3,     3,     3,     2,     3 },
 };
 
-int32u spell_learned   = 0; /* bit mask of spells learned */
-int32u spell_worked    = 0; /* bit mask of spells tried and worked */
-int32u spell_forgotten = 0; /* bit mask of spells learned but forgotten */
-uint8_t  spell_order[32];   /* order spells learned/remembered/forgotten */
+uint32_t spell_learned   = 0; /* bit mask of spells learned */
+uint32_t spell_worked    = 0; /* bit mask of spells tried and worked */
+uint32_t spell_forgotten = 0; /* bit mask of spells learned but forgotten */
+uint8_t  spell_order[32];     /* order spells learned/remembered/forgotten */
 
 /* Warriors don't have spells, so there is no entry for them.
  * Note that this means you must always subtract one from the

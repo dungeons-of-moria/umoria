@@ -936,10 +936,10 @@ int monptr;
 static void make_move(monptr, mm, rcmove)
 int monptr;
 int *mm;
-int32u *rcmove;
+uint32_t *rcmove;
 {
     int i, newy, newx, do_turn, do_move, stuck_door;
-    int32u movebits;
+    uint32_t movebits;
      cave_type *c_ptr;
      monster_type *m_ptr;
      inven_type *t_ptr;
@@ -1127,7 +1127,7 @@ static void mon_cast_spell(monptr, took_turn)
 int monptr;
 int *took_turn;
 {
-    int32u i;
+    uint32_t i;
     int y, x, chance, thrown_spell, r1;
      int k;
     int spell_choice[30];
@@ -1440,7 +1440,7 @@ int monptr;
 /* Move the critters about the dungeon      -RAK- */
 static void mon_move(monptr, rcmove)
 int monptr;
-int32u *rcmove;
+uint32_t *rcmove;
 {
     int i, j;
     int k, move_test, dir;
@@ -1641,7 +1641,7 @@ int attack;
      int i, k;
      monster_type *m_ptr;
     recall_type *r_ptr;
-    int32u notice, rcmove;
+    uint32_t notice, rcmove;
     int wake, ignore;
     vtype cdesc;
 
