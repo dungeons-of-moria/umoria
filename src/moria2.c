@@ -240,7 +240,7 @@ int dir;
     row = char_row;
     col = char_col;
     if (!mmove(dir, &row, &col)) {
-        find_flag = false;
+        find_flag = 0;
     } else {
         find_direction = dir;
         find_flag = 1;
@@ -303,7 +303,7 @@ int dir;
     }
 
     move_char(dir, true);
-    if (find_flag == false) {
+    if (find_flag == 0) {
         command_count = 0;
     }
 }
@@ -321,7 +321,7 @@ void find_run() {
 /* Switch off the run flag - and get the light correct. -CJS- */
 void end_find() {
     if (find_flag) {
-        find_flag = false;
+        find_flag = 0;
         move_light(char_row, char_col, char_row, char_col);
     }
 }

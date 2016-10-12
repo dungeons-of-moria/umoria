@@ -2318,7 +2318,7 @@ int *y, *x;
         break;
     }
 
-    _Bool moved = false;
+    bool moved = false;
 
     if ((new_row >= 0) && (new_row < cur_height) && (new_col >= 0) && (new_col < cur_width)) {
         *y = new_row;

@@ -340,7 +340,7 @@ static void highscores() {
         return;
     }
 
-    if (panic_save == 1) {
+    if (panic_save == true) {
         msg_print("Sorry, scores for games restored from panic save files are not saved.");
         return;
     }

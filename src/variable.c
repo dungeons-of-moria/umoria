@@ -51,64 +51,71 @@ int16_t last_store_inc;
    creatures() via summon_monster() and place_monster() */
 int hack_monptr                 = -1;
 
-int weapon_heavy                = false;
-int pack_heavy                  = false;
+bool weapon_heavy               = false;
+int pack_heavy                  = 0;
 vtype died_from;
 int32_t birth_date;
 
 vtype savefile; /* The savefile to use. */
 
-int16_t total_winner            = false;
+bool total_winner               = false;
 int32_t max_score               = 0;
-int character_generated         = 0;        /* don't save score until char gen finished */
-int character_saved             = 0;        /* prevents save on kill after save_char() */
+bool character_generated        = false;    /* don't save score until char gen finished */
+bool character_saved            = false;    /* prevents save on kill after save_char() */
 FILE *highscore_fp;                         /* File pointer to high score file */
 uint32_t randes_seed;                       /* for restarting randes_state */
 uint32_t town_seed;                         /* for restarting town_seed */
 int16_t cur_height, cur_width;              /* Cur dungeon size */
 int16_t dun_level               = 0;        /* Cur dungeon level */
 int16_t missile_ctr             = 0;        /* Counter for missiles */
-int msg_flag;                               /* Set with first msg */
+bool msg_flag;                              /* Set with first msg */
 vtype old_msg[MAX_SAVE_MSG];                /* Last message */
 int16_t last_msg                = 0;        /* Where last is held */
-int death                       = false;    /* True if died */
-int find_flag;                              /* Used in MORIA for .(dir) */
-int free_turn_flag;                         /* Used in MORIA, do not move creatures */
-int command_count;                          /* Gives repetition of commands. -CJS- */
-int default_dir                 = false;    /* Use last direction for repeated command */
-int32_t turn                    = -1;       /* Cur turn of game */
-int wizard                      = false;    /* Wizard flag */
-int to_be_wizard                = false;    /* used during startup, when -w option used */
-int16_t panic_save              = false;    /* this is true if playing from a panic save */
-int16_t noscore                 = false;    /* Don't log the game. -CJS- */
+bool death                      = false;    /* True if died */
 
-int rogue_like_commands; /* set in config.h/main.c */
+// FIXME: this is basically a `bool` type, except in the `find_run()` and
+// `end_find()` functions, where it's used as an `int`. Maybe implement a
+// better solution to "prevent infinite loops in find mode".
+int find_flag;                              /* Used in MORIA for .(dir) */
+
+bool free_turn_flag;                        /* Used in MORIA, do not move creatures */
+int command_count;                          /* Gives repetition of commands. -CJS- */
+bool default_dir                = false;    /* Use last direction for repeated command */
+int32_t turn                    = -1;       /* Cur turn of game */
+bool wizard                     = false;    /* Wizard flag */
+bool to_be_wizard               = false;    /* used during startup, when -w option used */
+bool panic_save                 = false;    /* this is true if playing from a panic save */
+int16_t noscore                 = 0;        /* Don't log the game. -CJS- */
+
+bool rogue_like_commands;                   /* set in config.h/main.c */
 
 /* options set via the '=' command */
-int find_cut                    = true;
-int find_examine                = true;
-int find_bound                  = false;
-int find_prself                 = false;
-int prompt_carry_flag           = false;
-int show_weight_flag            = false;
-int highlight_seams             = false;
-int find_ignore_doors           = false;
-int sound_beep_flag             = true;
-int display_counts              = true;
+bool find_cut                   = true;
+bool find_examine               = true;
+bool find_bound                 = false;
+bool find_prself                = false;
+bool prompt_carry_flag          = false;
+bool show_weight_flag           = false;
+bool highlight_seams            = false;
+bool find_ignore_doors          = false;
+bool sound_beep_flag            = true;
+bool display_counts             = true;
 
-char doing_inven                = false;  /* Track inventory commands. -CJS- */
-int screen_change               = false;  /* Track screen updates for inven_commands. */
+// FIXME: was a `bool`, but also holds an ASCII character. Is this the best solution?
+char doing_inven                = 0;      /* Track inventory commands. -CJS- */
+
+bool screen_change              = false;  /* Track screen updates for inven_commands. */
 char last_command               = ' ';    /* Memory of previous command. */
 
 /* these used to be in dungeon.c */
-int new_level_flag;                       /* Next level when true */
-int teleport_flag;                        /* Handle teleport traps */
-int player_light;                         /* Player carrying light */
-int eof_flag                    = false;  /* Used to signal EOF/HANGUP condition */
-int light_flag                  = false;  /* Track if temporary light about player. */
+bool new_level_flag;                      /* Next level when true */
+bool teleport_flag;                       /* Handle teleport traps */
+bool player_light;                        /* Player carrying light */
+int eof_flag                    = 0;      /* Used to signal EOF/HANGUP condition */
+bool light_flag                 = false;  /* Track if temporary light about player. */
 
-int wait_for_more               = false;  /* used when ^C hit during -more- prompt */
-int closing_flag                = false;  /* Used for closing */
+bool wait_for_more              = false;  /* used when ^C hit during -more- prompt */
+int closing_flag                = 0;      /* Used for closing */
 
 /*  Following are calculated from max dungeon sizes */
 int16_t max_panel_rows, max_panel_cols;

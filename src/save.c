@@ -486,7 +486,7 @@ char *fnam;
         msg_print(temp);
         return false;
     } else {
-        character_saved = 1;
+        character_saved = true;
     }
 
     turn = -1;
@@ -856,7 +856,7 @@ int *generate;
                 }
 
                 dun_level = 0; /* Resurrect on the town level. */
-                character_generated = 1;
+                character_generated = true;
 
                 /* set noscore to indicate a resurrection, and don't enter
                    wizard mode */
@@ -991,7 +991,7 @@ int *generate;
             if (py.misc.chp >= 0) {
                 (void)strcpy(died_from, "(alive and well)");
             }
-            character_generated = 1;
+            character_generated = true;
         }
 
     closefiles:
@@ -1013,7 +1013,7 @@ int *generate;
             /* let the user overwrite the old savefile when save/quit */
             from_savefile = 1;
 
-            if (panic_save == 1) {
+            if (panic_save == true) {
                 (void)sprintf(temp, "This game is from a panic save.  Score "
                                     "will not be added to scoreboard.");
                 msg_print(temp);

@@ -89,7 +89,7 @@ void put_buffer(char *out_str, int row, int col) {
     if (mvaddstr(row, col, tmp_str) == ERR) {
         abort();
         /* clear msg_flag to avoid problems with unflushed messages */
-        msg_flag = 0;
+        msg_flag = false;
         (void)sprintf(tmp_str, "error in put_buffer, row = %d col = %d\n", row, col);
         prt(tmp_str, 0, 0);
         bell();
@@ -165,7 +165,7 @@ char inkey() {
 
             if (eof_flag > 100) {
                 /* just in case, to make sure that the process eventually dies */
-                panic_save = 1;
+                panic_save = true;
 
                 (void)strcpy(died_from, "(end of input: panic saved)");
                 if (!save_char()) {
@@ -231,7 +231,7 @@ void print(char ch, int row, int col) {
         abort();
 
         /* clear msg_flag to avoid problems with unflushed messages */
-        msg_flag = 0;
+        msg_flag = false;
 
         (void)sprintf(tmp_str, "error in print, row = %d col = %d\n", row, col);
         prt(tmp_str, 0, 0);
@@ -253,7 +253,7 @@ void move_cursor_relative(int row, int col) {
     if (move(row, col) == ERR) {
         abort();
         /* clear msg_flag to avoid problems with unflushed messages */
-        msg_flag = 0;
+        msg_flag = false;
 
         (void)sprintf(tmp_str, "error in move_cursor_relative, row = %d col = %d\n", row, col);
         prt(tmp_str, 0, 0);
@@ -318,13 +318,13 @@ void msg_print(char *str_buff) {
             put_buffer(" -more-", MSG_LINE, old_len);
 
             /* let sigint handler know that we are waiting for a space */
-            wait_for_more = 1;
+            wait_for_more = true;
 
             do {
                 in_char = inkey();
             } while ((in_char != ' ') && (in_char != ESCAPE) && (in_char != '\n') && (in_char != '\r'));
 
-            wait_for_more = 0;
+            wait_for_more = false;
         } else {
             combine_messages = true;
         }

@@ -77,7 +77,7 @@ void dungeon() {
     command_count = 0;
     find_count = 0;
     new_level_flag = false;
-    find_flag = false;
+    find_flag = 0;
     teleport_flag = false;
     mon_tot_mult = 0;
     cave[char_row][char_col].cptr = 1;

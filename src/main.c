@@ -62,7 +62,7 @@ char *argv[];
 
     int new_game = false;
     int force_rogue_like = false;
-    int force_keys_to;
+    bool force_keys_to;
 
     /* default command set defined in config.h file */
     rogue_like_commands = ROGUE_LIKE;
@@ -204,7 +204,7 @@ char *argv[];
         /* prevent ^c quit from entering score into scoreboard,
            and prevent signal from creating panic save until this point,
            all info needed for save file is now valid */
-        character_generated = 1;
+        character_generated = true;
         generate = true;
     }
 

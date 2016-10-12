@@ -270,7 +270,8 @@ void calc_bonuses() {
    entry in the mask array. */
 int show_inven(r1, r2, weight, col, mask)
 int r1, r2;
-int weight, col;
+bool weight;
+int col;
 char *mask;
 {
     int i;
@@ -384,7 +385,8 @@ int i;
 /* Displays equipment items from r1 to end  -RAK- */
 /* Keep display as far right as possible. -CJS- */
 int show_equip(weight, col)
-int weight, col;
+bool weight;
+int col;
 {
     int i, line;
     int total_weight, l, len, lim;
@@ -661,7 +663,7 @@ char command;
         if (screen_change) {
             if (command == ' ' ||
                 !get_check("Continuing with inventory command?")) {
-                doing_inven = false;
+                doing_inven = 0;
                 return;
             }
             scr_left = 50;
@@ -1674,7 +1676,7 @@ int s, l;
         rest_off();
     }
     if (l || find_flag) {
-        find_flag = false;
+        find_flag = 0;
         check_view();
     }
     flush();
