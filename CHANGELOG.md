@@ -11,6 +11,12 @@
 
 ### All Changes
 
+`2016-10-12`
+
+- Changes Globals in `variables.c`: use `bool` type for booleans.
+- Update many local bool's to use an actual `bool` type.
+
+
 `2016-10-10`
 
 - Use the `_Bool` standard type in place of those `TRUE`/`FALSE`.

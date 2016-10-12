@@ -50,7 +50,8 @@ I want to let everyone play Moria again!
   * ~~Remove support for ancient computers/OS: DOS, Amiga, Atari ST, etc.~~
   * ~~Compile against the `C11` standard.~~
   * Update the code to to be as platform independent as possible.
-    E.g. use _standard types_, such as changing `long` types to `int32`.
+    E.g. use _standard types_, such as replacing `long` types with `int32`,
+    and introduce the proper `bool` type.
   * Add Windows and macOS support.
 
 
