@@ -30,7 +30,7 @@
 /* Wands for the aiming. */
 void aim() {
     uint32_t i;
-    int l, ident;
+    int l;
     int item_val, j, k, chance, dir;
     inven_type *i_ptr;
     struct misc *m_ptr;
@@ -50,7 +50,7 @@ void aim() {
                     dir = randint(9);
                 } while (dir == 5);
             }
-            ident = false;
+            bool ident = false;
             m_ptr = &py.misc;
             chance =
                 m_ptr->save + stat_adj(A_INT) - (int)i_ptr->level +

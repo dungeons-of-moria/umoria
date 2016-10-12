@@ -318,10 +318,9 @@ int i, j;
 {
     char command;
     vtype out_val;
-    int flag;
 
     *com_val = -1;
-    flag = false;
+    bool flag = false;
     (void)sprintf(out_val, "(Items %c-%c, ESC to exit) %s", i + 'a', j + 'a', pmt);
 
     while (get_com(out_val, &command)) {
@@ -341,10 +340,9 @@ int i, j;
 static int increase_insults(store_num)
 int store_num;
 {
-    int increase;
     store_type *s_ptr;
 
-    increase = false;
+    bool increase = false;
     s_ptr = &store[store_num];
     s_ptr->insult_cur++;
     if (s_ptr->insult_cur > owners[s_ptr->owner].insult_max) {
@@ -373,9 +371,7 @@ int store_num;
 static int haggle_insults(store_num)
 int store_num;
 {
-    int haggle;
-
-    haggle = false;
+    bool haggle = false;
     if (increase_insults(store_num)) {
         haggle = true;
     } else {
@@ -392,13 +388,12 @@ int num_offer;
 {
     int32_t i;
     vtype out_val, default_offer;
-    int flag, clen;
+    int clen;
     int orig_clen;
     char *p;
-    int increment;
 
-    flag = true;
-    increment = false;
+    bool flag = true;
+    bool increment = false;
     clen = strlen(comment);
     orig_clen = clen;
 
@@ -470,11 +465,10 @@ char *comment;
 int32_t *new_offer, last_offer;
 int num_offer, factor;
 {
-    int flag;
     int receive;
 
     receive = 0;
-    flag = false;
+    bool flag = false;
     do {
         if (get_haggle(comment, new_offer, num_offer)) {
             if (*new_offer * factor >= last_offer * factor) {
@@ -507,18 +501,18 @@ inven_type *item;
     int32_t last_offer, new_offer;
     int32_t x1, x2, x3;
     int32_t min_per, max_per;
-    int flag, loop_flag;
+    bool loop_flag;
     char *comment;
     vtype out_val;
-    int purchase, num_offer, final_flag, didnt_haggle;
+    int purchase, num_offer, final_flag;
     store_type *s_ptr;
     owner_type *o_ptr;
 
-    flag = false;
+    bool flag = false;
     purchase = 0;
     *price = 0;
     final_flag = 0;
-    didnt_haggle = false;
+    bool didnt_haggle = false;
     s_ptr = &store[store_num];
     o_ptr = &owners[s_ptr->owner];
     cost = sell_price(store_num, &max_sell, &min_sell, item);
@@ -568,8 +562,7 @@ inven_type *item;
             loop_flag = true;
             (void)sprintf(out_val, "%s :  %d", comment, cur_ask);
             put_buffer(out_val, 1, 0);
-            purchase = receive_offer(store_num, "What do you offer? ",
-                                     &new_offer, last_offer, num_offer, 1);
+            purchase = receive_offer(store_num, "What do you offer? ", &new_offer, last_offer, num_offer, 1);
             if (purchase != 0) {
                 flag = true;
             } else {
@@ -671,18 +664,18 @@ inven_type *item;
     int32_t max_gold;
     int32_t x1, x2, x3;
     int32_t min_per, max_per;
-    int flag, loop_flag;
+    bool loop_flag;
     char *comment;
     vtype out_val;
     store_type *s_ptr;
     owner_type *o_ptr;
-    int sell, num_offer, final_flag, didnt_haggle;
+    int sell, num_offer, final_flag;
 
-    flag = false;
+    bool flag = false;
     sell = 0;
     *price = 0;
     final_flag = 0;
-    didnt_haggle = false;
+    bool didnt_haggle = false;
     s_ptr = &store[store_num];
 
     cost = item_value(item);
@@ -868,9 +861,9 @@ int *cur_top;
     store_type *s_ptr;
     inven_type sell_obj;
     inven_record *r_ptr;
-    int item_val, item_new, purchase;
+    int item_val, item_new;
 
-    purchase = false;
+    bool purchase = false;
     s_ptr = &store[store_num];
 
     /* i == number of objects shown on screen */
@@ -954,11 +947,11 @@ int store_num, *cur_top;
     int32_t price;
     bigvtype out_val, tmp_str;
     inven_type sold_obj;
-    int sell, choice, flag;
+    int choice, flag;
     char mask[INVEN_WIELD];
     int counter, first_item, last_item;
 
-    sell = false;
+    bool sell = false;
     first_item = inven_ctr;
     last_item = -1;
 
@@ -1045,12 +1038,11 @@ int store_num;
 {
     int cur_top, tmp_chr;
     char command;
-    int exit_flag;
     store_type *s_ptr;
 
     s_ptr = &store[store_num];
     if (s_ptr->store_open < turn) {
-        exit_flag = false;
+        bool exit_flag = false;
         cur_top = 0;
         display_store(store_num, cur_top);
 

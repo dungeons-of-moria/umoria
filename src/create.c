@@ -29,7 +29,7 @@
 
 /* Generates character's stats        -JWT- */
 static void get_stats() {
-     int i, tot;
+    int i, tot;
     int dice[18];
 
     do {
@@ -126,12 +126,12 @@ static void get_all_stats() {
 
 /* Allows player to select a race      -JWT- */
 static void choose_race() {
-     int j, k;
-    int l, m, exit_flag;
+    int j, k;
+    int l, m;
     char s;
     char tmp_str[80];
-     player_type *p_ptr;
-     race_type *r_ptr;
+    player_type *p_ptr;
+    race_type *r_ptr;
 
     j = 0;
     k = 0;
@@ -153,7 +153,7 @@ static void choose_race() {
         j++;
     } while (j < MAX_RACES);
 
-    exit_flag = false;
+    bool exit_flag = false;
 
     do {
         move_cursor(20, 30);
@@ -190,11 +190,12 @@ static void print_history() {
  *    All history parts are in ascending order
  */
 static void get_history() {
-    int hist_ptr, cur_ptr, test_roll, flag;
-     int start_pos, end_pos, cur_len;
+    int hist_ptr, cur_ptr, test_roll;
+    int start_pos, end_pos, cur_len;
     int line_ctr, new_start, social_class;
     char history_block[240];
-     background_type *b_ptr;
+    background_type *b_ptr;
+    bool flag;
 
     /* Get a block of history text */
     hist_ptr = py.misc.prace * 3 + 1;
@@ -228,14 +229,16 @@ static void get_history() {
         py.misc.history[hist_ptr][0] = '\0';
     }
 
-    /* Process block of history text for pretty output */
     start_pos = 0;
-    end_pos = strlen(history_block) - 1;
     line_ctr = 0;
-    flag = false;
+
+    /* Process block of history text for pretty output */
+    end_pos = strlen(history_block) - 1;
     while (history_block[end_pos] == ' ') {
         end_pos--;
     }
+
+    flag = false;
     do {
         while (history_block[start_pos] == ' ') {
             start_pos++;
@@ -272,10 +275,9 @@ static void get_history() {
 
 /* Gets the character's sex        -JWT- */
 static void get_sex() {
-     int exit_flag;
     char c;
 
-    exit_flag = false;
+    bool exit_flag = false;
     clear_from(20);
     put_buffer("Choose a sex (? for Help):", 20, 2);
     put_buffer("m) Male       f) Female", 21, 2);
@@ -317,11 +319,11 @@ static void get_ahw() {
 
 /* Gets a character class        -JWT- */
 static void get_class() {
-     int i, j;
+    int i, j;
     int k, l, m, min_value, max_value;
-    int cl[MAX_CLASS], exit_flag;
-     struct misc *m_ptr;
-     player_type *p_ptr;
+    int cl[MAX_CLASS];
+    struct misc *m_ptr;
+    player_type *p_ptr;
     class_type *c_ptr;
     char tmp_str[80], s;
     uint32_t mask;
@@ -356,7 +358,7 @@ static void get_class() {
     } while (j < MAX_CLASS);
 
     py.misc.pclass = 0;
-    exit_flag = false;
+    bool exit_flag = false;
 
     do {
         move_cursor(20, 31);

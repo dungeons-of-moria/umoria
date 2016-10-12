@@ -178,7 +178,7 @@ void tunnel(dir) int dir;
 
 /* Disarms a trap          -RAK- */
 void disarm_trap() {
-    int y, x, level, tmp, dir, no_disarm;
+    int y, x, level, tmp, dir;
     int tot, i;
     cave_type *c_ptr;
     inven_type *i_ptr;
@@ -191,7 +191,7 @@ void disarm_trap() {
     if (get_dir(CNIL, &dir)) {
         (void)mmove(dir, &y, &x);
         c_ptr = &cave[y][x];
-        no_disarm = false;
+        bool no_disarm = false;
         if (c_ptr->cptr > 1 && c_ptr->tptr != 0 &&
             (t_list[c_ptr->tptr].tval == TV_VIS_TRAP ||
              t_list[c_ptr->tptr].tval == TV_CHEST)) {
@@ -337,7 +337,8 @@ void disarm_trap() {
    dungeon x = char_col   + gl_fxx * (ray x)  + gl_fxy * (ray y)
  */
 static int gl_fxx, gl_fxy, gl_fyx, gl_fyy;
-static int gl_nseen, gl_noquery;
+static int gl_nseen;
+static bool gl_noquery;
 static int gl_rock;
 /* Intended to be indexed by dir/2, since is only relevant to horizontal or
    vertical directions. */
@@ -365,21 +366,22 @@ static int map_diag2[] = {2, 1, 0, 4, 3};
  */
 
 void look() {
-    int i, abort;
-    int dir, dummy;
+    int i;
+    int dir;
 
     if (py.flags.blind > 0) {
         msg_print("You can't see a damn thing!");
     } else if (py.flags.image > 0) {
         msg_print("You can't believe what you are seeing! It's like a dream!");
     } else if (get_alldir("Look which direction?", &dir)) {
-        abort = false;
+        bool abort = false;
         gl_nseen = 0;
         gl_rock = 0;
 
         /* Have to set this up for the look_see */
         gl_noquery = false;
 
+        bool dummy;
         if (look_see(0, 0, &dummy)) {
             abort = true;
         } else {
@@ -477,7 +479,7 @@ static int look_ray(y, from, to)
 int y, from, to;
 {
     int max_x, x;
-    int transparent;
+    bool transparent;
 
     /* from is the larger angle of the ray, since we scan towards the
        center line. If from is smaller, then the ray does not exist. */
@@ -562,7 +564,7 @@ int y, from, to;
 
 static int look_see(x, y, transparent)
 int x, y;
-int *transparent;
+bool *transparent;
 {
     char *dstring, *string, query;
     cave_type *c_ptr;
@@ -598,9 +600,7 @@ int *transparent;
     out_val[0] = 0;
     if (gl_rock == 0 && c_ptr->cptr > 1 && m_list[c_ptr->cptr].ml) {
         j = m_list[c_ptr->cptr].mptr;
-        (void)sprintf(out_val, "%s %s %s. [(r)ecall]", dstring,
-                      is_a_vowel(c_list[j].name[0]) ? "an" : "a",
-                      c_list[j].name);
+        (void)sprintf(out_val, "%s %s %s. [(r)ecall]", dstring, is_a_vowel(c_list[j].name[0]) ? "an" : "a", c_list[j].name);
         dstring = "It is on";
         prt(out_val, 0, 0);
         move_cursor_relative(y, x);
@@ -785,11 +785,11 @@ int y, x;
 inven_type *t_ptr;
 {
     int i, j, k;
-    int flag, cur_pos;
+    int cur_pos;
     bigvtype out_val, tmp_str;
     cave_type *c_ptr;
 
-    flag = false;
+    bool flag = false;
     i = y;
     j = x;
     k = 0;
@@ -829,7 +829,6 @@ inven_type *t_ptr;
 void throw_object() {
     int item_val, tbth, tpth, tdam, tdis;
     int y, x, oldy, oldx, cur_dis, dir;
-    int flag, visible;
     bigvtype out_val, tmp_str;
     inven_type throw_obj;
     cave_type *c_ptr;
@@ -852,7 +851,8 @@ void throw_object() {
             inven_throw(item_val, &throw_obj);
             facts(&throw_obj, &tbth, &tpth, &tdam, &tdis);
             tchar = throw_obj.tchar;
-            flag = false;
+            bool flag = false;
+            bool visible;
             y = char_row;
             x = char_col;
             oldy = char_row;

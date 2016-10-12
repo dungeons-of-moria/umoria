@@ -423,7 +423,7 @@ int _save_char(fnam)
 char *fnam;
 {
     vtype temp;
-    int ok, fd;
+    int fd;
     uint8_t char_tmp;
 
     if (character_saved) {
@@ -434,7 +434,7 @@ char *fnam;
     disturb(1, 0);             /* Turn off resting and searching. */
     change_speed(-pack_heavy); /* Fix the speed */
     pack_heavy = 0;
-    ok = false;
+    bool ok = false;
 
     fd = -1;
     fileptr = NULL; /* Do not assume it has been init'ed */
@@ -499,7 +499,7 @@ int get_char(generate)
 int *generate;
 {
     int i, j;
-    int fd, c, ok, total_count;
+    int fd, c, total_count;
     uint32_t l, age, time_saved;
     vtype temp;
     uint16_t uint16_t_tmp;
@@ -537,7 +537,7 @@ int *generate;
         msg_print("Can't open file for reading.");
     } else {
         turn = -1;
-        ok = true;
+        bool ok = true;
 
         (void)close(fd);
         fd = -1; /* Make sure it isn't closed again */

@@ -198,7 +198,7 @@ int get_panel(y, x, force)
 int y, x, force;
 {
     int prow, pcol;
-    int panel;
+    bool panel;
 
     prow = panel_row;
     pcol = panel_col;
@@ -579,13 +579,13 @@ void prt_map() {
 /* Return true if any monsters were deleted, false if could not delete any monsters. */
 int compact_monsters() {
     int i;
-    int cur_dis, delete_any;
+    int cur_dis;
     monster_type *mon_ptr;
 
     msg_print("Compacting monsters...");
 
     cur_dis = 66;
-    delete_any = false;
+    bool delete_any = false;
     do {
         for (i = mfptr - 1; i >= MIN_MONIX; i--) {
             mon_ptr = &m_list[i];
@@ -832,11 +832,11 @@ int *y, *x;
 int slp;
 {
     int i, j, k;
-    int l, summon;
+    int l;
     cave_type *cave_ptr;
 
     i = 0;
-    summon = false;
+    bool summon = false;
     l = get_mons_num(dun_level + MON_SUMMON_ADJ);
 
     do {
@@ -866,11 +866,11 @@ int summon_undead(y, x)
 int *y, *x;
 {
     int i, j, k;
-    int l, m, ctr, summon;
+    int l, m, ctr;
     cave_type *cave_ptr;
 
     i = 0;
-    summon = false;
+    bool summon = false;
     l = m_level[MAX_MONS_LEVEL];
 
     do {

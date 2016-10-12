@@ -31,9 +31,10 @@
 void read_scroll() {
     uint32_t i;
     int j, k, item_val, y, x;
-    int tmp[6], flag, used_up;
+    int tmp[6];
+    bool flag;
     bigvtype out_val, tmp_str;
-    int ident, l;
+    int l;
     inven_type *i_ptr;
     struct misc *m_ptr;
 
@@ -51,9 +52,9 @@ void read_scroll() {
     } else if (get_item(&item_val, "Read which scroll?", j, k, CNIL, CNIL)) {
         i_ptr = &inventory[item_val];
         free_turn_flag = false;
-        used_up = true;
+        bool used_up = true;
         i = i_ptr->flags;
-        ident = false;
+        bool ident = false;
 
         while (i != 0) {
             j = bit_pos(&i) + 1;

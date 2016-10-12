@@ -332,7 +332,8 @@ static void place_stairs(typ, num, walls)
 int typ, num, walls;
 {
     cave_type *cave_ptr;
-    int i, j, flag;
+    int i, j;
+    bool flag;
     int y1, x1, y2, x2;
 
     for (i = 0; i < num; i++) {
@@ -377,7 +378,8 @@ static void vault_trap(y, x, yd, xd, num)
 int y, x, yd, xd, num;
 {
     int count, y1, x1;
-    int i, flag;
+    int i;
+    bool flag;
     cave_type *c_ptr;
 
     for (i = 0; i < num; i++) {
@@ -982,13 +984,13 @@ int row1, col1, row2, col2;
     coords tunstk[1000], wallstk[1000];
     coords *tun_ptr;
     int row_dir, col_dir, tunindex, wallindex;
-    int stop_flag, door_flag, main_loop_count;
+    int main_loop_count;
     int start_row, start_col;
 
     /* Main procedure for Tunnel */
     /* Note: 9 is a temporary value */
-    stop_flag = false;
-    door_flag = false;
+    bool stop_flag = false;
+    bool door_flag = false;
     tunindex = 0;
     wallindex = 0;
     main_loop_count = 0;
@@ -1113,7 +1115,7 @@ int row1, col1, row2, col2;
 static int next_to(y, x)
 int y, x;
 {
-    int next;
+    bool next;
 
     if (next_to_corr(y, x) > 2) {
         if ((cave[y - 1][x].fval >= MIN_CAVE_WALL) &&

@@ -30,7 +30,7 @@
 /* Eat some food.          -RAK- */
 void eat() {
     uint32_t i;
-    int j, k, item_val, ident;
+    int j, k, item_val;
     struct flags *f_ptr;
     struct misc *m_ptr;
     inven_type *i_ptr;
@@ -44,7 +44,7 @@ void eat() {
         i_ptr = &inventory[item_val];
         free_turn_flag = false;
         i = i_ptr->flags;
-        ident = false;
+        bool ident = false;
         while (i != 0) {
             j = bit_pos(&i) + 1;
             /* Foods */

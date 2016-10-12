@@ -33,7 +33,7 @@ long atol();
 void wizard_light() {
     cave_type *c_ptr;
     int k, l, i, j;
-    int flag;
+    bool flag;
 
     if (cave[char_row][char_col].pl) {
         flag = false;

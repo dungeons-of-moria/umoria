@@ -171,7 +171,8 @@ int roff_recall(mon_num) int mon_num;
     vtype temp;
     recall_type *mp;
     creature_type *cp;
-    int i, k;
+    int i;
+    bool known;
     uint32_t j;
     int32_t templong;
     int mspeed;
@@ -251,10 +252,10 @@ int roff_recall(mon_num) int mon_num;
     }
 
     /* Immediately obvious. */
-    k = false;
+    known = false;
     if (cp->level == 0) {
         roff(" It lives in the town");
-        k = true;
+        known = true;
     } else if (mp->r_kills) {
         /* The Balrog is a level 100 monster, but appears at 50 feet. */
         i = cp->level;
@@ -263,17 +264,17 @@ int roff_recall(mon_num) int mon_num;
         }
         (void)sprintf(temp, " It is normally found at depths of %d feet", i * 50);
         roff(temp);
-        k = true;
+        known = true;
     }
 
     /* the c_list speed value is 10 greater, so that it can be a uint8_t */
     mspeed = cp->speed - 10;
     if (rcmove & CM_ALL_MV_FLAGS) {
-        if (k) {
+        if (known) {
             roff(", and");
         } else {
             roff(" It");
-            k = true;
+            known = true;
         }
         roff(" moves");
         if (rcmove & CM_RANDOM_MOVE) {
@@ -306,26 +307,26 @@ int roff_recall(mon_num) int mon_num;
     }
 
     if (rcmove & CM_ATTACK_ONLY) {
-        if (k) {
+        if (known) {
             roff(", but");
         } else {
             roff(" It");
-            k = true;
+            known = true;
         }
         roff(" does not deign to chase intruders");
     }
 
     if (rcmove & CM_ONLY_MAGIC) {
-        if (k) {
+        if (known) {
             roff(", but");
         } else {
             roff(" It");
-            k = true;
+            known = true;
         }
         roff(" always moves and attacks by using magic");
     }
 
-    if (k) {
+    if (known) {
         roff(".");
     }
 
@@ -385,20 +386,20 @@ int roff_recall(mon_num) int mon_num;
     /* Spells known, if have been used against us.
        Breath weapons or resistance might be known only because we cast spells
        at it. */
-    k = true;
+    known = true;
     j = rspells;
 
     for (i = 0; j & CS_BREATHE; i++) {
         if (j & (CS_BR_LIGHT << i)) {
             j &= ~(CS_BR_LIGHT << i);
 
-            if (k) {
+            if (known) {
                 if (mp->r_spells & CS_FREQ) {
                     roff(" It can breathe ");
                 } else {
                     roff(" It is resistant to ");
                 }
-                k = false;
+                known = false;
             } else if (j & CS_BREATHE) {
                 roff(", ");
             } else {
@@ -408,20 +409,20 @@ int roff_recall(mon_num) int mon_num;
         }
     }
 
-    k = true;
+    known = true;
 
     for (i = 0; j & CS_SPELLS; i++) {
         if (j & (CS_TEL_SHORT << i)) {
             j &= ~(CS_TEL_SHORT << i);
 
-            if (k) {
+            if (known) {
                 if (rspells & CS_BREATHE) {
                     roff(", and is also");
                 } else {
                     roff(" It is");
                 }
                 roff(" magical, casting spells which ");
-                k = false;
+                known = false;
             } else if (j & CS_SPELLS) {
                 roff(", ");
             } else {
@@ -451,16 +452,16 @@ int roff_recall(mon_num) int mon_num;
     }
 
     /* Do we know how clever they are? Special abilities. */
-    k = true;
+    known = true;
     j = rcmove;
 
     for (i = 0; j & CM_SPECIAL; i++) {
         if (j & (CM_INVISIBLE << i)) {
             j &= ~(CM_INVISIBLE << i);
 
-            if (k) {
+            if (known) {
                 roff(" It can ");
-                k = false;
+                known = false;
             } else if (j & CM_SPECIAL) {
                 roff(", ");
             } else {
@@ -470,19 +471,19 @@ int roff_recall(mon_num) int mon_num;
         }
     }
 
-    if (!k) {
+    if (!known) {
         roff(".");
     }
 
     /* Do we know its special weaknesses? Most cdefense flags. */
-    k = true;
+    known = true;
     j = rcdefense;
     for (i = 0; j & CD_WEAKNESS; i++) {
         if (j & (CD_FROST << i)) {
             j &= ~(CD_FROST << i);
-            if (k) {
+            if (known) {
                 roff(" It is susceptible to ");
-                k = false;
+                known = false;
             } else if (j & CD_WEAKNESS) {
                 roff(", ");
             } else {
@@ -492,7 +493,7 @@ int roff_recall(mon_num) int mon_num;
         }
     }
 
-    if (!k) {
+    if (!known) {
         roff(".");
     }
 
@@ -597,13 +598,13 @@ int roff_recall(mon_num) int mon_num;
     }
 
     /* We know about attacks it has used on us, and maybe the damage they do. */
-    /* k is the total number of known attacks, used for punctuation */
-    k = 0;
+    /* known_attacks is the total number of known attacks, used for punctuation */
+    int known_attacks = 0;
 
     /* Turbo C needs a 16 bit int for the array index. */
     for (j = 0; j < 4; j++) {
         if (mp->r_attacks[(int)j]) {
-            k++;
+            known_attacks++;
         }
     }
 
@@ -627,7 +628,7 @@ int roff_recall(mon_num) int mon_num;
         j++;
         if (j == 1) {
             roff(" It can ");
-        } else if (j == k) {
+        } else if (j == known_attacks) {
             roff(", and ");
         } else {
             roff(", ");
@@ -662,7 +663,7 @@ int roff_recall(mon_num) int mon_num;
 
     if (j) {
         roff(".");
-    } else if (k > 0 && mp->r_attacks[0] >= 10) {
+    } else if (known_attacks > 0 && mp->r_attacks[0] >= 10) {
         roff(" It has no physical attacks.");
     } else {
         roff(" Nothing is known about its attack.");

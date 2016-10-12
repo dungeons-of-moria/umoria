@@ -180,11 +180,11 @@ int store_check_num(t_ptr, store_num)
 inven_type *t_ptr;
 int store_num;
 {
-    int store_check, i;
+    int i;
     store_type *s_ptr;
     inven_type *i_ptr;
 
-    store_check = false;
+    bool store_check = false;
     s_ptr = &store[store_num];
     if (s_ptr->store_ctr < STORE_INVEN_MAX) {
         store_check = true;
@@ -230,7 +230,7 @@ int store_num;
 int *ipos;
 inven_type *t_ptr;
 {
-    int item_num, item_val, flag;
+    int item_num, item_val;
     int typ, subt;
     int32_t icost, dummy;
     inven_type *i_ptr;
@@ -241,7 +241,7 @@ inven_type *t_ptr;
         s_ptr = &store[store_num];
         item_val = 0;
         item_num = t_ptr->number;
-        flag = false;
+        bool flag = false;
         typ = t_ptr->tval;
         subt = t_ptr->subval;
         do {

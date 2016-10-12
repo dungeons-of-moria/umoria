@@ -1065,7 +1065,8 @@ char com_val;
 static void do_command(com_val)
 char com_val;
 {
-    int dir_val, do_pickup;
+    int dir_val;
+    bool do_pickup, do_diplay_scores;
     int y, x, i, j;
     vtype out_val, tmp_str;
     struct flags *f_ptr;
@@ -1315,12 +1316,12 @@ char com_val;
         break;
     case 'V': /* (V)iew scores */
         if (last_command != 'V') {
-            i = true;
+            do_diplay_scores = true;
         } else {
-            i = false;
+            do_diplay_scores = false;
         }
         save_screen();
-        display_scores(i);
+        display_scores(do_diplay_scores);
         restore_screen();
         free_turn_flag = true;
         break;
@@ -1810,7 +1811,7 @@ inven_type *t_ptr;
 /* Examine a Book          -RAK- */
 static void examine_book() {
     uint32_t j;
-    int i, k, item_val, flag;
+    int i, k, item_val;
     int spell_index[31];
     inven_type *i_ptr;
     spell_type *s_ptr;
@@ -1824,7 +1825,7 @@ static void examine_book() {
     } else if (py.flags.confused > 0) {
         msg_print("You are too confused.");
     } else if (get_item(&item_val, "Which Book?", i, k, CNIL, CNIL)) {
-        flag = true;
+        bool flag = true;
         i_ptr = &inventory[item_val];
         if (class[py.misc.pclass].spell == MAGE) {
             if (i_ptr->tval != TV_MAGIC_BOOK) {
@@ -1862,7 +1863,7 @@ static void examine_book() {
 /* Go up one level          -RAK- */
 static void go_up() {
     cave_type *c_ptr;
-    int no_stairs = false;
+    bool no_stairs = false;
 
     c_ptr = &cave[char_row][char_col];
     if (c_ptr->tptr != 0) {
@@ -1887,7 +1888,7 @@ static void go_up() {
 /* Go down one level          -RAK- */
 static void go_down() {
     cave_type *c_ptr;
-    int no_stairs = false;
+    bool no_stairs = false;
 
     c_ptr = &cave[char_row][char_col];
     if (c_ptr->tptr != 0) {

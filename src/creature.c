@@ -31,13 +31,13 @@
 void update_mon(monptr)
 int monptr;
 {
-     int flag;
-     cave_type *c_ptr;
-     monster_type *m_ptr;
-     creature_type *r_ptr;
+    cave_type *c_ptr;
+    monster_type *m_ptr;
+    creature_type *r_ptr;
+
+    bool flag = false;
 
     m_ptr = &m_list[monptr];
-    flag = false;
     if ((m_ptr->cdis <= MAX_SIGHT) && !(py.flags.status & PY_BLIND) &&
         (panel_contains((int)m_ptr->fy, (int)m_ptr->fx))) {
         if (wizard) {
@@ -89,7 +89,7 @@ int monptr;
 /* NOTE: Player must always move at least once per iteration, */
 /*   a slowed player is handled by moving monsters faster */
 static int movement_rate(speed)
- int16_t speed;
+int16_t speed;
 {
     if (speed > 0) {
         if (py.flags.rest != 0) {
@@ -107,7 +107,7 @@ static int movement_rate(speed)
 static int check_mon_lite(y, x)
 int y, x;
 {
-     int monptr;
+    int monptr;
 
     monptr = cave[y][x].cptr;
     if (monptr <= 1) {
@@ -121,7 +121,7 @@ int y, x;
 /* Choose correct directions for monster movement  -RAK- */
 static void get_moves(monptr, mm)
 int monptr;
- int *mm;
+int *mm;
 {
     int y, ay, x, ax, move_val;
 
@@ -270,7 +270,7 @@ static void make_attack(monptr)
 int monptr;
 {
     int attype, adesc, adice, asides;
-    int i, j, damage, flag, attackn, notice, visible;
+    int i, j, damage, attackn;
     int32_t gold;
     uint8_t *attstr;
     vtype cdesc, tmp_str, ddesc;
@@ -305,6 +305,8 @@ int monptr;
 
     attackn = 0;
     attstr = r_ptr->damage;
+
+    bool flag = false;
     while ((*attstr != 0) && !death) {
         attype = monster_attacks[*attstr].attack_type;
         adesc = monster_attacks[*attstr].attack_desc;
@@ -325,118 +327,97 @@ int monptr;
 
         switch (attype) {
         case 1: /*Normal attack */
-            if (test_hit(60, (int)r_ptr->level, 0, p_ptr->pac + p_ptr->ptoac,
-                         CLA_MISC_HIT)) {
+            if (test_hit(60, (int)r_ptr->level, 0, p_ptr->pac + p_ptr->ptoac, CLA_MISC_HIT)) {
                 flag = true;
             }
             break;
         case 2: /*Lose Strength*/
-            if (test_hit(-3, (int)r_ptr->level, 0, p_ptr->pac + p_ptr->ptoac,
-                         CLA_MISC_HIT)) {
+            if (test_hit(-3, (int)r_ptr->level, 0, p_ptr->pac + p_ptr->ptoac, CLA_MISC_HIT)) {
                 flag = true;
             }
             break;
         case 3: /*Confusion attack*/
-            if (test_hit(10, (int)r_ptr->level, 0, p_ptr->pac + p_ptr->ptoac,
-                         CLA_MISC_HIT)) {
+            if (test_hit(10, (int)r_ptr->level, 0, p_ptr->pac + p_ptr->ptoac, CLA_MISC_HIT)) {
                 flag = true;
             }
             break;
         case 4: /*Fear attack */
-            if (test_hit(10, (int)r_ptr->level, 0, p_ptr->pac + p_ptr->ptoac,
-                         CLA_MISC_HIT)) {
+            if (test_hit(10, (int)r_ptr->level, 0, p_ptr->pac + p_ptr->ptoac, CLA_MISC_HIT)) {
                 flag = true;
             }
             break;
         case 5: /*Fire attack */
-            if (test_hit(10, (int)r_ptr->level, 0, p_ptr->pac + p_ptr->ptoac,
-                         CLA_MISC_HIT)) {
+            if (test_hit(10, (int)r_ptr->level, 0, p_ptr->pac + p_ptr->ptoac, CLA_MISC_HIT)) {
                 flag = true;
             }
             break;
         case 6: /*Acid attack */
-            if (test_hit(0, (int)r_ptr->level, 0, p_ptr->pac + p_ptr->ptoac,
-                         CLA_MISC_HIT)) {
+            if (test_hit(0, (int)r_ptr->level, 0, p_ptr->pac + p_ptr->ptoac, CLA_MISC_HIT)) {
                 flag = true;
             }
             break;
         case 7: /*Cold attack */
-            if (test_hit(10, (int)r_ptr->level, 0, p_ptr->pac + p_ptr->ptoac,
-                         CLA_MISC_HIT)) {
+            if (test_hit(10, (int)r_ptr->level, 0, p_ptr->pac + p_ptr->ptoac, CLA_MISC_HIT)) {
                 flag = true;
             }
             break;
         case 8: /*Lightning attack*/
-            if (test_hit(10, (int)r_ptr->level, 0, p_ptr->pac + p_ptr->ptoac,
-                         CLA_MISC_HIT)) {
+            if (test_hit(10, (int)r_ptr->level, 0, p_ptr->pac + p_ptr->ptoac, CLA_MISC_HIT)) {
                 flag = true;
             }
             break;
         case 9: /*Corrosion attack*/
-            if (test_hit(0, (int)r_ptr->level, 0, p_ptr->pac + p_ptr->ptoac,
-                         CLA_MISC_HIT)) {
+            if (test_hit(0, (int)r_ptr->level, 0, p_ptr->pac + p_ptr->ptoac, CLA_MISC_HIT)) {
                 flag = true;
             }
             break;
         case 10: /*Blindness attack*/
-            if (test_hit(2, (int)r_ptr->level, 0, p_ptr->pac + p_ptr->ptoac,
-                         CLA_MISC_HIT)) {
+            if (test_hit(2, (int)r_ptr->level, 0, p_ptr->pac + p_ptr->ptoac, CLA_MISC_HIT)) {
                 flag = true;
             }
             break;
         case 11: /*Paralysis attack*/
-            if (test_hit(2, (int)r_ptr->level, 0, p_ptr->pac + p_ptr->ptoac,
-                         CLA_MISC_HIT)) {
+            if (test_hit(2, (int)r_ptr->level, 0, p_ptr->pac + p_ptr->ptoac, CLA_MISC_HIT)) {
                 flag = true;
             }
             break;
         case 12: /*Steal Money */
-            if ((test_hit(5, (int)r_ptr->level, 0, (int)py.misc.lev,
-                          CLA_MISC_HIT)) &&
-                (py.misc.au > 0)) {
+            if ((test_hit(5, (int)r_ptr->level, 0, (int)py.misc.lev, CLA_MISC_HIT)) && (py.misc.au > 0)) {
                 flag = true;
             }
             break;
         case 13: /*Steal Object */
-            if ((test_hit(2, (int)r_ptr->level, 0, (int)py.misc.lev,
-                          CLA_MISC_HIT)) &&
-                (inven_ctr > 0)) {
+            if ((test_hit(2, (int)r_ptr->level, 0, (int)py.misc.lev, CLA_MISC_HIT)) && (inven_ctr > 0)) {
                 flag = true;
             }
             break;
         case 14: /*Poison */
-            if (test_hit(5, (int)r_ptr->level, 0, p_ptr->pac + p_ptr->ptoac,
-                         CLA_MISC_HIT)) {
+            if (test_hit(5, (int)r_ptr->level, 0, p_ptr->pac + p_ptr->ptoac, CLA_MISC_HIT)) {
                 flag = true;
             }
             break;
         case 15: /*Lose dexterity*/
-            if (test_hit(0, (int)r_ptr->level, 0, p_ptr->pac + p_ptr->ptoac,
-                         CLA_MISC_HIT)) {
+            if (test_hit(0, (int)r_ptr->level, 0, p_ptr->pac + p_ptr->ptoac, CLA_MISC_HIT)) {
                 flag = true;
             }
             break;
         case 16: /*Lose constitution*/
-            if (test_hit(0, (int)r_ptr->level, 0, p_ptr->pac + p_ptr->ptoac,
-                         CLA_MISC_HIT)) {
+            if (test_hit(0, (int)r_ptr->level, 0, p_ptr->pac + p_ptr->ptoac, CLA_MISC_HIT)) {
                 flag = true;
             }
             break;
         case 17: /*Lose intelligence*/
-            if (test_hit(2, (int)r_ptr->level, 0, p_ptr->pac + p_ptr->ptoac,
-                         CLA_MISC_HIT)) {
+            if (test_hit(2, (int)r_ptr->level, 0, p_ptr->pac + p_ptr->ptoac, CLA_MISC_HIT)) {
                 flag = true;
             }
             break;
         case 18: /*Lose wisdom*/
-            if (test_hit(2, (int)r_ptr->level, 0, p_ptr->pac + p_ptr->ptoac,
-                         CLA_MISC_HIT)) {
+            if (test_hit(2, (int)r_ptr->level, 0, p_ptr->pac + p_ptr->ptoac, CLA_MISC_HIT)) {
                 flag = true;
             }
             break;
         case 19: /*Lose experience*/
-            if (test_hit(5, (int)r_ptr->level, 0, p_ptr->pac + p_ptr->ptoac,
-                         CLA_MISC_HIT)) {
+            if (test_hit(5, (int)r_ptr->level, 0, p_ptr->pac + p_ptr->ptoac, CLA_MISC_HIT)) {
                 flag = true;
             }
             break;
@@ -444,27 +425,23 @@ int monptr;
             flag = true;
             break;
         case 21: /*Disenchant */
-            if (test_hit(20, (int)r_ptr->level, 0, p_ptr->pac + p_ptr->ptoac,
-                         CLA_MISC_HIT)) {
+            if (test_hit(20, (int)r_ptr->level, 0, p_ptr->pac + p_ptr->ptoac, CLA_MISC_HIT)) {
                 flag = true;
             }
             break;
         case 22: /*Eat food */
-            if (test_hit(5, (int)r_ptr->level, 0, p_ptr->pac + p_ptr->ptoac,
-                         CLA_MISC_HIT)) {
+            if (test_hit(5, (int)r_ptr->level, 0, p_ptr->pac + p_ptr->ptoac, CLA_MISC_HIT)) {
                 flag = true;
             }
             break;
         case 23: /*Eat light */
-            if (test_hit(5, (int)r_ptr->level, 0, p_ptr->pac + p_ptr->ptoac,
-                         CLA_MISC_HIT)) {
+            if (test_hit(5, (int)r_ptr->level, 0, p_ptr->pac + p_ptr->ptoac, CLA_MISC_HIT)) {
                 flag = true;
             }
             break;
         case 24: /*Eat charges */
             /* check to make sure an object exists */
-            if ((test_hit(15, (int)r_ptr->level, 0, p_ptr->pac + p_ptr->ptoac,
-                          CLA_MISC_HIT)) &&
+            if ((test_hit(15, (int)r_ptr->level, 0, p_ptr->pac + p_ptr->ptoac, CLA_MISC_HIT)) &&
                 (inven_ctr > 0)) {
                 flag = true;
             }
@@ -578,7 +555,8 @@ int monptr;
                 break;
             }
 
-            notice = true;
+            bool notice = true;
+            bool visible = true;
 
             /* always fail to notice attack if creature invisible, set notice
                and visible here since creature may be visible when attacking
@@ -885,8 +863,7 @@ int monptr;
             if (py.flags.confuse_monster && adesc != 99) {
                 msg_print("Your hands stop glowing.");
                 py.flags.confuse_monster = false;
-                if ((randint(MAX_MONS_LEVEL) < r_ptr->level) ||
-                    (CD_NO_SLEEP & r_ptr->cdefense)) {
+                if ((randint(MAX_MONS_LEVEL) < r_ptr->level) || (CD_NO_SLEEP & r_ptr->cdefense)) {
                     (void)sprintf(tmp_str, "%sis unaffected.", cdesc);
                 } else {
                     (void)sprintf(tmp_str, "%sappears confused.", cdesc);
@@ -898,8 +875,7 @@ int monptr;
                 }
                 msg_print(tmp_str);
                 if (visible && !death && randint(4) == 1) {
-                    c_recall[m_ptr->mptr].r_cdefense |=
-                        r_ptr->cdefense & CD_NO_SLEEP;
+                    c_recall[m_ptr->mptr].r_cdefense |= r_ptr->cdefense & CD_NO_SLEEP;
                 }
             }
 
@@ -907,10 +883,7 @@ int monptr;
                previously noticed the attack (in which case all this does is
                help player learn damage), note that in the second case do
                not increase attacks if creature repelled (no damage done) */
-            if ((notice ||
-                 (visible && c_recall[m_ptr->mptr].r_attacks[attackn] != 0 &&
-                  attype != 99)) &&
-                c_recall[m_ptr->mptr].r_attacks[attackn] < MAX_UCHAR) {
+            if ((notice || (visible && c_recall[m_ptr->mptr].r_attacks[attackn] != 0 && attype != 99)) && c_recall[m_ptr->mptr].r_attacks[attackn] < MAX_UCHAR) {
                 c_recall[m_ptr->mptr].r_attacks[attackn]++;
             }
             if (death && c_recall[m_ptr->mptr].r_deaths < MAX_SHORT) {
@@ -938,15 +911,15 @@ int monptr;
 int *mm;
 uint32_t *rcmove;
 {
-    int i, newy, newx, do_turn, do_move, stuck_door;
+    int i, newy, newx, stuck_door;
     uint32_t movebits;
-     cave_type *c_ptr;
-     monster_type *m_ptr;
-     inven_type *t_ptr;
+    cave_type *c_ptr;
+    monster_type *m_ptr;
+    inven_type *t_ptr;
 
     i = 0;
-    do_turn = false;
-    do_move = false;
+    bool do_turn = false;
+    bool do_move = false;
     m_ptr = &m_list[monptr];
     movebits = c_list[m_ptr->mptr].cmove;
     do {
@@ -1125,15 +1098,15 @@ uint32_t *rcmove;
 /* took_turn  = true if creature casts a spell */
 static void mon_cast_spell(monptr, took_turn)
 int monptr;
-int *took_turn;
+bool *took_turn;
 {
     uint32_t i;
     int y, x, chance, thrown_spell, r1;
-     int k;
+    int k;
     int spell_choice[30];
     vtype cdesc, outval, ddesc;
-     monster_type *m_ptr;
-     creature_type *r_ptr;
+    monster_type *m_ptr;
+    creature_type *r_ptr;
 
     if (death) {
         return;
@@ -1372,8 +1345,8 @@ int multiply_monster(y, x, cr_index, monptr)
 int y, x, cr_index;
 int monptr;
 {
-     int i, j, k;
-     cave_type *c_ptr;
+    int i, j, k;
+    cave_type *c_ptr;
     int result;
 
     i = 0;
@@ -1443,7 +1416,7 @@ int monptr;
 uint32_t *rcmove;
 {
     int i, j;
-    int k, move_test, dir;
+    int k, dir;
 
     creature_type *r_ptr;
 
@@ -1479,7 +1452,8 @@ uint32_t *rcmove;
             }
         }
     }
-    move_test = false;
+
+    bool move_test = false;
 
     /* if in wall, must immediately escape to a clear area */
     if (!(r_ptr->cmove & CM_PHASE) && (cave[m_ptr->fy][m_ptr->fx].fval >= MIN_CAVE_WALL)) {
@@ -1638,11 +1612,11 @@ uint32_t *rcmove;
 void creatures(attack)
 int attack;
 {
-     int i, k;
-     monster_type *m_ptr;
+    int i, k;
+    monster_type *m_ptr;
     recall_type *r_ptr;
     uint32_t notice, rcmove;
-    int wake, ignore;
+    bool wake, ignore;
     vtype cdesc;
 
     /* Process the monsters */

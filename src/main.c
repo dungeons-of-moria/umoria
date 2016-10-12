@@ -56,12 +56,10 @@ int argc;
 char *argv[];
 {
     uint32_t seed;
-    int generate;
-    int result;
     char *p;
 
-    int new_game = false;
-    int force_rogue_like = false;
+    bool new_game = false;
+    bool force_rogue_like = false;
     bool force_keys_to;
 
     /* default command set defined in config.h file */
@@ -159,7 +157,8 @@ char *argv[];
        (if you are the wizard). In this case, it returns true, but also sets the
        parameter "generate" to true, as it does not recover any cave details. */
 
-    result = false;
+    bool result = false;
+    bool generate = false;
 
     if ((new_game == false) && !access(savefile, 0) && get_char(&generate)) {
         result = true;

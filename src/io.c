@@ -33,7 +33,7 @@
 
 #define use_value2
 
-static int curses_on = false;
+static bool curses_on = false;
 
 /* Spare window for saving the screen. -CJS-*/
 static WINDOW *savescr;
@@ -293,7 +293,7 @@ void move_cursor(int row, int col) {
 /* These messages are kept for later reference. */
 void msg_print(char *str_buff) {
     int old_len, new_len;
-    int combine_messages = false;
+    bool combine_messages = false;
     char in_char;
 
     if (msg_flag) {
@@ -393,7 +393,7 @@ int get_check(char *prompt) {
 /* Prompts (optional) and returns ord value of input char */
 /* Function returns false if <ESCAPE> is input */
 int get_com(char *prompt, char *command) {
-    int res;
+    bool res;
 
     if (prompt) {
         prt(prompt, 0, 0);
@@ -417,10 +417,9 @@ int get_com(char *prompt, char *command) {
 int get_string(char *in_str, int row, int column, int slen) {
     int start_col, end_col, i;
     char *p;
-    int flag, aborted;
 
-    aborted = false;
-    flag = false;
+    bool aborted = false;
+    bool flag = false;
     (void)move(row, column);
 
     for (i = slen; i > 0; i--) {

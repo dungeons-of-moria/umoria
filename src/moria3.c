@@ -459,7 +459,7 @@ int y, x, num, typ;
 int delete_object(y, x)
 int y, x;
 {
-    int delete;
+    bool delete;
     cave_type *c_ptr;
 
     c_ptr = &cave[y][x];
@@ -936,7 +936,7 @@ int y, x;
 /* Opens a closed door or closed chest.    -RAK- */
 void openobject() {
     int y, x, i, dir;
-    int flag, no_object;
+    bool flag;
     cave_type *c_ptr;
     inven_type *t_ptr;
     struct misc *p_ptr;
@@ -948,7 +948,7 @@ void openobject() {
     if (get_dir(CNIL, &dir)) {
         (void)mmove(dir, &y, &x);
         c_ptr = &cave[y][x];
-        no_object = false;
+        bool no_object = false;
         if (c_ptr->cptr > 1 && c_ptr->tptr != 0 &&
             (t_list[c_ptr->tptr].tval == TV_CLOSED_DOOR ||
              t_list[c_ptr->tptr].tval == TV_CHEST)) {
@@ -1054,7 +1054,7 @@ void openobject() {
 
 /* Closes an open door.        -RAK- */
 void closeobject() {
-    int y, x, dir, no_object;
+    int y, x, dir;
     vtype out_val, m_name;
     cave_type *c_ptr;
     monster_type *m_ptr;
@@ -1065,7 +1065,7 @@ void closeobject() {
     if (get_dir(CNIL, &dir)) {
         (void)mmove(dir, &y, &x);
         c_ptr = &cave[y][x];
-        no_object = false;
+        bool no_object = false;
 
         if (c_ptr->tptr != 0) {
             if (t_list[c_ptr->tptr].tval == TV_OPEN_DOOR) {
@@ -1108,9 +1108,9 @@ int y, x, t1, t2;
 {
     int i, j;
     cave_type *c_ptr;
-    int res, found;
 
-    res = false;
+    bool found;
+    bool res = false;
 
     if (t1 > t2) {
         c_ptr = &cave[y][x];

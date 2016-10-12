@@ -1132,11 +1132,11 @@ void get_name() {
 /* Changes the name of the character      -JWT- */
 void change_name() {
     char c;
-    int flag;
 
     vtype temp;
 
-    flag = false;
+    bool flag = false;
+
     display_char();
     do {
         prt("<f>ile character description. <c>hange character name.", 21, 2);
@@ -1505,18 +1505,18 @@ char *prompt;
 int first_spell;
 {
     spell_type *s_ptr;
-    int flag, redraw, offset, i;
+    int offset, i;
     char choice;
     vtype out_str, tmp_str;
 
     *sn = -1;
-    flag = false;
+    bool flag = false;
 
     (void)sprintf(out_str, "(Spells %c-%c, *=List, <ESCAPE>=exit) %s",
                   spell[0] + 'a' - first_spell,
                   spell[num - 1] + 'a' - first_spell, prompt);
 
-    redraw = false;
+    bool redraw = false;
 
     offset = (class[py.misc.pclass].spell == MAGE ? SPELL_OFFSET : PRAYER_OFFSET);
 
@@ -2348,12 +2348,12 @@ int *j, *k;
 {
     int i;
     inven_type *i_ptr;
-    int flag;
 
     i = 0;
     *j = -1;
     *k = -1;
-    flag = false;
+
+    bool flag = false;
 
     i_ptr = &inventory[0];
 

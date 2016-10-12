@@ -314,15 +314,15 @@ int pref;
     char *basenm, *modstr;
     bigvtype tmp_val;
     vtype tmp_str, damstr;
-    int indexx, p1_use, modify, append_name, tmp;
+    int indexx, p1_use, tmp;
 
     indexx = i_ptr->subval & (ITEM_SINGLE_STACK_MIN - 1);
     basenm = object_list[i_ptr->index].name;
     modstr = CNIL;
     damstr[0] = '\0';
     p1_use = IGNORED;
-    modify = (known1_p(i_ptr) ? false : true);
-    append_name = false;
+    bool modify = (known1_p(i_ptr) ? false : true);
+    bool append_name = false;
     switch (i_ptr->tval) {
     case TV_MISC: case TV_CHEST:
         break;

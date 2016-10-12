@@ -31,7 +31,6 @@
 void use() {
     uint32_t i;
     int j, k, item_val, chance, y, x;
-    int ident;
     struct misc *m_ptr;
     inven_type *i_ptr;
 
@@ -59,7 +58,7 @@ void use() {
             msg_print("You failed to use the staff properly.");
         } else if (i_ptr->p1 > 0) {
             i = i_ptr->flags;
-            ident = false;
+            bool ident = false;
             (i_ptr->p1)--;
             while (i != 0) {
                 j = bit_pos(&i) + 1;

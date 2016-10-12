@@ -646,7 +646,8 @@ void inven_command(command)
 char command;
 {
     int slot, item;
-    int tmp, tmp2, selecting, from, to;
+    int tmp, tmp2, from, to;
+    bool selecting;
     char *prompt, *swap, *disp, *string;
     char which, query;
     bigvtype prt1, prt2;
@@ -761,9 +762,7 @@ char command;
                 msg_print("But you are wielding no weapons.");
             } else if (TR_CURSED & inventory[INVEN_WIELD].flags) {
                 objdes(prt1, &inventory[INVEN_WIELD], false);
-                (void)sprintf(prt2,
-                              "The %s you are wielding appears to be cursed.",
-                              prt1);
+                (void)sprintf(prt2, "The %s you are wielding appears to be cursed.", prt1);
                 msg_print(prt2);
             } else {
                 free_turn_flag = false;
@@ -1217,11 +1216,12 @@ char *message;
 {
     vtype out_val;
     char which;
-    int test_flag, item;
-    int full, i_scr, redraw;
+    int i_scr;
 
-    item = false;
-    redraw = false;
+    bool test_flag;
+    bool full;
+    bool item = false;
+    bool redraw = false;
     *com_val = 0;
     i_scr = 1;
 

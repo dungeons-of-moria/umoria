@@ -228,14 +228,17 @@ void search(y, x, chance) int y, x, chance;
 */
 static int cycle[] = {1, 2, 3, 6, 9, 8, 7, 4, 1, 2, 3, 6, 9, 8, 7, 4, 1};
 static int chome[] = {-1, 8, 9, 10, 7, -1, 11, 6, 5, 4};
-static int find_openarea, find_breakright, find_breakleft, find_prevdir;
+static bool find_openarea, find_breakright, find_breakleft;
+static int find_prevdir;
 static int find_direction; /* Keep a record of which way we are going. */
 
 void find_init(dir)
 int dir;
 {
-    int row, col, deepleft, deepright;
-    int i, shortleft, shortright;
+    int row, col;
+    bool deepleft, deepright;
+    int i;
+    bool shortleft, shortright;
 
     row = char_row;
     col = char_col;
@@ -360,7 +363,8 @@ int dir, y, x;
 void area_affect(dir, y, x)
 int dir, y, x;
 {
-    int newdir, t, inv, check_dir, row, col;
+    int newdir, t, check_dir, row, col;
+    bool inv;
     int i, max, option, option2;
     cave_type *c_ptr;
 
@@ -508,7 +512,7 @@ int minus_ac(typ_dam)
 uint32_t typ_dam;
 {
     int i, j;
-    int tmp[6], minus;
+    int tmp[6];
     inven_type *i_ptr;
     bigvtype out_val, tmp_str;
 
@@ -538,7 +542,8 @@ uint32_t typ_dam;
         tmp[i] = INVEN_FEET;
         i++;
     }
-    minus = false;
+
+    bool minus = false;
     if (i > 0) {
         j = tmp[randint(i) - 1];
         i_ptr = &inventory[j];

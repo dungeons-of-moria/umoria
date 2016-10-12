@@ -66,10 +66,9 @@ int y, x;
     cave_type *c_ptr;
     monster_type *m_ptr;
     creature_type *r_ptr;
-    int sleep;
     vtype out_val, m_name;
 
-    sleep = false;
+    bool sleep = false;
 
     for (i = y - 1; i <= y + 1; i++) {
         for (j = x - 1; j <= x + 1; j++) {
@@ -102,10 +101,10 @@ int y, x;
 
 /* Detect any treasure on the current panel    -RAK- */
 int detect_treasure() {
-    int i, j, detect;
+    int i, j;
     cave_type *c_ptr;
 
-    detect = false;
+    bool detect = false;
 
     for (i = panel_row_min; i <= panel_row_max; i++) {
         for (j = panel_col_min; j <= panel_col_max; j++) {
@@ -124,10 +123,10 @@ int detect_treasure() {
 
 /* Detect all objects on the current panel    -RAK- */
 int detect_object() {
-    int i, j, detect;
+    int i, j;
     cave_type *c_ptr;
 
-    detect = false;
+    bool detect = false;
 
     for (i = panel_row_min; i <= panel_row_max; i++) {
         for (j = panel_col_min; j <= panel_col_max; j++) {
@@ -148,11 +147,10 @@ int detect_object() {
 /* Locates and displays traps on current panel    -RAK- */
 int detect_trap() {
     int i, j;
-    int detect;
     cave_type *c_ptr;
     inven_type *t_ptr;
 
-    detect = false;
+    bool detect = false;
 
     for (i = panel_row_min; i <= panel_row_max; i++) {
         for (j = panel_col_min; j <= panel_col_max; j++) {
@@ -175,10 +173,10 @@ int detect_trap() {
 
 /* Locates and displays all secret doors on current panel -RAK- */
 int detect_sdoor() {
-    int i, j, detect;
+    int i, j;
     cave_type *c_ptr;
 
-    detect = false;
+    bool detect = false;
 
     for (i = panel_row_min; i <= panel_row_max; i++) {
         for (j = panel_col_min; j <= panel_col_max; j++) {
@@ -205,10 +203,10 @@ int detect_sdoor() {
 
 /* Locates and displays all invisible creatures on current panel -RAK-*/
 int detect_invisible() {
-    int i, flag;
+    int i;
     monster_type *m_ptr;
 
-    flag = false;
+    bool flag = false;
 
     for (i = mfptr - 1; i >= MIN_MONIX; i--) {
         m_ptr = &m_list[i];
@@ -238,13 +236,13 @@ int detect_invisible() {
 int light_area(y, x)
 int y, x;
 {
-    int i, j, light;
+    int i, j;
 
     if (py.flags.blind < 1) {
         msg_print("You are surrounded by a white light.");
     }
 
-    light = true;
+    bool light = true;
 
     if (cave[y][x].lr && (dun_level > 0)) {
         light_room(y, x);
@@ -267,11 +265,11 @@ int unlight_area(y, x)
 int y, x;
 {
     int i, j;
-    int tmp1, tmp2, unlight;
+    int tmp1, tmp2;
     int start_row, start_col, end_row, end_col;
     cave_type *c_ptr;
 
-    unlight = false;
+    bool unlight = false;
 
     if (cave[y][x].lr && (dun_level > 0)) {
         tmp1 = (SCREEN_HEIGHT / 2);
@@ -348,10 +346,9 @@ void map_area() {
 int ident_spell() {
     int item_val;
     bigvtype out_val, tmp_str;
-    int ident;
     inven_type *i_ptr;
 
-    ident = false;
+    bool ident = false;
 
     if (get_item(&item_val, "Item you wish identified?", 0, INVEN_ARRAY_SIZE, CNIL, CNIL)) {
         ident = true;
@@ -376,10 +373,10 @@ int ident_spell() {
 int aggravate_monster(dis_affect)
 int dis_affect;
 {
-    int i, aggravate;
+    int i;
     monster_type *m_ptr;
 
-    aggravate = false;
+    bool aggravate = false;
 
     for (i = mfptr - 1; i >= MIN_MONIX; i--) {
         m_ptr = &m_list[i];
@@ -399,10 +396,10 @@ int dis_affect;
 
 /* Surround the fool with traps (chuckle)    -RAK- */
 int trap_creation() {
-    int i, j, trap;
+    int i, j;
     cave_type *c_ptr;
 
-    trap = true;
+    bool trap = true;
 
     for (i = char_row - 1; i <= char_row + 1; i++) {
         for (j = char_col - 1; j <= char_col + 1; j++) {
@@ -436,11 +433,11 @@ int trap_creation() {
 
 /* Surround the player with doors.      -RAK- */
 int door_creation() {
-    int i, j, door;
+    int i, j;
     int k;
     cave_type *c_ptr;
 
-    door = false;
+    bool door = false;
 
     for (i = char_row - 1; i <= char_row + 1; i++) {
         for (j = char_col - 1; j <= char_col + 1; j++) {
@@ -468,10 +465,10 @@ int door_creation() {
 
 /* Destroys any adjacent door(s)/trap(s)    -RAK- */
 int td_destroy() {
-    int i, j, destroy;
+    int i, j;
     cave_type *c_ptr;
 
-    destroy = false;
+    bool destroy = false;
 
     for (i = char_row - 1; i <= char_row + 1; i++) {
         for (j = char_col - 1; j <= char_col + 1; j++) {
@@ -504,10 +501,10 @@ int td_destroy() {
 
 /* Display all creatures on the current panel    -RAK- */
 int detect_monsters() {
-    int i, detect;
+    int i;
     monster_type *m_ptr;
 
-    detect = false;
+    bool detect = false;
 
     for (i = mfptr - 1; i >= MIN_MONIX; i--) {
         m_ptr = &m_list[i];
@@ -539,12 +536,12 @@ int dir, y, x;
     cave_type *c_ptr;
     monster_type *m_ptr;
     creature_type *r_ptr;
-    int dist, flag;
+    int dist;
     vtype out_val, m_name;
 
     dist = -1;
 
-    flag = false;
+    bool flag = false;
 
     do {
         /* put mmove at end because want to light up current spot */
@@ -617,9 +614,9 @@ int dir, y, x;
 {
     cave_type *c_ptr;
     inven_type *t_ptr;
-    int disarm, dist;
+    int dist;
 
-    disarm = false;
+    bool disarm = false;
     dist = -1;
 
     do {
@@ -710,7 +707,7 @@ void fire_bolt(typ, dir, y, x, dam, bolt_typ)
 int typ, dir, y, x, dam;
 char *bolt_typ;
 {
-    int i, oldy, oldx, dist, flag;
+    int i, oldy, oldx, dist;
     uint32_t weapon_type;
     int harm_type;
     int (*dummy)();
@@ -719,7 +716,7 @@ char *bolt_typ;
     creature_type *r_ptr;
     vtype out_val, m_name;
 
-    flag = false;
+    bool flag = false;
 
     get_flags(typ, &weapon_type, &harm_type, &dummy);
 
@@ -797,7 +794,7 @@ char *descrip;
 {
     int i, j;
     int dam, max_dis, thit, tkill, k, tmp;
-    int oldy, oldx, dist, flag, harm_type;
+    int oldy, oldx, dist, harm_type;
     uint32_t weapon_type;
     int (*destroy)();
     cave_type *c_ptr;
@@ -810,7 +807,7 @@ char *descrip;
     max_dis = 2;
     get_flags(typ, &weapon_type, &harm_type, &destroy);
 
-    flag = false;
+    bool flag = false;
 
     oldy = y;
     oldx = x;
@@ -1048,10 +1045,9 @@ int recharge(num)
 int num;
 {
     int i, j, item_val;
-    int res;
     inven_type *i_ptr;
 
-    res = false;
+    bool res = false;
     if (!find_range(TV_STAFF, TV_WAND, &i, &j)) {
         msg_print("You have nothing to recharge.");
     } else if (get_item(&item_val, "Recharge which item?", i, j, CNIL, CNIL)) {
@@ -1092,14 +1088,14 @@ int hp_monster(dir, y, x, dam)
 int dir, y, x, dam;
 {
     int i;
-    int flag, dist, monster;
+    int dist;
     cave_type *c_ptr;
     monster_type *m_ptr;
     creature_type *r_ptr;
     vtype out_val, m_name;
 
-    monster = false;
-    flag = false;
+    bool monster = false;
+    bool flag = false;
     dist = 0;
 
     do {
@@ -1135,14 +1131,14 @@ int drain_life(dir, y, x)
 int dir, y, x;
 {
     int i;
-    int flag, dist, drain;
+    int dist;
     cave_type *c_ptr;
     monster_type *m_ptr;
     creature_type *r_ptr;
     vtype out_val, m_name;
 
-    drain = false;
-    flag = false;
+    bool drain = false;
+    bool flag = false;
     dist = 0;
 
     do {
@@ -1183,14 +1179,14 @@ int dir, y, x;
 int speed_monster(dir, y, x, spd)
 int dir, y, x, spd;
 {
-    int flag, dist, speed;
+    int dist;
     cave_type *c_ptr;
     monster_type *m_ptr;
     creature_type *r_ptr;
     vtype out_val, m_name;
 
-    speed = false;
-    flag = false;
+    bool speed = false;
+    bool flag = false;
     dist = 0;
 
     do {
@@ -1232,14 +1228,14 @@ int dir, y, x, spd;
 int confuse_monster(dir, y, x)
 int dir, y, x;
 {
-    int flag, dist, confuse;
+    int  dist;
     cave_type *c_ptr;
     monster_type *m_ptr;
     creature_type *r_ptr;
     vtype out_val, m_name;
 
-    confuse = false;
-    flag = false;
+    bool confuse = false;
+    bool flag = false;
     dist = 0;
 
     do {
@@ -1288,14 +1284,14 @@ int dir, y, x;
 int sleep_monster(dir, y, x)
 int dir, y, x;
 {
-    int flag, dist, sleep;
+    int dist;
     cave_type *c_ptr;
     monster_type *m_ptr;
     creature_type *r_ptr;
     vtype out_val, m_name;
 
-    sleep = false;
-    flag = false;
+    bool sleep = false;
+    bool flag = false;
     dist = 0;
 
     do {
@@ -1333,16 +1329,15 @@ int dir, y, x;
 int wall_to_mud(dir, y, x)
 int dir, y, x;
 {
-    int i, wall, dist;
+    int i, dist;
     bigvtype out_val, tmp_str;
-    int flag;
     cave_type *c_ptr;
     monster_type *m_ptr;
     creature_type *r_ptr;
     vtype m_name;
 
-    wall = false;
-    flag = false;
+    bool wall = false;
+    bool flag = false;
     dist = 0;
 
     do {
@@ -1417,11 +1412,11 @@ int dir, y, x;
 int td_destroy2(dir, y, x)
 int dir, y, x;
 {
-    int destroy2, dist;
+    int dist;
     cave_type *c_ptr;
     inven_type *t_ptr;
 
-    destroy2 = false;
+    bool destroy2 = false;
     dist = 0;
 
     do {
@@ -1460,14 +1455,14 @@ int dir, y, x;
 int poly_monster(dir, y, x)
 int dir, y, x;
 {
-    int dist, flag, poly;
+    int dist;
     cave_type *c_ptr;
     creature_type *r_ptr;
     monster_type *m_ptr;
     vtype out_val, m_name;
 
-    poly = false;
-    flag = false;
+    bool poly = false;
+    bool flag = false;
     dist = 0;
 
     do {
@@ -1508,15 +1503,15 @@ int build_wall(dir, y, x)
 int dir, y, x;
 {
     int i;
-    int build, damage, dist, flag;
+    int damage, dist;
     cave_type *c_ptr;
     monster_type *m_ptr;
     creature_type *r_ptr;
     vtype m_name, out_val;
 
-    build = false;
+    bool build = false;
     dist = 0;
-    flag = false;
+    bool flag = false;
 
     do {
         (void)mmove(dir, &y, &x);
@@ -1581,10 +1576,10 @@ int clone_monster(dir, y, x)
 int dir, y, x;
 {
     cave_type *c_ptr;
-    int dist, flag;
+    int dist;
 
     dist = 0;
-    flag = false;
+    bool flag = false;
 
     do {
         (void)mmove(dir, &y, &x);
@@ -1682,11 +1677,11 @@ int ny, nx;
 int teleport_monster(dir, y, x)
 int dir, y, x;
 {
-    int flag, result, dist;
+    int dist;
     cave_type *c_ptr;
 
-    flag = false;
-    result = false;
+    bool flag = false;
+    bool result = false;
     dist = 0;
 
     do {
@@ -1709,11 +1704,11 @@ int dir, y, x;
 /* Delete all creatures within max_sight distance  -RAK- */
 /* NOTE : Winning creatures cannot be genocided */
 int mass_genocide() {
-    int i, result;
+    int i;
     monster_type *m_ptr;
     creature_type *r_ptr;
 
-    result = false;
+    bool result = false;
 
     for (i = mfptr - 1; i >= MIN_MONIX; i--) {
         m_ptr = &m_list[i];
@@ -1732,13 +1727,13 @@ int mass_genocide() {
 /* This does not keep creatures of type from appearing later. */
 /* NOTE : Winning creatures can not be genocided. */
 int genocide() {
-    int i, killed;
+    int i;
     char typ;
     monster_type *m_ptr;
     creature_type *r_ptr;
     vtype out_val;
 
-    killed = false;
+    bool killed = false;
 
     if (get_com("Which type of creature do you wish exterminated?", &typ)) {
         for (i = mfptr - 1; i >= MIN_MONIX; i--) {
@@ -1767,12 +1762,12 @@ int genocide() {
 int speed_monsters(spd)
 int spd;
 {
-    int i, speed;
+    int i;
     monster_type *m_ptr;
     creature_type *r_ptr;
     vtype out_val, m_name;
 
-    speed = false;
+    bool speed = false;
 
     for (i = mfptr - 1; i >= MIN_MONIX; i--) {
         m_ptr = &m_list[i];
@@ -1811,12 +1806,12 @@ int spd;
 
 /* Sleep any creature .    -RAK- */
 int sleep_monsters2() {
-    int i, sleep;
+    int i;
     monster_type *m_ptr;
     creature_type *r_ptr;
     vtype out_val, m_name;
 
-    sleep = false;
+    bool sleep = false;
 
     for (i = mfptr - 1; i >= MIN_MONIX; i--) {
         m_ptr = &m_list[i];
@@ -1850,11 +1845,11 @@ int sleep_monsters2() {
 /* NOTE: cannot polymorph a winning creature (BALROG) */
 int mass_poly() {
     int i;
-    int y, x, mass;
+    int y, x;
     monster_type *m_ptr;
     creature_type *r_ptr;
 
-    mass = false;
+    bool mass = false;
     for (i = mfptr - 1; i >= MIN_MONIX; i--) {
         m_ptr = &m_list[i];
         if (m_ptr->cdis <= MAX_SIGHT) {
@@ -1876,10 +1871,10 @@ int mass_poly() {
 
 /* Display evil creatures on current panel    -RAK- */
 int detect_evil() {
-    int i, flag;
+    int i;
     monster_type *m_ptr;
 
-    flag = false;
+    bool flag = false;
 
     for (i = mfptr - 1; i >= MIN_MONIX; i--) {
         m_ptr = &m_list[i];
@@ -1908,10 +1903,9 @@ int detect_evil() {
 int hp_player(num)
 int num;
 {
-    int res;
     struct misc *m_ptr;
 
-    res = false;
+    bool res = false;
     m_ptr = &py.misc;
 
     if (m_ptr->chp < m_ptr->mhp) {
@@ -1945,10 +1939,9 @@ int num;
 
 /* Cure players confusion        -RAK- */
 int cure_confusion() {
-    int cure;
     struct flags *f_ptr;
 
-    cure = false;
+    bool cure = false;
     f_ptr = &py.flags;
     if (f_ptr->confused > 1) {
         f_ptr->confused = 1;
@@ -1959,10 +1952,9 @@ int cure_confusion() {
 
 /* Cure players blindness        -RAK- */
 int cure_blindness() {
-    int cure;
     struct flags *f_ptr;
 
-    cure = false;
+    bool cure = false;
     f_ptr = &py.flags;
     if (f_ptr->blind > 1) {
         f_ptr->blind = 1;
@@ -1973,10 +1965,9 @@ int cure_blindness() {
 
 /* Cure poisoning          -RAK- */
 int cure_poison() {
-    int cure;
     struct flags *f_ptr;
 
-    cure = false;
+    bool cure = false;
     f_ptr = &py.flags;
     if (f_ptr->poisoned > 1) {
         f_ptr->poisoned = 1;
@@ -1987,10 +1978,9 @@ int cure_poison() {
 
 /* Cure the players fear        -RAK- */
 int remove_fear() {
-    int result;
     struct flags *f_ptr;
 
-    result = false;
+    bool result = false;
     f_ptr = &py.flags;
     if (f_ptr->afraid > 1) {
         f_ptr->afraid = 1;
@@ -2073,7 +2063,7 @@ void earthquake() {
 
 /* Evil creatures don't like this.           -RAK- */
 int protect_evil() {
-    int res;
+    bool res;
     struct flags *f_ptr;
 
     f_ptr = &py.flags;
@@ -2112,12 +2102,12 @@ int cflag;
 int damage;
 {
     int i;
-    int k, dispel;
+    int k;
     monster_type *m_ptr;
     creature_type *r_ptr;
     vtype out_val, m_name;
 
-    dispel = false;
+    bool dispel = false;
 
     for (i = mfptr - 1; i >= MIN_MONIX; i--) {
         m_ptr = &m_list[i];
@@ -2149,12 +2139,12 @@ int damage;
 
 /* Attempt to turn (confuse) undead creatures.  -RAK- */
 int turn_undead() {
-    int i, turn_und;
+    int i;
     monster_type *m_ptr;
     creature_type *r_ptr;
     vtype out_val, m_name;
 
-    turn_und = false;
+    bool turn_und = false;
 
     for (i = mfptr - 1; i >= MIN_MONIX; i--) {
         m_ptr = &m_list[i];
@@ -2298,10 +2288,9 @@ int32_t amount;
 
 /* Slow Poison            -RAK- */
 int slow_poison() {
-    int slow;
     struct flags *f_ptr;
 
-    slow = false;
+    bool slow = false;
     f_ptr = &py.flags;
     if (f_ptr->poisoned > 0) {
         f_ptr->poisoned = f_ptr->poisoned / 2;
@@ -2401,7 +2390,7 @@ int16_t *plusses;
 int16_t limit; /* maximum bonus allowed; usually 10, but weapon's maximum
                   damage when enchanting melee weapons to damage */
 {
-    int chance, res;
+    int chance;
 
     /* avoid randint(0) call */
     if (limit <= 0) {
@@ -2409,7 +2398,7 @@ int16_t limit; /* maximum bonus allowed; usually 10, but weapon's maximum
     }
 
     chance = 0;
-    res = false;
+    bool res = false;
 
     if (*plusses > 0) {
         chance = *plusses;
@@ -2430,10 +2419,10 @@ int16_t limit; /* maximum bonus allowed; usually 10, but weapon's maximum
 
 /* Removes curses from items in inventory    -RAK- */
 int remove_curse() {
-    int i, result;
+    int i;
     inven_type *i_ptr;
 
-    result = false;
+    bool result = false;
     for (i = INVEN_WIELD; i <= INVEN_OUTER; i++) {
         i_ptr = &inventory[i];
 
@@ -2448,10 +2437,9 @@ int remove_curse() {
 
 /* Restores any drained experience      -RAK- */
 int restore_level() {
-    int restore;
     struct misc *m_ptr;
 
-    restore = false;
+    bool restore = false;
     m_ptr = &py.misc;
 
     if (m_ptr->max_exp > m_ptr->exp) {
