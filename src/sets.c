@@ -25,7 +25,7 @@
 #include "constant.h"
 #include "types.h"
 
-int set_room(element)
+bool set_room(element)
 int element;
 {
     if ((element == DARK_FLOOR) || (element == LIGHT_FLOOR)) {
@@ -34,7 +34,7 @@ int element;
     return false;
 }
 
-int set_corr(element)
+bool set_corr(element)
 int element;
 {
     if (element == CORR_FLOOR || element == BLOCKED_FLOOR) {
@@ -43,7 +43,7 @@ int element;
     return false;
 }
 
-int set_floor(element)
+bool set_floor(element)
 int element;
 {
     if (element <= MAX_CAVE_FLOOR) {
@@ -53,7 +53,7 @@ int element;
     }
 }
 
-int set_corrodes(item)
+bool set_corrodes(item)
 inven_type *item;
 {
     switch (item->tval) {
@@ -67,7 +67,7 @@ inven_type *item;
     return false;
 }
 
-int set_flammable(item)
+bool set_flammable(item)
 inven_type *item;
 {
     switch (item->tval) {
@@ -93,7 +93,7 @@ inven_type *item;
     return false;
 }
 
-int set_frost_destroy(item)
+bool set_frost_destroy(item)
 inven_type *item;
 {
     if ((item->tval == TV_POTION1) || (item->tval == TV_POTION2) ||
@@ -103,7 +103,7 @@ inven_type *item;
     return false;
 }
 
-int set_acid_affect(item) inven_type *item;
+bool set_acid_affect(item) inven_type *item;
 {
     switch (item->tval) {
     case TV_MISC:
@@ -127,7 +127,7 @@ int set_acid_affect(item) inven_type *item;
     return false;
 }
 
-int set_lightning_destroy(item)
+bool set_lightning_destroy(item)
 inven_type *item;
 {
     if ((item->tval == TV_RING) || (item->tval == TV_WAND) ||
@@ -138,13 +138,13 @@ inven_type *item;
     }
 }
 
-int set_null(item)
+bool set_null(item)
 inven_type *item;
 {
     return false;
 }
 
-int set_acid_destroy(item)
+bool set_acid_destroy(item)
 inven_type *item;
 {
     switch (item->tval) {
@@ -175,7 +175,7 @@ inven_type *item;
     return false;
 }
 
-int set_fire_destroy(item)
+bool set_fire_destroy(item)
 inven_type *item;
 {
     switch (item->tval) {
@@ -206,7 +206,7 @@ inven_type *item;
     return false;
 }
 
-int set_large(item)      /* Items too large to fit in chests   -DJG- */
+bool set_large(item)      /* Items too large to fit in chests   -DJG- */
     treasure_type *item; /* Use treasure_type since item not yet created */
 {
     switch (item->tval) {
@@ -229,7 +229,7 @@ int set_large(item)      /* Items too large to fit in chests   -DJG- */
     return false;
 }
 
-int general_store(element)
+bool general_store(element)
 int element;
 {
     switch (element) {
@@ -245,7 +245,7 @@ int element;
     return false;
 }
 
-int armory(element)
+bool armory(element)
 int element;
 {
     switch (element) {
@@ -260,7 +260,7 @@ int element;
     return false;
 }
 
-int weaponsmith(element)
+bool weaponsmith(element)
 int element;
 {
     switch (element) {
@@ -276,7 +276,7 @@ int element;
     return false;
 }
 
-int temple(element)
+bool temple(element)
 int element;
 {
     switch (element) {
@@ -291,7 +291,7 @@ int element;
     return false;
 }
 
-int alchemist(element)
+bool alchemist(element)
 int element;
 {
     switch (element) {
@@ -304,7 +304,7 @@ int element;
     return false;
 }
 
-int magic_shop(element)
+bool magic_shop(element)
 int element;
 {
     switch (element) {

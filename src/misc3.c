@@ -85,7 +85,8 @@ int y, x;
 
 /* Returns the array number of a random object    -RAK- */
 int get_obj_num(level, must_be_small)
-int level, must_be_small;
+int level;
+bool must_be_small;
 {
     int i, j;
 
@@ -676,7 +677,7 @@ int stat;
 }
 
 /* Increases a stat by one randomized level    -RAK- */
-int inc_stat(stat)
+bool inc_stat(stat)
 int stat;
 {
     int tmp_stat, gain;
@@ -707,7 +708,7 @@ int stat;
 }
 
 /* Decreases a stat by one randomized level    -RAK- */
-int dec_stat(stat)
+bool dec_stat(stat)
 int stat;
 {
     int tmp_stat, loss;
@@ -736,7 +737,7 @@ int stat;
 }
 
 /* Restore a stat.  Return true only if this actually makes a difference. */
-int res_stat(stat)
+bool res_stat(stat)
 int stat;
 {
     int i;
@@ -1268,7 +1269,7 @@ int weight_limit() {
 }
 
 /* this code must be identical to the inven_carry() code below */
-int inven_check_num(t_ptr)
+bool inven_check_num(t_ptr)
 inven_type *t_ptr;
 {
     int i;
@@ -1295,7 +1296,7 @@ inven_type *t_ptr;
 }
 
 /* return false if picking up an object would change the players speed */
-int inven_check_weight(i_ptr)
+bool inven_check_weight(i_ptr)
 inven_type *i_ptr;
 {
     int i, new_inven_weight;
@@ -2119,7 +2120,7 @@ int show_sign;
 }
 
 /* lets anyone enter wizard mode after a disclaimer...    - JEW - */
-int enter_wiz_mode() {
+bool enter_wiz_mode() {
     int answer;
 
     if (!noscore) {
@@ -2330,7 +2331,7 @@ int *y, *x;
 }
 
 /* Saving throws for player character.    -RAK- */
-int player_saves() {
+bool player_saves() {
     /* MPW C couldn't handle the expression, so split it into two parts */
     int16_t temp = class_level_adj[py.misc.pclass][CLA_SAVE];
 

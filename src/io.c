@@ -364,7 +364,7 @@ void msg_print(char *str_buff) {
 }
 
 /* Used to verify a choice - user gets the chance to abort choice.  -CJS- */
-int get_check(char *prompt) {
+bool get_check(char *prompt) {
     int res;
     int y, x;
 
@@ -414,7 +414,7 @@ int get_com(char *prompt, char *command) {
 
 /* Gets a string terminated by <RETURN> */
 /* Function returns false if <ESCAPE> is input */
-int get_string(char *in_str, int row, int column, int slen) {
+bool get_string(char *in_str, int row, int column, int slen) {
     int start_col, end_col, i;
     char *p;
 

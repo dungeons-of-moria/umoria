@@ -181,17 +181,17 @@ void create_character();
 
 /* creature.c */
 void update_mon();
-int multiply_monster();
+bool multiply_monster();
 void creatures();
 
 /* death.c */
 void display_scores();
-int duplicate_character();
+bool duplicate_character();
 int32_t total_points();
 void exit_game();
 
 /* desc.c */
-int is_a_vowel();
+bool is_a_vowel();
 void magic_init();
 int16_t object_offset();
 void known1();
@@ -221,7 +221,7 @@ void init_scorefile();
 void read_times();
 void helpfile();
 void print_objects();
-int file_character();
+bool file_character();
 
 /* generate.c */
 void generate_cave();
@@ -247,9 +247,9 @@ void count_msg_print();
 void prt();
 void move_cursor();
 void msg_print();
-int get_check();
+bool get_check();
 int get_com();
-int get_string();
+bool get_string();
 void pause_line();
 void pause_exit();
 void save_screen();
@@ -267,36 +267,36 @@ int main();
 void init_seeds();
 void set_seed();
 void reset_seed();
-int check_time();
+bool check_time();
 int randint();
 int randnor();
 int bit_pos();
-int in_bounds();
+bool in_bounds();
 void panel_bounds();
 int get_panel();
-int panel_contains();
+bool panel_contains();
 int distance();
 int next_to_walls();
 int next_to_corr();
 int damroll();
 int pdamroll();
-int los();
+bool los();
 uint8_t loc_symbol();
-int test_light();
+bool test_light();
 void prt_map();
-int compact_monsters();
+bool compact_monsters();
 void add_food();
 int popm();
 int max_hp();
-int place_monster();
+bool place_monster();
 void place_win_monster();
 int get_mons_num();
 void alloc_monster();
-int summon_monster();
-int summon_undead();
+bool summon_monster();
+bool summon_undead();
 int popt();
 void pusht();
-int magik();
+bool magik();
 int m_bonus();
 
 /* misc2.c */
@@ -337,9 +337,9 @@ void prt_study();
 void prt_winner();
 uint8_t modify_stat();
 void set_use_stat();
-int inc_stat();
-int dec_stat();
-int res_stat();
+bool inc_stat();
+bool dec_stat();
+bool res_stat();
 void bst_stat();
 int tohit_adj();
 int toac_adj();
@@ -361,8 +361,8 @@ void take_one_item();
 void inven_drop();
 int inven_damage();
 int weight_limit();
-int inven_check_num();
-int inven_check_weight();
+bool inven_check_num();
+bool inven_check_weight();
 void check_strength();
 int inven_carry();
 int spell_chance();
@@ -375,12 +375,12 @@ void prt_experience();
 void calc_hitpoints();
 void insert_str();
 void insert_lnum();
-int enter_wiz_mode();
+bool enter_wiz_mode();
 int attack_blows();
 int tot_dam();
 int critical_blow();
 int mmove();
-int player_saves();
+bool player_saves();
 int find_range();
 void teleport();
 
@@ -403,9 +403,9 @@ void takeoff();
 int verify();
 void inven_command();
 int get_item();
-int no_light();
-int get_dir();
-int get_alldir();
+bool no_light();
+bool get_dir();
+bool get_alldir();
 void move_rec();
 void light_room();
 void lite_spot();
@@ -415,7 +415,7 @@ void search_on();
 void search_off();
 void rest();
 void rest_off();
-int test_hit();
+bool test_hit();
 void take_hit();
 
 /* moria2.c */
@@ -462,7 +462,7 @@ void quaff();
 void pray();
 
 /* recall.c */
-int bool_roff_recall();
+bool bool_roff_recall();
 int roff_recall();
 
 /* rnd.c */
@@ -471,9 +471,9 @@ void set_rnd_seed();
 int32_t rnd();
 
 /* save.c */
-int save_char();
-int _save_char();
-int get_char();
+bool save_char();
+bool _save_char();
+bool get_char();
 void set_fileptr();
 void wr_highscore();
 void rd_highscore();
@@ -482,24 +482,24 @@ void rd_highscore();
 void read_scroll();
 
 /* sets.c */
-int set_room();
-int set_corr();
-int set_floor();
-int set_corrodes();
-int set_flammable();
-int set_frost_destroy();
-int set_acid_affect();
-int set_lightning_destroy();
-int set_null();
-int set_acid_destroy();
-int set_fire_destroy();
-int set_large();
-int general_store();
-int armory();
-int weaponsmith();
-int temple();
-int alchemist();
-int magic_shop();
+bool set_room();
+bool set_corr();
+bool set_floor();
+bool set_corrodes();
+bool set_flammable();
+bool set_frost_destroy();
+bool set_acid_affect();
+bool set_lightning_destroy();
+bool set_null();
+bool set_acid_destroy();
+bool set_fire_destroy();
+bool set_large();
+bool general_store();
+bool armory();
+bool weaponsmith();
+bool temple();
+bool alchemist();
+bool magic_shop();
 
 /* spells.c */
 void monster_name();
@@ -536,7 +536,7 @@ int wall_to_mud();
 int td_destroy2();
 int poly_monster();
 int build_wall();
-int clone_monster();
+bool clone_monster();
 void teleport_away();
 void teleport_to();
 int teleport_monster();
@@ -568,7 +568,7 @@ int slow_poison();
 void bless();
 void detect_inv2();
 void destroy_area();
-int enchant();
+bool enchant();
 int remove_curse();
 int restore_level();
 

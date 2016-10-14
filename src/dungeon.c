@@ -29,10 +29,10 @@
 
 static char original_commands();
 static void do_command();
-static int valid_countcommand();
+static bool valid_countcommand();
 static void regenhp();
 static void regenmana();
-static int enchanted();
+static bool enchanted();
 static void examine_book();
 static void go_up();
 static void go_down();
@@ -1608,7 +1608,7 @@ char com_val;
 }
 
 /* Check whether this command will accept a count.     -CJS- */
-static int valid_countcommand(c)
+static bool valid_countcommand(c)
 char c;
 {
     switch (c) {
@@ -1782,7 +1782,7 @@ int percent;
 
 /* Is an item an enchanted weapon or armor and we don't know?  -CJS- */
 /* only returns true if it is a good enchantment */
-static int enchanted(t_ptr)
+static bool enchanted(t_ptr)
 inven_type *t_ptr;
 {
     if (t_ptr->tval < TV_MIN_ENCHANT || t_ptr->tval > TV_MAX_ENCHANT || t_ptr->flags & TR_CURSED) {

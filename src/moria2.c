@@ -27,7 +27,7 @@
 
 #include "externs.h"
 
-static int see_wall();
+static bool see_wall();
 
 /* Change a trap from invisible to visible    -RAK- */
 /* Note: Secret doors are handled here */
@@ -330,7 +330,7 @@ void end_find() {
 }
 
 /* Do we see a wall? Used in running.   -CJS- */
-static int see_wall(dir, y, x)
+static bool see_wall(dir, y, x)
 int dir, y, x;
 {
     /* check to see if movement there possible */
@@ -347,7 +347,7 @@ int dir, y, x;
 }
 
 /* Do we see anything? Used in running.   -CJS- */
-static int see_nothing(dir, y, x)
+static bool see_nothing(dir, y, x)
 int dir, y, x;
 {
     if (!mmove(dir, &y, &x)) { /* check to see if movement there possible */

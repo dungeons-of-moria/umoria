@@ -73,7 +73,7 @@ void reset_seed() {
 }
 
 /* Check the day-time strings to see if open    -RAK- */
-int check_time() {
+bool check_time() {
     // Play the game any time of day you like!
     return true;
 }
@@ -171,7 +171,7 @@ uint32_t *test;
 }
 
 /* Checks a co-ordinate for in bounds status    -RAK- */
-int in_bounds(y, x)
+bool in_bounds(y, x)
 int y, x;
 {
     if ((y > 0) && (y < cur_height - 1) && (x > 0) && (x < cur_width - 1)) {
@@ -235,7 +235,7 @@ int y, x, force;
 
 /* Tests a given point to see if it is within the screen -RAK- */
 /* boundaries. */
-int panel_contains(y, x)
+bool panel_contains(y, x)
 int y, x;
 {
     if ((y >= panel_row_min) && (y <= panel_row_max) && (x >= panel_col_min) &&
@@ -355,7 +355,7 @@ uint8_t *array;
  * may occur if deltaX and deltaY exceed 90.
  */
 
-int los(fromY, fromX, toY, toX)
+bool los(fromY, fromX, toY, toX)
 int fromY, fromX, toY, toX;
 {
     int tmp, deltaX, deltaY;
@@ -541,7 +541,7 @@ int y, x;
 }
 
 /* Tests a spot for light or field mark status    -RAK- */
-int test_light(y, x)
+bool test_light(y, x)
 int y, x;
 {
     cave_type *cave_ptr;
@@ -577,7 +577,7 @@ void prt_map() {
 
 /* Compact monsters          -RAK- */
 /* Return true if any monsters were deleted, false if could not delete any monsters. */
-int compact_monsters() {
+bool compact_monsters() {
     int i;
     int cur_dis;
     monster_type *mon_ptr;
@@ -674,7 +674,7 @@ uint8_t *array;
 }
 
 /* Places a monster at given location      -RAK- */
-int place_monster(y, x, z, slp)
+bool place_monster(y, x, z, slp)
 int y, x, z;
 int slp;
 {
@@ -827,7 +827,7 @@ int slp;
 }
 
 /* Places creature adjacent to given location    -RAK- */
-int summon_monster(y, x, slp)
+bool summon_monster(y, x, slp)
 int *y, *x;
 int slp;
 {
@@ -862,7 +862,7 @@ int slp;
 }
 
 /* Places undead adjacent to given location    -RAK- */
-int summon_undead(y, x)
+bool summon_undead(y, x)
 int *y, *x;
 {
     int i, j, k;
@@ -1002,7 +1002,7 @@ uint8_t x;
 }
 
 /* Boolean : is object enchanted    -RAK- */
-int magik(chance)
+bool magik(chance)
 int chance;
 {
     if (randint(100) <= chance) {

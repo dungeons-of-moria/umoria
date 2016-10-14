@@ -256,9 +256,9 @@ int *sn, *sc;
         if (result &&
             magic_spell[py.misc.pclass - 1][*sn].smana > py.misc.cmana) {
             if (class[py.misc.pclass].spell == MAGE) {
-                result = get_check("You summon your limited strength to cast this one! Confirm?");
+                result = (int)get_check("You summon your limited strength to cast this one! Confirm?");
             } else {
-                result = get_check("The gods may think you presumptuous for this! Confirm?");
+                result = (int)get_check("The gods may think you presumptuous for this! Confirm?");
             }
         }
     }
@@ -271,7 +271,7 @@ int *sn, *sc;
 /* sit there. */
 static void carry(y, x, pickup)
 int y, x;
-int pickup;
+bool pickup;
 {
     int locn, i;
     bigvtype out_val, tmp_str;
@@ -312,9 +312,7 @@ int pickup;
 
                     /* change the period to a question mark */
                     tmp_str[strlen(tmp_str) - 1] = '?';
-                    (void)sprintf(out_val,
-                                  "Exceed your weight limit to pick up %s",
-                                  tmp_str);
+                    (void)sprintf(out_val, "Exceed your weight limit to pick up %s", tmp_str);
                     pickup = get_check(out_val);
                 }
 
@@ -745,7 +743,8 @@ int y, x;
 /* Moves player from one space to another.    -RAK- */
 /* Note: This routine has been pre-declared; see that for argument*/
 void move_char(dir, do_pickup)
-int dir, do_pickup;
+int dir;
+bool do_pickup;
 {
     int old_row, old_col, old_find_flag;
     int y, x;

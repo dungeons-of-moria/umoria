@@ -659,7 +659,7 @@ void get_flags(typ, weapon_type, harm_type, destroy)
 int typ;
 uint32_t *weapon_type;
 int *harm_type;
-int (**destroy)();
+bool (**destroy)();
 {
     switch (typ) {
     case GF_MAGIC_MISSILE:
@@ -710,7 +710,7 @@ char *bolt_typ;
     int i, oldy, oldx, dist;
     uint32_t weapon_type;
     int harm_type;
-    int (*dummy)();
+    bool (*dummy)();
     cave_type *c_ptr;
     monster_type *m_ptr;
     creature_type *r_ptr;
@@ -796,7 +796,7 @@ char *descrip;
     int dam, max_dis, thit, tkill, k, tmp;
     int oldy, oldx, dist, harm_type;
     uint32_t weapon_type;
-    int (*destroy)();
+    bool (*destroy)();
     cave_type *c_ptr;
     monster_type *m_ptr;
     creature_type *r_ptr;
@@ -931,7 +931,7 @@ int monptr;
     int dam, max_dis, harm_type;
     uint32_t weapon_type;
     uint32_t tmp, treas;
-    int (*destroy)();
+    bool (*destroy)();
     cave_type *c_ptr;
     monster_type *m_ptr;
     creature_type *r_ptr;
@@ -1572,7 +1572,7 @@ int dir, y, x;
 }
 
 /* Replicate a creature          -RAK- */
-int clone_monster(dir, y, x)
+bool clone_monster(dir, y, x)
 int dir, y, x;
 {
     cave_type *c_ptr;
@@ -2385,7 +2385,7 @@ int y, x;
 }
 
 /* Enchants a plus onto an item.      -RAK- */
-int enchant(plusses, limit)
+bool enchant(plusses, limit)
 int16_t *plusses;
 int16_t limit; /* maximum bonus allowed; usually 10, but weapon's maximum
                   damage when enchanting melee weapons to damage */

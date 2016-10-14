@@ -203,7 +203,7 @@ void display_scores(show_player) int show_player;
     }
 }
 
-int duplicate_character() {
+bool duplicate_character() {
     /* Only check for duplicate characters under unix. */
     return false;
 }

@@ -32,7 +32,7 @@ char titles[MAX_TITLES][10];
 
 /* Object descriptor routines         */
 
-int is_a_vowel(ch)
+bool is_a_vowel(ch)
 char ch;
 {
     switch (ch) {

@@ -142,7 +142,7 @@ static int roffpline; /* Place to print line now being loaded. */
 #define knowdamage(l, a, d) ((4 + (l)) * (a) > 80 * (d))
 
 /* Do we know anything about this monster? */
-int bool_roff_recall(mon_num) int mon_num;
+bool bool_roff_recall(mon_num) int mon_num;
 {
     recall_type *mp;
     int i;

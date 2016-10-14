@@ -110,7 +110,8 @@ char *filename;
 /* be expected to appear on that level. */
 void print_objects() {
     int i;
-    int nobj, j, level, small;
+    int nobj, j, level;
+    bool small;
     vtype filename1;
     bigvtype tmp_str;
     FILE *file1;
@@ -176,7 +177,7 @@ void print_objects() {
 }
 
 /* Print the character to a file or device    -RAK- */
-int file_character(filename1)
+bool file_character(filename1)
 char *filename1;
 {
     int i;

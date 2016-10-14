@@ -32,7 +32,7 @@
 
 DEBUG(static FILE *logfile);
 
-static int sv_write();
+static bool sv_write();
 static void wr_byte();
 static void wr_short();
 static void wr_long();
@@ -65,7 +65,7 @@ static uint32_t start_time; /* time that play started */
 /* and has been completely rewritten again by   -CJS- */
 /* and completely rewritten again! for portability by -JEW- */
 
-static int sv_write() {
+static bool sv_write() {
     uint32_t l;
     int i, j;
     int count;
@@ -284,7 +284,7 @@ static int sv_write() {
         }
     }
 
-/* save the current time in the savefile */
+    /* save the current time in the savefile */
     l = time((time_t *)0);
 
     if (l < start_time) {
@@ -389,7 +389,7 @@ static int sv_write() {
 
 
 /* Set up prior to actual save, do the save, then clean up */
-int save_char() {
+bool save_char() {
     int i;
     vtype temp;
 
@@ -419,7 +419,7 @@ int save_char() {
     return true;
 }
 
-int _save_char(fnam)
+bool _save_char(fnam)
 char *fnam;
 {
     vtype temp;
@@ -495,7 +495,7 @@ char *fnam;
 }
 
 /* Certain checks are ommitted for the wizard. -CJS- */
-int get_char(generate)
+bool get_char(generate)
 int *generate;
 {
     int i, j;

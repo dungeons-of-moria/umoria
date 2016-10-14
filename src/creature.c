@@ -104,7 +104,7 @@ int16_t speed;
 }
 
 /* Makes sure a new creature gets lit up.      -CJS- */
-static int check_mon_lite(y, x)
+static bool check_mon_lite(y, x)
 int y, x;
 {
     int monptr;
@@ -1341,7 +1341,7 @@ bool *took_turn;
 
 /* Places creature adjacent to given location    -RAK- */
 /* Rats and Flys are fun! */
-int multiply_monster(y, x, cr_index, monptr)
+bool multiply_monster(y, x, cr_index, monptr)
 int y, x, cr_index;
 int monptr;
 {

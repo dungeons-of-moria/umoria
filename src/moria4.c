@@ -27,8 +27,8 @@
 
 #include "externs.h"
 
-static int look_ray();
-static int look_see();
+static bool look_ray();
+static bool look_see();
 
 /* Tunnels through rubble and walls      -RAK- */
 /* Must take into account: secret doors,  special tools */
@@ -475,7 +475,7 @@ void look() {
      |
      |
  */
-static int look_ray(y, from, to)
+static bool look_ray(y, from, to)
 int y, from, to;
 {
     int max_x, x;
@@ -562,7 +562,7 @@ int y, from, to;
     }
 }
 
-static int look_see(x, y, transparent)
+static bool look_see(x, y, transparent)
 int x, y;
 bool *transparent;
 {

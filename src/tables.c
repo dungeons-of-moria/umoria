@@ -86,10 +86,10 @@ uint16_t store_choice[MAX_STORES][STORE_CHOICES] = {
 };
 
 /* functions defined in sets.c */
-extern int general_store(), armory(), weaponsmith(), temple(), alchemist(), magic_shop();
+extern bool general_store(), armory(), weaponsmith(), temple(), alchemist(), magic_shop();
 
 /* Each store will buy only certain items, based on TVAL */
-int (*store_buy[MAX_STORES])() = {
+bool (*store_buy[MAX_STORES])() = {
     general_store,
     armory,
     weaponsmith,

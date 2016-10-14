@@ -1384,7 +1384,7 @@ char *message;
 /* hooks which I have not had time to re-think.     -RAK- */
 
 /* Returns true if player has no light      -RAK- */
-int no_light() {
+bool no_light() {
     cave_type *c_ptr;
 
     c_ptr = &cave[char_row][char_col];
@@ -1432,7 +1432,7 @@ char comval;
 
 /* Prompts for a direction        -RAK- */
 /* Direction memory added, for repeated commands.  -CJS */
-int get_dir(prompt, dir)
+bool get_dir(prompt, dir)
 char *prompt;
 int *dir;
 {
@@ -1475,7 +1475,7 @@ int *dir;
 
 /* Similar to get_dir, except that no memory exists, and it is    -CJS-
    allowed to enter the null direction. */
-int get_alldir(prompt, dir)
+bool get_alldir(prompt, dir)
 char *prompt;
 int *dir;
 {
@@ -1753,7 +1753,7 @@ void rest_off() {
 }
 
 /* Attacker's level and plusses,  defender's AC    -RAK- */
-int test_hit(bth, level, pth, ac, attack_type)
+bool test_hit(bth, level, pth, ac, attack_type)
 int bth, level, pth, ac, attack_type;
 {
     int i, die;
