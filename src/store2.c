@@ -333,7 +333,7 @@ int i, j;
         bell();
     }
     erase_line(MSG_LINE, 0);
-    return (flag);
+    return flag;
 }
 
 /* Increase the insult counter and get angry if too many -RAK- */
@@ -352,7 +352,7 @@ int store_num;
         s_ptr->store_open = turn + 2500 + randint(2500);
         increase = true;
     }
-    return (increase);
+    return increase;
 }
 
 /* Decrease insults          -RAK- */
@@ -378,7 +378,7 @@ int store_num;
         prt_comment5();
         msg_print(CNIL); /* keep insult separate from rest of haggle */
     }
-    return (haggle);
+    return haggle;
 }
 
 static int get_haggle(comment, new_offer, num_offer)
@@ -456,7 +456,7 @@ int num_offer;
         erase_line(0, 0);
     }
 
-    return (flag);
+    return flag;
 }
 
 static int receive_offer(store_num, comment, new_offer, last_offer, num_offer, factor)
@@ -487,7 +487,7 @@ int num_offer, factor;
         }
     } while (!flag);
 
-    return (receive);
+    return receive;
 }
 
 /* Haggling routine          -RAK- */
@@ -649,7 +649,7 @@ inven_type *item;
         updatebargain(store_num, *price, final_ask);
     }
 
-    return (purchase);
+    return purchase;
 }
 
 /* Haggling routine          -RAK- */
@@ -847,7 +847,7 @@ inven_type *item;
         updatebargain(store_num, *price, final_ask);
     }
 
-    return (sell);
+    return sell;
 }
 
 /* Buy an item from a store        -RAK- */
@@ -936,7 +936,7 @@ int *cur_top;
         }
     }
 
-    return (purchase);
+    return purchase;
 }
 
 /* Sell an item to the store        -RAK- */
@@ -1029,7 +1029,7 @@ int store_num, *cur_top;
             msg_print("I have not the room in my store to keep it.");
         }
     }
-    return (sell);
+    return sell;
 }
 
 /* Entering a store          -RAK- */

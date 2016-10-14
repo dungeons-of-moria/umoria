@@ -561,7 +561,7 @@ uint32_t typ_dam;
             minus = true;
         }
     }
-    return (minus);
+    return minus;
 }
 
 /* Corrode the unsuspecting person's armor     -RAK- */

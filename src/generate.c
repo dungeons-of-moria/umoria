@@ -1130,7 +1130,7 @@ int y, x;
     } else {
         next = false;
     }
-    return (next);
+    return next;
 }
 
 /* Places door at y, x position if at least 2 walls found */

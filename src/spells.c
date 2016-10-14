@@ -96,7 +96,7 @@ int y, x;
         }
     }
 
-    return (sleep);
+    return sleep;
 }
 
 /* Detect any treasure on the current panel    -RAK- */
@@ -118,7 +118,7 @@ int detect_treasure() {
         }
     }
 
-    return (detect);
+    return detect;
 }
 
 /* Detect all objects on the current panel    -RAK- */
@@ -141,7 +141,7 @@ int detect_object() {
         }
     }
 
-    return (detect);
+    return detect;
 }
 
 /* Locates and displays traps on current panel    -RAK- */
@@ -168,7 +168,7 @@ int detect_trap() {
         }
     }
 
-    return (detect);
+    return detect;
 }
 
 /* Locates and displays all secret doors on current panel -RAK- */
@@ -198,7 +198,7 @@ int detect_sdoor() {
         }
     }
 
-    return (detect);
+    return detect;
 }
 
 /* Locates and displays all invisible creatures on current panel -RAK-*/
@@ -226,7 +226,7 @@ int detect_invisible() {
         creatures(false);
     }
 
-    return (flag);
+    return flag;
 }
 
 /* Light an area:                           -RAK-
@@ -257,7 +257,7 @@ int y, x;
         }
     }
 
-    return (light);
+    return light;
 }
 
 /* Darken an area, opposite of light area    -RAK- */
@@ -309,7 +309,7 @@ int y, x;
         msg_print("Darkness surrounds you.");
     }
 
-    return (unlight);
+    return unlight;
 }
 
 /* Map the current area plus some      -RAK- */
@@ -366,7 +366,7 @@ int ident_spell() {
         msg_print(out_val);
     }
 
-    return (ident);
+    return ident;
 }
 
 /* Get all the monsters on the level pissed off.  -RAK- */
@@ -391,7 +391,7 @@ int dis_affect;
         msg_print("You hear a sudden stirring in the distance!");
     }
 
-    return (aggravate);
+    return aggravate;
 }
 
 /* Surround the fool with traps (chuckle)    -RAK- */
@@ -428,7 +428,7 @@ int trap_creation() {
         }
     }
 
-    return (trap);
+    return trap;
 }
 
 /* Surround the player with doors.      -RAK- */
@@ -460,7 +460,7 @@ int door_creation() {
         }
     }
 
-    return (door);
+    return door;
 }
 
 /* Destroys any adjacent door(s)/trap(s)    -RAK- */
@@ -496,7 +496,7 @@ int td_destroy() {
         }
     }
 
-    return (destroy);
+    return destroy;
 }
 
 /* Display all creatures on the current panel    -RAK- */
@@ -524,7 +524,7 @@ int detect_monsters() {
         creatures(false);
     }
 
-    return (detect);
+    return detect;
 }
 
 /* Leave a line of light in given dir, blue light can sometimes */
@@ -651,7 +651,7 @@ int dir, y, x;
         (void)mmove(dir, &y, &x);
     } while ((dist <= OBJ_BOLT_RANGE) && c_ptr->fval <= MAX_OPEN_SPACE);
 
-    return (disarm);
+    return disarm;
 }
 
 /* Return flags for given type area affect    -RAK- */
@@ -1080,7 +1080,7 @@ int num;
             clear_empty(i_ptr);
         }
     }
-    return (res);
+    return res;
 }
 
 /* Increase or decrease a creatures hit points    -RAK- */
@@ -1123,7 +1123,7 @@ int dir, y, x, dam;
         }
     } while (!flag);
 
-    return (monster);
+    return monster;
 }
 
 /* Drains life; note it must be living.    -RAK- */
@@ -1171,7 +1171,7 @@ int dir, y, x;
         }
     } while (!flag);
 
-    return (drain);
+    return drain;
 }
 
 /* Increase or decrease a creatures speed    -RAK- */
@@ -1221,7 +1221,7 @@ int dir, y, x, spd;
         }
     } while (!flag);
 
-    return (speed);
+    return speed;
 }
 
 /* Confuse a creature          -RAK- */
@@ -1277,7 +1277,7 @@ int dir, y, x;
         }
     } while (!flag);
 
-    return (confuse);
+    return confuse;
 }
 
 /* Sleep a creature.          -RAK- */
@@ -1322,7 +1322,7 @@ int dir, y, x;
         }
     } while (!flag);
 
-    return (sleep);
+    return sleep;
 }
 
 /* Turn stone to mud, delete wall.      -RAK- */
@@ -1405,7 +1405,7 @@ int dir, y, x;
         }
     } while (!flag);
 
-    return (wall);
+    return wall;
 }
 
 /* Destroy all traps and doors in a given direction  -RAK- */
@@ -1447,7 +1447,7 @@ int dir, y, x;
         }
     } while ((dist <= OBJ_BOLT_RANGE) || c_ptr->fval <= MAX_OPEN_SPACE);
 
-    return (destroy2);
+    return destroy2;
 }
 
 /* Polymorph a monster          -RAK- */
@@ -1495,7 +1495,7 @@ int dir, y, x;
         }
     } while (!flag);
 
-    return (poly);
+    return poly;
 }
 
 /* Create a wall.          -RAK- */
@@ -1568,7 +1568,7 @@ int dir, y, x;
         }
     } while (!flag);
 
-    return (build);
+    return build;
 }
 
 /* Replicate a creature          -RAK- */
@@ -1596,7 +1596,7 @@ int dir, y, x;
         }
     } while (!flag);
 
-    return (false);
+    return false;
 }
 
 /* Move the creature record to a new location    -RAK- */
@@ -1698,7 +1698,7 @@ int dir, y, x;
         }
     } while (!flag);
 
-    return (result);
+    return result;
 }
 
 /* Delete all creatures within max_sight distance  -RAK- */
@@ -1720,7 +1720,7 @@ int mass_genocide() {
         }
     }
 
-    return (result);
+    return result;
 }
 
 /* Delete all creatures of a given type from level.  -RAK- */
@@ -1754,7 +1754,7 @@ int genocide() {
         }
     }
 
-    return (killed);
+    return killed;
 }
 
 /* Change speed of any creature .      -RAK- */
@@ -1801,7 +1801,7 @@ int spd;
         }
     }
 
-    return (speed);
+    return speed;
 }
 
 /* Sleep any creature .    -RAK- */
@@ -1838,7 +1838,7 @@ int sleep_monsters2() {
         }
     }
 
-    return (sleep);
+    return sleep;
 }
 
 /* Polymorph any creature that player can see.  -RAK- */
@@ -1866,7 +1866,7 @@ int mass_poly() {
         }
     }
 
-    return (mass);
+    return mass;
 }
 
 /* Display evil creatures on current panel    -RAK- */
@@ -1896,7 +1896,7 @@ int detect_evil() {
         creatures(false);
     }
 
-    return (flag);
+    return flag;
 }
 
 /* Change players hit points in some manner    -RAK- */
@@ -1934,7 +1934,7 @@ int num;
         res = true;
     }
 
-    return (res);
+    return res;
 }
 
 /* Cure players confusion        -RAK- */
@@ -1947,7 +1947,7 @@ int cure_confusion() {
         f_ptr->confused = 1;
         cure = true;
     }
-    return (cure);
+    return cure;
 }
 
 /* Cure players blindness        -RAK- */
@@ -1960,7 +1960,7 @@ int cure_blindness() {
         f_ptr->blind = 1;
         cure = true;
     }
-    return (cure);
+    return cure;
 }
 
 /* Cure poisoning          -RAK- */
@@ -1973,7 +1973,7 @@ int cure_poison() {
         f_ptr->poisoned = 1;
         cure = true;
     }
-    return (cure);
+    return cure;
 }
 
 /* Cure the players fear        -RAK- */
@@ -1986,7 +1986,7 @@ int remove_fear() {
         f_ptr->afraid = 1;
         result = true;
     }
-    return (result);
+    return result;
 }
 
 /* This is a fun one.  In a given block, pick some walls and */
@@ -2075,7 +2075,7 @@ int protect_evil() {
     }
     f_ptr->protevil += randint(25) + 3 * py.misc.lev;
 
-    return (res);
+    return res;
 }
 
 /* Create some high quality mush for the player.  -RAK- */
@@ -2134,7 +2134,7 @@ int damage;
         }
     }
 
-    return (dispel);
+    return dispel;
 }
 
 /* Attempt to turn (confuse) undead creatures.  -RAK- */
@@ -2167,7 +2167,7 @@ int turn_undead() {
         }
     }
 
-    return (turn_und);
+    return turn_und;
 }
 
 /* Leave a glyph of warding. Creatures will not pass over! -RAK-*/
@@ -2300,7 +2300,7 @@ int slow_poison() {
         slow = true;
         msg_print("The effect of the poison has been reduced.");
     }
-    return (slow);
+    return slow;
 }
 
 /* Bless            -RAK- */
@@ -2394,7 +2394,7 @@ int16_t limit; /* maximum bonus allowed; usually 10, but weapon's maximum
 
     /* avoid randint(0) call */
     if (limit <= 0) {
-        return (false);
+        return false;
     }
 
     chance = 0;
@@ -2414,7 +2414,7 @@ int16_t limit; /* maximum bonus allowed; usually 10, but weapon's maximum
         res = true;
     }
 
-    return (res);
+    return res;
 }
 
 /* Removes curses from items in inventory    -RAK- */
@@ -2432,7 +2432,7 @@ int remove_curse() {
             result = true;
         }
     }
-    return (result);
+    return result;
 }
 
 /* Restores any drained experience      -RAK- */
@@ -2452,5 +2452,5 @@ int restore_level() {
             prt_experience();
         }
     }
-    return (restore);
+    return restore;
 }

@@ -29,27 +29,27 @@ int set_room(element)
 int element;
 {
     if ((element == DARK_FLOOR) || (element == LIGHT_FLOOR)) {
-        return (true);
+        return true;
     }
-    return (false);
+    return false;
 }
 
 int set_corr(element)
 int element;
 {
     if (element == CORR_FLOOR || element == BLOCKED_FLOOR) {
-        return (true);
+        return true;
     }
-    return (false);
+    return false;
 }
 
 int set_floor(element)
 int element;
 {
     if (element <= MAX_CAVE_FLOOR) {
-        return (true);
+        return true;
     } else {
-        return (false);
+        return false;
     }
 }
 
@@ -62,9 +62,9 @@ inven_type *item;
     case TV_SHIELD:
     case TV_HARD_ARMOR:
     case TV_WAND:
-        return (true);
+        return true;
     }
-    return (false);
+    return false;
 }
 
 int set_flammable(item)
@@ -90,7 +90,7 @@ inven_type *item;
     case TV_SCROLL2:
         return true;
     }
-    return (false);
+    return false;
 }
 
 int set_frost_destroy(item)
@@ -98,9 +98,9 @@ inven_type *item;
 {
     if ((item->tval == TV_POTION1) || (item->tval == TV_POTION2) ||
         (item->tval == TV_FLASK)) {
-        return (true);
+        return true;
     }
-    return (false);
+    return false;
 }
 
 int set_acid_affect(item) inven_type *item;
@@ -119,12 +119,12 @@ int set_acid_affect(item) inven_type *item;
     case TV_CLOAK:
     case TV_SOFT_ARMOR:
         if (item->flags & TR_RES_ACID) {
-            return (false);
+            return false;
         } else {
-            return (true);
+            return true;
         }
     }
-    return (false);
+    return false;
 }
 
 int set_lightning_destroy(item)
@@ -132,16 +132,16 @@ inven_type *item;
 {
     if ((item->tval == TV_RING) || (item->tval == TV_WAND) ||
         (item->tval == TV_SPIKE)) {
-        return (true);
+        return true;
     } else {
-        return (false);
+        return false;
     }
 }
 
 int set_null(item)
 inven_type *item;
 {
-    return (false);
+    return false;
 }
 
 int set_acid_destroy(item)
@@ -170,9 +170,9 @@ inven_type *item;
     case TV_FOOD:
     case TV_OPEN_DOOR:
     case TV_CLOSED_DOOR:
-        return (true);
+        return true;
     }
-    return (false);
+    return false;
 }
 
 int set_fire_destroy(item)
@@ -201,9 +201,9 @@ inven_type *item;
     case TV_FOOD:
     case TV_OPEN_DOOR:
     case TV_CLOSED_DOOR:
-        return (true);
+        return true;
     }
-    return (false);
+    return false;
 }
 
 int set_large(item)      /* Items too large to fit in chests   -DJG- */
@@ -240,9 +240,9 @@ int element;
     case TV_FLASK:
     case TV_LIGHT:
     case TV_SPIKE:
-        return (true);
+        return true;
     }
-    return (false);
+    return false;
 }
 
 int armory(element)
@@ -255,9 +255,9 @@ int element;
     case TV_SHIELD:
     case TV_HARD_ARMOR:
     case TV_SOFT_ARMOR:
-        return (true);
+        return true;
     }
-    return (false);
+    return false;
 }
 
 int weaponsmith(element)
@@ -271,9 +271,9 @@ int element;
     case TV_HAFTED:
     case TV_POLEARM:
     case TV_SWORD:
-        return (true);
+        return true;
     }
-    return (false);
+    return false;
 }
 
 int temple(element)
@@ -286,9 +286,9 @@ int element;
     case TV_POTION1:
     case TV_POTION2:
     case TV_PRAYER_BOOK:
-        return (true);
+        return true;
     }
-    return (false);
+    return false;
 }
 
 int alchemist(element)
@@ -299,9 +299,9 @@ int element;
     case TV_SCROLL2:
     case TV_POTION1:
     case TV_POTION2:
-        return (true);
+        return true;
     }
-    return (false);
+    return false;
 }
 
 int magic_shop(element)
@@ -317,7 +317,7 @@ int element;
     case TV_POTION1:
     case TV_POTION2:
     case TV_MAGIC_BOOK:
-        return (true);
+        return true;
     }
-    return (false);
+    return false;
 }

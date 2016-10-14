@@ -262,7 +262,7 @@ int *sn, *sc;
             }
         }
     }
-    return (result);
+    return result;
 }
 
 /* Player is on an object.  Many things can happen based -RAK- */
@@ -475,7 +475,7 @@ int y, x;
     } else {
         delete = false;
     }
-    return (delete);
+    return delete;
 }
 
 /* Allocates objects upon a creatures death    -RAK- */
@@ -621,7 +621,7 @@ int monptr, dam;
         m_take_hit = -1;
     }
 
-    return (m_take_hit);
+    return m_take_hit;
 }
 
 /* Player attacks a (poor, defenseless) creature  -RAK- */
@@ -1148,5 +1148,5 @@ int y, x, t1, t2;
         lite_spot(y, x);
         res = true;
     }
-    return (res);
+    return res;
 }

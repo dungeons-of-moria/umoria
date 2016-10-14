@@ -1376,7 +1376,7 @@ char *message;
         prt("You are not carrying anything.", 0, 0);
     }
 
-    return (item);
+    return item;
 }
 
 /* I may have written the town level code, but I'm not exactly */
@@ -1427,7 +1427,7 @@ char comval;
         comval = '5';
         break;
     }
-    return (comval);
+    return comval;
 }
 
 /* Prompts for a direction        -RAK- */

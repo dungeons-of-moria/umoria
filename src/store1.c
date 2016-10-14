@@ -141,7 +141,7 @@ inven_type *i_ptr;
         value = value * i_ptr->number;
     }
 
-    return (value);
+    return value;
 }
 
 /* Asking price for an item        -RAK- */
@@ -168,10 +168,10 @@ inven_type *item;
             *min_sell = *max_sell;
         }
 
-        return (i);
+        return i;
     } else {
         /* don't let the item get into the store inventory */
-        return (0);
+        return 0;
     }
 }
 
@@ -201,7 +201,7 @@ int store_num;
             }
         }
     }
-    return (store_check);
+    return store_check;
 }
 
 /* Insert INVEN_MAX at given location */
@@ -423,7 +423,7 @@ int32_t minprice;
     flagnoneed =
         ((bargain_record > 0) && ((int32_t)bargain_record * (int32_t)bargain_record > minprice / 50));
 
-    return (flagnoneed);
+    return flagnoneed;
 }
 
 /* update the bargin info          -DJB- */

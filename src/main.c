@@ -245,7 +245,7 @@ char *argv[];
     exit_game(); /* Character gets buried. */
 
     /* should never reach here, but just in case */
-    return (0);
+    return 0;
 }
 
 /* Init players with some belongings      -RAK- */

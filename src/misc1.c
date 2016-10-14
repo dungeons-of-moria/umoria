@@ -161,13 +161,13 @@ uint32_t *test;
     for (i = 0; i < sizeof(*test) * 8; i++) {
         if (*test & mask) {
             *test &= ~mask;
-            return (i);
+            return i;
         }
         mask <<= 1;
     }
 
     /* no one bits found */
-    return (-1);
+    return -1;
 }
 
 /* Checks a co-ordinate for in bounds status    -RAK- */
@@ -175,9 +175,9 @@ int in_bounds(y, x)
 int y, x;
 {
     if ((y > 0) && (y < cur_height - 1) && (x > 0) && (x < cur_width - 1)) {
-        return (true);
+        return true;
     } else {
-        return (false);
+        return false;
     }
 }
 
@@ -230,7 +230,7 @@ int y, x, force;
     } else {
         panel = false;
     }
-    return (panel);
+    return panel;
 }
 
 /* Tests a given point to see if it is within the screen -RAK- */
@@ -240,9 +240,9 @@ int y, x;
 {
     if ((y >= panel_row_min) && (y <= panel_row_max) && (x >= panel_col_min) &&
         (x <= panel_col_max)) {
-        return (true);
+        return true;
     } else {
-        return (false);
+        return false;
     }
 }
 
@@ -291,7 +291,7 @@ int y, x;
         i++;
     }
 
-    return (i);
+    return i;
 }
 
 /* Checks all adjacent spots for corridors    -RAK- */
@@ -316,7 +316,7 @@ int y, x;
         }
     }
 
-    return (i);
+    return i;
 }
 
 /* generates damage for 2d6 style dice rolls */
@@ -328,7 +328,7 @@ int num, sides;
     for (i = 0; i < num; i++) {
         sum += randint(sides);
     }
-    return (sum);
+    return sum;
 }
 
 int pdamroll(array)
@@ -548,9 +548,9 @@ int y, x;
 
     cave_ptr = &cave[y][x];
     if (cave_ptr->pl || cave_ptr->tl || cave_ptr->fm) {
-        return (true);
+        return true;
     } else {
-        return (false);
+        return false;
     }
 }
 
@@ -663,7 +663,7 @@ int popm() {
             return -1;
         }
     }
-    return (mfptr++);
+    return mfptr++;
 }
 
 /* Gives Max hit points          -RAK- */
@@ -858,7 +858,7 @@ int slp;
         i++;
     } while (i <= 9);
 
-    return (summon);
+    return summon;
 }
 
 /* Places undead adjacent to given location    -RAK- */
@@ -910,7 +910,7 @@ int *y, *x;
         i++;
     } while (i <= 9);
 
-    return (summon);
+    return summon;
 }
 
 /* If too many objects on floor level, delete some of them-RAK- */
@@ -974,7 +974,7 @@ int popt() {
     if (tcptr == MAX_TALLOC) {
         compact_objects();
     }
-    return (tcptr++);
+    return tcptr++;
 }
 
 /* Pushs a record back onto free space list    -RAK- */
@@ -1006,9 +1006,9 @@ int magik(chance)
 int chance;
 {
     if (randint(100) <= chance) {
-        return (true);
+        return true;
     } else {
-        return (false);
+        return false;
     }
 }
 
@@ -1029,8 +1029,8 @@ int base, max_std, level;
     tmp = randnor(0, stand_dev);
     x = (abs(tmp) / 10) + base;
     if (x < base) {
-        return (base);
+        return base;
     } else {
-        return (x);
+        return x;
     }
 }

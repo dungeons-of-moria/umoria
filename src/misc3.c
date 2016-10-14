@@ -131,7 +131,7 @@ int level, must_be_small;
             }
         } while ((must_be_small) && (set_large(&object_list[sorted_objects[i]])));
     }
-    return (i);
+    return i;
 }
 
 /* Places an object at given row, column co-ordinate  -RAK- */
@@ -321,21 +321,21 @@ int stat_adj(stat) int stat;
 
     value = py.stats.use_stat[stat];
     if (value > 117) {
-        return (7);
+        return 7;
     } else if (value > 107) {
-        return (6);
+        return 6;
     } else if (value > 87) {
-        return (5);
+        return 5;
     } else if (value > 67) {
-        return (4);
+        return 4;
     } else if (value > 17) {
-        return (3);
+        return 3;
     } else if (value > 14) {
-        return (2);
+        return 2;
     } else if (value > 7) {
-        return (1);
+        return 1;
     } else {
-        return (0);
+        return 0;
     }
 }
 
@@ -347,51 +347,51 @@ int chr_adj() {
     charisma = py.stats.use_stat[A_CHR];
 
     if (charisma > 117) {
-        return (90);
+        return 90;
     } else if (charisma > 107) {
-        return (92);
+        return 92;
     } else if (charisma > 87) {
-        return (94);
+        return 94;
     } else if (charisma > 67) {
-        return (96);
+        return 96;
     } else if (charisma > 18) {
-        return (98);
+        return 98;
     } else {
         switch (charisma) {
         case 18:
-            return (100);
+            return 100;
         case 17:
-            return (101);
+            return 101;
         case 16:
-            return (102);
+            return 102;
         case 15:
-            return (103);
+            return 103;
         case 14:
-            return (104);
+            return 104;
         case 13:
-            return (106);
+            return 106;
         case 12:
-            return (108);
+            return 108;
         case 11:
-            return (110);
+            return 110;
         case 10:
-            return (112);
+            return 112;
         case 9:
-            return (114);
+            return 114;
         case 8:
-            return (116);
+            return 116;
         case 7:
-            return (118);
+            return 118;
         case 6:
-            return (120);
+            return 120;
         case 5:
-            return (122);
+            return 122;
         case 4:
-            return (125);
+            return 125;
         case 3:
-            return (130);
+            return 130;
         default:
-            return (100);
+            return 100;
         }
     }
 }
@@ -405,15 +405,15 @@ int con_adj() {
     if (con < 7) {
         return (con - 7);
     } else if (con < 17) {
-        return (0);
+        return 0;
     } else if (con == 17) {
-        return (1);
+        return 1;
     } else if (con < 94) {
-        return (2);
+        return 2;
     } else if (con < 117) {
-        return (3);
+        return 3;
     } else {
-        return (4);
+        return 4;
     }
 }
 
@@ -808,7 +808,7 @@ int tohit_adj() {
         total += 4;
     }
 
-    return (total);
+    return total;
 }
 
 /* Returns a character's adjustment to armor class   -JWT- */
@@ -817,25 +817,25 @@ int toac_adj() {
 
     stat = py.stats.use_stat[A_DEX];
     if (stat < 4) {
-        return (-4);
+        return -4;
     } else if (stat == 4) {
-        return (-3);
+        return -3;
     } else if (stat == 5) {
-        return (-2);
+        return -2;
     } else if (stat == 6) {
-        return (-1);
+        return -1;
     } else if (stat < 15) {
-        return (0);
+        return 0;
     } else if (stat < 18) {
-        return (1);
+        return 1;
     } else if (stat < 59) {
-        return (2);
+        return 2;
     } else if (stat < 94) {
-        return (3);
+        return 3;
     } else if (stat < 117) {
-        return (4);
+        return 4;
     } else {
-        return (5);
+        return 5;
     }
 }
 
@@ -845,29 +845,29 @@ int todis_adj() {
 
     stat = py.stats.use_stat[A_DEX];
     if (stat < 4) {
-        return (-8);
+        return -8;
     } else if (stat == 4) {
-        return (-6);
+        return -6;
     } else if (stat == 5) {
-        return (-4);
+        return -4;
     } else if (stat == 6) {
-        return (-2);
+        return -2;
     } else if (stat == 7) {
-        return (-1);
+        return -1;
     } else if (stat < 13) {
-        return (0);
+        return 0;
     } else if (stat < 16) {
-        return (1);
+        return 1;
     } else if (stat < 18) {
-        return (2);
+        return 2;
     } else if (stat < 59) {
-        return (4);
+        return 4;
     } else if (stat < 94) {
-        return (5);
+        return 5;
     } else if (stat < 117) {
-        return (6);
+        return 6;
     } else {
-        return (8);
+        return 8;
     }
 }
 
@@ -877,23 +877,23 @@ int todam_adj() {
 
     stat = py.stats.use_stat[A_STR];
     if (stat < 4) {
-        return (-2);
+        return -2;
     } else if (stat < 5) {
-        return (-1);
+        return -1;
     } else if (stat < 16) {
-        return (0);
+        return 0;
     } else if (stat < 17) {
-        return (1);
+        return 1;
     } else if (stat < 18) {
-        return (2);
+        return 2;
     } else if (stat < 94) {
-        return (3);
+        return 3;
     } else if (stat < 109) {
-        return (4);
+        return 4;
     } else if (stat < 117) {
-        return (5);
+        return 5;
     } else {
-        return (6);
+        return 6;
     }
 }
 
@@ -1006,21 +1006,21 @@ int x, y;
 {
     switch ((x / y)) {
     case -3: case -2: case -1:
-        return ("Very Bad");
+        return "Very Bad";
     case 0: case 1:
-        return ("Bad");
+        return "Bad";
     case 2:
-        return ("Poor");
+        return "Poor";
     case 3: case 4:
-        return ("Fair");
+        return "Fair";
     case 5:
-        return ("Good");
+        return "Good";
     case 6:
-        return ("Very Good");
+        return "Very Good";
     case 7: case 8:
-        return ("Excellent");
+        return "Excellent";
     default:
-        return ("Superb");
+        return "Superb";
     }
 }
 
@@ -1253,7 +1253,7 @@ int perc;
             j++;
         }
     }
-    return (j);
+    return j;
 }
 
 /* Computes current weight limit      -RAK- */
@@ -1264,7 +1264,7 @@ int weight_limit() {
     if (weight_cap > 3000) {
         weight_cap = 3000;
     }
-    return (weight_cap);
+    return weight_cap;
 }
 
 /* this code must be identical to the inven_carry() code below */
@@ -1587,7 +1587,7 @@ int first_spell;
         *sc = spell_chance(*sn);
     }
 
-    return (flag);
+    return flag;
 }
 
 /* calculate number of spells player should have, and learn forget spells
@@ -2130,10 +2130,10 @@ int enter_wiz_mode() {
     if (noscore || answer) {
         noscore |= 0x2;
         wizard = true;
-        return (true);
+        return true;
     }
 
-    return (false);
+    return false;
 }
 
 /* Weapon weight VS strength and dexterity    -RAK- */
@@ -2236,7 +2236,7 @@ int monster;
             r_ptr->r_cdefense |= CD_FIRE;
         }
     }
-    return (tdam);
+    return tdam;
 }
 
 /* Critical hits, Nasty way to die.      -RAK- */
@@ -2269,7 +2269,7 @@ int attack_type;
         }
     }
 
-    return (critical);
+    return critical;
 }
 
 /* Given direction "dir", returns new row, column location -RAK- */
@@ -2326,7 +2326,7 @@ int *y, *x;
         moved = true;
     }
 
-    return (moved);
+    return moved;
 }
 
 /* Saving throws for player character.    -RAK- */
@@ -2335,9 +2335,9 @@ int player_saves() {
     int16_t temp = class_level_adj[py.misc.pclass][CLA_SAVE];
 
     if (randint(100) <= (py.misc.save + stat_adj(A_WIS) + (temp * py.misc.lev / 3))) {
-        return (true);
+        return true;
     } else {
-        return (false);
+        return false;
     }
 }
 
@@ -2377,7 +2377,7 @@ int *j, *k;
         *k = inven_ctr - 1;
     }
 
-    return (flag);
+    return flag;
 }
 
 /* Teleport the player to a new location    -RAK- */

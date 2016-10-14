@@ -409,7 +409,7 @@ int get_com(char *prompt, char *command) {
 
     erase_line(MSG_LINE, 0);
 
-    return (res);
+    return res;
 }
 
 /* Gets a string terminated by <RETURN> */
@@ -468,7 +468,7 @@ int get_string(char *in_str, int row, int column, int slen) {
     } while ((!flag) && (!aborted));
 
     if (aborted) {
-        return (false);
+        return false;
     }
 
     /* Remove trailing blanks */
@@ -477,7 +477,7 @@ int get_string(char *in_str, int row, int column, int slen) {
     }
     *p = '\0';
 
-    return (true);
+    return true;
 }
 
 /* Pauses for user response before returning    -RAK- */
