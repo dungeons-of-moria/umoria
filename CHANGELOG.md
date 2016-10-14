@@ -11,6 +11,13 @@
 
 ### All Changes
 
+
+`2016-10-14`
+
+- Updates many func signatures/returns to use the bool type for booleans
+- Removes unneeded braces around returns types
+
+
 `2016-10-12`
 
 - Changes Globals in `variables.c`: use `bool` type for booleans.
