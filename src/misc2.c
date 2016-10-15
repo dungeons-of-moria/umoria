@@ -30,17 +30,17 @@
 /* Chance of treasure having magic abilities    -RAK- */
 /* Chance increases with each dungeon level */
 void magic_treasure(int x, int level) {
-    inven_type *t_ptr;
-    int chance, special, cursed, i;
     int tmp;
 
-    chance = OBJ_BASE_MAGIC + level;
+    int chance = OBJ_BASE_MAGIC + level;
     if (chance > OBJ_BASE_MAX) {
         chance = OBJ_BASE_MAX;
     }
-    special = chance / OBJ_DIV_SPECIAL;
-    cursed = (10 * chance) / OBJ_DIV_CURSED;
-    t_ptr = &t_list[x];
+
+    int special = chance / OBJ_DIV_SPECIAL;
+    int cursed = (10 * chance) / OBJ_DIV_CURSED;
+
+    inven_type *t_ptr = &t_list[x];
 
     /* some objects appear multiple times in the object_list with different
        levels, this is to make the object occur more often, however, for
@@ -820,7 +820,7 @@ void magic_treasure(int x, int level) {
         }
 
         t_ptr->number = 0;
-        for (i = 0; i < 7; i++) {
+        for (int i = 0; i < 7; i++) {
             t_ptr->number += randint(6);
         }
         if (missile_ctr == MAX_SHORT) {
@@ -883,17 +883,18 @@ static struct opt_desc { char *o_prompt; bool *o_var; } options[] = {
 
 /* Set or unset various boolean options.    -CJS- */
 void set_options() {
-    int i, max;
-    vtype string;
-
     prt("  ESC when finished, y/n to set options, <return> or - to move cursor", 0, 0);
+
+    int max;
     for (max = 0; options[max].o_prompt != 0; max++) {
+        vtype string;
+
         (void)sprintf(string, "%-38s: %s", options[max].o_prompt, (*options[max].o_var ? "yes" : "no "));
         prt(string, max + 1, 0);
     }
     erase_line(max + 1, 0);
 
-    i = 0;
+    int i = 0;
     for (;;) {
         move_cursor(i + 1, 40);
         switch (inkey()) {

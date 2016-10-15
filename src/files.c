@@ -50,14 +50,13 @@ void init_scorefile() {
 /* This routine also checks the hours file vs. what time it is  -Doc */
 void read_times() {
     vtype in_line;
-    int i;
-    FILE *file1;
 
     /* Print the introduction message, news, etc. */
-    if ((file1 = fopen(MORIA_MOR, "r")) != NULL) {
+    FILE *file1 = fopen(MORIA_MOR, "r");
+    if (file1 != NULL) {
         clear_screen();
 
-        for (i = 0; fgets(in_line, 80, file1) != CNIL; i++) {
+        for (int i = 0; fgets(in_line, 80, file1) != CNIL; i++) {
             put_buffer(in_line, i, 0);
         }
         pause_line(23);
@@ -69,11 +68,8 @@ void read_times() {
    primitive, but portable */
 void helpfile(char *filename) {
     bigvtype tmp_str;
-    FILE *file;
-    char input;
-    int i;
 
-    file = fopen(filename, "r");
+    FILE *file = fopen(filename, "r");
     if (file == NULL) {
         (void)sprintf(tmp_str, "Can not find help file \"%s\".\n", filename);
         prt(tmp_str, 0, 0);
@@ -82,9 +78,10 @@ void helpfile(char *filename) {
 
     save_screen();
 
+    char input;
     while (!feof(file)) {
         clear_screen();
-        for (i = 0; i < 23; i++) {
+        for (int i = 0; i < 23; i++) {
             if (fgets(tmp_str, BIGVTYPESIZ - 1, file) != CNIL) {
                 put_buffer(tmp_str, i, 0);
             }
@@ -104,39 +101,38 @@ void helpfile(char *filename) {
 /* the objects produced is a sampling of objects which */
 /* be expected to appear on that level. */
 void print_objects() {
-    int i;
-    int nobj, j, level;
-    bool small;
-    vtype filename1;
     bigvtype tmp_str;
-    FILE *file1;
-    inven_type *i_ptr;
 
     prt("Produce objects on what level?: ", 0, 0);
-    level = 0;
+
+    int level = 0;
     if (!get_string(tmp_str, 0, 32, 10)) {
         return;
     }
     level = atoi(tmp_str);
+
     prt("Produce how many objects?: ", 0, 0);
-    nobj = 0;
+
+    int nobj = 0;
     if (!get_string(tmp_str, 0, 27, 10)) {
         return;
     }
     nobj = atoi(tmp_str);
-    small = get_check("Small objects only?");
+    bool small = get_check("Small objects only?");
     if ((nobj > 0) && (level > -1) && (level < 1201)) {
         if (nobj > 10000) {
             nobj = 10000;
         }
 
         prt("File name: ", 0, 0);
+        vtype filename1;
         if (get_string(filename1, 0, 11, 64)) {
             if (strlen(filename1) == 0) {
                 return;
             }
 
-            if ((file1 = fopen(filename1, "w")) != NULL) {
+            FILE *file1 = fopen(filename1, "w");
+            if (file1 != NULL) {
                 (void)sprintf(tmp_str, "%d", nobj);
                 prt(strcat(tmp_str, " random objects being produced..."), 0, 0);
                 put_qio();
@@ -145,8 +141,11 @@ void print_objects() {
                 (void)fprintf(file1, "*** For Level %d\n", level);
                 (void)fprintf(file1, "\n");
                 (void)fprintf(file1, "\n");
-                j = popt();
-                for (i = 0; i < nobj; i++) {
+
+                int j = popt();
+
+                inven_type *i_ptr;
+                for (int i = 0; i < nobj; i++) {
                     invcopy(&t_list[j], sorted_objects[get_obj_num(level, small)]);
                     magic_treasure(j, level);
                     i_ptr = &t_list[j];
@@ -173,18 +172,9 @@ void print_objects() {
 
 /* Print the character to a file or device    -RAK- */
 bool file_character(char *filename1) {
-    int i;
-    int j, xbth, xbthb, xfos, xsrh, xstl, xdis, xsave, xdev;
-    vtype xinfra;
-    int fd;
-    FILE *file1;
-    bigvtype prt2;
-    struct misc *p_ptr;
-    inven_type *i_ptr;
-    vtype out_val, prt1;
-    char *p, *colon, *blank;
+    vtype out_val;
 
-    fd = open(filename1, O_WRONLY | O_CREAT | O_EXCL, 0644);
+    int fd = open(filename1, O_WRONLY | O_CREAT | O_EXCL, 0644);
     if (fd < 0 && errno == EEXIST) {
         (void)sprintf(out_val, "Replace existing file %s?", filename1);
         if (get_check(out_val)) {
@@ -192,6 +182,7 @@ bool file_character(char *filename1) {
         }
     }
 
+    FILE *file1;
     if (fd >= 0) {
         /* on some non-unix machines, fdopen() is not reliable, hence must call
            close() and then fopen() */
@@ -202,10 +193,13 @@ bool file_character(char *filename1) {
     }
 
     if (file1 != NULL) {
+        vtype prt1;
+
         prt("Writing character sheet...", 0, 0);
         put_qio();
-        colon = ":";
-        blank = " ";
+
+        char *colon = ":";
+        char *blank = " ";
 
         (void)fprintf(file1, "%c\n\n", CTRL('L'));
 
@@ -247,33 +241,30 @@ bool file_character(char *filename1) {
         if (py.misc.lev >= MAX_PLAYER_LEVEL) {
             (void)fprintf(file1, "%7sExp to Adv : *******", blank);
         } else {
-            (void)fprintf(
-                file1, "%7sExp to Adv : %7d", blank,
-                (int32_t)(player_exp[py.misc.lev - 1] * py.misc.expfact / 100));
+            (void)fprintf(file1, "%7sExp to Adv : %7d", blank, (int32_t)(player_exp[py.misc.lev - 1] * py.misc.expfact / 100));
         }
         (void)fprintf(file1, "    Cur Mana%8s %6d\n", colon, py.misc.cmana);
         (void)fprintf(file1, "%28sGold%8s %7d\n\n", blank, colon, py.misc.au);
 
-        p_ptr = &py.misc;
-        xbth = p_ptr->bth + p_ptr->ptohit * BTH_PLUS_ADJ +
-               (class_level_adj[p_ptr->pclass][CLA_BTH] * p_ptr->lev);
-        xbthb = p_ptr->bthb + p_ptr->ptohit * BTH_PLUS_ADJ +
-                (class_level_adj[p_ptr->pclass][CLA_BTHB] * p_ptr->lev);
+        struct misc *p_ptr = &py.misc;
+
+        int xbth = p_ptr->bth + p_ptr->ptohit * BTH_PLUS_ADJ + (class_level_adj[p_ptr->pclass][CLA_BTH] * p_ptr->lev);
+        int xbthb = p_ptr->bthb + p_ptr->ptohit * BTH_PLUS_ADJ + (class_level_adj[p_ptr->pclass][CLA_BTHB] * p_ptr->lev);
+
         /* this results in a range from 0 to 29 */
-        xfos = 40 - p_ptr->fos;
+        int xfos = 40 - p_ptr->fos;
         if (xfos < 0) {
             xfos = 0;
         }
-        xsrh = p_ptr->srh;
-        /* this results in a range from 0 to 9 */
-        xstl = p_ptr->stl + 1;
-        xdis = p_ptr->disarm + 2 * todis_adj() + stat_adj(A_INT) +
-               (class_level_adj[p_ptr->pclass][CLA_DISARM] * p_ptr->lev / 3);
-        xsave = p_ptr->save + stat_adj(A_WIS) +
-                (class_level_adj[p_ptr->pclass][CLA_SAVE] * p_ptr->lev / 3);
-        xdev = p_ptr->save + stat_adj(A_INT) +
-               (class_level_adj[p_ptr->pclass][CLA_DEVICE] * p_ptr->lev / 3);
+        int xsrh = p_ptr->srh;
 
+        /* this results in a range from 0 to 9 */
+        int xstl = p_ptr->stl + 1;
+        int xdis = p_ptr->disarm + 2 * todis_adj() + stat_adj(A_INT) + (class_level_adj[p_ptr->pclass][CLA_DISARM] * p_ptr->lev / 3);
+        int xsave = p_ptr->save + stat_adj(A_WIS) + (class_level_adj[p_ptr->pclass][CLA_SAVE] * p_ptr->lev / 3);
+        int xdev = p_ptr->save + stat_adj(A_INT) + (class_level_adj[p_ptr->pclass][CLA_DEVICE] * p_ptr->lev / 3);
+
+        vtype xinfra;
         (void)sprintf(xinfra, "%d feet", py.flags.see_infra * 10);
 
         (void)fprintf(file1, "(Miscellaneous Abilities)\n\n");
@@ -289,17 +280,22 @@ bool file_character(char *filename1) {
 
         /* Write out the character's history */
         (void)fprintf(file1, "Character Background\n");
-        for (i = 0; i < 4; i++) {
+        for (int i = 0; i < 4; i++) {
             (void)fprintf(file1, " %s\n", py.misc.history[i]);
         }
 
         /* Write out the equipment list. */
-        j = 0;
+        bigvtype prt2;
+        int j = 0;
+
         (void)fprintf(file1, "\n  [Character's Equipment List]\n\n");
         if (equip_ctr == 0) {
             (void)fprintf(file1, "  Character has no equipment in use.\n");
         } else {
-            for (i = INVEN_WIELD; i < INVEN_ARRAY_SIZE; i++) {
+            char *p;
+            inven_type *i_ptr;
+
+            for (int i = INVEN_WIELD; i < INVEN_ARRAY_SIZE; i++) {
                 i_ptr = &inventory[i];
                 if (i_ptr->tval != TV_NOTHING) {
                     switch (i) {
@@ -357,7 +353,7 @@ bool file_character(char *filename1) {
         if (inven_ctr == 0) {
             (void)fprintf(file1, "  Character has no objects in inventory.\n");
         } else {
-            for (i = 0; i < inven_ctr; i++) {
+            for (int i = 0; i < inven_ctr; i++) {
                 objdes(prt2, &inventory[i], true);
                 (void)fprintf(file1, "%c) %s\n", i + 'a', prt2);
             }

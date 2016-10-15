@@ -32,12 +32,10 @@
 /*   change the speed of all the monsters.  This greatly */
 /*   simplified the logic. */
 void change_speed(int num) {
-    int i;
-
     py.flags.speed += num;
     py.flags.status |= PY_SPEED;
 
-    for (i = mfptr - 1; i >= MIN_MONIX; i--) {
+    for (int i = mfptr - 1; i >= MIN_MONIX; i--) {
         m_list[i].cspeed += num;
     }
 }
@@ -52,11 +50,9 @@ void change_speed(int num) {
  * depend on everything being worn are recalculated by calc_bonuses() -CJS-
  */
 void py_bonuses(inven_type *t_ptr, int factor) {
-    int i, amount;
-
-    amount = t_ptr->p1 * factor;
+    int amount = t_ptr->p1 * factor;
     if (t_ptr->flags & TR_STATS) {
-        for (i = 0; i < 6; i++) {
+        for (int i = 0; i < 6; i++) {
             if ((1 << i) & t_ptr->flags) {
                 bst_stat(i, amount);
             }
@@ -85,21 +81,16 @@ void py_bonuses(inven_type *t_ptr, int factor) {
 
 /* Recalculate the effect of all the stuff we use.      -CJS- */
 void calc_bonuses() {
-    uint32_t item_flags;
-    int old_dis_ac;
-    struct flags *p_ptr;
-    struct misc *m_ptr;
-    inven_type *i_ptr;
-    int i;
+    struct flags *p_ptr = &py.flags;
+    struct misc *m_ptr = &py.misc;
 
-    p_ptr = &py.flags;
-    m_ptr = &py.misc;
     if (p_ptr->slow_digest) {
         p_ptr->food_digested++;
     }
     if (p_ptr->regenerate) {
         p_ptr->food_digested -= 3;
     }
+
     p_ptr->see_inv = false;
     p_ptr->teleport = false;
     p_ptr->free_act = false;
@@ -118,7 +109,8 @@ void calc_bonuses() {
     p_ptr->lght_resist = false;
     p_ptr->ffall = false;
 
-    old_dis_ac = m_ptr->dis_ac;
+    int old_dis_ac = m_ptr->dis_ac;
+
     m_ptr->ptohit = tohit_adj();   /* Real To Hit */
     m_ptr->ptodam = todam_adj();   /* Real To Dam */
     m_ptr->ptoac = toac_adj();     /* Real To AC */
@@ -128,8 +120,8 @@ void calc_bonuses() {
     m_ptr->dis_ac = 0;             /* Display AC */
     m_ptr->dis_tac = m_ptr->ptoac; /* Display To AC */
 
-    for (i = INVEN_WIELD; i < INVEN_LIGHT; i++) {
-        i_ptr = &inventory[i];
+    for (int i = INVEN_WIELD; i < INVEN_LIGHT; i++) {
+        inven_type *i_ptr = &inventory[i];
         if (i_ptr->tval != TV_NOTHING) {
             m_ptr->ptohit += i_ptr->tohit;
 
@@ -149,8 +141,7 @@ void calc_bonuses() {
                 m_ptr->dis_tac += i_ptr->toac;
                 m_ptr->dis_ac += i_ptr->ac;
             } else if (!(TR_CURSED & i_ptr->flags)) {
-                /* Base AC values should always be visible, as long as the item
-                   is not cursed. */
+                /* Base AC values should always be visible, as long as the item is not cursed. */
                 m_ptr->dis_ac += i_ptr->ac;
             }
         }
@@ -179,9 +170,11 @@ void calc_bonuses() {
         p_ptr->status |= PY_ARMOR;
     }
 
-    item_flags = 0;
+    inven_type *i_ptr;
+
+    uint32_t item_flags = 0;
     i_ptr = &inventory[INVEN_WIELD];
-    for (i = INVEN_WIELD; i < INVEN_LIGHT; i++) {
+    for (int i = INVEN_WIELD; i < INVEN_LIGHT; i++) {
         item_flags |= i_ptr->flags;
         i_ptr++;
     }
@@ -221,7 +214,7 @@ void calc_bonuses() {
     }
 
     i_ptr = &inventory[INVEN_WIELD];
-    for (i = INVEN_WIELD; i < INVEN_LIGHT; i++) {
+    for (int i = INVEN_WIELD; i < INVEN_LIGHT; i++) {
         if (TR_SUST_STAT & i_ptr->flags) {
             switch (i_ptr->p1) {
             case 1:
@@ -264,12 +257,12 @@ void calc_bonuses() {
 /* If mask is non-zero, then only display those items which have a non-zero
    entry in the mask array. */
 int show_inven(int r1, int r2, bool weight, int col, char *mask) {
-    int i;
-    int total_weight, len, l, lim, current_line;
     bigvtype tmp_val;
     vtype out_val[23];
 
-    len = 79 - col;
+    int len = 79 - col;
+
+    int lim;
     if (weight) {
         lim = 68;
     } else {
@@ -277,7 +270,7 @@ int show_inven(int r1, int r2, bool weight, int col, char *mask) {
     }
 
     /* Print the items */
-    for (i = r1; i <= r2; i++) {
+    for (int i = r1; i <= r2; i++) {
         if (mask == CNIL || mask[i]) {
             objdes(tmp_val, &inventory[i], true);
 
@@ -285,7 +278,7 @@ int show_inven(int r1, int r2, bool weight, int col, char *mask) {
             tmp_val[lim] = 0;
 
             (void)sprintf(out_val[i], "%c) %s", 'a' + i, tmp_val);
-            l = strlen(out_val[i]) + 2;
+            int l = strlen(out_val[i]) + 2;
             if (weight) {
                 l += 9;
             }
@@ -300,8 +293,8 @@ int show_inven(int r1, int r2, bool weight, int col, char *mask) {
         col = 0;
     }
 
-    current_line = 1;
-    for (i = r1; i <= r2; i++) {
+    int current_line = 1;
+    for (int i = r1; i <= r2; i++) {
         if (mask == CNIL || mask[i]) {
             /* don't need first two spaces if in first column */
             if (col == 0) {
@@ -311,9 +304,8 @@ int show_inven(int r1, int r2, bool weight, int col, char *mask) {
                 prt(out_val[i], current_line, col + 2);
             }
             if (weight) {
-                total_weight = inventory[i].weight * inventory[i].number;
-                (void)sprintf(tmp_val, "%3d.%d lb", (total_weight) / 10,
-                              (total_weight) % 10);
+                int total_weight = inventory[i].weight * inventory[i].number;
+                (void)sprintf(tmp_val, "%3d.%d lb", (total_weight) / 10, (total_weight) % 10);
                 prt(tmp_val, current_line, 71);
             }
             current_line++;
@@ -325,7 +317,6 @@ int show_inven(int r1, int r2, bool weight, int col, char *mask) {
 /* Return a string describing how a given equipment item is carried. -CJS- */
 char *describe_use(int i) {
     char *p;
-
     switch (i) {
     case INVEN_WIELD:
         p = "wielding";
@@ -373,15 +364,15 @@ char *describe_use(int i) {
 /* Displays equipment items from r1 to end  -RAK- */
 /* Keep display as far right as possible. -CJS- */
 int show_equip(bool weight, int col) {
-    int i, line;
-    int total_weight, l, len, lim;
-    char *prt1;
     bigvtype prt2;
     vtype out_val[INVEN_ARRAY_SIZE - INVEN_WIELD];
+
     inven_type *i_ptr;
 
-    line = 0;
-    len = 79 - col;
+    int line = 0;
+    int len = 79 - col;
+
+    int lim;
     if (weight) {
         lim = 52;
     } else {
@@ -389,9 +380,11 @@ int show_equip(bool weight, int col) {
     }
 
     /* Range of equipment */
-    for (i = INVEN_WIELD; i < INVEN_ARRAY_SIZE; i++) {
+    for (int i = INVEN_WIELD; i < INVEN_ARRAY_SIZE; i++) {
         i_ptr = &inventory[i];
         if (i_ptr->tval != TV_NOTHING) {
+            char *prt1;
+
             /* Get position */
             switch (i) {
             case INVEN_WIELD:
@@ -444,7 +437,7 @@ int show_equip(bool weight, int col) {
             prt2[lim] = 0;
 
             (void)sprintf(out_val[line], "%c) %-14s: %s", line + 'a', prt1, prt2);
-            l = strlen(out_val[line]) + 2;
+            int l = strlen(out_val[line]) + 2;
             if (weight) {
                 l += 9;
             }
@@ -462,7 +455,7 @@ int show_equip(bool weight, int col) {
     line = 0;
 
     /* Range of equipment */
-    for (i = INVEN_WIELD; i < INVEN_ARRAY_SIZE; i++) {
+    for (int i = INVEN_WIELD; i < INVEN_ARRAY_SIZE; i++) {
         i_ptr = &inventory[i];
         if (i_ptr->tval != TV_NOTHING) {
             /* don't need first two spaces when using whole screen */
@@ -473,7 +466,7 @@ int show_equip(bool weight, int col) {
                 prt(out_val[line], line + 1, col + 2);
             }
             if (weight) {
-                total_weight = i_ptr->weight * i_ptr->number;
+                int total_weight = i_ptr->weight * i_ptr->number;
                 (void)sprintf(prt2, "%3d.%d lb", (total_weight) / 10, (total_weight) % 10);
                 prt(prt2, line + 1, 71);
             }
@@ -486,15 +479,14 @@ int show_equip(bool weight, int col) {
 
 /* Remove item from equipment list    -RAK- */
 void takeoff(int item_val, int posn) {
-    char *p;
-    bigvtype out_val, prt2;
-    inven_type *t_ptr;
-
     equip_ctr--;
-    t_ptr = &inventory[item_val];
+
+    inven_type *t_ptr = &inventory[item_val];
+
     inven_weight -= t_ptr->weight * t_ptr->number;
     py.flags.status |= PY_STR_WGT;
 
+    char *p;
     if (item_val == INVEN_WIELD || item_val == INVEN_AUX) {
         p = "Was wielding ";
     } else if (item_val == INVEN_LIGHT) {
@@ -502,6 +494,8 @@ void takeoff(int item_val, int posn) {
     } else {
         p = "Was wearing ";
     }
+
+    bigvtype out_val, prt2;
     objdes(prt2, t_ptr, true);
     if (posn >= 0) {
         (void)sprintf(out_val, "%s%s (%c)", p, prt2, 'a' + posn);
@@ -621,17 +615,14 @@ static void inven_screen(int new_scr) {
 
 /* This does all the work. */
 void inven_command(char command) {
-    int slot, item;
-    int tmp, tmp2, from, to;
-    bool selecting;
-    char *prompt, *swap, *disp, *string;
-    char which, query;
     bigvtype prt1, prt2;
-    inven_type *i_ptr;
+    int slot, item, tmp;
     inven_type tmp_obj;
 
     free_turn_flag = true;
+
     save_screen();
+
     /* Take up where we left off after a previous inventory command. -CJS- */
     if (doing_inven) {
         /* If the screen has been flushed, we need to redraw. If the command is
@@ -656,6 +647,8 @@ void inven_command(char command) {
         /* this forces exit of inven_command() if selecting is not set true */
         scr_state = BLANK_SCR;
     }
+
+    bool selecting;
 
     do {
         if (isupper((int)command)) {
@@ -781,9 +774,12 @@ void inven_command(char command) {
         doing_inven = 0;
 
         /* Keep looking for objects to drop/wear/take off/throw off */
-        which = 'z';
+        char which = 'z';
         while (selecting && free_turn_flag) {
-            swap = "";
+            int from, to;
+            char *prompt;
+            char *swap = "";
+
             if (command == 'w') {
                 from = wear_low;
                 to = wear_high;
@@ -811,6 +807,7 @@ void inven_command(char command) {
             if (from > to) {
                 selecting = false;
             } else {
+                char *disp;
                 if (scr_state == BLANK_SCR) {
                     disp = ", * to list";
                 } else {
@@ -966,6 +963,7 @@ void inven_command(char command) {
                                         slot = 0;
                                         /* Rings. Give choice over where they go. */
                                         do {
+                                            char query;
                                             if (!get_com("Put ring on which ""hand (l/r/L/R)?", &query)) {
                                                 item = -1;
                                                 slot = -1;
@@ -1022,7 +1020,7 @@ void inven_command(char command) {
 
                                 /* first remove new item from inventory */
                                 tmp_obj = inventory[item];
-                                i_ptr = &tmp_obj;
+                                inven_type *i_ptr = &tmp_obj;
 
                                 wear_high--;
 
@@ -1040,7 +1038,7 @@ void inven_command(char command) {
                                 /* second, add old item to inv and remove from equipment list, if necessary */
                                 i_ptr = &inventory[slot];
                                 if (i_ptr->tval != TV_NOTHING) {
-                                    tmp2 = inven_ctr;
+                                    int tmp2 = inven_ctr;
                                     tmp = inven_carry(i_ptr);
                                     /* if item removed did not stack with anything in inventory, then increment wear_high */
                                     if (inven_ctr != tmp2) {
@@ -1053,6 +1051,8 @@ void inven_command(char command) {
                                 *i_ptr = tmp_obj;
                                 equip_ctr++;
                                 py_bonuses(i_ptr, 1);
+
+                                char *string;
                                 if (slot == INVEN_WIELD) {
                                     string = "You are wielding";
                                 } else if (slot == INVEN_LIGHT) {
@@ -1087,6 +1087,8 @@ void inven_command(char command) {
                         } else {
                             /* command == 'd' */
 
+                            char query;
+
                             if (inventory[item].number > 1) {
                                 objdes(prt1, &inventory[item], true);
                                 prt1[strlen(prt1) - 1] = '?';
@@ -1106,12 +1108,15 @@ void inven_command(char command) {
                             } else {
                                 query = 'y';
                             }
+
                             if (item >= 0) {
                                 free_turn_flag = false; /* Player turn */
                                 inven_drop(item, query == 'y');
                                 check_strength();
                             }
+
                             selecting = false;
+
                             /* As a safety measure, set the player's inven weight
                                to 0, when the last object is dropped. */
                             if (inven_ctr == 0 && equip_ctr == 0) {
@@ -1184,16 +1189,13 @@ void inven_command(char command) {
 
 /* Get the ID of an item and return the CTR value of it  -RAK- */
 int get_item(int *com_val, char *pmt, int i, int j, char *mask, char *message) {
-    vtype out_val;
-    char which;
-    int i_scr;
 
     bool test_flag;
     bool full;
     bool item = false;
     bool redraw = false;
+    int i_scr = 1;
     *com_val = 0;
-    i_scr = 1;
 
     if (j > INVEN_WIELD) {
         full = true;
@@ -1216,6 +1218,9 @@ int get_item(int *com_val, char *pmt, int i, int j, char *mask, char *message) {
                     (void)show_equip(false, 80);
                 }
             }
+
+            vtype out_val;
+
             if (full) {
                 (void)sprintf(out_val, "(%s: %c-%c,%s%s / for %s, or ESC) %s",
                               (i_scr > 0 ? "Inven" : "Equip"), i + 'a', j + 'a',
@@ -1232,7 +1237,7 @@ int get_item(int *com_val, char *pmt, int i, int j, char *mask, char *message) {
             prt(out_val, 0, 0);
 
             do {
-                which = inkey();
+                char which = inkey();
                 switch (which) {
                 case ESCAPE:
                     test_flag = true;
@@ -1355,9 +1360,8 @@ int get_item(int *com_val, char *pmt, int i, int j, char *mask, char *message) {
 
 /* Returns true if player has no light      -RAK- */
 bool no_light() {
-    cave_type *c_ptr;
+    cave_type *c_ptr = &cave[char_row][char_col];
 
-    c_ptr = &cave[char_row][char_col];
     if (!c_ptr->tl && !c_ptr->pl) {
         return true;
     }
@@ -1401,8 +1405,6 @@ static char map_roguedir(char comval) {
 /* Prompts for a direction        -RAK- */
 /* Direction memory added, for repeated commands.  -CJS */
 bool get_dir(char *prompt, int *dir) {
-    char command;
-    int save;
     static char prev_dir; /* Direction memory. -CJS- */
 
     /* used in counted commands. -CJS- */
@@ -1416,7 +1418,9 @@ bool get_dir(char *prompt, int *dir) {
     }
 
     for (;;) {
-        save = command_count; /* Don't end a counted command. -CJS- */
+        char command;
+
+        int save = command_count; /* Don't end a counted command. -CJS- */
 
         if (!get_com(prompt, &command)) {
             free_turn_flag = true;
@@ -1464,40 +1468,34 @@ bool get_alldir(char *prompt, int *dir) {
 
 /* Moves creature record from one space to another  -RAK- */
 void move_rec(int y1, int x1, int y2, int x2) {
-    int tmp;
-
     /* this always works correctly, even if y1==y2 and x1==x2 */
-    tmp = cave[y1][x1].cptr;
+    int tmp = cave[y1][x1].cptr;
     cave[y1][x1].cptr = 0;
     cave[y2][x2].cptr = tmp;
 }
 
 /* Room is lit, make it appear        -RAK- */
 void light_room(int y, int x) {
-    int i, j, start_col, end_col;
-    int tmp1, tmp2, start_row, end_row;
-    cave_type *c_ptr;
-    int tval;
+    int tmp1 = (SCREEN_HEIGHT / 2);
+    int tmp2 = (SCREEN_WIDTH / 2);
 
-    tmp1 = (SCREEN_HEIGHT / 2);
-    tmp2 = (SCREEN_WIDTH / 2);
+    int start_row = (y / tmp1) * tmp1;
+    int start_col = (x / tmp2) * tmp2;
 
-    start_row = (y / tmp1) * tmp1;
-    start_col = (x / tmp2) * tmp2;
+    int end_row = start_row + tmp1 - 1;
+    int end_col = start_col + tmp2 - 1;
 
-    end_row = start_row + tmp1 - 1;
-    end_col = start_col + tmp2 - 1;
+    for (int i = start_row; i <= end_row; i++) {
+        for (int j = start_col; j <= end_col; j++) {
+            cave_type *c_ptr = &cave[i][j];
 
-    for (i = start_row; i <= end_row; i++) {
-        for (j = start_col; j <= end_col; j++) {
-            c_ptr = &cave[i][j];
             if (c_ptr->lr && !c_ptr->pl) {
                 c_ptr->pl = true;
                 if (c_ptr->fval == DARK_FLOOR) {
                     c_ptr->fval = LIGHT_FLOOR;
                 }
                 if (!c_ptr->fm && c_ptr->tptr != 0) {
-                    tval = t_list[c_ptr->tptr].tval;
+                    int tval = t_list[c_ptr->tptr].tval;
                     if (tval >= TV_MIN_VISIBLE && tval <= TV_MAX_VISIBLE) {
                         c_ptr->fm = true;
                     }
@@ -1518,14 +1516,10 @@ void lite_spot(int y, int x) {
 /* Normal movement */
 /* When FIND_FLAG,  light only permanent features */
 static void sub1_move_light(int y1, int x1, int y2, int x2) {
-    int i, j;
-    cave_type *c_ptr;
-    int tval, top, left, bottom, right;
-
     if (light_flag) {
         /* Turn off lamp light */
-        for (i = y1 - 1; i <= y1 + 1; i++) {
-            for (j = x1 - 1; j <= x1 + 1; j++) {
+        for (int i = y1 - 1; i <= y1 + 1; i++) {
+            for (int j = x1 - 1; j <= x1 + 1; j++) {
                 cave[i][j].tl = false;
             }
         }
@@ -1536,9 +1530,9 @@ static void sub1_move_light(int y1, int x1, int y2, int x2) {
         light_flag = true;
     }
 
-    for (i = y2 - 1; i <= y2 + 1; i++) {
-        for (j = x2 - 1; j <= x2 + 1; j++) {
-            c_ptr = &cave[i][j];
+    for (int i = y2 - 1; i <= y2 + 1; i++) {
+        for (int j = x2 - 1; j <= x2 + 1; j++) {
+            cave_type *c_ptr = &cave[i][j];
 
             /* only light up if normal movement */
             if (light_flag) {
@@ -1547,13 +1541,15 @@ static void sub1_move_light(int y1, int x1, int y2, int x2) {
             if (c_ptr->fval >= MIN_CAVE_WALL) {
                 c_ptr->pl = true;
             } else if (!c_ptr->fm && c_ptr->tptr != 0) {
-                tval = t_list[c_ptr->tptr].tval;
+                int tval = t_list[c_ptr->tptr].tval;
                 if ((tval >= TV_MIN_VISIBLE) && (tval <= TV_MAX_VISIBLE)) {
                     c_ptr->fm = true;
                 }
             }
         }
     }
+
+    int top, left, bottom, right;
 
     /* From uppermost to bottom most lines player was on. */
     if (y1 < y2) {
@@ -1570,9 +1566,9 @@ static void sub1_move_light(int y1, int x1, int y2, int x2) {
         left = x2 - 1;
         right = x1 + 1;
     }
-    for (i = top; i <= bottom; i++) {
+    for (int i = top; i <= bottom; i++) {
         /* Leftmost to rightmost do*/
-        for (j = left; j <= right; j++) {
+        for (int j = left; j <= right; j++) {
             print(loc_symbol(i, j), i, j);
         }
     }
@@ -1581,11 +1577,9 @@ static void sub1_move_light(int y1, int x1, int y2, int x2) {
 /* When blinded,  move only the player symbol. */
 /* With no light,  movement becomes involved. */
 static void sub3_move_light(int y1, int x1, int y2, int x2) {
-    int i, j;
-
     if (light_flag) {
-        for (i = y1 - 1; i <= y1 + 1; i++) {
-            for (j = x1 - 1; j <= x1 + 1; j++) {
+        for (int i = y1 - 1; i <= y1 + 1; i++) {
+            for (int j = x1 - 1; j <= x1 + 1; j++) {
                 cave[i][j].tl = false;
                 print(loc_symbol(i, j), i, j);
             }
@@ -1651,7 +1645,6 @@ void search_off() {
 /* Resting allows a player to safely restore his hp  -RAK- */
 void rest() {
     int rest_num;
-    vtype rest_str;
 
     if (command_count > 0) {
         rest_num = command_count;
@@ -1659,6 +1652,8 @@ void rest() {
     } else {
         prt("Rest for how long? ", 0, 0);
         rest_num = 0;
+
+        vtype rest_str;
         if (get_string(rest_str, 0, 19, 5)) {
             if (rest_str[0] == '*') {
                 rest_num = -MAX_SHORT;
@@ -1700,13 +1695,13 @@ void rest_off() {
 
 /* Attacker's level and plusses,  defender's AC    -RAK- */
 bool test_hit(int bth, int level, int pth, int ac, int attack_type) {
-    int i, die;
-
     disturb(1, 0);
-    i = bth + pth * BTH_PLUS_ADJ + (level * class_level_adj[py.misc.pclass][attack_type]);
+
     /* pth could be less than 0 if player wielding weapon too heavy for him */
+    int i = bth + pth * BTH_PLUS_ADJ + (level * class_level_adj[py.misc.pclass][attack_type]);
+
     /* always miss 1 out of 20, always hit 1 out of 20 */
-    die = randint(20);
+    int die = randint(20);
 
     /* normal hit */
     if ((die != 1) && ((die == 20) || ((i > 0) && (randint(i) > ac)))) {
@@ -1716,7 +1711,7 @@ bool test_hit(int bth, int level, int pth, int ac, int attack_type) {
     }
 }
 
-/* Decreases players hit points and sets death flag if necessary*/
+/* Decreases players hit points and sets death flag if necessary */
 /*               -RAK- */
 void take_hit(int damage, char *hit_from) {
     if (py.flags.invuln > 0) {

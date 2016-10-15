@@ -29,19 +29,19 @@
 
 /* Generates character's stats        -JWT- */
 static void get_stats() {
-    int i, tot;
+    int tot;
     int dice[18];
 
     do {
         tot = 0;
-        for (i = 0; i < 18; i++) {
+        for (int i = 0; i < 18; i++) {
             /* Roll 3,4,5 sided dice once each */
             dice[i] = randint(3 + i % 3);
             tot += dice[i];
         }
     } while (tot <= 42 || tot >= 54);
 
-    for (i = 0; i < 6; i++) {
+    for (int i = 0; i < 6; i++) {
         py.stats.max_stat[i] =
             5 + dice[3 * i] + dice[3 * i + 1] + dice[3 * i + 2];
     }
@@ -49,12 +49,10 @@ static void get_stats() {
 
 /* Changes stats by given amount        -JWT- */
 static void change_stat(int stat, int16_t amount) {
-    int i;
-    int tmp_stat;
+    int tmp_stat = py.stats.max_stat[stat];
 
-    tmp_stat = py.stats.max_stat[stat];
     if (amount < 0) {
-        for (i = 0; i > amount; i--) {
+        for (int i = 0; i > amount; i--) {
             if (tmp_stat > 108) {
                 tmp_stat--;
             } else if (tmp_stat > 88) {
@@ -69,7 +67,7 @@ static void change_stat(int stat, int16_t amount) {
             }
         }
     } else {
-        for (i = 0; i < amount; i++) {
+        for (int i = 0; i < amount; i++) {
             if (tmp_stat < 18) {
                 tmp_stat++;
             } else if (tmp_stat < 88) {
@@ -87,12 +85,9 @@ static void change_stat(int stat, int16_t amount) {
 /* generate all stats and modify for race. needed in a separate module so
    looping of character selection would be allowed     -RGM- */
 static void get_all_stats() {
-    player_type *p_ptr;
-    race_type *r_ptr;
-    int j;
+    player_type *p_ptr = &py;
+    race_type *r_ptr = &race[p_ptr->misc.prace];
 
-    p_ptr = &py;
-    r_ptr = &race[p_ptr->misc.prace];
     get_stats();
     change_stat(A_STR, r_ptr->str_adj);
     change_stat(A_INT, r_ptr->int_adj);
@@ -100,8 +95,10 @@ static void get_all_stats() {
     change_stat(A_DEX, r_ptr->dex_adj);
     change_stat(A_CON, r_ptr->con_adj);
     change_stat(A_CHR, r_ptr->chr_adj);
+
     p_ptr->misc.lev = 1;
-    for (j = 0; j < 6; j++) {
+
+    for (int j = 0; j < 6; j++) {
         py.stats.cur_stat[j] = py.stats.max_stat[j];
         set_use_stat(j);
     }
@@ -123,21 +120,15 @@ static void get_all_stats() {
 
 /* Allows player to select a race      -JWT- */
 static void choose_race() {
-    int j, k;
-    int l, m;
-    char s;
-    char tmp_str[80];
-    player_type *p_ptr;
-    race_type *r_ptr;
-
-    j = 0;
-    k = 0;
-    l = 2;
-    m = 21;
+    int j = 0;
+    int k = 0;
+    int l = 2;
+    int m = 21;
 
     clear_from(20);
     put_buffer("Choose a race (? for Help):", 20, 2);
 
+    char tmp_str[80];
     do {
         (void)sprintf(tmp_str, "%c) %s", k + 'a', race[j].trace);
         put_buffer(tmp_str, m, l);
@@ -152,6 +143,7 @@ static void choose_race() {
 
     bool exit_flag = false;
 
+    char s;
     do {
         move_cursor(20, 30);
         s = inkey();
@@ -165,18 +157,17 @@ static void choose_race() {
         }
     } while (!exit_flag);
 
-    p_ptr = &py;
-    r_ptr = &race[j];
+    player_type *p_ptr = &py;
+    race_type *r_ptr = &race[j];
     p_ptr->misc.prace = j;
     put_buffer(r_ptr->trace, 3, 15);
 }
 
 /* Will print the history of a character      -JWT- */
 static void print_history() {
-    int i;
-
     put_buffer("Character Background", 14, 27);
-    for (i = 0; i < 4; i++) {
+
+    for (int i = 0; i < 4; i++) {
         prt(py.misc.history[i], i + 15, 10);
     }
 }
@@ -187,18 +178,17 @@ static void print_history() {
  *    All history parts are in ascending order
  */
 static void get_history() {
-    int hist_ptr, cur_ptr, test_roll;
-    int start_pos, end_pos, cur_len;
-    int line_ctr, new_start, social_class;
     char history_block[240];
     background_type *b_ptr;
+    int test_roll;
     bool flag;
 
-    /* Get a block of history text */
-    hist_ptr = py.misc.prace * 3 + 1;
+    int hist_ptr = py.misc.prace * 3 + 1;
+    int social_class = randint(4);
+    int cur_ptr = 0;
     history_block[0] = '\0';
-    social_class = randint(4);
-    cur_ptr = 0;
+
+    /* Get a block of history text */
     do {
         flag = false;
         do {
@@ -226,14 +216,17 @@ static void get_history() {
         py.misc.history[hist_ptr][0] = '\0';
     }
 
-    start_pos = 0;
-    line_ctr = 0;
-
     /* Process block of history text for pretty output */
-    end_pos = strlen(history_block) - 1;
+    int end_pos = strlen(history_block) - 1;
     while (history_block[end_pos] == ' ') {
         end_pos--;
     }
+
+    int cur_len;
+    int new_start;
+
+    int start_pos = 0;
+    int line_ctr = 0;
 
     flag = false;
     do {
@@ -273,8 +266,8 @@ static void get_history() {
 /* Gets the character's sex        -JWT- */
 static void get_sex() {
     char c;
-
     bool exit_flag = false;
+
     clear_from(20);
     put_buffer("Choose a sex (? for Help):", 20, 2);
     put_buffer("m) Male       f) Female", 21, 2);
@@ -300,9 +293,7 @@ static void get_sex() {
 
 /* Computes character's age, height, and weight    -JWT- */
 static void get_ahw() {
-    int i;
-
-    i = py.misc.prace;
+    int i = py.misc.prace;
     py.misc.age = race[i].b_age + randint((int)race[i].m_age);
     if (py.misc.male) {
         py.misc.ht = randnor((int)race[i].m_b_ht, (int)race[i].m_m_ht);
@@ -316,25 +307,19 @@ static void get_ahw() {
 
 /* Gets a character class        -JWT- */
 static void get_class() {
-    int i, j;
-    int k, l, m, min_value, max_value;
-    int cl[MAX_CLASS];
-    struct misc *m_ptr;
-    player_type *p_ptr;
-    class_type *c_ptr;
-    char tmp_str[80], s;
-    uint32_t mask;
+    char tmp_str[80];
 
-    for (j = 0; j < MAX_CLASS; j++) {
+    int cl[MAX_CLASS];
+    for (int j = 0; j < MAX_CLASS; j++) {
         cl[j] = 0;
     }
 
-    i = py.misc.prace;
-    j = 0;
-    k = 0;
-    l = 2;
-    m = 21;
-    mask = 0x1;
+    int i = py.misc.prace;
+    int j = 0;
+    int k = 0;
+    int l = 2;
+    int m = 21;
+    uint32_t mask = 0x1;
 
     clear_from(20);
     put_buffer("Choose a class (? for Help):", 20, 2);
@@ -355,8 +340,14 @@ static void get_class() {
     } while (j < MAX_CLASS);
 
     py.misc.pclass = 0;
-    bool exit_flag = false;
 
+    int min_value, max_value;
+    struct misc *m_ptr;
+    player_type *p_ptr;
+    class_type *c_ptr;
+    char s;
+
+    bool exit_flag = false;
     do {
         move_cursor(20, 31);
         s = inkey();
@@ -435,19 +426,16 @@ static int monval(uint8_t i) {
 }
 
 static void get_money() {
-    int tmp, gold;
-    uint8_t *a_ptr;
-
-    a_ptr = py.stats.max_stat;
-    tmp = monval(a_ptr[A_STR]) +
+    uint8_t *a_ptr = py.stats.max_stat;
+    int tmp = monval(a_ptr[A_STR]) +
           monval(a_ptr[A_INT]) +
           monval(a_ptr[A_WIS]) +
           monval(a_ptr[A_CON]) +
           monval(a_ptr[A_DEX]);
 
-    gold = py.misc.sc * 6 + randint(25) + 325; /* Social Class adj */
-    gold -= tmp;                               /* Stat adj */
-    gold += monval(a_ptr[A_CHR]);              /* Charisma adj */
+    int gold = py.misc.sc * 6 + randint(25) + 325; /* Social Class adj */
+    gold -= tmp;                                   /* Stat adj */
+    gold += monval(a_ptr[A_CHR]);                  /* Charisma adj */
 
     /* She charmed the banker into it! -CJS- */
     if (!py.misc.male) {
@@ -465,9 +453,6 @@ static void get_money() {
 /* ---------- M A I N  for Character Creation Routine ---------- */
 /*              -JWT- */
 void create_character() {
-    int exit_flag = 1;
-    char c;
-
     put_character();
     choose_race();
     get_sex();
@@ -482,11 +467,14 @@ void create_character() {
 
     clear_from(20);
     put_buffer("Hit space to reroll or ESC to accept characteristics: ", 20, 2);
+
+    char c;
+    bool exit_flag = true;
     do {
         move_cursor(20, 56);
         c = inkey();
         if (c == ESCAPE) {
-            exit_flag = 0;
+            exit_flag = false;
         } else if (c == ' ') {
             get_all_stats();
             get_history();
@@ -497,8 +485,7 @@ void create_character() {
         } else {
             bell();
         }
-    } /* done with stats generation */
-    while (exit_flag == 1);
+    } while (exit_flag); /* done with stats generation */
 
     get_class();
     get_money();

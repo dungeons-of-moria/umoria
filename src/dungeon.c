@@ -46,22 +46,17 @@ static void refill_lamp();
 /* It has had a bit more hard work.      -CJS- */
 
 void dungeon() {
-    int find_count, i;
-    int regen_amount; /* Regenerate hp and mana*/
-    char command;     /* Last command */
-    struct misc *p_ptr;
-    inven_type *i_ptr;
-    struct flags *f_ptr;
+    int i;
 
     /* Main procedure for dungeon.      -RAK- */
     /* Note: There is a lot of preliminary magic going on here at first*/
 
     /* init pointers. */
-    f_ptr = &py.flags;
-    p_ptr = &py.misc;
+    struct flags *f_ptr = &py.flags;
+    struct misc *p_ptr = &py.misc;
 
     /* Check light status for setup */
-    i_ptr = &inventory[INVEN_LIGHT];
+    inven_type *i_ptr = &inventory[INVEN_LIGHT];
     if (i_ptr->p1 > 0) {
         player_light = true;
     } else {
@@ -74,8 +69,8 @@ void dungeon() {
     }
 
     /* Reset flags and initialize variables */
+    int find_count = 0;
     command_count = 0;
-    find_count = 0;
     new_level_flag = false;
     find_flag = 0;
     teleport_flag = false;
@@ -229,7 +224,7 @@ void dungeon() {
         }
 
         /* Check food status */
-        regen_amount = PLAYER_REGEN_NORMAL;
+        int regen_amount = PLAYER_REGEN_NORMAL; /* Regenerate hp and mana*/
         if (f_ptr->food < PLAYER_FOOD_ALERT) {
             if (f_ptr->food < PLAYER_FOOD_WEAK) {
                 if (f_ptr->food < 0) {
@@ -624,7 +619,7 @@ void dungeon() {
         }
 
         if ((py.flags.status & PY_STATS) != 0) {
-            for (i = 0; i < 6; i++) {
+            for (int i = 0; i < 6; i++) {
                 if ((PY_STR << i) & py.flags.status) {
                     prt_stat(i);
                 }
@@ -680,9 +675,10 @@ void dungeon() {
             (void)compact_monsters();
         }
 
-        if ((py.flags.paralysis < 1) && /* Accept a command? */
-            (py.flags.rest == 0) && (!death))
-        {
+        /* Accept a command? */
+        if ((py.flags.paralysis < 1) && (py.flags.rest == 0) && (!death)) {
+            char command; /* Last command */
+
             /* Accept a command and execute it */
             do {
                 if (py.flags.status & PY_REPEAT) {
@@ -1698,13 +1694,9 @@ static bool valid_countcommand(char c) {
 
 /* Regenerate hit points        -RAK- */
 static void regenhp(int percent) {
-    struct misc *p_ptr;
-    int32_t new_chp, new_chp_frac;
-    int old_chp;
-
-    p_ptr = &py.misc;
-    old_chp = p_ptr->chp;
-    new_chp = ((int32_t)p_ptr->mhp) * percent + PLAYER_REGEN_HPBASE;
+    struct misc *p_ptr = &py.misc;
+    int old_chp = p_ptr->chp;
+    int32_t new_chp = ((int32_t)p_ptr->mhp) * percent + PLAYER_REGEN_HPBASE;
 
     /* div 65536 */
     p_ptr->chp += new_chp >> 16;
@@ -1715,7 +1707,7 @@ static void regenhp(int percent) {
     }
 
     /* mod 65536 */
-    new_chp_frac = (new_chp & 0xFFFF) + p_ptr->chp_frac;
+    int32_t new_chp_frac = (new_chp & 0xFFFF) + p_ptr->chp_frac;
 
     if (new_chp_frac >= 0x10000L) {
         p_ptr->chp_frac = new_chp_frac - 0x10000L;
@@ -1736,13 +1728,9 @@ static void regenhp(int percent) {
 
 /* Regenerate mana points        -RAK- */
 static void regenmana(int percent) {
-    struct misc *p_ptr;
-    int32_t new_mana, new_mana_frac;
-    int old_cmana;
-
-    p_ptr = &py.misc;
-    old_cmana = p_ptr->cmana;
-    new_mana = ((int32_t)p_ptr->mana) * percent + PLAYER_REGEN_MNBASE;
+    struct misc *p_ptr = &py.misc;
+    int old_cmana = p_ptr->cmana;
+    int32_t new_mana = ((int32_t)p_ptr->mana) * percent + PLAYER_REGEN_MNBASE;
 
     /* div 65536 */
     p_ptr->cmana += new_mana >> 16;
@@ -1753,7 +1741,7 @@ static void regenmana(int percent) {
     }
 
     /* mod 65536 */
-    new_mana_frac = (new_mana & 0xFFFF) + p_ptr->cmana_frac;
+    int32_t new_mana_frac = (new_mana & 0xFFFF) + p_ptr->cmana_frac;
 
     if (new_mana_frac >= 0x10000L) {
         p_ptr->cmana_frac = new_mana_frac - 0x10000L;
@@ -1800,11 +1788,7 @@ static bool enchanted(inven_type *t_ptr) {
 
 /* Examine a Book          -RAK- */
 static void examine_book() {
-    uint32_t j;
     int i, k, item_val;
-    int spell_index[31];
-    inven_type *i_ptr;
-    spell_type *s_ptr;
 
     if (!find_range(TV_MAGIC_BOOK, TV_PRAYER_BOOK, &i, &k)) {
         msg_print("You are not carrying any books.");
@@ -1815,8 +1799,12 @@ static void examine_book() {
     } else if (py.flags.confused > 0) {
         msg_print("You are too confused.");
     } else if (get_item(&item_val, "Which Book?", i, k, CNIL, CNIL)) {
+        int spell_index[31];
+        spell_type *s_ptr;
+
         bool flag = true;
-        i_ptr = &inventory[item_val];
+        inven_type *i_ptr = &inventory[item_val];
+
         if (class[py.misc.pclass].spell == MAGE) {
             if (i_ptr->tval != TV_MAGIC_BOOK) {
                 flag = false;
@@ -1833,7 +1821,8 @@ static void examine_book() {
             msg_print("You do not understand the language.");
         } else {
             i = 0;
-            j = inventory[item_val].flags;
+            uint32_t j = inventory[item_val].flags;
+
             while (j) {
                 k = bit_pos(&j);
                 s_ptr = &magic_spell[py.misc.pclass - 1][k];
@@ -1842,6 +1831,7 @@ static void examine_book() {
                     i++;
                 }
             }
+
             save_screen();
             print_spells(spell_index, i, true, -1);
             pause_line(0);
@@ -1852,10 +1842,9 @@ static void examine_book() {
 
 /* Go up one level          -RAK- */
 static void go_up() {
-    cave_type *c_ptr;
     bool no_stairs = false;
+    cave_type *c_ptr = &cave[char_row][char_col];
 
-    c_ptr = &cave[char_row][char_col];
     if (c_ptr->tptr != 0) {
         if (t_list[c_ptr->tptr].tval == TV_UP_STAIR) {
             dun_level--;
@@ -1877,10 +1866,9 @@ static void go_up() {
 
 /* Go down one level          -RAK- */
 static void go_down() {
-    cave_type *c_ptr;
     bool no_stairs = false;
+    cave_type *c_ptr = &cave[char_row][char_col];
 
-    c_ptr = &cave[char_row][char_col];
     if (c_ptr->tptr != 0) {
         if (t_list[c_ptr->tptr].tval == TV_DOWN_STAIR) {
             dun_level++;
@@ -1902,22 +1890,22 @@ static void go_down() {
 
 /* Jam a closed door          -RAK- */
 static void jamdoor() {
-    int y, x, dir, i, j;
-    cave_type *c_ptr;
-    inven_type *t_ptr, *i_ptr;
-    char tmp_str[80];
-
     free_turn_flag = true;
-    y = char_row;
-    x = char_col;
+
+    int y = char_row;
+    int x = char_col;
+
+    int dir;
     if (get_dir(CNIL, &dir)) {
         (void)mmove(dir, &y, &x);
-        c_ptr = &cave[y][x];
+        cave_type *c_ptr = &cave[y][x];
 
         if (c_ptr->tptr != 0) {
-            t_ptr = &t_list[c_ptr->tptr];
+            inven_type *t_ptr = &t_list[c_ptr->tptr];
             if (t_ptr->tval == TV_CLOSED_DOOR) {
                 if (c_ptr->cptr == 0) {
+                    int i, j;
+
                     if (find_range(TV_SPIKE, TV_NEVER, &i, &j)) {
                         free_turn_flag = false;
                         count_msg_print("You jam the door with a spike.");
@@ -1930,7 +1918,8 @@ static void jamdoor() {
                         /* Successive spikes have a progressively smaller effect.
                            Series is: 0 20 30 37 43 48 52 56 60 64 67 70 ... */
                         t_ptr->p1 -= 1 + 190 / (10 - t_ptr->p1);
-                        i_ptr = &inventory[i];
+
+                        inven_type *i_ptr = &inventory[i];
                         if (i_ptr->number > 1) {
                             i_ptr->number--;
                             inven_weight -= i_ptr->weight;
@@ -1942,8 +1931,9 @@ static void jamdoor() {
                     }
                 } else {
                     free_turn_flag = false;
-                    (void)sprintf(tmp_str, "The %s is in your way!",
-                                  c_list[m_list[c_ptr->cptr].mptr].name);
+
+                    char tmp_str[80];
+                    (void)sprintf(tmp_str, "The %s is in your way!", c_list[m_list[c_ptr->cptr].mptr].name);
                     msg_print(tmp_str);
                 }
             } else if (t_ptr->tval == TV_OPEN_DOOR) {
@@ -1960,11 +1950,10 @@ static void jamdoor() {
 /* Refill the players lamp        -RAK- */
 static void refill_lamp() {
     int i, j;
-    int k;
-    inven_type *i_ptr;
 
     free_turn_flag = true;
-    k = inventory[INVEN_LIGHT].subval;
+
+    int k = inventory[INVEN_LIGHT].subval;
 
     if (k != 0) {
         msg_print("But you are not using a lamp.");
@@ -1972,7 +1961,8 @@ static void refill_lamp() {
         msg_print("You have no oil.");
     } else {
         free_turn_flag = false;
-        i_ptr = &inventory[INVEN_LIGHT];
+
+        inven_type *i_ptr = &inventory[INVEN_LIGHT];
         i_ptr->p1 += inventory[i].p1;
         if (i_ptr->p1 > OBJ_LAMP_MAX) {
             i_ptr->p1 = OBJ_LAMP_MAX;

@@ -75,27 +75,23 @@ bool check_time() {
 
 /* Generates a random integer x where 1<=X<=MAXVAL  -RAK- */
 int randint(int maxval) {
-    int32_t randval;
-
-    randval = rnd();
+    int32_t randval = rnd();
     return ((int)(randval % maxval) + 1);
 }
 
 /* Generates a random integer number of NORMAL distribution -RAK-*/
 int randnor(int mean, int stand) {
-    int tmp, offset, low, iindex, high;
-
     /* alternate randnor code, slower but much smaller since no table */
     /* 2 per 1,000,000 will be > 4*SD, max is 5*SD */
     // tmp = damroll(8, 99);   /* mean 400, SD 81 */
     // tmp = (tmp - 400) * stand / 81;
     // return tmp + mean;
 
-    tmp = randint(MAX_SHORT);
+    int tmp = randint(MAX_SHORT);
 
     /* off scale, assign random value between 4 and 5 times SD */
     if (tmp == MAX_SHORT) {
-        offset = 4 * stand + randint(stand);
+        int offset = 4 * stand + randint(stand);
 
         /* one half are negative */
         if (randint(2) == 1) {
@@ -107,9 +103,9 @@ int randnor(int mean, int stand) {
 
     /* binary search normal normal_table to get index that matches tmp */
     /* this takes up to 8 iterations */
-    low = 0;
-    iindex = NORMAL_TABLE_SIZE >> 1;
-    high = NORMAL_TABLE_SIZE;
+    int low = 0;
+    int iindex = NORMAL_TABLE_SIZE >> 1;
+    int high = NORMAL_TABLE_SIZE;
 
     while (true) {
         if ((normal_table[iindex] == tmp) || (high == (low + 1))) {
@@ -131,7 +127,7 @@ int randnor(int mean, int stand) {
 
     /* normal_table is based on SD of 64, so adjust the index value here,
        round the half way case up */
-    offset = ((stand * iindex) + (NORMAL_TABLE_SD >> 1)) / NORMAL_TABLE_SD;
+    int offset = ((stand * iindex) + (NORMAL_TABLE_SD >> 1)) / NORMAL_TABLE_SD;
 
     /* one half should be negative */
     if (randint(2) == 1) {
@@ -144,10 +140,9 @@ int randnor(int mean, int stand) {
 /* Returns position of first set bit      -RAK- */
 /*     and clears that bit */
 int bit_pos(uint32_t *test) {
-    int i;
     uint32_t mask = 0x1;
 
-    for (i = 0; i < sizeof(*test) * 8; i++) {
+    for (int i = 0; i < sizeof(*test) * 8; i++) {
         if (*test & mask) {
             *test &= ~mask;
             return i;
@@ -182,11 +177,10 @@ void panel_bounds() {
 /* when a move off the screen has occurred and figures new borders.
    Force forcses the panel bounds to be recalculated, useful for 'W'here. */
 int get_panel(int y, int x, int force) {
-    int prow, pcol;
     bool panel;
 
-    prow = panel_row;
-    pcol = panel_col;
+    int prow = panel_row;
+    int pcol = panel_col;
     if (force || (y < panel_row_min + 2) || (y > panel_row_max - 2)) {
         prow = ((y - SCREEN_HEIGHT / 4) / (SCREEN_HEIGHT / 2));
         if (prow > max_panel_rows) {
@@ -231,13 +225,12 @@ bool panel_contains(int y, int x) {
 
 /* Distance between two points        -RAK- */
 int distance(int y1, int x1, int y2, int x2) {
-    int dy, dx;
-
-    dy = y1 - y2;
+    int dy = y1 - y2;
     if (dy < 0) {
         dy = -dy;
     }
-    dx = x1 - x2;
+
+    int dx = x1 - x2;
     if (dx < 0) {
         dx = -dx;
     }
@@ -249,11 +242,9 @@ int distance(int y1, int x1, int y2, int x2) {
 /* note that y,x is always in_bounds(), i.e. 0 < y < cur_height-1, and
    0 < x < cur_width-1 */
 int next_to_walls(int y, int x) {
-    int i;
-    cave_type *c_ptr;
+    int i = 0;
+    cave_type *c_ptr = &cave[y - 1][x];
 
-    i = 0;
-    c_ptr = &cave[y - 1][x];
     if (c_ptr->fval >= MIN_CAVE_WALL) {
         i++;
     }
@@ -277,13 +268,11 @@ int next_to_walls(int y, int x) {
 /* note that y, x is always in_bounds(), hence no need to check that
    j, k are in_bounds(), even if they are 0 or cur_x-1 is still works */
 int next_to_corr(int y, int x) {
-    int k, j, i;
-    cave_type *c_ptr;
+    int i = 0;
 
-    i = 0;
-    for (j = y - 1; j <= (y + 1); j++) {
-        for (k = x - 1; k <= (x + 1); k++) {
-            c_ptr = &cave[j][k];
+    for (int j = y - 1; j <= (y + 1); j++) {
+        for (int k = x - 1; k <= (x + 1); k++) {
+            cave_type *c_ptr = &cave[j][k];
 
             /* should fail if there is already a door present */
             if (c_ptr->fval == CORR_FLOOR &&
@@ -298,9 +287,8 @@ int next_to_corr(int y, int x) {
 
 /* generates damage for 2d6 style dice rolls */
 int damroll(int num, int sides) {
-    int i, sum = 0;
-
-    for (i = 0; i < num; i++) {
+    int sum = 0;
+    for (int i = 0; i < num; i++) {
         sum += randint(sides);
     }
     return sum;
@@ -329,10 +317,8 @@ int pdamroll(uint8_t *array) {
  */
 
 bool los(int fromY, int fromX, int toY, int toX) {
-    int tmp, deltaX, deltaY;
-
-    deltaX = toX - fromX;
-    deltaY = toY - fromY;
+    int deltaX = toX - fromX;
+    int deltaY = toY - fromY;
 
     /* Adjacent? */
     if ((deltaX < 2) && (deltaX > -2) && (deltaY < 2) && (deltaY > -2)) {
@@ -344,7 +330,7 @@ bool los(int fromY, int fromX, int toY, int toX) {
         int p_y; /* y position -- loop variable */
 
         if (deltaY < 0) {
-            tmp = fromY;
+            int tmp = fromY;
             fromY = toY;
             toY = tmp;
         }
@@ -359,7 +345,7 @@ bool los(int fromY, int fromX, int toY, int toX) {
         int px; /* x position -- loop variable */
 
         if (deltaX < 0) {
-            tmp = fromX;
+            int tmp = fromX;
             fromX = toX;
             toX = tmp;
         }
@@ -376,23 +362,21 @@ bool los(int fromY, int fromX, int toY, int toX) {
        In the computations below, dy (or dx) and m are multiplied by a
        scale factor, scale = abs(deltaX * deltaY * 2), so that we can use
        integer arithmetic. */
-
     {
         int px,        /* x position */
-                     p_y,       /* y position */
-                     scale2;    /* above scale factor / 2 */
-                 int scale,     /* above scale factor */
-                     xSign,     /* sign of deltaX */
-                     ySign,     /* sign of deltaY */
-                     m;         /* slope or 1/slope of LOS */
+            p_y,       /* y position */
+            scale2;    /* above scale factor / 2 */
+        int scale,     /* above scale factor */
+            xSign,     /* sign of deltaX */
+            ySign,     /* sign of deltaY */
+            m;         /* slope or 1/slope of LOS */
 
         scale2 = abs(deltaX * deltaY);
         scale  = scale2 << 1;
         xSign  = (deltaX < 0) ? -1 : 1;
         ySign  = (deltaY < 0) ? -1 : 1;
 
-        /* Travel from one end of the line to the other, oriented along
-           the longer axis. */
+        /* Travel from one end of the line to the other, oriented along the longer axis. */
 
         if (abs(deltaX) >= abs(deltaY)) {
             int dy; /* "fractional" y position */
@@ -479,11 +463,8 @@ bool los(int fromY, int fromX, int toY, int toX) {
 
 /* Returns symbol for given row, column      -RAK- */
 uint8_t loc_symbol(int y, int x) {
-    cave_type *cave_ptr;
-    struct flags *f_ptr;
-
-    cave_ptr = &cave[y][x];
-    f_ptr = &py.flags;
+    cave_type *cave_ptr = &cave[y][x];
+    struct flags *f_ptr = &py.flags;
 
     if ((cave_ptr->cptr == 1) && (!find_flag || find_prself)) {
         return '@';
@@ -511,9 +492,7 @@ uint8_t loc_symbol(int y, int x) {
 
 /* Tests a spot for light or field mark status    -RAK- */
 bool test_light(int y, int x) {
-    cave_type *cave_ptr;
-
-    cave_ptr = &cave[y][x];
+    cave_type *cave_ptr = &cave[y][x];
     if (cave_ptr->pl || cave_ptr->tl || cave_ptr->fm) {
         return true;
     } else {
@@ -523,17 +502,15 @@ bool test_light(int y, int x) {
 
 /* Prints the map of the dungeon      -RAK- */
 void prt_map() {
-    int i, j, k;
-
-    k = 0;
+    int k = 0;
 
     /* Top to bottom */
-    for (i = panel_row_min; i <= panel_row_max; i++) {
+    for (int i = panel_row_min; i <= panel_row_max; i++) {
         k++;
         erase_line(k, 13);
 
         /* Left to right */
-        for (j = panel_col_min; j <= panel_col_max; j++) {
+        for (int j = panel_col_min; j <= panel_col_max; j++) {
             uint8_t tmp = loc_symbol(i, j);
             if (tmp != ' ') {
                 print(tmp, i, j);
@@ -545,17 +522,14 @@ void prt_map() {
 /* Compact monsters          -RAK- */
 /* Return true if any monsters were deleted, false if could not delete any monsters. */
 bool compact_monsters() {
-    int i;
-    int cur_dis;
-    monster_type *mon_ptr;
-
     msg_print("Compacting monsters...");
 
-    cur_dis = 66;
+    int cur_dis = 66;
     bool delete_any = false;
+
     do {
-        for (i = mfptr - 1; i >= MIN_MONIX; i--) {
-            mon_ptr = &m_list[i];
+        for (int i = mfptr - 1; i >= MIN_MONIX; i--) {
+            monster_type *mon_ptr = &m_list[i];
             if ((cur_dis < mon_ptr->cdis) && (randint(3) == 1)) {
                 /* Never compact away the Balrog!! */
                 if (c_list[mon_ptr->mptr].cmove & CM_WIN) {
@@ -588,10 +562,7 @@ bool compact_monsters() {
 
 /* Add to the players food time        -RAK- */
 void add_food(int num) {
-    struct flags *p_ptr;
-    int extra, penalty;
-
-    p_ptr = &py.flags;
+    struct flags *p_ptr = &py.flags;
     if (p_ptr->food < 0) {
         p_ptr->food = 0;
     }
@@ -603,11 +574,11 @@ void add_food(int num) {
         /* Calculate how much of num is responsible for the bloating.
            Give the player food credit for 1/50, and slow him for that many
            turns also. */
-        extra = p_ptr->food - PLAYER_FOOD_MAX;
+        int extra = p_ptr->food - PLAYER_FOOD_MAX;
         if (extra > num) {
             extra = num;
         }
-        penalty = extra / 50;
+        int penalty = extra / 50;
 
         p_ptr->slow += penalty;
         if (extra == num) {
@@ -638,15 +609,12 @@ int max_hp(uint8_t *array) {
 
 /* Places a monster at given location      -RAK- */
 bool place_monster(int y, int x, int z, int slp) {
-    int cur_pos;
-    monster_type *mon_ptr;
-
-    cur_pos = popm();
+    int cur_pos = popm();
     if (cur_pos == -1) {
         return false;
     }
 
-    mon_ptr = &m_list[cur_pos];
+    monster_type *mon_ptr = &m_list[cur_pos];
     mon_ptr->fy = y;
     mon_ptr->fx = x;
     mon_ptr->mptr = z;
@@ -678,17 +646,18 @@ bool place_monster(int y, int x, int z, int slp) {
 
 /* Places a monster at given location      -RAK- */
 void place_win_monster() {
-    int y, x, cur_pos;
-    monster_type *mon_ptr;
+    int y, x;
 
     if (!total_winner) {
-        cur_pos = popm();
-        /* Check for case where could not allocate space for the win monster,
-           this should never happen. */
+        int cur_pos = popm();
+
+        /* Check for case where could not allocate space for the win monster, this should never happen. */
         if (cur_pos == -1) {
             abort();
         }
-        mon_ptr = &m_list[cur_pos];
+
+        monster_type *mon_ptr = &m_list[cur_pos];
+
         do {
             y = randint(cur_height - 2);
             x = randint(cur_width - 2);
@@ -719,7 +688,7 @@ void place_win_monster() {
    high level monsters (up to the given level) slightly more common than
    low level monsters at any given level.   -CJS- */
 int get_mons_num(int level) {
-    int i, j, num;
+    int i;
 
     if (level == 0) {
         i = randint(m_level[0]) - 1;
@@ -740,9 +709,9 @@ int get_mons_num(int level) {
                dungeon level. This distribution makes a level n monster occur
                approx 2/n% of the time on level n, and 1/n*n% are 1st level.
              */
-            num = m_level[level] - m_level[0];
+            int num = m_level[level] - m_level[0];
             i = randint(num) - 1;
-            j = randint(num) - 1;
+            int j = randint(num) - 1;
             if (j > i) {
                 i = j;
             }
@@ -756,46 +725,38 @@ int get_mons_num(int level) {
 
 /* Allocates a random monster        -RAK- */
 void alloc_monster(int num, int dis, int slp) {
-    int y, x, i;
-    int l;
+    int y, x;
 
-    for (i = 0; i < num; i++) {
+    for (int i = 0; i < num; i++) {
         do {
             y = randint(cur_height - 2);
             x = randint(cur_width - 2);
-        } while (cave[y][x].fval >= MIN_CLOSED_SPACE ||
-                 (cave[y][x].cptr != 0) ||
-                 (distance(y, x, char_row, char_col) <= dis));
+        } while (cave[y][x].fval >= MIN_CLOSED_SPACE || (cave[y][x].cptr != 0) || (distance(y, x, char_row, char_col) <= dis));
 
-        l = get_mons_num(dun_level);
+        int l = get_mons_num(dun_level);
 
-        /* Dragons are always created sleeping here, so as to give the player a
-           sporting chance. */
+        /* Dragons are always created sleeping here, so as to give the player a sporting chance. */
         if (c_list[l].cchar == 'd' || c_list[l].cchar == 'D') {
             slp = true;
         }
 
-        /* Place_monster() should always return true here.  It does not
-           matter if it fails though. */
+        /* Place_monster() should always return true here.  It does not matter if it fails though. */
         (void)place_monster(y, x, l, slp);
     }
 }
 
 /* Places creature adjacent to given location    -RAK- */
 bool summon_monster(int *y, int *x, int slp) {
-    int i, j, k;
-    int l;
-    cave_type *cave_ptr;
+    int i = 0;
+    int l = get_mons_num(dun_level + MON_SUMMON_ADJ);
 
-    i = 0;
     bool summon = false;
-    l = get_mons_num(dun_level + MON_SUMMON_ADJ);
 
     do {
-        j = *y - 2 + randint(3);
-        k = *x - 2 + randint(3);
+        int j = *y - 2 + randint(3);
+        int k = *x - 2 + randint(3);
         if (in_bounds(j, k)) {
-            cave_ptr = &cave[j][k];
+            cave_type *cave_ptr = &cave[j][k];
             if (cave_ptr->fval <= MAX_OPEN_SPACE && (cave_ptr->cptr == 0)) {
                 /* Place_monster() should always return true here. */
                 if (!place_monster(j, k, l, slp)) {
@@ -815,17 +776,15 @@ bool summon_monster(int *y, int *x, int slp) {
 
 /* Places undead adjacent to given location    -RAK- */
 bool summon_undead(int *y, int *x) {
-    int i, j, k;
-    int l, m, ctr;
-    cave_type *cave_ptr;
+    int m;
+    int i = 0;
+    int l = m_level[MAX_MONS_LEVEL];
 
-    i = 0;
     bool summon = false;
-    l = m_level[MAX_MONS_LEVEL];
 
     do {
         m = randint(l) - 1;
-        ctr = 0;
+        int ctr = 0;
         do {
             if (c_list[m].cdefense & CD_UNDEAD) {
                 ctr = 20;
@@ -842,10 +801,10 @@ bool summon_undead(int *y, int *x) {
     } while (l != 0);
 
     do {
-        j = *y - 2 + randint(3);
-        k = *x - 2 + randint(3);
+        int j = *y - 2 + randint(3);
+        int k = *x - 2 + randint(3);
         if (in_bounds(j, k)) {
-            cave_ptr = &cave[j][k];
+            cave_type *cave_ptr = &cave[j][k];
             if (cave_ptr->fval <= MAX_OPEN_SPACE && (cave_ptr->cptr == 0)) {
                 /* Place_monster() should always return true here. */
                 if (!place_monster(j, k, m, false)) {
@@ -865,18 +824,17 @@ bool summon_undead(int *y, int *x) {
 
 /* If too many objects on floor level, delete some of them-RAK- */
 static void compact_objects() {
-    int i, j;
-    int ctr, cur_dis, chance;
-    cave_type *cave_ptr;
-
     msg_print("Compacting objects...");
 
-    ctr = 0;
-    cur_dis = 66;
+    int ctr = 0;
+    int cur_dis = 66;
+
     do {
-        for (i = 0; i < cur_height; i++) {
-            for (j = 0; j < cur_width; j++) {
-                cave_ptr = &cave[i][j];
+        for (int i = 0; i < cur_height; i++) {
+            for (int j = 0; j < cur_width; j++) {
+                int chance;
+
+                cave_type *cave_ptr = &cave[i][j];
                 if ((cave_ptr->tptr != 0) &&
                     (distance(i, j, char_row, char_col) > cur_dis)) {
                     switch (t_list[cave_ptr->tptr].tval) {
@@ -931,14 +889,12 @@ int popt() {
 /* Delete_object() should always be called instead, unless the object in
    question is not in the dungeon, e.g. in store1.c and files.c */
 void pusht(uint8_t x) {
-    int i, j;
-
     if (x != tcptr - 1) {
         t_list[x] = t_list[tcptr - 1];
 
         /* must change the tptr in the cave of the object just moved */
-        for (i = 0; i < cur_height; i++) {
-            for (j = 0; j < cur_width; j++) {
+        for (int i = 0; i < cur_height; i++) {
+            for (int j = 0; j < cur_width; j++) {
                 if (cave[i][j].tptr == tcptr - 1) {
                     cave[i][j].tptr = x;
                 }
@@ -960,9 +916,7 @@ bool magik(int chance) {
 
 /* Enchant a bonus based on degree desired -RAK- */
 int m_bonus(int base, int max_std, int level) {
-    int x, stand_dev, tmp;
-
-    stand_dev = (OBJ_STD_ADJ * level / 100) + OBJ_STD_MIN;
+    int stand_dev = (OBJ_STD_ADJ * level / 100) + OBJ_STD_MIN;
 
     /* Check for level > max_std since that may have generated an overflow. */
     if (stand_dev > max_std || level > max_std) {
@@ -970,8 +924,8 @@ int m_bonus(int base, int max_std, int level) {
     }
 
     /* abs may be a macro, don't call it with randnor as a parameter */
-    tmp = randnor(0, stand_dev);
-    x = (abs(tmp) / 10) + base;
+    int tmp = randnor(0, stand_dev);
+    int x = (abs(tmp) / 10) + base;
     if (x < base) {
         return base;
     } else {

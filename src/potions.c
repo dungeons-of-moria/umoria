@@ -29,23 +29,19 @@
 
 /* Potions for the quaffing        -RAK- */
 void quaff() {
-    uint32_t i, l;
-    int j, k, item_val;
-    int ident;
-    inven_type *i_ptr;
-    struct misc *m_ptr;
-    struct flags *f_ptr;
-
     free_turn_flag = true;
+
+    int j, k, item_val;
     if (inven_ctr == 0) {
         msg_print("But you are not carrying anything.");
     } else if (!find_range(TV_POTION1, TV_POTION2, &j, &k)) {
         msg_print("You are not carrying any potions.");
     } else if (get_item(&item_val, "Quaff which potion?", j, k, CNIL, CNIL)) {
-        i_ptr = &inventory[item_val];
-        i = i_ptr->flags;
+        inven_type *i_ptr = &inventory[item_val];
+
+        uint32_t i = i_ptr->flags;
         free_turn_flag = false;
-        ident = false;
+        bool ident = false;
         if (i == 0) {
             msg_print("You feel less thirsty.");
             ident = true;
@@ -55,6 +51,10 @@ void quaff() {
                 if (i_ptr->tval == TV_POTION2) {
                     j += 32;
                 }
+
+                struct flags *f_ptr;
+                struct misc *m_ptr;
+
                 /* Potions */
                 switch (j) {
                 case 1:
@@ -142,10 +142,12 @@ void quaff() {
                 case 18:
                     m_ptr = &py.misc;
                     if (m_ptr->exp < MAX_EXP) {
-                        l = (m_ptr->exp / 2) + 10;
+                        uint32_t l = (m_ptr->exp / 2) + 10;
+
                         if (l > 100000L) {
                             l = 100000L;
                         }
+
                         m_ptr->exp += l;
                         msg_print("You feel more experienced.");
                         prt_experience();
@@ -326,9 +328,10 @@ void quaff() {
                 /* End of Potions. */
             }
         }
+
         if (ident) {
             if (!known1_p(i_ptr)) {
-                m_ptr = &py.misc;
+                struct misc *m_ptr = &py.misc;
                 /* round half-way case up */
                 m_ptr->exp += (i_ptr->level + (m_ptr->lev >> 1)) / m_ptr->lev;
                 prt_experience();

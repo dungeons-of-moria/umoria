@@ -38,9 +38,7 @@
 
 static void date(char *day) {
     char *tmp;
-    long clockvar;
-
-    clockvar = time((time_t *)0);
+    long clockvar = time((time_t *)0);
     tmp = ctime(&clockvar);
     tmp[10] = '\0';
     (void)strcpy(day, tmp);
@@ -48,10 +46,8 @@ static void date(char *day) {
 
 /* Centers a string within a 31 character string    -JWT- */
 static char *center_string(char *centered_str, char *in_str) {
-    int i, j;
-
-    i = strlen(in_str);
-    j = 15 - i / 2;
+    int i = strlen(in_str);
+    int j = 15 - i / 2;
     (void)sprintf(centered_str, "%*s%s%*s", j, "", in_str, 31 - i - j, "");
     return centered_str;
 }
@@ -81,12 +77,11 @@ static char *center_string(char *centered_str, char *in_str) {
    a lock which you failed to set!  ALWAYS release a lock you set! */
 int flock(int f, l) {
     struct stat sbuf;
-    char lockname[80];
-
     if (fstat(f, &sbuf) < 0) {
         return -1;
     }
 
+    char lockname[80];
 #ifdef __linux__
     (void)sprintf(lockname, "/tmp/moria.%ld", sbuf.st_ino);
 #else
@@ -120,20 +115,12 @@ int flock(int f, l) {
 #endif
 
 void display_scores(int show_player) {
-    int i, rank;
-    high_scores score;
-    char input;
-    char string[100];
-    uint8_t version_maj, version_min, patch_level;
-
-    int16_t player_uid;
-
     (void)fseek(highscore_fp, (off_t)0, L_SET);
 
     /* Read version numbers from the score file, and check for validity. */
-    version_maj = getc(highscore_fp);
-    version_min = getc(highscore_fp);
-    patch_level = getc(highscore_fp);
+    uint8_t version_maj = getc(highscore_fp);
+    uint8_t version_min = getc(highscore_fp);
+    uint8_t patch_level = getc(highscore_fp);
 
     /* Support score files from 5.2.2 to present. */
     if (feof(highscore_fp)) {
@@ -148,13 +135,20 @@ void display_scores(int show_player) {
         return;
     }
 
-    player_uid = getuid();
+    int16_t player_uid = getuid();
 
     /* set the static fileptr in save.c to the highscore file pointer */
     set_fileptr(highscore_fp);
 
-    rank = 1;
+    high_scores score;
     rd_highscore(&score);
+
+    char input;
+    char string[100];
+
+    int i = 0;
+    int rank = 1;
+
     while (!feof(highscore_fp)) {
         i = 1;
         clear_screen();
@@ -191,10 +185,8 @@ bool duplicate_character() {
 
 /* Prints the gravestone of the character    -RAK- */
 static void print_tomb() {
-    vtype str, tmp_str;
-    int i;
-    char day[11];
     char *p;
+    vtype str, tmp_str;
 
     clear_screen();
     put_buffer("_______________________", 1, 15);
@@ -240,14 +232,18 @@ static void print_tomb() {
     put_buffer(str, 14, 9);
     put_buffer("|            killed by            |", 15, 9);
     p = died_from;
-    i = strlen(p);
+
+    int i = strlen(p);
     p[i] = '.'; /* add a trailing period */
     p[i + 1] = '\0';
     (void)sprintf(str, "| %s |", center_string(tmp_str, p));
     put_buffer(str, 16, 9);
     p[i] = '\0'; /* strip off the period */
+
+    char day[11];
     date(day);
     (void)sprintf(str, "| %s |", center_string(tmp_str, day));
+
     put_buffer(str, 17, 9);
     put_buffer("*|   *     *     *    *   *     *  | *", 18, 8);
     put_buffer("________)/\\\\_)_/___(\\/___(//_\\)/_\\//__\\\\(/_|_)_______", 19, 0);
@@ -258,7 +254,7 @@ retry:
     put_buffer("(ESC to abort, return to print on screen, or file name)", 23, 0);
     put_buffer("Character record?", 22, 0);
     if (get_string(str, 22, 18, 60)) {
-        for (i = 0; i < INVEN_ARRAY_SIZE; i++) {
+        for (int i = 0; i < INVEN_ARRAY_SIZE; i++) {
             known1(&inventory[i]);
             known2(&inventory[i]);
         }
@@ -289,14 +285,13 @@ retry:
 
 /* Calculates the total number of points earned    -JWT- */
 int32_t total_points() {
-    int32_t total;
-    int i;
-
-    total = py.misc.max_exp + (100 * py.misc.max_dlv);
+    int32_t total = py.misc.max_exp + (100 * py.misc.max_dlv);
     total += py.misc.au / 100;
-    for (i = 0; i < INVEN_ARRAY_SIZE; i++) {
+
+    for (int i = 0; i < INVEN_ARRAY_SIZE; i++) {
         total += item_value(&inventory[i]);
     }
+
     total += dun_level * 50;
 
     /* Don't ever let the score decrease from one save to the next. */
@@ -309,12 +304,6 @@ int32_t total_points() {
 
 /* Enters a players name on the top twenty list    -JWT- */
 static void highscores() {
-    high_scores old_entry, new_entry, entry;
-    int i;
-    char *tmp;
-    uint8_t version_maj, version_min, patch_level;
-    off_t curpos;
-
     clear_screen();
 
     if (noscore) {
@@ -326,6 +315,7 @@ static void highscores() {
         return;
     }
 
+    high_scores new_entry;
     new_entry.points = total_points();
     new_entry.birth_date = birth_date;
 
@@ -340,7 +330,8 @@ static void highscores() {
     new_entry.race = py.misc.prace;
     new_entry.class = py.misc.pclass;
     (void)strcpy(new_entry.name, py.misc.name);
-    tmp = died_from;
+
+    char *tmp = died_from;
     if ('a' == *tmp) {
         if ('n' == *(++tmp)) {
             tmp++;
@@ -366,9 +357,9 @@ static void highscores() {
     (void)fseek(highscore_fp, (off_t)0, L_SET);
 
     /* Read version numbers from the score file, and check for validity. */
-    version_maj = getc(highscore_fp);
-    version_min = getc(highscore_fp);
-    patch_level = getc(highscore_fp);
+    uint8_t version_maj = getc(highscore_fp);
+    uint8_t version_min = getc(highscore_fp);
+    uint8_t patch_level = getc(highscore_fp);
 
     /* If this is a new scorefile, it should be empty.  Write the current
        version numbers to the score file. */
@@ -395,9 +386,12 @@ static void highscores() {
     /* set the static fileptr in save.c to the highscore file pointer */
     set_fileptr(highscore_fp);
 
-    i = 0;
-    curpos = ftell(highscore_fp);
+    high_scores old_entry, entry;
+
+    int i = 0;
+    off_t curpos = ftell(highscore_fp);
     rd_highscore(&old_entry);
+
     while (!feof(highscore_fp)) {
         if (new_entry.points >= old_entry.points) {
             break;
@@ -467,14 +461,16 @@ static void highscores() {
 
 /* Change the player into a King!      -RAK- */
 static void kingly() {
-    struct misc *p_ptr;
     char *p;
 
     /* Change the character attributes. */
     dun_level = 0;
     (void)strcpy(died_from, "Ripe Old Age");
-    p_ptr = &py.misc;
+
+    struct misc *p_ptr = &py.misc;
+
     (void)restore_level();
+
     p_ptr->lev += MAX_PLAYER_LEVEL;
     p_ptr->au += 250000L;
     p_ptr->max_exp += 5000000L;

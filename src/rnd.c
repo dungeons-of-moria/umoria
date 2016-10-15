@@ -95,11 +95,10 @@ void set_rnd_seed(uint32_t seedval) {
 
 /* returns a pseudo-random number from set 1, 2, ..., RNG_M - 1 */
 int32_t rnd() {
-    int32_t low, high, test;
+    int32_t high = rnd_seed / RNG_Q;
+    int32_t low = rnd_seed % RNG_Q;
+    int32_t test = RNG_A * low - RNG_R * high;
 
-    high = rnd_seed / RNG_Q;
-    low = rnd_seed % RNG_Q;
-    test = RNG_A * low - RNG_R * high;
     if (test > 0) {
         rnd_seed = test;
     } else {
@@ -111,14 +110,13 @@ int32_t rnd() {
 #ifdef TEST_RNG
 
 main() {
-    int32_t i, random;
-
     set_rnd_seed(0L);
 
-    for (i = 1; i < 10000; i++)
+    for (int32_t i = 1; i < 10000; i++) {
         (void)rnd();
+    }
 
-    random = rnd();
+    int32_t random = rnd();
     printf("z[10001] = %ld, should be 1043618065\n", random);
     if (random == 1043618065L) {
         printf("success!!!\n");

@@ -30,12 +30,11 @@
 /* Updates screen when monsters move about    -RAK- */
 void update_mon(int monptr) {
     cave_type *c_ptr;
-    monster_type *m_ptr;
     creature_type *r_ptr;
 
     bool flag = false;
+    monster_type *m_ptr = &m_list[monptr];
 
-    m_ptr = &m_list[monptr];
     if ((m_ptr->cdis <= MAX_SIGHT) && !(py.flags.status & PY_BLIND) &&
         (panel_contains((int)m_ptr->fy, (int)m_ptr->fx))) {
         if (wizard) {
@@ -101,9 +100,8 @@ static int movement_rate(int16_t speed) {
 
 /* Makes sure a new creature gets lit up.      -CJS- */
 static bool check_mon_lite(int y, int x) {
-    int monptr;
+    int monptr = cave[y][x].cptr;
 
-    monptr = cave[y][x].cptr;
     if (monptr <= 1) {
         return false;
     } else {
@@ -114,10 +112,10 @@ static bool check_mon_lite(int y, int x) {
 
 /* Choose correct directions for monster movement  -RAK- */
 static void get_moves(int monptr, int *mm) {
-    int y, ay, x, ax, move_val;
+    int ay, ax, move_val;
 
-    y = m_list[monptr].fy - char_row;
-    x = m_list[monptr].fx - char_col;
+    int y = m_list[monptr].fy - char_row;
+    int x = m_list[monptr].fx - char_col;
 
     if (y < 0) {
         move_val = 8;
@@ -258,24 +256,15 @@ static void get_moves(int monptr, int *mm) {
 
 /* Make an attack on the player (chuckle.)    -RAK- */
 static void make_attack(int monptr) {
-    int attype, adesc, adice, asides;
-    int i, j, damage, attackn;
-    int32_t gold;
-    uint8_t *attstr;
-    vtype cdesc, tmp_str, ddesc;
-    creature_type *r_ptr;
-    monster_type *m_ptr;
-    struct misc *p_ptr;
-    struct flags *f_ptr;
-    inven_type *i_ptr;
-
     /* don't beat a dead body! */
     if (death) {
         return;
     }
 
-    m_ptr = &m_list[monptr];
-    r_ptr = &c_list[m_ptr->mptr];
+    monster_type *m_ptr = &m_list[monptr];
+    creature_type *r_ptr = &c_list[m_ptr->mptr];
+
+    vtype cdesc;
     if (!m_ptr->ml) {
         (void)strcpy(cdesc, "It ");
     } else {
@@ -283,6 +272,7 @@ static void make_attack(int monptr) {
     }
 
     /* For "DIED_FROM" string */
+    vtype ddesc;
     if (CM_WIN & r_ptr->cmove) {
         (void)sprintf(ddesc, "The %s", r_ptr->name);
     } else if (is_a_vowel(r_ptr->name[0])) {
@@ -292,10 +282,18 @@ static void make_attack(int monptr) {
     }
     /* End DIED_FROM */
 
-    attackn = 0;
-    attstr = r_ptr->damage;
+    int i, j, damage;
+    int attype, adesc, adice, asides;
+    int32_t gold;
+    struct misc *p_ptr;
+    struct flags *f_ptr;
+    inven_type *i_ptr;
+    vtype tmp_str;
 
     bool flag = false;
+    int attackn = 0;
+    uint8_t *attstr = r_ptr->damage;
+
     while ((*attstr != 0) && !death) {
         attype = monster_attacks[*attstr].attack_type;
         adesc = monster_attacks[*attstr].attack_desc;
@@ -896,17 +894,16 @@ static void make_attack(int monptr) {
 
 /* Make the move if possible, five choices    -RAK- */
 static void make_move(int monptr, int *mm, uint32_t *rcmove) {
-    int i, newy, newx, stuck_door;
-    uint32_t movebits;
+    int newy, newx, stuck_door;
     cave_type *c_ptr;
-    monster_type *m_ptr;
     inven_type *t_ptr;
 
-    i = 0;
+    int i = 0;
     bool do_turn = false;
     bool do_move = false;
-    m_ptr = &m_list[monptr];
-    movebits = c_list[m_ptr->mptr].cmove;
+    monster_type *m_ptr = &m_list[monptr];
+    uint32_t movebits = c_list[m_ptr->mptr].cmove;
+
     do {
         /* Get new position */
         newy = m_ptr->fy;
@@ -1082,21 +1079,13 @@ static void make_move(int monptr, int *mm, uint32_t *rcmove) {
 /* cast_spell = true if creature changes position */
 /* took_turn  = true if creature casts a spell */
 static void mon_cast_spell(int monptr, bool *took_turn) {
-    uint32_t i;
-    int y, x, chance, thrown_spell, r1;
-    int k;
-    int spell_choice[30];
-    vtype cdesc, outval, ddesc;
-    monster_type *m_ptr;
-    creature_type *r_ptr;
-
     if (death) {
         return;
     }
 
-    m_ptr = &m_list[monptr];
-    r_ptr = &c_list[m_ptr->mptr];
-    chance = (int)(r_ptr->spells & CS_FREQ);
+    monster_type *m_ptr = &m_list[monptr];
+    creature_type *r_ptr = &c_list[m_ptr->mptr];
+    int chance = (int)(r_ptr->spells & CS_FREQ);
 
     if (randint(chance) != 1) {
         /* 1 in x chance of casting spell */
@@ -1119,6 +1108,7 @@ static void mon_cast_spell(int monptr, bool *took_turn) {
         update_mon(monptr);
 
         /* Describe the attack */
+        vtype cdesc;
         if (m_ptr->ml) {
             (void)sprintf(cdesc, "The %s ", r_ptr->name);
         } else {
@@ -1126,6 +1116,7 @@ static void mon_cast_spell(int monptr, bool *took_turn) {
         }
 
         /* For "DIED_FROM" string */
+        vtype ddesc;
         if (CM_WIN & r_ptr->cmove) {
             (void)sprintf(ddesc, "The %s", r_ptr->name);
         } else if (is_a_vowel(r_ptr->name[0])) {
@@ -1136,16 +1127,17 @@ static void mon_cast_spell(int monptr, bool *took_turn) {
         /* End DIED_FROM */
 
         /* Extract all possible spells into spell_choice */
-        i = (r_ptr->spells & ~CS_FREQ);
+        int spell_choice[30];
+        uint32_t i = (r_ptr->spells & ~CS_FREQ);
+        int k = 0;
 
-        k = 0;
         while (i != 0) {
             spell_choice[k] = bit_pos(&i);
             k++;
         }
 
         /* Choose a spell to cast */
-        thrown_spell = spell_choice[randint(k) - 1];
+        int thrown_spell = spell_choice[randint(k) - 1];
         thrown_spell++;
 
         /* all except teleport_away() and drain mana spells always disturb */
@@ -1158,6 +1150,8 @@ static void mon_cast_spell(int monptr, bool *took_turn) {
             (void)strcat(cdesc, "casts a spell.");
             msg_print(cdesc);
         }
+
+        int y, x;
 
         /* Cast the spell. */
         switch (thrown_spell) {
@@ -1259,6 +1253,8 @@ static void mon_cast_spell(int monptr, bool *took_turn) {
             break;
         case 17: /*Drain Mana */
             if (py.misc.cmana > 0) {
+                vtype outval;
+
                 disturb(1, 0);
                 (void)sprintf(outval, "%sdraws psychic energy from you!", cdesc);
                 msg_print(outval);
@@ -1266,7 +1262,8 @@ static void mon_cast_spell(int monptr, bool *took_turn) {
                     (void)sprintf(outval, "%sappears healthier.", cdesc);
                     msg_print(outval);
                 }
-                r1 = (randint((int)r_ptr->level) >> 1) + 1;
+
+                int r1 = (randint((int)r_ptr->level) >> 1) + 1;
                 if (r1 > py.misc.cmana) {
                     r1 = py.misc.cmana;
                     py.misc.cmana = 0;
@@ -1324,11 +1321,10 @@ static void mon_cast_spell(int monptr, bool *took_turn) {
 /* Places creature adjacent to given location    -RAK- */
 /* Rats and Flys are fun! */
 bool multiply_monster(int y, int x, int cr_index, int monptr) {
-    int i, j, k;
+    int j, k, result;
     cave_type *c_ptr;
-    int result;
 
-    i = 0;
+    int i = 0;
     do {
         j = y - 2 + randint(3);
         k = x - 2 + randint(3);
@@ -1391,26 +1387,19 @@ bool multiply_monster(int y, int x, int cr_index, int monptr) {
 
 /* Move the critters about the dungeon      -RAK- */
 static void mon_move(int monptr, uint32_t *rcmove) {
-    int i, j;
-    int k, dir;
+    int i, k;
 
-    creature_type *r_ptr;
-
-    monster_type *m_ptr;
-    int mm[9];
-    int rest_val;
-
-    m_ptr = &m_list[monptr];
-    r_ptr = &c_list[m_ptr->mptr];
+    monster_type *m_ptr = &m_list[monptr];
+    creature_type *r_ptr = &c_list[m_ptr->mptr];
 
     /* Does the critter multiply? */
     /* rest could be negative, to be safe, only use mod with positive values. */
-    rest_val = abs(py.flags.rest);
+    int rest_val = abs(py.flags.rest);
 
     if ((r_ptr->cmove & CM_MULTIPLY) && (MAX_MON_MULT >= mon_tot_mult) && ((rest_val % MON_MULT_ADJ) == 0)) {
         k = 0;
         for (i = m_ptr->fy - 1; i <= m_ptr->fy + 1; i++) {
-            for (j = m_ptr->fx - 1; j <= m_ptr->fx + 1; j++) {
+            for (int j = m_ptr->fx - 1; j <= m_ptr->fx + 1; j++) {
                 if (in_bounds(i, j) && (cave[i][j].cptr > 1)) {
                     k++;
                 }
@@ -1429,6 +1418,7 @@ static void mon_move(int monptr, uint32_t *rcmove) {
         }
     }
 
+    int mm[9];
     bool move_test = false;
 
     /* if in wall, must immediately escape to a clear area */
@@ -1442,14 +1432,14 @@ static void mon_move(int monptr, uint32_t *rcmove) {
         }
 
         k = 0;
-        dir = 1;
+        int dir = 1;
 
         /* note direction of for loops matches direction of keypad from 1 to 9*/
         /* do not allow attack against the player */
         /* Must cast fy-1 to signed int, so that a nagative value of i will
            fail the comparison. */
         for (i = m_ptr->fy + 1; i >= (int)(m_ptr->fy - 1); i--) {
-            for (j = m_ptr->fx - 1; j <= m_ptr->fx + 1; j++) {
+            for (int j = m_ptr->fx - 1; j <= m_ptr->fx + 1; j++) {
                 if ((dir != 5) && (cave[i][j].fval <= MAX_OPEN_SPACE) &&
                     (cave[i][j].cptr != 1)) {
                     mm[k++] = dir;
@@ -1586,15 +1576,15 @@ static void mon_move(int monptr, uint32_t *rcmove) {
 
 /* Creatures movement and attacking are done from here  -RAK- */
 void creatures(int attack) {
-    int i, k;
-    monster_type *m_ptr;
-    recall_type *r_ptr;
+    int k;
     uint32_t notice, rcmove;
     bool wake, ignore;
+    monster_type *m_ptr;
+    recall_type *r_ptr;
     vtype cdesc;
 
     /* Process the monsters */
-    for (i = mfptr - 1; i >= MIN_MONIX && !death; i--) {
+    for (int i = mfptr - 1; i >= MIN_MONIX && !death; i--) {
         m_ptr = &m_list[i];
         /* Get rid of an eaten/breathed on monster.  Note: Be sure not to
            process this monster. This is necessary because we can't delete

@@ -44,54 +44,57 @@ bool is_a_vowel(char ch) {
 
 /* Initialize all Potions, wands, staves, scrolls, etc. */
 void magic_init() {
-    int h, i, j, k;
+    int j;
     char *tmp;
-    vtype string;
 
     set_seed(randes_seed);
 
     /* The first 3 entries for colors are fixed, (slime & apple juice, water) */
-    for (i = 3; i < MAX_COLORS; i++) {
+    for (int i = 3; i < MAX_COLORS; i++) {
         j = randint(MAX_COLORS - 3) + 2;
         tmp = colors[i];
         colors[i] = colors[j];
         colors[j] = tmp;
     }
-    for (i = 0; i < MAX_WOODS; i++) {
+    for (int i = 0; i < MAX_WOODS; i++) {
         j = randint(MAX_WOODS) - 1;
         tmp = woods[i];
         woods[i] = woods[j];
         woods[j] = tmp;
     }
-    for (i = 0; i < MAX_METALS; i++) {
+    for (int i = 0; i < MAX_METALS; i++) {
         j = randint(MAX_METALS) - 1;
         tmp = metals[i];
         metals[i] = metals[j];
         metals[j] = tmp;
     }
-    for (i = 0; i < MAX_ROCKS; i++) {
+    for (int i = 0; i < MAX_ROCKS; i++) {
         j = randint(MAX_ROCKS) - 1;
         tmp = rocks[i];
         rocks[i] = rocks[j];
         rocks[j] = tmp;
     }
-    for (i = 0; i < MAX_AMULETS; i++) {
+    for (int i = 0; i < MAX_AMULETS; i++) {
         j = randint(MAX_AMULETS) - 1;
         tmp = amulets[i];
         amulets[i] = amulets[j];
         amulets[j] = tmp;
     }
-    for (i = 0; i < MAX_MUSH; i++) {
+    for (int i = 0; i < MAX_MUSH; i++) {
         j = randint(MAX_MUSH) - 1;
         tmp = mushrooms[i];
         mushrooms[i] = mushrooms[j];
         mushrooms[j] = tmp;
     }
-    for (h = 0; h < MAX_TITLES; h++) {
+
+    int k;
+    vtype string;
+
+    for (int h = 0; h < MAX_TITLES; h++) {
         string[0] = '\0';
         k = randint(2) + 1;
-        for (i = 0; i < k; i++) {
-            for (j = randint(2); j > 0; j--) {
+        for (int i = 0; i < k; i++) {
+            for (int j = randint(2); j > 0; j--) {
                 (void)strcat(string, syllables[randint(MAX_SYLLABLES) - 1]);
             }
             if (i < k - 1) {
@@ -136,33 +139,32 @@ int16_t object_offset(inven_type *t_ptr) {
 
 /* Remove "Secret" symbol for identity of object      */
 void known1(inven_type *i_ptr) {
-    int16_t offset;
-    uint8_t indexx;
-
-    if ((offset = object_offset(i_ptr)) < 0) {
+    int16_t offset = object_offset(i_ptr);
+    if (offset < 0) {
         return;
     }
     offset <<= 6;
-    indexx = i_ptr->subval & (ITEM_SINGLE_STACK_MIN - 1);
+
+    uint8_t indexx = i_ptr->subval & (ITEM_SINGLE_STACK_MIN - 1);
+
     object_ident[offset + indexx] |= OD_KNOWN1;
     /* clear the tried flag, since it is now known */
     object_ident[offset + indexx] &= ~OD_TRIED;
 }
 
 int known1_p(inven_type *i_ptr) {
-    int16_t offset;
-    uint8_t indexx;
-
-    /* Items which don't have a 'color' are always known1, so that they can
-       be carried in order in the inventory. */
-    if ((offset = object_offset(i_ptr)) < 0) {
+    /* Items which don't have a 'color' are always known1, so that they can be carried in order in the inventory. */
+    int16_t offset = object_offset(i_ptr);
+    if (offset < 0) {
         return OD_KNOWN1;
     }
     if (store_bought_p(i_ptr)) {
         return OD_KNOWN1;
     }
     offset <<= 6;
-    indexx = i_ptr->subval & (ITEM_SINGLE_STACK_MIN - 1);
+
+    uint8_t indexx = i_ptr->subval & (ITEM_SINGLE_STACK_MIN - 1);
+
     return (object_ident[offset + indexx] & OD_KNOWN1);
 }
 
@@ -195,16 +197,16 @@ int store_bought_p(inven_type *i_ptr) {
 
 /*  Remove an automatically generated inscription.  -CJS- */
 static void unsample(inven_type *i_ptr) {
-    int16_t offset;
-    uint8_t indexx;
-
     /* used to clear ID_DAMD flag, but I think it should remain set */
     i_ptr->ident &= ~(ID_MAGIK | ID_EMPTY);
-    if ((offset = object_offset(i_ptr)) < 0) {
+
+    int16_t offset = object_offset(i_ptr);
+    if (offset < 0) {
         return;
     }
     offset <<= 6;
-    indexx = i_ptr->subval & (ITEM_SINGLE_STACK_MIN - 1);
+
+    uint8_t indexx = i_ptr->subval & (ITEM_SINGLE_STACK_MIN - 1);
     object_ident[offset + indexx] &= ~OD_TRIED;
 }
 
@@ -212,14 +214,13 @@ static void unsample(inven_type *i_ptr) {
 
 /* Somethings been sampled -CJS- */
 void sample(inven_type *i_ptr) {
-    int16_t offset;
-    uint8_t indexx;
-
-    if ((offset = object_offset(i_ptr)) < 0) {
+    int16_t offset = object_offset(i_ptr);
+    if (offset < 0) {
         return;
     }
     offset <<= 6;
-    indexx = i_ptr->subval & (ITEM_SINGLE_STACK_MIN - 1);
+
+    uint8_t indexx = i_ptr->subval & (ITEM_SINGLE_STACK_MIN - 1);
     object_ident[offset + indexx] |= OD_TRIED;
 }
 
@@ -227,11 +228,7 @@ void sample(inven_type *i_ptr) {
 /* extra complexity by CJS so that it can merge store/dungeon objects
    when appropriate */
 void identify(int *item) {
-    int i, x1, x2;
-    int j;
-    inven_type *i_ptr, *t_ptr;
-
-    i_ptr = &inventory[*item];
+    inven_type *i_ptr = &inventory[*item];
 
     if (i_ptr->flags & TR_CURSED) {
         add_inscribe(i_ptr, ID_DAMD);
@@ -239,12 +236,15 @@ void identify(int *item) {
 
     if (!known1_p(i_ptr)) {
         known1(i_ptr);
-        x1 = i_ptr->tval;
-        x2 = i_ptr->subval;
+        int x1 = i_ptr->tval;
+        int x2 = i_ptr->subval;
         if (x2 < ITEM_SINGLE_STACK_MIN || x2 >= ITEM_GROUP_MIN) {
             ; /* no merging possible */
         } else {
-            for (i = 0; i < inven_ctr; i++) {
+            int j;
+            inven_type *t_ptr;
+
+            for (int i = 0; i < inven_ctr; i++) {
                 t_ptr = &inventory[i];
                 if (t_ptr->tval == x1 && t_ptr->subval == x2 && i != *item &&
                     ((int)t_ptr->number + (int)i_ptr->number < 256)) {
@@ -288,19 +288,20 @@ void unmagic_name(inven_type *i_ptr) {
 /* note that since out_val can easily exceed 80 characters, objdes must
    always be called with a bigvtype as the first paramter */
 void objdes(char *out_val, inven_type *i_ptr, int pref) {
-    /* base name, modifier string*/
-    char *basenm, *modstr;
-    bigvtype tmp_val;
-    vtype tmp_str, damstr;
-    int indexx, p1_use, tmp;
+    int tmp;
 
-    indexx = i_ptr->subval & (ITEM_SINGLE_STACK_MIN - 1);
-    basenm = object_list[i_ptr->index].name;
-    modstr = CNIL;
+    int indexx = i_ptr->subval & (ITEM_SINGLE_STACK_MIN - 1);
+
+    /* base name, modifier string*/
+    char *basenm = object_list[i_ptr->index].name;
+    char *modstr = CNIL;
+
+    vtype damstr;
     damstr[0] = '\0';
-    p1_use = IGNORED;
+    int p1_use = IGNORED;
     bool modify = (known1_p(i_ptr) ? false : true);
     bool append_name = false;
+
     switch (i_ptr->tval) {
     case TV_MISC: case TV_CHEST:
         break;
@@ -441,6 +442,8 @@ void objdes(char *out_val, inven_type *i_ptr, int pref) {
         return;
     }
 
+    bigvtype tmp_val;
+
     if (modstr != CNIL) {
         (void)sprintf(tmp_val, basenm, modstr);
     } else {
@@ -466,6 +469,8 @@ void objdes(char *out_val, inven_type *i_ptr, int pref) {
             (void)strcpy(out_val, tmp_val);
         }
     } else {
+        vtype tmp_str;
+
         if (i_ptr->name2 != SN_NULL && known2_p(i_ptr)) {
             (void)strcat(tmp_val, " ");
             (void)strcat(tmp_val, special_names[i_ptr->name2]);
@@ -480,11 +485,9 @@ void objdes(char *out_val, inven_type *i_ptr, int pref) {
                               (i_ptr->tohit < 0) ? '-' : '+', abs(i_ptr->tohit),
                               (i_ptr->todam < 0) ? '-' : '+', abs(i_ptr->todam));
             } else if (i_ptr->tohit != 0) {
-                (void)sprintf(tmp_str, " (%c%d)",
-                              (i_ptr->tohit < 0) ? '-' : '+', abs(i_ptr->tohit));
+                (void)sprintf(tmp_str, " (%c%d)", (i_ptr->tohit < 0) ? '-' : '+', abs(i_ptr->tohit));
             } else if (i_ptr->todam != 0) {
-                (void)sprintf(tmp_str, " (%c%d)",
-                              (i_ptr->todam < 0) ? '-' : '+', abs(i_ptr->todam));
+                (void)sprintf(tmp_str, " (%c%d)", (i_ptr->todam < 0) ? '-' : '+', abs(i_ptr->todam));
             } else {
                 tmp_str[0] = '\0';
             }
@@ -600,9 +603,7 @@ void objdes(char *out_val, inven_type *i_ptr, int pref) {
 }
 
 void invcopy(inven_type *to, int from_index) {
-    treasure_type *from;
-
-    from = &object_list[from_index];
+    treasure_type *from = &object_list[from_index];
 
     to->index       = from_index;
     to->name2       = SN_NULL;
@@ -640,9 +641,8 @@ void desc_charges(int item_val) {
 /* Describe amount of item remaining.     -RAK- */
 void desc_remain(int item_val) {
     bigvtype out_val, tmp_str;
-    inven_type *i_ptr;
 
-    i_ptr = &inventory[item_val];
+    inven_type *i_ptr = &inventory[item_val];
     i_ptr->number--;
     objdes(tmp_str, i_ptr, true);
     i_ptr->number++;

@@ -29,22 +29,24 @@
 
 /* Eat some food.          -RAK- */
 void eat() {
-    uint32_t i;
     int j, k, item_val;
-    struct flags *f_ptr;
-    struct misc *m_ptr;
-    inven_type *i_ptr;
 
     free_turn_flag = true;
+
     if (inven_ctr == 0) {
         msg_print("But you are not carrying anything.");
     } else if (!find_range(TV_FOOD, TV_NEVER, &j, &k)) {
         msg_print("You are not carrying any food.");
     } else if (get_item(&item_val, "Eat what?", j, k, CNIL, CNIL)) {
-        i_ptr = &inventory[item_val];
         free_turn_flag = false;
-        i = i_ptr->flags;
+
+        struct flags *f_ptr;
+        struct misc *m_ptr;
+
+        inven_type *i_ptr = &inventory[item_val];
         bool ident = false;
+
+        uint32_t i = i_ptr->flags;
         while (i != 0) {
             j = bit_pos(&i) + 1;
             /* Foods */

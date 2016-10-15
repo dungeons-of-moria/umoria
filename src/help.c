@@ -28,9 +28,7 @@
 #include "externs.h"
 
 void ident_char() {
-    char command, query;
-    int i, n;
-
+    char command;
     if (get_com("Enter character to be identified :", &command)) {
         // every printing ASCII character is listed here, in the
         // order in which they appear in the ASCII character set.
@@ -309,8 +307,9 @@ void ident_char() {
     }
 
     /* Allow access to monster memory. -CJS- */
-    n = 0;
-    for (i = MAX_CREATURES - 1; i >= 0; i--) {
+    int n = 0;
+    char query;
+    for (int i = MAX_CREATURES - 1; i >= 0; i--) {
         if ((c_list[i].cchar == command) && bool_roff_recall(i)) {
             if (n == 0) {
                 put_buffer("You recall those details? [y/n]", 0, 40);

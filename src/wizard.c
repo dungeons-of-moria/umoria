@@ -29,8 +29,6 @@
 
 /* Light up the dungeon          -RAK- */
 void wizard_light() {
-    cave_type *c_ptr;
-    int k, l, i, j;
     bool flag;
 
     if (cave[char_row][char_col].pl) {
@@ -38,13 +36,15 @@ void wizard_light() {
     } else {
         flag = true;
     }
-    for (i = 0; i < cur_height; i++) {
-        for (j = 0; j < cur_width; j++) {
+
+    for (int i = 0; i < cur_height; i++) {
+        for (int j = 0; j < cur_width; j++) {
             if (cave[i][j].fval <= MAX_CAVE_FLOOR) {
-                for (k = i - 1; k <= i + 1; k++) {
-                    for (l = j - 1; l <= j + 1; l++) {
-                        c_ptr = &cave[k][l];
+                for (int k = i - 1; k <= i + 1; k++) {
+                    for (int l = j - 1; l <= j + 1; l++) {
+                        cave_type *c_ptr = &cave[k][l];
                         c_ptr->pl = flag;
+
                         if (!flag) {
                             c_ptr->fm = false;
                         }
@@ -59,12 +59,10 @@ void wizard_light() {
 /* Wizard routine for gaining on stats      -RAK- */
 void change_character() {
     int tmp_val;
-    int32_t tmp_lval;
-    uint8_t *a_ptr;
     vtype tmp_str;
-    struct misc *m_ptr;
 
-    a_ptr = py.stats.max_stat;
+    uint8_t *a_ptr = py.stats.max_stat;
+
     prt("(3 - 118) Strength     = ", 0, 0);
     if (get_string(tmp_str, 0, 25, 3)) {
         tmp_val = atoi(tmp_str);
@@ -131,7 +129,8 @@ void change_character() {
         return;
     }
 
-    m_ptr = &py.misc;
+    struct misc *m_ptr = &py.misc;
+
     prt("(1 - 32767) Hit points = ", 0, 0);
     if (get_string(tmp_str, 0, 25, 5)) {
         tmp_val = atoi(tmp_str);
@@ -163,7 +162,7 @@ void change_character() {
     tmp_val = strlen(tmp_str);
     prt(tmp_str, 0, 0);
     if (get_string(tmp_str, 0, tmp_val, 7)) {
-        tmp_lval = atol(tmp_str);
+        int32_t tmp_lval = atol(tmp_str);
         if (tmp_lval > -1 && (*tmp_str != '\0')) {
             m_ptr->au = tmp_lval;
             prt_gold();
@@ -271,15 +270,13 @@ void change_character() {
 /* Wizard routine for creating objects      -RAK- */
 void wizard_create() {
     int tmp_val;
-    int32_t tmp_lval;
     vtype tmp_str;
-    inven_type *i_ptr;
-    inven_type forge;
-    cave_type *c_ptr;
-    char pattern[4];
 
     msg_print("Warning: This routine can cause a fatal error.");
-    i_ptr = &forge;
+
+    inven_type forge;
+    inven_type *i_ptr = &forge;
+
     i_ptr->index = OBJ_WIZARD;
     i_ptr->name2 = 0;
     inscribe(i_ptr, "wizard item");
@@ -375,7 +372,11 @@ void wizard_create() {
 
     /* can't be constant string, this causes problems with the GCC compiler
        and some scanf routines */
+    char pattern[4];
+
     (void)strcpy(pattern, "%lx");
+
+    int32_t tmp_lval;
     (void)sscanf(tmp_str, pattern, &tmp_lval);
     i_ptr->flags = tmp_lval;
 
@@ -395,7 +396,7 @@ void wizard_create() {
 
     if (get_check("Allocate?")) {
         /* delete object first if any, before call popt */
-        c_ptr = &cave[char_row][char_col];
+        cave_type *c_ptr = &cave[char_row][char_col];
         if (c_ptr->tptr != 0) {
             (void)delete_object(char_row, char_col);
         }

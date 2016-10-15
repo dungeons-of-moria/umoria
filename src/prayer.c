@@ -30,13 +30,9 @@
 /* Pray like HELL.          -RAK- */
 void pray() {
     int i, j, item_val, dir;
-    int choice, chance, result;
-    spell_type *s_ptr;
-    struct misc *m_ptr;
-    struct flags *f_ptr;
-    inven_type *i_ptr;
 
     free_turn_flag = true;
+
     if (py.flags.blind > 0) {
         msg_print("You can't see to read your prayer!");
     } else if (no_light()) {
@@ -50,16 +46,21 @@ void pray() {
     } else if (!find_range(TV_PRAYER_BOOK, TV_NEVER, &i, &j)) {
         msg_print("You are not carrying any Holy Books!");
     } else if (get_item(&item_val, "Use which Holy Book?", i, j, CNIL, CNIL)) {
-        result = cast_spell("Recite which prayer?", item_val, &choice, &chance);
+        int choice, chance;
+        int result = cast_spell("Recite which prayer?", item_val, &choice, &chance);
+
         if (result < 0) {
             msg_print("You don't know any prayers in that book.");
         } else if (result > 0) {
-            s_ptr = &magic_spell[py.misc.pclass - 1][choice];
             free_turn_flag = false;
+
+            spell_type *s_ptr = &magic_spell[py.misc.pclass - 1][choice];
 
             if (randint(100) < chance) {
                 msg_print("You lost your concentration!");
             } else {
+                struct flags *f_ptr;
+
                 /* Prayers. */
                 switch (choice + 1) {
                 case 1:
@@ -108,7 +109,8 @@ void pray() {
                     break;
                 case 15:
                     for (i = 0; i < INVEN_ARRAY_SIZE; i++) {
-                        i_ptr = &inventory[i];
+                        inven_type *i_ptr = &inventory[i];
+
                         /* only clear flag for items that are wielded or worn */
                         if (i_ptr->tval >= TV_MIN_WEAR && i_ptr->tval <= TV_MAX_WEAR) {
                             i_ptr->flags &= ~TR_CURSED;
@@ -125,9 +127,7 @@ void pray() {
                     break;
                 case 18:
                     if (get_dir(CNIL, &dir)) {
-                        fire_ball(GF_HOLY_ORB, dir, char_row, char_col,
-                                  (int)(damroll(3, 6) + py.misc.lev),
-                                  "Black Sphere");
+                        fire_ball(GF_HOLY_ORB, dir, char_row, char_col, (int)(damroll(3, 6) + py.misc.lev), "Black Sphere");
                     }
                     break;
                 case 19:
@@ -186,7 +186,7 @@ void pray() {
                 }
                 /* End of prayers. */
                 if (!free_turn_flag) {
-                    m_ptr = &py.misc;
+                    struct misc *m_ptr = &py.misc;
                     if ((spell_worked & (1L << choice)) == 0) {
                         m_ptr->exp += s_ptr->sexp << 2;
                         prt_experience();
@@ -194,7 +194,9 @@ void pray() {
                     }
                 }
             }
-            m_ptr = &py.misc;
+
+            struct misc *m_ptr = &py.misc;
+
             if (!free_turn_flag) {
                 if (s_ptr->smana > m_ptr->cmana) {
                     msg_print("You faint from fatigue!");

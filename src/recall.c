@@ -143,18 +143,15 @@ static int roffpline; /* Place to print line now being loaded. */
 
 /* Do we know anything about this monster? */
 bool bool_roff_recall(int mon_num) {
-    recall_type *mp;
-    int i;
-
     if (wizard) {
         return true;
     }
-    mp = &c_recall[mon_num];
-    if (mp->r_cmove || mp->r_cdefense || mp->r_kills || mp->r_spells ||
-        mp->r_deaths) {
+
+    recall_type *mp = &c_recall[mon_num];
+    if (mp->r_cmove || mp->r_cdefense || mp->r_kills || mp->r_spells || mp->r_deaths) {
         return true;
     }
-    for (i = 0; i < 4; i++) {
+    for (int i = 0; i < 4; i++) {
         if (mp->r_attacks[i]) {
             return true;
         }
@@ -164,22 +161,17 @@ bool bool_roff_recall(int mon_num) {
 
 /* Print out what we have discovered about this monster. */
 int roff_recall(int mon_num) {
+    bool known;
     char *p, *q;
     uint8_t *pu;
-    vtype temp;
-    recall_type *mp;
-    creature_type *cp;
-    int i;
-    bool known;
     uint32_t j;
-    int32_t templong;
-    int mspeed;
-    uint32_t rcmove, rspells;
-    uint16_t rcdefense;
+    vtype temp;
+
+    recall_type *mp = &c_recall[mon_num];
+    creature_type *cp = &c_list[mon_num];
+
     recall_type save_mem;
 
-    mp = &c_recall[mon_num];
-    cp = &c_list[mon_num];
     if (wizard) {
         save_mem = *mp;
         mp->r_kills = MAX_SHORT;
@@ -217,32 +209,29 @@ int roff_recall(int mon_num) {
     roffpline = 0;
     roffp = roffbuf;
 
-    rspells = mp->r_spells & cp->spells & ~CS_FREQ;
+    uint32_t rspells = mp->r_spells & cp->spells & ~CS_FREQ;
 
     /* the CM_WIN property is always known, set it if a win monster */
-    rcmove = mp->r_cmove | (CM_WIN & cp->cmove);
+    uint32_t rcmove = mp->r_cmove | (CM_WIN & cp->cmove);
 
-    rcdefense = mp->r_cdefense & cp->cdefense;
+    uint16_t rcdefense = mp->r_cdefense & cp->cdefense;
+
     (void)sprintf(temp, "The %s:\n", cp->name);
     roff(temp);
 
     /* Conflict history. */
     if (mp->r_deaths) {
-        (void)sprintf(temp, "%d of the contributors to your monster memory %s",
-                      mp->r_deaths, plural(mp->r_deaths, "has", "have"));
+        (void)sprintf(temp, "%d of the contributors to your monster memory %s", mp->r_deaths, plural(mp->r_deaths, "has", "have"));
         roff(temp);
         roff(" been killed by this creature, and ");
         if (mp->r_kills == 0) {
             roff("it is not ever known to have been defeated.");
         } else {
-            (void)sprintf(temp,
-                          "at least %d of the beasts %s been exterminated.",
-                          mp->r_kills, plural(mp->r_kills, "has", "have"));
+            (void)sprintf(temp, "at least %d of the beasts %s been exterminated.", mp->r_kills, plural(mp->r_kills, "has", "have"));
             roff(temp);
         }
     } else if (mp->r_kills) {
-        (void)sprintf(temp, "At least %d of these creatures %s", mp->r_kills,
-                      plural(mp->r_kills, "has", "have"));
+        (void)sprintf(temp, "At least %d of these creatures %s", mp->r_kills, plural(mp->r_kills, "has", "have"));
         roff(temp);
         roff(" been killed by contributors to your monster memory.");
     } else {
@@ -256,7 +245,7 @@ int roff_recall(int mon_num) {
         known = true;
     } else if (mp->r_kills) {
         /* The Balrog is a level 100 monster, but appears at 50 feet. */
-        i = cp->level;
+        int i = cp->level;
         if (i > WIN_MON_APPEAR) {
             i = WIN_MON_APPEAR;
         }
@@ -266,7 +255,8 @@ int roff_recall(int mon_num) {
     }
 
     /* the c_list speed value is 10 greater, so that it can be a uint8_t */
-    mspeed = cp->speed - 10;
+    int mspeed = cp->speed - 10;
+
     if (rcmove & CM_ALL_MV_FLAGS) {
         if (known) {
             roff(", and");
@@ -347,7 +337,7 @@ int roff_recall(int mon_num) {
 
         /* calculate the integer exp part, can be larger than 64K when first
            level character looks at Balrog info, so must store in long */
-        templong = (int32_t)cp->mexp * cp->level / py.misc.lev;
+        int32_t templong = (int32_t)cp->mexp * cp->level / py.misc.lev;
 
         /* calculate the fractional exp part scaled by 100,
            must use long arithmetic to avoid overflow */
@@ -359,35 +349,35 @@ int roff_recall(int mon_num) {
         if (py.misc.lev / 10 == 1) {
             p = "th";
         } else {
-            i = py.misc.lev % 10;
-            if (i == 1) {
+            int ord = py.misc.lev % 10;
+            if (ord == 1) {
                 p = "st";
-            } else if (i == 2) {
+            } else if (ord == 2) {
                 p = "nd";
-            } else if (i == 3) {
+            } else if (ord == 3) {
                 p = "rd";
             } else {
                 p = "th";
             }
         }
 
-        i = py.misc.lev;
-        if (i == 8 || i == 11 || i == 18) {
+        int n = py.misc.lev;
+        if (n == 8 || n == 11 || n == 18) {
             q = "n";
         } else {
             q = "";
         }
-        (void)sprintf(temp, " for a%s %d%s level character.", q, i, p);
+        (void)sprintf(temp, " for a%s %d%s level character.", q, n, p);
         roff(temp);
     }
 
     /* Spells known, if have been used against us.
-       Breath weapons or resistance might be known only because we cast spells
-       at it. */
+     * Breath weapons or resistance might be known only because we cast spells at it.
+     */
     known = true;
     j = rspells;
 
-    for (i = 0; j & CS_BREATHE; i++) {
+    for (int i = 0; j & CS_BREATHE; i++) {
         if (j & (CS_BR_LIGHT << i)) {
             j &= ~(CS_BR_LIGHT << i);
 
@@ -409,7 +399,7 @@ int roff_recall(int mon_num) {
 
     known = true;
 
-    for (i = 0; j & CS_SPELLS; i++) {
+    for (int i = 0; j & CS_SPELLS; i++) {
         if (j & (CS_TEL_SHORT << i)) {
             j &= ~(CS_TEL_SHORT << i);
 
@@ -443,9 +433,7 @@ int roff_recall(int mon_num) {
     if (knowarmor(cp->level, mp->r_kills)) {
         (void)sprintf(temp, " It has an armor rating of %d", cp->ac);
         roff(temp);
-        (void)sprintf(temp, " and a%s life rating of %dd%d.",
-                      ((cp->cdefense & CD_MAX_HP) ? " maximized" : ""),
-                      cp->hd[0], cp->hd[1]);
+        (void)sprintf(temp, " and a%s life rating of %dd%d.", ((cp->cdefense & CD_MAX_HP) ? " maximized" : ""), cp->hd[0], cp->hd[1]);
         roff(temp);
     }
 
@@ -453,7 +441,7 @@ int roff_recall(int mon_num) {
     known = true;
     j = rcmove;
 
-    for (i = 0; j & CM_SPECIAL; i++) {
+    for (int i = 0; j & CM_SPECIAL; i++) {
         if (j & (CM_INVISIBLE << i)) {
             j &= ~(CM_INVISIBLE << i);
 
@@ -476,7 +464,7 @@ int roff_recall(int mon_num) {
     /* Do we know its special weaknesses? Most cdefense flags. */
     known = true;
     j = rcdefense;
-    for (i = 0; j & CD_WEAKNESS; i++) {
+    for (int i = 0; j & CD_WEAKNESS; i++) {
         if (j & (CD_FROST << i)) {
             j &= ~(CD_FROST << i);
             if (known) {
@@ -513,8 +501,7 @@ int roff_recall(int mon_num) {
     }
 
     /* Do we know how aware it is? */
-    if (((mp->r_wake * mp->r_wake) > cp->sleep) || mp->r_ignore == MAX_UCHAR ||
-        (cp->sleep == 0 && mp->r_kills >= 10)) {
+    if (((mp->r_wake * mp->r_wake) > cp->sleep) || mp->r_ignore == MAX_UCHAR || (cp->sleep == 0 && mp->r_kills >= 10)) {
         roff(" It ");
         if (cp->sleep > 200) {
             roff("prefers to ignore");
@@ -610,7 +597,7 @@ int roff_recall(int mon_num) {
 
     /* j counts the attacks as printed, used for punctuation */
     j = 0;
-    for (i = 0; *pu != 0 && i < 4; pu++, i++) {
+    for (int i = 0; *pu != 0 && i < 4; pu++, i++) {
         int att_type, att_how, d1, d2;
 
         /* don't print out unknown attacks */
@@ -683,12 +670,10 @@ int roff_recall(int mon_num) {
 
 /* Print out strings, filling up lines as we go. */
 static void roff(char *p) {
-    char *q, *r;
-
     while (*p) {
         *roffp = *p;
         if (*p == '\n' || roffp >= roffbuf + sizeof(roffbuf) - 1) {
-            q = roffp;
+            char *q = roffp;
             if (*p != '\n') {
                 while (*q != ' ') {
                     q--;
@@ -697,7 +682,8 @@ static void roff(char *p) {
             *q = 0;
             prt(roffbuf, roffpline, 0);
             roffpline++;
-            r = roffbuf;
+
+            char *r = roffbuf;
             while (q < roffp) {
                 q++;
                 *r = *q;

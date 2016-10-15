@@ -29,16 +29,13 @@
 
 /* Scrolls for the reading              -RAK- */
 void read_scroll() {
-    uint32_t i;
-    int j, k, item_val, y, x;
-    int tmp[6];
     bool flag;
-    bigvtype out_val, tmp_str;
-    int l;
-    inven_type *i_ptr;
-    struct misc *m_ptr;
+    int j, k, l, y, x;
+    int item_val;
+    int tmp[6];
 
     free_turn_flag = true;
+
     if (py.flags.blind > 0) {
         msg_print("You can't see to read the scroll.");
     } else if (no_light()) {
@@ -50,11 +47,15 @@ void read_scroll() {
     } else if (!find_range(TV_SCROLL1, TV_SCROLL2, &j, &k)) {
         msg_print("You are not carrying any scrolls!");
     } else if (get_item(&item_val, "Read which scroll?", j, k, CNIL, CNIL)) {
-        i_ptr = &inventory[item_val];
         free_turn_flag = false;
+
+        inven_type *i_ptr = &inventory[item_val];
+        uint32_t i = i_ptr->flags;
+
         bool used_up = true;
-        i = i_ptr->flags;
         bool ident = false;
+
+        bigvtype out_val, tmp_str;
 
         while (i != 0) {
             j = bit_pos(&i) + 1;
@@ -478,10 +479,13 @@ void read_scroll() {
             }
             /* End of Scrolls. */
         }
+
         i_ptr = &inventory[item_val];
+
         if (ident) {
             if (!known1_p(i_ptr)) {
-                m_ptr = &py.misc;
+                struct misc *m_ptr = &py.misc;
+
                 /* round half-way case up */
                 m_ptr->exp += (i_ptr->level + (m_ptr->lev >> 1)) / m_ptr->lev;
                 prt_experience();

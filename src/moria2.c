@@ -32,11 +32,9 @@ static bool see_wall();
 /* Change a trap from invisible to visible    -RAK- */
 /* Note: Secret doors are handled here */
 void change_trap(int y, int x) {
-    cave_type *c_ptr;
-    inven_type *t_ptr;
+    cave_type *c_ptr = &cave[y][x];
+    inven_type *t_ptr = &t_list[c_ptr->tptr];
 
-    c_ptr = &cave[y][x];
-    t_ptr = &t_list[c_ptr->tptr];
     if (t_ptr->tval == TV_INVIS_TRAP) {
         t_ptr->tval = TV_VIS_TRAP;
         lite_spot(y, x);
@@ -51,13 +49,8 @@ void change_trap(int y, int x) {
 
 /* Searches for hidden things.      -RAK- */
 void search(int y, int x, int chance) {
-    int i, j;
-    cave_type *c_ptr;
-    inven_type *t_ptr;
-    struct flags *p_ptr;
-    bigvtype tmp_str, tmp_str2;
+    struct flags *p_ptr = &py.flags;
 
-    p_ptr = &py.flags;
     if (p_ptr->confused > 0) {
         chance = chance / 10;
     }
@@ -67,16 +60,20 @@ void search(int y, int x, int chance) {
     if (p_ptr->image > 0) {
         chance = chance / 10;
     }
-    for (i = (y - 1); i <= (y + 1); i++) {
-        for (j = (x - 1); j <= (x + 1); j++) {
+    for (int i = (y - 1); i <= (y + 1); i++) {
+        for (int j = (x - 1); j <= (x + 1); j++) {
             /* always in_bounds here */
             if (randint(100) < chance) {
-                c_ptr = &cave[i][j];
+                cave_type *c_ptr = &cave[i][j];
+
                 /* Search for hidden objects */
                 if (c_ptr->tptr != 0) {
-                    t_ptr = &t_list[c_ptr->tptr];
+                    inven_type *t_ptr = &t_list[c_ptr->tptr];
+
                     /* Trap on floor? */
                     if (t_ptr->tval == TV_INVIS_TRAP) {
+                        bigvtype tmp_str, tmp_str2;
+
                         objdes(tmp_str2, t_ptr, true);
                         (void)sprintf(tmp_str, "You have found %s", tmp_str2);
                         msg_print(tmp_str);
@@ -230,13 +227,9 @@ static int find_prevdir;
 static int find_direction; /* Keep a record of which way we are going. */
 
 void find_init(int dir) {
-    int row, col;
-    bool deepleft, deepright;
-    int i;
-    bool shortleft, shortright;
+    int row = char_row;
+    int col = char_col;
 
-    row = char_row;
-    col = char_col;
     if (!mmove(dir, &row, &col)) {
         find_flag = 0;
     } else {
@@ -245,9 +238,13 @@ void find_init(int dir) {
         find_breakright = find_breakleft = false;
         find_prevdir = dir;
         if (py.flags.blind < 1) {
-            i = chome[dir];
-            deepleft = deepright = false;
-            shortright = shortleft = false;
+            int i = chome[dir];
+
+            bool deepleft = false;
+            bool deepright = false;
+            bool shortleft = false;
+            bool shortright = false;
+
             if (see_wall(cycle[i + 1], char_row, char_col)) {
                 find_breakleft = true;
                 shortleft = true;
@@ -352,28 +349,28 @@ static bool see_nothing(int dir, int y, int x) {
 
 /* Determine the next direction for a run, or if we should stop.  -CJS- */
 void area_affect(int dir, int y, int x) {
-    int newdir, t, check_dir, row, col;
-    bool inv;
-    int i, max, option, option2;
-    cave_type *c_ptr;
-
     if (py.flags.blind < 1) {
-        option = 0;
-        option2 = 0;
+        int check_dir;
+        int option = 0;
+        int option2 = 0;
+
         dir = find_prevdir;
-        max = (dir & 1) + 1;
+        int max = (dir & 1) + 1;
+
         /* Look at every newly adjacent square. */
-        for (i = -max; i <= max; i++) {
-            newdir = cycle[chome[dir] + i];
-            row = y;
-            col = x;
+        for (int i = -max; i <= max; i++) {
+            int newdir = cycle[chome[dir] + i];
+            int row = y;
+            int col = x;
 
             /* Objects player can see (Including doors?) cause a stop. */
             if (mmove(newdir, &row, &col)) {
-                c_ptr = &cave[row][col];
+                cave_type *c_ptr = &cave[row][col];
+
+                bool inv;
                 if (player_light || c_ptr->tl || c_ptr->pl || c_ptr->fm) {
                     if (c_ptr->tptr != 0) {
-                        t = t_list[c_ptr->tptr].tval;
+                        int t = t_list[c_ptr->tptr].tval;
                         if (t != TV_INVIS_TRAP && t != TV_SECRET_DOOR &&
                             (t != TV_OPEN_DOOR || !find_ignore_doors)) {
                             end_find();
@@ -463,8 +460,10 @@ void area_affect(int dir, int y, int x) {
                 }
             } else {
                 /* Two options! */
-                row = y;
-                col = x;
+
+                int row = y;
+                int col = x;
+
                 (void)mmove(option, &row, &col);
                 if (!see_wall(option, row, col) || !see_wall(check_dir, row, col)) {
                     /* Don't see that it is closed off.  This could be a
@@ -498,12 +497,8 @@ void area_affect(int dir, int y, int x) {
 /* Note: This routine affects magical AC bonuses so that stores */
 /*   can detect the damage. */
 int minus_ac(uint32_t typ_dam) {
-    int i, j;
     int tmp[6];
-    inven_type *i_ptr;
-    bigvtype out_val, tmp_str;
-
-    i = 0;
+    int i = 0;
     if (inventory[INVEN_BODY].tval != TV_NOTHING) {
         tmp[i] = INVEN_BODY;
         i++;
@@ -531,9 +526,13 @@ int minus_ac(uint32_t typ_dam) {
     }
 
     bool minus = false;
+
     if (i > 0) {
-        j = tmp[randint(i) - 1];
-        i_ptr = &inventory[j];
+        int j = tmp[randint(i) - 1];
+
+        inven_type *i_ptr = &inventory[j];
+
+        bigvtype out_val, tmp_str;
         if (i_ptr->flags & typ_dam) {
             objdes(tmp_str, &inventory[j], false);
             (void)sprintf(out_val, "Your %s resists damage!", tmp_str);
@@ -610,9 +609,7 @@ void light_dam(int dam, char *kb_str) {
 
 /* Throw acid on the hapless victim     -RAK- */
 void acid_dam(int dam, char *kb_str) {
-    int flag;
-
-    flag = 0;
+    int flag = 0;
     if (minus_ac((uint32_t)TR_RES_ACID)) {
         flag = 1;
     }

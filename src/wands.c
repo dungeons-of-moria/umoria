@@ -29,20 +29,18 @@
 
 /* Wands for the aiming. */
 void aim() {
-    uint32_t i;
-    int l;
-    int item_val, j, k, chance, dir;
-    inven_type *i_ptr;
-    struct misc *m_ptr;
-
     free_turn_flag = true;
+
+    int j, k, item_val;
     if (inven_ctr == 0) {
         msg_print("But you are not carrying anything.");
     } else if (!find_range(TV_WAND, TV_NEVER, &j, &k)) {
         msg_print("You are not carrying any wands.");
     } else if (get_item(&item_val, "Aim which wand?", j, k, CNIL, CNIL)) {
-        i_ptr = &inventory[item_val];
+        inven_type *i_ptr = &inventory[item_val];
         free_turn_flag = false;
+
+        int dir;
         if (get_dir(CNIL, &dir)) {
             if (py.flags.confused > 0) {
                 msg_print("You are confused.");
@@ -51,10 +49,11 @@ void aim() {
                 } while (dir == 5);
             }
             bool ident = false;
-            m_ptr = &py.misc;
-            chance =
-                m_ptr->save + stat_adj(A_INT) - (int)i_ptr->level +
-                (class_level_adj[m_ptr->pclass][CLA_DEVICE] * m_ptr->lev / 3);
+
+            struct misc *m_ptr = &py.misc;
+
+            int chance = m_ptr->save + stat_adj(A_INT) - (int)i_ptr->level + (class_level_adj[m_ptr->pclass][CLA_DEVICE] * m_ptr->lev / 3);
+
             if (py.flags.confused > 0) {
                 chance = chance / 2;
             }
@@ -68,12 +67,13 @@ void aim() {
             if (randint(chance) < USE_DEVICE) {
                 msg_print("You failed to use the wand properly.");
             } else if (i_ptr->p1 > 0) {
-                i = i_ptr->flags;
+                uint32_t i = i_ptr->flags;
                 (i_ptr->p1)--;
+
                 while (i != 0) {
                     j = bit_pos(&i) + 1;
                     k = char_row;
-                    l = char_col;
+                    int l = char_col;
                     /* Wands */
                     switch (j) {
                     case 1:

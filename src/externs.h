@@ -582,12 +582,12 @@ void use();
 /* store1.c */
 int32_t item_value(inven_type *);
 int32_t sell_price(int, int32_t *, int32_t *, inven_type *);
-int store_check_num(inven_type *, int);
+bool store_check_num(inven_type *, int);
 void store_carry(int, int *, inven_type *);
 void store_destroy(int, int, int);
 void store_init();
 void store_maint();
-int noneedtobargain(int, int32_t);
+bool noneedtobargain(int, int32_t);
 void updatebargain(int, int32_t, int32_t);
 
 /* store2.c */

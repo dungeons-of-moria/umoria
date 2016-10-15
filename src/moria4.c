@@ -33,36 +33,28 @@ static bool look_see();
 /* Tunnels through rubble and walls      -RAK- */
 /* Must take into account: secret doors,  special tools */
 void tunnel(int dir) {
-    int i, tabil;
-    cave_type *c_ptr;
-    inven_type *i_ptr;
-    int y, x;
-    monster_type *m_ptr;
-    vtype out_val, m_name;
-
-    if ((py.flags.confused > 0) && /* Confused? */
-        (randint(4) > 1))          /* 75% random movement */
-    {
+    /*   Confused?                  75% random movement */
+    if ((py.flags.confused > 0) && (randint(4) > 1)) {
         dir = randint(9);
     }
 
-    y = char_row;
-    x = char_col;
+    int y = char_row;
+    int x = char_col;
     (void)mmove(dir, &y, &x);
 
-    c_ptr = &cave[y][x];
+    cave_type *c_ptr = &cave[y][x];
 
     /* Compute the digging ability of player; based on */
     /* strength, and type of tool used */
-    tabil = py.stats.use_stat[A_STR];
-    i_ptr = &inventory[INVEN_WIELD];
+    int tabil = py.stats.use_stat[A_STR];
+
+    inven_type *i_ptr = &inventory[INVEN_WIELD];
 
     /* Don't let the player tunnel somewhere illegal, this is necessary to
        prevent the player from getting a free attack by trying to tunnel
        somewhere where it has no effect. */
     if (c_ptr->fval < MIN_CAVE_WALL &&
-        (c_ptr->tptr == 0 || (t_list[c_ptr->tptr].tval != TV_RUBBLE &&
-                              t_list[c_ptr->tptr].tval != TV_SECRET_DOOR))) {
+        (c_ptr->tptr == 0 || (t_list[c_ptr->tptr].tval != TV_RUBBLE && t_list[c_ptr->tptr].tval != TV_SECRET_DOOR))) {
         if (c_ptr->tptr == 0) {
             msg_print("Tunnel through what?  Empty air?!?");
             free_turn_flag = true;
@@ -74,7 +66,9 @@ void tunnel(int dir) {
     }
 
     if (c_ptr->cptr > 1) {
-        m_ptr = &m_list[c_ptr->cptr];
+        monster_type *m_ptr = &m_list[c_ptr->cptr];
+
+        vtype out_val, m_name;
         if (m_ptr->ml) {
             (void)sprintf(m_name, "The %s", c_list[m_ptr->mptr].name);
         } else {
@@ -108,6 +102,8 @@ void tunnel(int dir) {
                 tabil = 0;
             }
         }
+
+        int i;
 
         /* Regular walls; Granite, magma intrusion, quartz vein */
         /* Don't forget the boundary walls, made of titanium (255)*/
@@ -177,24 +173,21 @@ void tunnel(int dir) {
 
 /* Disarms a trap          -RAK- */
 void disarm_trap() {
-    int y, x, level, tmp, dir;
-    int tot, i;
-    cave_type *c_ptr;
-    inven_type *i_ptr;
-    monster_type *m_ptr;
-    vtype m_name, out_val;
+    int y = char_row;
+    int x = char_col;
 
-    y = char_row;
-    x = char_col;
-
+    int dir;
     if (get_dir(CNIL, &dir)) {
         (void)mmove(dir, &y, &x);
-        c_ptr = &cave[y][x];
+
+        cave_type *c_ptr = &cave[y][x];
+
         bool no_disarm = false;
-        if (c_ptr->cptr > 1 && c_ptr->tptr != 0 &&
-            (t_list[c_ptr->tptr].tval == TV_VIS_TRAP ||
-             t_list[c_ptr->tptr].tval == TV_CHEST)) {
-            m_ptr = &m_list[c_ptr->cptr];
+
+        if (c_ptr->cptr > 1 && c_ptr->tptr != 0 && (t_list[c_ptr->tptr].tval == TV_VIS_TRAP || t_list[c_ptr->tptr].tval == TV_CHEST)) {
+            monster_type *m_ptr = &m_list[c_ptr->cptr];
+
+            vtype m_name, out_val;
             if (m_ptr->ml) {
                 (void)sprintf(m_name, "The %s", c_list[m_ptr->mptr].name);
             } else {
@@ -203,9 +196,8 @@ void disarm_trap() {
             (void)sprintf(out_val, "%s is in your way!", m_name);
             msg_print(out_val);
         } else if (c_ptr->tptr != 0) {
-            tot =
-                py.misc.disarm + 2 * todis_adj() + stat_adj(A_INT) +
-                (class_level_adj[py.misc.pclass][CLA_DISARM] * py.misc.lev / 3);
+            int tot = py.misc.disarm + 2 * todis_adj() + stat_adj(A_INT) + (class_level_adj[py.misc.pclass][CLA_DISARM] * py.misc.lev / 3);
+
             if ((py.flags.blind > 0) || (no_light())) {
                 tot = tot / 10;
             }
@@ -215,9 +207,11 @@ void disarm_trap() {
             if (py.flags.image > 0) {
                 tot = tot / 10;
             }
-            i_ptr = &t_list[c_ptr->tptr];
-            i = i_ptr->tval;
-            level = i_ptr->level;
+
+            inven_type *i_ptr = &t_list[c_ptr->tptr];
+            int i = i_ptr->tval;
+            int level = i_ptr->level;
+
             if (i == TV_VIS_TRAP) { /* Floor trap */
                 if ((tot + 100 - level) > randint(100)) {
                     msg_print("You have disarmed the trap.");
@@ -225,7 +219,7 @@ void disarm_trap() {
                     (void)delete_object(y, x);
 
                     /* make sure we move onto the trap even if confused */
-                    tmp = py.flags.confused;
+                    int tmp = py.flags.confused;
                     py.flags.confused = 0;
                     move_char(dir, false);
                     py.flags.confused = tmp;
@@ -237,7 +231,7 @@ void disarm_trap() {
                     msg_print("You set the trap off!");
 
                     /* make sure we move onto the trap even if confused */
-                    tmp = py.flags.confused;
+                    int tmp = py.flags.confused;
                     py.flags.confused = 0;
                     move_char(dir, false);
                     py.flags.confused += tmp;
@@ -339,12 +333,13 @@ static int gl_fxx, gl_fxy, gl_fyx, gl_fyy;
 static int gl_nseen;
 static bool gl_noquery;
 static int gl_rock;
-/* Intended to be indexed by dir/2, since is only relevant to horizontal or
-   vertical directions. */
+
+/* Intended to be indexed by dir/2, since is only relevant to horizontal or vertical directions. */
 static int set_fxy[] = {0, 1, 0, 0, -1};
 static int set_fxx[] = {0, 0, -1, 1, 0};
 static int set_fyy[] = {0, 0, 1, -1, 0};
 static int set_fyx[] = {0, 1, 0, 0, -1};
+
 /* Map diagonal-dir/2 to a normal-dir/2. */
 static int map_diag1[] = {1, 3, 0, 2, 4};
 static int map_diag2[] = {2, 1, 0, 4, 3};
@@ -363,9 +358,7 @@ static int map_diag2[] = {2, 1, 0, 4, 3};
    types only after all other things have been seen.  Only looks at rock
    types if the highlight_seams option is set.
  */
-
 void look() {
-    int i;
     int dir;
 
     if (py.flags.blind > 0) {
@@ -374,6 +367,7 @@ void look() {
         msg_print("You can't believe what you are seeing! It's like a dream!");
     } else if (get_alldir("Look which direction?", &dir)) {
         bool abort = false;
+
         gl_nseen = 0;
         gl_rock = 0;
 
@@ -387,7 +381,7 @@ void look() {
             do {
                 abort = false;
                 if (dir == 5) {
-                    for (i = 1; i <= 4; i++) {
+                    for (int i = 1; i <= 4; i++) {
                         gl_fxx = set_fxx[i];
                         gl_fyx = set_fyx[i];
                         gl_fxy = set_fxy[i];
@@ -406,7 +400,7 @@ void look() {
                 } else if ((dir & 1) == 0) {
                     /* Straight directions */
 
-                    i = dir >> 1;
+                    int i = dir >> 1;
                     gl_fxx = set_fxx[i];
                     gl_fyx = set_fyx[i];
                     gl_fxy = set_fxy[i];
@@ -419,7 +413,7 @@ void look() {
                         abort = look_ray(0, GRADF, 2);
                     }
                 } else {
-                    i = map_diag1[dir >> 1];
+                    int i = map_diag1[dir >> 1];
                     gl_fxx = set_fxx[i];
                     gl_fyx = set_fyx[i];
                     gl_fxy = -set_fxy[i];
@@ -475,9 +469,6 @@ void look() {
      |
  */
 static bool look_ray(int y, int from, int to) {
-    int max_x, x;
-    bool transparent;
-
     /* from is the larger angle of the ray, since we scan towards the
        center line. If from is smaller, then the ray does not exist. */
     if (from <= to || y > MAX_SIGHT) {
@@ -488,14 +479,14 @@ static bool look_ray(int y, int from, int to) {
        that (2x-1)/x < from/GRADF <=> x > GRADF(2x-1)/from. This may
        be called with y=0 whence x will be set to 0. Thus we need a
        special fix. */
-    x = (int)((int32_t)GRADF * (2 * y - 1) / from + 1);
+    int x = (int)((int32_t)GRADF * (2 * y - 1) / from + 1);
     if (x <= 0) {
         x = 1;
     }
 
     /* Find last visible location along this line.
        Maximum x such that (2x+1)/x > to/GRADF <=> x < GRADF(2x+1)/to */
-    max_x = (int)(((int32_t)GRADF * (2 * y + 1) - 1) / to);
+    int max_x = (int)(((int32_t)GRADF * (2 * y + 1) - 1) / to);
     if (max_x > MAX_SIGHT) {
         max_x = MAX_SIGHT;
     }
@@ -512,6 +503,8 @@ static bool look_ray(int y, int from, int to) {
     } else {
         gl_noquery = false;
     }
+
+    bool transparent;
     if (look_see(x, y, &transparent)) {
         return true;
     }
@@ -560,23 +553,20 @@ static bool look_ray(int y, int from, int to) {
 }
 
 static bool look_see(int x, int y, bool *transparent) {
-    char *dstring, *string, query;
-    cave_type *c_ptr;
-    int j;
-    bigvtype out_val, tmp_str;
-
+    bigvtype tmp_str;
     if (x < 0 || y < 0 || y > x) {
         (void)sprintf(tmp_str, "Illegal call to look_see(%d, %d)", x, y);
         msg_print(tmp_str);
     }
 
+    char *dstring;
     if (x == 0 && y == 0) {
         dstring = "You are on";
     } else {
         dstring = "You see";
     }
 
-    j = char_col + gl_fxx * x + gl_fxy * y;
+    int j = char_col + gl_fxx * x + gl_fxy * y;
     y = char_row + gl_fyx * x + gl_fyy * y;
     x = j;
     if (!panel_contains(y, x)) {
@@ -584,14 +574,18 @@ static bool look_see(int x, int y, bool *transparent) {
         return false;
     }
 
-    c_ptr = &cave[y][x];
+    cave_type *c_ptr = &cave[y][x];
     *transparent = c_ptr->fval <= MAX_OPEN_SPACE;
 
     if (gl_noquery) {
         return false; /* Don't look at a direct line of sight. A hack. */
     }
 
+    char query;
+
+    bigvtype out_val;
     out_val[0] = 0;
+
     if (gl_rock == 0 && c_ptr->cptr > 1 && m_list[c_ptr->cptr].ml) {
         j = m_list[c_ptr->cptr].mptr;
         (void)sprintf(out_val, "%s %s %s. [(r)ecall]", dstring, is_a_vowel(c_list[j].name[0]) ? "an" : "a", c_list[j].name);
@@ -612,6 +606,7 @@ static bool look_see(int x, int y, bool *transparent) {
                 goto granite;
             }
             if (gl_rock == 0 && t_list[c_ptr->tptr].tval != TV_INVIS_TRAP) {
+                bigvtype tmp_str;
                 objdes(tmp_str, &t_list[c_ptr->tptr], true);
                 (void)sprintf(out_val, "%s %s ---pause---", dstring, tmp_str);
                 dstring = "It is in";
@@ -622,6 +617,8 @@ static bool look_see(int x, int y, bool *transparent) {
         }
 
         if ((gl_rock || out_val[0]) && c_ptr->fval >= MIN_CLOSED_SPACE) {
+            char *string;
+
             switch (c_ptr->fval) {
             case BOUNDARY_WALL:
             case GRANITE_WALL:
@@ -664,9 +661,8 @@ static bool look_see(int x, int y, bool *transparent) {
 }
 
 static void inven_throw(int item_val, inven_type *t_ptr) {
-    inven_type *i_ptr;
+    inven_type *i_ptr = &inventory[item_val];
 
-    i_ptr = &inventory[item_val];
     *t_ptr = *i_ptr;
     if (i_ptr->number > 1) {
         t_ptr->number = 1;
@@ -682,7 +678,6 @@ static void inven_throw(int item_val, inven_type *t_ptr) {
    thrown missile. */
 static void facts(inven_type *i_ptr, int *tbth, int *tpth, int *tdam, int *tdis) {
     int tmp_weight;
-
     if (i_ptr->weight < 1) {
         tmp_weight = 1;
     } else {
@@ -769,20 +764,16 @@ static void facts(inven_type *i_ptr, int *tbth, int *tpth, int *tdam, int *tdis)
 }
 
 static void drop_throw(int y, int x, inven_type *t_ptr) {
-    int i, j, k;
-    int cur_pos;
-    bigvtype out_val, tmp_str;
-    cave_type *c_ptr;
+    int i = y;
+    int j = x;
+    int k = 0;
 
     bool flag = false;
-    i = y;
-    j = x;
-    k = 0;
-
     if (randint(10) > 1) {
         do {
             if (in_bounds(i, j)) {
-                c_ptr = &cave[i][j];
+                cave_type *c_ptr = &cave[i][j];
+
                 if (c_ptr->fval <= MAX_OPEN_SPACE && c_ptr->tptr == 0) {
                     flag = true;
                 }
@@ -796,11 +787,12 @@ static void drop_throw(int y, int x, inven_type *t_ptr) {
     }
 
     if (flag) {
-        cur_pos = popt();
+        int cur_pos = popt();
         cave[i][j].tptr = cur_pos;
         t_list[cur_pos] = *t_ptr;
         lite_spot(i, j);
     } else {
+        bigvtype out_val, tmp_str;
         objdes(tmp_str, t_ptr, false);
         (void)sprintf(out_val, "The %s disappears.", tmp_str);
         msg_print(out_val);
@@ -812,19 +804,13 @@ static void drop_throw(int y, int x, inven_type *t_ptr) {
 /* Note: Extra damage and chance of hitting when missiles are used*/
 /*   with correct weapon.  I.E.  wield bow and throw arrow. */
 void throw_object() {
-    int item_val, tbth, tpth, tdam, tdis;
-    int y, x, oldy, oldx, cur_dis, dir;
-    bigvtype out_val, tmp_str;
-    inven_type throw_obj;
-    cave_type *c_ptr;
-    monster_type *m_ptr;
-    int i;
-    char tchar;
+    int item_val;
 
     if (inven_ctr == 0) {
         msg_print("But you are not carrying anything.");
         free_turn_flag = true;
     } else if (get_item(&item_val, "Fire/Throw which one?", 0, inven_ctr - 1, CNIL, CNIL)) {
+        int dir;
         if (get_dir(CNIL, &dir)) {
             desc_remain(item_val);
             if (py.flags.confused > 0) {
@@ -833,16 +819,21 @@ void throw_object() {
                     dir = randint(9);
                 } while (dir == 5);
             }
+
+            inven_type throw_obj;
             inven_throw(item_val, &throw_obj);
+
+            int tbth, tpth, tdam, tdis;
             facts(&throw_obj, &tbth, &tpth, &tdam, &tdis);
-            tchar = throw_obj.tchar;
+
+            char tchar = throw_obj.tchar;
             bool flag = false;
             bool visible;
-            y = char_row;
-            x = char_col;
-            oldy = char_row;
-            oldx = char_col;
-            cur_dis = 0;
+            int y = char_row;
+            int x = char_col;
+            int oldy = char_row;
+            int oldx = char_col;
+            int cur_dis = 0;
 
             do {
                 (void)mmove(dir, &y, &x);
@@ -852,56 +843,49 @@ void throw_object() {
                     flag = true;
                 }
 
-                c_ptr = &cave[y][x];
+                cave_type *c_ptr = &cave[y][x];
                 if ((c_ptr->fval <= MAX_OPEN_SPACE) && (!flag)) {
                     if (c_ptr->cptr > 1) {
                         flag = true;
-                        m_ptr = &m_list[c_ptr->cptr];
+                        monster_type *m_ptr = &m_list[c_ptr->cptr];
                         tbth = tbth - cur_dis;
 
                         /* if monster not lit, make it much more difficult to
                            hit, subtract off most bonuses, and reduce bthb
                            depending on distance */
                         if (!m_ptr->ml) {
-                            tbth = (tbth / (cur_dis + 2)) -
-                                   (py.misc.lev *
-                                    class_level_adj[py.misc.pclass][CLA_BTHB] /
-                                    2) -
-                                   (tpth * (BTH_PLUS_ADJ - 1));
+                            tbth = (tbth / (cur_dis + 2)) - (py.misc.lev * class_level_adj[py.misc.pclass][CLA_BTHB] / 2) - (tpth * (BTH_PLUS_ADJ - 1));
                         }
 
-                        if (test_hit(tbth, (int)py.misc.lev, tpth,
-                                     (int)c_list[m_ptr->mptr].ac, CLA_BTHB)) {
-                            i = m_ptr->mptr;
+                        if (test_hit(tbth, (int)py.misc.lev, tpth, (int)c_list[m_ptr->mptr].ac, CLA_BTHB)) {
+                            int i = m_ptr->mptr;
+
+                            bigvtype tmp_str;
                             objdes(tmp_str, &throw_obj, false);
+
+                            bigvtype out_val;
 
                             /* Does the player know what he's fighting? */
                             if (!m_ptr->ml) {
-                                (void)sprintf(
-                                    out_val,
-                                    "You hear a cry as the %s finds a mark.",
-                                    tmp_str);
+                                (void)sprintf(out_val, "You hear a cry as the %s finds a mark.", tmp_str);
                                 visible = false;
                             } else {
-                                (void)sprintf(out_val, "The %s hits the %s.",
-                                              tmp_str, c_list[i].name);
+                                (void)sprintf(out_val, "The %s hits the %s.", tmp_str, c_list[i].name);
                                 visible = true;
                             }
                             msg_print(out_val);
                             tdam = tot_dam(&throw_obj, tdam, i);
-                            tdam = critical_blow((int)throw_obj.weight, tpth,
-                                                 tdam, CLA_BTHB);
+                            tdam = critical_blow((int)throw_obj.weight, tpth, tdam, CLA_BTHB);
                             if (tdam < 0) {
                                 tdam = 0;
                             }
+
                             i = mon_take_hit((int)c_ptr->cptr, tdam);
                             if (i >= 0) {
                                 if (!visible) {
                                     msg_print("You have killed something!");
                                 } else {
-                                    (void)sprintf(out_val,
-                                                  "You have killed the %s.",
-                                                  c_list[i].name);
+                                    (void)sprintf(out_val, "You have killed the %s.", c_list[i].name);
                                     msg_print(out_val);
                                 }
                                 prt_experience();
@@ -912,8 +896,7 @@ void throw_object() {
                     } else {
                         /* do not test c_ptr->fm here */
 
-                        if (panel_contains(y, x) && (py.flags.blind < 1) &&
-                            (c_ptr->tl || c_ptr->pl)) {
+                        if (panel_contains(y, x) && (py.flags.blind < 1) && (c_ptr->tl || c_ptr->pl)) {
                             print(tchar, y, x);
                             put_qio(); /* show object moving */
                         }
@@ -932,40 +915,33 @@ void throw_object() {
 /* Make a bash attack on someone.        -CJS-
    Used to be part of bash above. */
 static void py_bash(int y, int x) {
-    int monster, k, avg_max_hp, base_tohit;
-    creature_type *c_ptr;
-    monster_type *m_ptr;
-    vtype m_name, out_val;
 
-    monster = cave[y][x].cptr;
-    m_ptr = &m_list[monster];
-    c_ptr = &c_list[m_ptr->mptr];
+    int monster = cave[y][x].cptr;
+    monster_type *m_ptr = &m_list[monster];
+    creature_type *c_ptr = &c_list[m_ptr->mptr];
     m_ptr->csleep = 0;
 
     /* Does the player know what he's fighting? */
+    vtype m_name;
     if (!m_ptr->ml) {
         (void)strcpy(m_name, "it");
     } else {
         (void)sprintf(m_name, "the %s", c_ptr->name);
     }
 
-    base_tohit = py.stats.use_stat[A_STR] + inventory[INVEN_ARM].weight / 2 +
-                 py.misc.wt / 10;
+    int base_tohit = py.stats.use_stat[A_STR] + inventory[INVEN_ARM].weight / 2 + py.misc.wt / 10;
 
     if (!m_ptr->ml) {
-        base_tohit =
-            (base_tohit / 2) - (py.stats.use_stat[A_DEX] * (BTH_PLUS_ADJ - 1)) -
-            (py.misc.lev * class_level_adj[py.misc.pclass][CLA_BTH] / 2);
+        base_tohit = (base_tohit / 2) - (py.stats.use_stat[A_DEX] * (BTH_PLUS_ADJ - 1)) - (py.misc.lev * class_level_adj[py.misc.pclass][CLA_BTH] / 2);
     }
 
-    if (test_hit(base_tohit, (int)py.misc.lev, (int)py.stats.use_stat[A_DEX],
-                 (int)c_ptr->ac, CLA_BTH)) {
+    if (test_hit(base_tohit, (int)py.misc.lev, (int)py.stats.use_stat[A_DEX], (int)c_ptr->ac, CLA_BTH)) {
+        vtype out_val;
+
         (void)sprintf(out_val, "You hit %s.", m_name);
         msg_print(out_val);
-        k = pdamroll(inventory[INVEN_ARM].damage);
-        k = critical_blow(
-            (int)(inventory[INVEN_ARM].weight / 4 + py.stats.use_stat[A_STR]),
-            0, k, CLA_BTH);
+        int k = pdamroll(inventory[INVEN_ARM].damage);
+        k = critical_blow((int)(inventory[INVEN_ARM].weight / 4 + py.stats.use_stat[A_STR]), 0, k, CLA_BTH);
         k += py.misc.wt / 60 + 3;
         if (k < 0) {
             k = 0;
@@ -980,15 +956,13 @@ static void py_bash(int y, int x) {
             m_name[0] = toupper((int)m_name[0]); /* Capitalize */
 
             /* Can not stun Balrog */
-            avg_max_hp = (c_ptr->cdefense & CD_MAX_HP
-                              ? c_ptr->hd[0] * c_ptr->hd[1]
-                              : (c_ptr->hd[0] * (c_ptr->hd[1] + 1)) >> 1);
-            if ((100 + randint(400) + randint(400)) >
-                (m_ptr->hp + avg_max_hp)) {
+            int avg_max_hp = (c_ptr->cdefense & CD_MAX_HP ? c_ptr->hd[0] * c_ptr->hd[1] : (c_ptr->hd[0] * (c_ptr->hd[1] + 1)) >> 1);
+            if ((100 + randint(400) + randint(400)) > (m_ptr->hp + avg_max_hp)) {
                 m_ptr->stunned += randint(3) + 1;
                 if (m_ptr->stunned > 24) {
                     m_ptr->stunned = 24;
                 }
+
                 (void)sprintf(out_val, "%s appears stunned!", m_name);
             } else {
                 (void)sprintf(out_val, "%s ignores your bash!", m_name);
@@ -996,6 +970,7 @@ static void py_bash(int y, int x) {
             msg_print(out_val);
         }
     } else {
+        vtype out_val;
         (void)sprintf(out_val, "You miss %s.", m_name);
         msg_print(out_val);
     }
@@ -1029,12 +1004,10 @@ static void py_bash(int y, int x) {
    A creature with no such ability will attempt to bash a
    non-secret door. */
 void bash() {
-    int y, x, dir, tmp;
-    cave_type *c_ptr;
-    inven_type *t_ptr;
+    int y = char_row;
+    int x = char_col;
 
-    y = char_row;
-    x = char_col;
+    int dir;
     if (get_dir(CNIL, &dir)) {
         if (py.flags.confused > 0) {
             msg_print("You are confused.");
@@ -1043,7 +1016,8 @@ void bash() {
             } while (dir == 5);
         }
         (void)mmove(dir, &y, &x);
-        c_ptr = &cave[y][x];
+
+        cave_type *c_ptr = &cave[y][x];
         if (c_ptr->cptr > 1) {
             if (py.flags.afraid > 0) {
                 msg_print("You are afraid!");
@@ -1051,10 +1025,11 @@ void bash() {
                 py_bash(y, x);
             }
         } else if (c_ptr->tptr != 0) {
-            t_ptr = &t_list[c_ptr->tptr];
+            inven_type *t_ptr = &t_list[c_ptr->tptr];
+
             if (t_ptr->tval == TV_CLOSED_DOOR) {
                 count_msg_print("You smash into the door!");
-                tmp = py.stats.use_stat[A_STR] + py.misc.wt / 2;
+                int tmp = py.stats.use_stat[A_STR] + py.misc.wt / 2;
 
                 /* Use (roughly) similar method as for monsters. */
                 if (randint(tmp * (20 + abs(t_ptr->p1))) <

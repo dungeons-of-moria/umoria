@@ -140,13 +140,11 @@ void shell_out() {
  * inkey() never returns ^R.
  */
 char inkey() {
-    int i;
-
     put_qio();         /* Dump IO buffer */
     command_count = 0; /* Just to be safe -CJS- */
 
     while (true) {
-        i = getch();
+        int i = getch();
 
         /* some machines may not sign extend. */
         if (i == EOF) {
@@ -221,7 +219,6 @@ void clear_from(int row) {
 /* Outputs a char to a given interpolated y, x position  -RAK- */
 /* sign bit of a character used to indicate standout mode. -CJS */
 void print(char ch, int row, int col) {
-    vtype tmp_str;
 
     /* Real co-ords convert to screen positions */
     row -= panel_row_prt;
@@ -233,6 +230,7 @@ void print(char ch, int row, int col) {
         /* clear msg_flag to avoid problems with unflushed messages */
         msg_flag = false;
 
+        vtype tmp_str;
         (void)sprintf(tmp_str, "error in print, row = %d col = %d\n", row, col);
         prt(tmp_str, 0, 0);
         bell();
@@ -244,8 +242,6 @@ void print(char ch, int row, int col) {
 
 /* Moves the cursor to a given interpolated y, x position  -RAK- */
 void move_cursor_relative(int row, int col) {
-    vtype tmp_str;
-
     /* Real co-ords convert to screen positions */
     row -= panel_row_prt;
     col -= panel_col_prt;
@@ -255,6 +251,7 @@ void move_cursor_relative(int row, int col) {
         /* clear msg_flag to avoid problems with unflushed messages */
         msg_flag = false;
 
+        vtype tmp_str;
         (void)sprintf(tmp_str, "error in move_cursor_relative, row = %d col = %d\n", row, col);
         prt(tmp_str, 0, 0);
         bell();
@@ -266,9 +263,7 @@ void move_cursor_relative(int row, int col) {
 
 /* Print a message so as not to interrupt a counted command. -CJS- */
 void count_msg_print(char *p) {
-    int i;
-
-    i = command_count;
+    int i = command_count;
     msg_print(p);
     command_count = i;
 }
@@ -294,7 +289,6 @@ void move_cursor(int row, int col) {
 void msg_print(char *str_buff) {
     int old_len, new_len;
     bool combine_messages = false;
-    char in_char;
 
     if (msg_flag) {
         old_len = strlen(old_msg[last_msg]) + 1;
@@ -320,6 +314,7 @@ void msg_print(char *str_buff) {
             /* let sigint handler know that we are waiting for a space */
             wait_for_more = true;
 
+            char in_char;
             do {
                 in_char = inkey();
             } while ((in_char != ' ') && (in_char != ESCAPE) && (in_char != '\n') && (in_char != '\r'));
@@ -365,18 +360,18 @@ void msg_print(char *str_buff) {
 
 /* Used to verify a choice - user gets the chance to abort choice.  -CJS- */
 bool get_check(char *prompt) {
-    int res;
     int y, x;
 
     prt(prompt, 0, 0);
-    getyx(stdscr, y, x);
 
+    getyx(stdscr, y, x);
     if (x > 73) {
         (void)move(0, 73);
     }
 
     (void)addstr(" [y/n]");
 
+    int res;
     do {
         res = inkey();
     } while (res == ' ');
@@ -393,14 +388,13 @@ bool get_check(char *prompt) {
 /* Prompts (optional) and returns ord value of input char */
 /* Function returns false if <ESCAPE> is input */
 int get_com(char *prompt, char *command) {
-    bool res;
-
     if (prompt) {
         prt(prompt, 0, 0);
     }
 
     *command = inkey();
 
+    bool res;
     if (*command == ESCAPE) {
         res = false;
     } else {
@@ -415,30 +409,28 @@ int get_com(char *prompt, char *command) {
 /* Gets a string terminated by <RETURN> */
 /* Function returns false if <ESCAPE> is input */
 bool get_string(char *in_str, int row, int column, int slen) {
-    int start_col, end_col, i;
-    char *p;
-
     bool aborted = false;
     bool flag = false;
+
     (void)move(row, column);
 
-    for (i = slen; i > 0; i--) {
+    for (int i = slen; i > 0; i--) {
         (void)addch(' ');
     }
 
     (void)move(row, column);
-    start_col = column;
-    end_col = column + slen - 1;
+    int start_col = column;
+    int end_col = column + slen - 1;
 
     if (end_col > 79) {
         slen = 80 - column;
         end_col = 79;
     }
 
-    p = in_str;
+    char *p = in_str;
 
     do {
-        i = inkey();
+        int i = inkey();
 
         switch (i) {
         case ESCAPE:
@@ -491,11 +483,9 @@ void pause_line(int prt_line) {
 /* NOTE: Delay is for players trying to roll up "perfect" */
 /*  characters.  Make them wait a bit. */
 void pause_exit(int prt_line, int delay) {
-    char dummy;
-
     prt("[Press any key to continue, or Q to exit.]", prt_line, 10);
 
-    dummy = inkey();
+    char dummy = inkey();
     if (dummy == 'Q') {
         erase_line(prt_line, 0);
 
@@ -544,8 +534,6 @@ void bell() {
 #define RATIO 3
 
 void screen_map() {
-    int i, j;
-
     static uint8_t screen_border[2][6] = {
         {'+', '+', '+', '+', '-', '|'}, /* normal chars */
         {201, 187, 200, 188, 205, 186}, /* graphics chars */
@@ -553,10 +541,10 @@ void screen_map() {
 
     uint8_t map[MAX_WIDTH / RATIO + 1];
     int priority[256];
-    int row, orow, col, myrow, mycol = 0;
+
     char prntscrnbuf[80];
 
-    for (i = 0; i < 256; i++) {
+    for (int i = 0; i < 256; i++) {
         priority[i] = 0;
     }
 
@@ -572,16 +560,19 @@ void screen_map() {
     clear_screen();
     use_value2 mvaddch(0, 0, CH(TL));
 
-    for (i = 0; i < MAX_WIDTH / RATIO; i++) {
+    for (int i = 0; i < MAX_WIDTH / RATIO; i++) {
         (void)addch(CH(HE));
     }
 
     (void)addch(CH(TR));
-    orow = -1;
     map[MAX_WIDTH / RATIO] = '\0';
 
-    for (i = 0; i < MAX_HEIGHT; i++) {
-        row = i / RATIO;
+    int myrow = 0;
+    int mycol = 0;
+    int orow = -1;
+
+    for (int i = 0; i < MAX_HEIGHT; i++) {
+        int row = i / RATIO;
         if (row != orow) {
             if (orow >= 0) {
                 /* can not use mvprintw() on ibmpc, because PC-Curses is horribly
@@ -591,15 +582,15 @@ void screen_map() {
                 use_value2 mvaddstr(orow + 1, 0, prntscrnbuf);
             }
 
-            for (j = 0; j < MAX_WIDTH / RATIO; j++) {
+            for (int j = 0; j < MAX_WIDTH / RATIO; j++) {
                 map[j] = ' ';
             }
 
             orow = row;
         }
 
-        for (j = 0; j < MAX_WIDTH; j++) {
-            col = j / RATIO;
+        for (int j = 0; j < MAX_WIDTH; j++) {
+            int col = j / RATIO;
             uint8_t tmp = loc_symbol(i, j);
 
             if (priority[map[col]] < priority[tmp]) {
@@ -620,7 +611,7 @@ void screen_map() {
 
     use_value2 mvaddch(orow + 2, 0, CH(BL));
 
-    for (i = 0; i < MAX_WIDTH / RATIO; i++) {
+    for (int i = 0; i < MAX_WIDTH / RATIO; i++) {
         (void)addch(CH(HE));
     }
 

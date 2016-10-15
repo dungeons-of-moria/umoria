@@ -29,18 +29,16 @@
 
 /* Player hit a trap.  (Chuckle)      -RAK- */
 static void hit_trap(int y, int x) {
-    int i, ty, tx, num, dam;
-    cave_type *c_ptr;
-    struct misc *p_ptr;
-    inven_type *t_ptr;
-    bigvtype tmp;
-
     end_find();
     change_trap(y, x);
-    c_ptr = &cave[y][x];
-    p_ptr = &py.misc;
-    t_ptr = &t_list[c_ptr->tptr];
-    dam = pdamroll(t_ptr->damage);
+
+    cave_type *c_ptr = &cave[y][x];
+    struct misc *p_ptr = &py.misc;
+    inven_type *t_ptr = &t_list[c_ptr->tptr];
+
+    int dam = pdamroll(t_ptr->damage);
+
+    bigvtype tmp;
     switch (t_ptr->subval) {
     case 1: /* Open pit*/
         msg_print("You fell into a pit!");
@@ -133,10 +131,11 @@ static void hit_trap(int y, int x) {
         break;
     case 11:                       /* Summon mon*/
         (void)delete_object(y, x); /* Rune disappears. */
-        num = 2 + randint(3);
-        for (i = 0; i < num; i++) {
-            ty = y;
-            tx = x;
+
+        int num = 2 + randint(3);
+        for (int i = 0; i < num; i++) {
+            int ty = y;
+            int tx = x;
             (void)summon_monster(&ty, &tx, false);
         }
         break;
@@ -224,21 +223,19 @@ static void hit_trap(int y, int x) {
    returns 1 if choose a spell in book to cast
    returns 0 if don't choose a spell, i.e. exit with an escape */
 int cast_spell(char *prompt, int item_val, int *sn, int *sc) {
-    uint32_t j;
-    int i, k;
-    int spell[31], result, first_spell;
-    spell_type *s_ptr;
+    int result = -1;
+    int i = 0;
 
-    result = -1;
-    i = 0;
-    j = inventory[item_val].flags;
-    first_spell = bit_pos(&j);
-
+    uint32_t j = inventory[item_val].flags;
+    int first_spell = bit_pos(&j);
     /* set j again, since bit_pos modified it */
     j = inventory[item_val].flags & spell_learned;
-    s_ptr = magic_spell[py.misc.pclass - 1];
+
+    spell_type *s_ptr = magic_spell[py.misc.pclass - 1];
+
+    int spell[31];
     while (j) {
-        k = bit_pos(&j);
+        int k = bit_pos(&j);
         if (s_ptr[k].slevel <= py.misc.lev) {
             spell[i] = k;
             i++;
@@ -264,14 +261,12 @@ int cast_spell(char *prompt, int item_val, int *sn, int *sc) {
 /* objects are picked up.  Some objects, such as open doors, just*/
 /* sit there. */
 static void carry(int y, int x, bool pickup) {
-    int locn, i;
     bigvtype out_val, tmp_str;
-    cave_type *c_ptr;
-    inven_type *i_ptr;
 
-    c_ptr = &cave[y][x];
-    i_ptr = &t_list[c_ptr->tptr];
-    i = t_list[c_ptr->tptr].tval;
+    cave_type *c_ptr = &cave[y][x];
+    inven_type *i_ptr = &t_list[c_ptr->tptr];
+
+    int i = t_list[c_ptr->tptr].tval;
     if (i <= TV_MAX_PICK_UP) {
         end_find();
 
@@ -309,7 +304,8 @@ static void carry(int y, int x, bool pickup) {
 
                 /* Attempt to pick up an object. */
                 if (pickup) {
-                    locn = inven_carry(i_ptr);
+                    int locn = inven_carry(i_ptr);
+
                     objdes(tmp_str, &inventory[locn], true);
                     (void)sprintf(out_val, "You have %s (%c)", tmp_str, locn + 'a');
                     msg_print(out_val);
@@ -330,9 +326,8 @@ static void carry(int y, int x, bool pickup) {
 
 /* Deletes a monster entry from the level    -RAK- */
 void delete_monster(int j) {
-    monster_type *m_ptr;
+    monster_type *m_ptr = &m_list[j];
 
-    m_ptr = &m_list[j];
     cave[m_ptr->fy][m_ptr->fx].cptr = 0;
     if (m_ptr->ml) {
         lite_spot((int)m_ptr->fy, (int)m_ptr->fx);
@@ -358,9 +353,7 @@ void delete_monster(int j) {
    the monster record and reduce mfptr, this is called in breathe, and
    a couple of places in creatures.c */
 void fix1_delete_monster(int j) {
-    monster_type *m_ptr;
-
-    m_ptr = &m_list[j];
+    monster_type *m_ptr = &m_list[j];
 
     /* force the hp negative to ensure that the monster is dead, for example,
        if the monster was just eaten by another, it will still have positive
@@ -378,10 +371,9 @@ void fix1_delete_monster(int j) {
 /* fix2_delete_monster does everything in delete_monster that wasn't done
    by fix1_monster_delete above, this is only called in creatures() */
 void fix2_delete_monster(int j) {
-    monster_type *m_ptr;
 
     if (j != mfptr - 1) {
-        m_ptr = &m_list[mfptr - 1];
+        monster_type *m_ptr = &m_list[mfptr - 1];
         cave[m_ptr->fy][m_ptr->fx].cptr = j;
         m_list[j] = m_list[mfptr - 1];
     }
@@ -391,23 +383,25 @@ void fix2_delete_monster(int j) {
 
 /* Creates objects nearby the coordinates given    -RAK- */
 static int summon_object(int y, int x, int num, int typ) {
-    int i, j, k;
-    cave_type *c_ptr;
-    int real_typ, res;
-
+    int real_typ;
     if ((typ == 1) || (typ == 5)) {
         real_typ = 1; /* typ == 1 -> objects */
     } else {
         real_typ = 256; /* typ == 2 -> gold */
     }
-    res = 0;
+
+    int res = 0;
+
     do {
-        i = 0;
+        int i = 0;
+
         do {
-            j = y - 3 + randint(5);
-            k = x - 3 + randint(5);
+            int j = y - 3 + randint(5);
+            int k = x - 3 + randint(5);
+
             if (in_bounds(j, k) && los(y, x, j, k)) {
-                c_ptr = &cave[j][k];
+                cave_type *c_ptr = &cave[j][k];
+
                 if (c_ptr->fval <= MAX_OPEN_SPACE && (c_ptr->tptr == 0)) {
                     /* typ == 3 -> 50% objects, 50% gold */
                     if ((typ == 3) || (typ == 7)) {
@@ -431,17 +425,17 @@ static int summon_object(int y, int x, int num, int typ) {
             }
             i++;
         } while (i <= 20);
+
         num--;
     } while (num != 0);
+
     return res;
 }
 
 /* Deletes object from given location      -RAK- */
 int delete_object(int y, int x) {
-    bool delete;
-    cave_type *c_ptr;
+    cave_type *c_ptr = &cave[y][x];
 
-    c_ptr = &cave[y][x];
     if (c_ptr->fval == BLOCKED_FLOOR) {
         c_ptr->fval = CORR_FLOOR;
     }
@@ -449,11 +443,15 @@ int delete_object(int y, int x) {
     c_ptr->tptr = 0;
     c_ptr->fm = false;
     lite_spot(y, x);
+
+    bool delete;
+
     if (test_light(y, x)) {
         delete = true;
     } else {
         delete = false;
     }
+
     return delete;
 }
 
@@ -463,9 +461,8 @@ int delete_object(int y, int x) {
 /* Returns a mask of bits from the given flags which indicates what the
    monster is seen to have dropped.  This may be added to monster memory. */
 uint32_t monster_death(int y, int x, uint32_t flags) {
-    int i, number;
-    uint32_t dump, res;
 
+    int i;
     if (flags & CM_CARRY_OBJ) {
         i = 1;
     } else {
@@ -478,7 +475,7 @@ uint32_t monster_death(int y, int x, uint32_t flags) {
         i += 4;
     }
 
-    number = 0;
+    int number = 0;
     if ((flags & CM_60_RANDOM) && (randint(100) < 60)) {
         number++;
     }
@@ -494,6 +491,8 @@ uint32_t monster_death(int y, int x, uint32_t flags) {
     if (flags & CM_4D2_OBJ) {
         number += damroll(4, 2);
     }
+
+    uint32_t dump;
     if (number > 0) {
         dump = summon_object(y, x, number, i);
     } else {
@@ -510,6 +509,7 @@ uint32_t monster_death(int y, int x, uint32_t flags) {
         }
     }
 
+    uint32_t res;
     if (dump) {
         res = 0;
         if (dump & 255) {
@@ -535,22 +535,17 @@ uint32_t monster_death(int y, int x, uint32_t flags) {
 /* Decreases monsters hit points and deletes monster if needed. */
 /* (Picking on my babies.)             -RAK- */
 int mon_take_hit(int monptr, int dam) {
-    uint32_t i;
-    int32_t new_exp, new_exp_frac;
-    monster_type *m_ptr;
-    struct misc *p_ptr;
-    creature_type *c_ptr;
-    int m_take_hit;
-    uint32_t tmp;
-
-    m_ptr = &m_list[monptr];
+    monster_type *m_ptr = &m_list[monptr];
     m_ptr->hp -= dam;
     m_ptr->csleep = 0;
+
+    int m_take_hit;
+
     if (m_ptr->hp < 0) {
-        i = monster_death((int)m_ptr->fy, (int)m_ptr->fx, c_list[m_ptr->mptr].cmove);
+        uint32_t i = monster_death((int)m_ptr->fy, (int)m_ptr->fx, c_list[m_ptr->mptr].cmove);
 
         if ((py.flags.blind < 1 && m_ptr->ml) || (c_list[m_ptr->mptr].cmove & CM_WIN)) {
-            tmp = (c_recall[m_ptr->mptr].r_cmove & CM_TREASURE) >> CM_TR_SHIFT;
+            uint32_t tmp = (c_recall[m_ptr->mptr].r_cmove & CM_TREASURE) >> CM_TR_SHIFT;
 
             if (tmp > ((i & CM_TREASURE) >> CM_TR_SHIFT)) {
                 i = (i & ~CM_TREASURE) | (tmp << CM_TR_SHIFT);
@@ -562,11 +557,11 @@ int mon_take_hit(int monptr, int dam) {
             }
         }
 
-        c_ptr = &c_list[m_ptr->mptr];
-        p_ptr = &py.misc;
+        creature_type *c_ptr = &c_list[m_ptr->mptr];
+        struct misc *p_ptr = &py.misc;
 
-        new_exp = ((int32_t)c_ptr->mexp * c_ptr->level) / p_ptr->lev;
-        new_exp_frac = ((((int32_t)c_ptr->mexp * c_ptr->level) % p_ptr->lev) *
+        int32_t new_exp = ((int32_t)c_ptr->mexp * c_ptr->level) / p_ptr->lev;
+        int32_t new_exp_frac = ((((int32_t)c_ptr->mexp * c_ptr->level) % p_ptr->lev) *
                         0x10000L / p_ptr->lev) +
                        p_ptr->exp_frac;
 
@@ -600,24 +595,20 @@ int mon_take_hit(int monptr, int dam) {
 
 /* Player attacks a (poor, defenseless) creature  -RAK- */
 void py_attack(int y, int x) {
-    int k, blows;
-    int crptr, monptr, tot_tohit, base_tohit;
-    vtype m_name, out_val;
-    inven_type *i_ptr;
-    struct misc *p_ptr;
-
-    crptr = cave[y][x].cptr;
-    monptr = m_list[crptr].mptr;
+    int crptr = cave[y][x].cptr;
+    int monptr = m_list[crptr].mptr;
     m_list[crptr].csleep = 0;
-    i_ptr = &inventory[INVEN_WIELD];
+    inven_type *i_ptr = &inventory[INVEN_WIELD];
 
     /* Does the player know what he's fighting? */
+    vtype m_name;
     if (!m_list[crptr].ml) {
         (void)strcpy(m_name, "it");
     } else {
         (void)sprintf(m_name, "the %s", c_list[monptr].name);
     }
 
+    int blows, tot_tohit;
     if (i_ptr->tval != TV_NOTHING) {
         /* Proper weapon */
         blows = attack_blows((int)i_ptr->weight, &tot_tohit);
@@ -632,21 +623,23 @@ void py_attack(int y, int x) {
         blows = 1;
     }
 
-    p_ptr = &py.misc;
+    struct misc *p_ptr = &py.misc;
     tot_tohit += p_ptr->ptohit;
 
     /* if creature not lit, make it more difficult to hit */
+    int base_tohit;
     if (m_list[crptr].ml) {
         base_tohit = p_ptr->bth;
     } else {
-        base_tohit = (p_ptr->bth / 2) - (tot_tohit * (BTH_PLUS_ADJ - 1)) -
-                     (p_ptr->lev * class_level_adj[p_ptr->pclass][CLA_BTH] / 2);
+        base_tohit = (p_ptr->bth / 2) - (tot_tohit * (BTH_PLUS_ADJ - 1)) - (p_ptr->lev * class_level_adj[p_ptr->pclass][CLA_BTH] / 2);
     }
+
+    vtype out_val;
+    int k;
 
     /* Loop for number of blows,  trying to hit the critter. */
     do {
-        if (test_hit(base_tohit, (int)p_ptr->lev, tot_tohit,
-                     (int)c_list[monptr].ac, CLA_BTH)) {
+        if (test_hit(base_tohit, (int)p_ptr->lev, tot_tohit, (int)c_list[monptr].ac, CLA_BTH)) {
             (void)sprintf(out_val, "You hit %s.", m_name);
             msg_print(out_val);
             if (i_ptr->tval != TV_NOTHING) {
@@ -667,8 +660,7 @@ void py_attack(int y, int x) {
             if (py.flags.confuse_monster) {
                 py.flags.confuse_monster = false;
                 msg_print("Your hands stop glowing.");
-                if ((c_list[monptr].cdefense & CD_NO_SLEEP) ||
-                    (randint(MAX_MONS_LEVEL) < c_list[monptr].level)) {
+                if ((c_list[monptr].cdefense & CD_NO_SLEEP) || (randint(MAX_MONS_LEVEL) < c_list[monptr].level)) {
                     (void)sprintf(out_val, "%s is unaffected.", m_name);
                 } else {
                     (void)sprintf(out_val, "%s appears confused.", m_name);
@@ -717,11 +709,6 @@ void py_attack(int y, int x) {
 /* Moves player from one space to another.    -RAK- */
 /* Note: This routine has been pre-declared; see that for argument*/
 void move_char(int dir, bool do_pickup) {
-    int old_row, old_col, old_find_flag;
-    int y, x;
-    int i, j;
-    cave_type *c_ptr, *d_ptr;
-
     if ((py.flags.confused > 0) && /* Confused? */
         (randint(4) > 1) &&        /* 75% random movement */
         (dir != 5))                /* Never random if sitting*/
@@ -730,12 +717,12 @@ void move_char(int dir, bool do_pickup) {
         end_find();
     }
 
-    y = char_row;
-    x = char_col;
+    int y = char_row;
+    int x = char_col;
 
     /* Legal move? */
     if (mmove(dir, &y, &x)) {
-        c_ptr = &cave[y][x];
+        cave_type *c_ptr = &cave[y][x];
 
         /* if there is no creature, or an unlit creature in the walls then...
          * disallow attacks against unlit creatures in walls because moving into
@@ -748,8 +735,8 @@ void move_char(int dir, bool do_pickup) {
             /* Open floor spot */
             if (c_ptr->fval <= MAX_OPEN_SPACE) {
                 /* Make final assignments of char co-ords */
-                old_row = char_row;
-                old_col = char_col;
+                int old_row = char_row;
+                int old_col = char_col;
                 char_row = y;
                 char_col = x;
 
@@ -782,9 +769,10 @@ void move_char(int dir, bool do_pickup) {
 
                 /* In doorway of light-room? */
                 else if (c_ptr->lr && (py.flags.blind < 1)) {
-                    for (i = (char_row - 1); i <= (char_row + 1); i++) {
-                        for (j = (char_col - 1); j <= (char_col + 1); j++) {
-                            d_ptr = &cave[i][j];
+                    for (int i = (char_row - 1); i <= (char_row + 1); i++) {
+                        for (int j = (char_col - 1); j <= (char_col + 1); j++) {
+                            cave_type *d_ptr = &cave[i][j];
+
                             if ((d_ptr->fval == LIGHT_FLOOR) && (!d_ptr->pl)) {
                                 light_room(i, j);
                             }
@@ -811,7 +799,7 @@ void move_char(int dir, bool do_pickup) {
                            trap, if so, set it off */
                         c_ptr = &cave[char_row][char_col];
                         if (c_ptr->tptr != 0) {
-                            i = t_list[c_ptr->tptr].tval;
+                            int i = t_list[c_ptr->tptr].tval;
                             if (i == TV_INVIS_TRAP || i == TV_VIS_TRAP ||
                                 i == TV_STORE_DOOR) {
                                 hit_trap(char_row, char_col);
@@ -836,7 +824,7 @@ void move_char(int dir, bool do_pickup) {
         } else {
             /* Attacking a creature! */
 
-            old_find_flag = find_flag;
+            int old_find_flag = find_flag;
             end_find();
 
             /* if player can see monster, and was in find mode, then nothing */
@@ -858,11 +846,8 @@ void move_char(int dir, bool do_pickup) {
 /* Chests have traps too.        -RAK- */
 /* Note: Chest traps are based on the FLAGS value */
 void chest_trap(int y, int x) {
-    int i;
-    int j, k;
-    inven_type *t_ptr;
+    inven_type *t_ptr = &t_list[cave[y][x].tptr];
 
-    t_ptr = &t_list[cave[y][x].tptr];
     if (CH_LOSE_STR & t_ptr->flags) {
         msg_print("A small needle has pricked you!");
         if (!py.flags.sustain_str) {
@@ -888,9 +873,9 @@ void chest_trap(int y, int x) {
         }
     }
     if (CH_SUMMON & t_ptr->flags) {
-        for (i = 0; i < 3; i++) {
-            j = y;
-            k = x;
+        for (int i = 0; i < 3; i++) {
+            int j = y;
+            int k = x;
             (void)summon_monster(&j, &k, false);
         }
     }
@@ -903,42 +888,39 @@ void chest_trap(int y, int x) {
 
 /* Opens a closed door or closed chest.    -RAK- */
 void openobject() {
-    int y, x, i, dir;
-    bool flag;
-    cave_type *c_ptr;
-    inven_type *t_ptr;
-    struct misc *p_ptr;
-    monster_type *m_ptr;
-    vtype m_name, out_val;
+    int y = char_row;
+    int x = char_col;
 
-    y = char_row;
-    x = char_col;
+    int dir;
     if (get_dir(CNIL, &dir)) {
         (void)mmove(dir, &y, &x);
-        c_ptr = &cave[y][x];
+
         bool no_object = false;
-        if (c_ptr->cptr > 1 && c_ptr->tptr != 0 &&
-            (t_list[c_ptr->tptr].tval == TV_CLOSED_DOOR ||
-             t_list[c_ptr->tptr].tval == TV_CHEST)) {
-            m_ptr = &m_list[c_ptr->cptr];
+        cave_type *c_ptr = &cave[y][x];
+
+        if (c_ptr->cptr > 1 && c_ptr->tptr != 0 && (t_list[c_ptr->tptr].tval == TV_CLOSED_DOOR || t_list[c_ptr->tptr].tval == TV_CHEST)) {
+            monster_type *m_ptr = &m_list[c_ptr->cptr];
+
+            vtype m_name;
             if (m_ptr->ml) {
                 (void)sprintf(m_name, "The %s", c_list[m_ptr->mptr].name);
             } else {
                 (void)strcpy(m_name, "Something");
             }
+
+            vtype out_val;
             (void)sprintf(out_val, "%s is in your way!", m_name);
             msg_print(out_val);
         } else if (c_ptr->tptr != 0) {
             /* Closed door */
             if (t_list[c_ptr->tptr].tval == TV_CLOSED_DOOR) {
-                t_ptr = &t_list[c_ptr->tptr];
+                inven_type *t_ptr = &t_list[c_ptr->tptr];
 
                 /* It's locked. */
                 if (t_ptr->p1 > 0) {
-                    p_ptr = &py.misc;
-                    i = p_ptr->disarm + 2 * todis_adj() + stat_adj(A_INT) +
-                        (class_level_adj[p_ptr->pclass][CLA_DISARM] *
-                         p_ptr->lev / 3);
+                    struct misc *p_ptr = &py.misc;
+                    int i = p_ptr->disarm + 2 * todis_adj() + stat_adj(A_INT) + (class_level_adj[p_ptr->pclass][CLA_DISARM] * p_ptr->lev / 3);
+
                     if (py.flags.confused > 0) {
                         msg_print("You are too confused to pick the lock.");
                     } else if ((i - t_ptr->p1) > randint(100)) {
@@ -961,12 +943,13 @@ void openobject() {
             } else if (t_list[c_ptr->tptr].tval == TV_CHEST) {
                 /* Open a closed chest. */
 
-                p_ptr = &py.misc;
-                i = p_ptr->disarm + 2 * todis_adj() + stat_adj(A_INT) +
-                    (class_level_adj[p_ptr->pclass][CLA_DISARM] * p_ptr->lev / 3);
-                t_ptr = &t_list[c_ptr->tptr];
+                struct misc *p_ptr = &py.misc;
+                int i = p_ptr->disarm + 2 * todis_adj() + stat_adj(A_INT) + (class_level_adj[p_ptr->pclass][CLA_DISARM] * p_ptr->lev / 3);
 
-                flag = false;
+                inven_type *t_ptr = &t_list[c_ptr->tptr];
+
+                bool flag = false;
+
                 if (CH_LOCKED & t_ptr->flags) {
                     if (py.flags.confused > 0) {
                         msg_print("You are too confused to pick the lock.");
@@ -1022,17 +1005,15 @@ void openobject() {
 
 /* Closes an open door.        -RAK- */
 void closeobject() {
-    int y, x, dir;
-    vtype out_val, m_name;
-    cave_type *c_ptr;
-    monster_type *m_ptr;
+    int y = char_row;
+    int x = char_col;
 
-    y = char_row;
-    x = char_col;
-
+    int dir;
     if (get_dir(CNIL, &dir)) {
         (void)mmove(dir, &y, &x);
-        c_ptr = &cave[y][x];
+
+        cave_type *c_ptr = &cave[y][x];
+
         bool no_object = false;
 
         if (c_ptr->tptr != 0) {
@@ -1046,12 +1027,16 @@ void closeobject() {
                         msg_print("The door appears to be broken.");
                     }
                 } else {
-                    m_ptr = &m_list[c_ptr->cptr];
+                    monster_type *m_ptr = &m_list[c_ptr->cptr];
+
+                    vtype m_name;
                     if (m_ptr->ml) {
                         (void)sprintf(m_name, "The %s", c_list[m_ptr->mptr].name);
                     } else {
                         (void)strcpy(m_name, "Something");
                     }
+
+                    vtype out_val;
                     (void)sprintf(out_val, "%s is in your way!", m_name);
                     msg_print(out_val);
                 }
@@ -1072,21 +1057,19 @@ void closeobject() {
 /* Tunneling through real wall: 10, 11, 12    -RAK- */
 /* Used by TUNNEL and WALL_TO_MUD */
 int twall(int y, int x, int t1, int t2) {
-    int i, j;
-    cave_type *c_ptr;
-
     bool found;
     bool res = false;
 
     if (t1 > t2) {
-        c_ptr = &cave[y][x];
+        cave_type *c_ptr = &cave[y][x];
+
         if (c_ptr->lr) {
             /* should become a room space, check to see whether it should be
                LIGHT_FLOOR or DARK_FLOOR */
             found = false;
 
-            for (i = y - 1; i <= y + 1; i++) {
-                for (j = x - 1; j <= x + 1; j++) {
+            for (int i = y - 1; i <= y + 1; i++) {
+                for (int j = x - 1; j <= x + 1; j++) {
                     if (cave[i][j].fval <= MAX_CAVE_ROOM) {
                         c_ptr->fval = cave[i][j].fval;
                         c_ptr->pl = cave[i][j].pl;

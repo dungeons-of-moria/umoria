@@ -29,22 +29,24 @@
 
 /* Use a staff.                 -RAK- */
 void use() {
-    uint32_t i;
-    int j, k, item_val, chance, y, x;
-    struct misc *m_ptr;
-    inven_type *i_ptr;
+    int j, k, y, x;
+    int item_val;
 
     free_turn_flag = true;
+
     if (inven_ctr == 0) {
         msg_print("But you are not carrying anything.");
     } else if (!find_range(TV_STAFF, TV_NEVER, &j, &k)) {
         msg_print("You are not carrying any staffs.");
     } else if (get_item(&item_val, "Use which staff?", j, k, CNIL, CNIL)) {
-        i_ptr = &inventory[item_val];
         free_turn_flag = false;
-        m_ptr = &py.misc;
-        chance = m_ptr->save + stat_adj(A_INT) - (int)i_ptr->level - 5 +
-                 (class_level_adj[m_ptr->pclass][CLA_DEVICE] * m_ptr->lev / 3);
+
+        inven_type *i_ptr = &inventory[item_val];
+
+        struct misc *m_ptr = &py.misc;
+
+        int chance = m_ptr->save + stat_adj(A_INT) - (int)i_ptr->level - 5 + (class_level_adj[m_ptr->pclass][CLA_DEVICE] * m_ptr->lev / 3);
+
         if (py.flags.confused > 0) {
             chance = chance / 2;
         }
@@ -57,11 +59,14 @@ void use() {
         if (randint(chance) < USE_DEVICE) {
             msg_print("You failed to use the staff properly.");
         } else if (i_ptr->p1 > 0) {
-            i = i_ptr->flags;
             bool ident = false;
+
+            uint32_t i = i_ptr->flags;
             (i_ptr->p1)--;
+
             while (i != 0) {
-                j = bit_pos(&i) + 1;
+                int j = bit_pos(&i) + 1;
+
                 /* Staffs. */
                 switch (j) {
                 case 1:
@@ -165,6 +170,7 @@ void use() {
                 }
                 /* End of staff actions. */
             }
+
             if (ident) {
                 if (!known1_p(i_ptr)) {
                     m_ptr = &py.misc;

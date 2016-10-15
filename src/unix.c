@@ -114,14 +114,13 @@ int check_input(int microsec) {
 /* Find a default user name from the system. */
 void user_name(char *buf) {
     extern char *getlogin();
-    struct passwd *pwline;
-    char *p;
 
-    p = getlogin();
+    char *p = getlogin();
+
     if (p && p[0]) {
         (void)strcpy(buf, p);
     } else {
-        pwline = getpwuid((int)getuid());
+        struct passwd *pwline = getpwuid((int)getuid());
         if (pwline) {
             (void)strcpy(buf, pwline->pw_name);
         }
@@ -174,9 +173,9 @@ int tilde(char *file, char *exp) {
 /* open a file just as does fopen, but allow a leading ~ to specify a home
    directory */
 FILE *tfopen(char *file, char *mode) {
-    char buf[1024];
     extern int errno;
 
+    char buf[1024];
     if (tilde(file, buf)) {
         return (fopen(buf, mode));
     }
@@ -187,9 +186,9 @@ FILE *tfopen(char *file, char *mode) {
 /* open a file just as does open, but expand a leading ~ into a home directory
    name */
 int topen(char *file, int flags, int mode) {
-    char buf[1024];
     extern int errno;
 
+    char buf[1024];
     if (tilde(file, buf)) {
         return (open(buf, flags, mode));
     }

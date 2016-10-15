@@ -29,12 +29,7 @@
 
 /* Throw a magic spell          -RAK- */
 void cast() {
-    int i, j, item_val, dir;
-    int choice, chance, result;
-    struct flags *f_ptr;
-    struct misc *p_ptr;
-    inven_type *i_ptr;
-    spell_type *m_ptr;
+    int i, j, item_val;
 
     free_turn_flag = true;
     if (py.flags.blind > 0) {
@@ -48,16 +43,22 @@ void cast() {
     } else if (!find_range(TV_MAGIC_BOOK, TV_NEVER, &i, &j)) {
         msg_print("But you are not carrying any spell-books!");
     } else if (get_item(&item_val, "Use which spell-book?", i, j, CNIL, CNIL)) {
-        result = cast_spell("Cast which spell?", item_val, &choice, &chance);
+        int choice, chance;
+        int result = cast_spell("Cast which spell?", item_val, &choice, &chance);
+
         if (result < 0) {
             msg_print("You don't know any spells in that book.");
         } else if (result > 0) {
-            m_ptr = &magic_spell[py.misc.pclass - 1][choice];
             free_turn_flag = false;
+
+            spell_type *m_ptr = &magic_spell[py.misc.pclass - 1][choice];
 
             if (randint(100) < chance) {
                 msg_print("You failed to get the spell off!");
             } else {
+                int dir;
+                struct flags *f_ptr;
+
                 /* Spells. */
                 switch (choice + 1) {
                 case 1:
@@ -111,8 +112,8 @@ void cast() {
                     teleport((int)(py.misc.lev * 5));
                     break;
                 case 14:
-                    for (i = 22; i < INVEN_ARRAY_SIZE; i++) {
-                        i_ptr = &inventory[i];
+                    for (int i = 22; i < INVEN_ARRAY_SIZE; i++) {
+                        inven_type *i_ptr = &inventory[i];
                         i_ptr->flags = (i_ptr->flags & ~TR_CURSED);
                     }
                     break;
@@ -188,8 +189,9 @@ void cast() {
                     break;
                 }
                 /* End of spells. */
+
                 if (!free_turn_flag) {
-                    p_ptr = &py.misc;
+                    struct misc *p_ptr = &py.misc;
                     if ((spell_worked & (1L << choice)) == 0) {
                         p_ptr->exp += m_ptr->sexp << 2;
                         spell_worked |= (1L << choice);
@@ -197,7 +199,8 @@ void cast() {
                     }
                 }
             }
-            p_ptr = &py.misc;
+
+            struct misc *p_ptr = &py.misc;
             if (!free_turn_flag) {
                 if (m_ptr->smana > p_ptr->cmana) {
                     msg_print("You faint from the effort!");

@@ -37,9 +37,6 @@ static void price_adjust();
 
 /* Initialize, restore, and get the ball rolling.  -RAK- */
 int main(int argc, char *argv[]) {
-    uint32_t seed;
-    char *p;
-
     bool new_game = false;
     bool force_rogue_like = false;
     bool force_keys_to;
@@ -63,7 +60,7 @@ int main(int argc, char *argv[]) {
     /* use curses */
     init_curses();
 
-    seed = 0; /* let wizard specify rng seed */
+    uint32_t seed = 0; /* let wizard specify rng seed */
     /* check for user interface option */
     for (--argc, ++argv; argc > 0 && argv[0][0] == '-'; --argc, ++argv) {
         switch (argv[0][1]) {
@@ -106,9 +103,9 @@ int main(int argc, char *argv[]) {
     /* Some necessary initializations */
     /* all made into constants or initialized in variables.c */
 
-#if (COST_ADJ != 100)
-    price_adjust();
-#endif
+    #if (COST_ADJ != 100)
+        price_adjust();
+    #endif
 
     /* Grab a random seed from the clock */
     init_seeds(seed);
@@ -124,6 +121,7 @@ int main(int argc, char *argv[]) {
        hence, this code is not necessary */
 
     /* Auto-restart of saved file */
+    char *p;
     if (argv[0] != CNIL) {
         (void)strcpy(savefile, argv[0]);
     } else if ((p = getenv("MORIA_SAV")) != CNIL) {
@@ -260,48 +258,46 @@ static void char_inven_init() {
 
 /* Initializes M_LEVEL array for use with PLACE_MONSTER  -RAK- */
 static void init_m_level() {
-    int i, k;
-
-    for (i = 0; i <= MAX_MONS_LEVEL; i++) {
+    for (int i = 0; i <= MAX_MONS_LEVEL; i++) {
         m_level[i] = 0;
     }
 
-    k = MAX_CREATURES - WIN_MON_TOT;
-    for (i = 0; i < k; i++) {
+    int k = MAX_CREATURES - WIN_MON_TOT;
+    for (int i = 0; i < k; i++) {
         m_level[c_list[i].level]++;
     }
 
-    for (i = 1; i <= MAX_MONS_LEVEL; i++) {
+    for (int i = 1; i <= MAX_MONS_LEVEL; i++) {
         m_level[i] += m_level[i - 1];
     }
 }
 
 /* Initializes T_LEVEL array for use with PLACE_OBJECT  -RAK- */
 static void init_t_level() {
-    int i, l;
-    int tmp[MAX_OBJ_LEVEL + 1];
-
-    for (i = 0; i <= MAX_OBJ_LEVEL; i++) {
+    for (int i = 0; i <= MAX_OBJ_LEVEL; i++) {
         t_level[i] = 0;
     }
 
-    for (i = 0; i < MAX_DUNGEON_OBJ; i++) {
+    for (int i = 0; i < MAX_DUNGEON_OBJ; i++) {
         t_level[object_list[i].level]++;
     }
 
-    for (i = 1; i <= MAX_OBJ_LEVEL; i++) {
+    for (int i = 1; i <= MAX_OBJ_LEVEL; i++) {
         t_level[i] += t_level[i - 1];
     }
 
-    /* now produce an array with object indexes sorted by level, by using
-       the info in t_level, this is an O(n) sort! */
-    /* this is not a stable sort, but that does not matter */
-    for (i = 0; i <= MAX_OBJ_LEVEL; i++) {
+    /* now produce an array with object indexes sorted by level,
+     * by using the info in t_level, this is an O(n) sort!
+     * this is not a stable sort, but that does not matter
+     */
+    int tmp[MAX_OBJ_LEVEL + 1];
+
+    for (int i = 0; i <= MAX_OBJ_LEVEL; i++) {
         tmp[i] = 1;
     }
 
-    for (i = 0; i < MAX_DUNGEON_OBJ; i++) {
-        l = object_list[i].level;
+    for (int i = 0; i < MAX_DUNGEON_OBJ; i++) {
+        int l = object_list[i].level;
         sorted_objects[t_level[l] - tmp[l]] = i;
         tmp[l]++;
     }
