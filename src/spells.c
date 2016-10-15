@@ -2384,12 +2384,11 @@ int y, x;
     py.flags.blind += 10 + randint(10);
 }
 
-/* Enchants a plus onto an item.      -RAK- */
-bool enchant(plusses, limit)
-int16_t *plusses;
-int16_t limit; /* maximum bonus allowed; usually 10, but weapon's maximum
-                  damage when enchanting melee weapons to damage */
-{
+/* Enchants a plus onto an item.      -RAK-
+ * `limit` param is the maximum bonus allowed; usually 10,
+ * but weapon's maximum damage when enchanting melee weapons to damage.
+ */
+bool enchant(int16_t *plusses, int16_t limit) {
     int chance;
 
     /* avoid randint(0) call */

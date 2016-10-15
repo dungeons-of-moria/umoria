@@ -52,7 +52,8 @@ int y, x;
 }
 
 /* Searches for hidden things.      -RAK- */
-void search(y, x, chance) int y, x, chance;
+void search(y, x, chance)
+int y, x, chance;
 {
     int i, j;
     cave_type *c_ptr;

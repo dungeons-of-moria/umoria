@@ -84,10 +84,7 @@ int y, x;
 }
 
 /* Returns the array number of a random object    -RAK- */
-int get_obj_num(level, must_be_small)
-int level;
-bool must_be_small;
-{
+int get_obj_num(int level, bool must_be_small) {
     int i, j;
 
     if (level == 0) {
@@ -137,7 +134,8 @@ bool must_be_small;
 
 /* Places an object at given row, column co-ordinate  -RAK- */
 void place_object(y, x, must_be_small)
-int y, x, must_be_small;
+int y, x;
+bool must_be_small;
 {
     int cur_pos, tmp;
 
@@ -155,7 +153,7 @@ int y, x, must_be_small;
 
 /* Allocates an object for tunnels and rooms    -RAK- */
 void alloc_object(alloc_set, typ, num)
-int (*alloc_set)();
+bool (*alloc_set)();
 int typ, num;
 {
     int i, j, k;
@@ -219,10 +217,7 @@ int y, x, num;
 }
 
 /* Converts stat num into string      -RAK- */
-void cnv_stat(stat, out_val)
-uint8_t stat;
-char *out_val;
-{
+void cnv_stat(uint8_t stat, char *out_val) {
     int part1, part2;
 
     if (stat > 18) {
@@ -316,7 +311,8 @@ int num, row, column;
 }
 
 /* Adjustment for wisdom/intelligence        -JWT- */
-int stat_adj(stat) int stat;
+int stat_adj(stat)
+int stat;
 {
     int value;
 
@@ -620,10 +616,7 @@ void prt_winner() {
     }
 }
 
-uint8_t modify_stat(stat, amount)
-int stat;
-int16_t amount;
-{
+uint8_t modify_stat(int stat, int16_t amount) {
     int loop, i;
     uint8_t tmp_stat;
 
@@ -1242,7 +1235,7 @@ int item_val, drop_all;
 
 /* Destroys a type of item on a given percent chance  -RAK- */
 int inven_damage(typ, perc)
-int (*typ)();
+bool (*typ)();
 int perc;
 {
     int i, j;
@@ -2242,8 +2235,7 @@ int monster;
 
 /* Critical hits, Nasty way to die.      -RAK- */
 int critical_blow(weight, plus, dam, attack_type)
-int weight, plus,
-    dam;
+int weight, plus, dam;
 int attack_type;
 {
     int critical;

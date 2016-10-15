@@ -345,7 +345,8 @@ void store_init() {
 }
 
 /* Creates an item and inserts it into store's inven  -RAK- */
-static void store_create(store_num) int store_num;
+static void store_create(store_num)
+int store_num;
 {
     int i, tries;
     int cur_pos, dummy;
@@ -427,7 +428,8 @@ int32_t minprice;
 }
 
 /* update the bargin info          -DJB- */
-void updatebargain(store_num, price, minprice) int store_num;
+void updatebargain(store_num, price, minprice)
+int store_num;
 int32_t price, minprice;
 {
     store_type *s_ptr;

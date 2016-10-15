@@ -742,10 +742,7 @@ int y, x;
 
 /* Moves player from one space to another.    -RAK- */
 /* Note: This routine has been pre-declared; see that for argument*/
-void move_char(dir, do_pickup)
-int dir;
-bool do_pickup;
-{
+void move_char(int dir, bool do_pickup) {
     int old_row, old_col, old_find_flag;
     int y, x;
     int i, j;

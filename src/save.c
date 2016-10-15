@@ -495,9 +495,7 @@ char *fnam;
 }
 
 /* Certain checks are ommitted for the wizard. -CJS- */
-bool get_char(generate)
-int *generate;
-{
+bool get_char(bool *generate) {
     int i, j;
     int fd, c, total_count;
     uint32_t l, age, time_saved;

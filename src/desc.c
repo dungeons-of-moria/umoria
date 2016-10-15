@@ -291,7 +291,9 @@ int *item;
  */
 void unmagic_name(i_ptr)
 inven_type *i_ptr;
-{ i_ptr->name2 = SN_NULL; }
+{
+    i_ptr->name2 = SN_NULL;
+}
 
 /* defines for p1_use, determine how the p1 field is printed */
 #define IGNORED   0

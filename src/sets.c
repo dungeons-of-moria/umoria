@@ -103,7 +103,8 @@ inven_type *item;
     return false;
 }
 
-bool set_acid_affect(item) inven_type *item;
+bool set_acid_affect(item)
+inven_type *item;
 {
     switch (item->tval) {
     case TV_MISC:
@@ -206,8 +207,10 @@ inven_type *item;
     return false;
 }
 
-bool set_large(item)      /* Items too large to fit in chests   -DJG- */
-    treasure_type *item; /* Use treasure_type since item not yet created */
+/* Items too large to fit in chests   -DJG- */
+/* Use treasure_type since item not yet created */
+bool set_large(item)
+treasure_type *item;
 {
     switch (item->tval) {
     case TV_CHEST:

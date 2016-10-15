@@ -137,7 +137,8 @@ int f, l;
 }
 #endif
 
-void display_scores(show_player) int show_player;
+void display_scores(show_player)
+int show_player;
 {
     int i, rank;
     high_scores score;

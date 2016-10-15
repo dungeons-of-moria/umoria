@@ -32,7 +32,8 @@ static bool look_see();
 
 /* Tunnels through rubble and walls      -RAK- */
 /* Must take into account: secret doors,  special tools */
-void tunnel(dir) int dir;
+void tunnel(dir)
+int dir;
 {
     int i, tabil;
     cave_type *c_ptr;

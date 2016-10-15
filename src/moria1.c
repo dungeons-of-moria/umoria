@@ -268,12 +268,7 @@ void calc_bonuses() {
    not fit, it may be moved left.  The return value is the left edge used. */
 /* If mask is non-zero, then only display those items which have a non-zero
    entry in the mask array. */
-int show_inven(r1, r2, weight, col, mask)
-int r1, r2;
-bool weight;
-int col;
-char *mask;
-{
+int show_inven(int r1, int r2, bool weight, int col, char *mask) {
     int i;
     int total_weight, len, l, lim, current_line;
     bigvtype tmp_val;
@@ -384,10 +379,7 @@ int i;
 
 /* Displays equipment items from r1 to end  -RAK- */
 /* Keep display as far right as possible. -CJS- */
-int show_equip(weight, col)
-bool weight;
-int col;
-{
+int show_equip(bool weight, int col) {
     int i, line;
     int total_weight, l, len, lim;
     char *prt1;

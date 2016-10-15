@@ -59,16 +59,17 @@ void scribe_object() {
 }
 
 /* Append an additional comment to an object description.	-CJS- */
-void add_inscribe(i_ptr, type)
-inven_type *i_ptr;
-uint8_t type;
-{ i_ptr->ident |= type; }
+void add_inscribe(inven_type *i_ptr, uint8_t type) {
+    i_ptr->ident |= type;
+}
 
 /* Replace any existing comment in an object description with a new one. CJS*/
 void inscribe(i_ptr, str)
 inven_type *i_ptr;
 char *str;
-{ (void)strcpy(i_ptr->inscrip, str); }
+{
+    (void)strcpy(i_ptr->inscrip, str);
+}
 
 /* We need to reset the view of things.			-CJS- */
 void check_view() {
