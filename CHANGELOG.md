@@ -12,6 +12,11 @@
 ### All Changes
 
 
+`2016-10-15`
+
+- Cleans up function prototypes in externs.h and elsewhere.
+
+
 `2016-10-14`
 
 - Updates many func signatures/returns to use the bool type for booleans
