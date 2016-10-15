@@ -594,7 +594,7 @@ void dungeon() {
             teleport(40);
         }
 
-/* See if we are too weak to handle the weapon or pack.  -CJS- */
+        /* See if we are too weak to handle the weapon or pack.  -CJS- */
         if (py.flags.status & PY_STR_WGT) {
             check_strength();
         }

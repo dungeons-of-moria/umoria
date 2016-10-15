@@ -27,8 +27,6 @@
 
 #include "externs.h"
 
-long atol();
-
 /* Light up the dungeon          -RAK- */
 void wizard_light() {
     cave_type *c_ptr;

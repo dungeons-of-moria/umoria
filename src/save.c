@@ -50,10 +50,7 @@ static void rd_shorts();
 static void rd_item();
 static void rd_monster();
 
-time_t time();
-
-/* these are used for the save file, to avoid having to pass them to every
-   procedure */
+/* these are used for the save file, to avoid having to pass them to every procedure */
 static FILE *fileptr;
 static uint8_t xor_byte;
 static int from_savefile;   /* can overwrite old savefile when save */

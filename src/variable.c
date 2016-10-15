@@ -44,6 +44,7 @@ char *copyright[17] = {
     "You should have received a copy of the GNU General Public License ",
     "along with Umoria.  If not, see <http://www.gnu.org/licenses/>."};
 
+// FIXME: why is this here? It's only used in store2.c.
 /* Save the store's last increment value. */
 int16_t last_store_inc;
 

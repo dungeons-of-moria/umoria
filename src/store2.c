@@ -27,8 +27,6 @@
 
 #include "externs.h"
 
-long atol();
-
 static char *comment1[14] = {
     "Done!",
     "Accepted!",
@@ -127,8 +125,6 @@ static char *comment6[5] = {
     "I'm sorry, say that again.", "What did you say?",
     "Sorry, what was that again?",
 };
-
-extern int16_t last_store_inc;
 
 /* Comments vary.          -RAK- */
 /* Comment one : Finished haggling */
@@ -437,8 +433,7 @@ int num_offer;
             i = atol(out_val);
         }
 
-        /* don't allow incremental haggling, if player has not made an offer yet
- */
+        /* don't allow incremental haggling, if player has not made an offer yet */
         if (flag && num_offer == 0 && increment) {
             msg_print("You haven't even made your first offer yet!");
             i = 0;

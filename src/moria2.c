@@ -282,7 +282,7 @@ int dir;
                     /* else if there is a wall two spaces ahead and seem to be in a
                      * corridor, then force a turn into the side corridor, must
                      * be moving straight into a corridor here
- */
+                     */
 
                     if (shortleft && !shortright) {
                         find_prevdir = cycle[i - 2];

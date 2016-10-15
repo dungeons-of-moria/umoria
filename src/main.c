@@ -27,21 +27,6 @@
 
 #include "externs.h"
 
-// from the <unistd.h> library
-uid_t getuid();
-uid_t getgid();
-
-time_t time();
-char *getenv();
-
-#if defined(USG)
-void perror();
-#endif
-
-#ifdef USG
-void exit();
-#endif
-
 static void char_inven_init();
 static void init_m_level();
 static void init_t_level();
@@ -328,10 +313,9 @@ static void init_t_level() {
 #if (COST_ADJ != 100)
 /* Adjust prices of objects        -RAK- */
 static void price_adjust() {
-    int i;
-
     /* round half-way cases up */
-    for (i = 0; i < MAX_OBJECTS; i++)
+    for (int i = 0; i < MAX_OBJECTS; i++) {
         object_list[i].cost = ((object_list[i].cost * COST_ADJ) + 50) / 100;
+    }
 }
 #endif

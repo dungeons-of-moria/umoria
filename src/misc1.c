@@ -27,7 +27,6 @@
 
 #include "externs.h"
 
-time_t time();
 struct tm *localtime();
 
 /* gets a new random seed for the random number generator */

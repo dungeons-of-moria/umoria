@@ -184,15 +184,21 @@ inven_type *i_ptr;
 
 int known2_p(i_ptr)
 inven_type *i_ptr;
-{ return (i_ptr->ident & ID_KNOWN2); }
+{
+    return (i_ptr->ident & ID_KNOWN2);
+}
 
 void clear_known2(i_ptr)
 inven_type *i_ptr;
-{ i_ptr->ident &= ~ID_KNOWN2; }
+{
+    i_ptr->ident &= ~ID_KNOWN2;
+}
 
 void clear_empty(i_ptr)
 inven_type *i_ptr;
-{ i_ptr->ident &= ~ID_EMPTY; }
+{
+    i_ptr->ident &= ~ID_EMPTY;
+}
 
 void store_bought(i_ptr)
 inven_type *i_ptr;
@@ -203,7 +209,9 @@ inven_type *i_ptr;
 
 int store_bought_p(i_ptr)
 inven_type *i_ptr;
-{ return (i_ptr->ident & ID_STOREBOUGHT); }
+{
+    return (i_ptr->ident & ID_STOREBOUGHT);
+}
 
 /*  Remove an automatically generated inscription.  -CJS- */
 static void unsample(i_ptr)

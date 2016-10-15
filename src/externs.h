@@ -124,6 +124,10 @@ extern store_type store[MAX_STORES];
 extern uint16_t store_choice[MAX_STORES][STORE_CHOICES];
 extern int (*store_buy[MAX_STORES])();
 
+// FIXME: why is this extern? It's only used in store2.c.
+/* Save the store's last increment value. */
+extern int16_t last_store_inc;
+
 /* Following are treasure arrays  and variables */
 extern treasure_type object_list[MAX_OBJECTS];
 extern uint8_t object_ident[OBJECT_IDENT_SIZE];

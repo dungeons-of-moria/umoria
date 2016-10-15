@@ -27,11 +27,6 @@
 
 #include "externs.h"
 
-uid_t getuid();
-uid_t getgid();
-
-off_t lseek();
-
 #if defined(USG)
 #ifndef L_SET
 #define L_SET 0
@@ -40,12 +35,6 @@ off_t lseek();
 #define L_INCR 1
 #endif
 #endif
-
-#if defined(USG)
-void exit();
-#endif
-
-time_t time();
 
 static void date(day)
 char *day;

@@ -547,7 +547,7 @@ int mon_num;
         roff(temp);
     }
 
-/* Do we know what it might carry? */
+    /* Do we know what it might carry? */
     if (rcmove & (CM_CARRY_OBJ | CM_CARRY_GOLD)) {
         roff(" It may");
         j = (rcmove & CM_TREASURE) >> CM_TR_SHIFT;

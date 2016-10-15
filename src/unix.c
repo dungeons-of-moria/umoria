@@ -113,11 +113,6 @@ int microsec;
 #endif
 }
 
-#ifndef DEBIAN_LINUX
-uid_t getuid();
-uid_t getgid();
-#endif
-
 /* Find a default user name from the system. */
 void user_name(char *buf) {
     extern char *getlogin();
