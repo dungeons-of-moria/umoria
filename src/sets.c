@@ -25,27 +25,21 @@
 #include "constant.h"
 #include "types.h"
 
-bool set_room(element)
-int element;
-{
+bool set_room(int element) {
     if ((element == DARK_FLOOR) || (element == LIGHT_FLOOR)) {
         return true;
     }
     return false;
 }
 
-bool set_corr(element)
-int element;
-{
+bool set_corr(int element) {
     if (element == CORR_FLOOR || element == BLOCKED_FLOOR) {
         return true;
     }
     return false;
 }
 
-bool set_floor(element)
-int element;
-{
+bool set_floor(int element) {
     if (element <= MAX_CAVE_FLOOR) {
         return true;
     } else {
@@ -53,9 +47,7 @@ int element;
     }
 }
 
-bool set_corrodes(item)
-inven_type *item;
-{
+bool set_corrodes(inven_type *item) {
     switch (item->tval) {
     case TV_SWORD:
     case TV_HELM:
@@ -67,9 +59,7 @@ inven_type *item;
     return false;
 }
 
-bool set_flammable(item)
-inven_type *item;
-{
+bool set_flammable(inven_type *item) {
     switch (item->tval) {
     case TV_ARROW:
     case TV_BOW:
@@ -93,9 +83,7 @@ inven_type *item;
     return false;
 }
 
-bool set_frost_destroy(item)
-inven_type *item;
-{
+bool set_frost_destroy(inven_type *item) {
     if ((item->tval == TV_POTION1) || (item->tval == TV_POTION2) ||
         (item->tval == TV_FLASK)) {
         return true;
@@ -103,9 +91,7 @@ inven_type *item;
     return false;
 }
 
-bool set_acid_affect(item)
-inven_type *item;
-{
+bool set_acid_affect(inven_type *item) {
     switch (item->tval) {
     case TV_MISC:
     case TV_CHEST:
@@ -128,9 +114,7 @@ inven_type *item;
     return false;
 }
 
-bool set_lightning_destroy(item)
-inven_type *item;
-{
+bool set_lightning_destroy(inven_type *item) {
     if ((item->tval == TV_RING) || (item->tval == TV_WAND) ||
         (item->tval == TV_SPIKE)) {
         return true;
@@ -139,15 +123,11 @@ inven_type *item;
     }
 }
 
-bool set_null(item)
-inven_type *item;
-{
+bool set_null(inven_type *item) {
     return false;
 }
 
-bool set_acid_destroy(item)
-inven_type *item;
-{
+bool set_acid_destroy(inven_type *item) {
     switch (item->tval) {
     case TV_ARROW:
     case TV_BOW:
@@ -176,9 +156,7 @@ inven_type *item;
     return false;
 }
 
-bool set_fire_destroy(item)
-inven_type *item;
-{
+bool set_fire_destroy(inven_type *item) {
     switch (item->tval) {
     case TV_ARROW:
     case TV_BOW:
@@ -209,9 +187,7 @@ inven_type *item;
 
 /* Items too large to fit in chests   -DJG- */
 /* Use treasure_type since item not yet created */
-bool set_large(item)
-treasure_type *item;
-{
+bool set_large(treasure_type *item) {
     switch (item->tval) {
     case TV_CHEST:
     case TV_BOW:
@@ -232,9 +208,7 @@ treasure_type *item;
     return false;
 }
 
-bool general_store(element)
-int element;
-{
+bool general_store(int element) {
     switch (element) {
     case TV_DIGGING:
     case TV_BOOTS:
@@ -248,9 +222,7 @@ int element;
     return false;
 }
 
-bool armory(element)
-int element;
-{
+bool armory(int element) {
     switch (element) {
     case TV_BOOTS:
     case TV_GLOVES:
@@ -263,9 +235,7 @@ int element;
     return false;
 }
 
-bool weaponsmith(element)
-int element;
-{
+bool weaponsmith(int element) {
     switch (element) {
     case TV_SLING_AMMO:
     case TV_BOLT:
@@ -279,9 +249,7 @@ int element;
     return false;
 }
 
-bool temple(element)
-int element;
-{
+bool temple(int element) {
     switch (element) {
     case TV_HAFTED:
     case TV_SCROLL1:
@@ -294,9 +262,7 @@ int element;
     return false;
 }
 
-bool alchemist(element)
-int element;
-{
+bool alchemist(int element) {
     switch (element) {
     case TV_SCROLL1:
     case TV_SCROLL2:
@@ -307,9 +273,7 @@ int element;
     return false;
 }
 
-bool magic_shop(element)
-int element;
-{
+bool magic_shop(int element) {
     switch (element) {
     case TV_AMULET:
     case TV_RING:

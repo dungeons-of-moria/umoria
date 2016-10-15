@@ -30,9 +30,7 @@
 struct tm *localtime();
 
 /* gets a new random seed for the random number generator */
-void init_seeds(seed)
-uint32_t seed;
-{
+void init_seeds(uint32_t seed) {
     uint32_t clock_var;
 
     if (seed == 0) {
@@ -57,9 +55,7 @@ uint32_t seed;
 static uint32_t old_seed;
 
 /* change to different random number generator state */
-void set_seed(seed)
-uint32_t seed;
-{
+void set_seed(uint32_t seed) {
     old_seed = get_rnd_seed();
 
     /* want reproducible state here */
@@ -78,9 +74,7 @@ bool check_time() {
 }
 
 /* Generates a random integer x where 1<=X<=MAXVAL  -RAK- */
-int randint(maxval)
-int maxval;
-{
+int randint(int maxval) {
     int32_t randval;
 
     randval = rnd();
@@ -88,9 +82,7 @@ int maxval;
 }
 
 /* Generates a random integer number of NORMAL distribution -RAK-*/
-int randnor(mean, stand)
-int mean, stand;
-{
+int randnor(int mean, int stand) {
     int tmp, offset, low, iindex, high;
 
     /* alternate randnor code, slower but much smaller since no table */
@@ -151,9 +143,7 @@ int mean, stand;
 
 /* Returns position of first set bit      -RAK- */
 /*     and clears that bit */
-int bit_pos(test)
-uint32_t *test;
-{
+int bit_pos(uint32_t *test) {
     int i;
     uint32_t mask = 0x1;
 
@@ -170,9 +160,7 @@ uint32_t *test;
 }
 
 /* Checks a co-ordinate for in bounds status    -RAK- */
-bool in_bounds(y, x)
-int y, x;
-{
+bool in_bounds(int y, int x) {
     if ((y > 0) && (y < cur_height - 1) && (x > 0) && (x < cur_width - 1)) {
         return true;
     } else {
@@ -193,9 +181,7 @@ void panel_bounds() {
 /* Given an row (y) and col (x), this routine detects  -RAK- */
 /* when a move off the screen has occurred and figures new borders.
    Force forcses the panel bounds to be recalculated, useful for 'W'here. */
-int get_panel(y, x, force)
-int y, x, force;
-{
+int get_panel(int y, int x, int force) {
     int prow, pcol;
     bool panel;
 
@@ -234,9 +220,7 @@ int y, x, force;
 
 /* Tests a given point to see if it is within the screen -RAK- */
 /* boundaries. */
-bool panel_contains(y, x)
-int y, x;
-{
+bool panel_contains(int y, int x) {
     if ((y >= panel_row_min) && (y <= panel_row_max) && (x >= panel_col_min) &&
         (x <= panel_col_max)) {
         return true;
@@ -246,9 +230,7 @@ int y, x;
 }
 
 /* Distance between two points        -RAK- */
-int distance(y1, x1, y2, x2)
-int y1, x1, y2, x2;
-{
+int distance(int y1, int x1, int y2, int x2) {
     int dy, dx;
 
     dy = y1 - y2;
@@ -266,9 +248,7 @@ int y1, x1, y2, x2;
 /* Checks points north, south, east, and west for a wall -RAK- */
 /* note that y,x is always in_bounds(), i.e. 0 < y < cur_height-1, and
    0 < x < cur_width-1 */
-int next_to_walls(y, x)
-int y, x;
-{
+int next_to_walls(int y, int x) {
     int i;
     cave_type *c_ptr;
 
@@ -296,9 +276,7 @@ int y, x;
 /* Checks all adjacent spots for corridors    -RAK- */
 /* note that y, x is always in_bounds(), hence no need to check that
    j, k are in_bounds(), even if they are 0 or cur_x-1 is still works */
-int next_to_corr(y, x)
-int y, x;
-{
+int next_to_corr(int y, int x) {
     int k, j, i;
     cave_type *c_ptr;
 
@@ -319,9 +297,7 @@ int y, x;
 }
 
 /* generates damage for 2d6 style dice rolls */
-int damroll(num, sides)
-int num, sides;
-{
+int damroll(int num, int sides) {
     int i, sum = 0;
 
     for (i = 0; i < num; i++) {
@@ -330,9 +306,7 @@ int num, sides;
     return sum;
 }
 
-int pdamroll(array)
-uint8_t *array;
-{
+int pdamroll(uint8_t *array) {
     return damroll((int)array[0], (int)array[1]);
 }
 
@@ -354,9 +328,7 @@ uint8_t *array;
  * may occur if deltaX and deltaY exceed 90.
  */
 
-bool los(fromY, fromX, toY, toX)
-int fromY, fromX, toY, toX;
-{
+bool los(int fromY, int fromX, int toY, int toX) {
     int tmp, deltaX, deltaY;
 
     deltaX = toX - fromX;
@@ -506,9 +478,7 @@ int fromY, fromX, toY, toX;
 }
 
 /* Returns symbol for given row, column      -RAK- */
-uint8_t loc_symbol(y, x)
-int y, x;
-{
+uint8_t loc_symbol(int y, int x) {
     cave_type *cave_ptr;
     struct flags *f_ptr;
 
@@ -540,9 +510,7 @@ int y, x;
 }
 
 /* Tests a spot for light or field mark status    -RAK- */
-bool test_light(y, x)
-int y, x;
-{
+bool test_light(int y, int x) {
     cave_type *cave_ptr;
 
     cave_ptr = &cave[y][x];
@@ -619,9 +587,7 @@ bool compact_monsters() {
 }
 
 /* Add to the players food time        -RAK- */
-void add_food(num)
-int num;
-{
+void add_food(int num) {
     struct flags *p_ptr;
     int extra, penalty;
 
@@ -666,17 +632,12 @@ int popm() {
 }
 
 /* Gives Max hit points          -RAK- */
-int max_hp(array)
-uint8_t *array;
-{
+int max_hp(uint8_t *array) {
     return (array[0] * array[1]);
 }
 
 /* Places a monster at given location      -RAK- */
-bool place_monster(y, x, z, slp)
-int y, x, z;
-int slp;
-{
+bool place_monster(int y, int x, int z, int slp) {
     int cur_pos;
     monster_type *mon_ptr;
 
@@ -757,9 +718,7 @@ void place_win_monster() {
 /* Return a monster suitable to be placed at a given level.  This makes
    high level monsters (up to the given level) slightly more common than
    low level monsters at any given level.   -CJS- */
-int get_mons_num(level)
-int level;
-{
+int get_mons_num(int level) {
     int i, j, num;
 
     if (level == 0) {
@@ -796,10 +755,7 @@ int level;
 }
 
 /* Allocates a random monster        -RAK- */
-void alloc_monster(num, dis, slp)
-int num, dis;
-int slp;
-{
+void alloc_monster(int num, int dis, int slp) {
     int y, x, i;
     int l;
 
@@ -826,10 +782,7 @@ int slp;
 }
 
 /* Places creature adjacent to given location    -RAK- */
-bool summon_monster(y, x, slp)
-int *y, *x;
-int slp;
-{
+bool summon_monster(int *y, int *x, int slp) {
     int i, j, k;
     int l;
     cave_type *cave_ptr;
@@ -861,9 +814,7 @@ int slp;
 }
 
 /* Places undead adjacent to given location    -RAK- */
-bool summon_undead(y, x)
-int *y, *x;
-{
+bool summon_undead(int *y, int *x) {
     int i, j, k;
     int l, m, ctr;
     cave_type *cave_ptr;
@@ -979,9 +930,7 @@ int popt() {
 /* Pushs a record back onto free space list    -RAK- */
 /* Delete_object() should always be called instead, unless the object in
    question is not in the dungeon, e.g. in store1.c and files.c */
-void pusht(x)
-uint8_t x;
-{
+void pusht(uint8_t x) {
     int i, j;
 
     if (x != tcptr - 1) {
@@ -1001,9 +950,7 @@ uint8_t x;
 }
 
 /* Boolean : is object enchanted    -RAK- */
-bool magik(chance)
-int chance;
-{
+bool magik(int chance) {
     if (randint(100) <= chance) {
         return true;
     } else {
@@ -1012,9 +959,7 @@ int chance;
 }
 
 /* Enchant a bonus based on degree desired -RAK- */
-int m_bonus(base, max_std, level)
-int base, max_std, level;
-{
+int m_bonus(int base, int max_std, int level) {
     int x, stand_dev, tmp;
 
     stand_dev = (OBJ_STD_ADJ * level / 100) + OBJ_STD_MIN;

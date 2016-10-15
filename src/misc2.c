@@ -29,9 +29,7 @@
 
 /* Chance of treasure having magic abilities    -RAK- */
 /* Chance increases with each dungeon level */
-void magic_treasure(x, level)
-int x, level;
-{
+void magic_treasure(int x, int level) {
     inven_type *t_ptr;
     int chance, special, cursed, i;
     int tmp;

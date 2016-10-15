@@ -28,9 +28,7 @@
 #include "externs.h"
 
 /* Updates screen when monsters move about    -RAK- */
-void update_mon(monptr)
-int monptr;
-{
+void update_mon(int monptr) {
     cave_type *c_ptr;
     monster_type *m_ptr;
     creature_type *r_ptr;
@@ -88,9 +86,7 @@ int monptr;
 /* Given speed,   returns number of moves this turn.  -RAK- */
 /* NOTE: Player must always move at least once per iteration, */
 /*   a slowed player is handled by moving monsters faster */
-static int movement_rate(speed)
-int16_t speed;
-{
+static int movement_rate(int16_t speed) {
     if (speed > 0) {
         if (py.flags.rest != 0) {
             return 1;
@@ -104,9 +100,7 @@ int16_t speed;
 }
 
 /* Makes sure a new creature gets lit up.      -CJS- */
-static bool check_mon_lite(y, x)
-int y, x;
-{
+static bool check_mon_lite(int y, int x) {
     int monptr;
 
     monptr = cave[y][x].cptr;
@@ -119,10 +113,7 @@ int y, x;
 }
 
 /* Choose correct directions for monster movement  -RAK- */
-static void get_moves(monptr, mm)
-int monptr;
-int *mm;
-{
+static void get_moves(int monptr, int *mm) {
     int y, ay, x, ax, move_val;
 
     y = m_list[monptr].fy - char_row;
@@ -266,9 +257,7 @@ int *mm;
 }
 
 /* Make an attack on the player (chuckle.)    -RAK- */
-static void make_attack(monptr)
-int monptr;
-{
+static void make_attack(int monptr) {
     int attype, adesc, adice, asides;
     int i, j, damage, attackn;
     int32_t gold;
@@ -906,11 +895,7 @@ int monptr;
 }
 
 /* Make the move if possible, five choices    -RAK- */
-static void make_move(monptr, mm, rcmove)
-int monptr;
-int *mm;
-uint32_t *rcmove;
-{
+static void make_move(int monptr, int *mm, uint32_t *rcmove) {
     int i, newy, newx, stuck_door;
     uint32_t movebits;
     cave_type *c_ptr;
@@ -1096,10 +1081,7 @@ uint32_t *rcmove;
 /* Creatures can cast spells too.  (Dragon Breath)  -RAK- */
 /* cast_spell = true if creature changes position */
 /* took_turn  = true if creature casts a spell */
-static void mon_cast_spell(monptr, took_turn)
-int monptr;
-bool *took_turn;
-{
+static void mon_cast_spell(int monptr, bool *took_turn) {
     uint32_t i;
     int y, x, chance, thrown_spell, r1;
     int k;
@@ -1341,10 +1323,7 @@ bool *took_turn;
 
 /* Places creature adjacent to given location    -RAK- */
 /* Rats and Flys are fun! */
-bool multiply_monster(y, x, cr_index, monptr)
-int y, x, cr_index;
-int monptr;
-{
+bool multiply_monster(int y, int x, int cr_index, int monptr) {
     int i, j, k;
     cave_type *c_ptr;
     int result;
@@ -1411,10 +1390,7 @@ int monptr;
 }
 
 /* Move the critters about the dungeon      -RAK- */
-static void mon_move(monptr, rcmove)
-int monptr;
-uint32_t *rcmove;
-{
+static void mon_move(int monptr, uint32_t *rcmove) {
     int i, j;
     int k, dir;
 
@@ -1609,9 +1585,7 @@ uint32_t *rcmove;
 }
 
 /* Creatures movement and attacking are done from here  -RAK- */
-void creatures(attack)
-int attack;
-{
+void creatures(int attack) {
     int i, k;
     monster_type *m_ptr;
     recall_type *r_ptr;

@@ -142,9 +142,7 @@ static int roffpline; /* Place to print line now being loaded. */
 #define knowdamage(l, a, d) ((4 + (l)) * (a) > 80 * (d))
 
 /* Do we know anything about this monster? */
-bool bool_roff_recall(mon_num)
-int mon_num;
-{
+bool bool_roff_recall(int mon_num) {
     recall_type *mp;
     int i;
 
@@ -165,9 +163,7 @@ int mon_num;
 }
 
 /* Print out what we have discovered about this monster. */
-int roff_recall(mon_num)
-int mon_num;
-{
+int roff_recall(int mon_num) {
     char *p, *q;
     uint8_t *pu;
     vtype temp;
@@ -686,9 +682,7 @@ int mon_num;
 }
 
 /* Print out strings, filling up lines as we go. */
-static void roff(p)
-char *p;
-{
+static void roff(char *p) {
     char *q, *r;
 
     while (*p) {

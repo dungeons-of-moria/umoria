@@ -50,9 +50,7 @@ struct passwd *getpwnam();
    certain point, sleep for a second. There would need to be a
    way of resetting the count, with a call made for commands like
    run or rest. */
-int check_input(microsec)
-int microsec;
-{
+int check_input(int microsec) {
 #if defined(USG) && !defined(__linux__)
     int arg, result;
 #else
@@ -135,9 +133,7 @@ void user_name(char *buf) {
 
 /* expands a tilde at the beginning of a file name to a users home
    directory */
-int tilde(file, exp)
-char *file, *exp;
-{
+int tilde(char *file, char *exp) {
     *exp = '\0';
     if (file) {
         if (*file == '~') {
@@ -177,10 +173,7 @@ char *file, *exp;
 
 /* open a file just as does fopen, but allow a leading ~ to specify a home
    directory */
-FILE *tfopen(file, mode)
-char *file;
-char *mode;
-{
+FILE *tfopen(char *file, char *mode) {
     char buf[1024];
     extern int errno;
 
@@ -193,10 +186,7 @@ char *mode;
 
 /* open a file just as does open, but expand a leading ~ into a home directory
    name */
-int topen(file, flags, mode)
-char *file;
-int flags, mode;
-{
+int topen(char *file, int flags, int mode) {
     char buf[1024];
     extern int errno;
 

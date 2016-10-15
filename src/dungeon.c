@@ -27,9 +27,9 @@
 
 #include "externs.h"
 
-static char original_commands();
-static void do_command();
-static bool valid_countcommand();
+static char original_commands(char);
+static void do_command(char);
+static bool valid_countcommand(char);
 static void regenhp();
 static void regenmana();
 static bool enchanted();
@@ -836,9 +836,7 @@ void dungeon() {
     } while (!new_level_flag && !eof_flag);
 }
 
-static char original_commands(com_val)
-char com_val;
-{
+static char original_commands(char com_val) {
     int dir_val;
 
     switch (com_val) {
@@ -1062,9 +1060,7 @@ char com_val;
     return com_val;
 }
 
-static void do_command(com_val)
-char com_val;
-{
+static void do_command(char com_val) {
     int dir_val;
     bool do_pickup, do_diplay_scores;
     int y, x, i, j;
@@ -1608,9 +1604,7 @@ char com_val;
 }
 
 /* Check whether this command will accept a count.     -CJS- */
-static bool valid_countcommand(c)
-char c;
-{
+static bool valid_countcommand(char c) {
     switch (c) {
     case 'Q':
     case CTRL('W'):
@@ -1741,9 +1735,7 @@ static void regenhp(int percent) {
 }
 
 /* Regenerate mana points        -RAK- */
-static void regenmana(percent)
-int percent;
-{
+static void regenmana(int percent) {
     struct misc *p_ptr;
     int32_t new_mana, new_mana_frac;
     int old_cmana;
@@ -1782,9 +1774,7 @@ int percent;
 
 /* Is an item an enchanted weapon or armor and we don't know?  -CJS- */
 /* only returns true if it is a good enchantment */
-static bool enchanted(t_ptr)
-inven_type *t_ptr;
-{
+static bool enchanted(inven_type *t_ptr) {
     if (t_ptr->tval < TV_MIN_ENCHANT || t_ptr->tval > TV_MAX_ENCHANT || t_ptr->flags & TR_CURSED) {
         return false;
     }

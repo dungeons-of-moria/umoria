@@ -31,9 +31,7 @@
 /* Note: When the player is sped up or slowed down, I simply */
 /*   change the speed of all the monsters.  This greatly */
 /*   simplified the logic. */
-void change_speed(num)
-int num;
-{
+void change_speed(int num) {
     int i;
 
     py.flags.speed += num;
@@ -53,10 +51,7 @@ int num;
  * Only calculates properties with cumulative effect.  Properties that
  * depend on everything being worn are recalculated by calc_bonuses() -CJS-
  */
-void py_bonuses(t_ptr, factor)
-inven_type *t_ptr;
-int factor;
-{
+void py_bonuses(inven_type *t_ptr, int factor) {
     int i, amount;
 
     amount = t_ptr->p1 * factor;
@@ -328,9 +323,7 @@ int show_inven(int r1, int r2, bool weight, int col, char *mask) {
 }
 
 /* Return a string describing how a given equipment item is carried. -CJS- */
-char *describe_use(i)
-int i;
-{
+char *describe_use(int i) {
     char *p;
 
     switch (i) {
@@ -492,9 +485,7 @@ int show_equip(bool weight, int col) {
 }
 
 /* Remove item from equipment list    -RAK- */
-void takeoff(item_val, posn)
-int item_val, posn;
-{
+void takeoff(int item_val, int posn) {
     char *p;
     bigvtype out_val, prt2;
     inven_type *t_ptr;
@@ -528,10 +519,7 @@ int item_val, posn;
 
 /* Used to verify if this really is the item we wish to   -CJS-
    wear or read. */
-int verify(prompt, item)
-char *prompt;
-int item;
-{
+int verify(char *prompt, int item) {
     bigvtype out_str, object;
 
     objdes(object, &inventory[item], true);
@@ -583,9 +571,7 @@ static int scr_state, scr_left, scr_base;
 static int wear_low, wear_high;
 
 /* Draw the inventory screen. */
-static void inven_screen(new_scr)
-int new_scr;
-{
+static void inven_screen(int new_scr) {
     int line;
 
     if (new_scr != scr_state) {
@@ -634,9 +620,7 @@ int new_scr;
 }
 
 /* This does all the work. */
-void inven_command(command)
-char command;
-{
+void inven_command(char command) {
     int slot, item;
     int tmp, tmp2, from, to;
     bool selecting;
@@ -1199,13 +1183,7 @@ char command;
 }
 
 /* Get the ID of an item and return the CTR value of it  -RAK- */
-int get_item(com_val, pmt, i, j, mask, message)
-int *com_val;
-char *pmt;
-int i, j;
-char *mask;
-char *message;
-{
+int get_item(int *com_val, char *pmt, int i, int j, char *mask, char *message) {
     vtype out_val;
     char which;
     int i_scr;
@@ -1387,9 +1365,7 @@ bool no_light() {
 }
 
 /* map rogue_like direction commands into numbers */
-static char map_roguedir(comval)
-char comval;
-{
+static char map_roguedir(char comval) {
     switch (comval) {
     case 'h':
         comval = '4';
@@ -1424,10 +1400,7 @@ char comval;
 
 /* Prompts for a direction        -RAK- */
 /* Direction memory added, for repeated commands.  -CJS */
-bool get_dir(prompt, dir)
-char *prompt;
-int *dir;
-{
+bool get_dir(char *prompt, int *dir) {
     char command;
     int save;
     static char prev_dir; /* Direction memory. -CJS- */
@@ -1467,10 +1440,7 @@ int *dir;
 
 /* Similar to get_dir, except that no memory exists, and it is    -CJS-
    allowed to enter the null direction. */
-bool get_alldir(prompt, dir)
-char *prompt;
-int *dir;
-{
+bool get_alldir(char *prompt, int *dir) {
     char command;
 
     for (;;) {
@@ -1493,9 +1463,7 @@ int *dir;
 }
 
 /* Moves creature record from one space to another  -RAK- */
-void move_rec(y1, x1, y2, x2)
-int y1, x1, y2, x2;
-{
+void move_rec(int y1, int x1, int y2, int x2) {
     int tmp;
 
     /* this always works correctly, even if y1==y2 and x1==x2 */
@@ -1505,9 +1473,7 @@ int y1, x1, y2, x2;
 }
 
 /* Room is lit, make it appear        -RAK- */
-void light_room(y, x)
-int y, x;
-{
+void light_room(int y, int x) {
     int i, j, start_col, end_col;
     int tmp1, tmp2, start_row, end_row;
     cave_type *c_ptr;
@@ -1543,9 +1509,7 @@ int y, x;
 }
 
 /* Lights up given location        -RAK- */
-void lite_spot(y, x)
-int y, x;
-{
+void lite_spot(int y, int x) {
     if (panel_contains(y, x)) {
         print(loc_symbol(y, x), y, x);
     }
@@ -1553,10 +1517,7 @@ int y, x;
 
 /* Normal movement */
 /* When FIND_FLAG,  light only permanent features */
-static void sub1_move_light(y1, x1, y2, x2)
-int x1, x2;
-int y1, y2;
-{
+static void sub1_move_light(int y1, int x1, int y2, int x2) {
     int i, j;
     cave_type *c_ptr;
     int tval, top, left, bottom, right;
@@ -1619,10 +1580,7 @@ int y1, y2;
 
 /* When blinded,  move only the player symbol. */
 /* With no light,  movement becomes involved. */
-static void sub3_move_light(y1, x1, y2, x2)
-int y1, x1;
-int y2, x2;
-{
+static void sub3_move_light(int y1, int x1, int y2, int x2) {
     int i, j;
 
     if (light_flag) {
@@ -1644,9 +1602,7 @@ int y2, x2;
 
 /* Package for moving the character's light about the screen */
 /* Four cases : Normal, Finding, Blind, and Nolight   -RAK- */
-void move_light(y1, x1, y2, x2)
-int y1, x1, y2, x2;
-{
+void move_light(int y1, int x1, int y2, int x2) {
     if (py.flags.blind > 0 || !player_light) {
         sub3_move_light(y1, x1, y2, x2);
     } else {
@@ -1657,9 +1613,7 @@ int y1, x1, y2, x2;
 /* Something happens to disturb the player.    -CJS-
    The first arg indicates a major disturbance, which affects search.
    The second arg indicates a light change. */
-void disturb(s, l)
-int s, l;
-{
+void disturb(int s, int l) {
     command_count = 0;
     if (s && (py.flags.status & PY_SEARCH)) {
         search_off();
@@ -1745,9 +1699,7 @@ void rest_off() {
 }
 
 /* Attacker's level and plusses,  defender's AC    -RAK- */
-bool test_hit(bth, level, pth, ac, attack_type)
-int bth, level, pth, ac, attack_type;
-{
+bool test_hit(int bth, int level, int pth, int ac, int attack_type) {
     int i, die;
 
     disturb(1, 0);
@@ -1766,10 +1718,7 @@ int bth, level, pth, ac, attack_type;
 
 /* Decreases players hit points and sets death flag if necessary*/
 /*               -RAK- */
-void take_hit(damage, hit_from)
-int damage;
-char *hit_from;
-{
+void take_hit(int damage, char *hit_from) {
     if (py.flags.invuln > 0) {
         damage = 0;
     }

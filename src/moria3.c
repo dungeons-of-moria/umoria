@@ -28,9 +28,7 @@
 #include "externs.h"
 
 /* Player hit a trap.  (Chuckle)      -RAK- */
-static void hit_trap(y, x)
-int y, x;
-{
+static void hit_trap(int y, int x) {
     int i, ty, tx, num, dam;
     cave_type *c_ptr;
     struct misc *p_ptr;
@@ -225,11 +223,7 @@ int y, x;
 /* returns -1 if no spells in book
    returns 1 if choose a spell in book to cast
    returns 0 if don't choose a spell, i.e. exit with an escape */
-int cast_spell(prompt, item_val, sn, sc)
-char *prompt;
-int item_val;
-int *sn, *sc;
-{
+int cast_spell(char *prompt, int item_val, int *sn, int *sc) {
     uint32_t j;
     int i, k;
     int spell[31], result, first_spell;
@@ -269,10 +263,7 @@ int *sn, *sc;
 /* on the TVAL of the object.  Traps are set off, money and most */
 /* objects are picked up.  Some objects, such as open doors, just*/
 /* sit there. */
-static void carry(y, x, pickup)
-int y, x;
-bool pickup;
-{
+static void carry(int y, int x, bool pickup) {
     int locn, i;
     bigvtype out_val, tmp_str;
     cave_type *c_ptr;
@@ -338,9 +329,7 @@ bool pickup;
 }
 
 /* Deletes a monster entry from the level    -RAK- */
-void delete_monster(j)
-int j;
-{
+void delete_monster(int j) {
     monster_type *m_ptr;
 
     m_ptr = &m_list[j];
@@ -368,9 +357,7 @@ int j;
 /* fix1_delete_monster does everything delete_monster does except delete
    the monster record and reduce mfptr, this is called in breathe, and
    a couple of places in creatures.c */
-void fix1_delete_monster(j)
-int j;
-{
+void fix1_delete_monster(int j) {
     monster_type *m_ptr;
 
     m_ptr = &m_list[j];
@@ -390,9 +377,7 @@ int j;
 
 /* fix2_delete_monster does everything in delete_monster that wasn't done
    by fix1_monster_delete above, this is only called in creatures() */
-void fix2_delete_monster(j)
-int j;
-{
+void fix2_delete_monster(int j) {
     monster_type *m_ptr;
 
     if (j != mfptr - 1) {
@@ -405,9 +390,7 @@ int j;
 }
 
 /* Creates objects nearby the coordinates given    -RAK- */
-static int summon_object(y, x, num, typ)
-int y, x, num, typ;
-{
+static int summon_object(int y, int x, int num, int typ) {
     int i, j, k;
     cave_type *c_ptr;
     int real_typ, res;
@@ -454,9 +437,7 @@ int y, x, num, typ;
 }
 
 /* Deletes object from given location      -RAK- */
-int delete_object(y, x)
-int y, x;
-{
+int delete_object(int y, int x) {
     bool delete;
     cave_type *c_ptr;
 
@@ -481,10 +462,7 @@ int y, x;
 /* based on flags set in the main creature record */
 /* Returns a mask of bits from the given flags which indicates what the
    monster is seen to have dropped.  This may be added to monster memory. */
-uint32_t monster_death(y, x, flags)
-int y, x;
-uint32_t flags;
-{
+uint32_t monster_death(int y, int x, uint32_t flags) {
     int i, number;
     uint32_t dump, res;
 
@@ -556,9 +534,7 @@ uint32_t flags;
 
 /* Decreases monsters hit points and deletes monster if needed. */
 /* (Picking on my babies.)             -RAK- */
-int mon_take_hit(monptr, dam)
-int monptr, dam;
-{
+int mon_take_hit(int monptr, int dam) {
     uint32_t i;
     int32_t new_exp, new_exp_frac;
     monster_type *m_ptr;
@@ -623,9 +599,7 @@ int monptr, dam;
 }
 
 /* Player attacks a (poor, defenseless) creature  -RAK- */
-void py_attack(y, x)
-int y, x;
-{
+void py_attack(int y, int x) {
     int k, blows;
     int crptr, monptr, tot_tohit, base_tohit;
     vtype m_name, out_val;
@@ -883,9 +857,7 @@ void move_char(int dir, bool do_pickup) {
 
 /* Chests have traps too.        -RAK- */
 /* Note: Chest traps are based on the FLAGS value */
-void chest_trap(y, x)
-int y, x;
-{
+void chest_trap(int y, int x) {
     int i;
     int j, k;
     inven_type *t_ptr;
@@ -1099,9 +1071,7 @@ void closeobject() {
 
 /* Tunneling through real wall: 10, 11, 12    -RAK- */
 /* Used by TUNNEL and WALL_TO_MUD */
-int twall(y, x, t1, t2)
-int y, x, t1, t2;
-{
+int twall(int y, int x, int t1, int t2) {
     int i, j;
     cave_type *c_ptr;
 

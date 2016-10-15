@@ -35,9 +35,7 @@ static char *stat_names[] = {
 static char blank_string[] = "                        ";
 
 /* Places a particular trap at location y, x    -RAK- */
-void place_trap(y, x, subval)
-int y, x, subval;
-{
+void place_trap(int y, int x, int subval) {
     int cur_pos;
 
     cur_pos = popt();
@@ -46,9 +44,7 @@ int y, x, subval;
 }
 
 /* Places rubble at location y, x      -RAK- */
-void place_rubble(y, x)
-int y, x;
-{
+void place_rubble(int y, int x) {
     int cur_pos;
     cave_type *cave_ptr;
 
@@ -60,9 +56,7 @@ int y, x;
 }
 
 /* Places a treasure (Gold or Gems) at given row, column -RAK- */
-void place_gold(y, x)
-int y, x;
-{
+void place_gold(int y, int x) {
     int i, cur_pos;
     inven_type *t_ptr;
 
@@ -133,10 +127,7 @@ int get_obj_num(int level, bool must_be_small) {
 }
 
 /* Places an object at given row, column co-ordinate  -RAK- */
-void place_object(y, x, must_be_small)
-int y, x;
-bool must_be_small;
-{
+void place_object(int y, int x, bool must_be_small) {
     int cur_pos, tmp;
 
     cur_pos = popt();
@@ -152,10 +143,7 @@ bool must_be_small;
 }
 
 /* Allocates an object for tunnels and rooms    -RAK- */
-void alloc_object(alloc_set, typ, num)
-bool (*alloc_set)();
-int typ, num;
-{
+void alloc_object(bool (*alloc_set)(), int typ, int num) {
     int i, j, k;
 
     for (k = 0; k < num; k++) {
@@ -190,9 +178,7 @@ int typ, num;
 }
 
 /* Creates objects nearby the coordinates given    -RAK- */
-void random_object(y, x, num)
-int y, x, num;
-{
+void random_object(int y, int x, int num) {
     int i, j, k;
     cave_type *cave_ptr;
 
@@ -234,9 +220,7 @@ void cnv_stat(uint8_t stat, char *out_val) {
 }
 
 /* Print character stat in given row, column    -RAK- */
-void prt_stat(stat)
-int stat;
-{
+void prt_stat(int stat) {
     stat_type out_val1;
 
     cnv_stat(py.stats.use_stat[stat], out_val1);
@@ -246,20 +230,13 @@ int stat;
 
 /* Print character info in given row, column    -RAK- */
 /* the longest title is 13 characters, so only pad to 13 */
-void prt_field(info, row, column)
-char *info;
-int row, column;
-{
+void prt_field(char *info, int row, int column) {
     put_buffer(&blank_string[BLANK_LENGTH - 13], row, column);
     put_buffer(info, row, column);
 }
 
 /* Print long number with header at given row, column */
-static void prt_lnum(header, num, row, column)
-char *header;
-int32_t num;
-int row, column;
-{
+static void prt_lnum(char *header, int32_t num, int row, int column) {
     vtype out_val;
 
     (void)sprintf(out_val, "%s: %6d", header, num);
@@ -267,11 +244,7 @@ int row, column;
 }
 
 /* Print long number (7 digits of space) with header at given row, column */
-static void prt_7lnum(header, num, row, column)
-char *header;
-int32_t num;
-int row, column;
-{
+static void prt_7lnum(char *header, int32_t num, int row, int column) {
     vtype out_val;
 
     (void)sprintf(out_val, "%s: %7d", header, num);
@@ -279,10 +252,7 @@ int row, column;
 }
 
 /* Print number with header at given row, column  -RAK- */
-static void prt_num(header, num, row, column)
-char *header;
-int num, row, column;
-{
+static void prt_num(char *header, int num, int row, int column) {
     vtype out_val;
 
     (void)sprintf(out_val, "%s: %6d", header, num);
@@ -290,10 +260,7 @@ int num, row, column;
 }
 
 /* Print long number at given row, column */
-static void prt_long(num, row, column)
-int32_t num;
-int row, column;
-{
+static void prt_long(int32_t num, int row, int column) {
     vtype out_val;
 
     (void)sprintf(out_val, "%6d", num);
@@ -301,9 +268,7 @@ int row, column;
 }
 
 /* Print number at given row, column  -RAK- */
-static void prt_int(num, row, column)
-int num, row, column;
-{
+static void prt_int(int num, int row, int column) {
     vtype out_val;
 
     (void)sprintf(out_val, "%6d", num);
@@ -311,9 +276,7 @@ int num, row, column;
 }
 
 /* Adjustment for wisdom/intelligence        -JWT- */
-int stat_adj(stat)
-int stat;
-{
+int stat_adj(int stat) {
     int value;
 
     value = py.stats.use_stat[stat];
@@ -648,9 +611,7 @@ uint8_t modify_stat(int stat, int16_t amount) {
 }
 
 /* Set the value of the stat which is actually used.   -CJS- */
-void set_use_stat(stat)
-int stat;
-{
+void set_use_stat(int stat) {
     py.stats.use_stat[stat] = modify_stat(stat, py.stats.mod_stat[stat]);
 
     if (stat == A_STR) {
@@ -670,9 +631,7 @@ int stat;
 }
 
 /* Increases a stat by one randomized level    -RAK- */
-bool inc_stat(stat)
-int stat;
-{
+bool inc_stat(int stat) {
     int tmp_stat, gain;
 
     tmp_stat = py.stats.cur_stat[stat];
@@ -701,9 +660,7 @@ int stat;
 }
 
 /* Decreases a stat by one randomized level    -RAK- */
-bool dec_stat(stat)
-int stat;
-{
+bool dec_stat(int stat) {
     int tmp_stat, loss;
 
     tmp_stat = py.stats.cur_stat[stat];
@@ -730,9 +687,7 @@ int stat;
 }
 
 /* Restore a stat.  Return true only if this actually makes a difference. */
-bool res_stat(stat)
-int stat;
-{
+bool res_stat(int stat) {
     int i;
 
     i = py.stats.max_stat[stat] - py.stats.cur_stat[stat];
@@ -747,9 +702,7 @@ int stat;
 
 /* Boost a stat artificially (by wearing something). If the display argument
    is true, then increase is shown on the screen. */
-void bst_stat(stat, amount)
-int stat, amount;
-{
+void bst_stat(int stat, int amount) {
     py.stats.mod_stat[stat] += amount;
 
     set_use_stat(stat);
@@ -995,9 +948,7 @@ void put_stats() {
 }
 
 /* Returns a rating of x depending on y      -JWT- */
-char *likert(x, y)
-int x, y;
-{
+char *likert(int x, int y) {
     switch ((x / y)) {
     case -3: case -2: case -1:
         return "Very Bad";
@@ -1160,9 +1111,7 @@ void change_name() {
 }
 
 /* Destroy an item in the inventory      -RAK- */
-void inven_destroy(item_val)
-int item_val;
-{
+void inven_destroy(int item_val) {
     int j;
     inven_type *i_ptr;
 
@@ -1183,9 +1132,7 @@ int item_val;
 
 /* Copies the object in the second argument over the first argument.
    However, the second always gets a number of one except for ammo etc. */
-void take_one_item(s_ptr, i_ptr)
-inven_type *s_ptr, *i_ptr;
-{
+void take_one_item(inven_type *s_ptr, inven_type *i_ptr) {
     *s_ptr = *i_ptr;
     if ((s_ptr->number > 1) && (s_ptr->subval >= ITEM_SINGLE_STACK_MIN) &&
         (s_ptr->subval <= ITEM_SINGLE_STACK_MAX)) {
@@ -1194,9 +1141,7 @@ inven_type *s_ptr, *i_ptr;
 }
 
 /* Drops an item from inventory to given location  -RAK- */
-void inven_drop(item_val, drop_all)
-int item_val, drop_all;
-{
+void inven_drop(int item_val, int drop_all) {
     int i;
     inven_type *i_ptr;
     bigvtype prt1, prt2;
@@ -1234,10 +1179,7 @@ int item_val, drop_all;
 }
 
 /* Destroys a type of item on a given percent chance  -RAK- */
-int inven_damage(typ, perc)
-bool (*typ)();
-int perc;
-{
+int inven_damage(bool (*typ)(), int perc) {
     int i, j;
 
     j = 0;
@@ -1262,9 +1204,7 @@ int weight_limit() {
 }
 
 /* this code must be identical to the inven_carry() code below */
-bool inven_check_num(t_ptr)
-inven_type *t_ptr;
-{
+bool inven_check_num(inven_type *t_ptr) {
     int i;
 
     if (inven_ctr < INVEN_WIELD) {
@@ -1289,9 +1229,7 @@ inven_type *t_ptr;
 }
 
 /* return false if picking up an object would change the players speed */
-bool inven_check_weight(i_ptr)
-inven_type *i_ptr;
-{
+bool inven_check_weight(inven_type *i_ptr) {
     int i, new_inven_weight;
 
     i = weight_limit();
@@ -1353,9 +1291,7 @@ void check_strength() {
 /* Add an item to players inventory.  Return the */
 /* item position for a description if needed.         -RAK- */
 /* this code must be identical to the inven_check_num() code above */
-int inven_carry(i_ptr)
-inven_type *i_ptr;
-{
+int inven_carry(inven_type *i_ptr) {
     int locn, i;
     int typ, subt;
     inven_type *t_ptr;
@@ -1398,9 +1334,7 @@ inven_type *i_ptr;
 }
 
 /* Returns spell chance of failure for spell    -RAK- */
-int spell_chance(spell)
-int spell;
-{
+int spell_chance(int spell) {
     spell_type *s_ptr;
     int chance;
     int stat;
@@ -1431,11 +1365,7 @@ int spell;
 /* Print list of spells          -RAK- */
 /* if nonconsec is -1: spells numbered consecutively from 'a' to 'a'+num
                   >=0: spells numbered by offset from nonconsec */
-void print_spells(spell, num, comment, nonconsec)
-int *spell;
-int num;
-int comment, nonconsec;
-{
+void print_spells(int *spell, int num, int comment, int nonconsec) {
     int i, j;
     vtype out_val;
     spell_type *s_ptr;
@@ -1491,13 +1421,7 @@ int comment, nonconsec;
 }
 
 /* Returns spell pointer        -RAK- */
-int get_spell(spell, num, sn, sc, prompt, first_spell)
-int *spell;
-int num;
-int *sn, *sc;
-char *prompt;
-int first_spell;
-{
+int get_spell(int *spell, int num, int *sn, int *sc, char *prompt, int first_spell) {
     spell_type *s_ptr;
     int offset, i;
     char choice;
@@ -1586,9 +1510,7 @@ int first_spell;
 
 /* calculate number of spells player should have, and learn forget spells
    until that number is met -JEW- */
-void calc_spells(stat)
-int stat;
-{
+void calc_spells(int stat) {
     int i;
     uint32_t mask;
     uint32_t spell_flag;
@@ -1875,9 +1797,7 @@ void gain_spells() {
 }
 
 /* Gain some mana if you know at least one spell  -RAK- */
-void calc_mana(stat)
-int stat;
-{
+void calc_mana(int stat) {
     int new_mana, levels;
     struct misc *p_ptr;
     int32_t value;
@@ -2034,9 +1954,7 @@ void calc_hitpoints() {
 }
 
 /* Inserts a string into a string */
-void insert_str(object_str, mtc_str, insert)
-char *object_str, *mtc_str, *insert;
-{
+void insert_str(char *object_str, char *mtc_str, char *insert) {
     int obj_len;
     char *bound, *pc;
     int i, mtc_len;
@@ -2072,12 +1990,7 @@ char *object_str, *mtc_str, *insert;
     }
 }
 
-void insert_lnum(object_str, mtc_str, number, show_sign)
-char *object_str;
-char *mtc_str;
-int32_t number;
-int show_sign;
-{
+void insert_lnum(char *object_str, char *mtc_str, int32_t number, int show_sign) {
     int mlen;
     vtype str1, str2;
     char *string, *tmp_str;
@@ -2131,10 +2044,7 @@ bool enter_wiz_mode() {
 }
 
 /* Weapon weight VS strength and dexterity    -RAK- */
-int attack_blows(weight, wtohit)
-int weight;
-int *wtohit;
-{
+int attack_blows(int weight, int *wtohit) {
     int adj_weight;
     int str_index, dex_index, s, d;
 
@@ -2182,11 +2092,7 @@ int *wtohit;
 }
 
 /* Special damage due to magical abilities of object  -RAK- */
-int tot_dam(i_ptr, tdam, monster)
-inven_type *i_ptr;
-int tdam;
-int monster;
-{
+int tot_dam(inven_type *i_ptr, int tdam, int monster) {
     creature_type *m_ptr;
     recall_type *r_ptr;
 
@@ -2234,10 +2140,7 @@ int monster;
 }
 
 /* Critical hits, Nasty way to die.      -RAK- */
-int critical_blow(weight, plus, dam, attack_type)
-int weight, plus, dam;
-int attack_type;
-{
+int critical_blow(int weight, int plus, int dam, int attack_type) {
     int critical;
 
     critical = dam;
@@ -2266,10 +2169,7 @@ int attack_type;
 }
 
 /* Given direction "dir", returns new row, column location -RAK- */
-int mmove(dir, y, x)
-int dir;
-int *y, *x;
-{
+int mmove(int dir, int *y, int *x) {
     int new_row, new_col;
 
     switch (dir) {
@@ -2335,10 +2235,7 @@ bool player_saves() {
 }
 
 /* Finds range of item in inventory list    -RAK- */
-int find_range(item1, item2, j, k)
-int item1, item2;
-int *j, *k;
-{
+int find_range(int item1, int item2, int *j, int *k) {
     int i;
     inven_type *i_ptr;
 
@@ -2374,9 +2271,7 @@ int *j, *k;
 }
 
 /* Teleport the player to a new location    -RAK- */
-void teleport(dis)
-int dis;
-{
+void teleport(int dis) {
     int y, x, i, j;
 
     do {

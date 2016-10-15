@@ -133,10 +133,7 @@ static void prt_comment1() {
 }
 
 /* %A1 is offer, %A2 is asking. */
-static void prt_comment2(offer, asking, final)
-int32_t offer, asking;
-int final;
-{
+static void prt_comment2(int32_t offer, int32_t asking, int final) {
     vtype comment;
 
     if (final > 0) {
@@ -150,10 +147,7 @@ int final;
     msg_print(comment);
 }
 
-static void prt_comment3(offer, asking, final)
-int32_t offer, asking;
-int final;
-{
+static void prt_comment3(int32_t offer, int32_t asking, int final) {
     vtype comment;
 
     if (final > 0) {
@@ -193,9 +187,7 @@ static void display_commands() {
 }
 
 /* Displays the set of commands        -RAK- */
-static void haggle_commands(typ)
-int typ;
-{
+static void haggle_commands(int typ) {
     if (typ == -1) {
         prt("Specify an asking-price in gold pieces.", 21, 0);
     } else {
@@ -206,9 +198,7 @@ int typ;
 }
 
 /* Displays a store's inventory        -RAK- */
-static void display_inventory(store_num, start)
-int store_num, start;
-{
+static void display_inventory(int store_num, int start) {
     store_type *s_ptr;
     inven_type *i_ptr;
     int i, j, stop;
@@ -262,9 +252,7 @@ int store_num, start;
 }
 
 /* Re-displays only a single cost      -RAK- */
-static void display_cost(store_num, pos)
-int store_num, pos;
-{
+static void display_cost(int store_num, int pos) {
     int i;
     int32_t j;
     vtype out_val;
@@ -291,9 +279,7 @@ static void store_prt_gold() {
 }
 
 /* Displays store          -RAK- */
-static void display_store(store_num, cur_top)
-int store_num, cur_top;
-{
+static void display_store(int store_num, int cur_top) {
     store_type *s_ptr;
 
     s_ptr = &store[store_num];
@@ -307,11 +293,7 @@ int store_num, cur_top;
 }
 
 /* Get the ID of a store item and return it's value  -RAK- */
-static int get_store_item(com_val, pmt, i, j)
-int *com_val;
-char *pmt;
-int i, j;
-{
+static int get_store_item(int *com_val, char *pmt, int i, int j) {
     char command;
     vtype out_val;
 
@@ -333,9 +315,7 @@ int i, j;
 }
 
 /* Increase the insult counter and get angry if too many -RAK- */
-static int increase_insults(store_num)
-int store_num;
-{
+static int increase_insults(int store_num) {
     store_type *s_ptr;
 
     bool increase = false;
@@ -352,9 +332,7 @@ int store_num;
 }
 
 /* Decrease insults          -RAK- */
-static void decrease_insults(store_num)
-int store_num;
-{
+static void decrease_insults(int store_num) {
     store_type *s_ptr;
 
     s_ptr = &store[store_num];
@@ -364,9 +342,7 @@ int store_num;
 }
 
 /* Have insulted while haggling        -RAK- */
-static int haggle_insults(store_num)
-int store_num;
-{
+static int haggle_insults(int store_num) {
     bool haggle = false;
     if (increase_insults(store_num)) {
         haggle = true;
@@ -377,11 +353,7 @@ int store_num;
     return haggle;
 }
 
-static int get_haggle(comment, new_offer, num_offer)
-char *comment;
-int32_t *new_offer;
-int num_offer;
-{
+static int get_haggle(char *comment, int32_t *new_offer, int num_offer) {
     int32_t i;
     vtype out_val, default_offer;
     int clen;
@@ -454,12 +426,7 @@ int num_offer;
     return flag;
 }
 
-static int receive_offer(store_num, comment, new_offer, last_offer, num_offer, factor)
-int store_num;
-char *comment;
-int32_t *new_offer, last_offer;
-int num_offer, factor;
-{
+static int receive_offer(int store_num, char *comment, int32_t *new_offer, int32_t last_offer, int num_offer, int factor) {
     int receive;
 
     receive = 0;
@@ -486,11 +453,7 @@ int num_offer, factor;
 }
 
 /* Haggling routine          -RAK- */
-static int purchase_haggle(store_num, price, item)
-int store_num;
-int32_t *price;
-inven_type *item;
-{
+static int purchase_haggle(int store_num, int32_t *price, inven_type *item) {
     int32_t max_sell, min_sell, max_buy;
     int32_t cost, cur_ask, final_ask, min_offer;
     int32_t last_offer, new_offer;
@@ -648,11 +611,7 @@ inven_type *item;
 }
 
 /* Haggling routine          -RAK- */
-static int sell_haggle(store_num, price, item)
-int store_num;
-int32_t *price;
-inven_type *item;
-{
+static int sell_haggle(int store_num, int32_t *price, inven_type *item) {
     int32_t max_sell, max_buy, min_buy;
     int32_t cost, cur_ask, final_ask, min_offer;
     int32_t last_offer, new_offer;
@@ -846,10 +805,7 @@ inven_type *item;
 }
 
 /* Buy an item from a store        -RAK- */
-static int store_purchase(store_num, cur_top)
-int store_num;
-int *cur_top;
-{
+static int store_purchase(int store_num, int *cur_top) {
     int32_t price;
     int i, choice;
     bigvtype out_val, tmp_str;
@@ -935,9 +891,7 @@ int *cur_top;
 }
 
 /* Sell an item to the store        -RAK- */
-static int store_sell(store_num, cur_top)
-int store_num, *cur_top;
-{
+static int store_sell(int store_num, int *cur_top) {
     int item_val, item_pos;
     int32_t price;
     bigvtype out_val, tmp_str;
@@ -1028,9 +982,7 @@ int store_num, *cur_top;
 }
 
 /* Entering a store          -RAK- */
-void enter_store(store_num)
-int store_num;
-{
+void enter_store(int store_num) {
     int cur_top, tmp_chr;
     char command;
     store_type *s_ptr;

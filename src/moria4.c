@@ -32,9 +32,7 @@ static bool look_see();
 
 /* Tunnels through rubble and walls      -RAK- */
 /* Must take into account: secret doors,  special tools */
-void tunnel(dir)
-int dir;
-{
+void tunnel(int dir) {
     int i, tabil;
     cave_type *c_ptr;
     inven_type *i_ptr;
@@ -476,9 +474,7 @@ void look() {
      |
      |
  */
-static bool look_ray(y, from, to)
-int y, from, to;
-{
+static bool look_ray(int y, int from, int to) {
     int max_x, x;
     bool transparent;
 
@@ -563,10 +559,7 @@ int y, from, to;
     }
 }
 
-static bool look_see(x, y, transparent)
-int x, y;
-bool *transparent;
-{
+static bool look_see(int x, int y, bool *transparent) {
     char *dstring, *string, query;
     cave_type *c_ptr;
     int j;
@@ -670,10 +663,7 @@ bool *transparent;
     return false;
 }
 
-static void inven_throw(item_val, t_ptr)
-int item_val;
-inven_type *t_ptr;
-{
+static void inven_throw(int item_val, inven_type *t_ptr) {
     inven_type *i_ptr;
 
     i_ptr = &inventory[item_val];
@@ -690,10 +680,7 @@ inven_type *t_ptr;
 
 /* Obtain the hit and damage bonuses and the maximum distance for a
    thrown missile. */
-static void facts(i_ptr, tbth, tpth, tdam, tdis)
-inven_type *i_ptr;
-int *tbth, *tpth, *tdam, *tdis;
-{
+static void facts(inven_type *i_ptr, int *tbth, int *tpth, int *tdam, int *tdis) {
     int tmp_weight;
 
     if (i_ptr->weight < 1) {
@@ -781,10 +768,7 @@ int *tbth, *tpth, *tdam, *tdis;
     }
 }
 
-static void drop_throw(y, x, t_ptr)
-int y, x;
-inven_type *t_ptr;
-{
+static void drop_throw(int y, int x, inven_type *t_ptr) {
     int i, j, k;
     int cur_pos;
     bigvtype out_val, tmp_str;
@@ -947,9 +931,7 @@ void throw_object() {
 
 /* Make a bash attack on someone.        -CJS-
    Used to be part of bash above. */
-static void py_bash(y, x)
-int y, x;
-{
+static void py_bash(int y, int x) {
     int monster, k, avg_max_hp, base_tohit;
     creature_type *c_ptr;
     monster_type *m_ptr;

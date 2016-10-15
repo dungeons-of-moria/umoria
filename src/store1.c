@@ -31,9 +31,7 @@ static void insert_store();
 static void store_create();
 
 /* Returns the value for any given object    -RAK- */
-int32_t item_value(i_ptr)
-inven_type *i_ptr;
-{
+int32_t item_value(inven_type *i_ptr) {
     int32_t value;
 
     value = i_ptr->cost;
@@ -145,11 +143,7 @@ inven_type *i_ptr;
 }
 
 /* Asking price for an item        -RAK- */
-int32_t sell_price(snum, max_sell, min_sell, item)
-int snum;
-int32_t *max_sell, *min_sell;
-inven_type *item;
-{
+int32_t sell_price(int snum, int32_t *max_sell, int32_t *min_sell, inven_type *item) {
     int32_t i;
     store_type *s_ptr;
 
@@ -176,10 +170,7 @@ inven_type *item;
 }
 
 /* Check to see if he will be carrying too many objects  -RAK- */
-int store_check_num(t_ptr, store_num)
-inven_type *t_ptr;
-int store_num;
-{
+int store_check_num(inven_type *t_ptr, int store_num) {
     int i;
     store_type *s_ptr;
     inven_type *i_ptr;
@@ -205,12 +196,7 @@ int store_num;
 }
 
 /* Insert INVEN_MAX at given location */
-static void insert_store(store_num, pos, icost, i_ptr)
-int pos;
-int store_num;
-int32_t icost;
-inven_type *i_ptr;
-{
+static void insert_store(int store_num, int pos, int32_t icost, inven_type *i_ptr) {
     int i;
     store_type *s_ptr;
 
@@ -225,11 +211,7 @@ inven_type *i_ptr;
 }
 
 /* Add the item in INVEN_MAX to stores inventory.  -RAK- */
-void store_carry(store_num, ipos, t_ptr)
-int store_num;
-int *ipos;
-inven_type *t_ptr;
-{
+void store_carry(int store_num, int *ipos, inven_type *t_ptr) {
     int item_num, item_val;
     int typ, subt;
     int32_t icost, dummy;
@@ -285,10 +267,7 @@ inven_type *t_ptr;
 
 /* Destroy an item in the stores inventory.  Note that if */
 /* "one_of" is false, an entire slot is destroyed  -RAK- */
-void store_destroy(store_num, item_val, one_of)
-int store_num, item_val;
-int one_of;
-{
+void store_destroy(int store_num, int item_val, int one_of) {
     int j, number;
     store_type *s_ptr;
     inven_type *i_ptr;
@@ -345,9 +324,7 @@ void store_init() {
 }
 
 /* Creates an item and inserts it into store's inven  -RAK- */
-static void store_create(store_num)
-int store_num;
-{
+static void store_create(int store_num) {
     int i, tries;
     int cur_pos, dummy;
     store_type *s_ptr;
@@ -408,10 +385,7 @@ void store_maint() {
 }
 
 /* eliminate need to bargain if player has haggled well in the past   -DJB- */
-int noneedtobargain(store_num, minprice)
-int store_num;
-int32_t minprice;
-{
+int noneedtobargain(int store_num, int32_t minprice) {
     int flagnoneed;
     int bargain_record;
     store_type *s_ptr;
@@ -428,10 +402,7 @@ int32_t minprice;
 }
 
 /* update the bargin info          -DJB- */
-void updatebargain(store_num, price, minprice)
-int store_num;
-int32_t price, minprice;
-{
+void updatebargain(int store_num, int32_t price, int32_t minprice) {
     store_type *s_ptr;
 
     s_ptr = &store[store_num];

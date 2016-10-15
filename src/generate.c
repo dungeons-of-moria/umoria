@@ -35,10 +35,7 @@ static coords doorstk[100];
 static int doorindex;
 
 /* Always picks a correct direction */
-static void correct_dir(rdir, cdir, y1, x1, y2, x2)
-int *rdir, *cdir;
-int y1, x1, y2, x2;
-{
+static void correct_dir(int *rdir, int *cdir, int y1, int x1, int y2, int x2) {
     if (y1 < y2) {
         *rdir = 1;
     } else if (y1 == y2) {
@@ -63,9 +60,7 @@ int y1, x1, y2, x2;
 }
 
 /* Chance of wandering direction */
-static void rand_dir(rdir, cdir)
-int *rdir, *cdir;
-{
+static void rand_dir(int *rdir, int *cdir) {
     int tmp;
 
     tmp = randint(4);
@@ -89,8 +84,7 @@ static void blank_cave() {
 
 /* Fills in empty spots with desired rock    -RAK- */
 /* Note: 9 is a temporary value. */
-static void fill_cave(fval) int fval;
-{
+static void fill_cave(int fval) {
     int i, j;
     cave_type *c_ptr;
 
@@ -151,10 +145,7 @@ static void place_boundary() {
 }
 
 /* Places "streamers" of rock through dungeon    -RAK- */
-static void place_streamer(fval, treas_chance)
-int fval;
-int treas_chance;
-{
+static void place_streamer(int fval, int treas_chance) {
     int i, tx, ty;
     int y, x, t1, t2, dir;
     cave_type *c_ptr;
@@ -188,9 +179,7 @@ int treas_chance;
     } while (mmove(dir, &y, &x));
 }
 
-static void place_open_door(y, x)
-int y, x;
-{
+static void place_open_door(int y, int x) {
     int cur_pos;
     cave_type *cave_ptr;
 
@@ -201,9 +190,7 @@ int y, x;
     cave_ptr->fval = CORR_FLOOR;
 }
 
-static void place_broken_door(y, x)
-int y, x;
-{
+static void place_broken_door(int y, int x) {
     int cur_pos;
     cave_type *cave_ptr;
 
@@ -215,9 +202,7 @@ int y, x;
     t_list[cur_pos].p1 = 1;
 }
 
-static void place_closed_door(y, x)
-int y, x;
-{
+static void place_closed_door(int y, int x) {
     int cur_pos;
     cave_type *cave_ptr;
 
@@ -228,9 +213,7 @@ int y, x;
     cave_ptr->fval = BLOCKED_FLOOR;
 }
 
-static void place_locked_door(y, x)
-int y, x;
-{
+static void place_locked_door(int y, int x) {
     int cur_pos;
     cave_type *cave_ptr;
 
@@ -242,9 +225,7 @@ int y, x;
     t_list[cur_pos].p1 = randint(10) + 10;
 }
 
-static void place_stuck_door(y, x)
-int y, x;
-{
+static void place_stuck_door(int y, int x) {
     int cur_pos;
     cave_type *cave_ptr;
 
@@ -256,9 +237,7 @@ int y, x;
     t_list[cur_pos].p1 = -randint(10) - 10;
 }
 
-static void place_secret_door(y, x)
-int y, x;
-{
+static void place_secret_door(int y, int x) {
     int cur_pos;
     cave_type *cave_ptr;
 
@@ -269,9 +248,7 @@ int y, x;
     cave_ptr->fval = BLOCKED_FLOOR;
 }
 
-static void place_door(y, x)
-int y, x;
-{
+static void place_door(int y, int x) {
     int tmp;
 
     tmp = randint(3);
@@ -296,9 +273,7 @@ int y, x;
 }
 
 /* Place an up staircase at given y, x      -RAK- */
-static void place_up_stairs(y, x)
-int y, x;
-{
+static void place_up_stairs(int y, int x) {
     int cur_pos;
     cave_type *cave_ptr;
 
@@ -312,9 +287,7 @@ int y, x;
 }
 
 /* Place a down staircase at given y, x      -RAK- */
-static void place_down_stairs(y, x)
-int y, x;
-{
+static void place_down_stairs(int y, int x) {
     int cur_pos;
     cave_type *cave_ptr;
 
@@ -328,9 +301,7 @@ int y, x;
 }
 
 /* Places a staircase 1=up, 2=down      -RAK- */
-static void place_stairs(typ, num, walls)
-int typ, num, walls;
-{
+static void place_stairs(int typ, int num, int walls) {
     cave_type *cave_ptr;
     int i, j;
     bool flag;
@@ -374,9 +345,7 @@ int typ, num, walls;
 }
 
 /* Place a trap with a given displacement of point  -RAK- */
-static void vault_trap(y, x, yd, xd, num)
-int y, x, yd, xd, num;
-{
+static void vault_trap(int y, int x, int yd, int xd, int num) {
     int count, y1, x1;
     int i;
     bool flag;
@@ -399,9 +368,7 @@ int y, x, yd, xd, num;
 }
 
 /* Place a trap with a given displacement of point  -RAK- */
-static void vault_monster(y, x, num)
-int y, x, num;
-{
+static void vault_monster(int y, int x, int num) {
     int i;
     int y1, x1;
 
@@ -413,8 +380,7 @@ int y, x, num;
 }
 
 /* Builds a room at a row, column coordinate    -RAK- */
-static void build_room(yval, xval) int yval, xval;
-{
+static void build_room(int yval, int xval) {
     int i, j, y_depth, x_right;
     int y_height, x_left;
     uint8_t floor;
@@ -467,9 +433,7 @@ static void build_room(yval, xval) int yval, xval;
 
 /* Builds a room at a row, column coordinate    -RAK- */
 /* Type 1 unusual rooms are several overlapping rectangular ones */
-static void build_type1(yval, xval)
-int yval, xval;
-{
+static void build_type1(int yval, int xval) {
     int y_height, y_depth;
     int x_left, x_right, limit;
     int i0, i, j;
@@ -538,9 +502,7 @@ int yval, xval;
 /*   3 - An inner room with pillar(s) */
 /*   4 - Inner room has a maze */
 /*   5 - A set of four inner rooms */
-static void build_type2(yval, xval)
-int yval, xval;
-{
+static void build_type2(int yval, int xval) {
     int i, j, y_height, x_left;
     int y_depth, x_right, tmp;
     uint8_t floor;
@@ -820,9 +782,7 @@ int yval, xval;
 
 /* Builds a room at a row, column coordinate    -RAK- */
 /* Type 3 unusual rooms are cross shaped */
-static void build_type3(yval, xval)
-int yval, xval;
-{
+static void build_type3(int yval, int xval) {
     int y_height, y_depth;
     int x_left, x_right;
     int tmp, i, j;
@@ -975,9 +935,7 @@ int yval, xval;
 }
 
 /* Constructs a tunnel between two points */
-static void build_tunnel(row1, col1, row2, col2)
-int row1, col1, row2, col2;
-{
+static void build_tunnel(int row1, int col1, int row2, int col2) {
     int tmp_row, tmp_col, i, j;
     cave_type *c_ptr;
     cave_type *d_ptr;
@@ -1112,9 +1070,7 @@ int row1, col1, row2, col2;
     }
 }
 
-static int next_to(y, x)
-int y, x;
-{
+static int next_to(int y, int x) {
     bool next;
 
     if (next_to_corr(y, x) > 2) {
@@ -1134,9 +1090,7 @@ int y, x;
 }
 
 /* Places door at y, x position if at least 2 walls found */
-static void try_door(y, x)
-int y, x;
-{
+static void try_door(int y, int x) {
     if ((cave[y][x].fval == CORR_FLOOR) && (randint(100) > DUN_TUN_JCT) &&
         next_to(y, x)) {
         place_door(y, x);
@@ -1144,9 +1098,7 @@ int y, x;
 }
 
 /* Returns random co-ordinates        -RAK- */
-static void new_spot(y, x)
-int16_t *y, *x;
-{
+static void new_spot(int16_t *y, int16_t *x) {
     int i, j;
     cave_type *c_ptr;
 
@@ -1273,9 +1225,7 @@ static void cave_gen() {
 }
 
 /* Builds a store at a row, column coordinate */
-static void build_store(store_num, y, x)
-int store_num, y, x;
-{
+static void build_store(int store_num, int y, int x) {
     int yval, y_height, y_depth;
     int xval, x_left, x_right;
     int i, j;

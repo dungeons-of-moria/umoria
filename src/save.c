@@ -33,8 +33,8 @@
 DEBUG(static FILE *logfile);
 
 static bool sv_write();
-static void wr_byte();
-static void wr_short();
+static void wr_byte(uint8_t);
+static void wr_short(uint16_t);
 static void wr_long();
 static void wr_bytes();
 static void wr_string();
@@ -416,9 +416,7 @@ bool save_char() {
     return true;
 }
 
-bool _save_char(fnam)
-char *fnam;
-{
+bool _save_char(char *fnam) {
     vtype temp;
     int fd;
     uint8_t char_tmp;
@@ -1076,17 +1074,13 @@ bool get_char(bool *generate) {
     return false; /* not reached */
 }
 
-static void wr_byte(c)
-uint8_t c;
-{
+static void wr_byte(uint8_t c) {
     xor_byte ^= c;
     (void)putc((int)xor_byte, fileptr);
     DEBUG(fprintf(logfile, "BYTE:  %02X = %d\n", (int)xor_byte, (int)c));
 }
 
-static void wr_short(s)
-uint16_t s;
-{
+static void wr_short(uint16_t s) {
     xor_byte ^= (s & 0xFF);
     (void)putc((int)xor_byte, fileptr);
     DEBUG(fprintf(logfile, "SHORT: %02X", (int)xor_byte));
@@ -1095,9 +1089,7 @@ uint16_t s;
     DEBUG(fprintf(logfile, " %02X = %d\n", (int)xor_byte, (int)s));
 }
 
-static void wr_long(l)
-uint32_t l;
-{
+static void wr_long(uint32_t l) {
     xor_byte ^= (l & 0xFF);
     (void)putc((int)xor_byte, fileptr);
     DEBUG(fprintf(logfile, "LONG:  %02X", (int)xor_byte));
@@ -1112,10 +1104,7 @@ uint32_t l;
     DEBUG(fprintf(logfile, " %02X = %ld\n", (int)xor_byte, (int32_t)l));
 }
 
-static void wr_bytes(c, count)
-uint8_t *c;
-int count;
-{
+static void wr_bytes(uint8_t *c, int count) {
     int i;
     uint8_t *ptr;
 
@@ -1129,9 +1118,7 @@ int count;
     DEBUG(fprintf(logfile, "\n"));
 }
 
-static void wr_string(str)
-char *str;
-{
+static void wr_string(char *str) {
     DEBUG(char *s = str);
     DEBUG(fprintf(logfile, "STRING:"));
     while (*str != '\0') {
@@ -1144,10 +1131,7 @@ char *str;
     DEBUG(fprintf(logfile, " %02X = \"%s\"\n", (int)xor_byte, s));
 }
 
-static void wr_shorts(s, count)
-uint16_t *s;
-int count;
-{
+static void wr_shorts(uint16_t *s, int count) {
     int i;
     uint16_t *sptr;
 
@@ -1164,9 +1148,7 @@ int count;
     DEBUG(fprintf(logfile, "\n"));
 }
 
-static void wr_item(item)
-inven_type *item;
-{
+static void wr_item(inven_type *item) {
     DEBUG(fprintf(logfile, "ITEM:\n"));
     wr_short(item->index);
     wr_byte(item->name2);
@@ -1188,9 +1170,7 @@ inven_type *item;
     wr_byte(item->ident);
 }
 
-static void wr_monster(mon)
-monster_type *mon;
-{
+static void wr_monster(monster_type *mon) {
     DEBUG(fprintf(logfile, "MONSTER:\n"));
     wr_short((uint16_t)mon->hp);
     wr_short((uint16_t)mon->csleep);
@@ -1204,9 +1184,7 @@ monster_type *mon;
     wr_byte(mon->confused);
 }
 
-static void rd_byte(ptr)
-uint8_t *ptr;
-{
+static void rd_byte(uint8_t *ptr) {
     uint8_t c;
 
     c = getc(fileptr) & 0xFF;
@@ -1215,9 +1193,7 @@ uint8_t *ptr;
     DEBUG(fprintf(logfile, "BYTE:  %02X = %d\n", (int)c, (int)*ptr));
 }
 
-static void rd_short(ptr)
-uint16_t *ptr;
-{
+static void rd_short(uint16_t *ptr) {
     uint8_t c;
     uint16_t s;
 
@@ -1230,9 +1206,7 @@ uint16_t *ptr;
                   (int)s));
 }
 
-static void rd_long(ptr)
-uint32_t *ptr;
-{
+static void rd_long(uint32_t *ptr) {
     uint32_t l;
     uint8_t c;
 
@@ -1250,10 +1224,7 @@ uint32_t *ptr;
         fprintf(logfile, "%02X %02X = %ld\n", (int)c, (int)xor_byte, (int32_t)l));
 }
 
-static void rd_bytes(ch_ptr, count)
-uint8_t *ch_ptr;
-int count;
-{
+static void rd_bytes(uint8_t *ch_ptr, int count) {
     int i;
     uint8_t *ptr;
     uint8_t c;
@@ -1269,9 +1240,7 @@ int count;
     DEBUG(fprintf(logfile, "\n"));
 }
 
-static void rd_string(str)
-char *str;
-{
+static void rd_string(char *str) {
     uint8_t c;
 
     DEBUG(char *s = str);
@@ -1285,10 +1254,7 @@ char *str;
     DEBUG(fprintf(logfile, "= \"%s\"\n", s));
 }
 
-static void rd_shorts(ptr, count)
-uint16_t *ptr;
-int count;
-{
+static void rd_shorts(uint16_t *ptr, int count) {
     int i;
     uint16_t *sptr;
     uint16_t s;
@@ -1308,9 +1274,7 @@ int count;
     DEBUG(fprintf(logfile, "\n"));
 }
 
-static void rd_item(item)
-inven_type *item;
-{
+static void rd_item(inven_type *item) {
     DEBUG(fprintf(logfile, "ITEM:\n"));
     rd_short(&item->index);
     rd_byte(&item->name2);
@@ -1332,9 +1296,7 @@ inven_type *item;
     rd_byte(&item->ident);
 }
 
-static void rd_monster(mon)
-monster_type *mon;
-{
+static void rd_monster(monster_type *mon) {
     DEBUG(fprintf(logfile, "MONSTER:\n"));
     rd_short((uint16_t *)&mon->hp);
     rd_short((uint16_t *)&mon->csleep);
@@ -1351,15 +1313,11 @@ monster_type *mon;
 /* functions called from death.c to implement the score file */
 
 /* set the local fileptr to the scorefile fileptr */
-void set_fileptr(file)
-FILE *file;
-{
+void set_fileptr(FILE *file) {
     fileptr = file;
 }
 
-void wr_highscore(score)
-high_scores *score;
-{
+void wr_highscore(high_scores *score) {
     DEBUG(logfile = fopen("IO_LOG", "a"));
     DEBUG(fprintf(logfile, "Saving score:\n"));
 
@@ -1382,9 +1340,7 @@ high_scores *score;
     DEBUG(fclose(logfile));
 }
 
-void rd_highscore(score)
-high_scores *score;
-{
+void rd_highscore(high_scores *score) {
     DEBUG(logfile = fopen("IO_LOG", "a"));
     DEBUG(fprintf(logfile, "Reading score:\n"));
 

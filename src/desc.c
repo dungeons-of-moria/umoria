@@ -32,9 +32,7 @@ char titles[MAX_TITLES][10];
 
 /* Object descriptor routines         */
 
-bool is_a_vowel(ch)
-char ch;
-{
+bool is_a_vowel(char ch) {
     switch (ch) {
     case 'a': case 'e': case 'i': case 'o': case 'u':
     case 'A': case 'E': case 'I': case 'O': case 'U':
@@ -110,9 +108,7 @@ void magic_init() {
     reset_seed();
 }
 
-int16_t object_offset(t_ptr)
-inven_type *t_ptr;
-{
+int16_t object_offset(inven_type *t_ptr) {
     switch (t_ptr->tval) {
     case TV_AMULET:
         return 0;
@@ -139,9 +135,7 @@ inven_type *t_ptr;
 }
 
 /* Remove "Secret" symbol for identity of object      */
-void known1(i_ptr)
-inven_type *i_ptr;
-{
+void known1(inven_type *i_ptr) {
     int16_t offset;
     uint8_t indexx;
 
@@ -155,9 +149,7 @@ inven_type *i_ptr;
     object_ident[offset + indexx] &= ~OD_TRIED;
 }
 
-int known1_p(i_ptr)
-inven_type *i_ptr;
-{
+int known1_p(inven_type *i_ptr) {
     int16_t offset;
     uint8_t indexx;
 
@@ -175,48 +167,34 @@ inven_type *i_ptr;
 }
 
 /* Remove "Secret" symbol for identity of plusses     */
-void known2(i_ptr)
-inven_type *i_ptr;
-{
+void known2(inven_type *i_ptr) {
     unsample(i_ptr);
     i_ptr->ident |= ID_KNOWN2;
 }
 
-int known2_p(i_ptr)
-inven_type *i_ptr;
-{
+int known2_p(inven_type *i_ptr) {
     return (i_ptr->ident & ID_KNOWN2);
 }
 
-void clear_known2(i_ptr)
-inven_type *i_ptr;
-{
+void clear_known2(inven_type *i_ptr) {
     i_ptr->ident &= ~ID_KNOWN2;
 }
 
-void clear_empty(i_ptr)
-inven_type *i_ptr;
-{
+void clear_empty(inven_type *i_ptr) {
     i_ptr->ident &= ~ID_EMPTY;
 }
 
-void store_bought(i_ptr)
-inven_type *i_ptr;
-{
+void store_bought(inven_type *i_ptr) {
     i_ptr->ident |= ID_STOREBOUGHT;
     known2(i_ptr);
 }
 
-int store_bought_p(i_ptr)
-inven_type *i_ptr;
-{
+int store_bought_p(inven_type *i_ptr) {
     return (i_ptr->ident & ID_STOREBOUGHT);
 }
 
 /*  Remove an automatically generated inscription.  -CJS- */
-static void unsample(i_ptr)
-inven_type *i_ptr;
-{
+static void unsample(inven_type *i_ptr) {
     int16_t offset;
     uint8_t indexx;
 
@@ -233,9 +211,7 @@ inven_type *i_ptr;
 /* unquote() is no longer needed */
 
 /* Somethings been sampled -CJS- */
-void sample(i_ptr)
-inven_type *i_ptr;
-{
+void sample(inven_type *i_ptr) {
     int16_t offset;
     uint8_t indexx;
 
@@ -250,9 +226,7 @@ inven_type *i_ptr;
 /* Somethings been identified         */
 /* extra complexity by CJS so that it can merge store/dungeon objects
    when appropriate */
-void identify(item)
-int *item;
-{
+void identify(int *item) {
     int i, x1, x2;
     int j;
     inven_type *i_ptr, *t_ptr;
@@ -297,9 +271,7 @@ int *item;
 /* If an object has lost magical properties,
  * remove the appropriate portion of the name.         -CJS-
  */
-void unmagic_name(i_ptr)
-inven_type *i_ptr;
-{
+void unmagic_name(inven_type *i_ptr) {
     i_ptr->name2 = SN_NULL;
 }
 
@@ -315,11 +287,7 @@ inven_type *i_ptr;
 /* pref indicates that there should be an article added (prefix) */
 /* note that since out_val can easily exceed 80 characters, objdes must
    always be called with a bigvtype as the first paramter */
-void objdes(out_val, i_ptr, pref)
-char *out_val;
-inven_type *i_ptr;
-int pref;
-{
+void objdes(char *out_val, inven_type *i_ptr, int pref) {
     /* base name, modifier string*/
     char *basenm, *modstr;
     bigvtype tmp_val;
@@ -631,10 +599,7 @@ int pref;
     }
 }
 
-void invcopy(to, from_index)
-inven_type *to;
-int from_index;
-{
+void invcopy(inven_type *to, int from_index) {
     treasure_type *from;
 
     from = &object_list[from_index];
@@ -661,9 +626,7 @@ int from_index;
 }
 
 /* Describe number of remaining charges.    -RAK- */
-void desc_charges(item_val)
-int item_val;
-{
+void desc_charges(int item_val) {
     int rem_num;
     vtype out_val;
 
@@ -675,9 +638,7 @@ int item_val;
 }
 
 /* Describe amount of item remaining.     -RAK- */
-void desc_remain(item_val)
-int item_val;
-{
+void desc_remain(int item_val) {
     bigvtype out_val, tmp_str;
     inven_type *i_ptr;
 

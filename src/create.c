@@ -48,12 +48,9 @@ static void get_stats() {
 }
 
 /* Changes stats by given amount        -JWT- */
-static void change_stat(stat, amount)
-int stat;
-int16_t amount;
-{
-     int i;
-     int tmp_stat;
+static void change_stat(int stat, int16_t amount) {
+    int i;
+    int tmp_stat;
 
     tmp_stat = py.stats.max_stat[stat];
     if (amount < 0) {
@@ -90,9 +87,9 @@ int16_t amount;
 /* generate all stats and modify for race. needed in a separate module so
    looping of character selection would be allowed     -RGM- */
 static void get_all_stats() {
-     player_type *p_ptr;
-     race_type *r_ptr;
-     int j;
+    player_type *p_ptr;
+    race_type *r_ptr;
+    int j;
 
     p_ptr = &py;
     r_ptr = &race[p_ptr->misc.prace];
@@ -176,7 +173,7 @@ static void choose_race() {
 
 /* Will print the history of a character      -JWT- */
 static void print_history() {
-     int i;
+    int i;
 
     put_buffer("Character Background", 14, 27);
     for (i = 0; i < 4; i++) {
@@ -303,7 +300,7 @@ static void get_sex() {
 
 /* Computes character's age, height, and weight    -JWT- */
 static void get_ahw() {
-     int i;
+    int i;
 
     i = py.misc.prace;
     py.misc.age = race[i].b_age + randint((int)race[i].m_age);
@@ -433,15 +430,13 @@ static void get_class() {
 /* Given a stat value, return a monetary value,
  * which affects the amount of gold a player has.
  */
-static int monval(i)
-uint8_t i;
-{
+static int monval(uint8_t i) {
     return 5 * ((int)i - 10);
 }
 
 static void get_money() {
-     int tmp, gold;
-     uint8_t *a_ptr;
+    int tmp, gold;
+    uint8_t *a_ptr;
 
     a_ptr = py.stats.max_stat;
     tmp = monval(a_ptr[A_STR]) +
@@ -470,8 +465,8 @@ static void get_money() {
 /* ---------- M A I N  for Character Creation Routine ---------- */
 /*              -JWT- */
 void create_character() {
-     int exit_flag = 1;
-     char c;
+    int exit_flag = 1;
+    char c;
 
     put_character();
     choose_race();

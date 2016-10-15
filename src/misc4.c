@@ -64,10 +64,7 @@ void add_inscribe(inven_type *i_ptr, uint8_t type) {
 }
 
 /* Replace any existing comment in an object description with a new one. CJS*/
-void inscribe(i_ptr, str)
-inven_type *i_ptr;
-char *str;
-{
+void inscribe(inven_type *i_ptr, char *str) {
     (void)strcpy(i_ptr->inscrip, str);
 }
 

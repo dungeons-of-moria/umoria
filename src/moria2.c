@@ -31,9 +31,7 @@ static bool see_wall();
 
 /* Change a trap from invisible to visible    -RAK- */
 /* Note: Secret doors are handled here */
-void change_trap(y, x)
-int y, x;
-{
+void change_trap(int y, int x) {
     cave_type *c_ptr;
     inven_type *t_ptr;
 
@@ -52,9 +50,7 @@ int y, x;
 }
 
 /* Searches for hidden things.      -RAK- */
-void search(y, x, chance)
-int y, x, chance;
-{
+void search(int y, int x, int chance) {
     int i, j;
     cave_type *c_ptr;
     inven_type *t_ptr;
@@ -233,9 +229,7 @@ static bool find_openarea, find_breakright, find_breakleft;
 static int find_prevdir;
 static int find_direction; /* Keep a record of which way we are going. */
 
-void find_init(dir)
-int dir;
-{
+void find_init(int dir) {
     int row, col;
     bool deepleft, deepright;
     int i;
@@ -331,9 +325,7 @@ void end_find() {
 }
 
 /* Do we see a wall? Used in running.   -CJS- */
-static bool see_wall(dir, y, x)
-int dir, y, x;
-{
+static bool see_wall(int dir, int y, int x) {
     /* check to see if movement there possible */
     if (!mmove(dir, &y, &x)) {
         return true;
@@ -348,9 +340,7 @@ int dir, y, x;
 }
 
 /* Do we see anything? Used in running.   -CJS- */
-static bool see_nothing(dir, y, x)
-int dir, y, x;
-{
+static bool see_nothing(int dir, int y, int x) {
     if (!mmove(dir, &y, &x)) { /* check to see if movement there possible */
         return false;
     } else if (loc_symbol(y, x) == ' ') {
@@ -361,9 +351,7 @@ int dir, y, x;
 }
 
 /* Determine the next direction for a run, or if we should stop.  -CJS- */
-void area_affect(dir, y, x)
-int dir, y, x;
-{
+void area_affect(int dir, int y, int x) {
     int newdir, t, check_dir, row, col;
     bool inv;
     int i, max, option, option2;
@@ -509,9 +497,7 @@ int dir, y, x;
 /* AC gets worse          -RAK- */
 /* Note: This routine affects magical AC bonuses so that stores */
 /*   can detect the damage. */
-int minus_ac(typ_dam)
-uint32_t typ_dam;
-{
+int minus_ac(uint32_t typ_dam) {
     int i, j;
     int tmp[6];
     inven_type *i_ptr;
@@ -566,9 +552,7 @@ uint32_t typ_dam;
 }
 
 /* Corrode the unsuspecting person's armor     -RAK- */
-void corrode_gas(kb_str)
-char *kb_str;
-{
+void corrode_gas(char *kb_str) {
     if (!minus_ac((uint32_t)TR_RES_ACID)) {
         take_hit(randint(8), kb_str);
     }
@@ -579,19 +563,13 @@ char *kb_str;
 }
 
 /* Poison gas the idiot.        -RAK- */
-void poison_gas(dam, kb_str)
-int dam;
-char *kb_str;
-{
+void poison_gas(int dam, char *kb_str) {
     take_hit(dam, kb_str);
     py.flags.poisoned += 12 + randint(dam);
 }
 
 /* Burn the fool up.          -RAK- */
-void fire_dam(dam, kb_str)
-int dam;
-char *kb_str;
-{
+void fire_dam(int dam, char *kb_str) {
     if (py.flags.fire_resist) {
         dam = dam / 3;
     }
@@ -605,10 +583,7 @@ char *kb_str;
 }
 
 /* Freeze him to death.       -RAK- */
-void cold_dam(dam, kb_str)
-int dam;
-char *kb_str;
-{
+void cold_dam(int dam, char *kb_str) {
     if (py.flags.cold_resist) {
         dam = dam / 3;
     }
@@ -622,10 +597,7 @@ char *kb_str;
 }
 
 /* Lightning bolt the sucker away.      -RAK- */
-void light_dam(dam, kb_str)
-int dam;
-char *kb_str;
-{
+void light_dam(int dam, char *kb_str) {
     if (py.flags.lght_resist) {
         take_hit((dam / 3), kb_str);
     } else {
@@ -637,10 +609,7 @@ char *kb_str;
 }
 
 /* Throw acid on the hapless victim     -RAK- */
-void acid_dam(dam, kb_str)
-int dam;
-char *kb_str;
-{
+void acid_dam(int dam, char *kb_str) {
     int flag;
 
     flag = 0;

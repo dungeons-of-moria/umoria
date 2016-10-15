@@ -36,10 +36,7 @@ static void price_adjust();
 #endif
 
 /* Initialize, restore, and get the ball rolling.  -RAK- */
-int main(argc, argv)
-int argc;
-char *argv[];
-{
+int main(int argc, char *argv[]) {
     uint32_t seed;
     char *p;
 

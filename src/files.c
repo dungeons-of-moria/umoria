@@ -67,9 +67,7 @@ void read_times() {
 
 /* File perusal.      -CJS-
    primitive, but portable */
-void helpfile(filename)
-char *filename;
-{
+void helpfile(char *filename) {
     bigvtype tmp_str;
     FILE *file;
     char input;
@@ -174,9 +172,7 @@ void print_objects() {
 }
 
 /* Print the character to a file or device    -RAK- */
-bool file_character(filename1)
-char *filename1;
-{
+bool file_character(char *filename1) {
     int i;
     int j, xbth, xbthb, xfos, xsrh, xstl, xdis, xsave, xdev;
     vtype xinfra;

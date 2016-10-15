@@ -34,11 +34,7 @@ static void replace_spot();
 /* staves routines, and are occasionally called from other areas. */
 /* Now included are creature spells also.           -RAK */
 
-void monster_name(m_name, m_ptr, r_ptr)
-char *m_name;
-monster_type *m_ptr;
-creature_type *r_ptr;
-{
+void monster_name(char *m_name, monster_type *m_ptr, creature_type *r_ptr) {
     if (!m_ptr->ml) {
         (void)strcpy(m_name, "It");
     } else {
@@ -46,11 +42,7 @@ creature_type *r_ptr;
     }
 }
 
-void lower_monster_name(m_name, m_ptr, r_ptr)
-char *m_name;
-monster_type *m_ptr;
-creature_type *r_ptr;
-{
+void lower_monster_name(char *m_name, monster_type *m_ptr, creature_type *r_ptr) {
     if (!m_ptr->ml) {
         (void)strcpy(m_name, "it");
     } else {
@@ -59,9 +51,7 @@ creature_type *r_ptr;
 }
 
 /* Sleep creatures adjacent to player      -RAK- */
-int sleep_monsters1(y, x)
-int y, x;
-{
+int sleep_monsters1(int y, int x) {
     int i, j;
     cave_type *c_ptr;
     monster_type *m_ptr;
@@ -233,9 +223,7 @@ int detect_invisible() {
  *     1.  If corridor  light immediate area
  *     2.  If room      light entire room plus immediate area.
  */
-int light_area(y, x)
-int y, x;
-{
+int light_area(int y, int x) {
     int i, j;
 
     if (py.flags.blind < 1) {
@@ -261,9 +249,7 @@ int y, x;
 }
 
 /* Darken an area, opposite of light area    -RAK- */
-int unlight_area(y, x)
-int y, x;
-{
+int unlight_area(int y, int x) {
     int i, j;
     int tmp1, tmp2;
     int start_row, start_col, end_row, end_col;
@@ -370,9 +356,7 @@ int ident_spell() {
 }
 
 /* Get all the monsters on the level pissed off.  -RAK- */
-int aggravate_monster(dis_affect)
-int dis_affect;
-{
+int aggravate_monster(int dis_affect) {
     int i;
     monster_type *m_ptr;
 
@@ -529,9 +513,7 @@ int detect_monsters() {
 
 /* Leave a line of light in given dir, blue light can sometimes */
 /* hurt creatures.               -RAK- */
-void light_line(dir, y, x)
-int dir, y, x;
-{
+void light_line(int dir, int y, int x) {
     int i;
     cave_type *c_ptr;
     monster_type *m_ptr;
@@ -592,9 +574,7 @@ int dir, y, x;
 }
 
 /* Light line in all directions        -RAK- */
-void starlite(y, x)
-int y, x;
-{
+void starlite(int y, int x) {
     int i;
 
     if (py.flags.blind < 1) {
@@ -609,9 +589,7 @@ int y, x;
 }
 
 /* Disarms all traps/chests in a given direction  -RAK- */
-int disarm_all(dir, y, x)
-int dir, y, x;
-{
+int disarm_all(int dir, int y, int x) {
     cave_type *c_ptr;
     inven_type *t_ptr;
     int dist;
@@ -655,12 +633,7 @@ int dir, y, x;
 }
 
 /* Return flags for given type area affect    -RAK- */
-void get_flags(typ, weapon_type, harm_type, destroy)
-int typ;
-uint32_t *weapon_type;
-int *harm_type;
-bool (**destroy)();
-{
+void get_flags(int typ, uint32_t *weapon_type, int *harm_type, bool (**destroy)()) {
     switch (typ) {
     case GF_MAGIC_MISSILE:
         *weapon_type = 0;
@@ -703,10 +676,7 @@ bool (**destroy)();
 }
 
 /* Shoot a bolt in a given direction      -RAK- */
-void fire_bolt(typ, dir, y, x, dam, bolt_typ)
-int typ, dir, y, x, dam;
-char *bolt_typ;
-{
+void fire_bolt(int typ, int dir, int y, int x, int dam, char *bolt_typ) {
     int i, oldy, oldx, dist;
     uint32_t weapon_type;
     int harm_type;
@@ -788,10 +758,7 @@ char *bolt_typ;
 
 /* Shoot a ball in a given direction.  Note that balls have an */
 /* area affect.                -RAK- */
-void fire_ball(typ, dir, y, x, dam_hp, descrip)
-int typ, dir, y, x, dam_hp;
-char *descrip;
-{
+void fire_ball(int typ, int dir, int y, int x, int dam_hp, char *descrip) {
     int i, j;
     int dam, max_dis, thit, tkill, k, tmp;
     int oldy, oldx, dist, harm_type;
@@ -922,11 +889,7 @@ char *descrip;
 
 /* Breath weapon works like a fire_ball, but affects the player. */
 /* Note the area affect.            -RAK- */
-void breath(typ, y, x, dam_hp, ddesc, monptr)
-int typ, y, x, dam_hp;
-char *ddesc;
-int monptr;
-{
+void breath(int typ, int y, int x, int dam_hp, char *ddesc, int monptr) {
     int i, j;
     int dam, max_dis, harm_type;
     uint32_t weapon_type;
@@ -1041,9 +1004,7 @@ int monptr;
 }
 
 /* Recharge a wand, staff, or rod.  Sometimes the item breaks. -RAK-*/
-int recharge(num)
-int num;
-{
+int recharge(int num) {
     int i, j, item_val;
     inven_type *i_ptr;
 
@@ -1084,9 +1045,7 @@ int num;
 }
 
 /* Increase or decrease a creatures hit points    -RAK- */
-int hp_monster(dir, y, x, dam)
-int dir, y, x, dam;
-{
+int hp_monster(int dir, int y, int x, int dam) {
     int i;
     int dist;
     cave_type *c_ptr;
@@ -1127,9 +1086,7 @@ int dir, y, x, dam;
 }
 
 /* Drains life; note it must be living.    -RAK- */
-int drain_life(dir, y, x)
-int dir, y, x;
-{
+int drain_life(int dir, int y, int x) {
     int i;
     int dist;
     cave_type *c_ptr;
@@ -1176,9 +1133,7 @@ int dir, y, x;
 
 /* Increase or decrease a creatures speed    -RAK- */
 /* NOTE: cannot slow a winning creature (BALROG) */
-int speed_monster(dir, y, x, spd)
-int dir, y, x, spd;
-{
+int speed_monster(int dir, int y, int x, int spd) {
     int dist;
     cave_type *c_ptr;
     monster_type *m_ptr;
@@ -1225,9 +1180,7 @@ int dir, y, x, spd;
 }
 
 /* Confuse a creature          -RAK- */
-int confuse_monster(dir, y, x)
-int dir, y, x;
-{
+int confuse_monster(int dir, int y, int x) {
     int  dist;
     cave_type *c_ptr;
     monster_type *m_ptr;
@@ -1281,9 +1234,7 @@ int dir, y, x;
 }
 
 /* Sleep a creature.          -RAK- */
-int sleep_monster(dir, y, x)
-int dir, y, x;
-{
+int sleep_monster(int dir, int y, int x) {
     int dist;
     cave_type *c_ptr;
     monster_type *m_ptr;
@@ -1326,9 +1277,7 @@ int dir, y, x;
 }
 
 /* Turn stone to mud, delete wall.      -RAK- */
-int wall_to_mud(dir, y, x)
-int dir, y, x;
-{
+int wall_to_mud(int dir, int y, int x) {
     int i, dist;
     bigvtype out_val, tmp_str;
     cave_type *c_ptr;
@@ -1409,9 +1358,7 @@ int dir, y, x;
 }
 
 /* Destroy all traps and doors in a given direction  -RAK- */
-int td_destroy2(dir, y, x)
-int dir, y, x;
-{
+int td_destroy2(int dir, int y, int x) {
     int dist;
     cave_type *c_ptr;
     inven_type *t_ptr;
@@ -1452,9 +1399,7 @@ int dir, y, x;
 
 /* Polymorph a monster          -RAK- */
 /* NOTE: cannot polymorph a winning creature (BALROG) */
-int poly_monster(dir, y, x)
-int dir, y, x;
-{
+int poly_monster(int dir, int y, int x) {
     int dist;
     cave_type *c_ptr;
     creature_type *r_ptr;
@@ -1499,9 +1444,7 @@ int dir, y, x;
 }
 
 /* Create a wall.          -RAK- */
-int build_wall(dir, y, x)
-int dir, y, x;
-{
+int build_wall(int dir, int y, int x) {
     int i;
     int damage, dist;
     cave_type *c_ptr;
@@ -1572,9 +1515,7 @@ int dir, y, x;
 }
 
 /* Replicate a creature          -RAK- */
-bool clone_monster(dir, y, x)
-int dir, y, x;
-{
+bool clone_monster(int dir, int y, int x) {
     cave_type *c_ptr;
     int dist;
 
@@ -1600,9 +1541,7 @@ int dir, y, x;
 }
 
 /* Move the creature record to a new location    -RAK- */
-void teleport_away(monptr, dis)
-int monptr, dis;
-{
+void teleport_away(int monptr, int dis) {
     int yn, xn, ctr;
     monster_type *m_ptr;
 
@@ -1634,9 +1573,7 @@ int monptr, dis;
 }
 
 /* Teleport player to spell casting creature    -RAK- */
-void teleport_to(ny, nx)
-int ny, nx;
-{
+void teleport_to(int ny, int nx) {
     int dis, ctr, y, x;
     int i, j;
     cave_type *c_ptr;
@@ -1674,9 +1611,7 @@ int ny, nx;
 }
 
 /* Teleport all creatures in a given direction away  -RAK- */
-int teleport_monster(dir, y, x)
-int dir, y, x;
-{
+int teleport_monster(int dir, int y, int x) {
     int dist;
     cave_type *c_ptr;
 
@@ -1759,9 +1694,7 @@ int genocide() {
 
 /* Change speed of any creature .      -RAK- */
 /* NOTE: cannot slow a winning creature (BALROG) */
-int speed_monsters(spd)
-int spd;
-{
+int speed_monsters(int spd) {
     int i;
     monster_type *m_ptr;
     creature_type *r_ptr;
@@ -1900,9 +1833,7 @@ int detect_evil() {
 }
 
 /* Change players hit points in some manner    -RAK- */
-int hp_player(num)
-int num;
-{
+int hp_player(int num) {
     struct misc *m_ptr;
 
     bool res = false;
@@ -2097,10 +2028,7 @@ void create_food() {
 
 /* Attempts to destroy a type of creature.  Success depends on */
 /* the creatures level VS. the player's level     -RAK- */
-int dispel_creature(cflag, damage)
-int cflag;
-int damage;
-{
+int dispel_creature(int cflag, int damage) {
     int i;
     int k;
     monster_type *m_ptr;
@@ -2244,9 +2172,7 @@ void lose_chr() {
 }
 
 /* Lose experience          -RAK- */
-void lose_exp(amount)
-int32_t amount;
-{
+void lose_exp(int32_t amount) {
     int i;
     struct misc *m_ptr;
     class_type *c_ptr;
@@ -2304,22 +2230,16 @@ int slow_poison() {
 }
 
 /* Bless            -RAK- */
-void bless(amount)
-int amount;
-{
+void bless(int amount) {
     py.flags.blessed += amount;
 }
 
 /* Detect Invisible for period of time      -RAK- */
-void detect_inv2(amount)
-int amount;
-{
+void detect_inv2(int amount) {
     py.flags.detect_inv += amount;
 }
 
-static void replace_spot(y, x, typ)
-int y, x, typ;
-{
+static void replace_spot(int y, int x, int typ) {
     cave_type *c_ptr;
 
     c_ptr = &cave[y][x];
@@ -2357,9 +2277,7 @@ int y, x, typ;
  *        as teleporting to another level.  This will NOT win
  *        the game.
  */
-void destroy_area(y, x)
-int y, x;
-{
+void destroy_area(int y, int x) {
     int i, j, k;
 
     if (dun_level > 0) {

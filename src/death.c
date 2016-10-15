@@ -36,9 +36,7 @@
 #endif
 #endif
 
-static void date(day)
-char *day;
-{
+static void date(char *day) {
     char *tmp;
     long clockvar;
 
@@ -49,10 +47,7 @@ char *day;
 }
 
 /* Centers a string within a 31 character string    -JWT- */
-static char *center_string(centered_str, in_str)
-char *centered_str;
-char *in_str;
-{
+static char *center_string(char *centered_str, char *in_str) {
     int i, j;
 
     i = strlen(in_str);
@@ -84,9 +79,7 @@ char *in_str;
 
 /* An flock HACK.  LOCK_SH and LOCK_EX are not distinguished.  DO NOT release
    a lock which you failed to set!  ALWAYS release a lock you set! */
-int flock(f, l)
-int f, l;
-{
+int flock(int f, l) {
     struct stat sbuf;
     char lockname[80];
 
@@ -126,9 +119,7 @@ int f, l;
 }
 #endif
 
-void display_scores(show_player)
-int show_player;
-{
+void display_scores(int show_player) {
     int i, rank;
     high_scores score;
     char input;

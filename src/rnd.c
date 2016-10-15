@@ -88,9 +88,7 @@ uint32_t get_rnd_seed() {
     return rnd_seed;
 }
 
-void set_rnd_seed(seedval)
-uint32_t seedval;
-{
+void set_rnd_seed(uint32_t seedval) {
     /* set seed to value between 1 and m-1 */
     rnd_seed = (seedval % (RNG_M - 1)) + 1;
 }
