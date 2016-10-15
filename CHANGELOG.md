@@ -14,6 +14,7 @@
 
 `2016-10-15`
 
+- Converts deprecated K&R style function declarations.
 - Cleans up function prototypes in externs.h and elsewhere.
 
 
