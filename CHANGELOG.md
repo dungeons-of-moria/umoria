@@ -12,6 +12,11 @@
 ### All Changes
 
 
+`2016-10-16`
+
+- Updates variable declarations: initialize at point of first use.
+
+
 `2016-10-15`
 
 - Converts deprecated K&R style function declarations.
