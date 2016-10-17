@@ -65,10 +65,10 @@ void use() {
             (i_ptr->p1)--;
 
             while (i != 0) {
-                int j = bit_pos(&i) + 1;
+                int pos = bit_pos(&i) + 1;
 
                 /* Staffs. */
-                switch (j) {
+                switch (pos) {
                 case 1:
                     ident = light_area(char_row, char_col);
                     break;

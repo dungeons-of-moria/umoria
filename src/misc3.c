@@ -1515,9 +1515,9 @@ void calc_spells(int stat) {
     if (new_spells > 0) {
         /* remember forgotten spells while forgotten spells exist of new_spells
            positive, remember the spells in the order that they were learned */
-        for (int i = 0; (spell_forgotten && new_spells && (i < num_allowed) && (i < 32)); i++) {
+        for (int n = 0; (spell_forgotten && new_spells && (n < num_allowed) && (n < 32)); n++) {
             /* j is (i+1)th spell learned */
-            int j = spell_order[i];
+            int j = spell_order[n];
 
             /* shifting by amounts greater than number of bits in long gives
                an undefined result, so don't shift for unknown spells */
@@ -1548,18 +1548,18 @@ void calc_spells(int stat) {
             uint32_t spell_flag = 0x7FFFFFFFL & ~spell_learned;
 
             int j;
-            int i = 0;
+            int id = 0;
             for (j = 0, mask = 0x1; spell_flag; mask <<= 1, j++) {
                 if (spell_flag & mask) {
                     spell_flag &= ~mask;
                     if (msp_ptr[j].slevel <= p_ptr->lev) {
-                        i++;
+                        id++;
                     }
                 }
             }
 
-            if (new_spells > i) {
-                new_spells = i;
+            if (new_spells > id) {
+                new_spells = id;
             }
         }
     } else if (new_spells < 0) {
@@ -1695,19 +1695,19 @@ void gain_spells() {
 
             char query;
             while (new_spells && get_com("Learn which spell?", &query)) {
-                int j = query - 'a';
+                int c = query - 'a';
 
                 /* test j < 23 in case i is greater than 22, only 22 spells
                    are actually shown on the screen, so limit choice to those */
-                if (j >= 0 && j < i && j < 22) {
+                if (c >= 0 && c < i && c < 22) {
                     new_spells--;
-                    spell_learned |= 1L << spells[j];
-                    spell_order[last_known++] = spells[j];
-                    for (; j <= i - 1; j++) {
-                        spells[j] = spells[j + 1];
+                    spell_learned |= 1L << spells[c];
+                    spell_order[last_known++] = spells[c];
+                    for (; c <= i - 1; c++) {
+                        spells[c] = spells[c + 1];
                     }
                     i--;
-                    erase_line(j + 1, 31);
+                    erase_line(c + 1, 31);
                     print_spells(spells, i, false, -1);
                 } else {
                     bell();
@@ -1717,16 +1717,16 @@ void gain_spells() {
         } else {
             /* pick a prayer at random */
             while (new_spells) {
-                int j = randint(i) - 1;
-                spell_learned |= 1L << spells[j];
-                spell_order[last_known++] = spells[j];
+                int s = randint(i) - 1;
+                spell_learned |= 1L << spells[s];
+                spell_order[last_known++] = spells[s];
 
                 vtype tmp_str;
-                (void)sprintf(tmp_str, "You have learned the prayer of %s.", spell_names[spells[j] + offset]);
+                (void)sprintf(tmp_str, "You have learned the prayer of %s.", spell_names[spells[s] + offset]);
                 msg_print(tmp_str);
 
-                for (; j <= i - 1; j++) {
-                    spells[j] = spells[j + 1];
+                for (; s <= i - 1; s++) {
+                    spells[s] = spells[s + 1];
                 }
                 i--;
                 new_spells--;

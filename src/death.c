@@ -233,12 +233,12 @@ static void print_tomb() {
     put_buffer("|            killed by            |", 15, 9);
     p = died_from;
 
-    int i = (int)strlen(p);
-    p[i] = '.'; /* add a trailing period */
-    p[i + 1] = '\0';
+    int len = (int)strlen(p);
+    p[len] = '.'; /* add a trailing period */
+    p[len + 1] = '\0';
     (void)sprintf(str, "| %s |", center_string(tmp_str, p));
     put_buffer(str, 16, 9);
-    p[i] = '\0'; /* strip off the period */
+    p[len] = '\0'; /* strip off the period */
 
     char day[11];
     date(day);

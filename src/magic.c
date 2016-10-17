@@ -112,8 +112,8 @@ void cast() {
                     teleport((int)(py.misc.lev * 5));
                     break;
                 case 14:
-                    for (int i = 22; i < INVEN_ARRAY_SIZE; i++) {
-                        inven_type *i_ptr = &inventory[i];
+                    for (int id = 22; id < INVEN_ARRAY_SIZE; id++) {
+                        inven_type *i_ptr = &inventory[id];
                         i_ptr->flags = (i_ptr->flags & ~TR_CURSED);
                     }
                     break;

@@ -622,9 +622,9 @@ void dungeon() {
         }
 
         if ((py.flags.status & PY_STATS) != 0) {
-            for (int i = 0; i < 6; i++) {
-                if ((PY_STR << i) & py.flags.status) {
-                    prt_stat(i);
+            for (int n = 0; n < 6; n++) {
+                if ((PY_STR << n) & py.flags.status) {
+                    prt_stat(n);
                 }
             }
 

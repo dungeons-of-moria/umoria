@@ -94,7 +94,7 @@ void magic_init() {
         string[0] = '\0';
         k = randint(2) + 1;
         for (int i = 0; i < k; i++) {
-            for (int j = randint(2); j > 0; j--) {
+            for (int s = randint(2); s > 0; s--) {
                 (void)strcat(string, syllables[randint(MAX_SYLLABLES) - 1]);
             }
             if (i < k - 1) {

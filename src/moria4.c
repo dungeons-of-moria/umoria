@@ -609,9 +609,9 @@ static bool look_see(int x, int y, bool *transparent) {
                 goto granite;
             }
             if (gl_rock == 0 && t_list[c_ptr->tptr].tval != TV_INVIS_TRAP) {
-                bigvtype tmp_str;
-                objdes(tmp_str, &t_list[c_ptr->tptr], true);
-                (void)sprintf(out_val, "%s %s ---pause---", dstring, tmp_str);
+                bigvtype obj_string;
+                objdes(obj_string, &t_list[c_ptr->tptr], true);
+                (void)sprintf(out_val, "%s %s ---pause---", dstring, obj_string);
                 dstring = "It is in";
                 prt(out_val, 0, 0);
                 move_cursor_relative(y, x);
