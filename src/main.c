@@ -87,7 +87,7 @@ int main(int argc, char *argv[]) {
             to_be_wizard = true;
 
             if (isdigit((int)argv[0][2])) {
-                seed = atoi(&argv[0][2]);
+                seed = (uint32_t)atoi(&argv[0][2]);
             }
             break;
         default:

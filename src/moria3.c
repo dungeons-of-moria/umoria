@@ -461,7 +461,6 @@ int delete_object(int y, int x) {
 /* Returns a mask of bits from the given flags which indicates what the
    monster is seen to have dropped.  This may be added to monster memory. */
 uint32_t monster_death(int y, int x, uint32_t flags) {
-
     int i;
     if (flags & CM_CARRY_OBJ) {
         i = 1;
@@ -494,7 +493,7 @@ uint32_t monster_death(int y, int x, uint32_t flags) {
 
     uint32_t dump;
     if (number > 0) {
-        dump = summon_object(y, x, number, i);
+        dump = (uint32_t)summon_object(y, x, number, i);
     } else {
         dump = 0;
     }

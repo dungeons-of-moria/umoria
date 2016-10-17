@@ -1579,7 +1579,8 @@ static void mon_move(int monptr, uint32_t *rcmove) {
 /* Creatures movement and attacking are done from here  -RAK- */
 void creatures(int attack) {
     int k;
-    uint32_t notice, rcmove;
+    int notice;
+    uint32_t rcmove;
     bool wake, ignore;
     monster_type *m_ptr;
     recall_type *r_ptr;

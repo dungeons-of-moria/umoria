@@ -1928,10 +1928,10 @@ void insert_str(char *object_str, char *mtc_str, char *insert) {
 }
 
 void insert_lnum(char *object_str, char *mtc_str, int32_t number, int show_sign) {
-    int flag = 1;
-    int mlen = (int)strlen(mtc_str);
+    size_t mlen = strlen(mtc_str);
     char *tmp_str = object_str;
 
+    int flag = 1;
     char *string;
     do {
         string = strchr(tmp_str, mtc_str[0]);

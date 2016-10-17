@@ -285,7 +285,7 @@ static bool sv_write() {
     wr_string(died_from);
 
     /* starting with 5.2.2, put the max_score in the savefile */
-    l = total_points();
+    l = (uint32_t)(total_points());
     wr_long(l);
 
     /* starting with 5.2.2, put the birth_date in the savefile */

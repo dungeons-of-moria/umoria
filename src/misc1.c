@@ -46,7 +46,7 @@ void init_seeds(uint32_t seed) {
     clock_var += 113452L;
     set_rnd_seed(clock_var);
     /* make it a little more random */
-    for (clock_var = randint(100); clock_var != 0; clock_var--) {
+    for (clock_var = (uint32_t)randint(100); clock_var != 0; clock_var--) {
         (void)rnd();
     }
 }
