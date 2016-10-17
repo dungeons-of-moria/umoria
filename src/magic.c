@@ -109,7 +109,7 @@ void cast() {
                     (void)cure_poison();
                     break;
                 case 13:
-                    teleport((int)(py.misc.lev * 5));
+                    teleport((py.misc.lev * 5));
                     break;
                 case 14:
                     for (int id = 22; id < INVEN_ARRAY_SIZE; id++) {

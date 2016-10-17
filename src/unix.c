@@ -147,7 +147,7 @@ int tilde(char *file, char *exp) {
             }
             user[i] = '\0';
             if (i == 0) {
-                char *login = (char *)getlogin();
+                char *login = getlogin();
 
                 if (login != NULL) {
                     (void)strcpy(user, login);

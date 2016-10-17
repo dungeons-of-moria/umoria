@@ -345,7 +345,7 @@ static void highscores() {
     /*  First, get a lock on the high score file so no-one else tries */
     /*  to write to it while we are using it, on IBMPCs only one
         process can have the file open at a time, so we just open it here */
-    if (0 != flock((int)fileno(highscore_fp), LOCK_EX)) {
+    if (0 != flock(fileno(highscore_fp), LOCK_EX)) {
         msg_print("Error gaining lock for score file");
         msg_print(CNIL);
         return;
@@ -456,7 +456,7 @@ static void highscores() {
         }
     }
 
-    (void)flock((int)fileno(highscore_fp), LOCK_UN);
+    (void)flock(fileno(highscore_fp), LOCK_UN);
 }
 
 /* Change the player into a King!      -RAK- */

@@ -93,7 +93,7 @@ void pray() {
                     }
                     break;
                 case 10:
-                    teleport((int)(py.misc.lev * 3));
+                    teleport((py.misc.lev * 3));
                     break;
                 case 11:
                     (void)hp_player(damroll(4, 4));
@@ -127,7 +127,7 @@ void pray() {
                     break;
                 case 18:
                     if (get_dir(CNIL, &dir)) {
-                        fire_ball(GF_HOLY_ORB, dir, char_row, char_col, (int)(damroll(3, 6) + py.misc.lev), "Black Sphere");
+                        fire_ball(GF_HOLY_ORB, dir, char_row, char_col, (damroll(3, 6) + py.misc.lev), "Black Sphere");
                     }
                     break;
                 case 19:
@@ -155,13 +155,13 @@ void pray() {
                     bless(randint(48) + 48);
                     break;
                 case 27:
-                    (void)dispel_creature(CD_UNDEAD, (int)(3 * py.misc.lev));
+                    (void)dispel_creature(CD_UNDEAD, (3 * py.misc.lev));
                     break;
                 case 28:
                     (void)hp_player(200);
                     break;
                 case 29:
-                    (void)dispel_creature(CD_EVIL, (int)(3 * py.misc.lev));
+                    (void)dispel_creature(CD_EVIL, (3 * py.misc.lev));
                     break;
                 case 30:
                     warding_glyph();
@@ -173,7 +173,7 @@ void pray() {
                     for (i = A_STR; i <= A_CHR; i++) {
                         (void)res_stat(i);
                     }
-                    (void)dispel_creature(CD_EVIL, (int)(4 * py.misc.lev));
+                    (void)dispel_creature(CD_EVIL, (4 * py.misc.lev));
                     (void)turn_undead();
                     if (py.flags.invuln < 3) {
                         py.flags.invuln = 3;

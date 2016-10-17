@@ -1922,7 +1922,7 @@ void insert_str(char *object_str, char *mtc_str, char *insert) {
         if (insert) {
             (void)strcat(out_val, insert);
         }
-        (void)strcat(out_val, (char *)(pc + mtc_len));
+        (void)strcat(out_val, (pc + mtc_len));
         (void)strcpy(object_str, out_val);
     }
 }
@@ -2072,7 +2072,7 @@ int critical_blow(int weight, int plus, int dam, int attack_type) {
 
     /* Weight of weapon, plusses to hit, and character level all */
     /* contribute to the chance of a critical */
-    if (randint(5000) <= (int)(weight + 5 * plus + (class_level_adj[py.misc.pclass][attack_type] * py.misc.lev))) {
+    if (randint(5000) <= (weight + 5 * plus + (class_level_adj[py.misc.pclass][attack_type] * py.misc.lev))) {
         weight += randint(650);
 
         if (weight < 400) {

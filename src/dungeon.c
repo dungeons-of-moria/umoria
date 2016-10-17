@@ -646,7 +646,7 @@ void dungeon() {
         /* for 1st level char, check once every 2160 turns
            for 40th level char, check once every 416 turns */
         if (((turn & 0xF) == 0) && (f_ptr->confused == 0) &&
-            (randint((int)(10 + 750 / (5 + py.misc.lev))) == 1)) {
+            (randint((10 + 750 / (5 + py.misc.lev))) == 1)) {
             vtype tmp_str;
 
             for (i = 0; i < INVEN_ARRAY_SIZE; i++) {

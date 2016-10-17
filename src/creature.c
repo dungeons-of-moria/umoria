@@ -1440,7 +1440,7 @@ static void mon_move(int monptr, uint32_t *rcmove) {
         /* do not allow attack against the player */
         /* Must cast fy-1 to signed int, so that a nagative value of i will
            fail the comparison. */
-        for (i = m_ptr->fy + 1; i >= (int)(m_ptr->fy - 1); i--) {
+        for (i = m_ptr->fy + 1; i >= (m_ptr->fy - 1); i--) {
             for (int j = m_ptr->fx - 1; j <= m_ptr->fx + 1; j++) {
                 if ((dir != 5) && (cave[i][j].fval <= MAX_OPEN_SPACE) &&
                     (cave[i][j].cptr != 1)) {

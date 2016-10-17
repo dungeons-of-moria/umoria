@@ -518,7 +518,7 @@ static bool look_ray(int y, int from, int to) {
 
     for (;;) {
         /* Look down the window we've found. */
-        if (look_ray(y + 1, from, (int)((2 * y + 1) * (int32_t)GRADF / x))) {
+        if (look_ray(y + 1, from, ((2 * y + 1) * (int32_t)GRADF / x))) {
             return true;
         }
         /* Find the start of next window. */
@@ -528,7 +528,7 @@ static bool look_ray(int y, int from, int to) {
             }
 
             /* See if this seals off the scan. (If y is zero, then it will.) */
-            from = (int)((2 * y - 1) * (int32_t)GRADF / x);
+            from = ((2 * y - 1) * (int32_t)GRADF / x);
             if (from <= to) {
                 return false;
             }
@@ -944,7 +944,7 @@ static void py_bash(int y, int x) {
         (void)sprintf(out_val, "You hit %s.", m_name);
         msg_print(out_val);
         int k = pdamroll(inventory[INVEN_ARM].damage);
-        k = critical_blow((int)(inventory[INVEN_ARM].weight / 4 + py.stats.use_stat[A_STR]), 0, k, CLA_BTH);
+        k = critical_blow((inventory[INVEN_ARM].weight / 4 + py.stats.use_stat[A_STR]), 0, k, CLA_BTH);
         k += py.misc.wt / 60 + 3;
         if (k < 0) {
             k = 0;
