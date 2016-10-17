@@ -12,6 +12,13 @@
 ### All Changes
 
 
+`2016-10-17`
+
+- Fixes numerous unread variables and other warnings.
+- Fix numerous uninitialised variable warnings by initialising them!
+- Fix numerous implicit type conversions when loss of precision occurs.
+
+
 `2016-10-16`
 
 - Updates variable declarations: initialize at point of first use.
