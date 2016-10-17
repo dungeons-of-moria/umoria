@@ -162,7 +162,7 @@ void aim() {
                         ident = true;
                         break;
                     case 24:
-                        i = 1L << (randint(23) - 1);
+                        i = (uint32_t)(1L << (randint(23) - 1));
                         break;
                     default:
                         msg_print("Internal error in wands()");

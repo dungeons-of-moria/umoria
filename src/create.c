@@ -217,7 +217,7 @@ static void get_history() {
     }
 
     /* Process block of history text for pretty output */
-    int end_pos = strlen(history_block) - 1;
+    int end_pos = (int)strlen(history_block) - 1;
     while (history_block[end_pos] == ' ') {
         end_pos--;
     }

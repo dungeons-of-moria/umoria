@@ -46,7 +46,7 @@ static void date(char *day) {
 
 /* Centers a string within a 31 character string    -JWT- */
 static char *center_string(char *centered_str, char *in_str) {
-    int i = strlen(in_str);
+    int i = (int)strlen(in_str);
     int j = 15 - i / 2;
     (void)sprintf(centered_str, "%*s%s%*s", j, "", in_str, 31 - i - j, "");
     return centered_str;
@@ -233,7 +233,7 @@ static void print_tomb() {
     put_buffer("|            killed by            |", 15, 9);
     p = died_from;
 
-    int i = strlen(p);
+    int i = (int)strlen(p);
     p[i] = '.'; /* add a trailing period */
     p[i + 1] = '\0';
     (void)sprintf(str, "| %s |", center_string(tmp_str, p));

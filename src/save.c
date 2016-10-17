@@ -273,7 +273,7 @@ static bool sv_write() {
     }
 
     /* save the current time in the savefile */
-    l = time((time_t *)0);
+    l = (uint32_t)time((time_t *)0);
 
     if (l < start_time) {
         /* someone is messing with the clock!, assume that we have been playing for 1 day */
@@ -812,7 +812,7 @@ bool get_char(bool *generate) {
             if ((version_min >= 3) || (version_min == 2 && patch_level >= 2)) {
                 rd_long((uint32_t *)&birth_date);
             } else {
-                birth_date = time((time_t *)0);
+                birth_date = (int32_t)time((time_t *)0);
             }
         }
 
@@ -1018,7 +1018,7 @@ bool get_char(bool *generate) {
                 /* rotate store inventory, depending on how old the save file */
                 /* is foreach day old (rounded up), call store_maint */
                 /* calculate age in seconds */
-                start_time = time((time_t *)0);
+                start_time = (uint32_t)time((time_t *)0);
 
                 uint32_t age;
 

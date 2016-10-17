@@ -34,7 +34,7 @@ void init_seeds(uint32_t seed) {
     uint32_t clock_var;
 
     if (seed == 0) {
-        clock_var = time((time_t *)0);
+        clock_var = (uint32_t)time((time_t *)0);
     } else {
         clock_var = seed;
     }

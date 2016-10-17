@@ -278,7 +278,7 @@ int show_inven(int r1, int r2, bool weight, int col, char *mask) {
             tmp_val[lim] = 0;
 
             (void)sprintf(out_val[i], "%c) %s", 'a' + i, tmp_val);
-            int l = strlen(out_val[i]) + 2;
+            int l = (int)strlen(out_val[i]) + 2;
             if (weight) {
                 l += 9;
             }
@@ -437,7 +437,7 @@ int show_equip(bool weight, int col) {
             prt2[lim] = 0;
 
             (void)sprintf(out_val[line], "%c) %-14s: %s", line + 'a', prt1, prt2);
-            int l = strlen(out_val[line]) + 2;
+            int l = (int)strlen(out_val[line]) + 2;
             if (weight) {
                 l += 9;
             }

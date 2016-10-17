@@ -291,14 +291,14 @@ void msg_print(char *str_buff) {
     bool combine_messages = false;
 
     if (msg_flag) {
-        old_len = strlen(old_msg[last_msg]) + 1;
+        old_len = (int)strlen(old_msg[last_msg]) + 1;
 
         /* If the new message and the old message are short enough, we want
            display them together on the same line.  So we don't flush the old
            message in this case. */
 
         if (str_buff) {
-            new_len = strlen(str_buff);
+            new_len = (int)strlen(str_buff);
         } else {
             new_len = 0;
         }

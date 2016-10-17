@@ -44,7 +44,7 @@ void scribe_object() {
             } else {
                 (void)strcpy(out_val, "Inscription: ");
             }
-            int j = 78 - strlen(tmp_str);
+            int j = 78 - (int)strlen(tmp_str);
             if (j > 12) {
                 j = 12;
             }

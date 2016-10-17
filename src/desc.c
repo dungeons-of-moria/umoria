@@ -590,7 +590,7 @@ void objdes(char *out_val, inven_type *i_ptr, int pref) {
         }
         if (i_ptr->inscrip[0] != '\0') {
             (void)strcat(tmp_str, i_ptr->inscrip);
-        } else if ((indexx = strlen(tmp_str)) > 0) {
+        } else if ((indexx = (int)strlen(tmp_str)) > 0) {
             /* remove the extra blank at the end */
             tmp_str[indexx - 1] = '\0';
         }

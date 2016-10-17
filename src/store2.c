@@ -354,7 +354,7 @@ static bool get_haggle(char *comment, int32_t *new_offer, int num_offer) {
     bool flag = true;
     bool increment = false;
 
-    int clen = strlen(comment);
+    int clen = (int)strlen(comment);
     int orig_clen = clen;
 
     if (num_offer == 0) {
@@ -370,7 +370,7 @@ static bool get_haggle(char *comment, int32_t *new_offer, int num_offer) {
         if (num_offer && last_store_inc != 0) {
             (void)sprintf(default_offer, "[%c%d] ", (last_store_inc < 0) ? '-' : '+', abs(last_store_inc));
             prt(default_offer, 0, orig_clen);
-            clen = orig_clen + strlen(default_offer);
+            clen = orig_clen + (int)strlen(default_offer);
         }
         if (!get_string(out_val, 0, clen, 40)) {
             flag = false;
@@ -382,7 +382,7 @@ static bool get_haggle(char *comment, int32_t *new_offer, int num_offer) {
             increment = true;
         }
         if (num_offer && increment) {
-            i = atol(out_val);
+            i = (int32_t)atol(out_val);
             /* Don't accept a zero here.  Turn off increment if it was zero
                because a zero will not exit.  This can be zero if the user
                did not type a number after the +/- sign. */
@@ -395,7 +395,7 @@ static bool get_haggle(char *comment, int32_t *new_offer, int num_offer) {
             i = last_store_inc;
             increment = true;
         } else {
-            i = atol(out_val);
+            i = (int32_t)atol(out_val);
         }
 
         /* don't allow incremental haggling, if player has not made an offer yet */

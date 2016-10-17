@@ -1524,7 +1524,7 @@ void calc_spells(int stat) {
             if (j == 99) {
                 mask = 0x0;
             } else {
-                mask = 1L << j;
+                mask = (uint32_t)(1L << j);
             }
             if (mask & spell_forgotten) {
                 if (msp_ptr[j].slevel <= p_ptr->lev) {
@@ -1575,7 +1575,7 @@ void calc_spells(int stat) {
             if (j == 99) {
                 mask = 0x0;
             } else {
-                mask = 1L << j;
+                mask = (uint32_t)(1L << j);
             }
             if (mask & spell_learned) {
                 spell_learned &= ~mask;
@@ -1895,8 +1895,8 @@ void calc_hitpoints() {
 
 /* Inserts a string into a string */
 void insert_str(char *object_str, char *mtc_str, char *insert) {
-    int mtc_len = strlen(mtc_str);
-    int obj_len = strlen(object_str);
+    int mtc_len = (int)strlen(mtc_str);
+    int obj_len = (int)strlen(object_str);
     char *bound = object_str + obj_len - mtc_len;
 
     char *pc;
@@ -1931,7 +1931,7 @@ void insert_str(char *object_str, char *mtc_str, char *insert) {
 
 void insert_lnum(char *object_str, char *mtc_str, int32_t number, int show_sign) {
     int flag = 1;
-    int mlen = strlen(mtc_str);
+    int mlen = (int)strlen(mtc_str);
     char *tmp_str = object_str;
 
     char *string;

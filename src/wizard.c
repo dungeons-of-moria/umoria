@@ -159,10 +159,10 @@ void change_character() {
     }
 
     (void)sprintf(tmp_str, "Current=%d  Gold = ", m_ptr->au);
-    tmp_val = strlen(tmp_str);
+    tmp_val = (int)strlen(tmp_str);
     prt(tmp_str, 0, 0);
     if (get_string(tmp_str, 0, tmp_val, 7)) {
-        int32_t tmp_lval = atol(tmp_str);
+        int32_t tmp_lval = (int32_t)atol(tmp_str);
         if (tmp_lval > -1 && (*tmp_str != '\0')) {
             m_ptr->au = tmp_lval;
             prt_gold();
@@ -172,7 +172,7 @@ void change_character() {
     }
 
     (void)sprintf(tmp_str, "Current=%d  (0-200) Searching = ", m_ptr->srh);
-    tmp_val = strlen(tmp_str);
+    tmp_val = (int)strlen(tmp_str);
     prt(tmp_str, 0, 0);
     if (get_string(tmp_str, 0, tmp_val, 3)) {
         tmp_val = atoi(tmp_str);
@@ -184,7 +184,7 @@ void change_character() {
     }
 
     (void)sprintf(tmp_str, "Current=%d  (-1-18) Stealth = ", m_ptr->stl);
-    tmp_val = strlen(tmp_str);
+    tmp_val = (int)strlen(tmp_str);
     prt(tmp_str, 0, 0);
     if (get_string(tmp_str, 0, tmp_val, 3)) {
         tmp_val = atoi(tmp_str);
@@ -196,7 +196,7 @@ void change_character() {
     }
 
     (void)sprintf(tmp_str, "Current=%d  (0-200) Disarming = ", m_ptr->disarm);
-    tmp_val = strlen(tmp_str);
+    tmp_val = (int)strlen(tmp_str);
     prt(tmp_str, 0, 0);
     if (get_string(tmp_str, 0, tmp_val, 3)) {
         tmp_val = atoi(tmp_str);
@@ -208,7 +208,7 @@ void change_character() {
     }
 
     (void)sprintf(tmp_str, "Current=%d  (0-100) Save = ", m_ptr->save);
-    tmp_val = strlen(tmp_str);
+    tmp_val = (int)strlen(tmp_str);
     prt(tmp_str, 0, 0);
     if (get_string(tmp_str, 0, tmp_val, 3)) {
         tmp_val = atoi(tmp_str);
@@ -220,7 +220,7 @@ void change_character() {
     }
 
     (void)sprintf(tmp_str, "Current=%d  (0-200) Base to hit = ", m_ptr->bth);
-    tmp_val = strlen(tmp_str);
+    tmp_val = (int)strlen(tmp_str);
     prt(tmp_str, 0, 0);
     if (get_string(tmp_str, 0, tmp_val, 3)) {
         tmp_val = atoi(tmp_str);
@@ -232,7 +232,7 @@ void change_character() {
     }
 
     (void)sprintf(tmp_str, "Current=%d  (0-200) Bows/Throwing = ", m_ptr->bthb);
-    tmp_val = strlen(tmp_str);
+    tmp_val = (int)strlen(tmp_str);
     prt(tmp_str, 0, 0);
     if (get_string(tmp_str, 0, tmp_val, 3)) {
         tmp_val = atoi(tmp_str);
@@ -244,7 +244,7 @@ void change_character() {
     }
 
     (void)sprintf(tmp_str, "Current=%d  Weight = ", m_ptr->wt);
-    tmp_val = strlen(tmp_str);
+    tmp_val = (int)strlen(tmp_str);
     prt(tmp_str, 0, 0);
     if (get_string(tmp_str, 0, tmp_val, 3)) {
         tmp_val = atoi(tmp_str);
@@ -384,7 +384,7 @@ void wizard_create() {
     if (!get_string(tmp_str, 0, 9, 8)) {
         return;
     }
-    tmp_lval = atol(tmp_str);
+    tmp_lval = (int)atol(tmp_str);
     i_ptr->cost = tmp_lval;
 
     prt("Level : ", 0, 0);
