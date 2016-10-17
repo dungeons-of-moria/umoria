@@ -30,9 +30,9 @@
 static char original_commands(char);
 static void do_command(char);
 static bool valid_countcommand(char);
-static void regenhp();
-static void regenmana();
-static bool enchanted();
+static void regenhp(int);
+static void regenmana(int);
+static bool enchanted(inven_type *);
 static void examine_book();
 static void go_up();
 static void go_down();

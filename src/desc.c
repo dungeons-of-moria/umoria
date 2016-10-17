@@ -26,7 +26,7 @@
 
 #include "externs.h"
 
-static void unsample();
+static void unsample(inven_type *);
 
 char titles[MAX_TITLES][10];
 

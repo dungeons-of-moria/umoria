@@ -27,7 +27,7 @@
 
 #include "externs.h"
 
-static bool see_wall();
+static bool see_wall(int, int, int);
 
 /* Change a trap from invisible to visible    -RAK- */
 /* Note: Secret doors are handled here */

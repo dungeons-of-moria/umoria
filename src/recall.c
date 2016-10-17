@@ -27,7 +27,7 @@
 
 #include "externs.h"
 
-static void roff();
+static void roff(char *);
 
 static char *desc_atype[] = {
     "do something undefined",

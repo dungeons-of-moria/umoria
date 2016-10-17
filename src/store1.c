@@ -27,8 +27,8 @@
 
 #include "externs.h"
 
-static void insert_store();
-static void store_create();
+static void insert_store(int, int, int32_t, inven_type *);
+static void store_create(int);
 
 /* Returns the value for any given object    -RAK- */
 int32_t item_value(inven_type *i_ptr) {

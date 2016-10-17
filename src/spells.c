@@ -27,7 +27,7 @@
 
 #include "externs.h"
 
-static void replace_spot();
+static void replace_spot(int, int, int);
 
 /* Following are spell procedure/functions      -RAK- */
 /* These routines are commonly used in the scroll, potion, wands, and */

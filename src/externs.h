@@ -19,8 +19,6 @@
  * along with Umoria.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-extern int errno;
-
 extern char *copyright[5];
 
 /* horrible hack: needed because compact_monster() can be called from deep
