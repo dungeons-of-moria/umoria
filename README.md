@@ -49,9 +49,11 @@ I want to let everyone play Moria again!
   * ~~Format source code using `clang-tidy` and `clang-format`.~~
   * ~~Remove support for ancient computers/OS: DOS, Amiga, Atari ST, etc.~~
   * ~~Compile against the `C11` standard.~~
+  * ~~Use standard `bool` type instead of `int`s.~~
+  * ~~Use only _standard types_ (`int32_t` instead of `long`) where possible.~~
+  * ~~Clean up function prototypes/signatures.~~
+  * General code clean up, fixing _all_ warnings.
   * Update the code to to be as platform independent as possible.
-    E.g. use _standard types_, such as replacing `long` types with `int32`,
-    and introduce the proper `bool` type.
   * Add Windows and macOS support.
 
 
