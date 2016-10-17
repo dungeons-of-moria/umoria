@@ -14,9 +14,12 @@
 
 `2016-10-17`
 
+- Fixes for signedness mismatch, redundant castings, hides upper scope issues
 - Fixes numerous unread variables and other warnings.
 - Fix numerous uninitialised variable warnings by initialising them!
 - Fix numerous implicit type conversions when loss of precision occurs.
+- Updates prototypes for static functions
+
 
 
 `2016-10-16`
