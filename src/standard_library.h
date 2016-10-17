@@ -12,7 +12,7 @@
 #include <time.h>
 #include <unistd.h> // rototype for execl
 
-#include <sys/ioctl.h> // defines CTRL
+#include <sys/ioctl.h> // defines CTRL_KEY
 #include <sys/stat.h> // defines chmod
 #include <sys/wait.h>
 

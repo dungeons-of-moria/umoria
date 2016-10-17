@@ -1451,8 +1451,6 @@ int get_spell(int *spell, int num, int *sn, int *sc, char *prompt, int first_spe
 /* calculate number of spells player should have, and learn forget spells
    until that number is met -JEW- */
 void calc_spells(int stat) {
-    uint32_t mask;
-    int i; // not sure why, but needs initialising before using in for loops -MRC-
 
     struct misc *p_ptr = &py.misc;
     spell_type *msp_ptr = &magic_spell[p_ptr->pclass - 1][0];
@@ -1468,6 +1466,8 @@ void calc_spells(int stat) {
     }
 
     /* check to see if know any spells greater than level, eliminate them */
+    int i;
+    uint32_t mask;
     for (i = 31, mask = 0x80000000L; mask; mask >>= 1, i--) {
         if (mask & spell_learned) {
             if (msp_ptr[i].slevel > p_ptr->lev) {
@@ -1547,11 +1547,9 @@ void calc_spells(int stat) {
              */
             uint32_t spell_flag = 0x7FFFFFFFL & ~spell_learned;
 
-            // FIXME: is this `mask` unused?
-            mask = 0x1;
-
+            int j;
             int i = 0;
-            for (int j = 0, mask = 0x1; spell_flag; mask <<= 1, j++) {
+            for (j = 0, mask = 0x1; spell_flag; mask <<= 1, j++) {
                 if (spell_flag & mask) {
                     spell_flag &= ~mask;
                     if (msp_ptr[j].slevel <= p_ptr->lev) {
@@ -1605,7 +1603,7 @@ void calc_spells(int stat) {
 
 /* gain spells when player wants to    - jw */
 void gain_spells() {
-    uint32_t spell_flag, mask;
+    uint32_t spell_flag;
 
     /* Priests don't need light because they get spells from their god,
        so only fail when can't see if player has MAGE spells.  This check
@@ -1668,12 +1666,12 @@ void gain_spells() {
         /* clear bits for spells already learned */
         spell_flag &= ~spell_learned;
 
-        // FIXME: is this `mask` unused?
-        mask = 0x1;
-
         int i = 0;
         int spells[31];
-        for (int j = 0, mask = 0x1; spell_flag; mask <<= 1, j++) {
+
+        int j;
+        uint32_t mask;
+        for (j = 0, mask = 0x1; spell_flag; mask <<= 1, j++) {
             if (spell_flag & mask) {
                 spell_flag &= ~mask;
                 if (msp_ptr[j].slevel <= p_ptr->lev) {

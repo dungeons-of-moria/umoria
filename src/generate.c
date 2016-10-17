@@ -1112,6 +1112,7 @@ static void cave_gen() {
     /* move zero entry to k, so that can call build_tunnel all k times */
     yloc[k] = yloc[0];
     xloc[k] = xloc[0];
+
     for (int i = 0; i < k; i++) {
         int y1 = yloc[i];
         int x1 = xloc[i];

@@ -725,7 +725,7 @@ void dungeon() {
                             i = 0;
 
                             while (true) {
-                                if (command == DELETE || command == CTRL('H')) {
+                                if (command == DELETE || command == CTRL_KEY('H')) {
                                     i = i / 10;
                                     (void)sprintf(tmp, "%d", i);
                                     prt(tmp, 0, 14);
@@ -839,17 +839,17 @@ static char original_commands(char com_val) {
     int dir_val;
 
     switch (com_val) {
-    case CTRL('K'): /*^K = exit */
+    case CTRL_KEY('K'): /*^K = exit */
         com_val = 'Q';
         break;
-    case CTRL('J'):
-    case CTRL('M'):
+    case CTRL_KEY('J'):
+    case CTRL_KEY('M'):
         com_val = '+';
         break;
-    case CTRL('P'): /*^P = repeat */
-    case CTRL('W'): /*^W = password*/
-    case CTRL('X'): /*^X = save */
-    case CTRL('V'): /*^V = view license */
+    case CTRL_KEY('P'): /*^P = repeat */
+    case CTRL_KEY('W'): /*^W = password*/
+    case CTRL_KEY('X'): /*^X = save */
+    case CTRL_KEY('V'): /*^V = view license */
     case ' ':
     case '!':
     case '$':
@@ -948,28 +948,28 @@ static char original_commands(char com_val) {
         if (get_dir(CNIL, &dir_val)) {
             switch (dir_val) {
             case 1:
-                com_val = CTRL('B');
+                com_val = CTRL_KEY('B');
                 break;
             case 2:
-                com_val = CTRL('J');
+                com_val = CTRL_KEY('J');
                 break;
             case 3:
-                com_val = CTRL('N');
+                com_val = CTRL_KEY('N');
                 break;
             case 4:
-                com_val = CTRL('H');
+                com_val = CTRL_KEY('H');
                 break;
             case 6:
-                com_val = CTRL('L');
+                com_val = CTRL_KEY('L');
                 break;
             case 7:
-                com_val = CTRL('Y');
+                com_val = CTRL_KEY('Y');
                 break;
             case 8:
-                com_val = CTRL('K');
+                com_val = CTRL_KEY('K');
                 break;
             case 9:
-                com_val = CTRL('U');
+                com_val = CTRL_KEY('U');
                 break;
             default:
                 com_val = ' ';
@@ -1026,30 +1026,30 @@ static char original_commands(char com_val) {
         break;
 
     /* wizard mode commands follow */
-    case CTRL('A'): /*^A = cure all */
+    case CTRL_KEY('A'): /*^A = cure all */
         break;
-    case CTRL('B'): /*^B = objects */
-        com_val = CTRL('O');
+    case CTRL_KEY('B'): /*^B = objects */
+        com_val = CTRL_KEY('O');
         break;
-    case CTRL('D'): /*^D = up/down */
+    case CTRL_KEY('D'): /*^D = up/down */
         break;
-    case CTRL('H'): /*^H = wizhelp */
+    case CTRL_KEY('H'): /*^H = wizhelp */
         com_val = '\\';
         break;
-    case CTRL('I'): /*^I = identify*/
+    case CTRL_KEY('I'): /*^I = identify*/
         break;
-    case CTRL('L'): /*^L = wizlight*/
+    case CTRL_KEY('L'): /*^L = wizlight*/
         com_val = '*';
         break;
     case ':':
-    case CTRL('T'): /*^T = teleport*/
-    case CTRL('E'): /*^E = wizchar */
-    case CTRL('F'): /*^F = genocide*/
-    case CTRL('G'): /*^G = treasure*/
+    case CTRL_KEY('T'): /*^T = teleport*/
+    case CTRL_KEY('E'): /*^E = wizchar */
+    case CTRL_KEY('F'): /*^F = genocide*/
+    case CTRL_KEY('G'): /*^G = treasure*/
     case '@':
     case '+':
         break;
-    case CTRL('U'): /*^U = summon */
+    case CTRL_KEY('U'): /*^U = summon */
         com_val = '&';
         break;
     default:
@@ -1119,14 +1119,14 @@ static void do_command(char com_val) {
         }
         free_turn_flag = true;
         break;
-    case CTRL('P'): /* (^P)revious message. */
+    case CTRL_KEY('P'): /* (^P)revious message. */
         if (command_count > 0) {
             i = command_count;
             if (i > MAX_SAVE_MSG) {
                 i = MAX_SAVE_MSG;
             }
             command_count = 0;
-        } else if (last_command != CTRL('P')) {
+        } else if (last_command != CTRL_KEY('P')) {
             i = 1;
         } else {
             i = MAX_SAVE_MSG;
@@ -1159,11 +1159,11 @@ static void do_command(char com_val) {
 
         free_turn_flag = true;
         break;
-    case CTRL('V'): /* (^V)iew license */
+    case CTRL_KEY('V'): /* (^V)iew license */
         helpfile(MORIA_GPL);
         free_turn_flag = true;
         break;
-    case CTRL('W'): /* (^W)izard mode */
+    case CTRL_KEY('W'): /* (^W)izard mode */
         if (wizard) {
             wizard = false;
             msg_print("Wizard mode off.");
@@ -1174,7 +1174,7 @@ static void do_command(char com_val) {
         prt_winner();
         free_turn_flag = true;
         break;
-    case CTRL('X'): /* e(^X)it and save */
+    case CTRL_KEY('X'): /* e(^X)it and save */
         if (total_winner) {
             msg_print(
                 "You are a Total Winner,  your character must be retired.");
@@ -1385,29 +1385,29 @@ static void do_command(char com_val) {
         }
         free_turn_flag = true;
         break;
-    case CTRL('B'): /* (^B) tunnel down left  (T 1) */
+    case CTRL_KEY('B'): /* (^B) tunnel down left  (T 1) */
         tunnel(1);
         break;
-    case CTRL('M'): /* cr must be treated same as lf. */
-    case CTRL('J'): /* (^J) tunnel down    (T 2) */
+    case CTRL_KEY('M'): /* cr must be treated same as lf. */
+    case CTRL_KEY('J'): /* (^J) tunnel down    (T 2) */
         tunnel(2);
         break;
-    case CTRL('N'): /* (^N) tunnel down right  (T 3) */
+    case CTRL_KEY('N'): /* (^N) tunnel down right  (T 3) */
         tunnel(3);
         break;
-    case CTRL('H'): /* (^H) tunnel left    (T 4) */
+    case CTRL_KEY('H'): /* (^H) tunnel left    (T 4) */
         tunnel(4);
         break;
-    case CTRL('L'): /* (^L) tunnel right    (T 6) */
+    case CTRL_KEY('L'): /* (^L) tunnel right    (T 6) */
         tunnel(6);
         break;
-    case CTRL('Y'): /* (^Y) tunnel up left    (T 7) */
+    case CTRL_KEY('Y'): /* (^Y) tunnel up left    (T 7) */
         tunnel(7);
         break;
-    case CTRL('K'): /* (^K) tunnel up    (T 8) */
+    case CTRL_KEY('K'): /* (^K) tunnel up    (T 8) */
         tunnel(8);
         break;
-    case CTRL('U'): /* (^U) tunnel up right    (T 9) */
+    case CTRL_KEY('U'): /* (^U) tunnel up right    (T 9) */
         tunnel(9);
         break;
     case 'z': /* (z)ap a wand    (a)im a wand */
@@ -1483,7 +1483,7 @@ static void do_command(char com_val) {
             free_turn_flag = true;
 
             switch (com_val) {
-            case CTRL('A'): /*^A = Cure all*/
+            case CTRL_KEY('A'): /*^A = Cure all*/
                 (void)remove_curse();
                 (void)cure_blindness();
                 (void)cure_confusion();
@@ -1503,14 +1503,14 @@ static void do_command(char com_val) {
                     f_ptr->image = 1;
                 }
                 break;
-            case CTRL('E'): /*^E = wizchar */
+            case CTRL_KEY('E'): /*^E = wizchar */
                 change_character();
                 erase_line(MSG_LINE, 0);
                 break;
-            case CTRL('F'): /*^F = genocide*/
+            case CTRL_KEY('F'): /*^F = genocide*/
                 (void)mass_genocide();
                 break;
-            case CTRL('G'): /*^G = treasure*/
+            case CTRL_KEY('G'): /*^G = treasure*/
                 if (command_count > 0) {
                     i = command_count;
                     command_count = 0;
@@ -1520,7 +1520,7 @@ static void do_command(char com_val) {
                 random_object(char_row, char_col, i);
                 prt_map();
                 break;
-            case CTRL('D'): /*^D = up/down */
+            case CTRL_KEY('D'): /*^D = up/down */
                 if (command_count > 0) {
                     if (command_count > 99) {
                         i = 0;
@@ -1545,7 +1545,7 @@ static void do_command(char com_val) {
                     erase_line(MSG_LINE, 0);
                 }
                 break;
-            case CTRL('O'): /*^O = objects */
+            case CTRL_KEY('O'): /*^O = objects */
                 print_objects();
                 break;
             case '\\': /* \ wizard help */
@@ -1555,7 +1555,7 @@ static void do_command(char com_val) {
                     helpfile(MORIA_OWIZ_HELP);
                 }
                 break;
-            case CTRL('I'): /*^I = identify*/
+            case CTRL_KEY('I'): /*^I = identify*/
                 (void)ident_spell();
                 break;
             case '*':
@@ -1564,7 +1564,7 @@ static void do_command(char com_val) {
             case ':':
                 map_area();
                 break;
-            case CTRL('T'): /*^T = teleport*/
+            case CTRL_KEY('T'): /*^T = teleport*/
                 teleport(100);
                 break;
             case '+':
@@ -1606,8 +1606,8 @@ static void do_command(char com_val) {
 static bool valid_countcommand(char c) {
     switch (c) {
     case 'Q':
-    case CTRL('W'):
-    case CTRL('X'):
+    case CTRL_KEY('W'):
+    case CTRL_KEY('X'):
     case '=':
     case '{':
     case '/':
@@ -1638,19 +1638,19 @@ static bool valid_countcommand(char c) {
     case 'w':
     case 'W':
     case 'X':
-    case CTRL('A'):
+    case CTRL_KEY('A'):
     case '\\':
-    case CTRL('I'):
+    case CTRL_KEY('I'):
     case '*':
     case ':':
-    case CTRL('T'):
-    case CTRL('E'):
-    case CTRL('F'):
-    case CTRL('S'):
-    case CTRL('Q'):
+    case CTRL_KEY('T'):
+    case CTRL_KEY('E'):
+    case CTRL_KEY('F'):
+    case CTRL_KEY('S'):
+    case CTRL_KEY('Q'):
         return false;
 
-    case CTRL('P'):
+    case CTRL_KEY('P'):
     case ESCAPE:
     case ' ':
     case '-':
@@ -1674,19 +1674,19 @@ static bool valid_countcommand(char c) {
     case 'U':
     case 'D':
     case 'R':
-    case CTRL('Y'):
-    case CTRL('K'):
-    case CTRL('U'):
-    case CTRL('L'):
-    case CTRL('N'):
-    case CTRL('J'):
-    case CTRL('B'):
-    case CTRL('H'):
+    case CTRL_KEY('Y'):
+    case CTRL_KEY('K'):
+    case CTRL_KEY('U'):
+    case CTRL_KEY('L'):
+    case CTRL_KEY('N'):
+    case CTRL_KEY('J'):
+    case CTRL_KEY('B'):
+    case CTRL_KEY('H'):
     case 'S':
     case 'o':
     case 's':
-    case CTRL('D'):
-    case CTRL('G'):
+    case CTRL_KEY('D'):
+    case CTRL_KEY('G'):
     case '+':
         return true;
 

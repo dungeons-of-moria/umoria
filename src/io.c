@@ -175,7 +175,7 @@ char inkey() {
             return ESCAPE;
         }
 
-        if (i != CTRL('R')) {
+        if (i != CTRL_KEY('R')) {
             return (char)i;
         }
 
@@ -424,7 +424,9 @@ bool get_string(char *in_str, int row, int column, int slen) {
     int end_col = column + slen - 1;
 
     if (end_col > 79) {
-        slen = 80 - column;
+        // NOTE: `slen` is never read after this point, so commenting out. -MRC-
+        // slen = 80 - column;
+
         end_col = 79;
     }
 
@@ -437,10 +439,10 @@ bool get_string(char *in_str, int row, int column, int slen) {
         case ESCAPE:
             aborted = true;
             break;
-        case CTRL('J'): case CTRL('M'):
+        case CTRL_KEY('J'): case CTRL_KEY('M'):
             flag = true;
             break;
-        case DELETE: case CTRL('H'):
+        case DELETE: case CTRL_KEY('H'):
             if (column > start_col) {
                 column--;
                 put_buffer(" ", row, column);

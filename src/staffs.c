@@ -180,7 +180,9 @@ void use() {
                     prt_experience();
 
                     identify(&item_val);
-                    i_ptr = &inventory[item_val];
+
+                    // NOTE: this is never read after this, so commenting out. -MRC-
+                    // i_ptr = &inventory[item_val];
                 }
             } else if (!known1_p(i_ptr)) {
                 sample(i_ptr);

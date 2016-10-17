@@ -376,7 +376,8 @@ void look() {
 
         bool dummy;
         if (look_see(0, 0, &dummy)) {
-            abort = true;
+            // NOTE: `abort` is not read after this so commenting out. -MRC_
+            // abort = true;
         } else {
             do {
                 abort = false;

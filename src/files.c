@@ -201,7 +201,7 @@ bool file_character(char *filename1) {
         char *colon = ":";
         char *blank = " ";
 
-        (void)fprintf(file1, "%c\n\n", CTRL('L'));
+        (void)fprintf(file1, "%c\n\n", CTRL_KEY('L'));
 
         (void)fprintf(file1, " Name%9s %-23s", colon, py.misc.name);
         (void)fprintf(file1, " Age%11s %6d", colon, (int)py.misc.age);
@@ -347,7 +347,7 @@ bool file_character(char *filename1) {
         }
 
         /* Write out the character's inventory. */
-        (void)fprintf(file1, "%c\n\n", CTRL('L'));
+        (void)fprintf(file1, "%c\n\n", CTRL_KEY('L'));
 
         (void)fprintf(file1, "  [General Inventory List]\n\n");
         if (inven_ctr == 0) {
@@ -359,7 +359,7 @@ bool file_character(char *filename1) {
             }
         }
 
-        (void)fprintf(file1, "%c", CTRL('L'));
+        (void)fprintf(file1, "%c", CTRL_KEY('L'));
         (void)fclose(file1);
 
         prt("Completed.", 0, 0);

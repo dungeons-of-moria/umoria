@@ -248,8 +248,8 @@ some of the system defines set up there.
 #define A_CHR 5
 
 /* some systems have a non-ANSI definition of this, so undef it first */
-#undef CTRL
-#define CTRL(x)   ((x) & 0x1F)
+#undef CTRL_KEY
+#define CTRL_KEY(x)   ((x) & 0x1F)
 #define DELETE    0x7f
 #define ESCAPE    '\033'  /* ESCAPE character -CJS- */
 

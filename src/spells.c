@@ -646,7 +646,7 @@ void fire_bolt(int typ, int dir, int y, int x, int dam, char *bolt_typ) {
     bool flag = false;
 
     bool (*dummy)();
-    int harm_type;
+    int harm_type = 0;
     uint32_t weapon_type;
     get_flags(typ, &weapon_type, &harm_type, &dummy);
 
