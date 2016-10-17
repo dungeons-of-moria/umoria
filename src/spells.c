@@ -1410,7 +1410,7 @@ int build_wall(int dir, int y, int x) {
     int dist = 0;
     bool flag = false;
 
-    int i;
+    int i = 0;
     do {
         (void)mmove(dir, &y, &x);
         dist++;

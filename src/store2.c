@@ -603,9 +603,12 @@ static int purchase_haggle(int store_num, int32_t *price, inven_type *item) {
 
 /* Haggling routine          -RAK- */
 static int sell_haggle(int store_num, int32_t *price, inven_type *item) {
-    int32_t max_gold;
-    int32_t min_per, max_per;
-    int32_t max_sell, min_buy, max_buy;
+    int32_t max_gold = 0;
+    int32_t min_per = 0;
+    int32_t max_per = 0;
+    int32_t max_sell = 0;
+    int32_t min_buy = 0;
+    int32_t max_buy = 0;
 
     bool flag = false;
     bool didnt_haggle = false;
@@ -647,7 +650,8 @@ static int sell_haggle(int store_num, int32_t *price, inven_type *item) {
         max_gold = o_ptr->max_cost;
     }
 
-    int32_t cur_ask, final_ask;
+    int32_t cur_ask;
+    int32_t final_ask = 0;
     char *comment;
 
     if (!flag) {

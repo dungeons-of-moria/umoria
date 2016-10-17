@@ -375,6 +375,9 @@ void dungeon() {
                 case 6:
                     i = ((turn % 4) == 0);
                     break;
+                default:
+                    // FIXME: uninitialized warning so let's add that here -MRC-
+                    i = 0;
                 }
 
                 take_hit(i, "poison");

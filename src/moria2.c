@@ -350,7 +350,7 @@ static bool see_nothing(int dir, int y, int x) {
 /* Determine the next direction for a run, or if we should stop.  -CJS- */
 void area_affect(int dir, int y, int x) {
     if (py.flags.blind < 1) {
-        int check_dir;
+        int check_dir = 0;
         int option = 0;
         int option2 = 0;
 

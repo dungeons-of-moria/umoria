@@ -581,7 +581,9 @@ static bool look_see(int x, int y, bool *transparent) {
         return false; /* Don't look at a direct line of sight. A hack. */
     }
 
-    char query;
+    // FIXME: was uninitialized but the `query == ESCAPE` below was causing
+    // a warning. Perhaps we can set it to `ESCAPE` here as default? -MRC-
+    char query = ESCAPE;
 
     bigvtype out_val;
     out_val[0] = 0;

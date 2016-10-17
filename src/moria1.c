@@ -566,7 +566,7 @@ static int wear_low, wear_high;
 
 /* Draw the inventory screen. */
 static void inven_screen(int new_scr) {
-    int line;
+    int line = 0;
 
     if (new_scr != scr_state) {
         scr_state = new_scr;
@@ -588,13 +588,11 @@ static void inven_screen(int new_scr) {
             line = 7;
             break;
         case INVEN_SCR:
-            scr_left =
-                show_inven(0, inven_ctr - 1, show_weight_flag, scr_left, CNIL);
+            scr_left = show_inven(0, inven_ctr - 1, show_weight_flag, scr_left, CNIL);
             line = inven_ctr;
             break;
         case WEAR_SCR:
-            scr_left = show_inven(wear_low, wear_high, show_weight_flag,
-                                  scr_left, CNIL);
+            scr_left = show_inven(wear_low, wear_high, show_weight_flag, scr_left, CNIL);
             line = wear_high - wear_low + 1;
             break;
         case EQUIP_SCR:
@@ -616,8 +614,11 @@ static void inven_screen(int new_scr) {
 /* This does all the work. */
 void inven_command(char command) {
     bigvtype prt1, prt2;
-    int slot, item, tmp;
+    int item, tmp;
     inven_type tmp_obj;
+
+    // FIXME: initialize as it was giving a warning below. -MRC-
+    int slot = 0;
 
     free_turn_flag = true;
 
@@ -1087,7 +1088,8 @@ void inven_command(char command) {
                         } else {
                             /* command == 'd' */
 
-                            char query;
+                            // FIXME: initializing to `ESCAPE` as it was giving a warning below. -MRC-
+                            char query = ESCAPE;
 
                             if (inventory[item].number > 1) {
                                 objdes(prt1, &inventory[item], true);

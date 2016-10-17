@@ -761,7 +761,9 @@ static void make_attack(int monptr) {
                     i = INVEN_FEET;
                     break;
                 }
+                // FIXME: `i` may be uninitialized here!
                 i_ptr = &inventory[i];
+
                 if (i_ptr->tohit > 0) {
                     i_ptr->tohit -= randint(2);
 

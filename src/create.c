@@ -223,7 +223,7 @@ static void get_history() {
     }
 
     int cur_len;
-    int new_start;
+    int new_start = 0;
 
     int start_pos = 0;
     int line_ctr = 0;

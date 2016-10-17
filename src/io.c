@@ -287,7 +287,8 @@ void move_cursor(int row, int col) {
 /* Outputs message to top line of screen */
 /* These messages are kept for later reference. */
 void msg_print(char *str_buff) {
-    int old_len, new_len;
+    int new_len = 0;
+    int old_len = 0;
     bool combine_messages = false;
 
     if (msg_flag) {

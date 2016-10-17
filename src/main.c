@@ -39,7 +39,7 @@ static void price_adjust();
 int main(int argc, char *argv[]) {
     bool new_game = false;
     bool force_rogue_like = false;
-    bool force_keys_to;
+    bool force_keys_to = false;
 
     /* default command set defined in config.h file */
     rogue_like_commands = ROGUE_LIKE;

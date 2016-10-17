@@ -1484,7 +1484,7 @@ void calc_spells(int stat) {
     }
 
     /* calc number of spells allowed */
-    int num_allowed;
+    int num_allowed = 0;
     int levels = p_ptr->lev - class[p_ptr->pclass].first_spell_lev + 1;
     switch (stat_adj(stat)) {
     case 0:
@@ -1753,7 +1753,7 @@ void calc_mana(int stat) {
     struct misc *p_ptr = &py.misc;
 
     if (spell_learned != 0) {
-        int new_mana;
+        int new_mana = 0;
         int levels = p_ptr->lev - class[p_ptr->pclass].first_spell_lev + 1;
         switch (stat_adj(stat)) {
         case 0:
@@ -1964,7 +1964,7 @@ void insert_lnum(char *object_str, char *mtc_str, int32_t number, int show_sign)
 
 /* lets anyone enter wizard mode after a disclaimer...    - JEW - */
 bool enter_wiz_mode() {
-    bool answer;
+    bool answer = false;
 
     if (!noscore) {
         msg_print("Wizard mode is for debugging and experimenting.");
@@ -2097,7 +2097,9 @@ int critical_blow(int weight, int plus, int dam, int attack_type) {
 
 /* Given direction "dir", returns new row, column location -RAK- */
 int mmove(int dir, int *y, int *x) {
-    int new_row, new_col;
+    // NOTE: initializing as these were giving a warning below -MRC-
+    int new_row = 0;
+    int new_col = 0;
 
     switch (dir) {
     case 1:
