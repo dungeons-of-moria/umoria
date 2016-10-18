@@ -27,8 +27,6 @@
 
 #include "externs.h"
 
-struct tm *localtime();
-
 /* gets a new random seed for the random number generator */
 void init_seeds(uint32_t seed) {
     uint32_t clock_var;

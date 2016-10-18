@@ -647,7 +647,6 @@ void dungeon() {
            for 40th level char, check once every 416 turns */
         if (((turn & 0xF) == 0) && (f_ptr->confused == 0) &&
             (randint((10 + 750 / (5 + py.misc.lev))) == 1)) {
-            vtype tmp_str;
 
             for (i = 0; i < INVEN_ARRAY_SIZE; i++) {
                 if (i == inven_ctr) {
@@ -659,8 +658,9 @@ void dungeon() {
                    if in equipment list, success 1 out of 10 times */
                 if ((i_ptr->tval != TV_NOTHING) && enchanted(i_ptr) &&
                     (randint(i < 22 ? 50 : 10) == 1)) {
-                    extern char *describe_use();
+                    extern char *describe_use(int);
 
+                    vtype tmp_str;
                     (void)sprintf(tmp_str, "There's something about what you are %s...", describe_use(i));
                     disturb(0, 0);
                     msg_print(tmp_str);
