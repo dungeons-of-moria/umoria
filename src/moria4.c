@@ -366,8 +366,6 @@ void look() {
     } else if (py.flags.image > 0) {
         msg_print("You can't believe what you are seeing! It's like a dream!");
     } else if (get_alldir("Look which direction?", &dir)) {
-        bool abort = false;
-
         gl_nseen = 0;
         gl_rock = 0;
 
@@ -379,6 +377,8 @@ void look() {
             // NOTE: `abort` is not read after this so commenting out. -MRC_
             // abort = true;
         } else {
+            bool abort;
+
             do {
                 abort = false;
                 if (dir == 5) {

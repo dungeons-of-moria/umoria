@@ -420,10 +420,10 @@ bool _save_char(char *fnam) {
     pack_heavy = 0;
     bool ok = false;
 
-    int fd = -1;
     fileptr = NULL; /* Do not assume it has been init'ed */
 
-    fd = open(fnam, O_RDWR | O_CREAT | O_EXCL, 0600);
+    int fd = open(fnam, O_RDWR | O_CREAT | O_EXCL, 0600);
+
     if (fd < 0 && access(fnam, 0) >= 0 && (from_savefile || (wizard && get_check("Can't make new savefile. Overwrite old?")))) {
         (void)chmod(fnam, 0600);
         fd = open(fnam, O_RDWR | O_TRUNC, 0600);
