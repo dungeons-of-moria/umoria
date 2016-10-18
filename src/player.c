@@ -1,23 +1,22 @@
-/* source/player.c: player specific variable definitions
- *
- * Copyright (C) 1989-2008 James E. Wilson, Robert A. Koeneke,
- *                         David J. Grabiner
- *
- * This file is part of Umoria.
- *
- * Umoria is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Umoria is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Umoria.  If not, see <http://www.gnu.org/licenses/>.
- */
+// src/player.c: player specific variable definitions
+//
+// Copyright (C) 1989-2008 James E. Wilson, Robert A. Koeneke,
+//                         David J. Grabiner
+//
+// This file is part of Umoria.
+//
+// Umoria is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Umoria is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Umoria.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "standard_library.h"
 
@@ -25,21 +24,20 @@
 #include "constant.h"
 #include "types.h"
 
-/* Player record for most player related info */
+// Player record for most player related info
 player_type py;
 
-/* player location in dungeon */
+// player location in dungeon
 int16_t char_row;
 int16_t char_col;
 
-/* calculated base hp values for player at each level, store them so that
- * drain life + restore life does not affect hit points
- */
+// calculated base hp values for player at each level, store them
+// so that drain life + restore life does not affect hit points.
 uint16_t player_hp[MAX_PLAYER_LEVEL];
 
-/* Class titles for different levels */
+// Class titles for different levels
 char *player_title[MAX_CLASS][MAX_PLAYER_LEVEL] = {
-    /* Warrior */
+    // Warrior
     {"Rookie",       "Private",      "Soldier",      "Mercenary",
      "Veteran(1st)", "Veteran(2nd)", "Veteran(3rd)", "Warrior(1st)",
      "Warrior(2nd)", "Warrior(3rd)", "Warrior(4th)", "Swordsman-1",
@@ -50,7 +48,7 @@ char *player_title[MAX_CLASS][MAX_PLAYER_LEVEL] = {
      "Lord (1st)",   "Lord (2nd)",   "Lord (3rd)",   "Lord (4th)",
      "Lord (5th)",   "Lord (6th)",   "Lord (7th)",   "Lord (8th)",
      "Lord (9th)",   "Lord Gallant", "Lord Keeper",  "Lord Noble"},
-    /* Mage */
+    // Mage
     {"Novice",       "Apprentice",   "Trickster-1",  "Trickster-2",
      "Trickster-3",  "Cabalist-1",   "Cabalist-2",   "Cabalist-3",
      "Visionist",    "Phantasmist",  "Shadowist",    "Spellbinder",
@@ -61,7 +59,7 @@ char *player_title[MAX_CLASS][MAX_PLAYER_LEVEL] = {
      "Mage (4th)",   "Mage (5th)",   "Wizard (1st)", "Wizard (2nd)",
      "Wizard (3rd)", "Wizard (4th)", "Wizard (5th)", "Wizard (6th)",
      "Wizard (7th)", "Wizard (8th)", "Wizard (9th)", "Wizard Lord"},
-    /* Priests */
+    // Priests
     {"Believer",     "Acolyte(1st)", "Acolyte(2nd)", "Acolyte(3rd)",
      "Adept (1st)",  "Adept (2nd)",  "Adept (3rd)",  "Priest (1st)",
      "Priest (2nd)", "Priest (3rd)", "Priest (4th)", "Priest (5th)",
@@ -72,7 +70,7 @@ char *player_title[MAX_CLASS][MAX_PLAYER_LEVEL] = {
      "Canon (4th)",  "Canon (5th)",  "Low Lama",     "Lama-1",
      "Lama-2",       "Lama-3",       "High Lama",    "Great Lama",
      "Patriarch",    "High Priest",  "Great Priest", "Noble Priest"},
-    /* Rogues */
+    // Rogues
     {"Vagabond",     "Footpad",     "Cutpurse",      "Robber",
      "Burglar",      "Filcher",     "Sharper",       "Magsman",
      "Common Rogue", "Rogue (1st)", "Rogue (2nd)",   "Rogue (3rd)",
@@ -83,7 +81,7 @@ char *player_title[MAX_CLASS][MAX_PLAYER_LEVEL] = {
      "Thief (5th)",  "Thief (6th)", "Thief (7th)",   "Thief (8th)",
      "Thief (9th)",  "High Thief",  "Master Thief",  "Executioner",
      "Low Assassin", "Assassin",    "High Assassin", "Guildsmaster"},
-    /* Rangers */
+    // Rangers
     {"Runner (1st)",  "Runner (2nd)",  "Runner (3rd)",  "Strider (1st)",
      "Strider (2nd)", "Strider (3rd)", "Scout (1st)",   "Scout (2nd)",
      "Scout (3rd)",   "Scout (4th)",   "Scout (5th)",   "Courser (1st)",
@@ -94,7 +92,7 @@ char *player_title[MAX_CLASS][MAX_PLAYER_LEVEL] = {
      "Guide (4th)",   "Guide (5th)",   "Guide (6th)",   "Guide (7th)",
      "Guide (8th)",   "Guide (9th)",   "Pathfinder-1",  "Pathfinder-2",
      "Pathfinder-3",  "Ranger",        "High Ranger",   "Ranger Lord"},
-    /* Paladins */
+    // Paladins
     {"Gallant",      "Keeper (1st)", "Keeper (2nd)", "Keeper (3rd)",
      "Keeper (4th)", "Keeper (5th)", "Keeper (6th)", "Keeper (7th)",
      "Keeper (8th)", "Keeper (9th)", "Protector-1",  "Protector-2",
@@ -107,7 +105,7 @@ char *player_title[MAX_CLASS][MAX_PLAYER_LEVEL] = {
      "Chevalier",    "Justiciar",    "Paladin",      "High Lord"},
 };
 
-/* Base experience levels, may be adjusted up for race and/or class*/
+// Base experience levels, may be adjusted up for race and/or class
 uint32_t player_exp[MAX_PLAYER_LEVEL] = {
      10,      25,      45,      70,      100,      140,      200,       280,
     380,     500,     650,     850,     1100,     1400,     1800,      2300,
@@ -116,12 +114,11 @@ uint32_t player_exp[MAX_PLAYER_LEVEL] = {
  300000L, 400000L, 500000L, 750000L, 1500000L, 2500000L, 5000000L, 10000000L
 };
 
-/* Race, STR, INT, WIS, DEX, CON, CHR,
- * Ages, heights, and weights (male then female)
- * Racial Bases for:
- *      dis, srh, stl, fos, bth, bthb, bsav, hitdie,
- *      infra, exp base, choice-classes
- */
+// Race, STR, INT, WIS, DEX, CON, CHR,
+// Ages, heights, and weights (male then female)
+// Racial Bases for:
+//      dis, srh, stl, fos, bth, bthb, bsav, hitdie,
+//      infra, exp base, choice-classes
 race_type race[MAX_RACES] = {
     {
         "Human", 0,  0,  0,  0,  0,  0,
@@ -165,7 +162,7 @@ race_type race[MAX_RACES] = {
     },
 };
 
-/* Background information */
+// Background information
 background_type background[MAX_BACKGROUND] = {
     {"You are the illegitimate and unacknowledged child ",  10,  1,  2,  25},
     {"You are the illegitimate but acknowledged child ",    20,  1,  2,  35},
@@ -297,9 +294,9 @@ background_type background[MAX_BACKGROUND] = {
     {"of a Royal Blood Line.  ",                            100, 2,  3,  140},
 };
 
-/* Classes. */
+// Classes.
 class_type class[MAX_CLASS] = {
-    /*    HP Dis Src Stl Fos bth btb sve S  I  W  D Co Ch  Spell Exp  spl */
+    // HP Dis Src Stl Fos bth btb sve S  I  W  D Co Ch  Spell Exp  spl
     {"Warrior", 9, 25, 14, 1, 38, 70, 55, 18,  5, -2, -2,  2,  2, -1, NONE,    0, 0},
     {"Mage",    0, 30, 16, 2, 20, 34, 20, 36, -5,  3,  0,  1, -2,  1, MAGE,   30, 1},
     {"Priest",  2, 25, 16, 2, 32, 48, 35, 30, -3, -3,  3, -1,  0,  2, PRIEST, 20, 1},
@@ -308,33 +305,31 @@ class_type class[MAX_CLASS] = {
     {"Paladin", 6, 20, 12, 1, 38, 68, 40, 24,  3, -3,  1,  0,  2,  2, PRIEST, 35, 1},
 };
 
-/* making it 16 bits wastes a little space, but saves much signed/unsigned
- * headaches in its use.
- * CLA_MISC_HIT is identical to CLA_SAVE, which takes advantage of
- * the fact that the save values are independent of the class.
- */
+// making it 16 bits wastes a little space, but saves much signed/unsigned
+// headaches in its use.
+// CLA_MISC_HIT is identical to CLA_SAVE, which takes advantage of
+// the fact that the save values are independent of the class.
 int16_t class_level_adj[MAX_CLASS][MAX_LEV_ADJ] = {
-    /*               bth    bthb   device disarm save/misc hit */
-    /* Warrior */  { 4,     4,     2,     2,     3 },
-    /* Mage    */  { 2,     2,     4,     3,     3 },
-    /* Priest  */  { 2,     2,     4,     3,     3 },
-    /* Rogue   */  { 3,     4,     3,     4,     3 },
-    /* Ranger  */  { 3,     4,     3,     3,     3 },
-    /* Paladin */  { 3,     3,     3,     2,     3 },
+    //bth    bthb   device disarm save/misc hit
+    { 4,     4,     2,     2,     3 }, // Warrior
+    { 2,     2,     4,     3,     3 }, // Mage
+    { 2,     2,     4,     3,     3 }, // Priest
+    { 3,     4,     3,     4,     3 }, // Rogue
+    { 3,     4,     3,     3,     3 }, // Ranger
+    { 3,     3,     3,     2,     3 }, // Paladin
 };
 
-uint32_t spell_learned   = 0; /* bit mask of spells learned */
-uint32_t spell_worked    = 0; /* bit mask of spells tried and worked */
-uint32_t spell_forgotten = 0; /* bit mask of spells learned but forgotten */
-uint8_t  spell_order[32];     /* order spells learned/remembered/forgotten */
+uint32_t spell_learned   = 0; // bit mask of spells learned
+uint32_t spell_worked    = 0; // bit mask of spells tried and worked
+uint32_t spell_forgotten = 0; // bit mask of spells learned but forgotten
+uint8_t  spell_order[32];     // order spells learned/remembered/forgotten
 
-/* Warriors don't have spells, so there is no entry for them.
- * Note that this means you must always subtract one from the
- * py.misc.pclass before indexing into magic_spell[].
- */
+// Warriors don't have spells, so there is no entry for them.
+// Note that this means you must always subtract one from the
+// py.misc.pclass before indexing into magic_spell[].
 spell_type magic_spell[MAX_CLASS - 1][31] = {
     {
-        /* Mage */
+        // Mage
         {  1,  1, 22,   1},
         {  1,  1, 23,   1},
         {  1,  2, 24,   1},
@@ -368,7 +363,7 @@ spell_type magic_spell[MAX_CLASS - 1][31] = {
         { 37, 25, 95, 200}
     },
     {
-        /* Priest */
+        // Priest
         {  1,  1, 10,   1},
         {  1,  2, 15,   1},
         {  1,  2, 20,   1},
@@ -402,7 +397,7 @@ spell_type magic_spell[MAX_CLASS - 1][31] = {
         { 39, 32, 80, 200}
     },
     {
-        /* Rogue */
+        // Rogue
         { 99, 99,  0,   0},
         {  5,  1, 50,   1},
         {  7,  2, 55,   1},
@@ -436,7 +431,7 @@ spell_type magic_spell[MAX_CLASS - 1][31] = {
         { 99, 99,  0,   0},
     },
     {
-        /* Ranger */
+        // Ranger
         {  3,  1, 30,   1},
         {  3,  2, 35,   2},
         {  3,  2, 35,   2},
@@ -470,7 +465,7 @@ spell_type magic_spell[MAX_CLASS - 1][31] = {
         { 99, 99,  0,   0}
     },
     {
-        /* Paladin */
+        // Paladin
         {  1,  1, 30,   1},
         {  2,  2, 35,   2},
         {  3,  3, 35,   3},
@@ -506,7 +501,7 @@ spell_type magic_spell[MAX_CLASS - 1][31] = {
 };
 
 char *spell_names[62] = {
-    /* Mage Spells */
+    // Mage Spells
     "Magic Missile", "Detect Monsters", "Phase Door", "Light Area",
     "Cure Light Wounds", "Find Hidden Traps/Doors", "Stinking Cloud",
     "Confusion", "Lightning Bolt", "Trap/Door Destruction", "Sleep I",
@@ -516,7 +511,7 @@ char *spell_names[62] = {
     "Frost Ball", "Recharge Item II", "Teleport Other", "Haste Self",
     "Fire Ball", "Word of Destruction", "Genocide",
 
-    /* Priest Spells, start at index 31 */
+    // Priest Spells, start at index 31
     "Detect Evil", "Cure Light Wounds", "Bless", "Remove Fear", "Call Light",
     "Find Traps", "Detect Doors/Stairs", "Slow Poison", "Blind Creature",
     "Portal", "Cure Medium Wounds", "Chant", "Sanctuary", "Create Food",
@@ -527,22 +522,21 @@ char *spell_names[62] = {
     "Dispel Evil", "Glyph of Warding", "Holy Word",
 };
 
-/* Each type of character starts out with a few provisions.
- *
- * Note that the entries refer to elements of the object_list[] array.
- *      344 = Food Ration
- *      365 = Wooden Torch
- *      123 = Cloak
- *      318 = Beginners-Majik
- *      103 = Soft Leather Armor
- *       30 = Stiletto
- *      322 = Beginners Handbook
- */
+// Each type of character starts out with a few provisions.
+//
+// Note that the entries refer to elements of the object_list[] array.
+//      344 = Food Ration
+//      365 = Wooden Torch
+//      123 = Cloak
+//      318 = Beginners-Majik
+//      103 = Soft Leather Armor
+//       30 = Stiletto
+//      322 = Beginners Handbook
 uint16_t player_init[MAX_CLASS][5] = {
-    {344, 365, 123, 30, 103}, /* Warrior */
-    {344, 365, 123, 30, 318}, /* Mage */
-    {344, 365, 123, 30, 322}, /* Priest */
-    {344, 365, 123, 30, 318}, /* Rogue */
-    {344, 365, 123, 30, 318}, /* Ranger */
-    {344, 365, 123, 30, 322}  /* Paladin */
+    {344, 365, 123, 30, 103}, // Warrior
+    {344, 365, 123, 30, 318}, // Mage
+    {344, 365, 123, 30, 322}, // Priest
+    {344, 365, 123, 30, 318}, // Rogue
+    {344, 365, 123, 30, 318}, // Ranger
+    {344, 365, 123, 30, 322}  // Paladin
 };

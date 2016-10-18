@@ -1,23 +1,22 @@
-/* source/moria4.c: misc code, mainly to handle player commands
- *
- * Copyright (C) 1989-2008 James E. Wilson, Robert A. Koeneke,
- *                         David J. Grabiner
- *
- * This file is part of Umoria.
- *
- * Umoria is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Umoria is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Umoria.  If not, see <http://www.gnu.org/licenses/>.
- */
+// src/moria4.c: misc code, mainly to handle player commands
+//
+// Copyright (C) 1989-2008 James E. Wilson, Robert A. Koeneke,
+//                         David J. Grabiner
+//
+// This file is part of Umoria.
+//
+// Umoria is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Umoria is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Umoria.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "standard_library.h"
 
@@ -30,10 +29,10 @@
 static bool look_ray(int, int, int);
 static bool look_see(int, int, bool *);
 
-/* Tunnels through rubble and walls      -RAK- */
-/* Must take into account: secret doors,  special tools */
+// Tunnels through rubble and walls -RAK-
+// Must take into account: secret doors, special tools
 void tunnel(int dir) {
-    /*   Confused?                  75% random movement */
+    // Confused?                  75% random movement
     if ((py.flags.confused > 0) && (randint(4) > 1)) {
         dir = randint(9);
     }
@@ -44,15 +43,15 @@ void tunnel(int dir) {
 
     cave_type *c_ptr = &cave[y][x];
 
-    /* Compute the digging ability of player; based on */
-    /* strength, and type of tool used */
+    // Compute the digging ability of player; based on
+    // strength, and type of tool used
     int tabil = py.stats.use_stat[A_STR];
 
     inven_type *i_ptr = &inventory[INVEN_WIELD];
 
-    /* Don't let the player tunnel somewhere illegal, this is necessary to
-       prevent the player from getting a free attack by trying to tunnel
-       somewhere where it has no effect. */
+    // Don't let the player tunnel somewhere illegal, this is necessary to
+    // prevent the player from getting a free attack by trying to tunnel
+    // somewhere where it has no effect.
     if (c_ptr->fval < MIN_CAVE_WALL &&
         (c_ptr->tptr == 0 || (t_list[c_ptr->tptr].tval != TV_RUBBLE && t_list[c_ptr->tptr].tval != TV_SECRET_DOOR))) {
         if (c_ptr->tptr == 0) {
@@ -77,7 +76,7 @@ void tunnel(int dir) {
         (void)sprintf(out_val, "%s is in your way!", m_name);
         msg_print(out_val);
 
-        /* let the player attack the creature */
+        // let the player attack the creature
         if (py.flags.afraid < 1) {
             py_attack(y, x);
         } else {
@@ -89,12 +88,12 @@ void tunnel(int dir) {
             tabil += 25 + i_ptr->p1 * 50;
         } else {
             tabil += (i_ptr->damage[0] * i_ptr->damage[1]) + i_ptr->tohit + i_ptr->todam;
-            /* divide by two so that digging without shovel isn't too easy */
+            // divide by two so that digging without shovel isn't too easy
             tabil >>= 1;
         }
 
-        /* If this weapon is too heavy for the player to wield properly, then
-           also make it harder to dig with it. */
+        // If this weapon is too heavy for the player to wield properly, then
+        // also make it harder to dig with it.
 
         if (weapon_heavy) {
             tabil += (py.stats.use_stat[A_STR] * 15) - i_ptr->weight;
@@ -105,8 +104,8 @@ void tunnel(int dir) {
 
         int i;
 
-        /* Regular walls; Granite, magma intrusion, quartz vein */
-        /* Don't forget the boundary walls, made of titanium (255)*/
+        // Regular walls; Granite, magma intrusion, quartz vein
+        // Don't forget the boundary walls, made of titanium (255)
         switch (c_ptr->fval) {
         case GRANITE_WALL:
             i = randint(1200) + 80;
@@ -136,9 +135,9 @@ void tunnel(int dir) {
             msg_print("This seems to be permanent rock.");
             break;
         default:
-            /* Is there an object in the way?  (Rubble and secret doors)*/
+            // Is there an object in the way?  (Rubble and secret doors)
             if (c_ptr->tptr != 0) {
-                /* Rubble. */
+                // Rubble.
                 if (t_list[c_ptr->tptr].tval == TV_RUBBLE) {
                     if (tabil > randint(180)) {
                         (void)delete_object(y, x);
@@ -154,7 +153,7 @@ void tunnel(int dir) {
                         count_msg_print("You dig in the rubble.");
                     }
                 } else if (t_list[c_ptr->tptr].tval == TV_SECRET_DOOR) {
-                    /* Secret doors.*/
+                    // Secret doors.
 
                     count_msg_print("You tunnel into the granite wall.");
                     search(char_row, char_col, py.misc.srh);
@@ -171,7 +170,7 @@ void tunnel(int dir) {
     }
 }
 
-/* Disarms a trap          -RAK- */
+// Disarms a trap -RAK-
 void disarm_trap() {
     int y = char_row;
     int x = char_col;
@@ -212,25 +211,25 @@ void disarm_trap() {
             int i = i_ptr->tval;
             int level = i_ptr->level;
 
-            if (i == TV_VIS_TRAP) { /* Floor trap */
+            if (i == TV_VIS_TRAP) { // Floor trap
                 if ((tot + 100 - level) > randint(100)) {
                     msg_print("You have disarmed the trap.");
                     py.misc.exp += i_ptr->p1;
                     (void)delete_object(y, x);
 
-                    /* make sure we move onto the trap even if confused */
+                    // make sure we move onto the trap even if confused
                     int tmp = py.flags.confused;
                     py.flags.confused = 0;
                     move_char(dir, false);
                     py.flags.confused = tmp;
                     prt_experience();
                 } else if ((tot > 5) && (randint(tot) > 5)) {
-                    /* avoid randint(0) call */
+                    // avoid randint(0) call
                     count_msg_print("You failed to disarm the trap.");
                 } else {
                     msg_print("You set the trap off!");
 
-                    /* make sure we move onto the trap even if confused */
+                    // make sure we move onto the trap even if confused
                     int tmp = py.flags.confused;
                     py.flags.confused = 0;
                     move_char(dir, false);
@@ -277,87 +276,82 @@ void disarm_trap() {
     }
 }
 
-/* An enhanced look, with peripheral vision. Looking all 8  -CJS-
-   directions will see everything which ought to be visible. Can
-   specify direction 5, which looks in all directions.
+// An enhanced look, with peripheral vision. Looking all 8 -CJS- directions will
+// see everything which ought to be visible. Can specify direction 5, which looks
+// in all directions.
+//
+// For the purpose of hindering vision, each place is regarded as a diamond just
+// touching its four immediate neighbours. A diamond is opaque if it is a wall,
+// or shut door, or something like that. A place is visible if any part of its
+// diamond is visible: i.e. there is a line from the view point to part of the
+// diamond which does not pass through any opaque diamonds.
+//
+// Consider the following situation:
+//
+//   @....                         X   X   X   X   X
+//   .##..                        / \ / \ / \ / \ / \
+//   .....                       X @ X . X . X 1 X . X
+//                                \ / \ / \ / \ / \ /
+//                                 X   X   X   X   X
+//         Expanded view, with    / \ / \ / \ / \ / \
+//         diamonds inscribed    X . X # X # X 2 X . X
+//         about each point,      \ / \ / \ / \ / \ /
+//         and some locations      X   X   X   X   X
+//         numbered.              / \ / \ / \ / \ / \
+//                               X . X . X . X 3 X 4 X
+//                                \ / \ / \ / \ / \ /
+//                                 X   X   X   X   X
+//
+//      - Location 1 is fully visible.
+//      - Location 2 is visible, even though partially obscured.
+//      - Location 3 is invisible, but if either # were
+//        transparent, it would be visible.
+//      - Location 4 is completely obscured by a single #.
+//
+// The function which does the work is look_ray. It sets up its own co-ordinate
+// frame (global variables map back to the dungeon frame) and looks for
+// everything between two angles specified from a central line. It is recursive,
+// and each call looks at stuff visible along a line parallel to the center line,
+// and a set distance away from it. A diagonal look uses more extreme peripheral
+// vision from the closest horizontal and vertical directions; horizontal or
+// vertical looks take a call for each side of the central line.
+//
+// Globally accessed variables: gl_nseen counts the number of places where
+// something is seen. gl_rock indicates a look for rock or objects.
+//
+// The others map co-ords in the ray frame to dungeon co-ords.
+//
+// dungeon y = char_row   + gl_fyx * (ray x)  + gl_fyy * (ray y)
+// dungeon x = char_col   + gl_fxx * (ray x)  + gl_fxy * (ray y)
 
-   For the purpose of hindering vision, each place is regarded as
-   a diamond just touching its four immediate neighbours. A
-   diamond is opaque if it is a wall, or shut door, or something
-   like that. A place is visible if any part of its diamond is
-   visible: i.e. there is a line from the view point to part of
-   the diamond which does not pass through any opaque diamonds.
-
-   Consider the following situation:
-
-     @....                         X   X   X   X   X
-     .##..                        / \ / \ / \ / \ / \
-     .....                       X @ X . X . X 1 X . X
-                                  \ / \ / \ / \ / \ /
-                                   X   X   X   X   X
-           Expanded view, with    / \ / \ / \ / \ / \
-           diamonds inscribed    X . X # X # X 2 X . X
-           about each point,      \ / \ / \ / \ / \ /
-           and some locations      X   X   X   X   X
-           numbered.              / \ / \ / \ / \ / \
-                                 X . X . X . X 3 X 4 X
-                                  \ / \ / \ / \ / \ /
-                                   X   X   X   X   X
-
-        - Location 1 is fully visible.
-        - Location 2 is visible, even though partially obscured.
-        - Location 3 is invisible, but if either # were
-          transparent, it would be visible.
-        - Location 4 is completely obscured by a single #.
-
-   The function which does the work is look_ray. It sets up its
-   own co-ordinate frame (global variables map back to the
-   dungeon frame) and looks for everything between two angles
-   specified from a central line. It is recursive, and each call
-   looks at stuff visible along a line parallel to the center
-   line, and a set distance away from it. A diagonal look uses
-   more extreme peripheral vision from the closest horizontal and
-   vertical directions; horizontal or vertical looks take a call
-   for each side of the central line.
- */
-
-/* Globally accessed variables: gl_nseen counts the number of places where
-   something is seen. gl_rock indicates a look for rock or objects.
-
-   The others map co-ords in the ray frame to dungeon co-ords.
-
-   dungeon y = char_row   + gl_fyx * (ray x)  + gl_fyy * (ray y)
-   dungeon x = char_col   + gl_fxx * (ray x)  + gl_fxy * (ray y)
- */
 static int gl_fxx, gl_fxy, gl_fyx, gl_fyy;
 static int gl_nseen;
 static bool gl_noquery;
 static int gl_rock;
 
-/* Intended to be indexed by dir/2, since is only relevant to horizontal or vertical directions. */
+// Intended to be indexed by dir/2, since is only
+// relevant to horizontal or vertical directions.
 static int set_fxy[] = {0, 1, 0, 0, -1};
 static int set_fxx[] = {0, 0, -1, 1, 0};
 static int set_fyy[] = {0, 0, 1, -1, 0};
 static int set_fyx[] = {0, 1, 0, 0, -1};
 
-/* Map diagonal-dir/2 to a normal-dir/2. */
+// Map diagonal-dir/2 to a normal-dir/2.
 static int map_diag1[] = {1, 3, 0, 2, 4};
 static int map_diag2[] = {2, 1, 0, 4, 3};
 
-#define GRADF 10000 /* Any sufficiently big number will do */
+#define GRADF 10000 // Any sufficiently big number will do
 
-/* Look at what we can see. This is a free move.
-
-   Prompts for a direction, and then looks at every object in
-   turn within a cone of vision in that direction. For each
-   object, the cursor is moved over the object, a description is
-   given, and we wait for the user to type something. Typing
-   ESCAPE will abort the entire look.
-
-   Looks first at real objects and monsters, and looks at rock
-   types only after all other things have been seen.  Only looks at rock
-   types if the highlight_seams option is set.
- */
+// Look at what we can see. This is a free move.
+//
+// Prompts for a direction, and then looks at every object in turn within a cone of
+// vision in that direction. For each object, the cursor is moved over the object,
+// a description is given, and we wait for the user to type something. Typing
+// ESCAPE will abort the entire look.
+//
+// Looks first at real objects and monsters, and looks at rock types only after all
+// other things have been seen.  Only looks at rock types if the highlight_seams
+// option is set.
 void look() {
     int dir;
 
@@ -369,7 +363,7 @@ void look() {
         gl_nseen = 0;
         gl_rock = 0;
 
-        /* Have to set this up for the look_see */
+        // Have to set this up for the look_see
         gl_noquery = false;
 
         bool dummy;
@@ -399,7 +393,7 @@ void look() {
                         }
                     }
                 } else if ((dir & 1) == 0) {
-                    /* Straight directions */
+                    // Straight directions
 
                     int i = dir >> 1;
                     gl_fxx = set_fxx[i];
@@ -451,42 +445,40 @@ void look() {
     }
 }
 
-/* Look at everything within a cone of vision between two ray
-   lines emanating from the player, and y or more places away
-   from the direct line of view. This is recursive.
-
-   Rays are specified by gradients, y over x, multiplied by
-   2*GRADF. This is ONLY called with gradients between 2*GRADF
-   (45 degrees) and 1 (almost horizontal).
-
-   (y axis)/ angle from
-     ^    /      ___ angle to
-     |   /   ___
-  ...|../.....___.................... parameter y (look at things in the
-     | /   ___                        cone, and on or above this line)
-     |/ ___
-     @-------------------->   direction in which you are looking. (x axis)
-     |
-     |
- */
+// Look at everything within a cone of vision between two ray lines emanating
+// from  the player, and y or more places away from the direct line of view.
+// This is recursive.
+//
+// Rays are specified by gradients, y over x, multiplied by 2*GRADF. This is ONLY
+// called with gradients between 2*GRADF (45 degrees) and 1 (almost horizontal).
+//
+//   (y axis)/ angle from
+//     ^    /      ___ angle to
+//     |   /   ___
+//  ...|../.....___.................... parameter y (look at things in the
+//     | /   ___                        cone, and on or above this line)
+//     |/ ___
+//     @-------------------->   direction in which you are looking. (x axis)
+//     |
+//     |
 static bool look_ray(int y, int from, int to) {
-    /* from is the larger angle of the ray, since we scan towards the
-       center line. If from is smaller, then the ray does not exist. */
+    // from is the larger angle of the ray, since we scan towards the
+    // center line. If from is smaller, then the ray does not exist.
     if (from <= to || y > MAX_SIGHT) {
         return false;
     }
 
-    /* Find first visible location along this line. Minimum x such
-       that (2x-1)/x < from/GRADF <=> x > GRADF(2x-1)/from. This may
-       be called with y=0 whence x will be set to 0. Thus we need a
-       special fix. */
+    // Find first visible location along this line. Minimum x such
+    // that (2x-1)/x < from/GRADF <=> x > GRADF(2x-1)/from. This may
+    // be called with y=0 whence x will be set to 0. Thus we need a
+    // special fix.
     int x = (int)((int32_t)GRADF * (2 * y - 1) / from + 1);
     if (x <= 0) {
         x = 1;
     }
 
-    /* Find last visible location along this line.
-       Maximum x such that (2x+1)/x > to/GRADF <=> x < GRADF(2x+1)/to */
+    // Find last visible location along this line.
+    // Maximum x such that (2x+1)/x > to/GRADF <=> x < GRADF(2x+1)/to
     int max_x = (int)(((int32_t)GRADF * (2 * y + 1) - 1) / to);
     if (max_x > MAX_SIGHT) {
         max_x = MAX_SIGHT;
@@ -495,10 +487,10 @@ static bool look_ray(int y, int from, int to) {
         return false;
     }
 
-    /* gl_noquery is a HACK to prevent doubling up on direct lines of
-       sight. If 'to' is  greater than 1, we do not really look at
-       stuff along the direct line of sight, but we do have to see
-       what is opaque for the purposes of obscuring other objects. */
+    // gl_noquery is a HACK to prevent doubling up on direct lines of
+    // sight. If 'to' is  greater than 1, we do not really look at
+    // stuff along the direct line of sight, but we do have to see
+    // what is opaque for the purposes of obscuring other objects.
     if ((y == 0 && to > 1) || (y == x && from < GRADF * 2)) {
         gl_noquery = true;
     } else {
@@ -517,17 +509,17 @@ static bool look_ray(int y, int from, int to) {
     }
 
     for (;;) {
-        /* Look down the window we've found. */
+        // Look down the window we've found.
         if (look_ray(y + 1, from, ((2 * y + 1) * (int32_t)GRADF / x))) {
             return true;
         }
-        /* Find the start of next window. */
+        // Find the start of next window.
         do {
             if (x == max_x) {
                 return false;
             }
 
-            /* See if this seals off the scan. (If y is zero, then it will.) */
+            // See if this seals off the scan. (If y is zero, then it will.)
             from = ((2 * y - 1) * (int32_t)GRADF / x);
             if (from <= to) {
                 return false;
@@ -539,10 +531,10 @@ static bool look_ray(int y, int from, int to) {
         } while (!transparent);
 
     init_transparent:
-        /* Find the end of this window of visibility. */
+        // Find the end of this window of visibility.
         do {
             if (x == max_x) {
-                /* The window is trimmed by an earlier limit. */
+                // The window is trimmed by an earlier limit.
                 return look_ray(y + 1, from, to);
             }
             x++;
@@ -579,7 +571,7 @@ static bool look_see(int x, int y, bool *transparent) {
     *transparent = c_ptr->fval <= MAX_OPEN_SPACE;
 
     if (gl_noquery) {
-        return false; /* Don't look at a direct line of sight. A hack. */
+        return false; // Don't look at a direct line of sight. A hack.
     }
 
     // FIXME: was uninitialized but the `query == ESCAPE` below was causing
@@ -626,11 +618,11 @@ static bool look_see(int x, int y, bool *transparent) {
             case BOUNDARY_WALL:
             case GRANITE_WALL:
             granite:
-                /* Granite is only interesting if it contains something. */
+                // Granite is only interesting if it contains something.
                 if (out_val[0]) {
                     string = "a granite wall";
                 } else {
-                    string = CNIL; /* In case we jump here */
+                    string = CNIL; // In case we jump here
                 }
                 break;
             case MAGMA_WALL:
@@ -677,8 +669,7 @@ static void inven_throw(int item_val, inven_type *t_ptr) {
     }
 }
 
-/* Obtain the hit and damage bonuses and the maximum distance for a
-   thrown missile. */
+// Obtain the hit and damage bonuses and the maximum distance for a thrown missile.
 static void facts(inven_type *i_ptr, int *tbth, int *tpth, int *tdam, int *tdis) {
     int tmp_weight;
     if (i_ptr->weight < 1) {
@@ -687,12 +678,12 @@ static void facts(inven_type *i_ptr, int *tbth, int *tpth, int *tdam, int *tdis)
         tmp_weight = i_ptr->weight;
     }
 
-    /* Throwing objects */
+    // Throwing objects
     *tdam = pdamroll(i_ptr->damage) + i_ptr->todam;
     *tbth = py.misc.bthb * 75 / 100;
     *tpth = py.misc.ptohit + i_ptr->tohit;
 
-    /* Add this back later if the correct throwing device. -CJS- */
+    // Add this back later if the correct throwing device. -CJS-
     if (inventory[INVEN_WIELD].tval != TV_NOTHING) {
         *tpth -= inventory[INVEN_WIELD].tohit;
     }
@@ -702,14 +693,14 @@ static void facts(inven_type *i_ptr, int *tbth, int *tpth, int *tdam, int *tdis)
         *tdis = 10;
     }
 
-    /* multiply damage bonuses instead of adding, when have proper
-       missile/weapon combo, this makes them much more useful */
+    // multiply damage bonuses instead of adding, when have proper
+    // missile/weapon combo, this makes them much more useful
 
-    /* Using Bows,  slings,  or crossbows */
+    // Using Bows,  slings,  or crossbows
     if (inventory[INVEN_WIELD].tval == TV_BOW) {
         switch (inventory[INVEN_WIELD].p1) {
         case 1:
-            if (i_ptr->tval == TV_SLING_AMMO) { /* Sling and ammo */
+            if (i_ptr->tval == TV_SLING_AMMO) { // Sling and ammo
                 *tbth = py.misc.bthb;
                 *tpth += 2 * inventory[INVEN_WIELD].tohit;
                 *tdam += inventory[INVEN_WIELD].todam;
@@ -718,7 +709,7 @@ static void facts(inven_type *i_ptr, int *tbth, int *tpth, int *tdam, int *tdis)
             }
             break;
         case 2:
-            if (i_ptr->tval == TV_ARROW) { /* Short Bow and Arrow */
+            if (i_ptr->tval == TV_ARROW) { // Short Bow and Arrow
                 *tbth = py.misc.bthb;
                 *tpth += 2 * inventory[INVEN_WIELD].tohit;
                 *tdam += inventory[INVEN_WIELD].todam;
@@ -727,7 +718,7 @@ static void facts(inven_type *i_ptr, int *tbth, int *tpth, int *tdam, int *tdis)
             }
             break;
         case 3:
-            if (i_ptr->tval == TV_ARROW) { /* Long Bow and Arrow */
+            if (i_ptr->tval == TV_ARROW) { // Long Bow and Arrow
                 *tbth = py.misc.bthb;
                 *tpth += 2 * inventory[INVEN_WIELD].tohit;
                 *tdam += inventory[INVEN_WIELD].todam;
@@ -736,7 +727,7 @@ static void facts(inven_type *i_ptr, int *tbth, int *tpth, int *tdam, int *tdis)
             }
             break;
         case 4:
-            if (i_ptr->tval == TV_ARROW) { /* Composite Bow and Arrow*/
+            if (i_ptr->tval == TV_ARROW) { // Composite Bow and Arrow
                 *tbth = py.misc.bthb;
                 *tpth += 2 * inventory[INVEN_WIELD].tohit;
                 *tdam += inventory[INVEN_WIELD].todam;
@@ -745,7 +736,7 @@ static void facts(inven_type *i_ptr, int *tbth, int *tpth, int *tdam, int *tdis)
             }
             break;
         case 5:
-            if (i_ptr->tval == TV_BOLT) { /* Light Crossbow and Bolt*/
+            if (i_ptr->tval == TV_BOLT) { // Light Crossbow and Bolt
                 *tbth = py.misc.bthb;
                 *tpth += 2 * inventory[INVEN_WIELD].tohit;
                 *tdam += inventory[INVEN_WIELD].todam;
@@ -754,7 +745,7 @@ static void facts(inven_type *i_ptr, int *tbth, int *tpth, int *tdam, int *tdis)
             }
             break;
         case 6:
-            if (i_ptr->tval == TV_BOLT) { /* Heavy Crossbow and Bolt*/
+            if (i_ptr->tval == TV_BOLT) { // Heavy Crossbow and Bolt
                 *tbth = py.misc.bthb;
                 *tpth += 2 * inventory[INVEN_WIELD].tohit;
                 *tdam += inventory[INVEN_WIELD].todam;
@@ -802,10 +793,10 @@ static void drop_throw(int y, int x, inven_type *t_ptr) {
     }
 }
 
-/* Throw an object across the dungeon.    -RAK- */
-/* Note: Flasks of oil do fire damage */
-/* Note: Extra damage and chance of hitting when missiles are used*/
-/*   with correct weapon.  I.E.  wield bow and throw arrow. */
+// Throw an object across the dungeon. -RAK-
+// Note: Flasks of oil do fire damage
+// Note: Extra damage and chance of hitting when missiles are used
+// with correct weapon.  I.E.  wield bow and throw arrow.
 void throw_object() {
     int item_val;
 
@@ -853,9 +844,9 @@ void throw_object() {
                         monster_type *m_ptr = &m_list[c_ptr->cptr];
                         tbth = tbth - cur_dis;
 
-                        /* if monster not lit, make it much more difficult to
-                           hit, subtract off most bonuses, and reduce bthb
-                           depending on distance */
+                        // if monster not lit, make it much more difficult to
+                        // hit, subtract off most bonuses, and reduce bthb
+                        // depending on distance
                         if (!m_ptr->ml) {
                             tbth = (tbth / (cur_dis + 2)) - (py.misc.lev * class_level_adj[py.misc.pclass][CLA_BTHB] / 2) - (tpth * (BTH_PLUS_ADJ - 1));
                         }
@@ -868,7 +859,7 @@ void throw_object() {
 
                             bigvtype out_val;
 
-                            /* Does the player know what he's fighting? */
+                            // Does the player know what he's fighting?
                             if (!m_ptr->ml) {
                                 (void)sprintf(out_val, "You hear a cry as the %s finds a mark.", tmp_str);
                                 visible = false;
@@ -897,11 +888,11 @@ void throw_object() {
                             drop_throw(oldy, oldx, &throw_obj);
                         }
                     } else {
-                        /* do not test c_ptr->fm here */
+                        // do not test c_ptr->fm here
 
                         if (panel_contains(y, x) && (py.flags.blind < 1) && (c_ptr->tl || c_ptr->pl)) {
                             print(tchar, y, x);
-                            put_qio(); /* show object moving */
+                            put_qio(); // show object moving
                         }
                     }
                 } else {
@@ -915,8 +906,8 @@ void throw_object() {
     }
 }
 
-/* Make a bash attack on someone.        -CJS-
-   Used to be part of bash above. */
+// Make a bash attack on someone. -CJS-
+// Used to be part of bash above.
 static void py_bash(int y, int x) {
 
     int monster = cave[y][x].cptr;
@@ -924,7 +915,7 @@ static void py_bash(int y, int x) {
     creature_type *c_ptr = &c_list[m_ptr->mptr];
     m_ptr->csleep = 0;
 
-    /* Does the player know what he's fighting? */
+    // Does the player know what he's fighting?
     vtype m_name;
     if (!m_ptr->ml) {
         (void)strcpy(m_name, "it");
@@ -950,15 +941,15 @@ static void py_bash(int y, int x) {
             k = 0;
         }
 
-        /* See if we done it in. */
+        // See if we done it in.
         if (mon_take_hit(monster, k) >= 0) {
             (void)sprintf(out_val, "You have slain %s.", m_name);
             msg_print(out_val);
             prt_experience();
         } else {
-            m_name[0] = toupper((int)m_name[0]); /* Capitalize */
+            m_name[0] = toupper((int)m_name[0]); // Capitalize
 
-            /* Can not stun Balrog */
+            // Can not stun Balrog
             int avg_max_hp = (c_ptr->cdefense & CD_MAX_HP ? c_ptr->hd[0] * c_ptr->hd[1] : (c_ptr->hd[0] * (c_ptr->hd[1] + 1)) >> 1);
             if ((100 + randint(400) + randint(400)) > (m_ptr->hp + avg_max_hp)) {
                 m_ptr->stunned += randint(3) + 1;
@@ -983,29 +974,25 @@ static void py_bash(int y, int x) {
     }
 }
 
-/* Bash open a door or chest        -RAK- */
-/* Note: Affected by strength and weight of character
-
-   For a closed door, p1 is positive if locked; negative if
-   stuck. A disarm spell unlocks and unjams doors!
-
-   For an open door, p1 is positive for a broken door.
-
-   A closed door can be opened - harder if locked. Any door might
-   be bashed open (and thereby broken). Bashing a door is
-   (potentially) faster! You move into the door way. To open a
-   stuck door, it must be bashed. A closed door can be jammed
-   (which makes it stuck if previously locked).
-
-   Creatures can also open doors. A creature with open door
-   ability will (if not in the line of sight) move though a
-   closed or secret door with no changes. If in the line of
-   sight, closed door are openned, & secret door revealed.
-   Whether in the line of sight or not, such a creature may
-   unlock or unstick a door.
-
-   A creature with no such ability will attempt to bash a
-   non-secret door. */
+// Bash open a door or chest -RAK-
+// Note: Affected by strength and weight of character
+//
+// For a closed door, p1 is positive if locked; negative if stuck. A disarm spell
+// unlocks and unjams doors!
+//
+// For an open door, p1 is positive for a broken door.
+//
+// A closed door can be opened - harder if locked. Any door might be bashed open
+// (and thereby broken). Bashing a door is (potentially) faster! You move into the
+// door way. To open a stuck door, it must be bashed. A closed door can be jammed
+// (which makes it stuck if previously locked).
+//
+// Creatures can also open doors. A creature with open door ability will (if not
+// in the line of sight) move though a closed or secret door with no changes. If
+// in the line of sight, closed door are openned, & secret door revealed. Whether
+// in the line of sight or not, such a creature may unlock or unstick a door.
+//
+// A creature with no such ability will attempt to bash a non-secret door.
 void bash() {
     int y = char_row;
     int x = char_col;
@@ -1034,13 +1021,13 @@ void bash() {
                 count_msg_print("You smash into the door!");
                 int tmp = py.stats.use_stat[A_STR] + py.misc.wt / 2;
 
-                /* Use (roughly) similar method as for monsters. */
+                // Use (roughly) similar method as for monsters.
                 if (randint(tmp * (20 + abs(t_ptr->p1))) <
                     10 * (tmp - abs(t_ptr->p1))) {
                     msg_print("The door crashes open!");
                     invcopy(&t_list[c_ptr->tptr], OBJ_OPEN_DOOR);
                     t_ptr->p1 =
-                        1 - randint(2); /* 50% chance of breaking door */
+                        1 - randint(2); // 50% chance of breaking door
                     c_ptr->fval = CORR_FLOOR;
                     if (py.flags.confused == 0) {
                         move_char(dir, false);
@@ -1066,15 +1053,15 @@ void bash() {
                     count_msg_print("The chest holds firm.");
                 }
             } else {
-                /* Can't give free turn, or else player could try directions
-                   until he found invisible creature */
+                // Can't give free turn, or else player could try directions
+                // until he found invisible creature
                 msg_print("You bash it, but nothing interesting happens.");
             }
         } else {
             if (c_ptr->fval < MIN_CAVE_WALL) {
                 msg_print("You bash at empty space.");
             } else {
-                /* same message for wall as for secret door */
+                // same message for wall as for secret door
                 msg_print("You bash it, but nothing interesting happens.");
             }
         }

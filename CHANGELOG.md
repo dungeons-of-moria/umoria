@@ -12,6 +12,11 @@
 ### All Changes
 
 
+`2016-10-18`
+
+- Converts to single-line comments, and Prettify them.
+
+
 `2016-10-17`
 
 - Fixes for signedness mismatch, redundant castings, hides upper scope issues

@@ -1,23 +1,22 @@
-/* source/store2.c: store code, entering, command interpreter, buying, selling
- *
- * Copyright (C) 1989-2008 James E. Wilson, Robert A. Koeneke,
- *                         David J. Grabiner
- *
- * This file is part of Umoria.
- *
- * Umoria is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Umoria is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Umoria.  If not, see <http://www.gnu.org/licenses/>.
- */
+// src/store2.c: store code, entering, command interpreter, buying, selling
+//
+// Copyright (C) 1989-2008 James E. Wilson, Robert A. Koeneke,
+//                         David J. Grabiner
+//
+// This file is part of Umoria.
+//
+// Umoria is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Umoria is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Umoria.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "standard_library.h"
 
@@ -126,13 +125,13 @@ static char *comment6[5] = {
     "Sorry, what was that again?",
 };
 
-/* Comments vary.          -RAK- */
-/* Comment one : Finished haggling */
+// Comments vary. -RAK-
+// Comment one : Finished haggling
 static void prt_comment1() {
     msg_print(comment1[randint(14) - 1]);
 }
 
-/* %A1 is offer, %A2 is asking. */
+// %A1 is offer, %A2 is asking.
 static void prt_comment2(int32_t offer, int32_t asking, int final) {
     vtype comment;
 
@@ -161,7 +160,7 @@ static void prt_comment3(int32_t offer, int32_t asking, int final) {
     msg_print(comment);
 }
 
-/* Kick 'da bum out.          -RAK- */
+// Kick 'da bum out. -RAK-
 static void prt_comment4() {
     int tmp = randint(5) - 1;
     msg_print(comment4a[tmp]);
@@ -176,7 +175,7 @@ static void prt_comment6() {
     msg_print(comment6[randint(5) - 1]);
 }
 
-/* Displays the set of commands        -RAK- */
+// Displays the set of commands -RAK-
 static void display_commands() {
     prt("You may:", 20, 0);
     prt(" p) Purchase an item.           b) Browse store's inventory.", 21, 0);
@@ -184,7 +183,7 @@ static void display_commands() {
     prt("ESC) Exit from Building.        ^R) Redraw the screen.", 23, 0);
 }
 
-/* Displays the set of commands        -RAK- */
+// Displays the set of commands -RAK-
 static void haggle_commands(int typ) {
     if (typ == -1) {
         prt("Specify an asking-price in gold pieces.", 21, 0);
@@ -192,10 +191,10 @@ static void haggle_commands(int typ) {
         prt("Specify an offer in gold pieces.", 21, 0);
     }
     prt("ESC) Quit Haggling.", 22, 0);
-    erase_line(23, 0); /* clear last line */
+    erase_line(23, 0); // clear last line
 }
 
-/* Displays a store's inventory        -RAK- */
+// Displays a store's inventory -RAK-
 static void display_inventory(int store_num, int start) {
     store_type *s_ptr = &store[store_num];
 
@@ -237,7 +236,7 @@ static void display_inventory(int store_num, int start) {
     }
     if (i < 12) {
         for (int j = 0; j < (11 - i + 1); j++) {
-            /* clear remaining lines */
+            // clear remaining lines
             erase_line(j + i + 5, 0);
         }
     }
@@ -248,7 +247,7 @@ static void display_inventory(int store_num, int start) {
     }
 }
 
-/* Re-displays only a single cost      -RAK- */
+// Re-displays only a single cost -RAK-
 static void display_cost(int store_num, int pos) {
     store_type *s_ptr = &store[store_num];
 
@@ -265,14 +264,14 @@ static void display_cost(int store_num, int pos) {
     prt(out_val, i + 5, 59);
 }
 
-/* Displays players gold          -RAK- */
+// Displays players gold -RAK-
 static void store_prt_gold() {
     vtype out_val;
     (void)sprintf(out_val, "Gold Remaining : %d", py.misc.au);
     prt(out_val, 18, 17);
 }
 
-/* Displays store          -RAK- */
+// Displays store -RAK-
 static void display_store(int store_num, int cur_top) {
     store_type *s_ptr = &store[store_num];
 
@@ -285,7 +284,7 @@ static void display_store(int store_num, int cur_top) {
     display_inventory(store_num, cur_top);
 }
 
-/* Get the ID of a store item and return it's value  -RAK- */
+// Get the ID of a store item and return it's value -RAK-
 static bool get_store_item(int *com_val, char *pmt, int i, int j) {
     bool flag = false;
 
@@ -309,7 +308,7 @@ static bool get_store_item(int *com_val, char *pmt, int i, int j) {
     return flag;
 }
 
-/* Increase the insult counter and get angry if too many -RAK- */
+// Increase the insult counter and get angry if too many -RAK-
 static bool increase_insults(int store_num) {
     bool increase = false;
 
@@ -327,7 +326,7 @@ static bool increase_insults(int store_num) {
     return increase;
 }
 
-/* Decrease insults          -RAK- */
+// Decrease insults -RAK-
 static void decrease_insults(int store_num) {
     store_type *s_ptr = &store[store_num];
 
@@ -336,7 +335,7 @@ static void decrease_insults(int store_num) {
     }
 }
 
-/* Have insulted while haggling        -RAK- */
+// Have insulted while haggling -RAK-
 static bool haggle_insults(int store_num) {
     bool haggle = false;
 
@@ -344,7 +343,7 @@ static bool haggle_insults(int store_num) {
         haggle = true;
     } else {
         prt_comment5();
-        msg_print(CNIL); /* keep insult separate from rest of haggle */
+        msg_print(CNIL); // keep insult separate from rest of haggle
     }
 
     return haggle;
@@ -383,9 +382,9 @@ static bool get_haggle(char *comment, int32_t *new_offer, int num_offer) {
         }
         if (num_offer && increment) {
             i = (int32_t)atol(out_val);
-            /* Don't accept a zero here.  Turn off increment if it was zero
-               because a zero will not exit.  This can be zero if the user
-               did not type a number after the +/- sign. */
+            // Don't accept a zero here.  Turn off increment if it was zero
+            // because a zero will not exit.  This can be zero if the user
+            // did not type a number after the +/- sign.
             if (i == 0) {
                 increment = false;
             } else {
@@ -398,7 +397,7 @@ static bool get_haggle(char *comment, int32_t *new_offer, int num_offer) {
             i = (int32_t)atol(out_val);
         }
 
-        /* don't allow incremental haggling, if player has not made an offer yet */
+        // don't allow incremental haggling, if player has not made an offer yet
         if (flag && num_offer == 0 && increment) {
             msg_print("You haven't even made your first offer yet!");
             i = 0;
@@ -431,8 +430,8 @@ static int receive_offer(int store_num, char *comment, int32_t *new_offer, int32
                 receive = 2;
                 flag = true;
             } else {
-                /* new_offer rejected, reset new_offer so that incremental
-                   haggling works correctly */
+                // new_offer rejected, reset new_offer so that incremental
+                // haggling works correctly
                 *new_offer = last_offer;
             }
         } else {
@@ -444,7 +443,7 @@ static int receive_offer(int store_num, char *comment, int32_t *new_offer, int32
     return receive;
 }
 
-/* Haggling routine          -RAK- */
+// Haggling routine -RAK-
 static int purchase_haggle(int store_num, int32_t *price, inven_type *item) {
     bool flag = false;
     bool didnt_haggle = false;
@@ -469,7 +468,7 @@ static int purchase_haggle(int store_num, int32_t *price, inven_type *item) {
         min_sell = 1;
     }
 
-    /* cast max_inflate to signed so that subtraction works correctly */
+    // cast max_inflate to signed so that subtraction works correctly
     int32_t max_buy = cost * (200 - (int)o_ptr->max_inflate) / 100;
     if (max_buy <= 0) {
         max_buy = 1;
@@ -485,18 +484,17 @@ static int purchase_haggle(int store_num, int32_t *price, inven_type *item) {
     int32_t min_offer = max_buy;
     int32_t last_offer = min_offer;
     int32_t new_offer = 0;
-    int num_offer = 0; /* this prevents incremental haggling on first try */
+    int num_offer = 0; // this prevents incremental haggling on first try
     char *comment = "Asking";
 
-    /* go right to final price if player has bargained well */
+    // go right to final price if player has bargained well
     if (noneedtobargain(store_num, final_ask)) {
         msg_print("After a long bargaining session, you agree upon the price.");
         cur_ask = min_sell;
         comment = "Final offer";
         didnt_haggle = true;
 
-        /* Set up automatic increment, so that a return will accept the final
-         * price. */
+        // Set up automatic increment, so that a return will accept the final price.
         last_store_inc = min_sell;
         num_offer = 1;
     }
@@ -517,12 +515,12 @@ static int purchase_haggle(int store_num, int32_t *price, inven_type *item) {
             } else {
                 if (new_offer > cur_ask) {
                     prt_comment6();
-                    /* rejected, reset new_offer for incremental haggling */
+                    // rejected, reset new_offer for incremental haggling
                     new_offer = last_offer;
 
-                    /* If the automatic increment is large enough to overflow,
-                       then the player must have made a mistake.  Clear it
-                       because it is useless. */
+                    // If the automatic increment is large enough to overflow,
+                    // then the player must have made a mistake.  Clear it
+                    // because it is useless.
                     if (last_offer + last_store_inc > cur_ask) {
                         last_store_inc = 0;
                     }
@@ -551,7 +549,7 @@ static int purchase_haggle(int store_num, int32_t *price, inven_type *item) {
             int32_t x2 = x1 + randint(5) - 3;
             int32_t x3 = ((cur_ask - new_offer) * x2 / 100) + 1;
 
-            /* don't let the price go up */
+            // don't let the price go up
             if (x3 < 0) {
                 x3 = 0;
             }
@@ -560,8 +558,8 @@ static int purchase_haggle(int store_num, int32_t *price, inven_type *item) {
                 cur_ask = final_ask;
                 comment = "Final Offer";
 
-                /* Set the automatic haggle increment so that RET will give
-                   a new_offer equal to the final_ask price. */
+                // Set the automatic haggle increment so that RET will give
+                // a new_offer equal to the final_ask price.
                 last_store_inc = final_ask - new_offer;
                 final_flag++;
                 if (final_flag > 3) {
@@ -578,14 +576,14 @@ static int purchase_haggle(int store_num, int32_t *price, inven_type *item) {
             }
             if (!flag) {
                 last_offer = new_offer;
-                num_offer++; /* enable incremental haggling */
+                num_offer++; // enable incremental haggling
                 erase_line(1, 0);
                 (void)sprintf(out_val, "Your last offer : %d", last_offer);
                 put_buffer(out_val, 1, 39);
                 prt_comment2(last_offer, cur_ask, final_flag);
 
-                /* If the current increment would take you over the store's
-                   price, then decrease it to an exact match. */
+                // If the current increment would take you over the store's
+                // price, then decrease it to an exact match.
                 if (cur_ask - last_offer < last_store_inc) {
                     last_store_inc = cur_ask - last_offer;
                 }
@@ -593,7 +591,7 @@ static int purchase_haggle(int store_num, int32_t *price, inven_type *item) {
         }
     } while (!flag);
 
-    /* update bargaining info */
+    // update bargaining info
     if ((purchase == 0) && (!didnt_haggle)) {
         updatebargain(store_num, *price, final_ask);
     }
@@ -601,7 +599,7 @@ static int purchase_haggle(int store_num, int32_t *price, inven_type *item) {
     return purchase;
 }
 
-/* Haggling routine          -RAK- */
+// Haggling routine -RAK-
 static int sell_haggle(int store_num, int32_t *price, inven_type *item) {
     int32_t max_gold = 0;
     int32_t min_per = 0;
@@ -633,7 +631,7 @@ static int sell_haggle(int store_num, int32_t *price, inven_type *item) {
         }
         max_sell = cost * o_ptr->max_inflate / 100;
 
-        /* cast max_inflate to signed so that subtraction works correctly */
+        // cast max_inflate to signed so that subtraction works correctly
         max_buy = cost * (200 - (int)o_ptr->max_inflate) / 100;
         min_buy = cost * (200 - o_ptr->min_inflate) / 100;
         if (min_buy < 1) {
@@ -657,13 +655,13 @@ static int sell_haggle(int store_num, int32_t *price, inven_type *item) {
     if (!flag) {
         haggle_commands(-1);
 
-        int num_offer = 0; /* this prevents incremental haggling on first try */
+        int num_offer = 0; // this prevents incremental haggling on first try
 
         if (max_buy > max_gold) {
             final_flag = 1;
             comment = "Final Offer";
 
-            /* Disable the automatic haggle increment on RET. */
+            // Disable the automatic haggle increment on RET.
             last_store_inc = 0;
             cur_ask = max_gold;
             final_ask = max_gold;
@@ -677,15 +675,15 @@ static int sell_haggle(int store_num, int32_t *price, inven_type *item) {
             }
             comment = "Offer";
 
-            /* go right to final price if player has bargained well */
+            // go right to final price if player has bargained well
             if (noneedtobargain(store_num, final_ask)) {
                 msg_print("After a long bargaining session, you agree upon the ""price.");
                 cur_ask = final_ask;
                 comment = "Final offer";
                 didnt_haggle = true;
 
-                /* Set up automatic increment, so that a return will accept the
-                   final price. */
+                // Set up automatic increment, so that a return
+                // will accept the final price.
                 last_store_inc = final_ask;
                 num_offer = 1;
             }
@@ -714,12 +712,12 @@ static int sell_haggle(int store_num, int32_t *price, inven_type *item) {
                     if (new_offer < cur_ask) {
                         prt_comment6();
 
-                        /* rejected, reset new_offer for incremental haggling */
+                        // rejected, reset new_offer for incremental haggling
                         new_offer = last_offer;
 
-                        /* If the automatic increment is large enough to
-                           overflow, then the player must have made a mistake.
-                           Clear it because it is useless. */
+                        // If the automatic increment is large enough to
+                        // overflow, then the player must have made a mistake.
+                        // Clear it because it is useless.
                         if (last_offer + last_store_inc < cur_ask) {
                             last_store_inc = 0;
                         }
@@ -749,7 +747,7 @@ static int sell_haggle(int store_num, int32_t *price, inven_type *item) {
                 int32_t x2 = x1 + randint(5) - 3;
                 int32_t x3 = ((new_offer - cur_ask) * x2 / 100) + 1;
 
-                /* don't let the price go down */
+                // don't let the price go down
                 if (x3 < 0) {
                     x3 = 0;
                 }
@@ -759,8 +757,8 @@ static int sell_haggle(int store_num, int32_t *price, inven_type *item) {
                     cur_ask = final_ask;
                     comment = "Final Offer";
 
-                    /* Set the automatic haggle increment so that RET will give
-                       a new_offer equal to the final_ask price. */
+                    // Set the automatic haggle increment so that RET will give
+                    // a new_offer equal to the final_ask price.
                     last_store_inc = final_ask - new_offer;
                     final_flag++;
                     if (final_flag > 3) {
@@ -778,7 +776,7 @@ static int sell_haggle(int store_num, int32_t *price, inven_type *item) {
 
                 if (!flag) {
                     last_offer = new_offer;
-                    num_offer++; /* enable incremental haggling */
+                    num_offer++; // enable incremental haggling
                     erase_line(1, 0);
 
                     vtype out_val;
@@ -786,8 +784,8 @@ static int sell_haggle(int store_num, int32_t *price, inven_type *item) {
                     put_buffer(out_val, 1, 39);
                     prt_comment3(cur_ask, last_offer, final_flag);
 
-                    /* If the current decrement would take you under the store's
-                       price, then increase it to an exact match. */
+                    // If the current decrement would take you under the store's
+                    // price, then increase it to an exact match.
                     if (cur_ask - last_offer > last_store_inc) {
                         last_store_inc = cur_ask - last_offer;
                     }
@@ -796,7 +794,7 @@ static int sell_haggle(int store_num, int32_t *price, inven_type *item) {
         } while (!flag);
     }
 
-    /* update bargaining info */
+    // update bargaining info
     if ((sell == 0) && (!didnt_haggle)) {
         updatebargain(store_num, *price, final_ask);
     }
@@ -804,13 +802,13 @@ static int sell_haggle(int store_num, int32_t *price, inven_type *item) {
     return sell;
 }
 
-/* Buy an item from a store        -RAK- */
+// Buy an item from a store -RAK-
 static bool store_purchase(int store_num, int *cur_top) {
     bool purchase = false;
 
     store_type *s_ptr = &store[store_num];
 
-    /* i == number of objects shown on screen */
+    // i == number of objects shown on screen
     int i;
     if (*cur_top == 12) {
         i = s_ptr->store_ctr - 1 - 12;
@@ -825,9 +823,9 @@ static bool store_purchase(int store_num, int *cur_top) {
     if (s_ptr->store_ctr < 1) {
         msg_print("I am currently out of stock.");
     } else if (get_store_item(&item_val, "Which item are you interested in? ", 0, i)) {
-        /* Get the item number to be bought */
+        // Get the item number to be bought
 
-        item_val = item_val + *cur_top; /* true item_val */
+        item_val = item_val + *cur_top; // true item_val
 
         inven_type sell_obj;
         take_one_item(&sell_obj, &s_ptr->store_inven[item_val].sitem);
@@ -887,7 +885,7 @@ static bool store_purchase(int store_num, int *cur_top) {
                 purchase = true;
             }
 
-            /* Less intuitive, but looks better here than in purchase_haggle. */
+            // Less intuitive, but looks better here than in purchase_haggle.
             display_commands();
             erase_line(1, 0);
         } else {
@@ -898,7 +896,7 @@ static bool store_purchase(int store_num, int *cur_top) {
     return purchase;
 }
 
-/* Sell an item to the store        -RAK- */
+// Sell an item to the store -RAK-
 static bool store_sell(int store_num, int *cur_top) {
     bool sell = false;
 
@@ -918,8 +916,8 @@ static bool store_sell(int store_num, int *cur_top) {
             if (counter > last_item) {
                 last_item = counter;
             }
-        } /* end of if (flag) */
-    } /* end of for (counter) */
+        } // end of if (flag)
+    } // end of for (counter)
 
     int item_val;
 
@@ -944,13 +942,13 @@ static bool store_sell(int store_num, int *cur_top) {
                 decrease_insults(store_num);
                 py.misc.au += price;
 
-                /* identify object in inventory to set object_ident */
+                // identify object in inventory to set object_ident
                 identify(&item_val);
 
-                /* retake sold_obj so that it will be identified */
+                // retake sold_obj so that it will be identified
                 take_one_item(&sold_obj, &inventory[item_val]);
 
-                /* call known2 for store item, so charges/pluses are known */
+                // call known2 for store item, so charges/pluses are known
                 known2(&sold_obj);
                 inven_destroy(item_val);
                 objdes(tmp_str, &sold_obj, true);
@@ -986,7 +984,7 @@ static bool store_sell(int store_num, int *cur_top) {
                 sell = increase_insults(store_num);
             }
 
-            /* Less intuitive, but looks better here than in sell_haggle. */
+            // Less intuitive, but looks better here than in sell_haggle.
             erase_line(1, 0);
             display_commands();
         } else {
@@ -996,7 +994,7 @@ static bool store_sell(int store_num, int *cur_top) {
     return sell;
 }
 
-/* Entering a store          -RAK- */
+// Entering a store -RAK-
 void enter_store(int store_num) {
     store_type *s_ptr = &store[store_num];
 
@@ -1008,7 +1006,7 @@ void enter_store(int store_num) {
         do {
             move_cursor(20, 9);
 
-            /* clear the msg flag just like we do in dungeon.c */
+            // clear the msg flag just like we do in dungeon.c
             msg_flag = false;
 
             char command;
@@ -1029,11 +1027,11 @@ void enter_store(int store_num) {
                         display_inventory(store_num, cur_top);
                     }
                     break;
-                case 'E': case 'e': /* Equipment List */
-                case 'I': case 'i': /* Inventory */
-                case 'T': case 't': /* Take off */
-                case 'W': case 'w': /* Wear */
-                case 'X': case 'x': /* Switch weapon */
+                case 'E': case 'e': // Equipment List
+                case 'I': case 'i': // Inventory
+                case 'T': case 't': // Take off
+                case 'W': case 'w': // Wear
+                case 'X': case 'x': // Switch weapon
                     tmp_chr = py.stats.use_stat[A_CHR];
 
                     do {
@@ -1041,11 +1039,11 @@ void enter_store(int store_num) {
                         command = doing_inven;
                     } while (command);
 
-                    /* redisplay store prices if charisma changes */
+                    // redisplay store prices if charisma changes
                     if (tmp_chr != py.stats.use_stat[A_CHR]) {
                         display_inventory(store_num, cur_top);
                     }
-                    free_turn_flag = false; /* No free moves here. -CJS- */
+                    free_turn_flag = false; // No free moves here. -CJS-
                     break;
                 case 'p':
                     exit_flag = store_purchase(store_num, &cur_top);
@@ -1062,7 +1060,7 @@ void enter_store(int store_num) {
             }
         } while (!exit_flag);
 
-        /* Can't save and restore the screen because inven_command does that. */
+        // Can't save and restore the screen because inven_command does that.
         draw_cave();
     } else {
         msg_print("The doors are locked.");

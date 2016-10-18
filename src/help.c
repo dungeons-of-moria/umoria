@@ -1,23 +1,22 @@
-/* source/help.c: identify a symbol
- *
- * Copyright (C) 1989-2008 James E. Wilson, Robert A. Koeneke,
- *                         David J. Grabiner
- *
- * This file is part of Umoria.
- *
- * Umoria is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Umoria is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Umoria.  If not, see <http://www.gnu.org/licenses/>.
- */
+// src/help.c: identify a symbol
+//
+// Copyright (C) 1989-2008 James E. Wilson, Robert A. Koeneke,
+//                         David J. Grabiner
+//
+// This file is part of Umoria.
+//
+// Umoria is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Umoria is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Umoria.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "standard_library.h"
 
@@ -85,7 +84,7 @@ void ident_char() {
         case '/':
             prt("/ - A pole weapon.", 0, 0);
             break;
-        /* case '0': prt("0 - Not used.", 0, 0); break; */
+        // case '0': prt("0 - Not used.", 0, 0); break;
         case '1':
             prt("1 - Entrance to General Store.", 0, 0);
             break;
@@ -104,9 +103,9 @@ void ident_char() {
         case '6':
             prt("6 - Entrance to Magic-Users store.", 0, 0);
             break;
-        /* case '7': prt("7 - Not used.", 0, 0); break; */
-        /* case '8': prt("8 - Not used.", 0, 0); break; */
-        /* case '9': prt("9 - Not used.", 0, 0);  break;*/
+        // case '7': prt("7 - Not used.", 0, 0); break;
+        // case '8': prt("8 - Not used.", 0, 0); break;
+        // case '9': prt("9 - Not used.", 0, 0);  break;
         case ':':
             prt(": - Rubble.", 0, 0);
             break;
@@ -152,7 +151,7 @@ void ident_char() {
         case 'H':
             prt("H - Hobgoblin.", 0, 0);
             break;
-        /* case 'I': prt("I - Invisible Stalker.", 0, 0); break; */
+        // case 'I': prt("I - Invisible Stalker.", 0, 0); break;
         case 'J':
             prt("J - Jelly.", 0, 0);
             break;
@@ -165,7 +164,7 @@ void ident_char() {
         case 'M':
             prt("M - Mummy.", 0, 0);
             break;
-        /* case 'N': prt("N - Not used.", 0, 0); break; */
+        // case 'N': prt("N - Not used.", 0, 0); break;
         case 'O':
             prt("O - Ooze.", 0, 0);
             break;
@@ -199,7 +198,7 @@ void ident_char() {
         case 'Y':
             prt("Y - Yeti.", 0, 0);
             break;
-        /* case 'Z': prt("Z - Not used.", 0, 0); break; */
+        // case 'Z': prt("Z - Not used.", 0, 0); break;
         case '[':
             prt("[ - Hard armor.", 0, 0);
             break;
@@ -215,7 +214,7 @@ void ident_char() {
         case '_':
             prt("_ - A staff.", 0, 0);
             break;
-        /* case '`': prt("` - Not used.", 0, 0); break; */
+        // case '`': prt("` - Not used.", 0, 0); break;
         case 'a':
             prt("a - Giant Ant.", 0, 0);
             break;
@@ -276,12 +275,12 @@ void ident_char() {
         case 't':
             prt("t - Giant Tick.", 0, 0);
             break;
-        /* case 'u': prt("u - Not used.", 0, 0); break; */
-        /* case 'v': prt("v - Not used.", 0, 0); break; */
+        // case 'u': prt("u - Not used.", 0, 0); break;
+        // case 'v': prt("v - Not used.", 0, 0); break;
         case 'w':
             prt("w - Worm or Worm Mass.", 0, 0);
             break;
-        /* case 'x': prt("x - Not used.", 0, 0); break; */
+        // case 'x': prt("x - Not used.", 0, 0); break;
         case 'y':
             prt("y - Yeek.", 0, 0);
             break;
@@ -306,7 +305,7 @@ void ident_char() {
         }
     }
 
-    /* Allow access to monster memory. -CJS- */
+    // Allow access to monster memory. -CJS-
     int n = 0;
     char query;
     for (int i = MAX_CREATURES - 1; i >= 0; i--) {

@@ -1,22 +1,21 @@
-/* source/files.c: misc code to access files used by Moria
- *
- * Copyright (c) 1989-94 James E. Wilson, Robert A. Koeneke
- *
- * This file is part of Umoria.
- *
- * Umoria is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Umoria is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Umoria.  If not, see <http://www.gnu.org/licenses/>.
- */
+// src/files.c: misc code to access files used by Moria
+//
+// Copyright (c) 1989-94 James E. Wilson, Robert A. Koeneke
+//
+// This file is part of Umoria.
+//
+// Umoria is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Umoria is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Umoria.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "standard_library.h"
 
@@ -24,19 +23,15 @@
 #include "constant.h"
 #include "types.h"
 
-/* This must be included after fcntl.h, which has a prototype for `open'
- * on some systems.  Otherwise, the `open' prototype conflicts with the
- * `topen' declaration.
- */
+// This must be included after fcntl.h, which has a prototype for `open' on some
+// systems.  Otherwise, the `open' prototype conflicts with the `topen' declaration.
 #include "externs.h"
 
-/*
- *  init_scorefile
- *  Open the score file while we still have the setuid privileges.  Later
- *  when the score is being written out, you must be sure to flock the file
- *  so we don't have multiple people trying to write to it at the same time.
- *  Craig Norborg (doc)    Mon Aug 10 16:41:59 EST 1987
- */
+//  init_scorefile
+//  Open the score file while we still have the setuid privileges.  Later
+//  when the score is being written out, you must be sure to flock the file
+//  so we don't have multiple people trying to write to it at the same time.
+//  Craig Norborg (doc)    Mon Aug 10 16:41:59 EST 1987
 void init_scorefile() {
     highscore_fp = fopen(MORIA_TOP, "r+");
 
@@ -46,12 +41,12 @@ void init_scorefile() {
     }
 }
 
-/* Attempt to open the intro file      -RAK- */
-/* This routine also checks the hours file vs. what time it is  -Doc */
+// Attempt to open the intro file -RAK-
+// This routine also checks the hours file vs. what time it is  -Doc
 void read_times() {
     vtype in_line;
 
-    /* Print the introduction message, news, etc. */
+    // Print the introduction message, news, etc.
     FILE *file1 = fopen(MORIA_MOR, "r");
     if (file1 != NULL) {
         clear_screen();
@@ -64,8 +59,8 @@ void read_times() {
     }
 }
 
-/* File perusal.      -CJS-
-   primitive, but portable */
+// File perusal. -CJS-
+// primitive, but portable
 void helpfile(char *filename) {
     bigvtype tmp_str;
 
@@ -97,9 +92,9 @@ void helpfile(char *filename) {
     restore_screen();
 }
 
-/* Prints a list of random objects to a file.  Note that -RAK- */
-/* the objects produced is a sampling of objects which */
-/* be expected to appear on that level. */
+// Prints a list of random objects to a file. -RAK-
+// Note that the objects produced is a sampling of objects
+// which be expected to appear on that level.
 void print_objects() {
     bigvtype tmp_str;
 
@@ -170,7 +165,7 @@ void print_objects() {
     }
 }
 
-/* Print the character to a file or device    -RAK- */
+// Print the character to a file or device -RAK-
 bool file_character(char *filename1) {
     vtype out_val;
 
@@ -184,8 +179,8 @@ bool file_character(char *filename1) {
 
     FILE *file1;
     if (fd >= 0) {
-        /* on some non-unix machines, fdopen() is not reliable, hence must call
-           close() and then fopen() */
+        // on some non-unix machines, fdopen() is not reliable,
+        // hence must call close() and then fopen().
         (void)close(fd);
         file1 = fopen(filename1, "w");
     } else {
@@ -251,14 +246,14 @@ bool file_character(char *filename1) {
         int xbth = p_ptr->bth + p_ptr->ptohit * BTH_PLUS_ADJ + (class_level_adj[p_ptr->pclass][CLA_BTH] * p_ptr->lev);
         int xbthb = p_ptr->bthb + p_ptr->ptohit * BTH_PLUS_ADJ + (class_level_adj[p_ptr->pclass][CLA_BTHB] * p_ptr->lev);
 
-        /* this results in a range from 0 to 29 */
+        // this results in a range from 0 to 29
         int xfos = 40 - p_ptr->fos;
         if (xfos < 0) {
             xfos = 0;
         }
         int xsrh = p_ptr->srh;
 
-        /* this results in a range from 0 to 9 */
+        // this results in a range from 0 to 9
         int xstl = p_ptr->stl + 1;
         int xdis = p_ptr->disarm + 2 * todis_adj() + stat_adj(A_INT) + (class_level_adj[p_ptr->pclass][CLA_DISARM] * p_ptr->lev / 3);
         int xsave = p_ptr->save + stat_adj(A_WIS) + (class_level_adj[p_ptr->pclass][CLA_SAVE] * p_ptr->lev / 3);
@@ -278,13 +273,13 @@ bool file_character(char *filename1) {
         (void)fprintf(file1, "   Magic Device: %-10s", likert(xdev, 6));
         (void)fprintf(file1, "   Infra-Vision: %s\n\n", xinfra);
 
-        /* Write out the character's history */
+        // Write out the character's history
         (void)fprintf(file1, "Character Background\n");
         for (int i = 0; i < 4; i++) {
             (void)fprintf(file1, " %s\n", py.misc.history[i]);
         }
 
-        /* Write out the equipment list. */
+        // Write out the equipment list.
         bigvtype prt2;
         int j = 0;
 
@@ -346,7 +341,7 @@ bool file_character(char *filename1) {
             }
         }
 
-        /* Write out the character's inventory. */
+        // Write out the character's inventory.
         (void)fprintf(file1, "%c\n\n", CTRL_KEY('L'));
 
         (void)fprintf(file1, "  [General Inventory List]\n\n");

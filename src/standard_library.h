@@ -1,6 +1,6 @@
-/*
- * This is not 1994 anymore, so let's include all standard libraries in one file!
- */
+//
+// This is not 1994 anymore, so let's include all standard libraries in one file!
+//
 
 #include <stdbool.h>
 #include <ctype.h>
@@ -31,7 +31,7 @@
 #else // else USG
   #include <strings.h>
 
-  /* only needed for Berkeley UNIX */
+  // only needed for Berkeley UNIX
   #include <sys/file.h>
   #include <sys/param.h>
   #include <sys/resource.h>

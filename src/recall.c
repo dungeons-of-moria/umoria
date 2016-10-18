@@ -1,23 +1,22 @@
-/* source/recall.c: print out monster memory info      -CJS-
- *
- * Copyright (C) 1989-2008 James E. Wilson, Robert A. Koeneke,
- *                         David J. Grabiner
- *
- * This file is part of Umoria.
- *
- * Umoria is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Umoria is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Umoria.  If not, see <http://www.gnu.org/licenses/>.
- */
+// src/recall.c: print out monster memory info -CJS-
+//
+// Copyright (C) 1989-2008 James E. Wilson, Robert A. Koeneke,
+//                         David J. Grabiner
+//
+// This file is part of Umoria.
+//
+// Umoria is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Umoria is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Umoria.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "standard_library.h"
 
@@ -126,22 +125,22 @@ static char *desc_weakness[] = {
     "frost", "fire", "poison", "acid", "bright light", "rock remover",
 };
 
-static vtype roffbuf; /* Line buffer. */
-static char *roffp;   /* Pointer into line buffer. */
-static int roffpline; /* Place to print line now being loaded. */
+static vtype roffbuf; // Line buffer.
+static char *roffp;   // Pointer into line buffer.
+static int roffpline; // Place to print line now being loaded.
 
 #define plural(c, ss, sp) ((c) == 1 ? (ss) : (sp))
 
-/* Number of kills needed for information. */
+// Number of kills needed for information.
 
-/* the higher the level of the monster, the fewer the kills you need */
+// the higher the level of the monster, the fewer the kills you need
 #define knowarmor(l, d) ((d) > 304 / (4 + (l)))
 
-/* the higher the level of the monster, the fewer the attacks you need,
-   the more damage an attack does, the more attacks you need */
+// the higher the level of the monster, the fewer the attacks you need,
+// the more damage an attack does, the more attacks you need.
 #define knowdamage(l, a, d) ((4 + (l)) * (a) > 80 * (d))
 
-/* Do we know anything about this monster? */
+// Do we know anything about this monster?
 bool bool_roff_recall(int mon_num) {
     if (wizard) {
         return true;
@@ -159,7 +158,7 @@ bool bool_roff_recall(int mon_num) {
     return false;
 }
 
-/* Print out what we have discovered about this monster. */
+// Print out what we have discovered about this monster.
 int roff_recall(int mon_num) {
     bool known;
     char *p, *q;
@@ -195,13 +194,13 @@ int roff_recall(int mon_num) {
         j = 0;
         pu = cp->damage;
         while (*pu != 0 && j < 4) {
-            /* Turbo C needs a 16 bit int for the array index. */
+            // Turbo C needs a 16 bit int for the array index.
             mp->r_attacks[(int)j] = MAX_UCHAR;
             j++;
             pu++;
         }
 
-        /* A little hack to enable the display of info for Quylthulgs. */
+        // A little hack to enable the display of info for Quylthulgs.
         if (mp->r_cmove & CM_ONLY_MAGIC) {
             mp->r_attacks[0] = MAX_UCHAR;
         }
@@ -211,7 +210,7 @@ int roff_recall(int mon_num) {
 
     uint32_t rspells = mp->r_spells & cp->spells & ~CS_FREQ;
 
-    /* the CM_WIN property is always known, set it if a win monster */
+    // the CM_WIN property is always known, set it if a win monster
     uint32_t rcmove = mp->r_cmove | (CM_WIN & cp->cmove);
 
     uint16_t rcdefense = mp->r_cdefense & cp->cdefense;
@@ -219,7 +218,7 @@ int roff_recall(int mon_num) {
     (void)sprintf(temp, "The %s:\n", cp->name);
     roff(temp);
 
-    /* Conflict history. */
+    // Conflict history.
     if (mp->r_deaths) {
         (void)sprintf(temp, "%d of the contributors to your monster memory %s", mp->r_deaths, plural(mp->r_deaths, "has", "have"));
         roff(temp);
@@ -238,13 +237,13 @@ int roff_recall(int mon_num) {
         roff("No known battles to the death are recalled.");
     }
 
-    /* Immediately obvious. */
+    // Immediately obvious.
     known = false;
     if (cp->level == 0) {
         roff(" It lives in the town");
         known = true;
     } else if (mp->r_kills) {
-        /* The Balrog is a level 100 monster, but appears at 50 feet. */
+        // The Balrog is a level 100 monster, but appears at 50 feet.
         int i = cp->level;
         if (i > WIN_MON_APPEAR) {
             i = WIN_MON_APPEAR;
@@ -254,7 +253,7 @@ int roff_recall(int mon_num) {
         known = true;
     }
 
-    /* the c_list speed value is 10 greater, so that it can be a uint8_t */
+    // the c_list speed value is 10 greater, so that it can be a uint8_t
     int mspeed = cp->speed - 10;
 
     if (rcmove & CM_ALL_MV_FLAGS) {
@@ -266,7 +265,7 @@ int roff_recall(int mon_num) {
         }
         roff(" moves");
         if (rcmove & CM_RANDOM_MOVE) {
-            /* Turbo C needs a 16 bit int for the array index. */
+            // Turbo C needs a 16 bit int for the array index.
             roff(desc_howmuch[(int)((rcmove & CM_RANDOM_MOVE) >> 3)]);
             roff(" erratically");
         }
@@ -318,8 +317,8 @@ int roff_recall(int mon_num) {
         roff(".");
     }
 
-    /* Kill it once to know experience, and quality (evil, undead, monsterous).
-       The quality of being a dragon is obvious. */
+    // Kill it once to know experience, and quality (evil, undead, monsterous).
+    // The quality of being a dragon is obvious.
     if (mp->r_kills) {
         roff(" A kill of this");
 
@@ -335,12 +334,12 @@ int roff_recall(int mon_num) {
             roff(" undead");
         }
 
-        /* calculate the integer exp part, can be larger than 64K when first
-           level character looks at Balrog info, so must store in long */
+        // calculate the integer exp part, can be larger than 64K when first
+        // level character looks at Balrog info, so must store in long
         int32_t templong = (int32_t)cp->mexp * cp->level / py.misc.lev;
 
-        /* calculate the fractional exp part scaled by 100,
-           must use long arithmetic to avoid overflow */
+        // calculate the fractional exp part scaled by 100,
+        // must use long arithmetic to avoid overflow
         j = (((int32_t)cp->mexp * cp->level % py.misc.lev) * (int32_t)1000 / py.misc.lev + 5) / 10;
 
         (void)sprintf(temp, " creature is worth %d.%02d point%s", templong, j, (templong == 1 && j == 0 ? "" : "s"));
@@ -371,9 +370,8 @@ int roff_recall(int mon_num) {
         roff(temp);
     }
 
-    /* Spells known, if have been used against us.
-     * Breath weapons or resistance might be known only because we cast spells at it.
-     */
+    // Spells known, if have been used against us.
+    // Breath weapons or resistance might be known only because we cast spells at it.
     known = true;
     j = rspells;
 
@@ -421,7 +419,7 @@ int roff_recall(int mon_num) {
     }
 
     if (rspells & (CS_BREATHE | CS_SPELLS)) {
-        /* Could offset by level */
+        // Could offset by level
         if ((mp->r_spells & CS_FREQ) > 5) {
             (void)sprintf(temp, "; 1 time in %ld", cp->spells & CS_FREQ);
             roff(temp);
@@ -429,7 +427,7 @@ int roff_recall(int mon_num) {
         roff(".");
     }
 
-    /* Do we know how hard they are to kill? Armor class, hit die. */
+    // Do we know how hard they are to kill? Armor class, hit die.
     if (knowarmor(cp->level, mp->r_kills)) {
         (void)sprintf(temp, " It has an armor rating of %d", cp->ac);
         roff(temp);
@@ -437,7 +435,7 @@ int roff_recall(int mon_num) {
         roff(temp);
     }
 
-    /* Do we know how clever they are? Special abilities. */
+    // Do we know how clever they are? Special abilities.
     known = true;
     j = rcmove;
 
@@ -461,7 +459,7 @@ int roff_recall(int mon_num) {
         roff(".");
     }
 
-    /* Do we know its special weaknesses? Most cdefense flags. */
+    // Do we know its special weaknesses? Most cdefense flags.
     known = true;
     j = rcdefense;
     for (int i = 0; j & CD_WEAKNESS; i++) {
@@ -500,7 +498,7 @@ int roff_recall(int mon_num) {
         roff(".");
     }
 
-    /* Do we know how aware it is? */
+    // Do we know how aware it is?
     if (((mp->r_wake * mp->r_wake) > cp->sleep) || mp->r_ignore == MAX_UCHAR || (cp->sleep == 0 && mp->r_kills >= 10)) {
         roff(" It ");
         if (cp->sleep > 200) {
@@ -530,7 +528,7 @@ int roff_recall(int mon_num) {
         roff(temp);
     }
 
-    /* Do we know what it might carry? */
+    // Do we know what it might carry?
     if (rcmove & (CM_CARRY_OBJ | CM_CARRY_GOLD)) {
         roff(" It may");
         j = (rcmove & CM_TREASURE) >> CM_TR_SHIFT;
@@ -582,11 +580,11 @@ int roff_recall(int mon_num) {
         }
     }
 
-    /* We know about attacks it has used on us, and maybe the damage they do. */
-    /* known_attacks is the total number of known attacks, used for punctuation */
+    // We know about attacks it has used on us, and maybe the damage they do.
+    // known_attacks is the total number of known attacks, used for punctuation
     int known_attacks = 0;
 
-    /* Turbo C needs a 16 bit int for the array index. */
+    // Turbo C needs a 16 bit int for the array index.
     for (j = 0; j < 4; j++) {
         if (mp->r_attacks[(int)j]) {
             known_attacks++;
@@ -595,12 +593,12 @@ int roff_recall(int mon_num) {
 
     pu = cp->damage;
 
-    /* j counts the attacks as printed, used for punctuation */
+    // j counts the attacks as printed, used for punctuation
     j = 0;
     for (int i = 0; *pu != 0 && i < 4; pu++, i++) {
         int att_type, att_how, d1, d2;
 
-        /* don't print out unknown attacks */
+        // don't print out unknown attacks
         if (!mp->r_attacks[i]) {
             continue;
         }
@@ -633,7 +631,7 @@ int roff_recall(int mon_num) {
             roff(desc_atype[att_type]);
             if (d1 && d2) {
                 if (knowdamage(cp->level, mp->r_attacks[i], d1 * d2)) {
-                    /* Loss of experience */
+                    // Loss of experience
                     if (att_type == 19) {
                         roff(" by");
                     } else {
@@ -654,7 +652,7 @@ int roff_recall(int mon_num) {
         roff(" Nothing is known about its attack.");
     }
 
-    /* Always know the win creature. */
+    // Always know the win creature.
     if (cp->cmove & CM_WIN) {
         roff(" Killing one of these wins the game!");
     }
@@ -668,7 +666,7 @@ int roff_recall(int mon_num) {
     return inkey();
 }
 
-/* Print out strings, filling up lines as we go. */
+// Print out strings, filling up lines as we go.
 static void roff(char *p) {
     while (*p) {
         *roffp = *p;

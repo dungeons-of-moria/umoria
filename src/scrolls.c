@@ -1,23 +1,22 @@
-/* source/scrolls.c: scroll code
- *
- * Copyright (C) 1989-2008 James E. Wilson, Robert A. Koeneke,
- *                         David J. Grabiner
- *
- * This file is part of Umoria.
- *
- * Umoria is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Umoria is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Umoria.  If not, see <http://www.gnu.org/licenses/>.
- */
+// src/scrolls.c: scroll code
+//
+// Copyright (C) 1989-2008 James E. Wilson, Robert A. Koeneke,
+//                         David J. Grabiner
+//
+// This file is part of Umoria.
+//
+// Umoria is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Umoria is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Umoria.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "standard_library.h"
 
@@ -27,7 +26,7 @@
 
 #include "externs.h"
 
-/* Scrolls for the reading              -RAK- */
+// Scrolls for the reading -RAK-
 void read_scroll() {
     bool flag;
     int j, k, l, y, x;
@@ -63,7 +62,7 @@ void read_scroll() {
                 j += 32;
             }
 
-            /* Scrolls. */
+            // Scrolls.
             switch (j) {
             case 1:
                 i_ptr = &inventory[INVEN_WIELD];
@@ -90,8 +89,8 @@ void read_scroll() {
                         (i_ptr->tval <= TV_DIGGING)) {
                         j = i_ptr->damage[0] * i_ptr->damage[1];
                     } else {
-                        /* Bows' and arrows' enchantments should not be
-                           limited by their low base damages */
+                        // Bows' and arrows' enchantments should not be
+                        // limited by their low base damages
                         j = 10;
                     }
                     if (enchant(&i_ptr->todam, j)) {
@@ -121,7 +120,7 @@ void read_scroll() {
                 if (inventory[INVEN_HEAD].tval != TV_NOTHING) {
                     tmp[k++] = INVEN_HEAD;
                 }
-                /* also enchant boots */
+                // also enchant boots
                 if (inventory[INVEN_FEET].tval != TV_NOTHING) {
                     tmp[k++] = INVEN_FEET;
                 }
@@ -163,11 +162,10 @@ void read_scroll() {
                 ident = true;
                 used_up = ident_spell();
 
-                /* The identify may merge objects, causing the identify scroll
-                   to move to a different place.    Check for that here.  It
-                   can
-                   move arbitrarily far if an identify scroll was used on
-                   another identify scroll, but it always moves down. */
+                // The identify may merge objects, causing the identify scroll
+                // to move to a different place.  Check for that here.  It can
+                // move arbitrarily far if an identify scroll was used on
+                // another identify scroll, but it always moves down.
                 while (i_ptr->tval != TV_SCROLL1 || i_ptr->flags != 0x00000008) {
                     item_val--;
                     i_ptr = &inventory[item_val];
@@ -294,10 +292,10 @@ void read_scroll() {
                     }
                     if ((i_ptr->tval >= TV_HAFTED) && (i_ptr->tval <= TV_DIGGING)) {
                         j = i_ptr->damage[0] * i_ptr->damage[1];
-                    } else { /* Bows' and arrows' enchantments should not be
-                            limited
-                            by their low base damages */
-                        j = 10;
+                    } else {
+                      // Bows' and arrows' enchantments should not be limited
+                      // by their low base damages
+                      j = 10;
                     }
                     for (k = 0; k < randint(2); k++) {
                         if (enchant(&i_ptr->todam, j)) {
@@ -323,9 +321,9 @@ void read_scroll() {
                     i_ptr->tohit = -randint(5) - randint(5);
                     i_ptr->todam = -randint(5) - randint(5);
                     i_ptr->toac = 0;
-                    /* Must call py_bonuses() before set (clear) flags, and
-                       must call calc_bonuses() after set (clear) flags, so that
-                       all attributes will be properly turned off. */
+                    // Must call py_bonuses() before set (clear) flags, and
+                    // must call calc_bonuses() after set (clear) flags, so that
+                    // all attributes will be properly turned off.
                     py_bonuses(i_ptr, -1);
                     i_ptr->flags = TR_CURSED;
                     calc_bonuses();
@@ -350,7 +348,7 @@ void read_scroll() {
                 if (inventory[INVEN_HEAD].tval != TV_NOTHING) {
                     tmp[k++] = INVEN_HEAD;
                 }
-                /* also enchant boots */
+                // also enchant boots
                 if (inventory[INVEN_FEET].tval != TV_NOTHING) {
                     tmp[k++] = INVEN_FEET;
                 }
@@ -394,23 +392,17 @@ void read_scroll() {
                 }
                 break;
             case 36:
-                if ((inventory[INVEN_BODY].tval != TV_NOTHING) &&
-                    (randint(4) == 1)) {
+                if ((inventory[INVEN_BODY].tval != TV_NOTHING) && (randint(4) == 1)) {
                     k = INVEN_BODY;
-                } else if ((inventory[INVEN_ARM].tval != TV_NOTHING) &&
-                           (randint(3) == 1)) {
+                } else if ((inventory[INVEN_ARM].tval != TV_NOTHING) && (randint(3) == 1)) {
                     k = INVEN_ARM;
-                } else if ((inventory[INVEN_OUTER].tval != TV_NOTHING) &&
-                           (randint(3) == 1)) {
+                } else if ((inventory[INVEN_OUTER].tval != TV_NOTHING) && (randint(3) == 1)) {
                     k = INVEN_OUTER;
-                } else if ((inventory[INVEN_HEAD].tval != TV_NOTHING) &&
-                           (randint(3) == 1)) {
+                } else if ((inventory[INVEN_HEAD].tval != TV_NOTHING) && (randint(3) == 1)) {
                     k = INVEN_HEAD;
-                } else if ((inventory[INVEN_HANDS].tval != TV_NOTHING) &&
-                           (randint(3) == 1)) {
+                } else if ((inventory[INVEN_HANDS].tval != TV_NOTHING) && (randint(3) == 1)) {
                     k = INVEN_HANDS;
-                } else if ((inventory[INVEN_FEET].tval != TV_NOTHING) &&
-                           (randint(3) == 1)) {
+                } else if ((inventory[INVEN_FEET].tval != TV_NOTHING) && (randint(3) == 1)) {
                     k = INVEN_FEET;
                 } else if (inventory[INVEN_BODY].tval != TV_NOTHING) {
                     k = INVEN_BODY;
@@ -477,7 +469,7 @@ void read_scroll() {
                 msg_print("Internal error in scroll()");
                 break;
             }
-            /* End of Scrolls. */
+            // End of Scrolls.
         }
 
         i_ptr = &inventory[item_val];
@@ -486,7 +478,7 @@ void read_scroll() {
             if (!known1_p(i_ptr)) {
                 struct misc *m_ptr = &py.misc;
 
-                /* round half-way case up */
+                // round half-way case up
                 m_ptr->exp += (i_ptr->level + (m_ptr->lev >> 1)) / m_ptr->lev;
                 prt_experience();
 

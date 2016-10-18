@@ -1,23 +1,22 @@
-/* source/io.c: terminal I/O code, uses the curses package
- *
- * Copyright (C) 1989-2008 James E. Wilson, Robert A. Koeneke,
- *                         David J. Grabiner
- *
- * This file is part of Umoria.
- *
- * Umoria is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Umoria is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Umoria.  If not, see <http://www.gnu.org/licenses/>.
- */
+// src/io.c: terminal I/O code, uses the curses package
+//
+// Copyright (C) 1989-2008 James E. Wilson, Robert A. Koeneke,
+//                         David J. Grabiner
+//
+// This file is part of Umoria.
+//
+// Umoria is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Umoria is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Umoria.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "standard_library.h"
 
@@ -35,14 +34,14 @@
 
 static bool curses_on = false;
 
-/* Spare window for saving the screen. -CJS-*/
+// Spare window for saving the screen. -CJS-
 static WINDOW *savescr;
 
-/* initializes curses routines */
+// initializes curses routines
 void init_curses() {
     initscr();
 
-    /* Check we have enough screen. -CJS- */
+    // Check we have enough screen. -CJS-
     if (LINES < 24 || COLS < 80) {
         (void)printf("Screen too small for moria.\n");
         exit(1);
@@ -75,11 +74,11 @@ void moriaterm() {
     curses_on = true;
 }
 
-/* Dump IO to buffer          -RAK- */
+// Dump IO to buffer -RAK-
 void put_buffer(char *out_str, int row, int col) {
     vtype tmp_str;
 
-    /* truncate the string, to make sure that it won't go past right edge of screen */
+    // truncate the string, to make sure that it won't go past right edge of screen.
     if (col > 79) {
         col = 79;
     }
@@ -88,41 +87,41 @@ void put_buffer(char *out_str, int row, int col) {
 
     if (mvaddstr(row, col, tmp_str) == ERR) {
         abort();
-        /* clear msg_flag to avoid problems with unflushed messages */
+        // clear msg_flag to avoid problems with unflushed messages.
         msg_flag = false;
         (void)sprintf(tmp_str, "error in put_buffer, row = %d col = %d\n", row, col);
         prt(tmp_str, 0, 0);
         bell();
 
-        /* wait so user can see error */
+        // wait so user can see error
         (void)sleep(2);
     }
 }
 
-/* Dump the IO buffer to terminal      -RAK- */
+// Dump the IO buffer to terminal -RAK-
 void put_qio() {
-    /* Let inven_command know something has changed. */
+    // Let inven_command know something has changed.
     screen_change = true;
 
     (void)refresh();
 }
 
-/* Put the terminal in the original mode.         -CJS- */
+// Put the terminal in the original mode. -CJS-
 void restore_term() {
     if (!curses_on) {
         return;
     }
 
-    /* Dump any remaining buffer */
+    // Dump any remaining buffer
     put_qio();
 
-    /* this moves curses to bottom right corner */
+    // this moves curses to bottom right corner
     int y = 0;
     int x = 0;
     getyx(stdscr, y, x);
     mvcur(y, x, LINES - 1, 0);
 
-    /* exit curses */
+    // exit curses
     endwin();
     (void)fflush(stdout);
 
@@ -133,22 +132,21 @@ void shell_out() {
     put_buffer("[Opening new shells is not currently supported]\n", 0, 0);
 }
 
-/* Returns a single character input from the terminal.              -CJS-
- *
- * This silently consumes ^R to redraw the screen and reset the terminal,
- * so that this operation can always be performed at any input prompt.
- * inkey() never returns ^R.
- */
+// Returns a single character input from the terminal. -CJS-
+//
+// This silently consumes ^R to redraw the screen and reset the
+// terminal, so that this operation can always be performed at
+// any input prompt. inkey() never returns ^R.
 char inkey() {
-    put_qio();         /* Dump IO buffer */
-    command_count = 0; /* Just to be safe -CJS- */
+    put_qio();         // Dump IO buffer
+    command_count = 0; // Just to be safe -CJS-
 
     while (true) {
         int i = getch();
 
-        /* some machines may not sign extend. */
+        // some machines may not sign extend.
         if (i == EOF) {
-            /* avoid infinite loops while trying to call inkey() for a -more- prompt. */
+            // avoid infinite loops while trying to call inkey() for a -more- prompt.
             msg_flag = false;
 
             eof_flag++;
@@ -162,7 +160,7 @@ char inkey() {
             disturb(1, 0);
 
             if (eof_flag > 100) {
-                /* just in case, to make sure that the process eventually dies */
+                // just in case, to make sure that the process eventually dies
                 panic_save = true;
 
                 (void)strcpy(died_from, "(end of input: panic saved)");
@@ -184,7 +182,7 @@ char inkey() {
     }
 }
 
-/* Flush the buffer          -RAK- */
+// Flush the buffer -RAK-
 void flush() {
     if (!eof_flag) {
         while (check_input(0)) {
@@ -193,7 +191,7 @@ void flush() {
     }
 }
 
-/* Clears given line of text        -RAK- */
+// Clears given line of text -RAK-
 void erase_line(int row, int col) {
     if (row == MSG_LINE && msg_flag) {
         msg_print(CNIL);
@@ -203,7 +201,7 @@ void erase_line(int row, int col) {
     clrtoeol();
 }
 
-/* Clears screen */
+// Clears screen
 void clear_screen() {
     if (msg_flag) {
         msg_print(CNIL);
@@ -216,18 +214,18 @@ void clear_from(int row) {
     clrtobot();
 }
 
-/* Outputs a char to a given interpolated y, x position  -RAK- */
-/* sign bit of a character used to indicate standout mode. -CJS */
+// Outputs a char to a given interpolated y, x position -RAK-
+// sign bit of a character used to indicate standout mode. -CJS
 void print(char ch, int row, int col) {
 
-    /* Real co-ords convert to screen positions */
+    // Real co-ords convert to screen positions
     row -= panel_row_prt;
     col -= panel_col_prt;
 
     if (mvaddch(row, col, ch) == ERR) {
         abort();
 
-        /* clear msg_flag to avoid problems with unflushed messages */
+        // clear msg_flag to avoid problems with unflushed messages
         msg_flag = false;
 
         vtype tmp_str;
@@ -235,20 +233,20 @@ void print(char ch, int row, int col) {
         prt(tmp_str, 0, 0);
         bell();
 
-        /* wait so user can see error */
+        // wait so user can see error
         (void)sleep(2);
     }
 }
 
-/* Moves the cursor to a given interpolated y, x position  -RAK- */
+// Moves the cursor to a given interpolated y, x position -RAK-
 void move_cursor_relative(int row, int col) {
-    /* Real co-ords convert to screen positions */
+    // Real co-ords convert to screen positions
     row -= panel_row_prt;
     col -= panel_col_prt;
 
     if (move(row, col) == ERR) {
         abort();
-        /* clear msg_flag to avoid problems with unflushed messages */
+        // clear msg_flag to avoid problems with unflushed messages
         msg_flag = false;
 
         vtype tmp_str;
@@ -256,19 +254,19 @@ void move_cursor_relative(int row, int col) {
         prt(tmp_str, 0, 0);
         bell();
 
-        /* wait so user can see error */
+        // wait so user can see error
         (void)sleep(2);
     }
 }
 
-/* Print a message so as not to interrupt a counted command. -CJS- */
+// Print a message so as not to interrupt a counted command. -CJS-
 void count_msg_print(char *p) {
     int i = command_count;
     msg_print(p);
     command_count = i;
 }
 
-/* Outputs a line to a given y, x position    -RAK- */
+// Outputs a line to a given y, x position -RAK-
 void prt(char *str_buff, int row, int col) {
     if (row == MSG_LINE && msg_flag) {
         msg_print(CNIL);
@@ -279,13 +277,13 @@ void prt(char *str_buff, int row, int col) {
     put_buffer(str_buff, row, col);
 }
 
-/* move cursor to a given y, x position */
+// move cursor to a given y, x position
 void move_cursor(int row, int col) {
     (void)move(row, col);
 }
 
-/* Outputs message to top line of screen */
-/* These messages are kept for later reference. */
+// Outputs message to top line of screen
+// These messages are kept for later reference.
 void msg_print(char *str_buff) {
     int new_len = 0;
     int old_len = 0;
@@ -294,9 +292,9 @@ void msg_print(char *str_buff) {
     if (msg_flag) {
         old_len = (int)strlen(old_msg[last_msg]) + 1;
 
-        /* If the new message and the old message are short enough, we want
-           display them together on the same line.  So we don't flush the old
-           message in this case. */
+        // If the new message and the old message are short enough,
+        // we want display them together on the same line.  So we
+        // don't flush the old message in this case.
 
         if (str_buff) {
             new_len = (int)strlen(str_buff);
@@ -305,14 +303,14 @@ void msg_print(char *str_buff) {
         }
 
         if (!str_buff || (new_len + old_len + 2 >= 73)) {
-            /* ensure that the complete -more- message is visible. */
+            // ensure that the complete -more- message is visible.
             if (old_len > 73) {
                 old_len = 73;
             }
 
             put_buffer(" -more-", MSG_LINE, old_len);
 
-            /* let sigint handler know that we are waiting for a space */
+            // let sigint handler know that we are waiting for a space
             wait_for_more = true;
 
             char in_char;
@@ -331,13 +329,13 @@ void msg_print(char *str_buff) {
         clrtoeol();
     }
 
-    /* Make the null string a special case.  -CJS- */
+    // Make the null string a special case. -CJS-
     if (str_buff) {
         command_count = 0;
         msg_flag = true;
 
-        /* If the new message and the old message are short enough, display
-           them on the same line. */
+        // If the new message and the old message are short enough,
+        // display them on the same line.
 
         if (combine_messages) {
             put_buffer(str_buff, MSG_LINE, old_len + 2);
@@ -359,7 +357,7 @@ void msg_print(char *str_buff) {
     }
 }
 
-/* Used to verify a choice - user gets the chance to abort choice.  -CJS- */
+// Used to verify a choice - user gets the chance to abort choice. -CJS-
 bool get_check(char *prompt) {
     int y, x;
 
@@ -386,8 +384,8 @@ bool get_check(char *prompt) {
     }
 }
 
-/* Prompts (optional) and returns ord value of input char */
-/* Function returns false if <ESCAPE> is input */
+// Prompts (optional) and returns ord value of input char
+// Function returns false if <ESCAPE> is input
 int get_com(char *prompt, char *command) {
     if (prompt) {
         prt(prompt, 0, 0);
@@ -407,8 +405,8 @@ int get_com(char *prompt, char *command) {
     return res;
 }
 
-/* Gets a string terminated by <RETURN> */
-/* Function returns false if <ESCAPE> is input */
+// Gets a string terminated by <RETURN>
+// Function returns false if <ESCAPE> is input
 bool get_string(char *in_str, int row, int column, int slen) {
     bool aborted = false;
     bool flag = false;
@@ -466,7 +464,7 @@ bool get_string(char *in_str, int row, int column, int slen) {
         return false;
     }
 
-    /* Remove trailing blanks */
+    // Remove trailing blanks
     while (p > in_str && p[-1] == ' ') {
         p--;
     }
@@ -475,16 +473,16 @@ bool get_string(char *in_str, int row, int column, int slen) {
     return true;
 }
 
-/* Pauses for user response before returning    -RAK- */
+// Pauses for user response before returning -RAK-
 void pause_line(int prt_line) {
     prt("[Press any key to continue.]", prt_line, 23);
     (void)inkey();
     erase_line(prt_line, 0);
 }
 
-/* Pauses for user response before returning    -RAK- */
-/* NOTE: Delay is for players trying to roll up "perfect" */
-/*  characters.  Make them wait a bit. */
+// Pauses for user response before returning -RAK-
+// NOTE: Delay is for players trying to roll up "perfect"
+// characters.  Make them wait a bit.
 void pause_exit(int prt_line, int delay) {
     prt("[Press any key to continue, or Q to exit.]", prt_line, 10);
 
@@ -513,7 +511,7 @@ void restore_screen() {
 void bell() {
     put_qio();
 
-    /* The player can turn off beeps if he/she finds them annoying. */
+    // The player can turn off beeps if he/she finds them annoying.
     if (!sound_beep_flag) {
         return;
     }
@@ -521,25 +519,25 @@ void bell() {
     (void)write(1, "\007", 1);
 }
 
-/* definitions used by screen_map() */
-/* index into border character array */
-#define TL 0 /* top left */
+// definitions used by screen_map()
+// index into border character array
+#define TL 0 // top left
 #define TR 1
 #define BL 2
 #define BR 3
-#define HE 4 /* horizontal edge */
+#define HE 4 // horizontal edge
 #define VE 5
 
-/* character set to use */
+// character set to use
 #define CH(x) (screen_border[0][x])
 
-/* Display highest priority object in the RATIO by RATIO area */
+// Display highest priority object in the RATIO by RATIO area
 #define RATIO 3
 
 void screen_map() {
     static uint8_t screen_border[2][6] = {
-        {'+', '+', '+', '+', '-', '|'}, /* normal chars */
-        {201, 187, 200, 188, 205, 186}, /* graphics chars */
+        {'+', '+', '+', '+', '-', '|'}, // normal chars
+        {201, 187, 200, 188, 205, 186}, // graphics chars
     };
 
     uint8_t map[MAX_WIDTH / RATIO + 1];
@@ -578,9 +576,9 @@ void screen_map() {
         int row = i / RATIO;
         if (row != orow) {
             if (orow >= 0) {
-                /* can not use mvprintw() on ibmpc, because PC-Curses is horribly
-                   written, and mvprintw() causes the fp emulation library to be
-                   linked with PC-Moria, makes the program 10K bigger */
+                // can not use mvprintw() on ibmpc, because PC-Curses is horribly
+                // written, and mvprintw() causes the fp emulation library to be
+                // linked with PC-Moria, makes the program 10K bigger
                 (void)sprintf(prntscrnbuf, "%c%s%c", CH(VE), map, CH(VE));
                 use_value2 mvaddstr(orow + 1, 0, prntscrnbuf);
             }
@@ -601,7 +599,7 @@ void screen_map() {
             }
 
             if (map[col] == '@') {
-                mycol = col + 1; /* account for border */
+                mycol = col + 1; // account for border
                 myrow = row + 1;
             }
         }

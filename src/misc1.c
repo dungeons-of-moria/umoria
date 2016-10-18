@@ -1,23 +1,22 @@
-/* source/misc1.c: misc utility and initialization code, magic objects code
- *
- * Copyright (C) 1989-2008 James E. Wilson, Robert A. Koeneke,
- *                         David J. Grabiner
- *
- * This file is part of Umoria.
- *
- * Umoria is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Umoria is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Umoria.  If not, see <http://www.gnu.org/licenses/>.
- */
+// src/misc1.c: misc utility and initialization code, magic objects code
+//
+// Copyright (C) 1989-2008 James E. Wilson, Robert A. Koeneke,
+//                         David J. Grabiner
+//
+// This file is part of Umoria.
+//
+// Umoria is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Umoria is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Umoria.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "standard_library.h"
 
@@ -27,7 +26,7 @@
 
 #include "externs.h"
 
-/* gets a new random seed for the random number generator */
+// gets a new random seed for the random number generator
 void init_seeds(uint32_t seed) {
     uint32_t clock_var;
 
@@ -43,55 +42,56 @@ void init_seeds(uint32_t seed) {
 
     clock_var += 113452L;
     set_rnd_seed(clock_var);
-    /* make it a little more random */
+    // make it a little more random
     for (clock_var = (uint32_t)randint(100); clock_var != 0; clock_var--) {
         (void)rnd();
     }
 }
 
-/* holds the previous rnd state */
+// holds the previous rnd state
 static uint32_t old_seed;
 
-/* change to different random number generator state */
+// change to different random number generator state
 void set_seed(uint32_t seed) {
     old_seed = get_rnd_seed();
 
-    /* want reproducible state here */
+    // want reproducible state here
     set_rnd_seed(seed);
 }
 
-/* restore the normal random generator state */
+// restore the normal random generator state
 void reset_seed() {
     set_rnd_seed(old_seed);
 }
 
-/* Check the day-time strings to see if open    -RAK- */
+// Check the day-time strings to see if open -RAK-
 bool check_time() {
     // Play the game any time of day you like!
     return true;
 }
 
-/* Generates a random integer x where 1<=X<=MAXVAL  -RAK- */
+// Generates a random integer x where 1<=X<=MAXVAL -RAK-
 int randint(int maxval) {
     int32_t randval = rnd();
     return ((int)(randval % maxval) + 1);
 }
 
-/* Generates a random integer number of NORMAL distribution -RAK-*/
+// Generates a random integer number of NORMAL distribution -RAK-
 int randnor(int mean, int stand) {
-    /* alternate randnor code, slower but much smaller since no table */
-    /* 2 per 1,000,000 will be > 4*SD, max is 5*SD */
-    // tmp = damroll(8, 99);   /* mean 400, SD 81 */
+    // alternate randnor code, slower but much smaller since no table
+    // 2 per 1,000,000 will be > 4*SD, max is 5*SD
+    //
+    // tmp = damroll(8, 99);   // mean 400, SD 81
     // tmp = (tmp - 400) * stand / 81;
     // return tmp + mean;
 
     int tmp = randint(MAX_SHORT);
 
-    /* off scale, assign random value between 4 and 5 times SD */
+    // off scale, assign random value between 4 and 5 times SD
     if (tmp == MAX_SHORT) {
         int offset = 4 * stand + randint(stand);
 
-        /* one half are negative */
+        // one half are negative
         if (randint(2) == 1) {
             offset = -offset;
         }
@@ -99,8 +99,8 @@ int randnor(int mean, int stand) {
         return mean + offset;
     }
 
-    /* binary search normal normal_table to get index that matches tmp */
-    /* this takes up to 8 iterations */
+    // binary search normal normal_table to get index that
+    // matches tmp this takes up to 8 iterations.
     int low = 0;
     int iindex = NORMAL_TABLE_SIZE >> 1;
     int high = NORMAL_TABLE_SIZE;
@@ -118,16 +118,16 @@ int randnor(int mean, int stand) {
         }
     }
 
-    /* might end up one below target, check that here */
+    // might end up one below target, check that here
     if (normal_table[iindex] < tmp) {
         iindex = iindex + 1;
     }
 
-    /* normal_table is based on SD of 64, so adjust the index value here,
-       round the half way case up */
+    // normal_table is based on SD of 64, so adjust the
+    // index value here, round the half way case up.
     int offset = ((stand * iindex) + (NORMAL_TABLE_SD >> 1)) / NORMAL_TABLE_SD;
 
-    /* one half should be negative */
+    // one half should be negative
     if (randint(2) == 1) {
         offset = -offset;
     }
@@ -135,8 +135,8 @@ int randnor(int mean, int stand) {
     return mean + offset;
 }
 
-/* Returns position of first set bit      -RAK- */
-/*     and clears that bit */
+// Returns position of first set bit -RAK-
+// and clears that bit
 int bit_pos(uint32_t *test) {
     uint32_t mask = 0x1;
 
@@ -148,11 +148,11 @@ int bit_pos(uint32_t *test) {
         mask <<= 1;
     }
 
-    /* no one bits found */
+    // no one bits found
     return -1;
 }
 
-/* Checks a co-ordinate for in bounds status    -RAK- */
+// Checks a co-ordinate for in bounds status -RAK-
 bool in_bounds(int y, int x) {
     if ((y > 0) && (y < cur_height - 1) && (x > 0) && (x < cur_width - 1)) {
         return true;
@@ -161,7 +161,7 @@ bool in_bounds(int y, int x) {
     }
 }
 
-/* Calculates current boundaries        -RAK- */
+// Calculates current boundaries -RAK-
 void panel_bounds() {
     panel_row_min = panel_row * (SCREEN_HEIGHT / 2);
     panel_row_max = panel_row_min + SCREEN_HEIGHT - 1;
@@ -171,9 +171,9 @@ void panel_bounds() {
     panel_col_prt = panel_col_min - 13;
 }
 
-/* Given an row (y) and col (x), this routine detects  -RAK- */
-/* when a move off the screen has occurred and figures new borders.
-   Force forcses the panel bounds to be recalculated, useful for 'W'here. */
+// Given an row (y) and col (x), this routine detects -RAK-
+// when a move off the screen has occurred and figures new borders.
+// Force forcses the panel bounds to be recalculated, useful for 'W'here.
 int get_panel(int y, int x, int force) {
     bool panel;
 
@@ -200,7 +200,7 @@ int get_panel(int y, int x, int force) {
         panel_col = pcol;
         panel_bounds();
         panel = true;
-        /* stop movement if any */
+        // stop movement if any
         if (find_bound) {
             end_find();
         }
@@ -210,8 +210,8 @@ int get_panel(int y, int x, int force) {
     return panel;
 }
 
-/* Tests a given point to see if it is within the screen -RAK- */
-/* boundaries. */
+// Tests a given point to see if it is within the screen -RAK-
+// boundaries.
 bool panel_contains(int y, int x) {
     if ((y >= panel_row_min) && (y <= panel_row_max) && (x >= panel_col_min) &&
         (x <= panel_col_max)) {
@@ -221,7 +221,7 @@ bool panel_contains(int y, int x) {
     }
 }
 
-/* Distance between two points        -RAK- */
+// Distance between two points -RAK-
 int distance(int y1, int x1, int y2, int x2) {
     int dy = y1 - y2;
     if (dy < 0) {
@@ -236,9 +236,9 @@ int distance(int y1, int x1, int y2, int x2) {
     return ((((dy + dx) << 1) - (dy > dx ? dx : dy)) >> 1);
 }
 
-/* Checks points north, south, east, and west for a wall -RAK- */
-/* note that y,x is always in_bounds(), i.e. 0 < y < cur_height-1, and
-   0 < x < cur_width-1 */
+// Checks points north, south, east, and west for a wall -RAK-
+// note that y,x is always in_bounds(), i.e. 0 < y < cur_height-1,
+// and 0 < x < cur_width-1
 int next_to_walls(int y, int x) {
     int i = 0;
     cave_type *c_ptr = &cave[y - 1][x];
@@ -262,9 +262,9 @@ int next_to_walls(int y, int x) {
     return i;
 }
 
-/* Checks all adjacent spots for corridors    -RAK- */
-/* note that y, x is always in_bounds(), hence no need to check that
-   j, k are in_bounds(), even if they are 0 or cur_x-1 is still works */
+// Checks all adjacent spots for corridors -RAK-
+// note that y, x is always in_bounds(), hence no need to check that
+// j, k are in_bounds(), even if they are 0 or cur_x-1 is still works
 int next_to_corr(int y, int x) {
     int i = 0;
 
@@ -272,7 +272,7 @@ int next_to_corr(int y, int x) {
         for (int k = x - 1; k <= (x + 1); k++) {
             cave_type *c_ptr = &cave[j][k];
 
-            /* should fail if there is already a door present */
+            // should fail if there is already a door present
             if (c_ptr->fval == CORR_FLOOR &&
                 (c_ptr->tptr == 0 || t_list[c_ptr->tptr].tval < TV_MIN_DOORS)) {
                 i++;
@@ -283,7 +283,7 @@ int next_to_corr(int y, int x) {
     return i;
 }
 
-/* generates damage for 2d6 style dice rolls */
+// generates damage for 2d6 style dice rolls
 int damroll(int num, int sides) {
     int sum = 0;
     for (int i = 0; i < num; i++) {
@@ -296,36 +296,34 @@ int pdamroll(uint8_t *array) {
     return damroll((int)array[0], (int)array[1]);
 }
 
-/* A simple, fast, integer-based line-of-sight algorithm.  By Joseph Hall,
-*  4116 Brewster Drive, Raleigh NC 27606.  Email to jnh@ecemwl.ncsu.edu.
-*
-*  Returns true if a line of sight can be traced from x0, y0 to x1, y1.
-*
-*  The LOS begins at the center of the tile [x0, y0] and ends at
-*  the center of the tile [x1, y1].  If los() is to return true, all of
-*  the tiles this line passes through must be transparent, WITH THE
-*  EXCEPTIONS of the starting and ending tiles.
-*
-*  We don't consider the line to be "passing through" a tile if
-*  it only passes across one corner of that tile.
- */
+// A simple, fast, integer-based line-of-sight algorithm.  By Joseph Hall,
+// 4116 Brewster Drive, Raleigh NC 27606.  Email to jnh@ecemwl.ncsu.edu.
+//
+// Returns true if a line of sight can be traced from x0, y0 to x1, y1.
+//
+// The LOS begins at the center of the tile [x0, y0] and ends at the center of
+// the tile [x1, y1].  If los() is to return true, all of the tiles this line
+// passes through must be transparent, WITH THE EXCEPTIONS of the starting and
+// ending tiles.
+//
+// We don't consider the line to be "passing through" a tile if it only passes
+// across one corner of that tile.
 
-/* Because this function uses (short) ints for all calculations, overflow
- * may occur if deltaX and deltaY exceed 90.
- */
+// Because this function uses (short) ints for all calculations, overflow may
+// occur if deltaX and deltaY exceed 90.
 
 bool los(int fromY, int fromX, int toY, int toX) {
     int deltaX = toX - fromX;
     int deltaY = toY - fromY;
 
-    /* Adjacent? */
+    // Adjacent?
     if ((deltaX < 2) && (deltaX > -2) && (deltaY < 2) && (deltaY > -2)) {
         return true;
     }
 
-    /* Handle the cases where deltaX or deltaY == 0. */
+    // Handle the cases where deltaX or deltaY == 0.
     if (deltaX == 0) {
-        int p_y; /* y position -- loop variable */
+        int p_y; // y position -- loop variable
 
         if (deltaY < 0) {
             int tmp = fromY;
@@ -340,7 +338,7 @@ bool los(int fromY, int fromX, int toY, int toX) {
         }
         return true;
     } else if (deltaY == 0) {
-        int px; /* x position -- loop variable */
+        int px; // x position -- loop variable
 
         if (deltaX < 0) {
             int tmp = fromX;
@@ -356,40 +354,38 @@ bool los(int fromY, int fromX, int toY, int toX) {
         return true;
     }
 
-    /* Now, we've eliminated all the degenerate cases.
-       In the computations below, dy (or dx) and m are multiplied by a
-       scale factor, scale = abs(deltaX * deltaY * 2), so that we can use
-       integer arithmetic. */
+    // Now, we've eliminated all the degenerate cases.
+    // In the computations below, dy (or dx) and m are multiplied by a scale factor,
+    // scale = abs(deltaX * deltaY * 2), so that we can use integer arithmetic.
     {
-        int px,        /* x position */
-            p_y,       /* y position */
-            scale2;    /* above scale factor / 2 */
-        int scale,     /* above scale factor */
-            xSign,     /* sign of deltaX */
-            ySign,     /* sign of deltaY */
-            m;         /* slope or 1/slope of LOS */
+        int px,        // x position
+            p_y,       // y position
+            scale2;    // above scale factor / 2
+        int scale,     // above scale factor
+            xSign,     // sign of deltaX
+            ySign,     // sign of deltaY
+            m;         // slope or 1/slope of LOS
 
         scale2 = abs(deltaX * deltaY);
         scale  = scale2 << 1;
         xSign  = (deltaX < 0) ? -1 : 1;
         ySign  = (deltaY < 0) ? -1 : 1;
 
-        /* Travel from one end of the line to the other, oriented along the longer axis. */
+        // Travel from one end of the line to the other, oriented along the longer axis.
 
         if (abs(deltaX) >= abs(deltaY)) {
-            int dy; /* "fractional" y position */
-            /* We start at the border between the first and second tiles,
-             * where the y offset = .5 * slope.  Remember the scale
-             * factor.  We have:
-             *              m = deltaY / deltaX * 2 * (deltaY * deltaX)
-             *                = 2 * deltaY * deltaY.
-             */
+            int dy; // "fractional" y position
+
+            // We start at the border between the first and second tiles, where
+            // the y offset = .5 * slope.  Remember the scale factor.
+            // We have:     m = deltaY / deltaX * 2 * (deltaY * deltaX)
+            //                = 2 * deltaY * deltaY.
 
             dy = deltaY * deltaY;
             m = dy << 1;
             px = fromX + xSign;
 
-            /* Consider the special case where slope == 1. */
+            // Consider the special case where slope == 1.
             if (dy == scale2) {
                 p_y = fromY + ySign;
                 dy -= scale;
@@ -413,8 +409,8 @@ bool los(int fromY, int fromX, int toY, int toX) {
                     px += xSign;
                     dy -= scale;
                 } else {
-                    /* This is the case, dy == scale2, where the LOS
-                       exactly meets the corner of a tile. */
+                    // This is the case, dy == scale2, where the LOS
+                    // exactly meets the corner of a tile.
                     px += xSign;
                     p_y += ySign;
                     dy -= scale;
@@ -422,7 +418,7 @@ bool los(int fromY, int fromX, int toY, int toX) {
             }
             return true;
         } else {
-            int dx; /* "fractional" x position */
+            int dx; // "fractional" x position
             dx = deltaX * deltaX;
             m = dx << 1;
 
@@ -459,7 +455,7 @@ bool los(int fromY, int fromX, int toY, int toX) {
     }
 }
 
-/* Returns symbol for given row, column      -RAK- */
+// Returns symbol for given row, column -RAK-
 uint8_t loc_symbol(int y, int x) {
     cave_type *cave_ptr = &cave[y][x];
     struct flags *f_ptr = &py.flags;
@@ -482,13 +478,13 @@ uint8_t loc_symbol(int y, int x) {
     } else if (cave_ptr->fval == GRANITE_WALL || cave_ptr->fval == BOUNDARY_WALL || highlight_seams == false) {
         return '#';
     } else {
-        /* Originally set highlight bit, but that is not portable, now use the
-         * percent sign instead. */
+        // Originally set highlight bit, but that is not portable,
+        // now use the percent sign instead.
         return '%';
     }
 }
 
-/* Tests a spot for light or field mark status    -RAK- */
+// Tests a spot for light or field mark status -RAK-
 bool test_light(int y, int x) {
     cave_type *cave_ptr = &cave[y][x];
     if (cave_ptr->pl || cave_ptr->tl || cave_ptr->fm) {
@@ -498,16 +494,16 @@ bool test_light(int y, int x) {
     }
 }
 
-/* Prints the map of the dungeon      -RAK- */
+// Prints the map of the dungeon -RAK-
 void prt_map() {
     int k = 0;
 
-    /* Top to bottom */
+    // Top to bottom
     for (int i = panel_row_min; i <= panel_row_max; i++) {
         k++;
         erase_line(k, 13);
 
-        /* Left to right */
+        // Left to right
         for (int j = panel_col_min; j <= panel_col_max; j++) {
             uint8_t tmp = loc_symbol(i, j);
             if (tmp != ' ') {
@@ -517,8 +513,8 @@ void prt_map() {
     }
 }
 
-/* Compact monsters          -RAK- */
-/* Return true if any monsters were deleted, false if could not delete any monsters. */
+// Compact monsters -RAK-
+// Return true if any monsters were deleted, false if could not delete any monsters.
 bool compact_monsters() {
     msg_print("Compacting monsters...");
 
@@ -529,18 +525,17 @@ bool compact_monsters() {
         for (int i = mfptr - 1; i >= MIN_MONIX; i--) {
             monster_type *mon_ptr = &m_list[i];
             if ((cur_dis < mon_ptr->cdis) && (randint(3) == 1)) {
-                /* Never compact away the Balrog!! */
+                // Never compact away the Balrog!!
                 if (c_list[mon_ptr->mptr].cmove & CM_WIN) {
-                    ; /* Do nothing */
+                    ; // Do nothing
                 } else if (hack_monptr < i) {
-                    /* in case this is called from within creatures(), this is a
-                       horrible hack, the m_list/creatures() code needs to be
-                       rewritten */
+                    // in case this is called from within creatures(), this is a horrible
+                    // hack, the m_list/creatures() code needs to be rewritten.
                     delete_monster(i);
                     delete_any = true;
                 } else {
-                    /* fix1_delete_monster() does not decrement mfptr, so
-                       don't set delete_any if this was called */
+                    // fix1_delete_monster() does not decrement mfptr,
+                    // so don't set delete_any if this was called.
                     fix1_delete_monster(i);
                 }
             }
@@ -548,7 +543,7 @@ bool compact_monsters() {
 
         if (!delete_any) {
             cur_dis -= 6;
-            /* Can't delete any monsters, return failure. */
+            // Can't delete any monsters, return failure.
             if (cur_dis < 0) {
                 return false;
             }
@@ -558,7 +553,7 @@ bool compact_monsters() {
     return true;
 }
 
-/* Add to the players food time        -RAK- */
+// Add to the players food time -RAK-
 void add_food(int num) {
     struct flags *p_ptr = &py.flags;
     if (p_ptr->food < 0) {
@@ -569,9 +564,8 @@ void add_food(int num) {
     if (p_ptr->food > PLAYER_FOOD_MAX) {
         msg_print("You are bloated from overeating.");
 
-        /* Calculate how much of num is responsible for the bloating.
-           Give the player food credit for 1/50, and slow him for that many
-           turns also. */
+        // Calculate how much of num is responsible for the bloating. Give the
+        // player food credit for 1/50, and slow him for that many turns also.
         int extra = p_ptr->food - PLAYER_FOOD_MAX;
         if (extra > num) {
             extra = num;
@@ -589,8 +583,8 @@ void add_food(int num) {
     }
 }
 
-/* Returns a pointer to next free space      -RAK- */
-/* Returns -1 if could not allocate a monster. */
+// Returns a pointer to next free space -RAK-
+// Returns -1 if could not allocate a monster.
 int popm() {
     if (mfptr == MAX_MALLOC) {
         if (!compact_monsters()) {
@@ -600,12 +594,12 @@ int popm() {
     return mfptr++;
 }
 
-/* Gives Max hit points          -RAK- */
+// Gives Max hit points -RAK-
 int max_hp(uint8_t *array) {
     return (array[0] * array[1]);
 }
 
-/* Places a monster at given location      -RAK- */
+// Places a monster at given location -RAK-
 bool place_monster(int y, int x, int z, int slp) {
     int cur_pos = popm();
     if (cur_pos == -1) {
@@ -623,7 +617,7 @@ bool place_monster(int y, int x, int z, int slp) {
         mon_ptr->hp = pdamroll(c_list[z].hd);
     }
 
-    /* the c_list speed value is 10 greater, so that it can be a uint8_t */
+    // the c_list speed value is 10 greater, so that it can be a uint8_t
     mon_ptr->cspeed = c_list[z].speed - 10 + py.flags.speed;
     mon_ptr->stunned = 0;
     mon_ptr->cdis = distance(char_row, char_col, y, x);
@@ -642,14 +636,15 @@ bool place_monster(int y, int x, int z, int slp) {
     return true;
 }
 
-/* Places a monster at given location      -RAK- */
+// Places a monster at given location -RAK-
 void place_win_monster() {
     int y, x;
 
     if (!total_winner) {
         int cur_pos = popm();
 
-        /* Check for case where could not allocate space for the win monster, this should never happen. */
+        // Check for case where could not allocate space for
+        // the win monster, this should never happen.
         if (cur_pos == -1) {
             abort();
         }
@@ -673,7 +668,7 @@ void place_win_monster() {
             mon_ptr->hp = pdamroll(c_list[mon_ptr->mptr].hd);
         }
 
-        /* the c_list speed value is 10 greater, so that it can be a uint8_t */
+        // the c_list speed value is 10 greater, so that it can be a uint8_t
         mon_ptr->cspeed = c_list[mon_ptr->mptr].speed - 10 + py.flags.speed;
         mon_ptr->stunned = 0;
         mon_ptr->cdis = distance(char_row, char_col, y, x);
@@ -682,9 +677,9 @@ void place_win_monster() {
     }
 }
 
-/* Return a monster suitable to be placed at a given level.  This makes
-   high level monsters (up to the given level) slightly more common than
-   low level monsters at any given level.   -CJS- */
+// Return a monster suitable to be placed at a given level. This
+// makes high level monsters (up to the given level) slightly more
+// common than low level monsters at any given level. -CJS-
 int get_mons_num(int level) {
     int i;
 
@@ -701,12 +696,11 @@ int get_mons_num(int level) {
                 level = MAX_MONS_LEVEL;
             }
         } else {
-            /* This code has been added to make it slightly more likely to
-               get the higher level monsters. Originally a uniform
-               distribution over all monsters of level less than or equal to the
-               dungeon level. This distribution makes a level n monster occur
-               approx 2/n% of the time on level n, and 1/n*n% are 1st level.
-             */
+            // This code has been added to make it slightly more likely to get
+            // the higher level monsters. Originally a uniform distribution over
+            // all monsters of level less than or equal to the dungeon level.
+            // This distribution makes a level n monster occur approx 2/n% of the
+            // time on level n, and 1/n*n% are 1st level.
             int num = m_level[level] - m_level[0];
             i = randint(num) - 1;
             int j = randint(num) - 1;
@@ -721,7 +715,7 @@ int get_mons_num(int level) {
     return i;
 }
 
-/* Allocates a random monster        -RAK- */
+// Allocates a random monster -RAK-
 void alloc_monster(int num, int dis, int slp) {
     int y, x;
 
@@ -733,17 +727,19 @@ void alloc_monster(int num, int dis, int slp) {
 
         int l = get_mons_num(dun_level);
 
-        /* Dragons are always created sleeping here, so as to give the player a sporting chance. */
+        // Dragons are always created sleeping here,
+        // so as to give the player a sporting chance.
         if (c_list[l].cchar == 'd' || c_list[l].cchar == 'D') {
             slp = true;
         }
 
-        /* Place_monster() should always return true here.  It does not matter if it fails though. */
+        // Place_monster() should always return true here.
+        // It does not matter if it fails though.
         (void)place_monster(y, x, l, slp);
     }
 }
 
-/* Places creature adjacent to given location    -RAK- */
+// Places creature adjacent to given location -RAK-
 bool summon_monster(int *y, int *x, int slp) {
     int i = 0;
     int l = get_mons_num(dun_level + MON_SUMMON_ADJ);
@@ -756,7 +752,7 @@ bool summon_monster(int *y, int *x, int slp) {
         if (in_bounds(j, k)) {
             cave_type *cave_ptr = &cave[j][k];
             if (cave_ptr->fval <= MAX_OPEN_SPACE && (cave_ptr->cptr == 0)) {
-                /* Place_monster() should always return true here. */
+                // Place_monster() should always return true here.
                 if (!place_monster(j, k, l, slp)) {
                     return false;
                 }
@@ -772,7 +768,7 @@ bool summon_monster(int *y, int *x, int slp) {
     return summon;
 }
 
-/* Places undead adjacent to given location    -RAK- */
+// Places undead adjacent to given location -RAK-
 bool summon_undead(int *y, int *x) {
     int m;
     int i = 0;
@@ -804,7 +800,7 @@ bool summon_undead(int *y, int *x) {
         if (in_bounds(j, k)) {
             cave_type *cave_ptr = &cave[j][k];
             if (cave_ptr->fval <= MAX_OPEN_SPACE && (cave_ptr->cptr == 0)) {
-                /* Place_monster() should always return true here. */
+                // Place_monster() should always return true here.
                 if (!place_monster(j, k, m, false)) {
                     return false;
                 }
@@ -820,7 +816,7 @@ bool summon_undead(int *y, int *x) {
     return summon;
 }
 
-/* If too many objects on floor level, delete some of them-RAK- */
+// If too many objects on floor level, delete some of them-RAK-
 static void compact_objects() {
     msg_print("Compacting objects...");
 
@@ -848,11 +844,11 @@ static void compact_objects() {
                     case TV_UP_STAIR:
                     case TV_DOWN_STAIR:
                     case TV_STORE_DOOR:
-                        /* stairs, don't delete them */
-                        /* shop doors, don't delete them */
+                        // Stairs, don't delete them.
+                        // Shop doors, don't delete them.
                         chance = 0;
                         break;
-                    case TV_SECRET_DOOR: /* secret doors */
+                    case TV_SECRET_DOOR: // secret doors
                         chance = 3;
                         break;
                     default:
@@ -875,7 +871,7 @@ static void compact_objects() {
     }
 }
 
-/* Gives pointer to next free space      -RAK- */
+// Gives pointer to next free space -RAK-
 int popt() {
     if (tcptr == MAX_TALLOC) {
         compact_objects();
@@ -883,14 +879,14 @@ int popt() {
     return tcptr++;
 }
 
-/* Pushs a record back onto free space list    -RAK- */
-/* Delete_object() should always be called instead, unless the object in
-   question is not in the dungeon, e.g. in store1.c and files.c */
+// Pushs a record back onto free space list -RAK-
+// Delete_object() should always be called instead, unless the object
+// in question is not in the dungeon, e.g. in store1.c and files.c
 void pusht(uint8_t x) {
     if (x != tcptr - 1) {
         t_list[x] = t_list[tcptr - 1];
 
-        /* must change the tptr in the cave of the object just moved */
+        // must change the tptr in the cave of the object just moved
         for (int i = 0; i < cur_height; i++) {
             for (int j = 0; j < cur_width; j++) {
                 if (cave[i][j].tptr == tcptr - 1) {
@@ -903,7 +899,7 @@ void pusht(uint8_t x) {
     invcopy(&t_list[tcptr], OBJ_NOTHING);
 }
 
-/* Boolean : is object enchanted    -RAK- */
+// Boolean : is object enchanted -RAK-
 bool magik(int chance) {
     if (randint(100) <= chance) {
         return true;
@@ -912,16 +908,16 @@ bool magik(int chance) {
     }
 }
 
-/* Enchant a bonus based on degree desired -RAK- */
+// Enchant a bonus based on degree desired -RAK-
 int m_bonus(int base, int max_std, int level) {
     int stand_dev = (OBJ_STD_ADJ * level / 100) + OBJ_STD_MIN;
 
-    /* Check for level > max_std since that may have generated an overflow. */
+    // Check for level > max_std since that may have generated an overflow.
     if (stand_dev > max_std || level > max_std) {
         stand_dev = max_std;
     }
 
-    /* abs may be a macro, don't call it with randnor as a parameter */
+    // abs may be a macro, don't call it with randnor as a parameter
     int tmp = randnor(0, stand_dev);
     int x = (abs(tmp) / 10) + base;
     if (x < base) {

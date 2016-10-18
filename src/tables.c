@@ -1,23 +1,22 @@
-/* source/tables.c: store/attack/RNG/etc tables and variables
- *
- * Copyright (C) 1989-2008 James E. Wilson, Robert A. Koeneke,
- *                         David J. Grabiner
- *
- * This file is part of Umoria.
- *
- * Umoria is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Umoria is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Umoria.  If not, see <http://www.gnu.org/licenses/>.
- */
+// src/tables.c: store/attack/RNG/etc tables and variables
+//
+// Copyright (C) 1989-2008 James E. Wilson, Robert A. Koeneke,
+//                         David J. Grabiner
+//
+// This file is part of Umoria.
+//
+// Umoria is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Umoria is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Umoria.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "standard_library.h"
 
@@ -27,8 +26,8 @@
 
 store_type store[MAX_STORES];
 
-/* Store owners have different characteristics for pricing and haggling*/
-/* Note: Store owners should be added in groups, one for each store */
+// Store owners have different characteristics for pricing and haggling
+// Note: Store owners should be added in groups, one for each store
 owner_type owners[MAX_OWNERS] = {
     {"Erick the Honest       (Human)      General Store",   250, 175, 108, 4, 0, 12},
     {"Mauglin the Grumpy     (Dwarf)      Armory",        32000, 200, 112, 4, 5,  5},
@@ -50,45 +49,45 @@ owner_type owners[MAX_OWNERS] = {
     {"Inglorian the Mage     (Human?)     Magic Shop",    32000, 200, 110, 7, 0, 10},
 };
 
-/* Buying and selling adjustments for character race VS store owner race */
+// Buying and selling adjustments for character race VS store owner race
 uint8_t rgold_adj[MAX_RACES][MAX_RACES] = {
-    /*                 Hum, HfE, Elf, Hal, Gno, Dwa, HfO, HfT */
-    /* Human */      { 100, 105, 105, 110, 113, 115, 120, 125 },
-    /* Half-Elf */   { 110, 100, 100, 105, 110, 120, 125, 130 },
-    /* Elf */        { 110, 105, 100, 105, 110, 120, 125, 130 },
-    /* Halfling */   { 115, 110, 105,  95, 105, 110, 115, 130 },
-    /* Gnome */      { 115, 115, 110, 105,  95, 110, 115, 130 },
-    /* Dwarf */      { 115, 120, 120, 110, 110,  95, 125, 135 },
-    /* Half-Orc */   { 115, 120, 125, 115, 115, 130, 110, 115 },
-    /* Half-Troll */ { 110, 115, 115, 110, 110, 130, 110, 110 },
+    //Hum, HfE, Elf, Hal, Gno, Dwa, HfO, HfT
+    { 100, 105, 105, 110, 113, 115, 120, 125 }, // Human
+    { 110, 100, 100, 105, 110, 120, 125, 130 }, // Half-Elf
+    { 110, 105, 100, 105, 110, 120, 125, 130 }, // Elf
+    { 115, 110, 105,  95, 105, 110, 115, 130 }, // Halfling
+    { 115, 115, 110, 105,  95, 110, 115, 130 }, // Gnome
+    { 115, 120, 120, 110, 110,  95, 125, 135 }, // Dwarf
+    { 115, 120, 125, 115, 115, 130, 110, 115 }, // Half-Orc
+    { 110, 115, 115, 110, 110, 130, 110, 110 }, // Half-Troll
 };
 
-/* object_list[] index of objects that may appear in the store */
+// object_list[] index of objects that may appear in the store
 uint16_t store_choice[MAX_STORES][STORE_CHOICES] = {
-    /* General Store */
+    // General Store
     {366, 365, 364, 84,  84,  365, 123, 366, 365, 350, 349, 348, 347,
      346, 346, 345, 345, 345, 344, 344, 344, 344, 344, 344, 344, 344},
-    /* Armory */
+    // Armory
     {94,  95,  96,  109, 103, 104, 105, 106, 110, 111, 112, 114, 116,
      124, 125, 126, 127, 129, 103, 104, 124, 125, 91,  92,  95,  96},
-    /* Weaponsmith */
+    // Weaponsmith
     {29, 30, 34, 37, 45, 49, 57, 58, 59, 65, 67, 68, 73,
      74, 75, 77, 79, 80, 81, 83, 29, 30, 80, 83, 80, 83},
-    /* Temple */
+    // Temple
     {322, 323, 324, 325, 180, 180, 233, 237, 240, 241, 361, 362, 57,
      58,  59,  260, 358, 359, 265, 237, 237, 240, 240, 241, 323, 359},
-    /* Alchemy shop */
+    // Alchemy shop
     {173, 174, 175, 351, 351, 352, 353, 354, 355, 356, 357, 206, 227,
      230, 236, 252, 253, 352, 353, 354, 355, 356, 359, 363, 359, 359},
-    /* Magic-User store */
+    // Magic-User store
     {318, 141, 142, 153, 164, 167, 168, 140, 319, 320, 320, 321, 269,
      270, 282, 286, 287, 292, 293, 294, 295, 308, 269, 290, 319, 282},
 };
 
-/* functions defined in sets.c */
+// functions defined in sets.c
 extern bool general_store(), armory(), weaponsmith(), temple(), alchemist(), magic_shop();
 
-/* Each store will buy only certain items, based on TVAL */
+// Each store will buy only certain items, based on TVAL
 bool (*store_buy[MAX_STORES])() = {
     general_store,
     armory,
@@ -98,9 +97,9 @@ bool (*store_buy[MAX_STORES])() = {
     magic_shop,
 };
 
-/* Following are arrays for descriptive pieces */
+// Following are arrays for descriptive pieces
 char *colors[MAX_COLORS] = {
-    /* Do not move the first three */
+    // Do not move the first three
     "Icky Green",  "Light Brown",  "Clear",
     "Azure", "Blue", "Blue Speckled", "Black", "Brown", "Brown Speckled", "Bubbling",
     "Chartreuse", "Cloudy", "Copper Speckled", "Crimson", "Cyan", "Dark Blue",
@@ -165,22 +164,21 @@ char *syllables[MAX_SYLLABLES] = {
     "wed",  "werg", "wex",  "whon", "wun",  "x",   "yerg", "yp",  "zun",
 };
 
-/* used to calculate the number of blows the player gets in combat */
+// used to calculate the number of blows the player gets in combat
 uint8_t blows_table[7][6] = {
-    /* STR/W:   9  18  67  107 117 118  : DEX */
-    /* <2 */  { 1,  1,  1,  1,  1,  1 },
-    /* <3 */  { 1,  1,  1,  1,  2,  2 },
-    /* <4 */  { 1,  1,  1,  2,  2,  3 },
-    /* <5 */  { 1,  1,  2,  2,  3,  3 },
-    /* <7 */  { 1,  2,  2,  3,  3,  4 },
-    /* <9 */  { 1,  2,  2,  3,  4,  4 },
-    /* >9 */  { 2,  2,  3,  3,  4,  4 },
+    // STR/W:   9  18  67  107 117 118  : DEX
+    { 1,  1,  1,  1,  1,  1 }, // <2
+    { 1,  1,  1,  1,  2,  2 }, // <3
+    { 1,  1,  1,  2,  2,  3 }, // <4
+    { 1,  1,  2,  2,  3,  3 }, // <5
+    { 1,  2,  2,  3,  3,  4 }, // <7
+    { 1,  2,  2,  3,  4,  4 }, // <9
+    { 2,  2,  3,  3,  4,  4 }, // >9
 };
 
-/* this table is used to generate a psuedo-normal distribution.  See
- * the function randnor() in misc1.c, this is much faster than calling
- * transcendental function to calculate a true normal distribution.
- */
+// this table is used to generate a psuedo-normal distribution.  See
+// the function randnor() in misc1.c, this is much faster than calling
+// transcendental function to calculate a true normal distribution.
 uint16_t normal_table[NORMAL_TABLE_SIZE] = {
      206,     613,    1022,    1430,    1838,    2245,    2652,    3058,
     3463,    3867,    4271,    4673,    5075,    5475,    5874,    6271,

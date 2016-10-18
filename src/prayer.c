@@ -1,23 +1,22 @@
-/* source/prayer.c: code for priest spells
- *
- * Copyright (C) 1989-2008 James E. Wilson, Robert A. Koeneke,
- *                         David J. Grabiner
- *
- * This file is part of Umoria.
- *
- * Umoria is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Umoria is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Umoria.  If not, see <http://www.gnu.org/licenses/>.
- */
+// src/prayer.c: code for priest spells
+//
+// Copyright (C) 1989-2008 James E. Wilson, Robert A. Koeneke,
+//                         David J. Grabiner
+//
+// This file is part of Umoria.
+//
+// Umoria is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Umoria is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Umoria.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "standard_library.h"
 
@@ -27,7 +26,7 @@
 
 #include "externs.h"
 
-/* Pray like HELL.          -RAK- */
+// Pray like HELL. -RAK-
 void pray() {
     int i, j, item_val, dir;
 
@@ -61,7 +60,7 @@ void pray() {
             } else {
                 struct flags *f_ptr;
 
-                /* Prayers. */
+                // Prayers.
                 switch (choice + 1) {
                 case 1:
                     (void)detect_evil();
@@ -111,7 +110,7 @@ void pray() {
                     for (i = 0; i < INVEN_ARRAY_SIZE; i++) {
                         inven_type *i_ptr = &inventory[i];
 
-                        /* only clear flag for items that are wielded or worn */
+                        // only clear flag for items that are wielded or worn
                         if (i_ptr->tval >= TV_MIN_WEAR && i_ptr->tval <= TV_MAX_WEAR) {
                             i_ptr->flags &= ~TR_CURSED;
                         }
@@ -184,7 +183,7 @@ void pray() {
                 default:
                     break;
                 }
-                /* End of prayers. */
+                // End of prayers.
                 if (!free_turn_flag) {
                     struct misc *m_ptr = &py.misc;
                     if ((spell_worked & (1L << choice)) == 0) {

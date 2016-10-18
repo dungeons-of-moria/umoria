@@ -1,23 +1,22 @@
-/* source/sets.c: code to emulate the original Pascal sets
- *
- * Copyright (C) 1989-2008 James E. Wilson, Robert A. Koeneke,
- *                         David J. Grabiner
- *
- * This file is part of Umoria.
- *
- * Umoria is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Umoria is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Umoria.  If not, see <http://www.gnu.org/licenses/>.
- */
+// src/sets.c: code to emulate the original Pascal sets
+//
+// Copyright (C) 1989-2008 James E. Wilson, Robert A. Koeneke,
+//                         David J. Grabiner
+//
+// This file is part of Umoria.
+//
+// Umoria is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Umoria is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Umoria.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "standard_library.h"
 
@@ -69,7 +68,7 @@ bool set_flammable(inven_type *item) {
     case TV_GLOVES:
     case TV_CLOAK:
     case TV_SOFT_ARMOR:
-        /* Items of (RF) should not be destroyed. */
+        // Items of (RF) should not be destroyed.
         if (item->flags & TR_RES_FIRE) {
             return false;
         } else {
@@ -185,8 +184,8 @@ bool set_fire_destroy(inven_type *item) {
     return false;
 }
 
-/* Items too large to fit in chests   -DJG- */
-/* Use treasure_type since item not yet created */
+// Items too large to fit in chests -DJG-
+// Use treasure_type since item not yet created
 bool set_large(treasure_type *item) {
     switch (item->tval) {
     case TV_CHEST:

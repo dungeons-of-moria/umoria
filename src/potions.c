@@ -1,23 +1,22 @@
-/* source/potions.c: code for potions
- *
- * Copyright (C) 1989-2008 James E. Wilson, Robert A. Koeneke,
- *                         David J. Grabiner
- *
- * This file is part of Umoria.
- *
- * Umoria is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Umoria is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Umoria.  If not, see <http://www.gnu.org/licenses/>.
- */
+// src/potions.c: code for potions
+//
+// Copyright (C) 1989-2008 James E. Wilson, Robert A. Koeneke,
+//                         David J. Grabiner
+//
+// This file is part of Umoria.
+//
+// Umoria is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Umoria is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Umoria.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "standard_library.h"
 
@@ -27,7 +26,7 @@
 
 #include "externs.h"
 
-/* Potions for the quaffing        -RAK- */
+// Potions for the quaffing -RAK-
 void quaff() {
     free_turn_flag = true;
 
@@ -55,7 +54,7 @@ void quaff() {
                 struct flags *f_ptr;
                 struct misc *m_ptr;
 
-                /* Potions */
+                // Potions
                 switch (j) {
                 case 1:
                     if (inc_stat(A_STR)) {
@@ -157,7 +156,7 @@ void quaff() {
                 case 19:
                     f_ptr = &py.flags;
                     if (!f_ptr->free_act) {
-                        /* paralysis must == 0, otherwise could not drink potion */
+                        // paralysis must == 0, otherwise could not drink potion
                         msg_print("You fall asleep.");
                         f_ptr->paralysis += randint(4) + 4;
                         ident = true;
@@ -231,7 +230,7 @@ void quaff() {
                     if (py.misc.exp > 0) {
                         int32_t m, scale;
                         msg_print("You feel your memories fade.");
-                        /* Lose between 1/5 and 2/5 of your experience */
+                        // Lose between 1/5 and 2/5 of your experience
                         m = py.misc.exp / 5;
                         if (py.misc.exp > MAX_SHORT) {
                             scale = MAX_LONG / py.misc.exp;
@@ -325,14 +324,14 @@ void quaff() {
                     msg_print("Internal error in potion()");
                     break;
                 }
-                /* End of Potions. */
+                // End of Potions.
             }
         }
 
         if (ident) {
             if (!known1_p(i_ptr)) {
                 struct misc *m_ptr = &py.misc;
-                /* round half-way case up */
+                // round half-way case up
                 m_ptr->exp += (i_ptr->level + (m_ptr->lev >> 1)) / m_ptr->lev;
                 prt_experience();
 

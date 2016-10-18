@@ -1,23 +1,22 @@
-/* source/wizard.c: Version history and info, and wizard mode debugging aids.
- *
- * Copyright (C) 1989-2008 James E. Wilson, Robert A. Koeneke,
- *                         David J. Grabiner
- *
- * This file is part of Umoria.
- *
- * Umoria is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Umoria is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Umoria.  If not, see <http://www.gnu.org/licenses/>.
- */
+// src/wizard.c: Version history and info, and wizard mode debugging aids.
+//
+// Copyright (C) 1989-2008 James E. Wilson, Robert A. Koeneke,
+//                         David J. Grabiner
+//
+// This file is part of Umoria.
+//
+// Umoria is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Umoria is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Umoria.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "standard_library.h"
 
@@ -27,7 +26,7 @@
 
 #include "externs.h"
 
-/* Light up the dungeon          -RAK- */
+// Light up the dungeon -RAK-
 void wizard_light() {
     bool flag;
 
@@ -56,7 +55,7 @@ void wizard_light() {
     prt_map();
 }
 
-/* Wizard routine for gaining on stats      -RAK- */
+// Wizard routine for gaining on stats -RAK-
 void change_character() {
     int tmp_val;
     vtype tmp_str;
@@ -267,7 +266,7 @@ void change_character() {
     }
 }
 
-/* Wizard routine for creating objects      -RAK- */
+// Wizard routine for creating objects -RAK-
 void wizard_create() {
     int tmp_val;
     vtype tmp_str;
@@ -370,8 +369,8 @@ void wizard_create() {
         return;
     }
 
-    /* can't be constant string, this causes problems with the GCC compiler
-       and some scanf routines */
+    // can't be constant string, this causes problems with
+    // the GCC compiler and some scanf routines.
     char pattern[4];
 
     (void)strcpy(pattern, "%lx");
@@ -395,7 +394,7 @@ void wizard_create() {
     i_ptr->level = tmp_val;
 
     if (get_check("Allocate?")) {
-        /* delete object first if any, before call popt */
+        // delete object first if any, before call popt
         cave_type *c_ptr = &cave[char_row][char_col];
         if (c_ptr->tptr != 0) {
             (void)delete_object(char_row, char_col);

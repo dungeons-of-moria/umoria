@@ -1,23 +1,22 @@
-/* source/save.c: save and restore games and monster memory info
- *
- * Copyright (C) 1989-2008 James E. Wilson, Robert A. Koeneke,
- *                         David J. Grabiner
- *
- * This file is part of Umoria.
- *
- * Umoria is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Umoria is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Umoria.  If not, see <http://www.gnu.org/licenses/>.
- */
+// src/save.c: save and restore games and monster memory info
+//
+// Copyright (C) 1989-2008 James E. Wilson, Robert A. Koeneke,
+//                         David J. Grabiner
+//
+// This file is part of Umoria.
+//
+// Umoria is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Umoria is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Umoria.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "standard_library.h"
 
@@ -27,7 +26,7 @@
 
 #include "externs.h"
 
-/* For debugging the savefile code on systems with broken compilers. */
+// For debugging the savefile code on systems with broken compilers.
 #define DEBUG(x)
 
 DEBUG(static FILE *logfile);
@@ -50,20 +49,21 @@ static void rd_shorts(uint16_t *, int);
 static void rd_item(inven_type *);
 static void rd_monster(monster_type *);
 
-/* these are used for the save file, to avoid having to pass them to every procedure */
+// these are used for the save file, to avoid having to pass them to every procedure
 static FILE *fileptr;
 static uint8_t xor_byte;
-static int from_savefile;   /* can overwrite old savefile when save */
-static uint32_t start_time; /* time that play started */
+static int from_savefile;   // can overwrite old savefile when save
+static uint32_t start_time; // time that play started
 
-/* This save package was brought to by      -JWT-
-   and              -RAK-
-   and has been completely rewritten for UNIX by  -JEW- */
-/* and has been completely rewritten again by   -CJS- */
-/* and completely rewritten again! for portability by -JEW- */
+// This save package was brought to by -JWT-
+// and -RAK-
+// and has been completely rewritten for UNIX by -JEW-
+// and has been completely rewritten again by -CJS-
+// and completely rewritten again! for portability by -JEW-
 
 static bool sv_write() {
-    /* clear the death flag when creating a HANGUP save file, so that player can see tombstone when restart */
+    // clear the death flag when creating a HANGUP save file,
+    // so that player can see tombstone when restart
     if (eof_flag) {
         death = false;
     }
@@ -104,7 +104,7 @@ static bool sv_write() {
         l |= 0x400;
     }
     if (death) {
-        /* Sign bit */
+        // Sign bit
         l |= 0x80000000L;
     }
     if (total_winner) {
@@ -129,7 +129,7 @@ static bool sv_write() {
         }
     }
 
-    /* sentinel to indicate no more monster info */
+    // sentinel to indicate no more monster info
     wr_short((uint16_t)0xFFFF);
 
     wr_long(l);
@@ -251,7 +251,7 @@ static bool sv_write() {
         wr_string(old_msg[i]);
     }
 
-    /* this indicates 'cheating' if it is a one */
+    // this indicates 'cheating' if it is a one
     wr_short((uint16_t)panic_save);
     wr_short((uint16_t)total_winner);
     wr_short((uint16_t)noscore);
@@ -272,27 +272,28 @@ static bool sv_write() {
         }
     }
 
-    /* save the current time in the savefile */
+    // save the current time in the savefile
     l = (uint32_t)time((time_t *)0);
 
     if (l < start_time) {
-        /* someone is messing with the clock!, assume that we have been playing for 1 day */
+        // someone is messing with the clock!,
+        // assume that we have been playing for 1 day
         l = start_time + 86400L;
     }
     wr_long(l);
 
-    /* starting with 5.2, put died_from string in savefile */
+    // starting with 5.2, put died_from string in savefile
     wr_string(died_from);
 
-    /* starting with 5.2.2, put the max_score in the savefile */
+    // starting with 5.2.2, put the max_score in the savefile
     l = (uint32_t)(total_points());
     wr_long(l);
 
-    /* starting with 5.2.2, put the birth_date in the savefile */
+    // starting with 5.2.2, put the birth_date in the savefile
     wr_long((uint32_t)birth_date);
 
-    /* only level specific info follows, this allows characters to be
-       resurrected, the dungeon level info is not needed for a resurrection */
+    // only level specific info follows, this allows characters to be
+    // resurrected, the dungeon level info is not needed for a resurrection
     if (death) {
         if (ferror(fileptr) || fflush(fileptr) == EOF) {
             return false;
@@ -320,7 +321,7 @@ static bool sv_write() {
         }
     }
 
-    /* marks end of cptr info */
+    // marks end of cptr info
     wr_byte((uint8_t)0xFF);
 
     for (int i = 0; i < MAX_HEIGHT; i++) {
@@ -334,10 +335,10 @@ static bool sv_write() {
         }
     }
 
-    /* marks end of tptr info */
+    // marks end of tptr info
     wr_byte((uint8_t)0xFF);
 
-    /* must set counter to zero, note that code may write out two bytes unnecessarily */
+    // must set counter to zero, note that code may write out two bytes unnecessarily
     int count = 0;
     uint8_t prev_char = 0;
 
@@ -358,7 +359,7 @@ static bool sv_write() {
         }
     }
 
-    /* save last entry */
+    // save last entry
     wr_byte((uint8_t)count);
     wr_byte(prev_char);
 
@@ -378,7 +379,7 @@ static bool sv_write() {
 }
 
 
-/* Set up prior to actual save, do the save, then clean up */
+// Set up prior to actual save, do the save, then clean up
 bool save_char() {
     while (!_save_char(savefile)) {
         vtype temp;
@@ -411,16 +412,16 @@ bool save_char() {
 
 bool _save_char(char *fnam) {
     if (character_saved) {
-        return true; /* Nothing to save. */
+        return true; // Nothing to save.
     }
 
     put_qio();
-    disturb(1, 0);             /* Turn off resting and searching. */
-    change_speed(-pack_heavy); /* Fix the speed */
+    disturb(1, 0);             // Turn off resting and searching.
+    change_speed(-pack_heavy); // Fix the speed
     pack_heavy = 0;
     bool ok = false;
 
-    fileptr = NULL; /* Do not assume it has been init'ed */
+    fileptr = NULL; // Do not assume it has been init'ed
 
     int fd = open(fnam, O_RDWR | O_CREAT | O_EXCL, 0600);
 
@@ -448,7 +449,7 @@ bool _save_char(char *fnam) {
 
         uint8_t char_tmp = randint(256) - 1;
         wr_byte(char_tmp);
-        /* Note that xor_byte is now equal to char_tmp */
+        // Note that xor_byte is now equal to char_tmp
 
         ok = sv_write();
 
@@ -482,18 +483,18 @@ bool _save_char(char *fnam) {
     return true;
 }
 
-/* Certain checks are ommitted for the wizard. -CJS- */
+// Certain checks are ommitted for the wizard. -CJS-
 bool get_char(bool *generate) {
     uint32_t time_saved;
 
     *generate = true;
     int fd = -1;
 
-    /* Not required for Mac, because the file name is obtained through a dialog.
-       There is no way for a non existnat file to be specified.  -BS- */
+    // Not required for Mac, because the file name is obtained through a dialog.
+    // There is no way for a non existnat file to be specified. -BS-
     if (access(savefile, 0) != 0) {
         msg_print("Savefile does not exist.");
-        return false; /* Don't bother with messages here. File absent. */
+        return false; // Don't bother with messages here. File absent.
     }
 
     clear_screen();
@@ -506,8 +507,8 @@ bool get_char(bool *generate) {
     if (turn >= 0) {
         msg_print("IMPOSSIBLE! Attempt to restore while still alive!");
     } else if ((fd = open(savefile, O_RDONLY, 0)) < 0 && (chmod(savefile, 0400) < 0 || (fd = open(savefile, O_RDONLY, 0)) < 0)) {
-        /* Allow restoring a file belonging to someone else, if we can delete it. */
-        /* Hence first try to read without doing a chmod. */
+        // Allow restoring a file belonging to someone else, if we can delete it.
+        // Hence first try to read without doing a chmod.
 
         msg_print("Can't open file for reading.");
     } else {
@@ -515,7 +516,7 @@ bool get_char(bool *generate) {
         bool ok = true;
 
         (void)close(fd);
-        fd = -1; /* Make sure it isn't closed again */
+        fd = -1; // Make sure it isn't closed again
         fileptr = fopen(savefile, "r");
         if (fileptr == NULL) {
             goto error;
@@ -538,11 +539,10 @@ bool get_char(bool *generate) {
         xor_byte = 0;
         rd_byte(&xor_byte);
 
-        /* COMPAT support savefiles from 5.0.14 to 5.0.17.
-         * Support savefiles from 5.1.0 to present.
-         * As of version 5.4, accept savefiles even if they have higher version numbers.
-         * The savefile format was frozen as of version 5.2.2.
-         */
+        // COMPAT support savefiles from 5.0.14 to 5.0.17.
+        // Support savefiles from 5.1.0 to present.
+        // As of version 5.4, accept savefiles even if they have higher version numbers.
+        // The savefile format was frozen as of version 5.2.2.
         if ((version_maj != CUR_VERSION_MAJ) || (version_min == 0 && patch_level < 14)) {
             prt("Sorry. This savefile is from a different version of umoria.", 2, 0);
             goto error;
@@ -566,7 +566,7 @@ bool get_char(bool *generate) {
             rd_short(&uint16_t_tmp);
         }
 
-        /* for save files before 5.2.2, read and ignore log_index (sic) */
+        // for save files before 5.2.2, read and ignore log_index (sic)
         if ((version_min < 2) || (version_min == 2 && patch_level < 2)) {
             rd_short(&uint16_t_tmp);
         }
@@ -619,8 +619,8 @@ bool get_char(bool *generate) {
         } else {
             find_ignore_doors = false;
         }
-        /* save files before 5.2.2 don't have sound_beep_flag, set it on
-           for compatibility */
+        // save files before 5.2.2 don't have sound_beep_flag, set it on
+        // for compatibility
         if ((version_min < 2) || (version_min == 2 && patch_level < 2)) {
             sound_beep_flag = true;
         } else if (l & 0x200) {
@@ -628,8 +628,8 @@ bool get_char(bool *generate) {
         } else {
             sound_beep_flag = false;
         }
-        /* save files before 5.2.2 don't have display_counts, set it on
-           for compatibility */
+        // save files before 5.2.2 don't have display_counts, set it on
+        // for compatibility
         if ((version_min < 2) || (version_min == 2 && patch_level < 2)) {
             display_counts = true;
         } else if (l & 0x400) {
@@ -638,8 +638,8 @@ bool get_char(bool *generate) {
             display_counts = false;
         }
 
-        /* Don't allow resurrection of total_winner characters.  It causes
-           problems because the character level is out of the allowed range. */
+        // Don't allow resurrection of total_winner characters.  It causes
+        // problems because the character level is out of the allowed range.
         if (to_be_wizard && (l & 0x40000000L)) {
             msg_print("Sorry, this character is retired from moria.");
             msg_print("You can not resurrect a retired character.");
@@ -828,26 +828,26 @@ bool get_char(bool *generate) {
                     py.misc.chp_frac = 0;
                 }
 
-                /* don't let him starve to death immediately */
+                // don't let him starve to death immediately
                 if (py.flags.food < 0) {
                     py.flags.food = 0;
                 }
 
-                /* don't let him die of poison again immediately */
+                // don't let him die of poison again immediately
                 if (py.flags.poisoned > 1) {
                     py.flags.poisoned = 1;
                 }
 
-                dun_level = 0; /* Resurrect on the town level. */
+                dun_level = 0; // Resurrect on the town level.
                 character_generated = true;
 
-                /* set noscore to indicate a resurrection, and don't enter
-                   wizard mode */
+                // set noscore to indicate a resurrection, and don't enter
+                // wizard mode
                 to_be_wizard = false;
                 noscore |= 0x1;
             } else {
-                /* Make sure that this message is seen, since it is a bit
-                   more interesting than the other messages. */
+                // Make sure that this message is seen, since it is a bit
+                // more interesting than the other messages.
                 msg_print("Restoring Memory of a departed spirit...");
                 turn = -1;
             }
@@ -861,8 +861,8 @@ bool get_char(bool *generate) {
         prt("Restoring Character...", 0, 0);
         put_qio();
 
-        /* only level specific info should follow, not present for dead
-           characters */
+        // only level specific info should follow,
+        // not present for dead characters
 
         rd_short((uint16_t *)&dun_level);
         rd_short((uint16_t *)&char_row);
@@ -875,7 +875,7 @@ bool get_char(bool *generate) {
 
         uint8_t char_tmp, ychar, xchar, count;
 
-        /* read in the creature ptr info */
+        // read in the creature ptr info
         rd_byte(&char_tmp);
         while (char_tmp != 0xFF) {
             ychar = char_tmp;
@@ -888,7 +888,7 @@ bool get_char(bool *generate) {
             rd_byte(&char_tmp);
         }
 
-        /* read in the treasure ptr info */
+        // read in the treasure ptr info
         rd_byte(&char_tmp);
         while (char_tmp != 0xFF) {
             ychar = char_tmp;
@@ -901,7 +901,7 @@ bool get_char(bool *generate) {
             rd_byte(&char_tmp);
         }
 
-        /* read in the rest of the cave info */
+        // read in the rest of the cave info
         cave_type *c_ptr = &cave[0][0];
         int total_count = 0;
         while (total_count != MAX_HEIGHT * MAX_WIDTH) {
@@ -936,7 +936,7 @@ bool get_char(bool *generate) {
             rd_monster(&m_list[i]);
         }
 
-        *generate = false; /* We have restored a cave - no need to generate. */
+        *generate = false; // We have restored a cave - no need to generate.
 
         if ((version_min == 1 && patch_level < 3) || (version_min == 0)) {
             for (int i = 0; i < MAX_STORES; i++) {
@@ -958,9 +958,9 @@ bool get_char(bool *generate) {
             }
         }
 
-        /* read the time that the file was saved */
+        // read the time that the file was saved
         if (version_min == 0 && patch_level < 16) {
-            time_saved = 0; /* no time in file, clear to zero */
+            time_saved = 0; // no time in file, clear to zero
         } else if (version_min == 1 && patch_level < 3) {
             rd_long(&time_saved);
         }
@@ -971,9 +971,9 @@ bool get_char(bool *generate) {
 
         if (turn < 0) {
         error:
-            ok = false; /* Assume bad data. */
+            ok = false; // Assume bad data.
         } else {
-            /* don't overwrite the killed by string if character is dead */
+            // don't overwrite the killed by string if character is dead
             if (py.misc.chp >= 0) {
                 (void)strcpy(died_from, "(alive and well)");
             }
@@ -996,7 +996,7 @@ bool get_char(bool *generate) {
         if (!ok) {
             msg_print("Error during reading of file.");
         } else {
-            /* let the user overwrite the old savefile when save/quit */
+            // let the user overwrite the old savefile when save/quit
             from_savefile = 1;
 
             if (panic_save == true) {
@@ -1010,28 +1010,28 @@ bool get_char(bool *generate) {
                 noscore |= 0x4;
             }
 
-            if (turn >= 0) { /* Only if a full restoration. */
+            if (turn >= 0) { // Only if a full restoration.
                 weapon_heavy = false;
                 pack_heavy = 0;
                 check_strength();
 
-                /* rotate store inventory, depending on how old the save file */
-                /* is foreach day old (rounded up), call store_maint */
-                /* calculate age in seconds */
+                // rotate store inventory, depending on how old the save file
+                // is foreach day old (rounded up), call store_maint
+                // calculate age in seconds
                 start_time = (uint32_t)time((time_t *)0);
 
                 uint32_t age;
 
-                /* check for reasonable values of time here ... */
+                // check for reasonable values of time here ...
                 if (start_time < time_saved) {
                     age = 0;
                 } else {
                     age = start_time - time_saved;
                 }
 
-                age = (age + 43200L) / 86400L; /* age in days */
+                age = (age + 43200L) / 86400L; // age in days
                 if (age > 10) {
-                    age = 10; /* in case savefile is very old */
+                    age = 10; // in case savefile is very old
                 }
 
                 for (int i = 0; i < age; i++) {
@@ -1055,7 +1055,7 @@ bool get_char(bool *generate) {
             if (turn >= 0) {
                 return true;
             } else {
-                return false; /* Only restored options and monster memory. */
+                return false; // Only restored options and monster memory.
             }
         }
     }
@@ -1064,7 +1064,7 @@ bool get_char(bool *generate) {
 
     exit_game();
 
-    return false; /* not reached */
+    return false; // not reached
 }
 
 static void wr_byte(uint8_t c) {
@@ -1189,8 +1189,7 @@ static void rd_short(uint16_t *ptr) {
     xor_byte = (getc(fileptr) & 0xFF);
     s |= (uint16_t)(c ^ xor_byte) << 8;
     *ptr = s;
-    DEBUG(fprintf(logfile, "SHORT: %02X %02X = %d\n", (int)c, (int)xor_byte,
-                  (int)s));
+    DEBUG(fprintf(logfile, "SHORT: %02X %02X = %d\n", (int)c, (int)xor_byte, (int)s));
 }
 
 static void rd_long(uint32_t *ptr) {
@@ -1283,9 +1282,9 @@ static void rd_monster(monster_type *mon) {
     rd_byte(&mon->confused);
 }
 
-/* functions called from death.c to implement the score file */
+// functions called from death.c to implement the score file
 
-/* set the local fileptr to the scorefile fileptr */
+// set the local fileptr to the scorefile fileptr
 void set_fileptr(FILE *file) {
     fileptr = file;
 }
@@ -1294,7 +1293,7 @@ void wr_highscore(high_scores *score) {
     DEBUG(logfile = fopen("IO_LOG", "a"));
     DEBUG(fprintf(logfile, "Saving score:\n"));
 
-    /* Save the encryption byte for robustness. */
+    // Save the encryption byte for robustness.
     wr_byte(xor_byte);
 
     wr_long((uint32_t)score->points);
@@ -1317,7 +1316,7 @@ void rd_highscore(high_scores *score) {
     DEBUG(logfile = fopen("IO_LOG", "a"));
     DEBUG(fprintf(logfile, "Reading score:\n"));
 
-    /* Read the encryption byte. */
+    // Read the encryption byte.
     rd_byte(&xor_byte);
 
     rd_long((uint32_t *)&score->points);

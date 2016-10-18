@@ -1,23 +1,22 @@
-/* source/misc2.c: misc utility and initialization code, magic objects code
- *
- * Copyright (C) 1989-2008 James E. Wilson, Robert A. Koeneke,
- *                         David J. Grabiner
- *
- * This file is part of Umoria.
- *
- * Umoria is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Umoria is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Umoria.  If not, see <http://www.gnu.org/licenses/>.
- */
+// src/misc2.c: misc utility and initialization code, magic objects code
+//
+// Copyright (C) 1989-2008 James E. Wilson, Robert A. Koeneke,
+//                         David J. Grabiner
+//
+// This file is part of Umoria.
+//
+// Umoria is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Umoria is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Umoria.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "standard_library.h"
 
@@ -27,8 +26,8 @@
 
 #include "externs.h"
 
-/* Chance of treasure having magic abilities    -RAK- */
-/* Chance increases with each dungeon level */
+// Chance of treasure having magic abilities -RAK-
+// Chance increases with each dungeon level
 void magic_treasure(int x, int level) {
     int tmp;
 
@@ -42,12 +41,12 @@ void magic_treasure(int x, int level) {
 
     inven_type *t_ptr = &t_list[x];
 
-    /* some objects appear multiple times in the object_list with different
-       levels, this is to make the object occur more often, however, for
-       consistency, must set the level of these duplicates to be the same
-       as the object with the lowest level */
+    // some objects appear multiple times in the object_list with different
+    // levels, this is to make the object occur more often, however, for
+    // consistency, must set the level of these duplicates to be the same
+    // as the object with the lowest level
 
-    /* Depending on treasure type, it can have certain magical properties*/
+    // Depending on treasure type, it can have certain magical properties
     switch (t_ptr->tval) {
     case TV_SHIELD: case TV_HARD_ARMOR: case TV_SOFT_ARMOR:
         if (magik(chance)) {
@@ -60,26 +59,26 @@ void magic_treasure(int x, int level) {
                     t_ptr->toac += 5;
                     t_ptr->cost += 2500;
                     break;
-                case 2: /* Resist Acid */
+                case 2: // Resist Acid
                     t_ptr->flags |= TR_RES_ACID;
                     t_ptr->name2 = SN_RA;
                     t_ptr->cost += 1000;
                     break;
                 case 3:
-                case 4: /* Resist Fire */
+                case 4: // Resist Fire
                     t_ptr->flags |= TR_RES_FIRE;
                     t_ptr->name2 = SN_RF;
                     t_ptr->cost += 600;
                     break;
                 case 5:
-                case 6: /* Resist Cold */
+                case 6: // Resist Cold
                     t_ptr->flags |= TR_RES_COLD;
                     t_ptr->name2 = SN_RC;
                     t_ptr->cost += 600;
                     break;
                 case 7:
                 case 8:
-                case 9: /* Resist Lightning*/
+                case 9: // Resist Lightning
                     t_ptr->flags |= TR_RES_LIGHT;
                     t_ptr->name2 = SN_RL;
                     t_ptr->cost += 500;
@@ -93,81 +92,81 @@ void magic_treasure(int x, int level) {
         }
         break;
     case TV_HAFTED: case TV_POLEARM: case TV_SWORD:
-        /* always show tohit/todam values if identified */
+        // always show tohit/todam values if identified
         t_ptr->ident |= ID_SHOW_HITDAM;
         if (magik(chance)) {
             t_ptr->tohit += m_bonus(0, 40, level);
 
-            /* Magical damage bonus now proportional to weapon base damage */
+            // Magical damage bonus now proportional to weapon base damage
             tmp = t_ptr->damage[0] * t_ptr->damage[1];
             t_ptr->todam += m_bonus(0, 4 * tmp, tmp * level / 10);
 
-            /* the 3*special/2 is needed because weapons are not as common as
-               before change to treasure distribution, this helps keep same
-               number of ego weapons same as before, see also missiles */
+            // the 3*special/2 is needed because weapons are not as common as
+            // before change to treasure distribution, this helps keep same
+            // number of ego weapons same as before, see also missiles
             if (magik(3 * special / 2)) {
                 switch (randint(16)) {
-                case 1: /* Holy Avenger */
+                case 1: // Holy Avenger
                     t_ptr->flags |= (TR_SEE_INVIS | TR_SUST_STAT | TR_SLAY_UNDEAD | TR_SLAY_EVIL | TR_STR);
                     t_ptr->tohit += 5;
                     t_ptr->todam += 5;
                     t_ptr->toac += randint(4);
 
-                    /* the value in p1 is used for strength increase */
-                    /* p1 is also used for sustain stat */
+                    // the value in p1 is used for strength increase
+                    // p1 is also used for sustain stat
                     t_ptr->p1 = randint(4);
                     t_ptr->name2 = SN_HA;
                     t_ptr->cost += t_ptr->p1 * 500;
                     t_ptr->cost += 10000;
                     break;
-                case 2: /* Defender */
+                case 2: // Defender
                     t_ptr->flags |= (TR_FFALL | TR_RES_LIGHT | TR_SEE_INVIS | TR_FREE_ACT | TR_RES_COLD | TR_RES_ACID | TR_RES_FIRE | TR_REGEN | TR_STEALTH);
                     t_ptr->tohit += 3;
                     t_ptr->todam += 3;
                     t_ptr->toac += 5 + randint(5);
                     t_ptr->name2 = SN_DF;
 
-                    /* the value in p1 is used for stealth */
+                    // the value in p1 is used for stealth
                     t_ptr->p1 = randint(3);
                     t_ptr->cost += t_ptr->p1 * 500;
                     t_ptr->cost += 7500;
                     break;
-                case 3: case 4: /* Slay Animal */
+                case 3: case 4: // Slay Animal
                     t_ptr->flags |= TR_SLAY_ANIMAL;
                     t_ptr->tohit += 2;
                     t_ptr->todam += 2;
                     t_ptr->name2 = SN_SA;
                     t_ptr->cost += 3000;
                     break;
-                case 5: case 6: /* Slay Dragon */
+                case 5: case 6: // Slay Dragon
                     t_ptr->flags |= TR_SLAY_DRAGON;
                     t_ptr->tohit += 3;
                     t_ptr->todam += 3;
                     t_ptr->name2 = SN_SD;
                     t_ptr->cost += 4000;
                     break;
-                case 7: case 8: /* Slay Evil */
+                case 7: case 8: // Slay Evil
                     t_ptr->flags |= TR_SLAY_EVIL;
                     t_ptr->tohit += 3;
                     t_ptr->todam += 3;
                     t_ptr->name2 = SN_SE;
                     t_ptr->cost += 4000;
                     break;
-                case 9: case 10: /* Slay Undead */
+                case 9: case 10: // Slay Undead
                     t_ptr->flags |= (TR_SEE_INVIS | TR_SLAY_UNDEAD);
                     t_ptr->tohit += 3;
                     t_ptr->todam += 3;
                     t_ptr->name2 = SN_SU;
                     t_ptr->cost += 5000;
                     break;
-                case 11: case 12: case 13: /* Flame Tongue */
+                case 11: case 12: case 13: // Flame Tongue
                     t_ptr->flags |= TR_FLAME_TONGUE;
                     t_ptr->tohit++;
                     t_ptr->todam += 3;
                     t_ptr->name2 = SN_FT;
                     t_ptr->cost += 2000;
                     break;
-                case 14: case 15: case 16: /* Frost Brand */
+                case 14: case 15: case 16: // Frost Brand
                     t_ptr->flags |= TR_FROST_BRAND;
                     t_ptr->tohit++;
                     t_ptr->todam++;
@@ -179,7 +178,7 @@ void magic_treasure(int x, int level) {
         } else if (magik(cursed)) {
             t_ptr->tohit -= m_bonus(1, 55, level);
 
-            /* Magical damage bonus now proportional to weapon base damage */
+            // Magical damage bonus now proportional to weapon base damage
             tmp = t_ptr->damage[0] * t_ptr->damage[1];
             t_ptr->todam -= m_bonus(1, 11 * tmp / 2, tmp * level / 10);
             t_ptr->flags |= TR_CURSED;
@@ -188,27 +187,27 @@ void magic_treasure(int x, int level) {
         break;
 
     case TV_BOW:
-        /* always show tohit/todam values if identified */
+        // always show tohit/todam values if identified
         t_ptr->ident |= ID_SHOW_HITDAM;
         if (magik(chance)) {
             t_ptr->tohit += m_bonus(1, 30, level);
-            t_ptr->todam += m_bonus(1, 20, level); /* add damage. -CJS- */
+            t_ptr->todam += m_bonus(1, 20, level); // add damage. -CJS-
         } else if (magik(cursed)) {
             t_ptr->tohit -= m_bonus(1, 50, level);
-            t_ptr->todam -= m_bonus(1, 30, level); /* add damage. -CJS- */
+            t_ptr->todam -= m_bonus(1, 30, level); // add damage. -CJS-
             t_ptr->flags |= TR_CURSED;
             t_ptr->cost = 0;
         }
         break;
     case TV_DIGGING:
-        /* always show tohit/todam values if identified */
+        // always show tohit/todam values if identified
         t_ptr->ident |= ID_SHOW_HITDAM;
         if (magik(chance)) {
             tmp = randint(3);
             if (tmp < 3) {
                 t_ptr->p1 += m_bonus(0, 25, level);
             } else {
-                /* a cursed digging tool */
+                // a cursed digging tool
                 t_ptr->p1 = -m_bonus(1, 30, level);
                 t_ptr->cost = 0;
                 t_ptr->flags |= TR_CURSED;
@@ -263,7 +262,7 @@ void magic_treasure(int x, int level) {
                     t_ptr->ident |= ID_SHOW_P1;
                     t_ptr->p1 = 1;
                     t_ptr->cost += 5000;
-                } else /* 2 - 5 */
+                } else // 2 - 5
                 {
                     t_ptr->flags |= TR_STEALTH;
                     t_ptr->ident |= ID_SHOW_P1;
@@ -291,9 +290,9 @@ void magic_treasure(int x, int level) {
             t_ptr->flags |= TR_CURSED;
         }
         break;
-    case TV_HELM: /* Helms */
+    case TV_HELM: // Helms
         if ((t_ptr->subval >= 6) && (t_ptr->subval <= 8)) {
-            /* give crowns a higher chance for magic */
+            // give crowns a higher chance for magic
             chance += (int)(t_ptr->cost / 100);
             special += special;
         }
@@ -410,7 +409,7 @@ void magic_treasure(int x, int level) {
             }
         }
         break;
-    case TV_RING: /* Rings */
+    case TV_RING: // Rings
         switch (t_ptr->subval) {
         case 0:
         case 1:
@@ -443,7 +442,7 @@ void magic_treasure(int x, int level) {
                 t_ptr->cost = -t_ptr->cost;
             }
             break;
-        case 19: /* Increase damage */
+        case 19: // Increase damage
             t_ptr->todam += m_bonus(1, 20, level);
             t_ptr->cost += t_ptr->todam * 100;
             if (magik(cursed)) {
@@ -452,7 +451,7 @@ void magic_treasure(int x, int level) {
                 t_ptr->cost = -t_ptr->cost;
             }
             break;
-        case 20: /* Increase To-Hit */
+        case 20: // Increase To-Hit
             t_ptr->tohit += m_bonus(1, 20, level);
             t_ptr->cost += t_ptr->tohit * 100;
             if (magik(cursed)) {
@@ -461,7 +460,7 @@ void magic_treasure(int x, int level) {
                 t_ptr->cost = -t_ptr->cost;
             }
             break;
-        case 21: /* Protection */
+        case 21: // Protection
             t_ptr->toac += m_bonus(1, 20, level);
             t_ptr->cost += t_ptr->toac * 100;
             if (magik(cursed)) {
@@ -473,7 +472,7 @@ void magic_treasure(int x, int level) {
         case 24: case 25: case 26: case 27: case 28: case 29:
             t_ptr->ident |= ID_NOSHOW_P1;
             break;
-        case 30: /* Slaying */
+        case 30: // Slaying
             t_ptr->ident |= ID_SHOW_HITDAM;
             t_ptr->todam += m_bonus(1, 25, level);
             t_ptr->tohit += m_bonus(1, 25, level);
@@ -489,7 +488,7 @@ void magic_treasure(int x, int level) {
             break;
         }
         break;
-    case TV_AMULET: /* Amulets */
+    case TV_AMULET: // Amulets
         if (t_ptr->subval < 2) {
             if (magik(cursed)) {
                 t_ptr->p1 = -m_bonus(1, 20, level);
@@ -509,14 +508,14 @@ void magic_treasure(int x, int level) {
                 t_ptr->cost += 50 * t_ptr->p1;
             }
         } else if (t_ptr->subval == 8) {
-            /* amulet of the magi is never cursed */
+            // amulet of the magi is never cursed
             t_ptr->p1 = 5 * m_bonus(1, 25, level);
             t_ptr->cost += 20 * t_ptr->p1;
         }
         break;
     case TV_LIGHT:
-        /* Subval should be even for store, odd for dungeon*/
-        /* Dungeon found ones will be partially charged */
+        // Subval should be even for store, odd for dungeon
+        // Dungeon found ones will be partially charged
 
         if ((t_ptr->subval % 2) == 1) {
             t_ptr->p1 = randint(t_ptr->p1);
@@ -765,14 +764,14 @@ void magic_treasure(int x, int level) {
     case TV_SLING_AMMO: case TV_SPIKE: case TV_BOLT: case TV_ARROW:
         if (t_ptr->tval == TV_SLING_AMMO || t_ptr->tval == TV_BOLT ||
             t_ptr->tval == TV_ARROW) {
-            /* always show tohit/todam values if identified */
+            // always show tohit/todam values if identified
             t_ptr->ident |= ID_SHOW_HITDAM;
 
             if (magik(chance)) {
                 t_ptr->tohit += m_bonus(1, 35, level);
                 t_ptr->todam += m_bonus(1, 35, level);
 
-                /* see comment for weapons */
+                // see comment for weapons
                 if (magik(3 * special / 2)) {
                     switch (randint(10)) {
                     case 1: case 2: case 3:
@@ -831,31 +830,31 @@ void magic_treasure(int x, int level) {
         t_ptr->p1 = missile_ctr;
         break;
     case TV_FOOD:
-        /* make sure all food rations have the same level */
+        // make sure all food rations have the same level
         if (t_ptr->subval == 90) {
             t_ptr->level = 0;
-            /* give all elvish waybread the same level */
+            // give all elvish waybread the same level
         } else if (t_ptr->subval == 92) {
             t_ptr->level = 6;
         }
         break;
     case TV_SCROLL1:
-        /* give all identify scrolls the same level */
+        // give all identify scrolls the same level
         if (t_ptr->subval == 67) {
             t_ptr->level = 1;
-            /* scroll of light */
+            // scroll of light
         } else if (t_ptr->subval == 69) {
             t_ptr->level = 0;
-            /* scroll of trap detection */
+            // scroll of trap detection
         } else if (t_ptr->subval == 80) {
             t_ptr->level = 5;
-            /* scroll of door/stair location */
+            // scroll of door/stair location
         } else if (t_ptr->subval == 81) {
             t_ptr->level = 5;
         }
         break;
-    case TV_POTION1: /* potions */
-        /* cure light */
+    case TV_POTION1: // potions
+        // cure light
         if (t_ptr->subval == 76) {
             t_ptr->level = 0;
         }
@@ -881,7 +880,7 @@ static struct opt_desc { char *o_prompt; bool *o_var; } options[] = {
     {0, 0},
 };
 
-/* Set or unset various boolean options.    -CJS- */
+// Set or unset various boolean options. -CJS-
 void set_options() {
     prt("  ESC when finished, y/n to set options, <return> or - to move cursor", 0, 0);
 

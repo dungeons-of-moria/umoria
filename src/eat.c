@@ -1,23 +1,22 @@
-/* source/eat.c: food code
- *
- * Copyright (C) 1989-2008 James E. Wilson, Robert A. Koeneke,
- *                         David J. Grabiner
- *
- * This file is part of Umoria.
- *
- * Umoria is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Umoria is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Umoria.  If not, see <http://www.gnu.org/licenses/>.
- */
+// src/eat.c: food code
+//
+// Copyright (C) 1989-2008 James E. Wilson, Robert A. Koeneke,
+//                         David J. Grabiner
+//
+// This file is part of Umoria.
+//
+// Umoria is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Umoria is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Umoria.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "standard_library.h"
 
@@ -27,7 +26,7 @@
 
 #include "externs.h"
 
-/* Eat some food.          -RAK- */
+// Eat some food. -RAK-
 void eat() {
     int j, k, item_val;
 
@@ -49,7 +48,7 @@ void eat() {
         uint32_t i = i_ptr->flags;
         while (i != 0) {
             j = bit_pos(&i) + 1;
-            /* Foods */
+            // Foods
             switch (j) {
             case 1:
                 f_ptr = &py.flags;
@@ -105,7 +104,7 @@ void eat() {
                 ident = true;
                 lose_con();
                 break;
-#if 0 /* 12 through 15 are not used */
+#if 0 // 12 through 15 are not used
             case 12:
                 ident = true;
                 lose_int();
@@ -168,7 +167,7 @@ void eat() {
             case 24:
                 ident = hp_player(randint(18));
                 break;
-#if 0 /* 25 is not used */
+#if 0 // 25 is not used
             case 25:
                 ident = hp_player(damroll(3, 6));
                 break;
@@ -180,7 +179,7 @@ void eat() {
                 take_hit(randint(18), "poisonous food.");
                 ident = true;
                 break;
-#if 0 /* 28 through 30 are not used */
+#if 0 // 28 through 30 are not used
             case 28:
                 take_hit(randint(8), "poisonous food.");
                 ident = true;
@@ -198,13 +197,13 @@ void eat() {
                 msg_print("Internal error in eat()");
                 break;
             }
-            /* End of food actions. */
+            // End of food actions.
         }
         if (ident) {
             if (!known1_p(i_ptr)) {
-                /* use identified it, gain experience */
+                // use identified it, gain experience
                 m_ptr = &py.misc;
-                /* round half-way case up */
+                // round half-way case up
                 m_ptr->exp += (i_ptr->level + (m_ptr->lev >> 1)) / m_ptr->lev;
                 prt_experience();
 

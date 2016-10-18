@@ -1,23 +1,22 @@
-/* source/staffs.c: staff code
- *
- * Copyright (C) 1989-2008 James E. Wilson, Robert A. Koeneke,
- *                         David J. Grabiner
- *
- * This file is part of Umoria.
- *
- * Umoria is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Umoria is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Umoria.  If not, see <http://www.gnu.org/licenses/>.
- */
+// src/staffs.c: staff code
+//
+// Copyright (C) 1989-2008 James E. Wilson, Robert A. Koeneke,
+//                         David J. Grabiner
+//
+// This file is part of Umoria.
+//
+// Umoria is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Umoria is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Umoria.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "standard_library.h"
 
@@ -27,7 +26,7 @@
 
 #include "externs.h"
 
-/* Use a staff.                 -RAK- */
+// Use a staff. -RAK-
 void use() {
     int j, k, y, x;
     int item_val;
@@ -51,7 +50,7 @@ void use() {
             chance = chance / 2;
         }
         if ((chance < USE_DEVICE) && (randint(USE_DEVICE - chance + 1) == 1)) {
-            chance = USE_DEVICE; /* Give everyone a slight chance */
+            chance = USE_DEVICE; // Give everyone a slight chance
         }
         if (chance <= 0) {
             chance = 1;
@@ -67,7 +66,7 @@ void use() {
             while (i != 0) {
                 int pos = bit_pos(&i) + 1;
 
-                /* Staffs. */
+                // Staffs.
                 switch (pos) {
                 case 1:
                     ident = light_area(char_row, char_col);
@@ -162,19 +161,19 @@ void use() {
                     ident = unlight_area(char_row, char_col);
                     break;
                 case 32:
-                    /* store bought flag */
+                    // store bought flag
                     break;
                 default:
                     msg_print("Internal error in staffs()");
                     break;
                 }
-                /* End of staff actions. */
+                // End of staff actions.
             }
 
             if (ident) {
                 if (!known1_p(i_ptr)) {
                     m_ptr = &py.misc;
-                    /* round half-way case up */
+                    // round half-way case up
                     m_ptr->exp +=
                         (i_ptr->level + (m_ptr->lev >> 1)) / m_ptr->lev;
                     prt_experience();

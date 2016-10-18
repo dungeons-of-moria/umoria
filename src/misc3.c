@@ -1,23 +1,22 @@
-/* source/misc3.c: misc code for maintaining the dungeon, printing player info
- *
- * Copyright (C) 1989-2008 James E. Wilson, Robert A. Koeneke,
- *                         David J. Grabiner
- *
- * This file is part of Umoria.
- *
- * Umoria is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Umoria is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Umoria.  If not, see <http://www.gnu.org/licenses/>.
- */
+// src/misc3.c: misc code for maintaining the dungeon, printing player info
+//
+// Copyright (C) 1989-2008 James E. Wilson, Robert A. Koeneke,
+//                         David J. Grabiner
+//
+// This file is part of Umoria.
+//
+// Umoria is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Umoria is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Umoria.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "standard_library.h"
 
@@ -34,14 +33,14 @@ static char *stat_names[] = {
 #define BLANK_LENGTH 24
 static char blank_string[] = "                        ";
 
-/* Places a particular trap at location y, x    -RAK- */
+// Places a particular trap at location y, x -RAK-
 void place_trap(int y, int x, int subval) {
     int cur_pos = popt();
     cave[y][x].tptr = cur_pos;
     invcopy(&t_list[cur_pos], OBJ_TRAP_LIST + subval);
 }
 
-/* Places rubble at location y, x      -RAK- */
+// Places rubble at location y, x -RAK-
 void place_rubble(int y, int x) {
     int cur_pos = popt();
     cave_type *cave_ptr = &cave[y][x];
@@ -50,7 +49,7 @@ void place_rubble(int y, int x) {
     invcopy(&t_list[cur_pos], OBJ_RUBBLE);
 }
 
-/* Places a treasure (Gold or Gems) at given row, column -RAK- */
+// Places a treasure (Gold or Gems) at given row, column -RAK-
 void place_gold(int y, int x) {
     int cur_pos = popt();
     int i = ((randint(dun_level + 2) + 2) / 2) - 1;
@@ -71,7 +70,7 @@ void place_gold(int y, int x) {
     }
 }
 
-/* Returns the array number of a random object    -RAK- */
+// Returns the array number of a random object -RAK-
 int get_obj_num(int level, bool must_be_small) {
     int i;
 
@@ -87,16 +86,16 @@ int get_obj_num(int level, bool must_be_small) {
             }
         }
 
-        /* This code has been added to make it slightly more likely to get the
-           higher level objects.  Originally a uniform distribution over all
-           objects less than or equal to the dungeon level.  This distribution
-           makes a level n objects occur approx 2/n% of the time on level n,
-           and 1/2n are 0th level. */
+        // This code has been added to make it slightly more likely to get the
+        // higher level objects.  Originally a uniform distribution over all
+        // objects less than or equal to the dungeon level. This distribution
+        // makes a level n objects occur approx 2/n% of the time on level n,
+        // and 1/2n are 0th level.
         do {
             if (randint(2) == 1) {
                 i = randint(t_level[level]) - 1;
             } else {
-                /* Choose three objects, pick the highest level. */
+                // Choose three objects, pick the highest level.
 
                 i = randint(t_level[level]) - 1;
                 int j = randint(t_level[level]) - 1;
@@ -120,21 +119,21 @@ int get_obj_num(int level, bool must_be_small) {
     return i;
 }
 
-/* Places an object at given row, column co-ordinate  -RAK- */
+// Places an object at given row, column co-ordinate -RAK-
 void place_object(int y, int x, bool must_be_small) {
     int cur_pos = popt();
     cave[y][x].tptr = cur_pos;
 
-    /* split this line up to avoid a reported compiler bug */
+    // split this line up to avoid a reported compiler bug
     int tmp = get_obj_num(dun_level, must_be_small);
     invcopy(&t_list[cur_pos], sorted_objects[tmp]);
     magic_treasure(cur_pos, dun_level);
     if (cave[y][x].cptr == 1) {
-        msg_print("You feel something roll beneath your feet."); /* -CJS- */
+        msg_print("You feel something roll beneath your feet."); // -CJS-
     }
 }
 
-/* Allocates an object for tunnels and rooms    -RAK- */
+// Allocates an object for tunnels and rooms -RAK-
 void alloc_object(bool (*alloc_set)(), int typ, int num) {
     for (int k = 0; k < num; k++) {
         int i, j;
@@ -144,32 +143,32 @@ void alloc_object(bool (*alloc_set)(), int typ, int num) {
             j = randint(cur_width) - 1;
         }
 
-        /* don't put an object beneath the player, this could cause problems
-           if player is standing under rubble, or on a trap */
+        // don't put an object beneath the player, this could cause
+        // problems if player is standing under rubble, or on a trap.
         while ((!(*alloc_set)(cave[i][j].fval)) || (cave[i][j].tptr != 0) || (i == char_row && j == char_col));
 
-        /* typ == 2 not used, used to be visible traps */
+        // typ == 2 not used, used to be visible traps
         if (typ < 4) {
             if (typ == 1) {
-                /* typ == 1 */
+                // typ == 1
                 place_trap(i, j, randint(MAX_TRAP) - 1);
             } else {
-                /* typ == 3 */
+                // typ == 3
                 place_rubble(i, j);
             }
         } else {
             if (typ == 4) {
-                /* typ == 4 */
+                // typ == 4
                 place_gold(i, j);
             } else {
-                /* typ == 5 */
+                // typ == 5
                 place_object(i, j, false);
             }
         }
     }
 }
 
-/* Creates objects nearby the coordinates given    -RAK- */
+// Creates objects nearby the coordinates given -RAK-
 void random_object(int y, int x, int num) {
     do {
         int i = 0;
@@ -195,7 +194,7 @@ void random_object(int y, int x, int num) {
     } while (num != 0);
 }
 
-/* Converts stat num into string      -RAK- */
+// Converts stat num into string -RAK-
 void cnv_stat(uint8_t stat, char *out_val) {
     if (stat > 18) {
         int part1 = 18;
@@ -211,7 +210,7 @@ void cnv_stat(uint8_t stat, char *out_val) {
     }
 }
 
-/* Print character stat in given row, column    -RAK- */
+// Print character stat in given row, column -RAK-
 void prt_stat(int stat) {
     stat_type out_val1;
     cnv_stat(py.stats.use_stat[stat], out_val1);
@@ -219,49 +218,49 @@ void prt_stat(int stat) {
     put_buffer(out_val1, 6 + stat, STAT_COLUMN + 6);
 }
 
-/* Print character info in given row, column    -RAK- */
-/* the longest title is 13 characters, so only pad to 13 */
+// Print character info in given row, column -RAK-
+// The longest title is 13 characters, so only pad to 13
 void prt_field(char *info, int row, int column) {
     put_buffer(&blank_string[BLANK_LENGTH - 13], row, column);
     put_buffer(info, row, column);
 }
 
-/* Print long number with header at given row, column */
+// Print long number with header at given row, column
 static void prt_lnum(char *header, int32_t num, int row, int column) {
     vtype out_val;
     (void)sprintf(out_val, "%s: %6d", header, num);
     put_buffer(out_val, row, column);
 }
 
-/* Print long number (7 digits of space) with header at given row, column */
+// Print long number (7 digits of space) with header at given row, column
 static void prt_7lnum(char *header, int32_t num, int row, int column) {
     vtype out_val;
     (void)sprintf(out_val, "%s: %7d", header, num);
     put_buffer(out_val, row, column);
 }
 
-/* Print number with header at given row, column  -RAK- */
+// Print number with header at given row, column -RAK-
 static void prt_num(char *header, int num, int row, int column) {
     vtype out_val;
     (void)sprintf(out_val, "%s: %6d", header, num);
     put_buffer(out_val, row, column);
 }
 
-/* Print long number at given row, column */
+// Print long number at given row, column
 static void prt_long(int32_t num, int row, int column) {
     vtype out_val;
     (void)sprintf(out_val, "%6d", num);
     put_buffer(out_val, row, column);
 }
 
-/* Print number at given row, column  -RAK- */
+// Print number at given row, column -RAK-
 static void prt_int(int num, int row, int column) {
     vtype out_val;
     (void)sprintf(out_val, "%6d", num);
     put_buffer(out_val, row, column);
 }
 
-/* Adjustment for wisdom/intelligence        -JWT- */
+// Adjustment for wisdom/intelligence -JWT-
 int stat_adj(int stat) {
     int value = py.stats.use_stat[stat];
 
@@ -284,8 +283,8 @@ int stat_adj(int stat) {
     }
 }
 
-/* Adjustment for charisma        -RAK- */
-/* Percent decrease or increase in price of goods */
+// Adjustment for charisma -RAK-
+// Percent decrease or increase in price of goods
 int chr_adj() {
     int charisma = py.stats.use_stat[A_CHR];
 
@@ -339,7 +338,7 @@ int chr_adj() {
     }
 }
 
-/* Returns a character's adjustment to hit points   -JWT- */
+// Returns a character's adjustment to hit points -JWT-
 int con_adj() {
     int con = py.stats.use_stat[A_CON];
 
@@ -374,42 +373,42 @@ char *title_string() {
     return p;
 }
 
-/* Prints title of character        -RAK- */
+// Prints title of character -RAK-
 void prt_title() {
     prt_field(title_string(), 4, STAT_COLUMN);
 }
 
-/* Prints level            -RAK- */
+// Prints level -RAK-
 void prt_level() {
     prt_int((int)py.misc.lev, 13, STAT_COLUMN + 6);
 }
 
-/* Prints players current mana points.     -RAK- */
+// Prints players current mana points. -RAK-
 void prt_cmana() {
     prt_int(py.misc.cmana, 15, STAT_COLUMN + 6);
 }
 
-/* Prints Max hit points        -RAK- */
+// Prints Max hit points -RAK-
 void prt_mhp() {
     prt_int(py.misc.mhp, 16, STAT_COLUMN + 6);
 }
 
-/* Prints players current hit points      -RAK- */
+// Prints players current hit points -RAK-
 void prt_chp() {
     prt_int(py.misc.chp, 17, STAT_COLUMN + 6);
 }
 
-/* prints current AC          -RAK- */
+// prints current AC -RAK-
 void prt_pac() {
     prt_int(py.misc.dis_ac, 19, STAT_COLUMN + 6);
 }
 
-/* Prints current gold          -RAK- */
+// Prints current gold -RAK-
 void prt_gold() {
     prt_long(py.misc.au, 20, STAT_COLUMN + 6);
 }
 
-/* Prints depth in stat area        -RAK- */
+// Prints depth in stat area -RAK-
 void prt_depth() {
     vtype depths;
 
@@ -424,7 +423,7 @@ void prt_depth() {
     prt(depths, 23, 65);
 }
 
-/* Prints status of hunger        -RAK- */
+// Prints status of hunger -RAK-
 void prt_hunger() {
     if (PY_WEAK & py.flags.status) {
         put_buffer("Weak  ", 23, 0);
@@ -435,7 +434,7 @@ void prt_hunger() {
     }
 }
 
-/* Prints Blind status          -RAK- */
+// Prints Blind status -RAK-
 void prt_blind() {
     if (PY_BLIND & py.flags.status) {
         put_buffer("Blind", 23, 7);
@@ -444,7 +443,7 @@ void prt_blind() {
     }
 }
 
-/* Prints Confusion status        -RAK- */
+// Prints Confusion status -RAK-
 void prt_confused() {
     if (PY_CONFUSED & py.flags.status) {
         put_buffer("Confused", 23, 13);
@@ -453,7 +452,7 @@ void prt_confused() {
     }
 }
 
-/* Prints Fear status          -RAK- */
+// Prints Fear status -RAK-
 void prt_afraid() {
     if (PY_FEAR & py.flags.status) {
         put_buffer("Afraid", 23, 22);
@@ -462,7 +461,7 @@ void prt_afraid() {
     }
 }
 
-/* Prints Poisoned status        -RAK- */
+// Prints Poisoned status -RAK-
 void prt_poisoned() {
     if (PY_POISONED & py.flags.status) {
         put_buffer("Poisoned", 23, 29);
@@ -471,7 +470,7 @@ void prt_poisoned() {
     }
 }
 
-/* Prints Searching, Resting, Paralysis, or 'count' status  -RAK- */
+// Prints Searching, Resting, Paralysis, or 'count' status -RAK-
 void prt_state() {
     py.flags.status &= ~PY_REPEAT;
 
@@ -506,16 +505,16 @@ void prt_state() {
     } else if (PY_SEARCH & py.flags.status) {
         put_buffer("Searching", 23, 38);
     } else {
-        /* "repeat 999" is 10 characters */
+        // "repeat 999" is 10 characters
         put_buffer(&blank_string[BLANK_LENGTH - 10], 23, 38);
     }
 }
 
-/* Prints the speed of a character.      -CJS- */
+// Prints the speed of a character. -CJS-
 void prt_speed() {
     int i = py.flags.speed;
 
-    /* Search mode. */
+    // Search mode.
     if (PY_SEARCH & py.flags.status) {
         i--;
     }
@@ -543,7 +542,7 @@ void prt_study() {
     }
 }
 
-/* Prints winner status on display      -RAK- */
+// Prints winner status on display -RAK-
 void prt_winner() {
     if (noscore & 0x2) {
         if (wizard) {
@@ -587,7 +586,7 @@ uint8_t modify_stat(int stat, int16_t amount) {
     return tmp_stat;
 }
 
-/* Set the value of the stat which is actually used.   -CJS- */
+// Set the value of the stat which is actually used. -CJS-
 void set_use_stat(int stat) {
     py.stats.use_stat[stat] = modify_stat(stat, py.stats.mod_stat[stat]);
 
@@ -607,14 +606,14 @@ void set_use_stat(int stat) {
     }
 }
 
-/* Increases a stat by one randomized level    -RAK- */
+// Increases a stat by one randomized level -RAK-
 bool inc_stat(int stat) {
     int tmp_stat = py.stats.cur_stat[stat];
     if (tmp_stat < 118) {
         if (tmp_stat < 18) {
             tmp_stat++;
         } else if (tmp_stat < 116) {
-            /* stat increases by 1/6 to 1/3 of difference from max */
+            // stat increases by 1/6 to 1/3 of difference from max
             int gain = ((118 - tmp_stat) / 3 + 1) >> 1;
             tmp_stat += randint(gain) + gain;
         } else {
@@ -634,7 +633,7 @@ bool inc_stat(int stat) {
     }
 }
 
-/* Decreases a stat by one randomized level    -RAK- */
+// Decreases a stat by one randomized level -RAK-
 bool dec_stat(int stat) {
     int tmp_stat = py.stats.cur_stat[stat];
     if (tmp_stat > 3) {
@@ -659,7 +658,7 @@ bool dec_stat(int stat) {
     }
 }
 
-/* Restore a stat.  Return true only if this actually makes a difference. */
+// Restore a stat.  Return true only if this actually makes a difference.
 bool res_stat(int stat) {
     int i = py.stats.max_stat[stat] - py.stats.cur_stat[stat];
 
@@ -673,18 +672,18 @@ bool res_stat(int stat) {
     return false;
 }
 
-/* Boost a stat artificially (by wearing something). If the display argument
-   is true, then increase is shown on the screen. */
+// Boost a stat artificially (by wearing something). If the display
+// argument is true, then increase is shown on the screen.
 void bst_stat(int stat, int amount) {
     py.stats.mod_stat[stat] += amount;
 
     set_use_stat(stat);
 
-    /* can not call prt_stat() here, may be in store, may be in inven_command */
+    // can not call prt_stat() here, may be in store, may be in inven_command
     py.flags.status |= (PY_STR << stat);
 }
 
-/* Returns a character's adjustment to hit.     -JWT- */
+// Returns a character's adjustment to hit. -JWT-
 int tohit_adj() {
     int total;
 
@@ -731,7 +730,7 @@ int tohit_adj() {
     return total;
 }
 
-/* Returns a character's adjustment to armor class   -JWT- */
+// Returns a character's adjustment to armor class -JWT-
 int toac_adj() {
     int stat = py.stats.use_stat[A_DEX];
 
@@ -758,7 +757,7 @@ int toac_adj() {
     }
 }
 
-/* Returns a character's adjustment to disarm     -RAK- */
+// Returns a character's adjustment to disarm -RAK-
 int todis_adj() {
     int stat = py.stats.use_stat[A_DEX];
 
@@ -789,7 +788,7 @@ int todis_adj() {
     }
 }
 
-/* Returns a character's adjustment to damage     -JWT- */
+// Returns a character's adjustment to damage -JWT-
 int todam_adj() {
     int stat = py.stats.use_stat[A_STR];
 
@@ -814,7 +813,7 @@ int todam_adj() {
     }
 }
 
-/* Prints character-screen info        -RAK- */
+// Prints character-screen info -RAK-
 void prt_stat_block() {
     struct misc *m_ptr = &py.misc;
     prt_field(race[py.misc.prace].trace, 2, STAT_COLUMN);
@@ -855,16 +854,16 @@ void prt_stat_block() {
         prt_state();
     }
 
-    /* if speed non zero, print it, modify speed if Searching */
+    // if speed non zero, print it, modify speed if Searching
     if (py.flags.speed - ((PY_SEARCH & status) >> 8) != 0) {
         prt_speed();
     }
 
-    /* display the study field */
+    // display the study field
     prt_study();
 }
 
-/* Draws entire screen          -RAK- */
+// Draws entire screen -RAK-
 void draw_cave() {
     clear_screen();
     prt_stat_block();
@@ -872,7 +871,7 @@ void draw_cave() {
     prt_depth();
 }
 
-/* Prints the following information on the screen.  -JWT- */
+// Prints the following information on the screen. -JWT-
 void put_character() {
     struct misc *m_ptr = &py.misc;
 
@@ -891,7 +890,7 @@ void put_character() {
     }
 }
 
-/* Prints the following information on the screen.  -JWT- */
+// Prints the following information on the screen. -JWT-
 void put_stats() {
     struct misc *m_ptr = &py.misc;
 
@@ -913,7 +912,7 @@ void put_stats() {
     prt_num("  Total AC  ", m_ptr->dis_ac, 12, 1);
 }
 
-/* Returns a rating of x depending on y      -JWT- */
+// Returns a rating of x depending on y -JWT-
 char *likert(int x, int y) {
     switch ((x / y)) {
     case -3: case -2: case -1:
@@ -935,7 +934,7 @@ char *likert(int x, int y) {
     }
 }
 
-/* Prints age, height, weight, and SC      -JWT- */
+// Prints age, height, weight, and SC -JWT-
 void put_misc1() {
     struct misc *m_ptr = &py.misc;
 
@@ -945,7 +944,7 @@ void put_misc1() {
     prt_num("Social Class ", (int)m_ptr->sc, 5, 38);
 }
 
-/* Prints the following information on the screen.  -JWT- */
+// Prints the following information on the screen. -JWT-
 void put_misc2() {
     struct misc *m_ptr = &py.misc;
 
@@ -966,7 +965,7 @@ void put_misc2() {
     prt_num("Cur Mana       ", m_ptr->cmana, 12, 52);
 }
 
-/* Prints ratings on certain abilities      -RAK- */
+// Prints ratings on certain abilities -RAK-
 void put_misc3() {
     clear_from(14);
 
@@ -974,7 +973,7 @@ void put_misc3() {
     int xbth = p_ptr->bth + p_ptr->ptohit * BTH_PLUS_ADJ + (class_level_adj[p_ptr->pclass][CLA_BTH] * p_ptr->lev);
     int xbthb = p_ptr->bthb + p_ptr->ptohit * BTH_PLUS_ADJ + (class_level_adj[p_ptr->pclass][CLA_BTHB] * p_ptr->lev);
 
-    /* this results in a range from 0 to 29 */
+    // this results in a range from 0 to 29
     int xfos = 40 - p_ptr->fos;
     if (xfos < 0) {
         xfos = 0;
@@ -982,7 +981,7 @@ void put_misc3() {
 
     int xsrh = p_ptr->srh;
 
-    /* this results in a range from 0 to 9 */
+    // this results in a range from 0 to 9
     int xstl = p_ptr->stl + 1;
     int xdis = p_ptr->disarm + 2 * todis_adj() + stat_adj(A_INT) + (class_level_adj[p_ptr->pclass][CLA_DISARM] * p_ptr->lev / 3);
     int xsave = p_ptr->save + stat_adj(A_WIS) + (class_level_adj[p_ptr->pclass][CLA_SAVE] * p_ptr->lev / 3);
@@ -1014,7 +1013,7 @@ void put_misc3() {
     put_buffer(xinfra, 18, 69);
 }
 
-/* Used to display the character on the screen.    -RAK- */
+// Used to display the character on the screen. -RAK-
 void display_char() {
     put_character();
     put_misc1();
@@ -1023,7 +1022,7 @@ void display_char() {
     put_misc3();
 }
 
-/* Gets a name for the character      -JWT- */
+// Gets a name for the character -JWT-
 void get_name() {
     prt("Enter your player's name  [press <RETURN> when finished]", 21, 2);
     put_buffer(&blank_string[BLANK_LENGTH - 23], 2, 15);
@@ -1036,7 +1035,7 @@ void get_name() {
     clear_from(20);
 }
 
-/* Changes the name of the character      -JWT- */
+// Changes the name of the character -JWT-
 void change_name() {
     vtype temp;
 
@@ -1071,7 +1070,7 @@ void change_name() {
     } while (!flag);
 }
 
-/* Destroy an item in the inventory      -RAK- */
+// Destroy an item in the inventory -RAK-
 void inven_destroy(int item_val) {
     inven_type *i_ptr = &inventory[item_val];
 
@@ -1089,8 +1088,8 @@ void inven_destroy(int item_val) {
     py.flags.status |= PY_STR_WGT;
 }
 
-/* Copies the object in the second argument over the first argument.
-   However, the second always gets a number of one except for ammo etc. */
+// Copies the object in the second argument over the first argument.
+// However, the second always gets a number of one except for ammo etc.
 void take_one_item(inven_type *s_ptr, inven_type *i_ptr) {
     *s_ptr = *i_ptr;
     if ((s_ptr->number > 1) && (s_ptr->subval >= ITEM_SINGLE_STACK_MIN) &&
@@ -1099,7 +1098,7 @@ void take_one_item(inven_type *s_ptr, inven_type *i_ptr) {
     }
 }
 
-/* Drops an item from inventory to given location  -RAK- */
+// Drops an item from inventory to given location -RAK-
 void inven_drop(int item_val, int drop_all) {
     if (cave[char_row][char_col].tptr != 0) {
         (void)delete_object(char_row, char_col);
@@ -1135,7 +1134,7 @@ void inven_drop(int item_val, int drop_all) {
     py.flags.status |= PY_STR_WGT;
 }
 
-/* Destroys a type of item on a given percent chance  -RAK- */
+// Destroys a type of item on a given percent chance -RAK-
 int inven_damage(bool (*typ)(), int perc) {
     int j = 0;
 
@@ -1149,7 +1148,7 @@ int inven_damage(bool (*typ)(), int perc) {
     return j;
 }
 
-/* Computes current weight limit      -RAK- */
+// Computes current weight limit -RAK-
 int weight_limit() {
     int weight_cap = py.stats.use_stat[A_STR] * PLAYER_WEIGHT_CAP + py.misc.wt;
 
@@ -1160,7 +1159,7 @@ int weight_limit() {
     return weight_cap;
 }
 
-/* this code must be identical to the inven_carry() code below */
+// this code must be identical to the inven_carry() code below
 bool inven_check_num(inven_type *t_ptr) {
     if (inven_ctr < INVEN_WIELD) {
         return true;
@@ -1168,12 +1167,12 @@ bool inven_check_num(inven_type *t_ptr) {
         for (int i = 0; i < inven_ctr; i++) {
             if (inventory[i].tval == t_ptr->tval &&
                 inventory[i].subval == t_ptr->subval &&
-                /* make sure the number field doesn't overflow */
+                // make sure the number field doesn't overflow
                 ((int)inventory[i].number + (int)t_ptr->number < 256) &&
-                /* they always stack (subval < 192), or else they have same p1 */
+                // they always stack (subval < 192), or else they have same p1
                 ((t_ptr->subval < ITEM_GROUP_MIN) ||
                  (inventory[i].p1 == t_ptr->p1))
-                /* only stack if both or neither are identified */
+                // only stack if both or neither are identified
                 && (known1_p(&inventory[i]) == known1_p(t_ptr)))
             {
                 return true;
@@ -1183,7 +1182,7 @@ bool inven_check_num(inven_type *t_ptr) {
     return false;
 }
 
-/* return false if picking up an object would change the players speed */
+// return false if picking up an object would change the players speed
 bool inven_check_weight(inven_type *i_ptr) {
     int i = weight_limit();
     int new_inven_weight = i_ptr->number * i_ptr->weight + inven_weight;
@@ -1201,7 +1200,7 @@ bool inven_check_weight(inven_type *i_ptr) {
     }
 }
 
-/* Are we strong enough for the current pack and weapon?  -CJS- */
+// Are we strong enough for the current pack and weapon? -CJS-
 void check_strength() {
     inven_type *i_ptr = &inventory[INVEN_WIELD];
 
@@ -1239,9 +1238,9 @@ void check_strength() {
     py.flags.status &= ~PY_STR_WGT;
 }
 
-/* Add an item to players inventory.  Return the */
-/* item position for a description if needed.         -RAK- */
-/* this code must be identical to the inven_check_num() code above */
+// Add an item to players inventory.  Return the
+// item position for a description if needed. -RAK-
+// this code must be identical to the inven_check_num() code above
 int inven_carry(inven_type *i_ptr) {
     int typ = i_ptr->tval;
     int subt = i_ptr->subval;
@@ -1250,7 +1249,7 @@ int inven_carry(inven_type *i_ptr) {
 
     int locn;
 
-    /* Now, check to see if player can carry object */
+    // Now, check to see if player can carry object
     for (locn = 0;; locn++) {
         inven_type *t_ptr = &inventory[locn];
 
@@ -1258,14 +1257,14 @@ int inven_carry(inven_type *i_ptr) {
             (subt >= ITEM_SINGLE_STACK_MIN) &&
             ((int)t_ptr->number + (int)i_ptr->number < 256) &&
             ((subt < ITEM_GROUP_MIN) || (t_ptr->p1 == i_ptr->p1)) &&
-            /* only stack if both or neither are identified */
+            // only stack if both or neither are identified
             (known1p == known1_p(t_ptr)))
         {
             t_ptr->number += i_ptr->number;
             break;
         } else if ((typ == t_ptr->tval && subt < t_ptr->subval && always_known1p) || (typ > t_ptr->tval)) {
-            /* For items which are always known1p, i.e. never have a 'color',
-             insert them into the inventory in sorted order. */
+            // For items which are always known1p, i.e. never have a 'color',
+            // insert them into the inventory in sorted order.
 
             for (int i = inven_ctr - 1; i >= locn; i--) {
                 inventory[i + 1] = inventory[i];
@@ -1282,7 +1281,7 @@ int inven_carry(inven_type *i_ptr) {
     return locn;
 }
 
-/* Returns spell chance of failure for spell    -RAK- */
+// Returns spell chance of failure for spell -RAK-
 int spell_chance(int spell) {
     spell_type *s_ptr = &magic_spell[py.misc.pclass - 1][spell];
 
@@ -1309,9 +1308,9 @@ int spell_chance(int spell) {
     return chance;
 }
 
-/* Print list of spells          -RAK- */
-/* if nonconsec is -1: spells numbered consecutively from 'a' to 'a'+num
-                  >=0: spells numbered by offset from nonconsec */
+// Print list of spells -RAK-
+// if nonconsec is  -1: spells numbered consecutively from 'a' to 'a'+num
+//                 >=0: spells numbered by offset from nonconsec
 void print_spells(int *spell, int num, int comment, int nonconsec) {
     int col;
     if (comment) {
@@ -1326,7 +1325,7 @@ void print_spells(int *spell, int num, int comment, int nonconsec) {
     put_buffer("Name", 1, col + 5);
     put_buffer("Lv Mana Fail", 1, col + 35);
 
-    /* only show the first 22 choices */
+    // only show the first 22 choices
     if (num > 22) {
         num = 22;
     }
@@ -1348,10 +1347,8 @@ void print_spells(int *spell, int num, int comment, int nonconsec) {
             p = "";
         }
 
-        /* determine whether or not to leave holes in character choices,
-         * nonconsec -1 when learning spells, consec offset>=0 when
-         * asking which spell to cast
-         */
+        // determine whether or not to leave holes in character choices, nonconsec -1
+        // when learning spells, consec offset>=0 when asking which spell to cast.
         char spell_char;
         if (nonconsec == -1) {
             spell_char = 'a' + i;
@@ -1365,7 +1362,7 @@ void print_spells(int *spell, int num, int comment, int nonconsec) {
     }
 }
 
-/* Returns spell pointer        -RAK- */
+// Returns spell pointer -RAK-
 int get_spell(int *spell, int num, int *sn, int *sc, char *prompt, int first_spell) {
     *sn = -1;
 
@@ -1382,7 +1379,7 @@ int get_spell(int *spell, int num, int *sn, int *sc, char *prompt, int first_spe
         if (isupper((int)choice)) {
             *sn = choice - 'A' + first_spell;
 
-            /* verify that this is in spell[], at most 22 entries in spell[] */
+            // verify that this is in spell[], at most 22 entries in spell[]
             int i;
             for (i = 0; i < num; i++) {
                 if (*sn == spell[i]) {
@@ -1405,7 +1402,7 @@ int get_spell(int *spell, int num, int *sn, int *sc, char *prompt, int first_spe
         } else if (islower((int)choice)) {
             *sn = choice - 'a' + first_spell;
 
-            /* verify that this is in spell[], at most 22 entries in spell[] */
+            // verify that this is in spell[], at most 22 entries in spell[]
             int i;
             for (i = 0; i < num; i++) {
                 if (*sn == spell[i]) {
@@ -1418,7 +1415,7 @@ int get_spell(int *spell, int num, int *sn, int *sc, char *prompt, int first_spe
                 flag = true;
             }
         } else if (choice == '*') {
-            /* only do this drawing once */
+            // only do this drawing once
             if (!redraw) {
                 save_screen();
                 redraw = true;
@@ -1448,8 +1445,8 @@ int get_spell(int *spell, int num, int *sn, int *sc, char *prompt, int first_spe
     return flag;
 }
 
-/* calculate number of spells player should have, and learn forget spells
-   until that number is met -JEW- */
+// calculate number of spells player should have, and
+// learn forget spells until that number is met -JEW-
 void calc_spells(int stat) {
 
     struct misc *p_ptr = &py.misc;
@@ -1465,7 +1462,7 @@ void calc_spells(int stat) {
         offset = PRAYER_OFFSET;
     }
 
-    /* check to see if know any spells greater than level, eliminate them */
+    // check to see if know any spells greater than level, eliminate them
     int i;
     uint32_t mask;
     for (i = 31, mask = 0x80000000L; mask; mask >>= 1, i--) {
@@ -1483,7 +1480,7 @@ void calc_spells(int stat) {
         }
     }
 
-    /* calc number of spells allowed */
+    // calc number of spells allowed
     int num_allowed = 0;
     int levels = p_ptr->lev - class[p_ptr->pclass].first_spell_lev + 1;
     switch (stat_adj(stat)) {
@@ -1513,14 +1510,14 @@ void calc_spells(int stat) {
     int new_spells = num_allowed - num_known;
 
     if (new_spells > 0) {
-        /* remember forgotten spells while forgotten spells exist of new_spells
-           positive, remember the spells in the order that they were learned */
+        // remember forgotten spells while forgotten spells exist of new_spells
+        // positive, remember the spells in the order that they were learned
         for (int n = 0; (spell_forgotten && new_spells && (n < num_allowed) && (n < 32)); n++) {
-            /* j is (i+1)th spell learned */
+            // j is (i+1)th spell learned
             int j = spell_order[n];
 
-            /* shifting by amounts greater than number of bits in long gives
-               an undefined result, so don't shift for unknown spells */
+            // shifting by amounts greater than number of bits in long gives
+            // an undefined result, so don't shift for unknown spells
             if (j == 99) {
                 mask = 0x0;
             } else {
@@ -1542,9 +1539,8 @@ void calc_spells(int stat) {
         }
 
         if (new_spells > 0) {
-            /* determine which spells player can learn must check all spells here,
-             * in gain_spell() we actually check if the books are present
-             */
+            // determine which spells player can learn must check all spells here,
+            // in gain_spell() we actually check if the books are present
             uint32_t spell_flag = 0x7FFFFFFFL & ~spell_learned;
 
             int j;
@@ -1563,13 +1559,13 @@ void calc_spells(int stat) {
             }
         }
     } else if (new_spells < 0) {
-        /* forget spells until new_spells zero or no more spells know, spells
-           are forgotten in the opposite order that they were learned */
+        // forget spells until new_spells zero or no more spells know, spells
+        // are forgotten in the opposite order that they were learned
         for (i = 31; new_spells && spell_learned; i--) {
-            /* j is the (i+1)th spell learned */
+            // j is the (i+1)th spell learned
             int j = spell_order[i];
-            /* shifting by amounts greater than number of bits in long gives
-               an undefined result, so don't shift for unknown spells */
+            // shifting by amounts greater than number of bits in long gives
+            // an undefined result, so don't shift for unknown spells
             if (j == 99) {
                 mask = 0x0;
             } else {
@@ -1601,13 +1597,12 @@ void calc_spells(int stat) {
     }
 }
 
-/* gain spells when player wants to    - jw */
+// gain spells when player wants to    - jw
 void gain_spells() {
     uint32_t spell_flag;
 
-    /* Priests don't need light because they get spells from their god,
-       so only fail when can't see if player has MAGE spells.  This check
-       is done below. */
+    // Priests don't need light because they get spells from their god, so only
+    // fail when can't see if player has MAGE spells. This check is done below.
     if (py.flags.confused > 0) {
         msg_print("You are too confused.");
         return;
@@ -1624,7 +1619,7 @@ void gain_spells() {
         stat = A_INT;
         offset = SPELL_OFFSET;
 
-        /* People with MAGE spells can't learn spells if they can't read their books. */
+        // People with MAGE spells can't learn spells if they can't read their books.
         if (py.flags.blind > 0) {
             msg_print("You can't see to read your spell book!");
             return;
@@ -1650,8 +1645,8 @@ void gain_spells() {
         msg_print(tmp_str);
         free_turn_flag = true;
     } else {
-        /* determine which spells player can learn */
-        /* mages need the book to learn a spell, priests do not need the book */
+        // determine which spells player can learn
+        // mages need the book to learn a spell, priests do not need the book
         if (stat == A_INT) {
             spell_flag = 0;
             for (int i = 0; i < inven_ctr; i++) {
@@ -1663,7 +1658,7 @@ void gain_spells() {
             spell_flag = 0x7FFFFFFF;
         }
 
-        /* clear bits for spells already learned */
+        // clear bits for spells already learned
         spell_flag &= ~spell_learned;
 
         int i = 0;
@@ -1689,7 +1684,7 @@ void gain_spells() {
         if (new_spells == 0) {
             ;
         } else if (stat == A_INT) {
-            /* get to choose which mage spells will be learned */
+            // get to choose which mage spells will be learned
             save_screen();
             print_spells(spells, i, false, -1);
 
@@ -1697,8 +1692,8 @@ void gain_spells() {
             while (new_spells && get_com("Learn which spell?", &query)) {
                 int c = query - 'a';
 
-                /* test j < 23 in case i is greater than 22, only 22 spells
-                   are actually shown on the screen, so limit choice to those */
+                // test j < 23 in case i is greater than 22, only 22 spells
+                // are actually shown on the screen, so limit choice to those
                 if (c >= 0 && c < i && c < 22) {
                     new_spells--;
                     spell_learned |= 1L << spells[c];
@@ -1715,7 +1710,7 @@ void gain_spells() {
             }
             restore_screen();
         } else {
-            /* pick a prayer at random */
+            // pick a prayer at random
             while (new_spells) {
                 int s = randint(i) - 1;
                 spell_learned |= 1L << spells[s];
@@ -1738,15 +1733,14 @@ void gain_spells() {
             py.flags.status |= PY_STUDY;
         }
 
-        /* set the mana for first level characters when they learn their
-           first spell */
+        // set the mana for first level characters when they learn their first spell.
         if (py.misc.mana == 0) {
             calc_mana(stat);
         }
     }
 }
 
-/* Gain some mana if you know at least one spell  -RAK- */
+// Gain some mana if you know at least one spell -RAK-
 void calc_mana(int stat) {
     struct misc *p_ptr = &py.misc;
 
@@ -1778,16 +1772,16 @@ void calc_mana(int stat) {
             break;
         }
 
-        /* increment mana by one, so that first level chars have 2 mana */
+        // increment mana by one, so that first level chars have 2 mana
         if (new_mana > 0) {
             new_mana++;
         }
 
-        /* mana can be zero when creating character */
+        // mana can be zero when creating character
         if (p_ptr->mana != new_mana) {
             if (p_ptr->mana != 0) {
-                /* change current mana proportionately to change of max mana,
-                   divide first to avoid overflow, little loss of accuracy */
+                // change current mana proportionately to change of max mana,
+                // divide first to avoid overflow, little loss of accuracy
                 int32_t value = (((int32_t)p_ptr->cmana << 16) + p_ptr->cmana_frac) / p_ptr->mana * new_mana;
                 p_ptr->cmana = value >> 16;
                 p_ptr->cmana_frac = value & 0xFFFF;
@@ -1797,19 +1791,19 @@ void calc_mana(int stat) {
             }
             p_ptr->mana = new_mana;
 
-            /* can't print mana here, may be in store or inventory mode */
+            // can't print mana here, may be in store or inventory mode
             py.flags.status |= PY_MANA;
         }
     } else if (p_ptr->mana != 0) {
         p_ptr->mana = 0;
         p_ptr->cmana = 0;
 
-        /* can't print mana here, may be in store or inventory mode */
+        // can't print mana here, may be in store or inventory mode
         py.flags.status |= PY_MANA;
     }
 }
 
-/* Increases hit points and level      -RAK- */
+// Increases hit points and level -RAK-
 static void gain_level() {
     struct misc *p_ptr = &py.misc;
     p_ptr->lev++;
@@ -1821,7 +1815,7 @@ static void gain_level() {
 
     int32_t need_exp = player_exp[p_ptr->lev - 1] * p_ptr->expfact / 100;
     if (p_ptr->exp > need_exp) {
-        /* lose some of the 'extra' exp when gaining several levels at once */
+        // lose some of the 'extra' exp when gaining several levels at once
         int32_t dif_exp = p_ptr->exp - need_exp;
         p_ptr->exp = need_exp + (dif_exp / 2);
     }
@@ -1840,7 +1834,7 @@ static void gain_level() {
     }
 }
 
-/* Prints experience          -RAK- */
+// Prints experience -RAK-
 void prt_experience() {
     struct misc *p_ptr = &py.misc;
 
@@ -1859,12 +1853,12 @@ void prt_experience() {
     prt_long(p_ptr->exp, 14, STAT_COLUMN + 6);
 }
 
-/* Calculate the players hit points */
+// Calculate the players hit points
 void calc_hitpoints() {
     struct misc *p_ptr = &py.misc;
     int hitpoints = player_hp[p_ptr->lev - 1] + (con_adj() * p_ptr->lev);
 
-    /* always give at least one point per level + 1 */
+    // always give at least one point per level + 1
     if (hitpoints < (p_ptr->lev + 1)) {
         hitpoints = p_ptr->lev + 1;
     }
@@ -1877,21 +1871,21 @@ void calc_hitpoints() {
         hitpoints += 20;
     }
 
-    /* mhp can equal zero while character is being created */
+    // mhp can equal zero while character is being created
     if ((hitpoints != p_ptr->mhp) && (p_ptr->mhp != 0)) {
-        /* change current hit points proportionately to change of mhp,
-           divide first to avoid overflow, little loss of accuracy */
+        // change current hit points proportionately to change of mhp,
+        // divide first to avoid overflow, little loss of accuracy
         int32_t value = (((int32_t)p_ptr->chp << 16) + p_ptr->chp_frac) / p_ptr->mhp * hitpoints;
         p_ptr->chp = value >> 16;
         p_ptr->chp_frac = value & 0xFFFF;
         p_ptr->mhp = hitpoints;
 
-        /* can't print hit points here, may be in store or inventory mode */
+        // can't print hit points here, may be in store or inventory mode
         py.flags.status |= PY_HP;
     }
 }
 
-/* Inserts a string into a string */
+// Inserts a string into a string
 void insert_str(char *object_str, char *mtc_str, char *insert) {
     int mtc_len = (int)strlen(mtc_str);
     int obj_len = (int)strlen(object_str);
@@ -1917,7 +1911,7 @@ void insert_str(char *object_str, char *mtc_str, char *insert) {
         char out_val[80];
 
         (void)strncpy(out_val, object_str, (pc - object_str));
-        /* Turbo C needs int for array index. */
+        // Turbo C needs int for array index.
         out_val[(int)(pc - object_str)] = '\0';
         if (insert) {
             (void)strcat(out_val, insert);
@@ -1960,7 +1954,7 @@ void insert_lnum(char *object_str, char *mtc_str, int32_t number, int show_sign)
     }
 }
 
-/* lets anyone enter wizard mode after a disclaimer...    - JEW - */
+// lets anyone enter wizard mode after a disclaimer... -JEW-
 bool enter_wiz_mode() {
     bool answer = false;
 
@@ -1978,7 +1972,7 @@ bool enter_wiz_mode() {
     return false;
 }
 
-/* Weapon weight VS strength and dexterity    -RAK- */
+// Weapon weight VS strength and dexterity -RAK-
 int attack_blows(int weight, int *wtohit) {
     int s = py.stats.use_stat[A_STR];
     int d = py.stats.use_stat[A_DEX];
@@ -2025,39 +2019,39 @@ int attack_blows(int weight, int *wtohit) {
     }
 }
 
-/* Special damage due to magical abilities of object  -RAK- */
+// Special damage due to magical abilities of object -RAK-
 int tot_dam(inven_type *i_ptr, int tdam, int monster) {
     if ((i_ptr->flags & TR_EGO_WEAPON) && (((i_ptr->tval >= TV_SLING_AMMO) && (i_ptr->tval <= TV_ARROW)) || ((i_ptr->tval >= TV_HAFTED) && (i_ptr->tval <= TV_SWORD)) || (i_ptr->tval == TV_FLASK))) {
         creature_type *m_ptr = &c_list[monster];
         recall_type *r_ptr = &c_recall[monster];
 
         if ((m_ptr->cdefense & CD_DRAGON) && (i_ptr->flags & TR_SLAY_DRAGON)) {
-            /* Slay Dragon */
+            // Slay Dragon
 
             tdam = tdam * 4;
             r_ptr->r_cdefense |= CD_DRAGON;
         } else if ((m_ptr->cdefense & CD_UNDEAD) && (i_ptr->flags & TR_SLAY_UNDEAD)) {
-            /* Slay Undead */
+            // Slay Undead
 
             tdam = tdam * 3;
             r_ptr->r_cdefense |= CD_UNDEAD;
         } else if ((m_ptr->cdefense & CD_ANIMAL) && (i_ptr->flags & TR_SLAY_ANIMAL)) {
-           /* Slay Animal */
+           // Slay Animal
 
             tdam = tdam * 2;
             r_ptr->r_cdefense |= CD_ANIMAL;
         } else if ((m_ptr->cdefense & CD_EVIL) && (i_ptr->flags & TR_SLAY_EVIL)) {
-            /* Slay Evil */
+            // Slay Evil
 
             tdam = tdam * 2;
             r_ptr->r_cdefense |= CD_EVIL;
         } else if ((m_ptr->cdefense & CD_FROST) && (i_ptr->flags & TR_FROST_BRAND)) {
-            /* Frost */
+            // Frost
 
             tdam = tdam * 3 / 2;
             r_ptr->r_cdefense |= CD_FROST;
         } else if ((m_ptr->cdefense & CD_FIRE) && (i_ptr->flags & TR_FLAME_TONGUE)) {
-            /* Fire */
+            // Fire
 
             tdam = tdam * 3 / 2;
             r_ptr->r_cdefense |= CD_FIRE;
@@ -2066,12 +2060,12 @@ int tot_dam(inven_type *i_ptr, int tdam, int monster) {
     return tdam;
 }
 
-/* Critical hits, Nasty way to die.      -RAK- */
+// Critical hits, Nasty way to die. -RAK-
 int critical_blow(int weight, int plus, int dam, int attack_type) {
     int critical = dam;
 
-    /* Weight of weapon, plusses to hit, and character level all */
-    /* contribute to the chance of a critical */
+    // Weight of weapon, plusses to hit, and character level all
+    // contribute to the chance of a critical
     if (randint(5000) <= (weight + 5 * plus + (class_level_adj[py.misc.pclass][attack_type] * py.misc.lev))) {
         weight += randint(650);
 
@@ -2093,7 +2087,7 @@ int critical_blow(int weight, int plus, int dam, int attack_type) {
     return critical;
 }
 
-/* Given direction "dir", returns new row, column location -RAK- */
+// Given direction "dir", returns new row, column location -RAK-
 int mmove(int dir, int *y, int *x) {
     // NOTE: initializing as these were giving a warning below -MRC-
     int new_row = 0;
@@ -2149,9 +2143,9 @@ int mmove(int dir, int *y, int *x) {
     return moved;
 }
 
-/* Saving throws for player character.    -RAK- */
+// Saving throws for player character. -RAK-
 bool player_saves() {
-    /* MPW C couldn't handle the expression, so split it into two parts */
+    // MPW C couldn't handle the expression, so split it into two parts
     int16_t temp = class_level_adj[py.misc.pclass][CLA_SAVE];
 
     if (randint(100) <= (py.misc.save + stat_adj(A_WIS) + (temp * py.misc.lev / 3))) {
@@ -2161,7 +2155,7 @@ bool player_saves() {
     }
 }
 
-/* Finds range of item in inventory list    -RAK- */
+// Finds range of item in inventory list -RAK-
 int find_range(int item1, int item2, int *j, int *k) {
     int i = 0;
 
@@ -2195,7 +2189,7 @@ int find_range(int item1, int item2, int *j, int *k) {
     return flag;
 }
 
-/* Teleport the player to a new location    -RAK- */
+// Teleport the player to a new location -RAK-
 void teleport(int dis) {
     int y, x;
 

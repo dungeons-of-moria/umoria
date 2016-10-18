@@ -1,23 +1,22 @@
-/* source/create.c: create a player character
- *
- * Copyright (C) 1989-2008 James E. Wilson, Robert A. Koeneke,
- *                         David J. Grabiner
- *
- * This file is part of Umoria.
- *
- * Umoria is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Umoria is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Umoria.  If not, see <http://www.gnu.org/licenses/>.
- */
+// src/create.c: create a player character
+//
+// Copyright (C) 1989-2008 James E. Wilson, Robert A. Koeneke,
+//                         David J. Grabiner
+//
+// This file is part of Umoria.
+//
+// Umoria is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Umoria is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Umoria.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "standard_library.h"
 
@@ -27,7 +26,7 @@
 
 #include "externs.h"
 
-/* Generates character's stats        -JWT- */
+// Generates character's stats -JWT-
 static void get_stats() {
     int tot;
     int dice[18];
@@ -35,7 +34,7 @@ static void get_stats() {
     do {
         tot = 0;
         for (int i = 0; i < 18; i++) {
-            /* Roll 3,4,5 sided dice once each */
+            // Roll 3,4,5 sided dice once each
             dice[i] = randint(3 + i % 3);
             tot += dice[i];
         }
@@ -47,7 +46,7 @@ static void get_stats() {
     }
 }
 
-/* Changes stats by given amount        -JWT- */
+// Changes stats by given amount -JWT-
 static void change_stat(int stat, int16_t amount) {
     int tmp_stat = py.stats.max_stat[stat];
 
@@ -82,8 +81,8 @@ static void change_stat(int stat, int16_t amount) {
     py.stats.max_stat[stat] = tmp_stat;
 }
 
-/* generate all stats and modify for race. needed in a separate module so
-   looping of character selection would be allowed     -RGM- */
+// generate all stats and modify for race. needed in a separate
+// module so looping of character selection would be allowed -RGM-
 static void get_all_stats() {
     player_type *p_ptr = &py;
     race_type *r_ptr = &race[p_ptr->misc.prace];
@@ -118,7 +117,7 @@ static void get_all_stats() {
     p_ptr->flags.see_infra = r_ptr->infra;
 }
 
-/* Allows player to select a race      -JWT- */
+// Allows player to select a race -JWT-
 static void choose_race() {
     int j = 0;
     int k = 0;
@@ -163,7 +162,7 @@ static void choose_race() {
     put_buffer(r_ptr->trace, 3, 15);
 }
 
-/* Will print the history of a character      -JWT- */
+// Will print the history of a character -JWT-
 static void print_history() {
     put_buffer("Character Background", 14, 27);
 
@@ -172,11 +171,11 @@ static void print_history() {
     }
 }
 
-/* Get the racial history, determines social class  -RAK-
- * Assumptions:
- *    Each race has init history beginning at (race-1)*3+1
- *    All history parts are in ascending order
- */
+// Get the racial history, determines social class -RAK-
+//
+// Assumptions:
+//   - Each race has init history beginning at (race-1)*3+1
+//   - All history parts are in ascending order
 static void get_history() {
     char history_block[240];
     background_type *b_ptr;
@@ -188,7 +187,7 @@ static void get_history() {
     int cur_ptr = 0;
     history_block[0] = '\0';
 
-    /* Get a block of history text */
+    // Get a block of history text
     do {
         flag = false;
         do {
@@ -211,12 +210,12 @@ static void get_history() {
         } while (!flag);
     } while (hist_ptr >= 1);
 
-    /* clear the previous history strings */
+    // Clear the previous history strings
     for (hist_ptr = 0; hist_ptr < 4; hist_ptr++) {
         py.misc.history[hist_ptr][0] = '\0';
     }
 
-    /* Process block of history text for pretty output */
+    // Process block of history text for pretty output
     int end_pos = (int)strlen(history_block) - 1;
     while (history_block[end_pos] == ' ') {
         end_pos--;
@@ -254,7 +253,7 @@ static void get_history() {
         start_pos = new_start;
     } while (!flag);
 
-    /* Compute social class for player */
+    // Compute social class for player
     if (social_class > 100) {
         social_class = 100;
     } else if (social_class < 1) {
@@ -263,7 +262,7 @@ static void get_history() {
     py.misc.sc = social_class;
 }
 
-/* Gets the character's sex        -JWT- */
+// Gets the character's sex -JWT-
 static void get_sex() {
     char c;
     bool exit_flag = false;
@@ -273,7 +272,7 @@ static void get_sex() {
     put_buffer("m) Male       f) Female", 21, 2);
     do {
         move_cursor(20, 29);
-        /* speed not important here */
+        // speed not important here
         c = inkey();
         if (c == 'f' || c == 'F') {
             py.misc.male = false;
@@ -291,7 +290,7 @@ static void get_sex() {
     } while (!exit_flag);
 }
 
-/* Computes character's age, height, and weight    -JWT- */
+// Computes character's age, height, and weight -JWT-
 static void get_ahw() {
     int i = py.misc.prace;
     py.misc.age = race[i].b_age + randint((int)race[i].m_age);
@@ -305,7 +304,7 @@ static void get_ahw() {
     py.misc.disarm = race[i].b_dis + todis_adj();
 }
 
-/* Gets a character class        -JWT- */
+// Gets a character class -JWT-
 static void get_class() {
     char tmp_str[80];
 
@@ -359,7 +358,7 @@ static void get_class() {
             clear_from(20);
             put_buffer(c_ptr->title, 5, 15);
 
-            /* Adjust the stats for the class adjustment    -RAK- */
+            // Adjust the stats for the class adjustment -RAK-
             p_ptr = &py;
             change_stat(A_STR, c_ptr->madj_str);
             change_stat(A_INT, c_ptr->madj_int);
@@ -372,25 +371,25 @@ static void get_class() {
                 set_use_stat(i);
             }
 
-            p_ptr->misc.ptodam  = todam_adj(); /* Real values */
+            p_ptr->misc.ptodam  = todam_adj(); // Real values
             p_ptr->misc.ptohit  = tohit_adj();
             p_ptr->misc.ptoac   = toac_adj();
             p_ptr->misc.pac     = 0;
-            p_ptr->misc.dis_td  = p_ptr->misc.ptodam; /* Displayed values */
+            p_ptr->misc.dis_td  = p_ptr->misc.ptodam; // Displayed values
             p_ptr->misc.dis_th  = p_ptr->misc.ptohit;
             p_ptr->misc.dis_tac = p_ptr->misc.ptoac;
             p_ptr->misc.dis_ac  = p_ptr->misc.pac + p_ptr->misc.dis_tac;
 
-            /* now set misc stats, do this after setting stats because of con_adj() for hitpoints */
+            // now set misc stats, do this after setting stats because of con_adj() for hitpoints
             m_ptr = &py.misc;
             m_ptr->hitdie += c_ptr->adj_hd;
             m_ptr->mhp = con_adj() + m_ptr->hitdie;
             m_ptr->chp = m_ptr->mhp;
             m_ptr->chp_frac = 0;
 
-            /* initialize hit_points array */
-            /* put bounds on total possible hp, only succeed if it is within
-               1/8 of average value */
+            // Initialize hit_points array.
+            // Put bounds on total possible hp, only succeed
+            // if it is within 1/8 of average value.
             min_value = (MAX_PLAYER_LEVEL * 3 / 8 * (m_ptr->hitdie - 1)) + MAX_PLAYER_LEVEL;
             max_value = (MAX_PLAYER_LEVEL * 5 / 8 * (m_ptr->hitdie - 1)) + MAX_PLAYER_LEVEL;
             player_hp[0] = m_ptr->hitdie;
@@ -403,7 +402,7 @@ static void get_class() {
                      (player_hp[MAX_PLAYER_LEVEL - 1] > max_value));
 
             m_ptr->bth += c_ptr->mbth;
-            m_ptr->bthb += c_ptr->mbthb; /*RAK*/
+            m_ptr->bthb += c_ptr->mbthb; // RAK
             m_ptr->srh += c_ptr->msrh;
             m_ptr->disarm += c_ptr->mdis;
             m_ptr->fos += c_ptr->mfos;
@@ -418,9 +417,8 @@ static void get_class() {
     } while (!exit_flag);
 }
 
-/* Given a stat value, return a monetary value,
- * which affects the amount of gold a player has.
- */
+// Given a stat value, return a monetary value,
+// which affects the amount of gold a player has.
 static int monval(uint8_t i) {
     return 5 * ((int)i - 10);
 }
@@ -433,16 +431,16 @@ static void get_money() {
           monval(a_ptr[A_CON]) +
           monval(a_ptr[A_DEX]);
 
-    int gold = py.misc.sc * 6 + randint(25) + 325; /* Social Class adj */
-    gold -= tmp;                                   /* Stat adj */
-    gold += monval(a_ptr[A_CHR]);                  /* Charisma adj */
+    int gold = py.misc.sc * 6 + randint(25) + 325; // Social Class adj
+    gold -= tmp;                                   // Stat adj
+    gold += monval(a_ptr[A_CHR]);                  // Charisma adj
 
-    /* She charmed the banker into it! -CJS- */
+    // She charmed the banker into it! -CJS-
     if (!py.misc.male) {
         gold += 50;
     }
 
-    /* Minimum */
+    // Minimum
     if (gold < 80) {
         gold = 80;
     }
@@ -450,14 +448,15 @@ static void get_money() {
     py.misc.au = gold;
 }
 
-/* ---------- M A I N  for Character Creation Routine ---------- */
-/*              -JWT- */
+// -----------------------------------------------------
+//     M A I N  for Character Creation Routine -JWT-
+// -----------------------------------------------------
 void create_character() {
     put_character();
     choose_race();
     get_sex();
 
-    /* here we start a loop giving a player a choice of characters -RGM- */
+    // here we start a loop giving a player a choice of characters -RGM-
     get_all_stats();
     get_history();
     get_ahw();
@@ -485,7 +484,7 @@ void create_character() {
         } else {
             bell();
         }
-    } while (exit_flag); /* done with stats generation */
+    } while (exit_flag); // done with stats generation
 
     get_class();
     get_money();
@@ -494,8 +493,7 @@ void create_character() {
     put_misc3();
     get_name();
 
-    /* This delay may be reduced, but is recommended to keep players */
-    /* from continuously rolling up characters, which can be VERY */
-    /* expensive CPU wise. */
+    // This delay may be reduced, but is recommended to keep players from
+    // continuously rolling up characters, which can be VERY expensive CPU wise.
     pause_exit(23, PLAYER_EXIT_PAUSE);
 }
