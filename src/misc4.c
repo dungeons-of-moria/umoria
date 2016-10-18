@@ -26,7 +26,7 @@
 
 #include "externs.h"
 
-// Add a comment to an object description.		-CJS-
+// Add a comment to an object description. -CJS-
 void scribe_object() {
     if (inven_ctr > 0 || equip_ctr > 0) {
         int item_val;
@@ -57,17 +57,17 @@ void scribe_object() {
     }
 }
 
-// Append an additional comment to an object description.	-CJS-
+// Append an additional comment to an object description. -CJS-
 void add_inscribe(inven_type *i_ptr, uint8_t type) {
     i_ptr->ident |= type;
 }
 
-// Replace any existing comment in an object description with a new one. CJS
+// Replace any existing comment in an object description with a new one. -CJS-
 void inscribe(inven_type *i_ptr, char *str) {
     (void)strcpy(i_ptr->inscrip, str);
 }
 
-// We need to reset the view of things.			-CJS-
+// We need to reset the view of things. -CJS-
 void check_view() {
     cave_type *c_ptr = &cave[char_row][char_col];
 
