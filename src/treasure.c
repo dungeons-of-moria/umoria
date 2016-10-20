@@ -502,7 +502,7 @@ treasure_type object_list[MAX_OBJECTS] = {
 {"a dart trap",                   0x00000000L, TV_INVIS_TRAP,   '^',  5, 0, 18, 1, 0, 0, 0, 0, 0, {1, 8}, 110}, // 395
 
 // rubble
- // 396 {"some rubble",                  0x00000000L, TV_RUBBLE,   ':', 0, 0, 1, 1, 0, 0, 0, 0, 0, {0, 0}, 0},
+{"some rubble",                  0x00000000L, TV_RUBBLE,   ':', 0, 0, 1, 1, 0, 0, 0, 0, 0, {0, 0}, 0}, // 396
 
 // mush
 {"& Pint~ of Fine Grade Mush",    0x00000000L, TV_FOOD,     ',', 1500, 1, 97, 1, 1, 0, 0, 0, 0, {1, 1}, 1}, // 397
