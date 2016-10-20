@@ -16,30 +16,25 @@ _Note: current platform support is still in Beta...things may go wrong!_
 
 ## What's the Moria Restoration Project?
 
-Over the years Moria has been ported to many platforms with code contributions
-from 26 different people. Although these people were writing a great game, they
-were also doing so _just for fun_, and this has unfortunately made the source
-code difficult to navigate and even more difficult to understand.
-
-Umoria 5.6 has support for many different platforms which include; Linux, MS DOS,
-"Classic" Mac OS (pre OS X), Amiga, and Atari ST. Back in the late 1980's and
-early 1990's, all these were still useful systems to support.
+Umoria 5.6 has support for many different platforms which include; Linux,
+MS DOS, "Classic" Mac OS (pre OS X), Amiga, and Atari ST. Back in the late
+1980's and early 1990's, all these were still useful systems to support.
 
 Now, 30 years on, the only viable option from those platforms is Linux.
 This means there is no support for Windows or macOS. However, most people
-these days are running on Windows and macOS computers!
+these days are running on Windows and macOS computers, and it is now far too
+difficult for players on these modern systems to play Moria!
 
 What to do about it?
 
-With all those old systems no longer useful to anyone but the most dedicated
-nerd, there is no point in clogging up the code base with support for them.
-That means we start work on removing all related code from the game sources.
-This will clean up the source code considerably, making it much easier to
-then implement proper Windows and macOS support.
+This project is an attempt to _clean up_ this decades old code base.
 
-This project is an attempt _clean up_ this decades old code base;
-standardise the code against modern C, and refactor to be as platform
-independent as possible.
+With all those old systems no longer useful to anyone but the most dedicated
+nerd, there is no point in clogging up the code base with support for them,
+so the first task is to strip back the support to just Debian Linux. We can
+then start work on modernising the code to be C99 or even C11 compliant, and
+begin refactoring to be as platform independent as possible. From there it
+should be much easier to add support for macOS, and then finally Windows.
 
 I want to let everyone play Moria again!
 
@@ -57,7 +52,19 @@ I want to let everyone play Moria again!
   * Add Windows and macOS support.
 
 
-## Historical Documents and Information
+## Copyright / License Information
+
+Umoria is released under the [General Public License version 2](LICENCE) (GPL v2).
+
+In 2007 Ben Asselstine and Ben Shadwick started the
+[_free-moria_](http://free-moria.sourceforge.net/) project to re-license
+UMoria 5.5.2 under the `GPL v2` by obtaining permission from all the
+contributing authors. Some eight years later, they finally succeeded in their
+goal and in early 2015 David Grabiner, the official Moria maintainer, released
+Umoria 5.6 under GPL v2.
+
+
+## Historical Documents
 
 If you're interested in reading the original documentation that came with
 Umoria 5.6, then take a look in the [historical](historical/) directory.
