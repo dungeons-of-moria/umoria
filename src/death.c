@@ -71,7 +71,7 @@ static char *center_string(char *centered_str, char *in_str) {
 
 // An flock HACK.  LOCK_SH and LOCK_EX are not distinguished. DO NOT release
 // a lock which you failed to set!  ALWAYS release a lock you set!
-int flock(int f, l) {
+int flock(int f, int l) {
     struct stat sbuf;
     if (fstat(f, &sbuf) < 0) {
         return -1;
