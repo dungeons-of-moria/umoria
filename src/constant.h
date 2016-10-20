@@ -242,7 +242,11 @@ some of the system defines set up there.
 // some systems have a non-ANSI definition of this, so undef it first
 #undef CTRL_KEY
 #define CTRL_KEY(x)   ((x) & 0x1F)
+
+#undef DELETE
 #define DELETE    0x7f
+
+#undef ESCAPE
 #define ESCAPE    '\033'  // ESCAPE character -CJS-
 
 // This used to be NULL, but that was technically incorrect.
