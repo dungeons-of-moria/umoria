@@ -2002,7 +2002,7 @@ int turn_undead() {
                     turn_und = true;
                     c_recall[m_ptr->mptr].r_cdefense |= CD_UNDEAD;
                 }
-                m_ptr->confused = py.misc.lev;
+                m_ptr->confused = (uint8_t)py.misc.lev;
             } else if (m_ptr->ml) {
                 (void)sprintf(out_val, "%s is unaffected.", m_name);
                 msg_print(out_val);
@@ -2097,7 +2097,7 @@ void lose_exp(int32_t amount) {
     prt_experience();
 
     int i = 0;
-    while ((player_exp[i] * m_ptr->expfact / 100) <= m_ptr->exp) {
+    while ((signed)(player_exp[i] * m_ptr->expfact / 100) <= m_ptr->exp) {
         i++;
     }
 
