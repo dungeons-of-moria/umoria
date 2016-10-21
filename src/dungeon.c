@@ -1711,7 +1711,7 @@ static void regenhp(int percent) {
     int32_t new_chp_frac = (new_chp & 0xFFFF) + p_ptr->chp_frac;
 
     if (new_chp_frac >= 0x10000L) {
-        p_ptr->chp_frac = new_chp_frac - 0x10000L;
+        p_ptr->chp_frac = (uint16_t)(new_chp_frac - 0x10000L);
         p_ptr->chp++;
     } else {
         p_ptr->chp_frac = new_chp_frac;
@@ -1745,7 +1745,7 @@ static void regenmana(int percent) {
     int32_t new_mana_frac = (new_mana & 0xFFFF) + p_ptr->cmana_frac;
 
     if (new_mana_frac >= 0x10000L) {
-        p_ptr->cmana_frac = new_mana_frac - 0x10000L;
+        p_ptr->cmana_frac = (uint16_t)(new_mana_frac - 0x10000L);
         p_ptr->cmana++;
     } else {
         p_ptr->cmana_frac = new_mana_frac;

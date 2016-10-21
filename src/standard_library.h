@@ -18,57 +18,42 @@
 // along with Umoria.  If not, see <http://www.gnu.org/licenses/>.
 
 #ifdef _WIN32
-  #define _CRT_SECURE_NO_WARNINGS
+    #define _CRT_SECURE_NO_WARNINGS
+    #define _CRT_NONSTDC_NO_DEPRECATE
 
-  #include <ctype.h>
-  #include <errno.h>
-  #include <fcntl.h>
-  // #include <pwd.h>
-  #include <stdbool.h>
-  #include <stdint.h>
-  #include <stdio.h>
-  #include <stdlib.h>
-  #include <string.h>
-  #include <time.h>
-  // #include <unistd.h>
+    #include <windows.h>
 
-  // #include <sys/param.h>
-  #include <sys/stat.h>
+    #include <io.h> // <unistd.h>
+    #include <sys/types.h>
 
 #elif __APPLE__
 
-  #include <ctype.h>
-  #include <errno.h>
-  #include <fcntl.h>
-  #include <pwd.h>
-  #include <stdbool.h>
-  #include <stdint.h>
-  #include <stdio.h>
-  #include <stdlib.h>
-  #include <string.h>
-  #include <time.h>
-  #include <unistd.h>
-
-  #include <sys/param.h>
-  #include <sys/stat.h>
+    #include <pwd.h>
+    #include <unistd.h>
+    #include <sys/param.h>
 
 #elif __linux__
 
-  #include <ctype.h>     // islower(), isupper(), isalpha(), etc.
-  #include <errno.h>
-  #include <fcntl.h>
-  #include <pwd.h>
-  #include <stdbool.h>
-  #include <stdint.h>
-  #include <stdio.h>
-  #include <stdlib.h>
-  #include <string.h>
-  #include <time.h>
-  #include <unistd.h>    // getuid() and others
-
-  #include <sys/param.h> // Defines the timeval structure / fd_set
-  #include <sys/stat.h>  // Used only for chmod()
+    #include <pwd.h>
+    #include <unistd.h>    // getuid() and others
+    #include <sys/param.h> // Defines the timeval structure / fd_set
 
 #else
 #   error "Unknown compiler"
 #endif
+
+
+// Includes we can use on all supported systems!
+
+#include <ctype.h>     // islower(), isupper(), isalpha(), etc.
+#include <errno.h>
+#include <fcntl.h>
+
+#include <stdbool.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <time.h>
+
+#include <sys/stat.h>  // Used only for chmod()

@@ -113,7 +113,7 @@ void print_objects() {
         return;
     }
     nobj = atoi(tmp_str);
-    bool small = get_check("Small objects only?");
+    bool small_object = get_check("Small objects only?");
     if ((nobj > 0) && (level > -1) && (level < 1201)) {
         if (nobj > 10000) {
             nobj = 10000;
@@ -141,7 +141,7 @@ void print_objects() {
 
                 inven_type *i_ptr;
                 for (int i = 0; i < nobj; i++) {
-                    invcopy(&t_list[j], sorted_objects[get_obj_num(level, small)]);
+                    invcopy(&t_list[j], sorted_objects[get_obj_num(level, small_object)]);
                     magic_treasure(j, level);
                     i_ptr = &t_list[j];
                     store_bought(i_ptr);

@@ -566,7 +566,7 @@ int mon_take_hit(int monptr, int dam) {
 
         if (new_exp_frac >= 0x10000L) {
             new_exp++;
-            p_ptr->exp_frac = new_exp_frac - 0x10000L;
+            p_ptr->exp_frac = (uint16_t)(new_exp_frac - 0x10000L);
         } else {
             p_ptr->exp_frac = new_exp_frac;
         }

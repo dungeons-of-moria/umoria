@@ -1034,7 +1034,7 @@ bool get_char(bool *generate) {
                     age = 10; // in case savefile is very old
                 }
 
-                for (int i = 0; i < age; i++) {
+                for (int i = 0; i < (int)age; i++) {
                     store_maint();
                 }
             }

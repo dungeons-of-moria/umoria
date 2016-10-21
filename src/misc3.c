@@ -1842,7 +1842,7 @@ void prt_experience() {
         p_ptr->exp = MAX_EXP;
     }
 
-    while ((p_ptr->lev < MAX_PLAYER_LEVEL) && (player_exp[p_ptr->lev - 1] * p_ptr->expfact / 100) <= p_ptr->exp) {
+    while ((p_ptr->lev < MAX_PLAYER_LEVEL) && (signed)(player_exp[p_ptr->lev - 1] * p_ptr->expfact / 100) <= p_ptr->exp) {
         gain_level();
     }
 
