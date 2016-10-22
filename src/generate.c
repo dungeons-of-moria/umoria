@@ -72,11 +72,7 @@ static void rand_dir(int *rdir, int *cdir) {
 
 // Blanks out entire cave -RAK-
 static void blank_cave() {
-#ifndef USG
-    bzero((char *)&cave[0][0], sizeof(cave));
-#else
-    (void)memset((char *)&cave[0][0], 0, sizeof(cave));
-#endif
+    memset((char *)&cave[0][0], 0, sizeof(cave));
 }
 
 // Fills in empty spots with desired rock -RAK-
