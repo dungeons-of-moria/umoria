@@ -12,9 +12,18 @@
 ### All Changes
 
 
+`2016-10-22`
+
+- Initial work on Windows support
+- Fix more implicit type conversions.
+
+
 `2016-10-18`
 
 - Converts to single-line comments, and Prettify them.
+- Removes some unused values
+- Fixes for "hides upper scope", redundant castings, "signedness mismatch",
+  and other minor issues.
 
 
 `2016-10-17`
