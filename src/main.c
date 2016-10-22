@@ -47,14 +47,8 @@ int main(int argc, char *argv[]) {
     // and prepare things to relinquish setuid privileges
     init_scorefile();
 
-    if (0 != setuid(getuid())) {
-        perror("Can't set permissions correctly!  Setuid call failed.\n");
-        exit(0);
-    }
-    if (0 != setgid(getgid())) {
-        perror("Can't set permissions correctly!  Setgid call failed.\n");
-        exit(0);
-    }
+    // Check the user permissions -MRC-
+    check_file_permissions();
 
     // use curses
     init_curses();
@@ -310,3 +304,18 @@ static void price_adjust() {
     }
 }
 #endif
+
+// Check user permissions on Unix based systems,
+// or if on Windows just return. -MRC-
+void check_file_permissions() {
+#ifndef _WIN32
+  if (0 != setuid(getuid())) {
+    perror("Can't set permissions correctly!  Setuid call failed.\n");
+    exit(0);
+  }
+  if (0 != setgid(getgid())) {
+    perror("Can't set permissions correctly!  Setgid call failed.\n");
+    exit(0);
+  }
+#endif
+}

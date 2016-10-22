@@ -261,7 +261,7 @@ void screen_map();
 void cast();
 
 // main.c
-int main(int, char **);
+void check_file_permissions();
 
 // misc1.c
 void init_seeds(uint32_t);
