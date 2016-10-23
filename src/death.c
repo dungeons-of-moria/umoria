@@ -26,15 +26,6 @@
 
 #include "externs.h"
 
-#if defined(USG)
-#ifndef L_SET
-#define L_SET 0
-#endif
-#ifndef L_INCR
-#define L_INCR 1
-#endif
-#endif
-
 static void date(char *day) {
     char *tmp;
     time_t clockvar = time((time_t *)0);
@@ -51,67 +42,17 @@ static char *center_string(char *centered_str, char *in_str) {
     return centered_str;
 }
 
-#if defined(USG)
-// The following code is provided especially for systems which -CJS-
-// have no flock system call. It has never been tested.
-
-// DEBIAN_LINUX defined because fcntlbits.h defines EX and SH the other way. -RJW-
-// The comment below indicates that they're not distinguished anyways, so
-// this should be harmless, and this does seem to be the prevailing order
-// (c.f. IRIX 6.5) but just in case, they've been ifdef'ed.
-#ifdef DEBIAN_LINUX
-#define LOCK_SH 1
-#define LOCK_EX 2
-#else // DEBIAN_LINUX
-#define LOCK_EX 1
-#define LOCK_SH 2
-#endif // DEBIAN_LINUX
-#define LOCK_NB 4
-#define LOCK_UN 8
-
-// An flock HACK.  LOCK_SH and LOCK_EX are not distinguished. DO NOT release
-// a lock which you failed to set!  ALWAYS release a lock you set!
-int flock(int f, int l) {
-    struct stat sbuf;
-    if (fstat(f, &sbuf) < 0) {
-        return -1;
-    }
-
-    char lockname[80];
-#ifdef __linux__
-    (void)sprintf(lockname, "/tmp/moria.%ld", sbuf.st_ino);
-#else
-    (void)sprintf(lockname, "/tmp/moria.%d", sbuf.st_ino);
-#endif
-
-    if (l & LOCK_UN) {
-        return unlink(lockname);
-    }
-
-    while (open(lockname, O_WRONLY | O_CREAT | O_EXCL, 0644) < 0) {
-        if (errno != EEXIST) {
-            return -1;
-        }
-        if (stat(lockname, &sbuf) < 0) {
-            return -1;
-        }
-        // Locks which last more than 10 seconds get deleted.
-        if (time((time_t *)0) - sbuf.st_mtime > 10) {
-            if (unlink(lockname) < 0) {
-                return -1;
-            }
-        } else if (l & LOCK_NB) {
-            return -1;
-        } else {
-            (void)sleep(1);
-        }
-    }
-    return 0;
-}
-#endif
-
 void display_scores(int show_player) {
-    (void)fseek(highscore_fp, (off_t)0, L_SET);
+    char string[100];
+
+    if ((highscore_fp = fopen(MORIA_TOP, "rb")) == NULL) {
+        sprintf(string, "Error opening score file \"%s\"\n", MORIA_TOP);
+        msg_print(string);
+        msg_print(CNIL);
+        return;
+    }
+
+    (void) fseek(highscore_fp, (long)0, L_SET);
 
     // Read version numbers from the score file, and check for validity.
     uint8_t version_maj = getc(highscore_fp);
@@ -128,10 +69,9 @@ void display_scores(int show_player) {
         msg_print("Sorry. This scorefile is from a different version of umoria.");
         msg_print(CNIL);
 
+        (void)fclose(highscore_fp);
         return;
     }
-
-    int16_t player_uid = getuid();
 
     // set the static fileptr in save.c to the highscore file pointer
     set_fileptr(highscore_fp);
@@ -140,7 +80,6 @@ void display_scores(int show_player) {
     rd_highscore(&score);
 
     char input;
-    char string[100];
 
     int i = 0;
     int rank = 1;
@@ -150,10 +89,8 @@ void display_scores(int show_player) {
         clear_screen();
         // Put twenty scores on each page, on lines 2 through 21.
         while (!feof(highscore_fp) && i < 21) {
-            // Only show the entry if show_player false, or
-
-            // if the entry belongs to the current player.
-            if (!show_player || score.uid == player_uid) {
+            // Only show the entry if show_player false
+            if (!show_player) {
                 (void)sprintf(string,
                               "%-4d%8d %-19.19s %c %-10.10s %-7.7s%3d %-22.22s",
                               rank, score.points, score.name, score.sex,
@@ -172,6 +109,8 @@ void display_scores(int show_player) {
             break;
         }
     }
+
+    (void)fclose(highscore_fp);
 }
 
 bool duplicate_character() {
@@ -249,6 +188,7 @@ retry:
 
     put_buffer("(ESC to abort, return to print on screen, or file name)", 23, 0);
     put_buffer("Character record?", 22, 0);
+
     if (get_string(str, 22, 18, 60)) {
         for (int i = 0; i < INVEN_ARRAY_SIZE; i++) {
             known1(&inventory[i]);
@@ -314,9 +254,7 @@ static void highscores() {
     high_scores new_entry;
     new_entry.points = total_points();
     new_entry.birth_date = birth_date;
-
-    new_entry.uid = getuid();
-
+    new_entry.uid = 0; // NOTE: do we not want to use `getuid()`? -MRC-
     new_entry.mhp = py.misc.mhp;
     new_entry.chp = py.misc.chp;
     new_entry.dun_level = (uint8_t)dun_level;
@@ -338,11 +276,11 @@ static void highscores() {
     }
     (void)strcpy(new_entry.died_from, tmp);
 
-    // First, get a lock on the high score file so no-one else tries to write
-    // to it while we are using it, on IBMPCs only one process can have the
-    // file open at a time, so we just open it here
-    if (0 != flock(fileno(highscore_fp), LOCK_EX)) {
-        msg_print("Error gaining lock for score file");
+    if ((highscore_fp = fopen(MORIA_TOP, "r+")) == NULL) {
+        char string[100];
+
+        (void) sprintf (string, "Error opening score file \"%s\"\n", MORIA_TOP);
+        msg_print(string);
         msg_print(CNIL);
         return;
     }
@@ -350,7 +288,7 @@ static void highscores() {
     // Search file to find where to insert this character, if uid != 0 and
     // find same uid/sex/race/class combo then exit without saving this score.
     // Seek to the beginning of the file just to be safe.
-    (void)fseek(highscore_fp, (off_t)0, L_SET);
+    (void)fseek(highscore_fp, (long)0, L_SET);
 
     // Read version numbers from the score file, and check for validity.
     uint8_t version_maj = getc(highscore_fp);
@@ -361,21 +299,25 @@ static void highscores() {
     // Write the current version numbers to the score file.
     if (feof(highscore_fp)) {
         // Seek to the beginning of the file just to be safe.
-        (void)fseek(highscore_fp, (off_t)0, L_SET);
+        (void)fseek(highscore_fp, (long)0, L_SET);
 
         (void)putc(CUR_VERSION_MAJ, highscore_fp);
         (void)putc(CUR_VERSION_MIN, highscore_fp);
         (void)putc(PATCH_LEVEL, highscore_fp);
 
         // must fseek() before can change read/write mode
-        (void)fseek(highscore_fp, (off_t)0, L_INCR);
-    } else if ((version_maj != CUR_VERSION_MAJ) ||
-             (version_min > CUR_VERSION_MIN) ||
-             (version_min == CUR_VERSION_MIN && patch_level > PATCH_LEVEL) ||
-             (version_min == 2 && patch_level < 2) || (version_min < 2))
-    { // Support score files from 5.2.2 to present.
+        (void)fseek(highscore_fp, (long)0, L_INCR);
+    } else if (
+        (version_maj != CUR_VERSION_MAJ) ||
+        (version_min > CUR_VERSION_MIN) ||
+        (version_min == CUR_VERSION_MIN && patch_level > PATCH_LEVEL) ||
+        (version_min == 2 && patch_level < 2) ||
+        (version_min < 2)
+    ) {
+        // Support score files from 5.2.2 to present.
         // No need to print a message, a subsequent call to
         // display_scores() will print a message.
+        (void)fclose(highscore_fp);
         return;
     }
 
@@ -391,68 +333,77 @@ static void highscores() {
     while (!feof(highscore_fp)) {
         if (new_entry.points >= old_entry.points) {
             break;
-            // under unix, only allow one sex/race/class combo per person,
-            // on single user system, allow any number of entries, but try to
-            // prevent multiple entries per character by checking for case when
-            // birthdate/sex/race/class are the same, and died_from of scorefile
-            // entry is "(saved)"
-        } else if (((new_entry.uid != 0 && new_entry.uid == old_entry.uid) ||
-                    (new_entry.uid == 0 &&
-                     !strcmp(old_entry.died_from, "(saved)") &&
-                     new_entry.birth_date == old_entry.birth_date)) &&
-                   new_entry.sex == old_entry.sex &&
-                   new_entry.race == old_entry.race &&
-                   new_entry.class == old_entry.class)
-        {
-            return;
-        } else if (++i >= SCOREFILE_SIZE) {
-            // only allow one thousand scores in the score file
+        }
+
+        // under unix, only allow one sex/race/class combo per person,
+        // on single user system, allow any number of entries, but try to
+        // prevent multiple entries per character by checking for case when
+        // birthdate/sex/race/class are the same, and died_from of scorefile
+        // entry is "(saved)"
+        if (((new_entry.uid != 0 && new_entry.uid == old_entry.uid) ||
+             (new_entry.uid == 0 && !strcmp(old_entry.died_from, "(saved)") && new_entry.birth_date == old_entry.birth_date)
+            ) &&
+            new_entry.sex == old_entry.sex &&
+            new_entry.race == old_entry.race &&
+            new_entry.class == old_entry.class
+           ) {
+            (void)fclose(highscore_fp);
             return;
         }
+
+        // only allow one thousand scores in the score file
+        if (++i >= SCOREFILE_SIZE) {
+            (void)fclose(highscore_fp);
+            return;
+        }
+
         curpos = ftell(highscore_fp);
         rd_highscore(&old_entry);
     }
 
     if (feof(highscore_fp)) {
         // write out new_entry at end of file
-        (void)fseek(highscore_fp, (off_t)curpos, L_SET);
+        (void)fseek(highscore_fp, curpos, L_SET);
 
         wr_highscore(&new_entry);
     } else {
         entry = new_entry;
+
         while (!feof(highscore_fp)) {
-            (void)fseek(highscore_fp, -(off_t)sizeof(high_scores) - (off_t)sizeof(char), L_INCR);
+            (void)fseek(highscore_fp, -(long)sizeof(high_scores)-(long)sizeof(char), L_INCR);
 
             wr_highscore(&entry);
+
             // under unix, only allow one sex/race/class combo per person,
             // on single user system, allow any number of entries, but try
             // to prevent multiple entries per character by checking for
             // case when birthdate/sex/race/class are the same, and died_from
             // of scorefile entry is "(saved)"
             if (((new_entry.uid != 0 && new_entry.uid == old_entry.uid) ||
-                 (new_entry.uid == 0 &&
-                  !strcmp(old_entry.died_from, "(saved)") &&
-                  new_entry.birth_date == old_entry.birth_date)) &&
+                 (new_entry.uid == 0 && !strcmp(old_entry.died_from, "(saved)") && new_entry.birth_date == old_entry.birth_date)
+                ) &&
                 new_entry.sex == old_entry.sex &&
                 new_entry.race == old_entry.race &&
-                new_entry.class == old_entry.class) {
+                new_entry.class == old_entry.class
+               ) {
                 break;
             }
             entry = old_entry;
 
             // must fseek() before can change read/write mode
-            (void)fseek(highscore_fp, (off_t)0, L_INCR);
+            (void)fseek(highscore_fp, (long)0, L_INCR);
 
             curpos = ftell(highscore_fp);
             rd_highscore(&old_entry);
         }
         if (feof(highscore_fp)) {
-            (void)fseek(highscore_fp, (off_t)curpos, L_SET);
+            (void)fseek(highscore_fp, curpos, L_SET);
+
             wr_highscore(&entry);
         }
     }
 
-    (void)flock(fileno(highscore_fp), LOCK_UN);
+    (void)fclose(highscore_fp);
 }
 
 // Change the player into a King! -RAK-
