@@ -256,6 +256,7 @@ void save_screen();
 void restore_screen();
 void bell();
 void screen_map();
+void sleep_in_seconds(int);
 
 // magic.c
 void cast();

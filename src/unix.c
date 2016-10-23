@@ -67,7 +67,7 @@ int check_input(int microsec) {
     if (select(1, &smask, (fd_set *)0, (fd_set *)0, &tbuf) == 1)
 #else
     smask = 1; // i.e. (1 << 0)
-    if (select(1, &smask, (int *)0, (int *)0, &tbuf) == 1)
+    if (select(1, (fd_set *)&smask, (fd_set *)0, (fd_set *)0, &tbuf) == 1)
 #endif
     {
         ch = getch();
@@ -82,7 +82,7 @@ int check_input(int microsec) {
     }
 #else // SYS V code follows
     if (microsec != 0 && (turn & 0x7F) == 0) {
-        (void)sleep(1); // mod 128, sleep one sec every 128 turns
+        sleep_in_seconds(1); // mod 128, sleep one sec every 128 turns
     }
     // Can't check for input, but can do non-blocking read, so...
     // Ugh!
@@ -107,6 +107,13 @@ int check_input(int microsec) {
 
 // Find a default user name from the system.
 void user_name(char *buf) {
+#ifdef _WIN32
+    int32_t bufCharCount = PLAYER_NAME_SIZE;
+
+    if (!GetUserName(buf, &bufCharCount)) {
+        (void)strcpy(buf, "X"); // Gotta have some name
+    }
+#else
     extern char *getlogin();
 
     char *p = getlogin();
@@ -122,10 +129,12 @@ void user_name(char *buf) {
     if (!buf[0]) {
         (void)strcpy(buf, "X"); // Gotta have some name
     }
+#endif
 }
 
 // expands a tilde at the beginning of a file name to a users home directory
 int tilde(char *file, char *exp) {
+#ifndef _WIN32
     *exp = '\0';
     if (file) {
         if (*file == '~') {
@@ -157,6 +166,9 @@ int tilde(char *file, char *exp) {
         return 1;
     }
     return 0;
+#else
+    return 0;
+#endif
 }
 
 // undefine these so that tfopen and topen will work

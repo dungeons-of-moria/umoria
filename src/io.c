@@ -65,8 +65,10 @@ void moriaterm() {
     intrflush(stdscr, false);
     keypad(stdscr, false);
 
+#ifdef __APPLE__
     // Default delay on macOS is 1 second, let's do something about that!
     set_escdelay(50);
+#endif
 
     curses_on = true;
 }
@@ -91,7 +93,7 @@ void put_buffer(char *out_str, int row, int col) {
         bell();
 
         // wait so user can see error
-        (void)sleep(2);
+        sleep_in_seconds(2);
     }
 }
 
@@ -231,7 +233,7 @@ void print(char ch, int row, int col) {
         bell();
 
         // wait so user can see error
-        (void)sleep(2);
+        sleep_in_seconds(2);
     }
 }
 
@@ -252,7 +254,7 @@ void move_cursor_relative(int row, int col) {
         bell();
 
         // wait so user can see error
-        (void)sleep(2);
+        sleep_in_seconds(2);
     }
 }
 
@@ -488,7 +490,7 @@ void pause_exit(int prt_line, int delay) {
         erase_line(prt_line, 0);
 
         if (delay > 0) {
-            (void)sleep((unsigned)delay);
+            sleep_in_seconds(delay);
         }
 
         exit_game();
@@ -623,4 +625,12 @@ void screen_map() {
 
     (void)inkey();
     restore_screen();
+}
+
+void sleep_in_seconds(int seconds) {
+#ifdef _WIN32
+    Sleep(seconds * 1000);
+#else
+    sleep(seconds);
+#endif
 }
