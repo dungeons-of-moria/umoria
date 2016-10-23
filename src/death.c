@@ -52,7 +52,7 @@ void display_scores(int show_player) {
         return;
     }
 
-    (void) fseek(highscore_fp, (long)0, L_SET);
+    (void) fseek(highscore_fp, (long)0, SEEK_SET);
 
     // Read version numbers from the score file, and check for validity.
     uint8_t version_maj = getc(highscore_fp);
@@ -288,7 +288,7 @@ static void highscores() {
     // Search file to find where to insert this character, if uid != 0 and
     // find same uid/sex/race/class combo then exit without saving this score.
     // Seek to the beginning of the file just to be safe.
-    (void)fseek(highscore_fp, (long)0, L_SET);
+    (void)fseek(highscore_fp, (long)0, SEEK_SET);
 
     // Read version numbers from the score file, and check for validity.
     uint8_t version_maj = getc(highscore_fp);
@@ -299,14 +299,14 @@ static void highscores() {
     // Write the current version numbers to the score file.
     if (feof(highscore_fp)) {
         // Seek to the beginning of the file just to be safe.
-        (void)fseek(highscore_fp, (long)0, L_SET);
+        (void)fseek(highscore_fp, (long)0, SEEK_SET);
 
         (void)putc(CUR_VERSION_MAJ, highscore_fp);
         (void)putc(CUR_VERSION_MIN, highscore_fp);
         (void)putc(PATCH_LEVEL, highscore_fp);
 
         // must fseek() before can change read/write mode
-        (void)fseek(highscore_fp, (long)0, L_INCR);
+        (void)fseek(highscore_fp, (long)0, SEEK_CUR);
     } else if (
         (version_maj != CUR_VERSION_MAJ) ||
         (version_min > CUR_VERSION_MIN) ||
@@ -363,14 +363,14 @@ static void highscores() {
 
     if (feof(highscore_fp)) {
         // write out new_entry at end of file
-        (void)fseek(highscore_fp, curpos, L_SET);
+        (void)fseek(highscore_fp, curpos, SEEK_SET);
 
         wr_highscore(&new_entry);
     } else {
         entry = new_entry;
 
         while (!feof(highscore_fp)) {
-            (void)fseek(highscore_fp, -(long)sizeof(high_scores)-(long)sizeof(char), L_INCR);
+            (void)fseek(highscore_fp, -(long)sizeof(high_scores)-(long)sizeof(char), SEEK_CUR);
 
             wr_highscore(&entry);
 
@@ -391,13 +391,13 @@ static void highscores() {
             entry = old_entry;
 
             // must fseek() before can change read/write mode
-            (void)fseek(highscore_fp, (long)0, L_INCR);
+            (void)fseek(highscore_fp, (long)0, SEEK_CUR);
 
             curpos = ftell(highscore_fp);
             rd_highscore(&old_entry);
         }
         if (feof(highscore_fp)) {
-            (void)fseek(highscore_fp, curpos, L_SET);
+            (void)fseek(highscore_fp, curpos, SEEK_SET);
 
             wr_highscore(&entry);
         }
