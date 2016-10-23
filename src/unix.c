@@ -18,9 +18,7 @@
 // along with Umoria.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "standard_library.h"
-
-// NOTE: do not include in standard_library.h just yet.
-#include <ncurses.h>
+#include "curses.h"
 
 #include "config.h"
 #include "constant.h"
