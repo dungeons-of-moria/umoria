@@ -13,8 +13,9 @@
 ### All Changes
 
 
-`2016-10-223`
+`2016-10-23`
 
+- Adds `sleep_in_seconds()` wrapper for cross platform sleeping.
 - Replaces custom `fseek` _origin_ defines with standard `SEEK_SET` and `SEEK_CUR`.
 - Refactor `death.c` to use standard `fopen`/`fclose`.
 
