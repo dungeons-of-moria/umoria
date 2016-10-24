@@ -44,63 +44,44 @@ struct passwd *getpwnam();
 // might hack a static accumulation of times to wait. When the accumulation reaches
 // a certain point, sleep for a second. There would need to be a way of resetting
 // the count, with a call made for commands like run or rest.
-int check_input(int microsec) {
-#if defined(USG) && !defined(__linux__)
-    int arg, result;
-#else
-    struct timeval tbuf;
-    int ch;
-#if defined(BSD4_3) || defined(__linux__)
-    fd_set smask;
-#else
-    int smask;
-#endif
-#endif
+bool check_input(int microsec) {
+#ifdef _WIN32
+    int result;
 
-// Return true if a read on descriptor 1 will not block.
-#if !defined(USG) || defined(__linux__)
-    tbuf.tv_sec = 0;
-    tbuf.tv_usec = microsec;
-#if defined(BSD4_3) || defined(__linux__)
-    FD_ZERO(&smask);
-    FD_SET(fileno(stdin), &smask);
-    if (select(1, &smask, (fd_set *)0, (fd_set *)0, &tbuf) == 1)
-#else
-    smask = 1; // i.e. (1 << 0)
-    if (select(1, (fd_set *)&smask, (fd_set *)0, (fd_set *)0, &tbuf) == 1)
-#endif
-    {
-        ch = getch();
-        // check for EOF errors here, select sometimes works even when EOF
-        if (ch == -1) {
-            eof_flag++;
-            return 0;
-        }
-        return 1;
-    } else {
-        return 0;
-    }
-#else // SYS V code follows
+    // Return true if a read on descriptor 1 will not block.
     if (microsec != 0 && (turn & 0x7F) == 0) {
         sleep_in_seconds(1); // mod 128, sleep one sec every 128 turns
     }
     // Can't check for input, but can do non-blocking read, so...
     // Ugh!
-    arg = 0;
-    arg = fcntl(0, F_GETFL, arg);
-    arg |= O_NDELAY;
-    (void)fcntl(0, F_SETFL, arg);
-
+    // Double Ugh! -MRC-
+    timeout(8);
     result = getch();
-
-    arg = 0;
-    arg = fcntl(0, F_GETFL, arg);
-    arg &= ~O_NDELAY;
-    (void)fcntl(0, F_SETFL, arg);
     if (result == -1) {
-        return 0;
+        return false;
     } else {
-        return 1;
+        return true;
+    }
+#else
+    struct timeval tbuf;
+    int ch;
+    int smask;
+
+    // Return true if a read on descriptor 1 will not block.
+    tbuf.tv_sec = 0;
+    tbuf.tv_usec = microsec;
+
+    smask = 1; // i.e. (1 << 0)
+    if (select(1, (fd_set *)&smask, (fd_set *)0, (fd_set *)0, &tbuf) == 1) {
+        ch = getch();
+        // check for EOF errors here, select sometimes works even when EOF
+        if (ch == -1) {
+            eof_flag++;
+            return false;
+        }
+        return true;
+    } else {
+        return false;
     }
 #endif
 }

@@ -595,7 +595,7 @@ void enter_store(int);
 // treasur.c
 
 // unix.c
-int check_input(int);
+bool check_input(int);
 void user_name(char *);
 int tilde(char *, char *);
 FILE *tfopen(char *, char *);

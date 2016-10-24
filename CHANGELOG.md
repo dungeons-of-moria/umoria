@@ -13,6 +13,11 @@
 ### All Changes
 
 
+`2016-10-24`
+
+- Experiment on Windows non-blocking keyboard reads for check_input().
+
+
 `2016-10-23`
 
 - Adds `sleep_in_seconds()` wrapper for cross platform sleeping.
