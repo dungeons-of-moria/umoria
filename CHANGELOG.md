@@ -13,9 +13,14 @@
 ### All Changes
 
 
+`2016-11-05`
+
+- Fixes some minor Windows GCC compile errors.
+
+
 `2016-10-24`
 
-- Experiment on Windows non-blocking keyboard reads for check_input().
+- Experiment on Windows non-blocking keyboard reads for `check_input()`.
 
 
 `2016-10-23`
