@@ -1,11 +1,14 @@
 # our game binary
 src/moria
+src/umoria
+
+# Just in case we accidentally leave a makefile here
+src/makefile
 
 # CMake
 CMakeCache.txt
 CMakeFiles
 CMakeScripts
-Makefile
 cmake_install.cmake
 install_manifest.txt
 CPackConfig.cmake
