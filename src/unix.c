@@ -89,7 +89,7 @@ bool check_input(int microsec) {
 // Find a default user name from the system.
 void user_name(char *buf) {
 #ifdef _WIN32
-    int32_t bufCharCount = PLAYER_NAME_SIZE;
+    unsigned long bufCharCount = PLAYER_NAME_SIZE;
 
     if (!GetUserName(buf, &bufCharCount)) {
         (void)strcpy(buf, "X"); // Gotta have some name
@@ -158,7 +158,7 @@ int tilde(char *file, char *exp) {
 
 // open a file just as does fopen, but allow a leading ~ to specify a home directory
 FILE *tfopen(char *file, char *mode) {
-    extern int errno;
+    // extern int errno;
 
     char buf[1024];
     if (tilde(file, buf)) {
@@ -170,7 +170,7 @@ FILE *tfopen(char *file, char *mode) {
 
 // open a file just as does open, but expand a leading ~ into a home directory name
 int topen(char *file, int flags, int mode) {
-    extern int errno;
+    // extern int errno;
 
     char buf[1024];
     if (tilde(file, buf)) {

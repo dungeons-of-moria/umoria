@@ -15,6 +15,8 @@
 
 `2016-11-05`
 
+- WIP Windows Support: Successfully compiles, although not yet playable.
+- First try at a Windows/MinGW makefile
 - Fixes some minor Windows GCC compile errors.
 
 

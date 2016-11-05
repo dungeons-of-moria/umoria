@@ -17,9 +17,12 @@
 // You should have received a copy of the GNU General Public License
 // along with Umoria.  If not, see <http://www.gnu.org/licenses/>.
 
+#pragma once
+
 #ifdef _WIN32
     #define _CRT_SECURE_NO_WARNINGS
     #define _CRT_NONSTDC_NO_DEPRECATE
+    #define WIN32_LEAN_AND_MEAN
 
     #include <windows.h>
 

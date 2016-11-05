@@ -17,8 +17,11 @@
 // You should have received a copy of the GNU General Public License
 // along with Umoria.  If not, see <http://www.gnu.org/licenses/>.
 
+#pragma once
+
 #ifdef _WIN32
-    #include <curses.h>
-#else
-    #include <ncurses.h>
+    // this is defined in Windows and also in ncurses
+    #undef KEY_EVENT
 #endif
+
+#include <ncurses.h>
