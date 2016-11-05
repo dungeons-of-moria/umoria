@@ -365,6 +365,8 @@ bool get_check(char *prompt) {
     getyx(stdscr, y, x);
     if (x > 73) {
         (void)move(0, 73);
+    } else if (y) {
+        // use `y` to prevent compiler warning.
     }
 
     (void)addstr(" [y/n]");
