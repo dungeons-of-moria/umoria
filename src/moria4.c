@@ -276,54 +276,55 @@ void disarm_trap() {
     }
 }
 
-// An enhanced look, with peripheral vision. Looking all 8 -CJS- directions will
-// see everything which ought to be visible. Can specify direction 5, which looks
-// in all directions.
-//
-// For the purpose of hindering vision, each place is regarded as a diamond just
-// touching its four immediate neighbours. A diamond is opaque if it is a wall,
-// or shut door, or something like that. A place is visible if any part of its
-// diamond is visible: i.e. there is a line from the view point to part of the
-// diamond which does not pass through any opaque diamonds.
-//
-// Consider the following situation:
-//
-//   @....                         X   X   X   X   X
-//   .##..                        / \ / \ / \ / \ / \
-//   .....                       X @ X . X . X 1 X . X
-//                                \ / \ / \ / \ / \ /
-//                                 X   X   X   X   X
-//         Expanded view, with    / \ / \ / \ / \ / \
-//         diamonds inscribed    X . X # X # X 2 X . X
-//         about each point,      \ / \ / \ / \ / \ /
-//         and some locations      X   X   X   X   X
-//         numbered.              / \ / \ / \ / \ / \
-//                               X . X . X . X 3 X 4 X
-//                                \ / \ / \ / \ / \ /
-//                                 X   X   X   X   X
-//
-//      - Location 1 is fully visible.
-//      - Location 2 is visible, even though partially obscured.
-//      - Location 3 is invisible, but if either # were
-//        transparent, it would be visible.
-//      - Location 4 is completely obscured by a single #.
-//
-// The function which does the work is look_ray. It sets up its own co-ordinate
-// frame (global variables map back to the dungeon frame) and looks for
-// everything between two angles specified from a central line. It is recursive,
-// and each call looks at stuff visible along a line parallel to the center line,
-// and a set distance away from it. A diagonal look uses more extreme peripheral
-// vision from the closest horizontal and vertical directions; horizontal or
-// vertical looks take a call for each side of the central line.
-//
-// Globally accessed variables: gl_nseen counts the number of places where
-// something is seen. gl_rock indicates a look for rock or objects.
-//
-// The others map co-ords in the ray frame to dungeon co-ords.
-//
-// dungeon y = char_row   + gl_fyx * (ray x)  + gl_fyy * (ray y)
-// dungeon x = char_col   + gl_fxx * (ray x)  + gl_fxy * (ray y)
+/*
+  An enhanced look, with peripheral vision. Looking all 8 -CJS- directions will
+  see everything which ought to be visible. Can specify direction 5, which looks
+  in all directions.
 
+  For the purpose of hindering vision, each place is regarded as a diamond just
+  touching its four immediate neighbours. A diamond is opaque if it is a wall,
+  or shut door, or something like that. A place is visible if any part of its
+  diamond is visible: i.e. there is a line from the view point to part of the
+  diamond which does not pass through any opaque diamonds.
+
+  Consider the following situation:
+
+    @....                         X   X   X   X   X
+    .##..                        / \ / \ / \ / \ / \
+    .....                       X @ X . X . X 1 X . X
+                                 \ / \ / \ / \ / \ /
+                                  X   X   X   X   X
+          Expanded view, with    / \ / \ / \ / \ / \
+          diamonds inscribed    X . X # X # X 2 X . X
+          about each point,      \ / \ / \ / \ / \ /
+          and some locations      X   X   X   X   X
+          numbered.              / \ / \ / \ / \ / \
+                                X . X . X . X 3 X 4 X
+                                 \ / \ / \ / \ / \ /
+                                  X   X   X   X   X
+
+       - Location 1 is fully visible.
+       - Location 2 is visible, even though partially obscured.
+       - Location 3 is invisible, but if either # were
+         transparent, it would be visible.
+       - Location 4 is completely obscured by a single #.
+
+  The function which does the work is look_ray. It sets up its own co-ordinate
+  frame (global variables map back to the dungeon frame) and looks for
+  everything between two angles specified from a central line. It is recursive,
+  and each call looks at stuff visible along a line parallel to the center line,
+  and a set distance away from it. A diagonal look uses more extreme peripheral
+  vision from the closest horizontal and vertical directions; horizontal or
+  vertical looks take a call for each side of the central line.
+
+  Globally accessed variables: gl_nseen counts the number of places where
+  something is seen. gl_rock indicates a look for rock or objects.
+
+  The others map co-ords in the ray frame to dungeon co-ords.
+
+  dungeon y = char_row   + gl_fyx * (ray x)  + gl_fyy * (ray y)
+  dungeon x = char_col   + gl_fxx * (ray x)  + gl_fxy * (ray y)
+*/
 static int gl_fxx, gl_fxy, gl_fyx, gl_fyy;
 static int gl_nseen;
 static bool gl_noquery;
