@@ -46,21 +46,21 @@ struct passwd *getpwnam();
 // the count, with a call made for commands like run or rest.
 bool check_input(int microsec) {
 #ifdef _WIN32
-    int result;
-
     // Return true if a read on descriptor 1 will not block.
+
     if (microsec != 0 && (turn & 0x7F) == 0) {
         sleep_in_seconds(1); // mod 128, sleep one sec every 128 turns
     }
+
     // Can't check for input, but can do non-blocking read, so...
     // Ugh!
     // Double Ugh! -MRC-
     timeout(8);
-    result = getch();
-    if (result == -1) {
-        return false;
-    } else {
+    int result = kbhit();
+    if (result) {
         return true;
+    } else {
+        return false;
     }
 #else
     struct timeval tbuf;
