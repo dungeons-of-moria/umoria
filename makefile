@@ -3,12 +3,15 @@
 # LIBDIR must be the same directory defined in config.h
 # OWNER is who you want the game to be chown to.
 # GROUP is who you wnat the game to be chgrp to.
-BINDIR = ~/moria-56
-LIBDIR = ~/moria-56/files
+BINDIR = ~/umoria
+LIBDIR = ~/umoria/files
 
 # We're installing to home directory so no need for these settings
 # OWNER = michael
 # GROUP = staff
+
+# Game binary name. e.g `moria` or `umoria`.
+TARGET = umoria
 
 # For testing and debugging the program, it is best to use this line.
 CFLAGS = -g -Wall -std=gnu11
@@ -41,7 +44,7 @@ LIBFILES = COPYING hours news origcmds.hlp owizcmds.hlp roglcmds.hlp rwizcmds.hl
 	version.hlp welcome.hlp
 
 moria : $(OBJS)
-	$(CC) -o moria $(CFLAGS) $(OBJS) $(CURSES) $(LFLAGS)
+	$(CC) -o $(TARGET) $(CFLAGS) $(OBJS) $(CURSES) $(LFLAGS)
 
 lintout : $(SRCS)
 	lint $(SRCS) $(CURSES) > lintout
@@ -55,23 +58,22 @@ TAGS : $(SRCS)
 # you must define BINDIR and LIBDIR before installing
 # assumes that BINDIR and LIBDIR exist
 install:
+	mkdir -p $(BINDIR)
 	chmod 755 $(BINDIR)
-	cp -f moria $(BINDIR)
-	chmod 4711 $(BINDIR)/moria
+	cp -f $(TARGET) $(BINDIR)/$(TARGET)
+	chmod 4711 $(BINDIR)/$(TARGET)
+	mkdir -p $(LIBDIR)
 	chmod 711 $(LIBDIR)
 	(cd ../files; cp -f $(LIBFILES) $(LIBDIR))
 	(cd $(LIBDIR); chmod 444 $(LIBFILES))
 	(cd $(LIBDIR); touch scores; chmod 644 scores)
-	# chown $(OWNER) $(BINDIR)/moria
-	# chgrp $(GROUP) $(BINDIR)/moria
-	# (cd $(LIBDIR); chown $(OWNER) $(LIBFILES) scores)
-	# (cd $(LIBDIR); chgrp $(GROUP) $(LIBFILES) scores)
 # If you are short on disk space, or aren't interested in debugging moria.
 #	strip $(BINDIR)/moria
 
 clean:
-	rm -r *.o
-	rm -i moria
+	@rm -r $(OBJS)
+	@rm -f $(TARGET)
+	@echo "Compilation files removed!"
 
 create.o: constant.h types.h externs.h config.h
 creature.o: constant.h types.h externs.h config.h
