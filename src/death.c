@@ -52,7 +52,7 @@ void display_scores(int show_player) {
         return;
     }
 
-    (void) fseek(highscore_fp, (long)0, SEEK_SET);
+    (void) fseek(highscore_fp, (off_t)0, SEEK_SET);
 
     // Read version numbers from the score file, and check for validity.
     uint8_t version_maj = getc(highscore_fp);
@@ -90,7 +90,8 @@ void display_scores(int show_player) {
         // Put twenty scores on each page, on lines 2 through 21.
         while (!feof(highscore_fp) && i < 21) {
             // Only show the entry if show_player false
-            if (!show_player) {
+            // NOTE: let's show all players for now with `true` -MRC-
+            if (!show_player || true) {
                 (void)sprintf(string,
                               "%-4d%8d %-19.19s %c %-10.10s %-7.7s%3d %-22.22s",
                               rank, score.points, score.name, score.sex,
