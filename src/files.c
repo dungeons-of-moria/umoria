@@ -33,7 +33,7 @@
 //  so we don't have multiple people trying to write to it at the same time.
 //  Craig Norborg (doc)    Mon Aug 10 16:41:59 EST 1987
 void init_scorefile() {
-    highscore_fp = fopen(MORIA_TOP, "r+");
+    highscore_fp = fopen(MORIA_TOP, "rb+");
 
     if (highscore_fp == NULL) {
         (void)fprintf(stderr, "Can't open score file \"%s\"\n", MORIA_TOP);

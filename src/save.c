@@ -378,7 +378,6 @@ static bool sv_write() {
     return true;
 }
 
-
 // Set up prior to actual save, do the save, then clean up
 bool save_char() {
     while (!_save_char(savefile)) {
@@ -432,7 +431,7 @@ bool _save_char(char *fnam) {
 
     if (fd >= 0) {
         (void)close(fd);
-        fileptr = fopen(savefile, "w");
+        fileptr = fopen(savefile, "wb");
     }
 
     DEBUG(logfile = fopen("IO_LOG", "a"));
@@ -517,7 +516,8 @@ bool get_char(bool *generate) {
 
         (void)close(fd);
         fd = -1; // Make sure it isn't closed again
-        fileptr = fopen(savefile, "r");
+        fileptr = fopen(savefile, "rb");
+
         if (fileptr == NULL) {
             goto error;
         }
@@ -643,8 +643,7 @@ bool get_char(bool *generate) {
         if (to_be_wizard && (l & 0x40000000L)) {
             msg_print("Sorry, this character is retired from moria.");
             msg_print("You can not resurrect a retired character.");
-        } else if (to_be_wizard && (l & 0x80000000L) &&
-                   get_check("Resurrect a dead character?")) {
+        } else if (to_be_wizard && (l & 0x80000000L) && get_check("Resurrect a dead character?")) {
             l &= ~0x80000000L;
         }
 

@@ -277,7 +277,7 @@ static void highscores() {
     }
     (void)strcpy(new_entry.died_from, tmp);
 
-    if ((highscore_fp = fopen(MORIA_TOP, "r+")) == NULL) {
+    if ((highscore_fp = fopen(MORIA_TOP, "rb+")) == NULL) {
         char string[100];
 
         (void) sprintf (string, "Error opening score file \"%s\"\n", MORIA_TOP);

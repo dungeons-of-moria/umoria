@@ -13,6 +13,11 @@
 ### All Changes
 
 
+`2016-11-08`
+
+- Open save/score files in binary mode for Windows support.
+
+
 `2016-11-05`
 
 - WIP Windows Support: Successfully compiles, although not yet playable.
