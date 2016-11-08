@@ -8,10 +8,11 @@ perhaps the most famous roguelike of all, _Diablo_!
 
 Supported Platforms:
 
+  - Windows
   - macOS
   - Ubuntu / Debian Linux
 
-_Note: current platform support is still in Beta...things may go wrong!_
+_**Note: we are currently still in Beta - things may go wrong!**_
 
 
 ## What's the Moria Restoration Project?
@@ -39,6 +40,31 @@ should be much easier to add support for macOS, and then finally Windows.
 I want to let everyone play Moria again!
 
 
+## Notes on Compiling Umoria
+
+To date I've only compiled Umoria using `GCC 6.2` and `ncurses 6.0`, although I'm sure other versions will also work fine. You will need theses along with the normal C build tools for your system.
+
+### macOS and Debian Linux
+
+- Copy the `makefile` to the `src` directory.
+- `cd` into the `src` directory.
+- Type `make && make install`
+
+Currently the game will be installed to `~/umoria`.
+
+
+### Windows
+
+Here I used MinGW to provide GCC and Binutils for the Windows platform, installed via the [MSYS2 Installer](http://msys2.github.io/). Once installed you will use `pacman` to install `GCC` and `ncurses`.
+
+- Copy the `makefile.win` to the `src` directory.
+- Rename `makefile.win` to `makefile`.
+- `cd` into the `src` directory.
+- Type `make && make install`
+
+Currently the game will be installed to `C:\umoria`.
+
+
 ## Umoria Development Road map
 
   * ~~Format source code using `clang-tidy` and `clang-format`.~~
@@ -47,9 +73,9 @@ I want to let everyone play Moria again!
   * ~~Use standard `bool` type instead of `int`s.~~
   * ~~Use only _standard types_ (`int32_t` instead of `long`) where possible.~~
   * ~~Clean up function prototypes/signatures.~~
-  * General code clean up, fixing _all_ warnings.
+  * ~~General code clean up, fixing _all_ warnings.~~
   * Update the code to to be as platform independent as possible.
-  * Add Windows and macOS support.
+  * ~~Add Windows and macOS support.~~
 
 
 ## Copyright / License Information
