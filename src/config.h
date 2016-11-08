@@ -30,18 +30,6 @@ because it uses some of the system defines set up here.
 // Recompile files.c and misc2.c if this changes.
 #define WIZARD "David Grabiner <grabiner@alumni.princeton.edu>"
 
-//
-// System definitions.
-//
-// You must define one of these as appropriate for the system
-// you are compiling moria on.
-
-// If compiling on Debian (also works on other versions of Linux), define this.
-#define DEBIAN_LINUX
-
-// If you are compiling on a SYS V version of UNIX, define this.
-// #define SYS_V
-
 // Files used by moria, set these to valid pathnames for your system.
 #define MORIA_SAV "umoria.save"
 #define MORIA_MOR "files/splash"
@@ -59,19 +47,3 @@ because it uses some of the system defines set up here.
 // to use the rogue-like key bindings (vi style movement) set ROGUE_LIKE to true.
 // If you change this, you only need to recompile main.c.
 #define ROGUE_LIKE false
-
-// System dependent defines follow.
-// You should not need to change anything below.
-
-// Linux supports System V
-#if defined(__linux__)
-#define SYS_V
-#endif
-
-// Define USG for many systems, this is basically to select SYS V style
-// system calls (as opposed to BSD style).
-#if defined(SYS_V)
-#ifndef USG
-#define USG
-#endif
-#endif

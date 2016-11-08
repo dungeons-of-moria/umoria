@@ -26,11 +26,6 @@
 
 #include "externs.h"
 
-#ifdef USG
-struct passwd *getpwuid();
-struct passwd *getpwnam();
-#endif
-
 // Provides for a timeout on input. Does a non-blocking read, consuming the data if
 // any, and then returns 1 if data was read, zero otherwise.
 //
