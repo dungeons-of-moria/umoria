@@ -4,7 +4,7 @@
 
 ### Notable Changes
 
-- Supported platforms: **macOS** and **Ubuntu** (Debian Linux).
+- Supported platforms: **Windows**, **macOS** and **Ubuntu** (Debian Linux).
 - Remove support for all other platforms E.g. Atari ST, Amiga,
   MS DOS, "Classic" Mac OS (pre OS X), etc., etc.
 - Use `clang-format`/`-tidy` to clean up the code formatting.
@@ -15,13 +15,17 @@
 
 `2016-11-08`
 
+- Removes remaining uneeded system dependent defines.
+- Reorganise and clean up the various text `files`.
+- Removes all remaining HOURS code.
+- Delete files/COPYING and use LICENSE for instead.
 - Open save/score files in binary mode for Windows support.
 
 
 `2016-11-05`
 
 - WIP Windows Support: Successfully compiles, although not yet playable.
-- First try at a Windows/MinGW makefile
+- First try at a Windows/MinGW makefile.
 - Fixes some minor Windows GCC compile errors.
 
 
