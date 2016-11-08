@@ -42,7 +42,6 @@ void init_scorefile() {
 }
 
 // Attempt to open the intro file -RAK-
-// This routine also checks the hours file vs. what time it is  -Doc
 void read_times() {
     vtype in_line;
 

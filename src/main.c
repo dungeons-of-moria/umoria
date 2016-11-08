@@ -89,8 +89,7 @@ int main(int argc, char *argv[]) {
         }
     }
 
-    // Check operating hours
-    // If not wizard  No_Control_Y
+    // Show intro text
     read_times();
 
     // Some necessary initializations
