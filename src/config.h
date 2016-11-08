@@ -43,8 +43,8 @@ because it uses some of the system defines set up here.
 // #define SYS_V
 
 // Files used by moria, set these to valid pathnames for your system.
-#define MORIA_SAV "moria-save"
-#define MORIA_MOR "files/news"
+#define MORIA_SAV "umoria.save"
+#define MORIA_MOR "files/splash"
 #define MORIA_GPL "files/LICENSE"
 #define MORIA_TOP "files/scores"
 #define MORIA_HELP "files/roglcmds.hlp"

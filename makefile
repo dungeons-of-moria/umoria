@@ -40,7 +40,7 @@ OBJS = main.o misc1.o misc2.o misc3.o misc4.o store1.o files.o io.o \
 	moria3.o moria4.o monsters.o treasure.o variable.o rnd.o recall.o \
 	unix.o player.o tables.o
 
-LIBFILES = hours news origcmds.hlp owizcmds.hlp roglcmds.hlp rwizcmds.hlp \
+LIBFILES = splash origcmds.hlp owizcmds.hlp roglcmds.hlp rwizcmds.hlp \
 	version.hlp welcome.hlp
 
 LICENSE = LICENSE
