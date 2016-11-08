@@ -40,8 +40,10 @@ OBJS = main.o misc1.o misc2.o misc3.o misc4.o store1.o files.o io.o \
 	moria3.o moria4.o monsters.o treasure.o variable.o rnd.o recall.o \
 	unix.o player.o tables.o
 
-LIBFILES = COPYING hours news origcmds.hlp owizcmds.hlp roglcmds.hlp rwizcmds.hlp \
+LIBFILES = hours news origcmds.hlp owizcmds.hlp roglcmds.hlp rwizcmds.hlp \
 	version.hlp welcome.hlp
+
+LICENSE = LICENSE
 
 moria : $(OBJS)
 	$(CC) -o $(TARGET) $(CFLAGS) $(OBJS) $(CURSES) $(LFLAGS)
@@ -65,6 +67,7 @@ install:
 	mkdir -p $(LIBDIR)
 	chmod 711 $(LIBDIR)
 	(cd ../files; cp -f $(LIBFILES) $(LIBDIR))
+	(cd ../; cp -f $(LICENSE) $(LIBDIR))
 	(cd $(LIBDIR); chmod 444 $(LIBFILES))
 	(cd $(LIBDIR); touch scores; chmod 644 scores)
 # If you are short on disk space, or aren't interested in debugging moria.
