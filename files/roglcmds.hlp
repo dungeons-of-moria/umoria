@@ -1,28 +1,28 @@
 Command summary: (@ is optional count, ~ is direction, ^R redraws, ESC aborts)
-  c ~     Close a door.             |   C       Character player description.
-  d       Drop an item.             | @ D ~     Disarm a trap/chest.
-  e       Equipment list.           |   E       Eat some food.
-@ f ~     Force (bash) item or mons.|   F       Fill lamp with oil.
-  i       Inventory list.           |   G       Gain new magic spells.
-  m       magic spell casting.      |   M       Map, show reduced size.
-@ o ~     Open a door/chest.        |   P       Peruse a book.
-  p       Pray.                     |   Q       Quit the game.
-  q       Quaff a potion.           | @ R       Rest (Count or *=restore).
-  r       Read a scroll.            | @ S ~     Spike a door.
-@ s       Search for traps or doors.|   T       Take off an item.
-  t       Throw an item.            |   V       View scores.
-  v       Version info              |   W       Where: locate self.
-  w       Wear/Wield an item.       |   X       Exchange weapon.
-  x ~     Examine surroundings      |   Z       Zap a staff.
-  z       Zap a wand.               |   #       Search Mode.
-  =       Set options.              |   <       Go up an up-staircase.
-  /       Identify a character.     |   >       Go down a down-staircase.
-@ CTRL-P  Previous message review   |   {       Inscribe an object.
-@ -  ~    Move without pickup.      |   ?       Type this page.
-@ CTRL  ~ Tunnel in a direction.    |   CTRL-X  Save character and exit.
-@ SHIFT ~ Run in direction.         | @ ~       For movement.
+  c ~     Close a door              |   C       Character description
+  d       Drop an item              | @ D ~     Disarm a trap/chest
+  e       Equipment list            |   E       Eat some food
+@ f ~     Force (bash) item or mons.|   F       Fill lamp with oil
+  i       Inventory list            |   G       Gain new magic spells
+  m       Magic spell casting       |   M       Map (shown reduced size)
+@ o ~     Open a door/chest         |   P       Peruse a book
+  p       Pray                      |   Q       Quit the game
+  q       Quaff a potion            | @ R       Rest (count or *=restore)
+  r       Read a scroll             | @ S ~     Spike a door
+@ s       Search for traps or doors |   T       Take off an item
+  t       Throw an item             |   V       View scores
+  v       Version info and credits  |   W       Where: locate self
+  w       Wear/Wield an item        |   X       Exchange weapon
+  x ~     Examine surroundings      |   Z       Zap a staff
+  z       Zap a wand                |   #       Search mode
+  =       Set options               |   <       Go up an up-staircase
+  /       Identify a character      |   >       Go down a down-staircase
+@ CTRL-P  Previous message review   |   {       Inscribe an object
+@ -  ~    Move without pickup       |   ?       View this page
+@ CTRL  ~ Tunnel in a direction     |   CTRL-X  Save character and quit
+@ SHIFT ~ Run in direction          | @ ~       For movement
 Directions:     y  k  u
-                h  .  l  [. is stay]
+                h  .  l  [. to rest]
                 b  j  n
 
 To give a count to a command, type the number in digits, then the command.
@@ -58,4 +58,3 @@ under certain conditions; for details, type control-V.
 
 Umoria comes with ABSOLUTELY NO WARRANTY; for details,
 type control-V and view sections 15-17 of the License.
-

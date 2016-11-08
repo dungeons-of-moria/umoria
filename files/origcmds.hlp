@@ -6,13 +6,13 @@ Command summary: (@ is optional count, ~ is direction, ^R redraws, ESC aborts)
   e        Equipment list              |   F        Fill lamp with oil
   f        Fire/Throw an item          |   G        Gain new magic spells
   i        Inventory list              |   L        Locate with map
-@ j ~      Jam a door with spike       |   M        Map shown reduced size
-  l ~      Look given direction        | @ R        Rest (Count or *=restore)
-  m        Magic spell casting         |   S        Search Mode
+@ j ~      Jam a door with spike       |   M        Map (shown reduced size)
+  l ~      Look given direction        | @ R        Rest (count or *=restore)
+  m        Magic spell casting         |   S        Search mode
 @ o ~      Open a door/chest           | @ T ~      Tunnel in a direction
   p        Pray                        |   V        View scoreboard
   q        Quaff a potion              |   =        Set options
-  r        Read a scroll               |   ?        Type this page
+  r        Read a scroll               |   ?        View this page
 @ s        Search for traps or doors   |   {        Inscribe an object
   t        Take off an item            | @ -        Move without pickup
   u        Use a staff                 |   . ~      Run in direction
@@ -20,9 +20,9 @@ Command summary: (@ is optional count, ~ is direction, ^R redraws, ESC aborts)
   w        Wear/Wield an item          |   CTRL-K   Quit the game
   x        Exchange weapon             | @ CTRL-P   Repeat the last message
   <        Go up an up-staircase       |   CTRL-X   Save character and quit
-  >        Go down a down-staircase    | @ ~        for movement
+  >        Go down a down-staircase    | @ ~        For movement
 Directions:     7  8  9
-                4  5  6  [5 is stay]
+                4  5  6  [5 to rest]
                 1  2  3
 
 To give a count to a command, type a '#', followed by the digits. A count
@@ -53,4 +53,3 @@ under certain conditions; for details, type control-V.
 
 Umoria comes with ABSOLUTELY NO WARRANTY; for details,
 type control-V and view sections 15-17 of the License.
-

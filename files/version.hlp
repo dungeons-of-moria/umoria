@@ -1,6 +1,6 @@
                              Umoria 5.7-beta
 
-    Version 5.7b  :  2016-10-09
+    Version 5.7b  :  2016-11-09
     Version 5.6   :  2015-03-03
     Version 5.5   :  1992-08-12
     Version 5.4   :  1991-10-12
@@ -63,6 +63,8 @@ Ben Schreiber         - Macintosh port for Think C
 
 Copyright (c) 1989-94 James E. Wilson, Robert A. Keoneke
 
-  This software may be copied and distributed for educational, research, and
-  not for profit purposes provided that this copyright and statement are
-  included in all such copies.
+Umoria is free software, and you are welcome to distribute it
+under certain conditions; for details, type control-V.
+
+Umoria comes with ABSOLUTELY NO WARRANTY; for details,
+type control-V and view sections 15-17 of the License.
