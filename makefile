@@ -24,7 +24,7 @@ CURSES = -lncurses
 
 LFLAGS =
 
-CC = clang
+CC = gcc
 
 SRCS = main.c misc1.c misc2.c misc3.c misc4.c store1.c files.c io.c \
 	create.c desc.c generate.c sets.c dungeon.c creature.c death.c \
