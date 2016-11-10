@@ -118,8 +118,6 @@ int main(int argc, char *argv[]) {
         (void)strcpy(savefile, argv[0]);
     } else if ((p = getenv("MORIA_SAV")) != CNIL) {
         (void)strcpy(savefile, p);
-    } else if ((p = getenv("HOME")) != CNIL) {
-        (void)sprintf(savefile, "%s/%s", p, MORIA_SAV);
     } else {
         (void)strcpy(savefile, MORIA_SAV);
     }
