@@ -13,6 +13,12 @@
 ### All Changes
 
 
+`2016-11-10`
+
+- Adds `.dat` extension to scores and save game.
+- Renames `files` directory to `data`.
+
+
 `2016-11-08`
 
 - Removes remaining uneeded system dependent defines.

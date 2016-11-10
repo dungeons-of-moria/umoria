@@ -4,7 +4,7 @@
 # OWNER is who you want the game to be chown to.
 # GROUP is who you wnat the game to be chgrp to.
 BINDIR = ~/umoria
-LIBDIR = ~/umoria/files
+LIBDIR = ~/umoria/data
 
 # We're installing to home directory so no need for these settings
 # OWNER = michael
@@ -40,7 +40,7 @@ OBJS = main.o misc1.o misc2.o misc3.o misc4.o store1.o files.o io.o \
 	moria3.o moria4.o monsters.o treasure.o variable.o rnd.o recall.o \
 	unix.o player.o tables.o
 
-LIBFILES = splash origcmds.hlp owizcmds.hlp roglcmds.hlp rwizcmds.hlp \
+LIBFILES = splash.hlp origcmds.hlp owizcmds.hlp roglcmds.hlp rwizcmds.hlp \
 	version.hlp welcome.hlp
 
 LICENSE = LICENSE
@@ -66,10 +66,10 @@ install:
 	chmod 4711 $(BINDIR)/$(TARGET)
 	mkdir -p $(LIBDIR)
 	chmod 711 $(LIBDIR)
-	(cd ../files; cp -f $(LIBFILES) $(LIBDIR))
-	(cd ../; cp -f $(LICENSE) $(LIBDIR))
+	(cd ../data; cp -f $(LIBFILES) $(LIBDIR))
+	(cd ../; cp -f $(LICENSE) $(BINDIR))
 	(cd $(LIBDIR); chmod 444 $(LIBFILES))
-	(cd $(LIBDIR); touch scores; chmod 644 scores)
+	(cd $(BINDIR); touch scores.dat; chmod 644 scores.dat)
 # If you are short on disk space, or aren't interested in debugging moria.
 #	strip $(BINDIR)/moria
 

@@ -31,16 +31,16 @@ because it uses some of the system defines set up here.
 #define WIZARD "David Grabiner <grabiner@alumni.princeton.edu>"
 
 // Files used by moria, set these to valid pathnames for your system.
-#define MORIA_SAV "umoria.save"
-#define MORIA_MOR "files/splash"
-#define MORIA_GPL "files/LICENSE"
-#define MORIA_TOP "files/scores"
-#define MORIA_HELP "files/roglcmds.hlp"
-#define MORIA_ORIG_HELP "files/origcmds.hlp"
-#define MORIA_WIZ_HELP "files/rwizcmds.hlp"
-#define MORIA_OWIZ_HELP "files/owizcmds.hlp"
-#define MORIA_WELCOME "files/welcome.hlp"
-#define MORIA_VER "files/version.hlp"
+#define MORIA_GPL "LICENSE"
+#define MORIA_TOP "scores.dat"
+#define MORIA_SAV "savegame.dat"
+#define MORIA_MOR "data/splash.hlp"
+#define MORIA_HELP "data/roglcmds.hlp"
+#define MORIA_ORIG_HELP "data/origcmds.hlp"
+#define MORIA_WIZ_HELP "data/rwizcmds.hlp"
+#define MORIA_OWIZ_HELP "data/owizcmds.hlp"
+#define MORIA_WELCOME "data/welcome.hlp"
+#define MORIA_VER "data/version.hlp"
 
 // This sets the default user interface.
 // To use the original key bindings (keypad for movement) set ROGUE_LIKE to false;
