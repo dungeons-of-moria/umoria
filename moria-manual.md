@@ -1,5 +1,7 @@
 # The Dungeons of Moria
 
+_Robert A. Koeneke's classic roguelike dungeon crawler._
+
 
 
 ## 1. Introduction
@@ -28,9 +30,9 @@ other roguelikes), and will require a dedicated player to win.
 
 
 By default, *moria* will save and restore games from a file called
-moria.save in the home directory. If the environment variable MORIA\_SAV
+moria.save in the home directory. If the environment variable `MORIA_SAV`
 is defined, then *moria* will use that file name instead of the default.
-If MORIA\_SAV is not a complete path name, then the savefile will be
+If `MORIA_SAV` is not a complete path name, then the savefile will be
 created or restored from the current directory. The savefile can also be
 explicitly specified on the command line.
 
@@ -101,48 +103,54 @@ Intelligence for Mages.
 
 ### 3.1 Character Stats
 
-`Strength`:
-  Strength is important in fighting with weapons and hand to hand
-  combat. A high strength can improve the chances of hitting, and the
-  amount of damage done with each hit. Characters with low strengths
-  may receive penalties. Strength is also useful in tunneling, body
-  and shield bashing, and in carrying heavy items.
+#### `STR`
 
-`Intelligence`:
-  Intelligence is the prime stat of a mage, or magician. A high
-  intelligence increases a mage’s chances of learning spells, and it
-  also increases the amount of mana a mage has. No spell may be
-  learned by mages with intelligences under 8. Intelligence also
-  modifies a character’s chance of disarming traps, picking locks, and
-  using magic devices.
+Strength is important in fighting with weapons and hand to hand
+combat. A high strength can improve the chances of hitting, and the
+amount of damage done with each hit. Characters with low strengths
+may receive penalties. Strength is also useful in tunneling, body
+and shield bashing, and in carrying heavy items.
 
-`Wisdom`:
-  Wisdom is the prime stat of a priest. A high wisdom increases the
-  chance of receiving new spells from a priest’s deity, and it also
-  increases the amount of mana a priest has. No spell may be learned
-  by priests with wisdom under 8. Wisdom also modifies a character’s
-  chance of resisting magical spells cast upon their person.
+#### `INT`
 
-`Dexterity`:
-  Dexterity is a combination of agility and quickness. A high
-  dexterity may allow a character to get multiple blows with lighter
-  weapons, thus greatly increasing kill power, and may increase the
-  chances of hitting with any weapon and dodging blows from enemies.
-  Dexterity is also useful in picking locks, disarming traps, and
-  protection from pick pockets.
+Intelligence is the prime stat of a mage, or magician. A high
+intelligence increases a mage’s chances of learning spells, and it
+also increases the amount of mana a mage has. No spell may be
+learned by mages with intelligences under 8. Intelligence also
+modifies a character’s chance of disarming traps, picking locks, and
+using magic devices.
 
-`Constitution`:
-  Constitution is a character’s ability to resist damage to the body,
-  and to recover from damage received. Therefore a character with a
-  high constitution will receive more hit points, and be more
-  resistant to poisons.
+#### `WIS`
 
-`Charisma`:
-  Charisma represents a character’s personality, as well as physical
-  looks. A character with a high charisma will receive better prices
-  from store owners, whereas a character with a very low charisma will
-  be robbed blind. A high charisma will also mean more starting money
-  for the character.
+Wisdom is the prime stat of a priest. A high wisdom increases the
+chance of receiving new spells from a priest’s deity, and it also
+increases the amount of mana a priest has. No spell may be learned
+by priests with wisdom under 8. Wisdom also modifies a character’s
+chance of resisting magical spells cast upon their person.
+
+#### `DEX`
+
+Dexterity is a combination of agility and quickness. A high
+dexterity may allow a character to get multiple blows with lighter
+weapons, thus greatly increasing kill power, and may increase the
+chances of hitting with any weapon and dodging blows from enemies.
+Dexterity is also useful in picking locks, disarming traps, and
+protection from pick pockets.
+
+#### `CON`
+
+Constitution is a character’s ability to resist damage to the body,
+and to recover from damage received. Therefore a character with a
+high constitution will receive more hit points, and be more
+resistant to poisons.
+
+#### `CHR`
+
+Charisma represents a character’s personality, as well as physical
+looks. A character with a high charisma will receive better prices
+from store owners, whereas a character with a very low charisma will
+be robbed blind. A high charisma will also mean more starting money
+for the character.
 
 
 ### 3.2 Character Sex
@@ -162,74 +170,83 @@ survive. The starting abilities of a character are based upon race and
 class. Abilities may be adjusted by high or low stats, and may increase
 with the level of the character.
 
-`Fighting`:
-  Fighting is the ability to hit and do damage with weapons or fists.
-  Normally a character gets a single blow from any weapon, but if
-  their dexterity and strength are high enough, they may receive more
-  blows per round with lighter weapons. Strength and dexterity both
-  modify the ability to hit an opponent. This skill increases with the
-  level of the character.
+#### `Fighting`
 
-`Throwing/Bows`:
-  Using ranged missile weapons and throwing objects is included in
-  this skill. Different stats apply to different weapons, but this
-  ability may modify the distance an object is thrown/fired, the
-  amount of damage done, and the ability to hit a creature. This skill
-  increases with the level of the character.
+Fighting is the ability to hit and do damage with weapons or fists.
+Normally a character gets a single blow from any weapon, but if
+their dexterity and strength are high enough, they may receive more
+blows per round with lighter weapons. Strength and dexterity both
+modify the ability to hit an opponent. This skill increases with the
+level of the character.
 
-`Saving Throw`:
-  A Saving Throw is the ability of a character to resist the effects
-  of a spell cast on them by another person or creature. This does not
-  include spells cast on the character by their own stupidity, such as
-  quaffing a nasty potion. This ability increases with the level of
-  the character, but then most high level creatures are better at
-  casting spells, so it tends to even out. A high wisdom also
-  increases this ability.
+#### `Throwing/Bows`
 
-`Stealth`:
-  The ability to move silently about is very useful. Characters with
-  good stealth can usually surprise their opponents, gaining the first
-  blow. Also, creatures may fail to notice a stealthy character
-  entirely, allowing a character to avoid certain fights. This skill
-  is based entirely upon race and class, and will never improve unless
-  magically enhanced.
+Using ranged missile weapons and throwing objects is included in
+this skill. Different stats apply to different weapons, but this
+ability may modify the distance an object is thrown/fired, the
+amount of damage done, and the ability to hit a creature. This skill
+increases with the level of the character.
 
-`Disarming`:
-  Disarming is the ability to remove traps (safely), and includes
-  picking locks on traps and doors. A successful disarming will gain
-  the character some experience. A trap must be found before it can be
-  disarmed. Dexterity and intelligence both modify the ability to
-  disarm, and this ability increases with the level of the character.
+#### `Saving Throw`
 
-`Using Magical Devices`:
-  Using a magical device such as a wand or staff requires experience
-  and knowledge. Spell users such as mages and priests are therefore
-  much better at using a magical device than say a warrior. This skill
-  is modified by intelligence, and increases with the level of the
-  character.
+A Saving Throw is the ability of a character to resist the effects
+of a spell cast on them by another person or creature. This does not
+include spells cast on the character by their own stupidity, such as
+quaffing a nasty potion. This ability increases with the level of
+the character, but then most high level creatures are better at
+casting spells, so it tends to even out. A high wisdom also
+increases this ability.
 
-`Perception`:
-  Perception is the ability to notice something without actively
-  seeking it out. This skill is based entirely upon race and class,
-  and will never improve unless magically enhanced.
+#### `Stealth`
 
-`Searching`:
-  To search is to actively look for secret doors, floor traps, and
-  traps on chests. Rogues are the best at searching, but mages,
-  rangers, and priests are also good at it. This skill is based
-  entirely upon race and class, and will never improve unless
-  magically enhanced.
+The ability to move silently about is very useful. Characters with
+good stealth can usually surprise their opponents, gaining the first
+blow. Also, creatures may fail to notice a stealthy character
+entirely, allowing a character to avoid certain fights. This skill
+is based entirely upon race and class, and will never improve unless
+magically enhanced.
 
-`Infravision`:
-  Infravision is the ability to see heat sources. Since most of the
-  dungeon is cool or cold, infravision will not allow the character to
-  see walls and objects. Infravision will allow a character to see any
-  warm-blooded creatures up to a certain distance. This ability works
-  equally well with or without a light source. The majority of
-  *moria*’s creatures are cold-blooded, and will not be detected
-  unless lit up by a light source. All non-human races have innate
-  infravision ability. Humans can gain infravision only if it is
-  magically enhanced.
+#### `Disarming`
+
+Disarming is the ability to remove traps (safely), and includes
+picking locks on traps and doors. A successful disarming will gain
+the character some experience. A trap must be found before it can be
+disarmed. Dexterity and intelligence both modify the ability to
+disarm, and this ability increases with the level of the character.
+
+#### `Using Magical Devices`
+
+Using a magical device such as a wand or staff requires experience
+and knowledge. Spell users such as mages and priests are therefore
+much better at using a magical device than say a warrior. This skill
+is modified by intelligence, and increases with the level of the
+character.
+
+#### `Perception`
+
+Perception is the ability to notice something without actively
+seeking it out. This skill is based entirely upon race and class,
+and will never improve unless magically enhanced.
+
+#### `Searching`
+
+To search is to actively look for secret doors, floor traps, and
+traps on chests. Rogues are the best at searching, but mages,
+rangers, and priests are also good at it. This skill is based
+entirely upon race and class, and will never improve unless
+magically enhanced.
+
+#### `Infravision`
+
+Infravision is the ability to see heat sources. Since most of the
+dungeon is cool or cold, infravision will not allow the character to
+see walls and objects. Infravision will allow a character to see any
+warm-blooded creatures up to a certain distance. This ability works
+equally well with or without a light source. The majority of
+*moria*’s creatures are cold-blooded, and will not be detected
+unless lit up by a light source. All non-human races have innate
+infravision ability. Humans can gain infravision only if it is
+magically enhanced.
 
 
 ### 3.4 Choosing A Race
@@ -238,79 +255,88 @@ There are eight different races that can be chosen from in *moria*. Some
 races are restricted as to what profession they may be, and each race
 has its own adjustments to a character’s stats and abilities.
 
-`Human`:
-  The human is the base character, all other races are compared to
-  this race. Humans can choose any class, and are average at
-  everything. Humans tend to go up levels faster than any other race,
-  because of their shorter life spans. No racial adjustments occur to
-  characters choosing human.
+#### `Human`
 
-`Half-Elf`:
-  Half-elves tend to be smarter and faster than a human, but not as
-  strong. Half-elves are slightly better at searching, disarming,
-  perception, stealth, and magic, but they are not as good at hand
-  weapons. Half-elves may choose any class.
+The human is the base character, all other races are compared to
+this race. Humans can choose any class, and are average at
+everything. Humans tend to go up levels faster than any other race,
+because of their shorter life spans. No racial adjustments occur to
+characters choosing human.
 
-`Elf`:
-  Elves are better magicians then humans, but not as good at fighting.
-  They tend to be smarter and faster than either humans or half-elves,
-  and also have better wisdom. Elves are better at searching,
-  disarming, perception, stealth, and magic, but they are not as good
-  at hand weapons. Elves may choose any class except Paladin.
+#### `Half-Elf`
 
-`Halfling`:
-  Halflings, or Hobbits, are very good at bows, throwing, and have
-  good saving throws. They also are very good at searching, disarming,
-  perception, and stealth; so they make excellent thieves (but prefer
-  to be called burglars...). They will be much weaker than humans, and
-  no good at bashing. Halflings have fair infravision, so they can
-  detect warm creatures at a distance. Halflings can choose between
-  being a warrior, mage, or rogue.
+Half-elves tend to be smarter and faster than a human, but not as
+strong. Half-elves are slightly better at searching, disarming,
+perception, stealth, and magic, but they are not as good at hand
+weapons. Half-elves may choose any class.
 
-`Gnome`:
-  Gnomes are smaller than dwarfs, but larger than halflings. They,
-  like the halflings, live in the earth in burrow-like homes. Gnomes
-  are practical jokers, so if they can kill something in a humorous
-  way, so much the better. Gnomes make excellent mages, and have very
-  good saving throws. They are good at searching, disarming,
-  perception, and stealth. They have lower strength than humans so
-  they are not very good at fighting with hand weapons. Gnomes have
-  fair infravision, so they can detect warm creatures at a distance. A
-  gnome may choose between being a warrior, mage, priest, or rogue.
+#### `Elf`
 
-`Dwarf`:
-  Dwarves are the headstrong miners and fighters of legend. Since
-  dungeons are the natural home of a dwarf, they are excellent choices
-  for a warrior or priest. Dwarves tend to be stronger and have higher
-  constitutions, but are slower and less intelligent than humans.
-  Because they are so headstrong and are somewhat wise, they resist
-  spells which are cast on them. Dwarves also have good infravision
-  because they live underground. They do have one big drawback though.
-  Dwarves are loudmouthed and proud, singing in loud voices, arguing
-  with themselves for no good reason, screaming out challenges at
-  imagined foes. In other words, dwarves have a miserable stealth.
+Elves are better magicians then humans, but not as good at fighting.
+They tend to be smarter and faster than either humans or half-elves,
+and also have better wisdom. Elves are better at searching,
+disarming, perception, stealth, and magic, but they are not as good
+at hand weapons. Elves may choose any class except Paladin.
 
-`Half-Orc`:
-  Half-Orcs make excellent warriors, and decent priests, but are
-  terrible at magic. They are as bad as dwarves at stealth, and
-  horrible at searching, disarming, and perception. Half-Orcs are,
-  let’s face it, ugly. They tend to pay more for goods in town.
-  Half-Orcs do make good priests and rogues, for the simple reason
-  that Half-Orcs tend to have great constitutions and lots of
-  hit-points.
+#### `Halfling`
 
-`Half-Troll`:
-  Half-Trolls are incredibly strong, and have the highest hit points
-  of any character race. They are also very stupid and slow. They will
-  make great warriors and iffy priests. They are bad at searching,
-  disarming, perception, and stealth. They are so ugly that a Half-Orc
-  grimaces in their presence. They also happen to be fun to run...
+Halflings, or Hobbits, are very good at bows, throwing, and have
+good saving throws. They also are very good at searching, disarming,
+perception, and stealth; so they make excellent thieves (but prefer
+to be called burglars...). They will be much weaker than humans, and
+no good at bashing. Halflings have fair infravision, so they can
+detect warm creatures at a distance. Halflings can choose between
+being a warrior, mage, or rogue.
+
+#### `Gnome`
+
+Gnomes are smaller than dwarfs, but larger than halflings. They,
+like the halflings, live in the earth in burrow-like homes. Gnomes
+are practical jokers, so if they can kill something in a humorous
+way, so much the better. Gnomes make excellent mages, and have very
+good saving throws. They are good at searching, disarming,
+perception, and stealth. They have lower strength than humans so
+they are not very good at fighting with hand weapons. Gnomes have
+fair infravision, so they can detect warm creatures at a distance. A
+gnome may choose between being a warrior, mage, priest, or rogue.
+
+#### `Dwarf`
+
+Dwarves are the headstrong miners and fighters of legend. Since
+dungeons are the natural home of a dwarf, they are excellent choices
+for a warrior or priest. Dwarves tend to be stronger and have higher
+constitutions, but are slower and less intelligent than humans.
+Because they are so headstrong and are somewhat wise, they resist
+spells which are cast on them. Dwarves also have good infravision
+because they live underground. They do have one big drawback though.
+Dwarves are loudmouthed and proud, singing in loud voices, arguing
+with themselves for no good reason, screaming out challenges at
+imagined foes. In other words, dwarves have a miserable stealth.
+
+#### `Half-Orc`
+
+Half-Orcs make excellent warriors, and decent priests, but are
+terrible at magic. They are as bad as dwarves at stealth, and
+horrible at searching, disarming, and perception. Half-Orcs are,
+let’s face it, ugly. They tend to pay more for goods in town.
+Half-Orcs do make good priests and rogues, for the simple reason
+that Half-Orcs tend to have great constitutions and lots of
+hit-points.
+
+#### `Half-Troll`
+
+Half-Trolls are incredibly strong, and have the highest hit points
+of any character race. They are also very stupid and slow. They will
+make great warriors and iffy priests. They are bad at searching,
+disarming, perception, and stealth. They are so ugly that a Half-Orc
+grimaces in their presence. They also happen to be fun to run...
 
 
-#### 3.4.1 Race Versus Skills and Stats
+#### 3.4.1 Race versus Skills and Stats
 
 Stat, hit dice, and experience points per level modifications due to
 race are listed in the following table.
+
 
                 Str  Int  Wis  Dex  Con  Chr  Hit Dice  Rqd Exp/level
 
@@ -327,6 +353,7 @@ race are listed in the following table.
 Racial abilities as compared to each other, with 1 the lowest, or worst,
 and 10 the highest, or best, are listed in the following table.
 
+
                Disarm Search Stealth Percep Fight Bows Save Infra
 
     Human         5      5      5       5     5     5    5  None
@@ -339,6 +366,7 @@ and 10 the highest, or best, are listed in the following table.
     Half-Troll    1      1      1       1    10     1    1  30 feet
 
 
+
 ### 3.5 Choosing A Class
 
 Once a race has been chosen, the player will need to pick a class. Some
@@ -347,72 +375,79 @@ Half-Troll cannot become a Paladin. Players who are new to the game
 should run a warrior or rogue. Spell casting generally requires a more
 experienced player that is familiar with survival techniques.
 
-`Warrior`:
-  Warriors are hack-and-slash characters, who solve most of their
-  problems by cutting them to pieces, but occasionally falls back on
-  the help of magical devices. Their prime stats are Strength and
-  Constitution, and a good Dexterity can really help at times. A
-  Warrior will be good at Fighting and Throwing/Bows, but bad at most
-  other skills.
+#### `Warrior`
 
-`Mage`:
-  Mages must live by their wits. They cannot hope to simply hack their
-  way through the dungeon, and so must therefore use their magic to
-  defeat, deceive, confuse, and escape. Mages are not really complete
-  without an assortment of magical devices to use in addition to their
-  spells. They can master the higher level magical devices far easier
-  than anyone else, and has the best saving throw to resist effects of
-  spells cast at them. Intelligence and Dexterity are their primary
-  stats. There is no rule that says a mages cannot become good
-  fighters, but spells are their true realm.
+Warriors are hack-and-slash characters, who solve most of their
+problems by cutting them to pieces, but occasionally falls back on
+the help of magical devices. Their prime stats are Strength and
+Constitution, and a good Dexterity can really help at times. A
+Warrior will be good at Fighting and Throwing/Bows, but bad at most
+other skills.
 
-`Priest`:
-  Priests are characters of holy devotion. They explore the dungeon
-  only to destroy the evil that lurks within, and if treasure just
-  happens to fall into their pack, well, so much more to the glory of
-  their temple! Priests receive their spells from a deity, and
-  therefore do not choose which spells are learned. They are familiar
-  with magical devices, preferring to call them instruments of god,
-  but is not as good as a mage in their use. Priests have good saving
-  throws, and make decent fighters, preferring blunt weapons over
-  edged ones. Wisdom and Charisma are the priest’s primary stats.
+#### `Mage`
 
-`Rogue`:
-  Rogues are characters that prefer to live by their cunning, but is
-  capable of fighting their way out of a tight spot. They are the
-  master of traps and locks, no device being impossible to overcome. A
-  rogue has a high stealth allowing them to sneak around many
-  creatures without having to fight, or sneak up and get the first
-  blow. A rogue’s perception is higher than any other class, and many
-  times they will notice a trap or secret door before having to
-  search. A rogue is better than a warrior or paladin with magical
-  devices, but still cannot rely on their performance. Rogues can also
-  learn a few spells, but not the powerful offensive spells mages can
-  use. A rogue’s primary stats are Intelligence and Dexterity.
+Mages must live by their wits. They cannot hope to simply hack their
+way through the dungeon, and so must therefore use their magic to
+defeat, deceive, confuse, and escape. Mages are not really complete
+without an assortment of magical devices to use in addition to their
+spells. They can master the higher level magical devices far easier
+than anyone else, and has the best saving throw to resist effects of
+spells cast at them. Intelligence and Dexterity are their primary
+stats. There is no rule that says a mages cannot become good
+fighters, but spells are their true realm.
 
-`Ranger`:
-  A Ranger is a warrior/mage. They are good fighters, and the best of
-  the classes with a missile weapon such as a bow. Rangers learn
-  spells much more slowly than a mage, but is capable of learning all
-  but the most powerful spell. Because rangers are really a dual class
-  character, more experience is required for them to advance. Rangers
-  have good stealth, good perception, good searching, good saving
-  throw, and is good with magical devices. Their primary stats are
-  Intelligence and Dexterity.
+#### `Priest`
 
-`Paladin`:
-  A Paladin is a warrior/priest. They are very good fighters, second
-  only to the warrior class, but are not very good at missile weapons.
-  They receive prayers at a slower pace then the priest, but can
-  eventually learn all the prayers. Because paladins are dual class
-  characters, it requires more experience to advance them. A paladin
-  lacks much in the way of abilities. They are poor at stealth,
-  perception, searching, and magical devices. They have a decent
-  saving throw due to their divine alliance. A paladin’s primary stats
-  are Strength and Charisma.
+Priests are characters of holy devotion. They explore the dungeon
+only to destroy the evil that lurks within, and if treasure just
+happens to fall into their pack, well, so much more to the glory of
+their temple! Priests receive their spells from a deity, and
+therefore do not choose which spells are learned. They are familiar
+with magical devices, preferring to call them instruments of god,
+but is not as good as a mage in their use. Priests have good saving
+throws, and make decent fighters, preferring blunt weapons over
+edged ones. Wisdom and Charisma are the priest’s primary stats.
+
+#### `Rogue`
+
+Rogues are characters that prefer to live by their cunning, but is
+capable of fighting their way out of a tight spot. They are the
+master of traps and locks, no device being impossible to overcome. A
+rogue has a high stealth allowing them to sneak around many
+creatures without having to fight, or sneak up and get the first
+blow. A rogue’s perception is higher than any other class, and many
+times they will notice a trap or secret door before having to
+search. A rogue is better than a warrior or paladin with magical
+devices, but still cannot rely on their performance. Rogues can also
+learn a few spells, but not the powerful offensive spells mages can
+use. A rogue’s primary stats are Intelligence and Dexterity.
+
+#### `Ranger`
+
+A Ranger is a warrior/mage. They are good fighters, and the best of
+the classes with a missile weapon such as a bow. Rangers learn
+spells much more slowly than a mage, but is capable of learning all
+but the most powerful spell. Because rangers are really a dual class
+character, more experience is required for them to advance. Rangers
+have good stealth, good perception, good searching, good saving
+throw, and is good with magical devices. Their primary stats are
+Intelligence and Dexterity.
+
+#### `Paladin`
+
+A Paladin is a warrior/priest. They are very good fighters, second
+only to the warrior class, but are not very good at missile weapons.
+They receive prayers at a slower pace then the priest, but can
+eventually learn all the prayers. Because paladins are dual class
+characters, it requires more experience to advance them. A paladin
+lacks much in the way of abilities. They are poor at stealth,
+perception, searching, and magical devices. They have a decent
+saving throw due to their divine alliance. A paladin’s primary stats
+are Strength and Charisma.
 
 
 #### 3.5.1 Race Versus Class
+
 
                 Warrior   Mage    Priest    Rogue   Ranger   Paladin
 
@@ -426,10 +461,12 @@ experienced player that is familiar with survival techniques.
     Half-Troll    Yes      No       Yes      No       No       No
 
 
+
 #### 3.5.2 Class Versus Skills
 
 Class abilities as compared to each other, with 1 as the lowest, or
 worst, and 10 as the highest, or best are shown in the following table.
+
 
                        Save  Stea-        Magic                 Extra
             Fight Bows Throw  lth  Disarm Device Percep Search Exp/lev
@@ -440,6 +477,7 @@ worst, and 10 as the highest, or best are shown in the following table.
     Rogue     8     9    7    10     10      6     10     10       +0%
     Ranger    6    10    8     7      6      7      6      6      +40%
     Paladin   9     5    4     2      2      4      2      2      +35%
+
 
 
 ### 3.6 Experience
@@ -497,6 +535,7 @@ on the map. See the section on commands for further help.
 
 ### Features
 
+
     .   A floor space, or hidden trap   1   Entrance to General Store
     #   A wall                          2   Entrance to Armory
     '   An open door                    3   Entrance to Weapon Smith
@@ -508,7 +547,9 @@ on the map. See the section on commands for further help.
     %   A mineral vein                  @   The character
 
 
+
 ### Objects
+
 
     !   A flask or potion         ?   A scroll
     "   An amulet                 [   Hard armor
@@ -523,7 +564,9 @@ on the map. See the section on commands for further help.
     s   A skeleton
 
 
+
 ### Creatures
+
 
     a   Giant Ant           A   Giant Ant Lion
     b   Giant Bat           B   The Balrog
@@ -554,6 +597,7 @@ on the map. See the section on commands for further help.
     $   Creeping Coins      ,   Mushroom Patch
 
 
+
 Here is what the screen looks like after a character has been
 adventuring in *moria* for a while:
 
@@ -574,7 +618,7 @@ adventuring in *moria* for a while:
     EXP :  38487             #.......###
     MANA:  66/66             #....@..#
     HP  :123/123             #........
-                             #.......#     
+                             #.......#
                              #.......#
     AC  :     55             ####.#'##
     GOLD:  23868
@@ -601,12 +645,12 @@ monsters visible.
 
 From the statistics on the left side of the screen, it can be seen that
 the character is a `Mage (2nd)`, which is another way of saying that it
-is at level 27. The reason that this character is at level 27 is because
-it has 38487 experience points.
+is at level 27. The reason that this character is at level 27 (`LEV`) is
+because it has 38487 experience points (`EXP`).
 
 The character has 123 of 123 hit-points available. `HP` shows the
 current hit points and then the maximum hit-points. This spell-caster
-has exactly 66 mana (spell-casting) points to spend as spells are cast.
+has exactly 66 `MANA` (spell-casting) points to spend as spells are cast.
 It can also be seen that this mage has some spells to learn. The word
 `Study` in the bottom right shows this.
 
@@ -615,8 +659,8 @@ dexterity, constitution and charisma can also be seen. The character
 doesn’t have 18 of 78 intelligence, they have 18 78/100 intelligence,
 which is more than just 18.
 
-Finally, the character’s armor class is currently at 55, and has a great
-number of gold pieces.
+Finally, the character’s armor class (`AC`) is currently at 55, and has a
+great number of gold pieces.
 
 
 ## 6. Commands
@@ -695,24 +739,24 @@ Rogue-like command summary.
 ### 6.1 Special Keys
 
 Certain commands may be entered at any time input is accepted. The
-special character CTRL+R, entered as a single keystroke, will always
+special character `CTRL+R`, entered as a single keystroke, will always
 refresh the screen. This may be used at any prompt for input, and is
 otherwise ignored.
 
 When playing on a UNIX or similar system, then there are some additional
-special characters used by *moria*. The special character CTRL+C will
+special characters used by *moria*. The special character `CTRL+C` will
 interrupt *moria*, and asks the player if they really want the character
 to die and quit the game. Should the player choose for the character not
 to die, *moria* merely continues as before, except that resting,
 running, repeated commands, etc will be terminated. The game can be
-suspended with CTRL+Z, and return to the original command shell. In this
+suspended with `CTRL+Z`, and return to the original command shell. In this
 case, *moria* is not terminated, and may be restarted at any time from
 the shell. Alternatively, the special command `!` is available to run
 any normal shell command. When it is complete, *moria* will restart.
 
-For many input requests or queries, the special character ESCAPE will
-abort the command. For the "`-more-`" message prompts, any of SPACE,
-ESCAPE, RETURN (CTRL+Shift+M), or LINEFEED (CTRL+J) can be used to
+For many input requests or queries, the special character `ESCAPE` will
+abort the command. For the "`-more-`" message prompts, any of `SPACE`,
+`ESCAPE`, `RETURN` (`CTRL+Shift+M`), or `LINEFEED` (`CTRL+J`) can be used to
 continue after pausing to read the displayed message.
 
 It is possible to give control character commands in two keystrokes, by
@@ -786,8 +830,8 @@ type a space after the number, and then give the command.
 Counted commands are very useful for searching or tunneling, as they
 automatically terminate on success, or if the character is attacked. A
 counted command or a Run can be terminated a counted command by pressing
-any key. This character is ignored, but it is safest to use a SPACE or
-ESCAPE which are always ignored as commands.
+any key. This character is ignored, but it is safest to use a `SPACE` or
+`ESCAPE` which are always ignored as commands.
 
 
 ### 6.4 Selection of objects
@@ -816,394 +860,466 @@ In the following command descriptions, the original style key is given.
 If the rogue-like key for that command is different, then it will be
 shown following the original key.
 
-`B <Dir> (f <Dir>) - Bash.`:
-  The bash command includes breaking open doors and chests, or bashing
-  an opponent. The bashing ability increases with weight and strength.
-  In addition, when bashing an opponent, it will either perform a body
-  bash, or, when wielding a shield, perform a shield bash which is
-  more effective.
 
-  Bashing a door can throw the character off-balance, but this will
-  not generally be a problem. Doors that have been jammed closed with
-  spikes can only be opened by bashing. Locked doors may also be
-  bashed open. Bashing a door open will permanently break it.
+#### `B <Dir> (f <Dir>) - Bash.`
 
-  Bashing a creature affects both the character and the opponent.
-  Depending on dexterity, the character may or may not be thrown
-  off-balance allowing free moves to the opponent. If the bash is
-  successful, the opponent may be thrown off-balance, thus giving the
-  character some free hits or a chance to flee. Huge creatures such as
-  ancient dragons will be difficult or even impossible to bash
-  successfully.
+The bash command includes breaking open doors and chests, or bashing
+an opponent. The bashing ability increases with weight and strength.
+In addition, when bashing an opponent, it will either perform a body
+bash, or, when wielding a shield, perform a shield bash which is
+more effective.
 
-  A character automatically performs a shield bash instead of a body
-  bash, when they are currently wearing a shield. A shield bash adds
-  the damage of a shield to that of the bash, so it is more effective.
-  Size and material both affect the damage that a shield will do.
+Bashing a door can throw the character off-balance, but this will
+not generally be a problem. Doors that have been jammed closed with
+spikes can only be opened by bashing. Locked doors may also be
+bashed open. Bashing a door open will permanently break it.
 
-  Bashing can be done with a command-count, but if the character is
-  town off-balance, the count will be reset straight away.
+Bashing a creature affects both the character and the opponent.
+Depending on dexterity, the character may or may not be thrown
+off-balance allowing free moves to the opponent. If the bash is
+successful, the opponent may be thrown off-balance, thus giving the
+character some free hits or a chance to flee. Huge creatures such as
+ancient dragons will be difficult or even impossible to bash
+successfully.
 
-`C - Display character (on screen or saving to a file.)`:
-  This command allows the player to either display the character
-  details on the terminal screen, or to save an entire character info
-  listing to a file. The character’s history, equipment, and inventory
-  list are also included when saving to a file.
+A character automatically performs a shield bash instead of a body
+bash, when they are currently wearing a shield. A shield bash adds
+the damage of a shield to that of the bash, so it is more effective.
+Size and material both affect the damage that a shield will do.
 
-`D <Dir> - Disarm a trap.`:
-  The character can attempt to disarm floor traps, or trapped chests.
-  When the character tries and fails to disarm a trap, there is a
-  chance that the blunder will set it off. Traps on chests can only be
-  disarmed after firstly finding the trap with the search command.
-  This command can have a count.
+Bashing can be done with a command-count, but if the character is
+town off-balance, the count will be reset straight away.
 
-`E - Eat some food.`:
-  A character must eat occasionally to remain effective. As a
-  character grows hungry, a message will appear at the bottom of the
-  screen saying "`Hungry`". When a character remains hungry for too
-  long, they will become weak, and eventually start fainting, and
-  finally die of starvation.
 
-`F - Fill a lamp or lantern with oil.`:
-  When the character is using a lamp for a light source, and has a
-  flask of oil in the pack, they may refill the lamp by using this
-  command. A lamp is capable of a maximum of 15000 turns of light, and
-  each flask has 7500 turns of oil contained in it.
+#### `C - Display character (on screen or saving to a file.)`
 
-`G - Gain new spells.`:
-  This command causes the character to learn new spells. When the
-  character is able to learn some spells, the word "`Study`" appears
-  on the status line at the bottom of the screen. Mages, rogues, and
-  rangers must have the magic books containing new spells to be able
-  to learn them. Priests and Paladins are given their prayers by their
-  gods, and hence do not need a holy book before learning the prayers
-  in it. They do need the book in order to use the prayers.
+This command allows the player to either display the character
+details on the terminal screen, or to save an entire character info
+listing to a file. The character’s history, equipment, and inventory
+list are also included when saving to a file.
 
-`L (W) - Location on map.`:
-  The location command allows the player to look at all parts of the
-  current dungeon level. The displayed view of the dungeon is shifted
-  to bring the character’s current position as close to the center as
-  possible. The map can then be shifted using any of the eight
-  possible directions. Each shift moves the view point by one half
-  screen. The top line displays a map section number, each map section
-  having a height and width one half that of the display, and
-  indicates the direction of the display from the character’s current
-  position. When this command is exited and the character is not on
-  the display, then the display is centered again.
 
-`M - Map shown reduced size.`:
-  This command will show the entire map, reduced by a factor of nine,
-  on the screen. Since nine places map into every character on the
-  screen, only the major dungeon features will be visible. This is
-  especially useful for finding where the stairs are in relation to
-  the character’s current position. It is also useful for identifying
-  unexplored areas.
+#### `D <Dir> - Disarm a trap.`
 
-`R - Rest for a number of turns.`:
-  The character may rest one turn with the null movement command.
-  Resting for longer periods of time is accomplished by using the Rest
-  command, followed by the number of turns to rest. Resting will
-  continue until the specified duration has expired, or something to
-  wake the character happens, such as a creature wandering by, or
-  getting hungry, or some disability like blindness expiring. It is
-  sometimes a good idea to rest a beat-up character until they regain
-  some of their hit-points, but be sure to have plenty of food if you
-  rest often.
+The character can attempt to disarm floor traps, or trapped chests.
+When the character tries and fails to disarm a trap, there is a
+chance that the blunder will set it off. Traps on chests can only be
+disarmed after firstly finding the trap with the search command.
+This command can have a count.
 
-  The character can be awakened by pressing any key. Space is best,
-  since if the rest ends just before the character is typed, the space
-  is ignored as a command.
 
-  It is also possible to rest by typing the count first, and using
-  either the Rest or the null movement command.
+#### `E - Eat some food.`
 
-  When `*` is given for the rest count, the character will rest until
-  both hit-points and mana reach their maximum values. As above, the
-  character will immediately be awakened if anything interesting
-  happens.
+A character must eat occasionally to remain effective. As a
+character grows hungry, a message will appear at the bottom of the
+screen saying "`Hungry`". When a character remains hungry for too
+long, they will become weak, and eventually start fainting, and
+finally die of starvation.
 
-`S (#) - Search mode toggle.`:
-  The Searching toggle will take the character into and out of search
-  mode. When first pressed, the message "`Searching`" will appear on
-  the status line at the bottom of the screen. The character is now
-  taking two turns for each command, one for the command and one turn
-  to search. This means that the character is taking twice the time to
-  move about the dungeon, and therefore twice the food. If a creature
-  should happen by or attack, search mode will automatically toggled
-  off. Search mode can also be turned off by again pressing the `S`
-  (or `#`) key.
 
-`T <Dir> (CTRL+<Dir>) - Tunnel through rock.`:
-  Tunneling (Mining) is a very useful art in the dungeons of *moria*.
-  There are four kinds of rock:
+#### `F - Fill a lamp or lantern with oil.`
+
+When the character is using a lamp for a light source, and has a
+flask of oil in the pack, they may refill the lamp by using this
+command. A lamp is capable of a maximum of 15000 turns of light, and
+each flask has 7500 turns of oil contained in it.
+
+
+#### `G - Gain new spells.`
+
+This command causes the character to learn new spells. When the
+character is able to learn some spells, the word "`Study`" appears
+on the status line at the bottom of the screen. Mages, rogues, and
+rangers must have the magic books containing new spells to be able
+to learn them. Priests and Paladins are given their prayers by their
+gods, and hence do not need a holy book before learning the prayers
+in it. They do need the book in order to use the prayers.
+
+
+#### `L (W) - Location on map.`
+
+The location command allows the player to look at all parts of the
+current dungeon level. The displayed view of the dungeon is shifted
+to bring the character’s current position as close to the center as
+possible. The map can then be shifted using any of the eight
+possible directions. Each shift moves the view point by one half
+screen. The top line displays a map section number, each map section
+having a height and width one half that of the display, and
+indicates the direction of the display from the character’s current
+position. When this command is exited and the character is not on
+the display, then the display is centered again.
+
+
+#### `M - Map shown reduced size.`
+
+This command will show the entire map, reduced by a factor of nine,
+on the screen. Since nine places map into every character on the
+screen, only the major dungeon features will be visible. This is
+especially useful for finding where the stairs are in relation to
+the character’s current position. It is also useful for identifying
+unexplored areas.
+
+
+#### `R - Rest for a number of turns.`
+
+The character may rest one turn with the null movement command.
+Resting for longer periods of time is accomplished by using the Rest
+command, followed by the number of turns to rest. Resting will
+continue until the specified duration has expired, or something to
+wake the character happens, such as a creature wandering by, or
+getting hungry, or some disability like blindness expiring. It is
+sometimes a good idea to rest a beat-up character until they regain
+some of their hit-points, but be sure to have plenty of food if you
+rest often.
+
+The character can be awakened by pressing any key. Space is best,
+since if the rest ends just before the character is typed, the space
+is ignored as a command.
+
+It is also possible to rest by typing the count first, and using
+either the Rest or the null movement command.
+
+When `*` is given for the rest count, the character will rest until
+both hit-points and mana reach their maximum values. As above, the
+character will immediately be awakened if anything interesting
+happens.
+
+
+#### `S (#) - Search mode toggle.`
+
+The Searching toggle will take the character into and out of search
+mode. When first pressed, the message "`Searching`" will appear on
+the status line at the bottom of the screen. The character is now
+taking two turns for each command, one for the command and one turn
+to search. This means that the character is taking twice the time to
+move about the dungeon, and therefore twice the food. If a creature
+should happen by or attack, search mode will automatically toggled
+off. Search mode can also be turned off by again pressing the `S`
+(or `#`) key.
+
+
+#### `T <Dir> (CTRL+<Dir>) - Tunnel through rock.`
+
+Tunneling (Mining) is a very useful art in the dungeons of *moria*.
+There are four kinds of rock:
 
   1.  Permanent Rock
   2.  Granite Rock
   3.  Magma Intrusion
   4.  Quartz Veins
 
-  Permanent Rock is exactly that, permanent. Granite is very hard,
-  therefore hard to dig through, and contains no valuable metals.
-  Magma and Quartz veins are softer and sometimes bear valuable metals
-  and gems, shown as a `$` or a `*` symbol. When the character can’t
-  move over these symbols, it means they are embedded in the rock, and
-  the tunnel command must be used to dig them out. There is a game
-  option which causes magma and quartz to be displayed differently
-  than other rock types.
+Permanent Rock is exactly that, permanent. Granite is very hard,
+therefore hard to dig through, and contains no valuable metals.
+Magma and Quartz veins are softer and sometimes bear valuable metals
+and gems, shown as a `$` or a `*` symbol. When the character can’t
+move over these symbols, it means they are embedded in the rock, and
+the tunnel command must be used to dig them out. There is a game
+option which causes magma and quartz to be displayed differently
+than other rock types.
 
-  Tunneling can be VERY difficult by hand, so when digging be sure to
-  wield either a shovel or a pick. Magical shovels and picks can be
-  found which allow the wielder to dig much faster than normal, and a
-  good strength also helps.
+Tunneling can be **VERY** difficult by hand, so when digging be sure to
+wield either a shovel or a pick. Magical shovels and picks can be
+found which allow the wielder to dig much faster than normal, and a
+good strength also helps.
 
-  Tunneling can have a count.
+Tunneling can have a count.
 
-`V - View scoreboard.`:
-  This command will display the contents of the score board on the
-  screen. On a multiuser system, pressing `V` the first time will show
-  only those scores from the score board that belong to the current
-  user, and pressing `V` again will show all users’ scores.
 
-`a <Dir> (z <Dir>) - Aim a wand.`:
-  Wands must be aimed in a direction to be used. Wands are magical
-  devices and therefore use the Magical Devices ability of the
-  character. They will either affect the first object/creature
-  encountered, or affect anything in a given direction, depending upon
-  the wand. An obstruction such as a door or wall will generally stop
-  the effects of a wand from traveling further.
+#### `V - View scoreboard.`
 
-`b (P) - Browse a book.`:
-  Books can only be read if the character is of its realm. Therefore a
-  magic user could read a magic book, but not a holy book. Warriors
-  will not be able to read either kind of book. When the browse
-  command is used, all of the spells or prayers contained therein are
-  displayed, along with information such as their level, the amount of
-  mana used up in casting them, and whether or not you know the spell
-  or prayer. There are a total of 31 different magical spells in four
-  books, and 31 different prayers in four books.
+This command will display the contents of the score board on the
+screen. On a multiuser system, pressing `V` the first time will show
+only those scores from the score board that belong to the current
+user, and pressing `V` again will show all users’ scores.
 
-`c <Dir> - Close a door.`:
-  Non-intelligent and certain other creatures will not be able to open
-  a door. Therefore shutting doors can be a life saver. To close a
-  door, the character must be adjacent to an open door, and broken
-  doors cannot be closed. Bashing a closed door will break it and
-  leave it permanently open.
 
-`d - Drop an object from the inventory.`:
-  Objects can be dropped onto the floor beneath the character if that
-  floor spot does not already contain an object. Doors and traps are
-  considered objects in this sense. If the character has several
-  objects of the same kind, the player will be prompted for dropping
-  one or all of them. It is possible to directly drop things which you
-  are wielding or wearing.
+#### `a <Dir> (z <Dir>) - Aim a wand.`
 
-`e - Display a list of equipment being used.`:
-  Use the Equipment command to display a list of objects currently
-  being worn or wielded by the character. Each object has a specific
-  place where it is placed, and that only one object of each type may
-  be used at any one time, excepting rings of which two can be worn,
-  one on each hand.
+Wands must be aimed in a direction to be used. Wands are magical
+devices and therefore use the Magical Devices ability of the
+character. They will either affect the first object/creature
+encountered, or affect anything in a given direction, depending upon
+the wand. An obstruction such as a door or wall will generally stop
+the effects of a wand from traveling further.
 
-`f <Dir> (t <Dir>) - Fire/Throw an object/use a missile weapon.`:
-  Any object carried by the character can be thrown. Depending upon
-  the weight of an object, it may travel across a room or drop down
-  beside the character. When a stackable object like an arrow is
-  thrown, only one will be thrown at a time.
 
-  When throwing at a creature, the chance of hitting the creature is
-  determined by the character’s pluses to hit, the ability at
-  throwing, and the object’s pluses to hit. Once the creature is hit,
-  the object may or may not do any actual damage to it. Certain
-  objects in the dungeon can do great amounts of damage when thrown,
-  but it’s for the player to figure out the obscure ones. Oil flasks
-  are considered to be lit before thrown; therefore, they will do fire
-  damage to a creature if they hit it.
+#### `b (P) - Browse a book.`
 
-  To use a bow with arrows, simply wield the bow and throw the arrows.
-  Extra pluses to damage and hitting are gained by wielding the proper
-  weapon and throwing the corresponding ammo. A heavy crossbow with
-  bolts for example, is a killer...
+Books can only be read if the character is of its realm. Therefore a
+magic user could read a magic book, but not a holy book. Warriors
+will not be able to read either kind of book. When the browse
+command is used, all of the spells or prayers contained therein are
+displayed, along with information such as their level, the amount of
+mana used up in casting them, and whether or not you know the spell
+or prayer. There are a total of 31 different magical spells in four
+books, and 31 different prayers in four books.
 
-`i - Display a list of objects being carried.`:
-  This command displays an inventory of all objects being carried, but
-  not currently in use (e.g. being worn or wielded). The character may
-  carry up to 22 different kinds of objects in the pack. Depending
-  upon strength, the character will be able carry many identical
-  objects before hitting the weight limit. After the weight limit is
-  exceeded the character will move slower due to the encumbrance.
 
-`j <Dir> (S <Dir>) - Jam a door with an iron spike.`:
-  Most humanoid and many intelligent creatures can simply open a
-  closed door, and can eventually get through a locked door. Therefore
-  the character may also spike a door in order to jam it. Each spike
-  used on a door will increase its strength, although as more spikes
-  are jammed, the less effect each additional spike has. It is very
-  easy to jam a door so much as to make it impossible for the
-  character to bash it down, so spike doors wisely. The bigger a
-  creature is, the easier it can bash a door down. Therefore twenty or
-  more spikes might be necessary to slow down a dragon, where one
-  spike would slow down a kobold. This command can be counted.
+#### `c <Dir> - Close a door.`
 
-`l <Dir> (x <Dir>) - Look in a direction.`:
-  The Look command is useful in identifying the exact type of object
-  or creature shown on the screen. Also, if a creature is on top of an
-  object, the look command will describe both. Creatures and objects
-  can be seen up to 200 feet away (20 spaces or tiles). The Look
-  command can be used freely without the creatures getting a turn to
-  move against the character.
+Non-intelligent and certain other creatures will not be able to open
+a door. Therefore shutting doors can be a life saver. To close a
+door, the character must be adjacent to an open door, and broken
+doors cannot be closed. Bashing a closed door will break it and
+leave it permanently open.
 
-  Looking in a particular direction sees everything within a cone of
-  vision which just overlaps the cones of the two adjacent directions.
-  Looking with the null direction `5` (or `.`) sees everything which
-  there is to be seen.
 
-  The character is able to access monster memories with this command.
-  When the character sees a creature, the player has the option to
-  view a short paragraph of information about prior experiences with
-  that creature. See also the section on being attacked.
+#### `d - Drop an object from the inventory.`
 
-`m - Cast a magic spell.`:
-  To cast a spell, a character must have previously learned it, and
-  must also have in the inventory a magical book from which the spell
-  may be read. Each spell has a chance of failure which starts out
-  fairly large but decreases as a character gains levels. If a
-  character does not have enough mana, the chance of failure is
-  greatly increased, and gambles on losing a point of constitution.
-  The player will be prompted for confirmation before trying to cast a
-  spell when there is insufficient mana. Since a character must read
-  the spell from a book, they cannot be blind or confused when casting
-  a spell, and there must be some light present.
+Objects can be dropped onto the floor beneath the character if that
+floor spot does not already contain an object. Doors and traps are
+considered objects in this sense. If the character has several
+objects of the same kind, the player will be prompted for dropping
+one or all of them. It is possible to directly drop things which you
+are wielding or wearing.
 
-`o <Dir> - Open a door, chest, or lock.`:
-  To open an object such as a door or chest, the Open command can be
-  used. If the object is locked, the Open command will attempt to pick
-  the lock, based on the character’s disarm ability. If an object is
-  trapped and the character opens it, the trap will be set off. This
-  command can be counted, because the locked object may require
-  several tries to open.
 
-`p - Read a prayer.`:
-  To pray effectively, a character must have learned the prayer, and
-  must also have in the inventory a holy book from which the prayer
-  may be read. Each prayer has a chance of being ignored which starts
-  out fairly large but decreases as a character gains levels. If a
-  character does not have enough mana, the chance of failure is
-  greatly increased, and gambles on losing a point of constitution.
-  The player will be prompted for confirmation before trying to pray
-  when there is insufficient mana. Since a character must read the
-  prayer from a book, they cannot be blind or confused when praying,
-  and there must be some light present.
+#### `e - Display a list of equipment being used.`
 
-`q - Quaff a potion.`:
-  To drink a potion use the Quaff command. A potion affects the
-  character in some manner. The effects of the potion may be
-  immediately noticed, or they may be subtle and unnoticed.
+Use the Equipment command to display a list of objects currently
+being worn or wielded by the character. Each object has a specific
+place where it is placed, and that only one object of each type may
+be used at any one time, excepting rings of which two can be worn,
+one on each hand.
 
-`r - Read a scroll.`:
-  To read a scroll use the Read command. Most scroll spells either
-  affect the player or the area around the character; a few cases such
-  as identify scrolls act on other objects. Two scrolls, the identify
-  scroll and the recharge scroll, have titles which can be read
-  without setting them off, and by pressing ESCAPE can be saved for
-  future use.
 
-`s - Search general area one turn.`:
-  The Search command can be used to locate hidden traps and secret
-  doors about the character. More than a single turn of searching will
-  be required in most cases. The character should always search a
-  chest before trying to open it because they are generally trapped.
-  This command can be counted, and the counted search ends as soon as
-  anything is found.
+#### `f <Dir> (t <Dir>) - Fire/Throw an object/use a missile weapon.`
 
-`t (T) - Take off a piece of equipment.`:
-  Use the Take Off command to remove an object from use, and return it
-  to the character’s pack, or inventory. Occasionally the character
-  will have a cursed item which cannot be removed. Cursed items are
-  always bad, and can only be taken off after removing the curse.
+Any object carried by the character can be thrown. Depending upon
+the weight of an object, it may travel across a room or drop down
+beside the character. When a stackable object like an arrow is
+thrown, only one will be thrown at a time.
 
-`u (Z) - Use/Zap a staff.`:
-  The Use command will activate a staff. Like scrolls, most staves
-  have an area effect. Because staves are generally more powerful than
-  most other items, they are also harder to use correctly.
+When throwing at a creature, the chance of hitting the creature is
+determined by the character’s pluses to hit, the ability at
+throwing, and the object’s pluses to hit. Once the creature is hit,
+the object may or may not do any actual damage to it. Certain
+objects in the dungeon can do great amounts of damage when thrown,
+but it’s for the player to figure out the obscure ones. Oil flasks
+are considered to be lit before thrown; therefore, they will do fire
+damage to a creature if they hit it.
 
-`v - Display current version of game.`:
-  The Version command displays the credits for the current version of
-  *moria*.
+To use a bow with arrows, simply wield the bow and throw the arrows.
+Extra pluses to damage and hitting are gained by wielding the proper
+weapon and throwing the corresponding ammo. A heavy crossbow with
+bolts for example, is a killer...
 
-`w - Wear or wield an item being carried.`:
-  To wear or wield an object in the character’s inventory, use the
-  Wear/Wield command. If another object is already in use for the same
-  function, it is automatically removed first; if the character is
-  wearing two rings, the player is given a choice of which one to
-  remove. An object’s bonuses cannot be gained until it is worn or
-  wielded.
 
-`x (X) - Exchange primary and secondary weapons.`:
-  A secondary weapon is any weapon which may be needed often. Instead
-  of searching through the inventory, the character may use the
-  exchange command to keep the weapon ready (e.g. slung over the
-  character’s back). For instance, if the bow was going to be used
-  primarily, but needed a sword for close combat, the character could
-  wield the sword, use the exchange command to make it the secondary
-  weapon, then wield the bow. If the sword was suddenly needed, simply
-  use the exchange command to switch between the bow and the sword.
+#### `i - Display a list of objects being carried.`
 
-`/ - Identify a character shown on screen.`:
-  Use the identify command to find out what a symbol displayed on the
-  screen stands for. For instance, by pressing `/.`, the player can
-  find out that the `.` stands for a floor spot, or tile. When used
-  with a creature, the identify command will only tell what class of
-  creature the symbol stands for, not the specific creature;
-  therefore, use the look command for this information.
+This command displays an inventory of all objects being carried, but
+not currently in use (e.g. being worn or wielded). The character may
+carry up to 22 different kinds of objects in the pack. Depending
+upon strength, the character will be able carry many identical
+objects before hitting the weight limit. After the weight limit is
+exceeded the character will move slower due to the encumbrance.
 
-  When identifying a symbol for a creature in the character’s monster
-  memory, the player has the option to view a paragraph of information
-  on those creatures identified by the given character. Several
-  creatures may be identified in this way. Typing ESCAPE after the
-  paragraph for any creature will abort back to command level. See
-  also the section on being attacked.
 
-`? - Display a list of commands.`:
-  The `?` command displays a quick reference help page on the screen.
+#### `j <Dir> (S <Dir>) - Jam a door with an iron spike.`
 
-`- - Move without pickup.`:
-  This is followed by a move command, and causes the character to move
-  over an object without automatically picking it up. This command can
-  be counted.
+Most humanoid and many intelligent creatures can simply open a
+closed door, and can eventually get through a locked door. Therefore
+the character may also spike a door in order to jam it. Each spike
+used on a door will increase its strength, although as more spikes
+are jammed, the less effect each additional spike has. It is very
+easy to jam a door so much as to make it impossible for the
+character to bash it down, so spike doors wisely. The bigger a
+creature is, the easier it can bash a door down. Therefore twenty or
+more spikes might be necessary to slow down a dragon, where one
+spike would slow down a kobold. This command can be counted.
 
-`= - Set options.`:
-  This is a free move, to set various game options in *moria*. The
-  available options are:
 
-  1.  Cut known corners when running. This is on by default, and the
+#### `l <Dir> (x <Dir>) - Look in a direction.`
+
+The Look command is useful in identifying the exact type of object
+or creature shown on the screen. Also, if a creature is on top of an
+object, the look command will describe both. Creatures and objects
+can be seen up to 200 feet away (20 spaces or tiles). The Look
+command can be used freely without the creatures getting a turn to
+move against the character.
+
+Looking in a particular direction sees everything within a cone of
+vision which just overlaps the cones of the two adjacent directions.
+Looking with the null direction `5` (or `.`) sees everything which
+there is to be seen.
+
+The character is able to access monster memories with this command.
+When the character sees a creature, the player has the option to
+view a short paragraph of information about prior experiences with
+that creature. See also the section on being attacked.
+
+
+#### `m - Cast a magic spell.`
+
+To cast a spell, a character must have previously learned it, and
+must also have in the inventory a magical book from which the spell
+may be read. Each spell has a chance of failure which starts out
+fairly large but decreases as a character gains levels. If a
+character does not have enough mana, the chance of failure is
+greatly increased, and gambles on losing a point of constitution.
+The player will be prompted for confirmation before trying to cast a
+spell when there is insufficient mana. Since a character must read
+the spell from a book, they cannot be blind or confused when casting
+a spell, and there must be some light present.
+
+
+#### `o <Dir> - Open a door, chest, or lock.`
+
+To open an object such as a door or chest, the Open command can be
+used. If the object is locked, the Open command will attempt to pick
+the lock, based on the character’s disarm ability. If an object is
+trapped and the character opens it, the trap will be set off. This
+command can be counted, because the locked object may require
+several tries to open.
+
+
+#### `p - Read a prayer.`
+
+To pray effectively, a character must have learned the prayer, and
+must also have in the inventory a holy book from which the prayer
+may be read. Each prayer has a chance of being ignored which starts
+out fairly large but decreases as a character gains levels. If a
+character does not have enough mana, the chance of failure is
+greatly increased, and gambles on losing a point of constitution.
+The player will be prompted for confirmation before trying to pray
+when there is insufficient mana. Since a character must read the
+prayer from a book, they cannot be blind or confused when praying,
+and there must be some light present.
+
+
+#### `q - Quaff a potion.`
+
+To drink a potion use the Quaff command. A potion affects the
+character in some manner. The effects of the potion may be
+immediately noticed, or they may be subtle and unnoticed.
+
+
+#### `r - Read a scroll.`
+
+To read a scroll use the Read command. Most scroll spells either
+affect the player or the area around the character; a few cases such
+as identify scrolls act on other objects. Two scrolls, the identify
+scroll and the recharge scroll, have titles which can be read
+without setting them off, and by pressing ESCAPE can be saved for
+future use.
+
+
+#### `s - Search general area one turn.`
+
+The Search command can be used to locate hidden traps and secret
+doors about the character. More than a single turn of searching will
+be required in most cases. The character should always search a
+chest before trying to open it because they are generally trapped.
+This command can be counted, and the counted search ends as soon as
+anything is found.
+
+
+#### `t (T) - Take off a piece of equipment.`
+
+Use the Take Off command to remove an object from use, and return it
+to the character’s pack, or inventory. Occasionally the character
+will have a cursed item which cannot be removed. Cursed items are
+always bad, and can only be taken off after removing the curse.
+
+
+#### `u (Z) - Use/Zap a staff.`
+
+The Use command will activate a staff. Like scrolls, most staves
+have an area effect. Because staves are generally more powerful than
+most other items, they are also harder to use correctly.
+
+
+#### `v - Display current version of game.`
+
+The Version command displays the credits for the current version of
+*moria*.
+
+
+#### `w - Wear or wield an item being carried.`
+
+To wear or wield an object in the character’s inventory, use the
+Wear/Wield command. If another object is already in use for the same
+function, it is automatically removed first; if the character is
+wearing two rings, the player is given a choice of which one to
+remove. An object’s bonuses cannot be gained until it is worn or
+wielded.
+
+
+#### `x (X) - Exchange primary and secondary weapons.`
+
+A secondary weapon is any weapon which may be needed often. Instead
+of searching through the inventory, the character may use the
+exchange command to keep the weapon ready (e.g. slung over the
+character’s back). For instance, if the bow was going to be used
+primarily, but needed a sword for close combat, the character could
+wield the sword, use the exchange command to make it the secondary
+weapon, then wield the bow. If the sword was suddenly needed, simply
+use the exchange command to switch between the bow and the sword.
+
+
+#### `/ - Identify a character shown on screen.`
+
+Use the identify command to find out what a symbol displayed on the
+screen stands for. For instance, by pressing `/.`, the player can
+find out that the `.` stands for a floor spot, or tile. When used
+with a creature, the identify command will only tell what class of
+creature the symbol stands for, not the specific creature;
+therefore, use the look command for this information.
+
+When identifying a symbol for a creature in the character’s monster
+memory, the player has the option to view a paragraph of information
+on those creatures identified by the given character. Several
+creatures may be identified in this way. Typing ESCAPE after the
+paragraph for any creature will abort back to command level. See
+also the section on being attacked.
+
+
+#### `? - Display a list of commands.`
+
+The `?` command displays a quick reference help page on the screen.
+
+
+#### `- - Move without pickup.`
+
+This is followed by a move command, and causes the character to move
+over an object without automatically picking it up. This command can
+be counted.
+
+
+#### `= - Set options.`
+
+This is a free move, to set various game options in *moria*. The
+available options are:
+
+1.  Cut known corners when running. This is on by default, and the
     only reason for switching it off would be if the character had
     the search mode on and wished to look for secret doors in the
     extremity of every corner.
-  2.  Examine potential corners when running. This is on by default,
+2.  Examine potential corners when running. This is on by default,
     and allows the character to run along an unknown curving
     corridor. If however, the character is running from a creature,
     the player may wish to switch this option off, because the
     creature will cut the corner.
-  3.  Display self during a run. This is off by default, which gives
+3.  Display self during a run. This is off by default, which gives
     faster screen updating.
-  4.  Stop when map sector changes. This is off by default, but can be
+4.  Stop when map sector changes. This is off by default, but can be
     switched on to stop running whenever a new part of the dungeon
     appears in view.
-  5.  Treat open doors as empty space while running. This is off by
+5.  Treat open doors as empty space while running. This is off by
     default, in which case the character stops whenever they run up
     to an open door.
-  6.  Prompt to pick up objects. This is off by default, in which case
+6.  Prompt to pick up objects. This is off by default, in which case
     stepping over an object automatically causes the character to
     pick it up. With the option on, the player gets prompted in all
     such cases with a description of the object to see if it should
     be put into the character’s pack.
-  7.  Rogue-like command set. This option controls the command set in
+7.  Rogue-like command set. This option controls the command set in
     use. It is off by default.
-  8.  Show weights in inventory. This is off by default: switching it
+8.  Show weights in inventory. This is off by default: switching it
     on causes the inventory and equipment listings to include the
     weight of all objects. This may be useful to know if the
     character’s pack is getting too heavy.
-  9.  Highlight and notice mineral seams. This is off by default.
+9.  Highlight and notice mineral seams. This is off by default.
     Switching it on causes quartz and magma to be displayed as `%`
     instead of `#`; also, it causes the look command to treat them
     as interesting objects. This is handy when mining. Setting this
@@ -1211,126 +1327,142 @@ shown following the original key.
     those which are subsequently displayed. To display all minerals,
     just move the map around a bit with the *Where* (or *Locate*)
     command.
-  10. Beep for invalid character. This is on by default. When this
+10. Beep for invalid character. This is on by default. When this
     option is on, the program will beep for most invalid characters,
     such as trying to choose a spell that hasn’t been learned yet.
     When off, there are no such beeps.
-  11. Display rest/repeat counts. This is on by default. When on, the
+11. Display rest/repeat counts. This is on by default. When on, the
     program will progressively display the remaining turns left
     while resting, and for repeated commands. For those trying to
     play over a very slow connection, or for those playing on very
     slow computers, turning this off will make resting and repeated
     commands work much faster.
-  12. Disable haggling. This is off by default. When on, all haggling
+12. Disable haggling. This is off by default. When on, all haggling
     will be disabled at the cost of a 10 percent tax on the final
     price on items you would otherwise have had to haggle for, and
     all prices displayed in the stores will be the actual prices you
     have to pay.
 
-  The setting of all these options persist in the savefile, even after
-  the character dies.
+The setting of all these options persist in the savefile, even after
+the character dies.
 
-`^P - Previous message.`:
-  The Control-P command will redisplay the last message displayed on
-  the message line at the top of the screen. A second such command
-  will display all of the saved messages. This command can be given a
-  count to specify the number of previous messages to View. At
-  present, only 22 messages are saved.
 
-`^K (^Q) - Kill the character.`:
-  To exit the game without saving the character (i.e. killing the
-  character) use the Control-K command. Once exited in this manner,
-  the character is nonrecoverable.
+#### `^P - Previous message.`
 
-`^X - Save the character and exit the game.`:
-  To save the game so that it can be restarted later, use the
-  Control-X command. Save files will also be generated if the game
-  crashes due to a system error. When the character dies, a reduced
-  savefile is produced containing only the monster memory, and the
-  option settings.
+The Control-P command will redisplay the last message displayed on
+the message line at the top of the screen. A second such command
+will display all of the saved messages. This command can be given a
+count to specify the number of previous messages to View. At
+present, only 22 messages are saved.
 
-`{ - Inscribe an object.`:
-  This command can be used to inscribe any short string on an object.
-  Inscriptions are limited to twelve characters. The inscription
-  applies only to the particular object, it is not automatically
-  transferred to all similar objects. Under certain circumstances,
-  *moria* will itself inscribe objects: if they have been discovered
-  to be cursed or enchanted, or if they have been sampled without
-  being identified. In this last case, *moria* does in fact carefully
-  inscribe every such item.
 
-  If the inscription on an item is a single digit, that digit can be
-  used to refer to it when using, wearing, or wielding an item from
-  inside the pack. For example, if a shovel is kept in the pack with
-  the inscription `1`, you can switch to the shovel by wielding item
-  `1` without checking the full inventory list to find out which item
-  the shovel is.
+#### `^K (^Q) - Kill the character.`
 
-`! - Shell out of game.`:
-  Use the Shell command `!` to temporarily exit the game to execute
-  UNIX or DOS commands. The game can be reentered by typing exit to
-  end the spawned process.
+To exit the game without saving the character (i.e. killing the
+character) use the Control-K command. Once exited in this manner,
+the character is nonrecoverable.
 
-`< - Go up an up staircase.`:
-  If the character moves onto an up staircase the `<` command will
-  take the character to go up one level (e.g. one level of dungeon
-  depth). There is always one staircase going up on every level except
-  for the town level (this does not mean it’s easy to find). Going up
-  a staircase will always take the character to a new dungeon area
-  except for the town level, which remains the same for the duration
-  of the current character’s game.
 
-`> - Go down a down staircase.`:
-  If the character is on top of a down staircase the `>` command may
-  be used to go down one level of dungeon depth. There are always two
-  or three staircases going down on each level, except the town level
-  which has only one. Going down will always take the character to a
-  new dungeon area.
+#### `^X - Save the character and exit the game.`
 
-`. <Dir> (shift <Dir>) - Move in direction.`:
-  The Run command will move the character in the indicated direction
-  until either a choice needs to be made between two directions, or
-  something interesting happens. There are options which determine
-  behavior at corners, and at screen boundaries. More precisely, the
-  conditions which stop a run are as follows:
+To save the game so that it can be restarted later, use the
+Control-X command. Save files will also be generated if the game
+crashes due to a system error. When the character dies, a reduced
+savefile is produced containing only the monster memory, and the
+option settings.
 
-  1.  A creature appears on the screen, one already on the screen
+
+#### `{ - Inscribe an object.`
+
+This command can be used to inscribe any short string on an object.
+Inscriptions are limited to twelve characters. The inscription
+applies only to the particular object, it is not automatically
+transferred to all similar objects. Under certain circumstances,
+*moria* will itself inscribe objects: if they have been discovered
+to be cursed or enchanted, or if they have been sampled without
+being identified. In this last case, *moria* does in fact carefully
+inscribe every such item.
+
+If the inscription on an item is a single digit, that digit can be
+used to refer to it when using, wearing, or wielding an item from
+inside the pack. For example, if a shovel is kept in the pack with
+the inscription `1`, you can switch to the shovel by wielding item
+`1` without checking the full inventory list to find out which item
+the shovel is.
+
+
+#### `! - Shell out of game.`
+
+Use the Shell command `!` to temporarily exit the game to execute
+UNIX or DOS commands. The game can be reentered by typing exit to
+end the spawned process.
+
+
+#### `< - Go up an up staircase.`
+
+If the character moves onto an up staircase the `<` command will
+take the character to go up one level (e.g. one level of dungeon
+depth). There is always one staircase going up on every level except
+for the town level (this does not mean it’s easy to find). Going up
+a staircase will always take the character to a new dungeon area
+except for the town level, which remains the same for the duration
+of the current character’s game.
+
+
+#### `> - Go down a down staircase.`
+
+If the character is on top of a down staircase the `>` command may
+be used to go down one level of dungeon depth. There are always two
+or three staircases going down on each level, except the town level
+which has only one. Going down will always take the character to a
+new dungeon area.
+
+
+#### `. <Dir> (shift <Dir>) - Move in direction.`
+
+The Run command will move the character in the indicated direction
+until either a choice needs to be made between two directions, or
+something interesting happens. There are options which determine
+behavior at corners, and at screen boundaries. More precisely, the
+conditions which stop a run are as follows:
+
+1.  A creature appears on the screen, one already on the screen
     moves, or a creature attacks or casts a spell at the character.
-  2.  The character moves next to an object, or a feature such as a
+2.  The character moves next to an object, or a feature such as a
     door or trap.
-  3.  The character comes to the end of open space, or the end of a
+3.  The character comes to the end of open space, or the end of a
     passage, or a junction of passages, or a hole in a wall.
-  4.  Anything typed during a run causes the run to stop. The keyboard
+4.  Anything typed during a run causes the run to stop. The keyboard
     key causing this to occur is ignored. It is best to use a space,
     which is ignored as a command, just in case the run stops just
     before the key is pressed.
-  5.  Various changes of state, such as recovery from fear or loss of
+5.  Various changes of state, such as recovery from fear or loss of
     heroism, will stop a run.
 
-  Corners are more complex. A corner allows a choice between adjacent
-  rectangular and diagonal directions. If the character can see walls
-  which ensure that the diagonal gives a faster traversal, then action
-  is determined by the "cut corners" options. If it is set, then the
-  character moves diagonally through the corner. This gives maximum
-  speed (as is nice when fleeing a hidden creature). On the other
-  hand, this option should not be set if more careful coverage is
-  desired (as when searching) so that the character take two moves
-  through the corner.
+Corners are more complex. A corner allows a choice between adjacent
+rectangular and diagonal directions. If the character can see walls
+which ensure that the diagonal gives a faster traversal, then action
+is determined by the "cut corners" options. If it is set, then the
+character moves diagonally through the corner. This gives maximum
+speed (as is nice when fleeing a hidden creature). On the other
+hand, this option should not be set if more careful coverage is
+desired (as when searching) so that the character take two moves
+through the corner.
 
-  At a potential corner, where walls are not yet visible ahead of the
-  rectangular direction, the "examine corners" option is considered.
-  If set, the character will move straight into the corner, which will
-  light up all the corner and so determine where to go from there.
-  This allows the character to follow corners in new passages. If the
-  option is not set, the character stops. This allows highly cautious
-  running where the character stops at all potential choice points.
+At a potential corner, where walls are not yet visible ahead of the
+rectangular direction, the "examine corners" option is considered.
+If set, the character will move straight into the corner, which will
+light up all the corner and so determine where to go from there.
+This allows the character to follow corners in new passages. If the
+option is not set, the character stops. This allows highly cautious
+running where the character stops at all potential choice points.
 
-  If the character moves off the screen while running, then a new
-  section of the dungeon is displayed and the run continues. However,
-  if the "stop when map changes" option is set, the character will
-  stop. Again, this is an option for nervous players; after all, there
-  may be a dragon on the new screen, and running into a dragon can be
-  bad for the character’s health.
+If the character moves off the screen while running, then a new
+section of the dungeon is displayed and the run continues. However,
+if the "stop when map changes" option is set, the character will
+stop. Again, this is an option for nervous players; after all, there
+may be a dragon on the new screen, and running into a dragon can be
+bad for the character’s health.
 
 
 ## 7. The Town Level
@@ -1408,36 +1540,47 @@ object, they will add it to their inventory. If it was a bad bargain,
 they simply throw the item away. In any case, the player may receive
 some knowledge of the item if another is encountered.
 
-`The General Store`:
-    The General Store sells foods, drinks, some clothing, torches,
-    lamps, oil, shovels, picks, and spikes. All of these items, and some
-    others, can be sold back to the General store for money. The
-    entrance to the General Store is a `1`.
 
-`The Armory`:
-    The Armory is where the town’s armor is fashioned. All sorts of
-    protective gear may be bought and sold here. The entrance to the
-    Armory is a `2`.
+#### `The General Store`
 
-`The Weaponsmith's Shop`:
-    The Weaponsmith’s Shop is where the town’s weapons are fashioned.
-    Hand and missile weapons may be purchased and sold here, along with
-    arrows, bolts, and shots. The entrance to the Weaponsmith’s is a
-    `3`.
+The General Store sells foods, drinks, some clothing, torches,
+lamps, oil, shovels, picks, and spikes. All of these items, and some
+others, can be sold back to the General store for money. The
+entrance to the General Store is a `1`.
 
-`The Temple`:
-    The Temple deals in healing and restoration potions, as well as
-    bless scrolls, word of recall scrolls, some approved priestly
-    weapons, etc. The entrance to the Temple is a `4`.
 
-`The Alchemy Shop`:
-    The Alchemy Shop deals in all manner of potions and scrolls. The
-    entrance to the Alchemy Shop is a `5`.
+#### `The Armory`
 
-`The Magic User's Shop`:
-    The Magic User’s Shop is the most expensive of all the stores. It
-    deals in all sorts of rings, wands, amulets, and staves. The
-    entrance to the Magic Shop is a `6`.
+The Armory is where the town’s armor is fashioned. All sorts of
+protective gear may be bought and sold here. The entrance to the
+Armory is a `2`.
+
+
+#### `The Weaponsmith's Shop`
+
+The Weaponsmith’s Shop is where the town’s weapons are fashioned.
+Hand and missile weapons may be purchased and sold here, along with
+arrows, bolts, and shots. The entrance to the Weaponsmith’s is a `3`.
+
+
+#### `The Temple`
+
+The Temple deals in healing and restoration potions, as well as
+bless scrolls, word of recall scrolls, some approved priestly
+weapons, etc. The entrance to the Temple is a `4`.
+
+
+#### `The Alchemy Shop`
+
+The Alchemy Shop deals in all manner of potions and scrolls. The
+entrance to the Alchemy Shop is a `5`.
+
+
+#### `The Magic User's Shop`
+
+The Magic User’s Shop is the most expensive of all the stores. It
+deals in all sorts of rings, wands, amulets, and staves. The
+entrance to the Magic Shop is a `6`.
 
 
 ## 8. Within The Dungeon
@@ -1446,7 +1589,7 @@ Once the character is adequately supplied with food, light, armor, and
 weapons, it is time to enter the dungeon. Move on top of the `>` symbol
 and use the down `>` command. The character enters a maze of
 interconnecting staircases and finally passes through a one-way door.
-The character is now on the first level of the dungeon (50 feet), and
+The character is now on the first level of the dungeon (`50 feet`), and
 must survive many horrible and challenging encounters to find the
 treasure lying about.
 
@@ -1570,56 +1713,73 @@ to receive benefit of its abilities.
 
 Special weapons are denoted by the following abbreviations:
 
-`DF - Defender.`:
-    A magical weapon that helps wielders defend themselves, thus
-    increasing their armor class, and protecting them against damage
-    from fire, frost, acid, lightning, and falls. This weapon also will
-    increase stealth, let the character see invisible creatures, protect
-    from paralyzation attacks, and help regenerate hit-points and mana
-    faster. As a result of the regeneration ability, the character will
-    use up food faster than normal while wielding such a weapon.
 
-`FB - Frost Brand.`:
-    A magical weapon of ice that delivers a cold critical to heat-based
-    creatures. It will inflict one and a half times the normal damage
-    when used against a heat-based creature.
+#### `DF - Defender.`
 
-`FT - Flame Tongue.`:
-    A magical weapon of flame that delivers a heat critical to
-    cold-based creatures. It will inflict one and a half times the
-    normal damage when used against cold-based or inflammable creatures.
+A magical weapon that helps wielders defend themselves, thus
+increasing their armor class, and protecting them against damage
+from fire, frost, acid, lightning, and falls. This weapon also will
+increase stealth, let the character see invisible creatures, protect
+from paralyzation attacks, and help regenerate hit-points and mana
+faster. As a result of the regeneration ability, the character will
+use up food faster than normal while wielding such a weapon.
 
-`HA - Holy Avenger.`:
-    A Holy Avenger is one of the most powerful of weapons. A Holy
-    Avenger will increase the strength and the armor class of the
-    wielder. This weapon will do extra damage when used against evil and
-    undead creatures, and will also give the ability to see invisible
-    creatures.
 
-`SA - Slay Animal.`:
-    A Slay Animal weapon is a special-purpose weapon whose sole intent
-    is to destroy all the dangerous animals in the world. An animal is
-    any creature natural to the world. Therefore an orc would not be an
-    animal, but a giant snake would be. This will inflict twice the
-    normal amount of damage when used against an animal.
+#### `FB - Frost Brand.`
 
-`SD - Slay Dragon.`:
-    A Slay Dragon weapon is a special-purpose weapon whose sole intent
-    is to destroy dragon-kind. Therefore, when used against a dragon,
-    the amount of damage done is four times the normal amount.
+A magical weapon of ice that delivers a cold critical to heat-based
+creatures. It will inflict one and a half times the normal damage
+when used against a heat-based creature.
 
-`SE - Slay Evil.`:
-    A Slay Evil weapon is a special-purpose weapon whose sole intent is
-    to destroy all forms of evil. When used against an evil creature,
-    either alive or undead, the damage done twice the normal amount.
 
-`SU - Slay Undead.`:
-    A Slay Undead weapon is a special-purpose weapon whose sole intent
-    is to destroy all forms of undead. This weapon is hated and feared
-    by the intelligent undead, for a single blow from this weapon will
-    inflict three times the normal amount of damage. This weapon also
-    gives the ability to see invisible creatures, which is especially
-    useful against undead, since many of them are normally invisible.
+#### `FT - Flame Tongue.`
+
+A magical weapon of flame that delivers a heat critical to
+cold-based creatures. It will inflict one and a half times the
+normal damage when used against cold-based or inflammable creatures.
+
+
+#### `HA - Holy Avenger.`
+
+A Holy Avenger is one of the most powerful of weapons. A Holy
+Avenger will increase the strength and the armor class of the
+wielder. This weapon will do extra damage when used against evil and
+undead creatures, and will also give the ability to see invisible
+creatures.
+
+
+#### `SA - Slay Animal.`
+
+A Slay Animal weapon is a special-purpose weapon whose sole intent
+is to destroy all the dangerous animals in the world. An animal is
+any creature natural to the world. Therefore an orc would not be an
+animal, but a giant snake would be. This will inflict twice the
+normal amount of damage when used against an animal.
+
+
+#### `SD - Slay Dragon.`
+
+A Slay Dragon weapon is a special-purpose weapon whose sole intent
+is to destroy dragon-kind. Therefore, when used against a dragon,
+the amount of damage done is four times the normal amount.
+
+
+#### `SE - Slay Evil.`
+
+A Slay Evil weapon is a special-purpose weapon whose sole intent is
+to destroy all forms of evil. When used against an evil creature,
+either alive or undead, the damage done twice the normal amount.
+
+
+#### `SU - Slay Undead.`
+
+A Slay Undead weapon is a special-purpose weapon whose sole intent
+is to destroy all forms of undead. This weapon is hated and feared
+by the intelligent undead, for a single blow from this weapon will
+inflict three times the normal amount of damage. This weapon also
+gives the ability to see invisible creatures, which is especially
+useful against undead, since many of them are normally invisible.
+
 
 
 ### 9.3 Body and Shield Bashes
@@ -1672,32 +1832,39 @@ second number is the magical bonus of the item which is only displayed
 if known, and will always have a sign preceding the value. There are a
 few cases where the form `[+#]` is used, meaning the object has no armor
 class, only a magical armor bonus if worn. Body armor may also have a
-(-\#) displayed in parentheses; this is a penalty to hit, because the
+`(-#)` displayed in parentheses; this is a penalty to hit, because the
 bulk of the armor makes it more difficult to swing a weapon freely.
 
 Some pieces of armor will possess special abilities denoted by the
 following abbreviations:
 
-`RA - Resist Acid.`:
-  A character using such an object will take only one-third normal
-  damage from any acid thrown upon them. In addition, armor so
-  enchanted will resist the acid’s effects and not be damaged by it.
 
-`RC - Resist Cold.`:
-  A character using a resist cold object will take only one-third
-  damage from frost and cold.
+#### `RA - Resist Acid.`
 
-`RF - Resist Fire.`:
-  A character using a resist fire object will take only one-third
-  damage from heat and fire.
+A character using such an object will take only one-third normal
+damage from any acid thrown upon them. In addition, armor so
+enchanted will resist the acid’s effects and not be damaged by it.
 
-`RL - Resist Lightning.`:
-  A character using a resist lightning object will take only one-third
-  damage from electrical attacks.
+#### `RC - Resist Cold.`
 
-`R - Resistance.`:
-  A character wearing armor with this ability will have resistance to
-  Acid, Cold, Fire, and Lightning as explained in each part above.
+A character using a resist cold object will take only one-third
+damage from frost and cold.
+
+#### `RF - Resist Fire.`
+
+A character using a resist fire object will take only one-third
+damage from heat and fire.
+
+#### `RL - Resist Lightning.`
+
+A character using a resist lightning object will take only one-third
+damage from electrical attacks.
+
+#### `R - Resistance.`
+
+A character wearing armor with this ability will have resistance to
+Acid, Cold, Fire, and Lightning as explained in each part above.
+
 
 
 ### 9.5 Crowns
@@ -1705,34 +1872,41 @@ following abbreviations:
 Some crowns also have special magical abilities that improve chances in
 a battle.
 
-`Crown of Might`:
-  This is the great crown of the warriors. This crown increases the
-  strength, dexterity, and constitution of the wearer. Any attempt to
-  paralyze or slow the character will fail.
+#### `Crown of Might`
 
-`Crown of the Magi`:
-  This is the great crown of the wizards. The wearer will have an
-  increased intelligence, and will also be given resistance against
-  fire, frost, acid, and lightning.
+This is the great crown of the warriors. This crown increases the
+strength, dexterity, and constitution of the wearer. Any attempt to
+paralyze or slow the character will fail.
 
-`Crown of Lordliness`:
-  This is the great crown of the priests. The wearer will have an
-  increased wisdom and charisma.
+#### `Crown of the Magi`
 
-`Crown of Seeing`:
-  This is the great crown of the rogues. The wearer will be able to
-  see even invisible creatures, and will have an increased ability to
-  locate traps and secret doors.
+This is the great crown of the wizards. The wearer will have an
+increased intelligence, and will also be given resistance against
+fire, frost, acid, and lightning.
 
-`Crown of Regeneration`:
-  This crown will help you regenerate hit-points and mana more quickly
-  than normal, allowing the character to fight longer before needing
-  to rest. The character will use food faster than normal while
-  wearing this crown because of the regenerative effects.
+#### `Crown of Lordliness`
 
-`Crown of Beauty`:
-  This crown looks impressive, and will increase charisma, but is
-  otherwise not useful.
+This is the great crown of the priests. The wearer will have an
+increased wisdom and charisma.
+
+#### `Crown of Seeing`
+
+This is the great crown of the rogues. The wearer will be able to
+see even invisible creatures, and will have an increased ability to
+locate traps and secret doors.
+
+#### `Crown of Regeneration`
+
+This crown will help you regenerate hit-points and mana more quickly
+than normal, allowing the character to fight longer before needing
+to rest. The character will use food faster than normal while
+wearing this crown because of the regenerative effects.
+
+#### `Crown of Beauty`
+
+This crown looks impressive, and will increase charisma, but is
+otherwise not useful.
+
 
 
 ### 9.6 Magic Spells
@@ -1783,7 +1957,7 @@ percentages and spell effectiveness are based on wisdom for priests and
 paladins.
 
 
-#### 9.6.1.1 Priest Spell Levels And Mana {.subsubsection}
+#### 9.6.1.1 Priest Spell Levels And Mana
 
 This is a table of all the spells, with the mana and level of
 achievement for Priests and Paladins.
@@ -1829,7 +2003,7 @@ achievement for Priests and Paladins.
     B  Dispel Undead          17  14     31  24
     C  Heal                   21  16     33  28
     D  Dispel Evil            25  20     35  32
-    E  Resist Poison Gas      31  45     --  -- 
+    E  Resist Poison Gas      31  45     --  --
     F  Glyph of Warding       33  24     37  36
     G  Holy Word              39  32     39  38
 
@@ -1839,104 +2013,134 @@ achievement for Priests and Paladins.
 This is a short description of each of the spells, listed
 alphabetically.
 
-`Bless`:
-   Improves armor class and fighting ability for a short period of
-    time.
+#### `Bless`
 
-`Blind Creature`:
-   Blinds a creature for a short period of time.
+Improves armor class and fighting ability for a short period of time.
 
-`Call Light`:
-   Lights up an area.
+#### `Blind Creature`
 
-`Chant`:
-   Improves armor class and fighting ability for a medium period of
-    time.
+Blinds a creature for a short period of time.
 
-`Create Food`:
-   Causes a food item to be dropped at the character`s feet.
+#### `Call Light`
 
-`Cure Critical Wounds`:
-   Cures a very large number of hit-points.
+Lights up an area.
 
-`Cure Light Wounds`:
-   Cures a small number of hit-points.
+#### `Chant`
 
-`Cure Medium Wounds`:
-   Cures a medium number of hit-points.
+Improves armor class and fighting ability for a medium period of time.
 
-`Cure Serious Wounds`:
-   Cures a large number of hit-points.
+#### `Create Food`
 
-`Detect Doors/Stairs`:
-   Finds all the doors and stairs on the screen.
+Causes a food item to be dropped at the character`s feet.
 
-`Detect Evil`:
-   Finds all the evil creatures on the screen.
+#### `Cure Critical Wounds`
 
-`Dispel Evil`:
-   Attempts to destroy the evil creature.
+Cures a very large number of hit-points.
 
-`Dispel Undead`:
-   Attempts to destroy the undead creature.
+#### `Cure Light Wounds`
 
-`Earthquake`:
-   Randomly toggles corridors into walls and vice versa.
+Cures a small number of hit-points.
 
-`Find Traps`:
-   Locates all the traps on the screen.
+#### `Cure Medium Wounds`
 
-`Glyph of Warding`:
-   Leaves a *Glyph* that monsters won`t pass over. Appears as a trap.
+Cures a medium number of hit-points.
 
-`Heal`:
-   Restores 200 Hit Points.
+#### `Cure Serious Wounds`
 
-`Holy Word`:
-   Dispels evil, removes fear, cures poison, restores 1000 hit-points,
-    restores all stats, and invulnerability for 3 turns.
+Cures a large number of hit-points.
 
-`Neutralize Poison`:
-   Cures you of poison.
+#### `Detect Doors/Stairs`
 
-`Orb of Draining`:
-   Offensive spell that drains levels from monsters.
+Finds all the doors and stairs on the screen.
 
-`Portal`:
-   Teleports the character a short distance away.
+#### `Detect Evil`
 
-`Prayer`:
-   Improves armor class and fighting ability for a long period of time.
+Finds all the evil creatures on the screen.
 
-`Protection from Evil`:
-   Causes evil creatures to do less damage.
+#### `Dispel Evil`
 
-`Remove Curse`:
-   Removes {damned} objects that you are welding.
+Attempts to destroy the evil creature.
 
-`Remove Fear`:
-   Negates the fear placed on the character by an enemy.
+#### `Dispel Undead`
 
-`Resist Heat and Cold`:
-   Reduce damage from heat or cold attacks.
+Attempts to destroy the undead creature.
 
-`Resist Poison Gas`:
-   Permanently reduces damage from poison gas attacks.
+#### `Earthquake`
 
-`Sanctuary`:
-   Causes neighboring monsters to fall asleep for a while.
+Randomly toggles corridors into walls and vice versa.
 
-`Sense Invisible`:
-   Finds all invisible creatures on the screen.
+#### `Find Traps`
 
-`Sense Surroundings`:
-   Maps the dungeon appearing on the screen.
+Locates all the traps on the screen.
 
-`Slow Poison`:
-   Reduces the rate hit-points are lost due to poison.
+#### `Glyph of Warding`
 
-`Turn Undead`:
-   Attempts to cause undead creatures to flee.
+Leaves a *Glyph* that monsters won`t pass over. Appears as a trap.
+
+#### `Heal`
+
+Restores 200 Hit Points.
+
+#### `Holy Word`
+
+Dispels evil, removes fear, cures poison, restores 1000 hit-points,
+restores all stats, and invulnerability for 3 turns.
+
+#### `Neutralize Poison`
+
+Cures you of poison.
+
+#### `Orb of Draining`
+
+Offensive spell that drains levels from monsters.
+
+#### `Portal`
+
+Teleports the character a short distance away.
+
+#### `Prayer`
+
+Improves armor class and fighting ability for a long period of time.
+
+#### `Protection from Evil`
+
+Causes evil creatures to do less damage.
+
+#### `Remove Curse`
+
+Removes {damned} objects that you are welding.
+
+#### `Remove Fear`
+
+Negates the fear placed on the character by an enemy.
+
+#### `Resist Heat and Cold`
+
+Reduce damage from heat or cold attacks.
+
+#### `Resist Poison Gas`
+
+Permanently reduces damage from poison gas attacks.
+
+#### `Sanctuary`
+
+Causes neighboring monsters to fall asleep for a while.
+
+#### `Sense Invisible`
+
+Finds all invisible creatures on the screen.
+
+#### `Sense Surroundings`
+
+Maps the dungeon appearing on the screen.
+
+#### `Slow Poison`
+
+Reduces the rate hit-points are lost due to poison.
+
+#### `Turn Undead`
+
+Attempts to cause undead creatures to flee.
 
 
 #### 9.6.2 Mage Spells
@@ -1955,7 +2159,7 @@ rogues. Rangers can learn all but the most powerful offensive spell.
 Rogues cannot learn any offensive spell.
 
 
-#### 9.6.2.1 Mage Spell Levels And Mana {.subsubsection}
+#### 9.6.2.1 Mage Spell Levels And Mana
 
 
                                       Mage       Ranger      Rogue
@@ -2006,104 +2210,137 @@ Rogues cannot learn any offensive spell.
 Note: Rangers don’t get spells until 3rd level, Rogues 5th level.
 
 
-#### 9.6.2.2 Mage Spell Descriptions {.subsubsection}
+#### 9.6.2.2 Mage Spell Descriptions
 
-`Confusion`:
-   Confuses a monster for a short time.
+#### `Confusion`
 
-`Create Food`:
-   Causes a food item to be dropped at the character`s feet.
+Confuses a monster for a short time.
 
-`Cure Light Wounds`:
-   Restores a small number of hit-points.
+#### `Create Food`
 
-`Cure Poison`:
-   Neutralizes the poison running through the character`s veins.
+Causes a food item to be dropped at the character`s feet.
 
-`Detect Monsters`:
-   Displays all the monsters on the screen.
+#### `Cure Light Wounds`
 
-`Find Hidden Traps/Doors`:
-   Locates all the secret traps and doors.
+Restores a small number of hit-points.
 
-`Fire Ball`:
-   Shoots a ball of flame toward a monster.
+#### `Cure Poison`
 
-`Fire Bolt`:
-   Shoots a bolt of flame toward a monster.
+Neutralizes the poison running through the character`s veins.
 
-`Frost Ball`:
-   Shoots a ball of frost toward a monster.
+#### `Detect Monsters`
 
-`Frost Bolt`:
-   Shoots a bolt of frost toward a monster.
+Displays all the monsters on the screen.
 
-`Genocide`:
-   Destroys a particular monster on the level.
+#### `Find Hidden Traps/Doors`
 
-`Haste Self`:
-   Causes the character to move faster temporarily.
+Locates all the secret traps and doors.
 
-`Identify`:
-   Identifies an unknown object in the pack.
+#### `Fire Ball`
 
-`Light Area`:
-   Illuminates the area with light.
+Shoots a ball of flame toward a monster.
 
-`Lightning Bolt`:
-   Shoots a bolt of lightning at the enemy.
+#### `Fire Bolt`
 
-`Magic Missile`:
-   Traditional bolt of magic used to damage enemies.
+Shoots a bolt of flame toward a monster.
 
-`Phase Door`:
-   Teleports the character a short distance.
+#### `Frost Ball`
 
-`Polymorph Other`:
-   Polymorphs a monster into a different creature.
+Shoots a ball of frost toward a monster.
 
-`Recharge Item I and II`:
-   Recharges a staff, or wand.
+#### `Frost Bolt`
 
-`Remove Curse`:
-   Allows {damned} items to be taken off.
+Shoots a bolt of frost toward a monster.
 
-`Resist Poison Gas`:
-   Permanently reduces damage from poison gas attacks.
+#### `Genocide`
 
-`Sleep I`:
-   Causes a specified monster to fall asleep.
+Destroys a particular monster on the level.
 
-`Sleep II`:
-   Causes neighboring monsters to fall asleep.
+#### `Haste Self`
 
-`Sleep III`:
-   Causes all monsters in range to fall asleep.
+Causes the character to move faster temporarily.
 
-`Slow Monster`:
-   Causes a monster to move slower.
+#### `Identify`
 
-`Stinking Cloud`:
-   Shoots a ball of noxious vapors to do damage.
+Identifies an unknown object in the pack.
 
-`Teleport Self`:
-   Teleports the character to a new place on the level.
+#### `Light Area`
 
-`Teleport Other`:
-   Teleports an enemy to a new place on the level.
+Illuminates the area with light.
 
-`Trap/Door Destruction`:
-   Destroys all neighboring doors and traps.
+#### `Lightning Bolt`
 
-`Turn Stone to Mud`:
-   Causes a wall (or other stone object) to melt.
+Shoots a bolt of lightning at the enemy.
 
-`Word of Destruction`:
-   Destroys the entire screen.
+#### `Magic Missile`
+
+Traditional bolt of magic used to damage enemies.
+
+#### `Phase Door`
+
+Teleports the character a short distance.
+
+#### `Polymorph Other`
+
+Polymorphs a monster into a different creature.
+
+#### `Recharge Item I and II`
+
+Recharges a staff, or wand.
+
+#### `Remove Curse`
+
+Allows {damned} items to be taken off.
+
+#### `Resist Poison Gas`
+
+Permanently reduces damage from poison gas attacks.
+
+#### `Sleep I`
+
+Causes a specified monster to fall asleep.
+
+#### `Sleep II`
+
+Causes neighboring monsters to fall asleep.
+
+#### `Sleep III`
+
+Causes all monsters in range to fall asleep.
+
+#### `Slow Monster`
+
+Causes a monster to move slower.
+
+#### `Stinking Cloud`
+
+Shoots a ball of noxious vapors to do damage.
+
+#### `Teleport Self`
+
+Teleports the character to a new place on the level.
+
+#### `Teleport Other`
+
+Teleports an enemy to a new place on the level.
+
+#### `Trap/Door Destruction`
+
+Destroys all neighboring doors and traps.
+
+#### `Turn Stone to Mud`
+
+Causes a wall (or other stone object) to melt.
+
+#### `Word of Destruction`
+
+Destroys the entire screen.
+
 
 For spells that come in numbered versions (Sleep I, II, III, etc), the
 higher numbers have a higher effectiveness, but greater change of spell
 failure and greater Mana cost.
+
 
 
 #### 9.6.3 Using Offensive Spells Against Monsters
@@ -2264,7 +2501,7 @@ are effective, as are weapons, but the Balrog is difficult to kill, and
 if allowed to escape to another level it can heal itself.
 
 If the character should actually survive the attempt of killing the
-Balrog, they will receive the status of WINNER. Since the toughest
+Balrog, they will receive the status of `WINNER`. Since the toughest
 creature alive has been defeated, the character is ready to retire and
 cannot be saved. When you quit the game, the character receives a
 surprise bonus score.
@@ -2331,20 +2568,17 @@ The following people have contributed to *moria*:
 
 ## 15 Licence
 
-Umoria is free software; you can redistribute it and/or
-modify it under the terms of the GNU General Public
-License as published by the Free Software Foundation,
-either version 3 of the License, or (at your option)
-any later version.
+```
+Umoria is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
 
-Umoria is distributed in the hope that it will be
-useful, but WITHOUT ANY WARRANTY; without even the
-implied warranty of MERCHANTABILITY or FITNESS FOR A
-PARTICULAR PURPOSE.  See the GNU General Public License
-for more details.
+Umoria is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
 
-You should have received a copy of the GNU General
-Public License along with Umoria.  If not, see
-<http://www.gnu.org/licenses/>.
-
-October 13, 2008
+You should have received a copy of the GNU General Public License
+along with Umoria.  If not, see <http://www.gnu.org/licenses/>.
+```
