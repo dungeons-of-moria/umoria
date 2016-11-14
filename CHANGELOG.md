@@ -13,6 +13,11 @@
 ### All Changes
 
 
+`2016-11-14`
+
+- Updates and moves the game `manual.md` to the `docs` folder
+
+
 `2016-11-10`
 
 - Adds `.dat` extension to scores and save game.
