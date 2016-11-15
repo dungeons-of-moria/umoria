@@ -15,6 +15,7 @@
 
 `2016-11-15`
 
+- Improves the splash screen!
 - `unix.c` does not make sense anymore so move its contents to `io.c`.
 
 
