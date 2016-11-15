@@ -15,7 +15,7 @@ Supported Platforms:
 _**Note: we are currently still in Beta - things may go wrong!**_
 
 
-## What's the Moria Restoration Project?
+## What is the Moria Restoration Project?
 
 Umoria 5.6 has support for many different platforms which include; Linux,
 MS DOS, "Classic" Mac OS (pre OS X), Amiga, and Atari ST. Back in the late
