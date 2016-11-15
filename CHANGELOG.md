@@ -13,9 +13,14 @@
 ### All Changes
 
 
+`2016-11-15`
+
+- `unix.c` does not make sense anymore so move its contents to `io.c`.
+
+
 `2016-11-14`
 
-- Updates and moves the game `manual.md` to the `docs` folder
+- Updates and moves the game `manual.md` to the `docs` folder.
 
 
 `2016-11-10`
