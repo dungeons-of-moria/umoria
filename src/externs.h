@@ -257,6 +257,14 @@ void restore_screen();
 void bell();
 void screen_map();
 void sleep_in_seconds(int);
+bool check_input(int);
+void user_name(char *);
+
+#ifndef _WIN32
+int tilde(char *, char *);
+FILE *tfopen(char *, char *);
+int topen(char *, int, int);
+#endif
 
 // magic.c
 void cast();
@@ -593,13 +601,6 @@ void enter_store(int);
 // tables.c
 
 // treasur.c
-
-// unix.c
-bool check_input(int);
-void user_name(char *);
-int tilde(char *, char *);
-FILE *tfopen(char *, char *);
-int topen(char *, int, int);
 
 // variable.c
 
