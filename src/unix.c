@@ -102,9 +102,40 @@ void user_name(char *buf) {
 #endif
 }
 
+#ifndef _WIN32
+// On unix based systems we should expand `~` to the users home path,
+// otherwise on Windows we can ignore all of this. -MRC-
+
+// undefine these so that tfopen and topen will work
+#undef fopen
+#undef open
+
+// open a file just as does fopen, but allow a leading ~ to specify a home directory
+FILE *tfopen(char *file, char *mode) {
+    // extern int errno;
+
+    char buf[1024];
+    if (tilde(file, buf)) {
+        return (fopen(buf, mode));
+    }
+    errno = ENOENT;
+    return NULL;
+}
+
+// open a file just as does open, but expand a leading ~ into a home directory name
+int topen(char *file, int flags, int mode) {
+    // extern int errno;
+
+    char buf[1024];
+    if (tilde(file, buf)) {
+        return (open(buf, flags, mode));
+    }
+    errno = ENOENT;
+    return -1;
+}
+
 // expands a tilde at the beginning of a file name to a users home directory
 int tilde(char *file, char *exp) {
-#ifndef _WIN32
     *exp = '\0';
     if (file) {
         if (*file == '~') {
@@ -136,35 +167,5 @@ int tilde(char *file, char *exp) {
         return 1;
     }
     return 0;
-#else
-    return 0;
+}
 #endif
-}
-
-// undefine these so that tfopen and topen will work
-#undef fopen
-#undef open
-
-// open a file just as does fopen, but allow a leading ~ to specify a home directory
-FILE *tfopen(char *file, char *mode) {
-    // extern int errno;
-
-    char buf[1024];
-    if (tilde(file, buf)) {
-        return (fopen(buf, mode));
-    }
-    errno = ENOENT;
-    return NULL;
-}
-
-// open a file just as does open, but expand a leading ~ into a home directory name
-int topen(char *file, int flags, int mode) {
-    // extern int errno;
-
-    char buf[1024];
-    if (tilde(file, buf)) {
-        return (open(buf, flags, mode));
-    }
-    errno = ENOENT;
-    return -1;
-}
