@@ -33,12 +33,6 @@
 // uses the number, the program may stop working correctly.  Modify the
 // constants at your own risk. -JEW-
 
-#define CONSTANT_H_INCLUDED
-#ifndef CONFIG_H_INCLUDED
-Constant.h should always be included after config.h, because it uses
-some of the system defines set up there.
-#endif
-
 // Current version number of Moria
 #define CUR_VERSION_MAJ  5
 #define CUR_VERSION_MIN  7

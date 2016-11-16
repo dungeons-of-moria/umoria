@@ -18,12 +18,6 @@
 // You should have received a copy of the GNU General Public License
 // along with Umoria.  If not, see <http://www.gnu.org/licenses/>.
 
-#define CONFIG_H_INCLUDED
-#ifdef CONSTANT_H_INCLUDED
-Constant.h should always be included after config.h,
-because it uses some of the system defines set up here.
-#endif
-
 // NOTE: the wizard password and wizard uid are no longer used.
 //
 // Person to bother if something goes wrong.
