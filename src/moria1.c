@@ -269,7 +269,7 @@ int show_inven(int r1, int r2, bool weight, int col, char *mask) {
 
     // Print the items
     for (int i = r1; i <= r2; i++) {
-        if (mask == CNIL || mask[i]) {
+        if (mask == NULL || mask[i]) {
             objdes(tmp_val, &inventory[i], true);
 
             // Truncate if too long.
@@ -293,7 +293,7 @@ int show_inven(int r1, int r2, bool weight, int col, char *mask) {
 
     int current_line = 1;
     for (int i = r1; i <= r2; i++) {
-        if (mask == CNIL || mask[i]) {
+        if (mask == NULL || mask[i]) {
             // don't need first two spaces if in first column
             if (col == 0) {
                 prt(out_val[i], current_line, col);
@@ -586,11 +586,11 @@ static void inven_screen(int new_scr) {
             line = 7;
             break;
         case INVEN_SCR:
-            scr_left = show_inven(0, inven_ctr - 1, show_weight_flag, scr_left, CNIL);
+            scr_left = show_inven(0, inven_ctr - 1, show_weight_flag, scr_left, "");
             line = inven_ctr;
             break;
         case WEAR_SCR:
-            scr_left = show_inven(wear_low, wear_high, show_weight_flag, scr_left, CNIL);
+            scr_left = show_inven(wear_low, wear_high, show_weight_flag, scr_left, "");
             line = wear_high - wear_low + 1;
             break;
         case EQUIP_SCR:
@@ -1142,7 +1142,7 @@ void inven_command(char command) {
                 doing_inven = ' '; // A dummy command to recover screen.
                 // flush last message before clearing screen_change and exiting
             }
-            msg_print(CNIL);
+            msg_print("");
             screen_change = false; // This lets us know if the world changes
             command = ESCAPE;
         } else {
@@ -1310,7 +1310,7 @@ int get_item(int *com_val, char *pmt, int i, int j, char *mask, char *message) {
                     }
 
                     if ((*com_val >= i) && (*com_val <= j) &&
-                        (mask == CNIL || mask[*com_val])) {
+                        (mask == NULL || mask[*com_val])) {
                         if (i_scr == 0) {
                             i = 21;
                             j = *com_val;
@@ -1415,7 +1415,7 @@ bool get_dir(char *prompt, int *dir) {
         return true;
     }
 
-    if (prompt == CNIL) {
+    if (prompt == NULL) {
         prompt = "Which direction?";
     }
 
@@ -1690,7 +1690,7 @@ void rest_off() {
     py.flags.status &= ~PY_REST;
 
     prt_state();
-    msg_print(CNIL); // flush last message, or delete "press any key" message
+    msg_print(""); // flush last message, or delete "press any key" message
 
     py.flags.food_digested++;
 }

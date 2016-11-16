@@ -193,7 +193,7 @@ void flush() {
 // Clears given line of text -RAK-
 void erase_line(int row, int col) {
     if (row == MSG_LINE && msg_flag) {
-        msg_print(CNIL);
+        msg_print("");
     }
 
     (void)move(row, col);
@@ -203,7 +203,7 @@ void erase_line(int row, int col) {
 // Clears screen
 void clear_screen() {
     if (msg_flag) {
-        msg_print(CNIL);
+        msg_print("");
     }
     (void)clear();
 }
@@ -268,7 +268,7 @@ void count_msg_print(char *p) {
 // Outputs a line to a given y, x position -RAK-
 void prt(char *str_buff, int row, int col) {
     if (row == MSG_LINE && msg_flag) {
-        msg_print(CNIL);
+        msg_print("");
     }
 
     (void)move(row, col);

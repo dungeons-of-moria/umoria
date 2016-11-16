@@ -31,7 +31,7 @@ void scribe_object() {
     if (inven_ctr > 0 || equip_ctr > 0) {
         int item_val;
 
-        if (get_item(&item_val, "Which one? ", 0, INVEN_ARRAY_SIZE, CNIL, CNIL)) {
+        if (get_item(&item_val, "Which one? ", 0, INVEN_ARRAY_SIZE, "", "")) {
             bigvtype out_val, tmp_str;
 
             objdes(tmp_str, &inventory[item_val], true);

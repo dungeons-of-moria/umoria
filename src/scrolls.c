@@ -45,7 +45,7 @@ void read_scroll() {
         msg_print("You are not carrying anything!");
     } else if (!find_range(TV_SCROLL1, TV_SCROLL2, &j, &k)) {
         msg_print("You are not carrying any scrolls!");
-    } else if (get_item(&item_val, "Read which scroll?", j, k, CNIL, CNIL)) {
+    } else if (get_item(&item_val, "Read which scroll?", j, k, "", "")) {
         free_turn_flag = false;
 
         inven_type *i_ptr = &inventory[item_val];

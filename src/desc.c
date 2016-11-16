@@ -292,7 +292,7 @@ void objdes(char *out_val, inven_type *i_ptr, int pref) {
 
     // base name, modifier string
     char *basenm = object_list[i_ptr->index].name;
-    char *modstr = CNIL;
+    char *modstr = "";
 
     vtype damstr;
     damstr[0] = '\0';
@@ -442,7 +442,7 @@ void objdes(char *out_val, inven_type *i_ptr, int pref) {
 
     bigvtype tmp_val;
 
-    if (modstr != CNIL) {
+    if (modstr != NULL) {
         (void)sprintf(tmp_val, basenm, modstr);
     } else {
         (void)strcpy(tmp_val, basenm);
@@ -455,7 +455,7 @@ void objdes(char *out_val, inven_type *i_ptr, int pref) {
         insert_str(tmp_val, "ch~", "ches");
         insert_str(tmp_val, "~", "s");
     } else {
-        insert_str(tmp_val, "~", CNIL);
+        insert_str(tmp_val, "~", "");
     }
     if (!pref) {
         if (!strncmp("some", tmp_val, 4)) {

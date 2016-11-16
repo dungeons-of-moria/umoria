@@ -36,7 +36,7 @@ void eat() {
         msg_print("But you are not carrying anything.");
     } else if (!find_range(TV_FOOD, TV_NEVER, &j, &k)) {
         msg_print("You are not carrying any food.");
-    } else if (get_item(&item_val, "Eat what?", j, k, CNIL, CNIL)) {
+    } else if (get_item(&item_val, "Eat what?", j, k, "", "")) {
         free_turn_flag = false;
 
         struct flags *f_ptr;

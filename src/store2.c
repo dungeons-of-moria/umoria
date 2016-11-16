@@ -343,7 +343,7 @@ static bool haggle_insults(int store_num) {
         haggle = true;
     } else {
         prt_comment5();
-        msg_print(CNIL); // keep insult separate from rest of haggle
+        msg_print(""); // keep insult separate from rest of haggle
     }
 
     return haggle;
@@ -1010,7 +1010,7 @@ void enter_store(int store_num) {
             msg_flag = false;
 
             char command;
-            if (get_com(CNIL, &command)) {
+            if (get_com("", &command)) {
                 int tmp_chr;
 
                 switch (command) {

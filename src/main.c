@@ -114,9 +114,9 @@ int main(int argc, char *argv[]) {
 
     // Auto-restart of saved file
     char *p;
-    if (argv[0] != CNIL) {
+    if (argv[0] != NULL) {
         (void)strcpy(savefile, argv[0]);
-    } else if ((p = getenv("MORIA_SAV")) != CNIL) {
+    } else if ((p = getenv("MORIA_SAV")) != NULL) {
         (void)strcpy(savefile, p);
     } else {
         (void)strcpy(savefile, MORIA_SAV);

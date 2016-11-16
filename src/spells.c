@@ -196,7 +196,7 @@ int detect_invisible() {
 
     if (flag) {
         msg_print("You sense the presence of invisible creatures!");
-        msg_print(CNIL);
+        msg_print("");
 
         // must unlight every monster just lighted
         creatures(false);
@@ -310,7 +310,7 @@ int ident_spell() {
     bool ident = false;
 
     int item_val;
-    if (get_item(&item_val, "Item you wish identified?", 0, INVEN_ARRAY_SIZE, CNIL, CNIL)) {
+    if (get_item(&item_val, "Item you wish identified?", 0, INVEN_ARRAY_SIZE, "", "")) {
         ident = true;
         identify(&item_val);
 
@@ -468,7 +468,7 @@ int detect_monsters() {
 
     if (detect) {
         msg_print("You sense the presence of monsters!");
-        msg_print(CNIL);
+        msg_print("");
 
         // must unlight every monster just lighted
         creatures(false);
@@ -968,7 +968,7 @@ int recharge(int num) {
 
     if (!find_range(TV_STAFF, TV_WAND, &i, &j)) {
         msg_print("You have nothing to recharge.");
-    } else if (get_item(&item_val, "Recharge which item?", i, j, CNIL, CNIL)) {
+    } else if (get_item(&item_val, "Recharge which item?", i, j, "", "")) {
         inven_type *i_ptr = &inventory[item_val];
 
         res = true;
@@ -1751,7 +1751,7 @@ int detect_evil() {
 
     if (flag) {
         msg_print("You sense the presence of evil!");
-        msg_print(CNIL);
+        msg_print("");
 
         // must unlight every monster just lighted
         creatures(false);

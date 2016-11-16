@@ -176,7 +176,7 @@ void disarm_trap() {
     int x = char_col;
 
     int dir;
-    if (get_dir(CNIL, &dir)) {
+    if (get_dir("", &dir)) {
         (void)mmove(dir, &y, &x);
 
         cave_type *c_ptr = &cave[y][x];
@@ -623,7 +623,7 @@ static bool look_see(int x, int y, bool *transparent) {
                 if (out_val[0]) {
                     string = "a granite wall";
                 } else {
-                    string = CNIL; // In case we jump here
+                    string = ""; // In case we jump here
                 }
                 break;
             case MAGMA_WALL:
@@ -633,7 +633,7 @@ static bool look_see(int x, int y, bool *transparent) {
                 string = "a quartz vein";
                 break;
             default:
-                string = CNIL;
+                string = "";
                 break;
             }
 
@@ -804,9 +804,9 @@ void throw_object() {
     if (inven_ctr == 0) {
         msg_print("But you are not carrying anything.");
         free_turn_flag = true;
-    } else if (get_item(&item_val, "Fire/Throw which one?", 0, inven_ctr - 1, CNIL, CNIL)) {
+    } else if (get_item(&item_val, "Fire/Throw which one?", 0, inven_ctr - 1, "", "")) {
         int dir;
-        if (get_dir(CNIL, &dir)) {
+        if (get_dir("", &dir)) {
             desc_remain(item_val);
             if (py.flags.confused > 0) {
                 msg_print("You are confused.");
@@ -999,7 +999,7 @@ void bash() {
     int x = char_col;
 
     int dir;
-    if (get_dir(CNIL, &dir)) {
+    if (get_dir("", &dir)) {
         if (py.flags.confused > 0) {
             msg_print("You are confused.");
             do {
