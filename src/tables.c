@@ -1,12 +1,10 @@
-// src/tables.c: store/attack/RNG/etc tables and variables
-//
-// Copyright (C) 1989-2008 James E. Wilson, Robert A. Koeneke,
-//                         David J. Grabiner
+// Copyright (c) 1989-2008 James E. Wilson, Robert A. Koeneke, David J. Grabiner
 //
 // Umoria is free software released under a GPL v2 license and comes with
 // ABSOLUTELY NO WARRANTY. See https://www.gnu.org/licenses/gpl-2.0.html
 // for further details.
 
+// Store/attack/RNG/etc tables and variables
 #include "headers.h"
 
 #include "config.h"

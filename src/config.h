@@ -1,19 +1,12 @@
-// src/config.h: configuration definitions
-//
-// Copyright (C) 1989-2008 James E. Wilson, Robert A. Koeneke,
-//                         David J. Grabiner
+// Copyright (c) 1989-2008 James E. Wilson, Robert A. Koeneke, David J. Grabiner
 //
 // Umoria is free software released under a GPL v2 license and comes with
 // ABSOLUTELY NO WARRANTY. See https://www.gnu.org/licenses/gpl-2.0.html
 // for further details.
 
-// NOTE: the wizard password and wizard uid are no longer used.
-//
-// Person to bother if something goes wrong.
-// Recompile files.c and misc2.c if this changes.
-#define WIZARD "David Grabiner <grabiner@alumni.princeton.edu>"
+// Basic Configuration
 
-// Files used by moria, set these to valid pathnames for your system.
+// Data files used by Umoria - relative to the executable binary.
 #define MORIA_GPL "LICENSE"
 #define MORIA_TOP "scores.dat"
 #define MORIA_SAV "savegame.dat"

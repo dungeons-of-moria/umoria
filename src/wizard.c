@@ -1,11 +1,10 @@
-// src/wizard.c: Version history and info, and wizard mode debugging aids.
-//
-// Copyright (C) 1989-2008 James E. Wilson, Robert A. Koeneke,
-//                         David J. Grabiner
+// Copyright (c) 1989-2008 James E. Wilson, Robert A. Koeneke, David J. Grabiner
 //
 // Umoria is free software released under a GPL v2 license and comes with
 // ABSOLUTELY NO WARRANTY. See https://www.gnu.org/licenses/gpl-2.0.html
 // for further details.
+
+// Version history and info, and wizard mode debugging aids.
 
 #include "headers.h"
 

@@ -1,12 +1,22 @@
-// src/constant.h: global constants used by Moria
-//
 // Copyright (c) 1989-94 James E. Wilson, Robert A. Koeneke
 //
 // Umoria is free software released under a GPL v2 license and comes with
 // ABSOLUTELY NO WARRANTY. See https://www.gnu.org/licenses/gpl-2.0.html
 // for further details.
 
+// Global constants used by Moria
+
+// Current version number of Moria
+#define CUR_VERSION_MAJ  5
+#define CUR_VERSION_MIN  7
+#define PATCH_LEVEL      0
+
+#define MAX_UCHAR         255
+#define MAX_SHORT       32767   // maximum short/long signed ints
+#define MAX_LONG   0x7FFFFFFFL
+
 // Note to the Wizard:
+//
 // Tweaking these constants can *GREATLY* change the game.
 // Two years of constant tuning have generated these
 // values.  Minor adjustments are encouraged, but you must
@@ -20,19 +30,6 @@
 // you change anything below, without understanding EXACTLY how the game
 // uses the number, the program may stop working correctly.  Modify the
 // constants at your own risk. -JEW-
-
-// Current version number of Moria
-#define CUR_VERSION_MAJ  5
-#define CUR_VERSION_MIN  7
-#define PATCH_LEVEL      0
-
-#define MAX_UCHAR         255
-#define MAX_SHORT       32767   // maximum short/long signed ints
-#define MAX_LONG   0x7FFFFFFFL
-
-//
-// Changing values below this line may be hazardous to your health!
-//
 
 // message line location
 #define MSG_LINE 0
@@ -49,8 +46,7 @@
 #define QUART_WIDTH     (SCREEN_WIDTH / 4)
 
 // Dungeon generation values
-// Note: The entire design of dungeon can be changed by only
-// slight adjustments here.
+// Note: The entire design of dungeon can be changed by only slight adjustments here.
 #define DUN_TUN_RND               9   // 1/Chance of Random direction
 #define DUN_TUN_CHG              70   // Chance of changing direction (99 max)
 #define DUN_TUN_CON              15   // Chance of extra tunneling
@@ -213,7 +209,6 @@
 #define INVEN_AUX                33
 
 // Attribute indexes -CJS-
-
 #define A_STR 0
 #define A_INT 1
 #define A_WIS 2
@@ -439,9 +434,9 @@
 #define ITEM_GROUP_MIN        192
 #define ITEM_GROUP_MAX        255
 
-// NOTE: items with subval 192 are treated as single objects, but only stack
-// with others of same subval if have the same p1 value, only used for
-// torches
+// NOTE: items with subval 192 are treated as single objects,
+// but only stack with others of same subval if have the same
+// p1 value, only used for torches.
 
 // id's used for object description, stored in object_ident
 #define OD_TRIED        0x1
@@ -522,12 +517,12 @@
 #define TV_MISC                1
 #define TV_CHEST               2
 
-// min tval for wearable items, all items between TV_MIN_WEAR and TV_MAX_WEAR
-// use the same flag bits, see the TR_* defines
+// min tval for wearable items, all items between TV_MIN_WEAR and
+// TV_MAX_WEAR use the same flag bits, see the TR_* defines.
 #define TV_MIN_WEAR           10
 
-// items tested for enchantments, i.e. the MAGIK inscription, see the
-// enchanted() procedure
+// items tested for enchantments, i.e. the MAGIK inscription,
+// see the enchanted() procedure.
 #define TV_MIN_ENCHANT        10
 #define TV_SLING_AMMO         10
 #define TV_BOLT               11
