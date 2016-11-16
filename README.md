@@ -28,7 +28,8 @@ difficult for players on these modern systems to play Moria!
 
 What to do about it?
 
-This project is an attempt to _clean up_ this decades old code base.
+This project is an attempt to clean up this decades old code base,
+yet without changing any of the gameplay.
 
 With all those old systems no longer useful to anyone but the most dedicated
 nerd, there is no point in clogging up the code base with support for them,
