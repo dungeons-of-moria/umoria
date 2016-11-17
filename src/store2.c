@@ -331,7 +331,7 @@ static bool haggle_insults(int store_num) {
         haggle = true;
     } else {
         prt_comment5();
-        msg_print(""); // keep insult separate from rest of haggle
+        msg_print(CNIL); // keep insult separate from rest of haggle
     }
 
     return haggle;
@@ -653,7 +653,7 @@ static int sell_haggle(int store_num, int32_t *price, inven_type *item) {
             last_store_inc = 0;
             cur_ask = max_gold;
             final_ask = max_gold;
-            msg_print("I am sorry, but I have not the money to afford such a ""fine item.");
+            msg_print("I am sorry, but I have not the money to afford such a fine item.");
             didnt_haggle = true;
         } else {
             cur_ask = max_buy;
@@ -665,7 +665,7 @@ static int sell_haggle(int store_num, int32_t *price, inven_type *item) {
 
             // go right to final price if player has bargained well
             if (noneedtobargain(store_num, final_ask)) {
-                msg_print("After a long bargaining session, you agree upon the ""price.");
+                msg_print("After a long bargaining session, you agree upon the price.");
                 cur_ask = final_ask;
                 comment = "Final offer";
                 didnt_haggle = true;
@@ -998,7 +998,7 @@ void enter_store(int store_num) {
             msg_flag = false;
 
             char command;
-            if (get_com("", &command)) {
+            if (get_com(CNIL, &command)) {
                 int tmp_chr;
 
                 switch (command) {

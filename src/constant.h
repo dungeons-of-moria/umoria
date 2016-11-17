@@ -226,6 +226,12 @@
 #undef ESCAPE
 #define ESCAPE    '\033'  // ESCAPE character -CJS-
 
+// This used to be NULL, but that was technically incorrect.
+// CNIL is used instead of null to help avoid lint errors.
+#ifndef CNIL
+#define CNIL (char *)0
+#endif
+
 // Fval definitions: these describe the various types of dungeon floors and
 // walls, if numbers above 15 are ever used, then the test against MIN_CAVE_WALL
 // will have to be changed, also the save routines will have to be changed.

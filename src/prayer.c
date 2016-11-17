@@ -32,7 +32,7 @@ void pray() {
         msg_print("But you are not carrying anything!");
     } else if (!find_range(TV_PRAYER_BOOK, TV_NEVER, &i, &j)) {
         msg_print("You are not carrying any Holy Books!");
-    } else if (get_item(&item_val, "Use which Holy Book?", i, j, "", "")) {
+    } else if (get_item(&item_val, "Use which Holy Book?", i, j, CNIL, CNIL)) {
         int choice, chance;
         int result = cast_spell("Recite which prayer?", item_val, &choice, &chance);
 
@@ -75,7 +75,7 @@ void pray() {
                     (void)slow_poison();
                     break;
                 case 9:
-                    if (get_dir("", &dir)) {
+                    if (get_dir(CNIL, &dir)) {
                         (void)confuse_monster(dir, char_row, char_col);
                     }
                     break;
@@ -113,7 +113,7 @@ void pray() {
                     (void)cure_poison();
                     break;
                 case 18:
-                    if (get_dir("", &dir)) {
+                    if (get_dir(CNIL, &dir)) {
                         fire_ball(GF_HOLY_ORB, dir, char_row, char_col, (damroll(3, 6) + py.misc.lev), "Black Sphere");
                     }
                     break;

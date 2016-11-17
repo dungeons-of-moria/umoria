@@ -257,7 +257,7 @@ int show_inven(int r1, int r2, bool weight, int col, char *mask) {
 
     // Print the items
     for (int i = r1; i <= r2; i++) {
-        if (mask == NULL || mask[i]) {
+        if (mask == CNIL || mask[i]) {
             objdes(tmp_val, &inventory[i], true);
 
             // Truncate if too long.
@@ -281,7 +281,7 @@ int show_inven(int r1, int r2, bool weight, int col, char *mask) {
 
     int current_line = 1;
     for (int i = r1; i <= r2; i++) {
-        if (mask == NULL || mask[i]) {
+        if (mask == CNIL || mask[i]) {
             // don't need first two spaces if in first column
             if (col == 0) {
                 prt(out_val[i], current_line, col);
@@ -574,11 +574,11 @@ static void inven_screen(int new_scr) {
             line = 7;
             break;
         case INVEN_SCR:
-            scr_left = show_inven(0, inven_ctr - 1, show_weight_flag, scr_left, "");
+            scr_left = show_inven(0, inven_ctr - 1, show_weight_flag, scr_left, CNIL);
             line = inven_ctr;
             break;
         case WEAR_SCR:
-            scr_left = show_inven(wear_low, wear_high, show_weight_flag, scr_left, "");
+            scr_left = show_inven(wear_low, wear_high, show_weight_flag, scr_left, CNIL);
             line = wear_high - wear_low + 1;
             break;
         case EQUIP_SCR:
@@ -948,7 +948,7 @@ void inven_command(char command) {
                                         // Rings. Give choice over where they go.
                                         do {
                                             char query;
-                                            if (!get_com("Put ring on which ""hand (l/r/L/R)?", &query)) {
+                                            if (!get_com("Put ring on which hand (l/r/L/R)?", &query)) {
                                                 item = -1;
                                                 slot = -1;
                                             } else if (query == 'l') {
@@ -1127,7 +1127,7 @@ void inven_command(char command) {
                 doing_inven = ' '; // A dummy command to recover screen.
                 // flush last message before clearing screen_change and exiting
             }
-            msg_print("");
+            msg_print(CNIL);
             screen_change = false; // This lets us know if the world changes
             command = ESCAPE;
         } else {
@@ -1294,7 +1294,7 @@ int get_item(int *com_val, char *pmt, int i, int j, char *mask, char *message) {
                     }
 
                     if ((*com_val >= i) && (*com_val <= j) &&
-                        (mask == NULL || mask[*com_val])) {
+                        (mask == CNIL || mask[*com_val])) {
                         if (i_scr == 0) {
                             i = 21;
                             j = *com_val;
@@ -1399,7 +1399,7 @@ bool get_dir(char *prompt, int *dir) {
         return true;
     }
 
-    if (prompt == NULL) {
+    if (prompt == CNIL) {
         prompt = "Which direction?";
     }
 
@@ -1677,7 +1677,7 @@ void rest_off() {
     prt_state();
 
     // flush last message, or delete "press any key" message
-    msg_print("");
+    msg_print(CNIL);
 
     py.flags.food_digested++;
 }

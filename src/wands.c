@@ -23,12 +23,12 @@ void aim() {
         msg_print("But you are not carrying anything.");
     } else if (!find_range(TV_WAND, TV_NEVER, &j, &k)) {
         msg_print("You are not carrying any wands.");
-    } else if (get_item(&item_val, "Aim which wand?", j, k, "", "")) {
+    } else if (get_item(&item_val, "Aim which wand?", j, k, CNIL, CNIL)) {
         inven_type *i_ptr = &inventory[item_val];
         free_turn_flag = false;
 
         int dir;
-        if (get_dir("", &dir)) {
+        if (get_dir(CNIL, &dir)) {
             if (py.flags.confused > 0) {
                 msg_print("You are confused.");
                 do {

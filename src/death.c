@@ -36,7 +36,7 @@ void display_scores(int show_player) {
     if ((highscore_fp = fopen(MORIA_TOP, "rb")) == NULL) {
         sprintf(string, "Error opening score file \"%s\"\n", MORIA_TOP);
         msg_print(string);
-        msg_print("");
+        msg_print(CNIL);
         return;
     }
 
@@ -55,7 +55,7 @@ void display_scores(int show_player) {
                (version_min == CUR_VERSION_MIN && patch_level > PATCH_LEVEL) ||
                (version_min == 2 && patch_level < 2) || (version_min < 2)) {
         msg_print("Sorry. This scorefile is from a different version of umoria.");
-        msg_print("");
+        msg_print(CNIL);
 
         (void)fclose(highscore_fp);
         return;
@@ -198,11 +198,11 @@ retry:
                 clear_screen();
                 msg_print("You are using:");
                 (void)show_equip(true, 0);
-                msg_print("");
+                msg_print(CNIL);
                 msg_print("You are carrying:");
                 clear_from(1);
-                (void)show_inven(0, inven_ctr - 1, true, 0, "");
-                msg_print("");
+                (void)show_inven(0, inven_ctr - 1, true, 0, CNIL);
+                msg_print(CNIL);
             }
         }
     }
@@ -270,7 +270,7 @@ static void highscores() {
 
         (void) sprintf (string, "Error opening score file \"%s\"\n", MORIA_TOP);
         msg_print(string);
-        msg_print("");
+        msg_print(CNIL);
         return;
     }
 
@@ -441,7 +441,7 @@ static void kingly() {
 // Handles the gravestone end top-twenty routines -RAK-
 // What happens upon dying. -RAK-
 void exit_game() {
-    msg_print("");
+    msg_print(CNIL);
 
     // flush all input
     flush();

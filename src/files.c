@@ -39,7 +39,7 @@ void read_times() {
     if (file1 != NULL) {
         clear_screen();
 
-        for (int i = 0; fgets(in_line, 80, file1) != NULL; i++) {
+        for (int i = 0; fgets(in_line, 80, file1) != CNIL; i++) {
             put_buffer(in_line, i, 0);
         }
         pause_line(23);
@@ -65,7 +65,7 @@ void helpfile(char *filename) {
     while (!feof(file)) {
         clear_screen();
         for (int i = 0; i < 23; i++) {
-            if (fgets(tmp_str, BIGVTYPESIZ - 1, file) != NULL) {
+            if (fgets(tmp_str, BIGVTYPESIZ - 1, file) != CNIL) {
                 put_buffer(tmp_str, i, 0);
             }
         }

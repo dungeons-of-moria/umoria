@@ -23,7 +23,7 @@ void quaff() {
         msg_print("But you are not carrying anything.");
     } else if (!find_range(TV_POTION1, TV_POTION2, &j, &k)) {
         msg_print("You are not carrying any potions.");
-    } else if (get_item(&item_val, "Quaff which potion?", j, k, "", "")) {
+    } else if (get_item(&item_val, "Quaff which potion?", j, k, CNIL, CNIL)) {
         inven_type *i_ptr = &inventory[item_val];
 
         uint32_t i = i_ptr->flags;

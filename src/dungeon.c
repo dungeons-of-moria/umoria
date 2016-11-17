@@ -829,7 +829,7 @@ static char original_commands(char com_val) {
     case '$':
         break;
     case '.':
-        if (get_dir("", &dir_val)) {
+        if (get_dir(CNIL, &dir_val)) {
             switch (dir_val) {
             case 1:
                 com_val = 'B';
@@ -919,7 +919,7 @@ static char original_commands(char com_val) {
         com_val = '#';
         break;
     case 'T':
-        if (get_dir("", &dir_val)) {
+        if (get_dir(CNIL, &dir_val)) {
             switch (dir_val) {
             case 1:
                 com_val = CTRL_KEY('B');
@@ -1045,7 +1045,7 @@ static void do_command(char com_val) {
         do_pickup = false;
         i = command_count;
 
-        if (get_dir("", &dir_val)) {
+        if (get_dir(CNIL, &dir_val)) {
             command_count = i;
             switch (dir_val) {
             case 1:
@@ -1772,7 +1772,7 @@ static void examine_book() {
         msg_print("You have no light to read by.");
     } else if (py.flags.confused > 0) {
         msg_print("You are too confused.");
-    } else if (get_item(&item_val, "Which Book?", i, k, "", "")) {
+    } else if (get_item(&item_val, "Which Book?", i, k, CNIL, CNIL)) {
         int spell_index[31];
         spell_type *s_ptr;
 
@@ -1870,7 +1870,7 @@ static void jamdoor() {
     int x = char_col;
 
     int dir;
-    if (get_dir("", &dir)) {
+    if (get_dir(CNIL, &dir)) {
         (void)mmove(dir, &y, &x);
         cave_type *c_ptr = &cave[y][x];
 

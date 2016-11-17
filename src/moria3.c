@@ -66,7 +66,7 @@ static void hit_trap(int y, int x) {
             take_hit(dam, tmp);
         }
         // Force the messages to display before starting to generate the next level.
-        msg_print("");
+        msg_print(CNIL);
         break;
     case 5: // Sleep gas
         if (py.flags.paralysis == 0) {
@@ -877,7 +877,7 @@ void openobject() {
     int x = char_col;
 
     int dir;
-    if (get_dir("", &dir)) {
+    if (get_dir(CNIL, &dir)) {
         (void)mmove(dir, &y, &x);
 
         bool no_object = false;
@@ -994,7 +994,7 @@ void closeobject() {
     int x = char_col;
 
     int dir;
-    if (get_dir("", &dir)) {
+    if (get_dir(CNIL, &dir)) {
         (void)mmove(dir, &y, &x);
 
         cave_type *c_ptr = &cave[y][x];

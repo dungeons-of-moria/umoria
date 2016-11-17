@@ -528,7 +528,7 @@ treasure_type object_list[MAX_OBJECTS] = {
 };
 
 char *special_names[SN_ARRAY_SIZE] = {
-    "",                  "(R)",              "(RA)",
+    CNIL,                "(R)",              "(RA)",
     "(RF)",              "(RC)",             "(RL)",
     "(HA)",              "(DF)",             "(SA)",
     "(SD)",              "(SE)",             "(SU)",
