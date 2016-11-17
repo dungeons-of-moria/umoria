@@ -4,7 +4,7 @@
 // ABSOLUTELY NO WARRANTY. See https://www.gnu.org/licenses/gpl-2.0.html
 // for further details.
 
-// Imports the correct curses for the system.
+// Sets up curses for the correct system.
 
 #pragma once
 

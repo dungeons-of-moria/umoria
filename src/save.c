@@ -44,10 +44,10 @@ static uint8_t xor_byte;
 static int from_savefile;   // can overwrite old savefile when save
 static uint32_t start_time; // time that play started
 
-// This save package was brought to by -JWT-
-// and -RAK-
-// and has been completely rewritten for UNIX by -JEW-
-// and has been completely rewritten again by -CJS-
+// This save package was brought to by                -JWT-
+// and                                                -RAK-
+// and has been completely rewritten for UNIX by      -JEW-
+// and has been completely rewritten again by         -CJS-
 // and completely rewritten again! for portability by -JEW-
 
 static bool sv_write() {

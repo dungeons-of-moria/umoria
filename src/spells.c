@@ -148,14 +148,15 @@ int detect_sdoor() {
             cave_type *c_ptr = &cave[i][j];
 
             if (c_ptr->tptr != 0) {
-                // Secret doors
                 if (t_list[c_ptr->tptr].tval == TV_SECRET_DOOR) {
+                    // Secret doors
+
                     c_ptr->fm = true;
                     change_trap(i, j);
                     detect = true;
-                } else if (((t_list[c_ptr->tptr].tval == TV_UP_STAIR) ||
-                            (t_list[c_ptr->tptr].tval == TV_DOWN_STAIR)) &&
-                           !c_ptr->fm) { // Staircases
+                } else if (((t_list[c_ptr->tptr].tval == TV_UP_STAIR) || (t_list[c_ptr->tptr].tval == TV_DOWN_STAIR)) && !c_ptr->fm) {
+                    // Staircases
+
                     c_ptr->fm = true;
                     lite_spot(i, j);
                     detect = true;
@@ -707,8 +708,7 @@ void fire_bolt(int typ, int dir, int y, int x, int dam, char *bolt_typ) {
     } while (!flag);
 }
 
-// Shoot a ball in a given direction.  Note that balls have an
-// area affect. -RAK-
+// Shoot a ball in a given direction.  Note that balls have an area affect. -RAK-
 void fire_ball(int typ, int dir, int y, int x, int dam_hp, char *descrip) {
     int thit = 0;
     int tkill = 0;

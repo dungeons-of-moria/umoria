@@ -135,7 +135,7 @@ void alloc_object(bool (*alloc_set)(), int typ, int num) {
         // problems if player is standing under rubble, or on a trap.
         while ((!(*alloc_set)(cave[i][j].fval)) || (cave[i][j].tptr != 0) || (i == char_row && j == char_col));
 
-        // typ == 2 not used, used to be visible traps
+        // NOTE: typ == 2 is not used - used to be visible traps.
         if (typ < 4) {
             if (typ == 1) {
                 // typ == 1
@@ -2077,7 +2077,6 @@ int critical_blow(int weight, int plus, int dam, int attack_type) {
 
 // Given direction "dir", returns new row, column location -RAK-
 int mmove(int dir, int *y, int *x) {
-    // NOTE: initializing as these were giving a warning below -MRC-
     int new_row = 0;
     int new_col = 0;
 

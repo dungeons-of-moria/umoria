@@ -413,7 +413,6 @@ bool get_string(char *in_str, int row, int column, int slen) {
     if (end_col > 79) {
         // NOTE: `slen` is never read after this point, so commenting out. -MRC-
         // slen = 80 - column;
-
         end_col = 79;
     }
 

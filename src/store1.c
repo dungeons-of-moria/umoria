@@ -24,9 +24,9 @@ int32_t item_value(inven_type *i_ptr) {
     // don't purchase known cursed items
     if (i_ptr->ident & ID_DAMD) {
         value = 0;
-    } else if (((i_ptr->tval >= TV_BOW) && (i_ptr->tval <= TV_SWORD)) ||
-               ((i_ptr->tval >= TV_BOOTS) &&
-                (i_ptr->tval <= TV_SOFT_ARMOR))) { // Weapons and armor
+    } else if (((i_ptr->tval >= TV_BOW) && (i_ptr->tval <= TV_SWORD)) || ((i_ptr->tval >= TV_BOOTS) && (i_ptr->tval <= TV_SOFT_ARMOR))) {
+        // Weapons and armor
+
         if (!known2_p(i_ptr)) {
             value = object_list[i_ptr->index].cost;
         } else if ((i_ptr->tval >= TV_BOW) && (i_ptr->tval <= TV_SWORD)) {
@@ -37,8 +37,7 @@ int32_t item_value(inven_type *i_ptr) {
             } else if (i_ptr->toac < 0) {
                 value = 0;
             } else {
-                value = i_ptr->cost +
-                        (i_ptr->tohit + i_ptr->todam + i_ptr->toac) * 100;
+                value = i_ptr->cost + (i_ptr->tohit + i_ptr->todam + i_ptr->toac) * 100;
             }
         } else {
             if (i_ptr->toac < 0) {
@@ -47,8 +46,9 @@ int32_t item_value(inven_type *i_ptr) {
                 value = i_ptr->cost + i_ptr->toac * 100;
             }
         }
-    } else if ((i_ptr->tval >= TV_SLING_AMMO) &&
-               (i_ptr->tval <= TV_SPIKE)) { // Ammo
+    } else if ((i_ptr->tval >= TV_SLING_AMMO) && (i_ptr->tval <= TV_SPIKE)) {
+        // Ammo
+
         if (!known2_p(i_ptr)) {
             value = object_list[i_ptr->index].cost;
         } else {
@@ -64,10 +64,9 @@ int32_t item_value(inven_type *i_ptr) {
                 value = i_ptr->cost + (i_ptr->tohit + i_ptr->todam + i_ptr->toac) * 5;
             }
         }
-    } else if ((i_ptr->tval == TV_SCROLL1) || (i_ptr->tval == TV_SCROLL2) ||
-               (i_ptr->tval == TV_POTION1) ||
-               (i_ptr->tval ==
-                TV_POTION2)) { // Potions, Scrolls, and Food
+    } else if ((i_ptr->tval == TV_SCROLL1) || (i_ptr->tval == TV_SCROLL2) || (i_ptr->tval == TV_POTION1) || (i_ptr->tval == TV_POTION2)) {
+        // Potions, Scrolls, and Food
+
         if (!known1_p(i_ptr)) {
             value = 20;
         }
@@ -76,8 +75,8 @@ int32_t item_value(inven_type *i_ptr) {
             !known1_p(i_ptr)) {
             value = 1;
         }
-    } else if ((i_ptr->tval == TV_AMULET) ||
-               (i_ptr->tval == TV_RING)) { // Rings and amulets
+    } else if ((i_ptr->tval == TV_AMULET) || (i_ptr->tval == TV_RING)) {
+        // Rings and amulets
 
         // player does not know what type of ring/amulet this is
         if (!known1_p(i_ptr)) {
@@ -88,8 +87,9 @@ int32_t item_value(inven_type *i_ptr) {
             // player can use this to 'identify' cursed objects
             value = object_list[i_ptr->index].cost;
         }
-    } else if ((i_ptr->tval == TV_STAFF) ||
-               (i_ptr->tval == TV_WAND)) { // Wands and staffs
+    } else if ((i_ptr->tval == TV_STAFF) || (i_ptr->tval == TV_WAND)) {
+        // Wands and staffs
+
         if (!known1_p(i_ptr)) {
             if (i_ptr->tval == TV_WAND) {
                 value = 50;
@@ -99,7 +99,9 @@ int32_t item_value(inven_type *i_ptr) {
         } else if (known2_p(i_ptr)) {
             value = i_ptr->cost + (i_ptr->cost / 20) * i_ptr->p1;
         }
-    } else if (i_ptr->tval == TV_DIGGING) { // picks and shovels
+    } else if (i_ptr->tval == TV_DIGGING) {
+        // Picks and shovels
+
         if (!known2_p(i_ptr)) {
             value = object_list[i_ptr->index].cost;
         } else {
@@ -108,8 +110,7 @@ int32_t item_value(inven_type *i_ptr) {
             } else {
                 // some digging tools start with non-zero p1 values, so only
                 // multiply the plusses by 100, make sure result is positive
-                value = i_ptr->cost +
-                        (i_ptr->p1 - object_list[i_ptr->index].p1) * 100;
+                value = i_ptr->cost + (i_ptr->p1 - object_list[i_ptr->index].p1) * 100;
                 if (value < 0) {
                     value = 0;
                 }
@@ -117,8 +118,9 @@ int32_t item_value(inven_type *i_ptr) {
         }
     }
 
-    // multiply value by number of items if it is a group stack item
-    if (i_ptr->subval > ITEM_GROUP_MIN) { // do not include torches here
+    // Multiply value by number of items if it is a group stack item.
+    // Do not include torches here.
+    if (i_ptr->subval > ITEM_GROUP_MIN) {
         value = value * i_ptr->number;
     }
 

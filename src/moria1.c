@@ -602,8 +602,6 @@ void inven_command(char command) {
     bigvtype prt1, prt2;
     int item, tmp;
     inven_type tmp_obj;
-
-    // FIXME: initialize as it was giving a warning below. -MRC-
     int slot = 0;
 
     free_turn_flag = true;
@@ -888,9 +886,8 @@ void inven_command(char command) {
                             if (item >= 0) {
                                 if (command == 'r') {
                                     inven_drop(item, true);
-                                    // As a safety measure, set the player's
-                                    // inven weight to 0,
-                                    // when the last object is dropped
+                                    // As a safety measure, set the player's inven
+                                    // weight to 0, when the last object is dropped.
                                     if (inven_ctr == 0 && equip_ctr == 0) {
                                         inven_weight = 0;
                                     }
@@ -1076,7 +1073,7 @@ void inven_command(char command) {
                         } else {
                             // command == 'd'
 
-                            // FIXME: initializing to `ESCAPE` as it was giving a warning below. -MRC-
+                            // FIXME: initializing to `ESCAPE` as warnings were being given. -MRC-
                             char query = ESCAPE;
 
                             if (inventory[item].number > 1) {
@@ -1179,7 +1176,6 @@ void inven_command(char command) {
 
 // Get the ID of an item and return the CTR value of it -RAK-
 int get_item(int *com_val, char *pmt, int i, int j, char *mask, char *message) {
-
     bool test_flag;
     bool full;
     bool item = false;
@@ -1410,7 +1406,8 @@ bool get_dir(char *prompt, int *dir) {
     for (;;) {
         char command;
 
-        int save = command_count; // Don't end a counted command. -CJS-
+        // Don't end a counted command. -CJS-
+        int save = command_count;
 
         if (!get_com(prompt, &command)) {
             free_turn_flag = true;
@@ -1652,8 +1649,8 @@ void rest() {
             }
         }
     }
-    // check for reasonable value, must be positive number in range of a
-    // short, or must be -MAX_SHORT
+    // check for reasonable value, must be positive number
+    // in range of a short, or must be -MAX_SHORT
     if ( (rest_num == -MAX_SHORT) || ((rest_num > 0) && (rest_num < MAX_SHORT)) ) {
         if (py.flags.status & PY_SEARCH) {
             search_off();
@@ -1678,7 +1675,9 @@ void rest_off() {
     py.flags.status &= ~PY_REST;
 
     prt_state();
-    msg_print(""); // flush last message, or delete "press any key" message
+
+    // flush last message, or delete "press any key" message
+    msg_print("");
 
     py.flags.food_digested++;
 }
@@ -1701,8 +1700,7 @@ bool test_hit(int bth, int level, int pth, int ac, int attack_type) {
     }
 }
 
-// Decreases players hit points and sets death flag if necessary
-// -RAK-
+// Decreases players hit points and sets death flag if necessary -RAK-
 void take_hit(int damage, char *hit_from) {
     if (py.flags.invuln > 0) {
         damage = 0;

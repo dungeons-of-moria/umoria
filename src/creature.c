@@ -747,7 +747,6 @@ static void make_attack(int monptr) {
                     i = INVEN_FEET;
                     break;
                 }
-                // FIXME: `i` may be uninitialized here!
                 i_ptr = &inventory[i];
 
                 if (i_ptr->tohit > 0) {
@@ -1523,7 +1522,6 @@ static void mon_move(int monptr, uint32_t *rcmove) {
             make_move(monptr, mm, rcmove);
         } else if (r_ptr->cmove & CM_MOVE_NORMAL) {
             // Normal movement
-
             if (randint(200) == 1) {
                 mm[0] = randint(9);
                 mm[1] = randint(9);
@@ -1537,7 +1535,6 @@ static void mon_move(int monptr, uint32_t *rcmove) {
             make_move(monptr, mm, rcmove);
         } else if (r_ptr->cmove & CM_ATTACK_ONLY) {
             // Attack, but don't move
-
             if (m_ptr->cdis < 2) {
                 get_moves(monptr, mm);
                 make_move(monptr, mm, rcmove);

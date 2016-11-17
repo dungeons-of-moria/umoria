@@ -818,26 +818,26 @@ void magic_treasure(int x, int level) {
         t_ptr->p1 = missile_ctr;
         break;
     case TV_FOOD:
-        // make sure all food rations have the same level
         if (t_ptr->subval == 90) {
+            // make sure all food rations have the same level
             t_ptr->level = 0;
-            // give all elvish waybread the same level
         } else if (t_ptr->subval == 92) {
+            // give all elvish waybread the same level
             t_ptr->level = 6;
         }
         break;
     case TV_SCROLL1:
-        // give all identify scrolls the same level
         if (t_ptr->subval == 67) {
+            // give all identify scrolls the same level
             t_ptr->level = 1;
-            // scroll of light
         } else if (t_ptr->subval == 69) {
+            // scroll of light
             t_ptr->level = 0;
-            // scroll of trap detection
         } else if (t_ptr->subval == 80) {
+            // scroll of trap detection
             t_ptr->level = 5;
-            // scroll of door/stair location
         } else if (t_ptr->subval == 81) {
+            // scroll of door/stair location
             t_ptr->level = 5;
         }
         break;

@@ -207,8 +207,8 @@ static void hit_trap(int y, int x) {
 
 // Return spell number and failure chance -RAK-
 // returns -1 if no spells in book
-// returns 1 if choose a spell in book to cast
-// returns 0 if don't choose a spell, i.e. exit with an escape
+// returns  1 if choose a spell in book to cast
+// returns  0 if don't choose a spell, i.e. exit with an escape
 int cast_spell(char *prompt, int item_val, int *sn, int *sc) {
     int result = -1;
     int i = 0;
@@ -372,7 +372,7 @@ void fix2_delete_monster(int j) {
 static int summon_object(int y, int x, int num, int typ) {
     int real_typ;
     if ((typ == 1) || (typ == 5)) {
-        real_typ = 1; // typ == 1 -> objects
+        real_typ = 1;   // typ == 1 -> objects
     } else {
         real_typ = 256; // typ == 2 -> gold
     }

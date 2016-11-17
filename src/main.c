@@ -35,10 +35,9 @@ int main(int argc, char *argv[]) {
     // and prepare things to relinquish setuid privileges
     init_scorefile();
 
-    // Check the user permissions -MRC-
+    // Make sure we have access to all files -MRC-
     check_file_permissions();
 
-    // use curses
     init_curses();
 
     uint32_t seed = 0; // let wizard specify rng seed
@@ -77,7 +76,7 @@ int main(int argc, char *argv[]) {
         }
     }
 
-    // Show intro text
+    // Show the game splash screen
     read_times();
 
     // Some necessary initializations

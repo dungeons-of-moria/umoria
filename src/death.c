@@ -439,12 +439,12 @@ static void kingly() {
 }
 
 // Handles the gravestone end top-twenty routines -RAK-
+// What happens upon dying. -RAK-
 void exit_game() {
-    // What happens upon dying. -RAK-
-
     msg_print("");
 
-    flush();     // flush all input
+    // flush all input
+    flush();
 
     // If the game has been saved, then save sets turn back to -1,
     // which inhibits the printing of the tomb.

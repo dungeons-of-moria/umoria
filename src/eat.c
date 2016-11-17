@@ -92,7 +92,7 @@ void eat() {
                 ident = true;
                 lose_con();
                 break;
-#if 0 // 12 through 15 are not used
+#if 0 // 12 through 15 are no longer used
             case 12:
                 ident = true;
                 lose_int();
@@ -155,7 +155,7 @@ void eat() {
             case 24:
                 ident = hp_player(randint(18));
                 break;
-#if 0 // 25 is not used
+#if 0 // 25 is no longer used
             case 25:
                 ident = hp_player(damroll(3, 6));
                 break;
@@ -167,7 +167,7 @@ void eat() {
                 take_hit(randint(18), "poisonous food.");
                 ident = true;
                 break;
-#if 0 // 28 through 30 are not used
+#if 0 // 28 through 30 are no longer used
             case 28:
                 take_hit(randint(8), "poisonous food.");
                 ident = true;

@@ -317,9 +317,9 @@ static void vault_monster(int y, int x, int num) {
 static void build_room(int yval, int xval) {
     uint8_t floor;
     if (dun_level <= randint(25)) {
-        floor = LIGHT_FLOOR; // Floor with light
+        floor = LIGHT_FLOOR;
     } else {
-        floor = DARK_FLOOR; // Dark floor
+        floor = DARK_FLOOR;
     }
 
     int y_height = yval - randint(4);
@@ -368,9 +368,9 @@ static void build_room(int yval, int xval) {
 static void build_type1(int yval, int xval) {
     uint8_t floor;
     if (dun_level <= randint(25)) {
-        floor = LIGHT_FLOOR; // Floor with light
+        floor = LIGHT_FLOOR;
     } else {
-        floor = DARK_FLOOR; // Dark floor
+        floor = DARK_FLOOR;
     }
 
     cave_type *c_ptr, *d_ptr;
@@ -434,9 +434,9 @@ static void build_type1(int yval, int xval) {
 static void build_type2(int yval, int xval) {
     uint8_t floor;
     if (dun_level <= randint(25)) {
-        floor = LIGHT_FLOOR; // Floor with light
+        floor = LIGHT_FLOOR;
     } else {
-        floor = DARK_FLOOR; // Dark floor
+        floor = DARK_FLOOR;
     }
 
     int y_height = yval - 4;
@@ -716,9 +716,9 @@ static void build_type2(int yval, int xval) {
 static void build_type3(int yval, int xval) {
     uint8_t floor;
     if (dun_level <= randint(25)) {
-        floor = LIGHT_FLOOR; // Floor with light
+        floor = LIGHT_FLOOR;
     } else {
-        floor = DARK_FLOOR; // Dark floor
+        floor = DARK_FLOOR;
     }
 
     int tmp = 2 + randint(2);
@@ -1230,7 +1230,7 @@ static void town_gen() {
     // Set up the character co-ords, used by alloc_monster below
     new_spot(&char_row, &char_col);
     if (0x1 & (turn / 5000)) {
-        // Night
+        // Night time
         for (int i = 0; i < cur_height; i++) {
             cave_type *c_ptr = &cave[i][0];
             for (int j = 0; j < cur_width; j++) {
@@ -1242,7 +1242,7 @@ static void town_gen() {
         }
         alloc_monster(MIN_MALLOC_TN, 3, true);
     } else {
-        // Day
+        // Day time
         for (int i = 0; i < cur_height; i++) {
             cave_type *c_ptr = &cave[i][0];
             for (int j = 0; j < cur_width; j++) {

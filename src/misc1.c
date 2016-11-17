@@ -188,6 +188,7 @@ int get_panel(int y, int x, int force) {
         panel_col = pcol;
         panel_bounds();
         panel = true;
+
         // stop movement if any
         if (find_bound) {
             end_find();
@@ -299,7 +300,6 @@ int pdamroll(uint8_t *array) {
 
 // Because this function uses (short) ints for all calculations, overflow may
 // occur if deltaX and deltaY exceed 90.
-
 bool los(int fromY, int fromX, int toY, int toX) {
     int deltaX = toX - fromX;
     int deltaY = toY - fromY;
@@ -458,8 +458,7 @@ uint8_t loc_symbol(int y, int x) {
         return c_list[m_list[cave_ptr->cptr].mptr].cchar;
     } else if (!cave_ptr->pl && !cave_ptr->tl && !cave_ptr->fm) {
         return ' ';
-    } else if ((cave_ptr->tptr != 0) &&
-               (t_list[cave_ptr->tptr].tval != TV_INVIS_TRAP)) {
+    } else if ((cave_ptr->tptr != 0) && (t_list[cave_ptr->tptr].tval != TV_INVIS_TRAP)) {
         return t_list[cave_ptr->tptr].tchar;
     } else if (cave_ptr->fval <= MAX_CAVE_FLOOR) {
         return '.';
@@ -887,7 +886,7 @@ void pusht(uint8_t x) {
     invcopy(&t_list[tcptr], OBJ_NOTHING);
 }
 
-// Boolean : is object enchanted -RAK-
+// Should the object be enchanted -RAK-
 bool magik(int chance) {
     if (randint(100) <= chance) {
         return true;

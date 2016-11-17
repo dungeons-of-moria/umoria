@@ -41,7 +41,7 @@ typedef struct creature_type {
     uint8_t sleep;      // Inactive counter/10
     uint8_t aaf;        // Area affect radius
     uint8_t ac;         // AC
-    uint8_t speed;      // Movement speed+10
+    uint8_t speed;      // Movement speed+10 (NOTE: +10 so that it can be a uint8_t)
     uint8_t cchar;      // Character rep.
     uint8_t hd[2];      // Creatures hit die
     uint8_t damage[4];  // Type attack and damage
@@ -110,24 +110,24 @@ typedef struct treasure_type {
 // pointers, so we use a char array for them instead
 #define INSCRIP_SIZE 13 // notice alignment, must be 4*x + 1
 typedef struct inven_type {
-    uint16_t index;                 // Index to object_list
-    uint8_t name2;                  // Object special name
-    char inscrip[INSCRIP_SIZE];     // Object inscription
-    uint32_t flags;                 // Special flags
-    uint8_t tval;                   // Category number
-    uint8_t tchar;                  // Character representation
-    int16_t p1;                     // Misc. use variable
-    int32_t cost;                   // Cost of item
-    uint8_t subval;                 // Sub-category number
-    uint8_t number;                 // Number of items
-    uint16_t weight;                // Weight
-    int16_t tohit;                  // Plusses to hit
-    int16_t todam;                  // Plusses to damage
-    int16_t ac;                     // Normal AC
-    int16_t toac;                   // Plusses to AC
-    uint8_t damage[2];              // Damage when hits
-    uint8_t level;                  // Level item first found
-    uint8_t ident;                  // Identify information
+    uint16_t index;                   // Index to object_list
+    uint8_t name2;                    // Object special name
+    char inscrip[INSCRIP_SIZE];       // Object inscription
+    uint32_t flags;                   // Special flags
+    uint8_t tval;                     // Category number
+    uint8_t tchar;                    // Character representation
+    int16_t p1;                       // Misc. use variable
+    int32_t cost;                     // Cost of item
+    uint8_t subval;                   // Sub-category number
+    uint8_t number;                   // Number of items
+    uint16_t weight;                  // Weight
+    int16_t tohit;                    // Plusses to hit
+    int16_t todam;                    // Plusses to damage
+    int16_t ac;                       // Normal AC
+    int16_t toac;                     // Plusses to AC
+    uint8_t damage[2];                // Damage when hits
+    uint8_t level;                    // Level item first found
+    uint8_t ident;                    // Identify information
 } inven_type;
 
 #define PLAYER_NAME_SIZE 27
@@ -235,7 +235,7 @@ typedef struct spell_type {
     uint8_t slevel;
     uint8_t smana;
     uint8_t sfail;
-    uint8_t sexp;     // 1/4 of exp gained for learning spell
+    uint8_t sexp;             // 1/4 of exp gained for learning spell
 } spell_type;
 
 typedef struct race_type {

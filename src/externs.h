@@ -65,7 +65,8 @@ extern bool wait_for_more;
 extern char days[7][29];
 extern int closing_flag;            // Used for closing
 
-extern int16_t cur_height, cur_width; // Cur dungeon size
+extern int16_t cur_height;          // Current dungeon height
+extern int16_t cur_width;           // Current dungeon width
 
 // Following are calculated from max dungeon sizes
 extern int16_t max_panel_rows, max_panel_cols;
@@ -248,6 +249,10 @@ bool check_input(int);
 void user_name(char *);
 
 #ifndef _WIN32
+// call functions which expand tilde before calling open/fopen
+#define open topen
+#define fopen tfopen
+
 int tilde(char *, char *);
 FILE *tfopen(char *, char *);
 int topen(char *, int, int);
@@ -598,10 +603,3 @@ void aim();
 void wizard_light();
 void change_character();
 void wizard_create();
-
-
-#ifndef _WIN32
-// call functions which expand tilde before calling open/fopen
-#define open topen
-#define fopen tfopen
-#endif

@@ -83,10 +83,11 @@ void dungeon() {
     // Print the depth
     prt_depth();
 
+    //
     // Loop until dead,  or new level
+    //
     do {
-        // Increment turn counter
-        turn++;
+        turn++; // Increment turn counter
 
         // turn over the store contents every, say, 1000 turns
         if ((dun_level != 0) && ((turn % 1000) == 0)) {
@@ -130,7 +131,9 @@ void dungeon() {
             creatures(false);
         }
 
+        //
         // Update counters and messages
+        //
 
         // Heroism (must precede anything that can damage player)
         if (f_ptr->hero > 0) {
@@ -345,7 +348,8 @@ void dungeon() {
                     i = ((turn % 4) == 0);
                     break;
                 default:
-                    // FIXME: uninitialized warning so let's add that here -MRC-
+                    // An uninitialized warning if given further down,
+                    // so let's fix that here -MRC-
                     i = 0;
                 }
 
@@ -782,6 +786,7 @@ void dungeon() {
                     }
                 }
                 // End of commands
+
             } while (free_turn_flag && !new_level_flag && !eof_flag);
         } else {
             // if paralyzed, resting, or dead, flush output
@@ -1617,7 +1622,6 @@ static bool valid_countcommand(char c) {
     case CTRL_KEY('S'):
     case CTRL_KEY('Q'):
         return false;
-
     case CTRL_KEY('P'):
     case ESCAPE:
     case ' ':
@@ -1657,7 +1661,6 @@ static bool valid_countcommand(char c) {
     case CTRL_KEY('G'):
     case '+':
         return true;
-
     default:
         return false;
     }

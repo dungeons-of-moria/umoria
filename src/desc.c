@@ -199,8 +199,6 @@ static void unsample(inven_type *i_ptr) {
     object_ident[offset + indexx] &= ~OD_TRIED;
 }
 
-// unquote() is no longer needed
-
 // Somethings been sampled -CJS-
 void sample(inven_type *i_ptr) {
     int16_t offset = object_offset(i_ptr);

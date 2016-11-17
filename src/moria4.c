@@ -20,7 +20,7 @@ static bool look_see(int, int, bool *);
 // Tunnels through rubble and walls -RAK-
 // Must take into account: secret doors, special tools
 void tunnel(int dir) {
-    // Confused?                  75% random movement
+    // Confused?                    75% random movement
     if ((py.flags.confused > 0) && (randint(4) > 1)) {
         dir = randint(9);
     }
@@ -125,8 +125,9 @@ void tunnel(int dir) {
         default:
             // Is there an object in the way?  (Rubble and secret doors)
             if (c_ptr->tptr != 0) {
-                // Rubble.
                 if (t_list[c_ptr->tptr].tval == TV_RUBBLE) {
+                    // Rubble.
+
                     if (tabil > randint(180)) {
                         (void)delete_object(y, x);
                         msg_print("You have removed the rubble.");
@@ -357,7 +358,7 @@ void look() {
 
         bool dummy;
         if (look_see(0, 0, &dummy)) {
-            // NOTE: `abort` is not read after this so commenting out. -MRC_
+            // NOTE: `abort` is not read after this so commenting out. -MRC-
             // abort = true;
         } else {
             bool abort;
@@ -833,9 +834,8 @@ void throw_object() {
                         monster_type *m_ptr = &m_list[c_ptr->cptr];
                         tbth = tbth - cur_dis;
 
-                        // if monster not lit, make it much more difficult to
-                        // hit, subtract off most bonuses, and reduce bthb
-                        // depending on distance
+                        // if monster not lit, make it much more difficult to hit, subtract
+                        // off most bonuses, and reduce bthb depending on distance.
                         if (!m_ptr->ml) {
                             tbth = (tbth / (cur_dis + 2)) - (py.misc.lev * class_level_adj[py.misc.pclass][CLA_BTHB] / 2) - (tpth * (BTH_PLUS_ADJ - 1));
                         }
@@ -1011,12 +1011,10 @@ void bash() {
                 int tmp = py.stats.use_stat[A_STR] + py.misc.wt / 2;
 
                 // Use (roughly) similar method as for monsters.
-                if (randint(tmp * (20 + abs(t_ptr->p1))) <
-                    10 * (tmp - abs(t_ptr->p1))) {
+                if (randint(tmp * (20 + abs(t_ptr->p1))) < 10 * (tmp - abs(t_ptr->p1))) {
                     msg_print("The door crashes open!");
                     invcopy(&t_list[c_ptr->tptr], OBJ_OPEN_DOOR);
-                    t_ptr->p1 =
-                        1 - randint(2); // 50% chance of breaking door
+                    t_ptr->p1 = 1 - randint(2); // 50% chance of breaking door
                     c_ptr->fval = CORR_FLOOR;
                     if (py.flags.confused == 0) {
                         move_char(dir, false);
