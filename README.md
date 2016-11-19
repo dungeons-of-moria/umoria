@@ -12,7 +12,7 @@ Supported Platforms:
 
   - Windows
   - macOS
-  - Ubuntu / Debian Linux*
+  - Linux* (Ubuntu/Debian, Fedora)
 
 _* other Linux distros may work, but have not yet been tested._
 
