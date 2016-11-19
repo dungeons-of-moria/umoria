@@ -1,49 +1,48 @@
-# Umoria Restoration Project
+# Umoria
 
-_The Dungeons of Moria_ is a single player dungeon simulation originally written
-by Robert Alan Koeneke and first released in 1985. The original version was
-written in VMS Pascal, before being ported to the C language, and released as
-_Umoria_ in 1988. Moria has inspired many other games including _Angband_ and
-perhaps the most famous roguelike of all, _Diablo_!
+_The Dungeons of Moria_ is a single player dungeon simulation originally
+written by Robert Alan Koeneke, with v1.0 released in 1983. The game was
+originally written in VMS Pascal before being ported to the C language and
+released as _Umoria_ in 1988. Moria has had many variants over the years, with
+[_Angband_](http://rephial.org/) being the most well known, and was also an
+inspiration for one the most commercially successful roguelike-like games,
+_Diablo_!
 
 Supported Platforms:
 
   - Windows
   - macOS
-  - Ubuntu / Debian Linux
+  - Ubuntu / Debian Linux*
 
-_**Note: we are currently still in Beta - things may go wrong!**_
+_* other Linux distros may work, but have not yet been tested._
 
 
-## What is the Moria Restoration Project?
+## Umoria Restoration Release: v5.7.0
 
-Umoria 5.6 has support for many different platforms which include; Linux,
-MS DOS, "Classic" Mac OS (pre OS X), Amiga, and Atari ST. Back in the late
-1980's and early 1990's, all these were still useful systems to support.
+The main focus of the `v5.7.0` release was to provide support for Windows
+and macOS users, while at the same time removing support for the many
+outdated computer system such as, MS DOS, "Classic" Mac OS (pre OS X), Amiga,
+and Atari ST.
 
-Now, 30 years on, the only viable option from those platforms is Linux.
-This means there is no support for Windows or macOS. However, most people
-these days are running on Windows and macOS computers, and it is now far too
-difficult for players on these modern systems to play Moria!
+_Note: there are no gameplay changes in this release._
 
-What to do about it?
+During the process a great deal of _code restoration_ was undertaken to aid
+future development of the game. This included tasks such as reformatting the
+source code with the help of `clang-tidy` and `clang-format`, modernising the
+code to use standard C types, and fixing all warnings while compiling against
+recent versions of GCC. Details of all changes can be found in the
+[CHANGELOG](CHANGELOG.md), and by browsing the commit history.
 
-This project is an attempt to clean up this decades old code base,
-yet without changing any of the gameplay.
-
-With all those old systems no longer useful to anyone but the most dedicated
-nerd, there is no point in clogging up the code base with support for them,
-so the first task is to strip back the support to just Debian Linux. We can
-then start work on modernising the code to be C99 or even C11 compliant, and
-begin refactoring to be as platform independent as possible. From there it
-should be much easier to add support for macOS, and then finally Windows.
-
-I want to let everyone play Moria again!
+Due to its lack of Windows and Mac support, Moria was unplayable for many
+people. Hopefully these changes will give more people a chance to play this
+classic game.
 
 
 ## Notes on Compiling Umoria
 
-To date I've only compiled Umoria using `GCC 6.2` and `ncurses 6.0`, although I'm sure other versions will also work fine. You will need theses along with the normal C build tools for your system.
+At present Umoria has only been compiled against `GCC 6.2` and `ncurses 6.0`,
+although some slightly earlier versions should also work fine. You will
+require these along with the normal C build tools for your system.
 
 ### macOS and Debian Linux
 
@@ -56,7 +55,9 @@ Currently the game will be installed to `~/umoria`.
 
 ### Windows
 
-Here I used MinGW to provide GCC and Binutils for the Windows platform, installed via the [MSYS2 Installer](http://msys2.github.io/). Once installed you will use `pacman` to install `GCC` and `ncurses`.
+MinGW is used to provide GCC and Binutils for the Windows platform. This
+can be installed via the [MSYS2 Installer](http://msys2.github.io/). Once
+installed you will use `pacman` to install `GCC` and `ncurses`.
 
 - Copy the `makefile.win` to the `src` directory.
 - Rename `makefile.win` to `makefile`.
@@ -66,37 +67,24 @@ Here I used MinGW to provide GCC and Binutils for the Windows platform, installe
 Currently the game will be installed to `C:\umoria`.
 
 
-## Umoria Development Road map
+## Historical Documents
 
-  * ~~Format source code using `clang-tidy` and `clang-format`.~~
-  * ~~Remove support for ancient computers/OS: DOS, Amiga, Atari ST, etc.~~
-  * ~~Compile against the `C11` standard.~~
-  * ~~Use standard `bool` type instead of `int`s.~~
-  * ~~Use only _standard types_ (`int32_t` instead of `long`) where possible.~~
-  * ~~Clean up function prototypes/signatures.~~
-  * ~~General code clean up, fixing _all_ warnings.~~
-  * Update the code to to be as platform independent as possible.
-  * ~~Add Windows and macOS support.~~
+Most of the original documents included in the Umoria 5.6 sources have been
+moved to the [historical](historical/) directory. You will even find the old
+CHANGELOG which tracks all the code changes made between versions 4.81 and
+5.5.2 (1987-2008).
+
+If you'd like to learn more on the development history of Umoria, these can
+make interesting reading.
 
 
-## Copyright / License Information
+## License Information
 
-Umoria is released under the [General Public License version 2](LICENCE) (GPL v2).
+Umoria is released under the [General Public License version 2](LICENSE) (GPL v2).
 
 In 2007 Ben Asselstine and Ben Shadwick started the
 [_free-moria_](http://free-moria.sourceforge.net/) project to re-license
-UMoria 5.5.2 under the `GPL v2` by obtaining permission from all the
-contributing authors. Some eight years later, they finally succeeded in their
-goal and in early 2015 David Grabiner, the official Moria maintainer, released
-Umoria 5.6 under GPL v2.
-
-
-## Historical Documents
-
-If you're interested in reading the original documentation that came with
-Umoria 5.6, then take a look in the [historical](historical/) directory.
-
-I've re-formatted the various documents from the original release, such as
-the game manual, FAQ, and even a CHANGELOG of all the Umoria changes made
-between version 4.81 and 5.5.2 (1987-2008).
-
+UMoria 5.5.2 under GPL v2 by obtaining permission from all the contributing
+authors. Some eight years later, they finally succeeded in their goal and in
+early 2015 the Moria maintainer, David Grabiner, released Umoria 5.6 under a
+GPL v2 license.
