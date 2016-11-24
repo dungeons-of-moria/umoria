@@ -1073,7 +1073,7 @@ void inven_command(char command) {
                         } else {
                             // command == 'd'
 
-                            // FIXME: initializing to `ESCAPE` as warnings were being given. -MRC-
+                            // NOTE: initializing to `ESCAPE` as warnings were being given. -MRC-
                             char query = ESCAPE;
 
                             if (inventory[item].number > 1) {

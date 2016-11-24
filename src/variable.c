@@ -31,8 +31,9 @@ char *copyright[17] = {
     "You should have received a copy of the GNU General Public License ",
     "along with Umoria.  If not, see <http://www.gnu.org/licenses/>."};
 
+// FIXME: why is this here, it's only used in store2.c.
 // Save the store's last increment value.
-int16_t last_store_inc; // FIXME: why is this here? It's only used in store2.c.
+int16_t last_store_inc;
 
 // a horrible hack: needed because compact_monster() can be called from
 // creatures() via summon_monster() and place_monster()
@@ -60,9 +61,6 @@ vtype old_msg[MAX_SAVE_MSG];                // Last message
 int16_t last_msg                = 0;        // Where last is held
 bool death                      = false;    // True if died
 
-// FIXME: this is basically a `bool` type, except in the `find_run()` and
-// `end_find()` functions, where it's used as an `int`. Maybe implement a
-// better solution to "prevent infinite loops in find mode".
 int find_flag;                              // Used in MORIA for .(dir)
 
 bool free_turn_flag;                        // Used in MORIA, do not move creatures
