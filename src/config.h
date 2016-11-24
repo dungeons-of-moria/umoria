@@ -9,7 +9,7 @@
 // Data files used by Umoria - relative to the executable binary.
 #define MORIA_GPL "LICENSE"
 #define MORIA_TOP "scores.dat"
-#define MORIA_SAV "savegame.dat"
+#define MORIA_SAV "game.sav"
 #define MORIA_MOR "data/splash.hlp"
 #define MORIA_HELP "data/roglcmds.hlp"
 #define MORIA_ORIG_HELP "data/origcmds.hlp"
