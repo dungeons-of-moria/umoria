@@ -1,6 +1,6 @@
 # Umoria Change log
 
-## HEAD 5.7.0-beta
+## 5.7.0 (2016-11-27)
 
 Lots of code clean-up and standardization, along with removing support for
 outdated systems. The main feature of this release is support for Windows
@@ -8,7 +8,9 @@ and macOS.
 
 ### Notable changes
 
-- **Windows**, **macOS** and **Ubuntu** (Debian Linux) support.
+- **Windows**, **macOS** and **Linux** support.
+- Renaming binary from `moria` to `umoria`, save file to `game.sav`,
+  and scores to `scores.dat`.
 - Use `clang-format`/`-tidy` to clean up the code formatting.
 - Moves all standard library header includes into one file.
 - Replaces custom types (e.g. `int8u`, `int16u`, etc.) with their equivalent

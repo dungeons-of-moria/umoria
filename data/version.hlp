@@ -1,17 +1,17 @@
-                             Umoria 5.7-beta
+                                Umoria 5.7.0
 
-    Version 5.7b  :  2016-11-09
-    Version 5.6   :  2015-03-03
-    Version 5.5   :  1992-08-12
-    Version 5.4   :  1991-10-12
-    Version 5.3   :  1991-03-25
-    Version 5.2   :  1991-05-09
-    Version 5.0   :  1989-11-02
-    Version 4.87  :  1988-05-27
-    Version 4.85  :  1987-10-26
-    Version 4.83  :  1987-05-14
+    Version 5.7.0  :  2016-11-27
+    Version 5.6    :  2015-03-03
+    Version 5.5    :  1992-08-12
+    Version 5.4    :  1991-10-12
+    Version 5.3    :  1991-03-25
+    Version 5.2    :  1991-05-09
+    Version 5.0    :  1989-11-02
+    Version 4.87   :  1988-05-27
+    Version 4.85   :  1987-10-26
+    Version 4.83   :  1987-05-14
 
-Moria Restoration Project, developed and maintained by Michael R. Cook.
+Umoria 5.7 developed and maintained by Michael R. Cook.
 Bug reports and contributions can be made to the Umoria repository:
 https://github.com/dungeons-of-moria/umoria
 
@@ -21,7 +21,7 @@ Umoria maintainer: David J. Grabiner
 
         Umoria is free software, released under the GPL v2 license.
 
-                          VMS Moria Version 4.8
+                            VMS Moria Version 4.8
 
     Version 4.0  :  1985-01-20
     Version 3.0  :  1984-11-20
@@ -61,10 +61,7 @@ Scott Kolodzieski     - Atari ST port for Gnu C
 Hildo Biersma         - Atari ST port for Turbo C
 Ben Schreiber         - Macintosh port for Think C
 
-Copyright (c) 1989-94 James E. Wilson, Robert A. Keoneke
+Copyright (c) Robert A. Koeneke, James E. Wilson, David J. Grabiner
 
-Umoria is free software, and you are welcome to distribute it
-under certain conditions; for details, type control-V.
-
-Umoria comes with ABSOLUTELY NO WARRANTY; for details,
-type control-V and view sections 15-17 of the License.
+Umoria is free software released under the GPL v2 license and comes
+with ABSOLUTELY NO WARRANTY. Read the LICENSE for full details.

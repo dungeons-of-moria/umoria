@@ -6,10 +6,6 @@
 BINDIR = ~/umoria
 LIBDIR = ~/umoria/data
 
-# We're installing to home directory so no need for these settings
-# OWNER = michael
-# GROUP = staff
-
 # Game binary name. e.g `moria` or `umoria`.
 TARGET = umoria
 
