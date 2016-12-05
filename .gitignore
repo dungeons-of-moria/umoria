@@ -2,10 +2,8 @@
 src/moria
 src/umoria
 
-# Just in case we accidentally leave a makefile here
-src/makefile
-
 # CMake
+Makefile
 CMakeCache.txt
 CMakeFiles
 CMakeScripts
@@ -14,6 +12,8 @@ install_manifest.txt
 CPackConfig.cmake
 CPackSourceConfig.cmake
 CTestTestfile.cmake
+cmake-build-debug
+cmake-build-release
 
 # Prerequisites
 *.d

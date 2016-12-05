@@ -1,5 +1,11 @@
 # Umoria Change log
 
+## HEAD
+
+- Now uses CMake for Mac/Linux build - Windows/MinGW still uses a normal Makefile.
+
+
+
 ## 5.7.0 (2016-11-27)
 
 Lots of code clean-up and standardization, along with removing support for

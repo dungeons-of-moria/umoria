@@ -11,6 +11,7 @@
 #include "config.h"
 #include "constant.h"
 #include "types.h"
+#include "version.h"
 
 #include "externs.h"
 
@@ -50,9 +51,9 @@ void display_scores(int show_player) {
     // Support score files from 5.2.2 to present.
     if (feof(highscore_fp)) {
         ; // An empty score file.
-    } else if ((version_maj != CUR_VERSION_MAJ) ||
-               (version_min > CUR_VERSION_MIN) ||
-               (version_min == CUR_VERSION_MIN && patch_level > PATCH_LEVEL) ||
+    } else if ((version_maj != CURRENT_VERSION_MAJOR) ||
+               (version_min > CURRENT_VERSION_MINOR) ||
+               (version_min == CURRENT_VERSION_MINOR && patch_level > CURRENT_VERSION_PATCH) ||
                (version_min == 2 && patch_level < 2) || (version_min < 2)) {
         msg_print("Sorry. This scorefile is from a different version of umoria.");
         msg_print(CNIL);
@@ -290,16 +291,16 @@ static void highscores() {
         // Seek to the beginning of the file just to be safe.
         (void)fseek(highscore_fp, (long)0, SEEK_SET);
 
-        (void)putc(CUR_VERSION_MAJ, highscore_fp);
-        (void)putc(CUR_VERSION_MIN, highscore_fp);
-        (void)putc(PATCH_LEVEL, highscore_fp);
+        (void)putc(CURRENT_VERSION_MAJOR, highscore_fp);
+        (void)putc(CURRENT_VERSION_MINOR, highscore_fp);
+        (void)putc(CURRENT_VERSION_PATCH, highscore_fp);
 
         // must fseek() before can change read/write mode
         (void)fseek(highscore_fp, (long)0, SEEK_CUR);
     } else if (
-        (version_maj != CUR_VERSION_MAJ) ||
-        (version_min > CUR_VERSION_MIN) ||
-        (version_min == CUR_VERSION_MIN && patch_level > PATCH_LEVEL) ||
+        (version_maj != CURRENT_VERSION_MAJOR) ||
+        (version_min > CURRENT_VERSION_MINOR) ||
+        (version_min == CURRENT_VERSION_MINOR && patch_level > CURRENT_VERSION_PATCH) ||
         (version_min == 2 && patch_level < 2) ||
         (version_min < 2)
     ) {

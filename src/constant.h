@@ -6,11 +6,6 @@
 
 // Global constants used by Moria
 
-// Current version number of Moria
-#define CUR_VERSION_MAJ  5
-#define CUR_VERSION_MIN  7
-#define PATCH_LEVEL      0
-
 #define MAX_UCHAR         255
 #define MAX_SHORT       32767   // maximum short/long signed ints
 #define MAX_LONG   0x7FFFFFFFL

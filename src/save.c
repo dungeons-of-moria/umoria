@@ -9,9 +9,9 @@
 
 #include "headers.h"
 
-#include "config.h"
 #include "constant.h"
 #include "types.h"
+#include "version.h"
 
 #include "externs.h"
 
@@ -428,11 +428,11 @@ bool _save_char(char *fnam) {
 
     if (fileptr != NULL) {
         xor_byte = 0;
-        wr_byte((uint8_t)CUR_VERSION_MAJ);
+        wr_byte((uint8_t)CURRENT_VERSION_MAJOR);
         xor_byte = 0;
-        wr_byte((uint8_t)CUR_VERSION_MIN);
+        wr_byte((uint8_t)CURRENT_VERSION_MINOR);
         xor_byte = 0;
-        wr_byte((uint8_t)PATCH_LEVEL);
+        wr_byte((uint8_t)CURRENT_VERSION_PATCH);
         xor_byte = 0;
 
         uint8_t char_tmp = randint(256) - 1;
@@ -532,7 +532,7 @@ bool get_char(bool *generate) {
         // Support savefiles from 5.1.0 to present.
         // As of version 5.4, accept savefiles even if they have higher version numbers.
         // The savefile format was frozen as of version 5.2.2.
-        if ((version_maj != CUR_VERSION_MAJ) || (version_min == 0 && patch_level < 14)) {
+        if ((version_maj != CURRENT_VERSION_MAJOR) || (version_min == 0 && patch_level < 14)) {
             prt("Sorry. This savefile is from a different version of umoria.", 2, 0);
             goto error;
         }
@@ -1031,12 +1031,12 @@ bool get_char(bool *generate) {
                 msg_print("This save file cannot be used to get on the score board.");
             }
 
-            if (version_maj != CUR_VERSION_MAJ || version_min != CUR_VERSION_MIN) {
+            if (version_maj != CURRENT_VERSION_MAJOR || version_min != CURRENT_VERSION_MINOR) {
                 (void)sprintf(
                     temp, "Save file version %d.%d %s on game version %d.%d.",
                     version_maj, version_min,
-                    version_min <= CUR_VERSION_MIN ? "accepted" : "risky",
-                    CUR_VERSION_MAJ, CUR_VERSION_MIN);
+                    version_min <= CURRENT_VERSION_MINOR ? "accepted" : "risky",
+                    CURRENT_VERSION_MAJOR, CURRENT_VERSION_MINOR);
                 msg_print(temp);
             }
 

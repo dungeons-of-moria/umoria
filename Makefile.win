@@ -1,25 +1,30 @@
-# BINDIR is the directory where the moria binary while be put
+# BINDIR is the directory where the moria binary will be put
 # LIBDIR is where the other files (score, news, hours) will be put
 # LIBDIR must be the same directory defined in config.h
-# OWNER is who you want the game to be chown to.
-# GROUP is who you wnat the game to be chgrp to.
-BINDIR = ~/umoria
-LIBDIR = ~/umoria/data
+BINDIR = C:/umoria
+LIBDIR = C:/umoria/data
 
 # Game binary name. e.g `moria` or `umoria`.
 TARGET = umoria
 
-# For testing and debugging the program, it is best to use this line.
-CFLAGS = -g -Wall -std=gnu11
+# Custom include paths. e.g. ncurses includes for MinGW on Windows.
+INC = -I/usr/include/ncurses/
 
-# NOTE: the -O flag currently crashes the game when running! -- MRC (2016-09-30)
+# For testing and debugging the program, it is best to use this line.
+CFLAGS = -g -Wall -std=gnu11 $(INC)
+
 # For playing the game, you may want to use this line
 # CFLAGS = -O
+# NOTE: the -O flag currently crashes the game when running! -- MRC (2016-09-30)
+
+# Required for GCC compilation under MinGW
+PTHREAD = -static -lpthread
 
 CURSES = -lncurses
 
 LFLAGS =
 
+# GCC is required when using MinGW
 CC = gcc
 
 SRCS = main.c misc1.c misc2.c misc3.c misc4.c store1.c files.c io.c \
@@ -36,22 +41,13 @@ OBJS = main.o misc1.o misc2.o misc3.o misc4.o store1.o files.o io.o \
 	moria3.o moria4.o monsters.o treasure.o variable.o rnd.o recall.o \
 	player.o tables.o
 
-LIBFILES = splash.hlp origcmds.hlp owizcmds.hlp roglcmds.hlp rwizcmds.hlp \
-	version.hlp welcome.hlp
+LIBFILES = splash.hlp origcmds.hlp owizcmds.hlp roglcmds.hlp \
+			rwizcmds.hlp version.hlp welcome.hlp
 
 DOCS = manual.md
 
 moria : $(OBJS)
-	$(CC) -o $(TARGET) $(CFLAGS) $(OBJS) $(CURSES) $(LFLAGS)
-
-lintout : $(SRCS)
-	lint $(SRCS) $(CURSES) > lintout
-
-lintout2 : $(SRCS)
-	lint -bach $(SRCS) $(CURSES) > lintout
-
-TAGS : $(SRCS)
-	ctags -x $(SRCS) > TAGS
+	$(CC) -o $(TARGET) $(CFLAGS) $(OBJS) $(CURSES) $(PTHREAD) $(LFLAGS)
 
 # you must define BINDIR and LIBDIR before installing
 # assumes that BINDIR and LIBDIR exist
@@ -77,7 +73,7 @@ clean:
 
 create.o: constant.h types.h externs.h config.h
 creature.o: constant.h types.h externs.h config.h
-death.o: constant.h types.h externs.h config.h
+death.o: constant.h types.h externs.h config.h version.h
 desc.o: constant.h types.h externs.h config.h
 dungeon.o: constant.h types.h externs.h config.h
 eat.o: constant.h types.h externs.h config.h
@@ -101,7 +97,7 @@ potions.o: constant.h types.h externs.h config.h
 prayer.o: constant.h types.h externs.h config.h
 recall.o: constant.h config.h types.h externs.h
 rnd.o: constant.h types.h
-save.o: constant.h types.h externs.h config.h
+save.o: constant.h types.h externs.h version.h
 scrolls.o: constant.h types.h externs.h config.h
 sets.o: constant.h config.h
 spells.o: constant.h types.h externs.h config.h

@@ -42,15 +42,20 @@ classic game.
 
 At present Umoria has only been compiled against `GCC 6.2` and `ncurses 6.0`,
 although some slightly earlier versions should also work fine. You will
-require these along with the normal C build tools for your system.
+require these along with `CMake`, the `ZIP` archiving program, and the C build
+tools for your system.
 
-### macOS and Debian Linux
 
-- Copy the `makefile` to the `src` directory.
-- `cd` into the `src` directory.
-- Type `make && make install`
+### macOS and Linux
 
-Currently the game will be installed to `~/umoria`.
+At the prompt type the following:
+
+```
+  $ cmake .
+  $ make package
+```
+
+A `.zip` archive will be created in the directory.
 
 
 ### Windows
