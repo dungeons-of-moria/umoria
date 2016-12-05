@@ -7,11 +7,6 @@
 // Misc code, mainly handles player movement, inventory, etc
 
 #include "headers.h"
-
-#include "config.h"
-#include "constant.h"
-#include "types.h"
-
 #include "externs.h"
 
 static bool see_wall(int, int, int);

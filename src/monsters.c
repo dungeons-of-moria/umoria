@@ -8,10 +8,6 @@
 
 #include "headers.h"
 
-#include "config.h"
-#include "constant.h"
-#include "types.h"
-
 // Following are creature arrays and variables
 
 // Creatures must be defined here

@@ -8,10 +8,6 @@
 
 #include "headers.h"
 
-#include "config.h"
-#include "constant.h"
-#include "types.h"
-
 bool set_room(int element) {
     if ((element == DARK_FLOOR) || (element == LIGHT_FLOOR)) {
         return true;

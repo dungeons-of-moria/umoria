@@ -7,11 +7,6 @@
 // Misc code, mainly handles player movement, inventory, etc
 
 #include "headers.h"
-
-#include "config.h"
-#include "constant.h"
-#include "types.h"
-
 #include "externs.h"
 
 // Changes speed of monsters relative to player -RAK-

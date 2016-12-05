@@ -8,12 +8,8 @@
 // for further details.
 
 #include "headers.h"
-
-#include "constant.h"
-#include "types.h"
-#include "version.h"
-
 #include "externs.h"
+#include "version.h"
 
 // For debugging the savefile code on systems with broken compilers.
 #define DEBUG(x)

@@ -7,11 +7,6 @@
 // Misc utility and initialization code, magic objects code
 
 #include "headers.h"
-
-#include "config.h"
-#include "constant.h"
-#include "types.h"
-
 #include "externs.h"
 
 // gets a new random seed for the random number generator

@@ -7,11 +7,6 @@
 // Create a player character
 
 #include "headers.h"
-
-#include "config.h"
-#include "constant.h"
-#include "types.h"
-
 #include "externs.h"
 
 // Generates character's stats -JWT-

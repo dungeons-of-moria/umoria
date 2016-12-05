@@ -7,11 +7,6 @@
 // Store code, updating store inventory, pricing objects
 
 #include "headers.h"
-
-#include "config.h"
-#include "constant.h"
-#include "types.h"
-
 #include "externs.h"
 
 static void insert_store(int, int, int32_t, inven_type *);

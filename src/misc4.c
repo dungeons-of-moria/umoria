@@ -7,11 +7,6 @@
 // Misc code for maintaining the dungeon, printing player info
 
 #include "headers.h"
-
-#include "config.h"
-#include "constant.h"
-#include "types.h"
-
 #include "externs.h"
 
 // Add a comment to an object description. -CJS-

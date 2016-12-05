@@ -7,11 +7,6 @@
 // Identify a symbol
 
 #include "headers.h"
-
-#include "config.h"
-#include "constant.h"
-#include "types.h"
-
 #include "externs.h"
 
 void ident_char() {

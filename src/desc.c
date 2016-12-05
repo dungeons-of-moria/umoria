@@ -7,11 +7,6 @@
 // Handle object descriptions, mostly string handling code
 
 #include "headers.h"
-
-#include "config.h"
-#include "constant.h"
-#include "types.h"
-
 #include "externs.h"
 
 static void unsample(inven_type *);

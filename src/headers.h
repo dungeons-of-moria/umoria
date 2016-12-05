@@ -4,9 +4,9 @@
 // ABSOLUTELY NO WARRANTY. See https://www.gnu.org/licenses/gpl-2.0.html
 // for further details.
 
-// Standard library header imports
-
 #pragma once
+
+// System specific headers
 
 #ifdef _WIN32
     #define _CRT_SECURE_NO_WARNINGS
@@ -49,3 +49,10 @@
 #include <time.h>
 
 #include <sys/stat.h>
+
+
+// General Umoria headers
+
+#include "config.h"
+#include "constant.h"
+#include "types.h"

@@ -6,8 +6,6 @@
 
 // Global type declarations
 
-#include "headers.h"
-
 // some machines will not accept 'signed char' as a type, and some accept it
 // but still treat it like an unsigned character, let's just avoid it,
 // any variable which can ever hold a negative value must be 16 or 32 bits

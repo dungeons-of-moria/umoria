@@ -7,11 +7,6 @@
 // Store code, entering, command interpreter, buying, selling
 
 #include "headers.h"
-
-#include "config.h"
-#include "constant.h"
-#include "types.h"
-
 #include "externs.h"
 
 static char *comment1[14] = {

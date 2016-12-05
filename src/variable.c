@@ -8,10 +8,6 @@
 
 #include "headers.h"
 
-#include "config.h"
-#include "constant.h"
-#include "types.h"
-
 char *copyright[17] = {
     "Copyright (C) 1989-2008 James E. Wilson, Robert A. Koeneke, ",
     "                        David J. Grabiner",

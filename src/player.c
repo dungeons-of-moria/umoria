@@ -8,10 +8,6 @@
 
 #include "headers.h"
 
-#include "config.h"
-#include "constant.h"
-#include "types.h"
-
 // Player record for most player related info
 player_type py;
 

@@ -7,11 +7,6 @@
 // Version history and info, and wizard mode debugging aids.
 
 #include "headers.h"
-
-#include "config.h"
-#include "constant.h"
-#include "types.h"
-
 #include "externs.h"
 
 // Light up the dungeon -RAK-

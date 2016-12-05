@@ -7,11 +7,6 @@
 // Initialize/create a dungeon or town level
 
 #include "headers.h"
-
-#include "config.h"
-#include "constant.h"
-#include "types.h"
-
 #include "externs.h"
 
 typedef struct coords {

@@ -5,11 +5,8 @@
 // for further details.
 
 // Store/attack/RNG/etc tables and variables
-#include "headers.h"
 
-#include "config.h"
-#include "constant.h"
-#include "types.h"
+#include "headers.h"
 
 store_type store[MAX_STORES];
 

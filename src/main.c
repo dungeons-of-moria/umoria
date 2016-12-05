@@ -7,11 +7,6 @@
 // Initialization, main() function and main loop
 
 #include "headers.h"
-
-#include "config.h"
-#include "constant.h"
-#include "types.h"
-
 #include "externs.h"
 
 static void char_inven_init();

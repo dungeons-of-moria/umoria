@@ -8,10 +8,6 @@
 
 #include "headers.h"
 
-#include "config.h"
-#include "constant.h"
-#include "types.h"
-
 // Following are treasure arrays  and variables
 
 // Object description:  Objects are defined here.  Each object has

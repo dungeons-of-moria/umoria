@@ -8,10 +8,6 @@
 
 #include "headers.h"
 
-#include "config.h"
-#include "constant.h"
-#include "types.h"
-
 // Define this to compile as a standalone test
 // #define TEST_RNG
 

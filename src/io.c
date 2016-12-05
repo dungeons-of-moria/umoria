@@ -8,11 +8,6 @@
 
 #include "headers.h"
 #include "curses.h"
-
-#include "config.h"
-#include "constant.h"
-#include "types.h"
-
 #include "externs.h"
 
 #define use_value2

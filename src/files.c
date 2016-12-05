@@ -8,10 +8,6 @@
 
 #include "headers.h"
 
-#include "config.h"
-#include "constant.h"
-#include "types.h"
-
 // This must be included after fcntl.h, which has a prototype for `open' on some
 // systems.  Otherwise, the `open' prototype conflicts with the `topen' declaration.
 #include "externs.h"

@@ -7,11 +7,6 @@
 // Code for priest spells
 
 #include "headers.h"
-
-#include "config.h"
-#include "constant.h"
-#include "types.h"
-
 #include "externs.h"
 
 // Pray like HELL. -RAK-

@@ -7,11 +7,6 @@
 // Misc code, mainly to handle player commands
 
 #include "headers.h"
-
-#include "config.h"
-#include "constant.h"
-#include "types.h"
-
 #include "externs.h"
 
 // Player hit a trap.  (Chuckle) -RAK-

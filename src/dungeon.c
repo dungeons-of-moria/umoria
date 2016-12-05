@@ -7,11 +7,6 @@
 // The main command interpreter, updating player status
 
 #include "headers.h"
-
-#include "config.h"
-#include "constant.h"
-#include "types.h"
-
 #include "externs.h"
 
 static char original_commands(char);

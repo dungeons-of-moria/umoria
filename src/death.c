@@ -7,13 +7,8 @@
 // Code executed when player dies
 
 #include "headers.h"
-
-#include "config.h"
-#include "constant.h"
-#include "types.h"
-#include "version.h"
-
 #include "externs.h"
+#include "version.h"
 
 static void date(char *day) {
     char *tmp;
