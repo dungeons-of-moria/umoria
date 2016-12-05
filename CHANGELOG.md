@@ -2,6 +2,7 @@
 
 ## HEAD
 
+- Improved CLI: adds help and version information.
 - Now uses CMake for Mac/Linux build - Windows/MinGW still uses a normal Makefile.
 
 

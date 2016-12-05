@@ -8,6 +8,7 @@
 
 #include "headers.h"
 #include "externs.h"
+#include "version.h"
 
 static void char_inven_init();
 static void init_m_level();
@@ -39,26 +40,27 @@ int main(int argc, char *argv[]) {
     // check for user interface option
     for (--argc, ++argv; argc > 0 && argv[0][0] == '-'; --argc, ++argv) {
         switch (argv[0][1]) {
-        case 'N': case 'n':
+        case 'v':
+            restore_term();
+            printf("%d.%d.%d\n", CURRENT_VERSION_MAJOR, CURRENT_VERSION_MINOR, CURRENT_VERSION_PATCH);
+            exit(0);
+        case 'n':
             new_game = true;
             break;
-        case 'O': case 'o':
+        case 'o':
             // rogue_like_commands may be set in get_char(),
             // so delay this until after read savefile if any.
             force_rogue_like = true;
             force_keys_to = false;
             break;
-        case 'R': case 'r':
+        case 'r':
             force_rogue_like = true;
             force_keys_to = true;
             break;
-        case 'S':
+        case 's':
             display_scores(true);
             exit_game();
-        case 's':
-            display_scores(false);
-            exit_game();
-        case 'W': case 'w':
+        case 'w':
             to_be_wizard = true;
 
             if (isdigit((int)argv[0][2])) {
@@ -66,8 +68,25 @@ int main(int argc, char *argv[]) {
             }
             break;
         default:
-            (void)printf("Usage: moria [-norsw] [savefile]\n");
-            exit_game();
+            restore_term();
+            printf("Robert A. Koeneke's classic dungeon crawler.\n");
+            printf("Umoria %d.%d.%d is released under a GPL v2 license.\n", CURRENT_VERSION_MAJOR, CURRENT_VERSION_MINOR, CURRENT_VERSION_PATCH);
+            printf("\n");
+            printf("Usage:\n");
+            printf("    umoria [OPTIONS] SAVEGAME\n");
+            printf("\n");
+            printf("SAVEGAME is an optional save game filename (default: game.sav)\n");
+            printf("\n");
+            printf("Options:\n");
+            printf("    -n    Force start of new game\n");
+            printf("    -o    Use classic roguelike keys: hjkl (save game overrides)\n");
+            printf("    -r    Force use of roguelike keys\n");
+            printf("    -s    Display high scores and exit\n");
+            printf("    -w    Enter Wizard mode!\n");
+            printf("\n");
+            printf("    -v    Print version info and exit\n");
+            printf("    -h    Display this message\n");
+            exit(0);
         }
     }
 
