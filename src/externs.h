@@ -173,7 +173,7 @@ bool multiply_monster(int, int, int, int);
 void creatures(int);
 
 // death.c
-void display_scores(int);
+void display_scores();
 bool duplicate_character();
 int32_t total_points();
 void exit_game();

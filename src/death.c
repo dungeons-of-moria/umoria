@@ -26,7 +26,7 @@ static char *center_string(char *centered_str, char *in_str) {
     return centered_str;
 }
 
-void display_scores(int show_player) {
+void display_scores() {
     char string[100];
 
     if ((highscore_fp = fopen(MORIA_TOP, "rb")) == NULL) {
@@ -73,16 +73,12 @@ void display_scores(int show_player) {
         clear_screen();
         // Put twenty scores on each page, on lines 2 through 21.
         while (!feof(highscore_fp) && i < 21) {
-            // Only show the entry if show_player false
-            // NOTE: let's show all players for now with `true` -MRC-
-            if (!show_player || true) {
-                (void)sprintf(string,
-                              "%-4d%8d %-19.19s %c %-10.10s %-7.7s%3d %-22.22s",
-                              rank, score.points, score.name, score.sex,
-                              race[score.race].trace, class[score.class].title,
-                              score.lev, score.died_from);
-                prt(string, ++i, 0);
-            }
+            (void)sprintf(string,
+                          "%-4d%8d %-19.19s %c %-10.10s %-7.7s%3d %-22.22s",
+                          rank, score.points, score.name, score.sex,
+                          race[score.race].trace, class[score.class].title,
+                          score.lev, score.died_from);
+            prt(string, ++i, 0);
             rank++;
             rd_highscore(&score);
         }
@@ -463,7 +459,7 @@ void exit_game() {
         // been an eof on stdin detected.
         character_saved = false;
         highscores();
-        display_scores(true);
+        display_scores();
     }
     erase_line(23, 0);
     restore_term();

@@ -58,7 +58,7 @@ int main(int argc, char *argv[]) {
             force_keys_to = true;
             break;
         case 's':
-            display_scores(true);
+            display_scores();
             exit_game();
         case 'w':
             to_be_wizard = true;

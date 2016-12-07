@@ -1030,7 +1030,7 @@ static char original_commands(char com_val) {
 
 static void do_command(char com_val) {
     int dir_val;
-    bool do_pickup, do_diplay_scores;
+    bool do_pickup;
     int y, x, i, j;
     vtype out_val, tmp_str;
     struct flags *f_ptr;
@@ -1279,13 +1279,8 @@ static void do_command(char com_val) {
         gain_spells();
         break;
     case 'V': // (V)iew scores
-        if (last_command != 'V') {
-            do_diplay_scores = true;
-        } else {
-            do_diplay_scores = false;
-        }
         save_screen();
-        display_scores(do_diplay_scores);
+        display_scores();
         restore_screen();
         free_turn_flag = true;
         break;
