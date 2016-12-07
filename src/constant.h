@@ -143,7 +143,8 @@
 // Trap constants
 #define MAX_TRAP                 18   // Number of defined traps
 
-#define SCARE_MONSTER            99
+// FIXME: this const is not used anywhere!
+//#define SCARE_MONSTER            99
 
 // Descriptive constants
 #define MAX_COLORS               49   // Used with potions
@@ -293,11 +294,13 @@
 
 #define PY_STATS        0x3F000000L
 #define PY_STR          0x01000000L // these 6 stat flags must be adjacent
-#define PY_INT          0x02000000L
-#define PY_WIS          0x04000000L
-#define PY_DEX          0x08000000L
-#define PY_CON          0x10000000L
-#define PY_CHR          0x20000000L
+
+// FIXME: these const are not used anywhere!
+//#define PY_INT          0x02000000L
+//#define PY_WIS          0x04000000L
+//#define PY_DEX          0x08000000L
+//#define PY_CON          0x10000000L
+//#define PY_CHR          0x20000000L
 
 #define PY_HP           0x40000000L
 #define PY_MANA         0x80000000L
@@ -385,18 +388,20 @@
 #define CS_FREQ         0x0000000FL
 #define CS_SPELLS       0x0001FFF0L
 #define CS_TEL_SHORT    0x00000010L
-#define CS_TEL_LONG     0x00000020L
-#define CS_TEL_TO       0x00000040L
-#define CS_LGHT_WND     0x00000080L
-#define CS_SER_WND      0x00000100L
-#define CS_HOLD_PER     0x00000200L
-#define CS_BLIND        0x00000400L
-#define CS_CONFUSE      0x00000800L
-#define CS_FEAR         0x00001000L
-#define CS_SUMMON_MON   0x00002000L
-#define CS_SUMMON_UND   0x00004000L
-#define CS_SLOW_PER     0x00008000L
-#define CS_DRAIN_MANA   0x00010000L
+
+// FIXME: these const are not used anywhere!
+//#define CS_TEL_LONG     0x00000020L
+//#define CS_TEL_TO       0x00000040L
+//#define CS_LGHT_WND     0x00000080L
+//#define CS_SER_WND      0x00000100L
+//#define CS_HOLD_PER     0x00000200L
+//#define CS_BLIND        0x00000400L
+//#define CS_CONFUSE      0x00000800L
+//#define CS_FEAR         0x00001000L
+//#define CS_SUMMON_MON   0x00002000L
+//#define CS_SUMMON_UND   0x00004000L
+//#define CS_SLOW_PER     0x00008000L
+//#define CS_DRAIN_MANA   0x00010000L
 
 #define CS_BREATHE      0x00F80000L // may also just indicate resistance
 #define CS_BR_LIGHT     0x00080000L // if no spell frequency set
@@ -422,10 +427,11 @@
 #define CD_INFRA        0x2000
 #define CD_MAX_HP       0x4000
 
+// FIXME: some of these const are not used anywhere!
 // inventory stacking subvals
 // these never stack
-#define ITEM_NEVER_STACK_MIN    0
-#define ITEM_NEVER_STACK_MAX   63
+//#define ITEM_NEVER_STACK_MIN    0
+//#define ITEM_NEVER_STACK_MAX   63
 // these items always stack with others of same subval, always treated as
 // single objects, must be power of 2
 #define ITEM_SINGLE_STACK_MIN  64
@@ -433,7 +439,7 @@
 // these items stack with others only if have same subval and same p1,
 // they are treated as a group for wielding, etc.
 #define ITEM_GROUP_MIN        192
-#define ITEM_GROUP_MAX        255
+//#define ITEM_GROUP_MAX        255
 
 // NOTE: items with subval 192 are treated as single objects,
 // but only stack with others of same subval if have the same
