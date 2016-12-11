@@ -224,7 +224,7 @@ This was based on the Moria UB 5.0 sources.
 ### Imoria
 
 This version was developed at the Univ. Washington.  It is written
-in VMS Pascal, and is only available for VAX/VMX systems.  
+in VMS Pascal, and is only available for VAX/VMX systems.
 
 I know very little about this version, but have been told by people
 at U Washington that it is far superior to any other Moria version
@@ -311,7 +311,7 @@ Moria 5.x.  Should not be confused with Moria UB 5.0.)
 
 ### Umoria 5.6
 
-The latest version of Umoria 5.x.  David Grabiner has taken over 
+The latest version of Umoria 5.x.  David Grabiner has taken over
 Umoria 5.x development but has made only minor changes.  Umoria 5.6
 is released under the GNU General Public License.
 

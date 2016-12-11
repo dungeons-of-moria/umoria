@@ -9,7 +9,6 @@ Markdown format, to help make consumption easier.
 
 * `history.md`    - Articles posted to various mailing lists giving a brief history of Moria, by the original creator, Robert Koeneke, and long time contributor James Wilson.
 * `features.md`   - A list of all of the important _user visible changes_ from UMoria 4.87 to UMoria 5.x.
-* `faq.md`        - Various FAQ. Contains spoilers.
 * `dragons.md`    - Information on dragons. Contains spoilers.
 * `CHANGELOG`     - A detailed list of all changes made between May 1987 to October 2008, covering versions 4.81 through 5.5.2.
 * `errors.txt`    - A list of known errors for UMoria v5.x.

@@ -44,7 +44,7 @@ OBJS = main.o misc1.o misc2.o misc3.o misc4.o store1.o files.o io.o \
 LIBFILES = splash.hlp origcmds.hlp owizcmds.hlp roglcmds.hlp \
 			rwizcmds.hlp version.hlp welcome.hlp
 
-DOCS = manual.md
+DOCS = manual.md faq.md
 
 moria : $(OBJS)
 	$(CC) -o $(TARGET) $(CFLAGS) $(OBJS) $(CURSES) $(PTHREAD) $(LFLAGS)

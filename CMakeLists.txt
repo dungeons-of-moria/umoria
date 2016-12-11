@@ -94,6 +94,7 @@ install(FILES ${DATA_FILES}
 set(SUPPORT_FILES
     ${PROJECT_SOURCE_DIR}/data/scores.dat
     ${PROJECT_SOURCE_DIR}/docs/manual.md
+    ${PROJECT_SOURCE_DIR}/docs/faq.md
     ${PROJECT_SOURCE_DIR}/LICENSE
 )
 install(FILES ${SUPPORT_FILES}
