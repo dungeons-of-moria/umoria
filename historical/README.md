@@ -7,7 +7,6 @@ Markdown format, to help make consumption easier.
 
 ### Table of Contents
 
-* `experience.md` - Documents how experience works. (Should be part of the manual.)
 * `history.md`    - Articles posted to various mailing lists giving a brief history of Moria, by the original creator, Robert Koeneke, and long time contributor James Wilson.
 * `features.md`   - A list of all of the important _user visible changes_ from UMoria 4.87 to UMoria 5.x.
 * `faq.md`        - Various FAQ. Contains spoilers.
