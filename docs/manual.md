@@ -5,22 +5,21 @@ _Robert A. Koeneke's classic roguelike dungeon crawler._
 
 Contents
 
-   1. Introduction
-   2. Running The Game
-   3. The Character
-   4. Adventuring
-   5. Symbols On The Screen
-   6. Commands
-   7. The Town Level
-   8. Within The Dungeon
-   9. Attacking and Being Attacked
-  10. Objects Found In The Dungeon
-  11. Winning The Game
-  12. Upon Death and Dying
-  13. Wizards
-  14. Appendix: How Experience Works in Umoria
-  15. Contributors
-  16. Umoria Licence
+1. Introduction
+2. Running The Game
+3. The Character
+4. Adventuring
+5. Symbols On The Screen
+6. Commands
+7. The Town Level
+8. Within The Dungeon
+9. Attacking and Being Attacked
+10. Objects Found In The Dungeon
+11. Winning The Game
+12. Upon Death and Dying
+13. Wizards
+14. Contributors
+15. Umoria Licence
 
 
 ## 1. Introduction
@@ -45,7 +44,7 @@ other roguelikes), and will require a dedicated player to win.
 ## 2. Running The Game
 
 
-    moria [ -o ] [ -r ] [ -s ] [ -S ] [ -n ] [ -w[seed] ] [ savefile ]
+    umoria [ -v ] [ -o ] [ -r ] [ -s ] [ -n ] [ -w[seed] ] [ savefile ]
 
 
 By default, *moria* will save and restore games from a file called
@@ -61,16 +60,15 @@ is specified on the command line, as this will prevent *moria* from
 trying to overwrite the default savefile (if it exists) when saving a
 game.
 
-Movement in various directions is accomplished by pressing the numeric
-keypad keys, VMS-style. When `-r` is specified, movement is accomplished
-in the same way as rogue. When `-o` is specified, it forces the VMS-style
-command set. These options will override defaults stored in the
-savefile. If these options are given multiple times, only the last one
-will take effect.
+Movement in various directions is accomplished by pressing the numeric keypad
+keys. When `-r` is specified, movement is accomplished in the same way as the
+original _Rogue_ game (`hjkl`). When `-o` is specified, it forces the keypad
+based command set. These options will override defaults stored in the
+savefile. If these options are given multiple times, only the last one will
+take effect.
 
 When `-s` is specified, *moria* displays all of the scores in the score
-file and exits. On a multiuser system, when `-S` is specified, *moria*
-displays only those scores belonging to the current user and then exits.
+file and exits.
 
 When `-w` is specified, *moria* will start up in wizard mode. Dead
 characters can be resurrected using this option when starting the game.
@@ -80,6 +78,8 @@ experimenting with new features. To make random events happen in a
 predictable manner a seed number can be given to the `-w` option. Using
 wizard mode to win the game is considered cheating. Games played with
 wizard mode are not scored.
+
+Use `-v` to show the current version of Umoria.
 
 
 ## 3. The Character
@@ -690,10 +690,10 @@ shift or control key while pressing another key. As a special feature,
 control keys may be entered in a single keystroke, or in two keystrokes,
 with a `^` character first.
 
-There are two command sets: the original command set which is the
-default (e.g. the original VMS-style command set), and the rogue-like
-command set. The rogue-like command is generally more convenient,
-especially if the keyboard lacks a keypad.
+There are two command sets: the original command set which is the default
+(e.g. the keypad based command set), and the roguelike command set. The
+roguelike command is generally more convenient, especially if the keyboard
+lacks a keypad.
 
 The following tables summarize the two command sets. Certain commands
 may be preceded by an optional count, and certain commands must be
@@ -728,7 +728,7 @@ Original command summary.
         >      Go down a down staircase       @ ~         for movement
     --------- ----------------------------- ------------ -------------------------
 
-Rogue-like command summary.
+Roguelike command summary.
 
     ------------ ------------------------- ------------ -----------------------
         c ~       Close a door                 C         Character description
@@ -788,16 +788,16 @@ are intercepted by some external process, or by the operating system.
 
 For the original style command set, a direction is given by a digit
 which is in the appropriate orientation on the keypad. For the
-rogue-like command set, a direction is given by one of the letters
+roguelike command set, a direction is given by one of the letters
 `hykulnjb`. Again, the relative position of the keys on the keyboard
 gives a clue as to the direction. The digit `5` for the original
-commands, and the period `.` for rogue-like commands, is a null
+commands, and the period `.` for roguelike commands, is a null
 direction indicator. This means to stay in one place, or when in a look
 command to look in all directions.
 
     +---------------------------+---------------------------+
     |                           |                           |
-    |    Original Directions    |   Rogue-like Directions   |
+    |    Original Directions    |   Roguelike Directions    |
     |                           |                           |
     |       \     |     /       |       \     |     /       |
     |        7    8    9        |        y    k    u        |
@@ -818,12 +818,12 @@ closed door.
 Other commands that require a direction will prompt for it.
 
 Moving the character one step at a time can be time consuming and
-boring, so a faster method has been supplied. For the original VMS-style
+boring, so a faster method has been supplied. For the original keypad based
 command set, by using the Run command `.`, the character may move in a
 direction until something interesting happens. For instance, by pressing
 the period key `.` followed by the direction 8, the character would
 continue to move up the screen, only coming to a stop after at least one
-condition is satisfied. For the rogue-like command set, typing a shifted
+condition is satisfied. For the roguelike command set, typing a shifted
 directional letter will move the character in that direction until
 something interesting happens. The stopping conditions are described
 more completely in the run command description below.
@@ -839,7 +839,7 @@ another creature. While the command is being repeated, the number of
 times left to be repeated will flash by on the command line at the
 bottom of the screen.
 
-To give a count to a command in the rogue-like mode, type the number in
+To give a count to a command in the roguelike mode, type the number in
 digits, then the command. A count of zero defaults to a count of 99.
 
 To give a count to a command in the original mode, press `#`, followed
@@ -876,7 +876,7 @@ keystroke.
 ### 6.5 Command descriptions
 
 In the following command descriptions, the original style key is given.
-If the rogue-like key for that command is different, then it will be
+If the roguelike key for that command is different, then it will be
 shown following the original key.
 
 
@@ -1332,7 +1332,7 @@ available options are:
     pick it up. With the option on, the player gets prompted in all
     such cases with a description of the object to see if it should
     be put into the character’s pack.
-7.  Rogue-like command set. This option controls the command set in
+7.  Roguelike command set. This option controls the command set in
     use. It is off by default.
 8.  Show weights in inventory. This is off by default: switching it
     on causes the inventory and equipment listings to include the
@@ -2546,140 +2546,7 @@ There are rumors of *moria* Wizards which, if asked nicely, can explain
 details of the *moria* game that seem complicated to beginners.
 
 
-## 14. Appendix: How Experience Works in Umoria
-
-_Contribution by Mike Marcelais, North Carolina School of Science And Math._
-
-
-### 14.1. Experience
-
-All characters receive experience during the game.  Experience determines your
-level, which determines hit points, mana points, spells, abilities, etc.  The
-amount of experience required to advance a level is a base value (shown below)
-plus a penalty for race and class.
-
-
-### 14.2. Calculating Experience Levels
-
-
-Base Experience
-
-```
-  Lv   Exp to Adv     Lv   Exp to Adv     Lv   Exp to Adv
-   1      10          14    1,400         27      35,000
-   2      25          15    1,800         28      50,000
-   3      45          16    2,300         29      75,000
-   4      70          17    2,900         30     100,000
-   5     100          18    3,600         31     150,000
-   6     140          19    4,400         32     200,000
-   7     200          20    5,400         33     300,000
-   8     280          21    6,800         34     400,000
-   9     380          22    8,400         35     500,000
-  10     500          23   10,200         36     750,000
-  11     650          24   12,500         37   1,500,000
-  12     850          25   17,500         38   2,500,000
-  13   1,100          26   25,000         39   5,000,000
-```
-
-Maximum level is `40` and maximum experience is `9,999,999`.
-
-There are percent penalties for various races and classes to help even them
-out.  The table below lists all the penalties.
-
-```
-  Human       0%
-  Half-Elf   10%
-  Elf        20%
-  Halfling   10%
-  Gnome      25%
-  Dwarf      20%
-  Half-Orc   10%
-  Half-Troll 20%
-  Warrior     0%
-  Mage       30%
-  Priest     20%
-  Rogue       0%
-  Ranger     40%
-  Paladin    35%
-```
-
-As an example, for a 10th level _Gnomish Mage_ to achieve the 11th level, they need:
-
-```
-  base    gnome    mage
-  500  *  1.25  *  1.30  =  812.5
-```
-
-Note:  Even for the worst case (_Gnomish Ranger_) it is still possible to achieve
-the 40th level: `5,000,000 * 1.25 * 1.40 = 8,750,000` experience.
-
-
-### 14.3. Gaining Experience
-
-There are many ways to gain experience.  This list shows a few.
-
-1.  Defeating monsters
-2.  Disarming traps
-3.  Picking locks
-4.  Using a scroll, potion, staff, wand, or rod for the first time
-    and discovering what it did.
-5.  Casting a spell successfully for the first time.
-6.  Drinking a potion of gain experience or gain level
-
-
-### 14.4. Titles
-
-Each experience level has a title which is displayed under your name
-and class.  Below is a listing of all the titles for each level and
-class.
-
-```
-       Warrior   |      Mage     |     Priest    |     Rogue     |     Ranger    |   Paladin
-    -------------+---------------+---------------+---------------+---------------+------------
- 1. Rookie         Novice          Believer        Vagabond        Runner(1st)     Gallant
- 2. Private        Apprentice      Acolyte(1st)    Footpad         Runner(2nd)     Keeper(1st)
- 3. Soldier        Trickster-1     Acolyte(2nd)    Cutpurse        Runner(3rd)     Keeper(2nd)
- 4. Mercenary      Trickster-2     Acolyte(3rd)    Robber          Strider(1st)    Keeper(3rd)
- 5. Veteran(1st)   Trickster-3     Adept(1st)      Burglar         Strider(2nd)    Keeper(4th)
- 6. Veteran(2nd)   Cabalist-1      Adept(2nd)      Filcher         Strider(3rd)    Keeper(5th)
- 7. Veteran(3rd)   Cabalist-2      Adept(3rd)      Sharper         Scout(1st)      Keeper(6th)
- 8. Warrior(1st)   Cabalist-3      Priest(1st)     Magsman         Scout(2nd)      Keeper(7th)
- 9. Warrior(2nd)   Visionist       Priest(2nd)     Common Rogue    Scout(3rd)      Keeper(8th)
-10. Warrior(3rd)   Phantasmist     Priest(3rd)     Rogue(1st)      Scout(4th)      Keeper(9th)
-11. Warrior(4th)   Shadowist       Priest(4th)     Rogue(2nd)      Scout(5th)      Protector-1
-12. Swordsman-1    Spellbinder     Priest(5th)     Rogue(3rd)      Courser(1st)    Protector-2
-13. Swordsman-2    Illusionist     Priest(6th)     Rogue(4th)      Courser(2nd)    Protector-3
-14. Swordsman-3    Evoker(1st)     Priest(7th)     Rogue(5th)      Courser(3rd)    Protector-4
-15. Hero           Evoker(2nd)     Priest(8th)     Rogue(6th)      Courser(4th)    Protector-5
-16. Swashbuckler   Evoker(3rd)     Priest(9th)     Rogue(7th)      Courser(5th)    Protector-6
-17. Myrmidon       Evoker(4th)     Curate(1st)     Rogue(8th)      Tracker(1st)    Protector-7
-18. Champion-1     Conjurer        Curate(2nd)     Rogue(9th)      Tracker(2nd)    Protector-8
-19. Champion-2     Theurgist       Curate(3rd)     Master Rogue    Tracker(3rd)    Defender-1
-20. Champion-3     Thaumaturge     Curate(4th)     Expert Rogue    Tracker(4th)    Defender-2
-21. Superhero      Magician        Curate(5th)     Senior Rogue    Tracker(5th)    Defender-3
-22. Knight         Enchanter       Curate(6th)     Chief Rogue     Tracker(6th)    Defender-4
-23. Superior Knt   Warlock         Curate(7th)     Prime Rogue     Tracker(7th)    Defender-5
-24. Gallant Knt    Sorcerer        Curate(8th)     Low Thief       Tracker(8th)    Defender-6
-25. Knt Errant     Necromancer     Curate(9th)     Thief(1st)      Tracker(9th)    Defender-7
-26. Guardian Knt   Mage(1st)       Canon(1st)      Thief(2nd)      Guide(1st)      Defender-8
-27. Baron          Mage(2nd)       Canon(2nd)      Thief(3rd)      Guide(2nd)      Warder(1st)
-28. Duke           Mage(3rd)       Canon(3rd)      Thief(4th)      Guide(3rd)      Warder(2nd)
-29. Lord(1st)      Mage(4th)       Canon(4th)      Thief(5th)      Guide(4th)      Warder(3rd)
-30. Lord(2nd)      Mage(5th)       Canon(5th)      Thief(6th)      Guide(5th)      Warder(4th)
-31. Lord(3rd)      Wizard(1st)     Low Lama        Thief(7th)      Guide(6th)      Warder(5th)
-32. Lord(4th)      Wizard(2nd)     Lama-1          Thief(8th)      Guide(7th)      Warder(6th)
-33. Lord(5th)      Wizard(3rd)     Lama-2          Thief(9th)      Guide(8th)      Warder(7th)
-34. Lord(6th)      Wizard(4th)     Lama-3          High Thief      Guide(9th)      Warder(8th)
-35. Lord(7th)      Wizard(5th)     High Lama       Master Thief    Pathfinder-1    Warder(9th)
-36. Lord(8th)      Wizard(6th)     Great Lama      Executioner     Pathfinder-2    Guardian
-37. Lord(9th)      Wizard(7th)     Patriarch       Low Assassin    Pathfinder-3    Chevalier
-38. Lord Gallant   Wizard(8th)     High Priest     Assassin        Ranger          Justiciar
-39. Lord Keeper    Wizard(9th)     Great Priest    High Assassin   High Ranger     Paladin
-40. Lord Noble     Wizard Lord     Noble Priest    Guildmaster     Ranger Lord     High Lord
-```
-
-
-## 15. Contributors
+## 14. Contributors
 
 The following people have contributed to *moria*:
 
@@ -2718,7 +2585,7 @@ The following people have contributed to *moria*:
     - merge monster memories
 
 
-## 16. Umoria Licence
+## 15. Umoria Licence
 
 ```
 Umoria is free software: you can redistribute it and/or modify
