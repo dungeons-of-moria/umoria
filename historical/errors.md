@@ -1,0 +1,869 @@
+# Umoria, Known Errors
+
+
+* explain non obvious spells/prayers, many of the priest spells are confusing,
+  really should have a general section on spells explaining the 'G' command,
+  how int/wis and level affects number of spells/prayers, how area effect
+  spells work, centering before casting an area effect spell is very useful
+  and perhaps other stuff about spells/magic
+
+* explain the special inventory_items/equipment mode?
+
+* explain how misc abilities depend on level, give table of classes versus
+  ability showing the relative gain per level values
+
+* mention too-heavy weapons?
+
+* says nothing about levels and EXP
+  should mention that level 40 is the highest level that can be reached
+
+----
+
+* black ooze should resist acid, but can't code this because it casts
+  spells and would breathe acid if it were given acid resistance
+
+* identifying items by one-digit inscriptions should work for items in
+  equipment list as well as for items in inventory_items
+
+* saving and restoring takes a turn, this can be fatal in combat
+
+
+
+
+##  JEW's old ERRORS list, excluding things fixed by DJG
+
+* stores probably should buy items which have been marked `{damned}` by being worn
+  and then cleared via remove curse, after all they buy unident damned items
+
+* creating traps can destroy staircases
+
+* chests should create treasure appropriate to the level they were found
+  on, or to the level of the chest, not the level that they are opened on
+
+* color MacMoria bugs: the colors dialog box says greed not green
+  - the help dialog lists the wrong versions
+  - my address is wrong
+
+* when wearing a ring of speed, light should not be used up as fast, the faster
+  you are moving, the more turns it should last - by the same reasoning,
+  stores lockout are broken too, in fact just about anything using time
+  won't work `correctly' when character is sped up
+
+* calling `put_qio()` every turn during running significantly slows it down
+  on slow hosts which are using curses, I believe it was added only for
+  aesthetics, and it probably isn't strictly necessary, could at least
+  surround it with an #ifndef FAST_RUNNING or similar
+
+* when thief steals an object, say what was stolen in message
+  when item in backpack is destroyed, indicate what item was destroyed
+  inventory_items does not take a turn
+
+* display_scores(), at end of the game, should display top 15 or so scores, and
+  list the current player's score below that if not in the top 15 list, at least,
+  the value of show_player should be false at the end
+
+* better, display_scores can put a message line at the bottom like this
+  `( ESC : return to game  space : toggle all scores/your scores)`
+  and then the player can easily choose which scores to see
+
+* the 32767 limit in the recall code for number of monsters killed is too
+  easy to reach, making it unsigned will extend the range to 65535,
+  making it a long would increase program size by 2K, I don't think that this
+  change is worth the extra memory used
+
+* monsters should probably not be summoned on top of a rune of protection
+
+* could make scorefile code more efficient if I read/write more than one entry
+  at a time
+
+* to floorsym?, shouldn't the save.c file change '.' to floorsym and vice
+  versa, just like it already does for wallsym?
+
+* remove the hours support for all micros, or else give people the option
+  in the config.h file to remove it
+
+* when functions are not used, ifdef out the calls instead of providing
+  dummy functions, to save some space
+
+* in stores.c, the comment "Your mother was a troll!" doesn't mean anything
+  if you are a half-troll, change to Ogre?
+
+* the ms_misc.c file maps the 'Ins' key, which is the '0' key to 'i',
+  this confuses the hell out of a lot of people, this IS documented, but
+  few people read the documentation
+
+* add a turns counter to the higscores entry, and check this when restoring
+  a character, don't score the character if this value is different
+  this prevents someone from playing a character, goofing, saving it while
+  alive, and then going back to the first savefile
+
+* haste self is a level 1 potion, and super heroism is level 3, both
+  seem far too low of a level for the potions considering how useful they
+  are, increasing the levels would make them more common deeper in the dungeon
+  restore potions are level 40 are too deep, they are available in the stores,
+  and just aren't that powerful of a potion
+  DJG: haste self is needed at level 1 for early encounters with nasty monsters
+  super heroism could be higher
+
+* the sorting code does not work with foodstuffs, problem is that when
+  restore a 5.2.1 character which has unsorted food, the new code may
+  put a food ration at the start instead of merging it with the other unsorted
+  food, thus overflowing the inventory_items size, there are few 5.2.1 characters
+  left anyways, so perhaps this isn't much of a problem anymore
+
+* wine/ale should be potions to be quaffed, not foodstuffs to be eaten
+
+* `^M = ^J` when digging, can't really solve well, because of bugs in some
+  version of curses which requires this to be true
+
+* perhaps add an option to control the Drop One/Drop All query for multiple
+  stacking items
+
+*  give warriors a better chance of detecting that ego weapons are magik,
+  but only for ego weapons, not all items
+
+* an inscription is lost when two objects are merged, either choose longest,
+  or ask player, try to combine them, at least do something
+
+* if you curse a special magic item (HA, RF, etc), it retains its very high
+  value, its cost should be reset to the value in `game_objects[index]`
+
+* if you curse a special cursed object (noise, irritation), it will lose its
+  special cursed ability (two wrongs make a right?!?), this should not happen,
+  instead of clearing ALL flag bits, should only clear the 'good' ones
+
+* if wield a torch, and a silver jelly immediately drains it to 1,
+  the program will be confused for one turn thinking that you still have
+  light even though you don't
+
+* scoring unfair to humans/warriors/etc, since they have a lower max exp than
+  other player_races/classes, should adjust exp downward by inflationary factors
+  when calculating score?
+  DJG: unnecessary
+
+* should reduce stack usage in generate.c
+
+* in the stores, should have some way to determine how close one is to
+  getting perfect haggling
+
+* replace all of those heavy weapon messages with an automatic inscription,
+  how should this be maintainted, should it change only when wielded,
+  or should it change whenever the players strength changes?
+
+* throwing a lot of objects into a pile can cause problems?
+
+* make the printing of stuff under monsters an option for those who find
+  it bothersome
+
+* make monster movement more intelligent:
+  - for slow monsters, in movement_rate(), instead of using mod, use
+    `(randint(2 - speed) == 1)` to make monster movement a little more uncertain
+    for fast monsters, give a little variance to speed, i.e. 66% of time monster
+    moves at speed, 17% of time move at speed+1, 17% of time move at speed-1
+  - monsters which are about to die should flee if intelligent
+  - monsters should breathe at player if only separated by a single column
+  - better spell selection, don't cast teleport_to when standing next to
+    player, etc.
+  - have monsters with multiple attacks spread the attacks over each turn if
+    moving slower than player, instead of doing nothing one turn, and then
+    attacking multiple times on the next turn
+  - remember the previous two moves for each intelligent monster, so they can
+    tell which direction they are moving
+
+* in `get_com()`, `get_dir()`, etc, put `-escape-` on the msg line if escape
+  key pressed, useful if message doesn't get deleted, but doesn't this
+  always happen?, apparently not on the Atari ST MWC port
+
+* rubble can be generated underneath a monster, which should not happen
+
+* why call sigsetmask(0)?
+  delete signals() and nosignals() as unnecessary?
+
+* killing a shell -1 results in the game disappearing without leaving
+  a save file, what happened?
+
+* the save.c code that says "file exists, overwrite?", can this ever be
+  executed?, if so, does it do the right thing?,  and also, what happens on
+  EOF? will it go into an infinite loop on EOF?
+
+* what exactly does the damned flag mean, should it be on for all except known2
+  items, or should it be on when an item is known to be cursed?
+
+* add ptodam to damage before calling critical_hits
+  - modify C command to print to dam bonuses modified by weapon, should
+    print both the unmodified bonus, and the modified bonus
+  - should take about 10 slay dragon arrows to kill AMHD, check this after
+    ptodam code is changed, may need to increase damages from +3?
+  - also check other ego weapons for play balance, maybe reduce ego multipliers
+
+* when rogues list Beginners Majik spell book, spells are listed 'a'-'e',
+  when cast from the spell book, spells are listed 'b'-'f', the spell casting
+  list should also go from 'a'-'e', but this looks hard to fix
+
+* allow SPACE to exit from inventory_items commands
+
+* no monster, except Balrog, can resist mass polymorph, should I make it more
+  like polymorph?
+
+* mass polymorph is much higher level than polymorph, and is useful for
+  dire emergencies, either don't give monsters a saving throw, or make is
+  something like level/(3*MAX_MONS_LEVEL/2) which will make it possible but not
+  certain that the staff will work on AMHD's
+
+* should mac port have a separate io.c file?
+
+* 'headless' monsters should not glare when recovering from a bash
+
+* version.inf file should not contain version number/copyright, these should
+  be printed from the variable values
+
+* in misc1.c, the pusht code requires search of entire cave structure,
+  this needs to be written more efficiently, perhaps put x,y into Inventory for
+  every object located somewhere in the cave?
+
+* eliminate all #if 0 in the code
+
+
+
+
+## Changes that can wait...
+
+
+* only let warriors get *GREAT* hits?
+
+* in critical_hits(), change the threshholds to 400-600-800, which will make
+  all melee weapons eligible for great hits, and only let warriors get great
+  hits
+
+* since this makes Mage's much worse fighters, swap Sleep II for Lightning
+  Ball (giving a much needed intermediate Ball spell), and Recharge I for
+  Object Dectection (to compensate for Priest's sense surroundings)
+  DJG: object detection isn't very useful
+
+* increase the classes of weapons from 3 to 5, i.e. missile, blunt, assassin,
+  melee (two handed weapons, etc., only these can do *GREAT* hits), and normal.
+  Then modify fighting abilities as follows:
+  ```
+             mis   blu   ass   mel   nor
+              a)    b)    c)    d)    e)      -- := suck
+    Warrior   +     +     +     ++    +       -  := iffy
+    Rogue     +     0     ++    -     0       0  := unchanged
+    Mage      0     0     0     --    0       +  := improved
+    Ranger    ++    0     0     0     0       ++ := hyperb
+    Priest    0     +     -     --    0
+    Paladin   0     ++    0     0     0
+  ```
+  the monster memory always prints monster attack types and damage types
+  together, this can lead to strange situations, for example, if a grey
+  mushroom patch releases spores, but does not confuse the player, nothing
+  appears in the monster memory because the player does not know they were
+  confusion spores, but he/she does know that that spores are released
+
+
+* show how many spells player can learn via the 'G' command
+
+* add max mana to display in addition to current mana
+
+* add inscriptions that apply to a classes of objects, not just a single instance
+
+* shouldn't be able to genocide invalid letters; escape out of genocide
+
+* have alternative messages to 'dies in a fit of agony', that gets
+  a bit repetitive, and boring
+
+* a command to allow writing the monster memory to a file
+
+* get sources for nethack/omega, look for any really good ideas, also check
+  to see how the implement Mac compatibility, portability, protection,
+  and other general concepts
+
+* treasure.c has an arrow and a bolt out of order (arrow in the rings, and
+  bolt in the amulets)
+
+* secret doors are always granite, would be nice to have secrets doors
+  hidden in other types of rock, would make them less obvious when
+  hightlight seams is on, also current scheme gives an advantage while searching
+  since walls displayed as % obviously are not secret doors
+
+* MAX_SIGHT is 20, but rooms can be larger than twenty across, that gives
+  strange situation where moving one step away from a monster in a large room
+  can cause it to disappear, either increase MAX_SIGHT to be size of largest
+  possible room size, or else use different MAX_SIGHT values in rooms/corridors/
+  town level?
+
+* instead of printing 'it can hit to attack and hit to attack' print
+  'it can hit to attack twice' in monster descriptions?
+
+* change haggling so that initial price depends on how many good bargains
+  you have had
+
+* add key to accept price, instead of forcing player to type in price
+
+* when reach perfect haggling, should just give object to player without
+  asking for any prompt, bad idea if someone mistypes a letter
+
+* add an option so that player can play with or without haggling, without
+  haggling, give prices that are always, say, 30% above the minimum
+
+* add stores commands to buy/sell without haggling, with price say, 20%,
+  less/greater than asking price
+
+* improve map command (see nethack), define an array of special characters,
+  one for each type of composite wall, say, and then let end users specify
+  the necessary graphic characters, allow for multiple character graphic
+  sequences
+
+* combat in a room should have a chance of waking up sleeping monsters, except
+  that it would not be fair, since monsters can send breath weapons through
+  other monsters, but the player can only attack the nearest monsters
+
+* (high level?) monsters should slowly regenerate hit points, esp since the
+  doc states that the Balrog does
+
+* note, if leave level and come back, the Balrog is regenerated (sic) with
+  full hit points
+
+* every 128 turns, let monsters regenerate 1/64 of their total hit points?
+
+* have several different types of Balrog, i.e. a fire breathing one,
+  a cold breathing one, a lightning breathing one, etc.
+
+* should be a chance of weapons breaking when try to dig with them?
+  NO, it is too easy to dig with weapon by accident, shouldn't dull them unless
+  there is some way to sharpen them which there currently isn't
+
+* can get small groups of rooms which are connected to each other, but not
+  to the rest of the rooms on the level, perhaps check for cycles in
+  tunnel/room graph before trying to build tunnels?
+
+* can not use counted commands while bashing a door, because of the
+  paralyzation that sometimes occurs always stops a counted command
+
+* allow character building, by allocation of a limited number of stat points,
+  instead of random rerolling??
+
+* add another aux inventory_items slot, so that there is one for picks, and one for
+  bows
+
+* decrease mithril values, increase gem values, more expensive items in the
+  shops, should be greater difference between prices of low level objects
+  and high level objects, more gold/silver/copper on lower levels, selling
+  high enchanted objects should not be so profitable
+  (good idea here, favorite suggestion for fixing the money problem)
+
+* in object_offset(), give 70/71 and 75/76 different codes, shift by 5 (32)
+  everywhere instead of 6 (64), reduce size of identified_objects_size[] from
+  7*64 to 9*32, objects 71 must all have 2 added to subval so that they
+  start at 96, objects 76 must all have 1 added to subval
+
+* all variables (including bss) should be initialized before they are used,
+  see the mac sources
+
+* add a macro capability
+
+* most case statements should use table or if/else instead, table are much
+  faster, both give much smaller code
+
+* if have one unidentified object, and sell it to a stores, and it gets
+  identified, and you happen to have some similar stores items, you will get
+  a 'combining' message, even though no combining is really taking place,
+  perhaps adding an extra parameter to identify which indicates whether
+  the item will remain in inventory_items after ident, if it does not remain,
+  then should not give combining message if there is only one of them
+
+* many of the constants in constant.h should really be enums instead, this
+  would make the game more maintainable
+
+* some fields of Treasure are const and could be deleted
+
+* missile weapons should be made more useful, make them stackable after
+  identified if they are identical, increase the benefit of using proper
+  bow/arrow combo, increase +todam, +tohit more than now, perhaps give
+  an advantage here to fighters/paladins/rangers/rogues somehow, don't
+  decrease ptohit so much in inven_throw() (currently reduced by distance)
+
+* should recall info be set in breath() for other monsters?
+
+* finish monster compiler, write defs for all monsters
+
+* should be able to increase digging plusses for weapons??
+
+* should be able to increase ring plusses?? this would seriously unbalance
+  the game if allowed
+
+* in the stores bargain code, separate the sell good bargains from the purchase
+  good bargains?  this is important for store_owners with very high inflate values
+  as it is easy to reach sell final value, but very difficult to reach purchase
+  final value, change from 20 to 10 if do this
+
+* change move to take a char-number i.e. '0' instead of a number, i.e. 0
+
+* put all prt_ functions into a separate file, put all movement functions
+  in a separate file
+
+* define constants for all possible tchars, number-directions, attack-types,
+  last_line = 23, scroll flags, potion flags, etc
+
+* would be nice if 10-23 were all wielded objects, i.e. move light 15 outside
+  this range
+
+* use scroll bars on the Mac version for showing the rest of the level,
+  L/W, might be confusing since this won't scroll the whole window, only
+  the dungeon view
+
+* have multiple windows, one for inventory_items, one resizable/scrollable for
+  dungeon view, etc...
+
+* should eliminate need for 70/71 scrolls and 75/76 potions
+
+* replace hex flag fields in treasure with constants
+
+* should not get message "something rolls under feet" when step on a loose rock
+  /* Hid Obj*/ trap?, also should not get this message when cast create food
+  some people prefer to have these messages though
+
+
+
+
+## ideas from Bron Campbell Nelson
+
+* potion of boldness should have duration, i.e. should be safe from fear for
+  a little while after quaffing boldness potion (also heroism/super-heroism)
+  the current length values seem a little long, perhaps just improve the
+  characters resistance to fear?
+
+* warriors too hard, give them more hitpoints?, lower base-to-hit of other
+  classes?, fix warrior so can withstand one AMHD poison breath attack?
+
+* boots of speed are too hard to find, 1/7000 is ring of speed, 1/14000+ is
+  boots of speed, other evidence suggests that boots are about 10 times as
+  rare as rings
+
+* items needed for win: see invisible, free action, resist fire, speed, if
+  add black market, don't make it too easy to get these items
+
+* black market suggestions:
+  - staff of teleportation 20000
+  - staff of speed 100000
+  - mushroom of restoring 20000
+  - and perhaps some powerful archery items
+
+* heavy armor is useless, does not protect against spells/breate, and reduces
+  from to-hit, reduce penalty for characters with high STR?
+
+* new shop: enchantorium, where enchantments can be purchased for a high
+  price, price proportional to how many enchants already there (i.e. enchanting
+  a +9 item costs a fabulous amount, but enchanting a +0 item costs a little
+  more than one enchant armor/weapon scroll), allow enchant to any value, i.e.
+  AC/digging for HA/DF, digging for picks/shovels/etc, etc...
+
+* less reasonble suggestions follow...
+
+* too many weapon types, the variety is useless
+
+* have armor protect by subtracting ac/10 (sic) instead of reducing by %
+
+* speed is too important, need smaller time quanta
+
+* player_races/classes adjustments should be more meaningful, give races/classes max
+  stat values which are not 18/100
+
+* add an autosave option
+
+* add more up stairways? currently there are only randint(2) per level,
+  perhaps guarantee that there will be at least 2
+
+* warriors should automatically recognize ego weapons
+
+* dispel evil/undead are nearly worthless since they do not do much damage for
+  their mana cost, change dispel_creature from mon_take_hit (i, randint(damage))
+  to mon_take_hit (i, damage)
+
+* rune of protection is too powerful, reduce OBJ_RUNE_PROT to 800, maybe 1000,
+  if make this change, should make the spell somewhat easier to cast, say
+  50% for a level 33 priest
+  DJG: this makes them much less useful against the Balrog
+
+* Balrog should not cast cause serious wounds as it does less damage than a
+  normal attack, should not cast slow/paralyze since the player almost
+  certainly will have some form of free action
+
+----
+
+* reincarnate, and lose 1/2 exp?
+
+* give enchant scrolls (or perhaps just *enchant*) a small probability
+  of creating ego weapons
+
+* give enchant scrolls a small probability of destroying ego enchantments
+  if they fail to increase pluses
+
+* make the number of hits per round probabilistic, i.e. instead of getting
+  1/2/3/4 hits per round, gives weapons 2.4 hits per round etc, to smoothen
+  the curve
+
+* perhaps add option to order monsters differently?
+
+* give list of all monsters of that type, and then recall all if type 0,
+  else only recall the one indicated by the number typed in
+  change ident_char() in help.c
+
+* have all top level action functions (aim, move, throw, inven_command, etc.)
+  return true if took a turn, otherwise false
+
+* add command to show number of turns played, time spent playing, date character
+  started, perhaps even a calendar to give game date '1037 in the Third Age'
+
+* enter_store in store2.c calls draw_cave when exiting the stores, it should
+  save the current screen contents away in memory and then restore from that
+  saved screen
+
+* if type control-C while resting, sometimes the counter is not cleared, happens
+  often when count less than 10, to fix, should move all I/O code out of signal
+  handler, it should just set a flag and return
+
+* should examine_book(), scrolls(), and spells/prayers work when hallucinating?
+
+* change player attributes to counters, things like sustain_stat, etc.
+  this would greatly simplify calc_bonuses()
+
+* should not be able to stun creates which do not move, and creatures
+  which have no brains
+
+* los code used to determine if monsters are visible but not for objects,
+  this leads to strange situations, when room lights up, one can see all objects
+  in the room, but must enter the room before can see then monsters
+
+* have the monster generator make a table of undead monster indexes, to simplify
+  summon_undead()
+
+* add some unique levels to make it more interesting, mazes, etc.
+
+* add a metric option
+
+* add diagonal corridors???
+
+* add a storage rental shop, so players can save objects until they need them,
+  but must pay for the priviledge, and have to go back to level 0 to
+  retrieve the objects
+
+* create a safe haven for the player, where hp regen faster, poison/disease
+  cure faster, and player must be in to win
+
+* add amulet of poison resistance, make it a high level item, people would
+  have to take off amulet of the magi to wear it
+
+* add another set of gain stat potions, at about 1550 feet, to encourage
+  people to go deeper in search of them
+
+* add a bank for saving/borrowing money (I don't like this), would rather
+  make money less plentiful, perhaps make magic items less profitable to
+  sell?
+
+* possible AD&D enhancements:
+  - mages can't wear armor and cast at the same time
+  - stealth decreases when wearing armor (for thieves)
+  - priests can't use edged weapons
+  - spell casting takes time (more than one turn for high level spells?)
+  - ranger attack bonuses
+  - paladin's laying on hands and wealth limits
+
+* give females better dexterity, and/or better spell casting ability, and/or
+  more stealth
+
+* Orcs should always appear in groups?
+
+* possible balancing enhancements:
+  - characters have max stat of 18/50+ initial player_races/classes mod, for example,
+    human mage has max str of 18/50 - 5 = 18.
+  - increase warrior HP so that a warrior can withstand one breath of any type
+    frlom any dragon
+  - dex is very important, so everybody should have a chance of getting high
+    dex values
+
+* add option to find code so that it can optionally stop before lighting
+  up or entering a room
+
+* add otpion to find code so that will enter corridor intersections
+
+* Change key-dispatch table in dungeon.c back to ORIGINAL mode.
+
+* put shell_out code in OS dependent files, unix.c/msdos.c/etc.
+
+* save all levels, problems with the sheer size of doing this, 10K * 50 levels
+  is 500K total
+
+* change stats to straight 1-40 range
+
+* replace sets.c with an array ~110*16 with a flag for each type of damage
+  faster and smaller than current scheme
+
+* add option to loc_symbol so that it can optionally print char to screen,
+  most loc_symbol calls feed directly to print()
+
+* the look code uses a different algorithm from the los code, is recursive,
+  hard to understand, has 3 gotos, I would prefer code more like los
+  using the shading ideas of jnh
+
+* lose_dex is never called, well, we'd better fix that!
+
+* for characters with low dex, should have slight chance of dropping weapon,
+  maybe less for fighters, more for mages and priests, should also trip
+  occassionally when running
+
+* acid attacks should lower charisma?
+
+* the first nasty invisible monster is the Banshee at 1200 feet, so need to
+  have see invisible items start appearing at about this time, the current
+  balance seems OK to me though
+
+* black mold, and shimmering mold have 00000080 CMOVE flag set which has no
+  effect
+
+* boots of great mass can be identified by checking the weight display,
+  should eliminate them and replace with some other type of cursed boots
+  suggestion: boots of two left feet, (- to dexterity)
+
+* add another field to Monster, treasurep, cloned/multiplyed monsters
+  - should not have treasure, but if they pick up an object, then
+  - again let them carry treasure
+
+* change randnor from table lookup to 8d99, save 512 bytes for table
+
+* remove ASCII dependencies
+  - many places assume that a-z are consecutive, i.e. 'a'+25 = 'z'
+  - the hallucination code assumes ascii - randint(95)+31 (misc1.c)
+
+* eliminate sscanf calls in ms_misc.c and wizard.c
+
+* allow numbers instead of letters in menus, i.e. spell lists,
+  inventory_items/equip lists
+
+* don't use num-lock for tunneling in PC version, this is a locking key
+
+* characters accumulate too much cash, perhaps do this:
+  - change OBJ_TOWN_LEVEL from 7 to 17, and change place_gold() in misc2.c
+  ```
+    293c293,294
+    <   i = ((randint(dun_level+2)+2)/2.0) - 1;
+    ---
+    > /* NF: Change randint multiplier from (r(d+2)+2)/2 to (r(d+2)+4)/3 */
+    >   i = ((randint(dun_level+2)+4)/3.0) - 1;
+  ```
+  the fixes above (decrease mithril values ...) are preferable
+
+* show time elapsed playing, date character started, and number of turns
+  elapsed
+
+* have option to put inventory_items/equipment list on one screen
+
+* set a timer, and if the game has been idle for 15 minutes, gracefully
+  save and exit?
+
+* new monster suggestions by berman-andrew@yale, because there are no
+  medium difficult monsters before level 40...
+  ```
+   {"Electric Golem", 0x00020002, 0x00080004, 0x1080, 100,  380, 12, 85, 0, 'g', "70d8", "8 1 1d24|8 1 1d24", 35}
+   {"Queen Harpy",    0x37120012, 0x00008208, 0x2036, 100, 1200, 20, 80, 2, 'h', "46d8", "1 3 2d6|1 3 2d6|1 2 2d12|3 7 0d0", 35}
+  ```
+
+
+
+
+## new monster suggestions by Don Dodson
+
+* Nether Lich: invisible, phases through walls, similar to Emperor Lich in
+  other respects
+
+* Archer: fires arrows that do normal damage, or poison, or reduce stat
+
+* Wizard: Like a sorceror but more powerful.  Casts fireballs, summons all sorts
+  of nasties, blindness, and hold person.  Very high saving throw
+  and resistant for fire/frost.
+
+* balls should affect player if inside radius, unfortunately, this is not
+  really such a good idea, since the player is often forced to cast to the
+  next space, would be OK if the player can specify any point for the target
+  of the spell
+
+* when resting, a player should have a chance of not waking up when a monster
+  enters a room
+
+* add wizard command that would create new MORIA_HOU file, since there already
+  is a default def for it, otherwise, make days array bss
+
+* for HA weapons, p1 is used for both str increase, and sustain stat
+
+* rewrite my own sprintf routine that just takes strings %s and integers %d
+  and nothing else, may be faster/smaller than the library version, or perhaps
+  have a routine which cats 3 strings together, or 2 strings and an int
+
+* age characters before killing them of Ripe-Old-Age
+
+* these commands which take a dir should not work when confused,
+  closeobject, jamdoor, openobject
+
+* monsters need a 'not carry large object' flag in CMOVE, have all chests
+  (type 2), polearms (type 22) and staffs (type 55) be large objects, these
+  should be rerolled if they occur when only small objects allowed, chests
+  should have this bit set, also small creatures should have it set: kobolds,
+  mummified kobolds, greedy little gnomes, scruffy-looking hobbits.
+
+* trap names are vague,
+  have two names for each trap, a simple search discloses current vague name,
+  setting it off, or a find/identify trap gives the long name
+
+* allow option of making aux files either hard coded paths, or paths relative
+  to the executables directory, could then make the aux files relative, put
+  exe file in same directory as aux files, and start up program with shell
+  script that cds to aux file direcotry, this makes it easy to keep multiply
+  moria versions around
+
+* allow rerolling after choose player_races/classes
+
+* still too slow on i/o, perhaps rewrite to avoid refresh() calls?
+  perhaps use only motion optimization stuff?
+
+* should we call m_name if spell only applies to visible creatures?
+
+* when moving on objects, say what character moved onto (like rogue)
+
+* for throw command, ask for direction first (like rogue)
+
+* should be able to enchant to-hit to-dam of gauntlets of slaying?
+  likewise, enchant toac of HA swords, etc.
+  either should allow enchant of HA sword toac, or else disenchanter bats
+  should not be allowed to reduce it
+
+* fix save files to include obj desc, then only need one random number
+  generator which can use table program
+
+* give rogues detect treasure and detect objects, also give them a chance to
+  steal objects from monsters
+
+* modify 'x' command to show monster hitpoints
+
+* replace magic numbers with constants
+
+* name objects if use did not identify them
+
+* when creature steals and then dies, the stolen item should appear, unless
+  creature has teleported away in the meantime
+
+* always add exp to current and max, instead of just increasing max when current
+  exceeds it, this would make attacking undead creatures a little more profitable
+  since you are guaranteed a net gain of exp if you kill it, even if it drains
+  a lot of EXP from you
+
+* allow chests to hold items
+
+* have a global variable, savefile field to keep track of the number of times
+  a character has been resurrected
+
+* should not be able to use a two-handed weapon (two-handed sword, pole arm,
+  bow, crossbow, flail, etc.) at same time as wearing a shield
+  should be able to also choose to wield two weapons, but with a penalty of
+  some sort, probably lowered AC
+
+* can't cast in any direction, should be able to, should also be able to cast
+  down at feet (5), should be able to cast area affect spells (balls) at any
+  point, so that the burst will affect any desired area
+
+* Long term stuff, enhancement suggestions:
+  - give player something to do with money, i.e. 1Million gp for HA +10 +10 sword
+    'flavor' the levels, dragons on one level, undead on another, etc.
+  - what's been discovered list
+  - commands not close enough to rogue style
+  - fixed item lettering in inventory_items, in-line/cmd-line options?
+  - command line option to print out times open
+  - Y destroy command, allow destroy from equipment list
+  - let o, c, D commands automatically pick direction when they can
+  - give rogue's a chance to steal, e.g. let monsters carry items that they
+    pick up, if rogue fails, then monster gets a free hit, otherwise monster
+    stays asleep, with a small chance of monster waking up
+  - give magic users a chance at pre identifying scrolls
+  - could use a help system, like VMS version
+  - have multiple character parties, note that almost everything character
+    dependent is stored in the py structure already
+
+* could reduce the size of the types.h file (and other source files too) if
+  eliminate reduce type specifiers, i.e. int32u cmove;\n int32u spells;
+  could be int32u cmove,\n        spells;
+
+* add color, i.e. red dragons show up as a red 'D', etc
+
+* an inn on the town level, in which you must pay to stay, could be used
+  by those who need to wait to get back into a stores, or who want to wait
+  until a stores's inventory_items changes
+
+* when look at monsters, give monster state in addition to monster name, i.e.
+  "You see a sleeping ancient red dragon."
+
+* add code to the get_dir() function so that one can optionally specific a
+  hex instead of a direction, i.e. if you enter '.', then program goes
+  into a cursor positioning mode, allowing you to move the cursor to
+  the spot you want to specify
+
+* don't like the player_exp_levels values, the increase is not very even, especially
+  in the upper levels
+
+* cloak of protection is misleading, it has no special features
+
+* need documentation on what each spell/prayer/staff/etc does, this is needed
+  for priestly spells in particular, since these are non obvious
+  also needed for special objects, such as crown of magi
+
+* eating elvish waybread for curing can cause a character to become bloated and
+  start moving slower, either decrease food value of ew to 5000, or
+  increase player food limit to 17500, or combination of both, or perhaps
+  change the you are full message, maybe have another message at 7500?,
+  or maybe make elvish waybread immune to the slowing effect
+
+* monsters should be more intelligent, should know about corridors so that they
+  don't get stuck in dead ends, or continually retrace their movement
+
+* RNG for Moria should have a table shuffle, see Knuth
+
+* don't update stores inventories across save, unless the save file is at least,
+  say, an hour old
+
+* when monster appears, print its name, may need some work to work reasonably
+  with detect spells
+
+
+
+
+## Features:
+
+* hero/superhero do not subtract hit points when effect wears off
+* WOR scroll can save you with minus hit points!!
+* detect monster does not detect invisible monsters (normally)
+* can hit monsters in walls, but can not cast at them
+* can not enchant something with negative numbers (i.e. cursed items)
+* how does armor protect against breath/gas? it doesn't!!!
+
+* missing amulets: strength, constitution, intelligence, dexterity
+* missing rings: gain wisdom, gain charisma note that missing rings/amulets are disjoint
+* missing detect monster potion (feature!)
+* missing blank scrolls (feature!)
+* missing staff genocide (feature!)
+* missing staff mass_genocide (feature!)
+
+
+
+
+## D&D Inconsistencies, most of these should not be fixed since that would unbalance the game:
+
+* priests should not need light for prayers
+* magic missile should do 1d4+1 per level
+* detect invisible should last 5 rounds, instead of 1
+* stinking cloud should be renamed cloudkill
+* fireball does 1d6 per level, should destroy all paper/wood and melt metal
+* lightning does 1d6 per level
+* hold monster 1 round per level of caster
+* phase door by touching a wall, and end up on other side of the wall
+* light spells should be mobile
+* heroism should not work when over level 11, superheroism should not work when over level 14
+* rings can not be used cummulatively, rings or prot have no effect if wearing armor
+* Flame Tongue, +3 versus cold creatures and avian, +4 vs undead
+* Holy Avenger, +50% on all saving throws
