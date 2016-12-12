@@ -69,3 +69,5 @@ dkms.conf
 
 umoria.xcodeproj
 .idea
+
+.DS_Store
