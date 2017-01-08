@@ -5,6 +5,7 @@
 // for further details.
 
 // Store/attack/RNG/etc tables and variables
+// clang-format off
 
 #include "headers.h"
 

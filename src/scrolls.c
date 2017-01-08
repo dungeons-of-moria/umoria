@@ -276,9 +276,9 @@ void read_scroll() {
                     if ((i_ptr->tval >= TV_HAFTED) && (i_ptr->tval <= TV_DIGGING)) {
                         j = i_ptr->damage[0] * i_ptr->damage[1];
                     } else {
-                      // Bows' and arrows' enchantments should not be limited
-                      // by their low base damages
-                      j = 10;
+                        // Bows' and arrows' enchantments should not be limited
+                        // by their low base damages
+                        j = 10;
                     }
                     for (k = 0; k < randint(2); k++) {
                         if (enchant(&i_ptr->todam, j)) {

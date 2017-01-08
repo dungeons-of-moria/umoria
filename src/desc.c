@@ -17,8 +17,16 @@ char titles[MAX_TITLES][10];
 
 bool is_a_vowel(char ch) {
     switch (ch) {
-    case 'a': case 'e': case 'i': case 'o': case 'u':
-    case 'A': case 'E': case 'I': case 'O': case 'U':
+    case 'a':
+    case 'e':
+    case 'i':
+    case 'o':
+    case 'u':
+    case 'A':
+    case 'E':
+    case 'I':
+    case 'O':
+    case 'U':
         return true;
     default:
         return false;
@@ -256,11 +264,11 @@ void unmagic_name(inven_type *i_ptr) {
 }
 
 // defines for p1_use, determine how the p1 field is printed
-#define IGNORED   0
-#define CHARGES   1
-#define PLUSSES   2
-#define LIGHT     3
-#define FLAGS     4
+#define IGNORED 0
+#define CHARGES 1
+#define PLUSSES 2
+#define LIGHT 3
+#define FLAGS 4
 #define Z_PLUSSES 5
 
 // Returns a description of item for inventory
@@ -283,9 +291,12 @@ void objdes(char *out_val, inven_type *i_ptr, int pref) {
     bool append_name = false;
 
     switch (i_ptr->tval) {
-    case TV_MISC: case TV_CHEST:
+    case TV_MISC:
+    case TV_CHEST:
         break;
-    case TV_SLING_AMMO: case TV_BOLT: case TV_ARROW:
+    case TV_SLING_AMMO:
+    case TV_BOLT:
+    case TV_ARROW:
         (void)sprintf(damstr, " (%dd%d)", i_ptr->damage[0], i_ptr->damage[1]);
         break;
     case TV_LIGHT:
@@ -305,7 +316,9 @@ void objdes(char *out_val, inven_type *i_ptr, int pref) {
         }
         (void)sprintf(damstr, " (x%d)", tmp);
         break;
-    case TV_HAFTED: case TV_POLEARM: case TV_SWORD:
+    case TV_HAFTED:
+    case TV_POLEARM:
+    case TV_SWORD:
         (void)sprintf(damstr, " (%dd%d)", i_ptr->damage[0], i_ptr->damage[1]);
         p1_use = FLAGS;
         break;
@@ -313,8 +326,13 @@ void objdes(char *out_val, inven_type *i_ptr, int pref) {
         p1_use = Z_PLUSSES;
         (void)sprintf(damstr, " (%dd%d)", i_ptr->damage[0], i_ptr->damage[1]);
         break;
-    case TV_BOOTS: case TV_GLOVES: case TV_CLOAK: case TV_HELM:
-    case TV_SHIELD: case TV_HARD_ARMOR: case TV_SOFT_ARMOR:
+    case TV_BOOTS:
+    case TV_GLOVES:
+    case TV_CLOAK:
+    case TV_HELM:
+    case TV_SHIELD:
+    case TV_HARD_ARMOR:
+    case TV_SOFT_ARMOR:
         break;
     case TV_AMULET:
         if (modify) {
@@ -356,7 +374,8 @@ void objdes(char *out_val, inven_type *i_ptr, int pref) {
         }
         p1_use = CHARGES;
         break;
-    case TV_SCROLL1: case TV_SCROLL2:
+    case TV_SCROLL1:
+    case TV_SCROLL2:
         if (modify) {
             basenm = "& Scroll~ titled \"%s\"";
             modstr = titles[indexx];
@@ -365,7 +384,8 @@ void objdes(char *out_val, inven_type *i_ptr, int pref) {
             append_name = true;
         }
         break;
-    case TV_POTION1: case TV_POTION2:
+    case TV_POTION1:
+    case TV_POTION2:
         if (modify) {
             basenm = "& %s Potion~";
             modstr = colors[indexx];
@@ -406,11 +426,16 @@ void objdes(char *out_val, inven_type *i_ptr, int pref) {
         modstr = basenm;
         basenm = "& Holy Book~ of Prayers %s";
         break;
-    case TV_OPEN_DOOR: case TV_CLOSED_DOOR: case TV_SECRET_DOOR: case TV_RUBBLE:
+    case TV_OPEN_DOOR:
+    case TV_CLOSED_DOOR:
+    case TV_SECRET_DOOR:
+    case TV_RUBBLE:
         break;
     case TV_GOLD:
-    case TV_INVIS_TRAP: case TV_VIS_TRAP:
-    case TV_UP_STAIR: case TV_DOWN_STAIR:
+    case TV_INVIS_TRAP:
+    case TV_VIS_TRAP:
+    case TV_UP_STAIR:
+    case TV_DOWN_STAIR:
         (void)strcpy(out_val, object_list[i_ptr->index].name);
         (void)strcat(out_val, ".");
         return;
@@ -585,25 +610,25 @@ void objdes(char *out_val, inven_type *i_ptr, int pref) {
 void invcopy(inven_type *to, int from_index) {
     treasure_type *from = &object_list[from_index];
 
-    to->index       = from_index;
-    to->name2       = SN_NULL;
-    to->inscrip[0]  = '\0';
-    to->flags       = from->flags;
-    to->tval        = from->tval;
-    to->tchar       = from->tchar;
-    to->p1          = from->p1;
-    to->cost        = from->cost;
-    to->subval      = from->subval;
-    to->number      = from->number;
-    to->weight      = from->weight;
-    to->tohit       = from->tohit;
-    to->todam       = from->todam;
-    to->ac          = from->ac;
-    to->toac        = from->toac;
-    to->damage[0]   = from->damage[0];
-    to->damage[1]   = from->damage[1];
-    to->level       = from->level;
-    to->ident       = 0;
+    to->index = from_index;
+    to->name2 = SN_NULL;
+    to->inscrip[0] = '\0';
+    to->flags = from->flags;
+    to->tval = from->tval;
+    to->tchar = from->tchar;
+    to->p1 = from->p1;
+    to->cost = from->cost;
+    to->subval = from->subval;
+    to->number = from->number;
+    to->weight = from->weight;
+    to->tohit = from->tohit;
+    to->todam = from->todam;
+    to->ac = from->ac;
+    to->toac = from->toac;
+    to->damage[0] = from->damage[0];
+    to->damage[1] = from->damage[1];
+    to->level = from->level;
+    to->ident = 0;
 }
 
 // Describe number of remaining charges. -RAK-

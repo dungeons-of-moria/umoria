@@ -88,10 +88,10 @@ static void place_boundary() {
     right_ptr = (cave_type(*)[MAX_WIDTH]) & cave[0][cur_width - 1];
 
     for (int i = 0; i < cur_height; i++) {
-        #ifdef DEBUG
-            assert((cave_type *)left_ptr == &cave[i][0]);
-            assert((cave_type *)right_ptr == &cave[i][cur_width - 1]);
-        #endif
+#ifdef DEBUG
+        assert((cave_type *)left_ptr == &cave[i][0]);
+        assert((cave_type *)right_ptr == &cave[i][cur_width - 1]);
+#endif
 
         ((cave_type *)left_ptr)->fval = BOUNDARY_WALL;
         left_ptr++;
@@ -104,10 +104,10 @@ static void place_boundary() {
     cave_type *bottom_ptr = &cave[cur_height - 1][0];
 
     for (int i = 0; i < cur_width; i++) {
-        #ifdef DEBUG
-            assert(top_ptr == &cave[0][i]);
-            assert(bottom_ptr == &cave[cur_height - 1][i]);
-        #endif
+#ifdef DEBUG
+        assert(top_ptr == &cave[0][i]);
+        assert(bottom_ptr == &cave[cur_height - 1][i]);
+#endif
         top_ptr->fval = BOUNDARY_WALL;
         top_ptr++;
         bottom_ptr->fval = BOUNDARY_WALL;

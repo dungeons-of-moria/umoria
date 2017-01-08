@@ -353,7 +353,6 @@ void fix1_delete_monster(int j) {
 // fix2_delete_monster does everything in delete_monster that wasn't done
 // by fix1_monster_delete above, this is only called in creatures()
 void fix2_delete_monster(int j) {
-
     if (j != mfptr - 1) {
         monster_type *m_ptr = &m_list[mfptr - 1];
         cave[m_ptr->fy][m_ptr->fx].cptr = j;
@@ -367,7 +366,7 @@ void fix2_delete_monster(int j) {
 static int summon_object(int y, int x, int num, int typ) {
     int real_typ;
     if ((typ == 1) || (typ == 5)) {
-        real_typ = 1;   // typ == 1 -> objects
+        real_typ = 1; // typ == 1 -> objects
     } else {
         real_typ = 256; // typ == 2 -> gold
     }
@@ -544,8 +543,8 @@ int mon_take_hit(int monptr, int dam) {
 
         int32_t new_exp = ((int32_t)c_ptr->mexp * c_ptr->level) / p_ptr->lev;
         int32_t new_exp_frac = ((((int32_t)c_ptr->mexp * c_ptr->level) % p_ptr->lev) *
-                        0x10000L / p_ptr->lev) +
-                       p_ptr->exp_frac;
+                                0x10000L / p_ptr->lev) +
+                               p_ptr->exp_frac;
 
         if (new_exp_frac >= 0x10000L) {
             new_exp++;

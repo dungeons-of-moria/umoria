@@ -898,19 +898,24 @@ void put_stats() {
 // Returns a rating of x depending on y -JWT-
 char *likert(int x, int y) {
     switch ((x / y)) {
-    case -3: case -2: case -1:
+    case -3:
+    case -2:
+    case -1:
         return "Very Bad";
-    case 0: case 1:
+    case 0:
+    case 1:
         return "Bad";
     case 2:
         return "Poor";
-    case 3: case 4:
+    case 3:
+    case 4:
         return "Fair";
     case 5:
         return "Good";
     case 6:
         return "Very Good";
-    case 7: case 8:
+    case 7:
+    case 8:
         return "Excellent";
     default:
         return "Superb";
@@ -1043,7 +1048,9 @@ void change_name() {
             }
             break;
         case ESCAPE:
-        case ' ': case '\n': case '\r':
+        case ' ':
+        case '\n':
+        case '\r':
             flag = true;
             break;
         default:
@@ -1156,8 +1163,7 @@ bool inven_check_num(inven_type *t_ptr) {
                 ((t_ptr->subval < ITEM_GROUP_MIN) ||
                  (inventory[i].p1 == t_ptr->p1))
                 // only stack if both or neither are identified
-                && (known1_p(&inventory[i]) == known1_p(t_ptr)))
-            {
+                && (known1_p(&inventory[i]) == known1_p(t_ptr))) {
                 return true;
             }
         }
@@ -1241,8 +1247,7 @@ int inven_carry(inven_type *i_ptr) {
             ((int)t_ptr->number + (int)i_ptr->number < 256) &&
             ((subt < ITEM_GROUP_MIN) || (t_ptr->p1 == i_ptr->p1)) &&
             // only stack if both or neither are identified
-            (known1p == known1_p(t_ptr)))
-        {
+            (known1p == known1_p(t_ptr))) {
             t_ptr->number += i_ptr->number;
             break;
         } else if ((typ == t_ptr->tval && subt < t_ptr->subval && always_known1p) || (typ > t_ptr->tval)) {
@@ -1431,7 +1436,6 @@ int get_spell(int *spell, int num, int *sn, int *sc, char *prompt, int first_spe
 // calculate number of spells player should have, and
 // learn forget spells until that number is met -JEW-
 void calc_spells(int stat) {
-
     struct misc *p_ptr = &py.misc;
     spell_type *msp_ptr = &magic_spell[p_ptr->pclass - 1][0];
 
@@ -1470,10 +1474,13 @@ void calc_spells(int stat) {
     case 0:
         num_allowed = 0;
         break;
-    case 1: case 2: case 3:
+    case 1:
+    case 2:
+    case 3:
         num_allowed = 1 * levels;
         break;
-    case 4: case 5:
+    case 4:
+    case 5:
         num_allowed = 3 * levels / 2;
         break;
     case 6:
@@ -2019,7 +2026,7 @@ int tot_dam(inven_type *i_ptr, int tdam, int monster) {
             tdam = tdam * 3;
             r_ptr->r_cdefense |= CD_UNDEAD;
         } else if ((m_ptr->cdefense & CD_ANIMAL) && (i_ptr->flags & TR_SLAY_ANIMAL)) {
-           // Slay Animal
+            // Slay Animal
 
             tdam = tdam * 2;
             r_ptr->r_cdefense |= CD_ANIMAL;

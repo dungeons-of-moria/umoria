@@ -5,6 +5,7 @@
 // for further details.
 
 // Monster definitions
+// clang-format off
 
 #include "headers.h"
 

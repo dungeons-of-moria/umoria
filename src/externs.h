@@ -13,33 +13,33 @@ extern char *copyright[5];
 extern int hack_monptr;
 
 extern vtype died_from;
-extern vtype savefile;              // The save file. -CJS-
+extern vtype savefile; // The save file. -CJS-
 extern int32_t birth_date;
 
 // These are options, set with set_options command -CJS-
 extern bool rogue_like_commands;
-extern bool find_cut;               // Cut corners on a run
-extern bool find_examine;           // Check corners on a run
-extern bool find_prself;            // Print yourself on a run (slower)
-extern bool find_bound;             // Stop run when the map shifts
-extern bool prompt_carry_flag;      // Prompt to pick something up
-extern bool show_weight_flag;       // Display weights in inventory
-extern bool highlight_seams;        // Highlight magma and quartz
-extern bool find_ignore_doors;      // Run through open doors
-extern bool sound_beep_flag;        // Beep for invalid character
-extern bool display_counts;         // Display rest/repeat counts
+extern bool find_cut;          // Cut corners on a run
+extern bool find_examine;      // Check corners on a run
+extern bool find_prself;       // Print yourself on a run (slower)
+extern bool find_bound;        // Stop run when the map shifts
+extern bool prompt_carry_flag; // Prompt to pick something up
+extern bool show_weight_flag;  // Display weights in inventory
+extern bool highlight_seams;   // Highlight magma and quartz
+extern bool find_ignore_doors; // Run through open doors
+extern bool sound_beep_flag;   // Beep for invalid character
+extern bool display_counts;    // Display rest/repeat counts
 
 // global flags
-extern bool new_level_flag;         // Next level when true
-extern bool teleport_flag;          // Handle teleport traps
-extern int eof_flag;                // Used to handle eof/HANGUP
-extern bool player_light;           // Player carrying light
-extern int find_flag;               // Used in MORIA
-extern bool free_turn_flag;         // Used in MORIA
-extern bool weapon_heavy;           // Flag if the weapon too heavy -CJS-
-extern int pack_heavy;              // Flag if the pack too heavy -CJS-
-extern char doing_inven;            // Track inventory commands
-extern bool screen_change;          // Screen changes (used in inven_commands)
+extern bool new_level_flag; // Next level when true
+extern bool teleport_flag;  // Handle teleport traps
+extern int eof_flag;        // Used to handle eof/HANGUP
+extern bool player_light;   // Player carrying light
+extern int find_flag;       // Used in MORIA
+extern bool free_turn_flag; // Used in MORIA
+extern bool weapon_heavy;   // Flag if the weapon too heavy -CJS-
+extern int pack_heavy;      // Flag if the pack too heavy -CJS-
+extern char doing_inven;    // Track inventory commands
+extern bool screen_change;  // Screen changes (used in inven_commands)
 
 extern bool character_generated;    // don't save score until char gen finished
 extern bool character_saved;        // prevents save on kill after save_char()
@@ -58,15 +58,15 @@ extern bool death;                  // True if died
 extern int32_t turn;                // Cur trun of game
 extern bool wizard;                 // Wizard flag
 extern bool to_be_wizard;
-extern bool panic_save;             // this is true if playing from a panic save
+extern bool panic_save; // this is true if playing from a panic save
 
 extern bool wait_for_more;
 
 extern char days[7][29];
-extern int closing_flag;            // Used for closing
+extern int closing_flag; // Used for closing
 
-extern int16_t cur_height;          // Current dungeon height
-extern int16_t cur_width;           // Current dungeon width
+extern int16_t cur_height; // Current dungeon height
+extern int16_t cur_width;  // Current dungeon width
 
 // Following are calculated from max dungeon sizes
 extern int16_t max_panel_rows, max_panel_cols;
@@ -96,10 +96,10 @@ extern int16_t class_level_adj[MAX_CLASS][MAX_LEV_ADJ];
 // Warriors don't have spells, so there is no entry for them.
 extern spell_type magic_spell[MAX_CLASS - 1][31];
 extern char *spell_names[62];
-extern uint32_t spell_learned;      // Bit field for spells learnt -CJS-
-extern uint32_t spell_worked;       // Bit field for spells tried -CJS-
-extern uint32_t spell_forgotten;    // Bit field for spells forgotten -JEW-
-extern uint8_t spell_order[32];     // remember order that spells are learned in
+extern uint32_t spell_learned;   // Bit field for spells learnt -CJS-
+extern uint32_t spell_worked;    // Bit field for spells tried -CJS-
+extern uint32_t spell_forgotten; // Bit field for spells forgotten -JEW-
+extern uint8_t spell_order[32];  // remember order that spells are learned in
 extern uint16_t player_init[MAX_CLASS][5];
 extern bool total_winner;
 extern int32_t max_score;
@@ -122,20 +122,20 @@ extern inven_type t_list[MAX_TALLOC];
 extern inven_type inventory[INVEN_ARRAY_SIZE];
 extern char *special_names[SN_ARRAY_SIZE];
 extern int16_t sorted_objects[MAX_DUNGEON_OBJ];
-extern int16_t inven_ctr;                     // Total different obj's
-extern int16_t inven_weight;                  // Cur carried weight
-extern int16_t equip_ctr;                     // Cur equipment ctr
-extern int16_t tcptr;                         // Cur treasure heap ptr
+extern int16_t inven_ctr;    // Total different obj's
+extern int16_t inven_weight; // Cur carried weight
+extern int16_t equip_ctr;    // Cur equipment ctr
+extern int16_t tcptr;        // Cur treasure heap ptr
 
 // Following are creature arrays and variables
 extern creature_type c_list[MAX_CREATURES];
 extern monster_type m_list[MAX_MALLOC];
 extern int16_t m_level[MAX_MONS_LEVEL + 1];
 extern m_attack_type monster_attacks[N_MONS_ATTS];
-extern recall_type c_recall[MAX_CREATURES];   // Monster memories. -CJS-
-extern monster_type blank_monster;            // Blank monster values
-extern int16_t mfptr;                         // Cur free monster ptr
-extern int16_t mon_tot_mult;                  // # of repro's of creature
+extern recall_type c_recall[MAX_CREATURES]; // Monster memories. -CJS-
+extern monster_type blank_monster;          // Blank monster values
+extern int16_t mfptr;                       // Cur free monster ptr
+extern int16_t mon_tot_mult;                // # of repro's of creature
 
 // Following are arrays for descriptive pieces
 extern char *colors[MAX_COLORS];
@@ -293,7 +293,7 @@ bool place_monster(int, int, int, int);
 void place_win_monster();
 int get_mons_num(int);
 void alloc_monster(int, int, int);
-bool summon_monster(int *, int*, int);
+bool summon_monster(int *, int *, int);
 bool summon_undead(int *, int *);
 int popt();
 void pusht(uint8_t);

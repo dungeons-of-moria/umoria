@@ -93,12 +93,12 @@ int main(int argc, char *argv[]) {
     // Show the game splash screen
     read_times();
 
-    // Some necessary initializations
-    // all made into constants or initialized in variables.c
+// Some necessary initializations
+// all made into constants or initialized in variables.c
 
-    #if (COST_ADJ != 100)
-        price_adjust();
-    #endif
+#if (COST_ADJ != 100)
+    price_adjust();
+#endif
 
     // Grab a random seed from the clock
     init_seeds(seed);

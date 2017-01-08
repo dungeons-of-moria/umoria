@@ -5,6 +5,7 @@
 // for further details.
 
 // Global constants used by Moria
+// clang-format off
 
 #define MAX_UCHAR         255
 #define MAX_SHORT       32767   // maximum short/long signed ints

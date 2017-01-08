@@ -5,6 +5,7 @@
 // for further details.
 
 // Player specific variable definitions
+// clang-format off
 
 #include "headers.h"
 

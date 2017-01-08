@@ -324,7 +324,8 @@ void dungeon() {
                 case -4:
                     i = 4;
                     break;
-                case -3: case -2:
+                case -3:
+                case -2:
                     i = 3;
                     break;
                 case -1:
@@ -333,10 +334,13 @@ void dungeon() {
                 case 0:
                     i = 1;
                     break;
-                case 1: case 2: case 3:
+                case 1:
+                case 2:
+                case 3:
                     i = ((turn % 2) == 0);
                     break;
-                case 4: case 5:
+                case 4:
+                case 5:
                     i = ((turn % 3) == 0);
                     break;
                 case 6:
@@ -615,7 +619,6 @@ void dungeon() {
         // for 40th level char, check once every 416 turns
         if (((turn & 0xF) == 0) && (f_ptr->confused == 0) &&
             (randint((10 + 750 / (5 + py.misc.lev))) == 1)) {
-
             for (i = 0; i < INVEN_ARRAY_SIZE; i++) {
                 if (i == inven_ctr) {
                     i = 22;
@@ -1303,7 +1306,7 @@ static void do_command(char com_val) {
                 if (p_y == cy && p_x == cx) {
                     tmp_str[0] = '\0';
                 } else {
-                    (void)sprintf(tmp_str, "%s%s of", p_y < cy ? " North" : p_y > cy ? " South": "", p_x < cx ? " West" : p_x > cx ? " East" : "");
+                    (void)sprintf(tmp_str, "%s%s of", p_y < cy ? " North" : p_y > cy ? " South" : "", p_x < cx ? " West" : p_x > cx ? " East" : "");
                 }
                 (void)sprintf(out_val, "Map sector [%d,%d], which is%s your sector. Look which direction?", p_y, p_x, tmp_str);
                 if (!get_dir(out_val, &dir_val)) {

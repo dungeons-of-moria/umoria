@@ -5,6 +5,7 @@
 // for further details.
 
 // Global variables
+// clang-format off
 
 #include "headers.h"
 

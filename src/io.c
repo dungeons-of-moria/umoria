@@ -199,7 +199,6 @@ void clear_from(int row) {
 // Outputs a char to a given interpolated y, x position -RAK-
 // sign bit of a character used to indicate standout mode. -CJS
 void print(char ch, int row, int col) {
-
     // Real co-ords convert to screen positions
     row -= panel_row_prt;
     col -= panel_col_prt;
@@ -420,10 +419,12 @@ bool get_string(char *in_str, int row, int column, int slen) {
         case ESCAPE:
             aborted = true;
             break;
-        case CTRL_KEY('J'): case CTRL_KEY('M'):
+        case CTRL_KEY('J'):
+        case CTRL_KEY('M'):
             flag = true;
             break;
-        case DELETE: case CTRL_KEY('H'):
+        case DELETE:
+        case CTRL_KEY('H'):
             if (column > start_col) {
                 column--;
                 put_buffer(" ", row, column);

@@ -5,6 +5,7 @@
 // for further details.
 
 // Sets up curses for the correct system.
+// clang-format off
 
 #ifdef _WIN32
     // this is defined in Windows and also in ncurses

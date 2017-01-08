@@ -290,7 +290,6 @@ void map_area() {
 
 // Identify an object -RAK-
 int ident_spell() {
-
     bool ident = false;
 
     int item_val;
@@ -413,14 +412,12 @@ int td_destroy() {
                 if (((t_list[c_ptr->tptr].tval >= TV_INVIS_TRAP) &&
                      (t_list[c_ptr->tptr].tval <= TV_CLOSED_DOOR) &&
                      (t_list[c_ptr->tptr].tval != TV_RUBBLE)) ||
-                    (t_list[c_ptr->tptr].tval == TV_SECRET_DOOR))
-                {
+                    (t_list[c_ptr->tptr].tval == TV_SECRET_DOOR)) {
                     if (delete_object(i, j)) {
                         destroy = true;
                     }
                 } else if ((t_list[c_ptr->tptr].tval == TV_CHEST) &&
-                           (t_list[c_ptr->tptr].flags != 0))
-                {
+                           (t_list[c_ptr->tptr].flags != 0)) {
                     // destroy traps on chest and unlock
                     t_list[c_ptr->tptr].flags &= ~(CH_TRAPPED | CH_LOCKED);
                     t_list[c_ptr->tptr].name2 = SN_UNLOCKED;
@@ -1322,8 +1319,7 @@ int td_destroy2(int dir, int y, int x) {
                 (t_ptr->tval == TV_CLOSED_DOOR) ||
                 (t_ptr->tval == TV_VIS_TRAP) ||
                 (t_ptr->tval == TV_OPEN_DOOR) ||
-                (t_ptr->tval == TV_SECRET_DOOR))
-            {
+                (t_ptr->tval == TV_SECRET_DOOR)) {
                 if (delete_object(y, x)) {
                     msg_print("There is a bright flash of light!");
                     destroy2 = true;
@@ -2138,16 +2134,24 @@ static void replace_spot(int y, int x, int typ) {
     cave_type *c_ptr = &cave[y][x];
 
     switch (typ) {
-    case 1: case 2: case 3:
+    case 1:
+    case 2:
+    case 3:
         c_ptr->fval = CORR_FLOOR;
         break;
-    case 4: case 7: case 10:
+    case 4:
+    case 7:
+    case 10:
         c_ptr->fval = GRANITE_WALL;
         break;
-    case 5: case 8: case 11:
+    case 5:
+    case 8:
+    case 11:
         c_ptr->fval = MAGMA_WALL;
         break;
-    case 6: case 9: case 12:
+    case 6:
+    case 9:
+    case 12:
         c_ptr->fval = QUARTZ_WALL;
         break;
     }

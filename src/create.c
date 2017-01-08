@@ -354,14 +354,14 @@ static void get_class() {
                 set_use_stat(i);
             }
 
-            p_ptr->misc.ptodam  = todam_adj(); // Real values
-            p_ptr->misc.ptohit  = tohit_adj();
-            p_ptr->misc.ptoac   = toac_adj();
-            p_ptr->misc.pac     = 0;
-            p_ptr->misc.dis_td  = p_ptr->misc.ptodam; // Displayed values
-            p_ptr->misc.dis_th  = p_ptr->misc.ptohit;
+            p_ptr->misc.ptodam = todam_adj(); // Real values
+            p_ptr->misc.ptohit = tohit_adj();
+            p_ptr->misc.ptoac = toac_adj();
+            p_ptr->misc.pac = 0;
+            p_ptr->misc.dis_td = p_ptr->misc.ptodam; // Displayed values
+            p_ptr->misc.dis_th = p_ptr->misc.ptohit;
             p_ptr->misc.dis_tac = p_ptr->misc.ptoac;
-            p_ptr->misc.dis_ac  = p_ptr->misc.pac + p_ptr->misc.dis_tac;
+            p_ptr->misc.dis_ac = p_ptr->misc.pac + p_ptr->misc.dis_tac;
 
             // now set misc stats, do this after setting stats because of con_adj() for hitpoints
             m_ptr = &py.misc;
@@ -409,10 +409,10 @@ static int monval(uint8_t i) {
 static void get_money() {
     uint8_t *a_ptr = py.stats.max_stat;
     int tmp = monval(a_ptr[A_STR]) +
-          monval(a_ptr[A_INT]) +
-          monval(a_ptr[A_WIS]) +
-          monval(a_ptr[A_CON]) +
-          monval(a_ptr[A_DEX]);
+              monval(a_ptr[A_INT]) +
+              monval(a_ptr[A_WIS]) +
+              monval(a_ptr[A_CON]) +
+              monval(a_ptr[A_DEX]);
 
     int gold = py.misc.sc * 6 + randint(25) + 325; // Social Class adj
     gold -= tmp;                                   // Stat adj

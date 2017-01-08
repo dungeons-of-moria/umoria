@@ -900,7 +900,7 @@ static bool store_sell(int store_num, int *cur_top) {
                 last_item = counter;
             }
         } // end of if (flag)
-    } // end of for (counter)
+    }     // end of for (counter)
 
     int item_val;
 
@@ -1010,11 +1010,16 @@ void enter_store(int store_num) {
                         display_inventory(store_num, cur_top);
                     }
                     break;
-                case 'E': case 'e': // Equipment List
-                case 'I': case 'i': // Inventory
-                case 'T': case 't': // Take off
-                case 'W': case 'w': // Wear
-                case 'X': case 'x': // Switch weapon
+                case 'E':
+                case 'e': // Equipment List
+                case 'I':
+                case 'i': // Inventory
+                case 'T':
+                case 't': // Take off
+                case 'W':
+                case 'w': // Wear
+                case 'X':
+                case 'x': // Switch weapon
                     tmp_chr = py.stats.use_stat[A_CHR];
 
                     do {

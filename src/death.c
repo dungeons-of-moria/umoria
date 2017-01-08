@@ -36,7 +36,7 @@ void display_scores() {
         return;
     }
 
-    (void) fseek(highscore_fp, (off_t)0, SEEK_SET);
+    (void)fseek(highscore_fp, (off_t)0, SEEK_SET);
 
     // Read version numbers from the score file, and check for validity.
     uint8_t version_maj = getc(highscore_fp);
@@ -82,7 +82,7 @@ void display_scores() {
             rank++;
             rd_highscore(&score);
         }
-        prt("Rank  Points Name              Sex Race       Class  Lvl Killed ""By", 0, 0);
+        prt("Rank  Points Name              Sex Race       Class  Lvl Killed By", 0, 0);
         erase_line(1, 0);
         prt("[Press any key to continue.]", 23, 23);
         input = inkey();
@@ -260,7 +260,7 @@ static void highscores() {
     if ((highscore_fp = fopen(MORIA_TOP, "rb+")) == NULL) {
         char string[100];
 
-        (void) sprintf (string, "Error opening score file \"%s\"\n", MORIA_TOP);
+        (void)sprintf(string, "Error opening score file \"%s\"\n", MORIA_TOP);
         msg_print(string);
         msg_print(CNIL);
         return;
@@ -293,8 +293,7 @@ static void highscores() {
         (version_min > CURRENT_VERSION_MINOR) ||
         (version_min == CURRENT_VERSION_MINOR && patch_level > CURRENT_VERSION_PATCH) ||
         (version_min == 2 && patch_level < 2) ||
-        (version_min < 2)
-    ) {
+        (version_min < 2)) {
         // Support score files from 5.2.2 to present.
         // No need to print a message, a subsequent call to
         // display_scores() will print a message.
@@ -322,12 +321,10 @@ static void highscores() {
         // birthdate/sex/race/class are the same, and died_from of scorefile
         // entry is "(saved)"
         if (((new_entry.uid != 0 && new_entry.uid == old_entry.uid) ||
-             (new_entry.uid == 0 && !strcmp(old_entry.died_from, "(saved)") && new_entry.birth_date == old_entry.birth_date)
-            ) &&
+             (new_entry.uid == 0 && !strcmp(old_entry.died_from, "(saved)") && new_entry.birth_date == old_entry.birth_date)) &&
             new_entry.sex == old_entry.sex &&
             new_entry.race == old_entry.race &&
-            new_entry.class == old_entry.class
-           ) {
+            new_entry.class == old_entry.class) {
             (void)fclose(highscore_fp);
             return;
         }
@@ -351,7 +348,7 @@ static void highscores() {
         entry = new_entry;
 
         while (!feof(highscore_fp)) {
-            (void)fseek(highscore_fp, -(long)sizeof(high_scores)-(long)sizeof(char), SEEK_CUR);
+            (void)fseek(highscore_fp, -(long)sizeof(high_scores) - (long)sizeof(char), SEEK_CUR);
 
             wr_highscore(&entry);
 
@@ -361,12 +358,10 @@ static void highscores() {
             // case when birthdate/sex/race/class are the same, and died_from
             // of scorefile entry is "(saved)"
             if (((new_entry.uid != 0 && new_entry.uid == old_entry.uid) ||
-                 (new_entry.uid == 0 && !strcmp(old_entry.died_from, "(saved)") && new_entry.birth_date == old_entry.birth_date)
-                ) &&
+                 (new_entry.uid == 0 && !strcmp(old_entry.died_from, "(saved)") && new_entry.birth_date == old_entry.birth_date)) &&
                 new_entry.sex == old_entry.sex &&
                 new_entry.race == old_entry.race &&
-                new_entry.class == old_entry.class
-               ) {
+                new_entry.class == old_entry.class) {
                 break;
             }
             entry = old_entry;

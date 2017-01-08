@@ -66,7 +66,6 @@ void tunnel(int dir) {
             msg_print("You are too afraid!");
         }
     } else if (i_ptr->tval != TV_NOTHING) {
-
         if (TR_TUNNEL & i_ptr->flags) {
             tabil += 25 + i_ptr->p1 * 50;
         } else {
@@ -893,7 +892,6 @@ void throw_object() {
 // Make a bash attack on someone. -CJS-
 // Used to be part of bash above.
 static void py_bash(int y, int x) {
-
     int monster = cave[y][x].cptr;
     monster_type *m_ptr = &m_list[monster];
     creature_type *c_ptr = &c_list[m_ptr->mptr];

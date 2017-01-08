@@ -278,12 +278,12 @@ void store_init() {
     for (int j = 0; j < MAX_STORES; j++) {
         store_type *s_ptr = &store[j];
 
-        s_ptr->owner      = MAX_STORES * (randint(i) - 1) + j;
+        s_ptr->owner = MAX_STORES * (randint(i) - 1) + j;
         s_ptr->insult_cur = 0;
         s_ptr->store_open = 0;
-        s_ptr->store_ctr  = 0;
-        s_ptr->good_buy   = 0;
-        s_ptr->bad_buy    = 0;
+        s_ptr->store_ctr = 0;
+        s_ptr->good_buy = 0;
+        s_ptr->bad_buy = 0;
 
         for (int k = 0; k < STORE_INVEN_MAX; k++) {
             invcopy(&s_ptr->store_inven[k].sitem, OBJ_NOTHING);

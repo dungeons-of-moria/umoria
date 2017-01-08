@@ -4,9 +4,10 @@
 // ABSOLUTELY NO WARRANTY. See https://www.gnu.org/licenses/gpl-2.0.html
 // for further details.
 
-#pragma once
-
 // System specific headers
+// clang-format off
+
+#pragma once
 
 #ifdef _WIN32
     #define _CRT_SECURE_NO_WARNINGS

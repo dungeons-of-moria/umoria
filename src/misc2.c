@@ -31,7 +31,9 @@ void magic_treasure(int x, int level) {
 
     // Depending on treasure type, it can have certain magical properties
     switch (t_ptr->tval) {
-    case TV_SHIELD: case TV_HARD_ARMOR: case TV_SOFT_ARMOR:
+    case TV_SHIELD:
+    case TV_HARD_ARMOR:
+    case TV_SOFT_ARMOR:
         if (magik(chance)) {
             t_ptr->toac += m_bonus(1, 30, level);
             if (magik(special)) {
@@ -74,7 +76,9 @@ void magic_treasure(int x, int level) {
             t_ptr->flags |= TR_CURSED;
         }
         break;
-    case TV_HAFTED: case TV_POLEARM: case TV_SWORD:
+    case TV_HAFTED:
+    case TV_POLEARM:
+    case TV_SWORD:
         // always show tohit/todam values if identified
         t_ptr->ident |= ID_SHOW_HITDAM;
         if (magik(chance)) {
@@ -114,42 +118,50 @@ void magic_treasure(int x, int level) {
                     t_ptr->cost += t_ptr->p1 * 500;
                     t_ptr->cost += 7500;
                     break;
-                case 3: case 4: // Slay Animal
+                case 3:
+                case 4: // Slay Animal
                     t_ptr->flags |= TR_SLAY_ANIMAL;
                     t_ptr->tohit += 2;
                     t_ptr->todam += 2;
                     t_ptr->name2 = SN_SA;
                     t_ptr->cost += 3000;
                     break;
-                case 5: case 6: // Slay Dragon
+                case 5:
+                case 6: // Slay Dragon
                     t_ptr->flags |= TR_SLAY_DRAGON;
                     t_ptr->tohit += 3;
                     t_ptr->todam += 3;
                     t_ptr->name2 = SN_SD;
                     t_ptr->cost += 4000;
                     break;
-                case 7: case 8: // Slay Evil
+                case 7:
+                case 8: // Slay Evil
                     t_ptr->flags |= TR_SLAY_EVIL;
                     t_ptr->tohit += 3;
                     t_ptr->todam += 3;
                     t_ptr->name2 = SN_SE;
                     t_ptr->cost += 4000;
                     break;
-                case 9: case 10: // Slay Undead
+                case 9:
+                case 10: // Slay Undead
                     t_ptr->flags |= (TR_SEE_INVIS | TR_SLAY_UNDEAD);
                     t_ptr->tohit += 3;
                     t_ptr->todam += 3;
                     t_ptr->name2 = SN_SU;
                     t_ptr->cost += 5000;
                     break;
-                case 11: case 12: case 13: // Flame Tongue
+                case 11:
+                case 12:
+                case 13: // Flame Tongue
                     t_ptr->flags |= TR_FLAME_TONGUE;
                     t_ptr->tohit++;
                     t_ptr->todam += 3;
                     t_ptr->name2 = SN_FT;
                     t_ptr->cost += 2000;
                     break;
-                case 14: case 15: case 16: // Frost Brand
+                case 14:
+                case 15:
+                case 16: // Frost Brand
                     t_ptr->flags |= TR_FROST_BRAND;
                     t_ptr->tohit++;
                     t_ptr->todam++;
@@ -452,7 +464,12 @@ void magic_treasure(int x, int level) {
                 t_ptr->cost = -t_ptr->cost;
             }
             break;
-        case 24: case 25: case 26: case 27: case 28: case 29:
+        case 24:
+        case 25:
+        case 26:
+        case 27:
+        case 28:
+        case 29:
             t_ptr->ident |= ID_NOSHOW_P1;
             break;
         case 30: // Slaying
@@ -713,27 +730,36 @@ void magic_treasure(int x, int level) {
             t_ptr->flags |= CH_LOCKED;
             t_ptr->name2 = SN_LOCKED;
             break;
-        case 3: case 4:
+        case 3:
+        case 4:
             t_ptr->flags |= (CH_LOSE_STR | CH_LOCKED);
             t_ptr->name2 = SN_POISON_NEEDLE;
             break;
-        case 5: case 6:
+        case 5:
+        case 6:
             t_ptr->flags |= (CH_POISON | CH_LOCKED);
             t_ptr->name2 = SN_POISON_NEEDLE;
             break;
-        case 7: case 8: case 9:
+        case 7:
+        case 8:
+        case 9:
             t_ptr->flags |= (CH_PARALYSED | CH_LOCKED);
             t_ptr->name2 = SN_GAS_TRAP;
             break;
-        case 10: case 11:
+        case 10:
+        case 11:
             t_ptr->flags |= (CH_EXPLODE | CH_LOCKED);
             t_ptr->name2 = SN_EXPLOSION_DEVICE;
             break;
-        case 12: case 13: case 14:
+        case 12:
+        case 13:
+        case 14:
             t_ptr->flags |= (CH_SUMMON | CH_LOCKED);
             t_ptr->name2 = SN_SUMMONING_RUNES;
             break;
-        case 15: case 16: case 17:
+        case 15:
+        case 16:
+        case 17:
             t_ptr->flags |=
                 (CH_PARALYSED | CH_POISON | CH_LOSE_STR | CH_LOCKED);
             t_ptr->name2 = SN_MULTIPLE_TRAPS;
@@ -744,7 +770,10 @@ void magic_treasure(int x, int level) {
             break;
         }
         break;
-    case TV_SLING_AMMO: case TV_SPIKE: case TV_BOLT: case TV_ARROW:
+    case TV_SLING_AMMO:
+    case TV_SPIKE:
+    case TV_BOLT:
+    case TV_ARROW:
         if (t_ptr->tval == TV_SLING_AMMO || t_ptr->tval == TV_BOLT ||
             t_ptr->tval == TV_ARROW) {
             // always show tohit/todam values if identified
@@ -757,27 +786,32 @@ void magic_treasure(int x, int level) {
                 // see comment for weapons
                 if (magik(3 * special / 2)) {
                     switch (randint(10)) {
-                    case 1: case 2: case 3:
+                    case 1:
+                    case 2:
+                    case 3:
                         t_ptr->name2 = SN_SLAYING;
                         t_ptr->tohit += 5;
                         t_ptr->todam += 5;
                         t_ptr->cost += 20;
                         break;
-                    case 4: case 5:
+                    case 4:
+                    case 5:
                         t_ptr->flags |= TR_FLAME_TONGUE;
                         t_ptr->tohit += 2;
                         t_ptr->todam += 4;
                         t_ptr->name2 = SN_FIRE;
                         t_ptr->cost += 25;
                         break;
-                    case 6: case 7:
+                    case 6:
+                    case 7:
                         t_ptr->flags |= TR_SLAY_EVIL;
                         t_ptr->tohit += 3;
                         t_ptr->todam += 3;
                         t_ptr->name2 = SN_SLAY_EVIL;
                         t_ptr->cost += 25;
                         break;
-                    case 8: case 9:
+                    case 8:
+                    case 9:
                         t_ptr->flags |= TR_SLAY_ANIMAL;
                         t_ptr->tohit += 2;
                         t_ptr->todam += 2;
@@ -848,7 +882,10 @@ void magic_treasure(int x, int level) {
     }
 }
 
-static struct { char *o_prompt; bool *o_var; } options[] = {
+static struct {
+    char *o_prompt;
+    bool *o_var;
+} options[] = {
     {"Running: cut known corners", &find_cut},
     {"Running: examine potential corners", &find_examine},
     {"Running: print self during run", &find_prself},
@@ -889,14 +926,17 @@ void set_options() {
                 i = max - 1;
             }
             break;
-        case ' ': case '\n': case '\r':
+        case ' ':
+        case '\n':
+        case '\r':
             if (i + 1 < max) {
                 i++;
             } else {
                 i = 0;
             }
             break;
-        case 'y': case 'Y':
+        case 'y':
+        case 'Y':
             put_buffer("yes", i + 1, 40);
             *options[i].o_var = true;
             if (i + 1 < max) {
@@ -905,7 +945,8 @@ void set_options() {
                 i = 0;
             }
             break;
-        case 'n': case 'N':
+        case 'n':
+        case 'N':
             put_buffer("no ", i + 1, 40);
             *options[i].o_var = false;
             if (i + 1 < max) {

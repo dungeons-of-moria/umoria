@@ -818,7 +818,7 @@ void inven_command(char command) {
                         selecting = false;
                     }
                 } else if (which == '/' && swap[0]) {
-                   // Swap screens (for drop)
+                    // Swap screens (for drop)
 
                     if (command == 'd') {
                         command = 'r';
@@ -904,9 +904,15 @@ void inven_command(char command) {
                             } else {
                                 // Slot for equipment
                                 switch (inventory[item].tval) {
-                                case TV_SLING_AMMO: case TV_BOLT: case TV_ARROW: case TV_BOW:
-                                case TV_HAFTED: case TV_POLEARM: case TV_SWORD:
-                                case TV_DIGGING: case TV_SPIKE:
+                                case TV_SLING_AMMO:
+                                case TV_BOLT:
+                                case TV_ARROW:
+                                case TV_BOW:
+                                case TV_HAFTED:
+                                case TV_POLEARM:
+                                case TV_SWORD:
+                                case TV_DIGGING:
+                                case TV_SPIKE:
                                     slot = INVEN_WIELD;
                                     break;
                                 case TV_LIGHT:
@@ -927,7 +933,8 @@ void inven_command(char command) {
                                 case TV_SHIELD:
                                     slot = INVEN_ARM;
                                     break;
-                                case TV_HARD_ARMOR: case TV_SOFT_ARMOR:
+                                case TV_HARD_ARMOR:
+                                case TV_SOFT_ARMOR:
                                     slot = INVEN_BODY;
                                     break;
                                 case TV_AMULET:
@@ -985,8 +992,7 @@ void inven_command(char command) {
                                     item = -1;
                                 } else if (inventory[item].subval == ITEM_GROUP_MIN &&
                                            inventory[item].number > 1 &&
-                                           !inven_check_num(&inventory[slot]))
-                                {
+                                           !inven_check_num(&inventory[slot])) {
                                     // this can happen if try to wield a torch,
                                     // and have more than one in inventory
                                     msg_print("You will have to drop something first.");
@@ -1646,7 +1652,7 @@ void rest() {
     }
     // check for reasonable value, must be positive number
     // in range of a short, or must be -MAX_SHORT
-    if ( (rest_num == -MAX_SHORT) || ((rest_num > 0) && (rest_num < MAX_SHORT)) ) {
+    if ((rest_num == -MAX_SHORT) || ((rest_num > 0) && (rest_num < MAX_SHORT))) {
         if (py.flags.status & PY_SEARCH) {
             search_off();
         }

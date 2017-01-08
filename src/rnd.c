@@ -44,7 +44,6 @@
 // Hence each value of z can be computed exactly without overflow as long
 // as m can be represented as an integer.
 
-
 // a good random number generator, correct on any machine with 32 bit
 // integers, this algorithm is from:
 //
@@ -59,10 +58,10 @@
 //  Has a full period of 2^31 - 1.
 //  Returns integers in the range 1 to 2^31-1.
 
-#define RNG_M   2147483647L // m = 2^31 - 1
-#define RNG_A   16807L
-#define RNG_Q   127773L     // m div a
-#define RNG_R   2836L       // m mod a
+#define RNG_M 2147483647L // m = 2^31 - 1
+#define RNG_A 16807L
+#define RNG_Q 127773L // m div a
+#define RNG_R 2836L   // m mod a
 
 // 32 bit seed
 static uint32_t rnd_seed;
