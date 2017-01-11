@@ -57,7 +57,7 @@ void moriaterm() {
 }
 
 // Dump IO to buffer -RAK-
-void put_buffer(char *out_str, int row, int col) {
+void put_buffer(const char *out_str, int row, int col) {
     vtype tmp_str;
 
     // truncate the string, to make sure that it won't go past right edge of screen.

@@ -469,10 +469,13 @@ bool _save_char(char *fnam) {
 
 // Certain checks are ommitted for the wizard. -CJS-
 bool get_char(bool *generate) {
+    int c;
+    cave_type *c_ptr;
     uint32_t time_saved;
 
     *generate = true;
     int fd = -1;
+    int total_count = 0;
 
     // Not required for Mac, because the file name is obtained through a dialog.
     // There is no way for a non existnat file to be specified. -BS-
@@ -800,7 +803,7 @@ bool get_char(bool *generate) {
             }
         }
 
-        int c = getc(fileptr);
+        c = getc(fileptr);
         if (c == EOF || (l & 0x80000000L)) {
             if ((l & 0x80000000L) == 0) {
                 if (!to_be_wizard || turn < 0) {
@@ -886,8 +889,8 @@ bool get_char(bool *generate) {
         }
 
         // read in the rest of the cave info
-        cave_type *c_ptr = &cave[0][0];
-        int total_count = 0;
+        c_ptr = &cave[0][0];
+        total_count = 0;
         while (total_count != MAX_HEIGHT * MAX_WIDTH) {
             rd_byte(&count);
             rd_byte(&char_tmp);

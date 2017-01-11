@@ -578,7 +578,7 @@ int disarm_all(int dir, int y, int x) {
 }
 
 // Return flags for given type area affect -RAK-
-void get_flags(int typ, uint32_t *weapon_type, int *harm_type, bool (**destroy)()) {
+void get_flags(int typ, uint32_t *weapon_type, int *harm_type, bool (**destroy)(inven_type *)) {
     switch (typ) {
     case GF_MAGIC_MISSILE:
         *weapon_type = 0;
@@ -624,7 +624,7 @@ void get_flags(int typ, uint32_t *weapon_type, int *harm_type, bool (**destroy)(
 void fire_bolt(int typ, int dir, int y, int x, int dam, char *bolt_typ) {
     bool flag = false;
 
-    bool (*dummy)();
+    bool (*dummy)(inven_type *);
     int harm_type = 0;
     uint32_t weapon_type;
     get_flags(typ, &weapon_type, &harm_type, &dummy);
@@ -706,7 +706,7 @@ void fire_ball(int typ, int dir, int y, int x, int dam_hp, char *descrip) {
     int tkill = 0;
     int max_dis = 2;
 
-    bool (*destroy)();
+    bool (*destroy)(inven_type *);
     int harm_type;
     uint32_t weapon_type;
     get_flags(typ, &weapon_type, &harm_type, &destroy);
@@ -832,7 +832,7 @@ void fire_ball(int typ, int dir, int y, int x, int dam_hp, char *descrip) {
 void breath(int typ, int y, int x, int dam_hp, char *ddesc, int monptr) {
     int max_dis = 2;
 
-    bool (*destroy)();
+    bool (*destroy)(inven_type *);
     int harm_type;
     uint32_t weapon_type;
     get_flags(typ, &weapon_type, &harm_type, &destroy);

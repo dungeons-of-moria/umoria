@@ -117,7 +117,7 @@ void place_object(int y, int x, bool must_be_small) {
 }
 
 // Allocates an object for tunnels and rooms -RAK-
-void alloc_object(bool (*alloc_set)(), int typ, int num) {
+void alloc_object(bool (*alloc_set)(int), int typ, int num) {
     for (int k = 0; k < num; k++) {
         int i, j;
 
@@ -128,7 +128,7 @@ void alloc_object(bool (*alloc_set)(), int typ, int num) {
 
         // don't put an object beneath the player, this could cause
         // problems if player is standing under rubble, or on a trap.
-        while ((!(*alloc_set)(cave[i][j].fval)) || (cave[i][j].tptr != 0) || (i == char_row && j == char_col));
+        while (!(*alloc_set)(cave[i][j].fval) || cave[i][j].tptr != 0 || (i == char_row && j == char_col));
 
         // NOTE: typ == 2 is not used - used to be visible traps.
         if (typ < 4) {
@@ -1125,7 +1125,7 @@ void inven_drop(int item_val, int drop_all) {
 }
 
 // Destroys a type of item on a given percent chance -RAK-
-int inven_damage(bool (*typ)(), int perc) {
+int inven_damage(bool (*typ)(inven_type *), int perc) {
     int j = 0;
 
     for (int i = 0; i < inven_ctr; i++) {

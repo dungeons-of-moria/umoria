@@ -108,7 +108,7 @@ extern int32_t max_score;
 extern owner_type owners[MAX_OWNERS];
 extern store_type store[MAX_STORES];
 extern uint16_t store_choice[MAX_STORES][STORE_CHOICES];
-extern int (*store_buy[MAX_STORES])();
+extern int (*store_buy[MAX_STORES])(int);
 
 // FIXME: why is this extern here, it's only used in store2.c. -MRC-
 // Save the store's last increment value.
@@ -220,7 +220,7 @@ void ident_char();
 // io.c
 void init_curses();
 void moriaterm();
-void put_buffer(char *, int, int);
+void put_buffer(const char *, int, int);
 void put_qio();
 void restore_term();
 void shell_out();
@@ -310,7 +310,7 @@ void place_rubble(int, int);
 void place_gold(int, int);
 int get_obj_num(int, bool);
 void place_object(int, int, bool);
-void alloc_object(bool (*)(), int, int);
+void alloc_object(bool (*)(int), int, int);
 void random_object(int, int, int);
 void cnv_stat(uint8_t, char *);
 void prt_stat(int);
@@ -360,7 +360,7 @@ void change_name();
 void inven_destroy(int);
 void take_one_item(inven_type *, inven_type *);
 void inven_drop(int, int);
-int inven_damage(bool (*)(), int);
+int inven_damage(bool (*)(inven_type *), int);
 int weight_limit();
 bool inven_check_num(inven_type *);
 bool inven_check_weight(inven_type *);
@@ -523,7 +523,7 @@ int detect_monsters();
 void light_line(int, int, int);
 void starlite(int, int);
 int disarm_all(int, int, int);
-void get_flags(int, uint32_t *, int *, bool (**)());
+void get_flags(int, uint32_t *, int *, bool (**)(inven_type *));
 void fire_bolt(int, int, int, int, int, char *);
 void fire_ball(int, int, int, int, int, char *);
 void breath(int, int, int, int, char *, int);

@@ -18,6 +18,7 @@ static void hit_trap(int y, int x) {
     struct misc *p_ptr = &py.misc;
     inven_type *t_ptr = &t_list[c_ptr->tptr];
 
+    int num;
     int dam = pdamroll(t_ptr->damage);
 
     bigvtype tmp;
@@ -114,7 +115,7 @@ static void hit_trap(int y, int x) {
     case 11:                       // Summon mon
         (void)delete_object(y, x); // Rune disappears.
 
-        int num = 2 + randint(3);
+        num = 2 + randint(3);
         for (int i = 0; i < num; i++) {
             int ty = y;
             int tx = x;
@@ -425,15 +426,15 @@ int delete_object(int y, int x) {
     c_ptr->fm = false;
     lite_spot(y, x);
 
-    bool delete;
+    bool deleted;
 
     if (test_light(y, x)) {
-        delete = true;
+        deleted = true;
     } else {
-        delete = false;
+        deleted = false;
     }
 
-    return delete;
+    return deleted;
 }
 
 // Allocates objects upon a creatures death -RAK-
