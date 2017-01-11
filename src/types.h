@@ -346,7 +346,7 @@ typedef struct high_scores {
     uint8_t max_dlv;
     uint8_t sex;
     uint8_t race;
-    uint8_t class;
+    uint8_t character_class;
     char name[PLAYER_NAME_SIZE];
     char died_from[25];
 } high_scores;

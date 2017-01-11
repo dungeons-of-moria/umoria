@@ -76,7 +76,7 @@ void display_scores() {
             (void)sprintf(string,
                           "%-4d%8d %-19.19s %c %-10.10s %-7.7s%3d %-22.22s",
                           rank, score.points, score.name, score.sex,
-                          race[score.race].trace, class[score.class].title,
+                          race[score.race].trace, class[score.character_class].title,
                           score.lev, score.died_from);
             prt(string, ++i, 0);
             rank++;
@@ -243,7 +243,7 @@ static void highscores() {
     new_entry.max_dlv = (uint8_t)py.misc.max_dlv;
     new_entry.sex = (py.misc.male ? 'M' : 'F');
     new_entry.race = py.misc.prace;
-    new_entry.class = py.misc.pclass;
+    new_entry.character_class = py.misc.pclass;
     (void)strcpy(new_entry.name, py.misc.name);
 
     char *tmp = died_from;
@@ -324,7 +324,7 @@ static void highscores() {
              (new_entry.uid == 0 && !strcmp(old_entry.died_from, "(saved)") && new_entry.birth_date == old_entry.birth_date)) &&
             new_entry.sex == old_entry.sex &&
             new_entry.race == old_entry.race &&
-            new_entry.class == old_entry.class) {
+            new_entry.character_class == old_entry.character_class) {
             (void)fclose(highscore_fp);
             return;
         }
@@ -361,7 +361,7 @@ static void highscores() {
                  (new_entry.uid == 0 && !strcmp(old_entry.died_from, "(saved)") && new_entry.birth_date == old_entry.birth_date)) &&
                 new_entry.sex == old_entry.sex &&
                 new_entry.race == old_entry.race &&
-                new_entry.class == old_entry.class) {
+                new_entry.character_class == old_entry.character_class) {
                 break;
             }
             entry = old_entry;

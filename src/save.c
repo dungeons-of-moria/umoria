@@ -1290,7 +1290,7 @@ void wr_highscore(high_scores *score) {
     wr_byte(score->max_dlv);
     wr_byte(score->sex);
     wr_byte(score->race);
-    wr_byte(score->class);
+    wr_byte(score->character_class);
     wr_bytes((uint8_t *)score->name, PLAYER_NAME_SIZE);
     wr_bytes((uint8_t *)score->died_from, 25);
     DEBUG(fclose(logfile));
@@ -1313,7 +1313,7 @@ void rd_highscore(high_scores *score) {
     rd_byte(&score->max_dlv);
     rd_byte(&score->sex);
     rd_byte(&score->race);
-    rd_byte(&score->class);
+    rd_byte(&score->character_class);
     rd_bytes((uint8_t *)score->name, PLAYER_NAME_SIZE);
     rd_bytes((uint8_t *)score->died_from, 25);
     DEBUG(fclose(logfile));
