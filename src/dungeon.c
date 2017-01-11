@@ -1772,11 +1772,11 @@ static void examine_book() {
         bool flag = true;
         inven_type *i_ptr = &inventory[item_val];
 
-        if (class[py.misc.pclass].spell == MAGE) {
+        if (classes[py.misc.pclass].spell == MAGE) {
             if (i_ptr->tval != TV_MAGIC_BOOK) {
                 flag = false;
             }
-        } else if (class[py.misc.pclass].spell == PRIEST) {
+        } else if (classes[py.misc.pclass].spell == PRIEST) {
             if (i_ptr->tval != TV_PRAYER_BOOK) {
                 flag = false;
             }

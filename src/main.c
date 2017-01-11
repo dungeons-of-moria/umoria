@@ -159,12 +159,12 @@ int main(int argc, char *argv[]) {
         py.flags.food = 7500;
         py.flags.food_digested = 2;
 
-        if (class[py.misc.pclass].spell == MAGE) {
+        if (classes[py.misc.pclass].spell == MAGE) {
             // Magic realm
             clear_screen(); // makes spell list easier to read
             calc_spells(A_INT);
             calc_mana(A_INT);
-        } else if (class[py.misc.pclass].spell == PRIEST) {
+        } else if (classes[py.misc.pclass].spell == PRIEST) {
             // Clerical realm
             calc_spells(A_WIS);
             clear_screen(); // force out the 'learn prayer' message

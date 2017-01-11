@@ -307,7 +307,7 @@ static void get_class() {
     put_buffer("Choose a class (? for Help):", 20, 2);
     do {
         if (race[i].rtclass & mask) {
-            (void)sprintf(tmp_str, "%c) %s", k + 'a', class[j].title);
+            (void)sprintf(tmp_str, "%c) %s", k + 'a', classes[j].title);
             put_buffer(tmp_str, m, l);
             cl[k] = j;
             l += 15;
@@ -336,7 +336,7 @@ static void get_class() {
         j = s - 'a';
         if ((j < k) && (j >= 0)) {
             py.misc.pclass = cl[j];
-            c_ptr = &class[py.misc.pclass];
+            c_ptr = &classes[py.misc.pclass];
             exit_flag = true;
             clear_from(20);
             put_buffer(c_ptr->title, 5, 15);

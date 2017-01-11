@@ -228,7 +228,7 @@ int cast_spell(char *prompt, int item_val, int *sn, int *sc) {
         result = get_spell(spell, i, sn, sc, prompt, first_spell);
         if (result &&
             magic_spell[py.misc.pclass - 1][*sn].smana > py.misc.cmana) {
-            if (class[py.misc.pclass].spell == MAGE) {
+            if (classes[py.misc.pclass].spell == MAGE) {
                 result = (int)get_check("You summon your limited strength to cast this one! Confirm?");
             } else {
                 result = (int)get_check("The gods may think you presumptuous for this! Confirm?");

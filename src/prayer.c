@@ -21,7 +21,7 @@ void pray() {
         msg_print("You have no light to read by.");
     } else if (py.flags.confused > 0) {
         msg_print("You are too confused.");
-    } else if (class[py.misc.pclass].spell != PRIEST) {
+    } else if (classes[py.misc.pclass].spell != PRIEST) {
         msg_print("Pray hard enough and your prayers may be answered.");
     } else if (inven_ctr == 0) {
         msg_print("But you are not carrying anything!");

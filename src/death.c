@@ -76,7 +76,7 @@ void display_scores() {
             (void)sprintf(string,
                           "%-4d%8d %-19.19s %c %-10.10s %-7.7s%3d %-22.22s",
                           rank, score.points, score.name, score.sex,
-                          race[score.race].trace, class[score.character_class].title,
+                          race[score.race].trace, classes[score.character_class].title,
                           score.lev, score.died_from);
             prt(string, ++i, 0);
             rank++;
@@ -126,7 +126,7 @@ static void print_tomb() {
     put_buffer("|", 9, 9);
     put_buffer("|  :   :", 9, 43);
     if (!total_winner) {
-        p = class[py.misc.pclass].title;
+        p = classes[py.misc.pclass].title;
     } else if (py.misc.male) {
         p = "*King*";
     } else {

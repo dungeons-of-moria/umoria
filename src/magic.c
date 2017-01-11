@@ -20,7 +20,7 @@ void cast() {
         msg_print("You have no light to read by.");
     } else if (py.flags.confused > 0) {
         msg_print("You are too confused.");
-    } else if (class[py.misc.pclass].spell != MAGE) {
+    } else if (classes[py.misc.pclass].spell != MAGE) {
         msg_print("You can't cast spells!");
     } else if (!find_range(TV_MAGIC_BOOK, TV_NEVER, &i, &j)) {
         msg_print("But you are not carrying any spell-books!");

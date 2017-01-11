@@ -2088,7 +2088,7 @@ void lose_exp(int32_t amount) {
 
         calc_hitpoints();
 
-        class_type *c_ptr = &class[m_ptr->pclass];
+        class_type *c_ptr = &classes[m_ptr->pclass];
 
         if (c_ptr->spell == MAGE) {
             calc_spells(A_INT);

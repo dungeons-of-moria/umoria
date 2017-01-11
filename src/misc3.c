@@ -578,10 +578,10 @@ void set_use_stat(int stat) {
         calc_bonuses();
     } else if (stat == A_DEX) {
         calc_bonuses();
-    } else if (stat == A_INT && class[py.misc.pclass].spell == MAGE) {
+    } else if (stat == A_INT && classes[py.misc.pclass].spell == MAGE) {
         calc_spells(A_INT);
         calc_mana(A_INT);
-    } else if (stat == A_WIS && class[py.misc.pclass].spell == PRIEST) {
+    } else if (stat == A_WIS && classes[py.misc.pclass].spell == PRIEST) {
         calc_spells(A_WIS);
         calc_mana(A_WIS);
     } else if (stat == A_CON) {
@@ -800,7 +800,7 @@ int todam_adj() {
 void prt_stat_block() {
     struct misc *m_ptr = &py.misc;
     prt_field(race[py.misc.prace].trace, 2, STAT_COLUMN);
-    prt_field(class[py.misc.pclass].title, 3, STAT_COLUMN);
+    prt_field(classes[py.misc.pclass].title, 3, STAT_COLUMN);
     prt_field(title_string(), 4, STAT_COLUMN);
 
     for (int i = 0; i < 6; i++) {
@@ -869,7 +869,7 @@ void put_character() {
         put_buffer(m_ptr->name, 2, 15);
         put_buffer(race[m_ptr->prace].trace, 3, 15);
         put_buffer((m_ptr->male ? "Male" : "Female"), 4, 15);
-        put_buffer(class[m_ptr->pclass].title, 5, 15);
+        put_buffer(classes[m_ptr->pclass].title, 5, 15);
     }
 }
 
@@ -1276,7 +1276,7 @@ int spell_chance(int spell) {
     int stat;
     int chance = s_ptr->sfail - 3 * (py.misc.lev - s_ptr->slevel);
 
-    if (class[py.misc.pclass].spell == MAGE) {
+    if (classes[py.misc.pclass].spell == MAGE) {
         stat = A_INT;
     } else {
         stat = A_WIS;
@@ -1307,7 +1307,7 @@ void print_spells(int *spell, int num, int comment, int nonconsec) {
         col = 31;
     }
 
-    int offset = (class[py.misc.pclass].spell == MAGE ? SPELL_OFFSET : PRAYER_OFFSET);
+    int offset = (classes[py.misc.pclass].spell == MAGE ? SPELL_OFFSET : PRAYER_OFFSET);
 
     erase_line(1, col);
     put_buffer("Name", 1, col + 5);
@@ -1360,7 +1360,7 @@ int get_spell(int *spell, int num, int *sn, int *sc, char *prompt, int first_spe
     bool flag = false;
     bool redraw = false;
 
-    int offset = (class[py.misc.pclass].spell == MAGE ? SPELL_OFFSET : PRAYER_OFFSET);
+    int offset = (classes[py.misc.pclass].spell == MAGE ? SPELL_OFFSET : PRAYER_OFFSET);
 
     char choice;
     while (flag == false && get_com(out_str, &choice)) {
@@ -1469,7 +1469,7 @@ void calc_spells(int stat) {
 
     // calc number of spells allowed
     int num_allowed = 0;
-    int levels = p_ptr->lev - class[p_ptr->pclass].first_spell_lev + 1;
+    int levels = p_ptr->lev - classes[p_ptr->pclass].first_spell_lev + 1;
     switch (stat_adj(stat)) {
     case 0:
         num_allowed = 0;
@@ -1605,7 +1605,7 @@ void gain_spells() {
     spell_type *msp_ptr = &magic_spell[p_ptr->pclass - 1][0];
 
     int stat, offset;
-    if (class[p_ptr->pclass].spell == MAGE) {
+    if (classes[p_ptr->pclass].spell == MAGE) {
         stat = A_INT;
         offset = SPELL_OFFSET;
 
@@ -1736,7 +1736,7 @@ void calc_mana(int stat) {
 
     if (spell_learned != 0) {
         int new_mana = 0;
-        int levels = p_ptr->lev - class[p_ptr->pclass].first_spell_lev + 1;
+        int levels = p_ptr->lev - classes[p_ptr->pclass].first_spell_lev + 1;
         switch (stat_adj(stat)) {
         case 0:
             new_mana = 0;
@@ -1813,7 +1813,7 @@ static void gain_level() {
     prt_level();
     prt_title();
 
-    class_type *c_ptr = &class[p_ptr->pclass];
+    class_type *c_ptr = &classes[p_ptr->pclass];
 
     if (c_ptr->spell == MAGE) {
         calc_spells(A_INT);

@@ -280,7 +280,7 @@ background_type background[MAX_BACKGROUND] = {
 };
 
 // Classes.
-class_type class[MAX_CLASS] = {
+class_type classes[MAX_CLASS] = {
     // HP Dis Src Stl Fos bth btb sve S  I  W  D Co Ch  Spell Exp  spl
     {"Warrior", 9, 25, 14, 1, 38, 70, 55, 18,  5, -2, -2,  2,  2, -1, NONE,    0, 0},
     {"Mage",    0, 30, 16, 2, 20, 34, 20, 36, -5,  3,  0,  1, -2,  1, MAGE,   30, 1},
