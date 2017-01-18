@@ -239,7 +239,7 @@ void store_carry(int store_num, int *ipos, inven_type *t_ptr) {
 
 // Destroy an item in the stores inventory.  Note that if
 // "one_of" is false, an entire slot is destroyed -RAK-
-void store_destroy(int store_num, int item_val, int one_of) {
+void store_destroy(int store_num, int item_val, bool one_of) {
     store_type *s_ptr = &store[store_num];
     inven_type *i_ptr = &s_ptr->store_inven[item_val].sitem;
 
