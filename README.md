@@ -83,6 +83,17 @@ If you'd like to learn more on the development history of Umoria, these can
 make interesting reading.
 
 
+## Contributions
+
+I have some very specific ideas on what changes I'd like to see to Umoria,
+which means I will be quite conservative on accepting pull requests.
+Therefore, before making a PR I'd recommend that you first create an
+[issue](https://github.com/dungeons-of-moria/umoria/issues) so that we can
+discuss your idea.
+
+Please note that I will not at this time accept PRs for _game play_ changes.
+
+
 ## License Information
 
 Umoria is released under the [General Public License version 2](LICENSE) (GPL v2).
