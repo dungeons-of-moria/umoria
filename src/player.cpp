@@ -21,7 +21,7 @@ int16_t char_col;
 uint16_t player_hp[MAX_PLAYER_LEVEL];
 
 // Class titles for different levels
-char *player_title[MAX_CLASS][MAX_PLAYER_LEVEL] = {
+const char *player_title[MAX_CLASS][MAX_PLAYER_LEVEL] = {
     // Warrior
     {"Rookie",       "Private",      "Soldier",      "Mercenary",
      "Veteran(1st)", "Veteran(2nd)", "Veteran(3rd)", "Warrior(1st)",
@@ -485,7 +485,7 @@ spell_type magic_spell[MAX_CLASS - 1][31] = {
     }
 };
 
-char *spell_names[62] = {
+const char *spell_names[62] = {
     // Mage Spells
     "Magic Missile", "Detect Monsters", "Phase Door", "Light Area",
     "Cure Light Wounds", "Find Hidden Traps/Doors", "Stinking Cloud",

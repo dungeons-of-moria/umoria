@@ -95,7 +95,7 @@ bool (*store_buy[MAX_STORES])(int) = {
 };
 
 // Following are arrays for descriptive pieces
-char *colors[MAX_COLORS] = {
+const char *colors[MAX_COLORS] = {
     // Do not move the first three
     "Icky Green",  "Light Brown",  "Clear",
     "Azure", "Blue", "Blue Speckled", "Black", "Brown", "Brown Speckled", "Bubbling",
@@ -108,27 +108,27 @@ char *colors[MAX_COLORS] = {
     "Tangerine", "Violet", "Vermilion", "White", "Yellow",
 };
 
-char *mushrooms[MAX_MUSH] = {
+const char *mushrooms[MAX_MUSH] = {
     "Blue", "Black", "Black Spotted", "Brown", "Dark Blue", "Dark Green", "Dark Red",
     "Ecru", "Furry", "Green", "Grey", "Light Blue", "Light Green", "Plaid", "Red",
     "Slimy", "Tan", "White", "White Spotted", "Wooden", "Wrinkled", "Yellow",
 };
 
-char *woods[MAX_WOODS] = {
+const char *woods[MAX_WOODS] = {
     "Aspen", "Balsa", "Banyan", "Birch", "Cedar", "Cottonwood", "Cypress", "Dogwood",
     "Elm", "Eucalyptus", "Hemlock", "Hickory", "Ironwood", "Locust", "Mahogany",
     "Maple", "Mulberry", "Oak", "Pine", "Redwood", "Rosewood", "Spruce", "Sycamore",
     "Teak", "Walnut",
 };
 
-char *metals[MAX_METALS] = {
+const char *metals[MAX_METALS] = {
     "Aluminum", "Cast Iron", "Chromium", "Copper", "Gold", "Iron", "Magnesium",
     "Molybdenum", "Nickel", "Rusty", "Silver", "Steel", "Tin", "Titanium", "Tungsten",
     "Zirconium", "Zinc", "Aluminum-Plated", "Copper-Plated", "Gold-Plated",
     "Nickel-Plated", "Silver-Plated", "Steel-Plated", "Tin-Plated", "Zinc-Plated",
 };
 
-char *rocks[MAX_ROCKS] = {
+const char *rocks[MAX_ROCKS] = {
     "Alexandrite", "Amethyst", "Aquamarine", "Azurite", "Beryl", "Bloodstone",
     "Calcite", "Carnelian", "Corundum", "Diamond", "Emerald", "Fluorite", "Garnet",
     "Granite", "Jade", "Jasper", "Lapis Lazuli", "Malachite", "Marble", "Moonstone",
@@ -136,12 +136,12 @@ char *rocks[MAX_ROCKS] = {
     "Tiger Eye", "Topaz", "Turquoise", "Zircon"
 };
 
-char *amulets[MAX_AMULETS] = {
+const char *amulets[MAX_AMULETS] = {
     "Amber", "Driftwood", "Coral", "Agate", "Ivory", "Obsidian",
     "Bone", "Brass", "Bronze", "Pewter", "Tortoise Shell",
 };
 
-char *syllables[MAX_SYLLABLES] = {
+const char *syllables[MAX_SYLLABLES] = {
     "a",    "ab",   "ag",   "aks",  "ala",  "an",  "ankh", "app", "arg",
     "arze", "ash",  "aus",  "ban",  "bar",  "bat", "bek",  "bie", "bin",
     "bit",  "bjor", "blu",  "bot",  "bu",   "byt", "comp", "con", "cos",
