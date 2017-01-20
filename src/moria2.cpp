@@ -31,7 +31,7 @@ void change_trap(int y, int x) {
 
 // Searches for hidden things. -RAK-
 void search(int y, int x, int chance) {
-    struct flags *p_ptr = &py.flags;
+    struct player_type::flags *p_ptr = &py.flags;
 
     if (p_ptr->confused > 0) {
         chance = chance / 10;

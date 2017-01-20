@@ -39,7 +39,7 @@ void cast() {
                 msg_print("You failed to get the spell off!");
             } else {
                 int dir;
-                struct flags *f_ptr;
+                struct player_type::flags *f_ptr;
 
                 // Spells.
                 switch (choice + 1) {
@@ -173,7 +173,7 @@ void cast() {
                 // End of spells.
 
                 if (!free_turn_flag) {
-                    struct misc *p_ptr = &py.misc;
+                    struct player_type::misc *p_ptr = &py.misc;
                     if ((spell_worked & (1L << choice)) == 0) {
                         p_ptr->exp += m_ptr->sexp << 2;
                         spell_worked |= (1L << choice);
@@ -182,7 +182,7 @@ void cast() {
                 }
             }
 
-            struct misc *p_ptr = &py.misc;
+            struct player_type::misc *p_ptr = &py.misc;
             if (!free_turn_flag) {
                 if (m_ptr->smana > p_ptr->cmana) {
                     msg_print("You faint from the effort!");

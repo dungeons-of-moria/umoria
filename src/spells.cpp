@@ -1743,7 +1743,7 @@ int detect_evil() {
 int hp_player(int num) {
     bool res = false;
 
-    struct misc *m_ptr = &py.misc;
+    struct player_type::misc *m_ptr = &py.misc;
 
     if (m_ptr->chp < m_ptr->mhp) {
         m_ptr->chp += num;
@@ -1778,7 +1778,7 @@ int hp_player(int num) {
 int cure_confusion() {
     bool cure = false;
 
-    struct flags *f_ptr = &py.flags;
+    struct player_type::flags *f_ptr = &py.flags;
 
     if (f_ptr->confused > 1) {
         f_ptr->confused = 1;
@@ -1791,7 +1791,7 @@ int cure_confusion() {
 int cure_blindness() {
     bool cure = false;
 
-    struct flags *f_ptr = &py.flags;
+    struct player_type::flags *f_ptr = &py.flags;
 
     if (f_ptr->blind > 1) {
         f_ptr->blind = 1;
@@ -1804,7 +1804,7 @@ int cure_blindness() {
 int cure_poison() {
     bool cure = false;
 
-    struct flags *f_ptr = &py.flags;
+    struct player_type::flags *f_ptr = &py.flags;
 
     if (f_ptr->poisoned > 1) {
         f_ptr->poisoned = 1;
@@ -1817,7 +1817,7 @@ int cure_poison() {
 int remove_fear() {
     bool result = false;
 
-    struct flags *f_ptr = &py.flags;
+    struct player_type::flags *f_ptr = &py.flags;
 
     if (f_ptr->afraid > 1) {
         f_ptr->afraid = 1;
@@ -1898,7 +1898,7 @@ void earthquake() {
 int protect_evil() {
     bool res;
 
-    struct flags *f_ptr = &py.flags;
+    struct player_type::flags *f_ptr = &py.flags;
 
     if (f_ptr->protevil == 0) {
         res = true;
@@ -2065,7 +2065,7 @@ void lose_chr() {
 
 // Lose experience -RAK-
 void lose_exp(int32_t amount) {
-    struct misc *m_ptr = &py.misc;
+    struct player_type::misc *m_ptr = &py.misc;
 
     if (amount > m_ptr->exp) {
         m_ptr->exp = 0;
@@ -2106,7 +2106,7 @@ void lose_exp(int32_t amount) {
 int slow_poison() {
     bool slow = false;
 
-    struct flags *f_ptr = &py.flags;
+    struct player_type::flags *f_ptr = &py.flags;
 
     if (f_ptr->poisoned > 0) {
         f_ptr->poisoned = f_ptr->poisoned / 2;
@@ -2246,7 +2246,7 @@ int remove_curse() {
 int restore_level() {
     bool restore = false;
 
-    struct misc *m_ptr = &py.misc;
+    struct player_type::misc *m_ptr = &py.misc;
 
     if (m_ptr->max_exp > m_ptr->exp) {
         restore = true;

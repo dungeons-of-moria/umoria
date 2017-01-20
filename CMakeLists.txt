@@ -22,48 +22,53 @@ set(SOURCE_FILES_DIR ${PROJECT_SOURCE_DIR}/src)
 include_directories(${SOURCE_FILES_DIR})
 
 set(SOURCE_FILES
-    ${SOURCE_FILES_DIR}/main.c
-    ${SOURCE_FILES_DIR}/misc1.c
-    ${SOURCE_FILES_DIR}/misc2.c
-    ${SOURCE_FILES_DIR}/misc3.c
-    ${SOURCE_FILES_DIR}/misc4.c
-    ${SOURCE_FILES_DIR}/store1.c
-    ${SOURCE_FILES_DIR}/files.c
-    ${SOURCE_FILES_DIR}/io.c
-    ${SOURCE_FILES_DIR}/create.c
-    ${SOURCE_FILES_DIR}/desc.c
-    ${SOURCE_FILES_DIR}/generate.c
-    ${SOURCE_FILES_DIR}/sets.c
-    ${SOURCE_FILES_DIR}/dungeon.c
-    ${SOURCE_FILES_DIR}/creature.c
-    ${SOURCE_FILES_DIR}/death.c
-    ${SOURCE_FILES_DIR}/eat.c
-    ${SOURCE_FILES_DIR}/help.c
-    ${SOURCE_FILES_DIR}/magic.c
-    ${SOURCE_FILES_DIR}/potions.c
-    ${SOURCE_FILES_DIR}/prayer.c
-    ${SOURCE_FILES_DIR}/save.c
-    ${SOURCE_FILES_DIR}/staffs.c
-    ${SOURCE_FILES_DIR}/wands.c
-    ${SOURCE_FILES_DIR}/scrolls.c
-    ${SOURCE_FILES_DIR}/spells.c
-    ${SOURCE_FILES_DIR}/wizard.c
-    ${SOURCE_FILES_DIR}/store2.c
-    ${SOURCE_FILES_DIR}/moria1.c
-    ${SOURCE_FILES_DIR}/moria2.c
-    ${SOURCE_FILES_DIR}/moria3.c
-    ${SOURCE_FILES_DIR}/moria4.c
-    ${SOURCE_FILES_DIR}/monsters.c
-    ${SOURCE_FILES_DIR}/treasure.c
-    ${SOURCE_FILES_DIR}/variable.c
-    ${SOURCE_FILES_DIR}/rnd.c
-    ${SOURCE_FILES_DIR}/recall.c
-    ${SOURCE_FILES_DIR}/player.c
-    ${SOURCE_FILES_DIR}/tables.c
+    ${SOURCE_FILES_DIR}/main.cpp
+    ${SOURCE_FILES_DIR}/misc1.cpp
+    ${SOURCE_FILES_DIR}/misc2.cpp
+    ${SOURCE_FILES_DIR}/misc3.cpp
+    ${SOURCE_FILES_DIR}/misc4.cpp
+    ${SOURCE_FILES_DIR}/store1.cpp
+    ${SOURCE_FILES_DIR}/files.cpp
+    ${SOURCE_FILES_DIR}/io.cpp
+    ${SOURCE_FILES_DIR}/create.cpp
+    ${SOURCE_FILES_DIR}/desc.cpp
+    ${SOURCE_FILES_DIR}/generate.cpp
+    ${SOURCE_FILES_DIR}/sets.cpp
+    ${SOURCE_FILES_DIR}/dungeon.cpp
+    ${SOURCE_FILES_DIR}/creature.cpp
+    ${SOURCE_FILES_DIR}/death.cpp
+    ${SOURCE_FILES_DIR}/eat.cpp
+    ${SOURCE_FILES_DIR}/help.cpp
+    ${SOURCE_FILES_DIR}/magic.cpp
+    ${SOURCE_FILES_DIR}/potions.cpp
+    ${SOURCE_FILES_DIR}/prayer.cpp
+    ${SOURCE_FILES_DIR}/save.cpp
+    ${SOURCE_FILES_DIR}/staffs.cpp
+    ${SOURCE_FILES_DIR}/wands.cpp
+    ${SOURCE_FILES_DIR}/scrolls.cpp
+    ${SOURCE_FILES_DIR}/spells.cpp
+    ${SOURCE_FILES_DIR}/wizard.cpp
+    ${SOURCE_FILES_DIR}/store2.cpp
+    ${SOURCE_FILES_DIR}/moria1.cpp
+    ${SOURCE_FILES_DIR}/moria2.cpp
+    ${SOURCE_FILES_DIR}/moria3.cpp
+    ${SOURCE_FILES_DIR}/moria4.cpp
+    ${SOURCE_FILES_DIR}/monsters.cpp
+    ${SOURCE_FILES_DIR}/treasure.cpp
+    ${SOURCE_FILES_DIR}/variable.cpp
+    ${SOURCE_FILES_DIR}/rnd.cpp
+    ${SOURCE_FILES_DIR}/recall.cpp
+    ${SOURCE_FILES_DIR}/player.cpp
+    ${SOURCE_FILES_DIR}/tables.cpp
 )
 add_executable(umoria ${SOURCE_FILES})
 
-set(CMAKE_C_FLAGS  "${CMAKE_C_FLAGS} -g -Wall -Werror -Wshadow -std=gnu11")
+set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD_REQUIRED on)
+
+# Disable many C++ warnings until they are fixed.
+#set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -Wall -Werror -Wshadow -std=c++14")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -Wall -Wno-write-strings -Wno-char-subscripts -std=c++14")
 
 # Link Curses
 find_package(Curses REQUIRED)

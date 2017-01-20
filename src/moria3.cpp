@@ -15,7 +15,7 @@ static void hit_trap(int y, int x) {
     change_trap(y, x);
 
     cave_type *c_ptr = &cave[y][x];
-    struct misc *p_ptr = &py.misc;
+    struct player_type::misc *p_ptr = &py.misc;
     inven_type *t_ptr = &t_list[c_ptr->tptr];
 
     int num;
@@ -540,7 +540,7 @@ int mon_take_hit(int monptr, int dam) {
         }
 
         creature_type *c_ptr = &c_list[m_ptr->mptr];
-        struct misc *p_ptr = &py.misc;
+        struct player_type::misc *p_ptr = &py.misc;
 
         int32_t new_exp = ((int32_t)c_ptr->mexp * c_ptr->level) / p_ptr->lev;
         int32_t new_exp_frac = ((((int32_t)c_ptr->mexp * c_ptr->level) % p_ptr->lev) *
@@ -604,7 +604,7 @@ void py_attack(int y, int x) {
         blows = 1;
     }
 
-    struct misc *p_ptr = &py.misc;
+    struct player_type::misc *p_ptr = &py.misc;
     tot_tohit += p_ptr->ptohit;
 
     // if creature not lit, make it more difficult to hit
@@ -898,7 +898,7 @@ void openobject() {
 
                 // It's locked.
                 if (t_ptr->p1 > 0) {
-                    struct misc *p_ptr = &py.misc;
+                    struct player_type::misc *p_ptr = &py.misc;
                     int i = p_ptr->disarm + 2 * todis_adj() + stat_adj(A_INT) + (class_level_adj[p_ptr->pclass][CLA_DISARM] * p_ptr->lev / 3);
 
                     if (py.flags.confused > 0) {
@@ -923,7 +923,7 @@ void openobject() {
             } else if (t_list[c_ptr->tptr].tval == TV_CHEST) {
                 // Open a closed chest.
 
-                struct misc *p_ptr = &py.misc;
+                struct player_type::misc *p_ptr = &py.misc;
                 int i = p_ptr->disarm + 2 * todis_adj() + stat_adj(A_INT) + (class_level_adj[p_ptr->pclass][CLA_DISARM] * p_ptr->lev / 3);
 
                 inven_type *t_ptr = &t_list[c_ptr->tptr];

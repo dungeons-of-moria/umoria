@@ -34,8 +34,8 @@ void quaff() {
                     j += 32;
                 }
 
-                struct flags *f_ptr;
-                struct misc *m_ptr;
+                struct player_type::flags *f_ptr;
+                struct player_type::misc *m_ptr;
 
                 // Potions
                 switch (j) {
@@ -313,7 +313,7 @@ void quaff() {
 
         if (ident) {
             if (!known1_p(i_ptr)) {
-                struct misc *m_ptr = &py.misc;
+                struct player_type::misc *m_ptr = &py.misc;
                 // round half-way case up
                 m_ptr->exp += (i_ptr->level + (m_ptr->lev >> 1)) / m_ptr->lev;
                 prt_experience();

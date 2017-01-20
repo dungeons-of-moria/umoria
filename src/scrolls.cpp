@@ -459,7 +459,7 @@ void read_scroll() {
 
         if (ident) {
             if (!known1_p(i_ptr)) {
-                struct misc *m_ptr = &py.misc;
+                struct player_type::misc *m_ptr = &py.misc;
 
                 // round half-way case up
                 m_ptr->exp += (i_ptr->level + (m_ptr->lev >> 1)) / m_ptr->lev;

@@ -32,7 +32,7 @@ void aim() {
             }
             bool ident = false;
 
-            struct misc *m_ptr = &py.misc;
+            struct player_type::misc *m_ptr = &py.misc;
 
             int chance = m_ptr->save + stat_adj(A_INT) - (int)i_ptr->level + (class_level_adj[m_ptr->pclass][CLA_DEVICE] * m_ptr->lev / 3);
 

@@ -324,7 +324,7 @@ static void get_class() {
     py.misc.pclass = 0;
 
     int min_value, max_value;
-    struct misc *m_ptr;
+    struct player_type::misc *m_ptr;
     player_type *p_ptr;
     class_type *c_ptr;
     char s;

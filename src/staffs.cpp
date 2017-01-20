@@ -25,7 +25,7 @@ void use() {
 
         inven_type *i_ptr = &inventory[item_val];
 
-        struct misc *m_ptr = &py.misc;
+        struct player_type::misc *m_ptr = &py.misc;
 
         int chance = m_ptr->save + stat_adj(A_INT) - (int)i_ptr->level - 5 + (class_level_adj[m_ptr->pclass][CLA_DEVICE] * m_ptr->lev / 3);
 

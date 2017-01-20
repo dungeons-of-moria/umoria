@@ -111,7 +111,7 @@ void change_character() {
         return;
     }
 
-    struct misc *m_ptr = &py.misc;
+    struct player_type::misc *m_ptr = &py.misc;
 
     prt("(1 - 32767) Hit points = ", 0, 0);
     if (get_string(tmp_str, 0, 25, 5)) {

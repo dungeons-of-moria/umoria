@@ -22,8 +22,8 @@ void eat() {
     } else if (get_item(&item_val, "Eat what?", j, k, CNIL, CNIL)) {
         free_turn_flag = false;
 
-        struct flags *f_ptr;
-        struct misc *m_ptr;
+        struct player_type::flags *f_ptr;
+        struct player_type::misc *m_ptr;
 
         inven_type *i_ptr = &inventory[item_val];
         bool ident = false;

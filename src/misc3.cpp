@@ -798,7 +798,7 @@ int todam_adj() {
 
 // Prints character-screen info -RAK-
 void prt_stat_block() {
-    struct misc *m_ptr = &py.misc;
+    struct player_type::misc *m_ptr = &py.misc;
     prt_field(race[py.misc.prace].trace, 2, STAT_COLUMN);
     prt_field(classes[py.misc.pclass].title, 3, STAT_COLUMN);
     prt_field(title_string(), 4, STAT_COLUMN);
@@ -856,7 +856,7 @@ void draw_cave() {
 
 // Prints the following information on the screen. -JWT-
 void put_character() {
-    struct misc *m_ptr = &py.misc;
+    struct player_type::misc *m_ptr = &py.misc;
 
     clear_screen();
 
@@ -875,7 +875,7 @@ void put_character() {
 
 // Prints the following information on the screen. -JWT-
 void put_stats() {
-    struct misc *m_ptr = &py.misc;
+    struct player_type::misc *m_ptr = &py.misc;
 
     for (int i = 0; i < 6; i++) {
         vtype buf;
@@ -924,7 +924,7 @@ char *likert(int x, int y) {
 
 // Prints age, height, weight, and SC -JWT-
 void put_misc1() {
-    struct misc *m_ptr = &py.misc;
+    struct player_type::misc *m_ptr = &py.misc;
 
     prt_num("Age          ", (int)m_ptr->age, 2, 38);
     prt_num("Height       ", (int)m_ptr->ht, 3, 38);
@@ -934,7 +934,7 @@ void put_misc1() {
 
 // Prints the following information on the screen. -JWT-
 void put_misc2() {
-    struct misc *m_ptr = &py.misc;
+    struct player_type::misc *m_ptr = &py.misc;
 
     prt_7lnum("Level      ", (int32_t)m_ptr->lev, 9, 28);
     prt_7lnum("Experience ", m_ptr->exp, 10, 28);
@@ -957,7 +957,7 @@ void put_misc2() {
 void put_misc3() {
     clear_from(14);
 
-    struct misc *p_ptr = &py.misc;
+    struct player_type::misc *p_ptr = &py.misc;
     int xbth = p_ptr->bth + p_ptr->ptohit * BTH_PLUS_ADJ + (class_level_adj[p_ptr->pclass][CLA_BTH] * p_ptr->lev);
     int xbthb = p_ptr->bthb + p_ptr->ptohit * BTH_PLUS_ADJ + (class_level_adj[p_ptr->pclass][CLA_BTHB] * p_ptr->lev);
 
@@ -1436,7 +1436,7 @@ int get_spell(int *spell, int num, int *sn, int *sc, char *prompt, int first_spe
 // calculate number of spells player should have, and
 // learn forget spells until that number is met -JEW-
 void calc_spells(int stat) {
-    struct misc *p_ptr = &py.misc;
+    struct player_type::misc *p_ptr = &py.misc;
     spell_type *msp_ptr = &magic_spell[p_ptr->pclass - 1][0];
 
     char *p;
@@ -1601,7 +1601,7 @@ void gain_spells() {
     int new_spells = py.flags.new_spells;
     int diff_spells = 0;
 
-    struct misc *p_ptr = &py.misc;
+    struct player_type::misc *p_ptr = &py.misc;
     spell_type *msp_ptr = &magic_spell[p_ptr->pclass - 1][0];
 
     int stat, offset;
@@ -1732,7 +1732,7 @@ void gain_spells() {
 
 // Gain some mana if you know at least one spell -RAK-
 void calc_mana(int stat) {
-    struct misc *p_ptr = &py.misc;
+    struct player_type::misc *p_ptr = &py.misc;
 
     if (spell_learned != 0) {
         int new_mana = 0;
@@ -1795,7 +1795,7 @@ void calc_mana(int stat) {
 
 // Increases hit points and level -RAK-
 static void gain_level() {
-    struct misc *p_ptr = &py.misc;
+    struct player_type::misc *p_ptr = &py.misc;
     p_ptr->lev++;
 
     vtype out_val;
@@ -1826,7 +1826,7 @@ static void gain_level() {
 
 // Prints experience -RAK-
 void prt_experience() {
-    struct misc *p_ptr = &py.misc;
+    struct player_type::misc *p_ptr = &py.misc;
 
     if (p_ptr->exp > MAX_EXP) {
         p_ptr->exp = MAX_EXP;
@@ -1845,7 +1845,7 @@ void prt_experience() {
 
 // Calculate the players hit points
 void calc_hitpoints() {
-    struct misc *p_ptr = &py.misc;
+    struct player_type::misc *p_ptr = &py.misc;
     int hitpoints = player_hp[p_ptr->lev - 1] + (con_adj() * p_ptr->lev);
 
     // always give at least one point per level + 1

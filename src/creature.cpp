@@ -271,8 +271,8 @@ static void make_attack(int monptr) {
     int i, j, damage;
     int attype, adesc, adice, asides;
     int32_t gold;
-    struct misc *p_ptr;
-    struct flags *f_ptr;
+    struct player_type::misc *p_ptr;
+    struct player_type::flags *f_ptr;
     inven_type *i_ptr;
     vtype tmp_str;
 

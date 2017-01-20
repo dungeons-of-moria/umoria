@@ -41,7 +41,7 @@ void pray() {
             if (randint(100) < chance) {
                 msg_print("You lost your concentration!");
             } else {
-                struct flags *f_ptr;
+                struct player_type::flags *f_ptr;
 
                 // Prayers.
                 switch (choice + 1) {
@@ -168,7 +168,7 @@ void pray() {
                 }
                 // End of prayers.
                 if (!free_turn_flag) {
-                    struct misc *m_ptr = &py.misc;
+                    struct player_type::misc *m_ptr = &py.misc;
                     if ((spell_worked & (1L << choice)) == 0) {
                         m_ptr->exp += s_ptr->sexp << 2;
                         prt_experience();
@@ -177,7 +177,7 @@ void pray() {
                 }
             }
 
-            struct misc *m_ptr = &py.misc;
+            struct player_type::misc *m_ptr = &py.misc;
 
             if (!free_turn_flag) {
                 if (s_ptr->smana > m_ptr->cmana) {

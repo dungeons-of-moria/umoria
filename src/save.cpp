@@ -119,7 +119,7 @@ static bool sv_write() {
 
     wr_long(l);
 
-    struct misc *m_ptr = &py.misc;
+    struct player_type::misc *m_ptr = &py.misc;
     wr_string(m_ptr->name);
     wr_byte(m_ptr->male);
     wr_long((uint32_t)m_ptr->au);
@@ -161,13 +161,13 @@ static bool sv_write() {
         wr_string(m_ptr->history[i]);
     }
 
-    struct stats *s_ptr = &py.stats;
+    struct player_type::stats *s_ptr = &py.stats;
     wr_bytes(s_ptr->max_stat, 6);
     wr_bytes(s_ptr->cur_stat, 6);
     wr_shorts((uint16_t *)s_ptr->mod_stat, 6);
     wr_bytes(s_ptr->use_stat, 6);
 
-    struct flags *f_ptr = &py.flags;
+    struct player_type::flags *f_ptr = &py.flags;
     wr_long(f_ptr->status);
     wr_short((uint16_t)f_ptr->rest);
     wr_short((uint16_t)f_ptr->blind);
@@ -636,7 +636,7 @@ bool get_char(bool *generate) {
         }
 
         if ((l & 0x80000000L) == 0) {
-            struct misc *m_ptr = &py.misc;
+            struct player_type::misc *m_ptr = &py.misc;
 
             rd_string(m_ptr->name);
             rd_byte(&m_ptr->male);
@@ -679,13 +679,13 @@ bool get_char(bool *generate) {
                 rd_string(m_ptr->history[i]);
             }
 
-            struct stats *s_ptr = &py.stats;
+            struct player_type::stats *s_ptr = &py.stats;
             rd_bytes(s_ptr->max_stat, 6);
             rd_bytes(s_ptr->cur_stat, 6);
             rd_shorts((uint16_t *)s_ptr->mod_stat, 6);
             rd_bytes(s_ptr->use_stat, 6);
 
-            struct flags *f_ptr = &py.flags;
+            struct player_type::flags *f_ptr = &py.flags;
             rd_long(&f_ptr->status);
             rd_short((uint16_t *)&f_ptr->rest);
             rd_short((uint16_t *)&f_ptr->blind);

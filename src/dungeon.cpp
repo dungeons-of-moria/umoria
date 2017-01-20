@@ -34,8 +34,8 @@ void dungeon() {
     // Note: There is a lot of preliminary magic going on here at first
 
     // init pointers.
-    struct flags *f_ptr = &py.flags;
-    struct misc *p_ptr = &py.misc;
+    struct player_type::flags *f_ptr = &py.flags;
+    struct player_type::misc *p_ptr = &py.misc;
 
     // Check light status for setup
     inven_type *i_ptr = &inventory[INVEN_LIGHT];
@@ -1036,7 +1036,7 @@ static void do_command(char com_val) {
     bool do_pickup;
     int y, x, i, j;
     vtype out_val, tmp_str;
-    struct flags *f_ptr;
+    struct player_type::flags *f_ptr;
 
     // hack for move without pickup.  Map '-' to a movement command.
     if (com_val == '-') {
@@ -1661,7 +1661,7 @@ static bool valid_countcommand(char c) {
 
 // Regenerate hit points -RAK-
 static void regenhp(int percent) {
-    struct misc *p_ptr = &py.misc;
+    struct player_type::misc *p_ptr = &py.misc;
     int old_chp = p_ptr->chp;
     int32_t new_chp = ((int32_t)p_ptr->mhp) * percent + PLAYER_REGEN_HPBASE;
 
@@ -1695,7 +1695,7 @@ static void regenhp(int percent) {
 
 // Regenerate mana points -RAK-
 static void regenmana(int percent) {
-    struct misc *p_ptr = &py.misc;
+    struct player_type::misc *p_ptr = &py.misc;
     int old_cmana = p_ptr->cmana;
     int32_t new_mana = ((int32_t)p_ptr->mana) * percent + PLAYER_REGEN_MNBASE;
 

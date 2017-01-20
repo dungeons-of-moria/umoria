@@ -61,8 +61,8 @@ void py_bonuses(inven_type *t_ptr, int factor) {
 
 // Recalculate the effect of all the stuff we use. -CJS-
 void calc_bonuses() {
-    struct flags *p_ptr = &py.flags;
-    struct misc *m_ptr = &py.misc;
+    struct player_type::flags *p_ptr = &py.flags;
+    struct player_type::misc *m_ptr = &py.misc;
 
     if (p_ptr->slow_digest) {
         p_ptr->food_digested++;

@@ -8,8 +8,10 @@
 // clang-format off
 
 #ifdef _WIN32
-    // this is defined in Windows and also in ncurses
-    #undef KEY_EVENT
+  // this is defined in Windows and also in ncurses
+  #undef KEY_EVENT
+  #include <ncursesw/ncurses.h>
+#else
+  #include <ncurses.h>
 #endif
 
-#include <ncurses.h>

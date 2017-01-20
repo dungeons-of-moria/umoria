@@ -390,7 +390,7 @@ static void kingly() {
     dun_level = 0;
     (void)strcpy(died_from, "Ripe Old Age");
 
-    struct misc *p_ptr = &py.misc;
+    struct player_type::misc *p_ptr = &py.misc;
 
     (void)restore_level();
 

@@ -225,7 +225,7 @@ bool file_character(char *filename1) {
         (void)fprintf(file1, "    Cur Mana%8s %6d\n", colon, py.misc.cmana);
         (void)fprintf(file1, "%28sGold%8s %7d\n\n", blank, colon, py.misc.au);
 
-        struct misc *p_ptr = &py.misc;
+        struct player_type::misc *p_ptr = &py.misc;
 
         int xbth = p_ptr->bth + p_ptr->ptohit * BTH_PLUS_ADJ + (class_level_adj[p_ptr->pclass][CLA_BTH] * p_ptr->lev);
         int xbthb = p_ptr->bthb + p_ptr->ptohit * BTH_PLUS_ADJ + (class_level_adj[p_ptr->pclass][CLA_BTHB] * p_ptr->lev);

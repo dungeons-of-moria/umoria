@@ -441,7 +441,7 @@ bool los(int fromY, int fromX, int toY, int toX) {
 // Returns symbol for given row, column -RAK-
 uint8_t loc_symbol(int y, int x) {
     cave_type *cave_ptr = &cave[y][x];
-    struct flags *f_ptr = &py.flags;
+    struct player_type::flags *f_ptr = &py.flags;
 
     if ((cave_ptr->cptr == 1) && (!find_flag || find_prself)) {
         return '@';
@@ -537,7 +537,7 @@ bool compact_monsters() {
 
 // Add to the players food time -RAK-
 void add_food(int num) {
-    struct flags *p_ptr = &py.flags;
+    struct player_type::flags *p_ptr = &py.flags;
     if (p_ptr->food < 0) {
         p_ptr->food = 0;
     }

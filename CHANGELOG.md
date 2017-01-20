@@ -2,9 +2,7 @@
 
 ## HEAD
 
-- C++ compiler compatibility updates. Many small fixes to be more compatible
-  with the C++ compiler. For example, renaming arrays/struct fields/variables
-  (e.g. `class`) and adding types to functions passed as parameters.
+- Compiles as a C++ application only.
 - Improved CLI: adds help and version information.
 - Now uses CMake for Mac/Linux build - Windows/MinGW still uses a normal Makefile.
 - Updates to manual, FAQ, and historical/errors.
