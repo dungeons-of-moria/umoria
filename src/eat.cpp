@@ -131,7 +131,7 @@ void eat() {
                 break;
             case 20:
                 if (res_stat(A_DEX)) {
-                    msg_print("You feel more dextrous.");
+                    msg_print("You feel more dexterous.");
                     ident = true;
                 }
                 break;

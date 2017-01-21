@@ -365,7 +365,7 @@ bool noneedtobargain(int store_num, int32_t minprice) {
     return ((bargain_record > 0) && ((int32_t)bargain_record * (int32_t)bargain_record > minprice / 50));
 }
 
-// update the bargin info -DJB-
+// update the bargain info -DJB-
 void updatebargain(int store_num, int32_t price, int32_t minprice) {
     store_type *s_ptr = &store[store_num];
 

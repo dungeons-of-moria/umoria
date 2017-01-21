@@ -1127,7 +1127,7 @@ static void cave_gen() {
     place_stairs(2, randint(2) + 2, 3);
     place_stairs(1, randint(2), 3);
 
-    // Set up the character co-ords, used by alloc_monster, place_win_monster
+    // Set up the character coords, used by alloc_monster, place_win_monster
     new_spot(&char_row, &char_col);
     alloc_monster((randint(8) + MIN_MALLOC_LEVEL + alloc_level), 0, true);
     alloc_object(set_corr, 3, randint(alloc_level));
@@ -1222,7 +1222,7 @@ static void town_gen() {
     place_stairs(2, 1, 0);
     reset_seed();
 
-    // Set up the character co-ords, used by alloc_monster below
+    // Set up the character coords, used by alloc_monster below
     new_spot(&char_row, &char_col);
     if (0x1 & (turn / 5000)) {
         // Night time

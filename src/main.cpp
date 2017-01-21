@@ -27,7 +27,7 @@ int main(int argc, char *argv[]) {
     // default command set defined in config.h file
     rogue_like_commands = ROGUE_LIKE;
 
-    // call this routine to grab a file pointer to the highscore file
+    // call this routine to grab a file pointer to the high score file
     // and prepare things to relinquish setuid privileges
     init_scorefile();
 
@@ -49,7 +49,7 @@ int main(int argc, char *argv[]) {
             break;
         case 'o':
             // rogue_like_commands may be set in get_char(),
-            // so delay this until after read savefile if any.
+            // so delay this until after read save file if any.
             force_rogue_like = true;
             force_keys_to = false;
             break;
@@ -111,7 +111,7 @@ int main(int argc, char *argv[]) {
     store_init();
 
     // If -n is not passed, the calling routine will know
-    // savefile name, hence, this code is not necessary.
+    // save file name, hence, this code is not necessary.
 
     // Auto-restart of saved file
     char *p;
@@ -241,7 +241,7 @@ static void char_inven_init() {
         (void)inven_carry(&inven_init);
     }
 
-    // wierd place for it, but why not?
+    // weird place for it, but why not?
     for (i = 0; i < 32; i++) {
         spell_order[i] = 99;
     }

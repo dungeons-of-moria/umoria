@@ -60,10 +60,10 @@
 // Store constants
 #define MAX_OWNERS               18   // Number of owners to choose from
 #define MAX_STORES                6   // Number of different stores
-#define STORE_INVEN_MAX          24   // Max number of discrete objs in inven
+#define STORE_INVEN_MAX          24   // Max number of discrete objects in inventory
 #define STORE_CHOICES            26   // NUMBER of items to choose stock from
-#define STORE_MAX_INVEN          18   // Max diff objs in stock for auto buy
-#define STORE_MIN_INVEN          10   // Min diff objs in stock for auto sell
+#define STORE_MAX_INVEN          18   // Max diff objects in stock for auto buy
+#define STORE_MIN_INVEN          10   // Min diff objects in stock for auto sell
 #define STORE_TURN_AROUND         9   // Amount of buying and selling normally
 #define COST_ADJ                100   // Adjust prices for buying and selling
 
@@ -127,10 +127,10 @@
 #define MAX_MALLOC_CHANCE       160   // 1/x chance of new monster each round
 #define MAX_MONS_LEVEL           40   // Maximum level of creatures
 #define MAX_SIGHT                20   // Maximum dis a creature can be seen
-#define MAX_SPELL_DIS            20   // Maximum dis creat. spell can be cast
+#define MAX_SPELL_DIS            20   // Maximum dis creature spell can be cast
 #define MAX_MON_MULT             75   // Maximum reproductions on a level
 #define MON_MULT_ADJ              7   // High value slows multiplication
-#define MON_NASTY                50   // 1/x chance of high level creat
+#define MON_NASTY                50   // 1/x chance of high level creature
 #define MIN_MALLOC_LEVEL         14   // Minimum number of monsters/level
 #define MIN_MALLOC_TD             4   // Number of people on town level (day)
 #define MIN_MALLOC_TN             8   // Number of people on town level (night)
@@ -264,7 +264,7 @@
 #define SPELL_OFFSET         0
 #define PRAYER_OFFSET       31
 
-// definitions for the psuedo-normal distribution generation
+// definitions for the pseudo-normal distribution generation
 #define NORMAL_TABLE_SIZE  256
 #define NORMAL_TABLE_SD     64  // the standard deviation for the table
 
@@ -596,5 +596,5 @@
 #define GF_FIRE                5
 #define GF_HOLY_ORB            6
 
-// Number of entries allowed in the scorefile.
+// Number of entries allowed in the score file.
 #define SCOREFILE_SIZE      1000

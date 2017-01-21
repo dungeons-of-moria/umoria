@@ -303,7 +303,7 @@ void disarm_trap() {
   Globally accessed variables: gl_nseen counts the number of places where
   something is seen. gl_rock indicates a look for rock or objects.
 
-  The others map co-ords in the ray frame to dungeon co-ords.
+  The others map coords in the ray frame to dungeon coords.
 
   dungeon y = char_row   + gl_fyx * (ray x)  + gl_fyy * (ray y)
   dungeon x = char_col   + gl_fxx * (ray x)  + gl_fxy * (ray y)
@@ -971,7 +971,7 @@ static void py_bash(int y, int x) {
 //
 // Creatures can also open doors. A creature with open door ability will (if not
 // in the line of sight) move though a closed or secret door with no changes. If
-// in the line of sight, closed door are openned, & secret door revealed. Whether
+// in the line of sight, closed door are opened, & secret door revealed. Whether
 // in the line of sight or not, such a creature may unlock or unstick a door.
 //
 // A creature with no such ability will attempt to bash a non-secret door.

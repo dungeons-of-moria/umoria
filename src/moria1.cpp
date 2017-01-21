@@ -1583,7 +1583,7 @@ static void sub3_move_light(int y1, int x1, int y2, int x2) {
 }
 
 // Package for moving the character's light about the screen
-// Four cases : Normal, Finding, Blind, and Nolight -RAK-
+// Four cases : Normal, Finding, Blind, and No light -RAK-
 void move_light(int y1, int x1, int y2, int x2) {
     if (py.flags.blind > 0 || !player_light) {
         sub3_move_light(y1, x1, y2, x2);

@@ -113,7 +113,7 @@ static void get_moves(int monptr, int *mm) {
         ax = -x;
     }
 
-    // this has the advantage of preventing the diamond maneuvre, also faster
+    // this has the advantage of preventing the diamond maneuver, also faster
     if (ay > (ax << 1)) {
         move_val += 2;
     } else if (ax > (ay << 1)) {
@@ -1422,7 +1422,7 @@ static void mon_move(int monptr, uint32_t *rcmove) {
 
         // Note direction of for loops matches direction of keypad from 1 to 9
         // Do not allow attack against the player.
-        // Must cast fy-1 to signed int, so that a nagative value
+        // Must cast fy-1 to signed int, so that a negative value
         // of i will fail the comparison.
         for (i = m_ptr->fy + 1; i >= (m_ptr->fy - 1); i--) {
             for (int j = m_ptr->fx - 1; j <= m_ptr->fx + 1; j++) {

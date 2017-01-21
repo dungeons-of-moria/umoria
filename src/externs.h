@@ -55,7 +55,7 @@ extern bool msg_flag;               // Set with first msg
 extern vtype old_msg[MAX_SAVE_MSG]; // Last messages -CJS-
 extern int16_t last_msg;            // Where in the array is the last
 extern bool death;                  // True if died
-extern int32_t turn;                // Cur trun of game
+extern int32_t turn;                // Current turn of game
 extern bool wizard;                 // Wizard flag
 extern bool to_be_wizard;
 extern bool panic_save; // this is true if playing from a panic save
@@ -592,7 +592,7 @@ void enter_store(int);
 
 // tables.c
 
-// treasur.c
+// treasure.c
 
 // variable.c
 

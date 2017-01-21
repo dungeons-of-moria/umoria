@@ -300,7 +300,7 @@ static void carry(int y, int x, bool pickup) {
             }
         }
     } else if (i == TV_INVIS_TRAP || i == TV_VIS_TRAP || i == TV_STORE_DOOR) {
-        // OPPS!
+        // OOPS!
 
         hit_trap(y, x);
     }
@@ -714,7 +714,7 @@ void move_char(int dir, bool do_pickup) {
             (!m_list[c_ptr->cptr].ml && c_ptr->fval >= MIN_CLOSED_SPACE)) {
             // Open floor spot
             if (c_ptr->fval <= MAX_OPEN_SPACE) {
-                // Make final assignments of char co-ords
+                // Make final assignments of char coords
                 int old_row = char_row;
                 int old_col = char_col;
                 char_row = y;

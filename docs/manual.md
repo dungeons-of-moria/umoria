@@ -50,21 +50,21 @@ other roguelikes), and will require a dedicated player to win.
 By default, *moria* will save and restore games from a file called
 moria.save in the home directory. If the environment variable `MORIA_SAV`
 is defined, then *moria* will use that file name instead of the default.
-If `MORIA_SAV` is not a complete path name, then the savefile will be
-created or restored from the current directory. The savefile can also be
+If `MORIA_SAV` is not a complete path name, then the save file will be
+created or restored from the current directory. The save file can also be
 explicitly specified on the command line.
 
 When the `-n` option is used, *moria* will create a new game, ignoring any
-savefile which may already exist. This works best when a savefile name
+save file which may already exist. This works best when a save file name
 is specified on the command line, as this will prevent *moria* from
-trying to overwrite the default savefile (if it exists) when saving a
+trying to overwrite the default save file (if it exists) when saving a
 game.
 
 Movement in various directions is accomplished by pressing the numeric keypad
 keys. When `-r` is specified, movement is accomplished in the same way as the
 original _Rogue_ game (`hjkl`). When `-o` is specified, it forces the keypad
 based command set. These options will override defaults stored in the
-savefile. If these options are given multiple times, only the last one will
+save file. If these options are given multiple times, only the last one will
 take effect.
 
 When `-s` is specified, *moria* displays all of the scores in the score
@@ -309,8 +309,8 @@ being a warrior, mage, or rogue.
 
 #### `Gnome`
 
-Gnomes are smaller than dwarfs, but larger than halflings. They,
-like the halflings, live in the earth in burrow-like homes. Gnomes
+Gnomes are smaller than dwarfs, but larger than Halflings. They,
+like the Halflings, live in the earth in burrow-like homes. Gnomes
 are practical jokers, so if they can kill something in a humorous
 way, so much the better. Gnomes make excellent mages, and have very
 good saving throws. They are good at searching, disarming,
@@ -330,12 +330,12 @@ spells which are cast on them. Dwarves also have good infravision
 because they live underground. They do have one big drawback though.
 Dwarves are loudmouthed and proud, singing in loud voices, arguing
 with themselves for no good reason, screaming out challenges at
-imagined foes. In other words, dwarves have a miserable stealth.
+imagined foes. In other words, Dwarves have a miserable stealth.
 
 #### `Half-Orc`
 
 Half-Orcs make excellent warriors, and decent priests, but are
-terrible at magic. They are as bad as dwarves at stealth, and
+terrible at magic. They are as bad as Dwarves at stealth, and
 horrible at searching, disarming, and perception. Half-Orcs are,
 let’s face it, ugly. They tend to pay more for goods in town.
 Half-Orcs do make good priests and rogues, for the simple reason
@@ -675,7 +675,7 @@ It can also be seen that this mage has some spells to learn. The word
 
 The character’s current levels of strength, intelligence, wisdom,
 dexterity, constitution and charisma can also be seen. The character
-doesn’t have 18 of 78 intelligence, they have 18 78/100 intelligence,
+doesn't have 18 of 78 intelligence, they have 18 78/100 intelligence,
 which is more than just 18.
 
 Finally, the character’s armor class (`AC`) is currently at 55, and has a
@@ -834,7 +834,7 @@ more completely in the run command description below.
 Some commands can be executed a fixed number of times by preceding them
 with a count. Counted commands will execute until the count expires, or
 until any key is pressed, or until something significant happens, such
-as being attacked. Thus, a counted command doesn’t work to attack
+as being attacked. Thus, a counted command doesn't work to attack
 another creature. While the command is being repeated, the number of
 times left to be repeated will flash by on the command line at the
 bottom of the screen.
@@ -1030,7 +1030,7 @@ There are four kinds of rock:
 Permanent Rock is exactly that, permanent. Granite is very hard,
 therefore hard to dig through, and contains no valuable metals.
 Magma and Quartz veins are softer and sometimes bear valuable metals
-and gems, shown as a `$` or a `*` symbol. When the character can’t
+and gems, shown as a `$` or a `*` symbol. When the character can't
 move over these symbols, it means they are embedded in the rock, and
 the tunnel command must be used to dig them out. There is a game
 option which causes magma and quartz to be displayed differently
@@ -1047,7 +1047,7 @@ Tunneling can have a count.
 #### `V - View scoreboard.`
 
 This command will display the contents of the score board on the
-screen. On a multiuser system, pressing `V` the first time will show
+screen. On a multi-user system, pressing `V` the first time will show
 only those scores from the score board that belong to the current
 user, and pressing `V` again will show all users’ scores.
 
@@ -1145,7 +1145,7 @@ easy to jam a door so much as to make it impossible for the
 character to bash it down, so spike doors wisely. The bigger a
 creature is, the easier it can bash a door down. Therefore twenty or
 more spikes might be necessary to slow down a dragon, where one
-spike would slow down a kobold. This command can be counted.
+spike would slow down a Kobold. This command can be counted.
 
 
 #### `l <Dir> (x <Dir>) - Look in a direction.`
@@ -1348,7 +1348,7 @@ available options are:
     command.
 10. Beep for invalid character. This is on by default. When this
     option is on, the program will beep for most invalid characters,
-    such as trying to choose a spell that hasn’t been learned yet.
+    such as trying to choose a spell that hasn't been learned yet.
     When off, there are no such beeps.
 11. Display rest/repeat counts. This is on by default. When on, the
     program will progressively display the remaining turns left
@@ -1362,7 +1362,7 @@ available options are:
     all prices displayed in the stores will be the actual prices you
     have to pay.
 
-The setting of all these options persist in the savefile, even after
+The setting of all these options persist in the save file, even after
 the character dies.
 
 
@@ -1387,7 +1387,7 @@ the character is nonrecoverable.
 To save the game so that it can be restarted later, use the
 Control-X command. Save files will also be generated if the game
 crashes due to a system error. When the character dies, a reduced
-savefile is produced containing only the monster memory, and the
+save file is produced containing only the monster memory, and the
 option settings.
 
 
@@ -1550,7 +1550,7 @@ work, but were excluded to keep the options simple.
 Stores do not always have everything in stock. As the game progresses,
 they may get new items, so check from time to time. Also, if you sell
 them an item, it may get sold to a customer while you are adventuring,
-so don’t always expect to be able to get back everything you have sold.
+so don't always expect to be able to get back everything you have sold.
 
 Store owners will not buy harmful or useless items. If an object is
 unidentified, they will pay some base price for it. Once they have
@@ -1685,12 +1685,12 @@ enough attacks, recalling the monster memory may also provide
 information not otherwise available, such as a armor class or hit dice.
 These are not explained, but may be useful to give the relative danger
 of each creature. This memory can be passed on to a new character even
-after the character dies, by means of a reduced savefile.
+after the character dies, by means of a reduced save file.
 
 
 ### 9.2 The Character’s Weapon
 
-Carrying a weapon in a backpack doesn’t do much good. The character must
+Carrying a weapon in a backpack doesn't do much good. The character must
 wield a weapon before it can be used in a fight. A secondary weapon can
 be kept by wielding it and then using the exchange command. A secondary
 weapon is not in use, simply ready to be switched with the current
@@ -2027,7 +2027,7 @@ achievement for Priests and Paladins.
     G  Holy Word              39  32     39  38
 
 
-#### 9.6.1.2 Priest Spell Descriptions {.subsubsection}
+#### 9.6.1.2 Priest Spell Descriptions
 
 This is a short description of each of the spells, listed
 alphabetically.
@@ -2182,7 +2182,7 @@ Rogues cannot learn any offensive spell.
 
 
                                       Mage       Ranger      Rogue
-    (Beginners-Magik)               Lv  Mana    Lv  Mana    Lv  Mana
+    (Beginners-Magick)               Lv  Mana    Lv  Mana    Lv  Mana
     A  Magic Missile                 1   1       3   1      --  --
     B  Detect Monsters               1   1       3   2       5   1
     C  Phase Door                    1   2       3   2       7   2
@@ -2226,7 +2226,7 @@ Rogues cannot learn any offensive spell.
     H  Genocide                     37  25      --  --      --  --
 
 
-Note: Rangers don’t get spells until 3rd level, Rogues 5th level.
+Note: Rangers don't get spells until 3rd level, Rogues 5th level.
 
 
 #### 9.6.2.2 Mage Spell Descriptions
@@ -2418,13 +2418,13 @@ back to town. If read in town, it will teleport the character back down
 to the deepest level of the dungeon on which the character has
 previously been. This makes the scroll very useful for getting back to
 the deeper levels of *moria*. Once the scroll has been read, it takes a
-while for the spell to act, so don’t expect it to save the character in
+while for the spell to act, so don't expect it to save the character in
 a crisis.
 
 The game provides some automatic inscriptions to help keep track of
 possessions. Wands and staves which are known to be empty will be
 inscribed with "`empty`". Objects which have been tried at least once,
-but haven’t been identified yet will be inscribed with "`tried`". Cursed
+but haven't been identified yet will be inscribed with "`tried`". Cursed
 objects are inscribed with "`damned`". Also, occasionally the character
 will notice that something in the pack or equipment list seems to be
 magical. High level characters are much more likely to notice this than
@@ -2509,13 +2509,13 @@ a known door and no more searching will be required to use it.
 Once the character has progressed into killing dragons with but a mean
 glance and snap of the fingers, they may be ready to take on the Balrog.
 The Balrog will appear on most levels after level 49 (a depth of 2450
-feet), so don’t go down there until the character is ready to take on
+feet), so don't go down there until the character is ready to take on
 the biggest and baddest creature in the game.
 
 The Balrog cannot be killed in some of the easier methods used on normal
 creatures. The Balrog will cunningly teleport to another level if a
 spell such as destruction is cast. Also, the Balrog cannot be
-polymorphed, slept, confused or genocided. Magical spells like coldball
+polymorphed, slept, confused, or commit genocide. Magical spells like _Coldball_
 are effective, as are weapons, but the Balrog is difficult to kill, and
 if allowed to escape to another level it can heal itself.
 
@@ -2533,7 +2533,7 @@ restored. A tombstone showing information about the character will be
 displayed. A record of the character will be provided, along with all of
 the equipment (identified) either on the screen or saved in a file.
 
-The character will leave behind a reduced savefile, which contains only
+The character will leave behind a reduced save file, which contains only
 the monster memory and the game option choices. It may be restored, in
 which case the new character is generated exactly as if the file was not
 there, but the new character will find the monster memory containing all

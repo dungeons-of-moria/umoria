@@ -199,7 +199,7 @@ void clear_from(int row) {
 // Outputs a char to a given interpolated y, x position -RAK-
 // sign bit of a character used to indicate standout mode. -CJS
 void print(char ch, int row, int col) {
-    // Real co-ords convert to screen positions
+    // Real coords convert to screen positions
     row -= panel_row_prt;
     col -= panel_col_prt;
 
@@ -221,7 +221,7 @@ void print(char ch, int row, int col) {
 
 // Moves the cursor to a given interpolated y, x position -RAK-
 void move_cursor_relative(int row, int col) {
-    // Real co-ords convert to screen positions
+    // Real coords convert to screen positions
     row -= panel_row_prt;
     col -= panel_col_prt;
 
@@ -560,7 +560,7 @@ void screen_map() {
         int row = i / RATIO;
         if (row != orow) {
             if (orow >= 0) {
-                // can not use mvprintw() on ibmpc, because PC-Curses is horribly
+                // can not use mvprintw() on IBM PC, because PC-Curses is horribly
                 // written, and mvprintw() causes the fp emulation library to be
                 // linked with PC-Moria, makes the program 10K bigger
                 (void)sprintf(prntscrnbuf, "%c%s%c", CH(VE), map, CH(VE));

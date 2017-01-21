@@ -50,14 +50,14 @@ void display_scores() {
                (version_min > CURRENT_VERSION_MINOR) ||
                (version_min == CURRENT_VERSION_MINOR && patch_level > CURRENT_VERSION_PATCH) ||
                (version_min == 2 && patch_level < 2) || (version_min < 2)) {
-        msg_print("Sorry. This scorefile is from a different version of umoria.");
+        msg_print("Sorry. This score file is from a different version of umoria.");
         msg_print(CNIL);
 
         (void)fclose(highscore_fp);
         return;
     }
 
-    // set the static fileptr in save.c to the highscore file pointer
+    // set the static fileptr in save.c to the high score file pointer
     set_fileptr(highscore_fp);
 
     high_scores score;
@@ -276,7 +276,7 @@ static void highscores() {
     uint8_t version_min = getc(highscore_fp);
     uint8_t patch_level = getc(highscore_fp);
 
-    // If this is a new scorefile, it should be empty.
+    // If this is a new score file, it should be empty.
     // Write the current version numbers to the score file.
     if (feof(highscore_fp)) {
         // Seek to the beginning of the file just to be safe.
@@ -301,7 +301,7 @@ static void highscores() {
         return;
     }
 
-    // set the static fileptr in save.c to the highscore file pointer
+    // set the static fileptr in save.c to the high score file pointer
     set_fileptr(highscore_fp);
 
     high_scores old_entry, entry;
@@ -318,7 +318,7 @@ static void highscores() {
         // under unix, only allow one sex/race/class combo per person,
         // on single user system, allow any number of entries, but try to
         // prevent multiple entries per character by checking for case when
-        // birthdate/sex/race/class are the same, and died_from of scorefile
+        // birthdate/sex/race/class are the same, and died_from of score file
         // entry is "(saved)"
         if (((new_entry.uid != 0 && new_entry.uid == old_entry.uid) ||
              (new_entry.uid == 0 && !strcmp(old_entry.died_from, "(saved)") && new_entry.birth_date == old_entry.birth_date)) &&
@@ -356,7 +356,7 @@ static void highscores() {
             // on single user system, allow any number of entries, but try
             // to prevent multiple entries per character by checking for
             // case when birthdate/sex/race/class are the same, and died_from
-            // of scorefile entry is "(saved)"
+            // of score file entry is "(saved)"
             if (((new_entry.uid != 0 && new_entry.uid == old_entry.uid) ||
                  (new_entry.uid == 0 && !strcmp(old_entry.died_from, "(saved)") && new_entry.birth_date == old_entry.birth_date)) &&
                 new_entry.sex == old_entry.sex &&
@@ -447,7 +447,7 @@ void exit_game() {
         (void)save_char();
     }
 
-    // add score to scorefile if applicable
+    // add score to score file if applicable
     if (character_generated) {
         // Clear character_saved, strange thing to do, but it prevents
         // inkey() from recursively calling exit_game() when there has

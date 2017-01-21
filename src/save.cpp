@@ -11,7 +11,7 @@
 #include "externs.h"
 #include "version.h"
 
-// For debugging the savefile code on systems with broken compilers.
+// For debugging the save file code on systems with broken compilers.
 #define DEBUG(x)
 
 DEBUG(static FILE *logfile);
@@ -37,7 +37,7 @@ static void rd_monster(monster_type *);
 // these are used for the save file, to avoid having to pass them to every procedure
 static FILE *fileptr;
 static uint8_t xor_byte;
-static int from_savefile;   // can overwrite old savefile when save
+static int from_savefile;   // can overwrite old save file when save
 static uint32_t start_time; // time that play started
 
 // This save package was brought to by                -JWT-
@@ -257,7 +257,7 @@ static bool sv_write() {
         }
     }
 
-    // save the current time in the savefile
+    // save the current time in the save file
     l = (uint32_t)time((time_t *)0);
 
     if (l < start_time) {
@@ -267,14 +267,14 @@ static bool sv_write() {
     }
     wr_long(l);
 
-    // starting with 5.2, put died_from string in savefile
+    // starting with 5.2, put died_from string in save file
     wr_string(died_from);
 
-    // starting with 5.2.2, put the max_score in the savefile
+    // starting with 5.2.2, put the max_score in the save file
     l = (uint32_t)(total_points());
     wr_long(l);
 
-    // starting with 5.2.2, put the birth_date in the savefile
+    // starting with 5.2.2, put the birth_date in the save file
     wr_long((uint32_t)birth_date);
 
     // only level specific info follows, this allows characters to be
@@ -368,18 +368,18 @@ bool save_char() {
     while (!_save_char(savefile)) {
         vtype temp;
 
-        (void)sprintf(temp, "Savefile '%s' fails.", savefile);
+        (void)sprintf(temp, "Save file '%s' fails.", savefile);
         msg_print(temp);
 
         int i = 0;
         if (access(savefile, 0) < 0 ||
-            get_check("File exists. Delete old savefile?") == 0 ||
+            get_check("File exists. Delete old save file?") == 0 ||
             (i = unlink(savefile)) < 0) {
             if (i < 0) {
                 (void)sprintf(temp, "Can't delete '%s'", savefile);
                 msg_print(temp);
             }
-            prt("New Savefile [ESC to give up]:", 0, 0);
+            prt("New Save file [ESC to give up]:", 0, 0);
             if (!get_string(temp, 0, 31, 45)) {
                 return false;
             }
@@ -409,7 +409,7 @@ bool _save_char(char *fnam) {
 
     int fd = open(fnam, O_RDWR | O_CREAT | O_EXCL, 0600);
 
-    if (fd < 0 && access(fnam, 0) >= 0 && (from_savefile || (wizard && get_check("Can't make new savefile. Overwrite old?")))) {
+    if (fd < 0 && access(fnam, 0) >= 0 && (from_savefile || (wizard && get_check("Can't make new save file. Overwrite old?")))) {
         (void)chmod(fnam, 0600);
         fd = open(fnam, O_RDWR | O_TRUNC, 0600);
     }
@@ -467,7 +467,7 @@ bool _save_char(char *fnam) {
     return true;
 }
 
-// Certain checks are ommitted for the wizard. -CJS-
+// Certain checks are omitted for the wizard. -CJS-
 bool get_char(bool *generate) {
     int c;
     cave_type *c_ptr;
@@ -481,16 +481,16 @@ bool get_char(bool *generate) {
     int total_count = 0;
 
     // Not required for Mac, because the file name is obtained through a dialog.
-    // There is no way for a non existnat file to be specified. -BS-
+    // There is no way for a nonexistent file to be specified. -BS-
     if (access(savefile, 0) != 0) {
-        msg_print("Savefile does not exist.");
+        msg_print("Save file does not exist.");
         return false; // Don't bother with messages here. File absent.
     }
 
     clear_screen();
 
     vtype temp;
-    (void)sprintf(temp, "Savefile %s present. Attempting restore.", savefile);
+    (void)sprintf(temp, "Save file %s present. Attempting restore.", savefile);
     put_buffer(temp, 23, 0);
 
     // FIXME: check this if/else logic! -- MRC
@@ -528,12 +528,12 @@ bool get_char(bool *generate) {
         xor_byte = 0;
         rd_byte(&xor_byte);
 
-        // COMPAT support savefiles from 5.0.14 to 5.0.17.
-        // Support savefiles from 5.1.0 to present.
-        // As of version 5.4, accept savefiles even if they have higher version numbers.
-        // The savefile format was frozen as of version 5.2.2.
+        // COMPAT support save files from 5.0.14 to 5.0.17.
+        // Support save files from 5.1.0 to present.
+        // As of version 5.4, accept save files even if they have higher version numbers.
+        // The save file format was frozen as of version 5.2.2.
         if ((version_maj != CURRENT_VERSION_MAJOR) || (version_min == 0 && patch_level < 14)) {
-            prt("Sorry. This savefile is from a different version of umoria.", 2, 0);
+            prt("Sorry. This save file is from a different version of umoria.", 2, 0);
             goto error;
         }
 
@@ -984,7 +984,7 @@ bool get_char(bool *generate) {
         if (!ok) {
             msg_print("Error during reading of file.");
         } else {
-            // let the user overwrite the old savefile when save/quit
+            // let the user overwrite the old save file when save/quit
             from_savefile = 1;
 
             if (panic_save == true) {
@@ -1019,7 +1019,7 @@ bool get_char(bool *generate) {
 
                 age = (age + 43200L) / 86400L; // age in days
                 if (age > 10) {
-                    age = 10; // in case savefile is very old
+                    age = 10; // in case save file is very old
                 }
 
                 for (int i = 0; i < (int)age; i++) {
@@ -1048,7 +1048,7 @@ bool get_char(bool *generate) {
         }
     }
     turn = -1;
-    prt("Please try again without that savefile.", 1, 0);
+    prt("Please try again without that save file.", 1, 0);
 
     exit_game();
 
@@ -1272,7 +1272,7 @@ static void rd_monster(monster_type *mon) {
 
 // functions called from death.c to implement the score file
 
-// set the local fileptr to the scorefile fileptr
+// set the local fileptr to the score file fileptr
 void set_fileptr(FILE *file) {
     fileptr = file;
 }

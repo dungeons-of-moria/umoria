@@ -363,7 +363,7 @@ static void get_class() {
             p_ptr->misc.dis_tac = p_ptr->misc.ptoac;
             p_ptr->misc.dis_ac = p_ptr->misc.pac + p_ptr->misc.dis_tac;
 
-            // now set misc stats, do this after setting stats because of con_adj() for hitpoints
+            // now set misc stats, do this after setting stats because of con_adj() for hit-points
             m_ptr = &py.misc;
             m_ptr->hitdie += c_ptr->adj_hd;
             m_ptr->mhp = con_adj() + m_ptr->hitdie;
@@ -448,7 +448,7 @@ void create_character() {
     put_stats();
 
     clear_from(20);
-    put_buffer("Hit space to reroll or ESC to accept characteristics: ", 20, 2);
+    put_buffer("Hit space to re-roll or ESC to accept characteristics: ", 20, 2);
 
     char c;
     bool exit_flag = true;

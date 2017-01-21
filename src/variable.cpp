@@ -41,7 +41,7 @@ int pack_heavy                  = 0;
 vtype died_from;
 int32_t birth_date;
 
-vtype savefile; // The savefile to use.
+vtype savefile; // The save file to use.
 
 bool total_winner               = false;
 int32_t max_score               = 0;

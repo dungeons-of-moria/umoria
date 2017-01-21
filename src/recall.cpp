@@ -300,7 +300,7 @@ int roff_recall(int mon_num) {
         roff(".");
     }
 
-    // Kill it once to know experience, and quality (evil, undead, monsterous).
+    // Kill it once to know experience, and quality (evil, undead, monstrous).
     // The quality of being a dragon is obvious.
     if (mp->r_kills) {
         roff(" A kill of this");

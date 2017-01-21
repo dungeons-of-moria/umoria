@@ -546,7 +546,7 @@ int disarm_all(int dir, int y, int x) {
 
         c_ptr = &cave[y][x];
 
-        // note, must continue upto and including the first non open space,
+        // note, must continue up to and including the first non open space,
         // because secret doors have fval greater than MAX_OPEN_SPACE
         if (c_ptr->tptr != 0) {
             inven_type *t_ptr = &t_list[c_ptr->tptr];
@@ -1144,7 +1144,7 @@ int confuse_monster(int dir, int y, int x) {
                 }
 
                 // Monsters which resisted the attack should wake up.
-                // Monsters with innate resistence ignore the attack.
+                // Monsters with innate resistance ignore the attack.
                 if (!(CD_NO_SLEEP & r_ptr->cdefense)) {
                     m_ptr->csleep = 0;
                 }
@@ -1565,7 +1565,7 @@ int teleport_monster(int dir, int y, int x) {
 }
 
 // Delete all creatures within max_sight distance -RAK-
-// NOTE : Winning creatures cannot be genocided
+// NOTE : Winning creatures cannot be killed by genocide.
 int mass_genocide() {
     bool result = false;
 
@@ -1584,7 +1584,7 @@ int mass_genocide() {
 
 // Delete all creatures of a given type from level. -RAK-
 // This does not keep creatures of type from appearing later.
-// NOTE : Winning creatures can not be genocided.
+// NOTE : Winning creatures can not be killed by genocide.
 int genocide() {
     bool killed = false;
 

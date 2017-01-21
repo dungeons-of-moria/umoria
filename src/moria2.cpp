@@ -109,7 +109,7 @@ void search(int y, int x, int chance) {
 //
 // To initialize these conditions is the task of find_init. If moving from the
 // square marked @ to the square marked . (in the two diagrams below), then two
-// adjacent sqares on the left and the right (L and R) are considered. If either
+// adjacent squares on the left and the right (L and R) are considered. If either
 // one is seen to be closed, then that side is considered to be closed. If both
 // sides are closed, then it is an enclosed (corridor) run.
 //

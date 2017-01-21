@@ -156,7 +156,7 @@ void panel_bounds() {
 
 // Given an row (y) and col (x), this routine detects -RAK-
 // when a move off the screen has occurred and figures new borders.
-// Force forcses the panel bounds to be recalculated, useful for 'W'here.
+// Force, forces the panel bounds to be recalculated, useful for 'W'here.
 int get_panel(int y, int x, int force) {
     bool panel;
 

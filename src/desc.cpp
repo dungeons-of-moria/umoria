@@ -274,7 +274,7 @@ void unmagic_name(inven_type *i_ptr) {
 // Returns a description of item for inventory
 // pref indicates that there should be an article added (prefix).
 // Note that since out_val can easily exceed 80 characters, objdes
-// must always be called with a bigvtype as the first paramter.
+// must always be called with a bigvtype as the first parameter.
 void objdes(char *out_val, inven_type *i_ptr, int pref) {
     int tmp;
 

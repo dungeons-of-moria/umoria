@@ -107,7 +107,7 @@ Armor/weapons show their base AC/hit/dam values in their name.
 
 Any of `RETURN (^M)`, `LF (^J)`, `SPACE`, or `ESCAPE` can be typed at `-more-` prompts.
 
-When droping a group of items, you have the choice of dropping only one,
+When dropping a group of items, you have the choice of dropping only one,
 or all of them.
 
 There is a small chance that a player will notice that there are unidentified

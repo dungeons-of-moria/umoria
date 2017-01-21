@@ -221,7 +221,7 @@ void dungeon() {
         }
 
         // Food consumption
-        // Note: Speeded up characters really burn up the food!
+        // Note: Sped up characters really burn up the food!
         if (f_ptr->speed < 0) {
             f_ptr->food -= f_ptr->speed * f_ptr->speed;
         }

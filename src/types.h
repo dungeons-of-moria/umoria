@@ -14,7 +14,7 @@
 #define BIGVTYPESIZ 160
 typedef char vtype[VTYPESIZ];
 // note that since its output can easily exceed 80 characters, objdes must
-// always be called with a bigvtype as the first paramter
+// always be called with a bigvtype as the first parameter
 typedef char bigvtype[BIGVTYPESIZ];
 typedef char stat_type[7];
 
@@ -22,7 +22,7 @@ typedef char stat_type[7];
 // increased the size of the executable.  I have replaced many fixed
 // length fields with variable length ones.
 //
-// all fields are given the smallest possbile type, and all fields are
+// all fields are given the smallest possible type, and all fields are
 // aligned within the structure to their natural size boundary, so that
 // the structures contain no padding and are minimum size.
 //
@@ -31,7 +31,7 @@ typedef char stat_type[7];
 // results in larger and slower code.
 
 typedef struct creature_type {
-    const char *name;  // Descrip of creature
+    const char *name;  // Description of creature
     uint32_t cmove;    // Bit field
     uint32_t spells;   // Creature spells
     uint16_t cdefense; // Bit field
@@ -103,7 +103,7 @@ typedef struct treasure_type {
 //
 // extra fields x and y for location in dungeon would simplify pusht().
 //
-// making inscrip a pointer and mallocing space does not work, there are
+// making inscrip a pointer and malloc-ing space does not work, there are
 // two many places where inven_types are copied, which results in dangling
 // pointers, so we use a char array for them instead
 #define INSCRIP_SIZE 13 // notice alignment, must be 4*x + 1

@@ -851,7 +851,7 @@ void magic_treasure(int x, int level) {
             // make sure all food rations have the same level
             t_ptr->level = 0;
         } else if (t_ptr->subval == 92) {
-            // give all elvish waybread the same level
+            // give all Elvish waybread the same level
             t_ptr->level = 6;
         }
         break;

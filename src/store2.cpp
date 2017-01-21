@@ -43,7 +43,7 @@ static const char *comment2b[16] = {
     "I paid more than %A1 for it myself, try %A2.",
     "%A1?  Are you mad?!?  How about %A2 gold pieces?",
     "As scrap this would bring %A1.  Try %A2 in gold.",
-    "May the fleas of 1000 orcs molest you.  I want %A2.",
+    "May the fleas of 1000 Orcs molest you.  I want %A2.",
     "My mother you can get for %A1, this costs %A2.",
     "May your chickens grow lips.  I want %A2 in gold!",
     "Sell this for such a pittance?  Give me %A2 gold.",

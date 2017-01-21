@@ -173,7 +173,7 @@ uint8_t blows_table[7][6] = {
     { 2,  2,  3,  3,  4,  4 }, // >9
 };
 
-// this table is used to generate a psuedo-normal distribution.  See
+// this table is used to generate a pseudo-normal distribution.  See
 // the function randnor() in misc1.c, this is much faster than calling
 // transcendental function to calculate a true normal distribution.
 uint16_t normal_table[NORMAL_TABLE_SIZE] = {

@@ -25,7 +25,7 @@
 // The sequence of z's must be initialized by choosing an initial seed z[1]
 // from the range 1, 2, ..., m - 1.  The sequence of z's is a pseudo-random
 // sequence drawn without replacement from the set 1, 2, ..., m - 1.
-// The u's form a psuedo-random sequence of real numbers between (but not
+// The u's form a pseudo-random sequence of real numbers between (but not
 // including) 0 and 1.
 //
 // Schrage's method is used to compute the sequence of z's.
