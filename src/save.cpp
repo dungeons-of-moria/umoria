@@ -471,7 +471,10 @@ bool _save_char(char *fnam) {
 bool get_char(bool *generate) {
     int c;
     cave_type *c_ptr;
-    uint32_t time_saved;
+    uint32_t time_saved = 0;
+    uint8_t version_maj = 0;
+    uint8_t version_min = 0;
+    uint8_t patch_level = 0;
 
     *generate = true;
     int fd = -1;
@@ -515,8 +518,6 @@ bool get_char(bool *generate) {
 
         DEBUG(logfile = fopen("IO_LOG", "a"));
         DEBUG(fprintf(logfile, "Reading data from %s\n", savefile));
-
-        uint8_t version_maj, version_min, patch_level;
 
         xor_byte = 0;
         rd_byte(&version_maj);

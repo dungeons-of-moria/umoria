@@ -651,7 +651,7 @@ void dungeon() {
 
         // Accept a command?
         if ((py.flags.paralysis < 1) && (py.flags.rest == 0) && (!death)) {
-            char command; // Last command
+            char command = 0; // Last command
 
             // Accept a command and execute it
             do {

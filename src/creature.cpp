@@ -268,7 +268,8 @@ static void make_attack(int monptr) {
     }
     // End DIED_FROM
 
-    int i, j, damage;
+    int i = 0;
+    int j, damage;
     int attype, adesc, adice, asides;
     int32_t gold;
     struct player_type::misc *p_ptr;
