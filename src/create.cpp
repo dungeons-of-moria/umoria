@@ -230,7 +230,7 @@ static void get_history() {
             flag = true;
         }
 
-        (void)strncpy(py.misc.history[line_ctr], &history_block[start_pos], cur_len);
+        (void)strncpy(py.misc.history[line_ctr], &history_block[start_pos], (size_t)cur_len);
         py.misc.history[line_ctr][cur_len] = '\0';
         line_ctr++;
         start_pos = new_start;

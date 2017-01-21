@@ -673,7 +673,7 @@ monster_type m_list[MAX_MALLOC];
 int16_t m_level[MAX_MONS_LEVEL + 1];
 
 // Blank monster values
-monster_type blank_monster = {0, 0, 0, 0, 0, 0, 0, false, 0, false};
+monster_type blank_monster = {0, 0, 0, 0, 0, 0, 0, false, 0, 0};
 
 int16_t mfptr;        // Current free monster ptr
 int16_t mon_tot_mult; // # of repro's of creature

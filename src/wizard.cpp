@@ -275,7 +275,7 @@ void wizard_create() {
     if (!get_string(tmp_str, 0, 9, 1)) {
         return;
     }
-    i_ptr->tchar = tmp_str[0];
+    i_ptr->tchar = (uint8_t)tmp_str[0];
 
     prt("Subval : ", 0, 0);
     if (!get_string(tmp_str, 0, 9, 5)) {
@@ -360,7 +360,7 @@ void wizard_create() {
 
     int32_t tmp_lval;
     (void)sscanf(tmp_str, pattern, &tmp_lval);
-    i_ptr->flags = tmp_lval;
+    i_ptr->flags = (uint32_t)tmp_lval;
 
     prt("Cost : ", 0, 0);
     if (!get_string(tmp_str, 0, 9, 8)) {

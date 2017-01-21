@@ -64,7 +64,7 @@ void put_buffer(const char *out_str, int row, int col) {
     if (col > 79) {
         col = 79;
     }
-    (void)strncpy(tmp_str, out_str, 79 - col);
+    (void)strncpy(tmp_str, out_str, (size_t)(79 - col));
     tmp_str[79 - col] = '\0';
 
     if (mvaddstr(row, col, tmp_str) == ERR) {
@@ -616,7 +616,7 @@ void sleep_in_seconds(int seconds) {
 #ifdef _WIN32
     Sleep(seconds * 1000);
 #else
-    sleep(seconds);
+    sleep((unsigned int)seconds);
 #endif
 }
 

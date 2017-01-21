@@ -609,8 +609,7 @@ bool place_monster(int y, int x, int z, int slp) {
         if (c_list[z].sleep == 0) {
             mon_ptr->csleep = 0;
         } else {
-            mon_ptr->csleep =
-                (c_list[z].sleep * 2) + randint((int)c_list[z].sleep * 10);
+            mon_ptr->csleep = (c_list[z].sleep * 2) + randint((int)c_list[z].sleep * 10);
         }
     } else {
         mon_ptr->csleep = 0;

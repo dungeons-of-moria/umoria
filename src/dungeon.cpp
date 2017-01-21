@@ -47,7 +47,7 @@ void dungeon() {
 
     // Check for a maximum level
     if (dun_level > p_ptr->max_dlv) {
-        p_ptr->max_dlv = dun_level;
+        p_ptr->max_dlv = (uint16_t)dun_level;
     }
 
     // Reset flags and initialize variables

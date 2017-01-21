@@ -159,11 +159,11 @@ int roff_recall(int mon_num) {
         mp->r_kills = MAX_SHORT;
         mp->r_wake = mp->r_ignore = MAX_UCHAR;
 
-        j = (((cp->cmove & CM_4D2_OBJ) != 0) * 8) +
-            (((cp->cmove & CM_2D2_OBJ) != 0) * 4) +
-            (((cp->cmove & CM_1D2_OBJ) != 0) * 2) +
-            ((cp->cmove & CM_90_RANDOM) != 0) +
-            ((cp->cmove & CM_60_RANDOM) != 0);
+        j = (uint32_t)((((cp->cmove & CM_4D2_OBJ) != 0) * 8) +
+                       (((cp->cmove & CM_2D2_OBJ) != 0) * 4) +
+                       (((cp->cmove & CM_1D2_OBJ) != 0) * 2) +
+                       ((cp->cmove & CM_90_RANDOM) != 0) +
+                       ((cp->cmove & CM_60_RANDOM) != 0));
 
         mp->r_cmove = (cp->cmove & ~CM_TREASURE) | (j << CM_TR_SHIFT);
         mp->r_cdefense = cp->cdefense;
@@ -323,7 +323,7 @@ int roff_recall(int mon_num) {
 
         // calculate the fractional exp part scaled by 100,
         // must use long arithmetic to avoid overflow
-        j = (((int32_t)cp->mexp * cp->level % py.misc.lev) * (int32_t)1000 / py.misc.lev + 5) / 10;
+        j = (uint32_t)((((int32_t)cp->mexp * cp->level % py.misc.lev) * (int32_t)1000 / py.misc.lev + 5) / 10);
 
         (void)sprintf(temp, " creature is worth %d.%02d point%s", templong, j, (templong == 1 && j == 0 ? "" : "s"));
         roff(temp);

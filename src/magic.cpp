@@ -186,8 +186,7 @@ void cast() {
             if (!free_turn_flag) {
                 if (m_ptr->smana > p_ptr->cmana) {
                     msg_print("You faint from the effort!");
-                    py.flags.paralysis =
-                        randint((int)(5 * (m_ptr->smana - p_ptr->cmana)));
+                    py.flags.paralysis = (int16_t)randint((5 * (m_ptr->smana - p_ptr->cmana)));
                     p_ptr->cmana = 0;
                     p_ptr->cmana_frac = 0;
                     if (randint(3) == 1) {

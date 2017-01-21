@@ -124,7 +124,7 @@ void quaff() {
                 case 18:
                     m_ptr = &py.misc;
                     if (m_ptr->exp < MAX_EXP) {
-                        uint32_t l = (m_ptr->exp / 2) + 10;
+                        uint32_t l = (uint32_t)((m_ptr->exp / 2) + 10);
 
                         if (l > 100000L) {
                             l = 100000L;
