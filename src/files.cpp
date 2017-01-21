@@ -18,7 +18,7 @@
 //  so we don't have multiple people trying to write to it at the same time.
 //  Craig Norborg (doc)    Mon Aug 10 16:41:59 EST 1987
 void init_scorefile() {
-    highscore_fp = fopen(MORIA_TOP, "rb+");
+    highscore_fp = fopen(MORIA_TOP, (char *)"rb+");
 
     if (highscore_fp == NULL) {
         (void)fprintf(stderr, "Can't open score file \"%s\"\n", MORIA_TOP);
@@ -31,7 +31,7 @@ void read_times() {
     vtype in_line;
 
     // Print the introduction message, news, etc.
-    FILE *file1 = fopen(MORIA_MOR, "r");
+    FILE *file1 = fopen(MORIA_MOR, (char *)"r");
     if (file1 != NULL) {
         clear_screen();
 
@@ -48,7 +48,7 @@ void read_times() {
 void helpfile(char *filename) {
     bigvtype tmp_str;
 
-    FILE *file = fopen(filename, "r");
+    FILE *file = fopen(filename, (char *)"r");
     if (file == NULL) {
         (void)sprintf(tmp_str, "Can not find help file \"%s\".\n", filename);
         prt(tmp_str, 0, 0);
@@ -110,7 +110,7 @@ void print_objects() {
                 return;
             }
 
-            FILE *file1 = fopen(filename1, "w");
+            FILE *file1 = fopen(filename1, (char *)"w");
             if (file1 != NULL) {
                 (void)sprintf(tmp_str, "%d", nobj);
                 prt(strcat(tmp_str, " random objects being produced..."), 0, 0);
@@ -166,7 +166,7 @@ bool file_character(char *filename1) {
         // on some non-unix machines, fdopen() is not reliable,
         // hence must call close() and then fopen().
         (void)close(fd);
-        file1 = fopen(filename1, "w");
+        file1 = fopen(filename1, (char *)"w");
     } else {
         file1 = NULL;
     }
@@ -177,8 +177,8 @@ bool file_character(char *filename1) {
         prt("Writing character sheet...", 0, 0);
         put_qio();
 
-        char *colon = ":";
-        char *blank = " ";
+        const char *colon = ":";
+        const char *blank = " ";
 
         (void)fprintf(file1, "%c\n\n", CTRL_KEY('L'));
 
@@ -271,7 +271,7 @@ bool file_character(char *filename1) {
         if (equip_ctr == 0) {
             (void)fprintf(file1, "  Character has no equipment in use.\n");
         } else {
-            char *p;
+            const char *p;
             inven_type *i_ptr;
 
             for (int i = INVEN_WIELD; i < INVEN_ARRAY_SIZE; i++) {

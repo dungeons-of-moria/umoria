@@ -701,7 +701,7 @@ void fire_bolt(int typ, int dir, int y, int x, int dam, char *bolt_typ) {
 }
 
 // Shoot a ball in a given direction.  Note that balls have an area affect. -RAK-
-void fire_ball(int typ, int dir, int y, int x, int dam_hp, char *descrip) {
+void fire_ball(int typ, int dir, int y, int x, int dam_hp, const char *descrip) {
     int thit = 0;
     int tkill = 0;
     int max_dis = 2;

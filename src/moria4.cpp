@@ -536,7 +536,7 @@ static bool look_see(int x, int y, bool *transparent) {
         msg_print(tmp_str);
     }
 
-    char *dstring;
+    const char *dstring;
     if (x == 0 && y == 0) {
         dstring = "You are on";
     } else {
@@ -596,7 +596,7 @@ static bool look_see(int x, int y, bool *transparent) {
         }
 
         if ((gl_rock || out_val[0]) && c_ptr->fval >= MIN_CLOSED_SPACE) {
-            char *string;
+            const char *wall_description;
 
             switch (c_ptr->fval) {
             case BOUNDARY_WALL:
@@ -604,24 +604,24 @@ static bool look_see(int x, int y, bool *transparent) {
             granite:
                 // Granite is only interesting if it contains something.
                 if (out_val[0]) {
-                    string = "a granite wall";
+                    wall_description = "a granite wall";
                 } else {
-                    string = CNIL; // In case we jump here
+                    wall_description = CNIL; // In case we jump here
                 }
                 break;
             case MAGMA_WALL:
-                string = "some dark rock";
+                wall_description = "some dark rock";
                 break;
             case QUARTZ_WALL:
-                string = "a quartz vein";
+                wall_description = "a quartz vein";
                 break;
             default:
-                string = CNIL;
+                wall_description = CNIL;
                 break;
             }
 
-            if (string) {
-                (void)sprintf(out_val, "%s %s ---pause---", dstring, string);
+            if (wall_description) {
+                (void)sprintf(out_val, "%s %s ---pause---", dstring, wall_description);
                 prt(out_val, 0, 0);
                 move_cursor_relative(y, x);
                 query = inkey();

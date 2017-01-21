@@ -19,7 +19,7 @@ static void date(char *day) {
 }
 
 // Centers a string within a 31 character string -JWT-
-static char *center_string(char *centered_str, char *in_str) {
+static char *center_string(char *centered_str, const char *in_str) {
     int i = (int)strlen(in_str);
     int j = 15 - i / 2;
     (void)sprintf(centered_str, "%*s%s%*s", j, "", in_str, 31 - i - j, "");
@@ -29,7 +29,7 @@ static char *center_string(char *centered_str, char *in_str) {
 void display_scores() {
     char string[100];
 
-    if ((highscore_fp = fopen(MORIA_TOP, "rb")) == NULL) {
+    if ((highscore_fp = fopen(MORIA_TOP, (char *)"rb")) == NULL) {
         sprintf(string, "Error opening score file \"%s\"\n", MORIA_TOP);
         msg_print(string);
         msg_print(CNIL);
@@ -119,18 +119,18 @@ static void print_tomb() {
     if (!total_winner) {
         p = title_string();
     } else {
-        p = "Magnificent";
+        p = (char *)"Magnificent";
     }
     (void)sprintf(str, "| %s |  /   \\", center_string(tmp_str, p));
     put_buffer(str, 8, 9);
     put_buffer("|", 9, 9);
     put_buffer("|  :   :", 9, 43);
     if (!total_winner) {
-        p = classes[py.misc.pclass].title;
+        p = (char *)classes[py.misc.pclass].title;
     } else if (py.misc.male) {
-        p = "*King*";
+        p = (char *)"*King*";
     } else {
-        p = "*Queen*";
+        p = (char *)"*Queen*";
     }
     (void)sprintf(str, "| %s | _;,,,;_   ____", center_string(tmp_str, p));
     put_buffer(str, 10, 9);
@@ -257,7 +257,7 @@ static void highscores() {
     }
     (void)strcpy(new_entry.died_from, tmp);
 
-    if ((highscore_fp = fopen(MORIA_TOP, "rb+")) == NULL) {
+    if ((highscore_fp = fopen(MORIA_TOP, (char *)"rb+")) == NULL) {
         char string[100];
 
         (void)sprintf(string, "Error opening score file \"%s\"\n", MORIA_TOP);
@@ -384,7 +384,7 @@ static void highscores() {
 
 // Change the player into a King! -RAK-
 static void kingly() {
-    char *p;
+    const char *p;
 
     // Change the character attributes.
     dun_level = 0;

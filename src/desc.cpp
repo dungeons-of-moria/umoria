@@ -281,8 +281,8 @@ void objdes(char *out_val, inven_type *i_ptr, int pref) {
     int indexx = i_ptr->subval & (ITEM_SINGLE_STACK_MIN - 1);
 
     // base name, modifier string
-    char *basenm = object_list[i_ptr->index].name;
-    char *modstr = CNIL;
+    const char *basenm = object_list[i_ptr->index].name;
+    const char *modstr = CNIL;
 
     vtype damstr;
     damstr[0] = '\0';

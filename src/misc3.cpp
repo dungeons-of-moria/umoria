@@ -9,7 +9,7 @@
 #include "headers.h"
 #include "externs.h"
 
-static char *stat_names[] = {
+static const char *stat_names[] = {
     "STR : ", "INT : ", "WIS : ",
     "DEX : ", "CON : ", "CHR : ",
 };
@@ -203,27 +203,27 @@ void prt_stat(int stat) {
 
 // Print character info in given row, column -RAK-
 // The longest title is 13 characters, so only pad to 13
-void prt_field(char *info, int row, int column) {
+void prt_field(const char *info, int row, int column) {
     put_buffer(&blank_string[BLANK_LENGTH - 13], row, column);
     put_buffer(info, row, column);
 }
 
 // Print long number with header at given row, column
-static void prt_lnum(char *header, int32_t num, int row, int column) {
+static void prt_lnum(const char *header, int32_t num, int row, int column) {
     vtype out_val;
     (void)sprintf(out_val, "%s: %6d", header, num);
     put_buffer(out_val, row, column);
 }
 
 // Print long number (7 digits of space) with header at given row, column
-static void prt_7lnum(char *header, int32_t num, int row, int column) {
+static void prt_7lnum(const char *header, int32_t num, int row, int column) {
     vtype out_val;
     (void)sprintf(out_val, "%s: %7d", header, num);
     put_buffer(out_val, row, column);
 }
 
 // Print number with header at given row, column -RAK-
-static void prt_num(char *header, int num, int row, int column) {
+static void prt_num(const char *header, int num, int row, int column) {
     vtype out_val;
     (void)sprintf(out_val, "%s: %6d", header, num);
     put_buffer(out_val, row, column);
@@ -341,7 +341,7 @@ int con_adj() {
 }
 
 char *title_string() {
-    char *p;
+    const char *p;
 
     if (py.misc.lev < 1) {
         p = "Babe in arms";
@@ -353,7 +353,7 @@ char *title_string() {
         p = "**QUEEN**";
     }
 
-    return p;
+    return (char *)p;
 }
 
 // Prints title of character -RAK-
@@ -896,7 +896,7 @@ void put_stats() {
 }
 
 // Returns a rating of x depending on y -JWT-
-char *likert(int x, int y) {
+const char *likert(int x, int y) {
     switch ((x / y)) {
     case -3:
     case -2:
@@ -1322,7 +1322,7 @@ void print_spells(int *spell, int num, int comment, int nonconsec) {
         int j = spell[i];
         spell_type *s_ptr = &magic_spell[py.misc.pclass - 1][j];
 
-        char *p;
+        const char *p;
         if (comment == false) {
             p = "";
         } else if ((spell_forgotten & (1L << j)) != 0) {
@@ -1351,7 +1351,7 @@ void print_spells(int *spell, int num, int comment, int nonconsec) {
 }
 
 // Returns spell pointer -RAK-
-int get_spell(int *spell, int num, int *sn, int *sc, char *prompt, int first_spell) {
+int get_spell(int *spell, int num, int *sn, int *sc, const char *prompt, int first_spell) {
     *sn = -1;
 
     vtype out_str;
@@ -1439,7 +1439,7 @@ void calc_spells(int stat) {
     struct player_type::misc *p_ptr = &py.misc;
     spell_type *msp_ptr = &magic_spell[p_ptr->pclass - 1][0];
 
-    char *p;
+    const char *p;
     int offset;
     if (stat == A_INT) {
         p = "spell";
@@ -1876,7 +1876,7 @@ void calc_hitpoints() {
 }
 
 // Inserts a string into a string
-void insert_str(char *object_str, char *mtc_str, char *insert) {
+void insert_str(char *object_str, const char *mtc_str, const char *insert) {
     int mtc_len = (int)strlen(mtc_str);
     int obj_len = (int)strlen(object_str);
     char *bound = object_str + obj_len - mtc_len;
@@ -1884,7 +1884,7 @@ void insert_str(char *object_str, char *mtc_str, char *insert) {
     char *pc;
     for (pc = object_str; pc <= bound; pc++) {
         char *temp_obj = pc;
-        char *temp_mtc = mtc_str;
+        const char *temp_mtc = mtc_str;
 
         int i;
         for (i = 0; i < mtc_len; i++) {
@@ -1911,7 +1911,7 @@ void insert_str(char *object_str, char *mtc_str, char *insert) {
     }
 }
 
-void insert_lnum(char *object_str, char *mtc_str, int32_t number, int show_sign) {
+void insert_lnum(char *object_str, const char *mtc_str, int32_t number, int show_sign) {
     size_t mlen = strlen(mtc_str);
     char *tmp_str = object_str;
 

@@ -297,7 +297,7 @@ int show_inven(int r1, int r2, bool weight, int col, char *mask) {
 
 // Return a string describing how a given equipment item is carried. -CJS-
 char *describe_use(int i) {
-    char *p;
+    const char *p;
     switch (i) {
     case INVEN_WIELD:
         p = "wielding";
@@ -339,7 +339,7 @@ char *describe_use(int i) {
         p = "carrying in your pack";
         break;
     }
-    return p;
+    return (char *)p;
 }
 
 // Displays equipment items from r1 to end -RAK-
@@ -364,7 +364,7 @@ int show_equip(bool weight, int col) {
     for (int i = INVEN_WIELD; i < INVEN_ARRAY_SIZE; i++) {
         i_ptr = &inventory[i];
         if (i_ptr->tval != TV_NOTHING) {
-            char *prt1;
+            const char *prt1;
 
             // Get position
             switch (i) {
@@ -467,7 +467,7 @@ void takeoff(int item_val, int posn) {
     inven_weight -= t_ptr->weight * t_ptr->number;
     py.flags.status |= PY_STR_WGT;
 
-    char *p;
+    const char *p;
     if (item_val == INVEN_WIELD || item_val == INVEN_AUX) {
         p = "Was wielding ";
     } else if (item_val == INVEN_LIGHT) {
@@ -494,7 +494,7 @@ void takeoff(int item_val, int posn) {
 
 // Used to verify if this really is the item we wish to -CJS-
 // wear or read.
-int verify(char *prompt, int item) {
+int verify(const char *prompt, int item) {
     bigvtype out_str, object;
 
     objdes(object, &inventory[item], true);
@@ -757,8 +757,8 @@ void inven_command(char command) {
         char which = 'z';
         while (selecting && free_turn_flag) {
             int from, to;
-            char *prompt;
-            char *swap = "";
+            const char *prompt;
+            const char *swap = "";
 
             if (command == 'w') {
                 from = wear_low;
@@ -787,7 +787,7 @@ void inven_command(char command) {
             if (from > to) {
                 selecting = false;
             } else {
-                char *disp;
+                const char *disp;
                 if (scr_state == BLANK_SCR) {
                     disp = ", * to list";
                 } else {
@@ -863,7 +863,7 @@ void inven_command(char command) {
                                     tmp--;
                                 }
                             } while (tmp >= 0);
-                            if (isupper((int)which) && !verify(prompt, item)) {
+                            if (isupper((int)which) && !verify((char *)prompt, item)) {
                                 item = -1;
                             } else if (TR_CURSED & inventory[item].flags) {
                                 msg_print("Hmmm, it seems to be cursed.");
@@ -899,7 +899,7 @@ void inven_command(char command) {
                         } else if (command == 'w') {
                             // Wearing. Go to a bit of trouble over replacing
                             // existing equipment.
-                            if (isupper((int)which) && !verify(prompt, item)) {
+                            if (isupper((int)which) && !verify((char *)prompt, item)) {
                                 item = -1;
                             } else {
                                 // Slot for equipment
@@ -1039,7 +1039,7 @@ void inven_command(char command) {
                                 equip_ctr++;
                                 py_bonuses(i_ptr, 1);
 
-                                char *string;
+                                const char *string;
                                 if (slot == INVEN_WIELD) {
                                     string = "You are wielding";
                                 } else if (slot == INVEN_LIGHT) {
@@ -1091,7 +1091,7 @@ void inven_command(char command) {
                                     erase_line(MSG_LINE, 0);
                                     item = -1;
                                 }
-                            } else if (isupper((int)which) && !verify(prompt, item)) {
+                            } else if (isupper((int)which) && !verify((char *)prompt, item)) {
                                 item = -1;
                             } else {
                                 query = 'y';
@@ -1176,7 +1176,7 @@ void inven_command(char command) {
 }
 
 // Get the ID of an item and return the CTR value of it -RAK-
-int get_item(int *com_val, char *pmt, int i, int j, char *mask, char *message) {
+int get_item(int *com_val, const char *pmt, int i, int j, char *mask, const char *message) {
     bool test_flag;
     bool full;
     bool item = false;
@@ -1401,7 +1401,7 @@ bool get_dir(char *prompt, int *dir) {
     }
 
     if (prompt == CNIL) {
-        prompt = "Which direction?";
+        prompt = (char *)"Which direction?";
     }
 
     for (;;) {
@@ -1432,7 +1432,7 @@ bool get_dir(char *prompt, int *dir) {
 
 // Similar to get_dir, except that no memory exists, and it is -CJS-
 // allowed to enter the null direction.
-bool get_alldir(char *prompt, int *dir) {
+bool get_alldir(const char *prompt, int *dir) {
     char command;
 
     for (;;) {
@@ -1702,7 +1702,7 @@ bool test_hit(int bth, int level, int pth, int ac, int attack_type) {
 }
 
 // Decreases players hit points and sets death flag if necessary -RAK-
-void take_hit(int damage, char *hit_from) {
+void take_hit(int damage, const char *hit_from) {
     if (py.flags.invuln > 0) {
         damage = 0;
     }

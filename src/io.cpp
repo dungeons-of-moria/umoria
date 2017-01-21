@@ -241,14 +241,14 @@ void move_cursor_relative(int row, int col) {
 }
 
 // Print a message so as not to interrupt a counted command. -CJS-
-void count_msg_print(char *p) {
+void count_msg_print(const char *p) {
     int i = command_count;
     msg_print(p);
     command_count = i;
 }
 
 // Outputs a line to a given y, x position -RAK-
-void prt(char *str_buff, int row, int col) {
+void prt(const char *str_buff, int row, int col) {
     if (row == MSG_LINE && msg_flag) {
         msg_print(CNIL);
     }
@@ -265,7 +265,7 @@ void move_cursor(int row, int col) {
 
 // Outputs message to top line of screen
 // These messages are kept for later reference.
-void msg_print(char *str_buff) {
+void msg_print(const char *str_buff) {
     int new_len = 0;
     int old_len = 0;
     bool combine_messages = false;
@@ -339,7 +339,7 @@ void msg_print(char *str_buff) {
 }
 
 // Used to verify a choice - user gets the chance to abort choice. -CJS-
-bool get_check(char *prompt) {
+bool get_check(const char *prompt) {
     int y, x;
 
     prt(prompt, 0, 0);
@@ -369,7 +369,7 @@ bool get_check(char *prompt) {
 
 // Prompts (optional) and returns ord value of input char
 // Function returns false if <ESCAPE> is input
-int get_com(char *prompt, char *command) {
+int get_com(const char *prompt, char *command) {
     if (prompt) {
         prt(prompt, 0, 0);
     }

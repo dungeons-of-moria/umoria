@@ -524,7 +524,7 @@ treasure_type object_list[MAX_OBJECTS] = {
     {"",                              0x00000000L, TV_NOTHING,  ' ', 0, 0, 0, 0,   0, 0, 0, 0, 0, {0, 0}, 0} // 419
 };
 
-char *special_names[SN_ARRAY_SIZE] = {
+const char *special_names[SN_ARRAY_SIZE] = {
     CNIL,                "(R)",              "(RA)",
     "(RF)",              "(RC)",             "(RL)",
     "(HA)",              "(DF)",             "(SA)",

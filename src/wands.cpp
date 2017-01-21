@@ -123,8 +123,7 @@ void aim() {
                         ident = disarm_all(dir, k, l);
                         break;
                     case 19:
-                        fire_ball(GF_LIGHTNING, dir, k, l, 32,
-                                  "Lightning Ball");
+                        fire_ball(GF_LIGHTNING, dir, k, l, 32, "Lightning Ball");
                         ident = true;
                         break;
                     case 20:

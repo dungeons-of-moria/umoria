@@ -416,7 +416,7 @@ bool _save_char(char *fnam) {
 
     if (fd >= 0) {
         (void)close(fd);
-        fileptr = fopen(savefile, "wb");
+        fileptr = fopen(savefile, (char *)"wb");
     }
 
     DEBUG(logfile = fopen("IO_LOG", "a"));
@@ -504,7 +504,7 @@ bool get_char(bool *generate) {
 
         (void)close(fd);
         fd = -1; // Make sure it isn't closed again
-        fileptr = fopen(savefile, "rb");
+        fileptr = fopen(savefile, (char *)"rb");
 
         if (fileptr == NULL) {
             goto error;

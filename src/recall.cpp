@@ -9,9 +9,9 @@
 #include "headers.h"
 #include "externs.h"
 
-static void roff(char *);
+static void roff(const char *);
 
-static char *desc_atype[] = {
+static const char *desc_atype[] = {
     "do something undefined",
     "attack",
     "weaken",
@@ -39,7 +39,7 @@ static char *desc_atype[] = {
     "absorb charges",
 };
 
-static char *desc_amethod[] = {
+static const char *desc_amethod[] = {
     "make an undefined advance",
     "hit",
     "bite",
@@ -62,7 +62,7 @@ static char *desc_amethod[] = {
     "insult",
 };
 
-static char *desc_howmuch[] = {
+static const char *desc_howmuch[] = {
     " not at all",
     " a bit",
     "",
@@ -73,7 +73,7 @@ static char *desc_howmuch[] = {
     " extremely",
 };
 
-static char *desc_move[] = {
+static const char *desc_move[] = {
     "move invisibly",
     "open doors",
     "pass through walls",
@@ -82,7 +82,7 @@ static char *desc_move[] = {
     "breed explosively",
 };
 
-static char *desc_spell[] = {
+static const char *desc_spell[] = {
     "teleport short distances",
     "teleport long distances",
     "teleport its prey",
@@ -100,11 +100,11 @@ static char *desc_spell[] = {
     "unknown 2",
 };
 
-static char *desc_breath[] = {
+static const char *desc_breath[] = {
     "lightning", "poison gases", "acid", "frost", "fire",
 };
 
-static char *desc_weakness[] = {
+static const char *desc_weakness[] = {
     "frost", "fire", "poison", "acid", "bright light", "rock remover",
 };
 
@@ -144,7 +144,7 @@ bool bool_roff_recall(int mon_num) {
 // Print out what we have discovered about this monster.
 int roff_recall(int mon_num) {
     bool known;
-    char *p, *q;
+    const char *p, *q;
     uint8_t *pu;
     uint32_t j;
     vtype temp;
@@ -650,7 +650,7 @@ int roff_recall(int mon_num) {
 }
 
 // Print out strings, filling up lines as we go.
-static void roff(char *p) {
+static void roff(const char *p) {
     while (*p) {
         *roffp = *p;
         if (*p == '\n' || roffp >= roffbuf + sizeof(roffbuf) - 1) {

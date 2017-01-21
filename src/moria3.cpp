@@ -205,7 +205,7 @@ static void hit_trap(int y, int x) {
 // returns -1 if no spells in book
 // returns  1 if choose a spell in book to cast
 // returns  0 if don't choose a spell, i.e. exit with an escape
-int cast_spell(char *prompt, int item_val, int *sn, int *sc) {
+int cast_spell(const char *prompt, int item_val, int *sn, int *sc) {
     int result = -1;
     int i = 0;
 

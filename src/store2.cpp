@@ -9,7 +9,7 @@
 #include "headers.h"
 #include "externs.h"
 
-static char *comment1[14] = {
+static const char *comment1[14] = {
     "Done!",
     "Accepted!",
     "Fine.",
@@ -26,13 +26,13 @@ static char *comment1[14] = {
     "My spouse will skin me, but accepted.",
 };
 
-static char *comment2a[3] = {
+static const char *comment2a[3] = {
     "%A2 is my final offer; take it or leave it.",
     "I'll give you no more than %A2.",
     "My patience grows thin.  %A2 is final.",
 };
 
-static char *comment2b[16] = {
+static const char *comment2b[16] = {
     "%A1 for such a fine item?  HA!  No less than %A2.",
     "%A1 is an insult!  Try %A2 gold pieces.",
     "%A1?!?  You would rob my poor starving children?",
@@ -51,13 +51,13 @@ static char *comment2b[16] = {
     "Your mother was a Troll!  %A2 or I'll tell.",
 };
 
-static char *comment3a[3] = {
+static const char *comment3a[3] = {
     "I'll pay no more than %A1; take it or leave it.",
     "You'll get no more than %A1 from me.",
     "%A1 and that's final.",
 };
 
-static char *comment3b[15] = {
+static const char *comment3b[15] = {
     "%A2 for that piece of junk?  No more than %A1.",
     "For %A2 I could own ten of those.  Try %A1.",
     "%A2?  NEVER!  %A1 is more like it.",
@@ -75,7 +75,7 @@ static char *comment3b[15] = {
     "%A2 is too much, let us say %A1 gold.",
 };
 
-static char *comment4a[5] = {
+static const char *comment4a[5] = {
     "ENOUGH!  You have abused me once too often!",
     "THAT DOES IT!  You shall waste my time no more!",
     "This is getting nowhere.  I'm going home!",
@@ -83,13 +83,13 @@ static char *comment4a[5] = {
     "Begone!  I have had enough abuse for one day.",
 };
 
-static char *comment4b[5] = {
+static const char *comment4b[5] = {
     "Out of my place!", "out... Out... OUT!!!",
     "Come back tomorrow.", "Leave my place.  Begone!",
     "Come back when thou art richer.",
 };
 
-static char *comment5[10] = {
+static const char *comment5[10] = {
     "You will have to do better than that!",
     "That's an insult!",
     "Do you wish to do business or not?",
@@ -102,7 +102,7 @@ static char *comment5[10] = {
     "Hmmm, nice weather we're having.",
 };
 
-static char *comment6[5] = {
+static const char *comment6[5] = {
     "I must have heard you wrong.", "What was that?",
     "I'm sorry, say that again.", "What did you say?",
     "Sorry, what was that again?",
@@ -268,7 +268,7 @@ static void display_store(int store_num, int cur_top) {
 }
 
 // Get the ID of a store item and return it's value -RAK-
-static bool get_store_item(int *com_val, char *pmt, int i, int j) {
+static bool get_store_item(int *com_val, const char * pmt, int i, int j) {
     bool flag = false;
 
     *com_val = -1;
@@ -332,7 +332,7 @@ static bool haggle_insults(int store_num) {
     return haggle;
 }
 
-static bool get_haggle(char *comment, int32_t *new_offer, int num_offer) {
+static bool get_haggle(const char *comment, int32_t *new_offer, int num_offer) {
     bool flag = true;
     bool increment = false;
 
@@ -401,7 +401,7 @@ static bool get_haggle(char *comment, int32_t *new_offer, int num_offer) {
     return flag;
 }
 
-static int receive_offer(int store_num, char *comment, int32_t *new_offer, int32_t last_offer, int num_offer, int factor) {
+static int receive_offer(int store_num, const char *comment, int32_t *new_offer, int32_t last_offer, int num_offer, int factor) {
     int receive = 0;
 
     bool flag = false;
@@ -468,7 +468,7 @@ static int purchase_haggle(int store_num, int32_t *price, inven_type *item) {
     int32_t last_offer = min_offer;
     int32_t new_offer = 0;
     int num_offer = 0; // this prevents incremental haggling on first try
-    char *comment = "Asking";
+    const char *comment = "Asking";
 
     // go right to final price if player has bargained well
     if (noneedtobargain(store_num, final_ask)) {
@@ -633,7 +633,7 @@ static int sell_haggle(int store_num, int32_t *price, inven_type *item) {
 
     int32_t cur_ask;
     int32_t final_ask = 0;
-    char *comment;
+    const char *comment;
 
     if (!flag) {
         haggle_commands(-1);
