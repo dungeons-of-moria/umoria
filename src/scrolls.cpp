@@ -187,7 +187,7 @@ void read_scroll() {
                 ident = true;
                 break;
             case 11:
-                if (py.flags.confuse_monster == 0) {
+                if (py.flags.confuse_monster == false) {
                     msg_print("Your hands begin to glow.");
                     py.flags.confuse_monster = true;
                     ident = true;

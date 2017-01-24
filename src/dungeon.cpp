@@ -559,7 +559,7 @@ void dungeon() {
         }
 
         // Random teleportation
-        if ((py.flags.teleport) && (randint(100) == 1)) {
+        if (py.flags.teleport && randint(100) == 1) {
             disturb(0, 0);
             teleport(40);
         }

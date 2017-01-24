@@ -17,6 +17,7 @@
 DEBUG(static FILE *logfile);
 
 static bool sv_write();
+static void wr_bool(bool c);
 static void wr_byte(uint8_t);
 static void wr_short(uint16_t);
 static void wr_long(uint32_t);
@@ -25,6 +26,7 @@ static void wr_string(char *);
 static void wr_shorts(uint16_t *, int);
 static void wr_item(inven_type *);
 static void wr_monster(monster_type *);
+static bool rd_bool();
 static void rd_byte(uint8_t *);
 static void rd_short(uint16_t *);
 static void rd_long(uint32_t *);
@@ -121,7 +123,7 @@ static bool sv_write() {
 
     struct player_type::misc *m_ptr = &py.misc;
     wr_string(m_ptr->name);
-    wr_byte(m_ptr->male);
+    wr_bool(m_ptr->male);
     wr_long((uint32_t)m_ptr->au);
     wr_long((uint32_t)m_ptr->max_exp);
     wr_long((uint32_t)m_ptr->exp);
@@ -193,24 +195,24 @@ static bool sv_write() {
     wr_short((uint16_t)f_ptr->word_recall);
     wr_short((uint16_t)f_ptr->see_infra);
     wr_short((uint16_t)f_ptr->tim_infra);
-    wr_byte(f_ptr->see_inv);
-    wr_byte(f_ptr->teleport);
-    wr_byte(f_ptr->free_act);
-    wr_byte(f_ptr->slow_digest);
-    wr_byte(f_ptr->aggravate);
-    wr_byte(f_ptr->fire_resist);
-    wr_byte(f_ptr->cold_resist);
-    wr_byte(f_ptr->acid_resist);
-    wr_byte(f_ptr->regenerate);
-    wr_byte(f_ptr->lght_resist);
-    wr_byte(f_ptr->ffall);
-    wr_byte(f_ptr->sustain_str);
-    wr_byte(f_ptr->sustain_int);
-    wr_byte(f_ptr->sustain_wis);
-    wr_byte(f_ptr->sustain_con);
-    wr_byte(f_ptr->sustain_dex);
-    wr_byte(f_ptr->sustain_chr);
-    wr_byte(f_ptr->confuse_monster);
+    wr_bool(f_ptr->see_inv);
+    wr_bool(f_ptr->teleport);
+    wr_bool(f_ptr->free_act);
+    wr_bool(f_ptr->slow_digest);
+    wr_bool(f_ptr->aggravate);
+    wr_bool(f_ptr->fire_resist);
+    wr_bool(f_ptr->cold_resist);
+    wr_bool(f_ptr->acid_resist);
+    wr_bool(f_ptr->regenerate);
+    wr_bool(f_ptr->lght_resist);
+    wr_bool(f_ptr->ffall);
+    wr_bool(f_ptr->sustain_str);
+    wr_bool(f_ptr->sustain_int);
+    wr_bool(f_ptr->sustain_wis);
+    wr_bool(f_ptr->sustain_con);
+    wr_bool(f_ptr->sustain_dex);
+    wr_bool(f_ptr->sustain_chr);
+    wr_bool(f_ptr->confuse_monster);
     wr_byte(f_ptr->new_spells);
 
     wr_short((uint16_t)missile_ctr);
@@ -640,7 +642,7 @@ bool get_char(bool *generate) {
             struct player_type::misc *m_ptr = &py.misc;
 
             rd_string(m_ptr->name);
-            rd_byte(&m_ptr->male);
+            m_ptr->male = rd_bool();
             rd_long((uint32_t *)&m_ptr->au);
             rd_long((uint32_t *)&m_ptr->max_exp);
             rd_long((uint32_t *)&m_ptr->exp);
@@ -712,24 +714,24 @@ bool get_char(bool *generate) {
             rd_short((uint16_t *)&f_ptr->word_recall);
             rd_short((uint16_t *)&f_ptr->see_infra);
             rd_short((uint16_t *)&f_ptr->tim_infra);
-            rd_byte(&f_ptr->see_inv);
-            rd_byte(&f_ptr->teleport);
-            rd_byte(&f_ptr->free_act);
-            rd_byte(&f_ptr->slow_digest);
-            rd_byte(&f_ptr->aggravate);
-            rd_byte(&f_ptr->fire_resist);
-            rd_byte(&f_ptr->cold_resist);
-            rd_byte(&f_ptr->acid_resist);
-            rd_byte(&f_ptr->regenerate);
-            rd_byte(&f_ptr->lght_resist);
-            rd_byte(&f_ptr->ffall);
-            rd_byte(&f_ptr->sustain_str);
-            rd_byte(&f_ptr->sustain_int);
-            rd_byte(&f_ptr->sustain_wis);
-            rd_byte(&f_ptr->sustain_con);
-            rd_byte(&f_ptr->sustain_dex);
-            rd_byte(&f_ptr->sustain_chr);
-            rd_byte(&f_ptr->confuse_monster);
+            f_ptr->see_inv = rd_bool();
+            f_ptr->teleport = rd_bool();
+            f_ptr->free_act = rd_bool();
+            f_ptr->slow_digest = rd_bool();
+            f_ptr->aggravate = rd_bool();
+            f_ptr->fire_resist = rd_bool();
+            f_ptr->cold_resist = rd_bool();
+            f_ptr->acid_resist = rd_bool();
+            f_ptr->regenerate = rd_bool();
+            f_ptr->lght_resist = rd_bool();
+            f_ptr->ffall = rd_bool();
+            f_ptr->sustain_str = rd_bool();
+            f_ptr->sustain_int = rd_bool();
+            f_ptr->sustain_wis = rd_bool();
+            f_ptr->sustain_con = rd_bool();
+            f_ptr->sustain_dex = rd_bool();
+            f_ptr->sustain_chr = rd_bool();
+            f_ptr->confuse_monster = rd_bool();
             rd_byte(&f_ptr->new_spells);
 
             rd_short((uint16_t *)&missile_ctr);
@@ -1055,6 +1057,10 @@ bool get_char(bool *generate) {
     return false; // not reached
 }
 
+static void wr_bool(bool c) {
+    wr_byte((uint8_t)c);
+}
+
 static void wr_byte(uint8_t c) {
     xor_byte ^= c;
     (void)putc((int)xor_byte, fileptr);
@@ -1158,9 +1164,15 @@ static void wr_monster(monster_type *mon) {
     wr_byte(mon->fy);
     wr_byte(mon->fx);
     wr_byte(mon->cdis);
-    wr_byte(mon->ml);
+    wr_bool(mon->ml);
     wr_byte(mon->stunned);
     wr_byte(mon->confused);
+}
+
+static bool rd_bool() {
+    uint8_t value;
+    rd_byte(&value);
+    return (bool)value;
 }
 
 static void rd_byte(uint8_t *ptr) {
@@ -1265,7 +1277,7 @@ static void rd_monster(monster_type *mon) {
     rd_byte(&mon->fy);
     rd_byte(&mon->fx);
     rd_byte(&mon->cdis);
-    rd_byte(&mon->ml);
+    mon->ml = rd_bool();
     rd_byte(&mon->stunned);
     rd_byte(&mon->confused);
 }

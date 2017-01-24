@@ -75,7 +75,7 @@ typedef struct monster_type {
     uint8_t fx;   // X Pointer into map
     uint8_t cdis; // Cur dis from player
 
-    uint8_t ml;
+    bool ml;
     uint8_t stunned;
     uint8_t confused;
 } monster_type;
@@ -133,7 +133,7 @@ typedef struct inven_type {
 typedef struct player_type {
     struct misc {
         char name[PLAYER_NAME_SIZE]; // Name of character
-        uint8_t male;                // Sex of character
+        bool male;                   // Sex of character
         int32_t au;                  // Gold
         int32_t max_exp;             // Max experience
         int32_t exp;                 // Cur experience
@@ -206,24 +206,24 @@ typedef struct player_type {
         int16_t word_recall;     // Timed teleport level
         int16_t see_infra;       // See warm creatures
         int16_t tim_infra;       // Timed infra vision
-        uint8_t see_inv;         // Can see invisible
-        uint8_t teleport;        // Random teleportation
-        uint8_t free_act;        // Never paralyzed
-        uint8_t slow_digest;     // Lower food needs
-        uint8_t aggravate;       // Aggravate monsters
-        uint8_t fire_resist;     // Resistance to fire
-        uint8_t cold_resist;     // Resistance to cold
-        uint8_t acid_resist;     // Resistance to acid
-        uint8_t regenerate;      // Regenerate hit pts
-        uint8_t lght_resist;     // Resistance to light
-        uint8_t ffall;           // No damage falling
-        uint8_t sustain_str;     // Keep strength
-        uint8_t sustain_int;     // Keep intelligence
-        uint8_t sustain_wis;     // Keep wisdom
-        uint8_t sustain_con;     // Keep constitution
-        uint8_t sustain_dex;     // Keep dexterity
-        uint8_t sustain_chr;     // Keep charisma
-        uint8_t confuse_monster; // Glowing hands.
+        bool see_inv;            // Can see invisible
+        bool teleport;           // Random teleportation
+        bool free_act;           // Never paralyzed
+        bool slow_digest;        // Lower food needs
+        bool aggravate;          // Aggravate monsters
+        bool fire_resist;        // Resistance to fire
+        bool cold_resist;        // Resistance to cold
+        bool acid_resist;        // Resistance to acid
+        bool regenerate;         // Regenerate hit pts
+        bool lght_resist;        // Resistance to light
+        bool ffall;              // No damage falling
+        bool sustain_str;        // Keep strength
+        bool sustain_int;        // Keep intelligence
+        bool sustain_wis;        // Keep wisdom
+        bool sustain_con;        // Keep constitution
+        bool sustain_dex;        // Keep dexterity
+        bool sustain_chr;        // Keep charisma
+        bool confuse_monster;    // Glowing hands.
         uint8_t new_spells;      // Number of spells can learn.
     } flags;
 } player_type;
