@@ -38,8 +38,9 @@ bool set_corrodes(inven_type *item) {
     case TV_HARD_ARMOR:
     case TV_WAND:
         return true;
+    default:
+        return false;
     }
-    return false;
 }
 
 bool set_flammable(inven_type *item) {
@@ -62,8 +63,9 @@ bool set_flammable(inven_type *item) {
     case TV_SCROLL1:
     case TV_SCROLL2:
         return true;
+    default:
+        return false;
     }
-    return false;
 }
 
 bool set_frost_destroy(inven_type *item) {
@@ -135,8 +137,9 @@ bool set_acid_destroy(inven_type *item) {
     case TV_OPEN_DOOR:
     case TV_CLOSED_DOOR:
         return true;
+    default:
+        return false;
     }
-    return false;
 }
 
 bool set_fire_destroy(inven_type *item) {
@@ -164,8 +167,9 @@ bool set_fire_destroy(inven_type *item) {
     case TV_OPEN_DOOR:
     case TV_CLOSED_DOOR:
         return true;
+    default:
+        return false;
     }
-    return false;
 }
 
 // Items too large to fit in chests -DJG-
@@ -187,8 +191,9 @@ bool set_large(treasure_type *item) {
         } else {
             return false;
         }
+    default:
+        return false;
     }
-    return false;
 }
 
 bool general_store(int element) {
@@ -201,8 +206,9 @@ bool general_store(int element) {
     case TV_LIGHT:
     case TV_SPIKE:
         return true;
+    default:
+        return false;
     }
-    return false;
 }
 
 bool armory(int element) {
@@ -214,8 +220,9 @@ bool armory(int element) {
     case TV_HARD_ARMOR:
     case TV_SOFT_ARMOR:
         return true;
+    default:
+        return false;
     }
-    return false;
 }
 
 bool weaponsmith(int element) {
@@ -228,8 +235,9 @@ bool weaponsmith(int element) {
     case TV_POLEARM:
     case TV_SWORD:
         return true;
+    default:
+        return false;
     }
-    return false;
 }
 
 bool temple(int element) {
@@ -241,8 +249,9 @@ bool temple(int element) {
     case TV_POTION2:
     case TV_PRAYER_BOOK:
         return true;
+    default:
+        return false;
     }
-    return false;
 }
 
 bool alchemist(int element) {
@@ -252,8 +261,9 @@ bool alchemist(int element) {
     case TV_POTION1:
     case TV_POTION2:
         return true;
+    default:
+        return false;
     }
-    return false;
 }
 
 bool magic_shop(int element) {
@@ -268,6 +278,7 @@ bool magic_shop(int element) {
     case TV_POTION2:
     case TV_MAGIC_BOOK:
         return true;
+    default:
+        return false;
     }
-    return false;
 }
