@@ -227,7 +227,7 @@ static void highscores() {
         return;
     }
 
-    if (panic_save == true) {
+    if (panic_save) {
         msg_print("Sorry, scores for games restored from panic save files are not saved.");
         return;
     }
@@ -356,7 +356,7 @@ static void highscores() {
             // on single user system, allow any number of entries, but try
             // to prevent multiple entries per character by checking for
             // case when birthdate/sex/race/class are the same, and died_from
-            // of scorefile entry is "(saved)"
+            // of score file entry is "(saved)"
             if (((new_entry.uid != 0 && new_entry.uid == old_entry.uid) ||
                  (new_entry.uid == 0 && !strcmp(old_entry.died_from, "(saved)") && new_entry.birth_date == old_entry.birth_date)) &&
                 new_entry.sex == old_entry.sex &&
@@ -447,7 +447,7 @@ void exit_game() {
         (void)save_char();
     }
 
-    // add score to scorefile if applicable
+    // add score to score file if applicable
     if (character_generated) {
         // Clear character_saved, strange thing to do, but it prevents
         // inkey() from recursively calling exit_game() when there has

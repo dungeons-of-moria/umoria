@@ -1896,15 +1896,9 @@ void earthquake() {
 
 // Evil creatures don't like this. -RAK-
 int protect_evil() {
-    bool res;
-
     struct player_type::flags *f_ptr = &py.flags;
 
-    if (f_ptr->protevil == 0) {
-        res = true;
-    } else {
-        res = false;
-    }
+    bool res = f_ptr->protevil == 0;
     f_ptr->protevil += randint(25) + 3 * py.misc.lev;
 
     return res;

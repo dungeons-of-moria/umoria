@@ -408,7 +408,7 @@ void look() {
                         abort = look_ray(1, 2 * GRADF - 1, GRADF);
                     }
                 }
-            } while (abort == false && highlight_seams && (++gl_rock < 2));
+            } while (!abort && highlight_seams && (++gl_rock < 2));
 
             if (abort) {
                 msg_print("--Aborting look--");
@@ -475,11 +475,7 @@ static bool look_ray(int y, int from, int to) {
     // sight. If 'to' is  greater than 1, we do not really look at
     // stuff along the direct line of sight, but we do have to see
     // what is opaque for the purposes of obscuring other objects.
-    if ((y == 0 && to > 1) || (y == x && from < GRADF * 2)) {
-        gl_noquery = true;
-    } else {
-        gl_noquery = false;
-    }
+    gl_noquery = (y == 0 && to > 1) || (y == x && from < GRADF * 2);
 
     bool transparent;
     if (look_see(x, y, &transparent)) {

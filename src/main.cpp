@@ -131,7 +131,7 @@ int main(int argc, char *argv[]) {
     bool result = false;
     bool generate = false;
 
-    if ((new_game == false) && !access(savefile, 0) && get_char(&generate)) {
+    if (!new_game && !access(savefile, 0) && get_char(&generate)) {
         result = true;
     }
 

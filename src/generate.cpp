@@ -988,29 +988,20 @@ static void build_tunnel(int row1, int col1, int row2, int col2) {
     }
 }
 
-static int next_to(int y, int x) {
-    bool next;
-
+static bool next_to(int y, int x) {
     if (next_to_corr(y, x) > 2) {
-        if ((cave[y - 1][x].fval >= MIN_CAVE_WALL) &&
-            (cave[y + 1][x].fval >= MIN_CAVE_WALL)) {
-            next = true;
-        } else if ((cave[y][x - 1].fval >= MIN_CAVE_WALL) &&
-                   (cave[y][x + 1].fval >= MIN_CAVE_WALL)) {
-            next = true;
-        } else {
-            next = false;
+        if ((cave[y - 1][x].fval >= MIN_CAVE_WALL) && (cave[y + 1][x].fval >= MIN_CAVE_WALL)) {
+            return true;
         }
-    } else {
-        next = false;
+        return ((cave[y][x - 1].fval >= MIN_CAVE_WALL) && (cave[y][x + 1].fval >= MIN_CAVE_WALL));
     }
-    return next;
+
+    return false;
 }
 
 // Places door at y, x position if at least 2 walls found
 static void try_door(int y, int x) {
-    if ((cave[y][x].fval == CORR_FLOOR) && (randint(100) > DUN_TUN_JCT) &&
-        next_to(y, x)) {
+    if ((cave[y][x].fval == CORR_FLOOR) && (randint(100) > DUN_TUN_JCT) && next_to(y, x)) {
         place_door(y, x);
     }
 }
@@ -1037,7 +1028,7 @@ static void cave_gen() {
         int endy;
     };
 
-    int room_map[20][20];
+    bool room_map[20][20];
     int16_t yloc[400], xloc[400];
 
     int row_rooms = 2 * (cur_height / SCREEN_HEIGHT);
@@ -1056,7 +1047,7 @@ static void cave_gen() {
     k = 0;
     for (int i = 0; i < row_rooms; i++) {
         for (int j = 0; j < col_rooms; j++) {
-            if (room_map[i][j] == true) {
+            if (room_map[i][j]) {
                 yloc[k] = i * (SCREEN_HEIGHT >> 1) + QUART_HEIGHT;
                 xloc[k] = j * (SCREEN_WIDTH >> 1) + QUART_WIDTH;
                 if (dun_level > randint(DUN_UNUSUAL)) {

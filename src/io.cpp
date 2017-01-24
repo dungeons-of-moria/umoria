@@ -360,11 +360,7 @@ bool get_check(const char *prompt) {
 
     erase_line(0, 0);
 
-    if (res == 'Y' || res == 'y') {
-        return true;
-    } else {
-        return false;
-    }
+    return (res == 'Y' || res == 'y');
 }
 
 // Prompts (optional) and returns ord value of input char
@@ -376,12 +372,7 @@ int get_com(const char *prompt, char *command) {
 
     *command = inkey();
 
-    bool res;
-    if (*command == ESCAPE) {
-        res = false;
-    } else {
-        res = true;
-    }
+    bool res = (*command != ESCAPE);
 
     erase_line(MSG_LINE, 0);
 

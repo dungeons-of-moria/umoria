@@ -137,11 +137,7 @@ int bit_pos(uint32_t *test) {
 
 // Checks a co-ordinate for in bounds status -RAK-
 bool in_bounds(int y, int x) {
-    if ((y > 0) && (y < cur_height - 1) && (x > 0) && (x < cur_width - 1)) {
-        return true;
-    } else {
-        return false;
-    }
+    return (y > 0 && y < cur_height - 1 && x > 0 && x < cur_width - 1);
 }
 
 // Calculates current boundaries -RAK-
@@ -197,12 +193,7 @@ int get_panel(int y, int x, int force) {
 // Tests a given point to see if it is within the screen -RAK-
 // boundaries.
 bool panel_contains(int y, int x) {
-    if ((y >= panel_row_min) && (y <= panel_row_max) && (x >= panel_col_min) &&
-        (x <= panel_col_max)) {
-        return true;
-    } else {
-        return false;
-    }
+    return (y >= panel_row_min && y <= panel_row_max && x >= panel_col_min && x <= panel_col_max);
 }
 
 // Distance between two points -RAK-
@@ -457,7 +448,7 @@ uint8_t loc_symbol(int y, int x) {
         return t_list[cave_ptr->tptr].tchar;
     } else if (cave_ptr->fval <= MAX_CAVE_FLOOR) {
         return '.';
-    } else if (cave_ptr->fval == GRANITE_WALL || cave_ptr->fval == BOUNDARY_WALL || highlight_seams == false) {
+    } else if (cave_ptr->fval == GRANITE_WALL || cave_ptr->fval == BOUNDARY_WALL || !highlight_seams) {
         return '#';
     } else {
         // Originally set highlight bit, but that is not portable,
@@ -469,11 +460,8 @@ uint8_t loc_symbol(int y, int x) {
 // Tests a spot for light or field mark status -RAK-
 bool test_light(int y, int x) {
     cave_type *cave_ptr = &cave[y][x];
-    if (cave_ptr->pl || cave_ptr->tl || cave_ptr->fm) {
-        return true;
-    } else {
-        return false;
-    }
+
+    return (cave_ptr->pl || cave_ptr->tl || cave_ptr->fm);
 }
 
 // Prints the map of the dungeon -RAK-
@@ -882,11 +870,7 @@ void pusht(uint8_t x) {
 
 // Should the object be enchanted -RAK-
 bool magik(int chance) {
-    if (randint(100) <= chance) {
-        return true;
-    } else {
-        return false;
-    }
+    return (randint(100) <= chance);
 }
 
 // Enchant a bonus based on degree desired -RAK-

@@ -9,25 +9,15 @@
 #include "headers.h"
 
 bool set_room(int element) {
-    if ((element == DARK_FLOOR) || (element == LIGHT_FLOOR)) {
-        return true;
-    }
-    return false;
+    return (element == DARK_FLOOR || element == LIGHT_FLOOR);
 }
 
 bool set_corr(int element) {
-    if (element == CORR_FLOOR || element == BLOCKED_FLOOR) {
-        return true;
-    }
-    return false;
+    return (element == CORR_FLOOR || element == BLOCKED_FLOOR);
 }
 
 bool set_floor(int element) {
-    if (element <= MAX_CAVE_FLOOR) {
-        return true;
-    } else {
-        return false;
-    }
+    return (element <= MAX_CAVE_FLOOR);
 }
 
 bool set_corrodes(inven_type *item) {
@@ -54,11 +44,7 @@ bool set_flammable(inven_type *item) {
     case TV_CLOAK:
     case TV_SOFT_ARMOR:
         // Items of (RF) should not be destroyed.
-        if (item->flags & TR_RES_FIRE) {
-            return false;
-        } else {
-            return true;
-        }
+        return (item->flags & TR_RES_FIRE) == 0;
     case TV_STAFF:
     case TV_SCROLL1:
     case TV_SCROLL2:
@@ -69,11 +55,7 @@ bool set_flammable(inven_type *item) {
 }
 
 bool set_frost_destroy(inven_type *item) {
-    if ((item->tval == TV_POTION1) || (item->tval == TV_POTION2) ||
-        (item->tval == TV_FLASK)) {
-        return true;
-    }
-    return false;
+    return (item->tval == TV_POTION1 || item->tval == TV_POTION2 || item->tval == TV_FLASK);
 }
 
 bool set_acid_affect(inven_type *item) {
@@ -90,22 +72,13 @@ bool set_acid_affect(inven_type *item) {
     case TV_GLOVES:
     case TV_CLOAK:
     case TV_SOFT_ARMOR:
-        if (item->flags & TR_RES_ACID) {
-            return false;
-        } else {
-            return true;
-        }
+        return (item->flags & TR_RES_ACID) == 0;
     }
     return false;
 }
 
 bool set_lightning_destroy(inven_type *item) {
-    if ((item->tval == TV_RING) || (item->tval == TV_WAND) ||
-        (item->tval == TV_SPIKE)) {
-        return true;
-    } else {
-        return false;
-    }
+    return (item->tval == TV_RING || item->tval == TV_WAND || item->tval == TV_SPIKE);
 }
 
 bool set_null(inven_type *item) {
@@ -125,11 +98,7 @@ bool set_acid_destroy(inven_type *item) {
     case TV_SHIELD:
     case TV_HARD_ARMOR:
     case TV_SOFT_ARMOR:
-        if (item->flags & TR_RES_ACID) {
-            return false;
-        } else {
-            return true;
-        }
+        return (item->flags & TR_RES_ACID) == 0;
     case TV_STAFF:
     case TV_SCROLL1:
     case TV_SCROLL2:
@@ -152,11 +121,7 @@ bool set_fire_destroy(inven_type *item) {
     case TV_GLOVES:
     case TV_CLOAK:
     case TV_SOFT_ARMOR:
-        if (item->flags & TR_RES_FIRE) {
-            return false;
-        } else {
-            return true;
-        }
+        return (item->flags & TR_RES_FIRE) == 0;
     case TV_STAFF:
     case TV_SCROLL1:
     case TV_SCROLL2:
@@ -186,11 +151,7 @@ bool set_large(treasure_type *item) {
     case TV_HAFTED:
     case TV_SWORD:
     case TV_DIGGING:
-        if (item->weight > 150) {
-            return true;
-        } else {
-            return false;
-        }
+        return (item->weight > 150);
     default:
         return false;
     }

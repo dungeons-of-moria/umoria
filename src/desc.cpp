@@ -287,7 +287,7 @@ void objdes(char *out_val, inven_type *i_ptr, int pref) {
     vtype damstr;
     damstr[0] = '\0';
     int p1_use = IGNORED;
-    bool modify = (known1_p(i_ptr) ? false : true);
+    bool modify = known1_p(i_ptr) == 0;
     bool append_name = false;
 
     switch (i_ptr->tval) {

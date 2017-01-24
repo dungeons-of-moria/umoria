@@ -13,11 +13,7 @@
 void wizard_light() {
     bool flag;
 
-    if (cave[char_row][char_col].pl) {
-        flag = false;
-    } else {
-        flag = true;
-    }
+    flag = !cave[char_row][char_col].pl;
 
     for (int i = 0; i < cur_height; i++) {
         for (int j = 0; j < cur_width; j++) {

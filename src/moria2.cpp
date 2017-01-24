@@ -297,22 +297,18 @@ static bool see_wall(int dir, int y, int x) {
     }
 
     uint8_t c = loc_symbol(y, x);
-    if (c == '#' || c == '%') {
-        return true;
-    }
 
-    return false;
+    return (c == '#' || c == '%');
 }
 
 // Do we see anything? Used in running. -CJS-
 static bool see_nothing(int dir, int y, int x) {
-    if (!mmove(dir, &y, &x)) { // check to see if movement there possible
-        return false;
-    } else if (loc_symbol(y, x) == ' ') {
-        return true;
-    } else {
+    // check to see if movement there possible
+    if (!mmove(dir, &y, &x)) {
         return false;
     }
+
+    return (loc_symbol(y, x) == ' ');
 }
 
 // Determine the next direction for a run, or if we should stop. -CJS-
@@ -412,7 +408,7 @@ void area_affect(int dir, int y, int x) {
         }
 
         // choose a direction.
-        if (find_openarea == false) {
+        if (!find_openarea) {
             if (option2 == 0 || (find_examine && !find_cut)) {
                 // There is only one option, or if two, then we always examine
                 // potential corners and never cur known corners, so you step

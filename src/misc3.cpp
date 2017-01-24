@@ -1182,11 +1182,7 @@ bool inven_check_weight(inven_type *i_ptr) {
         i = 0;
     }
 
-    if (pack_heavy != i) {
-        return false;
-    } else {
-        return true;
-    }
+    return (pack_heavy == i);
 }
 
 // Are we strong enough for the current pack and weapon? -CJS-
@@ -1195,12 +1191,12 @@ void check_strength() {
 
     if (i_ptr->tval != TV_NOTHING &&
         (py.stats.use_stat[A_STR] * 15 < i_ptr->weight)) {
-        if (weapon_heavy == false) {
+        if (!weapon_heavy) {
             msg_print("You have trouble wielding such a heavy weapon.");
             weapon_heavy = true;
             calc_bonuses();
         }
-    } else if (weapon_heavy == true) {
+    } else if (weapon_heavy) {
         weapon_heavy = false;
         if (i_ptr->tval != TV_NOTHING) {
             msg_print("You are strong enough to wield your weapon.");
@@ -1323,7 +1319,7 @@ void print_spells(int *spell, int num, int comment, int nonconsec) {
         spell_type *s_ptr = &magic_spell[py.misc.pclass - 1][j];
 
         const char *p;
-        if (comment == false) {
+        if (comment == 0) {
             p = "";
         } else if ((spell_forgotten & (1L << j)) != 0) {
             p = " forgotten";
@@ -1363,7 +1359,7 @@ int get_spell(int *spell, int num, int *sn, int *sc, const char *prompt, int fir
     int offset = (classes[py.misc.pclass].spell == MAGE ? SPELL_OFFSET : PRAYER_OFFSET);
 
     char choice;
-    while (flag == false && get_com(out_str, &choice)) {
+    while (!flag && get_com(out_str, &choice)) {
         if (isupper((int)choice)) {
             *sn = choice - 'A' + first_spell;
 
@@ -2137,11 +2133,7 @@ bool player_saves() {
     // MPW C couldn't handle the expression, so split it into two parts
     int16_t temp = class_level_adj[py.misc.pclass][CLA_SAVE];
 
-    if (randint(100) <= (py.misc.save + stat_adj(A_WIS) + (temp * py.misc.lev / 3))) {
-        return true;
-    } else {
-        return false;
-    }
+    return (randint(100) <= (py.misc.save + stat_adj(A_WIS) + (temp * py.misc.lev / 3)));
 }
 
 // Finds range of item in inventory list -RAK-

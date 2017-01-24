@@ -1111,7 +1111,7 @@ void inven_command(char command) {
                                 inven_weight = 0;
                             }
                         }
-                        if (free_turn_flag == false && scr_state == BLANK_SCR) {
+                        if (!free_turn_flag && scr_state == BLANK_SCR) {
                             selecting = false;
                         }
                     }
@@ -1349,10 +1349,7 @@ int get_item(int *com_val, const char *pmt, int i, int j, char *mask, const char
 bool no_light() {
     cave_type *c_ptr = &cave[char_row][char_col];
 
-    if (!c_ptr->tl && !c_ptr->pl) {
-        return true;
-    }
-    return false;
+    return (!c_ptr->tl && !c_ptr->pl);
 }
 
 // map rogue_like direction commands into numbers
@@ -1694,11 +1691,7 @@ bool test_hit(int bth, int level, int pth, int ac, int attack_type) {
     int die = randint(20);
 
     // normal hit
-    if ((die != 1) && ((die == 20) || ((i > 0) && (randint(i) > ac)))) {
-        return true;
-    } else {
-        return false;
-    }
+    return (die != 1 && (die == 20 || (i > 0 && randint(i) > ac)));
 }
 
 // Decreases players hit points and sets death flag if necessary -RAK-

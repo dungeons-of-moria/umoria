@@ -39,11 +39,7 @@ void dungeon() {
 
     // Check light status for setup
     inven_type *i_ptr = &inventory[INVEN_LIGHT];
-    if (i_ptr->p1 > 0) {
-        player_light = true;
-    } else {
-        player_light = false;
-    }
+    player_light = (i_ptr->p1 > 0);
 
     // Check for a maximum level
     if (dun_level > p_ptr->max_dlv) {
@@ -751,7 +747,7 @@ void dungeon() {
                         move_cursor_relative(char_row, char_col);
 
                         // Commands are always converted to rogue form. -CJS-
-                        if (rogue_like_commands == false) {
+                        if (!rogue_like_commands) {
                             command = original_commands(command);
                         }
                         if (i > 0) {
@@ -1732,24 +1728,17 @@ static void regenmana(int percent) {
 static bool enchanted(inven_type *t_ptr) {
     if (t_ptr->tval < TV_MIN_ENCHANT || t_ptr->tval > TV_MAX_ENCHANT || t_ptr->flags & TR_CURSED) {
         return false;
-    }
-
-    if (known2_p(t_ptr)) {
+    } else if (known2_p(t_ptr)) {
         return false;
-    }
-    if (t_ptr->ident & ID_MAGIK) {
+    } else if (t_ptr->ident & ID_MAGIK) {
         return false;
-    }
-    if (t_ptr->tohit > 0 || t_ptr->todam > 0 || t_ptr->toac > 0) {
+    } else if (t_ptr->tohit > 0 || t_ptr->todam > 0 || t_ptr->toac > 0) {
+        return true;
+    } else if ((0x4000107fL & t_ptr->flags) && t_ptr->p1 > 0) {
+        return true;
+    } else if (0x07ffe980L & t_ptr->flags) {
         return true;
     }
-    if ((0x4000107fL & t_ptr->flags) && t_ptr->p1 > 0) {
-        return true;
-    }
-    if (0x07ffe980L & t_ptr->flags) {
-        return true;
-    }
-
     return false;
 }
 

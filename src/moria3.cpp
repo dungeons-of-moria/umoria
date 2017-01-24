@@ -426,15 +426,7 @@ int delete_object(int y, int x) {
     c_ptr->fm = false;
     lite_spot(y, x);
 
-    bool deleted;
-
-    if (test_light(y, x)) {
-        deleted = true;
-    } else {
-        deleted = false;
-    }
-
-    return deleted;
+    return (test_light(y, x));
 }
 
 // Allocates objects upon a creatures death -RAK-

@@ -565,51 +565,16 @@ bool get_char(bool *generate) {
         uint32_t l;
         rd_long(&l);
 
-        if (l & 0x1) {
-            find_cut = true;
-        } else {
-            find_cut = false;
-        }
-        if (l & 0x2) {
-            find_examine = true;
-        } else {
-            find_examine = false;
-        }
-        if (l & 0x4) {
-            find_prself = true;
-        } else {
-            find_prself = false;
-        }
-        if (l & 0x8) {
-            find_bound = true;
-        } else {
-            find_bound = false;
-        }
-        if (l & 0x10) {
-            prompt_carry_flag = true;
-        } else {
-            prompt_carry_flag = false;
-        }
-        if (l & 0x20) {
-            rogue_like_commands = true;
-        } else {
-            rogue_like_commands = false;
-        }
-        if (l & 0x40) {
-            show_weight_flag = true;
-        } else {
-            show_weight_flag = false;
-        }
-        if (l & 0x80) {
-            highlight_seams = true;
-        } else {
-            highlight_seams = false;
-        }
-        if (l & 0x100) {
-            find_ignore_doors = true;
-        } else {
-            find_ignore_doors = false;
-        }
+        find_cut = (l & 0x1) != 0;
+        find_examine = (l & 0x2) != 0;
+        find_prself = (l & 0x4) != 0;
+        find_bound = (l & 0x8) != 0;
+        prompt_carry_flag = (l & 0x10) != 0;
+        rogue_like_commands = (l & 0x20) != 0;
+        show_weight_flag = (l & 0x40) != 0;
+        highlight_seams = (l & 0x80) != 0;
+        find_ignore_doors = (l & 0x100) != 0;
+
         // save files before 5.2.2 don't have sound_beep_flag, set it on
         // for compatibility
         if ((version_min < 2) || (version_min == 2 && patch_level < 2)) {
@@ -989,13 +954,11 @@ bool get_char(bool *generate) {
             // let the user overwrite the old save file when save/quit
             from_savefile = 1;
 
-            if (panic_save == true) {
-                (void)sprintf(temp, "This game is from a panic save.  Score "
-                                    "will not be added to scoreboard.");
+            if (panic_save) {
+                (void)sprintf(temp, "This game is from a panic save.  Score will not be added to scoreboard.");
                 msg_print(temp);
             } else if (((!noscore) & 0x04) && duplicate_character()) {
-                (void)sprintf(temp, "This character is already on the "
-                                    "scoreboard; it will not be scored again.");
+                (void)sprintf(temp, "This character is already on the scoreboard; it will not be scored again.");
                 msg_print(temp);
                 noscore |= 0x4;
             }
