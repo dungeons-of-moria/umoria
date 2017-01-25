@@ -136,7 +136,7 @@ void known1(inven_type *i_ptr) {
     }
     offset <<= 6;
 
-    uint8_t indexx = i_ptr->subval & (ITEM_SINGLE_STACK_MIN - 1);
+    uint8_t indexx = (uint8_t) (i_ptr->subval & (ITEM_SINGLE_STACK_MIN - 1));
 
     object_ident[offset + indexx] |= OD_KNOWN1;
     // clear the tried flag, since it is now known
@@ -155,7 +155,7 @@ int known1_p(inven_type *i_ptr) {
     }
     offset <<= 6;
 
-    uint8_t indexx = i_ptr->subval & (ITEM_SINGLE_STACK_MIN - 1);
+    uint8_t indexx = (uint8_t) (i_ptr->subval & (ITEM_SINGLE_STACK_MIN - 1));
 
     return (object_ident[offset + indexx] & OD_KNOWN1);
 }
@@ -198,7 +198,7 @@ static void unsample(inven_type *i_ptr) {
     }
     offset <<= 6;
 
-    uint8_t indexx = i_ptr->subval & (ITEM_SINGLE_STACK_MIN - 1);
+    uint8_t indexx = (uint8_t) (i_ptr->subval & (ITEM_SINGLE_STACK_MIN - 1));
     object_ident[offset + indexx] &= ~OD_TRIED;
 }
 
@@ -210,7 +210,7 @@ void sample(inven_type *i_ptr) {
     }
     offset <<= 6;
 
-    uint8_t indexx = i_ptr->subval & (ITEM_SINGLE_STACK_MIN - 1);
+    uint8_t indexx = (uint8_t) (i_ptr->subval & (ITEM_SINGLE_STACK_MIN - 1));
     object_ident[offset + indexx] |= OD_TRIED;
 }
 
@@ -610,7 +610,7 @@ void objdes(char *out_val, inven_type *i_ptr, int pref) {
 void invcopy(inven_type *to, int from_index) {
     treasure_type *from = &object_list[from_index];
 
-    to->index = from_index;
+    to->index = (uint16_t) from_index;
     to->name2 = SN_NULL;
     to->inscrip[0] = '\0';
     to->flags = from->flags;

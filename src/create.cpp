@@ -24,8 +24,7 @@ static void get_stats() {
     } while (tot <= 42 || tot >= 54);
 
     for (int i = 0; i < 6; i++) {
-        py.stats.max_stat[i] =
-            5 + dice[3 * i] + dice[3 * i + 1] + dice[3 * i + 2];
+        py.stats.max_stat[i] = (uint8_t)(5 + dice[3 * i] + dice[3 * i + 1] + dice[3 * i + 2]);
     }
 }
 
@@ -61,7 +60,7 @@ static void change_stat(int stat, int16_t amount) {
             }
         }
     }
-    py.stats.max_stat[stat] = tmp_stat;
+    py.stats.max_stat[stat] = (uint8_t)tmp_stat;
 }
 
 // generate all stats and modify for race. needed in a separate
@@ -92,10 +91,10 @@ static void get_all_stats() {
     p_ptr->misc.stl = r_ptr->stl;
     p_ptr->misc.save = r_ptr->bsav;
     p_ptr->misc.hitdie = r_ptr->bhitdie;
-    p_ptr->misc.ptodam = todam_adj();
-    p_ptr->misc.ptohit = tohit_adj();
+    p_ptr->misc.ptodam = (int16_t)todam_adj();
+    p_ptr->misc.ptohit = (int16_t)tohit_adj();
     p_ptr->misc.ptoac = 0;
-    p_ptr->misc.pac = toac_adj();
+    p_ptr->misc.pac = (int16_t)toac_adj();
     p_ptr->misc.expfact = r_ptr->b_exp;
     p_ptr->flags.see_infra = r_ptr->infra;
 }
@@ -141,7 +140,7 @@ static void choose_race() {
 
     player_type *p_ptr = &py;
     race_type *r_ptr = &race[j];
-    p_ptr->misc.prace = j;
+    p_ptr->misc.prace = (uint8_t)j;
     put_buffer(r_ptr->trace, 3, 15);
 }
 
@@ -242,7 +241,7 @@ static void get_history() {
     } else if (social_class < 1) {
         social_class = 1;
     }
-    py.misc.sc = social_class;
+    py.misc.sc = (int16_t) social_class;
 }
 
 // Gets the character's sex -JWT-
@@ -276,15 +275,15 @@ static void get_sex() {
 // Computes character's age, height, and weight -JWT-
 static void get_ahw() {
     int i = py.misc.prace;
-    py.misc.age = race[i].b_age + randint((int)race[i].m_age);
+    py.misc.age = (uint16_t) (race[i].b_age + randint((int)race[i].m_age));
     if (py.misc.male) {
-        py.misc.ht = randnor((int)race[i].m_b_ht, (int)race[i].m_m_ht);
-        py.misc.wt = randnor((int)race[i].m_b_wt, (int)race[i].m_m_wt);
+        py.misc.ht = (uint16_t) randnor((int)race[i].m_b_ht, (int)race[i].m_m_ht);
+        py.misc.wt = (uint16_t) randnor((int)race[i].m_b_wt, (int)race[i].m_m_wt);
     } else {
-        py.misc.ht = randnor((int)race[i].f_b_ht, (int)race[i].f_m_ht);
-        py.misc.wt = randnor((int)race[i].f_b_wt, (int)race[i].f_m_wt);
+        py.misc.ht = (uint16_t) randnor((int)race[i].f_b_ht, (int)race[i].f_m_ht);
+        py.misc.wt = (uint16_t) randnor((int)race[i].f_b_wt, (int)race[i].f_m_wt);
     }
-    py.misc.disarm = race[i].b_dis + todis_adj();
+    py.misc.disarm = (int16_t) (race[i].b_dis + todis_adj());
 }
 
 // Gets a character class -JWT-
@@ -335,7 +334,7 @@ static void get_class() {
         s = inkey();
         j = s - 'a';
         if ((j < k) && (j >= 0)) {
-            py.misc.pclass = cl[j];
+            py.misc.pclass = (uint8_t) cl[j];
             c_ptr = &classes[py.misc.pclass];
             exit_flag = true;
             clear_from(20);
@@ -354,9 +353,9 @@ static void get_class() {
                 set_use_stat(i);
             }
 
-            p_ptr->misc.ptodam = todam_adj(); // Real values
-            p_ptr->misc.ptohit = tohit_adj();
-            p_ptr->misc.ptoac = toac_adj();
+            p_ptr->misc.ptodam = (int16_t) todam_adj(); // Real values
+            p_ptr->misc.ptohit = (int16_t) tohit_adj();
+            p_ptr->misc.ptoac = (int16_t) toac_adj();
             p_ptr->misc.pac = 0;
             p_ptr->misc.dis_td = p_ptr->misc.ptodam; // Displayed values
             p_ptr->misc.dis_th = p_ptr->misc.ptohit;
@@ -366,7 +365,7 @@ static void get_class() {
             // now set misc stats, do this after setting stats because of con_adj() for hit-points
             m_ptr = &py.misc;
             m_ptr->hitdie += c_ptr->adj_hd;
-            m_ptr->mhp = con_adj() + m_ptr->hitdie;
+            m_ptr->mhp = (int16_t) (con_adj() + m_ptr->hitdie);
             m_ptr->chp = m_ptr->mhp;
             m_ptr->chp_frac = 0;
 
@@ -378,7 +377,7 @@ static void get_class() {
             player_hp[0] = m_ptr->hitdie;
             do {
                 for (i = 1; i < MAX_PLAYER_LEVEL; i++) {
-                    player_hp[i] = randint((int)m_ptr->hitdie);
+                    player_hp[i] = (uint16_t) randint((int)m_ptr->hitdie);
                     player_hp[i] += player_hp[i - 1];
                 }
             } while ((player_hp[MAX_PLAYER_LEVEL - 1] < min_value) ||

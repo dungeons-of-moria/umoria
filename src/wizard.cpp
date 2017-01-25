@@ -45,7 +45,7 @@ void change_character() {
     if (get_string(tmp_str, 0, 25, 3)) {
         tmp_val = atoi(tmp_str);
         if ((tmp_val > 2) && (tmp_val < 119)) {
-            a_ptr[A_STR] = tmp_val;
+            a_ptr[A_STR] = (uint8_t) tmp_val;
             (void)res_stat(A_STR);
         }
     } else {
@@ -56,7 +56,7 @@ void change_character() {
     if (get_string(tmp_str, 0, 25, 3)) {
         tmp_val = atoi(tmp_str);
         if ((tmp_val > 2) && (tmp_val < 119)) {
-            a_ptr[A_INT] = tmp_val;
+            a_ptr[A_INT] = (uint8_t) tmp_val;
             (void)res_stat(A_INT);
         }
     } else {
@@ -67,7 +67,7 @@ void change_character() {
     if (get_string(tmp_str, 0, 25, 3)) {
         tmp_val = atoi(tmp_str);
         if ((tmp_val > 2) && (tmp_val < 119)) {
-            a_ptr[A_WIS] = tmp_val;
+            a_ptr[A_WIS] = (uint8_t) tmp_val;
             (void)res_stat(A_WIS);
         }
     } else {
@@ -78,7 +78,7 @@ void change_character() {
     if (get_string(tmp_str, 0, 25, 3)) {
         tmp_val = atoi(tmp_str);
         if ((tmp_val > 2) && (tmp_val < 119)) {
-            a_ptr[A_DEX] = tmp_val;
+            a_ptr[A_DEX] = (uint8_t) tmp_val;
             (void)res_stat(A_DEX);
         }
     } else {
@@ -89,7 +89,7 @@ void change_character() {
     if (get_string(tmp_str, 0, 25, 3)) {
         tmp_val = atoi(tmp_str);
         if ((tmp_val > 2) && (tmp_val < 119)) {
-            a_ptr[A_CON] = tmp_val;
+            a_ptr[A_CON] = (uint8_t) tmp_val;
             (void)res_stat(A_CON);
         }
     } else {
@@ -100,7 +100,7 @@ void change_character() {
     if (get_string(tmp_str, 0, 25, 3)) {
         tmp_val = atoi(tmp_str);
         if ((tmp_val > 2) && (tmp_val < 119)) {
-            a_ptr[A_CHR] = tmp_val;
+            a_ptr[A_CHR] = (uint8_t) tmp_val;
             (void)res_stat(A_CHR);
         }
     } else {
@@ -113,8 +113,8 @@ void change_character() {
     if (get_string(tmp_str, 0, 25, 5)) {
         tmp_val = atoi(tmp_str);
         if ((tmp_val > 0) && (tmp_val <= MAX_SHORT)) {
-            m_ptr->mhp = tmp_val;
-            m_ptr->chp = tmp_val;
+            m_ptr->mhp = (int16_t) tmp_val;
+            m_ptr->chp = (int16_t) tmp_val;
             m_ptr->chp_frac = 0;
             prt_mhp();
             prt_chp();
@@ -127,8 +127,8 @@ void change_character() {
     if (get_string(tmp_str, 0, 25, 5)) {
         tmp_val = atoi(tmp_str);
         if ((tmp_val > -1) && (tmp_val <= MAX_SHORT) && (*tmp_str != '\0')) {
-            m_ptr->mana = tmp_val;
-            m_ptr->cmana = tmp_val;
+            m_ptr->mana = (int16_t) tmp_val;
+            m_ptr->cmana = (int16_t) tmp_val;
             m_ptr->cmana_frac = 0;
             prt_cmana();
         }
@@ -155,7 +155,7 @@ void change_character() {
     if (get_string(tmp_str, 0, tmp_val, 3)) {
         tmp_val = atoi(tmp_str);
         if ((tmp_val > -1) && (tmp_val < 201) && (*tmp_str != '\0')) {
-            m_ptr->srh = tmp_val;
+            m_ptr->srh = (int16_t) tmp_val;
         }
     } else {
         return;
@@ -167,7 +167,7 @@ void change_character() {
     if (get_string(tmp_str, 0, tmp_val, 3)) {
         tmp_val = atoi(tmp_str);
         if ((tmp_val > -2) && (tmp_val < 19) && (*tmp_str != '\0')) {
-            m_ptr->stl = tmp_val;
+            m_ptr->stl = (int16_t) tmp_val;
         }
     } else {
         return;
@@ -179,7 +179,7 @@ void change_character() {
     if (get_string(tmp_str, 0, tmp_val, 3)) {
         tmp_val = atoi(tmp_str);
         if ((tmp_val > -1) && (tmp_val < 201) && (*tmp_str != '\0')) {
-            m_ptr->disarm = tmp_val;
+            m_ptr->disarm = (int16_t) tmp_val;
         }
     } else {
         return;
@@ -191,7 +191,7 @@ void change_character() {
     if (get_string(tmp_str, 0, tmp_val, 3)) {
         tmp_val = atoi(tmp_str);
         if ((tmp_val > -1) && (tmp_val < 201) && (*tmp_str != '\0')) {
-            m_ptr->save = tmp_val;
+            m_ptr->save = (int16_t) tmp_val;
         }
     } else {
         return;
@@ -203,7 +203,7 @@ void change_character() {
     if (get_string(tmp_str, 0, tmp_val, 3)) {
         tmp_val = atoi(tmp_str);
         if ((tmp_val > -1) && (tmp_val < 201) && (*tmp_str != '\0')) {
-            m_ptr->bth = tmp_val;
+            m_ptr->bth = (int16_t) tmp_val;
         }
     } else {
         return;
@@ -215,7 +215,7 @@ void change_character() {
     if (get_string(tmp_str, 0, tmp_val, 3)) {
         tmp_val = atoi(tmp_str);
         if ((tmp_val > -1) && (tmp_val < 201) && (*tmp_str != '\0')) {
-            m_ptr->bthb = tmp_val;
+            m_ptr->bthb = (int16_t) tmp_val;
         }
     } else {
         return;
@@ -227,7 +227,7 @@ void change_character() {
     if (get_string(tmp_str, 0, tmp_val, 3)) {
         tmp_val = atoi(tmp_str);
         if (tmp_val > -1 && (*tmp_str != '\0')) {
-            m_ptr->wt = tmp_val;
+            m_ptr->wt = (uint16_t) tmp_val;
         }
     } else {
         return;
@@ -265,7 +265,7 @@ void wizard_create() {
         return;
     }
     tmp_val = atoi(tmp_str);
-    i_ptr->tval = tmp_val;
+    i_ptr->tval = (uint8_t) tmp_val;
 
     prt("Tchar  : ", 0, 0);
     if (!get_string(tmp_str, 0, 9, 1)) {
@@ -278,70 +278,70 @@ void wizard_create() {
         return;
     }
     tmp_val = atoi(tmp_str);
-    i_ptr->subval = tmp_val;
+    i_ptr->subval = (uint8_t) tmp_val;
 
     prt("Weight : ", 0, 0);
     if (!get_string(tmp_str, 0, 9, 5)) {
         return;
     }
     tmp_val = atoi(tmp_str);
-    i_ptr->weight = tmp_val;
+    i_ptr->weight = (uint16_t) tmp_val;
 
     prt("Number : ", 0, 0);
     if (!get_string(tmp_str, 0, 9, 5)) {
         return;
     }
     tmp_val = atoi(tmp_str);
-    i_ptr->number = tmp_val;
+    i_ptr->number = (uint8_t) tmp_val;
 
     prt("Damage (dice): ", 0, 0);
     if (!get_string(tmp_str, 0, 15, 3)) {
         return;
     }
     tmp_val = atoi(tmp_str);
-    i_ptr->damage[0] = tmp_val;
+    i_ptr->damage[0] = (uint8_t) tmp_val;
 
     prt("Damage (sides): ", 0, 0);
     if (!get_string(tmp_str, 0, 16, 3)) {
         return;
     }
     tmp_val = atoi(tmp_str);
-    i_ptr->damage[1] = tmp_val;
+    i_ptr->damage[1] = (uint8_t) tmp_val;
 
     prt("+To hit: ", 0, 0);
     if (!get_string(tmp_str, 0, 9, 3)) {
         return;
     }
     tmp_val = atoi(tmp_str);
-    i_ptr->tohit = tmp_val;
+    i_ptr->tohit = (int16_t) tmp_val;
 
     prt("+To dam: ", 0, 0);
     if (!get_string(tmp_str, 0, 9, 3)) {
         return;
     }
     tmp_val = atoi(tmp_str);
-    i_ptr->todam = tmp_val;
+    i_ptr->todam = (int16_t) tmp_val;
 
     prt("AC     : ", 0, 0);
     if (!get_string(tmp_str, 0, 9, 3)) {
         return;
     }
     tmp_val = atoi(tmp_str);
-    i_ptr->ac = tmp_val;
+    i_ptr->ac = (int16_t) tmp_val;
 
     prt("+To AC : ", 0, 0);
     if (!get_string(tmp_str, 0, 9, 3)) {
         return;
     }
     tmp_val = atoi(tmp_str);
-    i_ptr->toac = tmp_val;
+    i_ptr->toac = (int16_t) tmp_val;
 
     prt("P1     : ", 0, 0);
     if (!get_string(tmp_str, 0, 9, 5)) {
         return;
     }
     tmp_val = atoi(tmp_str);
-    i_ptr->p1 = tmp_val;
+    i_ptr->p1 = (int16_t) tmp_val;
 
     prt("Flags (In HEX): ", 0, 0);
     if (!get_string(tmp_str, 0, 16, 8)) {
@@ -370,7 +370,7 @@ void wizard_create() {
         return;
     }
     tmp_val = atoi(tmp_str);
-    i_ptr->level = tmp_val;
+    i_ptr->level = (uint8_t) tmp_val;
 
     if (get_check("Allocate?")) {
         // delete object first if any, before call popt
@@ -381,7 +381,7 @@ void wizard_create() {
 
         tmp_val = popt();
         t_list[tmp_val] = forge;
-        c_ptr->tptr = tmp_val;
+        c_ptr->tptr = (uint8_t) tmp_val;
         msg_print("Allocated.");
     } else {
         msg_print("Aborted.");

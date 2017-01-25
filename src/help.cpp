@@ -303,7 +303,7 @@ void ident_char() {
                 save_screen();
             }
             n++;
-            query = roff_recall(i);
+            query = (char) roff_recall(i);
             restore_screen();
             if (query == ESCAPE) {
                 break;

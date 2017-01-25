@@ -39,9 +39,9 @@ void display_scores() {
     (void)fseek(highscore_fp, (off_t)0, SEEK_SET);
 
     // Read version numbers from the score file, and check for validity.
-    uint8_t version_maj = getc(highscore_fp);
-    uint8_t version_min = getc(highscore_fp);
-    uint8_t patch_level = getc(highscore_fp);
+    uint8_t version_maj = (uint8_t) getc(highscore_fp);
+    uint8_t version_min = (uint8_t) getc(highscore_fp);
+    uint8_t patch_level = (uint8_t) getc(highscore_fp);
 
     // Support score files from 5.2.2 to present.
     if (feof(highscore_fp)) {
@@ -272,9 +272,9 @@ static void highscores() {
     (void)fseek(highscore_fp, (long)0, SEEK_SET);
 
     // Read version numbers from the score file, and check for validity.
-    uint8_t version_maj = getc(highscore_fp);
-    uint8_t version_min = getc(highscore_fp);
-    uint8_t patch_level = getc(highscore_fp);
+    uint8_t version_maj = (uint8_t) getc(highscore_fp);
+    uint8_t version_min = (uint8_t) getc(highscore_fp);
+    uint8_t patch_level = (uint8_t) getc(highscore_fp);
 
     // If this is a new score file, it should be empty.
     // Write the current version numbers to the score file.

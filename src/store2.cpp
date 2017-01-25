@@ -199,7 +199,7 @@ static void display_inventory(int store_num, int start) {
         bigvtype out_val1, out_val2;
 
         objdes(out_val1, i_ptr, true);
-        i_ptr->number = x;
+        i_ptr->number = (uint8_t) x;
         (void)sprintf(out_val2, "%c) %s", 'a' + i, out_val1);
         prt(out_val2, i + 5, 0);
         x = s_ptr->store_inven[start].scost;
@@ -371,7 +371,7 @@ static bool get_haggle(const char *comment, int32_t *new_offer, int num_offer) {
             if (i == 0) {
                 increment = false;
             } else {
-                last_store_inc = i;
+                last_store_inc = (int16_t) i;
             }
         } else if (num_offer && *out_val == '\0') {
             i = last_store_inc;
@@ -478,7 +478,7 @@ static int purchase_haggle(int store_num, int32_t *price, inven_type *item) {
         didnt_haggle = true;
 
         // Set up automatic increment, so that a return will accept the final price.
-        last_store_inc = min_sell;
+        last_store_inc = (int16_t) min_sell;
         num_offer = 1;
     }
 
@@ -543,7 +543,7 @@ static int purchase_haggle(int store_num, int32_t *price, inven_type *item) {
 
                 // Set the automatic haggle increment so that RET will give
                 // a new_offer equal to the final_ask price.
-                last_store_inc = final_ask - new_offer;
+                last_store_inc = (int16_t) (final_ask - new_offer);
                 final_flag++;
                 if (final_flag > 3) {
                     if (increase_insults(store_num)) {
@@ -568,7 +568,7 @@ static int purchase_haggle(int store_num, int32_t *price, inven_type *item) {
                 // If the current increment would take you over the store's
                 // price, then decrease it to an exact match.
                 if (cur_ask - last_offer < last_store_inc) {
-                    last_store_inc = cur_ask - last_offer;
+                    last_store_inc = (int16_t) (cur_ask - last_offer);
                 }
             }
         }
@@ -667,7 +667,7 @@ static int sell_haggle(int store_num, int32_t *price, inven_type *item) {
 
                 // Set up automatic increment, so that a return
                 // will accept the final price.
-                last_store_inc = final_ask;
+                last_store_inc = (int16_t) final_ask;
                 num_offer = 1;
             }
         }
@@ -742,7 +742,7 @@ static int sell_haggle(int store_num, int32_t *price, inven_type *item) {
 
                     // Set the automatic haggle increment so that RET will give
                     // a new_offer equal to the final_ask price.
-                    last_store_inc = final_ask - new_offer;
+                    last_store_inc = (int16_t) (final_ask - new_offer);
                     final_flag++;
                     if (final_flag > 3) {
                         if (increase_insults(store_num)) {
@@ -770,7 +770,7 @@ static int sell_haggle(int store_num, int32_t *price, inven_type *item) {
                     // If the current decrement would take you under the store's
                     // price, then increase it to an exact match.
                     if (cur_ask - last_offer > last_store_inc) {
-                        last_store_inc = cur_ask - last_offer;
+                        last_store_inc = (int16_t) (cur_ask - last_offer);
                     }
                 }
             }
@@ -891,7 +891,7 @@ static bool store_sell(int store_num, int *cur_top) {
     for (int counter = 0; counter < inven_ctr; counter++) {
         int flag = (*store_buy[store_num])(inventory[counter].tval);
 
-        mask[counter] = flag;
+        mask[counter] = (char) flag;
         if (flag) {
             if (counter < first_item) {
                 first_item = counter;

@@ -182,7 +182,7 @@ void pray() {
             if (!free_turn_flag) {
                 if (s_ptr->smana > m_ptr->cmana) {
                     msg_print("You faint from fatigue!");
-                    py.flags.paralysis = randint((5 * (s_ptr->smana - m_ptr->cmana)));
+                    py.flags.paralysis = (int16_t) randint((5 * (s_ptr->smana - m_ptr->cmana)));
                     m_ptr->cmana = 0;
                     m_ptr->cmana_frac = 0;
                     if (randint(3) == 1) {

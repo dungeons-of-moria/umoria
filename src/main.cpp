@@ -288,7 +288,7 @@ static void init_t_level() {
 
     for (int i = 0; i < MAX_DUNGEON_OBJ; i++) {
         int l = object_list[i].level;
-        sorted_objects[t_level[l] - tmp[l]] = i;
+        sorted_objects[t_level[l] - tmp[l]] = (int16_t) i;
         tmp[l]++;
     }
 }

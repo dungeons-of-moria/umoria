@@ -67,7 +67,7 @@ static void fill_cave(int fval) {
         for (int j = cur_width - 2; j > 0; j--) {
             if ((c_ptr->fval == NULL_WALL) || (c_ptr->fval == TMP1_WALL) ||
                 (c_ptr->fval == TMP2_WALL)) {
-                c_ptr->fval = fval;
+                c_ptr->fval = (uint8_t) fval;
             }
             c_ptr++;
         }
@@ -137,7 +137,7 @@ static void place_streamer(int fval, int treas_chance) {
             if (in_bounds(ty, tx)) {
                 cave_type *c_ptr = &cave[ty][tx];
                 if (c_ptr->fval == GRANITE_WALL) {
-                    c_ptr->fval = fval;
+                    c_ptr->fval = (uint8_t) fval;
                     if (randint(treas_chance) == 1) {
                         place_gold(ty, tx);
                     }
@@ -150,7 +150,7 @@ static void place_streamer(int fval, int treas_chance) {
 static void place_open_door(int y, int x) {
     int cur_pos = popt();
     cave_type *cave_ptr = &cave[y][x];
-    cave_ptr->tptr = cur_pos;
+    cave_ptr->tptr = (uint8_t) cur_pos;
     invcopy(&t_list[cur_pos], OBJ_OPEN_DOOR);
     cave_ptr->fval = CORR_FLOOR;
 }
@@ -158,7 +158,7 @@ static void place_open_door(int y, int x) {
 static void place_broken_door(int y, int x) {
     int cur_pos = popt();
     cave_type *cave_ptr = &cave[y][x];
-    cave_ptr->tptr = cur_pos;
+    cave_ptr->tptr = (uint8_t) cur_pos;
     invcopy(&t_list[cur_pos], OBJ_OPEN_DOOR);
     cave_ptr->fval = CORR_FLOOR;
     t_list[cur_pos].p1 = 1;
@@ -167,7 +167,7 @@ static void place_broken_door(int y, int x) {
 static void place_closed_door(int y, int x) {
     int cur_pos = popt();
     cave_type *cave_ptr = &cave[y][x];
-    cave_ptr->tptr = cur_pos;
+    cave_ptr->tptr = (uint8_t) cur_pos;
     invcopy(&t_list[cur_pos], OBJ_CLOSED_DOOR);
     cave_ptr->fval = BLOCKED_FLOOR;
 }
@@ -175,25 +175,25 @@ static void place_closed_door(int y, int x) {
 static void place_locked_door(int y, int x) {
     int cur_pos = popt();
     cave_type *cave_ptr = &cave[y][x];
-    cave_ptr->tptr = cur_pos;
+    cave_ptr->tptr = (uint8_t) cur_pos;
     invcopy(&t_list[cur_pos], OBJ_CLOSED_DOOR);
     cave_ptr->fval = BLOCKED_FLOOR;
-    t_list[cur_pos].p1 = randint(10) + 10;
+    t_list[cur_pos].p1 = (int16_t) (randint(10) + 10);
 }
 
 static void place_stuck_door(int y, int x) {
     int cur_pos = popt();
     cave_type *cave_ptr = &cave[y][x];
-    cave_ptr->tptr = cur_pos;
+    cave_ptr->tptr = (uint8_t) cur_pos;
     invcopy(&t_list[cur_pos], OBJ_CLOSED_DOOR);
     cave_ptr->fval = BLOCKED_FLOOR;
-    t_list[cur_pos].p1 = -randint(10) - 10;
+    t_list[cur_pos].p1 = (int16_t) (-randint(10) - 10);
 }
 
 static void place_secret_door(int y, int x) {
     int cur_pos = popt();
     cave_type *cave_ptr = &cave[y][x];
-    cave_ptr->tptr = cur_pos;
+    cave_ptr->tptr = (uint8_t) cur_pos;
     invcopy(&t_list[cur_pos], OBJ_SECRET_DOOR);
     cave_ptr->fval = BLOCKED_FLOOR;
 }
@@ -227,7 +227,7 @@ static void place_up_stairs(int y, int x) {
         (void)delete_object(y, x);
     }
     int cur_pos = popt();
-    cave_ptr->tptr = cur_pos;
+    cave_ptr->tptr = (uint8_t) cur_pos;
     invcopy(&t_list[cur_pos], OBJ_UP_STAIR);
 }
 
@@ -238,7 +238,7 @@ static void place_down_stairs(int y, int x) {
         (void)delete_object(y, x);
     }
     int cur_pos = popt();
-    cave_ptr->tptr = cur_pos;
+    cave_ptr->tptr = (uint8_t) cur_pos;
     invcopy(&t_list[cur_pos], OBJ_DOWN_STAIR);
 }
 
@@ -1017,8 +1017,8 @@ static void new_spot(int16_t *y, int16_t *x) {
         c_ptr = &cave[i][j];
     } while (c_ptr->fval >= MIN_CLOSED_SPACE || (c_ptr->cptr != 0) || (c_ptr->tptr != 0));
 
-    *y = i;
-    *x = j;
+    *y = (int16_t) i;
+    *x = (int16_t) j;
 }
 
 // Cave logic flow for generation of new dungeon
@@ -1048,8 +1048,8 @@ static void cave_gen() {
     for (int i = 0; i < row_rooms; i++) {
         for (int j = 0; j < col_rooms; j++) {
             if (room_map[i][j]) {
-                yloc[k] = i * (SCREEN_HEIGHT >> 1) + QUART_HEIGHT;
-                xloc[k] = j * (SCREEN_WIDTH >> 1) + QUART_WIDTH;
+                yloc[k] = (int16_t) (i * (SCREEN_HEIGHT >> 1) + QUART_HEIGHT);
+                xloc[k] = (int16_t) (j * (SCREEN_WIDTH >> 1) + QUART_WIDTH);
                 if (dun_level > randint(DUN_UNUSUAL)) {
                     int tmp = randint(3);
                     if (tmp == 1) {
@@ -1074,8 +1074,8 @@ static void cave_gen() {
         int x1 = xloc[pick1];
         yloc[pick1] = yloc[pick2];
         xloc[pick1] = xloc[pick2];
-        yloc[pick2] = y1;
-        xloc[pick2] = x1;
+        yloc[pick2] = (int16_t) y1;
+        xloc[pick2] = (int16_t) x1;
     }
 
     doorindex = 0;
@@ -1166,7 +1166,7 @@ static void build_store(int store_num, int y, int x) {
     cave_type *c_ptr = &cave[i][j];
     c_ptr->fval = CORR_FLOOR;
     int cur_pos = popt();
-    c_ptr->tptr = cur_pos;
+    c_ptr->tptr = (uint8_t) cur_pos;
     invcopy(&t_list[cur_pos], OBJ_STORE_DOOR + store_num);
 }
 
@@ -1257,16 +1257,16 @@ void generate_cave() {
     if (dun_level == 0) {
         cur_height = SCREEN_HEIGHT;
         cur_width = SCREEN_WIDTH;
-        max_panel_rows = (cur_height / SCREEN_HEIGHT) * 2 - 2;
-        max_panel_cols = (cur_width / SCREEN_WIDTH) * 2 - 2;
+        max_panel_rows = (int16_t) ((cur_height / SCREEN_HEIGHT) * 2 - 2);
+        max_panel_cols = (int16_t) ((cur_width / SCREEN_WIDTH) * 2 - 2);
         panel_row = max_panel_rows;
         panel_col = max_panel_cols;
         town_gen();
     } else {
         cur_height = MAX_HEIGHT;
         cur_width = MAX_WIDTH;
-        max_panel_rows = (cur_height / SCREEN_HEIGHT) * 2 - 2;
-        max_panel_cols = (cur_width / SCREEN_WIDTH) * 2 - 2;
+        max_panel_rows = (int16_t) ((cur_height / SCREEN_HEIGHT) * 2 - 2);
+        max_panel_cols = (int16_t) ((cur_width / SCREEN_WIDTH) * 2 - 2);
         panel_row = max_panel_rows;
         panel_col = max_panel_cols;
         cave_gen();

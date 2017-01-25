@@ -204,7 +204,7 @@ void disarm_trap() {
                     int tmp = py.flags.confused;
                     py.flags.confused = 0;
                     move_char(dir, false);
-                    py.flags.confused = tmp;
+                    py.flags.confused = (int16_t) tmp;
                     prt_experience();
                 } else if ((tot > 5) && (randint(tot) > 5)) {
                     // avoid randint(0) call
@@ -570,7 +570,7 @@ static bool look_see(int x, int y, bool *transparent) {
         query = inkey();
         if (query == 'r' || query == 'R') {
             save_screen();
-            query = roff_recall(j);
+            query = (char) roff_recall(j);
             restore_screen();
         }
     }
@@ -762,7 +762,7 @@ static void drop_throw(int y, int x, inven_type *t_ptr) {
 
     if (flag) {
         int cur_pos = popt();
-        cave[i][j].tptr = cur_pos;
+        cave[i][j].tptr = (uint8_t) cur_pos;
         t_list[cur_pos] = *t_ptr;
         lite_spot(i, j);
     } else {
@@ -925,7 +925,7 @@ static void py_bash(int y, int x) {
             msg_print(out_val);
             prt_experience();
         } else {
-            m_name[0] = toupper((int)m_name[0]); // Capitalize
+            m_name[0] = (char) toupper((int)m_name[0]); // Capitalize
 
             // Can not stun Balrog
             int avg_max_hp = (c_ptr->cdefense & CD_MAX_HP ? c_ptr->hd[0] * c_ptr->hd[1] : (c_ptr->hd[0] * (c_ptr->hd[1] + 1)) >> 1);
@@ -948,7 +948,7 @@ static void py_bash(int y, int x) {
     }
     if (randint(150) > py.stats.use_stat[A_DEX]) {
         msg_print("You are off balance.");
-        py.flags.paralysis = 1 + randint(2);
+        py.flags.paralysis = (int16_t) (1 + randint(2));
     }
 }
 
@@ -1003,7 +1003,7 @@ void bash() {
                 if (randint(tmp * (20 + abs(t_ptr->p1))) < 10 * (tmp - abs(t_ptr->p1))) {
                     msg_print("The door crashes open!");
                     invcopy(&t_list[c_ptr->tptr], OBJ_OPEN_DOOR);
-                    t_ptr->p1 = 1 - randint(2); // 50% chance of breaking door
+                    t_ptr->p1 = (int16_t) (1 - randint(2)); // 50% chance of breaking door
                     c_ptr->fval = CORR_FLOOR;
                     if (py.flags.confused == 0) {
                         move_char(dir, false);
@@ -1012,7 +1012,7 @@ void bash() {
                     }
                 } else if (randint(150) > py.stats.use_stat[A_DEX]) {
                     msg_print("You are off-balance.");
-                    py.flags.paralysis = 1 + randint(2);
+                    py.flags.paralysis = (int16_t) (1 + randint(2));
                 } else if (command_count == 0) {
                     msg_print("The door holds firm.");
                 }

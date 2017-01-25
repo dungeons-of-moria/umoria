@@ -101,7 +101,7 @@ void magic_treasure(int x, int level) {
 
                     // the value in p1 is used for strength increase
                     // p1 is also used for sustain stat
-                    t_ptr->p1 = randint(4);
+                    t_ptr->p1 = (int16_t) randint(4);
                     t_ptr->name2 = SN_HA;
                     t_ptr->cost += t_ptr->p1 * 500;
                     t_ptr->cost += 10000;
@@ -114,7 +114,7 @@ void magic_treasure(int x, int level) {
                     t_ptr->name2 = SN_DF;
 
                     // the value in p1 is used for stealth
-                    t_ptr->p1 = randint(3);
+                    t_ptr->p1 = (int16_t) randint(3);
                     t_ptr->cost += t_ptr->p1 * 500;
                     t_ptr->cost += 7500;
                     break;
@@ -203,7 +203,7 @@ void magic_treasure(int x, int level) {
                 t_ptr->p1 += m_bonus(0, 25, level);
             } else {
                 // a cursed digging tool
-                t_ptr->p1 = -m_bonus(1, 30, level);
+                t_ptr->p1 = (int16_t) -m_bonus(1, 30, level);
                 t_ptr->cost = 0;
                 t_ptr->flags |= TR_CURSED;
             }
@@ -235,7 +235,7 @@ void magic_treasure(int x, int level) {
                     t_ptr->name2 = SN_WEAKNESS;
                 }
                 t_ptr->ident |= ID_SHOW_P1;
-                t_ptr->p1 = -m_bonus(1, 10, level);
+                t_ptr->p1 = (int16_t) -m_bonus(1, 10, level);
             }
             t_ptr->toac -= m_bonus(1, 40, level);
             t_ptr->flags |= TR_CURSED;
@@ -261,7 +261,7 @@ void magic_treasure(int x, int level) {
                 {
                     t_ptr->flags |= TR_STEALTH;
                     t_ptr->ident |= ID_SHOW_P1;
-                    t_ptr->p1 = randint(3);
+                    t_ptr->p1 = (int16_t) randint(3);
                     t_ptr->name2 = SN_STEALTH;
                     t_ptr->cost += 500;
                 }
@@ -278,7 +278,7 @@ void magic_treasure(int x, int level) {
                 t_ptr->name2 = SN_NOISE;
             } else {
                 t_ptr->name2 = SN_GREAT_MASS;
-                t_ptr->weight = t_ptr->weight * 5;
+                t_ptr->weight = (uint16_t) (t_ptr->weight * 5);
             }
             t_ptr->cost = 0;
             t_ptr->toac -= m_bonus(2, 45, level);
@@ -298,17 +298,17 @@ void magic_treasure(int x, int level) {
                     tmp = randint(3);
                     t_ptr->ident |= ID_SHOW_P1;
                     if (tmp == 1) {
-                        t_ptr->p1 = randint(2);
+                        t_ptr->p1 = (int16_t) randint(2);
                         t_ptr->flags |= TR_INT;
                         t_ptr->name2 = SN_INTELLIGENCE;
                         t_ptr->cost += t_ptr->p1 * 500;
                     } else if (tmp == 2) {
-                        t_ptr->p1 = randint(2);
+                        t_ptr->p1 = (int16_t) randint(2);
                         t_ptr->flags |= TR_WIS;
                         t_ptr->name2 = SN_WISDOM;
                         t_ptr->cost += t_ptr->p1 * 500;
                     } else {
-                        t_ptr->p1 = 1 + randint(4);
+                        t_ptr->p1 = (int16_t) (1 + randint(4));
                         t_ptr->flags |= TR_INFRA;
                         t_ptr->name2 = SN_INFRAVISION;
                         t_ptr->cost += t_ptr->p1 * 250;
@@ -317,35 +317,35 @@ void magic_treasure(int x, int level) {
                     switch (randint(6)) {
                     case 1:
                         t_ptr->ident |= ID_SHOW_P1;
-                        t_ptr->p1 = randint(3);
+                        t_ptr->p1 = (int16_t) randint(3);
                         t_ptr->flags |= (TR_FREE_ACT | TR_CON | TR_DEX | TR_STR);
                         t_ptr->name2 = SN_MIGHT;
                         t_ptr->cost += 1000 + t_ptr->p1 * 500;
                         break;
                     case 2:
                         t_ptr->ident |= ID_SHOW_P1;
-                        t_ptr->p1 = randint(3);
+                        t_ptr->p1 = (int16_t) randint(3);
                         t_ptr->flags |= (TR_CHR | TR_WIS);
                         t_ptr->name2 = SN_LORDLINESS;
                         t_ptr->cost += 1000 + t_ptr->p1 * 500;
                         break;
                     case 3:
                         t_ptr->ident |= ID_SHOW_P1;
-                        t_ptr->p1 = randint(3);
+                        t_ptr->p1 = (int16_t) randint(3);
                         t_ptr->flags |= (TR_RES_LIGHT | TR_RES_COLD | TR_RES_ACID | TR_RES_FIRE | TR_INT);
                         t_ptr->name2 = SN_MAGI;
                         t_ptr->cost += 3000 + t_ptr->p1 * 500;
                         break;
                     case 4:
                         t_ptr->ident |= ID_SHOW_P1;
-                        t_ptr->p1 = randint(3);
+                        t_ptr->p1 = (int16_t) randint(3);
                         t_ptr->flags |= TR_CHR;
                         t_ptr->name2 = SN_BEAUTY;
                         t_ptr->cost += 750;
                         break;
                     case 5:
                         t_ptr->ident |= ID_SHOW_P1;
-                        t_ptr->p1 = 5 * (1 + randint(4));
+                        t_ptr->p1 = (int16_t) (5 * (1 + randint(4)));
                         t_ptr->flags |= (TR_SEE_INVIS | TR_SEARCH);
                         t_ptr->name2 = SN_SEEING;
                         t_ptr->cost += 1000 + t_ptr->p1 * 100;
@@ -366,13 +366,13 @@ void magic_treasure(int x, int level) {
                 switch (randint(7)) {
                 case 1:
                     t_ptr->ident |= ID_SHOW_P1;
-                    t_ptr->p1 = -randint(5);
+                    t_ptr->p1 = (int16_t) -randint(5);
                     t_ptr->flags |= TR_INT;
                     t_ptr->name2 = SN_STUPIDITY;
                     break;
                 case 2:
                     t_ptr->ident |= ID_SHOW_P1;
-                    t_ptr->p1 = -randint(5);
+                    t_ptr->p1 = (int16_t) -randint(5);
                     t_ptr->flags |= TR_WIS;
                     t_ptr->name2 = SN_DULLNESS;
                     break;
@@ -386,7 +386,7 @@ void magic_treasure(int x, int level) {
                     break;
                 case 5:
                     t_ptr->ident |= ID_SHOW_P1;
-                    t_ptr->p1 = -randint(5);
+                    t_ptr->p1 = (int16_t) -randint(5);
                     t_ptr->flags |= TR_STR;
                     t_ptr->name2 = SN_WEAKNESS;
                     break;
@@ -396,7 +396,7 @@ void magic_treasure(int x, int level) {
                     break;
                 case 7:
                     t_ptr->ident |= ID_SHOW_P1;
-                    t_ptr->p1 = -randint(5);
+                    t_ptr->p1 = (int16_t) -randint(5);
                     t_ptr->flags |= TR_CHR;
                     t_ptr->name2 = SN_UGLINESS;
                     break;
@@ -411,17 +411,17 @@ void magic_treasure(int x, int level) {
         case 2:
         case 3:
             if (magik(cursed)) {
-                t_ptr->p1 = -m_bonus(1, 20, level);
+                t_ptr->p1 = (int16_t) -m_bonus(1, 20, level);
                 t_ptr->flags |= TR_CURSED;
                 t_ptr->cost = -t_ptr->cost;
             } else {
-                t_ptr->p1 = m_bonus(1, 10, level);
+                t_ptr->p1 = (int16_t) m_bonus(1, 10, level);
                 t_ptr->cost += t_ptr->p1 * 100;
             }
             break;
         case 4:
             if (magik(cursed)) {
-                t_ptr->p1 = -randint(3);
+                t_ptr->p1 = (int16_t) -randint(3);
                 t_ptr->flags |= TR_CURSED;
                 t_ptr->cost = -t_ptr->cost;
             } else {
@@ -429,7 +429,7 @@ void magic_treasure(int x, int level) {
             }
             break;
         case 5:
-            t_ptr->p1 = 5 * m_bonus(1, 20, level);
+            t_ptr->p1 = (int16_t) (5 * m_bonus(1, 20, level));
             t_ptr->cost += t_ptr->p1 * 50;
             if (magik(cursed)) {
                 t_ptr->p1 = -t_ptr->p1;
@@ -491,15 +491,15 @@ void magic_treasure(int x, int level) {
     case TV_AMULET: // Amulets
         if (t_ptr->subval < 2) {
             if (magik(cursed)) {
-                t_ptr->p1 = -m_bonus(1, 20, level);
+                t_ptr->p1 = (int16_t) -m_bonus(1, 20, level);
                 t_ptr->flags |= TR_CURSED;
                 t_ptr->cost = -t_ptr->cost;
             } else {
-                t_ptr->p1 = m_bonus(1, 10, level);
+                t_ptr->p1 = (int16_t) m_bonus(1, 10, level);
                 t_ptr->cost += t_ptr->p1 * 100;
             }
         } else if (t_ptr->subval == 2) {
-            t_ptr->p1 = 5 * m_bonus(1, 25, level);
+            t_ptr->p1 = (int16_t) (5 * m_bonus(1, 25, level));
             if (magik(cursed)) {
                 t_ptr->p1 = -t_ptr->p1;
                 t_ptr->cost = -t_ptr->cost;
@@ -509,7 +509,7 @@ void magic_treasure(int x, int level) {
             }
         } else if (t_ptr->subval == 8) {
             // amulet of the magi is never cursed
-            t_ptr->p1 = 5 * m_bonus(1, 25, level);
+            t_ptr->p1 = (int16_t) (5 * m_bonus(1, 25, level));
             t_ptr->cost += 20 * t_ptr->p1;
         }
         break;
@@ -518,83 +518,83 @@ void magic_treasure(int x, int level) {
         // Dungeon found ones will be partially charged
 
         if ((t_ptr->subval % 2) == 1) {
-            t_ptr->p1 = randint(t_ptr->p1);
+            t_ptr->p1 = (int16_t) randint(t_ptr->p1);
             t_ptr->subval -= 1;
         }
         break;
     case TV_WAND:
         switch (t_ptr->subval) {
         case 0:
-            t_ptr->p1 = randint(10) + 6;
+            t_ptr->p1 = (int16_t) (randint(10) + 6);
             break;
         case 1:
-            t_ptr->p1 = randint(8) + 6;
+            t_ptr->p1 = (int16_t) (randint(8) + 6);
             break;
         case 2:
-            t_ptr->p1 = randint(5) + 6;
+            t_ptr->p1 = (int16_t) (randint(5) + 6);
             break;
         case 3:
-            t_ptr->p1 = randint(8) + 6;
+            t_ptr->p1 = (int16_t) (randint(8) + 6);
             break;
         case 4:
-            t_ptr->p1 = randint(4) + 3;
+            t_ptr->p1 = (int16_t) (randint(4) + 3);
             break;
         case 5:
-            t_ptr->p1 = randint(8) + 6;
+            t_ptr->p1 = (int16_t) (randint(8) + 6);
             break;
         case 6:
-            t_ptr->p1 = randint(20) + 12;
+            t_ptr->p1 = (int16_t) (randint(20) + 12);
             break;
         case 7:
-            t_ptr->p1 = randint(20) + 12;
+            t_ptr->p1 = (int16_t) (randint(20) + 12);
             break;
         case 8:
-            t_ptr->p1 = randint(10) + 6;
+            t_ptr->p1 = (int16_t) (randint(10) + 6);
             break;
         case 9:
-            t_ptr->p1 = randint(12) + 6;
+            t_ptr->p1 = (int16_t) (randint(12) + 6);
             break;
         case 10:
-            t_ptr->p1 = randint(10) + 12;
+            t_ptr->p1 = (int16_t) (randint(10) + 12);
             break;
         case 11:
-            t_ptr->p1 = randint(3) + 3;
+            t_ptr->p1 = (int16_t) (randint(3) + 3);
             break;
         case 12:
-            t_ptr->p1 = randint(8) + 6;
+            t_ptr->p1 = (int16_t) (randint(8) + 6);
             break;
         case 13:
-            t_ptr->p1 = randint(10) + 6;
+            t_ptr->p1 = (int16_t) (randint(10) + 6);
             break;
         case 14:
-            t_ptr->p1 = randint(5) + 3;
+            t_ptr->p1 = (int16_t) (randint(5) + 3);
             break;
         case 15:
-            t_ptr->p1 = randint(5) + 3;
+            t_ptr->p1 = (int16_t) (randint(5) + 3);
             break;
         case 16:
-            t_ptr->p1 = randint(5) + 6;
+            t_ptr->p1 = (int16_t) (randint(5) + 6);
             break;
         case 17:
-            t_ptr->p1 = randint(5) + 4;
+            t_ptr->p1 = (int16_t) (randint(5) + 4);
             break;
         case 18:
-            t_ptr->p1 = randint(8) + 4;
+            t_ptr->p1 = (int16_t) (randint(8) + 4);
             break;
         case 19:
-            t_ptr->p1 = randint(6) + 2;
+            t_ptr->p1 = (int16_t) (randint(6) + 2);
             break;
         case 20:
-            t_ptr->p1 = randint(4) + 2;
+            t_ptr->p1 = (int16_t) (randint(4) + 2);
             break;
         case 21:
-            t_ptr->p1 = randint(8) + 6;
+            t_ptr->p1 = (int16_t) (randint(8) + 6);
             break;
         case 22:
-            t_ptr->p1 = randint(5) + 2;
+            t_ptr->p1 = (int16_t) (randint(5) + 2);
             break;
         case 23:
-            t_ptr->p1 = randint(12) + 12;
+            t_ptr->p1 = (int16_t) (randint(12) + 12);
             break;
         default:
             break;
@@ -603,74 +603,74 @@ void magic_treasure(int x, int level) {
     case TV_STAFF:
         switch (t_ptr->subval) {
         case 0:
-            t_ptr->p1 = randint(20) + 12;
+            t_ptr->p1 = (int16_t) (randint(20) + 12);
             break;
         case 1:
-            t_ptr->p1 = randint(8) + 6;
+            t_ptr->p1 = (int16_t) (randint(8) + 6);
             break;
         case 2:
-            t_ptr->p1 = randint(5) + 6;
+            t_ptr->p1 = (int16_t) (randint(5) + 6);
             break;
         case 3:
-            t_ptr->p1 = randint(20) + 12;
+            t_ptr->p1 = (int16_t) (randint(20) + 12);
             break;
         case 4:
-            t_ptr->p1 = randint(15) + 6;
+            t_ptr->p1 = (int16_t) (randint(15) + 6);
             break;
         case 5:
-            t_ptr->p1 = randint(4) + 5;
+            t_ptr->p1 = (int16_t) (randint(4) + 5);
             break;
         case 6:
-            t_ptr->p1 = randint(5) + 3;
+            t_ptr->p1 = (int16_t) (randint(5) + 3);
             break;
         case 7:
-            t_ptr->p1 = randint(3) + 1;
+            t_ptr->p1 = (int16_t) (randint(3) + 1);
             t_ptr->level = 10;
             break;
         case 8:
-            t_ptr->p1 = randint(3) + 1;
+            t_ptr->p1 = (int16_t) (randint(3) + 1);
             break;
         case 9:
-            t_ptr->p1 = randint(5) + 6;
+            t_ptr->p1 = (int16_t) (randint(5) + 6);
             break;
         case 10:
-            t_ptr->p1 = randint(10) + 12;
+            t_ptr->p1 = (int16_t) (randint(10) + 12);
             break;
         case 11:
-            t_ptr->p1 = randint(5) + 6;
+            t_ptr->p1 = (int16_t) (randint(5) + 6);
             break;
         case 12:
-            t_ptr->p1 = randint(5) + 6;
+            t_ptr->p1 = (int16_t) (randint(5) + 6);
             break;
         case 13:
-            t_ptr->p1 = randint(5) + 6;
+            t_ptr->p1 = (int16_t) (randint(5) + 6);
             break;
         case 14:
-            t_ptr->p1 = randint(10) + 12;
+            t_ptr->p1 = (int16_t) (randint(10) + 12);
             break;
         case 15:
-            t_ptr->p1 = randint(3) + 4;
+            t_ptr->p1 = (int16_t) (randint(3) + 4);
             break;
         case 16:
-            t_ptr->p1 = randint(5) + 6;
+            t_ptr->p1 = (int16_t) (randint(5) + 6);
             break;
         case 17:
-            t_ptr->p1 = randint(5) + 6;
+            t_ptr->p1 = (int16_t) (randint(5) + 6);
             break;
         case 18:
-            t_ptr->p1 = randint(3) + 4;
+            t_ptr->p1 = (int16_t) (randint(3) + 4);
             break;
         case 19:
-            t_ptr->p1 = randint(10) + 12;
+            t_ptr->p1 = (int16_t) (randint(10) + 12);
             break;
         case 20:
-            t_ptr->p1 = randint(3) + 4;
+            t_ptr->p1 = (int16_t) (randint(3) + 4);
             break;
         case 21:
-            t_ptr->p1 = randint(3) + 4;
+            t_ptr->p1 = (int16_t) (randint(3) + 4);
             break;
         case 22:
-            t_ptr->p1 = randint(10) + 6;
+            t_ptr->p1 = (int16_t) (randint(10) + 6);
             t_ptr->level = 5;
             break;
         default:
@@ -687,7 +687,7 @@ void magic_treasure(int x, int level) {
                 } else {
                     t_ptr->toac += m_bonus(1, 20, level);
                     t_ptr->ident |= ID_SHOW_P1;
-                    t_ptr->p1 = randint(3);
+                    t_ptr->p1 = (int16_t) randint(3);
                     t_ptr->flags |= TR_STEALTH;
                     t_ptr->name2 = SN_STEALTH;
                     t_ptr->cost += 500;

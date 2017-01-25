@@ -76,7 +76,7 @@ void read_scroll() {
                         // limited by their low base damages
                         j = 10;
                     }
-                    if (enchant(&i_ptr->todam, j)) {
+                    if (enchant(&i_ptr->todam, (int16_t) j)) {
                         i_ptr->flags &= ~TR_CURSED;
                         calc_bonuses();
                     } else {
@@ -281,7 +281,7 @@ void read_scroll() {
                         j = 10;
                     }
                     for (k = 0; k < randint(2); k++) {
-                        if (enchant(&i_ptr->todam, j)) {
+                        if (enchant(&i_ptr->todam, (int16_t) j)) {
                             flag = true;
                         }
                     }
@@ -301,8 +301,8 @@ void read_scroll() {
                     (void)sprintf(out_val, "Your %s glows black, fades.", tmp_str);
                     msg_print(out_val);
                     unmagic_name(i_ptr);
-                    i_ptr->tohit = -randint(5) - randint(5);
-                    i_ptr->todam = -randint(5) - randint(5);
+                    i_ptr->tohit = (int16_t) (-randint(5) - randint(5));
+                    i_ptr->todam = (int16_t) (-randint(5) - randint(5));
                     i_ptr->toac = 0;
                     // Must call py_bonuses() before set (clear) flags, and
                     // must call calc_bonuses() after set (clear) flags, so that
@@ -412,7 +412,7 @@ void read_scroll() {
                     i_ptr->flags = TR_CURSED;
                     i_ptr->tohit = 0;
                     i_ptr->todam = 0;
-                    i_ptr->toac = -randint(5) - randint(5);
+                    i_ptr->toac = (int16_t) (-randint(5) - randint(5));
                     calc_bonuses();
                     ident = true;
                 }
@@ -440,7 +440,7 @@ void read_scroll() {
             case 41:
                 ident = true;
                 if (py.flags.word_recall == 0) {
-                    py.flags.word_recall = 25 + randint(30);
+                    py.flags.word_recall = (int16_t) (25 + randint(30));
                 }
                 msg_print("The air about you becomes charged.");
                 break;

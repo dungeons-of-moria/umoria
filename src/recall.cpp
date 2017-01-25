@@ -165,11 +165,11 @@ int roff_recall(int mon_num) {
                        ((cp->cmove & CM_90_RANDOM) != 0) +
                        ((cp->cmove & CM_60_RANDOM) != 0));
 
-        mp->r_cmove = (cp->cmove & ~CM_TREASURE) | (j << CM_TR_SHIFT);
+        mp->r_cmove = (uint32_t) ((cp->cmove & ~CM_TREASURE) | (j << CM_TR_SHIFT));
         mp->r_cdefense = cp->cdefense;
 
         if (cp->spells & CS_FREQ) {
-            mp->r_spells = cp->spells | CS_FREQ;
+            mp->r_spells = (uint32_t) (cp->spells | CS_FREQ);
         } else {
             mp->r_spells = cp->spells;
         }
@@ -191,10 +191,10 @@ int roff_recall(int mon_num) {
     roffpline = 0;
     roffp = roffbuf;
 
-    uint32_t rspells = mp->r_spells & cp->spells & ~CS_FREQ;
+    uint32_t rspells = (uint32_t) (mp->r_spells & cp->spells & ~CS_FREQ);
 
     // the CM_WIN property is always known, set it if a win monster
-    uint32_t rcmove = mp->r_cmove | (CM_WIN & cp->cmove);
+    uint32_t rcmove = (uint32_t) (mp->r_cmove | (CM_WIN & cp->cmove));
 
     uint16_t rcdefense = mp->r_cdefense & cp->cdefense;
 
@@ -514,7 +514,7 @@ int roff_recall(int mon_num) {
     // Do we know what it might carry?
     if (rcmove & (CM_CARRY_OBJ | CM_CARRY_GOLD)) {
         roff(" It may");
-        j = (rcmove & CM_TREASURE) >> CM_TR_SHIFT;
+        j = (uint32_t) ((rcmove & CM_TREASURE) >> CM_TR_SHIFT);
 
         if (j == 1) {
             if ((cp->cmove & CM_TREASURE) == CM_60_RANDOM) {

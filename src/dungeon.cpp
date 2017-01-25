@@ -1498,7 +1498,7 @@ static void do_command(char com_val) {
                     }
                 }
                 if (i > -1) {
-                    dun_level = i;
+                    dun_level = (int16_t) i;
                     if (dun_level > 99) {
                         dun_level = 99;
                     }
@@ -1676,7 +1676,7 @@ static void regenhp(int percent) {
         p_ptr->chp_frac = (uint16_t)(new_chp_frac - 0x10000L);
         p_ptr->chp++;
     } else {
-        p_ptr->chp_frac = new_chp_frac;
+        p_ptr->chp_frac = (uint16_t) new_chp_frac;
     }
 
     // must set frac to zero even if equal
@@ -1710,7 +1710,7 @@ static void regenmana(int percent) {
         p_ptr->cmana_frac = (uint16_t)(new_mana_frac - 0x10000L);
         p_ptr->cmana++;
     } else {
-        p_ptr->cmana_frac = new_mana_frac;
+        p_ptr->cmana_frac = (uint16_t) new_mana_frac;
     }
 
     // must set frac to zero even if equal

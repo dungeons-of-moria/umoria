@@ -265,7 +265,7 @@ static bool sv_write() {
     if (l < start_time) {
         // someone is messing with the clock!,
         // assume that we have been playing for 1 day
-        l = start_time + 86400L;
+        l = (uint32_t) (start_time + 86400L);
     }
     wr_long(l);
 
@@ -333,7 +333,7 @@ static bool sv_write() {
         for (int j = 0; j < MAX_WIDTH; j++) {
             cave_type *c_ptr = &cave[i][j];
 
-            uint8_t char_tmp = c_ptr->fval | (c_ptr->lr << 4) | (c_ptr->fm << 5) | (c_ptr->pl << 6) | (c_ptr->tl << 7);
+            uint8_t char_tmp = (uint8_t) (c_ptr->fval | (c_ptr->lr << 4) | (c_ptr->fm << 5) | (c_ptr->pl << 6) | (c_ptr->tl << 7));
 
             if (char_tmp != prev_char || count == MAX_UCHAR) {
                 wr_byte((uint8_t)count);
@@ -433,7 +433,7 @@ bool _save_char(char *fnam) {
         wr_byte((uint8_t)CURRENT_VERSION_PATCH);
         xor_byte = 0;
 
-        uint8_t char_tmp = randint(256) - 1;
+        uint8_t char_tmp = (uint8_t) (randint(256) - 1);
         wr_byte(char_tmp);
         // Note that xor_byte is now equal to char_tmp
 
@@ -982,7 +982,7 @@ bool get_char(bool *generate) {
                     age = start_time - time_saved;
                 }
 
-                age = (age + 43200L) / 86400L; // age in days
+                age = (uint32_t) ((age + 43200L) / 86400L); // age in days
                 if (age > 10) {
                     age = 10; // in case save file is very old
                 }
@@ -1139,32 +1139,32 @@ static bool rd_bool() {
 }
 
 static void rd_byte(uint8_t *ptr) {
-    uint8_t c = getc(fileptr) & 0xFF;
+    uint8_t c = (uint8_t) (getc(fileptr) & 0xFF);
     *ptr = c ^ xor_byte;
     xor_byte = c;
     DEBUG(fprintf(logfile, "BYTE:  %02X = %d\n", (int)c, (int)*ptr));
 }
 
 static void rd_short(uint16_t *ptr) {
-    uint8_t c = (getc(fileptr) & 0xFF);
+    uint8_t c = (uint8_t) (getc(fileptr) & 0xFF);
     uint16_t s = c ^ xor_byte;
 
-    xor_byte = (getc(fileptr) & 0xFF);
+    xor_byte = (uint8_t) (getc(fileptr) & 0xFF);
     s |= (uint16_t)(c ^ xor_byte) << 8;
     *ptr = s;
     DEBUG(fprintf(logfile, "SHORT: %02X %02X = %d\n", (int)c, (int)xor_byte, (int)s));
 }
 
 static void rd_long(uint32_t *ptr) {
-    uint8_t c = (getc(fileptr) & 0xFF);
+    uint8_t c = (uint8_t) (getc(fileptr) & 0xFF);
     uint32_t l = c ^ xor_byte;
 
-    xor_byte = (getc(fileptr) & 0xFF);
+    xor_byte = (uint8_t) (getc(fileptr) & 0xFF);
     l |= (uint32_t)(c ^ xor_byte) << 8;
     DEBUG(fprintf(logfile, "LONG:  %02X %02X ", (int)c, (int)xor_byte));
-    c = (getc(fileptr) & 0xFF);
+    c = (uint8_t) (getc(fileptr) & 0xFF);
     l |= (uint32_t)(c ^ xor_byte) << 16;
-    xor_byte = (getc(fileptr) & 0xFF);
+    xor_byte = (uint8_t) (getc(fileptr) & 0xFF);
     l |= (uint32_t)(c ^ xor_byte) << 24;
     *ptr = l;
     DEBUG(fprintf(logfile, "%02X %02X = %ld\n", (int)c, (int)xor_byte, (int32_t)l));
@@ -1174,7 +1174,7 @@ static void rd_bytes(uint8_t *ch_ptr, int count) {
     DEBUG(fprintf(logfile, "%d BYTES:", count));
     uint8_t *ptr = ch_ptr;
     for (int i = 0; i < count; i++) {
-        uint8_t c = (getc(fileptr) & 0xFF);
+        uint8_t c = (uint8_t) (getc(fileptr) & 0xFF);
         *ptr++ = c ^ xor_byte;
         xor_byte = c;
         DEBUG(fprintf(logfile, "  %02X = %d", (int)c, (int)ptr[-1]));
@@ -1186,7 +1186,7 @@ static void rd_string(char *str) {
     DEBUG(char *s = str);
     DEBUG(fprintf(logfile, "STRING: "));
     do {
-        uint8_t c = (getc(fileptr) & 0xFF);
+        uint8_t c = (uint8_t) (getc(fileptr) & 0xFF);
         *str = c ^ xor_byte;
         xor_byte = c;
         DEBUG(fprintf(logfile, "%02X ", (int)c));
@@ -1199,9 +1199,9 @@ static void rd_shorts(uint16_t *ptr, int count) {
     uint16_t *sptr = ptr;
 
     for (int i = 0; i < count; i++) {
-        uint8_t c = (getc(fileptr) & 0xFF);
+        uint8_t c = (uint8_t) (getc(fileptr) & 0xFF);
         uint16_t s = c ^ xor_byte;
-        xor_byte = (getc(fileptr) & 0xFF);
+        xor_byte = (uint8_t) (getc(fileptr) & 0xFF);
         s |= (uint16_t)(c ^ xor_byte) << 8;
         *sptr++ = s;
         DEBUG(fprintf(logfile, "  %02X %02X = %d", (int)c, (int)xor_byte, (int)s));

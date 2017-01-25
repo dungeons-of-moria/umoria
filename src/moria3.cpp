@@ -316,7 +316,7 @@ void delete_monster(int j) {
     }
     if (j != mfptr - 1) {
         m_ptr = &m_list[mfptr - 1];
-        cave[m_ptr->fy][m_ptr->fx].cptr = j;
+        cave[m_ptr->fy][m_ptr->fx].cptr = (uint8_t) j;
         m_list[j] = m_list[mfptr - 1];
     }
     mfptr--;
@@ -356,7 +356,7 @@ void fix1_delete_monster(int j) {
 void fix2_delete_monster(int j) {
     if (j != mfptr - 1) {
         monster_type *m_ptr = &m_list[mfptr - 1];
-        cave[m_ptr->fy][m_ptr->fx].cptr = j;
+        cave[m_ptr->fy][m_ptr->fx].cptr = (uint8_t) j;
         m_list[j] = m_list[mfptr - 1];
     }
     m_list[mfptr - 1] = blank_monster;
@@ -519,12 +519,12 @@ int mon_take_hit(int monptr, int dam) {
         uint32_t i = monster_death((int)m_ptr->fy, (int)m_ptr->fx, c_list[m_ptr->mptr].cmove);
 
         if ((py.flags.blind < 1 && m_ptr->ml) || (c_list[m_ptr->mptr].cmove & CM_WIN)) {
-            uint32_t tmp = (c_recall[m_ptr->mptr].r_cmove & CM_TREASURE) >> CM_TR_SHIFT;
+            uint32_t tmp = (uint32_t) ((c_recall[m_ptr->mptr].r_cmove & CM_TREASURE) >> CM_TR_SHIFT);
 
             if (tmp > ((i & CM_TREASURE) >> CM_TR_SHIFT)) {
-                i = (i & ~CM_TREASURE) | (tmp << CM_TR_SHIFT);
+                i = (uint32_t) ((i & ~CM_TREASURE) | (tmp << CM_TR_SHIFT));
             }
-            c_recall[m_ptr->mptr].r_cmove = (c_recall[m_ptr->mptr].r_cmove & ~CM_TREASURE) | i;
+            c_recall[m_ptr->mptr].r_cmove = (uint32_t) ((c_recall[m_ptr->mptr].r_cmove & ~CM_TREASURE) | i);
 
             if (c_recall[m_ptr->mptr].r_kills < MAX_SHORT) {
                 c_recall[m_ptr->mptr].r_kills++;
@@ -535,15 +535,15 @@ int mon_take_hit(int monptr, int dam) {
         struct player_type::misc *p_ptr = &py.misc;
 
         int32_t new_exp = ((int32_t)c_ptr->mexp * c_ptr->level) / p_ptr->lev;
-        int32_t new_exp_frac = ((((int32_t)c_ptr->mexp * c_ptr->level) % p_ptr->lev) *
-                                0x10000L / p_ptr->lev) +
-                               p_ptr->exp_frac;
+        int32_t new_exp_frac = (int32_t) (((((int32_t)c_ptr->mexp * c_ptr->level) % p_ptr->lev) *
+                                           0x10000L / p_ptr->lev) +
+                                          p_ptr->exp_frac);
 
         if (new_exp_frac >= 0x10000L) {
             new_exp++;
             p_ptr->exp_frac = (uint16_t)(new_exp_frac - 0x10000L);
         } else {
-            p_ptr->exp_frac = new_exp_frac;
+            p_ptr->exp_frac = (uint16_t) new_exp_frac;
         }
 
         p_ptr->exp += new_exp;
@@ -640,7 +640,7 @@ void py_attack(int y, int x) {
                     if (m_list[crptr].confused) {
                         m_list[crptr].confused += 3;
                     } else {
-                        m_list[crptr].confused = 2 + randint(16);
+                        m_list[crptr].confused = (uint8_t) (2 + randint(16));
                     }
                 }
                 msg_print(out_val);
@@ -709,8 +709,8 @@ void move_char(int dir, bool do_pickup) {
                 // Make final assignments of char coords
                 int old_row = char_row;
                 int old_col = char_col;
-                char_row = y;
-                char_col = x;
+                char_row = (int16_t) y;
+                char_col = (int16_t) x;
 
                 // Move character record (-1)
                 move_rec(old_row, old_col, char_row, char_col);
@@ -764,8 +764,8 @@ void move_char(int dir, bool do_pickup) {
                     if (t_list[c_ptr->tptr].tval == TV_RUBBLE) {
                         move_rec(char_row, char_col, old_row, old_col);
                         move_light(char_row, char_col, old_row, old_col);
-                        char_row = old_row;
-                        char_col = old_col;
+                        char_row = (int16_t) old_row;
+                        char_col = (int16_t) old_col;
 
                         // check to see if we have stepped back onto another
                         // trap, if so, set it off
@@ -841,7 +841,7 @@ void chest_trap(int y, int x) {
             msg_print("You are unaffected.");
         } else {
             msg_print("You choke and pass out.");
-            py.flags.paralysis = 10 + randint(20);
+            py.flags.paralysis = (int16_t) (10 + randint(20));
         }
     }
     if (CH_SUMMON & t_ptr->flags) {

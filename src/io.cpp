@@ -428,7 +428,7 @@ bool get_string(char *in_str, int row, int column, int slen) {
                 bell();
             } else {
                 use_value2 mvaddch(row, column, (char)i);
-                *p++ = i;
+                *p++ = (char) i;
                 column++;
             }
             break;

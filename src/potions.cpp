@@ -216,7 +216,7 @@ void quaff() {
                         // Lose between 1/5 and 2/5 of your experience
                         m = py.misc.exp / 5;
                         if (py.misc.exp > MAX_SHORT) {
-                            scale = MAX_LONG / py.misc.exp;
+                            scale = (int32_t) (MAX_LONG / py.misc.exp);
                             m += (randint((int)scale) * py.misc.exp) /
                                  (scale * 5);
                         } else {

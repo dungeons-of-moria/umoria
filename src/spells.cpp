@@ -390,7 +390,7 @@ bool door_creation() {
 
                     int k = popt();
                     c_ptr->fval = BLOCKED_FLOOR;
-                    c_ptr->tptr = k;
+                    c_ptr->tptr = (uint8_t) k;
                     invcopy(&t_list[k], OBJ_CLOSED_DOOR);
                     lite_spot(i, j);
                 }
@@ -872,18 +872,18 @@ void breath(int typ, int y, int x, int dam_hp, char *ddesc, int monptr) {
 
                         // can not call mon_take_hit here, since player does not
                         // get experience for kill
-                        m_ptr->hp = m_ptr->hp - dam;
+                        m_ptr->hp = (int16_t) (m_ptr->hp - dam);
                         m_ptr->csleep = 0;
 
                         if (m_ptr->hp < 0) {
                             uint32_t treas = monster_death((int)m_ptr->fy, (int)m_ptr->fx, r_ptr->cmove);
 
                             if (m_ptr->ml) {
-                                uint32_t tmp = (c_recall[m_ptr->mptr].r_cmove & CM_TREASURE) >> CM_TR_SHIFT;
+                                uint32_t tmp = (uint32_t) ((c_recall[m_ptr->mptr].r_cmove & CM_TREASURE) >> CM_TR_SHIFT);
                                 if (tmp > ((treas & CM_TREASURE) >> CM_TR_SHIFT)) {
-                                    treas = (treas & ~CM_TREASURE) | (tmp << CM_TR_SHIFT);
+                                    treas = (uint32_t) ((treas & ~CM_TREASURE) | (tmp << CM_TR_SHIFT));
                                 }
-                                c_recall[m_ptr->mptr].r_cmove = treas | (c_recall[m_ptr->mptr].r_cmove & ~CM_TREASURE);
+                                c_recall[m_ptr->mptr].r_cmove = (uint32_t) (treas | (c_recall[m_ptr->mptr].r_cmove & ~CM_TREASURE));
                             }
 
                             // It ate an already processed monster.Handle normally.
@@ -1156,7 +1156,7 @@ bool confuse_monster(int dir, int y, int x) {
                 if (m_ptr->confused) {
                     m_ptr->confused += 3;
                 } else {
-                    m_ptr->confused = 2 + randint(16);
+                    m_ptr->confused = (uint8_t) (2 + randint(16));
                 }
                 confuse = true;
                 m_ptr->csleep = 0;
@@ -1495,13 +1495,13 @@ void teleport_away(int monptr, int dis) {
 
     move_rec((int)m_ptr->fy, (int)m_ptr->fx, yn, xn);
     lite_spot((int)m_ptr->fy, (int)m_ptr->fx);
-    m_ptr->fy = yn;
-    m_ptr->fx = xn;
+    m_ptr->fy = (uint8_t) yn;
+    m_ptr->fx = (uint8_t) xn;
 
     // this is necessary, because the creature is
     // not currently visible in its new position.
     m_ptr->ml = false;
-    m_ptr->cdis = distance(char_row, char_col, yn, xn);
+    m_ptr->cdis = (uint8_t) distance(char_row, char_col, yn, xn);
     update_mon(monptr);
 }
 
@@ -1532,8 +1532,8 @@ void teleport_to(int ny, int nx) {
     }
 
     lite_spot(char_row, char_col);
-    char_row = y;
-    char_col = x;
+    char_row = (int16_t) y;
+    char_col = (int16_t) x;
     check_view();
 
     // light creatures
@@ -1895,7 +1895,7 @@ void earthquake() {
 }
 
 // Evil creatures don't like this. -RAK-
-int protect_evil() {
+bool protect_evil() {
     struct player_type::flags *f_ptr = &py.flags;
 
     bool res = f_ptr->protevil == 0;
@@ -1992,7 +1992,7 @@ void warding_glyph() {
 
     if (c_ptr->tptr == 0) {
         int i = popt();
-        c_ptr->tptr = i;
+        c_ptr->tptr = (uint8_t) i;
         invcopy(&t_list[i], OBJ_SCARE_MON);
     }
 }
@@ -2078,7 +2078,7 @@ void lose_exp(int32_t amount) {
     i++;
 
     if (m_ptr->lev != i) {
-        m_ptr->lev = i;
+        m_ptr->lev = (uint16_t) i;
 
         calc_hitpoints();
 
@@ -2103,7 +2103,7 @@ bool slow_poison() {
     struct player_type::flags *f_ptr = &py.flags;
 
     if (f_ptr->poisoned > 0) {
-        f_ptr->poisoned = f_ptr->poisoned / 2;
+        f_ptr->poisoned = (int16_t) (f_ptr->poisoned / 2);
         if (f_ptr->poisoned < 1) {
             f_ptr->poisoned = 1;
         }

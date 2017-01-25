@@ -439,7 +439,7 @@ uint8_t loc_symbol(int y, int x) {
     } else if (f_ptr->status & PY_BLIND) {
         return ' ';
     } else if ((f_ptr->image > 0) && (randint(12) == 1)) {
-        return randint(95) + 31;
+        return (uint8_t) (randint(95) + 31);
     } else if ((cave_ptr->cptr > 1) && (m_list[cave_ptr->cptr].ml)) {
         return c_list[m_list[cave_ptr->cptr].mptr].cchar;
     } else if (!cave_ptr->pl && !cave_ptr->tl && !cave_ptr->fm) {
@@ -544,9 +544,9 @@ void add_food(int num) {
 
         p_ptr->slow += penalty;
         if (extra == num) {
-            p_ptr->food = p_ptr->food - num + penalty;
+            p_ptr->food = (int16_t) (p_ptr->food - num + penalty);
         } else {
-            p_ptr->food = PLAYER_FOOD_MAX + penalty;
+            p_ptr->food = (int16_t) (PLAYER_FOOD_MAX + penalty);
         }
     } else if (p_ptr->food > PLAYER_FOOD_FULL) {
         msg_print("You are full.");
@@ -577,27 +577,27 @@ bool place_monster(int y, int x, int z, int slp) {
     }
 
     monster_type *mon_ptr = &m_list[cur_pos];
-    mon_ptr->fy = y;
-    mon_ptr->fx = x;
-    mon_ptr->mptr = z;
+    mon_ptr->fy = (uint8_t) y;
+    mon_ptr->fx = (uint8_t) x;
+    mon_ptr->mptr = (uint16_t) z;
 
     if (c_list[z].cdefense & CD_MAX_HP) {
-        mon_ptr->hp = max_hp(c_list[z].hd);
+        mon_ptr->hp = (int16_t) max_hp(c_list[z].hd);
     } else {
-        mon_ptr->hp = pdamroll(c_list[z].hd);
+        mon_ptr->hp = (int16_t) pdamroll(c_list[z].hd);
     }
 
     // the c_list speed value is 10 greater, so that it can be a uint8_t
-    mon_ptr->cspeed = c_list[z].speed - 10 + py.flags.speed;
+    mon_ptr->cspeed = (int16_t) (c_list[z].speed - 10 + py.flags.speed);
     mon_ptr->stunned = 0;
-    mon_ptr->cdis = distance(char_row, char_col, y, x);
+    mon_ptr->cdis = (uint8_t) distance(char_row, char_col, y, x);
     mon_ptr->ml = false;
-    cave[y][x].cptr = cur_pos;
+    cave[y][x].cptr = (uint8_t) cur_pos;
     if (slp) {
         if (c_list[z].sleep == 0) {
             mon_ptr->csleep = 0;
         } else {
-            mon_ptr->csleep = (c_list[z].sleep * 2) + randint((int)c_list[z].sleep * 10);
+            mon_ptr->csleep = (int16_t) ((c_list[z].sleep * 2) + randint((int)c_list[z].sleep * 10));
         }
     } else {
         mon_ptr->csleep = 0;
@@ -627,21 +627,21 @@ void place_win_monster() {
                  (cave[y][x].cptr != 0) || (cave[y][x].tptr != 0) ||
                  (distance(y, x, char_row, char_col) <= MAX_SIGHT));
 
-        mon_ptr->fy = y;
-        mon_ptr->fx = x;
-        mon_ptr->mptr = randint(WIN_MON_TOT) - 1 + m_level[MAX_MONS_LEVEL];
+        mon_ptr->fy = (uint8_t) y;
+        mon_ptr->fx = (uint8_t) x;
+        mon_ptr->mptr = (uint16_t) (randint(WIN_MON_TOT) - 1 + m_level[MAX_MONS_LEVEL]);
 
         if (c_list[mon_ptr->mptr].cdefense & CD_MAX_HP) {
-            mon_ptr->hp = max_hp(c_list[mon_ptr->mptr].hd);
+            mon_ptr->hp = (int16_t) max_hp(c_list[mon_ptr->mptr].hd);
         } else {
-            mon_ptr->hp = pdamroll(c_list[mon_ptr->mptr].hd);
+            mon_ptr->hp = (int16_t) pdamroll(c_list[mon_ptr->mptr].hd);
         }
 
         // the c_list speed value is 10 greater, so that it can be a uint8_t
-        mon_ptr->cspeed = c_list[mon_ptr->mptr].speed - 10 + py.flags.speed;
+        mon_ptr->cspeed = (int16_t) (c_list[mon_ptr->mptr].speed - 10 + py.flags.speed);
         mon_ptr->stunned = 0;
-        mon_ptr->cdis = distance(char_row, char_col, y, x);
-        cave[y][x].cptr = cur_pos;
+        mon_ptr->cdis = (uint8_t) distance(char_row, char_col, y, x);
+        cave[y][x].cptr = (uint8_t) cur_pos;
         mon_ptr->csleep = 0;
     }
 }

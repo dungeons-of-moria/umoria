@@ -19,7 +19,7 @@ static char blank_string[] = "                        ";
 // Places a particular trap at location y, x -RAK-
 void place_trap(int y, int x, int subval) {
     int cur_pos = popt();
-    cave[y][x].tptr = cur_pos;
+    cave[y][x].tptr = (uint8_t) cur_pos;
     invcopy(&t_list[cur_pos], OBJ_TRAP_LIST + subval);
 }
 
@@ -27,7 +27,7 @@ void place_trap(int y, int x, int subval) {
 void place_rubble(int y, int x) {
     int cur_pos = popt();
     cave_type *cave_ptr = &cave[y][x];
-    cave_ptr->tptr = cur_pos;
+    cave_ptr->tptr = (uint8_t) cur_pos;
     cave_ptr->fval = BLOCKED_FLOOR;
     invcopy(&t_list[cur_pos], OBJ_RUBBLE);
 }
@@ -42,7 +42,7 @@ void place_gold(int y, int x) {
     if (i >= MAX_GOLD) {
         i = MAX_GOLD - 1;
     }
-    cave[y][x].tptr = cur_pos;
+    cave[y][x].tptr = (uint8_t) cur_pos;
     invcopy(&t_list[cur_pos], OBJ_GOLD_LIST + i);
 
     inven_type *t_ptr = &t_list[cur_pos];
@@ -105,7 +105,7 @@ int get_obj_num(int level, bool must_be_small) {
 // Places an object at given row, column co-ordinate -RAK-
 void place_object(int y, int x, bool must_be_small) {
     int cur_pos = popt();
-    cave[y][x].tptr = cur_pos;
+    cave[y][x].tptr = (uint8_t) cur_pos;
 
     // split this line up to avoid a reported compiler bug
     int tmp = get_obj_num(dun_level, must_be_small);
@@ -603,10 +603,10 @@ bool inc_stat(int stat) {
             tmp_stat++;
         }
 
-        py.stats.cur_stat[stat] = tmp_stat;
+        py.stats.cur_stat[stat] = (uint8_t) tmp_stat;
 
         if (tmp_stat > py.stats.max_stat[stat]) {
-            py.stats.max_stat[stat] = tmp_stat;
+            py.stats.max_stat[stat] = (uint8_t) tmp_stat;
         }
         set_use_stat(stat);
         prt_stat(stat);
@@ -632,7 +632,7 @@ bool dec_stat(int stat) {
             tmp_stat--;
         }
 
-        py.stats.cur_stat[stat] = tmp_stat;
+        py.stats.cur_stat[stat] = (uint8_t) tmp_stat;
         set_use_stat(stat);
         prt_stat(stat);
         return true;
@@ -1097,7 +1097,7 @@ void inven_drop(int item_val, int drop_all) {
     int i = popt();
     inven_type *i_ptr = &inventory[item_val];
     t_list[i] = *i_ptr;
-    cave[char_row][char_col].tptr = i;
+    cave[char_row][char_col].tptr = (uint8_t) i;
 
     if (item_val >= INVEN_WIELD) {
         takeoff(item_val, -1);
@@ -1335,9 +1335,9 @@ void print_spells(int *spell, int num, int comment, int nonconsec) {
         // when learning spells, consec offset>=0 when asking which spell to cast.
         char spell_char;
         if (nonconsec == -1) {
-            spell_char = 'a' + i;
+            spell_char = (char) ('a' + i);
         } else {
-            spell_char = 'a' + j - nonconsec;
+            spell_char = (char) ('a' + j - nonconsec);
         }
 
         vtype out_val;
@@ -1527,7 +1527,7 @@ void calc_spells(int stat) {
         if (new_spells > 0) {
             // determine which spells player can learn must check all spells here,
             // in gain_spell() we actually check if the books are present
-            uint32_t spell_flag = 0x7FFFFFFFL & ~spell_learned;
+            uint32_t spell_flag = (uint32_t) (0x7FFFFFFFL & ~spell_learned);
 
             int j;
             int id = 0;
@@ -1578,7 +1578,7 @@ void calc_spells(int stat) {
             msg_print(tmp_str);
         }
 
-        py.flags.new_spells = new_spells;
+        py.flags.new_spells = (uint8_t) new_spells;
         py.flags.status |= PY_STUDY;
     }
 }
@@ -1683,7 +1683,7 @@ void gain_spells() {
                 if (c >= 0 && c < i && c < 22) {
                     new_spells--;
                     spell_learned |= 1L << spells[c];
-                    spell_order[last_known++] = spells[c];
+                    spell_order[last_known++] = (uint8_t) spells[c];
                     for (; c <= i - 1; c++) {
                         spells[c] = spells[c + 1];
                     }
@@ -1700,7 +1700,7 @@ void gain_spells() {
             while (new_spells) {
                 int s = randint(i) - 1;
                 spell_learned |= 1L << spells[s];
-                spell_order[last_known++] = spells[s];
+                spell_order[last_known++] = (uint8_t) spells[s];
 
                 vtype tmp_str;
                 (void)sprintf(tmp_str, "You have learned the prayer of %s.", spell_names[spells[s] + offset]);
@@ -1714,7 +1714,7 @@ void gain_spells() {
             }
         }
 
-        py.flags.new_spells = new_spells + diff_spells;
+        py.flags.new_spells = (uint8_t) (new_spells + diff_spells);
         if (py.flags.new_spells == 0) {
             py.flags.status |= PY_STUDY;
         }
@@ -1769,13 +1769,13 @@ void calc_mana(int stat) {
                 // change current mana proportionately to change of max mana,
                 // divide first to avoid overflow, little loss of accuracy
                 int32_t value = (((int32_t)p_ptr->cmana << 16) + p_ptr->cmana_frac) / p_ptr->mana * new_mana;
-                p_ptr->cmana = value >> 16;
-                p_ptr->cmana_frac = value & 0xFFFF;
+                p_ptr->cmana = (int16_t) (value >> 16);
+                p_ptr->cmana_frac = (uint16_t) (value & 0xFFFF);
             } else {
-                p_ptr->cmana = new_mana;
+                p_ptr->cmana = (int16_t) new_mana;
                 p_ptr->cmana_frac = 0;
             }
-            p_ptr->mana = new_mana;
+            p_ptr->mana = (int16_t) new_mana;
 
             // can't print mana here, may be in store or inventory mode
             py.flags.status |= PY_MANA;
@@ -1862,9 +1862,9 @@ void calc_hitpoints() {
         // change current hit points proportionately to change of mhp,
         // divide first to avoid overflow, little loss of accuracy
         int32_t value = (((int32_t)p_ptr->chp << 16) + p_ptr->chp_frac) / p_ptr->mhp * hitpoints;
-        p_ptr->chp = value >> 16;
-        p_ptr->chp_frac = value & 0xFFFF;
-        p_ptr->mhp = hitpoints;
+        p_ptr->chp = (int16_t) (value >> 16);
+        p_ptr->chp_frac = (uint16_t) (value & 0xFFFF);
+        p_ptr->mhp = (int16_t) hitpoints;
 
         // can't print hit points here, may be in store or inventory mode
         py.flags.status |= PY_HP;
@@ -2193,8 +2193,8 @@ void teleport(int dis) {
     }
 
     lite_spot(char_row, char_col);
-    char_row = y;
-    char_col = x;
+    char_row = (int16_t) y;
+    char_col = (int16_t) x;
     check_view();
     creatures(false);
     teleport_flag = false;

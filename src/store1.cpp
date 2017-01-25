@@ -278,7 +278,7 @@ void store_init() {
     for (int j = 0; j < MAX_STORES; j++) {
         store_type *s_ptr = &store[j];
 
-        s_ptr->owner = MAX_STORES * (randint(i) - 1) + j;
+        s_ptr->owner = (uint8_t) (MAX_STORES * (randint(i) - 1) + j);
         s_ptr->insult_cur = 0;
         s_ptr->store_open = 0;
         s_ptr->store_ctr = 0;

@@ -629,7 +629,7 @@ static void make_attack(int monptr) {
                     if (f_ptr->free_act) {
                         msg_print("You are unaffected.");
                     } else {
-                        f_ptr->paralysis = randint((int)r_ptr->level) + 3;
+                        f_ptr->paralysis = (int16_t) (randint((int)r_ptr->level) + 3);
                         msg_print("You are paralyzed.");
                     }
                 } else {
@@ -844,7 +844,7 @@ static void make_attack(int monptr) {
                     if (m_ptr->confused) {
                         m_ptr->confused += 3;
                     } else {
-                        m_ptr->confused = 2 + randint(16);
+                        m_ptr->confused = (uint8_t) (2 + randint(16));
                     }
                 }
                 msg_print(tmp_str);
@@ -948,7 +948,7 @@ static void make_move(int monptr, int *mm, uint32_t *rcmove) {
 
                         // 50% chance of breaking door
                         if (stuck_door) {
-                            t_ptr->p1 = 1 - randint(2);
+                            t_ptr->p1 = (int16_t) (1 - randint(2));
                         }
                         c_ptr->fval = CORR_FLOOR;
                         lite_spot(newy, newx);
@@ -965,7 +965,7 @@ static void make_move(int monptr, int *mm, uint32_t *rcmove) {
                             invcopy(t_ptr, OBJ_OPEN_DOOR);
 
                             // 50% chance of breaking door
-                            t_ptr->p1 = 1 - randint(2);
+                            t_ptr->p1 = (int16_t) (1 - randint(2));
                             c_ptr->fval = CORR_FLOOR;
                             lite_spot(newy, newx);
                             msg_print("You hear a door burst open!");
@@ -1050,9 +1050,9 @@ static void make_move(int monptr, int *mm, uint32_t *rcmove) {
                     m_ptr->ml = false;
                     lite_spot((int)m_ptr->fy, (int)m_ptr->fx);
                 }
-                m_ptr->fy = newy;
-                m_ptr->fx = newx;
-                m_ptr->cdis = distance(char_row, char_col, newy, newx);
+                m_ptr->fy = (uint8_t) newy;
+                m_ptr->fx = (uint8_t) newx;
+                m_ptr->cdis = (uint8_t) distance(char_row, char_col, newy, newx);
                 do_turn = true;
             }
         }
@@ -1115,7 +1115,7 @@ static void mon_cast_spell(int monptr, bool *took_turn) {
 
         // Extract all possible spells into spell_choice
         int spell_choice[30];
-        uint32_t i = (r_ptr->spells & ~CS_FREQ);
+        uint32_t i = (uint32_t) (r_ptr->spells & ~CS_FREQ);
         int k = 0;
 
         while (i != 0) {
@@ -1173,7 +1173,7 @@ static void mon_cast_spell(int monptr, bool *took_turn) {
             } else if (py.flags.paralysis > 0) {
                 py.flags.paralysis += 2;
             } else {
-                py.flags.paralysis = randint(5) + 4;
+                py.flags.paralysis = (int16_t) (randint(5) + 4);
             }
             break;
         case 11: // Cause Blindness
@@ -1191,7 +1191,7 @@ static void mon_cast_spell(int monptr, bool *took_turn) {
             } else if (py.flags.confused > 0) {
                 py.flags.confused += 2;
             } else {
-                py.flags.confused = randint(5) + 3;
+                py.flags.confused = (int16_t) (randint(5) + 3);
             }
             break;
         case 13: // Cause Fear
@@ -1200,7 +1200,7 @@ static void mon_cast_spell(int monptr, bool *took_turn) {
             } else if (py.flags.afraid > 0) {
                 py.flags.afraid += 2;
             } else {
-                py.flags.afraid = randint(5) + 3;
+                py.flags.afraid = (int16_t) (randint(5) + 3);
             }
             break;
         case 14: // Summon Monster
@@ -1235,7 +1235,7 @@ static void mon_cast_spell(int monptr, bool *took_turn) {
             } else if (py.flags.slow > 0) {
                 py.flags.slow += 2;
             } else {
-                py.flags.slow = randint(5) + 3;
+                py.flags.slow = (int16_t) (randint(5) + 3);
             }
             break;
         case 17: // Drain Mana
@@ -1579,7 +1579,7 @@ void creatures(int attack) {
             continue;
         }
 
-        m_ptr->cdis = distance(char_row, char_col, (int)m_ptr->fy, (int)m_ptr->fx);
+        m_ptr->cdis = (uint8_t) distance(char_row, char_col, (int)m_ptr->fy, (int)m_ptr->fx);
 
         // Attack is argument passed to CREATURE
         if (attack) {

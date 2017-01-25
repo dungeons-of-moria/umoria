@@ -96,7 +96,7 @@ void cast() {
                 case 14:
                     for (int id = 22; id < INVEN_ARRAY_SIZE; id++) {
                         inven_type *i_ptr = &inventory[id];
-                        i_ptr->flags = (i_ptr->flags & ~TR_CURSED);
+                        i_ptr->flags = (uint32_t) (i_ptr->flags & ~TR_CURSED);
                     }
                     break;
                 case 15:

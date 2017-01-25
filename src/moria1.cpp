@@ -91,9 +91,9 @@ void calc_bonuses() {
 
     int old_dis_ac = m_ptr->dis_ac;
 
-    m_ptr->ptohit = tohit_adj();   // Real To Hit
-    m_ptr->ptodam = todam_adj();   // Real To Dam
-    m_ptr->ptoac = toac_adj();     // Real To AC
+    m_ptr->ptohit = (int16_t) tohit_adj();   // Real To Hit
+    m_ptr->ptodam = (int16_t) todam_adj();   // Real To Dam
+    m_ptr->ptoac = (int16_t) toac_adj();     // Real To AC
     m_ptr->pac = 0;                // Real AC
     m_ptr->dis_th = m_ptr->ptohit; // Display To Hit
     m_ptr->dis_td = m_ptr->ptodam; // Display To Dam
@@ -632,7 +632,7 @@ void inven_command(char command) {
 
     do {
         if (isupper((int)command)) {
-            command = tolower((int)command);
+            command = (char) tolower((int)command);
         }
 
         // Simple command getting and screen selection.
@@ -1456,7 +1456,7 @@ void move_rec(int y1, int x1, int y2, int x2) {
     // this always works correctly, even if y1==y2 and x1==x2
     int tmp = cave[y1][x1].cptr;
     cave[y1][x1].cptr = 0;
-    cave[y2][x2].cptr = tmp;
+    cave[y2][x2].cptr = (uint8_t) tmp;
 }
 
 // Room is lit, make it appear -RAK-
@@ -1653,7 +1653,7 @@ void rest() {
         if (py.flags.status & PY_SEARCH) {
             search_off();
         }
-        py.flags.rest = rest_num;
+        py.flags.rest = (int16_t) rest_num;
         py.flags.status |= PY_REST;
         prt_state();
         py.flags.food_digested--;
