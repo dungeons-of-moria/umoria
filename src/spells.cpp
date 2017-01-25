@@ -33,7 +33,7 @@ void lower_monster_name(char *m_name, monster_type *m_ptr, creature_type *r_ptr)
 }
 
 // Sleep creatures adjacent to player -RAK-
-int sleep_monsters1(int y, int x) {
+bool sleep_monsters1(int y, int x) {
     bool sleep = false;
 
     for (int i = y - 1; i <= y + 1; i++) {
@@ -70,7 +70,7 @@ int sleep_monsters1(int y, int x) {
 }
 
 // Detect any treasure on the current panel -RAK-
-int detect_treasure() {
+bool detect_treasure() {
     bool detect = false;
 
     for (int i = panel_row_min; i <= panel_row_max; i++) {
@@ -90,7 +90,7 @@ int detect_treasure() {
 }
 
 // Detect all objects on the current panel -RAK-
-int detect_object() {
+bool detect_object() {
     bool detect = false;
 
     for (int i = panel_row_min; i <= panel_row_max; i++) {
@@ -111,7 +111,7 @@ int detect_object() {
 }
 
 // Locates and displays traps on current panel -RAK-
-int detect_trap() {
+bool detect_trap() {
     bool detect = false;
 
     for (int i = panel_row_min; i <= panel_row_max; i++) {
@@ -135,7 +135,7 @@ int detect_trap() {
 }
 
 // Locates and displays all secret doors on current panel -RAK-
-int detect_sdoor() {
+bool detect_sdoor() {
     bool detect = false;
 
     for (int i = panel_row_min; i <= panel_row_max; i++) {
@@ -164,7 +164,7 @@ int detect_sdoor() {
 }
 
 // Locates and displays all invisible creatures on current panel -RAK-
-int detect_invisible() {
+bool detect_invisible() {
     bool flag = false;
 
     for (int i = mfptr - 1; i >= MIN_MONIX; i--) {
@@ -192,7 +192,7 @@ int detect_invisible() {
 // Light an area: -RAK-
 //     1.  If corridor  light immediate area
 //     2.  If room      light entire room plus immediate area.
-int light_area(int y, int x) {
+bool light_area(int y, int x) {
     if (py.flags.blind < 1) {
         msg_print("You are surrounded by a white light.");
     }
@@ -216,7 +216,7 @@ int light_area(int y, int x) {
 }
 
 // Darken an area, opposite of light area -RAK-
-int unlight_area(int y, int x) {
+bool unlight_area(int y, int x) {
     bool unlight = false;
 
     if (cave[y][x].lr && (dun_level > 0)) {
@@ -289,7 +289,7 @@ void map_area() {
 }
 
 // Identify an object -RAK-
-int ident_spell() {
+bool ident_spell() {
     bool ident = false;
 
     int item_val;
@@ -317,7 +317,7 @@ int ident_spell() {
 }
 
 // Get all the monsters on the level pissed off. -RAK-
-int aggravate_monster(int dis_affect) {
+bool aggravate_monster(int dis_affect) {
     monster_type *m_ptr;
 
     bool aggravate = false;
@@ -339,7 +339,7 @@ int aggravate_monster(int dis_affect) {
 }
 
 // Surround the fool with traps (chuckle) -RAK-
-int trap_creation() {
+bool trap_creation() {
     bool trap = true;
 
     for (int i = char_row - 1; i <= char_row + 1; i++) {
@@ -373,7 +373,7 @@ int trap_creation() {
 }
 
 // Surround the player with doors. -RAK-
-int door_creation() {
+bool door_creation() {
     bool door = false;
 
     for (int i = char_row - 1; i <= char_row + 1; i++) {
@@ -402,7 +402,7 @@ int door_creation() {
 }
 
 // Destroys any adjacent door(s)/trap(s) -RAK-
-int td_destroy() {
+bool td_destroy() {
     bool destroy = false;
 
     for (int i = char_row - 1; i <= char_row + 1; i++) {
@@ -433,7 +433,7 @@ int td_destroy() {
 }
 
 // Display all creatures on the current panel -RAK-
-int detect_monsters() {
+bool detect_monsters() {
     bool detect = false;
 
     for (int i = mfptr - 1; i >= MIN_MONIX; i--) {
@@ -534,7 +534,7 @@ void starlite(int y, int x) {
 }
 
 // Disarms all traps/chests in a given direction -RAK-
-int disarm_all(int dir, int y, int x) {
+bool disarm_all(int dir, int y, int x) {
     bool disarm = false;
     int dist = -1;
 
@@ -941,7 +941,7 @@ void breath(int typ, int y, int x, int dam_hp, char *ddesc, int monptr) {
 }
 
 // Recharge a wand, staff, or rod.  Sometimes the item breaks. -RAK-
-int recharge(int num) {
+bool recharge(int num) {
     int i, j, item_val;
 
     bool res = false;
@@ -982,7 +982,7 @@ int recharge(int num) {
 }
 
 // Increase or decrease a creatures hit points -RAK-
-int hp_monster(int dir, int y, int x, int dam) {
+bool hp_monster(int dir, int y, int x, int dam) {
     bool monster = false;
     bool flag = false;
     int dist = 0;
@@ -1023,7 +1023,7 @@ int hp_monster(int dir, int y, int x, int dam) {
 }
 
 // Drains life; note it must be living. -RAK-
-int drain_life(int dir, int y, int x) {
+bool drain_life(int dir, int y, int x) {
     bool drain = false;
     bool flag = false;
     int dist = 0;
@@ -1070,7 +1070,7 @@ int drain_life(int dir, int y, int x) {
 
 // Increase or decrease a creatures speed -RAK-
 // NOTE: cannot slow a winning creature (BALROG)
-int speed_monster(int dir, int y, int x, int spd) {
+bool speed_monster(int dir, int y, int x, int spd) {
     bool speed = false;
     bool flag = false;
     int dist = 0;
@@ -1119,7 +1119,7 @@ int speed_monster(int dir, int y, int x, int spd) {
 }
 
 // Confuse a creature -RAK-
-int confuse_monster(int dir, int y, int x) {
+bool confuse_monster(int dir, int y, int x) {
     bool confuse = false;
     bool flag = false;
     int dist = 0;
@@ -1172,7 +1172,7 @@ int confuse_monster(int dir, int y, int x) {
 }
 
 // Sleep a creature. -RAK-
-int sleep_monster(int dir, int y, int x) {
+bool sleep_monster(int dir, int y, int x) {
     bool sleep = false;
     bool flag = false;
     int dist = 0;
@@ -1217,7 +1217,7 @@ int sleep_monster(int dir, int y, int x) {
 }
 
 // Turn stone to mud, delete wall. -RAK-
-int wall_to_mud(int dir, int y, int x) {
+bool wall_to_mud(int dir, int y, int x) {
     bool wall = false;
     bool flag = false;
     int dist = 0;
@@ -1299,7 +1299,7 @@ int wall_to_mud(int dir, int y, int x) {
 }
 
 // Destroy all traps and doors in a given direction -RAK-
-int td_destroy2(int dir, int y, int x) {
+bool td_destroy2(int dir, int y, int x) {
     bool destroy2 = false;
     int dist = 0;
 
@@ -1339,7 +1339,7 @@ int td_destroy2(int dir, int y, int x) {
 
 // Polymorph a monster -RAK-
 // NOTE: cannot polymorph a winning creature (BALROG)
-int poly_monster(int dir, int y, int x) {
+bool poly_monster(int dir, int y, int x) {
     bool poly = false;
     bool flag = false;
     int dist = 0;
@@ -1380,7 +1380,7 @@ int poly_monster(int dir, int y, int x) {
 }
 
 // Create a wall. -RAK-
-int build_wall(int dir, int y, int x) {
+bool build_wall(int dir, int y, int x) {
     bool build = false;
     int dist = 0;
     bool flag = false;
@@ -1541,7 +1541,7 @@ void teleport_to(int ny, int nx) {
 }
 
 // Teleport all creatures in a given direction away -RAK-
-int teleport_monster(int dir, int y, int x) {
+bool teleport_monster(int dir, int y, int x) {
     bool flag = false;
     bool result = false;
     int dist = 0;
@@ -1566,7 +1566,7 @@ int teleport_monster(int dir, int y, int x) {
 
 // Delete all creatures within max_sight distance -RAK-
 // NOTE : Winning creatures cannot be killed by genocide.
-int mass_genocide() {
+bool mass_genocide() {
     bool result = false;
 
     for (int i = mfptr - 1; i >= MIN_MONIX; i--) {
@@ -1585,7 +1585,7 @@ int mass_genocide() {
 // Delete all creatures of a given type from level. -RAK-
 // This does not keep creatures of type from appearing later.
 // NOTE : Winning creatures can not be killed by genocide.
-int genocide() {
+bool genocide() {
     bool killed = false;
 
     char typ;
@@ -1614,7 +1614,7 @@ int genocide() {
 
 // Change speed of any creature . -RAK-
 // NOTE: cannot slow a winning creature (BALROG)
-int speed_monsters(int spd) {
+bool speed_monsters(int spd) {
     bool speed = false;
 
     for (int i = mfptr - 1; i >= MIN_MONIX; i--) {
@@ -1655,7 +1655,7 @@ int speed_monsters(int spd) {
 }
 
 // Sleep any creature . -RAK-
-int sleep_monsters2() {
+bool sleep_monsters2() {
     bool sleep = false;
 
     for (int i = mfptr - 1; i >= MIN_MONIX; i--) {
@@ -1690,7 +1690,7 @@ int sleep_monsters2() {
 
 // Polymorph any creature that player can see. -RAK-
 // NOTE: cannot polymorph a winning creature (BALROG)
-int mass_poly() {
+bool mass_poly() {
     bool mass = false;
 
     for (int i = mfptr - 1; i >= MIN_MONIX; i--) {
@@ -1713,7 +1713,7 @@ int mass_poly() {
 }
 
 // Display evil creatures on current panel -RAK-
-int detect_evil() {
+bool detect_evil() {
     bool flag = false;
 
     for (int i = mfptr - 1; i >= MIN_MONIX; i--) {
@@ -1740,7 +1740,7 @@ int detect_evil() {
 }
 
 // Change players hit points in some manner -RAK-
-int hp_player(int num) {
+bool hp_player(int num) {
     bool res = false;
 
     struct player_type::misc *m_ptr = &py.misc;
@@ -1775,7 +1775,7 @@ int hp_player(int num) {
 }
 
 // Cure players confusion -RAK-
-int cure_confusion() {
+bool cure_confusion() {
     bool cure = false;
 
     struct player_type::flags *f_ptr = &py.flags;
@@ -1788,7 +1788,7 @@ int cure_confusion() {
 }
 
 // Cure players blindness -RAK-
-int cure_blindness() {
+bool cure_blindness() {
     bool cure = false;
 
     struct player_type::flags *f_ptr = &py.flags;
@@ -1801,7 +1801,7 @@ int cure_blindness() {
 }
 
 // Cure poisoning -RAK-
-int cure_poison() {
+bool cure_poison() {
     bool cure = false;
 
     struct player_type::flags *f_ptr = &py.flags;
@@ -1814,7 +1814,7 @@ int cure_poison() {
 }
 
 // Cure the players fear -RAK-
-int remove_fear() {
+bool remove_fear() {
     bool result = false;
 
     struct player_type::flags *f_ptr = &py.flags;
@@ -1922,7 +1922,7 @@ void create_food() {
 
 // Attempts to destroy a type of creature.  Success depends on
 // the creatures level VS. the player's level -RAK-
-int dispel_creature(int cflag, int damage) {
+bool dispel_creature(int cflag, int damage) {
     bool dispel = false;
 
     for (int i = mfptr - 1; i >= MIN_MONIX; i--) {
@@ -1957,7 +1957,7 @@ int dispel_creature(int cflag, int damage) {
 }
 
 // Attempt to turn (confuse) undead creatures. -RAK-
-int turn_undead() {
+bool turn_undead() {
     bool turn_und = false;
 
     for (int i = mfptr - 1; i >= MIN_MONIX; i--) {
@@ -2097,7 +2097,7 @@ void lose_exp(int32_t amount) {
 }
 
 // Slow Poison -RAK-
-int slow_poison() {
+bool slow_poison() {
     bool slow = false;
 
     struct player_type::flags *f_ptr = &py.flags;
@@ -2220,7 +2220,7 @@ bool enchant(int16_t *plusses, int16_t limit) {
 }
 
 // Removes curses from items in inventory -RAK-
-int remove_curse() {
+bool remove_curse() {
     bool result = false;
 
     for (int i = INVEN_WIELD; i <= INVEN_OUTER; i++) {
@@ -2237,7 +2237,7 @@ int remove_curse() {
 }
 
 // Restores any drained experience -RAK-
-int restore_level() {
+bool restore_level() {
     bool restore = false;
 
     struct player_type::misc *m_ptr = &py.misc;
