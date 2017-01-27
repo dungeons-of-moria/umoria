@@ -524,13 +524,13 @@ void screen_map() {
         priority[i] = 0;
     }
 
-    priority['<'] = 5;
-    priority['>'] = 5;
-    priority['@'] = 10;
-    priority['#'] = -5;
-    priority['.'] = -10;
-    priority['\''] = -3;
-    priority[' '] = -15;
+    priority[60] = 5;       // char '<'
+    priority[62] = 5;       // char '>'
+    priority[64] = 10;      // char '@'
+    priority[35] = -5;      // char '#'
+    priority[46] = -10;     // char '.'
+    priority[92] = -3;      // char '\'
+    priority[32] = -15;     // char ' '
 
     save_screen();
     clear_screen();
