@@ -31,7 +31,7 @@ void read_times() {
     vtype in_line;
 
     // Print the introduction message, news, etc.
-    FILE *file1 = fopen(MORIA_MOR, (char *)"r");
+    FILE *file1 = fopen(MORIA_MOR, "r");
     if (file1 != NULL) {
         clear_screen();
 
@@ -45,10 +45,10 @@ void read_times() {
 
 // File perusal. -CJS-
 // primitive, but portable
-void helpfile(char *filename) {
+void helpfile(const char *filename) {
     bigvtype tmp_str;
 
-    FILE *file = fopen(filename, (char *)"r");
+    FILE *file = fopen(filename, "r");
     if (file == NULL) {
         (void)sprintf(tmp_str, "Can not find help file \"%s\".\n", filename);
         prt(tmp_str, 0, 0);
@@ -110,7 +110,7 @@ void print_objects() {
                 return;
             }
 
-            FILE *file1 = fopen(filename1, (char *)"w");
+            FILE *file1 = fopen(filename1, "w");
             if (file1 != NULL) {
                 (void)sprintf(tmp_str, "%d", nobj);
                 prt(strcat(tmp_str, " random objects being produced..."), 0, 0);
@@ -166,7 +166,7 @@ bool file_character(char *filename1) {
         // on some non-unix machines, fdopen() is not reliable,
         // hence must call close() and then fopen().
         (void)close(fd);
-        file1 = fopen(filename1, (char *)"w");
+        file1 = fopen(filename1, "w");
     } else {
         file1 = NULL;
     }

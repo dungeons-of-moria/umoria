@@ -207,7 +207,7 @@ void eat();
 // files.c
 void init_scorefile();
 void read_times();
-void helpfile(char *);
+void helpfile(const char *);
 void print_objects();
 bool file_character(char *);
 
@@ -253,9 +253,9 @@ void user_name(char *);
 #define open topen
 #define fopen tfopen
 
-int tilde(char *, char *);
-FILE *tfopen(char *, char *);
-int topen(char *, int, int);
+int tilde(const char *, char *);
+FILE *tfopen(const char *, const char *);
+int topen(const char *, int, int);
 #endif
 
 // magic.c

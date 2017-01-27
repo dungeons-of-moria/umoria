@@ -696,7 +696,7 @@ void user_name(char *buf) {
 #undef open
 
 // open a file just as does fopen, but allow a leading ~ to specify a home directory
-FILE *tfopen(char *file, char *mode) {
+FILE *tfopen(const char *file, const char *mode) {
     // extern int errno;
 
     char buf[1024];
@@ -708,7 +708,7 @@ FILE *tfopen(char *file, char *mode) {
 }
 
 // open a file just as does open, but expand a leading ~ into a home directory name
-int topen(char *file, int flags, int mode) {
+int topen(const char *file, int flags, int mode) {
     // extern int errno;
 
     char buf[1024];
@@ -720,7 +720,7 @@ int topen(char *file, int flags, int mode) {
 }
 
 // expands a tilde at the beginning of a file name to a users home directory
-int tilde(char *file, char *exp) {
+int tilde(const char *file, char *exp) {
     *exp = '\0';
     if (file) {
         if (*file == '~') {
