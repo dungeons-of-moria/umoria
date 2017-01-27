@@ -68,7 +68,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED on)
 
 # Disable many C++ warnings until they are fixed.
 #set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -Wall -Werror -Wshadow -std=c++14")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -Wall -Wno-write-strings -Wno-char-subscripts -std=c++14")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -Wall -Wshadow -std=c++14")
 
 # Link Curses
 find_package(Curses REQUIRED)
