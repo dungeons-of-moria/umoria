@@ -1,11 +1,15 @@
 # Umoria Change log
 
-## HEAD
 
-- Compiles as a C++ application only.
-- Improved CLI: adds help and version information.
+
+## 5.7.1 (2017-01-27)
+
+- Improved CLI: adds _help_ and _version_ information (`-h` and `-v`).
+- Lots of spelling fixes, mostly source code comments, but a few in-game also.
+- Updates to the manual, FAQ, and historical/errors documents.
+
+- Compiles to C++, with all warnings fixed! (`-Wall`, `-Wextra`, `-Werror`, `-Wshadow`)
 - Now uses CMake for Mac/Linux build - Windows/MinGW still uses a normal Makefile.
-- Updates to manual, FAQ, and historical/errors.
 
 
 
