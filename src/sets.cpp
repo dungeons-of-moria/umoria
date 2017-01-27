@@ -82,6 +82,7 @@ bool set_lightning_destroy(inven_type *item) {
 }
 
 bool set_null(inven_type *item) {
+    (void)item; // silence warnings
     return false;
 }
 

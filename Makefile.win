@@ -11,7 +11,7 @@ TARGET = umoria
 INC = -I/usr/include/ncurses/
 
 # For testing and debugging the program, it is best to use this line.
-CFLAGS = -g -Wall -Wno-write-strings -Wno-char-subscripts -std=c++14 $(INC)
+CFLAGS = -g -Wall -Wextra -Werror -Wshadow -std=c++14 $(INC)
 
 # For playing the game, you may want to use this line
 # CFLAGS = -O

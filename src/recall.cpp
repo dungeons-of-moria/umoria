@@ -594,7 +594,7 @@ int roff_recall(int mon_num) {
         j++;
         if (j == 1) {
             roff(" It can ");
-        } else if (j == known_attacks) {
+        } else if (j == (uint32_t)known_attacks) {
             roff(", and ");
         } else {
             roff(", ");

@@ -730,7 +730,7 @@ int tilde(const char *file, char *exp) {
 
             user[0] = '\0';
             file++;
-            while (*file != '/' && i < sizeof(user)) {
+            while (*file != '/' && i < (int)sizeof(user)) {
                 user[i++] = *file++;
             }
             user[i] = '\0';

@@ -123,7 +123,7 @@ int randnor(int mean, int stand) {
 int bit_pos(uint32_t *test) {
     uint32_t mask = 0x1;
 
-    for (int i = 0; i < sizeof(*test) * 8; i++) {
+    for (int i = 0; i < (int)sizeof(*test) * 8; i++) {
         if (*test & mask) {
             *test &= ~mask;
             return i;
