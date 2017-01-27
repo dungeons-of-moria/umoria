@@ -5,7 +5,7 @@ project(umoria)
 # Current version number
 set(CURRENT_VERSION_MAJOR 5)
 set(CURRENT_VERSION_MINOR 7)
-set(CURRENT_VERSION_PATCH 0)
+set(CURRENT_VERSION_PATCH 1)
 
 set(SOURCE_FILES_DIR ${PROJECT_SOURCE_DIR}/src)
 
@@ -76,9 +76,10 @@ target_link_libraries(umoria ${CURSES_LIBRARIES})
 # add the package install targets
 install(TARGETS umoria
     RUNTIME
-    DESTINATION "./"
+    DESTINATION ./
     COMPONENT applications
 )
+set(EXECUTABLE_OUTPUT_PATH ./umoria)
 
 set(DATA_FILES
     ${PROJECT_SOURCE_DIR}/data/origcmds.hlp
@@ -89,10 +90,7 @@ set(DATA_FILES
     ${PROJECT_SOURCE_DIR}/data/version.hlp
     ${PROJECT_SOURCE_DIR}/data/welcome.hlp
 )
-install(FILES ${DATA_FILES}
-    DESTINATION "data"
-    COMPONENT gameData
-)
+file(COPY ${DATA_FILES} DESTINATION ./umoria/data)
 
 set(SUPPORT_FILES
     ${PROJECT_SOURCE_DIR}/data/scores.dat
@@ -100,10 +98,7 @@ set(SUPPORT_FILES
     ${PROJECT_SOURCE_DIR}/docs/faq.md
     ${PROJECT_SOURCE_DIR}/LICENSE
 )
-install(FILES ${SUPPORT_FILES}
-    DESTINATION "./"
-    COMPONENT supportData
-)
+file(COPY ${SUPPORT_FILES} DESTINATION ./umoria)
 
 # CPack configuration
 
