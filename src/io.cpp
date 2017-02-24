@@ -41,16 +41,15 @@ void init_curses() {
 
 // Set up the terminal into a suitable state -MRC-
 void moriaterm() {
-    cbreak();
-    noecho();
-
-    nonl();
-    intrflush(stdscr, false);
-    keypad(stdscr, false);
+    raw();                 // <curses.h> disable control characters. I.e. Ctrl-C does not work!
+    // cbreak();           // <curses.h> use raw() instead as it disables Ctrl chars
+    noecho();              // <curses.h> do not echo typed characters
+    nonl();                // <curses.h> disable translation return/newline for detection of return key
+    keypad(stdscr, false); // <curses.h> disable keypad input as we handle that ourselves
+    curs_set(0);           // <curses.h> sets the appearance of the cursor based on the value of visibility
 
 #ifdef __APPLE__
-    // Default delay on macOS is 1 second, let's do something about that!
-    set_escdelay(50);
+    set_escdelay(50);      // <curses.h> default delay on macOS is 1 second, let's do something about that!
 #endif
 
     curses_on = true;
