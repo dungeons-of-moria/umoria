@@ -2,6 +2,13 @@
 
 
 
+## 5.7.2 (2017-03-12)
+
+- Disable terminal control chars (e.g. CTRL-C)
+- Make splash screen logo a little nicer.
+
+
+
 ## 5.7.1 (2017-01-27)
 
 - Improved CLI: adds _help_ and _version_ information (`-h` and `-v`).
