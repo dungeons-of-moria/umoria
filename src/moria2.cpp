@@ -42,42 +42,46 @@ void search(int y, int x, int chance) {
     if (p_ptr->image > 0) {
         chance = chance / 10;
     }
+
     for (int i = (y - 1); i <= (y + 1); i++) {
         for (int j = (x - 1); j <= (x + 1); j++) {
             // always in_bounds here
-            if (randint(100) < chance) {
-                cave_type *c_ptr = &cave[i][j];
+            if (randint(100) >= chance) {
+                continue;
+            }
 
-                // Search for hidden objects
-                if (c_ptr->tptr != 0) {
-                    inven_type *t_ptr = &t_list[c_ptr->tptr];
+            cave_type *c_ptr = &cave[i][j];
+            if (c_ptr->tptr == 0) {
+                continue;
+            }
 
-                    // Trap on floor?
-                    if (t_ptr->tval == TV_INVIS_TRAP) {
-                        bigvtype tmp_str, tmp_str2;
+            // Search for hidden objects
+            inven_type *t_ptr = &t_list[c_ptr->tptr];
 
-                        objdes(tmp_str2, t_ptr, true);
-                        (void)sprintf(tmp_str, "You have found %s", tmp_str2);
-                        msg_print(tmp_str);
-                        change_trap(i, j);
-                        end_find();
-                    } else if (t_ptr->tval == TV_SECRET_DOOR) {
-                        // Secret door?
-                        msg_print("You have found a secret door.");
-                        change_trap(i, j);
-                        end_find();
-                    } else if (t_ptr->tval == TV_CHEST) {
-                        // Chest is trapped?
+            // Trap on floor?
+            if (t_ptr->tval == TV_INVIS_TRAP) {
+                bigvtype tmp_str, tmp_str2;
 
-                        // mask out the treasure bits
-                        if ((t_ptr->flags & CH_TRAPPED) > 1) {
-                            if (!known2_p(t_ptr)) {
-                                known2(t_ptr);
-                                msg_print("You have discovered a trap on the chest!");
-                            } else {
-                                msg_print("The chest is trapped!");
-                            }
-                        }
+                objdes(tmp_str2, t_ptr, true);
+                (void)sprintf(tmp_str, "You have found %s", tmp_str2);
+                msg_print(tmp_str);
+                change_trap(i, j);
+                end_find();
+            } else if (t_ptr->tval == TV_SECRET_DOOR) {
+                // Secret door?
+                msg_print("You have found a secret door.");
+                change_trap(i, j);
+                end_find();
+            } else if (t_ptr->tval == TV_CHEST) {
+                // Chest is trapped?
+
+                // mask out the treasure bits
+                if ((t_ptr->flags & CH_TRAPPED) > 1) {
+                    if (!known2_p(t_ptr)) {
+                        known2(t_ptr);
+                        msg_print("You have discovered a trap on the chest!");
+                    } else {
+                        msg_print("The chest is trapped!");
                     }
                 }
             }
@@ -313,146 +317,151 @@ static bool see_nothing(int dir, int y, int x) {
 
 // Determine the next direction for a run, or if we should stop. -CJS-
 void area_affect(int dir, int y, int x) {
-    if (py.flags.blind < 1) {
-        int check_dir = 0;
-        int option = 0;
-        int option2 = 0;
+    if (py.flags.blind >= 1) {
+        return;
+    }
 
-        dir = find_prevdir;
-        int max = (dir & 1) + 1;
+    int check_dir = 0;
+    int option = 0;
+    int option2 = 0;
 
-        // Look at every newly adjacent square.
-        for (int i = -max; i <= max; i++) {
-            int newdir = cycle[chome[dir] + i];
-            int row = y;
-            int col = x;
+    dir = find_prevdir;
+    int max = (dir & 1) + 1;
 
-            // Objects player can see (Including doors?) cause a stop.
-            if (mmove(newdir, &row, &col)) {
-                cave_type *c_ptr = &cave[row][col];
+    // Look at every newly adjacent square.
+    for (int i = -max; i <= max; i++) {
+        int newdir = cycle[chome[dir] + i];
+        int row = y;
+        int col = x;
 
-                bool inv;
-                if (player_light || c_ptr->tl || c_ptr->pl || c_ptr->fm) {
-                    if (c_ptr->tptr != 0) {
-                        int t = t_list[c_ptr->tptr].tval;
-                        if (t != TV_INVIS_TRAP && t != TV_SECRET_DOOR &&
-                            (t != TV_OPEN_DOOR || !find_ignore_doors)) {
-                            end_find();
-                            return;
-                        }
-                    }
-                    // Also Creatures
-                    // The monster should be visible since update_mon() checks
-                    // for the special case of being in find mode
-                    if (c_ptr->cptr > 1 && m_list[c_ptr->cptr].ml) {
+        // Objects player can see (Including doors?) cause a stop.
+        if (mmove(newdir, &row, &col)) {
+            cave_type *c_ptr = &cave[row][col];
+
+            bool inv;
+            if (player_light || c_ptr->tl || c_ptr->pl || c_ptr->fm) {
+                if (c_ptr->tptr != 0) {
+                    int t = t_list[c_ptr->tptr].tval;
+                    if (t != TV_INVIS_TRAP && t != TV_SECRET_DOOR &&
+                        (t != TV_OPEN_DOOR || !find_ignore_doors)) {
                         end_find();
                         return;
                     }
-                    inv = false;
-                } else {
-                    inv = true; // Square unseen. Treat as open.
                 }
+                // Also Creatures
+                // The monster should be visible since update_mon() checks
+                // for the special case of being in find mode
+                if (c_ptr->cptr > 1 && m_list[c_ptr->cptr].ml) {
+                    end_find();
+                    return;
+                }
+                inv = false;
+            } else {
+                inv = true; // Square unseen. Treat as open.
+            }
 
-                if (c_ptr->fval <= MAX_OPEN_SPACE || inv) {
-                    if (find_openarea) {
-                        // Have we found a break?
-                        if (i < 0) {
-                            if (find_breakright) {
-                                end_find();
-                                return;
-                            }
-                        } else if (i > 0) {
-                            if (find_breakleft) {
-                                end_find();
-                                return;
-                            }
-                        }
-                    } else if (option == 0) {
-                        option = newdir; // The first new direction.
-                    } else if (option2 != 0) {
-                        end_find(); // Three new directions. STOP.
-                        return;
-                    } else if (option != cycle[chome[dir] + i - 1]) {
-                        end_find(); // If not adjacent to prev, STOP
-                        return;
-                    } else {
-                        // Two adjacent choices. Make option2 the diagonal, and
-                        // remember the other diagonal adjacent to the first option.
-                        if ((newdir & 1) == 1) {
-                            check_dir = cycle[chome[dir] + i - 2];
-                            option2 = newdir;
-                        } else {
-                            check_dir = cycle[chome[dir] + i + 1];
-                            option2 = option;
-                            option = newdir;
-                        }
-                    }
-                } else if (find_openarea) {
-                    // We see an obstacle. In open area, STOP if on a side
-                    // previously open.
+            if (c_ptr->fval <= MAX_OPEN_SPACE || inv) {
+                if (find_openarea) {
+                    // Have we found a break?
                     if (i < 0) {
-                        if (find_breakleft) {
-                            end_find();
-                            return;
-                        }
-                        find_breakright = true;
-                    } else if (i > 0) {
                         if (find_breakright) {
                             end_find();
                             return;
                         }
-                        find_breakleft = true;
+                    } else if (i > 0) {
+                        if (find_breakleft) {
+                            end_find();
+                            return;
+                        }
                     }
-                }
-            }
-        }
-
-        // choose a direction.
-        if (!find_openarea) {
-            if (option2 == 0 || (find_examine && !find_cut)) {
-                // There is only one option, or if two, then we always examine
-                // potential corners and never cur known corners, so you step
-                // into the straight option.
-                if (option != 0) {
-                    find_direction = option;
-                }
-                if (option2 == 0) {
-                    find_prevdir = option;
+                } else if (option == 0) {
+                    option = newdir; // The first new direction.
+                } else if (option2 != 0) {
+                    end_find(); // Three new directions. STOP.
+                    return;
+                } else if (option != cycle[chome[dir] + i - 1]) {
+                    end_find(); // If not adjacent to prev, STOP
+                    return;
                 } else {
-                    find_prevdir = option2;
-                }
-            } else {
-                // Two options!
-
-                int row = y;
-                int col = x;
-
-                (void)mmove(option, &row, &col);
-                if (!see_wall(option, row, col) || !see_wall(check_dir, row, col)) {
-                    // Don't see that it is closed off.  This could be a
-                    // potential corner or an intersection.
-                    if (find_examine && see_nothing(option, row, col) &&
-                        see_nothing(option2, row, col)) {
-                        // Can not see anything ahead and in the direction we are
-                        // turning, assume that it is a potential corner.
-                        find_direction = option;
-                        find_prevdir = option2;
+                    // Two adjacent choices. Make option2 the diagonal, and
+                    // remember the other diagonal adjacent to the first option.
+                    if ((newdir & 1) == 1) {
+                        check_dir = cycle[chome[dir] + i - 2];
+                        option2 = newdir;
                     } else {
-                        // STOP: we are next to an intersection or a room
-                        end_find();
+                        check_dir = cycle[chome[dir] + i + 1];
+                        option2 = option;
+                        option = newdir;
                     }
-                } else if (find_cut) {
-                    // This corner is seen to be enclosed; we cut the corner.
-                    find_direction = option2;
-                    find_prevdir = option2;
-                } else {
-                    // This corner is seen to be enclosed, and we deliberately
-                    // go the long way.
-                    find_direction = option;
-                    find_prevdir = option2;
+                }
+            } else if (find_openarea) {
+                // We see an obstacle. In open area, STOP if on a side
+                // previously open.
+                if (i < 0) {
+                    if (find_breakleft) {
+                        end_find();
+                        return;
+                    }
+                    find_breakright = true;
+                } else if (i > 0) {
+                    if (find_breakright) {
+                        end_find();
+                        return;
+                    }
+                    find_breakleft = true;
                 }
             }
         }
+    }
+
+    if (find_openarea) {
+        return;
+    }
+
+    // choose a direction.
+
+    if (option2 == 0 || (find_examine && !find_cut)) {
+        // There is only one option, or if two, then we always examine
+        // potential corners and never cur known corners, so you step
+        // into the straight option.
+        if (option != 0) {
+            find_direction = option;
+        }
+        if (option2 == 0) {
+            find_prevdir = option;
+        } else {
+            find_prevdir = option2;
+        }
+        return;
+    }
+
+    // Two options!
+    int row = y;
+    int col = x;
+    (void)mmove(option, &row, &col);
+
+    if (!see_wall(option, row, col) || !see_wall(check_dir, row, col)) {
+        // Don't see that it is closed off.  This could be a
+        // potential corner or an intersection.
+        if (find_examine && see_nothing(option, row, col) &&
+            see_nothing(option2, row, col)) {
+            // Can not see anything ahead and in the direction we are
+            // turning, assume that it is a potential corner.
+            find_direction = option;
+            find_prevdir = option2;
+        } else {
+            // STOP: we are next to an intersection or a room
+            end_find();
+        }
+    } else if (find_cut) {
+        // This corner is seen to be enclosed; we cut the corner.
+        find_direction = option2;
+        find_prevdir = option2;
+    } else {
+        // This corner is seen to be enclosed, and we deliberately
+        // go the long way.
+        find_direction = option;
+        find_prevdir = option2;
     }
 }
 
@@ -490,26 +499,30 @@ int minus_ac(uint32_t typ_dam) {
 
     bool minus = false;
 
-    if (i > 0) {
-        int j = tmp[randint(i) - 1];
-
-        inven_type *i_ptr = &inventory[j];
-
-        bigvtype out_val, tmp_str;
-        if (i_ptr->flags & typ_dam) {
-            objdes(tmp_str, &inventory[j], false);
-            (void)sprintf(out_val, "Your %s resists damage!", tmp_str);
-            msg_print(out_val);
-            minus = true;
-        } else if ((i_ptr->ac + i_ptr->toac) > 0) {
-            objdes(tmp_str, &inventory[j], false);
-            (void)sprintf(out_val, "Your %s is damaged!", tmp_str);
-            msg_print(out_val);
-            i_ptr->toac--;
-            calc_bonuses();
-            minus = true;
-        }
+    if (i == 0) {
+        return minus;
     }
+
+    int j = tmp[randint(i) - 1];
+
+    inven_type *i_ptr = &inventory[j];
+
+    bigvtype out_val, tmp_str;
+
+    if (i_ptr->flags & typ_dam) {
+        objdes(tmp_str, &inventory[j], false);
+        (void)sprintf(out_val, "Your %s resists damage!", tmp_str);
+        msg_print(out_val);
+        minus = true;
+    } else if ((i_ptr->ac + i_ptr->toac) > 0) {
+        objdes(tmp_str, &inventory[j], false);
+        (void)sprintf(out_val, "Your %s is damaged!", tmp_str);
+        msg_print(out_val);
+        i_ptr->toac--;
+        calc_bonuses();
+        minus = true;
+    }
+
     return minus;
 }
 

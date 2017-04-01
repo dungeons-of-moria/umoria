@@ -1905,33 +1905,34 @@ static void jamdoor() {
 
 // Refill the players lamp -RAK-
 static void refill_lamp() {
-    int i, j;
-
     free_turn_flag = true;
 
-    int k = inventory[INVEN_LIGHT].subval;
-
-    if (k != 0) {
+    if (inventory[INVEN_LIGHT].subval != 0) {
         msg_print("But you are not using a lamp.");
-    } else if (!find_range(TV_FLASK, TV_NEVER, &i, &j)) {
-        msg_print("You have no oil.");
-    } else {
-        free_turn_flag = false;
-
-        inven_type *i_ptr = &inventory[INVEN_LIGHT];
-        i_ptr->p1 += inventory[i].p1;
-        if (i_ptr->p1 > OBJ_LAMP_MAX) {
-            i_ptr->p1 = OBJ_LAMP_MAX;
-            msg_print("Your lamp overflows, spilling oil on the ground.");
-            msg_print("Your lamp is full.");
-        } else if (i_ptr->p1 > OBJ_LAMP_MAX / 2) {
-            msg_print("Your lamp is more than half full.");
-        } else if (i_ptr->p1 == OBJ_LAMP_MAX / 2) {
-            msg_print("Your lamp is half full.");
-        } else {
-            msg_print("Your lamp is less than half full.");
-        }
-        desc_remain(i);
-        inven_destroy(i);
+        return;
     }
+
+    int i, j;
+    if (!find_range(TV_FLASK, TV_NEVER, &i, &j)) {
+        msg_print("You have no oil.");
+        return;
+    }
+
+    free_turn_flag = false;
+
+    inven_type *i_ptr = &inventory[INVEN_LIGHT];
+    i_ptr->p1 += inventory[i].p1;
+    if (i_ptr->p1 > OBJ_LAMP_MAX) {
+        i_ptr->p1 = OBJ_LAMP_MAX;
+        msg_print("Your lamp overflows, spilling oil on the ground.");
+        msg_print("Your lamp is full.");
+    } else if (i_ptr->p1 > OBJ_LAMP_MAX / 2) {
+        msg_print("Your lamp is more than half full.");
+    } else if (i_ptr->p1 == OBJ_LAMP_MAX / 2) {
+        msg_print("Your lamp is half full.");
+    } else {
+        msg_print("Your lamp is less than half full.");
+    }
+    desc_remain(i);
+    inven_destroy(i);
 }

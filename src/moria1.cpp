@@ -547,11 +547,14 @@ static int wear_low, wear_high;
 
 // Draw the inventory screen.
 static void inven_screen(int new_scr) {
+    if (new_scr == scr_state) {
+        return;
+    }
+
     int line = 0;
 
-    if (new_scr != scr_state) {
-        scr_state = new_scr;
-        switch (new_scr) {
+    scr_state = new_scr;
+    switch (new_scr) {
         case BLANK_SCR:
             line = 0;
             break;
@@ -580,15 +583,16 @@ static void inven_screen(int new_scr) {
             scr_left = show_equip(show_weight_flag, scr_left);
             line = equip_ctr;
             break;
-        }
-        if (line >= scr_base) {
-            scr_base = line + 1;
-            erase_line(scr_base, scr_left);
-        } else {
-            while (++line <= scr_base) {
-                erase_line(line, scr_left);
-            }
-        }
+    }
+
+    if (line >= scr_base) {
+        scr_base = line + 1;
+        erase_line(scr_base, scr_left);
+        return;
+    }
+
+    while (++line <= scr_base) {
+        erase_line(line, scr_left);
     }
 }
 
@@ -1423,6 +1427,7 @@ bool get_dir(char *prompt, int *dir) {
             *dir = prev_dir;
             return true;
         }
+
         bell();
     }
 }
@@ -1551,6 +1556,7 @@ static void sub1_move_light(int y1, int x1, int y2, int x2) {
         left = x2 - 1;
         right = x1 + 1;
     }
+
     for (int i = top; i <= bottom; i++) {
         // Leftmost to rightmost do
         for (int j = left; j <= right; j++) {
@@ -1647,6 +1653,7 @@ void rest() {
             }
         }
     }
+
     // check for reasonable value, must be positive number
     // in range of a short, or must be -MAX_SHORT
     if ((rest_num == -MAX_SHORT) || ((rest_num > 0) && (rest_num < MAX_SHORT))) {
@@ -1699,7 +1706,9 @@ void take_hit(int damage, const char *hit_from) {
     if (py.flags.invuln > 0) {
         damage = 0;
     }
+
     py.misc.chp -= damage;
+
     if (py.misc.chp < 0) {
         if (!death) {
             death = true;

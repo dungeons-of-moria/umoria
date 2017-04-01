@@ -55,50 +55,50 @@ void place_gold(int y, int x) {
 
 // Returns the array number of a random object -RAK-
 int get_obj_num(int level, bool must_be_small) {
+    if (level == 0) {
+        return randint(t_level[0]) - 1;
+    }
+
+    if (level >= MAX_OBJ_LEVEL) {
+        level = MAX_OBJ_LEVEL;
+    } else if (randint(OBJ_GREAT) == 1) {
+        level = level * MAX_OBJ_LEVEL / randint(MAX_OBJ_LEVEL) + 1;
+        if (level > MAX_OBJ_LEVEL) {
+            level = MAX_OBJ_LEVEL;
+        }
+    }
+
     int i;
 
-    if (level == 0) {
-        i = randint(t_level[0]) - 1;
-    } else {
-        if (level >= MAX_OBJ_LEVEL) {
-            level = MAX_OBJ_LEVEL;
-        } else if (randint(OBJ_GREAT) == 1) {
-            level = level * MAX_OBJ_LEVEL / randint(MAX_OBJ_LEVEL) + 1;
-            if (level > MAX_OBJ_LEVEL) {
-                level = MAX_OBJ_LEVEL;
+    // This code has been added to make it slightly more likely to get the
+    // higher level objects.  Originally a uniform distribution over all
+    // objects less than or equal to the dungeon level. This distribution
+    // makes a level n objects occur approx 2/n% of the time on level n,
+    // and 1/2n are 0th level.
+    do {
+        if (randint(2) == 1) {
+            i = randint(t_level[level]) - 1;
+        } else {
+            // Choose three objects, pick the highest level.
+
+            i = randint(t_level[level]) - 1;
+            int j = randint(t_level[level]) - 1;
+            if (i < j) {
+                i = j;
+            }
+            j = randint(t_level[level]) - 1;
+            if (i < j) {
+                i = j;
+            }
+            j = object_list[sorted_objects[i]].level;
+            if (j == 0) {
+                i = randint(t_level[0]) - 1;
+            } else {
+                i = randint(t_level[j] - t_level[j - 1]) - 1 + t_level[j - 1];
             }
         }
+    } while ((must_be_small) && (set_large(&object_list[sorted_objects[i]])));
 
-        // This code has been added to make it slightly more likely to get the
-        // higher level objects.  Originally a uniform distribution over all
-        // objects less than or equal to the dungeon level. This distribution
-        // makes a level n objects occur approx 2/n% of the time on level n,
-        // and 1/2n are 0th level.
-        do {
-            if (randint(2) == 1) {
-                i = randint(t_level[level]) - 1;
-            } else {
-                // Choose three objects, pick the highest level.
-
-                i = randint(t_level[level]) - 1;
-                int j = randint(t_level[level]) - 1;
-                if (i < j) {
-                    i = j;
-                }
-                j = randint(t_level[level]) - 1;
-                if (i < j) {
-                    i = j;
-                }
-                j = object_list[sorted_objects[i]].level;
-                if (j == 0) {
-                    i = randint(t_level[0]) - 1;
-                } else {
-                    i = randint(t_level[j] - t_level[j - 1]) - 1 +
-                        t_level[j - 1];
-                }
-            }
-        } while ((must_be_small) && (set_large(&object_list[sorted_objects[i]])));
-    }
     return i;
 }
 
@@ -611,9 +611,9 @@ bool inc_stat(int stat) {
         set_use_stat(stat);
         prt_stat(stat);
         return true;
-    } else {
-        return false;
     }
+
+    return false;
 }
 
 // Decreases a stat by one randomized level -RAK-
@@ -636,9 +636,9 @@ bool dec_stat(int stat) {
         set_use_stat(stat);
         prt_stat(stat);
         return true;
-    } else {
-        return false;
     }
+
+    return false;
 }
 
 // Restore a stat.  Return true only if this actually makes a difference.
@@ -1153,7 +1153,9 @@ int weight_limit() {
 bool inven_check_num(inven_type *t_ptr) {
     if (inven_ctr < INVEN_WIELD) {
         return true;
-    } else if (t_ptr->subval >= ITEM_SINGLE_STACK_MIN) {
+    }
+
+    if (t_ptr->subval >= ITEM_SINGLE_STACK_MIN) {
         for (int i = 0; i < inven_ctr; i++) {
             if (inventory[i].tval == t_ptr->tval &&
                 inventory[i].subval == t_ptr->subval &&
@@ -1168,6 +1170,7 @@ bool inven_check_num(inven_type *t_ptr) {
             }
         }
     }
+
     return false;
 }
 
@@ -1630,99 +1633,100 @@ void gain_spells() {
         (void)sprintf(tmp_str, "You can't learn any new %ss!", (stat == A_INT ? "spell" : "prayer"));
         msg_print(tmp_str);
         free_turn_flag = true;
+        return;
+    }
+
+    // determine which spells player can learn
+    // mages need the book to learn a spell, priests do not need the book
+    if (stat == A_INT) {
+        spell_flag = 0;
+        for (int i = 0; i < inven_ctr; i++) {
+            if (inventory[i].tval == TV_MAGIC_BOOK) {
+                spell_flag |= inventory[i].flags;
+            }
+        }
     } else {
-        // determine which spells player can learn
-        // mages need the book to learn a spell, priests do not need the book
-        if (stat == A_INT) {
-            spell_flag = 0;
-            for (int i = 0; i < inven_ctr; i++) {
-                if (inventory[i].tval == TV_MAGIC_BOOK) {
-                    spell_flag |= inventory[i].flags;
-                }
-            }
-        } else {
-            spell_flag = 0x7FFFFFFF;
-        }
+        spell_flag = 0x7FFFFFFF;
+    }
 
-        // clear bits for spells already learned
-        spell_flag &= ~spell_learned;
+    // clear bits for spells already learned
+    spell_flag &= ~spell_learned;
 
-        int i = 0;
-        int spells[31];
+    int i = 0;
+    int spells[31];
 
-        int j;
-        uint32_t mask;
-        for (j = 0, mask = 0x1; spell_flag; mask <<= 1, j++) {
-            if (spell_flag & mask) {
-                spell_flag &= ~mask;
-                if (msp_ptr[j].slevel <= p_ptr->lev) {
-                    spells[i] = j;
-                    i++;
-                }
+    int j;
+    uint32_t mask;
+    for (j = 0, mask = 0x1; spell_flag; mask <<= 1, j++) {
+        if (spell_flag & mask) {
+            spell_flag &= ~mask;
+            if (msp_ptr[j].slevel <= p_ptr->lev) {
+                spells[i] = j;
+                i++;
             }
         }
+    }
 
-        if (new_spells > i) {
-            msg_print("You seem to be missing a book.");
-            diff_spells = new_spells - i;
-            new_spells = i;
-        }
-        if (new_spells == 0) {
-            ;
-        } else if (stat == A_INT) {
-            // get to choose which mage spells will be learned
-            save_screen();
-            print_spells(spells, i, false, -1);
+    if (new_spells > i) {
+        msg_print("You seem to be missing a book.");
+        diff_spells = new_spells - i;
+        new_spells = i;
+    }
+    if (new_spells == 0) {
+        ;
+    } else if (stat == A_INT) {
+        // get to choose which mage spells will be learned
+        save_screen();
+        print_spells(spells, i, false, -1);
 
-            char query;
-            while (new_spells && get_com("Learn which spell?", &query)) {
-                int c = query - 'a';
+        char query;
+        while (new_spells && get_com("Learn which spell?", &query)) {
+            int c = query - 'a';
 
-                // test j < 23 in case i is greater than 22, only 22 spells
-                // are actually shown on the screen, so limit choice to those
-                if (c >= 0 && c < i && c < 22) {
-                    new_spells--;
-                    spell_learned |= 1L << spells[c];
-                    spell_order[last_known++] = (uint8_t) spells[c];
-                    for (; c <= i - 1; c++) {
-                        spells[c] = spells[c + 1];
-                    }
-                    i--;
-                    erase_line(c + 1, 31);
-                    print_spells(spells, i, false, -1);
-                } else {
-                    bell();
-                }
-            }
-            restore_screen();
-        } else {
-            // pick a prayer at random
-            while (new_spells) {
-                int s = randint(i) - 1;
-                spell_learned |= 1L << spells[s];
-                spell_order[last_known++] = (uint8_t) spells[s];
-
-                vtype tmp_str;
-                (void)sprintf(tmp_str, "You have learned the prayer of %s.", spell_names[spells[s] + offset]);
-                msg_print(tmp_str);
-
-                for (; s <= i - 1; s++) {
-                    spells[s] = spells[s + 1];
+            // test j < 23 in case i is greater than 22, only 22 spells
+            // are actually shown on the screen, so limit choice to those
+            if (c >= 0 && c < i && c < 22) {
+                new_spells--;
+                spell_learned |= 1L << spells[c];
+                spell_order[last_known++] = (uint8_t) spells[c];
+                for (; c <= i - 1; c++) {
+                    spells[c] = spells[c + 1];
                 }
                 i--;
-                new_spells--;
+                erase_line(c + 1, 31);
+                print_spells(spells, i, false, -1);
+            } else {
+                bell();
             }
         }
+        restore_screen();
+    } else {
+        // pick a prayer at random
+        while (new_spells) {
+            int s = randint(i) - 1;
+            spell_learned |= 1L << spells[s];
+            spell_order[last_known++] = (uint8_t) spells[s];
 
-        py.flags.new_spells = (uint8_t) (new_spells + diff_spells);
-        if (py.flags.new_spells == 0) {
-            py.flags.status |= PY_STUDY;
-        }
+            vtype tmp_str;
+            (void)sprintf(tmp_str, "You have learned the prayer of %s.", spell_names[spells[s] + offset]);
+            msg_print(tmp_str);
 
-        // set the mana for first level characters when they learn their first spell.
-        if (py.misc.mana == 0) {
-            calc_mana(stat);
+            for (; s <= i - 1; s++) {
+                spells[s] = spells[s + 1];
+            }
+            i--;
+            new_spells--;
         }
+    }
+
+    py.flags.new_spells = (uint8_t) (new_spells + diff_spells);
+    if (py.flags.new_spells == 0) {
+        py.flags.status |= PY_STUDY;
+    }
+
+    // set the mana for first level characters when they learn their first spell.
+    if (py.misc.mana == 0) {
+        calc_mana(stat);
     }
 }
 
@@ -1966,43 +1970,43 @@ int attack_blows(int weight, int *wtohit) {
     if (s * 15 < weight) {
         *wtohit = s * 15 - weight;
         return 1;
-    } else {
-        int str_index, dex_index;
-
-        *wtohit = 0;
-        if (d < 10) {
-            dex_index = 0;
-        } else if (d < 19) {
-            dex_index = 1;
-        } else if (d < 68) {
-            dex_index = 2;
-        } else if (d < 108) {
-            dex_index = 3;
-        } else if (d < 118) {
-            dex_index = 4;
-        } else {
-            dex_index = 5;
-        }
-
-        int adj_weight = (s * 10 / weight);
-        if (adj_weight < 2) {
-            str_index = 0;
-        } else if (adj_weight < 3) {
-            str_index = 1;
-        } else if (adj_weight < 4) {
-            str_index = 2;
-        } else if (adj_weight < 5) {
-            str_index = 3;
-        } else if (adj_weight < 7) {
-            str_index = 4;
-        } else if (adj_weight < 9) {
-            str_index = 5;
-        } else {
-            str_index = 6;
-        }
-
-        return (int)blows_table[str_index][dex_index];
     }
+
+    int str_index, dex_index;
+
+    *wtohit = 0;
+    if (d < 10) {
+        dex_index = 0;
+    } else if (d < 19) {
+        dex_index = 1;
+    } else if (d < 68) {
+        dex_index = 2;
+    } else if (d < 108) {
+        dex_index = 3;
+    } else if (d < 118) {
+        dex_index = 4;
+    } else {
+        dex_index = 5;
+    }
+
+    int adj_weight = (s * 10 / weight);
+    if (adj_weight < 2) {
+        str_index = 0;
+    } else if (adj_weight < 3) {
+        str_index = 1;
+    } else if (adj_weight < 4) {
+        str_index = 2;
+    } else if (adj_weight < 5) {
+        str_index = 3;
+    } else if (adj_weight < 7) {
+        str_index = 4;
+    } else if (adj_weight < 9) {
+        str_index = 5;
+    } else {
+        str_index = 6;
+    }
+
+    return (int)blows_table[str_index][dex_index];
 }
 
 // Special damage due to magical abilities of object -RAK-
@@ -2043,6 +2047,7 @@ int tot_dam(inven_type *i_ptr, int tdam, int monster) {
             r_ptr->r_cdefense |= CD_FIRE;
         }
     }
+
     return tdam;
 }
 

@@ -486,11 +486,9 @@ void bell() {
     put_qio();
 
     // The player can turn off beeps if he/she finds them annoying.
-    if (!sound_beep_flag) {
-        return;
+    if (sound_beep_flag) {
+        (void)write(1, "\007", 1);
     }
-
-    (void)write(1, "\007", 1);
 }
 
 // definitions used by screen_map()
@@ -653,9 +651,9 @@ bool check_input(int microsec) {
             return false;
         }
         return true;
-    } else {
-        return false;
     }
+
+    return false;
 #endif
 }
 
@@ -720,36 +718,39 @@ int topen(const char *file, int flags, int mode) {
 
 // expands a tilde at the beginning of a file name to a users home directory
 int tilde(const char *file, char *exp) {
+    if (!file) {
+        return 0;
+    }
+
     *exp = '\0';
-    if (file) {
-        if (*file == '~') {
-            char user[128];
-            struct passwd *pw = NULL;
-            int i = 0;
 
-            user[0] = '\0';
-            file++;
-            while (*file != '/' && i < (int)sizeof(user)) {
-                user[i++] = *file++;
-            }
-            user[i] = '\0';
-            if (i == 0) {
-                char *login = getlogin();
+    if (*file == '~') {
+        char user[128];
+        struct passwd *pw = NULL;
+        int i = 0;
 
-                if (login != NULL) {
-                    (void)strcpy(user, login);
-                } else if ((pw = getpwuid(getuid())) == NULL) {
-                    return 0;
-                }
-            }
-            if (pw == NULL && (pw = getpwnam(user)) == NULL) {
+        user[0] = '\0';
+        file++;
+        while (*file != '/' && i < (int)sizeof(user)) {
+            user[i++] = *file++;
+        }
+        user[i] = '\0';
+        if (i == 0) {
+            char *login = getlogin();
+
+            if (login != NULL) {
+                (void)strcpy(user, login);
+            } else if ((pw = getpwuid(getuid())) == NULL) {
                 return 0;
             }
-            (void)strcpy(exp, pw->pw_dir);
         }
-        (void)strcat(exp, file);
-        return 1;
+        if (pw == NULL && (pw = getpwnam(user)) == NULL) {
+            return 0;
+        }
+        (void)strcpy(exp, pw->pw_dir);
     }
-    return 0;
+    (void)strcat(exp, file);
+
+    return 1;
 }
 #endif

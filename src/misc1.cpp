@@ -297,34 +297,34 @@ bool los(int fromY, int fromX, int toY, int toX) {
 
     // Handle the cases where deltaX or deltaY == 0.
     if (deltaX == 0) {
-        int p_y; // y position -- loop variable
-
         if (deltaY < 0) {
             int tmp = fromY;
             fromY = toY;
             toY = tmp;
         }
 
-        for (p_y = fromY + 1; p_y < toY; p_y++) {
+        for (int p_y = fromY + 1; p_y < toY; p_y++) {
             if (cave[p_y][fromX].fval >= MIN_CLOSED_SPACE) {
                 return false;
             }
         }
-        return true;
-    } else if (deltaY == 0) {
-        int px; // x position -- loop variable
 
+        return true;
+    }
+
+    if (deltaY == 0) {
         if (deltaX < 0) {
             int tmp = fromX;
             fromX = toX;
             toX = tmp;
         }
 
-        for (px = fromX + 1; px < toX; px++) {
+        for (int px = fromX + 1; px < toX; px++) {
             if (cave[fromY][px].fval >= MIN_CLOSED_SPACE) {
                 return false;
             }
         }
+
         return true;
     }
 
@@ -432,29 +432,44 @@ bool los(int fromY, int fromX, int toY, int toX) {
 // Returns symbol for given row, column -RAK-
 uint8_t loc_symbol(int y, int x) {
     cave_type *cave_ptr = &cave[y][x];
-    struct player_type::flags *f_ptr = &py.flags;
 
     if ((cave_ptr->cptr == 1) && (!find_flag || find_prself)) {
         return '@';
-    } else if (f_ptr->status & PY_BLIND) {
-        return ' ';
-    } else if ((f_ptr->image > 0) && (randint(12) == 1)) {
-        return (uint8_t) (randint(95) + 31);
-    } else if ((cave_ptr->cptr > 1) && (m_list[cave_ptr->cptr].ml)) {
-        return c_list[m_list[cave_ptr->cptr].mptr].cchar;
-    } else if (!cave_ptr->pl && !cave_ptr->tl && !cave_ptr->fm) {
-        return ' ';
-    } else if ((cave_ptr->tptr != 0) && (t_list[cave_ptr->tptr].tval != TV_INVIS_TRAP)) {
-        return t_list[cave_ptr->tptr].tchar;
-    } else if (cave_ptr->fval <= MAX_CAVE_FLOOR) {
-        return '.';
-    } else if (cave_ptr->fval == GRANITE_WALL || cave_ptr->fval == BOUNDARY_WALL || !highlight_seams) {
-        return '#';
-    } else {
-        // Originally set highlight bit, but that is not portable,
-        // now use the percent sign instead.
-        return '%';
     }
+
+    struct player_type::flags *f_ptr = &py.flags;
+
+    if (f_ptr->status & PY_BLIND) {
+        return ' ';
+    }
+
+    if ((f_ptr->image > 0) && (randint(12) == 1)) {
+        return (uint8_t) (randint(95) + 31);
+    }
+
+    if ((cave_ptr->cptr > 1) && (m_list[cave_ptr->cptr].ml)) {
+        return c_list[m_list[cave_ptr->cptr].mptr].cchar;
+    }
+
+    if (!cave_ptr->pl && !cave_ptr->tl && !cave_ptr->fm) {
+        return ' ';
+    }
+
+    if ((cave_ptr->tptr != 0) && (t_list[cave_ptr->tptr].tval != TV_INVIS_TRAP)) {
+        return t_list[cave_ptr->tptr].tchar;
+    }
+
+    if (cave_ptr->fval <= MAX_CAVE_FLOOR) {
+        return '.';
+    }
+
+    if (cave_ptr->fval == GRANITE_WALL || cave_ptr->fval == BOUNDARY_WALL || !highlight_seams) {
+        return '#';
+    }
+
+    // Originally set highlight bit, but that is not portable,
+    // now use the percent sign instead.
+    return '%';
 }
 
 // Tests a spot for light or field mark status -RAK-
@@ -607,81 +622,82 @@ bool place_monster(int y, int x, int z, int slp) {
 
 // Places a monster at given location -RAK-
 void place_win_monster() {
-    int y, x;
-
-    if (!total_winner) {
-        int cur_pos = popm();
-
-        // Check for case where could not allocate space for
-        // the win monster, this should never happen.
-        if (cur_pos == -1) {
-            abort();
-        }
-
-        monster_type *mon_ptr = &m_list[cur_pos];
-
-        do {
-            y = randint(cur_height - 2);
-            x = randint(cur_width - 2);
-        } while ((cave[y][x].fval >= MIN_CLOSED_SPACE) ||
-                 (cave[y][x].cptr != 0) || (cave[y][x].tptr != 0) ||
-                 (distance(y, x, char_row, char_col) <= MAX_SIGHT));
-
-        mon_ptr->fy = (uint8_t) y;
-        mon_ptr->fx = (uint8_t) x;
-        mon_ptr->mptr = (uint16_t) (randint(WIN_MON_TOT) - 1 + m_level[MAX_MONS_LEVEL]);
-
-        if (c_list[mon_ptr->mptr].cdefense & CD_MAX_HP) {
-            mon_ptr->hp = (int16_t) max_hp(c_list[mon_ptr->mptr].hd);
-        } else {
-            mon_ptr->hp = (int16_t) pdamroll(c_list[mon_ptr->mptr].hd);
-        }
-
-        // the c_list speed value is 10 greater, so that it can be a uint8_t
-        mon_ptr->cspeed = (int16_t) (c_list[mon_ptr->mptr].speed - 10 + py.flags.speed);
-        mon_ptr->stunned = 0;
-        mon_ptr->cdis = (uint8_t) distance(char_row, char_col, y, x);
-        cave[y][x].cptr = (uint8_t) cur_pos;
-        mon_ptr->csleep = 0;
+    if (total_winner) {
+        return;
     }
+
+    int cur_pos = popm();
+
+    // Check for case where could not allocate space for
+    // the win monster, this should never happen.
+    if (cur_pos == -1) {
+        abort();
+    }
+
+    monster_type *mon_ptr = &m_list[cur_pos];
+
+    int y, x;
+    do {
+        y = randint(cur_height - 2);
+        x = randint(cur_width - 2);
+    } while ((cave[y][x].fval >= MIN_CLOSED_SPACE) ||
+             (cave[y][x].cptr != 0) || (cave[y][x].tptr != 0) ||
+             (distance(y, x, char_row, char_col) <= MAX_SIGHT));
+
+    mon_ptr->fy = (uint8_t) y;
+    mon_ptr->fx = (uint8_t) x;
+    mon_ptr->mptr = (uint16_t) (randint(WIN_MON_TOT) - 1 + m_level[MAX_MONS_LEVEL]);
+
+    if (c_list[mon_ptr->mptr].cdefense & CD_MAX_HP) {
+        mon_ptr->hp = (int16_t) max_hp(c_list[mon_ptr->mptr].hd);
+    } else {
+        mon_ptr->hp = (int16_t) pdamroll(c_list[mon_ptr->mptr].hd);
+    }
+
+    // the c_list speed value is 10 greater, so that it can be a uint8_t
+    mon_ptr->cspeed = (int16_t) (c_list[mon_ptr->mptr].speed - 10 + py.flags.speed);
+    mon_ptr->stunned = 0;
+    mon_ptr->cdis = (uint8_t) distance(char_row, char_col, y, x);
+    cave[y][x].cptr = (uint8_t) cur_pos;
+    mon_ptr->csleep = 0;
 }
 
 // Return a monster suitable to be placed at a given level. This
 // makes high level monsters (up to the given level) slightly more
 // common than low level monsters at any given level. -CJS-
 int get_mons_num(int level) {
+    if (level == 0) {
+        return randint(m_level[0]) - 1;
+    }
+
+    if (level > MAX_MONS_LEVEL) {
+        level = MAX_MONS_LEVEL;
+    }
+
     int i;
 
-    if (level == 0) {
-        i = randint(m_level[0]) - 1;
-    } else {
+    if (randint(MON_NASTY) == 1) {
+        i = randnor(0, 4);
+        level = level + abs(i) + 1;
         if (level > MAX_MONS_LEVEL) {
             level = MAX_MONS_LEVEL;
         }
-        if (randint(MON_NASTY) == 1) {
-            i = randnor(0, 4);
-            level = level + abs(i) + 1;
-            if (level > MAX_MONS_LEVEL) {
-                level = MAX_MONS_LEVEL;
-            }
-        } else {
-            // This code has been added to make it slightly more likely to get
-            // the higher level monsters. Originally a uniform distribution over
-            // all monsters of level less than or equal to the dungeon level.
-            // This distribution makes a level n monster occur approx 2/n% of the
-            // time on level n, and 1/n*n% are 1st level.
-            int num = m_level[level] - m_level[0];
-            i = randint(num) - 1;
-            int j = randint(num) - 1;
-            if (j > i) {
-                i = j;
-            }
-            level = c_list[i + m_level[0]].level;
+    } else {
+        // This code has been added to make it slightly more likely to get
+        // the higher level monsters. Originally a uniform distribution over
+        // all monsters of level less than or equal to the dungeon level.
+        // This distribution makes a level n monster occur approx 2/n% of the
+        // time on level n, and 1/n*n% are 1st level.
+        int num = m_level[level] - m_level[0];
+        i = randint(num) - 1;
+        int j = randint(num) - 1;
+        if (j > i) {
+            i = j;
         }
-        i = randint(m_level[level] - m_level[level - 1]) - 1 + m_level[level - 1];
+        level = c_list[i + m_level[0]].level;
     }
 
-    return i;
+    return randint(m_level[level] - m_level[level - 1]) - 1 + m_level[level - 1];
 }
 
 // Allocates a random monster -RAK-
@@ -885,9 +901,10 @@ int m_bonus(int base, int max_std, int level) {
     // abs may be a macro, don't call it with randnor as a parameter
     int tmp = randnor(0, stand_dev);
     int x = (abs(tmp) / 10) + base;
+
     if (x < base) {
         return base;
-    } else {
-        return x;
     }
+
+    return x;
 }

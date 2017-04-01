@@ -13,32 +13,43 @@
 void quaff() {
     free_turn_flag = true;
 
-    int j, k, item_val;
     if (inven_ctr == 0) {
         msg_print("But you are not carrying anything.");
-    } else if (!find_range(TV_POTION1, TV_POTION2, &j, &k)) {
+        return;
+    }
+
+    int j, k;
+    if (!find_range(TV_POTION1, TV_POTION2, &j, &k)) {
         msg_print("You are not carrying any potions.");
-    } else if (get_item(&item_val, "Quaff which potion?", j, k, CNIL, CNIL)) {
-        inven_type *i_ptr = &inventory[item_val];
+        return;
+    }
 
-        uint32_t i = i_ptr->flags;
-        free_turn_flag = false;
-        bool ident = false;
-        if (i == 0) {
-            msg_print("You feel less thirsty.");
-            ident = true;
-        } else {
-            while (i != 0) {
-                j = bit_pos(&i) + 1;
-                if (i_ptr->tval == TV_POTION2) {
-                    j += 32;
-                }
+    int item_val;
+    if (!get_item(&item_val, "Quaff which potion?", j, k, CNIL, CNIL)) {
+        return;
+    }
 
-                struct player_type::flags *f_ptr;
-                struct player_type::misc *m_ptr;
+    free_turn_flag = false;
 
-                // Potions
-                switch (j) {
+    inven_type *i_ptr = &inventory[item_val];
+    uint32_t i = i_ptr->flags;
+    bool ident = false;
+
+    if (i == 0) {
+        msg_print("You feel less thirsty.");
+        ident = true;
+    } else {
+        while (i != 0) {
+            j = bit_pos(&i) + 1;
+            if (i_ptr->tval == TV_POTION2) {
+                j += 32;
+            }
+
+            struct player_type::flags *f_ptr;
+            struct player_type::misc *m_ptr;
+
+            // Potions
+            switch (j) {
                 case 1:
                     if (inc_stat(A_STR)) {
                         msg_print("Wow!  What bulging muscles!");
@@ -208,7 +219,7 @@ void quaff() {
                 case 31:
                     ident = cure_poison();
                     break;
-                // case 33: break; // this is no longer useful, now that there is a 'G'ain magic spells command
+                    // case 33: break; // this is no longer useful, now that there is a 'G'ain magic spells command
                 case 34:
                     if (py.misc.exp > 0) {
                         int32_t m, scale;
@@ -306,27 +317,26 @@ void quaff() {
                 default:
                     msg_print("Internal error in potion()");
                     break;
-                }
-                // End of Potions.
             }
+            // End of Potions.
         }
-
-        if (ident) {
-            if (!known1_p(i_ptr)) {
-                struct player_type::misc *m_ptr = &py.misc;
-                // round half-way case up
-                m_ptr->exp += (i_ptr->level + (m_ptr->lev >> 1)) / m_ptr->lev;
-                prt_experience();
-
-                identify(&item_val);
-                i_ptr = &inventory[item_val];
-            }
-        } else if (!known1_p(i_ptr)) {
-            sample(i_ptr);
-        }
-
-        add_food(i_ptr->p1);
-        desc_remain(item_val);
-        inven_destroy(item_val);
     }
+
+    if (ident) {
+        if (!known1_p(i_ptr)) {
+            struct player_type::misc *m_ptr = &py.misc;
+            // round half-way case up
+            m_ptr->exp += (i_ptr->level + (m_ptr->lev >> 1)) / m_ptr->lev;
+            prt_experience();
+
+            identify(&item_val);
+            i_ptr = &inventory[item_val];
+        }
+    } else if (!known1_p(i_ptr)) {
+        sample(i_ptr);
+    }
+
+    add_food(i_ptr->p1);
+    desc_remain(item_val);
+    inven_destroy(item_val);
 }

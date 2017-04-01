@@ -38,30 +38,31 @@ bool sleep_monsters1(int y, int x) {
 
     for (int i = y - 1; i <= y + 1; i++) {
         for (int j = x - 1; j <= x + 1; j++) {
-            cave_type *c_ptr = &cave[i][j];
-            if (c_ptr->cptr > 1) {
-                monster_type *m_ptr = &m_list[c_ptr->cptr];
-                creature_type *r_ptr = &c_list[m_ptr->mptr];
+            if (cave[i][j].cptr <= 1) {
+                continue;
+            }
 
-                vtype m_name;
-                monster_name(m_name, m_ptr, r_ptr);
+            monster_type *m_ptr = &m_list[cave[i][j].cptr];
+            creature_type *r_ptr = &c_list[m_ptr->mptr];
 
-                if ((randint(MAX_MONS_LEVEL) < r_ptr->level) || (CD_NO_SLEEP & r_ptr->cdefense)) {
-                    if (m_ptr->ml && (r_ptr->cdefense & CD_NO_SLEEP)) {
-                        c_recall[m_ptr->mptr].r_cdefense |= CD_NO_SLEEP;
-                    }
+            vtype m_name;
+            monster_name(m_name, m_ptr, r_ptr);
 
-                    vtype out_val;
-                    (void)sprintf(out_val, "%s is unaffected.", m_name);
-                    msg_print(out_val);
-                } else {
-                    sleep = true;
-                    m_ptr->csleep = 500;
-
-                    vtype out_val;
-                    (void)sprintf(out_val, "%s falls asleep.", m_name);
-                    msg_print(out_val);
+            if ((randint(MAX_MONS_LEVEL) < r_ptr->level) || (CD_NO_SLEEP & r_ptr->cdefense)) {
+                if (m_ptr->ml && (r_ptr->cdefense & CD_NO_SLEEP)) {
+                    c_recall[m_ptr->mptr].r_cdefense |= CD_NO_SLEEP;
                 }
+
+                vtype out_val;
+                (void)sprintf(out_val, "%s is unaffected.", m_name);
+                msg_print(out_val);
+            } else {
+                sleep = true;
+                m_ptr->csleep = 500;
+
+                vtype out_val;
+                (void)sprintf(out_val, "%s falls asleep.", m_name);
+                msg_print(out_val);
             }
         }
     }
@@ -77,8 +78,7 @@ bool detect_treasure() {
         for (int j = panel_col_min; j <= panel_col_max; j++) {
             cave_type *c_ptr = &cave[i][j];
 
-            if ((c_ptr->tptr != 0) && (t_list[c_ptr->tptr].tval == TV_GOLD) &&
-                !test_light(i, j)) {
+            if ((c_ptr->tptr != 0) && (t_list[c_ptr->tptr].tval == TV_GOLD) && !test_light(i, j)) {
                 c_ptr->fm = true;
                 lite_spot(i, j);
                 detect = true;
@@ -97,9 +97,7 @@ bool detect_object() {
         for (int j = panel_col_min; j <= panel_col_max; j++) {
             cave_type *c_ptr = &cave[i][j];
 
-            if ((c_ptr->tptr != 0) &&
-                (t_list[c_ptr->tptr].tval < TV_MAX_OBJECT) &&
-                !test_light(i, j)) {
+            if ((c_ptr->tptr != 0) && (t_list[c_ptr->tptr].tval < TV_MAX_OBJECT) && !test_light(i, j)) {
                 c_ptr->fm = true;
                 lite_spot(i, j);
                 detect = true;
@@ -118,15 +116,17 @@ bool detect_trap() {
         for (int j = panel_col_min; j <= panel_col_max; j++) {
             cave_type *c_ptr = &cave[i][j];
 
-            if (c_ptr->tptr != 0) {
-                if (t_list[c_ptr->tptr].tval == TV_INVIS_TRAP) {
-                    c_ptr->fm = true;
-                    change_trap(i, j);
-                    detect = true;
-                } else if (t_list[c_ptr->tptr].tval == TV_CHEST) {
-                    inven_type *t_ptr = &t_list[c_ptr->tptr];
-                    known2(t_ptr);
-                }
+            if (c_ptr->tptr == 0) {
+                continue;
+            }
+
+            if (t_list[c_ptr->tptr].tval == TV_INVIS_TRAP) {
+                c_ptr->fm = true;
+                change_trap(i, j);
+                detect = true;
+            } else if (t_list[c_ptr->tptr].tval == TV_CHEST) {
+                inven_type *t_ptr = &t_list[c_ptr->tptr];
+                known2(t_ptr);
             }
         }
     }
@@ -142,20 +142,22 @@ bool detect_sdoor() {
         for (int j = panel_col_min; j <= panel_col_max; j++) {
             cave_type *c_ptr = &cave[i][j];
 
-            if (c_ptr->tptr != 0) {
-                if (t_list[c_ptr->tptr].tval == TV_SECRET_DOOR) {
-                    // Secret doors
+            if (c_ptr->tptr == 0) {
+                continue;
+            }
 
-                    c_ptr->fm = true;
-                    change_trap(i, j);
-                    detect = true;
-                } else if (((t_list[c_ptr->tptr].tval == TV_UP_STAIR) || (t_list[c_ptr->tptr].tval == TV_DOWN_STAIR)) && !c_ptr->fm) {
-                    // Staircases
+            if (t_list[c_ptr->tptr].tval == TV_SECRET_DOOR) {
+                // Secret doors
 
-                    c_ptr->fm = true;
-                    lite_spot(i, j);
-                    detect = true;
-                }
+                c_ptr->fm = true;
+                change_trap(i, j);
+                detect = true;
+            } else if (((t_list[c_ptr->tptr].tval == TV_UP_STAIR) || (t_list[c_ptr->tptr].tval == TV_DOWN_STAIR)) && !c_ptr->fm) {
+                // Staircases
+
+                c_ptr->fm = true;
+                lite_spot(i, j);
+                detect = true;
             }
         }
     }
@@ -290,30 +292,29 @@ void map_area() {
 
 // Identify an object -RAK-
 bool ident_spell() {
-    bool ident = false;
-
     int item_val;
-    if (get_item(&item_val, "Item you wish identified?", 0, INVEN_ARRAY_SIZE, CNIL, CNIL)) {
-        ident = true;
-        identify(&item_val);
-
-        inven_type *i_ptr = &inventory[item_val];
-        known2(i_ptr);
-
-        bigvtype tmp_str;
-        objdes(tmp_str, i_ptr, true);
-
-        bigvtype out_val;
-        if (item_val >= INVEN_WIELD) {
-            calc_bonuses();
-            (void)sprintf(out_val, "%s: %s", describe_use(item_val), tmp_str);
-        } else {
-            (void)sprintf(out_val, "%c %s", item_val + 97, tmp_str);
-        }
-        msg_print(out_val);
+    if (!get_item(&item_val, "Item you wish identified?", 0, INVEN_ARRAY_SIZE, CNIL, CNIL)) {
+        return false;
     }
 
-    return ident;
+    identify(&item_val);
+
+    inven_type *i_ptr = &inventory[item_val];
+    known2(i_ptr);
+
+    bigvtype tmp_str;
+    objdes(tmp_str, i_ptr, true);
+
+    bigvtype out_val;
+    if (item_val >= INVEN_WIELD) {
+        calc_bonuses();
+        (void)sprintf(out_val, "%s: %s", describe_use(item_val), tmp_str);
+    } else {
+        (void)sprintf(out_val, "%c %s", item_val + 97, tmp_str);
+    }
+    msg_print(out_val);
+
+    return true;
 }
 
 // Get all the monsters on the level pissed off. -RAK-
@@ -378,22 +379,24 @@ bool door_creation() {
 
     for (int i = char_row - 1; i <= char_row + 1; i++) {
         for (int j = char_col - 1; j <= char_col + 1; j++) {
-            if ((i != char_row) || (j != char_col)) {
-                cave_type *c_ptr = &cave[i][j];
+            if (i == char_row && j == char_col) {
+                continue;
+            }
 
-                if (c_ptr->fval <= MAX_CAVE_FLOOR) {
-                    door = true;
+            cave_type *c_ptr = &cave[i][j];
 
-                    if (c_ptr->tptr != 0) {
-                        (void)delete_object(i, j);
-                    }
+            if (c_ptr->fval <= MAX_CAVE_FLOOR) {
+                door = true;
 
-                    int k = popt();
-                    c_ptr->fval = BLOCKED_FLOOR;
-                    c_ptr->tptr = (uint8_t) k;
-                    invcopy(&t_list[k], OBJ_CLOSED_DOOR);
-                    lite_spot(i, j);
+                if (c_ptr->tptr != 0) {
+                    (void)delete_object(i, j);
                 }
+
+                int k = popt();
+                c_ptr->fval = BLOCKED_FLOOR;
+                c_ptr->tptr = (uint8_t) k;
+                invcopy(&t_list[k], OBJ_CLOSED_DOOR);
+                lite_spot(i, j);
             }
         }
     }
@@ -408,23 +411,24 @@ bool td_destroy() {
     for (int i = char_row - 1; i <= char_row + 1; i++) {
         for (int j = char_col - 1; j <= char_col + 1; j++) {
             cave_type *c_ptr = &cave[i][j];
-            if (c_ptr->tptr != 0) {
-                if (((t_list[c_ptr->tptr].tval >= TV_INVIS_TRAP) &&
-                     (t_list[c_ptr->tptr].tval <= TV_CLOSED_DOOR) &&
-                     (t_list[c_ptr->tptr].tval != TV_RUBBLE)) ||
-                    (t_list[c_ptr->tptr].tval == TV_SECRET_DOOR)) {
-                    if (delete_object(i, j)) {
-                        destroy = true;
-                    }
-                } else if ((t_list[c_ptr->tptr].tval == TV_CHEST) &&
-                           (t_list[c_ptr->tptr].flags != 0)) {
-                    // destroy traps on chest and unlock
-                    t_list[c_ptr->tptr].flags &= ~(CH_TRAPPED | CH_LOCKED);
-                    t_list[c_ptr->tptr].name2 = SN_UNLOCKED;
-                    msg_print("You have disarmed the chest.");
-                    known2(&t_list[c_ptr->tptr]);
+            if (c_ptr->tptr == 0) {
+                continue;
+            }
+
+            if (((t_list[c_ptr->tptr].tval >= TV_INVIS_TRAP) &&
+                 (t_list[c_ptr->tptr].tval <= TV_CLOSED_DOOR) &&
+                 (t_list[c_ptr->tptr].tval != TV_RUBBLE)) ||
+                (t_list[c_ptr->tptr].tval == TV_SECRET_DOOR)) {
+                if (delete_object(i, j)) {
                     destroy = true;
                 }
+            } else if ((t_list[c_ptr->tptr].tval == TV_CHEST) && (t_list[c_ptr->tptr].flags != 0)) {
+                // destroy traps on chest and unlock
+                t_list[c_ptr->tptr].flags &= ~(CH_TRAPPED | CH_LOCKED);
+                t_list[c_ptr->tptr].name2 = SN_UNLOCKED;
+                msg_print("You have disarmed the chest.");
+                known2(&t_list[c_ptr->tptr]);
+                destroy = true;
             }
         }
     }
@@ -942,43 +946,45 @@ void breath(int typ, int y, int x, int dam_hp, char *ddesc, int monptr) {
 
 // Recharge a wand, staff, or rod.  Sometimes the item breaks. -RAK-
 bool recharge(int num) {
-    int i, j, item_val;
-
-    bool res = false;
-
+    int i, j;
     if (!find_range(TV_STAFF, TV_WAND, &i, &j)) {
         msg_print("You have nothing to recharge.");
-    } else if (get_item(&item_val, "Recharge which item?", i, j, CNIL, CNIL)) {
-        inven_type *i_ptr = &inventory[item_val];
-
-        res = true;
-
-        // recharge  I = recharge(20) = 1/6  failure for empty 10th level wand
-        // recharge II = recharge(60) = 1/10 failure for empty 10th level wand
-        //
-        // make it harder to recharge high level, and highly charged wands, note
-        // that i can be negative, so check its value before trying to call randint().
-        i = num + 50 - (int)i_ptr->level - i_ptr->p1;
-        if (i < 19) {
-            // Automatic failure.
-            i = 1;
-        } else {
-            i = randint(i / 10);
-        }
-
-        if (i == 1) {
-            msg_print("There is a bright flash of light.");
-            inven_destroy(item_val);
-        } else {
-            num = (num / (i_ptr->level + 2)) + 1;
-            i_ptr->p1 += 2 + randint(num);
-            if (known2_p(i_ptr)) {
-                clear_known2(i_ptr);
-            }
-            clear_empty(i_ptr);
-        }
+        return false;
     }
-    return res;
+
+    int item_val;
+    if (!get_item(&item_val, "Recharge which item?", i, j, CNIL, CNIL)) {
+        return false;
+    }
+
+    inven_type *i_ptr = &inventory[item_val];
+
+    // recharge  I = recharge(20) = 1/6  failure for empty 10th level wand
+    // recharge II = recharge(60) = 1/10 failure for empty 10th level wand
+    //
+    // make it harder to recharge high level, and highly charged wands, note
+    // that i can be negative, so check its value before trying to call randint().
+    i = num + 50 - (int)i_ptr->level - i_ptr->p1;
+    if (i < 19) {
+        // Automatic failure.
+        i = 1;
+    } else {
+        i = randint(i / 10);
+    }
+
+    if (i == 1) {
+        msg_print("There is a bright flash of light.");
+        inven_destroy(item_val);
+    } else {
+        num = (num / (i_ptr->level + 2)) + 1;
+        i_ptr->p1 += 2 + randint(num);
+        if (known2_p(i_ptr)) {
+            clear_known2(i_ptr);
+        }
+        clear_empty(i_ptr);
+    }
+
+    return true;
 }
 
 // Increase or decrease a creatures hit points -RAK-
@@ -1586,25 +1592,27 @@ bool mass_genocide() {
 // This does not keep creatures of type from appearing later.
 // NOTE : Winning creatures can not be killed by genocide.
 bool genocide() {
+    char typ;
+    if (!get_com("Which type of creature do you wish exterminated?", &typ)) {
+        return false;
+    }
+
     bool killed = false;
 
-    char typ;
-    if (get_com("Which type of creature do you wish exterminated?", &typ)) {
-        for (int i = mfptr - 1; i >= MIN_MONIX; i--) {
-            monster_type *m_ptr = &m_list[i];
-            creature_type *r_ptr = &c_list[m_ptr->mptr];
-            if (typ == c_list[m_ptr->mptr].cchar) {
-                if ((r_ptr->cmove & CM_WIN) == 0) {
-                    delete_monster(i);
-                    killed = true;
-                } else {
-                    // genocide is a powerful spell, so we will let the player
-                    // know the names of the creatures he did not destroy,
-                    // this message makes no sense otherwise
-                    vtype out_val;
-                    (void)sprintf(out_val, "The %s is unaffected.", r_ptr->name);
-                    msg_print(out_val);
-                }
+    for (int i = mfptr - 1; i >= MIN_MONIX; i--) {
+        monster_type *m_ptr = &m_list[i];
+        creature_type *r_ptr = &c_list[m_ptr->mptr];
+        if (typ == c_list[m_ptr->mptr].cchar) {
+            if ((r_ptr->cmove & CM_WIN) == 0) {
+                delete_monster(i);
+                killed = true;
+            } else {
+                // genocide is a powerful spell, so we will let the player
+                // know the names of the creatures he did not destroy,
+                // this message makes no sense otherwise
+                vtype out_val;
+                (void)sprintf(out_val, "The %s is unaffected.", r_ptr->name);
+                msg_print(out_val);
             }
         }
     }
@@ -1625,7 +1633,7 @@ bool speed_monsters(int spd) {
         monster_name(m_name, m_ptr, r_ptr);
 
         if ((m_ptr->cdis > MAX_SIGHT) || !los(char_row, char_col, (int)m_ptr->fy, (int)m_ptr->fx)) {
-            ; // do nothing
+            continue; // do nothing
         } else if (spd > 0) {
             m_ptr->cspeed += spd;
             m_ptr->csleep = 0;
@@ -1666,7 +1674,7 @@ bool sleep_monsters2() {
         monster_name(m_name, m_ptr, r_ptr);
 
         if ((m_ptr->cdis > MAX_SIGHT) || !los(char_row, char_col, (int)m_ptr->fy, (int)m_ptr->fx)) {
-            ; // do nothing
+            continue; // do nothing
         } else if ((randint(MAX_MONS_LEVEL) < r_ptr->level) || (CD_NO_SLEEP & r_ptr->cdefense)) {
             if (m_ptr->ml) {
                 if (r_ptr->cdefense & CD_NO_SLEEP) {
@@ -1718,8 +1726,7 @@ bool detect_evil() {
 
     for (int i = mfptr - 1; i >= MIN_MONIX; i--) {
         monster_type *m_ptr = &m_list[i];
-        if (panel_contains((int)m_ptr->fy, (int)m_ptr->fx) &&
-            (CD_EVIL & c_list[m_ptr->mptr].cdefense)) {
+        if (panel_contains((int)m_ptr->fy, (int)m_ptr->fx) && (CD_EVIL & c_list[m_ptr->mptr].cdefense)) {
             m_ptr->ml = true;
 
             // works correctly even if hallucinating
@@ -1741,89 +1748,84 @@ bool detect_evil() {
 
 // Change players hit points in some manner -RAK-
 bool hp_player(int num) {
-    bool res = false;
-
     struct player_type::misc *m_ptr = &py.misc;
 
-    if (m_ptr->chp < m_ptr->mhp) {
-        m_ptr->chp += num;
-
-        if (m_ptr->chp > m_ptr->mhp) {
-            m_ptr->chp = m_ptr->mhp;
-            m_ptr->chp_frac = 0;
-        }
-        prt_chp();
-
-        num = num / 5;
-        if (num < 3) {
-            if (num == 0) {
-                msg_print("You feel a little better.");
-            } else {
-                msg_print("You feel better.");
-            }
-        } else {
-            if (num < 7) {
-                msg_print("You feel much better.");
-            } else {
-                msg_print("You feel very good.");
-            }
-        }
-        res = true;
+    if (m_ptr->chp >= m_ptr->mhp) {
+        return false;
     }
 
-    return res;
+    m_ptr->chp += num;
+
+    if (m_ptr->chp > m_ptr->mhp) {
+        m_ptr->chp = m_ptr->mhp;
+        m_ptr->chp_frac = 0;
+    }
+    prt_chp();
+
+    num = num / 5;
+    if (num < 3) {
+        if (num == 0) {
+            msg_print("You feel a little better.");
+        } else {
+            msg_print("You feel better.");
+        }
+    } else {
+        if (num < 7) {
+            msg_print("You feel much better.");
+        } else {
+            msg_print("You feel very good.");
+        }
+    }
+
+    return true;
 }
 
 // Cure players confusion -RAK-
 bool cure_confusion() {
-    bool cure = false;
-
     struct player_type::flags *f_ptr = &py.flags;
 
     if (f_ptr->confused > 1) {
         f_ptr->confused = 1;
-        cure = true;
+        return true;
     }
-    return cure;
+
+    return false;
 }
 
 // Cure players blindness -RAK-
 bool cure_blindness() {
-    bool cure = false;
-
     struct player_type::flags *f_ptr = &py.flags;
 
     if (f_ptr->blind > 1) {
         f_ptr->blind = 1;
-        cure = true;
+        return true;
     }
-    return cure;
+
+    return false;
 }
 
 // Cure poisoning -RAK-
 bool cure_poison() {
-    bool cure = false;
-
     struct player_type::flags *f_ptr = &py.flags;
 
     if (f_ptr->poisoned > 1) {
         f_ptr->poisoned = 1;
-        cure = true;
+        return true;
     }
-    return cure;
+
+    return false;
 }
 
 // Cure the players fear -RAK-
 bool remove_fear() {
-    bool result = false;
-
     struct player_type::flags *f_ptr = &py.flags;
 
     if (f_ptr->afraid > 1) {
         f_ptr->afraid = 1;
-        result = true;
+        return true;
     }
-    return result;
+
+    return false;
 }
 
 // This is a fun one.  In a given block, pick some walls and
@@ -2098,8 +2100,6 @@ void lose_exp(int32_t amount) {
 
 // Slow Poison -RAK-
 bool slow_poison() {
-    bool slow = false;
-
     struct player_type::flags *f_ptr = &py.flags;
 
     if (f_ptr->poisoned > 0) {
@@ -2107,11 +2107,11 @@ bool slow_poison() {
         if (f_ptr->poisoned < 1) {
             f_ptr->poisoned = 1;
         }
-        slow = true;
         msg_print("The effect of the poison has been reduced.");
+        return true;
     }
 
-    return slow;
+    return false;
 }
 
 // Bless -RAK-
@@ -2200,7 +2200,6 @@ bool enchant(int16_t *plusses, int16_t limit) {
     }
 
     int chance = 0;
-    bool res = false;
 
     if (*plusses > 0) {
         chance = *plusses;
@@ -2213,10 +2212,10 @@ bool enchant(int16_t *plusses, int16_t limit) {
 
     if (randint(limit) > chance) {
         *plusses += 1;
-        res = true;
+        return true;
     }
 
-    return res;
+    return false;
 }
 
 // Removes curses from items in inventory -RAK-
@@ -2238,12 +2237,9 @@ bool remove_curse() {
 
 // Restores any drained experience -RAK-
 bool restore_level() {
-    bool restore = false;
-
     struct player_type::misc *m_ptr = &py.misc;
 
     if (m_ptr->max_exp > m_ptr->exp) {
-        restore = true;
         msg_print("You feel your life energies returning.");
 
         // this while loop is not redundant, ptr_exp may reduce the exp level
@@ -2251,7 +2247,9 @@ bool restore_level() {
             m_ptr->exp = m_ptr->max_exp;
             prt_experience();
         }
+
+        return true;
     }
 
-    return restore;
+    return false;
 }

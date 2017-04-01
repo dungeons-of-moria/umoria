@@ -1,5 +1,11 @@
 # Umoria Change log
 
+### Code Cleanup
+
+- Refactor `if/else` statements:
+  * Add guard clauses / return early where possible.
+  * Remove `else` when an `if` returns.
+  * Make many of them easier to understand (e.g. less indentation).
 
 
 ## 5.7.2 (2017-03-12)

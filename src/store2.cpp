@@ -173,6 +173,7 @@ static void haggle_commands(int typ) {
     } else {
         prt("Specify an offer in gold pieces.", 21, 0);
     }
+
     prt("ESC) Quit Haggling.", 22, 0);
     erase_line(23, 0); // clear last line
 }
@@ -202,6 +203,7 @@ static void display_inventory(int store_num, int start) {
         i_ptr->number = (uint8_t) x;
         (void)sprintf(out_val2, "%c) %s", 'a' + i, out_val1);
         prt(out_val2, i + 5, 0);
+
         x = s_ptr->store_inven[start].scost;
         if (x <= 0) {
             int32_t value = -x;
@@ -213,16 +215,19 @@ static void display_inventory(int store_num, int start) {
         } else {
             (void)sprintf(out_val2, "%9d [Fixed]", x);
         }
+
         prt(out_val2, i + 5, 59);
         i++;
         start++;
     }
+
     if (i < 12) {
         for (int j = 0; j < (11 - i + 1); j++) {
             // clear remaining lines
             erase_line(j + i + 5, 0);
         }
     }
+
     if (s_ptr->store_ctr > 12) {
         put_buffer("- cont. -", 17, 60);
     } else {
@@ -269,14 +274,14 @@ static void display_store(int store_num, int cur_top) {
 
 // Get the ID of a store item and return it's value -RAK-
 static bool get_store_item(int *com_val, const char * pmt, int i, int j) {
-    bool flag = false;
-
     *com_val = -1;
 
     vtype out_val;
     (void)sprintf(out_val, "(Items %c-%c, ESC to exit) %s", i + 'a', j + 'a', pmt);
 
     char command;
+    bool flag = false;
+
     while (get_com(out_val, &command)) {
         command -= 'a';
         if (command >= i && command <= j) {
@@ -293,8 +298,6 @@ static bool get_store_item(int *com_val, const char * pmt, int i, int j) {
 
 // Increase the insult counter and get angry if too many -RAK-
 static bool increase_insults(int store_num) {
-    bool increase = false;
-
     store_type *s_ptr = &store[store_num];
     s_ptr->insult_cur++;
 
@@ -303,10 +306,10 @@ static bool increase_insults(int store_num) {
         s_ptr->insult_cur = 0;
         s_ptr->bad_buy++;
         s_ptr->store_open = turn + 2500 + randint(2500);
-        increase = true;
+        return true;
     }
 
-    return increase;
+    return false;
 }
 
 // Decrease insults -RAK-
@@ -320,16 +323,14 @@ static void decrease_insults(int store_num) {
 
 // Have insulted while haggling -RAK-
 static bool haggle_insults(int store_num) {
-    bool haggle = false;
-
     if (increase_insults(store_num)) {
-        haggle = true;
-    } else {
-        prt_comment5();
-        msg_print(CNIL); // keep insult separate from rest of haggle
+        return true;
     }
 
-    return haggle;
+    prt_comment5();
+    msg_print(CNIL); // keep insult separate from rest of haggle
+
+    return false;
 }
 
 static bool get_haggle(const char *comment, int32_t *new_offer, int num_offer) {
@@ -787,8 +788,6 @@ static int sell_haggle(int store_num, int32_t *price, inven_type *item) {
 
 // Buy an item from a store -RAK-
 static bool store_purchase(int store_num, int *cur_top) {
-    bool purchase = false;
-
     store_type *s_ptr = &store[store_num];
 
     // i == number of objects shown on screen
@@ -801,88 +800,93 @@ static bool store_purchase(int store_num, int *cur_top) {
         i = s_ptr->store_ctr - 1;
     }
 
-    int item_val;
-
     if (s_ptr->store_ctr < 1) {
         msg_print("I am currently out of stock.");
-    } else if (get_store_item(&item_val, "Which item are you interested in? ", 0, i)) {
-        // Get the item number to be bought
-
-        item_val = item_val + *cur_top; // true item_val
-
-        inven_type sell_obj;
-        take_one_item(&sell_obj, &s_ptr->store_inven[item_val].sitem);
-
-        if (inven_check_num(&sell_obj)) {
-            int choice;
-            int32_t price;
-
-            if (s_ptr->store_inven[item_val].scost > 0) {
-                price = s_ptr->store_inven[item_val].scost;
-                choice = 0;
-            } else {
-                choice = purchase_haggle(store_num, &price, &sell_obj);
-            }
-
-            if (choice == 0) {
-                if (py.misc.au >= price) {
-                    prt_comment1();
-                    decrease_insults(store_num);
-                    py.misc.au -= price;
-
-                    int item_new = inven_carry(&sell_obj);
-                    i = s_ptr->store_ctr;
-                    store_destroy(store_num, item_val, true);
-
-                    bigvtype out_val, tmp_str;
-                    objdes(tmp_str, &inventory[item_new], true);
-                    (void)sprintf(out_val, "You have %s (%c)", tmp_str, item_new + 'a');
-                    prt(out_val, 0, 0);
-
-                    check_strength();
-                    if (*cur_top >= s_ptr->store_ctr) {
-                        *cur_top = 0;
-                        display_inventory(store_num, *cur_top);
-                    } else {
-                        inven_record *r_ptr = &s_ptr->store_inven[item_val];
-
-                        if (i == s_ptr->store_ctr) {
-                            if (r_ptr->scost < 0) {
-                                r_ptr->scost = price;
-                                display_cost(store_num, item_val);
-                            }
-                        } else {
-                            display_inventory(store_num, item_val);
-                        }
-                    }
-                    store_prt_gold();
-                } else {
-                    if (increase_insults(store_num)) {
-                        purchase = true;
-                    } else {
-                        prt_comment1();
-                        msg_print("Liar!  You have not the gold!");
-                    }
-                }
-            } else if (choice == 2) {
-                purchase = true;
-            }
-
-            // Less intuitive, but looks better here than in purchase_haggle.
-            display_commands();
-            erase_line(1, 0);
-        } else {
-            prt("You cannot carry that many different items.", 0, 0);
-        }
+        return false;
     }
 
-    return purchase;
+    int item_val;
+    if (!get_store_item(&item_val, "Which item are you interested in? ", 0, i)) {
+        return false;
+    }
+
+    // Get the item number to be bought
+
+    item_val = item_val + *cur_top; // true item_val
+
+    inven_type sell_obj;
+    take_one_item(&sell_obj, &s_ptr->store_inven[item_val].sitem);
+
+    if (!inven_check_num(&sell_obj)) {
+        prt("You cannot carry that many different items.", 0, 0);
+        return false;
+    }
+
+    int choice;
+    int32_t price;
+
+    if (s_ptr->store_inven[item_val].scost > 0) {
+        price = s_ptr->store_inven[item_val].scost;
+        choice = 0;
+    } else {
+        choice = purchase_haggle(store_num, &price, &sell_obj);
+    }
+
+    bool purchased = false;
+
+    if (choice == 0) {
+        if (py.misc.au >= price) {
+            prt_comment1();
+            decrease_insults(store_num);
+            py.misc.au -= price;
+
+            int item_new = inven_carry(&sell_obj);
+            i = s_ptr->store_ctr;
+            store_destroy(store_num, item_val, true);
+
+            bigvtype out_val, tmp_str;
+            objdes(tmp_str, &inventory[item_new], true);
+            (void)sprintf(out_val, "You have %s (%c)", tmp_str, item_new + 'a');
+            prt(out_val, 0, 0);
+
+            check_strength();
+            if (*cur_top >= s_ptr->store_ctr) {
+                *cur_top = 0;
+                display_inventory(store_num, *cur_top);
+            } else {
+                inven_record *r_ptr = &s_ptr->store_inven[item_val];
+
+                if (i == s_ptr->store_ctr) {
+                    if (r_ptr->scost < 0) {
+                        r_ptr->scost = price;
+                        display_cost(store_num, item_val);
+                    }
+                } else {
+                    display_inventory(store_num, item_val);
+                }
+            }
+            store_prt_gold();
+        } else {
+            if (increase_insults(store_num)) {
+                purchased = true;
+            } else {
+                prt_comment1();
+                msg_print("Liar!  You have not the gold!");
+            }
+        }
+    } else if (choice == 2) {
+        purchased = true;
+    }
+
+    // Less intuitive, but looks better here than in purchase_haggle.
+    display_commands();
+    erase_line(1, 0);
+
+    return purchased;
 }
 
 // Sell an item to the store -RAK-
 static bool store_sell(int store_num, int *cur_top) {
-    bool sell = false;
-
     int first_item = inven_ctr;
     int last_item = -1;
 
@@ -902,101 +906,114 @@ static bool store_sell(int store_num, int *cur_top) {
         } // end of if (flag)
     }     // end of for (counter)
 
-    int item_val;
-
     if (last_item == -1) {
         msg_print("You have nothing to sell to this store!");
-    } else if (get_item(&item_val, "Which one? ", first_item, last_item, mask, "I do not buy such items.")) {
-        inven_type sold_obj;
-        bigvtype out_val, tmp_str;
+        return false;
+    }
 
+    int item_val;
+    if (!get_item(&item_val, "Which one? ", first_item, last_item, mask, "I do not buy such items.")) {
+        return false;
+    }
+
+    inven_type sold_obj;
+    bigvtype out_val, tmp_str;
+
+    take_one_item(&sold_obj, &inventory[item_val]);
+    objdes(tmp_str, &sold_obj, true);
+
+    (void)sprintf(out_val, "Selling %s (%c)", tmp_str, item_val + 'a');
+    msg_print(out_val);
+
+    if (!store_check_num(&sold_obj, store_num)) {
+        msg_print("I have not the room in my store to keep it.");
+        return false;
+    }
+
+
+    int32_t price;
+    bool sold = false;
+
+    int choice = sell_haggle(store_num, &price, &sold_obj);
+
+    if (choice == 0) {
+        prt_comment1();
+        decrease_insults(store_num);
+        py.misc.au += price;
+
+        // identify object in inventory to set object_ident
+        identify(&item_val);
+
+        // retake sold_obj so that it will be identified
         take_one_item(&sold_obj, &inventory[item_val]);
-        objdes(tmp_str, &sold_obj, true);
 
-        (void)sprintf(out_val, "Selling %s (%c)", tmp_str, item_val + 'a');
+        // call known2 for store item, so charges/pluses are known
+        known2(&sold_obj);
+        inven_destroy(item_val);
+        objdes(tmp_str, &sold_obj, true);
+        (void)sprintf(out_val, "You've sold %s", tmp_str);
         msg_print(out_val);
 
-        if (store_check_num(&sold_obj, store_num)) {
-            int32_t price;
+        int item_pos;
+        store_carry(store_num, &item_pos, &sold_obj);
 
-            int choice = sell_haggle(store_num, &price, &sold_obj);
-            if (choice == 0) {
-                prt_comment1();
-                decrease_insults(store_num);
-                py.misc.au += price;
+        check_strength();
 
-                // identify object in inventory to set object_ident
-                identify(&item_val);
-
-                // retake sold_obj so that it will be identified
-                take_one_item(&sold_obj, &inventory[item_val]);
-
-                // call known2 for store item, so charges/pluses are known
-                known2(&sold_obj);
-                inven_destroy(item_val);
-                objdes(tmp_str, &sold_obj, true);
-                (void)sprintf(out_val, "You've sold %s", tmp_str);
-                msg_print(out_val);
-
-                int item_pos;
-                store_carry(store_num, &item_pos, &sold_obj);
-
-                check_strength();
-
-                if (item_pos >= 0) {
-                    if (item_pos < 12) {
-                        if (*cur_top < 12) {
-                            display_inventory(store_num, item_pos);
-                        } else {
-                            *cur_top = 0;
-                            display_inventory(store_num, *cur_top);
-                        }
-                    } else if (*cur_top > 11) {
-                        display_inventory(store_num, item_pos);
-                    } else {
-                        *cur_top = 12;
-                        display_inventory(store_num, *cur_top);
-                    }
+        if (item_pos >= 0) {
+            if (item_pos < 12) {
+                if (*cur_top < 12) {
+                    display_inventory(store_num, item_pos);
+                } else {
+                    *cur_top = 0;
+                    display_inventory(store_num, *cur_top);
                 }
-                store_prt_gold();
-            } else if (choice == 2) {
-                sell = true;
-            } else if (choice == 3) {
-                msg_print("How dare you!");
-                msg_print("I will not buy that!");
-                sell = increase_insults(store_num);
+            } else if (*cur_top > 11) {
+                display_inventory(store_num, item_pos);
+            } else {
+                *cur_top = 12;
+                display_inventory(store_num, *cur_top);
             }
-
-            // Less intuitive, but looks better here than in sell_haggle.
-            erase_line(1, 0);
-            display_commands();
-        } else {
-            msg_print("I have not the room in my store to keep it.");
         }
+        store_prt_gold();
+    } else if (choice == 2) {
+        sold = true;
+    } else if (choice == 3) {
+        msg_print("How dare you!");
+        msg_print("I will not buy that!");
+        sold = increase_insults(store_num);
     }
-    return sell;
+
+    // Less intuitive, but looks better here than in sell_haggle.
+    erase_line(1, 0);
+    display_commands();
+
+    return sold;
 }
 
 // Entering a store -RAK-
 void enter_store(int store_num) {
     store_type *s_ptr = &store[store_num];
 
-    if (s_ptr->store_open < turn) {
-        bool exit_flag = false;
-        int cur_top = 0;
-        display_store(store_num, cur_top);
+    if (s_ptr->store_open >= turn) {
+        msg_print("The doors are locked.");
+        return;
+    }
 
-        do {
-            move_cursor(20, 9);
+    int cur_top = 0;
+    display_store(store_num, cur_top);
 
-            // clear the msg flag just like we do in dungeon.c
-            msg_flag = false;
+    bool exit_flag = false;
+    do {
+        move_cursor(20, 9);
 
-            char command;
-            if (get_com(CNIL, &command)) {
-                int tmp_chr;
+        // clear the msg flag just like we do in dungeon.c
+        msg_flag = false;
 
-                switch (command) {
+        char command;
+        if (get_com(CNIL, &command)) {
+            int tmp_chr;
+
+            switch (command) {
                 case 'b':
                     if (cur_top == 0) {
                         if (s_ptr->store_ctr > 12) {
@@ -1042,15 +1059,12 @@ void enter_store(int store_num) {
                 default:
                     bell();
                     break;
-                }
-            } else {
-                exit_flag = true;
             }
-        } while (!exit_flag);
+        } else {
+            exit_flag = true;
+        }
+    } while (!exit_flag);
 
-        // Can't save and restore the screen because inven_command does that.
-        draw_cave();
-    } else {
-        msg_print("The doors are locked.");
-    }
+    // Can't save and restore the screen because inven_command does that.
+    draw_cave();
 }

@@ -124,48 +124,58 @@ int32_t item_value(inven_type *i_ptr) {
 
 // Asking price for an item -RAK-
 int32_t sell_price(int snum, int32_t *max_sell, int32_t *min_sell, inven_type *item) {
-    store_type *s_ptr = &store[snum];
-
     int32_t i = item_value(item);
 
     // check item->cost in case it is cursed, check i in case it is damaged
-    if ((item->cost > 0) && (i > 0)) {
-        i = i * rgold_adj[owners[s_ptr->owner].owner_race][py.misc.prace] / 100;
-        if (i < 1) {
-            i = 1;
-        }
-        *max_sell = i * owners[s_ptr->owner].max_inflate / 100;
-        *min_sell = i * owners[s_ptr->owner].min_inflate / 100;
-        if (*min_sell > *max_sell) {
-            *min_sell = *max_sell;
-        }
 
-        return i;
-    } else {
+    if (item->cost < 1 || i < 1) {
         // don't let the item get into the store inventory
         return 0;
     }
+
+    store_type *s_ptr = &store[snum];
+
+    i = i * rgold_adj[owners[s_ptr->owner].owner_race][py.misc.prace] / 100;
+
+    if (i < 1) {
+        i = 1;
+    }
+
+    *max_sell = i * owners[s_ptr->owner].max_inflate / 100;
+    *min_sell = i * owners[s_ptr->owner].min_inflate / 100;
+
+    if (*min_sell > *max_sell) {
+        *min_sell = *max_sell;
+    }
+
+    return i;
 }
 
 // Check to see if he will be carrying too many objects -RAK-
 bool store_check_num(inven_type *t_ptr, int store_num) {
-    bool store_check = false;
-
     store_type *s_ptr = &store[store_num];
 
     if (s_ptr->store_ctr < STORE_INVEN_MAX) {
-        store_check = true;
-    } else if (t_ptr->subval >= ITEM_SINGLE_STACK_MIN) {
-        for (int i = 0; i < s_ptr->store_ctr; i++) {
-            inven_type *i_ptr = &s_ptr->store_inven[i].sitem;
+        return true;
+    }
 
-            // note: items with subval of gte ITEM_SINGLE_STACK_MAX only stack
-            // if their subvals match
-            if (i_ptr->tval == t_ptr->tval && i_ptr->subval == t_ptr->subval &&
-                ((int)i_ptr->number + (int)t_ptr->number < 256) &&
-                (t_ptr->subval < ITEM_GROUP_MIN || (i_ptr->p1 == t_ptr->p1))) {
-                store_check = true;
-            }
+    if (t_ptr->subval < ITEM_SINGLE_STACK_MIN) {
+        return false;
+    }
+
+    bool store_check = false;
+
+    for (int i = 0; i < s_ptr->store_ctr; i++) {
+        inven_type *i_ptr = &s_ptr->store_inven[i].sitem;
+
+        // note: items with subval of gte ITEM_SINGLE_STACK_MAX only stack
+        // if their subvals match
+        if (i_ptr->tval == t_ptr->tval &&
+            i_ptr->subval == t_ptr->subval &&
+            (int)(i_ptr->number + t_ptr->number) < 256 &&
+            (t_ptr->subval < ITEM_GROUP_MIN || i_ptr->p1 == t_ptr->p1)
+           ) {
+            store_check = true;
         }
     }
 
@@ -190,50 +200,53 @@ void store_carry(int store_num, int *ipos, inven_type *t_ptr) {
     *ipos = -1;
 
     int32_t icost, dummy;
-    if (sell_price(store_num, &icost, &dummy, t_ptr) > 0) {
-        store_type *s_ptr = &store[store_num];
+    if (sell_price(store_num, &icost, &dummy, t_ptr) < 1) {
+        return;
+    }
 
-        int item_val = 0;
-        int item_num = t_ptr->number;
-        bool flag = false;
-        int typ = t_ptr->tval;
-        int subt = t_ptr->subval;
-        do {
-            inven_type *i_ptr = &s_ptr->store_inven[item_val].sitem;
+    store_type *s_ptr = &store[store_num];
 
-            if (typ == i_ptr->tval) {
-                if (subt == i_ptr->subval && // Adds to other item
-                    subt >= ITEM_SINGLE_STACK_MIN &&
-                    (subt < ITEM_GROUP_MIN || i_ptr->p1 == t_ptr->p1)) {
-                    *ipos = item_val;
-                    i_ptr->number += item_num;
+    int item_val = 0;
+    int item_num = t_ptr->number;
+    int typ = t_ptr->tval;
+    int subt = t_ptr->subval;
 
-                    // must set new scost for group items, do this only for items
-                    // strictly greater than group_min, not for torches, this
-                    // must be recalculated for entire group
-                    if (subt > ITEM_GROUP_MIN) {
-                        (void)sell_price(store_num, &icost, &dummy, i_ptr);
-                        s_ptr->store_inven[item_val].scost = -icost;
-                    } else if (i_ptr->number > 24) {
-                        // must let group objects (except torches) stack over 24
-                        // since there may be more than 24 in the group
-                        i_ptr->number = 24;
-                    }
-                    flag = true;
-                }
-            } else if (typ > i_ptr->tval) { // Insert into list
-                insert_store(store_num, item_val, icost, t_ptr);
-                flag = true;
+    bool flag = false;
+    do {
+        inven_type *i_ptr = &s_ptr->store_inven[item_val].sitem;
+
+        if (typ == i_ptr->tval) {
+            if (subt == i_ptr->subval && // Adds to other item
+                subt >= ITEM_SINGLE_STACK_MIN &&
+                (subt < ITEM_GROUP_MIN || i_ptr->p1 == t_ptr->p1)) {
                 *ipos = item_val;
-            }
-            item_val++;
-        } while ((item_val < s_ptr->store_ctr) && (!flag));
+                i_ptr->number += item_num;
 
-        // Becomes last item in list
-        if (!flag) {
-            insert_store(store_num, (int)s_ptr->store_ctr, icost, t_ptr);
-            *ipos = s_ptr->store_ctr - 1;
+                // must set new scost for group items, do this only for items
+                // strictly greater than group_min, not for torches, this
+                // must be recalculated for entire group
+                if (subt > ITEM_GROUP_MIN) {
+                    (void)sell_price(store_num, &icost, &dummy, i_ptr);
+                    s_ptr->store_inven[item_val].scost = -icost;
+                } else if (i_ptr->number > 24) {
+                    // must let group objects (except torches) stack over 24
+                    // since there may be more than 24 in the group
+                    i_ptr->number = 24;
+                }
+                flag = true;
+            }
+        } else if (typ > i_ptr->tval) { // Insert into list
+            insert_store(store_num, item_val, icost, t_ptr);
+            flag = true;
+            *ipos = item_val;
         }
+        item_val++;
+    } while ((item_val < s_ptr->store_ctr) && (!flag));
+
+    // Becomes last item in list
+    if (!flag) {
+        insert_store(store_num, (int)s_ptr->store_ctr, icost, t_ptr);
+        *ipos = s_ptr->store_ctr - 1;
     }
 }
 
@@ -294,11 +307,10 @@ void store_init() {
 
 // Creates an item and inserts it into store's inven -RAK-
 static void store_create(int store_num) {
-    int tries = 0;
     int cur_pos = popt();
-
     store_type *s_ptr = &store[store_num];
 
+    int tries = 0;
     do {
         int i = store_choice[store_num][randint(STORE_CHOICES) - 1];
         invcopy(&t_list[cur_pos], i);
@@ -360,6 +372,7 @@ bool noneedtobargain(int store_num, int32_t minprice) {
     if (s_ptr->good_buy == MAX_SHORT) {
         return true;
     }
+
     int bargain_record = (s_ptr->good_buy - 3 * s_ptr->bad_buy - 5);
 
     return ((bargain_record > 0) && ((int32_t)bargain_record * (int32_t)bargain_record > minprice / 50));

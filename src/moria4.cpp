@@ -155,107 +155,107 @@ void tunnel(int dir) {
 
 // Disarms a trap -RAK-
 void disarm_trap() {
+    int dir;
+    if (!get_dir(CNIL, &dir)) {
+        return;
+    }
+
     int y = char_row;
     int x = char_col;
+    (void)mmove(dir, &y, &x);
 
-    int dir;
-    if (get_dir(CNIL, &dir)) {
-        (void)mmove(dir, &y, &x);
+    cave_type *c_ptr = &cave[y][x];
+    bool no_disarm = false;
 
-        cave_type *c_ptr = &cave[y][x];
+    if (c_ptr->cptr > 1 && c_ptr->tptr != 0 && (t_list[c_ptr->tptr].tval == TV_VIS_TRAP || t_list[c_ptr->tptr].tval == TV_CHEST)) {
+        monster_type *m_ptr = &m_list[c_ptr->cptr];
 
-        bool no_disarm = false;
+        vtype m_name, out_val;
+        if (m_ptr->ml) {
+            (void)sprintf(m_name, "The %s", c_list[m_ptr->mptr].name);
+        } else {
+            (void)strcpy(m_name, "Something");
+        }
+        (void)sprintf(out_val, "%s is in your way!", m_name);
+        msg_print(out_val);
+    } else if (c_ptr->tptr != 0) {
+        int tot = py.misc.disarm + 2 * todis_adj() + stat_adj(A_INT) + (class_level_adj[py.misc.pclass][CLA_DISARM] * py.misc.lev / 3);
 
-        if (c_ptr->cptr > 1 && c_ptr->tptr != 0 && (t_list[c_ptr->tptr].tval == TV_VIS_TRAP || t_list[c_ptr->tptr].tval == TV_CHEST)) {
-            monster_type *m_ptr = &m_list[c_ptr->cptr];
+        if ((py.flags.blind > 0) || (no_light())) {
+            tot = tot / 10;
+        }
+        if (py.flags.confused > 0) {
+            tot = tot / 10;
+        }
+        if (py.flags.image > 0) {
+            tot = tot / 10;
+        }
 
-            vtype m_name, out_val;
-            if (m_ptr->ml) {
-                (void)sprintf(m_name, "The %s", c_list[m_ptr->mptr].name);
+        inven_type *i_ptr = &t_list[c_ptr->tptr];
+        int i = i_ptr->tval;
+        int level = i_ptr->level;
+
+        if (i == TV_VIS_TRAP) { // Floor trap
+            if ((tot + 100 - level) > randint(100)) {
+                msg_print("You have disarmed the trap.");
+                py.misc.exp += i_ptr->p1;
+                (void)delete_object(y, x);
+
+                // make sure we move onto the trap even if confused
+                int tmp = py.flags.confused;
+                py.flags.confused = 0;
+                move_char(dir, false);
+                py.flags.confused = (int16_t) tmp;
+                prt_experience();
+            } else if ((tot > 5) && (randint(tot) > 5)) {
+                // avoid randint(0) call
+                count_msg_print("You failed to disarm the trap.");
             } else {
-                (void)strcpy(m_name, "Something");
-            }
-            (void)sprintf(out_val, "%s is in your way!", m_name);
-            msg_print(out_val);
-        } else if (c_ptr->tptr != 0) {
-            int tot = py.misc.disarm + 2 * todis_adj() + stat_adj(A_INT) + (class_level_adj[py.misc.pclass][CLA_DISARM] * py.misc.lev / 3);
+                msg_print("You set the trap off!");
 
-            if ((py.flags.blind > 0) || (no_light())) {
-                tot = tot / 10;
+                // make sure we move onto the trap even if confused
+                int tmp = py.flags.confused;
+                py.flags.confused = 0;
+                move_char(dir, false);
+                py.flags.confused += tmp;
             }
-            if (py.flags.confused > 0) {
-                tot = tot / 10;
-            }
-            if (py.flags.image > 0) {
-                tot = tot / 10;
-            }
-
-            inven_type *i_ptr = &t_list[c_ptr->tptr];
-            int i = i_ptr->tval;
-            int level = i_ptr->level;
-
-            if (i == TV_VIS_TRAP) { // Floor trap
-                if ((tot + 100 - level) > randint(100)) {
-                    msg_print("You have disarmed the trap.");
-                    py.misc.exp += i_ptr->p1;
-                    (void)delete_object(y, x);
-
-                    // make sure we move onto the trap even if confused
-                    int tmp = py.flags.confused;
-                    py.flags.confused = 0;
-                    move_char(dir, false);
-                    py.flags.confused = (int16_t) tmp;
+        } else if (i == TV_CHEST) {
+            if (!known2_p(i_ptr)) {
+                msg_print("I don't see a trap.");
+                free_turn_flag = true;
+            } else if (CH_TRAPPED & i_ptr->flags) {
+                if ((tot - level) > randint(100)) {
+                    i_ptr->flags &= ~CH_TRAPPED;
+                    if (CH_LOCKED & i_ptr->flags) {
+                        i_ptr->name2 = SN_LOCKED;
+                    } else {
+                        i_ptr->name2 = SN_DISARMED;
+                    }
+                    msg_print("You have disarmed the chest.");
+                    known2(i_ptr);
+                    py.misc.exp += level;
                     prt_experience();
                 } else if ((tot > 5) && (randint(tot) > 5)) {
-                    // avoid randint(0) call
-                    count_msg_print("You failed to disarm the trap.");
+                    count_msg_print("You failed to disarm the chest.");
                 } else {
-                    msg_print("You set the trap off!");
-
-                    // make sure we move onto the trap even if confused
-                    int tmp = py.flags.confused;
-                    py.flags.confused = 0;
-                    move_char(dir, false);
-                    py.flags.confused += tmp;
-                }
-            } else if (i == TV_CHEST) {
-                if (!known2_p(i_ptr)) {
-                    msg_print("I don't see a trap.");
-                    free_turn_flag = true;
-                } else if (CH_TRAPPED & i_ptr->flags) {
-                    if ((tot - level) > randint(100)) {
-                        i_ptr->flags &= ~CH_TRAPPED;
-                        if (CH_LOCKED & i_ptr->flags) {
-                            i_ptr->name2 = SN_LOCKED;
-                        } else {
-                            i_ptr->name2 = SN_DISARMED;
-                        }
-                        msg_print("You have disarmed the chest.");
-                        known2(i_ptr);
-                        py.misc.exp += level;
-                        prt_experience();
-                    } else if ((tot > 5) && (randint(tot) > 5)) {
-                        count_msg_print("You failed to disarm the chest.");
-                    } else {
-                        msg_print("You set a trap off!");
-                        known2(i_ptr);
-                        chest_trap(y, x);
-                    }
-                } else {
-                    msg_print("The chest was not trapped.");
-                    free_turn_flag = true;
+                    msg_print("You set a trap off!");
+                    known2(i_ptr);
+                    chest_trap(y, x);
                 }
             } else {
-                no_disarm = true;
+                msg_print("The chest was not trapped.");
+                free_turn_flag = true;
             }
         } else {
             no_disarm = true;
         }
+    } else {
+        no_disarm = true;
+    }
 
-        if (no_disarm) {
-            msg_print("I do not see anything to disarm there.");
-            free_turn_flag = true;
-        }
+    if (no_disarm) {
+        msg_print("I do not see anything to disarm there.");
+        free_turn_flag = true;
     }
 }
 
@@ -337,95 +337,101 @@ static int map_diag2[] = {2, 1, 0, 4, 3};
 // other things have been seen.  Only looks at rock types if the highlight_seams
 // option is set.
 void look() {
-    int dir;
-
     if (py.flags.blind > 0) {
         msg_print("You can't see a damn thing!");
-    } else if (py.flags.image > 0) {
+        return;
+    }
+
+    if (py.flags.image > 0) {
         msg_print("You can't believe what you are seeing! It's like a dream!");
-    } else if (get_alldir("Look which direction?", &dir)) {
-        gl_nseen = 0;
-        gl_rock = 0;
+        return;
+    }
 
-        // Have to set this up for the look_see
-        gl_noquery = false;
+    int dir;
+    if (!get_alldir("Look which direction?", &dir)) {
+        return;
+    }
 
-        bool dummy;
-        if (look_see(0, 0, &dummy)) {
-            // NOTE: `abort` is not read after this so commenting out. -MRC-
-            // abort = true;
-        } else {
-            bool abort;
+    gl_nseen = 0;
+    gl_rock = 0;
 
-            do {
-                abort = false;
-                if (dir == 5) {
-                    for (int i = 1; i <= 4; i++) {
-                        gl_fxx = set_fxx[i];
-                        gl_fyx = set_fyx[i];
-                        gl_fxy = set_fxy[i];
-                        gl_fyy = set_fyy[i];
-                        if (look_ray(0, 2 * GRADF - 1, 1)) {
-                            abort = true;
-                            break;
-                        }
-                        gl_fxy = -gl_fxy;
-                        gl_fyy = -gl_fyy;
-                        if (look_ray(0, 2 * GRADF, 2)) {
-                            abort = true;
-                            break;
-                        }
-                    }
-                } else if ((dir & 1) == 0) {
-                    // Straight directions
+    // Have to set this up for the look_see
+    gl_noquery = false;
 
-                    int i = dir >> 1;
-                    gl_fxx = set_fxx[i];
-                    gl_fyx = set_fyx[i];
-                    gl_fxy = set_fxy[i];
-                    gl_fyy = set_fyy[i];
-                    if (look_ray(0, GRADF, 1)) {
-                        abort = true;
-                    } else {
-                        gl_fxy = -gl_fxy;
-                        gl_fyy = -gl_fyy;
-                        abort = look_ray(0, GRADF, 2);
-                    }
-                } else {
-                    int i = map_diag1[dir >> 1];
-                    gl_fxx = set_fxx[i];
-                    gl_fyx = set_fyx[i];
-                    gl_fxy = -set_fxy[i];
-                    gl_fyy = -set_fyy[i];
-                    if (look_ray(1, 2 * GRADF, GRADF)) {
-                        abort = true;
-                    } else {
-                        i = map_diag2[dir >> 1];
-                        gl_fxx = set_fxx[i];
-                        gl_fyx = set_fyx[i];
-                        gl_fxy = set_fxy[i];
-                        gl_fyy = set_fyy[i];
-                        abort = look_ray(1, 2 * GRADF - 1, GRADF);
-                    }
+    bool dummy;
+    if (look_see(0, 0, &dummy)) {
+        return;
+    }
+
+    bool abort;
+    do {
+        abort = false;
+        if (dir == 5) {
+            for (int i = 1; i <= 4; i++) {
+                gl_fxx = set_fxx[i];
+                gl_fyx = set_fyx[i];
+                gl_fxy = set_fxy[i];
+                gl_fyy = set_fyy[i];
+                if (look_ray(0, 2 * GRADF - 1, 1)) {
+                    abort = true;
+                    break;
                 }
-            } while (!abort && highlight_seams && (++gl_rock < 2));
-
-            if (abort) {
-                msg_print("--Aborting look--");
-            } else {
-                if (gl_nseen) {
-                    if (dir == 5) {
-                        msg_print("That's all you see.");
-                    } else {
-                        msg_print("That's all you see in that direction.");
-                    }
-                } else if (dir == 5) {
-                    msg_print("You see nothing of interest.");
-                } else {
-                    msg_print("You see nothing of interest in that direction.");
+                gl_fxy = -gl_fxy;
+                gl_fyy = -gl_fyy;
+                if (look_ray(0, 2 * GRADF, 2)) {
+                    abort = true;
+                    break;
                 }
             }
+        } else if ((dir & 1) == 0) {
+            // Straight directions
+
+            int i = dir >> 1;
+            gl_fxx = set_fxx[i];
+            gl_fyx = set_fyx[i];
+            gl_fxy = set_fxy[i];
+            gl_fyy = set_fyy[i];
+            if (look_ray(0, GRADF, 1)) {
+                abort = true;
+            } else {
+                gl_fxy = -gl_fxy;
+                gl_fyy = -gl_fyy;
+                abort = look_ray(0, GRADF, 2);
+            }
+        } else {
+            int i = map_diag1[dir >> 1];
+            gl_fxx = set_fxx[i];
+            gl_fyx = set_fyx[i];
+            gl_fxy = -set_fxy[i];
+            gl_fyy = -set_fyy[i];
+            if (look_ray(1, 2 * GRADF, GRADF)) {
+                abort = true;
+            } else {
+                i = map_diag2[dir >> 1];
+                gl_fxx = set_fxx[i];
+                gl_fyx = set_fyx[i];
+                gl_fxy = set_fxy[i];
+                gl_fyy = set_fyy[i];
+                abort = look_ray(1, 2 * GRADF - 1, GRADF);
+            }
         }
+    } while (!abort && highlight_seams && (++gl_rock < 2));
+
+    if (abort) {
+        msg_print("--Aborting look--");
+        return;
+    }
+
+    if (gl_nseen) {
+        if (dir == 5) {
+            msg_print("That's all you see.");
+        } else {
+            msg_print("That's all you see in that direction.");
+        }
+    } else if (dir == 5) {
+        msg_print("You see nothing of interest.");
+    } else {
+        msg_print("You see nothing of interest in that direction.");
     }
 }
 
@@ -676,9 +682,12 @@ static void facts(inven_type *i_ptr, int *tbth, int *tpth, int *tdam, int *tdis)
     // multiply damage bonuses instead of adding, when have proper
     // missile/weapon combo, this makes them much more useful
 
-    // Using Bows,  slings,  or crossbows
-    if (inventory[INVEN_WIELD].tval == TV_BOW) {
-        switch (inventory[INVEN_WIELD].p1) {
+    // Using Bows, slings, or crossbows?
+    if (inventory[INVEN_WIELD].tval != TV_BOW) {
+        return;
+    }
+
+    switch (inventory[INVEN_WIELD].p1) {
         case 1:
             if (i_ptr->tval == TV_SLING_AMMO) { // Sling and ammo
                 *tbth = py.misc.bthb;
@@ -733,7 +742,6 @@ static void facts(inven_type *i_ptr, int *tbth, int *tpth, int *tdam, int *tdis)
                 *tdis = 35;
             }
             break;
-        }
     }
 }
 
@@ -778,111 +786,118 @@ static void drop_throw(int y, int x, inven_type *t_ptr) {
 // Note: Extra damage and chance of hitting when missiles are used
 // with correct weapon.  I.E.  wield bow and throw arrow.
 void throw_object() {
-    int item_val;
-
     if (inven_ctr == 0) {
         msg_print("But you are not carrying anything.");
         free_turn_flag = true;
-    } else if (get_item(&item_val, "Fire/Throw which one?", 0, inven_ctr - 1, CNIL, CNIL)) {
-        int dir;
-        if (get_dir(CNIL, &dir)) {
-            desc_remain(item_val);
-            if (py.flags.confused > 0) {
-                msg_print("You are confused.");
-                do {
-                    dir = randint(9);
-                } while (dir == 5);
-            }
+        return;
+    }
 
-            inven_type throw_obj;
-            inven_throw(item_val, &throw_obj);
+    int item_val;
+    if (!get_item(&item_val, "Fire/Throw which one?", 0, inven_ctr - 1, CNIL, CNIL)) {
+        return;
+    }
 
-            int tbth, tpth, tdam, tdis;
-            facts(&throw_obj, &tbth, &tpth, &tdam, &tdis);
+    int dir;
+    if (!get_dir(CNIL, &dir)) {
+        return;
+    }
 
-            char tchar = throw_obj.tchar;
-            bool flag = false;
-            bool visible;
-            int y = char_row;
-            int x = char_col;
-            int oldy = char_row;
-            int oldx = char_col;
-            int cur_dis = 0;
+    desc_remain(item_val);
 
-            do {
-                (void)mmove(dir, &y, &x);
-                cur_dis++;
-                lite_spot(oldy, oldx);
-                if (cur_dis > tdis) {
-                    flag = true;
+    if (py.flags.confused > 0) {
+        msg_print("You are confused.");
+        do {
+            dir = randint(9);
+        } while (dir == 5);
+    }
+
+    inven_type throw_obj;
+    inven_throw(item_val, &throw_obj);
+
+    int tbth, tpth, tdam, tdis;
+    facts(&throw_obj, &tbth, &tpth, &tdam, &tdis);
+
+    char tchar = throw_obj.tchar;
+    bool visible;
+    int y = char_row;
+    int x = char_col;
+    int oldy = char_row;
+    int oldx = char_col;
+    int cur_dis = 0;
+
+    bool flag = false;
+    do {
+        (void)mmove(dir, &y, &x);
+        cur_dis++;
+        lite_spot(oldy, oldx);
+        if (cur_dis > tdis) {
+            flag = true;
+        }
+
+        cave_type *c_ptr = &cave[y][x];
+        if ((c_ptr->fval <= MAX_OPEN_SPACE) && (!flag)) {
+            if (c_ptr->cptr > 1) {
+                flag = true;
+                monster_type *m_ptr = &m_list[c_ptr->cptr];
+                tbth = tbth - cur_dis;
+
+                // if monster not lit, make it much more difficult to hit, subtract
+                // off most bonuses, and reduce bthb depending on distance.
+                if (!m_ptr->ml) {
+                    tbth = (tbth / (cur_dis + 2)) - (py.misc.lev * class_level_adj[py.misc.pclass][CLA_BTHB] / 2) - (tpth * (BTH_PLUS_ADJ - 1));
                 }
 
-                cave_type *c_ptr = &cave[y][x];
-                if ((c_ptr->fval <= MAX_OPEN_SPACE) && (!flag)) {
-                    if (c_ptr->cptr > 1) {
-                        flag = true;
-                        monster_type *m_ptr = &m_list[c_ptr->cptr];
-                        tbth = tbth - cur_dis;
+                if (test_hit(tbth, (int)py.misc.lev, tpth, (int)c_list[m_ptr->mptr].ac, CLA_BTHB)) {
+                    int i = m_ptr->mptr;
 
-                        // if monster not lit, make it much more difficult to hit, subtract
-                        // off most bonuses, and reduce bthb depending on distance.
-                        if (!m_ptr->ml) {
-                            tbth = (tbth / (cur_dis + 2)) - (py.misc.lev * class_level_adj[py.misc.pclass][CLA_BTHB] / 2) - (tpth * (BTH_PLUS_ADJ - 1));
-                        }
+                    bigvtype tmp_str;
+                    objdes(tmp_str, &throw_obj, false);
 
-                        if (test_hit(tbth, (int)py.misc.lev, tpth, (int)c_list[m_ptr->mptr].ac, CLA_BTHB)) {
-                            int i = m_ptr->mptr;
+                    bigvtype out_val;
 
-                            bigvtype tmp_str;
-                            objdes(tmp_str, &throw_obj, false);
-
-                            bigvtype out_val;
-
-                            // Does the player know what he's fighting?
-                            if (!m_ptr->ml) {
-                                (void)sprintf(out_val, "You hear a cry as the %s finds a mark.", tmp_str);
-                                visible = false;
-                            } else {
-                                (void)sprintf(out_val, "The %s hits the %s.", tmp_str, c_list[i].name);
-                                visible = true;
-                            }
-                            msg_print(out_val);
-                            tdam = tot_dam(&throw_obj, tdam, i);
-                            tdam = critical_blow((int)throw_obj.weight, tpth, tdam, CLA_BTHB);
-                            if (tdam < 0) {
-                                tdam = 0;
-                            }
-
-                            i = mon_take_hit((int)c_ptr->cptr, tdam);
-                            if (i >= 0) {
-                                if (!visible) {
-                                    msg_print("You have killed something!");
-                                } else {
-                                    (void)sprintf(out_val, "You have killed the %s.", c_list[i].name);
-                                    msg_print(out_val);
-                                }
-                                prt_experience();
-                            }
-                        } else {
-                            drop_throw(oldy, oldx, &throw_obj);
-                        }
+                    // Does the player know what he's fighting?
+                    if (!m_ptr->ml) {
+                        (void)sprintf(out_val, "You hear a cry as the %s finds a mark.", tmp_str);
+                        visible = false;
                     } else {
-                        // do not test c_ptr->fm here
+                        (void)sprintf(out_val, "The %s hits the %s.", tmp_str, c_list[i].name);
+                        visible = true;
+                    }
+                    msg_print(out_val);
+                    tdam = tot_dam(&throw_obj, tdam, i);
+                    tdam = critical_blow((int)throw_obj.weight, tpth, tdam, CLA_BTHB);
+                    if (tdam < 0) {
+                        tdam = 0;
+                    }
 
-                        if (panel_contains(y, x) && (py.flags.blind < 1) && (c_ptr->tl || c_ptr->pl)) {
-                            print(tchar, y, x);
-                            put_qio(); // show object moving
+                    i = mon_take_hit((int)c_ptr->cptr, tdam);
+                    if (i >= 0) {
+                        if (!visible) {
+                            msg_print("You have killed something!");
+                        } else {
+                            (void)sprintf(out_val, "You have killed the %s.", c_list[i].name);
+                            msg_print(out_val);
                         }
+                        prt_experience();
                     }
                 } else {
-                    flag = true;
                     drop_throw(oldy, oldx, &throw_obj);
                 }
-                oldy = y;
-                oldx = x;
-            } while (!flag);
+            } else {
+                // do not test c_ptr->fm here
+
+                if (panel_contains(y, x) && (py.flags.blind < 1) && (c_ptr->tl || c_ptr->pl)) {
+                    print(tchar, y, x);
+                    put_qio(); // show object moving
+                }
+            }
+        } else {
+            flag = true;
+            drop_throw(oldy, oldx, &throw_obj);
         }
-    }
+        oldy = y;
+        oldx = x;
+    } while (!flag);
 }
 
 // Make a bash attack on someone. -CJS-
@@ -946,6 +961,7 @@ static void py_bash(int y, int x) {
         (void)sprintf(out_val, "You miss %s.", m_name);
         msg_print(out_val);
     }
+
     if (randint(150) > py.stats.use_stat[A_DEX]) {
         msg_print("You are off balance.");
         py.flags.paralysis = (int16_t) (1 + randint(2));
@@ -972,74 +988,76 @@ static void py_bash(int y, int x) {
 //
 // A creature with no such ability will attempt to bash a non-secret door.
 void bash() {
+    int dir;
+    if (!get_dir(CNIL, &dir)) {
+        return;
+    }
+
+    if (py.flags.confused > 0) {
+        msg_print("You are confused.");
+        do {
+            dir = randint(9);
+        } while (dir == 5);
+    }
+
     int y = char_row;
     int x = char_col;
+    (void)mmove(dir, &y, &x);
 
-    int dir;
-    if (get_dir(CNIL, &dir)) {
-        if (py.flags.confused > 0) {
-            msg_print("You are confused.");
-            do {
-                dir = randint(9);
-            } while (dir == 5);
+    cave_type *c_ptr = &cave[y][x];
+    if (c_ptr->cptr > 1) {
+        if (py.flags.afraid > 0) {
+            msg_print("You are afraid!");
+        } else {
+            py_bash(y, x);
         }
-        (void)mmove(dir, &y, &x);
+    } else if (c_ptr->tptr != 0) {
+        inven_type *t_ptr = &t_list[c_ptr->tptr];
 
-        cave_type *c_ptr = &cave[y][x];
-        if (c_ptr->cptr > 1) {
-            if (py.flags.afraid > 0) {
-                msg_print("You are afraid!");
-            } else {
-                py_bash(y, x);
-            }
-        } else if (c_ptr->tptr != 0) {
-            inven_type *t_ptr = &t_list[c_ptr->tptr];
+        if (t_ptr->tval == TV_CLOSED_DOOR) {
+            count_msg_print("You smash into the door!");
+            int tmp = py.stats.use_stat[A_STR] + py.misc.wt / 2;
 
-            if (t_ptr->tval == TV_CLOSED_DOOR) {
-                count_msg_print("You smash into the door!");
-                int tmp = py.stats.use_stat[A_STR] + py.misc.wt / 2;
-
-                // Use (roughly) similar method as for monsters.
-                if (randint(tmp * (20 + abs(t_ptr->p1))) < 10 * (tmp - abs(t_ptr->p1))) {
-                    msg_print("The door crashes open!");
-                    invcopy(&t_list[c_ptr->tptr], OBJ_OPEN_DOOR);
-                    t_ptr->p1 = (int16_t) (1 - randint(2)); // 50% chance of breaking door
-                    c_ptr->fval = CORR_FLOOR;
-                    if (py.flags.confused == 0) {
-                        move_char(dir, false);
-                    } else {
-                        lite_spot(y, x);
-                    }
-                } else if (randint(150) > py.stats.use_stat[A_DEX]) {
-                    msg_print("You are off-balance.");
-                    py.flags.paralysis = (int16_t) (1 + randint(2));
-                } else if (command_count == 0) {
-                    msg_print("The door holds firm.");
-                }
-            } else if (t_ptr->tval == TV_CHEST) {
-                if (randint(10) == 1) {
-                    msg_print("You have destroyed the chest.");
-                    msg_print("and its contents!");
-                    t_ptr->index = OBJ_RUINED_CHEST;
-                    t_ptr->flags = 0;
-                } else if ((CH_LOCKED & t_ptr->flags) && (randint(10) == 1)) {
-                    msg_print("The lock breaks open!");
-                    t_ptr->flags &= ~CH_LOCKED;
+            // Use (roughly) similar method as for monsters.
+            if (randint(tmp * (20 + abs(t_ptr->p1))) < 10 * (tmp - abs(t_ptr->p1))) {
+                msg_print("The door crashes open!");
+                invcopy(&t_list[c_ptr->tptr], OBJ_OPEN_DOOR);
+                t_ptr->p1 = (int16_t) (1 - randint(2)); // 50% chance of breaking door
+                c_ptr->fval = CORR_FLOOR;
+                if (py.flags.confused == 0) {
+                    move_char(dir, false);
                 } else {
-                    count_msg_print("The chest holds firm.");
+                    lite_spot(y, x);
                 }
+            } else if (randint(150) > py.stats.use_stat[A_DEX]) {
+                msg_print("You are off-balance.");
+                py.flags.paralysis = (int16_t) (1 + randint(2));
+            } else if (command_count == 0) {
+                msg_print("The door holds firm.");
+            }
+        } else if (t_ptr->tval == TV_CHEST) {
+            if (randint(10) == 1) {
+                msg_print("You have destroyed the chest.");
+                msg_print("and its contents!");
+                t_ptr->index = OBJ_RUINED_CHEST;
+                t_ptr->flags = 0;
+            } else if ((CH_LOCKED & t_ptr->flags) && (randint(10) == 1)) {
+                msg_print("The lock breaks open!");
+                t_ptr->flags &= ~CH_LOCKED;
             } else {
-                // Can't give free turn, or else player could try directions
-                // until he found invisible creature
-                msg_print("You bash it, but nothing interesting happens.");
+                count_msg_print("The chest holds firm.");
             }
         } else {
-            if (c_ptr->fval < MIN_CAVE_WALL) {
-                msg_print("You bash at empty space.");
-            } else {
-                // same message for wall as for secret door
-                msg_print("You bash it, but nothing interesting happens.");
-            }
+            // Can't give free turn, or else player could try directions
+            // until he found invisible creature
+            msg_print("You bash it, but nothing interesting happens.");
+        }
+    } else {
+        if (c_ptr->fval < MIN_CAVE_WALL) {
+            msg_print("You bash at empty space.");
+        } else {
+            // same message for wall as for secret door
+            msg_print("You bash it, but nothing interesting happens.");
         }
     }
 }

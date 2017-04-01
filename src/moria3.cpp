@@ -206,9 +206,6 @@ static void hit_trap(int y, int x) {
 // returns  1 if choose a spell in book to cast
 // returns  0 if don't choose a spell, i.e. exit with an escape
 int cast_spell(const char *prompt, int item_val, int *sn, int *sc) {
-    int result = -1;
-    int i = 0;
-
     uint32_t j = inventory[item_val].flags;
     int first_spell = bit_pos(&j);
     // set j again, since bit_pos modified it
@@ -216,7 +213,9 @@ int cast_spell(const char *prompt, int item_val, int *sn, int *sc) {
 
     spell_type *s_ptr = magic_spell[py.misc.pclass - 1];
 
+    int i = 0;
     int spell[31];
+
     while (j) {
         int k = bit_pos(&j);
         if (s_ptr[k].slevel <= py.misc.lev) {
@@ -225,17 +224,22 @@ int cast_spell(const char *prompt, int item_val, int *sn, int *sc) {
         }
     }
 
-    if (i > 0) {
-        result = get_spell(spell, i, sn, sc, prompt, first_spell);
-        if (result &&
-            magic_spell[py.misc.pclass - 1][*sn].smana > py.misc.cmana) {
-            if (classes[py.misc.pclass].spell == MAGE) {
-                result = (int)get_check("You summon your limited strength to cast this one! Confirm?");
-            } else {
-                result = (int)get_check("The gods may think you presumptuous for this! Confirm?");
-            }
+    int result = -1;
+
+    if (i == 0) {
+        return result;
+    }
+
+    result = get_spell(spell, i, sn, sc, prompt, first_spell);
+
+    if (result && magic_spell[py.misc.pclass - 1][*sn].smana > py.misc.cmana) {
+        if (classes[py.misc.pclass].spell == MAGE) {
+            result = (int)get_check("You summon your limited strength to cast this one! Confirm?");
+        } else {
+            result = (int)get_check("The gods may think you presumptuous for this! Confirm?");
         }
     }
+
     return result;
 }
 
@@ -256,8 +260,7 @@ static void carry(int y, int x, bool pickup) {
         if (i == TV_GOLD) {
             py.misc.au += i_ptr->cost;
             objdes(tmp_str, i_ptr, true);
-            (void)sprintf(out_val, "You have found %d gold pieces worth of %s",
-                          i_ptr->cost, tmp_str);
+            (void)sprintf(out_val, "You have found %d gold pieces worth of %s", i_ptr->cost, tmp_str);
             prt_gold();
             (void)delete_object(y, x);
             msg_print(out_val);
@@ -694,122 +697,121 @@ void move_char(int dir, bool do_pickup) {
     int x = char_col;
 
     // Legal move?
-    if (mmove(dir, &y, &x)) {
-        cave_type *c_ptr = &cave[y][x];
+    if (!mmove(dir, &y, &x)) {
+        return;
+    }
 
-        // if there is no creature, or an unlit creature in the walls then...
-        // disallow attacks against unlit creatures in walls because moving into
-        // a wall is a free turn normally, hence don't give player free turns
-        // attacking each wall in an attempt to locate the invisible creature,
-        // instead force player to tunnel into walls which always takes a turn
-        if ((c_ptr->cptr < 2) ||
-            (!m_list[c_ptr->cptr].ml && c_ptr->fval >= MIN_CLOSED_SPACE)) {
-            // Open floor spot
-            if (c_ptr->fval <= MAX_OPEN_SPACE) {
-                // Make final assignments of char coords
-                int old_row = char_row;
-                int old_col = char_col;
-                char_row = (int16_t) y;
-                char_col = (int16_t) x;
+    cave_type *c_ptr = &cave[y][x];
 
-                // Move character record (-1)
-                move_rec(old_row, old_col, char_row, char_col);
+    // if there is no creature, or an unlit creature in the walls then...
+    // disallow attacks against unlit creatures in walls because moving into
+    // a wall is a free turn normally, hence don't give player free turns
+    // attacking each wall in an attempt to locate the invisible creature,
+    // instead force player to tunnel into walls which always takes a turn
+    if ((c_ptr->cptr < 2) || (!m_list[c_ptr->cptr].ml && c_ptr->fval >= MIN_CLOSED_SPACE)) {
+        // Open floor spot
+        if (c_ptr->fval <= MAX_OPEN_SPACE) {
+            // Make final assignments of char coords
+            int old_row = char_row;
+            int old_col = char_col;
+            char_row = (int16_t) y;
+            char_col = (int16_t) x;
 
-                // Check for new panel
-                if (get_panel(char_row, char_col, false)) {
-                    prt_map();
+            // Move character record (-1)
+            move_rec(old_row, old_col, char_row, char_col);
+
+            // Check for new panel
+            if (get_panel(char_row, char_col, false)) {
+                prt_map();
+            }
+
+            // Check to see if he should stop
+            if (find_flag) {
+                area_affect(dir, char_row, char_col);
+            }
+
+            // Check to see if he notices something
+            // fos may be negative if have good rings of searching
+            if ((py.misc.fos <= 1) || (randint(py.misc.fos) == 1) || (py.flags.status & PY_SEARCH)) {
+                search(char_row, char_col, py.misc.srh);
+            }
+
+            // A room of light should be lit.
+            if (c_ptr->fval == LIGHT_FLOOR) {
+                if (!c_ptr->pl && !py.flags.blind) {
+                    light_room(char_row, char_col);
                 }
-
-                // Check to see if he should stop
-                if (find_flag) {
-                    area_affect(dir, char_row, char_col);
-                }
-
-                // Check to see if he notices something
-                // fos may be negative if have good rings of searching
-                if ((py.misc.fos <= 1) || (randint(py.misc.fos) == 1) ||
-                    (py.flags.status & PY_SEARCH)) {
-                    search(char_row, char_col, py.misc.srh);
-                }
-
-                // A room of light should be lit.
-                if (c_ptr->fval == LIGHT_FLOOR) {
-                    if (!c_ptr->pl && !py.flags.blind) {
-                        light_room(char_row, char_col);
-                    }
-                }
+            }
 
                 // In doorway of light-room?
-                else if (c_ptr->lr && (py.flags.blind < 1)) {
-                    for (int i = (char_row - 1); i <= (char_row + 1); i++) {
-                        for (int j = (char_col - 1); j <= (char_col + 1); j++) {
-                            cave_type *d_ptr = &cave[i][j];
+            else if (c_ptr->lr && (py.flags.blind < 1)) {
+                for (int i = (char_row - 1); i <= (char_row + 1); i++) {
+                    for (int j = (char_col - 1); j <= (char_col + 1); j++) {
+                        cave_type *d_ptr = &cave[i][j];
 
-                            if ((d_ptr->fval == LIGHT_FLOOR) && (!d_ptr->pl)) {
-                                light_room(i, j);
-                            }
+                        if ((d_ptr->fval == LIGHT_FLOOR) && (!d_ptr->pl)) {
+                            light_room(i, j);
                         }
                     }
                 }
+            }
 
-                // Move the light source
-                move_light(old_row, old_col, char_row, char_col);
+            // Move the light source
+            move_light(old_row, old_col, char_row, char_col);
 
-                // An object is beneath him.
-                if (c_ptr->tptr != 0) {
-                    carry(char_row, char_col, do_pickup);
+            // An object is beneath him.
+            if (c_ptr->tptr != 0) {
+                carry(char_row, char_col, do_pickup);
 
-                    // if stepped on falling rock trap, and space contains
-                    // rubble, then step back into a clear area
-                    if (t_list[c_ptr->tptr].tval == TV_RUBBLE) {
-                        move_rec(char_row, char_col, old_row, old_col);
-                        move_light(char_row, char_col, old_row, old_col);
-                        char_row = (int16_t) old_row;
-                        char_col = (int16_t) old_col;
+                // if stepped on falling rock trap, and space contains
+                // rubble, then step back into a clear area
+                if (t_list[c_ptr->tptr].tval == TV_RUBBLE) {
+                    move_rec(char_row, char_col, old_row, old_col);
+                    move_light(char_row, char_col, old_row, old_col);
+                    char_row = (int16_t) old_row;
+                    char_col = (int16_t) old_col;
 
-                        // check to see if we have stepped back onto another
-                        // trap, if so, set it off
-                        c_ptr = &cave[char_row][char_col];
-                        if (c_ptr->tptr != 0) {
-                            int i = t_list[c_ptr->tptr].tval;
-                            if (i == TV_INVIS_TRAP || i == TV_VIS_TRAP ||
-                                i == TV_STORE_DOOR) {
-                                hit_trap(char_row, char_col);
-                            }
+                    // check to see if we have stepped back onto another
+                    // trap, if so, set it off
+                    c_ptr = &cave[char_row][char_col];
+                    if (c_ptr->tptr != 0) {
+                        int i = t_list[c_ptr->tptr].tval;
+                        if (i == TV_INVIS_TRAP || i == TV_VIS_TRAP || i == TV_STORE_DOOR) {
+                            hit_trap(char_row, char_col);
                         }
                     }
                 }
-            } else {
-                // Can't move onto floor space
-
-                if (!find_flag && (c_ptr->tptr != 0)) {
-                    if (t_list[c_ptr->tptr].tval == TV_RUBBLE) {
-                        msg_print("There is rubble blocking your way.");
-                    } else if (t_list[c_ptr->tptr].tval == TV_CLOSED_DOOR) {
-                        msg_print("There is a closed door blocking your way.");
-                    }
-                } else {
-                    end_find();
-                }
-                free_turn_flag = true;
             }
         } else {
-            // Attacking a creature!
+            // Can't move onto floor space
 
-            int old_find_flag = find_flag;
-            end_find();
-
-            // if player can see monster, and was in find mode, then nothing
-            if (m_list[c_ptr->cptr].ml && old_find_flag) {
-                // did not do anything this turn
-                free_turn_flag = true;
-            } else {
-                // Coward?
-                if (py.flags.afraid < 1) {
-                    py_attack(y, x);
-                } else { // Coward!
-                    msg_print("You are too afraid!");
+            if (!find_flag && (c_ptr->tptr != 0)) {
+                if (t_list[c_ptr->tptr].tval == TV_RUBBLE) {
+                    msg_print("There is rubble blocking your way.");
+                } else if (t_list[c_ptr->tptr].tval == TV_CLOSED_DOOR) {
+                    msg_print("There is a closed door blocking your way.");
                 }
+            } else {
+                end_find();
+            }
+            free_turn_flag = true;
+        }
+    } else {
+        // Attacking a creature!
+
+        int old_find_flag = find_flag;
+        end_find();
+
+        // if player can see monster, and was in find mode, then nothing
+        if (m_list[c_ptr->cptr].ml && old_find_flag) {
+            // did not do anything this turn
+            free_turn_flag = true;
+        } else {
+            // Coward?
+            if (py.flags.afraid < 1) {
+                py_attack(y, x);
+            } else { // Coward!
+                msg_print("You are too afraid!");
             }
         }
     }
@@ -860,214 +862,217 @@ void chest_trap(int y, int x) {
 
 // Opens a closed door or closed chest. -RAK-
 void openobject() {
+    int dir;
+    if (!get_dir(CNIL, &dir)) {
+        return;
+    }
+
     int y = char_row;
     int x = char_col;
+    (void)mmove(dir, &y, &x);
 
-    int dir;
-    if (get_dir(CNIL, &dir)) {
-        (void)mmove(dir, &y, &x);
+    bool no_object = false;
+    cave_type *c_ptr = &cave[y][x];
 
-        bool no_object = false;
-        cave_type *c_ptr = &cave[y][x];
+    if (c_ptr->cptr > 1 && c_ptr->tptr != 0 && (t_list[c_ptr->tptr].tval == TV_CLOSED_DOOR || t_list[c_ptr->tptr].tval == TV_CHEST)) {
+        monster_type *m_ptr = &m_list[c_ptr->cptr];
 
-        if (c_ptr->cptr > 1 && c_ptr->tptr != 0 && (t_list[c_ptr->tptr].tval == TV_CLOSED_DOOR || t_list[c_ptr->tptr].tval == TV_CHEST)) {
-            monster_type *m_ptr = &m_list[c_ptr->cptr];
+        vtype m_name;
+        if (m_ptr->ml) {
+            (void)sprintf(m_name, "The %s", c_list[m_ptr->mptr].name);
+        } else {
+            (void)strcpy(m_name, "Something");
+        }
 
-            vtype m_name;
-            if (m_ptr->ml) {
-                (void)sprintf(m_name, "The %s", c_list[m_ptr->mptr].name);
-            } else {
-                (void)strcpy(m_name, "Something");
-            }
+        vtype out_val;
+        (void)sprintf(out_val, "%s is in your way!", m_name);
+        msg_print(out_val);
+    } else if (c_ptr->tptr != 0) {
+        // Closed door
+        if (t_list[c_ptr->tptr].tval == TV_CLOSED_DOOR) {
+            inven_type *t_ptr = &t_list[c_ptr->tptr];
 
-            vtype out_val;
-            (void)sprintf(out_val, "%s is in your way!", m_name);
-            msg_print(out_val);
-        } else if (c_ptr->tptr != 0) {
-            // Closed door
-            if (t_list[c_ptr->tptr].tval == TV_CLOSED_DOOR) {
-                inven_type *t_ptr = &t_list[c_ptr->tptr];
-
-                // It's locked.
-                if (t_ptr->p1 > 0) {
-                    struct player_type::misc *p_ptr = &py.misc;
-                    int i = p_ptr->disarm + 2 * todis_adj() + stat_adj(A_INT) + (class_level_adj[p_ptr->pclass][CLA_DISARM] * p_ptr->lev / 3);
-
-                    if (py.flags.confused > 0) {
-                        msg_print("You are too confused to pick the lock.");
-                    } else if ((i - t_ptr->p1) > randint(100)) {
-                        msg_print("You have picked the lock.");
-                        py.misc.exp++;
-                        prt_experience();
-                        t_ptr->p1 = 0;
-                    } else {
-                        count_msg_print("You failed to pick the lock.");
-                    }
-                } else if (t_ptr->p1 < 0) { // It's stuck
-                    msg_print("It appears to be stuck.");
-                }
-                if (t_ptr->p1 == 0) {
-                    invcopy(&t_list[c_ptr->tptr], OBJ_OPEN_DOOR);
-                    c_ptr->fval = CORR_FLOOR;
-                    lite_spot(y, x);
-                    command_count = 0;
-                }
-            } else if (t_list[c_ptr->tptr].tval == TV_CHEST) {
-                // Open a closed chest.
-
+            // It's locked.
+            if (t_ptr->p1 > 0) {
                 struct player_type::misc *p_ptr = &py.misc;
                 int i = p_ptr->disarm + 2 * todis_adj() + stat_adj(A_INT) + (class_level_adj[p_ptr->pclass][CLA_DISARM] * p_ptr->lev / 3);
 
-                inven_type *t_ptr = &t_list[c_ptr->tptr];
-
-                bool flag = false;
-
-                if (CH_LOCKED & t_ptr->flags) {
-                    if (py.flags.confused > 0) {
-                        msg_print("You are too confused to pick the lock.");
-                    } else if ((i - (int)t_ptr->level) > randint(100)) {
-                        msg_print("You have picked the lock.");
-                        flag = true;
-                        py.misc.exp += t_ptr->level;
-                        prt_experience();
-                    } else {
-                        count_msg_print("You failed to pick the lock.");
-                    }
+                if (py.flags.confused > 0) {
+                    msg_print("You are too confused to pick the lock.");
+                } else if ((i - t_ptr->p1) > randint(100)) {
+                    msg_print("You have picked the lock.");
+                    py.misc.exp++;
+                    prt_experience();
+                    t_ptr->p1 = 0;
                 } else {
+                    count_msg_print("You failed to pick the lock.");
+                }
+            } else if (t_ptr->p1 < 0) { // It's stuck
+                msg_print("It appears to be stuck.");
+            }
+            if (t_ptr->p1 == 0) {
+                invcopy(&t_list[c_ptr->tptr], OBJ_OPEN_DOOR);
+                c_ptr->fval = CORR_FLOOR;
+                lite_spot(y, x);
+                command_count = 0;
+            }
+        } else if (t_list[c_ptr->tptr].tval == TV_CHEST) {
+            // Open a closed chest.
+
+            struct player_type::misc *p_ptr = &py.misc;
+            int i = p_ptr->disarm + 2 * todis_adj() + stat_adj(A_INT) + (class_level_adj[p_ptr->pclass][CLA_DISARM] * p_ptr->lev / 3);
+
+            inven_type *t_ptr = &t_list[c_ptr->tptr];
+
+            bool flag = false;
+
+            if (CH_LOCKED & t_ptr->flags) {
+                if (py.flags.confused > 0) {
+                    msg_print("You are too confused to pick the lock.");
+                } else if ((i - (int)t_ptr->level) > randint(100)) {
+                    msg_print("You have picked the lock.");
                     flag = true;
-                }
-                if (flag) {
-                    t_ptr->flags &= ~CH_LOCKED;
-                    t_ptr->name2 = SN_EMPTY;
-                    known2(t_ptr);
-                    t_ptr->cost = 0;
-                }
-                flag = false;
-
-                // Was chest still trapped?   (Snicker)
-                if ((CH_LOCKED & t_ptr->flags) == 0) {
-                    chest_trap(y, x);
-                    if (c_ptr->tptr != 0) {
-                        flag = true;
-                    }
-                }
-
-                // Chest treasure is allocated as if a creature
-                // had been killed.
-                if (flag) {
-                    // clear the cursed chest/monster win flag, so that people
-                    // can not win by opening a cursed chest
-                    t_list[c_ptr->tptr].flags &= ~TR_CURSED;
-                    (void)monster_death(y, x, t_list[c_ptr->tptr].flags);
-                    t_list[c_ptr->tptr].flags = 0;
+                    py.misc.exp += t_ptr->level;
+                    prt_experience();
+                } else {
+                    count_msg_print("You failed to pick the lock.");
                 }
             } else {
-                no_object = true;
+                flag = true;
+            }
+            if (flag) {
+                t_ptr->flags &= ~CH_LOCKED;
+                t_ptr->name2 = SN_EMPTY;
+                known2(t_ptr);
+                t_ptr->cost = 0;
+            }
+            flag = false;
+
+            // Was chest still trapped?   (Snicker)
+            if ((CH_LOCKED & t_ptr->flags) == 0) {
+                chest_trap(y, x);
+                if (c_ptr->tptr != 0) {
+                    flag = true;
+                }
+            }
+
+            // Chest treasure is allocated as if a creature
+            // had been killed.
+            if (flag) {
+                // clear the cursed chest/monster win flag, so that people
+                // can not win by opening a cursed chest
+                t_list[c_ptr->tptr].flags &= ~TR_CURSED;
+                (void)monster_death(y, x, t_list[c_ptr->tptr].flags);
+                t_list[c_ptr->tptr].flags = 0;
             }
         } else {
             no_object = true;
         }
+    } else {
+        no_object = true;
+    }
 
-        if (no_object) {
-            msg_print("I do not see anything you can open there.");
-            free_turn_flag = true;
-        }
+    if (no_object) {
+        msg_print("I do not see anything you can open there.");
+        free_turn_flag = true;
     }
 }
 
 // Closes an open door. -RAK-
 void closeobject() {
+    int dir;
+    if (!get_dir(CNIL, &dir)) {
+        return;
+    }
+
     int y = char_row;
     int x = char_col;
+    (void)mmove(dir, &y, &x);
 
-    int dir;
-    if (get_dir(CNIL, &dir)) {
-        (void)mmove(dir, &y, &x);
+    cave_type *c_ptr = &cave[y][x];
+    bool no_object = false;
 
-        cave_type *c_ptr = &cave[y][x];
-
-        bool no_object = false;
-
-        if (c_ptr->tptr != 0) {
-            if (t_list[c_ptr->tptr].tval == TV_OPEN_DOOR) {
-                if (c_ptr->cptr == 0) {
-                    if (t_list[c_ptr->tptr].p1 == 0) {
-                        invcopy(&t_list[c_ptr->tptr], OBJ_CLOSED_DOOR);
-                        c_ptr->fval = BLOCKED_FLOOR;
-                        lite_spot(y, x);
-                    } else {
-                        msg_print("The door appears to be broken.");
-                    }
+    if (c_ptr->tptr != 0) {
+        if (t_list[c_ptr->tptr].tval == TV_OPEN_DOOR) {
+            if (c_ptr->cptr == 0) {
+                if (t_list[c_ptr->tptr].p1 == 0) {
+                    invcopy(&t_list[c_ptr->tptr], OBJ_CLOSED_DOOR);
+                    c_ptr->fval = BLOCKED_FLOOR;
+                    lite_spot(y, x);
                 } else {
-                    monster_type *m_ptr = &m_list[c_ptr->cptr];
-
-                    vtype m_name;
-                    if (m_ptr->ml) {
-                        (void)sprintf(m_name, "The %s", c_list[m_ptr->mptr].name);
-                    } else {
-                        (void)strcpy(m_name, "Something");
-                    }
-
-                    vtype out_val;
-                    (void)sprintf(out_val, "%s is in your way!", m_name);
-                    msg_print(out_val);
+                    msg_print("The door appears to be broken.");
                 }
             } else {
-                no_object = true;
+                monster_type *m_ptr = &m_list[c_ptr->cptr];
+
+                vtype m_name;
+                if (m_ptr->ml) {
+                    (void)sprintf(m_name, "The %s", c_list[m_ptr->mptr].name);
+                } else {
+                    (void)strcpy(m_name, "Something");
+                }
+
+                vtype out_val;
+                (void)sprintf(out_val, "%s is in your way!", m_name);
+                msg_print(out_val);
             }
         } else {
             no_object = true;
         }
+    } else {
+        no_object = true;
+    }
 
-        if (no_object) {
-            msg_print("I do not see anything you can close there.");
-            free_turn_flag = true;
-        }
+    if (no_object) {
+        msg_print("I do not see anything you can close there.");
+        free_turn_flag = true;
     }
 }
 
 // Tunneling through real wall: 10, 11, 12 -RAK-
 // Used by TUNNEL and WALL_TO_MUD
 int twall(int y, int x, int t1, int t2) {
-    bool found;
-    bool res = false;
+    if (t1 <= t2) {
+        return false;
+    }
 
-    if (t1 > t2) {
-        cave_type *c_ptr = &cave[y][x];
+    cave_type *c_ptr = &cave[y][x];
 
-        if (c_ptr->lr) {
-            // Should become a room space, check to see whether
-            // it should be LIGHT_FLOOR or DARK_FLOOR.
-            found = false;
+    if (c_ptr->lr) {
+        // Should become a room space, check to see whether
+        // it should be LIGHT_FLOOR or DARK_FLOOR.
+        bool found = false;
 
-            for (int i = y - 1; i <= y + 1; i++) {
-                for (int j = x - 1; j <= x + 1; j++) {
-                    if (cave[i][j].fval <= MAX_CAVE_ROOM) {
-                        c_ptr->fval = cave[i][j].fval;
-                        c_ptr->pl = cave[i][j].pl;
-                        found = true;
-                        break;
-                    }
+        for (int i = y - 1; i <= y + 1; i++) {
+            for (int j = x - 1; j <= x + 1; j++) {
+                if (cave[i][j].fval <= MAX_CAVE_ROOM) {
+                    c_ptr->fval = cave[i][j].fval;
+                    c_ptr->pl = cave[i][j].pl;
+                    found = true;
+                    break;
                 }
             }
+        }
 
-            if (!found) {
-                c_ptr->fval = CORR_FLOOR;
-                c_ptr->pl = false;
-            }
-        } else {
-            // should become a corridor space
+        if (!found) {
             c_ptr->fval = CORR_FLOOR;
             c_ptr->pl = false;
         }
-        c_ptr->fm = false;
-        if (panel_contains(y, x)) {
-            if ((c_ptr->tl || c_ptr->pl) && c_ptr->tptr != 0) {
-                msg_print("You have found something!");
-            }
-        }
-        lite_spot(y, x);
-        res = true;
+    } else {
+        // should become a corridor space
+        c_ptr->fval = CORR_FLOOR;
+        c_ptr->pl = false;
     }
-    return res;
+
+    c_ptr->fm = false;
+
+    if (panel_contains(y, x)) {
+        if ((c_ptr->tl || c_ptr->pl) && c_ptr->tptr != 0) {
+            msg_print("You have found something!");
+        }
+    }
+
+    lite_spot(y, x);
+
+    return true;
 }

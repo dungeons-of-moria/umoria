@@ -227,31 +227,33 @@ void identify(int *item) {
         known1(i_ptr);
         int x1 = i_ptr->tval;
         int x2 = i_ptr->subval;
+
         if (x2 < ITEM_SINGLE_STACK_MIN || x2 >= ITEM_GROUP_MIN) {
-            ; // no merging possible
-        } else {
-            int j;
-            inven_type *t_ptr;
+            // no merging possible
+            return;
+        }
 
-            for (int i = 0; i < inven_ctr; i++) {
-                t_ptr = &inventory[i];
-                if (t_ptr->tval == x1 && t_ptr->subval == x2 && i != *item &&
-                    ((int)t_ptr->number + (int)i_ptr->number < 256)) {
-                    // make *item the smaller number
-                    if (*item > i) {
-                        j = *item;
-                        *item = i;
-                        i = j;
-                    }
-                    msg_print("You combine similar objects from the shop and dungeon.");
+        int j;
+        inven_type *t_ptr;
 
-                    inventory[*item].number += inventory[i].number;
-                    inven_ctr--;
-                    for (j = i; j < inven_ctr; j++) {
-                        inventory[j] = inventory[j + 1];
-                    }
-                    invcopy(&inventory[j], OBJ_NOTHING);
+        for (int i = 0; i < inven_ctr; i++) {
+            t_ptr = &inventory[i];
+            if (t_ptr->tval == x1 && t_ptr->subval == x2 && i != *item &&
+                ((int)t_ptr->number + (int)i_ptr->number < 256)) {
+                // make *item the smaller number
+                if (*item > i) {
+                    j = *item;
+                    *item = i;
+                    i = j;
                 }
+                msg_print("You combine similar objects from the shop and dungeon.");
+
+                inventory[*item].number += inventory[i].number;
+                inven_ctr--;
+                for (j = i; j < inven_ctr; j++) {
+                    inventory[j] = inventory[j + 1];
+                }
+                invcopy(&inventory[j], OBJ_NOTHING);
             }
         }
     }

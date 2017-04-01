@@ -171,113 +171,121 @@ bool file_character(char *filename1) {
         file1 = NULL;
     }
 
-    if (file1 != NULL) {
-        vtype prt1;
-
-        prt("Writing character sheet...", 0, 0);
-        put_qio();
-
-        const char *colon = ":";
-        const char *blank = " ";
-
-        (void)fprintf(file1, "%c\n\n", CTRL_KEY('L'));
-
-        (void)fprintf(file1, " Name%9s %-23s", colon, py.misc.name);
-        (void)fprintf(file1, " Age%11s %6d", colon, (int)py.misc.age);
-        cnv_stat(py.stats.use_stat[A_STR], prt1);
-        (void)fprintf(file1, "   STR : %s\n", prt1);
-        (void)fprintf(file1, " Race%9s %-23s", colon, race[py.misc.prace].trace);
-        (void)fprintf(file1, " Height%8s %6d", colon, (int)py.misc.ht);
-        cnv_stat(py.stats.use_stat[A_INT], prt1);
-        (void)fprintf(file1, "   INT : %s\n", prt1);
-        (void)fprintf(file1, " Sex%10s %-23s", colon, (py.misc.male ? "Male" : "Female"));
-        (void)fprintf(file1, " Weight%8s %6d", colon, (int)py.misc.wt);
-        cnv_stat(py.stats.use_stat[A_WIS], prt1);
-        (void)fprintf(file1, "   WIS : %s\n", prt1);
-        (void)fprintf(file1, " Class%8s %-23s", colon, classes[py.misc.pclass].title);
-        (void)fprintf(file1, " Social Class : %6d", py.misc.sc);
-        cnv_stat(py.stats.use_stat[A_DEX], prt1);
-        (void)fprintf(file1, "   DEX : %s\n", prt1);
-        (void)fprintf(file1, " Title%8s %-23s", colon, title_string());
-        (void)fprintf(file1, "%22s", blank);
-        cnv_stat(py.stats.use_stat[A_CON], prt1);
-        (void)fprintf(file1, "   CON : %s\n", prt1);
-        (void)fprintf(file1, "%34s", blank);
-        (void)fprintf(file1, "%26s", blank);
-        cnv_stat(py.stats.use_stat[A_CHR], prt1);
-        (void)fprintf(file1, "   CHR : %s\n\n", prt1);
-
-        (void)fprintf(file1, " + To Hit    : %6d", py.misc.dis_th);
-        (void)fprintf(file1, "%7sLevel      : %7d", blank, (int)py.misc.lev);
-        (void)fprintf(file1, "    Max Hit Points : %6d\n", py.misc.mhp);
-        (void)fprintf(file1, " + To Damage : %6d", py.misc.dis_td);
-        (void)fprintf(file1, "%7sExperience : %7d", blank, py.misc.exp);
-        (void)fprintf(file1, "    Cur Hit Points : %6d\n", py.misc.chp);
-        (void)fprintf(file1, " + To AC     : %6d", py.misc.dis_tac);
-        (void)fprintf(file1, "%7sMax Exp    : %7d", blank, py.misc.max_exp);
-        (void)fprintf(file1, "    Max Mana%8s %6d\n", colon, py.misc.mana);
-        (void)fprintf(file1, "   Total AC  : %6d", py.misc.dis_ac);
-        if (py.misc.lev >= MAX_PLAYER_LEVEL) {
-            (void)fprintf(file1, "%7sExp to Adv : *******", blank);
-        } else {
-            (void)fprintf(file1, "%7sExp to Adv : %7d", blank, (int32_t)(player_exp[py.misc.lev - 1] * py.misc.expfact / 100));
+    if (file1 == NULL) {
+        if (fd >= 0) {
+            (void)close(fd);
         }
-        (void)fprintf(file1, "    Cur Mana%8s %6d\n", colon, py.misc.cmana);
-        (void)fprintf(file1, "%28sGold%8s %7d\n\n", blank, colon, py.misc.au);
+        (void)sprintf(out_val, "Can't open file %s:", filename1);
+        msg_print(out_val);
+        return false;
+    }
 
-        struct player_type::misc *p_ptr = &py.misc;
+    vtype prt1;
 
-        int xbth = p_ptr->bth + p_ptr->ptohit * BTH_PLUS_ADJ + (class_level_adj[p_ptr->pclass][CLA_BTH] * p_ptr->lev);
-        int xbthb = p_ptr->bthb + p_ptr->ptohit * BTH_PLUS_ADJ + (class_level_adj[p_ptr->pclass][CLA_BTHB] * p_ptr->lev);
+    prt("Writing character sheet...", 0, 0);
+    put_qio();
 
-        // this results in a range from 0 to 29
-        int xfos = 40 - p_ptr->fos;
-        if (xfos < 0) {
-            xfos = 0;
-        }
-        int xsrh = p_ptr->srh;
+    const char *colon = ":";
+    const char *blank = " ";
 
-        // this results in a range from 0 to 9
-        int xstl = p_ptr->stl + 1;
-        int xdis = p_ptr->disarm + 2 * todis_adj() + stat_adj(A_INT) + (class_level_adj[p_ptr->pclass][CLA_DISARM] * p_ptr->lev / 3);
-        int xsave = p_ptr->save + stat_adj(A_WIS) + (class_level_adj[p_ptr->pclass][CLA_SAVE] * p_ptr->lev / 3);
-        int xdev = p_ptr->save + stat_adj(A_INT) + (class_level_adj[p_ptr->pclass][CLA_DEVICE] * p_ptr->lev / 3);
+    (void)fprintf(file1, "%c\n\n", CTRL_KEY('L'));
 
-        vtype xinfra;
-        (void)sprintf(xinfra, "%d feet", py.flags.see_infra * 10);
+    (void)fprintf(file1, " Name%9s %-23s", colon, py.misc.name);
+    (void)fprintf(file1, " Age%11s %6d", colon, (int)py.misc.age);
+    cnv_stat(py.stats.use_stat[A_STR], prt1);
+    (void)fprintf(file1, "   STR : %s\n", prt1);
+    (void)fprintf(file1, " Race%9s %-23s", colon, race[py.misc.prace].trace);
+    (void)fprintf(file1, " Height%8s %6d", colon, (int)py.misc.ht);
+    cnv_stat(py.stats.use_stat[A_INT], prt1);
+    (void)fprintf(file1, "   INT : %s\n", prt1);
+    (void)fprintf(file1, " Sex%10s %-23s", colon, (py.misc.male ? "Male" : "Female"));
+    (void)fprintf(file1, " Weight%8s %6d", colon, (int)py.misc.wt);
+    cnv_stat(py.stats.use_stat[A_WIS], prt1);
+    (void)fprintf(file1, "   WIS : %s\n", prt1);
+    (void)fprintf(file1, " Class%8s %-23s", colon, classes[py.misc.pclass].title);
+    (void)fprintf(file1, " Social Class : %6d", py.misc.sc);
+    cnv_stat(py.stats.use_stat[A_DEX], prt1);
+    (void)fprintf(file1, "   DEX : %s\n", prt1);
+    (void)fprintf(file1, " Title%8s %-23s", colon, title_string());
+    (void)fprintf(file1, "%22s", blank);
+    cnv_stat(py.stats.use_stat[A_CON], prt1);
+    (void)fprintf(file1, "   CON : %s\n", prt1);
+    (void)fprintf(file1, "%34s", blank);
+    (void)fprintf(file1, "%26s", blank);
+    cnv_stat(py.stats.use_stat[A_CHR], prt1);
+    (void)fprintf(file1, "   CHR : %s\n\n", prt1);
 
-        (void)fprintf(file1, "(Miscellaneous Abilities)\n\n");
-        (void)fprintf(file1, " Fighting    : %-10s", likert(xbth, 12));
-        (void)fprintf(file1, "   Stealth     : %-10s", likert(xstl, 1));
-        (void)fprintf(file1, "   Perception  : %s\n", likert(xfos, 3));
-        (void)fprintf(file1, " Bows/Throw  : %-10s", likert(xbthb, 12));
-        (void)fprintf(file1, "   Disarming   : %-10s", likert(xdis, 8));
-        (void)fprintf(file1, "   Searching   : %s\n", likert(xsrh, 6));
-        (void)fprintf(file1, " Saving Throw: %-10s", likert(xsave, 6));
-        (void)fprintf(file1, "   Magic Device: %-10s", likert(xdev, 6));
-        (void)fprintf(file1, "   Infra-Vision: %s\n\n", xinfra);
+    (void)fprintf(file1, " + To Hit    : %6d", py.misc.dis_th);
+    (void)fprintf(file1, "%7sLevel      : %7d", blank, (int)py.misc.lev);
+    (void)fprintf(file1, "    Max Hit Points : %6d\n", py.misc.mhp);
+    (void)fprintf(file1, " + To Damage : %6d", py.misc.dis_td);
+    (void)fprintf(file1, "%7sExperience : %7d", blank, py.misc.exp);
+    (void)fprintf(file1, "    Cur Hit Points : %6d\n", py.misc.chp);
+    (void)fprintf(file1, " + To AC     : %6d", py.misc.dis_tac);
+    (void)fprintf(file1, "%7sMax Exp    : %7d", blank, py.misc.max_exp);
+    (void)fprintf(file1, "    Max Mana%8s %6d\n", colon, py.misc.mana);
+    (void)fprintf(file1, "   Total AC  : %6d", py.misc.dis_ac);
+    if (py.misc.lev >= MAX_PLAYER_LEVEL) {
+        (void)fprintf(file1, "%7sExp to Adv : *******", blank);
+    } else {
+        (void)fprintf(file1, "%7sExp to Adv : %7d", blank, (int32_t)(player_exp[py.misc.lev - 1] * py.misc.expfact / 100));
+    }
+    (void)fprintf(file1, "    Cur Mana%8s %6d\n", colon, py.misc.cmana);
+    (void)fprintf(file1, "%28sGold%8s %7d\n\n", blank, colon, py.misc.au);
 
-        // Write out the character's history
-        (void)fprintf(file1, "Character Background\n");
-        for (int i = 0; i < 4; i++) {
-            (void)fprintf(file1, " %s\n", py.misc.history[i]);
-        }
+    struct player_type::misc *p_ptr = &py.misc;
 
-        // Write out the equipment list.
-        bigvtype prt2;
-        int j = 0;
+    int xbth = p_ptr->bth + p_ptr->ptohit * BTH_PLUS_ADJ + (class_level_adj[p_ptr->pclass][CLA_BTH] * p_ptr->lev);
+    int xbthb = p_ptr->bthb + p_ptr->ptohit * BTH_PLUS_ADJ + (class_level_adj[p_ptr->pclass][CLA_BTHB] * p_ptr->lev);
 
-        (void)fprintf(file1, "\n  [Character's Equipment List]\n\n");
-        if (equip_ctr == 0) {
-            (void)fprintf(file1, "  Character has no equipment in use.\n");
-        } else {
-            const char *p;
-            inven_type *i_ptr;
+    // this results in a range from 0 to 29
+    int xfos = 40 - p_ptr->fos;
+    if (xfos < 0) {
+        xfos = 0;
+    }
+    int xsrh = p_ptr->srh;
 
-            for (int i = INVEN_WIELD; i < INVEN_ARRAY_SIZE; i++) {
-                i_ptr = &inventory[i];
-                if (i_ptr->tval != TV_NOTHING) {
-                    switch (i) {
+    // this results in a range from 0 to 9
+    int xstl = p_ptr->stl + 1;
+    int xdis = p_ptr->disarm + 2 * todis_adj() + stat_adj(A_INT) + (class_level_adj[p_ptr->pclass][CLA_DISARM] * p_ptr->lev / 3);
+    int xsave = p_ptr->save + stat_adj(A_WIS) + (class_level_adj[p_ptr->pclass][CLA_SAVE] * p_ptr->lev / 3);
+    int xdev = p_ptr->save + stat_adj(A_INT) + (class_level_adj[p_ptr->pclass][CLA_DEVICE] * p_ptr->lev / 3);
+
+    vtype xinfra;
+    (void)sprintf(xinfra, "%d feet", py.flags.see_infra * 10);
+
+    (void)fprintf(file1, "(Miscellaneous Abilities)\n\n");
+    (void)fprintf(file1, " Fighting    : %-10s", likert(xbth, 12));
+    (void)fprintf(file1, "   Stealth     : %-10s", likert(xstl, 1));
+    (void)fprintf(file1, "   Perception  : %s\n", likert(xfos, 3));
+    (void)fprintf(file1, " Bows/Throw  : %-10s", likert(xbthb, 12));
+    (void)fprintf(file1, "   Disarming   : %-10s", likert(xdis, 8));
+    (void)fprintf(file1, "   Searching   : %s\n", likert(xsrh, 6));
+    (void)fprintf(file1, " Saving Throw: %-10s", likert(xsave, 6));
+    (void)fprintf(file1, "   Magic Device: %-10s", likert(xdev, 6));
+    (void)fprintf(file1, "   Infra-Vision: %s\n\n", xinfra);
+
+    // Write out the character's history
+    (void)fprintf(file1, "Character Background\n");
+    for (int i = 0; i < 4; i++) {
+        (void)fprintf(file1, " %s\n", py.misc.history[i]);
+    }
+
+    // Write out the equipment list.
+    bigvtype prt2;
+    int j = 0;
+
+    (void)fprintf(file1, "\n  [Character's Equipment List]\n\n");
+    if (equip_ctr == 0) {
+        (void)fprintf(file1, "  Character has no equipment in use.\n");
+    } else {
+        const char *p;
+        inven_type *i_ptr;
+
+        for (int i = INVEN_WIELD; i < INVEN_ARRAY_SIZE; i++) {
+            i_ptr = &inventory[i];
+            if (i_ptr->tval != TV_NOTHING) {
+                switch (i) {
                     case INVEN_WIELD:
                         p = "You are wielding";
                         break;
@@ -317,38 +325,31 @@ bool file_character(char *filename1) {
                     default:
                         p = "*Unknown value*";
                         break;
-                    }
-                    objdes(prt2, &inventory[i], true);
-                    (void)fprintf(file1, "  %c) %-19s: %s\n", j + 'a', p, prt2);
-                    j++;
                 }
-            }
-        }
-
-        // Write out the character's inventory.
-        (void)fprintf(file1, "%c\n\n", CTRL_KEY('L'));
-
-        (void)fprintf(file1, "  [General Inventory List]\n\n");
-        if (inven_ctr == 0) {
-            (void)fprintf(file1, "  Character has no objects in inventory.\n");
-        } else {
-            for (int i = 0; i < inven_ctr; i++) {
                 objdes(prt2, &inventory[i], true);
-                (void)fprintf(file1, "%c) %s\n", i + 'a', prt2);
+                (void)fprintf(file1, "  %c) %-19s: %s\n", j + 'a', p, prt2);
+                j++;
             }
         }
-
-        (void)fprintf(file1, "%c", CTRL_KEY('L'));
-        (void)fclose(file1);
-
-        prt("Completed.", 0, 0);
-        return true;
-    } else {
-        if (fd >= 0) {
-            (void)close(fd);
-        }
-        (void)sprintf(out_val, "Can't open file %s:", filename1);
-        msg_print(out_val);
-        return false;
     }
+
+    // Write out the character's inventory.
+    (void)fprintf(file1, "%c\n\n", CTRL_KEY('L'));
+
+    (void)fprintf(file1, "  [General Inventory List]\n\n");
+    if (inven_ctr == 0) {
+        (void)fprintf(file1, "  Character has no objects in inventory.\n");
+    } else {
+        for (int i = 0; i < inven_ctr; i++) {
+            objdes(prt2, &inventory[i], true);
+            (void)fprintf(file1, "%c) %s\n", i + 'a', prt2);
+        }
+    }
+
+    (void)fprintf(file1, "%c", CTRL_KEY('L'));
+    (void)fclose(file1);
+
+    prt("Completed.", 0, 0);
+
+    return true;
 }

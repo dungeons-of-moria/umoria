@@ -74,10 +74,10 @@ static int movement_rate(int16_t speed) {
         } else {
             return speed;
         }
-    } else {
-        // speed must be negative here
-        return ((turn % (2 - speed)) == 0);
     }
+
+    // speed must be negative here
+    return ((turn % (2 - speed)) == 0);
 }
 
 // Makes sure a new creature gets lit up. -CJS-
@@ -86,10 +86,10 @@ static bool check_mon_lite(int y, int x) {
 
     if (monptr <= 1) {
         return false;
-    } else {
-        update_mon(monptr);
-        return m_list[monptr].ml;
     }
+
+    update_mon(monptr);
+    return m_list[monptr].ml;
 }
 
 // Choose correct directions for monster movement -RAK-
@@ -288,8 +288,7 @@ static void make_attack(int monptr) {
         asides = monster_attacks[*attstr].attack_sides;
         attstr++;
         flag = false;
-        if ((py.flags.protevil > 0) && (r_ptr->cdefense & CD_EVIL) &&
-            ((py.misc.lev + 1) > r_ptr->level)) {
+        if ((py.flags.protevil > 0) && (r_ptr->cdefense & CD_EVIL) && ((py.misc.lev + 1) > r_ptr->level)) {
             if (m_ptr->ml) {
                 c_recall[m_ptr->mptr].r_cdefense |= CD_EVIL;
             }
@@ -1368,6 +1367,7 @@ bool multiply_monster(int y, int x, int cr_index, int monptr) {
         }
         i++;
     } while (i <= 18);
+
     return false;
 }
 
