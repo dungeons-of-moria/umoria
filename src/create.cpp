@@ -289,109 +289,119 @@ static void get_ahw() {
     py.misc.disarm = (int16_t) (race[i].b_dis + todis_adj());
 }
 
-// Gets a character class -JWT-
-static void get_class() {
+// Prints the classes for a given race: Rogue, Mage, Priest, etc.,
+// shown during the character creation screens.
+static int print_classes(int race_id, int *class_list) {
+    int col = 2;
+    int row = 21;
+
+    int class_id = 0;
+
     char tmp_str[80];
-
-    int cl[MAX_CLASS];
-    for (int j = 0; j < MAX_CLASS; j++) {
-        cl[j] = 0;
-    }
-
-    int i = py.misc.prace;
-    int j = 0;
-    int k = 0;
-    int l = 2;
-    int m = 21;
     uint32_t mask = 0x1;
 
     clear_from(20);
     put_buffer("Choose a class (? for Help):", 20, 2);
-    do {
-        if (race[i].rtclass & mask) {
-            (void)sprintf(tmp_str, "%c) %s", k + 'a', classes[j].title);
-            put_buffer(tmp_str, m, l);
-            cl[k] = j;
-            l += 15;
-            if (l > 70) {
-                l = 2;
-                m++;
+
+    for (int i = 0; i < MAX_CLASS; i++) {
+        if (race[race_id].rtclass & mask) {
+            (void)sprintf(tmp_str, "%c) %s", class_id + 'a', classes[i].title);
+            put_buffer(tmp_str, row, col);
+            class_list[class_id] = i;
+
+            col += 15;
+            if (col > 70) {
+                col = 2;
+                row++;
             }
-            k++;
+            class_id++;
         }
-        j++;
         mask <<= 1;
-    } while (j < MAX_CLASS);
+    }
+
+    return class_id;
+}
+
+// Gets a character class -JWT-
+static void get_class() {
+    int class_list[MAX_CLASS];
+    for (int cid = 0; cid < MAX_CLASS; cid++) {
+        class_list[cid] = 0;
+    }
+
+    int class_count = print_classes(py.misc.prace, class_list);
 
     py.misc.pclass = 0;
 
     int min_value, max_value;
-    struct player_type::misc *m_ptr;
-    player_type *p_ptr;
-    class_type *c_ptr;
 
     bool exit_flag = false;
     while (!exit_flag) {
         move_cursor(20, 31);
+
         char s = inkey();
-        j = s - 'a';
-        if ((j < k) && (j >= 0)) {
-            py.misc.pclass = (uint8_t) cl[j];
-            c_ptr = &classes[py.misc.pclass];
+
+        int cid = s - 'a';
+        if (cid < class_count && cid >= 0) {
             exit_flag = true;
+
+            py.misc.pclass = (uint8_t) class_list[cid];
+
+            class_type *c_ptr = &classes[py.misc.pclass];
+
             clear_from(20);
             put_buffer(c_ptr->title, 5, 15);
 
             // Adjust the stats for the class adjustment -RAK-
-            p_ptr = &py;
             change_stat(A_STR, c_ptr->madj_str);
             change_stat(A_INT, c_ptr->madj_int);
             change_stat(A_WIS, c_ptr->madj_wis);
             change_stat(A_DEX, c_ptr->madj_dex);
             change_stat(A_CON, c_ptr->madj_con);
             change_stat(A_CHR, c_ptr->madj_chr);
-            for (i = 0; i < 6; i++) {
-                p_ptr->stats.cur_stat[i] = p_ptr->stats.max_stat[i];
+
+            for (int i = 0; i < 6; i++) {
+                py.stats.cur_stat[i] = py.stats.max_stat[i];
                 set_use_stat(i);
             }
 
-            p_ptr->misc.ptodam = (int16_t) todam_adj(); // Real values
-            p_ptr->misc.ptohit = (int16_t) tohit_adj();
-            p_ptr->misc.ptoac = (int16_t) toac_adj();
-            p_ptr->misc.pac = 0;
-            p_ptr->misc.dis_td = p_ptr->misc.ptodam; // Displayed values
-            p_ptr->misc.dis_th = p_ptr->misc.ptohit;
-            p_ptr->misc.dis_tac = p_ptr->misc.ptoac;
-            p_ptr->misc.dis_ac = p_ptr->misc.pac + p_ptr->misc.dis_tac;
+            py.misc.ptodam = (int16_t) todam_adj(); // Real values
+            py.misc.ptohit = (int16_t) tohit_adj();
+            py.misc.ptoac = (int16_t) toac_adj();
+            py.misc.pac = 0;
+            py.misc.dis_td = py.misc.ptodam; // Displayed values
+            py.misc.dis_th = py.misc.ptohit;
+            py.misc.dis_tac = py.misc.ptoac;
+            py.misc.dis_ac = py.misc.pac + py.misc.dis_tac;
 
             // now set misc stats, do this after setting stats because of con_adj() for hit-points
-            m_ptr = &py.misc;
-            m_ptr->hitdie += c_ptr->adj_hd;
-            m_ptr->mhp = (int16_t) (con_adj() + m_ptr->hitdie);
-            m_ptr->chp = m_ptr->mhp;
-            m_ptr->chp_frac = 0;
+            py.misc.hitdie += c_ptr->adj_hd;
+            py.misc.mhp = (int16_t) (con_adj() + py.misc.hitdie);
+            py.misc.chp = py.misc.mhp;
+            py.misc.chp_frac = 0;
 
             // Initialize hit_points array.
             // Put bounds on total possible hp, only succeed
             // if it is within 1/8 of average value.
-            min_value = (MAX_PLAYER_LEVEL * 3 / 8 * (m_ptr->hitdie - 1)) + MAX_PLAYER_LEVEL;
-            max_value = (MAX_PLAYER_LEVEL * 5 / 8 * (m_ptr->hitdie - 1)) + MAX_PLAYER_LEVEL;
-            player_hp[0] = m_ptr->hitdie;
+            min_value = (MAX_PLAYER_LEVEL * 3 / 8 * (py.misc.hitdie - 1)) + MAX_PLAYER_LEVEL;
+            max_value = (MAX_PLAYER_LEVEL * 5 / 8 * (py.misc.hitdie - 1)) + MAX_PLAYER_LEVEL;
+            player_hp[0] = py.misc.hitdie;
+
             do {
-                for (i = 1; i < MAX_PLAYER_LEVEL; i++) {
-                    player_hp[i] = (uint16_t) randint((int)m_ptr->hitdie);
+                for (int i = 1; i < MAX_PLAYER_LEVEL; i++) {
+                    player_hp[i] = (uint16_t) randint((int)py.misc.hitdie);
                     player_hp[i] += player_hp[i - 1];
                 }
             } while (player_hp[MAX_PLAYER_LEVEL - 1] < min_value || player_hp[MAX_PLAYER_LEVEL - 1] > max_value);
 
-            m_ptr->bth += c_ptr->mbth;
-            m_ptr->bthb += c_ptr->mbthb; // RAK
-            m_ptr->srh += c_ptr->msrh;
-            m_ptr->disarm += c_ptr->mdis;
-            m_ptr->fos += c_ptr->mfos;
-            m_ptr->stl += c_ptr->mstl;
-            m_ptr->save += c_ptr->msav;
-            m_ptr->expfact += c_ptr->m_exp;
+            py.misc.bth += c_ptr->mbth;
+            py.misc.bthb += c_ptr->mbthb; // RAK
+            py.misc.srh += c_ptr->msrh;
+            py.misc.disarm += c_ptr->mdis;
+            py.misc.fos += c_ptr->mfos;
+            py.misc.stl += c_ptr->mstl;
+            py.misc.save += c_ptr->msav;
+            py.misc.expfact += c_ptr->m_exp;
         } else if (s == '?') {
             helpfile(MORIA_WELCOME);
         } else {
@@ -431,9 +441,7 @@ static void get_money() {
     py.misc.au = gold;
 }
 
-// -----------------------------------------------------
-//     M A I N  for Character Creation Routine -JWT-
-// -----------------------------------------------------
+// Main Character Creation Routine -JWT-
 void create_character() {
     put_character();
     choose_race();
