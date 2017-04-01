@@ -10,6 +10,7 @@
 #include "externs.h"
 
 static void insert_store(int, int, int32_t, inven_type *);
+
 static void store_create(int);
 
 // Returns the value for any given object -RAK-
@@ -66,8 +67,7 @@ int32_t item_value(inven_type *i_ptr) {
             value = 20;
         }
     } else if (i_ptr->tval == TV_FOOD) {
-        if ((i_ptr->subval < (ITEM_SINGLE_STACK_MIN + MAX_MUSH)) &&
-            !known1_p(i_ptr)) {
+        if ((i_ptr->subval < (ITEM_SINGLE_STACK_MIN + MAX_MUSH)) && !known1_p(i_ptr)) {
             value = 1;
         }
     } else if ((i_ptr->tval == TV_AMULET) || (i_ptr->tval == TV_RING)) {
@@ -172,9 +172,8 @@ bool store_check_num(inven_type *t_ptr, int store_num) {
         // if their subvals match
         if (i_ptr->tval == t_ptr->tval &&
             i_ptr->subval == t_ptr->subval &&
-            (int)(i_ptr->number + t_ptr->number) < 256 &&
-            (t_ptr->subval < ITEM_GROUP_MIN || i_ptr->p1 == t_ptr->p1)
-           ) {
+            (int) (i_ptr->number + t_ptr->number) < 256 &&
+            (t_ptr->subval < ITEM_GROUP_MIN || i_ptr->p1 == t_ptr->p1)) {
             store_check = true;
         }
     }
@@ -217,8 +216,7 @@ void store_carry(int store_num, int *ipos, inven_type *t_ptr) {
 
         if (typ == i_ptr->tval) {
             if (subt == i_ptr->subval && // Adds to other item
-                subt >= ITEM_SINGLE_STACK_MIN &&
-                (subt < ITEM_GROUP_MIN || i_ptr->p1 == t_ptr->p1)) {
+                subt >= ITEM_SINGLE_STACK_MIN && (subt < ITEM_GROUP_MIN || i_ptr->p1 == t_ptr->p1)) {
                 *ipos = item_val;
                 i_ptr->number += item_num;
 
@@ -226,7 +224,7 @@ void store_carry(int store_num, int *ipos, inven_type *t_ptr) {
                 // strictly greater than group_min, not for torches, this
                 // must be recalculated for entire group
                 if (subt > ITEM_GROUP_MIN) {
-                    (void)sell_price(store_num, &icost, &dummy, i_ptr);
+                    (void) sell_price(store_num, &icost, &dummy, i_ptr);
                     s_ptr->store_inven[item_val].scost = -icost;
                 } else if (i_ptr->number > 24) {
                     // must let group objects (except torches) stack over 24
@@ -245,7 +243,7 @@ void store_carry(int store_num, int *ipos, inven_type *t_ptr) {
 
     // Becomes last item in list
     if (!flag) {
-        insert_store(store_num, (int)s_ptr->store_ctr, icost, t_ptr);
+        insert_store(store_num, (int) s_ptr->store_ctr, icost, t_ptr);
         *ipos = s_ptr->store_ctr - 1;
     }
 }
@@ -261,12 +259,11 @@ void store_destroy(int store_num, int item_val, bool one_of) {
     // for single stackable objects, only destroy one half on average,
     // this will help ensure that general store and alchemist have
     // reasonable selection of objects
-    if ((i_ptr->subval >= ITEM_SINGLE_STACK_MIN) &&
-        (i_ptr->subval <= ITEM_SINGLE_STACK_MAX)) {
+    if ((i_ptr->subval >= ITEM_SINGLE_STACK_MIN) && (i_ptr->subval <= ITEM_SINGLE_STACK_MAX)) {
         if (one_of) {
             number = 1;
         } else {
-            number = randint((int)i_ptr->number);
+            number = randint((int) i_ptr->number);
         }
     } else {
         number = i_ptr->number;
@@ -332,7 +329,7 @@ static void store_create(int store_num) {
         }
     }
 
-    pusht((uint8_t)cur_pos);
+    pusht((uint8_t) cur_pos);
 }
 
 // Initialize and up-keep the store's inventory. -RAK-
@@ -347,7 +344,7 @@ void store_maint() {
                 j += 1 + s_ptr->store_ctr - STORE_MAX_INVEN;
             }
             while (--j >= 0) {
-                store_destroy(i, randint((int)s_ptr->store_ctr) - 1, false);
+                store_destroy(i, randint((int) s_ptr->store_ctr) - 1, false);
             }
         }
 
@@ -373,7 +370,7 @@ bool noneedtobargain(int store_num, int32_t minprice) {
 
     int bargain_record = (s_ptr->good_buy - 3 * s_ptr->bad_buy - 5);
 
-    return ((bargain_record > 0) && ((int32_t)bargain_record * (int32_t)bargain_record > minprice / 50));
+    return ((bargain_record > 0) && ((int32_t) bargain_record * (int32_t) bargain_record > minprice / 50));
 }
 
 // update the bargain info -DJB-

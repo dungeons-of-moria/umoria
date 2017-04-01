@@ -34,7 +34,7 @@ void use() {
     inven_type *i_ptr = &inventory[item_val];
     struct player_type::misc *m_ptr = &py.misc;
 
-    int chance = m_ptr->save + stat_adj(A_INT) - (int)i_ptr->level - 5 + (class_level_adj[m_ptr->pclass][CLA_DEVICE] * m_ptr->lev / 3);
+    int chance = m_ptr->save + stat_adj(A_INT) - (int) i_ptr->level - 5 + (class_level_adj[m_ptr->pclass][CLA_DEVICE] * m_ptr->lev / 3);
 
     if (py.flags.confused > 0) {
         chance = chance / 2;
@@ -153,8 +153,7 @@ void use() {
                 ident = detect_evil();
                 break;
             case 22:
-                if ((cure_blindness()) || (cure_poison()) ||
-                    (cure_confusion())) {
+                if ((cure_blindness()) || (cure_poison()) || (cure_confusion())) {
                     ident = true;
                 }
                 break;

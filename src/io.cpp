@@ -23,20 +23,20 @@ void init_curses() {
 
     // Check we have enough screen. -CJS-
     if (LINES < 24 || COLS < 80) {
-        (void)printf("Screen too small for moria.\n");
+        (void) printf("Screen too small for moria.\n");
         exit(1);
     }
 
     savescr = newwin(0, 0, 0, 0);
     if (savescr == NULL) {
-        (void)printf("Out of memory in starting up curses.\n");
+        (void) printf("Out of memory in starting up curses.\n");
         exit_game();
     }
 
     moriaterm();
 
-    (void)clear();
-    (void)refresh();
+    (void) clear();
+    (void) refresh();
 }
 
 // Set up the terminal into a suitable state -MRC-
@@ -63,14 +63,14 @@ void put_buffer(const char *out_str, int row, int col) {
     if (col > 79) {
         col = 79;
     }
-    (void)strncpy(tmp_str, out_str, (size_t)(79 - col));
+    (void) strncpy(tmp_str, out_str, (size_t) (79 - col));
     tmp_str[79 - col] = '\0';
 
     if (mvaddstr(row, col, tmp_str) == ERR) {
         abort();
         // clear msg_flag to avoid problems with unflushed messages.
         msg_flag = false;
-        (void)sprintf(tmp_str, "error in put_buffer, row = %d col = %d\n", row, col);
+        (void) sprintf(tmp_str, "error in put_buffer, row = %d col = %d\n", row, col);
         prt(tmp_str, 0, 0);
         bell();
 
@@ -84,7 +84,7 @@ void put_qio() {
     // Let inven_command know something has changed.
     screen_change = true;
 
-    (void)refresh();
+    (void) refresh();
 }
 
 // Put the terminal in the original mode. -CJS-
@@ -104,7 +104,7 @@ void restore_term() {
 
     // exit curses
     endwin();
-    (void)fflush(stdout);
+    (void) fflush(stdout);
 
     curses_on = false;
 }
@@ -132,7 +132,7 @@ char inkey() {
 
             eof_flag++;
 
-            (void)refresh();
+            (void) refresh();
 
             if (!character_generated || character_saved) {
                 exit_game();
@@ -144,9 +144,9 @@ char inkey() {
                 // just in case, to make sure that the process eventually dies
                 panic_save = true;
 
-                (void)strcpy(died_from, "(end of input: panic saved)");
+                (void) strcpy(died_from, "(end of input: panic saved)");
                 if (!save_char()) {
-                    (void)strcpy(died_from, "panic: unexpected eof");
+                    (void) strcpy(died_from, "panic: unexpected eof");
                     death = true;
                 }
                 exit_game();
@@ -155,10 +155,10 @@ char inkey() {
         }
 
         if (i != CTRL_KEY('R')) {
-            return (char)i;
+            return (char) i;
         }
 
-        (void)wrefresh(curscr);
+        (void) wrefresh(curscr);
         moriaterm();
     }
 }
@@ -166,8 +166,7 @@ char inkey() {
 // Flush the buffer -RAK-
 void flush() {
     if (!eof_flag) {
-        while (check_input(0)) {
-            ;
+        while (check_input(0)) { ;
         }
     }
 }
@@ -178,7 +177,7 @@ void erase_line(int row, int col) {
         msg_print(CNIL);
     }
 
-    (void)move(row, col);
+    (void) move(row, col);
     clrtoeol();
 }
 
@@ -187,11 +186,11 @@ void clear_screen() {
     if (msg_flag) {
         msg_print(CNIL);
     }
-    (void)clear();
+    (void) clear();
 }
 
 void clear_from(int row) {
-    (void)move(row, 0);
+    (void) move(row, 0);
     clrtobot();
 }
 
@@ -209,7 +208,7 @@ void print(char ch, int row, int col) {
         msg_flag = false;
 
         vtype tmp_str;
-        (void)sprintf(tmp_str, "error in print, row = %d col = %d\n", row, col);
+        (void) sprintf(tmp_str, "error in print, row = %d col = %d\n", row, col);
         prt(tmp_str, 0, 0);
         bell();
 
@@ -230,7 +229,7 @@ void move_cursor_relative(int row, int col) {
         msg_flag = false;
 
         vtype tmp_str;
-        (void)sprintf(tmp_str, "error in move_cursor_relative, row = %d col = %d\n", row, col);
+        (void) sprintf(tmp_str, "error in move_cursor_relative, row = %d col = %d\n", row, col);
         prt(tmp_str, 0, 0);
         bell();
 
@@ -252,14 +251,14 @@ void prt(const char *str_buff, int row, int col) {
         msg_print(CNIL);
     }
 
-    (void)move(row, col);
+    (void) move(row, col);
     clrtoeol();
     put_buffer(str_buff, row, col);
 }
 
 // move cursor to a given y, x position
 void move_cursor(int row, int col) {
-    (void)move(row, col);
+    (void) move(row, col);
 }
 
 // Outputs message to top line of screen
@@ -270,14 +269,14 @@ void msg_print(const char *str_buff) {
     bool combine_messages = false;
 
     if (msg_flag) {
-        old_len = (int)strlen(old_msg[last_msg]) + 1;
+        old_len = (int) strlen(old_msg[last_msg]) + 1;
 
         // If the new message and the old message are short enough,
         // we want display them together on the same line.  So we
         // don't flush the old message in this case.
 
         if (str_buff) {
-            new_len = (int)strlen(str_buff);
+            new_len = (int) strlen(str_buff);
         } else {
             new_len = 0;
         }
@@ -305,7 +304,7 @@ void msg_print(const char *str_buff) {
     }
 
     if (!combine_messages) {
-        (void)move(MSG_LINE, 0);
+        (void) move(MSG_LINE, 0);
         clrtoeol();
     }
 
@@ -329,7 +328,7 @@ void msg_print(const char *str_buff) {
                 last_msg = 0;
             }
 
-            (void)strncpy(old_msg[last_msg], str_buff, VTYPESIZ);
+            (void) strncpy(old_msg[last_msg], str_buff, VTYPESIZ);
             old_msg[last_msg][VTYPESIZ - 1] = '\0';
         }
     } else {
@@ -345,12 +344,12 @@ bool get_check(const char *prompt) {
     getyx(stdscr, y, x);
 
     if (x > 73) {
-        (void)move(0, 73);
+        (void) move(0, 73);
     } else if (y) {
         // use `y` to prevent compiler warning.
     }
 
-    (void)addstr(" [y/n]");
+    (void) addstr(" [y/n]");
 
     char res = ' ';
     while (res == ' ') {
@@ -381,13 +380,13 @@ int get_com(const char *prompt, char *command) {
 // Gets a string terminated by <RETURN>
 // Function returns false if <ESCAPE> is input
 bool get_string(char *in_str, int row, int column, int slen) {
-    (void)move(row, column);
+    (void) move(row, column);
 
     for (int i = slen; i > 0; i--) {
-        (void)addch(' ');
+        (void) addch(' ');
     }
 
-    (void)move(row, column);
+    (void) move(row, column);
 
     int start_col = column;
     int end_col = column + slen - 1;
@@ -404,31 +403,31 @@ bool get_string(char *in_str, int row, int column, int slen) {
         int i = inkey();
 
         switch (i) {
-        case ESCAPE:
-            aborted = true;
-            break;
-        case CTRL_KEY('J'):
-        case CTRL_KEY('M'):
-            flag = true;
-            break;
-        case DELETE:
-        case CTRL_KEY('H'):
-            if (column > start_col) {
-                column--;
-                put_buffer(" ", row, column);
-                move_cursor(row, column);
-                *--p = '\0';
-            }
-            break;
-        default:
-            if (!isprint(i) || column > end_col) {
-                bell();
-            } else {
-                use_value2 mvaddch(row, column, (char)i);
-                *p++ = (char) i;
-                column++;
-            }
-            break;
+            case ESCAPE:
+                aborted = true;
+                break;
+            case CTRL_KEY('J'):
+            case CTRL_KEY('M'):
+                flag = true;
+                break;
+            case DELETE:
+            case CTRL_KEY('H'):
+                if (column > start_col) {
+                    column--;
+                    put_buffer(" ", row, column);
+                    move_cursor(row, column);
+                    *--p = '\0';
+                }
+                break;
+            default:
+                if (!isprint(i) || column > end_col) {
+                    bell();
+                } else {
+                    use_value2 mvaddch(row, column, (char) i);
+                    *p++ = (char) i;
+                    column++;
+                }
+                break;
         }
     }
 
@@ -448,7 +447,7 @@ bool get_string(char *in_str, int row, int column, int slen) {
 // Pauses for user response before returning -RAK-
 void pause_line(int prt_line) {
     prt("[Press any key to continue.]", prt_line, 23);
-    (void)inkey();
+    (void) inkey();
     erase_line(prt_line, 0);
 }
 
@@ -485,7 +484,7 @@ void bell() {
 
     // The player can turn off beeps if he/she finds them annoying.
     if (sound_beep_flag) {
-        (void)write(1, "\007", 1);
+        (void) write(1, "\007", 1);
     }
 }
 
@@ -506,8 +505,8 @@ void bell() {
 
 void screen_map() {
     static uint8_t screen_border[2][6] = {
-        {'+', '+', '+', '+', '-', '|'}, // normal chars
-        {201, 187, 200, 188, 205, 186}, // graphics chars
+            {'+', '+', '+', '+', '-', '|'}, // normal chars
+            {201, 187, 200, 188, 205, 186}, // graphics chars
     };
 
     uint8_t map[MAX_WIDTH / RATIO + 1];
@@ -532,10 +531,10 @@ void screen_map() {
     use_value2 mvaddch(0, 0, CH(TL));
 
     for (int i = 0; i < MAX_WIDTH / RATIO; i++) {
-        (void)addch(CH(HE));
+        (void) addch(CH(HE));
     }
 
-    (void)addch(CH(TR));
+    (void) addch(CH(TR));
     map[MAX_WIDTH / RATIO] = '\0';
 
     int myrow = 0;
@@ -549,7 +548,7 @@ void screen_map() {
                 // can not use mvprintw() on IBM PC, because PC-Curses is horribly
                 // written, and mvprintw() causes the fp emulation library to be
                 // linked with PC-Moria, makes the program 10K bigger
-                (void)sprintf(prntscrnbuf, "%c%s%c", CH(VE), map, CH(VE));
+                (void) sprintf(prntscrnbuf, "%c%s%c", CH(VE), map, CH(VE));
                 use_value2 mvaddstr(orow + 1, 0, prntscrnbuf);
             }
 
@@ -576,25 +575,25 @@ void screen_map() {
     }
 
     if (orow >= 0) {
-        (void)sprintf(prntscrnbuf, "%c%s%c", CH(VE), map, CH(VE));
+        (void) sprintf(prntscrnbuf, "%c%s%c", CH(VE), map, CH(VE));
         use_value2 mvaddstr(orow + 1, 0, prntscrnbuf);
     }
 
     use_value2 mvaddch(orow + 2, 0, CH(BL));
 
     for (int i = 0; i < MAX_WIDTH / RATIO; i++) {
-        (void)addch(CH(HE));
+        (void) addch(CH(HE));
     }
 
-    (void)addch(CH(BR));
+    (void) addch(CH(BR));
 
     use_value2 mvaddstr(23, 23, "Hit any key to continue");
 
     if (mycol > 0) {
-        (void)move(myrow, mycol);
+        (void) move(myrow, mycol);
     }
 
-    (void)inkey();
+    (void) inkey();
     restore_screen();
 }
 
@@ -602,7 +601,7 @@ void sleep_in_seconds(int seconds) {
 #ifdef _WIN32
     Sleep(seconds * 1000);
 #else
-    sleep((unsigned int)seconds);
+    sleep((unsigned int) seconds);
 #endif
 }
 
@@ -641,7 +640,7 @@ bool check_input(int microsec) {
     tbuf.tv_usec = microsec;
 
     smask = 1; // i.e. (1 << 0)
-    if (select(1, (fd_set *)&smask, (fd_set *)0, (fd_set *)0, &tbuf) == 1) {
+    if (select(1, (fd_set *) &smask, (fd_set *) 0, (fd_set *) 0, &tbuf) == 1) {
         ch = getch();
         // check for EOF errors here, select sometimes works even when EOF
         if (ch == -1) {
@@ -669,15 +668,15 @@ void user_name(char *buf) {
     char *p = getlogin();
 
     if (p && p[0]) {
-        (void)strcpy(buf, p);
+        (void) strcpy(buf, p);
     } else {
-        struct passwd *pwline = getpwuid((int)getuid());
+        struct passwd *pwline = getpwuid((int) getuid());
         if (pwline) {
-            (void)strcpy(buf, pwline->pw_name);
+            (void) strcpy(buf, pwline->pw_name);
         }
     }
     if (!buf[0]) {
-        (void)strcpy(buf, "X"); // Gotta have some name
+        (void) strcpy(buf, "X"); // Gotta have some name
     }
 #endif
 }
@@ -729,7 +728,7 @@ int tilde(const char *file, char *exp) {
 
         user[0] = '\0';
         file++;
-        while (*file != '/' && i < (int)sizeof(user)) {
+        while (*file != '/' && i < (int) sizeof(user)) {
             user[i++] = *file++;
         }
         user[i] = '\0';
@@ -737,7 +736,7 @@ int tilde(const char *file, char *exp) {
             char *login = getlogin();
 
             if (login != NULL) {
-                (void)strcpy(user, login);
+                (void) strcpy(user, login);
             } else if ((pw = getpwuid(getuid())) == NULL) {
                 return 0;
             }
@@ -745,10 +744,11 @@ int tilde(const char *file, char *exp) {
         if (pw == NULL && (pw = getpwnam(user)) == NULL) {
             return 0;
         }
-        (void)strcpy(exp, pw->pw_dir);
+        (void) strcpy(exp, pw->pw_dir);
     }
-    (void)strcat(exp, file);
+    (void) strcat(exp, file);
 
     return 1;
 }
+
 #endif

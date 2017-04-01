@@ -24,7 +24,7 @@ static void get_stats() {
     } while (tot <= 42 || tot >= 54);
 
     for (int i = 0; i < 6; i++) {
-        py.stats.max_stat[i] = (uint8_t)(5 + dice[3 * i] + dice[3 * i + 1] + dice[3 * i + 2]);
+        py.stats.max_stat[i] = (uint8_t) (5 + dice[3 * i] + dice[3 * i + 1] + dice[3 * i + 2]);
     }
 }
 
@@ -60,7 +60,7 @@ static void change_stat(int stat, int16_t amount) {
             }
         }
     }
-    py.stats.max_stat[stat] = (uint8_t)tmp_stat;
+    py.stats.max_stat[stat] = (uint8_t) tmp_stat;
 }
 
 // generate all stats and modify for race. needed in a separate
@@ -91,10 +91,10 @@ static void get_all_stats() {
     p_ptr->misc.stl = r_ptr->stl;
     p_ptr->misc.save = r_ptr->bsav;
     p_ptr->misc.hitdie = r_ptr->bhitdie;
-    p_ptr->misc.ptodam = (int16_t)todam_adj();
-    p_ptr->misc.ptohit = (int16_t)tohit_adj();
+    p_ptr->misc.ptodam = (int16_t) todam_adj();
+    p_ptr->misc.ptohit = (int16_t) tohit_adj();
     p_ptr->misc.ptoac = 0;
-    p_ptr->misc.pac = (int16_t)toac_adj();
+    p_ptr->misc.pac = (int16_t) toac_adj();
     p_ptr->misc.expfact = r_ptr->b_exp;
     p_ptr->flags.see_infra = r_ptr->infra;
 }
@@ -111,7 +111,7 @@ static void print_races(void) {
     for (int i = 0; i < MAX_RACES; i++) {
         char tmp_str[80];
 
-        (void)sprintf(tmp_str, "%c) %s", i + 'a', race[i].trace);
+        (void) sprintf(tmp_str, "%c) %s", i + 'a', race[i].trace);
         put_buffer(tmp_str, row, col);
 
         col += 15;
@@ -141,7 +141,7 @@ static void choose_race() {
         }
     }
 
-    py.misc.prace = (uint8_t)i;
+    py.misc.prace = (uint8_t) i;
 
     put_buffer(race[i].trace, 3, 15);
 }
@@ -180,7 +180,7 @@ static void get_history() {
                     cur_ptr++;
                 }
                 b_ptr = &background[cur_ptr];
-                (void)strcat(history_block, b_ptr->info);
+                (void) strcat(history_block, b_ptr->info);
                 social_class += b_ptr->bonus - 50;
                 if (hist_ptr > b_ptr->next) {
                     cur_ptr = 0;
@@ -199,7 +199,7 @@ static void get_history() {
     }
 
     // Process block of history text for pretty output
-    int end_pos = (int)strlen(history_block) - 1;
+    int end_pos = (int) strlen(history_block) - 1;
     while (history_block[end_pos] == ' ') {
         end_pos--;
     }
@@ -230,7 +230,7 @@ static void get_history() {
             flag = true;
         }
 
-        (void)strncpy(py.misc.history[line_ctr], &history_block[start_pos], (size_t)cur_len);
+        (void) strncpy(py.misc.history[line_ctr], &history_block[start_pos], (size_t) cur_len);
         py.misc.history[line_ctr][cur_len] = '\0';
         line_ctr++;
         start_pos = new_start;
@@ -278,13 +278,13 @@ static void get_sex() {
 // Computes character's age, height, and weight -JWT-
 static void get_ahw() {
     int i = py.misc.prace;
-    py.misc.age = (uint16_t) (race[i].b_age + randint((int)race[i].m_age));
+    py.misc.age = (uint16_t) (race[i].b_age + randint((int) race[i].m_age));
     if (py.misc.male) {
-        py.misc.ht = (uint16_t) randnor((int)race[i].m_b_ht, (int)race[i].m_m_ht);
-        py.misc.wt = (uint16_t) randnor((int)race[i].m_b_wt, (int)race[i].m_m_wt);
+        py.misc.ht = (uint16_t) randnor((int) race[i].m_b_ht, (int) race[i].m_m_ht);
+        py.misc.wt = (uint16_t) randnor((int) race[i].m_b_wt, (int) race[i].m_m_wt);
     } else {
-        py.misc.ht = (uint16_t) randnor((int)race[i].f_b_ht, (int)race[i].f_m_ht);
-        py.misc.wt = (uint16_t) randnor((int)race[i].f_b_wt, (int)race[i].f_m_wt);
+        py.misc.ht = (uint16_t) randnor((int) race[i].f_b_ht, (int) race[i].f_m_ht);
+        py.misc.wt = (uint16_t) randnor((int) race[i].f_b_wt, (int) race[i].f_m_wt);
     }
     py.misc.disarm = (int16_t) (race[i].b_dis + todis_adj());
 }
@@ -305,7 +305,7 @@ static int print_classes(int race_id, int *class_list) {
 
     for (int i = 0; i < MAX_CLASS; i++) {
         if (race[race_id].rtclass & mask) {
-            (void)sprintf(tmp_str, "%c) %s", class_id + 'a', classes[i].title);
+            (void) sprintf(tmp_str, "%c) %s", class_id + 'a', classes[i].title);
             put_buffer(tmp_str, row, col);
             class_list[class_id] = i;
 
@@ -389,7 +389,7 @@ static void get_class() {
 
             do {
                 for (int i = 1; i < MAX_PLAYER_LEVEL; i++) {
-                    player_hp[i] = (uint16_t) randint((int)py.misc.hitdie);
+                    player_hp[i] = (uint16_t) randint((int) py.misc.hitdie);
                     player_hp[i] += player_hp[i - 1];
                 }
             } while (player_hp[MAX_PLAYER_LEVEL - 1] < min_value || player_hp[MAX_PLAYER_LEVEL - 1] > max_value);
@@ -413,16 +413,12 @@ static void get_class() {
 // Given a stat value, return a monetary value,
 // which affects the amount of gold a player has.
 static int monval(uint8_t i) {
-    return 5 * ((int)i - 10);
+    return 5 * ((int) i - 10);
 }
 
 static void get_money() {
     uint8_t *a_ptr = py.stats.max_stat;
-    int tmp = monval(a_ptr[A_STR]) +
-              monval(a_ptr[A_INT]) +
-              monval(a_ptr[A_WIS]) +
-              monval(a_ptr[A_CON]) +
-              monval(a_ptr[A_DEX]);
+    int tmp = monval(a_ptr[A_STR]) + monval(a_ptr[A_INT]) + monval(a_ptr[A_WIS]) + monval(a_ptr[A_CON]) + monval(a_ptr[A_DEX]);
 
     int gold = py.misc.sc * 6 + randint(25) + 325; // Social Class adj
     gold -= tmp;                                   // Stat adj

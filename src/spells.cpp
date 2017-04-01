@@ -18,17 +18,17 @@ static void replace_spot(int, int, int);
 
 void monster_name(char *m_name, monster_type *m_ptr, creature_type *r_ptr) {
     if (!m_ptr->ml) {
-        (void)strcpy(m_name, "It");
+        (void) strcpy(m_name, "It");
     } else {
-        (void)sprintf(m_name, "The %s", r_ptr->name);
+        (void) sprintf(m_name, "The %s", r_ptr->name);
     }
 }
 
 void lower_monster_name(char *m_name, monster_type *m_ptr, creature_type *r_ptr) {
     if (!m_ptr->ml) {
-        (void)strcpy(m_name, "it");
+        (void) strcpy(m_name, "it");
     } else {
-        (void)sprintf(m_name, "the %s", r_ptr->name);
+        (void) sprintf(m_name, "the %s", r_ptr->name);
     }
 }
 
@@ -54,14 +54,14 @@ bool sleep_monsters1(int y, int x) {
                 }
 
                 vtype out_val;
-                (void)sprintf(out_val, "%s is unaffected.", m_name);
+                (void) sprintf(out_val, "%s is unaffected.", m_name);
                 msg_print(out_val);
             } else {
                 sleep = true;
                 m_ptr->csleep = 500;
 
                 vtype out_val;
-                (void)sprintf(out_val, "%s falls asleep.", m_name);
+                (void) sprintf(out_val, "%s falls asleep.", m_name);
                 msg_print(out_val);
             }
         }
@@ -172,10 +172,10 @@ bool detect_invisible() {
     for (int i = mfptr - 1; i >= MIN_MONIX; i--) {
         monster_type *m_ptr = &m_list[i];
 
-        if (panel_contains((int)m_ptr->fy, (int)m_ptr->fx) && (CM_INVISIBLE & c_list[m_ptr->mptr].cmove)) {
+        if (panel_contains((int) m_ptr->fy, (int) m_ptr->fx) && (CM_INVISIBLE & c_list[m_ptr->mptr].cmove)) {
             m_ptr->ml = true;
             // works correctly even if hallucinating
-            print((char)c_list[m_ptr->mptr].cchar, (int)m_ptr->fy, (int)m_ptr->fx);
+            print((char) c_list[m_ptr->mptr].cchar, (int) m_ptr->fy, (int) m_ptr->fx);
             flag = true;
         }
     }
@@ -308,9 +308,9 @@ bool ident_spell() {
     bigvtype out_val;
     if (item_val >= INVEN_WIELD) {
         calc_bonuses();
-        (void)sprintf(out_val, "%s: %s", describe_use(item_val), tmp_str);
+        (void) sprintf(out_val, "%s: %s", describe_use(item_val), tmp_str);
     } else {
-        (void)sprintf(out_val, "%c %s", item_val + 97, tmp_str);
+        (void) sprintf(out_val, "%c %s", item_val + 97, tmp_str);
     }
     msg_print(out_val);
 
@@ -357,7 +357,7 @@ bool trap_creation() {
 
             if (c_ptr->fval <= MAX_CAVE_FLOOR) {
                 if (c_ptr->tptr != 0) {
-                    (void)delete_object(i, j);
+                    (void) delete_object(i, j);
                 }
                 place_trap(i, j, randint(MAX_TRAP) - 1);
 
@@ -389,7 +389,7 @@ bool door_creation() {
                 door = true;
 
                 if (c_ptr->tptr != 0) {
-                    (void)delete_object(i, j);
+                    (void) delete_object(i, j);
                 }
 
                 int k = popt();
@@ -415,10 +415,10 @@ bool td_destroy() {
                 continue;
             }
 
-            if (((t_list[c_ptr->tptr].tval >= TV_INVIS_TRAP) &&
-                 (t_list[c_ptr->tptr].tval <= TV_CLOSED_DOOR) &&
-                 (t_list[c_ptr->tptr].tval != TV_RUBBLE)) ||
-                (t_list[c_ptr->tptr].tval == TV_SECRET_DOOR)) {
+            if ((t_list[c_ptr->tptr].tval >= TV_INVIS_TRAP &&
+                 t_list[c_ptr->tptr].tval <= TV_CLOSED_DOOR &&
+                 t_list[c_ptr->tptr].tval != TV_RUBBLE) ||
+                t_list[c_ptr->tptr].tval == TV_SECRET_DOOR) {
                 if (delete_object(i, j)) {
                     destroy = true;
                 }
@@ -443,10 +443,10 @@ bool detect_monsters() {
     for (int i = mfptr - 1; i >= MIN_MONIX; i--) {
         monster_type *m_ptr = &m_list[i];
 
-        if (panel_contains((int)m_ptr->fy, (int)m_ptr->fx) && ((CM_INVISIBLE & c_list[m_ptr->mptr].cmove) == 0)) {
+        if (panel_contains((int) m_ptr->fy, (int) m_ptr->fx) && ((CM_INVISIBLE & c_list[m_ptr->mptr].cmove) == 0)) {
             m_ptr->ml = true;
             // works correctly even if hallucinating
-            print((char)c_list[m_ptr->mptr].cchar, (int)m_ptr->fy, (int)m_ptr->fx);
+            print((char) c_list[m_ptr->mptr].cchar, (int) m_ptr->fy, (int) m_ptr->fx);
             detect = true;
         }
     }
@@ -496,7 +496,7 @@ void light_line(int dir, int y, int x) {
                 creature_type *r_ptr = &c_list[m_ptr->mptr];
 
                 // light up and draw monster
-                update_mon((int)c_ptr->cptr);
+                update_mon((int) c_ptr->cptr);
 
                 vtype m_name;
                 monster_name(m_name, m_ptr, r_ptr);
@@ -508,19 +508,19 @@ void light_line(int dir, int y, int x) {
 
                     vtype out_val;
 
-                    int i = mon_take_hit((int)c_ptr->cptr, damroll(2, 8));
+                    int i = mon_take_hit((int) c_ptr->cptr, damroll(2, 8));
                     if (i >= 0) {
-                        (void)sprintf(out_val, "%s shrivels away in the light!", m_name);
+                        (void) sprintf(out_val, "%s shrivels away in the light!", m_name);
                         msg_print(out_val);
                         prt_experience();
                     } else {
-                        (void)sprintf(out_val, "%s cringes from the light!", m_name);
+                        (void) sprintf(out_val, "%s cringes from the light!", m_name);
                         msg_print(out_val);
                     }
                 }
             }
         }
-        (void)mmove(dir, &y, &x);
+        (void) mmove(dir, &y, &x);
     }
 }
 
@@ -555,8 +555,7 @@ bool disarm_all(int dir, int y, int x) {
         if (c_ptr->tptr != 0) {
             inven_type *t_ptr = &t_list[c_ptr->tptr];
 
-            if ((t_ptr->tval == TV_INVIS_TRAP) ||
-                (t_ptr->tval == TV_VIS_TRAP)) {
+            if ((t_ptr->tval == TV_INVIS_TRAP) || (t_ptr->tval == TV_VIS_TRAP)) {
                 if (delete_object(y, x)) {
                     disarm = true;
                 }
@@ -575,7 +574,7 @@ bool disarm_all(int dir, int y, int x) {
                 known2(t_ptr);
             }
         }
-        (void)mmove(dir, &y, &x);
+        (void) mmove(dir, &y, &x);
     } while ((dist <= OBJ_BOLT_RANGE) && c_ptr->fval <= MAX_OPEN_SPACE);
 
     return disarm;
@@ -584,43 +583,43 @@ bool disarm_all(int dir, int y, int x) {
 // Return flags for given type area affect -RAK-
 void get_flags(int typ, uint32_t *weapon_type, int *harm_type, bool (**destroy)(inven_type *)) {
     switch (typ) {
-    case GF_MAGIC_MISSILE:
-        *weapon_type = 0;
-        *harm_type = 0;
-        *destroy = set_null;
-        break;
-    case GF_LIGHTNING:
-        *weapon_type = CS_BR_LIGHT;
-        *harm_type = CD_LIGHT;
-        *destroy = set_lightning_destroy;
-        break;
-    case GF_POISON_GAS:
-        *weapon_type = CS_BR_GAS;
-        *harm_type = CD_POISON;
-        *destroy = set_null;
-        break;
-    case GF_ACID:
-        *weapon_type = CS_BR_ACID;
-        *harm_type = CD_ACID;
-        *destroy = set_acid_destroy;
-        break;
-    case GF_FROST:
-        *weapon_type = CS_BR_FROST;
-        *harm_type = CD_FROST;
-        *destroy = set_frost_destroy;
-        break;
-    case GF_FIRE:
-        *weapon_type = CS_BR_FIRE;
-        *harm_type = CD_FIRE;
-        *destroy = set_fire_destroy;
-        break;
-    case GF_HOLY_ORB:
-        *weapon_type = 0;
-        *harm_type = CD_EVIL;
-        *destroy = set_null;
-        break;
-    default:
-        msg_print("ERROR in get_flags()\n");
+        case GF_MAGIC_MISSILE:
+            *weapon_type = 0;
+            *harm_type = 0;
+            *destroy = set_null;
+            break;
+        case GF_LIGHTNING:
+            *weapon_type = CS_BR_LIGHT;
+            *harm_type = CD_LIGHT;
+            *destroy = set_lightning_destroy;
+            break;
+        case GF_POISON_GAS:
+            *weapon_type = CS_BR_GAS;
+            *harm_type = CD_POISON;
+            *destroy = set_null;
+            break;
+        case GF_ACID:
+            *weapon_type = CS_BR_ACID;
+            *harm_type = CD_ACID;
+            *destroy = set_acid_destroy;
+            break;
+        case GF_FROST:
+            *weapon_type = CS_BR_FROST;
+            *harm_type = CD_FROST;
+            *destroy = set_frost_destroy;
+            break;
+        case GF_FIRE:
+            *weapon_type = CS_BR_FIRE;
+            *harm_type = CD_FIRE;
+            *destroy = set_fire_destroy;
+            break;
+        case GF_HOLY_ORB:
+            *weapon_type = 0;
+            *harm_type = CD_EVIL;
+            *destroy = set_null;
+            break;
+        default:
+            msg_print("ERROR in get_flags()\n");
     }
 }
 
@@ -637,7 +636,7 @@ void fire_bolt(int typ, int dir, int y, int x, int dam, char *bolt_typ) {
 
     bool flag = false;
     while (!flag) {
-        (void)mmove(dir, &y, &x);
+        (void) mmove(dir, &y, &x);
         dist++;
 
         cave_type *c_ptr = &cave[y][x];
@@ -656,7 +655,7 @@ void fire_bolt(int typ, int dir, int y, int x, int dam, char *bolt_typ) {
                 // pl so that update_mon() will work
                 int i = c_ptr->pl;
                 c_ptr->pl = true;
-                update_mon((int)c_ptr->cptr);
+                update_mon((int) c_ptr->cptr);
                 c_ptr->pl = i;
 
                 // draw monster and clear previous bolt
@@ -665,7 +664,7 @@ void fire_bolt(int typ, int dir, int y, int x, int dam, char *bolt_typ) {
                 vtype out_val, m_name;
 
                 lower_monster_name(m_name, m_ptr, r_ptr);
-                (void)sprintf(out_val, "The %s strikes %s.", bolt_typ, m_name);
+                (void) sprintf(out_val, "The %s strikes %s.", bolt_typ, m_name);
                 msg_print(out_val);
 
                 if (harm_type & r_ptr->cdefense) {
@@ -681,14 +680,14 @@ void fire_bolt(int typ, int dir, int y, int x, int dam, char *bolt_typ) {
                 }
 
                 monster_name(m_name, m_ptr, r_ptr);
-                i = mon_take_hit((int)c_ptr->cptr, dam);
+                i = mon_take_hit((int) c_ptr->cptr, dam);
 
                 if (i >= 0) {
-                    (void)sprintf(out_val, "%s dies in a fit of agony.", m_name);
+                    (void) sprintf(out_val, "%s dies in a fit of agony.", m_name);
                     msg_print(out_val);
                     prt_experience();
                 } else if (dam > 0) {
-                    (void)sprintf(out_val, "%s screams in agony.", m_name);
+                    (void) sprintf(out_val, "%s screams in agony.", m_name);
                     msg_print(out_val);
                 }
             } else if (panel_contains(y, x) && (py.flags.blind < 1)) {
@@ -720,7 +719,7 @@ void fire_ball(int typ, int dir, int y, int x, int dam_hp, const char *descrip) 
 
     bool flag = false;
     while (!flag) {
-        (void)mmove(dir, &y, &x);
+        (void) mmove(dir, &y, &x);
         dist++;
         lite_spot(oldy, oldx);
         if (dist > OBJ_BOLT_RANGE) {
@@ -742,7 +741,7 @@ void fire_ball(int typ, int dir, int y, int x, int dam_hp, const char *descrip) 
                             c_ptr = &cave[i][j];
 
                             if ((c_ptr->tptr != 0) && (*destroy)(&t_list[c_ptr->tptr])) {
-                                (void)delete_object(i, j);
+                                (void) delete_object(i, j);
                             }
 
                             if (c_ptr->fval <= MAX_OPEN_SPACE) {
@@ -753,7 +752,7 @@ void fire_ball(int typ, int dir, int y, int x, int dam_hp, const char *descrip) 
                                     // lite up creature if visible, temp set pl so that update_mon works
                                     int tmp = c_ptr->pl;
                                     c_ptr->pl = true;
-                                    update_mon((int)c_ptr->cptr);
+                                    update_mon((int) c_ptr->cptr);
 
                                     thit++;
                                     int dam = dam_hp;
@@ -771,7 +770,7 @@ void fire_ball(int typ, int dir, int y, int x, int dam_hp, const char *descrip) 
                                     }
 
                                     dam = (dam / (distance(i, j, y, x) + 1));
-                                    int k = mon_take_hit((int)c_ptr->cptr, dam);
+                                    int k = mon_take_hit((int) c_ptr->cptr, dam);
 
                                     if (k >= 0) {
                                         tkill++;
@@ -799,11 +798,11 @@ void fire_ball(int typ, int dir, int y, int x, int dam_hp, const char *descrip) 
 
                 if (thit == 1) {
                     vtype out_val;
-                    (void)sprintf(out_val, "The %s envelops a creature!", descrip);
+                    (void) sprintf(out_val, "The %s envelops a creature!", descrip);
                     msg_print(out_val);
                 } else if (thit > 1) {
                     vtype out_val;
-                    (void)sprintf(out_val, "The %s envelops several creatures!", descrip);
+                    (void) sprintf(out_val, "The %s envelops several creatures!", descrip);
                     msg_print(out_val);
                 }
 
@@ -847,7 +846,7 @@ void breath(int typ, int y, int x, int dam_hp, char *ddesc, int monptr) {
                 cave_type *c_ptr = &cave[i][j];
 
                 if ((c_ptr->tptr != 0) && (*destroy)(&t_list[c_ptr->tptr])) {
-                    (void)delete_object(i, j);
+                    (void) delete_object(i, j);
                 }
 
                 if (c_ptr->fval <= MAX_OPEN_SPACE) {
@@ -878,7 +877,7 @@ void breath(int typ, int y, int x, int dam_hp, char *ddesc, int monptr) {
                         m_ptr->csleep = 0;
 
                         if (m_ptr->hp < 0) {
-                            uint32_t treas = monster_death((int)m_ptr->fy, (int)m_ptr->fx, r_ptr->cmove);
+                            uint32_t treas = monster_death((int) m_ptr->fy, (int) m_ptr->fx, r_ptr->cmove);
 
                             if (m_ptr->ml) {
                                 uint32_t tmp = (uint32_t) ((c_recall[m_ptr->mptr].r_cmove & CM_TREASURE) >> CM_TR_SHIFT);
@@ -890,12 +889,12 @@ void breath(int typ, int y, int x, int dam_hp, char *ddesc, int monptr) {
 
                             // It ate an already processed monster.Handle normally.
                             if (monptr < c_ptr->cptr) {
-                                delete_monster((int)c_ptr->cptr);
+                                delete_monster((int) c_ptr->cptr);
                             } else {
                                 // If it eats this monster, an already processed monster
                                 // will take its place, causing all kinds of havoc.
                                 // Delay the kill a bit.
-                                fix1_delete_monster((int)c_ptr->cptr);
+                                fix1_delete_monster((int) c_ptr->cptr);
                             }
                         }
                     } else if (c_ptr->cptr == 1) {
@@ -908,21 +907,21 @@ void breath(int typ, int y, int x, int dam_hp, char *ddesc, int monptr) {
                         }
 
                         switch (typ) {
-                        case GF_LIGHTNING:
-                            light_dam(dam, ddesc);
-                            break;
-                        case GF_POISON_GAS:
-                            poison_gas(dam, ddesc);
-                            break;
-                        case GF_ACID:
-                            acid_dam(dam, ddesc);
-                            break;
-                        case GF_FROST:
-                            cold_dam(dam, ddesc);
-                            break;
-                        case GF_FIRE:
-                            fire_dam(dam, ddesc);
-                            break;
+                            case GF_LIGHTNING:
+                                light_dam(dam, ddesc);
+                                break;
+                            case GF_POISON_GAS:
+                                poison_gas(dam, ddesc);
+                                break;
+                            case GF_ACID:
+                                acid_dam(dam, ddesc);
+                                break;
+                            case GF_FROST:
+                                cold_dam(dam, ddesc);
+                                break;
+                            case GF_FIRE:
+                                fire_dam(dam, ddesc);
+                                break;
                         }
                     }
                 }
@@ -962,7 +961,7 @@ bool recharge(int num) {
     //
     // make it harder to recharge high level, and highly charged wands, note
     // that i can be negative, so check its value before trying to call randint().
-    i = num + 50 - (int)i_ptr->level - i_ptr->p1;
+    i = num + 50 - (int) i_ptr->level - i_ptr->p1;
     if (i < 19) {
         // Automatic failure.
         i = 1;
@@ -992,7 +991,7 @@ bool hp_monster(int dir, int y, int x, int dam) {
 
     bool flag = false;
     while (!flag) {
-        (void)mmove(dir, &y, &x);
+        (void) mmove(dir, &y, &x);
         dist++;
 
         cave_type *c_ptr = &cave[y][x];
@@ -1008,16 +1007,16 @@ bool hp_monster(int dir, int y, int x, int dam) {
             vtype m_name;
             monster_name(m_name, m_ptr, r_ptr);
             monster = true;
-            int i = mon_take_hit((int)c_ptr->cptr, dam);
+            int i = mon_take_hit((int) c_ptr->cptr, dam);
 
             if (i >= 0) {
                 vtype out_val;
-                (void)sprintf(out_val, "%s dies in a fit of agony.", m_name);
+                (void) sprintf(out_val, "%s dies in a fit of agony.", m_name);
                 msg_print(out_val);
                 prt_experience();
             } else if (dam > 0) {
                 vtype out_val;
-                (void)sprintf(out_val, "%s screams in agony.", m_name);
+                (void) sprintf(out_val, "%s screams in agony.", m_name);
                 msg_print(out_val);
             }
         }
@@ -1033,7 +1032,7 @@ bool drain_life(int dir, int y, int x) {
 
     bool flag = false;
     while (!flag) {
-        (void)mmove(dir, &y, &x);
+        (void) mmove(dir, &y, &x);
         dist++;
 
         cave_type *c_ptr = &cave[y][x];
@@ -1052,15 +1051,15 @@ bool drain_life(int dir, int y, int x) {
                 vtype m_name;
                 monster_name(m_name, m_ptr, r_ptr);
 
-                int i = mon_take_hit((int)c_ptr->cptr, 75);
+                int i = mon_take_hit((int) c_ptr->cptr, 75);
                 if (i >= 0) {
                     vtype out_val;
-                    (void)sprintf(out_val, "%s dies in a fit of agony.", m_name);
+                    (void) sprintf(out_val, "%s dies in a fit of agony.", m_name);
                     msg_print(out_val);
                     prt_experience();
                 } else {
                     vtype out_val;
-                    (void)sprintf(out_val, "%s screams in agony.", m_name);
+                    (void) sprintf(out_val, "%s screams in agony.", m_name);
                     msg_print(out_val);
                 }
             } else {
@@ -1080,7 +1079,7 @@ bool speed_monster(int dir, int y, int x, int spd) {
 
     bool flag = false;
     while (!flag) {
-        (void)mmove(dir, &y, &x);
+        (void) mmove(dir, &y, &x);
         dist++;
 
         cave_type *c_ptr = &cave[y][x];
@@ -1100,20 +1099,20 @@ bool speed_monster(int dir, int y, int x, int spd) {
                 vtype out_val;
                 m_ptr->cspeed += spd;
                 m_ptr->csleep = 0;
-                (void)sprintf(out_val, "%s starts moving faster.", m_name);
+                (void) sprintf(out_val, "%s starts moving faster.", m_name);
                 msg_print(out_val);
                 speed = true;
             } else if (randint(MAX_MONS_LEVEL) > r_ptr->level) {
                 vtype out_val;
                 m_ptr->cspeed += spd;
                 m_ptr->csleep = 0;
-                (void)sprintf(out_val, "%s starts moving slower.", m_name);
+                (void) sprintf(out_val, "%s starts moving slower.", m_name);
                 msg_print(out_val);
                 speed = true;
             } else {
                 vtype out_val;
                 m_ptr->csleep = 0;
-                (void)sprintf(out_val, "%s is unaffected.", m_name);
+                (void) sprintf(out_val, "%s is unaffected.", m_name);
                 msg_print(out_val);
             }
         }
@@ -1129,7 +1128,7 @@ bool confuse_monster(int dir, int y, int x) {
 
     bool flag = false;
     while (!flag) {
-        (void)mmove(dir, &y, &x);
+        (void) mmove(dir, &y, &x);
         dist++;
         cave_type *c_ptr = &cave[y][x];
 
@@ -1154,7 +1153,7 @@ bool confuse_monster(int dir, int y, int x) {
                 }
 
                 vtype out_val;
-                (void)sprintf(out_val, "%s is unaffected.", m_name);
+                (void) sprintf(out_val, "%s is unaffected.", m_name);
                 msg_print(out_val);
             } else {
                 if (m_ptr->confused) {
@@ -1166,7 +1165,7 @@ bool confuse_monster(int dir, int y, int x) {
                 m_ptr->csleep = 0;
 
                 vtype out_val;
-                (void)sprintf(out_val, "%s appears confused.", m_name);
+                (void) sprintf(out_val, "%s appears confused.", m_name);
                 msg_print(out_val);
             }
         }
@@ -1182,7 +1181,7 @@ bool sleep_monster(int dir, int y, int x) {
 
     bool flag = false;
     while (!flag) {
-        (void)mmove(dir, &y, &x);
+        (void) mmove(dir, &y, &x);
         dist++;
 
         cave_type *c_ptr = &cave[y][x];
@@ -1204,14 +1203,14 @@ bool sleep_monster(int dir, int y, int x) {
                 }
 
                 vtype out_val;
-                (void)sprintf(out_val, "%s is unaffected.", m_name);
+                (void) sprintf(out_val, "%s is unaffected.", m_name);
                 msg_print(out_val);
             } else {
                 m_ptr->csleep = 500;
                 sleep = true;
 
                 vtype out_val;
-                (void)sprintf(out_val, "%s falls asleep.", m_name);
+                (void) sprintf(out_val, "%s falls asleep.", m_name);
                 msg_print(out_val);
             }
         }
@@ -1227,7 +1226,7 @@ bool wall_to_mud(int dir, int y, int x) {
 
     bool flag = false;
     while (!flag) {
-        (void)mmove(dir, &y, &x);
+        (void) mmove(dir, &y, &x);
         dist++;
 
         cave_type *c_ptr = &cave[y][x];
@@ -1239,7 +1238,7 @@ bool wall_to_mud(int dir, int y, int x) {
 
         if ((c_ptr->fval >= MIN_CAVE_WALL) && (c_ptr->fval != BOUNDARY_WALL)) {
             flag = true;
-            (void)twall(y, x, 1, 0);
+            (void) twall(y, x, 1, 0);
 
             if (test_light(y, x)) {
                 msg_print("The wall turns into mud.");
@@ -1250,13 +1249,13 @@ bool wall_to_mud(int dir, int y, int x) {
             if (panel_contains(y, x) && test_light(y, x)) {
                 bigvtype out_val, tmp_str;
                 objdes(tmp_str, &t_list[c_ptr->tptr], false);
-                (void)sprintf(out_val, "The %s turns into mud.", tmp_str);
+                (void) sprintf(out_val, "The %s turns into mud.", tmp_str);
                 msg_print(out_val);
                 wall = true;
             }
 
             if (t_list[c_ptr->tptr].tval == TV_RUBBLE) {
-                (void)delete_object(y, x);
+                (void) delete_object(y, x);
                 if (randint(10) == 1) {
                     place_object(y, x, false);
                     if (test_light(y, x)) {
@@ -1265,7 +1264,7 @@ bool wall_to_mud(int dir, int y, int x) {
                 }
                 lite_spot(y, x);
             } else {
-                (void)delete_object(y, x);
+                (void) delete_object(y, x);
             }
         }
 
@@ -1277,21 +1276,21 @@ bool wall_to_mud(int dir, int y, int x) {
                 vtype m_name;
 
                 monster_name(m_name, m_ptr, r_ptr);
-                int i = mon_take_hit((int)c_ptr->cptr, 100);
+                int i = mon_take_hit((int) c_ptr->cptr, 100);
 
                 // Should get these messages even if the monster is not visible.
                 if (i >= 0) {
                     c_recall[i].r_cdefense |= CD_STONE;
 
                     bigvtype out_val;
-                    (void)sprintf(out_val, "%s dissolves!", m_name);
+                    (void) sprintf(out_val, "%s dissolves!", m_name);
                     msg_print(out_val);
                     prt_experience(); // print msg before calling prt_exp
                 } else {
                     c_recall[m_ptr->mptr].r_cdefense |= CD_STONE;
 
                     bigvtype out_val;
-                    (void)sprintf(out_val, "%s grunts in pain!", m_name);
+                    (void) sprintf(out_val, "%s grunts in pain!", m_name);
                     msg_print(out_val);
                 }
                 flag = true;
@@ -1310,7 +1309,7 @@ bool td_destroy2(int dir, int y, int x) {
     cave_type *c_ptr;
 
     do {
-        (void)mmove(dir, &y, &x);
+        (void) mmove(dir, &y, &x);
         dist++;
 
         c_ptr = &cave[y][x];
@@ -1319,11 +1318,11 @@ bool td_destroy2(int dir, int y, int x) {
         if (c_ptr->tptr != 0) {
             inven_type *t_ptr = &t_list[c_ptr->tptr];
 
-            if ((t_ptr->tval == TV_INVIS_TRAP) ||
-                (t_ptr->tval == TV_CLOSED_DOOR) ||
-                (t_ptr->tval == TV_VIS_TRAP) ||
-                (t_ptr->tval == TV_OPEN_DOOR) ||
-                (t_ptr->tval == TV_SECRET_DOOR)) {
+            if (t_ptr->tval == TV_INVIS_TRAP ||
+                t_ptr->tval == TV_CLOSED_DOOR ||
+                t_ptr->tval == TV_VIS_TRAP ||
+                t_ptr->tval == TV_OPEN_DOOR ||
+                t_ptr->tval == TV_SECRET_DOOR) {
                 if (delete_object(y, x)) {
                     msg_print("There is a bright flash of light!");
                     destroy2 = true;
@@ -1349,7 +1348,7 @@ bool poly_monster(int dir, int y, int x) {
 
     bool flag = false;
     while (!flag) {
-        (void)mmove(dir, &y, &x);
+        (void) mmove(dir, &y, &x);
         dist++;
 
         cave_type *c_ptr = &cave[y][x];
@@ -1362,7 +1361,7 @@ bool poly_monster(int dir, int y, int x) {
 
             if (randint(MAX_MONS_LEVEL) > r_ptr->level) {
                 flag = true;
-                delete_monster((int)c_ptr->cptr);
+                delete_monster((int) c_ptr->cptr);
 
                 // Place_monster() should always return true here.
                 poly = place_monster(y, x, randint(m_level[MAX_MONS_LEVEL] - m_level[0]) - 1 + m_level[0], false);
@@ -1374,7 +1373,7 @@ bool poly_monster(int dir, int y, int x) {
             } else {
                 vtype out_val, m_name;
                 monster_name(m_name, m_ptr, r_ptr);
-                (void)sprintf(out_val, "%s is unaffected.", m_name);
+                (void) sprintf(out_val, "%s is unaffected.", m_name);
                 msg_print(out_val);
             }
         }
@@ -1391,7 +1390,7 @@ bool build_wall(int dir, int y, int x) {
 
     bool flag = false;
     while (!flag) {
-        (void)mmove(dir, &y, &x);
+        (void) mmove(dir, &y, &x);
         dist++;
 
         cave_type *c_ptr = &cave[y][x];
@@ -1400,7 +1399,7 @@ bool build_wall(int dir, int y, int x) {
             flag = true;
         } else {
             if (c_ptr->tptr != 0) {
-                (void)delete_object(y, x);
+                (void) delete_object(y, x);
             }
 
             if (c_ptr->cptr > 1) {
@@ -1423,12 +1422,12 @@ bool build_wall(int dir, int y, int x) {
 
                     vtype m_name, out_val;
                     monster_name(m_name, m_ptr, r_ptr);
-                    (void)sprintf(out_val, "%s wails out in pain!", m_name);
+                    (void) sprintf(out_val, "%s wails out in pain!", m_name);
                     msg_print(out_val);
-                    i = mon_take_hit((int)c_ptr->cptr, damage);
+                    i = mon_take_hit((int) c_ptr->cptr, damage);
 
                     if (i >= 0) {
-                        (void)sprintf(out_val, "%s is embedded in the rock.", m_name);
+                        (void) sprintf(out_val, "%s is embedded in the rock.", m_name);
                         msg_print(out_val);
                         prt_experience();
                     }
@@ -1459,7 +1458,7 @@ bool clone_monster(int dir, int y, int x) {
 
     bool flag = false;
     while (!flag) {
-        (void)mmove(dir, &y, &x);
+        (void) mmove(dir, &y, &x);
         dist++;
 
         cave_type *c_ptr = &cave[y][x];
@@ -1470,7 +1469,7 @@ bool clone_monster(int dir, int y, int x) {
             m_list[c_ptr->cptr].csleep = 0;
 
             // monptr of 0 is safe here, since can't reach here from creatures
-            return multiply_monster(y, x, (int)m_list[c_ptr->cptr].mptr, 0);
+            return multiply_monster(y, x, (int) m_list[c_ptr->cptr].mptr, 0);
         }
     }
 
@@ -1497,8 +1496,8 @@ void teleport_away(int monptr, int dis) {
         }
     } while ((cave[yn][xn].fval >= MIN_CLOSED_SPACE) || (cave[yn][xn].cptr != 0));
 
-    move_rec((int)m_ptr->fy, (int)m_ptr->fx, yn, xn);
-    lite_spot((int)m_ptr->fy, (int)m_ptr->fx);
+    move_rec((int) m_ptr->fy, (int) m_ptr->fx, yn, xn);
+    lite_spot((int) m_ptr->fy, (int) m_ptr->fx);
     m_ptr->fy = (uint8_t) yn;
     m_ptr->fx = (uint8_t) xn;
 
@@ -1551,7 +1550,7 @@ bool teleport_monster(int dir, int y, int x) {
 
     bool flag = false;
     while (!flag) {
-        (void)mmove(dir, &y, &x);
+        (void) mmove(dir, &y, &x);
         dist++;
 
         cave_type *c_ptr = &cave[y][x];
@@ -1560,7 +1559,7 @@ bool teleport_monster(int dir, int y, int x) {
             flag = true;
         } else if (c_ptr->cptr > 1) {
             m_list[c_ptr->cptr].csleep = 0; // wake it up
-            teleport_away((int)c_ptr->cptr, MAX_SIGHT);
+            teleport_away((int) c_ptr->cptr, MAX_SIGHT);
             result = true;
         }
     }
@@ -1609,7 +1608,7 @@ bool genocide() {
                 // know the names of the creatures he did not destroy,
                 // this message makes no sense otherwise
                 vtype out_val;
-                (void)sprintf(out_val, "The %s is unaffected.", r_ptr->name);
+                (void) sprintf(out_val, "The %s is unaffected.", r_ptr->name);
                 msg_print(out_val);
             }
         }
@@ -1630,7 +1629,7 @@ bool speed_monsters(int spd) {
         vtype out_val, m_name;
         monster_name(m_name, m_ptr, r_ptr);
 
-        if ((m_ptr->cdis > MAX_SIGHT) || !los(char_row, char_col, (int)m_ptr->fy, (int)m_ptr->fx)) {
+        if ((m_ptr->cdis > MAX_SIGHT) || !los(char_row, char_col, (int) m_ptr->fy, (int) m_ptr->fx)) {
             continue; // do nothing
         } else if (spd > 0) {
             m_ptr->cspeed += spd;
@@ -1638,7 +1637,7 @@ bool speed_monsters(int spd) {
 
             if (m_ptr->ml) {
                 speed = true;
-                (void)sprintf(out_val, "%s starts moving faster.", m_name);
+                (void) sprintf(out_val, "%s starts moving faster.", m_name);
                 msg_print(out_val);
             }
         } else if (randint(MAX_MONS_LEVEL) > r_ptr->level) {
@@ -1646,13 +1645,13 @@ bool speed_monsters(int spd) {
             m_ptr->csleep = 0;
 
             if (m_ptr->ml) {
-                (void)sprintf(out_val, "%s starts moving slower.", m_name);
+                (void) sprintf(out_val, "%s starts moving slower.", m_name);
                 msg_print(out_val);
                 speed = true;
             }
         } else if (m_ptr->ml) {
             m_ptr->csleep = 0;
-            (void)sprintf(out_val, "%s is unaffected.", m_name);
+            (void) sprintf(out_val, "%s is unaffected.", m_name);
             msg_print(out_val);
         }
     }
@@ -1671,20 +1670,20 @@ bool sleep_monsters2() {
         vtype out_val, m_name;
         monster_name(m_name, m_ptr, r_ptr);
 
-        if ((m_ptr->cdis > MAX_SIGHT) || !los(char_row, char_col, (int)m_ptr->fy, (int)m_ptr->fx)) {
+        if ((m_ptr->cdis > MAX_SIGHT) || !los(char_row, char_col, (int) m_ptr->fy, (int) m_ptr->fx)) {
             continue; // do nothing
         } else if ((randint(MAX_MONS_LEVEL) < r_ptr->level) || (CD_NO_SLEEP & r_ptr->cdefense)) {
             if (m_ptr->ml) {
                 if (r_ptr->cdefense & CD_NO_SLEEP) {
                     c_recall[m_ptr->mptr].r_cdefense |= CD_NO_SLEEP;
                 }
-                (void)sprintf(out_val, "%s is unaffected.", m_name);
+                (void) sprintf(out_val, "%s is unaffected.", m_name);
                 msg_print(out_val);
             }
         } else {
             m_ptr->csleep = 500;
             if (m_ptr->ml) {
-                (void)sprintf(out_val, "%s falls asleep.", m_name);
+                (void) sprintf(out_val, "%s falls asleep.", m_name);
                 msg_print(out_val);
                 sleep = true;
             }
@@ -1724,11 +1723,11 @@ bool detect_evil() {
 
     for (int i = mfptr - 1; i >= MIN_MONIX; i--) {
         monster_type *m_ptr = &m_list[i];
-        if (panel_contains((int)m_ptr->fy, (int)m_ptr->fx) && (CD_EVIL & c_list[m_ptr->mptr].cdefense)) {
+        if (panel_contains((int) m_ptr->fy, (int) m_ptr->fx) && (CD_EVIL & c_list[m_ptr->mptr].cdefense)) {
             m_ptr->ml = true;
 
             // works correctly even if hallucinating
-            print((char)c_list[m_ptr->mptr].cchar, (int)m_ptr->fy, (int)m_ptr->fx);
+            print((char) c_list[m_ptr->mptr].cchar, (int) m_ptr->fy, (int) m_ptr->fx);
             flag = true;
         }
     }
@@ -1836,7 +1835,7 @@ void earthquake() {
                 cave_type *c_ptr = &cave[i][j];
 
                 if (c_ptr->tptr != 0) {
-                    (void)delete_object(i, j);
+                    (void) delete_object(i, j);
                 }
 
                 if (c_ptr->cptr > 1) {
@@ -1855,12 +1854,12 @@ void earthquake() {
 
                         vtype out_val, m_name;
                         monster_name(m_name, m_ptr, r_ptr);
-                        (void)sprintf(out_val, "%s wails out in pain!", m_name);
+                        (void) sprintf(out_val, "%s wails out in pain!", m_name);
                         msg_print(out_val);
-                        i = mon_take_hit((int)c_ptr->cptr, damage);
+                        i = mon_take_hit((int) c_ptr->cptr, damage);
 
                         if (i >= 0) {
-                            (void)sprintf(out_val, "%s is embedded in the rock.", m_name);
+                            (void) sprintf(out_val, "%s is embedded in the rock.", m_name);
                             msg_print(out_val);
                             prt_experience();
                         }
@@ -1928,7 +1927,7 @@ bool dispel_creature(int cflag, int damage) {
     for (int i = mfptr - 1; i >= MIN_MONIX; i--) {
         monster_type *m_ptr = &m_list[i];
 
-        if ((m_ptr->cdis <= MAX_SIGHT) && (cflag & c_list[m_ptr->mptr].cdefense) && los(char_row, char_col, (int)m_ptr->fy, (int)m_ptr->fx)) {
+        if ((m_ptr->cdis <= MAX_SIGHT) && (cflag & c_list[m_ptr->mptr].cdefense) && los(char_row, char_col, (int) m_ptr->fy, (int) m_ptr->fx)) {
             creature_type *r_ptr = &c_list[m_ptr->mptr];
 
             c_recall[m_ptr->mptr].r_cdefense |= cflag;
@@ -1939,9 +1938,9 @@ bool dispel_creature(int cflag, int damage) {
 
             // Should get these messages even if the monster is not visible.
             if (k >= 0) {
-                (void)sprintf(out_val, "%s dissolves!", m_name);
+                (void) sprintf(out_val, "%s dissolves!", m_name);
             } else {
-                (void)sprintf(out_val, "%s shudders.", m_name);
+                (void) sprintf(out_val, "%s shudders.", m_name);
             }
             msg_print(out_val);
 
@@ -1964,20 +1963,20 @@ bool turn_undead() {
         monster_type *m_ptr = &m_list[i];
         creature_type *r_ptr = &c_list[m_ptr->mptr];
 
-        if ((m_ptr->cdis <= MAX_SIGHT) && (CD_UNDEAD & r_ptr->cdefense) && (los(char_row, char_col, (int)m_ptr->fy, (int)m_ptr->fx))) {
+        if ((m_ptr->cdis <= MAX_SIGHT) && (CD_UNDEAD & r_ptr->cdefense) && (los(char_row, char_col, (int) m_ptr->fy, (int) m_ptr->fx))) {
             vtype out_val, m_name;
             monster_name(m_name, m_ptr, r_ptr);
 
             if (((py.misc.lev + 1) > r_ptr->level) || (randint(5) == 1)) {
                 if (m_ptr->ml) {
-                    (void)sprintf(out_val, "%s runs frantically!", m_name);
+                    (void) sprintf(out_val, "%s runs frantically!", m_name);
                     msg_print(out_val);
                     turn_und = true;
                     c_recall[m_ptr->mptr].r_cdefense |= CD_UNDEAD;
                 }
-                m_ptr->confused = (uint8_t)py.misc.lev;
+                m_ptr->confused = (uint8_t) py.misc.lev;
             } else if (m_ptr->ml) {
-                (void)sprintf(out_val, "%s is unaffected.", m_name);
+                (void) sprintf(out_val, "%s is unaffected.", m_name);
                 msg_print(out_val);
             }
         }
@@ -2000,7 +1999,7 @@ void warding_glyph() {
 // Lose a strength point. -RAK-
 void lose_str() {
     if (!py.flags.sustain_str) {
-        (void)dec_stat(A_STR);
+        (void) dec_stat(A_STR);
         msg_print("You feel very sick.");
     } else {
         msg_print("You feel sick for a moment,  it passes.");
@@ -2010,7 +2009,7 @@ void lose_str() {
 // Lose an intelligence point. -RAK-
 void lose_int() {
     if (!py.flags.sustain_int) {
-        (void)dec_stat(A_INT);
+        (void) dec_stat(A_INT);
         msg_print("You become very dizzy.");
     } else {
         msg_print("You become dizzy for a moment,  it passes.");
@@ -2020,7 +2019,7 @@ void lose_int() {
 // Lose a wisdom point. -RAK-
 void lose_wis() {
     if (!py.flags.sustain_wis) {
-        (void)dec_stat(A_WIS);
+        (void) dec_stat(A_WIS);
         msg_print("You feel very naive.");
     } else {
         msg_print("You feel naive for a moment,  it passes.");
@@ -2030,7 +2029,7 @@ void lose_wis() {
 // Lose a dexterity point. -RAK-
 void lose_dex() {
     if (!py.flags.sustain_dex) {
-        (void)dec_stat(A_DEX);
+        (void) dec_stat(A_DEX);
         msg_print("You feel very sore.");
     } else {
         msg_print("You feel sore for a moment,  it passes.");
@@ -2040,7 +2039,7 @@ void lose_dex() {
 // Lose a constitution point. -RAK-
 void lose_con() {
     if (!py.flags.sustain_con) {
-        (void)dec_stat(A_CON);
+        (void) dec_stat(A_CON);
         msg_print("You feel very sick.");
     } else {
         msg_print("You feel sick for a moment,  it passes.");
@@ -2050,7 +2049,7 @@ void lose_con() {
 // Lose a charisma point. -RAK-
 void lose_chr() {
     if (!py.flags.sustain_chr) {
-        (void)dec_stat(A_CHR);
+        (void) dec_stat(A_CHR);
         msg_print("Your skin starts to itch.");
     } else {
         msg_print("Your skin starts to itch, but feels better now.");
@@ -2070,7 +2069,7 @@ void lose_exp(int32_t amount) {
     prt_experience();
 
     int i = 0;
-    while ((signed)(player_exp[i] * m_ptr->expfact / 100) <= m_ptr->exp) {
+    while ((signed) (player_exp[i] * m_ptr->expfact / 100) <= m_ptr->exp) {
         i++;
     }
 
@@ -2126,26 +2125,26 @@ static void replace_spot(int y, int x, int typ) {
     cave_type *c_ptr = &cave[y][x];
 
     switch (typ) {
-    case 1:
-    case 2:
-    case 3:
-        c_ptr->fval = CORR_FLOOR;
-        break;
-    case 4:
-    case 7:
-    case 10:
-        c_ptr->fval = GRANITE_WALL;
-        break;
-    case 5:
-    case 8:
-    case 11:
-        c_ptr->fval = MAGMA_WALL;
-        break;
-    case 6:
-    case 9:
-    case 12:
-        c_ptr->fval = QUARTZ_WALL;
-        break;
+        case 1:
+        case 2:
+        case 3:
+            c_ptr->fval = CORR_FLOOR;
+            break;
+        case 4:
+        case 7:
+        case 10:
+            c_ptr->fval = GRANITE_WALL;
+            break;
+        case 5:
+        case 8:
+        case 11:
+            c_ptr->fval = MAGMA_WALL;
+            break;
+        case 6:
+        case 9:
+        case 12:
+            c_ptr->fval = QUARTZ_WALL;
+            break;
     }
 
     c_ptr->pl = false;
@@ -2153,11 +2152,11 @@ static void replace_spot(int y, int x, int typ) {
     c_ptr->lr = false; // this is no longer part of a room
 
     if (c_ptr->tptr != 0) {
-        (void)delete_object(y, x);
+        (void) delete_object(y, x);
     }
 
     if (c_ptr->cptr > 1) {
-        delete_monster((int)c_ptr->cptr);
+        delete_monster((int) c_ptr->cptr);
     }
 }
 

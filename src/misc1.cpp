@@ -14,20 +14,20 @@ void init_seeds(uint32_t seed) {
     uint32_t clock_var;
 
     if (seed == 0) {
-        clock_var = (uint32_t)time((time_t *)0);
+        clock_var = (uint32_t) time((time_t *) 0);
     } else {
         clock_var = seed;
     }
-    randes_seed = (int32_t)clock_var;
+    randes_seed = (int32_t) clock_var;
 
     clock_var += 8762;
-    town_seed = (int32_t)clock_var;
+    town_seed = (int32_t) clock_var;
 
     clock_var += 113452L;
     set_rnd_seed(clock_var);
     // make it a little more random
-    for (clock_var = (uint32_t)randint(100); clock_var != 0; clock_var--) {
-        (void)rnd();
+    for (clock_var = (uint32_t) randint(100); clock_var != 0; clock_var--) {
+        (void) rnd();
     }
 }
 
@@ -56,7 +56,7 @@ bool check_time() {
 // Generates a random integer x where 1<=X<=MAXVAL -RAK-
 int randint(int maxval) {
     int32_t randval = rnd();
-    return ((int)(randval % maxval) + 1);
+    return ((int) (randval % maxval) + 1);
 }
 
 // Generates a random integer number of NORMAL distribution -RAK-
@@ -123,7 +123,7 @@ int randnor(int mean, int stand) {
 int bit_pos(uint32_t *test) {
     uint32_t mask = 0x1;
 
-    for (int i = 0; i < (int)sizeof(*test) * 8; i++) {
+    for (int i = 0; i < (int) sizeof(*test) * 8; i++) {
         if (*test & mask) {
             *test &= ~mask;
             return i;
@@ -248,8 +248,7 @@ int next_to_corr(int y, int x) {
             cave_type *c_ptr = &cave[j][k];
 
             // should fail if there is already a door present
-            if (c_ptr->fval == CORR_FLOOR &&
-                (c_ptr->tptr == 0 || t_list[c_ptr->tptr].tval < TV_MIN_DOORS)) {
+            if (c_ptr->fval == CORR_FLOOR && (c_ptr->tptr == 0 || t_list[c_ptr->tptr].tval < TV_MIN_DOORS)) {
                 i++;
             }
         }
@@ -268,7 +267,7 @@ int damroll(int num, int sides) {
 }
 
 int pdamroll(uint8_t *array) {
-    return damroll((int)array[0], (int)array[1]);
+    return damroll((int) array[0], (int) array[1]);
 }
 
 // A simple, fast, integer-based line-of-sight algorithm.  By Joseph Hall,
@@ -333,12 +332,12 @@ bool los(int fromY, int fromX, int toY, int toX) {
     // scale = abs(deltaX * deltaY * 2), so that we can use integer arithmetic.
     {
         int px,     // x position
-            p_y,    // y position
-            scale2; // above scale factor / 2
+                p_y,    // y position
+                scale2; // above scale factor / 2
         int scale,  // above scale factor
-            xSign,  // sign of deltaX
-            ySign,  // sign of deltaY
-            m;      // slope or 1/slope of LOS
+                xSign,  // sign of deltaX
+                ySign,  // sign of deltaY
+                m;      // slope or 1/slope of LOS
 
         scale2 = abs(deltaX * deltaY);
         scale = scale2 << 1;
@@ -511,8 +510,7 @@ bool compact_monsters() {
             monster_type *mon_ptr = &m_list[i];
             if ((cur_dis < mon_ptr->cdis) && (randint(3) == 1)) {
                 // Never compact away the Balrog!!
-                if (c_list[mon_ptr->mptr].cmove & CM_WIN) {
-                    ; // Do nothing
+                if (c_list[mon_ptr->mptr].cmove & CM_WIN) { ; // Do nothing
                 } else if (hack_monptr < i) {
                     // in case this is called from within creatures(), this is a horrible
                     // hack, the m_list/creatures() code needs to be rewritten.
@@ -612,7 +610,7 @@ bool place_monster(int y, int x, int z, int slp) {
         if (c_list[z].sleep == 0) {
             mon_ptr->csleep = 0;
         } else {
-            mon_ptr->csleep = (int16_t) ((c_list[z].sleep * 2) + randint((int)c_list[z].sleep * 10));
+            mon_ptr->csleep = (int16_t) ((c_list[z].sleep * 2) + randint((int) c_list[z].sleep * 10));
         }
     } else {
         mon_ptr->csleep = 0;
@@ -640,9 +638,7 @@ void place_win_monster() {
     do {
         y = randint(cur_height - 2);
         x = randint(cur_width - 2);
-    } while ((cave[y][x].fval >= MIN_CLOSED_SPACE) ||
-             (cave[y][x].cptr != 0) || (cave[y][x].tptr != 0) ||
-             (distance(y, x, char_row, char_col) <= MAX_SIGHT));
+    } while ((cave[y][x].fval >= MIN_CLOSED_SPACE) || (cave[y][x].cptr != 0) || (cave[y][x].tptr != 0) || (distance(y, x, char_row, char_col) <= MAX_SIGHT));
 
     mon_ptr->fy = (uint8_t) y;
     mon_ptr->fx = (uint8_t) x;
@@ -720,7 +716,7 @@ void alloc_monster(int num, int dis, int slp) {
 
         // Place_monster() should always return true here.
         // It does not matter if it fails though.
-        (void)place_monster(y, x, l, slp);
+        (void) place_monster(y, x, l, slp);
     }
 }
 
@@ -810,30 +806,30 @@ static void compact_objects() {
                 cave_type *cave_ptr = &cave[i][j];
                 if ((cave_ptr->tptr != 0) && (distance(i, j, char_row, char_col) > cur_dis)) {
                     switch (t_list[cave_ptr->tptr].tval) {
-                    case TV_VIS_TRAP:
-                        chance = 15;
-                        break;
-                    case TV_INVIS_TRAP:
-                    case TV_RUBBLE:
-                    case TV_OPEN_DOOR:
-                    case TV_CLOSED_DOOR:
-                        chance = 5;
-                        break;
-                    case TV_UP_STAIR:
-                    case TV_DOWN_STAIR:
-                    case TV_STORE_DOOR:
-                        // Stairs, don't delete them.
-                        // Shop doors, don't delete them.
-                        chance = 0;
-                        break;
-                    case TV_SECRET_DOOR: // secret doors
-                        chance = 3;
-                        break;
-                    default:
-                        chance = 10;
+                        case TV_VIS_TRAP:
+                            chance = 15;
+                            break;
+                        case TV_INVIS_TRAP:
+                        case TV_RUBBLE:
+                        case TV_OPEN_DOOR:
+                        case TV_CLOSED_DOOR:
+                            chance = 5;
+                            break;
+                        case TV_UP_STAIR:
+                        case TV_DOWN_STAIR:
+                        case TV_STORE_DOOR:
+                            // Stairs, don't delete them.
+                            // Shop doors, don't delete them.
+                            chance = 0;
+                            break;
+                        case TV_SECRET_DOOR: // secret doors
+                            chance = 3;
+                            break;
+                        default:
+                            chance = 10;
                     }
                     if (randint(100) <= chance) {
-                        (void)delete_object(i, j);
+                        (void) delete_object(i, j);
                         ctr++;
                     }
                 }

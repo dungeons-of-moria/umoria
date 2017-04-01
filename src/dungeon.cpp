@@ -10,15 +10,25 @@
 #include "externs.h"
 
 static char original_commands(char);
+
 static void do_command(char);
+
 static bool valid_countcommand(char);
+
 static void regenhp(int);
+
 static void regenmana(int);
+
 static bool enchanted(inven_type *);
+
 static void examine_book();
+
 static void go_up();
+
 static void go_down();
+
 static void jamdoor();
+
 static void refill_lamp();
 
 // Moria game module -RAK-
@@ -43,7 +53,7 @@ void dungeon() {
 
     // Check for a maximum level
     if (dun_level > p_ptr->max_dlv) {
-        p_ptr->max_dlv = (uint16_t)dun_level;
+        p_ptr->max_dlv = (uint16_t) dun_level;
     }
 
     // Reset flags and initialize variables
@@ -317,35 +327,35 @@ void dungeon() {
                 disturb(0, 0);
             } else {
                 switch (con_adj()) {
-                case -4:
-                    i = 4;
-                    break;
-                case -3:
-                case -2:
-                    i = 3;
-                    break;
-                case -1:
-                    i = 2;
-                    break;
-                case 0:
-                    i = 1;
-                    break;
-                case 1:
-                case 2:
-                case 3:
-                    i = ((turn % 2) == 0);
-                    break;
-                case 4:
-                case 5:
-                    i = ((turn % 3) == 0);
-                    break;
-                case 6:
-                    i = ((turn % 4) == 0);
-                    break;
-                default:
-                    // An uninitialized warning if given further down,
-                    // so let's fix that here -MRC-
-                    i = 0;
+                    case -4:
+                        i = 4;
+                        break;
+                    case -3:
+                    case -2:
+                        i = 3;
+                        break;
+                    case -1:
+                        i = 2;
+                        break;
+                    case 0:
+                        i = 1;
+                        break;
+                    case 1:
+                    case 2:
+                    case 3:
+                        i = ((turn % 2) == 0);
+                        break;
+                    case 4:
+                    case 5:
+                        i = ((turn % 3) == 0);
+                        break;
+                    case 6:
+                        i = ((turn % 4) == 0);
+                        break;
+                    default:
+                        // An uninitialized warning if given further down,
+                        // so let's fix that here -MRC-
+                        i = 0;
                 }
 
                 take_hit(i, "poison");
@@ -398,8 +408,7 @@ void dungeon() {
         } else if (f_ptr->rest < 0) {
             // Rest until reach max mana and max hit points.
             f_ptr->rest++;
-            if ((p_ptr->chp == p_ptr->mhp && p_ptr->cmana == p_ptr->mana) ||
-                f_ptr->rest == 0) {
+            if ((p_ptr->chp == p_ptr->mhp && p_ptr->cmana == p_ptr->mana) || f_ptr->rest == 0) {
                 rest_off();
             }
         }
@@ -613,8 +622,7 @@ void dungeon() {
         // Allow for a slim chance of detect enchantment -CJS-
         // for 1st level char, check once every 2160 turns
         // for 40th level char, check once every 416 turns
-        if (((turn & 0xF) == 0) && (f_ptr->confused == 0) &&
-            (randint((10 + 750 / (5 + py.misc.lev))) == 1)) {
+        if (((turn & 0xF) == 0) && (f_ptr->confused == 0) && (randint((10 + 750 / (5 + py.misc.lev))) == 1)) {
             for (i = 0; i < INVEN_ARRAY_SIZE; i++) {
                 if (i == inven_ctr) {
                     i = 22;
@@ -623,12 +631,11 @@ void dungeon() {
 
                 // if in inventory, succeed 1 out of 50 times,
                 // if in equipment list, success 1 out of 10 times
-                if ((i_ptr->tval != TV_NOTHING) && enchanted(i_ptr) &&
-                    (randint(i < 22 ? 50 : 10) == 1)) {
+                if ((i_ptr->tval != TV_NOTHING) && enchanted(i_ptr) && (randint(i < 22 ? 50 : 10) == 1)) {
                     extern char *describe_use(int);
 
                     vtype tmp_str;
-                    (void)sprintf(tmp_str, "There's something about what you are %s...", describe_use(i));
+                    (void) sprintf(tmp_str, "There's something about what you are %s...", describe_use(i));
                     disturb(0, 0);
                     msg_print(tmp_str);
                     add_inscribe(i_ptr, ID_MAGIK);
@@ -642,7 +649,7 @@ void dungeon() {
         // much more likely to succeed if called from here, than if called
         // from within creatures().
         if (MAX_MALLOC - mfptr < 10) {
-            (void)compact_monsters();
+            (void) compact_monsters();
         }
 
         // Accept a command?
@@ -694,14 +701,14 @@ void dungeon() {
                             while (true) {
                                 if (command == DELETE || command == CTRL_KEY('H')) {
                                     i = i / 10;
-                                    (void)sprintf(tmp, "%d", i);
+                                    (void) sprintf(tmp, "%d", i);
                                     prt(tmp, 0, 14);
                                 } else if (command >= '0' && command <= '9') {
                                     if (i > 99) {
                                         bell();
                                     } else {
                                         i = i * 10 + command - '0';
-                                        (void)sprintf(tmp, "%d", i);
+                                        (void) sprintf(tmp, "%d", i);
                                         prt(tmp, 0, 14);
                                     }
                                 } else {
@@ -712,7 +719,7 @@ void dungeon() {
 
                             if (i == 0) {
                                 i = 99;
-                                (void)sprintf(tmp, "%d", i);
+                                (void) sprintf(tmp, "%d", i);
                                 prt(tmp, 0, 14);
                             }
 
@@ -734,8 +741,7 @@ void dungeon() {
                                 } else if (command >= 'a' && command <= 'z') {
                                     command -= 'a' - 1;
                                 } else {
-                                    msg_print(
-                                        "Type ^ <letter> for a control char");
+                                    msg_print("Type ^ <letter> for a control char");
                                     command = ' ';
                                 }
                             } else {
@@ -807,222 +813,222 @@ static char original_commands(char com_val) {
     int dir_val;
 
     switch (com_val) {
-    case CTRL_KEY('K'): // ^K = exit
-        com_val = 'Q';
-        break;
-    case CTRL_KEY('J'):
-    case CTRL_KEY('M'):
-        com_val = '+';
-        break;
-    case CTRL_KEY('P'): // ^P = repeat
-    case CTRL_KEY('W'): // ^W = password
-    case CTRL_KEY('X'): // ^X = save
-    case CTRL_KEY('V'): // ^V = view license
-    case ' ':
-    case '!':
-    case '$':
-        break;
-    case '.':
-        if (get_dir(CNIL, &dir_val)) {
-            switch (dir_val) {
-            case 1:
-                com_val = 'B';
-                break;
-            case 2:
-                com_val = 'J';
-                break;
-            case 3:
-                com_val = 'N';
-                break;
-            case 4:
-                com_val = 'H';
-                break;
-            case 6:
-                com_val = 'L';
-                break;
-            case 7:
-                com_val = 'Y';
-                break;
-            case 8:
-                com_val = 'K';
-                break;
-            case 9:
-                com_val = 'U';
-                break;
-            default:
+        case CTRL_KEY('K'): // ^K = exit
+            com_val = 'Q';
+            break;
+        case CTRL_KEY('J'):
+        case CTRL_KEY('M'):
+            com_val = '+';
+            break;
+        case CTRL_KEY('P'): // ^P = repeat
+        case CTRL_KEY('W'): // ^W = password
+        case CTRL_KEY('X'): // ^X = save
+        case CTRL_KEY('V'): // ^V = view license
+        case ' ':
+        case '!':
+        case '$':
+            break;
+        case '.':
+            if (get_dir(CNIL, &dir_val)) {
+                switch (dir_val) {
+                    case 1:
+                        com_val = 'B';
+                        break;
+                    case 2:
+                        com_val = 'J';
+                        break;
+                    case 3:
+                        com_val = 'N';
+                        break;
+                    case 4:
+                        com_val = 'H';
+                        break;
+                    case 6:
+                        com_val = 'L';
+                        break;
+                    case 7:
+                        com_val = 'Y';
+                        break;
+                    case 8:
+                        com_val = 'K';
+                        break;
+                    case 9:
+                        com_val = 'U';
+                        break;
+                    default:
+                        com_val = ' ';
+                        break;
+                }
+            } else {
                 com_val = ' ';
-                break;
             }
-        } else {
-            com_val = ' ';
-        }
-        break;
-    case '/':
-    case '<':
-    case '>':
-    case '-':
-    case '=':
-    case '{':
-    case '?':
-    case 'A':
-        break;
-    case '1':
-        com_val = 'b';
-        break;
-    case '2':
-        com_val = 'j';
-        break;
-    case '3':
-        com_val = 'n';
-        break;
-    case '4':
-        com_val = 'h';
-        break;
-    case '5': // Rest one turn
-        com_val = '.';
-        break;
-    case '6':
-        com_val = 'l';
-        break;
-    case '7':
-        com_val = 'y';
-        break;
-    case '8':
-        com_val = 'k';
-        break;
-    case '9':
-        com_val = 'u';
-        break;
-    case 'B':
-        com_val = 'f';
-        break;
-    case 'C':
-    case 'D':
-    case 'E':
-    case 'F':
-    case 'G':
-        break;
-    case 'L':
-        com_val = 'W';
-        break;
-    case 'M':
-        break;
-    case 'R':
-        break;
-    case 'S':
-        com_val = '#';
-        break;
-    case 'T':
-        if (get_dir(CNIL, &dir_val)) {
-            switch (dir_val) {
-            case 1:
-                com_val = CTRL_KEY('B');
-                break;
-            case 2:
-                com_val = CTRL_KEY('J');
-                break;
-            case 3:
-                com_val = CTRL_KEY('N');
-                break;
-            case 4:
-                com_val = CTRL_KEY('H');
-                break;
-            case 6:
-                com_val = CTRL_KEY('L');
-                break;
-            case 7:
-                com_val = CTRL_KEY('Y');
-                break;
-            case 8:
-                com_val = CTRL_KEY('K');
-                break;
-            case 9:
-                com_val = CTRL_KEY('U');
-                break;
-            default:
+            break;
+        case '/':
+        case '<':
+        case '>':
+        case '-':
+        case '=':
+        case '{':
+        case '?':
+        case 'A':
+            break;
+        case '1':
+            com_val = 'b';
+            break;
+        case '2':
+            com_val = 'j';
+            break;
+        case '3':
+            com_val = 'n';
+            break;
+        case '4':
+            com_val = 'h';
+            break;
+        case '5': // Rest one turn
+            com_val = '.';
+            break;
+        case '6':
+            com_val = 'l';
+            break;
+        case '7':
+            com_val = 'y';
+            break;
+        case '8':
+            com_val = 'k';
+            break;
+        case '9':
+            com_val = 'u';
+            break;
+        case 'B':
+            com_val = 'f';
+            break;
+        case 'C':
+        case 'D':
+        case 'E':
+        case 'F':
+        case 'G':
+            break;
+        case 'L':
+            com_val = 'W';
+            break;
+        case 'M':
+            break;
+        case 'R':
+            break;
+        case 'S':
+            com_val = '#';
+            break;
+        case 'T':
+            if (get_dir(CNIL, &dir_val)) {
+                switch (dir_val) {
+                    case 1:
+                        com_val = CTRL_KEY('B');
+                        break;
+                    case 2:
+                        com_val = CTRL_KEY('J');
+                        break;
+                    case 3:
+                        com_val = CTRL_KEY('N');
+                        break;
+                    case 4:
+                        com_val = CTRL_KEY('H');
+                        break;
+                    case 6:
+                        com_val = CTRL_KEY('L');
+                        break;
+                    case 7:
+                        com_val = CTRL_KEY('Y');
+                        break;
+                    case 8:
+                        com_val = CTRL_KEY('K');
+                        break;
+                    case 9:
+                        com_val = CTRL_KEY('U');
+                        break;
+                    default:
+                        com_val = ' ';
+                        break;
+                }
+            } else {
                 com_val = ' ';
-                break;
             }
-        } else {
-            com_val = ' ';
-        }
-        break;
-    case 'V':
-        break;
-    case 'a':
-        com_val = 'z';
-        break;
-    case 'b':
-        com_val = 'P';
-        break;
-    case 'c':
-    case 'd':
-    case 'e':
-        break;
-    case 'f':
-        com_val = 't';
-        break;
-    case 'h':
-        com_val = '?';
-        break;
-    case 'i':
-        break;
-    case 'j':
-        com_val = 'S';
-        break;
-    case 'l':
-        com_val = 'x';
-        break;
-    case 'm':
-    case 'o':
-    case 'p':
-    case 'q':
-    case 'r':
-    case 's':
-        break;
-    case 't':
-        com_val = 'T';
-        break;
-    case 'u':
-        com_val = 'Z';
-        break;
-    case 'v':
-    case 'w':
-        break;
-    case 'x':
-        com_val = 'X';
-        break;
+            break;
+        case 'V':
+            break;
+        case 'a':
+            com_val = 'z';
+            break;
+        case 'b':
+            com_val = 'P';
+            break;
+        case 'c':
+        case 'd':
+        case 'e':
+            break;
+        case 'f':
+            com_val = 't';
+            break;
+        case 'h':
+            com_val = '?';
+            break;
+        case 'i':
+            break;
+        case 'j':
+            com_val = 'S';
+            break;
+        case 'l':
+            com_val = 'x';
+            break;
+        case 'm':
+        case 'o':
+        case 'p':
+        case 'q':
+        case 'r':
+        case 's':
+            break;
+        case 't':
+            com_val = 'T';
+            break;
+        case 'u':
+            com_val = 'Z';
+            break;
+        case 'v':
+        case 'w':
+            break;
+        case 'x':
+            com_val = 'X';
+            break;
 
-    // wizard mode commands follow
-    case CTRL_KEY('A'): // ^A = cure all
-        break;
-    case CTRL_KEY('B'): // ^B = objects
-        com_val = CTRL_KEY('O');
-        break;
-    case CTRL_KEY('D'): // ^D = up/down
-        break;
-    case CTRL_KEY('H'): // ^H = wizhelp
-        com_val = '\\';
-        break;
-    case CTRL_KEY('I'): // ^I = identify
-        break;
-    case CTRL_KEY('L'): // ^L = wizlight
-        com_val = '*';
-        break;
-    case ':':
-    case CTRL_KEY('T'): // ^T = teleport
-    case CTRL_KEY('E'): // ^E = wizchar
-    case CTRL_KEY('F'): // ^F = genocide
-    case CTRL_KEY('G'): // ^G = treasure
-    case '@':
-    case '+':
-        break;
-    case CTRL_KEY('U'): // ^U = summon
-        com_val = '&';
-        break;
-    default:
-        com_val = '~'; // Anything illegal.
-        break;
+            // wizard mode commands follow
+        case CTRL_KEY('A'): // ^A = cure all
+            break;
+        case CTRL_KEY('B'): // ^B = objects
+            com_val = CTRL_KEY('O');
+            break;
+        case CTRL_KEY('D'): // ^D = up/down
+            break;
+        case CTRL_KEY('H'): // ^H = wizhelp
+            com_val = '\\';
+            break;
+        case CTRL_KEY('I'): // ^I = identify
+            break;
+        case CTRL_KEY('L'): // ^L = wizlight
+            com_val = '*';
+            break;
+        case ':':
+        case CTRL_KEY('T'): // ^T = teleport
+        case CTRL_KEY('E'): // ^E = wizchar
+        case CTRL_KEY('F'): // ^F = genocide
+        case CTRL_KEY('G'): // ^G = treasure
+        case '@':
+        case '+':
+            break;
+        case CTRL_KEY('U'): // ^U = summon
+            com_val = '&';
+            break;
+        default:
+            com_val = '~'; // Anything illegal.
+            break;
     }
     return com_val;
 }
@@ -1042,33 +1048,33 @@ static void do_command(char com_val) {
         if (get_dir(CNIL, &dir_val)) {
             command_count = i;
             switch (dir_val) {
-            case 1:
-                com_val = 'b';
-                break;
-            case 2:
-                com_val = 'j';
-                break;
-            case 3:
-                com_val = 'n';
-                break;
-            case 4:
-                com_val = 'h';
-                break;
-            case 6:
-                com_val = 'l';
-                break;
-            case 7:
-                com_val = 'y';
-                break;
-            case 8:
-                com_val = 'k';
-                break;
-            case 9:
-                com_val = 'u';
-                break;
-            default:
-                com_val = '~';
-                break;
+                case 1:
+                    com_val = 'b';
+                    break;
+                case 2:
+                    com_val = 'j';
+                    break;
+                case 3:
+                    com_val = 'n';
+                    break;
+                case 4:
+                    com_val = 'h';
+                    break;
+                case 6:
+                    com_val = 'l';
+                    break;
+                case 7:
+                    com_val = 'y';
+                    break;
+                case 8:
+                    com_val = 'k';
+                    break;
+                case 9:
+                    com_val = 'u';
+                    break;
+                default:
+                    com_val = '~';
+                    break;
             }
         } else {
             com_val = ' ';
@@ -1078,488 +1084,487 @@ static void do_command(char com_val) {
     }
 
     switch (com_val) {
-    case 'Q': // (Q)uit    (^K)ill
-        flush();
-        if (get_check("Do you really want to quit?")) {
-            new_level_flag = true;
-            death = true;
-            (void)strcpy(died_from, "Quitting");
-        }
-        free_turn_flag = true;
-        break;
-    case CTRL_KEY('P'): // (^P)revious message.
-        if (command_count > 0) {
-            i = command_count;
-            if (i > MAX_SAVE_MSG) {
+        case 'Q': // (Q)uit    (^K)ill
+            flush();
+            if (get_check("Do you really want to quit?")) {
+                new_level_flag = true;
+                death = true;
+                (void) strcpy(died_from, "Quitting");
+            }
+            free_turn_flag = true;
+            break;
+        case CTRL_KEY('P'): // (^P)revious message.
+            if (command_count > 0) {
+                i = command_count;
+                if (i > MAX_SAVE_MSG) {
+                    i = MAX_SAVE_MSG;
+                }
+                command_count = 0;
+            } else if (last_command != CTRL_KEY('P')) {
+                i = 1;
+            } else {
                 i = MAX_SAVE_MSG;
             }
-            command_count = 0;
-        } else if (last_command != CTRL_KEY('P')) {
-            i = 1;
-        } else {
-            i = MAX_SAVE_MSG;
-        }
 
-        j = last_msg;
+            j = last_msg;
 
-        if (i > 1) {
-            save_screen();
-            x = i;
+            if (i > 1) {
+                save_screen();
+                x = i;
 
-            while (i > 0) {
-                i--;
-                prt(old_msg[j], i, 0);
-                if (j == 0) {
-                    j = MAX_SAVE_MSG - 1;
-                } else {
-                    j--;
-                }
-            }
-
-            erase_line(x, 0);
-            pause_line(x);
-            restore_screen();
-        } else {
-            // Distinguish real and recovered messages with a '>'. -CJS-
-            put_buffer(">", 0, 0);
-            prt(old_msg[j], 0, 1);
-        }
-
-        free_turn_flag = true;
-        break;
-    case CTRL_KEY('V'): // (^V)iew license
-        helpfile(MORIA_GPL);
-        free_turn_flag = true;
-        break;
-    case CTRL_KEY('W'): // (^W)izard mode
-        if (wizard) {
-            wizard = false;
-            msg_print("Wizard mode off.");
-        } else if (enter_wiz_mode()) {
-            msg_print("Wizard mode on.");
-        }
-
-        prt_winner();
-        free_turn_flag = true;
-        break;
-    case CTRL_KEY('X'): // e(^X)it and save
-        if (total_winner) {
-            msg_print(
-                "You are a Total Winner,  your character must be retired.");
-            if (rogue_like_commands) {
-                msg_print("Use 'Q' to when you are ready to quit.");
-            } else {
-                msg_print("Use <Control>-K when you are ready to quit.");
-            }
-        } else {
-            (void)strcpy(died_from, "(saved)");
-            msg_print("Saving game...");
-
-            if (save_char()) {
-                exit_game();
-            }
-
-            (void)strcpy(died_from, "(alive and well)");
-        }
-
-        free_turn_flag = true;
-        break;
-    case '=': // (=) set options
-        save_screen();
-        set_options();
-        restore_screen();
-        free_turn_flag = true;
-        break;
-    case '{': // ({) inscribe an object
-        scribe_object();
-        free_turn_flag = true;
-        break;
-    case '!': // (!) escape to the shell
-    case '$':
-        shell_out();
-        free_turn_flag = true;
-        break;
-    case ESCAPE: // (ESC)   do nothing.
-    case ' ':    // (space) do nothing.
-        free_turn_flag = true;
-        break;
-    case 'b': // (b) down, left  (1)
-        move_char(1, do_pickup);
-        break;
-    case 'j': // (j) down    (2)
-        move_char(2, do_pickup);
-        break;
-    case 'n': // (n) down, right  (3)
-        move_char(3, do_pickup);
-        break;
-    case 'h': // (h) left    (4)
-        move_char(4, do_pickup);
-        break;
-    case 'l': // (l) right    (6)
-        move_char(6, do_pickup);
-        break;
-    case 'y': // (y) up, left    (7)
-        move_char(7, do_pickup);
-        break;
-    case 'k': // (k) up    (8)
-        move_char(8, do_pickup);
-        break;
-    case 'u': // (u) up, right  (9)
-        move_char(9, do_pickup);
-        break;
-    case 'B': // (B) run down, left  (. 1)
-        find_init(1);
-        break;
-    case 'J': // (J) run down    (. 2)
-        find_init(2);
-        break;
-    case 'N': // (N) run down, right  (. 3)
-        find_init(3);
-        break;
-    case 'H': // (H) run left    (. 4)
-        find_init(4);
-        break;
-    case 'L': // (L) run right  (. 6)
-        find_init(6);
-        break;
-    case 'Y': // (Y) run up, left  (. 7)
-        find_init(7);
-        break;
-    case 'K': // (K) run up    (. 8)
-        find_init(8);
-        break;
-    case 'U': // (U) run up, right  (. 9)
-        find_init(9);
-        break;
-    case '/': // (/) identify a symbol
-        ident_char();
-        free_turn_flag = true;
-        break;
-    case '.': // (.) stay in one place (5)
-        move_char(5, do_pickup);
-        if (command_count > 1) {
-            command_count--;
-            rest();
-        }
-        break;
-    case '<': // (<) go down a staircase
-        go_up();
-        break;
-    case '>': // (>) go up a staircase
-        go_down();
-        break;
-    case '?': // (?) help with commands
-        if (rogue_like_commands) {
-            helpfile(MORIA_HELP);
-        } else {
-            helpfile(MORIA_ORIG_HELP);
-        }
-        free_turn_flag = true;
-        break;
-    case 'f': // (f)orce    (B)ash
-        bash();
-        break;
-    case 'C': // (C)haracter description
-        save_screen();
-        change_name();
-        restore_screen();
-        free_turn_flag = true;
-        break;
-    case 'D': // (D)isarm trap
-        disarm_trap();
-        break;
-    case 'E': // (E)at food
-        eat();
-        break;
-    case 'F': // (F)ill lamp
-        refill_lamp();
-        break;
-    case 'G': // (G)ain magic spells
-        gain_spells();
-        break;
-    case 'V': // (V)iew scores
-        save_screen();
-        display_scores();
-        restore_screen();
-        free_turn_flag = true;
-        break;
-    case 'W': // (W)here are we on the map  (L)ocate on map
-        if ((py.flags.blind > 0) || no_light()) {
-            msg_print("You can't see your map.");
-        } else {
-            int cy, cx, p_y, p_x;
-
-            y = char_row;
-            x = char_col;
-            if (get_panel(y, x, true)) {
-                prt_map();
-            }
-            cy = panel_row;
-            cx = panel_col;
-            for (;;) {
-                p_y = panel_row;
-                p_x = panel_col;
-                if (p_y == cy && p_x == cx) {
-                    tmp_str[0] = '\0';
-                } else {
-                    (void)sprintf(tmp_str, "%s%s of", p_y < cy ? " North" : p_y > cy ? " South" : "", p_x < cx ? " West" : p_x > cx ? " East" : "");
-                }
-                (void)sprintf(out_val, "Map sector [%d,%d], which is%s your sector. Look which direction?", p_y, p_x, tmp_str);
-                if (!get_dir(out_val, &dir_val)) {
-                    break;
-                }
-
-                // -CJS-
-                // Should really use the move function, but what the hell. This
-                // is nicer, as it moves exactly to the same place in another
-                // section. The direction calculation is not intuitive. Sorry.
-                for (;;) {
-                    x += ((dir_val - 1) % 3 - 1) * SCREEN_WIDTH / 2;
-                    y -= ((dir_val - 1) / 3 - 1) * SCREEN_HEIGHT / 2;
-                    if (x < 0 || y < 0 || x >= cur_width || y >= cur_width) {
-                        msg_print("You've gone past the end of your map.");
-                        x -= ((dir_val - 1) % 3 - 1) * SCREEN_WIDTH / 2;
-                        y += ((dir_val - 1) / 3 - 1) * SCREEN_HEIGHT / 2;
-                        break;
-                    }
-                    if (get_panel(y, x, true)) {
-                        prt_map();
-                        break;
-                    }
-                }
-            }
-
-            // Move to a new panel - but only if really necessary.
-            if (get_panel(char_row, char_col, false)) {
-                prt_map();
-            }
-        }
-        free_turn_flag = true;
-        break;
-    case 'R': // (R)est a while
-        rest();
-        break;
-    case '#': // (#) search toggle  (S)earch toggle
-        if (py.flags.status & PY_SEARCH) {
-            search_off();
-        } else {
-            search_on();
-        }
-        free_turn_flag = true;
-        break;
-    case CTRL_KEY('B'): // (^B) tunnel down left  (T 1)
-        tunnel(1);
-        break;
-    case CTRL_KEY('M'): // cr must be treated same as lf.
-    case CTRL_KEY('J'): // (^J) tunnel down    (T 2)
-        tunnel(2);
-        break;
-    case CTRL_KEY('N'): // (^N) tunnel down right  (T 3)
-        tunnel(3);
-        break;
-    case CTRL_KEY('H'): // (^H) tunnel left    (T 4)
-        tunnel(4);
-        break;
-    case CTRL_KEY('L'): // (^L) tunnel right    (T 6)
-        tunnel(6);
-        break;
-    case CTRL_KEY('Y'): // (^Y) tunnel up left    (T 7)
-        tunnel(7);
-        break;
-    case CTRL_KEY('K'): // (^K) tunnel up    (T 8)
-        tunnel(8);
-        break;
-    case CTRL_KEY('U'): // (^U) tunnel up right    (T 9)
-        tunnel(9);
-        break;
-    case 'z': // (z)ap a wand    (a)im a wand
-        aim();
-        break;
-    case 'M':
-        screen_map();
-        free_turn_flag = true;
-        break;
-    case 'P': // (P)eruse a book  (B)rowse in a book
-        examine_book();
-        free_turn_flag = true;
-        break;
-    case 'c': // (c)lose an object
-        closeobject();
-        break;
-    case 'd': // (d)rop something
-        inven_command('d');
-        break;
-    case 'e': // (e)quipment list
-        inven_command('e');
-        break;
-    case 't': // (t)hrow something  (f)ire something
-        throw_object();
-        break;
-    case 'i': // (i)nventory list
-        inven_command('i');
-        break;
-    case 'S': // (S)pike a door  (j)am a door
-        jamdoor();
-        break;
-    case 'x': // e(x)amine surrounds  (l)ook about
-        look();
-        free_turn_flag = true;
-        break;
-    case 'm': // (m)agic spells
-        cast();
-        break;
-    case 'o': // (o)pen something
-        openobject();
-        break;
-    case 'p': // (p)ray
-        pray();
-        break;
-    case 'q': // (q)uaff
-        quaff();
-        break;
-    case 'r': // (r)ead
-        read_scroll();
-        break;
-    case 's': // (s)earch for a turn
-        search(char_row, char_col, py.misc.srh);
-        break;
-    case 'T': // (T)ake off something  (t)ake off
-        inven_command('t');
-        break;
-    case 'Z': // (Z)ap a staff  (u)se a staff
-        use();
-        break;
-    case 'v': // (v)ersion of game
-        helpfile(MORIA_VER);
-        free_turn_flag = true;
-        break;
-    case 'w': // (w)ear or wield
-        inven_command('w');
-        break;
-    case 'X': // e(X)change weapons  e(x)change
-        inven_command('x');
-        break;
-    default:
-        if (wizard) {
-            // Wizard commands are free moves
-            free_turn_flag = true;
-
-            switch (com_val) {
-            case CTRL_KEY('A'): // ^A = Cure all
-                (void)remove_curse();
-                (void)cure_blindness();
-                (void)cure_confusion();
-                (void)cure_poison();
-                (void)remove_fear();
-                (void)res_stat(A_STR);
-                (void)res_stat(A_INT);
-                (void)res_stat(A_WIS);
-                (void)res_stat(A_CON);
-                (void)res_stat(A_DEX);
-                (void)res_stat(A_CHR);
-                f_ptr = &py.flags;
-                if (f_ptr->slow > 1) {
-                    f_ptr->slow = 1;
-                }
-                if (f_ptr->image > 1) {
-                    f_ptr->image = 1;
-                }
-                break;
-            case CTRL_KEY('E'): // ^E = wizchar
-                change_character();
-                erase_line(MSG_LINE, 0);
-                break;
-            case CTRL_KEY('F'): // ^F = genocide
-                (void)mass_genocide();
-                break;
-            case CTRL_KEY('G'): // ^G = treasure
-                if (command_count > 0) {
-                    i = command_count;
-                    command_count = 0;
-                } else {
-                    i = 1;
-                }
-                random_object(char_row, char_col, i);
-                prt_map();
-                break;
-            case CTRL_KEY('D'): // ^D = up/down
-                if (command_count > 0) {
-                    if (command_count > 99) {
-                        i = 0;
+                while (i > 0) {
+                    i--;
+                    prt(old_msg[j], i, 0);
+                    if (j == 0) {
+                        j = MAX_SAVE_MSG - 1;
                     } else {
-                        i = command_count;
-                    }
-                    command_count = 0;
-                } else {
-                    prt("Go to which level (0-99) ? ", 0, 0);
-                    i = -1;
-                    if (get_string(tmp_str, 0, 27, 10)) {
-                        i = atoi(tmp_str);
+                        j--;
                     }
                 }
-                if (i > -1) {
-                    dun_level = (int16_t) i;
-                    if (dun_level > 99) {
-                        dun_level = 99;
-                    }
-                    new_level_flag = true;
-                } else {
-                    erase_line(MSG_LINE, 0);
-                }
-                break;
-            case CTRL_KEY('O'): // ^O = objects
-                print_objects();
-                break;
-            case '\\': // \ wizard help
+
+                erase_line(x, 0);
+                pause_line(x);
+                restore_screen();
+            } else {
+                // Distinguish real and recovered messages with a '>'. -CJS-
+                put_buffer(">", 0, 0);
+                prt(old_msg[j], 0, 1);
+            }
+
+            free_turn_flag = true;
+            break;
+        case CTRL_KEY('V'): // (^V)iew license
+            helpfile(MORIA_GPL);
+            free_turn_flag = true;
+            break;
+        case CTRL_KEY('W'): // (^W)izard mode
+            if (wizard) {
+                wizard = false;
+                msg_print("Wizard mode off.");
+            } else if (enter_wiz_mode()) {
+                msg_print("Wizard mode on.");
+            }
+
+            prt_winner();
+            free_turn_flag = true;
+            break;
+        case CTRL_KEY('X'): // e(^X)it and save
+            if (total_winner) {
+                msg_print("You are a Total Winner,  your character must be retired.");
                 if (rogue_like_commands) {
-                    helpfile(MORIA_WIZ_HELP);
+                    msg_print("Use 'Q' to when you are ready to quit.");
                 } else {
-                    helpfile(MORIA_OWIZ_HELP);
+                    msg_print("Use <Control>-K when you are ready to quit.");
                 }
-                break;
-            case CTRL_KEY('I'): // ^I = identify
-                (void)ident_spell();
-                break;
-            case '*':
-                wizard_light();
-                break;
-            case ':':
-                map_area();
-                break;
-            case CTRL_KEY('T'): // ^T = teleport
-                teleport(100);
-                break;
-            case '+':
-                if (command_count > 0) {
-                    py.misc.exp = command_count;
-                    command_count = 0;
-                } else if (py.misc.exp == 0) {
-                    py.misc.exp = 1;
-                } else {
-                    py.misc.exp = py.misc.exp * 2;
+            } else {
+                (void) strcpy(died_from, "(saved)");
+                msg_print("Saving game...");
+
+                if (save_char()) {
+                    exit_game();
                 }
-                prt_experience();
-                break;
-            case '&': // & = summon
+
+                (void) strcpy(died_from, "(alive and well)");
+            }
+
+            free_turn_flag = true;
+            break;
+        case '=': // (=) set options
+            save_screen();
+            set_options();
+            restore_screen();
+            free_turn_flag = true;
+            break;
+        case '{': // ({) inscribe an object
+            scribe_object();
+            free_turn_flag = true;
+            break;
+        case '!': // (!) escape to the shell
+        case '$':
+            shell_out();
+            free_turn_flag = true;
+            break;
+        case ESCAPE: // (ESC)   do nothing.
+        case ' ':    // (space) do nothing.
+            free_turn_flag = true;
+            break;
+        case 'b': // (b) down, left  (1)
+            move_char(1, do_pickup);
+            break;
+        case 'j': // (j) down    (2)
+            move_char(2, do_pickup);
+            break;
+        case 'n': // (n) down, right  (3)
+            move_char(3, do_pickup);
+            break;
+        case 'h': // (h) left    (4)
+            move_char(4, do_pickup);
+            break;
+        case 'l': // (l) right    (6)
+            move_char(6, do_pickup);
+            break;
+        case 'y': // (y) up, left    (7)
+            move_char(7, do_pickup);
+            break;
+        case 'k': // (k) up    (8)
+            move_char(8, do_pickup);
+            break;
+        case 'u': // (u) up, right  (9)
+            move_char(9, do_pickup);
+            break;
+        case 'B': // (B) run down, left  (. 1)
+            find_init(1);
+            break;
+        case 'J': // (J) run down    (. 2)
+            find_init(2);
+            break;
+        case 'N': // (N) run down, right  (. 3)
+            find_init(3);
+            break;
+        case 'H': // (H) run left    (. 4)
+            find_init(4);
+            break;
+        case 'L': // (L) run right  (. 6)
+            find_init(6);
+            break;
+        case 'Y': // (Y) run up, left  (. 7)
+            find_init(7);
+            break;
+        case 'K': // (K) run up    (. 8)
+            find_init(8);
+            break;
+        case 'U': // (U) run up, right  (. 9)
+            find_init(9);
+            break;
+        case '/': // (/) identify a symbol
+            ident_char();
+            free_turn_flag = true;
+            break;
+        case '.': // (.) stay in one place (5)
+            move_char(5, do_pickup);
+            if (command_count > 1) {
+                command_count--;
+                rest();
+            }
+            break;
+        case '<': // (<) go down a staircase
+            go_up();
+            break;
+        case '>': // (>) go up a staircase
+            go_down();
+            break;
+        case '?': // (?) help with commands
+            if (rogue_like_commands) {
+                helpfile(MORIA_HELP);
+            } else {
+                helpfile(MORIA_ORIG_HELP);
+            }
+            free_turn_flag = true;
+            break;
+        case 'f': // (f)orce    (B)ash
+            bash();
+            break;
+        case 'C': // (C)haracter description
+            save_screen();
+            change_name();
+            restore_screen();
+            free_turn_flag = true;
+            break;
+        case 'D': // (D)isarm trap
+            disarm_trap();
+            break;
+        case 'E': // (E)at food
+            eat();
+            break;
+        case 'F': // (F)ill lamp
+            refill_lamp();
+            break;
+        case 'G': // (G)ain magic spells
+            gain_spells();
+            break;
+        case 'V': // (V)iew scores
+            save_screen();
+            display_scores();
+            restore_screen();
+            free_turn_flag = true;
+            break;
+        case 'W': // (W)here are we on the map  (L)ocate on map
+            if ((py.flags.blind > 0) || no_light()) {
+                msg_print("You can't see your map.");
+            } else {
+                int cy, cx, p_y, p_x;
+
                 y = char_row;
                 x = char_col;
-                (void)summon_monster(&y, &x, true);
-                creatures(false);
-                break;
-            case '@':
-                wizard_create();
-                break;
-            default:
-                if (rogue_like_commands) {
-                    prt("Type '?' or '\\' for help.", 0, 0);
-                } else {
-                    prt("Type '?' or ^H for help.", 0, 0);
+                if (get_panel(y, x, true)) {
+                    prt_map();
+                }
+                cy = panel_row;
+                cx = panel_col;
+                for (;;) {
+                    p_y = panel_row;
+                    p_x = panel_col;
+                    if (p_y == cy && p_x == cx) {
+                        tmp_str[0] = '\0';
+                    } else {
+                        (void) sprintf(tmp_str, "%s%s of", p_y < cy ? " North" : p_y > cy ? " South" : "", p_x < cx ? " West" : p_x > cx ? " East" : "");
+                    }
+                    (void) sprintf(out_val, "Map sector [%d,%d], which is%s your sector. Look which direction?", p_y, p_x, tmp_str);
+                    if (!get_dir(out_val, &dir_val)) {
+                        break;
+                    }
+
+                    // -CJS-
+                    // Should really use the move function, but what the hell. This
+                    // is nicer, as it moves exactly to the same place in another
+                    // section. The direction calculation is not intuitive. Sorry.
+                    for (;;) {
+                        x += ((dir_val - 1) % 3 - 1) * SCREEN_WIDTH / 2;
+                        y -= ((dir_val - 1) / 3 - 1) * SCREEN_HEIGHT / 2;
+                        if (x < 0 || y < 0 || x >= cur_width || y >= cur_width) {
+                            msg_print("You've gone past the end of your map.");
+                            x -= ((dir_val - 1) % 3 - 1) * SCREEN_WIDTH / 2;
+                            y += ((dir_val - 1) / 3 - 1) * SCREEN_HEIGHT / 2;
+                            break;
+                        }
+                        if (get_panel(y, x, true)) {
+                            prt_map();
+                            break;
+                        }
+                    }
+                }
+
+                // Move to a new panel - but only if really necessary.
+                if (get_panel(char_row, char_col, false)) {
+                    prt_map();
                 }
             }
-        } else {
-            prt("Type '?' for help.", 0, 0);
             free_turn_flag = true;
-        }
+            break;
+        case 'R': // (R)est a while
+            rest();
+            break;
+        case '#': // (#) search toggle  (S)earch toggle
+            if (py.flags.status & PY_SEARCH) {
+                search_off();
+            } else {
+                search_on();
+            }
+            free_turn_flag = true;
+            break;
+        case CTRL_KEY('B'): // (^B) tunnel down left  (T 1)
+            tunnel(1);
+            break;
+        case CTRL_KEY('M'): // cr must be treated same as lf.
+        case CTRL_KEY('J'): // (^J) tunnel down    (T 2)
+            tunnel(2);
+            break;
+        case CTRL_KEY('N'): // (^N) tunnel down right  (T 3)
+            tunnel(3);
+            break;
+        case CTRL_KEY('H'): // (^H) tunnel left    (T 4)
+            tunnel(4);
+            break;
+        case CTRL_KEY('L'): // (^L) tunnel right    (T 6)
+            tunnel(6);
+            break;
+        case CTRL_KEY('Y'): // (^Y) tunnel up left    (T 7)
+            tunnel(7);
+            break;
+        case CTRL_KEY('K'): // (^K) tunnel up    (T 8)
+            tunnel(8);
+            break;
+        case CTRL_KEY('U'): // (^U) tunnel up right    (T 9)
+            tunnel(9);
+            break;
+        case 'z': // (z)ap a wand    (a)im a wand
+            aim();
+            break;
+        case 'M':
+            screen_map();
+            free_turn_flag = true;
+            break;
+        case 'P': // (P)eruse a book  (B)rowse in a book
+            examine_book();
+            free_turn_flag = true;
+            break;
+        case 'c': // (c)lose an object
+            closeobject();
+            break;
+        case 'd': // (d)rop something
+            inven_command('d');
+            break;
+        case 'e': // (e)quipment list
+            inven_command('e');
+            break;
+        case 't': // (t)hrow something  (f)ire something
+            throw_object();
+            break;
+        case 'i': // (i)nventory list
+            inven_command('i');
+            break;
+        case 'S': // (S)pike a door  (j)am a door
+            jamdoor();
+            break;
+        case 'x': // e(x)amine surrounds  (l)ook about
+            look();
+            free_turn_flag = true;
+            break;
+        case 'm': // (m)agic spells
+            cast();
+            break;
+        case 'o': // (o)pen something
+            openobject();
+            break;
+        case 'p': // (p)ray
+            pray();
+            break;
+        case 'q': // (q)uaff
+            quaff();
+            break;
+        case 'r': // (r)ead
+            read_scroll();
+            break;
+        case 's': // (s)earch for a turn
+            search(char_row, char_col, py.misc.srh);
+            break;
+        case 'T': // (T)ake off something  (t)ake off
+            inven_command('t');
+            break;
+        case 'Z': // (Z)ap a staff  (u)se a staff
+            use();
+            break;
+        case 'v': // (v)ersion of game
+            helpfile(MORIA_VER);
+            free_turn_flag = true;
+            break;
+        case 'w': // (w)ear or wield
+            inven_command('w');
+            break;
+        case 'X': // e(X)change weapons  e(x)change
+            inven_command('x');
+            break;
+        default:
+            if (wizard) {
+                // Wizard commands are free moves
+                free_turn_flag = true;
+
+                switch (com_val) {
+                    case CTRL_KEY('A'): // ^A = Cure all
+                        (void) remove_curse();
+                        (void) cure_blindness();
+                        (void) cure_confusion();
+                        (void) cure_poison();
+                        (void) remove_fear();
+                        (void) res_stat(A_STR);
+                        (void) res_stat(A_INT);
+                        (void) res_stat(A_WIS);
+                        (void) res_stat(A_CON);
+                        (void) res_stat(A_DEX);
+                        (void) res_stat(A_CHR);
+                        f_ptr = &py.flags;
+                        if (f_ptr->slow > 1) {
+                            f_ptr->slow = 1;
+                        }
+                        if (f_ptr->image > 1) {
+                            f_ptr->image = 1;
+                        }
+                        break;
+                    case CTRL_KEY('E'): // ^E = wizchar
+                        change_character();
+                        erase_line(MSG_LINE, 0);
+                        break;
+                    case CTRL_KEY('F'): // ^F = genocide
+                        (void) mass_genocide();
+                        break;
+                    case CTRL_KEY('G'): // ^G = treasure
+                        if (command_count > 0) {
+                            i = command_count;
+                            command_count = 0;
+                        } else {
+                            i = 1;
+                        }
+                        random_object(char_row, char_col, i);
+                        prt_map();
+                        break;
+                    case CTRL_KEY('D'): // ^D = up/down
+                        if (command_count > 0) {
+                            if (command_count > 99) {
+                                i = 0;
+                            } else {
+                                i = command_count;
+                            }
+                            command_count = 0;
+                        } else {
+                            prt("Go to which level (0-99) ? ", 0, 0);
+                            i = -1;
+                            if (get_string(tmp_str, 0, 27, 10)) {
+                                i = atoi(tmp_str);
+                            }
+                        }
+                        if (i > -1) {
+                            dun_level = (int16_t) i;
+                            if (dun_level > 99) {
+                                dun_level = 99;
+                            }
+                            new_level_flag = true;
+                        } else {
+                            erase_line(MSG_LINE, 0);
+                        }
+                        break;
+                    case CTRL_KEY('O'): // ^O = objects
+                        print_objects();
+                        break;
+                    case '\\': // \ wizard help
+                        if (rogue_like_commands) {
+                            helpfile(MORIA_WIZ_HELP);
+                        } else {
+                            helpfile(MORIA_OWIZ_HELP);
+                        }
+                        break;
+                    case CTRL_KEY('I'): // ^I = identify
+                        (void) ident_spell();
+                        break;
+                    case '*':
+                        wizard_light();
+                        break;
+                    case ':':
+                        map_area();
+                        break;
+                    case CTRL_KEY('T'): // ^T = teleport
+                        teleport(100);
+                        break;
+                    case '+':
+                        if (command_count > 0) {
+                            py.misc.exp = command_count;
+                            command_count = 0;
+                        } else if (py.misc.exp == 0) {
+                            py.misc.exp = 1;
+                        } else {
+                            py.misc.exp = py.misc.exp * 2;
+                        }
+                        prt_experience();
+                        break;
+                    case '&': // & = summon
+                        y = char_row;
+                        x = char_col;
+                        (void) summon_monster(&y, &x, true);
+                        creatures(false);
+                        break;
+                    case '@':
+                        wizard_create();
+                        break;
+                    default:
+                        if (rogue_like_commands) {
+                            prt("Type '?' or '\\' for help.", 0, 0);
+                        } else {
+                            prt("Type '?' or ^H for help.", 0, 0);
+                        }
+                }
+            } else {
+                prt("Type '?' for help.", 0, 0);
+                free_turn_flag = true;
+            }
     }
     last_command = com_val;
 }
@@ -1567,91 +1572,91 @@ static void do_command(char com_val) {
 // Check whether this command will accept a count. -CJS-
 static bool valid_countcommand(char c) {
     switch (c) {
-    case 'Q':
-    case CTRL_KEY('W'):
-    case CTRL_KEY('X'):
-    case '=':
-    case '{':
-    case '/':
-    case '<':
-    case '>':
-    case '?':
-    case 'C':
-    case 'E':
-    case 'F':
-    case 'G':
-    case 'V':
-    case '#':
-    case 'z':
-    case 'P':
-    case 'c':
-    case 'd':
-    case 'e':
-    case 't':
-    case 'i':
-    case 'x':
-    case 'm':
-    case 'p':
-    case 'q':
-    case 'r':
-    case 'T':
-    case 'Z':
-    case 'v':
-    case 'w':
-    case 'W':
-    case 'X':
-    case CTRL_KEY('A'):
-    case '\\':
-    case CTRL_KEY('I'):
-    case '*':
-    case ':':
-    case CTRL_KEY('T'):
-    case CTRL_KEY('E'):
-    case CTRL_KEY('F'):
-    case CTRL_KEY('S'):
-    case CTRL_KEY('Q'):
-        return false;
-    case CTRL_KEY('P'):
-    case ESCAPE:
-    case ' ':
-    case '-':
-    case 'b':
-    case 'f':
-    case 'j':
-    case 'n':
-    case 'h':
-    case 'l':
-    case 'y':
-    case 'k':
-    case 'u':
-    case '.':
-    case 'B':
-    case 'J':
-    case 'N':
-    case 'H':
-    case 'L':
-    case 'Y':
-    case 'K':
-    case 'U':
-    case 'D':
-    case 'R':
-    case CTRL_KEY('Y'):
-    case CTRL_KEY('K'):
-    case CTRL_KEY('U'):
-    case CTRL_KEY('L'):
-    case CTRL_KEY('N'):
-    case CTRL_KEY('J'):
-    case CTRL_KEY('B'):
-    case CTRL_KEY('H'):
-    case 'S':
-    case 'o':
-    case 's':
-    case CTRL_KEY('D'):
-    case CTRL_KEY('G'):
-    case '+':
-        return true;
-    default:
-        return false;
+        case 'Q':
+        case CTRL_KEY('W'):
+        case CTRL_KEY('X'):
+        case '=':
+        case '{':
+        case '/':
+        case '<':
+        case '>':
+        case '?':
+        case 'C':
+        case 'E':
+        case 'F':
+        case 'G':
+        case 'V':
+        case '#':
+        case 'z':
+        case 'P':
+        case 'c':
+        case 'd':
+        case 'e':
+        case 't':
+        case 'i':
+        case 'x':
+        case 'm':
+        case 'p':
+        case 'q':
+        case 'r':
+        case 'T':
+        case 'Z':
+        case 'v':
+        case 'w':
+        case 'W':
+        case 'X':
+        case CTRL_KEY('A'):
+        case '\\':
+        case CTRL_KEY('I'):
+        case '*':
+        case ':':
+        case CTRL_KEY('T'):
+        case CTRL_KEY('E'):
+        case CTRL_KEY('F'):
+        case CTRL_KEY('S'):
+        case CTRL_KEY('Q'):
+            return false;
+        case CTRL_KEY('P'):
+        case ESCAPE:
+        case ' ':
+        case '-':
+        case 'b':
+        case 'f':
+        case 'j':
+        case 'n':
+        case 'h':
+        case 'l':
+        case 'y':
+        case 'k':
+        case 'u':
+        case '.':
+        case 'B':
+        case 'J':
+        case 'N':
+        case 'H':
+        case 'L':
+        case 'Y':
+        case 'K':
+        case 'U':
+        case 'D':
+        case 'R':
+        case CTRL_KEY('Y'):
+        case CTRL_KEY('K'):
+        case CTRL_KEY('U'):
+        case CTRL_KEY('L'):
+        case CTRL_KEY('N'):
+        case CTRL_KEY('J'):
+        case CTRL_KEY('B'):
+        case CTRL_KEY('H'):
+        case 'S':
+        case 'o':
+        case 's':
+        case CTRL_KEY('D'):
+        case CTRL_KEY('G'):
+        case '+':
+            return true;
+        default:
+            return false;
     }
 }
 
@@ -1659,7 +1664,7 @@ static bool valid_countcommand(char c) {
 static void regenhp(int percent) {
     struct player_type::misc *p_ptr = &py.misc;
     int old_chp = p_ptr->chp;
-    int32_t new_chp = ((int32_t)p_ptr->mhp) * percent + PLAYER_REGEN_HPBASE;
+    int32_t new_chp = ((int32_t) p_ptr->mhp) * percent + PLAYER_REGEN_HPBASE;
 
     // div 65536
     p_ptr->chp += new_chp >> 16;
@@ -1673,7 +1678,7 @@ static void regenhp(int percent) {
     int32_t new_chp_frac = (new_chp & 0xFFFF) + p_ptr->chp_frac;
 
     if (new_chp_frac >= 0x10000L) {
-        p_ptr->chp_frac = (uint16_t)(new_chp_frac - 0x10000L);
+        p_ptr->chp_frac = (uint16_t) (new_chp_frac - 0x10000L);
         p_ptr->chp++;
     } else {
         p_ptr->chp_frac = (uint16_t) new_chp_frac;
@@ -1693,7 +1698,7 @@ static void regenhp(int percent) {
 static void regenmana(int percent) {
     struct player_type::misc *p_ptr = &py.misc;
     int old_cmana = p_ptr->cmana;
-    int32_t new_mana = ((int32_t)p_ptr->mana) * percent + PLAYER_REGEN_MNBASE;
+    int32_t new_mana = ((int32_t) p_ptr->mana) * percent + PLAYER_REGEN_MNBASE;
 
     // div 65536
     p_ptr->cmana += new_mana >> 16;
@@ -1707,7 +1712,7 @@ static void regenmana(int percent) {
     int32_t new_mana_frac = (new_mana & 0xFFFF) + p_ptr->cmana_frac;
 
     if (new_mana_frac >= 0x10000L) {
-        p_ptr->cmana_frac = (uint16_t)(new_mana_frac - 0x10000L);
+        p_ptr->cmana_frac = (uint16_t) (new_mana_frac - 0x10000L);
         p_ptr->cmana++;
     } else {
         p_ptr->cmana_frac = (uint16_t) new_mana_frac;
@@ -1853,7 +1858,7 @@ static void jamdoor() {
 
     int dir;
     if (get_dir(CNIL, &dir)) {
-        (void)mmove(dir, &y, &x);
+        (void) mmove(dir, &y, &x);
         cave_type *c_ptr = &cave[y][x];
 
         if (c_ptr->tptr != 0) {
@@ -1889,7 +1894,7 @@ static void jamdoor() {
                     free_turn_flag = false;
 
                     char tmp_str[80];
-                    (void)sprintf(tmp_str, "The %s is in your way!", c_list[m_list[c_ptr->cptr].mptr].name);
+                    (void) sprintf(tmp_str, "The %s is in your way!", c_list[m_list[c_ptr->cptr].mptr].name);
                     msg_print(tmp_str);
                 }
             } else if (t_ptr->tval == TV_OPEN_DOOR) {

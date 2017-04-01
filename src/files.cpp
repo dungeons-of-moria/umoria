@@ -18,10 +18,10 @@
 //  so we don't have multiple people trying to write to it at the same time.
 //  Craig Norborg (doc)    Mon Aug 10 16:41:59 EST 1987
 void init_scorefile() {
-    highscore_fp = fopen(MORIA_TOP, (char *)"rb+");
+    highscore_fp = fopen(MORIA_TOP, (char *) "rb+");
 
     if (highscore_fp == NULL) {
-        (void)fprintf(stderr, "Can't open score file \"%s\"\n", MORIA_TOP);
+        (void) fprintf(stderr, "Can't open score file \"%s\"\n", MORIA_TOP);
         exit(1);
     }
 }
@@ -39,7 +39,7 @@ void read_times() {
             put_buffer(in_line, i, 0);
         }
         pause_line(23);
-        (void)fclose(file1);
+        (void) fclose(file1);
     }
 }
 
@@ -50,7 +50,7 @@ void helpfile(const char *filename) {
 
     FILE *file = fopen(filename, "r");
     if (file == NULL) {
-        (void)sprintf(tmp_str, "Can not find help file \"%s\".\n", filename);
+        (void) sprintf(tmp_str, "Can not find help file \"%s\".\n", filename);
         prt(tmp_str, 0, 0);
         return;
     }
@@ -72,7 +72,7 @@ void helpfile(const char *filename) {
         }
     }
 
-    (void)fclose(file);
+    (void) fclose(file);
     restore_screen();
 }
 
@@ -112,14 +112,14 @@ void print_objects() {
 
             FILE *file1 = fopen(filename1, "w");
             if (file1 != NULL) {
-                (void)sprintf(tmp_str, "%d", nobj);
+                (void) sprintf(tmp_str, "%d", nobj);
                 prt(strcat(tmp_str, " random objects being produced..."), 0, 0);
                 put_qio();
-                (void)fprintf(file1, "*** Random Object Sampling:\n");
-                (void)fprintf(file1, "*** %d objects\n", nobj);
-                (void)fprintf(file1, "*** For Level %d\n", level);
-                (void)fprintf(file1, "\n");
-                (void)fprintf(file1, "\n");
+                (void) fprintf(file1, "*** Random Object Sampling:\n");
+                (void) fprintf(file1, "*** %d objects\n", nobj);
+                (void) fprintf(file1, "*** For Level %d\n", level);
+                (void) fprintf(file1, "\n");
+                (void) fprintf(file1, "\n");
 
                 int j = popt();
 
@@ -135,10 +135,10 @@ void print_objects() {
                     }
 
                     objdes(tmp_str, i_ptr, true);
-                    (void)fprintf(file1, "%d %s\n", i_ptr->level, tmp_str);
+                    (void) fprintf(file1, "%d %s\n", i_ptr->level, tmp_str);
                 }
-                pusht((uint8_t)j);
-                (void)fclose(file1);
+                pusht((uint8_t) j);
+                (void) fclose(file1);
                 prt("Completed.", 0, 0);
             } else {
                 prt("File could not be opened.", 0, 0);
@@ -155,7 +155,7 @@ bool file_character(char *filename1) {
 
     int fd = open(filename1, O_WRONLY | O_CREAT | O_EXCL, 0644);
     if (fd < 0 && errno == EEXIST) {
-        (void)sprintf(out_val, "Replace existing file %s?", filename1);
+        (void) sprintf(out_val, "Replace existing file %s?", filename1);
         if (get_check(out_val)) {
             fd = open(filename1, O_WRONLY, 0644);
         }
@@ -165,7 +165,7 @@ bool file_character(char *filename1) {
     if (fd >= 0) {
         // on some non-unix machines, fdopen() is not reliable,
         // hence must call close() and then fopen().
-        (void)close(fd);
+        (void) close(fd);
         file1 = fopen(filename1, "w");
     } else {
         file1 = NULL;
@@ -173,9 +173,9 @@ bool file_character(char *filename1) {
 
     if (file1 == NULL) {
         if (fd >= 0) {
-            (void)close(fd);
+            (void) close(fd);
         }
-        (void)sprintf(out_val, "Can't open file %s:", filename1);
+        (void) sprintf(out_val, "Can't open file %s:", filename1);
         msg_print(out_val);
         return false;
     }
@@ -188,50 +188,50 @@ bool file_character(char *filename1) {
     const char *colon = ":";
     const char *blank = " ";
 
-    (void)fprintf(file1, "%c\n\n", CTRL_KEY('L'));
+    (void) fprintf(file1, "%c\n\n", CTRL_KEY('L'));
 
-    (void)fprintf(file1, " Name%9s %-23s", colon, py.misc.name);
-    (void)fprintf(file1, " Age%11s %6d", colon, (int)py.misc.age);
+    (void) fprintf(file1, " Name%9s %-23s", colon, py.misc.name);
+    (void) fprintf(file1, " Age%11s %6d", colon, (int) py.misc.age);
     cnv_stat(py.stats.use_stat[A_STR], prt1);
-    (void)fprintf(file1, "   STR : %s\n", prt1);
-    (void)fprintf(file1, " Race%9s %-23s", colon, race[py.misc.prace].trace);
-    (void)fprintf(file1, " Height%8s %6d", colon, (int)py.misc.ht);
+    (void) fprintf(file1, "   STR : %s\n", prt1);
+    (void) fprintf(file1, " Race%9s %-23s", colon, race[py.misc.prace].trace);
+    (void) fprintf(file1, " Height%8s %6d", colon, (int) py.misc.ht);
     cnv_stat(py.stats.use_stat[A_INT], prt1);
-    (void)fprintf(file1, "   INT : %s\n", prt1);
-    (void)fprintf(file1, " Sex%10s %-23s", colon, (py.misc.male ? "Male" : "Female"));
-    (void)fprintf(file1, " Weight%8s %6d", colon, (int)py.misc.wt);
+    (void) fprintf(file1, "   INT : %s\n", prt1);
+    (void) fprintf(file1, " Sex%10s %-23s", colon, (py.misc.male ? "Male" : "Female"));
+    (void) fprintf(file1, " Weight%8s %6d", colon, (int) py.misc.wt);
     cnv_stat(py.stats.use_stat[A_WIS], prt1);
-    (void)fprintf(file1, "   WIS : %s\n", prt1);
-    (void)fprintf(file1, " Class%8s %-23s", colon, classes[py.misc.pclass].title);
-    (void)fprintf(file1, " Social Class : %6d", py.misc.sc);
+    (void) fprintf(file1, "   WIS : %s\n", prt1);
+    (void) fprintf(file1, " Class%8s %-23s", colon, classes[py.misc.pclass].title);
+    (void) fprintf(file1, " Social Class : %6d", py.misc.sc);
     cnv_stat(py.stats.use_stat[A_DEX], prt1);
-    (void)fprintf(file1, "   DEX : %s\n", prt1);
-    (void)fprintf(file1, " Title%8s %-23s", colon, title_string());
-    (void)fprintf(file1, "%22s", blank);
+    (void) fprintf(file1, "   DEX : %s\n", prt1);
+    (void) fprintf(file1, " Title%8s %-23s", colon, title_string());
+    (void) fprintf(file1, "%22s", blank);
     cnv_stat(py.stats.use_stat[A_CON], prt1);
-    (void)fprintf(file1, "   CON : %s\n", prt1);
-    (void)fprintf(file1, "%34s", blank);
-    (void)fprintf(file1, "%26s", blank);
+    (void) fprintf(file1, "   CON : %s\n", prt1);
+    (void) fprintf(file1, "%34s", blank);
+    (void) fprintf(file1, "%26s", blank);
     cnv_stat(py.stats.use_stat[A_CHR], prt1);
-    (void)fprintf(file1, "   CHR : %s\n\n", prt1);
+    (void) fprintf(file1, "   CHR : %s\n\n", prt1);
 
-    (void)fprintf(file1, " + To Hit    : %6d", py.misc.dis_th);
-    (void)fprintf(file1, "%7sLevel      : %7d", blank, (int)py.misc.lev);
-    (void)fprintf(file1, "    Max Hit Points : %6d\n", py.misc.mhp);
-    (void)fprintf(file1, " + To Damage : %6d", py.misc.dis_td);
-    (void)fprintf(file1, "%7sExperience : %7d", blank, py.misc.exp);
-    (void)fprintf(file1, "    Cur Hit Points : %6d\n", py.misc.chp);
-    (void)fprintf(file1, " + To AC     : %6d", py.misc.dis_tac);
-    (void)fprintf(file1, "%7sMax Exp    : %7d", blank, py.misc.max_exp);
-    (void)fprintf(file1, "    Max Mana%8s %6d\n", colon, py.misc.mana);
-    (void)fprintf(file1, "   Total AC  : %6d", py.misc.dis_ac);
+    (void) fprintf(file1, " + To Hit    : %6d", py.misc.dis_th);
+    (void) fprintf(file1, "%7sLevel      : %7d", blank, (int) py.misc.lev);
+    (void) fprintf(file1, "    Max Hit Points : %6d\n", py.misc.mhp);
+    (void) fprintf(file1, " + To Damage : %6d", py.misc.dis_td);
+    (void) fprintf(file1, "%7sExperience : %7d", blank, py.misc.exp);
+    (void) fprintf(file1, "    Cur Hit Points : %6d\n", py.misc.chp);
+    (void) fprintf(file1, " + To AC     : %6d", py.misc.dis_tac);
+    (void) fprintf(file1, "%7sMax Exp    : %7d", blank, py.misc.max_exp);
+    (void) fprintf(file1, "    Max Mana%8s %6d\n", colon, py.misc.mana);
+    (void) fprintf(file1, "   Total AC  : %6d", py.misc.dis_ac);
     if (py.misc.lev >= MAX_PLAYER_LEVEL) {
-        (void)fprintf(file1, "%7sExp to Adv : *******", blank);
+        (void) fprintf(file1, "%7sExp to Adv : *******", blank);
     } else {
-        (void)fprintf(file1, "%7sExp to Adv : %7d", blank, (int32_t)(player_exp[py.misc.lev - 1] * py.misc.expfact / 100));
+        (void) fprintf(file1, "%7sExp to Adv : %7d", blank, (int32_t) (player_exp[py.misc.lev - 1] * py.misc.expfact / 100));
     }
-    (void)fprintf(file1, "    Cur Mana%8s %6d\n", colon, py.misc.cmana);
-    (void)fprintf(file1, "%28sGold%8s %7d\n\n", blank, colon, py.misc.au);
+    (void) fprintf(file1, "    Cur Mana%8s %6d\n", colon, py.misc.cmana);
+    (void) fprintf(file1, "%28sGold%8s %7d\n\n", blank, colon, py.misc.au);
 
     struct player_type::misc *p_ptr = &py.misc;
 
@@ -252,32 +252,32 @@ bool file_character(char *filename1) {
     int xdev = p_ptr->save + stat_adj(A_INT) + (class_level_adj[p_ptr->pclass][CLA_DEVICE] * p_ptr->lev / 3);
 
     vtype xinfra;
-    (void)sprintf(xinfra, "%d feet", py.flags.see_infra * 10);
+    (void) sprintf(xinfra, "%d feet", py.flags.see_infra * 10);
 
-    (void)fprintf(file1, "(Miscellaneous Abilities)\n\n");
-    (void)fprintf(file1, " Fighting    : %-10s", likert(xbth, 12));
-    (void)fprintf(file1, "   Stealth     : %-10s", likert(xstl, 1));
-    (void)fprintf(file1, "   Perception  : %s\n", likert(xfos, 3));
-    (void)fprintf(file1, " Bows/Throw  : %-10s", likert(xbthb, 12));
-    (void)fprintf(file1, "   Disarming   : %-10s", likert(xdis, 8));
-    (void)fprintf(file1, "   Searching   : %s\n", likert(xsrh, 6));
-    (void)fprintf(file1, " Saving Throw: %-10s", likert(xsave, 6));
-    (void)fprintf(file1, "   Magic Device: %-10s", likert(xdev, 6));
-    (void)fprintf(file1, "   Infra-Vision: %s\n\n", xinfra);
+    (void) fprintf(file1, "(Miscellaneous Abilities)\n\n");
+    (void) fprintf(file1, " Fighting    : %-10s", likert(xbth, 12));
+    (void) fprintf(file1, "   Stealth     : %-10s", likert(xstl, 1));
+    (void) fprintf(file1, "   Perception  : %s\n", likert(xfos, 3));
+    (void) fprintf(file1, " Bows/Throw  : %-10s", likert(xbthb, 12));
+    (void) fprintf(file1, "   Disarming   : %-10s", likert(xdis, 8));
+    (void) fprintf(file1, "   Searching   : %s\n", likert(xsrh, 6));
+    (void) fprintf(file1, " Saving Throw: %-10s", likert(xsave, 6));
+    (void) fprintf(file1, "   Magic Device: %-10s", likert(xdev, 6));
+    (void) fprintf(file1, "   Infra-Vision: %s\n\n", xinfra);
 
     // Write out the character's history
-    (void)fprintf(file1, "Character Background\n");
+    (void) fprintf(file1, "Character Background\n");
     for (int i = 0; i < 4; i++) {
-        (void)fprintf(file1, " %s\n", py.misc.history[i]);
+        (void) fprintf(file1, " %s\n", py.misc.history[i]);
     }
 
     // Write out the equipment list.
     bigvtype prt2;
     int j = 0;
 
-    (void)fprintf(file1, "\n  [Character's Equipment List]\n\n");
+    (void) fprintf(file1, "\n  [Character's Equipment List]\n\n");
     if (equip_ctr == 0) {
-        (void)fprintf(file1, "  Character has no equipment in use.\n");
+        (void) fprintf(file1, "  Character has no equipment in use.\n");
     } else {
         const char *p;
         inven_type *i_ptr;
@@ -327,27 +327,27 @@ bool file_character(char *filename1) {
                         break;
                 }
                 objdes(prt2, &inventory[i], true);
-                (void)fprintf(file1, "  %c) %-19s: %s\n", j + 'a', p, prt2);
+                (void) fprintf(file1, "  %c) %-19s: %s\n", j + 'a', p, prt2);
                 j++;
             }
         }
     }
 
     // Write out the character's inventory.
-    (void)fprintf(file1, "%c\n\n", CTRL_KEY('L'));
+    (void) fprintf(file1, "%c\n\n", CTRL_KEY('L'));
 
-    (void)fprintf(file1, "  [General Inventory List]\n\n");
+    (void) fprintf(file1, "  [General Inventory List]\n\n");
     if (inven_ctr == 0) {
-        (void)fprintf(file1, "  Character has no objects in inventory.\n");
+        (void) fprintf(file1, "  Character has no objects in inventory.\n");
     } else {
         for (int i = 0; i < inven_ctr; i++) {
             objdes(prt2, &inventory[i], true);
-            (void)fprintf(file1, "%c) %s\n", i + 'a', prt2);
+            (void) fprintf(file1, "%c) %s\n", i + 'a', prt2);
         }
     }
 
-    (void)fprintf(file1, "%c", CTRL_KEY('L'));
-    (void)fclose(file1);
+    (void) fprintf(file1, "%c", CTRL_KEY('L'));
+    (void) fclose(file1);
 
     prt("Completed.", 0, 0);
 

@@ -10,102 +10,102 @@
 #include "externs.h"
 
 static const char *comment1[14] = {
-    "Done!",
-    "Accepted!",
-    "Fine.",
-    "Agreed!",
-    "Ok.",
-    "Taken!",
-    "You drive a hard bargain, but taken.",
-    "You'll force me bankrupt, but it's a deal.",
-    "Sigh.  I'll take it.",
-    "My poor sick children may starve, but done!",
-    "Finally!  I accept.",
-    "Robbed again.",
-    "A pleasure to do business with you!",
-    "My spouse will skin me, but accepted.",
+        "Done!",
+        "Accepted!",
+        "Fine.",
+        "Agreed!",
+        "Ok.",
+        "Taken!",
+        "You drive a hard bargain, but taken.",
+        "You'll force me bankrupt, but it's a deal.",
+        "Sigh.  I'll take it.",
+        "My poor sick children may starve, but done!",
+        "Finally!  I accept.",
+        "Robbed again.",
+        "A pleasure to do business with you!",
+        "My spouse will skin me, but accepted.",
 };
 
 static const char *comment2a[3] = {
-    "%A2 is my final offer; take it or leave it.",
-    "I'll give you no more than %A2.",
-    "My patience grows thin.  %A2 is final.",
+        "%A2 is my final offer; take it or leave it.",
+        "I'll give you no more than %A2.",
+        "My patience grows thin.  %A2 is final.",
 };
 
 static const char *comment2b[16] = {
-    "%A1 for such a fine item?  HA!  No less than %A2.",
-    "%A1 is an insult!  Try %A2 gold pieces.",
-    "%A1?!?  You would rob my poor starving children?",
-    "Why, I'll take no less than %A2 gold pieces.",
-    "Ha!  No less than %A2 gold pieces.",
-    "Thou knave!  No less than %A2 gold pieces.",
-    "%A1 is far too little, how about %A2?",
-    "I paid more than %A1 for it myself, try %A2.",
-    "%A1?  Are you mad?!?  How about %A2 gold pieces?",
-    "As scrap this would bring %A1.  Try %A2 in gold.",
-    "May the fleas of 1000 Orcs molest you.  I want %A2.",
-    "My mother you can get for %A1, this costs %A2.",
-    "May your chickens grow lips.  I want %A2 in gold!",
-    "Sell this for such a pittance?  Give me %A2 gold.",
-    "May the Balrog find you tasty!  %A2 gold pieces?",
-    "Your mother was a Troll!  %A2 or I'll tell.",
+        "%A1 for such a fine item?  HA!  No less than %A2.",
+        "%A1 is an insult!  Try %A2 gold pieces.",
+        "%A1?!?  You would rob my poor starving children?",
+        "Why, I'll take no less than %A2 gold pieces.",
+        "Ha!  No less than %A2 gold pieces.",
+        "Thou knave!  No less than %A2 gold pieces.",
+        "%A1 is far too little, how about %A2?",
+        "I paid more than %A1 for it myself, try %A2.",
+        "%A1?  Are you mad?!?  How about %A2 gold pieces?",
+        "As scrap this would bring %A1.  Try %A2 in gold.",
+        "May the fleas of 1000 Orcs molest you.  I want %A2.",
+        "My mother you can get for %A1, this costs %A2.",
+        "May your chickens grow lips.  I want %A2 in gold!",
+        "Sell this for such a pittance?  Give me %A2 gold.",
+        "May the Balrog find you tasty!  %A2 gold pieces?",
+        "Your mother was a Troll!  %A2 or I'll tell.",
 };
 
 static const char *comment3a[3] = {
-    "I'll pay no more than %A1; take it or leave it.",
-    "You'll get no more than %A1 from me.",
-    "%A1 and that's final.",
+        "I'll pay no more than %A1; take it or leave it.",
+        "You'll get no more than %A1 from me.",
+        "%A1 and that's final.",
 };
 
 static const char *comment3b[15] = {
-    "%A2 for that piece of junk?  No more than %A1.",
-    "For %A2 I could own ten of those.  Try %A1.",
-    "%A2?  NEVER!  %A1 is more like it.",
-    "Let's be reasonable. How about %A1 gold pieces?",
-    "%A1 gold for that junk, no more.",
-    "%A1 gold pieces and be thankful for it!",
-    "%A1 gold pieces and not a copper more.",
-    "%A2 gold?  HA!  %A1 is more like it.",
-    "Try about %A1 gold.",
-    "I wouldn't pay %A2 for your children, try %A1.",
-    "*CHOKE* For that!?  Let's say %A1.",
-    "How about %A1?",
-    "That looks war surplus!  Say %A1 gold.",
-    "I'll buy it as scrap for %A1.",
-    "%A2 is too much, let us say %A1 gold.",
+        "%A2 for that piece of junk?  No more than %A1.",
+        "For %A2 I could own ten of those.  Try %A1.",
+        "%A2?  NEVER!  %A1 is more like it.",
+        "Let's be reasonable. How about %A1 gold pieces?",
+        "%A1 gold for that junk, no more.",
+        "%A1 gold pieces and be thankful for it!",
+        "%A1 gold pieces and not a copper more.",
+        "%A2 gold?  HA!  %A1 is more like it.",
+        "Try about %A1 gold.",
+        "I wouldn't pay %A2 for your children, try %A1.",
+        "*CHOKE* For that!?  Let's say %A1.",
+        "How about %A1?",
+        "That looks war surplus!  Say %A1 gold.",
+        "I'll buy it as scrap for %A1.",
+        "%A2 is too much, let us say %A1 gold.",
 };
 
 static const char *comment4a[5] = {
-    "ENOUGH!  You have abused me once too often!",
-    "THAT DOES IT!  You shall waste my time no more!",
-    "This is getting nowhere.  I'm going home!",
-    "BAH!  No more shall you insult me!",
-    "Begone!  I have had enough abuse for one day.",
+        "ENOUGH!  You have abused me once too often!",
+        "THAT DOES IT!  You shall waste my time no more!",
+        "This is getting nowhere.  I'm going home!",
+        "BAH!  No more shall you insult me!",
+        "Begone!  I have had enough abuse for one day.",
 };
 
 static const char *comment4b[5] = {
-    "Out of my place!", "out... Out... OUT!!!",
-    "Come back tomorrow.", "Leave my place.  Begone!",
-    "Come back when thou art richer.",
+        "Out of my place!", "out... Out... OUT!!!",
+        "Come back tomorrow.", "Leave my place.  Begone!",
+        "Come back when thou art richer.",
 };
 
 static const char *comment5[10] = {
-    "You will have to do better than that!",
-    "That's an insult!",
-    "Do you wish to do business or not?",
-    "Hah!  Try again.",
-    "Ridiculous!",
-    "You've got to be kidding!",
-    "You'd better be kidding!",
-    "You try my patience.",
-    "I don't hear you.",
-    "Hmmm, nice weather we're having.",
+        "You will have to do better than that!",
+        "That's an insult!",
+        "Do you wish to do business or not?",
+        "Hah!  Try again.",
+        "Ridiculous!",
+        "You've got to be kidding!",
+        "You'd better be kidding!",
+        "You try my patience.",
+        "I don't hear you.",
+        "Hmmm, nice weather we're having.",
 };
 
 static const char *comment6[5] = {
-    "I must have heard you wrong.", "What was that?",
-    "I'm sorry, say that again.", "What did you say?",
-    "Sorry, what was that again?",
+        "I must have heard you wrong.", "What was that?",
+        "I'm sorry, say that again.", "What did you say?",
+        "Sorry, what was that again?",
 };
 
 // Comments vary. -RAK-
@@ -119,9 +119,9 @@ static void prt_comment2(int32_t offer, int32_t asking, int final) {
     vtype comment;
 
     if (final > 0) {
-        (void)strcpy(comment, comment2a[randint(3) - 1]);
+        (void) strcpy(comment, comment2a[randint(3) - 1]);
     } else {
-        (void)strcpy(comment, comment2b[randint(16) - 1]);
+        (void) strcpy(comment, comment2b[randint(16) - 1]);
     }
 
     insert_lnum(comment, "%A1", offer, false);
@@ -133,9 +133,9 @@ static void prt_comment3(int32_t offer, int32_t asking, int final) {
     vtype comment;
 
     if (final > 0) {
-        (void)strcpy(comment, comment3a[randint(3) - 1]);
+        (void) strcpy(comment, comment3a[randint(3) - 1]);
     } else {
-        (void)strcpy(comment, comment3b[randint(15) - 1]);
+        (void) strcpy(comment, comment3b[randint(15) - 1]);
     }
 
     insert_lnum(comment, "%A1", offer, false);
@@ -201,7 +201,7 @@ static void display_inventory(int store_num, int start) {
 
         objdes(out_val1, i_ptr, true);
         i_ptr->number = (uint8_t) x;
-        (void)sprintf(out_val2, "%c) %s", 'a' + i, out_val1);
+        (void) sprintf(out_val2, "%c) %s", 'a' + i, out_val1);
         prt(out_val2, i + 5, 0);
 
         x = s_ptr->store_inven[start].scost;
@@ -211,9 +211,9 @@ static void display_inventory(int store_num, int start) {
             if (value <= 0) {
                 value = 1;
             }
-            (void)sprintf(out_val2, "%9d", value);
+            (void) sprintf(out_val2, "%9d", value);
         } else {
-            (void)sprintf(out_val2, "%9d [Fixed]", x);
+            (void) sprintf(out_val2, "%9d [Fixed]", x);
         }
 
         prt(out_val2, i + 5, 59);
@@ -245,9 +245,9 @@ static void display_cost(int store_num, int pos) {
     if (s_ptr->store_inven[pos].scost < 0) {
         int32_t j = -s_ptr->store_inven[pos].scost;
         j = j * chr_adj() / 100;
-        (void)sprintf(out_val, "%d", j);
+        (void) sprintf(out_val, "%d", j);
     } else {
-        (void)sprintf(out_val, "%9d [Fixed]", s_ptr->store_inven[pos].scost);
+        (void) sprintf(out_val, "%9d [Fixed]", s_ptr->store_inven[pos].scost);
     }
     prt(out_val, i + 5, 59);
 }
@@ -255,7 +255,7 @@ static void display_cost(int store_num, int pos) {
 // Displays players gold -RAK-
 static void store_prt_gold() {
     vtype out_val;
-    (void)sprintf(out_val, "Gold Remaining : %d", py.misc.au);
+    (void) sprintf(out_val, "Gold Remaining : %d", py.misc.au);
     prt(out_val, 18, 17);
 }
 
@@ -273,11 +273,11 @@ static void display_store(int store_num, int cur_top) {
 }
 
 // Get the ID of a store item and return it's value -RAK-
-static bool get_store_item(int *com_val, const char * pmt, int i, int j) {
+static bool get_store_item(int *com_val, const char *pmt, int i, int j) {
     *com_val = -1;
 
     vtype out_val;
-    (void)sprintf(out_val, "(Items %c-%c, ESC to exit) %s", i + 'a', j + 'a', pmt);
+    (void) sprintf(out_val, "(Items %c-%c, ESC to exit) %s", i + 'a', j + 'a', pmt);
 
     char command;
     bool flag = false;
@@ -336,7 +336,7 @@ static bool haggle_insults(int store_num) {
 static bool get_haggle(const char *comment, int32_t *new_offer, int num_offer) {
     bool increment = false;
 
-    int clen = (int)strlen(comment);
+    int clen = (int) strlen(comment);
     int orig_clen = clen;
 
     if (num_offer == 0) {
@@ -351,21 +351,20 @@ static bool get_haggle(const char *comment, int32_t *new_offer, int num_offer) {
     while (flag && i == 0) {
         prt(comment, 0, 0);
         if (num_offer && last_store_inc != 0) {
-            (void)sprintf(default_offer, "[%c%d] ", (last_store_inc < 0) ? '-' : '+', abs(last_store_inc));
+            (void) sprintf(default_offer, "[%c%d] ", (last_store_inc < 0) ? '-' : '+', abs(last_store_inc));
             prt(default_offer, 0, orig_clen);
-            clen = orig_clen + (int)strlen(default_offer);
+            clen = orig_clen + (int) strlen(default_offer);
         }
         if (!get_string(out_val, 0, clen, 40)) {
             flag = false;
         }
-        for (p = out_val; *p == ' '; p++) {
-            ;
+        for (p = out_val; *p == ' '; p++) { ;
         }
         if (*p == '+' || *p == '-') {
             increment = true;
         }
         if (num_offer && increment) {
-            i = (int32_t)atol(out_val);
+            i = (int32_t) atol(out_val);
             // Don't accept a zero here.  Turn off increment if it was zero
             // because a zero will not exit.  This can be zero if the user
             // did not type a number after the +/- sign.
@@ -378,7 +377,7 @@ static bool get_haggle(const char *comment, int32_t *new_offer, int num_offer) {
             i = last_store_inc;
             increment = true;
         } else {
-            i = (int32_t)atol(out_val);
+            i = (int32_t) atol(out_val);
         }
 
         // don't allow incremental haggling, if player has not made an offer yet
@@ -452,7 +451,7 @@ static int purchase_haggle(int store_num, int32_t *price, inven_type *item) {
     }
 
     // cast max_inflate to signed so that subtraction works correctly
-    int32_t max_buy = cost * (200 - (int)o_ptr->max_inflate) / 100;
+    int32_t max_buy = cost * (200 - (int) o_ptr->max_inflate) / 100;
     if (max_buy <= 0) {
         max_buy = 1;
     }
@@ -490,7 +489,7 @@ static int purchase_haggle(int store_num, int32_t *price, inven_type *item) {
         do {
             loop_flag = true;
 
-            (void)sprintf(out_val, "%s :  %d", comment, cur_ask);
+            (void) sprintf(out_val, "%s :  %d", comment, cur_ask);
             put_buffer(out_val, 1, 0);
 
             purchase = receive_offer(store_num, "What do you offer? ", &new_offer, last_offer, num_offer, 1);
@@ -562,7 +561,7 @@ static int purchase_haggle(int store_num, int32_t *price, inven_type *item) {
                 last_offer = new_offer;
                 num_offer++; // enable incremental haggling
                 erase_line(1, 0);
-                (void)sprintf(out_val, "Your last offer : %d", last_offer);
+                (void) sprintf(out_val, "Your last offer : %d", last_offer);
                 put_buffer(out_val, 1, 39);
                 prt_comment2(last_offer, cur_ask, final_flag);
 
@@ -616,7 +615,7 @@ static int sell_haggle(int store_num, int32_t *price, inven_type *item) {
         max_sell = cost * o_ptr->max_inflate / 100;
 
         // cast max_inflate to signed so that subtraction works correctly
-        max_buy = cost * (200 - (int)o_ptr->max_inflate) / 100;
+        max_buy = cost * (200 - (int) o_ptr->max_inflate) / 100;
         min_buy = cost * (200 - o_ptr->min_inflate) / 100;
         if (min_buy < 1) {
             min_buy = 1;
@@ -687,7 +686,7 @@ static int sell_haggle(int store_num, int32_t *price, inven_type *item) {
                 loop_flag = true;
 
                 vtype out_val;
-                (void)sprintf(out_val, "%s :  %d", comment, cur_ask);
+                (void) sprintf(out_val, "%s :  %d", comment, cur_ask);
                 put_buffer(out_val, 1, 0);
                 sell = receive_offer(store_num, "What price do you ask? ", &new_offer, last_offer, num_offer, -1);
                 if (sell != 0) {
@@ -764,7 +763,7 @@ static int sell_haggle(int store_num, int32_t *price, inven_type *item) {
                     erase_line(1, 0);
 
                     vtype out_val;
-                    (void)sprintf(out_val, "Your last bid %d", last_offer);
+                    (void) sprintf(out_val, "Your last bid %d", last_offer);
                     put_buffer(out_val, 1, 39);
                     prt_comment3(cur_ask, last_offer, final_flag);
 
@@ -846,7 +845,7 @@ static bool store_purchase(int store_num, int *cur_top) {
 
             bigvtype out_val, tmp_str;
             objdes(tmp_str, &inventory[item_new], true);
-            (void)sprintf(out_val, "You have %s (%c)", tmp_str, item_new + 'a');
+            (void) sprintf(out_val, "You have %s (%c)", tmp_str, item_new + 'a');
             prt(out_val, 0, 0);
 
             check_strength();
@@ -922,7 +921,7 @@ static bool store_sell(int store_num, int *cur_top) {
     take_one_item(&sold_obj, &inventory[item_val]);
     objdes(tmp_str, &sold_obj, true);
 
-    (void)sprintf(out_val, "Selling %s (%c)", tmp_str, item_val + 'a');
+    (void) sprintf(out_val, "Selling %s (%c)", tmp_str, item_val + 'a');
     msg_print(out_val);
 
     if (!store_check_num(&sold_obj, store_num)) {
@@ -951,7 +950,7 @@ static bool store_sell(int store_num, int *cur_top) {
         known2(&sold_obj);
         inven_destroy(item_val);
         objdes(tmp_str, &sold_obj, true);
-        (void)sprintf(out_val, "You've sold %s", tmp_str);
+        (void) sprintf(out_val, "You've sold %s", tmp_str);
         msg_print(out_val);
 
         int item_pos;

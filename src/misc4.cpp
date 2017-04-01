@@ -22,20 +22,19 @@ void scribe_object() {
         bigvtype out_val, tmp_str;
 
         objdes(tmp_str, &inventory[item_val], true);
-        (void)sprintf(out_val, "Inscribing %s", tmp_str);
+        (void) sprintf(out_val, "Inscribing %s", tmp_str);
         msg_print(out_val);
         if (inventory[item_val].inscrip[0] != '\0') {
-            (void)sprintf(out_val, "Replace %s New inscription:",
-                          inventory[item_val].inscrip);
+            (void) sprintf(out_val, "Replace %s New inscription:", inventory[item_val].inscrip);
         } else {
-            (void)strcpy(out_val, "Inscription: ");
+            (void) strcpy(out_val, "Inscription: ");
         }
-        int j = 78 - (int)strlen(tmp_str);
+        int j = 78 - (int) strlen(tmp_str);
         if (j > 12) {
             j = 12;
         }
         prt(out_val, 0, 0);
-        if (get_string(out_val, 0, (int)strlen(out_val), j)) {
+        if (get_string(out_val, 0, (int) strlen(out_val), j)) {
             inscribe(&inventory[item_val], out_val);
         }
     }
@@ -48,7 +47,7 @@ void add_inscribe(inven_type *i_ptr, uint8_t type) {
 
 // Replace any existing comment in an object description with a new one. -CJS-
 void inscribe(inven_type *i_ptr, const char *str) {
-    (void)strcpy(i_ptr->inscrip, str);
+    (void) strcpy(i_ptr->inscrip, str);
 }
 
 // We need to reset the view of things. -CJS-

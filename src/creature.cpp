@@ -17,12 +17,11 @@ void update_mon(int monptr) {
     bool flag = false;
     monster_type *m_ptr = &m_list[monptr];
 
-    if ((m_ptr->cdis <= MAX_SIGHT) && !(py.flags.status & PY_BLIND) &&
-        (panel_contains((int)m_ptr->fy, (int)m_ptr->fx))) {
+    if ((m_ptr->cdis <= MAX_SIGHT) && !(py.flags.status & PY_BLIND) && (panel_contains((int) m_ptr->fy, (int) m_ptr->fx))) {
         if (wizard) {
             // Wizard sight.
             flag = true;
-        } else if (los(char_row, char_col, (int)m_ptr->fy, (int)m_ptr->fx)) {
+        } else if (los(char_row, char_col, (int) m_ptr->fy, (int) m_ptr->fx)) {
             // Normal sight.
             c_ptr = &cave[m_ptr->fy][m_ptr->fx];
             r_ptr = &c_list[m_ptr->mptr];
@@ -48,7 +47,7 @@ void update_mon(int monptr) {
         if (!m_ptr->ml) {
             disturb(1, 0);
             m_ptr->ml = true;
-            lite_spot((int)m_ptr->fy, (int)m_ptr->fx);
+            lite_spot((int) m_ptr->fy, (int) m_ptr->fx);
 
             // notify inven_command
             screen_change = true;
@@ -57,7 +56,7 @@ void update_mon(int monptr) {
         // Turn it off.
 
         m_ptr->ml = false;
-        lite_spot((int)m_ptr->fy, (int)m_ptr->fx);
+        lite_spot((int) m_ptr->fy, (int) m_ptr->fx);
 
         // notify inven_command
         screen_change = true;
@@ -121,122 +120,122 @@ static void get_moves(int monptr, int *mm) {
     }
 
     switch (move_val) {
-    case 0:
-        mm[0] = 9;
-        if (ay > ax) {
-            mm[1] = 8;
-            mm[2] = 6;
-            mm[3] = 7;
-            mm[4] = 3;
-        } else {
-            mm[1] = 6;
-            mm[2] = 8;
-            mm[3] = 3;
-            mm[4] = 7;
-        }
-        break;
-    case 1:
-    case 9:
-        mm[0] = 6;
-        if (y < 0) {
-            mm[1] = 3;
-            mm[2] = 9;
-            mm[3] = 2;
-            mm[4] = 8;
-        } else {
-            mm[1] = 9;
-            mm[2] = 3;
-            mm[3] = 8;
-            mm[4] = 2;
-        }
-        break;
-    case 2:
-    case 6:
-        mm[0] = 8;
-        if (x < 0) {
-            mm[1] = 9;
-            mm[2] = 7;
-            mm[3] = 6;
-            mm[4] = 4;
-        } else {
-            mm[1] = 7;
-            mm[2] = 9;
-            mm[3] = 4;
-            mm[4] = 6;
-        }
-        break;
-    case 4:
-        mm[0] = 7;
-        if (ay > ax) {
-            mm[1] = 8;
-            mm[2] = 4;
-            mm[3] = 9;
-            mm[4] = 1;
-        } else {
-            mm[1] = 4;
-            mm[2] = 8;
-            mm[3] = 1;
-            mm[4] = 9;
-        }
-        break;
-    case 5:
-    case 13:
-        mm[0] = 4;
-        if (y < 0) {
-            mm[1] = 1;
-            mm[2] = 7;
-            mm[3] = 2;
-            mm[4] = 8;
-        } else {
-            mm[1] = 7;
-            mm[2] = 1;
-            mm[3] = 8;
-            mm[4] = 2;
-        }
-        break;
-    case 8:
-        mm[0] = 3;
-        if (ay > ax) {
-            mm[1] = 2;
-            mm[2] = 6;
-            mm[3] = 1;
-            mm[4] = 9;
-        } else {
-            mm[1] = 6;
-            mm[2] = 2;
-            mm[3] = 9;
-            mm[4] = 1;
-        }
-        break;
-    case 10:
-    case 14:
-        mm[0] = 2;
-        if (x < 0) {
-            mm[1] = 3;
-            mm[2] = 1;
-            mm[3] = 6;
-            mm[4] = 4;
-        } else {
-            mm[1] = 1;
-            mm[2] = 3;
-            mm[3] = 4;
-            mm[4] = 6;
-        }
-        break;
-    case 12:
-        mm[0] = 1;
-        if (ay > ax) {
-            mm[1] = 2;
-            mm[2] = 4;
-            mm[3] = 3;
-            mm[4] = 7;
-        } else {
-            mm[1] = 4;
-            mm[2] = 2;
-            mm[3] = 7;
-            mm[4] = 3;
-        }
-        break;
+        case 0:
+            mm[0] = 9;
+            if (ay > ax) {
+                mm[1] = 8;
+                mm[2] = 6;
+                mm[3] = 7;
+                mm[4] = 3;
+            } else {
+                mm[1] = 6;
+                mm[2] = 8;
+                mm[3] = 3;
+                mm[4] = 7;
+            }
+            break;
+        case 1:
+        case 9:
+            mm[0] = 6;
+            if (y < 0) {
+                mm[1] = 3;
+                mm[2] = 9;
+                mm[3] = 2;
+                mm[4] = 8;
+            } else {
+                mm[1] = 9;
+                mm[2] = 3;
+                mm[3] = 8;
+                mm[4] = 2;
+            }
+            break;
+        case 2:
+        case 6:
+            mm[0] = 8;
+            if (x < 0) {
+                mm[1] = 9;
+                mm[2] = 7;
+                mm[3] = 6;
+                mm[4] = 4;
+            } else {
+                mm[1] = 7;
+                mm[2] = 9;
+                mm[3] = 4;
+                mm[4] = 6;
+            }
+            break;
+        case 4:
+            mm[0] = 7;
+            if (ay > ax) {
+                mm[1] = 8;
+                mm[2] = 4;
+                mm[3] = 9;
+                mm[4] = 1;
+            } else {
+                mm[1] = 4;
+                mm[2] = 8;
+                mm[3] = 1;
+                mm[4] = 9;
+            }
+            break;
+        case 5:
+        case 13:
+            mm[0] = 4;
+            if (y < 0) {
+                mm[1] = 1;
+                mm[2] = 7;
+                mm[3] = 2;
+                mm[4] = 8;
+            } else {
+                mm[1] = 7;
+                mm[2] = 1;
+                mm[3] = 8;
+                mm[4] = 2;
+            }
+            break;
+        case 8:
+            mm[0] = 3;
+            if (ay > ax) {
+                mm[1] = 2;
+                mm[2] = 6;
+                mm[3] = 1;
+                mm[4] = 9;
+            } else {
+                mm[1] = 6;
+                mm[2] = 2;
+                mm[3] = 9;
+                mm[4] = 1;
+            }
+            break;
+        case 10:
+        case 14:
+            mm[0] = 2;
+            if (x < 0) {
+                mm[1] = 3;
+                mm[2] = 1;
+                mm[3] = 6;
+                mm[4] = 4;
+            } else {
+                mm[1] = 1;
+                mm[2] = 3;
+                mm[3] = 4;
+                mm[4] = 6;
+            }
+            break;
+        case 12:
+            mm[0] = 1;
+            if (ay > ax) {
+                mm[1] = 2;
+                mm[2] = 4;
+                mm[3] = 3;
+                mm[4] = 7;
+            } else {
+                mm[1] = 4;
+                mm[2] = 2;
+                mm[3] = 7;
+                mm[4] = 3;
+            }
+            break;
     }
 }
 
@@ -252,19 +251,19 @@ static void make_attack(int monptr) {
 
     vtype cdesc;
     if (!m_ptr->ml) {
-        (void)strcpy(cdesc, "It ");
+        (void) strcpy(cdesc, "It ");
     } else {
-        (void)sprintf(cdesc, "The %s ", r_ptr->name);
+        (void) sprintf(cdesc, "The %s ", r_ptr->name);
     }
 
     // For "DIED_FROM" string
     vtype ddesc;
     if (CM_WIN & r_ptr->cmove) {
-        (void)sprintf(ddesc, "The %s", r_ptr->name);
+        (void) sprintf(ddesc, "The %s", r_ptr->name);
     } else if (is_a_vowel(r_ptr->name[0])) {
-        (void)sprintf(ddesc, "an %s", r_ptr->name);
+        (void) sprintf(ddesc, "an %s", r_ptr->name);
     } else {
-        (void)sprintf(ddesc, "a %s", r_ptr->name);
+        (void) sprintf(ddesc, "a %s", r_ptr->name);
     }
     // End DIED_FROM
 
@@ -299,232 +298,231 @@ static void make_attack(int monptr) {
         p_ptr = &py.misc;
 
         switch (attype) {
-        case 1: // Normal attack
-            if (test_hit(60, (int)r_ptr->level, 0, p_ptr->pac + p_ptr->ptoac, CLA_MISC_HIT)) {
+            case 1: // Normal attack
+                if (test_hit(60, (int) r_ptr->level, 0, p_ptr->pac + p_ptr->ptoac, CLA_MISC_HIT)) {
+                    flag = true;
+                }
+                break;
+            case 2: // Lose Strength
+                if (test_hit(-3, (int) r_ptr->level, 0, p_ptr->pac + p_ptr->ptoac, CLA_MISC_HIT)) {
+                    flag = true;
+                }
+                break;
+            case 3: // Confusion attack
+                if (test_hit(10, (int) r_ptr->level, 0, p_ptr->pac + p_ptr->ptoac, CLA_MISC_HIT)) {
+                    flag = true;
+                }
+                break;
+            case 4: // Fear attack
+                if (test_hit(10, (int) r_ptr->level, 0, p_ptr->pac + p_ptr->ptoac, CLA_MISC_HIT)) {
+                    flag = true;
+                }
+                break;
+            case 5: // Fire attack
+                if (test_hit(10, (int) r_ptr->level, 0, p_ptr->pac + p_ptr->ptoac, CLA_MISC_HIT)) {
+                    flag = true;
+                }
+                break;
+            case 6: // Acid attack
+                if (test_hit(0, (int) r_ptr->level, 0, p_ptr->pac + p_ptr->ptoac, CLA_MISC_HIT)) {
+                    flag = true;
+                }
+                break;
+            case 7: // Cold attack
+                if (test_hit(10, (int) r_ptr->level, 0, p_ptr->pac + p_ptr->ptoac, CLA_MISC_HIT)) {
+                    flag = true;
+                }
+                break;
+            case 8: // Lightning attack
+                if (test_hit(10, (int) r_ptr->level, 0, p_ptr->pac + p_ptr->ptoac, CLA_MISC_HIT)) {
+                    flag = true;
+                }
+                break;
+            case 9: // Corrosion attack
+                if (test_hit(0, (int) r_ptr->level, 0, p_ptr->pac + p_ptr->ptoac, CLA_MISC_HIT)) {
+                    flag = true;
+                }
+                break;
+            case 10: // Blindness attack
+                if (test_hit(2, (int) r_ptr->level, 0, p_ptr->pac + p_ptr->ptoac, CLA_MISC_HIT)) {
+                    flag = true;
+                }
+                break;
+            case 11: // Paralysis attack
+                if (test_hit(2, (int) r_ptr->level, 0, p_ptr->pac + p_ptr->ptoac, CLA_MISC_HIT)) {
+                    flag = true;
+                }
+                break;
+            case 12: // Steal Money
+                if ((test_hit(5, (int) r_ptr->level, 0, (int) py.misc.lev, CLA_MISC_HIT)) && (py.misc.au > 0)) {
+                    flag = true;
+                }
+                break;
+            case 13: // Steal Object
+                if ((test_hit(2, (int) r_ptr->level, 0, (int) py.misc.lev, CLA_MISC_HIT)) && (inven_ctr > 0)) {
+                    flag = true;
+                }
+                break;
+            case 14: // Poison
+                if (test_hit(5, (int) r_ptr->level, 0, p_ptr->pac + p_ptr->ptoac, CLA_MISC_HIT)) {
+                    flag = true;
+                }
+                break;
+            case 15: // Lose dexterity
+                if (test_hit(0, (int) r_ptr->level, 0, p_ptr->pac + p_ptr->ptoac, CLA_MISC_HIT)) {
+                    flag = true;
+                }
+                break;
+            case 16: // Lose constitution
+                if (test_hit(0, (int) r_ptr->level, 0, p_ptr->pac + p_ptr->ptoac, CLA_MISC_HIT)) {
+                    flag = true;
+                }
+                break;
+            case 17: // Lose intelligence
+                if (test_hit(2, (int) r_ptr->level, 0, p_ptr->pac + p_ptr->ptoac, CLA_MISC_HIT)) {
+                    flag = true;
+                }
+                break;
+            case 18: // Lose wisdom
+                if (test_hit(2, (int) r_ptr->level, 0, p_ptr->pac + p_ptr->ptoac, CLA_MISC_HIT)) {
+                    flag = true;
+                }
+                break;
+            case 19: // Lose experience
+                if (test_hit(5, (int) r_ptr->level, 0, p_ptr->pac + p_ptr->ptoac, CLA_MISC_HIT)) {
+                    flag = true;
+                }
+                break;
+            case 20: // Aggravate monsters
                 flag = true;
-            }
-            break;
-        case 2: // Lose Strength
-            if (test_hit(-3, (int)r_ptr->level, 0, p_ptr->pac + p_ptr->ptoac, CLA_MISC_HIT)) {
+                break;
+            case 21: // Disenchant
+                if (test_hit(20, (int) r_ptr->level, 0, p_ptr->pac + p_ptr->ptoac, CLA_MISC_HIT)) {
+                    flag = true;
+                }
+                break;
+            case 22: // Eat food
+                if (test_hit(5, (int) r_ptr->level, 0, p_ptr->pac + p_ptr->ptoac, CLA_MISC_HIT)) {
+                    flag = true;
+                }
+                break;
+            case 23: // Eat light
+                if (test_hit(5, (int) r_ptr->level, 0, p_ptr->pac + p_ptr->ptoac, CLA_MISC_HIT)) {
+                    flag = true;
+                }
+                break;
+            case 24: // Eat charges
+                // check to make sure an object exists
+                if ((test_hit(15, (int) r_ptr->level, 0, p_ptr->pac + p_ptr->ptoac, CLA_MISC_HIT)) && (inven_ctr > 0)) {
+                    flag = true;
+                }
+                break;
+            case 99:
                 flag = true;
-            }
-            break;
-        case 3: // Confusion attack
-            if (test_hit(10, (int)r_ptr->level, 0, p_ptr->pac + p_ptr->ptoac, CLA_MISC_HIT)) {
-                flag = true;
-            }
-            break;
-        case 4: // Fear attack
-            if (test_hit(10, (int)r_ptr->level, 0, p_ptr->pac + p_ptr->ptoac, CLA_MISC_HIT)) {
-                flag = true;
-            }
-            break;
-        case 5: // Fire attack
-            if (test_hit(10, (int)r_ptr->level, 0, p_ptr->pac + p_ptr->ptoac, CLA_MISC_HIT)) {
-                flag = true;
-            }
-            break;
-        case 6: // Acid attack
-            if (test_hit(0, (int)r_ptr->level, 0, p_ptr->pac + p_ptr->ptoac, CLA_MISC_HIT)) {
-                flag = true;
-            }
-            break;
-        case 7: // Cold attack
-            if (test_hit(10, (int)r_ptr->level, 0, p_ptr->pac + p_ptr->ptoac, CLA_MISC_HIT)) {
-                flag = true;
-            }
-            break;
-        case 8: // Lightning attack
-            if (test_hit(10, (int)r_ptr->level, 0, p_ptr->pac + p_ptr->ptoac, CLA_MISC_HIT)) {
-                flag = true;
-            }
-            break;
-        case 9: // Corrosion attack
-            if (test_hit(0, (int)r_ptr->level, 0, p_ptr->pac + p_ptr->ptoac, CLA_MISC_HIT)) {
-                flag = true;
-            }
-            break;
-        case 10: // Blindness attack
-            if (test_hit(2, (int)r_ptr->level, 0, p_ptr->pac + p_ptr->ptoac, CLA_MISC_HIT)) {
-                flag = true;
-            }
-            break;
-        case 11: // Paralysis attack
-            if (test_hit(2, (int)r_ptr->level, 0, p_ptr->pac + p_ptr->ptoac, CLA_MISC_HIT)) {
-                flag = true;
-            }
-            break;
-        case 12: // Steal Money
-            if ((test_hit(5, (int)r_ptr->level, 0, (int)py.misc.lev, CLA_MISC_HIT)) && (py.misc.au > 0)) {
-                flag = true;
-            }
-            break;
-        case 13: // Steal Object
-            if ((test_hit(2, (int)r_ptr->level, 0, (int)py.misc.lev, CLA_MISC_HIT)) && (inven_ctr > 0)) {
-                flag = true;
-            }
-            break;
-        case 14: // Poison
-            if (test_hit(5, (int)r_ptr->level, 0, p_ptr->pac + p_ptr->ptoac, CLA_MISC_HIT)) {
-                flag = true;
-            }
-            break;
-        case 15: // Lose dexterity
-            if (test_hit(0, (int)r_ptr->level, 0, p_ptr->pac + p_ptr->ptoac, CLA_MISC_HIT)) {
-                flag = true;
-            }
-            break;
-        case 16: // Lose constitution
-            if (test_hit(0, (int)r_ptr->level, 0, p_ptr->pac + p_ptr->ptoac, CLA_MISC_HIT)) {
-                flag = true;
-            }
-            break;
-        case 17: // Lose intelligence
-            if (test_hit(2, (int)r_ptr->level, 0, p_ptr->pac + p_ptr->ptoac, CLA_MISC_HIT)) {
-                flag = true;
-            }
-            break;
-        case 18: // Lose wisdom
-            if (test_hit(2, (int)r_ptr->level, 0, p_ptr->pac + p_ptr->ptoac, CLA_MISC_HIT)) {
-                flag = true;
-            }
-            break;
-        case 19: // Lose experience
-            if (test_hit(5, (int)r_ptr->level, 0, p_ptr->pac + p_ptr->ptoac, CLA_MISC_HIT)) {
-                flag = true;
-            }
-            break;
-        case 20: // Aggravate monsters
-            flag = true;
-            break;
-        case 21: // Disenchant
-            if (test_hit(20, (int)r_ptr->level, 0, p_ptr->pac + p_ptr->ptoac, CLA_MISC_HIT)) {
-                flag = true;
-            }
-            break;
-        case 22: // Eat food
-            if (test_hit(5, (int)r_ptr->level, 0, p_ptr->pac + p_ptr->ptoac, CLA_MISC_HIT)) {
-                flag = true;
-            }
-            break;
-        case 23: // Eat light
-            if (test_hit(5, (int)r_ptr->level, 0, p_ptr->pac + p_ptr->ptoac, CLA_MISC_HIT)) {
-                flag = true;
-            }
-            break;
-        case 24: // Eat charges
-            // check to make sure an object exists
-            if ((test_hit(15, (int)r_ptr->level, 0, p_ptr->pac + p_ptr->ptoac, CLA_MISC_HIT)) &&
-                (inven_ctr > 0)) {
-                flag = true;
-            }
-            break;
-        case 99:
-            flag = true;
-            break;
-        default:
-            break;
+                break;
+            default:
+                break;
         }
 
         if (flag) {
             // can not strcat to cdesc because the creature may have multiple attacks.
             disturb(1, 0);
-            (void)strcpy(tmp_str, cdesc);
+            (void) strcpy(tmp_str, cdesc);
             switch (adesc) {
-            case 1:
-                msg_print(strcat(tmp_str, "hits you."));
-                break;
-            case 2:
-                msg_print(strcat(tmp_str, "bites you."));
-                break;
-            case 3:
-                msg_print(strcat(tmp_str, "claws you."));
-                break;
-            case 4:
-                msg_print(strcat(tmp_str, "stings you."));
-                break;
-            case 5:
-                msg_print(strcat(tmp_str, "touches you."));
-                break;
-#if 0
-            case 6:
-                msg_print(strcat(tmp_str, "kicks you."));
-                break;
-#endif
-            case 7:
-                msg_print(strcat(tmp_str, "gazes at you."));
-                break;
-            case 8:
-                msg_print(strcat(tmp_str, "breathes on you."));
-                break;
-            case 9:
-                msg_print(strcat(tmp_str, "spits on you."));
-                break;
-            case 10:
-                msg_print(strcat(tmp_str, "makes a horrible wail."));
-                break;
-#if 0
-            case 11:
-                msg_print(strcat(tmp_str, "embraces you."));
-                break;
-#endif
-            case 12:
-                msg_print(strcat(tmp_str, "crawls on you."));
-                break;
-            case 13:
-                msg_print(strcat(tmp_str, "releases a cloud of spores."));
-                break;
-            case 14:
-                msg_print(strcat(tmp_str, "begs you for money."));
-                break;
-            case 15:
-                msg_print("You've been slimed!");
-                break;
-            case 16:
-                msg_print(strcat(tmp_str, "crushes you."));
-                break;
-            case 17:
-                msg_print(strcat(tmp_str, "tramples you."));
-                break;
-            case 18:
-                msg_print(strcat(tmp_str, "drools on you."));
-                break;
-            case 19:
-                switch (randint(9)) {
                 case 1:
-                    msg_print(strcat(tmp_str, "insults you!"));
+                    msg_print(strcat(tmp_str, "hits you."));
                     break;
                 case 2:
-                    msg_print(strcat(tmp_str, "insults your mother!"));
+                    msg_print(strcat(tmp_str, "bites you."));
                     break;
                 case 3:
-                    msg_print(strcat(tmp_str, "gives you the finger!"));
+                    msg_print(strcat(tmp_str, "claws you."));
                     break;
                 case 4:
-                    msg_print(strcat(tmp_str, "humiliates you!"));
+                    msg_print(strcat(tmp_str, "stings you."));
                     break;
                 case 5:
-                    msg_print(strcat(tmp_str, "wets on your leg!"));
+                    msg_print(strcat(tmp_str, "touches you."));
                     break;
+#if 0
                 case 6:
-                    msg_print(strcat(tmp_str, "defiles you!"));
+                    msg_print(strcat(tmp_str, "kicks you."));
                     break;
+#endif
                 case 7:
-                    msg_print(strcat(tmp_str, "dances around you!"));
+                    msg_print(strcat(tmp_str, "gazes at you."));
                     break;
                 case 8:
-                    msg_print(strcat(tmp_str, "makes obscene gestures!"));
+                    msg_print(strcat(tmp_str, "breathes on you."));
                     break;
                 case 9:
-                    msg_print(strcat(tmp_str, "moons you!!!"));
+                    msg_print(strcat(tmp_str, "spits on you."));
                     break;
-                }
-                break;
-            case 99:
-                msg_print(strcat(tmp_str, "is repelled."));
-                break;
-            default:
-                break;
+                case 10:
+                    msg_print(strcat(tmp_str, "makes a horrible wail."));
+                    break;
+#if 0
+                case 11:
+                    msg_print(strcat(tmp_str, "embraces you."));
+                    break;
+#endif
+                case 12:
+                    msg_print(strcat(tmp_str, "crawls on you."));
+                    break;
+                case 13:
+                    msg_print(strcat(tmp_str, "releases a cloud of spores."));
+                    break;
+                case 14:
+                    msg_print(strcat(tmp_str, "begs you for money."));
+                    break;
+                case 15:
+                    msg_print("You've been slimed!");
+                    break;
+                case 16:
+                    msg_print(strcat(tmp_str, "crushes you."));
+                    break;
+                case 17:
+                    msg_print(strcat(tmp_str, "tramples you."));
+                    break;
+                case 18:
+                    msg_print(strcat(tmp_str, "drools on you."));
+                    break;
+                case 19:
+                    switch (randint(9)) {
+                        case 1:
+                            msg_print(strcat(tmp_str, "insults you!"));
+                            break;
+                        case 2:
+                            msg_print(strcat(tmp_str, "insults your mother!"));
+                            break;
+                        case 3:
+                            msg_print(strcat(tmp_str, "gives you the finger!"));
+                            break;
+                        case 4:
+                            msg_print(strcat(tmp_str, "humiliates you!"));
+                            break;
+                        case 5:
+                            msg_print(strcat(tmp_str, "wets on your leg!"));
+                            break;
+                        case 6:
+                            msg_print(strcat(tmp_str, "defiles you!"));
+                            break;
+                        case 7:
+                            msg_print(strcat(tmp_str, "dances around you!"));
+                            break;
+                        case 8:
+                            msg_print(strcat(tmp_str, "makes obscene gestures!"));
+                            break;
+                        case 9:
+                            msg_print(strcat(tmp_str, "moons you!!!"));
+                            break;
+                    }
+                    break;
+                case 99:
+                    msg_print(strcat(tmp_str, "is repelled."));
+                    break;
+                default:
+                    break;
             }
 
             bool notice = true;
@@ -543,291 +541,288 @@ static void make_attack(int monptr) {
             damage = damroll(adice, asides);
 
             switch (attype) {
-            case 1: // Normal attack
-                // round half-way case down
-                damage -= ((p_ptr->pac + p_ptr->ptoac) * damage) / 200;
-                take_hit(damage, ddesc);
-                break;
-            case 2: // Lose Strength
-                take_hit(damage, ddesc);
-                if (py.flags.sustain_str) {
-                    msg_print("You feel weaker for a moment, but it passes.");
-                } else if (randint(2) == 1) {
-                    msg_print("You feel weaker.");
-                    (void)dec_stat(A_STR);
-                } else {
-                    notice = false;
-                }
-                break;
-            case 3: // Confusion attack
-                f_ptr = &py.flags;
-                take_hit(damage, ddesc);
-                if (randint(2) == 1) {
-                    if (f_ptr->confused < 1) {
-                        msg_print("You feel confused.");
-                        f_ptr->confused += randint((int)r_ptr->level);
+                case 1: // Normal attack
+                    // round half-way case down
+                    damage -= ((p_ptr->pac + p_ptr->ptoac) * damage) / 200;
+                    take_hit(damage, ddesc);
+                    break;
+                case 2: // Lose Strength
+                    take_hit(damage, ddesc);
+                    if (py.flags.sustain_str) {
+                        msg_print("You feel weaker for a moment, but it passes.");
+                    } else if (randint(2) == 1) {
+                        msg_print("You feel weaker.");
+                        (void) dec_stat(A_STR);
                     } else {
                         notice = false;
                     }
-                    f_ptr->confused += 3;
-                } else {
-                    notice = false;
-                }
-                break;
-            case 4: // Fear attack
-                f_ptr = &py.flags;
-                take_hit(damage, ddesc);
-                if (player_saves()) {
-                    msg_print("You resist the effects!");
-                } else if (f_ptr->afraid < 1) {
-                    msg_print("You are suddenly afraid!");
-                    f_ptr->afraid += 3 + randint((int)r_ptr->level);
-                } else {
-                    f_ptr->afraid += 3;
-                    notice = false;
-                }
-                break;
-            case 5: // Fire attack
-                msg_print("You are enveloped in flames!");
-                fire_dam(damage, ddesc);
-                break;
-            case 6: // Acid attack
-                msg_print("You are covered in acid!");
-                acid_dam(damage, ddesc);
-                break;
-            case 7: // Cold attack
-                msg_print("You are covered with frost!");
-                cold_dam(damage, ddesc);
-                break;
-            case 8: // Lightning attack
-                msg_print("Lightning strikes you!");
-                light_dam(damage, ddesc);
-                break;
-            case 9: // Corrosion attack
-                msg_print("A stinging red gas swirls about you.");
-                corrode_gas(ddesc);
-                take_hit(damage, ddesc);
-                break;
-            case 10: // Blindness attack
-                f_ptr = &py.flags;
-                take_hit(damage, ddesc);
-                if (f_ptr->blind < 1) {
-                    f_ptr->blind += 10 + randint((int)r_ptr->level);
-                    msg_print("Your eyes begin to sting.");
-                } else {
-                    f_ptr->blind += 5;
-                    notice = false;
-                }
-                break;
-            case 11: // Paralysis attack
-                f_ptr = &py.flags;
-                take_hit(damage, ddesc);
-                if (player_saves()) {
-                    msg_print("You resist the effects!");
-                } else if (f_ptr->paralysis < 1) {
-                    if (f_ptr->free_act) {
-                        msg_print("You are unaffected.");
+                    break;
+                case 3: // Confusion attack
+                    f_ptr = &py.flags;
+                    take_hit(damage, ddesc);
+                    if (randint(2) == 1) {
+                        if (f_ptr->confused < 1) {
+                            msg_print("You feel confused.");
+                            f_ptr->confused += randint((int) r_ptr->level);
+                        } else {
+                            notice = false;
+                        }
+                        f_ptr->confused += 3;
                     } else {
-                        f_ptr->paralysis = (int16_t) (randint((int)r_ptr->level) + 3);
-                        msg_print("You are paralyzed.");
+                        notice = false;
                     }
-                } else {
-                    notice = false;
-                }
-                break;
-            case 12: // Steal Money
-                if ((py.flags.paralysis < 1) &&
-                    (randint(124) < py.stats.use_stat[A_DEX])) {
-                    msg_print("You quickly protect your money pouch!");
-                } else {
-                    gold = (p_ptr->au / 10) + randint(25);
-                    if (gold > p_ptr->au) {
-                        p_ptr->au = 0;
+                    break;
+                case 4: // Fear attack
+                    f_ptr = &py.flags;
+                    take_hit(damage, ddesc);
+                    if (player_saves()) {
+                        msg_print("You resist the effects!");
+                    } else if (f_ptr->afraid < 1) {
+                        msg_print("You are suddenly afraid!");
+                        f_ptr->afraid += 3 + randint((int) r_ptr->level);
                     } else {
-                        p_ptr->au -= gold;
+                        f_ptr->afraid += 3;
+                        notice = false;
                     }
-                    msg_print("Your purse feels lighter.");
-                    prt_gold();
-                }
-                if (randint(2) == 1) {
-                    msg_print("There is a puff of smoke!");
-                    teleport_away(monptr, MAX_SIGHT);
-                }
-                break;
-            case 13: // Steal Object
-                if ((py.flags.paralysis < 1) &&
-                    (randint(124) < py.stats.use_stat[A_DEX])) {
-                    msg_print("You grab hold of your backpack!");
-                } else {
+                    break;
+                case 5: // Fire attack
+                    msg_print("You are enveloped in flames!");
+                    fire_dam(damage, ddesc);
+                    break;
+                case 6: // Acid attack
+                    msg_print("You are covered in acid!");
+                    acid_dam(damage, ddesc);
+                    break;
+                case 7: // Cold attack
+                    msg_print("You are covered with frost!");
+                    cold_dam(damage, ddesc);
+                    break;
+                case 8: // Lightning attack
+                    msg_print("Lightning strikes you!");
+                    light_dam(damage, ddesc);
+                    break;
+                case 9: // Corrosion attack
+                    msg_print("A stinging red gas swirls about you.");
+                    corrode_gas(ddesc);
+                    take_hit(damage, ddesc);
+                    break;
+                case 10: // Blindness attack
+                    f_ptr = &py.flags;
+                    take_hit(damage, ddesc);
+                    if (f_ptr->blind < 1) {
+                        f_ptr->blind += 10 + randint((int) r_ptr->level);
+                        msg_print("Your eyes begin to sting.");
+                    } else {
+                        f_ptr->blind += 5;
+                        notice = false;
+                    }
+                    break;
+                case 11: // Paralysis attack
+                    f_ptr = &py.flags;
+                    take_hit(damage, ddesc);
+                    if (player_saves()) {
+                        msg_print("You resist the effects!");
+                    } else if (f_ptr->paralysis < 1) {
+                        if (f_ptr->free_act) {
+                            msg_print("You are unaffected.");
+                        } else {
+                            f_ptr->paralysis = (int16_t) (randint((int) r_ptr->level) + 3);
+                            msg_print("You are paralyzed.");
+                        }
+                    } else {
+                        notice = false;
+                    }
+                    break;
+                case 12: // Steal Money
+                    if ((py.flags.paralysis < 1) && (randint(124) < py.stats.use_stat[A_DEX])) {
+                        msg_print("You quickly protect your money pouch!");
+                    } else {
+                        gold = (p_ptr->au / 10) + randint(25);
+                        if (gold > p_ptr->au) {
+                            p_ptr->au = 0;
+                        } else {
+                            p_ptr->au -= gold;
+                        }
+                        msg_print("Your purse feels lighter.");
+                        prt_gold();
+                    }
+                    if (randint(2) == 1) {
+                        msg_print("There is a puff of smoke!");
+                        teleport_away(monptr, MAX_SIGHT);
+                    }
+                    break;
+                case 13: // Steal Object
+                    if ((py.flags.paralysis < 1) && (randint(124) < py.stats.use_stat[A_DEX])) {
+                        msg_print("You grab hold of your backpack!");
+                    } else {
+                        i = randint(inven_ctr) - 1;
+                        inven_destroy(i);
+                        msg_print("Your backpack feels lighter.");
+                    }
+                    if (randint(2) == 1) {
+                        msg_print("There is a puff of smoke!");
+                        teleport_away(monptr, MAX_SIGHT);
+                    }
+                    break;
+                case 14: // Poison
+                    f_ptr = &py.flags;
+                    take_hit(damage, ddesc);
+                    msg_print("You feel very sick.");
+                    f_ptr->poisoned += randint((int) r_ptr->level) + 5;
+                    break;
+                case 15: // Lose dexterity
+                    f_ptr = &py.flags;
+                    take_hit(damage, ddesc);
+                    if (f_ptr->sustain_dex) {
+                        msg_print("You feel clumsy for a moment, but it passes.");
+                    } else {
+                        msg_print("You feel more clumsy.");
+                        (void) dec_stat(A_DEX);
+                    }
+                    break;
+                case 16: // Lose constitution
+                    f_ptr = &py.flags;
+                    take_hit(damage, ddesc);
+                    if (f_ptr->sustain_con) {
+                        msg_print("Your body resists the effects of the disease.");
+                    } else {
+                        msg_print("Your health is damaged!");
+                        (void) dec_stat(A_CON);
+                    }
+                    break;
+                case 17: // Lose intelligence
+                    f_ptr = &py.flags;
+                    take_hit(damage, ddesc);
+                    msg_print("You have trouble thinking clearly.");
+                    if (f_ptr->sustain_int) {
+                        msg_print("But your mind quickly clears.");
+                    } else {
+                        (void) dec_stat(A_INT);
+                    }
+                    break;
+                case 18: // Lose wisdom
+                    f_ptr = &py.flags;
+                    take_hit(damage, ddesc);
+                    if (f_ptr->sustain_wis) {
+                        msg_print("Your wisdom is sustained.");
+                    } else {
+                        msg_print("Your wisdom is drained.");
+                        (void) dec_stat(A_WIS);
+                    }
+                    break;
+                case 19: // Lose experience
+                    msg_print("You feel your life draining away!");
+                    lose_exp(damage + (py.misc.exp / 100) * MON_DRAIN_LIFE);
+                    break;
+                case 20: // Aggravate monster
+                    (void) aggravate_monster(20);
+                    break;
+                case 21: // Disenchant
+                    flag = false;
+                    switch (randint(7)) {
+                        case 1:
+                            i = INVEN_WIELD;
+                            break;
+                        case 2:
+                            i = INVEN_BODY;
+                            break;
+                        case 3:
+                            i = INVEN_ARM;
+                            break;
+                        case 4:
+                            i = INVEN_OUTER;
+                            break;
+                        case 5:
+                            i = INVEN_HANDS;
+                            break;
+                        case 6:
+                            i = INVEN_HEAD;
+                            break;
+                        case 7:
+                            i = INVEN_FEET;
+                            break;
+                    }
+                    i_ptr = &inventory[i];
+
+                    if (i_ptr->tohit > 0) {
+                        i_ptr->tohit -= randint(2);
+
+                        // don't send it below zero
+                        if (i_ptr->tohit < 0) {
+                            i_ptr->tohit = 0;
+                        }
+                        flag = true;
+                    }
+                    if (i_ptr->todam > 0) {
+                        i_ptr->todam -= randint(2);
+
+                        // don't send it below zero
+                        if (i_ptr->todam < 0) {
+                            i_ptr->todam = 0;
+                        }
+                        flag = true;
+                    }
+                    if (i_ptr->toac > 0) {
+                        i_ptr->toac -= randint(2);
+
+                        // don't send it below zero
+                        if (i_ptr->toac < 0) {
+                            i_ptr->toac = 0;
+                        }
+                        flag = true;
+                    }
+                    if (flag) {
+                        msg_print("There is a static feeling in the air.");
+                        calc_bonuses();
+                    } else {
+                        notice = false;
+                    }
+                    break;
+                case 22: // Eat food
+                    if (find_range(TV_FOOD, TV_NEVER, &i, &j)) {
+                        inven_destroy(i);
+                        msg_print("It got at your rations!");
+                    } else {
+                        notice = false;
+                    }
+                    break;
+                case 23: // Eat light
+                    i_ptr = &inventory[INVEN_LIGHT];
+                    if (i_ptr->p1 > 0) {
+                        i_ptr->p1 -= (250 + randint(250));
+                        if (i_ptr->p1 < 1) {
+                            i_ptr->p1 = 1;
+                        }
+                        if (py.flags.blind < 1) {
+                            msg_print("Your light dims.");
+                        } else {
+                            notice = false;
+                        }
+                    } else {
+                        notice = false;
+                    }
+                    break;
+                case 24: // Eat charges
                     i = randint(inven_ctr) - 1;
-                    inven_destroy(i);
-                    msg_print("Your backpack feels lighter.");
-                }
-                if (randint(2) == 1) {
-                    msg_print("There is a puff of smoke!");
-                    teleport_away(monptr, MAX_SIGHT);
-                }
-                break;
-            case 14: // Poison
-                f_ptr = &py.flags;
-                take_hit(damage, ddesc);
-                msg_print("You feel very sick.");
-                f_ptr->poisoned += randint((int)r_ptr->level) + 5;
-                break;
-            case 15: // Lose dexterity
-                f_ptr = &py.flags;
-                take_hit(damage, ddesc);
-                if (f_ptr->sustain_dex) {
-                    msg_print("You feel clumsy for a moment, but it passes.");
-                } else {
-                    msg_print("You feel more clumsy.");
-                    (void)dec_stat(A_DEX);
-                }
-                break;
-            case 16: // Lose constitution
-                f_ptr = &py.flags;
-                take_hit(damage, ddesc);
-                if (f_ptr->sustain_con) {
-                    msg_print("Your body resists the effects of the disease.");
-                } else {
-                    msg_print("Your health is damaged!");
-                    (void)dec_stat(A_CON);
-                }
-                break;
-            case 17: // Lose intelligence
-                f_ptr = &py.flags;
-                take_hit(damage, ddesc);
-                msg_print("You have trouble thinking clearly.");
-                if (f_ptr->sustain_int) {
-                    msg_print("But your mind quickly clears.");
-                } else {
-                    (void)dec_stat(A_INT);
-                }
-                break;
-            case 18: // Lose wisdom
-                f_ptr = &py.flags;
-                take_hit(damage, ddesc);
-                if (f_ptr->sustain_wis) {
-                    msg_print("Your wisdom is sustained.");
-                } else {
-                    msg_print("Your wisdom is drained.");
-                    (void)dec_stat(A_WIS);
-                }
-                break;
-            case 19: // Lose experience
-                msg_print("You feel your life draining away!");
-                lose_exp(damage + (py.misc.exp / 100) * MON_DRAIN_LIFE);
-                break;
-            case 20: // Aggravate monster
-                (void)aggravate_monster(20);
-                break;
-            case 21: // Disenchant
-                flag = false;
-                switch (randint(7)) {
-                case 1:
-                    i = INVEN_WIELD;
-                    break;
-                case 2:
-                    i = INVEN_BODY;
-                    break;
-                case 3:
-                    i = INVEN_ARM;
-                    break;
-                case 4:
-                    i = INVEN_OUTER;
-                    break;
-                case 5:
-                    i = INVEN_HANDS;
-                    break;
-                case 6:
-                    i = INVEN_HEAD;
-                    break;
-                case 7:
-                    i = INVEN_FEET;
-                    break;
-                }
-                i_ptr = &inventory[i];
-
-                if (i_ptr->tohit > 0) {
-                    i_ptr->tohit -= randint(2);
-
-                    // don't send it below zero
-                    if (i_ptr->tohit < 0) {
-                        i_ptr->tohit = 0;
-                    }
-                    flag = true;
-                }
-                if (i_ptr->todam > 0) {
-                    i_ptr->todam -= randint(2);
-
-                    // don't send it below zero
-                    if (i_ptr->todam < 0) {
-                        i_ptr->todam = 0;
-                    }
-                    flag = true;
-                }
-                if (i_ptr->toac > 0) {
-                    i_ptr->toac -= randint(2);
-
-                    // don't send it below zero
-                    if (i_ptr->toac < 0) {
-                        i_ptr->toac = 0;
-                    }
-                    flag = true;
-                }
-                if (flag) {
-                    msg_print("There is a static feeling in the air.");
-                    calc_bonuses();
-                } else {
-                    notice = false;
-                }
-                break;
-            case 22: // Eat food
-                if (find_range(TV_FOOD, TV_NEVER, &i, &j)) {
-                    inven_destroy(i);
-                    msg_print("It got at your rations!");
-                } else {
-                    notice = false;
-                }
-                break;
-            case 23: // Eat light
-                i_ptr = &inventory[INVEN_LIGHT];
-                if (i_ptr->p1 > 0) {
-                    i_ptr->p1 -= (250 + randint(250));
-                    if (i_ptr->p1 < 1) {
-                        i_ptr->p1 = 1;
-                    }
-                    if (py.flags.blind < 1) {
-                        msg_print("Your light dims.");
+                    j = r_ptr->level;
+                    i_ptr = &inventory[i];
+                    if (((i_ptr->tval == TV_STAFF) || (i_ptr->tval == TV_WAND)) && (i_ptr->p1 > 0)) {
+                        m_ptr->hp += j * i_ptr->p1;
+                        i_ptr->p1 = 0;
+                        if (!known2_p(i_ptr)) {
+                            add_inscribe(i_ptr, ID_EMPTY);
+                        }
+                        msg_print("Energy drains from your pack!");
                     } else {
                         notice = false;
                     }
-                } else {
+                    break;
+                case 99:
                     notice = false;
-                }
-                break;
-            case 24: // Eat charges
-                i = randint(inven_ctr) - 1;
-                j = r_ptr->level;
-                i_ptr = &inventory[i];
-                if (((i_ptr->tval == TV_STAFF) || (i_ptr->tval == TV_WAND)) &&
-                    (i_ptr->p1 > 0)) {
-                    m_ptr->hp += j * i_ptr->p1;
-                    i_ptr->p1 = 0;
-                    if (!known2_p(i_ptr)) {
-                        add_inscribe(i_ptr, ID_EMPTY);
-                    }
-                    msg_print("Energy drains from your pack!");
-                } else {
+                    break;
+                default:
                     notice = false;
-                }
-                break;
-            case 99:
-                notice = false;
-                break;
-            default:
-                notice = false;
-                break;
+                    break;
             }
 
             // Moved here from mon_move, so that monster only confused if it
@@ -837,9 +832,9 @@ static void make_attack(int monptr) {
                 msg_print("Your hands stop glowing.");
                 py.flags.confuse_monster = false;
                 if ((randint(MAX_MONS_LEVEL) < r_ptr->level) || (CD_NO_SLEEP & r_ptr->cdefense)) {
-                    (void)sprintf(tmp_str, "%sis unaffected.", cdesc);
+                    (void) sprintf(tmp_str, "%sis unaffected.", cdesc);
                 } else {
-                    (void)sprintf(tmp_str, "%sappears confused.", cdesc);
+                    (void) sprintf(tmp_str, "%sappears confused.", cdesc);
                     if (m_ptr->confused) {
                         m_ptr->confused += 3;
                     } else {
@@ -865,7 +860,7 @@ static void make_attack(int monptr) {
         } else {
             if ((adesc >= 1 && adesc <= 3) || (adesc == 6)) {
                 disturb(1, 0);
-                (void)strcpy(tmp_str, cdesc);
+                (void) strcpy(tmp_str, cdesc);
                 msg_print(strcat(tmp_str, "misses you."));
             }
         }
@@ -894,7 +889,7 @@ static void make_move(int monptr, int *mm, uint32_t *rcmove) {
         // Get new position
         newy = m_ptr->fy;
         newx = m_ptr->fx;
-        (void)mmove(mm[i], &newy, &newx);
+        (void) mmove(mm[i], &newy, &newx);
         c_ptr = &cave[newy][newx];
         if (c_ptr->fval != BOUNDARY_WALL) {
             // Floor is open?
@@ -923,15 +918,13 @@ static void make_move(int monptr, int *mm, uint32_t *rcmove) {
                         } else if (t_ptr->p1 > 0) {
                             // Locked doors
 
-                            if (randint((m_ptr->hp + 1) * (50 + t_ptr->p1)) <
-                                40 * (m_ptr->hp - 10 - t_ptr->p1)) {
+                            if (randint((m_ptr->hp + 1) * (50 + t_ptr->p1)) < 40 * (m_ptr->hp - 10 - t_ptr->p1)) {
                                 t_ptr->p1 = 0;
                             }
                         } else if (t_ptr->p1 < 0) {
                             // Stuck doors
 
-                            if (randint((m_ptr->hp + 1) * (50 - t_ptr->p1)) <
-                                40 * (m_ptr->hp - 10 + t_ptr->p1)) {
+                            if (randint((m_ptr->hp + 1) * (50 - t_ptr->p1)) < 40 * (m_ptr->hp - 10 + t_ptr->p1)) {
                                 msg_print("You hear a door burst open!");
                                 disturb(1, 0);
                                 stuck_door = true;
@@ -959,8 +952,7 @@ static void make_move(int monptr, int *mm, uint32_t *rcmove) {
 
                     if (t_ptr->tval == TV_CLOSED_DOOR) {
                         do_turn = true;
-                        if (randint((m_ptr->hp + 1) * (80 + abs(t_ptr->p1))) <
-                            40 * (m_ptr->hp - 20 - abs(t_ptr->p1))) {
+                        if (randint((m_ptr->hp + 1) * (80 + abs(t_ptr->p1))) < 40 * (m_ptr->hp - 20 - abs(t_ptr->p1))) {
                             invcopy(t_ptr, OBJ_OPEN_DOOR);
 
                             // 50% chance of breaking door
@@ -975,14 +967,12 @@ static void make_move(int monptr, int *mm, uint32_t *rcmove) {
             }
 
             // Glyph of warding present?
-            if (do_move && (c_ptr->tptr != 0) &&
-                (t_list[c_ptr->tptr].tval == TV_VIS_TRAP) &&
-                (t_list[c_ptr->tptr].subval == 99)) {
+            if (do_move && (c_ptr->tptr != 0) && (t_list[c_ptr->tptr].tval == TV_VIS_TRAP) && (t_list[c_ptr->tptr].subval == 99)) {
                 if (randint(OBJ_RUNE_PROT) < c_list[m_ptr->mptr].level) {
                     if ((newy == char_row) && (newx == char_col)) {
                         msg_print("The rune of protection is broken!");
                     }
-                    (void)delete_object(newy, newx);
+                    (void) delete_object(newy, newx);
                 } else {
                     do_move = false;
 
@@ -1018,12 +1008,12 @@ static void make_move(int monptr, int *mm, uint32_t *rcmove) {
 
                         // It ate an already processed monster. Handle normally.
                         if (monptr < c_ptr->cptr) {
-                            delete_monster((int)c_ptr->cptr);
+                            delete_monster((int) c_ptr->cptr);
                         } else {
                             // If it eats this monster, an already processed
                             // monster will take its place, causing all kinds
                             // of havoc. Delay the kill a bit.
-                            fix1_delete_monster((int)c_ptr->cptr);
+                            fix1_delete_monster((int) c_ptr->cptr);
                         }
                     } else {
                         do_move = false;
@@ -1039,15 +1029,15 @@ static void make_move(int monptr, int *mm, uint32_t *rcmove) {
 
                     if ((c_ptr->tptr != 0) && (t_list[c_ptr->tptr].tval <= TV_MAX_OBJECT)) {
                         *rcmove |= CM_PICKS_UP;
-                        (void)delete_object(newy, newx);
+                        (void) delete_object(newy, newx);
                     }
                 }
 
                 // Move creature record
-                move_rec((int)m_ptr->fy, (int)m_ptr->fx, newy, newx);
+                move_rec((int) m_ptr->fy, (int) m_ptr->fx, newy, newx);
                 if (m_ptr->ml) {
                     m_ptr->ml = false;
-                    lite_spot((int)m_ptr->fy, (int)m_ptr->fx);
+                    lite_spot((int) m_ptr->fy, (int) m_ptr->fx);
                 }
                 m_ptr->fy = (uint8_t) newy;
                 m_ptr->fx = (uint8_t) newx;
@@ -1068,7 +1058,7 @@ static void mon_cast_spell(int monptr, bool *took_turn) {
 
     monster_type *m_ptr = &m_list[monptr];
     creature_type *r_ptr = &c_list[m_ptr->mptr];
-    int chance = (int)(r_ptr->spells & CS_FREQ);
+    int chance = (int) (r_ptr->spells & CS_FREQ);
 
     if (randint(chance) != 1) {
         // 1 in x chance of casting spell
@@ -1078,7 +1068,7 @@ static void mon_cast_spell(int monptr, bool *took_turn) {
         // Must be within certain range
 
         *took_turn = false;
-    } else if (!los(char_row, char_col, (int)m_ptr->fy, (int)m_ptr->fx)) {
+    } else if (!los(char_row, char_col, (int) m_ptr->fy, (int) m_ptr->fx)) {
         // Must have unobstructed Line-Of-Sight
 
         *took_turn = false;
@@ -1093,19 +1083,19 @@ static void mon_cast_spell(int monptr, bool *took_turn) {
         // Describe the attack
         vtype cdesc;
         if (m_ptr->ml) {
-            (void)sprintf(cdesc, "The %s ", r_ptr->name);
+            (void) sprintf(cdesc, "The %s ", r_ptr->name);
         } else {
-            (void)strcpy(cdesc, "It ");
+            (void) strcpy(cdesc, "It ");
         }
 
         // For "DIED_FROM" string
         vtype ddesc;
         if (CM_WIN & r_ptr->cmove) {
-            (void)sprintf(ddesc, "The %s", r_ptr->name);
+            (void) sprintf(ddesc, "The %s", r_ptr->name);
         } else if (is_a_vowel(r_ptr->name[0])) {
-            (void)sprintf(ddesc, "an %s", r_ptr->name);
+            (void) sprintf(ddesc, "an %s", r_ptr->name);
         } else {
-            (void)sprintf(ddesc, "a %s", r_ptr->name);
+            (void) sprintf(ddesc, "a %s", r_ptr->name);
         }
         // End DIED_FROM
 
@@ -1130,7 +1120,7 @@ static void mon_cast_spell(int monptr, bool *took_turn) {
 
         // save some code/data space here, with a small time penalty
         if ((thrown_spell < 14 && thrown_spell > 6) || (thrown_spell == 16)) {
-            (void)strcat(cdesc, "casts a spell.");
+            (void) strcat(cdesc, "casts a spell.");
             msg_print(cdesc);
         }
 
@@ -1138,154 +1128,154 @@ static void mon_cast_spell(int monptr, bool *took_turn) {
 
         // Cast the spell.
         switch (thrown_spell) {
-        case 5: // Teleport Short
-            teleport_away(monptr, 5);
-            break;
-        case 6: // Teleport Long
-            teleport_away(monptr, MAX_SIGHT);
-            break;
-        case 7: // Teleport To
-            teleport_to((int)m_ptr->fy, (int)m_ptr->fx);
-            break;
-        case 8: // Light Wound
-            if (player_saves()) {
-                msg_print("You resist the effects of the spell.");
-            } else {
-                take_hit(damroll(3, 8), ddesc);
-            }
-            break;
-        case 9: // Serious Wound
-            if (player_saves()) {
-                msg_print("You resist the effects of the spell.");
-            } else {
-                take_hit(damroll(8, 8), ddesc);
-            }
-            break;
-        case 10: // Hold Person
-            if (py.flags.free_act) {
-                msg_print("You are unaffected.");
-            } else if (player_saves()) {
-                msg_print("You resist the effects of the spell.");
-            } else if (py.flags.paralysis > 0) {
-                py.flags.paralysis += 2;
-            } else {
-                py.flags.paralysis = (int16_t) (randint(5) + 4);
-            }
-            break;
-        case 11: // Cause Blindness
-            if (player_saves()) {
-                msg_print("You resist the effects of the spell.");
-            } else if (py.flags.blind > 0) {
-                py.flags.blind += 6;
-            } else {
-                py.flags.blind += 12 + randint(3);
-            }
-            break;
-        case 12: // Cause Confuse
-            if (player_saves()) {
-                msg_print("You resist the effects of the spell.");
-            } else if (py.flags.confused > 0) {
-                py.flags.confused += 2;
-            } else {
-                py.flags.confused = (int16_t) (randint(5) + 3);
-            }
-            break;
-        case 13: // Cause Fear
-            if (player_saves()) {
-                msg_print("You resist the effects of the spell.");
-            } else if (py.flags.afraid > 0) {
-                py.flags.afraid += 2;
-            } else {
-                py.flags.afraid = (int16_t) (randint(5) + 3);
-            }
-            break;
-        case 14: // Summon Monster
-            (void)strcat(cdesc, "magically summons a monster!");
-            msg_print(cdesc);
-            y = char_row;
-            x = char_col;
-
-            // in case compact_monster() is called,it needs monptr
-            hack_monptr = monptr;
-            (void)summon_monster(&y, &x, false);
-            hack_monptr = -1;
-            update_mon((int)cave[y][x].cptr);
-            break;
-        case 15: // Summon Undead
-            (void)strcat(cdesc, "magically summons an undead!");
-            msg_print(cdesc);
-            y = char_row;
-            x = char_col;
-
-            // in case compact_monster() is called,it needs monptr
-            hack_monptr = monptr;
-            (void)summon_undead(&y, &x);
-            hack_monptr = -1;
-            update_mon((int)cave[y][x].cptr);
-            break;
-        case 16: // Slow Person
-            if (py.flags.free_act) {
-                msg_print("You are unaffected.");
-            } else if (player_saves()) {
-                msg_print("You resist the effects of the spell.");
-            } else if (py.flags.slow > 0) {
-                py.flags.slow += 2;
-            } else {
-                py.flags.slow = (int16_t) (randint(5) + 3);
-            }
-            break;
-        case 17: // Drain Mana
-            if (py.misc.cmana > 0) {
-                vtype outval;
-
-                disturb(1, 0);
-                (void)sprintf(outval, "%sdraws psychic energy from you!", cdesc);
-                msg_print(outval);
-                if (m_ptr->ml) {
-                    (void)sprintf(outval, "%sappears healthier.", cdesc);
-                    msg_print(outval);
-                }
-
-                int r1 = (randint((int)r_ptr->level) >> 1) + 1;
-                if (r1 > py.misc.cmana) {
-                    r1 = py.misc.cmana;
-                    py.misc.cmana = 0;
-                    py.misc.cmana_frac = 0;
+            case 5: // Teleport Short
+                teleport_away(monptr, 5);
+                break;
+            case 6: // Teleport Long
+                teleport_away(monptr, MAX_SIGHT);
+                break;
+            case 7: // Teleport To
+                teleport_to((int) m_ptr->fy, (int) m_ptr->fx);
+                break;
+            case 8: // Light Wound
+                if (player_saves()) {
+                    msg_print("You resist the effects of the spell.");
                 } else {
-                    py.misc.cmana -= r1;
+                    take_hit(damroll(3, 8), ddesc);
                 }
-                prt_cmana();
-                m_ptr->hp += 6 * (r1);
-            }
-            break;
-        case 20: // Breath Light
-            (void)strcat(cdesc, "breathes lightning.");
-            msg_print(cdesc);
-            breath(GF_LIGHTNING, char_row, char_col, (m_ptr->hp / 4), ddesc, monptr);
-            break;
-        case 21: // Breath Gas
-            (void)strcat(cdesc, "breathes gas.");
-            msg_print(cdesc);
-            breath(GF_POISON_GAS, char_row, char_col, (m_ptr->hp / 3), ddesc, monptr);
-            break;
-        case 22: // Breath Acid
-            (void)strcat(cdesc, "breathes acid.");
-            msg_print(cdesc);
-            breath(GF_ACID, char_row, char_col, (m_ptr->hp / 3), ddesc, monptr);
-            break;
-        case 23: // Breath Frost
-            (void)strcat(cdesc, "breathes frost.");
-            msg_print(cdesc);
-            breath(GF_FROST, char_row, char_col, (m_ptr->hp / 3), ddesc, monptr);
-            break;
-        case 24: // Breath Fire
-            (void)strcat(cdesc, "breathes fire.");
-            msg_print(cdesc);
-            breath(GF_FIRE, char_row, char_col, (m_ptr->hp / 3), ddesc, monptr);
-            break;
-        default:
-            (void)strcat(cdesc, "cast unknown spell.");
-            msg_print(cdesc);
+                break;
+            case 9: // Serious Wound
+                if (player_saves()) {
+                    msg_print("You resist the effects of the spell.");
+                } else {
+                    take_hit(damroll(8, 8), ddesc);
+                }
+                break;
+            case 10: // Hold Person
+                if (py.flags.free_act) {
+                    msg_print("You are unaffected.");
+                } else if (player_saves()) {
+                    msg_print("You resist the effects of the spell.");
+                } else if (py.flags.paralysis > 0) {
+                    py.flags.paralysis += 2;
+                } else {
+                    py.flags.paralysis = (int16_t) (randint(5) + 4);
+                }
+                break;
+            case 11: // Cause Blindness
+                if (player_saves()) {
+                    msg_print("You resist the effects of the spell.");
+                } else if (py.flags.blind > 0) {
+                    py.flags.blind += 6;
+                } else {
+                    py.flags.blind += 12 + randint(3);
+                }
+                break;
+            case 12: // Cause Confuse
+                if (player_saves()) {
+                    msg_print("You resist the effects of the spell.");
+                } else if (py.flags.confused > 0) {
+                    py.flags.confused += 2;
+                } else {
+                    py.flags.confused = (int16_t) (randint(5) + 3);
+                }
+                break;
+            case 13: // Cause Fear
+                if (player_saves()) {
+                    msg_print("You resist the effects of the spell.");
+                } else if (py.flags.afraid > 0) {
+                    py.flags.afraid += 2;
+                } else {
+                    py.flags.afraid = (int16_t) (randint(5) + 3);
+                }
+                break;
+            case 14: // Summon Monster
+                (void) strcat(cdesc, "magically summons a monster!");
+                msg_print(cdesc);
+                y = char_row;
+                x = char_col;
+
+                // in case compact_monster() is called,it needs monptr
+                hack_monptr = monptr;
+                (void) summon_monster(&y, &x, false);
+                hack_monptr = -1;
+                update_mon((int) cave[y][x].cptr);
+                break;
+            case 15: // Summon Undead
+                (void) strcat(cdesc, "magically summons an undead!");
+                msg_print(cdesc);
+                y = char_row;
+                x = char_col;
+
+                // in case compact_monster() is called,it needs monptr
+                hack_monptr = monptr;
+                (void) summon_undead(&y, &x);
+                hack_monptr = -1;
+                update_mon((int) cave[y][x].cptr);
+                break;
+            case 16: // Slow Person
+                if (py.flags.free_act) {
+                    msg_print("You are unaffected.");
+                } else if (player_saves()) {
+                    msg_print("You resist the effects of the spell.");
+                } else if (py.flags.slow > 0) {
+                    py.flags.slow += 2;
+                } else {
+                    py.flags.slow = (int16_t) (randint(5) + 3);
+                }
+                break;
+            case 17: // Drain Mana
+                if (py.misc.cmana > 0) {
+                    vtype outval;
+
+                    disturb(1, 0);
+                    (void) sprintf(outval, "%sdraws psychic energy from you!", cdesc);
+                    msg_print(outval);
+                    if (m_ptr->ml) {
+                        (void) sprintf(outval, "%sappears healthier.", cdesc);
+                        msg_print(outval);
+                    }
+
+                    int r1 = (randint((int) r_ptr->level) >> 1) + 1;
+                    if (r1 > py.misc.cmana) {
+                        r1 = py.misc.cmana;
+                        py.misc.cmana = 0;
+                        py.misc.cmana_frac = 0;
+                    } else {
+                        py.misc.cmana -= r1;
+                    }
+                    prt_cmana();
+                    m_ptr->hp += 6 * (r1);
+                }
+                break;
+            case 20: // Breath Light
+                (void) strcat(cdesc, "breathes lightning.");
+                msg_print(cdesc);
+                breath(GF_LIGHTNING, char_row, char_col, (m_ptr->hp / 4), ddesc, monptr);
+                break;
+            case 21: // Breath Gas
+                (void) strcat(cdesc, "breathes gas.");
+                msg_print(cdesc);
+                breath(GF_POISON_GAS, char_row, char_col, (m_ptr->hp / 3), ddesc, monptr);
+                break;
+            case 22: // Breath Acid
+                (void) strcat(cdesc, "breathes acid.");
+                msg_print(cdesc);
+                breath(GF_ACID, char_row, char_col, (m_ptr->hp / 3), ddesc, monptr);
+                break;
+            case 23: // Breath Frost
+                (void) strcat(cdesc, "breathes frost.");
+                msg_print(cdesc);
+                breath(GF_FROST, char_row, char_col, (m_ptr->hp / 3), ddesc, monptr);
+                break;
+            case 24: // Breath Fire
+                (void) strcat(cdesc, "breathes fire.");
+                msg_print(cdesc);
+                breath(GF_FIRE, char_row, char_col, (m_ptr->hp / 3), ddesc, monptr);
+                break;
+            default:
+                (void) strcat(cdesc, "cast unknown spell.");
+                msg_print(cdesc);
         }
         // End of spells
 
@@ -1323,12 +1313,12 @@ bool multiply_monster(int y, int x, int cr_index, int monptr) {
                         && c_list[cr_index].mexp >= c_list[m_list[c_ptr->cptr].mptr].mexp) {
                         // It ate an already processed monster.Handle * normally.
                         if (monptr < c_ptr->cptr) {
-                            delete_monster((int)c_ptr->cptr);
+                            delete_monster((int) c_ptr->cptr);
                         } else {
                             // If it eats this monster, an already processed
                             // mosnter will take its place, causing all kinds
                             // of havoc. Delay the kill a bit.
-                            fix1_delete_monster((int)c_ptr->cptr);
+                            fix1_delete_monster((int) c_ptr->cptr);
                         }
 
                         // in case compact_monster() is called,it needs monptr
@@ -1392,7 +1382,7 @@ static void mon_move(int monptr, uint32_t *rcmove) {
             k++;
         }
         if ((k < 4) && (randint(k * MON_MULT_ADJ) == 1)) {
-            if (multiply_monster((int)m_ptr->fy, (int)m_ptr->fx, (int)m_ptr->mptr, monptr)) {
+            if (multiply_monster((int) m_ptr->fy, (int) m_ptr->fx, (int) m_ptr->mptr, monptr)) {
                 *rcmove |= CM_MULTIPLY;
             }
         }
@@ -1420,8 +1410,7 @@ static void mon_move(int monptr, uint32_t *rcmove) {
         // of i will fail the comparison.
         for (i = m_ptr->fy + 1; i >= (m_ptr->fy - 1); i--) {
             for (int j = m_ptr->fx - 1; j <= m_ptr->fx + 1; j++) {
-                if ((dir != 5) && (cave[i][j].fval <= MAX_OPEN_SPACE) &&
-                    (cave[i][j].cptr != 1)) {
+                if ((dir != 5) && (cave[i][j].fval <= MAX_OPEN_SPACE) && (cave[i][j].cptr != 1)) {
                     mm[k++] = dir;
                 }
                 dir++;
@@ -1450,7 +1439,7 @@ static void mon_move(int monptr, uint32_t *rcmove) {
                 prt_experience();
             } else {
                 msg_print("A creature digs itself out from the rock!");
-                (void)twall((int)m_ptr->fy, (int)m_ptr->fx, 1, 0);
+                (void) twall((int) m_ptr->fy, (int) m_ptr->fx, 1, 0);
             }
         }
         // monster movement finished
@@ -1573,7 +1562,7 @@ void creatures(int attack) {
             continue;
         }
 
-        m_ptr->cdis = (uint8_t) distance(char_row, char_col, (int)m_ptr->fy, (int)m_ptr->fx);
+        m_ptr->cdis = (uint8_t) distance(char_row, char_col, (int) m_ptr->fy, (int) m_ptr->fx);
 
         // Attack is argument passed to CREATURE
         if (attack) {
@@ -1618,7 +1607,7 @@ void creatures(int attack) {
                             }
                             if (m_ptr->stunned == 0) {
                                 if (m_ptr->ml) {
-                                    (void)sprintf(cdesc, "The %s ", c_list[m_ptr->mptr].name);
+                                    (void) sprintf(cdesc, "The %s ", c_list[m_ptr->mptr].name);
                                     msg_print(strcat(cdesc, "recovers and glares at you."));
                                 }
                             }

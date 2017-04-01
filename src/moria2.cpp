@@ -63,7 +63,7 @@ void search(int y, int x, int chance) {
                 bigvtype tmp_str, tmp_str2;
 
                 objdes(tmp_str2, t_ptr, true);
-                (void)sprintf(tmp_str, "You have found %s", tmp_str2);
+                (void) sprintf(tmp_str, "You have found %s", tmp_str2);
                 msg_print(tmp_str);
                 change_trap(i, j);
                 end_find();
@@ -342,8 +342,7 @@ void area_affect(int dir, int y, int x) {
             if (player_light || c_ptr->tl || c_ptr->pl || c_ptr->fm) {
                 if (c_ptr->tptr != 0) {
                     int t = t_list[c_ptr->tptr].tval;
-                    if (t != TV_INVIS_TRAP && t != TV_SECRET_DOOR &&
-                        (t != TV_OPEN_DOOR || !find_ignore_doors)) {
+                    if (t != TV_INVIS_TRAP && t != TV_SECRET_DOOR && (t != TV_OPEN_DOOR || !find_ignore_doors)) {
                         end_find();
                         return;
                     }
@@ -438,13 +437,12 @@ void area_affect(int dir, int y, int x) {
     // Two options!
     int row = y;
     int col = x;
-    (void)mmove(option, &row, &col);
+    (void) mmove(option, &row, &col);
 
     if (!see_wall(option, row, col) || !see_wall(check_dir, row, col)) {
         // Don't see that it is closed off.  This could be a
         // potential corner or an intersection.
-        if (find_examine && see_nothing(option, row, col) &&
-            see_nothing(option2, row, col)) {
+        if (find_examine && see_nothing(option, row, col) && see_nothing(option2, row, col)) {
             // Can not see anything ahead and in the direction we are
             // turning, assume that it is a potential corner.
             find_direction = option;
@@ -511,12 +509,12 @@ int minus_ac(uint32_t typ_dam) {
 
     if (i_ptr->flags & typ_dam) {
         objdes(tmp_str, &inventory[j], false);
-        (void)sprintf(out_val, "Your %s resists damage!", tmp_str);
+        (void) sprintf(out_val, "Your %s resists damage!", tmp_str);
         msg_print(out_val);
         minus = true;
     } else if ((i_ptr->ac + i_ptr->toac) > 0) {
         objdes(tmp_str, &inventory[j], false);
-        (void)sprintf(out_val, "Your %s is damaged!", tmp_str);
+        (void) sprintf(out_val, "Your %s is damaged!", tmp_str);
         msg_print(out_val);
         i_ptr->toac--;
         calc_bonuses();
@@ -528,7 +526,7 @@ int minus_ac(uint32_t typ_dam) {
 
 // Corrode the unsuspecting person's armor -RAK-
 void corrode_gas(const char *kb_str) {
-    if (!minus_ac((uint32_t)TR_RES_ACID)) {
+    if (!minus_ac((uint32_t) TR_RES_ACID)) {
         take_hit(randint(8), kb_str);
     }
 
@@ -586,7 +584,7 @@ void light_dam(int dam, const char *kb_str) {
 // Throw acid on the hapless victim -RAK-
 void acid_dam(int dam, const char *kb_str) {
     int flag = 0;
-    if (minus_ac((uint32_t)TR_RES_ACID)) {
+    if (minus_ac((uint32_t) TR_RES_ACID)) {
         flag = 1;
     }
     if (py.flags.acid_resist) {

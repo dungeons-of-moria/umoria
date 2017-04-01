@@ -12,17 +12,17 @@
 
 static void date(char *day) {
     char *tmp;
-    time_t clockvar = time((time_t *)0);
+    time_t clockvar = time((time_t *) 0);
     tmp = ctime(&clockvar);
     tmp[10] = '\0';
-    (void)strcpy(day, tmp);
+    (void) strcpy(day, tmp);
 }
 
 // Centers a string within a 31 character string -JWT-
 static char *center_string(char *centered_str, const char *in_str) {
-    int i = (int)strlen(in_str);
+    int i = (int) strlen(in_str);
     int j = 15 - i / 2;
-    (void)sprintf(centered_str, "%*s%s%*s", j, "", in_str, 31 - i - j, "");
+    (void) sprintf(centered_str, "%*s%s%*s", j, "", in_str, 31 - i - j, "");
     return centered_str;
 }
 
@@ -36,7 +36,7 @@ void display_scores() {
         return;
     }
 
-    (void)fseek(highscore_fp, (off_t)0, SEEK_SET);
+    (void) fseek(highscore_fp, (off_t) 0, SEEK_SET);
 
     // Read version numbers from the score file, and check for validity.
     uint8_t version_maj = (uint8_t) getc(highscore_fp);
@@ -53,7 +53,7 @@ void display_scores() {
         msg_print("Sorry. This score file is from a different version of umoria.");
         msg_print(CNIL);
 
-        (void)fclose(highscore_fp);
+        (void) fclose(highscore_fp);
         return;
     }
 
@@ -73,11 +73,11 @@ void display_scores() {
         clear_screen();
         // Put twenty scores on each page, on lines 2 through 21.
         while (!feof(highscore_fp) && i < 21) {
-            (void)sprintf(string,
-                          "%-4d%8d %-19.19s %c %-10.10s %-7.7s%3d %-22.22s",
-                          rank, score.points, score.name, score.sex,
-                          race[score.race].trace, classes[score.character_class].title,
-                          score.lev, score.died_from);
+            (void) sprintf(string,
+                           "%-4d%8d %-19.19s %c %-10.10s %-7.7s%3d %-22.22s",
+                           rank, score.points, score.name, score.sex,
+                           race[score.race].trace, classes[score.character_class].title,
+                           score.lev, score.died_from);
             prt(string, ++i, 0);
             rank++;
             rd_highscore(&score);
@@ -91,7 +91,7 @@ void display_scores() {
         }
     }
 
-    (void)fclose(highscore_fp);
+    (void) fclose(highscore_fp);
 }
 
 bool duplicate_character() {
@@ -113,58 +113,58 @@ static void print_tomb() {
     put_buffer("/            RIP            \\   \\  :   :     /   \\", 4, 12);
     put_buffer("/", 5, 11);
     put_buffer("\\  : _;,,,;_    :   :", 5, 41);
-    (void)sprintf(str, "/%s\\,;_          _;,,,;_", center_string(tmp_str, py.misc.name));
+    (void) sprintf(str, "/%s\\,;_          _;,,,;_", center_string(tmp_str, py.misc.name));
     put_buffer(str, 6, 10);
     put_buffer("|               the               |   ___", 7, 9);
     if (!total_winner) {
         p = title_string();
     } else {
-        p = (char *)"Magnificent";
+        p = (char *) "Magnificent";
     }
-    (void)sprintf(str, "| %s |  /   \\", center_string(tmp_str, p));
+    (void) sprintf(str, "| %s |  /   \\", center_string(tmp_str, p));
     put_buffer(str, 8, 9);
     put_buffer("|", 9, 9);
     put_buffer("|  :   :", 9, 43);
     if (!total_winner) {
-        p = (char *)classes[py.misc.pclass].title;
+        p = (char *) classes[py.misc.pclass].title;
     } else if (py.misc.male) {
-        p = (char *)"*King*";
+        p = (char *) "*King*";
     } else {
-        p = (char *)"*Queen*";
+        p = (char *) "*Queen*";
     }
-    (void)sprintf(str, "| %s | _;,,,;_   ____", center_string(tmp_str, p));
+    (void) sprintf(str, "| %s | _;,,,;_   ____", center_string(tmp_str, p));
     put_buffer(str, 10, 9);
-    (void)sprintf(str, "Level : %d", (int)py.misc.lev);
-    (void)sprintf(str, "| %s |          /    \\", center_string(tmp_str, str));
+    (void) sprintf(str, "Level : %d", (int) py.misc.lev);
+    (void) sprintf(str, "| %s |          /    \\", center_string(tmp_str, str));
     put_buffer(str, 11, 9);
-    (void)sprintf(str, "%d Exp", py.misc.exp);
-    (void)sprintf(str, "| %s |          :    :", center_string(tmp_str, str));
+    (void) sprintf(str, "%d Exp", py.misc.exp);
+    (void) sprintf(str, "| %s |          :    :", center_string(tmp_str, str));
     put_buffer(str, 12, 9);
-    (void)sprintf(str, "%d Au", py.misc.au);
-    (void)sprintf(str, "| %s |          :    :", center_string(tmp_str, str));
+    (void) sprintf(str, "%d Au", py.misc.au);
+    (void) sprintf(str, "| %s |          :    :", center_string(tmp_str, str));
     put_buffer(str, 13, 9);
-    (void)sprintf(str, "Died on Level : %d", dun_level);
-    (void)sprintf(str, "| %s |         _;,,,,;_", center_string(tmp_str, str));
+    (void) sprintf(str, "Died on Level : %d", dun_level);
+    (void) sprintf(str, "| %s |         _;,,,,;_", center_string(tmp_str, str));
     put_buffer(str, 14, 9);
     put_buffer("|            killed by            |", 15, 9);
     p = died_from;
 
-    int len = (int)strlen(p);
+    int len = (int) strlen(p);
     p[len] = '.'; // add a trailing period
     p[len + 1] = '\0';
-    (void)sprintf(str, "| %s |", center_string(tmp_str, p));
+    (void) sprintf(str, "| %s |", center_string(tmp_str, p));
     put_buffer(str, 16, 9);
     p[len] = '\0'; // strip off the period
 
     char day[11];
     date(day);
-    (void)sprintf(str, "| %s |", center_string(tmp_str, day));
+    (void) sprintf(str, "| %s |", center_string(tmp_str, day));
 
     put_buffer(str, 17, 9);
     put_buffer("*|   *     *     *    *   *     *  | *", 18, 8);
     put_buffer("________)/\\\\_)_/___(\\/___(//_\\)/_\\//__\\\\(/_|_)_______", 19, 0);
 
-retry:
+    retry:
     flush();
 
     put_buffer("(ESC to abort, return to print on screen, or file name)", 23, 0);
@@ -189,11 +189,11 @@ retry:
             if (inkey() != ESCAPE) {
                 clear_screen();
                 msg_print("You are using:");
-                (void)show_equip(true, 0);
+                (void) show_equip(true, 0);
                 msg_print(CNIL);
                 msg_print("You are carrying:");
                 clear_from(1);
-                (void)show_inven(0, inven_ctr - 1, true, 0, CNIL);
+                (void) show_inven(0, inven_ctr - 1, true, 0, CNIL);
                 msg_print(CNIL);
             }
         }
@@ -238,13 +238,13 @@ static void highscores() {
     new_entry.uid = 0; // NOTE: do we not want to use `getuid()`? -MRC-
     new_entry.mhp = py.misc.mhp;
     new_entry.chp = py.misc.chp;
-    new_entry.dun_level = (uint8_t)dun_level;
-    new_entry.lev = (uint8_t)py.misc.lev;
-    new_entry.max_dlv = (uint8_t)py.misc.max_dlv;
+    new_entry.dun_level = (uint8_t) dun_level;
+    new_entry.lev = (uint8_t) py.misc.lev;
+    new_entry.max_dlv = (uint8_t) py.misc.max_dlv;
     new_entry.sex = (py.misc.male ? 'M' : 'F');
     new_entry.race = py.misc.prace;
     new_entry.character_class = py.misc.pclass;
-    (void)strcpy(new_entry.name, py.misc.name);
+    (void) strcpy(new_entry.name, py.misc.name);
 
     char *tmp = died_from;
     if ('a' == *tmp) {
@@ -255,12 +255,12 @@ static void highscores() {
             tmp++;
         }
     }
-    (void)strcpy(new_entry.died_from, tmp);
+    (void) strcpy(new_entry.died_from, tmp);
 
     if ((highscore_fp = fopen(MORIA_TOP, "rb+")) == NULL) {
         char string[100];
 
-        (void)sprintf(string, "Error opening score file \"%s\"\n", MORIA_TOP);
+        (void) sprintf(string, "Error opening score file \"%s\"\n", MORIA_TOP);
         msg_print(string);
         msg_print(CNIL);
         return;
@@ -269,7 +269,7 @@ static void highscores() {
     // Search file to find where to insert this character, if uid != 0 and
     // find same uid/sex/race/class combo then exit without saving this score.
     // Seek to the beginning of the file just to be safe.
-    (void)fseek(highscore_fp, (long)0, SEEK_SET);
+    (void) fseek(highscore_fp, (long) 0, SEEK_SET);
 
     // Read version numbers from the score file, and check for validity.
     uint8_t version_maj = (uint8_t) getc(highscore_fp);
@@ -280,24 +280,24 @@ static void highscores() {
     // Write the current version numbers to the score file.
     if (feof(highscore_fp)) {
         // Seek to the beginning of the file just to be safe.
-        (void)fseek(highscore_fp, (long)0, SEEK_SET);
+        (void) fseek(highscore_fp, (long) 0, SEEK_SET);
 
-        (void)putc(CURRENT_VERSION_MAJOR, highscore_fp);
-        (void)putc(CURRENT_VERSION_MINOR, highscore_fp);
-        (void)putc(CURRENT_VERSION_PATCH, highscore_fp);
+        (void) putc(CURRENT_VERSION_MAJOR, highscore_fp);
+        (void) putc(CURRENT_VERSION_MINOR, highscore_fp);
+        (void) putc(CURRENT_VERSION_PATCH, highscore_fp);
 
         // must fseek() before can change read/write mode
-        (void)fseek(highscore_fp, (long)0, SEEK_CUR);
+        (void) fseek(highscore_fp, (long) 0, SEEK_CUR);
     } else if (
-        (version_maj != CURRENT_VERSION_MAJOR) ||
-        (version_min > CURRENT_VERSION_MINOR) ||
-        (version_min == CURRENT_VERSION_MINOR && patch_level > CURRENT_VERSION_PATCH) ||
-        (version_min == 2 && patch_level < 2) ||
-        (version_min < 2)) {
+            (version_maj != CURRENT_VERSION_MAJOR) ||
+            (version_min > CURRENT_VERSION_MINOR) ||
+            (version_min == CURRENT_VERSION_MINOR && patch_level > CURRENT_VERSION_PATCH) ||
+            (version_min == 2 && patch_level < 2) ||
+            (version_min < 2)) {
         // Support score files from 5.2.2 to present.
         // No need to print a message, a subsequent call to
         // display_scores() will print a message.
-        (void)fclose(highscore_fp);
+        (void) fclose(highscore_fp);
         return;
     }
 
@@ -325,13 +325,13 @@ static void highscores() {
             new_entry.sex == old_entry.sex &&
             new_entry.race == old_entry.race &&
             new_entry.character_class == old_entry.character_class) {
-            (void)fclose(highscore_fp);
+            (void) fclose(highscore_fp);
             return;
         }
 
         // only allow one thousand scores in the score file
         if (++i >= SCOREFILE_SIZE) {
-            (void)fclose(highscore_fp);
+            (void) fclose(highscore_fp);
             return;
         }
 
@@ -341,14 +341,14 @@ static void highscores() {
 
     if (feof(highscore_fp)) {
         // write out new_entry at end of file
-        (void)fseek(highscore_fp, curpos, SEEK_SET);
+        (void) fseek(highscore_fp, curpos, SEEK_SET);
 
         wr_highscore(&new_entry);
     } else {
         entry = new_entry;
 
         while (!feof(highscore_fp)) {
-            (void)fseek(highscore_fp, -(long)sizeof(high_scores) - (long)sizeof(char), SEEK_CUR);
+            (void) fseek(highscore_fp, -(long) sizeof(high_scores) - (long) sizeof(char), SEEK_CUR);
 
             wr_highscore(&entry);
 
@@ -367,19 +367,19 @@ static void highscores() {
             entry = old_entry;
 
             // must fseek() before can change read/write mode
-            (void)fseek(highscore_fp, (long)0, SEEK_CUR);
+            (void) fseek(highscore_fp, (long) 0, SEEK_CUR);
 
             curpos = ftell(highscore_fp);
             rd_highscore(&old_entry);
         }
         if (feof(highscore_fp)) {
-            (void)fseek(highscore_fp, curpos, SEEK_SET);
+            (void) fseek(highscore_fp, curpos, SEEK_SET);
 
             wr_highscore(&entry);
         }
     }
 
-    (void)fclose(highscore_fp);
+    (void) fclose(highscore_fp);
 }
 
 // Change the player into a King! -RAK-
@@ -388,11 +388,11 @@ static void kingly() {
 
     // Change the character attributes.
     dun_level = 0;
-    (void)strcpy(died_from, "Ripe Old Age");
+    (void) strcpy(died_from, "Ripe Old Age");
 
     struct player_type::misc *p_ptr = &py.misc;
 
-    (void)restore_level();
+    (void) restore_level();
 
     p_ptr->lev += MAX_PLAYER_LEVEL;
     p_ptr->au += 250000L;
@@ -444,7 +444,7 @@ void exit_game() {
 
     if (character_generated && !character_saved) {
         // Save the memory at least.
-        (void)save_char();
+        (void) save_char();
     }
 
     // add score to score file if applicable

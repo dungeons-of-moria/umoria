@@ -11,7 +11,9 @@
 #include "version.h"
 
 static void char_inven_init();
+
 static void init_m_level();
+
 static void init_t_level();
 
 #if (COST_ADJ != 100)
@@ -40,53 +42,53 @@ int main(int argc, char *argv[]) {
     // check for user interface option
     for (--argc, ++argv; argc > 0 && argv[0][0] == '-'; --argc, ++argv) {
         switch (argv[0][1]) {
-        case 'v':
-            restore_term();
-            printf("%d.%d.%d\n", CURRENT_VERSION_MAJOR, CURRENT_VERSION_MINOR, CURRENT_VERSION_PATCH);
-            exit(0);
-        case 'n':
-            new_game = true;
-            break;
-        case 'o':
-            // rogue_like_commands may be set in get_char(),
-            // so delay this until after read save file if any.
-            force_rogue_like = true;
-            force_keys_to = false;
-            break;
-        case 'r':
-            force_rogue_like = true;
-            force_keys_to = true;
-            break;
-        case 's':
-            display_scores();
-            exit_game();
-        case 'w':
-            to_be_wizard = true;
+            case 'v':
+                restore_term();
+                printf("%d.%d.%d\n", CURRENT_VERSION_MAJOR, CURRENT_VERSION_MINOR, CURRENT_VERSION_PATCH);
+                exit(0);
+            case 'n':
+                new_game = true;
+                break;
+            case 'o':
+                // rogue_like_commands may be set in get_char(),
+                // so delay this until after read save file if any.
+                force_rogue_like = true;
+                force_keys_to = false;
+                break;
+            case 'r':
+                force_rogue_like = true;
+                force_keys_to = true;
+                break;
+            case 's':
+                display_scores();
+                exit_game();
+            case 'w':
+                to_be_wizard = true;
 
-            if (isdigit((int)argv[0][2])) {
-                seed = (uint32_t)atoi(&argv[0][2]);
-            }
-            break;
-        default:
-            restore_term();
-            printf("Robert A. Koeneke's classic dungeon crawler.\n");
-            printf("Umoria %d.%d.%d is released under a GPL v2 license.\n", CURRENT_VERSION_MAJOR, CURRENT_VERSION_MINOR, CURRENT_VERSION_PATCH);
-            printf("\n");
-            printf("Usage:\n");
-            printf("    umoria [OPTIONS] SAVEGAME\n");
-            printf("\n");
-            printf("SAVEGAME is an optional save game filename (default: game.sav)\n");
-            printf("\n");
-            printf("Options:\n");
-            printf("    -n    Force start of new game\n");
-            printf("    -o    Use classic roguelike keys: hjkl (save game overrides)\n");
-            printf("    -r    Force use of roguelike keys\n");
-            printf("    -s    Display high scores and exit\n");
-            printf("    -w    Enter Wizard mode!\n");
-            printf("\n");
-            printf("    -v    Print version info and exit\n");
-            printf("    -h    Display this message\n");
-            exit(0);
+                if (isdigit((int) argv[0][2])) {
+                    seed = (uint32_t) atoi(&argv[0][2]);
+                }
+                break;
+            default:
+                restore_term();
+                printf("Robert A. Koeneke's classic dungeon crawler.\n");
+                printf("Umoria %d.%d.%d is released under a GPL v2 license.\n", CURRENT_VERSION_MAJOR, CURRENT_VERSION_MINOR, CURRENT_VERSION_PATCH);
+                printf("\n");
+                printf("Usage:\n");
+                printf("    umoria [OPTIONS] SAVEGAME\n");
+                printf("\n");
+                printf("SAVEGAME is an optional save game filename (default: game.sav)\n");
+                printf("\n");
+                printf("Options:\n");
+                printf("    -n    Force start of new game\n");
+                printf("    -o    Use classic roguelike keys: hjkl (save game overrides)\n");
+                printf("    -r    Force use of roguelike keys\n");
+                printf("    -s    Display high scores and exit\n");
+                printf("    -w    Enter Wizard mode!\n");
+                printf("\n");
+                printf("    -v    Print version info and exit\n");
+                printf("    -h    Display this message\n");
+                exit(0);
         }
     }
 
@@ -116,11 +118,11 @@ int main(int argc, char *argv[]) {
     // Auto-restart of saved file
     char *p;
     if (argv[0] != CNIL) {
-        (void)strcpy(savefile, argv[0]);
+        (void) strcpy(savefile, argv[0]);
     } else if ((p = getenv("MORIA_SAV")) != CNIL) {
-        (void)strcpy(savefile, p);
+        (void) strcpy(savefile, p);
     } else {
-        (void)strcpy(savefile, MORIA_SAV);
+        (void) strcpy(savefile, MORIA_SAV);
     }
 
     // This restoration of a saved character may get ONLY the monster memory. In
@@ -153,7 +155,7 @@ int main(int argc, char *argv[]) {
     } else { // Create character
         create_character();
 
-        birth_date = (int32_t)time((time_t *)0);
+        birth_date = (int32_t) time((time_t *) 0);
 
         char_inven_init();
         py.flags.food = 7500;
@@ -198,9 +200,9 @@ int main(int argc, char *argv[]) {
         // check for eof here, see inkey() in io.c
         // eof can occur if the process gets a HANGUP signal
         if (eof_flag) {
-            (void)strcpy(died_from, "(end of input: saved)");
+            (void) strcpy(died_from, "(end of input: saved)");
             if (!save_char()) {
-                (void)strcpy(died_from, "unexpected eof");
+                (void) strcpy(died_from, "unexpected eof");
             }
 
             // should not reach here, but if we do, this guarantees exit
@@ -238,7 +240,7 @@ static void char_inven_init() {
         if (inven_init.tval == TV_SWORD) {
             inven_init.ident |= ID_SHOW_HITDAM;
         }
-        (void)inven_carry(&inven_init);
+        (void) inven_carry(&inven_init);
     }
 
     // weird place for it, but why not?

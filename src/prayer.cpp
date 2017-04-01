@@ -76,45 +76,45 @@ void pray() {
         // Prayers.
         switch (choice + 1) {
             case 1:
-                (void)detect_evil();
+                (void) detect_evil();
                 break;
             case 2:
-                (void)hp_player(damroll(3, 3));
+                (void) hp_player(damroll(3, 3));
                 break;
             case 3:
                 bless(randint(12) + 12);
                 break;
             case 4:
-                (void)remove_fear();
+                (void) remove_fear();
                 break;
             case 5:
-                (void)light_area(char_row, char_col);
+                (void) light_area(char_row, char_col);
                 break;
             case 6:
-                (void)detect_trap();
+                (void) detect_trap();
                 break;
             case 7:
-                (void)detect_sdoor();
+                (void) detect_sdoor();
                 break;
             case 8:
-                (void)slow_poison();
+                (void) slow_poison();
                 break;
             case 9:
                 if (get_dir(CNIL, &dir)) {
-                    (void)confuse_monster(dir, char_row, char_col);
+                    (void) confuse_monster(dir, char_row, char_col);
                 }
                 break;
             case 10:
                 teleport((py.misc.lev * 3));
                 break;
             case 11:
-                (void)hp_player(damroll(4, 4));
+                (void) hp_player(damroll(4, 4));
                 break;
             case 12:
                 bless(randint(24) + 24);
                 break;
             case 13:
-                (void)sleep_monsters1(char_row, char_col);
+                (void) sleep_monsters1(char_row, char_col);
                 break;
             case 14:
                 create_food();
@@ -135,7 +135,7 @@ void pray() {
                 f_ptr->resist_cold += randint(10) + 10;
                 break;
             case 17:
-                (void)cure_poison();
+                (void) cure_poison();
                 break;
             case 18:
                 if (get_dir(CNIL, &dir)) {
@@ -143,13 +143,13 @@ void pray() {
                 }
                 break;
             case 19:
-                (void)hp_player(damroll(8, 4));
+                (void) hp_player(damroll(8, 4));
                 break;
             case 20:
                 detect_inv2(randint(24) + 24);
                 break;
             case 21:
-                (void)protect_evil();
+                (void) protect_evil();
                 break;
             case 22:
                 earthquake();
@@ -158,35 +158,35 @@ void pray() {
                 map_area();
                 break;
             case 24:
-                (void)hp_player(damroll(16, 4));
+                (void) hp_player(damroll(16, 4));
                 break;
             case 25:
-                (void)turn_undead();
+                (void) turn_undead();
                 break;
             case 26:
                 bless(randint(48) + 48);
                 break;
             case 27:
-                (void)dispel_creature(CD_UNDEAD, (3 * py.misc.lev));
+                (void) dispel_creature(CD_UNDEAD, (3 * py.misc.lev));
                 break;
             case 28:
-                (void)hp_player(200);
+                (void) hp_player(200);
                 break;
             case 29:
-                (void)dispel_creature(CD_EVIL, (3 * py.misc.lev));
+                (void) dispel_creature(CD_EVIL, (3 * py.misc.lev));
                 break;
             case 30:
                 warding_glyph();
                 break;
             case 31:
-                (void)remove_fear();
-                (void)cure_poison();
-                (void)hp_player(1000);
+                (void) remove_fear();
+                (void) cure_poison();
+                (void) hp_player(1000);
                 for (i = A_STR; i <= A_CHR; i++) {
-                    (void)res_stat(i);
+                    (void) res_stat(i);
                 }
-                (void)dispel_creature(CD_EVIL, (4 * py.misc.lev));
-                (void)turn_undead();
+                (void) dispel_creature(CD_EVIL, (4 * py.misc.lev));
+                (void) turn_undead();
                 if (py.flags.invuln < 3) {
                     py.flags.invuln = 3;
                 } else {
@@ -217,7 +217,7 @@ void pray() {
             m_ptr->cmana_frac = 0;
             if (randint(3) == 1) {
                 msg_print("You have damaged your health!");
-                (void)dec_stat(A_CON);
+                (void) dec_stat(A_CON);
             }
         } else {
             m_ptr->cmana -= s_ptr->smana;

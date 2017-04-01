@@ -46,7 +46,7 @@ void aim() {
     inven_type *i_ptr = &inventory[item_val];
     struct player_type::misc *m_ptr = &py.misc;
 
-    int chance = m_ptr->save + stat_adj(A_INT) - (int)i_ptr->level + (class_level_adj[m_ptr->pclass][CLA_DEVICE] * m_ptr->lev / 3);
+    int chance = m_ptr->save + stat_adj(A_INT) - (int) i_ptr->level + (class_level_adj[m_ptr->pclass][CLA_DEVICE] * m_ptr->lev / 3);
 
     if (py.flags.confused > 0) {
         chance = chance / 2;
@@ -168,7 +168,7 @@ void aim() {
                 ident = true;
                 break;
             case 24:
-                i = (uint32_t)(1L << (randint(23) - 1));
+                i = (uint32_t) (1L << (randint(23) - 1));
                 break;
             default:
                 msg_print("Internal error in wands()");
@@ -181,8 +181,7 @@ void aim() {
         if (!known1_p(i_ptr)) {
             m_ptr = &py.misc;
             // round half-way case up
-            m_ptr->exp +=
-                    (i_ptr->level + (m_ptr->lev >> 1)) / m_ptr->lev;
+            m_ptr->exp += (i_ptr->level + (m_ptr->lev >> 1)) / m_ptr->lev;
             prt_experience();
 
             identify(&item_val);

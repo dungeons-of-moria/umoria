@@ -46,7 +46,7 @@ void change_character() {
         tmp_val = atoi(tmp_str);
         if ((tmp_val > 2) && (tmp_val < 119)) {
             a_ptr[A_STR] = (uint8_t) tmp_val;
-            (void)res_stat(A_STR);
+            (void) res_stat(A_STR);
         }
     } else {
         return;
@@ -57,7 +57,7 @@ void change_character() {
         tmp_val = atoi(tmp_str);
         if ((tmp_val > 2) && (tmp_val < 119)) {
             a_ptr[A_INT] = (uint8_t) tmp_val;
-            (void)res_stat(A_INT);
+            (void) res_stat(A_INT);
         }
     } else {
         return;
@@ -68,7 +68,7 @@ void change_character() {
         tmp_val = atoi(tmp_str);
         if ((tmp_val > 2) && (tmp_val < 119)) {
             a_ptr[A_WIS] = (uint8_t) tmp_val;
-            (void)res_stat(A_WIS);
+            (void) res_stat(A_WIS);
         }
     } else {
         return;
@@ -79,7 +79,7 @@ void change_character() {
         tmp_val = atoi(tmp_str);
         if ((tmp_val > 2) && (tmp_val < 119)) {
             a_ptr[A_DEX] = (uint8_t) tmp_val;
-            (void)res_stat(A_DEX);
+            (void) res_stat(A_DEX);
         }
     } else {
         return;
@@ -90,7 +90,7 @@ void change_character() {
         tmp_val = atoi(tmp_str);
         if ((tmp_val > 2) && (tmp_val < 119)) {
             a_ptr[A_CON] = (uint8_t) tmp_val;
-            (void)res_stat(A_CON);
+            (void) res_stat(A_CON);
         }
     } else {
         return;
@@ -101,7 +101,7 @@ void change_character() {
         tmp_val = atoi(tmp_str);
         if ((tmp_val > 2) && (tmp_val < 119)) {
             a_ptr[A_CHR] = (uint8_t) tmp_val;
-            (void)res_stat(A_CHR);
+            (void) res_stat(A_CHR);
         }
     } else {
         return;
@@ -136,11 +136,11 @@ void change_character() {
         return;
     }
 
-    (void)sprintf(tmp_str, "Current=%d  Gold = ", m_ptr->au);
-    tmp_val = (int)strlen(tmp_str);
+    (void) sprintf(tmp_str, "Current=%d  Gold = ", m_ptr->au);
+    tmp_val = (int) strlen(tmp_str);
     prt(tmp_str, 0, 0);
     if (get_string(tmp_str, 0, tmp_val, 7)) {
-        int32_t tmp_lval = (int32_t)atol(tmp_str);
+        int32_t tmp_lval = (int32_t) atol(tmp_str);
         if (tmp_lval > -1 && (*tmp_str != '\0')) {
             m_ptr->au = tmp_lval;
             prt_gold();
@@ -149,8 +149,8 @@ void change_character() {
         return;
     }
 
-    (void)sprintf(tmp_str, "Current=%d  (0-200) Searching = ", m_ptr->srh);
-    tmp_val = (int)strlen(tmp_str);
+    (void) sprintf(tmp_str, "Current=%d  (0-200) Searching = ", m_ptr->srh);
+    tmp_val = (int) strlen(tmp_str);
     prt(tmp_str, 0, 0);
     if (get_string(tmp_str, 0, tmp_val, 3)) {
         tmp_val = atoi(tmp_str);
@@ -161,8 +161,8 @@ void change_character() {
         return;
     }
 
-    (void)sprintf(tmp_str, "Current=%d  (-1-18) Stealth = ", m_ptr->stl);
-    tmp_val = (int)strlen(tmp_str);
+    (void) sprintf(tmp_str, "Current=%d  (-1-18) Stealth = ", m_ptr->stl);
+    tmp_val = (int) strlen(tmp_str);
     prt(tmp_str, 0, 0);
     if (get_string(tmp_str, 0, tmp_val, 3)) {
         tmp_val = atoi(tmp_str);
@@ -173,8 +173,8 @@ void change_character() {
         return;
     }
 
-    (void)sprintf(tmp_str, "Current=%d  (0-200) Disarming = ", m_ptr->disarm);
-    tmp_val = (int)strlen(tmp_str);
+    (void) sprintf(tmp_str, "Current=%d  (0-200) Disarming = ", m_ptr->disarm);
+    tmp_val = (int) strlen(tmp_str);
     prt(tmp_str, 0, 0);
     if (get_string(tmp_str, 0, tmp_val, 3)) {
         tmp_val = atoi(tmp_str);
@@ -185,8 +185,8 @@ void change_character() {
         return;
     }
 
-    (void)sprintf(tmp_str, "Current=%d  (0-100) Save = ", m_ptr->save);
-    tmp_val = (int)strlen(tmp_str);
+    (void) sprintf(tmp_str, "Current=%d  (0-100) Save = ", m_ptr->save);
+    tmp_val = (int) strlen(tmp_str);
     prt(tmp_str, 0, 0);
     if (get_string(tmp_str, 0, tmp_val, 3)) {
         tmp_val = atoi(tmp_str);
@@ -197,8 +197,8 @@ void change_character() {
         return;
     }
 
-    (void)sprintf(tmp_str, "Current=%d  (0-200) Base to hit = ", m_ptr->bth);
-    tmp_val = (int)strlen(tmp_str);
+    (void) sprintf(tmp_str, "Current=%d  (0-200) Base to hit = ", m_ptr->bth);
+    tmp_val = (int) strlen(tmp_str);
     prt(tmp_str, 0, 0);
     if (get_string(tmp_str, 0, tmp_val, 3)) {
         tmp_val = atoi(tmp_str);
@@ -209,8 +209,8 @@ void change_character() {
         return;
     }
 
-    (void)sprintf(tmp_str, "Current=%d  (0-200) Bows/Throwing = ", m_ptr->bthb);
-    tmp_val = (int)strlen(tmp_str);
+    (void) sprintf(tmp_str, "Current=%d  (0-200) Bows/Throwing = ", m_ptr->bthb);
+    tmp_val = (int) strlen(tmp_str);
     prt(tmp_str, 0, 0);
     if (get_string(tmp_str, 0, tmp_val, 3)) {
         tmp_val = atoi(tmp_str);
@@ -221,8 +221,8 @@ void change_character() {
         return;
     }
 
-    (void)sprintf(tmp_str, "Current=%d  Weight = ", m_ptr->wt);
-    tmp_val = (int)strlen(tmp_str);
+    (void) sprintf(tmp_str, "Current=%d  Weight = ", m_ptr->wt);
+    tmp_val = (int) strlen(tmp_str);
     prt(tmp_str, 0, 0);
     if (get_string(tmp_str, 0, tmp_val, 3)) {
         tmp_val = atoi(tmp_str);
@@ -271,7 +271,7 @@ void wizard_create() {
     if (!get_string(tmp_str, 0, 9, 1)) {
         return;
     }
-    i_ptr->tchar = (uint8_t)tmp_str[0];
+    i_ptr->tchar = (uint8_t) tmp_str[0];
 
     prt("Subval : ", 0, 0);
     if (!get_string(tmp_str, 0, 9, 5)) {
@@ -352,17 +352,17 @@ void wizard_create() {
     // the GCC compiler and some scanf routines.
     char pattern[4];
 
-    (void)strcpy(pattern, "%lx");
+    (void) strcpy(pattern, "%lx");
 
     int32_t tmp_lval;
-    (void)sscanf(tmp_str, pattern, &tmp_lval);
-    i_ptr->flags = (uint32_t)tmp_lval;
+    (void) sscanf(tmp_str, pattern, &tmp_lval);
+    i_ptr->flags = (uint32_t) tmp_lval;
 
     prt("Cost : ", 0, 0);
     if (!get_string(tmp_str, 0, 9, 8)) {
         return;
     }
-    tmp_lval = (int)atol(tmp_str);
+    tmp_lval = (int) atol(tmp_str);
     i_ptr->cost = tmp_lval;
 
     prt("Level : ", 0, 0);
@@ -376,7 +376,7 @@ void wizard_create() {
         // delete object first if any, before call popt
         cave_type *c_ptr = &cave[char_row][char_col];
         if (c_ptr->tptr != 0) {
-            (void)delete_object(char_row, char_col);
+            (void) delete_object(char_row, char_col);
         }
 
         tmp_val = popt();

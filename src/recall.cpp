@@ -12,100 +12,100 @@
 static void roff(const char *);
 
 static const char *desc_atype[] = {
-    "do something undefined",
-    "attack",
-    "weaken",
-    "confuse",
-    "terrify",
-    "shoot flames",
-    "shoot acid",
-    "freeze",
-    "shoot lightning",
-    "corrode",
-    "blind",
-    "paralyse",
-    "steal money",
-    "steal things",
-    "poison",
-    "reduce dexterity",
-    "reduce constitution",
-    "drain intelligence",
-    "drain wisdom",
-    "lower experience",
-    "call for help",
-    "disenchant",
-    "eat your food",
-    "absorb light",
-    "absorb charges",
+        "do something undefined",
+        "attack",
+        "weaken",
+        "confuse",
+        "terrify",
+        "shoot flames",
+        "shoot acid",
+        "freeze",
+        "shoot lightning",
+        "corrode",
+        "blind",
+        "paralyse",
+        "steal money",
+        "steal things",
+        "poison",
+        "reduce dexterity",
+        "reduce constitution",
+        "drain intelligence",
+        "drain wisdom",
+        "lower experience",
+        "call for help",
+        "disenchant",
+        "eat your food",
+        "absorb light",
+        "absorb charges",
 };
 
 static const char *desc_amethod[] = {
-    "make an undefined advance",
-    "hit",
-    "bite",
-    "claw",
-    "sting",
-    "touch",
-    "kick",
-    "gaze",
-    "breathe",
-    "spit",
-    "wail",
-    "embrace",
-    "crawl on you",
-    "release spores",
-    "beg",
-    "slime you",
-    "crush",
-    "trample",
-    "drool",
-    "insult",
+        "make an undefined advance",
+        "hit",
+        "bite",
+        "claw",
+        "sting",
+        "touch",
+        "kick",
+        "gaze",
+        "breathe",
+        "spit",
+        "wail",
+        "embrace",
+        "crawl on you",
+        "release spores",
+        "beg",
+        "slime you",
+        "crush",
+        "trample",
+        "drool",
+        "insult",
 };
 
 static const char *desc_howmuch[] = {
-    " not at all",
-    " a bit",
-    "",
-    " quite",
-    " very",
-    " most",
-    " highly",
-    " extremely",
+        " not at all",
+        " a bit",
+        "",
+        " quite",
+        " very",
+        " most",
+        " highly",
+        " extremely",
 };
 
 static const char *desc_move[] = {
-    "move invisibly",
-    "open doors",
-    "pass through walls",
-    "kill weaker creatures",
-    "pick up objects",
-    "breed explosively",
+        "move invisibly",
+        "open doors",
+        "pass through walls",
+        "kill weaker creatures",
+        "pick up objects",
+        "breed explosively",
 };
 
 static const char *desc_spell[] = {
-    "teleport short distances",
-    "teleport long distances",
-    "teleport its prey",
-    "cause light wounds",
-    "cause serious wounds",
-    "paralyse its prey",
-    "induce blindness",
-    "confuse",
-    "terrify",
-    "summon a monster",
-    "summon the undead",
-    "slow its prey",
-    "drain mana",
-    "unknown 1",
-    "unknown 2",
+        "teleport short distances",
+        "teleport long distances",
+        "teleport its prey",
+        "cause light wounds",
+        "cause serious wounds",
+        "paralyse its prey",
+        "induce blindness",
+        "confuse",
+        "terrify",
+        "summon a monster",
+        "summon the undead",
+        "slow its prey",
+        "drain mana",
+        "unknown 1",
+        "unknown 2",
 };
 
 static const char *desc_breath[] = {
-    "lightning", "poison gases", "acid", "frost", "fire",
+        "lightning", "poison gases", "acid", "frost", "fire",
 };
 
 static const char *desc_weakness[] = {
-    "frost", "fire", "poison", "acid", "bright light", "rock remover",
+        "frost", "fire", "poison", "acid", "bright light", "rock remover",
 };
 
 static vtype roffbuf; // Line buffer.
@@ -178,7 +178,7 @@ int roff_recall(int mon_num) {
         pu = cp->damage;
         while (*pu != 0 && j < 4) {
             // Turbo C needs a 16 bit int for the array index.
-            mp->r_attacks[(int)j] = MAX_UCHAR;
+            mp->r_attacks[(int) j] = MAX_UCHAR;
             j++;
             pu++;
         }
@@ -198,22 +198,22 @@ int roff_recall(int mon_num) {
 
     uint16_t rcdefense = mp->r_cdefense & cp->cdefense;
 
-    (void)sprintf(temp, "The %s:\n", cp->name);
+    (void) sprintf(temp, "The %s:\n", cp->name);
     roff(temp);
 
     // Conflict history.
     if (mp->r_deaths) {
-        (void)sprintf(temp, "%d of the contributors to your monster memory %s", mp->r_deaths, plural(mp->r_deaths, "has", "have"));
+        (void) sprintf(temp, "%d of the contributors to your monster memory %s", mp->r_deaths, plural(mp->r_deaths, "has", "have"));
         roff(temp);
         roff(" been killed by this creature, and ");
         if (mp->r_kills == 0) {
             roff("it is not ever known to have been defeated.");
         } else {
-            (void)sprintf(temp, "at least %d of the beasts %s been exterminated.", mp->r_kills, plural(mp->r_kills, "has", "have"));
+            (void) sprintf(temp, "at least %d of the beasts %s been exterminated.", mp->r_kills, plural(mp->r_kills, "has", "have"));
             roff(temp);
         }
     } else if (mp->r_kills) {
-        (void)sprintf(temp, "At least %d of these creatures %s", mp->r_kills, plural(mp->r_kills, "has", "have"));
+        (void) sprintf(temp, "At least %d of these creatures %s", mp->r_kills, plural(mp->r_kills, "has", "have"));
         roff(temp);
         roff(" been killed by contributors to your monster memory.");
     } else {
@@ -231,7 +231,7 @@ int roff_recall(int mon_num) {
         if (i > WIN_MON_APPEAR) {
             i = WIN_MON_APPEAR;
         }
-        (void)sprintf(temp, " It is normally found at depths of %d feet", i * 50);
+        (void) sprintf(temp, " It is normally found at depths of %d feet", i * 50);
         roff(temp);
         known = true;
     }
@@ -249,7 +249,7 @@ int roff_recall(int mon_num) {
         roff(" moves");
         if (rcmove & CM_RANDOM_MOVE) {
             // Turbo C needs a 16 bit int for the array index.
-            roff(desc_howmuch[(int)((rcmove & CM_RANDOM_MOVE) >> 3)]);
+            roff(desc_howmuch[(int) ((rcmove & CM_RANDOM_MOVE) >> 3)]);
             roff(" erratically");
         }
         if (mspeed == 1) {
@@ -319,13 +319,13 @@ int roff_recall(int mon_num) {
 
         // calculate the integer exp part, can be larger than 64K when first
         // level character looks at Balrog info, so must store in long
-        int32_t templong = (int32_t)cp->mexp * cp->level / py.misc.lev;
+        int32_t templong = (int32_t) cp->mexp * cp->level / py.misc.lev;
 
         // calculate the fractional exp part scaled by 100,
         // must use long arithmetic to avoid overflow
-        j = (uint32_t)((((int32_t)cp->mexp * cp->level % py.misc.lev) * (int32_t)1000 / py.misc.lev + 5) / 10);
+        j = (uint32_t) ((((int32_t) cp->mexp * cp->level % py.misc.lev) * (int32_t) 1000 / py.misc.lev + 5) / 10);
 
-        (void)sprintf(temp, " creature is worth %d.%02d point%s", templong, j, (templong == 1 && j == 0 ? "" : "s"));
+        (void) sprintf(temp, " creature is worth %d.%02d point%s", templong, j, (templong == 1 && j == 0 ? "" : "s"));
         roff(temp);
 
         if (py.misc.lev / 10 == 1) {
@@ -349,7 +349,7 @@ int roff_recall(int mon_num) {
         } else {
             q = "";
         }
-        (void)sprintf(temp, " for a%s %d%s level character.", q, n, p);
+        (void) sprintf(temp, " for a%s %d%s level character.", q, n, p);
         roff(temp);
     }
 
@@ -404,7 +404,7 @@ int roff_recall(int mon_num) {
     if (rspells & (CS_BREATHE | CS_SPELLS)) {
         // Could offset by level
         if ((mp->r_spells & CS_FREQ) > 5) {
-            (void)sprintf(temp, "; 1 time in %ld", cp->spells & CS_FREQ);
+            (void) sprintf(temp, "; 1 time in %ld", cp->spells & CS_FREQ);
             roff(temp);
         }
         roff(".");
@@ -412,9 +412,9 @@ int roff_recall(int mon_num) {
 
     // Do we know how hard they are to kill? Armor class, hit die.
     if (knowarmor(cp->level, mp->r_kills)) {
-        (void)sprintf(temp, " It has an armor rating of %d", cp->ac);
+        (void) sprintf(temp, " It has an armor rating of %d", cp->ac);
         roff(temp);
-        (void)sprintf(temp, " and a%s life rating of %dd%d.", ((cp->cdefense & CD_MAX_HP) ? " maximized" : ""), cp->hd[0], cp->hd[1]);
+        (void) sprintf(temp, " and a%s life rating of %dd%d.", ((cp->cdefense & CD_MAX_HP) ? " maximized" : ""), cp->hd[0], cp->hd[1]);
         roff(temp);
     }
 
@@ -507,7 +507,7 @@ int roff_recall(int mon_num) {
         } else {
             roff("is ever vigilant for");
         }
-        (void)sprintf(temp, " intruders, which it may notice from %d feet.", 10 * cp->aaf);
+        (void) sprintf(temp, " intruders, which it may notice from %d feet.", 10 * cp->aaf);
         roff(temp);
     }
 
@@ -543,7 +543,7 @@ int roff_recall(int mon_num) {
         } else if (j == 2) {
             roff(" one or two");
         } else {
-            (void)sprintf(temp, " up to %d", j);
+            (void) sprintf(temp, " up to %d", j);
             roff(temp);
         }
 
@@ -569,7 +569,7 @@ int roff_recall(int mon_num) {
 
     // Turbo C needs a 16 bit int for the array index.
     for (j = 0; j < 4; j++) {
-        if (mp->r_attacks[(int)j]) {
+        if (mp->r_attacks[(int) j]) {
             known_attacks++;
         }
     }
@@ -594,7 +594,7 @@ int roff_recall(int mon_num) {
         j++;
         if (j == 1) {
             roff(" It can ");
-        } else if (j == (uint32_t)known_attacks) {
+        } else if (j == (uint32_t) known_attacks) {
             roff(", and ");
         } else {
             roff(", ");
@@ -620,7 +620,7 @@ int roff_recall(int mon_num) {
                     } else {
                         roff(" with damage");
                     }
-                    (void)sprintf(temp, " %dd%d", d1, d2);
+                    (void) sprintf(temp, " %dd%d", d1, d2);
                     roff(temp);
                 }
             }

@@ -55,7 +55,7 @@ static void rand_dir(int *rdir, int *cdir) {
 
 // Blanks out entire cave -RAK-
 static void blank_cave() {
-    memset((char *)&cave[0][0], 0, sizeof(cave));
+    memset((char *) &cave[0][0], 0, sizeof(cave));
 }
 
 // Fills in empty spots with desired rock -RAK-
@@ -65,8 +65,7 @@ static void fill_cave(int fval) {
     for (int i = cur_height - 2; i > 0; i--) {
         cave_type *c_ptr = &cave[i][1];
         for (int j = cur_width - 2; j > 0; j--) {
-            if ((c_ptr->fval == NULL_WALL) || (c_ptr->fval == TMP1_WALL) ||
-                (c_ptr->fval == TMP2_WALL)) {
+            if ((c_ptr->fval == NULL_WALL) || (c_ptr->fval == TMP1_WALL) || (c_ptr->fval == TMP2_WALL)) {
                 c_ptr->fval = (uint8_t) fval;
             }
             c_ptr++;
@@ -84,8 +83,8 @@ static void place_boundary() {
     cave_type(*right_ptr)[MAX_WIDTH];
 
     // put permanent wall on leftmost row and rightmost row
-    left_ptr = (cave_type(*)[MAX_WIDTH]) & cave[0][0];
-    right_ptr = (cave_type(*)[MAX_WIDTH]) & cave[0][cur_width - 1];
+    left_ptr = (cave_type(*)[MAX_WIDTH]) &cave[0][0];
+    right_ptr = (cave_type(*)[MAX_WIDTH]) &cave[0][cur_width - 1];
 
     for (int i = 0; i < cur_height; i++) {
 #ifdef DEBUG
@@ -93,9 +92,9 @@ static void place_boundary() {
         assert((cave_type *)right_ptr == &cave[i][cur_width - 1]);
 #endif
 
-        ((cave_type *)left_ptr)->fval = BOUNDARY_WALL;
+        ((cave_type *) left_ptr)->fval = BOUNDARY_WALL;
         left_ptr++;
-        ((cave_type *)right_ptr)->fval = BOUNDARY_WALL;
+        ((cave_type *) right_ptr)->fval = BOUNDARY_WALL;
         right_ptr++;
     }
 
@@ -224,7 +223,7 @@ static void place_door(int y, int x) {
 static void place_up_stairs(int y, int x) {
     cave_type *cave_ptr = &cave[y][x];
     if (cave_ptr->tptr != 0) {
-        (void)delete_object(y, x);
+        (void) delete_object(y, x);
     }
     int cur_pos = popt();
     cave_ptr->tptr = (uint8_t) cur_pos;
@@ -235,7 +234,7 @@ static void place_up_stairs(int y, int x) {
 static void place_down_stairs(int y, int x) {
     cave_type *cave_ptr = &cave[y][x];
     if (cave_ptr->tptr != 0) {
-        (void)delete_object(y, x);
+        (void) delete_object(y, x);
     }
     int cur_pos = popt();
     cave_ptr->tptr = (uint8_t) cur_pos;
@@ -259,9 +258,7 @@ static void place_stairs(int typ, int num, int walls) {
                 do {
                     do {
                         cave_type *cave_ptr = &cave[y1][x1];
-                        if (cave_ptr->fval <= MAX_OPEN_SPACE &&
-                            (cave_ptr->tptr == 0) &&
-                            (next_to_walls(y1, x1) >= walls)) {
+                        if (cave_ptr->fval <= MAX_OPEN_SPACE && (cave_ptr->tptr == 0) && (next_to_walls(y1, x1) >= walls)) {
                             flag = true;
                             if (typ == 1) {
                                 place_up_stairs(y1, x1);
@@ -304,7 +301,7 @@ static void vault_monster(int y, int x, int num) {
     for (int i = 0; i < num; i++) {
         int y1 = y;
         int x1 = x;
-        (void)summon_monster(&y1, &x1, true);
+        (void) summon_monster(&y1, &x1, true);
     }
 }
 
@@ -497,212 +494,212 @@ static void build_type2(int yval, int xval) {
 
     // Inner room variations
     switch (randint(5)) {
-    case 1: // Just an inner room.
-        tmp = randint(4);
-        if (tmp < 3) { // Place a door
-            if (tmp == 1) {
-                place_secret_door(y_height - 1, xval);
+        case 1: // Just an inner room.
+            tmp = randint(4);
+            if (tmp < 3) { // Place a door
+                if (tmp == 1) {
+                    place_secret_door(y_height - 1, xval);
+                } else {
+                    place_secret_door(y_depth + 1, xval);
+                }
             } else {
-                place_secret_door(y_depth + 1, xval);
+                if (tmp == 3) {
+                    place_secret_door(yval, x_left - 1);
+                } else {
+                    place_secret_door(yval, x_right + 1);
+                }
             }
-        } else {
-            if (tmp == 3) {
-                place_secret_door(yval, x_left - 1);
+            vault_monster(yval, xval, 1);
+            break;
+        case 2: // Treasure Vault
+            tmp = randint(4);
+
+            // Place a door
+            if (tmp < 3) {
+                if (tmp == 1) {
+                    place_secret_door(y_height - 1, xval);
+                } else {
+                    place_secret_door(y_depth + 1, xval);
+                }
             } else {
-                place_secret_door(yval, x_right + 1);
+                if (tmp == 3) {
+                    place_secret_door(yval, x_left - 1);
+                } else {
+                    place_secret_door(yval, x_right + 1);
+                }
             }
-        }
-        vault_monster(yval, xval, 1);
-        break;
-    case 2: // Treasure Vault
-        tmp = randint(4);
 
-        // Place a door
-        if (tmp < 3) {
-            if (tmp == 1) {
-                place_secret_door(y_height - 1, xval);
-            } else {
-                place_secret_door(y_depth + 1, xval);
-            }
-        } else {
-            if (tmp == 3) {
-                place_secret_door(yval, x_left - 1);
-            } else {
-                place_secret_door(yval, x_right + 1);
-            }
-        }
-
-        for (int i = yval - 1; i <= yval + 1; i++) {
-            cave[i][xval - 1].fval = TMP1_WALL;
-            cave[i][xval + 1].fval = TMP1_WALL;
-        }
-        cave[yval - 1][xval].fval = TMP1_WALL;
-        cave[yval + 1][xval].fval = TMP1_WALL;
-
-        // Place a door
-        tmp = randint(4);
-        if (tmp < 3) {
-            // 1 -> yval-1; 2 -> yval+1
-            place_locked_door(yval - 3 + (tmp << 1), xval);
-        } else {
-            place_locked_door(yval, xval - 7 + (tmp << 1));
-        }
-
-        // Place an object in the treasure vault
-        tmp = randint(10);
-        if (tmp > 2) {
-            place_object(yval, xval, false);
-        } else if (tmp == 2) {
-            place_down_stairs(yval, xval);
-        } else {
-            place_up_stairs(yval, xval);
-        }
-
-        // Guard the treasure well
-        vault_monster(yval, xval, 2 + randint(3));
-
-        // If the monsters don't get 'em.
-        vault_trap(yval, xval, 4, 10, 2 + randint(3));
-        break;
-    case 3: // Inner pillar(s).
-        tmp = randint(4);
-
-        // Place a door
-        if (tmp < 3) {
-            if (tmp == 1) {
-                place_secret_door(y_height - 1, xval);
-            } else {
-                place_secret_door(y_depth + 1, xval);
-            }
-        } else {
-            if (tmp == 3) {
-                place_secret_door(yval, x_left - 1);
-            } else {
-                place_secret_door(yval, x_right + 1);
-            }
-        }
-
-        for (int i = yval - 1; i <= yval + 1; i++) {
-            c_ptr = &cave[i][xval - 1];
-            for (int j = xval - 1; j <= xval + 1; j++) {
-                c_ptr->fval = TMP1_WALL;
-                c_ptr++;
-            }
-        }
-        if (randint(2) == 1) {
-            tmp = randint(2);
             for (int i = yval - 1; i <= yval + 1; i++) {
-                c_ptr = &cave[i][xval - 5 - tmp];
-                for (int j = xval - 5 - tmp; j <= xval - 3 - tmp; j++) {
+                cave[i][xval - 1].fval = TMP1_WALL;
+                cave[i][xval + 1].fval = TMP1_WALL;
+            }
+            cave[yval - 1][xval].fval = TMP1_WALL;
+            cave[yval + 1][xval].fval = TMP1_WALL;
+
+            // Place a door
+            tmp = randint(4);
+            if (tmp < 3) {
+                // 1 -> yval-1; 2 -> yval+1
+                place_locked_door(yval - 3 + (tmp << 1), xval);
+            } else {
+                place_locked_door(yval, xval - 7 + (tmp << 1));
+            }
+
+            // Place an object in the treasure vault
+            tmp = randint(10);
+            if (tmp > 2) {
+                place_object(yval, xval, false);
+            } else if (tmp == 2) {
+                place_down_stairs(yval, xval);
+            } else {
+                place_up_stairs(yval, xval);
+            }
+
+            // Guard the treasure well
+            vault_monster(yval, xval, 2 + randint(3));
+
+            // If the monsters don't get 'em.
+            vault_trap(yval, xval, 4, 10, 2 + randint(3));
+            break;
+        case 3: // Inner pillar(s).
+            tmp = randint(4);
+
+            // Place a door
+            if (tmp < 3) {
+                if (tmp == 1) {
+                    place_secret_door(y_height - 1, xval);
+                } else {
+                    place_secret_door(y_depth + 1, xval);
+                }
+            } else {
+                if (tmp == 3) {
+                    place_secret_door(yval, x_left - 1);
+                } else {
+                    place_secret_door(yval, x_right + 1);
+                }
+            }
+
+            for (int i = yval - 1; i <= yval + 1; i++) {
+                c_ptr = &cave[i][xval - 1];
+                for (int j = xval - 1; j <= xval + 1; j++) {
                     c_ptr->fval = TMP1_WALL;
                     c_ptr++;
                 }
             }
-            for (int i = yval - 1; i <= yval + 1; i++) {
-                c_ptr = &cave[i][xval + 3 + tmp];
-                for (int j = xval + 3 + tmp; j <= xval + 5 + tmp; j++) {
+            if (randint(2) == 1) {
+                tmp = randint(2);
+                for (int i = yval - 1; i <= yval + 1; i++) {
+                    c_ptr = &cave[i][xval - 5 - tmp];
+                    for (int j = xval - 5 - tmp; j <= xval - 3 - tmp; j++) {
+                        c_ptr->fval = TMP1_WALL;
+                        c_ptr++;
+                    }
+                }
+                for (int i = yval - 1; i <= yval + 1; i++) {
+                    c_ptr = &cave[i][xval + 3 + tmp];
+                    for (int j = xval + 3 + tmp; j <= xval + 5 + tmp; j++) {
+                        c_ptr->fval = TMP1_WALL;
+                        c_ptr++;
+                    }
+                }
+            }
+
+            // Inner rooms
+            if (randint(3) == 1) {
+                c_ptr = &cave[yval - 1][xval - 5];
+                d_ptr = &cave[yval + 1][xval - 5];
+                for (int i = xval - 5; i <= xval + 5; i++) {
                     c_ptr->fval = TMP1_WALL;
                     c_ptr++;
+                    d_ptr->fval = TMP1_WALL;
+                    d_ptr++;
+                }
+                cave[yval][xval - 5].fval = TMP1_WALL;
+                cave[yval][xval + 5].fval = TMP1_WALL;
+                place_secret_door(yval - 3 + (randint(2) << 1), xval - 3);
+                place_secret_door(yval - 3 + (randint(2) << 1), xval + 3);
+                if (randint(3) == 1) {
+                    place_object(yval, xval - 2, false);
+                }
+                if (randint(3) == 1) {
+                    place_object(yval, xval + 2, false);
+                }
+                vault_monster(yval, xval - 2, randint(2));
+                vault_monster(yval, xval + 2, randint(2));
+            }
+            break;
+        case 4: // Maze inside.
+            tmp = randint(4);
+
+            // Place a door
+            if (tmp < 3) {
+                if (tmp == 1) {
+                    place_secret_door(y_height - 1, xval);
+                } else {
+                    place_secret_door(y_depth + 1, xval);
+                }
+            } else {
+                if (tmp == 3) {
+                    place_secret_door(yval, x_left - 1);
+                } else {
+                    place_secret_door(yval, x_right + 1);
                 }
             }
-        }
+            for (int i = y_height; i <= y_depth; i++) {
+                for (int j = x_left; j <= x_right; j++) {
+                    if (0x1 & (j + i)) {
+                        cave[i][j].fval = TMP1_WALL;
+                    }
+                }
+            }
 
-        // Inner rooms
-        if (randint(3) == 1) {
-            c_ptr = &cave[yval - 1][xval - 5];
-            d_ptr = &cave[yval + 1][xval - 5];
-            for (int i = xval - 5; i <= xval + 5; i++) {
+            // Monsters just love mazes.
+            vault_monster(yval, xval - 5, randint(3));
+            vault_monster(yval, xval + 5, randint(3));
+
+            // Traps make them entertaining.
+            vault_trap(yval, xval - 3, 2, 8, randint(3));
+            vault_trap(yval, xval + 3, 2, 8, randint(3));
+
+            // Mazes should have some treasure too..
+            for (int i = 0; i < 3; i++) {
+                random_object(yval, xval, 1);
+            }
+            break;
+        case 5: // Four small rooms.
+            for (int i = y_height; i <= y_depth; i++) {
+                cave[i][xval].fval = TMP1_WALL;
+            }
+
+            c_ptr = &cave[yval][x_left];
+            for (int i = x_left; i <= x_right; i++) {
                 c_ptr->fval = TMP1_WALL;
                 c_ptr++;
-                d_ptr->fval = TMP1_WALL;
-                d_ptr++;
             }
-            cave[yval][xval - 5].fval = TMP1_WALL;
-            cave[yval][xval + 5].fval = TMP1_WALL;
-            place_secret_door(yval - 3 + (randint(2) << 1), xval - 3);
-            place_secret_door(yval - 3 + (randint(2) << 1), xval + 3);
-            if (randint(3) == 1) {
-                place_object(yval, xval - 2, false);
-            }
-            if (randint(3) == 1) {
-                place_object(yval, xval + 2, false);
-            }
-            vault_monster(yval, xval - 2, randint(2));
-            vault_monster(yval, xval + 2, randint(2));
-        }
-        break;
-    case 4: // Maze inside.
-        tmp = randint(4);
 
-        // Place a door
-        if (tmp < 3) {
-            if (tmp == 1) {
-                place_secret_door(y_height - 1, xval);
+            if (randint(2) == 1) {
+                int i = randint(10);
+                place_secret_door(y_height - 1, xval - i);
+                place_secret_door(y_height - 1, xval + i);
+                place_secret_door(y_depth + 1, xval - i);
+                place_secret_door(y_depth + 1, xval + i);
             } else {
-                place_secret_door(y_depth + 1, xval);
+                int i = randint(3);
+                place_secret_door(yval + i, x_left - 1);
+                place_secret_door(yval - i, x_left - 1);
+                place_secret_door(yval + i, x_right + 1);
+                place_secret_door(yval - i, x_right + 1);
             }
-        } else {
-            if (tmp == 3) {
-                place_secret_door(yval, x_left - 1);
-            } else {
-                place_secret_door(yval, x_right + 1);
-            }
-        }
-        for (int i = y_height; i <= y_depth; i++) {
-            for (int j = x_left; j <= x_right; j++) {
-                if (0x1 & (j + i)) {
-                    cave[i][j].fval = TMP1_WALL;
-                }
-            }
-        }
 
-        // Monsters just love mazes.
-        vault_monster(yval, xval - 5, randint(3));
-        vault_monster(yval, xval + 5, randint(3));
+            // Treasure in each one.
+            random_object(yval, xval, 2 + randint(2));
 
-        // Traps make them entertaining.
-        vault_trap(yval, xval - 3, 2, 8, randint(3));
-        vault_trap(yval, xval + 3, 2, 8, randint(3));
-
-        // Mazes should have some treasure too..
-        for (int i = 0; i < 3; i++) {
-            random_object(yval, xval, 1);
-        }
-        break;
-    case 5: // Four small rooms.
-        for (int i = y_height; i <= y_depth; i++) {
-            cave[i][xval].fval = TMP1_WALL;
-        }
-
-        c_ptr = &cave[yval][x_left];
-        for (int i = x_left; i <= x_right; i++) {
-            c_ptr->fval = TMP1_WALL;
-            c_ptr++;
-        }
-
-        if (randint(2) == 1) {
-            int i = randint(10);
-            place_secret_door(y_height - 1, xval - i);
-            place_secret_door(y_height - 1, xval + i);
-            place_secret_door(y_depth + 1, xval - i);
-            place_secret_door(y_depth + 1, xval + i);
-        } else {
-            int i = randint(3);
-            place_secret_door(yval + i, x_left - 1);
-            place_secret_door(yval - i, x_left - 1);
-            place_secret_door(yval + i, x_right + 1);
-            place_secret_door(yval - i, x_right + 1);
-        }
-
-        // Treasure in each one.
-        random_object(yval, xval, 2 + randint(2));
-
-        // Gotta have some monsters.
-        vault_monster(yval + 2, xval - 4, randint(2));
-        vault_monster(yval + 2, xval + 4, randint(2));
-        vault_monster(yval - 2, xval - 4, randint(2));
-        vault_monster(yval - 2, xval + 4, randint(2));
-        break;
+            // Gotta have some monsters.
+            vault_monster(yval + 2, xval - 4, randint(2));
+            vault_monster(yval + 2, xval + 4, randint(2));
+            vault_monster(yval - 2, xval - 4, randint(2));
+            vault_monster(yval - 2, xval + 4, randint(2));
+            break;
     }
 }
 
@@ -792,68 +789,68 @@ static void build_type3(int yval, int xval) {
 
     // Special features.
     switch (randint(4)) {
-    case 1: // Large middle pillar
-        for (int i = yval - 1; i <= yval + 1; i++) {
-            c_ptr = &cave[i][xval - 1];
-            for (int j = xval - 1; j <= xval + 1; j++) {
-                c_ptr->fval = TMP1_WALL;
-                c_ptr++;
+        case 1: // Large middle pillar
+            for (int i = yval - 1; i <= yval + 1; i++) {
+                c_ptr = &cave[i][xval - 1];
+                for (int j = xval - 1; j <= xval + 1; j++) {
+                    c_ptr->fval = TMP1_WALL;
+                    c_ptr++;
+                }
             }
-        }
-        break;
-    case 2: // Inner treasure vault
-        for (int i = yval - 1; i <= yval + 1; i++) {
-            cave[i][xval - 1].fval = TMP1_WALL;
-            cave[i][xval + 1].fval = TMP1_WALL;
-        }
-        cave[yval - 1][xval].fval = TMP1_WALL;
-        cave[yval + 1][xval].fval = TMP1_WALL;
-
-        // Place a door
-        tmp = randint(4);
-        if (tmp < 3) {
-            place_secret_door(yval - 3 + (tmp << 1), xval);
-        } else {
-            place_secret_door(yval, xval - 7 + (tmp << 1));
-        }
-
-        // Place a treasure in the vault
-        place_object(yval, xval, false);
-
-        // Let's guard the treasure well.
-        vault_monster(yval, xval, 2 + randint(2));
-
-        // Traps naturally
-        vault_trap(yval, xval, 4, 4, 1 + randint(3));
-        break;
-    case 3:
-        if (randint(3) == 1) {
-            cave[yval - 1][xval - 2].fval = TMP1_WALL;
-            cave[yval + 1][xval - 2].fval = TMP1_WALL;
-            cave[yval - 1][xval + 2].fval = TMP1_WALL;
-            cave[yval + 1][xval + 2].fval = TMP1_WALL;
-            cave[yval - 2][xval - 1].fval = TMP1_WALL;
-            cave[yval - 2][xval + 1].fval = TMP1_WALL;
-            cave[yval + 2][xval - 1].fval = TMP1_WALL;
-            cave[yval + 2][xval + 1].fval = TMP1_WALL;
-            if (randint(3) == 1) {
-                place_secret_door(yval, xval - 2);
-                place_secret_door(yval, xval + 2);
-                place_secret_door(yval - 2, xval);
-                place_secret_door(yval + 2, xval);
+            break;
+        case 2: // Inner treasure vault
+            for (int i = yval - 1; i <= yval + 1; i++) {
+                cave[i][xval - 1].fval = TMP1_WALL;
+                cave[i][xval + 1].fval = TMP1_WALL;
             }
-        } else if (randint(3) == 1) {
-            cave[yval][xval].fval = TMP1_WALL;
             cave[yval - 1][xval].fval = TMP1_WALL;
             cave[yval + 1][xval].fval = TMP1_WALL;
-            cave[yval][xval - 1].fval = TMP1_WALL;
-            cave[yval][xval + 1].fval = TMP1_WALL;
-        } else if (randint(3) == 1) {
-            cave[yval][xval].fval = TMP1_WALL;
-        }
-        break;
-    case 4:
-        break;
+
+            // Place a door
+            tmp = randint(4);
+            if (tmp < 3) {
+                place_secret_door(yval - 3 + (tmp << 1), xval);
+            } else {
+                place_secret_door(yval, xval - 7 + (tmp << 1));
+            }
+
+            // Place a treasure in the vault
+            place_object(yval, xval, false);
+
+            // Let's guard the treasure well.
+            vault_monster(yval, xval, 2 + randint(2));
+
+            // Traps naturally
+            vault_trap(yval, xval, 4, 4, 1 + randint(3));
+            break;
+        case 3:
+            if (randint(3) == 1) {
+                cave[yval - 1][xval - 2].fval = TMP1_WALL;
+                cave[yval + 1][xval - 2].fval = TMP1_WALL;
+                cave[yval - 1][xval + 2].fval = TMP1_WALL;
+                cave[yval + 1][xval + 2].fval = TMP1_WALL;
+                cave[yval - 2][xval - 1].fval = TMP1_WALL;
+                cave[yval - 2][xval + 1].fval = TMP1_WALL;
+                cave[yval + 2][xval - 1].fval = TMP1_WALL;
+                cave[yval + 2][xval + 1].fval = TMP1_WALL;
+                if (randint(3) == 1) {
+                    place_secret_door(yval, xval - 2);
+                    place_secret_door(yval, xval + 2);
+                    place_secret_door(yval - 2, xval);
+                    place_secret_door(yval + 2, xval);
+                }
+            } else if (randint(3) == 1) {
+                cave[yval][xval].fval = TMP1_WALL;
+                cave[yval - 1][xval].fval = TMP1_WALL;
+                cave[yval + 1][xval].fval = TMP1_WALL;
+                cave[yval][xval - 1].fval = TMP1_WALL;
+                cave[yval][xval + 1].fval = TMP1_WALL;
+            } else if (randint(3) == 1) {
+                cave[yval][xval].fval = TMP1_WALL;
+            }
+            break;
+        case 4:
+            break;
     }
 }
 

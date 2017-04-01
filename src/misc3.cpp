@@ -9,10 +9,7 @@
 #include "headers.h"
 #include "externs.h"
 
-static const char *stat_names[] = {
-    "STR : ", "INT : ", "WIS : ",
-    "DEX : ", "CON : ", "CHR : ",
-};
+static const char *stat_names[] = {"STR : ", "INT : ", "WIS : ", "DEX : ", "CON : ", "CHR : ",};
 #define BLANK_LENGTH 24
 static char blank_string[] = "                        ";
 
@@ -46,7 +43,7 @@ void place_gold(int y, int x) {
     invcopy(&t_list[cur_pos], OBJ_GOLD_LIST + i);
 
     inven_type *t_ptr = &t_list[cur_pos];
-    t_ptr->cost += (8L * (int32_t)randint((int)t_ptr->cost)) + randint(8);
+    t_ptr->cost += (8L * (int32_t) randint((int) t_ptr->cost)) + randint(8);
 
     if (cave[y][x].cptr == 1) {
         msg_print("You feel something roll beneath your feet.");
@@ -179,12 +176,12 @@ void cnv_stat(uint8_t stat, char *out_val) {
         int part2 = stat - 18;
 
         if (part2 == 100) {
-            (void)strcpy(out_val, "18/100");
+            (void) strcpy(out_val, "18/100");
         } else {
-            (void)sprintf(out_val, " %2d/%02d", part1, part2);
+            (void) sprintf(out_val, " %2d/%02d", part1, part2);
         }
     } else {
-        (void)sprintf(out_val, "%6d", stat);
+        (void) sprintf(out_val, "%6d", stat);
     }
 }
 
@@ -206,35 +203,35 @@ void prt_field(const char *info, int row, int column) {
 // Print long number with header at given row, column
 static void prt_lnum(const char *header, int32_t num, int row, int column) {
     vtype out_val;
-    (void)sprintf(out_val, "%s: %6d", header, num);
+    (void) sprintf(out_val, "%s: %6d", header, num);
     put_buffer(out_val, row, column);
 }
 
 // Print long number (7 digits of space) with header at given row, column
 static void prt_7lnum(const char *header, int32_t num, int row, int column) {
     vtype out_val;
-    (void)sprintf(out_val, "%s: %7d", header, num);
+    (void) sprintf(out_val, "%s: %7d", header, num);
     put_buffer(out_val, row, column);
 }
 
 // Print number with header at given row, column -RAK-
 static void prt_num(const char *header, int num, int row, int column) {
     vtype out_val;
-    (void)sprintf(out_val, "%s: %6d", header, num);
+    (void) sprintf(out_val, "%s: %6d", header, num);
     put_buffer(out_val, row, column);
 }
 
 // Print long number at given row, column
 static void prt_long(int32_t num, int row, int column) {
     vtype out_val;
-    (void)sprintf(out_val, "%6d", num);
+    (void) sprintf(out_val, "%6d", num);
     put_buffer(out_val, row, column);
 }
 
 // Print number at given row, column -RAK-
 static void prt_int(int num, int row, int column) {
     vtype out_val;
-    (void)sprintf(out_val, "%6d", num);
+    (void) sprintf(out_val, "%6d", num);
     put_buffer(out_val, row, column);
 }
 
@@ -278,40 +275,40 @@ int chr_adj() {
         return 98;
     } else {
         switch (charisma) {
-        case 18:
-            return 100;
-        case 17:
-            return 101;
-        case 16:
-            return 102;
-        case 15:
-            return 103;
-        case 14:
-            return 104;
-        case 13:
-            return 106;
-        case 12:
-            return 108;
-        case 11:
-            return 110;
-        case 10:
-            return 112;
-        case 9:
-            return 114;
-        case 8:
-            return 116;
-        case 7:
-            return 118;
-        case 6:
-            return 120;
-        case 5:
-            return 122;
-        case 4:
-            return 125;
-        case 3:
-            return 130;
-        default:
-            return 100;
+            case 18:
+                return 100;
+            case 17:
+                return 101;
+            case 16:
+                return 102;
+            case 15:
+                return 103;
+            case 14:
+                return 104;
+            case 13:
+                return 106;
+            case 12:
+                return 108;
+            case 11:
+                return 110;
+            case 10:
+                return 112;
+            case 9:
+                return 114;
+            case 8:
+                return 116;
+            case 7:
+                return 118;
+            case 6:
+                return 120;
+            case 5:
+                return 122;
+            case 4:
+                return 125;
+            case 3:
+                return 130;
+            default:
+                return 100;
         }
     }
 }
@@ -348,7 +345,7 @@ char *title_string() {
         p = "**QUEEN**";
     }
 
-    return (char *)p;
+    return (char *) p;
 }
 
 // Prints title of character -RAK-
@@ -358,7 +355,7 @@ void prt_title() {
 
 // Prints level -RAK-
 void prt_level() {
-    prt_int((int)py.misc.lev, 13, STAT_COLUMN + 6);
+    prt_int((int) py.misc.lev, 13, STAT_COLUMN + 6);
 }
 
 // Prints players current mana points. -RAK-
@@ -393,9 +390,9 @@ void prt_depth() {
     int depth = dun_level * 50;
 
     if (depth == 0) {
-        (void)strcpy(depths, "Town level");
+        (void) strcpy(depths, "Town level");
     } else {
-        (void)sprintf(depths, "%d feet", depth);
+        (void) sprintf(depths, "%d feet", depth);
     }
 
     prt(depths, 23, 65);
@@ -458,20 +455,20 @@ void prt_state() {
         char tmp[16];
 
         if (py.flags.rest < 0) {
-            (void)strcpy(tmp, "Rest *");
+            (void) strcpy(tmp, "Rest *");
         } else if (display_counts) {
-            (void)sprintf(tmp, "Rest %-5d", py.flags.rest);
+            (void) sprintf(tmp, "Rest %-5d", py.flags.rest);
         } else {
-            (void)strcpy(tmp, "Rest");
+            (void) strcpy(tmp, "Rest");
         }
         put_buffer(tmp, 23, 38);
     } else if (command_count > 0) {
         char tmp[16];
 
         if (display_counts) {
-            (void)sprintf(tmp, "Repeat %-3d", command_count);
+            (void) sprintf(tmp, "Repeat %-3d", command_count);
         } else {
-            (void)strcpy(tmp, "Repeat");
+            (void) strcpy(tmp, "Repeat");
         }
 
         py.flags.status |= PY_REPEAT;
@@ -802,7 +799,7 @@ void prt_stat_block() {
         prt_stat(i);
     }
 
-    prt_num("LEV ", (int)m_ptr->lev, 13, STAT_COLUMN);
+    prt_num("LEV ", (int) m_ptr->lev, 13, STAT_COLUMN);
     prt_lnum("EXP ", m_ptr->exp, 14, STAT_COLUMN);
     prt_num("MANA", m_ptr->cmana, 15, STAT_COLUMN);
     prt_num("MHP ", m_ptr->mhp, 16, STAT_COLUMN);
@@ -893,27 +890,27 @@ void put_stats() {
 // Returns a rating of x depending on y -JWT-
 const char *likert(int x, int y) {
     switch ((x / y)) {
-    case -3:
-    case -2:
-    case -1:
-        return "Very Bad";
-    case 0:
-    case 1:
-        return "Bad";
-    case 2:
-        return "Poor";
-    case 3:
-    case 4:
-        return "Fair";
-    case 5:
-        return "Good";
-    case 6:
-        return "Very Good";
-    case 7:
-    case 8:
-        return "Excellent";
-    default:
-        return "Superb";
+        case -3:
+        case -2:
+        case -1:
+            return "Very Bad";
+        case 0:
+        case 1:
+            return "Bad";
+        case 2:
+            return "Poor";
+        case 3:
+        case 4:
+            return "Fair";
+        case 5:
+            return "Good";
+        case 6:
+            return "Very Good";
+        case 7:
+        case 8:
+            return "Excellent";
+        default:
+            return "Superb";
     }
 }
 
@@ -921,24 +918,24 @@ const char *likert(int x, int y) {
 void put_misc1() {
     struct player_type::misc *m_ptr = &py.misc;
 
-    prt_num("Age          ", (int)m_ptr->age, 2, 38);
-    prt_num("Height       ", (int)m_ptr->ht, 3, 38);
-    prt_num("Weight       ", (int)m_ptr->wt, 4, 38);
-    prt_num("Social Class ", (int)m_ptr->sc, 5, 38);
+    prt_num("Age          ", (int) m_ptr->age, 2, 38);
+    prt_num("Height       ", (int) m_ptr->ht, 3, 38);
+    prt_num("Weight       ", (int) m_ptr->wt, 4, 38);
+    prt_num("Social Class ", (int) m_ptr->sc, 5, 38);
 }
 
 // Prints the following information on the screen. -JWT-
 void put_misc2() {
     struct player_type::misc *m_ptr = &py.misc;
 
-    prt_7lnum("Level      ", (int32_t)m_ptr->lev, 9, 28);
+    prt_7lnum("Level      ", (int32_t) m_ptr->lev, 9, 28);
     prt_7lnum("Experience ", m_ptr->exp, 10, 28);
     prt_7lnum("Max Exp    ", m_ptr->max_exp, 11, 28);
 
     if (m_ptr->lev >= MAX_PLAYER_LEVEL) {
         prt("Exp to Adv.: *******", 12, 28);
     } else {
-        prt_7lnum("Exp to Adv.", (int32_t)(player_exp[m_ptr->lev - 1] * m_ptr->expfact / 100), 12, 28);
+        prt_7lnum("Exp to Adv.", (int32_t) (player_exp[m_ptr->lev - 1] * m_ptr->expfact / 100), 12, 28);
     }
 
     prt_7lnum("Gold       ", m_ptr->au, 13, 28);
@@ -971,7 +968,7 @@ void put_misc3() {
     int xdev = p_ptr->save + stat_adj(A_INT) + (class_level_adj[p_ptr->pclass][CLA_DEVICE] * p_ptr->lev / 3);
 
     vtype xinfra;
-    (void)sprintf(xinfra, "%d feet", py.flags.see_infra * 10);
+    (void) sprintf(xinfra, "%d feet", py.flags.see_infra * 10);
 
     put_buffer("(Miscellaneous Abilities)", 15, 25);
     put_buffer("Fighting    :", 16, 1);
@@ -1029,27 +1026,27 @@ void change_name() {
         prt("<f>ile character description. <c>hange character name.", 21, 2);
         char c = inkey();
         switch (c) {
-        case 'c':
-            get_name();
-            flag = true;
-            break;
-        case 'f':
-            prt("File name:", 0, 0);
-            if (get_string(temp, 0, 10, 60) && temp[0]) {
-                if (file_character(temp)) {
-                    flag = true;
+            case 'c':
+                get_name();
+                flag = true;
+                break;
+            case 'f':
+                prt("File name:", 0, 0);
+                if (get_string(temp, 0, 10, 60) && temp[0]) {
+                    if (file_character(temp)) {
+                        flag = true;
+                    }
                 }
-            }
-            break;
-        case ESCAPE:
-        case ' ':
-        case '\n':
-        case '\r':
-            flag = true;
-            break;
-        default:
-            bell();
-            break;
+                break;
+            case ESCAPE:
+            case ' ':
+            case '\n':
+            case '\r':
+                flag = true;
+                break;
+            default:
+                bell();
+                break;
         }
     }
 }
@@ -1076,8 +1073,7 @@ void inven_destroy(int item_val) {
 // However, the second always gets a number of one except for ammo etc.
 void take_one_item(inven_type *s_ptr, inven_type *i_ptr) {
     *s_ptr = *i_ptr;
-    if ((s_ptr->number > 1) && (s_ptr->subval >= ITEM_SINGLE_STACK_MIN) &&
-        (s_ptr->subval <= ITEM_SINGLE_STACK_MAX)) {
+    if ((s_ptr->number > 1) && (s_ptr->subval >= ITEM_SINGLE_STACK_MIN) && (s_ptr->subval <= ITEM_SINGLE_STACK_MAX)) {
         s_ptr->number = 1;
     }
 }
@@ -1085,7 +1081,7 @@ void take_one_item(inven_type *s_ptr, inven_type *i_ptr) {
 // Drops an item from inventory to given location -RAK-
 void inven_drop(int item_val, int drop_all) {
     if (cave[char_row][char_col].tptr != 0) {
-        (void)delete_object(char_row, char_col);
+        (void) delete_object(char_row, char_col);
     }
 
     int i = popt();
@@ -1112,7 +1108,7 @@ void inven_drop(int item_val, int drop_all) {
 
         bigvtype prt1, prt2;
         objdes(prt1, &t_list[i], true);
-        (void)sprintf(prt2, "Dropped %s", prt1);
+        (void) sprintf(prt2, "Dropped %s", prt1);
         msg_print(prt2);
     }
     py.flags.status |= PY_STR_WGT;
@@ -1151,13 +1147,11 @@ bool inven_check_num(inven_type *t_ptr) {
 
     if (t_ptr->subval >= ITEM_SINGLE_STACK_MIN) {
         for (int i = 0; i < inven_ctr; i++) {
-            if (inventory[i].tval == t_ptr->tval &&
-                inventory[i].subval == t_ptr->subval &&
+            if (inventory[i].tval == t_ptr->tval && inventory[i].subval == t_ptr->subval &&
                 // make sure the number field doesn't overflow
-                ((int)inventory[i].number + (int)t_ptr->number < 256) &&
+                ((int) inventory[i].number + (int) t_ptr->number < 256) &&
                 // they always stack (subval < 192), or else they have same p1
-                ((t_ptr->subval < ITEM_GROUP_MIN) ||
-                 (inventory[i].p1 == t_ptr->p1))
+                ((t_ptr->subval < ITEM_GROUP_MIN) || (inventory[i].p1 == t_ptr->p1))
                 // only stack if both or neither are identified
                 && (known1_p(&inventory[i]) == known1_p(t_ptr))) {
                 return true;
@@ -1186,8 +1180,7 @@ bool inven_check_weight(inven_type *i_ptr) {
 void check_strength() {
     inven_type *i_ptr = &inventory[INVEN_WIELD];
 
-    if (i_ptr->tval != TV_NOTHING &&
-        (py.stats.use_stat[A_STR] * 15 < i_ptr->weight)) {
+    if (i_ptr->tval != TV_NOTHING && (py.stats.use_stat[A_STR] * 15 < i_ptr->weight)) {
         if (!weapon_heavy) {
             msg_print("You have trouble wielding such a heavy weapon.");
             weapon_heavy = true;
@@ -1235,9 +1228,7 @@ int inven_carry(inven_type *i_ptr) {
     for (locn = 0;; locn++) {
         inven_type *t_ptr = &inventory[locn];
 
-        if ((typ == t_ptr->tval) && (subt == t_ptr->subval) &&
-            (subt >= ITEM_SINGLE_STACK_MIN) &&
-            ((int)t_ptr->number + (int)i_ptr->number < 256) &&
+        if ((typ == t_ptr->tval) && (subt == t_ptr->subval) && (subt >= ITEM_SINGLE_STACK_MIN) && ((int) t_ptr->number + (int) i_ptr->number < 256) &&
             ((subt < ITEM_GROUP_MIN) || (t_ptr->p1 == i_ptr->p1)) &&
             // only stack if both or neither are identified
             (known1p == known1_p(t_ptr))) {
@@ -1338,7 +1329,7 @@ void print_spells(int *spell, int num, int comment, int nonconsec) {
         }
 
         vtype out_val;
-        (void)sprintf(out_val, "  %c) %-30s%2d %4d %3d%%%s", spell_char, spell_names[j + offset], s_ptr->slevel, s_ptr->smana, spell_chance(j), p);
+        (void) sprintf(out_val, "  %c) %-30s%2d %4d %3d%%%s", spell_char, spell_names[j + offset], s_ptr->slevel, s_ptr->smana, spell_chance(j), p);
         prt(out_val, 2 + i, col);
     }
 }
@@ -1348,7 +1339,7 @@ int get_spell(int *spell, int num, int *sn, int *sc, const char *prompt, int fir
     *sn = -1;
 
     vtype out_str;
-    (void)sprintf(out_str, "(Spells %c-%c, *=List, <ESCAPE>=exit) %s", spell[0] + 'a' - first_spell, spell[num - 1] + 'a' - first_spell, prompt);
+    (void) sprintf(out_str, "(Spells %c-%c, *=List, <ESCAPE>=exit) %s", spell[0] + 'a' - first_spell, spell[num - 1] + 'a' - first_spell, prompt);
 
     bool flag = false;
     bool redraw = false;
@@ -1357,7 +1348,7 @@ int get_spell(int *spell, int num, int *sn, int *sc, const char *prompt, int fir
 
     char choice;
     while (!flag && get_com(out_str, &choice)) {
-        if (isupper((int)choice)) {
+        if (isupper((int) choice)) {
             *sn = choice - 'A' + first_spell;
 
             // verify that this is in spell[], at most 22 entries in spell[]
@@ -1373,14 +1364,14 @@ int get_spell(int *spell, int num, int *sn, int *sc, const char *prompt, int fir
                 spell_type *s_ptr = &magic_spell[py.misc.pclass - 1][*sn];
 
                 vtype tmp_str;
-                (void)sprintf(tmp_str, "Cast %s (%d mana, %d%% fail)?", spell_names[*sn + offset], s_ptr->smana, spell_chance(*sn));
+                (void) sprintf(tmp_str, "Cast %s (%d mana, %d%% fail)?", spell_names[*sn + offset], s_ptr->smana, spell_chance(*sn));
                 if (get_check(tmp_str)) {
                     flag = true;
                 } else {
                     *sn = -1;
                 }
             }
-        } else if (islower((int)choice)) {
+        } else if (islower((int) choice)) {
             *sn = choice - 'a' + first_spell;
 
             // verify that this is in spell[], at most 22 entries in spell[]
@@ -1402,7 +1393,7 @@ int get_spell(int *spell, int num, int *sn, int *sc, const char *prompt, int fir
                 redraw = true;
                 print_spells(spell, num, false, first_spell);
             }
-        } else if (isalpha((int)choice)) {
+        } else if (isalpha((int) choice)) {
             *sn = -2;
         } else {
             *sn = -1;
@@ -1410,7 +1401,7 @@ int get_spell(int *spell, int num, int *sn, int *sc, const char *prompt, int fir
         }
         if (*sn == -2) {
             vtype tmp_str;
-            (void)sprintf(tmp_str, "You don't know that %s.", (offset == SPELL_OFFSET ? "spell" : "prayer"));
+            (void) sprintf(tmp_str, "You don't know that %s.", (offset == SPELL_OFFSET ? "spell" : "prayer"));
             msg_print(tmp_str);
         }
     }
@@ -1452,7 +1443,7 @@ void calc_spells(int stat) {
                 spell_forgotten |= mask;
 
                 vtype tmp_str;
-                (void)sprintf(tmp_str, "You have forgotten the %s of %s.", p, spell_names[i + offset]);
+                (void) sprintf(tmp_str, "You have forgotten the %s of %s.", p, spell_names[i + offset]);
                 msg_print(tmp_str);
             } else {
                 break;
@@ -1464,24 +1455,24 @@ void calc_spells(int stat) {
     int num_allowed = 0;
     int levels = p_ptr->lev - classes[p_ptr->pclass].first_spell_lev + 1;
     switch (stat_adj(stat)) {
-    case 0:
-        num_allowed = 0;
-        break;
-    case 1:
-    case 2:
-    case 3:
-        num_allowed = 1 * levels;
-        break;
-    case 4:
-    case 5:
-        num_allowed = 3 * levels / 2;
-        break;
-    case 6:
-        num_allowed = 2 * levels;
-        break;
-    case 7:
-        num_allowed = 5 * levels / 2;
-        break;
+        case 0:
+            num_allowed = 0;
+            break;
+        case 1:
+        case 2:
+        case 3:
+            num_allowed = 1 * levels;
+            break;
+        case 4:
+        case 5:
+            num_allowed = 3 * levels / 2;
+            break;
+        case 6:
+            num_allowed = 2 * levels;
+            break;
+        case 7:
+            num_allowed = 5 * levels / 2;
+            break;
     }
 
     int num_known = 0;
@@ -1504,7 +1495,7 @@ void calc_spells(int stat) {
             if (j == 99) {
                 mask = 0x0;
             } else {
-                mask = (uint32_t)(1L << j);
+                mask = (uint32_t) (1L << j);
             }
             if (mask & spell_forgotten) {
                 if (msp_ptr[j].slevel <= p_ptr->lev) {
@@ -1513,7 +1504,7 @@ void calc_spells(int stat) {
                     spell_learned |= mask;
 
                     vtype tmp_str;
-                    (void)sprintf(tmp_str, "You have remembered the %s of %s.", p, spell_names[j + offset]);
+                    (void) sprintf(tmp_str, "You have remembered the %s of %s.", p, spell_names[j + offset]);
                     msg_print(tmp_str);
                 } else {
                     num_allowed++;
@@ -1552,7 +1543,7 @@ void calc_spells(int stat) {
             if (j == 99) {
                 mask = 0x0;
             } else {
-                mask = (uint32_t)(1L << j);
+                mask = (uint32_t) (1L << j);
             }
             if (mask & spell_learned) {
                 spell_learned &= ~mask;
@@ -1560,7 +1551,7 @@ void calc_spells(int stat) {
                 new_spells++;
 
                 vtype tmp_str;
-                (void)sprintf(tmp_str, "You have forgotten the %s of %s.", p, spell_names[j + offset]);
+                (void) sprintf(tmp_str, "You have forgotten the %s of %s.", p, spell_names[j + offset]);
                 msg_print(tmp_str);
             }
         }
@@ -1571,7 +1562,7 @@ void calc_spells(int stat) {
     if (new_spells != py.flags.new_spells) {
         if (new_spells > 0 && py.flags.new_spells == 0) {
             vtype tmp_str;
-            (void)sprintf(tmp_str, "You can learn some new %ss now.", p);
+            (void) sprintf(tmp_str, "You can learn some new %ss now.", p);
             msg_print(tmp_str);
         }
 
@@ -1624,7 +1615,7 @@ void gain_spells() {
 
     if (!new_spells) {
         vtype tmp_str;
-        (void)sprintf(tmp_str, "You can't learn any new %ss!", (stat == A_INT ? "spell" : "prayer"));
+        (void) sprintf(tmp_str, "You can't learn any new %ss!", (stat == A_INT ? "spell" : "prayer"));
         msg_print(tmp_str);
         free_turn_flag = true;
         return;
@@ -1666,8 +1657,7 @@ void gain_spells() {
         diff_spells = new_spells - i;
         new_spells = i;
     }
-    if (new_spells == 0) {
-        ;
+    if (new_spells == 0) { ;
     } else if (stat == A_INT) {
         // get to choose which mage spells will be learned
         save_screen();
@@ -1702,7 +1692,7 @@ void gain_spells() {
             spell_order[last_known++] = (uint8_t) spells[s];
 
             vtype tmp_str;
-            (void)sprintf(tmp_str, "You have learned the prayer of %s.", spell_names[spells[s] + offset]);
+            (void) sprintf(tmp_str, "You have learned the prayer of %s.", spell_names[spells[s] + offset]);
             msg_print(tmp_str);
 
             for (; s <= i - 1; s++) {
@@ -1732,28 +1722,28 @@ void calc_mana(int stat) {
         int new_mana = 0;
         int levels = p_ptr->lev - classes[p_ptr->pclass].first_spell_lev + 1;
         switch (stat_adj(stat)) {
-        case 0:
-            new_mana = 0;
-            break;
-        case 1:
-        case 2:
-            new_mana = 1 * levels;
-            break;
-        case 3:
-            new_mana = 3 * levels / 2;
-            break;
-        case 4:
-            new_mana = 2 * levels;
-            break;
-        case 5:
-            new_mana = 5 * levels / 2;
-            break;
-        case 6:
-            new_mana = 3 * levels;
-            break;
-        case 7:
-            new_mana = 4 * levels;
-            break;
+            case 0:
+                new_mana = 0;
+                break;
+            case 1:
+            case 2:
+                new_mana = 1 * levels;
+                break;
+            case 3:
+                new_mana = 3 * levels / 2;
+                break;
+            case 4:
+                new_mana = 2 * levels;
+                break;
+            case 5:
+                new_mana = 5 * levels / 2;
+                break;
+            case 6:
+                new_mana = 3 * levels;
+                break;
+            case 7:
+                new_mana = 4 * levels;
+                break;
         }
 
         // increment mana by one, so that first level chars have 2 mana
@@ -1766,7 +1756,7 @@ void calc_mana(int stat) {
             if (p_ptr->mana != 0) {
                 // change current mana proportionately to change of max mana,
                 // divide first to avoid overflow, little loss of accuracy
-                int32_t value = (((int32_t)p_ptr->cmana << 16) + p_ptr->cmana_frac) / p_ptr->mana * new_mana;
+                int32_t value = (((int32_t) p_ptr->cmana << 16) + p_ptr->cmana_frac) / p_ptr->mana * new_mana;
                 p_ptr->cmana = (int16_t) (value >> 16);
                 p_ptr->cmana_frac = (uint16_t) (value & 0xFFFF);
             } else {
@@ -1793,7 +1783,7 @@ static void gain_level() {
     p_ptr->lev++;
 
     vtype out_val;
-    (void)sprintf(out_val, "Welcome to level %d.", (int)p_ptr->lev);
+    (void) sprintf(out_val, "Welcome to level %d.", (int) p_ptr->lev);
     msg_print(out_val);
     calc_hitpoints();
 
@@ -1826,7 +1816,7 @@ void prt_experience() {
         p_ptr->exp = MAX_EXP;
     }
 
-    while ((p_ptr->lev < MAX_PLAYER_LEVEL) && (signed)(player_exp[p_ptr->lev - 1] * p_ptr->expfact / 100) <= p_ptr->exp) {
+    while ((p_ptr->lev < MAX_PLAYER_LEVEL) && (signed) (player_exp[p_ptr->lev - 1] * p_ptr->expfact / 100) <= p_ptr->exp) {
         gain_level();
     }
 
@@ -1859,7 +1849,7 @@ void calc_hitpoints() {
     if ((hitpoints != p_ptr->mhp) && (p_ptr->mhp != 0)) {
         // change current hit points proportionately to change of mhp,
         // divide first to avoid overflow, little loss of accuracy
-        int32_t value = (((int32_t)p_ptr->chp << 16) + p_ptr->chp_frac) / p_ptr->mhp * hitpoints;
+        int32_t value = (((int32_t) p_ptr->chp << 16) + p_ptr->chp_frac) / p_ptr->mhp * hitpoints;
         p_ptr->chp = (int16_t) (value >> 16);
         p_ptr->chp_frac = (uint16_t) (value & 0xFFFF);
         p_ptr->mhp = (int16_t) hitpoints;
@@ -1871,8 +1861,8 @@ void calc_hitpoints() {
 
 // Inserts a string into a string
 void insert_str(char *object_str, const char *mtc_str, const char *insert) {
-    int mtc_len = (int)strlen(mtc_str);
-    int obj_len = (int)strlen(object_str);
+    int mtc_len = (int) strlen(mtc_str);
+    int obj_len = (int) strlen(object_str);
     char *bound = object_str + obj_len - mtc_len;
 
     char *pc;
@@ -1894,14 +1884,14 @@ void insert_str(char *object_str, const char *mtc_str, const char *insert) {
     if (pc <= bound) {
         char out_val[80];
 
-        (void)strncpy(out_val, object_str, (pc - object_str));
+        (void) strncpy(out_val, object_str, (pc - object_str));
         // Turbo C needs int for array index.
-        out_val[(int)(pc - object_str)] = '\0';
+        out_val[(int) (pc - object_str)] = '\0';
         if (insert) {
-            (void)strcat(out_val, insert);
+            (void) strcat(out_val, insert);
         }
-        (void)strcat(out_val, (pc + mtc_len));
-        (void)strcpy(object_str, out_val);
+        (void) strcat(out_val, (pc + mtc_len));
+        (void) strcpy(object_str, out_val);
     }
 }
 
@@ -1926,14 +1916,14 @@ void insert_lnum(char *object_str, const char *mtc_str, int32_t number, int show
     if (string) {
         vtype str1, str2;
 
-        (void)strncpy(str1, object_str, string - object_str);
+        (void) strncpy(str1, object_str, string - object_str);
         str1[string - object_str] = '\0';
-        (void)strcpy(str2, string + mlen);
+        (void) strcpy(str2, string + mlen);
 
         if ((number >= 0) && (show_sign)) {
-            (void)sprintf(object_str, "%s+%d%s", str1, number, str2);
+            (void) sprintf(object_str, "%s+%d%s", str1, number, str2);
         } else {
-            (void)sprintf(object_str, "%s%d%s", str1, number, str2);
+            (void) sprintf(object_str, "%s%d%s", str1, number, str2);
         }
     }
 }
@@ -2000,12 +1990,13 @@ int attack_blows(int weight, int *wtohit) {
         str_index = 6;
     }
 
-    return (int)blows_table[str_index][dex_index];
+    return (int) blows_table[str_index][dex_index];
 }
 
 // Special damage due to magical abilities of object -RAK-
 int tot_dam(inven_type *i_ptr, int tdam, int monster) {
-    if ((i_ptr->flags & TR_EGO_WEAPON) && (((i_ptr->tval >= TV_SLING_AMMO) && (i_ptr->tval <= TV_ARROW)) || ((i_ptr->tval >= TV_HAFTED) && (i_ptr->tval <= TV_SWORD)) || (i_ptr->tval == TV_FLASK))) {
+    if ((i_ptr->flags & TR_EGO_WEAPON) &&
+        (((i_ptr->tval >= TV_SLING_AMMO) && (i_ptr->tval <= TV_ARROW)) || ((i_ptr->tval >= TV_HAFTED) && (i_ptr->tval <= TV_SWORD)) || (i_ptr->tval == TV_FLASK))) {
         creature_type *m_ptr = &c_list[monster];
         recall_type *r_ptr = &c_recall[monster];
 
@@ -2078,42 +2069,42 @@ int mmove(int dir, int *y, int *x) {
     int new_col = 0;
 
     switch (dir) {
-    case 1:
-        new_row = *y + 1;
-        new_col = *x - 1;
-        break;
-    case 2:
-        new_row = *y + 1;
-        new_col = *x;
-        break;
-    case 3:
-        new_row = *y + 1;
-        new_col = *x + 1;
-        break;
-    case 4:
-        new_row = *y;
-        new_col = *x - 1;
-        break;
-    case 5:
-        new_row = *y;
-        new_col = *x;
-        break;
-    case 6:
-        new_row = *y;
-        new_col = *x + 1;
-        break;
-    case 7:
-        new_row = *y - 1;
-        new_col = *x - 1;
-        break;
-    case 8:
-        new_row = *y - 1;
-        new_col = *x;
-        break;
-    case 9:
-        new_row = *y - 1;
-        new_col = *x + 1;
-        break;
+        case 1:
+            new_row = *y + 1;
+            new_col = *x - 1;
+            break;
+        case 2:
+            new_row = *y + 1;
+            new_col = *x;
+            break;
+        case 3:
+            new_row = *y + 1;
+            new_col = *x + 1;
+            break;
+        case 4:
+            new_row = *y;
+            new_col = *x - 1;
+            break;
+        case 5:
+            new_row = *y;
+            new_col = *x;
+            break;
+        case 6:
+            new_row = *y;
+            new_col = *x + 1;
+            break;
+        case 7:
+            new_row = *y - 1;
+            new_col = *x - 1;
+            break;
+        case 8:
+            new_row = *y - 1;
+            new_col = *x;
+            break;
+        case 9:
+            new_row = *y - 1;
+            new_col = *x + 1;
+            break;
     }
 
     bool moved = false;

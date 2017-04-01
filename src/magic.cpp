@@ -72,20 +72,20 @@ void cast() {
                 }
                 break;
             case 2:
-                (void)detect_monsters();
+                (void) detect_monsters();
                 break;
             case 3:
                 teleport(10);
                 break;
             case 4:
-                (void)light_area(char_row, char_col);
+                (void) light_area(char_row, char_col);
                 break;
             case 5:
-                (void)hp_player(damroll(4, 4));
+                (void) hp_player(damroll(4, 4));
                 break;
             case 6:
-                (void)detect_sdoor();
-                (void)detect_trap();
+                (void) detect_sdoor();
+                (void) detect_trap();
                 break;
             case 7:
                 if (get_dir(CNIL, &dir)) {
@@ -94,7 +94,7 @@ void cast() {
                 break;
             case 8:
                 if (get_dir(CNIL, &dir)) {
-                    (void)confuse_monster(dir, char_row, char_col);
+                    (void) confuse_monster(dir, char_row, char_col);
                 }
                 break;
             case 9:
@@ -103,15 +103,15 @@ void cast() {
                 }
                 break;
             case 10:
-                (void)td_destroy();
+                (void) td_destroy();
                 break;
             case 11:
                 if (get_dir(CNIL, &dir)) {
-                    (void)sleep_monster(dir, char_row, char_col);
+                    (void) sleep_monster(dir, char_row, char_col);
                 }
                 break;
             case 12:
-                (void)cure_poison();
+                (void) cure_poison();
                 break;
             case 13:
                 teleport((py.misc.lev * 5));
@@ -129,28 +129,28 @@ void cast() {
                 break;
             case 16:
                 if (get_dir(CNIL, &dir)) {
-                    (void)wall_to_mud(dir, char_row, char_col);
+                    (void) wall_to_mud(dir, char_row, char_col);
                 }
                 break;
             case 17:
                 create_food();
                 break;
             case 18:
-                (void)recharge(20);
+                (void) recharge(20);
                 break;
             case 19:
-                (void)sleep_monsters1(char_row, char_col);
+                (void) sleep_monsters1(char_row, char_col);
                 break;
             case 20:
                 if (get_dir(CNIL, &dir)) {
-                    (void)poly_monster(dir, char_row, char_col);
+                    (void) poly_monster(dir, char_row, char_col);
                 }
                 break;
             case 21:
-                (void)ident_spell();
+                (void) ident_spell();
                 break;
             case 22:
-                (void)sleep_monsters2();
+                (void) sleep_monsters2();
                 break;
             case 23:
                 if (get_dir(CNIL, &dir)) {
@@ -159,7 +159,7 @@ void cast() {
                 break;
             case 24:
                 if (get_dir(CNIL, &dir)) {
-                    (void)speed_monster(dir, char_row, char_col, -1);
+                    (void) speed_monster(dir, char_row, char_col, -1);
                 }
                 break;
             case 25:
@@ -168,11 +168,11 @@ void cast() {
                 }
                 break;
             case 26:
-                (void)recharge(60);
+                (void) recharge(60);
                 break;
             case 27:
                 if (get_dir(CNIL, &dir)) {
-                    (void)teleport_monster(dir, char_row, char_col);
+                    (void) teleport_monster(dir, char_row, char_col);
                 }
                 break;
             case 28:
@@ -188,7 +188,7 @@ void cast() {
                 destroy_area(char_row, char_col);
                 break;
             case 31:
-                (void)genocide();
+                (void) genocide();
                 break;
             default:
                 break;
@@ -209,12 +209,12 @@ void cast() {
     if (!free_turn_flag) {
         if (m_ptr->smana > p_ptr->cmana) {
             msg_print("You faint from the effort!");
-            py.flags.paralysis = (int16_t)randint((5 * (m_ptr->smana - p_ptr->cmana)));
+            py.flags.paralysis = (int16_t) randint((5 * (m_ptr->smana - p_ptr->cmana)));
             p_ptr->cmana = 0;
             p_ptr->cmana_frac = 0;
             if (randint(3) == 1) {
                 msg_print("You have damaged your health!");
-                (void)dec_stat(A_CON);
+                (void) dec_stat(A_CON);
             }
         } else {
             p_ptr->cmana -= m_ptr->smana;

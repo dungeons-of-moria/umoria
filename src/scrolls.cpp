@@ -68,7 +68,7 @@ void read_scroll() {
                 i_ptr = &inventory[INVEN_WIELD];
                 if (i_ptr->tval != TV_NOTHING) {
                     objdes(tmp_str, i_ptr, false);
-                    (void)sprintf(out_val, "Your %s glows faintly!", tmp_str);
+                    (void) sprintf(out_val, "Your %s glows faintly!", tmp_str);
                     msg_print(out_val);
                     if (enchant(&i_ptr->tohit, 10)) {
                         i_ptr->flags &= ~TR_CURSED;
@@ -83,10 +83,9 @@ void read_scroll() {
                 i_ptr = &inventory[INVEN_WIELD];
                 if (i_ptr->tval != TV_NOTHING) {
                     objdes(tmp_str, i_ptr, false);
-                    (void)sprintf(out_val, "Your %s glows faintly!", tmp_str);
+                    (void) sprintf(out_val, "Your %s glows faintly!", tmp_str);
                     msg_print(out_val);
-                    if ((i_ptr->tval >= TV_HAFTED) &&
-                        (i_ptr->tval <= TV_DIGGING)) {
+                    if ((i_ptr->tval >= TV_HAFTED) && (i_ptr->tval <= TV_DIGGING)) {
                         j = i_ptr->damage[0] * i_ptr->damage[1];
                     } else {
                         // Bows' and arrows' enchantments should not be
@@ -146,7 +145,7 @@ void read_scroll() {
                 if (l > 0) {
                     i_ptr = &inventory[l];
                     objdes(tmp_str, i_ptr, false);
-                    (void)sprintf(out_val, "Your %s glows faintly!", tmp_str);
+                    (void) sprintf(out_val, "Your %s glows faintly!", tmp_str);
                     msg_print(out_val);
                     if (enchant(&i_ptr->toac, 10)) {
                         i_ptr->flags &= ~TR_CURSED;
@@ -235,7 +234,7 @@ void read_scroll() {
                 break;
             case 19:
                 msg_print("This is a mass genocide scroll.");
-                (void)mass_genocide();
+                (void) mass_genocide();
                 ident = true;
                 break;
             case 20:
@@ -243,7 +242,7 @@ void read_scroll() {
                 break;
             case 21:
                 msg_print("There is a high pitched humming noise.");
-                (void)aggravate_monster(20);
+                (void) aggravate_monster(20);
                 ident = true;
                 break;
             case 22:
@@ -262,7 +261,7 @@ void read_scroll() {
                 break;
             case 26:
                 msg_print("This is a genocide scroll.");
-                (void)genocide();
+                (void) genocide();
                 ident = true;
                 break;
             case 27:
@@ -282,7 +281,7 @@ void read_scroll() {
                 i_ptr = &inventory[INVEN_WIELD];
                 if (i_ptr->tval != TV_NOTHING) {
                     objdes(tmp_str, i_ptr, false);
-                    (void)sprintf(out_val, "Your %s glows brightly!", tmp_str);
+                    (void) sprintf(out_val, "Your %s glows brightly!", tmp_str);
                     msg_print(out_val);
                     flag = false;
                     for (k = 0; k < randint(2); k++) {
@@ -315,7 +314,7 @@ void read_scroll() {
                 i_ptr = &inventory[INVEN_WIELD];
                 if (i_ptr->tval != TV_NOTHING) {
                     objdes(tmp_str, i_ptr, false);
-                    (void)sprintf(out_val, "Your %s glows black, fades.", tmp_str);
+                    (void) sprintf(out_val, "Your %s glows black, fades.", tmp_str);
                     msg_print(out_val);
                     unmagic_name(i_ptr);
                     i_ptr->tohit = (int16_t) (-randint(5) - randint(5));
@@ -374,7 +373,7 @@ void read_scroll() {
                 if (l > 0) {
                     i_ptr = &inventory[l];
                     objdes(tmp_str, i_ptr, false);
-                    (void)sprintf(out_val, "Your %s glows brightly!", tmp_str);
+                    (void) sprintf(out_val, "Your %s glows brightly!", tmp_str);
                     msg_print(out_val);
                     flag = false;
                     for (k = 0; k < randint(2) + 1; k++) {
@@ -423,7 +422,7 @@ void read_scroll() {
                 if (k > 0) {
                     i_ptr = &inventory[k];
                     objdes(tmp_str, i_ptr, false);
-                    (void)sprintf(out_val, "Your %s glows black, fades.", tmp_str);
+                    (void) sprintf(out_val, "Your %s glows black, fades.", tmp_str);
                     msg_print(out_val);
                     unmagic_name(i_ptr);
                     i_ptr->flags = TR_CURSED;

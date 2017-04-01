@@ -23,181 +23,181 @@ static void hit_trap(int y, int x) {
 
     bigvtype tmp;
     switch (t_ptr->subval) {
-    case 1: // Open pit
-        msg_print("You fell into a pit!");
-        if (py.flags.ffall) {
-            msg_print("You gently float down.");
-        } else {
-            objdes(tmp, t_ptr, true);
-            take_hit(dam, tmp);
-        }
-        break;
-    case 2: // Arrow trap
-        if (test_hit(125, 0, 0, p_ptr->pac + p_ptr->ptoac, CLA_MISC_HIT)) {
-            objdes(tmp, t_ptr, true);
-            take_hit(dam, tmp);
-            msg_print("An arrow hits you.");
-        } else {
-            msg_print("An arrow barely misses you.");
-        }
-        break;
-    case 3: // Covered pit
-        msg_print("You fell into a covered pit.");
-        if (py.flags.ffall) {
-            msg_print("You gently float down.");
-        } else {
-            objdes(tmp, t_ptr, true);
-            take_hit(dam, tmp);
-        }
-        place_trap(y, x, 0);
-        break;
-    case 4: // Trap door
-        msg_print("You fell through a trap door!");
-        new_level_flag = true;
-        dun_level++;
-        if (py.flags.ffall) {
-            msg_print("You gently float down.");
-        } else {
-            objdes(tmp, t_ptr, true);
-            take_hit(dam, tmp);
-        }
-        // Force the messages to display before starting to generate the next level.
-        msg_print(CNIL);
-        break;
-    case 5: // Sleep gas
-        if (py.flags.paralysis == 0) {
-            msg_print("A strange white mist surrounds you!");
-            if (py.flags.free_act) {
-                msg_print("You are unaffected.");
+        case 1: // Open pit
+            msg_print("You fell into a pit!");
+            if (py.flags.ffall) {
+                msg_print("You gently float down.");
             } else {
-                msg_print("You fall asleep.");
-                py.flags.paralysis += randint(10) + 4;
-            }
-        }
-        break;
-    case 6: // Hid Obj
-        (void)delete_object(y, x);
-        place_object(y, x, false);
-        msg_print("Hmmm, there was something under this rock.");
-        break;
-    case 7: // STR Dart
-        if (test_hit(125, 0, 0, p_ptr->pac + p_ptr->ptoac, CLA_MISC_HIT)) {
-            if (!py.flags.sustain_str) {
-                (void)dec_stat(A_STR);
                 objdes(tmp, t_ptr, true);
                 take_hit(dam, tmp);
-                msg_print("A small dart weakens you!");
-            } else {
-                msg_print("A small dart hits you.");
             }
-        } else {
-            msg_print("A small dart barely misses you.");
-        }
-        break;
-    case 8: // Teleport
-        teleport_flag = true;
-        msg_print("You hit a teleport trap!");
-
-        // Light up the teleport trap, before we teleport away.
-        move_light(y, x, y, x);
-        break;
-    case 9: // Rockfall
-        take_hit(dam, "a falling rock");
-        (void)delete_object(y, x);
-        place_rubble(y, x);
-        msg_print("You are hit by falling rock.");
-        break;
-    case 10: // Corrode gas
-        // Makes more sense to print the message first, then damage an object.
-        msg_print("A strange red gas surrounds you.");
-        corrode_gas("corrosion gas");
-        break;
-    case 11:                       // Summon mon
-        (void)delete_object(y, x); // Rune disappears.
-
-        num = 2 + randint(3);
-        for (int i = 0; i < num; i++) {
-            int ty = y;
-            int tx = x;
-            (void)summon_monster(&ty, &tx, false);
-        }
-        break;
-    case 12: // Fire trap
-        msg_print("You are enveloped in flames!");
-        fire_dam(dam, "a fire trap");
-        break;
-    case 13: // Acid trap
-        msg_print("You are splashed with acid!");
-        acid_dam(dam, "an acid trap");
-        break;
-    case 14: // Poison gas
-        msg_print("A pungent green gas surrounds you!");
-        poison_gas(dam, "a poison gas trap");
-        break;
-    case 15: // Blind Gas
-        msg_print("A black gas surrounds you!");
-        py.flags.blind += randint(50) + 50;
-        break;
-    case 16: // Confuse Gas
-        msg_print("A gas of scintillating colors surrounds you!");
-        py.flags.confused += randint(15) + 15;
-        break;
-    case 17: // Slow Dart
-        if (test_hit(125, 0, 0, p_ptr->pac + p_ptr->ptoac, CLA_MISC_HIT)) {
-            objdes(tmp, t_ptr, true);
-            take_hit(dam, tmp);
-            msg_print("A small dart hits you!");
-            if (py.flags.free_act) {
-                msg_print("You are unaffected.");
-            } else {
-                py.flags.slow += randint(20) + 10;
-            }
-        } else {
-            msg_print("A small dart barely misses you.");
-        }
-        break;
-    case 18: // CON Dart
-        if (test_hit(125, 0, 0, p_ptr->pac + p_ptr->ptoac, CLA_MISC_HIT)) {
-            if (!py.flags.sustain_con) {
-                (void)dec_stat(A_CON);
+            break;
+        case 2: // Arrow trap
+            if (test_hit(125, 0, 0, p_ptr->pac + p_ptr->ptoac, CLA_MISC_HIT)) {
                 objdes(tmp, t_ptr, true);
                 take_hit(dam, tmp);
-                msg_print("A small dart saps your health!");
+                msg_print("An arrow hits you.");
             } else {
-                msg_print("A small dart hits you.");
+                msg_print("An arrow barely misses you.");
             }
-        } else {
-            msg_print("A small dart barely misses you.");
-        }
-        break;
-    case 19: // Secret Door
-        break;
-    case 99: // Scare Mon
-        break;
+            break;
+        case 3: // Covered pit
+            msg_print("You fell into a covered pit.");
+            if (py.flags.ffall) {
+                msg_print("You gently float down.");
+            } else {
+                objdes(tmp, t_ptr, true);
+                take_hit(dam, tmp);
+            }
+            place_trap(y, x, 0);
+            break;
+        case 4: // Trap door
+            msg_print("You fell through a trap door!");
+            new_level_flag = true;
+            dun_level++;
+            if (py.flags.ffall) {
+                msg_print("You gently float down.");
+            } else {
+                objdes(tmp, t_ptr, true);
+                take_hit(dam, tmp);
+            }
+            // Force the messages to display before starting to generate the next level.
+            msg_print(CNIL);
+            break;
+        case 5: // Sleep gas
+            if (py.flags.paralysis == 0) {
+                msg_print("A strange white mist surrounds you!");
+                if (py.flags.free_act) {
+                    msg_print("You are unaffected.");
+                } else {
+                    msg_print("You fall asleep.");
+                    py.flags.paralysis += randint(10) + 4;
+                }
+            }
+            break;
+        case 6: // Hid Obj
+            (void) delete_object(y, x);
+            place_object(y, x, false);
+            msg_print("Hmmm, there was something under this rock.");
+            break;
+        case 7: // STR Dart
+            if (test_hit(125, 0, 0, p_ptr->pac + p_ptr->ptoac, CLA_MISC_HIT)) {
+                if (!py.flags.sustain_str) {
+                    (void) dec_stat(A_STR);
+                    objdes(tmp, t_ptr, true);
+                    take_hit(dam, tmp);
+                    msg_print("A small dart weakens you!");
+                } else {
+                    msg_print("A small dart hits you.");
+                }
+            } else {
+                msg_print("A small dart barely misses you.");
+            }
+            break;
+        case 8: // Teleport
+            teleport_flag = true;
+            msg_print("You hit a teleport trap!");
 
-    // Town level traps are special, the stores.
-    case 101: // General
-        enter_store(0);
-        break;
-    case 102: // Armory
-        enter_store(1);
-        break;
-    case 103: // Weaponsmith
-        enter_store(2);
-        break;
-    case 104: // Temple
-        enter_store(3);
-        break;
-    case 105: // Alchemy
-        enter_store(4);
-        break;
-    case 106: // Magic-User
-        enter_store(5);
-        break;
+            // Light up the teleport trap, before we teleport away.
+            move_light(y, x, y, x);
+            break;
+        case 9: // Rockfall
+            take_hit(dam, "a falling rock");
+            (void) delete_object(y, x);
+            place_rubble(y, x);
+            msg_print("You are hit by falling rock.");
+            break;
+        case 10: // Corrode gas
+            // Makes more sense to print the message first, then damage an object.
+            msg_print("A strange red gas surrounds you.");
+            corrode_gas("corrosion gas");
+            break;
+        case 11:                       // Summon mon
+            (void) delete_object(y, x); // Rune disappears.
 
-    default:
-        msg_print("Unknown trap value.");
-        break;
+            num = 2 + randint(3);
+            for (int i = 0; i < num; i++) {
+                int ty = y;
+                int tx = x;
+                (void) summon_monster(&ty, &tx, false);
+            }
+            break;
+        case 12: // Fire trap
+            msg_print("You are enveloped in flames!");
+            fire_dam(dam, "a fire trap");
+            break;
+        case 13: // Acid trap
+            msg_print("You are splashed with acid!");
+            acid_dam(dam, "an acid trap");
+            break;
+        case 14: // Poison gas
+            msg_print("A pungent green gas surrounds you!");
+            poison_gas(dam, "a poison gas trap");
+            break;
+        case 15: // Blind Gas
+            msg_print("A black gas surrounds you!");
+            py.flags.blind += randint(50) + 50;
+            break;
+        case 16: // Confuse Gas
+            msg_print("A gas of scintillating colors surrounds you!");
+            py.flags.confused += randint(15) + 15;
+            break;
+        case 17: // Slow Dart
+            if (test_hit(125, 0, 0, p_ptr->pac + p_ptr->ptoac, CLA_MISC_HIT)) {
+                objdes(tmp, t_ptr, true);
+                take_hit(dam, tmp);
+                msg_print("A small dart hits you!");
+                if (py.flags.free_act) {
+                    msg_print("You are unaffected.");
+                } else {
+                    py.flags.slow += randint(20) + 10;
+                }
+            } else {
+                msg_print("A small dart barely misses you.");
+            }
+            break;
+        case 18: // CON Dart
+            if (test_hit(125, 0, 0, p_ptr->pac + p_ptr->ptoac, CLA_MISC_HIT)) {
+                if (!py.flags.sustain_con) {
+                    (void) dec_stat(A_CON);
+                    objdes(tmp, t_ptr, true);
+                    take_hit(dam, tmp);
+                    msg_print("A small dart saps your health!");
+                } else {
+                    msg_print("A small dart hits you.");
+                }
+            } else {
+                msg_print("A small dart barely misses you.");
+            }
+            break;
+        case 19: // Secret Door
+            break;
+        case 99: // Scare Mon
+            break;
+
+            // Town level traps are special, the stores.
+        case 101: // General
+            enter_store(0);
+            break;
+        case 102: // Armory
+            enter_store(1);
+            break;
+        case 103: // Weaponsmith
+            enter_store(2);
+            break;
+        case 104: // Temple
+            enter_store(3);
+            break;
+        case 105: // Alchemy
+            enter_store(4);
+            break;
+        case 106: // Magic-User
+            enter_store(5);
+            break;
+
+        default:
+            msg_print("Unknown trap value.");
+            break;
     }
 }
 
@@ -234,9 +234,9 @@ int cast_spell(const char *prompt, int item_val, int *sn, int *sc) {
 
     if (result && magic_spell[py.misc.pclass - 1][*sn].smana > py.misc.cmana) {
         if (classes[py.misc.pclass].spell == MAGE) {
-            result = (int)get_check("You summon your limited strength to cast this one! Confirm?");
+            result = (int) get_check("You summon your limited strength to cast this one! Confirm?");
         } else {
-            result = (int)get_check("The gods may think you presumptuous for this! Confirm?");
+            result = (int) get_check("The gods may think you presumptuous for this! Confirm?");
         }
     }
 
@@ -260,9 +260,9 @@ static void carry(int y, int x, bool pickup) {
         if (i == TV_GOLD) {
             py.misc.au += i_ptr->cost;
             objdes(tmp_str, i_ptr, true);
-            (void)sprintf(out_val, "You have found %d gold pieces worth of %s", i_ptr->cost, tmp_str);
+            (void) sprintf(out_val, "You have found %d gold pieces worth of %s", i_ptr->cost, tmp_str);
             prt_gold();
-            (void)delete_object(y, x);
+            (void) delete_object(y, x);
             msg_print(out_val);
         } else {
             // Too many objects?
@@ -273,7 +273,7 @@ static void carry(int y, int x, bool pickup) {
 
                     // change the period to a question mark
                     tmp_str[strlen(tmp_str) - 1] = '?';
-                    (void)sprintf(out_val, "Pick up %s", tmp_str);
+                    (void) sprintf(out_val, "Pick up %s", tmp_str);
                     pickup = get_check(out_val);
                 }
 
@@ -283,7 +283,7 @@ static void carry(int y, int x, bool pickup) {
 
                     // change the period to a question mark
                     tmp_str[strlen(tmp_str) - 1] = '?';
-                    (void)sprintf(out_val, "Exceed your weight limit to pick up %s", tmp_str);
+                    (void) sprintf(out_val, "Exceed your weight limit to pick up %s", tmp_str);
                     pickup = get_check(out_val);
                 }
 
@@ -292,13 +292,13 @@ static void carry(int y, int x, bool pickup) {
                     int locn = inven_carry(i_ptr);
 
                     objdes(tmp_str, &inventory[locn], true);
-                    (void)sprintf(out_val, "You have %s (%c)", tmp_str, locn + 'a');
+                    (void) sprintf(out_val, "You have %s (%c)", tmp_str, locn + 'a');
                     msg_print(out_val);
-                    (void)delete_object(y, x);
+                    (void) delete_object(y, x);
                 }
             } else {
                 objdes(tmp_str, i_ptr, true);
-                (void)sprintf(out_val, "You can't carry %s", tmp_str);
+                (void) sprintf(out_val, "You can't carry %s", tmp_str);
                 msg_print(out_val);
             }
         }
@@ -315,7 +315,7 @@ void delete_monster(int j) {
 
     cave[m_ptr->fy][m_ptr->fx].cptr = 0;
     if (m_ptr->ml) {
-        lite_spot((int)m_ptr->fy, (int)m_ptr->fx);
+        lite_spot((int) m_ptr->fy, (int) m_ptr->fx);
     }
     if (j != mfptr - 1) {
         m_ptr = &m_list[mfptr - 1];
@@ -347,7 +347,7 @@ void fix1_delete_monster(int j) {
     m_ptr->hp = -1;
     cave[m_ptr->fy][m_ptr->fx].cptr = 0;
     if (m_ptr->ml) {
-        lite_spot((int)m_ptr->fy, (int)m_ptr->fx);
+        lite_spot((int) m_ptr->fy, (int) m_ptr->fx);
     }
     if (mon_tot_mult > 0) {
         mon_tot_mult--;
@@ -468,7 +468,7 @@ uint32_t monster_death(int y, int x, uint32_t flags) {
 
     uint32_t dump;
     if (number > 0) {
-        dump = (uint32_t)summon_object(y, x, number, i);
+        dump = (uint32_t) summon_object(y, x, number, i);
     } else {
         dump = 0;
     }
@@ -516,7 +516,7 @@ int mon_take_hit(int monptr, int dam) {
     int m_take_hit;
 
     if (m_ptr->hp < 0) {
-        uint32_t i = monster_death((int)m_ptr->fy, (int)m_ptr->fx, c_list[m_ptr->mptr].cmove);
+        uint32_t i = monster_death((int) m_ptr->fy, (int) m_ptr->fx, c_list[m_ptr->mptr].cmove);
 
         if ((py.flags.blind < 1 && m_ptr->ml) || (c_list[m_ptr->mptr].cmove & CM_WIN)) {
             uint32_t tmp = (uint32_t) ((c_recall[m_ptr->mptr].r_cmove & CM_TREASURE) >> CM_TR_SHIFT);
@@ -534,14 +534,12 @@ int mon_take_hit(int monptr, int dam) {
         creature_type *c_ptr = &c_list[m_ptr->mptr];
         struct player_type::misc *p_ptr = &py.misc;
 
-        int32_t new_exp = ((int32_t)c_ptr->mexp * c_ptr->level) / p_ptr->lev;
-        int32_t new_exp_frac = (int32_t) (((((int32_t)c_ptr->mexp * c_ptr->level) % p_ptr->lev) *
-                                           0x10000L / p_ptr->lev) +
-                                          p_ptr->exp_frac);
+        int32_t new_exp = ((int32_t) c_ptr->mexp * c_ptr->level) / p_ptr->lev;
+        int32_t new_exp_frac = (int32_t) (((((int32_t) c_ptr->mexp * c_ptr->level) % p_ptr->lev) * 0x10000L / p_ptr->lev) + p_ptr->exp_frac);
 
         if (new_exp_frac >= 0x10000L) {
             new_exp++;
-            p_ptr->exp_frac = (uint16_t)(new_exp_frac - 0x10000L);
+            p_ptr->exp_frac = (uint16_t) (new_exp_frac - 0x10000L);
         } else {
             p_ptr->exp_frac = (uint16_t) new_exp_frac;
         }
@@ -576,15 +574,15 @@ void py_attack(int y, int x) {
     // Does the player know what he's fighting?
     vtype m_name;
     if (!m_list[crptr].ml) {
-        (void)strcpy(m_name, "it");
+        (void) strcpy(m_name, "it");
     } else {
-        (void)sprintf(m_name, "the %s", c_list[monptr].name);
+        (void) sprintf(m_name, "the %s", c_list[monptr].name);
     }
 
     int blows, tot_tohit;
     if (i_ptr->tval != TV_NOTHING) {
         // Proper weapon
-        blows = attack_blows((int)i_ptr->weight, &tot_tohit);
+        blows = attack_blows((int) i_ptr->weight, &tot_tohit);
     } else {
         // Bare hands?
         blows = 2;
@@ -612,13 +610,13 @@ void py_attack(int y, int x) {
 
     // Loop for number of blows,  trying to hit the critter.
     do {
-        if (test_hit(base_tohit, (int)p_ptr->lev, tot_tohit, (int)c_list[monptr].ac, CLA_BTH)) {
-            (void)sprintf(out_val, "You hit %s.", m_name);
+        if (test_hit(base_tohit, (int) p_ptr->lev, tot_tohit, (int) c_list[monptr].ac, CLA_BTH)) {
+            (void) sprintf(out_val, "You hit %s.", m_name);
             msg_print(out_val);
             if (i_ptr->tval != TV_NOTHING) {
                 k = pdamroll(i_ptr->damage);
                 k = tot_dam(i_ptr, k, monptr);
-                k = critical_blow((int)i_ptr->weight, tot_tohit, k, CLA_BTH);
+                k = critical_blow((int) i_ptr->weight, tot_tohit, k, CLA_BTH);
             } else {
                 // Bare hands!?
                 k = damroll(1, 1);
@@ -634,9 +632,9 @@ void py_attack(int y, int x) {
                 py.flags.confuse_monster = false;
                 msg_print("Your hands stop glowing.");
                 if ((c_list[monptr].cdefense & CD_NO_SLEEP) || (randint(MAX_MONS_LEVEL) < c_list[monptr].level)) {
-                    (void)sprintf(out_val, "%s is unaffected.", m_name);
+                    (void) sprintf(out_val, "%s is unaffected.", m_name);
                 } else {
-                    (void)sprintf(out_val, "%s appears confused.", m_name);
+                    (void) sprintf(out_val, "%s appears confused.", m_name);
                     if (m_list[crptr].confused) {
                         m_list[crptr].confused += 3;
                     } else {
@@ -651,14 +649,13 @@ void py_attack(int y, int x) {
 
             // See if we done it in.
             if (mon_take_hit(crptr, k) >= 0) {
-                (void)sprintf(out_val, "You have slain %s.", m_name);
+                (void) sprintf(out_val, "You have slain %s.", m_name);
                 msg_print(out_val);
                 prt_experience();
                 blows = 0;
             }
 
-            if ((i_ptr->tval >= TV_SLING_AMMO) &&
-                (i_ptr->tval <= TV_SPIKE)) // Use missiles up
+            if ((i_ptr->tval >= TV_SLING_AMMO) && (i_ptr->tval <= TV_SPIKE)) // Use missiles up
             {
                 i_ptr->number--;
                 inven_weight -= i_ptr->weight;
@@ -672,7 +669,7 @@ void py_attack(int y, int x) {
                 }
             }
         } else {
-            (void)sprintf(out_val, "You miss %s.", m_name);
+            (void) sprintf(out_val, "You miss %s.", m_name);
             msg_print(out_val);
         }
         blows--;
@@ -822,7 +819,7 @@ void chest_trap(int y, int x) {
     if (CH_LOSE_STR & t_ptr->flags) {
         msg_print("A small needle has pricked you!");
         if (!py.flags.sustain_str) {
-            (void)dec_stat(A_STR);
+            (void) dec_stat(A_STR);
             take_hit(damroll(1, 4), "a poison needle");
             msg_print("You feel weakened!");
         } else {
@@ -847,12 +844,12 @@ void chest_trap(int y, int x) {
         for (int i = 0; i < 3; i++) {
             int j = y;
             int k = x;
-            (void)summon_monster(&j, &k, false);
+            (void) summon_monster(&j, &k, false);
         }
     }
     if (CH_EXPLODE & t_ptr->flags) {
         msg_print("There is a sudden explosion!");
-        (void)delete_object(y, x);
+        (void) delete_object(y, x);
         take_hit(damroll(5, 8), "an exploding chest");
     }
 }
@@ -866,7 +863,7 @@ void openobject() {
 
     int y = char_row;
     int x = char_col;
-    (void)mmove(dir, &y, &x);
+    (void) mmove(dir, &y, &x);
 
     bool no_object = false;
     cave_type *c_ptr = &cave[y][x];
@@ -876,13 +873,13 @@ void openobject() {
 
         vtype m_name;
         if (m_ptr->ml) {
-            (void)sprintf(m_name, "The %s", c_list[m_ptr->mptr].name);
+            (void) sprintf(m_name, "The %s", c_list[m_ptr->mptr].name);
         } else {
-            (void)strcpy(m_name, "Something");
+            (void) strcpy(m_name, "Something");
         }
 
         vtype out_val;
-        (void)sprintf(out_val, "%s is in your way!", m_name);
+        (void) sprintf(out_val, "%s is in your way!", m_name);
         msg_print(out_val);
     } else if (c_ptr->tptr != 0) {
         // Closed door
@@ -926,7 +923,7 @@ void openobject() {
             if (CH_LOCKED & t_ptr->flags) {
                 if (py.flags.confused > 0) {
                     msg_print("You are too confused to pick the lock.");
-                } else if ((i - (int)t_ptr->level) > randint(100)) {
+                } else if ((i - (int) t_ptr->level) > randint(100)) {
                     msg_print("You have picked the lock.");
                     flag = true;
                     py.misc.exp += t_ptr->level;
@@ -959,7 +956,7 @@ void openobject() {
                 // clear the cursed chest/monster win flag, so that people
                 // can not win by opening a cursed chest
                 t_list[c_ptr->tptr].flags &= ~TR_CURSED;
-                (void)monster_death(y, x, t_list[c_ptr->tptr].flags);
+                (void) monster_death(y, x, t_list[c_ptr->tptr].flags);
                 t_list[c_ptr->tptr].flags = 0;
             }
         } else {
@@ -984,7 +981,7 @@ void closeobject() {
 
     int y = char_row;
     int x = char_col;
-    (void)mmove(dir, &y, &x);
+    (void) mmove(dir, &y, &x);
 
     cave_type *c_ptr = &cave[y][x];
     bool no_object = false;
@@ -1004,13 +1001,13 @@ void closeobject() {
 
                 vtype m_name;
                 if (m_ptr->ml) {
-                    (void)sprintf(m_name, "The %s", c_list[m_ptr->mptr].name);
+                    (void) sprintf(m_name, "The %s", c_list[m_ptr->mptr].name);
                 } else {
-                    (void)strcpy(m_name, "Something");
+                    (void) strcpy(m_name, "Something");
                 }
 
                 vtype out_val;
-                (void)sprintf(out_val, "%s is in your way!", m_name);
+                (void) sprintf(out_val, "%s is in your way!", m_name);
                 msg_print(out_val);
             }
         } else {

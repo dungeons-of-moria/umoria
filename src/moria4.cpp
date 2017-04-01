@@ -10,6 +10,7 @@
 #include "externs.h"
 
 static bool look_ray(int, int, int);
+
 static bool look_see(int, int, bool *);
 
 // Tunnels through rubble and walls -RAK-
@@ -22,7 +23,7 @@ void tunnel(int dir) {
 
     int y = char_row;
     int x = char_col;
-    (void)mmove(dir, &y, &x);
+    (void) mmove(dir, &y, &x);
 
     cave_type *c_ptr = &cave[y][x];
 
@@ -35,8 +36,7 @@ void tunnel(int dir) {
     // Don't let the player tunnel somewhere illegal, this is necessary to
     // prevent the player from getting a free attack by trying to tunnel
     // somewhere where it has no effect.
-    if (c_ptr->fval < MIN_CAVE_WALL &&
-        (c_ptr->tptr == 0 || (t_list[c_ptr->tptr].tval != TV_RUBBLE && t_list[c_ptr->tptr].tval != TV_SECRET_DOOR))) {
+    if (c_ptr->fval < MIN_CAVE_WALL && (c_ptr->tptr == 0 || (t_list[c_ptr->tptr].tval != TV_RUBBLE && t_list[c_ptr->tptr].tval != TV_SECRET_DOOR))) {
         if (c_ptr->tptr == 0) {
             msg_print("Tunnel through what?  Empty air?!?");
             free_turn_flag = true;
@@ -52,11 +52,11 @@ void tunnel(int dir) {
 
         vtype out_val, m_name;
         if (m_ptr->ml) {
-            (void)sprintf(m_name, "The %s", c_list[m_ptr->mptr].name);
+            (void) sprintf(m_name, "The %s", c_list[m_ptr->mptr].name);
         } else {
-            (void)strcpy(m_name, "Something");
+            (void) strcpy(m_name, "Something");
         }
-        (void)sprintf(out_val, "%s is in your way!", m_name);
+        (void) sprintf(out_val, "%s is in your way!", m_name);
         msg_print(out_val);
 
         // let the player attack the creature
@@ -89,64 +89,64 @@ void tunnel(int dir) {
         // Regular walls; Granite, magma intrusion, quartz vein
         // Don't forget the boundary walls, made of titanium (255)
         switch (c_ptr->fval) {
-        case GRANITE_WALL:
-            i = randint(1200) + 80;
-            if (twall(y, x, tabil, i)) {
-                msg_print("You have finished the tunnel.");
-            } else {
-                count_msg_print("You tunnel into the granite wall.");
-            }
-            break;
-        case MAGMA_WALL:
-            i = randint(600) + 10;
-            if (twall(y, x, tabil, i)) {
-                msg_print("You have finished the tunnel.");
-            } else {
-                count_msg_print("You tunnel into the magma intrusion.");
-            }
-            break;
-        case QUARTZ_WALL:
-            i = randint(400) + 10;
-            if (twall(y, x, tabil, i)) {
-                msg_print("You have finished the tunnel.");
-            } else {
-                count_msg_print("You tunnel into the quartz vein.");
-            }
-            break;
-        case BOUNDARY_WALL:
-            msg_print("This seems to be permanent rock.");
-            break;
-        default:
-            // Is there an object in the way?  (Rubble and secret doors)
-            if (c_ptr->tptr != 0) {
-                if (t_list[c_ptr->tptr].tval == TV_RUBBLE) {
-                    // Rubble.
-
-                    if (tabil > randint(180)) {
-                        (void)delete_object(y, x);
-                        msg_print("You have removed the rubble.");
-                        if (randint(10) == 1) {
-                            place_object(y, x, false);
-                            if (test_light(y, x)) {
-                                msg_print("You have found something!");
-                            }
-                        }
-                        lite_spot(y, x);
-                    } else {
-                        count_msg_print("You dig in the rubble.");
-                    }
-                } else if (t_list[c_ptr->tptr].tval == TV_SECRET_DOOR) {
-                    // Secret doors.
-
+            case GRANITE_WALL:
+                i = randint(1200) + 80;
+                if (twall(y, x, tabil, i)) {
+                    msg_print("You have finished the tunnel.");
+                } else {
                     count_msg_print("You tunnel into the granite wall.");
-                    search(char_row, char_col, py.misc.srh);
+                }
+                break;
+            case MAGMA_WALL:
+                i = randint(600) + 10;
+                if (twall(y, x, tabil, i)) {
+                    msg_print("You have finished the tunnel.");
+                } else {
+                    count_msg_print("You tunnel into the magma intrusion.");
+                }
+                break;
+            case QUARTZ_WALL:
+                i = randint(400) + 10;
+                if (twall(y, x, tabil, i)) {
+                    msg_print("You have finished the tunnel.");
+                } else {
+                    count_msg_print("You tunnel into the quartz vein.");
+                }
+                break;
+            case BOUNDARY_WALL:
+                msg_print("This seems to be permanent rock.");
+                break;
+            default:
+                // Is there an object in the way?  (Rubble and secret doors)
+                if (c_ptr->tptr != 0) {
+                    if (t_list[c_ptr->tptr].tval == TV_RUBBLE) {
+                        // Rubble.
+
+                        if (tabil > randint(180)) {
+                            (void) delete_object(y, x);
+                            msg_print("You have removed the rubble.");
+                            if (randint(10) == 1) {
+                                place_object(y, x, false);
+                                if (test_light(y, x)) {
+                                    msg_print("You have found something!");
+                                }
+                            }
+                            lite_spot(y, x);
+                        } else {
+                            count_msg_print("You dig in the rubble.");
+                        }
+                    } else if (t_list[c_ptr->tptr].tval == TV_SECRET_DOOR) {
+                        // Secret doors.
+
+                        count_msg_print("You tunnel into the granite wall.");
+                        search(char_row, char_col, py.misc.srh);
+                    } else {
+                        abort();
+                    }
                 } else {
                     abort();
                 }
-            } else {
-                abort();
-            }
-            break;
+                break;
         }
     } else {
         msg_print("You dig with your hands, making no progress.");
@@ -162,7 +162,7 @@ void disarm_trap() {
 
     int y = char_row;
     int x = char_col;
-    (void)mmove(dir, &y, &x);
+    (void) mmove(dir, &y, &x);
 
     cave_type *c_ptr = &cave[y][x];
     bool no_disarm = false;
@@ -172,11 +172,11 @@ void disarm_trap() {
 
         vtype m_name, out_val;
         if (m_ptr->ml) {
-            (void)sprintf(m_name, "The %s", c_list[m_ptr->mptr].name);
+            (void) sprintf(m_name, "The %s", c_list[m_ptr->mptr].name);
         } else {
-            (void)strcpy(m_name, "Something");
+            (void) strcpy(m_name, "Something");
         }
-        (void)sprintf(out_val, "%s is in your way!", m_name);
+        (void) sprintf(out_val, "%s is in your way!", m_name);
         msg_print(out_val);
     } else if (c_ptr->tptr != 0) {
         int tot = py.misc.disarm + 2 * todis_adj() + stat_adj(A_INT) + (class_level_adj[py.misc.pclass][CLA_DISARM] * py.misc.lev / 3);
@@ -199,7 +199,7 @@ void disarm_trap() {
             if ((tot + 100 - level) > randint(100)) {
                 msg_print("You have disarmed the trap.");
                 py.misc.exp += i_ptr->p1;
-                (void)delete_object(y, x);
+                (void) delete_object(y, x);
 
                 // make sure we move onto the trap even if confused
                 int tmp = py.flags.confused;
@@ -462,14 +462,14 @@ static bool look_ray(int y, int from, int to) {
     // that (2x-1)/x < from/GRADF <=> x > GRADF(2x-1)/from. This may
     // be called with y=0 whence x will be set to 0. Thus we need a
     // special fix.
-    int x = (int)((int32_t)GRADF * (2 * y - 1) / from + 1);
+    int x = (int) ((int32_t) GRADF * (2 * y - 1) / from + 1);
     if (x <= 0) {
         x = 1;
     }
 
     // Find last visible location along this line.
     // Maximum x such that (2x+1)/x > to/GRADF <=> x < GRADF(2x+1)/to
-    int max_x = (int)(((int32_t)GRADF * (2 * y + 1) - 1) / to);
+    int max_x = (int) (((int32_t) GRADF * (2 * y + 1) - 1) / to);
     if (max_x > MAX_SIGHT) {
         max_x = MAX_SIGHT;
     }
@@ -496,7 +496,7 @@ static bool look_ray(int y, int from, int to) {
 
     for (;;) {
         // Look down the window we've found.
-        if (look_ray(y + 1, from, ((2 * y + 1) * (int32_t)GRADF / x))) {
+        if (look_ray(y + 1, from, ((2 * y + 1) * (int32_t) GRADF / x))) {
             return true;
         }
         // Find the start of next window.
@@ -506,7 +506,7 @@ static bool look_ray(int y, int from, int to) {
             }
 
             // See if this seals off the scan. (If y is zero, then it will.)
-            from = ((2 * y - 1) * (int32_t)GRADF / x);
+            from = ((2 * y - 1) * (int32_t) GRADF / x);
             if (from <= to) {
                 return false;
             }
@@ -516,7 +516,7 @@ static bool look_ray(int y, int from, int to) {
             }
         } while (!transparent);
 
-    init_transparent:
+        init_transparent:
         // Find the end of this window of visibility.
         do {
             if (x == max_x) {
@@ -534,7 +534,7 @@ static bool look_ray(int y, int from, int to) {
 static bool look_see(int x, int y, bool *transparent) {
     bigvtype tmp_str;
     if (x < 0 || y < 0 || y > x) {
-        (void)sprintf(tmp_str, "Illegal call to look_see(%d, %d)", x, y);
+        (void) sprintf(tmp_str, "Illegal call to look_see(%d, %d)", x, y);
         msg_print(tmp_str);
     }
 
@@ -569,7 +569,7 @@ static bool look_see(int x, int y, bool *transparent) {
 
     if (gl_rock == 0 && c_ptr->cptr > 1 && m_list[c_ptr->cptr].ml) {
         j = m_list[c_ptr->cptr].mptr;
-        (void)sprintf(out_val, "%s %s %s. [(r)ecall]", dstring, is_a_vowel(c_list[j].name[0]) ? "an" : "a", c_list[j].name);
+        (void) sprintf(out_val, "%s %s %s. [(r)ecall]", dstring, is_a_vowel(c_list[j].name[0]) ? "an" : "a", c_list[j].name);
         dstring = "It is on";
         prt(out_val, 0, 0);
         move_cursor_relative(y, x);
@@ -589,7 +589,7 @@ static bool look_see(int x, int y, bool *transparent) {
             if (gl_rock == 0 && t_list[c_ptr->tptr].tval != TV_INVIS_TRAP) {
                 bigvtype obj_string;
                 objdes(obj_string, &t_list[c_ptr->tptr], true);
-                (void)sprintf(out_val, "%s %s ---pause---", dstring, obj_string);
+                (void) sprintf(out_val, "%s %s ---pause---", dstring, obj_string);
                 dstring = "It is in";
                 prt(out_val, 0, 0);
                 move_cursor_relative(y, x);
@@ -601,29 +601,29 @@ static bool look_see(int x, int y, bool *transparent) {
             const char *wall_description;
 
             switch (c_ptr->fval) {
-            case BOUNDARY_WALL:
-            case GRANITE_WALL:
-            granite:
-                // Granite is only interesting if it contains something.
-                if (out_val[0]) {
-                    wall_description = "a granite wall";
-                } else {
-                    wall_description = CNIL; // In case we jump here
-                }
-                break;
-            case MAGMA_WALL:
-                wall_description = "some dark rock";
-                break;
-            case QUARTZ_WALL:
-                wall_description = "a quartz vein";
-                break;
-            default:
-                wall_description = CNIL;
-                break;
+                case BOUNDARY_WALL:
+                case GRANITE_WALL:
+                granite:
+                    // Granite is only interesting if it contains something.
+                    if (out_val[0]) {
+                        wall_description = "a granite wall";
+                    } else {
+                        wall_description = CNIL; // In case we jump here
+                    }
+                    break;
+                case MAGMA_WALL:
+                    wall_description = "some dark rock";
+                    break;
+                case QUARTZ_WALL:
+                    wall_description = "a quartz vein";
+                    break;
+                default:
+                    wall_description = CNIL;
+                    break;
             }
 
             if (wall_description) {
-                (void)sprintf(out_val, "%s %s ---pause---", dstring, wall_description);
+                (void) sprintf(out_val, "%s %s ---pause---", dstring, wall_description);
                 prt(out_val, 0, 0);
                 move_cursor_relative(y, x);
                 query = inkey();
@@ -751,7 +751,7 @@ static void drop_throw(int y, int x, inven_type *t_ptr) {
     bool flag = false;
 
     if (randint(10) > 1) {
-        for (int k = 0; !flag && k <= 9; ) {
+        for (int k = 0; !flag && k <= 9;) {
             if (in_bounds(i, j)) {
                 cave_type *c_ptr = &cave[i][j];
 
@@ -775,7 +775,7 @@ static void drop_throw(int y, int x, inven_type *t_ptr) {
     } else {
         bigvtype out_val, tmp_str;
         objdes(tmp_str, t_ptr, false);
-        (void)sprintf(out_val, "The %s disappears.", tmp_str);
+        (void) sprintf(out_val, "The %s disappears.", tmp_str);
         msg_print(out_val);
     }
 }
@@ -826,7 +826,7 @@ void throw_object() {
 
     bool flag = false;
     while (!flag) {
-        (void)mmove(dir, &y, &x);
+        (void) mmove(dir, &y, &x);
         cur_dis++;
         lite_spot(oldy, oldx);
         if (cur_dis > tdis) {
@@ -846,7 +846,7 @@ void throw_object() {
                     tbth = (tbth / (cur_dis + 2)) - (py.misc.lev * class_level_adj[py.misc.pclass][CLA_BTHB] / 2) - (tpth * (BTH_PLUS_ADJ - 1));
                 }
 
-                if (test_hit(tbth, (int)py.misc.lev, tpth, (int)c_list[m_ptr->mptr].ac, CLA_BTHB)) {
+                if (test_hit(tbth, (int) py.misc.lev, tpth, (int) c_list[m_ptr->mptr].ac, CLA_BTHB)) {
                     int i = m_ptr->mptr;
 
                     bigvtype tmp_str;
@@ -856,25 +856,25 @@ void throw_object() {
 
                     // Does the player know what he's fighting?
                     if (!m_ptr->ml) {
-                        (void)sprintf(out_val, "You hear a cry as the %s finds a mark.", tmp_str);
+                        (void) sprintf(out_val, "You hear a cry as the %s finds a mark.", tmp_str);
                         visible = false;
                     } else {
-                        (void)sprintf(out_val, "The %s hits the %s.", tmp_str, c_list[i].name);
+                        (void) sprintf(out_val, "The %s hits the %s.", tmp_str, c_list[i].name);
                         visible = true;
                     }
                     msg_print(out_val);
                     tdam = tot_dam(&throw_obj, tdam, i);
-                    tdam = critical_blow((int)throw_obj.weight, tpth, tdam, CLA_BTHB);
+                    tdam = critical_blow((int) throw_obj.weight, tpth, tdam, CLA_BTHB);
                     if (tdam < 0) {
                         tdam = 0;
                     }
 
-                    i = mon_take_hit((int)c_ptr->cptr, tdam);
+                    i = mon_take_hit((int) c_ptr->cptr, tdam);
                     if (i >= 0) {
                         if (!visible) {
                             msg_print("You have killed something!");
                         } else {
-                            (void)sprintf(out_val, "You have killed the %s.", c_list[i].name);
+                            (void) sprintf(out_val, "You have killed the %s.", c_list[i].name);
                             msg_print(out_val);
                         }
                         prt_experience();
@@ -910,9 +910,9 @@ static void py_bash(int y, int x) {
     // Does the player know what he's fighting?
     vtype m_name;
     if (!m_ptr->ml) {
-        (void)strcpy(m_name, "it");
+        (void) strcpy(m_name, "it");
     } else {
-        (void)sprintf(m_name, "the %s", c_ptr->name);
+        (void) sprintf(m_name, "the %s", c_ptr->name);
     }
 
     int base_tohit = py.stats.use_stat[A_STR] + inventory[INVEN_ARM].weight / 2 + py.misc.wt / 10;
@@ -921,10 +921,10 @@ static void py_bash(int y, int x) {
         base_tohit = (base_tohit / 2) - (py.stats.use_stat[A_DEX] * (BTH_PLUS_ADJ - 1)) - (py.misc.lev * class_level_adj[py.misc.pclass][CLA_BTH] / 2);
     }
 
-    if (test_hit(base_tohit, (int)py.misc.lev, (int)py.stats.use_stat[A_DEX], (int)c_ptr->ac, CLA_BTH)) {
+    if (test_hit(base_tohit, (int) py.misc.lev, (int) py.stats.use_stat[A_DEX], (int) c_ptr->ac, CLA_BTH)) {
         vtype out_val;
 
-        (void)sprintf(out_val, "You hit %s.", m_name);
+        (void) sprintf(out_val, "You hit %s.", m_name);
         msg_print(out_val);
         int k = pdamroll(inventory[INVEN_ARM].damage);
         k = critical_blow((inventory[INVEN_ARM].weight / 4 + py.stats.use_stat[A_STR]), 0, k, CLA_BTH);
@@ -935,11 +935,11 @@ static void py_bash(int y, int x) {
 
         // See if we done it in.
         if (mon_take_hit(monster, k) >= 0) {
-            (void)sprintf(out_val, "You have slain %s.", m_name);
+            (void) sprintf(out_val, "You have slain %s.", m_name);
             msg_print(out_val);
             prt_experience();
         } else {
-            m_name[0] = (char) toupper((int)m_name[0]); // Capitalize
+            m_name[0] = (char) toupper((int) m_name[0]); // Capitalize
 
             // Can not stun Balrog
             int avg_max_hp = (c_ptr->cdefense & CD_MAX_HP ? c_ptr->hd[0] * c_ptr->hd[1] : (c_ptr->hd[0] * (c_ptr->hd[1] + 1)) >> 1);
@@ -949,15 +949,15 @@ static void py_bash(int y, int x) {
                     m_ptr->stunned = 24;
                 }
 
-                (void)sprintf(out_val, "%s appears stunned!", m_name);
+                (void) sprintf(out_val, "%s appears stunned!", m_name);
             } else {
-                (void)sprintf(out_val, "%s ignores your bash!", m_name);
+                (void) sprintf(out_val, "%s ignores your bash!", m_name);
             }
             msg_print(out_val);
         }
     } else {
         vtype out_val;
-        (void)sprintf(out_val, "You miss %s.", m_name);
+        (void) sprintf(out_val, "You miss %s.", m_name);
         msg_print(out_val);
     }
 
@@ -1001,7 +1001,7 @@ void bash() {
 
     int y = char_row;
     int x = char_col;
-    (void)mmove(dir, &y, &x);
+    (void) mmove(dir, &y, &x);
 
     cave_type *c_ptr = &cave[y][x];
     if (c_ptr->cptr > 1) {
