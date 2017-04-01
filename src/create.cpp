@@ -99,49 +99,51 @@ static void get_all_stats() {
     p_ptr->flags.see_infra = r_ptr->infra;
 }
 
-// Allows player to select a race -JWT-
-static void choose_race() {
-    int j = 0;
-    int k = 0;
-    int l = 2;
-    int m = 21;
-
+// Prints a list of the available races: Human, Elf, etc.,
+// shown during the character creation screens.
+static void print_races(void) {
     clear_from(20);
     put_buffer("Choose a race (? for Help):", 20, 2);
 
-    char tmp_str[80];
-    do {
-        (void)sprintf(tmp_str, "%c) %s", k + 'a', race[j].trace);
-        put_buffer(tmp_str, m, l);
-        k++;
-        l += 15;
-        if (l > 70) {
-            l = 2;
-            m++;
+    int col = 2;
+    int row = 21;
+
+    for (int i = 0; i < MAX_RACES; i++) {
+        char tmp_str[80];
+
+        (void)sprintf(tmp_str, "%c) %s", i + 'a', race[i].trace);
+        put_buffer(tmp_str, row, col);
+
+        col += 15;
+        if (col > 70) {
+            col = 2;
+            row++;
         }
-        j++;
-    } while (j < MAX_RACES);
+    }
+}
 
-    bool exit_flag = false;
+// Allows player to select a race -JWT-
+static void choose_race() {
+    print_races();
 
-    char s;
-    do {
+    int i = 0;
+
+    while (true) {
         move_cursor(20, 30);
-        s = inkey();
-        j = s - 'a';
-        if ((j < MAX_RACES) && (j >= 0)) {
-            exit_flag = true;
+        char s = inkey();
+        i = s - 'a';
+        if (i < MAX_RACES && i >= 0) {
+            break;
         } else if (s == '?') {
             helpfile(MORIA_WELCOME);
         } else {
             bell();
         }
-    } while (!exit_flag);
+    }
 
-    player_type *p_ptr = &py;
-    race_type *r_ptr = &race[j];
-    p_ptr->misc.prace = (uint8_t)j;
-    put_buffer(r_ptr->trace, 3, 15);
+    py.misc.prace = (uint8_t)i;
+
+    put_buffer(race[i].trace, 3, 15);
 }
 
 // Will print the history of a character -JWT-
