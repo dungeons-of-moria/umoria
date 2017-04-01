@@ -1,5 +1,7 @@
 # Umoria Change log
 
+- Removes `curs_set(0)` as cursor is needed in menus!
+
 ### Code Cleanup
 
 - Refactor `if/else` statements:

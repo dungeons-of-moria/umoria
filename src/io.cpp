@@ -46,7 +46,7 @@ void moriaterm() {
     noecho();              // <curses.h> do not echo typed characters
     nonl();                // <curses.h> disable translation return/newline for detection of return key
     keypad(stdscr, false); // <curses.h> disable keypad input as we handle that ourselves
-    curs_set(0);           // <curses.h> sets the appearance of the cursor based on the value of visibility
+    // curs_set(0);        // <curses.h> sets the appearance of the cursor based on the value of visibility
 
 #ifdef __APPLE__
     set_escdelay(50);      // <curses.h> default delay on macOS is 1 second, let's do something about that!
