@@ -339,11 +339,11 @@ void msg_print(const char *str_buff) {
 
 // Used to verify a choice - user gets the chance to abort choice. -CJS-
 bool get_check(const char *prompt) {
-    int y, x;
-
     prt(prompt, 0, 0);
 
+    int y, x;
     getyx(stdscr, y, x);
+
     if (x > 73) {
         (void)move(0, 73);
     } else if (y) {
@@ -352,10 +352,10 @@ bool get_check(const char *prompt) {
 
     (void)addstr(" [y/n]");
 
-    int res;
-    do {
+    char res = ' ';
+    while (res == ' ') {
         res = inkey();
-    } while (res == ' ');
+    }
 
     erase_line(0, 0);
 
@@ -381,9 +381,6 @@ int get_com(const char *prompt, char *command) {
 // Gets a string terminated by <RETURN>
 // Function returns false if <ESCAPE> is input
 bool get_string(char *in_str, int row, int column, int slen) {
-    bool aborted = false;
-    bool flag = false;
-
     (void)move(row, column);
 
     for (int i = slen; i > 0; i--) {
@@ -391,18 +388,19 @@ bool get_string(char *in_str, int row, int column, int slen) {
     }
 
     (void)move(row, column);
+
     int start_col = column;
     int end_col = column + slen - 1;
-
     if (end_col > 79) {
-        // NOTE: `slen` is never read after this point, so commenting out. -MRC-
-        // slen = 80 - column;
         end_col = 79;
     }
 
     char *p = in_str;
 
-    do {
+    bool aborted = false;
+    bool flag = false;
+
+    while (!flag && !aborted) {
         int i = inkey();
 
         switch (i) {
@@ -432,7 +430,7 @@ bool get_string(char *in_str, int row, int column, int slen) {
             }
             break;
         }
-    } while ((!flag) && (!aborted));
+    }
 
     if (aborted) {
         return false;

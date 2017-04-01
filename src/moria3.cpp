@@ -378,9 +378,7 @@ static int summon_object(int y, int x, int num, int typ) {
     int res = 0;
 
     do {
-        int i = 0;
-
-        do {
+        for (int i = 0; i <= 20; i++) {
             int j = y - 3 + randint(5);
             int k = x - 3 + randint(5);
 
@@ -408,8 +406,7 @@ static int summon_object(int y, int x, int num, int typ) {
                     i = 20;
                 }
             }
-            i++;
-        } while (i <= 20);
+        }
 
         num--;
     } while (num != 0);

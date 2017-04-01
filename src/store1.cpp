@@ -241,7 +241,7 @@ void store_carry(int store_num, int *ipos, inven_type *t_ptr) {
             *ipos = item_val;
         }
         item_val++;
-    } while ((item_val < s_ptr->store_ctr) && (!flag));
+    } while (item_val < s_ptr->store_ctr && !flag);
 
     // Becomes last item in list
     if (!flag) {
@@ -310,8 +310,7 @@ static void store_create(int store_num) {
     int cur_pos = popt();
     store_type *s_ptr = &store[store_num];
 
-    int tries = 0;
-    do {
+    for (int tries = 0; tries <= 3; tries++) {
         int i = store_choice[store_num][randint(STORE_CHOICES) - 1];
         invcopy(&t_list[cur_pos], i);
         magic_treasure(cur_pos, OBJ_TOWN_LEVEL);
@@ -331,8 +330,7 @@ static void store_create(int store_num) {
                 tries = 10;
             }
         }
-        tries++;
-    } while (tries <= 3);
+    }
 
     pusht((uint8_t)cur_pos);
 }

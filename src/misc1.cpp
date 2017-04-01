@@ -504,9 +504,9 @@ bool compact_monsters() {
     msg_print("Compacting monsters...");
 
     int cur_dis = 66;
-    bool delete_any = false;
 
-    do {
+    bool delete_any = false;
+    while (!delete_any) {
         for (int i = mfptr - 1; i >= MIN_MONIX; i--) {
             monster_type *mon_ptr = &m_list[i];
             if ((cur_dis < mon_ptr->cdis) && (randint(3) == 1)) {
@@ -533,7 +533,7 @@ bool compact_monsters() {
                 return false;
             }
         }
-    } while (!delete_any);
+    }
 
     return true;
 }
@@ -726,12 +726,10 @@ void alloc_monster(int num, int dis, int slp) {
 
 // Places creature adjacent to given location -RAK-
 bool summon_monster(int *y, int *x, int slp) {
-    int i = 0;
+    bool summon = false;
     int l = get_mons_num(dun_level + MON_SUMMON_ADJ);
 
-    bool summon = false;
-
-    do {
+    for (int i = 0; i <= 9; i++) {
         int j = *y - 2 + randint(3);
         int k = *x - 2 + randint(3);
         if (in_bounds(j, k)) {
@@ -747,8 +745,7 @@ bool summon_monster(int *y, int *x, int slp) {
                 *x = k;
             }
         }
-        i++;
-    } while (i <= 9);
+    }
 
     return summon;
 }
@@ -756,15 +753,13 @@ bool summon_monster(int *y, int *x, int slp) {
 // Places undead adjacent to given location -RAK-
 bool summon_undead(int *y, int *x) {
     int m;
-    int i = 0;
-    int l = m_level[MAX_MONS_LEVEL];
 
     bool summon = false;
 
+    int l = m_level[MAX_MONS_LEVEL];
     do {
         m = randint(l) - 1;
-        int ctr = 0;
-        do {
+        for (int ctr = 0; ctr <= 19;) {
             if (c_list[m].cdefense & CD_UNDEAD) {
                 ctr = 20;
                 l = 0;
@@ -776,10 +771,10 @@ bool summon_undead(int *y, int *x) {
                     ctr++;
                 }
             }
-        } while (ctr <= 19);
+        }
     } while (l != 0);
 
-    do {
+    for (int i = 0; i <= 9; i++) {
         int j = *y - 2 + randint(3);
         int k = *x - 2 + randint(3);
         if (in_bounds(j, k)) {
@@ -795,8 +790,7 @@ bool summon_undead(int *y, int *x) {
                 *x = k;
             }
         }
-        i++;
-    } while (i <= 9);
+    }
 
     return summon;
 }
@@ -805,17 +799,16 @@ bool summon_undead(int *y, int *x) {
 static void compact_objects() {
     msg_print("Compacting objects...");
 
-    int ctr = 0;
     int cur_dis = 66;
 
-    do {
+    int ctr = 0;
+    while (ctr <= 0) {
         for (int i = 0; i < cur_height; i++) {
             for (int j = 0; j < cur_width; j++) {
                 int chance;
 
                 cave_type *cave_ptr = &cave[i][j];
-                if ((cave_ptr->tptr != 0) &&
-                    (distance(i, j, char_row, char_col) > cur_dis)) {
+                if ((cave_ptr->tptr != 0) && (distance(i, j, char_row, char_col) > cur_dis)) {
                     switch (t_list[cave_ptr->tptr].tval) {
                     case TV_VIS_TRAP:
                         chance = 15;
@@ -846,10 +839,11 @@ static void compact_objects() {
                 }
             }
         }
+
         if (ctr == 0) {
             cur_dis -= 6;
         }
-    } while (ctr <= 0);
+    }
 
     if (cur_dis < 66) {
         prt_map();

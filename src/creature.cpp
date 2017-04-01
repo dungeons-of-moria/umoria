@@ -884,13 +884,13 @@ static void make_move(int monptr, int *mm, uint32_t *rcmove) {
     cave_type *c_ptr;
     inven_type *t_ptr;
 
-    int i = 0;
     bool do_turn = false;
     bool do_move = false;
     monster_type *m_ptr = &m_list[monptr];
     uint32_t movebits = c_list[m_ptr->mptr].cmove;
 
-    do {
+    // Up to 5 attempts at moving, give up.
+    for (int i = 0; !do_turn && i < 5; i++) {
         // Get new position
         newy = m_ptr->fy;
         newx = m_ptr->fx;
@@ -1055,10 +1055,7 @@ static void make_move(int monptr, int *mm, uint32_t *rcmove) {
                 do_turn = true;
             }
         }
-        i++;
-
-        // Up to 5 attempts at moving,  give up.
-    } while ((!do_turn) && (i < 5));
+    }
 }
 
 // Creatures can cast spells too.  (Dragon Breath) -RAK-
@@ -1307,13 +1304,11 @@ static void mon_cast_spell(int monptr, bool *took_turn) {
 // Places creature adjacent to given location -RAK-
 // Rats and Flys are fun!
 bool multiply_monster(int y, int x, int cr_index, int monptr) {
-    int j, k, result;
     cave_type *c_ptr;
 
-    int i = 0;
-    do {
-        j = y - 2 + randint(3);
-        k = x - 2 + randint(3);
+    for (int i = 0; i <= 18; i++) {
+        int j = y - 2 + randint(3);
+        int k = x - 2 + randint(3);
 
         // don't create a new creature on top of the old one, that
         // causes invincible/invisible creatures to appear.
@@ -1340,7 +1335,7 @@ bool multiply_monster(int y, int x, int cr_index, int monptr) {
                         hack_monptr = monptr;
 
                         // Place_monster() may fail if monster list full.
-                        result = place_monster(j, k, cr_index, false);
+                        int result = place_monster(j, k, cr_index, false);
                         hack_monptr = -1;
                         if (!result) {
                             return false;
@@ -1355,7 +1350,7 @@ bool multiply_monster(int y, int x, int cr_index, int monptr) {
                     hack_monptr = monptr;
 
                     // Place_monster() may fail if monster list full.
-                    result = place_monster(j, k, cr_index, false);
+                    int result = place_monster(j, k, cr_index, false);
                     hack_monptr = -1;
                     if (!result) {
                         return false;
@@ -1365,8 +1360,7 @@ bool multiply_monster(int y, int x, int cr_index, int monptr) {
                 }
             }
         }
-        i++;
-    } while (i <= 18);
+    }
 
     return false;
 }

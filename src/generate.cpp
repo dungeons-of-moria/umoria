@@ -246,7 +246,7 @@ static void place_down_stairs(int y, int x) {
 static void place_stairs(int typ, int num, int walls) {
     for (int i = 0; i < num; i++) {
         bool flag = false;
-        do {
+        while (!flag) {
             int j = 0;
             do {
                 // Note: don't let y1/x1 be zero, and don't let y2/x2
@@ -277,7 +277,7 @@ static void place_stairs(int typ, int num, int walls) {
                 j++;
             } while ((!flag) && (j <= 30));
             walls--;
-        } while (!flag);
+        }
     }
 }
 
@@ -285,17 +285,17 @@ static void place_stairs(int typ, int num, int walls) {
 static void vault_trap(int y, int x, int yd, int xd, int num) {
     for (int i = 0; i < num; i++) {
         bool flag = false;
-        int count = 0;
-        do {
+
+        for (int count = 0; !flag && count <= 5; count++) {
             int y1 = y - yd - 1 + randint(2 * yd + 1);
             int x1 = x - xd - 1 + randint(2 * xd + 1);
             cave_type *c_ptr = &cave[y1][x1];
+
             if ((c_ptr->fval != NULL_WALL) && (c_ptr->fval <= MAX_CAVE_FLOOR) && (c_ptr->tptr == 0)) {
                 place_trap(y1, x1, randint(MAX_TRAP) - 1);
                 flag = true;
             }
-            count++;
-        } while ((!flag) && (count <= 5));
+        }
     }
 }
 

@@ -334,7 +334,6 @@ static bool haggle_insults(int store_num) {
 }
 
 static bool get_haggle(const char *comment, int32_t *new_offer, int num_offer) {
-    bool flag = true;
     bool increment = false;
 
     int clen = (int)strlen(comment);
@@ -345,10 +344,11 @@ static bool get_haggle(const char *comment, int32_t *new_offer, int num_offer) {
     }
 
     char *p;
-    int32_t i = 0;
     vtype out_val, default_offer;
 
-    do {
+    int32_t i = 0;
+    bool flag = true;
+    while (flag && i == 0) {
         prt(comment, 0, 0);
         if (num_offer && last_store_inc != 0) {
             (void)sprintf(default_offer, "[%c%d] ", (last_store_inc < 0) ? '-' : '+', abs(last_store_inc));
@@ -387,7 +387,7 @@ static bool get_haggle(const char *comment, int32_t *new_offer, int num_offer) {
             i = 0;
             increment = false;
         }
-    } while (flag && (i == 0));
+    }
 
     if (flag) {
         if (increment) {
@@ -406,7 +406,7 @@ static int receive_offer(int store_num, const char *comment, int32_t *new_offer,
     int receive = 0;
 
     bool flag = false;
-    do {
+    while (!flag) {
         if (get_haggle(comment, new_offer, num_offer)) {
             if (*new_offer * factor >= last_offer * factor) {
                 flag = true;
@@ -422,14 +422,13 @@ static int receive_offer(int store_num, const char *comment, int32_t *new_offer,
             receive = 1;
             flag = true;
         }
-    } while (!flag);
+    }
 
     return receive;
 }
 
 // Haggling routine -RAK-
 static int purchase_haggle(int store_num, int32_t *price, inven_type *item) {
-    bool flag = false;
     bool didnt_haggle = false;
 
     *price = 0;
@@ -485,7 +484,8 @@ static int purchase_haggle(int store_num, int32_t *price, inven_type *item) {
 
     vtype out_val;
 
-    do {
+    bool flag = false;
+    while (!flag) {
         bool loop_flag;
         do {
             loop_flag = true;
@@ -573,7 +573,7 @@ static int purchase_haggle(int store_num, int32_t *price, inven_type *item) {
                 }
             }
         }
-    } while (!flag);
+    }
 
     // update bargaining info
     if ((purchase == 0) && (!didnt_haggle)) {
@@ -1003,7 +1003,7 @@ void enter_store(int store_num) {
     display_store(store_num, cur_top);
 
     bool exit_flag = false;
-    do {
+    while (!exit_flag) {
         move_cursor(20, 9);
 
         // clear the msg flag just like we do in dungeon.c
@@ -1063,7 +1063,7 @@ void enter_store(int store_num) {
         } else {
             exit_flag = true;
         }
-    } while (!exit_flag);
+    }
 
     // Can't save and restore the screen because inven_command does that.
     draw_cave();

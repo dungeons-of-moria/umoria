@@ -748,11 +748,10 @@ static void facts(inven_type *i_ptr, int *tbth, int *tpth, int *tdam, int *tdis)
 static void drop_throw(int y, int x, inven_type *t_ptr) {
     int i = y;
     int j = x;
-    int k = 0;
-
     bool flag = false;
+
     if (randint(10) > 1) {
-        do {
+        for (int k = 0; !flag && k <= 9; ) {
             if (in_bounds(i, j)) {
                 cave_type *c_ptr = &cave[i][j];
 
@@ -765,7 +764,7 @@ static void drop_throw(int y, int x, inven_type *t_ptr) {
                 j = x + randint(3) - 2;
                 k++;
             }
-        } while ((!flag) && (k <= 9));
+        }
     }
 
     if (flag) {
@@ -826,7 +825,7 @@ void throw_object() {
     int cur_dis = 0;
 
     bool flag = false;
-    do {
+    while (!flag) {
         (void)mmove(dir, &y, &x);
         cur_dis++;
         lite_spot(oldy, oldx);
@@ -897,7 +896,7 @@ void throw_object() {
         }
         oldy = y;
         oldx = x;
-    } while (!flag);
+    }
 }
 
 // Make a bash attack on someone. -CJS-

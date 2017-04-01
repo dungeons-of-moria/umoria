@@ -465,10 +465,10 @@ bool detect_monsters() {
 // Leave a line of light in given dir, blue light can sometimes
 // hurt creatures. -RAK-
 void light_line(int dir, int y, int x) {
-    bool flag = false;
     int dist = -1;
 
-    do {
+    bool flag = false;
+    while (!flag) {
         // put mmove at end because want to light up current spot
         dist++;
 
@@ -521,7 +521,7 @@ void light_line(int dir, int y, int x) {
             }
         }
         (void)mmove(dir, &y, &x);
-    } while (!flag);
+    }
 }
 
 // Light line in all directions -RAK-
@@ -626,8 +626,6 @@ void get_flags(int typ, uint32_t *weapon_type, int *harm_type, bool (**destroy)(
 
 // Shoot a bolt in a given direction -RAK-
 void fire_bolt(int typ, int dir, int y, int x, int dam, char *bolt_typ) {
-    bool flag = false;
-
     bool (*dummy)(inven_type *);
     int harm_type = 0;
     uint32_t weapon_type;
@@ -637,7 +635,8 @@ void fire_bolt(int typ, int dir, int y, int x, int dam, char *bolt_typ) {
     int oldx = x;
     int dist = 0;
 
-    do {
+    bool flag = false;
+    while (!flag) {
         (void)mmove(dir, &y, &x);
         dist++;
 
@@ -701,7 +700,7 @@ void fire_bolt(int typ, int dir, int y, int x, int dam, char *bolt_typ) {
         }
         oldy = y;
         oldx = x;
-    } while (!flag);
+    }
 }
 
 // Shoot a ball in a given direction.  Note that balls have an area affect. -RAK-
@@ -715,13 +714,12 @@ void fire_ball(int typ, int dir, int y, int x, int dam_hp, const char *descrip) 
     uint32_t weapon_type;
     get_flags(typ, &weapon_type, &harm_type, &destroy);
 
-    bool flag = false;
-
     int oldy = y;
     int oldx = x;
     int dist = 0;
 
-    do {
+    bool flag = false;
+    while (!flag) {
         (void)mmove(dir, &y, &x);
         dist++;
         lite_spot(oldy, oldx);
@@ -828,7 +826,7 @@ void fire_ball(int typ, int dir, int y, int x, int dam_hp, const char *descrip) 
             oldy = y;
             oldx = x;
         }
-    } while (!flag);
+    }
 }
 
 // Breath weapon works like a fire_ball, but affects the player.
@@ -990,10 +988,10 @@ bool recharge(int num) {
 // Increase or decrease a creatures hit points -RAK-
 bool hp_monster(int dir, int y, int x, int dam) {
     bool monster = false;
-    bool flag = false;
     int dist = 0;
 
-    do {
+    bool flag = false;
+    while (!flag) {
         (void)mmove(dir, &y, &x);
         dist++;
 
@@ -1023,7 +1021,7 @@ bool hp_monster(int dir, int y, int x, int dam) {
                 msg_print(out_val);
             }
         }
-    } while (!flag);
+    }
 
     return monster;
 }
@@ -1031,10 +1029,10 @@ bool hp_monster(int dir, int y, int x, int dam) {
 // Drains life; note it must be living. -RAK-
 bool drain_life(int dir, int y, int x) {
     bool drain = false;
-    bool flag = false;
     int dist = 0;
 
-    do {
+    bool flag = false;
+    while (!flag) {
         (void)mmove(dir, &y, &x);
         dist++;
 
@@ -1069,7 +1067,7 @@ bool drain_life(int dir, int y, int x) {
                 c_recall[m_ptr->mptr].r_cdefense |= CD_UNDEAD;
             }
         }
-    } while (!flag);
+    }
 
     return drain;
 }
@@ -1078,10 +1076,10 @@ bool drain_life(int dir, int y, int x) {
 // NOTE: cannot slow a winning creature (BALROG)
 bool speed_monster(int dir, int y, int x, int spd) {
     bool speed = false;
-    bool flag = false;
     int dist = 0;
 
-    do {
+    bool flag = false;
+    while (!flag) {
         (void)mmove(dir, &y, &x);
         dist++;
 
@@ -1119,7 +1117,7 @@ bool speed_monster(int dir, int y, int x, int spd) {
                 msg_print(out_val);
             }
         }
-    } while (!flag);
+    }
 
     return speed;
 }
@@ -1127,10 +1125,10 @@ bool speed_monster(int dir, int y, int x, int spd) {
 // Confuse a creature -RAK-
 bool confuse_monster(int dir, int y, int x) {
     bool confuse = false;
-    bool flag = false;
     int dist = 0;
 
-    do {
+    bool flag = false;
+    while (!flag) {
         (void)mmove(dir, &y, &x);
         dist++;
         cave_type *c_ptr = &cave[y][x];
@@ -1172,7 +1170,7 @@ bool confuse_monster(int dir, int y, int x) {
                 msg_print(out_val);
             }
         }
-    } while (!flag);
+    }
 
     return confuse;
 }
@@ -1180,10 +1178,10 @@ bool confuse_monster(int dir, int y, int x) {
 // Sleep a creature. -RAK-
 bool sleep_monster(int dir, int y, int x) {
     bool sleep = false;
-    bool flag = false;
     int dist = 0;
 
-    do {
+    bool flag = false;
+    while (!flag) {
         (void)mmove(dir, &y, &x);
         dist++;
 
@@ -1217,7 +1215,7 @@ bool sleep_monster(int dir, int y, int x) {
                 msg_print(out_val);
             }
         }
-    } while (!flag);
+    }
 
     return sleep;
 }
@@ -1225,10 +1223,10 @@ bool sleep_monster(int dir, int y, int x) {
 // Turn stone to mud, delete wall. -RAK-
 bool wall_to_mud(int dir, int y, int x) {
     bool wall = false;
-    bool flag = false;
     int dist = 0;
 
-    do {
+    bool flag = false;
+    while (!flag) {
         (void)mmove(dir, &y, &x);
         dist++;
 
@@ -1299,7 +1297,7 @@ bool wall_to_mud(int dir, int y, int x) {
                 flag = true;
             }
         }
-    } while (!flag);
+    }
 
     return wall;
 }
@@ -1347,10 +1345,10 @@ bool td_destroy2(int dir, int y, int x) {
 // NOTE: cannot polymorph a winning creature (BALROG)
 bool poly_monster(int dir, int y, int x) {
     bool poly = false;
-    bool flag = false;
     int dist = 0;
 
-    do {
+    bool flag = false;
+    while (!flag) {
         (void)mmove(dir, &y, &x);
         dist++;
 
@@ -1380,7 +1378,7 @@ bool poly_monster(int dir, int y, int x) {
                 msg_print(out_val);
             }
         }
-    } while (!flag);
+    }
 
     return poly;
 }
@@ -1389,10 +1387,10 @@ bool poly_monster(int dir, int y, int x) {
 bool build_wall(int dir, int y, int x) {
     bool build = false;
     int dist = 0;
-    bool flag = false;
-
     int i = 0;
-    do {
+
+    bool flag = false;
+    while (!flag) {
         (void)mmove(dir, &y, &x);
         dist++;
 
@@ -1450,7 +1448,7 @@ bool build_wall(int dir, int y, int x) {
             i++;
             build = true;
         }
-    } while (!flag);
+    }
 
     return build;
 }
@@ -1458,9 +1456,9 @@ bool build_wall(int dir, int y, int x) {
 // Replicate a creature -RAK-
 bool clone_monster(int dir, int y, int x) {
     int dist = 0;
-    bool flag = false;
 
-    do {
+    bool flag = false;
+    while (!flag) {
         (void)mmove(dir, &y, &x);
         dist++;
 
@@ -1474,7 +1472,7 @@ bool clone_monster(int dir, int y, int x) {
             // monptr of 0 is safe here, since can't reach here from creatures
             return multiply_monster(y, x, (int)m_list[c_ptr->cptr].mptr, 0);
         }
-    } while (!flag);
+    }
 
     return false;
 }
@@ -1548,11 +1546,11 @@ void teleport_to(int ny, int nx) {
 
 // Teleport all creatures in a given direction away -RAK-
 bool teleport_monster(int dir, int y, int x) {
-    bool flag = false;
     bool result = false;
     int dist = 0;
 
-    do {
+    bool flag = false;
+    while (!flag) {
         (void)mmove(dir, &y, &x);
         dist++;
 
@@ -1565,7 +1563,7 @@ bool teleport_monster(int dir, int y, int x) {
             teleport_away((int)c_ptr->cptr, MAX_SIGHT);
             result = true;
         }
-    } while (!flag);
+    }
 
     return result;
 }

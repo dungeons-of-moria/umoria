@@ -121,14 +121,12 @@ void alloc_object(bool (*alloc_set)(int), int typ, int num) {
     for (int k = 0; k < num; k++) {
         int i, j;
 
+        // don't put an object beneath the player, this could cause
+        // problems if player is standing under rubble, or on a trap.
         do {
             i = randint(cur_height) - 1;
             j = randint(cur_width) - 1;
-        }
-
-        // don't put an object beneath the player, this could cause
-        // problems if player is standing under rubble, or on a trap.
-        while (!(*alloc_set)(cave[i][j].fval) || cave[i][j].tptr != 0 || (i == char_row && j == char_col));
+        } while (!(*alloc_set)(cave[i][j].fval) || cave[i][j].tptr != 0 || (i == char_row && j == char_col));
 
         // NOTE: typ == 2 is not used - used to be visible traps.
         if (typ < 4) {
@@ -154,9 +152,7 @@ void alloc_object(bool (*alloc_set)(int), int typ, int num) {
 // Creates objects nearby the coordinates given -RAK-
 void random_object(int y, int x, int num) {
     do {
-        int i = 0;
-
-        do {
+        for (int i = 0; i <= 10; i++) {
             int j = y - 3 + randint(5);
             int k = x - 4 + randint(7);
 
@@ -170,8 +166,7 @@ void random_object(int y, int x, int num) {
                 }
                 i = 9;
             }
-            i++;
-        } while (i <= 10);
+        }
 
         num--;
     } while (num != 0);
@@ -1030,8 +1025,7 @@ void change_name() {
     display_char();
 
     bool flag = false;
-
-    do {
+    while (!flag) {
         prt("<f>ile character description. <c>hange character name.", 21, 2);
         char c = inkey();
         switch (c) {
@@ -1057,7 +1051,7 @@ void change_name() {
             bell();
             break;
         }
-    } while (!flag);
+    }
 }
 
 // Destroy an item in the inventory -RAK-
@@ -1914,10 +1908,10 @@ void insert_str(char *object_str, const char *mtc_str, const char *insert) {
 void insert_lnum(char *object_str, const char *mtc_str, int32_t number, int show_sign) {
     size_t mlen = strlen(mtc_str);
     char *tmp_str = object_str;
+    char *string;
 
     int flag = 1;
-    char *string;
-    do {
+    while (flag != 0) {
         string = strchr(tmp_str, mtc_str[0]);
         if (string == 0) {
             flag = 0;
@@ -1927,7 +1921,7 @@ void insert_lnum(char *object_str, const char *mtc_str, int32_t number, int show
                 tmp_str = string + 1;
             }
         }
-    } while (flag);
+    }
 
     if (string) {
         vtype str1, str2;

@@ -164,7 +164,6 @@ static void get_history() {
     char history_block[240];
     background_type *b_ptr;
     int test_roll;
-    bool flag;
 
     int hist_ptr = py.misc.prace * 3 + 1;
     int social_class = randint(4);
@@ -173,8 +172,8 @@ static void get_history() {
 
     // Get a block of history text
     do {
-        flag = false;
-        do {
+        bool flag = false;
+        while (!flag) {
             if (background[cur_ptr].chart == hist_ptr) {
                 test_roll = randint(100);
                 while (test_roll > background[cur_ptr].roll) {
@@ -191,12 +190,12 @@ static void get_history() {
             } else {
                 cur_ptr++;
             }
-        } while (!flag);
+        }
     } while (hist_ptr >= 1);
 
     // Clear the previous history strings
-    for (hist_ptr = 0; hist_ptr < 4; hist_ptr++) {
-        py.misc.history[hist_ptr][0] = '\0';
+    for (int i = 0; i < 4; i++) {
+        py.misc.history[i][0] = '\0';
     }
 
     // Process block of history text for pretty output
@@ -211,8 +210,8 @@ static void get_history() {
     int start_pos = 0;
     int line_ctr = 0;
 
-    flag = false;
-    do {
+    bool flag = false;
+    while (!flag) {
         while (history_block[start_pos] == ' ') {
             start_pos++;
         }
@@ -235,7 +234,7 @@ static void get_history() {
         py.misc.history[line_ctr][cur_len] = '\0';
         line_ctr++;
         start_pos = new_start;
-    } while (!flag);
+    }
 
     // Compute social class for player
     if (social_class > 100) {
@@ -248,14 +247,16 @@ static void get_history() {
 
 // Gets the character's sex -JWT-
 static void get_sex() {
-    char c;
-    bool exit_flag = false;
-
     clear_from(20);
     put_buffer("Choose a sex (? for Help):", 20, 2);
     put_buffer("m) Male       f) Female", 21, 2);
-    do {
+
+    char c;
+
+    bool exit_flag = false;
+    while (!exit_flag) {
         move_cursor(20, 29);
+
         // speed not important here
         c = inkey();
         if (c == 'f' || c == 'F') {
@@ -271,7 +272,7 @@ static void get_sex() {
         } else {
             bell();
         }
-    } while (!exit_flag);
+    }
 }
 
 // Computes character's age, height, and weight -JWT-
@@ -328,12 +329,11 @@ static void get_class() {
     struct player_type::misc *m_ptr;
     player_type *p_ptr;
     class_type *c_ptr;
-    char s;
 
     bool exit_flag = false;
-    do {
+    while (!exit_flag) {
         move_cursor(20, 31);
-        s = inkey();
+        char s = inkey();
         j = s - 'a';
         if ((j < k) && (j >= 0)) {
             py.misc.pclass = (uint8_t) cl[j];
@@ -382,8 +382,7 @@ static void get_class() {
                     player_hp[i] = (uint16_t) randint((int)m_ptr->hitdie);
                     player_hp[i] += player_hp[i - 1];
                 }
-            } while ((player_hp[MAX_PLAYER_LEVEL - 1] < min_value) ||
-                     (player_hp[MAX_PLAYER_LEVEL - 1] > max_value));
+            } while (player_hp[MAX_PLAYER_LEVEL - 1] < min_value || player_hp[MAX_PLAYER_LEVEL - 1] > max_value);
 
             m_ptr->bth += c_ptr->mbth;
             m_ptr->bthb += c_ptr->mbthb; // RAK
@@ -398,7 +397,7 @@ static void get_class() {
         } else {
             bell();
         }
-    } while (!exit_flag);
+    }
 }
 
 // Given a stat value, return a monetary value,
@@ -451,11 +450,10 @@ void create_character() {
     clear_from(20);
     put_buffer("Hit space to re-roll or ESC to accept characteristics: ", 20, 2);
 
-    char c;
     bool exit_flag = true;
-    do {
+    while (exit_flag) {
         move_cursor(20, 56);
-        c = inkey();
+        char c = inkey();
         if (c == ESCAPE) {
             exit_flag = false;
         } else if (c == ' ') {
@@ -468,7 +466,8 @@ void create_character() {
         } else {
             bell();
         }
-    } while (exit_flag); // done with stats generation
+    }
+    // done with stats generation
 
     get_class();
     get_money();

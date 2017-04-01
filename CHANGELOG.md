@@ -1,13 +1,18 @@
 # Umoria Change log
 
-- Removes `curs_set(0)` as cursor is needed in menus!
+## HEAD
 
-### Code Cleanup
+### Bugfixes
+
+- Removes `curs_set(0)` as a visible cursor is needed in menus!
+
+### Code Refactoring
 
 - Refactor `if/else` statements:
   * Add guard clauses / return early where possible.
   * Remove `else` when an `if` returns.
   * Make many of them easier to understand (e.g. less indentation).
+- Refactor `do/while` statements, to be just `while` statements where possible.
 
 
 ## 5.7.2 (2017-03-12)
