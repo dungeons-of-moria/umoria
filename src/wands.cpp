@@ -9,82 +9,20 @@
 #include "headers.h"
 #include "externs.h"
 
-// Wands for the aiming.
-void aim() {
-    free_turn_flag = true;
-
-    if (inven_ctr == 0) {
-        msg_print("But you are not carrying anything.");
-        return;
-    }
-
-    int j, k;
-    if (!find_range(TV_WAND, TV_NEVER, &j, &k)) {
-        msg_print("You are not carrying any wands.");
-        return;
-    }
-
-    int item_id;
-    if (!get_item(&item_id, "Aim which wand?", j, k, CNIL, CNIL)) {
-        return;
-    }
-
-    free_turn_flag = false;
-
-    int dir;
-    if (!get_dir(CNIL, &dir)) {
-        return;
-    }
-
-    if (py.flags.confused > 0) {
-        msg_print("You are confused.");
-        dir = getRandomDirection();
-    }
-
-    inven_type *item = &inventory[item_id];
-
-    int player_class_lev_adj = class_level_adj[py.misc.pclass][CLA_DEVICE] * py.misc.lev / 3;
-    int chance = py.misc.save + stat_adj(A_INT) - (int) item->level + player_class_lev_adj;
-
-    if (py.flags.confused > 0) {
-        chance = chance / 2;
-    }
-
-    if (chance < USE_DEVICE && randint(USE_DEVICE - chance + 1) == 1) {
-        chance = USE_DEVICE; // Give everyone a slight chance
-    }
-
-    if (chance <= 0) {
-        chance = 1;
-    }
-
-    if (randint(chance) < USE_DEVICE) {
-        msg_print("You failed to use the wand properly.");
-        return;
-    }
-
-    if (item->p1 < 1) {
-        msg_print("The wand has no charges left.");
-        if (!known2_p(item)) {
-            add_inscribe(item, ID_EMPTY);
-        }
-        return;
-    }
-
-    // Discharge the wand
-
+static bool discharge_wand(inven_type *wand, int dir) {
     bool identified = false;
 
-    uint32_t item_flags = item->flags;
-    (item->p1)--;
+    uint32_t flags = wand->flags;
 
-    while (item_flags != 0) {
-        int wand_type = bit_pos(&item_flags) + 1;
+    (wand->p1)--; // decrement "use" variable
+
+    while (flags != 0) {
+        int kind = bit_pos(&flags) + 1;
         int row = char_row;
         int col = char_col;
 
-        // Wands
-        switch (wand_type) {
+        // Wand types
+        switch (kind) {
             case 1:
                 msg_print("A line of blue shimmering light appears.");
                 light_line(dir, char_row, char_col);
@@ -166,16 +104,82 @@ void aim() {
                 identified = true;
                 break;
             case 24:
-                item_flags = (uint32_t) (1L << (randint(23) - 1));
+                flags = (uint32_t) (1L << (randint(23) - 1));
                 break;
             default:
                 msg_print("Internal error in wands()");
                 break;
         }
-        // End of Wands.
     }
 
-    if (identified) {
+    return identified;
+}
+
+// Wands for the aiming.
+void aim() {
+    free_turn_flag = true;
+
+    if (inven_ctr == 0) {
+        msg_print("But you are not carrying anything.");
+        return;
+    }
+
+    int j, k;
+    if (!find_range(TV_WAND, TV_NEVER, &j, &k)) {
+        msg_print("You are not carrying any wands.");
+        return;
+    }
+
+    int item_id;
+    if (!get_item(&item_id, "Aim which wand?", j, k, CNIL, CNIL)) {
+        return;
+    }
+
+    free_turn_flag = false;
+
+    int dir;
+    if (!get_dir(CNIL, &dir)) {
+        return;
+    }
+
+    if (py.flags.confused > 0) {
+        msg_print("You are confused.");
+        dir = getRandomDirection();
+    }
+
+    inven_type *item = &inventory[item_id];
+
+    int player_class_lev_adj = class_level_adj[py.misc.pclass][CLA_DEVICE] * py.misc.lev / 3;
+    int chance = py.misc.save + stat_adj(A_INT) - (int) item->level + player_class_lev_adj;
+
+    if (py.flags.confused > 0) {
+        chance = chance / 2;
+    }
+
+    if (chance < USE_DEVICE && randint(USE_DEVICE - chance + 1) == 1) {
+        chance = USE_DEVICE; // Give everyone a slight chance
+    }
+
+    if (chance <= 0) {
+        chance = 1;
+    }
+
+    if (randint(chance) < USE_DEVICE) {
+        msg_print("You failed to use the wand properly.");
+        return;
+    }
+
+    if (item->p1 < 1) {
+        msg_print("The wand has no charges left.");
+        if (!known2_p(item)) {
+            add_inscribe(item, ID_EMPTY);
+        }
+        return;
+    }
+
+    bool ident = discharge_wand(item, dir);
+
+    if (ident) {
         if (!known1_p(item)) {
             // round half-way case up
             py.misc.exp += (item->level + (py.misc.lev >> 1)) / py.misc.lev;
