@@ -805,9 +805,7 @@ void throw_object() {
 
     if (py.flags.confused > 0) {
         msg_print("You are confused.");
-        do {
-            dir = randint(9);
-        } while (dir == 5);
+        dir = getRandomDirection();
     }
 
     inven_type throw_obj;
@@ -994,9 +992,7 @@ void bash() {
 
     if (py.flags.confused > 0) {
         msg_print("You are confused.");
-        do {
-            dir = randint(9);
-        } while (dir == 5);
+        dir = getRandomDirection();
     }
 
     int y = char_row;
@@ -1059,4 +1055,14 @@ void bash() {
             msg_print("You bash it, but nothing interesting happens.");
         }
     }
+}
+
+int getRandomDirection() {
+    int dir;
+
+    do {
+        dir = randint(9);
+    } while (dir == 5);
+
+    return dir;
 }

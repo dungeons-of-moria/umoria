@@ -38,9 +38,7 @@ void aim() {
 
     if (py.flags.confused > 0) {
         msg_print("You are confused.");
-        do {
-            dir = randint(9);
-        } while (dir == 5);
+        dir = getRandomDirection();
     }
 
     inven_type *item = &inventory[item_id];

@@ -455,6 +455,7 @@ void disarm_trap();
 void look();
 void throw_object();
 void bash();
+int getRandomDirection(void);
 
 // potions.c
 void quaff();
