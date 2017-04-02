@@ -24,8 +24,8 @@ void aim() {
         return;
     }
 
-    int item_val;
-    if (!get_item(&item_val, "Aim which wand?", j, k, CNIL, CNIL)) {
+    int item_id;
+    if (!get_item(&item_id, "Aim which wand?", j, k, CNIL, CNIL)) {
         return;
     }
 
@@ -43,10 +43,10 @@ void aim() {
         } while (dir == 5);
     }
 
-    inven_type *i_ptr = &inventory[item_val];
-    struct player_type::misc *m_ptr = &py.misc;
+    inven_type *item = &inventory[item_id];
 
-    int chance = m_ptr->save + stat_adj(A_INT) - (int) i_ptr->level + (class_level_adj[m_ptr->pclass][CLA_DEVICE] * m_ptr->lev / 3);
+    int player_class_lev_adj = class_level_adj[py.misc.pclass][CLA_DEVICE] * py.misc.lev / 3;
+    int chance = py.misc.save + stat_adj(A_INT) - (int) item->level + player_class_lev_adj;
 
     if (py.flags.confused > 0) {
         chance = chance / 2;
@@ -65,110 +65,110 @@ void aim() {
         return;
     }
 
-    if (i_ptr->p1 < 1) {
+    if (item->p1 < 1) {
         msg_print("The wand has no charges left.");
-        if (!known2_p(i_ptr)) {
-            add_inscribe(i_ptr, ID_EMPTY);
+        if (!known2_p(item)) {
+            add_inscribe(item, ID_EMPTY);
         }
         return;
     }
 
     // Discharge the wand
 
-    bool ident = false;
+    bool identified = false;
 
-    uint32_t i = i_ptr->flags;
-    (i_ptr->p1)--;
+    uint32_t item_flags = item->flags;
+    (item->p1)--;
 
-    while (i != 0) {
-        j = bit_pos(&i) + 1;
-        k = char_row;
-        int l = char_col;
+    while (item_flags != 0) {
+        int wand_type = bit_pos(&item_flags) + 1;
+        int row = char_row;
+        int col = char_col;
 
         // Wands
-        switch (j) {
+        switch (wand_type) {
             case 1:
                 msg_print("A line of blue shimmering light appears.");
                 light_line(dir, char_row, char_col);
-                ident = true;
+                identified = true;
                 break;
             case 2:
-                fire_bolt(GF_LIGHTNING, dir, k, l, damroll(4, 8), spell_names[8]);
-                ident = true;
+                fire_bolt(GF_LIGHTNING, dir, row, col, damroll(4, 8), spell_names[8]);
+                identified = true;
                 break;
             case 3:
-                fire_bolt(GF_FROST, dir, k, l, damroll(6, 8), spell_names[14]);
-                ident = true;
+                fire_bolt(GF_FROST, dir, row, col, damroll(6, 8), spell_names[14]);
+                identified = true;
                 break;
             case 4:
-                fire_bolt(GF_FIRE, dir, k, l, damroll(9, 8), spell_names[22]);
-                ident = true;
+                fire_bolt(GF_FIRE, dir, row, col, damroll(9, 8), spell_names[22]);
+                identified = true;
                 break;
             case 5:
-                ident = wall_to_mud(dir, k, l);
+                identified = wall_to_mud(dir, row, col);
                 break;
             case 6:
-                ident = poly_monster(dir, k, l);
+                identified = poly_monster(dir, row, col);
                 break;
             case 7:
-                ident = hp_monster(dir, k, l, -damroll(4, 6));
+                identified = hp_monster(dir, row, col, -damroll(4, 6));
                 break;
             case 8:
-                ident = speed_monster(dir, k, l, 1);
+                identified = speed_monster(dir, row, col, 1);
                 break;
             case 9:
-                ident = speed_monster(dir, k, l, -1);
+                identified = speed_monster(dir, row, col, -1);
                 break;
             case 10:
-                ident = confuse_monster(dir, k, l);
+                identified = confuse_monster(dir, row, col);
                 break;
             case 11:
-                ident = sleep_monster(dir, k, l);
+                identified = sleep_monster(dir, row, col);
                 break;
             case 12:
-                ident = drain_life(dir, k, l);
+                identified = drain_life(dir, row, col);
                 break;
             case 13:
-                ident = td_destroy2(dir, k, l);
+                identified = td_destroy2(dir, row, col);
                 break;
             case 14:
-                fire_bolt(GF_MAGIC_MISSILE, dir, k, l, damroll(2, 6), spell_names[0]);
-                ident = true;
+                fire_bolt(GF_MAGIC_MISSILE, dir, row, col, damroll(2, 6), spell_names[0]);
+                identified = true;
                 break;
             case 15:
-                ident = build_wall(dir, k, l);
+                identified = build_wall(dir, row, col);
                 break;
             case 16:
-                ident = clone_monster(dir, k, l);
+                identified = clone_monster(dir, row, col);
                 break;
             case 17:
-                ident = teleport_monster(dir, k, l);
+                identified = teleport_monster(dir, row, col);
                 break;
             case 18:
-                ident = disarm_all(dir, k, l);
+                identified = disarm_all(dir, row, col);
                 break;
             case 19:
-                fire_ball(GF_LIGHTNING, dir, k, l, 32, "Lightning Ball");
-                ident = true;
+                fire_ball(GF_LIGHTNING, dir, row, col, 32, "Lightning Ball");
+                identified = true;
                 break;
             case 20:
-                fire_ball(GF_FROST, dir, k, l, 48, "Cold Ball");
-                ident = true;
+                fire_ball(GF_FROST, dir, row, col, 48, "Cold Ball");
+                identified = true;
                 break;
             case 21:
-                fire_ball(GF_FIRE, dir, k, l, 72, spell_names[28]);
-                ident = true;
+                fire_ball(GF_FIRE, dir, row, col, 72, spell_names[28]);
+                identified = true;
                 break;
             case 22:
-                fire_ball(GF_POISON_GAS, dir, k, l, 12, spell_names[6]);
-                ident = true;
+                fire_ball(GF_POISON_GAS, dir, row, col, 12, spell_names[6]);
+                identified = true;
                 break;
             case 23:
-                fire_ball(GF_ACID, dir, k, l, 60, "Acid Ball");
-                ident = true;
+                fire_ball(GF_ACID, dir, row, col, 60, "Acid Ball");
+                identified = true;
                 break;
             case 24:
-                i = (uint32_t) (1L << (randint(23) - 1));
+                item_flags = (uint32_t) (1L << (randint(23) - 1));
                 break;
             default:
                 msg_print("Internal error in wands()");
@@ -177,21 +177,17 @@ void aim() {
         // End of Wands.
     }
 
-    if (ident) {
-        if (!known1_p(i_ptr)) {
-            m_ptr = &py.misc;
+    if (identified) {
+        if (!known1_p(item)) {
             // round half-way case up
-            m_ptr->exp += (i_ptr->level + (m_ptr->lev >> 1)) / m_ptr->lev;
+            py.misc.exp += (item->level + (py.misc.lev >> 1)) / py.misc.lev;
             prt_experience();
 
-            identify(&item_val);
-
-            // NOTE: this is never read after this, so commenting out. -MRC-
-            // i_ptr = &inventory[item_val];
+            identify(&item_id);
         }
-    } else if (!known1_p(i_ptr)) {
-        sample(i_ptr);
+    } else if (!known1_p(item)) {
+        sample(item);
     }
 
-    desc_charges(item_val);
+    desc_charges(item_id);
 }
