@@ -377,7 +377,7 @@ static bool sv_write() {
         wr_monster(&m_list[i]);
     }
 
-    if (ferror(fileptr) || (fflush(fileptr) == EOF)) {
+    if (ferror(fileptr) || fflush(fileptr) == EOF) {
         return false;
     }
     return true;
@@ -550,7 +550,7 @@ bool get_char(bool *generate) {
         // Support save files from 5.1.0 to present.
         // As of version 5.4, accept save files even if they have higher version numbers.
         // The save file format was frozen as of version 5.2.2.
-        if ((version_maj != CURRENT_VERSION_MAJOR) || (version_min == 0 && patch_level < 14)) {
+        if (version_maj != CURRENT_VERSION_MAJOR || (version_min == 0 && patch_level < 14)) {
             prt("Sorry. This save file is from a different version of umoria.", 2, 0);
             goto error;
         }
@@ -574,7 +574,7 @@ bool get_char(bool *generate) {
         }
 
         // for save files before 5.2.2, read and ignore log_index (sic)
-        if ((version_min < 2) || (version_min == 2 && patch_level < 2)) {
+        if (version_min < 2 || (version_min == 2 && patch_level < 2)) {
             rd_short(&uint16_t_tmp);
         }
 
@@ -593,7 +593,7 @@ bool get_char(bool *generate) {
 
         // save files before 5.2.2 don't have sound_beep_flag, set it on
         // for compatibility
-        if ((version_min < 2) || (version_min == 2 && patch_level < 2)) {
+        if (version_min < 2 || (version_min == 2 && patch_level < 2)) {
             sound_beep_flag = true;
         } else if (l & 0x200) {
             sound_beep_flag = true;
@@ -602,7 +602,7 @@ bool get_char(bool *generate) {
         }
         // save files before 5.2.2 don't have display_counts, set it on
         // for compatibility
-        if ((version_min < 2) || (version_min == 2 && patch_level < 2)) {
+        if (version_min < 2 || (version_min == 2 && patch_level < 2)) {
             display_counts = true;
         } else if (l & 0x400) {
             display_counts = true;
@@ -746,7 +746,7 @@ bool get_char(bool *generate) {
             rd_short((uint16_t *) &noscore);
             rd_shorts(player_hp, MAX_PLAYER_LEVEL);
 
-            if ((version_min >= 2) || (version_min == 1 && patch_level >= 3)) {
+            if (version_min >= 2 || (version_min == 1 && patch_level >= 3)) {
                 for (int i = 0; i < MAX_STORES; i++) {
                     store_type *st_ptr = &store[i];
 
@@ -766,7 +766,7 @@ bool get_char(bool *generate) {
                 }
             }
 
-            if ((version_min >= 2) || (version_min == 1 && patch_level >= 3)) {
+            if (version_min >= 2 || (version_min == 1 && patch_level >= 3)) {
                 rd_long(&time_saved);
             }
 
@@ -774,13 +774,13 @@ bool get_char(bool *generate) {
                 rd_string(died_from);
             }
 
-            if ((version_min >= 3) || (version_min == 2 && patch_level >= 2)) {
+            if (version_min >= 3 || (version_min == 2 && patch_level >= 2)) {
                 rd_long((uint32_t *) &max_score);
             } else {
                 max_score = 0;
             }
 
-            if ((version_min >= 3) || (version_min == 2 && patch_level >= 2)) {
+            if (version_min >= 3 || (version_min == 2 && patch_level >= 2)) {
                 rd_long((uint32_t *) &birth_date);
             } else {
                 birth_date = (int32_t) time((time_t *) 0);
@@ -909,7 +909,7 @@ bool get_char(bool *generate) {
 
         *generate = false; // We have restored a cave - no need to generate.
 
-        if ((version_min == 1 && patch_level < 3) || (version_min == 0)) {
+        if ((version_min == 1 && patch_level < 3) || version_min == 0) {
             for (int i = 0; i < MAX_STORES; i++) {
                 store_type *st_ptr = &store[i];
 

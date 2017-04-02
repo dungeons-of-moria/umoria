@@ -65,16 +65,16 @@ void check_view() {
     if (c_ptr->fval == LIGHT_FLOOR) {
         // A room of light should be lit.
 
-        if ((py.flags.blind < 1) && !c_ptr->pl) {
+        if (py.flags.blind < 1 && !c_ptr->pl) {
             light_room(char_row, char_col);
         }
-    } else if (c_ptr->lr && (py.flags.blind < 1)) {
+    } else if (c_ptr->lr && py.flags.blind < 1) {
         // In doorway of light-room?
 
         for (int i = (char_row - 1); i <= (char_row + 1); i++) {
             for (int j = (char_col - 1); j <= (char_col + 1); j++) {
                 cave_type *d_ptr = &cave[i][j];
-                if ((d_ptr->fval == LIGHT_FLOOR) && !d_ptr->pl) {
+                if (d_ptr->fval == LIGHT_FLOOR && !d_ptr->pl) {
                     light_room(i, j);
                 }
             }

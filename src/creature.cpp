@@ -17,7 +17,7 @@ void update_mon(int monptr) {
     bool flag = false;
     monster_type *m_ptr = &m_list[monptr];
 
-    if ((m_ptr->cdis <= MAX_SIGHT) && !(py.flags.status & PY_BLIND) && (panel_contains((int) m_ptr->fy, (int) m_ptr->fx))) {
+    if (m_ptr->cdis <= MAX_SIGHT && !(py.flags.status & PY_BLIND) && panel_contains((int) m_ptr->fy, (int) m_ptr->fx)) {
         if (wizard) {
             // Wizard sight.
             flag = true;
@@ -32,7 +32,7 @@ void update_mon(int monptr) {
                     flag = true;
                     c_recall[m_ptr->mptr].r_cmove |= CM_INVISIBLE;
                 }
-            } else if ((py.flags.see_infra > 0) && (m_ptr->cdis <= py.flags.see_infra) && (CD_INFRA & r_ptr->cdefense)) {
+            } else if (py.flags.see_infra > 0 && m_ptr->cdis <= py.flags.see_infra && (CD_INFRA & r_ptr->cdefense)) {
                 // Infra vision.
 
                 flag = true;
@@ -287,7 +287,7 @@ static void make_attack(int monptr) {
         asides = monster_attacks[*attstr].attack_sides;
         attstr++;
         flag = false;
-        if ((py.flags.protevil > 0) && (r_ptr->cdefense & CD_EVIL) && ((py.misc.lev + 1) > r_ptr->level)) {
+        if (py.flags.protevil > 0 && (r_ptr->cdefense & CD_EVIL) && py.misc.lev + 1 > r_ptr->level) {
             if (m_ptr->ml) {
                 c_recall[m_ptr->mptr].r_cdefense |= CD_EVIL;
             }
@@ -354,12 +354,12 @@ static void make_attack(int monptr) {
                 }
                 break;
             case 12: // Steal Money
-                if ((test_hit(5, (int) r_ptr->level, 0, (int) py.misc.lev, CLA_MISC_HIT)) && (py.misc.au > 0)) {
+                if (test_hit(5, (int) r_ptr->level, 0, (int) py.misc.lev, CLA_MISC_HIT) && py.misc.au > 0) {
                     flag = true;
                 }
                 break;
             case 13: // Steal Object
-                if ((test_hit(2, (int) r_ptr->level, 0, (int) py.misc.lev, CLA_MISC_HIT)) && (inven_ctr > 0)) {
+                if (test_hit(2, (int) r_ptr->level, 0, (int) py.misc.lev, CLA_MISC_HIT) && inven_ctr > 0) {
                     flag = true;
                 }
                 break;
@@ -413,7 +413,7 @@ static void make_attack(int monptr) {
                 break;
             case 24: // Eat charges
                 // check to make sure an object exists
-                if ((test_hit(15, (int) r_ptr->level, 0, p_ptr->pac + p_ptr->ptoac, CLA_MISC_HIT)) && (inven_ctr > 0)) {
+                if (test_hit(15, (int) r_ptr->level, 0, p_ptr->pac + p_ptr->ptoac, CLA_MISC_HIT) && inven_ctr > 0) {
                     flag = true;
                 }
                 break;
@@ -525,17 +525,14 @@ static void make_attack(int monptr) {
                     break;
             }
 
-            bool notice = true;
-            bool visible = true;
-
             // always fail to notice attack if creature invisible, set notice
             // and visible here since creature may be visible when attacking
             // and then teleport afterwards (becoming effectively invisible)
+            bool notice = true;
+            bool visible = true;
             if (!m_ptr->ml) {
                 visible = false;
                 notice = false;
-            } else {
-                visible = true;
             }
 
             damage = damroll(adice, asides);
@@ -634,7 +631,7 @@ static void make_attack(int monptr) {
                     }
                     break;
                 case 12: // Steal Money
-                    if ((py.flags.paralysis < 1) && (randint(124) < py.stats.use_stat[A_DEX])) {
+                    if (py.flags.paralysis < 1 && randint(124) < py.stats.use_stat[A_DEX]) {
                         msg_print("You quickly protect your money pouch!");
                     } else {
                         gold = (p_ptr->au / 10) + randint(25);
@@ -652,7 +649,7 @@ static void make_attack(int monptr) {
                     }
                     break;
                 case 13: // Steal Object
-                    if ((py.flags.paralysis < 1) && (randint(124) < py.stats.use_stat[A_DEX])) {
+                    if (py.flags.paralysis < 1 && randint(124) < py.stats.use_stat[A_DEX]) {
                         msg_print("You grab hold of your backpack!");
                     } else {
                         i = randint(inven_ctr) - 1;
@@ -806,7 +803,7 @@ static void make_attack(int monptr) {
                     i = randint(inven_ctr) - 1;
                     j = r_ptr->level;
                     i_ptr = &inventory[i];
-                    if (((i_ptr->tval == TV_STAFF) || (i_ptr->tval == TV_WAND)) && (i_ptr->p1 > 0)) {
+                    if ((i_ptr->tval == TV_STAFF || i_ptr->tval == TV_WAND) && i_ptr->p1 > 0) {
                         m_ptr->hp += j * i_ptr->p1;
                         i_ptr->p1 = 0;
                         if (!known2_p(i_ptr)) {
@@ -831,7 +828,7 @@ static void make_attack(int monptr) {
             if (py.flags.confuse_monster && adesc != 99) {
                 msg_print("Your hands stop glowing.");
                 py.flags.confuse_monster = false;
-                if ((randint(MAX_MONS_LEVEL) < r_ptr->level) || (CD_NO_SLEEP & r_ptr->cdefense)) {
+                if (randint(MAX_MONS_LEVEL) < r_ptr->level || (CD_NO_SLEEP & r_ptr->cdefense)) {
                     (void) sprintf(tmp_str, "%sis unaffected.", cdesc);
                 } else {
                     (void) sprintf(tmp_str, "%sappears confused.", cdesc);
@@ -858,7 +855,7 @@ static void make_attack(int monptr) {
                 c_recall[m_ptr->mptr].r_deaths++;
             }
         } else {
-            if ((adesc >= 1 && adesc <= 3) || (adesc == 6)) {
+            if ((adesc >= 1 && adesc <= 3) || adesc == 6) {
                 disturb(1, 0);
                 (void) strcpy(tmp_str, cdesc);
                 msg_print(strcat(tmp_str, "misses you."));
@@ -967,9 +964,9 @@ static void make_move(int monptr, int *mm, uint32_t *rcmove) {
             }
 
             // Glyph of warding present?
-            if (do_move && (c_ptr->tptr != 0) && (t_list[c_ptr->tptr].tval == TV_VIS_TRAP) && (t_list[c_ptr->tptr].subval == 99)) {
+            if (do_move && c_ptr->tptr != 0 && t_list[c_ptr->tptr].tval == TV_VIS_TRAP && t_list[c_ptr->tptr].subval == 99) {
                 if (randint(OBJ_RUNE_PROT) < c_list[m_ptr->mptr].level) {
-                    if ((newy == char_row) && (newx == char_col)) {
+                    if (newy == char_row && newx == char_col) {
                         msg_print("The rune of protection is broken!");
                     }
                     (void) delete_object(newy, newx);
@@ -997,11 +994,11 @@ static void make_move(int monptr, int *mm, uint32_t *rcmove) {
                     make_attack(monptr);
                     do_move = false;
                     do_turn = true;
-                } else if ((c_ptr->cptr > 1) && ((newy != m_ptr->fy) || (newx != m_ptr->fx))) {
+                } else if (c_ptr->cptr > 1 && (newy != m_ptr->fy || newx != m_ptr->fx)) {
                     // Creature is attempting to move on other creature?
 
                     // Creature eats other creatures?
-                    if ((movebits & CM_EATS_OTHER) && (c_list[m_ptr->mptr].mexp >= c_list[m_list[c_ptr->cptr].mptr].mexp)) {
+                    if ((movebits & CM_EATS_OTHER) && c_list[m_ptr->mptr].mexp >= c_list[m_list[c_ptr->cptr].mptr].mexp) {
                         if (m_list[c_ptr->cptr].ml) {
                             *rcmove |= CM_EATS_OTHER;
                         }
@@ -1027,7 +1024,7 @@ static void make_move(int monptr, int *mm, uint32_t *rcmove) {
                 if (movebits & CM_PICKS_UP) {
                     c_ptr = &cave[newy][newx];
 
-                    if ((c_ptr->tptr != 0) && (t_list[c_ptr->tptr].tval <= TV_MAX_OBJECT)) {
+                    if (c_ptr->tptr != 0 && t_list[c_ptr->tptr].tval <= TV_MAX_OBJECT) {
                         *rcmove |= CM_PICKS_UP;
                         (void) delete_object(newy, newx);
                     }
@@ -1119,7 +1116,7 @@ static void mon_cast_spell(int monptr, bool *took_turn) {
         }
 
         // save some code/data space here, with a small time penalty
-        if ((thrown_spell < 14 && thrown_spell > 6) || (thrown_spell == 16)) {
+        if ((thrown_spell < 14 && thrown_spell > 6) || thrown_spell == 16) {
             (void) strcat(cdesc, "casts a spell.");
             msg_print(cdesc);
         }
@@ -1304,7 +1301,7 @@ bool multiply_monster(int y, int x, int cr_index, int monptr) {
         // causes invincible/invisible creatures to appear.
         if (in_bounds(j, k) && (j != y || k != x)) {
             c_ptr = &cave[j][k];
-            if ((c_ptr->fval <= MAX_OPEN_SPACE) && (c_ptr->tptr == 0) && (c_ptr->cptr != 1)) {
+            if (c_ptr->fval <= MAX_OPEN_SPACE && c_ptr->tptr == 0 && c_ptr->cptr != 1) {
                 // Creature there already?
                 if (c_ptr->cptr > 1) {
                     // Some critters are cannibalistic!
@@ -1366,7 +1363,7 @@ static void mon_move(int monptr, uint32_t *rcmove) {
     // rest could be negative, to be safe, only use mod with positive values.
     int rest_val = abs(py.flags.rest);
 
-    if ((r_ptr->cmove & CM_MULTIPLY) && (MAX_MON_MULT >= mon_tot_mult) && ((rest_val % MON_MULT_ADJ) == 0)) {
+    if ((r_ptr->cmove & CM_MULTIPLY) && MAX_MON_MULT >= mon_tot_mult && (rest_val % MON_MULT_ADJ) == 0) {
         k = 0;
         for (i = m_ptr->fy - 1; i <= m_ptr->fy + 1; i++) {
             for (int j = m_ptr->fx - 1; j <= m_ptr->fx + 1; j++) {
@@ -1381,7 +1378,7 @@ static void mon_move(int monptr, uint32_t *rcmove) {
         if (k == 0) {
             k++;
         }
-        if ((k < 4) && (randint(k * MON_MULT_ADJ) == 1)) {
+        if (k < 4 && randint(k * MON_MULT_ADJ) == 1) {
             if (multiply_monster((int) m_ptr->fy, (int) m_ptr->fx, (int) m_ptr->mptr, monptr)) {
                 *rcmove |= CM_MULTIPLY;
             }
@@ -1392,7 +1389,7 @@ static void mon_move(int monptr, uint32_t *rcmove) {
     bool move_test = false;
 
     // if in wall, must immediately escape to a clear area
-    if (!(r_ptr->cmove & CM_PHASE) && (cave[m_ptr->fy][m_ptr->fx].fval >= MIN_CAVE_WALL)) {
+    if (!(r_ptr->cmove & CM_PHASE) && cave[m_ptr->fy][m_ptr->fx].fval >= MIN_CAVE_WALL) {
         // If the monster is already dead, don't kill it again!
         // This can happen for monsters moving faster than the player. They
         // will get multiple moves, but should not if they die on the first
@@ -1410,7 +1407,7 @@ static void mon_move(int monptr, uint32_t *rcmove) {
         // of i will fail the comparison.
         for (i = m_ptr->fy + 1; i >= (m_ptr->fy - 1); i--) {
             for (int j = m_ptr->fx - 1; j <= m_ptr->fx + 1; j++) {
-                if ((dir != 5) && (cave[i][j].fval <= MAX_OPEN_SPACE) && (cave[i][j].cptr != 1)) {
+                if (dir != 5 && cave[i][j].fval <= MAX_OPEN_SPACE && cave[i][j].cptr != 1) {
                     mm[k++] = dir;
                 }
                 dir++;
@@ -1475,7 +1472,7 @@ static void mon_move(int monptr, uint32_t *rcmove) {
     }
 
     if (!move_test) {
-        if ((r_ptr->cmove & CM_75_RANDOM) && (randint(100) < 75)) {
+        if ((r_ptr->cmove & CM_75_RANDOM) && randint(100) < 75) {
             // 75% random movement
             mm[0] = randint(9);
             mm[1] = randint(9);
@@ -1484,7 +1481,7 @@ static void mon_move(int monptr, uint32_t *rcmove) {
             mm[4] = randint(9);
             *rcmove |= CM_75_RANDOM;
             make_move(monptr, mm, rcmove);
-        } else if ((r_ptr->cmove & CM_40_RANDOM) && (randint(100) < 40)) {
+        } else if ((r_ptr->cmove & CM_40_RANDOM) && randint(100) < 40) {
             // 40% random movement
             mm[0] = randint(9);
             mm[1] = randint(9);
@@ -1493,7 +1490,7 @@ static void mon_move(int monptr, uint32_t *rcmove) {
             mm[4] = randint(9);
             *rcmove |= CM_40_RANDOM;
             make_move(monptr, mm, rcmove);
-        } else if ((r_ptr->cmove & CM_20_RANDOM) && (randint(100) < 20)) {
+        } else if ((r_ptr->cmove & CM_20_RANDOM) && randint(100) < 20) {
             // 20% random movement
             mm[0] = randint(9);
             mm[1] = randint(9);
@@ -1525,7 +1522,7 @@ static void mon_move(int monptr, uint32_t *rcmove) {
                 // it should have moved, but didn't.
                 *rcmove |= CM_ATTACK_ONLY;
             }
-        } else if ((r_ptr->cmove & CM_ONLY_MAGIC) && (m_ptr->cdis < 2)) {
+        } else if ((r_ptr->cmove & CM_ONLY_MAGIC) && m_ptr->cdis < 2) {
             // A little hack for Quylthulgs, so that one will eventually
             // notice that they have no physical attacks.
             if (c_recall[m_ptr->mptr].r_attacks[0] < MAX_UCHAR) {
@@ -1578,7 +1575,7 @@ void creatures(int attack) {
 
                     // Monsters trapped in rock must be given a turn also,
                     // so that they will die/dig out immediately.
-                    if (m_ptr->ml || (m_ptr->cdis <= c_list[m_ptr->mptr].aaf) || ((!(c_list[m_ptr->mptr].cmove & CM_PHASE)) && cave[m_ptr->fy][m_ptr->fx].fval >= MIN_CAVE_WALL)) {
+                    if (m_ptr->ml || m_ptr->cdis <= c_list[m_ptr->mptr].aaf || ((!(c_list[m_ptr->mptr].cmove & CM_PHASE)) && cave[m_ptr->fy][m_ptr->fx].fval >= MIN_CAVE_WALL)) {
                         if (m_ptr->csleep > 0) {
                             if (py.flags.aggravate) {
                                 m_ptr->csleep = 0;

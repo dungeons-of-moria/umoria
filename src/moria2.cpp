@@ -36,7 +36,7 @@ void search(int y, int x, int chance) {
     if (p_ptr->confused > 0) {
         chance = chance / 10;
     }
-    if ((p_ptr->blind > 0) || no_light()) {
+    if (p_ptr->blind > 0 || no_light()) {
         chance = chance / 10;
     }
     if (p_ptr->image > 0) {
@@ -512,7 +512,7 @@ int minus_ac(uint32_t typ_dam) {
         (void) sprintf(out_val, "Your %s resists damage!", tmp_str);
         msg_print(out_val);
         minus = true;
-    } else if ((i_ptr->ac + i_ptr->toac) > 0) {
+    } else if (i_ptr->ac + i_ptr->toac > 0) {
         objdes(tmp_str, &inventory[j], false);
         (void) sprintf(out_val, "Your %s is damaged!", tmp_str);
         msg_print(out_val);

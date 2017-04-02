@@ -482,7 +482,7 @@ int roff_recall(int mon_num) {
     }
 
     // Do we know how aware it is?
-    if (((mp->r_wake * mp->r_wake) > cp->sleep) || mp->r_ignore == MAX_UCHAR || (cp->sleep == 0 && mp->r_kills >= 10)) {
+    if (mp->r_wake * mp->r_wake > cp->sleep || mp->r_ignore == MAX_UCHAR || (cp->sleep == 0 && mp->r_kills >= 10)) {
         roff(" It ");
         if (cp->sleep > 200) {
             roff("prefers to ignore");
@@ -522,7 +522,7 @@ int roff_recall(int mon_num) {
             } else {
                 roff(" often");
             }
-        } else if ((j == 2) && ((cp->cmove & CM_TREASURE) == (CM_60_RANDOM | CM_90_RANDOM))) {
+        } else if (j == 2 && (cp->cmove & CM_TREASURE) == (CM_60_RANDOM | CM_90_RANDOM)) {
             roff(" often");
         }
 

@@ -48,7 +48,7 @@ bool sleep_monsters1(int y, int x) {
             vtype m_name;
             monster_name(m_name, m_ptr, r_ptr);
 
-            if ((randint(MAX_MONS_LEVEL) < r_ptr->level) || (CD_NO_SLEEP & r_ptr->cdefense)) {
+            if (randint(MAX_MONS_LEVEL) < r_ptr->level || (CD_NO_SLEEP & r_ptr->cdefense)) {
                 if (m_ptr->ml && (r_ptr->cdefense & CD_NO_SLEEP)) {
                     c_recall[m_ptr->mptr].r_cdefense |= CD_NO_SLEEP;
                 }
@@ -78,7 +78,7 @@ bool detect_treasure() {
         for (int j = panel_col_min; j <= panel_col_max; j++) {
             cave_type *c_ptr = &cave[i][j];
 
-            if ((c_ptr->tptr != 0) && (t_list[c_ptr->tptr].tval == TV_GOLD) && !test_light(i, j)) {
+            if (c_ptr->tptr != 0 && t_list[c_ptr->tptr].tval == TV_GOLD && !test_light(i, j)) {
                 c_ptr->fm = true;
                 lite_spot(i, j);
                 detect = true;
@@ -97,7 +97,7 @@ bool detect_object() {
         for (int j = panel_col_min; j <= panel_col_max; j++) {
             cave_type *c_ptr = &cave[i][j];
 
-            if ((c_ptr->tptr != 0) && (t_list[c_ptr->tptr].tval < TV_MAX_OBJECT) && !test_light(i, j)) {
+            if (c_ptr->tptr != 0 && t_list[c_ptr->tptr].tval < TV_MAX_OBJECT && !test_light(i, j)) {
                 c_ptr->fm = true;
                 lite_spot(i, j);
                 detect = true;
@@ -152,7 +152,7 @@ bool detect_sdoor() {
                 c_ptr->fm = true;
                 change_trap(i, j);
                 detect = true;
-            } else if (((t_list[c_ptr->tptr].tval == TV_UP_STAIR) || (t_list[c_ptr->tptr].tval == TV_DOWN_STAIR)) && !c_ptr->fm) {
+            } else if ((t_list[c_ptr->tptr].tval == TV_UP_STAIR || t_list[c_ptr->tptr].tval == TV_DOWN_STAIR) && !c_ptr->fm) {
                 // Staircases
 
                 c_ptr->fm = true;
@@ -201,7 +201,7 @@ bool light_area(int y, int x) {
 
     bool light = true;
 
-    if (cave[y][x].lr && (dun_level > 0)) {
+    if (cave[y][x].lr && dun_level > 0) {
         light_room(y, x);
     }
 
@@ -221,7 +221,7 @@ bool light_area(int y, int x) {
 bool unlight_area(int y, int x) {
     bool unlight = false;
 
-    if (cave[y][x].lr && (dun_level > 0)) {
+    if (cave[y][x].lr && dun_level > 0) {
         int tmp1 = (SCREEN_HEIGHT / 2);
         int tmp2 = (SCREEN_WIDTH / 2);
         int start_row = (y / tmp1) * tmp1 + 1;
@@ -246,7 +246,7 @@ bool unlight_area(int y, int x) {
         for (int i = y - 1; i <= y + 1; i++) {
             for (int j = x - 1; j <= x + 1; j++) {
                 cave_type *c_ptr = &cave[i][j];
-                if ((c_ptr->fval == CORR_FLOOR) && c_ptr->pl) {
+                if (c_ptr->fval == CORR_FLOOR && c_ptr->pl) {
                     // pl could have been set by star-lite wand, etc
                     c_ptr->pl = false;
                     unlight = true;
@@ -271,14 +271,14 @@ void map_area() {
 
     for (int m = i; m <= j; m++) {
         for (int n = k; n <= l; n++) {
-            if (in_bounds(m, n) && (cave[m][n].fval <= MAX_CAVE_FLOOR)) {
+            if (in_bounds(m, n) && cave[m][n].fval <= MAX_CAVE_FLOOR) {
                 for (int i7 = m - 1; i7 <= m + 1; i7++) {
                     for (int i8 = n - 1; i8 <= n + 1; i8++) {
                         cave_type *c_ptr = &cave[i7][i8];
 
                         if (c_ptr->fval >= MIN_CAVE_WALL) {
                             c_ptr->pl = true;
-                        } else if ((c_ptr->tptr != 0) && (t_list[c_ptr->tptr].tval >= TV_MIN_VISIBLE) && (t_list[c_ptr->tptr].tval <= TV_MAX_VISIBLE)) {
+                        } else if (c_ptr->tptr != 0 && t_list[c_ptr->tptr].tval >= TV_MIN_VISIBLE && t_list[c_ptr->tptr].tval <= TV_MAX_VISIBLE) {
                             c_ptr->fm = true;
                         }
                     }
@@ -326,7 +326,7 @@ bool aggravate_monster(int dis_affect) {
     for (int i = mfptr - 1; i >= MIN_MONIX; i--) {
         m_ptr = &m_list[i];
         m_ptr->csleep = 0;
-        if ((m_ptr->cdis <= dis_affect) && (m_ptr->cspeed < 2)) {
+        if (m_ptr->cdis <= dis_affect && m_ptr->cspeed < 2) {
             m_ptr->cspeed++;
             aggravate = true;
         }
@@ -422,7 +422,7 @@ bool td_destroy() {
                 if (delete_object(i, j)) {
                     destroy = true;
                 }
-            } else if ((t_list[c_ptr->tptr].tval == TV_CHEST) && (t_list[c_ptr->tptr].flags != 0)) {
+            } else if (t_list[c_ptr->tptr].tval == TV_CHEST && t_list[c_ptr->tptr].flags != 0) {
                 // destroy traps on chest and unlock
                 t_list[c_ptr->tptr].flags &= ~(CH_TRAPPED | CH_LOCKED);
                 t_list[c_ptr->tptr].name2 = SN_UNLOCKED;
@@ -443,7 +443,7 @@ bool detect_monsters() {
     for (int i = mfptr - 1; i >= MIN_MONIX; i--) {
         monster_type *m_ptr = &m_list[i];
 
-        if (panel_contains((int) m_ptr->fy, (int) m_ptr->fx) && ((CM_INVISIBLE & c_list[m_ptr->mptr].cmove) == 0)) {
+        if (panel_contains((int) m_ptr->fy, (int) m_ptr->fx) && (CM_INVISIBLE & c_list[m_ptr->mptr].cmove) == 0) {
             m_ptr->ml = true;
             // works correctly even if hallucinating
             print((char) c_list[m_ptr->mptr].cchar, (int) m_ptr->fy, (int) m_ptr->fx);
@@ -474,7 +474,7 @@ void light_line(int dir, int y, int x) {
 
         cave_type *c_ptr = &cave[y][x];
 
-        if ((dist > OBJ_BOLT_RANGE) || c_ptr->fval >= MIN_CLOSED_SPACE) {
+        if (dist > OBJ_BOLT_RANGE || c_ptr->fval >= MIN_CLOSED_SPACE) {
             flag = true;
         } else {
             if (!c_ptr->pl && !c_ptr->tl) {
@@ -555,7 +555,7 @@ bool disarm_all(int dir, int y, int x) {
         if (c_ptr->tptr != 0) {
             inven_type *t_ptr = &t_list[c_ptr->tptr];
 
-            if ((t_ptr->tval == TV_INVIS_TRAP) || (t_ptr->tval == TV_VIS_TRAP)) {
+            if (t_ptr->tval == TV_INVIS_TRAP || t_ptr->tval == TV_VIS_TRAP) {
                 if (delete_object(y, x)) {
                     disarm = true;
                 }
@@ -566,7 +566,7 @@ bool disarm_all(int dir, int y, int x) {
                 c_ptr->fm = true;
                 change_trap(y, x);
                 disarm = true;
-            } else if ((t_ptr->tval == TV_CHEST) && (t_ptr->flags != 0)) {
+            } else if (t_ptr->tval == TV_CHEST && t_ptr->flags != 0) {
                 msg_print("Click!");
                 t_ptr->flags &= ~(CH_TRAPPED | CH_LOCKED);
                 disarm = true;
@@ -642,7 +642,7 @@ void fire_bolt(int typ, int dir, int y, int x, int dam, char *bolt_typ) {
         cave_type *c_ptr = &cave[y][x];
 
         lite_spot(oldy, oldx);
-        if ((dist > OBJ_BOLT_RANGE) || c_ptr->fval >= MIN_CLOSED_SPACE) {
+        if (dist > OBJ_BOLT_RANGE || c_ptr->fval >= MIN_CLOSED_SPACE) {
             flag = true;
         } else {
             if (c_ptr->cptr > 1) {
@@ -690,7 +690,7 @@ void fire_bolt(int typ, int dir, int y, int x, int dam, char *bolt_typ) {
                     (void) sprintf(out_val, "%s screams in agony.", m_name);
                     msg_print(out_val);
                 }
-            } else if (panel_contains(y, x) && (py.flags.blind < 1)) {
+            } else if (panel_contains(y, x) && py.flags.blind < 1) {
                 print('*', y, x);
 
                 // show the bolt
@@ -727,7 +727,7 @@ void fire_ball(int typ, int dir, int y, int x, int dam_hp, const char *descrip) 
         } else {
             cave_type *c_ptr = &cave[y][x];
 
-            if ((c_ptr->fval >= MIN_CLOSED_SPACE) || (c_ptr->cptr > 1)) {
+            if (c_ptr->fval >= MIN_CLOSED_SPACE || c_ptr->cptr > 1) {
                 flag = true;
                 if (c_ptr->fval >= MIN_CLOSED_SPACE) {
                     y = oldy;
@@ -737,10 +737,10 @@ void fire_ball(int typ, int dir, int y, int x, int dam_hp, const char *descrip) 
                 // The explosion.
                 for (int i = y - max_dis; i <= y + max_dis; i++) {
                     for (int j = x - max_dis; j <= x + max_dis; j++) {
-                        if (in_bounds(i, j) && (distance(y, x, i, j) <= max_dis) && los(y, x, i, j)) {
+                        if (in_bounds(i, j) && distance(y, x, i, j) <= max_dis && los(y, x, i, j)) {
                             c_ptr = &cave[i][j];
 
-                            if ((c_ptr->tptr != 0) && (*destroy)(&t_list[c_ptr->tptr])) {
+                            if (c_ptr->tptr != 0 && (*destroy)(&t_list[c_ptr->tptr])) {
                                 (void) delete_object(i, j);
                             }
 
@@ -776,7 +776,7 @@ void fire_ball(int typ, int dir, int y, int x, int dam_hp, const char *descrip) 
                                         tkill++;
                                     }
                                     c_ptr->pl = tmp;
-                                } else if (panel_contains(i, j) && (py.flags.blind < 1)) {
+                                } else if (panel_contains(i, j) && py.flags.blind < 1) {
                                     print('*', i, j);
                                 }
                             }
@@ -789,7 +789,7 @@ void fire_ball(int typ, int dir, int y, int x, int dam_hp, const char *descrip) 
 
                 for (int i = (y - 2); i <= (y + 2); i++) {
                     for (int j = (x - 2); j <= (x + 2); j++) {
-                        if (in_bounds(i, j) && panel_contains(i, j) && (distance(y, x, i, j) <= max_dis)) {
+                        if (in_bounds(i, j) && panel_contains(i, j) && distance(y, x, i, j) <= max_dis) {
                             lite_spot(i, j);
                         }
                     }
@@ -816,7 +816,7 @@ void fire_ball(int typ, int dir, int y, int x, int dam_hp, const char *descrip) 
                     prt_experience();
                 }
                 // End ball hitting.
-            } else if (panel_contains(y, x) && (py.flags.blind < 1)) {
+            } else if (panel_contains(y, x) && py.flags.blind < 1) {
                 print('*', y, x);
 
                 // show bolt
@@ -842,10 +842,10 @@ void breath(int typ, int y, int x, int dam_hp, char *ddesc, int monptr) {
 
     for (int i = y - 2; i <= y + 2; i++) {
         for (int j = x - 2; j <= x + 2; j++) {
-            if (in_bounds(i, j) && (distance(y, x, i, j) <= max_dis) && los(y, x, i, j)) {
+            if (in_bounds(i, j) && distance(y, x, i, j) <= max_dis && los(y, x, i, j)) {
                 cave_type *c_ptr = &cave[i][j];
 
-                if ((c_ptr->tptr != 0) && (*destroy)(&t_list[c_ptr->tptr])) {
+                if (c_ptr->tptr != 0 && (*destroy)(&t_list[c_ptr->tptr])) {
                     (void) delete_object(i, j);
                 }
 
@@ -934,7 +934,7 @@ void breath(int typ, int y, int x, int dam_hp, char *ddesc, int monptr) {
 
     for (int i = (y - 2); i <= (y + 2); i++) {
         for (int j = (x - 2); j <= (x + 2); j++) {
-            if (in_bounds(i, j) && panel_contains(i, j) && (distance(y, x, i, j) <= max_dis)) {
+            if (in_bounds(i, j) && panel_contains(i, j) && distance(y, x, i, j) <= max_dis) {
                 lite_spot(i, j);
             }
         }
@@ -996,7 +996,7 @@ bool hp_monster(int dir, int y, int x, int dam) {
 
         cave_type *c_ptr = &cave[y][x];
 
-        if ((dist > OBJ_BOLT_RANGE) || c_ptr->fval >= MIN_CLOSED_SPACE) {
+        if (dist > OBJ_BOLT_RANGE || c_ptr->fval >= MIN_CLOSED_SPACE) {
             flag = true;
         } else if (c_ptr->cptr > 1) {
             flag = true;
@@ -1037,7 +1037,7 @@ bool drain_life(int dir, int y, int x) {
 
         cave_type *c_ptr = &cave[y][x];
 
-        if ((dist > OBJ_BOLT_RANGE) || c_ptr->fval >= MIN_CLOSED_SPACE) {
+        if (dist > OBJ_BOLT_RANGE || c_ptr->fval >= MIN_CLOSED_SPACE) {
             flag = true;
         } else if (c_ptr->cptr > 1) {
             flag = true;
@@ -1084,7 +1084,7 @@ bool speed_monster(int dir, int y, int x, int spd) {
 
         cave_type *c_ptr = &cave[y][x];
 
-        if ((dist > OBJ_BOLT_RANGE) || c_ptr->fval >= MIN_CLOSED_SPACE) {
+        if (dist > OBJ_BOLT_RANGE || c_ptr->fval >= MIN_CLOSED_SPACE) {
             flag = true;
         } else if (c_ptr->cptr > 1) {
             flag = true;
@@ -1132,7 +1132,7 @@ bool confuse_monster(int dir, int y, int x) {
         dist++;
         cave_type *c_ptr = &cave[y][x];
 
-        if ((dist > OBJ_BOLT_RANGE) || c_ptr->fval >= MIN_CLOSED_SPACE) {
+        if (dist > OBJ_BOLT_RANGE || c_ptr->fval >= MIN_CLOSED_SPACE) {
             flag = true;
         } else if (c_ptr->cptr > 1) {
             monster_type *m_ptr = &m_list[c_ptr->cptr];
@@ -1141,7 +1141,7 @@ bool confuse_monster(int dir, int y, int x) {
             vtype m_name;
             monster_name(m_name, m_ptr, r_ptr);
             flag = true;
-            if ((randint(MAX_MONS_LEVEL) < r_ptr->level) || (CD_NO_SLEEP & r_ptr->cdefense)) {
+            if (randint(MAX_MONS_LEVEL) < r_ptr->level || (CD_NO_SLEEP & r_ptr->cdefense)) {
                 if (m_ptr->ml && (r_ptr->cdefense & CD_NO_SLEEP)) {
                     c_recall[m_ptr->mptr].r_cdefense |= CD_NO_SLEEP;
                 }
@@ -1186,7 +1186,7 @@ bool sleep_monster(int dir, int y, int x) {
 
         cave_type *c_ptr = &cave[y][x];
 
-        if ((dist > OBJ_BOLT_RANGE) || c_ptr->fval >= MIN_CLOSED_SPACE) {
+        if (dist > OBJ_BOLT_RANGE || c_ptr->fval >= MIN_CLOSED_SPACE) {
             flag = true;
         } else if (c_ptr->cptr > 1) {
             flag = true;
@@ -1197,7 +1197,7 @@ bool sleep_monster(int dir, int y, int x) {
             vtype m_name;
             monster_name(m_name, m_ptr, r_ptr);
 
-            if ((randint(MAX_MONS_LEVEL) < r_ptr->level) || (CD_NO_SLEEP & r_ptr->cdefense)) {
+            if (randint(MAX_MONS_LEVEL) < r_ptr->level || (CD_NO_SLEEP & r_ptr->cdefense)) {
                 if (m_ptr->ml && (r_ptr->cdefense & CD_NO_SLEEP)) {
                     c_recall[m_ptr->mptr].r_cdefense |= CD_NO_SLEEP;
                 }
@@ -1236,7 +1236,7 @@ bool wall_to_mud(int dir, int y, int x) {
             flag = true;
         }
 
-        if ((c_ptr->fval >= MIN_CAVE_WALL) && (c_ptr->fval != BOUNDARY_WALL)) {
+        if (c_ptr->fval >= MIN_CAVE_WALL && c_ptr->fval != BOUNDARY_WALL) {
             flag = true;
             (void) twall(y, x, 1, 0);
 
@@ -1244,7 +1244,7 @@ bool wall_to_mud(int dir, int y, int x) {
                 msg_print("The wall turns into mud.");
                 wall = true;
             }
-        } else if ((c_ptr->tptr != 0) && (c_ptr->fval >= MIN_CLOSED_SPACE)) {
+        } else if (c_ptr->tptr != 0 && c_ptr->fval >= MIN_CLOSED_SPACE) {
             flag = true;
             if (panel_contains(y, x) && test_light(y, x)) {
                 bigvtype out_val, tmp_str;
@@ -1327,7 +1327,7 @@ bool td_destroy2(int dir, int y, int x) {
                     msg_print("There is a bright flash of light!");
                     destroy2 = true;
                 }
-            } else if ((t_ptr->tval == TV_CHEST) && (t_ptr->flags != 0)) {
+            } else if (t_ptr->tval == TV_CHEST && t_ptr->flags != 0) {
                 msg_print("Click!");
                 t_ptr->flags &= ~(CH_TRAPPED | CH_LOCKED);
                 destroy2 = true;
@@ -1353,7 +1353,7 @@ bool poly_monster(int dir, int y, int x) {
 
         cave_type *c_ptr = &cave[y][x];
 
-        if ((dist > OBJ_BOLT_RANGE) || c_ptr->fval >= MIN_CLOSED_SPACE) {
+        if (dist > OBJ_BOLT_RANGE || c_ptr->fval >= MIN_CLOSED_SPACE) {
             flag = true;
         } else if (c_ptr->cptr > 1) {
             monster_type *m_ptr = &m_list[c_ptr->cptr];
@@ -1395,7 +1395,7 @@ bool build_wall(int dir, int y, int x) {
 
         cave_type *c_ptr = &cave[y][x];
 
-        if ((dist > OBJ_BOLT_RANGE) || c_ptr->fval >= MIN_CLOSED_SPACE) {
+        if (dist > OBJ_BOLT_RANGE || c_ptr->fval >= MIN_CLOSED_SPACE) {
             flag = true;
         } else {
             if (c_ptr->tptr != 0) {
@@ -1463,7 +1463,7 @@ bool clone_monster(int dir, int y, int x) {
 
         cave_type *c_ptr = &cave[y][x];
 
-        if ((dist > OBJ_BOLT_RANGE) || c_ptr->fval >= MIN_CLOSED_SPACE) {
+        if (dist > OBJ_BOLT_RANGE || c_ptr->fval >= MIN_CLOSED_SPACE) {
             flag = true;
         } else if (c_ptr->cptr > 1) {
             m_list[c_ptr->cptr].csleep = 0;
@@ -1555,7 +1555,7 @@ bool teleport_monster(int dir, int y, int x) {
 
         cave_type *c_ptr = &cave[y][x];
 
-        if ((dist > OBJ_BOLT_RANGE) || c_ptr->fval >= MIN_CLOSED_SPACE) {
+        if (dist > OBJ_BOLT_RANGE || c_ptr->fval >= MIN_CLOSED_SPACE) {
             flag = true;
         } else if (c_ptr->cptr > 1) {
             m_list[c_ptr->cptr].csleep = 0; // wake it up
@@ -1576,7 +1576,7 @@ bool mass_genocide() {
         monster_type *m_ptr = &m_list[i];
         creature_type *r_ptr = &c_list[m_ptr->mptr];
 
-        if ((m_ptr->cdis <= MAX_SIGHT) && ((r_ptr->cmove & CM_WIN) == 0)) {
+        if (m_ptr->cdis <= MAX_SIGHT && (r_ptr->cmove & CM_WIN) == 0) {
             delete_monster(i);
             result = true;
         }
@@ -1629,7 +1629,7 @@ bool speed_monsters(int spd) {
         vtype out_val, m_name;
         monster_name(m_name, m_ptr, r_ptr);
 
-        if ((m_ptr->cdis > MAX_SIGHT) || !los(char_row, char_col, (int) m_ptr->fy, (int) m_ptr->fx)) {
+        if (m_ptr->cdis > MAX_SIGHT || !los(char_row, char_col, (int) m_ptr->fy, (int) m_ptr->fx)) {
             continue; // do nothing
         } else if (spd > 0) {
             m_ptr->cspeed += spd;
@@ -1670,9 +1670,9 @@ bool sleep_monsters2() {
         vtype out_val, m_name;
         monster_name(m_name, m_ptr, r_ptr);
 
-        if ((m_ptr->cdis > MAX_SIGHT) || !los(char_row, char_col, (int) m_ptr->fy, (int) m_ptr->fx)) {
+        if (m_ptr->cdis > MAX_SIGHT || !los(char_row, char_col, (int) m_ptr->fy, (int) m_ptr->fx)) {
             continue; // do nothing
-        } else if ((randint(MAX_MONS_LEVEL) < r_ptr->level) || (CD_NO_SLEEP & r_ptr->cdefense)) {
+        } else if (randint(MAX_MONS_LEVEL) < r_ptr->level || (CD_NO_SLEEP & r_ptr->cdefense)) {
             if (m_ptr->ml) {
                 if (r_ptr->cdefense & CD_NO_SLEEP) {
                     c_recall[m_ptr->mptr].r_cdefense |= CD_NO_SLEEP;
@@ -1831,7 +1831,7 @@ bool remove_fear() {
 void earthquake() {
     for (int i = char_row - 8; i <= char_row + 8; i++) {
         for (int j = char_col - 8; j <= char_col + 8; j++) {
-            if (((i != char_row) || (j != char_col)) && in_bounds(i, j) && (randint(8) == 1)) {
+            if ((i != char_row || j != char_col) && in_bounds(i, j) && randint(8) == 1) {
                 cave_type *c_ptr = &cave[i][j];
 
                 if (c_ptr->tptr != 0) {
@@ -1870,7 +1870,7 @@ void earthquake() {
                     }
                 }
 
-                if ((c_ptr->fval >= MIN_CAVE_WALL) && (c_ptr->fval != BOUNDARY_WALL)) {
+                if (c_ptr->fval >= MIN_CAVE_WALL && c_ptr->fval != BOUNDARY_WALL) {
                     c_ptr->fval = CORR_FLOOR;
                     c_ptr->pl = false;
                     c_ptr->fm = false;
@@ -1927,7 +1927,7 @@ bool dispel_creature(int cflag, int damage) {
     for (int i = mfptr - 1; i >= MIN_MONIX; i--) {
         monster_type *m_ptr = &m_list[i];
 
-        if ((m_ptr->cdis <= MAX_SIGHT) && (cflag & c_list[m_ptr->mptr].cdefense) && los(char_row, char_col, (int) m_ptr->fy, (int) m_ptr->fx)) {
+        if (m_ptr->cdis <= MAX_SIGHT && (cflag & c_list[m_ptr->mptr].cdefense) && los(char_row, char_col, (int) m_ptr->fy, (int) m_ptr->fx)) {
             creature_type *r_ptr = &c_list[m_ptr->mptr];
 
             c_recall[m_ptr->mptr].r_cdefense |= cflag;
@@ -1963,11 +1963,11 @@ bool turn_undead() {
         monster_type *m_ptr = &m_list[i];
         creature_type *r_ptr = &c_list[m_ptr->mptr];
 
-        if ((m_ptr->cdis <= MAX_SIGHT) && (CD_UNDEAD & r_ptr->cdefense) && (los(char_row, char_col, (int) m_ptr->fy, (int) m_ptr->fx))) {
+        if (m_ptr->cdis <= MAX_SIGHT && (CD_UNDEAD & r_ptr->cdefense) && los(char_row, char_col, (int) m_ptr->fy, (int) m_ptr->fx)) {
             vtype out_val, m_name;
             monster_name(m_name, m_ptr, r_ptr);
 
-            if (((py.misc.lev + 1) > r_ptr->level) || (randint(5) == 1)) {
+            if (py.misc.lev + 1 > r_ptr->level || randint(5) == 1) {
                 if (m_ptr->ml) {
                     (void) sprintf(out_val, "%s runs frantically!", m_name);
                     msg_print(out_val);
@@ -2168,7 +2168,7 @@ void destroy_area(int y, int x) {
     if (dun_level > 0) {
         for (int i = (y - 15); i <= (y + 15); i++) {
             for (int j = (x - 15); j <= (x + 15); j++) {
-                if (in_bounds(i, j) && (cave[i][j].fval != BOUNDARY_WALL)) {
+                if (in_bounds(i, j) && cave[i][j].fval != BOUNDARY_WALL) {
                     int k = distance(i, j, y, x);
 
                     // clear player's spot, but don't put wall there

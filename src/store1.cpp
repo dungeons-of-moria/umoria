@@ -20,12 +20,12 @@ int32_t item_value(inven_type *i_ptr) {
     // don't purchase known cursed items
     if (i_ptr->ident & ID_DAMD) {
         value = 0;
-    } else if (((i_ptr->tval >= TV_BOW) && (i_ptr->tval <= TV_SWORD)) || ((i_ptr->tval >= TV_BOOTS) && (i_ptr->tval <= TV_SOFT_ARMOR))) {
+    } else if ((i_ptr->tval >= TV_BOW && i_ptr->tval <= TV_SWORD) || (i_ptr->tval >= TV_BOOTS && i_ptr->tval <= TV_SOFT_ARMOR)) {
         // Weapons and armor
 
         if (!known2_p(i_ptr)) {
             value = object_list[i_ptr->index].cost;
-        } else if ((i_ptr->tval >= TV_BOW) && (i_ptr->tval <= TV_SWORD)) {
+        } else if (i_ptr->tval >= TV_BOW && i_ptr->tval <= TV_SWORD) {
             if (i_ptr->tohit < 0) {
                 value = 0;
             } else if (i_ptr->todam < 0) {
@@ -42,7 +42,7 @@ int32_t item_value(inven_type *i_ptr) {
                 value = i_ptr->cost + i_ptr->toac * 100;
             }
         }
-    } else if ((i_ptr->tval >= TV_SLING_AMMO) && (i_ptr->tval <= TV_SPIKE)) {
+    } else if (i_ptr->tval >= TV_SLING_AMMO && i_ptr->tval <= TV_SPIKE) {
         // Ammo
 
         if (!known2_p(i_ptr)) {
@@ -60,17 +60,17 @@ int32_t item_value(inven_type *i_ptr) {
                 value = i_ptr->cost + (i_ptr->tohit + i_ptr->todam + i_ptr->toac) * 5;
             }
         }
-    } else if ((i_ptr->tval == TV_SCROLL1) || (i_ptr->tval == TV_SCROLL2) || (i_ptr->tval == TV_POTION1) || (i_ptr->tval == TV_POTION2)) {
+    } else if (i_ptr->tval == TV_SCROLL1 || i_ptr->tval == TV_SCROLL2 || i_ptr->tval == TV_POTION1 || i_ptr->tval == TV_POTION2) {
         // Potions, Scrolls, and Food
 
         if (!known1_p(i_ptr)) {
             value = 20;
         }
     } else if (i_ptr->tval == TV_FOOD) {
-        if ((i_ptr->subval < (ITEM_SINGLE_STACK_MIN + MAX_MUSH)) && !known1_p(i_ptr)) {
+        if (i_ptr->subval < (ITEM_SINGLE_STACK_MIN + MAX_MUSH) && !known1_p(i_ptr)) {
             value = 1;
         }
-    } else if ((i_ptr->tval == TV_AMULET) || (i_ptr->tval == TV_RING)) {
+    } else if (i_ptr->tval == TV_AMULET || i_ptr->tval == TV_RING) {
         // Rings and amulets
 
         // player does not know what type of ring/amulet this is
@@ -82,7 +82,7 @@ int32_t item_value(inven_type *i_ptr) {
             // player can use this to 'identify' cursed objects
             value = object_list[i_ptr->index].cost;
         }
-    } else if ((i_ptr->tval == TV_STAFF) || (i_ptr->tval == TV_WAND)) {
+    } else if (i_ptr->tval == TV_STAFF || i_ptr->tval == TV_WAND) {
         // Wands and staffs
 
         if (!known1_p(i_ptr)) {
@@ -216,7 +216,8 @@ void store_carry(int store_num, int *ipos, inven_type *t_ptr) {
 
         if (typ == i_ptr->tval) {
             if (subt == i_ptr->subval && // Adds to other item
-                subt >= ITEM_SINGLE_STACK_MIN && (subt < ITEM_GROUP_MIN || i_ptr->p1 == t_ptr->p1)) {
+                subt >= ITEM_SINGLE_STACK_MIN &&
+                (subt < ITEM_GROUP_MIN || i_ptr->p1 == t_ptr->p1)) {
                 *ipos = item_val;
                 i_ptr->number += item_num;
 
@@ -259,7 +260,7 @@ void store_destroy(int store_num, int item_val, bool one_of) {
     // for single stackable objects, only destroy one half on average,
     // this will help ensure that general store and alchemist have
     // reasonable selection of objects
-    if ((i_ptr->subval >= ITEM_SINGLE_STACK_MIN) && (i_ptr->subval <= ITEM_SINGLE_STACK_MAX)) {
+    if (i_ptr->subval >= ITEM_SINGLE_STACK_MIN && i_ptr->subval <= ITEM_SINGLE_STACK_MAX) {
         if (one_of) {
             number = 1;
         } else {
@@ -315,8 +316,8 @@ static void store_create(int store_num) {
         inven_type *t_ptr = &t_list[cur_pos];
 
         if (store_check_num(t_ptr, store_num)) {
-            if ((t_ptr->cost > 0) && // Item must be good
-                (t_ptr->cost < owners[s_ptr->owner].max_cost)) {
+            if (t_ptr->cost > 0 && // Item must be good
+                t_ptr->cost < owners[s_ptr->owner].max_cost) {
                 // equivalent to calling ident_spell(),
                 // except will not change the object_ident array.
                 store_bought(t_ptr);

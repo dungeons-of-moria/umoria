@@ -91,7 +91,7 @@ void dungeon() {
         turn++; // Increment turn counter
 
         // turn over the store contents every, say, 1000 turns
-        if ((dun_level != 0) && ((turn % 1000) == 0)) {
+        if (dun_level != 0 && (turn % 1000) == 0) {
             store_maint();
         }
 
@@ -112,7 +112,7 @@ void dungeon() {
 
                     // unlight creatures
                     creatures(false);
-                } else if ((i_ptr->p1 < 40) && (randint(5) == 1) && (py.flags.blind < 1)) {
+                } else if (i_ptr->p1 < 40 && randint(5) == 1 && py.flags.blind < 1) {
                     disturb(0, 0);
                     msg_print("Your light is growing faint.");
                 }
@@ -213,7 +213,7 @@ void dungeon() {
                     disturb(0, 0);
                     prt_hunger();
                 }
-                if ((f_ptr->food < PLAYER_FOOD_FAINT) && (randint(8) == 1)) {
+                if (f_ptr->food < PLAYER_FOOD_FAINT && randint(8) == 1) {
                     f_ptr->paralysis += randint(5);
                     msg_print("You faint from the lack of food.");
                     disturb(1, 0);
@@ -244,7 +244,7 @@ void dungeon() {
         if ((py.flags.status & PY_SEARCH) || f_ptr->rest != 0) {
             regen_amount = regen_amount * 2;
         }
-        if ((py.flags.poisoned < 1) && (p_ptr->chp < p_ptr->mhp)) {
+        if (py.flags.poisoned < 1 && p_ptr->chp < p_ptr->mhp) {
             regenhp(regen_amount);
         }
         if (p_ptr->cmana < p_ptr->mana) {
@@ -295,13 +295,13 @@ void dungeon() {
         // Afraid
         if (f_ptr->afraid > 0) {
             if ((PY_FEAR & f_ptr->status) == 0) {
-                if ((f_ptr->shero + f_ptr->hero) > 0) {
+                if (f_ptr->shero + f_ptr->hero > 0) {
                     f_ptr->afraid = 0;
                 } else {
                     f_ptr->status |= PY_FEAR;
                     prt_afraid();
                 }
-            } else if ((f_ptr->shero + f_ptr->hero) > 0) {
+            } else if (f_ptr->shero + f_ptr->hero > 0) {
                 f_ptr->afraid = 1;
             }
             f_ptr->afraid--;
@@ -414,7 +414,7 @@ void dungeon() {
         }
 
         // Check for interrupts to find or rest.
-        if ((command_count > 0 || find_flag || f_ptr->rest != 0) && (check_input(find_flag ? 0 : 10000))) {
+        if ((command_count > 0 || find_flag || f_ptr->rest != 0) && check_input(find_flag ? 0 : 10000)) {
             disturb(0, 0);
         }
 
@@ -583,7 +583,7 @@ void dungeon() {
             prt_speed();
         }
 
-        if ((py.flags.status & PY_PARALYSED) && (py.flags.paralysis < 1)) {
+        if ((py.flags.status & PY_PARALYSED) && py.flags.paralysis < 1) {
             prt_state();
             py.flags.status &= ~PY_PARALYSED;
         } else if (py.flags.paralysis > 0) {
@@ -622,7 +622,7 @@ void dungeon() {
         // Allow for a slim chance of detect enchantment -CJS-
         // for 1st level char, check once every 2160 turns
         // for 40th level char, check once every 416 turns
-        if (((turn & 0xF) == 0) && (f_ptr->confused == 0) && (randint((10 + 750 / (5 + py.misc.lev))) == 1)) {
+        if ((turn & 0xF) == 0 && f_ptr->confused == 0 && randint(10 + 750 / (5 + py.misc.lev)) == 1) {
             for (i = 0; i < INVEN_ARRAY_SIZE; i++) {
                 if (i == inven_ctr) {
                     i = 22;
@@ -631,7 +631,7 @@ void dungeon() {
 
                 // if in inventory, succeed 1 out of 50 times,
                 // if in equipment list, success 1 out of 10 times
-                if ((i_ptr->tval != TV_NOTHING) && enchanted(i_ptr) && (randint(i < 22 ? 50 : 10) == 1)) {
+                if (i_ptr->tval != TV_NOTHING && enchanted(i_ptr) && randint(i < 22 ? 50 : 10) == 1) {
                     extern char *describe_use(int);
 
                     vtype tmp_str;
@@ -653,7 +653,7 @@ void dungeon() {
         }
 
         // Accept a command?
-        if ((py.flags.paralysis < 1) && (py.flags.rest == 0) && (!death)) {
+        if (py.flags.paralysis < 1 && py.flags.rest == 0 && !death) {
             char command = 0; // Last command
 
             // Accept a command and execute it
@@ -1289,7 +1289,7 @@ static void do_command(char com_val) {
             free_turn_flag = true;
             break;
         case 'W': // (W)here are we on the map  (L)ocate on map
-            if ((py.flags.blind > 0) || no_light()) {
+            if (py.flags.blind > 0 || no_light()) {
                 msg_print("You can't see your map.");
             } else {
                 int cy, cx, p_y, p_x;
@@ -1731,7 +1731,7 @@ static void regenmana(int percent) {
 // Is an item an enchanted weapon or armor and we don't know? -CJS-
 // only returns true if it is a good enchantment
 static bool enchanted(inven_type *t_ptr) {
-    if (t_ptr->tval < TV_MIN_ENCHANT || t_ptr->tval > TV_MAX_ENCHANT || t_ptr->flags & TR_CURSED) {
+    if (t_ptr->tval < TV_MIN_ENCHANT || t_ptr->tval > TV_MAX_ENCHANT || (t_ptr->flags & TR_CURSED)) {
         return false;
     } else if (known2_p(t_ptr)) {
         return false;

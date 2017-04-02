@@ -85,7 +85,7 @@ void read_scroll() {
                     objdes(tmp_str, i_ptr, false);
                     (void) sprintf(out_val, "Your %s glows faintly!", tmp_str);
                     msg_print(out_val);
-                    if ((i_ptr->tval >= TV_HAFTED) && (i_ptr->tval <= TV_DIGGING)) {
+                    if (i_ptr->tval >= TV_HAFTED && i_ptr->tval <= TV_DIGGING) {
                         j = i_ptr->damage[0] * i_ptr->damage[1];
                     } else {
                         // Bows' and arrows' enchantments should not be
@@ -289,7 +289,7 @@ void read_scroll() {
                             flag = true;
                         }
                     }
-                    if ((i_ptr->tval >= TV_HAFTED) && (i_ptr->tval <= TV_DIGGING)) {
+                    if (i_ptr->tval >= TV_HAFTED && i_ptr->tval <= TV_DIGGING) {
                         j = i_ptr->damage[0] * i_ptr->damage[1];
                     } else {
                         // Bows' and arrows' enchantments should not be limited
@@ -391,17 +391,17 @@ void read_scroll() {
                 }
                 break;
             case 36:
-                if ((inventory[INVEN_BODY].tval != TV_NOTHING) && (randint(4) == 1)) {
+                if (inventory[INVEN_BODY].tval != TV_NOTHING && randint(4) == 1) {
                     k = INVEN_BODY;
-                } else if ((inventory[INVEN_ARM].tval != TV_NOTHING) && (randint(3) == 1)) {
+                } else if (inventory[INVEN_ARM].tval != TV_NOTHING && randint(3) == 1) {
                     k = INVEN_ARM;
-                } else if ((inventory[INVEN_OUTER].tval != TV_NOTHING) && (randint(3) == 1)) {
+                } else if (inventory[INVEN_OUTER].tval != TV_NOTHING && randint(3) == 1) {
                     k = INVEN_OUTER;
-                } else if ((inventory[INVEN_HEAD].tval != TV_NOTHING) && (randint(3) == 1)) {
+                } else if (inventory[INVEN_HEAD].tval != TV_NOTHING && randint(3) == 1) {
                     k = INVEN_HEAD;
-                } else if ((inventory[INVEN_HANDS].tval != TV_NOTHING) && (randint(3) == 1)) {
+                } else if (inventory[INVEN_HANDS].tval != TV_NOTHING && randint(3) == 1) {
                     k = INVEN_HANDS;
-                } else if ((inventory[INVEN_FEET].tval != TV_NOTHING) && (randint(3) == 1)) {
+                } else if (inventory[INVEN_FEET].tval != TV_NOTHING && randint(3) == 1) {
                     k = INVEN_FEET;
                 } else if (inventory[INVEN_BODY].tval != TV_NOTHING) {
                     k = INVEN_BODY;

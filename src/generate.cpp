@@ -65,7 +65,7 @@ static void fill_cave(int fval) {
     for (int i = cur_height - 2; i > 0; i--) {
         cave_type *c_ptr = &cave[i][1];
         for (int j = cur_width - 2; j > 0; j--) {
-            if ((c_ptr->fval == NULL_WALL) || (c_ptr->fval == TMP1_WALL) || (c_ptr->fval == TMP2_WALL)) {
+            if (c_ptr->fval == NULL_WALL || c_ptr->fval == TMP1_WALL || c_ptr->fval == TMP2_WALL) {
                 c_ptr->fval = (uint8_t) fval;
             }
             c_ptr++;
@@ -258,7 +258,7 @@ static void place_stairs(int typ, int num, int walls) {
                 do {
                     do {
                         cave_type *cave_ptr = &cave[y1][x1];
-                        if (cave_ptr->fval <= MAX_OPEN_SPACE && (cave_ptr->tptr == 0) && (next_to_walls(y1, x1) >= walls)) {
+                        if (cave_ptr->fval <= MAX_OPEN_SPACE && cave_ptr->tptr == 0 && next_to_walls(y1, x1) >= walls) {
                             flag = true;
                             if (typ == 1) {
                                 place_up_stairs(y1, x1);
@@ -288,7 +288,7 @@ static void vault_trap(int y, int x, int yd, int xd, int num) {
             int x1 = x - xd - 1 + randint(2 * xd + 1);
             cave_type *c_ptr = &cave[y1][x1];
 
-            if ((c_ptr->fval != NULL_WALL) && (c_ptr->fval <= MAX_CAVE_FLOOR) && (c_ptr->tptr == 0)) {
+            if (c_ptr->fval != NULL_WALL && c_ptr->fval <= MAX_CAVE_FLOOR && c_ptr->tptr == 0) {
                 place_trap(y1, x1, randint(MAX_TRAP) - 1);
                 flag = true;
             }
@@ -987,10 +987,10 @@ static void build_tunnel(int row1, int col1, int row2, int col2) {
 
 static bool next_to(int y, int x) {
     if (next_to_corr(y, x) > 2) {
-        if ((cave[y - 1][x].fval >= MIN_CAVE_WALL) && (cave[y + 1][x].fval >= MIN_CAVE_WALL)) {
+        if (cave[y - 1][x].fval >= MIN_CAVE_WALL && cave[y + 1][x].fval >= MIN_CAVE_WALL) {
             return true;
         }
-        return ((cave[y][x - 1].fval >= MIN_CAVE_WALL) && (cave[y][x + 1].fval >= MIN_CAVE_WALL));
+        return (cave[y][x - 1].fval >= MIN_CAVE_WALL && cave[y][x + 1].fval >= MIN_CAVE_WALL);
     }
 
     return false;
@@ -998,7 +998,7 @@ static bool next_to(int y, int x) {
 
 // Places door at y, x position if at least 2 walls found
 static void try_door(int y, int x) {
-    if ((cave[y][x].fval == CORR_FLOOR) && (randint(100) > DUN_TUN_JCT) && next_to(y, x)) {
+    if (cave[y][x].fval == CORR_FLOOR && randint(100) > DUN_TUN_JCT && next_to(y, x)) {
         place_door(y, x);
     }
 }
@@ -1012,7 +1012,7 @@ static void new_spot(int16_t *y, int16_t *x) {
         i = randint(cur_height - 2);
         j = randint(cur_width - 2);
         c_ptr = &cave[i][j];
-    } while (c_ptr->fval >= MIN_CLOSED_SPACE || (c_ptr->cptr != 0) || (c_ptr->tptr != 0));
+    } while (c_ptr->fval >= MIN_CLOSED_SPACE || c_ptr->cptr != 0 || c_ptr->tptr != 0);
 
     *y = (int16_t) i;
     *x = (int16_t) j;

@@ -281,7 +281,7 @@ void msg_print(const char *str_buff) {
             new_len = 0;
         }
 
-        if (!str_buff || (new_len + old_len + 2 >= 73)) {
+        if (!str_buff || new_len + old_len + 2 >= 73) {
             // ensure that the complete -more- message is visible.
             if (old_len > 73) {
                 old_len = 73;

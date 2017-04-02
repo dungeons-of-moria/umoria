@@ -238,7 +238,7 @@ void identify(int *item) {
 
         for (int i = 0; i < inven_ctr; i++) {
             t_ptr = &inventory[i];
-            if (t_ptr->tval == x1 && t_ptr->subval == x2 && i != *item && ((int) t_ptr->number + (int) i_ptr->number < 256)) {
+            if (t_ptr->tval == x1 && t_ptr->subval == x2 && i != *item && ((int) t_ptr->number + (int) i_ptr->number) < 256) {
                 // make *item the smaller number
                 if (*item > i) {
                     j = *item;
@@ -498,7 +498,7 @@ void objdes(char *out_val, inven_type *i_ptr, int pref) {
             (void) strcat(tmp_val, tmp_str);
         }
         // Crowns have a zero base AC, so make a special test for them.
-        if (i_ptr->ac != 0 || (i_ptr->tval == TV_HELM)) {
+        if (i_ptr->ac != 0 || i_ptr->tval == TV_HELM) {
             (void) sprintf(tmp_str, " [%d", i_ptr->ac);
             (void) strcat(tmp_val, tmp_str);
             if (known2_p(i_ptr)) {
@@ -507,7 +507,7 @@ void objdes(char *out_val, inven_type *i_ptr, int pref) {
                 (void) strcat(tmp_val, tmp_str);
             }
             (void) strcat(tmp_val, "]");
-        } else if ((i_ptr->toac != 0) && known2_p(i_ptr)) {
+        } else if (i_ptr->toac != 0 && known2_p(i_ptr)) {
             // originally used %+d, but several machines don't support it
             (void) sprintf(tmp_str, " [%c%d]", (i_ptr->toac < 0) ? '-' : '+', abs(i_ptr->toac));
             (void) strcat(tmp_val, tmp_str);

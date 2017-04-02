@@ -52,7 +52,7 @@ void aim() {
         chance = chance / 2;
     }
 
-    if ((chance < USE_DEVICE) && (randint(USE_DEVICE - chance + 1) == 1)) {
+    if (chance < USE_DEVICE && randint(USE_DEVICE - chance + 1) == 1) {
         chance = USE_DEVICE; // Give everyone a slight chance
     }
 

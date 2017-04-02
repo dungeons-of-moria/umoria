@@ -193,7 +193,7 @@ static void display_inventory(int store_num, int start) {
         inven_type *i_ptr = &s_ptr->store_inven[start].sitem;
 
         int32_t x = i_ptr->number;
-        if ((i_ptr->subval >= ITEM_SINGLE_STACK_MIN) && (i_ptr->subval <= ITEM_SINGLE_STACK_MAX)) {
+        if (i_ptr->subval >= ITEM_SINGLE_STACK_MIN && i_ptr->subval <= ITEM_SINGLE_STACK_MAX) {
             i_ptr->number = 1;
         }
 
@@ -575,7 +575,7 @@ static int purchase_haggle(int store_num, int32_t *price, inven_type *item) {
     }
 
     // update bargaining info
-    if ((purchase == 0) && (!didnt_haggle)) {
+    if (purchase == 0 && !didnt_haggle) {
         updatebargain(store_num, *price, final_ask);
     }
 
@@ -778,7 +778,7 @@ static int sell_haggle(int store_num, int32_t *price, inven_type *item) {
     }
 
     // update bargaining info
-    if ((sell == 0) && (!didnt_haggle)) {
+    if (sell == 0 && !didnt_haggle) {
         updatebargain(store_num, *price, final_ask);
     }
 

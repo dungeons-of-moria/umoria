@@ -1040,7 +1040,7 @@ void bash() {
                 msg_print("and its contents!");
                 t_ptr->index = OBJ_RUINED_CHEST;
                 t_ptr->flags = 0;
-            } else if ((CH_LOCKED & t_ptr->flags) && (randint(10) == 1)) {
+            } else if ((CH_LOCKED & t_ptr->flags) && randint(10) == 1) {
                 msg_print("The lock breaks open!");
                 t_ptr->flags &= ~CH_LOCKED;
             } else {

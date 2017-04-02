@@ -13,7 +13,8 @@
   * Remove `else` when an `if` returns.
   * Makes many easier to understand (e.g. less indentation).
 - Refactor `do/while` statements, to be just `while` statements where possible.
-- Other refactorings.
+- Removes unneeded braces for `if` statement expressions.
+- Various other refactorings.
 
 
 ## 5.7.2 (2017-03-12)

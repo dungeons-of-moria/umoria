@@ -155,7 +155,7 @@ void random_object(int y, int x, int num) {
 
             cave_type *cave_ptr = &cave[j][k];
 
-            if (in_bounds(j, k) && (cave_ptr->fval <= MAX_CAVE_FLOOR) && (cave_ptr->tptr == 0)) {
+            if (in_bounds(j, k) && cave_ptr->fval <= MAX_CAVE_FLOOR && cave_ptr->tptr == 0) {
                 if (randint(100) < 75) {
                     place_object(j, k, false);
                 } else {
@@ -1055,7 +1055,7 @@ void change_name() {
 void inven_destroy(int item_val) {
     inven_type *i_ptr = &inventory[item_val];
 
-    if ((i_ptr->number > 1) && (i_ptr->subval <= ITEM_SINGLE_STACK_MAX)) {
+    if (i_ptr->number > 1 && i_ptr->subval <= ITEM_SINGLE_STACK_MAX) {
         i_ptr->number--;
         inven_weight -= i_ptr->weight;
     } else {
@@ -1073,7 +1073,7 @@ void inven_destroy(int item_val) {
 // However, the second always gets a number of one except for ammo etc.
 void take_one_item(inven_type *s_ptr, inven_type *i_ptr) {
     *s_ptr = *i_ptr;
-    if ((s_ptr->number > 1) && (s_ptr->subval >= ITEM_SINGLE_STACK_MIN) && (s_ptr->subval <= ITEM_SINGLE_STACK_MAX)) {
+    if (s_ptr->number > 1 && s_ptr->subval >= ITEM_SINGLE_STACK_MIN && s_ptr->subval <= ITEM_SINGLE_STACK_MAX) {
         s_ptr->number = 1;
     }
 }
@@ -1119,7 +1119,7 @@ int inven_damage(bool (*typ)(inven_type *), int perc) {
     int j = 0;
 
     for (int i = 0; i < inven_ctr; i++) {
-        if ((*typ)(&inventory[i]) && (randint(100) < perc)) {
+        if ((*typ)(&inventory[i]) && randint(100) < perc) {
             inven_destroy(i);
             j++;
         }
@@ -1149,11 +1149,11 @@ bool inven_check_num(inven_type *t_ptr) {
         for (int i = 0; i < inven_ctr; i++) {
             if (inventory[i].tval == t_ptr->tval && inventory[i].subval == t_ptr->subval &&
                 // make sure the number field doesn't overflow
-                ((int) inventory[i].number + (int) t_ptr->number < 256) &&
+                ((int) inventory[i].number + (int) t_ptr->number) < 256 &&
                 // they always stack (subval < 192), or else they have same p1
-                ((t_ptr->subval < ITEM_GROUP_MIN) || (inventory[i].p1 == t_ptr->p1))
+                (t_ptr->subval < ITEM_GROUP_MIN || inventory[i].p1 == t_ptr->p1) &&
                 // only stack if both or neither are identified
-                && (known1_p(&inventory[i]) == known1_p(t_ptr))) {
+                known1_p(&inventory[i]) == known1_p(t_ptr)) {
                 return true;
             }
         }
@@ -1180,7 +1180,7 @@ bool inven_check_weight(inven_type *i_ptr) {
 void check_strength() {
     inven_type *i_ptr = &inventory[INVEN_WIELD];
 
-    if (i_ptr->tval != TV_NOTHING && (py.stats.use_stat[A_STR] * 15 < i_ptr->weight)) {
+    if (i_ptr->tval != TV_NOTHING && py.stats.use_stat[A_STR] * 15 < i_ptr->weight) {
         if (!weapon_heavy) {
             msg_print("You have trouble wielding such a heavy weapon.");
             weapon_heavy = true;
@@ -1228,13 +1228,15 @@ int inven_carry(inven_type *i_ptr) {
     for (locn = 0;; locn++) {
         inven_type *t_ptr = &inventory[locn];
 
-        if ((typ == t_ptr->tval) && (subt == t_ptr->subval) && (subt >= ITEM_SINGLE_STACK_MIN) && ((int) t_ptr->number + (int) i_ptr->number < 256) &&
-            ((subt < ITEM_GROUP_MIN) || (t_ptr->p1 == i_ptr->p1)) &&
+        if (typ == t_ptr->tval &&
+            subt == t_ptr->subval && subt >= ITEM_SINGLE_STACK_MIN &&
+            ((int) t_ptr->number + (int) i_ptr->number) < 256 &&
+            (subt < ITEM_GROUP_MIN || t_ptr->p1 == i_ptr->p1) &&
             // only stack if both or neither are identified
-            (known1p == known1_p(t_ptr))) {
+            known1p == known1_p(t_ptr)) {
             t_ptr->number += i_ptr->number;
             break;
-        } else if ((typ == t_ptr->tval && subt < t_ptr->subval && always_known1p) || (typ > t_ptr->tval)) {
+        } else if ((typ == t_ptr->tval && subt < t_ptr->subval && always_known1p) || typ > t_ptr->tval) {
             // For items which are always known1p, i.e. never have a 'color',
             // insert them into the inventory in sorted order.
 
@@ -1846,7 +1848,7 @@ void calc_hitpoints() {
     }
 
     // mhp can equal zero while character is being created
-    if ((hitpoints != p_ptr->mhp) && (p_ptr->mhp != 0)) {
+    if (hitpoints != p_ptr->mhp && p_ptr->mhp != 0) {
         // change current hit points proportionately to change of mhp,
         // divide first to avoid overflow, little loss of accuracy
         int32_t value = (((int32_t) p_ptr->chp << 16) + p_ptr->chp_frac) / p_ptr->mhp * hitpoints;
@@ -1920,7 +1922,7 @@ void insert_lnum(char *object_str, const char *mtc_str, int32_t number, int show
         str1[string - object_str] = '\0';
         (void) strcpy(str2, string + mlen);
 
-        if ((number >= 0) && (show_sign)) {
+        if (number >= 0 && show_sign) {
             (void) sprintf(object_str, "%s+%d%s", str1, number, str2);
         } else {
             (void) sprintf(object_str, "%s%d%s", str1, number, str2);
@@ -1996,7 +1998,11 @@ int attack_blows(int weight, int *wtohit) {
 // Special damage due to magical abilities of object -RAK-
 int tot_dam(inven_type *i_ptr, int tdam, int monster) {
     if ((i_ptr->flags & TR_EGO_WEAPON) &&
-        (((i_ptr->tval >= TV_SLING_AMMO) && (i_ptr->tval <= TV_ARROW)) || ((i_ptr->tval >= TV_HAFTED) && (i_ptr->tval <= TV_SWORD)) || (i_ptr->tval == TV_FLASK))) {
+        (
+                (i_ptr->tval >= TV_SLING_AMMO && i_ptr->tval <= TV_ARROW) ||
+                (i_ptr->tval >= TV_HAFTED && i_ptr->tval <= TV_SWORD) ||
+                i_ptr->tval == TV_FLASK
+        )) {
         creature_type *m_ptr = &c_list[monster];
         recall_type *r_ptr = &c_recall[monster];
 
@@ -2042,7 +2048,7 @@ int critical_blow(int weight, int plus, int dam, int attack_type) {
 
     // Weight of weapon, plusses to hit, and character level all
     // contribute to the chance of a critical
-    if (randint(5000) <= (weight + 5 * plus + (class_level_adj[py.misc.pclass][attack_type] * py.misc.lev))) {
+    if (randint(5000) <= weight + 5 * plus + (class_level_adj[py.misc.pclass][attack_type] * py.misc.lev)) {
         weight += randint(650);
 
         if (weight < 400) {
@@ -2109,7 +2115,7 @@ int mmove(int dir, int *y, int *x) {
 
     bool moved = false;
 
-    if ((new_row >= 0) && (new_row < cur_height) && (new_col >= 0) && (new_col < cur_width)) {
+    if (new_row >= 0 && new_row < cur_height && new_col >= 0 && new_col < cur_width) {
         *y = new_row;
         *x = new_col;
         moved = true;
@@ -2139,12 +2145,12 @@ int find_range(int item1, int item2, int *j, int *k) {
 
     while (i < inven_ctr) {
         if (!flag) {
-            if ((i_ptr->tval == item1) || (i_ptr->tval == item2)) {
+            if (i_ptr->tval == item1 || i_ptr->tval == item2) {
                 flag = true;
                 *j = i;
             }
         } else {
-            if ((i_ptr->tval != item1) && (i_ptr->tval != item2)) {
+            if (i_ptr->tval != item1 && i_ptr->tval != item2) {
                 *k = i - 1;
                 break;
             }

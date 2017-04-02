@@ -369,7 +369,7 @@ void fix2_delete_monster(int j) {
 // Creates objects nearby the coordinates given -RAK-
 static int summon_object(int y, int x, int num, int typ) {
     int real_typ;
-    if ((typ == 1) || (typ == 5)) {
+    if (typ == 1 || typ == 5) {
         real_typ = 1; // typ == 1 -> objects
     } else {
         real_typ = 256; // typ == 2 -> gold
@@ -385,9 +385,9 @@ static int summon_object(int y, int x, int num, int typ) {
             if (in_bounds(j, k) && los(y, x, j, k)) {
                 cave_type *c_ptr = &cave[j][k];
 
-                if (c_ptr->fval <= MAX_OPEN_SPACE && (c_ptr->tptr == 0)) {
+                if (c_ptr->fval <= MAX_OPEN_SPACE && c_ptr->tptr == 0) {
                     // typ == 3 -> 50% objects, 50% gold
-                    if ((typ == 3) || (typ == 7)) {
+                    if (typ == 3 || typ == 7) {
                         if (randint(100) < 50) {
                             real_typ = 1;
                         } else {
@@ -450,10 +450,10 @@ uint32_t monster_death(int y, int x, uint32_t flags) {
     }
 
     int number = 0;
-    if ((flags & CM_60_RANDOM) && (randint(100) < 60)) {
+    if ((flags & CM_60_RANDOM) && randint(100) < 60) {
         number++;
     }
-    if ((flags & CM_90_RANDOM) && (randint(100) < 90)) {
+    if ((flags & CM_90_RANDOM) && randint(100) < 90) {
         number++;
     }
     if (flags & CM_1D2_OBJ) {
@@ -589,7 +589,7 @@ void py_attack(int y, int x) {
         tot_tohit = -3;
     }
 
-    if ((i_ptr->tval >= TV_SLING_AMMO) && (i_ptr->tval <= TV_SPIKE)) {
+    if (i_ptr->tval >= TV_SLING_AMMO && i_ptr->tval <= TV_SPIKE) {
         // Fix for arrows
         blows = 1;
     }
@@ -631,7 +631,7 @@ void py_attack(int y, int x) {
             if (py.flags.confuse_monster) {
                 py.flags.confuse_monster = false;
                 msg_print("Your hands stop glowing.");
-                if ((c_list[monptr].cdefense & CD_NO_SLEEP) || (randint(MAX_MONS_LEVEL) < c_list[monptr].level)) {
+                if ((c_list[monptr].cdefense & CD_NO_SLEEP) || randint(MAX_MONS_LEVEL) < c_list[monptr].level) {
                     (void) sprintf(out_val, "%s is unaffected.", m_name);
                 } else {
                     (void) sprintf(out_val, "%s appears confused.", m_name);
@@ -655,8 +655,8 @@ void py_attack(int y, int x) {
                 blows = 0;
             }
 
-            if ((i_ptr->tval >= TV_SLING_AMMO) && (i_ptr->tval <= TV_SPIKE)) // Use missiles up
-            {
+            if (i_ptr->tval >= TV_SLING_AMMO && i_ptr->tval <= TV_SPIKE) {
+                // Use missiles up
                 i_ptr->number--;
                 inven_weight -= i_ptr->weight;
                 py.flags.status |= PY_STR_WGT;
@@ -679,9 +679,9 @@ void py_attack(int y, int x) {
 // Moves player from one space to another. -RAK-
 // Note: This routine has been pre-declared; see that for argument
 void move_char(int dir, bool do_pickup) {
-    if ((py.flags.confused > 0) && // Confused?
-        (randint(4) > 1) &&        // 75% random movement
-        (dir != 5))                // Never random if sitting
+    if (py.flags.confused > 0 && // Confused?
+        randint(4) > 1 &&        // 75% random movement
+        dir != 5)                // Never random if sitting
     {
         dir = randint(9);
         end_find();
@@ -702,7 +702,7 @@ void move_char(int dir, bool do_pickup) {
     // a wall is a free turn normally, hence don't give player free turns
     // attacking each wall in an attempt to locate the invisible creature,
     // instead force player to tunnel into walls which always takes a turn
-    if ((c_ptr->cptr < 2) || (!m_list[c_ptr->cptr].ml && c_ptr->fval >= MIN_CLOSED_SPACE)) {
+    if (c_ptr->cptr < 2 || (!m_list[c_ptr->cptr].ml && c_ptr->fval >= MIN_CLOSED_SPACE)) {
         // Open floor spot
         if (c_ptr->fval <= MAX_OPEN_SPACE) {
             // Make final assignments of char coords
@@ -726,7 +726,7 @@ void move_char(int dir, bool do_pickup) {
 
             // Check to see if he notices something
             // fos may be negative if have good rings of searching
-            if ((py.misc.fos <= 1) || (randint(py.misc.fos) == 1) || (py.flags.status & PY_SEARCH)) {
+            if (py.misc.fos <= 1 || randint(py.misc.fos) == 1 || (py.flags.status & PY_SEARCH)) {
                 search(char_row, char_col, py.misc.srh);
             }
 
@@ -738,12 +738,12 @@ void move_char(int dir, bool do_pickup) {
             }
 
                 // In doorway of light-room?
-            else if (c_ptr->lr && (py.flags.blind < 1)) {
+            else if (c_ptr->lr && py.flags.blind < 1) {
                 for (int i = (char_row - 1); i <= (char_row + 1); i++) {
                     for (int j = (char_col - 1); j <= (char_col + 1); j++) {
                         cave_type *d_ptr = &cave[i][j];
 
-                        if ((d_ptr->fval == LIGHT_FLOOR) && (!d_ptr->pl)) {
+                        if (d_ptr->fval == LIGHT_FLOOR && !d_ptr->pl) {
                             light_room(i, j);
                         }
                     }
@@ -779,7 +779,7 @@ void move_char(int dir, bool do_pickup) {
         } else {
             // Can't move onto floor space
 
-            if (!find_flag && (c_ptr->tptr != 0)) {
+            if (!find_flag && c_ptr->tptr != 0) {
                 if (t_list[c_ptr->tptr].tval == TV_RUBBLE) {
                     msg_print("There is rubble blocking your way.");
                 } else if (t_list[c_ptr->tptr].tval == TV_CLOSED_DOOR) {
@@ -893,7 +893,7 @@ void openobject() {
 
                 if (py.flags.confused > 0) {
                     msg_print("You are too confused to pick the lock.");
-                } else if ((i - t_ptr->p1) > randint(100)) {
+                } else if (i - t_ptr->p1 > randint(100)) {
                     msg_print("You have picked the lock.");
                     py.misc.exp++;
                     prt_experience();
@@ -923,7 +923,7 @@ void openobject() {
             if (CH_LOCKED & t_ptr->flags) {
                 if (py.flags.confused > 0) {
                     msg_print("You are too confused to pick the lock.");
-                } else if ((i - (int) t_ptr->level) > randint(100)) {
+                } else if (i - (int) t_ptr->level > randint(100)) {
                     msg_print("You have picked the lock.");
                     flag = true;
                     py.misc.exp += t_ptr->level;

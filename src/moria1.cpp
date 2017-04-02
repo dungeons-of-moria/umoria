@@ -48,10 +48,10 @@ void py_bonuses(inven_type *t_ptr, int factor) {
     if (TR_SPEED & t_ptr->flags) {
         change_speed(-amount);
     }
-    if ((TR_BLIND & t_ptr->flags) && (factor > 0)) {
+    if ((TR_BLIND & t_ptr->flags) && factor > 0) {
         py.flags.blind += 1000;
     }
-    if ((TR_TIMID & t_ptr->flags) && (factor > 0)) {
+    if ((TR_TIMID & t_ptr->flags) && factor > 0) {
         py.flags.afraid += 50;
     }
     if (TR_INFRA & t_ptr->flags) {
@@ -832,7 +832,7 @@ void inven_command(char command) {
                         inven_screen(EQUIP_SCR);
                     }
                 } else {
-                    if ((which >= '0') && (which <= '9') && (command != 'r') && (command != 't')) {
+                    if (which >= '0' && which <= '9' && command != 'r' && command != 't') {
                         // look for item whose inscription matches "which"
                         int m;
                         for (m = from; m <= to && ((inventory[m].inscrip[0] != which) || (inventory[m].inscrip[1] != '\0')); m++) {
@@ -843,7 +843,7 @@ void inven_command(char command) {
                         } else {
                             item = -1;
                         }
-                    } else if ((which >= 'A') && (which <= 'Z')) {
+                    } else if (which >= 'A' && which <= 'Z') {
                         item = which - 'A';
                     } else {
                         item = which - 'a';
@@ -1293,9 +1293,10 @@ int get_item(int *com_val, const char *pmt, int i, int j, char *mask, const char
                         break;
                     default:
                         // look for item whose inscription matches "which"
-                        if ((which >= '0') && (which <= '9') && (i_scr != 0)) {
+                        if (which >= '0' && which <= '9' && i_scr != 0) {
                             int m;
-                            for (m = i; (m < INVEN_WIELD) && ((inventory[m].inscrip[0] != which) || (inventory[m].inscrip[1] != '\0')); m++) { ;
+                            for (m = i; m < INVEN_WIELD && (inventory[m].inscrip[0] != which || inventory[m].inscrip[1] != '\0'); m++) {
+                                ;
                             }
                             if (m < INVEN_WIELD) {
                                 *com_val = m;
@@ -1540,7 +1541,7 @@ static void sub1_move_light(int y1, int x1, int y2, int x2) {
                 c_ptr->pl = true;
             } else if (!c_ptr->fm && c_ptr->tptr != 0) {
                 int tval = t_list[c_ptr->tptr].tval;
-                if ((tval >= TV_MIN_VISIBLE) && (tval <= TV_MAX_VISIBLE)) {
+                if (tval >= TV_MIN_VISIBLE && tval <= TV_MAX_VISIBLE) {
                     c_ptr->fm = true;
                 }
             }
@@ -1664,7 +1665,7 @@ void rest() {
 
     // check for reasonable value, must be positive number
     // in range of a short, or must be -MAX_SHORT
-    if ((rest_num == -MAX_SHORT) || ((rest_num > 0) && (rest_num < MAX_SHORT))) {
+    if (rest_num == -MAX_SHORT || (rest_num > 0 && rest_num < MAX_SHORT)) {
         if (py.flags.status & PY_SEARCH) {
             search_off();
         }

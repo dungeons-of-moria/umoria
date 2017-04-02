@@ -46,10 +46,12 @@ void display_scores() {
     // Support score files from 5.2.2 to present.
     if (feof(highscore_fp)) {
         ; // An empty score file.
-    } else if ((version_maj != CURRENT_VERSION_MAJOR) ||
-               (version_min > CURRENT_VERSION_MINOR) ||
+    } else if (version_maj != CURRENT_VERSION_MAJOR ||
+               version_min > CURRENT_VERSION_MINOR ||
                (version_min == CURRENT_VERSION_MINOR && patch_level > CURRENT_VERSION_PATCH) ||
-               (version_min == 2 && patch_level < 2) || (version_min < 2)) {
+               (version_min == 2 && patch_level < 2) ||
+                version_min < 2
+            ) {
         msg_print("Sorry. This score file is from a different version of umoria.");
         msg_print(CNIL);
 
@@ -289,11 +291,12 @@ static void highscores() {
         // must fseek() before can change read/write mode
         (void) fseek(highscore_fp, (long) 0, SEEK_CUR);
     } else if (
-            (version_maj != CURRENT_VERSION_MAJOR) ||
-            (version_min > CURRENT_VERSION_MINOR) ||
+            version_maj != CURRENT_VERSION_MAJOR ||
+            version_min > CURRENT_VERSION_MINOR ||
             (version_min == CURRENT_VERSION_MINOR && patch_level > CURRENT_VERSION_PATCH) ||
             (version_min == 2 && patch_level < 2) ||
-            (version_min < 2)) {
+            version_min < 2
+            ) {
         // Support score files from 5.2.2 to present.
         // No need to print a message, a subsequent call to
         // display_scores() will print a message.

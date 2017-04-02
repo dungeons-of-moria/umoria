@@ -40,7 +40,7 @@ void use() {
         chance = chance / 2;
     }
 
-    if ((chance < USE_DEVICE) && (randint(USE_DEVICE - chance + 1) == 1)) {
+    if (chance < USE_DEVICE && randint(USE_DEVICE - chance + 1) == 1) {
         chance = USE_DEVICE; // Give everyone a slight chance
     }
 
@@ -153,7 +153,7 @@ void use() {
                 ident = detect_evil();
                 break;
             case 22:
-                if ((cure_blindness()) || (cure_poison()) || (cure_confusion())) {
+                if (cure_blindness() || cure_poison() || cure_confusion()) {
                     ident = true;
                 }
                 break;

@@ -44,7 +44,7 @@ void change_character() {
     prt("(3 - 118) Strength     = ", 0, 0);
     if (get_string(tmp_str, 0, 25, 3)) {
         tmp_val = atoi(tmp_str);
-        if ((tmp_val > 2) && (tmp_val < 119)) {
+        if (tmp_val > 2 && tmp_val < 119) {
             a_ptr[A_STR] = (uint8_t) tmp_val;
             (void) res_stat(A_STR);
         }
@@ -55,7 +55,7 @@ void change_character() {
     prt("(3 - 118) Intelligence = ", 0, 0);
     if (get_string(tmp_str, 0, 25, 3)) {
         tmp_val = atoi(tmp_str);
-        if ((tmp_val > 2) && (tmp_val < 119)) {
+        if (tmp_val > 2 && tmp_val < 119) {
             a_ptr[A_INT] = (uint8_t) tmp_val;
             (void) res_stat(A_INT);
         }
@@ -66,7 +66,7 @@ void change_character() {
     prt("(3 - 118) Wisdom       = ", 0, 0);
     if (get_string(tmp_str, 0, 25, 3)) {
         tmp_val = atoi(tmp_str);
-        if ((tmp_val > 2) && (tmp_val < 119)) {
+        if (tmp_val > 2 && tmp_val < 119) {
             a_ptr[A_WIS] = (uint8_t) tmp_val;
             (void) res_stat(A_WIS);
         }
@@ -77,7 +77,7 @@ void change_character() {
     prt("(3 - 118) Dexterity    = ", 0, 0);
     if (get_string(tmp_str, 0, 25, 3)) {
         tmp_val = atoi(tmp_str);
-        if ((tmp_val > 2) && (tmp_val < 119)) {
+        if (tmp_val > 2 && tmp_val < 119) {
             a_ptr[A_DEX] = (uint8_t) tmp_val;
             (void) res_stat(A_DEX);
         }
@@ -88,7 +88,7 @@ void change_character() {
     prt("(3 - 118) Constitution = ", 0, 0);
     if (get_string(tmp_str, 0, 25, 3)) {
         tmp_val = atoi(tmp_str);
-        if ((tmp_val > 2) && (tmp_val < 119)) {
+        if (tmp_val > 2 && tmp_val < 119) {
             a_ptr[A_CON] = (uint8_t) tmp_val;
             (void) res_stat(A_CON);
         }
@@ -99,7 +99,7 @@ void change_character() {
     prt("(3 - 118) Charisma     = ", 0, 0);
     if (get_string(tmp_str, 0, 25, 3)) {
         tmp_val = atoi(tmp_str);
-        if ((tmp_val > 2) && (tmp_val < 119)) {
+        if (tmp_val > 2 && tmp_val < 119) {
             a_ptr[A_CHR] = (uint8_t) tmp_val;
             (void) res_stat(A_CHR);
         }
@@ -112,7 +112,7 @@ void change_character() {
     prt("(1 - 32767) Hit points = ", 0, 0);
     if (get_string(tmp_str, 0, 25, 5)) {
         tmp_val = atoi(tmp_str);
-        if ((tmp_val > 0) && (tmp_val <= MAX_SHORT)) {
+        if (tmp_val > 0 && tmp_val <= MAX_SHORT) {
             m_ptr->mhp = (int16_t) tmp_val;
             m_ptr->chp = (int16_t) tmp_val;
             m_ptr->chp_frac = 0;
@@ -126,7 +126,7 @@ void change_character() {
     prt("(0 - 32767) Mana       = ", 0, 0);
     if (get_string(tmp_str, 0, 25, 5)) {
         tmp_val = atoi(tmp_str);
-        if ((tmp_val > -1) && (tmp_val <= MAX_SHORT) && (*tmp_str != '\0')) {
+        if (tmp_val > -1 && tmp_val <= MAX_SHORT && (*tmp_str != '\0')) {
             m_ptr->mana = (int16_t) tmp_val;
             m_ptr->cmana = (int16_t) tmp_val;
             m_ptr->cmana_frac = 0;
@@ -154,7 +154,7 @@ void change_character() {
     prt(tmp_str, 0, 0);
     if (get_string(tmp_str, 0, tmp_val, 3)) {
         tmp_val = atoi(tmp_str);
-        if ((tmp_val > -1) && (tmp_val < 201) && (*tmp_str != '\0')) {
+        if (tmp_val > -1 && tmp_val < 201 && (*tmp_str != '\0')) {
             m_ptr->srh = (int16_t) tmp_val;
         }
     } else {
@@ -166,7 +166,7 @@ void change_character() {
     prt(tmp_str, 0, 0);
     if (get_string(tmp_str, 0, tmp_val, 3)) {
         tmp_val = atoi(tmp_str);
-        if ((tmp_val > -2) && (tmp_val < 19) && (*tmp_str != '\0')) {
+        if (tmp_val > -2 && tmp_val < 19 && (*tmp_str != '\0')) {
             m_ptr->stl = (int16_t) tmp_val;
         }
     } else {
@@ -178,7 +178,7 @@ void change_character() {
     prt(tmp_str, 0, 0);
     if (get_string(tmp_str, 0, tmp_val, 3)) {
         tmp_val = atoi(tmp_str);
-        if ((tmp_val > -1) && (tmp_val < 201) && (*tmp_str != '\0')) {
+        if (tmp_val > -1 && tmp_val < 201 && (*tmp_str != '\0')) {
             m_ptr->disarm = (int16_t) tmp_val;
         }
     } else {
@@ -190,7 +190,7 @@ void change_character() {
     prt(tmp_str, 0, 0);
     if (get_string(tmp_str, 0, tmp_val, 3)) {
         tmp_val = atoi(tmp_str);
-        if ((tmp_val > -1) && (tmp_val < 201) && (*tmp_str != '\0')) {
+        if (tmp_val > -1 && tmp_val < 201 && (*tmp_str != '\0')) {
             m_ptr->save = (int16_t) tmp_val;
         }
     } else {
@@ -202,7 +202,7 @@ void change_character() {
     prt(tmp_str, 0, 0);
     if (get_string(tmp_str, 0, tmp_val, 3)) {
         tmp_val = atoi(tmp_str);
-        if ((tmp_val > -1) && (tmp_val < 201) && (*tmp_str != '\0')) {
+        if (tmp_val > -1 && tmp_val < 201 && (*tmp_str != '\0')) {
             m_ptr->bth = (int16_t) tmp_val;
         }
     } else {
@@ -214,7 +214,7 @@ void change_character() {
     prt(tmp_str, 0, 0);
     if (get_string(tmp_str, 0, tmp_val, 3)) {
         tmp_val = atoi(tmp_str);
-        if ((tmp_val > -1) && (tmp_val < 201) && (*tmp_str != '\0')) {
+        if (tmp_val > -1 && tmp_val < 201 && (*tmp_str != '\0')) {
             m_ptr->bthb = (int16_t) tmp_val;
         }
     } else {

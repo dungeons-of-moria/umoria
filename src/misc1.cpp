@@ -89,7 +89,7 @@ int randnor(int mean, int stand) {
     int high = NORMAL_TABLE_SIZE;
 
     while (true) {
-        if ((normal_table[iindex] == tmp) || (high == (low + 1))) {
+        if (normal_table[iindex] == tmp || high == low + 1) {
             break;
         }
         if (normal_table[iindex] > tmp) {
@@ -158,7 +158,7 @@ int get_panel(int y, int x, int force) {
 
     int prow = panel_row;
     int pcol = panel_col;
-    if (force || (y < panel_row_min + 2) || (y > panel_row_max - 2)) {
+    if (force || y < panel_row_min + 2 || y > panel_row_max - 2) {
         prow = ((y - SCREEN_HEIGHT / 4) / (SCREEN_HEIGHT / 2));
         if (prow > max_panel_rows) {
             prow = max_panel_rows;
@@ -166,7 +166,7 @@ int get_panel(int y, int x, int force) {
             prow = 0;
         }
     }
-    if (force || (x < panel_col_min + 3) || (x > panel_col_max - 3)) {
+    if (force || x < panel_col_min + 3 || x > panel_col_max - 3) {
         pcol = ((x - SCREEN_WIDTH / 4) / (SCREEN_WIDTH / 2));
         if (pcol > max_panel_cols) {
             pcol = max_panel_cols;
@@ -174,7 +174,7 @@ int get_panel(int y, int x, int force) {
             pcol = 0;
         }
     }
-    if ((prow != panel_row) || (pcol != panel_col)) {
+    if (prow != panel_row || pcol != panel_col) {
         panel_row = prow;
         panel_col = pcol;
         panel_bounds();
@@ -290,7 +290,7 @@ bool los(int fromY, int fromX, int toY, int toX) {
     int deltaY = toY - fromY;
 
     // Adjacent?
-    if ((deltaX < 2) && (deltaX > -2) && (deltaY < 2) && (deltaY > -2)) {
+    if (deltaX < 2 && deltaX > -2 && deltaY < 2 && deltaY > -2) {
         return true;
     }
 
@@ -432,7 +432,7 @@ bool los(int fromY, int fromX, int toY, int toX) {
 uint8_t loc_symbol(int y, int x) {
     cave_type *cave_ptr = &cave[y][x];
 
-    if ((cave_ptr->cptr == 1) && (!find_flag || find_prself)) {
+    if (cave_ptr->cptr == 1 && (!find_flag || find_prself)) {
         return '@';
     }
 
@@ -442,11 +442,11 @@ uint8_t loc_symbol(int y, int x) {
         return ' ';
     }
 
-    if ((f_ptr->image > 0) && (randint(12) == 1)) {
+    if (f_ptr->image > 0 && randint(12) == 1) {
         return (uint8_t) (randint(95) + 31);
     }
 
-    if ((cave_ptr->cptr > 1) && (m_list[cave_ptr->cptr].ml)) {
+    if (cave_ptr->cptr > 1 && m_list[cave_ptr->cptr].ml) {
         return c_list[m_list[cave_ptr->cptr].mptr].cchar;
     }
 
@@ -454,7 +454,7 @@ uint8_t loc_symbol(int y, int x) {
         return ' ';
     }
 
-    if ((cave_ptr->tptr != 0) && (t_list[cave_ptr->tptr].tval != TV_INVIS_TRAP)) {
+    if (cave_ptr->tptr != 0 && t_list[cave_ptr->tptr].tval != TV_INVIS_TRAP) {
         return t_list[cave_ptr->tptr].tchar;
     }
 
@@ -508,7 +508,7 @@ bool compact_monsters() {
     while (!delete_any) {
         for (int i = mfptr - 1; i >= MIN_MONIX; i--) {
             monster_type *mon_ptr = &m_list[i];
-            if ((cur_dis < mon_ptr->cdis) && (randint(3) == 1)) {
+            if (cur_dis < mon_ptr->cdis && randint(3) == 1) {
                 // Never compact away the Balrog!!
                 if (c_list[mon_ptr->mptr].cmove & CM_WIN) { ; // Do nothing
                 } else if (hack_monptr < i) {
@@ -730,7 +730,7 @@ bool summon_monster(int *y, int *x, int slp) {
         int k = *x - 2 + randint(3);
         if (in_bounds(j, k)) {
             cave_type *cave_ptr = &cave[j][k];
-            if (cave_ptr->fval <= MAX_OPEN_SPACE && (cave_ptr->cptr == 0)) {
+            if (cave_ptr->fval <= MAX_OPEN_SPACE && cave_ptr->cptr == 0) {
                 // Place_monster() should always return true here.
                 if (!place_monster(j, k, l, slp)) {
                     return false;
@@ -775,7 +775,7 @@ bool summon_undead(int *y, int *x) {
         int k = *x - 2 + randint(3);
         if (in_bounds(j, k)) {
             cave_type *cave_ptr = &cave[j][k];
-            if (cave_ptr->fval <= MAX_OPEN_SPACE && (cave_ptr->cptr == 0)) {
+            if (cave_ptr->fval <= MAX_OPEN_SPACE && cave_ptr->cptr == 0) {
                 // Place_monster() should always return true here.
                 if (!place_monster(j, k, m, false)) {
                     return false;
@@ -804,7 +804,7 @@ static void compact_objects() {
                 int chance;
 
                 cave_type *cave_ptr = &cave[i][j];
-                if ((cave_ptr->tptr != 0) && (distance(i, j, char_row, char_col) > cur_dis)) {
+                if (cave_ptr->tptr != 0 && distance(i, j, char_row, char_col) > cur_dis) {
                     switch (t_list[cave_ptr->tptr].tval) {
                         case TV_VIS_TRAP:
                             chance = 15;

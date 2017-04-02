@@ -98,7 +98,7 @@ void print_objects() {
     }
     nobj = atoi(tmp_str);
     bool small_object = get_check("Small objects only?");
-    if ((nobj > 0) && (level > -1) && (level < 1201)) {
+    if (nobj > 0 && level > -1 && level < 1201) {
         if (nobj > 10000) {
             nobj = 10000;
         }

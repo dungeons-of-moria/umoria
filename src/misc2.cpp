@@ -286,7 +286,7 @@ void magic_treasure(int x, int level) {
             }
             break;
         case TV_HELM: // Helms
-            if ((t_ptr->subval >= 6) && (t_ptr->subval <= 8)) {
+            if (t_ptr->subval >= 6 && t_ptr->subval <= 8) {
                 // give crowns a higher chance for magic
                 chance += (int) (t_ptr->cost / 100);
                 special += special;
