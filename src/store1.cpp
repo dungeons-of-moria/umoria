@@ -10,113 +10,147 @@
 #include "externs.h"
 
 static void insert_store(int, int, int32_t, inven_type *);
-
 static void store_create(int);
+
+static int32_t getWeaponArmorBuyPrice(inven_type *i_ptr);
+static int32_t getAmmoBuyPrice(inven_type *i_ptr);
+static int32_t getPotionScrollBuyPrice(inven_type *i_ptr);
+static int32_t getFoodBuyPrice(inven_type *i_ptr);
+static int32_t getRingAmuletBuyPrice(inven_type *i_ptr);
+static int32_t getWandStaffBuyPrice(inven_type *i_ptr);
+static int32_t getPickShovelBuyPrice(inven_type *i_ptr);
 
 // Returns the value for any given object -RAK-
 int32_t item_value(inven_type *i_ptr) {
-    int32_t value = i_ptr->cost;
+    int32_t value;
 
-    // don't purchase known cursed items
     if (i_ptr->ident & ID_DAMD) {
+        // don't purchase known cursed items
         value = 0;
     } else if ((i_ptr->tval >= TV_BOW && i_ptr->tval <= TV_SWORD) || (i_ptr->tval >= TV_BOOTS && i_ptr->tval <= TV_SOFT_ARMOR)) {
-        // Weapons and armor
-
-        if (!known2_p(i_ptr)) {
-            value = object_list[i_ptr->index].cost;
-        } else if (i_ptr->tval >= TV_BOW && i_ptr->tval <= TV_SWORD) {
-            if (i_ptr->tohit < 0) {
-                value = 0;
-            } else if (i_ptr->todam < 0) {
-                value = 0;
-            } else if (i_ptr->toac < 0) {
-                value = 0;
-            } else {
-                value = i_ptr->cost + (i_ptr->tohit + i_ptr->todam + i_ptr->toac) * 100;
-            }
-        } else {
-            if (i_ptr->toac < 0) {
-                value = 0;
-            } else {
-                value = i_ptr->cost + i_ptr->toac * 100;
-            }
-        }
+        value = getWeaponArmorBuyPrice(i_ptr);
     } else if (i_ptr->tval >= TV_SLING_AMMO && i_ptr->tval <= TV_SPIKE) {
-        // Ammo
-
-        if (!known2_p(i_ptr)) {
-            value = object_list[i_ptr->index].cost;
-        } else {
-            if (i_ptr->tohit < 0) {
-                value = 0;
-            } else if (i_ptr->todam < 0) {
-                value = 0;
-            } else if (i_ptr->toac < 0) {
-                value = 0;
-            } else {
-                // use 5, because missiles generally appear in groups of 20,
-                // so 20 * 5 == 100, which is comparable to weapon bonus above
-                value = i_ptr->cost + (i_ptr->tohit + i_ptr->todam + i_ptr->toac) * 5;
-            }
-        }
+        value = getAmmoBuyPrice(i_ptr);
     } else if (i_ptr->tval == TV_SCROLL1 || i_ptr->tval == TV_SCROLL2 || i_ptr->tval == TV_POTION1 || i_ptr->tval == TV_POTION2) {
-        // Potions, Scrolls, and Food
-
-        if (!known1_p(i_ptr)) {
-            value = 20;
-        }
+        value = getPotionScrollBuyPrice(i_ptr);
     } else if (i_ptr->tval == TV_FOOD) {
-        if (i_ptr->subval < (ITEM_SINGLE_STACK_MIN + MAX_MUSH) && !known1_p(i_ptr)) {
-            value = 1;
-        }
+        value = getFoodBuyPrice(i_ptr);
     } else if (i_ptr->tval == TV_AMULET || i_ptr->tval == TV_RING) {
-        // Rings and amulets
-
-        // player does not know what type of ring/amulet this is
-        if (!known1_p(i_ptr)) {
-            value = 45;
-        } else if (!known2_p(i_ptr)) {
-            // player knows what type of ring, but does not know whether it
-            // is cursed or not, if refuse to buy cursed objects here, then
-            // player can use this to 'identify' cursed objects
-            value = object_list[i_ptr->index].cost;
-        }
+        value = getRingAmuletBuyPrice(i_ptr);
     } else if (i_ptr->tval == TV_STAFF || i_ptr->tval == TV_WAND) {
-        // Wands and staffs
-
-        if (!known1_p(i_ptr)) {
-            if (i_ptr->tval == TV_WAND) {
-                value = 50;
-            } else {
-                value = 70;
-            }
-        } else if (known2_p(i_ptr)) {
-            value = i_ptr->cost + (i_ptr->cost / 20) * i_ptr->p1;
-        }
+        value = getWandStaffBuyPrice(i_ptr);
     } else if (i_ptr->tval == TV_DIGGING) {
-        // Picks and shovels
-
-        if (!known2_p(i_ptr)) {
-            value = object_list[i_ptr->index].cost;
-        } else {
-            if (i_ptr->p1 < 0) {
-                value = 0;
-            } else {
-                // some digging tools start with non-zero p1 values, so only
-                // multiply the plusses by 100, make sure result is positive
-                value = i_ptr->cost + (i_ptr->p1 - object_list[i_ptr->index].p1) * 100;
-                if (value < 0) {
-                    value = 0;
-                }
-            }
-        }
+        value = getPickShovelBuyPrice(i_ptr);
+    } else {
+        value = i_ptr->cost;
     }
 
     // Multiply value by number of items if it is a group stack item.
     // Do not include torches here.
     if (i_ptr->subval > ITEM_GROUP_MIN) {
         value = value * i_ptr->number;
+    }
+
+    return value;
+}
+
+static int32_t getWeaponArmorBuyPrice(inven_type *i_ptr) {
+    if (!known2_p(i_ptr)) {
+        return object_list[i_ptr->index].cost;
+    }
+
+    if (i_ptr->tval >= TV_BOW && i_ptr->tval <= TV_SWORD) {
+        if (i_ptr->tohit < 0 || i_ptr->todam < 0 || i_ptr->toac < 0) {
+            return 0;
+        }
+
+        return i_ptr->cost + (i_ptr->tohit + i_ptr->todam + i_ptr->toac) * 100;
+    }
+
+    if (i_ptr->toac < 0) {
+        return 0;
+    }
+
+    return i_ptr->cost + i_ptr->toac * 100;
+}
+
+static int32_t getAmmoBuyPrice(inven_type *i_ptr) {
+    if (!known2_p(i_ptr)) {
+        return object_list[i_ptr->index].cost;
+    }
+
+    if (i_ptr->tohit < 0 || i_ptr->todam < 0 || i_ptr->toac < 0) {
+        return 0;
+    }
+
+    // use 5, because missiles generally appear in groups of 20,
+    // so 20 * 5 == 100, which is comparable to weapon bonus above
+    return i_ptr->cost + (i_ptr->tohit + i_ptr->todam + i_ptr->toac) * 5;
+}
+
+static int32_t getPotionScrollBuyPrice(inven_type *i_ptr) {
+    if (!known1_p(i_ptr)) {
+        return 20;
+    }
+
+    return i_ptr->cost;
+}
+
+static int32_t getFoodBuyPrice(inven_type *i_ptr) {
+    if (i_ptr->subval < ITEM_SINGLE_STACK_MIN + MAX_MUSH && !known1_p(i_ptr)) {
+        return 1;
+    }
+
+    return i_ptr->cost;
+}
+
+static int32_t getRingAmuletBuyPrice(inven_type *i_ptr) {
+    // player does not know what type of ring/amulet this is
+    if (!known1_p(i_ptr)) {
+        return 45;
+    }
+
+    // player knows what type of ring, but does not know whether it
+    // is cursed or not, if refuse to buy cursed objects here, then
+    // player can use this to 'identify' cursed objects
+    if (!known2_p(i_ptr)) {
+        return object_list[i_ptr->index].cost;
+    }
+
+    return i_ptr->cost;
+}
+
+static int32_t getWandStaffBuyPrice(inven_type *i_ptr) {
+    if (!known1_p(i_ptr)) {
+        if (i_ptr->tval == TV_WAND) {
+            return 50;
+        }
+
+        return 70;
+    }
+
+    if (known2_p(i_ptr)) {
+        return i_ptr->cost + (i_ptr->cost / 20) * i_ptr->p1;
+    }
+
+    return i_ptr->cost;
+}
+
+static int32_t getPickShovelBuyPrice(inven_type *i_ptr) {
+    if (!known2_p(i_ptr)) {
+        return object_list[i_ptr->index].cost;
+    }
+
+    if (i_ptr->p1 < 0) {
+        return 0;
+    }
+
+    // some digging tools start with non-zero p1 values, so only
+    // multiply the plusses by 100, make sure result is positive
+    int32_t value = i_ptr->cost + (i_ptr->p1 - object_list[i_ptr->index].p1) * 100;
+
+    if (value < 0) {
+        value = 0;
     }
 
     return value;
@@ -170,9 +204,7 @@ bool store_check_num(inven_type *t_ptr, int store_num) {
 
         // note: items with subval of gte ITEM_SINGLE_STACK_MAX only stack
         // if their subvals match
-        if (i_ptr->tval == t_ptr->tval &&
-            i_ptr->subval == t_ptr->subval &&
-            (int) (i_ptr->number + t_ptr->number) < 256 &&
+        if (i_ptr->tval == t_ptr->tval && i_ptr->subval == t_ptr->subval && (int) (i_ptr->number + t_ptr->number) < 256 &&
             (t_ptr->subval < ITEM_GROUP_MIN || i_ptr->p1 == t_ptr->p1)) {
             store_check = true;
         }
@@ -216,8 +248,7 @@ void store_carry(int store_num, int *ipos, inven_type *t_ptr) {
 
         if (typ == i_ptr->tval) {
             if (subt == i_ptr->subval && // Adds to other item
-                subt >= ITEM_SINGLE_STACK_MIN &&
-                (subt < ITEM_GROUP_MIN || i_ptr->p1 == t_ptr->p1)) {
+                subt >= ITEM_SINGLE_STACK_MIN && (subt < ITEM_GROUP_MIN || i_ptr->p1 == t_ptr->p1)) {
                 *ipos = item_val;
                 i_ptr->number += item_num;
 
