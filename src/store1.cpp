@@ -10,7 +10,8 @@
 #include "externs.h"
 
 static void insert_store(int, int, int32_t, inven_type *);
-static void store_create(int);
+
+static void store_create(int store_num, int16_t max_cost);
 
 static int32_t getWeaponArmorBuyPrice(inven_type *i_ptr);
 static int32_t getAmmoBuyPrice(inven_type *i_ptr);
@@ -158,31 +159,29 @@ static int32_t getPickShovelBuyPrice(inven_type *i_ptr) {
 
 // Asking price for an item -RAK-
 int32_t sell_price(int snum, int32_t *max_sell, int32_t *min_sell, inven_type *item) {
-    int32_t i = item_value(item);
+    int32_t price = item_value(item);
 
-    // check item->cost in case it is cursed, check i in case it is damaged
-
-    if (item->cost < 1 || i < 1) {
-        // don't let the item get into the store inventory
+    // check `item->cost` in case it is cursed, check `price` in case it is damaged
+    // don't let the item get into the store inventory
+    if (item->cost < 1 || price < 1) {
         return 0;
     }
 
-    store_type *s_ptr = &store[snum];
+    owner_type *owner = &owners[store[snum].owner];
 
-    i = i * rgold_adj[owners[s_ptr->owner].owner_race][py.misc.prace] / 100;
-
-    if (i < 1) {
-        i = 1;
+    price = price * rgold_adj[owner->owner_race][py.misc.prace] / 100;
+    if (price < 1) {
+        price = 1;
     }
 
-    *max_sell = i * owners[s_ptr->owner].max_inflate / 100;
-    *min_sell = i * owners[s_ptr->owner].min_inflate / 100;
+    *max_sell = price * owner->max_inflate / 100;
+    *min_sell = price * owner->min_inflate / 100;
 
     if (*min_sell > *max_sell) {
         *min_sell = *max_sell;
     }
 
-    return i;
+    return price;
 }
 
 // Check to see if he will be carrying too many objects -RAK-
@@ -335,9 +334,8 @@ void store_init() {
 }
 
 // Creates an item and inserts it into store's inven -RAK-
-static void store_create(int store_num) {
+static void store_create(int store_num, int16_t max_cost) {
     int cur_pos = popt();
-    store_type *s_ptr = &store[store_num];
 
     for (int tries = 0; tries <= 3; tries++) {
         int i = store_choice[store_num][randint(STORE_CHOICES) - 1];
@@ -347,8 +345,8 @@ static void store_create(int store_num) {
         inven_type *t_ptr = &t_list[cur_pos];
 
         if (store_check_num(t_ptr, store_num)) {
-            if (t_ptr->cost > 0 && // Item must be good
-                t_ptr->cost < owners[s_ptr->owner].max_cost) {
+            // Item must be good: cost > 0.
+            if (t_ptr->cost > 0 && t_ptr->cost < max_cost) {
                 // equivalent to calling ident_spell(),
                 // except will not change the object_ident array.
                 store_bought(t_ptr);
@@ -366,8 +364,8 @@ static void store_create(int store_num) {
 
 // Initialize and up-keep the store's inventory. -RAK-
 void store_maint() {
-    for (int i = 0; i < MAX_STORES; i++) {
-        store_type *s_ptr = &store[i];
+    for (int store_id = 0; store_id < MAX_STORES; store_id++) {
+        store_type *s_ptr = &store[store_id];
 
         s_ptr->insult_cur = 0;
         if (s_ptr->store_ctr >= STORE_MIN_INVEN) {
@@ -376,7 +374,7 @@ void store_maint() {
                 j += 1 + s_ptr->store_ctr - STORE_MAX_INVEN;
             }
             while (--j >= 0) {
-                store_destroy(i, randint((int) s_ptr->store_ctr) - 1, false);
+                store_destroy(store_id, randint((int) s_ptr->store_ctr) - 1, false);
             }
         }
 
@@ -385,8 +383,11 @@ void store_maint() {
             if (s_ptr->store_ctr < STORE_MIN_INVEN) {
                 j += STORE_MIN_INVEN - s_ptr->store_ctr;
             }
+
+            int16_t max_cost = owners[s_ptr->owner].max_cost;
+
             while (--j >= 0) {
-                store_create(i);
+                store_create(store_id, max_cost);
             }
         }
     }
