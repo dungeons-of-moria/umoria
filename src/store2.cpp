@@ -182,25 +182,28 @@ static void haggle_commands(int typ) {
 static void display_inventory(int store_num, int start) {
     store_type *s_ptr = &store[store_num];
 
-    int i = (start % 12);
-
     int stop = ((start / 12) + 1) * 12;
     if (stop > s_ptr->store_ctr) {
         stop = s_ptr->store_ctr;
     }
 
-    while (start < stop) {
+    int i;
+
+    for (i = (start % 12); start < stop; i++) {
         inven_type *i_ptr = &s_ptr->store_inven[start].sitem;
 
+        // Save the current number of items
         int32_t x = i_ptr->number;
+
         if (i_ptr->subval >= ITEM_SINGLE_STACK_MIN && i_ptr->subval <= ITEM_SINGLE_STACK_MAX) {
             i_ptr->number = 1;
         }
-
         bigvtype out_val1, out_val2;
-
         objdes(out_val1, i_ptr, true);
+
+        // Restore the number of items
         i_ptr->number = (uint8_t) x;
+
         (void) sprintf(out_val2, "%c) %s", 'a' + i, out_val1);
         prt(out_val2, i + 5, 0);
 
@@ -217,7 +220,6 @@ static void display_inventory(int store_num, int start) {
         }
 
         prt(out_val2, i + 5, 59);
-        i++;
         start++;
     }
 
@@ -237,19 +239,17 @@ static void display_inventory(int store_num, int start) {
 
 // Re-displays only a single cost -RAK-
 static void display_cost(int store_num, int pos) {
-    store_type *s_ptr = &store[store_num];
-
-    int i = (pos % 12);
+    int cost = store[store_num].store_inven[pos].scost;
 
     vtype out_val;
-    if (s_ptr->store_inven[pos].scost < 0) {
-        int32_t j = -s_ptr->store_inven[pos].scost;
+    if (cost < 0) {
+        int32_t j = -cost;
         j = j * chr_adj() / 100;
         (void) sprintf(out_val, "%d", j);
     } else {
-        (void) sprintf(out_val, "%9d [Fixed]", s_ptr->store_inven[pos].scost);
+        (void) sprintf(out_val, "%9d [Fixed]", cost);
     }
-    prt(out_val, i + 5, 59);
+    prt(out_val, (pos % 12) + 5, 59);
 }
 
 // Displays players gold -RAK-
@@ -260,11 +260,9 @@ static void store_prt_gold() {
 }
 
 // Displays store -RAK-
-static void display_store(int store_num, int cur_top) {
-    store_type *s_ptr = &store[store_num];
-
+static void display_store(int store_num, const char *owner_name, int cur_top) {
     clear_screen();
-    put_buffer(owners[s_ptr->owner].owner_name, 3, 9);
+    put_buffer(owner_name, 3, 9);
     put_buffer("Item", 4, 3);
     put_buffer("Asking Price", 4, 60);
     store_prt_gold();
@@ -314,10 +312,8 @@ static bool increase_insults(int store_num) {
 
 // Decrease insults -RAK-
 static void decrease_insults(int store_num) {
-    store_type *s_ptr = &store[store_num];
-
-    if (s_ptr->insult_cur != 0) {
-        s_ptr->insult_cur--;
+    if (store[store_num].insult_cur != 0) {
+        store[store_num].insult_cur--;
     }
 }
 
@@ -328,27 +324,30 @@ static bool haggle_insults(int store_num) {
     }
 
     prt_comment5();
-    msg_print(CNIL); // keep insult separate from rest of haggle
+
+    // keep insult separate from rest of haggle
+    msg_print(CNIL);
 
     return false;
 }
 
 static bool get_haggle(const char *comment, int32_t *new_offer, int num_offer) {
+    if (num_offer == 0) {
+        last_store_inc = 0;
+    }
+
     bool increment = false;
 
     int clen = (int) strlen(comment);
     int orig_clen = clen;
 
-    if (num_offer == 0) {
-        last_store_inc = 0;
-    }
-
     char *p;
     vtype out_val, default_offer;
 
-    int32_t i = 0;
     bool flag = true;
-    while (flag && i == 0) {
+    int32_t offer_adjust = 0;
+
+    while (flag && offer_adjust == 0) {
         prt(comment, 0, 0);
         if (num_offer && last_store_inc != 0) {
             (void) sprintf(default_offer, "[%c%d] ", (last_store_inc < 0) ? '-' : '+', abs(last_store_inc));
@@ -364,35 +363,36 @@ static bool get_haggle(const char *comment, int32_t *new_offer, int num_offer) {
             increment = true;
         }
         if (num_offer && increment) {
-            i = (int32_t) atol(out_val);
+            offer_adjust = (int32_t) atol(out_val);
+
             // Don't accept a zero here.  Turn off increment if it was zero
             // because a zero will not exit.  This can be zero if the user
             // did not type a number after the +/- sign.
-            if (i == 0) {
+            if (offer_adjust == 0) {
                 increment = false;
             } else {
-                last_store_inc = (int16_t) i;
+                last_store_inc = (int16_t) offer_adjust;
             }
         } else if (num_offer && *out_val == '\0') {
-            i = last_store_inc;
+            offer_adjust = last_store_inc;
             increment = true;
         } else {
-            i = (int32_t) atol(out_val);
+            offer_adjust = (int32_t) atol(out_val);
         }
 
         // don't allow incremental haggling, if player has not made an offer yet
         if (flag && num_offer == 0 && increment) {
             msg_print("You haven't even made your first offer yet!");
-            i = 0;
+            offer_adjust = 0;
             increment = false;
         }
     }
 
     if (flag) {
         if (increment) {
-            *new_offer += i;
+            *new_offer += offer_adjust;
         } else {
-            *new_offer = i;
+            *new_offer = offer_adjust;
         }
     } else {
         erase_line(0, 0);
@@ -403,15 +403,15 @@ static bool get_haggle(const char *comment, int32_t *new_offer, int num_offer) {
 
 static int receive_offer(int store_num, const char *comment, int32_t *new_offer, int32_t last_offer, int num_offer, int factor) {
     int receive = 0;
+    bool success = false;
 
-    bool flag = false;
-    while (!flag) {
+    while (!success) {
         if (get_haggle(comment, new_offer, num_offer)) {
             if (*new_offer * factor >= last_offer * factor) {
-                flag = true;
+                success = true;
             } else if (haggle_insults(store_num)) {
                 receive = 2;
-                flag = true;
+                success = true;
             } else {
                 // new_offer rejected, reset new_offer so that incremental
                 // haggling works correctly
@@ -419,7 +419,7 @@ static int receive_offer(int store_num, const char *comment, int32_t *new_offer,
             }
         } else {
             receive = 1;
-            flag = true;
+            success = true;
         }
     }
 
@@ -785,19 +785,22 @@ static int sell_haggle(int store_num, int32_t *price, inven_type *item) {
     return sell;
 }
 
+// Get the number of store items to display on the screen
+static int store_items_to_display(int store_ctr, int cur_top) {
+    if (cur_top == 12) {
+        return store_ctr - 1 - 12;
+    }
+
+    if (store_ctr > 11) {
+        return 11;
+    }
+
+    return store_ctr - 1;
+}
+
 // Buy an item from a store -RAK-
 static bool store_purchase(int store_num, int *cur_top) {
     store_type *s_ptr = &store[store_num];
-
-    // i == number of objects shown on screen
-    int i;
-    if (*cur_top == 12) {
-        i = s_ptr->store_ctr - 1 - 12;
-    } else if (s_ptr->store_ctr > 11) {
-        i = 11;
-    } else {
-        i = s_ptr->store_ctr - 1;
-    }
 
     if (s_ptr->store_ctr < 1) {
         msg_print("I am currently out of stock.");
@@ -805,7 +808,8 @@ static bool store_purchase(int store_num, int *cur_top) {
     }
 
     int item_val;
-    if (!get_store_item(&item_val, "Which item are you interested in? ", 0, i)) {
+    int item_count = store_items_to_display(s_ptr->store_ctr, *cur_top);
+    if (!get_store_item(&item_val, "Which item are you interested in? ", 0, item_count)) {
         return false;
     }
 
@@ -821,17 +825,15 @@ static bool store_purchase(int store_num, int *cur_top) {
         return false;
     }
 
-    int choice;
+    int choice = 0;
     int32_t price;
+    bool purchased = false;
 
     if (s_ptr->store_inven[item_val].scost > 0) {
         price = s_ptr->store_inven[item_val].scost;
-        choice = 0;
     } else {
         choice = purchase_haggle(store_num, &price, &sell_obj);
     }
-
-    bool purchased = false;
 
     if (choice == 0) {
         if (py.misc.au >= price) {
@@ -840,7 +842,8 @@ static bool store_purchase(int store_num, int *cur_top) {
             py.misc.au -= price;
 
             int item_new = inven_carry(&sell_obj);
-            i = s_ptr->store_ctr;
+            int saved_store_counter = s_ptr->store_ctr;
+
             store_destroy(store_num, item_val, true);
 
             bigvtype out_val, tmp_str;
@@ -855,7 +858,7 @@ static bool store_purchase(int store_num, int *cur_top) {
             } else {
                 inven_record *r_ptr = &s_ptr->store_inven[item_val];
 
-                if (i == s_ptr->store_ctr) {
+                if (saved_store_counter == s_ptr->store_ctr) {
                     if (r_ptr->scost < 0) {
                         r_ptr->scost = price;
                         display_cost(store_num, item_val);
@@ -902,8 +905,8 @@ static bool store_sell(int store_num, int *cur_top) {
             if (counter > last_item) {
                 last_item = counter;
             }
-        } // end of if (flag)
-    }     // end of for (counter)
+        }
+    }
 
     if (last_item == -1) {
         msg_print("You have nothing to sell to this store!");
@@ -928,7 +931,6 @@ static bool store_sell(int store_num, int *cur_top) {
         msg_print("I have not the room in my store to keep it.");
         return false;
     }
-
 
     int32_t price;
     bool sold = false;
@@ -999,10 +1001,10 @@ void enter_store(int store_num) {
     }
 
     int cur_top = 0;
-    display_store(store_num, cur_top);
+    display_store(store_num, owners[s_ptr->owner].owner_name, cur_top);
 
-    bool exit_flag = false;
-    while (!exit_flag) {
+    bool exit_store = false;
+    while (!exit_store) {
         move_cursor(20, 9);
 
         // clear the msg flag just like we do in dungeon.c
@@ -1010,7 +1012,7 @@ void enter_store(int store_num) {
 
         char command;
         if (get_com(CNIL, &command)) {
-            int tmp_chr;
+            int saved_chr;
 
             switch (command) {
                 case 'b':
@@ -1036,7 +1038,7 @@ void enter_store(int store_num) {
                 case 'w': // Wear
                 case 'X':
                 case 'x': // Switch weapon
-                    tmp_chr = py.stats.use_stat[A_CHR];
+                    saved_chr = py.stats.use_stat[A_CHR];
 
                     do {
                         inven_command(command);
@@ -1044,23 +1046,24 @@ void enter_store(int store_num) {
                     } while (command);
 
                     // redisplay store prices if charisma changes
-                    if (tmp_chr != py.stats.use_stat[A_CHR]) {
+                    if (saved_chr != py.stats.use_stat[A_CHR]) {
                         display_inventory(store_num, cur_top);
                     }
+
                     free_turn_flag = false; // No free moves here. -CJS-
                     break;
                 case 'p':
-                    exit_flag = store_purchase(store_num, &cur_top);
+                    exit_store = store_purchase(store_num, &cur_top);
                     break;
                 case 's':
-                    exit_flag = store_sell(store_num, &cur_top);
+                    exit_store = store_sell(store_num, &cur_top);
                     break;
                 default:
                     bell();
                     break;
             }
         } else {
-            exit_flag = true;
+            exit_store = true;
         }
     }
 
