@@ -11,11 +11,10 @@
 #include "headers.h"
 #include "externs.h"
 
-static void printMonsterActionText(std::string name, std::string text) {
-    vtype out_val;
-    (void) sprintf(out_val, "%s %s", name.c_str(), text.c_str());
-
-    msg_print(out_val);
+static void printMonsterActionText(std::string name, std::string action) {
+    vtype msg;
+    (void) sprintf(msg, "%s %s", name.c_str(), action.c_str());
+    msg_print(msg);
 }
 
 // Following are spell procedure/functions -RAK-
@@ -40,32 +39,32 @@ static void lower_monster_name(char *description, bool monsterLit, const char *m
 }
 
 // Sleep creatures adjacent to player -RAK-
-bool sleep_monsters1(int y, int x) {
+bool sleep_monsters1(int row, int col) {
     bool asleep = false;
 
-    for (int i = y - 1; i <= y + 1; i++) {
-        for (int j = x - 1; j <= x + 1; j++) {
-            if (cave[i][j].cptr <= 1) {
+    for (int y = row - 1; y <= row + 1; y++) {
+        for (int x = col - 1; x <= col + 1; x++) {
+            if (cave[y][x].cptr <= 1) {
                 continue;
             }
 
-            monster_type *m_ptr = &m_list[cave[i][j].cptr];
+            monster_type *m_ptr = &m_list[cave[y][x].cptr];
             creature_type *r_ptr = &c_list[m_ptr->mptr];
 
-            vtype m_name;
-            monster_name(m_name, m_ptr->ml, r_ptr->name);
+            vtype name;
+            monster_name(name, m_ptr->ml, r_ptr->name);
 
             if (randint(MAX_MONS_LEVEL) < r_ptr->level || (CD_NO_SLEEP & r_ptr->cdefense)) {
                 if (m_ptr->ml && (r_ptr->cdefense & CD_NO_SLEEP)) {
                     c_recall[m_ptr->mptr].r_cdefense |= CD_NO_SLEEP;
                 }
 
-                printMonsterActionText(m_name, "is unaffected.");
+                printMonsterActionText(name, "is unaffected.");
             } else {
                 m_ptr->csleep = 500;
                 asleep = true;
 
-                printMonsterActionText(m_name, "falls asleep.");
+                printMonsterActionText(name, "falls asleep.");
             }
         }
     }
@@ -77,13 +76,13 @@ bool sleep_monsters1(int y, int x) {
 bool detect_treasure() {
     bool detected = false;
 
-    for (int i = panel_row_min; i <= panel_row_max; i++) {
-        for (int j = panel_col_min; j <= panel_col_max; j++) {
-            cave_type *c_ptr = &cave[i][j];
+    for (int y = panel_row_min; y <= panel_row_max; y++) {
+        for (int x = panel_col_min; x <= panel_col_max; x++) {
+            cave_type *c_ptr = &cave[y][x];
 
-            if (c_ptr->tptr != 0 && t_list[c_ptr->tptr].tval == TV_GOLD && !test_light(i, j)) {
+            if (c_ptr->tptr != 0 && t_list[c_ptr->tptr].tval == TV_GOLD && !test_light(y, x)) {
                 c_ptr->fm = true;
-                lite_spot(i, j);
+                lite_spot(y, x);
 
                 detected = true;
             }
@@ -97,13 +96,13 @@ bool detect_treasure() {
 bool detect_object() {
     bool detected = false;
 
-    for (int i = panel_row_min; i <= panel_row_max; i++) {
-        for (int j = panel_col_min; j <= panel_col_max; j++) {
-            cave_type *c_ptr = &cave[i][j];
+    for (int y = panel_row_min; y <= panel_row_max; y++) {
+        for (int x = panel_col_min; x <= panel_col_max; x++) {
+            cave_type *c_ptr = &cave[y][x];
 
-            if (c_ptr->tptr != 0 && t_list[c_ptr->tptr].tval < TV_MAX_OBJECT && !test_light(i, j)) {
+            if (c_ptr->tptr != 0 && t_list[c_ptr->tptr].tval < TV_MAX_OBJECT && !test_light(y, x)) {
                 c_ptr->fm = true;
-                lite_spot(i, j);
+                lite_spot(y, x);
 
                 detected = true;
             }
@@ -117,9 +116,9 @@ bool detect_object() {
 bool detect_trap() {
     bool detected = false;
 
-    for (int i = panel_row_min; i <= panel_row_max; i++) {
-        for (int j = panel_col_min; j <= panel_col_max; j++) {
-            cave_type *c_ptr = &cave[i][j];
+    for (int y = panel_row_min; y <= panel_row_max; y++) {
+        for (int x = panel_col_min; x <= panel_col_max; x++) {
+            cave_type *c_ptr = &cave[y][x];
 
             if (c_ptr->tptr == 0) {
                 continue;
@@ -127,7 +126,7 @@ bool detect_trap() {
 
             if (t_list[c_ptr->tptr].tval == TV_INVIS_TRAP) {
                 c_ptr->fm = true;
-                change_trap(i, j);
+                change_trap(y, x);
 
                 detected = true;
             } else if (t_list[c_ptr->tptr].tval == TV_CHEST) {
@@ -144,9 +143,9 @@ bool detect_trap() {
 bool detect_sdoor() {
     bool detected = false;
 
-    for (int i = panel_row_min; i <= panel_row_max; i++) {
-        for (int j = panel_col_min; j <= panel_col_max; j++) {
-            cave_type *c_ptr = &cave[i][j];
+    for (int y = panel_row_min; y <= panel_row_max; y++) {
+        for (int x = panel_col_min; x <= panel_col_max; x++) {
+            cave_type *c_ptr = &cave[y][x];
 
             if (c_ptr->tptr == 0) {
                 continue;
@@ -156,14 +155,14 @@ bool detect_sdoor() {
                 // Secret doors
 
                 c_ptr->fm = true;
-                change_trap(i, j);
+                change_trap(y, x);
 
                 detected = true;
             } else if ((t_list[c_ptr->tptr].tval == TV_UP_STAIR || t_list[c_ptr->tptr].tval == TV_DOWN_STAIR) && !c_ptr->fm) {
                 // Staircases
 
                 c_ptr->fm = true;
-                lite_spot(i, j);
+                lite_spot(y, x);
 
                 detected = true;
             }
@@ -177,8 +176,8 @@ bool detect_sdoor() {
 bool detect_invisible() {
     bool detected = false;
 
-    for (int i = mfptr - 1; i >= MIN_MONIX; i--) {
-        monster_type *m_ptr = &m_list[i];
+    for (int id = mfptr - 1; id >= MIN_MONIX; id--) {
+        monster_type *m_ptr = &m_list[id];
 
         if (panel_contains((int) m_ptr->fy, (int) m_ptr->fx) && (CM_INVISIBLE & c_list[m_ptr->mptr].cmove)) {
             m_ptr->ml = true;
@@ -240,23 +239,23 @@ bool unlight_area(int y, int x) {
         int end_row = start_row + tmp1 - 1;
         int end_col = start_col + tmp2 - 1;
 
-        for (int i = start_row; i <= end_row; i++) {
-            for (int j = start_col; j <= end_col; j++) {
-                cave_type *c_ptr = &cave[i][j];
+        for (int row = start_row; row <= end_row; row++) {
+            for (int col = start_col; col <= end_col; col++) {
+                cave_type *c_ptr = &cave[row][col];
                 if (c_ptr->lr && c_ptr->fval <= MAX_CAVE_FLOOR) {
                     c_ptr->pl = false;
                     c_ptr->fval = DARK_FLOOR;
-                    lite_spot(i, j);
-                    if (!test_light(i, j)) {
+                    lite_spot(row, col);
+                    if (!test_light(row, col)) {
                         darkened = true;
                     }
                 }
             }
         }
     } else {
-        for (int i = y - 1; i <= y + 1; i++) {
-            for (int j = x - 1; j <= x + 1; j++) {
-                cave_type *c_ptr = &cave[i][j];
+        for (int row = y - 1; row <= y + 1; row++) {
+            for (int col = x - 1; col <= x + 1; col++) {
+                cave_type *c_ptr = &cave[row][col];
                 if (c_ptr->fval == CORR_FLOOR && c_ptr->pl) {
                     // pl could have been set by star-lite wand, etc
                     c_ptr->pl = false;
@@ -273,6 +272,20 @@ bool unlight_area(int y, int x) {
     return darkened;
 }
 
+static void lightTileArea(int row, int col) {
+    for (int y = row - 1; y <= row + 1; y++) {
+        for (int x = col - 1; x <= col + 1; x++) {
+            cave_type *c_ptr = &cave[y][x];
+
+            if (c_ptr->fval >= MIN_CAVE_WALL) {
+                c_ptr->pl = true;
+            } else if (c_ptr->tptr != 0 && t_list[c_ptr->tptr].tval >= TV_MIN_VISIBLE && t_list[c_ptr->tptr].tval <= TV_MAX_VISIBLE) {
+                c_ptr->fm = true;
+            }
+        }
+    }
+}
+
 // Map the current area plus some -RAK-
 void map_area() {
     int rowMin = panel_row_min - randint(10);
@@ -283,17 +296,7 @@ void map_area() {
     for (int row = rowMin; row <= rowMax; row++) {
         for (int col = colMin; col <= colMax; col++) {
             if (in_bounds(row, col) && cave[row][col].fval <= MAX_CAVE_FLOOR) {
-                for (int y = row - 1; y <= row + 1; y++) {
-                    for (int x = col - 1; x <= col + 1; x++) {
-                        cave_type *c_ptr = &cave[y][x];
-
-                        if (c_ptr->fval >= MIN_CAVE_WALL) {
-                            c_ptr->pl = true;
-                        } else if (c_ptr->tptr != 0 && t_list[c_ptr->tptr].tval >= TV_MIN_VISIBLE && t_list[c_ptr->tptr].tval <= TV_MAX_VISIBLE) {
-                            c_ptr->fm = true;
-                        }
-                    }
-                }
+                lightTileArea(row, col);
             }
         }
     }
@@ -332,8 +335,8 @@ bool ident_spell() {
 bool aggravate_monster(int dis_affect) {
     bool aggravated = false;
 
-    for (int i = mfptr - 1; i >= MIN_MONIX; i--) {
-        monster_type *m_ptr = &m_list[i];
+    for (int id = mfptr - 1; id >= MIN_MONIX; id--) {
+        monster_type *m_ptr = &m_list[id];
         m_ptr->csleep = 0;
         if (m_ptr->cdis <= dis_affect && m_ptr->cspeed < 2) {
             m_ptr->cspeed++;
@@ -353,29 +356,29 @@ bool trap_creation() {
     // NOTE: this is not changed anywhere. A bug or correct? -MRC-
     bool trapped = true;
 
-    for (int i = char_row - 1; i <= char_row + 1; i++) {
-        for (int j = char_col - 1; j <= char_col + 1; j++) {
+    for (int y = char_row - 1; y <= char_row + 1; y++) {
+        for (int x = char_col - 1; x <= char_col + 1; x++) {
             // Don't put a trap under the player, since this can lead to
             // strange situations, e.g. falling through a trap door while
             // trying to rest, setting off a falling rock trap and ending
             // up under the rock.
-            if (i == char_row && j == char_col) {
+            if (y == char_row && x == char_col) {
                 continue;
             }
 
-            cave_type *c_ptr = &cave[i][j];
+            cave_type *c_ptr = &cave[y][x];
 
             if (c_ptr->fval <= MAX_CAVE_FLOOR) {
                 if (c_ptr->tptr != 0) {
-                    (void) delete_object(i, j);
+                    (void) delete_object(y, x);
                 }
-                place_trap(i, j, randint(MAX_TRAP) - 1);
+                place_trap(y, x, randint(MAX_TRAP) - 1);
 
                 // don't let player gain exp from the newly created traps
                 t_list[c_ptr->tptr].p1 = 0;
 
                 // open pits are immediately visible, so call lite_spot
-                lite_spot(i, j);
+                lite_spot(y, x);
             }
         }
     }
@@ -387,25 +390,25 @@ bool trap_creation() {
 bool door_creation() {
     bool created = false;
 
-    for (int i = char_row - 1; i <= char_row + 1; i++) {
-        for (int j = char_col - 1; j <= char_col + 1; j++) {
+    for (int y = char_row - 1; y <= char_row + 1; y++) {
+        for (int x = char_col - 1; x <= char_col + 1; x++) {
             // Don't put a door under the player!
-            if (i == char_row && j == char_col) {
+            if (y == char_row && x == char_col) {
                 continue;
             }
 
-            cave_type *c_ptr = &cave[i][j];
+            cave_type *c_ptr = &cave[y][x];
 
             if (c_ptr->fval <= MAX_CAVE_FLOOR) {
                 if (c_ptr->tptr != 0) {
-                    (void) delete_object(i, j);
+                    (void) delete_object(y, x);
                 }
 
                 int k = popt();
                 c_ptr->fval = BLOCKED_FLOOR;
                 c_ptr->tptr = (uint8_t) k;
                 invcopy(&t_list[k], OBJ_CLOSED_DOOR);
-                lite_spot(i, j);
+                lite_spot(y, x);
 
                 created = true;
             }
@@ -419,9 +422,9 @@ bool door_creation() {
 bool td_destroy() {
     bool destroyed = false;
 
-    for (int i = char_row - 1; i <= char_row + 1; i++) {
-        for (int j = char_col - 1; j <= char_col + 1; j++) {
-            cave_type *c_ptr = &cave[i][j];
+    for (int y = char_row - 1; y <= char_row + 1; y++) {
+        for (int x = char_col - 1; x <= char_col + 1; x++) {
+            cave_type *c_ptr = &cave[y][x];
 
             if (c_ptr->tptr == 0) {
                 continue;
@@ -431,7 +434,7 @@ bool td_destroy() {
                  t_list[c_ptr->tptr].tval <= TV_CLOSED_DOOR &&
                  t_list[c_ptr->tptr].tval != TV_RUBBLE) ||
                 t_list[c_ptr->tptr].tval == TV_SECRET_DOOR) {
-                if (delete_object(i, j)) {
+                if (delete_object(y, x)) {
                     destroyed = true;
                 }
             } else if (t_list[c_ptr->tptr].tval == TV_CHEST && t_list[c_ptr->tptr].flags != 0) {
@@ -454,8 +457,8 @@ bool td_destroy() {
 bool detect_monsters() {
     bool detected = false;
 
-    for (int i = mfptr - 1; i >= MIN_MONIX; i--) {
-        monster_type *m_ptr = &m_list[i];
+    for (int id = mfptr - 1; id >= MIN_MONIX; id--) {
+        monster_type *m_ptr = &m_list[id];
 
         if (panel_contains((int) m_ptr->fy, (int) m_ptr->fx) && (CM_INVISIBLE & c_list[m_ptr->mptr].cmove) == 0) {
             m_ptr->ml = true;
@@ -477,61 +480,68 @@ bool detect_monsters() {
     return detected;
 }
 
+// Update monster when light line spell touches it.
+static void lightLineTouchesMonster(int monsterID) {
+    monster_type *monster = &m_list[monsterID];
+    creature_type *creature = &c_list[monster->mptr];
+
+    // light up and draw monster
+    update_mon(monsterID);
+
+    vtype name;
+    monster_name(name, monster->ml, creature->name);
+
+    if (CD_LIGHT & creature->cdefense) {
+        if (monster->ml) {
+            c_recall[monster->mptr].r_cdefense |= CD_LIGHT;
+        }
+
+        if (mon_take_hit(monsterID, damroll(2, 8) >= 0)) {
+            printMonsterActionText(name, "shrivels away in the light!");
+            prt_experience();
+        } else {
+            printMonsterActionText(name, "cringes from the light!");
+        }
+    }
+}
+
 // Leave a line of light in given dir, blue light can sometimes hurt creatures. -RAK-
 void light_line(int dir, int y, int x) {
-    int dist = -1;
-
+    int dist = 0;
     bool finished = false;
-    while (!finished) {
-        // put mmove at end because want to light up current spot
-        dist++;
 
+    while (!finished) {
         cave_type *c_ptr = &cave[y][x];
 
         if (dist > OBJ_BOLT_RANGE || c_ptr->fval >= MIN_CLOSED_SPACE) {
+            (void) mmove(dir, &y, &x);
             finished = true;
-        } else {
-            if (!c_ptr->pl && !c_ptr->tl) {
-                // set pl so that lite_spot will work
-                c_ptr->pl = true;
+            continue; // we're done here, break out of the loop
+        }
 
-                if (c_ptr->fval == LIGHT_FLOOR) {
-                    if (panel_contains(y, x)) {
-                        light_room(y, x);
-                    }
-                } else {
-                    lite_spot(y, x);
-                }
-            }
-
-            // set pl in case tl was true above
+        if (!c_ptr->pl && !c_ptr->tl) {
+            // set pl so that lite_spot will work
             c_ptr->pl = true;
 
-            if (c_ptr->cptr > 1) {
-                monster_type *m_ptr = &m_list[c_ptr->cptr];
-                creature_type *r_ptr = &c_list[m_ptr->mptr];
-
-                // light up and draw monster
-                update_mon((int) c_ptr->cptr);
-
-                vtype m_name;
-                monster_name(m_name, m_ptr->ml, r_ptr->name);
-
-                if (CD_LIGHT & r_ptr->cdefense) {
-                    if (m_ptr->ml) {
-                        c_recall[m_ptr->mptr].r_cdefense |= CD_LIGHT;
-                    }
-
-                    if (mon_take_hit((int) c_ptr->cptr, damroll(2, 8) >= 0)) {
-                        printMonsterActionText(m_name, "shrivels away in the light!");
-                        prt_experience();
-                    } else {
-                        printMonsterActionText(m_name, "cringes from the light!");
-                    }
+            if (c_ptr->fval == LIGHT_FLOOR) {
+                if (panel_contains(y, x)) {
+                    light_room(y, x);
                 }
+            } else {
+                lite_spot(y, x);
             }
         }
+
+        // set pl in case tl was true above
+        c_ptr->pl = true;
+
+        if (c_ptr->cptr > 1) {
+            lightLineTouchesMonster((int) c_ptr->cptr);
+        }
+
+        // move must be at end because want to light up current spot
         (void) mmove(dir, &y, &x);
+        dist++;
     }
 }
 
@@ -541,25 +551,20 @@ void starlite(int y, int x) {
         msg_print("The end of the staff bursts into a blue shimmering light.");
     }
 
-    for (int i = 1; i <= 9; i++) {
-        if (i != 5) {
-            light_line(i, y, x);
+    for (int dir = 1; dir <= 9; dir++) {
+        if (dir != 5) {
+            light_line(dir, y, x);
         }
     }
 }
 
 // Disarms all traps/chests in a given direction -RAK-
 bool disarm_all(int dir, int y, int x) {
+    int dist = 0;
     bool disarmed = false;
-
-    int dist = -1;
-
     cave_type *c_ptr;
 
     do {
-        // put mmove at end, in case standing on a trap
-        dist++;
-
         c_ptr = &cave[y][x];
 
         // note, must continue up to and including the first non open space,
@@ -588,8 +593,11 @@ bool disarm_all(int dir, int y, int x) {
                 known2(t_ptr);
             }
         }
+
+        // move must be at end because want to light up current spot
         (void) mmove(dir, &y, &x);
-    } while ((dist <= OBJ_BOLT_RANGE) && c_ptr->fval <= MAX_OPEN_SPACE);
+        dist++;
+    } while (dist <= OBJ_BOLT_RANGE && c_ptr->fval <= MAX_OPEN_SPACE);
 
     return disarmed;
 }
@@ -637,6 +645,50 @@ static void get_flags(int typ, uint32_t *weapon_type, int *harm_type, bool (**de
     }
 }
 
+// Light up, draw, and check for monster damage when Fire Bolt touches it.
+static void fireBoltTouchesMonster(cave_type *tile, int dam, int harmType, uint32_t weaponID, std::string boltName) {
+    monster_type *monster = &m_list[tile->cptr];
+    creature_type *creature = &c_list[monster->mptr];
+
+    // light up monster and draw monster, temporarily set
+    // pl so that update_mon() will work
+    uint saveLitStatus = tile->pl;
+    tile->pl = true;
+    update_mon((int) tile->cptr);
+    tile->pl = saveLitStatus;
+
+    // draw monster and clear previous bolt
+    put_qio();
+
+    vtype name;
+    lower_monster_name(name, monster->ml, creature->name);
+
+    vtype msg;
+    (void) sprintf(msg, "The %s strikes %s.", boltName.c_str(), name);
+    msg_print(msg);
+
+    if (harmType & creature->cdefense) {
+        dam = dam * 2;
+        if (monster->ml) {
+            c_recall[monster->mptr].r_cdefense |= harmType;
+        }
+    } else if (weaponID & creature->spells) {
+        dam = dam / 4;
+        if (monster->ml) {
+            c_recall[monster->mptr].r_spells |= weaponID;
+        }
+    }
+
+    monster_name(name, monster->ml, creature->name);
+
+    if (mon_take_hit((int) tile->cptr, dam) >= 0) {
+        printMonsterActionText(name, "dies in a fit of agony.");
+        prt_experience();
+    } else if (dam > 0) {
+        printMonsterActionText(name, "screams in agony.");
+    }
+}
+
 // Shoot a bolt in a given direction -RAK-
 void fire_bolt(int typ, int dir, int y, int x, int dam, char *bolt_typ) {
     bool (*dummy)(inven_type *);
@@ -644,73 +696,34 @@ void fire_bolt(int typ, int dir, int y, int x, int dam, char *bolt_typ) {
     uint32_t weapon_type;
     get_flags(typ, &weapon_type, &harm_type, &dummy);
 
-    int oldy = y;
-    int oldx = x;
     int dist = 0;
-
     bool finished = false;
+
     while (!finished) {
+        int oldy = y;
+        int oldx = x;
+
         (void) mmove(dir, &y, &x);
         dist++;
 
         cave_type *c_ptr = &cave[y][x];
 
         lite_spot(oldy, oldx);
+
         if (dist > OBJ_BOLT_RANGE || c_ptr->fval >= MIN_CLOSED_SPACE) {
             finished = true;
-        } else {
-            if (c_ptr->cptr > 1) {
-                finished = true;
-
-                monster_type *m_ptr = &m_list[c_ptr->cptr];
-                creature_type *r_ptr = &c_list[m_ptr->mptr];
-
-                // light up monster and draw monster, temporarily set
-                // pl so that update_mon() will work
-                int i = c_ptr->pl;
-                c_ptr->pl = true;
-                update_mon((int) c_ptr->cptr);
-                c_ptr->pl = i;
-
-                // draw monster and clear previous bolt
-                put_qio();
-
-                vtype out_val, m_name;
-
-                lower_monster_name(m_name, m_ptr->ml, r_ptr->name);
-                (void) sprintf(out_val, "The %s strikes %s.", bolt_typ, m_name);
-                msg_print(out_val);
-
-                if (harm_type & r_ptr->cdefense) {
-                    dam = dam * 2;
-                    if (m_ptr->ml) {
-                        c_recall[m_ptr->mptr].r_cdefense |= harm_type;
-                    }
-                } else if (weapon_type & r_ptr->spells) {
-                    dam = dam / 4;
-                    if (m_ptr->ml) {
-                        c_recall[m_ptr->mptr].r_spells |= weapon_type;
-                    }
-                }
-
-                monster_name(m_name, m_ptr->ml, r_ptr->name);
-                i = mon_take_hit((int) c_ptr->cptr, dam);
-
-                if (i >= 0) {
-                    printMonsterActionText(m_name, "dies in a fit of agony.");
-                    prt_experience();
-                } else if (dam > 0) {
-                    printMonsterActionText(m_name, "screams in agony.");
-                }
-            } else if (panel_contains(y, x) && py.flags.blind < 1) {
-                print('*', y, x);
-
-                // show the bolt
-                put_qio();
-            }
+            continue; // we're done here, break out of the loop
         }
-        oldy = y;
-        oldx = x;
+
+        if (c_ptr->cptr > 1) {
+            finished = true;
+            fireBoltTouchesMonster(c_ptr, dam, harm_type, weapon_type, bolt_typ);
+        } else if (panel_contains(y, x) && py.flags.blind < 1) {
+            print('*', y, x);
+
+            // show the bolt
+            put_qio();
+        }
     }
 }
 
@@ -725,12 +738,13 @@ void fire_ball(int typ, int dir, int y, int x, int dam_hp, const char *descrip) 
     uint32_t weapon_type;
     get_flags(typ, &weapon_type, &harm_type, &destroy);
 
-    int oldy = y;
-    int oldx = x;
     int dist = 0;
 
     bool finished = false;
     while (!finished) {
+        int oldy = y;
+        int oldx = x;
+
         (void) mmove(dir, &y, &x);
         dist++;
 
@@ -754,13 +768,13 @@ void fire_ball(int typ, int dir, int y, int x, int dam_hp, const char *descrip) 
             // The ball hits and explodes.
 
             // The explosion.
-            for (int i = y - max_dis; i <= y + max_dis; i++) {
-                for (int j = x - max_dis; j <= x + max_dis; j++) {
-                    if (in_bounds(i, j) && distance(y, x, i, j) <= max_dis && los(y, x, i, j)) {
-                        c_ptr = &cave[i][j];
+            for (int row = y - max_dis; row <= y + max_dis; row++) {
+                for (int col = x - max_dis; col <= x + max_dis; col++) {
+                    if (in_bounds(row, col) && distance(y, x, row, col) <= max_dis && los(y, x, row, col)) {
+                        c_ptr = &cave[row][col];
 
                         if (c_ptr->tptr != 0 && (*destroy)(&t_list[c_ptr->tptr])) {
-                            (void) delete_object(i, j);
+                            (void) delete_object(row, col);
                         }
 
                         if (c_ptr->fval <= MAX_OPEN_SPACE) {
@@ -788,15 +802,15 @@ void fire_ball(int typ, int dir, int y, int x, int dam_hp, const char *descrip) 
                                     }
                                 }
 
-                                dam = (dam / (distance(i, j, y, x) + 1));
+                                dam = (dam / (distance(row, col, y, x) + 1));
                                 int k = mon_take_hit((int) c_ptr->cptr, dam);
 
                                 if (k >= 0) {
                                     tkill++;
                                 }
                                 c_ptr->pl = tmp;
-                            } else if (panel_contains(i, j) && py.flags.blind < 1) {
-                                print('*', i, j);
+                            } else if (panel_contains(row, col) && py.flags.blind < 1) {
+                                print('*', row, col);
                             }
                         }
                     }
@@ -806,10 +820,10 @@ void fire_ball(int typ, int dir, int y, int x, int dam_hp, const char *descrip) 
             // show ball of whatever
             put_qio();
 
-            for (int i = (y - 2); i <= (y + 2); i++) {
-                for (int j = (x - 2); j <= (x + 2); j++) {
-                    if (in_bounds(i, j) && panel_contains(i, j) && distance(y, x, i, j) <= max_dis) {
-                        lite_spot(i, j);
+            for (int row = (y - 2); row <= (y + 2); row++) {
+                for (int col = (x - 2); col <= (x + 2); col++) {
+                    if (in_bounds(row, col) && panel_contains(row, col) && distance(y, x, row, col) <= max_dis) {
+                        lite_spot(row, col);
                     }
                 }
             }
@@ -841,8 +855,6 @@ void fire_ball(int typ, int dir, int y, int x, int dam_hp, const char *descrip) 
             // show bolt
             put_qio();
         }
-        oldy = y;
-        oldx = x;
     }
 }
 
@@ -858,21 +870,21 @@ void breath(int typ, int y, int x, int dam_hp, char *ddesc, int monptr) {
 
     int dam;
 
-    for (int i = y - 2; i <= y + 2; i++) {
-        for (int j = x - 2; j <= x + 2; j++) {
-            if (in_bounds(i, j) && distance(y, x, i, j) <= max_dis && los(y, x, i, j)) {
-                cave_type *c_ptr = &cave[i][j];
+    for (int row = y - 2; row <= y + 2; row++) {
+        for (int col = x - 2; col <= x + 2; col++) {
+            if (in_bounds(row, col) && distance(y, x, row, col) <= max_dis && los(y, x, row, col)) {
+                cave_type *c_ptr = &cave[row][col];
 
                 if (c_ptr->tptr != 0 && (*destroy)(&t_list[c_ptr->tptr])) {
-                    (void) delete_object(i, j);
+                    (void) delete_object(row, col);
                 }
 
                 if (c_ptr->fval <= MAX_OPEN_SPACE) {
                     // must test status bit, not py.flags.blind here, flag could have
                     // been set by a previous monster, but the breath should still
                     // be visible until the blindness takes effect
-                    if (panel_contains(i, j) && !(py.flags.status & PY_BLIND)) {
-                        print('*', i, j);
+                    if (panel_contains(row, col) && !(py.flags.status & PY_BLIND)) {
+                        print('*', row, col);
                     }
 
                     if (c_ptr->cptr > 1) {
@@ -887,7 +899,7 @@ void breath(int typ, int y, int x, int dam_hp, char *ddesc, int monptr) {
                             dam = (dam / 4);
                         }
 
-                        dam = (dam / (distance(i, j, y, x) + 1));
+                        dam = (dam / (distance(row, col, y, x) + 1));
 
                         // can not call mon_take_hit here, since player does not
                         // get experience for kill
@@ -916,7 +928,7 @@ void breath(int typ, int y, int x, int dam_hp, char *ddesc, int monptr) {
                             }
                         }
                     } else if (c_ptr->cptr == 1) {
-                        dam = (dam_hp / (distance(i, j, y, x) + 1));
+                        dam = (dam_hp / (distance(row, col, y, x) + 1));
 
                         // let's do at least one point of damage
                         // prevents randint(0) problem with poison_gas, also
@@ -950,10 +962,10 @@ void breath(int typ, int y, int x, int dam_hp, char *ddesc, int monptr) {
     // show the ball of gas
     put_qio();
 
-    for (int i = (y - 2); i <= (y + 2); i++) {
-        for (int j = (x - 2); j <= (x + 2); j++) {
-            if (in_bounds(i, j) && panel_contains(i, j) && distance(y, x, i, j) <= max_dis) {
-                lite_spot(i, j);
+    for (int row = (y - 2); row <= (y + 2); row++) {
+        for (int col = (x - 2); col <= (x + 2); col++) {
+            if (in_bounds(row, col) && panel_contains(row, col) && distance(y, x, row, col) <= max_dis) {
+                lite_spot(row, col);
             }
         }
     }
@@ -979,15 +991,15 @@ bool recharge(int num) {
     //
     // make it harder to recharge high level, and highly charged wands, note
     // that i can be negative, so check its value before trying to call randint().
-    i = num + 50 - (int) i_ptr->level - i_ptr->p1;
-    if (i < 19) {
+    int chance = num + 50 - (int) i_ptr->level - i_ptr->p1;
+    if (chance < 19) {
         // Automatic failure.
-        i = 1;
+        chance = 1;
     } else {
-        i = randint(i / 10);
+        chance = randint(chance / 10);
     }
 
-    if (i == 1) {
+    if (chance == 1) {
         msg_print("There is a bright flash of light.");
         inven_destroy(item_val);
     } else {
@@ -1023,14 +1035,14 @@ bool hp_monster(int dir, int y, int x, int dam) {
             monster_type *m_ptr = &m_list[c_ptr->cptr];
             creature_type *r_ptr = &c_list[m_ptr->mptr];
 
-            vtype m_name;
-            monster_name(m_name, m_ptr->ml, r_ptr->name);
+            vtype name;
+            monster_name(name, m_ptr->ml, r_ptr->name);
 
             if (mon_take_hit((int) c_ptr->cptr, dam) >= 0) {
-                printMonsterActionText(m_name, "dies in a fit of agony.");
+                printMonsterActionText(name, "dies in a fit of agony.");
                 prt_experience();
             } else if (dam > 0) {
-                printMonsterActionText(m_name, "screams in agony.");
+                printMonsterActionText(name, "screams in agony.");
             }
 
             changed = true;
@@ -1062,14 +1074,14 @@ bool drain_life(int dir, int y, int x) {
             creature_type *r_ptr = &c_list[m_ptr->mptr];
 
             if ((r_ptr->cdefense & CD_UNDEAD) == 0) {
-                vtype m_name;
-                monster_name(m_name, m_ptr->ml, r_ptr->name);
+                vtype name;
+                monster_name(name, m_ptr->ml, r_ptr->name);
 
                 if (mon_take_hit((int) c_ptr->cptr, 75) >= 0) {
-                    printMonsterActionText(m_name, "dies in a fit of agony.");
+                    printMonsterActionText(name, "dies in a fit of agony.");
                     prt_experience();
                 } else {
-                    printMonsterActionText(m_name, "screams in agony.");
+                    printMonsterActionText(name, "screams in agony.");
                 }
 
                 drained = true;
@@ -1104,8 +1116,8 @@ bool speed_monster(int dir, int y, int x, int spd) {
             monster_type *m_ptr = &m_list[c_ptr->cptr];
             creature_type *r_ptr = &c_list[m_ptr->mptr];
 
-            vtype m_name;
-            monster_name(m_name, m_ptr->ml, r_ptr->name);
+            vtype name;
+            monster_name(name, m_ptr->ml, r_ptr->name);
 
             if (spd > 0) {
                 m_ptr->cspeed += spd;
@@ -1113,18 +1125,18 @@ bool speed_monster(int dir, int y, int x, int spd) {
 
                 changed = true;
 
-                printMonsterActionText(m_name, "starts moving faster.");
+                printMonsterActionText(name, "starts moving faster.");
             } else if (randint(MAX_MONS_LEVEL) > r_ptr->level) {
                 m_ptr->cspeed += spd;
                 m_ptr->csleep = 0;
 
                 changed = true;
 
-                printMonsterActionText(m_name, "starts moving slower.");
+                printMonsterActionText(name, "starts moving slower.");
             } else {
                 m_ptr->csleep = 0;
 
-                printMonsterActionText(m_name, "is unaffected.");
+                printMonsterActionText(name, "is unaffected.");
             }
         }
     }
@@ -1153,8 +1165,8 @@ bool confuse_monster(int dir, int y, int x) {
             monster_type *m_ptr = &m_list[c_ptr->cptr];
             creature_type *r_ptr = &c_list[m_ptr->mptr];
 
-            vtype m_name;
-            monster_name(m_name, m_ptr->ml, r_ptr->name);
+            vtype name;
+            monster_name(name, m_ptr->ml, r_ptr->name);
 
             if (randint(MAX_MONS_LEVEL) < r_ptr->level || (CD_NO_SLEEP & r_ptr->cdefense)) {
                 if (m_ptr->ml && (r_ptr->cdefense & CD_NO_SLEEP)) {
@@ -1167,7 +1179,7 @@ bool confuse_monster(int dir, int y, int x) {
                     m_ptr->csleep = 0;
                 }
 
-                printMonsterActionText(m_name, "is unaffected.");
+                printMonsterActionText(name, "is unaffected.");
             } else {
                 if (m_ptr->confused) {
                     m_ptr->confused += 3;
@@ -1178,7 +1190,7 @@ bool confuse_monster(int dir, int y, int x) {
 
                 confused = true;
 
-                printMonsterActionText(m_name, "appears confused.");
+                printMonsterActionText(name, "appears confused.");
             }
         }
     }
@@ -1207,21 +1219,21 @@ bool sleep_monster(int dir, int y, int x) {
             monster_type *m_ptr = &m_list[c_ptr->cptr];
             creature_type *r_ptr = &c_list[m_ptr->mptr];
 
-            vtype m_name;
-            monster_name(m_name, m_ptr->ml, r_ptr->name);
+            vtype name;
+            monster_name(name, m_ptr->ml, r_ptr->name);
 
             if (randint(MAX_MONS_LEVEL) < r_ptr->level || (CD_NO_SLEEP & r_ptr->cdefense)) {
                 if (m_ptr->ml && (r_ptr->cdefense & CD_NO_SLEEP)) {
                     c_recall[m_ptr->mptr].r_cdefense |= CD_NO_SLEEP;
                 }
 
-                printMonsterActionText(m_name, "is unaffected.");
+                printMonsterActionText(name, "is unaffected.");
             } else {
                 m_ptr->csleep = 500;
 
                 asleep = true;
 
-                printMonsterActionText(m_name, "falls asleep.");
+                printMonsterActionText(name, "falls asleep.");
             }
         }
     }
@@ -1254,7 +1266,6 @@ bool wall_to_mud(int dir, int y, int x) {
 
             if (test_light(y, x)) {
                 turned = true;
-
                 msg_print("The wall turns into mud.");
             }
         } else if (c_ptr->tptr != 0 && c_ptr->fval >= MIN_CLOSED_SPACE) {
@@ -1263,11 +1274,11 @@ bool wall_to_mud(int dir, int y, int x) {
             if (panel_contains(y, x) && test_light(y, x)) {
                 turned = true;
 
-                bigvtype tmp_str;
-                objdes(tmp_str, &t_list[c_ptr->tptr], false);
+                bigvtype description;
+                objdes(description, &t_list[c_ptr->tptr], false);
 
                 bigvtype out_val;
-                (void) sprintf(out_val, "The %s turns into mud.", tmp_str);
+                (void) sprintf(out_val, "The %s turns into mud.", description);
                 msg_print(out_val);
             }
 
@@ -1290,18 +1301,18 @@ bool wall_to_mud(int dir, int y, int x) {
             creature_type *r_ptr = &c_list[m_ptr->mptr];
 
             if (CD_STONE & r_ptr->cdefense) {
-                vtype m_name;
-                monster_name(m_name, m_ptr->ml, r_ptr->name);
+                vtype name;
+                monster_name(name, m_ptr->ml, r_ptr->name);
 
                 // Should get these messages even if the monster is not visible.
                 int i = mon_take_hit((int) c_ptr->cptr, 100);
                 if (i >= 0) {
                     c_recall[i].r_cdefense |= CD_STONE;
-                    printMonsterActionText(m_name, "dissolves!");
+                    printMonsterActionText(name, "dissolves!");
                     prt_experience(); // print msg before calling prt_exp
                 } else {
                     c_recall[m_ptr->mptr].r_cdefense |= CD_STONE;
-                    printMonsterActionText(m_name, "grunts in pain!");
+                    printMonsterActionText(name, "grunts in pain!");
                 }
                 finished = true;
             }
@@ -1386,9 +1397,9 @@ bool poly_monster(int dir, int y, int x) {
                     morphed = true;
                 }
             } else {
-                vtype m_name;
-                monster_name(m_name, m_ptr->ml, r_ptr->name);
-                printMonsterActionText(m_name, "is unaffected.");
+                vtype name;
+                monster_name(name, m_ptr->ml, r_ptr->name);
+                printMonsterActionText(name, "is unaffected.");
             }
         }
     }
@@ -1411,55 +1422,56 @@ bool build_wall(int dir, int y, int x) {
 
         if (dist > OBJ_BOLT_RANGE || c_ptr->fval >= MIN_CLOSED_SPACE) {
             finished = true;
-        } else {
-            if (c_ptr->tptr != 0) {
-                (void) delete_object(y, x);
-            }
-
-            if (c_ptr->cptr > 1) {
-                finished = true;
-
-                monster_type *m_ptr = &m_list[c_ptr->cptr];
-                creature_type *r_ptr = &c_list[m_ptr->mptr];
-
-                if (!(r_ptr->cmove & CM_PHASE)) {
-                    // monster does not move, can't escape the wall
-                    int damage;
-                    if (r_ptr->cmove & CM_ATTACK_ONLY) {
-                        // this will kill everything
-                        damage = 3000;
-                    } else {
-                        damage = damroll(4, 8);
-                    }
-
-                    vtype m_name;
-                    monster_name(m_name, m_ptr->ml, r_ptr->name);
-
-                    printMonsterActionText(m_name, "wails out in pain!");
-
-                    if (mon_take_hit((int) c_ptr->cptr, damage) >= 0) {
-                        printMonsterActionText(m_name, "is embedded in the rock.");
-                        prt_experience();
-                    }
-                } else if (r_ptr->cchar == 'E' || r_ptr->cchar == 'X') {
-                    // must be an earth elemental or an earth spirit, or a Xorn
-                    // increase its hit points
-                    m_ptr->hp += damroll(4, 8);
-                }
-            }
-
-            c_ptr->fval = MAGMA_WALL;
-            c_ptr->fm = false;
-
-            // Permanently light this wall if it is lit by player's lamp.
-            c_ptr->pl = (c_ptr->tl || c_ptr->pl);
-            lite_spot(y, x);
-
-            // NOTE: this is never used anywhere. Is that a bug or just obsolete code?
-            // i++;
-
-            built = true;
+            continue; // we're done here, break out of the loop
         }
+
+        if (c_ptr->tptr != 0) {
+            (void) delete_object(y, x);
+        }
+
+        if (c_ptr->cptr > 1) {
+            finished = true;
+
+            monster_type *m_ptr = &m_list[c_ptr->cptr];
+            creature_type *r_ptr = &c_list[m_ptr->mptr];
+
+            if (!(r_ptr->cmove & CM_PHASE)) {
+                // monster does not move, can't escape the wall
+                int damage;
+                if (r_ptr->cmove & CM_ATTACK_ONLY) {
+                    // this will kill everything
+                    damage = 3000;
+                } else {
+                    damage = damroll(4, 8);
+                }
+
+                vtype name;
+                monster_name(name, m_ptr->ml, r_ptr->name);
+
+                printMonsterActionText(name, "wails out in pain!");
+
+                if (mon_take_hit((int) c_ptr->cptr, damage) >= 0) {
+                    printMonsterActionText(name, "is embedded in the rock.");
+                    prt_experience();
+                }
+            } else if (r_ptr->cchar == 'E' || r_ptr->cchar == 'X') {
+                // must be an earth elemental or an earth spirit, or a Xorn
+                // increase its hit points
+                m_ptr->hp += damroll(4, 8);
+            }
+        }
+
+        c_ptr->fval = MAGMA_WALL;
+        c_ptr->fm = false;
+
+        // Permanently light this wall if it is lit by player's lamp.
+        c_ptr->pl = (c_ptr->tl || c_ptr->pl);
+        lite_spot(y, x);
+
+        // NOTE: this was never used anywhere. Is that a bug or just obsolete code?
+        // i++;
+
+        built = true;
     }
 
     return built;
@@ -1539,11 +1551,11 @@ void teleport_to(int ny, int nx) {
 
     move_rec(char_row, char_col, y, x);
 
-    for (int i = char_row - 1; i <= char_row + 1; i++) {
-        for (int j = char_col - 1; j <= char_col + 1; j++) {
-            cave_type *c_ptr = &cave[i][j];
+    for (int row = char_row - 1; row <= char_row + 1; row++) {
+        for (int col = char_col - 1; col <= char_col + 1; col++) {
+            cave_type *c_ptr = &cave[row][col];
             c_ptr->tl = false;
-            lite_spot(i, j);
+            lite_spot(row, col);
         }
     }
 
@@ -1590,12 +1602,12 @@ bool teleport_monster(int dir, int y, int x) {
 bool mass_genocide() {
     bool killed = false;
 
-    for (int i = mfptr - 1; i >= MIN_MONIX; i--) {
-        monster_type *m_ptr = &m_list[i];
+    for (int id = mfptr - 1; id >= MIN_MONIX; id--) {
+        monster_type *m_ptr = &m_list[id];
         creature_type *r_ptr = &c_list[m_ptr->mptr];
 
         if (m_ptr->cdis <= MAX_SIGHT && (r_ptr->cmove & CM_WIN) == 0) {
-            delete_monster(i);
+            delete_monster(id);
 
             killed = true;
         }
@@ -1615,22 +1627,22 @@ bool genocide() {
 
     bool killed = false;
 
-    for (int i = mfptr - 1; i >= MIN_MONIX; i--) {
-        monster_type *m_ptr = &m_list[i];
+    for (int id = mfptr - 1; id >= MIN_MONIX; id--) {
+        monster_type *m_ptr = &m_list[id];
         creature_type *r_ptr = &c_list[m_ptr->mptr];
 
         if (typ == c_list[m_ptr->mptr].cchar) {
             if ((r_ptr->cmove & CM_WIN) == 0) {
-                delete_monster(i);
+                delete_monster(id);
 
                 killed = true;
             } else {
                 // genocide is a powerful spell, so we will let the player
                 // know the names of the creatures he did not destroy,
                 // this message makes no sense otherwise
-                vtype out_val;
-                (void) sprintf(out_val, "The %s is unaffected.", r_ptr->name);
-                msg_print(out_val);
+                vtype msg;
+                (void) sprintf(msg, "The %s is unaffected.", r_ptr->name);
+                msg_print(msg);
             }
         }
     }
@@ -1643,22 +1655,24 @@ bool genocide() {
 bool speed_monsters(int spd) {
     bool speedy = false;
 
-    for (int i = mfptr - 1; i >= MIN_MONIX; i--) {
-        monster_type *m_ptr = &m_list[i];
+    for (int id = mfptr - 1; id >= MIN_MONIX; id--) {
+        monster_type *m_ptr = &m_list[id];
         creature_type *r_ptr = &c_list[m_ptr->mptr];
 
-        vtype m_name;
-        monster_name(m_name, m_ptr->ml, r_ptr->name);
+        vtype name;
+        monster_name(name, m_ptr->ml, r_ptr->name);
 
         if (m_ptr->cdis > MAX_SIGHT || !los(char_row, char_col, (int) m_ptr->fy, (int) m_ptr->fx)) {
             continue; // do nothing
-        } else if (spd > 0) {
+        }
+
+        if (spd > 0) {
             m_ptr->cspeed += spd;
             m_ptr->csleep = 0;
 
             if (m_ptr->ml) {
                 speedy = true;
-                printMonsterActionText(m_name, "starts moving faster.");
+                printMonsterActionText(name, "starts moving faster.");
             }
         } else if (randint(MAX_MONS_LEVEL) > r_ptr->level) {
             m_ptr->cspeed += spd;
@@ -1666,11 +1680,11 @@ bool speed_monsters(int spd) {
 
             if (m_ptr->ml) {
                 speedy = true;
-                printMonsterActionText(m_name, "starts moving slower.");
+                printMonsterActionText(name, "starts moving slower.");
             }
         } else if (m_ptr->ml) {
             m_ptr->csleep = 0;
-            printMonsterActionText(m_name, "is unaffected.");
+            printMonsterActionText(name, "is unaffected.");
         }
     }
 
@@ -1681,27 +1695,29 @@ bool speed_monsters(int spd) {
 bool sleep_monsters2() {
     bool asleep = false;
 
-    for (int i = mfptr - 1; i >= MIN_MONIX; i--) {
-        monster_type *m_ptr = &m_list[i];
+    for (int id = mfptr - 1; id >= MIN_MONIX; id--) {
+        monster_type *m_ptr = &m_list[id];
         creature_type *r_ptr = &c_list[m_ptr->mptr];
 
-        vtype m_name;
-        monster_name(m_name, m_ptr->ml, r_ptr->name);
+        vtype name;
+        monster_name(name, m_ptr->ml, r_ptr->name);
 
         if (m_ptr->cdis > MAX_SIGHT || !los(char_row, char_col, (int) m_ptr->fy, (int) m_ptr->fx)) {
             continue; // do nothing
-        } else if (randint(MAX_MONS_LEVEL) < r_ptr->level || (CD_NO_SLEEP & r_ptr->cdefense)) {
+        }
+
+        if (randint(MAX_MONS_LEVEL) < r_ptr->level || (CD_NO_SLEEP & r_ptr->cdefense)) {
             if (m_ptr->ml) {
                 if (r_ptr->cdefense & CD_NO_SLEEP) {
                     c_recall[m_ptr->mptr].r_cdefense |= CD_NO_SLEEP;
                 }
-                printMonsterActionText(m_name, "is unaffected.");
+                printMonsterActionText(name, "is unaffected.");
             }
         } else {
             m_ptr->csleep = 500;
             if (m_ptr->ml) {
                 asleep = true;
-                printMonsterActionText(m_name, "falls asleep.");
+                printMonsterActionText(name, "falls asleep.");
             }
         }
     }
@@ -1714,8 +1730,8 @@ bool sleep_monsters2() {
 bool mass_poly() {
     bool morphed = false;
 
-    for (int i = mfptr - 1; i >= MIN_MONIX; i--) {
-        monster_type *m_ptr = &m_list[i];
+    for (int id = mfptr - 1; id >= MIN_MONIX; id--) {
+        monster_type *m_ptr = &m_list[id];
 
         if (m_ptr->cdis <= MAX_SIGHT) {
             creature_type *r_ptr = &c_list[m_ptr->mptr];
@@ -1723,7 +1739,7 @@ bool mass_poly() {
             if ((r_ptr->cmove & CM_WIN) == 0) {
                 int y = m_ptr->fy;
                 int x = m_ptr->fx;
-                delete_monster(i);
+                delete_monster(id);
 
                 // Place_monster() should always return true here.
                 morphed = place_monster(y, x, randint(m_level[MAX_MONS_LEVEL] - m_level[0]) - 1 + m_level[0], false);
@@ -1738,8 +1754,8 @@ bool mass_poly() {
 bool detect_evil() {
     bool detected = false;
 
-    for (int i = mfptr - 1; i >= MIN_MONIX; i--) {
-        monster_type *m_ptr = &m_list[i];
+    for (int id = mfptr - 1; id >= MIN_MONIX; id--) {
+        monster_type *m_ptr = &m_list[id];
 
         if (panel_contains((int) m_ptr->fy, (int) m_ptr->fx) && (CD_EVIL & c_list[m_ptr->mptr].cdefense)) {
             m_ptr->ml = true;
@@ -1829,46 +1845,50 @@ bool remove_fear() {
     return false;
 }
 
+static void earthquakeHitsMonster(int monsterID) {
+    monster_type *monster = &m_list[monsterID];
+    creature_type *creature = &c_list[monster->mptr];
+
+    if (!(creature->cmove & CM_PHASE)) {
+        int damage;
+        if (creature->cmove & CM_ATTACK_ONLY) {
+            // this will kill everything
+            damage = 3000;
+        } else {
+            damage = damroll(4, 8);
+        }
+
+        vtype name;
+        monster_name(name, monster->ml, creature->name);
+
+        printMonsterActionText(name, "wails out in pain!");
+
+        if (mon_take_hit(monsterID, damage) >= 0) {
+            printMonsterActionText(name, "is embedded in the rock.");
+            prt_experience();
+        }
+    } else if (creature->cchar == 'E' || creature->cchar == 'X') {
+        // must be an earth elemental or an earth spirit, or a
+        // Xorn increase its hit points
+        monster->hp += damroll(4, 8);
+    }
+}
+
 // This is a fun one.  In a given block, pick some walls and
 // turn them into open spots.  Pick some open spots and turn
 // them into walls.  An "Earthquake" effect. -RAK-
 void earthquake() {
-    for (int i = char_row - 8; i <= char_row + 8; i++) {
-        for (int j = char_col - 8; j <= char_col + 8; j++) {
-            if ((i != char_row || j != char_col) && in_bounds(i, j) && randint(8) == 1) {
-                cave_type *c_ptr = &cave[i][j];
+    for (int y = char_row - 8; y <= char_row + 8; y++) {
+        for (int x = char_col - 8; x <= char_col + 8; x++) {
+            if ((y != char_row || x != char_col) && in_bounds(y, x) && randint(8) == 1) {
+                cave_type *c_ptr = &cave[y][x];
 
                 if (c_ptr->tptr != 0) {
-                    (void) delete_object(i, j);
+                    (void) delete_object(y, x);
                 }
 
                 if (c_ptr->cptr > 1) {
-                    monster_type *m_ptr = &m_list[c_ptr->cptr];
-                    creature_type *r_ptr = &c_list[m_ptr->mptr];
-
-                    if (!(r_ptr->cmove & CM_PHASE)) {
-                        int damage;
-                        if (r_ptr->cmove & CM_ATTACK_ONLY) {
-                            // this will kill everything
-                            damage = 3000;
-                        } else {
-                            damage = damroll(4, 8);
-                        }
-
-                        vtype m_name;
-                        monster_name(m_name, m_ptr->ml, r_ptr->name);
-
-                        printMonsterActionText(m_name, "wails out in pain!");
-
-                        if (mon_take_hit((int) c_ptr->cptr, damage) >= 0) {
-                            printMonsterActionText(m_name, "is embedded in the rock.");
-                            prt_experience();
-                        }
-                    } else if (r_ptr->cchar == 'E' || r_ptr->cchar == 'X') {
-                        // must be an earth elemental or an earth spirit, or a
-                        // Xorn increase its hit points
-                        m_ptr->hp += damroll(4, 8);
-                    }
+                    earthquakeHitsMonster(c_ptr->cptr);
                 }
 
                 if (c_ptr->fval >= MIN_CAVE_WALL && c_ptr->fval != BOUNDARY_WALL) {
@@ -1888,7 +1908,7 @@ void earthquake() {
 
                     c_ptr->fm = false;
                 }
-                lite_spot(i, j);
+                lite_spot(y, x);
             }
         }
     }
@@ -1926,8 +1946,8 @@ void create_food() {
 bool dispel_creature(int cflag, int damage) {
     bool dispelled = false;
 
-    for (int i = mfptr - 1; i >= MIN_MONIX; i--) {
-        monster_type *m_ptr = &m_list[i];
+    for (int id = mfptr - 1; id >= MIN_MONIX; id--) {
+        monster_type *m_ptr = &m_list[id];
 
         if (m_ptr->cdis <= MAX_SIGHT && (cflag & c_list[m_ptr->mptr].cdefense) && los(char_row, char_col, (int) m_ptr->fy, (int) m_ptr->fx)) {
             creature_type *r_ptr = &c_list[m_ptr->mptr];
@@ -1936,19 +1956,19 @@ bool dispel_creature(int cflag, int damage) {
 
             dispelled = true;
 
-            vtype m_name;
-            monster_name(m_name, m_ptr->ml, r_ptr->name);
+            vtype name;
+            monster_name(name, m_ptr->ml, r_ptr->name);
 
-            int k = mon_take_hit(i, randint(damage));
+            int hit = mon_take_hit(id, randint(damage));
 
             // Should get these messages even if the monster is not visible.
-            if (k >= 0) {
-                printMonsterActionText(m_name, "dissolves!");
+            if (hit >= 0) {
+                printMonsterActionText(name, "dissolves!");
             } else {
-                printMonsterActionText(m_name, "shudders.");
+                printMonsterActionText(name, "shudders.");
             }
 
-            if (k >= 0) {
+            if (hit >= 0) {
                 prt_experience();
             }
         }
@@ -1961,13 +1981,13 @@ bool dispel_creature(int cflag, int damage) {
 bool turn_undead() {
     bool turned = false;
 
-    for (int i = mfptr - 1; i >= MIN_MONIX; i--) {
-        monster_type *m_ptr = &m_list[i];
+    for (int id = mfptr - 1; id >= MIN_MONIX; id--) {
+        monster_type *m_ptr = &m_list[id];
         creature_type *r_ptr = &c_list[m_ptr->mptr];
 
         if (m_ptr->cdis <= MAX_SIGHT && (CD_UNDEAD & r_ptr->cdefense) && los(char_row, char_col, (int) m_ptr->fy, (int) m_ptr->fx)) {
-            vtype m_name;
-            monster_name(m_name, m_ptr->ml, r_ptr->name);
+            vtype name;
+            monster_name(name, m_ptr->ml, r_ptr->name);
 
             if (py.misc.lev + 1 > r_ptr->level || randint(5) == 1) {
                 if (m_ptr->ml) {
@@ -1975,12 +1995,12 @@ bool turn_undead() {
 
                     turned = true;
 
-                    printMonsterActionText(m_name, "runs frantically!");
+                    printMonsterActionText(name, "runs frantically!");
                 }
 
                 m_ptr->confused = (uint8_t) py.misc.lev;
             } else if (m_ptr->ml) {
-                printMonsterActionText(m_name, "is unaffected.");
+                printMonsterActionText(name, "is unaffected.");
             }
         }
     }
@@ -2165,14 +2185,14 @@ void destroy_area(int y, int x) {
         for (int i = (y - 15); i <= (y + 15); i++) {
             for (int j = (x - 15); j <= (x + 15); j++) {
                 if (in_bounds(i, j) && cave[i][j].fval != BOUNDARY_WALL) {
-                    int k = distance(i, j, y, x);
+                    int dist = distance(i, j, y, x);
 
                     // clear player's spot, but don't put wall there
-                    if (k == 0) {
+                    if (dist == 0) {
                         replace_spot(i, j, 1);
-                    } else if (k < 13) {
+                    } else if (dist < 13) {
                         replace_spot(i, j, randint(6));
-                    } else if (k < 16) {
+                    } else if (dist < 16) {
                         replace_spot(i, j, randint(9));
                     }
                 }
@@ -2215,13 +2235,10 @@ bool enchant(int16_t *plusses, int16_t limit) {
 bool remove_curse() {
     bool removed = false;
 
-    for (int i = INVEN_WIELD; i <= INVEN_OUTER; i++) {
-        inven_type *i_ptr = &inventory[i];
-
-        if (TR_CURSED & i_ptr->flags) {
-            i_ptr->flags &= ~TR_CURSED;
+    for (int id = INVEN_WIELD; id <= INVEN_OUTER; id++) {
+        if (TR_CURSED & inventory[id].flags) {
+            inventory[id].flags &= ~TR_CURSED;
             calc_bonuses();
-
             removed = true;
         }
     }
