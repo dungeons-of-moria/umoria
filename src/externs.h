@@ -504,8 +504,6 @@ bool alchemist(int);
 bool magic_shop(int);
 
 // spells.c
-void monster_name(char *description, bool monsterLit, const char *monsterName);
-void lower_monster_name(char *description, bool monsterLit, const char *monsterName);
 bool sleep_monsters1(int, int);
 bool detect_treasure();
 bool detect_object();
@@ -524,7 +522,6 @@ bool detect_monsters();
 void light_line(int, int, int);
 void starlite(int, int);
 bool disarm_all(int, int, int);
-void get_flags(int, uint32_t *, int *, bool (**)(inven_type *));
 void fire_bolt(int, int, int, int, int, char *);
 void fire_ball(int, int, int, int, int, const char *);
 void breath(int, int, int, int, char *, int);

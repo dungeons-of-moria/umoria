@@ -11,8 +11,6 @@
 #include "headers.h"
 #include "externs.h"
 
-static void replace_spot(int, int, int);
-
 static void printMonsterActionText(std::string name, std::string text) {
     vtype out_val;
     (void) sprintf(out_val, "%s %s", name.c_str(), text.c_str());
@@ -25,7 +23,7 @@ static void printMonsterActionText(std::string name, std::string text) {
 // staves routines, and are occasionally called from other areas.
 // Now included are creature spells also.           -RAK
 
-void monster_name(char *description, bool monsterLit, const char *monsterName) {
+static void monster_name(char *description, bool monsterLit, const char *monsterName) {
     if (!monsterLit) {
         (void) strcpy(description, "It");
     } else {
@@ -33,7 +31,7 @@ void monster_name(char *description, bool monsterLit, const char *monsterName) {
     }
 }
 
-void lower_monster_name(char *description, bool monsterLit, const char *monsterName) {
+static void lower_monster_name(char *description, bool monsterLit, const char *monsterName) {
     if (!monsterLit) {
         (void) strcpy(description, "it");
     } else {
@@ -597,7 +595,7 @@ bool disarm_all(int dir, int y, int x) {
 }
 
 // Return flags for given type area affect -RAK-
-void get_flags(int typ, uint32_t *weapon_type, int *harm_type, bool (**destroy)(inven_type *)) {
+static void get_flags(int typ, uint32_t *weapon_type, int *harm_type, bool (**destroy)(inven_type *)) {
     switch (typ) {
         case GF_MAGIC_MISSILE:
             *weapon_type = 0;
