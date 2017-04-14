@@ -6,10 +6,19 @@
 
 // Player/creature spells, breaths, wands, scrolls, etc. code
 
+#include <string>
+
 #include "headers.h"
 #include "externs.h"
 
 static void replace_spot(int, int, int);
+
+static void printMonsterActionText(std::string name, std::string text) {
+    vtype out_val;
+    (void) sprintf(out_val, "%s %s", name.c_str(), text.c_str());
+
+    msg_print(out_val);
+}
 
 // Following are spell procedure/functions -RAK-
 // These routines are commonly used in the scroll, potion, wands, and
@@ -53,16 +62,12 @@ bool sleep_monsters1(int y, int x) {
                     c_recall[m_ptr->mptr].r_cdefense |= CD_NO_SLEEP;
                 }
 
-                vtype out_val;
-                (void) sprintf(out_val, "%s is unaffected.", m_name);
-                msg_print(out_val);
+                printMonsterActionText(m_name, "is unaffected.");
             } else {
                 m_ptr->csleep = 500;
                 asleep = true;
 
-                vtype out_val;
-                (void) sprintf(out_val, "%s falls asleep.", m_name);
-                msg_print(out_val);
+                printMonsterActionText(m_name, "falls asleep.");
             }
         }
     }
@@ -519,16 +524,11 @@ void light_line(int dir, int y, int x) {
                         c_recall[m_ptr->mptr].r_cdefense |= CD_LIGHT;
                     }
 
-                    vtype out_val;
-
-                    int i = mon_take_hit((int) c_ptr->cptr, damroll(2, 8));
-                    if (i >= 0) {
-                        (void) sprintf(out_val, "%s shrivels away in the light!", m_name);
-                        msg_print(out_val);
+                    if (mon_take_hit((int) c_ptr->cptr, damroll(2, 8) >= 0)) {
+                        printMonsterActionText(m_name, "shrivels away in the light!");
                         prt_experience();
                     } else {
-                        (void) sprintf(out_val, "%s cringes from the light!", m_name);
-                        msg_print(out_val);
+                        printMonsterActionText(m_name, "cringes from the light!");
                     }
                 }
             }
@@ -699,12 +699,10 @@ void fire_bolt(int typ, int dir, int y, int x, int dam, char *bolt_typ) {
                 i = mon_take_hit((int) c_ptr->cptr, dam);
 
                 if (i >= 0) {
-                    (void) sprintf(out_val, "%s dies in a fit of agony.", m_name);
-                    msg_print(out_val);
+                    printMonsterActionText(m_name, "dies in a fit of agony.");
                     prt_experience();
                 } else if (dam > 0) {
-                    (void) sprintf(out_val, "%s screams in agony.", m_name);
-                    msg_print(out_val);
+                    printMonsterActionText(m_name, "screams in agony.");
                 }
             } else if (panel_contains(y, x) && py.flags.blind < 1) {
                 print('*', y, x);
@@ -1031,14 +1029,10 @@ bool hp_monster(int dir, int y, int x, int dam) {
             monster_name(m_name, m_ptr->ml, r_ptr->name);
 
             if (mon_take_hit((int) c_ptr->cptr, dam) >= 0) {
-                vtype out_val;
-                (void) sprintf(out_val, "%s dies in a fit of agony.", m_name);
-                msg_print(out_val);
+                printMonsterActionText(m_name, "dies in a fit of agony.");
                 prt_experience();
             } else if (dam > 0) {
-                vtype out_val;
-                (void) sprintf(out_val, "%s screams in agony.", m_name);
-                msg_print(out_val);
+                printMonsterActionText(m_name, "screams in agony.");
             }
 
             changed = true;
@@ -1074,14 +1068,10 @@ bool drain_life(int dir, int y, int x) {
                 monster_name(m_name, m_ptr->ml, r_ptr->name);
 
                 if (mon_take_hit((int) c_ptr->cptr, 75) >= 0) {
-                    vtype out_val;
-                    (void) sprintf(out_val, "%s dies in a fit of agony.", m_name);
-                    msg_print(out_val);
+                    printMonsterActionText(m_name, "dies in a fit of agony.");
                     prt_experience();
                 } else {
-                    vtype out_val;
-                    (void) sprintf(out_val, "%s screams in agony.", m_name);
-                    msg_print(out_val);
+                    printMonsterActionText(m_name, "screams in agony.");
                 }
 
                 drained = true;
@@ -1125,24 +1115,18 @@ bool speed_monster(int dir, int y, int x, int spd) {
 
                 changed = true;
 
-                vtype out_val;
-                (void) sprintf(out_val, "%s starts moving faster.", m_name);
-                msg_print(out_val);
+                printMonsterActionText(m_name, "starts moving faster.");
             } else if (randint(MAX_MONS_LEVEL) > r_ptr->level) {
                 m_ptr->cspeed += spd;
                 m_ptr->csleep = 0;
 
                 changed = true;
 
-                vtype out_val;
-                (void) sprintf(out_val, "%s starts moving slower.", m_name);
-                msg_print(out_val);
+                printMonsterActionText(m_name, "starts moving slower.");
             } else {
                 m_ptr->csleep = 0;
 
-                vtype out_val;
-                (void) sprintf(out_val, "%s is unaffected.", m_name);
-                msg_print(out_val);
+                printMonsterActionText(m_name, "is unaffected.");
             }
         }
     }
@@ -1185,9 +1169,7 @@ bool confuse_monster(int dir, int y, int x) {
                     m_ptr->csleep = 0;
                 }
 
-                vtype out_val;
-                (void) sprintf(out_val, "%s is unaffected.", m_name);
-                msg_print(out_val);
+                printMonsterActionText(m_name, "is unaffected.");
             } else {
                 if (m_ptr->confused) {
                     m_ptr->confused += 3;
@@ -1198,9 +1180,7 @@ bool confuse_monster(int dir, int y, int x) {
 
                 confused = true;
 
-                vtype out_val;
-                (void) sprintf(out_val, "%s appears confused.", m_name);
-                msg_print(out_val);
+                printMonsterActionText(m_name, "appears confused.");
             }
         }
     }
@@ -1237,17 +1217,13 @@ bool sleep_monster(int dir, int y, int x) {
                     c_recall[m_ptr->mptr].r_cdefense |= CD_NO_SLEEP;
                 }
 
-                vtype out_val;
-                (void) sprintf(out_val, "%s is unaffected.", m_name);
-                msg_print(out_val);
+                printMonsterActionText(m_name, "is unaffected.");
             } else {
                 m_ptr->csleep = 500;
 
                 asleep = true;
 
-                vtype out_val;
-                (void) sprintf(out_val, "%s falls asleep.", m_name);
-                msg_print(out_val);
+                printMonsterActionText(m_name, "falls asleep.");
             }
         }
     }
@@ -1323,18 +1299,11 @@ bool wall_to_mud(int dir, int y, int x) {
                 int i = mon_take_hit((int) c_ptr->cptr, 100);
                 if (i >= 0) {
                     c_recall[i].r_cdefense |= CD_STONE;
-
-                    bigvtype out_val;
-                    (void) sprintf(out_val, "%s dissolves!", m_name);
-                    msg_print(out_val);
-
+                    printMonsterActionText(m_name, "dissolves!");
                     prt_experience(); // print msg before calling prt_exp
                 } else {
                     c_recall[m_ptr->mptr].r_cdefense |= CD_STONE;
-
-                    bigvtype out_val;
-                    (void) sprintf(out_val, "%s grunts in pain!", m_name);
-                    msg_print(out_val);
+                    printMonsterActionText(m_name, "grunts in pain!");
                 }
                 finished = true;
             }
@@ -1419,11 +1388,9 @@ bool poly_monster(int dir, int y, int x) {
                     morphed = true;
                 }
             } else {
-                vtype out_val, m_name;
+                vtype m_name;
                 monster_name(m_name, m_ptr->ml, r_ptr->name);
-                (void) sprintf(out_val, "%s is unaffected.", m_name);
-
-                msg_print(out_val);
+                printMonsterActionText(m_name, "is unaffected.");
             }
         }
     }
@@ -1467,14 +1434,13 @@ bool build_wall(int dir, int y, int x) {
                         damage = damroll(4, 8);
                     }
 
-                    vtype m_name, out_val;
+                    vtype m_name;
                     monster_name(m_name, m_ptr->ml, r_ptr->name);
-                    (void) sprintf(out_val, "%s wails out in pain!", m_name);
-                    msg_print(out_val);
+
+                    printMonsterActionText(m_name, "wails out in pain!");
 
                     if (mon_take_hit((int) c_ptr->cptr, damage) >= 0) {
-                        (void) sprintf(out_val, "%s is embedded in the rock.", m_name);
-                        msg_print(out_val);
+                        printMonsterActionText(m_name, "is embedded in the rock.");
                         prt_experience();
                     }
                 } else if (r_ptr->cchar == 'E' || r_ptr->cchar == 'X') {
@@ -1694,10 +1660,7 @@ bool speed_monsters(int spd) {
 
             if (m_ptr->ml) {
                 speedy = true;
-
-                vtype out_val;
-                (void) sprintf(out_val, "%s starts moving faster.", m_name);
-                msg_print(out_val);
+                printMonsterActionText(m_name, "starts moving faster.");
             }
         } else if (randint(MAX_MONS_LEVEL) > r_ptr->level) {
             m_ptr->cspeed += spd;
@@ -1705,17 +1668,11 @@ bool speed_monsters(int spd) {
 
             if (m_ptr->ml) {
                 speedy = true;
-
-                vtype out_val;
-                (void) sprintf(out_val, "%s starts moving slower.", m_name);
-                msg_print(out_val);
+                printMonsterActionText(m_name, "starts moving slower.");
             }
         } else if (m_ptr->ml) {
             m_ptr->csleep = 0;
-
-            vtype out_val;
-            (void) sprintf(out_val, "%s is unaffected.", m_name);
-            msg_print(out_val);
+            printMonsterActionText(m_name, "is unaffected.");
         }
     }
 
@@ -1740,19 +1697,13 @@ bool sleep_monsters2() {
                 if (r_ptr->cdefense & CD_NO_SLEEP) {
                     c_recall[m_ptr->mptr].r_cdefense |= CD_NO_SLEEP;
                 }
-
-                vtype out_val;
-                (void) sprintf(out_val, "%s is unaffected.", m_name);
-                msg_print(out_val);
+                printMonsterActionText(m_name, "is unaffected.");
             }
         } else {
             m_ptr->csleep = 500;
             if (m_ptr->ml) {
                 asleep = true;
-
-                vtype out_val;
-                (void) sprintf(out_val, "%s falls asleep.", m_name);
-                msg_print(out_val);
+                printMonsterActionText(m_name, "falls asleep.");
             }
         }
     }
@@ -1909,13 +1860,10 @@ void earthquake() {
                         vtype m_name;
                         monster_name(m_name, m_ptr->ml, r_ptr->name);
 
-                        vtype out_val;
-                        (void) sprintf(out_val, "%s wails out in pain!", m_name);
-                        msg_print(out_val);
+                        printMonsterActionText(m_name, "wails out in pain!");
 
                         if (mon_take_hit((int) c_ptr->cptr, damage) >= 0) {
-                            (void) sprintf(out_val, "%s is embedded in the rock.", m_name);
-                            msg_print(out_val);
+                            printMonsterActionText(m_name, "is embedded in the rock.");
                             prt_experience();
                         }
                     } else if (r_ptr->cchar == 'E' || r_ptr->cchar == 'X') {
@@ -1990,18 +1938,17 @@ bool dispel_creature(int cflag, int damage) {
 
             dispelled = true;
 
-            vtype out_val, m_name;
+            vtype m_name;
             monster_name(m_name, m_ptr->ml, r_ptr->name);
 
             int k = mon_take_hit(i, randint(damage));
 
             // Should get these messages even if the monster is not visible.
             if (k >= 0) {
-                (void) sprintf(out_val, "%s dissolves!", m_name);
+                printMonsterActionText(m_name, "dissolves!");
             } else {
-                (void) sprintf(out_val, "%s shudders.", m_name);
+                printMonsterActionText(m_name, "shudders.");
             }
-            msg_print(out_val);
 
             if (k >= 0) {
                 prt_experience();
@@ -2030,16 +1977,12 @@ bool turn_undead() {
 
                     turned = true;
 
-                    vtype out_val;
-                    (void) sprintf(out_val, "%s runs frantically!", m_name);
-                    msg_print(out_val);
+                    printMonsterActionText(m_name, "runs frantically!");
                 }
 
                 m_ptr->confused = (uint8_t) py.misc.lev;
             } else if (m_ptr->ml) {
-                vtype out_val;
-                (void) sprintf(out_val, "%s is unaffected.", m_name);
-                msg_print(out_val);
+                printMonsterActionText(m_name, "is unaffected.");
             }
         }
     }
