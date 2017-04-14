@@ -2070,7 +2070,7 @@ int critical_blow(int weight, int plus, int dam, int attack_type) {
 }
 
 // Given direction "dir", returns new row, column location -RAK-
-int mmove(int dir, int *y, int *x) {
+bool mmove(int dir, int *y, int *x) {
     int new_row = 0;
     int new_col = 0;
 

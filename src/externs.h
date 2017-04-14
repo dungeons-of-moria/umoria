@@ -380,7 +380,7 @@ bool enter_wiz_mode();
 int attack_blows(int, int *);
 int tot_dam(inven_type *, int, int);
 int critical_blow(int, int, int, int);
-int mmove(int, int *, int *);
+bool mmove(int, int *, int *);
 bool player_saves();
 int find_range(int, int, int *, int *);
 void teleport(int);
