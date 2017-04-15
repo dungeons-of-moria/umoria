@@ -9,489 +9,596 @@
 #include "headers.h"
 #include "externs.h"
 
-// Scrolls for the reading -RAK-
-void read_scroll() {
-    free_turn_flag = true;
+// Note: naming of all the scroll functions needs verifying -MRC-
 
+static bool canReadScroll(int *j, int *k) {
     if (py.flags.blind > 0) {
         msg_print("You can't see to read the scroll.");
-        return;
+        return false;
     }
 
     if (no_light()) {
         msg_print("You have no light to read by.");
-        return;
+        return false;
     }
 
     if (py.flags.confused > 0) {
         msg_print("You are too confused to read a scroll.");
-        return;
+        return false;
     }
 
     if (inven_ctr == 0) {
         msg_print("You are not carrying anything!");
-        return;
+        return false;
     }
+
+    if (!find_range(TV_SCROLL1, TV_SCROLL2, j, k)) {
+        msg_print("You are not carrying any scrolls!");
+        return false;
+    }
+
+    return true;
+}
+
+static int getEnchantedItemID() {
+    int itemCount = 0;
+    int items[6];
+
+    if (inventory[INVEN_BODY].tval != TV_NOTHING) {
+        items[itemCount++] = INVEN_BODY;
+    }
+    if (inventory[INVEN_ARM].tval != TV_NOTHING) {
+        items[itemCount++] = INVEN_ARM;
+    }
+    if (inventory[INVEN_OUTER].tval != TV_NOTHING) {
+        items[itemCount++] = INVEN_OUTER;
+    }
+    if (inventory[INVEN_HANDS].tval != TV_NOTHING) {
+        items[itemCount++] = INVEN_HANDS;
+    }
+    if (inventory[INVEN_HEAD].tval != TV_NOTHING) {
+        items[itemCount++] = INVEN_HEAD;
+    }
+    // also enchant boots
+    if (inventory[INVEN_FEET].tval != TV_NOTHING) {
+        items[itemCount++] = INVEN_FEET;
+    }
+
+    int item = 0;
+
+    if (itemCount > 0) {
+        item = items[randint(itemCount) - 1];
+    }
+
+    if (TR_CURSED & inventory[INVEN_BODY].flags) {
+        item = INVEN_BODY;
+    } else if (TR_CURSED & inventory[INVEN_ARM].flags) {
+        item = INVEN_ARM;
+    } else if (TR_CURSED & inventory[INVEN_OUTER].flags) {
+        item = INVEN_OUTER;
+    } else if (TR_CURSED & inventory[INVEN_HEAD].flags) {
+        item = INVEN_HEAD;
+    } else if (TR_CURSED & inventory[INVEN_HANDS].flags) {
+        item = INVEN_HANDS;
+    } else if (TR_CURSED & inventory[INVEN_FEET].flags) {
+        item = INVEN_FEET;
+    }
+
+    return item;
+}
+
+static bool readEnchantWeaponToHitScroll() {
+    inven_type *i_ptr = &inventory[INVEN_WIELD];
+
+    if (i_ptr->tval == TV_NOTHING) {
+        return false;
+    }
+
+    bigvtype msg, desc;
+    objdes(desc, i_ptr, false);
+
+    (void) sprintf(msg, "Your %s glows faintly!", desc);
+    msg_print(msg);
+
+    if (enchant(&i_ptr->tohit, 10)) {
+        i_ptr->flags &= ~TR_CURSED;
+        calc_bonuses();
+    } else {
+        msg_print("The enchantment fails.");
+    }
+
+    return true;
+}
+
+static bool readEnchantWeaponToDamageScroll() {
+    inven_type *i_ptr = &inventory[INVEN_WIELD];
+
+    if (i_ptr->tval == TV_NOTHING) {
+        return false;
+    }
+
+    bigvtype msg, desc;
+    objdes(desc, i_ptr, false);
+
+    (void) sprintf(msg, "Your %s glows faintly!", desc);
+    msg_print(msg);
+
+    int16_t scrollType;
+
+    if (i_ptr->tval >= TV_HAFTED && i_ptr->tval <= TV_DIGGING) {
+        scrollType = i_ptr->damage[0] * i_ptr->damage[1];
+    } else {
+        // Bows' and arrows' enchantments should not be
+        // limited by their low base damages
+        scrollType = 10;
+    }
+
+    if (enchant(&i_ptr->todam, scrollType)) {
+        i_ptr->flags &= ~TR_CURSED;
+        calc_bonuses();
+    } else {
+        msg_print("The enchantment fails.");
+    }
+
+    return true;
+}
+
+static bool readEnchantItemToACScroll() {
+    int id = getEnchantedItemID();
+
+    if (id <= 0) {
+        return false;
+    }
+
+    inven_type *i_ptr = &inventory[id];
+
+    bigvtype msg, desc;
+    objdes(desc, i_ptr, false);
+
+    (void) sprintf(msg, "Your %s glows faintly!", desc);
+    msg_print(msg);
+
+    if (enchant(&i_ptr->toac, 10)) {
+        i_ptr->flags &= ~TR_CURSED;
+        calc_bonuses();
+    } else {
+        msg_print("The enchantment fails.");
+    }
+
+    return true;
+}
+
+static int readIdentifyScroll(int itemID, bool *used_up) {
+    msg_print("This is an identify scroll.");
+
+    *used_up = ident_spell();
+
+    // The identify may merge objects, causing the identify scroll
+    // to move to a different place.  Check for that here.  It can
+    // move arbitrarily far if an identify scroll was used on
+    // another identify scroll, but it always moves down.
+    inven_type *i_ptr = &inventory[itemID];
+    while (itemID > 0 && (i_ptr->tval != TV_SCROLL1 || i_ptr->flags != 0x00000008)) {
+        itemID--;
+        i_ptr = &inventory[itemID];
+    }
+
+    return itemID;
+}
+
+static bool readRemoveCurseScroll() {
+    if (remove_curse()) {
+        msg_print("You feel as if someone is watching over you.");
+        return true;
+    }
+    return false;
+}
+
+static bool readSummonMonsterScroll() {
+    bool identified = false;
+
+    for (int k = 0; k < randint(3); k++) {
+        int y = (int) char_row;
+        int x = (int) char_col;
+        identified |= summon_monster(&y, &x, false);
+    }
+
+    return identified;
+}
+
+static void readTeleportLevelScroll() {
+    dun_level += (-3) + 2 * randint(2);
+    if (dun_level < 1) {
+        dun_level = 1;
+    }
+    new_level_flag = true;
+}
+
+static bool readConfuseMonsterScroll() {
+    if (!py.flags.confuse_monster) {
+        msg_print("Your hands begin to glow.");
+        py.flags.confuse_monster = true;
+        return true;
+    }
+    return false;
+}
+
+static bool readEnchantWeaponScroll() {
+    inven_type *i_ptr = &inventory[INVEN_WIELD];
+
+    if (i_ptr->tval == TV_NOTHING) {
+        return false;
+    }
+
+    bigvtype msg, desc;
+    objdes(desc, i_ptr, false);
+
+    (void) sprintf(msg, "Your %s glows brightly!", desc);
+    msg_print(msg);
+
+    bool flag = false;
+
+    for (int k = 0; k < randint(2); k++) {
+        if (enchant(&i_ptr->tohit, 10)) {
+            flag = true;
+        }
+    }
+
+    int16_t scrollType;
+
+    if (i_ptr->tval >= TV_HAFTED && i_ptr->tval <= TV_DIGGING) {
+        scrollType = i_ptr->damage[0] * i_ptr->damage[1];
+    } else {
+        // Bows' and arrows' enchantments should not be limited
+        // by their low base damages
+        scrollType = 10;
+    }
+
+    for (int k = 0; k < randint(2); k++) {
+        if (enchant(&i_ptr->todam, scrollType)) {
+            flag = true;
+        }
+    }
+
+    if (flag) {
+        i_ptr->flags &= ~TR_CURSED;
+        calc_bonuses();
+    } else {
+        msg_print("The enchantment fails.");
+    }
+
+    return true;
+}
+
+static bool readCurseWeaponScroll() {
+    inven_type *i_ptr = &inventory[INVEN_WIELD];
+
+    if (i_ptr->tval == TV_NOTHING) {
+        return false;
+    }
+
+    bigvtype msg, desc;
+    objdes(desc, i_ptr, false);
+
+    (void) sprintf(msg, "Your %s glows black, fades.", desc);
+    msg_print(msg);
+
+    unmagic_name(i_ptr);
+
+    i_ptr->tohit = (int16_t) (-randint(5) - randint(5));
+    i_ptr->todam = (int16_t) (-randint(5) - randint(5));
+    i_ptr->toac = 0;
+
+    // Must call py_bonuses() before set (clear) flags, and
+    // must call calc_bonuses() after set (clear) flags, so that
+    // all attributes will be properly turned off.
+    py_bonuses(i_ptr, -1);
+    i_ptr->flags = TR_CURSED;
+    calc_bonuses();
+
+    return true;
+}
+
+static bool readEnchantArmorScroll() {
+    int id = getEnchantedItemID();
+
+    if (id <= 0) {
+        return false;
+    }
+
+    inven_type *i_ptr = &inventory[id];
+
+    bigvtype msg, desc;
+    objdes(desc, i_ptr, false);
+
+    (void) sprintf(msg, "Your %s glows brightly!", desc);
+    msg_print(msg);
+
+    bool flag = false;
+
+    for (int k = 0; k < randint(2) + 1; k++) {
+        if (enchant(&i_ptr->toac, 10)) {
+            flag = true;
+        }
+    }
+
+    if (flag) {
+        i_ptr->flags &= ~TR_CURSED;
+        calc_bonuses();
+    } else {
+        msg_print("The enchantment fails.");
+    }
+
+    return true;
+}
+
+static bool readCurseArmorScroll() {
+    int id;
+
+    if (inventory[INVEN_BODY].tval != TV_NOTHING && randint(4) == 1) {
+        id = INVEN_BODY;
+    } else if (inventory[INVEN_ARM].tval != TV_NOTHING && randint(3) == 1) {
+        id = INVEN_ARM;
+    } else if (inventory[INVEN_OUTER].tval != TV_NOTHING && randint(3) == 1) {
+        id = INVEN_OUTER;
+    } else if (inventory[INVEN_HEAD].tval != TV_NOTHING && randint(3) == 1) {
+        id = INVEN_HEAD;
+    } else if (inventory[INVEN_HANDS].tval != TV_NOTHING && randint(3) == 1) {
+        id = INVEN_HANDS;
+    } else if (inventory[INVEN_FEET].tval != TV_NOTHING && randint(3) == 1) {
+        id = INVEN_FEET;
+    } else if (inventory[INVEN_BODY].tval != TV_NOTHING) {
+        id = INVEN_BODY;
+    } else if (inventory[INVEN_ARM].tval != TV_NOTHING) {
+        id = INVEN_ARM;
+    } else if (inventory[INVEN_OUTER].tval != TV_NOTHING) {
+        id = INVEN_OUTER;
+    } else if (inventory[INVEN_HEAD].tval != TV_NOTHING) {
+        id = INVEN_HEAD;
+    } else if (inventory[INVEN_HANDS].tval != TV_NOTHING) {
+        id = INVEN_HANDS;
+    } else if (inventory[INVEN_FEET].tval != TV_NOTHING) {
+        id = INVEN_FEET;
+    } else {
+        id = 0;
+    }
+
+    if (id <= 0) {
+        return false;
+    }
+
+    inven_type *i_ptr = &inventory[id];
+
+    bigvtype msg, desc;
+    objdes(desc, i_ptr, false);
+
+    (void) sprintf(msg, "Your %s glows black, fades.", desc);
+    msg_print(msg);
+
+    unmagic_name(i_ptr);
+
+    i_ptr->flags = TR_CURSED;
+    i_ptr->tohit = 0;
+    i_ptr->todam = 0;
+    i_ptr->toac = (int16_t) (-randint(5) - randint(5));
+
+    calc_bonuses();
+
+    return true;
+}
+
+static bool readSummonUndeadScroll() {
+    bool identified = false;
+
+    for (int k = 0; k < randint(3); k++) {
+        int y = char_row;
+        int x = char_col;
+        identified |= summon_undead(&y, &x);
+    }
+
+    return identified;
+}
+
+static void readWordOfRecallScroll() {
+    if (py.flags.word_recall == 0) {
+        py.flags.word_recall = (int16_t) (25 + randint(30));
+    }
+    msg_print("The air about you becomes charged.");
+}
+
+// Scrolls for the reading -RAK-
+void read_scroll() {
+    free_turn_flag = true;
 
     int j, k;
-    if (!find_range(TV_SCROLL1, TV_SCROLL2, &j, &k)) {
-        msg_print("You are not carrying any scrolls!");
+    if (!canReadScroll(&j, &k)) {
         return;
     }
 
-    int item_val;
-    if (!get_item(&item_val, "Read which scroll?", j, k, CNIL, CNIL)) {
+    int itemID;
+    if (!get_item(&itemID, "Read which scroll?", j, k, CNIL, CNIL)) {
         return;
     }
 
+    // From here on, no free turn for the player
     free_turn_flag = false;
 
-    bool flag;
     bool used_up = true;
-    bool ident = false;
-    int l, y, x;
-    int tmp[6];
-    bigvtype out_val, tmp_str;
+    bool identified = false;
 
-    inven_type *i_ptr = &inventory[item_val];
-    uint32_t i = i_ptr->flags;
+    inven_type *i_ptr = &inventory[itemID];
+    uint32_t flags = i_ptr->flags;
 
-    while (i != 0) {
-        j = bit_pos(&i) + 1;
+    while (flags != 0) {
+        int scrollType = bit_pos(&flags) + 1;
+
         if (i_ptr->tval == TV_SCROLL2) {
-            j += 32;
+            scrollType += 32;
         }
 
-        // Scrolls.
-        switch (j) {
+        switch (scrollType) {
             case 1:
-                i_ptr = &inventory[INVEN_WIELD];
-                if (i_ptr->tval != TV_NOTHING) {
-                    objdes(tmp_str, i_ptr, false);
-                    (void) sprintf(out_val, "Your %s glows faintly!", tmp_str);
-                    msg_print(out_val);
-                    if (enchant(&i_ptr->tohit, 10)) {
-                        i_ptr->flags &= ~TR_CURSED;
-                        calc_bonuses();
-                    } else {
-                        msg_print("The enchantment fails.");
-                    }
-                    ident = true;
-                }
+                identified = readEnchantWeaponToHitScroll();
                 break;
             case 2:
-                i_ptr = &inventory[INVEN_WIELD];
-                if (i_ptr->tval != TV_NOTHING) {
-                    objdes(tmp_str, i_ptr, false);
-                    (void) sprintf(out_val, "Your %s glows faintly!", tmp_str);
-                    msg_print(out_val);
-                    if (i_ptr->tval >= TV_HAFTED && i_ptr->tval <= TV_DIGGING) {
-                        j = i_ptr->damage[0] * i_ptr->damage[1];
-                    } else {
-                        // Bows' and arrows' enchantments should not be
-                        // limited by their low base damages
-                        j = 10;
-                    }
-                    if (enchant(&i_ptr->todam, (int16_t) j)) {
-                        i_ptr->flags &= ~TR_CURSED;
-                        calc_bonuses();
-                    } else {
-                        msg_print("The enchantment fails.");
-                    }
-                    ident = true;
-                }
+                identified = readEnchantWeaponToDamageScroll();
                 break;
             case 3:
-                k = 0;
-                l = 0;
-                if (inventory[INVEN_BODY].tval != TV_NOTHING) {
-                    tmp[k++] = INVEN_BODY;
-                }
-                if (inventory[INVEN_ARM].tval != TV_NOTHING) {
-                    tmp[k++] = INVEN_ARM;
-                }
-                if (inventory[INVEN_OUTER].tval != TV_NOTHING) {
-                    tmp[k++] = INVEN_OUTER;
-                }
-                if (inventory[INVEN_HANDS].tval != TV_NOTHING) {
-                    tmp[k++] = INVEN_HANDS;
-                }
-                if (inventory[INVEN_HEAD].tval != TV_NOTHING) {
-                    tmp[k++] = INVEN_HEAD;
-                }
-                // also enchant boots
-                if (inventory[INVEN_FEET].tval != TV_NOTHING) {
-                    tmp[k++] = INVEN_FEET;
-                }
-
-                if (k > 0) {
-                    l = tmp[randint(k) - 1];
-                }
-
-                if (TR_CURSED & inventory[INVEN_BODY].flags) {
-                    l = INVEN_BODY;
-                } else if (TR_CURSED & inventory[INVEN_ARM].flags) {
-                    l = INVEN_ARM;
-                } else if (TR_CURSED & inventory[INVEN_OUTER].flags) {
-                    l = INVEN_OUTER;
-                } else if (TR_CURSED & inventory[INVEN_HEAD].flags) {
-                    l = INVEN_HEAD;
-                } else if (TR_CURSED & inventory[INVEN_HANDS].flags) {
-                    l = INVEN_HANDS;
-                } else if (TR_CURSED & inventory[INVEN_FEET].flags) {
-                    l = INVEN_FEET;
-                }
-
-                if (l > 0) {
-                    i_ptr = &inventory[l];
-                    objdes(tmp_str, i_ptr, false);
-                    (void) sprintf(out_val, "Your %s glows faintly!", tmp_str);
-                    msg_print(out_val);
-                    if (enchant(&i_ptr->toac, 10)) {
-                        i_ptr->flags &= ~TR_CURSED;
-                        calc_bonuses();
-                    } else {
-                        msg_print("The enchantment fails.");
-                    }
-                    ident = true;
-                }
+                identified = readEnchantItemToACScroll();
                 break;
             case 4:
-                msg_print("This is an identify scroll.");
-                ident = true;
-                used_up = ident_spell();
-
-                // The identify may merge objects, causing the identify scroll
-                // to move to a different place.  Check for that here.  It can
-                // move arbitrarily far if an identify scroll was used on
-                // another identify scroll, but it always moves down.
-                while (i_ptr->tval != TV_SCROLL1 || i_ptr->flags != 0x00000008) {
-                    item_val--;
-                    i_ptr = &inventory[item_val];
-                }
+                itemID = readIdentifyScroll(itemID, &used_up);
+                identified = true;
                 break;
             case 5:
-                if (remove_curse()) {
-                    msg_print("You feel as if someone is watching over you.");
-                    ident = true;
-                }
+                identified = readRemoveCurseScroll();
                 break;
             case 6:
-                ident = light_area(char_row, char_col);
+                identified = light_area(char_row, char_col);
                 break;
             case 7:
-                for (k = 0; k < randint(3); k++) {
-                    y = char_row;
-                    x = char_col;
-                    ident |= summon_monster(&y, &x, false);
-                }
+                identified = readSummonMonsterScroll();
                 break;
             case 8:
-                teleport(10);
-                ident = true;
+                teleport(10); // Teleport Short, aka Phase Door
+                identified = true;
                 break;
             case 9:
-                teleport(100);
-                ident = true;
+                teleport(100); // Teleport Long
+                identified = true;
                 break;
             case 10:
-                dun_level += (-3) + 2 * randint(2);
-                if (dun_level < 1) {
-                    dun_level = 1;
-                }
-                new_level_flag = true;
-                ident = true;
+                readTeleportLevelScroll();
+                identified = true;
                 break;
             case 11:
-                if (!py.flags.confuse_monster) {
-                    msg_print("Your hands begin to glow.");
-                    py.flags.confuse_monster = true;
-                    ident = true;
-                }
+                identified = readConfuseMonsterScroll();
                 break;
             case 12:
-                ident = true;
                 map_area();
+                identified = true;
                 break;
             case 13:
-                ident = sleep_monsters1(char_row, char_col);
+                identified = sleep_monsters1(char_row, char_col);
                 break;
             case 14:
-                ident = true;
                 warding_glyph();
+                identified = true;
                 break;
             case 15:
-                ident = detect_treasure();
+                identified = detect_treasure();
                 break;
             case 16:
-                ident = detect_object();
+                identified = detect_object();
                 break;
             case 17:
-                ident = detect_trap();
+                identified = detect_trap();
                 break;
             case 18:
-                ident = detect_sdoor();
+                identified = detect_sdoor();
                 break;
             case 19:
                 msg_print("This is a mass genocide scroll.");
                 (void) mass_genocide();
-                ident = true;
+                identified = true;
                 break;
             case 20:
-                ident = detect_invisible();
+                identified = detect_invisible();
                 break;
             case 21:
                 msg_print("There is a high pitched humming noise.");
                 (void) aggravate_monster(20);
-                ident = true;
+                identified = true;
                 break;
             case 22:
-                ident = trap_creation();
+                identified = trap_creation();
                 break;
             case 23:
-                ident = td_destroy();
+                identified = td_destroy();
                 break;
             case 24:
-                ident = door_creation();
+                identified = door_creation();
                 break;
             case 25:
                 msg_print("This is a Recharge-Item scroll.");
-                ident = true;
                 used_up = recharge(60);
+                identified = true;
                 break;
             case 26:
                 msg_print("This is a genocide scroll.");
                 (void) genocide();
-                ident = true;
+                identified = true;
                 break;
             case 27:
-                ident = unlight_area(char_row, char_col);
+                identified = unlight_area(char_row, char_col);
                 break;
             case 28:
-                ident = protect_evil();
+                identified = protect_evil();
                 break;
             case 29:
-                ident = true;
                 create_food();
+                identified = true;
                 break;
             case 30:
-                ident = dispel_creature(CD_UNDEAD, 60);
+                identified = dispel_creature(CD_UNDEAD, 60);
                 break;
             case 33:
-                i_ptr = &inventory[INVEN_WIELD];
-                if (i_ptr->tval != TV_NOTHING) {
-                    objdes(tmp_str, i_ptr, false);
-                    (void) sprintf(out_val, "Your %s glows brightly!", tmp_str);
-                    msg_print(out_val);
-                    flag = false;
-                    for (k = 0; k < randint(2); k++) {
-                        if (enchant(&i_ptr->tohit, 10)) {
-                            flag = true;
-                        }
-                    }
-                    if (i_ptr->tval >= TV_HAFTED && i_ptr->tval <= TV_DIGGING) {
-                        j = i_ptr->damage[0] * i_ptr->damage[1];
-                    } else {
-                        // Bows' and arrows' enchantments should not be limited
-                        // by their low base damages
-                        j = 10;
-                    }
-                    for (k = 0; k < randint(2); k++) {
-                        if (enchant(&i_ptr->todam, (int16_t) j)) {
-                            flag = true;
-                        }
-                    }
-                    if (flag) {
-                        i_ptr->flags &= ~TR_CURSED;
-                        calc_bonuses();
-                    } else {
-                        msg_print("The enchantment fails.");
-                    }
-                    ident = true;
-                }
+                identified = readEnchantWeaponScroll();
                 break;
             case 34:
-                i_ptr = &inventory[INVEN_WIELD];
-                if (i_ptr->tval != TV_NOTHING) {
-                    objdes(tmp_str, i_ptr, false);
-                    (void) sprintf(out_val, "Your %s glows black, fades.", tmp_str);
-                    msg_print(out_val);
-                    unmagic_name(i_ptr);
-                    i_ptr->tohit = (int16_t) (-randint(5) - randint(5));
-                    i_ptr->todam = (int16_t) (-randint(5) - randint(5));
-                    i_ptr->toac = 0;
-                    // Must call py_bonuses() before set (clear) flags, and
-                    // must call calc_bonuses() after set (clear) flags, so that
-                    // all attributes will be properly turned off.
-                    py_bonuses(i_ptr, -1);
-                    i_ptr->flags = TR_CURSED;
-                    calc_bonuses();
-                    ident = true;
-                }
+                identified = readCurseWeaponScroll();
                 break;
             case 35:
-                k = 0;
-                l = 0;
-                if (inventory[INVEN_BODY].tval != TV_NOTHING) {
-                    tmp[k++] = INVEN_BODY;
-                }
-                if (inventory[INVEN_ARM].tval != TV_NOTHING) {
-                    tmp[k++] = INVEN_ARM;
-                }
-                if (inventory[INVEN_OUTER].tval != TV_NOTHING) {
-                    tmp[k++] = INVEN_OUTER;
-                }
-                if (inventory[INVEN_HANDS].tval != TV_NOTHING) {
-                    tmp[k++] = INVEN_HANDS;
-                }
-                if (inventory[INVEN_HEAD].tval != TV_NOTHING) {
-                    tmp[k++] = INVEN_HEAD;
-                }
-                // also enchant boots
-                if (inventory[INVEN_FEET].tval != TV_NOTHING) {
-                    tmp[k++] = INVEN_FEET;
-                }
-
-                if (k > 0) {
-                    l = tmp[randint(k) - 1];
-                }
-
-                if (TR_CURSED & inventory[INVEN_BODY].flags) {
-                    l = INVEN_BODY;
-                } else if (TR_CURSED & inventory[INVEN_ARM].flags) {
-                    l = INVEN_ARM;
-                } else if (TR_CURSED & inventory[INVEN_OUTER].flags) {
-                    l = INVEN_OUTER;
-                } else if (TR_CURSED & inventory[INVEN_HEAD].flags) {
-                    l = INVEN_HEAD;
-                } else if (TR_CURSED & inventory[INVEN_HANDS].flags) {
-                    l = INVEN_HANDS;
-                } else if (TR_CURSED & inventory[INVEN_FEET].flags) {
-                    l = INVEN_FEET;
-                }
-
-                if (l > 0) {
-                    i_ptr = &inventory[l];
-                    objdes(tmp_str, i_ptr, false);
-                    (void) sprintf(out_val, "Your %s glows brightly!", tmp_str);
-                    msg_print(out_val);
-                    flag = false;
-                    for (k = 0; k < randint(2) + 1; k++) {
-                        if (enchant(&i_ptr->toac, 10)) {
-                            flag = true;
-                        }
-                    }
-                    if (flag) {
-                        i_ptr->flags &= ~TR_CURSED;
-                        calc_bonuses();
-                    } else {
-                        msg_print("The enchantment fails.");
-                    }
-                    ident = true;
-                }
+                identified = readEnchantArmorScroll();
                 break;
             case 36:
-                if (inventory[INVEN_BODY].tval != TV_NOTHING && randint(4) == 1) {
-                    k = INVEN_BODY;
-                } else if (inventory[INVEN_ARM].tval != TV_NOTHING && randint(3) == 1) {
-                    k = INVEN_ARM;
-                } else if (inventory[INVEN_OUTER].tval != TV_NOTHING && randint(3) == 1) {
-                    k = INVEN_OUTER;
-                } else if (inventory[INVEN_HEAD].tval != TV_NOTHING && randint(3) == 1) {
-                    k = INVEN_HEAD;
-                } else if (inventory[INVEN_HANDS].tval != TV_NOTHING && randint(3) == 1) {
-                    k = INVEN_HANDS;
-                } else if (inventory[INVEN_FEET].tval != TV_NOTHING && randint(3) == 1) {
-                    k = INVEN_FEET;
-                } else if (inventory[INVEN_BODY].tval != TV_NOTHING) {
-                    k = INVEN_BODY;
-                } else if (inventory[INVEN_ARM].tval != TV_NOTHING) {
-                    k = INVEN_ARM;
-                } else if (inventory[INVEN_OUTER].tval != TV_NOTHING) {
-                    k = INVEN_OUTER;
-                } else if (inventory[INVEN_HEAD].tval != TV_NOTHING) {
-                    k = INVEN_HEAD;
-                } else if (inventory[INVEN_HANDS].tval != TV_NOTHING) {
-                    k = INVEN_HANDS;
-                } else if (inventory[INVEN_FEET].tval != TV_NOTHING) {
-                    k = INVEN_FEET;
-                } else {
-                    k = 0;
-                }
-
-                if (k > 0) {
-                    i_ptr = &inventory[k];
-                    objdes(tmp_str, i_ptr, false);
-                    (void) sprintf(out_val, "Your %s glows black, fades.", tmp_str);
-                    msg_print(out_val);
-                    unmagic_name(i_ptr);
-                    i_ptr->flags = TR_CURSED;
-                    i_ptr->tohit = 0;
-                    i_ptr->todam = 0;
-                    i_ptr->toac = (int16_t) (-randint(5) - randint(5));
-                    calc_bonuses();
-                    ident = true;
-                }
+                identified = readCurseArmorScroll();
                 break;
             case 37:
-                ident = false;
-                for (k = 0; k < randint(3); k++) {
-                    y = char_row;
-                    x = char_col;
-                    ident |= summon_undead(&y, &x);
-                }
+                identified = readSummonUndeadScroll();
                 break;
             case 38:
-                ident = true;
                 bless(randint(12) + 6);
+                identified = true;
                 break;
             case 39:
-                ident = true;
                 bless(randint(24) + 12);
+                identified = true;
                 break;
             case 40:
-                ident = true;
                 bless(randint(48) + 24);
+                identified = true;
                 break;
             case 41:
-                ident = true;
-                if (py.flags.word_recall == 0) {
-                    py.flags.word_recall = (int16_t) (25 + randint(30));
-                }
-                msg_print("The air about you becomes charged.");
+                readWordOfRecallScroll();
+                identified = true;
                 break;
             case 42:
                 destroy_area(char_row, char_col);
-                ident = true;
+                identified = true;
                 break;
             default:
                 msg_print("Internal error in scroll()");
                 break;
         }
-        // End of Scrolls.
     }
 
-    i_ptr = &inventory[item_val];
+    i_ptr = &inventory[itemID];
 
-    if (ident) {
+    if (identified) {
         if (!known1_p(i_ptr)) {
-            struct player_type::misc *m_ptr = &py.misc;
-
             // round half-way case up
-            m_ptr->exp += (i_ptr->level + (m_ptr->lev >> 1)) / m_ptr->lev;
+            py.misc.exp += (i_ptr->level + (py.misc.lev >> 1)) / py.misc.lev;
             prt_experience();
 
-            identify(&item_val);
-
-            // NOTE: this is never read after this, so commenting out. -MRC-
-            // i_ptr = &inventory[item_val];
+            identify(&itemID);
         }
     } else if (!known1_p(i_ptr)) {
         sample(i_ptr);
     }
 
     if (used_up) {
-        desc_remain(item_val);
-        inven_destroy(item_val);
+        desc_remain(itemID);
+        inven_destroy(itemID);
     }
 }
