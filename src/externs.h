@@ -170,7 +170,7 @@ void create_character();
 // creature.c
 void update_mon(int);
 bool multiply_monster(int, int, int, int);
-void creatures(int);
+void creatures(bool);
 
 // death.c
 void display_scores();
