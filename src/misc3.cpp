@@ -1219,7 +1219,7 @@ void check_strength() {
 int inven_carry(inven_type *i_ptr) {
     int typ = i_ptr->tval;
     int subt = i_ptr->subval;
-    int known1p = known1_p(i_ptr);
+    bool known1p = known1_p(i_ptr);
     int always_known1p = (object_offset(i_ptr) == -1);
 
     int locn;
