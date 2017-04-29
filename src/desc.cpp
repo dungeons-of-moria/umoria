@@ -13,8 +13,6 @@ static void unsample(inven_type *);
 
 char titles[MAX_TITLES][10];
 
-// Object descriptor routines
-
 bool is_a_vowel(char ch) {
     switch (ch) {
         case 'a':
@@ -47,30 +45,35 @@ void magic_init() {
         colors[i] = colors[j];
         colors[j] = tmp;
     }
+
     for (int i = 0; i < MAX_WOODS; i++) {
         j = randint(MAX_WOODS) - 1;
         tmp = woods[i];
         woods[i] = woods[j];
         woods[j] = tmp;
     }
+
     for (int i = 0; i < MAX_METALS; i++) {
         j = randint(MAX_METALS) - 1;
         tmp = metals[i];
         metals[i] = metals[j];
         metals[j] = tmp;
     }
+
     for (int i = 0; i < MAX_ROCKS; i++) {
         j = randint(MAX_ROCKS) - 1;
         tmp = rocks[i];
         rocks[i] = rocks[j];
         rocks[j] = tmp;
     }
+
     for (int i = 0; i < MAX_AMULETS; i++) {
         j = randint(MAX_AMULETS) - 1;
         tmp = amulets[i];
         amulets[i] = amulets[j];
         amulets[j] = tmp;
     }
+
     for (int i = 0; i < MAX_MUSH; i++) {
         j = randint(MAX_MUSH) - 1;
         tmp = mushrooms[i];
@@ -84,6 +87,7 @@ void magic_init() {
     for (int h = 0; h < MAX_TITLES; h++) {
         string[0] = '\0';
         k = randint(2) + 1;
+
         for (int i = 0; i < k; i++) {
             for (int s = randint(2); s > 0; s--) {
                 (void) strcat(string, syllables[randint(MAX_SYLLABLES) - 1]);
@@ -92,13 +96,16 @@ void magic_init() {
                 (void) strcat(string, " ");
             }
         }
+
         if (string[8] == ' ') {
             string[8] = '\0';
         } else {
             string[9] = '\0';
         }
+
         (void) strcpy(titles[h], string);
     }
+
     reset_seed();
 }
 
@@ -128,36 +135,51 @@ int16_t object_offset(inven_type *t_ptr) {
     }
 }
 
-// Remove "Secret" symbol for identity of object
-void known1(inven_type *i_ptr) {
-    int16_t offset = object_offset(i_ptr);
-    if (offset < 0) {
-        return;
-    }
-    offset <<= 6;
-
-    uint8_t indexx = (uint8_t) (i_ptr->subval & (ITEM_SINGLE_STACK_MIN - 1));
-
-    object_ident[offset + indexx] |= OD_KNOWN1;
-    // clear the tried flag, since it is now known
-    object_ident[offset + indexx] &= ~OD_TRIED;
+static void clearObjectTriedFlag(int16_t id) {
+    object_ident[id] &= ~OD_TRIED;
 }
 
+static void setObjectTriedFlag(int16_t id) {
+    object_ident[id] |= OD_TRIED;
+}
+
+static bool isObjectKnown(int16_t id) {
+    return (object_ident[id] & OD_KNOWN1) != 0;
+}
+
+// Remove "Secret" symbol for identity of object
+void known1(inven_type *i_ptr) {
+    int16_t id = object_offset(i_ptr);
+
+    if (id < 0) {
+        return;
+    }
+
+    id <<= 6;
+    id += (uint8_t) (i_ptr->subval & (ITEM_SINGLE_STACK_MIN - 1));
+
+    object_ident[id] |= OD_KNOWN1;
+
+    // clear the tried flag, since it is now known
+    clearObjectTriedFlag(id);
+}
+
+// Items which don't have a 'color' are always known1,
+// so that they can be carried in order in the inventory.
 int known1_p(inven_type *i_ptr) {
-    // Items which don't have a 'color' are always known1,
-    // so that they can be carried in order in the inventory.
-    int16_t offset = object_offset(i_ptr);
-    if (offset < 0) {
+    int16_t id = object_offset(i_ptr);
+
+    if (id < 0) {
         return OD_KNOWN1;
     }
     if (store_bought_p(i_ptr)) {
         return OD_KNOWN1;
     }
-    offset <<= 6;
 
-    uint8_t indexx = (uint8_t) (i_ptr->subval & (ITEM_SINGLE_STACK_MIN - 1));
+    id <<= 6;
+    id += (uint8_t) (i_ptr->subval & (ITEM_SINGLE_STACK_MIN - 1));
 
-    return (object_ident[offset + indexx] & OD_KNOWN1);
+    return isObjectKnown(id);
 }
 
 // Remove "Secret" symbol for identity of plusses
@@ -189,29 +211,34 @@ int store_bought_p(inven_type *i_ptr) {
 
 // Remove an automatically generated inscription. -CJS-
 static void unsample(inven_type *i_ptr) {
-    // used to clear ID_DAMD flag, but I think it should remain set
+    // this also used to clear ID_DAMD flag, but I think it should remain set
     i_ptr->ident &= ~(ID_MAGIK | ID_EMPTY);
 
-    int16_t offset = object_offset(i_ptr);
-    if (offset < 0) {
+    int16_t id = object_offset(i_ptr);
+
+    if (id < 0) {
         return;
     }
-    offset <<= 6;
 
-    uint8_t indexx = (uint8_t) (i_ptr->subval & (ITEM_SINGLE_STACK_MIN - 1));
-    object_ident[offset + indexx] &= ~OD_TRIED;
+    id <<= 6;
+    id += (uint8_t) (i_ptr->subval & (ITEM_SINGLE_STACK_MIN - 1));
+
+    // clear the tried flag, since it is now known
+    clearObjectTriedFlag(id);
 }
 
 // Somethings been sampled -CJS-
 void sample(inven_type *i_ptr) {
-    int16_t offset = object_offset(i_ptr);
-    if (offset < 0) {
+    int16_t id = object_offset(i_ptr);
+
+    if (id < 0) {
         return;
     }
-    offset <<= 6;
 
-    uint8_t indexx = (uint8_t) (i_ptr->subval & (ITEM_SINGLE_STACK_MIN - 1));
-    object_ident[offset + indexx] |= OD_TRIED;
+    id <<= 6;
+    id += (uint8_t) (i_ptr->subval & (ITEM_SINGLE_STACK_MIN - 1));
+
+    setObjectTriedFlag(id);
 }
 
 // Somethings been identified.
@@ -223,37 +250,44 @@ void identify(int *item) {
         add_inscribe(i_ptr, ID_DAMD);
     }
 
-    if (!known1_p(i_ptr)) {
-        known1(i_ptr);
-        int x1 = i_ptr->tval;
-        int x2 = i_ptr->subval;
+    if (known1_p(i_ptr)) {
+        return;
+    }
 
-        if (x2 < ITEM_SINGLE_STACK_MIN || x2 >= ITEM_GROUP_MIN) {
-            // no merging possible
-            return;
-        }
+    known1(i_ptr);
 
-        int j;
-        inven_type *t_ptr;
+    int x1 = i_ptr->tval;
+    int x2 = i_ptr->subval;
 
-        for (int i = 0; i < inven_ctr; i++) {
-            t_ptr = &inventory[i];
-            if (t_ptr->tval == x1 && t_ptr->subval == x2 && i != *item && ((int) t_ptr->number + (int) i_ptr->number) < 256) {
-                // make *item the smaller number
-                if (*item > i) {
-                    j = *item;
-                    *item = i;
-                    i = j;
-                }
-                msg_print("You combine similar objects from the shop and dungeon.");
+    // no merging possible
+    if (x2 < ITEM_SINGLE_STACK_MIN || x2 >= ITEM_GROUP_MIN) {
+        return;
+    }
 
-                inventory[*item].number += inventory[i].number;
-                inven_ctr--;
-                for (j = i; j < inven_ctr; j++) {
-                    inventory[j] = inventory[j + 1];
-                }
-                invcopy(&inventory[j], OBJ_NOTHING);
+    int j;
+    inven_type *t_ptr;
+
+    for (int i = 0; i < inven_ctr; i++) {
+        t_ptr = &inventory[i];
+
+        if (t_ptr->tval == x1 && t_ptr->subval == x2 && i != *item && ((int) t_ptr->number + (int) i_ptr->number) < 256) {
+            // make *item the smaller number
+            if (*item > i) {
+                j = *item;
+                *item = i;
+                i = j;
             }
+
+            msg_print("You combine similar objects from the shop and dungeon.");
+
+            inventory[*item].number += inventory[i].number;
+            inven_ctr--;
+
+            for (j = i; j < inven_ctr; j++) {
+                inventory[j] = inventory[j + 1];
+            }
+
+            invcopy(&inventory[j], OBJ_NOTHING);
         }
     }
 }
@@ -272,13 +306,25 @@ void unmagic_name(inven_type *i_ptr) {
 #define FLAGS 4
 #define Z_PLUSSES 5
 
+int bowDamageValue(int16_t p1) {
+    if (p1 == 1 || p1 == 2) {
+        return 2;
+    }
+    if (p1 == 3 || p1 == 5) {
+        return 3;
+    }
+    if (p1 == 4 || p1 == 6) {
+        return 4;
+    }
+    return -1;
+}
+
 // Returns a description of item for inventory
-// pref indicates that there should be an article added (prefix).
+// `pref` indicates that there should be an article added (prefix).
 // Note that since out_val can easily exceed 80 characters, objdes
 // must always be called with a bigvtype as the first parameter.
+// FIXME: first parameter should be a `bigvtype`, as stated above.
 void objdes(char *out_val, inven_type *i_ptr, int pref) {
-    int tmp;
-
     int indexx = i_ptr->subval & (ITEM_SINGLE_STACK_MIN - 1);
 
     // base name, modifier string
@@ -287,9 +333,11 @@ void objdes(char *out_val, inven_type *i_ptr, int pref) {
 
     vtype damstr;
     damstr[0] = '\0';
+
     int p1_use = IGNORED;
-    bool modify = known1_p(i_ptr) == 0;
     bool append_name = false;
+
+    bool modify = known1_p(i_ptr) == 0;
 
     switch (i_ptr->tval) {
         case TV_MISC:
@@ -306,16 +354,7 @@ void objdes(char *out_val, inven_type *i_ptr, int pref) {
         case TV_SPIKE:
             break;
         case TV_BOW:
-            if (i_ptr->p1 == 1 || i_ptr->p1 == 2) {
-                tmp = 2;
-            } else if (i_ptr->p1 == 3 || i_ptr->p1 == 5) {
-                tmp = 3;
-            } else if (i_ptr->p1 == 4 || i_ptr->p1 == 6) {
-                tmp = 4;
-            } else {
-                tmp = -1;
-            }
-            (void) sprintf(damstr, " (x%d)", tmp);
+            (void) sprintf(damstr, " (x%d)", bowDamageValue(i_ptr->p1));
             break;
         case TV_HAFTED:
         case TV_POLEARM:
@@ -455,16 +494,19 @@ void objdes(char *out_val, inven_type *i_ptr, int pref) {
     } else {
         (void) strcpy(tmp_val, basenm);
     }
+
     if (append_name) {
         (void) strcat(tmp_val, " of ");
         (void) strcat(tmp_val, object_list[i_ptr->index].name);
     }
+
     if (i_ptr->number != 1) {
         insert_str(tmp_val, "ch~", "ches");
         insert_str(tmp_val, "~", "s");
     } else {
         insert_str(tmp_val, "~", CNIL);
     }
+
     if (!pref) {
         if (!strncmp("some", tmp_val, 4)) {
             (void) strcpy(out_val, &tmp_val[5]);
@@ -474,135 +516,146 @@ void objdes(char *out_val, inven_type *i_ptr, int pref) {
         } else {
             (void) strcpy(out_val, tmp_val);
         }
-    } else {
-        vtype tmp_str;
+        return;
+    }
 
-        if (i_ptr->name2 != SN_NULL && known2_p(i_ptr)) {
-            (void) strcat(tmp_val, " ");
-            (void) strcat(tmp_val, special_names[i_ptr->name2]);
+    vtype tmp_str;
+
+    if (i_ptr->name2 != SN_NULL && known2_p(i_ptr)) {
+        (void) strcat(tmp_val, " ");
+        (void) strcat(tmp_val, special_names[i_ptr->name2]);
+    }
+
+    if (damstr[0] != '\0') {
+        (void) strcat(tmp_val, damstr);
+    }
+
+    if (known2_p(i_ptr)) {
+        // originally used %+d, but several machines don't support it
+        if (i_ptr->ident & ID_SHOW_HITDAM) {
+            (void) sprintf(tmp_str, " (%c%d,%c%d)", (i_ptr->tohit < 0) ? '-' : '+', abs(i_ptr->tohit), (i_ptr->todam < 0) ? '-' : '+', abs(i_ptr->todam));
+        } else if (i_ptr->tohit != 0) {
+            (void) sprintf(tmp_str, " (%c%d)", (i_ptr->tohit < 0) ? '-' : '+', abs(i_ptr->tohit));
+        } else if (i_ptr->todam != 0) {
+            (void) sprintf(tmp_str, " (%c%d)", (i_ptr->todam < 0) ? '-' : '+', abs(i_ptr->todam));
+        } else {
+            tmp_str[0] = '\0';
         }
-        if (damstr[0] != '\0') {
-            (void) strcat(tmp_val, damstr);
-        }
+        (void) strcat(tmp_val, tmp_str);
+    }
+
+    // Crowns have a zero base AC, so make a special test for them.
+    if (i_ptr->ac != 0 || i_ptr->tval == TV_HELM) {
+        (void) sprintf(tmp_str, " [%d", i_ptr->ac);
+        (void) strcat(tmp_val, tmp_str);
         if (known2_p(i_ptr)) {
             // originally used %+d, but several machines don't support it
-            if (i_ptr->ident & ID_SHOW_HITDAM) {
-                (void) sprintf(tmp_str, " (%c%d,%c%d)", (i_ptr->tohit < 0) ? '-' : '+', abs(i_ptr->tohit), (i_ptr->todam < 0) ? '-' : '+', abs(i_ptr->todam));
-            } else if (i_ptr->tohit != 0) {
-                (void) sprintf(tmp_str, " (%c%d)", (i_ptr->tohit < 0) ? '-' : '+', abs(i_ptr->tohit));
-            } else if (i_ptr->todam != 0) {
-                (void) sprintf(tmp_str, " (%c%d)", (i_ptr->todam < 0) ? '-' : '+', abs(i_ptr->todam));
-            } else {
-                tmp_str[0] = '\0';
-            }
+            (void) sprintf(tmp_str, ",%c%d", (i_ptr->toac < 0) ? '-' : '+', abs(i_ptr->toac));
             (void) strcat(tmp_val, tmp_str);
         }
-        // Crowns have a zero base AC, so make a special test for them.
-        if (i_ptr->ac != 0 || i_ptr->tval == TV_HELM) {
-            (void) sprintf(tmp_str, " [%d", i_ptr->ac);
-            (void) strcat(tmp_val, tmp_str);
-            if (known2_p(i_ptr)) {
-                // originally used %+d, but several machines don't support it
-                (void) sprintf(tmp_str, ",%c%d", (i_ptr->toac < 0) ? '-' : '+', abs(i_ptr->toac));
-                (void) strcat(tmp_val, tmp_str);
-            }
-            (void) strcat(tmp_val, "]");
-        } else if (i_ptr->toac != 0 && known2_p(i_ptr)) {
-            // originally used %+d, but several machines don't support it
-            (void) sprintf(tmp_str, " [%c%d]", (i_ptr->toac < 0) ? '-' : '+', abs(i_ptr->toac));
-            (void) strcat(tmp_val, tmp_str);
-        }
+        (void) strcat(tmp_val, "]");
+    } else if (i_ptr->toac != 0 && known2_p(i_ptr)) {
+        // originally used %+d, but several machines don't support it
+        (void) sprintf(tmp_str, " [%c%d]", (i_ptr->toac < 0) ? '-' : '+', abs(i_ptr->toac));
+        (void) strcat(tmp_val, tmp_str);
+    }
 
-        // override defaults, check for p1 flags in the ident field
-        if (i_ptr->ident & ID_NOSHOW_P1) {
-            p1_use = IGNORED;
-        } else if (i_ptr->ident & ID_SHOW_P1) {
-            p1_use = Z_PLUSSES;
-        }
-        tmp_str[0] = '\0';
-        if (p1_use == LIGHT) {
-            (void) sprintf(tmp_str, " with %d turns of light", i_ptr->p1);
-        } else if (p1_use == IGNORED) { ;
-        } else if (known2_p(i_ptr)) {
-            if (p1_use == Z_PLUSSES) {
-                // originally used %+d, but several machines don't support it
+    // override defaults, check for p1 flags in the ident field
+    if (i_ptr->ident & ID_NOSHOW_P1) {
+        p1_use = IGNORED;
+    } else if (i_ptr->ident & ID_SHOW_P1) {
+        p1_use = Z_PLUSSES;
+    }
+
+    tmp_str[0] = '\0';
+
+    if (p1_use == LIGHT) {
+        (void) sprintf(tmp_str, " with %d turns of light", i_ptr->p1);
+    } else if (p1_use == IGNORED) {
+        // NOOP
+    } else if (known2_p(i_ptr)) {
+        if (p1_use == Z_PLUSSES) {
+            // originally used %+d, but several machines don't support it
+            (void) sprintf(tmp_str, " (%c%d)", (i_ptr->p1 < 0) ? '-' : '+', abs(i_ptr->p1));
+        } else if (p1_use == CHARGES) {
+            (void) sprintf(tmp_str, " (%d charges)", i_ptr->p1);
+        } else if (i_ptr->p1 != 0) {
+            if (p1_use == PLUSSES) {
                 (void) sprintf(tmp_str, " (%c%d)", (i_ptr->p1 < 0) ? '-' : '+', abs(i_ptr->p1));
-            } else if (p1_use == CHARGES) {
-                (void) sprintf(tmp_str, " (%d charges)", i_ptr->p1);
-            } else if (i_ptr->p1 != 0) {
-                if (p1_use == PLUSSES) {
-                    (void) sprintf(tmp_str, " (%c%d)", (i_ptr->p1 < 0) ? '-' : '+', abs(i_ptr->p1));
-                } else if (p1_use == FLAGS) {
-                    if (i_ptr->flags & TR_STR) {
-                        (void) sprintf(tmp_str, " (%c%d to STR)", (i_ptr->p1 < 0) ? '-' : '+', abs(i_ptr->p1));
-                    } else if (i_ptr->flags & TR_STEALTH) {
-                        (void) sprintf(tmp_str, " (%c%d to stealth)", (i_ptr->p1 < 0) ? '-' : '+', abs(i_ptr->p1));
-                    }
+            } else if (p1_use == FLAGS) {
+                if (i_ptr->flags & TR_STR) {
+                    (void) sprintf(tmp_str, " (%c%d to STR)", (i_ptr->p1 < 0) ? '-' : '+', abs(i_ptr->p1));
+                } else if (i_ptr->flags & TR_STEALTH) {
+                    (void) sprintf(tmp_str, " (%c%d to stealth)", (i_ptr->p1 < 0) ? '-' : '+', abs(i_ptr->p1));
                 }
             }
         }
-        (void) strcat(tmp_val, tmp_str);
-
-        // ampersand is always the first character
-        if (tmp_val[0] == '&') {
-            // use &tmp_val[1], so that & does not appear in output
-            if (i_ptr->number > 1) {
-                (void) sprintf(out_val, "%d%s", (int) i_ptr->number, &tmp_val[1]);
-            } else if (i_ptr->number < 1) {
-                (void) sprintf(out_val, "%s%s", "no more", &tmp_val[1]);
-            } else if (is_a_vowel(tmp_val[2])) {
-                (void) sprintf(out_val, "an%s", &tmp_val[1]);
-            } else {
-                (void) sprintf(out_val, "a%s", &tmp_val[1]);
-            }
-        } else if (i_ptr->number < 1) {
-            // handle 'no more' case specially
-
-            // check for "some" at start
-            if (!strncmp("some", tmp_val, 4)) {
-                (void) sprintf(out_val, "no more %s", &tmp_val[5]);
-            } else {
-                // here if no article
-                (void) sprintf(out_val, "no more %s", tmp_val);
-            }
-        } else {
-            (void) strcpy(out_val, tmp_val);
-        }
-
-        tmp_str[0] = '\0';
-
-        if ((indexx = object_offset(i_ptr)) >= 0) {
-            indexx <<= 6;
-            indexx = indexx + (i_ptr->subval & (ITEM_SINGLE_STACK_MIN - 1));
-
-            // don't print tried string for store bought items
-            if ((object_ident[indexx] & OD_TRIED) && !store_bought_p(i_ptr)) {
-                (void) strcat(tmp_str, "tried ");
-            }
-        }
-        if (i_ptr->ident & (ID_MAGIK | ID_EMPTY | ID_DAMD)) {
-            if (i_ptr->ident & ID_MAGIK) {
-                (void) strcat(tmp_str, "magik ");
-            }
-            if (i_ptr->ident & ID_EMPTY) {
-                (void) strcat(tmp_str, "empty ");
-            }
-            if (i_ptr->ident & ID_DAMD) {
-                (void) strcat(tmp_str, "damned ");
-            }
-        }
-        if (i_ptr->inscrip[0] != '\0') {
-            (void) strcat(tmp_str, i_ptr->inscrip);
-        } else if ((indexx = (int) strlen(tmp_str)) > 0) {
-            // remove the extra blank at the end
-            tmp_str[indexx - 1] = '\0';
-        }
-        if (tmp_str[0]) {
-            (void) sprintf(tmp_val, " {%s}", tmp_str);
-            (void) strcat(out_val, tmp_val);
-        }
-        (void) strcat(out_val, ".");
     }
+    (void) strcat(tmp_val, tmp_str);
+
+    // ampersand is always the first character
+    if (tmp_val[0] == '&') {
+        // use &tmp_val[1], so that & does not appear in output
+        if (i_ptr->number > 1) {
+            (void) sprintf(out_val, "%d%s", (int) i_ptr->number, &tmp_val[1]);
+        } else if (i_ptr->number < 1) {
+            (void) sprintf(out_val, "%s%s", "no more", &tmp_val[1]);
+        } else if (is_a_vowel(tmp_val[2])) {
+            (void) sprintf(out_val, "an%s", &tmp_val[1]);
+        } else {
+            (void) sprintf(out_val, "a%s", &tmp_val[1]);
+        }
+    } else if (i_ptr->number < 1) {
+        // handle 'no more' case specially
+
+        // check for "some" at start
+        if (!strncmp("some", tmp_val, 4)) {
+            (void) sprintf(out_val, "no more %s", &tmp_val[5]);
+        } else {
+            // here if no article
+            (void) sprintf(out_val, "no more %s", tmp_val);
+        }
+    } else {
+        (void) strcpy(out_val, tmp_val);
+    }
+
+    tmp_str[0] = '\0';
+
+    if ((indexx = object_offset(i_ptr)) >= 0) {
+        indexx <<= 6;
+        indexx += (i_ptr->subval & (ITEM_SINGLE_STACK_MIN - 1));
+
+        // don't print tried string for store bought items
+        if ((object_ident[indexx] & OD_TRIED) && !store_bought_p(i_ptr)) {
+            (void) strcat(tmp_str, "tried ");
+        }
+    }
+
+    if (i_ptr->ident & (ID_MAGIK | ID_EMPTY | ID_DAMD)) {
+        if (i_ptr->ident & ID_MAGIK) {
+            (void) strcat(tmp_str, "magik ");
+        }
+        if (i_ptr->ident & ID_EMPTY) {
+            (void) strcat(tmp_str, "empty ");
+        }
+        if (i_ptr->ident & ID_DAMD) {
+            (void) strcat(tmp_str, "damned ");
+        }
+    }
+
+    if (i_ptr->inscrip[0] != '\0') {
+        (void) strcat(tmp_str, i_ptr->inscrip);
+    } else if ((indexx = (int) strlen(tmp_str)) > 0) {
+        // remove the extra blank at the end
+        tmp_str[indexx - 1] = '\0';
+    }
+
+    if (tmp_str[0]) {
+        (void) sprintf(tmp_val, " {%s}", tmp_str);
+        (void) strcat(out_val, tmp_val);
+    }
+
+    (void) strcat(out_val, ".");
 }
 
 void invcopy(inven_type *to, int from_index) {
@@ -631,25 +684,30 @@ void invcopy(inven_type *to, int from_index) {
 
 // Describe number of remaining charges. -RAK-
 void desc_charges(int item_val) {
-    int rem_num;
-    vtype out_val;
-
-    if (known2_p(&inventory[item_val])) {
-        rem_num = inventory[item_val].p1;
-        (void) sprintf(out_val, "You have %d charges remaining.", rem_num);
-        msg_print(out_val);
+    if (!known2_p(&inventory[item_val])) {
+        return;
     }
+
+    int rem_num = inventory[item_val].p1;
+
+    vtype out_val;
+    (void) sprintf(out_val, "You have %d charges remaining.", rem_num);
+    msg_print(out_val);
 }
 
 // Describe amount of item remaining. -RAK-
 void desc_remain(int item_val) {
-    bigvtype out_val, tmp_str;
-
     inven_type *i_ptr = &inventory[item_val];
+
     i_ptr->number--;
+
+    bigvtype tmp_str;
     objdes(tmp_str, i_ptr, true);
+
     i_ptr->number++;
+
     // the string already has a dot at the end.
+    bigvtype out_val;
     (void) sprintf(out_val, "You have %s", tmp_str);
     msg_print(out_val);
 }
