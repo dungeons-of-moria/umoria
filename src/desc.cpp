@@ -324,7 +324,7 @@ int bowDamageValue(int16_t p1) {
 // Note that since out_val can easily exceed 80 characters, objdes
 // must always be called with a bigvtype as the first parameter.
 // FIXME: first parameter should be a `bigvtype`, as stated above.
-void objdes(char *out_val, inven_type *i_ptr, int pref) {
+void objdes(char *out_val, inven_type *i_ptr, bool pref) {
     int indexx = i_ptr->subval & (ITEM_SINGLE_STACK_MIN - 1);
 
     // base name, modifier string

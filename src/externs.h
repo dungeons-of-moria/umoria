@@ -193,7 +193,7 @@ bool store_bought_p(inven_type *);
 void sample(inven_type *);
 void identify(int *);
 void unmagic_name(inven_type *);
-void objdes(char *, inven_type *, int);
+void objdes(char *, inven_type *, bool);
 void invcopy(inven_type *, int);
 void desc_charges(int);
 void desc_remain(int);
