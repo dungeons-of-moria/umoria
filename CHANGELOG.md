@@ -4,6 +4,7 @@
 
 ### Bug Fixes
 
+- Various repeat commands (e.g tunnelling) were broken in the 5.7.1 release.
 - Removes `curs_set(0)` as a visible cursor is needed in menus!
 
 ### Code
