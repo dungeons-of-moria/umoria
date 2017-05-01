@@ -10,25 +10,15 @@
 #include "externs.h"
 
 static char original_commands(char);
-
 static void do_command(char);
-
 static bool valid_countcommand(char);
-
 static void regenhp(int);
-
 static void regenmana(int);
-
 static bool enchanted(inven_type *);
-
 static void examine_book();
-
 static void go_up();
-
 static void go_down();
-
 static void jamdoor();
-
 static void refill_lamp();
 
 // Moria game module -RAK-
@@ -37,33 +27,771 @@ static void refill_lamp();
 
 // It has had a bit more hard work. -CJS-
 
-void dungeon() {
-    int i;
+// Check light status for dungeon setup
+static void updatePlayerLightStatus() {
+    player_light = (inventory[INVEN_LIGHT].p1 > 0);
+}
 
-    // Main procedure for dungeon. -RAK-
-    // Note: There is a lot of preliminary magic going on here at first
-
-    // init pointers.
-    struct player_type::flags *f_ptr = &py.flags;
-    struct player_type::misc *p_ptr = &py.misc;
-
-    // Check light status for setup
-    inven_type *i_ptr = &inventory[INVEN_LIGHT];
-    player_light = (i_ptr->p1 > 0);
-
-    // Check for a maximum level
-    if (dun_level > p_ptr->max_dlv) {
-        p_ptr->max_dlv = (uint16_t) dun_level;
+// Check for a maximum level
+static void updatePlayerMaximumDungeonLevel() {
+    if (dun_level > py.misc.max_dlv) {
+        py.misc.max_dlv = (uint16_t) dun_level;
     }
+}
 
-    // Reset flags and initialize variables
-    int find_count = 0;
+// Reset flags and initialize variables
+static void resetDungeonFlags() {
     command_count = 0;
     new_level_flag = false;
     find_flag = 0;
     teleport_flag = false;
     mon_tot_mult = 0;
     cave[char_row][char_col].cptr = 1;
+}
+
+// Check light status
+static void checkAndUpdatePlayerLightStatus() {
+    inven_type *i_ptr = &inventory[INVEN_LIGHT];
+
+    if (player_light) {
+        if (i_ptr->p1 > 0) {
+            i_ptr->p1--;
+            if (i_ptr->p1 == 0) {
+                player_light = false;
+                msg_print("Your light has gone out!");
+                disturb(0, 1);
+
+                // unlight creatures
+                creatures(false);
+            } else if (i_ptr->p1 < 40 && randint(5) == 1 && py.flags.blind < 1) {
+                disturb(0, 0);
+                msg_print("Your light is growing faint.");
+            }
+        } else {
+            player_light = false;
+            disturb(0, 1);
+
+            // unlight creatures
+            creatures(false);
+        }
+    } else if (i_ptr->p1 > 0) {
+        i_ptr->p1--;
+        player_light = true;
+        disturb(0, 1);
+
+        // light creatures
+        creatures(false);
+    }
+}
+
+static void playerActivateHeroism() {
+    py.flags.status |= PY_HERO;
+    disturb(0, 0);
+    py.misc.mhp += 10;
+    py.misc.chp += 10;
+    py.misc.bth += 12;
+    py.misc.bthb += 12;
+    msg_print("You feel like a HERO!");
+    prt_mhp();
+    prt_chp();
+}
+
+static void playerDisableHeroism() {
+    py.flags.status &= ~PY_HERO;
+    disturb(0, 0);
+    py.misc.mhp -= 10;
+    if (py.misc.chp > py.misc.mhp) {
+        py.misc.chp = py.misc.mhp;
+        py.misc.chp_frac = 0;
+        prt_chp();
+    }
+    py.misc.bth -= 12;
+    py.misc.bthb -= 12;
+    msg_print("The heroism wears off.");
+    prt_mhp();
+}
+
+static void playerActivateSuperHeroism() {
+    py.flags.status |= PY_SHERO;
+    disturb(0, 0);
+    py.misc.mhp += 20;
+    py.misc.chp += 20;
+    py.misc.bth += 24;
+    py.misc.bthb += 24;
+    msg_print("You feel like a SUPER HERO!");
+    prt_mhp();
+    prt_chp();
+}
+
+static void playerDisableSuperHeroism() {
+    py.flags.status &= ~PY_SHERO;
+    disturb(0, 0);
+    py.misc.mhp -= 20;
+    if (py.misc.chp > py.misc.mhp) {
+        py.misc.chp = py.misc.mhp;
+        py.misc.chp_frac = 0;
+        prt_chp();
+    }
+    py.misc.bth -= 24;
+    py.misc.bthb -= 24;
+    msg_print("The super heroism wears off.");
+    prt_mhp();
+}
+
+static void playerUpdateHeroStatus() {
+    // Heroism
+    if (py.flags.hero > 0) {
+        if ((PY_HERO & py.flags.status) == 0) {
+            playerActivateHeroism();
+        }
+
+        py.flags.hero--;
+
+        if (py.flags.hero == 0) {
+            playerDisableHeroism();
+        }
+    }
+
+    // Super Heroism
+    if (py.flags.shero > 0) {
+        if ((PY_SHERO & py.flags.status) == 0) {
+            playerActivateSuperHeroism();
+        }
+
+        py.flags.shero--;
+
+        if (py.flags.shero == 0) {
+            playerDisableSuperHeroism();
+        }
+    }
+}
+
+static int playerFoodConsumption() {
+    // Regenerate hp and mana
+    int regen_amount = PLAYER_REGEN_NORMAL;
+
+    if (py.flags.food < PLAYER_FOOD_ALERT) {
+        if (py.flags.food < PLAYER_FOOD_WEAK) {
+            if (py.flags.food < 0) {
+                regen_amount = 0;
+            } else if (py.flags.food < PLAYER_FOOD_FAINT) {
+                regen_amount = PLAYER_REGEN_FAINT;
+            } else if (py.flags.food < PLAYER_FOOD_WEAK) {
+                regen_amount = PLAYER_REGEN_WEAK;
+            }
+            if ((PY_WEAK & py.flags.status) == 0) {
+                py.flags.status |= PY_WEAK;
+                msg_print("You are getting weak from hunger.");
+                disturb(0, 0);
+                prt_hunger();
+            }
+            if (py.flags.food < PLAYER_FOOD_FAINT && randint(8) == 1) {
+                py.flags.paralysis += randint(5);
+                msg_print("You faint from the lack of food.");
+                disturb(1, 0);
+            }
+        } else if ((PY_HUNGRY & py.flags.status) == 0) {
+            py.flags.status |= PY_HUNGRY;
+            msg_print("You are getting hungry.");
+            disturb(0, 0);
+            prt_hunger();
+        }
+    }
+
+    // Food consumption
+    // Note: Sped up characters really burn up the food!
+    if (py.flags.speed < 0) {
+        py.flags.food -= py.flags.speed * py.flags.speed;
+    }
+
+    py.flags.food -= py.flags.food_digested;
+
+    if (py.flags.food < 0) {
+        take_hit(-py.flags.food / 16, "starvation"); // -CJS-
+        disturb(1, 0);
+    }
+
+    return regen_amount;
+}
+
+static void playerUpdateRegeneration(int regen_amount) {
+    if (py.flags.regenerate) {
+        regen_amount = regen_amount * 3 / 2;
+    }
+
+    if ((py.flags.status & PY_SEARCH) || py.flags.rest != 0) {
+        regen_amount = regen_amount * 2;
+    }
+
+    if (py.flags.poisoned < 1 && py.misc.chp < py.misc.mhp) {
+        regenhp(regen_amount);
+    }
+
+    if (py.misc.cmana < py.misc.mana) {
+        regenmana(regen_amount);
+    }
+}
+
+static void playerUpdateBlindnessState() {
+    if (py.flags.blind <= 0) {
+        return;
+    }
+
+    if ((PY_BLIND & py.flags.status) == 0) {
+        py.flags.status |= PY_BLIND;
+        prt_map();
+        prt_blind();
+        disturb(0, 1);
+
+        // unlight creatures
+        creatures(false);
+    }
+
+    py.flags.blind--;
+
+    if (py.flags.blind == 0) {
+        py.flags.status &= ~PY_BLIND;
+        prt_blind();
+        prt_map();
+
+        // light creatures
+        disturb(0, 1);
+        creatures(false);
+
+        msg_print("The veil of darkness lifts.");
+    }
+}
+
+static void playerUpdateConfusion() {
+    if (py.flags.confused <= 0) {
+        return;
+    }
+
+    if ((PY_CONFUSED & py.flags.status) == 0) {
+        py.flags.status |= PY_CONFUSED;
+        prt_confused();
+    }
+
+    py.flags.confused--;
+
+    if (py.flags.confused == 0) {
+        py.flags.status &= ~PY_CONFUSED;
+        prt_confused();
+        msg_print("You feel less confused now.");
+        if (py.flags.rest != 0) {
+            rest_off();
+        }
+    }
+}
+
+static void playerUpdateAfraidness() {
+    if (py.flags.afraid <= 0) {
+        return;
+    }
+
+    if ((PY_FEAR & py.flags.status) == 0) {
+        if (py.flags.shero + py.flags.hero > 0) {
+            py.flags.afraid = 0;
+        } else {
+            py.flags.status |= PY_FEAR;
+            prt_afraid();
+        }
+    } else if (py.flags.shero + py.flags.hero > 0) {
+        py.flags.afraid = 1;
+    }
+
+    py.flags.afraid--;
+
+    if (py.flags.afraid == 0) {
+        py.flags.status &= ~PY_FEAR;
+        prt_afraid();
+        msg_print("You feel bolder now.");
+        disturb(0, 0);
+    }
+}
+
+static void playerUpdatePoisonedState() {
+    if (py.flags.poisoned <= 0) {
+        return;
+    }
+
+    if ((PY_POISONED & py.flags.status) == 0) {
+        py.flags.status |= PY_POISONED;
+        prt_poisoned();
+    }
+
+    py.flags.poisoned--;
+
+    if (py.flags.poisoned == 0) {
+        py.flags.status &= ~PY_POISONED;
+        prt_poisoned();
+
+        msg_print("You feel better.");
+        disturb(0, 0);
+
+        return;
+    }
+
+
+    int damage = 0;
+
+    switch (con_adj()) {
+        case -4:
+            damage = 4;
+            break;
+        case -3:
+        case -2:
+            damage = 3;
+            break;
+        case -1:
+            damage = 2;
+            break;
+        case 0:
+            damage = 1;
+            break;
+        case 1:
+        case 2:
+        case 3:
+            damage = ((turn % 2) == 0);
+            break;
+        case 4:
+        case 5:
+            damage = ((turn % 3) == 0);
+            break;
+        case 6:
+            damage = ((turn % 4) == 0);
+            break;
+    }
+
+    take_hit(damage, "poison");
+    disturb(1, 0);
+}
+
+static void playerUpdateFastness() {
+    if (py.flags.fast <= 0) {
+        return;
+    }
+
+    if ((PY_FAST & py.flags.status) == 0) {
+        py.flags.status |= PY_FAST;
+        change_speed(-1);
+        msg_print("You feel yourself moving faster.");
+        disturb(0, 0);
+    }
+
+    py.flags.fast--;
+
+    if (py.flags.fast == 0) {
+        py.flags.status &= ~PY_FAST;
+        change_speed(1);
+        msg_print("You feel yourself slow down.");
+        disturb(0, 0);
+    }
+}
+
+static void playerUpdateSlowness() {
+    if (py.flags.slow <= 0) {
+        return;
+    }
+
+    if ((PY_SLOW & py.flags.status) == 0) {
+        py.flags.status |= PY_SLOW;
+        change_speed(1);
+        msg_print("You feel yourself moving slower.");
+        disturb(0, 0);
+    }
+
+    py.flags.slow--;
+
+    if (py.flags.slow == 0) {
+        py.flags.status &= ~PY_SLOW;
+        change_speed(-1);
+        msg_print("You feel yourself speed up.");
+        disturb(0, 0);
+    }
+}
+
+// Resting is over?
+static void playerUpdateRestingState() {
+    if (py.flags.rest > 0) {
+        py.flags.rest--;
+
+        // Resting over
+        if (py.flags.rest == 0) {
+            rest_off();
+        }
+    } else if (py.flags.rest < 0) {
+        // Rest until reach max mana and max hit points.
+        py.flags.rest++;
+
+        if ((py.misc.chp == py.misc.mhp && py.misc.cmana == py.misc.mana) || py.flags.rest == 0) {
+            rest_off();
+        }
+    }
+}
+
+// Hallucinating?   (Random characters appear!)
+static void playerUpdateHallucinationState() {
+    if (py.flags.image <= 0) {
+        return;
+    }
+
+    end_find();
+
+    py.flags.image--;
+
+    if (py.flags.image == 0) {
+        // Used to draw entire screen! -CJS-
+        prt_map();
+    }
+}
+
+static void playerUpdateParalysis() {
+    if (py.flags.paralysis <= 0) {
+        return;
+    }
+
+    // when paralysis true, you can not see any movement that occurs
+    py.flags.paralysis--;
+    disturb(1, 0);
+}
+
+// Protection from evil counter
+static void playerUpdateEvilProtection() {
+    if (py.flags.protevil <= 0) {
+        return;
+    }
+
+    py.flags.protevil--;
+
+    if (py.flags.protevil == 0) {
+        msg_print("You no longer feel safe from evil.");
+    }
+}
+
+static void playerUpdateInvulnerability() {
+    if (py.flags.invuln <= 0) {
+        return;
+    }
+
+    if ((PY_INVULN & py.flags.status) == 0) {
+        py.flags.status |= PY_INVULN;
+        disturb(0, 0);
+        py.misc.pac += 100;
+        py.misc.dis_ac += 100;
+
+        prt_pac();
+        msg_print("Your skin turns into steel!");
+    }
+
+    py.flags.invuln--;
+
+    if (py.flags.invuln == 0) {
+        py.flags.status &= ~PY_INVULN;
+        disturb(0, 0);
+        py.misc.pac -= 100;
+        py.misc.dis_ac -= 100;
+
+        prt_pac();
+        msg_print("Your skin returns to normal.");
+    }
+
+}
+
+static void playerUpdateBlessedness() {
+    if (py.flags.blessed <= 0) {
+        return;
+    }
+
+    if ((PY_BLESSED & py.flags.status) == 0) {
+        py.flags.status |= PY_BLESSED;
+        disturb(0, 0);
+        py.misc.bth += 5;
+        py.misc.bthb += 5;
+        py.misc.pac += 2;
+        py.misc.dis_ac += 2;
+
+        msg_print("You feel righteous!");
+        prt_pac();
+    }
+
+    py.flags.blessed--;
+
+    if (py.flags.blessed == 0) {
+        py.flags.status &= ~PY_BLESSED;
+        disturb(0, 0);
+        py.misc.bth -= 5;
+        py.misc.bthb -= 5;
+        py.misc.pac -= 2;
+        py.misc.dis_ac -= 2;
+
+        msg_print("The prayer has expired.");
+        prt_pac();
+    }
+
+}
+
+// Resist Heat
+static void playerUpdateHeatResistance() {
+    if (py.flags.resist_heat <= 0) {
+        return;
+    }
+
+    py.flags.resist_heat--;
+
+    if (py.flags.resist_heat == 0) {
+        msg_print("You no longer feel safe from flame.");
+    }
+}
+
+static void playerUpdateColdResistance() {
+    if (py.flags.resist_cold <= 0) {
+        return;
+    }
+
+    py.flags.resist_cold--;
+
+    if (py.flags.resist_cold == 0) {
+        msg_print("You no longer feel safe from cold.");
+    }
+}
+
+static void playerUpdateDetectInvisible() {
+    if (py.flags.detect_inv <= 0) {
+        return;
+    }
+
+    if ((PY_DET_INV & py.flags.status) == 0) {
+        py.flags.status |= PY_DET_INV;
+        py.flags.see_inv = true;
+
+        // light but don't move creatures
+        creatures(false);
+    }
+
+    py.flags.detect_inv--;
+
+    if (py.flags.detect_inv == 0) {
+        py.flags.status &= ~PY_DET_INV;
+
+        // may still be able to see_inv if wearing magic item
+        calc_bonuses();
+
+        // unlight but don't move creatures
+        creatures(false);
+    }
+}
+
+// Timed infra-vision
+static void playerUpdateInfraVision() {
+    if (py.flags.tim_infra <= 0) {
+        return;
+    }
+
+    if ((PY_TIM_INFRA & py.flags.status) == 0) {
+        py.flags.status |= PY_TIM_INFRA;
+        py.flags.see_infra++;
+
+        // light but don't move creatures
+        creatures(false);
+    }
+
+    py.flags.tim_infra--;
+
+    if (py.flags.tim_infra == 0) {
+        py.flags.status &= ~PY_TIM_INFRA;
+        py.flags.see_infra--;
+
+        // unlight but don't move creatures
+        creatures(false);
+    }
+}
+
+// Word-of-Recall  Note: Word-of-Recall is a delayed action
+static void playerUpdateWordOfRecall() {
+    if (py.flags.word_recall <= 0) {
+        return;
+    }
+
+    if (py.flags.word_recall == 1) {
+        new_level_flag = true;
+        py.flags.paralysis++;
+        py.flags.word_recall = 0;
+        if (dun_level > 0) {
+            dun_level = 0;
+            msg_print("You feel yourself yanked upwards!");
+        } else if (py.misc.max_dlv != 0) {
+            dun_level = py.misc.max_dlv;
+            msg_print("You feel yourself yanked downwards!");
+        }
+    } else {
+        py.flags.word_recall--;
+    }
+}
+
+static int getRepeatCommandCount(char *lastInputCharacter) {
+    prt("Repeat count:", 0, 0);
+    if (*lastInputCharacter == '#') {
+        *lastInputCharacter = '0';
+    }
+
+    int count = 0;
+    char countMsg[8];
+
+    while (true) {
+        if (*lastInputCharacter == DELETE || *lastInputCharacter == CTRL_KEY('H')) {
+            count = count / 10;
+            (void) sprintf(countMsg, "%d", count);
+            prt(countMsg, 0, 14);
+        } else if (*lastInputCharacter >= '0' && *lastInputCharacter <= '9') {
+            if (count > 99) {
+                bell();
+            } else {
+                count = count * 10 + *lastInputCharacter - '0';
+                (void) sprintf(countMsg, "%d", count);
+                prt(countMsg, 0, 14);
+            }
+        } else {
+            break;
+        }
+        *lastInputCharacter = inkey();
+    }
+
+    if (count == 0) {
+        count = 99;
+        (void) sprintf(countMsg, "%d", count);
+        prt(countMsg, 0, 14);
+    }
+
+    // a special hack to allow numbers as commands
+    if (*lastInputCharacter == ' ') {
+        prt("Command:", 0, 20);
+        *lastInputCharacter = inkey();
+    }
+
+    return count;
+}
+
+// Another way of typing control codes -CJS-
+static void processControlCharacterInput(char *lastInputCharacter) {
+    if (*lastInputCharacter != '^') {
+        return;
+    }
+
+    if (command_count > 0) {
+        prt_state();
+    }
+
+    if (get_com("Control-", lastInputCharacter)) {
+        if (*lastInputCharacter >= 'A' && *lastInputCharacter <= 'Z') {
+            *lastInputCharacter -= 'A' - 1;
+        } else if (*lastInputCharacter >= 'a' && *lastInputCharacter <= 'z') {
+            *lastInputCharacter -= 'a' - 1;
+        } else {
+            msg_print("Type ^ <letter> for a control char");
+            *lastInputCharacter = ' ';
+        }
+    } else {
+        *lastInputCharacter = ' ';
+    }
+}
+
+// Accept a command and execute it
+static int doCommandInput(int find_count) {
+    char lastInputCharacter;
+
+    do {
+        if (py.flags.status & PY_REPEAT) {
+            prt_state();
+        }
+
+        default_dir = false;
+        free_turn_flag = false;
+
+        if (find_flag) {
+            find_run();
+            find_count--;
+            if (find_count == 0) {
+                end_find();
+            }
+            put_qio();
+            continue;
+        }
+
+        if (doing_inven) {
+            inven_command(doing_inven);
+            continue;
+        }
+
+        // move the cursor to the players character
+        move_cursor_relative(char_row, char_col);
+
+        msg_flag = false;
+
+        if (command_count > 0) {
+            default_dir = true;
+        } else {
+            lastInputCharacter = inkey();
+
+            int repeatCount = 0;
+
+            // Get a count for a command.
+            if ((rogue_like_commands && lastInputCharacter >= '0' && lastInputCharacter <= '9') || (!rogue_like_commands && lastInputCharacter == '#')) {
+                repeatCount = getRepeatCommandCount(&lastInputCharacter);
+            }
+
+            // Another way of typing control codes -CJS-
+            processControlCharacterInput(&lastInputCharacter);
+
+            // move cursor to player char again, in case it moved
+            move_cursor_relative(char_row, char_col);
+
+            // Commands are always converted to rogue form. -CJS-
+            if (!rogue_like_commands) {
+                lastInputCharacter = original_commands(lastInputCharacter);
+            }
+
+            if (repeatCount > 0) {
+                if (!valid_countcommand(lastInputCharacter)) {
+                    free_turn_flag = true;
+                    msg_print("Invalid command with a count.");
+                    lastInputCharacter = ' ';
+                } else {
+                    command_count = repeatCount;
+                    prt_state();
+                }
+            }
+        }
+
+        // Flash the message line.
+        erase_line(MSG_LINE, 0);
+        move_cursor_relative(char_row, char_col);
+        put_qio();
+
+        do_command(lastInputCharacter);
+
+        // Find is counted differently, as the command changes.
+        if (find_flag) {
+            find_count = command_count - 1;
+            command_count = 0;
+        } else if (free_turn_flag) {
+            command_count = 0;
+        } else if (command_count) {
+            command_count--;
+        }
+    } while (free_turn_flag && !new_level_flag && !eof_flag);
+
+    return find_count;
+}
+
+// Main procedure for dungeon. -RAK-
+void dungeon() {
+    // Note: There is a lot of preliminary magic going on here at first
+    updatePlayerLightStatus();
+    updatePlayerMaximumDungeonLevel();
+    resetDungeonFlags();
+
+    int find_count = 0;
 
     // Ensure we display the panel. Used to do this with a global var. -CJS-
     panel_row = panel_col = -1;
@@ -84,11 +812,11 @@ void dungeon() {
     // Print the depth
     prt_depth();
 
-    //
     // Loop until dead,  or new level
-    //
+    // Exit when `new_level_flag` and `eof_flag` are both set
     do {
-        turn++; // Increment turn counter
+        // Increment turn counter
+        turn++;
 
         // turn over the store contents every, say, 1000 turns
         if (dun_level != 0 && (turn % 1000) == 0) {
@@ -100,468 +828,41 @@ void dungeon() {
             alloc_monster(1, MAX_SIGHT, false);
         }
 
-        // Check light status
-        i_ptr = &inventory[INVEN_LIGHT];
-        if (player_light) {
-            if (i_ptr->p1 > 0) {
-                i_ptr->p1--;
-                if (i_ptr->p1 == 0) {
-                    player_light = false;
-                    msg_print("Your light has gone out!");
-                    disturb(0, 1);
-
-                    // unlight creatures
-                    creatures(false);
-                } else if (i_ptr->p1 < 40 && randint(5) == 1 && py.flags.blind < 1) {
-                    disturb(0, 0);
-                    msg_print("Your light is growing faint.");
-                }
-            } else {
-                player_light = false;
-                disturb(0, 1);
-
-                // unlight creatures
-                creatures(false);
-            }
-        } else if (i_ptr->p1 > 0) {
-            i_ptr->p1--;
-            player_light = true;
-            disturb(0, 1);
-
-            // light creatures
-            creatures(false);
-        }
+        checkAndUpdatePlayerLightStatus();
 
         //
         // Update counters and messages
         //
 
-        // Heroism (must precede anything that can damage player)
-        if (f_ptr->hero > 0) {
-            if ((PY_HERO & f_ptr->status) == 0) {
-                f_ptr->status |= PY_HERO;
-                disturb(0, 0);
-                p_ptr->mhp += 10;
-                p_ptr->chp += 10;
-                p_ptr->bth += 12;
-                p_ptr->bthb += 12;
-                msg_print("You feel like a HERO!");
-                prt_mhp();
-                prt_chp();
-            }
-            f_ptr->hero--;
-            if (f_ptr->hero == 0) {
-                f_ptr->status &= ~PY_HERO;
-                disturb(0, 0);
-                p_ptr->mhp -= 10;
-                if (p_ptr->chp > p_ptr->mhp) {
-                    p_ptr->chp = p_ptr->mhp;
-                    p_ptr->chp_frac = 0;
-                    prt_chp();
-                }
-                p_ptr->bth -= 12;
-                p_ptr->bthb -= 12;
-                msg_print("The heroism wears off.");
-                prt_mhp();
-            }
-        }
+        // Heroism and Super Heroism must precede anything that can damage player
+        playerUpdateHeroStatus();
 
-        // Super Heroism
-        if (f_ptr->shero > 0) {
-            if ((PY_SHERO & f_ptr->status) == 0) {
-                f_ptr->status |= PY_SHERO;
-                disturb(0, 0);
-                p_ptr->mhp += 20;
-                p_ptr->chp += 20;
-                p_ptr->bth += 24;
-                p_ptr->bthb += 24;
-                msg_print("You feel like a SUPER HERO!");
-                prt_mhp();
-                prt_chp();
-            }
-            f_ptr->shero--;
-            if (f_ptr->shero == 0) {
-                f_ptr->status &= ~PY_SHERO;
-                disturb(0, 0);
-                p_ptr->mhp -= 20;
-                if (p_ptr->chp > p_ptr->mhp) {
-                    p_ptr->chp = p_ptr->mhp;
-                    p_ptr->chp_frac = 0;
-                    prt_chp();
-                }
-                p_ptr->bth -= 24;
-                p_ptr->bthb -= 24;
-                msg_print("The super heroism wears off.");
-                prt_mhp();
-            }
-        }
+        int regen_amount = playerFoodConsumption();
+        playerUpdateRegeneration(regen_amount);
 
-        // Check food status
-        int regen_amount = PLAYER_REGEN_NORMAL; // Regenerate hp and mana
-        if (f_ptr->food < PLAYER_FOOD_ALERT) {
-            if (f_ptr->food < PLAYER_FOOD_WEAK) {
-                if (f_ptr->food < 0) {
-                    regen_amount = 0;
-                } else if (f_ptr->food < PLAYER_FOOD_FAINT) {
-                    regen_amount = PLAYER_REGEN_FAINT;
-                } else if (f_ptr->food < PLAYER_FOOD_WEAK) {
-                    regen_amount = PLAYER_REGEN_WEAK;
-                }
-                if ((PY_WEAK & f_ptr->status) == 0) {
-                    f_ptr->status |= PY_WEAK;
-                    msg_print("You are getting weak from hunger.");
-                    disturb(0, 0);
-                    prt_hunger();
-                }
-                if (f_ptr->food < PLAYER_FOOD_FAINT && randint(8) == 1) {
-                    f_ptr->paralysis += randint(5);
-                    msg_print("You faint from the lack of food.");
-                    disturb(1, 0);
-                }
-            } else if ((PY_HUNGRY & f_ptr->status) == 0) {
-                f_ptr->status |= PY_HUNGRY;
-                msg_print("You are getting hungry.");
-                disturb(0, 0);
-                prt_hunger();
-            }
-        }
-
-        // Food consumption
-        // Note: Sped up characters really burn up the food!
-        if (f_ptr->speed < 0) {
-            f_ptr->food -= f_ptr->speed * f_ptr->speed;
-        }
-        f_ptr->food -= f_ptr->food_digested;
-        if (f_ptr->food < 0) {
-            take_hit(-f_ptr->food / 16, "starvation"); // -CJS-
-            disturb(1, 0);
-        }
-
-        // Regenerate
-        if (f_ptr->regenerate) {
-            regen_amount = regen_amount * 3 / 2;
-        }
-        if ((py.flags.status & PY_SEARCH) || f_ptr->rest != 0) {
-            regen_amount = regen_amount * 2;
-        }
-        if (py.flags.poisoned < 1 && p_ptr->chp < p_ptr->mhp) {
-            regenhp(regen_amount);
-        }
-        if (p_ptr->cmana < p_ptr->mana) {
-            regenmana(regen_amount);
-        }
-
-        // Blindness
-        if (f_ptr->blind > 0) {
-            if ((PY_BLIND & f_ptr->status) == 0) {
-                f_ptr->status |= PY_BLIND;
-                prt_map();
-                prt_blind();
-                disturb(0, 1);
-
-                // unlight creatures
-                creatures(false);
-            }
-            f_ptr->blind--;
-            if (f_ptr->blind == 0) {
-                f_ptr->status &= ~PY_BLIND;
-                prt_blind();
-                prt_map();
-
-                // light creatures
-                disturb(0, 1);
-                creatures(false);
-                msg_print("The veil of darkness lifts.");
-            }
-        }
-
-        // Confusion
-        if (f_ptr->confused > 0) {
-            if ((PY_CONFUSED & f_ptr->status) == 0) {
-                f_ptr->status |= PY_CONFUSED;
-                prt_confused();
-            }
-            f_ptr->confused--;
-            if (f_ptr->confused == 0) {
-                f_ptr->status &= ~PY_CONFUSED;
-                prt_confused();
-                msg_print("You feel less confused now.");
-                if (py.flags.rest != 0) {
-                    rest_off();
-                }
-            }
-        }
-
-        // Afraid
-        if (f_ptr->afraid > 0) {
-            if ((PY_FEAR & f_ptr->status) == 0) {
-                if (f_ptr->shero + f_ptr->hero > 0) {
-                    f_ptr->afraid = 0;
-                } else {
-                    f_ptr->status |= PY_FEAR;
-                    prt_afraid();
-                }
-            } else if (f_ptr->shero + f_ptr->hero > 0) {
-                f_ptr->afraid = 1;
-            }
-            f_ptr->afraid--;
-            if (f_ptr->afraid == 0) {
-                f_ptr->status &= ~PY_FEAR;
-                prt_afraid();
-                msg_print("You feel bolder now.");
-                disturb(0, 0);
-            }
-        }
-
-        // Poisoned
-        if (f_ptr->poisoned > 0) {
-            if ((PY_POISONED & f_ptr->status) == 0) {
-                f_ptr->status |= PY_POISONED;
-                prt_poisoned();
-            }
-            f_ptr->poisoned--;
-            if (f_ptr->poisoned == 0) {
-                f_ptr->status &= ~PY_POISONED;
-                prt_poisoned();
-                msg_print("You feel better.");
-                disturb(0, 0);
-            } else {
-                switch (con_adj()) {
-                    case -4:
-                        i = 4;
-                        break;
-                    case -3:
-                    case -2:
-                        i = 3;
-                        break;
-                    case -1:
-                        i = 2;
-                        break;
-                    case 0:
-                        i = 1;
-                        break;
-                    case 1:
-                    case 2:
-                    case 3:
-                        i = ((turn % 2) == 0);
-                        break;
-                    case 4:
-                    case 5:
-                        i = ((turn % 3) == 0);
-                        break;
-                    case 6:
-                        i = ((turn % 4) == 0);
-                        break;
-                    default:
-                        // An uninitialized warning if given further down,
-                        // so let's fix that here -MRC-
-                        i = 0;
-                }
-
-                take_hit(i, "poison");
-                disturb(1, 0);
-            }
-        }
-
-        // Fast
-        if (f_ptr->fast > 0) {
-            if ((PY_FAST & f_ptr->status) == 0) {
-                f_ptr->status |= PY_FAST;
-                change_speed(-1);
-                msg_print("You feel yourself moving faster.");
-                disturb(0, 0);
-            }
-            f_ptr->fast--;
-            if (f_ptr->fast == 0) {
-                f_ptr->status &= ~PY_FAST;
-                change_speed(1);
-                msg_print("You feel yourself slow down.");
-                disturb(0, 0);
-            }
-        }
-
-        // Slow
-        if (f_ptr->slow > 0) {
-            if ((PY_SLOW & f_ptr->status) == 0) {
-                f_ptr->status |= PY_SLOW;
-                change_speed(1);
-                msg_print("You feel yourself moving slower.");
-                disturb(0, 0);
-            }
-            f_ptr->slow--;
-            if (f_ptr->slow == 0) {
-                f_ptr->status &= ~PY_SLOW;
-                change_speed(-1);
-                msg_print("You feel yourself speed up.");
-                disturb(0, 0);
-            }
-        }
-
-        // Resting is over?
-        if (f_ptr->rest > 0) {
-            f_ptr->rest--;
-
-            // Resting over
-            if (f_ptr->rest == 0) {
-                rest_off();
-            }
-        } else if (f_ptr->rest < 0) {
-            // Rest until reach max mana and max hit points.
-            f_ptr->rest++;
-            if ((p_ptr->chp == p_ptr->mhp && p_ptr->cmana == p_ptr->mana) || f_ptr->rest == 0) {
-                rest_off();
-            }
-        }
+        playerUpdateBlindnessState();
+        playerUpdateConfusion();
+        playerUpdateAfraidness();
+        playerUpdatePoisonedState();
+        playerUpdateFastness();
+        playerUpdateSlowness();
+        playerUpdateRestingState();
 
         // Check for interrupts to find or rest.
-        if ((command_count > 0 || find_flag || f_ptr->rest != 0) && check_input(find_flag ? 0 : 10000)) {
+        if ((command_count > 0 || find_flag || py.flags.rest != 0) && check_input(find_flag ? 0 : 10000)) {
             disturb(0, 0);
         }
 
-        // Hallucinating?   (Random characters appear!)
-        if (f_ptr->image > 0) {
-            end_find();
-            f_ptr->image--;
-            if (f_ptr->image == 0) {
-                prt_map(); // Used to draw entire screen! -CJS-
-            }
-        }
-
-        // Paralysis
-        if (f_ptr->paralysis > 0) {
-            // when paralysis true, you can not see any movement that occurs
-            f_ptr->paralysis--;
-            disturb(1, 0);
-        }
-
-        // Protection from evil counter
-        if (f_ptr->protevil > 0) {
-            f_ptr->protevil--;
-            if (f_ptr->protevil == 0) {
-                msg_print("You no longer feel safe from evil.");
-            }
-        }
-
-        // Invulnerability
-        if (f_ptr->invuln > 0) {
-            if ((PY_INVULN & f_ptr->status) == 0) {
-                f_ptr->status |= PY_INVULN;
-                disturb(0, 0);
-                py.misc.pac += 100;
-                py.misc.dis_ac += 100;
-                prt_pac();
-                msg_print("Your skin turns into steel!");
-            }
-            f_ptr->invuln--;
-            if (f_ptr->invuln == 0) {
-                f_ptr->status &= ~PY_INVULN;
-                disturb(0, 0);
-                py.misc.pac -= 100;
-                py.misc.dis_ac -= 100;
-                prt_pac();
-                msg_print("Your skin returns to normal.");
-            }
-        }
-
-        // Blessed
-        if (f_ptr->blessed > 0) {
-            if ((PY_BLESSED & f_ptr->status) == 0) {
-                f_ptr->status |= PY_BLESSED;
-                disturb(0, 0);
-                p_ptr->bth += 5;
-                p_ptr->bthb += 5;
-                p_ptr->pac += 2;
-                p_ptr->dis_ac += 2;
-                msg_print("You feel righteous!");
-                prt_pac();
-            }
-            f_ptr->blessed--;
-            if (f_ptr->blessed == 0) {
-                f_ptr->status &= ~PY_BLESSED;
-                disturb(0, 0);
-                p_ptr->bth -= 5;
-                p_ptr->bthb -= 5;
-                p_ptr->pac -= 2;
-                p_ptr->dis_ac -= 2;
-                msg_print("The prayer has expired.");
-                prt_pac();
-            }
-        }
-
-        // Resist Heat
-        if (f_ptr->resist_heat > 0) {
-            f_ptr->resist_heat--;
-            if (f_ptr->resist_heat == 0) {
-                msg_print("You no longer feel safe from flame.");
-            }
-        }
-
-        // Resist Cold
-        if (f_ptr->resist_cold > 0) {
-            f_ptr->resist_cold--;
-            if (f_ptr->resist_cold == 0) {
-                msg_print("You no longer feel safe from cold.");
-            }
-        }
-
-        // Detect Invisible
-        if (f_ptr->detect_inv > 0) {
-            if ((PY_DET_INV & f_ptr->status) == 0) {
-                f_ptr->status |= PY_DET_INV;
-                f_ptr->see_inv = true;
-
-                // light but don't move creatures
-                creatures(false);
-            }
-            f_ptr->detect_inv--;
-            if (f_ptr->detect_inv == 0) {
-                f_ptr->status &= ~PY_DET_INV;
-
-                // may still be able to see_inv if wearing magic item
-                calc_bonuses();
-
-                // unlight but don't move creatures
-                creatures(false);
-            }
-        }
-
-        // Timed infra-vision
-        if (f_ptr->tim_infra > 0) {
-            if ((PY_TIM_INFRA & f_ptr->status) == 0) {
-                f_ptr->status |= PY_TIM_INFRA;
-                f_ptr->see_infra++;
-
-                // light but don't move creatures
-                creatures(false);
-            }
-            f_ptr->tim_infra--;
-
-            if (f_ptr->tim_infra == 0) {
-                f_ptr->status &= ~PY_TIM_INFRA;
-                f_ptr->see_infra--;
-
-                // unlight but don't move creatures
-                creatures(false);
-            }
-        }
-
-        // Word-of-Recall  Note: Word-of-Recall is a delayed action
-        if (f_ptr->word_recall > 0) {
-            if (f_ptr->word_recall == 1) {
-                new_level_flag = true;
-                f_ptr->paralysis++;
-                f_ptr->word_recall = 0;
-                if (dun_level > 0) {
-                    dun_level = 0;
-                    msg_print("You feel yourself yanked upwards!");
-                } else if (py.misc.max_dlv != 0) {
-                    dun_level = py.misc.max_dlv;
-                    msg_print("You feel yourself yanked downwards!");
-                }
-            } else {
-                f_ptr->word_recall--;
-            }
-        }
+        playerUpdateHallucinationState();
+        playerUpdateParalysis();
+        playerUpdateEvilProtection();
+        playerUpdateInvulnerability();
+        playerUpdateBlessedness();
+        playerUpdateHeatResistance();
+        playerUpdateColdResistance();
+        playerUpdateDetectInvisible();
+        playerUpdateInfraVision();
+        playerUpdateWordOfRecall();
 
         // Random teleportation
         if (py.flags.teleport && randint(100) == 1) {
@@ -622,12 +923,13 @@ void dungeon() {
         // Allow for a slim chance of detect enchantment -CJS-
         // for 1st level char, check once every 2160 turns
         // for 40th level char, check once every 416 turns
-        if ((turn & 0xF) == 0 && f_ptr->confused == 0 && randint(10 + 750 / (5 + py.misc.lev)) == 1) {
-            for (i = 0; i < INVEN_ARRAY_SIZE; i++) {
+        if ((turn & 0xF) == 0 && py.flags.confused == 0 && randint(10 + 750 / (5 + py.misc.lev)) == 1) {
+            for (int i = 0; i < INVEN_ARRAY_SIZE; i++) {
                 if (i == inven_ctr) {
                     i = 22;
                 }
-                i_ptr = &inventory[i];
+
+                inven_type *i_ptr = &inventory[i];
 
                 // if in inventory, succeed 1 out of 50 times,
                 // if in equipment list, success 1 out of 10 times
@@ -654,140 +956,8 @@ void dungeon() {
 
         // Accept a command?
         if (py.flags.paralysis < 1 && py.flags.rest == 0 && !death) {
-            char command; // Last command
-
             // Accept a command and execute it
-            do {
-                if (py.flags.status & PY_REPEAT) {
-                    prt_state();
-                }
-
-                default_dir = false;
-                free_turn_flag = false;
-
-                if (find_flag) {
-                    find_run();
-                    find_count--;
-                    if (find_count == 0) {
-                        end_find();
-                    }
-                    put_qio();
-                } else if (doing_inven) {
-                    inven_command(doing_inven);
-                } else {
-                    // move the cursor to the players character
-                    move_cursor_relative(char_row, char_col);
-
-                    if (command_count > 0) {
-                        msg_flag = false;
-                        default_dir = true;
-                    } else {
-                        msg_flag = false;
-                        command = inkey();
-
-                        i = 0;
-
-                        // Get a count for a command.
-                        if ((rogue_like_commands && command >= '0' && command <= '9') || (!rogue_like_commands && command == '#')) {
-                            char tmp[8];
-
-                            prt("Repeat count:", 0, 0);
-                            if (command == '#') {
-                                command = '0';
-                            }
-
-                            i = 0;
-
-                            while (true) {
-                                if (command == DELETE || command == CTRL_KEY('H')) {
-                                    i = i / 10;
-                                    (void) sprintf(tmp, "%d", i);
-                                    prt(tmp, 0, 14);
-                                } else if (command >= '0' && command <= '9') {
-                                    if (i > 99) {
-                                        bell();
-                                    } else {
-                                        i = i * 10 + command - '0';
-                                        (void) sprintf(tmp, "%d", i);
-                                        prt(tmp, 0, 14);
-                                    }
-                                } else {
-                                    break;
-                                }
-                                command = inkey();
-                            }
-
-                            if (i == 0) {
-                                i = 99;
-                                (void) sprintf(tmp, "%d", i);
-                                prt(tmp, 0, 14);
-                            }
-
-                            // a special hack to allow numbers as commands
-                            if (command == ' ') {
-                                prt("Command:", 0, 20);
-                                command = inkey();
-                            }
-                        }
-
-                        // Another way of typing control codes -CJS-
-                        if (command == '^') {
-                            if (command_count > 0) {
-                                prt_state();
-                            }
-                            if (get_com("Control-", &command)) {
-                                if (command >= 'A' && command <= 'Z') {
-                                    command -= 'A' - 1;
-                                } else if (command >= 'a' && command <= 'z') {
-                                    command -= 'a' - 1;
-                                } else {
-                                    msg_print("Type ^ <letter> for a control char");
-                                    command = ' ';
-                                }
-                            } else {
-                                command = ' ';
-                            }
-                        }
-
-                        // move cursor to player char again, in case it moved
-                        move_cursor_relative(char_row, char_col);
-
-                        // Commands are always converted to rogue form. -CJS-
-                        if (!rogue_like_commands) {
-                            command = original_commands(command);
-                        }
-                        if (i > 0) {
-                            if (!valid_countcommand(command)) {
-                                free_turn_flag = true;
-                                msg_print("Invalid command with a count.");
-                                command = ' ';
-                            } else {
-                                command_count = i;
-                                prt_state();
-                            }
-                        }
-                    }
-
-                    // Flash the message line.
-                    erase_line(MSG_LINE, 0);
-                    move_cursor_relative(char_row, char_col);
-                    put_qio();
-
-                    do_command(command);
-
-                    // Find is counted differently, as the command changes.
-                    if (find_flag) {
-                        find_count = command_count - 1;
-                        command_count = 0;
-                    } else if (free_turn_flag) {
-                        command_count = 0;
-                    } else if (command_count) {
-                        command_count--;
-                    }
-                }
-                // End of commands
-
-            } while (free_turn_flag && !new_level_flag && !eof_flag);
+            find_count = doCommandInput(find_count);
         } else {
             // if paralyzed, resting, or dead, flush output
             // but first move the cursor onto the player, for aesthetics
@@ -804,8 +974,6 @@ void dungeon() {
         if (!new_level_flag) {
             creatures(true);
         }
-
-        // Exit when new_level_flag is set
     } while (!new_level_flag && !eof_flag);
 }
 
