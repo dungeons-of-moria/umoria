@@ -19,7 +19,6 @@
 //  Craig Norborg (doc)    Mon Aug 10 16:41:59 EST 1987
 void init_scorefile() {
     highscore_fp = fopen(MORIA_TOP, (char *) "rb+");
-
     if (highscore_fp == NULL) {
         (void) fprintf(stderr, "Can't open score file \"%s\"\n", MORIA_TOP);
         exit(1);
@@ -34,11 +33,11 @@ void read_times() {
     FILE *file1 = fopen(MORIA_MOR, "r");
     if (file1 != NULL) {
         clear_screen();
-
         for (int i = 0; fgets(in_line, 80, file1) != CNIL; i++) {
             put_buffer(in_line, i, 0);
         }
         pause_line(23);
+
         (void) fclose(file1);
     }
 }
@@ -65,6 +64,7 @@ void helpfile(const char *filename) {
                 put_buffer(tmp_str, i, 0);
             }
         }
+
         prt("[Press any key to continue.]", 23, 23);
         input = inkey();
         if (input == ESCAPE) {
@@ -83,21 +83,19 @@ void print_objects() {
     bigvtype tmp_str;
 
     prt("Produce objects on what level?: ", 0, 0);
-
-    int level = 0;
     if (!get_string(tmp_str, 0, 32, 10)) {
         return;
     }
-    level = atoi(tmp_str);
+    int level = atoi(tmp_str);
 
     prt("Produce how many objects?: ", 0, 0);
-
-    int nobj = 0;
     if (!get_string(tmp_str, 0, 27, 10)) {
         return;
     }
-    nobj = atoi(tmp_str);
+    int nobj = atoi(tmp_str);
+
     bool small_object = get_check("Small objects only?");
+
     if (nobj > 0 && level > -1 && level < 1201) {
         if (nobj > 10000) {
             nobj = 10000;
@@ -114,20 +112,24 @@ void print_objects() {
             if (file1 != NULL) {
                 (void) sprintf(tmp_str, "%d", nobj);
                 prt(strcat(tmp_str, " random objects being produced..."), 0, 0);
+
                 put_qio();
+
                 (void) fprintf(file1, "*** Random Object Sampling:\n");
                 (void) fprintf(file1, "*** %d objects\n", nobj);
                 (void) fprintf(file1, "*** For Level %d\n", level);
                 (void) fprintf(file1, "\n");
                 (void) fprintf(file1, "\n");
 
-                int j = popt();
+                int treasureID = popt();
 
-                inven_type *i_ptr;
                 for (int i = 0; i < nobj; i++) {
-                    invcopy(&t_list[j], sorted_objects[get_obj_num(level, small_object)]);
-                    magic_treasure(j, level);
-                    i_ptr = &t_list[j];
+                    int objectID = get_obj_num(level, small_object);
+                    invcopy(&t_list[treasureID], sorted_objects[objectID]);
+
+                    magic_treasure(treasureID, level);
+
+                    inven_type *i_ptr = &t_list[treasureID];
                     store_bought(i_ptr);
 
                     if (i_ptr->flags & TR_CURSED) {
@@ -137,7 +139,9 @@ void print_objects() {
                     objdes(tmp_str, i_ptr, true);
                     (void) fprintf(file1, "%d %s\n", i_ptr->level, tmp_str);
                 }
-                pusht((uint8_t) j);
+
+                pusht((uint8_t) treasureID);
+
                 (void) fclose(file1);
                 prt("Completed.", 0, 0);
             } else {
@@ -149,71 +153,42 @@ void print_objects() {
     }
 }
 
-// Print the character to a file or device -RAK-
-bool file_character(char *filename1) {
-    vtype out_val;
-
-    int fd = open(filename1, O_WRONLY | O_CREAT | O_EXCL, 0644);
-    if (fd < 0 && errno == EEXIST) {
-        (void) sprintf(out_val, "Replace existing file %s?", filename1);
-        if (get_check(out_val)) {
-            fd = open(filename1, O_WRONLY, 0644);
-        }
-    }
-
-    FILE *file1;
-    if (fd >= 0) {
-        // on some non-unix machines, fdopen() is not reliable,
-        // hence must call close() and then fopen().
-        (void) close(fd);
-        file1 = fopen(filename1, "w");
-    } else {
-        file1 = NULL;
-    }
-
-    if (file1 == NULL) {
-        if (fd >= 0) {
-            (void) close(fd);
-        }
-        (void) sprintf(out_val, "Can't open file %s:", filename1);
-        msg_print(out_val);
-        return false;
-    }
-
-    vtype prt1;
-
+// Write character sheet to the file
+static void writeCharacterSheetToFile(FILE *file1) {
     prt("Writing character sheet...", 0, 0);
     put_qio();
 
     const char *colon = ":";
     const char *blank = " ";
 
+    vtype statDescription;
+
     (void) fprintf(file1, "%c\n\n", CTRL_KEY('L'));
 
     (void) fprintf(file1, " Name%9s %-23s", colon, py.misc.name);
     (void) fprintf(file1, " Age%11s %6d", colon, (int) py.misc.age);
-    cnv_stat(py.stats.use_stat[A_STR], prt1);
-    (void) fprintf(file1, "   STR : %s\n", prt1);
+    cnv_stat(py.stats.use_stat[A_STR], statDescription);
+    (void) fprintf(file1, "   STR : %s\n", statDescription);
     (void) fprintf(file1, " Race%9s %-23s", colon, race[py.misc.prace].trace);
     (void) fprintf(file1, " Height%8s %6d", colon, (int) py.misc.ht);
-    cnv_stat(py.stats.use_stat[A_INT], prt1);
-    (void) fprintf(file1, "   INT : %s\n", prt1);
+    cnv_stat(py.stats.use_stat[A_INT], statDescription);
+    (void) fprintf(file1, "   INT : %s\n", statDescription);
     (void) fprintf(file1, " Sex%10s %-23s", colon, (py.misc.male ? "Male" : "Female"));
     (void) fprintf(file1, " Weight%8s %6d", colon, (int) py.misc.wt);
-    cnv_stat(py.stats.use_stat[A_WIS], prt1);
-    (void) fprintf(file1, "   WIS : %s\n", prt1);
+    cnv_stat(py.stats.use_stat[A_WIS], statDescription);
+    (void) fprintf(file1, "   WIS : %s\n", statDescription);
     (void) fprintf(file1, " Class%8s %-23s", colon, classes[py.misc.pclass].title);
     (void) fprintf(file1, " Social Class : %6d", py.misc.sc);
-    cnv_stat(py.stats.use_stat[A_DEX], prt1);
-    (void) fprintf(file1, "   DEX : %s\n", prt1);
+    cnv_stat(py.stats.use_stat[A_DEX], statDescription);
+    (void) fprintf(file1, "   DEX : %s\n", statDescription);
     (void) fprintf(file1, " Title%8s %-23s", colon, title_string());
     (void) fprintf(file1, "%22s", blank);
-    cnv_stat(py.stats.use_stat[A_CON], prt1);
-    (void) fprintf(file1, "   CON : %s\n", prt1);
+    cnv_stat(py.stats.use_stat[A_CON], statDescription);
+    (void) fprintf(file1, "   CON : %s\n", statDescription);
     (void) fprintf(file1, "%34s", blank);
     (void) fprintf(file1, "%26s", blank);
-    cnv_stat(py.stats.use_stat[A_CHR], prt1);
-    (void) fprintf(file1, "   CHR : %s\n\n", prt1);
+    cnv_stat(py.stats.use_stat[A_CHR], statDescription);
+    (void) fprintf(file1, "   CHR : %s\n\n", statDescription);
 
     (void) fprintf(file1, " + To Hit    : %6d", py.misc.dis_th);
     (void) fprintf(file1, "%7sLevel      : %7d", blank, (int) py.misc.lev);
@@ -270,84 +245,120 @@ bool file_character(char *filename1) {
     for (int i = 0; i < 4; i++) {
         (void) fprintf(file1, " %s\n", py.misc.history[i]);
     }
+}
 
-    // Write out the equipment list.
-    bigvtype prt2;
-    int j = 0;
+static const char *equipmentPlacementDescription(int itemID) {
+    switch (itemID) {
+        case INVEN_WIELD:
+            return "You are wielding";
+        case INVEN_HEAD:
+            return "Worn on head";
+        case INVEN_NECK:
+            return "Worn around neck";
+        case INVEN_BODY:
+            return "Worn on body";
+        case INVEN_ARM:
+            return "Worn on shield arm";
+        case INVEN_HANDS:
+            return "Worn on hands";
+        case INVEN_RIGHT:
+            return "Right ring finger";
+        case INVEN_LEFT:
+            return "Left  ring finger";
+        case INVEN_FEET:
+            return "Worn on feet";
+        case INVEN_OUTER:
+            return "Worn about body";
+        case INVEN_LIGHT:
+            return "Light source is";
+        case INVEN_AUX:
+            return "Secondary weapon";
+        default:
+            return "*Unknown value*";
+    }
+}
 
+// Write out the equipment list.
+static void writeEquipmentListToFile(FILE *file1) {
     (void) fprintf(file1, "\n  [Character's Equipment List]\n\n");
+
     if (equip_ctr == 0) {
         (void) fprintf(file1, "  Character has no equipment in use.\n");
-    } else {
-        const char *p;
-        inven_type *i_ptr;
-
-        for (int i = INVEN_WIELD; i < INVEN_ARRAY_SIZE; i++) {
-            i_ptr = &inventory[i];
-            if (i_ptr->tval != TV_NOTHING) {
-                switch (i) {
-                    case INVEN_WIELD:
-                        p = "You are wielding";
-                        break;
-                    case INVEN_HEAD:
-                        p = "Worn on head";
-                        break;
-                    case INVEN_NECK:
-                        p = "Worn around neck";
-                        break;
-                    case INVEN_BODY:
-                        p = "Worn on body";
-                        break;
-                    case INVEN_ARM:
-                        p = "Worn on shield arm";
-                        break;
-                    case INVEN_HANDS:
-                        p = "Worn on hands";
-                        break;
-                    case INVEN_RIGHT:
-                        p = "Right ring finger";
-                        break;
-                    case INVEN_LEFT:
-                        p = "Left  ring finger";
-                        break;
-                    case INVEN_FEET:
-                        p = "Worn on feet";
-                        break;
-                    case INVEN_OUTER:
-                        p = "Worn about body";
-                        break;
-                    case INVEN_LIGHT:
-                        p = "Light source is";
-                        break;
-                    case INVEN_AUX:
-                        p = "Secondary weapon";
-                        break;
-                    default:
-                        p = "*Unknown value*";
-                        break;
-                }
-                objdes(prt2, &inventory[i], true);
-                (void) fprintf(file1, "  %c) %-19s: %s\n", j + 'a', p, prt2);
-                j++;
-            }
-        }
+        return;
     }
 
-    // Write out the character's inventory.
-    (void) fprintf(file1, "%c\n\n", CTRL_KEY('L'));
+    bigvtype description;
+    int itemSlotID = 0;
 
+    for (int i = INVEN_WIELD; i < INVEN_ARRAY_SIZE; i++) {
+        if (inventory[i].tval == TV_NOTHING) {
+            continue;
+        }
+
+        objdes(description, &inventory[i], true);
+        (void) fprintf(file1, "  %c) %-19s: %s\n", itemSlotID + 'a', equipmentPlacementDescription(i), description);
+
+        itemSlotID++;
+    }
+
+    (void) fprintf(file1, "%c\n\n", CTRL_KEY('L'));
+}
+
+// Write out the character's inventory.
+static void writeInventoryToFile(FILE *file1) {
     (void) fprintf(file1, "  [General Inventory List]\n\n");
+
     if (inven_ctr == 0) {
         (void) fprintf(file1, "  Character has no objects in inventory.\n");
-    } else {
-        for (int i = 0; i < inven_ctr; i++) {
-            objdes(prt2, &inventory[i], true);
-            (void) fprintf(file1, "%c) %s\n", i + 'a', prt2);
-        }
+        return;
+    }
+
+    bigvtype description;
+
+    for (int i = 0; i < inven_ctr; i++) {
+        objdes(description, &inventory[i], true);
+        (void) fprintf(file1, "%c) %s\n", i + 'a', description);
     }
 
     (void) fprintf(file1, "%c", CTRL_KEY('L'));
-    (void) fclose(file1);
+}
+
+// Print the character to a file or device -RAK-
+bool file_character(char *filename) {
+    vtype msg;
+
+    int fd = open(filename, O_WRONLY | O_CREAT | O_EXCL, 0644);
+    if (fd < 0 && errno == EEXIST) {
+        (void) sprintf(msg, "Replace existing file %s?", filename);
+        if (get_check(msg)) {
+            fd = open(filename, O_WRONLY, 0644);
+        }
+    }
+
+    FILE *file;
+    if (fd >= 0) {
+        // on some non-unix machines, fdopen() is not reliable,
+        // hence must call close() and then fopen().
+        (void) close(fd);
+        file = fopen(filename, "w");
+    } else {
+        file = NULL;
+    }
+
+    if (file == NULL) {
+        if (fd >= 0) {
+            (void) close(fd);
+        }
+        (void) sprintf(msg, "Can't open file %s:", filename);
+        msg_print(msg);
+        return false;
+    }
+
+    writeCharacterSheetToFile(file);
+    writeEquipmentListToFile(file);
+    writeInventoryToFile(file);
+
+    (void) fclose(file);
 
     prt("Completed.", 0, 0);
 
