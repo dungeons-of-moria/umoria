@@ -11,9 +11,7 @@
 #include "version.h"
 
 static void char_inven_init();
-
 static void init_m_level();
-
 static void init_t_level();
 
 #if (COST_ADJ != 100)
@@ -39,13 +37,14 @@ int main(int argc, char *argv[]) {
     init_curses();
 
     uint32_t seed = 0; // let wizard specify rng seed
+
     // check for user interface option
     for (--argc, ++argv; argc > 0 && argv[0][0] == '-'; --argc, ++argv) {
         switch (argv[0][1]) {
             case 'v':
                 restore_term();
                 printf("%d.%d.%d\n", CURRENT_VERSION_MAJOR, CURRENT_VERSION_MINOR, CURRENT_VERSION_PATCH);
-                exit(0);
+                return 0;
             case 'n':
                 new_game = true;
                 break;
@@ -88,15 +87,15 @@ int main(int argc, char *argv[]) {
                 printf("\n");
                 printf("    -v    Print version info and exit\n");
                 printf("    -h    Display this message\n");
-                exit(0);
+                return 0;
         }
     }
 
     // Show the game splash screen
     read_times();
 
-// Some necessary initializations
-// all made into constants or initialized in variables.c
+    // Some necessary initializations
+    // all made into constants or initialized in variables.c
 
 #if (COST_ADJ != 100)
     price_adjust();
@@ -161,13 +160,12 @@ int main(int argc, char *argv[]) {
         py.flags.food = 7500;
         py.flags.food_digested = 2;
 
+        // Spell and Mana based on class: Mage or Clerical realm.
         if (classes[py.misc.pclass].spell == MAGE) {
-            // Magic realm
             clear_screen(); // makes spell list easier to read
             calc_spells(A_INT);
             calc_mana(A_INT);
         } else if (classes[py.misc.pclass].spell == PRIEST) {
-            // Clerical realm
             calc_spells(A_WIS);
             clear_screen(); // force out the 'learn prayer' message
             calc_mana(A_WIS);
@@ -186,16 +184,20 @@ int main(int argc, char *argv[]) {
 
     magic_init();
 
+    //
     // Begin the game
+    //
     clear_screen();
     prt_stat_block();
+
     if (generate) {
         generate_cave();
     }
 
     // Loop till dead, or exit
     while (!death) {
-        dungeon(); // Dungeon logic
+        // Dungeon logic
+        dungeon();
 
         // check for eof here, see inkey() in io.c
         // eof can occur if the process gets a HANGUP signal
@@ -209,13 +211,14 @@ int main(int argc, char *argv[]) {
             death = true;
         }
 
+        // New level if not dead
         if (!death) {
-            // New level
             generate_cave();
         }
     }
 
-    exit_game(); // Character gets buried.
+    // Character gets buried.
+    exit_game();
 
     // should never reach here, but just in case
     return 0;
@@ -223,28 +226,29 @@ int main(int argc, char *argv[]) {
 
 // Init players with some belongings -RAK-
 static void char_inven_init() {
-    int i, j;
     inven_type inven_init;
 
     // this is needed for bash to work right, it can't hurt anyway
-    for (i = 0; i < INVEN_ARRAY_SIZE; i++) {
+    for (int i = 0; i < INVEN_ARRAY_SIZE; i++) {
         invcopy(&inventory[i], OBJ_NOTHING);
     }
 
-    for (i = 0; i < 5; i++) {
-        j = player_init[py.misc.pclass][i];
-        invcopy(&inven_init, j);
+    for (int i = 0; i < 5; i++) {
+        invcopy(&inven_init, player_init[py.misc.pclass][i]);
+
         // this makes it known2 and known1
         store_bought(&inven_init);
+
         // must set this bit to display tohit/todam for stiletto
         if (inven_init.tval == TV_SWORD) {
             inven_init.ident |= ID_SHOW_HITDAM;
         }
+
         (void) inven_carry(&inven_init);
     }
 
     // weird place for it, but why not?
-    for (i = 0; i < 32; i++) {
+    for (int i = 0; i < 32; i++) {
         spell_order[i] = 99;
     }
 }
@@ -255,8 +259,7 @@ static void init_m_level() {
         m_level[i] = 0;
     }
 
-    int k = MAX_CREATURES - WIN_MON_TOT;
-    for (int i = 0; i < k; i++) {
+    for (int i = 0; i < MAX_CREATURES - WIN_MON_TOT; i++) {
         m_level[c_list[i].level]++;
     }
 
@@ -282,16 +285,16 @@ static void init_t_level() {
     // now produce an array with object indexes sorted by level,
     // by using the info in t_level, this is an O(n) sort!
     // this is not a stable sort, but that does not matter
-    int tmp[MAX_OBJ_LEVEL + 1];
-
+    int objectIndexes[MAX_OBJ_LEVEL + 1];
     for (int i = 0; i <= MAX_OBJ_LEVEL; i++) {
-        tmp[i] = 1;
+        objectIndexes[i] = 1;
     }
 
     for (int i = 0; i < MAX_DUNGEON_OBJ; i++) {
-        int l = object_list[i].level;
-        sorted_objects[t_level[l] - tmp[l]] = (int16_t) i;
-        tmp[l]++;
+        int level = object_list[i].level;
+        int objectID = t_level[level] - objectIndexes[level];
+        sorted_objects[objectID] = (int16_t) i;
+        objectIndexes[level]++;
     }
 }
 
