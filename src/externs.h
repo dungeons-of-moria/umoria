@@ -253,7 +253,7 @@ void user_name(char *);
 #define open topen
 #define fopen tfopen
 
-int tilde(const char *, char *);
+bool tilde(const char *, char *);
 FILE *tfopen(const char *, const char *);
 int topen(const char *, int, int);
 #endif

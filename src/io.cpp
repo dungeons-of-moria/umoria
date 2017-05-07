@@ -57,25 +57,17 @@ void moriaterm() {
 
 // Dump IO to buffer -RAK-
 void put_buffer(const char *out_str, int row, int col) {
-    vtype tmp_str;
-
     // truncate the string, to make sure that it won't go past right edge of screen.
     if (col > 79) {
         col = 79;
     }
-    (void) strncpy(tmp_str, out_str, (size_t) (79 - col));
-    tmp_str[79 - col] = '\0';
 
-    if (mvaddstr(row, col, tmp_str) == ERR) {
+    vtype str;
+    (void) strncpy(str, out_str, (size_t) (79 - col));
+    str[79 - col] = '\0';
+
+    if (mvaddstr(row, col, str) == ERR) {
         abort();
-        // clear msg_flag to avoid problems with unflushed messages.
-        msg_flag = false;
-        (void) sprintf(tmp_str, "error in put_buffer, row = %d col = %d\n", row, col);
-        prt(tmp_str, 0, 0);
-        bell();
-
-        // wait so user can see error
-        sleep_in_seconds(2);
     }
 }
 
@@ -123,10 +115,10 @@ char inkey() {
     command_count = 0; // Just to be safe -CJS-
 
     while (true) {
-        int i = getch();
+        int ch = getch();
 
         // some machines may not sign extend.
-        if (i == EOF) {
+        if (ch == EOF) {
             // avoid infinite loops while trying to call inkey() for a -more- prompt.
             msg_flag = false;
 
@@ -154,8 +146,8 @@ char inkey() {
             return ESCAPE;
         }
 
-        if (i != CTRL_KEY('R')) {
-            return (char) i;
+        if (ch != CTRL_KEY('R')) {
+            return (char) ch;
         }
 
         (void) wrefresh(curscr);
@@ -165,10 +157,11 @@ char inkey() {
 
 // Flush the buffer -RAK-
 void flush() {
-    if (!eof_flag) {
-        while (check_input(0)) { ;
-        }
+    if (eof_flag) {
+        return;
     }
+
+    while (check_input(0));
 }
 
 // Clears given line of text -RAK-
@@ -203,17 +196,6 @@ void print(char ch, int row, int col) {
 
     if (mvaddch(row, col, ch) == ERR) {
         abort();
-
-        // clear msg_flag to avoid problems with unflushed messages
-        msg_flag = false;
-
-        vtype tmp_str;
-        (void) sprintf(tmp_str, "error in print, row = %d col = %d\n", row, col);
-        prt(tmp_str, 0, 0);
-        bell();
-
-        // wait so user can see error
-        sleep_in_seconds(2);
     }
 }
 
@@ -225,35 +207,29 @@ void move_cursor_relative(int row, int col) {
 
     if (move(row, col) == ERR) {
         abort();
-        // clear msg_flag to avoid problems with unflushed messages
-        msg_flag = false;
-
-        vtype tmp_str;
-        (void) sprintf(tmp_str, "error in move_cursor_relative, row = %d col = %d\n", row, col);
-        prt(tmp_str, 0, 0);
-        bell();
-
-        // wait so user can see error
-        sleep_in_seconds(2);
     }
 }
 
 // Print a message so as not to interrupt a counted command. -CJS-
-void count_msg_print(const char *p) {
+void count_msg_print(const char *msg) {
+    // Save command count value
     int i = command_count;
-    msg_print(p);
+
+    msg_print(msg);
+
+    // Restore count value
     command_count = i;
 }
 
 // Outputs a line to a given y, x position -RAK-
-void prt(const char *str_buff, int row, int col) {
+void prt(const char *str, int row, int col) {
     if (row == MSG_LINE && msg_flag) {
         msg_print(CNIL);
     }
 
     (void) move(row, col);
     clrtoeol();
-    put_buffer(str_buff, row, col);
+    put_buffer(str, row, col);
 }
 
 // move cursor to a given y, x position
@@ -263,7 +239,7 @@ void move_cursor(int row, int col) {
 
 // Outputs message to top line of screen
 // These messages are kept for later reference.
-void msg_print(const char *str_buff) {
+void msg_print(const char *msg) {
     int new_len = 0;
     int old_len = 0;
     bool combine_messages = false;
@@ -275,13 +251,13 @@ void msg_print(const char *str_buff) {
         // we want display them together on the same line.  So we
         // don't flush the old message in this case.
 
-        if (str_buff) {
-            new_len = (int) strlen(str_buff);
+        if (msg) {
+            new_len = (int) strlen(msg);
         } else {
             new_len = 0;
         }
 
-        if (!str_buff || new_len + old_len + 2 >= 73) {
+        if (!msg || new_len + old_len + 2 >= 73) {
             // ensure that the complete -more- message is visible.
             if (old_len > 73) {
                 old_len = 73;
@@ -309,30 +285,32 @@ void msg_print(const char *str_buff) {
     }
 
     // Make the null string a special case. -CJS-
-    if (str_buff) {
-        command_count = 0;
-        msg_flag = true;
 
-        // If the new message and the old message are short enough,
-        // display them on the same line.
-
-        if (combine_messages) {
-            put_buffer(str_buff, MSG_LINE, old_len + 2);
-            strcat(old_msg[last_msg], "  ");
-            strcat(old_msg[last_msg], str_buff);
-        } else {
-            put_buffer(str_buff, MSG_LINE, 0);
-            last_msg++;
-
-            if (last_msg >= MAX_SAVE_MSG) {
-                last_msg = 0;
-            }
-
-            (void) strncpy(old_msg[last_msg], str_buff, VTYPESIZ);
-            old_msg[last_msg][VTYPESIZ - 1] = '\0';
-        }
-    } else {
+    if (!msg) {
         msg_flag = false;
+        return;
+    }
+
+    command_count = 0;
+    msg_flag = true;
+
+    // If the new message and the old message are short enough,
+    // display them on the same line.
+
+    if (combine_messages) {
+        put_buffer(msg, MSG_LINE, old_len + 2);
+        strcat(old_msg[last_msg], "  ");
+        strcat(old_msg[last_msg], msg);
+    } else {
+        put_buffer(msg, MSG_LINE, 0);
+        last_msg++;
+
+        if (last_msg >= MAX_SAVE_MSG) {
+            last_msg = 0;
+        }
+
+        (void) strncpy(old_msg[last_msg], msg, VTYPESIZ);
+        old_msg[last_msg][VTYPESIZ - 1] = '\0';
     }
 }
 
@@ -351,14 +329,14 @@ bool get_check(const char *prompt) {
 
     (void) addstr(" [y/n]");
 
-    char res = ' ';
-    while (res == ' ') {
-        res = inkey();
+    char input = ' ';
+    while (input == ' ') {
+        input = inkey();
     }
 
     erase_line(0, 0);
 
-    return (res == 'Y' || res == 'y');
+    return (input == 'Y' || input == 'y');
 }
 
 // Prompts (optional) and returns ord value of input char
@@ -367,14 +345,11 @@ int get_com(const char *prompt, char *command) {
     if (prompt) {
         prt(prompt, 0, 0);
     }
-
     *command = inkey();
-
-    bool res = (*command != ESCAPE);
 
     erase_line(MSG_LINE, 0);
 
-    return res;
+    return *command != ESCAPE;
 }
 
 // Gets a string terminated by <RETURN>
@@ -390,19 +365,19 @@ bool get_string(char *in_str, int row, int column, int slen) {
 
     int start_col = column;
     int end_col = column + slen - 1;
+
     if (end_col > 79) {
         end_col = 79;
     }
 
     char *p = in_str;
 
-    bool aborted = false;
     bool flag = false;
+    bool aborted = false;
 
     while (!flag && !aborted) {
-        int i = inkey();
-
-        switch (i) {
+        int key = inkey();
+        switch (key) {
             case ESCAPE:
                 aborted = true;
                 break;
@@ -420,11 +395,11 @@ bool get_string(char *in_str, int row, int column, int slen) {
                 }
                 break;
             default:
-                if (!isprint(i) || column > end_col) {
+                if (!isprint(key) || column > end_col) {
                     bell();
                 } else {
-                    use_value2 mvaddch(row, column, (char) i);
-                    *p++ = (char) i;
+                    use_value2 mvaddch(row, column, (char) key);
+                    *p++ = (char) key;
                     column++;
                 }
                 break;
@@ -445,21 +420,20 @@ bool get_string(char *in_str, int row, int column, int slen) {
 }
 
 // Pauses for user response before returning -RAK-
-void pause_line(int prt_line) {
-    prt("[Press any key to continue.]", prt_line, 23);
+void pause_line(int lineNumber) {
+    prt("[Press any key to continue.]", lineNumber, 23);
     (void) inkey();
-    erase_line(prt_line, 0);
+    erase_line(lineNumber, 0);
 }
 
 // Pauses for user response before returning -RAK-
 // NOTE: Delay is for players trying to roll up "perfect"
 // characters.  Make them wait a bit.
-void pause_exit(int prt_line, int delay) {
-    prt("[Press any key to continue, or Q to exit.]", prt_line, 10);
+void pause_exit(int lineNumber, int delay) {
+    prt("[Press any key to continue, or Q to exit.]", lineNumber, 10);
 
-    char dummy = inkey();
-    if (dummy == 'Q') {
-        erase_line(prt_line, 0);
+    if (inkey() == 'Q') {
+        erase_line(lineNumber, 0);
 
         if (delay > 0) {
             sleep_in_seconds(delay);
@@ -467,7 +441,8 @@ void pause_exit(int prt_line, int delay) {
 
         exit_game();
     }
-    erase_line(prt_line, 0);
+
+    erase_line(lineNumber, 0);
 }
 
 void save_screen() {
@@ -482,7 +457,7 @@ void restore_screen() {
 void bell() {
     put_qio();
 
-    // The player can turn off beeps if he/she finds them annoying.
+    // The player can turn off beeps if they find them annoying.
     if (sound_beep_flag) {
         (void) write(1, "\007", 1);
     }
@@ -504,9 +479,8 @@ void bell() {
 #define RATIO 3
 
 void screen_map() {
-    static uint8_t screen_border[2][6] = {
-            {'+', '+', '+', '+', '-', '|'}, // normal chars
-            {201, 187, 200, 188, 205, 186}, // graphics chars
+    static uint8_t screen_border[2][6] = {{'+', '+', '+', '+', '-', '|'}, // normal chars
+                                          {201, 187, 200, 188, 205, 186}, // graphics chars
     };
 
     uint8_t map[MAX_WIDTH / RATIO + 1];
@@ -518,13 +492,13 @@ void screen_map() {
         priority[i] = 0;
     }
 
-    priority[60] = 5;       // char '<'
-    priority[62] = 5;       // char '>'
-    priority[64] = 10;      // char '@'
-    priority[35] = -5;      // char '#'
-    priority[46] = -10;     // char '.'
-    priority[92] = -3;      // char '\'
-    priority[32] = -15;     // char ' '
+    priority[60] = 5;    // char '<'
+    priority[62] = 5;    // char '>'
+    priority[64] = 10;   // char '@'
+    priority[35] = -5;   // char '#'
+    priority[46] = -10;  // char '.'
+    priority[92] = -3;   // char '\'
+    priority[32] = -15;  // char ' '
 
     save_screen();
     clear_screen();
@@ -656,11 +630,14 @@ bool check_input(int microsec) {
 
 // Find a default user name from the system.
 void user_name(char *buf) {
+    // Gotta have some name
+    const char *defaultName = "X";
+
 #ifdef _WIN32
     unsigned long bufCharCount = PLAYER_NAME_SIZE;
 
     if (!GetUserName(buf, &bufCharCount)) {
-        (void)strcpy(buf, "X"); // Gotta have some name
+        (void)strcpy(buf, defaultName);
     }
 #else
     extern char *getlogin();
@@ -675,8 +652,9 @@ void user_name(char *buf) {
             (void) strcpy(buf, pwline->pw_name);
         }
     }
+
     if (!buf[0]) {
-        (void) strcpy(buf, "X"); // Gotta have some name
+        (void) strcpy(buf, defaultName);
     }
 #endif
 }
@@ -691,11 +669,9 @@ void user_name(char *buf) {
 
 // open a file just as does fopen, but allow a leading ~ to specify a home directory
 FILE *tfopen(const char *file, const char *mode) {
-    // extern int errno;
-
-    char buf[1024];
-    if (tilde(file, buf)) {
-        return (fopen(buf, mode));
+    char expanded[1024];
+    if (tilde(file, expanded)) {
+        return (fopen(expanded, mode));
     }
     errno = ENOENT;
     return NULL;
@@ -703,23 +679,21 @@ FILE *tfopen(const char *file, const char *mode) {
 
 // open a file just as does open, but expand a leading ~ into a home directory name
 int topen(const char *file, int flags, int mode) {
-    // extern int errno;
-
-    char buf[1024];
-    if (tilde(file, buf)) {
-        return (open(buf, flags, mode));
+    char expanded[1024];
+    if (tilde(file, expanded)) {
+        return (open(expanded, flags, mode));
     }
     errno = ENOENT;
     return -1;
 }
 
 // expands a tilde at the beginning of a file name to a users home directory
-int tilde(const char *file, char *exp) {
+bool tilde(const char *file, char *expanded) {
     if (!file) {
-        return 0;
+        return false;
     }
 
-    *exp = '\0';
+    *expanded = '\0';
 
     if (*file == '~') {
         char user[128];
@@ -738,17 +712,18 @@ int tilde(const char *file, char *exp) {
             if (login != NULL) {
                 (void) strcpy(user, login);
             } else if ((pw = getpwuid(getuid())) == NULL) {
-                return 0;
+                return false;
             }
         }
         if (pw == NULL && (pw = getpwnam(user)) == NULL) {
-            return 0;
+            return false;
         }
-        (void) strcpy(exp, pw->pw_dir);
+        (void) strcpy(expanded, pw->pw_dir);
     }
-    (void) strcat(exp, file);
 
-    return 1;
+    (void) strcat(expanded, file);
+
+    return true;
 }
 
 #endif
