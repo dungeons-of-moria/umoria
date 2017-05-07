@@ -9,300 +9,228 @@
 #include "headers.h"
 #include "externs.h"
 
-void ident_char() {
-    char command;
-    if (get_com("Enter character to be identified :", &command)) {
-        // every printing ASCII character is listed here, in the
-        // order in which they appear in the ASCII character set.
-        switch (command) {
-            case ' ':
-                prt("  - An open pit.", 0, 0);
-                break;
-            case '!':
-                prt("! - A potion.", 0, 0);
-                break;
-            case '"':
-                prt("\" - An amulet, periapt, or necklace.", 0, 0);
-                break;
-            case '#':
-                prt("# - A stone wall.", 0, 0);
-                break;
-            case '$':
-                prt("$ - Treasure.", 0, 0);
-                break;
-            case '%':
-                if (highlight_seams) {
-                    prt("% - A magma or quartz vein.", 0, 0);
-                } else {
-                    prt("% - Not used.", 0, 0);
-                }
-                break;
-            case '&':
-                prt("& - Treasure chest.", 0, 0);
-                break;
-            case '\'':
-                prt("' - An open door.", 0, 0);
-                break;
-            case '(':
-                prt("( - Soft armor.", 0, 0);
-                break;
-            case ')':
-                prt(") - A shield.", 0, 0);
-                break;
-            case '*':
-                prt("* - Gems.", 0, 0);
-                break;
-            case '+':
-                prt("+ - A closed door.", 0, 0);
-                break;
-            case ',':
-                prt(", - Food or mushroom patch.", 0, 0);
-                break;
-            case '-':
-                prt("- - A wand", 0, 0);
-                break;
-            case '.':
-                prt(". - Floor.", 0, 0);
-                break;
-            case '/':
-                prt("/ - A pole weapon.", 0, 0);
-                break;
-                // case '0': prt("0 - Not used.", 0, 0); break;
-            case '1':
-                prt("1 - Entrance to General Store.", 0, 0);
-                break;
-            case '2':
-                prt("2 - Entrance to Armory.", 0, 0);
-                break;
-            case '3':
-                prt("3 - Entrance to Weaponsmith.", 0, 0);
-                break;
-            case '4':
-                prt("4 - Entrance to Temple.", 0, 0);
-                break;
-            case '5':
-                prt("5 - Entrance to Alchemy shop.", 0, 0);
-                break;
-            case '6':
-                prt("6 - Entrance to Magic-Users store.", 0, 0);
-                break;
-                // case '7': prt("7 - Not used.", 0, 0); break;
-                // case '8': prt("8 - Not used.", 0, 0); break;
-                // case '9': prt("9 - Not used.", 0, 0);  break;
-            case ':':
-                prt(": - Rubble.", 0, 0);
-                break;
-            case ';':
-                prt("; - A loose rock.", 0, 0);
-                break;
-            case '<':
-                prt("< - An up staircase.", 0, 0);
-                break;
-            case '=':
-                prt("= - A ring.", 0, 0);
-                break;
-            case '>':
-                prt("> - A down staircase.", 0, 0);
-                break;
-            case '?':
-                prt("? - A scroll.", 0, 0);
-                break;
-            case '@':
-                prt(py.misc.name, 0, 0);
-                break;
-            case 'A':
-                prt("A - Giant Ant Lion.", 0, 0);
-                break;
-            case 'B':
-                prt("B - The Balrog.", 0, 0);
-                break;
-            case 'C':
-                prt("C - Gelatinous Cube.", 0, 0);
-                break;
-            case 'D':
-                prt("D - An Ancient Dragon (Beware).", 0, 0);
-                break;
-            case 'E':
-                prt("E - Elemental.", 0, 0);
-                break;
-            case 'F':
-                prt("F - Giant Fly.", 0, 0);
-                break;
-            case 'G':
-                prt("G - Ghost.", 0, 0);
-                break;
-            case 'H':
-                prt("H - Hobgoblin.", 0, 0);
-                break;
-                // case 'I': prt("I - Invisible Stalker.", 0, 0); break;
-            case 'J':
-                prt("J - Jelly.", 0, 0);
-                break;
-            case 'K':
-                prt("K - Killer Beetle.", 0, 0);
-                break;
-            case 'L':
-                prt("L - Lich.", 0, 0);
-                break;
-            case 'M':
-                prt("M - Mummy.", 0, 0);
-                break;
-                // case 'N': prt("N - Not used.", 0, 0); break;
-            case 'O':
-                prt("O - Ooze.", 0, 0);
-                break;
-            case 'P':
-                prt("P - Giant humanoid.", 0, 0);
-                break;
-            case 'Q':
-                prt("Q - Quylthulg (Pulsing Flesh Mound).", 0, 0);
-                break;
-            case 'R':
-                prt("R - Reptile.", 0, 0);
-                break;
-            case 'S':
-                prt("S - Giant Scorpion.", 0, 0);
-                break;
-            case 'T':
-                prt("T - Troll.", 0, 0);
-                break;
-            case 'U':
-                prt("U - Umber Hulk.", 0, 0);
-                break;
-            case 'V':
-                prt("V - Vampire.", 0, 0);
-                break;
-            case 'W':
-                prt("W - Wight or Wraith.", 0, 0);
-                break;
-            case 'X':
-                prt("X - Xorn.", 0, 0);
-                break;
-            case 'Y':
-                prt("Y - Yeti.", 0, 0);
-                break;
-                // case 'Z': prt("Z - Not used.", 0, 0); break;
-            case '[':
-                prt("[ - Hard armor.", 0, 0);
-                break;
-            case '\\':
-                prt("\\ - A hafted weapon.", 0, 0);
-                break;
-            case ']':
-                prt("] - Misc. armor.", 0, 0);
-                break;
-            case '^':
-                prt("^ - A trap.", 0, 0);
-                break;
-            case '_':
-                prt("_ - A staff.", 0, 0);
-                break;
-                // case '`': prt("` - Not used.", 0, 0); break;
-            case 'a':
-                prt("a - Giant Ant.", 0, 0);
-                break;
-            case 'b':
-                prt("b - Giant Bat.", 0, 0);
-                break;
-            case 'c':
-                prt("c - Giant Centipede.", 0, 0);
-                break;
-            case 'd':
-                prt("d - Dragon.", 0, 0);
-                break;
-            case 'e':
-                prt("e - Floating Eye.", 0, 0);
-                break;
-            case 'f':
-                prt("f - Giant Frog.", 0, 0);
-                break;
-            case 'g':
-                prt("g - Golem.", 0, 0);
-                break;
-            case 'h':
-                prt("h - Harpy.", 0, 0);
-                break;
-            case 'i':
-                prt("i - Icky Thing.", 0, 0);
-                break;
-            case 'j':
-                prt("j - Jackal.", 0, 0);
-                break;
-            case 'k':
-                prt("k - Kobold.", 0, 0);
-                break;
-            case 'l':
-                prt("l - Giant Louse.", 0, 0);
-                break;
-            case 'm':
-                prt("m - Mold.", 0, 0);
-                break;
-            case 'n':
-                prt("n - Naga.", 0, 0);
-                break;
-            case 'o':
-                prt("o - Orc or Ogre.", 0, 0);
-                break;
-            case 'p':
-                prt("p - Person (Humanoid).", 0, 0);
-                break;
-            case 'q':
-                prt("q - Quasit.", 0, 0);
-                break;
-            case 'r':
-                prt("r - Rodent.", 0, 0);
-                break;
-            case 's':
-                prt("s - Skeleton.", 0, 0);
-                break;
-            case 't':
-                prt("t - Giant Tick.", 0, 0);
-                break;
-                // case 'u': prt("u - Not used.", 0, 0); break;
-                // case 'v': prt("v - Not used.", 0, 0); break;
-            case 'w':
-                prt("w - Worm or Worm Mass.", 0, 0);
-                break;
-                // case 'x': prt("x - Not used.", 0, 0); break;
-            case 'y':
-                prt("y - Yeek.", 0, 0);
-                break;
-            case 'z':
-                prt("z - Zombie.", 0, 0);
-                break;
-            case '{':
-                prt("{ - Arrow, bolt, or bullet.", 0, 0);
-                break;
-            case '|':
-                prt("| - A sword or dagger.", 0, 0);
-                break;
-            case '}':
-                prt("} - Bow, crossbow, or sling.", 0, 0);
-                break;
-            case '~':
-                prt("~ - Miscellaneous item.", 0, 0);
-                break;
-            default:
-                prt("Not Used.", 0, 0);
-                break;
-        }
+static const char *asciiCharacterDescription(char command) {
+    // every printing ASCII character is listed here, in the
+    // order in which they appear in the ASCII character set.
+    switch (command) {
+        case ' ':
+            return "  - An open pit.";
+        case '!':
+            return "! - A potion.";
+        case '"':
+            return "\" - An amulet, periapt, or necklace.";
+        case '#':
+            return "# - A stone wall.";
+        case '$':
+            return "$ - Treasure.";
+        case '%':
+            if (!highlight_seams) {
+                return "% - Not used.";
+            }
+            return "% - A magma or quartz vein.";
+        case '&':
+            return "& - Treasure chest.";
+        case '\'':
+            return "' - An open door.";
+        case '(':
+            return "( - Soft armor.";
+        case ')':
+            return ") - A shield.";
+        case '*':
+            return "* - Gems.";
+        case '+':
+            return "+ - A closed door.";
+        case ',':
+            return ", - Food or mushroom patch.";
+        case '-':
+            return "- - A wand";
+        case '.':
+            return ". - Floor.";
+        case '/':
+            return "/ - A pole weapon.";
+//        case '0':
+//            return "0 - Not used.";
+        case '1':
+            return "1 - Entrance to General Store.";
+        case '2':
+            return "2 - Entrance to Armory.";
+        case '3':
+            return "3 - Entrance to Weaponsmith.";
+        case '4':
+            return "4 - Entrance to Temple.";
+        case '5':
+            return "5 - Entrance to Alchemy shop.";
+        case '6':
+            return "6 - Entrance to Magic-Users store.";
+//        case '7':
+//            return "7 - Not used.";
+//        case '8':
+//            return "8 - Not used.";
+//        case '9':
+//            return "9 - Not used.";
+        case ':':
+            return ": - Rubble.";
+        case ';':
+            return "; - A loose rock.";
+        case '<':
+            return "< - An up staircase.";
+        case '=':
+            return "= - A ring.";
+        case '>':
+            return "> - A down staircase.";
+        case '?':
+            return "? - A scroll.";
+        case '@':
+            return py.misc.name;
+        case 'A':
+            return "A - Giant Ant Lion.";
+        case 'B':
+            return "B - The Balrog.";
+        case 'C':
+            return "C - Gelatinous Cube.";
+        case 'D':
+            return "D - An Ancient Dragon (Beware).";
+        case 'E':
+            return "E - Elemental.";
+        case 'F':
+            return "F - Giant Fly.";
+        case 'G':
+            return "G - Ghost.";
+        case 'H':
+            return "H - Hobgoblin.";
+//        case 'I':
+//            return "I - Invisible Stalker.";
+        case 'J':
+            return "J - Jelly.";
+        case 'K':
+            return "K - Killer Beetle.";
+        case 'L':
+            return "L - Lich.";
+        case 'M':
+            return "M - Mummy.";
+//        case 'N':
+//            return "N - Not used.";
+        case 'O':
+            return "O - Ooze.";
+        case 'P':
+            return "P - Giant humanoid.";
+        case 'Q':
+            return "Q - Quylthulg (Pulsing Flesh Mound).";
+        case 'R':
+            return "R - Reptile.";
+        case 'S':
+            return "S - Giant Scorpion.";
+        case 'T':
+            return "T - Troll.";
+        case 'U':
+            return "U - Umber Hulk.";
+        case 'V':
+            return "V - Vampire.";
+        case 'W':
+            return "W - Wight or Wraith.";
+        case 'X':
+            return "X - Xorn.";
+        case 'Y':
+            return "Y - Yeti.";
+//        case 'Z':
+//            return "Z - Not used.";
+        case '[':
+            return "[ - Hard armor.";
+        case '\\':
+            return "\\ - A hafted weapon.";
+        case ']':
+            return "] - Misc. armor.";
+        case '^':
+            return "^ - A trap.";
+        case '_':
+            return "_ - A staff.";
+//        case '`':
+//            return "` - Not used.";
+        case 'a':
+            return "a - Giant Ant.";
+        case 'b':
+            return "b - Giant Bat.";
+        case 'c':
+            return "c - Giant Centipede.";
+        case 'd':
+            return "d - Dragon.";
+        case 'e':
+            return "e - Floating Eye.";
+        case 'f':
+            return "f - Giant Frog.";
+        case 'g':
+            return "g - Golem.";
+        case 'h':
+            return "h - Harpy.";
+        case 'i':
+            return "i - Icky Thing.";
+        case 'j':
+            return "j - Jackal.";
+        case 'k':
+            return "k - Kobold.";
+        case 'l':
+            return "l - Giant Louse.";
+        case 'm':
+            return "m - Mold.";
+        case 'n':
+            return "n - Naga.";
+        case 'o':
+            return "o - Orc or Ogre.";
+        case 'p':
+            return "p - Person (Humanoid).";
+        case 'q':
+            return "q - Quasit.";
+        case 'r':
+            return "r - Rodent.";
+        case 's':
+            return "s - Skeleton.";
+        case 't':
+            return "t - Giant Tick.";
+//        case 'u':
+//            return "u - Not used.";
+//        case 'v':
+//            return "v - Not used.";
+        case 'w':
+            return "w - Worm or Worm Mass.";
+//        case 'x':
+//            return "x - Not used.";
+        case 'y':
+            return "y - Yeek.";
+        case 'z':
+            return "z - Zombie.";
+        case '{':
+            return "{ - Arrow, bolt, or bullet.";
+        case '|':
+            return "| - A sword or dagger.";
+        case '}':
+            return "} - Bow, crossbow, or sling.";
+        case '~':
+            return "~ - Miscellaneous item.";
+        default:
+            return "Not Used.";
     }
+}
 
-    // Allow access to monster memory. -CJS-
+// Allow access to monster memory. -CJS-
+static void printKnownMonsterMemories(char command) {
     int n = 0;
     char query;
+
     for (int i = MAX_CREATURES - 1; i >= 0; i--) {
         if (c_list[i].cchar == command && bool_roff_recall(i)) {
             if (n == 0) {
                 put_buffer("You recall those details? [y/n]", 0, 40);
                 query = inkey();
+
                 if (query != 'y' && query != 'Y') {
                     break;
                 }
+
                 erase_line(0, 40);
                 save_screen();
             }
             n++;
+
             query = (char) roff_recall(i);
             restore_screen();
             if (query == ESCAPE) {
@@ -310,4 +238,15 @@ void ident_char() {
             }
         }
     }
+}
+
+void ident_char() {
+    char command;
+    if (!get_com("Enter character to be identified :", &command)) {
+        return;
+    }
+
+    prt(asciiCharacterDescription(command), 0, 0);
+
+    printKnownMonsterMemories(command);
 }
