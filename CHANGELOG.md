@@ -9,13 +9,15 @@
 
 ### Code
 
+- Extract Method refactoring in many places.
 - Refactor `if/else` statements:
-  * Add guard clauses / return early where possible.
+  * Add guard clauses / early returns where possible.
   * Remove `else` when an `if` returns.
   * Makes many easier to understand (e.g. less indentation).
 - Refactor `do/while` statements, to be just `while` statements where possible.
 - Removes unneeded braces for `if` statement expressions.
-- Various other refactorings.
+- Rename many variables to make their function more obvious, but there's more to do in this area.
+- Generally lots of small refactoring.
 
 
 ## 5.7.2 (2017-03-12)
