@@ -273,7 +273,7 @@ int randnor(int, int);
 int bit_pos(uint32_t *);
 bool in_bounds(int, int);
 void panel_bounds();
-int get_panel(int, int, int);
+int get_panel(int, int, bool);
 bool panel_contains(int, int);
 int distance(int, int, int, int);
 int next_to_walls(int, int);
