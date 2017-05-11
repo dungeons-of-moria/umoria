@@ -593,7 +593,7 @@ int max_hp(uint8_t *array) {
 }
 
 // Places a monster at given location -RAK-
-bool place_monster(int y, int x, int monsterID, int slp) {
+bool place_monster(int y, int x, int monsterID, bool slp) {
     int cur_pos = popm();
 
     if (cur_pos == -1) {
@@ -712,7 +712,7 @@ int get_mons_num(int level) {
 }
 
 // Allocates a random monster -RAK-
-void alloc_monster(int num, int dis, int slp) {
+void alloc_monster(int num, int dis, bool slp) {
     int y, x;
 
     for (int i = 0; i < num; i++) {
@@ -735,7 +735,7 @@ void alloc_monster(int num, int dis, int slp) {
     }
 }
 
-static bool placeMonsterAdjacentTo(int monsterID, int *y, int *x, int slp) {
+static bool placeMonsterAdjacentTo(int monsterID, int *y, int *x, bool slp) {
     bool placed = false;
 
     for (int i = 0; i <= 9; i++) {
