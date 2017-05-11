@@ -281,7 +281,7 @@ int next_to_corr(int, int);
 int damroll(int, int);
 int pdamroll(uint8_t *);
 bool los(int, int, int, int);
-uint8_t loc_symbol(int, int);
+char loc_symbol(int, int);
 bool test_light(int, int);
 void prt_map();
 bool compact_monsters();

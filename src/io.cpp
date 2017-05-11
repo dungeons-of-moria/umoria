@@ -483,7 +483,7 @@ void screen_map() {
                                           {201, 187, 200, 188, 205, 186}, // graphics chars
     };
 
-    uint8_t map[MAX_WIDTH / RATIO + 1];
+    char map[MAX_WIDTH / RATIO + 1];
     int priority[256];
 
     char prntscrnbuf[80];
@@ -535,10 +535,9 @@ void screen_map() {
 
         for (int j = 0; j < MAX_WIDTH; j++) {
             int col = j / RATIO;
-            uint8_t tmp = loc_symbol(i, j);
-
-            if (priority[map[col]] < priority[tmp]) {
-                map[col] = tmp;
+            char tmpChar = loc_symbol(i, j);
+            if (priority[(uint8_t) map[col]] < priority[(uint8_t) tmpChar]) {
+                map[col] = tmpChar;
             }
 
             if (map[col] == '@') {

@@ -300,7 +300,7 @@ static bool see_wall(int dir, int y, int x) {
         return true;
     }
 
-    uint8_t c = loc_symbol(y, x);
+    char c = loc_symbol(y, x);
 
     return (c == '#' || c == '%');
 }

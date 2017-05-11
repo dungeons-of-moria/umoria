@@ -443,7 +443,7 @@ bool los(int fromY, int fromX, int toY, int toX) {
 }
 
 // Returns symbol for given row, column -RAK-
-uint8_t loc_symbol(int y, int x) {
+char loc_symbol(int y, int x) {
     cave_type *cave_ptr = &cave[y][x];
 
     if (cave_ptr->cptr == 1 && (!find_flag || find_prself)) {
@@ -498,7 +498,7 @@ void prt_map() {
 
         // Left to right
         for (int x = panel_col_min; x <= panel_col_max; x++) {
-            uint8_t ch = loc_symbol(y, x);
+            char ch = loc_symbol(y, x);
             if (ch != ' ') {
                 print(ch, y, x);
             }
