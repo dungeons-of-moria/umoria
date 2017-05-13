@@ -9,11 +9,776 @@
 #include "headers.h"
 #include "externs.h"
 
+static void magicalArmor(inven_type *t_ptr, int special, int level) {
+    t_ptr->toac += m_bonus(1, 30, level);
+
+    if (!magik(special)) {
+        return;
+    }
+
+    switch (randint(9)) {
+        case 1:
+            t_ptr->flags |= (TR_RES_LIGHT | TR_RES_COLD | TR_RES_ACID | TR_RES_FIRE);
+            t_ptr->name2 = SN_R;
+            t_ptr->toac += 5;
+            t_ptr->cost += 2500;
+            break;
+        case 2: // Resist Acid
+            t_ptr->flags |= TR_RES_ACID;
+            t_ptr->name2 = SN_RA;
+            t_ptr->cost += 1000;
+            break;
+        case 3:
+        case 4: // Resist Fire
+            t_ptr->flags |= TR_RES_FIRE;
+            t_ptr->name2 = SN_RF;
+            t_ptr->cost += 600;
+            break;
+        case 5:
+        case 6: // Resist Cold
+            t_ptr->flags |= TR_RES_COLD;
+            t_ptr->name2 = SN_RC;
+            t_ptr->cost += 600;
+            break;
+        case 7:
+        case 8:
+        case 9: // Resist Lightning
+            t_ptr->flags |= TR_RES_LIGHT;
+            t_ptr->name2 = SN_RL;
+            t_ptr->cost += 500;
+            break;
+        default:
+            // Do not apply any special magic
+            break;
+    }
+}
+
+static void cursedArmor(inven_type *t_ptr, int level) {
+    t_ptr->toac -= m_bonus(1, 40, level);
+    t_ptr->cost = 0;
+    t_ptr->flags |= TR_CURSED;
+}
+
+static void magicalSword(inven_type *t_ptr, int special, int level) {
+    t_ptr->tohit += m_bonus(0, 40, level);
+
+    // Magical damage bonus now proportional to weapon base damage
+    int damageBonus = t_ptr->damage[0] * t_ptr->damage[1];
+
+    t_ptr->todam += m_bonus(0, 4 * damageBonus, damageBonus * level / 10);
+
+    // the 3*special/2 is needed because weapons are not as common as
+    // before change to treasure distribution, this helps keep same
+    // number of ego weapons same as before, see also missiles
+    if (magik(3 * special / 2)) {
+        switch (randint(16)) {
+            case 1: // Holy Avenger
+                t_ptr->flags |= (TR_SEE_INVIS | TR_SUST_STAT | TR_SLAY_UNDEAD | TR_SLAY_EVIL | TR_STR);
+                t_ptr->tohit += 5;
+                t_ptr->todam += 5;
+                t_ptr->toac += randint(4);
+
+                // the value in p1 is used for strength increase
+                // p1 is also used for sustain stat
+                t_ptr->p1 = (int16_t) randint(4);
+                t_ptr->name2 = SN_HA;
+                t_ptr->cost += t_ptr->p1 * 500;
+                t_ptr->cost += 10000;
+                break;
+            case 2: // Defender
+                t_ptr->flags |= (TR_FFALL | TR_RES_LIGHT | TR_SEE_INVIS | TR_FREE_ACT | TR_RES_COLD | TR_RES_ACID | TR_RES_FIRE | TR_REGEN | TR_STEALTH);
+                t_ptr->tohit += 3;
+                t_ptr->todam += 3;
+                t_ptr->toac += 5 + randint(5);
+                t_ptr->name2 = SN_DF;
+
+                // the value in p1 is used for stealth
+                t_ptr->p1 = (int16_t) randint(3);
+                t_ptr->cost += t_ptr->p1 * 500;
+                t_ptr->cost += 7500;
+                break;
+            case 3:
+            case 4: // Slay Animal
+                t_ptr->flags |= TR_SLAY_ANIMAL;
+                t_ptr->tohit += 2;
+                t_ptr->todam += 2;
+                t_ptr->name2 = SN_SA;
+                t_ptr->cost += 3000;
+                break;
+            case 5:
+            case 6: // Slay Dragon
+                t_ptr->flags |= TR_SLAY_DRAGON;
+                t_ptr->tohit += 3;
+                t_ptr->todam += 3;
+                t_ptr->name2 = SN_SD;
+                t_ptr->cost += 4000;
+                break;
+            case 7:
+            case 8: // Slay Evil
+                t_ptr->flags |= TR_SLAY_EVIL;
+                t_ptr->tohit += 3;
+                t_ptr->todam += 3;
+                t_ptr->name2 = SN_SE;
+                t_ptr->cost += 4000;
+                break;
+            case 9:
+            case 10: // Slay Undead
+                t_ptr->flags |= (TR_SEE_INVIS | TR_SLAY_UNDEAD);
+                t_ptr->tohit += 3;
+                t_ptr->todam += 3;
+                t_ptr->name2 = SN_SU;
+                t_ptr->cost += 5000;
+                break;
+            case 11:
+            case 12:
+            case 13: // Flame Tongue
+                t_ptr->flags |= TR_FLAME_TONGUE;
+                t_ptr->tohit++;
+                t_ptr->todam += 3;
+                t_ptr->name2 = SN_FT;
+                t_ptr->cost += 2000;
+                break;
+            case 14:
+            case 15:
+            case 16: // Frost Brand
+                t_ptr->flags |= TR_FROST_BRAND;
+                t_ptr->tohit++;
+                t_ptr->todam++;
+                t_ptr->name2 = SN_FB;
+                t_ptr->cost += 1200;
+                break;
+        }
+    }
+}
+
+static void cursedSword(inven_type *t_ptr, int level) {
+    t_ptr->tohit -= m_bonus(1, 55, level);
+
+    // Magical damage bonus now proportional to weapon base damage
+    int damageBonus = t_ptr->damage[0] * t_ptr->damage[1];
+
+    t_ptr->todam -= m_bonus(1, 11 * damageBonus / 2, damageBonus * level / 10);
+    t_ptr->flags |= TR_CURSED;
+    t_ptr->cost = 0;
+}
+
+static void magicalBow(inven_type *t_ptr, int level) {
+    t_ptr->tohit += m_bonus(1, 30, level);
+
+    // add damage. -CJS-
+    t_ptr->todam += m_bonus(1, 20, level);
+}
+
+static void cursedBow(inven_type *t_ptr, int level) {
+    t_ptr->tohit -= m_bonus(1, 50, level);
+
+    // add damage. -CJS-
+    t_ptr->todam -= m_bonus(1, 30, level);
+
+    t_ptr->flags |= TR_CURSED;
+    t_ptr->cost = 0;
+}
+
+static void magicalDiggingTool(inven_type *t_ptr, int level) {
+    t_ptr->p1 += m_bonus(0, 25, level);
+}
+
+static void cursedDiggingTool(inven_type *t_ptr, int level) {
+    t_ptr->p1 = (int16_t) -m_bonus(1, 30, level);
+    t_ptr->cost = 0;
+    t_ptr->flags |= TR_CURSED;
+}
+
+static void magicalGloves(inven_type *t_ptr, int special, int level) {
+    t_ptr->toac += m_bonus(1, 20, level);
+
+    if (!magik(special)) {
+        return;
+    }
+
+    if (randint(2) == 1) {
+        t_ptr->flags |= TR_FREE_ACT;
+        t_ptr->name2 = SN_FREE_ACTION;
+        t_ptr->cost += 1000;
+    } else {
+        t_ptr->ident |= ID_SHOW_HITDAM;
+        t_ptr->tohit += 1 + randint(3);
+        t_ptr->todam += 1 + randint(3);
+        t_ptr->name2 = SN_SLAYING;
+        t_ptr->cost += (t_ptr->tohit + t_ptr->todam) * 250;
+    }
+}
+
+static void cursedGloves(inven_type *t_ptr, int special, int level) {
+    if (magik(special)) {
+        if (randint(2) == 1) {
+            t_ptr->flags |= TR_DEX;
+            t_ptr->name2 = SN_CLUMSINESS;
+        } else {
+            t_ptr->flags |= TR_STR;
+            t_ptr->name2 = SN_WEAKNESS;
+        }
+        t_ptr->ident |= ID_SHOW_P1;
+        t_ptr->p1 = (int16_t) -m_bonus(1, 10, level);
+    }
+
+    t_ptr->toac -= m_bonus(1, 40, level);
+    t_ptr->flags |= TR_CURSED;
+    t_ptr->cost = 0;
+}
+
+static void magicalBoots(inven_type *t_ptr, int special, int level) {
+    t_ptr->toac += m_bonus(1, 20, level);
+
+    if (!magik(special)) {
+        return;
+    }
+
+    int magicType = randint(12);
+
+    if (magicType > 5) {
+        t_ptr->flags |= TR_FFALL;
+        t_ptr->name2 = SN_SLOW_DESCENT;
+        t_ptr->cost += 250;
+    } else if (magicType == 1) {
+        t_ptr->flags |= TR_SPEED;
+        t_ptr->name2 = SN_SPEED;
+        t_ptr->ident |= ID_SHOW_P1;
+        t_ptr->p1 = 1;
+        t_ptr->cost += 5000;
+    } else {
+        // 2 - 5
+        t_ptr->flags |= TR_STEALTH;
+        t_ptr->ident |= ID_SHOW_P1;
+        t_ptr->p1 = (int16_t) randint(3);
+        t_ptr->name2 = SN_STEALTH;
+        t_ptr->cost += 500;
+    }
+}
+
+static void cursedBoots(inven_type *t_ptr, int level) {
+    int magicType = randint(3);
+
+    if (magicType == 1) {
+        t_ptr->flags |= TR_SPEED;
+        t_ptr->name2 = SN_SLOWNESS;
+        t_ptr->ident |= ID_SHOW_P1;
+        t_ptr->p1 = -1;
+    } else if (magicType == 2) {
+        t_ptr->flags |= TR_AGGRAVATE;
+        t_ptr->name2 = SN_NOISE;
+    } else {
+        t_ptr->name2 = SN_GREAT_MASS;
+        t_ptr->weight = (uint16_t) (t_ptr->weight * 5);
+    }
+
+    t_ptr->cost = 0;
+    t_ptr->toac -= m_bonus(2, 45, level);
+    t_ptr->flags |= TR_CURSED;
+}
+
+static void magicalHelms(inven_type *t_ptr, int special, int level) {
+    t_ptr->toac += m_bonus(1, 20, level);
+
+    if (!magik(special)) {
+        return;
+    }
+
+    if (t_ptr->subval < 6) {
+        t_ptr->ident |= ID_SHOW_P1;
+
+        int magicType = randint(3);
+
+        if (magicType == 1) {
+            t_ptr->p1 = (int16_t) randint(2);
+            t_ptr->flags |= TR_INT;
+            t_ptr->name2 = SN_INTELLIGENCE;
+            t_ptr->cost += t_ptr->p1 * 500;
+        } else if (magicType == 2) {
+            t_ptr->p1 = (int16_t) randint(2);
+            t_ptr->flags |= TR_WIS;
+            t_ptr->name2 = SN_WISDOM;
+            t_ptr->cost += t_ptr->p1 * 500;
+        } else {
+            t_ptr->p1 = (int16_t) (1 + randint(4));
+            t_ptr->flags |= TR_INFRA;
+            t_ptr->name2 = SN_INFRAVISION;
+            t_ptr->cost += t_ptr->p1 * 250;
+        }
+
+        return;
+    }
+
+    switch (randint(6)) {
+        case 1:
+            t_ptr->ident |= ID_SHOW_P1;
+            t_ptr->p1 = (int16_t) randint(3);
+            t_ptr->flags |= (TR_FREE_ACT | TR_CON | TR_DEX | TR_STR);
+            t_ptr->name2 = SN_MIGHT;
+            t_ptr->cost += 1000 + t_ptr->p1 * 500;
+            break;
+        case 2:
+            t_ptr->ident |= ID_SHOW_P1;
+            t_ptr->p1 = (int16_t) randint(3);
+            t_ptr->flags |= (TR_CHR | TR_WIS);
+            t_ptr->name2 = SN_LORDLINESS;
+            t_ptr->cost += 1000 + t_ptr->p1 * 500;
+            break;
+        case 3:
+            t_ptr->ident |= ID_SHOW_P1;
+            t_ptr->p1 = (int16_t) randint(3);
+            t_ptr->flags |= (TR_RES_LIGHT | TR_RES_COLD | TR_RES_ACID | TR_RES_FIRE | TR_INT);
+            t_ptr->name2 = SN_MAGI;
+            t_ptr->cost += 3000 + t_ptr->p1 * 500;
+            break;
+        case 4:
+            t_ptr->ident |= ID_SHOW_P1;
+            t_ptr->p1 = (int16_t) randint(3);
+            t_ptr->flags |= TR_CHR;
+            t_ptr->name2 = SN_BEAUTY;
+            t_ptr->cost += 750;
+            break;
+        case 5:
+            t_ptr->ident |= ID_SHOW_P1;
+            t_ptr->p1 = (int16_t) (5 * (1 + randint(4)));
+            t_ptr->flags |= (TR_SEE_INVIS | TR_SEARCH);
+            t_ptr->name2 = SN_SEEING;
+            t_ptr->cost += 1000 + t_ptr->p1 * 100;
+            break;
+        case 6:
+            t_ptr->flags |= TR_REGEN;
+            t_ptr->name2 = SN_REGENERATION;
+            t_ptr->cost += 1500;
+            break;
+    }
+}
+
+static void cursedHelms(inven_type *t_ptr, int special, int level) {
+    t_ptr->toac -= m_bonus(1, 45, level);
+    t_ptr->flags |= TR_CURSED;
+    t_ptr->cost = 0;
+
+    if (!magik(special)) {
+        return;
+    }
+
+    switch (randint(7)) {
+        case 1:
+            t_ptr->ident |= ID_SHOW_P1;
+            t_ptr->p1 = (int16_t) -randint(5);
+            t_ptr->flags |= TR_INT;
+            t_ptr->name2 = SN_STUPIDITY;
+            break;
+        case 2:
+            t_ptr->ident |= ID_SHOW_P1;
+            t_ptr->p1 = (int16_t) -randint(5);
+            t_ptr->flags |= TR_WIS;
+            t_ptr->name2 = SN_DULLNESS;
+            break;
+        case 3:
+            t_ptr->flags |= TR_BLIND;
+            t_ptr->name2 = SN_BLINDNESS;
+            break;
+        case 4:
+            t_ptr->flags |= TR_TIMID;
+            t_ptr->name2 = SN_TIMIDNESS;
+            break;
+        case 5:
+            t_ptr->ident |= ID_SHOW_P1;
+            t_ptr->p1 = (int16_t) -randint(5);
+            t_ptr->flags |= TR_STR;
+            t_ptr->name2 = SN_WEAKNESS;
+            break;
+        case 6:
+            t_ptr->flags |= TR_TELEPORT;
+            t_ptr->name2 = SN_TELEPORTATION;
+            break;
+        case 7:
+            t_ptr->ident |= ID_SHOW_P1;
+            t_ptr->p1 = (int16_t) -randint(5);
+            t_ptr->flags |= TR_CHR;
+            t_ptr->name2 = SN_UGLINESS;
+            break;
+    }
+}
+
+static void processRings(inven_type *t_ptr, int level, int cursed) {
+    switch (t_ptr->subval) {
+        case 0:
+        case 1:
+        case 2:
+        case 3:
+            if (magik(cursed)) {
+                t_ptr->p1 = (int16_t) -m_bonus(1, 20, level);
+                t_ptr->flags |= TR_CURSED;
+                t_ptr->cost = -t_ptr->cost;
+            } else {
+                t_ptr->p1 = (int16_t) m_bonus(1, 10, level);
+                t_ptr->cost += t_ptr->p1 * 100;
+            }
+            break;
+        case 4:
+            if (magik(cursed)) {
+                t_ptr->p1 = (int16_t) -randint(3);
+                t_ptr->flags |= TR_CURSED;
+                t_ptr->cost = -t_ptr->cost;
+            } else {
+                t_ptr->p1 = 1;
+            }
+            break;
+        case 5:
+            t_ptr->p1 = (int16_t) (5 * m_bonus(1, 20, level));
+            t_ptr->cost += t_ptr->p1 * 50;
+            if (magik(cursed)) {
+                t_ptr->p1 = -t_ptr->p1;
+                t_ptr->flags |= TR_CURSED;
+                t_ptr->cost = -t_ptr->cost;
+            }
+            break;
+        case 19: // Increase damage
+            t_ptr->todam += m_bonus(1, 20, level);
+            t_ptr->cost += t_ptr->todam * 100;
+            if (magik(cursed)) {
+                t_ptr->todam = -t_ptr->todam;
+                t_ptr->flags |= TR_CURSED;
+                t_ptr->cost = -t_ptr->cost;
+            }
+            break;
+        case 20: // Increase To-Hit
+            t_ptr->tohit += m_bonus(1, 20, level);
+            t_ptr->cost += t_ptr->tohit * 100;
+            if (magik(cursed)) {
+                t_ptr->tohit = -t_ptr->tohit;
+                t_ptr->flags |= TR_CURSED;
+                t_ptr->cost = -t_ptr->cost;
+            }
+            break;
+        case 21: // Protection
+            t_ptr->toac += m_bonus(1, 20, level);
+            t_ptr->cost += t_ptr->toac * 100;
+            if (magik(cursed)) {
+                t_ptr->toac = -t_ptr->toac;
+                t_ptr->flags |= TR_CURSED;
+                t_ptr->cost = -t_ptr->cost;
+            }
+            break;
+        case 24:
+        case 25:
+        case 26:
+        case 27:
+        case 28:
+        case 29:
+            t_ptr->ident |= ID_NOSHOW_P1;
+            break;
+        case 30: // Slaying
+            t_ptr->ident |= ID_SHOW_HITDAM;
+            t_ptr->todam += m_bonus(1, 25, level);
+            t_ptr->tohit += m_bonus(1, 25, level);
+            t_ptr->cost += (t_ptr->tohit + t_ptr->todam) * 100;
+            if (magik(cursed)) {
+                t_ptr->tohit = -t_ptr->tohit;
+                t_ptr->todam = -t_ptr->todam;
+                t_ptr->flags |= TR_CURSED;
+                t_ptr->cost = -t_ptr->cost;
+            }
+            break;
+        default:
+            break;
+    }
+}
+
+static void processAmulets(inven_type *t_ptr, int level, int cursed) {
+    if (t_ptr->subval < 2) {
+        if (magik(cursed)) {
+            t_ptr->p1 = (int16_t) -m_bonus(1, 20, level);
+            t_ptr->flags |= TR_CURSED;
+            t_ptr->cost = -t_ptr->cost;
+        } else {
+            t_ptr->p1 = (int16_t) m_bonus(1, 10, level);
+            t_ptr->cost += t_ptr->p1 * 100;
+        }
+    } else if (t_ptr->subval == 2) {
+        t_ptr->p1 = (int16_t) (5 * m_bonus(1, 25, level));
+        if (magik(cursed)) {
+            t_ptr->p1 = -t_ptr->p1;
+            t_ptr->cost = -t_ptr->cost;
+            t_ptr->flags |= TR_CURSED;
+        } else {
+            t_ptr->cost += 50 * t_ptr->p1;
+        }
+    } else if (t_ptr->subval == 8) {
+        // amulet of the magi is never cursed
+        t_ptr->p1 = (int16_t) (5 * m_bonus(1, 25, level));
+        t_ptr->cost += 20 * t_ptr->p1;
+    }
+}
+
+static int wandMagic(uint8_t id) {
+    switch (id) {
+        case 0:
+            return randint(10) + 6;
+        case 1:
+            return randint(8) + 6;
+        case 2:
+            return randint(5) + 6;
+        case 3:
+            return randint(8) + 6;
+        case 4:
+            return randint(4) + 3;
+        case 5:
+            return randint(8) + 6;
+        case 6:
+            return randint(20) + 12;
+        case 7:
+            return randint(20) + 12;
+        case 8:
+            return randint(10) + 6;
+        case 9:
+            return randint(12) + 6;
+        case 10:
+            return randint(10) + 12;
+        case 11:
+            return randint(3) + 3;
+        case 12:
+            return randint(8) + 6;
+        case 13:
+            return randint(10) + 6;
+        case 14:
+            return randint(5) + 3;
+        case 15:
+            return randint(5) + 3;
+        case 16:
+            return randint(5) + 6;
+        case 17:
+            return randint(5) + 4;
+        case 18:
+            return randint(8) + 4;
+        case 19:
+            return randint(6) + 2;
+        case 20:
+            return randint(4) + 2;
+        case 21:
+            return randint(8) + 6;
+        case 22:
+            return randint(5) + 2;
+        case 23:
+            return randint(12) + 12;
+        default:
+            return -1;
+    }
+}
+
+static int staffMagic(uint8_t id) {
+    switch (id) {
+        case 0:
+            return randint(20) + 12;
+        case 1:
+            return randint(8) + 6;
+        case 2:
+            return randint(5) + 6;
+        case 3:
+            return randint(20) + 12;
+        case 4:
+            return randint(15) + 6;
+        case 5:
+            return randint(4) + 5;
+        case 6:
+            return randint(5) + 3;
+        case 7:
+            return randint(3) + 1;
+        case 8:
+            return randint(3) + 1;
+        case 9:
+            return randint(5) + 6;
+        case 10:
+            return randint(10) + 12;
+        case 11:
+            return randint(5) + 6;
+        case 12:
+            return randint(5) + 6;
+        case 13:
+            return randint(5) + 6;
+        case 14:
+            return randint(10) + 12;
+        case 15:
+            return randint(3) + 4;
+        case 16:
+            return randint(5) + 6;
+        case 17:
+            return randint(5) + 6;
+        case 18:
+            return randint(3) + 4;
+        case 19:
+            return randint(10) + 12;
+        case 20:
+            return randint(3) + 4;
+        case 21:
+            return randint(3) + 4;
+        case 22:
+            return randint(10) + 6;
+        default:
+            return -1;
+    }
+}
+
+static void magicalCloak(inven_type *t_ptr, int special, int level) {
+    if (!magik(special)) {
+        t_ptr->toac += m_bonus(1, 20, level);
+        return;
+    }
+
+    if (randint(2) == 1) {
+        t_ptr->name2 = SN_PROTECTION;
+        t_ptr->toac += m_bonus(2, 40, level);
+        t_ptr->cost += 250;
+        return;
+    }
+
+    t_ptr->toac += m_bonus(1, 20, level);
+    t_ptr->ident |= ID_SHOW_P1;
+    t_ptr->p1 = (int16_t) randint(3);
+    t_ptr->flags |= TR_STEALTH;
+    t_ptr->name2 = SN_STEALTH;
+    t_ptr->cost += 500;
+}
+
+static void cursedCloak(inven_type *t_ptr, int level) {
+    int magicType = randint(3);
+
+    if (magicType == 1) {
+        t_ptr->flags |= TR_AGGRAVATE;
+        t_ptr->name2 = SN_IRRITATION;
+        t_ptr->toac -= m_bonus(1, 10, level);
+        t_ptr->ident |= ID_SHOW_HITDAM;
+        t_ptr->tohit -= m_bonus(1, 10, level);
+        t_ptr->todam -= m_bonus(1, 10, level);
+        t_ptr->cost = 0;
+    } else if (magicType == 2) {
+        t_ptr->name2 = SN_VULNERABILITY;
+        t_ptr->toac -= m_bonus(10, 100, level + 50);
+        t_ptr->cost = 0;
+    } else {
+        t_ptr->name2 = SN_ENVELOPING;
+        t_ptr->toac -= m_bonus(1, 10, level);
+        t_ptr->ident |= ID_SHOW_HITDAM;
+        t_ptr->tohit -= m_bonus(2, 40, level + 10);
+        t_ptr->todam -= m_bonus(2, 40, level + 10);
+        t_ptr->cost = 0;
+    }
+
+    t_ptr->flags |= TR_CURSED;
+}
+
+static void magicalChests(inven_type *t_ptr, int level) {
+    switch (randint(level + 4)) {
+        case 1:
+            t_ptr->flags = 0;
+            t_ptr->name2 = SN_EMPTY;
+            break;
+        case 2:
+            t_ptr->flags |= CH_LOCKED;
+            t_ptr->name2 = SN_LOCKED;
+            break;
+        case 3:
+        case 4:
+            t_ptr->flags |= (CH_LOSE_STR | CH_LOCKED);
+            t_ptr->name2 = SN_POISON_NEEDLE;
+            break;
+        case 5:
+        case 6:
+            t_ptr->flags |= (CH_POISON | CH_LOCKED);
+            t_ptr->name2 = SN_POISON_NEEDLE;
+            break;
+        case 7:
+        case 8:
+        case 9:
+            t_ptr->flags |= (CH_PARALYSED | CH_LOCKED);
+            t_ptr->name2 = SN_GAS_TRAP;
+            break;
+        case 10:
+        case 11:
+            t_ptr->flags |= (CH_EXPLODE | CH_LOCKED);
+            t_ptr->name2 = SN_EXPLOSION_DEVICE;
+            break;
+        case 12:
+        case 13:
+        case 14:
+            t_ptr->flags |= (CH_SUMMON | CH_LOCKED);
+            t_ptr->name2 = SN_SUMMONING_RUNES;
+            break;
+        case 15:
+        case 16:
+        case 17:
+            t_ptr->flags |= (CH_PARALYSED | CH_POISON | CH_LOSE_STR | CH_LOCKED);
+            t_ptr->name2 = SN_MULTIPLE_TRAPS;
+            break;
+        default:
+            t_ptr->flags |= (CH_SUMMON | CH_EXPLODE | CH_LOCKED);
+            t_ptr->name2 = SN_MULTIPLE_TRAPS;
+            break;
+    }
+}
+
+static void magicalProjectiles(inven_type *t_ptr, int special, int level) {
+    t_ptr->tohit += m_bonus(1, 35, level);
+    t_ptr->todam += m_bonus(1, 35, level);
+
+    // see comment for weapons
+    if (magik(3 * special / 2)) {
+        switch (randint(10)) {
+            case 1:
+            case 2:
+            case 3:
+                t_ptr->name2 = SN_SLAYING;
+                t_ptr->tohit += 5;
+                t_ptr->todam += 5;
+                t_ptr->cost += 20;
+                break;
+            case 4:
+            case 5:
+                t_ptr->flags |= TR_FLAME_TONGUE;
+                t_ptr->tohit += 2;
+                t_ptr->todam += 4;
+                t_ptr->name2 = SN_FIRE;
+                t_ptr->cost += 25;
+                break;
+            case 6:
+            case 7:
+                t_ptr->flags |= TR_SLAY_EVIL;
+                t_ptr->tohit += 3;
+                t_ptr->todam += 3;
+                t_ptr->name2 = SN_SLAY_EVIL;
+                t_ptr->cost += 25;
+                break;
+            case 8:
+            case 9:
+                t_ptr->flags |= TR_SLAY_ANIMAL;
+                t_ptr->tohit += 2;
+                t_ptr->todam += 2;
+                t_ptr->name2 = SN_SLAY_ANIMAL;
+                t_ptr->cost += 30;
+                break;
+            case 10:
+                t_ptr->flags |= TR_SLAY_DRAGON;
+                t_ptr->tohit += 3;
+                t_ptr->todam += 3;
+                t_ptr->name2 = SN_DRAGON_SLAYING;
+                t_ptr->cost += 35;
+                break;
+        }
+    }
+}
+
+static void cursedProjectiles(inven_type *t_ptr, int level) {
+    t_ptr->tohit -= m_bonus(5, 55, level);
+    t_ptr->todam -= m_bonus(5, 55, level);
+    t_ptr->flags |= TR_CURSED;
+    t_ptr->cost = 0;
+}
+
 // Chance of treasure having magic abilities -RAK-
 // Chance increases with each dungeon level
 void magic_treasure(int x, int level) {
-    int tmp;
-
     int chance = OBJ_BASE_MAGIC + level;
     if (chance > OBJ_BASE_MAX) {
         chance = OBJ_BASE_MAX;
@@ -22,6 +787,7 @@ void magic_treasure(int x, int level) {
     int special = chance / OBJ_DIV_SPECIAL;
     int cursed = (10 * chance) / OBJ_DIV_CURSED;
 
+    int magicAmount;
     inven_type *t_ptr = &t_list[x];
 
     // some objects appear multiple times in the object_list with different
@@ -35,45 +801,9 @@ void magic_treasure(int x, int level) {
         case TV_HARD_ARMOR:
         case TV_SOFT_ARMOR:
             if (magik(chance)) {
-                t_ptr->toac += m_bonus(1, 30, level);
-                if (magik(special)) {
-                    switch (randint(9)) {
-                        case 1:
-                            t_ptr->flags |= (TR_RES_LIGHT | TR_RES_COLD | TR_RES_ACID | TR_RES_FIRE);
-                            t_ptr->name2 = SN_R;
-                            t_ptr->toac += 5;
-                            t_ptr->cost += 2500;
-                            break;
-                        case 2: // Resist Acid
-                            t_ptr->flags |= TR_RES_ACID;
-                            t_ptr->name2 = SN_RA;
-                            t_ptr->cost += 1000;
-                            break;
-                        case 3:
-                        case 4: // Resist Fire
-                            t_ptr->flags |= TR_RES_FIRE;
-                            t_ptr->name2 = SN_RF;
-                            t_ptr->cost += 600;
-                            break;
-                        case 5:
-                        case 6: // Resist Cold
-                            t_ptr->flags |= TR_RES_COLD;
-                            t_ptr->name2 = SN_RC;
-                            t_ptr->cost += 600;
-                            break;
-                        case 7:
-                        case 8:
-                        case 9: // Resist Lightning
-                            t_ptr->flags |= TR_RES_LIGHT;
-                            t_ptr->name2 = SN_RL;
-                            t_ptr->cost += 500;
-                            break;
-                    }
-                }
+                magicalArmor(t_ptr, special, level);
             } else if (magik(cursed)) {
-                t_ptr->toac -= m_bonus(1, 40, level);
-                t_ptr->cost = 0;
-                t_ptr->flags |= TR_CURSED;
+                cursedArmor(t_ptr, level);
             }
             break;
         case TV_HAFTED:
@@ -81,693 +811,104 @@ void magic_treasure(int x, int level) {
         case TV_SWORD:
             // always show tohit/todam values if identified
             t_ptr->ident |= ID_SHOW_HITDAM;
+
             if (magik(chance)) {
-                t_ptr->tohit += m_bonus(0, 40, level);
-
-                // Magical damage bonus now proportional to weapon base damage
-                tmp = t_ptr->damage[0] * t_ptr->damage[1];
-                t_ptr->todam += m_bonus(0, 4 * tmp, tmp * level / 10);
-
-                // the 3*special/2 is needed because weapons are not as common as
-                // before change to treasure distribution, this helps keep same
-                // number of ego weapons same as before, see also missiles
-                if (magik(3 * special / 2)) {
-                    switch (randint(16)) {
-                        case 1: // Holy Avenger
-                            t_ptr->flags |= (TR_SEE_INVIS | TR_SUST_STAT | TR_SLAY_UNDEAD | TR_SLAY_EVIL | TR_STR);
-                            t_ptr->tohit += 5;
-                            t_ptr->todam += 5;
-                            t_ptr->toac += randint(4);
-
-                            // the value in p1 is used for strength increase
-                            // p1 is also used for sustain stat
-                            t_ptr->p1 = (int16_t) randint(4);
-                            t_ptr->name2 = SN_HA;
-                            t_ptr->cost += t_ptr->p1 * 500;
-                            t_ptr->cost += 10000;
-                            break;
-                        case 2: // Defender
-                            t_ptr->flags |= (TR_FFALL | TR_RES_LIGHT | TR_SEE_INVIS | TR_FREE_ACT | TR_RES_COLD | TR_RES_ACID | TR_RES_FIRE | TR_REGEN | TR_STEALTH);
-                            t_ptr->tohit += 3;
-                            t_ptr->todam += 3;
-                            t_ptr->toac += 5 + randint(5);
-                            t_ptr->name2 = SN_DF;
-
-                            // the value in p1 is used for stealth
-                            t_ptr->p1 = (int16_t) randint(3);
-                            t_ptr->cost += t_ptr->p1 * 500;
-                            t_ptr->cost += 7500;
-                            break;
-                        case 3:
-                        case 4: // Slay Animal
-                            t_ptr->flags |= TR_SLAY_ANIMAL;
-                            t_ptr->tohit += 2;
-                            t_ptr->todam += 2;
-                            t_ptr->name2 = SN_SA;
-                            t_ptr->cost += 3000;
-                            break;
-                        case 5:
-                        case 6: // Slay Dragon
-                            t_ptr->flags |= TR_SLAY_DRAGON;
-                            t_ptr->tohit += 3;
-                            t_ptr->todam += 3;
-                            t_ptr->name2 = SN_SD;
-                            t_ptr->cost += 4000;
-                            break;
-                        case 7:
-                        case 8: // Slay Evil
-                            t_ptr->flags |= TR_SLAY_EVIL;
-                            t_ptr->tohit += 3;
-                            t_ptr->todam += 3;
-                            t_ptr->name2 = SN_SE;
-                            t_ptr->cost += 4000;
-                            break;
-                        case 9:
-                        case 10: // Slay Undead
-                            t_ptr->flags |= (TR_SEE_INVIS | TR_SLAY_UNDEAD);
-                            t_ptr->tohit += 3;
-                            t_ptr->todam += 3;
-                            t_ptr->name2 = SN_SU;
-                            t_ptr->cost += 5000;
-                            break;
-                        case 11:
-                        case 12:
-                        case 13: // Flame Tongue
-                            t_ptr->flags |= TR_FLAME_TONGUE;
-                            t_ptr->tohit++;
-                            t_ptr->todam += 3;
-                            t_ptr->name2 = SN_FT;
-                            t_ptr->cost += 2000;
-                            break;
-                        case 14:
-                        case 15:
-                        case 16: // Frost Brand
-                            t_ptr->flags |= TR_FROST_BRAND;
-                            t_ptr->tohit++;
-                            t_ptr->todam++;
-                            t_ptr->name2 = SN_FB;
-                            t_ptr->cost += 1200;
-                            break;
-                    }
-                }
+                magicalSword(t_ptr, special, level);
             } else if (magik(cursed)) {
-                t_ptr->tohit -= m_bonus(1, 55, level);
-
-                // Magical damage bonus now proportional to weapon base damage
-                tmp = t_ptr->damage[0] * t_ptr->damage[1];
-                t_ptr->todam -= m_bonus(1, 11 * tmp / 2, tmp * level / 10);
-                t_ptr->flags |= TR_CURSED;
-                t_ptr->cost = 0;
+                cursedSword(t_ptr, level);
             }
             break;
-
         case TV_BOW:
             // always show tohit/todam values if identified
             t_ptr->ident |= ID_SHOW_HITDAM;
+
             if (magik(chance)) {
-                t_ptr->tohit += m_bonus(1, 30, level);
-                t_ptr->todam += m_bonus(1, 20, level); // add damage. -CJS-
+                magicalBow(t_ptr, level);
             } else if (magik(cursed)) {
-                t_ptr->tohit -= m_bonus(1, 50, level);
-                t_ptr->todam -= m_bonus(1, 30, level); // add damage. -CJS-
-                t_ptr->flags |= TR_CURSED;
-                t_ptr->cost = 0;
+                cursedBow(t_ptr, level);
             }
             break;
         case TV_DIGGING:
             // always show tohit/todam values if identified
             t_ptr->ident |= ID_SHOW_HITDAM;
+
             if (magik(chance)) {
-                tmp = randint(3);
-                if (tmp < 3) {
-                    t_ptr->p1 += m_bonus(0, 25, level);
+                if (randint(3) < 3) {
+                    magicalDiggingTool(t_ptr, level);
                 } else {
-                    // a cursed digging tool
-                    t_ptr->p1 = (int16_t) -m_bonus(1, 30, level);
-                    t_ptr->cost = 0;
-                    t_ptr->flags |= TR_CURSED;
+                    cursedDiggingTool(t_ptr, level);
                 }
             }
             break;
         case TV_GLOVES:
             if (magik(chance)) {
-                t_ptr->toac += m_bonus(1, 20, level);
-                if (magik(special)) {
-                    if (randint(2) == 1) {
-                        t_ptr->flags |= TR_FREE_ACT;
-                        t_ptr->name2 = SN_FREE_ACTION;
-                        t_ptr->cost += 1000;
-                    } else {
-                        t_ptr->ident |= ID_SHOW_HITDAM;
-                        t_ptr->tohit += 1 + randint(3);
-                        t_ptr->todam += 1 + randint(3);
-                        t_ptr->name2 = SN_SLAYING;
-                        t_ptr->cost += (t_ptr->tohit + t_ptr->todam) * 250;
-                    }
-                }
+                magicalGloves(t_ptr, special, level);
             } else if (magik(cursed)) {
-                if (magik(special)) {
-                    if (randint(2) == 1) {
-                        t_ptr->flags |= TR_DEX;
-                        t_ptr->name2 = SN_CLUMSINESS;
-                    } else {
-                        t_ptr->flags |= TR_STR;
-                        t_ptr->name2 = SN_WEAKNESS;
-                    }
-                    t_ptr->ident |= ID_SHOW_P1;
-                    t_ptr->p1 = (int16_t) -m_bonus(1, 10, level);
-                }
-                t_ptr->toac -= m_bonus(1, 40, level);
-                t_ptr->flags |= TR_CURSED;
-                t_ptr->cost = 0;
+                cursedGloves(t_ptr, special, level);
             }
             break;
         case TV_BOOTS:
             if (magik(chance)) {
-                t_ptr->toac += m_bonus(1, 20, level);
-                if (magik(special)) {
-                    tmp = randint(12);
-                    if (tmp > 5) {
-                        t_ptr->flags |= TR_FFALL;
-                        t_ptr->name2 = SN_SLOW_DESCENT;
-                        t_ptr->cost += 250;
-                    } else if (tmp == 1) {
-                        t_ptr->flags |= TR_SPEED;
-                        t_ptr->name2 = SN_SPEED;
-                        t_ptr->ident |= ID_SHOW_P1;
-                        t_ptr->p1 = 1;
-                        t_ptr->cost += 5000;
-                    } else // 2 - 5
-                    {
-                        t_ptr->flags |= TR_STEALTH;
-                        t_ptr->ident |= ID_SHOW_P1;
-                        t_ptr->p1 = (int16_t) randint(3);
-                        t_ptr->name2 = SN_STEALTH;
-                        t_ptr->cost += 500;
-                    }
-                }
+                magicalBoots(t_ptr, special, level);
             } else if (magik(cursed)) {
-                tmp = randint(3);
-                if (tmp == 1) {
-                    t_ptr->flags |= TR_SPEED;
-                    t_ptr->name2 = SN_SLOWNESS;
-                    t_ptr->ident |= ID_SHOW_P1;
-                    t_ptr->p1 = -1;
-                } else if (tmp == 2) {
-                    t_ptr->flags |= TR_AGGRAVATE;
-                    t_ptr->name2 = SN_NOISE;
-                } else {
-                    t_ptr->name2 = SN_GREAT_MASS;
-                    t_ptr->weight = (uint16_t) (t_ptr->weight * 5);
-                }
-                t_ptr->cost = 0;
-                t_ptr->toac -= m_bonus(2, 45, level);
-                t_ptr->flags |= TR_CURSED;
+                cursedBoots(t_ptr, level);
             }
             break;
-        case TV_HELM: // Helms
+        case TV_HELM:
+            // give crowns a higher chance for magic
             if (t_ptr->subval >= 6 && t_ptr->subval <= 8) {
-                // give crowns a higher chance for magic
                 chance += (int) (t_ptr->cost / 100);
                 special += special;
             }
+
             if (magik(chance)) {
-                t_ptr->toac += m_bonus(1, 20, level);
-                if (magik(special)) {
-                    if (t_ptr->subval < 6) {
-                        tmp = randint(3);
-                        t_ptr->ident |= ID_SHOW_P1;
-                        if (tmp == 1) {
-                            t_ptr->p1 = (int16_t) randint(2);
-                            t_ptr->flags |= TR_INT;
-                            t_ptr->name2 = SN_INTELLIGENCE;
-                            t_ptr->cost += t_ptr->p1 * 500;
-                        } else if (tmp == 2) {
-                            t_ptr->p1 = (int16_t) randint(2);
-                            t_ptr->flags |= TR_WIS;
-                            t_ptr->name2 = SN_WISDOM;
-                            t_ptr->cost += t_ptr->p1 * 500;
-                        } else {
-                            t_ptr->p1 = (int16_t) (1 + randint(4));
-                            t_ptr->flags |= TR_INFRA;
-                            t_ptr->name2 = SN_INFRAVISION;
-                            t_ptr->cost += t_ptr->p1 * 250;
-                        }
-                    } else {
-                        switch (randint(6)) {
-                            case 1:
-                                t_ptr->ident |= ID_SHOW_P1;
-                                t_ptr->p1 = (int16_t) randint(3);
-                                t_ptr->flags |= (TR_FREE_ACT | TR_CON | TR_DEX | TR_STR);
-                                t_ptr->name2 = SN_MIGHT;
-                                t_ptr->cost += 1000 + t_ptr->p1 * 500;
-                                break;
-                            case 2:
-                                t_ptr->ident |= ID_SHOW_P1;
-                                t_ptr->p1 = (int16_t) randint(3);
-                                t_ptr->flags |= (TR_CHR | TR_WIS);
-                                t_ptr->name2 = SN_LORDLINESS;
-                                t_ptr->cost += 1000 + t_ptr->p1 * 500;
-                                break;
-                            case 3:
-                                t_ptr->ident |= ID_SHOW_P1;
-                                t_ptr->p1 = (int16_t) randint(3);
-                                t_ptr->flags |= (TR_RES_LIGHT | TR_RES_COLD | TR_RES_ACID | TR_RES_FIRE | TR_INT);
-                                t_ptr->name2 = SN_MAGI;
-                                t_ptr->cost += 3000 + t_ptr->p1 * 500;
-                                break;
-                            case 4:
-                                t_ptr->ident |= ID_SHOW_P1;
-                                t_ptr->p1 = (int16_t) randint(3);
-                                t_ptr->flags |= TR_CHR;
-                                t_ptr->name2 = SN_BEAUTY;
-                                t_ptr->cost += 750;
-                                break;
-                            case 5:
-                                t_ptr->ident |= ID_SHOW_P1;
-                                t_ptr->p1 = (int16_t) (5 * (1 + randint(4)));
-                                t_ptr->flags |= (TR_SEE_INVIS | TR_SEARCH);
-                                t_ptr->name2 = SN_SEEING;
-                                t_ptr->cost += 1000 + t_ptr->p1 * 100;
-                                break;
-                            case 6:
-                                t_ptr->flags |= TR_REGEN;
-                                t_ptr->name2 = SN_REGENERATION;
-                                t_ptr->cost += 1500;
-                                break;
-                        }
-                    }
-                }
+                magicalHelms(t_ptr, special, level);
             } else if (magik(cursed)) {
-                t_ptr->toac -= m_bonus(1, 45, level);
-                t_ptr->flags |= TR_CURSED;
-                t_ptr->cost = 0;
-                if (magik(special)) {
-                    switch (randint(7)) {
-                        case 1:
-                            t_ptr->ident |= ID_SHOW_P1;
-                            t_ptr->p1 = (int16_t) -randint(5);
-                            t_ptr->flags |= TR_INT;
-                            t_ptr->name2 = SN_STUPIDITY;
-                            break;
-                        case 2:
-                            t_ptr->ident |= ID_SHOW_P1;
-                            t_ptr->p1 = (int16_t) -randint(5);
-                            t_ptr->flags |= TR_WIS;
-                            t_ptr->name2 = SN_DULLNESS;
-                            break;
-                        case 3:
-                            t_ptr->flags |= TR_BLIND;
-                            t_ptr->name2 = SN_BLINDNESS;
-                            break;
-                        case 4:
-                            t_ptr->flags |= TR_TIMID;
-                            t_ptr->name2 = SN_TIMIDNESS;
-                            break;
-                        case 5:
-                            t_ptr->ident |= ID_SHOW_P1;
-                            t_ptr->p1 = (int16_t) -randint(5);
-                            t_ptr->flags |= TR_STR;
-                            t_ptr->name2 = SN_WEAKNESS;
-                            break;
-                        case 6:
-                            t_ptr->flags |= TR_TELEPORT;
-                            t_ptr->name2 = SN_TELEPORTATION;
-                            break;
-                        case 7:
-                            t_ptr->ident |= ID_SHOW_P1;
-                            t_ptr->p1 = (int16_t) -randint(5);
-                            t_ptr->flags |= TR_CHR;
-                            t_ptr->name2 = SN_UGLINESS;
-                            break;
-                    }
-                }
+                cursedHelms(t_ptr, special, level);
             }
             break;
-        case TV_RING: // Rings
-            switch (t_ptr->subval) {
-                case 0:
-                case 1:
-                case 2:
-                case 3:
-                    if (magik(cursed)) {
-                        t_ptr->p1 = (int16_t) -m_bonus(1, 20, level);
-                        t_ptr->flags |= TR_CURSED;
-                        t_ptr->cost = -t_ptr->cost;
-                    } else {
-                        t_ptr->p1 = (int16_t) m_bonus(1, 10, level);
-                        t_ptr->cost += t_ptr->p1 * 100;
-                    }
-                    break;
-                case 4:
-                    if (magik(cursed)) {
-                        t_ptr->p1 = (int16_t) -randint(3);
-                        t_ptr->flags |= TR_CURSED;
-                        t_ptr->cost = -t_ptr->cost;
-                    } else {
-                        t_ptr->p1 = 1;
-                    }
-                    break;
-                case 5:
-                    t_ptr->p1 = (int16_t) (5 * m_bonus(1, 20, level));
-                    t_ptr->cost += t_ptr->p1 * 50;
-                    if (magik(cursed)) {
-                        t_ptr->p1 = -t_ptr->p1;
-                        t_ptr->flags |= TR_CURSED;
-                        t_ptr->cost = -t_ptr->cost;
-                    }
-                    break;
-                case 19: // Increase damage
-                    t_ptr->todam += m_bonus(1, 20, level);
-                    t_ptr->cost += t_ptr->todam * 100;
-                    if (magik(cursed)) {
-                        t_ptr->todam = -t_ptr->todam;
-                        t_ptr->flags |= TR_CURSED;
-                        t_ptr->cost = -t_ptr->cost;
-                    }
-                    break;
-                case 20: // Increase To-Hit
-                    t_ptr->tohit += m_bonus(1, 20, level);
-                    t_ptr->cost += t_ptr->tohit * 100;
-                    if (magik(cursed)) {
-                        t_ptr->tohit = -t_ptr->tohit;
-                        t_ptr->flags |= TR_CURSED;
-                        t_ptr->cost = -t_ptr->cost;
-                    }
-                    break;
-                case 21: // Protection
-                    t_ptr->toac += m_bonus(1, 20, level);
-                    t_ptr->cost += t_ptr->toac * 100;
-                    if (magik(cursed)) {
-                        t_ptr->toac = -t_ptr->toac;
-                        t_ptr->flags |= TR_CURSED;
-                        t_ptr->cost = -t_ptr->cost;
-                    }
-                    break;
-                case 24:
-                case 25:
-                case 26:
-                case 27:
-                case 28:
-                case 29:
-                    t_ptr->ident |= ID_NOSHOW_P1;
-                    break;
-                case 30: // Slaying
-                    t_ptr->ident |= ID_SHOW_HITDAM;
-                    t_ptr->todam += m_bonus(1, 25, level);
-                    t_ptr->tohit += m_bonus(1, 25, level);
-                    t_ptr->cost += (t_ptr->tohit + t_ptr->todam) * 100;
-                    if (magik(cursed)) {
-                        t_ptr->tohit = -t_ptr->tohit;
-                        t_ptr->todam = -t_ptr->todam;
-                        t_ptr->flags |= TR_CURSED;
-                        t_ptr->cost = -t_ptr->cost;
-                    }
-                    break;
-                default:
-                    break;
-            }
+        case TV_RING:
+            processRings(t_ptr, level, cursed);
             break;
-        case TV_AMULET: // Amulets
-            if (t_ptr->subval < 2) {
-                if (magik(cursed)) {
-                    t_ptr->p1 = (int16_t) -m_bonus(1, 20, level);
-                    t_ptr->flags |= TR_CURSED;
-                    t_ptr->cost = -t_ptr->cost;
-                } else {
-                    t_ptr->p1 = (int16_t) m_bonus(1, 10, level);
-                    t_ptr->cost += t_ptr->p1 * 100;
-                }
-            } else if (t_ptr->subval == 2) {
-                t_ptr->p1 = (int16_t) (5 * m_bonus(1, 25, level));
-                if (magik(cursed)) {
-                    t_ptr->p1 = -t_ptr->p1;
-                    t_ptr->cost = -t_ptr->cost;
-                    t_ptr->flags |= TR_CURSED;
-                } else {
-                    t_ptr->cost += 50 * t_ptr->p1;
-                }
-            } else if (t_ptr->subval == 8) {
-                // amulet of the magi is never cursed
-                t_ptr->p1 = (int16_t) (5 * m_bonus(1, 25, level));
-                t_ptr->cost += 20 * t_ptr->p1;
-            }
+        case TV_AMULET:
+            processAmulets(t_ptr, level, cursed);
             break;
         case TV_LIGHT:
             // Subval should be even for store, odd for dungeon
             // Dungeon found ones will be partially charged
-
             if ((t_ptr->subval % 2) == 1) {
                 t_ptr->p1 = (int16_t) randint(t_ptr->p1);
                 t_ptr->subval -= 1;
             }
             break;
         case TV_WAND:
-            switch (t_ptr->subval) {
-                case 0:
-                    t_ptr->p1 = (int16_t) (randint(10) + 6);
-                    break;
-                case 1:
-                    t_ptr->p1 = (int16_t) (randint(8) + 6);
-                    break;
-                case 2:
-                    t_ptr->p1 = (int16_t) (randint(5) + 6);
-                    break;
-                case 3:
-                    t_ptr->p1 = (int16_t) (randint(8) + 6);
-                    break;
-                case 4:
-                    t_ptr->p1 = (int16_t) (randint(4) + 3);
-                    break;
-                case 5:
-                    t_ptr->p1 = (int16_t) (randint(8) + 6);
-                    break;
-                case 6:
-                    t_ptr->p1 = (int16_t) (randint(20) + 12);
-                    break;
-                case 7:
-                    t_ptr->p1 = (int16_t) (randint(20) + 12);
-                    break;
-                case 8:
-                    t_ptr->p1 = (int16_t) (randint(10) + 6);
-                    break;
-                case 9:
-                    t_ptr->p1 = (int16_t) (randint(12) + 6);
-                    break;
-                case 10:
-                    t_ptr->p1 = (int16_t) (randint(10) + 12);
-                    break;
-                case 11:
-                    t_ptr->p1 = (int16_t) (randint(3) + 3);
-                    break;
-                case 12:
-                    t_ptr->p1 = (int16_t) (randint(8) + 6);
-                    break;
-                case 13:
-                    t_ptr->p1 = (int16_t) (randint(10) + 6);
-                    break;
-                case 14:
-                    t_ptr->p1 = (int16_t) (randint(5) + 3);
-                    break;
-                case 15:
-                    t_ptr->p1 = (int16_t) (randint(5) + 3);
-                    break;
-                case 16:
-                    t_ptr->p1 = (int16_t) (randint(5) + 6);
-                    break;
-                case 17:
-                    t_ptr->p1 = (int16_t) (randint(5) + 4);
-                    break;
-                case 18:
-                    t_ptr->p1 = (int16_t) (randint(8) + 4);
-                    break;
-                case 19:
-                    t_ptr->p1 = (int16_t) (randint(6) + 2);
-                    break;
-                case 20:
-                    t_ptr->p1 = (int16_t) (randint(4) + 2);
-                    break;
-                case 21:
-                    t_ptr->p1 = (int16_t) (randint(8) + 6);
-                    break;
-                case 22:
-                    t_ptr->p1 = (int16_t) (randint(5) + 2);
-                    break;
-                case 23:
-                    t_ptr->p1 = (int16_t) (randint(12) + 12);
-                    break;
-                default:
-                    break;
+            magicAmount = wandMagic(t_ptr->subval);
+            if (magicAmount != -1) {
+                t_ptr->p1 = (uint16_t) magicAmount;
             }
             break;
         case TV_STAFF:
-            switch (t_ptr->subval) {
-                case 0:
-                    t_ptr->p1 = (int16_t) (randint(20) + 12);
-                    break;
-                case 1:
-                    t_ptr->p1 = (int16_t) (randint(8) + 6);
-                    break;
-                case 2:
-                    t_ptr->p1 = (int16_t) (randint(5) + 6);
-                    break;
-                case 3:
-                    t_ptr->p1 = (int16_t) (randint(20) + 12);
-                    break;
-                case 4:
-                    t_ptr->p1 = (int16_t) (randint(15) + 6);
-                    break;
-                case 5:
-                    t_ptr->p1 = (int16_t) (randint(4) + 5);
-                    break;
-                case 6:
-                    t_ptr->p1 = (int16_t) (randint(5) + 3);
-                    break;
-                case 7:
-                    t_ptr->p1 = (int16_t) (randint(3) + 1);
-                    t_ptr->level = 10;
-                    break;
-                case 8:
-                    t_ptr->p1 = (int16_t) (randint(3) + 1);
-                    break;
-                case 9:
-                    t_ptr->p1 = (int16_t) (randint(5) + 6);
-                    break;
-                case 10:
-                    t_ptr->p1 = (int16_t) (randint(10) + 12);
-                    break;
-                case 11:
-                    t_ptr->p1 = (int16_t) (randint(5) + 6);
-                    break;
-                case 12:
-                    t_ptr->p1 = (int16_t) (randint(5) + 6);
-                    break;
-                case 13:
-                    t_ptr->p1 = (int16_t) (randint(5) + 6);
-                    break;
-                case 14:
-                    t_ptr->p1 = (int16_t) (randint(10) + 12);
-                    break;
-                case 15:
-                    t_ptr->p1 = (int16_t) (randint(3) + 4);
-                    break;
-                case 16:
-                    t_ptr->p1 = (int16_t) (randint(5) + 6);
-                    break;
-                case 17:
-                    t_ptr->p1 = (int16_t) (randint(5) + 6);
-                    break;
-                case 18:
-                    t_ptr->p1 = (int16_t) (randint(3) + 4);
-                    break;
-                case 19:
-                    t_ptr->p1 = (int16_t) (randint(10) + 12);
-                    break;
-                case 20:
-                    t_ptr->p1 = (int16_t) (randint(3) + 4);
-                    break;
-                case 21:
-                    t_ptr->p1 = (int16_t) (randint(3) + 4);
-                    break;
-                case 22:
-                    t_ptr->p1 = (int16_t) (randint(10) + 6);
-                    t_ptr->level = 5;
-                    break;
-                default:
-                    break;
+            magicAmount = staffMagic(t_ptr->subval);
+            if (magicAmount != -1) {
+                t_ptr->p1 = (uint16_t) magicAmount;
+            }
+
+            // Change the level the items was first found on value
+            if (t_ptr->subval == 7) {
+                t_ptr->level = 10;
+            } else if (t_ptr->subval == 22) {
+                t_ptr->level = 5;
             }
             break;
         case TV_CLOAK:
             if (magik(chance)) {
-                if (magik(special)) {
-                    if (randint(2) == 1) {
-                        t_ptr->name2 = SN_PROTECTION;
-                        t_ptr->toac += m_bonus(2, 40, level);
-                        t_ptr->cost += 250;
-                    } else {
-                        t_ptr->toac += m_bonus(1, 20, level);
-                        t_ptr->ident |= ID_SHOW_P1;
-                        t_ptr->p1 = (int16_t) randint(3);
-                        t_ptr->flags |= TR_STEALTH;
-                        t_ptr->name2 = SN_STEALTH;
-                        t_ptr->cost += 500;
-                    }
-                } else {
-                    t_ptr->toac += m_bonus(1, 20, level);
-                }
+                magicalCloak(t_ptr, special, level);
             } else if (magik(cursed)) {
-                tmp = randint(3);
-                if (tmp == 1) {
-                    t_ptr->flags |= TR_AGGRAVATE;
-                    t_ptr->name2 = SN_IRRITATION;
-                    t_ptr->toac -= m_bonus(1, 10, level);
-                    t_ptr->ident |= ID_SHOW_HITDAM;
-                    t_ptr->tohit -= m_bonus(1, 10, level);
-                    t_ptr->todam -= m_bonus(1, 10, level);
-                    t_ptr->cost = 0;
-                } else if (tmp == 2) {
-                    t_ptr->name2 = SN_VULNERABILITY;
-                    t_ptr->toac -= m_bonus(10, 100, level + 50);
-                    t_ptr->cost = 0;
-                } else {
-                    t_ptr->name2 = SN_ENVELOPING;
-                    t_ptr->toac -= m_bonus(1, 10, level);
-                    t_ptr->ident |= ID_SHOW_HITDAM;
-                    t_ptr->tohit -= m_bonus(2, 40, level + 10);
-                    t_ptr->todam -= m_bonus(2, 40, level + 10);
-                    t_ptr->cost = 0;
-                }
-                t_ptr->flags |= TR_CURSED;
+                cursedCloak(t_ptr, level);
             }
             break;
         case TV_CHEST:
-            switch (randint(level + 4)) {
-                case 1:
-                    t_ptr->flags = 0;
-                    t_ptr->name2 = SN_EMPTY;
-                    break;
-                case 2:
-                    t_ptr->flags |= CH_LOCKED;
-                    t_ptr->name2 = SN_LOCKED;
-                    break;
-                case 3:
-                case 4:
-                    t_ptr->flags |= (CH_LOSE_STR | CH_LOCKED);
-                    t_ptr->name2 = SN_POISON_NEEDLE;
-                    break;
-                case 5:
-                case 6:
-                    t_ptr->flags |= (CH_POISON | CH_LOCKED);
-                    t_ptr->name2 = SN_POISON_NEEDLE;
-                    break;
-                case 7:
-                case 8:
-                case 9:
-                    t_ptr->flags |= (CH_PARALYSED | CH_LOCKED);
-                    t_ptr->name2 = SN_GAS_TRAP;
-                    break;
-                case 10:
-                case 11:
-                    t_ptr->flags |= (CH_EXPLODE | CH_LOCKED);
-                    t_ptr->name2 = SN_EXPLOSION_DEVICE;
-                    break;
-                case 12:
-                case 13:
-                case 14:
-                    t_ptr->flags |= (CH_SUMMON | CH_LOCKED);
-                    t_ptr->name2 = SN_SUMMONING_RUNES;
-                    break;
-                case 15:
-                case 16:
-                case 17:
-                    t_ptr->flags |= (CH_PARALYSED | CH_POISON | CH_LOSE_STR | CH_LOCKED);
-                    t_ptr->name2 = SN_MULTIPLE_TRAPS;
-                    break;
-                default:
-                    t_ptr->flags |= (CH_SUMMON | CH_EXPLODE | CH_LOCKED);
-                    t_ptr->name2 = SN_MULTIPLE_TRAPS;
-                    break;
-            }
+            magicalChests(t_ptr, level);
             break;
         case TV_SLING_AMMO:
         case TV_SPIKE:
@@ -778,78 +919,34 @@ void magic_treasure(int x, int level) {
                 t_ptr->ident |= ID_SHOW_HITDAM;
 
                 if (magik(chance)) {
-                    t_ptr->tohit += m_bonus(1, 35, level);
-                    t_ptr->todam += m_bonus(1, 35, level);
-
-                    // see comment for weapons
-                    if (magik(3 * special / 2)) {
-                        switch (randint(10)) {
-                            case 1:
-                            case 2:
-                            case 3:
-                                t_ptr->name2 = SN_SLAYING;
-                                t_ptr->tohit += 5;
-                                t_ptr->todam += 5;
-                                t_ptr->cost += 20;
-                                break;
-                            case 4:
-                            case 5:
-                                t_ptr->flags |= TR_FLAME_TONGUE;
-                                t_ptr->tohit += 2;
-                                t_ptr->todam += 4;
-                                t_ptr->name2 = SN_FIRE;
-                                t_ptr->cost += 25;
-                                break;
-                            case 6:
-                            case 7:
-                                t_ptr->flags |= TR_SLAY_EVIL;
-                                t_ptr->tohit += 3;
-                                t_ptr->todam += 3;
-                                t_ptr->name2 = SN_SLAY_EVIL;
-                                t_ptr->cost += 25;
-                                break;
-                            case 8:
-                            case 9:
-                                t_ptr->flags |= TR_SLAY_ANIMAL;
-                                t_ptr->tohit += 2;
-                                t_ptr->todam += 2;
-                                t_ptr->name2 = SN_SLAY_ANIMAL;
-                                t_ptr->cost += 30;
-                                break;
-                            case 10:
-                                t_ptr->flags |= TR_SLAY_DRAGON;
-                                t_ptr->tohit += 3;
-                                t_ptr->todam += 3;
-                                t_ptr->name2 = SN_DRAGON_SLAYING;
-                                t_ptr->cost += 35;
-                                break;
-                        }
-                    }
+                    magicalProjectiles(t_ptr, special, level);
                 } else if (magik(cursed)) {
-                    t_ptr->tohit -= m_bonus(5, 55, level);
-                    t_ptr->todam -= m_bonus(5, 55, level);
-                    t_ptr->flags |= TR_CURSED;
-                    t_ptr->cost = 0;
+                    cursedProjectiles(t_ptr, level);
                 }
             }
 
             t_ptr->number = 0;
+
             for (int i = 0; i < 7; i++) {
                 t_ptr->number += randint(6);
             }
+
             if (missile_ctr == MAX_SHORT) {
                 missile_ctr = -MAX_SHORT - 1;
             } else {
                 missile_ctr++;
             }
+
             t_ptr->p1 = missile_ctr;
             break;
         case TV_FOOD:
+            // make sure all food rations have the same level
             if (t_ptr->subval == 90) {
-                // make sure all food rations have the same level
                 t_ptr->level = 0;
-            } else if (t_ptr->subval == 92) {
-                // give all Elvish waybread the same level
+            }
+
+            // give all Elvish waybread the same level
+            if (t_ptr->subval == 92) {
                 t_ptr->level = 6;
             }
             break;
@@ -868,13 +965,12 @@ void magic_treasure(int x, int level) {
                 t_ptr->level = 5;
             }
             break;
-        case TV_POTION1: // potions
+        case TV_POTION1:
             // cure light
             if (t_ptr->subval == 76) {
                 t_ptr->level = 0;
             }
             break;
-
         default:
             break;
     }
@@ -904,52 +1000,56 @@ void set_options() {
     int max;
     for (max = 0; options[max].o_prompt != 0; max++) {
         vtype string;
-
         (void) sprintf(string, "%-38s: %s", options[max].o_prompt, (*options[max].o_var ? "yes" : "no "));
         prt(string, max + 1, 0);
     }
     erase_line(max + 1, 0);
 
-    int i = 0;
-    for (;;) {
-        move_cursor(i + 1, 40);
+    int optionID = 0;
+    while (true) {
+        move_cursor(optionID + 1, 40);
+
         switch (inkey()) {
             case ESCAPE:
                 return;
             case '-':
-                if (i > 0) {
-                    i--;
+                if (optionID > 0) {
+                    optionID--;
                 } else {
-                    i = max - 1;
+                    optionID = max - 1;
                 }
                 break;
             case ' ':
             case '\n':
             case '\r':
-                if (i + 1 < max) {
-                    i++;
+                if (optionID + 1 < max) {
+                    optionID++;
                 } else {
-                    i = 0;
+                    optionID = 0;
                 }
                 break;
             case 'y':
             case 'Y':
-                put_buffer("yes", i + 1, 40);
-                *options[i].o_var = true;
-                if (i + 1 < max) {
-                    i++;
+                put_buffer("yes", optionID + 1, 40);
+
+                *options[optionID].o_var = true;
+
+                if (optionID + 1 < max) {
+                    optionID++;
                 } else {
-                    i = 0;
+                    optionID = 0;
                 }
                 break;
             case 'n':
             case 'N':
-                put_buffer("no ", i + 1, 40);
-                *options[i].o_var = false;
-                if (i + 1 < max) {
-                    i++;
+                put_buffer("no ", optionID + 1, 40);
+
+                *options[optionID].o_var = false;
+
+                if (optionID + 1 < max) {
+                    optionID++;
                 } else {
-                    i = 0;
+                    optionID = 0;
                 }
                 break;
             default:
