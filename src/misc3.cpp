@@ -23,27 +23,28 @@ void place_trap(int y, int x, int subval) {
 // Places rubble at location y, x -RAK-
 void place_rubble(int y, int x) {
     int cur_pos = popt();
-    cave_type *cave_ptr = &cave[y][x];
-    cave_ptr->tptr = (uint8_t) cur_pos;
-    cave_ptr->fval = BLOCKED_FLOOR;
+    cave[y][x].tptr = (uint8_t) cur_pos;
+    cave[y][x].fval = BLOCKED_FLOOR;
     invcopy(&t_list[cur_pos], OBJ_RUBBLE);
 }
 
 // Places a treasure (Gold or Gems) at given row, column -RAK-
 void place_gold(int y, int x) {
     int cur_pos = popt();
+
     int i = ((randint(dun_level + 2) + 2) / 2) - 1;
+
     if (randint(OBJ_GREAT) == 1) {
         i += randint(dun_level + 1);
     }
+
     if (i >= MAX_GOLD) {
         i = MAX_GOLD - 1;
     }
+
     cave[y][x].tptr = (uint8_t) cur_pos;
     invcopy(&t_list[cur_pos], OBJ_GOLD_LIST + i);
-
-    inven_type *t_ptr = &t_list[cur_pos];
-    t_ptr->cost += (8L * (int32_t) randint((int) t_ptr->cost)) + randint(8);
+    t_list[cur_pos].cost += (8L * (int32_t) randint((int) t_list[cur_pos].cost)) + randint(8);
 
     if (cave[y][x].cptr == 1) {
         msg_print("You feel something roll beneath your feet.");
@@ -65,7 +66,7 @@ int get_obj_num(int level, bool must_be_small) {
         }
     }
 
-    int i;
+    int objectID;
 
     // This code has been added to make it slightly more likely to get the
     // higher level objects.  Originally a uniform distribution over all
@@ -74,40 +75,47 @@ int get_obj_num(int level, bool must_be_small) {
     // and 1/2n are 0th level.
     do {
         if (randint(2) == 1) {
-            i = randint(t_level[level]) - 1;
+            objectID = randint(t_level[level]) - 1;
         } else {
             // Choose three objects, pick the highest level.
+            objectID = randint(t_level[level]) - 1;
 
-            i = randint(t_level[level]) - 1;
             int j = randint(t_level[level]) - 1;
-            if (i < j) {
-                i = j;
+
+            if (objectID < j) {
+                objectID = j;
             }
+
             j = randint(t_level[level]) - 1;
-            if (i < j) {
-                i = j;
+
+            if (objectID < j) {
+                objectID = j;
             }
-            j = object_list[sorted_objects[i]].level;
-            if (j == 0) {
-                i = randint(t_level[0]) - 1;
+
+            int foundLevel = object_list[sorted_objects[objectID]].level;
+
+            if (foundLevel == 0) {
+                objectID = randint(t_level[0]) - 1;
             } else {
-                i = randint(t_level[j] - t_level[j - 1]) - 1 + t_level[j - 1];
+                objectID = randint(t_level[foundLevel] - t_level[foundLevel - 1]) - 1 + t_level[foundLevel - 1];
             }
         }
-    } while ((must_be_small) && (set_large(&object_list[sorted_objects[i]])));
+    } while (must_be_small && set_large(&object_list[sorted_objects[objectID]]));
 
-    return i;
+    return objectID;
 }
 
 // Places an object at given row, column co-ordinate -RAK-
 void place_object(int y, int x, bool must_be_small) {
     int cur_pos = popt();
+
     cave[y][x].tptr = (uint8_t) cur_pos;
 
-    // split this line up to avoid a reported compiler bug
-    int tmp = get_obj_num(dun_level, must_be_small);
-    invcopy(&t_list[cur_pos], sorted_objects[tmp]);
+    int objectID = get_obj_num(dun_level, must_be_small);
+    invcopy(&t_list[cur_pos], sorted_objects[objectID]);
+
     magic_treasure(cur_pos, dun_level);
+
     if (cave[y][x].cptr == 1) {
         msg_print("You feel something roll beneath your feet."); // -CJS-
     }
@@ -115,33 +123,35 @@ void place_object(int y, int x, bool must_be_small) {
 
 // Allocates an object for tunnels and rooms -RAK-
 void alloc_object(bool (*alloc_set)(int), int typ, int num) {
-    for (int k = 0; k < num; k++) {
-        int i, j;
+    int y, x;
 
+    for (int k = 0; k < num; k++) {
         // don't put an object beneath the player, this could cause
         // problems if player is standing under rubble, or on a trap.
         do {
-            i = randint(cur_height) - 1;
-            j = randint(cur_width) - 1;
-        } while (!(*alloc_set)(cave[i][j].fval) || cave[i][j].tptr != 0 || (i == char_row && j == char_col));
+            y = randint(cur_height) - 1;
+            x = randint(cur_width) - 1;
+        } while (!(*alloc_set)(cave[y][x].fval) || cave[y][x].tptr != 0 || (y == char_row && x == char_col));
 
-        // NOTE: typ == 2 is not used - used to be visible traps.
-        if (typ < 4) {
-            if (typ == 1) {
-                // typ == 1
-                place_trap(i, j, randint(MAX_TRAP) - 1);
-            } else {
-                // typ == 3
-                place_rubble(i, j);
-            }
-        } else {
-            if (typ == 4) {
-                // typ == 4
-                place_gold(i, j);
-            } else {
-                // typ == 5
-                place_object(i, j, false);
-            }
+        switch (typ) {
+            case 1:
+                place_trap(y, x, randint(MAX_TRAP) - 1);
+                break;
+            case 2:
+                // NOTE: typ == 2 is not used - used to be visible traps.
+                // FIXME: is this correct, typ == 2 was not handled directly,
+                // FIXME: so was caught by typ == 3 -MRC-
+            case 3:
+                place_rubble(y, x);
+                break;
+            case 4:
+                place_gold(y, x);
+                break;
+            case 5:
+                place_object(y, x, false);
+                break;
+            default:
+                break;
         }
     }
 }
@@ -153,9 +163,7 @@ void random_object(int y, int x, int num) {
             int j = y - 3 + randint(5);
             int k = x - 4 + randint(7);
 
-            cave_type *cave_ptr = &cave[j][k];
-
-            if (in_bounds(j, k) && cave_ptr->fval <= MAX_CAVE_FLOOR && cave_ptr->tptr == 0) {
+            if (in_bounds(j, k) && cave[j][k].fval <= MAX_CAVE_FLOOR && cave[j][k].tptr == 0) {
                 if (randint(100) < 75) {
                     place_object(j, k, false);
                 } else {
@@ -170,27 +178,28 @@ void random_object(int y, int x, int num) {
 }
 
 // Converts stat num into string -RAK-
-void cnv_stat(uint8_t stat, char *out_val) {
-    if (stat > 18) {
-        int part1 = 18;
-        int part2 = stat - 18;
-
-        if (part2 == 100) {
-            (void) strcpy(out_val, "18/100");
-        } else {
-            (void) sprintf(out_val, " %2d/%02d", part1, part2);
-        }
-    } else {
-        (void) sprintf(out_val, "%6d", stat);
+void cnv_stat(uint8_t stat, char *str) {
+    if (stat <= 18) {
+        (void) sprintf(str, "%6d", stat);
     }
+
+    int part1 = 18;
+    int part2 = stat - 18;
+
+    if (part2 == 100) {
+        (void) strcpy(str, "18/100");
+        return;
+    }
+
+    (void) sprintf(str, " %2d/%02d", part1, part2);
 }
 
 // Print character stat in given row, column -RAK-
 void prt_stat(int stat) {
-    stat_type out_val1;
-    cnv_stat(py.stats.use_stat[stat], out_val1);
+    stat_type text;
+    cnv_stat(py.stats.use_stat[stat], text);
     put_buffer(stat_names[stat], 6 + stat, STAT_COLUMN);
-    put_buffer(out_val1, 6 + stat, STAT_COLUMN + 6);
+    put_buffer(text, 6 + stat, STAT_COLUMN + 6);
 }
 
 // Print character info in given row, column -RAK-
@@ -202,37 +211,37 @@ void prt_field(const char *info, int row, int column) {
 
 // Print long number with header at given row, column
 static void prt_lnum(const char *header, int32_t num, int row, int column) {
-    vtype out_val;
-    (void) sprintf(out_val, "%s: %6d", header, num);
-    put_buffer(out_val, row, column);
+    vtype str;
+    (void) sprintf(str, "%s: %6d", header, num);
+    put_buffer(str, row, column);
 }
 
 // Print long number (7 digits of space) with header at given row, column
 static void prt_7lnum(const char *header, int32_t num, int row, int column) {
-    vtype out_val;
-    (void) sprintf(out_val, "%s: %7d", header, num);
-    put_buffer(out_val, row, column);
+    vtype str;
+    (void) sprintf(str, "%s: %7d", header, num);
+    put_buffer(str, row, column);
 }
 
 // Print number with header at given row, column -RAK-
 static void prt_num(const char *header, int num, int row, int column) {
-    vtype out_val;
-    (void) sprintf(out_val, "%s: %6d", header, num);
-    put_buffer(out_val, row, column);
+    vtype str;
+    (void) sprintf(str, "%s: %6d", header, num);
+    put_buffer(str, row, column);
 }
 
 // Print long number at given row, column
 static void prt_long(int32_t num, int row, int column) {
-    vtype out_val;
-    (void) sprintf(out_val, "%6d", num);
-    put_buffer(out_val, row, column);
+    vtype str;
+    (void) sprintf(str, "%6d", num);
+    put_buffer(str, row, column);
 }
 
 // Print number at given row, column -RAK-
 static void prt_int(int num, int row, int column) {
-    vtype out_val;
-    (void) sprintf(out_val, "%6d", num);
-    put_buffer(out_val, row, column);
+    vtype str;
+    (void) sprintf(str, "%6d", num);
+    put_buffer(str, row, column);
 }
 
 // Adjustment for wisdom/intelligence -JWT-
@@ -265,51 +274,59 @@ int chr_adj() {
 
     if (charisma > 117) {
         return 90;
-    } else if (charisma > 107) {
+    }
+
+    if (charisma > 107) {
         return 92;
-    } else if (charisma > 87) {
+    }
+
+    if (charisma > 87) {
         return 94;
-    } else if (charisma > 67) {
+    }
+
+    if (charisma > 67) {
         return 96;
-    } else if (charisma > 18) {
+    }
+
+    if (charisma > 18) {
         return 98;
-    } else {
-        switch (charisma) {
-            case 18:
-                return 100;
-            case 17:
-                return 101;
-            case 16:
-                return 102;
-            case 15:
-                return 103;
-            case 14:
-                return 104;
-            case 13:
-                return 106;
-            case 12:
-                return 108;
-            case 11:
-                return 110;
-            case 10:
-                return 112;
-            case 9:
-                return 114;
-            case 8:
-                return 116;
-            case 7:
-                return 118;
-            case 6:
-                return 120;
-            case 5:
-                return 122;
-            case 4:
-                return 125;
-            case 3:
-                return 130;
-            default:
-                return 100;
-        }
+    }
+
+    switch (charisma) {
+        case 18:
+            return 100;
+        case 17:
+            return 101;
+        case 16:
+            return 102;
+        case 15:
+            return 103;
+        case 14:
+            return 104;
+        case 13:
+            return 106;
+        case 12:
+            return 108;
+        case 11:
+            return 110;
+        case 10:
+            return 112;
+        case 9:
+            return 114;
+        case 8:
+            return 116;
+        case 7:
+            return 118;
+        case 6:
+            return 120;
+        case 5:
+            return 122;
+        case 4:
+            return 125;
+        case 3:
+            return 130;
+        default:
+            return 100;
     }
 }
 
@@ -319,17 +336,25 @@ int con_adj() {
 
     if (con < 7) {
         return (con - 7);
-    } else if (con < 17) {
-        return 0;
-    } else if (con == 17) {
-        return 1;
-    } else if (con < 94) {
-        return 2;
-    } else if (con < 117) {
-        return 3;
-    } else {
-        return 4;
     }
+
+    if (con < 17) {
+        return 0;
+    }
+
+    if (con == 17) {
+        return 1;
+    }
+
+    if (con < 94) {
+        return 2;
+    }
+
+    if (con < 117) {
+        return 3;
+    }
+
+    return 4;
 }
 
 char *title_string() {
@@ -451,56 +476,70 @@ void prt_state() {
 
     if (py.flags.paralysis > 1) {
         put_buffer("Paralysed", 23, 38);
-    } else if (PY_REST & py.flags.status) {
-        char tmp[16];
+        return;
+    }
+
+    if (PY_REST & py.flags.status) {
+        char restString[16];
 
         if (py.flags.rest < 0) {
-            (void) strcpy(tmp, "Rest *");
+            (void) strcpy(restString, "Rest *");
         } else if (display_counts) {
-            (void) sprintf(tmp, "Rest %-5d", py.flags.rest);
+            (void) sprintf(restString, "Rest %-5d", py.flags.rest);
         } else {
-            (void) strcpy(tmp, "Rest");
+            (void) strcpy(restString, "Rest");
         }
-        put_buffer(tmp, 23, 38);
-    } else if (command_count > 0) {
-        char tmp[16];
+
+        put_buffer(restString, 23, 38);
+
+        return;
+    }
+
+    if (command_count > 0) {
+        char repeatString[16];
 
         if (display_counts) {
-            (void) sprintf(tmp, "Repeat %-3d", command_count);
+            (void) sprintf(repeatString, "Repeat %-3d", command_count);
         } else {
-            (void) strcpy(tmp, "Repeat");
+            (void) strcpy(repeatString, "Repeat");
         }
 
         py.flags.status |= PY_REPEAT;
 
-        put_buffer(tmp, 23, 38);
+        put_buffer(repeatString, 23, 38);
+
         if (PY_SEARCH & py.flags.status) {
             put_buffer("Search", 23, 38);
         }
-    } else if (PY_SEARCH & py.flags.status) {
-        put_buffer("Searching", 23, 38);
-    } else {
-        // "repeat 999" is 10 characters
-        put_buffer(&blank_string[BLANK_LENGTH - 10], 23, 38);
+
+        return;
     }
+
+    if (PY_SEARCH & py.flags.status) {
+        put_buffer("Searching", 23, 38);
+        return;
+    }
+
+    // "repeat 999" is 10 characters
+    put_buffer(&blank_string[BLANK_LENGTH - 10], 23, 38);
 }
 
 // Prints the speed of a character. -CJS-
 void prt_speed() {
-    int i = py.flags.speed;
+    int speed = py.flags.speed;
 
     // Search mode.
     if (PY_SEARCH & py.flags.status) {
-        i--;
+        speed--;
     }
 
-    if (i > 1) {
+    if (speed > 1) {
         put_buffer("Very Slow", 23, 49);
-    } else if (i == 1) {
+    } else if (speed == 1) {
         put_buffer("Slow     ", 23, 49);
-    } else if (i == 0) {
+    } else if (speed == 0) {
         put_buffer(&blank_string[BLANK_LENGTH - 9], 23, 49);
-    } else if (i == -1) {
+    } else if (speed == -1) {
         put_buffer("Fast     ", 23, 49);
     } else {
         put_buffer("Very Fast", 23, 49);
@@ -535,30 +574,31 @@ void prt_winner() {
 }
 
 uint8_t modify_stat(int stat, int16_t amount) {
-    uint8_t tmp_stat = py.stats.cur_stat[stat];
+    uint8_t newStat = py.stats.cur_stat[stat];
+
     int loop = (amount < 0 ? -amount : amount);
 
     for (int i = 0; i < loop; i++) {
         if (amount > 0) {
-            if (tmp_stat < 18) {
-                tmp_stat++;
-            } else if (tmp_stat < 108) {
-                tmp_stat += 10;
+            if (newStat < 18) {
+                newStat++;
+            } else if (newStat < 108) {
+                newStat += 10;
             } else {
-                tmp_stat = 118;
+                newStat = 118;
             }
         } else {
-            if (tmp_stat > 27) {
-                tmp_stat -= 10;
-            } else if (tmp_stat > 18) {
-                tmp_stat = 18;
-            } else if (tmp_stat > 3) {
-                tmp_stat--;
+            if (newStat > 27) {
+                newStat -= 10;
+            } else if (newStat > 18) {
+                newStat = 18;
+            } else if (newStat > 3) {
+                newStat--;
             }
         }
     }
 
-    return tmp_stat;
+    return newStat;
 }
 
 // Set the value of the stat which is actually used. -CJS-
@@ -583,68 +623,78 @@ void set_use_stat(int stat) {
 
 // Increases a stat by one randomized level -RAK-
 bool inc_stat(int stat) {
-    int tmp_stat = py.stats.cur_stat[stat];
-    if (tmp_stat < 118) {
-        if (tmp_stat < 18) {
-            tmp_stat++;
-        } else if (tmp_stat < 116) {
-            // stat increases by 1/6 to 1/3 of difference from max
-            int gain = ((118 - tmp_stat) / 3 + 1) >> 1;
-            tmp_stat += randint(gain) + gain;
-        } else {
-            tmp_stat++;
-        }
+    int newStat = py.stats.cur_stat[stat];
 
-        py.stats.cur_stat[stat] = (uint8_t) tmp_stat;
-
-        if (tmp_stat > py.stats.max_stat[stat]) {
-            py.stats.max_stat[stat] = (uint8_t) tmp_stat;
-        }
-        set_use_stat(stat);
-        prt_stat(stat);
-        return true;
+    if (newStat >= 118) {
+        return false;
     }
 
-    return false;
+    if (newStat < 18) {
+        newStat++;
+    } else if (newStat < 116) {
+        // stat increases by 1/6 to 1/3 of difference from max
+        int gain = ((118 - newStat) / 3 + 1) >> 1;
+
+        newStat += randint(gain) + gain;
+    } else {
+        newStat++;
+    }
+
+    py.stats.cur_stat[stat] = (uint8_t) newStat;
+
+    if (newStat > py.stats.max_stat[stat]) {
+        py.stats.max_stat[stat] = (uint8_t) newStat;
+    }
+
+    set_use_stat(stat);
+    prt_stat(stat);
+
+    return true;
 }
 
 // Decreases a stat by one randomized level -RAK-
 bool dec_stat(int stat) {
-    int tmp_stat = py.stats.cur_stat[stat];
-    if (tmp_stat > 3) {
-        if (tmp_stat < 19) {
-            tmp_stat--;
-        } else if (tmp_stat < 117) {
-            int loss = (((118 - tmp_stat) >> 1) + 1) >> 1;
-            tmp_stat += -randint(loss) - loss;
-            if (tmp_stat < 18) {
-                tmp_stat = 18;
-            }
-        } else {
-            tmp_stat--;
-        }
+    int newStat = py.stats.cur_stat[stat];
 
-        py.stats.cur_stat[stat] = (uint8_t) tmp_stat;
-        set_use_stat(stat);
-        prt_stat(stat);
-        return true;
+    if (newStat <= 3) {
+        return false;
     }
 
-    return false;
+    if (newStat < 19) {
+        newStat--;
+    } else if (newStat < 117) {
+        int loss = (((118 - newStat) >> 1) + 1) >> 1;
+        newStat += -randint(loss) - loss;
+
+        if (newStat < 18) {
+            newStat = 18;
+        }
+    } else {
+        newStat--;
+    }
+
+    py.stats.cur_stat[stat] = (uint8_t) newStat;
+
+    set_use_stat(stat);
+    prt_stat(stat);
+
+    return true;
 }
 
 // Restore a stat.  Return true only if this actually makes a difference.
 bool res_stat(int stat) {
-    int i = py.stats.max_stat[stat] - py.stats.cur_stat[stat];
+    int newStat = py.stats.max_stat[stat] - py.stats.cur_stat[stat];
 
-    if (i) {
-        py.stats.cur_stat[stat] += i;
-        set_use_stat(stat);
-        prt_stat(stat);
-        return true;
+    if (newStat == 0) {
+        return false;
     }
 
-    return false;
+    py.stats.cur_stat[stat] += newStat;
+
+    set_use_stat(stat);
+    prt_stat(stat);
+
+    return true;
 }
 
 // Boost a stat artificially (by wearing something). If the display
@@ -662,41 +712,41 @@ void bst_stat(int stat, int amount) {
 int tohit_adj() {
     int total;
 
-    int stat = py.stats.use_stat[A_DEX];
-    if (stat < 4) {
+    int dexterity = py.stats.use_stat[A_DEX];
+    if (dexterity < 4) {
         total = -3;
-    } else if (stat < 6) {
+    } else if (dexterity < 6) {
         total = -2;
-    } else if (stat < 8) {
+    } else if (dexterity < 8) {
         total = -1;
-    } else if (stat < 16) {
+    } else if (dexterity < 16) {
         total = 0;
-    } else if (stat < 17) {
+    } else if (dexterity < 17) {
         total = 1;
-    } else if (stat < 18) {
+    } else if (dexterity < 18) {
         total = 2;
-    } else if (stat < 69) {
+    } else if (dexterity < 69) {
         total = 3;
-    } else if (stat < 118) {
+    } else if (dexterity < 118) {
         total = 4;
     } else {
         total = 5;
     }
 
-    stat = py.stats.use_stat[A_STR];
-    if (stat < 4) {
+    int strength = py.stats.use_stat[A_STR];
+    if (strength < 4) {
         total -= 3;
-    } else if (stat < 5) {
+    } else if (strength < 5) {
         total -= 2;
-    } else if (stat < 7) {
+    } else if (strength < 7) {
         total -= 1;
-    } else if (stat < 18) {
+    } else if (strength < 18) {
         total -= 0;
-    } else if (stat < 94) {
+    } else if (strength < 94) {
         total += 1;
-    } else if (stat < 109) {
+    } else if (strength < 109) {
         total += 2;
-    } else if (stat < 117) {
+    } else if (strength < 117) {
         total += 3;
     } else {
         total += 4;
@@ -790,7 +840,6 @@ int todam_adj() {
 
 // Prints character-screen info -RAK-
 void prt_stat_block() {
-    struct player_type::misc *m_ptr = &py.misc;
     prt_field(race[py.misc.prace].trace, 2, STAT_COLUMN);
     prt_field(classes[py.misc.pclass].title, 3, STAT_COLUMN);
     prt_field(title_string(), 4, STAT_COLUMN);
@@ -799,13 +848,13 @@ void prt_stat_block() {
         prt_stat(i);
     }
 
-    prt_num("LEV ", (int) m_ptr->lev, 13, STAT_COLUMN);
-    prt_lnum("EXP ", m_ptr->exp, 14, STAT_COLUMN);
-    prt_num("MANA", m_ptr->cmana, 15, STAT_COLUMN);
-    prt_num("MHP ", m_ptr->mhp, 16, STAT_COLUMN);
-    prt_num("CHP ", m_ptr->chp, 17, STAT_COLUMN);
-    prt_num("AC  ", m_ptr->dis_ac, 19, STAT_COLUMN);
-    prt_lnum("GOLD", m_ptr->au, 20, STAT_COLUMN);
+    prt_num("LEV ", (int) py.misc.lev, 13, STAT_COLUMN);
+    prt_lnum("EXP ", py.misc.exp, 14, STAT_COLUMN);
+    prt_num("MANA", py.misc.cmana, 15, STAT_COLUMN);
+    prt_num("MHP ", py.misc.mhp, 16, STAT_COLUMN);
+    prt_num("CHP ", py.misc.chp, 17, STAT_COLUMN);
+    prt_num("AC  ", py.misc.dis_ac, 19, STAT_COLUMN);
+    prt_lnum("GOLD", py.misc.au, 20, STAT_COLUMN);
     prt_winner();
 
     uint32_t status = py.flags.status;
@@ -813,24 +862,30 @@ void prt_stat_block() {
     if ((PY_HUNGRY | PY_WEAK) & status) {
         prt_hunger();
     }
+
     if (PY_BLIND & status) {
         prt_blind();
     }
+
     if (PY_CONFUSED & status) {
         prt_confused();
     }
+
     if (PY_FEAR & status) {
         prt_afraid();
     }
+
     if (PY_POISONED & status) {
         prt_poisoned();
     }
+
     if ((PY_SEARCH | PY_REST) & status) {
         prt_state();
     }
 
     // if speed non zero, print it, modify speed if Searching
-    if (py.flags.speed - ((PY_SEARCH & status) >> 8) != 0) {
+    int16_t speed = py.flags.speed - (int16_t) ((PY_SEARCH & status) >> 8);
+    if (speed != 0) {
         prt_speed();
     }
 
@@ -848,8 +903,6 @@ void draw_cave() {
 
 // Prints the following information on the screen. -JWT-
 void put_character() {
-    struct player_type::misc *m_ptr = &py.misc;
-
     clear_screen();
 
     put_buffer("Name        :", 2, 1);
@@ -857,39 +910,40 @@ void put_character() {
     put_buffer("Sex         :", 4, 1);
     put_buffer("Class       :", 5, 1);
 
-    if (character_generated) {
-        put_buffer(m_ptr->name, 2, 15);
-        put_buffer(race[m_ptr->prace].trace, 3, 15);
-        put_buffer((m_ptr->male ? "Male" : "Female"), 4, 15);
-        put_buffer(classes[m_ptr->pclass].title, 5, 15);
+    if (!character_generated) {
+        return;
     }
+
+    put_buffer(py.misc.name, 2, 15);
+    put_buffer(race[py.misc.prace].trace, 3, 15);
+    put_buffer((py.misc.male ? "Male" : "Female"), 4, 15);
+    put_buffer(classes[py.misc.pclass].title, 5, 15);
 }
 
 // Prints the following information on the screen. -JWT-
 void put_stats() {
-    struct player_type::misc *m_ptr = &py.misc;
-
     for (int i = 0; i < 6; i++) {
         vtype buf;
 
         cnv_stat(py.stats.use_stat[i], buf);
         put_buffer(stat_names[i], 2 + i, 61);
         put_buffer(buf, 2 + i, 66);
+
         if (py.stats.max_stat[i] > py.stats.cur_stat[i]) {
             cnv_stat(py.stats.max_stat[i], buf);
             put_buffer(buf, 2 + i, 73);
         }
     }
 
-    prt_num("+ To Hit    ", m_ptr->dis_th, 9, 1);
-    prt_num("+ To Damage ", m_ptr->dis_td, 10, 1);
-    prt_num("+ To AC     ", m_ptr->dis_tac, 11, 1);
-    prt_num("  Total AC  ", m_ptr->dis_ac, 12, 1);
+    prt_num("+ To Hit    ", py.misc.dis_th, 9, 1);
+    prt_num("+ To Damage ", py.misc.dis_td, 10, 1);
+    prt_num("+ To AC     ", py.misc.dis_tac, 11, 1);
+    prt_num("  Total AC  ", py.misc.dis_ac, 12, 1);
 }
 
 // Returns a rating of x depending on y -JWT-
 const char *likert(int x, int y) {
-    switch ((x / y)) {
+    switch (x / y) {
         case -3:
         case -2:
         case -1:
@@ -916,56 +970,51 @@ const char *likert(int x, int y) {
 
 // Prints age, height, weight, and SC -JWT-
 void put_misc1() {
-    struct player_type::misc *m_ptr = &py.misc;
-
-    prt_num("Age          ", (int) m_ptr->age, 2, 38);
-    prt_num("Height       ", (int) m_ptr->ht, 3, 38);
-    prt_num("Weight       ", (int) m_ptr->wt, 4, 38);
-    prt_num("Social Class ", (int) m_ptr->sc, 5, 38);
+    prt_num("Age          ", (int) py.misc.age, 2, 38);
+    prt_num("Height       ", (int) py.misc.ht, 3, 38);
+    prt_num("Weight       ", (int) py.misc.wt, 4, 38);
+    prt_num("Social Class ", (int) py.misc.sc, 5, 38);
 }
 
 // Prints the following information on the screen. -JWT-
 void put_misc2() {
-    struct player_type::misc *m_ptr = &py.misc;
+    prt_7lnum("Level      ", (int32_t) py.misc.lev, 9, 28);
+    prt_7lnum("Experience ", py.misc.exp, 10, 28);
+    prt_7lnum("Max Exp    ", py.misc.max_exp, 11, 28);
 
-    prt_7lnum("Level      ", (int32_t) m_ptr->lev, 9, 28);
-    prt_7lnum("Experience ", m_ptr->exp, 10, 28);
-    prt_7lnum("Max Exp    ", m_ptr->max_exp, 11, 28);
-
-    if (m_ptr->lev >= MAX_PLAYER_LEVEL) {
+    if (py.misc.lev >= MAX_PLAYER_LEVEL) {
         prt("Exp to Adv.: *******", 12, 28);
     } else {
-        prt_7lnum("Exp to Adv.", (int32_t) (player_exp[m_ptr->lev - 1] * m_ptr->expfact / 100), 12, 28);
+        prt_7lnum("Exp to Adv.", (int32_t) (player_exp[py.misc.lev - 1] * py.misc.expfact / 100), 12, 28);
     }
 
-    prt_7lnum("Gold       ", m_ptr->au, 13, 28);
-    prt_num("Max Hit Points ", m_ptr->mhp, 9, 52);
-    prt_num("Cur Hit Points ", m_ptr->chp, 10, 52);
-    prt_num("Max Mana       ", m_ptr->mana, 11, 52);
-    prt_num("Cur Mana       ", m_ptr->cmana, 12, 52);
+    prt_7lnum("Gold       ", py.misc.au, 13, 28);
+    prt_num("Max Hit Points ", py.misc.mhp, 9, 52);
+    prt_num("Cur Hit Points ", py.misc.chp, 10, 52);
+    prt_num("Max Mana       ", py.misc.mana, 11, 52);
+    prt_num("Cur Mana       ", py.misc.cmana, 12, 52);
 }
 
 // Prints ratings on certain abilities -RAK-
 void put_misc3() {
     clear_from(14);
 
-    struct player_type::misc *p_ptr = &py.misc;
-    int xbth = p_ptr->bth + p_ptr->ptohit * BTH_PLUS_ADJ + (class_level_adj[p_ptr->pclass][CLA_BTH] * p_ptr->lev);
-    int xbthb = p_ptr->bthb + p_ptr->ptohit * BTH_PLUS_ADJ + (class_level_adj[p_ptr->pclass][CLA_BTHB] * p_ptr->lev);
+    int xbth = py.misc.bth + py.misc.ptohit * BTH_PLUS_ADJ + (class_level_adj[py.misc.pclass][CLA_BTH] * py.misc.lev);
+    int xbthb = py.misc.bthb + py.misc.ptohit * BTH_PLUS_ADJ + (class_level_adj[py.misc.pclass][CLA_BTHB] * py.misc.lev);
 
     // this results in a range from 0 to 29
-    int xfos = 40 - p_ptr->fos;
+    int xfos = 40 - py.misc.fos;
     if (xfos < 0) {
         xfos = 0;
     }
 
-    int xsrh = p_ptr->srh;
+    int xsrh = py.misc.srh;
 
     // this results in a range from 0 to 9
-    int xstl = p_ptr->stl + 1;
-    int xdis = p_ptr->disarm + 2 * todis_adj() + stat_adj(A_INT) + (class_level_adj[p_ptr->pclass][CLA_DISARM] * p_ptr->lev / 3);
-    int xsave = p_ptr->save + stat_adj(A_WIS) + (class_level_adj[p_ptr->pclass][CLA_SAVE] * p_ptr->lev / 3);
-    int xdev = p_ptr->save + stat_adj(A_INT) + (class_level_adj[p_ptr->pclass][CLA_DEVICE] * p_ptr->lev / 3);
+    int xstl = py.misc.stl + 1;
+    int xdis = py.misc.disarm + 2 * todis_adj() + stat_adj(A_INT) + (class_level_adj[py.misc.pclass][CLA_DISARM] * py.misc.lev / 3);
+    int xsave = py.misc.save + stat_adj(A_WIS) + (class_level_adj[py.misc.pclass][CLA_SAVE] * py.misc.lev / 3);
+    int xdev = py.misc.save + stat_adj(A_INT) + (class_level_adj[py.misc.pclass][CLA_DEVICE] * py.misc.lev / 3);
 
     vtype xinfra;
     (void) sprintf(xinfra, "%d feet", py.flags.see_infra * 10);
@@ -1005,6 +1054,7 @@ void display_char() {
 // Gets a name for the character -JWT-
 void get_name() {
     prt("Enter your player's name  [press <RETURN> when finished]", 21, 2);
+
     put_buffer(&blank_string[BLANK_LENGTH - 23], 2, 15);
 
     if (!get_string(py.misc.name, 2, 15, 23) || py.misc.name[0] == 0) {
@@ -1018,20 +1068,21 @@ void get_name() {
 // Changes the name of the character -JWT-
 void change_name() {
     vtype temp;
+    bool flag = false;
 
     display_char();
 
-    bool flag = false;
     while (!flag) {
         prt("<f>ile character description. <c>hange character name.", 21, 2);
-        char c = inkey();
-        switch (c) {
+
+        switch (inkey()) {
             case 'c':
                 get_name();
                 flag = true;
                 break;
             case 'f':
                 prt("File name:", 0, 0);
+
                 if (get_string(temp, 0, 10, 60) && temp[0]) {
                     if (file_character(temp)) {
                         flag = true;
@@ -1060,12 +1111,15 @@ void inven_destroy(int item_val) {
         inven_weight -= i_ptr->weight;
     } else {
         inven_weight -= i_ptr->weight * i_ptr->number;
-        for (int j = item_val; j < inven_ctr - 1; j++) {
-            inventory[j] = inventory[j + 1];
+
+        for (int i = item_val; i < inven_ctr - 1; i++) {
+            inventory[i] = inventory[i + 1];
         }
+
         invcopy(&inventory[inven_ctr - 1], OBJ_NOTHING);
         inven_ctr--;
     }
+
     py.flags.status |= PY_STR_WGT;
 }
 
@@ -1073,6 +1127,7 @@ void inven_destroy(int item_val) {
 // However, the second always gets a number of one except for ammo etc.
 void take_one_item(inven_type *s_ptr, inven_type *i_ptr) {
     *s_ptr = *i_ptr;
+
     if (s_ptr->number > 1 && s_ptr->subval >= ITEM_SINGLE_STACK_MIN && s_ptr->subval <= ITEM_SINGLE_STACK_MAX) {
         s_ptr->number = 1;
     }
@@ -1084,10 +1139,12 @@ void inven_drop(int item_val, int drop_all) {
         (void) delete_object(char_row, char_col);
     }
 
-    int i = popt();
+    int treasureID = popt();
+
     inven_type *i_ptr = &inventory[item_val];
-    t_list[i] = *i_ptr;
-    cave[char_row][char_col].tptr = (uint8_t) i;
+    t_list[treasureID] = *i_ptr;
+
+    cave[char_row][char_col].tptr = (uint8_t) treasureID;
 
     if (item_val >= INVEN_WIELD) {
         takeoff(item_val, -1);
@@ -1095,37 +1152,40 @@ void inven_drop(int item_val, int drop_all) {
         if (drop_all || i_ptr->number == 1) {
             inven_weight -= i_ptr->weight * i_ptr->number;
             inven_ctr--;
+
             while (item_val < inven_ctr) {
                 inventory[item_val] = inventory[item_val + 1];
                 item_val++;
             }
+
             invcopy(&inventory[inven_ctr], OBJ_NOTHING);
         } else {
-            t_list[i].number = 1;
+            t_list[treasureID].number = 1;
             inven_weight -= i_ptr->weight;
             i_ptr->number--;
         }
 
         bigvtype prt1, prt2;
-        objdes(prt1, &t_list[i], true);
+        objdes(prt1, &t_list[treasureID], true);
         (void) sprintf(prt2, "Dropped %s", prt1);
         msg_print(prt2);
     }
+
     py.flags.status |= PY_STR_WGT;
 }
 
 // Destroys a type of item on a given percent chance -RAK-
 int inven_damage(bool (*typ)(inven_type *), int perc) {
-    int j = 0;
+    int damage = 0;
 
     for (int i = 0; i < inven_ctr; i++) {
         if ((*typ)(&inventory[i]) && randint(100) < perc) {
             inven_destroy(i);
-            j++;
+            damage++;
         }
     }
 
-    return j;
+    return damage;
 }
 
 // Computes current weight limit -RAK-
@@ -1145,17 +1205,25 @@ bool inven_check_num(inven_type *t_ptr) {
         return true;
     }
 
-    if (t_ptr->subval >= ITEM_SINGLE_STACK_MIN) {
-        for (int i = 0; i < inven_ctr; i++) {
-            if (inventory[i].tval == t_ptr->tval && inventory[i].subval == t_ptr->subval &&
-                // make sure the number field doesn't overflow
-                ((int) inventory[i].number + (int) t_ptr->number) < 256 &&
-                // they always stack (subval < 192), or else they have same p1
-                (t_ptr->subval < ITEM_GROUP_MIN || inventory[i].p1 == t_ptr->p1) &&
-                // only stack if both or neither are identified
-                known1_p(&inventory[i]) == known1_p(t_ptr)) {
-                return true;
-            }
+    if (t_ptr->subval < ITEM_SINGLE_STACK_MIN) {
+        return false;
+    }
+
+    for (int i = 0; i < inven_ctr; i++) {
+        bool sameCharacter = inventory[i].tval == t_ptr->tval;
+        bool sameCategory = inventory[i].subval == t_ptr->subval;
+
+        // make sure the number field doesn't overflow
+        bool sameNumber = inventory[i].number + t_ptr->number < 256;
+
+        // they always stack (subval < 192), or else they have same p1
+        bool sameGroup = t_ptr->subval < ITEM_GROUP_MIN || inventory[i].p1 == t_ptr->p1;
+
+        // only stack if both or neither are identified
+        bool identification = known1_p(&inventory[i]) == known1_p(t_ptr);
+
+        if (sameCharacter && sameCategory && sameNumber && sameGroup && identification) {
+            return true;
         }
     }
 
@@ -1164,16 +1232,16 @@ bool inven_check_num(inven_type *t_ptr) {
 
 // return false if picking up an object would change the players speed
 bool inven_check_weight(inven_type *i_ptr) {
-    int i = weight_limit();
-    int new_inven_weight = i_ptr->number * i_ptr->weight + inven_weight;
+    int limit = weight_limit();
+    int newWeight = i_ptr->number * i_ptr->weight + inven_weight;
 
-    if (i < new_inven_weight) {
-        i = new_inven_weight / (i + 1);
+    if (limit < newWeight) {
+        limit = newWeight / (limit + 1);
     } else {
-        i = 0;
+        limit = 0;
     }
 
-    return (pack_heavy == i);
+    return pack_heavy == limit;
 }
 
 // Are we strong enough for the current pack and weapon? -CJS-
@@ -1194,22 +1262,24 @@ void check_strength() {
         calc_bonuses();
     }
 
-    int i = weight_limit();
-    if (i < inven_weight) {
-        i = inven_weight / (i + 1);
+    int limit = weight_limit();
+
+    if (limit < inven_weight) {
+        limit = inven_weight / (limit + 1);
     } else {
-        i = 0;
+        limit = 0;
     }
 
-    if (pack_heavy != i) {
-        if (pack_heavy < i) {
+    if (pack_heavy != limit) {
+        if (pack_heavy < limit) {
             msg_print("Your pack is so heavy that it slows you down.");
         } else {
             msg_print("You move more easily under the weight of your pack.");
         }
-        change_speed(i - pack_heavy);
-        pack_heavy = i;
+        change_speed(limit - pack_heavy);
+        pack_heavy = limit;
     }
+
     py.flags.status &= ~PY_STR_WGT;
 }
 
@@ -1228,23 +1298,25 @@ int inven_carry(inven_type *i_ptr) {
     for (locn = 0;; locn++) {
         inven_type *t_ptr = &inventory[locn];
 
-        if (typ == t_ptr->tval &&
-            subt == t_ptr->subval && subt >= ITEM_SINGLE_STACK_MIN &&
-            ((int) t_ptr->number + (int) i_ptr->number) < 256 &&
+        if (typ == t_ptr->tval && subt == t_ptr->subval && subt >= ITEM_SINGLE_STACK_MIN && ((int) t_ptr->number + (int) i_ptr->number) < 256 &&
             (subt < ITEM_GROUP_MIN || t_ptr->p1 == i_ptr->p1) &&
             // only stack if both or neither are identified
             known1p == known1_p(t_ptr)) {
             t_ptr->number += i_ptr->number;
+
             break;
-        } else if ((typ == t_ptr->tval && subt < t_ptr->subval && always_known1p) || typ > t_ptr->tval) {
+        }
+
+        if ((typ == t_ptr->tval && subt < t_ptr->subval && always_known1p) || typ > t_ptr->tval) {
             // For items which are always known1p, i.e. never have a 'color',
             // insert them into the inventory in sorted order.
-
             for (int i = inven_ctr - 1; i >= locn; i--) {
                 inventory[i + 1] = inventory[i];
             }
+
             inventory[locn] = *i_ptr;
             inven_ctr++;
+
             break;
         }
     }
@@ -1259,9 +1331,9 @@ int inven_carry(inven_type *i_ptr) {
 int spell_chance(int spell) {
     spell_type *s_ptr = &magic_spell[py.misc.pclass - 1][spell];
 
-    int stat;
     int chance = s_ptr->sfail - 3 * (py.misc.lev - s_ptr->slevel);
 
+    int stat;
     if (classes[py.misc.pclass].spell == MAGE) {
         stat = A_INT;
     } else {
@@ -1269,6 +1341,7 @@ int spell_chance(int spell) {
     }
 
     chance -= 3 * (stat_adj(stat) - 1);
+
     if (s_ptr->smana > py.misc.cmana) {
         chance += 5 * (s_ptr->smana - py.misc.cmana);
     }
@@ -1305,17 +1378,17 @@ void print_spells(int *spell, int num, int comment, int nonconsec) {
     }
 
     for (int i = 0; i < num; i++) {
-        int j = spell[i];
-        spell_type *s_ptr = &magic_spell[py.misc.pclass - 1][j];
+        int spellID = spell[i];
+        spell_type *s_ptr = &magic_spell[py.misc.pclass - 1][spellID];
 
         const char *p;
         if (comment == 0) {
             p = "";
-        } else if ((spell_forgotten & (1L << j)) != 0) {
+        } else if ((spell_forgotten & (1L << spellID)) != 0) {
             p = " forgotten";
-        } else if ((spell_learned & (1L << j)) == 0) {
+        } else if ((spell_learned & (1L << spellID)) == 0) {
             p = " unknown";
-        } else if ((spell_worked & (1L << j)) == 0) {
+        } else if ((spell_worked & (1L << spellID)) == 0) {
             p = " untried";
         } else {
             p = "";
@@ -1327,11 +1400,11 @@ void print_spells(int *spell, int num, int comment, int nonconsec) {
         if (nonconsec == -1) {
             spell_char = (char) ('a' + i);
         } else {
-            spell_char = (char) ('a' + j - nonconsec);
+            spell_char = (char) ('a' + spellID - nonconsec);
         }
 
         vtype out_val;
-        (void) sprintf(out_val, "  %c) %-30s%2d %4d %3d%%%s", spell_char, spell_names[j + offset], s_ptr->slevel, s_ptr->smana, spell_chance(j), p);
+        (void) sprintf(out_val, "  %c) %-30s%2d %4d %3d%%%s", spell_char, spell_names[spellID + offset], s_ptr->slevel, s_ptr->smana, spell_chance(spellID), p);
         prt(out_val, 2 + i, col);
     }
 }
@@ -1340,8 +1413,8 @@ void print_spells(int *spell, int num, int comment, int nonconsec) {
 int get_spell(int *spell, int num, int *sn, int *sc, const char *prompt, int first_spell) {
     *sn = -1;
 
-    vtype out_str;
-    (void) sprintf(out_str, "(Spells %c-%c, *=List, <ESCAPE>=exit) %s", spell[0] + 'a' - first_spell, spell[num - 1] + 'a' - first_spell, prompt);
+    vtype str;
+    (void) sprintf(str, "(Spells %c-%c, *=List, <ESCAPE>=exit) %s", spell[0] + 'a' - first_spell, spell[num - 1] + 'a' - first_spell, prompt);
 
     bool flag = false;
     bool redraw = false;
@@ -1349,18 +1422,20 @@ int get_spell(int *spell, int num, int *sn, int *sc, const char *prompt, int fir
     int offset = (classes[py.misc.pclass].spell == MAGE ? SPELL_OFFSET : PRAYER_OFFSET);
 
     char choice;
-    while (!flag && get_com(out_str, &choice)) {
+
+    while (!flag && get_com(str, &choice)) {
         if (isupper((int) choice)) {
             *sn = choice - 'A' + first_spell;
 
             // verify that this is in spell[], at most 22 entries in spell[]
-            int i;
-            for (i = 0; i < num; i++) {
-                if (*sn == spell[i]) {
+            int spellID;
+            for (spellID = 0; spellID < num; spellID++) {
+                if (*sn == spell[spellID]) {
                     break;
                 }
             }
-            if (i == num) {
+
+            if (spellID == num) {
                 *sn = -2;
             } else {
                 spell_type *s_ptr = &magic_spell[py.misc.pclass - 1][*sn];
@@ -1377,13 +1452,14 @@ int get_spell(int *spell, int num, int *sn, int *sc, const char *prompt, int fir
             *sn = choice - 'a' + first_spell;
 
             // verify that this is in spell[], at most 22 entries in spell[]
-            int i;
-            for (i = 0; i < num; i++) {
-                if (*sn == spell[i]) {
+            int spellID;
+            for (spellID = 0; spellID < num; spellID++) {
+                if (*sn == spell[spellID]) {
                     break;
                 }
             }
-            if (i == num) {
+
+            if (spellID == num) {
                 *sn = -2;
             } else {
                 flag = true;
@@ -1401,17 +1477,20 @@ int get_spell(int *spell, int num, int *sn, int *sc, const char *prompt, int fir
             *sn = -1;
             bell();
         }
+
         if (*sn == -2) {
             vtype tmp_str;
             (void) sprintf(tmp_str, "You don't know that %s.", (offset == SPELL_OFFSET ? "spell" : "prayer"));
             msg_print(tmp_str);
         }
     }
+
     if (redraw) {
         restore_screen();
     }
 
     erase_line(MSG_LINE, 0);
+
     if (flag) {
         *sc = spell_chance(*sn);
     }
@@ -1419,14 +1498,164 @@ int get_spell(int *spell, int num, int *sn, int *sc, const char *prompt, int fir
     return flag;
 }
 
+// check to see if know any spells greater than level, eliminate them
+static void eliminateKnownSpellsGreaterThanLevel(spell_type *msp_ptr, const char *p, int offset) {
+    uint32_t mask = 0x80000000L;
+
+    for (int i = 31; mask; mask >>= 1, i--) {
+        if (mask & spell_learned) {
+            if (msp_ptr[i].slevel > py.misc.lev) {
+                spell_learned &= ~mask;
+                spell_forgotten |= mask;
+
+                vtype msg;
+                (void) sprintf(msg, "You have forgotten the %s of %s.", p, spell_names[i + offset]);
+                msg_print(msg);
+            } else {
+                break;
+            }
+        }
+    }
+}
+
+static int numberOfSpellsAllowed(int stat) {
+    int allowed = 0;
+
+    int levels = py.misc.lev - classes[py.misc.pclass].first_spell_lev + 1;
+
+    switch (stat_adj(stat)) {
+        case 0:
+            allowed = 0;
+            break;
+        case 1:
+        case 2:
+        case 3:
+            allowed = 1 * levels;
+            break;
+        case 4:
+        case 5:
+            allowed = 3 * levels / 2;
+            break;
+        case 6:
+            allowed = 2 * levels;
+            break;
+        case 7:
+            allowed = 5 * levels / 2;
+            break;
+    }
+
+    return allowed;
+}
+
+static int numberOfSpellsKnown() {
+    int known = 0;
+
+    for (uint32_t mask = 0x1; mask; mask <<= 1) {
+        if (mask & spell_learned) {
+            known++;
+        }
+    }
+
+    return known;
+}
+
+// remember forgotten spells while forgotten spells exist of new_spells positive,
+// remember the spells in the order that they were learned
+static int rememberForgottenSpells(spell_type *msp_ptr, int allowedSpells, int newSpells, const char *p, int offset) {
+    uint32_t mask;
+
+    for (int n = 0; (spell_forgotten && newSpells && (n < allowedSpells) && (n < 32)); n++) {
+        // orderID is (i+1)th spell learned
+        int orderID = spell_order[n];
+
+        // shifting by amounts greater than number of bits in long gives
+        // an undefined result, so don't shift for unknown spells
+        if (orderID == 99) {
+            mask = 0x0;
+        } else {
+            mask = (uint32_t) (1L << orderID);
+        }
+
+        if (mask & spell_forgotten) {
+            if (msp_ptr[orderID].slevel <= py.misc.lev) {
+                newSpells--;
+                spell_forgotten &= ~mask;
+                spell_learned |= mask;
+
+                vtype msg;
+                (void) sprintf(msg, "You have remembered the %s of %s.", p, spell_names[orderID + offset]);
+                msg_print(msg);
+            } else {
+                allowedSpells++;
+            }
+        }
+    }
+
+    return newSpells;
+}
+
+// determine which spells player can learn must check all spells here,
+// in gain_spell() we actually check if the books are present
+static int learnableSpells(spell_type *msp_ptr, int newSpells) {
+    uint32_t spell_flag = (uint32_t) (0x7FFFFFFFL & ~spell_learned);
+
+    int id = 0;
+    uint32_t mask = 0x1;
+
+    for (int i = 0; spell_flag; mask <<= 1, i++) {
+        if (spell_flag & mask) {
+            spell_flag &= ~mask;
+            if (msp_ptr[i].slevel <= py.misc.lev) {
+                id++;
+            }
+        }
+    }
+
+    if (newSpells > id) {
+        newSpells = id;
+    }
+
+    return newSpells;
+}
+
+// forget spells until new_spells zero or no more spells know,
+// spells are forgotten in the opposite order that they were learned
+// NOTE: newSpells is always a negative value
+static void forgetSpells(int newSpells, const char *p, int offset) {
+    uint32_t mask;
+
+    for (int i = 31; newSpells && spell_learned; i--) {
+        // orderID is the (i+1)th spell learned
+        int orderID = spell_order[i];
+
+        // shifting by amounts greater than number of bits in long gives
+        // an undefined result, so don't shift for unknown spells
+        if (orderID == 99) {
+            mask = 0x0;
+        } else {
+            mask = (uint32_t) (1L << orderID);
+        }
+
+        if (mask & spell_learned) {
+            spell_learned &= ~mask;
+            spell_forgotten |= mask;
+            newSpells++;
+
+            vtype msg;
+            (void) sprintf(msg, "You have forgotten the %s of %s.", p, spell_names[orderID + offset]);
+            msg_print(msg);
+        }
+    }
+}
+
 // calculate number of spells player should have, and
 // learn forget spells until that number is met -JEW-
 void calc_spells(int stat) {
-    struct player_type::misc *p_ptr = &py.misc;
-    spell_type *msp_ptr = &magic_spell[p_ptr->pclass - 1][0];
+    spell_type *msp_ptr = &magic_spell[py.misc.pclass - 1][0];
 
     const char *p;
     int offset;
+
     if (stat == A_INT) {
         p = "spell";
         offset = SPELL_OFFSET;
@@ -1436,136 +1665,30 @@ void calc_spells(int stat) {
     }
 
     // check to see if know any spells greater than level, eliminate them
-    int i;
-    uint32_t mask;
-    for (i = 31, mask = 0x80000000L; mask; mask >>= 1, i--) {
-        if (mask & spell_learned) {
-            if (msp_ptr[i].slevel > p_ptr->lev) {
-                spell_learned &= ~mask;
-                spell_forgotten |= mask;
-
-                vtype tmp_str;
-                (void) sprintf(tmp_str, "You have forgotten the %s of %s.", p, spell_names[i + offset]);
-                msg_print(tmp_str);
-            } else {
-                break;
-            }
-        }
-    }
+    eliminateKnownSpellsGreaterThanLevel(msp_ptr, p, offset);
 
     // calc number of spells allowed
-    int num_allowed = 0;
-    int levels = p_ptr->lev - classes[p_ptr->pclass].first_spell_lev + 1;
-    switch (stat_adj(stat)) {
-        case 0:
-            num_allowed = 0;
-            break;
-        case 1:
-        case 2:
-        case 3:
-            num_allowed = 1 * levels;
-            break;
-        case 4:
-        case 5:
-            num_allowed = 3 * levels / 2;
-            break;
-        case 6:
-            num_allowed = 2 * levels;
-            break;
-        case 7:
-            num_allowed = 5 * levels / 2;
-            break;
-    }
-
-    int num_known = 0;
-    for (mask = 0x1; mask; mask <<= 1) {
-        if (mask & spell_learned) {
-            num_known++;
-        }
-    }
+    int num_allowed = numberOfSpellsAllowed(stat);
+    int num_known = numberOfSpellsKnown();
     int new_spells = num_allowed - num_known;
 
     if (new_spells > 0) {
-        // remember forgotten spells while forgotten spells exist of new_spells
-        // positive, remember the spells in the order that they were learned
-        for (int n = 0; (spell_forgotten && new_spells && (n < num_allowed) && (n < 32)); n++) {
-            // j is (i+1)th spell learned
-            int j = spell_order[n];
+        new_spells = rememberForgottenSpells(msp_ptr, num_allowed, new_spells, p, offset);
 
-            // shifting by amounts greater than number of bits in long gives
-            // an undefined result, so don't shift for unknown spells
-            if (j == 99) {
-                mask = 0x0;
-            } else {
-                mask = (uint32_t) (1L << j);
-            }
-            if (mask & spell_forgotten) {
-                if (msp_ptr[j].slevel <= p_ptr->lev) {
-                    new_spells--;
-                    spell_forgotten &= ~mask;
-                    spell_learned |= mask;
-
-                    vtype tmp_str;
-                    (void) sprintf(tmp_str, "You have remembered the %s of %s.", p, spell_names[j + offset]);
-                    msg_print(tmp_str);
-                } else {
-                    num_allowed++;
-                }
-            }
-        }
-
+        // If new spells is still greater than zero
         if (new_spells > 0) {
-            // determine which spells player can learn must check all spells here,
-            // in gain_spell() we actually check if the books are present
-            uint32_t spell_flag = (uint32_t) (0x7FFFFFFFL & ~spell_learned);
-
-            int j;
-            int id = 0;
-            for (j = 0, mask = 0x1; spell_flag; mask <<= 1, j++) {
-                if (spell_flag & mask) {
-                    spell_flag &= ~mask;
-                    if (msp_ptr[j].slevel <= p_ptr->lev) {
-                        id++;
-                    }
-                }
-            }
-
-            if (new_spells > id) {
-                new_spells = id;
-            }
+            new_spells = learnableSpells(msp_ptr, new_spells);
         }
     } else if (new_spells < 0) {
-        // forget spells until new_spells zero or no more spells know, spells
-        // are forgotten in the opposite order that they were learned
-        for (i = 31; new_spells && spell_learned; i--) {
-            // j is the (i+1)th spell learned
-            int j = spell_order[i];
-            // shifting by amounts greater than number of bits in long gives
-            // an undefined result, so don't shift for unknown spells
-            if (j == 99) {
-                mask = 0x0;
-            } else {
-                mask = (uint32_t) (1L << j);
-            }
-            if (mask & spell_learned) {
-                spell_learned &= ~mask;
-                spell_forgotten |= mask;
-                new_spells++;
-
-                vtype tmp_str;
-                (void) sprintf(tmp_str, "You have forgotten the %s of %s.", p, spell_names[j + offset]);
-                msg_print(tmp_str);
-            }
-        }
-
+        forgetSpells(new_spells, p, offset);
         new_spells = 0;
     }
 
     if (new_spells != py.flags.new_spells) {
         if (new_spells > 0 && py.flags.new_spells == 0) {
-            vtype tmp_str;
-            (void) sprintf(tmp_str, "You can learn some new %ss now.", p);
-            msg_print(tmp_str);
+            vtype msg;
+            (void) sprintf(msg, "You can learn some new %ss now.", p);
+            msg_print(msg);
         }
 
         py.flags.new_spells = (uint8_t) new_spells;
@@ -1573,10 +1696,45 @@ void calc_spells(int stat) {
     }
 }
 
+static bool playerCanRead() {
+    if (py.flags.blind > 0) {
+        msg_print("You can't see to read your spell book!");
+        return false;
+    }
+
+    if (no_light()) {
+        msg_print("You have no light to read by.");
+        return false;
+    }
+
+    return true;
+}
+
+static int lastKnownSpell() {
+    for (int last_known = 0; last_known < 32; last_known++) {
+        if (spell_order[last_known] == 99) {
+            return last_known;
+        }
+    }
+
+    // We should never actually reach this, but just in case... -MRC-
+    return 0;
+}
+
+static uint32_t playerDetermineLearnableSpells() {
+    uint32_t spell_flag = 0;
+
+    for (int i = 0; i < inven_ctr; i++) {
+        if (inventory[i].tval == TV_MAGIC_BOOK) {
+            spell_flag |= inventory[i].flags;
+        }
+    }
+
+    return spell_flag;
+}
+
 // gain spells when player wants to    - jw
 void gain_spells() {
-    uint32_t spell_flag;
-
     // Priests don't need light because they get spells from their god, so only
     // fail when can't see if player has MAGE spells. This check is done below.
     if (py.flags.confused > 0) {
@@ -1587,51 +1745,39 @@ void gain_spells() {
     int new_spells = py.flags.new_spells;
     int diff_spells = 0;
 
-    struct player_type::misc *p_ptr = &py.misc;
-    spell_type *msp_ptr = &magic_spell[p_ptr->pclass - 1][0];
+    spell_type *msp_ptr = &magic_spell[py.misc.pclass - 1][0];
 
     int stat, offset;
-    if (classes[p_ptr->pclass].spell == MAGE) {
-        stat = A_INT;
-        offset = SPELL_OFFSET;
 
+    if (classes[py.misc.pclass].spell == MAGE) {
         // People with MAGE spells can't learn spells if they can't read their books.
-        if (py.flags.blind > 0) {
-            msg_print("You can't see to read your spell book!");
-            return;
-        } else if (no_light()) {
-            msg_print("You have no light to read by.");
+        if (!playerCanRead()) {
             return;
         }
+        stat = A_INT;
+        offset = SPELL_OFFSET;
     } else {
         stat = A_WIS;
         offset = PRAYER_OFFSET;
     }
 
-    int last_known;
-    for (last_known = 0; last_known < 32; last_known++) {
-        if (spell_order[last_known] == 99) {
-            break;
-        }
-    }
+    int last_known = lastKnownSpell();
 
     if (!new_spells) {
         vtype tmp_str;
         (void) sprintf(tmp_str, "You can't learn any new %ss!", (stat == A_INT ? "spell" : "prayer"));
         msg_print(tmp_str);
+
         free_turn_flag = true;
         return;
     }
 
+    uint32_t spell_flag;
+
     // determine which spells player can learn
     // mages need the book to learn a spell, priests do not need the book
     if (stat == A_INT) {
-        spell_flag = 0;
-        for (int i = 0; i < inven_ctr; i++) {
-            if (inventory[i].tval == TV_MAGIC_BOOK) {
-                spell_flag |= inventory[i].flags;
-            }
-        }
+        spell_flag = playerDetermineLearnableSpells();
     } else {
         spell_flag = 0x7FFFFFFF;
     }
@@ -1639,31 +1785,33 @@ void gain_spells() {
     // clear bits for spells already learned
     spell_flag &= ~spell_learned;
 
-    int i = 0;
+    int spellID = 0;
     int spells[31];
+    uint32_t mask = 0x1;
 
-    int j;
-    uint32_t mask;
-    for (j = 0, mask = 0x1; spell_flag; mask <<= 1, j++) {
+    for (int i = 0; spell_flag; mask <<= 1, i++) {
         if (spell_flag & mask) {
             spell_flag &= ~mask;
-            if (msp_ptr[j].slevel <= p_ptr->lev) {
-                spells[i] = j;
-                i++;
+            if (msp_ptr[i].slevel <= py.misc.lev) {
+                spells[spellID] = i;
+                spellID++;
             }
         }
     }
 
-    if (new_spells > i) {
+    if (new_spells > spellID) {
         msg_print("You seem to be missing a book.");
-        diff_spells = new_spells - i;
-        new_spells = i;
+
+        diff_spells = new_spells - spellID;
+        new_spells = spellID;
     }
-    if (new_spells == 0) { ;
+
+    if (new_spells == 0) {
+        // do nothing
     } else if (stat == A_INT) {
         // get to choose which mage spells will be learned
         save_screen();
-        print_spells(spells, i, false, -1);
+        print_spells(spells, spellID, false, -1);
 
         char query;
         while (new_spells && get_com("Learn which spell?", &query)) {
@@ -1671,25 +1819,30 @@ void gain_spells() {
 
             // test j < 23 in case i is greater than 22, only 22 spells
             // are actually shown on the screen, so limit choice to those
-            if (c >= 0 && c < i && c < 22) {
+            if (c >= 0 && c < spellID && c < 22) {
                 new_spells--;
+
                 spell_learned |= 1L << spells[c];
                 spell_order[last_known++] = (uint8_t) spells[c];
-                for (; c <= i - 1; c++) {
+
+                for (; c <= spellID - 1; c++) {
                     spells[c] = spells[c + 1];
                 }
-                i--;
+
+                spellID--;
+
                 erase_line(c + 1, 31);
-                print_spells(spells, i, false, -1);
+                print_spells(spells, spellID, false, -1);
             } else {
                 bell();
             }
         }
+
         restore_screen();
     } else {
         // pick a prayer at random
         while (new_spells) {
-            int s = randint(i) - 1;
+            int s = randint(spellID) - 1;
             spell_learned |= 1L << spells[s];
             spell_order[last_known++] = (uint8_t) spells[s];
 
@@ -1697,15 +1850,16 @@ void gain_spells() {
             (void) sprintf(tmp_str, "You have learned the prayer of %s.", spell_names[spells[s] + offset]);
             msg_print(tmp_str);
 
-            for (; s <= i - 1; s++) {
+            for (; s <= spellID - 1; s++) {
                 spells[s] = spells[s + 1];
             }
-            i--;
+            spellID--;
             new_spells--;
         }
     }
 
     py.flags.new_spells = (uint8_t) (new_spells + diff_spells);
+
     if (py.flags.new_spells == 0) {
         py.flags.status |= PY_STUDY;
     }
@@ -1716,37 +1870,34 @@ void gain_spells() {
     }
 }
 
+static int newMana(int stat) {
+    int levels = py.misc.lev - classes[py.misc.pclass].first_spell_lev + 1;
+
+    switch (stat_adj(stat)) {
+        case 0:
+            return 0;
+        case 1:
+        case 2:
+            return 1 * levels;
+        case 3:
+            return 3 * levels / 2;
+        case 4:
+            return 2 * levels;
+        case 5:
+            return 5 * levels / 2;
+        case 6:
+            return 3 * levels;
+        case 7:
+            return 4 * levels;
+        default:
+            return 0;
+    }
+}
+
 // Gain some mana if you know at least one spell -RAK-
 void calc_mana(int stat) {
-    struct player_type::misc *p_ptr = &py.misc;
-
     if (spell_learned != 0) {
-        int new_mana = 0;
-        int levels = p_ptr->lev - classes[p_ptr->pclass].first_spell_lev + 1;
-        switch (stat_adj(stat)) {
-            case 0:
-                new_mana = 0;
-                break;
-            case 1:
-            case 2:
-                new_mana = 1 * levels;
-                break;
-            case 3:
-                new_mana = 3 * levels / 2;
-                break;
-            case 4:
-                new_mana = 2 * levels;
-                break;
-            case 5:
-                new_mana = 5 * levels / 2;
-                break;
-            case 6:
-                new_mana = 3 * levels;
-                break;
-            case 7:
-                new_mana = 4 * levels;
-                break;
-        }
+        int new_mana = newMana(stat);
 
         // increment mana by one, so that first level chars have 2 mana
         if (new_mana > 0) {
@@ -1754,25 +1905,26 @@ void calc_mana(int stat) {
         }
 
         // mana can be zero when creating character
-        if (p_ptr->mana != new_mana) {
-            if (p_ptr->mana != 0) {
+        if (py.misc.mana != new_mana) {
+            if (py.misc.mana != 0) {
                 // change current mana proportionately to change of max mana,
                 // divide first to avoid overflow, little loss of accuracy
-                int32_t value = (((int32_t) p_ptr->cmana << 16) + p_ptr->cmana_frac) / p_ptr->mana * new_mana;
-                p_ptr->cmana = (int16_t) (value >> 16);
-                p_ptr->cmana_frac = (uint16_t) (value & 0xFFFF);
+                int32_t value = (((int32_t) py.misc.cmana << 16) + py.misc.cmana_frac) / py.misc.mana * new_mana;
+                py.misc.cmana = (int16_t) (value >> 16);
+                py.misc.cmana_frac = (uint16_t) (value & 0xFFFF);
             } else {
-                p_ptr->cmana = (int16_t) new_mana;
-                p_ptr->cmana_frac = 0;
+                py.misc.cmana = (int16_t) new_mana;
+                py.misc.cmana_frac = 0;
             }
-            p_ptr->mana = (int16_t) new_mana;
+
+            py.misc.mana = (int16_t) new_mana;
 
             // can't print mana here, may be in store or inventory mode
             py.flags.status |= PY_MANA;
         }
-    } else if (p_ptr->mana != 0) {
-        p_ptr->mana = 0;
-        p_ptr->cmana = 0;
+    } else if (py.misc.mana != 0) {
+        py.misc.mana = 0;
+        py.misc.cmana = 0;
 
         // can't print mana here, may be in store or inventory mode
         py.flags.status |= PY_MANA;
@@ -1781,25 +1933,25 @@ void calc_mana(int stat) {
 
 // Increases hit points and level -RAK-
 static void gain_level() {
-    struct player_type::misc *p_ptr = &py.misc;
-    p_ptr->lev++;
+    py.misc.lev++;
 
     vtype out_val;
-    (void) sprintf(out_val, "Welcome to level %d.", (int) p_ptr->lev);
+    (void) sprintf(out_val, "Welcome to level %d.", (int) py.misc.lev);
     msg_print(out_val);
+
     calc_hitpoints();
 
-    int32_t need_exp = player_exp[p_ptr->lev - 1] * p_ptr->expfact / 100;
-    if (p_ptr->exp > need_exp) {
+    int32_t need_exp = player_exp[py.misc.lev - 1] * py.misc.expfact / 100;
+    if (py.misc.exp > need_exp) {
         // lose some of the 'extra' exp when gaining several levels at once
-        int32_t dif_exp = p_ptr->exp - need_exp;
-        p_ptr->exp = need_exp + (dif_exp / 2);
+        int32_t dif_exp = py.misc.exp - need_exp;
+        py.misc.exp = need_exp + (dif_exp / 2);
     }
 
     prt_level();
     prt_title();
 
-    class_type *c_ptr = &classes[p_ptr->pclass];
+    class_type *c_ptr = &classes[py.misc.pclass];
 
     if (c_ptr->spell == MAGE) {
         calc_spells(A_INT);
@@ -1812,31 +1964,28 @@ static void gain_level() {
 
 // Prints experience -RAK-
 void prt_experience() {
-    struct player_type::misc *p_ptr = &py.misc;
-
-    if (p_ptr->exp > MAX_EXP) {
-        p_ptr->exp = MAX_EXP;
+    if (py.misc.exp > MAX_EXP) {
+        py.misc.exp = MAX_EXP;
     }
 
-    while ((p_ptr->lev < MAX_PLAYER_LEVEL) && (signed) (player_exp[p_ptr->lev - 1] * p_ptr->expfact / 100) <= p_ptr->exp) {
+    while ((py.misc.lev < MAX_PLAYER_LEVEL) && (signed) (player_exp[py.misc.lev - 1] * py.misc.expfact / 100) <= py.misc.exp) {
         gain_level();
     }
 
-    if (p_ptr->exp > p_ptr->max_exp) {
-        p_ptr->max_exp = p_ptr->exp;
+    if (py.misc.exp > py.misc.max_exp) {
+        py.misc.max_exp = py.misc.exp;
     }
 
-    prt_long(p_ptr->exp, 14, STAT_COLUMN + 6);
+    prt_long(py.misc.exp, 14, STAT_COLUMN + 6);
 }
 
 // Calculate the players hit points
 void calc_hitpoints() {
-    struct player_type::misc *p_ptr = &py.misc;
-    int hitpoints = player_hp[p_ptr->lev - 1] + (con_adj() * p_ptr->lev);
+    int hitpoints = player_hp[py.misc.lev - 1] + (con_adj() * py.misc.lev);
 
     // always give at least one point per level + 1
-    if (hitpoints < (p_ptr->lev + 1)) {
-        hitpoints = p_ptr->lev + 1;
+    if (hitpoints < (py.misc.lev + 1)) {
+        hitpoints = py.misc.lev + 1;
     }
 
     if (py.flags.status & PY_HERO) {
@@ -1848,13 +1997,13 @@ void calc_hitpoints() {
     }
 
     // mhp can equal zero while character is being created
-    if (hitpoints != p_ptr->mhp && p_ptr->mhp != 0) {
+    if (hitpoints != py.misc.mhp && py.misc.mhp != 0) {
         // change current hit points proportionately to change of mhp,
         // divide first to avoid overflow, little loss of accuracy
-        int32_t value = (((int32_t) p_ptr->chp << 16) + p_ptr->chp_frac) / p_ptr->mhp * hitpoints;
-        p_ptr->chp = (int16_t) (value >> 16);
-        p_ptr->chp_frac = (uint16_t) (value & 0xFFFF);
-        p_ptr->mhp = (int16_t) hitpoints;
+        int32_t value = (((int32_t) py.misc.chp << 16) + py.misc.chp_frac) / py.misc.mhp * hitpoints;
+        py.misc.chp = (int16_t) (value >> 16);
+        py.misc.chp_frac = (uint16_t) (value & 0xFFFF);
+        py.misc.mhp = (int16_t) hitpoints;
 
         // can't print hit points here, may be in store or inventory mode
         py.flags.status |= PY_HP;
@@ -1951,91 +2100,95 @@ bool enter_wiz_mode() {
 // Weapon weight VS strength and dexterity -RAK-
 int attack_blows(int weight, int *wtohit) {
     int s = py.stats.use_stat[A_STR];
-    int d = py.stats.use_stat[A_DEX];
-
     if (s * 15 < weight) {
         *wtohit = s * 15 - weight;
         return 1;
     }
 
-    int str_index, dex_index;
-
     *wtohit = 0;
+
+    int d = py.stats.use_stat[A_DEX];
+    int dexterity;
+
     if (d < 10) {
-        dex_index = 0;
+        dexterity = 0;
     } else if (d < 19) {
-        dex_index = 1;
+        dexterity = 1;
     } else if (d < 68) {
-        dex_index = 2;
+        dexterity = 2;
     } else if (d < 108) {
-        dex_index = 3;
+        dexterity = 3;
     } else if (d < 118) {
-        dex_index = 4;
+        dexterity = 4;
     } else {
-        dex_index = 5;
+        dexterity = 5;
     }
 
     int adj_weight = (s * 10 / weight);
+    int strength;
+
     if (adj_weight < 2) {
-        str_index = 0;
+        strength = 0;
     } else if (adj_weight < 3) {
-        str_index = 1;
+        strength = 1;
     } else if (adj_weight < 4) {
-        str_index = 2;
+        strength = 2;
     } else if (adj_weight < 5) {
-        str_index = 3;
+        strength = 3;
     } else if (adj_weight < 7) {
-        str_index = 4;
+        strength = 4;
     } else if (adj_weight < 9) {
-        str_index = 5;
+        strength = 5;
     } else {
-        str_index = 6;
+        strength = 6;
     }
 
-    return (int) blows_table[str_index][dex_index];
+    return (int) blows_table[strength][dexterity];
 }
 
 // Special damage due to magical abilities of object -RAK-
 int tot_dam(inven_type *i_ptr, int tdam, int monster) {
-    if ((i_ptr->flags & TR_EGO_WEAPON) &&
-        (
-                (i_ptr->tval >= TV_SLING_AMMO && i_ptr->tval <= TV_ARROW) ||
-                (i_ptr->tval >= TV_HAFTED && i_ptr->tval <= TV_SWORD) ||
-                i_ptr->tval == TV_FLASK
-        )) {
+    bool isProjectile = i_ptr->tval >= TV_SLING_AMMO && i_ptr->tval <= TV_ARROW;
+    bool isHaftedSword = i_ptr->tval >= TV_HAFTED && i_ptr->tval <= TV_SWORD;
+
+    if ((i_ptr->flags & TR_EGO_WEAPON) && (isProjectile || isHaftedSword || i_ptr->tval == TV_FLASK)) {
         creature_type *m_ptr = &c_list[monster];
         recall_type *r_ptr = &c_recall[monster];
 
+        // Slay Dragon
         if ((m_ptr->cdefense & CD_DRAGON) && (i_ptr->flags & TR_SLAY_DRAGON)) {
-            // Slay Dragon
-
-            tdam = tdam * 4;
             r_ptr->r_cdefense |= CD_DRAGON;
-        } else if ((m_ptr->cdefense & CD_UNDEAD) && (i_ptr->flags & TR_SLAY_UNDEAD)) {
-            // Slay Undead
+            return tdam * 4;
+        }
 
-            tdam = tdam * 3;
+        // Slay Undead
+        if ((m_ptr->cdefense & CD_UNDEAD) && (i_ptr->flags & TR_SLAY_UNDEAD)) {
             r_ptr->r_cdefense |= CD_UNDEAD;
-        } else if ((m_ptr->cdefense & CD_ANIMAL) && (i_ptr->flags & TR_SLAY_ANIMAL)) {
-            // Slay Animal
+            return tdam * 3;
+        }
 
-            tdam = tdam * 2;
+        // Slay Animal
+        if ((m_ptr->cdefense & CD_ANIMAL) && (i_ptr->flags & TR_SLAY_ANIMAL)) {
             r_ptr->r_cdefense |= CD_ANIMAL;
-        } else if ((m_ptr->cdefense & CD_EVIL) && (i_ptr->flags & TR_SLAY_EVIL)) {
-            // Slay Evil
+            return tdam * 2;
+        }
 
-            tdam = tdam * 2;
+        // Slay Evil
+        if ((m_ptr->cdefense & CD_EVIL) && (i_ptr->flags & TR_SLAY_EVIL)) {
             r_ptr->r_cdefense |= CD_EVIL;
-        } else if ((m_ptr->cdefense & CD_FROST) && (i_ptr->flags & TR_FROST_BRAND)) {
-            // Frost
+            return tdam * 2;
+        }
 
-            tdam = tdam * 3 / 2;
+        // Frost
+        if ((m_ptr->cdefense & CD_FROST) && (i_ptr->flags & TR_FROST_BRAND)) {
             r_ptr->r_cdefense |= CD_FROST;
-        } else if ((m_ptr->cdefense & CD_FIRE) && (i_ptr->flags & TR_FLAME_TONGUE)) {
-            // Fire
+            return tdam * 3 / 2;
+        }
 
-            tdam = tdam * 3 / 2;
+        // Fire
+        if ((m_ptr->cdefense & CD_FIRE) && (i_ptr->flags & TR_FLAME_TONGUE)) {
             r_ptr->r_cdefense |= CD_FIRE;
+            return tdam * 3 / 2;
         }
     }
 
@@ -2126,40 +2279,37 @@ bool mmove(int dir, int *y, int *x) {
 
 // Saving throws for player character. -RAK-
 bool player_saves() {
-    // MPW C couldn't handle the expression, so split it into two parts
-    int16_t temp = class_level_adj[py.misc.pclass][CLA_SAVE];
+    int classLevelAdjustment = class_level_adj[py.misc.pclass][CLA_SAVE] * py.misc.lev / 3;
 
-    return (randint(100) <= (py.misc.save + stat_adj(A_WIS) + (temp * py.misc.lev / 3)));
+    int saving = py.misc.save + stat_adj(A_WIS) + classLevelAdjustment;
+
+    return randint(100) <= saving;
 }
 
 // Finds range of item in inventory list -RAK-
 int find_range(int item1, int item2, int *j, int *k) {
-    int i = 0;
-
     *j = -1;
     *k = -1;
 
-    inven_type *i_ptr = &inventory[0];
-
     bool flag = false;
 
-    while (i < inven_ctr) {
+    for (int i = 0; i < inven_ctr; i++) {
+        int itemID = (int) inventory[i].tval;
+
         if (!flag) {
-            if (i_ptr->tval == item1 || i_ptr->tval == item2) {
+            if (itemID == item1 || itemID == item2) {
                 flag = true;
                 *j = i;
             }
         } else {
-            if (i_ptr->tval != item1 && i_ptr->tval != item2) {
+            if (itemID != item1 && itemID != item2) {
                 *k = i - 1;
                 break;
             }
         }
-        i++;
-        i_ptr++;
     }
 
-    if (flag && (*k == -1)) {
+    if (flag && *k == -1) {
         *k = inven_ctr - 1;
     }
 
@@ -2173,25 +2323,29 @@ void teleport(int dis) {
     do {
         y = randint(cur_height) - 1;
         x = randint(cur_width) - 1;
+
         while (distance(y, x, char_row, char_col) > dis) {
-            y += ((char_row - y) / 2);
-            x += ((char_col - x) / 2);
+            y += (char_row - y) / 2;
+            x += (char_col - x) / 2;
         }
-    } while ((cave[y][x].fval >= MIN_CLOSED_SPACE) || (cave[y][x].cptr >= 2));
+    } while (cave[y][x].fval >= MIN_CLOSED_SPACE || cave[y][x].cptr >= 2);
 
     move_rec(char_row, char_col, y, x);
 
-    for (int i = char_row - 1; i <= char_row + 1; i++) {
-        for (int j = char_col - 1; j <= char_col + 1; j++) {
-            cave[i][j].tl = false;
-            lite_spot(i, j);
+    for (int yy = char_row - 1; yy <= char_row + 1; yy++) {
+        for (int xx = char_col - 1; xx <= char_col + 1; xx++) {
+            cave[yy][xx].tl = false;
+            lite_spot(yy, xx);
         }
     }
 
     lite_spot(char_row, char_col);
+
     char_row = (int16_t) y;
     char_col = (int16_t) x;
+
     check_view();
     creatures(false);
+
     teleport_flag = false;
 }
