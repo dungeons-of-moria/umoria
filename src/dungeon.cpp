@@ -715,7 +715,7 @@ static void playerDetectEnchantment() {
         int chance = (i < 22 ? 50 : 10);
 
         if (i_ptr->tval != TV_NOTHING && enchanted(i_ptr) && randint(chance) == 1) {
-            extern char *describe_use(int);
+            extern const char *describe_use(int);
 
             vtype tmp_str;
             (void) sprintf(tmp_str, "There's something about what you are %s...", describe_use(i));

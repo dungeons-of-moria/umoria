@@ -397,7 +397,7 @@ void change_speed(int);
 void py_bonuses(inven_type *, int);
 void calc_bonuses();
 int show_inven(int, int, bool, int, char *);
-char *describe_use(int);
+const char *describe_use(int);
 int show_equip(bool, int);
 void takeoff(int, int);
 int verify(const char *, int);

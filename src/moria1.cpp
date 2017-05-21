@@ -31,6 +31,7 @@ void change_speed(int num) {
 // depend on everything being worn are recalculated by calc_bonuses() -CJS-
 void py_bonuses(inven_type *t_ptr, int factor) {
     int amount = t_ptr->p1 * factor;
+
     if (t_ptr->flags & TR_STATS) {
         for (int i = 0; i < 6; i++) {
             if ((1 << i) & t_ptr->flags) {
@@ -38,197 +39,234 @@ void py_bonuses(inven_type *t_ptr, int factor) {
             }
         }
     }
+
     if (TR_SEARCH & t_ptr->flags) {
         py.misc.srh += amount;
         py.misc.fos -= amount;
     }
+
     if (TR_STEALTH & t_ptr->flags) {
         py.misc.stl += amount;
     }
+
     if (TR_SPEED & t_ptr->flags) {
         change_speed(-amount);
     }
+
     if ((TR_BLIND & t_ptr->flags) && factor > 0) {
         py.flags.blind += 1000;
     }
+
     if ((TR_TIMID & t_ptr->flags) && factor > 0) {
         py.flags.afraid += 50;
     }
+
     if (TR_INFRA & t_ptr->flags) {
         py.flags.see_infra += amount;
     }
 }
 
-// Recalculate the effect of all the stuff we use. -CJS-
-void calc_bonuses() {
-    struct player_type::flags *p_ptr = &py.flags;
-    struct player_type::misc *m_ptr = &py.misc;
+static void playerResetFlags() {
+    py.flags.see_inv = false;
+    py.flags.teleport = false;
+    py.flags.free_act = false;
+    py.flags.slow_digest = false;
+    py.flags.aggravate = false;
+    py.flags.sustain_str = false;
+    py.flags.sustain_int = false;
+    py.flags.sustain_wis = false;
+    py.flags.sustain_con = false;
+    py.flags.sustain_dex = false;
+    py.flags.sustain_chr = false;
+    py.flags.fire_resist = false;
+    py.flags.acid_resist = false;
+    py.flags.cold_resist = false;
+    py.flags.regenerate = false;
+    py.flags.lght_resist = false;
+    py.flags.ffall = false;
+}
 
-    if (p_ptr->slow_digest) {
-        p_ptr->food_digested++;
-    }
-    if (p_ptr->regenerate) {
-        p_ptr->food_digested -= 3;
-    }
-
-    p_ptr->see_inv = false;
-    p_ptr->teleport = false;
-    p_ptr->free_act = false;
-    p_ptr->slow_digest = false;
-    p_ptr->aggravate = false;
-    p_ptr->sustain_str = false;
-    p_ptr->sustain_int = false;
-    p_ptr->sustain_wis = false;
-    p_ptr->sustain_con = false;
-    p_ptr->sustain_dex = false;
-    p_ptr->sustain_chr = false;
-    p_ptr->fire_resist = false;
-    p_ptr->acid_resist = false;
-    p_ptr->cold_resist = false;
-    p_ptr->regenerate = false;
-    p_ptr->lght_resist = false;
-    p_ptr->ffall = false;
-
-    int old_dis_ac = m_ptr->dis_ac;
-
-    m_ptr->ptohit = (int16_t) tohit_adj();   // Real To Hit
-    m_ptr->ptodam = (int16_t) todam_adj();   // Real To Dam
-    m_ptr->ptoac = (int16_t) toac_adj();     // Real To AC
-    m_ptr->pac = 0;                // Real AC
-    m_ptr->dis_th = m_ptr->ptohit; // Display To Hit
-    m_ptr->dis_td = m_ptr->ptodam; // Display To Dam
-    m_ptr->dis_ac = 0;             // Display AC
-    m_ptr->dis_tac = m_ptr->ptoac; // Display To AC
+static void playerRecalculateBonusesFromInventory() {
+    inven_type *item;
 
     for (int i = INVEN_WIELD; i < INVEN_LIGHT; i++) {
-        inven_type *i_ptr = &inventory[i];
-        if (i_ptr->tval != TV_NOTHING) {
-            m_ptr->ptohit += i_ptr->tohit;
+        item = &inventory[i];
+
+        if (item->tval != TV_NOTHING) {
+            py.misc.ptohit += item->tohit;
 
             // Bows can't damage. -CJS-
-            if (i_ptr->tval != TV_BOW) {
-                m_ptr->ptodam += i_ptr->todam;
+            if (item->tval != TV_BOW) {
+                py.misc.ptodam += item->todam;
             }
 
-            m_ptr->ptoac += i_ptr->toac;
-            m_ptr->pac += i_ptr->ac;
-            if (known2_p(i_ptr)) {
-                m_ptr->dis_th += i_ptr->tohit;
-                if (i_ptr->tval != TV_BOW) {
-                    // Bows can't damage. -CJS-
-                    m_ptr->dis_td += i_ptr->todam;
+            py.misc.ptoac += item->toac;
+            py.misc.pac += item->ac;
+
+            if (known2_p(item)) {
+                py.misc.dis_th += item->tohit;
+
+                // Bows can't damage. -CJS-
+                if (item->tval != TV_BOW) {
+                    py.misc.dis_td += item->todam;
                 }
-                m_ptr->dis_tac += i_ptr->toac;
-                m_ptr->dis_ac += i_ptr->ac;
-            } else if (!(TR_CURSED & i_ptr->flags)) {
+
+                py.misc.dis_tac += item->toac;
+                py.misc.dis_ac += item->ac;
+            } else if (!(TR_CURSED & item->flags)) {
                 // Base AC values should always be visible,
                 // as long as the item is not cursed.
-                m_ptr->dis_ac += i_ptr->ac;
+                py.misc.dis_ac += item->ac;
             }
         }
     }
-    m_ptr->dis_ac += m_ptr->dis_tac;
+}
+
+static uint32_t inventoryCollectAllItemFlags() {
+    uint32_t flags = 0;
+
+    for (int i = INVEN_WIELD; i < INVEN_LIGHT; i++) {
+        flags |= inventory[i].flags;
+    }
+
+    return flags;
+}
+
+static void playerRecalculateSustainStatsFromInventory() {
+    for (int i = INVEN_WIELD; i < INVEN_LIGHT; i++) {
+        if (!(TR_SUST_STAT & inventory[i].flags)) {
+            continue;
+        }
+
+        switch (inventory[i].p1) {
+            case 1:
+                py.flags.sustain_str = true;
+                break;
+            case 2:
+                py.flags.sustain_int = true;
+                break;
+            case 3:
+                py.flags.sustain_wis = true;
+                break;
+            case 4:
+                py.flags.sustain_con = true;
+                break;
+            case 5:
+                py.flags.sustain_dex = true;
+                break;
+            case 6:
+                py.flags.sustain_chr = true;
+                break;
+            default:
+                break;
+        }
+    }
+}
+
+// Recalculate the effect of all the stuff we use. -CJS-
+void calc_bonuses() {
+    // Temporarily adjust food_digested
+    if (py.flags.slow_digest) {
+        py.flags.food_digested++;
+    }
+    if (py.flags.regenerate) {
+        py.flags.food_digested -= 3;
+    }
+
+    int savedDisplayAC = py.misc.dis_ac;
+
+    playerResetFlags();
+
+    py.misc.ptohit = (int16_t) tohit_adj();  // Real To Hit
+    py.misc.ptodam = (int16_t) todam_adj();  // Real To Dam
+    py.misc.ptoac = (int16_t) toac_adj();    // Real To AC
+    py.misc.pac = 0;                         // Real AC
+    py.misc.dis_th = py.misc.ptohit;         // Display To Hit
+    py.misc.dis_td = py.misc.ptodam;         // Display To Dam
+    py.misc.dis_ac = 0;                      // Display AC
+    py.misc.dis_tac = py.misc.ptoac;         // Display To AC
+
+    playerRecalculateBonusesFromInventory();
+
+    py.misc.dis_ac += py.misc.dis_tac;
 
     if (weapon_heavy) {
-        m_ptr->dis_th += (py.stats.use_stat[A_STR] * 15 - inventory[INVEN_WIELD].weight);
+        py.misc.dis_th += (py.stats.use_stat[A_STR] * 15 - inventory[INVEN_WIELD].weight);
     }
 
     // Add in temporary spell increases
-    if (p_ptr->invuln > 0) {
-        m_ptr->pac += 100;
-        m_ptr->dis_ac += 100;
+    if (py.flags.invuln > 0) {
+        py.misc.pac += 100;
+        py.misc.dis_ac += 100;
     }
-    if (p_ptr->blessed > 0) {
-        m_ptr->pac += 2;
-        m_ptr->dis_ac += 2;
+
+    if (py.flags.blessed > 0) {
+        py.misc.pac += 2;
+        py.misc.dis_ac += 2;
     }
-    if (p_ptr->detect_inv > 0) {
-        p_ptr->see_inv = true;
+
+    if (py.flags.detect_inv > 0) {
+        py.flags.see_inv = true;
     }
 
     // can't print AC here because might be in a store
-    if (old_dis_ac != m_ptr->dis_ac) {
-        p_ptr->status |= PY_ARMOR;
+    if (savedDisplayAC != py.misc.dis_ac) {
+        py.flags.status |= PY_ARMOR;
     }
 
-    inven_type *i_ptr;
-
-    uint32_t item_flags = 0;
-    i_ptr = &inventory[INVEN_WIELD];
-    for (int i = INVEN_WIELD; i < INVEN_LIGHT; i++) {
-        item_flags |= i_ptr->flags;
-        i_ptr++;
-    }
+    uint32_t item_flags = inventoryCollectAllItemFlags();
 
     if (TR_SLOW_DIGEST & item_flags) {
-        p_ptr->slow_digest = true;
+        py.flags.slow_digest = true;
     }
     if (TR_AGGRAVATE & item_flags) {
-        p_ptr->aggravate = true;
+        py.flags.aggravate = true;
     }
     if (TR_TELEPORT & item_flags) {
-        p_ptr->teleport = true;
+        py.flags.teleport = true;
     }
     if (TR_REGEN & item_flags) {
-        p_ptr->regenerate = true;
+        py.flags.regenerate = true;
     }
     if (TR_RES_FIRE & item_flags) {
-        p_ptr->fire_resist = true;
+        py.flags.fire_resist = true;
     }
     if (TR_RES_ACID & item_flags) {
-        p_ptr->acid_resist = true;
+        py.flags.acid_resist = true;
     }
     if (TR_RES_COLD & item_flags) {
-        p_ptr->cold_resist = true;
+        py.flags.cold_resist = true;
     }
     if (TR_FREE_ACT & item_flags) {
-        p_ptr->free_act = true;
+        py.flags.free_act = true;
     }
     if (TR_SEE_INVIS & item_flags) {
-        p_ptr->see_inv = true;
+        py.flags.see_inv = true;
     }
     if (TR_RES_LIGHT & item_flags) {
-        p_ptr->lght_resist = true;
+        py.flags.lght_resist = true;
     }
     if (TR_FFALL & item_flags) {
-        p_ptr->ffall = true;
+        py.flags.ffall = true;
     }
 
-    i_ptr = &inventory[INVEN_WIELD];
-    for (int i = INVEN_WIELD; i < INVEN_LIGHT; i++) {
-        if (TR_SUST_STAT & i_ptr->flags) {
-            switch (i_ptr->p1) {
-                case 1:
-                    p_ptr->sustain_str = true;
-                    break;
-                case 2:
-                    p_ptr->sustain_int = true;
-                    break;
-                case 3:
-                    p_ptr->sustain_wis = true;
-                    break;
-                case 4:
-                    p_ptr->sustain_con = true;
-                    break;
-                case 5:
-                    p_ptr->sustain_dex = true;
-                    break;
-                case 6:
-                    p_ptr->sustain_chr = true;
-                    break;
-                default:
-                    break;
-            }
-        }
-        i_ptr++;
-    }
+    playerRecalculateSustainStatsFromInventory();
 
-    if (p_ptr->slow_digest) {
-        p_ptr->food_digested--;
+    // Reset food_digested values
+    if (py.flags.slow_digest) {
+        py.flags.food_digested--;
     }
-    if (p_ptr->regenerate) {
-        p_ptr->food_digested += 3;
+    if (py.flags.regenerate) {
+        py.flags.food_digested += 3;
     }
+}
+
+static void inventoryItemWeightText(char *text, int itemID) {
+    int totalWeight = inventory[itemID].weight * inventory[itemID].number;
+    int quotient = totalWeight / 10;
+    int remainder = totalWeight % 10;
+
+    (void) sprintf(text, "%3d.%d lb", quotient, remainder);
 }
 
 // Displays inventory items from r1 to r2 -RAK-
@@ -238,8 +276,7 @@ void calc_bonuses() {
 // used. If mask is non-zero, then only display those items which have a
 // non-zero entry in the mask array.
 int show_inven(int r1, int r2, bool weight, int col, char *mask) {
-    bigvtype tmp_val;
-    vtype out_val[23];
+    vtype descriptions[23];
 
     int len = 79 - col;
 
@@ -250,22 +287,28 @@ int show_inven(int r1, int r2, bool weight, int col, char *mask) {
         lim = 76;
     }
 
-    // Print the items
+    // Generate the descriptions text
     for (int i = r1; i <= r2; i++) {
-        if (mask == CNIL || mask[i]) {
-            objdes(tmp_val, &inventory[i], true);
+        if (mask != CNIL && !mask[i]) {
+            continue;
+        }
 
-            // Truncate if too long.
-            tmp_val[lim] = 0;
+        bigvtype description;
+        objdes(description, &inventory[i], true);
 
-            (void) sprintf(out_val[i], "%c) %s", 'a' + i, tmp_val);
-            int l = (int) strlen(out_val[i]) + 2;
-            if (weight) {
-                l += 9;
-            }
-            if (l > len) {
-                len = l;
-            }
+        // Truncate if too long.
+        description[lim] = 0;
+
+        (void) sprintf(descriptions[i], "%c) %s", 'a' + i, description);
+
+        int l = (int) strlen(descriptions[i]) + 2;
+
+        if (weight) {
+            l += 9;
+        }
+
+        if (l > len) {
+            len = l;
         }
     }
 
@@ -275,82 +318,105 @@ int show_inven(int r1, int r2, bool weight, int col, char *mask) {
     }
 
     int current_line = 1;
+
+    // Print the descriptions
     for (int i = r1; i <= r2; i++) {
-        if (mask == CNIL || mask[i]) {
-            // don't need first two spaces if in first column
-            if (col == 0) {
-                prt(out_val[i], current_line, col);
-            } else {
-                put_buffer("  ", current_line, col);
-                prt(out_val[i], current_line, col + 2);
-            }
-            if (weight) {
-                int total_weight = inventory[i].weight * inventory[i].number;
-                (void) sprintf(tmp_val, "%3d.%d lb", (total_weight) / 10, (total_weight) % 10);
-                prt(tmp_val, current_line, 71);
-            }
-            current_line++;
+        if (mask != CNIL && !mask[i]) {
+            continue;
         }
+
+        // don't need first two spaces if in first column
+        if (col == 0) {
+            prt(descriptions[i], current_line, col);
+        } else {
+            put_buffer("  ", current_line, col);
+            prt(descriptions[i], current_line, col + 2);
+        }
+
+        if (weight) {
+            bigvtype text;
+            inventoryItemWeightText(text, i);
+            prt(text, current_line, 71);
+        }
+
+        current_line++;
     }
+
     return col;
 }
 
 // Return a string describing how a given equipment item is carried. -CJS-
-char *describe_use(int i) {
-    const char *p;
-    switch (i) {
+const char *describe_use(int positionID) {
+    switch (positionID) {
         case INVEN_WIELD:
-            p = "wielding";
-            break;
+            return "wielding";
         case INVEN_HEAD:
-            p = "wearing on your head";
-            break;
+            return "wearing on your head";
         case INVEN_NECK:
-            p = "wearing around your neck";
-            break;
+            return "wearing around your neck";
         case INVEN_BODY:
-            p = "wearing on your body";
-            break;
+            return "wearing on your body";
         case INVEN_ARM:
-            p = "wearing on your arm";
-            break;
+            return "wearing on your arm";
         case INVEN_HANDS:
-            p = "wearing on your hands";
-            break;
+            return "wearing on your hands";
         case INVEN_RIGHT:
-            p = "wearing on your right hand";
-            break;
+            return "wearing on your right hand";
         case INVEN_LEFT:
-            p = "wearing on your left hand";
-            break;
+            return "wearing on your left hand";
         case INVEN_FEET:
-            p = "wearing on your feet";
-            break;
+            return "wearing on your feet";
         case INVEN_OUTER:
-            p = "wearing about your body";
-            break;
+            return "wearing about your body";
         case INVEN_LIGHT:
-            p = "using to light the way";
-            break;
+            return "using to light the way";
         case INVEN_AUX:
-            p = "holding ready by your side";
-            break;
+            return "holding ready by your side";
         default:
-            p = "carrying in your pack";
-            break;
+            return "carrying in your pack";
     }
-    return (char *) p;
+}
+
+static const char *itemPostitionDescription(int positionID, uint16_t weight) {
+    switch (positionID) {
+        case INVEN_WIELD:
+            if (py.stats.use_stat[A_STR] * 15 < weight) {
+                return "Just lifting";
+            }
+
+            return "Wielding";
+        case INVEN_HEAD:
+            return "On head";
+        case INVEN_NECK:
+            return "Around neck";
+        case INVEN_BODY:
+            return "On body";
+        case INVEN_ARM:
+            return "On arm";
+        case INVEN_HANDS:
+            return "On hands";
+        case INVEN_RIGHT:
+            return "On right hand";
+        case INVEN_LEFT:
+            return "On left hand";
+        case INVEN_FEET:
+            return "On feet";
+        case INVEN_OUTER:
+            return "About body";
+        case INVEN_LIGHT:
+            return "Light source";
+        case INVEN_AUX:
+            return "Spare weapon";
+        default:
+            return "Unknown value";
+    }
 }
 
 // Displays equipment items from r1 to end -RAK-
 // Keep display as far right as possible. -CJS-
 int show_equip(bool weight, int col) {
-    bigvtype prt2;
-    vtype out_val[INVEN_ARRAY_SIZE - INVEN_WIELD];
+    vtype descriptions[INVEN_ARRAY_SIZE - INVEN_WIELD];
 
-    inven_type *i_ptr;
-
-    int line = 0;
     int len = 79 - col;
 
     int lim;
@@ -361,111 +427,77 @@ int show_equip(bool weight, int col) {
     }
 
     // Range of equipment
+    int line = 0;
     for (int i = INVEN_WIELD; i < INVEN_ARRAY_SIZE; i++) {
-        i_ptr = &inventory[i];
-        if (i_ptr->tval != TV_NOTHING) {
-            const char *prt1;
-
-            // Get position
-            switch (i) {
-                case INVEN_WIELD:
-                    if (py.stats.use_stat[A_STR] * 15 < i_ptr->weight) {
-                        prt1 = "Just lifting";
-                    } else {
-                        prt1 = "Wielding";
-                    }
-                    break;
-                case INVEN_HEAD:
-                    prt1 = "On head";
-                    break;
-                case INVEN_NECK:
-                    prt1 = "Around neck";
-                    break;
-                case INVEN_BODY:
-                    prt1 = "On body";
-                    break;
-                case INVEN_ARM:
-                    prt1 = "On arm";
-                    break;
-                case INVEN_HANDS:
-                    prt1 = "On hands";
-                    break;
-                case INVEN_RIGHT:
-                    prt1 = "On right hand";
-                    break;
-                case INVEN_LEFT:
-                    prt1 = "On left hand";
-                    break;
-                case INVEN_FEET:
-                    prt1 = "On feet";
-                    break;
-                case INVEN_OUTER:
-                    prt1 = "About body";
-                    break;
-                case INVEN_LIGHT:
-                    prt1 = "Light source";
-                    break;
-                case INVEN_AUX:
-                    prt1 = "Spare weapon";
-                    break;
-                default:
-                    prt1 = "Unknown value";
-                    break;
-            }
-            objdes(prt2, &inventory[i], true);
-
-            // Truncate if necessary
-            prt2[lim] = 0;
-
-            (void) sprintf(out_val[line], "%c) %-14s: %s", line + 'a', prt1, prt2);
-            int l = (int) strlen(out_val[line]) + 2;
-            if (weight) {
-                l += 9;
-            }
-            if (l > len) {
-                len = l;
-            }
-            line++;
+        if (inventory[i].tval == TV_NOTHING) {
+            continue;
         }
+
+        // Get position
+        const char *positionDescription = itemPostitionDescription(i, inventory[i].weight);
+
+        bigvtype description;
+        objdes(description, &inventory[i], true);
+
+        // Truncate if necessary
+        description[lim] = 0;
+
+        (void) sprintf(descriptions[line], "%c) %-14s: %s", line + 'a', positionDescription, description);
+
+        int l = (int) strlen(descriptions[line]) + 2;
+
+        if (weight) {
+            l += 9;
+        }
+
+        if (l > len) {
+            len = l;
+        }
+
+        line++;
     }
+
     col = 79 - len;
     if (col < 0) {
         col = 0;
     }
 
-    line = 0;
-
     // Range of equipment
+    line = 0;
     for (int i = INVEN_WIELD; i < INVEN_ARRAY_SIZE; i++) {
-        i_ptr = &inventory[i];
-        if (i_ptr->tval != TV_NOTHING) {
-            // don't need first two spaces when using whole screen
-            if (col == 0) {
-                prt(out_val[line], line + 1, col);
-            } else {
-                put_buffer("  ", line + 1, col);
-                prt(out_val[line], line + 1, col + 2);
-            }
-            if (weight) {
-                int total_weight = i_ptr->weight * i_ptr->number;
-                (void) sprintf(prt2, "%3d.%d lb", (total_weight) / 10, (total_weight) % 10);
-                prt(prt2, line + 1, 71);
-            }
-            line++;
+        if (inventory[i].tval == TV_NOTHING) {
+            continue;
         }
+
+        // don't need first two spaces when using whole screen
+        if (col == 0) {
+            prt(descriptions[line], line + 1, col);
+        } else {
+            put_buffer("  ", line + 1, col);
+            prt(descriptions[line], line + 1, col + 2);
+        }
+
+        if (weight) {
+            bigvtype text;
+            inventoryItemWeightText(text, i);
+            prt(text, line + 1, 71);
+        }
+
+        line++;
     }
     erase_line(line + 1, col);
+
     return col;
 }
 
 // Remove item from equipment list -RAK-
 void takeoff(int item_val, int posn) {
-    equip_ctr--;
+    py.flags.status |= PY_STR_WGT;
 
     inven_type *t_ptr = &inventory[item_val];
 
     inven_weight -= t_ptr->weight * t_ptr->number;
-    py.flags.status |= PY_STR_WGT;
+    equip_ctr--;
 
     const char *p;
     if (item_val == INVEN_WIELD || item_val == INVEN_AUX) {
@@ -476,35 +508,38 @@ void takeoff(int item_val, int posn) {
         p = "Was wearing ";
     }
 
-    bigvtype out_val, prt2;
-    objdes(prt2, t_ptr, true);
+    bigvtype description;
+    objdes(description, t_ptr, true);
+
+    bigvtype msg;
     if (posn >= 0) {
-        (void) sprintf(out_val, "%s%s (%c)", p, prt2, 'a' + posn);
+        (void) sprintf(msg, "%s%s (%c)", p, description, 'a' + posn);
     } else {
-        (void) sprintf(out_val, "%s%s", p, prt2);
+        (void) sprintf(msg, "%s%s", p, description);
     }
-    msg_print(out_val);
+    msg_print(msg);
 
     // For secondary weapon
     if (item_val != INVEN_AUX) {
         py_bonuses(t_ptr, -1);
     }
+
     invcopy(t_ptr, OBJ_NOTHING);
 }
 
 // Used to verify if this really is the item we wish to -CJS-
 // wear or read.
 int verify(const char *prompt, int item) {
-    bigvtype out_str, object;
-
-    objdes(object, &inventory[item], true);
+    bigvtype description;
+    objdes(description, &inventory[item], true);
 
     // change the period to a question mark
-    object[strlen(object) - 1] = '?';
+    description[strlen(description) - 1] = '?';
 
-    (void) sprintf(out_str, "%s %s", prompt, object);
+    bigvtype msg;
+    (void) sprintf(msg, "%s %s", prompt, description);
 
-    return get_check(out_str);
+    return get_check(msg);
 }
 
 // All inventory commands (wear, exchange, take off, drop, inventory and
@@ -549,11 +584,12 @@ static int wear_low, wear_high;
 static void inven_screen(int new_scr) {
     if (new_scr == scr_state) {
         return;
+    } else {
+        scr_state = new_scr;
     }
 
     int line = 0;
 
-    scr_state = new_scr;
     switch (new_scr) {
         case BLANK_SCR:
             line = 0;
@@ -562,6 +598,7 @@ static void inven_screen(int new_scr) {
             if (scr_left > 52) {
                 scr_left = 52;
             }
+
             prt("  ESC: exit", 1, scr_left);
             prt("  w  : wear or wield object", 2, scr_left);
             prt("  t  : take off item", 3, scr_left);
@@ -569,6 +606,7 @@ static void inven_screen(int new_scr) {
             prt("  x  : exchange weapons", 5, scr_left);
             prt("  i  : inventory of pack", 6, scr_left);
             prt("  e  : list used equipment", 7, scr_left);
+
             line = 7;
             break;
         case INVEN_SCR:
@@ -596,17 +634,7 @@ static void inven_screen(int new_scr) {
     }
 }
 
-// This does all the work.
-void inven_command(char command) {
-    bigvtype prt1, prt2;
-    int item, tmp;
-    inven_type tmp_obj;
-    int slot = 0;
-
-    free_turn_flag = true;
-
-    save_screen();
-
+static void setInventoryCommandScreenState(char command) {
     // Take up where we left off after a previous inventory command. -CJS-
     if (doing_inven) {
         // If the screen has been flushed, we need to redraw. If the command
@@ -620,18 +648,654 @@ void inven_command(char command) {
             scr_left = 50;
             scr_base = 0;
         }
-        tmp = scr_state;
-        scr_state = WRONG_SCR;
-        inven_screen(tmp);
-    } else {
-        scr_left = 50;
-        scr_base = 0;
 
-        // this forces exit of inven_command() if selecting is not set true
-        scr_state = BLANK_SCR;
+        int savedState = scr_state;
+        scr_state = WRONG_SCR;
+        inven_screen(savedState);
+
+        return;
     }
 
-    bool selecting;
+    scr_left = 50;
+    scr_base = 0;
+
+    // this forces exit of inven_command() if selecting is not set true
+    scr_state = BLANK_SCR;
+}
+
+static void displayInventory() {
+    if (inven_ctr == 0) {
+        msg_print("You are not carrying anything.");
+    } else {
+        inven_screen(INVEN_SCR);
+    }
+}
+
+static void displayEquipment() {
+    if (equip_ctr == 0) {
+        msg_print("You are not using any equipment.");
+    } else {
+        inven_screen(EQUIP_SCR);
+    }
+}
+
+static bool inventoryTakeOffItem(bool selecting) {
+    if (equip_ctr == 0) {
+        msg_print("You are not using any equipment.");
+        // don't print message restarting inven command after taking off something, it is confusing
+        return selecting;
+    }
+
+    if (inven_ctr >= INVEN_WIELD && !doing_inven) {
+        msg_print("You will have to drop something first.");
+        return selecting;
+    }
+
+    if (scr_state != BLANK_SCR) {
+        inven_screen(EQUIP_SCR);
+    }
+
+    return true;
+}
+
+static bool inventoryDropItem(char *command, bool selecting) {
+    if (inven_ctr == 0 && equip_ctr == 0) {
+        msg_print("But you're not carrying anything.");
+        return selecting;
+    }
+
+    if (cave[char_row][char_col].tptr != 0) {
+        msg_print("There's no room to drop anything here.");
+        return selecting;
+    }
+
+    if ((scr_state == EQUIP_SCR && equip_ctr > 0) || inven_ctr == 0) {
+        if (scr_state != BLANK_SCR) {
+            inven_screen(EQUIP_SCR);
+        }
+        *command = 'r'; // Remove - or take off and drop.
+    } else if (scr_state != BLANK_SCR) {
+        inven_screen(INVEN_SCR);
+    }
+
+    return true;
+}
+
+static bool inventoryWearWieldItem(bool selecting) {
+    // Note: simple loop to get wear_low value
+    for (wear_low = 0; wear_low < inven_ctr && inventory[wear_low].tval > TV_MAX_WEAR; wear_low++);
+
+    // Note: simple loop to get wear_high value
+    for (wear_high = wear_low; wear_high < inven_ctr && inventory[wear_high].tval >= TV_MIN_WEAR; wear_high++);
+
+    wear_high--;
+
+    if (wear_low > wear_high) {
+        msg_print("You have nothing to wear or wield.");
+        return selecting;
+    }
+
+    if (scr_state != BLANK_SCR && scr_state != INVEN_SCR) {
+        inven_screen(WEAR_SCR);
+    }
+
+    return true;
+}
+
+static void inventoryUnwieldItem() {
+    if (inventory[INVEN_WIELD].tval == TV_NOTHING && inventory[INVEN_AUX].tval == TV_NOTHING) {
+        msg_print("But you are wielding no weapons.");
+        return;
+    }
+
+    if (TR_CURSED & inventory[INVEN_WIELD].flags) {
+        bigvtype description;
+        objdes(description, &inventory[INVEN_WIELD], false);
+
+        bigvtype msg;
+        (void) sprintf(msg, "The %s you are wielding appears to be cursed.", description);
+
+        msg_print(msg);
+
+        return;
+    }
+
+    free_turn_flag = false;
+
+    inven_type savedItem = inventory[INVEN_AUX];
+    inventory[INVEN_AUX] = inventory[INVEN_WIELD];
+    inventory[INVEN_WIELD] = savedItem;
+
+    if (scr_state == EQUIP_SCR) {
+        scr_left = show_equip(show_weight_flag, scr_left);
+    }
+
+    py_bonuses(&inventory[INVEN_AUX], -1);  // Subtract bonuses
+    py_bonuses(&inventory[INVEN_WIELD], 1); // Add bonuses
+
+    if (inventory[INVEN_WIELD].tval != TV_NOTHING) {
+        bigvtype msgLabel;
+        (void) strcpy(msgLabel, "Primary weapon   : ");
+
+        bigvtype description;
+        objdes(description, &inventory[INVEN_WIELD], true);
+
+        msg_print(strcat(msgLabel, description));
+    } else {
+        msg_print("No primary weapon.");
+    }
+
+    // this is a new weapon, so clear the heavy flag
+    weapon_heavy = false;
+    check_strength();
+}
+
+// look for item whose inscription matches "which"
+static int inventoryGetItemMatchingInscription(char which, char command, int from, int to) {
+    int item;
+
+    if (which >= '0' && which <= '9' && command != 'r' && command != 't') {
+        int m;
+
+        // Note: simple loop to get id
+        for (m = from; m <= to && ((inventory[m].inscrip[0] != which) || (inventory[m].inscrip[1] != '\0')); m++);
+
+        if (m <= to) {
+            item = m;
+        } else {
+            item = -1;
+        }
+    } else if (which >= 'A' && which <= 'Z') {
+        item = which - 'A';
+    } else {
+        item = which - 'a';
+    }
+
+    return item;
+}
+
+static void buildCommandHeading(char *prt1, int from, int to, const char *swap, char command, const char *prompt) {
+    from = from + 'a';
+    to = to + 'a';
+
+    const char *listItems = "";
+    if (scr_state == BLANK_SCR) {
+        listItems = ", * to list";
+    }
+
+    const char *digits = "";
+    if (command == 'w' || command == 'd') {
+        digits = ", 0-9";
+    }
+
+    (void) sprintf(prt1, "(%c-%c%s%s%s, space to break, ESC to exit) %s which one?", from, to, listItems, swap, digits, prompt);
+}
+
+static void drawInventoryScreenForCommand(char command) {
+    if (command == 't' || command == 'r') {
+        inven_screen(EQUIP_SCR);
+    } else if (command == 'w' && scr_state != INVEN_SCR) {
+        inven_screen(WEAR_SCR);
+    } else {
+        inven_screen(INVEN_SCR);
+    }
+}
+
+static void swapInventoryScreenForDrop() {
+    if (scr_state == EQUIP_SCR) {
+        inven_screen(INVEN_SCR);
+    } else if (scr_state == INVEN_SCR) {
+        inven_screen(EQUIP_SCR);
+    }
+}
+
+static int inventoryGetSlotToWearEquipment(int item) {
+    int slot;
+
+    // Slot for equipment
+    switch (inventory[item].tval) {
+        case TV_SLING_AMMO:
+        case TV_BOLT:
+        case TV_ARROW:
+        case TV_BOW:
+        case TV_HAFTED:
+        case TV_POLEARM:
+        case TV_SWORD:
+        case TV_DIGGING:
+        case TV_SPIKE:
+            slot = INVEN_WIELD;
+            break;
+        case TV_LIGHT:
+            slot = INVEN_LIGHT;
+            break;
+        case TV_BOOTS:
+            slot = INVEN_FEET;
+            break;
+        case TV_GLOVES:
+            slot = INVEN_HANDS;
+            break;
+        case TV_CLOAK:
+            slot = INVEN_OUTER;
+            break;
+        case TV_HELM:
+            slot = INVEN_HEAD;
+            break;
+        case TV_SHIELD:
+            slot = INVEN_ARM;
+            break;
+        case TV_HARD_ARMOR:
+        case TV_SOFT_ARMOR:
+            slot = INVEN_BODY;
+            break;
+        case TV_AMULET:
+            slot = INVEN_NECK;
+            break;
+        case TV_RING:
+            if (inventory[INVEN_RIGHT].tval == TV_NOTHING) {
+                slot = INVEN_RIGHT;
+            } else if (inventory[INVEN_LEFT].tval == TV_NOTHING) {
+                slot = INVEN_LEFT;
+            } else {
+                slot = 0;
+
+                // Rings. Give choice over where they go.
+                do {
+                    char query;
+                    if (!get_com("Put ring on which hand (l/r/L/R)?", &query)) {
+                        slot = -1;
+                    } else if (query == 'l') {
+                        slot = INVEN_LEFT;
+                    } else if (query == 'r') {
+                        slot = INVEN_RIGHT;
+                    } else {
+                        if (query == 'L') {
+                            slot = INVEN_LEFT;
+                        } else if (query == 'R') {
+                            slot = INVEN_RIGHT;
+                        } else {
+                            bell();
+                        }
+                        if (slot && !verify("Replace", slot)) {
+                            slot = 0;
+                        }
+                    }
+                } while (slot == 0);
+            }
+            break;
+        default:
+            slot = -1;
+            msg_print("IMPOSSIBLE: I don't see how you can use that.");
+            break;
+    }
+
+    return slot;
+}
+
+static void inventoryItemIsCursedMessage(int itemID) {
+    bigvtype description;
+    objdes(description, &inventory[itemID], false);
+
+    bigvtype itemText;
+    (void) sprintf(itemText, "The %s you are ", description);
+
+    if (itemID == INVEN_HEAD) {
+        (void) strcat(itemText, "wielding ");
+    } else {
+        (void) strcat(itemText, "wearing ");
+    }
+
+    msg_print(strcat(itemText, "appears to be cursed."));
+}
+
+static bool selectItemCommands(char *command, char *which, bool selecting) {
+    int itemToTakeOff;
+    int slot = 0;
+
+    int from, to;
+    const char *prompt;
+    const char *swap;
+
+    while (selecting && free_turn_flag) {
+        swap = "";
+
+        if (*command == 'w') {
+            from = wear_low;
+            to = wear_high;
+            prompt = "Wear/Wield";
+        } else {
+            from = 0;
+            if (*command == 'd') {
+                to = inven_ctr - 1;
+                prompt = "Drop";
+
+                if (equip_ctr > 0) {
+                    swap = ", / for Equip";
+                }
+            } else {
+                to = equip_ctr - 1;
+
+                if (*command == 't') {
+                    prompt = "Take off";
+                } else {
+                    // command == 'r'
+
+                    prompt = "Throw off";
+                    if (inven_ctr > 0) {
+                        swap = ", / for Inven";
+                    }
+                }
+            }
+        }
+
+        if (from > to) {
+            selecting = false;
+            continue;
+        }
+
+        bigvtype headingText;
+        buildCommandHeading(headingText, from, to, swap, *command, prompt);
+
+        // Abort everything.
+        if (!get_com(headingText, which)) {
+            *which = ESCAPE;
+            selecting = false;
+            continue; // can we just return false from the function? -MRC-
+        }
+
+        // Draw the screen and maybe exit to main prompt.
+        if (*which == ' ' || *which == '*') {
+            drawInventoryScreenForCommand(*command);
+            if (*which == ' ') {
+                selecting = false;
+            }
+            continue;
+        }
+
+        // Swap screens (for drop)
+        if (*which == '/' && swap[0]) {
+            if (*command == 'd') {
+                *command = 'r';
+            } else {
+                *command = 'd';
+            }
+            swapInventoryScreenForDrop();
+            continue;
+        }
+
+        // look for item whose inscription matches "which"
+        int item = inventoryGetItemMatchingInscription(*which, *command, from, to);
+
+        if (item < from || item > to) {
+            bell();
+            continue;
+        }
+
+        // Found an item!
+
+        if (*command == 'r' || *command == 't') {
+            // Get its place in the equipment list.
+            itemToTakeOff = item;
+            item = 21;
+
+            do {
+                item++;
+                if (inventory[item].tval != TV_NOTHING) {
+                    itemToTakeOff--;
+                }
+            } while (itemToTakeOff >= 0);
+
+            if (isupper((int) *which) && !verify((char *) prompt, item)) {
+                item = -1;
+            } else if (TR_CURSED & inventory[item].flags) {
+                item = -1;
+                msg_print("Hmmm, it seems to be cursed.");
+            } else if (*command == 't' && !inven_check_num(&inventory[item])) {
+                if (cave[char_row][char_col].tptr != 0) {
+                    item = -1;
+                    msg_print("You can't carry it.");
+                } else if (get_check("You can't carry it.  Drop it?")) {
+                    *command = 'r';
+                } else {
+                    item = -1;
+                }
+            }
+
+            if (item >= 0) {
+                if (*command == 'r') {
+                    inven_drop(item, true);
+                    // As a safety measure, set the player's inven
+                    // weight to 0, when the last object is dropped.
+                    if (inven_ctr == 0 && equip_ctr == 0) {
+                        inven_weight = 0;
+                    }
+                } else {
+                    slot = inven_carry(&inventory[item]);
+                    takeoff(item, slot);
+                }
+
+                check_strength();
+
+                free_turn_flag = false;
+
+                if (*command == 'r') {
+                    selecting = false;
+                }
+            }
+        } else if (*command == 'w') {
+            // Wearing. Go to a bit of trouble over replacing existing equipment.
+
+            if (isupper((int) *which) && !verify((char *) prompt, item)) {
+                item = -1;
+            } else {
+                slot = inventoryGetSlotToWearEquipment(item);
+                if (slot == -1) {
+                    item = -1;
+                }
+            }
+
+            if (item >= 0 && inventory[slot].tval != TV_NOTHING) {
+                if (TR_CURSED & inventory[slot].flags) {
+                    inventoryItemIsCursedMessage(slot);
+                    item = -1;
+                } else if (inventory[item].subval == ITEM_GROUP_MIN && inventory[item].number > 1 && !inven_check_num(&inventory[slot])) {
+                    // this can happen if try to wield a torch,
+                    // and have more than one in inventory
+                    msg_print("You will have to drop something first.");
+                    item = -1;
+                }
+            }
+
+            // OK. Wear it.
+            if (item >= 0) {
+                free_turn_flag = false;
+
+                // first remove new item from inventory
+                inven_type savedItem = inventory[item];
+                inven_type *i_ptr = &savedItem;
+
+                wear_high--;
+
+                // Fix for torches
+                if (i_ptr->number > 1 && i_ptr->subval <= ITEM_SINGLE_STACK_MAX) {
+                    i_ptr->number = 1;
+                    wear_high++;
+                }
+
+                inven_weight += i_ptr->weight * i_ptr->number;
+
+                // Subtracts weight
+                inven_destroy(item);
+
+                // Second, add old item to inv and remove
+                // from equipment list, if necessary.
+                i_ptr = &inventory[slot];
+                if (i_ptr->tval != TV_NOTHING) {
+                    int savedCounter = inven_ctr;
+
+                    itemToTakeOff = inven_carry(i_ptr);
+
+                    // If item removed did not stack with anything
+                    // in inventory, then increment wear_high.
+                    if (inven_ctr != savedCounter) {
+                        wear_high++;
+                    }
+
+                    takeoff(slot, itemToTakeOff);
+                }
+
+                // third, wear new item
+                *i_ptr = savedItem;
+                equip_ctr++;
+
+                py_bonuses(i_ptr, 1);
+
+                const char *text;
+                if (slot == INVEN_WIELD) {
+                    text = "You are wielding";
+                } else if (slot == INVEN_LIGHT) {
+                    text = "Your light source is";
+                } else {
+                    text = "You are wearing";
+                }
+
+                bigvtype description;
+                objdes(description, i_ptr, true);
+
+                // Get the right equipment letter.
+                itemToTakeOff = INVEN_WIELD;
+                item = 0;
+
+                while (itemToTakeOff != slot) {
+                    if (inventory[itemToTakeOff++].tval != TV_NOTHING) {
+                        item++;
+                    }
+                }
+
+                bigvtype msg;
+                (void) sprintf(msg, "%s %s (%c)", text, description, 'a' + item);
+                msg_print(msg);
+
+                // this is a new weapon, so clear heavy flag
+                if (slot == INVEN_WIELD) {
+                    weapon_heavy = false;
+                }
+                check_strength();
+
+                if (i_ptr->flags & TR_CURSED) {
+                    msg_print("Oops! It feels deathly cold!");
+                    add_inscribe(i_ptr, ID_DAMD);
+
+                    // To force a cost of 0, even if unidentified.
+                    i_ptr->cost = -1;
+                }
+            }
+        } else {
+            // command == 'd'
+
+            // NOTE: initializing to `ESCAPE` as warnings were being given. -MRC-
+            char query = ESCAPE;
+
+            if (inventory[item].number > 1) {
+                bigvtype description;
+                objdes(description, &inventory[item], true);
+                description[strlen(description) - 1] = '?';
+
+                bigvtype msg;
+                (void) sprintf(msg, "Drop all %s [y/n]", description);
+                msg[strlen(description) - 1] = '.';
+
+                prt(msg, 0, 0);
+
+                query = inkey();
+
+                if (query != 'y' && query != 'n') {
+                    if (query != ESCAPE) {
+                        bell();
+                    }
+                    erase_line(MSG_LINE, 0);
+                    item = -1;
+                }
+            } else if (isupper((int) *which) && !verify((char *) prompt, item)) {
+                item = -1;
+            } else {
+                query = 'y';
+            }
+
+            if (item >= 0) {
+                free_turn_flag = false;
+
+                inven_drop(item, query == 'y');
+                check_strength();
+            }
+
+            selecting = false;
+
+            // As a safety measure, set the player's inven weight
+            // to 0, when the last object is dropped.
+            if (inven_ctr == 0 && equip_ctr == 0) {
+                inven_weight = 0;
+            }
+        }
+
+        if (!free_turn_flag && scr_state == BLANK_SCR) {
+            selecting = false;
+        }
+    }
+
+    return selecting;
+}
+
+// Put an appropriate header.
+static void inventoryDisplayAppropriateHeader() {
+    if (scr_state == INVEN_SCR) {
+        bigvtype msg;
+        int weightQuotient = inven_weight / 10;
+        int weightRemainder = inven_weight % 10;
+
+        if (!show_weight_flag || inven_ctr == 0) {
+            (void) sprintf(msg, "You are carrying %d.%d pounds. In your pack there is %s",
+                           weightQuotient,
+                           weightRemainder,
+                           (inven_ctr == 0 ? "nothing." : "-")
+            );
+        } else {
+            int limitQuotient = weight_limit() / 10;
+            int limitRemainder = weight_limit() % 10;
+
+            (void) sprintf(msg, "You are carrying %d.%d pounds. Your capacity is %d.%d pounds. In your pack is -",
+                           weightQuotient,
+                           weightRemainder,
+                           limitQuotient,
+                           limitRemainder
+            );
+        }
+
+        prt(msg, 0, 0);
+    } else if (scr_state == WEAR_SCR) {
+        if (wear_high < wear_low) {
+            prt("You have nothing you could wield.", 0, 0);
+        } else {
+            prt("You could wield -", 0, 0);
+        }
+    } else if (scr_state == EQUIP_SCR) {
+        if (equip_ctr == 0) {
+            prt("You are not using anything.", 0, 0);
+        } else {
+            prt("You are using -", 0, 0);
+        }
+    } else {
+        prt("Allowed commands:", 0, 0);
+    }
+
+    erase_line(scr_base, scr_left);
+}
+
+// This does all the work.
+void inven_command(char command) {
+    free_turn_flag = true;
+
+    save_screen();
+    setInventoryCommandScreenState(command);
 
     do {
         if (isupper((int) command)) {
@@ -639,103 +1303,28 @@ void inven_command(char command) {
         }
 
         // Simple command getting and screen selection.
-        selecting = false;
+        bool selecting = false;
         switch (command) {
-            case 'i': // Inventory
-                if (inven_ctr == 0) {
-                    msg_print("You are not carrying anything.");
-                } else {
-                    inven_screen(INVEN_SCR);
-                }
+            case 'i':
+                displayInventory();
                 break;
-            case 'e': // Equipment
-                if (equip_ctr == 0) {
-                    msg_print("You are not using any equipment.");
-                } else {
-                    inven_screen(EQUIP_SCR);
-                }
+            case 'e':
+                displayEquipment();
                 break;
-            case 't': // Take off
-                if (equip_ctr == 0) {
-                    msg_print("You are not using any equipment.");
-                    // don't print message restarting inven command after taking off
-                    // something, it is confusing
-                } else if (inven_ctr >= INVEN_WIELD && !doing_inven) {
-                    msg_print("You will have to drop something first.");
-                } else {
-                    if (scr_state != BLANK_SCR) {
-                        inven_screen(EQUIP_SCR);
-                    }
-                    selecting = true;
-                }
+            case 't':
+                selecting = inventoryTakeOffItem(selecting);
                 break;
-            case 'd': // Drop
-                if (inven_ctr == 0 && equip_ctr == 0) {
-                    msg_print("But you're not carrying anything.");
-                } else if (cave[char_row][char_col].tptr != 0) {
-                    msg_print("There's no room to drop anything here.");
-                } else {
-                    selecting = true;
-                    if ((scr_state == EQUIP_SCR && equip_ctr > 0) || inven_ctr == 0) {
-                        if (scr_state != BLANK_SCR) {
-                            inven_screen(EQUIP_SCR);
-                        }
-                        command = 'r'; // Remove - or take off and drop.
-                    } else if (scr_state != BLANK_SCR) {
-                        inven_screen(INVEN_SCR);
-                    }
-                }
+            case 'd':
+                selecting = inventoryDropItem(&command, selecting);
                 break;
-            case 'w': // Wear/wield
-                for (wear_low = 0; wear_low < inven_ctr && inventory[wear_low].tval > TV_MAX_WEAR; wear_low++) {
-                    ;
-                }
-                for (wear_high = wear_low; wear_high < inven_ctr && inventory[wear_high].tval >= TV_MIN_WEAR; wear_high++) {
-                    ;
-                }
-                wear_high--;
-                if (wear_low > wear_high) {
-                    msg_print("You have nothing to wear or wield.");
-                } else {
-                    if (scr_state != BLANK_SCR && scr_state != INVEN_SCR) {
-                        inven_screen(WEAR_SCR);
-                    }
-                    selecting = true;
-                }
+            case 'w':
+                selecting = inventoryWearWieldItem(selecting);
                 break;
             case 'x':
-                if (inventory[INVEN_WIELD].tval == TV_NOTHING && inventory[INVEN_AUX].tval == TV_NOTHING) {
-                    msg_print("But you are wielding no weapons.");
-                } else if (TR_CURSED & inventory[INVEN_WIELD].flags) {
-                    objdes(prt1, &inventory[INVEN_WIELD], false);
-                    (void) sprintf(prt2, "The %s you are wielding appears to be cursed.", prt1);
-                    msg_print(prt2);
-                } else {
-                    free_turn_flag = false;
-                    tmp_obj = inventory[INVEN_AUX];
-                    inventory[INVEN_AUX] = inventory[INVEN_WIELD];
-                    inventory[INVEN_WIELD] = tmp_obj;
-                    if (scr_state == EQUIP_SCR) {
-                        scr_left = show_equip(show_weight_flag, scr_left);
-                    }
-
-                    py_bonuses(&inventory[INVEN_AUX], -1);  // Subtract bonuses
-                    py_bonuses(&inventory[INVEN_WIELD], 1); // Add bonuses
-
-                    if (inventory[INVEN_WIELD].tval != TV_NOTHING) {
-                        (void) strcpy(prt1, "Primary weapon   : ");
-                        objdes(prt2, &inventory[INVEN_WIELD], true);
-                        msg_print(strcat(prt1, prt2));
-                    } else {
-                        msg_print("No primary weapon.");
-                    }
-
-                    // this is a new weapon, so clear the heavy flag
-                    weapon_heavy = false;
-                    check_strength();
-                }
+                inventoryUnwieldItem();
                 break;
-            case ' ': // Dummy command to return again to main prompt.
+            case ' ':
+                // Dummy command to return again to main prompt.
                 break;
             case '?':
                 inven_screen(HELP_SCR);
@@ -752,421 +1341,33 @@ void inven_command(char command) {
 
         // Keep looking for objects to drop/wear/take off/throw off
         char which = 'z';
-        while (selecting && free_turn_flag) {
-            int from, to;
-            const char *prompt;
-            const char *swap = "";
 
-            if (command == 'w') {
-                from = wear_low;
-                to = wear_high;
-                prompt = "Wear/Wield";
-            } else {
-                from = 0;
-                if (command == 'd') {
-                    to = inven_ctr - 1;
-                    prompt = "Drop";
-                    if (equip_ctr > 0) {
-                        swap = ", / for Equip";
-                    }
-                } else {
-                    to = equip_ctr - 1;
-                    if (command == 't') {
-                        prompt = "Take off";
-                    } else { // command == 'r'
-                        prompt = "Throw off";
-                        if (inven_ctr > 0) {
-                            swap = ", / for Inven";
-                        }
-                    }
-                }
-            }
-            if (from > to) {
-                selecting = false;
-            } else {
-                const char *disp;
-                if (scr_state == BLANK_SCR) {
-                    disp = ", * to list";
-                } else {
-                    disp = "";
-                }
-                (void) sprintf(
-                        prt1,
-                        "(%c-%c%s%s%s, space to break, ESC to exit) %s which one?",
-                        from + 'a',
-                        to + 'a',
-                        disp,
-                        swap,
-                        ((command == 'w' || command == 'd') ? ", 0-9" : ""),
-                        prompt
-                );
+        selecting = selectItemCommands(&command, &which, selecting);
 
-                // Abort everything.
-                if (!get_com(prt1, &which)) {
-                    selecting = false;
-                    which = ESCAPE;
-                } else if (which == ' ' || which == '*') {
-                    // Draw the screen and maybe exit to main prompt.
-
-                    if (command == 't' || command == 'r') {
-                        inven_screen(EQUIP_SCR);
-                    } else if (command == 'w' && scr_state != INVEN_SCR) {
-                        inven_screen(WEAR_SCR);
-                    } else {
-                        inven_screen(INVEN_SCR);
-                    }
-                    if (which == ' ') {
-                        selecting = false;
-                    }
-                } else if (which == '/' && swap[0]) {
-                    // Swap screens (for drop)
-
-                    if (command == 'd') {
-                        command = 'r';
-                    } else {
-                        command = 'd';
-                    }
-                    if (scr_state == EQUIP_SCR) {
-                        inven_screen(INVEN_SCR);
-                    } else if (scr_state == INVEN_SCR) {
-                        inven_screen(EQUIP_SCR);
-                    }
-                } else {
-                    if (which >= '0' && which <= '9' && command != 'r' && command != 't') {
-                        // look for item whose inscription matches "which"
-                        int m;
-                        for (m = from; m <= to && ((inventory[m].inscrip[0] != which) || (inventory[m].inscrip[1] != '\0')); m++) {
-                            ;
-                        }
-                        if (m <= to) {
-                            item = m;
-                        } else {
-                            item = -1;
-                        }
-                    } else if (which >= 'A' && which <= 'Z') {
-                        item = which - 'A';
-                    } else {
-                        item = which - 'a';
-                    }
-                    if (item < from || item > to) {
-                        bell();
-                    } else { // Found an item!
-                        if (command == 'r' || command == 't') {
-                            // Get its place in the equipment list.
-                            tmp = item;
-                            item = 21;
-                            do {
-                                item++;
-                                if (inventory[item].tval != TV_NOTHING) {
-                                    tmp--;
-                                }
-                            } while (tmp >= 0);
-                            if (isupper((int) which) && !verify((char *) prompt, item)) {
-                                item = -1;
-                            } else if (TR_CURSED & inventory[item].flags) {
-                                msg_print("Hmmm, it seems to be cursed.");
-                                item = -1;
-                            } else if (command == 't' && !inven_check_num(&inventory[item])) {
-                                if (cave[char_row][char_col].tptr != 0) {
-                                    msg_print("You can't carry it.");
-                                    item = -1;
-                                } else if (get_check("You can't carry it.  Drop it?")) {
-                                    command = 'r';
-                                } else {
-                                    item = -1;
-                                }
-                            }
-                            if (item >= 0) {
-                                if (command == 'r') {
-                                    inven_drop(item, true);
-                                    // As a safety measure, set the player's inven
-                                    // weight to 0, when the last object is dropped.
-                                    if (inven_ctr == 0 && equip_ctr == 0) {
-                                        inven_weight = 0;
-                                    }
-                                } else {
-                                    slot = inven_carry(&inventory[item]);
-                                    takeoff(item, slot);
-                                }
-                                check_strength();
-                                free_turn_flag = false;
-                                if (command == 'r') {
-                                    selecting = false;
-                                }
-                            }
-                        } else if (command == 'w') {
-                            // Wearing. Go to a bit of trouble over replacing
-                            // existing equipment.
-                            if (isupper((int) which) && !verify((char *) prompt, item)) {
-                                item = -1;
-                            } else {
-                                // Slot for equipment
-                                switch (inventory[item].tval) {
-                                    case TV_SLING_AMMO:
-                                    case TV_BOLT:
-                                    case TV_ARROW:
-                                    case TV_BOW:
-                                    case TV_HAFTED:
-                                    case TV_POLEARM:
-                                    case TV_SWORD:
-                                    case TV_DIGGING:
-                                    case TV_SPIKE:
-                                        slot = INVEN_WIELD;
-                                        break;
-                                    case TV_LIGHT:
-                                        slot = INVEN_LIGHT;
-                                        break;
-                                    case TV_BOOTS:
-                                        slot = INVEN_FEET;
-                                        break;
-                                    case TV_GLOVES:
-                                        slot = INVEN_HANDS;
-                                        break;
-                                    case TV_CLOAK:
-                                        slot = INVEN_OUTER;
-                                        break;
-                                    case TV_HELM:
-                                        slot = INVEN_HEAD;
-                                        break;
-                                    case TV_SHIELD:
-                                        slot = INVEN_ARM;
-                                        break;
-                                    case TV_HARD_ARMOR:
-                                    case TV_SOFT_ARMOR:
-                                        slot = INVEN_BODY;
-                                        break;
-                                    case TV_AMULET:
-                                        slot = INVEN_NECK;
-                                        break;
-                                    case TV_RING:
-                                        if (inventory[INVEN_RIGHT].tval == TV_NOTHING) {
-                                            slot = INVEN_RIGHT;
-                                        } else if (inventory[INVEN_LEFT].tval == TV_NOTHING) {
-                                            slot = INVEN_LEFT;
-                                        } else {
-                                            slot = 0;
-                                            // Rings. Give choice over where they go.
-                                            do {
-                                                char query;
-                                                if (!get_com("Put ring on which hand (l/r/L/R)?", &query)) {
-                                                    item = -1;
-                                                    slot = -1;
-                                                } else if (query == 'l') {
-                                                    slot = INVEN_LEFT;
-                                                } else if (query == 'r') {
-                                                    slot = INVEN_RIGHT;
-                                                } else {
-                                                    if (query == 'L') {
-                                                        slot = INVEN_LEFT;
-                                                    } else if (query == 'R') {
-                                                        slot = INVEN_RIGHT;
-                                                    } else {
-                                                        bell();
-                                                    }
-                                                    if (slot && !verify("Replace", slot)) {
-                                                        slot = 0;
-                                                    }
-                                                }
-                                            } while (slot == 0);
-                                        }
-                                        break;
-                                    default:
-                                        msg_print("IMPOSSIBLE: I don't see how you can use that.");
-                                        item = -1;
-                                        break;
-                                }
-                            }
-                            if (item >= 0 && inventory[slot].tval != TV_NOTHING) {
-                                if (TR_CURSED & inventory[slot].flags) {
-                                    objdes(prt1, &inventory[slot], false);
-                                    (void) sprintf(prt2, "The %s you are ", prt1);
-                                    if (slot == INVEN_HEAD) {
-                                        (void) strcat(prt2, "wielding ");
-                                    } else {
-                                        (void) strcat(prt2, "wearing ");
-                                    }
-                                    msg_print(strcat(prt2, "appears to be cursed."));
-                                    item = -1;
-                                } else if (inventory[item].subval == ITEM_GROUP_MIN && inventory[item].number > 1 && !inven_check_num(&inventory[slot])) {
-                                    // this can happen if try to wield a torch,
-                                    // and have more than one in inventory
-                                    msg_print("You will have to drop something first.");
-                                    item = -1;
-                                }
-                            }
-                            if (item >= 0) {
-                                // OK. Wear it.
-                                free_turn_flag = false;
-
-                                // first remove new item from inventory
-                                tmp_obj = inventory[item];
-                                inven_type *i_ptr = &tmp_obj;
-
-                                wear_high--;
-
-                                // Fix for torches
-                                if (i_ptr->number > 1 && i_ptr->subval <= ITEM_SINGLE_STACK_MAX) {
-                                    i_ptr->number = 1;
-                                    wear_high++;
-                                }
-                                inven_weight += i_ptr->weight * i_ptr->number;
-
-                                // Subtracts weight
-                                inven_destroy(item);
-
-                                // Second, add old item to inv and remove
-                                // from equipment list, if necessary.
-                                i_ptr = &inventory[slot];
-                                if (i_ptr->tval != TV_NOTHING) {
-                                    int tmp2 = inven_ctr;
-                                    tmp = inven_carry(i_ptr);
-                                    // If item removed did not stack with anything
-                                    // in inventory, then increment wear_high.
-                                    if (inven_ctr != tmp2) {
-                                        wear_high++;
-                                    }
-                                    takeoff(slot, tmp);
-                                }
-
-                                // third, wear new item
-                                *i_ptr = tmp_obj;
-                                equip_ctr++;
-                                py_bonuses(i_ptr, 1);
-
-                                const char *string;
-                                if (slot == INVEN_WIELD) {
-                                    string = "You are wielding";
-                                } else if (slot == INVEN_LIGHT) {
-                                    string = "Your light source is";
-                                } else {
-                                    string = "You are wearing";
-                                }
-                                objdes(prt2, i_ptr, true);
-                                // Get the right equipment letter.
-                                tmp = INVEN_WIELD;
-                                item = 0;
-                                while (tmp != slot) {
-                                    if (inventory[tmp++].tval != TV_NOTHING) {
-                                        item++;
-                                    }
-                                }
-
-                                (void) sprintf(prt1, "%s %s (%c)", string, prt2, 'a' + item);
-                                msg_print(prt1);
-                                // this is a new weapon, so clear heavy flag
-                                if (slot == INVEN_WIELD) {
-                                    weapon_heavy = false;
-                                }
-                                check_strength();
-                                if (i_ptr->flags & TR_CURSED) {
-                                    msg_print("Oops! It feels deathly cold!");
-                                    add_inscribe(i_ptr, ID_DAMD);
-                                    // To force a cost of 0, even if unidentified.
-                                    i_ptr->cost = -1;
-                                }
-                            }
-                        } else {
-                            // command == 'd'
-
-                            // NOTE: initializing to `ESCAPE` as warnings were being given. -MRC-
-                            char query = ESCAPE;
-
-                            if (inventory[item].number > 1) {
-                                objdes(prt1, &inventory[item], true);
-                                prt1[strlen(prt1) - 1] = '?';
-                                (void) sprintf(prt2, "Drop all %s [y/n]", prt1);
-                                prt1[strlen(prt1) - 1] = '.';
-                                prt(prt2, 0, 0);
-                                query = inkey();
-                                if (query != 'y' && query != 'n') {
-                                    if (query != ESCAPE) {
-                                        bell();
-                                    }
-                                    erase_line(MSG_LINE, 0);
-                                    item = -1;
-                                }
-                            } else if (isupper((int) which) && !verify((char *) prompt, item)) {
-                                item = -1;
-                            } else {
-                                query = 'y';
-                            }
-
-                            if (item >= 0) {
-                                free_turn_flag = false; // Player turn
-                                inven_drop(item, query == 'y');
-                                check_strength();
-                            }
-
-                            selecting = false;
-
-                            // As a safety measure, set the player's inven weight
-                            // to 0, when the last object is dropped.
-                            if (inven_ctr == 0 && equip_ctr == 0) {
-                                inven_weight = 0;
-                            }
-                        }
-                        if (!free_turn_flag && scr_state == BLANK_SCR) {
-                            selecting = false;
-                        }
-                    }
-                }
-            }
-        }
         if (which == ESCAPE || scr_state == BLANK_SCR) {
             command = ESCAPE;
         } else if (!free_turn_flag) {
             // Save state for recovery if they want to call us again next turn.
+            // Otherwise, set a dummy command to recover screen.
             if (selecting) {
                 doing_inven = command;
             } else {
-                doing_inven = ' '; // A dummy command to recover screen.
-                // flush last message before clearing screen_change and exiting
-            }
-            msg_print(CNIL);
-            screen_change = false; // This lets us know if the world changes
-            command = ESCAPE;
-        } else {
-            // Put an appropriate header.
-            if (scr_state == INVEN_SCR) {
-                if (!show_weight_flag || inven_ctr == 0) {
-                    (void) sprintf(
-                            prt1,
-                            "You are carrying %d.%d pounds. In your pack there is %s",
-                            inven_weight / 10,
-                            inven_weight % 10,
-                            (inven_ctr == 0 ? "nothing." : "-")
-                    );
-                } else {
-                    (void) sprintf(
-                            prt1,
-                            "You are carrying %d.%d pounds. Your capacity is %d.%d pounds. %s",
-                            inven_weight / 10,
-                            inven_weight % 10,
-                            weight_limit() / 10,
-                            weight_limit() % 10,
-                            "In your pack is -"
-                    );
-                }
-                prt(prt1, 0, 0);
-            } else if (scr_state == WEAR_SCR) {
-                if (wear_high < wear_low) {
-                    prt("You have nothing you could wield.", 0, 0);
-                } else {
-                    prt("You could wield -", 0, 0);
-                }
-            } else if (scr_state == EQUIP_SCR) {
-                if (equip_ctr == 0) {
-                    prt("You are not using anything.", 0, 0);
-                } else {
-                    prt("You are using -", 0, 0);
-                }
-            } else {
-                prt("Allowed commands:", 0, 0);
+                doing_inven = ' ';
             }
 
-            erase_line(scr_base, scr_left);
+            // flush last message before clearing screen_change and exiting
+            msg_print(CNIL);
+
+            // This lets us know if the world changes
+            screen_change = false;
+
+            command = ESCAPE;
+        } else {
+            inventoryDisplayAppropriateHeader();
+
             put_buffer("e/i/t/w/x/d/?/ESC:", scr_base, 60);
             command = inkey();
+
             erase_line(scr_base, scr_left);
         }
     } while (command != ESCAPE);
@@ -1180,178 +1381,196 @@ void inven_command(char command) {
 
 // Get the ID of an item and return the CTR value of it -RAK-
 int get_item(int *com_val, const char *pmt, int i, int j, char *mask, const char *message) {
-    bool test_flag;
-    bool full;
-    bool item = false;
-    bool redraw = false;
-    int i_scr = 1;
-    *com_val = 0;
+    int screenID = 1;
+    bool full = false;
 
     if (j > INVEN_WIELD) {
         full = true;
+
         if (inven_ctr == 0) {
-            i_scr = 0;
+            screenID = 0;
             j = equip_ctr - 1;
         } else {
             j = inven_ctr - 1;
         }
-    } else {
-        full = false;
     }
 
-    if (inven_ctr > 0 || (full && equip_ctr > 0)) {
-        do {
-            if (redraw) {
-                if (i_scr > 0) {
-                    (void) show_inven(i, j, false, 80, mask);
-                } else {
-                    (void) show_equip(false, 80);
-                }
-            }
+    if (inven_ctr < 1 && (!full || equip_ctr < 1)) {
+        prt("You are not carrying anything.", 0, 0);
+        return false;
+    }
 
-            vtype out_val;
+    *com_val = 0;
 
-            if (full) {
-                (void) sprintf(
-                        out_val,
-                        "(%s: %c-%c,%s%s / for %s, or ESC) %s",
-                        (i_scr > 0 ? "Inven" : "Equip"),
-                        i + 'a',
-                        j + 'a',
-                        (i_scr > 0 ? " 0-9," : ""),
-                        (redraw ? "" : " * to see,"),
-                        (i_scr > 0 ? "Equip" : "Inven"),
-                        pmt
-                );
+    bool itemFound = false;
+    bool redrawScreen = false;
+
+    do {
+        if (redrawScreen) {
+            if (screenID > 0) {
+                (void) show_inven(i, j, false, 80, mask);
             } else {
-                (void) sprintf(
-                        out_val,
-                        "(Items %c-%c,%s%s ESC to exit) %s",
-                        i + 'a',
-                        j + 'a',
-                        (i_scr > 0 ? " 0-9," : ""),
-                        (redraw ? "" : " * for inventory list,"),
-                        pmt
-                );
+                (void) show_equip(false, 80);
             }
-
-            test_flag = false;
-            prt(out_val, 0, 0);
-
-            do {
-                char which = inkey();
-                switch (which) {
-                    case ESCAPE:
-                        test_flag = true;
-                        free_turn_flag = true;
-                        i_scr = -1;
-                        break;
-                    case '/':
-                        if (full) {
-                            if (i_scr > 0) {
-                                if (equip_ctr == 0) {
-                                    prt("But you're not using anything -more-", 0, 0);
-                                    (void) inkey();
-                                } else {
-                                    i_scr = 0;
-                                    test_flag = true;
-                                    if (redraw) {
-                                        j = equip_ctr;
-                                        while (j < inven_ctr) {
-                                            j++;
-                                            erase_line(j, 0);
-                                        }
-                                    }
-                                    j = equip_ctr - 1;
-                                }
-                                prt(out_val, 0, 0);
-                            } else {
-                                if (inven_ctr == 0) {
-                                    prt("But you're not carrying anything -more-", 0, 0);
-                                    (void) inkey();
-                                } else {
-                                    i_scr = 1;
-                                    test_flag = true;
-                                    if (redraw) {
-                                        j = inven_ctr;
-                                        while (j < equip_ctr) {
-                                            j++;
-                                            erase_line(j, 0);
-                                        }
-                                    }
-                                    j = inven_ctr - 1;
-                                }
-                            }
-                        }
-                        break;
-                    case '*':
-                        if (!redraw) {
-                            test_flag = true;
-                            save_screen();
-                            redraw = true;
-                        }
-                        break;
-                    default:
-                        // look for item whose inscription matches "which"
-                        if (which >= '0' && which <= '9' && i_scr != 0) {
-                            int m;
-                            for (m = i; m < INVEN_WIELD && (inventory[m].inscrip[0] != which || inventory[m].inscrip[1] != '\0'); m++) {
-                                ;
-                            }
-                            if (m < INVEN_WIELD) {
-                                *com_val = m;
-                            } else {
-                                *com_val = -1;
-                            }
-                        } else if (isupper((int) which)) {
-                            *com_val = which - 'A';
-                        } else {
-                            *com_val = which - 'a';
-                        }
-
-                        if ((*com_val >= i) && (*com_val <= j) && (mask == CNIL || mask[*com_val])) {
-                            if (i_scr == 0) {
-                                i = 21;
-                                j = *com_val;
-                                do {
-                                    while (inventory[++i].tval == TV_NOTHING) { ;
-                                    }
-                                    j--;
-                                } while (j >= 0);
-                                *com_val = i;
-                            }
-                            if (isupper((int) which) && !verify("Try", *com_val)) {
-                                test_flag = true;
-                                free_turn_flag = true;
-                                i_scr = -1;
-                                break;
-                            }
-                            test_flag = true;
-                            item = true;
-                            i_scr = -1;
-                        } else if (message) {
-                            msg_print(message);
-
-                            // Set test_flag to force redraw of the question.
-                            test_flag = true;
-                        } else {
-                            bell();
-                        }
-                        break;
-                }
-            } while (!test_flag);
-        } while (i_scr >= 0);
-
-        if (redraw) {
-            restore_screen();
         }
 
-        erase_line(MSG_LINE, 0);
-    } else {
-        prt("You are not carrying anything.", 0, 0);
+        vtype out_val;
+
+        if (full) {
+            (void) sprintf(
+                    out_val,
+                    "(%s: %c-%c,%s%s / for %s, or ESC) %s",
+                    (screenID > 0 ? "Inven" : "Equip"),
+                    i + 'a',
+                    j + 'a',
+                    (screenID > 0 ? " 0-9," : ""),
+                    (redrawScreen ? "" : " * to see,"),
+                    (screenID > 0 ? "Equip" : "Inven"),
+                    pmt
+            );
+        } else {
+            (void) sprintf(
+                    out_val,
+                    "(Items %c-%c,%s%s ESC to exit) %s",
+                    i + 'a',
+                    j + 'a',
+                    (screenID > 0 ? " 0-9," : ""),
+                    (redrawScreen ? "" : " * for inventory list,"),
+                    pmt
+            );
+        }
+
+        prt(out_val, 0, 0);
+
+        bool commandFinished = false;
+        while (!commandFinished) {
+            char which = inkey();
+
+            switch (which) {
+                case ESCAPE:
+                    screenID = -1;
+                    commandFinished = true;
+
+                    free_turn_flag = true;
+
+                    break;
+                case '/':
+                    if (full) {
+                        if (screenID > 0) {
+                            if (equip_ctr == 0) {
+                                prt("But you're not using anything -more-", 0, 0);
+                                (void) inkey();
+                            } else {
+                                screenID = 0;
+                                commandFinished = true;
+
+                                if (redrawScreen) {
+                                    j = equip_ctr;
+
+                                    while (j < inven_ctr) {
+                                        j++;
+                                        erase_line(j, 0);
+                                    }
+                                }
+                                j = equip_ctr - 1;
+                            }
+
+                            prt(out_val, 0, 0);
+                        } else {
+                            if (inven_ctr == 0) {
+                                prt("But you're not carrying anything -more-", 0, 0);
+                                (void) inkey();
+                            } else {
+                                screenID = 1;
+                                commandFinished = true;
+
+                                if (redrawScreen) {
+                                    j = inven_ctr;
+
+                                    while (j < equip_ctr) {
+                                        j++;
+                                        erase_line(j, 0);
+                                    }
+                                }
+                                j = inven_ctr - 1;
+                            }
+                        }
+                    }
+                    break;
+                case '*':
+                    if (!redrawScreen) {
+                        commandFinished = true;
+                        save_screen();
+                        redrawScreen = true;
+                    }
+                    break;
+                default:
+                    // look for item whose inscription matches "which"
+                    if (which >= '0' && which <= '9' && screenID != 0) {
+                        int m;
+
+                        // Note: loop to find the inventory item
+                        for (m = i; m < INVEN_WIELD && (inventory[m].inscrip[0] != which || inventory[m].inscrip[1] != '\0'); m++);
+
+                        if (m < INVEN_WIELD) {
+                            *com_val = m;
+                        } else {
+                            *com_val = -1;
+                        }
+                    } else if (isupper((int) which)) {
+                        *com_val = which - 'A';
+                    } else {
+                        *com_val = which - 'a';
+                    }
+
+                    if (*com_val >= i && *com_val <= j && (mask == CNIL || mask[*com_val])) {
+                        if (screenID == 0) {
+                            i = 21;
+                            j = *com_val;
+
+                            do {
+                                // Note: a simple loop to find first inventory item
+                                while (inventory[++i].tval == TV_NOTHING);
+
+                                j--;
+                            } while (j >= 0);
+
+                            *com_val = i;
+                        }
+
+                        if (isupper((int) which) && !verify("Try", *com_val)) {
+                            screenID = -1;
+                            commandFinished = true;
+
+                            free_turn_flag = true;
+
+                            break;
+                        }
+
+                        screenID = -1;
+                        commandFinished = true;
+
+                        itemFound = true;
+                    } else if (message) {
+                        msg_print(message);
+
+                        // Set commandFinished to force redraw of the question.
+                        commandFinished = true;
+                    } else {
+                        bell();
+                    }
+                    break;
+            }
+        }
+    } while (screenID >= 0);
+
+    if (redrawScreen) {
+        restore_screen();
     }
 
-    return item;
+    erase_line(MSG_LINE, 0);
+
+    return itemFound;
 }
 
 // I may have written the town level code, but I'm not exactly
@@ -1360,43 +1579,33 @@ int get_item(int *com_val, const char *pmt, int i, int j, char *mask, const char
 
 // Returns true if player has no light -RAK-
 bool no_light() {
-    cave_type *c_ptr = &cave[char_row][char_col];
-
-    return (!c_ptr->tl && !c_ptr->pl);
+    return !cave[char_row][char_col].tl && !cave[char_row][char_col].pl;
 }
 
 // map rogue_like direction commands into numbers
-static char map_roguedir(char comval) {
-    switch (comval) {
+static char map_roguedir(char command) {
+    switch (command) {
         case 'h':
-            comval = '4';
-            break;
+            return '4';
         case 'y':
-            comval = '7';
-            break;
+            return '7';
         case 'k':
-            comval = '8';
-            break;
+            return '8';
         case 'u':
-            comval = '9';
-            break;
+            return '9';
         case 'l':
-            comval = '6';
-            break;
+            return '6';
         case 'n':
-            comval = '3';
-            break;
+            return '3';
         case 'j':
-            comval = '2';
-            break;
+            return '2';
         case 'b':
-            comval = '1';
-            break;
+            return '1';
         case '.':
-            comval = '5';
-            break;
+            return '5';
+        default:
+            return command;
     }
-    return comval;
 }
 
 // Prompts for a direction -RAK-
@@ -1414,9 +1623,9 @@ bool get_dir(char *prompt, int *dir) {
         prompt = (char *) "Which direction?";
     }
 
-    for (;;) {
-        char command;
+    char command;
 
+    while (true) {
         // Don't end a counted command. -CJS-
         int save = command_count;
 
@@ -1446,7 +1655,7 @@ bool get_dir(char *prompt, int *dir) {
 bool get_alldir(const char *prompt, int *dir) {
     char command;
 
-    for (;;) {
+    while (true) {
         if (!get_com(prompt, &command)) {
             free_turn_flag = true;
             return false;
@@ -1466,40 +1675,41 @@ bool get_alldir(const char *prompt, int *dir) {
 }
 
 // Moves creature record from one space to another -RAK-
+// this always works correctly, even if y1==y2 and x1==x2
 void move_rec(int y1, int x1, int y2, int x2) {
-    // this always works correctly, even if y1==y2 and x1==x2
-    int tmp = cave[y1][x1].cptr;
+    int id = cave[y1][x1].cptr;
     cave[y1][x1].cptr = 0;
-    cave[y2][x2].cptr = (uint8_t) tmp;
+    cave[y2][x2].cptr = (uint8_t) id;
 }
 
 // Room is lit, make it appear -RAK-
-void light_room(int y, int x) {
-    int tmp1 = (SCREEN_HEIGHT / 2);
-    int tmp2 = (SCREEN_WIDTH / 2);
+void light_room(int posY, int posX) {
+    int heightMiddle = (SCREEN_HEIGHT / 2);
+    int widthMiddle = (SCREEN_WIDTH / 2);
 
-    int start_row = (y / tmp1) * tmp1;
-    int start_col = (x / tmp2) * tmp2;
+    int top = (posY / heightMiddle) * heightMiddle;
+    int left = (posX / widthMiddle) * widthMiddle;
+    int bottom = top + heightMiddle - 1;
+    int right = left + widthMiddle - 1;
 
-    int end_row = start_row + tmp1 - 1;
-    int end_col = start_col + tmp2 - 1;
-
-    for (int i = start_row; i <= end_row; i++) {
-        for (int j = start_col; j <= end_col; j++) {
-            cave_type *c_ptr = &cave[i][j];
+    for (int y = top; y <= bottom; y++) {
+        for (int x = left; x <= right; x++) {
+            cave_type *c_ptr = &cave[y][x];
 
             if (c_ptr->lr && !c_ptr->pl) {
                 c_ptr->pl = true;
+
                 if (c_ptr->fval == DARK_FLOOR) {
                     c_ptr->fval = LIGHT_FLOOR;
                 }
                 if (!c_ptr->fm && c_ptr->tptr != 0) {
                     int tval = t_list[c_ptr->tptr].tval;
+
                     if (tval >= TV_MIN_VISIBLE && tval <= TV_MAX_VISIBLE) {
                         c_ptr->fm = true;
                     }
                 }
-                print(loc_symbol(i, j), i, j);
+                print(loc_symbol(y, x), y, x);
             }
         }
     }
@@ -1517,9 +1727,9 @@ void lite_spot(int y, int x) {
 static void sub1_move_light(int y1, int x1, int y2, int x2) {
     if (light_flag) {
         // Turn off lamp light
-        for (int i = y1 - 1; i <= y1 + 1; i++) {
-            for (int j = x1 - 1; j <= x1 + 1; j++) {
-                cave[i][j].tl = false;
+        for (int y = y1 - 1; y <= y1 + 1; y++) {
+            for (int x = x1 - 1; x <= x1 + 1; x++) {
+                cave[y][x].tl = false;
             }
         }
         if (find_flag && !find_prself) {
@@ -1529,18 +1739,20 @@ static void sub1_move_light(int y1, int x1, int y2, int x2) {
         light_flag = true;
     }
 
-    for (int i = y2 - 1; i <= y2 + 1; i++) {
-        for (int j = x2 - 1; j <= x2 + 1; j++) {
-            cave_type *c_ptr = &cave[i][j];
+    for (int y = y2 - 1; y <= y2 + 1; y++) {
+        for (int x = x2 - 1; x <= x2 + 1; x++) {
+            cave_type *c_ptr = &cave[y][x];
 
             // only light up if normal movement
             if (light_flag) {
                 c_ptr->tl = true;
             }
+
             if (c_ptr->fval >= MIN_CAVE_WALL) {
                 c_ptr->pl = true;
             } else if (!c_ptr->fm && c_ptr->tptr != 0) {
                 int tval = t_list[c_ptr->tptr].tval;
+
                 if (tval >= TV_MIN_VISIBLE && tval <= TV_MAX_VISIBLE) {
                     c_ptr->fm = true;
                 }
@@ -1548,9 +1760,9 @@ static void sub1_move_light(int y1, int x1, int y2, int x2) {
         }
     }
 
+    // From uppermost to bottom most lines player was on.
     int top, left, bottom, right;
 
-    // From uppermost to bottom most lines player was on.
     if (y1 < y2) {
         top = y1 - 1;
         bottom = y2 + 1;
@@ -1566,10 +1778,10 @@ static void sub1_move_light(int y1, int x1, int y2, int x2) {
         right = x1 + 1;
     }
 
-    for (int i = top; i <= bottom; i++) {
+    for (int y = top; y <= bottom; y++) {
         // Leftmost to rightmost do
-        for (int j = left; j <= right; j++) {
-            print(loc_symbol(i, j), i, j);
+        for (int x = left; x <= right; x++) {
+            print(loc_symbol(y, x), y, x);
         }
     }
 }
@@ -1578,12 +1790,13 @@ static void sub1_move_light(int y1, int x1, int y2, int x2) {
 // With no light,  movement becomes involved.
 static void sub3_move_light(int y1, int x1, int y2, int x2) {
     if (light_flag) {
-        for (int i = y1 - 1; i <= y1 + 1; i++) {
-            for (int j = x1 - 1; j <= x1 + 1; j++) {
-                cave[i][j].tl = false;
-                print(loc_symbol(i, j), i, j);
+        for (int y = y1 - 1; y <= y1 + 1; y++) {
+            for (int x = x1 - 1; x <= x1 + 1; x++) {
+                cave[y][x].tl = false;
+                print(loc_symbol(y, x), y, x);
             }
         }
+
         light_flag = false;
     } else if (!find_flag || find_prself) {
         print(loc_symbol(y1, x1), y1, x1);
@@ -1609,25 +1822,32 @@ void move_light(int y1, int x1, int y2, int x2) {
 // The second arg indicates a light change.
 void disturb(int s, int l) {
     command_count = 0;
+
     if (s && (py.flags.status & PY_SEARCH)) {
         search_off();
     }
+
     if (py.flags.rest != 0) {
         rest_off();
     }
+
     if (l || find_flag) {
         find_flag = 0;
         check_view();
     }
+
     flush();
 }
 
 // Search Mode enhancement -RAK-
 void search_on() {
     change_speed(1);
+
     py.flags.status |= PY_SEARCH;
+
     prt_state();
     prt_speed();
+
     py.flags.food_digested++;
 }
 
@@ -1669,19 +1889,25 @@ void rest() {
         if (py.flags.status & PY_SEARCH) {
             search_off();
         }
+
         py.flags.rest = (int16_t) rest_num;
         py.flags.status |= PY_REST;
         prt_state();
         py.flags.food_digested--;
+
         prt("Press any key to stop resting...", 0, 0);
         put_qio();
-    } else {
-        if (rest_num != 0) {
-            msg_print("Invalid rest count.");
-        }
-        erase_line(MSG_LINE, 0);
-        free_turn_flag = true;
+
+        return;
     }
+
+    // Something went wrong
+    if (rest_num != 0) {
+        msg_print("Invalid rest count.");
+    }
+    erase_line(MSG_LINE, 0);
+
+    free_turn_flag = true;
 }
 
 void rest_off() {
@@ -1715,17 +1941,20 @@ void take_hit(int damage, const char *hit_from) {
     if (py.flags.invuln > 0) {
         damage = 0;
     }
-
     py.misc.chp -= damage;
 
-    if (py.misc.chp < 0) {
-        if (!death) {
-            death = true;
-            (void) strcpy(died_from, hit_from);
-            total_winner = false;
-        }
-        new_level_flag = true;
-    } else {
+    if (py.misc.chp >= 0) {
         prt_chp();
+        return;
     }
+
+    if (!death) {
+        death = true;
+
+        (void) strcpy(died_from, hit_from);
+
+        total_winner = false;
+    }
+
+    new_level_flag = true;
 }
