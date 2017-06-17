@@ -139,8 +139,8 @@ void alloc_object(bool (*alloc_set)(int), int typ, int num) {
                 break;
             case 2:
                 // NOTE: typ == 2 is not used - used to be visible traps.
-                // FIXME: is this correct, typ == 2 was not handled directly,
-                // FIXME: so was caught by typ == 3 -MRC-
+                // FIXME: no `break` here, is this correct?
+                // FIXME: typ == 2 was not handled directly and was caught by typ == 3 -MRC-
             case 3:
                 place_rubble(y, x);
                 break;
