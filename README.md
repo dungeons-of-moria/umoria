@@ -83,15 +83,12 @@ If you'd like to learn more on the development history of Umoria, these can
 make interesting reading.
 
 
-## Contributions
+## Code of Conduct and Contributions
 
-I have some very specific ideas on what changes I'd like to see to Umoria,
-which means I will be quite conservative on accepting pull requests.
-Therefore, before making a PR I'd recommend that you first create an
-[issue](https://github.com/dungeons-of-moria/umoria/issues) so that we can
-discuss your idea.
+See here for details on our [Code of Conduct](CODE_OF_CONDUCT.md).
 
-Please note that I will not at this time accept PRs for _game play_ changes.
+For details on how to contribute to the Umoria project, please read our
+[contributing](CONTRIBUTING.md) guide.
 
 
 ## License Information

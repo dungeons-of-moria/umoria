@@ -1,6 +1,12 @@
-# Umoria Change log
+# Umoria Changes
 
 ## HEAD
+
+
+### Documentation
+
+- Added a CODE_OF_CONDUCT.md.
+- Added a CONTRIBUTING.md guide.
 
 ### Bug Fixes
 
