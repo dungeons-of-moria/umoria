@@ -9,19 +9,19 @@
 #include "headers.h"
 #include "externs.h"
 
-static bool see_wall(int, int, int);
-
 // Change a trap from invisible to visible -RAK-
 // Note: Secret doors are handled here
 void change_trap(int y, int x) {
-    cave_type *c_ptr = &cave[y][x];
-    inven_type *t_ptr = &t_list[c_ptr->tptr];
+    inven_type *t_ptr = &t_list[cave[y][x].tptr];
 
     if (t_ptr->tval == TV_INVIS_TRAP) {
         t_ptr->tval = TV_VIS_TRAP;
         lite_spot(y, x);
-    } else if (t_ptr->tval == TV_SECRET_DOOR) {
-        // change secret door to closed door
+        return;
+    }
+
+    // change secret door to closed door
+    if (t_ptr->tval == TV_SECRET_DOOR) {
         t_ptr->index = OBJ_CLOSED_DOOR;
         t_ptr->tval = object_list[OBJ_CLOSED_DOOR].tval;
         t_ptr->tchar = object_list[OBJ_CLOSED_DOOR].tchar;
@@ -31,45 +31,50 @@ void change_trap(int y, int x) {
 
 // Searches for hidden things. -RAK-
 void search(int y, int x, int chance) {
-    struct player_type::flags *p_ptr = &py.flags;
-
-    if (p_ptr->confused > 0) {
-        chance = chance / 10;
-    }
-    if (p_ptr->blind > 0 || no_light()) {
-        chance = chance / 10;
-    }
-    if (p_ptr->image > 0) {
+    if (py.flags.confused > 0) {
         chance = chance / 10;
     }
 
-    for (int i = (y - 1); i <= (y + 1); i++) {
-        for (int j = (x - 1); j <= (x + 1); j++) {
+    if (py.flags.blind > 0 || no_light()) {
+        chance = chance / 10;
+    }
+
+    if (py.flags.image > 0) {
+        chance = chance / 10;
+    }
+
+    for (int i = y - 1; i <= y + 1; i++) {
+        for (int j = x - 1; j <= x + 1; j++) {
             // always in_bounds here
             if (randint(100) >= chance) {
                 continue;
             }
 
-            cave_type *c_ptr = &cave[i][j];
-            if (c_ptr->tptr == 0) {
+            if (cave[i][j].tptr == 0) {
                 continue;
             }
 
             // Search for hidden objects
-            inven_type *t_ptr = &t_list[c_ptr->tptr];
 
-            // Trap on floor?
+            inven_type *t_ptr = &t_list[cave[i][j].tptr];
+
             if (t_ptr->tval == TV_INVIS_TRAP) {
-                bigvtype tmp_str, tmp_str2;
+                // Trap on floor?
 
-                objdes(tmp_str2, t_ptr, true);
-                (void) sprintf(tmp_str, "You have found %s", tmp_str2);
-                msg_print(tmp_str);
+                bigvtype description;
+                objdes(description, t_ptr, true);
+
+                bigvtype msg;
+                (void) sprintf(msg, "You have found %s", description);
+                msg_print(msg);
+
                 change_trap(i, j);
                 end_find();
             } else if (t_ptr->tval == TV_SECRET_DOOR) {
                 // Secret door?
+
                 msg_print("You have found a secret door.");
+
                 change_trap(i, j);
                 end_find();
             } else if (t_ptr->tval == TV_CHEST) {
@@ -199,6 +204,78 @@ static bool find_openarea, find_breakright, find_breakleft;
 static int find_prevdir;
 static int find_direction; // Keep a record of which way we are going.
 
+// Do we see a wall? Used in running. -CJS-
+static bool see_wall(int dir, int y, int x) {
+    // check to see if movement there possible
+    if (!mmove(dir, &y, &x)) {
+        return true;
+    }
+
+    char c = loc_symbol(y, x);
+
+    return c == '#' || c == '%';
+}
+
+// Do we see anything? Used in running. -CJS-
+static bool see_nothing(int dir, int y, int x) {
+    // check to see if movement there possible
+    if (!mmove(dir, &y, &x)) {
+        return false;
+    }
+
+    return loc_symbol(y, x) == ' ';
+}
+
+static void findRunningBreak(int dir, int row, int col) {
+    bool deepLeft = false;
+    bool deepRight = false;
+    bool shortLeft = false;
+    bool shortRight = false;
+
+    int cycleIndex = chome[dir];
+
+    if (see_wall(cycle[cycleIndex + 1], char_row, char_col)) {
+        find_breakleft = true;
+        shortLeft = true;
+    } else if (see_wall(cycle[cycleIndex + 1], row, col)) {
+        find_breakleft = true;
+        deepLeft = true;
+    }
+
+    if (see_wall(cycle[cycleIndex - 1], char_row, char_col)) {
+        find_breakright = true;
+        shortRight = true;
+    } else if (see_wall(cycle[cycleIndex - 1], row, col)) {
+        find_breakright = true;
+        deepRight = true;
+    }
+
+    if (find_breakleft && find_breakright) {
+        find_openarea = false;
+
+        // a hack to allow angled corridor entry
+        if (dir & 1) {
+            if (deepLeft && !deepRight) {
+                find_prevdir = cycle[cycleIndex - 1];
+            } else if (deepRight && !deepLeft) {
+                find_prevdir = cycle[cycleIndex + 1];
+            }
+        } else if (see_wall(cycle[cycleIndex], row, col)) {
+            // else if there is a wall two spaces ahead and seem to be in a
+            // corridor, then force a turn into the side corridor, must
+            // be moving straight into a corridor here
+
+            if (shortLeft && !shortRight) {
+                find_prevdir = cycle[cycleIndex - 2];
+            } else if (shortRight && !shortLeft) {
+                find_prevdir = cycle[cycleIndex + 2];
+            }
+        }
+    } else {
+        find_openarea = true;
+    }
+}
+
 void find_init(int dir) {
     int row = char_row;
     int col = char_col;
@@ -206,56 +283,16 @@ void find_init(int dir) {
     if (!mmove(dir, &row, &col)) {
         find_flag = 0;
     } else {
-        find_direction = dir;
         find_flag = 1;
-        find_breakright = find_breakleft = false;
+
+        find_direction = dir;
         find_prevdir = dir;
+
+        find_breakright = false;
+        find_breakleft = false;
+
         if (py.flags.blind < 1) {
-            int i = chome[dir];
-
-            bool deepleft = false;
-            bool deepright = false;
-            bool shortleft = false;
-            bool shortright = false;
-
-            if (see_wall(cycle[i + 1], char_row, char_col)) {
-                find_breakleft = true;
-                shortleft = true;
-            } else if (see_wall(cycle[i + 1], row, col)) {
-                find_breakleft = true;
-                deepleft = true;
-            }
-            if (see_wall(cycle[i - 1], char_row, char_col)) {
-                find_breakright = true;
-                shortright = true;
-            } else if (see_wall(cycle[i - 1], row, col)) {
-                find_breakright = true;
-                deepright = true;
-            }
-            if (find_breakleft && find_breakright) {
-                find_openarea = false;
-
-                // a hack to allow angled corridor entry
-                if (dir & 1) {
-                    if (deepleft && !deepright) {
-                        find_prevdir = cycle[i - 1];
-                    } else if (deepright && !deepleft) {
-                        find_prevdir = cycle[i + 1];
-                    }
-                } else if (see_wall(cycle[i], row, col)) {
-                    // else if there is a wall two spaces ahead and seem to be in a
-                    // corridor, then force a turn into the side corridor, must
-                    // be moving straight into a corridor here
-
-                    if (shortleft && !shortright) {
-                        find_prevdir = cycle[i - 2];
-                    } else if (shortright && !shortleft) {
-                        find_prevdir = cycle[i + 2];
-                    }
-                }
-            } else {
-                find_openarea = true;
-            }
+            findRunningBreak(dir, row, col);
         }
     }
 
@@ -270,6 +307,7 @@ void find_init(int dir) {
     }
 
     move_char(dir, true);
+
     if (find_flag == 0) {
         command_count = 0;
     }
@@ -280,39 +318,105 @@ void find_run() {
     if (find_flag++ > 100) {
         msg_print("You stop running to catch your breath.");
         end_find();
-    } else {
-        move_char(find_direction, true);
+        return;
     }
+
+    move_char(find_direction, true);
 }
 
 // Switch off the run flag - and get the light correct. -CJS-
 void end_find() {
-    if (find_flag) {
-        find_flag = 0;
-        move_light(char_row, char_col, char_row, char_col);
+    if (!find_flag) {
+        return;
     }
+
+    find_flag = 0;
+
+    move_light(char_row, char_col, char_row, char_col);
 }
 
-// Do we see a wall? Used in running. -CJS-
-static bool see_wall(int dir, int y, int x) {
-    // check to see if movement there possible
-    if (!mmove(dir, &y, &x)) {
-        return true;
+static bool areaAffectStopLookingAtSquares(int i, int dir, int newDir, int y, int x, int *check_dir, int *option, int *option2) {
+    cave_type *c_ptr = &cave[y][x];
+
+    // Default: Square unseen. Treat as open.
+    bool invisible = true;
+
+    if (player_light || c_ptr->tl || c_ptr->pl || c_ptr->fm) {
+        if (c_ptr->tptr != 0) {
+            int tileID = t_list[c_ptr->tptr].tval;
+
+            if (tileID != TV_INVIS_TRAP && tileID != TV_SECRET_DOOR && (tileID != TV_OPEN_DOOR || !find_ignore_doors)) {
+                end_find();
+                return true;
+            }
+        }
+
+        // Also Creatures
+        // The monster should be visible since update_mon() checks
+        // for the special case of being in find mode
+        if (c_ptr->cptr > 1 && m_list[c_ptr->cptr].ml) {
+            end_find();
+            return true;
+        }
+
+        invisible = false;
     }
 
-    char c = loc_symbol(y, x);
-
-    return (c == '#' || c == '%');
-}
-
-// Do we see anything? Used in running. -CJS-
-static bool see_nothing(int dir, int y, int x) {
-    // check to see if movement there possible
-    if (!mmove(dir, &y, &x)) {
-        return false;
+    if (c_ptr->fval <= MAX_OPEN_SPACE || invisible) {
+        if (find_openarea) {
+            // Have we found a break?
+            if (i < 0) {
+                if (find_breakright) {
+                    end_find();
+                    return true;
+                }
+            } else if (i > 0) {
+                if (find_breakleft) {
+                    end_find();
+                    return true;
+                }
+            }
+        } else if (*option == 0) {
+            // The first new direction.
+            *option = newDir;
+        } else if (*option2 != 0) {
+            // Three new directions. STOP.
+            end_find();
+            return true;
+        } else if (*option != cycle[chome[dir] + i - 1]) {
+            // If not adjacent to prev, STOP
+            end_find();
+            return true;
+        } else {
+            // Two adjacent choices. Make option2 the diagonal, and
+            // remember the other diagonal adjacent to the first option.
+            if ((newDir & 1) == 1) {
+                *check_dir = cycle[chome[dir] + i - 2];
+                *option2 = newDir;
+            } else {
+                *check_dir = cycle[chome[dir] + i + 1];
+                *option2 = *option;
+                *option = newDir;
+            }
+        }
+    } else if (find_openarea) {
+        // We see an obstacle. In open area, STOP if on a side previously open.
+        if (i < 0) {
+            if (find_breakleft) {
+                end_find();
+                return true;
+            }
+            find_breakright = true;
+        } else if (i > 0) {
+            if (find_breakright) {
+                end_find();
+                return true;
+            }
+            find_breakleft = true;
+        }
     }
 
-    return (loc_symbol(y, x) == ' ');
+    return false;
 }
 
 // Determine the next direction for a run, or if we should stop. -CJS-
@@ -326,90 +430,19 @@ void area_affect(int dir, int y, int x) {
     int option2 = 0;
 
     dir = find_prevdir;
+
     int max = (dir & 1) + 1;
 
     // Look at every newly adjacent square.
     for (int i = -max; i <= max; i++) {
         int newdir = cycle[chome[dir] + i];
+
         int row = y;
         int col = x;
 
         // Objects player can see (Including doors?) cause a stop.
         if (mmove(newdir, &row, &col)) {
-            cave_type *c_ptr = &cave[row][col];
-
-            bool inv;
-            if (player_light || c_ptr->tl || c_ptr->pl || c_ptr->fm) {
-                if (c_ptr->tptr != 0) {
-                    int t = t_list[c_ptr->tptr].tval;
-                    if (t != TV_INVIS_TRAP && t != TV_SECRET_DOOR && (t != TV_OPEN_DOOR || !find_ignore_doors)) {
-                        end_find();
-                        return;
-                    }
-                }
-                // Also Creatures
-                // The monster should be visible since update_mon() checks
-                // for the special case of being in find mode
-                if (c_ptr->cptr > 1 && m_list[c_ptr->cptr].ml) {
-                    end_find();
-                    return;
-                }
-                inv = false;
-            } else {
-                inv = true; // Square unseen. Treat as open.
-            }
-
-            if (c_ptr->fval <= MAX_OPEN_SPACE || inv) {
-                if (find_openarea) {
-                    // Have we found a break?
-                    if (i < 0) {
-                        if (find_breakright) {
-                            end_find();
-                            return;
-                        }
-                    } else if (i > 0) {
-                        if (find_breakleft) {
-                            end_find();
-                            return;
-                        }
-                    }
-                } else if (option == 0) {
-                    option = newdir; // The first new direction.
-                } else if (option2 != 0) {
-                    end_find(); // Three new directions. STOP.
-                    return;
-                } else if (option != cycle[chome[dir] + i - 1]) {
-                    end_find(); // If not adjacent to prev, STOP
-                    return;
-                } else {
-                    // Two adjacent choices. Make option2 the diagonal, and
-                    // remember the other diagonal adjacent to the first option.
-                    if ((newdir & 1) == 1) {
-                        check_dir = cycle[chome[dir] + i - 2];
-                        option2 = newdir;
-                    } else {
-                        check_dir = cycle[chome[dir] + i + 1];
-                        option2 = option;
-                        option = newdir;
-                    }
-                }
-            } else if (find_openarea) {
-                // We see an obstacle. In open area, STOP if on a side
-                // previously open.
-                if (i < 0) {
-                    if (find_breakleft) {
-                        end_find();
-                        return;
-                    }
-                    find_breakright = true;
-                } else if (i > 0) {
-                    if (find_breakright) {
-                        end_find();
-                        return;
-                    }
-                    find_breakleft = true;
-                }
-            }
+            areaAffectStopLookingAtSquares(i, dir, newdir, row, col, &check_dir, &option, &option2);
         }
     }
 
@@ -426,17 +459,20 @@ void area_affect(int dir, int y, int x) {
         if (option != 0) {
             find_direction = option;
         }
+
         if (option2 == 0) {
             find_prevdir = option;
         } else {
             find_prevdir = option2;
         }
+
         return;
     }
 
     // Two options!
     int row = y;
     int col = x;
+
     (void) mmove(option, &row, &col);
 
     if (!see_wall(option, row, col) || !see_wall(check_dir, row, col)) {
@@ -467,58 +503,65 @@ void area_affect(int dir, int y, int x) {
 // Note: This routine affects magical AC bonuses so
 // that stores can detect the damage.
 int minus_ac(uint32_t typ_dam) {
-    int tmp[6];
-    int i = 0;
+    int itemsCount = 0;
+    int items[6];
+
     if (inventory[INVEN_BODY].tval != TV_NOTHING) {
-        tmp[i] = INVEN_BODY;
-        i++;
+        items[itemsCount] = INVEN_BODY;
+        itemsCount++;
     }
+
     if (inventory[INVEN_ARM].tval != TV_NOTHING) {
-        tmp[i] = INVEN_ARM;
-        i++;
+        items[itemsCount] = INVEN_ARM;
+        itemsCount++;
     }
+
     if (inventory[INVEN_OUTER].tval != TV_NOTHING) {
-        tmp[i] = INVEN_OUTER;
-        i++;
+        items[itemsCount] = INVEN_OUTER;
+        itemsCount++;
     }
+
     if (inventory[INVEN_HANDS].tval != TV_NOTHING) {
-        tmp[i] = INVEN_HANDS;
-        i++;
+        items[itemsCount] = INVEN_HANDS;
+        itemsCount++;
     }
+
     if (inventory[INVEN_HEAD].tval != TV_NOTHING) {
-        tmp[i] = INVEN_HEAD;
-        i++;
+        items[itemsCount] = INVEN_HEAD;
+        itemsCount++;
     }
+
     // also affect boots
     if (inventory[INVEN_FEET].tval != TV_NOTHING) {
-        tmp[i] = INVEN_FEET;
-        i++;
+        items[itemsCount] = INVEN_FEET;
+        itemsCount++;
     }
 
     bool minus = false;
 
-    if (i == 0) {
+    if (itemsCount == 0) {
         return minus;
     }
 
-    int j = tmp[randint(i) - 1];
+    int itemID = items[randint(itemsCount) - 1];
 
-    inven_type *i_ptr = &inventory[j];
+    bigvtype description, msg;
 
-    bigvtype out_val, tmp_str;
-
-    if (i_ptr->flags & typ_dam) {
-        objdes(tmp_str, &inventory[j], false);
-        (void) sprintf(out_val, "Your %s resists damage!", tmp_str);
-        msg_print(out_val);
+    if (inventory[itemID].flags & typ_dam) {
         minus = true;
-    } else if (i_ptr->ac + i_ptr->toac > 0) {
-        objdes(tmp_str, &inventory[j], false);
-        (void) sprintf(out_val, "Your %s is damaged!", tmp_str);
-        msg_print(out_val);
-        i_ptr->toac--;
+
+        objdes(description, &inventory[itemID], false);
+        (void) sprintf(msg, "Your %s resists damage!", description);
+        msg_print(msg);
+    } else if (inventory[itemID].ac + inventory[itemID].toac > 0) {
+        minus = true;
+
+        objdes(description, &inventory[itemID], false);
+        (void) sprintf(msg, "Your %s is damaged!", description);
+        msg_print(msg);
+
+        inventory[itemID].toac--;
         calc_bonuses();
-        minus = true;
     }
 
     return minus;
@@ -538,6 +581,7 @@ void corrode_gas(const char *kb_str) {
 // Poison gas the idiot. -RAK-
 void poison_gas(int dam, const char *kb_str) {
     take_hit(dam, kb_str);
+
     py.flags.poisoned += 12 + randint(dam);
 }
 
@@ -546,10 +590,13 @@ void fire_dam(int dam, const char *kb_str) {
     if (py.flags.fire_resist) {
         dam = dam / 3;
     }
+
     if (py.flags.resist_heat > 0) {
         dam = dam / 3;
     }
+
     take_hit(dam, kb_str);
+
     if (inven_damage(set_flammable, 3) > 0) {
         msg_print("There is smoke coming from your pack!");
     }
@@ -560,10 +607,13 @@ void cold_dam(int dam, const char *kb_str) {
     if (py.flags.cold_resist) {
         dam = dam / 3;
     }
+
     if (py.flags.resist_cold > 0) {
         dam = dam / 3;
     }
+
     take_hit(dam, kb_str);
+
     if (inven_damage(set_frost_destroy, 5) > 0) {
         msg_print("Something shatters inside your pack!");
     }
@@ -572,10 +622,11 @@ void cold_dam(int dam, const char *kb_str) {
 // Lightning bolt the sucker away. -RAK-
 void light_dam(int dam, const char *kb_str) {
     if (py.flags.lght_resist) {
-        take_hit((dam / 3), kb_str);
-    } else {
-        take_hit(dam, kb_str);
+        dam = dam / 3;
     }
+
+    take_hit(dam, kb_str);
+
     if (inven_damage(set_lightning_destroy, 3) > 0) {
         msg_print("There are sparks coming from your pack!");
     }
@@ -584,13 +635,17 @@ void light_dam(int dam, const char *kb_str) {
 // Throw acid on the hapless victim -RAK-
 void acid_dam(int dam, const char *kb_str) {
     int flag = 0;
+
     if (minus_ac((uint32_t) TR_RES_ACID)) {
         flag = 1;
     }
+
     if (py.flags.acid_resist) {
         flag += 2;
     }
+
     take_hit(dam / (flag + 1), kb_str);
+
     if (inven_damage(set_acid_affect, 3) > 0) {
         msg_print("There is an acrid smell coming from your pack!");
     }
