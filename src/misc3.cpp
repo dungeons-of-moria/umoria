@@ -181,6 +181,7 @@ void random_object(int y, int x, int num) {
 void cnv_stat(uint8_t stat, char *str) {
     if (stat <= 18) {
         (void) sprintf(str, "%6d", stat);
+        return;
     }
 
     int part1 = 18;
