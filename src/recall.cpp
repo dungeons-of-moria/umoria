@@ -101,11 +101,20 @@ static const char *desc_spell[] = {
 };
 
 static const char *desc_breath[] = {
-        "lightning", "poison gases", "acid", "frost", "fire",
+        "lightning",
+        "poison gases",
+        "acid",
+        "frost",
+        "fire",
 };
 
 static const char *desc_weakness[] = {
-        "frost", "fire", "poison", "acid", "bright light", "rock remover",
+        "frost",
+        "fire",
+        "poison",
+        "acid",
+        "bright light",
+        "rock remover",
 };
 
 static vtype roffbuf; // Line buffer.
@@ -124,12 +133,13 @@ static int roffpline; // Place to print line now being loaded.
 #define knowdamage(l, a, d) ((4 + (l)) * (a) > 80 * (d))
 
 // Do we know anything about this monster?
-bool bool_roff_recall(int mon_num) {
+bool bool_roff_recall(int monsterID) {
     if (wizard) {
         return true;
     }
 
-    recall_type *mp = &c_recall[mon_num];
+    recall_type *mp = &c_recall[monsterID];
+
     if (mp->r_cmove || mp->r_cdefense || mp->r_kills || mp->r_spells || mp->r_deaths) {
         return true;
     }
@@ -164,12 +174,12 @@ static void wizardModeInit(recall_type *mp, creature_type *cp) {
         mp->r_spells = cp->spells;
     }
 
-    int j = 0;
     uint8_t *pu = cp->damage;
 
-    while (*pu != 0 && j < 4) {
-        mp->r_attacks[j] = MAX_UCHAR;
-        j++;
+    int attackID = 0;
+    while (*pu != 0 && attackID < 4) {
+        mp->r_attacks[attackID] = MAX_UCHAR;
+        attackID++;
         pu++;
     }
 
@@ -236,17 +246,21 @@ static bool movement(uint32_t rcmove, int mspeed, bool known) {
             roff(" It");
             known = true;
         }
+
         roff(" moves");
+
         if (rcmove & CM_RANDOM_MOVE) {
             roff(desc_howmuch[(rcmove & CM_RANDOM_MOVE) >> 3]);
             roff(" erratically");
         }
+
         if (mspeed == 1) {
             roff(" at normal speed");
         } else {
             if (rcmove & CM_RANDOM_MOVE) {
                 roff(", and");
             }
+
             if (mspeed <= 0) {
                 if (mspeed == -1) {
                     roff(" very");
@@ -272,6 +286,7 @@ static bool movement(uint32_t rcmove, int mspeed, bool known) {
             roff(" It");
             known = true;
         }
+
         roff(" does not deign to chase intruders");
     }
 
@@ -282,6 +297,7 @@ static bool movement(uint32_t rcmove, int mspeed, bool known) {
             roff(" It");
             known = true;
         }
+
         roff(" always moves and attacks by using magic");
     }
 
@@ -305,14 +321,21 @@ static void killPoints(uint16_t cdefense, uint16_t mexp, uint8_t level) {
 
     // calculate the integer exp part, can be larger than 64K when first
     // level character looks at Balrog info, so must store in long
-    int32_t templong = (int32_t) mexp * level / py.misc.lev;
+    int32_t quotient = (int32_t) mexp * level / py.misc.lev;
 
     // calculate the fractional exp part scaled by 100,
     // must use long arithmetic to avoid overflow
-    int j = (uint32_t) ((((int32_t) mexp * level % py.misc.lev) * (int32_t) 1000 / py.misc.lev + 5) / 10);
+    int remainder = (uint32_t) ((((int32_t) mexp * level % py.misc.lev) * (int32_t) 1000 / py.misc.lev + 5) / 10);
+
+    char plural;
+    if (quotient == 1 && remainder == 0) {
+        plural = '\0';
+    } else {
+        plural = 's';
+    }
 
     vtype desc;
-    (void) sprintf(desc, " creature is worth %d.%02d point%s", templong, j, (templong == 1 && j == 0 ? "" : "s"));
+    (void) sprintf(desc, " creature is worth %d.%02d point%c", quotient, remainder, plural);
     roff(desc);
 
     const char *p, *q;
@@ -496,9 +519,9 @@ static void awareness(creature_type *cp, recall_type *mp) {
             roff("is ever vigilant for");
         }
 
-        vtype temp;
-        (void) sprintf(temp, " intruders, which it may notice from %d feet.", 10 * cp->aaf);
-        roff(temp);
+        vtype text;
+        (void) sprintf(text, " intruders, which it may notice from %d feet.", 10 * cp->aaf);
+        roff(text);
     }
 }
 
@@ -510,15 +533,15 @@ static void lootCarried(uint32_t cp_cmove, uint32_t rcmove) {
 
     roff(" It may");
 
-    uint32_t j = (uint32_t) ((rcmove & CM_TREASURE) >> CM_TR_SHIFT);
+    uint32_t carryingChance = (uint32_t) ((rcmove & CM_TREASURE) >> CM_TR_SHIFT);
 
-    if (j == 1) {
+    if (carryingChance == 1) {
         if ((cp_cmove & CM_TREASURE) == CM_60_RANDOM) {
             roff(" sometimes");
         } else {
             roff(" often");
         }
-    } else if (j == 2 && (cp_cmove & CM_TREASURE) == (CM_60_RANDOM | CM_90_RANDOM)) {
+    } else if (carryingChance == 2 && (cp_cmove & CM_TREASURE) == (CM_60_RANDOM | CM_90_RANDOM)) {
         roff(" often");
     }
 
@@ -532,17 +555,17 @@ static void lootCarried(uint32_t cp_cmove, uint32_t rcmove) {
         p = " objects";
     }
 
-    if (j == 1) {
+    if (carryingChance == 1) {
         if (rcmove & CM_SMALL_OBJ) {
             p = " a small object";
         } else {
             p = " an object";
         }
-    } else if (j == 2) {
+    } else if (carryingChance == 2) {
         roff(" one or two");
     } else {
         vtype temp;
-        (void) sprintf(temp, " up to %d", j);
+        (void) sprintf(temp, " up to %d", carryingChance);
         roff(temp);
     }
 
@@ -550,12 +573,12 @@ static void lootCarried(uint32_t cp_cmove, uint32_t rcmove) {
         roff(p);
         if (rcmove & CM_CARRY_GOLD) {
             roff(" or treasure");
-            if (j > 1) {
+            if (carryingChance > 1) {
                 roff("s");
             }
         }
         roff(".");
-    } else if (j != 1) {
+    } else if (carryingChance != 1) {
         roff(" treasures.");
     } else {
         roff(" treasure.");
@@ -577,6 +600,7 @@ static void attackNumberAndDamage(recall_type *mp, creature_type *cp) {
     int attackCount = 0;
 
     uint8_t *pu = cp->damage;
+
     for (int i = 0; *pu != 0 && i < 4; pu++, i++) {
         int att_type, att_how, d1, d2;
 
@@ -608,10 +632,13 @@ static void attackNumberAndDamage(recall_type *mp, creature_type *cp) {
 
         if (att_type != 1 || (d1 > 0 && d2 > 0)) {
             roff(" to ");
+
             if (att_type > 24) {
                 att_type = 0;
             }
+
             roff(desc_atype[att_type]);
+
             if (d1 && d2) {
                 if (knowdamage(cp->level, mp->r_attacks[i], d1 * d2)) {
                     // Loss of experience
@@ -730,6 +757,7 @@ int roff_recall(int mon_num) {
 static void roff(const char *p) {
     while (*p) {
         *roffp = *p;
+
         if (*p == '\n' || roffp >= roffbuf + sizeof(roffbuf) - 1) {
             char *q = roffp;
             if (*p != '\n') {
@@ -742,6 +770,7 @@ static void roff(const char *p) {
             roffpline++;
 
             char *r = roffbuf;
+
             while (q < roffp) {
                 q++;
                 *r = *q;
