@@ -9,13 +9,13 @@
 #include "headers.h"
 #include "externs.h"
 
-static bool drinkPotion(uint32_t flags, uint8_t tval) {
+static bool drinkPotion(uint32_t flags, uint8_t itemID) {
     bool identified = false;
-    int potionID;
 
     while (flags != 0) {
-        potionID = bit_pos(&flags) + 1;
-        if (tval == TV_POTION2) {
+        int potionID = bit_pos(&flags) + 1;
+
+        if (itemID == TV_POTION2) {
             potionID += 32;
         }
 
@@ -106,12 +106,11 @@ static bool drinkPotion(uint32_t flags, uint8_t tval) {
             case 18:
                 if (py.misc.exp < MAX_EXP) {
                     uint32_t l = (uint32_t) ((py.misc.exp / 2) + 10);
-
                     if (l > 100000L) {
                         l = 100000L;
                     }
-
                     py.misc.exp += l;
+
                     msg_print("You feel more experienced.");
                     prt_experience();
                     identified = true;
@@ -185,7 +184,7 @@ static bool drinkPotion(uint32_t flags, uint8_t tval) {
             case 31:
                 identified = cure_poison();
                 break;
-            // case 33: break; // this is no longer useful, now that there is a 'G'ain magic spells command
+                // case 33: break; // this is no longer useful, now that there is a 'G'ain magic spells command
             case 34:
                 if (py.misc.exp > 0) {
                     msg_print("You feel your memories fade.");
@@ -294,21 +293,21 @@ void quaff() {
         return;
     }
 
-    int j, k;
-    if (!find_range(TV_POTION1, TV_POTION2, &j, &k)) {
+    int itemPosBegin, itemPosEnd;
+    if (!find_range(TV_POTION1, TV_POTION2, &itemPosBegin, &itemPosEnd)) {
         msg_print("You are not carrying any potions.");
         return;
     }
 
-    int item_val;
-    if (!get_item(&item_val, "Quaff which potion?", j, k, CNIL, CNIL)) {
+    int itemID;
+    if (!get_item(&itemID, "Quaff which potion?", itemPosBegin, itemPosEnd, CNIL, CNIL)) {
         return;
     }
 
     free_turn_flag = false;
 
     bool identified;
-    inven_type *i_ptr = &inventory[item_val];
+    inven_type *i_ptr = &inventory[itemID];
 
     if (i_ptr->flags == 0) {
         msg_print("You feel less thirsty.");
@@ -323,14 +322,14 @@ void quaff() {
             py.misc.exp += (i_ptr->level + (py.misc.lev >> 1)) / py.misc.lev;
             prt_experience();
 
-            identify(&item_val);
-            i_ptr = &inventory[item_val];
+            identify(&itemID);
+            i_ptr = &inventory[itemID];
         }
     } else if (!known1_p(i_ptr)) {
         sample(i_ptr);
     }
 
     add_food(i_ptr->p1);
-    desc_remain(item_val);
-    inven_destroy(item_val);
+    desc_remain(itemID);
+    inven_destroy(itemID);
 }
