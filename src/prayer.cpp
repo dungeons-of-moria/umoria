@@ -9,7 +9,7 @@
 #include "headers.h"
 #include "externs.h"
 
-static bool canPray(int *i, int *j) {
+static bool canPray(int *itemPosBegin, int *itemPosEnd) {
     if (py.flags.blind > 0) {
         msg_print("You can't see to read your prayer!");
         return false;
@@ -35,7 +35,7 @@ static bool canPray(int *i, int *j) {
         return false;
     }
 
-    if (!find_range(TV_PRAYER_BOOK, TV_NEVER, i, j)) {
+    if (!find_range(TV_PRAYER_BOOK, TV_NEVER, itemPosBegin, itemPosEnd)) {
         msg_print("You are not carrying any Holy Books!");
         return false;
     }
@@ -44,10 +44,10 @@ static bool canPray(int *i, int *j) {
 }
 
 // Recite a prayers.
-static void recitePrayer(int prayerID) {
+static void recitePrayer(int prayerType) {
     int dir;
 
-    switch (prayerID + 1) {
+    switch (prayerType + 1) {
         case 1:
             (void) detect_evil();
             break;
@@ -175,13 +175,13 @@ static void recitePrayer(int prayerID) {
 void pray() {
     free_turn_flag = true;
 
-    int i, j;
-    if (!canPray(&i, &j)) {
+    int itemPosBegin, itemposEnd;
+    if (!canPray(&itemPosBegin, &itemposEnd)) {
         return;
     }
 
     int item_val;
-    if (!get_item(&item_val, "Use which Holy Book?", i, j, CNIL, CNIL)) {
+    if (!get_item(&item_val, "Use which Holy Book?", itemPosBegin, itemposEnd, CNIL, CNIL)) {
         return;
     }
 
@@ -194,24 +194,22 @@ void pray() {
         return;
     }
 
-    // NOTE: does recitePrayer (or one of its function calls) change
-    // the free turn state? If not it will remain false, so the checks
-    // below will not be needed.
-    free_turn_flag = false;
+    if (randint(100) < chance) {
+        msg_print("You lost your concentration!");
+        return;
+    }
 
     spell_type *s_ptr = &magic_spell[py.misc.pclass - 1][choice];
 
-    if (randint(100) < chance) {
-        msg_print("You lost your concentration!");
-    } else {
-        recitePrayer(choice);
-
-        if (!free_turn_flag) {
-            if ((spell_worked & (1L << choice)) == 0) {
-                py.misc.exp += s_ptr->sexp << 2;
-                prt_experience();
-                spell_worked |= (1L << choice);
-            }
+    // NOTE: at least one function called by `recitePrayer()` sets `free_turn_flag = true`,
+    // e.g. `create_food()`, so this check is required. -MRC-
+    free_turn_flag = false;
+    recitePrayer(choice);
+    if (!free_turn_flag) {
+        if ((spell_worked & (1L << choice)) == 0) {
+            py.misc.exp += s_ptr->sexp << 2;
+            prt_experience();
+            spell_worked |= (1L << choice);
         }
     }
 
@@ -228,6 +226,7 @@ void pray() {
         } else {
             py.misc.cmana -= s_ptr->smana;
         }
+
         prt_cmana();
     }
 }
