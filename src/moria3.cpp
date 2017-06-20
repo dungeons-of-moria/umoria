@@ -1018,12 +1018,7 @@ void move_char(int dir, bool do_pickup) {
             // did not do anything this turn
             free_turn_flag = true;
         } else {
-            // Coward?
-            if (py.flags.afraid < 1) {
-                py_attack(y, x);
-            } else { // Coward!
-                msg_print("You are too afraid!");
-            }
+            playerAttackPosition(y, x);
         }
     }
 }
@@ -1103,22 +1098,6 @@ void chest_trap(int y, int x) {
     if (flags & CH_EXPLODE) {
         chestExplode(y, x);
     }
-}
-
-static void objectBlockedByMonster(int id) {
-    vtype description, msg;
-
-    monster_type *monster = &m_list[id];
-    const char *name = c_list[monster->mptr].name;
-
-    if (monster->ml) {
-        (void) sprintf(description, "The %s", name);
-    } else {
-        (void) strcpy(description, "Something");
-    }
-
-    (void) sprintf(msg, "%s is in your way!", description);
-    msg_print(msg);
 }
 
 static int16_t playerLockPickingSkill() {
@@ -1337,4 +1316,31 @@ int twall(int y, int x, int t1, int t2) {
     lite_spot(y, x);
 
     return true;
+}
+
+void objectBlockedByMonster(int id) {
+    vtype description, msg;
+
+    monster_type *monster = &m_list[id];
+    const char *name = c_list[monster->mptr].name;
+
+    if (monster->ml) {
+        (void) sprintf(description, "The %s", name);
+    } else {
+        (void) strcpy(description, "Something");
+    }
+
+    (void) sprintf(msg, "%s is in your way!", description);
+    msg_print(msg);
+}
+
+// let the player attack the creature
+void playerAttackPosition(int y, int x) {
+    // Is a Coward?
+    if (py.flags.afraid > 0) {
+        msg_print("You are too afraid!");
+        return;
+    }
+
+    py_attack(y, x);
 }

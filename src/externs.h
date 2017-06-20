@@ -447,6 +447,8 @@ void chest_trap(int, int);
 void openobject();
 void closeobject();
 int twall(int, int, int, int);
+void objectBlockedByMonster(int id);
+void playerAttackPosition(int y, int x);
 
 // moria4.c
 void tunnel(int);
