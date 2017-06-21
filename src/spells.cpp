@@ -652,7 +652,7 @@ static void fireBoltTouchesMonster(cave_type *tile, int dam, int harmType, uint3
 
     // light up monster and draw monster, temporarily set
     // pl so that update_mon() will work
-    uint saveLitStatus = tile->pl;
+    unsigned int saveLitStatus = tile->pl;
     tile->pl = true;
     update_mon((int) tile->cptr);
     tile->pl = saveLitStatus;
