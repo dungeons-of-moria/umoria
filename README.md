@@ -17,9 +17,9 @@ Supported Platforms:
 _* other Linux distros may work, but have not yet been tested._
 
 
-## Umoria Restoration Release: v5.7.0
+## Umoria Restoration Release: v5.7
 
-The main focus of the `v5.7.0` release was to provide support for Windows
+The main focus of the `v5.7` release was to provide support for Windows
 and macOS users, while at the same time removing support for the many
 outdated computer system such as, MS DOS, "Classic" Mac OS (pre OS X), Amiga,
 and Atari ST.

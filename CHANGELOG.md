@@ -3,27 +3,33 @@
 ## HEAD
 
 
-### Documentation
 
-- Added a CODE_OF_CONDUCT.md.
-- Added a CONTRIBUTING.md guide.
+## 5.7.3 (2017-06-21)
 
 ### Bug Fixes
 
 - Various repeat commands (e.g tunnelling) were broken in the 5.7.1 release.
-- Removes `curs_set(0)` as a visible cursor is needed in menus!
+- Remove `curs_set(0)` as a visible cursor is needed in menus!
+
+### Documentation
+
+- Add a `CODE_OF_CONDUCT`.
+- Add a `CONTRIBUTING` guide.
 
 ### Code
 
-- Extract Method refactoring in many places.
+_Extract Method_ refactoring was the main focus of this release. Along the way
+many other refactorings were made, including:
+
 - Refactor `if/else` statements:
   * Add guard clauses / early returns where possible.
   * Remove `else` when an `if` returns.
   * Makes many easier to understand (e.g. less indentation).
 - Refactor `do/while` statements, to be just `while` statements where possible.
-- Removes unneeded braces for `if` statement expressions.
+- Remove unneeded braces for `if` statement expressions.
 - Rename many variables to make their function more obvious, but there's more to do in this area.
 - Generally lots of small refactoring.
+
 
 
 ## 5.7.2 (2017-03-12)
