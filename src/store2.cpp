@@ -856,7 +856,7 @@ static bool store_purchase(int store_num, int *cur_top) {
                 *cur_top = 0;
                 display_inventory(store_num, *cur_top);
             } else {
-                inven_record *r_ptr = &s_ptr->store_inven[item_val];
+                InventoryRecord_t *r_ptr = &s_ptr->store_inven[item_val];
 
                 if (saved_store_counter == s_ptr->store_ctr) {
                     if (r_ptr->scost < 0) {

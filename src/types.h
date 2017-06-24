@@ -318,7 +318,7 @@ typedef struct {
 typedef struct {
     int32_t scost;
     inven_type sitem;
-} inven_record;
+} InventoryRecord_t;
 
 typedef struct {
     int32_t store_open;
@@ -327,7 +327,7 @@ typedef struct {
     uint8_t store_ctr;
     uint16_t good_buy;
     uint16_t bad_buy;
-    inven_record store_inven[STORE_INVEN_MAX];
+    InventoryRecord_t store_inven[STORE_INVEN_MAX];
 } Store_t;
 
 // 64 bytes for this structure
