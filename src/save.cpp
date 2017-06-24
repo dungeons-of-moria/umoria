@@ -377,7 +377,7 @@ static bool sv_write() {
 // Set up prior to actual save, do the save, then clean up
 bool save_char() {
     while (!_save_char(savefile)) {
-        vtype temp;
+        vtype_t temp;
 
         (void) sprintf(temp, "Save file '%s' fails.", savefile);
         msg_print(temp);
@@ -458,7 +458,7 @@ bool _save_char(char *fnam) {
             (void) unlink(fnam);
         }
 
-        vtype temp;
+        vtype_t temp;
         if (fd >= 0) {
             (void) sprintf(temp, "Error writing to file %s", fnam);
         } else {
@@ -498,7 +498,7 @@ bool get_char(bool *generate) {
 
     clear_screen();
 
-    vtype temp;
+    vtype_t temp;
     (void) sprintf(temp, "Save file %s present. Attempting restore.", savefile);
     put_buffer(temp, 23, 0);
 

@@ -38,10 +38,10 @@ int hack_monptr                 = -1;
 
 bool weapon_heavy               = false;
 int pack_heavy                  = 0;
-vtype died_from;
+vtype_t died_from;
 int32_t birth_date;
 
-vtype savefile; // The save file to use.
+vtype_t savefile; // The save file to use.
 
 bool total_winner               = false;
 int32_t max_score               = 0;
@@ -54,7 +54,7 @@ int16_t cur_height, cur_width;              // Cur dungeon size
 int16_t dun_level               = 0;        // Cur dungeon level
 int16_t missile_ctr             = 0;        // Counter for missiles
 bool msg_flag;                              // Set with first msg
-vtype old_msg[MAX_SAVE_MSG];                // Last message
+vtype_t old_msg[MAX_SAVE_MSG];                // Last message
 int16_t last_msg                = 0;        // Where last is held
 bool death                      = false;    // True if died
 

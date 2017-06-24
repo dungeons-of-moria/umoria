@@ -27,7 +27,7 @@ void init_scorefile() {
 
 // Attempt to open the intro file -RAK-
 void read_times() {
-    vtype in_line;
+    vtype_t in_line;
 
     // Print the introduction message, news, etc.
     FILE *file1 = fopen(MORIA_MOR, "r");
@@ -45,7 +45,7 @@ void read_times() {
 // File perusal. -CJS-
 // primitive, but portable
 void helpfile(const char *filename) {
-    bigvtype tmp_str;
+    obj_desc_t tmp_str;
 
     FILE *file = fopen(filename, "r");
     if (file == NULL) {
@@ -60,7 +60,7 @@ void helpfile(const char *filename) {
     while (!feof(file)) {
         clear_screen();
         for (int i = 0; i < 23; i++) {
-            if (fgets(tmp_str, BIGVTYPESIZ - 1, file) != CNIL) {
+            if (fgets(tmp_str, OBJECT_DESCRIPTION_SIZE - 1, file) != CNIL) {
                 put_buffer(tmp_str, i, 0);
             }
         }
@@ -80,7 +80,7 @@ void helpfile(const char *filename) {
 // Note that the objects produced is a sampling of objects
 // which be expected to appear on that level.
 void print_objects() {
-    bigvtype tmp_str;
+    obj_desc_t tmp_str;
 
     prt("Produce objects on what level?: ", 0, 0);
     if (!get_string(tmp_str, 0, 32, 10)) {
@@ -102,7 +102,7 @@ void print_objects() {
         }
 
         prt("File name: ", 0, 0);
-        vtype filename1;
+        vtype_t filename1;
         if (get_string(filename1, 0, 11, 64)) {
             if (strlen(filename1) == 0) {
                 return;
@@ -161,7 +161,7 @@ static void writeCharacterSheetToFile(FILE *file1) {
     const char *colon = ":";
     const char *blank = " ";
 
-    vtype statDescription;
+    vtype_t statDescription;
 
     (void) fprintf(file1, "%c\n\n", CTRL_KEY('L'));
 
@@ -224,7 +224,7 @@ static void writeCharacterSheetToFile(FILE *file1) {
     int xsave = py.misc.save + stat_adj(A_WIS) + (class_level_adj[py.misc.pclass][CLA_SAVE] * py.misc.lev / 3);
     int xdev = py.misc.save + stat_adj(A_INT) + (class_level_adj[py.misc.pclass][CLA_DEVICE] * py.misc.lev / 3);
 
-    vtype xinfra;
+    vtype_t xinfra;
     (void) sprintf(xinfra, "%d feet", py.flags.see_infra * 10);
 
     (void) fprintf(file1, "(Miscellaneous Abilities)\n\n");
@@ -285,7 +285,7 @@ static void writeEquipmentListToFile(FILE *file1) {
         return;
     }
 
-    bigvtype description;
+    obj_desc_t description;
     int itemSlotID = 0;
 
     for (int i = INVEN_WIELD; i < INVEN_ARRAY_SIZE; i++) {
@@ -311,7 +311,7 @@ static void writeInventoryToFile(FILE *file1) {
         return;
     }
 
-    bigvtype description;
+    obj_desc_t description;
 
     for (int i = 0; i < inven_ctr; i++) {
         objdes(description, &inventory[i], true);
@@ -323,7 +323,7 @@ static void writeInventoryToFile(FILE *file1) {
 
 // Print the character to a file or device -RAK-
 bool file_character(char *filename) {
-    vtype msg;
+    vtype_t msg;
 
     int fd = open(filename, O_WRONLY | O_CREAT | O_EXCL, 0644);
     if (fd < 0 && errno == EEXIST) {

@@ -717,7 +717,7 @@ static void playerDetectEnchantment() {
         if (i_ptr->tval != TV_NOTHING && enchanted(i_ptr) && randint(chance) == 1) {
             extern const char *describe_use(int);
 
-            vtype tmp_str;
+            vtype_t tmp_str;
             (void) sprintf(tmp_str, "There's something about what you are %s...", describe_use(i));
             disturb(0, 0);
             msg_print(tmp_str);
@@ -1391,7 +1391,7 @@ static void commandLocateOnMap() {
     cx = panel_col;
 
     int dir_val;
-    vtype out_val, tmp_str;
+    vtype_t out_val, tmp_str;
 
     while (true) {
         p_y = panel_row;
@@ -1501,7 +1501,7 @@ static void doWizardCommands(char com_val) {
                 prt("Go to which level (0-99) ? ", 0, 0);
                 i = -1;
 
-                vtype tmp_str;
+                vtype_t tmp_str;
                 if (get_string(tmp_str, 0, 27, 10)) {
                     i = atoi(tmp_str);
                 }

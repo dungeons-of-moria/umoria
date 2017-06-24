@@ -276,7 +276,7 @@ static void inventoryItemWeightText(char *text, int itemID) {
 // used. If mask is non-zero, then only display those items which have a
 // non-zero entry in the mask array.
 int show_inven(int r1, int r2, bool weight, int col, char *mask) {
-    vtype descriptions[23];
+    vtype_t descriptions[23];
 
     int len = 79 - col;
 
@@ -293,7 +293,7 @@ int show_inven(int r1, int r2, bool weight, int col, char *mask) {
             continue;
         }
 
-        bigvtype description;
+        obj_desc_t description;
         objdes(description, &inventory[i], true);
 
         // Truncate if too long.
@@ -334,7 +334,7 @@ int show_inven(int r1, int r2, bool weight, int col, char *mask) {
         }
 
         if (weight) {
-            bigvtype text;
+            obj_desc_t text;
             inventoryItemWeightText(text, i);
             prt(text, current_line, 71);
         }
@@ -415,7 +415,7 @@ static const char *itemPostitionDescription(int positionID, uint16_t weight) {
 // Displays equipment items from r1 to end -RAK-
 // Keep display as far right as possible. -CJS-
 int show_equip(bool weight, int col) {
-    vtype descriptions[INVEN_ARRAY_SIZE - INVEN_WIELD];
+    vtype_t descriptions[INVEN_ARRAY_SIZE - INVEN_WIELD];
 
     int len = 79 - col;
 
@@ -436,7 +436,7 @@ int show_equip(bool weight, int col) {
         // Get position
         const char *positionDescription = itemPostitionDescription(i, inventory[i].weight);
 
-        bigvtype description;
+        obj_desc_t description;
         objdes(description, &inventory[i], true);
 
         // Truncate if necessary
@@ -478,7 +478,7 @@ int show_equip(bool weight, int col) {
         }
 
         if (weight) {
-            bigvtype text;
+            obj_desc_t text;
             inventoryItemWeightText(text, i);
             prt(text, line + 1, 71);
         }
@@ -508,10 +508,10 @@ void takeoff(int item_val, int posn) {
         p = "Was wearing ";
     }
 
-    bigvtype description;
+    obj_desc_t description;
     objdes(description, t_ptr, true);
 
-    bigvtype msg;
+    obj_desc_t msg;
     if (posn >= 0) {
         (void) sprintf(msg, "%s%s (%c)", p, description, 'a' + posn);
     } else {
@@ -530,13 +530,13 @@ void takeoff(int item_val, int posn) {
 // Used to verify if this really is the item we wish to -CJS-
 // wear or read.
 int verify(const char *prompt, int item) {
-    bigvtype description;
+    obj_desc_t description;
     objdes(description, &inventory[item], true);
 
     // change the period to a question mark
     description[strlen(description) - 1] = '?';
 
-    bigvtype msg;
+    obj_desc_t msg;
     (void) sprintf(msg, "%s %s", prompt, description);
 
     return get_check(msg);
@@ -749,10 +749,10 @@ static void inventoryUnwieldItem() {
     }
 
     if (TR_CURSED & inventory[INVEN_WIELD].flags) {
-        bigvtype description;
+        obj_desc_t description;
         objdes(description, &inventory[INVEN_WIELD], false);
 
-        bigvtype msg;
+        obj_desc_t msg;
         (void) sprintf(msg, "The %s you are wielding appears to be cursed.", description);
 
         msg_print(msg);
@@ -774,10 +774,10 @@ static void inventoryUnwieldItem() {
     py_bonuses(&inventory[INVEN_WIELD], 1); // Add bonuses
 
     if (inventory[INVEN_WIELD].tval != TV_NOTHING) {
-        bigvtype msgLabel;
+        obj_desc_t msgLabel;
         (void) strcpy(msgLabel, "Primary weapon   : ");
 
-        bigvtype description;
+        obj_desc_t description;
         objdes(description, &inventory[INVEN_WIELD], true);
 
         msg_print(strcat(msgLabel, description));
@@ -932,10 +932,10 @@ static int inventoryGetSlotToWearEquipment(int item) {
 }
 
 static void inventoryItemIsCursedMessage(int itemID) {
-    bigvtype description;
+    obj_desc_t description;
     objdes(description, &inventory[itemID], false);
 
-    bigvtype itemText;
+    obj_desc_t itemText;
     (void) sprintf(itemText, "The %s you are ", description);
 
     if (itemID == INVEN_HEAD) {
@@ -992,7 +992,7 @@ static bool selectItemCommands(char *command, char *which, bool selecting) {
             continue;
         }
 
-        bigvtype headingText;
+        obj_desc_t headingText;
         buildCommandHeading(headingText, from, to, swap, *command, prompt);
 
         // Abort everything.
@@ -1158,7 +1158,7 @@ static bool selectItemCommands(char *command, char *which, bool selecting) {
                     text = "You are wearing";
                 }
 
-                bigvtype description;
+                obj_desc_t description;
                 objdes(description, i_ptr, true);
 
                 // Get the right equipment letter.
@@ -1171,7 +1171,7 @@ static bool selectItemCommands(char *command, char *which, bool selecting) {
                     }
                 }
 
-                bigvtype msg;
+                obj_desc_t msg;
                 (void) sprintf(msg, "%s %s (%c)", text, description, 'a' + item);
                 msg_print(msg);
 
@@ -1196,11 +1196,11 @@ static bool selectItemCommands(char *command, char *which, bool selecting) {
             char query = ESCAPE;
 
             if (inventory[item].number > 1) {
-                bigvtype description;
+                obj_desc_t description;
                 objdes(description, &inventory[item], true);
                 description[strlen(description) - 1] = '?';
 
-                bigvtype msg;
+                obj_desc_t msg;
                 (void) sprintf(msg, "Drop all %s [y/n]", description);
                 msg[strlen(description) - 1] = '.';
 
@@ -1248,7 +1248,7 @@ static bool selectItemCommands(char *command, char *which, bool selecting) {
 // Put an appropriate header.
 static void inventoryDisplayAppropriateHeader() {
     if (scr_state == INVEN_SCR) {
-        bigvtype msg;
+        obj_desc_t msg;
         int weightQuotient = inven_weight / 10;
         int weightRemainder = inven_weight % 10;
 
@@ -1414,7 +1414,7 @@ int get_item(int *com_val, const char *pmt, int i, int j, char *mask, const char
             }
         }
 
-        vtype out_val;
+        vtype_t out_val;
 
         if (full) {
             (void) sprintf(
@@ -1873,7 +1873,7 @@ void rest() {
         prt("Rest for how long? ", 0, 0);
         rest_num = 0;
 
-        vtype rest_str;
+        vtype_t rest_str;
         if (get_string(rest_str, 0, 19, 5)) {
             if (rest_str[0] == '*') {
                 rest_num = -MAX_SHORT;

@@ -12,8 +12,8 @@ extern char *copyright[5];
 // deep within creatures() via place_monster() and summon_monster().
 extern int hack_monptr;
 
-extern vtype died_from;
-extern vtype savefile; // The save file. -CJS-
+extern vtype_t died_from;
+extern vtype_t savefile; // The save file. -CJS-
 extern int32_t birth_date;
 
 // These are options, set with set_options command -CJS-
@@ -52,7 +52,7 @@ extern uint32_t town_seed;          // Seed for town genera
 extern int16_t dun_level;           // Cur dungeon level
 extern int16_t missile_ctr;         // Counter for missiles
 extern bool msg_flag;               // Set with first msg
-extern vtype old_msg[MAX_SAVE_MSG]; // Last messages -CJS-
+extern vtype_t old_msg[MAX_SAVE_MSG]; // Last messages -CJS-
 extern int16_t last_msg;            // Where in the array is the last
 extern bool death;                  // True if died
 extern int32_t turn;                // Current turn of game
@@ -193,7 +193,7 @@ bool store_bought_p(inven_type *);
 void sample(inven_type *);
 void identify(int *);
 void unmagic_name(inven_type *);
-void objdes(char *, inven_type *, bool);
+void objdes(obj_desc_t out_val, inven_type *i_ptr, bool pref);
 void invcopy(inven_type *, int);
 void desc_charges(int);
 void desc_remain(int);

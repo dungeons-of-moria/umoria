@@ -10,12 +10,15 @@
 // but still treat it like an unsigned character, let's just avoid it,
 // any variable which can ever hold a negative value must be 16 or 32 bits
 
-#define VTYPESIZ 80
-#define BIGVTYPESIZ 160
-typedef char vtype[VTYPESIZ];
+#define MORIA_MESSAGE_SIZE 80
+#define OBJECT_DESCRIPTION_SIZE 160
+
+typedef char vtype_t[MORIA_MESSAGE_SIZE];
+
 // note that since its output can easily exceed 80 characters, objdes must
-// always be called with a bigvtype as the first parameter
-typedef char bigvtype[BIGVTYPESIZ];
+// always be called with a obj_desc_t as the first parameter
+typedef char obj_desc_t[OBJECT_DESCRIPTION_SIZE];
+
 typedef char stat_type[7];
 
 // Many of the character fields used to be fixed length, which greatly

@@ -82,7 +82,7 @@ void magic_init() {
     }
 
     int k;
-    vtype string;
+    vtype_t string;
 
     for (int h = 0; h < MAX_TITLES; h++) {
         string[0] = '\0';
@@ -322,16 +322,15 @@ int bowDamageValue(int16_t p1) {
 // Returns a description of item for inventory
 // `pref` indicates that there should be an article added (prefix).
 // Note that since out_val can easily exceed 80 characters, objdes
-// must always be called with a bigvtype as the first parameter.
-// FIXME: first parameter should be a `bigvtype`, as stated above.
-void objdes(char *out_val, inven_type *i_ptr, bool pref) {
+// must always be called with a obj_desc_t as the first parameter.
+void objdes(obj_desc_t out_val, inven_type *i_ptr, bool pref) {
     int indexx = i_ptr->subval & (ITEM_SINGLE_STACK_MIN - 1);
 
     // base name, modifier string
     const char *basenm = object_list[i_ptr->index].name;
     const char *modstr = CNIL;
 
-    vtype damstr;
+    vtype_t damstr;
     damstr[0] = '\0';
 
     int p1_use = IGNORED;
@@ -487,7 +486,7 @@ void objdes(char *out_val, inven_type *i_ptr, bool pref) {
             return;
     }
 
-    bigvtype tmp_val;
+    obj_desc_t tmp_val;
 
     if (modstr != CNIL) {
         (void) sprintf(tmp_val, basenm, modstr);
@@ -519,7 +518,7 @@ void objdes(char *out_val, inven_type *i_ptr, bool pref) {
         return;
     }
 
-    vtype tmp_str;
+    vtype_t tmp_str;
 
     if (i_ptr->name2 != SN_NULL && known2_p(i_ptr)) {
         (void) strcat(tmp_val, " ");
@@ -690,7 +689,7 @@ void desc_charges(int item_val) {
 
     int rem_num = inventory[item_val].p1;
 
-    vtype out_val;
+    vtype_t out_val;
     (void) sprintf(out_val, "You have %d charges remaining.", rem_num);
     msg_print(out_val);
 }
@@ -701,13 +700,13 @@ void desc_remain(int item_val) {
 
     i_ptr->number--;
 
-    bigvtype tmp_str;
+    obj_desc_t tmp_str;
     objdes(tmp_str, i_ptr, true);
 
     i_ptr->number++;
 
     // the string already has a dot at the end.
-    bigvtype out_val;
+    obj_desc_t out_val;
     (void) sprintf(out_val, "You have %s", tmp_str);
     msg_print(out_val);
 }

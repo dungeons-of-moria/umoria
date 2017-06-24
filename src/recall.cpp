@@ -117,7 +117,7 @@ static const char *desc_weakness[] = {
         "rock remover",
 };
 
-static vtype roffbuf; // Line buffer.
+static vtype_t roffbuf; // Line buffer.
 static char *roffp;   // Pointer into line buffer.
 static int roffpline; // Place to print line now being loaded.
 
@@ -191,7 +191,7 @@ static void wizardModeInit(recall_type *mp, creature_type *cp) {
 
 // Conflict history.
 static void conflictHistory(uint16_t r_deaths, uint16_t r_kills) {
-    vtype desc;
+    vtype_t desc;
 
     if (r_deaths) {
         (void) sprintf(desc, "%d of the contributors to your monster memory %s", r_deaths, plural(r_deaths, "has", "have"));
@@ -227,7 +227,7 @@ static bool depthFoundAt(uint8_t level, uint16_t r_kills) {
             level = WIN_MON_APPEAR;
         }
 
-        vtype desc;
+        vtype_t desc;
         (void) sprintf(desc, " It is normally found at depths of %d feet", level * 50);
         roff(desc);
     }
@@ -334,7 +334,7 @@ static void killPoints(uint16_t cdefense, uint16_t mexp, uint8_t level) {
         plural = 's';
     }
 
-    vtype desc;
+    vtype_t desc;
     (void) sprintf(desc, " creature is worth %d.%02d point%c", quotient, remainder, plural);
     roff(desc);
 
@@ -418,7 +418,7 @@ static void magicSkills(uint32_t rspells, uint32_t mp_r_spells, uint32_t cp_spel
     if (rspells & (CS_BREATHE | CS_SPELLS)) {
         // Could offset by level
         if ((mp_r_spells & CS_FREQ) > 5) {
-            vtype temp;
+            vtype_t temp;
             (void) sprintf(temp, "; 1 time in %ld", cp_spells & CS_FREQ);
             roff(temp);
         }
@@ -432,7 +432,7 @@ static void killDifficulty(creature_type *cp, uint32_t mp_r_kills) {
         return;
     }
 
-    vtype temp;
+    vtype_t temp;
 
     (void) sprintf(temp, " It has an armor rating of %d", cp->ac);
     roff(temp);
@@ -519,7 +519,7 @@ static void awareness(creature_type *cp, recall_type *mp) {
             roff("is ever vigilant for");
         }
 
-        vtype text;
+        vtype_t text;
         (void) sprintf(text, " intruders, which it may notice from %d feet.", 10 * cp->aaf);
         roff(text);
     }
@@ -564,7 +564,7 @@ static void lootCarried(uint32_t cp_cmove, uint32_t rcmove) {
     } else if (carryingChance == 2) {
         roff(" one or two");
     } else {
-        vtype temp;
+        vtype_t temp;
         (void) sprintf(temp, " up to %d", carryingChance);
         roff(temp);
     }
@@ -648,7 +648,7 @@ static void attackNumberAndDamage(recall_type *mp, creature_type *cp) {
                         roff(" with damage");
                     }
 
-                    vtype temp;
+                    vtype_t temp;
                     (void) sprintf(temp, " %dd%d", d1, d2);
                     roff(temp);
                 }
@@ -690,7 +690,7 @@ int roff_recall(int mon_num) {
     bool known;
 
     // Start the paragraph for the core monster description
-    vtype temp;
+    vtype_t temp;
     (void) sprintf(temp, "The %s:\n", cp->name);
     roff(temp);
 

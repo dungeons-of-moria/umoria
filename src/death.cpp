@@ -104,7 +104,7 @@ bool duplicate_character() {
 // Prints the gravestone of the character -RAK-
 static void print_tomb() {
     char *p;
-    vtype str, tmp_str;
+    vtype_t str, tmp_str;
 
     clear_screen();
     put_buffer("_______________________", 1, 15);

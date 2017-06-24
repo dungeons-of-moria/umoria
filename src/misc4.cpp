@@ -18,7 +18,7 @@ void scribe_object() {
 
     int item_val;
     if (get_item(&item_val, "Which one? ", 0, INVEN_ARRAY_SIZE, CNIL, CNIL)) {
-        bigvtype out_val, tmp_str;
+        obj_desc_t out_val, tmp_str;
 
         objdes(tmp_str, &inventory[item_val], true);
         (void) sprintf(out_val, "Inscribing %s", tmp_str);

@@ -37,7 +37,7 @@ void wizard_light() {
 // Wizard routine for gaining on stats -RAK-
 void change_character() {
     int tmp_val;
-    vtype tmp_str;
+    vtype_t tmp_str;
 
     uint8_t *a_ptr = py.stats.max_stat;
 
@@ -246,7 +246,7 @@ void change_character() {
 // Wizard routine for creating objects -RAK-
 void wizard_create() {
     int tmp_val;
-    vtype tmp_str;
+    vtype_t tmp_str;
 
     msg_print("Warning: This routine can cause a fatal error.");
 

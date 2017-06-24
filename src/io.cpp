@@ -62,7 +62,7 @@ void put_buffer(const char *out_str, int row, int col) {
         col = 79;
     }
 
-    vtype str;
+    vtype_t str;
     (void) strncpy(str, out_str, (size_t) (79 - col));
     str[79 - col] = '\0';
 
@@ -309,8 +309,8 @@ void msg_print(const char *msg) {
             last_msg = 0;
         }
 
-        (void) strncpy(old_msg[last_msg], msg, VTYPESIZ);
-        old_msg[last_msg][VTYPESIZ - 1] = '\0';
+        (void) strncpy(old_msg[last_msg], msg, MORIA_MESSAGE_SIZE);
+        old_msg[last_msg][MORIA_MESSAGE_SIZE - 1] = '\0';
     }
 }
 

@@ -12,7 +12,7 @@
 #include "externs.h"
 
 static void printMonsterActionText(std::string name, std::string action) {
-    vtype msg;
+    vtype_t msg;
     (void) sprintf(msg, "%s %s", name.c_str(), action.c_str());
     msg_print(msg);
 }
@@ -51,7 +51,7 @@ bool sleep_monsters1(int row, int col) {
             monster_type *m_ptr = &m_list[cave[y][x].cptr];
             creature_type *r_ptr = &c_list[m_ptr->mptr];
 
-            vtype name;
+            vtype_t name;
             monster_name(name, m_ptr->ml, r_ptr->name);
 
             if (randint(MAX_MONS_LEVEL) < r_ptr->level || (CD_NO_SLEEP & r_ptr->cdefense)) {
@@ -316,10 +316,10 @@ bool ident_spell() {
     inven_type *i_ptr = &inventory[item_val];
     known2(i_ptr);
 
-    bigvtype tmp_str;
+    obj_desc_t tmp_str;
     objdes(tmp_str, i_ptr, true);
 
-    bigvtype out_val;
+    obj_desc_t out_val;
     if (item_val >= INVEN_WIELD) {
         calc_bonuses();
         (void) sprintf(out_val, "%s: %s", describe_use(item_val), tmp_str);
@@ -488,7 +488,7 @@ static void lightLineTouchesMonster(int monsterID) {
     // light up and draw monster
     update_mon(monsterID);
 
-    vtype name;
+    vtype_t name;
     monster_name(name, monster->ml, creature->name);
 
     if (CD_LIGHT & creature->cdefense) {
@@ -660,10 +660,10 @@ static void fireBoltTouchesMonster(cave_type *tile, int dam, int harmType, uint3
     // draw monster and clear previous bolt
     put_qio();
 
-    vtype name;
+    vtype_t name;
     lower_monster_name(name, monster->ml, creature->name);
 
-    vtype msg;
+    vtype_t msg;
     (void) sprintf(msg, "The %s strikes %s.", boltName.c_str(), name);
     msg_print(msg);
 
@@ -830,11 +830,11 @@ void fire_ball(int typ, int dir, int y, int x, int dam_hp, const char *descrip) 
             // End  explosion.
 
             if (thit == 1) {
-                vtype out_val;
+                vtype_t out_val;
                 (void) sprintf(out_val, "The %s envelops a creature!", descrip);
                 msg_print(out_val);
             } else if (thit > 1) {
-                vtype out_val;
+                vtype_t out_val;
                 (void) sprintf(out_val, "The %s envelops several creatures!", descrip);
                 msg_print(out_val);
             }
@@ -1035,7 +1035,7 @@ bool hp_monster(int dir, int y, int x, int dam) {
             monster_type *m_ptr = &m_list[c_ptr->cptr];
             creature_type *r_ptr = &c_list[m_ptr->mptr];
 
-            vtype name;
+            vtype_t name;
             monster_name(name, m_ptr->ml, r_ptr->name);
 
             if (mon_take_hit((int) c_ptr->cptr, dam) >= 0) {
@@ -1074,7 +1074,7 @@ bool drain_life(int dir, int y, int x) {
             creature_type *r_ptr = &c_list[m_ptr->mptr];
 
             if ((r_ptr->cdefense & CD_UNDEAD) == 0) {
-                vtype name;
+                vtype_t name;
                 monster_name(name, m_ptr->ml, r_ptr->name);
 
                 if (mon_take_hit((int) c_ptr->cptr, 75) >= 0) {
@@ -1116,7 +1116,7 @@ bool speed_monster(int dir, int y, int x, int spd) {
             monster_type *m_ptr = &m_list[c_ptr->cptr];
             creature_type *r_ptr = &c_list[m_ptr->mptr];
 
-            vtype name;
+            vtype_t name;
             monster_name(name, m_ptr->ml, r_ptr->name);
 
             if (spd > 0) {
@@ -1165,7 +1165,7 @@ bool confuse_monster(int dir, int y, int x) {
             monster_type *m_ptr = &m_list[c_ptr->cptr];
             creature_type *r_ptr = &c_list[m_ptr->mptr];
 
-            vtype name;
+            vtype_t name;
             monster_name(name, m_ptr->ml, r_ptr->name);
 
             if (randint(MAX_MONS_LEVEL) < r_ptr->level || (CD_NO_SLEEP & r_ptr->cdefense)) {
@@ -1219,7 +1219,7 @@ bool sleep_monster(int dir, int y, int x) {
             monster_type *m_ptr = &m_list[c_ptr->cptr];
             creature_type *r_ptr = &c_list[m_ptr->mptr];
 
-            vtype name;
+            vtype_t name;
             monster_name(name, m_ptr->ml, r_ptr->name);
 
             if (randint(MAX_MONS_LEVEL) < r_ptr->level || (CD_NO_SLEEP & r_ptr->cdefense)) {
@@ -1274,10 +1274,10 @@ bool wall_to_mud(int dir, int y, int x) {
             if (panel_contains(y, x) && test_light(y, x)) {
                 turned = true;
 
-                bigvtype description;
+                obj_desc_t description;
                 objdes(description, &t_list[c_ptr->tptr], false);
 
-                bigvtype out_val;
+                obj_desc_t out_val;
                 (void) sprintf(out_val, "The %s turns into mud.", description);
                 msg_print(out_val);
             }
@@ -1301,7 +1301,7 @@ bool wall_to_mud(int dir, int y, int x) {
             creature_type *r_ptr = &c_list[m_ptr->mptr];
 
             if (CD_STONE & r_ptr->cdefense) {
-                vtype name;
+                vtype_t name;
                 monster_name(name, m_ptr->ml, r_ptr->name);
 
                 // Should get these messages even if the monster is not visible.
@@ -1397,7 +1397,7 @@ bool poly_monster(int dir, int y, int x) {
                     morphed = true;
                 }
             } else {
-                vtype name;
+                vtype_t name;
                 monster_name(name, m_ptr->ml, r_ptr->name);
                 printMonsterActionText(name, "is unaffected.");
             }
@@ -1445,7 +1445,7 @@ bool build_wall(int dir, int y, int x) {
                     damage = damroll(4, 8);
                 }
 
-                vtype name;
+                vtype_t name;
                 monster_name(name, m_ptr->ml, r_ptr->name);
 
                 printMonsterActionText(name, "wails out in pain!");
@@ -1640,7 +1640,7 @@ bool genocide() {
                 // genocide is a powerful spell, so we will let the player
                 // know the names of the creatures he did not destroy,
                 // this message makes no sense otherwise
-                vtype msg;
+                vtype_t msg;
                 (void) sprintf(msg, "The %s is unaffected.", r_ptr->name);
                 msg_print(msg);
             }
@@ -1659,7 +1659,7 @@ bool speed_monsters(int spd) {
         monster_type *m_ptr = &m_list[id];
         creature_type *r_ptr = &c_list[m_ptr->mptr];
 
-        vtype name;
+        vtype_t name;
         monster_name(name, m_ptr->ml, r_ptr->name);
 
         if (m_ptr->cdis > MAX_SIGHT || !los(char_row, char_col, (int) m_ptr->fy, (int) m_ptr->fx)) {
@@ -1699,7 +1699,7 @@ bool sleep_monsters2() {
         monster_type *m_ptr = &m_list[id];
         creature_type *r_ptr = &c_list[m_ptr->mptr];
 
-        vtype name;
+        vtype_t name;
         monster_name(name, m_ptr->ml, r_ptr->name);
 
         if (m_ptr->cdis > MAX_SIGHT || !los(char_row, char_col, (int) m_ptr->fy, (int) m_ptr->fx)) {
@@ -1858,7 +1858,7 @@ static void earthquakeHitsMonster(int monsterID) {
             damage = damroll(4, 8);
         }
 
-        vtype name;
+        vtype_t name;
         monster_name(name, monster->ml, creature->name);
 
         printMonsterActionText(name, "wails out in pain!");
@@ -1956,7 +1956,7 @@ bool dispel_creature(int cflag, int damage) {
 
             dispelled = true;
 
-            vtype name;
+            vtype_t name;
             monster_name(name, m_ptr->ml, r_ptr->name);
 
             int hit = mon_take_hit(id, randint(damage));
@@ -1986,7 +1986,7 @@ bool turn_undead() {
         creature_type *r_ptr = &c_list[m_ptr->mptr];
 
         if (m_ptr->cdis <= MAX_SIGHT && (CD_UNDEAD & r_ptr->cdefense) && los(char_row, char_col, (int) m_ptr->fy, (int) m_ptr->fx)) {
-            vtype name;
+            vtype_t name;
             monster_name(name, m_ptr->ml, r_ptr->name);
 
             if (py.misc.lev + 1 > r_ptr->level || randint(5) == 1) {

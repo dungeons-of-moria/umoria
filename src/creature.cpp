@@ -243,7 +243,7 @@ static void get_moves(int monsterID, int *mm) {
 }
 
 // For "DIED_FROM" string
-static void diedFromString(vtype *desc, const char *name, uint32_t move) {
+static void diedFromString(vtype_t *desc, const char *name, uint32_t move) {
     if (CM_WIN & move) {
         (void) sprintf(*desc, "The %s", name);
     } else if (is_a_vowel(name[0])) {
@@ -546,7 +546,7 @@ static bool executeDisenchantAttack() {
     return success;
 }
 
-static bool executeAttack(creature_type *r_ptr, monster_type *m_ptr, int monsterID, int attype, int damage, vtype deathDescription, bool notice) {
+static bool executeAttack(creature_type *r_ptr, monster_type *m_ptr, int monsterID, int attype, int damage, vtype_t deathDescription, bool notice) {
     int i;
     int j;
     int32_t gold;
@@ -775,12 +775,12 @@ static bool executeAttack(creature_type *r_ptr, monster_type *m_ptr, int monster
     return notice;
 }
 
-static void confuseCreatureOnAttack(creature_type *r_ptr, monster_type *m_ptr, int adesc, vtype cdesc, bool visible) {
+static void confuseCreatureOnAttack(creature_type *r_ptr, monster_type *m_ptr, int adesc, vtype_t cdesc, bool visible) {
     if (py.flags.confuse_monster && adesc != 99) {
         msg_print("Your hands stop glowing.");
         py.flags.confuse_monster = false;
 
-        vtype msg;
+        vtype_t msg;
 
         if (randint(MAX_MONS_LEVEL) < r_ptr->level || (CD_NO_SLEEP & r_ptr->cdefense)) {
             (void) sprintf(msg, "%sis unaffected.", cdesc);
@@ -812,19 +812,19 @@ static void make_attack(int monsterID) {
     monster_type *m_ptr = &m_list[monsterID];
     creature_type *r_ptr = &c_list[m_ptr->mptr];
 
-    vtype cdesc;
+    vtype_t cdesc;
     if (!m_ptr->ml) {
         (void) strcpy(cdesc, "It ");
     } else {
         (void) sprintf(cdesc, "The %s ", r_ptr->name);
     }
 
-    vtype deathDescription;
+    vtype_t deathDescription;
     diedFromString(&deathDescription, r_ptr->name, r_ptr->cmove);
 
     int attype, adesc, adice, asides;
     int attackn = 0;
-    vtype tmp_str;
+    vtype_t tmp_str;
 
     uint8_t *attstr = r_ptr->damage;
     while ((*attstr != 0) && !death) {
@@ -1102,7 +1102,7 @@ static bool canCreatureCastSpells(monster_type *m_ptr, uint32_t spells) {
     return los(char_row, char_col, (int) m_ptr->fy, (int) m_ptr->fx);
 }
 
-void creatureCastsSpell(monster_type *m_ptr, int monsterID, int spellID, uint8_t level, vtype cdesc, vtype deathDescription) {
+void creatureCastsSpell(monster_type *m_ptr, int monsterID, int spellID, uint8_t level, vtype_t cdesc, vtype_t deathDescription) {
     int y, x;
 
     // Cast the spell.
@@ -1207,7 +1207,7 @@ void creatureCastsSpell(monster_type *m_ptr, int monsterID, int spellID, uint8_t
             if (py.misc.cmana > 0) {
                 disturb(1, 0);
 
-                vtype outval;
+                vtype_t outval;
                 (void) sprintf(outval, "%sdraws psychic energy from you!", cdesc);
                 msg_print(outval);
 
@@ -1280,14 +1280,14 @@ static bool mon_cast_spell(int monsterID) {
     update_mon(monsterID);
 
     // Describe the attack
-    vtype cdesc;
+    vtype_t cdesc;
     if (m_ptr->ml) {
         (void) sprintf(cdesc, "The %s ", r_ptr->name);
     } else {
         (void) strcpy(cdesc, "It ");
     }
 
-    vtype deathDescription;
+    vtype_t deathDescription;
     diedFromString(&deathDescription, r_ptr->name, r_ptr->cmove);
 
     // Extract all possible spells into spell_choice
@@ -1658,7 +1658,7 @@ static void creatureAttackingUpdate(monster_type *m_ptr, int monsterID, int move
 
                 if (m_ptr->stunned == 0) {
                     if (m_ptr->ml) {
-                        vtype msg;
+                        vtype_t msg;
                         (void) sprintf(msg, "The %s ", c_list[m_ptr->mptr].name);
                         msg_print(strcat(msg, "recovers and glares at you."));
                     }

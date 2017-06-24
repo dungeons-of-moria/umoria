@@ -61,10 +61,10 @@ void search(int y, int x, int chance) {
             if (t_ptr->tval == TV_INVIS_TRAP) {
                 // Trap on floor?
 
-                bigvtype description;
+                obj_desc_t description;
                 objdes(description, t_ptr, true);
 
-                bigvtype msg;
+                obj_desc_t msg;
                 (void) sprintf(msg, "You have found %s", description);
                 msg_print(msg);
 
@@ -541,7 +541,7 @@ int minus_ac(uint32_t typ_dam) {
 
     int itemID = items[randint(itemsCount) - 1];
 
-    bigvtype description, msg;
+    obj_desc_t description, msg;
 
     if (inventory[itemID].flags & typ_dam) {
         minus = true;

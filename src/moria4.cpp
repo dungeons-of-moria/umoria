@@ -596,7 +596,7 @@ static bool look_ray(int y, int from, int to) {
 
 static bool look_see(int x, int y, bool *transparent) {
     if (x < 0 || y < 0 || y > x) {
-        bigvtype errorMessage;
+        obj_desc_t errorMessage;
         (void) sprintf(errorMessage, "Illegal call to look_see(%d, %d)", x, y);
         msg_print(errorMessage);
     }
@@ -628,7 +628,7 @@ static bool look_see(int x, int y, bool *transparent) {
     // a warning. Perhaps we can set it to `ESCAPE` here as default. -MRC-
     char query = ESCAPE;
 
-    bigvtype msg;
+    obj_desc_t msg;
     msg[0] = 0;
 
     if (gl_rock == 0 && c_ptr->cptr > 1 && m_list[c_ptr->cptr].ml) {
@@ -654,7 +654,7 @@ static bool look_see(int x, int y, bool *transparent) {
             }
 
             if (gl_rock == 0 && t_list[c_ptr->tptr].tval != TV_INVIS_TRAP) {
-                bigvtype obj_string;
+                obj_desc_t obj_string;
                 objdes(obj_string, &t_list[c_ptr->tptr], true);
 
                 (void) sprintf(msg, "%s %s ---pause---", description, obj_string);
@@ -844,7 +844,7 @@ static void drop_throw(int y, int x, inven_type *t_ptr) {
         t_list[cur_pos] = *t_ptr;
         lite_spot(i, j);
     } else {
-        bigvtype description, msg;
+        obj_desc_t description, msg;
         objdes(description, t_ptr, false);
 
         (void) sprintf(msg, "The %s disappears.", description);
@@ -926,7 +926,7 @@ void throw_object() {
                 if (test_hit(tbth, (int) py.misc.lev, tpth, (int) c_list[m_ptr->mptr].ac, CLA_BTHB)) {
                     int damage = m_ptr->mptr;
 
-                    bigvtype description, msg;
+                    obj_desc_t description, msg;
                     objdes(description, &throw_obj, false);
 
                     // Does the player know what he's fighting?
@@ -988,7 +988,7 @@ static void py_bash(int y, int x) {
     m_ptr->csleep = 0;
 
     // Does the player know what he's fighting?
-    vtype name;
+    vtype_t name;
     if (!m_ptr->ml) {
         (void) strcpy(name, "it");
     } else {
@@ -1006,7 +1006,7 @@ static void py_bash(int y, int x) {
     }
 
     if (test_hit(base_tohit, (int) py.misc.lev, (int) py.stats.use_stat[A_DEX], (int) c_ptr->ac, CLA_BTH)) {
-        vtype msg;
+        vtype_t msg;
         (void) sprintf(msg, "You hit %s.", name);
         msg_print(msg);
 
@@ -1048,7 +1048,7 @@ static void py_bash(int y, int x) {
             msg_print(msg);
         }
     } else {
-        vtype msg;
+        vtype_t msg;
         (void) sprintf(msg, "You miss %s.", name);
         msg_print(msg);
     }

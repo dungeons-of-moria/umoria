@@ -17,14 +17,14 @@ static void trapOpenPit(inven_type *t_ptr, int dam) {
         return;
     }
 
-    bigvtype description;
+    obj_desc_t description;
     objdes(description, t_ptr, true);
     take_hit(dam, description);
 }
 
 static void trapArrow(inven_type *t_ptr, int dam) {
     if (test_hit(125, 0, 0, py.misc.pac + py.misc.ptoac, CLA_MISC_HIT)) {
-        bigvtype description;
+        obj_desc_t description;
         objdes(description, t_ptr, true);
         take_hit(dam, description);
 
@@ -41,7 +41,7 @@ static void trapCoveredPit(inven_type *t_ptr, int dam, int y, int x) {
     if (py.flags.ffall) {
         msg_print("You gently float down.");
     } else {
-        bigvtype description;
+        obj_desc_t description;
         objdes(description, t_ptr, true);
         take_hit(dam, description);
     }
@@ -58,7 +58,7 @@ static void trapDoor(inven_type *t_ptr, int dam) {
     if (py.flags.ffall) {
         msg_print("You gently float down.");
     } else {
-        bigvtype description;
+        obj_desc_t description;
         objdes(description, t_ptr, true);
         take_hit(dam, description);
     }
@@ -96,7 +96,7 @@ static void trapStrengthDart(inven_type *t_ptr, int dam) {
         if (!py.flags.sustain_str) {
             (void) dec_stat(A_STR);
 
-            bigvtype description;
+            obj_desc_t description;
             objdes(description, t_ptr, true);
             take_hit(dam, description);
 
@@ -182,7 +182,7 @@ static void trapConfuseGas() {
 
 static void trapSlowDart(inven_type *t_ptr, int dam) {
     if (test_hit(125, 0, 0, py.misc.pac + py.misc.ptoac, CLA_MISC_HIT)) {
-        bigvtype description;
+        obj_desc_t description;
         objdes(description, t_ptr, true);
         take_hit(dam, description);
 
@@ -203,7 +203,7 @@ static void trapConstitutionDart(inven_type *t_ptr, int dam) {
         if (!py.flags.sustain_con) {
             (void) dec_stat(A_CON);
 
-            bigvtype description;
+            obj_desc_t description;
             objdes(description, t_ptr, true);
             take_hit(dam, description);
 
@@ -396,7 +396,7 @@ static void carry(int y, int x, bool pickup) {
         return;
     }
 
-    bigvtype description, msg;
+    obj_desc_t description, msg;
 
     end_find();
 
@@ -793,7 +793,7 @@ void py_attack(int y, int x) {
     monster->csleep = 0;
 
     // Does the player know what he's fighting?
-    vtype name;
+    vtype_t name;
     if (!monster->ml) {
         (void) strcpy(name, "it");
     } else {
@@ -806,7 +806,7 @@ void py_attack(int y, int x) {
     int base_tohit = playerCalculateBaseToHit(monster->ml, tot_tohit);
 
     int damage;
-    vtype msg;
+    vtype_t msg;
 
     // Loop for number of blows, trying to hit the critter.
     // Note: blows will always be greater than 0 at the start of the loop -MRC-
@@ -1319,7 +1319,7 @@ int twall(int y, int x, int t1, int t2) {
 }
 
 void objectBlockedByMonster(int id) {
-    vtype description, msg;
+    vtype_t description, msg;
 
     monster_type *monster = &m_list[id];
     const char *name = c_list[monster->mptr].name;

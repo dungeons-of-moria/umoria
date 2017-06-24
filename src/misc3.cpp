@@ -212,35 +212,35 @@ void prt_field(const char *info, int row, int column) {
 
 // Print long number with header at given row, column
 static void prt_lnum(const char *header, int32_t num, int row, int column) {
-    vtype str;
+    vtype_t str;
     (void) sprintf(str, "%s: %6d", header, num);
     put_buffer(str, row, column);
 }
 
 // Print long number (7 digits of space) with header at given row, column
 static void prt_7lnum(const char *header, int32_t num, int row, int column) {
-    vtype str;
+    vtype_t str;
     (void) sprintf(str, "%s: %7d", header, num);
     put_buffer(str, row, column);
 }
 
 // Print number with header at given row, column -RAK-
 static void prt_num(const char *header, int num, int row, int column) {
-    vtype str;
+    vtype_t str;
     (void) sprintf(str, "%s: %6d", header, num);
     put_buffer(str, row, column);
 }
 
 // Print long number at given row, column
 static void prt_long(int32_t num, int row, int column) {
-    vtype str;
+    vtype_t str;
     (void) sprintf(str, "%6d", num);
     put_buffer(str, row, column);
 }
 
 // Print number at given row, column -RAK-
 static void prt_int(int num, int row, int column) {
-    vtype str;
+    vtype_t str;
     (void) sprintf(str, "%6d", num);
     put_buffer(str, row, column);
 }
@@ -411,7 +411,7 @@ void prt_gold() {
 
 // Prints depth in stat area -RAK-
 void prt_depth() {
-    vtype depths;
+    vtype_t depths;
 
     int depth = dun_level * 50;
 
@@ -924,7 +924,7 @@ void put_character() {
 // Prints the following information on the screen. -JWT-
 void put_stats() {
     for (int i = 0; i < 6; i++) {
-        vtype buf;
+        vtype_t buf;
 
         cnv_stat(py.stats.use_stat[i], buf);
         put_buffer(stat_names[i], 2 + i, 61);
@@ -1017,7 +1017,7 @@ void put_misc3() {
     int xsave = py.misc.save + stat_adj(A_WIS) + (class_level_adj[py.misc.pclass][CLA_SAVE] * py.misc.lev / 3);
     int xdev = py.misc.save + stat_adj(A_INT) + (class_level_adj[py.misc.pclass][CLA_DEVICE] * py.misc.lev / 3);
 
-    vtype xinfra;
+    vtype_t xinfra;
     (void) sprintf(xinfra, "%d feet", py.flags.see_infra * 10);
 
     put_buffer("(Miscellaneous Abilities)", 15, 25);
@@ -1068,7 +1068,7 @@ void get_name() {
 
 // Changes the name of the character -JWT-
 void change_name() {
-    vtype temp;
+    vtype_t temp;
     bool flag = false;
 
     display_char();
@@ -1166,7 +1166,7 @@ void inven_drop(int item_val, int drop_all) {
             i_ptr->number--;
         }
 
-        bigvtype prt1, prt2;
+        obj_desc_t prt1, prt2;
         objdes(prt1, &t_list[treasureID], true);
         (void) sprintf(prt2, "Dropped %s", prt1);
         msg_print(prt2);
@@ -1404,7 +1404,7 @@ void print_spells(int *spell, int num, int comment, int nonconsec) {
             spell_char = (char) ('a' + spellID - nonconsec);
         }
 
-        vtype out_val;
+        vtype_t out_val;
         (void) sprintf(out_val, "  %c) %-30s%2d %4d %3d%%%s", spell_char, spell_names[spellID + offset], s_ptr->slevel, s_ptr->smana, spell_chance(spellID), p);
         prt(out_val, 2 + i, col);
     }
@@ -1414,7 +1414,7 @@ void print_spells(int *spell, int num, int comment, int nonconsec) {
 int get_spell(int *spell, int num, int *sn, int *sc, const char *prompt, int first_spell) {
     *sn = -1;
 
-    vtype str;
+    vtype_t str;
     (void) sprintf(str, "(Spells %c-%c, *=List, <ESCAPE>=exit) %s", spell[0] + 'a' - first_spell, spell[num - 1] + 'a' - first_spell, prompt);
 
     bool flag = false;
@@ -1441,7 +1441,7 @@ int get_spell(int *spell, int num, int *sn, int *sc, const char *prompt, int fir
             } else {
                 spell_type *s_ptr = &magic_spell[py.misc.pclass - 1][*sn];
 
-                vtype tmp_str;
+                vtype_t tmp_str;
                 (void) sprintf(tmp_str, "Cast %s (%d mana, %d%% fail)?", spell_names[*sn + offset], s_ptr->smana, spell_chance(*sn));
                 if (get_check(tmp_str)) {
                     flag = true;
@@ -1480,7 +1480,7 @@ int get_spell(int *spell, int num, int *sn, int *sc, const char *prompt, int fir
         }
 
         if (*sn == -2) {
-            vtype tmp_str;
+            vtype_t tmp_str;
             (void) sprintf(tmp_str, "You don't know that %s.", (offset == SPELL_OFFSET ? "spell" : "prayer"));
             msg_print(tmp_str);
         }
@@ -1509,7 +1509,7 @@ static void eliminateKnownSpellsGreaterThanLevel(spell_type *msp_ptr, const char
                 spell_learned &= ~mask;
                 spell_forgotten |= mask;
 
-                vtype msg;
+                vtype_t msg;
                 (void) sprintf(msg, "You have forgotten the %s of %s.", p, spell_names[i + offset]);
                 msg_print(msg);
             } else {
@@ -1583,7 +1583,7 @@ static int rememberForgottenSpells(spell_type *msp_ptr, int allowedSpells, int n
                 spell_forgotten &= ~mask;
                 spell_learned |= mask;
 
-                vtype msg;
+                vtype_t msg;
                 (void) sprintf(msg, "You have remembered the %s of %s.", p, spell_names[orderID + offset]);
                 msg_print(msg);
             } else {
@@ -1642,7 +1642,7 @@ static void forgetSpells(int newSpells, const char *p, int offset) {
             spell_forgotten |= mask;
             newSpells++;
 
-            vtype msg;
+            vtype_t msg;
             (void) sprintf(msg, "You have forgotten the %s of %s.", p, spell_names[orderID + offset]);
             msg_print(msg);
         }
@@ -1687,7 +1687,7 @@ void calc_spells(int stat) {
 
     if (new_spells != py.flags.new_spells) {
         if (new_spells > 0 && py.flags.new_spells == 0) {
-            vtype msg;
+            vtype_t msg;
             (void) sprintf(msg, "You can learn some new %ss now.", p);
             msg_print(msg);
         }
@@ -1765,7 +1765,7 @@ void gain_spells() {
     int last_known = lastKnownSpell();
 
     if (!new_spells) {
-        vtype tmp_str;
+        vtype_t tmp_str;
         (void) sprintf(tmp_str, "You can't learn any new %ss!", (stat == A_INT ? "spell" : "prayer"));
         msg_print(tmp_str);
 
@@ -1847,7 +1847,7 @@ void gain_spells() {
             spell_learned |= 1L << spells[s];
             spell_order[last_known++] = (uint8_t) spells[s];
 
-            vtype tmp_str;
+            vtype_t tmp_str;
             (void) sprintf(tmp_str, "You have learned the prayer of %s.", spell_names[spells[s] + offset]);
             msg_print(tmp_str);
 
@@ -1936,7 +1936,7 @@ void calc_mana(int stat) {
 static void gain_level() {
     py.misc.lev++;
 
-    vtype out_val;
+    vtype_t out_val;
     (void) sprintf(out_val, "Welcome to level %d.", (int) py.misc.lev);
     msg_print(out_val);
 
@@ -2066,7 +2066,7 @@ void insert_lnum(char *object_str, const char *mtc_str, int32_t number, int show
     }
 
     if (string) {
-        vtype str1, str2;
+        vtype_t str1, str2;
 
         (void) strncpy(str1, object_str, string - object_str);
         str1[string - object_str] = '\0';

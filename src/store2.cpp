@@ -116,7 +116,7 @@ static void prt_comment1() {
 
 // %A1 is offer, %A2 is asking.
 static void prt_comment2(int32_t offer, int32_t asking, int final) {
-    vtype comment;
+    vtype_t comment;
 
     if (final > 0) {
         (void) strcpy(comment, comment2a[randint(3) - 1]);
@@ -130,7 +130,7 @@ static void prt_comment2(int32_t offer, int32_t asking, int final) {
 }
 
 static void prt_comment3(int32_t offer, int32_t asking, int final) {
-    vtype comment;
+    vtype_t comment;
 
     if (final > 0) {
         (void) strcpy(comment, comment3a[randint(3) - 1]);
@@ -198,7 +198,7 @@ static void display_inventory(int store_num, int start) {
         if (i_ptr->subval >= ITEM_SINGLE_STACK_MIN && i_ptr->subval <= ITEM_SINGLE_STACK_MAX) {
             i_ptr->number = 1;
         }
-        bigvtype out_val1, out_val2;
+        obj_desc_t out_val1, out_val2;
         objdes(out_val1, i_ptr, true);
 
         // Restore the number of items
@@ -241,7 +241,7 @@ static void display_inventory(int store_num, int start) {
 static void display_cost(int store_num, int pos) {
     int cost = store[store_num].store_inven[pos].scost;
 
-    vtype out_val;
+    vtype_t out_val;
     if (cost < 0) {
         int32_t j = -cost;
         j = j * chr_adj() / 100;
@@ -254,7 +254,7 @@ static void display_cost(int store_num, int pos) {
 
 // Displays players gold -RAK-
 static void store_prt_gold() {
-    vtype out_val;
+    vtype_t out_val;
     (void) sprintf(out_val, "Gold Remaining : %d", py.misc.au);
     prt(out_val, 18, 17);
 }
@@ -274,7 +274,7 @@ static void display_store(int store_num, const char *owner_name, int cur_top) {
 static bool get_store_item(int *com_val, const char *pmt, int i, int j) {
     *com_val = -1;
 
-    vtype out_val;
+    vtype_t out_val;
     (void) sprintf(out_val, "(Items %c-%c, ESC to exit) %s", i + 'a', j + 'a', pmt);
 
     char command;
@@ -342,7 +342,7 @@ static bool get_haggle(const char *comment, int32_t *new_offer, int num_offer) {
     int orig_clen = clen;
 
     char *p;
-    vtype out_val, default_offer;
+    vtype_t out_val, default_offer;
 
     bool flag = true;
     int32_t offer_adjust = 0;
@@ -481,7 +481,7 @@ static int purchase_haggle(int store_num, int32_t *price, inven_type *item) {
         num_offer = 1;
     }
 
-    vtype out_val;
+    vtype_t out_val;
 
     bool flag = false;
     while (!flag) {
@@ -685,7 +685,7 @@ static int sell_haggle(int store_num, int32_t *price, inven_type *item) {
             do {
                 loop_flag = true;
 
-                vtype out_val;
+                vtype_t out_val;
                 (void) sprintf(out_val, "%s :  %d", comment, cur_ask);
                 put_buffer(out_val, 1, 0);
                 sell = receive_offer(store_num, "What price do you ask? ", &new_offer, last_offer, num_offer, -1);
@@ -762,7 +762,7 @@ static int sell_haggle(int store_num, int32_t *price, inven_type *item) {
                     num_offer++; // enable incremental haggling
                     erase_line(1, 0);
 
-                    vtype out_val;
+                    vtype_t out_val;
                     (void) sprintf(out_val, "Your last bid %d", last_offer);
                     put_buffer(out_val, 1, 39);
                     prt_comment3(cur_ask, last_offer, final_flag);
@@ -846,7 +846,7 @@ static bool store_purchase(int store_num, int *cur_top) {
 
             store_destroy(store_num, item_val, true);
 
-            bigvtype out_val, tmp_str;
+            obj_desc_t out_val, tmp_str;
             objdes(tmp_str, &inventory[item_new], true);
             (void) sprintf(out_val, "You have %s (%c)", tmp_str, item_new + 'a');
             prt(out_val, 0, 0);
@@ -919,7 +919,7 @@ static bool store_sell(int store_num, int *cur_top) {
     }
 
     inven_type sold_obj;
-    bigvtype out_val, tmp_str;
+    obj_desc_t out_val, tmp_str;
 
     take_one_item(&sold_obj, &inventory[item_val]);
     objdes(tmp_str, &sold_obj, true);
