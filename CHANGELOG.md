@@ -2,6 +2,9 @@
 
 ## HEAD
 
+- Rename `typedef struct` names in `type.h` to the standard format of suffixing `_t`.
+- Other minor refactoring - see commit history for changes.
+
 
 
 ## 5.7.3 (2017-06-21)
