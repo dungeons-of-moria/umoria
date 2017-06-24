@@ -19,8 +19,6 @@ typedef char vtype_t[MORIA_MESSAGE_SIZE];
 // always be called with a obj_desc_t as the first parameter
 typedef char obj_desc_t[OBJECT_DESCRIPTION_SIZE];
 
-typedef char stat_type[7];
-
 // Many of the character fields used to be fixed length, which greatly
 // increased the size of the executable.  I have replaced many fixed
 // length fields with variable length ones.

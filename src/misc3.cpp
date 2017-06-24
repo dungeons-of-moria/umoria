@@ -197,7 +197,7 @@ void cnv_stat(uint8_t stat, char *str) {
 
 // Print character stat in given row, column -RAK-
 void prt_stat(int stat) {
-    stat_type text;
+    char text[7];
     cnv_stat(py.stats.use_stat[stat], text);
     put_buffer(stat_names[stat], 6 + stat, STAT_COLUMN);
     put_buffer(text, 6 + stat, STAT_COLUMN + 6);
