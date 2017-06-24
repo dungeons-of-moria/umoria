@@ -59,7 +59,7 @@ typedef struct {
     uint16_t r_cdefense;
     uint8_t r_wake, r_ignore;
     uint8_t r_attacks[MAX_MON_NATTACK];
-} recall_type;
+} Recall_t;
 
 typedef struct {
     int16_t hp;     // Hit points

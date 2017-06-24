@@ -117,7 +117,7 @@ static bool sv_write() {
     }
 
     for (int i = 0; i < MAX_CREATURES; i++) {
-        recall_type *r_ptr = &c_recall[i];
+        Recall_t *r_ptr = &c_recall[i];
 
         if (r_ptr->r_cmove || r_ptr->r_cdefense || r_ptr->r_kills ||
             r_ptr->r_spells || r_ptr->r_deaths || r_ptr->r_attacks[0] ||
@@ -552,7 +552,7 @@ bool get_char(bool *generate) {
             if (uint16_t_tmp >= MAX_CREATURES) {
                 goto error;
             }
-            recall_type *r_ptr = &c_recall[uint16_t_tmp];
+            Recall_t *r_ptr = &c_recall[uint16_t_tmp];
             rd_long(&r_ptr->r_cmove);
             rd_long(&r_ptr->r_spells);
             rd_short(&r_ptr->r_kills);

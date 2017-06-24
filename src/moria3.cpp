@@ -716,7 +716,7 @@ int mon_take_hit(int monsterID, int damage) {
 
     uint32_t treasureFlags = monster_death((int) monster->fy, (int) monster->fx, creature->cmove);
 
-    recall_type *memory = &c_recall[monster->mptr];
+    Recall_t *memory = &c_recall[monster->mptr];
 
     if ((py.flags.blind < 1 && monster->ml) || (creature->cmove & CM_WIN)) {
         uint32_t tmp = (uint32_t) ((memory->r_cmove & CM_TREASURE) >> CM_TR_SHIFT);

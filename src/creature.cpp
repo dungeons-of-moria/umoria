@@ -1603,7 +1603,7 @@ static void updateRecall(Monster_t *m_ptr, bool wake, bool ignore, int rcmove) {
         return;
     }
 
-    recall_type *r_ptr = &c_recall[m_ptr->mptr];
+    Recall_t *r_ptr = &c_recall[m_ptr->mptr];
 
     if (wake) {
         if (r_ptr->r_wake < MAX_UCHAR) {

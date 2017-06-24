@@ -138,7 +138,7 @@ bool bool_roff_recall(int monsterID) {
         return true;
     }
 
-    recall_type *mp = &c_recall[monsterID];
+    Recall_t *mp = &c_recall[monsterID];
 
     if (mp->r_cmove || mp->r_cdefense || mp->r_kills || mp->r_spells || mp->r_deaths) {
         return true;
@@ -153,7 +153,7 @@ bool bool_roff_recall(int monsterID) {
     return false;
 }
 
-static void wizardModeInit(recall_type *mp, creature_type *cp) {
+static void wizardModeInit(Recall_t *mp, creature_type *cp) {
     mp->r_kills = MAX_SHORT;
     mp->r_wake = mp->r_ignore = MAX_UCHAR;
 
@@ -491,7 +491,7 @@ static void weaknesses(uint32_t rcdefense) {
 }
 
 // Do we know how aware it is?
-static void awareness(creature_type *cp, recall_type *mp) {
+static void awareness(creature_type *cp, Recall_t *mp) {
     if (mp->r_wake * mp->r_wake > cp->sleep || mp->r_ignore == MAX_UCHAR || (cp->sleep == 0 && mp->r_kills >= 10)) {
         roff(" It ");
 
@@ -585,7 +585,7 @@ static void lootCarried(uint32_t cp_cmove, uint32_t rcmove) {
     }
 }
 
-static void attackNumberAndDamage(recall_type *mp, creature_type *cp) {
+static void attackNumberAndDamage(Recall_t *mp, creature_type *cp) {
     // We know about attacks it has used on us, and maybe the damage they do.
     // known_attacks is the total number of known attacks, used for punctuation
     int known_attacks = 0;
@@ -667,10 +667,10 @@ static void attackNumberAndDamage(recall_type *mp, creature_type *cp) {
 
 // Print out what we have discovered about this monster.
 int roff_recall(int mon_num) {
-    recall_type *mp = &c_recall[mon_num];
+    Recall_t *mp = &c_recall[mon_num];
     creature_type *cp = &c_list[mon_num];
 
-    recall_type save_mem;
+    Recall_t save_mem;
 
     if (wizard) {
         save_mem = *mp;
