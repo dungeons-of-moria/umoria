@@ -101,7 +101,7 @@ typedef struct {
 // extra fields x and y for location in dungeon would simplify pusht().
 //
 // making inscrip a pointer and malloc-ing space does not work, there are
-// two many places where inven_types are copied, which results in dangling
+// two many places where `Inventory_t` are copied, which results in dangling
 // pointers, so we use a char array for them instead
 #define INSCRIP_SIZE 13 // notice alignment, must be 4*x + 1
 typedef struct {
@@ -123,7 +123,7 @@ typedef struct {
     uint8_t damage[2];          // Damage when hits
     uint8_t level;              // Level item first found
     uint8_t ident;              // Identify information
-} inven_type;
+} Inventory_t;
 
 #define PLAYER_NAME_SIZE 27
 
@@ -316,7 +316,7 @@ typedef struct {
 
 typedef struct {
     int32_t scost;
-    inven_type sitem;
+    Inventory_t sitem;
 } InventoryRecord_t;
 
 typedef struct {

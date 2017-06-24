@@ -20,7 +20,7 @@ bool set_floor(int element) {
     return (element <= MAX_CAVE_FLOOR);
 }
 
-bool set_corrodes(inven_type *item) {
+bool set_corrodes(Inventory_t *item) {
     switch (item->tval) {
         case TV_SWORD:
         case TV_HELM:
@@ -33,7 +33,7 @@ bool set_corrodes(inven_type *item) {
     }
 }
 
-bool set_flammable(inven_type *item) {
+bool set_flammable(Inventory_t *item) {
     switch (item->tval) {
         case TV_ARROW:
         case TV_BOW:
@@ -54,11 +54,11 @@ bool set_flammable(inven_type *item) {
     }
 }
 
-bool set_frost_destroy(inven_type *item) {
+bool set_frost_destroy(Inventory_t *item) {
     return (item->tval == TV_POTION1 || item->tval == TV_POTION2 || item->tval == TV_FLASK);
 }
 
-bool set_acid_affect(inven_type *item) {
+bool set_acid_affect(Inventory_t *item) {
     switch (item->tval) {
         case TV_MISC:
         case TV_CHEST:
@@ -77,16 +77,16 @@ bool set_acid_affect(inven_type *item) {
     return false;
 }
 
-bool set_lightning_destroy(inven_type *item) {
+bool set_lightning_destroy(Inventory_t *item) {
     return (item->tval == TV_RING || item->tval == TV_WAND || item->tval == TV_SPIKE);
 }
 
-bool set_null(inven_type *item) {
+bool set_null(Inventory_t *item) {
     (void) item; // silence warnings
     return false;
 }
 
-bool set_acid_destroy(inven_type *item) {
+bool set_acid_destroy(Inventory_t *item) {
     switch (item->tval) {
         case TV_ARROW:
         case TV_BOW:
@@ -112,7 +112,7 @@ bool set_acid_destroy(inven_type *item) {
     }
 }
 
-bool set_fire_destroy(inven_type *item) {
+bool set_fire_destroy(Inventory_t *item) {
     switch (item->tval) {
         case TV_ARROW:
         case TV_BOW:

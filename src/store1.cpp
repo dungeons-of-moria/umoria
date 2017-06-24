@@ -9,20 +9,20 @@
 #include "headers.h"
 #include "externs.h"
 
-static void insert_store(int, int, int32_t, inven_type *);
+static void insert_store(int, int, int32_t, Inventory_t *);
 
 static void store_create(int store_num, int16_t max_cost);
 
-static int32_t getWeaponArmorBuyPrice(inven_type *i_ptr);
-static int32_t getAmmoBuyPrice(inven_type *i_ptr);
-static int32_t getPotionScrollBuyPrice(inven_type *i_ptr);
-static int32_t getFoodBuyPrice(inven_type *i_ptr);
-static int32_t getRingAmuletBuyPrice(inven_type *i_ptr);
-static int32_t getWandStaffBuyPrice(inven_type *i_ptr);
-static int32_t getPickShovelBuyPrice(inven_type *i_ptr);
+static int32_t getWeaponArmorBuyPrice(Inventory_t *i_ptr);
+static int32_t getAmmoBuyPrice(Inventory_t *i_ptr);
+static int32_t getPotionScrollBuyPrice(Inventory_t *i_ptr);
+static int32_t getFoodBuyPrice(Inventory_t *i_ptr);
+static int32_t getRingAmuletBuyPrice(Inventory_t *i_ptr);
+static int32_t getWandStaffBuyPrice(Inventory_t *i_ptr);
+static int32_t getPickShovelBuyPrice(Inventory_t *i_ptr);
 
 // Returns the value for any given object -RAK-
-int32_t item_value(inven_type *i_ptr) {
+int32_t item_value(Inventory_t *i_ptr) {
     int32_t value;
 
     if (i_ptr->ident & ID_DAMD) {
@@ -55,7 +55,7 @@ int32_t item_value(inven_type *i_ptr) {
     return value;
 }
 
-static int32_t getWeaponArmorBuyPrice(inven_type *i_ptr) {
+static int32_t getWeaponArmorBuyPrice(Inventory_t *i_ptr) {
     if (!known2_p(i_ptr)) {
         return object_list[i_ptr->index].cost;
     }
@@ -75,7 +75,7 @@ static int32_t getWeaponArmorBuyPrice(inven_type *i_ptr) {
     return i_ptr->cost + i_ptr->toac * 100;
 }
 
-static int32_t getAmmoBuyPrice(inven_type *i_ptr) {
+static int32_t getAmmoBuyPrice(Inventory_t *i_ptr) {
     if (!known2_p(i_ptr)) {
         return object_list[i_ptr->index].cost;
     }
@@ -89,7 +89,7 @@ static int32_t getAmmoBuyPrice(inven_type *i_ptr) {
     return i_ptr->cost + (i_ptr->tohit + i_ptr->todam + i_ptr->toac) * 5;
 }
 
-static int32_t getPotionScrollBuyPrice(inven_type *i_ptr) {
+static int32_t getPotionScrollBuyPrice(Inventory_t *i_ptr) {
     if (!known1_p(i_ptr)) {
         return 20;
     }
@@ -97,7 +97,7 @@ static int32_t getPotionScrollBuyPrice(inven_type *i_ptr) {
     return i_ptr->cost;
 }
 
-static int32_t getFoodBuyPrice(inven_type *i_ptr) {
+static int32_t getFoodBuyPrice(Inventory_t *i_ptr) {
     if (i_ptr->subval < ITEM_SINGLE_STACK_MIN + MAX_MUSH && !known1_p(i_ptr)) {
         return 1;
     }
@@ -105,7 +105,7 @@ static int32_t getFoodBuyPrice(inven_type *i_ptr) {
     return i_ptr->cost;
 }
 
-static int32_t getRingAmuletBuyPrice(inven_type *i_ptr) {
+static int32_t getRingAmuletBuyPrice(Inventory_t *i_ptr) {
     // player does not know what type of ring/amulet this is
     if (!known1_p(i_ptr)) {
         return 45;
@@ -121,7 +121,7 @@ static int32_t getRingAmuletBuyPrice(inven_type *i_ptr) {
     return i_ptr->cost;
 }
 
-static int32_t getWandStaffBuyPrice(inven_type *i_ptr) {
+static int32_t getWandStaffBuyPrice(Inventory_t *i_ptr) {
     if (!known1_p(i_ptr)) {
         if (i_ptr->tval == TV_WAND) {
             return 50;
@@ -137,7 +137,7 @@ static int32_t getWandStaffBuyPrice(inven_type *i_ptr) {
     return i_ptr->cost;
 }
 
-static int32_t getPickShovelBuyPrice(inven_type *i_ptr) {
+static int32_t getPickShovelBuyPrice(Inventory_t *i_ptr) {
     if (!known2_p(i_ptr)) {
         return object_list[i_ptr->index].cost;
     }
@@ -158,7 +158,7 @@ static int32_t getPickShovelBuyPrice(inven_type *i_ptr) {
 }
 
 // Asking price for an item -RAK-
-int32_t sell_price(int snum, int32_t *max_sell, int32_t *min_sell, inven_type *item) {
+int32_t sell_price(int snum, int32_t *max_sell, int32_t *min_sell, Inventory_t *item) {
     int32_t price = item_value(item);
 
     // check `item->cost` in case it is cursed, check `price` in case it is damaged
@@ -185,7 +185,7 @@ int32_t sell_price(int snum, int32_t *max_sell, int32_t *min_sell, inven_type *i
 }
 
 // Check to see if he will be carrying too many objects -RAK-
-bool store_check_num(inven_type *t_ptr, int store_num) {
+bool store_check_num(Inventory_t *t_ptr, int store_num) {
     Store_t *s_ptr = &store[store_num];
 
     if (s_ptr->store_ctr < STORE_INVEN_MAX) {
@@ -199,7 +199,7 @@ bool store_check_num(inven_type *t_ptr, int store_num) {
     bool store_check = false;
 
     for (int i = 0; i < s_ptr->store_ctr; i++) {
-        inven_type *i_ptr = &s_ptr->store_inven[i].sitem;
+        Inventory_t *i_ptr = &s_ptr->store_inven[i].sitem;
 
         // note: items with subval of gte ITEM_SINGLE_STACK_MAX only stack
         // if their subvals match
@@ -213,7 +213,7 @@ bool store_check_num(inven_type *t_ptr, int store_num) {
 }
 
 // Insert INVEN_MAX at given location
-static void insert_store(int store_num, int pos, int32_t icost, inven_type *i_ptr) {
+static void insert_store(int store_num, int pos, int32_t icost, Inventory_t *i_ptr) {
     Store_t *s_ptr = &store[store_num];
 
     for (int i = s_ptr->store_ctr - 1; i >= pos; i--) {
@@ -226,7 +226,7 @@ static void insert_store(int store_num, int pos, int32_t icost, inven_type *i_pt
 }
 
 // Add the item in INVEN_MAX to stores inventory. -RAK-
-void store_carry(int store_num, int *ipos, inven_type *t_ptr) {
+void store_carry(int store_num, int *ipos, Inventory_t *t_ptr) {
     *ipos = -1;
 
     int32_t icost, dummy;
@@ -243,7 +243,7 @@ void store_carry(int store_num, int *ipos, inven_type *t_ptr) {
 
     bool flag = false;
     do {
-        inven_type *i_ptr = &s_ptr->store_inven[item_val].sitem;
+        Inventory_t *i_ptr = &s_ptr->store_inven[item_val].sitem;
 
         if (typ == i_ptr->tval) {
             if (subt == i_ptr->subval && // Adds to other item
@@ -283,7 +283,7 @@ void store_carry(int store_num, int *ipos, inven_type *t_ptr) {
 // "one_of" is false, an entire slot is destroyed -RAK-
 void store_destroy(int store_num, int item_val, bool one_of) {
     Store_t *s_ptr = &store[store_num];
-    inven_type *i_ptr = &s_ptr->store_inven[item_val].sitem;
+    Inventory_t *i_ptr = &s_ptr->store_inven[item_val].sitem;
 
     int number;
 
@@ -342,7 +342,7 @@ static void store_create(int store_num, int16_t max_cost) {
         invcopy(&t_list[cur_pos], i);
         magic_treasure(cur_pos, OBJ_TOWN_LEVEL);
 
-        inven_type *t_ptr = &t_list[cur_pos];
+        Inventory_t *t_ptr = &t_list[cur_pos];
 
         if (store_check_num(t_ptr, store_num)) {
             // Item must be good: cost > 0.

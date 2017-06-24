@@ -9,7 +9,7 @@
 #include "headers.h"
 #include "externs.h"
 
-static void unsample(inven_type *);
+static void unsample(Inventory_t *);
 
 char titles[MAX_TITLES][10];
 
@@ -109,7 +109,7 @@ void magic_init() {
     reset_seed();
 }
 
-int16_t object_offset(inven_type *t_ptr) {
+int16_t object_offset(Inventory_t *t_ptr) {
     switch (t_ptr->tval) {
         case TV_AMULET:
             return 0;
@@ -148,7 +148,7 @@ static bool isObjectKnown(int16_t id) {
 }
 
 // Remove "Secret" symbol for identity of object
-void known1(inven_type *i_ptr) {
+void known1(Inventory_t *i_ptr) {
     int16_t id = object_offset(i_ptr);
 
     if (id < 0) {
@@ -166,7 +166,7 @@ void known1(inven_type *i_ptr) {
 
 // Items which don't have a 'color' are always known1,
 // so that they can be carried in order in the inventory.
-bool known1_p(inven_type *i_ptr) {
+bool known1_p(Inventory_t *i_ptr) {
     int16_t id = object_offset(i_ptr);
 
     if (id < 0) {
@@ -183,34 +183,34 @@ bool known1_p(inven_type *i_ptr) {
 }
 
 // Remove "Secret" symbol for identity of plusses
-void known2(inven_type *i_ptr) {
+void known2(Inventory_t *i_ptr) {
     unsample(i_ptr);
     i_ptr->ident |= ID_KNOWN2;
 }
 
-bool known2_p(inven_type *i_ptr) {
+bool known2_p(Inventory_t *i_ptr) {
     return (i_ptr->ident & ID_KNOWN2) != 0;
 }
 
-void clear_known2(inven_type *i_ptr) {
+void clear_known2(Inventory_t *i_ptr) {
     i_ptr->ident &= ~ID_KNOWN2;
 }
 
-void clear_empty(inven_type *i_ptr) {
+void clear_empty(Inventory_t *i_ptr) {
     i_ptr->ident &= ~ID_EMPTY;
 }
 
-void store_bought(inven_type *i_ptr) {
+void store_bought(Inventory_t *i_ptr) {
     i_ptr->ident |= ID_STOREBOUGHT;
     known2(i_ptr);
 }
 
-bool store_bought_p(inven_type *i_ptr) {
+bool store_bought_p(Inventory_t *i_ptr) {
     return (i_ptr->ident & ID_STOREBOUGHT) != 0;
 }
 
 // Remove an automatically generated inscription. -CJS-
-static void unsample(inven_type *i_ptr) {
+static void unsample(Inventory_t *i_ptr) {
     // this also used to clear ID_DAMD flag, but I think it should remain set
     i_ptr->ident &= ~(ID_MAGIK | ID_EMPTY);
 
@@ -228,7 +228,7 @@ static void unsample(inven_type *i_ptr) {
 }
 
 // Somethings been sampled -CJS-
-void sample(inven_type *i_ptr) {
+void sample(Inventory_t *i_ptr) {
     int16_t id = object_offset(i_ptr);
 
     if (id < 0) {
@@ -244,7 +244,7 @@ void sample(inven_type *i_ptr) {
 // Somethings been identified.
 // Extra complexity by CJS so that it can merge store/dungeon objects when appropriate.
 void identify(int *item) {
-    inven_type *i_ptr = &inventory[*item];
+    Inventory_t *i_ptr = &inventory[*item];
 
     if (i_ptr->flags & TR_CURSED) {
         add_inscribe(i_ptr, ID_DAMD);
@@ -265,7 +265,7 @@ void identify(int *item) {
     }
 
     int j;
-    inven_type *t_ptr;
+    Inventory_t *t_ptr;
 
     for (int i = 0; i < inven_ctr; i++) {
         t_ptr = &inventory[i];
@@ -294,7 +294,7 @@ void identify(int *item) {
 
 // If an object has lost magical properties,
 // remove the appropriate portion of the name. -CJS-
-void unmagic_name(inven_type *i_ptr) {
+void unmagic_name(Inventory_t *i_ptr) {
     i_ptr->name2 = SN_NULL;
 }
 
@@ -323,7 +323,7 @@ int bowDamageValue(int16_t p1) {
 // `pref` indicates that there should be an article added (prefix).
 // Note that since out_val can easily exceed 80 characters, objdes
 // must always be called with a obj_desc_t as the first parameter.
-void objdes(obj_desc_t out_val, inven_type *i_ptr, bool pref) {
+void objdes(obj_desc_t out_val, Inventory_t *i_ptr, bool pref) {
     int indexx = i_ptr->subval & (ITEM_SINGLE_STACK_MIN - 1);
 
     // base name, modifier string
@@ -657,7 +657,7 @@ void objdes(obj_desc_t out_val, inven_type *i_ptr, bool pref) {
     (void) strcat(out_val, ".");
 }
 
-void invcopy(inven_type *to, int from_index) {
+void invcopy(Inventory_t *to, int from_index) {
     treasure_type *from = &object_list[from_index];
 
     to->index = (uint16_t) from_index;
@@ -696,7 +696,7 @@ void desc_charges(int item_val) {
 
 // Describe amount of item remaining. -RAK-
 void desc_remain(int item_val) {
-    inven_type *i_ptr = &inventory[item_val];
+    Inventory_t *i_ptr = &inventory[item_val];
 
     i_ptr->number--;
 

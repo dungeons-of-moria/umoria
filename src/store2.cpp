@@ -190,7 +190,7 @@ static void display_inventory(int store_num, int start) {
     int i;
 
     for (i = (start % 12); start < stop; i++) {
-        inven_type *i_ptr = &s_ptr->store_inven[start].sitem;
+        Inventory_t *i_ptr = &s_ptr->store_inven[start].sitem;
 
         // Save the current number of items
         int32_t x = i_ptr->number;
@@ -427,7 +427,7 @@ static int receive_offer(int store_num, const char *comment, int32_t *new_offer,
 }
 
 // Haggling routine -RAK-
-static int purchase_haggle(int store_num, int32_t *price, inven_type *item) {
+static int purchase_haggle(int store_num, int32_t *price, Inventory_t *item) {
     bool didnt_haggle = false;
 
     *price = 0;
@@ -583,7 +583,7 @@ static int purchase_haggle(int store_num, int32_t *price, inven_type *item) {
 }
 
 // Haggling routine -RAK-
-static int sell_haggle(int store_num, int32_t *price, inven_type *item) {
+static int sell_haggle(int store_num, int32_t *price, Inventory_t *item) {
     int32_t max_gold = 0;
     int32_t min_per = 0;
     int32_t max_per = 0;
@@ -817,7 +817,7 @@ static bool store_purchase(int store_num, int *cur_top) {
 
     item_val = item_val + *cur_top; // true item_val
 
-    inven_type sell_obj;
+    Inventory_t sell_obj;
     take_one_item(&sell_obj, &s_ptr->store_inven[item_val].sitem);
 
     if (!inven_check_num(&sell_obj)) {
@@ -918,7 +918,7 @@ static bool store_sell(int store_num, int *cur_top) {
         return false;
     }
 
-    inven_type sold_obj;
+    Inventory_t sold_obj;
     obj_desc_t out_val, tmp_str;
 
     take_one_item(&sold_obj, &inventory[item_val]);

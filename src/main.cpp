@@ -226,7 +226,7 @@ int main(int argc, char *argv[]) {
 
 // Init players with some belongings -RAK-
 static void char_inven_init() {
-    inven_type inven_init;
+    Inventory_t inven_init;
 
     // this is needed for bash to work right, it can't hurt anyway
     for (int i = 0; i < INVEN_ARRAY_SIZE; i++) {

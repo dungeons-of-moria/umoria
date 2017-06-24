@@ -24,7 +24,7 @@ static bool isCarryingStaff(int *j, int *k) {
     return true;
 }
 
-static bool canUseStaff(inven_type *staff_ptr) {
+static bool canUseStaff(Inventory_t *staff_ptr) {
     int chance = py.misc.save + stat_adj(A_INT) - (int) staff_ptr->level - 5 + (class_level_adj[py.misc.pclass][CLA_DEVICE] * py.misc.lev / 3);
 
     if (py.flags.confused > 0) {
@@ -56,7 +56,7 @@ static bool canUseStaff(inven_type *staff_ptr) {
     return true;
 }
 
-static bool dischargeStaff(inven_type *staff_ptr) {
+static bool dischargeStaff(Inventory_t *staff_ptr) {
     bool identified = false;
 
     staff_ptr->p1--;
@@ -188,7 +188,7 @@ void use() {
     // From here on player uses up a turn
     free_turn_flag = false;
 
-    inven_type *staff_ptr = &inventory[staff_id];
+    Inventory_t *staff_ptr = &inventory[staff_id];
 
     if (!canUseStaff(staff_ptr)) {
         return;

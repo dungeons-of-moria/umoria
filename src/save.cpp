@@ -32,7 +32,7 @@ static void wr_string(char *);
 
 static void wr_shorts(uint16_t *, int);
 
-static void wr_item(inven_type *);
+static void wr_item(Inventory_t *);
 
 static void wr_monster(monster_type *);
 
@@ -50,7 +50,7 @@ static void rd_string(char *);
 
 static void rd_shorts(uint16_t *, int);
 
-static void rd_item(inven_type *);
+static void rd_item(Inventory_t *);
 
 static void rd_monster(monster_type *);
 
@@ -1086,7 +1086,7 @@ static void wr_shorts(uint16_t *s, int count) {
     DEBUG(fprintf(logfile, "\n"));
 }
 
-static void wr_item(inven_type *item) {
+static void wr_item(Inventory_t *item) {
     DEBUG(fprintf(logfile, "ITEM:\n"));
     wr_short(item->index);
     wr_byte(item->name2);
@@ -1199,7 +1199,7 @@ static void rd_shorts(uint16_t *ptr, int count) {
     DEBUG(fprintf(logfile, "\n"));
 }
 
-static void rd_item(inven_type *item) {
+static void rd_item(Inventory_t *item) {
     DEBUG(fprintf(logfile, "ITEM:\n"));
     rd_short(&item->index);
     rd_byte(&item->name2);

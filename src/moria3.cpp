@@ -9,7 +9,7 @@
 #include "headers.h"
 #include "externs.h"
 
-static void trapOpenPit(inven_type *t_ptr, int dam) {
+static void trapOpenPit(Inventory_t *t_ptr, int dam) {
     msg_print("You fell into a pit!");
 
     if (py.flags.ffall) {
@@ -22,7 +22,7 @@ static void trapOpenPit(inven_type *t_ptr, int dam) {
     take_hit(dam, description);
 }
 
-static void trapArrow(inven_type *t_ptr, int dam) {
+static void trapArrow(Inventory_t *t_ptr, int dam) {
     if (test_hit(125, 0, 0, py.misc.pac + py.misc.ptoac, CLA_MISC_HIT)) {
         obj_desc_t description;
         objdes(description, t_ptr, true);
@@ -35,7 +35,7 @@ static void trapArrow(inven_type *t_ptr, int dam) {
     msg_print("An arrow barely misses you.");
 }
 
-static void trapCoveredPit(inven_type *t_ptr, int dam, int y, int x) {
+static void trapCoveredPit(Inventory_t *t_ptr, int dam, int y, int x) {
     msg_print("You fell into a covered pit.");
 
     if (py.flags.ffall) {
@@ -49,7 +49,7 @@ static void trapCoveredPit(inven_type *t_ptr, int dam, int y, int x) {
     place_trap(y, x, 0);
 }
 
-static void trapDoor(inven_type *t_ptr, int dam) {
+static void trapDoor(Inventory_t *t_ptr, int dam) {
     new_level_flag = true;
     dun_level++;
 
@@ -91,7 +91,7 @@ static void trapHiddenObject(int y, int x) {
     msg_print("Hmmm, there was something under this rock.");
 }
 
-static void trapStrengthDart(inven_type *t_ptr, int dam) {
+static void trapStrengthDart(Inventory_t *t_ptr, int dam) {
     if (test_hit(125, 0, 0, py.misc.pac + py.misc.ptoac, CLA_MISC_HIT)) {
         if (!py.flags.sustain_str) {
             (void) dec_stat(A_STR);
@@ -180,7 +180,7 @@ static void trapConfuseGas() {
     py.flags.confused += randint(15) + 15;
 }
 
-static void trapSlowDart(inven_type *t_ptr, int dam) {
+static void trapSlowDart(Inventory_t *t_ptr, int dam) {
     if (test_hit(125, 0, 0, py.misc.pac + py.misc.ptoac, CLA_MISC_HIT)) {
         obj_desc_t description;
         objdes(description, t_ptr, true);
@@ -198,7 +198,7 @@ static void trapSlowDart(inven_type *t_ptr, int dam) {
     }
 }
 
-static void trapConstitutionDart(inven_type *t_ptr, int dam) {
+static void trapConstitutionDart(Inventory_t *t_ptr, int dam) {
     if (test_hit(125, 0, 0, py.misc.pac + py.misc.ptoac, CLA_MISC_HIT)) {
         if (!py.flags.sustain_con) {
             (void) dec_stat(A_CON);
@@ -221,7 +221,7 @@ static void hit_trap(int y, int x) {
     end_find();
     change_trap(y, x);
 
-    inven_type *tile = &t_list[cave[y][x].tptr];
+    Inventory_t *tile = &t_list[cave[y][x].tptr];
 
     int dam = pdamroll(tile->damage);
 
@@ -384,7 +384,7 @@ int cast_spell(const char *prompt, int item_val, int *sn, int *sc) {
 // on the TVAL of the object. Traps are set off, money and most objects
 // are picked up. Some objects, such as open doors, just sit there.
 static void carry(int y, int x, bool pickup) {
-    inven_type *item = &t_list[cave[y][x].tptr];
+    Inventory_t *item = &t_list[cave[y][x].tptr];
 
     int tileFlags = t_list[cave[y][x].tptr].tval;
 
@@ -788,7 +788,7 @@ void py_attack(int y, int x) {
 
     monster_type *monster = &m_list[creatureID];
     creature_type *creature = &c_list[monster->mptr];
-    inven_type *item = &inventory[INVEN_WIELD];
+    Inventory_t *item = &inventory[INVEN_WIELD];
 
     monster->csleep = 0;
 
@@ -1113,7 +1113,7 @@ static int16_t playerLockPickingSkill() {
 
 static void openClosedDoor(int y, int x) {
     Cave_t *tile = &cave[y][x];
-    inven_type *item = &t_list[tile->tptr];
+    Inventory_t *item = &t_list[tile->tptr];
 
     if (item->p1 > 0) {
         // It's locked.
@@ -1144,7 +1144,7 @@ static void openClosedDoor(int y, int x) {
 
 static void openClosedChest(int y, int x) {
     Cave_t *tile = &cave[y][x];
-    inven_type *item = &t_list[tile->tptr];
+    Inventory_t *item = &t_list[tile->tptr];
 
     bool success = false;
 
@@ -1207,7 +1207,7 @@ void openobject() {
     bool no_object = false;
 
     Cave_t *tile = &cave[y][x];
-    inven_type *item = &t_list[tile->tptr];
+    Inventory_t *item = &t_list[tile->tptr];
 
     if (tile->cptr > 1 && tile->tptr != 0 && (item->tval == TV_CLOSED_DOOR || item->tval == TV_CHEST)) {
         objectBlockedByMonster(tile->cptr);
@@ -1242,7 +1242,7 @@ void closeobject() {
     (void) mmove(dir, &y, &x);
 
     Cave_t *tile = &cave[y][x];
-    inven_type *item = &t_list[tile->tptr];
+    Inventory_t *item = &t_list[tile->tptr];
 
     bool no_object = false;
 

@@ -32,7 +32,7 @@ static bool canTunnel(int treasureID, int tileID) {
 }
 
 // Compute the digging ability of player; based on strength, and type of tool used
-static int playerDiggingAbility(inven_type *weapon) {
+static int playerDiggingAbility(Inventory_t *weapon) {
     int diggingAbility = py.stats.use_stat[A_STR];
 
     if (weapon->flags & TR_TUNNEL) {
@@ -142,7 +142,7 @@ void tunnel(int dir) {
     (void) mmove(dir, &y, &x);
 
     Cave_t *c_ptr = &cave[y][x];
-    inven_type *i_ptr = &inventory[INVEN_WIELD];
+    Inventory_t *i_ptr = &inventory[INVEN_WIELD];
 
     if (!canTunnel(c_ptr->tptr, c_ptr->fval)) {
         return;
@@ -233,7 +233,7 @@ static void disarmFloorTrap(int y, int x, int tot, int level, int dir, int16_t p
     py.flags.confused += confused;
 }
 
-static void disarmChestTrap(int y, int x, int tot, inven_type *item) {
+static void disarmChestTrap(int y, int x, int tot, Inventory_t *item) {
     if (!known2_p(item)) {
         free_turn_flag = true;
         msg_print("I don't see a trap.");
@@ -293,7 +293,7 @@ void disarm_trap() {
     } else if (c_ptr->tptr != 0) {
         int disarmAbility = playerTrapDisarmAbility();
 
-        inven_type *t_ptr = &t_list[c_ptr->tptr];
+        Inventory_t *t_ptr = &t_list[c_ptr->tptr];
 
         if (t_ptr->tval == TV_VIS_TRAP) {
             disarmFloorTrap(y, x, disarmAbility, t_ptr->level, dir, t_ptr->p1);
@@ -710,8 +710,8 @@ static bool look_see(int x, int y, bool *transparent) {
     return false;
 }
 
-static void inven_throw(int itemID, inven_type *treasure) {
-    inven_type *i_ptr = &inventory[itemID];
+static void inven_throw(int itemID, Inventory_t *treasure) {
+    Inventory_t *i_ptr = &inventory[itemID];
 
     *treasure = *i_ptr;
 
@@ -726,7 +726,7 @@ static void inven_throw(int itemID, inven_type *treasure) {
 }
 
 // Obtain the hit and damage bonuses and the maximum distance for a thrown missile.
-static void facts(inven_type *i_ptr, int *tbth, int *tpth, int *tdam, int *tdis) {
+static void facts(Inventory_t *i_ptr, int *tbth, int *tpth, int *tdam, int *tdis) {
     int weight = i_ptr->weight;
     if (weight < 1) {
         weight = 1;
@@ -816,7 +816,7 @@ static void facts(inven_type *i_ptr, int *tbth, int *tpth, int *tdam, int *tdis)
     }
 }
 
-static void drop_throw(int y, int x, inven_type *t_ptr) {
+static void drop_throw(int y, int x, Inventory_t *t_ptr) {
     int i = y;
     int j = x;
 
@@ -880,7 +880,7 @@ void throw_object() {
         dir = getRandomDirection();
     }
 
-    inven_type throw_obj;
+    Inventory_t throw_obj;
     inven_throw(itemID, &throw_obj);
 
     int tbth, tpth, tdam, tdis;
@@ -1069,7 +1069,7 @@ static void playerBashPosition(int y, int x) {
     py_bash(y, x);
 }
 
-static void bashClosedDoor(int y, int x, int dir, Cave_t *tile, inven_type *item) {
+static void bashClosedDoor(int y, int x, int dir, Cave_t *tile, Inventory_t *item) {
     count_msg_print("You smash into the door!");
 
     int chance = py.stats.use_stat[A_STR] + py.misc.wt / 2;
@@ -1105,7 +1105,7 @@ static void bashClosedDoor(int y, int x, int dir, Cave_t *tile, inven_type *item
     }
 }
 
-static void bashClosedChest(inven_type *item) {
+static void bashClosedChest(Inventory_t *item) {
     if (randint(10) == 1) {
         msg_print("You have destroyed the chest.");
         msg_print("and its contents!");
@@ -1169,7 +1169,7 @@ void bash() {
     }
 
     if (c_ptr->tptr != 0) {
-        inven_type *t_ptr = &t_list[c_ptr->tptr];
+        Inventory_t *t_ptr = &t_list[c_ptr->tptr];
 
         if (t_ptr->tval == TV_CLOSED_DOOR) {
             bashClosedDoor(y, x, dir, c_ptr, t_ptr);

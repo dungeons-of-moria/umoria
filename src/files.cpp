@@ -129,7 +129,7 @@ void print_objects() {
 
                     magic_treasure(treasureID, level);
 
-                    inven_type *i_ptr = &t_list[treasureID];
+                    Inventory_t *i_ptr = &t_list[treasureID];
                     store_bought(i_ptr);
 
                     if (i_ptr->flags & TR_CURSED) {

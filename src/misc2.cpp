@@ -9,7 +9,7 @@
 #include "headers.h"
 #include "externs.h"
 
-static void magicalArmor(inven_type *t_ptr, int special, int level) {
+static void magicalArmor(Inventory_t *t_ptr, int special, int level) {
     t_ptr->toac += m_bonus(1, 30, level);
 
     if (!magik(special)) {
@@ -53,13 +53,13 @@ static void magicalArmor(inven_type *t_ptr, int special, int level) {
     }
 }
 
-static void cursedArmor(inven_type *t_ptr, int level) {
+static void cursedArmor(Inventory_t *t_ptr, int level) {
     t_ptr->toac -= m_bonus(1, 40, level);
     t_ptr->cost = 0;
     t_ptr->flags |= TR_CURSED;
 }
 
-static void magicalSword(inven_type *t_ptr, int special, int level) {
+static void magicalSword(Inventory_t *t_ptr, int special, int level) {
     t_ptr->tohit += m_bonus(0, 40, level);
 
     // Magical damage bonus now proportional to weapon base damage
@@ -151,7 +151,7 @@ static void magicalSword(inven_type *t_ptr, int special, int level) {
     }
 }
 
-static void cursedSword(inven_type *t_ptr, int level) {
+static void cursedSword(Inventory_t *t_ptr, int level) {
     t_ptr->tohit -= m_bonus(1, 55, level);
 
     // Magical damage bonus now proportional to weapon base damage
@@ -162,14 +162,14 @@ static void cursedSword(inven_type *t_ptr, int level) {
     t_ptr->cost = 0;
 }
 
-static void magicalBow(inven_type *t_ptr, int level) {
+static void magicalBow(Inventory_t *t_ptr, int level) {
     t_ptr->tohit += m_bonus(1, 30, level);
 
     // add damage. -CJS-
     t_ptr->todam += m_bonus(1, 20, level);
 }
 
-static void cursedBow(inven_type *t_ptr, int level) {
+static void cursedBow(Inventory_t *t_ptr, int level) {
     t_ptr->tohit -= m_bonus(1, 50, level);
 
     // add damage. -CJS-
@@ -179,17 +179,17 @@ static void cursedBow(inven_type *t_ptr, int level) {
     t_ptr->cost = 0;
 }
 
-static void magicalDiggingTool(inven_type *t_ptr, int level) {
+static void magicalDiggingTool(Inventory_t *t_ptr, int level) {
     t_ptr->p1 += m_bonus(0, 25, level);
 }
 
-static void cursedDiggingTool(inven_type *t_ptr, int level) {
+static void cursedDiggingTool(Inventory_t *t_ptr, int level) {
     t_ptr->p1 = (int16_t) -m_bonus(1, 30, level);
     t_ptr->cost = 0;
     t_ptr->flags |= TR_CURSED;
 }
 
-static void magicalGloves(inven_type *t_ptr, int special, int level) {
+static void magicalGloves(Inventory_t *t_ptr, int special, int level) {
     t_ptr->toac += m_bonus(1, 20, level);
 
     if (!magik(special)) {
@@ -209,7 +209,7 @@ static void magicalGloves(inven_type *t_ptr, int special, int level) {
     }
 }
 
-static void cursedGloves(inven_type *t_ptr, int special, int level) {
+static void cursedGloves(Inventory_t *t_ptr, int special, int level) {
     if (magik(special)) {
         if (randint(2) == 1) {
             t_ptr->flags |= TR_DEX;
@@ -227,7 +227,7 @@ static void cursedGloves(inven_type *t_ptr, int special, int level) {
     t_ptr->cost = 0;
 }
 
-static void magicalBoots(inven_type *t_ptr, int special, int level) {
+static void magicalBoots(Inventory_t *t_ptr, int special, int level) {
     t_ptr->toac += m_bonus(1, 20, level);
 
     if (!magik(special)) {
@@ -256,7 +256,7 @@ static void magicalBoots(inven_type *t_ptr, int special, int level) {
     }
 }
 
-static void cursedBoots(inven_type *t_ptr, int level) {
+static void cursedBoots(Inventory_t *t_ptr, int level) {
     int magicType = randint(3);
 
     if (magicType == 1) {
@@ -277,7 +277,7 @@ static void cursedBoots(inven_type *t_ptr, int level) {
     t_ptr->flags |= TR_CURSED;
 }
 
-static void magicalHelms(inven_type *t_ptr, int special, int level) {
+static void magicalHelms(Inventory_t *t_ptr, int special, int level) {
     t_ptr->toac += m_bonus(1, 20, level);
 
     if (!magik(special)) {
@@ -353,7 +353,7 @@ static void magicalHelms(inven_type *t_ptr, int special, int level) {
     }
 }
 
-static void cursedHelms(inven_type *t_ptr, int special, int level) {
+static void cursedHelms(Inventory_t *t_ptr, int special, int level) {
     t_ptr->toac -= m_bonus(1, 45, level);
     t_ptr->flags |= TR_CURSED;
     t_ptr->cost = 0;
@@ -402,7 +402,7 @@ static void cursedHelms(inven_type *t_ptr, int special, int level) {
     }
 }
 
-static void processRings(inven_type *t_ptr, int level, int cursed) {
+static void processRings(Inventory_t *t_ptr, int level, int cursed) {
     switch (t_ptr->subval) {
         case 0:
         case 1:
@@ -487,7 +487,7 @@ static void processRings(inven_type *t_ptr, int level, int cursed) {
     }
 }
 
-static void processAmulets(inven_type *t_ptr, int level, int cursed) {
+static void processAmulets(Inventory_t *t_ptr, int level, int cursed) {
     if (t_ptr->subval < 2) {
         if (magik(cursed)) {
             t_ptr->p1 = (int16_t) -m_bonus(1, 20, level);
@@ -621,7 +621,7 @@ static int staffMagic(uint8_t id) {
     }
 }
 
-static void magicalCloak(inven_type *t_ptr, int special, int level) {
+static void magicalCloak(Inventory_t *t_ptr, int special, int level) {
     if (!magik(special)) {
         t_ptr->toac += m_bonus(1, 20, level);
         return;
@@ -642,7 +642,7 @@ static void magicalCloak(inven_type *t_ptr, int special, int level) {
     t_ptr->cost += 500;
 }
 
-static void cursedCloak(inven_type *t_ptr, int level) {
+static void cursedCloak(Inventory_t *t_ptr, int level) {
     int magicType = randint(3);
 
     if (magicType == 1) {
@@ -669,7 +669,7 @@ static void cursedCloak(inven_type *t_ptr, int level) {
     t_ptr->flags |= TR_CURSED;
 }
 
-static void magicalChests(inven_type *t_ptr, int level) {
+static void magicalChests(Inventory_t *t_ptr, int level) {
     switch (randint(level + 4)) {
         case 1:
             t_ptr->flags = 0;
@@ -719,7 +719,7 @@ static void magicalChests(inven_type *t_ptr, int level) {
     }
 }
 
-static void magicalProjectiles(inven_type *t_ptr, int special, int level) {
+static void magicalProjectiles(Inventory_t *t_ptr, int special, int level) {
     t_ptr->tohit += m_bonus(1, 35, level);
     t_ptr->todam += m_bonus(1, 35, level);
 
@@ -769,7 +769,7 @@ static void magicalProjectiles(inven_type *t_ptr, int special, int level) {
     }
 }
 
-static void cursedProjectiles(inven_type *t_ptr, int level) {
+static void cursedProjectiles(Inventory_t *t_ptr, int level) {
     t_ptr->tohit -= m_bonus(5, 55, level);
     t_ptr->todam -= m_bonus(5, 55, level);
     t_ptr->flags |= TR_CURSED;
@@ -788,7 +788,7 @@ void magic_treasure(int x, int level) {
     int cursed = (10 * chance) / OBJ_DIV_CURSED;
 
     int magicAmount;
-    inven_type *t_ptr = &t_list[x];
+    Inventory_t *t_ptr = &t_list[x];
 
     // some objects appear multiple times in the object_list with different
     // levels, this is to make the object occur more often, however, for

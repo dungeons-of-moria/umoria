@@ -130,7 +130,7 @@ bool detect_trap() {
 
                 detected = true;
             } else if (t_list[c_ptr->tptr].tval == TV_CHEST) {
-                inven_type *t_ptr = &t_list[c_ptr->tptr];
+                Inventory_t *t_ptr = &t_list[c_ptr->tptr];
                 known2(t_ptr);
             }
         }
@@ -313,7 +313,7 @@ bool ident_spell() {
 
     identify(&item_val);
 
-    inven_type *i_ptr = &inventory[item_val];
+    Inventory_t *i_ptr = &inventory[item_val];
     known2(i_ptr);
 
     obj_desc_t tmp_str;
@@ -570,7 +570,7 @@ bool disarm_all(int dir, int y, int x) {
         // note, must continue up to and including the first non open space,
         // because secret doors have fval greater than MAX_OPEN_SPACE
         if (c_ptr->tptr != 0) {
-            inven_type *t_ptr = &t_list[c_ptr->tptr];
+            Inventory_t *t_ptr = &t_list[c_ptr->tptr];
 
             if (t_ptr->tval == TV_INVIS_TRAP || t_ptr->tval == TV_VIS_TRAP) {
                 if (delete_object(y, x)) {
@@ -603,7 +603,7 @@ bool disarm_all(int dir, int y, int x) {
 }
 
 // Return flags for given type area affect -RAK-
-static void get_flags(int typ, uint32_t *weapon_type, int *harm_type, bool (**destroy)(inven_type *)) {
+static void get_flags(int typ, uint32_t *weapon_type, int *harm_type, bool (**destroy)(Inventory_t *)) {
     switch (typ) {
         case GF_MAGIC_MISSILE:
             *weapon_type = 0;
@@ -691,7 +691,7 @@ static void fireBoltTouchesMonster(Cave_t *tile, int dam, int harmType, uint32_t
 
 // Shoot a bolt in a given direction -RAK-
 void fire_bolt(int typ, int dir, int y, int x, int dam, char *bolt_typ) {
-    bool (*dummy)(inven_type *);
+    bool (*dummy)(Inventory_t *);
     int harm_type = 0;
     uint32_t weapon_type;
     get_flags(typ, &weapon_type, &harm_type, &dummy);
@@ -733,7 +733,7 @@ void fire_ball(int typ, int dir, int y, int x, int dam_hp, const char *descrip) 
     int tkill = 0;
     int max_dis = 2;
 
-    bool (*destroy)(inven_type *);
+    bool (*destroy)(Inventory_t *);
     int harm_type;
     uint32_t weapon_type;
     get_flags(typ, &weapon_type, &harm_type, &destroy);
@@ -863,7 +863,7 @@ void fire_ball(int typ, int dir, int y, int x, int dam_hp, const char *descrip) 
 void breath(int typ, int y, int x, int dam_hp, char *ddesc, int monptr) {
     int max_dis = 2;
 
-    bool (*destroy)(inven_type *);
+    bool (*destroy)(Inventory_t *);
     int harm_type;
     uint32_t weapon_type;
     get_flags(typ, &weapon_type, &harm_type, &destroy);
@@ -984,7 +984,7 @@ bool recharge(int num) {
         return false;
     }
 
-    inven_type *i_ptr = &inventory[item_val];
+    Inventory_t *i_ptr = &inventory[item_val];
 
     // recharge  I = recharge(20) = 1/6  failure for empty 10th level wand
     // recharge II = recharge(60) = 1/10 failure for empty 10th level wand
@@ -1338,7 +1338,7 @@ bool td_destroy2(int dir, int y, int x) {
 
         // must move into first closed spot, as it might be a secret door
         if (c_ptr->tptr != 0) {
-            inven_type *t_ptr = &t_list[c_ptr->tptr];
+            Inventory_t *t_ptr = &t_list[c_ptr->tptr];
 
             if (t_ptr->tval == TV_INVIS_TRAP ||
                 t_ptr->tval == TV_CLOSED_DOOR ||

@@ -1105,7 +1105,7 @@ void change_name() {
 
 // Destroy an item in the inventory -RAK-
 void inven_destroy(int item_val) {
-    inven_type *i_ptr = &inventory[item_val];
+    Inventory_t *i_ptr = &inventory[item_val];
 
     if (i_ptr->number > 1 && i_ptr->subval <= ITEM_SINGLE_STACK_MAX) {
         i_ptr->number--;
@@ -1126,7 +1126,7 @@ void inven_destroy(int item_val) {
 
 // Copies the object in the second argument over the first argument.
 // However, the second always gets a number of one except for ammo etc.
-void take_one_item(inven_type *s_ptr, inven_type *i_ptr) {
+void take_one_item(Inventory_t *s_ptr, Inventory_t *i_ptr) {
     *s_ptr = *i_ptr;
 
     if (s_ptr->number > 1 && s_ptr->subval >= ITEM_SINGLE_STACK_MIN && s_ptr->subval <= ITEM_SINGLE_STACK_MAX) {
@@ -1142,7 +1142,7 @@ void inven_drop(int item_val, int drop_all) {
 
     int treasureID = popt();
 
-    inven_type *i_ptr = &inventory[item_val];
+    Inventory_t *i_ptr = &inventory[item_val];
     t_list[treasureID] = *i_ptr;
 
     cave[char_row][char_col].tptr = (uint8_t) treasureID;
@@ -1176,7 +1176,7 @@ void inven_drop(int item_val, int drop_all) {
 }
 
 // Destroys a type of item on a given percent chance -RAK-
-int inven_damage(bool (*typ)(inven_type *), int perc) {
+int inven_damage(bool (*typ)(Inventory_t *), int perc) {
     int damage = 0;
 
     for (int i = 0; i < inven_ctr; i++) {
@@ -1201,7 +1201,7 @@ int weight_limit() {
 }
 
 // this code must be identical to the inven_carry() code below
-bool inven_check_num(inven_type *t_ptr) {
+bool inven_check_num(Inventory_t *t_ptr) {
     if (inven_ctr < INVEN_WIELD) {
         return true;
     }
@@ -1232,7 +1232,7 @@ bool inven_check_num(inven_type *t_ptr) {
 }
 
 // return false if picking up an object would change the players speed
-bool inven_check_weight(inven_type *i_ptr) {
+bool inven_check_weight(Inventory_t *i_ptr) {
     int limit = weight_limit();
     int newWeight = i_ptr->number * i_ptr->weight + inven_weight;
 
@@ -1247,7 +1247,7 @@ bool inven_check_weight(inven_type *i_ptr) {
 
 // Are we strong enough for the current pack and weapon? -CJS-
 void check_strength() {
-    inven_type *i_ptr = &inventory[INVEN_WIELD];
+    Inventory_t *i_ptr = &inventory[INVEN_WIELD];
 
     if (i_ptr->tval != TV_NOTHING && py.stats.use_stat[A_STR] * 15 < i_ptr->weight) {
         if (!weapon_heavy) {
@@ -1287,7 +1287,7 @@ void check_strength() {
 // Add an item to players inventory.  Return the
 // item position for a description if needed. -RAK-
 // this code must be identical to the inven_check_num() code above
-int inven_carry(inven_type *i_ptr) {
+int inven_carry(Inventory_t *i_ptr) {
     int typ = i_ptr->tval;
     int subt = i_ptr->subval;
     bool known1p = known1_p(i_ptr);
@@ -1297,7 +1297,7 @@ int inven_carry(inven_type *i_ptr) {
 
     // Now, check to see if player can carry object
     for (locn = 0;; locn++) {
-        inven_type *t_ptr = &inventory[locn];
+        Inventory_t *t_ptr = &inventory[locn];
 
         if (typ == t_ptr->tval && subt == t_ptr->subval && subt >= ITEM_SINGLE_STACK_MIN && ((int) t_ptr->number + (int) i_ptr->number) < 256 &&
             (subt < ITEM_GROUP_MIN || t_ptr->p1 == i_ptr->p1) &&
@@ -2148,7 +2148,7 @@ int attack_blows(int weight, int *wtohit) {
 }
 
 // Special damage due to magical abilities of object -RAK-
-int tot_dam(inven_type *i_ptr, int tdam, int monster) {
+int tot_dam(Inventory_t *i_ptr, int tdam, int monster) {
     bool isProjectile = i_ptr->tval >= TV_SLING_AMMO && i_ptr->tval <= TV_ARROW;
     bool isHaftedSword = i_ptr->tval >= TV_HAFTED && i_ptr->tval <= TV_SWORD;
 

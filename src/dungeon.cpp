@@ -14,7 +14,7 @@ static void do_command(char);
 static bool valid_countcommand(char);
 static void regenhp(int);
 static void regenmana(int);
-static bool enchanted(inven_type *);
+static bool enchanted(Inventory_t *);
 static void examine_book();
 static void go_up();
 static void go_down();
@@ -51,7 +51,7 @@ static void playerUpdateDeepestDungeonLevelVisited() {
 
 // Check light status
 static void playerUpdateLightStatus() {
-    inven_type *i_ptr = &inventory[INVEN_LIGHT];
+    Inventory_t *i_ptr = &inventory[INVEN_LIGHT];
 
     if (player_light) {
         if (i_ptr->p1 > 0) {
@@ -708,7 +708,7 @@ static void playerDetectEnchantment() {
             i = 22;
         }
 
-        inven_type *i_ptr = &inventory[i];
+        Inventory_t *i_ptr = &inventory[i];
 
         // if in inventory, succeed 1 out of 50 times,
         // if in equipment list, success 1 out of 10 times
@@ -1990,7 +1990,7 @@ static void regenmana(int percent) {
 
 // Is an item an enchanted weapon or armor and we don't know? -CJS-
 // only returns true if it is a good enchantment
-static bool enchanted(inven_type *t_ptr) {
+static bool enchanted(Inventory_t *t_ptr) {
     if (t_ptr->tval < TV_MIN_ENCHANT || t_ptr->tval > TV_MAX_ENCHANT || (t_ptr->flags & TR_CURSED)) {
         return false;
     } else if (known2_p(t_ptr)) {
@@ -2126,7 +2126,7 @@ static void jamdoor() {
         return;
     }
 
-    inven_type *t_ptr = &t_list[c_ptr->tptr];
+    Inventory_t *t_ptr = &t_list[c_ptr->tptr];
 
     uint8_t itemID = t_ptr->tval;
     if (itemID != TV_CLOSED_DOOR && itemID != TV_OPEN_DOOR) {
@@ -2192,7 +2192,7 @@ static void refill_lamp() {
 
     free_turn_flag = false;
 
-    inven_type *i_ptr = &inventory[INVEN_LIGHT];
+    Inventory_t *i_ptr = &inventory[INVEN_LIGHT];
     i_ptr->p1 += inventory[i].p1;
 
     if (i_ptr->p1 > OBJ_LAMP_MAX) {

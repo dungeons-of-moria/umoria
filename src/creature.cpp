@@ -513,7 +513,7 @@ static bool executeDisenchantAttack() {
             break;
     }
 
-    inven_type *i_ptr = &inventory[itemID];
+    Inventory_t *i_ptr = &inventory[itemID];
 
     if (i_ptr->tohit > 0) {
         i_ptr->tohit -= randint(2);
@@ -550,7 +550,7 @@ static bool executeAttack(creature_type *r_ptr, monster_type *m_ptr, int monster
     int i;
     int j;
     int32_t gold;
-    inven_type *i_ptr;
+    Inventory_t *i_ptr;
 
     switch (attype) {
         case 1: // Normal attack
@@ -895,7 +895,7 @@ static void make_attack(int monsterID) {
 }
 
 static void creatureOpensDoor(Cave_t *c_ptr, int16_t monsterHP, uint32_t movebits, bool *do_turn, bool *do_move, uint32_t *rcmove, int y, int x) {
-    inven_type *t_ptr = &t_list[c_ptr->tptr];
+    Inventory_t *t_ptr = &t_list[c_ptr->tptr];
 
     // Creature can open doors.
     if (movebits & CM_OPEN_DOOR) {

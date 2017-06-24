@@ -12,7 +12,7 @@
 // Change a trap from invisible to visible -RAK-
 // Note: Secret doors are handled here
 void change_trap(int y, int x) {
-    inven_type *t_ptr = &t_list[cave[y][x].tptr];
+    Inventory_t *t_ptr = &t_list[cave[y][x].tptr];
 
     if (t_ptr->tval == TV_INVIS_TRAP) {
         t_ptr->tval = TV_VIS_TRAP;
@@ -56,7 +56,7 @@ void search(int y, int x, int chance) {
 
             // Search for hidden objects
 
-            inven_type *t_ptr = &t_list[cave[i][j].tptr];
+            Inventory_t *t_ptr = &t_list[cave[i][j].tptr];
 
             if (t_ptr->tval == TV_INVIS_TRAP) {
                 // Trap on floor?

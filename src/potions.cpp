@@ -307,7 +307,7 @@ void quaff() {
     free_turn_flag = false;
 
     bool identified;
-    inven_type *i_ptr = &inventory[itemID];
+    Inventory_t *i_ptr = &inventory[itemID];
 
     if (i_ptr->flags == 0) {
         msg_print("You feel less thirsty.");

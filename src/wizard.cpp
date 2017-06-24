@@ -250,8 +250,8 @@ void wizard_create() {
 
     msg_print("Warning: This routine can cause a fatal error.");
 
-    inven_type forge;
-    inven_type *i_ptr = &forge;
+    Inventory_t forge;
+    Inventory_t *i_ptr = &forge;
 
     i_ptr->index = OBJ_WIZARD;
     i_ptr->name2 = 0;

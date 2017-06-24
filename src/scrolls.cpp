@@ -88,7 +88,7 @@ static int getEnchantedItemID() {
 }
 
 static bool readEnchantWeaponToHitScroll() {
-    inven_type *i_ptr = &inventory[INVEN_WIELD];
+    Inventory_t *i_ptr = &inventory[INVEN_WIELD];
 
     if (i_ptr->tval == TV_NOTHING) {
         return false;
@@ -111,7 +111,7 @@ static bool readEnchantWeaponToHitScroll() {
 }
 
 static bool readEnchantWeaponToDamageScroll() {
-    inven_type *i_ptr = &inventory[INVEN_WIELD];
+    Inventory_t *i_ptr = &inventory[INVEN_WIELD];
 
     if (i_ptr->tval == TV_NOTHING) {
         return false;
@@ -150,7 +150,7 @@ static bool readEnchantItemToACScroll() {
         return false;
     }
 
-    inven_type *i_ptr = &inventory[id];
+    Inventory_t *i_ptr = &inventory[id];
 
     obj_desc_t msg, desc;
     objdes(desc, i_ptr, false);
@@ -177,7 +177,7 @@ static int readIdentifyScroll(int itemID, bool *used_up) {
     // to move to a different place.  Check for that here.  It can
     // move arbitrarily far if an identify scroll was used on
     // another identify scroll, but it always moves down.
-    inven_type *i_ptr = &inventory[itemID];
+    Inventory_t *i_ptr = &inventory[itemID];
     while (itemID > 0 && (i_ptr->tval != TV_SCROLL1 || i_ptr->flags != 0x00000008)) {
         itemID--;
         i_ptr = &inventory[itemID];
@@ -224,7 +224,7 @@ static bool readConfuseMonsterScroll() {
 }
 
 static bool readEnchantWeaponScroll() {
-    inven_type *i_ptr = &inventory[INVEN_WIELD];
+    Inventory_t *i_ptr = &inventory[INVEN_WIELD];
 
     if (i_ptr->tval == TV_NOTHING) {
         return false;
@@ -271,7 +271,7 @@ static bool readEnchantWeaponScroll() {
 }
 
 static bool readCurseWeaponScroll() {
-    inven_type *i_ptr = &inventory[INVEN_WIELD];
+    Inventory_t *i_ptr = &inventory[INVEN_WIELD];
 
     if (i_ptr->tval == TV_NOTHING) {
         return false;
@@ -306,7 +306,7 @@ static bool readEnchantArmorScroll() {
         return false;
     }
 
-    inven_type *i_ptr = &inventory[id];
+    Inventory_t *i_ptr = &inventory[id];
 
     obj_desc_t msg, desc;
     objdes(desc, i_ptr, false);
@@ -367,7 +367,7 @@ static bool readCurseArmorScroll() {
         return false;
     }
 
-    inven_type *i_ptr = &inventory[id];
+    Inventory_t *i_ptr = &inventory[id];
 
     obj_desc_t msg, desc;
     objdes(desc, i_ptr, false);
@@ -426,7 +426,7 @@ void read_scroll() {
     bool used_up = true;
     bool identified = false;
 
-    inven_type *i_ptr = &inventory[itemID];
+    Inventory_t *i_ptr = &inventory[itemID];
     uint32_t flags = i_ptr->flags;
 
     while (flags != 0) {

@@ -29,7 +29,7 @@ void change_speed(int num) {
 //
 // Only calculates properties with cumulative effect.  Properties that
 // depend on everything being worn are recalculated by calc_bonuses() -CJS-
-void py_bonuses(inven_type *t_ptr, int factor) {
+void py_bonuses(Inventory_t *t_ptr, int factor) {
     int amount = t_ptr->p1 * factor;
 
     if (t_ptr->flags & TR_STATS) {
@@ -87,7 +87,7 @@ static void playerResetFlags() {
 }
 
 static void playerRecalculateBonusesFromInventory() {
-    inven_type *item;
+    Inventory_t *item;
 
     for (int i = INVEN_WIELD; i < INVEN_LIGHT; i++) {
         item = &inventory[i];
@@ -494,7 +494,7 @@ int show_equip(bool weight, int col) {
 void takeoff(int item_val, int posn) {
     py.flags.status |= PY_STR_WGT;
 
-    inven_type *t_ptr = &inventory[item_val];
+    Inventory_t *t_ptr = &inventory[item_val];
 
     inven_weight -= t_ptr->weight * t_ptr->number;
     equip_ctr--;
@@ -762,7 +762,7 @@ static void inventoryUnwieldItem() {
 
     free_turn_flag = false;
 
-    inven_type savedItem = inventory[INVEN_AUX];
+    Inventory_t savedItem = inventory[INVEN_AUX];
     inventory[INVEN_AUX] = inventory[INVEN_WIELD];
     inventory[INVEN_WIELD] = savedItem;
 
@@ -1110,8 +1110,8 @@ static bool selectItemCommands(char *command, char *which, bool selecting) {
                 free_turn_flag = false;
 
                 // first remove new item from inventory
-                inven_type savedItem = inventory[item];
-                inven_type *i_ptr = &savedItem;
+                Inventory_t savedItem = inventory[item];
+                Inventory_t *i_ptr = &savedItem;
 
                 wear_high--;
 

@@ -33,7 +33,7 @@ void eat() {
 
     bool identified = false;
 
-    inven_type *i_ptr = &inventory[item_val];
+    Inventory_t *i_ptr = &inventory[item_val];
     uint32_t itemFlags = i_ptr->flags;
 
     while (itemFlags != 0) {

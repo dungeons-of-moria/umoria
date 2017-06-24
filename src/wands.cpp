@@ -9,7 +9,7 @@
 #include "headers.h"
 #include "externs.h"
 
-static bool discharge_wand(inven_type *wand, int dir) {
+static bool discharge_wand(Inventory_t *wand, int dir) {
     bool identified = false;
 
     uint32_t flags = wand->flags;
@@ -147,7 +147,7 @@ void aim() {
         dir = getRandomDirection();
     }
 
-    inven_type *item = &inventory[item_id];
+    Inventory_t *item = &inventory[item_id];
 
     int player_class_lev_adj = class_level_adj[py.misc.pclass][CLA_DEVICE] * py.misc.lev / 3;
     int chance = py.misc.save + stat_adj(A_INT) - (int) item->level + player_class_lev_adj;
