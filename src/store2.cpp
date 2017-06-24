@@ -435,7 +435,7 @@ static int purchase_haggle(int store_num, int32_t *price, inven_type *item) {
     int final_flag = 0;
 
     Store_t *s_ptr = &store[store_num];
-    owner_type *o_ptr = &owners[s_ptr->owner];
+    Owner_t *o_ptr = &owners[s_ptr->owner];
 
     int32_t max_sell, min_sell;
     int32_t cost = sell_price(store_num, &max_sell, &min_sell, item);
@@ -605,7 +605,7 @@ static int sell_haggle(int store_num, int32_t *price, inven_type *item) {
         sell = 3;
         flag = true;
     } else {
-        owner_type *o_ptr = &owners[s_ptr->owner];
+        Owner_t *o_ptr = &owners[s_ptr->owner];
 
         cost = cost * (200 - chr_adj()) / 100;
         cost = cost * (200 - rgold_adj[o_ptr->owner_race][py.misc.prace]) / 100;

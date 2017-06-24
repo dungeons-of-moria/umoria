@@ -313,7 +313,7 @@ typedef struct {
     uint8_t haggle_per;
     uint8_t owner_race;
     uint8_t insult_max;
-} owner_type;
+} Owner_t;
 
 typedef struct {
     int32_t scost;

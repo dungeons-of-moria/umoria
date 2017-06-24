@@ -13,7 +13,7 @@ Store_t store[MAX_STORES];
 
 // Store owners have different characteristics for pricing and haggling
 // Note: Store owners should be added in groups, one for each store
-owner_type owners[MAX_OWNERS] = {
+Owner_t owners[MAX_OWNERS] = {
         {"Erick the Honest       (Human)      General Store",   250, 175, 108, 4, 0, 12},
         {"Mauglin the Grumpy     (Dwarf)      Armory",        32000, 200, 112, 4, 5,  5},
         {"Arndal Beast-Slayer    (Half-Elf)   Weaponsmith",   10000, 185, 110, 5, 1,  8},

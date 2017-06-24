@@ -167,7 +167,7 @@ int32_t sell_price(int snum, int32_t *max_sell, int32_t *min_sell, inven_type *i
         return 0;
     }
 
-    owner_type *owner = &owners[store[snum].owner];
+    Owner_t *owner = &owners[store[snum].owner];
 
     price = price * rgold_adj[owner->owner_race][py.misc.prace] / 100;
     if (price < 1) {
