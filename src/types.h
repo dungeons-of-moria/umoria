@@ -30,7 +30,7 @@ typedef char stat_type[7];
 // data size, they should not be used otherwise because their use
 // results in larger and slower code.
 
-typedef struct creature_type {
+typedef struct {
     const char *name;  // Description of creature
     uint32_t cmove;    // Bit field
     uint32_t spells;   // Creature spells
@@ -47,7 +47,7 @@ typedef struct creature_type {
 } creature_type;
 
 // Monster attack and damage types
-typedef struct m_attack_type {
+typedef struct {
     uint8_t attack_type;
     uint8_t attack_desc;
     uint8_t attack_dice;
@@ -55,7 +55,7 @@ typedef struct m_attack_type {
 } m_attack_type;
 
 // Monster memories. -CJS-
-typedef struct recall_type {
+typedef struct {
     uint32_t r_cmove;
     uint32_t r_spells;
     uint16_t r_kills, r_deaths;
@@ -64,7 +64,7 @@ typedef struct recall_type {
     uint8_t r_attacks[MAX_MON_NATTACK];
 } recall_type;
 
-typedef struct monster_type {
+typedef struct {
     int16_t hp;     // Hit points
     int16_t csleep; // Inactive counter
     int16_t cspeed; // Movement speed
@@ -80,7 +80,7 @@ typedef struct monster_type {
     uint8_t confused;
 } monster_type;
 
-typedef struct treasure_type {
+typedef struct {
     const char *name;  // Object name
     uint32_t flags;    // Special flags
     uint8_t tval;      // Category number
@@ -107,7 +107,7 @@ typedef struct treasure_type {
 // two many places where inven_types are copied, which results in dangling
 // pointers, so we use a char array for them instead
 #define INSCRIP_SIZE 13 // notice alignment, must be 4*x + 1
-typedef struct inven_type {
+typedef struct {
     uint16_t index;             // Index to object_list
     uint8_t name2;              // Object special name
     char inscrip[INSCRIP_SIZE]; // Object inscription
@@ -130,8 +130,8 @@ typedef struct inven_type {
 
 #define PLAYER_NAME_SIZE 27
 
-typedef struct player_type {
-    struct misc {
+typedef struct {
+    struct {
         char name[PLAYER_NAME_SIZE]; // Name of character
         bool male;                   // Sex of character
         int32_t au;                  // Gold
@@ -173,14 +173,14 @@ typedef struct player_type {
     } misc;
 
     // Stats now kept in arrays, for more efficient access. -CJS-
-    struct stats {
+    struct {
         uint8_t max_stat[6]; // What is restored
         uint8_t cur_stat[6]; // What is natural
         int16_t mod_stat[6]; // What is modified, may be +/-
         uint8_t use_stat[6]; // What is used
     } stats;
 
-    struct flags {
+    struct {
         uint32_t status;         // Status of player
         int16_t rest;            // Rest counter
         int16_t blind;           // Blindness counter
@@ -229,14 +229,14 @@ typedef struct player_type {
 } player_type;
 
 // spell name is stored in spell_names[] array at index i, +31 if priest
-typedef struct spell_type {
+typedef struct  {
     uint8_t slevel;
     uint8_t smana;
     uint8_t sfail;
     uint8_t sexp; // 1/4 of exp gained for learning spell
 } spell_type;
 
-typedef struct race_type {
+typedef struct {
     const char *trace; // Type of race
     int16_t str_adj;   // adjustments
     int16_t int_adj;
@@ -267,7 +267,7 @@ typedef struct race_type {
     uint8_t rtclass; // Bit field for class types
 } race_type;
 
-typedef struct class_type {
+typedef struct {
     const char *title;       // type of class
     uint8_t adj_hd;          // Adjust hit points
     uint8_t mdis;            // mod disarming traps
@@ -288,7 +288,7 @@ typedef struct class_type {
     uint8_t first_spell_lev; // First level where class can use spells.
 } class_type;
 
-typedef struct background_type {
+typedef struct {
     const char *info; // History information
     uint8_t roll;     // Die roll needed for history
     uint8_t chart;    // Table number
@@ -296,7 +296,7 @@ typedef struct background_type {
     uint8_t bonus;    // Bonus to the Social Class+50
 } background_type;
 
-typedef struct cave_type {
+typedef struct {
     uint8_t cptr;
     uint8_t tptr;
     uint8_t fval;
@@ -307,7 +307,7 @@ typedef struct cave_type {
     unsigned int tl : 1; // Temporary light, used for player's lamp light,etc.
 } cave_type;
 
-typedef struct owner_type {
+typedef struct {
     const char *owner_name;
     int16_t max_cost;
     uint8_t max_inflate;
@@ -317,12 +317,12 @@ typedef struct owner_type {
     uint8_t insult_max;
 } owner_type;
 
-typedef struct inven_record {
+typedef struct {
     int32_t scost;
     inven_type sitem;
 } inven_record;
 
-typedef struct store_type {
+typedef struct {
     int32_t store_open;
     int16_t insult_cur;
     uint8_t owner;
@@ -333,7 +333,7 @@ typedef struct store_type {
 } store_type;
 
 // 64 bytes for this structure
-typedef struct high_scores {
+typedef struct {
     int32_t points;
     int32_t birth_date;
     int16_t uid;

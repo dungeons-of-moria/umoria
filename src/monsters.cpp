@@ -439,7 +439,7 @@ creature_type c_list[MAX_CREATURES] = {
 };
 
 // ERROR: attack #35 is no longer used
-struct m_attack_type monster_attacks[N_MONS_ATTS] = {
+m_attack_type monster_attacks[N_MONS_ATTS] = {
         // 0
         {0, 0, 0, 0},
         {1, 1, 1, 2},
@@ -477,7 +477,7 @@ struct m_attack_type monster_attacks[N_MONS_ATTS] = {
         {1, 2, 1, 10},
         {1, 2, 2, 3},
         {1, 2, 2, 4},
-        {1, 2, 2, 5},
+        {1, 2, 2, 5}, // Note: this attack (#35) is no longer used
         {1, 2, 2, 6},
         {1, 2, 2, 8},
         {1, 2, 2, 10},
