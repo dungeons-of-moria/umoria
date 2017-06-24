@@ -9,11 +9,11 @@
 #include "headers.h"
 #include "externs.h"
 
-typedef struct Coords {
+typedef struct {
     int x, y;
-} Coords;
+} Coord_t;
 
-static Coords doorstk[100];
+static Coord_t doorstk[100];
 static int doorindex;
 
 // Returns a Dark/Light floor tile based on dun_level, and random number
@@ -786,7 +786,7 @@ static void build_type3(int y, int x) {
 
 // Constructs a tunnel between two points
 static void build_tunnel(int row1, int col1, int row2, int col2) {
-    Coords tunstk[1000], wallstk[1000];
+    Coord_t tunstk[1000], wallstk[1000];
 
     // Main procedure for Tunnel
     // Note: 9 is a temporary value
