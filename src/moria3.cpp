@@ -681,7 +681,7 @@ uint32_t monster_death(int y, int x, uint32_t flags) {
     return result;
 }
 
-static void playerGainKillExperience(creature_type *c_ptr) {
+static void playerGainKillExperience(Creature_t *c_ptr) {
     uint16_t exp = c_ptr->mexp * c_ptr->level;
 
     int32_t quotient = exp / py.misc.lev;
@@ -705,7 +705,7 @@ static void playerGainKillExperience(creature_type *c_ptr) {
 // (Picking on my babies.) -RAK-
 int mon_take_hit(int monsterID, int damage) {
     Monster_t *monster = &m_list[monsterID];
-    creature_type *creature = &c_list[monster->mptr];
+    Creature_t *creature = &c_list[monster->mptr];
 
     monster->csleep = 0;
     monster->hp -= damage;
@@ -787,7 +787,7 @@ void py_attack(int y, int x) {
     int creatureID = cave[y][x].cptr;
 
     Monster_t *monster = &m_list[creatureID];
-    creature_type *creature = &c_list[monster->mptr];
+    Creature_t *creature = &c_list[monster->mptr];
     Inventory_t *item = &inventory[INVEN_WIELD];
 
     monster->csleep = 0;

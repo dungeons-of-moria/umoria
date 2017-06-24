@@ -41,7 +41,7 @@ typedef struct {
     uint8_t hd[2];     // Creatures hit die
     uint8_t damage[4]; // Type attack and damage
     uint8_t level;     // Level of creature
-} creature_type;
+} Creature_t;
 
 // Monster attack and damage types
 typedef struct {

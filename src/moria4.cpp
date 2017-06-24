@@ -983,7 +983,7 @@ void throw_object() {
 static void py_bash(int y, int x) {
     int monsterID = cave[y][x].cptr;
     Monster_t *m_ptr = &m_list[monsterID];
-    creature_type *c_ptr = &c_list[m_ptr->mptr];
+    Creature_t *c_ptr = &c_list[m_ptr->mptr];
 
     m_ptr->csleep = 0;
 

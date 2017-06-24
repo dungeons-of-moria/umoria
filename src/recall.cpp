@@ -153,7 +153,7 @@ bool bool_roff_recall(int monsterID) {
     return false;
 }
 
-static void wizardModeInit(Recall_t *mp, creature_type *cp) {
+static void wizardModeInit(Recall_t *mp, Creature_t *cp) {
     mp->r_kills = MAX_SHORT;
     mp->r_wake = mp->r_ignore = MAX_UCHAR;
 
@@ -427,7 +427,7 @@ static void magicSkills(uint32_t rspells, uint32_t mp_r_spells, uint32_t cp_spel
 }
 
 // Do we know how hard they are to kill? Armor class, hit die.
-static void killDifficulty(creature_type *cp, uint32_t mp_r_kills) {
+static void killDifficulty(Creature_t *cp, uint32_t mp_r_kills) {
     if (!knowarmor(cp->level, mp_r_kills)) {
         return;
     }
@@ -491,7 +491,7 @@ static void weaknesses(uint32_t rcdefense) {
 }
 
 // Do we know how aware it is?
-static void awareness(creature_type *cp, Recall_t *mp) {
+static void awareness(Creature_t *cp, Recall_t *mp) {
     if (mp->r_wake * mp->r_wake > cp->sleep || mp->r_ignore == MAX_UCHAR || (cp->sleep == 0 && mp->r_kills >= 10)) {
         roff(" It ");
 
@@ -585,7 +585,7 @@ static void lootCarried(uint32_t cp_cmove, uint32_t rcmove) {
     }
 }
 
-static void attackNumberAndDamage(Recall_t *mp, creature_type *cp) {
+static void attackNumberAndDamage(Recall_t *mp, Creature_t *cp) {
     // We know about attacks it has used on us, and maybe the damage they do.
     // known_attacks is the total number of known attacks, used for punctuation
     int known_attacks = 0;
@@ -668,7 +668,7 @@ static void attackNumberAndDamage(Recall_t *mp, creature_type *cp) {
 // Print out what we have discovered about this monster.
 int roff_recall(int mon_num) {
     Recall_t *mp = &c_recall[mon_num];
-    creature_type *cp = &c_list[mon_num];
+    Creature_t *cp = &c_list[mon_num];
 
     Recall_t save_mem;
 

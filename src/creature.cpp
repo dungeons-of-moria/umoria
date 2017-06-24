@@ -13,7 +13,7 @@ static bool checkMonsterIsVisible(Monster_t *m_ptr) {
     bool visible = false;
 
     Cave_t *c_ptr = &cave[m_ptr->fy][m_ptr->fx];
-    creature_type *r_ptr = &c_list[m_ptr->mptr];
+    Creature_t *r_ptr = &c_list[m_ptr->mptr];
 
     if (c_ptr->pl || c_ptr->tl || (find_flag && m_ptr->cdis < 2 && player_light)) {
         // Normal sight.
@@ -546,7 +546,7 @@ static bool executeDisenchantAttack() {
     return success;
 }
 
-static bool executeAttack(creature_type *r_ptr, Monster_t *m_ptr, int monsterID, int attype, int damage, vtype_t deathDescription, bool notice) {
+static bool executeAttack(Creature_t *r_ptr, Monster_t *m_ptr, int monsterID, int attype, int damage, vtype_t deathDescription, bool notice) {
     int i;
     int j;
     int32_t gold;
@@ -775,7 +775,7 @@ static bool executeAttack(creature_type *r_ptr, Monster_t *m_ptr, int monsterID,
     return notice;
 }
 
-static void confuseCreatureOnAttack(creature_type *r_ptr, Monster_t *m_ptr, int adesc, vtype_t cdesc, bool visible) {
+static void confuseCreatureOnAttack(Creature_t *r_ptr, Monster_t *m_ptr, int adesc, vtype_t cdesc, bool visible) {
     if (py.flags.confuse_monster && adesc != 99) {
         msg_print("Your hands stop glowing.");
         py.flags.confuse_monster = false;
@@ -810,7 +810,7 @@ static void make_attack(int monsterID) {
     }
 
     Monster_t *m_ptr = &m_list[monsterID];
-    creature_type *r_ptr = &c_list[m_ptr->mptr];
+    Creature_t *r_ptr = &c_list[m_ptr->mptr];
 
     vtype_t cdesc;
     if (!m_ptr->ml) {
@@ -1268,7 +1268,7 @@ static bool mon_cast_spell(int monsterID) {
     }
 
     Monster_t *m_ptr = &m_list[monsterID];
-    creature_type *r_ptr = &c_list[m_ptr->mptr];
+    Creature_t *r_ptr = &c_list[m_ptr->mptr];
 
     if (!canCreatureCastSpells(m_ptr, r_ptr->spells)) {
         return false;
@@ -1473,7 +1473,7 @@ static void creatureMoveOutOfWall(Monster_t *m_ptr, int monsterID, uint32_t *rcm
     }
 }
 
-static void creatureMoveConfusedUndead(Monster_t *m_ptr, creature_type *r_ptr, int monsterID, uint32_t *rcmove) {
+static void creatureMoveConfusedUndead(Monster_t *m_ptr, Creature_t *r_ptr, int monsterID, uint32_t *rcmove) {
     int mm[9];
 
     // Undead only get confused from turn undead, so they should flee
@@ -1503,7 +1503,7 @@ static void creatureMoveConfusedUndead(Monster_t *m_ptr, creature_type *r_ptr, i
 // Move the critters about the dungeon -RAK-
 static void mon_move(int monsterID, uint32_t *rcmove) {
     Monster_t *m_ptr = &m_list[monsterID];
-    creature_type *r_ptr = &c_list[m_ptr->mptr];
+    Creature_t *r_ptr = &c_list[m_ptr->mptr];
 
     // Does the critter multiply?
     // rest could be negative, to be safe, only use mod with positive values.
