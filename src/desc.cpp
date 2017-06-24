@@ -658,7 +658,7 @@ void objdes(obj_desc_t out_val, Inventory_t *i_ptr, bool pref) {
 }
 
 void invcopy(Inventory_t *to, int from_index) {
-    treasure_type *from = &object_list[from_index];
+    Treasure_t *from = &object_list[from_index];
 
     to->index = (uint16_t) from_index;
     to->name2 = SN_NULL;

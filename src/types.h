@@ -93,7 +93,7 @@ typedef struct {
     int16_t toac;      // Plusses to AC
     uint8_t damage[2]; // Damage when hits
     uint8_t level;     // Level item first found
-} treasure_type;
+} Treasure_t;
 
 // only damage, ac, and tchar are constant; level could possibly be made
 // constant by changing index instead; all are used rarely.

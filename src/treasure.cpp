@@ -64,7 +64,7 @@
 // Object list (All objects must be defined here)
 
 // Dungeon items from 0 to MAX_DUNGEON_OBJ
-treasure_type object_list[MAX_OBJECTS] = {
+Treasure_t object_list[MAX_OBJECTS] = {
         {"Poison",                          0x00000001L, TV_FOOD,        ',', 500,  0,    64,  1, 1,    0,  0, 0,   0, {0, 0}, 7}, // 0
         {"Blindness",                       0x00000002L, TV_FOOD,        ',', 500,  0,    65,  1, 1,    0,  0, 0,   0, {0, 0}, 9}, // 1
         {"Paranoia",                        0x00000004L, TV_FOOD,        ',', 500,  0,    66,  1, 1,    0,  0, 0,   0, {0, 0}, 9}, // 2

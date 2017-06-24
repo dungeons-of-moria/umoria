@@ -115,7 +115,7 @@ extern int (*store_buy[MAX_STORES])(int);
 extern int16_t last_store_inc;
 
 // Following are treasure arrays  and variables
-extern treasure_type object_list[MAX_OBJECTS];
+extern Treasure_t object_list[MAX_OBJECTS];
 extern uint8_t object_ident[OBJECT_IDENT_SIZE];
 extern int16_t t_level[MAX_OBJ_LEVEL + 1];
 extern Inventory_t t_list[MAX_TALLOC];
@@ -496,7 +496,7 @@ bool set_lightning_destroy(Inventory_t *);
 bool set_null(Inventory_t *);
 bool set_acid_destroy(Inventory_t *);
 bool set_fire_destroy(Inventory_t *);
-bool set_large(treasure_type *);
+bool set_large(Treasure_t *);
 bool general_store(int);
 bool armory(int);
 bool weaponsmith(int);
