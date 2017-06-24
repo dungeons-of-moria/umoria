@@ -12,7 +12,7 @@
 static bool checkMonsterIsVisible(monster_type *m_ptr) {
     bool visible = false;
 
-    cave_type *c_ptr = &cave[m_ptr->fy][m_ptr->fx];
+    Cave_t *c_ptr = &cave[m_ptr->fy][m_ptr->fx];
     creature_type *r_ptr = &c_list[m_ptr->mptr];
 
     if (c_ptr->pl || c_ptr->tl || (find_flag && m_ptr->cdis < 2 && player_light)) {
@@ -894,7 +894,7 @@ static void make_attack(int monsterID) {
     }
 }
 
-static void creatureOpensDoor(cave_type *c_ptr, int16_t monsterHP, uint32_t movebits, bool *do_turn, bool *do_move, uint32_t *rcmove, int y, int x) {
+static void creatureOpensDoor(Cave_t *c_ptr, int16_t monsterHP, uint32_t movebits, bool *do_turn, bool *do_move, uint32_t *rcmove, int y, int x) {
     inven_type *t_ptr = &t_list[c_ptr->tptr];
 
     // Creature can open doors.
@@ -1052,7 +1052,7 @@ static void make_move(int monsterID, int *mm, uint32_t *rcmove) {
         int x = m_ptr->fx;
         (void) mmove(mm[i], &y, &x);
 
-        cave_type *c_ptr = &cave[y][x];
+        Cave_t *c_ptr = &cave[y][x];
 
         if (c_ptr->fval == BOUNDARY_WALL) {
             continue;
@@ -1340,7 +1340,7 @@ bool multiply_monster(int y, int x, int creatureID, int monsterID) {
         // don't create a new creature on top of the old one, that
         // causes invincible/invisible creatures to appear.
         if (in_bounds(row, col) && (row != y || col != x)) {
-            cave_type *c_ptr = &cave[row][col];
+            Cave_t *c_ptr = &cave[row][col];
 
             if (c_ptr->fval <= MAX_OPEN_SPACE && c_ptr->tptr == 0 && c_ptr->cptr != 1) {
                 // Creature there already?

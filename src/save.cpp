@@ -311,7 +311,7 @@ static bool sv_write() {
 
     for (int i = 0; i < MAX_HEIGHT; i++) {
         for (int j = 0; j < MAX_WIDTH; j++) {
-            cave_type *c_ptr = &cave[i][j];
+            Cave_t *c_ptr = &cave[i][j];
             if (c_ptr->cptr != 0) {
                 wr_byte((uint8_t) i);
                 wr_byte((uint8_t) j);
@@ -325,7 +325,7 @@ static bool sv_write() {
 
     for (int i = 0; i < MAX_HEIGHT; i++) {
         for (int j = 0; j < MAX_WIDTH; j++) {
-            cave_type *c_ptr = &cave[i][j];
+            Cave_t *c_ptr = &cave[i][j];
             if (c_ptr->tptr != 0) {
                 wr_byte((uint8_t) i);
                 wr_byte((uint8_t) j);
@@ -343,7 +343,7 @@ static bool sv_write() {
 
     for (int i = 0; i < MAX_HEIGHT; i++) {
         for (int j = 0; j < MAX_WIDTH; j++) {
-            cave_type *c_ptr = &cave[i][j];
+            Cave_t *c_ptr = &cave[i][j];
 
             uint8_t char_tmp = (uint8_t) (c_ptr->fval | (c_ptr->lr << 4) | (c_ptr->fm << 5) | (c_ptr->pl << 6) | (c_ptr->tl << 7));
 
@@ -479,7 +479,7 @@ bool _save_char(char *fnam) {
 // Certain checks are omitted for the wizard. -CJS-
 bool get_char(bool *generate) {
     int c;
-    cave_type *c_ptr;
+    Cave_t *c_ptr;
     uint32_t time_saved = 0;
     uint8_t version_maj = 0;
     uint8_t version_min = 0;

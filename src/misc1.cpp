@@ -444,7 +444,7 @@ bool los(int fromY, int fromX, int toY, int toX) {
 
 // Returns symbol for given row, column -RAK-
 char loc_symbol(int y, int x) {
-    cave_type *cave_ptr = &cave[y][x];
+    Cave_t *cave_ptr = &cave[y][x];
 
     if (cave_ptr->cptr == 1 && (!find_flag || find_prself)) {
         return '@';

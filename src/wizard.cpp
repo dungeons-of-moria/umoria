@@ -20,7 +20,7 @@ void wizard_light() {
             if (cave[i][j].fval <= MAX_CAVE_FLOOR) {
                 for (int k = i - 1; k <= i + 1; k++) {
                     for (int l = j - 1; l <= j + 1; l++) {
-                        cave_type *c_ptr = &cave[k][l];
+                        Cave_t *c_ptr = &cave[k][l];
                         c_ptr->pl = flag;
 
                         if (!flag) {
@@ -372,7 +372,7 @@ void wizard_create() {
 
     if (get_check("Allocate?")) {
         // delete object first if any, before call popt
-        cave_type *c_ptr = &cave[char_row][char_col];
+        Cave_t *c_ptr = &cave[char_row][char_col];
         if (c_ptr->tptr != 0) {
             (void) delete_object(char_row, char_col);
         }

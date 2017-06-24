@@ -332,7 +332,7 @@ void end_find() {
 }
 
 static bool areaAffectStopLookingAtSquares(int i, int dir, int newDir, int y, int x, int *check_dir, int *option, int *option2) {
-    cave_type *c_ptr = &cave[y][x];
+    Cave_t *c_ptr = &cave[y][x];
 
     // Default: Square unseen. Treat as open.
     bool invisible = true;

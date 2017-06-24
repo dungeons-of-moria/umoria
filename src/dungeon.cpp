@@ -2119,7 +2119,7 @@ static void jamdoor() {
     }
     (void) mmove(dir, &y, &x);
 
-    cave_type *c_ptr = &cave[y][x];
+    Cave_t *c_ptr = &cave[y][x];
 
     if (c_ptr->tptr == 0) {
         msg_print("That isn't a door!");

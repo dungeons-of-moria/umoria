@@ -141,7 +141,7 @@ void tunnel(int dir) {
     int x = char_col;
     (void) mmove(dir, &y, &x);
 
-    cave_type *c_ptr = &cave[y][x];
+    Cave_t *c_ptr = &cave[y][x];
     inven_type *i_ptr = &inventory[INVEN_WIELD];
 
     if (!canTunnel(c_ptr->tptr, c_ptr->fval)) {
@@ -284,7 +284,7 @@ void disarm_trap() {
     int x = char_col;
     (void) mmove(dir, &y, &x);
 
-    cave_type *c_ptr = &cave[y][x];
+    Cave_t *c_ptr = &cave[y][x];
 
     bool no_disarm = false;
 
@@ -617,7 +617,7 @@ static bool look_see(int x, int y, bool *transparent) {
         return false;
     }
 
-    cave_type *c_ptr = &cave[y][x];
+    Cave_t *c_ptr = &cave[y][x];
     *transparent = c_ptr->fval <= MAX_OPEN_SPACE;
 
     if (gl_noquery) {
@@ -905,7 +905,7 @@ void throw_object() {
             flag = true;
         }
 
-        cave_type *c_ptr = &cave[y][x];
+        Cave_t *c_ptr = &cave[y][x];
 
         if (c_ptr->fval <= MAX_OPEN_SPACE && !flag) {
             if (c_ptr->cptr > 1) {
@@ -1069,7 +1069,7 @@ static void playerBashPosition(int y, int x) {
     py_bash(y, x);
 }
 
-static void bashClosedDoor(int y, int x, int dir, cave_type *tile, inven_type *item) {
+static void bashClosedDoor(int y, int x, int dir, Cave_t *tile, inven_type *item) {
     count_msg_print("You smash into the door!");
 
     int chance = py.stats.use_stat[A_STR] + py.misc.wt / 2;
@@ -1161,7 +1161,7 @@ void bash() {
     int x = char_col;
     (void) mmove(dir, &y, &x);
 
-    cave_type *c_ptr = &cave[y][x];
+    Cave_t *c_ptr = &cave[y][x];
 
     if (c_ptr->cptr > 1) {
         playerBashPosition(y, x);

@@ -55,7 +55,7 @@ void inscribe(inven_type *i_ptr, const char *str) {
 
 // We need to reset the view of things. -CJS-
 void check_view() {
-    cave_type *c_ptr = &cave[char_row][char_col];
+    Cave_t *c_ptr = &cave[char_row][char_col];
 
     // Check for new panel
     if (get_panel(char_row, char_col, false)) {

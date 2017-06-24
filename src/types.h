@@ -302,8 +302,7 @@ typedef struct {
     bool fm; // Field mark, used for traps/doors/stairs, object is hidden if fm is false.
     bool pl; // Permanent light, used for walls and lighted rooms.
     bool tl; // Temporary light, used for player's lamp light,etc.
-} cave_type
-;
+} Cave_t;
 
 typedef struct {
     const char *owner_name;

@@ -1694,7 +1694,7 @@ void light_room(int posY, int posX) {
 
     for (int y = top; y <= bottom; y++) {
         for (int x = left; x <= right; x++) {
-            cave_type *c_ptr = &cave[y][x];
+            Cave_t *c_ptr = &cave[y][x];
 
             if (c_ptr->lr && !c_ptr->pl) {
                 c_ptr->pl = true;
@@ -1741,7 +1741,7 @@ static void sub1_move_light(int y1, int x1, int y2, int x2) {
 
     for (int y = y2 - 1; y <= y2 + 1; y++) {
         for (int x = x2 - 1; x <= x2 + 1; x++) {
-            cave_type *c_ptr = &cave[y][x];
+            Cave_t *c_ptr = &cave[y][x];
 
             // only light up if normal movement
             if (light_flag) {

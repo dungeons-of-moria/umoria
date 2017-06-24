@@ -90,29 +90,29 @@ static void fill_cave(uint8_t rockType) {
 
 // Places indestructible rock around edges of dungeon -RAK-
 static void place_boundary() {
-    cave_type(*left_ptr)[MAX_WIDTH];
-    cave_type(*right_ptr)[MAX_WIDTH];
+    Cave_t(*left_ptr)[MAX_WIDTH];
+    Cave_t(*right_ptr)[MAX_WIDTH];
 
     // put permanent wall on leftmost row and rightmost row
-    left_ptr = (cave_type(*)[MAX_WIDTH]) &cave[0][0];
-    right_ptr = (cave_type(*)[MAX_WIDTH]) &cave[0][cur_width - 1];
+    left_ptr = (Cave_t(*)[MAX_WIDTH]) &cave[0][0];
+    right_ptr = (Cave_t(*)[MAX_WIDTH]) &cave[0][cur_width - 1];
 
     for (int i = 0; i < cur_height; i++) {
 #ifdef DEBUG
-        assert((cave_type *)left_ptr == &cave[i][0]);
-        assert((cave_type *)right_ptr == &cave[i][cur_width - 1]);
+        assert((Cave_t *)left_ptr == &cave[i][0]);
+        assert((Cave_t *)right_ptr == &cave[i][cur_width - 1]);
 #endif
 
-        ((cave_type *) left_ptr)->fval = BOUNDARY_WALL;
+        ((Cave_t *) left_ptr)->fval = BOUNDARY_WALL;
         left_ptr++;
 
-        ((cave_type *) right_ptr)->fval = BOUNDARY_WALL;
+        ((Cave_t *) right_ptr)->fval = BOUNDARY_WALL;
         right_ptr++;
     }
 
     // put permanent wall on top row and bottom row
-    cave_type *top_ptr = &cave[0][0];
-    cave_type *bottom_ptr = &cave[cur_height - 1][0];
+    Cave_t *top_ptr = &cave[0][0];
+    Cave_t *bottom_ptr = &cave[cur_height - 1][0];
 
     for (int i = 0; i < cur_width; i++) {
 #ifdef DEBUG
@@ -909,7 +909,7 @@ static void build_tunnel(int row1, int col1, int row2, int col2) {
     }
 
     for (int i = 0; i < wallindex; i++) {
-        cave_type *c_ptr = &cave[wallstk[i].y][wallstk[i].x];
+        Cave_t *c_ptr = &cave[wallstk[i].y][wallstk[i].x];
 
         if (c_ptr->fval == TMP2_WALL) {
             if (randint(100) < DUN_TUN_PEN) {
@@ -943,7 +943,7 @@ static void try_door(int y, int x) {
 // Returns random co-ordinates -RAK-
 static void new_spot(int16_t *y, int16_t *x) {
     int yy, xx;
-    cave_type *c_ptr;
+    Cave_t *c_ptr;
 
     do {
         yy = randint(cur_height - 2);

@@ -577,7 +577,7 @@ static int summon_object(int y, int x, int num, int typ) {
 
 // Deletes object from given location -RAK-
 int delete_object(int y, int x) {
-    cave_type *tile = &cave[y][x];
+    Cave_t *tile = &cave[y][x];
 
     if (tile->fval == BLOCKED_FLOOR) {
         tile->fval = CORR_FLOOR;
@@ -911,7 +911,7 @@ void move_char(int dir, bool do_pickup) {
         return;
     }
 
-    cave_type *tile = &cave[y][x];
+    Cave_t *tile = &cave[y][x];
     monster_type *monster = &m_list[tile->cptr];
 
     // if there is no creature, or an unlit creature in the walls then...
@@ -1112,7 +1112,7 @@ static int16_t playerLockPickingSkill() {
 }
 
 static void openClosedDoor(int y, int x) {
-    cave_type *tile = &cave[y][x];
+    Cave_t *tile = &cave[y][x];
     inven_type *item = &t_list[tile->tptr];
 
     if (item->p1 > 0) {
@@ -1143,7 +1143,7 @@ static void openClosedDoor(int y, int x) {
 }
 
 static void openClosedChest(int y, int x) {
-    cave_type *tile = &cave[y][x];
+    Cave_t *tile = &cave[y][x];
     inven_type *item = &t_list[tile->tptr];
 
     bool success = false;
@@ -1206,7 +1206,7 @@ void openobject() {
 
     bool no_object = false;
 
-    cave_type *tile = &cave[y][x];
+    Cave_t *tile = &cave[y][x];
     inven_type *item = &t_list[tile->tptr];
 
     if (tile->cptr > 1 && tile->tptr != 0 && (item->tval == TV_CLOSED_DOOR || item->tval == TV_CHEST)) {
@@ -1241,7 +1241,7 @@ void closeobject() {
     int x = char_col;
     (void) mmove(dir, &y, &x);
 
-    cave_type *tile = &cave[y][x];
+    Cave_t *tile = &cave[y][x];
     inven_type *item = &t_list[tile->tptr];
 
     bool no_object = false;
@@ -1279,7 +1279,7 @@ int twall(int y, int x, int t1, int t2) {
         return false;
     }
 
-    cave_type *c_ptr = &cave[y][x];
+    Cave_t *c_ptr = &cave[y][x];
 
     if (c_ptr->lr) {
         // Should become a room space, check to see whether

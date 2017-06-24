@@ -106,6 +106,6 @@ int panel_row_min, panel_row_max;
 int panel_col_min, panel_col_max;
 int panel_col_prt, panel_row_prt;
 
-cave_type cave[MAX_HEIGHT][MAX_WIDTH];
+Cave_t cave[MAX_HEIGHT][MAX_WIDTH];
 
 recall_type c_recall[MAX_CREATURES]; // Monster memories

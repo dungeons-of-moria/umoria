@@ -76,7 +76,7 @@ extern int panel_col_min, panel_col_max;
 extern int panel_col_prt, panel_row_prt;
 
 // Following are all floor definitions
-extern cave_type cave[MAX_HEIGHT][MAX_WIDTH];
+extern Cave_t cave[MAX_HEIGHT][MAX_WIDTH];
 
 // Following are player variables
 extern player_type py;
