@@ -62,7 +62,7 @@ void display_scores() {
     // set the static fileptr in save.c to the high score file pointer
     set_fileptr(highscore_fp);
 
-    high_scores score;
+    HighScore_t score;
     rd_highscore(&score);
 
     char input;
@@ -234,7 +234,7 @@ static void highscores() {
         return;
     }
 
-    high_scores new_entry;
+    HighScore_t new_entry;
     new_entry.points = total_points();
     new_entry.birth_date = birth_date;
     new_entry.uid = 0; // NOTE: do we not want to use `getuid()`? -MRC-
@@ -307,7 +307,7 @@ static void highscores() {
     // set the static fileptr in save.c to the high score file pointer
     set_fileptr(highscore_fp);
 
-    high_scores old_entry, entry;
+    HighScore_t old_entry, entry;
 
     int i = 0;
     off_t curpos = ftell(highscore_fp);
@@ -351,7 +351,7 @@ static void highscores() {
         entry = new_entry;
 
         while (!feof(highscore_fp)) {
-            (void) fseek(highscore_fp, -(long) sizeof(high_scores) - (long) sizeof(char), SEEK_CUR);
+            (void) fseek(highscore_fp, -(long) sizeof(HighScore_t) - (long) sizeof(char), SEEK_CUR);
 
             wr_highscore(&entry);
 

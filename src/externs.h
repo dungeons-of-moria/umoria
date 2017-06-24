@@ -478,8 +478,8 @@ bool save_char();
 bool _save_char(char *);
 bool get_char(bool *);
 void set_fileptr(FILE *);
-void wr_highscore(high_scores *);
-void rd_highscore(high_scores *);
+void wr_highscore(HighScore_t *);
+void rd_highscore(HighScore_t *);
 
 // scrolls.c
 void read_scroll();

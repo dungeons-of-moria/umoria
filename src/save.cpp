@@ -1242,7 +1242,7 @@ void set_fileptr(FILE *file) {
     fileptr = file;
 }
 
-void wr_highscore(high_scores *score) {
+void wr_highscore(HighScore_t *score) {
     DEBUG(logfile = fopen("IO_LOG", "a"));
     DEBUG(fprintf(logfile, "Saving score:\n"));
 
@@ -1265,7 +1265,7 @@ void wr_highscore(high_scores *score) {
     DEBUG(fclose(logfile));
 }
 
-void rd_highscore(high_scores *score) {
+void rd_highscore(HighScore_t *score) {
     DEBUG(logfile = fopen("IO_LOG", "a"));
     DEBUG(fprintf(logfile, "Reading score:\n"));
 
