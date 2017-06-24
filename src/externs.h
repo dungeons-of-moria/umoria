@@ -292,7 +292,7 @@ bool place_monster(int, int, int, bool);
 void place_win_monster();
 int get_mons_num(int);
 void alloc_monster(int, int, bool);
-bool summon_monster(int *, int *, int);
+bool summon_monster(int *y, int *x, bool slp);
 bool summon_undead(int *, int *);
 int popt();
 void pusht(uint8_t);

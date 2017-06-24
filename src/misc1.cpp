@@ -762,7 +762,7 @@ static bool placeMonsterAdjacentTo(int monsterID, int *y, int *x, bool slp) {
 }
 
 // Places creature adjacent to given location -RAK-
-bool summon_monster(int *y, int *x, int slp) {
+bool summon_monster(int *y, int *x, bool slp) {
     int monsterID = get_mons_num(dun_level + MON_SUMMON_ADJ);
     return placeMonsterAdjacentTo(monsterID, y, x, slp);
 }
