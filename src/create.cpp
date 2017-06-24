@@ -66,8 +66,7 @@ static void change_stat(int stat, int16_t amount) {
 // generate all stats and modify for race. needed in a separate
 // module so looping of character selection would be allowed -RGM-
 static void get_all_stats() {
-    Player_t *p_ptr = &py;
-    Race_t *r_ptr = &race[p_ptr->misc.prace];
+    Race_t *r_ptr = &race[py.misc.prace];
 
     get_stats();
     change_stat(A_STR, r_ptr->str_adj);
@@ -77,26 +76,26 @@ static void get_all_stats() {
     change_stat(A_CON, r_ptr->con_adj);
     change_stat(A_CHR, r_ptr->chr_adj);
 
-    p_ptr->misc.lev = 1;
+    py.misc.lev = 1;
 
     for (int j = 0; j < 6; j++) {
         py.stats.cur_stat[j] = py.stats.max_stat[j];
         set_use_stat(j);
     }
 
-    p_ptr->misc.srh = r_ptr->srh;
-    p_ptr->misc.bth = r_ptr->bth;
-    p_ptr->misc.bthb = r_ptr->bthb;
-    p_ptr->misc.fos = r_ptr->fos;
-    p_ptr->misc.stl = r_ptr->stl;
-    p_ptr->misc.save = r_ptr->bsav;
-    p_ptr->misc.hitdie = r_ptr->bhitdie;
-    p_ptr->misc.ptodam = (int16_t) todam_adj();
-    p_ptr->misc.ptohit = (int16_t) tohit_adj();
-    p_ptr->misc.ptoac = 0;
-    p_ptr->misc.pac = (int16_t) toac_adj();
-    p_ptr->misc.expfact = r_ptr->b_exp;
-    p_ptr->flags.see_infra = r_ptr->infra;
+    py.misc.srh = r_ptr->srh;
+    py.misc.bth = r_ptr->bth;
+    py.misc.bthb = r_ptr->bthb;
+    py.misc.fos = r_ptr->fos;
+    py.misc.stl = r_ptr->stl;
+    py.misc.save = r_ptr->bsav;
+    py.misc.hitdie = r_ptr->bhitdie;
+    py.misc.ptodam = (int16_t) todam_adj();
+    py.misc.ptohit = (int16_t) tohit_adj();
+    py.misc.ptoac = 0;
+    py.misc.pac = (int16_t) toac_adj();
+    py.misc.expfact = r_ptr->b_exp;
+    py.flags.see_infra = r_ptr->infra;
 }
 
 // Prints a list of the available races: Human, Elf, etc.,
