@@ -66,7 +66,7 @@ static void change_stat(int stat, int16_t amount) {
 // generate all stats and modify for race. needed in a separate
 // module so looping of character selection would be allowed -RGM-
 static void get_all_stats() {
-    player_type *p_ptr = &py;
+    Player_t *p_ptr = &py;
     Race_t *r_ptr = &race[p_ptr->misc.prace];
 
     get_stats();

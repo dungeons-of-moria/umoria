@@ -79,7 +79,7 @@ extern int panel_col_prt, panel_row_prt;
 extern Cave_t cave[MAX_HEIGHT][MAX_WIDTH];
 
 // Following are player variables
-extern player_type py;
+extern Player_t py;
 extern char *player_title[MAX_CLASS][MAX_PLAYER_LEVEL];
 extern Race_t race[MAX_RACES];
 extern Background_t background[MAX_BACKGROUND];

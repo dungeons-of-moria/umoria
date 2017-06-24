@@ -223,7 +223,7 @@ typedef struct {
         bool confuse_monster;    // Glowing hands.
         uint8_t new_spells;      // Number of spells can learn.
     } flags;
-} player_type;
+} Player_t;
 
 // spell name is stored in spell_names[] array at index i, +31 if priest
 typedef struct  {

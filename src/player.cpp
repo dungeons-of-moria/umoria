@@ -10,7 +10,7 @@
 #include "headers.h"
 
 // Player record for most player related info
-player_type py;
+Player_t py;
 
 // player location in dungeon
 int16_t char_row;
