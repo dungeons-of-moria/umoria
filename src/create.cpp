@@ -347,7 +347,7 @@ static void get_class() {
 
             py.misc.pclass = (uint8_t) class_list[cid];
 
-            class_type *c_ptr = &classes[py.misc.pclass];
+            Class_t *c_ptr = &classes[py.misc.pclass];
 
             clear_from(20);
             put_buffer(c_ptr->title, 5, 15);

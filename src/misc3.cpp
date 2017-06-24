@@ -1952,7 +1952,7 @@ static void gain_level() {
     prt_level();
     prt_title();
 
-    class_type *c_ptr = &classes[py.misc.pclass];
+    Class_t *c_ptr = &classes[py.misc.pclass];
 
     if (c_ptr->spell == MAGE) {
         calc_spells(A_INT);

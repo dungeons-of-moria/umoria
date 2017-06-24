@@ -90,7 +90,7 @@ extern int16_t char_col;
 
 extern uint8_t rgold_adj[MAX_RACES][MAX_RACES];
 
-extern class_type classes[MAX_CLASS];
+extern Class_t classes[MAX_CLASS];
 extern int16_t class_level_adj[MAX_CLASS][MAX_LEV_ADJ];
 
 // Warriors don't have spells, so there is no entry for them.

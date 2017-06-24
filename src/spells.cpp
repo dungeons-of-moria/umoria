@@ -2099,7 +2099,7 @@ void lose_exp(int32_t amount) {
 
         calc_hitpoints();
 
-        class_type *c_ptr = &classes[py.misc.pclass];
+        Class_t *c_ptr = &classes[py.misc.pclass];
 
         if (c_ptr->spell == MAGE) {
             calc_spells(A_INT);

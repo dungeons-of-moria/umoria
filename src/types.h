@@ -283,7 +283,7 @@ typedef struct {
     uint8_t spell;           // class use mage spells
     uint8_t m_exp;           // Class experience factor
     uint8_t first_spell_lev; // First level where class can use spells.
-} class_type;
+} Class_t;
 
 typedef struct {
     const char *info; // History information
