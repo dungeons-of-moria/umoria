@@ -49,7 +49,7 @@ typedef struct {
     uint8_t attack_desc;
     uint8_t attack_dice;
     uint8_t attack_sides;
-} m_attack_type;
+} MonsterAttack_t;
 
 // Monster memories. -CJS-
 typedef struct {

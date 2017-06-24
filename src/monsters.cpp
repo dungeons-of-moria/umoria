@@ -439,7 +439,7 @@ creature_type c_list[MAX_CREATURES] = {
 };
 
 // ERROR: attack #35 is no longer used
-m_attack_type monster_attacks[N_MONS_ATTS] = {
+MonsterAttack_t monster_attacks[N_MONS_ATTS] = {
         // 0
         {0, 0, 0, 0},
         {1, 1, 1, 2},
