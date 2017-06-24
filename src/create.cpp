@@ -162,7 +162,7 @@ static void print_history() {
 //   - All history parts are in ascending order
 static void get_history() {
     char history_block[240];
-    background_type *b_ptr;
+    Background_t *b_ptr;
     int test_roll;
 
     int hist_ptr = py.misc.prace * 3 + 1;

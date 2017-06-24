@@ -148,7 +148,7 @@ race_type race[MAX_RACES] = {
 };
 
 // Background information
-background_type background[MAX_BACKGROUND] = {
+Background_t background[MAX_BACKGROUND] = {
     {"You are the illegitimate and unacknowledged child ",   10,  1,  2,  25},
     {"You are the illegitimate but acknowledged child ",     20,  1,  2,  35},
     {"You are one of several children ",                     95,  1,  2,  45},

@@ -291,7 +291,7 @@ typedef struct {
     uint8_t chart;    // Table number
     uint8_t next;     // Pointer to next table
     uint8_t bonus;    // Bonus to the Social Class+50
-} background_type;
+} Background_t;
 
 typedef struct {
     uint8_t cptr;
