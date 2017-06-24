@@ -600,7 +600,7 @@ bool place_monster(int y, int x, int monsterID, bool slp) {
         return false;
     }
 
-    monster_type *mon_ptr = &m_list[cur_pos];
+    Monster_t *mon_ptr = &m_list[cur_pos];
 
     mon_ptr->fy = (uint8_t) y;
     mon_ptr->fx = (uint8_t) x;
@@ -647,7 +647,7 @@ void place_win_monster() {
         abort();
     }
 
-    monster_type *mon_ptr = &m_list[cur_pos];
+    Monster_t *mon_ptr = &m_list[cur_pos];
 
     int y, x;
     do {

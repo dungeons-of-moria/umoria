@@ -9,7 +9,7 @@
 #include "headers.h"
 #include "externs.h"
 
-static bool checkMonsterIsVisible(monster_type *m_ptr) {
+static bool checkMonsterIsVisible(Monster_t *m_ptr) {
     bool visible = false;
 
     Cave_t *c_ptr = &cave[m_ptr->fy][m_ptr->fx];
@@ -35,7 +35,7 @@ static bool checkMonsterIsVisible(monster_type *m_ptr) {
 // Updates screen when monsters move about -RAK-
 void update_mon(int monsterID) {
     bool visible = false;
-    monster_type *m_ptr = &m_list[monsterID];
+    Monster_t *m_ptr = &m_list[monsterID];
 
     if (m_ptr->cdis <= MAX_SIGHT && !(py.flags.status & PY_BLIND) && panel_contains((int) m_ptr->fy, (int) m_ptr->fx)) {
         if (wizard) {
@@ -546,7 +546,7 @@ static bool executeDisenchantAttack() {
     return success;
 }
 
-static bool executeAttack(creature_type *r_ptr, monster_type *m_ptr, int monsterID, int attype, int damage, vtype_t deathDescription, bool notice) {
+static bool executeAttack(creature_type *r_ptr, Monster_t *m_ptr, int monsterID, int attype, int damage, vtype_t deathDescription, bool notice) {
     int i;
     int j;
     int32_t gold;
@@ -775,7 +775,7 @@ static bool executeAttack(creature_type *r_ptr, monster_type *m_ptr, int monster
     return notice;
 }
 
-static void confuseCreatureOnAttack(creature_type *r_ptr, monster_type *m_ptr, int adesc, vtype_t cdesc, bool visible) {
+static void confuseCreatureOnAttack(creature_type *r_ptr, Monster_t *m_ptr, int adesc, vtype_t cdesc, bool visible) {
     if (py.flags.confuse_monster && adesc != 99) {
         msg_print("Your hands stop glowing.");
         py.flags.confuse_monster = false;
@@ -809,7 +809,7 @@ static void make_attack(int monsterID) {
         return;
     }
 
-    monster_type *m_ptr = &m_list[monsterID];
+    Monster_t *m_ptr = &m_list[monsterID];
     creature_type *r_ptr = &c_list[m_ptr->mptr];
 
     vtype_t cdesc;
@@ -977,7 +977,7 @@ static void glyphOfWardingProtection(uint16_t creatureID, uint32_t movebits, boo
     }
 }
 
-static void creatureMovesOnPlayer(monster_type *m_ptr, uint8_t creatureID, int monsterID, uint32_t movebits, bool *do_move, bool *do_turn, uint32_t *rcmove, int y, int x) {
+static void creatureMovesOnPlayer(Monster_t *m_ptr, uint8_t creatureID, int monsterID, uint32_t movebits, bool *do_move, bool *do_turn, uint32_t *rcmove, int y, int x) {
     if (creatureID == 1) {
         // if the monster is not lit, must call update_mon, it
         // may be faster than character, and hence could have
@@ -1012,7 +1012,7 @@ static void creatureMovesOnPlayer(monster_type *m_ptr, uint8_t creatureID, int m
     }
 }
 
-static void creatureAllowedToMove(monster_type *m_ptr, uint32_t movebits, bool *do_turn, uint32_t *rcmove, int y, int x) {
+static void creatureAllowedToMove(Monster_t *m_ptr, uint32_t movebits, bool *do_turn, uint32_t *rcmove, int y, int x) {
     // Pick up or eat an object
     if (movebits & CM_PICKS_UP) {
         uint8_t treasureID = cave[y][x].tptr;
@@ -1042,7 +1042,7 @@ static void make_move(int monsterID, int *mm, uint32_t *rcmove) {
     bool do_turn = false;
     bool do_move = false;
 
-    monster_type *m_ptr = &m_list[monsterID];
+    Monster_t *m_ptr = &m_list[monsterID];
     uint32_t movebits = c_list[m_ptr->mptr].cmove;
 
     // Up to 5 attempts at moving, give up.
@@ -1087,7 +1087,7 @@ static void make_move(int monsterID, int *mm, uint32_t *rcmove) {
     }
 }
 
-static bool canCreatureCastSpells(monster_type *m_ptr, uint32_t spells) {
+static bool canCreatureCastSpells(Monster_t *m_ptr, uint32_t spells) {
     // 1 in x chance of casting spell
     if (randint((int) (spells & CS_FREQ)) != 1) {
         return false;
@@ -1102,7 +1102,7 @@ static bool canCreatureCastSpells(monster_type *m_ptr, uint32_t spells) {
     return los(char_row, char_col, (int) m_ptr->fy, (int) m_ptr->fx);
 }
 
-void creatureCastsSpell(monster_type *m_ptr, int monsterID, int spellID, uint8_t level, vtype_t cdesc, vtype_t deathDescription) {
+void creatureCastsSpell(Monster_t *m_ptr, int monsterID, int spellID, uint8_t level, vtype_t cdesc, vtype_t deathDescription) {
     int y, x;
 
     // Cast the spell.
@@ -1267,7 +1267,7 @@ static bool mon_cast_spell(int monsterID) {
         return false;
     }
 
-    monster_type *m_ptr = &m_list[monsterID];
+    Monster_t *m_ptr = &m_list[monsterID];
     creature_type *r_ptr = &c_list[m_ptr->mptr];
 
     if (!canCreatureCastSpells(m_ptr, r_ptr->spells)) {
@@ -1395,7 +1395,7 @@ bool multiply_monster(int y, int x, int creatureID, int monsterID) {
     return false;
 }
 
-static void multiplyCritter(monster_type *m_ptr, int monsterID, uint32_t *rcmove) {
+static void multiplyCritter(Monster_t *m_ptr, int monsterID, uint32_t *rcmove) {
     int counter = 0;
 
     for (int y = m_ptr->fy - 1; y <= m_ptr->fy + 1; y++) {
@@ -1419,7 +1419,7 @@ static void multiplyCritter(monster_type *m_ptr, int monsterID, uint32_t *rcmove
     }
 }
 
-static void creatureMoveOutOfWall(monster_type *m_ptr, int monsterID, uint32_t *rcmove) {
+static void creatureMoveOutOfWall(Monster_t *m_ptr, int monsterID, uint32_t *rcmove) {
     // If the monster is already dead, don't kill it again!
     // This can happen for monsters moving faster than the player. They
     // will get multiple moves, but should not if they die on the first
@@ -1473,7 +1473,7 @@ static void creatureMoveOutOfWall(monster_type *m_ptr, int monsterID, uint32_t *
     }
 }
 
-static void creatureMoveConfusedUndead(monster_type *m_ptr, creature_type *r_ptr, int monsterID, uint32_t *rcmove) {
+static void creatureMoveConfusedUndead(Monster_t *m_ptr, creature_type *r_ptr, int monsterID, uint32_t *rcmove) {
     int mm[9];
 
     // Undead only get confused from turn undead, so they should flee
@@ -1502,7 +1502,7 @@ static void creatureMoveConfusedUndead(monster_type *m_ptr, creature_type *r_ptr
 
 // Move the critters about the dungeon -RAK-
 static void mon_move(int monsterID, uint32_t *rcmove) {
-    monster_type *m_ptr = &m_list[monsterID];
+    Monster_t *m_ptr = &m_list[monsterID];
     creature_type *r_ptr = &c_list[m_ptr->mptr];
 
     // Does the critter multiply?
@@ -1598,7 +1598,7 @@ static void mon_move(int monsterID, uint32_t *rcmove) {
     }
 }
 
-static void updateRecall(monster_type *m_ptr, bool wake, bool ignore, int rcmove) {
+static void updateRecall(Monster_t *m_ptr, bool wake, bool ignore, int rcmove) {
     if (!m_ptr->ml) {
         return;
     }
@@ -1618,7 +1618,7 @@ static void updateRecall(monster_type *m_ptr, bool wake, bool ignore, int rcmove
     r_ptr->r_cmove |= rcmove;
 }
 
-static void creatureAttackingUpdate(monster_type *m_ptr, int monsterID, int moves) {
+static void creatureAttackingUpdate(Monster_t *m_ptr, int monsterID, int moves) {
     for (int i = moves; i > 0; i--) {
         bool wake = false;
         bool ignore = false;
@@ -1679,7 +1679,7 @@ static void creatureAttackingUpdate(monster_type *m_ptr, int monsterID, int move
 void creatures(bool attack) {
     // Process the monsters
     for (int id = mfptr - 1; id >= MIN_MONIX && !death; id--) {
-        monster_type *m_ptr = &m_list[id];
+        Monster_t *m_ptr = &m_list[id];
 
         // Get rid of an eaten/breathed on monster.  Note: Be sure not to
         // process this monster. This is necessary because we can't delete

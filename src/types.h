@@ -75,7 +75,7 @@ typedef struct {
     bool ml;
     uint8_t stunned;
     uint8_t confused;
-} monster_type;
+} Monster_t;
 
 typedef struct {
     const char *name;  // Object name

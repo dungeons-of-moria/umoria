@@ -34,7 +34,7 @@ static void wr_shorts(uint16_t *, int);
 
 static void wr_item(Inventory_t *);
 
-static void wr_monster(monster_type *);
+static void wr_monster(Monster_t *);
 
 static bool rd_bool();
 
@@ -52,7 +52,7 @@ static void rd_shorts(uint16_t *, int);
 
 static void rd_item(Inventory_t *);
 
-static void rd_monster(monster_type *);
+static void rd_monster(Monster_t *);
 
 // these are used for the save file, to avoid having to pass them to every procedure
 static FILE *fileptr;
@@ -1108,7 +1108,7 @@ static void wr_item(Inventory_t *item) {
     wr_byte(item->ident);
 }
 
-static void wr_monster(monster_type *mon) {
+static void wr_monster(Monster_t *mon) {
     DEBUG(fprintf(logfile, "MONSTER:\n"));
     wr_short((uint16_t) mon->hp);
     wr_short((uint16_t) mon->csleep);
@@ -1221,7 +1221,7 @@ static void rd_item(Inventory_t *item) {
     rd_byte(&item->ident);
 }
 
-static void rd_monster(monster_type *mon) {
+static void rd_monster(Monster_t *mon) {
     DEBUG(fprintf(logfile, "MONSTER:\n"));
     rd_short((uint16_t *) &mon->hp);
     rd_short((uint16_t *) &mon->csleep);

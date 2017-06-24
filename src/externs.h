@@ -129,11 +129,11 @@ extern int16_t tcptr;        // Cur treasure heap ptr
 
 // Following are creature arrays and variables
 extern creature_type c_list[MAX_CREATURES];
-extern monster_type m_list[MAX_MALLOC];
+extern Monster_t m_list[MAX_MALLOC];
 extern int16_t m_level[MAX_MONS_LEVEL + 1];
 extern m_attack_type monster_attacks[N_MONS_ATTS];
 extern recall_type c_recall[MAX_CREATURES]; // Monster memories. -CJS-
-extern monster_type blank_monster;          // Blank monster values
+extern Monster_t blank_monster;          // Blank monster values
 extern int16_t mfptr;                       // Cur free monster ptr
 extern int16_t mon_tot_mult;                // # of repro's of creature
 

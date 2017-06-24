@@ -455,7 +455,7 @@ static void carry(int y, int x, bool pickup) {
 
 // Deletes a monster entry from the level -RAK-
 void delete_monster(int id) {
-    monster_type *monster = &m_list[id];
+    Monster_t *monster = &m_list[id];
 
     cave[monster->fy][monster->fx].cptr = 0;
 
@@ -489,7 +489,7 @@ void delete_monster(int id) {
 // the monster record and reduce mfptr, this is called in breathe, and
 // a couple of places in creatures.c
 void fix1_delete_monster(int id) {
-    monster_type *monster = &m_list[id];
+    Monster_t *monster = &m_list[id];
 
     // force the hp negative to ensure that the monster is dead, for example,
     // if the monster was just eaten by another, it will still have positive
@@ -704,7 +704,7 @@ static void playerGainKillExperience(creature_type *c_ptr) {
 // Decreases monsters hit points and deletes monster if needed.
 // (Picking on my babies.) -RAK-
 int mon_take_hit(int monsterID, int damage) {
-    monster_type *monster = &m_list[monsterID];
+    Monster_t *monster = &m_list[monsterID];
     creature_type *creature = &c_list[monster->mptr];
 
     monster->csleep = 0;
@@ -786,7 +786,7 @@ static int playerCalculateBaseToHit(bool creatureLit, int tot_tohit) {
 void py_attack(int y, int x) {
     int creatureID = cave[y][x].cptr;
 
-    monster_type *monster = &m_list[creatureID];
+    Monster_t *monster = &m_list[creatureID];
     creature_type *creature = &c_list[monster->mptr];
     Inventory_t *item = &inventory[INVEN_WIELD];
 
@@ -912,7 +912,7 @@ void move_char(int dir, bool do_pickup) {
     }
 
     Cave_t *tile = &cave[y][x];
-    monster_type *monster = &m_list[tile->cptr];
+    Monster_t *monster = &m_list[tile->cptr];
 
     // if there is no creature, or an unlit creature in the walls then...
     // disallow attacks against unlit creatures in walls because moving into
@@ -1321,7 +1321,7 @@ int twall(int y, int x, int t1, int t2) {
 void objectBlockedByMonster(int id) {
     vtype_t description, msg;
 
-    monster_type *monster = &m_list[id];
+    Monster_t *monster = &m_list[id];
     const char *name = c_list[monster->mptr].name;
 
     if (monster->ml) {

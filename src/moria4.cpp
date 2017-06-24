@@ -911,7 +911,7 @@ void throw_object() {
             if (c_ptr->cptr > 1) {
                 flag = true;
 
-                monster_type *m_ptr = &m_list[c_ptr->cptr];
+                Monster_t *m_ptr = &m_list[c_ptr->cptr];
 
                 tbth -= cur_dis;
 
@@ -982,7 +982,7 @@ void throw_object() {
 // Used to be part of bash above.
 static void py_bash(int y, int x) {
     int monsterID = cave[y][x].cptr;
-    monster_type *m_ptr = &m_list[monsterID];
+    Monster_t *m_ptr = &m_list[monsterID];
     creature_type *c_ptr = &c_list[m_ptr->mptr];
 
     m_ptr->csleep = 0;
