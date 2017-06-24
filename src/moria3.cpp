@@ -347,7 +347,7 @@ int cast_spell(const char *prompt, int item_val, int *sn, int *sc) {
     int first_spell = bit_pos(&flags);
     flags = inventory[item_val].flags & spell_learned;
 
-    spell_type *s_ptr = magic_spell[py.misc.pclass - 1];
+    Spell_t *s_ptr = magic_spell[py.misc.pclass - 1];
 
     int spellCount = 0;
     int spellList[31];

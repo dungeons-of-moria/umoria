@@ -94,7 +94,7 @@ extern Class_t classes[MAX_CLASS];
 extern int16_t class_level_adj[MAX_CLASS][MAX_LEV_ADJ];
 
 // Warriors don't have spells, so there is no entry for them.
-extern spell_type magic_spell[MAX_CLASS - 1][31];
+extern Spell_t magic_spell[MAX_CLASS - 1][31];
 extern char *spell_names[62];
 extern uint32_t spell_learned;   // Bit field for spells learnt -CJS-
 extern uint32_t spell_worked;    // Bit field for spells tried -CJS-

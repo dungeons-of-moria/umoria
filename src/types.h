@@ -231,7 +231,7 @@ typedef struct  {
     uint8_t smana;
     uint8_t sfail;
     uint8_t sexp; // 1/4 of exp gained for learning spell
-} spell_type;
+} Spell_t;
 
 typedef struct {
     const char *trace; // Type of race

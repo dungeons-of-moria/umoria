@@ -199,7 +199,7 @@ void pray() {
         return;
     }
 
-    spell_type *s_ptr = &magic_spell[py.misc.pclass - 1][choice];
+    Spell_t *s_ptr = &magic_spell[py.misc.pclass - 1][choice];
 
     // NOTE: at least one function called by `recitePrayer()` sets `free_turn_flag = true`,
     // e.g. `create_food()`, so this check is required. -MRC-

@@ -194,7 +194,7 @@ void cast() {
 
     free_turn_flag = false;
 
-    spell_type *m_ptr = &magic_spell[py.misc.pclass - 1][choice];
+    Spell_t *m_ptr = &magic_spell[py.misc.pclass - 1][choice];
 
     if (randint(100) < chance) {
         msg_print("You failed to get the spell off!");

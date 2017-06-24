@@ -312,7 +312,7 @@ uint8_t  spell_order[32];     // order spells learned/remembered/forgotten
 // Warriors don't have spells, so there is no entry for them.
 // Note that this means you must always subtract one from the
 // py.misc.pclass before indexing into magic_spell[].
-spell_type magic_spell[MAX_CLASS - 1][31] = {
+Spell_t magic_spell[MAX_CLASS - 1][31] = {
     {
         // Mage
         {  1,  1, 22,   1},
