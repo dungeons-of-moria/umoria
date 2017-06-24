@@ -208,23 +208,21 @@ static void writeCharacterSheetToFile(FILE *file1) {
     (void) fprintf(file1, "    Cur Mana%8s %6d\n", colon, py.misc.cmana);
     (void) fprintf(file1, "%28sGold%8s %7d\n\n", blank, colon, py.misc.au);
 
-    struct player_type::misc *p_ptr = &py.misc;
-
-    int xbth = p_ptr->bth + p_ptr->ptohit * BTH_PLUS_ADJ + (class_level_adj[p_ptr->pclass][CLA_BTH] * p_ptr->lev);
-    int xbthb = p_ptr->bthb + p_ptr->ptohit * BTH_PLUS_ADJ + (class_level_adj[p_ptr->pclass][CLA_BTHB] * p_ptr->lev);
+    int xbth = py.misc.bth + py.misc.ptohit * BTH_PLUS_ADJ + (class_level_adj[py.misc.pclass][CLA_BTH] * py.misc.lev);
+    int xbthb = py.misc.bthb + py.misc.ptohit * BTH_PLUS_ADJ + (class_level_adj[py.misc.pclass][CLA_BTHB] * py.misc.lev);
 
     // this results in a range from 0 to 29
-    int xfos = 40 - p_ptr->fos;
+    int xfos = 40 - py.misc.fos;
     if (xfos < 0) {
         xfos = 0;
     }
-    int xsrh = p_ptr->srh;
+    int xsrh = py.misc.srh;
 
     // this results in a range from 0 to 9
-    int xstl = p_ptr->stl + 1;
-    int xdis = p_ptr->disarm + 2 * todis_adj() + stat_adj(A_INT) + (class_level_adj[p_ptr->pclass][CLA_DISARM] * p_ptr->lev / 3);
-    int xsave = p_ptr->save + stat_adj(A_WIS) + (class_level_adj[p_ptr->pclass][CLA_SAVE] * p_ptr->lev / 3);
-    int xdev = p_ptr->save + stat_adj(A_INT) + (class_level_adj[p_ptr->pclass][CLA_DEVICE] * p_ptr->lev / 3);
+    int xstl = py.misc.stl + 1;
+    int xdis = py.misc.disarm + 2 * todis_adj() + stat_adj(A_INT) + (class_level_adj[py.misc.pclass][CLA_DISARM] * py.misc.lev / 3);
+    int xsave = py.misc.save + stat_adj(A_WIS) + (class_level_adj[py.misc.pclass][CLA_SAVE] * py.misc.lev / 3);
+    int xdev = py.misc.save + stat_adj(A_INT) + (class_level_adj[py.misc.pclass][CLA_DEVICE] * py.misc.lev / 3);
 
     vtype xinfra;
     (void) sprintf(xinfra, "%d feet", py.flags.see_infra * 10);

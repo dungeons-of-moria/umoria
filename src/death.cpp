@@ -393,14 +393,12 @@ static void kingly() {
     dun_level = 0;
     (void) strcpy(died_from, "Ripe Old Age");
 
-    struct player_type::misc *p_ptr = &py.misc;
-
     (void) restore_level();
 
-    p_ptr->lev += MAX_PLAYER_LEVEL;
-    p_ptr->au += 250000L;
-    p_ptr->max_exp += 5000000L;
-    p_ptr->exp = p_ptr->max_exp;
+    py.misc.lev += MAX_PLAYER_LEVEL;
+    py.misc.au += 250000L;
+    py.misc.max_exp += 5000000L;
+    py.misc.exp = py.misc.max_exp;
 
     // Let the player know that he did good.
     clear_screen();
@@ -419,7 +417,7 @@ static void kingly() {
     put_buffer(p, 12, 24);
     put_buffer("Veni, Vidi, Vici!", 15, 26);
     put_buffer("I came, I saw, I conquered!", 16, 21);
-    if (p_ptr->male) {
+    if (py.misc.male) {
         put_buffer("All Hail the Mighty King!", 17, 22);
     } else {
         put_buffer("All Hail the Mighty Queen!", 17, 22);

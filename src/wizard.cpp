@@ -107,15 +107,13 @@ void change_character() {
         return;
     }
 
-    struct player_type::misc *m_ptr = &py.misc;
-
     prt("(1 - 32767) Hit points = ", 0, 0);
     if (get_string(tmp_str, 0, 25, 5)) {
         tmp_val = atoi(tmp_str);
         if (tmp_val > 0 && tmp_val <= MAX_SHORT) {
-            m_ptr->mhp = (int16_t) tmp_val;
-            m_ptr->chp = (int16_t) tmp_val;
-            m_ptr->chp_frac = 0;
+            py.misc.mhp = (int16_t) tmp_val;
+            py.misc.chp = (int16_t) tmp_val;
+            py.misc.chp_frac = 0;
             prt_mhp();
             prt_chp();
         }
@@ -127,107 +125,107 @@ void change_character() {
     if (get_string(tmp_str, 0, 25, 5)) {
         tmp_val = atoi(tmp_str);
         if (tmp_val > -1 && tmp_val <= MAX_SHORT && (*tmp_str != '\0')) {
-            m_ptr->mana = (int16_t) tmp_val;
-            m_ptr->cmana = (int16_t) tmp_val;
-            m_ptr->cmana_frac = 0;
+            py.misc.mana = (int16_t) tmp_val;
+            py.misc.cmana = (int16_t) tmp_val;
+            py.misc.cmana_frac = 0;
             prt_cmana();
         }
     } else {
         return;
     }
 
-    (void) sprintf(tmp_str, "Current=%d  Gold = ", m_ptr->au);
+    (void) sprintf(tmp_str, "Current=%d  Gold = ", py.misc.au);
     tmp_val = (int) strlen(tmp_str);
     prt(tmp_str, 0, 0);
     if (get_string(tmp_str, 0, tmp_val, 7)) {
         int32_t tmp_lval = (int32_t) atol(tmp_str);
         if (tmp_lval > -1 && (*tmp_str != '\0')) {
-            m_ptr->au = tmp_lval;
+            py.misc.au = tmp_lval;
             prt_gold();
         }
     } else {
         return;
     }
 
-    (void) sprintf(tmp_str, "Current=%d  (0-200) Searching = ", m_ptr->srh);
+    (void) sprintf(tmp_str, "Current=%d  (0-200) Searching = ", py.misc.srh);
     tmp_val = (int) strlen(tmp_str);
     prt(tmp_str, 0, 0);
     if (get_string(tmp_str, 0, tmp_val, 3)) {
         tmp_val = atoi(tmp_str);
         if (tmp_val > -1 && tmp_val < 201 && (*tmp_str != '\0')) {
-            m_ptr->srh = (int16_t) tmp_val;
+            py.misc.srh = (int16_t) tmp_val;
         }
     } else {
         return;
     }
 
-    (void) sprintf(tmp_str, "Current=%d  (-1-18) Stealth = ", m_ptr->stl);
+    (void) sprintf(tmp_str, "Current=%d  (-1-18) Stealth = ", py.misc.stl);
     tmp_val = (int) strlen(tmp_str);
     prt(tmp_str, 0, 0);
     if (get_string(tmp_str, 0, tmp_val, 3)) {
         tmp_val = atoi(tmp_str);
         if (tmp_val > -2 && tmp_val < 19 && (*tmp_str != '\0')) {
-            m_ptr->stl = (int16_t) tmp_val;
+            py.misc.stl = (int16_t) tmp_val;
         }
     } else {
         return;
     }
 
-    (void) sprintf(tmp_str, "Current=%d  (0-200) Disarming = ", m_ptr->disarm);
+    (void) sprintf(tmp_str, "Current=%d  (0-200) Disarming = ", py.misc.disarm);
     tmp_val = (int) strlen(tmp_str);
     prt(tmp_str, 0, 0);
     if (get_string(tmp_str, 0, tmp_val, 3)) {
         tmp_val = atoi(tmp_str);
         if (tmp_val > -1 && tmp_val < 201 && (*tmp_str != '\0')) {
-            m_ptr->disarm = (int16_t) tmp_val;
+            py.misc.disarm = (int16_t) tmp_val;
         }
     } else {
         return;
     }
 
-    (void) sprintf(tmp_str, "Current=%d  (0-100) Save = ", m_ptr->save);
+    (void) sprintf(tmp_str, "Current=%d  (0-100) Save = ", py.misc.save);
     tmp_val = (int) strlen(tmp_str);
     prt(tmp_str, 0, 0);
     if (get_string(tmp_str, 0, tmp_val, 3)) {
         tmp_val = atoi(tmp_str);
         if (tmp_val > -1 && tmp_val < 201 && (*tmp_str != '\0')) {
-            m_ptr->save = (int16_t) tmp_val;
+            py.misc.save = (int16_t) tmp_val;
         }
     } else {
         return;
     }
 
-    (void) sprintf(tmp_str, "Current=%d  (0-200) Base to hit = ", m_ptr->bth);
+    (void) sprintf(tmp_str, "Current=%d  (0-200) Base to hit = ", py.misc.bth);
     tmp_val = (int) strlen(tmp_str);
     prt(tmp_str, 0, 0);
     if (get_string(tmp_str, 0, tmp_val, 3)) {
         tmp_val = atoi(tmp_str);
         if (tmp_val > -1 && tmp_val < 201 && (*tmp_str != '\0')) {
-            m_ptr->bth = (int16_t) tmp_val;
+            py.misc.bth = (int16_t) tmp_val;
         }
     } else {
         return;
     }
 
-    (void) sprintf(tmp_str, "Current=%d  (0-200) Bows/Throwing = ", m_ptr->bthb);
+    (void) sprintf(tmp_str, "Current=%d  (0-200) Bows/Throwing = ", py.misc.bthb);
     tmp_val = (int) strlen(tmp_str);
     prt(tmp_str, 0, 0);
     if (get_string(tmp_str, 0, tmp_val, 3)) {
         tmp_val = atoi(tmp_str);
         if (tmp_val > -1 && tmp_val < 201 && (*tmp_str != '\0')) {
-            m_ptr->bthb = (int16_t) tmp_val;
+            py.misc.bthb = (int16_t) tmp_val;
         }
     } else {
         return;
     }
 
-    (void) sprintf(tmp_str, "Current=%d  Weight = ", m_ptr->wt);
+    (void) sprintf(tmp_str, "Current=%d  Weight = ", py.misc.wt);
     tmp_val = (int) strlen(tmp_str);
     prt(tmp_str, 0, 0);
     if (get_string(tmp_str, 0, tmp_val, 3)) {
         tmp_val = atoi(tmp_str);
         if (tmp_val > -1 && (*tmp_str != '\0')) {
-            m_ptr->wt = (uint16_t) tmp_val;
+            py.misc.wt = (uint16_t) tmp_val;
         }
     } else {
         return;
