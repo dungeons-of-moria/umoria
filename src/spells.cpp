@@ -652,10 +652,10 @@ static void fireBoltTouchesMonster(cave_type *tile, int dam, int harmType, uint3
 
     // light up monster and draw monster, temporarily set
     // pl so that update_mon() will work
-    unsigned int saveLitStatus = tile->pl;
+    bool savedLitStatus = tile->pl;
     tile->pl = true;
     update_mon((int) tile->cptr);
-    tile->pl = saveLitStatus;
+    tile->pl = savedLitStatus;
 
     // draw monster and clear previous bolt
     put_qio();
@@ -783,7 +783,7 @@ void fire_ball(int typ, int dir, int y, int x, int dam_hp, const char *descrip) 
                                 creature_type *r_ptr = &c_list[m_ptr->mptr];
 
                                 // lite up creature if visible, temp set pl so that update_mon works
-                                int tmp = c_ptr->pl;
+                                bool savedLitStatus = c_ptr->pl;
                                 c_ptr->pl = true;
                                 update_mon((int) c_ptr->cptr);
 
@@ -808,7 +808,7 @@ void fire_ball(int typ, int dir, int y, int x, int dam_hp, const char *descrip) 
                                 if (k >= 0) {
                                     tkill++;
                                 }
-                                c_ptr->pl = tmp;
+                                c_ptr->pl = savedLitStatus;
                             } else if (panel_contains(row, col) && py.flags.blind < 1) {
                                 print('*', row, col);
                             }

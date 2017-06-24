@@ -857,10 +857,10 @@ bool get_char(bool *generate) {
                     goto error;
                 }
                 c_ptr->fval = (uint8_t) (char_tmp & 0xF);
-                c_ptr->lr = (unsigned int) ((char_tmp >> 4) & 0x1);
-                c_ptr->fm = (unsigned int) (char_tmp >> 5) & 0x1;
-                c_ptr->pl = (unsigned int) (char_tmp >> 6) & 0x1;
-                c_ptr->tl = (unsigned int) (char_tmp >> 7) & 0x1;
+                c_ptr->lr = (char_tmp >> 4) != 0;
+                c_ptr->fm = (char_tmp >> 5) != 0;
+                c_ptr->pl = (char_tmp >> 6) != 0;
+                c_ptr->tl = (char_tmp >> 7) != 0;
                 c_ptr++;
             }
             total_count += count;

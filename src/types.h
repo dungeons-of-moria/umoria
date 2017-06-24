@@ -26,10 +26,6 @@ typedef char obj_desc_t[OBJECT_DESCRIPTION_SIZE];
 // all fields are given the smallest possible type, and all fields are
 // aligned within the structure to their natural size boundary, so that
 // the structures contain no padding and are minimum size.
-//
-// bit fields are only used where they would cause a large reduction in
-// data size, they should not be used otherwise because their use
-// results in larger and slower code.
 
 typedef struct {
     const char *name;  // Description of creature
@@ -302,10 +298,10 @@ typedef struct {
     uint8_t tptr;
     uint8_t fval;
 
-    unsigned int lr : 1; // Room should be lit with perm light, walls with this set should be perm lit after tunneled out.
-    unsigned int fm : 1; // Field mark, used for traps/doors/stairs, object is hidden if fm is false.
-    unsigned int pl : 1; // Permanent light, used for walls and lighted rooms.
-    unsigned int tl : 1; // Temporary light, used for player's lamp light,etc.
+    bool lr; // Room should be lit with perm light, walls with this set should be perm lit after tunneled out.
+    bool fm; // Field mark, used for traps/doors/stairs, object is hidden if fm is false.
+    bool pl; // Permanent light, used for walls and lighted rooms.
+    bool tl; // Temporary light, used for player's lamp light,etc.
 } cave_type;
 
 typedef struct {
