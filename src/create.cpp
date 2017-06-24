@@ -67,7 +67,7 @@ static void change_stat(int stat, int16_t amount) {
 // module so looping of character selection would be allowed -RGM-
 static void get_all_stats() {
     player_type *p_ptr = &py;
-    race_type *r_ptr = &race[p_ptr->misc.prace];
+    Race_t *r_ptr = &race[p_ptr->misc.prace];
 
     get_stats();
     change_stat(A_STR, r_ptr->str_adj);

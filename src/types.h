@@ -262,7 +262,7 @@ typedef struct {
     uint8_t infra;   // See infra-red
     uint8_t b_exp;   // Base experience factor
     uint8_t rtclass; // Bit field for class types
-} race_type;
+} Race_t;
 
 typedef struct {
     const char *title;       // type of class
