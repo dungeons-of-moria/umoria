@@ -180,7 +180,7 @@ static void haggle_commands(int typ) {
 
 // Displays a store's inventory -RAK-
 static void display_inventory(int store_num, int start) {
-    store_type *s_ptr = &store[store_num];
+    Store_t *s_ptr = &store[store_num];
 
     int stop = ((start / 12) + 1) * 12;
     if (stop > s_ptr->store_ctr) {
@@ -296,7 +296,7 @@ static bool get_store_item(int *com_val, const char *pmt, int i, int j) {
 
 // Increase the insult counter and get angry if too many -RAK-
 static bool increase_insults(int store_num) {
-    store_type *s_ptr = &store[store_num];
+    Store_t *s_ptr = &store[store_num];
     s_ptr->insult_cur++;
 
     if (s_ptr->insult_cur > owners[s_ptr->owner].insult_max) {
@@ -434,7 +434,7 @@ static int purchase_haggle(int store_num, int32_t *price, inven_type *item) {
     int purchase = 0;
     int final_flag = 0;
 
-    store_type *s_ptr = &store[store_num];
+    Store_t *s_ptr = &store[store_num];
     owner_type *o_ptr = &owners[s_ptr->owner];
 
     int32_t max_sell, min_sell;
@@ -598,7 +598,7 @@ static int sell_haggle(int store_num, int32_t *price, inven_type *item) {
     int sell = 0;
     int final_flag = 0;
 
-    store_type *s_ptr = &store[store_num];
+    Store_t *s_ptr = &store[store_num];
 
     int32_t cost = item_value(item);
     if (cost < 1) {
@@ -800,7 +800,7 @@ static int store_items_to_display(int store_ctr, int cur_top) {
 
 // Buy an item from a store -RAK-
 static bool store_purchase(int store_num, int *cur_top) {
-    store_type *s_ptr = &store[store_num];
+    Store_t *s_ptr = &store[store_num];
 
     if (s_ptr->store_ctr < 1) {
         msg_print("I am currently out of stock.");
@@ -993,7 +993,7 @@ static bool store_sell(int store_num, int *cur_top) {
 
 // Entering a store -RAK-
 void enter_store(int store_num) {
-    store_type *s_ptr = &store[store_num];
+    Store_t *s_ptr = &store[store_num];
 
     if (s_ptr->store_open >= turn) {
         msg_print("The doors are locked.");
