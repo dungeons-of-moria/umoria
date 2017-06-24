@@ -219,11 +219,7 @@ static bool see_wall(int dir, int y, int x) {
 // Do we see anything? Used in running. -CJS-
 static bool see_nothing(int dir, int y, int x) {
     // check to see if movement there possible
-    if (!mmove(dir, &y, &x)) {
-        return false;
-    }
-
-    return loc_symbol(y, x) == ' ';
+    return mmove(dir, &y, &x) && loc_symbol(y, x) == ' ';
 }
 
 static void findRunningBreak(int dir, int row, int col) {

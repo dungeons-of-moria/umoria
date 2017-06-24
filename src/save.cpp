@@ -297,10 +297,7 @@ static bool sv_write() {
     // only level specific info follows, this allows characters to be
     // resurrected, the dungeon level info is not needed for a resurrection
     if (death) {
-        if (ferror(fileptr) || fflush(fileptr) == EOF) {
-            return false;
-        }
-        return true;
+        return !(ferror(fileptr) || fflush(fileptr) == EOF);
     }
 
     wr_short((uint16_t) dun_level);
@@ -374,10 +371,7 @@ static bool sv_write() {
         wr_monster(&m_list[i]);
     }
 
-    if (ferror(fileptr) || fflush(fileptr) == EOF) {
-        return false;
-    }
-    return true;
+    return !(ferror(fileptr) || fflush(fileptr) == EOF);
 }
 
 // Set up prior to actual save, do the save, then clean up
@@ -588,24 +582,11 @@ bool get_char(bool *generate) {
         highlight_seams = (l & 0x80) != 0;
         find_ignore_doors = (l & 0x100) != 0;
 
-        // save files before 5.2.2 don't have sound_beep_flag, set it on
-        // for compatibility
-        if (version_min < 2 || (version_min == 2 && patch_level < 2)) {
-            sound_beep_flag = true;
-        } else if (l & 0x200) {
-            sound_beep_flag = true;
-        } else {
-            sound_beep_flag = false;
-        }
-        // save files before 5.2.2 don't have display_counts, set it on
-        // for compatibility
-        if (version_min < 2 || (version_min == 2 && patch_level < 2)) {
-            display_counts = true;
-        } else if (l & 0x400) {
-            display_counts = true;
-        } else {
-            display_counts = false;
-        }
+        // save files before 5.2.2 don't have sound_beep_flag, set it on for compatibility
+        sound_beep_flag = version_min < 2 || (version_min == 2 && patch_level < 2) || (l & 0x200) != 0;
+
+        // save files before 5.2.2 don't have display_counts, set it on for compatibility
+        display_counts = version_min < 2 || (version_min == 2 && patch_level < 2) || (l & 0x400) != 0;
 
         // Don't allow resurrection of total_winner characters.  It causes
         // problems because the character level is out of the allowed range.
@@ -1017,11 +998,8 @@ bool get_char(bool *generate) {
                 msg_print(temp);
             }
 
-            if (turn >= 0) {
-                return true;
-            } else {
-                return false; // Only restored options and monster memory.
-            }
+            // if false: only restored options and monster memory.
+            return turn >= 0;
         }
     }
     turn = -1;

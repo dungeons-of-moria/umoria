@@ -1099,11 +1099,7 @@ static bool canCreatureCastSpells(monster_type *m_ptr, uint32_t spells) {
     }
 
     // Must have unobstructed Line-Of-Sight
-    if (!los(char_row, char_col, (int) m_ptr->fy, (int) m_ptr->fx)) {
-        return false;
-    }
-
-    return true;
+    return los(char_row, char_col, (int) m_ptr->fy, (int) m_ptr->fx);
 }
 
 void creatureCastsSpell(monster_type *m_ptr, int monsterID, int spellID, uint8_t level, vtype cdesc, vtype deathDescription) {

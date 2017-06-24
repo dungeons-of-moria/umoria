@@ -924,10 +924,10 @@ static void build_tunnel(int row1, int col1, int row2, int col2) {
 
 static bool next_to(int y, int x) {
     if (next_to_corr(y, x) > 2) {
-        if (cave[y - 1][x].fval >= MIN_CAVE_WALL && cave[y + 1][x].fval >= MIN_CAVE_WALL) {
-            return true;
-        }
-        return (cave[y][x - 1].fval >= MIN_CAVE_WALL && cave[y][x + 1].fval >= MIN_CAVE_WALL);
+        bool vertical = cave[y - 1][x].fval >= MIN_CAVE_WALL && cave[y + 1][x].fval >= MIN_CAVE_WALL;
+        bool horizontal = cave[y][x - 1].fval >= MIN_CAVE_WALL && cave[y][x + 1].fval >= MIN_CAVE_WALL;
+
+        return vertical || horizontal;
     }
 
     return false;

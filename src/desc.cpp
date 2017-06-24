@@ -337,7 +337,7 @@ void objdes(char *out_val, inven_type *i_ptr, bool pref) {
     int p1_use = IGNORED;
     bool append_name = false;
 
-    bool modify = known1_p(i_ptr) == false;
+    bool modify = !known1_p(i_ptr);
 
     switch (i_ptr->tval) {
         case TV_MISC:
