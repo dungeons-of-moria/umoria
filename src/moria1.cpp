@@ -548,10 +548,10 @@ int verify(const char *prompt, int item) {
 //
 // It is intended that this function be called several times in succession,
 // as some commands take up a turn, and the rest of moria must proceed in the
-// interim. A global variable is provided, doing_inven, which is normally
+// interim. A global variable is provided, doing_inventory_command, which is normally
 // zero; however if on return from inven_command it is expected that
 // inven_command should be called *again*, (being still in inventory command
-// input mode), then doing_inven is set to the inventory command character
+// input mode), then doing_inventory_command is set to the inventory command character
 // which should be used in the next call to inven_command.
 //
 // On return, the screen is restored, but not flushed. Provided no flush of
@@ -636,13 +636,13 @@ static void inven_screen(int new_scr) {
 
 static void setInventoryCommandScreenState(char command) {
     // Take up where we left off after a previous inventory command. -CJS-
-    if (doing_inven) {
+    if (doing_inventory_command) {
         // If the screen has been flushed, we need to redraw. If the command
         // is a simple ' ' to recover the screen, just quit. Otherwise, check
         // and see what the user wants.
         if (screen_has_changed) {
             if (command == ' ' || !get_check("Continuing with inventory command?")) {
-                doing_inven = 0;
+                doing_inventory_command = 0;
                 return;
             }
             scr_left = 50;
@@ -686,7 +686,7 @@ static bool inventoryTakeOffItem(bool selecting) {
         return selecting;
     }
 
-    if (inven_ctr >= INVEN_WIELD && !doing_inven) {
+    if (inven_ctr >= INVEN_WIELD && !doing_inventory_command) {
         msg_print("You will have to drop something first.");
         return selecting;
     }
@@ -1335,9 +1335,9 @@ void inven_command(char command) {
                 break;
         }
 
-        // Clear the doing_inven flag here, instead of at beginning, so that
+        // Clear the doing_inventory_command flag here, instead of at beginning, so that
         // can use it to control when messages above appear.
-        doing_inven = 0;
+        doing_inventory_command = 0;
 
         // Keep looking for objects to drop/wear/take off/throw off
         char which = 'z';
@@ -1350,9 +1350,9 @@ void inven_command(char command) {
             // Save state for recovery if they want to call us again next turn.
             // Otherwise, set a dummy command to recover screen.
             if (selecting) {
-                doing_inven = command;
+                doing_inventory_command = command;
             } else {
-                doing_inven = ' ';
+                doing_inventory_command = ' ';
             }
 
             // flush last message before clearing screen_has_changed and exiting

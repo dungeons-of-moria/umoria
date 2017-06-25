@@ -1045,7 +1045,7 @@ void enter_store(int store_num) {
 
                     do {
                         inven_command(command);
-                        command = doing_inven;
+                        command = doing_inventory_command;
                     } while (command);
 
                     // redisplay store prices if charisma changes

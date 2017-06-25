@@ -746,8 +746,8 @@ static void executeInputCommands(char *command, int *find_count) {
                 end_find();
             }
             put_qio();
-        } else if (doing_inven) {
-            inven_command(doing_inven);
+        } else if (doing_inventory_command) {
+            inven_command(doing_inventory_command);
         } else {
             // move the cursor to the players character
             move_cursor_relative(char_row, char_col);

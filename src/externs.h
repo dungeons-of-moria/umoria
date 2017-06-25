@@ -49,7 +49,7 @@ extern bool character_is_dead;
 extern int32_t character_birth_date;
 extern vtype_t character_died_from;
 
-extern char doing_inven;
+extern char doing_inventory_command;
 extern char last_command;
 extern int command_count;
 extern bool default_dir;
