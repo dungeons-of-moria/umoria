@@ -38,7 +38,7 @@ bool screen_has_changed  = false;  // Track screen changes for inventory command
 
 bool player_free_turn;             // Player has a free turn, so do not move creatures
 int running_counter;               // Used in MORIA for .(dir)
-bool teleport_flag;                // Handle teleport traps
+bool teleport_player;              // Handle teleport traps
 
 bool player_light;                 // True when player is carrying light
 bool weapon_heavy        = false;  // Weapon is too heavy -CJS-

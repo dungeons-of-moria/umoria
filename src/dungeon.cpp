@@ -32,7 +32,7 @@ static void resetDungeonFlags() {
     command_count = 0;
     generate_new_level = false;
     running_counter = 0;
-    teleport_flag = false;
+    teleport_player = false;
     mon_tot_mult = 0;
     cave[char_row][char_col].cptr = 1;
 }
@@ -997,7 +997,7 @@ void dungeon() {
         }
 
         // Teleport?
-        if (teleport_flag) {
+        if (teleport_player) {
             teleport(100);
         }
 

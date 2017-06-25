@@ -2348,5 +2348,5 @@ void teleport(int dis) {
     check_view();
     creatures(false);
 
-    teleport_flag = false;
+    teleport_player = false;
 }

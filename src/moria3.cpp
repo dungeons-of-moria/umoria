@@ -110,7 +110,7 @@ static void trapStrengthDart(Inventory_t *t_ptr, int dam) {
 }
 
 static void trapTeleport(int y, int x) {
-    teleport_flag = true;
+    teleport_player = true;
 
     msg_print("You hit a teleport trap!");
 
