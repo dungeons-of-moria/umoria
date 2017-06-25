@@ -291,8 +291,8 @@ static bool sv_write() {
     l = (uint32_t) (total_points());
     wr_long(l);
 
-    // starting with 5.2.2, put the birth_date in the save file
-    wr_long((uint32_t) birth_date);
+    // starting with 5.2.2, put the date_of_birth in the save file
+    wr_long((uint32_t) date_of_birth);
 
     // only level specific info follows, this allows characters to be
     // resurrected, the dungeon level info is not needed for a resurrection
@@ -755,9 +755,9 @@ bool get_char(bool *generate) {
             }
 
             if (version_min >= 3 || (version_min == 2 && patch_level >= 2)) {
-                rd_long((uint32_t *) &birth_date);
+                rd_long((uint32_t *) &date_of_birth);
             } else {
-                birth_date = (int32_t) time((time_t *) 0);
+                date_of_birth = (int32_t) time((time_t *) 0);
             }
         }
 

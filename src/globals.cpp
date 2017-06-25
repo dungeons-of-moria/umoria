@@ -44,7 +44,7 @@ bool player_carrying_light;        // True when player is carrying light
 bool weapon_is_heavy     = false;  // Weapon is too heavy -CJS-
 int pack_heaviness       = 0;      // Heaviness of pack - used to calculate if pack is too heavy -CJS-
 
-int32_t birth_date;                // Unix time for when the character was created
+int32_t date_of_birth;             // Unix time for when the character was created
 vtype_t died_from;                 // What the character died from: starvation, Bat, etc.
 bool death               = false;  // True if character died
 

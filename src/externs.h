@@ -42,7 +42,7 @@ extern bool player_carrying_light;
 extern bool weapon_is_heavy;
 extern int pack_heaviness;
 
-extern int32_t birth_date;
+extern int32_t date_of_birth;
 extern vtype_t died_from;
 extern bool death;
 

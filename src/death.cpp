@@ -236,7 +236,7 @@ static void highscores() {
 
     HighScore_t new_entry;
     new_entry.points = total_points();
-    new_entry.birth_date = birth_date;
+    new_entry.birth_date = date_of_birth;
     new_entry.uid = 0; // NOTE: do we not want to use `getuid()`? -MRC-
     new_entry.mhp = py.misc.mhp;
     new_entry.chp = py.misc.chp;

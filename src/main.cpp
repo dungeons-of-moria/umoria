@@ -154,7 +154,7 @@ int main(int argc, char *argv[]) {
     } else { // Create character
         create_character();
 
-        birth_date = (int32_t) time((time_t *) 0);
+        date_of_birth = (int32_t) time((time_t *) 0);
 
         char_inven_init();
         py.flags.food = 7500;
