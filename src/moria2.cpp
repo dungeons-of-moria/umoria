@@ -192,7 +192,7 @@ void search(int y, int x, int chance) {
 // seen to be closed, then there is a potential choice. We check to see whether
 // it is a potential corner or an intersection/room entrance. If the square two
 // spaces straight ahead, and the space marked with 'X' are both blank, then it
-// is a potential corner and enter if find_examine is set, otherwise must stop
+// is a potential corner and enter if run_examine_corners is set, otherwise must stop
 // because it is not a corner.
 
 // The cycle lists the directions in anticlockwise order, for over two complete
@@ -448,7 +448,7 @@ void area_affect(int dir, int y, int x) {
 
     // choose a direction.
 
-    if (option2 == 0 || (find_examine && !run_cut_corners)) {
+    if (option2 == 0 || (run_examine_corners && !run_cut_corners)) {
         // There is only one option, or if two, then we always examine
         // potential corners and never cur known corners, so you step
         // into the straight option.
@@ -474,7 +474,7 @@ void area_affect(int dir, int y, int x) {
     if (!see_wall(option, row, col) || !see_wall(check_dir, row, col)) {
         // Don't see that it is closed off.  This could be a
         // potential corner or an intersection.
-        if (find_examine && see_nothing(option, row, col) && see_nothing(option2, row, col)) {
+        if (run_examine_corners && see_nothing(option, row, col) && see_nothing(option2, row, col)) {
             // Can not see anything ahead and in the direction we are
             // turning, assume that it is a potential corner.
             find_direction = option;

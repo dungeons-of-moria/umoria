@@ -17,7 +17,7 @@ extern FILE *highscore_fp;
 extern bool display_counts;
 extern bool find_bound;
 extern bool run_cut_corners;
-extern bool find_examine;
+extern bool run_examine_corners;
 extern bool find_ignore_doors;
 extern bool find_prself;
 extern bool highlight_seams;
