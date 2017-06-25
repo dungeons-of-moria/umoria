@@ -337,7 +337,7 @@ static bool areaAffectStopLookingAtSquares(int i, int dir, int newDir, int y, in
     // Default: Square unseen. Treat as open.
     bool invisible = true;
 
-    if (player_light || c_ptr->tl || c_ptr->pl || c_ptr->fm) {
+    if (player_carrying_light || c_ptr->tl || c_ptr->pl || c_ptr->fm) {
         if (c_ptr->tptr != 0) {
             int tileID = treasure_list[c_ptr->tptr].tval;
 

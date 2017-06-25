@@ -38,7 +38,7 @@ extern bool player_free_turn;
 extern int running_counter;
 extern bool teleport_player;
 
-extern bool player_light;
+extern bool player_carrying_light;
 extern bool weapon_heavy;
 extern int pack_heaviness;
 

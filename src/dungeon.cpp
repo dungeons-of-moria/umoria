@@ -39,7 +39,7 @@ static void resetDungeonFlags() {
 
 // Check light status for dungeon setup
 static void playerInitializePlayerLight() {
-    player_light = (inventory[INVEN_LIGHT].p1 > 0);
+    player_carrying_light = (inventory[INVEN_LIGHT].p1 > 0);
 }
 
 // Check for a maximum level
@@ -53,12 +53,12 @@ static void playerUpdateDeepestDungeonLevelVisited() {
 static void playerUpdateLightStatus() {
     Inventory_t *i_ptr = &inventory[INVEN_LIGHT];
 
-    if (player_light) {
+    if (player_carrying_light) {
         if (i_ptr->p1 > 0) {
             i_ptr->p1--;
 
             if (i_ptr->p1 == 0) {
-                player_light = false;
+                player_carrying_light = false;
                 msg_print("Your light has gone out!");
                 disturb(0, 1);
 
@@ -69,7 +69,7 @@ static void playerUpdateLightStatus() {
                 msg_print("Your light is growing faint.");
             }
         } else {
-            player_light = false;
+            player_carrying_light = false;
             disturb(0, 1);
 
             // unlight creatures
@@ -77,7 +77,7 @@ static void playerUpdateLightStatus() {
         }
     } else if (i_ptr->p1 > 0) {
         i_ptr->p1--;
-        player_light = true;
+        player_carrying_light = true;
         disturb(0, 1);
 
         // light creatures

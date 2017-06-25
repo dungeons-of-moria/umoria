@@ -40,7 +40,7 @@ bool player_free_turn;             // Player has a free turn, so do not move cre
 int running_counter;               // Used in MORIA for .(dir)
 bool teleport_player;              // Handle teleport traps
 
-bool player_light;                 // True when player is carrying light
+bool player_carrying_light;        // True when player is carrying light
 bool weapon_heavy        = false;  // Weapon is too heavy -CJS-
 int pack_heaviness       = 0;      // Heaviness of pack - used to calculate if pack is too heavy -CJS-
 
