@@ -59,7 +59,20 @@ Include details about your configuration and environment:
 
 ### Code Contributions
 
-At present there are no strong coding style guides when creating your Pull Request (PR). However there are two points worth remembering before making your PR:
+General points worth remembering before making your Pull Request (PR):
 
 * Avoid platform-dependent code.
 * Format your source code to the provided [`.clang-format`](.clang-format) style.
+
+At present there are no strong style requirements, but here are a few ideas that I would like to start thinking about.
+
+#### Naming
+
+* **Classes / Structs / Types**: `CamelCase`, with the first character uppercase.
+* **Functions**: `camelCase`, with the first character lowercase.
+* **Variables**: `snake_case`, and all lowercase.
+
+I like the easy visual distinction from naming like this. You can see immediately what its function is and without having _noisy_ suffixes.
+
+
+
