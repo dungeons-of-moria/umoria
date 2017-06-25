@@ -13,9 +13,6 @@
 // deep within creatures() via place_monster() and summon_monster()
 int hack_monptr = -1;
 
-int closing_flag   = 0;     // Used for closing
-bool wait_for_more = false; // used when ^C hit during -more- prompt
-
 vtype_t savegame_filename; // The save game filename -CJS-
 FILE *highscore_fp;        // High score file pointer
 

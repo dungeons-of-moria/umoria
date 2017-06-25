@@ -265,15 +265,10 @@ void msg_print(const char *msg) {
 
             put_buffer(" -more-", MSG_LINE, old_len);
 
-            // let sigint handler know that we are waiting for a space
-            wait_for_more = true;
-
             char in_char;
             do {
                 in_char = inkey();
             } while ((in_char != ' ') && (in_char != ESCAPE) && (in_char != '\n') && (in_char != '\r'));
-
-            wait_for_more = false;
         } else {
             combine_messages = true;
         }
