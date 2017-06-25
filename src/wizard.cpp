@@ -378,7 +378,7 @@ void wizard_create() {
         }
 
         tmp_val = popt();
-        t_list[tmp_val] = forge;
+        treasure_list[tmp_val] = forge;
         c_ptr->tptr = (uint8_t) tmp_val;
         msg_print("Allocated.");
     } else {

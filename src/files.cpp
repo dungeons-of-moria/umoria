@@ -125,11 +125,11 @@ void print_objects() {
 
                 for (int i = 0; i < nobj; i++) {
                     int objectID = get_obj_num(level, small_object);
-                    invcopy(&t_list[treasureID], sorted_objects[objectID]);
+                    invcopy(&treasure_list[treasureID], sorted_objects[objectID]);
 
                     magic_treasure(treasureID, level);
 
-                    Inventory_t *i_ptr = &t_list[treasureID];
+                    Inventory_t *i_ptr = &treasure_list[treasureID];
                     store_bought(i_ptr);
 
                     if (i_ptr->flags & TR_CURSED) {

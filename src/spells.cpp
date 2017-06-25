@@ -80,7 +80,7 @@ bool detect_treasure() {
         for (int x = panel_col_min; x <= panel_col_max; x++) {
             Cave_t *c_ptr = &cave[y][x];
 
-            if (c_ptr->tptr != 0 && t_list[c_ptr->tptr].tval == TV_GOLD && !test_light(y, x)) {
+            if (c_ptr->tptr != 0 && treasure_list[c_ptr->tptr].tval == TV_GOLD && !test_light(y, x)) {
                 c_ptr->fm = true;
                 lite_spot(y, x);
 
@@ -100,7 +100,7 @@ bool detect_object() {
         for (int x = panel_col_min; x <= panel_col_max; x++) {
             Cave_t *c_ptr = &cave[y][x];
 
-            if (c_ptr->tptr != 0 && t_list[c_ptr->tptr].tval < TV_MAX_OBJECT && !test_light(y, x)) {
+            if (c_ptr->tptr != 0 && treasure_list[c_ptr->tptr].tval < TV_MAX_OBJECT && !test_light(y, x)) {
                 c_ptr->fm = true;
                 lite_spot(y, x);
 
@@ -124,13 +124,13 @@ bool detect_trap() {
                 continue;
             }
 
-            if (t_list[c_ptr->tptr].tval == TV_INVIS_TRAP) {
+            if (treasure_list[c_ptr->tptr].tval == TV_INVIS_TRAP) {
                 c_ptr->fm = true;
                 change_trap(y, x);
 
                 detected = true;
-            } else if (t_list[c_ptr->tptr].tval == TV_CHEST) {
-                Inventory_t *t_ptr = &t_list[c_ptr->tptr];
+            } else if (treasure_list[c_ptr->tptr].tval == TV_CHEST) {
+                Inventory_t *t_ptr = &treasure_list[c_ptr->tptr];
                 known2(t_ptr);
             }
         }
@@ -151,14 +151,14 @@ bool detect_sdoor() {
                 continue;
             }
 
-            if (t_list[c_ptr->tptr].tval == TV_SECRET_DOOR) {
+            if (treasure_list[c_ptr->tptr].tval == TV_SECRET_DOOR) {
                 // Secret doors
 
                 c_ptr->fm = true;
                 change_trap(y, x);
 
                 detected = true;
-            } else if ((t_list[c_ptr->tptr].tval == TV_UP_STAIR || t_list[c_ptr->tptr].tval == TV_DOWN_STAIR) && !c_ptr->fm) {
+            } else if ((treasure_list[c_ptr->tptr].tval == TV_UP_STAIR || treasure_list[c_ptr->tptr].tval == TV_DOWN_STAIR) && !c_ptr->fm) {
                 // Staircases
 
                 c_ptr->fm = true;
@@ -279,7 +279,7 @@ static void lightTileArea(int row, int col) {
 
             if (c_ptr->fval >= MIN_CAVE_WALL) {
                 c_ptr->pl = true;
-            } else if (c_ptr->tptr != 0 && t_list[c_ptr->tptr].tval >= TV_MIN_VISIBLE && t_list[c_ptr->tptr].tval <= TV_MAX_VISIBLE) {
+            } else if (c_ptr->tptr != 0 && treasure_list[c_ptr->tptr].tval >= TV_MIN_VISIBLE && treasure_list[c_ptr->tptr].tval <= TV_MAX_VISIBLE) {
                 c_ptr->fm = true;
             }
         }
@@ -375,7 +375,7 @@ bool trap_creation() {
                 place_trap(y, x, randint(MAX_TRAP) - 1);
 
                 // don't let player gain exp from the newly created traps
-                t_list[c_ptr->tptr].p1 = 0;
+                treasure_list[c_ptr->tptr].p1 = 0;
 
                 // open pits are immediately visible, so call lite_spot
                 lite_spot(y, x);
@@ -407,7 +407,7 @@ bool door_creation() {
                 int k = popt();
                 c_ptr->fval = BLOCKED_FLOOR;
                 c_ptr->tptr = (uint8_t) k;
-                invcopy(&t_list[k], OBJ_CLOSED_DOOR);
+                invcopy(&treasure_list[k], OBJ_CLOSED_DOOR);
                 lite_spot(y, x);
 
                 created = true;
@@ -430,22 +430,22 @@ bool td_destroy() {
                 continue;
             }
 
-            if ((t_list[c_ptr->tptr].tval >= TV_INVIS_TRAP &&
-                 t_list[c_ptr->tptr].tval <= TV_CLOSED_DOOR &&
-                 t_list[c_ptr->tptr].tval != TV_RUBBLE) ||
-                t_list[c_ptr->tptr].tval == TV_SECRET_DOOR) {
+            if ((treasure_list[c_ptr->tptr].tval >= TV_INVIS_TRAP &&
+                 treasure_list[c_ptr->tptr].tval <= TV_CLOSED_DOOR &&
+                 treasure_list[c_ptr->tptr].tval != TV_RUBBLE) ||
+                treasure_list[c_ptr->tptr].tval == TV_SECRET_DOOR) {
                 if (delete_object(y, x)) {
                     destroyed = true;
                 }
-            } else if (t_list[c_ptr->tptr].tval == TV_CHEST && t_list[c_ptr->tptr].flags != 0) {
+            } else if (treasure_list[c_ptr->tptr].tval == TV_CHEST && treasure_list[c_ptr->tptr].flags != 0) {
                 // destroy traps on chest and unlock
-                t_list[c_ptr->tptr].flags &= ~(CH_TRAPPED | CH_LOCKED);
-                t_list[c_ptr->tptr].name2 = SN_UNLOCKED;
+                treasure_list[c_ptr->tptr].flags &= ~(CH_TRAPPED | CH_LOCKED);
+                treasure_list[c_ptr->tptr].name2 = SN_UNLOCKED;
 
                 destroyed = true;
 
                 msg_print("You have disarmed the chest.");
-                known2(&t_list[c_ptr->tptr]);
+                known2(&treasure_list[c_ptr->tptr]);
             }
         }
     }
@@ -570,7 +570,7 @@ bool disarm_all(int dir, int y, int x) {
         // note, must continue up to and including the first non open space,
         // because secret doors have fval greater than MAX_OPEN_SPACE
         if (c_ptr->tptr != 0) {
-            Inventory_t *t_ptr = &t_list[c_ptr->tptr];
+            Inventory_t *t_ptr = &treasure_list[c_ptr->tptr];
 
             if (t_ptr->tval == TV_INVIS_TRAP || t_ptr->tval == TV_VIS_TRAP) {
                 if (delete_object(y, x)) {
@@ -773,7 +773,7 @@ void fire_ball(int typ, int dir, int y, int x, int dam_hp, const char *descrip) 
                     if (in_bounds(row, col) && distance(y, x, row, col) <= max_dis && los(y, x, row, col)) {
                         c_ptr = &cave[row][col];
 
-                        if (c_ptr->tptr != 0 && (*destroy)(&t_list[c_ptr->tptr])) {
+                        if (c_ptr->tptr != 0 && (*destroy)(&treasure_list[c_ptr->tptr])) {
                             (void) delete_object(row, col);
                         }
 
@@ -875,7 +875,7 @@ void breath(int typ, int y, int x, int dam_hp, char *ddesc, int monptr) {
             if (in_bounds(row, col) && distance(y, x, row, col) <= max_dis && los(y, x, row, col)) {
                 Cave_t *c_ptr = &cave[row][col];
 
-                if (c_ptr->tptr != 0 && (*destroy)(&t_list[c_ptr->tptr])) {
+                if (c_ptr->tptr != 0 && (*destroy)(&treasure_list[c_ptr->tptr])) {
                     (void) delete_object(row, col);
                 }
 
@@ -1275,14 +1275,14 @@ bool wall_to_mud(int dir, int y, int x) {
                 turned = true;
 
                 obj_desc_t description;
-                objdes(description, &t_list[c_ptr->tptr], false);
+                objdes(description, &treasure_list[c_ptr->tptr], false);
 
                 obj_desc_t out_val;
                 (void) sprintf(out_val, "The %s turns into mud.", description);
                 msg_print(out_val);
             }
 
-            if (t_list[c_ptr->tptr].tval == TV_RUBBLE) {
+            if (treasure_list[c_ptr->tptr].tval == TV_RUBBLE) {
                 (void) delete_object(y, x);
                 if (randint(10) == 1) {
                     place_object(y, x, false);
@@ -1338,7 +1338,7 @@ bool td_destroy2(int dir, int y, int x) {
 
         // must move into first closed spot, as it might be a secret door
         if (c_ptr->tptr != 0) {
-            Inventory_t *t_ptr = &t_list[c_ptr->tptr];
+            Inventory_t *t_ptr = &treasure_list[c_ptr->tptr];
 
             if (t_ptr->tval == TV_INVIS_TRAP ||
                 t_ptr->tval == TV_CLOSED_DOOR ||
@@ -1938,7 +1938,7 @@ void create_food() {
     }
 
     place_object(char_row, char_col, false);
-    invcopy(&t_list[treasureID], OBJ_MUSH);
+    invcopy(&treasure_list[treasureID], OBJ_MUSH);
 }
 
 // Attempts to destroy a type of creature.  Success depends on
@@ -2013,7 +2013,7 @@ void warding_glyph() {
     if (cave[char_row][char_col].tptr == 0) {
         int newID = popt();
         cave[char_row][char_col].tptr = (uint8_t) newID;
-        invcopy(&t_list[newID], OBJ_SCARE_MON);
+        invcopy(&treasure_list[newID], OBJ_SCARE_MON);
     }
 }
 

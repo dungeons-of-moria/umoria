@@ -164,45 +164,45 @@ static void place_streamer(uint8_t rockType, int treas_chance) {
 static void place_open_door(int y, int x) {
     int cur_pos = popt();
     cave[y][x].tptr = (uint8_t) cur_pos;
-    invcopy(&t_list[cur_pos], OBJ_OPEN_DOOR);
+    invcopy(&treasure_list[cur_pos], OBJ_OPEN_DOOR);
     cave[y][x].fval = CORR_FLOOR;
 }
 
 static void place_broken_door(int y, int x) {
     int cur_pos = popt();
     cave[y][x].tptr = (uint8_t) cur_pos;
-    invcopy(&t_list[cur_pos], OBJ_OPEN_DOOR);
+    invcopy(&treasure_list[cur_pos], OBJ_OPEN_DOOR);
     cave[y][x].fval = CORR_FLOOR;
-    t_list[cur_pos].p1 = 1;
+    treasure_list[cur_pos].p1 = 1;
 }
 
 static void place_closed_door(int y, int x) {
     int cur_pos = popt();
     cave[y][x].tptr = (uint8_t) cur_pos;
-    invcopy(&t_list[cur_pos], OBJ_CLOSED_DOOR);
+    invcopy(&treasure_list[cur_pos], OBJ_CLOSED_DOOR);
     cave[y][x].fval = BLOCKED_FLOOR;
 }
 
 static void place_locked_door(int y, int x) {
     int cur_pos = popt();
     cave[y][x].tptr = (uint8_t) cur_pos;
-    invcopy(&t_list[cur_pos], OBJ_CLOSED_DOOR);
+    invcopy(&treasure_list[cur_pos], OBJ_CLOSED_DOOR);
     cave[y][x].fval = BLOCKED_FLOOR;
-    t_list[cur_pos].p1 = (int16_t) (randint(10) + 10);
+    treasure_list[cur_pos].p1 = (int16_t) (randint(10) + 10);
 }
 
 static void place_stuck_door(int y, int x) {
     int cur_pos = popt();
     cave[y][x].tptr = (uint8_t) cur_pos;
-    invcopy(&t_list[cur_pos], OBJ_CLOSED_DOOR);
+    invcopy(&treasure_list[cur_pos], OBJ_CLOSED_DOOR);
     cave[y][x].fval = BLOCKED_FLOOR;
-    t_list[cur_pos].p1 = (int16_t) (-randint(10) - 10);
+    treasure_list[cur_pos].p1 = (int16_t) (-randint(10) - 10);
 }
 
 static void place_secret_door(int y, int x) {
     int cur_pos = popt();
     cave[y][x].tptr = (uint8_t) cur_pos;
-    invcopy(&t_list[cur_pos], OBJ_SECRET_DOOR);
+    invcopy(&treasure_list[cur_pos], OBJ_SECRET_DOOR);
     cave[y][x].fval = BLOCKED_FLOOR;
 }
 
@@ -238,7 +238,7 @@ static void place_up_stairs(int y, int x) {
 
     int cur_pos = popt();
     cave[y][x].tptr = (uint8_t) cur_pos;
-    invcopy(&t_list[cur_pos], OBJ_UP_STAIR);
+    invcopy(&treasure_list[cur_pos], OBJ_UP_STAIR);
 }
 
 // Place a down staircase at given y, x -RAK-
@@ -249,7 +249,7 @@ static void place_down_stairs(int y, int x) {
 
     int cur_pos = popt();
     cave[y][x].tptr = (uint8_t) cur_pos;
-    invcopy(&t_list[cur_pos], OBJ_DOWN_STAIR);
+    invcopy(&treasure_list[cur_pos], OBJ_DOWN_STAIR);
 }
 
 // Places a staircase 1=up, 2=down -RAK-
@@ -1109,13 +1109,13 @@ static void build_store(int store_num, int y, int x) {
     int cur_pos = popt();
     cave[yy][xx].tptr = (uint8_t) cur_pos;
 
-    invcopy(&t_list[cur_pos], OBJ_STORE_DOOR + store_num);
+    invcopy(&treasure_list[cur_pos], OBJ_STORE_DOOR + store_num);
 }
 
 // Link all free space in treasure list together
 static void tlink() {
     for (int i = 0; i < MAX_TALLOC; i++) {
-        invcopy(&t_list[i], OBJ_NOTHING);
+        invcopy(&treasure_list[i], OBJ_NOTHING);
     }
     tcptr = MIN_TRIX;
 }

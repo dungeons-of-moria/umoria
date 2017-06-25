@@ -2076,7 +2076,7 @@ static void examine_book() {
 static void go_up() {
     uint8_t tileID = cave[char_row][char_col].tptr;
 
-    if (tileID != 0 && t_list[tileID].tval == TV_UP_STAIR) {
+    if (tileID != 0 && treasure_list[tileID].tval == TV_UP_STAIR) {
         dun_level--;
 
         msg_print("You enter a maze of up staircases.");
@@ -2093,7 +2093,7 @@ static void go_up() {
 static void go_down() {
     uint8_t tileID = cave[char_row][char_col].tptr;
 
-    if (tileID != 0 && t_list[tileID].tval == TV_DOWN_STAIR) {
+    if (tileID != 0 && treasure_list[tileID].tval == TV_DOWN_STAIR) {
         dun_level++;
 
         msg_print("You enter a maze of down staircases.");
@@ -2126,7 +2126,7 @@ static void jamdoor() {
         return;
     }
 
-    Inventory_t *t_ptr = &t_list[c_ptr->tptr];
+    Inventory_t *t_ptr = &treasure_list[c_ptr->tptr];
 
     uint8_t itemID = t_ptr->tval;
     if (itemID != TV_CLOSED_DOOR && itemID != TV_OPEN_DOOR) {

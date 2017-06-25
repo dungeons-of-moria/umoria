@@ -1703,7 +1703,7 @@ void light_room(int posY, int posX) {
                     c_ptr->fval = LIGHT_FLOOR;
                 }
                 if (!c_ptr->fm && c_ptr->tptr != 0) {
-                    int tval = t_list[c_ptr->tptr].tval;
+                    int tval = treasure_list[c_ptr->tptr].tval;
 
                     if (tval >= TV_MIN_VISIBLE && tval <= TV_MAX_VISIBLE) {
                         c_ptr->fm = true;
@@ -1751,7 +1751,7 @@ static void sub1_move_light(int y1, int x1, int y2, int x2) {
             if (c_ptr->fval >= MIN_CAVE_WALL) {
                 c_ptr->pl = true;
             } else if (!c_ptr->fm && c_ptr->tptr != 0) {
-                int tval = t_list[c_ptr->tptr].tval;
+                int tval = treasure_list[c_ptr->tptr].tval;
 
                 if (tval >= TV_MIN_VISIBLE && tval <= TV_MAX_VISIBLE) {
                     c_ptr->fm = true;

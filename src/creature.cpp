@@ -895,7 +895,7 @@ static void make_attack(int monsterID) {
 }
 
 static void creatureOpensDoor(Cave_t *c_ptr, int16_t monsterHP, uint32_t movebits, bool *do_turn, bool *do_move, uint32_t *rcmove, int y, int x) {
-    Inventory_t *t_ptr = &t_list[c_ptr->tptr];
+    Inventory_t *t_ptr = &treasure_list[c_ptr->tptr];
 
     // Creature can open doors.
     if (movebits & CM_OPEN_DOOR) {
@@ -1016,7 +1016,7 @@ static void creatureAllowedToMove(Monster_t *m_ptr, uint32_t movebits, bool *do_
     // Pick up or eat an object
     if (movebits & CM_PICKS_UP) {
         uint8_t treasureID = cave[y][x].tptr;
-        if (treasureID != 0 && t_list[treasureID].tval <= TV_MAX_OBJECT) {
+        if (treasureID != 0 && treasure_list[treasureID].tval <= TV_MAX_OBJECT) {
             *rcmove |= CM_PICKS_UP;
             (void) delete_object(y, x);
         }
@@ -1071,7 +1071,7 @@ static void make_move(int monsterID, int *mm, uint32_t *rcmove) {
         }
 
         // Glyph of warding present?
-        if (do_move && c_ptr->tptr != 0 && t_list[c_ptr->tptr].tval == TV_VIS_TRAP && t_list[c_ptr->tptr].subval == 99) {
+        if (do_move && c_ptr->tptr != 0 && treasure_list[c_ptr->tptr].tval == TV_VIS_TRAP && treasure_list[c_ptr->tptr].subval == 99) {
             glyphOfWardingProtection(m_ptr->mptr, movebits, &do_move, &do_turn, y, x);
         }
 

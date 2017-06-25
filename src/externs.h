@@ -118,7 +118,7 @@ extern int16_t last_store_inc;
 extern Treasure_t object_list[MAX_OBJECTS];
 extern uint8_t objects_identified[OBJECT_IDENT_SIZE];
 extern int16_t treasure_levels[MAX_OBJ_LEVEL + 1];
-extern Inventory_t t_list[MAX_TALLOC];
+extern Inventory_t treasure_list[MAX_TALLOC];
 extern Inventory_t inventory[INVEN_ARRAY_SIZE];
 extern char *special_names[SN_ARRAY_SIZE];
 extern int16_t sorted_objects[MAX_DUNGEON_OBJ];

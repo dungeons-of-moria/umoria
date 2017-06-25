@@ -788,7 +788,7 @@ void magic_treasure(int x, int level) {
     int cursed = (10 * chance) / OBJ_DIV_CURSED;
 
     int magicAmount;
-    Inventory_t *t_ptr = &t_list[x];
+    Inventory_t *t_ptr = &treasure_list[x];
 
     // some objects appear multiple times in the object_list with different
     // levels, this is to make the object occur more often, however, for

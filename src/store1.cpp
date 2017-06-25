@@ -339,10 +339,10 @@ static void store_create(int store_num, int16_t max_cost) {
 
     for (int tries = 0; tries <= 3; tries++) {
         int i = store_choices[store_num][randint(STORE_CHOICES) - 1];
-        invcopy(&t_list[cur_pos], i);
+        invcopy(&treasure_list[cur_pos], i);
         magic_treasure(cur_pos, OBJ_TOWN_LEVEL);
 
-        Inventory_t *t_ptr = &t_list[cur_pos];
+        Inventory_t *t_ptr = &treasure_list[cur_pos];
 
         if (store_check_num(t_ptr, store_num)) {
             // Item must be good: cost > 0.

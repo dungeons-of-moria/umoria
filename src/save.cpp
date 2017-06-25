@@ -364,7 +364,7 @@ static bool sv_write() {
 
     wr_short((uint16_t) tcptr);
     for (int i = MIN_TRIX; i < tcptr; i++) {
-        wr_item(&t_list[i]);
+        wr_item(&treasure_list[i]);
     }
     wr_short((uint16_t) mfptr);
     for (int i = MIN_MONIX; i < mfptr; i++) {
@@ -871,7 +871,7 @@ bool get_char(bool *generate) {
             goto error;
         }
         for (int i = MIN_TRIX; i < tcptr; i++) {
-            rd_item(&t_list[i]);
+            rd_item(&treasure_list[i]);
         }
         rd_short((uint16_t *) &mfptr);
         if (mfptr > MAX_MALLOC) {

@@ -17,7 +17,7 @@ static char blank_string[] = "                        ";
 void place_trap(int y, int x, int subval) {
     int cur_pos = popt();
     cave[y][x].tptr = (uint8_t) cur_pos;
-    invcopy(&t_list[cur_pos], OBJ_TRAP_LIST + subval);
+    invcopy(&treasure_list[cur_pos], OBJ_TRAP_LIST + subval);
 }
 
 // Places rubble at location y, x -RAK-
@@ -25,7 +25,7 @@ void place_rubble(int y, int x) {
     int cur_pos = popt();
     cave[y][x].tptr = (uint8_t) cur_pos;
     cave[y][x].fval = BLOCKED_FLOOR;
-    invcopy(&t_list[cur_pos], OBJ_RUBBLE);
+    invcopy(&treasure_list[cur_pos], OBJ_RUBBLE);
 }
 
 // Places a treasure (Gold or Gems) at given row, column -RAK-
@@ -43,8 +43,8 @@ void place_gold(int y, int x) {
     }
 
     cave[y][x].tptr = (uint8_t) cur_pos;
-    invcopy(&t_list[cur_pos], OBJ_GOLD_LIST + i);
-    t_list[cur_pos].cost += (8L * (int32_t) randint((int) t_list[cur_pos].cost)) + randint(8);
+    invcopy(&treasure_list[cur_pos], OBJ_GOLD_LIST + i);
+    treasure_list[cur_pos].cost += (8L * (int32_t) randint((int) treasure_list[cur_pos].cost)) + randint(8);
 
     if (cave[y][x].cptr == 1) {
         msg_print("You feel something roll beneath your feet.");
@@ -112,7 +112,7 @@ void place_object(int y, int x, bool must_be_small) {
     cave[y][x].tptr = (uint8_t) cur_pos;
 
     int objectID = get_obj_num(dun_level, must_be_small);
-    invcopy(&t_list[cur_pos], sorted_objects[objectID]);
+    invcopy(&treasure_list[cur_pos], sorted_objects[objectID]);
 
     magic_treasure(cur_pos, dun_level);
 
@@ -1143,7 +1143,7 @@ void inven_drop(int item_val, int drop_all) {
     int treasureID = popt();
 
     Inventory_t *i_ptr = &inventory[item_val];
-    t_list[treasureID] = *i_ptr;
+    treasure_list[treasureID] = *i_ptr;
 
     cave[char_row][char_col].tptr = (uint8_t) treasureID;
 
@@ -1161,13 +1161,13 @@ void inven_drop(int item_val, int drop_all) {
 
             invcopy(&inventory[inven_ctr], OBJ_NOTHING);
         } else {
-            t_list[treasureID].number = 1;
+            treasure_list[treasureID].number = 1;
             inven_weight -= i_ptr->weight;
             i_ptr->number--;
         }
 
         obj_desc_t prt1, prt2;
-        objdes(prt1, &t_list[treasureID], true);
+        objdes(prt1, &treasure_list[treasureID], true);
         (void) sprintf(prt2, "Dropped %s", prt1);
         msg_print(prt2);
     }

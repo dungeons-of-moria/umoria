@@ -256,7 +256,7 @@ int next_to_corr(int y, int x) {
             int treasureID = cave[yy][xx].tptr;
 
             // should fail if there is already a door present
-            if (tileID == CORR_FLOOR && (treasureID == 0 || t_list[treasureID].tval < TV_MIN_DOORS)) {
+            if (tileID == CORR_FLOOR && (treasureID == 0 || treasure_list[treasureID].tval < TV_MIN_DOORS)) {
                 walls++;
             }
         }
@@ -466,8 +466,8 @@ char loc_symbol(int y, int x) {
         return ' ';
     }
 
-    if (cave_ptr->tptr != 0 && t_list[cave_ptr->tptr].tval != TV_INVIS_TRAP) {
-        return t_list[cave_ptr->tptr].tchar;
+    if (cave_ptr->tptr != 0 && treasure_list[cave_ptr->tptr].tval != TV_INVIS_TRAP) {
+        return treasure_list[cave_ptr->tptr].tchar;
     }
 
     if (cave_ptr->fval <= MAX_CAVE_FLOOR) {
@@ -806,7 +806,7 @@ static void compact_objects() {
                 if (cave[y][x].tptr != 0 && distance(y, x, char_row, char_col) > cur_dis) {
                     int chance;
 
-                    switch (t_list[cave[y][x].tptr].tval) {
+                    switch (treasure_list[cave[y][x].tptr].tval) {
                         case TV_VIS_TRAP:
                             chance = 15;
                             break;
@@ -861,7 +861,7 @@ int popt() {
 // in question is not in the dungeon, e.g. in store1.c and files.c
 void pusht(uint8_t treasureID) {
     if (treasureID != tcptr - 1) {
-        t_list[treasureID] = t_list[tcptr - 1];
+        treasure_list[treasureID] = treasure_list[tcptr - 1];
 
         // must change the tptr in the cave of the object just moved
         for (int y = 0; y < cur_height; y++) {
@@ -874,7 +874,7 @@ void pusht(uint8_t treasureID) {
     }
     tcptr--;
 
-    invcopy(&t_list[tcptr], OBJ_NOTHING);
+    invcopy(&treasure_list[tcptr], OBJ_NOTHING);
 }
 
 // Should the object be enchanted -RAK-

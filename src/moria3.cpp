@@ -221,7 +221,7 @@ static void hit_trap(int y, int x) {
     end_find();
     change_trap(y, x);
 
-    Inventory_t *tile = &t_list[cave[y][x].tptr];
+    Inventory_t *tile = &treasure_list[cave[y][x].tptr];
 
     int dam = pdamroll(tile->damage);
 
@@ -384,9 +384,9 @@ int cast_spell(const char *prompt, int item_val, int *sn, int *sc) {
 // on the TVAL of the object. Traps are set off, money and most objects
 // are picked up. Some objects, such as open doors, just sit there.
 static void carry(int y, int x, bool pickup) {
-    Inventory_t *item = &t_list[cave[y][x].tptr];
+    Inventory_t *item = &treasure_list[cave[y][x].tptr];
 
-    int tileFlags = t_list[cave[y][x].tptr].tval;
+    int tileFlags = treasure_list[cave[y][x].tptr].tval;
 
     if (tileFlags > TV_MAX_PICK_UP) {
         if (tileFlags == TV_INVIS_TRAP || tileFlags == TV_VIS_TRAP || tileFlags == TV_STORE_DOOR) {
@@ -975,7 +975,7 @@ void move_char(int dir, bool do_pickup) {
 
                 // if stepped on falling rock trap, and space contains
                 // rubble, then step back into a clear area
-                if (t_list[tile->tptr].tval == TV_RUBBLE) {
+                if (treasure_list[tile->tptr].tval == TV_RUBBLE) {
                     move_rec(char_row, char_col, old_row, old_col);
                     move_light(char_row, char_col, old_row, old_col);
 
@@ -985,7 +985,7 @@ void move_char(int dir, bool do_pickup) {
                     // check to see if we have stepped back onto another trap, if so, set it off
                     uint8_t id = cave[char_row][char_col].tptr;
                     if (id != 0) {
-                        int val = t_list[id].tval;
+                        int val = treasure_list[id].tval;
                         if (val == TV_INVIS_TRAP || val == TV_VIS_TRAP || val == TV_STORE_DOOR) {
                             hit_trap(char_row, char_col);
                         }
@@ -996,9 +996,9 @@ void move_char(int dir, bool do_pickup) {
             // Can't move onto floor space
 
             if (!find_flag && tile->tptr != 0) {
-                if (t_list[tile->tptr].tval == TV_RUBBLE) {
+                if (treasure_list[tile->tptr].tval == TV_RUBBLE) {
                     msg_print("There is rubble blocking your way.");
-                } else if (t_list[tile->tptr].tval == TV_CLOSED_DOOR) {
+                } else if (treasure_list[tile->tptr].tval == TV_CLOSED_DOOR) {
                     msg_print("There is a closed door blocking your way.");
                 }
             } else {
@@ -1077,7 +1077,7 @@ static void chestExplode(int y, int x) {
 // Chests have traps too. -RAK-
 // Note: Chest traps are based on the FLAGS value
 void chest_trap(int y, int x) {
-    uint32_t flags = t_list[cave[y][x].tptr].flags;
+    uint32_t flags = treasure_list[cave[y][x].tptr].flags;
 
     if (flags & CH_LOSE_STR) {
         chestLooseStrength();
@@ -1113,7 +1113,7 @@ static int16_t playerLockPickingSkill() {
 
 static void openClosedDoor(int y, int x) {
     Cave_t *tile = &cave[y][x];
-    Inventory_t *item = &t_list[tile->tptr];
+    Inventory_t *item = &treasure_list[tile->tptr];
 
     if (item->p1 > 0) {
         // It's locked.
@@ -1135,7 +1135,7 @@ static void openClosedDoor(int y, int x) {
     }
 
     if (item->p1 == 0) {
-        invcopy(&t_list[tile->tptr], OBJ_OPEN_DOOR);
+        invcopy(&treasure_list[tile->tptr], OBJ_OPEN_DOOR);
         tile->fval = CORR_FLOOR;
         lite_spot(y, x);
         command_count = 0;
@@ -1144,7 +1144,7 @@ static void openClosedDoor(int y, int x) {
 
 static void openClosedChest(int y, int x) {
     Cave_t *tile = &cave[y][x];
-    Inventory_t *item = &t_list[tile->tptr];
+    Inventory_t *item = &treasure_list[tile->tptr];
 
     bool success = false;
 
@@ -1184,11 +1184,11 @@ static void openClosedChest(int y, int x) {
         // Chest treasure is allocated as if a creature had been killed.
         // clear the cursed chest/monster win flag, so that people
         // can not win by opening a cursed chest
-        t_list[tile->tptr].flags &= ~TR_CURSED;
+        treasure_list[tile->tptr].flags &= ~TR_CURSED;
 
-        (void) monster_death(y, x, t_list[tile->tptr].flags);
+        (void) monster_death(y, x, treasure_list[tile->tptr].flags);
 
-        t_list[tile->tptr].flags = 0;
+        treasure_list[tile->tptr].flags = 0;
     }
 }
 
@@ -1207,7 +1207,7 @@ void openobject() {
     bool no_object = false;
 
     Cave_t *tile = &cave[y][x];
-    Inventory_t *item = &t_list[tile->tptr];
+    Inventory_t *item = &treasure_list[tile->tptr];
 
     if (tile->cptr > 1 && tile->tptr != 0 && (item->tval == TV_CLOSED_DOOR || item->tval == TV_CHEST)) {
         objectBlockedByMonster(tile->cptr);
@@ -1242,7 +1242,7 @@ void closeobject() {
     (void) mmove(dir, &y, &x);
 
     Cave_t *tile = &cave[y][x];
-    Inventory_t *item = &t_list[tile->tptr];
+    Inventory_t *item = &treasure_list[tile->tptr];
 
     bool no_object = false;
 

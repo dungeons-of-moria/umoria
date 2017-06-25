@@ -16,7 +16,7 @@ static bool look_see(int, int, bool *);
 // prevent the player from getting a free attack by trying to tunnel
 // somewhere where it has no effect.
 static bool canTunnel(int treasureID, int tileID) {
-    if (tileID < MIN_CAVE_WALL && (treasureID == 0 || (t_list[treasureID].tval != TV_RUBBLE && t_list[treasureID].tval != TV_SECRET_DOOR))) {
+    if (tileID < MIN_CAVE_WALL && (treasureID == 0 || (treasure_list[treasureID].tval != TV_RUBBLE && treasure_list[treasureID].tval != TV_SECRET_DOOR))) {
         free_turn_flag = true;
 
         if (treasureID == 0) {
@@ -160,9 +160,9 @@ void tunnel(int dir) {
         if (!digPosition(y, x, c_ptr->fval, diggingAbility)) {
             // Is there an object in the way?  (Rubble and secret doors)
             if (c_ptr->tptr != 0) {
-                if (t_list[c_ptr->tptr].tval == TV_RUBBLE) {
+                if (treasure_list[c_ptr->tptr].tval == TV_RUBBLE) {
                     digRubble(y, x, diggingAbility);
-                } else if (t_list[c_ptr->tptr].tval == TV_SECRET_DOOR) {
+                } else if (treasure_list[c_ptr->tptr].tval == TV_SECRET_DOOR) {
                     // Found secret door!
                     count_msg_print("You tunnel into the granite wall.");
                     search(char_row, char_col, py.misc.srh);
@@ -288,12 +288,12 @@ void disarm_trap() {
 
     bool no_disarm = false;
 
-    if (c_ptr->cptr > 1 && c_ptr->tptr != 0 && (t_list[c_ptr->tptr].tval == TV_VIS_TRAP || t_list[c_ptr->tptr].tval == TV_CHEST)) {
+    if (c_ptr->cptr > 1 && c_ptr->tptr != 0 && (treasure_list[c_ptr->tptr].tval == TV_VIS_TRAP || treasure_list[c_ptr->tptr].tval == TV_CHEST)) {
         objectBlockedByMonster(c_ptr->cptr);
     } else if (c_ptr->tptr != 0) {
         int disarmAbility = playerTrapDisarmAbility();
 
-        Inventory_t *t_ptr = &t_list[c_ptr->tptr];
+        Inventory_t *t_ptr = &treasure_list[c_ptr->tptr];
 
         if (t_ptr->tval == TV_VIS_TRAP) {
             disarmFloorTrap(y, x, disarmAbility, t_ptr->level, dir, t_ptr->p1);
@@ -649,13 +649,13 @@ static bool look_see(int x, int y, bool *transparent) {
 
     if (c_ptr->tl || c_ptr->pl || c_ptr->fm) {
         if (c_ptr->tptr != 0) {
-            if (t_list[c_ptr->tptr].tval == TV_SECRET_DOOR) {
+            if (treasure_list[c_ptr->tptr].tval == TV_SECRET_DOOR) {
                 goto granite;
             }
 
-            if (gl_rock == 0 && t_list[c_ptr->tptr].tval != TV_INVIS_TRAP) {
+            if (gl_rock == 0 && treasure_list[c_ptr->tptr].tval != TV_INVIS_TRAP) {
                 obj_desc_t obj_string;
-                objdes(obj_string, &t_list[c_ptr->tptr], true);
+                objdes(obj_string, &treasure_list[c_ptr->tptr], true);
 
                 (void) sprintf(msg, "%s %s ---pause---", description, obj_string);
                 description = "It is in";
@@ -841,7 +841,7 @@ static void drop_throw(int y, int x, Inventory_t *t_ptr) {
     if (flag) {
         int cur_pos = popt();
         cave[i][j].tptr = (uint8_t) cur_pos;
-        t_list[cur_pos] = *t_ptr;
+        treasure_list[cur_pos] = *t_ptr;
         lite_spot(i, j);
     } else {
         obj_desc_t description, msg;
@@ -1078,7 +1078,7 @@ static void bashClosedDoor(int y, int x, int dir, Cave_t *tile, Inventory_t *ite
     if (randint(chance * (20 + abs(item->p1))) < 10 * (chance - abs(item->p1))) {
         msg_print("The door crashes open!");
 
-        invcopy(&t_list[tile->tptr], OBJ_OPEN_DOOR);
+        invcopy(&treasure_list[tile->tptr], OBJ_OPEN_DOOR);
 
         // 50% chance of breaking door
         item->p1 = (int16_t) (1 - randint(2));
@@ -1169,7 +1169,7 @@ void bash() {
     }
 
     if (c_ptr->tptr != 0) {
-        Inventory_t *t_ptr = &t_list[c_ptr->tptr];
+        Inventory_t *t_ptr = &treasure_list[c_ptr->tptr];
 
         if (t_ptr->tval == TV_CLOSED_DOOR) {
             bashClosedDoor(y, x, dir, c_ptr, t_ptr);

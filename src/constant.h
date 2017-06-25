@@ -97,7 +97,7 @@
 // with MAX_TALLOC 150, it is possible to get compacting objects during
 // level generation, although it is extremely rare
 #define MAX_TALLOC              175   // Max objects per level
-#define MIN_TRIX                  1   // Minimum t_list index used
+#define MIN_TRIX                  1   // Minimum treasure_list index used
 #define TREAS_ROOM_ALLOC          7   // Amount of objects for rooms
 #define TREAS_ANY_ALLOC           2   // Amount of objects for corridors
 #define TREAS_GOLD_ALLOC          2   // Amount of gold (and gems)
