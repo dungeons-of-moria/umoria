@@ -446,7 +446,7 @@
 // but only stack with others of same subval if have the same
 // p1 value, only used for torches.
 
-// id's used for object description, stored in object_ident
+// id's used for object description, stored in objects_identified array
 #define OD_TRIED        0x1
 #define OD_KNOWN1       0x2
 

@@ -942,7 +942,7 @@ static bool store_sell(int store_num, int *cur_top) {
         decrease_insults(store_num);
         py.misc.au += price;
 
-        // identify object in inventory to set object_ident
+        // identify object in inventory to set objects_identified array
         identify(&item_val);
 
         // retake sold_obj so that it will be identified

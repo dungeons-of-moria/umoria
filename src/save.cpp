@@ -245,7 +245,7 @@ static bool sv_write() {
     wr_long(spell_worked);
     wr_long(spell_forgotten);
     wr_bytes(spell_order, 32);
-    wr_bytes(object_ident, OBJECT_IDENT_SIZE);
+    wr_bytes(objects_identified, OBJECT_IDENT_SIZE);
     wr_long(randes_seed);
     wr_long(town_seed);
     wr_short((uint16_t) last_msg);
@@ -707,7 +707,7 @@ bool get_char(bool *generate) {
             rd_long(&spell_worked);
             rd_long(&spell_forgotten);
             rd_bytes(spell_order, 32);
-            rd_bytes(object_ident, OBJECT_IDENT_SIZE);
+            rd_bytes(objects_identified, OBJECT_IDENT_SIZE);
             rd_long(&randes_seed);
             rd_long(&town_seed);
             rd_short((uint16_t *) &last_msg);

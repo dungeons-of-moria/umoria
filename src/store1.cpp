@@ -348,7 +348,7 @@ static void store_create(int store_num, int16_t max_cost) {
             // Item must be good: cost > 0.
             if (t_ptr->cost > 0 && t_ptr->cost < max_cost) {
                 // equivalent to calling ident_spell(),
-                // except will not change the object_ident array.
+                // except will not change the objects_identified array.
                 store_bought(t_ptr);
 
                 int dummy;

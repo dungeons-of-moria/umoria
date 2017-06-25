@@ -136,15 +136,15 @@ int16_t object_offset(Inventory_t *t_ptr) {
 }
 
 static void clearObjectTriedFlag(int16_t id) {
-    object_ident[id] &= ~OD_TRIED;
+    objects_identified[id] &= ~OD_TRIED;
 }
 
 static void setObjectTriedFlag(int16_t id) {
-    object_ident[id] |= OD_TRIED;
+    objects_identified[id] |= OD_TRIED;
 }
 
 static bool isObjectKnown(int16_t id) {
-    return (object_ident[id] & OD_KNOWN1) != 0;
+    return (objects_identified[id] & OD_KNOWN1) != 0;
 }
 
 // Remove "Secret" symbol for identity of object
@@ -158,7 +158,7 @@ void known1(Inventory_t *i_ptr) {
     id <<= 6;
     id += (uint8_t) (i_ptr->subval & (ITEM_SINGLE_STACK_MIN - 1));
 
-    object_ident[id] |= OD_KNOWN1;
+    objects_identified[id] |= OD_KNOWN1;
 
     // clear the tried flag, since it is now known
     clearObjectTriedFlag(id);
@@ -625,7 +625,7 @@ void objdes(obj_desc_t out_val, Inventory_t *i_ptr, bool pref) {
         indexx += (i_ptr->subval & (ITEM_SINGLE_STACK_MIN - 1));
 
         // don't print tried string for store bought items
-        if ((object_ident[indexx] & OD_TRIED) && !store_bought_p(i_ptr)) {
+        if ((objects_identified[indexx] & OD_TRIED) && !store_bought_p(i_ptr)) {
             (void) strcat(tmp_str, "tried ");
         }
     }

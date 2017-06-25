@@ -116,7 +116,7 @@ extern int16_t last_store_inc;
 
 // Following are treasure arrays  and variables
 extern Treasure_t object_list[MAX_OBJECTS];
-extern uint8_t object_ident[OBJECT_IDENT_SIZE];
+extern uint8_t objects_identified[OBJECT_IDENT_SIZE];
 extern int16_t t_level[MAX_OBJ_LEVEL + 1];
 extern Inventory_t t_list[MAX_TALLOC];
 extern Inventory_t inventory[INVEN_ARRAY_SIZE];

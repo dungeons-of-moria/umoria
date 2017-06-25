@@ -549,7 +549,7 @@ const char *special_names[SN_ARRAY_SIZE] = {
 int16_t sorted_objects[MAX_DUNGEON_OBJ];
 
 // Identified objects flags
-uint8_t object_ident[OBJECT_IDENT_SIZE];
+uint8_t objects_identified[OBJECT_IDENT_SIZE];
 int16_t t_level[MAX_OBJ_LEVEL + 1];
 Inventory_t t_list[MAX_TALLOC];
 Inventory_t inventory[INVEN_ARRAY_SIZE];
