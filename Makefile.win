@@ -31,14 +31,14 @@ SRCS = main.cpp misc1.cpp misc2.cpp misc3.cpp misc4.cpp store1.cpp files.cpp io.
 	create.cpp desc.cpp generate.cpp sets.cpp dungeon.cpp creature.cpp death.cpp \
 	eat.cpp help.cpp magic.cpp potions.cpp prayer.cpp save.cpp staffs.cpp wands.cpp \
 	scrolls.cpp spells.cpp wizard.cpp store2.cpp moria1.cpp moria2.cpp \
-	moria3.cpp moria4.cpp monsters.cpp treasure.cpp variable.cpp rnd.cpp recall.cpp \
+	moria3.cpp moria4.cpp monsters.cpp treasure.cpp globals.cpp rnd.cpp recall.cpp \
 	player.cpp tables.cpp
 
 OBJS = main.o misc1.o misc2.o misc3.o misc4.o store1.o files.o io.o \
 	create.o desc.o generate.o sets.o dungeon.o creature.o death.o \
 	eat.o help.o magic.o potions.o prayer.o save.o staffs.o wands.o \
 	scrolls.o spells.o wizard.o store2.o moria1.o moria2.o \
-	moria3.o moria4.o monsters.o treasure.o variable.o rnd.o recall.o \
+	moria3.o moria4.o monsters.o treasure.o globals.o rnd.o recall.o \
 	player.o tables.o
 
 LIBFILES = splash.hlp origcmds.hlp owizcmds.hlp roglcmds.hlp \
@@ -106,6 +106,6 @@ store1.o: constant.h types.h externs.h config.h
 store2.o: constant.h types.h externs.h config.h
 tables.o: constant.h types.h config.h
 treasure.o: constant.h types.h config.h
-variable.o: constant.h types.h config.h
+globals.o: constant.h types.h config.h
 wands.o: constant.h types.h externs.h config.h
 wizard.o: constant.h types.h externs.h config.h

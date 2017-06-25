@@ -55,7 +55,7 @@ set(SOURCE_FILES
     ${SOURCE_FILES_DIR}/moria4.cpp
     ${SOURCE_FILES_DIR}/monsters.cpp
     ${SOURCE_FILES_DIR}/treasure.cpp
-    ${SOURCE_FILES_DIR}/variable.cpp
+    ${SOURCE_FILES_DIR}/globals.cpp
     ${SOURCE_FILES_DIR}/rnd.cpp
     ${SOURCE_FILES_DIR}/recall.cpp
     ${SOURCE_FILES_DIR}/player.cpp

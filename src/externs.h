@@ -390,8 +390,6 @@ void add_inscribe(Inventory_t *, uint8_t);
 void inscribe(Inventory_t *, const char *);
 void check_view();
 
-// monsters.c
-
 // moria1.c
 void change_speed(int);
 void py_bonuses(Inventory_t *, int);
@@ -588,12 +586,6 @@ void updatebargain(int, int32_t, int32_t);
 
 // store2.c
 void enter_store(int);
-
-// tables.c
-
-// treasure.c
-
-// variable.c
 
 // wands.c
 void aim();
