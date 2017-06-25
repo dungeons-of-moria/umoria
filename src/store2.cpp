@@ -1011,7 +1011,7 @@ void enter_store(int store_num) {
         move_cursor(20, 9);
 
         // clear the msg flag just like we do in dungeon.c
-        msg_flag = false;
+        message_ready_to_print = false;
 
         char command;
         if (get_com(CNIL, &command)) {

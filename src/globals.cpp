@@ -56,9 +56,9 @@ char last_command            = ' ';    // Save of the previous player command
 int command_count;                     // How many times to repeat a specific command -CJS-
 bool use_last_direction      = false;  // True when repeat commands should use last known direction
 
-bool msg_flag;                     // Set with first message
-vtype_t old_msgs[MAX_SAVE_MSG];    // Saved messages -CJS-
-int16_t last_msg         = 0;      // Index of last message held in saved messages array
+bool message_ready_to_print;           // Set with first message
+vtype_t messages[MAX_SAVE_MSG];        // Saved message history -CJS-
+int16_t last_message_id      = 0;      // Index of last message held in saved messages array
 
 int16_t missile_ctr      = 0;      // Counter for missiles
 

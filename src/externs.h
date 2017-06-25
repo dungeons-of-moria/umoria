@@ -54,9 +54,9 @@ extern char last_command;
 extern int command_count;
 extern bool use_last_direction;
 
-extern bool msg_flag;
-extern vtype_t old_msgs[MAX_SAVE_MSG];
-extern int16_t last_msg;
+extern bool message_ready_to_print;
+extern vtype_t messages[MAX_SAVE_MSG];
+extern int16_t last_message_id;
 
 extern int16_t missile_ctr;
 

@@ -120,7 +120,7 @@ char inkey() {
         // some machines may not sign extend.
         if (ch == EOF) {
             // avoid infinite loops while trying to call inkey() for a -more- prompt.
-            msg_flag = false;
+            message_ready_to_print = false;
 
             eof_flag++;
 
@@ -166,7 +166,7 @@ void flush() {
 
 // Clears given line of text -RAK-
 void erase_line(int row, int col) {
-    if (row == MSG_LINE && msg_flag) {
+    if (row == MSG_LINE && message_ready_to_print) {
         msg_print(CNIL);
     }
 
@@ -176,7 +176,7 @@ void erase_line(int row, int col) {
 
 // Clears screen
 void clear_screen() {
-    if (msg_flag) {
+    if (message_ready_to_print) {
         msg_print(CNIL);
     }
     (void) clear();
@@ -223,7 +223,7 @@ void count_msg_print(const char *msg) {
 
 // Outputs a line to a given y, x position -RAK-
 void prt(const char *str, int row, int col) {
-    if (row == MSG_LINE && msg_flag) {
+    if (row == MSG_LINE && message_ready_to_print) {
         msg_print(CNIL);
     }
 
@@ -244,8 +244,8 @@ void msg_print(const char *msg) {
     int old_len = 0;
     bool combine_messages = false;
 
-    if (msg_flag) {
-        old_len = (int) strlen(old_msgs[last_msg]) + 1;
+    if (message_ready_to_print) {
+        old_len = (int) strlen(messages[last_message_id]) + 1;
 
         // If the new message and the old message are short enough,
         // we want display them together on the same line.  So we
@@ -282,30 +282,30 @@ void msg_print(const char *msg) {
     // Make the null string a special case. -CJS-
 
     if (!msg) {
-        msg_flag = false;
+        message_ready_to_print = false;
         return;
     }
 
     command_count = 0;
-    msg_flag = true;
+    message_ready_to_print = true;
 
     // If the new message and the old message are short enough,
     // display them on the same line.
 
     if (combine_messages) {
         put_buffer(msg, MSG_LINE, old_len + 2);
-        strcat(old_msgs[last_msg], "  ");
-        strcat(old_msgs[last_msg], msg);
+        strcat(messages[last_message_id], "  ");
+        strcat(messages[last_message_id], msg);
     } else {
         put_buffer(msg, MSG_LINE, 0);
-        last_msg++;
+        last_message_id++;
 
-        if (last_msg >= MAX_SAVE_MSG) {
-            last_msg = 0;
+        if (last_message_id >= MAX_SAVE_MSG) {
+            last_message_id = 0;
         }
 
-        (void) strncpy(old_msgs[last_msg], msg, MORIA_MESSAGE_SIZE);
-        old_msgs[last_msg][MORIA_MESSAGE_SIZE - 1] = '\0';
+        (void) strncpy(messages[last_message_id], msg, MORIA_MESSAGE_SIZE);
+        messages[last_message_id][MORIA_MESSAGE_SIZE - 1] = '\0';
     }
 }
 

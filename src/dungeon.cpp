@@ -753,10 +753,10 @@ static void executeInputCommands(char *command, int *find_count) {
             move_cursor_relative(char_row, char_col);
 
             if (command_count > 0) {
-                msg_flag = false;
+                message_ready_to_print = false;
                 use_last_direction = true;
             } else {
-                msg_flag = false;
+                message_ready_to_print = false;
                 lastInputCommand = inkey();
 
                 int counter = 0;
@@ -1312,7 +1312,7 @@ static void commandPreviousMessage() {
         maxMessages = 1;
     }
 
-    int msgID = last_msg;
+    int msgID = last_message_id;
 
     if (maxMessages > 1) {
         save_screen();
@@ -1322,7 +1322,7 @@ static void commandPreviousMessage() {
         while (maxMessages > 0) {
             maxMessages--;
 
-            prt(old_msgs[msgID], maxMessages, 0);
+            prt(messages[msgID], maxMessages, 0);
 
             if (msgID == 0) {
                 msgID = MAX_SAVE_MSG - 1;
@@ -1337,7 +1337,7 @@ static void commandPreviousMessage() {
     } else {
         // Distinguish real and recovered messages with a '>'. -CJS-
         put_buffer(">", 0, 0);
-        prt(old_msgs[msgID], 0, 1);
+        prt(messages[msgID], 0, 1);
     }
 }
 

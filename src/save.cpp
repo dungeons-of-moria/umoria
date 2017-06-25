@@ -248,9 +248,9 @@ static bool sv_write() {
     wr_bytes(objects_identified, OBJECT_IDENT_SIZE);
     wr_long(randes_seed);
     wr_long(town_seed);
-    wr_short((uint16_t) last_msg);
+    wr_short((uint16_t) last_message_id);
     for (int i = 0; i < MAX_SAVE_MSG; i++) {
-        wr_string(old_msgs[i]);
+        wr_string(messages[i]);
     }
 
     // this indicates 'cheating' if it is a one
@@ -710,9 +710,9 @@ bool get_char(bool *generate) {
             rd_bytes(objects_identified, OBJECT_IDENT_SIZE);
             rd_long(&randes_seed);
             rd_long(&town_seed);
-            rd_short((uint16_t *) &last_msg);
+            rd_short((uint16_t *) &last_message_id);
             for (int i = 0; i < MAX_SAVE_MSG; i++) {
-                rd_string(old_msgs[i]);
+                rd_string(messages[i]);
             }
 
             rd_short((uint16_t *) &panic_save);
