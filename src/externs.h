@@ -27,7 +27,7 @@ extern bool show_inventory_weights;
 extern bool error_beep_sound;
 
 // Global flags
-extern int16_t dun_level;
+extern int16_t current_dungeon_level;
 extern int32_t max_score;
 extern int32_t turn;
 

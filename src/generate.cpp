@@ -16,9 +16,9 @@ typedef struct {
 static Coord_t doorstk[100];
 static int doorindex;
 
-// Returns a Dark/Light floor tile based on dun_level, and random number
+// Returns a Dark/Light floor tile based on current_dungeon_level, and random number
 static uint8_t floorTileForDungeonLevel() {
-    if (dun_level <= randint(25)) {
+    if (current_dungeon_level <= randint(25)) {
         return LIGHT_FLOOR;
     }
     return DARK_FLOOR;
@@ -982,7 +982,7 @@ static void cave_gen() {
             if (room_map[row][col]) {
                 yloc[locationID] = (int16_t) (row * (SCREEN_HEIGHT >> 1) + QUART_HEIGHT);
                 xloc[locationID] = (int16_t) (col * (SCREEN_WIDTH >> 1) + QUART_WIDTH);
-                if (dun_level > randint(DUN_UNUSUAL)) {
+                if (current_dungeon_level > randint(DUN_UNUSUAL)) {
                     int buildType = randint(3);
 
                     if (buildType == 1) {
@@ -1043,7 +1043,7 @@ static void cave_gen() {
         try_door(doorstk[i].y + 1, doorstk[i].x);
     }
 
-    int alloc_level = (dun_level / 3);
+    int alloc_level = (current_dungeon_level / 3);
     if (alloc_level < 2) {
         alloc_level = 2;
     } else if (alloc_level > 10) {
@@ -1063,7 +1063,7 @@ static void cave_gen() {
     alloc_object(set_floor, 4, randnor(TREAS_GOLD_ALLOC, 3));
     alloc_object(set_floor, 1, randint(alloc_level));
 
-    if (dun_level >= WIN_MON_APPEAR) {
+    if (current_dungeon_level >= WIN_MON_APPEAR) {
         place_win_monster();
     }
 }
@@ -1216,7 +1216,7 @@ void generate_cave() {
     cur_height = MAX_HEIGHT;
     cur_width = MAX_WIDTH;
 
-    if (dun_level == 0) {
+    if (current_dungeon_level == 0) {
         cur_height = SCREEN_HEIGHT;
         cur_width = SCREEN_WIDTH;
     }
@@ -1227,7 +1227,7 @@ void generate_cave() {
     panel_row = max_panel_rows;
     panel_col = max_panel_cols;
 
-    if (dun_level == 0) {
+    if (current_dungeon_level == 0) {
         town_gen();
     } else {
         cave_gen();

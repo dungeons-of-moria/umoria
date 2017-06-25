@@ -32,10 +32,10 @@ void place_rubble(int y, int x) {
 void place_gold(int y, int x) {
     int cur_pos = popt();
 
-    int i = ((randint(dun_level + 2) + 2) / 2) - 1;
+    int i = ((randint(current_dungeon_level + 2) + 2) / 2) - 1;
 
     if (randint(OBJ_GREAT) == 1) {
-        i += randint(dun_level + 1);
+        i += randint(current_dungeon_level + 1);
     }
 
     if (i >= MAX_GOLD) {
@@ -111,10 +111,10 @@ void place_object(int y, int x, bool must_be_small) {
 
     cave[y][x].tptr = (uint8_t) cur_pos;
 
-    int objectID = get_obj_num(dun_level, must_be_small);
+    int objectID = get_obj_num(current_dungeon_level, must_be_small);
     invcopy(&treasure_list[cur_pos], sorted_objects[objectID]);
 
-    magic_treasure(cur_pos, dun_level);
+    magic_treasure(cur_pos, current_dungeon_level);
 
     if (cave[y][x].cptr == 1) {
         msg_print("You feel something roll beneath your feet."); // -CJS-
@@ -413,7 +413,7 @@ void prt_gold() {
 void prt_depth() {
     vtype_t depths;
 
-    int depth = dun_level * 50;
+    int depth = current_dungeon_level * 50;
 
     if (depth == 0) {
         (void) strcpy(depths, "Town level");

@@ -207,9 +207,9 @@ static bool readSummonMonsterScroll() {
 }
 
 static void readTeleportLevelScroll() {
-    dun_level += (-3) + 2 * randint(2);
-    if (dun_level < 1) {
-        dun_level = 1;
+    current_dungeon_level += (-3) + 2 * randint(2);
+    if (current_dungeon_level < 1) {
+        current_dungeon_level = 1;
     }
     new_level_flag = true;
 }

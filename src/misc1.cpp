@@ -721,7 +721,7 @@ void alloc_monster(int num, int dis, bool slp) {
             x = randint(cur_width - 2);
         } while (cave[y][x].fval >= MIN_CLOSED_SPACE || (cave[y][x].cptr != 0) || (distance(y, x, char_row, char_col) <= dis));
 
-        int l = get_mons_num(dun_level);
+        int l = get_mons_num(current_dungeon_level);
 
         // Dragons are always created sleeping here,
         // so as to give the player a sporting chance.
@@ -763,7 +763,7 @@ static bool placeMonsterAdjacentTo(int monsterID, int *y, int *x, bool slp) {
 
 // Places creature adjacent to given location -RAK-
 bool summon_monster(int *y, int *x, bool slp) {
-    int monsterID = get_mons_num(dun_level + MON_SUMMON_ADJ);
+    int monsterID = get_mons_num(current_dungeon_level + MON_SUMMON_ADJ);
     return placeMonsterAdjacentTo(monsterID, y, x, slp);
 }
 

@@ -51,7 +51,7 @@ static void trapCoveredPit(Inventory_t *t_ptr, int dam, int y, int x) {
 
 static void trapDoor(Inventory_t *t_ptr, int dam) {
     new_level_flag = true;
-    dun_level++;
+    current_dungeon_level++;
 
     msg_print("You fell through a trap door!");
 

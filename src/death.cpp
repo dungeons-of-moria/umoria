@@ -145,7 +145,7 @@ static void print_tomb() {
     (void) sprintf(str, "%d Au", py.misc.au);
     (void) sprintf(str, "| %s |          :    :", center_string(tmp_str, str));
     put_buffer(str, 13, 9);
-    (void) sprintf(str, "Died on Level : %d", dun_level);
+    (void) sprintf(str, "Died on Level : %d", current_dungeon_level);
     (void) sprintf(str, "| %s |         _;,,,,;_", center_string(tmp_str, str));
     put_buffer(str, 14, 9);
     put_buffer("|            killed by            |", 15, 9);
@@ -211,7 +211,7 @@ int32_t total_points() {
         total += item_value(&inventory[i]);
     }
 
-    total += dun_level * 50;
+    total += current_dungeon_level * 50;
 
     // Don't ever let the score decrease from one save to the next.
     if (max_score > total) {
@@ -240,7 +240,7 @@ static void highscores() {
     new_entry.uid = 0; // NOTE: do we not want to use `getuid()`? -MRC-
     new_entry.mhp = py.misc.mhp;
     new_entry.chp = py.misc.chp;
-    new_entry.dun_level = (uint8_t) dun_level;
+    new_entry.dun_level = (uint8_t) current_dungeon_level;
     new_entry.lev = (uint8_t) py.misc.lev;
     new_entry.max_dlv = (uint8_t) py.misc.max_dlv;
     new_entry.sex = (py.misc.male ? 'M' : 'F');
@@ -390,7 +390,7 @@ static void kingly() {
     const char *p;
 
     // Change the character attributes.
-    dun_level = 0;
+    current_dungeon_level = 0;
     (void) strcpy(died_from, "Ripe Old Age");
 
     (void) restore_level();

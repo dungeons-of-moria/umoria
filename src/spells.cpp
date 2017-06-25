@@ -211,7 +211,7 @@ bool light_area(int y, int x) {
     // NOTE: this is not changed anywhere. A bug or correct? -MRC-
     bool lit = true;
 
-    if (cave[y][x].lr && dun_level > 0) {
+    if (cave[y][x].lr && current_dungeon_level > 0) {
         light_room(y, x);
     }
 
@@ -231,7 +231,7 @@ bool light_area(int y, int x) {
 bool unlight_area(int y, int x) {
     bool darkened = false;
 
-    if (cave[y][x].lr && dun_level > 0) {
+    if (cave[y][x].lr && current_dungeon_level > 0) {
         int tmp1 = (SCREEN_HEIGHT / 2);
         int tmp2 = (SCREEN_WIDTH / 2);
         int start_row = (y / tmp1) * tmp1 + 1;
@@ -2181,7 +2181,7 @@ static void replace_spot(int y, int x, int typ) {
 //        as teleporting to another level.  This will NOT win
 //        the game.
 void destroy_area(int y, int x) {
-    if (dun_level > 0) {
+    if (current_dungeon_level > 0) {
         for (int i = (y - 15); i <= (y + 15); i++) {
             for (int j = (x - 15); j <= (x + 15); j++) {
                 if (in_bounds(i, j) && cave[i][j].fval != BOUNDARY_WALL) {

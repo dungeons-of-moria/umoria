@@ -300,7 +300,7 @@ static bool sv_write() {
         return !(ferror(fileptr) || fflush(fileptr) == EOF);
     }
 
-    wr_short((uint16_t) dun_level);
+    wr_short((uint16_t) current_dungeon_level);
     wr_short((uint16_t) char_row);
     wr_short((uint16_t) char_col);
     wr_short((uint16_t) mon_tot_mult);
@@ -783,7 +783,7 @@ bool get_char(bool *generate) {
                     py.flags.poisoned = 1;
                 }
 
-                dun_level = 0; // Resurrect on the town level.
+                current_dungeon_level = 0; // Resurrect on the town level.
                 character_generated = true;
 
                 // set noscore to indicate a resurrection, and don't enter
@@ -809,7 +809,7 @@ bool get_char(bool *generate) {
         // only level specific info should follow,
         // not present for dead characters
 
-        rd_short((uint16_t *) &dun_level);
+        rd_short((uint16_t *) &current_dungeon_level);
         rd_short((uint16_t *) &char_row);
         rd_short((uint16_t *) &char_col);
         rd_short((uint16_t *) &mon_tot_mult);

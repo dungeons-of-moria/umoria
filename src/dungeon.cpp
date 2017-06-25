@@ -44,8 +44,8 @@ static void playerInitializePlayerLight() {
 
 // Check for a maximum level
 static void playerUpdateDeepestDungeonLevelVisited() {
-    if (dun_level > py.misc.max_dlv) {
-        py.misc.max_dlv = (uint16_t) dun_level;
+    if (current_dungeon_level > py.misc.max_dlv) {
+        py.misc.max_dlv = (uint16_t) current_dungeon_level;
     }
 }
 
@@ -646,11 +646,11 @@ static void playerUpdateWordOfRecall() {
         py.flags.paralysis++;
         py.flags.word_recall = 0;
 
-        if (dun_level > 0) {
-            dun_level = 0;
+        if (current_dungeon_level > 0) {
+            current_dungeon_level = 0;
             msg_print("You feel yourself yanked upwards!");
         } else if (py.misc.max_dlv != 0) {
-            dun_level = py.misc.max_dlv;
+            current_dungeon_level = py.misc.max_dlv;
             msg_print("You feel yourself yanked downwards!");
         }
     } else {
@@ -907,7 +907,7 @@ void dungeon() {
         turn++;
 
         // turn over the store contents every, say, 1000 turns
-        if (dun_level != 0 && turn % 1000 == 0) {
+        if (current_dungeon_level != 0 && turn % 1000 == 0) {
             store_maint();
         }
 
@@ -1508,9 +1508,9 @@ static void doWizardCommands(char com_val) {
             }
 
             if (i > -1) {
-                dun_level = (int16_t) i;
-                if (dun_level > 99) {
-                    dun_level = 99;
+                current_dungeon_level = (int16_t) i;
+                if (current_dungeon_level > 99) {
+                    current_dungeon_level = 99;
                 }
                 new_level_flag = true;
             } else {
@@ -2077,7 +2077,7 @@ static void go_up() {
     uint8_t tileID = cave[char_row][char_col].tptr;
 
     if (tileID != 0 && treasure_list[tileID].tval == TV_UP_STAIR) {
-        dun_level--;
+        current_dungeon_level--;
 
         msg_print("You enter a maze of up staircases.");
         msg_print("You pass through a one-way door.");
@@ -2094,7 +2094,7 @@ static void go_down() {
     uint8_t tileID = cave[char_row][char_col].tptr;
 
     if (tileID != 0 && treasure_list[tileID].tval == TV_DOWN_STAIR) {
-        dun_level++;
+        current_dungeon_level++;
 
         msg_print("You enter a maze of down staircases.");
         msg_print("You pass through a one-way door.");
