@@ -13,7 +13,6 @@ extern char days[7][29];
 extern vtype_t savegame_filename;
 extern FILE *highscore_fp;
 
-// These are options, set with set_options command `=` -CJS-
 extern bool display_counts;
 extern bool find_bound;
 extern bool run_cut_corners;
@@ -26,7 +25,6 @@ extern bool use_roguelike_keys;
 extern bool show_inventory_weights;
 extern bool error_beep_sound;
 
-// Global flags
 extern int16_t current_dungeon_level;
 extern int32_t character_max_score;
 extern int32_t current_game_turn;
@@ -70,9 +68,9 @@ extern int16_t noscore;
 extern bool to_be_wizard;
 extern bool wizard_mode;
 
-// Dungeon and display panel sizes
 extern int16_t dungeon_height;
 extern int16_t dungeon_width;
+
 extern int16_t max_panel_rows, max_panel_cols;
 extern int panel_row, panel_col;
 extern int panel_row_min, panel_row_max;

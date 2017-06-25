@@ -17,64 +17,65 @@ vtype_t savegame_filename; // The save game filename -CJS-
 FILE *highscore_fp;        // High score file pointer
 
 // Game options as set on startup and with `=` set options command -CJS-
-bool display_counts         = true;   // Display rest/repeat counts
-bool find_bound             = false;  // Print yourself on a run (slower)
-bool run_cut_corners        = true;   // Cut corners while running
-bool run_examine_corners    = true;   // Check corners while running
-bool run_ignore_doors       = false;  // Run through open doors
-bool run_print_self         = false;  // Stop running when the map shifts
-bool highlight_seams        = false;  // Highlight magma and quartz veins
-bool prompt_to_pickup       = false;  // Prompt to pick something up
-bool use_roguelike_keys     = false;  // Use classic Roguelike keys - set in config.h/main.c
-bool show_inventory_weights = false;  // Display weights in inventory
-bool error_beep_sound       = true;   // Beep for invalid characters
+bool display_counts           = true;   // Display rest/repeat counts
+bool find_bound               = false;  // Print yourself on a run (slower)
+bool run_cut_corners          = true;   // Cut corners while running
+bool run_examine_corners      = true;   // Check corners while running
+bool run_ignore_doors         = false;  // Run through open doors
+bool run_print_self           = false;  // Stop running when the map shifts
+bool highlight_seams          = false;  // Highlight magma and quartz veins
+bool prompt_to_pickup         = false;  // Prompt to pick something up
+bool use_roguelike_keys       = false;  // Use classic Roguelike keys - set in config.h/main.c
+bool show_inventory_weights   = false;  // Display weights in inventory
+bool error_beep_sound         = true;   // Beep for invalid characters
 
-// Global flags
-int16_t current_dungeon_level = 0;   // Current dungeon level
-int32_t current_game_turn     = -1;  // Current turn of game
+int16_t current_dungeon_level = 0;      // Current dungeon level
+int32_t current_game_turn     = -1;     // Current turn of game
 
-bool generate_new_level;           // True will generate a new level on next loop iteration
-bool screen_has_changed  = false;  // Track screen changes for inventory commands
+bool generate_new_level;                // True will generate a new level on next loop iteration
+bool screen_has_changed       = false;  // Track screen changes for inventory commands
 
-bool player_free_turn;             // Player has a free turn, so do not move creatures
-int running_counter;               // Used in MORIA for .(dir)
-bool teleport_player;              // Handle teleport traps
+bool player_free_turn;                  // Player has a free turn, so do not move creatures
+int running_counter;                    // Used in MORIA for .(dir)
+bool teleport_player;                   // Handle teleport traps
 
-bool player_carrying_light;        // True when player is carrying light
-bool weapon_is_heavy     = false;  // Weapon is too heavy -CJS-
-int pack_heaviness       = 0;      // Heaviness of pack - used to calculate if pack is too heavy -CJS-
+bool player_carrying_light;             // True when player is carrying light
+bool weapon_is_heavy          = false;  // Weapon is too heavy -CJS-
+int pack_heaviness            = 0;      // Heaviness of pack - used to calculate if pack is too heavy -CJS-
 
-bool total_winner        = false;  // Character beat the Balrog
-bool character_generated = false;  // Don't save score until character generation is finished
-bool character_saved     = false;  // Prevents save on kill after saving a character
-bool character_is_dead   = false;  // True if character has died
-int32_t character_birth_date;      // Unix time for when the character was created
-vtype_t character_died_from;       // What the character died from: starvation, Bat, etc.
+bool total_winner             = false;  // Character beat the Balrog
+bool character_generated      = false;  // Don't save score until character generation is finished
+bool character_saved          = false;  // Prevents save on kill after saving a character
+bool character_is_dead        = false;  // True if character has died
+int32_t character_birth_date;           // Unix time for when the character was created
+vtype_t character_died_from;            // What the character died from: starvation, Bat, etc.
 
-char doing_inventory_command = 0;      // Track inventory commands -CJS-
-char last_command            = ' ';    // Save of the previous player command
-int command_count;                     // How many times to repeat a specific command -CJS-
-bool use_last_direction      = false;  // True when repeat commands should use last known direction
+char doing_inventory_command  = 0;      // Track inventory commands -CJS-
+char last_command             = ' ';    // Save of the previous player command
+int command_count;                      // How many times to repeat a specific command -CJS-
+bool use_last_direction       = false;  // True when repeat commands should use last known direction
 
-bool message_ready_to_print;           // Set with first message
-vtype_t messages[MAX_SAVE_MSG];        // Saved message history -CJS-
-int16_t last_message_id      = 0;      // Index of last message held in saved messages array
+bool message_ready_to_print;            // Set with first message
+vtype_t messages[MAX_SAVE_MSG];         // Saved message history -CJS-
+int16_t last_message_id       = 0;      // Index of last message held in saved messages array
 
-int16_t missiles_counter     = 0;      // Counter for missiles
+int16_t missiles_counter      = 0;      // Counter for missiles
 
-uint32_t magic_seed;                   // Seed for initializing magic items (Potions, Wands, Staves, Scrolls, etc.)
-uint32_t town_seed;                    // Seed for town generation
+uint32_t magic_seed;                    // Seed for initializing magic items (Potions, Wands, Staves, Scrolls, etc.)
+uint32_t town_seed;                     // Seed for town generation
 
-int eof_flag                 = 0;      // Is used to signal EOF/HANGUP condition
-bool panic_save              = false;  // True if playing from a panic save
-int16_t noscore              = 0;      // Don't save a score for this game. -CJS-
+int eof_flag                  = 0;      // Is used to signal EOF/HANGUP condition
+bool panic_save               = false;  // True if playing from a panic save
+int16_t noscore               = 0;      // Don't save a score for this game. -CJS-
 
-bool to_be_wizard            = false;  // Player requests to be Wizard - used during startup, when -w option used
-bool wizard_mode             = false;  // Character is a Wizard when true
+bool to_be_wizard             = false;  // Player requests to be Wizard - used during startup, when -w option used
+bool wizard_mode              = false;  // Character is a Wizard when true
 
-// Dungeon and display panel sizes
-int16_t dungeon_height;  // Dungeon map height at either town level, or down in the dungeon
-int16_t dungeon_width;   // Dungeon map width at either town level, or down in the dungeon
+// Dungeon size is either big enough for town level, or the dungeon itself
+int16_t dungeon_height;
+int16_t dungeon_width;
+
+// Screen panels calculated from the dungeon/screen dimensions
 int16_t max_panel_rows, max_panel_cols;
 int panel_row, panel_col;
 int panel_row_min, panel_row_max;
