@@ -106,7 +106,7 @@ extern int32_t max_score;
 
 // Following are store definitions
 extern Owner_t owners[MAX_OWNERS];
-extern Store_t store[MAX_STORES];
+extern Store_t stores[MAX_STORES];
 extern uint16_t store_choice[MAX_STORES][STORE_CHOICES];
 extern int (*store_buy[MAX_STORES])(int);
 

@@ -260,7 +260,7 @@ static bool sv_write() {
     wr_shorts(player_hp, MAX_PLAYER_LEVEL);
 
     for (int i = 0; i < MAX_STORES; i++) {
-        Store_t *st_ptr = &store[i];
+        Store_t *st_ptr = &stores[i];
 
         wr_long((uint32_t) st_ptr->store_open);
         wr_short((uint16_t) st_ptr->insult_cur);
@@ -722,7 +722,7 @@ bool get_char(bool *generate) {
 
             if (version_min >= 2 || (version_min == 1 && patch_level >= 3)) {
                 for (int i = 0; i < MAX_STORES; i++) {
-                    Store_t *st_ptr = &store[i];
+                    Store_t *st_ptr = &stores[i];
 
                     rd_long((uint32_t *) &st_ptr->store_open);
                     rd_short((uint16_t *) &st_ptr->insult_cur);
@@ -885,7 +885,7 @@ bool get_char(bool *generate) {
 
         if ((version_min == 1 && patch_level < 3) || version_min == 0) {
             for (int i = 0; i < MAX_STORES; i++) {
-                Store_t *st_ptr = &store[i];
+                Store_t *st_ptr = &stores[i];
 
                 rd_long((uint32_t *) &st_ptr->store_open);
                 rd_short((uint16_t *) &st_ptr->insult_cur);

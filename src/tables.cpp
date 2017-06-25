@@ -9,7 +9,7 @@
 
 #include "headers.h"
 
-Store_t store[MAX_STORES];
+Store_t stores[MAX_STORES];
 
 // Store owners have different characteristics for pricing and haggling
 // Note: Store owners should be added in groups, one for each store

@@ -167,7 +167,7 @@ int32_t sell_price(int snum, int32_t *max_sell, int32_t *min_sell, Inventory_t *
         return 0;
     }
 
-    Owner_t *owner = &owners[store[snum].owner];
+    Owner_t *owner = &owners[stores[snum].owner];
 
     price = price * rgold_adj[owner->owner_race][py.misc.prace] / 100;
     if (price < 1) {
@@ -186,7 +186,7 @@ int32_t sell_price(int snum, int32_t *max_sell, int32_t *min_sell, Inventory_t *
 
 // Check to see if he will be carrying too many objects -RAK-
 bool store_check_num(Inventory_t *t_ptr, int store_num) {
-    Store_t *s_ptr = &store[store_num];
+    Store_t *s_ptr = &stores[store_num];
 
     if (s_ptr->store_ctr < STORE_INVEN_MAX) {
         return true;
@@ -214,7 +214,7 @@ bool store_check_num(Inventory_t *t_ptr, int store_num) {
 
 // Insert INVEN_MAX at given location
 static void insert_store(int store_num, int pos, int32_t icost, Inventory_t *i_ptr) {
-    Store_t *s_ptr = &store[store_num];
+    Store_t *s_ptr = &stores[store_num];
 
     for (int i = s_ptr->store_ctr - 1; i >= pos; i--) {
         s_ptr->store_inven[i + 1] = s_ptr->store_inven[i];
@@ -234,7 +234,7 @@ void store_carry(int store_num, int *ipos, Inventory_t *t_ptr) {
         return;
     }
 
-    Store_t *s_ptr = &store[store_num];
+    Store_t *s_ptr = &stores[store_num];
 
     int item_val = 0;
     int item_num = t_ptr->number;
@@ -282,7 +282,7 @@ void store_carry(int store_num, int *ipos, Inventory_t *t_ptr) {
 // Destroy an item in the stores inventory.  Note that if
 // "one_of" is false, an entire slot is destroyed -RAK-
 void store_destroy(int store_num, int item_val, bool one_of) {
-    Store_t *s_ptr = &store[store_num];
+    Store_t *s_ptr = &stores[store_num];
     Inventory_t *i_ptr = &s_ptr->store_inven[item_val].sitem;
 
     int number;
@@ -317,7 +317,7 @@ void store_init() {
     int i = MAX_OWNERS / MAX_STORES;
 
     for (int j = 0; j < MAX_STORES; j++) {
-        Store_t *s_ptr = &store[j];
+        Store_t *s_ptr = &stores[j];
 
         s_ptr->owner = (uint8_t) (MAX_STORES * (randint(i) - 1) + j);
         s_ptr->insult_cur = 0;
@@ -365,7 +365,7 @@ static void store_create(int store_num, int16_t max_cost) {
 // Initialize and up-keep the store's inventory. -RAK-
 void store_maint() {
     for (int store_id = 0; store_id < MAX_STORES; store_id++) {
-        Store_t *s_ptr = &store[store_id];
+        Store_t *s_ptr = &stores[store_id];
 
         s_ptr->insult_cur = 0;
         if (s_ptr->store_ctr >= STORE_MIN_INVEN) {
@@ -395,7 +395,7 @@ void store_maint() {
 
 // eliminate need to bargain if player has haggled well in the past -DJB-
 bool noneedtobargain(int store_num, int32_t minprice) {
-    Store_t *s_ptr = &store[store_num];
+    Store_t *s_ptr = &stores[store_num];
 
     if (s_ptr->good_buy == MAX_SHORT) {
         return true;
@@ -408,7 +408,7 @@ bool noneedtobargain(int store_num, int32_t minprice) {
 
 // update the bargain info -DJB-
 void updatebargain(int store_num, int32_t price, int32_t minprice) {
-    Store_t *s_ptr = &store[store_num];
+    Store_t *s_ptr = &stores[store_num];
 
     if (minprice > 9) {
         if (price == minprice) {
