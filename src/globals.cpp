@@ -62,8 +62,8 @@ int16_t last_message_id      = 0;      // Index of last message held in saved me
 
 int16_t missiles_counter     = 0;      // Counter for missiles
 
-uint32_t randes_seed;              // Seed for encoding colors / restarting randes_state
-uint32_t town_seed;                // Seed for town generation
+uint32_t magic_seed;                   // Seed for initializing magic items (Potions, Wands, Staves, Scrolls, etc.)
+uint32_t town_seed;                    // Seed for town generation
 
 int eof_flag             = 0;      // Is used to signal EOF/HANGUP condition
 bool panic_save          = false;  // True if playing from a panic save

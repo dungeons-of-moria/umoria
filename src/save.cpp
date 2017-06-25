@@ -246,7 +246,7 @@ static bool sv_write() {
     wr_long(spell_forgotten);
     wr_bytes(spell_order, 32);
     wr_bytes(objects_identified, OBJECT_IDENT_SIZE);
-    wr_long(randes_seed);
+    wr_long(magic_seed);
     wr_long(town_seed);
     wr_short((uint16_t) last_message_id);
     for (int i = 0; i < MAX_SAVE_MSG; i++) {
@@ -708,7 +708,7 @@ bool get_char(bool *generate) {
             rd_long(&spell_forgotten);
             rd_bytes(spell_order, 32);
             rd_bytes(objects_identified, OBJECT_IDENT_SIZE);
-            rd_long(&randes_seed);
+            rd_long(&magic_seed);
             rd_long(&town_seed);
             rd_short((uint16_t *) &last_message_id);
             for (int i = 0; i < MAX_SAVE_MSG; i++) {

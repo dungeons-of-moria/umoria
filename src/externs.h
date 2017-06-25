@@ -60,7 +60,7 @@ extern int16_t last_message_id;
 
 extern int16_t missiles_counter;
 
-extern uint32_t randes_seed;
+extern uint32_t magic_seed;
 extern uint32_t town_seed;
 
 extern int eof_flag;

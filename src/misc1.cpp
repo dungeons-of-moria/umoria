@@ -22,7 +22,7 @@ void init_seeds(uint32_t seed) {
         clock_var = seed;
     }
 
-    randes_seed = (int32_t) clock_var;
+    magic_seed = (int32_t) clock_var;
 
     clock_var += 8762;
     town_seed = (int32_t) clock_var;
