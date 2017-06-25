@@ -11,7 +11,7 @@
 
 static void unsample(Inventory_t *);
 
-char titles[MAX_TITLES][10];
+char magic_item_titles[MAX_TITLES][10];
 
 bool is_a_vowel(char ch) {
     switch (ch) {
@@ -103,7 +103,7 @@ void magic_init() {
             string[9] = '\0';
         }
 
-        (void) strcpy(titles[h], string);
+        (void) strcpy(magic_item_titles[h], string);
     }
 
     reset_seed();
@@ -417,7 +417,7 @@ void objdes(obj_desc_t out_val, Inventory_t *i_ptr, bool pref) {
         case TV_SCROLL2:
             if (modify) {
                 basenm = "& Scroll~ titled \"%s\"";
-                modstr = titles[indexx];
+                modstr = magic_item_titles[indexx];
             } else {
                 basenm = "& Scroll~";
                 append_name = true;
