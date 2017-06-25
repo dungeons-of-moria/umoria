@@ -1929,8 +1929,8 @@ void create_food() {
 
     // take no action here, don't want to destroy object under player
     if (treasureID != 0) {
-        // set free_turn_flag so that scroll/spell points won't be used
-        free_turn_flag = true;
+        // set player_free_turn so that scroll/spell points won't be used
+        player_free_turn = true;
 
         msg_print("There is already an object under you.");
 

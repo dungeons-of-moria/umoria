@@ -11,7 +11,7 @@
 
 // Eat some food. -RAK-
 void eat() {
-    free_turn_flag = true;
+    player_free_turn = true;
 
     if (inven_ctr == 0) {
         msg_print("But you are not carrying anything.");
@@ -29,7 +29,7 @@ void eat() {
         return;
     }
 
-    free_turn_flag = false;
+    player_free_turn = false;
 
     bool identified = false;
 

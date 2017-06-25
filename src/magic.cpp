@@ -166,7 +166,7 @@ static void castSpell(int spellID) {
 
 // Throw a magic spell -RAK-
 void cast() {
-    free_turn_flag = true;
+    player_free_turn = true;
 
     if (!canReadSpells()) {
         return;
@@ -192,7 +192,7 @@ void cast() {
         return;
     }
 
-    free_turn_flag = false;
+    player_free_turn = false;
 
     Spell_t *m_ptr = &magic_spells[py.misc.pclass - 1][choice];
 

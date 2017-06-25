@@ -36,7 +36,7 @@ int32_t current_game_turn     = -1;  // Current turn of game
 bool generate_new_level;           // True will generate a new level on next loop iteration
 bool screen_has_changed  = false;  // Track screen changes for inventory commands
 
-bool free_turn_flag;               // Player has a free turn, so do not move creatures
+bool player_free_turn;             // Player has a free turn, so do not move creatures
 int find_flag;                     // Used in MORIA for .(dir)
 bool teleport_flag;                // Handle teleport traps
 

@@ -174,7 +174,7 @@ static bool dischargeStaff(Inventory_t *staff_ptr) {
 void use() {
     int j, k;
 
-    free_turn_flag = true;
+    player_free_turn = true;
 
     if (!isCarryingStaff(&j, &k)) {
         return;
@@ -186,7 +186,7 @@ void use() {
     }
 
     // From here on player uses up a turn
-    free_turn_flag = false;
+    player_free_turn = false;
 
     Inventory_t *staff_ptr = &inventory[staff_id];
 

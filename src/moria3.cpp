@@ -1004,7 +1004,7 @@ void move_char(int dir, bool do_pickup) {
             } else {
                 end_find();
             }
-            free_turn_flag = true;
+            player_free_turn = true;
         }
     } else {
         // Attacking a creature!
@@ -1016,7 +1016,7 @@ void move_char(int dir, bool do_pickup) {
         // if player can see monster, and was in find mode, then nothing
         if (monster->ml && old_find_flag) {
             // did not do anything this turn
-            free_turn_flag = true;
+            player_free_turn = true;
         } else {
             playerAttackPosition(y, x);
         }
@@ -1224,7 +1224,7 @@ void openobject() {
     }
 
     if (no_object) {
-        free_turn_flag = true;
+        player_free_turn = true;
         msg_print("I do not see anything you can open there.");
     }
 }
@@ -1267,7 +1267,7 @@ void closeobject() {
     }
 
     if (no_object) {
-        free_turn_flag = true;
+        player_free_turn = true;
         msg_print("I do not see anything you can close there.");
     }
 }

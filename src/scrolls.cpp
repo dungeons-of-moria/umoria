@@ -408,7 +408,7 @@ static void readWordOfRecallScroll() {
 
 // Scrolls for the reading -RAK-
 void read_scroll() {
-    free_turn_flag = true;
+    player_free_turn = true;
 
     int j, k;
     if (!canReadScroll(&j, &k)) {
@@ -421,7 +421,7 @@ void read_scroll() {
     }
 
     // From here on, no free turn for the player
-    free_turn_flag = false;
+    player_free_turn = false;
 
     bool used_up = true;
     bool identified = false;

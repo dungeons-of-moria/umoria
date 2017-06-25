@@ -117,7 +117,7 @@ static bool discharge_wand(Inventory_t *wand, int dir) {
 
 // Wands for the aiming.
 void aim() {
-    free_turn_flag = true;
+    player_free_turn = true;
 
     if (inven_ctr == 0) {
         msg_print("But you are not carrying anything.");
@@ -135,7 +135,7 @@ void aim() {
         return;
     }
 
-    free_turn_flag = false;
+    player_free_turn = false;
 
     int dir;
     if (!get_dir(CNIL, &dir)) {

@@ -1053,7 +1053,7 @@ void enter_store(int store_num) {
                         display_inventory(store_num, cur_top);
                     }
 
-                    free_turn_flag = false; // No free moves here. -CJS-
+                    player_free_turn = false; // No free moves here. -CJS-
                     break;
                 case 'p':
                     exit_store = store_purchase(store_num, &cur_top);

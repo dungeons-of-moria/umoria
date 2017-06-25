@@ -1769,7 +1769,7 @@ void gain_spells() {
         (void) sprintf(tmp_str, "You can't learn any new %ss!", (stat == A_INT ? "spell" : "prayer"));
         msg_print(tmp_str);
 
-        free_turn_flag = true;
+        player_free_turn = true;
         return;
     }
 

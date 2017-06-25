@@ -173,7 +173,7 @@ static void recitePrayer(int prayerType) {
 
 // Pray like HELL. -RAK-
 void pray() {
-    free_turn_flag = true;
+    player_free_turn = true;
 
     int itemPosBegin, itemposEnd;
     if (!canPray(&itemPosBegin, &itemposEnd)) {
@@ -201,11 +201,11 @@ void pray() {
 
     Spell_t *s_ptr = &magic_spells[py.misc.pclass - 1][choice];
 
-    // NOTE: at least one function called by `recitePrayer()` sets `free_turn_flag = true`,
+    // NOTE: at least one function called by `recitePrayer()` sets `player_free_turn = true`,
     // e.g. `create_food()`, so this check is required. -MRC-
-    free_turn_flag = false;
+    player_free_turn = false;
     recitePrayer(choice);
-    if (!free_turn_flag) {
+    if (!player_free_turn) {
         if ((spell_worked & (1L << choice)) == 0) {
             py.misc.exp += s_ptr->sexp << 2;
             prt_experience();
@@ -213,7 +213,7 @@ void pray() {
         }
     }
 
-    if (!free_turn_flag) {
+    if (!player_free_turn) {
         if (s_ptr->smana > py.misc.cmana) {
             msg_print("You faint from fatigue!");
             py.flags.paralysis = (int16_t) randint((5 * (s_ptr->smana - py.misc.cmana)));

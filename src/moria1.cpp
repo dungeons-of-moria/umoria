@@ -760,7 +760,7 @@ static void inventoryUnwieldItem() {
         return;
     }
 
-    free_turn_flag = false;
+    player_free_turn = false;
 
     Inventory_t savedItem = inventory[INVEN_AUX];
     inventory[INVEN_AUX] = inventory[INVEN_WIELD];
@@ -955,7 +955,7 @@ static bool selectItemCommands(char *command, char *which, bool selecting) {
     const char *prompt;
     const char *swap;
 
-    while (selecting && free_turn_flag) {
+    while (selecting && player_free_turn) {
         swap = "";
 
         if (*command == 'w') {
@@ -1075,7 +1075,7 @@ static bool selectItemCommands(char *command, char *which, bool selecting) {
 
                 check_strength();
 
-                free_turn_flag = false;
+                player_free_turn = false;
 
                 if (*command == 'r') {
                     selecting = false;
@@ -1107,7 +1107,7 @@ static bool selectItemCommands(char *command, char *which, bool selecting) {
 
             // OK. Wear it.
             if (item >= 0) {
-                free_turn_flag = false;
+                player_free_turn = false;
 
                 // first remove new item from inventory
                 Inventory_t savedItem = inventory[item];
@@ -1222,7 +1222,7 @@ static bool selectItemCommands(char *command, char *which, bool selecting) {
             }
 
             if (item >= 0) {
-                free_turn_flag = false;
+                player_free_turn = false;
 
                 inven_drop(item, query == 'y');
                 check_strength();
@@ -1237,7 +1237,7 @@ static bool selectItemCommands(char *command, char *which, bool selecting) {
             }
         }
 
-        if (!free_turn_flag && scr_state == BLANK_SCR) {
+        if (!player_free_turn && scr_state == BLANK_SCR) {
             selecting = false;
         }
     }
@@ -1292,7 +1292,7 @@ static void inventoryDisplayAppropriateHeader() {
 
 // This does all the work.
 void inven_command(char command) {
-    free_turn_flag = true;
+    player_free_turn = true;
 
     save_screen();
     setInventoryCommandScreenState(command);
@@ -1346,7 +1346,7 @@ void inven_command(char command) {
 
         if (which == ESCAPE || scr_state == BLANK_SCR) {
             command = ESCAPE;
-        } else if (!free_turn_flag) {
+        } else if (!player_free_turn) {
             // Save state for recovery if they want to call us again next turn.
             // Otherwise, set a dummy command to recover screen.
             if (selecting) {
@@ -1451,7 +1451,7 @@ int get_item(int *com_val, const char *pmt, int i, int j, char *mask, const char
                     screenID = -1;
                     commandFinished = true;
 
-                    free_turn_flag = true;
+                    player_free_turn = true;
 
                     break;
                 case '/':
@@ -1542,7 +1542,7 @@ int get_item(int *com_val, const char *pmt, int i, int j, char *mask, const char
                             screenID = -1;
                             commandFinished = true;
 
-                            free_turn_flag = true;
+                            player_free_turn = true;
 
                             break;
                         }
@@ -1630,7 +1630,7 @@ bool get_dir(char *prompt, int *dir) {
         int save = command_count;
 
         if (!get_com(prompt, &command)) {
-            free_turn_flag = true;
+            player_free_turn = true;
             return false;
         }
 
@@ -1657,7 +1657,7 @@ bool get_alldir(const char *prompt, int *dir) {
 
     while (true) {
         if (!get_com(prompt, &command)) {
-            free_turn_flag = true;
+            player_free_turn = true;
             return false;
         }
 
@@ -1907,7 +1907,7 @@ void rest() {
     }
     erase_line(MSG_LINE, 0);
 
-    free_turn_flag = true;
+    player_free_turn = true;
 }
 
 void rest_off() {

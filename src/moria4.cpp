@@ -17,7 +17,7 @@ static bool look_see(int, int, bool *);
 // somewhere where it has no effect.
 static bool canTunnel(int treasureID, int tileID) {
     if (tileID < MIN_CAVE_WALL && (treasureID == 0 || (treasure_list[treasureID].tval != TV_RUBBLE && treasure_list[treasureID].tval != TV_SECRET_DOOR))) {
-        free_turn_flag = true;
+        player_free_turn = true;
 
         if (treasureID == 0) {
             msg_print("Tunnel through what?  Empty air?!?");
@@ -235,7 +235,7 @@ static void disarmFloorTrap(int y, int x, int tot, int level, int dir, int16_t p
 
 static void disarmChestTrap(int y, int x, int tot, Inventory_t *item) {
     if (!known2_p(item)) {
-        free_turn_flag = true;
+        player_free_turn = true;
         msg_print("I don't see a trap.");
 
         return;
@@ -270,7 +270,7 @@ static void disarmChestTrap(int y, int x, int tot, Inventory_t *item) {
     }
 
     msg_print("The chest was not trapped.");
-    free_turn_flag = true;
+    player_free_turn = true;
 }
 
 // Disarms a trap -RAK-
@@ -308,7 +308,7 @@ void disarm_trap() {
 
     if (no_disarm) {
         msg_print("I do not see anything to disarm there.");
-        free_turn_flag = true;
+        player_free_turn = true;
     }
 }
 
@@ -859,7 +859,7 @@ static void drop_throw(int y, int x, Inventory_t *t_ptr) {
 void throw_object() {
     if (inven_ctr == 0) {
         msg_print("But you are not carrying anything.");
-        free_turn_flag = true;
+        player_free_turn = true;
         return;
     }
 

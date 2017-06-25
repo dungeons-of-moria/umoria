@@ -34,7 +34,7 @@ extern int32_t current_game_turn;
 extern bool generate_new_level;
 extern bool screen_has_changed;
 
-extern bool free_turn_flag;
+extern bool player_free_turn;
 extern int find_flag;
 extern bool teleport_flag;
 

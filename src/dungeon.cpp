@@ -737,7 +737,7 @@ static void executeInputCommands(char *command, int *find_count) {
         }
 
         default_dir = false;
-        free_turn_flag = false;
+        player_free_turn = false;
 
         if (find_flag) {
             find_run();
@@ -835,7 +835,7 @@ static void executeInputCommands(char *command, int *find_count) {
 
                 if (counter > 0) {
                     if (!valid_countcommand(lastInputCommand)) {
-                        free_turn_flag = true;
+                        player_free_turn = true;
                         lastInputCommand = ' ';
                         msg_print("Invalid command with a count.");
                     } else {
@@ -856,13 +856,13 @@ static void executeInputCommands(char *command, int *find_count) {
             if (find_flag) {
                 *find_count = command_count - 1;
                 command_count = 0;
-            } else if (free_turn_flag) {
+            } else if (player_free_turn) {
                 command_count = 0;
             } else if (command_count) {
                 command_count--;
             }
         }
-    } while (free_turn_flag && !generate_new_level && !eof_flag);
+    } while (player_free_turn && !generate_new_level && !eof_flag);
 
     *command = lastInputCommand;
 }
@@ -1575,42 +1575,42 @@ static void do_command(char com_val) {
     switch (com_val) {
         case 'Q': // (Q)uit    (^K)ill
             commandQuit();
-            free_turn_flag = true;
+            player_free_turn = true;
             break;
         case CTRL_KEY('P'): // (^P)revious message.
             commandPreviousMessage();
-            free_turn_flag = true;
+            player_free_turn = true;
             break;
         case CTRL_KEY('V'): // (^V)iew license
             helpfile(MORIA_GPL);
-            free_turn_flag = true;
+            player_free_turn = true;
             break;
         case CTRL_KEY('W'): // (^W)izard mode
             commandFlipWizardMode();
-            free_turn_flag = true;
+            player_free_turn = true;
             break;
         case CTRL_KEY('X'): // e(^X)it and save
             commandSaveAndExit();
-            free_turn_flag = true;
+            player_free_turn = true;
             break;
         case '=': // (=) set options
             save_screen();
             set_options();
             restore_screen();
-            free_turn_flag = true;
+            player_free_turn = true;
             break;
         case '{': // ({) inscribe an object
             scribe_object();
-            free_turn_flag = true;
+            player_free_turn = true;
             break;
         case '!': // (!) escape to the shell
         case '$':
             shell_out();
-            free_turn_flag = true;
+            player_free_turn = true;
             break;
         case ESCAPE: // (ESC)   do nothing.
         case ' ':    // (space) do nothing.
-            free_turn_flag = true;
+            player_free_turn = true;
             break;
         case 'b': // (b) down, left  (1)
             move_char(1, do_pickup);
@@ -1662,7 +1662,7 @@ static void do_command(char com_val) {
             break;
         case '/': // (/) identify a symbol
             ident_char();
-            free_turn_flag = true;
+            player_free_turn = true;
             break;
         case '.': // (.) stay in one place (5)
             move_char(5, do_pickup);
@@ -1684,7 +1684,7 @@ static void do_command(char com_val) {
             } else {
                 helpfile(MORIA_ORIG_HELP);
             }
-            free_turn_flag = true;
+            player_free_turn = true;
             break;
         case 'f': // (f)orce    (B)ash
             bash();
@@ -1693,7 +1693,7 @@ static void do_command(char com_val) {
             save_screen();
             change_name();
             restore_screen();
-            free_turn_flag = true;
+            player_free_turn = true;
             break;
         case 'D': // (D)isarm trap
             disarm_trap();
@@ -1711,18 +1711,18 @@ static void do_command(char com_val) {
             save_screen();
             display_scores();
             restore_screen();
-            free_turn_flag = true;
+            player_free_turn = true;
             break;
         case 'W': // (W)here are we on the map  (L)ocate on map
             commandLocateOnMap();
-            free_turn_flag = true;
+            player_free_turn = true;
             break;
         case 'R': // (R)est a while
             rest();
             break;
         case '#': // (#) search toggle  (S)earch toggle
             commandToggleSearch();
-            free_turn_flag = true;
+            player_free_turn = true;
             break;
         case CTRL_KEY('B'): // (^B) tunnel down left  (T 1)
             tunnel(1);
@@ -1754,11 +1754,11 @@ static void do_command(char com_val) {
             break;
         case 'M':
             screen_map();
-            free_turn_flag = true;
+            player_free_turn = true;
             break;
         case 'P': // (P)eruse a book  (B)rowse in a book
             examine_book();
-            free_turn_flag = true;
+            player_free_turn = true;
             break;
         case 'c': // (c)lose an object
             closeobject();
@@ -1780,7 +1780,7 @@ static void do_command(char com_val) {
             break;
         case 'x': // e(x)amine surrounds  (l)ook about
             look();
-            free_turn_flag = true;
+            player_free_turn = true;
             break;
         case 'm': // (m)agic spells
             cast();
@@ -1808,7 +1808,7 @@ static void do_command(char com_val) {
             break;
         case 'v': // (v)ersion of game
             helpfile(MORIA_VER);
-            free_turn_flag = true;
+            player_free_turn = true;
             break;
         case 'w': // (w)ear or wield
             inven_command('w');
@@ -1818,7 +1818,7 @@ static void do_command(char com_val) {
             break;
         default:
             // Wizard commands are free moves
-            free_turn_flag = true;
+            player_free_turn = true;
 
             if (wizard) {
                 doWizardCommands(com_val);
@@ -2085,7 +2085,7 @@ static void go_up() {
         generate_new_level = true;
     } else {
         msg_print("I see no up staircase here.");
-        free_turn_flag = true;
+        player_free_turn = true;
     }
 }
 
@@ -2102,13 +2102,13 @@ static void go_down() {
         generate_new_level = true;
     } else {
         msg_print("I see no down staircase here.");
-        free_turn_flag = true;
+        player_free_turn = true;
     }
 }
 
 // Jam a closed door -RAK-
 static void jamdoor() {
-    free_turn_flag = true;
+    player_free_turn = true;
 
     int y = char_row;
     int x = char_col;
@@ -2144,7 +2144,7 @@ static void jamdoor() {
     if (c_ptr->cptr == 0) {
         int i, j;
         if (find_range(TV_SPIKE, TV_NEVER, &i, &j)) {
-            free_turn_flag = false;
+            player_free_turn = false;
 
             count_msg_print("You jam the door with a spike.");
 
@@ -2167,7 +2167,7 @@ static void jamdoor() {
             msg_print("But you have no spikes.");
         }
     } else {
-        free_turn_flag = false;
+        player_free_turn = false;
 
         char tmp_str[80];
         (void) sprintf(tmp_str, "The %s is in your way!", creatures_list[monsters_list[c_ptr->cptr].mptr].name);
@@ -2177,7 +2177,7 @@ static void jamdoor() {
 
 // Refill the players lamp -RAK-
 static void refill_lamp() {
-    free_turn_flag = true;
+    player_free_turn = true;
 
     if (inventory[INVEN_LIGHT].subval != 0) {
         msg_print("But you are not using a lamp.");
@@ -2190,7 +2190,7 @@ static void refill_lamp() {
         return;
     }
 
-    free_turn_flag = false;
+    player_free_turn = false;
 
     Inventory_t *i_ptr = &inventory[INVEN_LIGHT];
     i_ptr->p1 += inventory[i].p1;

@@ -286,7 +286,7 @@ static bool drinkPotion(uint32_t flags, uint8_t itemID) {
 
 // Potions for the quaffing -RAK-
 void quaff() {
-    free_turn_flag = true;
+    player_free_turn = true;
 
     if (inven_ctr == 0) {
         msg_print("But you are not carrying anything.");
@@ -304,7 +304,7 @@ void quaff() {
         return;
     }
 
-    free_turn_flag = false;
+    player_free_turn = false;
 
     bool identified;
     Inventory_t *i_ptr = &inventory[itemID];
