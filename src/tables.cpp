@@ -35,7 +35,7 @@ Owner_t owners[MAX_OWNERS] = {
 };
 
 // Buying and selling adjustments for character race VS store owner race
-uint8_t rgold_adj[MAX_RACES][MAX_RACES] = {
+uint8_t race_gold_adjustments[MAX_RACES][MAX_RACES] = {
         //Hum, HfE, Elf, Hal, Gno, Dwa, HfO, HfT
         { 100, 105, 105, 110, 113, 115, 120, 125 }, // Human
         { 110, 100, 100, 105, 110, 120, 125, 130 }, // Half-Elf

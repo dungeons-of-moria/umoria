@@ -611,7 +611,7 @@ static int sell_haggle(int store_num, int32_t *price, Inventory_t *item) {
         Owner_t *o_ptr = &owners[s_ptr->owner];
 
         cost = cost * (200 - chr_adj()) / 100;
-        cost = cost * (200 - rgold_adj[o_ptr->owner_race][py.misc.prace]) / 100;
+        cost = cost * (200 - race_gold_adjustments[o_ptr->owner_race][py.misc.prace]) / 100;
         if (cost < 1) {
             cost = 1;
         }

@@ -82,15 +82,16 @@ extern Cave_t cave[MAX_HEIGHT][MAX_WIDTH];
 
 // Following are player variables
 extern Player_t py;
+extern int16_t char_row;
+extern int16_t char_col;
+extern uint32_t player_base_exp_levels[MAX_PLAYER_LEVEL];
+extern uint16_t player_base_hp_levels[MAX_PLAYER_LEVEL];
+
 extern char *character_titles[MAX_CLASS][MAX_PLAYER_LEVEL];
 extern Race_t character_races[MAX_RACES];
 extern Background_t character_backgrounds[MAX_BACKGROUND];
-extern uint32_t player_base_exp_levels[MAX_PLAYER_LEVEL];
-extern uint16_t player_base_hp_levels[MAX_PLAYER_LEVEL];
-extern int16_t char_row;
-extern int16_t char_col;
 
-extern uint8_t rgold_adj[MAX_RACES][MAX_RACES];
+extern uint8_t race_gold_adjustments[MAX_RACES][MAX_RACES];
 
 extern Class_t classes[MAX_CLASS];
 extern int16_t class_level_adj[MAX_CLASS][MAX_LEV_ADJ];

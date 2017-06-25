@@ -169,7 +169,7 @@ int32_t sell_price(int snum, int32_t *max_sell, int32_t *min_sell, Inventory_t *
 
     Owner_t *owner = &owners[stores[snum].owner];
 
-    price = price * rgold_adj[owner->owner_race][py.misc.prace] / 100;
+    price = price * race_gold_adjustments[owner->owner_race][py.misc.prace] / 100;
     if (price < 1) {
         price = 1;
     }
