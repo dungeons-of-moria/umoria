@@ -226,12 +226,15 @@ typedef struct {
 } Player_t;
 
 // spell name is stored in spell_names[] array at index i, +31 if priest
-typedef struct  {
+typedef struct {
     uint8_t slevel;
     uint8_t smana;
     uint8_t sfail;
     uint8_t sexp; // 1/4 of exp gained for learning spell
 } Spell_t;
+
+// Character class title. E.g. Novice, Mage (5th), Paladin, etc.
+typedef const char *ClassTitle_t;
 
 typedef struct {
     const char *trace; // Type of race

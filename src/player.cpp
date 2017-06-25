@@ -21,7 +21,7 @@ int16_t char_col;
 uint16_t player_base_hp_levels[MAX_PLAYER_LEVEL];
 
 // Class titles for different levels
-const char *character_titles[MAX_CLASS][MAX_PLAYER_LEVEL] = {
+ClassTitle_t class_titles[MAX_CLASS][MAX_PLAYER_LEVEL] = {
     // Warrior
     {"Rookie",       "Private",      "Soldier",      "Mercenary",
      "Veteran(1st)", "Veteran(2nd)", "Veteran(3rd)", "Warrior(1st)",
