@@ -2087,11 +2087,11 @@ void lose_exp(int32_t amount) {
     prt_experience();
 
     int exp = 0;
-    while ((signed) (player_exp[exp] * py.misc.expfact / 100) <= py.misc.exp) {
+    while ((signed) (player_base_exp_levels[exp] * py.misc.expfact / 100) <= py.misc.exp) {
         exp++;
     }
 
-    // increment exp once more, because level 1 exp is stored in player_exp[0]
+    // increment exp once more, because level 1 exp is stored in player_base_exp_levels[0]
     exp++;
 
     if (py.misc.lev != exp) {

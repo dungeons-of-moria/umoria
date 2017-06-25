@@ -91,7 +91,7 @@ const char *player_titles[MAX_CLASS][MAX_PLAYER_LEVEL] = {
 };
 
 // Base experience levels, may be adjusted up for race and/or class
-uint32_t player_exp[MAX_PLAYER_LEVEL] = {
+uint32_t player_base_exp_levels[MAX_PLAYER_LEVEL] = {
      10,      25,      45,      70,      100,      140,      200,       280,
     380,     500,     650,     850,     1100,     1400,     1800,      2300,
    2900,    3600,    4400,    5400,     6800,     8400,    10200,     12500,

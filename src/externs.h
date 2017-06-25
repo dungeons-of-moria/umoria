@@ -85,7 +85,7 @@ extern Player_t py;
 extern char *player_titles[MAX_CLASS][MAX_PLAYER_LEVEL];
 extern Race_t races[MAX_RACES];
 extern Background_t backgrounds[MAX_BACKGROUND];
-extern uint32_t player_exp[MAX_PLAYER_LEVEL];
+extern uint32_t player_base_exp_levels[MAX_PLAYER_LEVEL];
 extern uint16_t player_hp[MAX_PLAYER_LEVEL];
 extern int16_t char_row;
 extern int16_t char_col;

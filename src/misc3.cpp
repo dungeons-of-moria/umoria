@@ -986,7 +986,7 @@ void put_misc2() {
     if (py.misc.lev >= MAX_PLAYER_LEVEL) {
         prt("Exp to Adv.: *******", 12, 28);
     } else {
-        prt_7lnum("Exp to Adv.", (int32_t) (player_exp[py.misc.lev - 1] * py.misc.expfact / 100), 12, 28);
+        prt_7lnum("Exp to Adv.", (int32_t) (player_base_exp_levels[py.misc.lev - 1] * py.misc.expfact / 100), 12, 28);
     }
 
     prt_7lnum("Gold       ", py.misc.au, 13, 28);
@@ -1942,7 +1942,7 @@ static void gain_level() {
 
     calc_hitpoints();
 
-    int32_t need_exp = player_exp[py.misc.lev - 1] * py.misc.expfact / 100;
+    int32_t need_exp = player_base_exp_levels[py.misc.lev - 1] * py.misc.expfact / 100;
     if (py.misc.exp > need_exp) {
         // lose some of the 'extra' exp when gaining several levels at once
         int32_t dif_exp = py.misc.exp - need_exp;
@@ -1969,7 +1969,7 @@ void prt_experience() {
         py.misc.exp = MAX_EXP;
     }
 
-    while ((py.misc.lev < MAX_PLAYER_LEVEL) && (signed) (player_exp[py.misc.lev - 1] * py.misc.expfact / 100) <= py.misc.exp) {
+    while ((py.misc.lev < MAX_PLAYER_LEVEL) && (signed) (player_base_exp_levels[py.misc.lev - 1] * py.misc.expfact / 100) <= py.misc.exp) {
         gain_level();
     }
 
