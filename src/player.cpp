@@ -509,7 +509,7 @@ const char *spell_names[62] = {
 
 // Each type of character starts out with a few provisions.
 //
-// Note that the entries refer to elements of the object_list[] array.
+// Note that the entries refer to elements of the game_objects[] array.
 //      344 = Food Ration
 //      365 = Wooden Torch
 //      123 = Cloak

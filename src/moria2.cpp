@@ -23,8 +23,8 @@ void change_trap(int y, int x) {
     // change secret door to closed door
     if (t_ptr->tval == TV_SECRET_DOOR) {
         t_ptr->index = OBJ_CLOSED_DOOR;
-        t_ptr->tval = object_list[OBJ_CLOSED_DOOR].tval;
-        t_ptr->tchar = object_list[OBJ_CLOSED_DOOR].tchar;
+        t_ptr->tval = game_objects[OBJ_CLOSED_DOOR].tval;
+        t_ptr->tchar = game_objects[OBJ_CLOSED_DOOR].tchar;
         lite_spot(y, x);
     }
 }

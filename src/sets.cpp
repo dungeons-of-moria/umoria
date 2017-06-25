@@ -139,8 +139,8 @@ bool set_fire_destroy(Inventory_t *item) {
 }
 
 // Items too large to fit in chests -DJG-
-// Use Treasure_t since item not yet created
-bool set_large(Treasure_t *item) {
+// Use GameObject_t since item not yet created
+bool set_large(GameObject_t *item) {
     switch (item->tval) {
         case TV_CHEST:
         case TV_BOW:

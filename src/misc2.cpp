@@ -790,7 +790,7 @@ void magic_treasure(int x, int level) {
     int magicAmount;
     Inventory_t *t_ptr = &treasure_list[x];
 
-    // some objects appear multiple times in the object_list with different
+    // some objects appear multiple times in the game_objects with different
     // levels, this is to make the object occur more often, however, for
     // consistency, must set the level of these duplicates to be the same
     // as the object with the lowest level

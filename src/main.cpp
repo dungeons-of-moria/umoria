@@ -275,7 +275,7 @@ static void init_t_level() {
     }
 
     for (int i = 0; i < MAX_DUNGEON_OBJ; i++) {
-        treasure_levels[object_list[i].level]++;
+        treasure_levels[game_objects[i].level]++;
     }
 
     for (int i = 1; i <= MAX_OBJ_LEVEL; i++) {
@@ -291,7 +291,7 @@ static void init_t_level() {
     }
 
     for (int i = 0; i < MAX_DUNGEON_OBJ; i++) {
-        int level = object_list[i].level;
+        int level = game_objects[i].level;
         int objectID = treasure_levels[level] - objectIndexes[level];
         sorted_objects[objectID] = (int16_t) i;
         objectIndexes[level]++;
@@ -303,7 +303,7 @@ static void init_t_level() {
 static void price_adjust() {
     // round half-way cases up
     for (int i = 0; i < MAX_OBJECTS; i++) {
-        object_list[i].cost = ((object_list[i].cost * COST_ADJ) + 50) / 100;
+        game_objects[i].cost = ((game_objects[i].cost * COST_ADJ) + 50) / 100;
     }
 }
 #endif

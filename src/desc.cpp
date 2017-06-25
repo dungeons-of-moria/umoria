@@ -327,7 +327,7 @@ void objdes(obj_desc_t out_val, Inventory_t *i_ptr, bool pref) {
     int indexx = i_ptr->subval & (ITEM_SINGLE_STACK_MIN - 1);
 
     // base name, modifier string
-    const char *basenm = object_list[i_ptr->index].name;
+    const char *basenm = game_objects[i_ptr->index].name;
     const char *modstr = CNIL;
 
     vtype_t damstr;
@@ -475,11 +475,11 @@ void objdes(obj_desc_t out_val, Inventory_t *i_ptr, bool pref) {
         case TV_VIS_TRAP:
         case TV_UP_STAIR:
         case TV_DOWN_STAIR:
-            (void) strcpy(out_val, object_list[i_ptr->index].name);
+            (void) strcpy(out_val, game_objects[i_ptr->index].name);
             (void) strcat(out_val, ".");
             return;
         case TV_STORE_DOOR:
-            (void) sprintf(out_val, "the entrance to the %s.", object_list[i_ptr->index].name);
+            (void) sprintf(out_val, "the entrance to the %s.", game_objects[i_ptr->index].name);
             return;
         default:
             (void) strcpy(out_val, "Error in objdes()");
@@ -496,7 +496,7 @@ void objdes(obj_desc_t out_val, Inventory_t *i_ptr, bool pref) {
 
     if (append_name) {
         (void) strcat(tmp_val, " of ");
-        (void) strcat(tmp_val, object_list[i_ptr->index].name);
+        (void) strcat(tmp_val, game_objects[i_ptr->index].name);
     }
 
     if (i_ptr->number != 1) {
@@ -658,7 +658,7 @@ void objdes(obj_desc_t out_val, Inventory_t *i_ptr, bool pref) {
 }
 
 void invcopy(Inventory_t *to, int from_index) {
-    Treasure_t *from = &object_list[from_index];
+    GameObject_t *from = &game_objects[from_index];
 
     to->index = (uint16_t) from_index;
     to->name2 = SN_NULL;

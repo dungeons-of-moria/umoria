@@ -47,7 +47,7 @@ uint8_t race_gold_adjustments[MAX_RACES][MAX_RACES] = {
         { 110, 115, 115, 110, 110, 130, 110, 110 }, // Half-Troll
 };
 
-// object_list[] index of objects that may appear in the store
+// game_objects[] index of objects that may appear in the store
 uint16_t store_choices[MAX_STORES][STORE_CHOICES] = {
         // General Store
         {

@@ -92,7 +92,7 @@ int get_obj_num(int level, bool must_be_small) {
                 objectID = j;
             }
 
-            int foundLevel = object_list[sorted_objects[objectID]].level;
+            int foundLevel = game_objects[sorted_objects[objectID]].level;
 
             if (foundLevel == 0) {
                 objectID = randint(treasure_levels[0]) - 1;
@@ -100,7 +100,7 @@ int get_obj_num(int level, bool must_be_small) {
                 objectID = randint(treasure_levels[foundLevel] - treasure_levels[foundLevel - 1]) - 1 + treasure_levels[foundLevel - 1];
             }
         }
-    } while (must_be_small && set_large(&object_list[sorted_objects[objectID]]));
+    } while (must_be_small && set_large(&game_objects[sorted_objects[objectID]]));
 
     return objectID;
 }
