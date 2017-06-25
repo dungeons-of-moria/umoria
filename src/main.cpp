@@ -117,11 +117,11 @@ int main(int argc, char *argv[]) {
     // Auto-restart of saved file
     char *p;
     if (argv[0] != CNIL) {
-        (void) strcpy(savefile, argv[0]);
+        (void) strcpy(savegame_filename, argv[0]);
     } else if ((p = getenv("MORIA_SAV")) != CNIL) {
-        (void) strcpy(savefile, p);
+        (void) strcpy(savegame_filename, p);
     } else {
-        (void) strcpy(savefile, MORIA_SAV);
+        (void) strcpy(savegame_filename, MORIA_SAV);
     }
 
     // This restoration of a saved character may get ONLY the monster memory. In
@@ -132,7 +132,7 @@ int main(int argc, char *argv[]) {
     bool result = false;
     bool generate = false;
 
-    if (!new_game && !access(savefile, 0) && get_char(&generate)) {
+    if (!new_game && !access(savegame_filename, 0) && get_char(&generate)) {
         result = true;
     }
 

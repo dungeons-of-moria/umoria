@@ -12,8 +12,10 @@ extern char *copyright[5];
 // deep within creatures() via place_monster() and summon_monster().
 extern int hack_monptr;
 
+extern vtype_t savegame_filename; // The save file. -CJS-
+extern FILE *highscore_fp;        // High score file pointer
+
 extern vtype_t died_from;
-extern vtype_t savefile; // The save file. -CJS-
 extern int32_t birth_date;
 
 // These are options, set with set_options command -CJS-
@@ -43,7 +45,6 @@ extern bool screen_change;  // Screen changes (used in inven_commands)
 
 extern bool character_generated;    // don't save score until char gen finished
 extern bool character_saved;        // prevents save on kill after save_char()
-extern FILE *highscore_fp;          // High score file pointer
 extern int command_count;           // Repetition of commands. -CJS-
 extern bool default_dir;            // Use last direction in repeated commands
 extern int16_t noscore;             // Don't score this game. -CJS-

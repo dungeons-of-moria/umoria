@@ -376,16 +376,16 @@ static bool sv_write() {
 
 // Set up prior to actual save, do the save, then clean up
 bool save_char() {
-    while (!_save_char(savefile)) {
+    while (!_save_char(savegame_filename)) {
         vtype_t temp;
 
-        (void) sprintf(temp, "Save file '%s' fails.", savefile);
+        (void) sprintf(temp, "Save file '%s' fails.", savegame_filename);
         msg_print(temp);
 
         int i = 0;
-        if (access(savefile, 0) < 0 || get_check("File exists. Delete old save file?") == 0 || (i = unlink(savefile)) < 0) {
+        if (access(savegame_filename, 0) < 0 || get_check("File exists. Delete old save file?") == 0 || (i = unlink(savegame_filename)) < 0) {
             if (i < 0) {
-                (void) sprintf(temp, "Can't delete '%s'", savefile);
+                (void) sprintf(temp, "Can't delete '%s'", savegame_filename);
                 msg_print(temp);
             }
             prt("New Save file [ESC to give up]:", 0, 0);
@@ -393,10 +393,10 @@ bool save_char() {
                 return false;
             }
             if (temp[0]) {
-                (void) strcpy(savefile, temp);
+                (void) strcpy(savegame_filename, temp);
             }
         }
-        (void) sprintf(temp, "Saving with %s...", savefile);
+        (void) sprintf(temp, "Saving with %s...", savegame_filename);
         prt(temp, 0, 0);
     }
 
@@ -425,11 +425,11 @@ bool _save_char(char *fnam) {
 
     if (fd >= 0) {
         (void) close(fd);
-        fileptr = fopen(savefile, "wb");
+        fileptr = fopen(savegame_filename, "wb");
     }
 
     DEBUG(logfile = fopen("IO_LOG", "a"));
-    DEBUG(fprintf(logfile, "Saving data to %s\n", savefile));
+    DEBUG(fprintf(logfile, "Saving data to %s\n", savegame_filename));
 
     if (fileptr != NULL) {
         xor_byte = 0;
@@ -491,7 +491,7 @@ bool get_char(bool *generate) {
 
     // Not required for Mac, because the file name is obtained through a dialog.
     // There is no way for a nonexistent file to be specified. -BS-
-    if (access(savefile, 0) != 0) {
+    if (access(savegame_filename, 0) != 0) {
         msg_print("Save file does not exist.");
         return false; // Don't bother with messages here. File absent.
     }
@@ -499,13 +499,13 @@ bool get_char(bool *generate) {
     clear_screen();
 
     vtype_t temp;
-    (void) sprintf(temp, "Save file %s present. Attempting restore.", savefile);
+    (void) sprintf(temp, "Save file %s present. Attempting restore.", savegame_filename);
     put_buffer(temp, 23, 0);
 
     // FIXME: check this if/else logic! -- MRC
     if (turn >= 0) {
         msg_print("IMPOSSIBLE! Attempt to restore while still alive!");
-    } else if ((fd = open(savefile, O_RDONLY, 0)) < 0 && (chmod(savefile, 0400) < 0 || (fd = open(savefile, O_RDONLY, 0)) < 0)) {
+    } else if ((fd = open(savegame_filename, O_RDONLY, 0)) < 0 && (chmod(savegame_filename, 0400) < 0 || (fd = open(savegame_filename, O_RDONLY, 0)) < 0)) {
         // Allow restoring a file belonging to someone else, if we can delete it.
         // Hence first try to read without doing a chmod.
 
@@ -516,7 +516,7 @@ bool get_char(bool *generate) {
 
         (void) close(fd);
         fd = -1; // Make sure it isn't closed again
-        fileptr = fopen(savefile, "rb");
+        fileptr = fopen(savegame_filename, "rb");
 
         if (fileptr == NULL) {
             goto error;
@@ -526,7 +526,7 @@ bool get_char(bool *generate) {
         put_qio();
 
         DEBUG(logfile = fopen("IO_LOG", "a"));
-        DEBUG(fprintf(logfile, "Reading data from %s\n", savefile));
+        DEBUG(fprintf(logfile, "Reading data from %s\n", savegame_filename));
 
         xor_byte = 0;
         rd_byte(&version_maj);
