@@ -1936,7 +1936,7 @@ bool test_hit(int bth, int level, int pth, int ac, int attack_type) {
     return (die != 1 && (die == 20 || (i > 0 && randint(i) > ac)));
 }
 
-// Decreases players hit points and sets death flag if necessary -RAK-
+// Decreases players hit points and sets character_is_dead flag if necessary -RAK-
 void take_hit(int damage, const char *hit_from) {
     if (py.flags.invuln > 0) {
         damage = 0;
@@ -1948,8 +1948,8 @@ void take_hit(int damage, const char *hit_from) {
         return;
     }
 
-    if (!death) {
-        death = true;
+    if (!character_is_dead) {
+        character_is_dead = true;
 
         (void) strcpy(died_from, hit_from);
 

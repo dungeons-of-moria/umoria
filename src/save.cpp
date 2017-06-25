@@ -67,10 +67,10 @@ static uint32_t start_time; // time that play started
 // and completely rewritten again! for portability by -JEW-
 
 static bool sv_write() {
-    // clear the death flag when creating a HANGUP save file,
+    // clear the character_is_dead flag when creating a HANGUP save file,
     // so that player can see tombstone when restart
     if (eof_flag) {
-        death = false;
+        character_is_dead = false;
     }
 
     uint32_t l = 0;
@@ -108,7 +108,7 @@ static bool sv_write() {
     if (display_counts) {
         l |= 0x400;
     }
-    if (death) {
+    if (character_is_dead) {
         // Sign bit
         l |= 0x80000000L;
     }
@@ -296,7 +296,7 @@ static bool sv_write() {
 
     // only level specific info follows, this allows characters to be
     // resurrected, the dungeon level info is not needed for a resurrection
-    if (death) {
+    if (character_is_dead) {
         return !(ferror(fileptr) || fflush(fileptr) == EOF);
     }
 

@@ -795,7 +795,7 @@ static void confuseCreatureOnAttack(Creature_t *r_ptr, Monster_t *m_ptr, int ade
 
         msg_print(msg);
 
-        if (visible && !death && randint(4) == 1) {
+        if (visible && !character_is_dead && randint(4) == 1) {
             creature_recall[m_ptr->mptr].r_cdefense |= r_ptr->cdefense & CD_NO_SLEEP;
         }
     }
@@ -805,7 +805,7 @@ static void confuseCreatureOnAttack(Creature_t *r_ptr, Monster_t *m_ptr, int ade
 // Make an attack on the player (chuckle.) -RAK-
 static void make_attack(int monsterID) {
     // don't beat a dead body!
-    if (death) {
+    if (character_is_dead) {
         return;
     }
 
@@ -827,7 +827,7 @@ static void make_attack(int monsterID) {
     vtype_t tmp_str;
 
     uint8_t *attstr = r_ptr->damage;
-    while ((*attstr != 0) && !death) {
+    while ((*attstr != 0) && !character_is_dead) {
         attype = monster_attacks[*attstr].attack_type;
         adesc = monster_attacks[*attstr].attack_desc;
         adice = monster_attacks[*attstr].attack_dice;
@@ -875,7 +875,7 @@ static void make_attack(int monsterID) {
             if ((notice || (visible && creature_recall[m_ptr->mptr].r_attacks[attackn] != 0 && attype != 99)) && creature_recall[m_ptr->mptr].r_attacks[attackn] < MAX_UCHAR) {
                 creature_recall[m_ptr->mptr].r_attacks[attackn]++;
             }
-            if (death && creature_recall[m_ptr->mptr].r_deaths < MAX_SHORT) {
+            if (character_is_dead && creature_recall[m_ptr->mptr].r_deaths < MAX_SHORT) {
                 creature_recall[m_ptr->mptr].r_deaths++;
             }
         } else {
@@ -1263,7 +1263,7 @@ void creatureCastsSpell(Monster_t *m_ptr, int monsterID, int spellID, uint8_t le
 //   cast_spell = true if creature changes position
 //   return true (took_turn) if creature casts a spell
 static bool mon_cast_spell(int monsterID) {
-    if (death) {
+    if (character_is_dead) {
         return false;
     }
 
@@ -1322,7 +1322,7 @@ static bool mon_cast_spell(int monsterID) {
         if ((creature_recall[m_ptr->mptr].r_spells & CS_FREQ) != CS_FREQ) {
             creature_recall[m_ptr->mptr].r_spells++;
         }
-        if (death && creature_recall[m_ptr->mptr].r_deaths < MAX_SHORT) {
+        if (character_is_dead && creature_recall[m_ptr->mptr].r_deaths < MAX_SHORT) {
             creature_recall[m_ptr->mptr].r_deaths++;
         }
     }
@@ -1678,7 +1678,7 @@ static void creatureAttackingUpdate(Monster_t *m_ptr, int monsterID, int moves) 
 // Creatures movement and attacking are done from here -RAK-
 void creatures(bool attack) {
     // Process the monsters
-    for (int id = mfptr - 1; id >= MIN_MONIX && !death; id--) {
+    for (int id = mfptr - 1; id >= MIN_MONIX && !character_is_dead; id--) {
         Monster_t *m_ptr = &monsters_list[id];
 
         // Get rid of an eaten/breathed on monster.  Note: Be sure not to

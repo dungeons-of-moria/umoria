@@ -46,7 +46,7 @@ int pack_heaviness       = 0;      // Heaviness of pack - used to calculate if p
 
 int32_t date_of_birth;             // Unix time for when the character was created
 vtype_t died_from;                 // What the character died from: starvation, Bat, etc.
-bool death               = false;  // True if character died
+bool character_is_dead   = false;  // True if character has died
 
 bool total_winner        = false;  // Character beat the Balrog
 bool character_generated = false;  // Don't save score until character generation is finished

@@ -987,7 +987,7 @@ void dungeon() {
         }
 
         // Accept a command?
-        if (py.flags.paralysis < 1 && py.flags.rest == 0 && !death) {
+        if (py.flags.paralysis < 1 && py.flags.rest == 0 && !character_is_dead) {
             executeInputCommands(&lastInputCommand, &find_count);
         } else {
             // if paralyzed, resting, or dead, flush output
@@ -1292,7 +1292,7 @@ static void commandQuit() {
     flush();
 
     if (get_check("Do you really want to quit?")) {
-        death = true;
+        character_is_dead = true;
         generate_new_level = true;
 
         (void) strcpy(died_from, "Quitting");

@@ -44,7 +44,7 @@ extern int pack_heaviness;
 
 extern int32_t date_of_birth;
 extern vtype_t died_from;
-extern bool death;
+extern bool character_is_dead;
 
 extern bool total_winner;
 extern bool character_generated;

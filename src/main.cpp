@@ -149,7 +149,7 @@ int main(int argc, char *argv[]) {
 
         // could be restoring a dead character after a signal or HANGUP
         if (py.misc.chp < 0) {
-            death = true;
+            character_is_dead = true;
         }
     } else { // Create character
         create_character();
@@ -195,7 +195,7 @@ int main(int argc, char *argv[]) {
     }
 
     // Loop till dead, or exit
-    while (!death) {
+    while (!character_is_dead) {
         // Dungeon logic
         dungeon();
 
@@ -208,11 +208,11 @@ int main(int argc, char *argv[]) {
             }
 
             // should not reach here, but if we do, this guarantees exit
-            death = true;
+            character_is_dead = true;
         }
 
         // New level if not dead
-        if (!death) {
+        if (!character_is_dead) {
             generate_cave();
         }
     }

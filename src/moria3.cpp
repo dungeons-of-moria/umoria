@@ -646,7 +646,7 @@ uint32_t monster_death(int y, int x, uint32_t flags) {
     }
 
     // maybe the player died in mid-turn
-    if ((flags & CM_WIN) && !death) {
+    if ((flags & CM_WIN) && !character_is_dead) {
         total_winner = true;
 
         prt_winner();

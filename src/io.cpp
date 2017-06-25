@@ -139,7 +139,7 @@ char inkey() {
                 (void) strcpy(died_from, "(end of input: panic saved)");
                 if (!save_char()) {
                     (void) strcpy(died_from, "panic: unexpected eof");
-                    death = true;
+                    character_is_dead = true;
                 }
                 exit_game();
             }
