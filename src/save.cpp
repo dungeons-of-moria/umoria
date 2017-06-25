@@ -287,7 +287,7 @@ static bool sv_write() {
     // starting with 5.2, put died_from string in save file
     wr_string(died_from);
 
-    // starting with 5.2.2, put the max_score in the save file
+    // starting with 5.2.2, put the character_max_score in the save file
     l = (uint32_t) (total_points());
     wr_long(l);
 
@@ -749,9 +749,9 @@ bool get_char(bool *generate) {
             }
 
             if (version_min >= 3 || (version_min == 2 && patch_level >= 2)) {
-                rd_long((uint32_t *) &max_score);
+                rd_long((uint32_t *) &character_max_score);
             } else {
-                max_score = 0;
+                character_max_score = 0;
             }
 
             if (version_min >= 3 || (version_min == 2 && patch_level >= 2)) {

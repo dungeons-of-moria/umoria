@@ -214,8 +214,8 @@ int32_t total_points() {
     total += current_dungeon_level * 50;
 
     // Don't ever let the score decrease from one save to the next.
-    if (max_score > total) {
-        return max_score;
+    if (character_max_score > total) {
+        return character_max_score;
     }
 
     return total;

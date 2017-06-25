@@ -31,7 +31,7 @@ bool error_beep_sound       = true;   // Beep for invalid characters
 
 // Global flags
 int16_t current_dungeon_level = 0;      // Current dungeon level
-int32_t max_score             = 0;
+int32_t character_max_score   = 0;
 int32_t turn                  = -1;     // Current turn of game
 
 bool new_level_flag;               // Do next level when true
