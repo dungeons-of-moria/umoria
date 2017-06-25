@@ -136,9 +136,9 @@ char inkey() {
                 // just in case, to make sure that the process eventually dies
                 panic_save = true;
 
-                (void) strcpy(died_from, "(end of input: panic saved)");
+                (void) strcpy(character_died_from, "(end of input: panic saved)");
                 if (!save_char()) {
-                    (void) strcpy(died_from, "panic: unexpected eof");
+                    (void) strcpy(character_died_from, "panic: unexpected eof");
                     character_is_dead = true;
                 }
                 exit_game();

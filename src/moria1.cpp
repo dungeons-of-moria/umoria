@@ -1951,7 +1951,7 @@ void take_hit(int damage, const char *hit_from) {
     if (!character_is_dead) {
         character_is_dead = true;
 
-        (void) strcpy(died_from, hit_from);
+        (void) strcpy(character_died_from, hit_from);
 
         total_winner = false;
     }

@@ -149,7 +149,7 @@ static void print_tomb() {
     (void) sprintf(str, "| %s |         _;,,,,;_", center_string(tmp_str, str));
     put_buffer(str, 14, 9);
     put_buffer("|            killed by            |", 15, 9);
-    p = died_from;
+    p = character_died_from;
 
     int len = (int) strlen(p);
     p[len] = '.'; // add a trailing period
@@ -248,7 +248,7 @@ static void highscores() {
     new_entry.character_class = py.misc.pclass;
     (void) strcpy(new_entry.name, py.misc.name);
 
-    char *tmp = died_from;
+    char *tmp = character_died_from;
     if ('a' == *tmp) {
         if ('n' == *(++tmp)) {
             tmp++;
@@ -321,7 +321,7 @@ static void highscores() {
         // under unix, only allow one sex/race/class combo per person,
         // on single user system, allow any number of entries, but try to
         // prevent multiple entries per character by checking for case when
-        // birthdate/sex/race/class are the same, and died_from of score file
+        // birthdate/sex/race/class are the same, and character_died_from of score file
         // entry is "(saved)"
         if (((new_entry.uid != 0 && new_entry.uid == old_entry.uid) ||
              (new_entry.uid == 0 && !strcmp(old_entry.died_from, "(saved)") && new_entry.birth_date == old_entry.birth_date)) &&
@@ -358,7 +358,7 @@ static void highscores() {
             // under unix, only allow one sex/race/class combo per person,
             // on single user system, allow any number of entries, but try
             // to prevent multiple entries per character by checking for
-            // case when birthdate/sex/race/class are the same, and died_from
+            // case when birthdate/sex/race/class are the same, and character_died_from
             // of score file entry is "(saved)"
             if (((new_entry.uid != 0 && new_entry.uid == old_entry.uid) ||
                  (new_entry.uid == 0 && !strcmp(old_entry.died_from, "(saved)") && new_entry.birth_date == old_entry.birth_date)) &&
@@ -391,7 +391,7 @@ static void kingly() {
 
     // Change the character attributes.
     current_dungeon_level = 0;
-    (void) strcpy(died_from, "Ripe Old Age");
+    (void) strcpy(character_died_from, "Ripe Old Age");
 
     (void) restore_level();
 

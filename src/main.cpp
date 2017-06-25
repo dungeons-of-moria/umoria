@@ -202,9 +202,9 @@ int main(int argc, char *argv[]) {
         // check for eof here, see inkey() in io.c
         // eof can occur if the process gets a HANGUP signal
         if (eof_flag) {
-            (void) strcpy(died_from, "(end of input: saved)");
+            (void) strcpy(character_died_from, "(end of input: saved)");
             if (!save_char()) {
-                (void) strcpy(died_from, "unexpected eof");
+                (void) strcpy(character_died_from, "unexpected eof");
             }
 
             // should not reach here, but if we do, this guarantees exit

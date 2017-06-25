@@ -1295,7 +1295,7 @@ static void commandQuit() {
         character_is_dead = true;
         generate_new_level = true;
 
-        (void) strcpy(died_from, "Quitting");
+        (void) strcpy(character_died_from, "Quitting");
     }
 }
 
@@ -1362,14 +1362,14 @@ static void commandSaveAndExit() {
             msg_print("Use <Control>-K when you are ready to quit.");
         }
     } else {
-        (void) strcpy(died_from, "(saved)");
+        (void) strcpy(character_died_from, "(saved)");
         msg_print("Saving game...");
 
         if (save_char()) {
             exit_game();
         }
 
-        (void) strcpy(died_from, "(alive and well)");
+        (void) strcpy(character_died_from, "(alive and well)");
     }
 }
 
