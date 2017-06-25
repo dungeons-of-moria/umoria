@@ -657,7 +657,7 @@ void place_win_monster() {
 
     mon_ptr->fy = (uint8_t) y;
     mon_ptr->fx = (uint8_t) x;
-    mon_ptr->mptr = (uint16_t) (randint(WIN_MON_TOT) - 1 + m_level[MAX_MONS_LEVEL]);
+    mon_ptr->mptr = (uint16_t) (randint(WIN_MON_TOT) - 1 + monster_levels[MAX_MONS_LEVEL]);
 
     if (creatures_list[mon_ptr->mptr].cdefense & CD_MAX_HP) {
         mon_ptr->hp = (int16_t) max_hp(creatures_list[mon_ptr->mptr].hd);
@@ -680,7 +680,7 @@ void place_win_monster() {
 // common than low level monsters at any given level. -CJS-
 int get_mons_num(int level) {
     if (level == 0) {
-        return randint(m_level[0]) - 1;
+        return randint(monster_levels[0]) - 1;
     }
 
     if (level > MAX_MONS_LEVEL) {
@@ -699,16 +699,16 @@ int get_mons_num(int level) {
         // all monsters of level less than or equal to the dungeon level.
         // This distribution makes a level n monster occur approx 2/n% of the
         // time on level n, and 1/n*n% are 1st level.
-        int num = m_level[level] - m_level[0];
+        int num = monster_levels[level] - monster_levels[0];
         int i = randint(num) - 1;
         int j = randint(num) - 1;
         if (j > i) {
             i = j;
         }
-        level = creatures_list[i + m_level[0]].level;
+        level = creatures_list[i + monster_levels[0]].level;
     }
 
-    return randint(m_level[level] - m_level[level - 1]) - 1 + m_level[level - 1];
+    return randint(monster_levels[level] - monster_levels[level - 1]) - 1 + monster_levels[level - 1];
 }
 
 // Allocates a random monster -RAK-
@@ -771,7 +771,7 @@ bool summon_monster(int *y, int *x, bool slp) {
 bool summon_undead(int *y, int *x) {
     int monsterID;
 
-    int maxLevels = m_level[MAX_MONS_LEVEL];
+    int maxLevels = monster_levels[MAX_MONS_LEVEL];
 
     do {
         monsterID = randint(maxLevels) - 1;

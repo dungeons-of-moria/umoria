@@ -256,15 +256,15 @@ static void char_inven_init() {
 // Initializes M_LEVEL array for use with PLACE_MONSTER -RAK-
 static void init_m_level() {
     for (int i = 0; i <= MAX_MONS_LEVEL; i++) {
-        m_level[i] = 0;
+        monster_levels[i] = 0;
     }
 
     for (int i = 0; i < MAX_CREATURES - WIN_MON_TOT; i++) {
-        m_level[creatures_list[i].level]++;
+        monster_levels[creatures_list[i].level]++;
     }
 
     for (int i = 1; i <= MAX_MONS_LEVEL; i++) {
-        m_level[i] += m_level[i - 1];
+        monster_levels[i] += monster_levels[i - 1];
     }
 }
 
