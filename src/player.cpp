@@ -517,7 +517,7 @@ const char *spell_names[62] = {
 //      103 = Soft Leather Armor
 //       30 = Stiletto
 //      322 = Beginners Handbook
-uint16_t player_init[MAX_CLASS][5] = {
+uint16_t player_base_provisions[MAX_CLASS][5] = {
     {344, 365, 123, 30, 103}, // Warrior
     {344, 365, 123, 30, 318}, // Mage
     {344, 365, 123, 30, 322}, // Priest

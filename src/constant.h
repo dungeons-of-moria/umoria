@@ -73,8 +73,8 @@
 #define OBJ_GREAT                12   // 1/n Chance of item being a Great Item
 
 // Note that the following constants are all related, if you change one, you
-// must also change all succeeding ones. Also, player_init[] and store_choices[]
-// may also have to be changed.
+// must also change all succeeding ones. Also, player_base_provisions[] and
+// store_choices[] may also have to be changed.
 #define MAX_OBJECTS             420   // Number of objects for universe
 #define MAX_DUNGEON_OBJ         344   // Number of dungeon objects
 #define OBJ_OPEN_DOOR           367
