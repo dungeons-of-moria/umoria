@@ -72,10 +72,10 @@ static void blank_cave() {
 // Note: 9 is a temporary value.
 static void fill_cave(uint8_t rockType) {
     // no need to check the border of the cave
-    for (int y = cur_height - 2; y > 0; y--) {
+    for (int y = dungeon_height - 2; y > 0; y--) {
         int x = 1;
 
-        for (int j = cur_width - 2; j > 0; j--) {
+        for (int j = dungeon_width - 2; j > 0; j--) {
             if (cave[y][x].fval == NULL_WALL || cave[y][x].fval == TMP1_WALL || cave[y][x].fval == TMP2_WALL) {
                 cave[y][x].fval = rockType;
             }
@@ -95,12 +95,12 @@ static void place_boundary() {
 
     // put permanent wall on leftmost row and rightmost row
     left_ptr = (Cave_t(*)[MAX_WIDTH]) &cave[0][0];
-    right_ptr = (Cave_t(*)[MAX_WIDTH]) &cave[0][cur_width - 1];
+    right_ptr = (Cave_t(*)[MAX_WIDTH]) &cave[0][dungeon_width - 1];
 
-    for (int i = 0; i < cur_height; i++) {
+    for (int i = 0; i < dungeon_height; i++) {
 #ifdef DEBUG
         assert((Cave_t *)left_ptr == &cave[i][0]);
-        assert((Cave_t *)right_ptr == &cave[i][cur_width - 1]);
+        assert((Cave_t *)right_ptr == &cave[i][dungeon_width - 1]);
 #endif
 
         ((Cave_t *) left_ptr)->fval = BOUNDARY_WALL;
@@ -112,12 +112,12 @@ static void place_boundary() {
 
     // put permanent wall on top row and bottom row
     Cave_t *top_ptr = &cave[0][0];
-    Cave_t *bottom_ptr = &cave[cur_height - 1][0];
+    Cave_t *bottom_ptr = &cave[dungeon_height - 1][0];
 
-    for (int i = 0; i < cur_width; i++) {
+    for (int i = 0; i < dungeon_width; i++) {
 #ifdef DEBUG
         assert(top_ptr == &cave[0][i]);
-        assert(bottom_ptr == &cave[cur_height - 1][i]);
+        assert(bottom_ptr == &cave[dungeon_height - 1][i]);
 #endif
         top_ptr->fval = BOUNDARY_WALL;
         top_ptr++;
@@ -130,8 +130,8 @@ static void place_boundary() {
 // Places "streamers" of rock through dungeon -RAK-
 static void place_streamer(uint8_t rockType, int treas_chance) {
     // Choose starting point and direction
-    int y = (cur_height / 2) + 11 - randint(23);
-    int x = (cur_width / 2) + 16 - randint(33);
+    int y = (dungeon_height / 2) + 11 - randint(23);
+    int x = (dungeon_width / 2) + 16 - randint(33);
 
     // Get random direction. Numbers 1-4, 6-9
     int dir = randint(8);
@@ -263,10 +263,10 @@ static void place_stairs(int stairType, int num, int walls) {
             do {
                 // Note:
                 // don't let y1/x1 be zero,
-                // don't let y2/x2 be equal to cur_height-1/cur_width-1,
+                // don't let y2/x2 be equal to dungeon_height-1/dungeon_width-1,
                 // these values are always BOUNDARY_ROCK.
-                int y1 = randint(cur_height - 14);
-                int x1 = randint(cur_width - 14);
+                int y1 = randint(dungeon_height - 14);
+                int x1 = randint(dungeon_width - 14);
                 int y2 = y1 + 12;
                 int x2 = x1 + 12;
 
@@ -946,8 +946,8 @@ static void new_spot(int16_t *y, int16_t *x) {
     Cave_t *c_ptr;
 
     do {
-        yy = randint(cur_height - 2);
-        xx = randint(cur_width - 2);
+        yy = randint(dungeon_height - 2);
+        xx = randint(dungeon_width - 2);
         c_ptr = &cave[yy][xx];
     } while (c_ptr->fval >= MIN_CLOSED_SPACE || c_ptr->cptr != 0 || c_ptr->tptr != 0);
 
@@ -958,8 +958,8 @@ static void new_spot(int16_t *y, int16_t *x) {
 // Cave logic flow for generation of new dungeon
 static void cave_gen() {
     // Room initialization
-    int row_rooms = 2 * (cur_height / SCREEN_HEIGHT);
-    int col_rooms = 2 * (cur_width / SCREEN_WIDTH);
+    int row_rooms = 2 * (dungeon_height / SCREEN_HEIGHT);
+    int col_rooms = 2 * (dungeon_width / SCREEN_WIDTH);
 
     bool room_map[20][20];
     for (int row = 0; row < row_rooms; row++) {
@@ -1157,8 +1157,8 @@ static bool isNighTime() {
 // Light town based on whether it is Night time, or day time.
 static void lightTown() {
     if (isNighTime()) {
-        for (int y = 0; y < cur_height; y++) {
-            for (int x = 0; x < cur_width; x++) {
+        for (int y = 0; y < dungeon_height; y++) {
+            for (int x = 0; x < dungeon_width; x++) {
                 if (cave[y][x].fval != DARK_FLOOR) {
                     cave[y][x].pl = true;
                 }
@@ -1167,8 +1167,8 @@ static void lightTown() {
         alloc_monster(MIN_MALLOC_TN, 3, true);
     } else {
         // ...it is day time
-        for (int y = 0; y < cur_height; y++) {
-            for (int x = 0; x < cur_width; x++) {
+        for (int y = 0; y < dungeon_height; y++) {
+            for (int x = 0; x < dungeon_width; x++) {
                 cave[y][x].pl = true;
             }
         }
@@ -1213,16 +1213,16 @@ void generate_cave() {
     blank_cave();
 
     // We're in the dungeon more than the town, so let's default to that -MRC-
-    cur_height = MAX_HEIGHT;
-    cur_width = MAX_WIDTH;
+    dungeon_height = MAX_HEIGHT;
+    dungeon_width = MAX_WIDTH;
 
     if (current_dungeon_level == 0) {
-        cur_height = SCREEN_HEIGHT;
-        cur_width = SCREEN_WIDTH;
+        dungeon_height = SCREEN_HEIGHT;
+        dungeon_width = SCREEN_WIDTH;
     }
 
-    max_panel_rows = (int16_t) ((cur_height / SCREEN_HEIGHT) * 2 - 2);
-    max_panel_cols = (int16_t) ((cur_width / SCREEN_WIDTH) * 2 - 2);
+    max_panel_rows = (int16_t) ((dungeon_height / SCREEN_HEIGHT) * 2 - 2);
+    max_panel_cols = (int16_t) ((dungeon_width / SCREEN_WIDTH) * 2 - 2);
 
     panel_row = max_panel_rows;
     panel_col = max_panel_cols;

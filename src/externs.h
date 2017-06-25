@@ -71,8 +71,8 @@ extern bool to_be_wizard;
 extern bool wizard_mode;
 
 // Dungeon and display panel sizes
-extern int16_t cur_height;
-extern int16_t cur_width;
+extern int16_t dungeon_height;
+extern int16_t dungeon_width;
 extern int16_t max_panel_rows, max_panel_cols;
 extern int panel_row, panel_col;
 extern int panel_row_min, panel_row_max;

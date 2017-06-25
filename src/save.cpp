@@ -304,8 +304,8 @@ static bool sv_write() {
     wr_short((uint16_t) char_row);
     wr_short((uint16_t) char_col);
     wr_short((uint16_t) mon_tot_mult);
-    wr_short((uint16_t) cur_height);
-    wr_short((uint16_t) cur_width);
+    wr_short((uint16_t) dungeon_height);
+    wr_short((uint16_t) dungeon_width);
     wr_short((uint16_t) max_panel_rows);
     wr_short((uint16_t) max_panel_cols);
 
@@ -813,8 +813,8 @@ bool get_char(bool *generate) {
         rd_short((uint16_t *) &char_row);
         rd_short((uint16_t *) &char_col);
         rd_short((uint16_t *) &mon_tot_mult);
-        rd_short((uint16_t *) &cur_height);
-        rd_short((uint16_t *) &cur_width);
+        rd_short((uint16_t *) &dungeon_height);
+        rd_short((uint16_t *) &dungeon_width);
         rd_short((uint16_t *) &max_panel_rows);
         rd_short((uint16_t *) &max_panel_cols);
 

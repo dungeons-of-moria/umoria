@@ -133,8 +133,8 @@ int bit_pos(uint32_t *test) {
 
 // Checks a co-ordinate for in bounds status -RAK-
 bool in_bounds(int y, int x) {
-    bool validY = y > 0 && y < cur_height - 1;
-    bool validX = x > 0 && x < cur_width - 1;
+    bool validY = y > 0 && y < dungeon_height - 1;
+    bool validX = x > 0 && x < dungeon_width - 1;
 
     return validY && validX;
 }
@@ -220,8 +220,8 @@ int distance(int y1, int x1, int y2, int x2) {
 }
 
 // Checks points north, south, east, and west for a wall -RAK-
-// note that y,x is always in_bounds(), i.e. 0 < y < cur_height-1,
-// and 0 < x < cur_width-1
+// note that y,x is always in_bounds(), i.e. 0 < y < dungeon_height-1,
+// and 0 < x < dungeon_width-1
 int next_to_walls(int y, int x) {
     int walls = 0;
 
@@ -651,8 +651,8 @@ void place_win_monster() {
 
     int y, x;
     do {
-        y = randint(cur_height - 2);
-        x = randint(cur_width - 2);
+        y = randint(dungeon_height - 2);
+        x = randint(dungeon_width - 2);
     } while ((cave[y][x].fval >= MIN_CLOSED_SPACE) || (cave[y][x].cptr != 0) || (cave[y][x].tptr != 0) || (distance(y, x, char_row, char_col) <= MAX_SIGHT));
 
     mon_ptr->fy = (uint8_t) y;
@@ -717,8 +717,8 @@ void alloc_monster(int num, int dis, bool slp) {
 
     for (int i = 0; i < num; i++) {
         do {
-            y = randint(cur_height - 2);
-            x = randint(cur_width - 2);
+            y = randint(dungeon_height - 2);
+            x = randint(dungeon_width - 2);
         } while (cave[y][x].fval >= MIN_CLOSED_SPACE || (cave[y][x].cptr != 0) || (distance(y, x, char_row, char_col) <= dis));
 
         int l = get_mons_num(current_dungeon_level);
@@ -801,8 +801,8 @@ static void compact_objects() {
     int cur_dis = 66;
 
     while (counter <= 0) {
-        for (int y = 0; y < cur_height; y++) {
-            for (int x = 0; x < cur_width; x++) {
+        for (int y = 0; y < dungeon_height; y++) {
+            for (int x = 0; x < dungeon_width; x++) {
                 if (cave[y][x].tptr != 0 && distance(y, x, char_row, char_col) > cur_dis) {
                     int chance;
 
@@ -864,8 +864,8 @@ void pusht(uint8_t treasureID) {
         treasure_list[treasureID] = treasure_list[tcptr - 1];
 
         // must change the tptr in the cave of the object just moved
-        for (int y = 0; y < cur_height; y++) {
-            for (int x = 0; x < cur_width; x++) {
+        for (int y = 0; y < dungeon_height; y++) {
+            for (int x = 0; x < dungeon_width; x++) {
                 if (cave[y][x].tptr == tcptr - 1) {
                     cave[y][x].tptr = treasureID;
                 }

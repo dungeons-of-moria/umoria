@@ -129,8 +129,8 @@ void alloc_object(bool (*alloc_set)(int), int typ, int num) {
         // don't put an object beneath the player, this could cause
         // problems if player is standing under rubble, or on a trap.
         do {
-            y = randint(cur_height) - 1;
-            x = randint(cur_width) - 1;
+            y = randint(dungeon_height) - 1;
+            x = randint(dungeon_width) - 1;
         } while (!(*alloc_set)(cave[y][x].fval) || cave[y][x].tptr != 0 || (y == char_row && x == char_col));
 
         switch (typ) {
@@ -2269,7 +2269,7 @@ bool mmove(int dir, int *y, int *x) {
 
     bool moved = false;
 
-    if (new_row >= 0 && new_row < cur_height && new_col >= 0 && new_col < cur_width) {
+    if (new_row >= 0 && new_row < dungeon_height && new_col >= 0 && new_col < dungeon_width) {
         *y = new_row;
         *x = new_col;
         moved = true;
@@ -2322,8 +2322,8 @@ void teleport(int dis) {
     int y, x;
 
     do {
-        y = randint(cur_height) - 1;
-        x = randint(cur_width) - 1;
+        y = randint(dungeon_height) - 1;
+        x = randint(dungeon_width) - 1;
 
         while (distance(y, x, char_row, char_col) > dis) {
             y += (char_row - y) / 2;

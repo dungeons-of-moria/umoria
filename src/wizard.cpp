@@ -15,8 +15,8 @@ void wizard_light() {
 
     flag = !cave[char_row][char_col].pl;
 
-    for (int i = 0; i < cur_height; i++) {
-        for (int j = 0; j < cur_width; j++) {
+    for (int i = 0; i < dungeon_height; i++) {
+        for (int j = 0; j < dungeon_width; j++) {
             if (cave[i][j].fval <= MAX_CAVE_FLOOR) {
                 for (int k = i - 1; k <= i + 1; k++) {
                     for (int l = j - 1; l <= j + 1; l++) {

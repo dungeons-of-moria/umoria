@@ -73,8 +73,8 @@ bool to_be_wizard            = false;  // Player requests to be Wizard - used du
 bool wizard_mode             = false;  // Character is a Wizard when true
 
 // Dungeon and display panel sizes
-int16_t cur_height;  // Current dungeon height
-int16_t cur_width;   // Current dungeon width
+int16_t dungeon_height;  // Dungeon map height at either town level, or down in the dungeon
+int16_t dungeon_width;   // Dungeon map width at either town level, or down in the dungeon
 int16_t max_panel_rows, max_panel_cols;
 int panel_row, panel_col;
 int panel_row_min, panel_row_max;

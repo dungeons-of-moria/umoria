@@ -1417,7 +1417,7 @@ static void commandLocateOnMap() {
             x += ((dir_val - 1) % 3 - 1) * SCREEN_WIDTH / 2;
             y -= ((dir_val - 1) / 3 - 1) * SCREEN_HEIGHT / 2;
 
-            if (x < 0 || y < 0 || x >= cur_width || y >= cur_width) {
+            if (x < 0 || y < 0 || x >= dungeon_width || y >= dungeon_width) {
                 msg_print("You've gone past the end of your map.");
 
                 x -= ((dir_val - 1) % 3 - 1) * SCREEN_WIDTH / 2;
