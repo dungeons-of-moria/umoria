@@ -4,87 +4,93 @@
 // ABSOLUTELY NO WARRANTY. See https://www.gnu.org/licenses/gpl-2.0.html
 // for further details.
 
-// Global variables
+// Global variables with defaults
 // clang-format off
 
 #include "headers.h"
 
-vtype_t savegame_filename; // The save file to use.
-FILE *highscore_fp;        // File pointer to high score file
+// A horrible hack, needed because compact_monster() is called from
+// deep within creatures() via place_monster() and summon_monster()
+int hack_monptr = -1;
 
-// a horrible hack: needed because compact_monster() can be called from
-// creatures() via summon_monster() and place_monster()
-int hack_monptr                 = -1;
+int closing_flag   = 0;     // Used for closing
+bool wait_for_more = false; // used when ^C hit during -more- prompt
 
-bool weapon_heavy               = false;
-int pack_heaviness              = 0;
+vtype_t savegame_filename; // The save game filename -CJS-
+FILE *highscore_fp;        // High score file pointer
 
-vtype_t died_from;
-int32_t birth_date;
+// Game options as set on startup and with `=` set options command -CJS-
+bool display_counts      = true;   // Display rest/repeat counts
+bool find_bound          = false;  // Print yourself on a run (slower)
+bool find_cut            = true;   // Cut corners while running
+bool find_examine        = true;   // Check corners while running
+bool find_ignore_doors   = false;  // Run through open doors
+bool find_prself         = false;  // Stop running when the map shifts
+bool highlight_seams     = false;  // Highlight magma and quartz veins
+bool prompt_carry_flag   = false;  // Prompt to pick something up
+bool rogue_like_commands = false;  // Use classic Roguelike keys - set in config.h/main.c
+bool show_weight_flag    = false;  // Display weights in inventory
+bool sound_beep_flag     = true;   // Beep for invalid characters
 
-bool total_winner               = false;
-int32_t max_score               = 0;
-bool character_generated        = false;    // don't save score until char gen finished
-bool character_saved            = false;    // prevents save on kill after save_char()
+// Global flags
+int16_t dun_level        = 0;      // Current dungeon level
+int32_t max_score        = 0;
+int32_t turn             = -1;     // Current turn of game
 
-uint32_t randes_seed;                       // for restarting randes_state
-uint32_t town_seed;                         // for restarting town_seed
-int16_t cur_height, cur_width;              // Cur dungeon size
-int16_t dun_level               = 0;        // Cur dungeon level
-int16_t missile_ctr             = 0;        // Counter for missiles
-bool msg_flag;                              // Set with first msg
-vtype_t old_msgs[MAX_SAVE_MSG];             // Last message
-int16_t last_msg                = 0;        // Where last is held
-bool death                      = false;    // True if died
+bool new_level_flag;               // Do next level when true
+bool screen_change       = false;  // Track screen changes for inventory commands
 
-int find_flag;                              // Used in MORIA for .(dir)
+bool free_turn_flag;               // Player has a free turn, so do not move creatures
+int find_flag;                     // Used in MORIA for .(dir)
+bool teleport_flag;                // Handle teleport traps
 
-bool free_turn_flag;                        // Used in MORIA, do not move creatures
-int command_count;                          // Gives repetition of commands. -CJS-
-bool default_dir                = false;    // Use last direction for repeated command
-int32_t turn                    = -1;       // Cur turn of game
-bool wizard                     = false;    // Wizard flag
-bool to_be_wizard               = false;    // used during startup, when -w option used
-bool panic_save                 = false;    // this is true if playing from a panic save
-int16_t noscore                 = 0;        // Don't log the game. -CJS-
+bool player_light;                 // True when player is carrying light
+bool weapon_heavy        = false;  // Weapon is too heavy -CJS-
+int pack_heaviness       = 0;      // Heaviness of pack - used to calculate if pack is too heavy -CJS-
 
-bool rogue_like_commands;                   // set in config.h/main.c
+int32_t birth_date;                // Unix time for when the character was created
+vtype_t died_from;                 // What the character died from: starvation, Bat, etc.
+bool death               = false;  // True if character died
 
-// options set via the '=' command
-bool find_cut                   = true;
-bool find_examine               = true;
-bool find_bound                 = false;
-bool find_prself                = false;
-bool prompt_carry_flag          = false;
-bool show_weight_flag           = false;
-bool highlight_seams            = false;
-bool find_ignore_doors          = false;
-bool sound_beep_flag            = true;
-bool display_counts             = true;
+bool total_winner        = false;  // Character beat the Balrog
+bool character_generated = false;  // Don't save score until character generation is finished
+bool character_saved     = false;  // Prevents save on kill after saving a character
 
-// FIXME: was a `bool`, but also holds an ASCII character. Is this the best solution?
-char doing_inven                = 0;      // Track inventory commands. -CJS-
+char doing_inven         = 0;      // Track inventory commands -CJS-
+char last_command        = ' ';    // Save of the previous player command
+int command_count;                 // How many times to repeat a specific command -CJS-
+bool default_dir         = false;  // Direction to use for repeated commands
 
-bool screen_change              = false;  // Track screen updates for inven_commands.
-char last_command               = ' ';    // Memory of previous command.
+bool msg_flag;                     // Set with first message
+vtype_t old_msgs[MAX_SAVE_MSG];    // Saved messages -CJS-
+int16_t last_msg         = 0;      // Index of last message held in saved messages array
 
-// these used to be in dungeon.c
-bool new_level_flag;                      // Next level when true
-bool teleport_flag;                       // Handle teleport traps
-bool player_light;                        // Player carrying light
-int eof_flag                    = 0;      // Used to signal EOF/HANGUP condition
-bool light_flag                 = false;  // Track if temporary light about player.
+int16_t missile_ctr      = 0;      // Counter for missiles
 
-bool wait_for_more              = false;  // used when ^C hit during -more- prompt
-int closing_flag                = 0;      // Used for closing
+uint32_t randes_seed;              // Seed for encoding colors / restarting randes_state
+uint32_t town_seed;                // Seed for town generation
 
-// Following are calculated from max dungeon sizes
+int eof_flag             = 0;      // Is used to signal EOF/HANGUP condition
+bool panic_save          = false;  // True if playing from a panic save
+int16_t noscore          = 0;      // Don't save a score for this game. -CJS-
+
+bool to_be_wizard        = false;  // Player requests to be Wizard - used during startup, when -w option used
+bool wizard              = false;  // Character is a Wizard when true
+
+// Dungeon and display panel sizes
+int16_t cur_height;  // Current dungeon height
+int16_t cur_width;   // Current dungeon width
 int16_t max_panel_rows, max_panel_cols;
 int panel_row, panel_col;
 int panel_row_min, panel_row_max;
 int panel_col_min, panel_col_max;
 int panel_col_prt, panel_row_prt;
 
+// Floor definitions
 Cave_t cave[MAX_HEIGHT][MAX_WIDTH];
 
+// Player variables
+bool light_flag = false; // Track if temporary light about player.
+
+// Creature arrays and variables
 Recall_t creature_recall[MAX_CREATURES]; // Monster memories

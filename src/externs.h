@@ -6,70 +6,76 @@
 
 // Declarations for global variables and initialized data
 
-extern char *copyright[5];
-
-// horrible hack: needed because compact_monster() can be called from
-// deep within creatures() via place_monster() and summon_monster().
 extern int hack_monptr;
 
-extern vtype_t savegame_filename; // The save file. -CJS-
-extern FILE *highscore_fp;        // High score file pointer
-
-extern vtype_t died_from;
-extern int32_t birth_date;
-
-// These are options, set with set_options command -CJS-
-extern bool rogue_like_commands;
-extern bool find_cut;          // Cut corners on a run
-extern bool find_examine;      // Check corners on a run
-extern bool find_prself;       // Print yourself on a run (slower)
-extern bool find_bound;        // Stop run when the map shifts
-extern bool prompt_carry_flag; // Prompt to pick something up
-extern bool show_weight_flag;  // Display weights in inventory
-extern bool highlight_seams;   // Highlight magma and quartz
-extern bool find_ignore_doors; // Run through open doors
-extern bool sound_beep_flag;   // Beep for invalid character
-extern bool display_counts;    // Display rest/repeat counts
-
-// global flags
-extern bool new_level_flag; // Next level when true
-extern bool teleport_flag;  // Handle teleport traps
-extern int eof_flag;        // Used to handle eof/HANGUP
-extern bool player_light;   // Player carrying light
-extern int find_flag;       // Used in MORIA
-extern bool free_turn_flag; // Used in MORIA
-extern bool weapon_heavy;   // Flag if the weapon too heavy -CJS-
-extern int pack_heaviness;  // Flag if the pack too heavy -CJS-
-extern char doing_inven;    // Track inventory commands
-extern bool screen_change;  // Screen changes (used in inven_commands)
-
-extern bool character_generated;    // don't save score until char gen finished
-extern bool character_saved;        // prevents save on kill after save_char()
-extern int command_count;           // Repetition of commands. -CJS-
-extern bool default_dir;            // Use last direction in repeated commands
-extern int16_t noscore;             // Don't score this game. -CJS-
-extern uint32_t randes_seed;        // For encoding colors
-extern uint32_t town_seed;          // Seed for town genera
-extern int16_t dun_level;           // Cur dungeon level
-extern int16_t missile_ctr;         // Counter for missiles
-extern bool msg_flag;               // Set with first msg
-extern vtype_t old_msgs[MAX_SAVE_MSG]; // Last messages -CJS-
-extern int16_t last_msg;            // Where in the array is the last
-extern bool death;                  // True if died
-extern int32_t turn;                // Current turn of game
-extern bool wizard;                 // Wizard flag
-extern bool to_be_wizard;
-extern bool panic_save; // this is true if playing from a panic save
-
+extern char days[7][29];
+extern int closing_flag;
 extern bool wait_for_more;
 
-extern char days[7][29];
-extern int closing_flag; // Used for closing
+extern vtype_t savegame_filename;
+extern FILE *highscore_fp;
 
-extern int16_t cur_height; // Current dungeon height
-extern int16_t cur_width;  // Current dungeon width
+// These are options, set with set_options command `=` -CJS-
+extern bool display_counts;
+extern bool find_bound;
+extern bool find_cut;
+extern bool find_examine;
+extern bool find_ignore_doors;
+extern bool find_prself;
+extern bool highlight_seams;
+extern bool prompt_carry_flag;
+extern bool rogue_like_commands;
+extern bool show_weight_flag;
+extern bool sound_beep_flag;
 
-// Following are calculated from max dungeon sizes
+// Global flags
+extern int16_t dun_level;
+extern int32_t max_score;
+extern int32_t turn;
+
+extern bool new_level_flag;
+extern bool screen_change;
+
+extern bool free_turn_flag;
+extern int find_flag;
+extern bool teleport_flag;
+
+extern bool player_light;
+extern bool weapon_heavy;
+extern int pack_heaviness;
+
+extern int32_t birth_date;
+extern vtype_t died_from;
+extern bool death;
+
+extern bool total_winner;
+extern bool character_generated;
+extern bool character_saved;
+
+extern char doing_inven;
+extern char last_command;
+extern int command_count;
+extern bool default_dir;
+
+extern bool msg_flag;
+extern vtype_t old_msgs[MAX_SAVE_MSG];
+extern int16_t last_msg;
+
+extern int16_t missile_ctr;
+
+extern uint32_t randes_seed;
+extern uint32_t town_seed;
+
+extern int eof_flag;
+extern bool panic_save;
+extern int16_t noscore;
+
+extern bool to_be_wizard;
+extern bool wizard;
+
+// Dungeon and display panel sizes
+extern int16_t cur_height;
+extern int16_t cur_width;
 extern int16_t max_panel_rows, max_panel_cols;
 extern int panel_row, panel_col;
 extern int panel_row_min, panel_row_max;
@@ -102,8 +108,6 @@ extern uint32_t spell_worked;    // Bit field for spells tried -CJS-
 extern uint32_t spell_forgotten; // Bit field for spells forgotten -JEW-
 extern uint8_t spell_order[32];  // remember order that spells are learned in
 extern uint16_t player_init[MAX_CLASS][5];
-extern bool total_winner;
-extern int32_t max_score;
 
 // Following are store definitions
 extern Owner_t owners[MAX_OWNERS];
@@ -147,13 +151,6 @@ extern uint8_t blows_table[7][6];
 
 extern uint16_t normal_table[NORMAL_TABLE_SIZE];
 
-// Initialized data which had to be moved from some other file
-// Since these get modified, macrsrc.c must be able to access
-// them Otherwise, game cannot be made restartable dungeon.c.
-extern char last_command; // Memory of previous command.
-
-// moria1.c
-// Track if temporary light about player.
 extern bool light_flag;
 
 // function return values
