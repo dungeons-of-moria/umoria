@@ -52,7 +52,7 @@ extern uint32_t town_seed;          // Seed for town genera
 extern int16_t dun_level;           // Cur dungeon level
 extern int16_t missile_ctr;         // Counter for missiles
 extern bool msg_flag;               // Set with first msg
-extern vtype_t old_msg[MAX_SAVE_MSG]; // Last messages -CJS-
+extern vtype_t old_msgs[MAX_SAVE_MSG]; // Last messages -CJS-
 extern int16_t last_msg;            // Where in the array is the last
 extern bool death;                  // True if died
 extern int32_t turn;                // Current turn of game

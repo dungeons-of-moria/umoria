@@ -1322,7 +1322,7 @@ static void commandPreviousMessage() {
         while (maxMessages > 0) {
             maxMessages--;
 
-            prt(old_msg[msgID], maxMessages, 0);
+            prt(old_msgs[msgID], maxMessages, 0);
 
             if (msgID == 0) {
                 msgID = MAX_SAVE_MSG - 1;
@@ -1337,7 +1337,7 @@ static void commandPreviousMessage() {
     } else {
         // Distinguish real and recovered messages with a '>'. -CJS-
         put_buffer(">", 0, 0);
-        prt(old_msg[msgID], 0, 1);
+        prt(old_msgs[msgID], 0, 1);
     }
 }
 

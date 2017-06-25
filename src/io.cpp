@@ -245,7 +245,7 @@ void msg_print(const char *msg) {
     bool combine_messages = false;
 
     if (msg_flag) {
-        old_len = (int) strlen(old_msg[last_msg]) + 1;
+        old_len = (int) strlen(old_msgs[last_msg]) + 1;
 
         // If the new message and the old message are short enough,
         // we want display them together on the same line.  So we
@@ -299,8 +299,8 @@ void msg_print(const char *msg) {
 
     if (combine_messages) {
         put_buffer(msg, MSG_LINE, old_len + 2);
-        strcat(old_msg[last_msg], "  ");
-        strcat(old_msg[last_msg], msg);
+        strcat(old_msgs[last_msg], "  ");
+        strcat(old_msgs[last_msg], msg);
     } else {
         put_buffer(msg, MSG_LINE, 0);
         last_msg++;
@@ -309,8 +309,8 @@ void msg_print(const char *msg) {
             last_msg = 0;
         }
 
-        (void) strncpy(old_msg[last_msg], msg, MORIA_MESSAGE_SIZE);
-        old_msg[last_msg][MORIA_MESSAGE_SIZE - 1] = '\0';
+        (void) strncpy(old_msgs[last_msg], msg, MORIA_MESSAGE_SIZE);
+        old_msgs[last_msg][MORIA_MESSAGE_SIZE - 1] = '\0';
     }
 }
 

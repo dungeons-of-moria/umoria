@@ -250,7 +250,7 @@ static bool sv_write() {
     wr_long(town_seed);
     wr_short((uint16_t) last_msg);
     for (int i = 0; i < MAX_SAVE_MSG; i++) {
-        wr_string(old_msg[i]);
+        wr_string(old_msgs[i]);
     }
 
     // this indicates 'cheating' if it is a one
@@ -712,7 +712,7 @@ bool get_char(bool *generate) {
             rd_long(&town_seed);
             rd_short((uint16_t *) &last_msg);
             for (int i = 0; i < MAX_SAVE_MSG; i++) {
-                rd_string(old_msg[i]);
+                rd_string(old_msgs[i]);
             }
 
             rd_short((uint16_t *) &panic_save);

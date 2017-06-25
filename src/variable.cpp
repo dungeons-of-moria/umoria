@@ -54,7 +54,7 @@ int16_t cur_height, cur_width;              // Cur dungeon size
 int16_t dun_level               = 0;        // Cur dungeon level
 int16_t missile_ctr             = 0;        // Counter for missiles
 bool msg_flag;                              // Set with first msg
-vtype_t old_msg[MAX_SAVE_MSG];                // Last message
+vtype_t old_msgs[MAX_SAVE_MSG];                // Last message
 int16_t last_msg                = 0;        // Where last is held
 bool death                      = false;    // True if died
 
