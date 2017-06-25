@@ -25,7 +25,7 @@ int main(int argc, char *argv[]) {
     bool force_keys_to = false;
 
     // default command set defined in config.h file
-    rogue_like_commands = ROGUE_LIKE;
+    use_roguelike_keys = ROGUE_LIKE;
 
     // call this routine to grab a file pointer to the high score file
     // and prepare things to relinquish setuid privileges
@@ -49,7 +49,7 @@ int main(int argc, char *argv[]) {
                 new_game = true;
                 break;
             case 'o':
-                // rogue_like_commands may be set in get_char(),
+                // use_roguelike_keys may be set in get_char(),
                 // so delay this until after read save file if any.
                 force_rogue_like = true;
                 force_keys_to = false;
@@ -179,7 +179,7 @@ int main(int argc, char *argv[]) {
     }
 
     if (force_rogue_like) {
-        rogue_like_commands = force_keys_to;
+        use_roguelike_keys = force_keys_to;
     }
 
     magic_init();

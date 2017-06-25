@@ -1636,7 +1636,7 @@ bool get_dir(char *prompt, int *dir) {
 
         command_count = save;
 
-        if (rogue_like_commands) {
+        if (use_roguelike_keys) {
             command = map_roguedir(command);
         }
 
@@ -1661,7 +1661,7 @@ bool get_alldir(const char *prompt, int *dir) {
             return false;
         }
 
-        if (rogue_like_commands) {
+        if (use_roguelike_keys) {
             command = map_roguedir(command);
         }
 

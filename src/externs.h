@@ -22,7 +22,7 @@ extern bool run_ignore_doors;
 extern bool run_print_self;
 extern bool highlight_seams;
 extern bool prompt_to_pickup;
-extern bool rogue_like_commands;
+extern bool use_roguelike_keys;
 extern bool show_weight_flag;
 extern bool sound_beep_flag;
 

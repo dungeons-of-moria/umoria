@@ -25,7 +25,7 @@ bool run_ignore_doors    = false;  // Run through open doors
 bool run_print_self      = false;  // Stop running when the map shifts
 bool highlight_seams     = false;  // Highlight magma and quartz veins
 bool prompt_to_pickup    = false;  // Prompt to pick something up
-bool rogue_like_commands = false;  // Use classic Roguelike keys - set in config.h/main.c
+bool use_roguelike_keys  = false;  // Use classic Roguelike keys - set in config.h/main.c
 bool show_weight_flag    = false;  // Display weights in inventory
 bool sound_beep_flag     = true;   // Beep for invalid characters
 

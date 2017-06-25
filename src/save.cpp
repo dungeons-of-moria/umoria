@@ -90,7 +90,7 @@ static bool sv_write() {
     if (prompt_to_pickup) {
         l |= 0x10;
     }
-    if (rogue_like_commands) {
+    if (use_roguelike_keys) {
         l |= 0x20;
     }
     if (show_weight_flag) {
@@ -577,7 +577,7 @@ bool get_char(bool *generate) {
         run_print_self = (l & 0x4) != 0;
         find_bound = (l & 0x8) != 0;
         prompt_to_pickup = (l & 0x10) != 0;
-        rogue_like_commands = (l & 0x20) != 0;
+        use_roguelike_keys = (l & 0x20) != 0;
         show_weight_flag = (l & 0x40) != 0;
         highlight_seams = (l & 0x80) != 0;
         run_ignore_doors = (l & 0x100) != 0;

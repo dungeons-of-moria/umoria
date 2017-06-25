@@ -762,7 +762,7 @@ static void executeInputCommands(char *command, int *find_count) {
                 int counter = 0;
 
                 // Get a count for a command.
-                if ((rogue_like_commands && lastInputCommand >= '0' && lastInputCommand <= '9') || (!rogue_like_commands && lastInputCommand == '#')) {
+                if ((use_roguelike_keys && lastInputCommand >= '0' && lastInputCommand <= '9') || (!use_roguelike_keys && lastInputCommand == '#')) {
                     char tmp[8];
 
                     prt("Repeat count:", 0, 0);
@@ -829,7 +829,7 @@ static void executeInputCommands(char *command, int *find_count) {
                 move_cursor_relative(char_row, char_col);
 
                 // Commands are always converted to rogue form. -CJS-
-                if (!rogue_like_commands) {
+                if (!use_roguelike_keys) {
                     lastInputCommand = original_commands(lastInputCommand);
                 }
 
@@ -1356,7 +1356,7 @@ static void commandSaveAndExit() {
     if (total_winner) {
         msg_print("You are a Total Winner,  your character must be retired.");
 
-        if (rogue_like_commands) {
+        if (use_roguelike_keys) {
             msg_print("Use 'Q' to when you are ready to quit.");
         } else {
             msg_print("Use <Control>-K when you are ready to quit.");
@@ -1521,7 +1521,7 @@ static void doWizardCommands(char com_val) {
             print_objects();
             break;
         case '\\': // \ wizard help
-            if (rogue_like_commands) {
+            if (use_roguelike_keys) {
                 helpfile(MORIA_WIZ_HELP);
             } else {
                 helpfile(MORIA_OWIZ_HELP);
@@ -1561,7 +1561,7 @@ static void doWizardCommands(char com_val) {
             wizard_create();
             break;
         default:
-            if (rogue_like_commands) {
+            if (use_roguelike_keys) {
                 prt("Type '?' or '\\' for help.", 0, 0);
             } else {
                 prt("Type '?' or ^H for help.", 0, 0);
@@ -1679,7 +1679,7 @@ static void do_command(char com_val) {
             go_down();
             break;
         case '?': // (?) help with commands
-            if (rogue_like_commands) {
+            if (use_roguelike_keys) {
                 helpfile(MORIA_HELP);
             } else {
                 helpfile(MORIA_ORIG_HELP);

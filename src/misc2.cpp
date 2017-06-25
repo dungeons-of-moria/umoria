@@ -985,7 +985,7 @@ static struct {
                {"Running: stop when map sector changes", &find_bound},
                {"Running: run through open doors",       &run_ignore_doors},
                {"Prompt to pick up objects",             &prompt_to_pickup},
-               {"Rogue like commands",                   &rogue_like_commands},
+               {"Rogue like commands",                   &use_roguelike_keys},
                {"Show weights in inventory",             &show_weight_flag},
                {"Highlight and notice mineral seams",    &highlight_seams},
                {"Beep for invalid character",            &sound_beep_flag},
