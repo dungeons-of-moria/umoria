@@ -241,10 +241,10 @@ static bool sv_write() {
     }
     wr_short((uint16_t) inven_weight);
     wr_short((uint16_t) equip_ctr);
-    wr_long(spell_learned);
-    wr_long(spell_worked);
-    wr_long(spell_forgotten);
-    wr_bytes(spell_order, 32);
+    wr_long(spells_learnt);
+    wr_long(spells_worked);
+    wr_long(spells_forgotten);
+    wr_bytes(spells_learned_order, 32);
     wr_bytes(objects_identified, OBJECT_IDENT_SIZE);
     wr_long(magic_seed);
     wr_long(town_seed);
@@ -703,10 +703,10 @@ bool get_char(bool *generate) {
             }
             rd_short((uint16_t *) &inven_weight);
             rd_short((uint16_t *) &equip_ctr);
-            rd_long(&spell_learned);
-            rd_long(&spell_worked);
-            rd_long(&spell_forgotten);
-            rd_bytes(spell_order, 32);
+            rd_long(&spells_learnt);
+            rd_long(&spells_worked);
+            rd_long(&spells_forgotten);
+            rd_bytes(spells_learned_order, 32);
             rd_bytes(objects_identified, OBJECT_IDENT_SIZE);
             rd_long(&magic_seed);
             rd_long(&town_seed);

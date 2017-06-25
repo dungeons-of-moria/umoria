@@ -304,10 +304,10 @@ int16_t class_level_adj[MAX_CLASS][MAX_LEV_ADJ] = {
     { 3,     3,     3,     2,     3 }, // Paladin
 };
 
-uint32_t spell_learned   = 0; // bit mask of spells learned
-uint32_t spell_worked    = 0; // bit mask of spells tried and worked
-uint32_t spell_forgotten = 0; // bit mask of spells learned but forgotten
-uint8_t  spell_order[32];     // order spells learned/remembered/forgotten
+uint32_t spells_learnt   = 0; // bit mask of spells learned
+uint32_t spells_worked    = 0; // bit mask of spells tried and worked
+uint32_t spells_forgotten = 0; // bit mask of spells learned but forgotten
+uint8_t  spells_learned_order[32];     // order spells learned/remembered/forgotten
 
 // Warriors don't have spells, so there is no entry for them.
 // Note that this means you must always subtract one from the

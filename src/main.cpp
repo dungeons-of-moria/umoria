@@ -249,7 +249,7 @@ static void char_inven_init() {
 
     // weird place for it, but why not?
     for (int i = 0; i < 32; i++) {
-        spell_order[i] = 99;
+        spells_learned_order[i] = 99;
     }
 }
 

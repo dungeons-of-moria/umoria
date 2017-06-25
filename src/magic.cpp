@@ -201,9 +201,9 @@ void cast() {
     } else {
         castSpell(choice + 1);
 
-        if ((spell_worked & (1L << choice)) == 0) {
+        if ((spells_worked & (1L << choice)) == 0) {
             py.misc.exp += m_ptr->sexp << 2;
-            spell_worked |= (1L << choice);
+            spells_worked |= (1L << choice);
 
             prt_experience();
         }

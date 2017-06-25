@@ -345,7 +345,7 @@ int cast_spell(const char *prompt, int item_val, int *sn, int *sc) {
     // NOTE: `flags` gets set again, since bit_pos modified it
     uint32_t flags = inventory[item_val].flags;
     int first_spell = bit_pos(&flags);
-    flags = inventory[item_val].flags & spell_learned;
+    flags = inventory[item_val].flags & spells_learnt;
 
     Spell_t *s_ptr = magic_spells[py.misc.pclass - 1];
 

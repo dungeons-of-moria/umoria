@@ -99,10 +99,11 @@ extern int16_t class_level_adj[MAX_CLASS][MAX_LEV_ADJ];
 // Warriors don't have spells, so there is no entry for them.
 extern Spell_t magic_spells[MAX_CLASS - 1][31];
 extern char *spell_names[62];
-extern uint32_t spell_learned;   // Bit field for spells learnt -CJS-
-extern uint32_t spell_worked;    // Bit field for spells tried -CJS-
-extern uint32_t spell_forgotten; // Bit field for spells forgotten -JEW-
-extern uint8_t spell_order[32];  // remember order that spells are learned in
+extern uint32_t spells_learnt;           // Bit field for spells learnt -CJS-
+extern uint32_t spells_worked;           // Bit field for spells tried -CJS-
+extern uint32_t spells_forgotten;        // Bit field for spells forgotten -JEW-
+extern uint8_t spells_learned_order[32]; // remember order that spells are learned in
+
 extern uint16_t player_init[MAX_CLASS][5];
 
 // Following are store definitions

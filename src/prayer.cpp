@@ -206,10 +206,10 @@ void pray() {
     player_free_turn = false;
     recitePrayer(choice);
     if (!player_free_turn) {
-        if ((spell_worked & (1L << choice)) == 0) {
+        if ((spells_worked & (1L << choice)) == 0) {
             py.misc.exp += s_ptr->sexp << 2;
             prt_experience();
-            spell_worked |= (1L << choice);
+            spells_worked |= (1L << choice);
         }
     }
 
