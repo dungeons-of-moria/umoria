@@ -347,7 +347,7 @@ int cast_spell(const char *prompt, int item_val, int *sn, int *sc) {
     int first_spell = bit_pos(&flags);
     flags = inventory[item_val].flags & spell_learned;
 
-    Spell_t *s_ptr = magic_spell[py.misc.pclass - 1];
+    Spell_t *s_ptr = magic_spells[py.misc.pclass - 1];
 
     int spellCount = 0;
     int spellList[31];
@@ -369,7 +369,7 @@ int cast_spell(const char *prompt, int item_val, int *sn, int *sc) {
 
     result = get_spell(spellList, spellCount, sn, sc, prompt, first_spell);
 
-    if (result && magic_spell[py.misc.pclass - 1][*sn].smana > py.misc.cmana) {
+    if (result && magic_spells[py.misc.pclass - 1][*sn].smana > py.misc.cmana) {
         if (classes[py.misc.pclass].spell == MAGE) {
             result = (int) get_check("You summon your limited strength to cast this one! Confirm?");
         } else {

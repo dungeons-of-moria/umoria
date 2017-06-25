@@ -1330,7 +1330,7 @@ int inven_carry(Inventory_t *i_ptr) {
 
 // Returns spell chance of failure for spell -RAK-
 int spell_chance(int spell) {
-    Spell_t *s_ptr = &magic_spell[py.misc.pclass - 1][spell];
+    Spell_t *s_ptr = &magic_spells[py.misc.pclass - 1][spell];
 
     int chance = s_ptr->sfail - 3 * (py.misc.lev - s_ptr->slevel);
 
@@ -1380,7 +1380,7 @@ void print_spells(int *spell, int num, int comment, int nonconsec) {
 
     for (int i = 0; i < num; i++) {
         int spellID = spell[i];
-        Spell_t *s_ptr = &magic_spell[py.misc.pclass - 1][spellID];
+        Spell_t *s_ptr = &magic_spells[py.misc.pclass - 1][spellID];
 
         const char *p;
         if (comment == 0) {
@@ -1439,7 +1439,7 @@ int get_spell(int *spell, int num, int *sn, int *sc, const char *prompt, int fir
             if (spellID == num) {
                 *sn = -2;
             } else {
-                Spell_t *s_ptr = &magic_spell[py.misc.pclass - 1][*sn];
+                Spell_t *s_ptr = &magic_spells[py.misc.pclass - 1][*sn];
 
                 vtype_t tmp_str;
                 (void) sprintf(tmp_str, "Cast %s (%d mana, %d%% fail)?", spell_names[*sn + offset], s_ptr->smana, spell_chance(*sn));
@@ -1652,7 +1652,7 @@ static void forgetSpells(int newSpells, const char *p, int offset) {
 // calculate number of spells player should have, and
 // learn forget spells until that number is met -JEW-
 void calc_spells(int stat) {
-    Spell_t *msp_ptr = &magic_spell[py.misc.pclass - 1][0];
+    Spell_t *msp_ptr = &magic_spells[py.misc.pclass - 1][0];
 
     const char *p;
     int offset;
@@ -1746,7 +1746,7 @@ void gain_spells() {
     int new_spells = py.flags.new_spells;
     int diff_spells = 0;
 
-    Spell_t *msp_ptr = &magic_spell[py.misc.pclass - 1][0];
+    Spell_t *msp_ptr = &magic_spells[py.misc.pclass - 1][0];
 
     int stat, offset;
 
