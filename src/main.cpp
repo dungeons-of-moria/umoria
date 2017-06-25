@@ -234,7 +234,7 @@ static void char_inven_init() {
     }
 
     for (int i = 0; i < 5; i++) {
-        invcopy(&inven_init, player_base_provisions[py.misc.pclass][i]);
+        invcopy(&inven_init, class_base_provisions[py.misc.pclass][i]);
 
         // this makes it known2 and known1
         store_bought(&inven_init);

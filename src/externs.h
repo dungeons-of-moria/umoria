@@ -95,6 +95,7 @@ extern uint8_t race_gold_adjustments[MAX_RACES][MAX_RACES];
 
 extern Class_t classes[MAX_CLASS];
 extern int16_t class_level_adj[MAX_CLASS][MAX_LEV_ADJ];
+extern uint16_t class_base_provisions[MAX_CLASS][5];
 
 // Warriors don't have spells, so there is no entry for them.
 extern Spell_t magic_spells[MAX_CLASS - 1][31];
@@ -103,8 +104,6 @@ extern uint32_t spells_learnt;           // Bit field for spells learnt -CJS-
 extern uint32_t spells_worked;           // Bit field for spells tried -CJS-
 extern uint32_t spells_forgotten;        // Bit field for spells forgotten -JEW-
 extern uint8_t spells_learned_order[32]; // remember order that spells are learned in
-
-extern uint16_t player_base_provisions[MAX_CLASS][5];
 
 // Following are store definitions
 extern Owner_t store_owners[MAX_OWNERS];
