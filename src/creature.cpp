@@ -79,7 +79,7 @@ static int movement_rate(int16_t speed) {
     }
 
     // speed must be negative here
-    return ((turn % (2 - speed)) == 0);
+    return ((current_game_turn % (2 - speed)) == 0);
 }
 
 // Makes sure a new creature gets lit up. -CJS-

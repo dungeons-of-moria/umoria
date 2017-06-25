@@ -29,7 +29,7 @@ extern bool error_beep_sound;
 // Global flags
 extern int16_t current_dungeon_level;
 extern int32_t character_max_score;
-extern int32_t turn;
+extern int32_t current_game_turn;
 
 extern bool new_level_flag;
 extern bool screen_change;

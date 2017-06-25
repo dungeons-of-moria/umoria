@@ -231,7 +231,7 @@ static bool sv_write() {
     wr_byte(py.flags.new_spells);
 
     wr_short((uint16_t) missile_ctr);
-    wr_long((uint32_t) turn);
+    wr_long((uint32_t) current_game_turn);
     wr_short((uint16_t) inven_ctr);
     for (int i = 0; i < inven_ctr; i++) {
         wr_item(&inventory[i]);
@@ -471,7 +471,7 @@ bool _save_char(char *fnam) {
         character_saved = true;
     }
 
-    turn = -1;
+    current_game_turn = -1;
 
     return true;
 }
@@ -503,7 +503,7 @@ bool get_char(bool *generate) {
     put_buffer(temp, 23, 0);
 
     // FIXME: check this if/else logic! -- MRC
-    if (turn >= 0) {
+    if (current_game_turn >= 0) {
         msg_print("IMPOSSIBLE! Attempt to restore while still alive!");
     } else if ((fd = open(savegame_filename, O_RDONLY, 0)) < 0 && (chmod(savegame_filename, 0400) < 0 || (fd = open(savegame_filename, O_RDONLY, 0)) < 0)) {
         // Allow restoring a file belonging to someone else, if we can delete it.
@@ -511,7 +511,7 @@ bool get_char(bool *generate) {
 
         msg_print("Can't open file for reading.");
     } else {
-        turn = -1;
+        current_game_turn = -1;
         bool ok = true;
 
         (void) close(fd);
@@ -690,7 +690,7 @@ bool get_char(bool *generate) {
             rd_byte(&py.flags.new_spells);
 
             rd_short((uint16_t *) &missile_ctr);
-            rd_long((uint32_t *) &turn);
+            rd_long((uint32_t *) &current_game_turn);
             rd_short((uint16_t *) &inven_ctr);
             if (inven_ctr > INVEN_WIELD) {
                 goto error;
@@ -764,7 +764,7 @@ bool get_char(bool *generate) {
         c = getc(fileptr);
         if (c == EOF || (l & 0x80000000L)) {
             if ((l & 0x80000000L) == 0) {
-                if (!to_be_wizard || turn < 0) {
+                if (!to_be_wizard || current_game_turn < 0) {
                     goto error;
                 }
                 prt("Attempting a resurrection!", 0, 0);
@@ -794,7 +794,7 @@ bool get_char(bool *generate) {
                 // Make sure that this message is seen, since it is a bit
                 // more interesting than the other messages.
                 msg_print("Restoring Memory of a departed spirit...");
-                turn = -1;
+                current_game_turn = -1;
             }
             put_qio();
             goto closefiles;
@@ -914,7 +914,7 @@ bool get_char(bool *generate) {
             goto error;
         }
 
-        if (turn < 0) {
+        if (current_game_turn < 0) {
             error:
             ok = false; // Assume bad data.
         } else {
@@ -953,7 +953,7 @@ bool get_char(bool *generate) {
                 noscore |= 0x4;
             }
 
-            if (turn >= 0) { // Only if a full restoration.
+            if (current_game_turn >= 0) { // Only if a full restoration.
                 weapon_heavy = false;
                 pack_heaviness = 0;
                 check_strength();
@@ -999,10 +999,10 @@ bool get_char(bool *generate) {
             }
 
             // if false: only restored options and monster memory.
-            return turn >= 0;
+            return current_game_turn >= 0;
         }
     }
-    turn = -1;
+    current_game_turn = -1;
     prt("Please try again without that save file.", 1, 0);
 
     exit_game();

@@ -30,9 +30,8 @@ bool show_inventory_weights = false;  // Display weights in inventory
 bool error_beep_sound       = true;   // Beep for invalid characters
 
 // Global flags
-int16_t current_dungeon_level = 0;      // Current dungeon level
-int32_t character_max_score   = 0;
-int32_t turn                  = -1;     // Current turn of game
+int16_t current_dungeon_level = 0;   // Current dungeon level
+int32_t current_game_turn     = -1;  // Current turn of game
 
 bool new_level_flag;               // Do next level when true
 bool screen_change       = false;  // Track screen changes for inventory commands
@@ -87,7 +86,8 @@ int panel_col_prt, panel_row_prt;
 Cave_t cave[MAX_HEIGHT][MAX_WIDTH];
 
 // Player variables
-bool light_flag = false; // Track if temporary light about player.
+bool light_flag             = false; // Track if temporary light about player.
+int32_t character_max_score  = 0;    // Maximum score for a character
 
 // Creature arrays and variables
 Recall_t creature_recall[MAX_CREATURES]; // Monster memories

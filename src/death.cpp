@@ -436,7 +436,7 @@ void exit_game() {
 
     // If the game has been saved, then save sets turn back to -1,
     // which inhibits the printing of the tomb.
-    if (turn >= 0) {
+    if (current_game_turn >= 0) {
         if (total_winner) {
             kingly();
         }

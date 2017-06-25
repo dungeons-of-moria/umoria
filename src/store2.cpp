@@ -306,7 +306,7 @@ static bool increase_insults(int store_num) {
         prt_comment4();
         s_ptr->insult_cur = 0;
         s_ptr->bad_buy++;
-        s_ptr->store_open = turn + 2500 + randint(2500);
+        s_ptr->store_open = current_game_turn + 2500 + randint(2500);
         return true;
     }
 
@@ -998,7 +998,7 @@ static bool store_sell(int store_num, int *cur_top) {
 void enter_store(int store_num) {
     Store_t *s_ptr = &stores[store_num];
 
-    if (s_ptr->store_open >= turn) {
+    if (s_ptr->store_open >= current_game_turn) {
         msg_print("The doors are locked.");
         return;
     }

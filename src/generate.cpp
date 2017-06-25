@@ -1151,7 +1151,7 @@ static void placeTownStores() {
 }
 
 static bool isNighTime() {
-    return (0x1 & (turn / 5000)) != 0;
+    return (0x1 & (current_game_turn / 5000)) != 0;
 }
 
 // Light town based on whether it is Night time, or day time.

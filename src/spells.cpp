@@ -1875,7 +1875,7 @@ static void earthquakeHitsMonster(int monsterID) {
 }
 
 // This is a fun one.  In a given block, pick some walls and
-// turn them into open spots.  Pick some open spots and turn
+// turn them into open spots.  Pick some open spots and current_game_turn
 // them into walls.  An "Earthquake" effect. -RAK-
 void earthquake() {
     for (int y = char_row - 8; y <= char_row + 8; y++) {

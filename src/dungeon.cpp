@@ -367,14 +367,14 @@ static void playerUpdatePoisonedState() {
         case 1:
         case 2:
         case 3:
-            damage = ((turn % 2) == 0);
+            damage = ((current_game_turn % 2) == 0);
             break;
         case 4:
         case 5:
-            damage = ((turn % 3) == 0);
+            damage = ((current_game_turn % 3) == 0);
             break;
         case 6:
-            damage = ((turn % 4) == 0);
+            damage = ((current_game_turn % 4) == 0);
             break;
     }
 
@@ -904,10 +904,10 @@ void dungeon() {
     // Exit when `new_level_flag` and `eof_flag` are both set
     do {
         // Increment turn counter
-        turn++;
+        current_game_turn++;
 
         // turn over the store contents every, say, 1000 turns
-        if (current_dungeon_level != 0 && turn % 1000 == 0) {
+        if (current_dungeon_level != 0 && current_game_turn % 1000 == 0) {
             store_maint();
         }
 
@@ -973,7 +973,7 @@ void dungeon() {
         // for 1st level char, check once every 2160 turns
         // for 40th level char, check once every 416 turns
         int chance = 10 + 750 / (5 + py.misc.lev);
-        if ((turn & 0xF) == 0 && py.flags.confused == 0 && randint(chance) == 1) {
+        if ((current_game_turn & 0xF) == 0 && py.flags.confused == 0 && randint(chance) == 1) {
             playerDetectEnchantment();
         }
 
