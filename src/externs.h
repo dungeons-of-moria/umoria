@@ -128,7 +128,7 @@ extern int16_t equip_ctr;    // Cur equipment ctr
 extern int16_t tcptr;        // Cur treasure heap ptr
 
 // Following are creature arrays and variables
-extern Creature_t c_list[MAX_CREATURES];
+extern Creature_t creatures_list[MAX_CREATURES];
 extern Monster_t m_list[MAX_MALLOC];
 extern int16_t m_level[MAX_MONS_LEVEL + 1];
 extern MonsterAttack_t monster_attacks[N_MONS_ATTS];

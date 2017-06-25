@@ -2153,7 +2153,7 @@ int tot_dam(Inventory_t *i_ptr, int tdam, int monster) {
     bool isHaftedSword = i_ptr->tval >= TV_HAFTED && i_ptr->tval <= TV_SWORD;
 
     if ((i_ptr->flags & TR_EGO_WEAPON) && (isProjectile || isHaftedSword || i_ptr->tval == TV_FLASK)) {
-        Creature_t *m_ptr = &c_list[monster];
+        Creature_t *m_ptr = &creatures_list[monster];
         Recall_t *r_ptr = &c_recall[monster];
 
         // Slay Dragon

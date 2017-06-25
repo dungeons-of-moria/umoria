@@ -236,7 +236,7 @@ static bool depthFoundAt(uint8_t level, uint16_t r_kills) {
 }
 
 static bool movement(uint32_t rcmove, int mspeed, bool known) {
-    // the c_list speed value is 10 greater, so that it can be a uint8_t
+    // the creatures_list speed value is 10 greater, so that it can be a uint8_t
     mspeed -= 10;
 
     if (rcmove & CM_ALL_MV_FLAGS) {
@@ -668,7 +668,7 @@ static void attackNumberAndDamage(Recall_t *mp, Creature_t *cp) {
 // Print out what we have discovered about this monster.
 int roff_recall(int mon_num) {
     Recall_t *mp = &c_recall[mon_num];
-    Creature_t *cp = &c_list[mon_num];
+    Creature_t *cp = &creatures_list[mon_num];
 
     Recall_t save_mem;
 

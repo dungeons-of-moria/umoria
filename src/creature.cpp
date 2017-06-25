@@ -13,7 +13,7 @@ static bool checkMonsterIsVisible(Monster_t *m_ptr) {
     bool visible = false;
 
     Cave_t *c_ptr = &cave[m_ptr->fy][m_ptr->fx];
-    Creature_t *r_ptr = &c_list[m_ptr->mptr];
+    Creature_t *r_ptr = &creatures_list[m_ptr->mptr];
 
     if (c_ptr->pl || c_ptr->tl || (find_flag && m_ptr->cdis < 2 && player_light)) {
         // Normal sight.
@@ -810,7 +810,7 @@ static void make_attack(int monsterID) {
     }
 
     Monster_t *m_ptr = &m_list[monsterID];
-    Creature_t *r_ptr = &c_list[m_ptr->mptr];
+    Creature_t *r_ptr = &creatures_list[m_ptr->mptr];
 
     vtype_t cdesc;
     if (!m_ptr->ml) {
@@ -959,7 +959,7 @@ static void creatureOpensDoor(Cave_t *c_ptr, int16_t monsterHP, uint32_t movebit
 }
 
 static void glyphOfWardingProtection(uint16_t creatureID, uint32_t movebits, bool *do_move, bool *do_turn, int y, int x) {
-    if (randint(OBJ_RUNE_PROT) < c_list[creatureID].level) {
+    if (randint(OBJ_RUNE_PROT) < creatures_list[creatureID].level) {
         if (y == char_row && x == char_col) {
             msg_print("The rune of protection is broken!");
         }
@@ -992,7 +992,7 @@ static void creatureMovesOnPlayer(Monster_t *m_ptr, uint8_t creatureID, int mons
         // Creature is attempting to move on other creature?
 
         // Creature eats other creatures?
-        if ((movebits & CM_EATS_OTHER) && c_list[m_ptr->mptr].mexp >= c_list[m_list[creatureID].mptr].mexp) {
+        if ((movebits & CM_EATS_OTHER) && creatures_list[m_ptr->mptr].mexp >= creatures_list[m_list[creatureID].mptr].mexp) {
             if (m_list[creatureID].ml) {
                 *rcmove |= CM_EATS_OTHER;
             }
@@ -1043,7 +1043,7 @@ static void make_move(int monsterID, int *mm, uint32_t *rcmove) {
     bool do_move = false;
 
     Monster_t *m_ptr = &m_list[monsterID];
-    uint32_t movebits = c_list[m_ptr->mptr].cmove;
+    uint32_t movebits = creatures_list[m_ptr->mptr].cmove;
 
     // Up to 5 attempts at moving, give up.
     for (int i = 0; !do_turn && i < 5; i++) {
@@ -1268,7 +1268,7 @@ static bool mon_cast_spell(int monsterID) {
     }
 
     Monster_t *m_ptr = &m_list[monsterID];
-    Creature_t *r_ptr = &c_list[m_ptr->mptr];
+    Creature_t *r_ptr = &creatures_list[m_ptr->mptr];
 
     if (!canCreatureCastSpells(m_ptr, r_ptr->spells)) {
         return false;
@@ -1346,9 +1346,9 @@ bool multiply_monster(int y, int x, int creatureID, int monsterID) {
                 // Creature there already?
                 if (c_ptr->cptr > 1) {
                     // Some critters are cannibalistic!
-                    if ((c_list[creatureID].cmove & CM_EATS_OTHER)
+                    if ((creatures_list[creatureID].cmove & CM_EATS_OTHER)
                         // Check the experience level -CJS-
-                        && c_list[creatureID].mexp >= c_list[m_list[c_ptr->cptr].mptr].mexp) {
+                        && creatures_list[creatureID].mexp >= creatures_list[m_list[c_ptr->cptr].mptr].mexp) {
                         // It ate an already processed monster.Handle * normally.
                         if (monsterID < c_ptr->cptr) {
                             delete_monster((int) c_ptr->cptr);
@@ -1503,7 +1503,7 @@ static void creatureMoveConfusedUndead(Monster_t *m_ptr, Creature_t *r_ptr, int 
 // Move the critters about the dungeon -RAK-
 static void mon_move(int monsterID, uint32_t *rcmove) {
     Monster_t *m_ptr = &m_list[monsterID];
-    Creature_t *r_ptr = &c_list[m_ptr->mptr];
+    Creature_t *r_ptr = &creatures_list[m_ptr->mptr];
 
     // Does the critter multiply?
     // rest could be negative, to be safe, only use mod with positive values.
@@ -1627,7 +1627,7 @@ static void creatureAttackingUpdate(Monster_t *m_ptr, int monsterID, int moves) 
 
         // Monsters trapped in rock must be given a turn also,
         // so that they will die/dig out immediately.
-        if (m_ptr->ml || m_ptr->cdis <= c_list[m_ptr->mptr].aaf || ((!(c_list[m_ptr->mptr].cmove & CM_PHASE)) && cave[m_ptr->fy][m_ptr->fx].fval >= MIN_CAVE_WALL)) {
+        if (m_ptr->ml || m_ptr->cdis <= creatures_list[m_ptr->mptr].aaf || ((!(creatures_list[m_ptr->mptr].cmove & CM_PHASE)) && cave[m_ptr->fy][m_ptr->fx].fval >= MIN_CAVE_WALL)) {
             if (m_ptr->csleep > 0) {
                 if (py.flags.aggravate) {
                     m_ptr->csleep = 0;
@@ -1650,7 +1650,7 @@ static void creatureAttackingUpdate(Monster_t *m_ptr, int monsterID, int moves) 
 
             if (m_ptr->stunned != 0) {
                 // NOTE: Balrog = 100*100 = 10000, it always recovers instantly
-                if (randint(5000) < c_list[m_ptr->mptr].level * c_list[m_ptr->mptr].level) {
+                if (randint(5000) < creatures_list[m_ptr->mptr].level * creatures_list[m_ptr->mptr].level) {
                     m_ptr->stunned = 0;
                 } else {
                     m_ptr->stunned--;
@@ -1659,7 +1659,7 @@ static void creatureAttackingUpdate(Monster_t *m_ptr, int monsterID, int moves) 
                 if (m_ptr->stunned == 0) {
                     if (m_ptr->ml) {
                         vtype_t msg;
-                        (void) sprintf(msg, "The %s ", c_list[m_ptr->mptr].name);
+                        (void) sprintf(msg, "The %s ", creatures_list[m_ptr->mptr].name);
                         msg_print(strcat(msg, "recovers and glares at you."));
                     }
                 }

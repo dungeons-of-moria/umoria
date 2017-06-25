@@ -260,7 +260,7 @@ static void init_m_level() {
     }
 
     for (int i = 0; i < MAX_CREATURES - WIN_MON_TOT; i++) {
-        m_level[c_list[i].level]++;
+        m_level[creatures_list[i].level]++;
     }
 
     for (int i = 1; i <= MAX_MONS_LEVEL; i++) {

@@ -633,7 +633,7 @@ static bool look_see(int x, int y, bool *transparent) {
 
     if (gl_rock == 0 && c_ptr->cptr > 1 && m_list[c_ptr->cptr].ml) {
         j = m_list[c_ptr->cptr].mptr;
-        (void) sprintf(msg, "%s %s %s. [(r)ecall]", description, is_a_vowel(c_list[j].name[0]) ? "an" : "a", c_list[j].name);
+        (void) sprintf(msg, "%s %s %s. [(r)ecall]", description, is_a_vowel(creatures_list[j].name[0]) ? "an" : "a", creatures_list[j].name);
         description = "It is on";
         prt(msg, 0, 0);
 
@@ -923,7 +923,7 @@ void throw_object() {
                     tbth -= tpth * (BTH_PLUS_ADJ - 1);
                 }
 
-                if (test_hit(tbth, (int) py.misc.lev, tpth, (int) c_list[m_ptr->mptr].ac, CLA_BTHB)) {
+                if (test_hit(tbth, (int) py.misc.lev, tpth, (int) creatures_list[m_ptr->mptr].ac, CLA_BTHB)) {
                     int damage = m_ptr->mptr;
 
                     obj_desc_t description, msg;
@@ -934,7 +934,7 @@ void throw_object() {
                         (void) sprintf(msg, "You hear a cry as the %s finds a mark.", description);
                         visible = false;
                     } else {
-                        (void) sprintf(msg, "The %s hits the %s.", description, c_list[damage].name);
+                        (void) sprintf(msg, "The %s hits the %s.", description, creatures_list[damage].name);
                         visible = true;
                     }
                     msg_print(msg);
@@ -952,7 +952,7 @@ void throw_object() {
                         if (!visible) {
                             msg_print("You have killed something!");
                         } else {
-                            (void) sprintf(msg, "You have killed the %s.", c_list[damage].name);
+                            (void) sprintf(msg, "You have killed the %s.", creatures_list[damage].name);
                             msg_print(msg);
                         }
                         prt_experience();
@@ -983,7 +983,7 @@ void throw_object() {
 static void py_bash(int y, int x) {
     int monsterID = cave[y][x].cptr;
     Monster_t *m_ptr = &m_list[monsterID];
-    Creature_t *c_ptr = &c_list[m_ptr->mptr];
+    Creature_t *c_ptr = &creatures_list[m_ptr->mptr];
 
     m_ptr->csleep = 0;
 

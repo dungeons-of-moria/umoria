@@ -705,7 +705,7 @@ static void playerGainKillExperience(Creature_t *c_ptr) {
 // (Picking on my babies.) -RAK-
 int mon_take_hit(int monsterID, int damage) {
     Monster_t *monster = &m_list[monsterID];
-    Creature_t *creature = &c_list[monster->mptr];
+    Creature_t *creature = &creatures_list[monster->mptr];
 
     monster->csleep = 0;
     monster->hp -= damage;
@@ -787,7 +787,7 @@ void py_attack(int y, int x) {
     int creatureID = cave[y][x].cptr;
 
     Monster_t *monster = &m_list[creatureID];
-    Creature_t *creature = &c_list[monster->mptr];
+    Creature_t *creature = &creatures_list[monster->mptr];
     Inventory_t *item = &inventory[INVEN_WIELD];
 
     monster->csleep = 0;
@@ -1322,7 +1322,7 @@ void objectBlockedByMonster(int id) {
     vtype_t description, msg;
 
     Monster_t *monster = &m_list[id];
-    const char *name = c_list[monster->mptr].name;
+    const char *name = creatures_list[monster->mptr].name;
 
     if (monster->ml) {
         (void) sprintf(description, "The %s", name);

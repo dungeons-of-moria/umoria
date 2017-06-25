@@ -49,7 +49,7 @@ bool sleep_monsters1(int row, int col) {
             }
 
             Monster_t *m_ptr = &m_list[cave[y][x].cptr];
-            Creature_t *r_ptr = &c_list[m_ptr->mptr];
+            Creature_t *r_ptr = &creatures_list[m_ptr->mptr];
 
             vtype_t name;
             monster_name(name, m_ptr->ml, r_ptr->name);
@@ -179,11 +179,11 @@ bool detect_invisible() {
     for (int id = mfptr - 1; id >= MIN_MONIX; id--) {
         Monster_t *m_ptr = &m_list[id];
 
-        if (panel_contains((int) m_ptr->fy, (int) m_ptr->fx) && (CM_INVISIBLE & c_list[m_ptr->mptr].cmove)) {
+        if (panel_contains((int) m_ptr->fy, (int) m_ptr->fx) && (CM_INVISIBLE & creatures_list[m_ptr->mptr].cmove)) {
             m_ptr->ml = true;
 
             // works correctly even if hallucinating
-            print((char) c_list[m_ptr->mptr].cchar, (int) m_ptr->fy, (int) m_ptr->fx);
+            print((char) creatures_list[m_ptr->mptr].cchar, (int) m_ptr->fy, (int) m_ptr->fx);
 
             detected = true;
         }
@@ -460,12 +460,12 @@ bool detect_monsters() {
     for (int id = mfptr - 1; id >= MIN_MONIX; id--) {
         Monster_t *m_ptr = &m_list[id];
 
-        if (panel_contains((int) m_ptr->fy, (int) m_ptr->fx) && (CM_INVISIBLE & c_list[m_ptr->mptr].cmove) == 0) {
+        if (panel_contains((int) m_ptr->fy, (int) m_ptr->fx) && (CM_INVISIBLE & creatures_list[m_ptr->mptr].cmove) == 0) {
             m_ptr->ml = true;
             detected = true;
 
             // works correctly even if hallucinating
-            print((char) c_list[m_ptr->mptr].cchar, (int) m_ptr->fy, (int) m_ptr->fx);
+            print((char) creatures_list[m_ptr->mptr].cchar, (int) m_ptr->fy, (int) m_ptr->fx);
         }
     }
 
@@ -483,7 +483,7 @@ bool detect_monsters() {
 // Update monster when light line spell touches it.
 static void lightLineTouchesMonster(int monsterID) {
     Monster_t *monster = &m_list[monsterID];
-    Creature_t *creature = &c_list[monster->mptr];
+    Creature_t *creature = &creatures_list[monster->mptr];
 
     // light up and draw monster
     update_mon(monsterID);
@@ -648,7 +648,7 @@ static void get_flags(int typ, uint32_t *weapon_type, int *harm_type, bool (**de
 // Light up, draw, and check for monster damage when Fire Bolt touches it.
 static void fireBoltTouchesMonster(Cave_t *tile, int dam, int harmType, uint32_t weaponID, std::string boltName) {
     Monster_t *monster = &m_list[tile->cptr];
-    Creature_t *creature = &c_list[monster->mptr];
+    Creature_t *creature = &creatures_list[monster->mptr];
 
     // light up monster and draw monster, temporarily set
     // pl so that update_mon() will work
@@ -780,7 +780,7 @@ void fire_ball(int typ, int dir, int y, int x, int dam_hp, const char *descrip) 
                         if (c_ptr->fval <= MAX_OPEN_SPACE) {
                             if (c_ptr->cptr > 1) {
                                 Monster_t *m_ptr = &m_list[c_ptr->cptr];
-                                Creature_t *r_ptr = &c_list[m_ptr->mptr];
+                                Creature_t *r_ptr = &creatures_list[m_ptr->mptr];
 
                                 // lite up creature if visible, temp set pl so that update_mon works
                                 bool savedLitStatus = c_ptr->pl;
@@ -889,7 +889,7 @@ void breath(int typ, int y, int x, int dam_hp, char *ddesc, int monptr) {
 
                     if (c_ptr->cptr > 1) {
                         Monster_t *m_ptr = &m_list[c_ptr->cptr];
-                        Creature_t *r_ptr = &c_list[m_ptr->mptr];
+                        Creature_t *r_ptr = &creatures_list[m_ptr->mptr];
 
                         dam = dam_hp;
 
@@ -1033,7 +1033,7 @@ bool hp_monster(int dir, int y, int x, int dam) {
             finished = true;
 
             Monster_t *m_ptr = &m_list[c_ptr->cptr];
-            Creature_t *r_ptr = &c_list[m_ptr->mptr];
+            Creature_t *r_ptr = &creatures_list[m_ptr->mptr];
 
             vtype_t name;
             monster_name(name, m_ptr->ml, r_ptr->name);
@@ -1071,7 +1071,7 @@ bool drain_life(int dir, int y, int x) {
             finished = true;
 
             Monster_t *m_ptr = &m_list[c_ptr->cptr];
-            Creature_t *r_ptr = &c_list[m_ptr->mptr];
+            Creature_t *r_ptr = &creatures_list[m_ptr->mptr];
 
             if ((r_ptr->cdefense & CD_UNDEAD) == 0) {
                 vtype_t name;
@@ -1114,7 +1114,7 @@ bool speed_monster(int dir, int y, int x, int spd) {
             finished = true;
 
             Monster_t *m_ptr = &m_list[c_ptr->cptr];
-            Creature_t *r_ptr = &c_list[m_ptr->mptr];
+            Creature_t *r_ptr = &creatures_list[m_ptr->mptr];
 
             vtype_t name;
             monster_name(name, m_ptr->ml, r_ptr->name);
@@ -1163,7 +1163,7 @@ bool confuse_monster(int dir, int y, int x) {
             finished = true;
 
             Monster_t *m_ptr = &m_list[c_ptr->cptr];
-            Creature_t *r_ptr = &c_list[m_ptr->mptr];
+            Creature_t *r_ptr = &creatures_list[m_ptr->mptr];
 
             vtype_t name;
             monster_name(name, m_ptr->ml, r_ptr->name);
@@ -1217,7 +1217,7 @@ bool sleep_monster(int dir, int y, int x) {
             finished = true;
 
             Monster_t *m_ptr = &m_list[c_ptr->cptr];
-            Creature_t *r_ptr = &c_list[m_ptr->mptr];
+            Creature_t *r_ptr = &creatures_list[m_ptr->mptr];
 
             vtype_t name;
             monster_name(name, m_ptr->ml, r_ptr->name);
@@ -1298,7 +1298,7 @@ bool wall_to_mud(int dir, int y, int x) {
 
         if (c_ptr->cptr > 1) {
             Monster_t *m_ptr = &m_list[c_ptr->cptr];
-            Creature_t *r_ptr = &c_list[m_ptr->mptr];
+            Creature_t *r_ptr = &creatures_list[m_ptr->mptr];
 
             if (CD_STONE & r_ptr->cdefense) {
                 vtype_t name;
@@ -1382,7 +1382,7 @@ bool poly_monster(int dir, int y, int x) {
             finished = true;
         } else if (c_ptr->cptr > 1) {
             Monster_t *m_ptr = &m_list[c_ptr->cptr];
-            Creature_t *r_ptr = &c_list[m_ptr->mptr];
+            Creature_t *r_ptr = &creatures_list[m_ptr->mptr];
 
             if (randint(MAX_MONS_LEVEL) > r_ptr->level) {
                 finished = true;
@@ -1433,7 +1433,7 @@ bool build_wall(int dir, int y, int x) {
             finished = true;
 
             Monster_t *m_ptr = &m_list[c_ptr->cptr];
-            Creature_t *r_ptr = &c_list[m_ptr->mptr];
+            Creature_t *r_ptr = &creatures_list[m_ptr->mptr];
 
             if (!(r_ptr->cmove & CM_PHASE)) {
                 // monster does not move, can't escape the wall
@@ -1604,7 +1604,7 @@ bool mass_genocide() {
 
     for (int id = mfptr - 1; id >= MIN_MONIX; id--) {
         Monster_t *m_ptr = &m_list[id];
-        Creature_t *r_ptr = &c_list[m_ptr->mptr];
+        Creature_t *r_ptr = &creatures_list[m_ptr->mptr];
 
         if (m_ptr->cdis <= MAX_SIGHT && (r_ptr->cmove & CM_WIN) == 0) {
             delete_monster(id);
@@ -1629,9 +1629,9 @@ bool genocide() {
 
     for (int id = mfptr - 1; id >= MIN_MONIX; id--) {
         Monster_t *m_ptr = &m_list[id];
-        Creature_t *r_ptr = &c_list[m_ptr->mptr];
+        Creature_t *r_ptr = &creatures_list[m_ptr->mptr];
 
-        if (typ == c_list[m_ptr->mptr].cchar) {
+        if (typ == creatures_list[m_ptr->mptr].cchar) {
             if ((r_ptr->cmove & CM_WIN) == 0) {
                 delete_monster(id);
 
@@ -1657,7 +1657,7 @@ bool speed_monsters(int spd) {
 
     for (int id = mfptr - 1; id >= MIN_MONIX; id--) {
         Monster_t *m_ptr = &m_list[id];
-        Creature_t *r_ptr = &c_list[m_ptr->mptr];
+        Creature_t *r_ptr = &creatures_list[m_ptr->mptr];
 
         vtype_t name;
         monster_name(name, m_ptr->ml, r_ptr->name);
@@ -1697,7 +1697,7 @@ bool sleep_monsters2() {
 
     for (int id = mfptr - 1; id >= MIN_MONIX; id--) {
         Monster_t *m_ptr = &m_list[id];
-        Creature_t *r_ptr = &c_list[m_ptr->mptr];
+        Creature_t *r_ptr = &creatures_list[m_ptr->mptr];
 
         vtype_t name;
         monster_name(name, m_ptr->ml, r_ptr->name);
@@ -1734,7 +1734,7 @@ bool mass_poly() {
         Monster_t *m_ptr = &m_list[id];
 
         if (m_ptr->cdis <= MAX_SIGHT) {
-            Creature_t *r_ptr = &c_list[m_ptr->mptr];
+            Creature_t *r_ptr = &creatures_list[m_ptr->mptr];
 
             if ((r_ptr->cmove & CM_WIN) == 0) {
                 int y = m_ptr->fy;
@@ -1757,13 +1757,13 @@ bool detect_evil() {
     for (int id = mfptr - 1; id >= MIN_MONIX; id--) {
         Monster_t *m_ptr = &m_list[id];
 
-        if (panel_contains((int) m_ptr->fy, (int) m_ptr->fx) && (CD_EVIL & c_list[m_ptr->mptr].cdefense)) {
+        if (panel_contains((int) m_ptr->fy, (int) m_ptr->fx) && (CD_EVIL & creatures_list[m_ptr->mptr].cdefense)) {
             m_ptr->ml = true;
 
             detected = true;
 
             // works correctly even if hallucinating
-            print((char) c_list[m_ptr->mptr].cchar, (int) m_ptr->fy, (int) m_ptr->fx);
+            print((char) creatures_list[m_ptr->mptr].cchar, (int) m_ptr->fy, (int) m_ptr->fx);
         }
     }
 
@@ -1847,7 +1847,7 @@ bool remove_fear() {
 
 static void earthquakeHitsMonster(int monsterID) {
     Monster_t *monster = &m_list[monsterID];
-    Creature_t *creature = &c_list[monster->mptr];
+    Creature_t *creature = &creatures_list[monster->mptr];
 
     if (!(creature->cmove & CM_PHASE)) {
         int damage;
@@ -1949,8 +1949,8 @@ bool dispel_creature(int cflag, int damage) {
     for (int id = mfptr - 1; id >= MIN_MONIX; id--) {
         Monster_t *m_ptr = &m_list[id];
 
-        if (m_ptr->cdis <= MAX_SIGHT && (cflag & c_list[m_ptr->mptr].cdefense) && los(char_row, char_col, (int) m_ptr->fy, (int) m_ptr->fx)) {
-            Creature_t *r_ptr = &c_list[m_ptr->mptr];
+        if (m_ptr->cdis <= MAX_SIGHT && (cflag & creatures_list[m_ptr->mptr].cdefense) && los(char_row, char_col, (int) m_ptr->fy, (int) m_ptr->fx)) {
+            Creature_t *r_ptr = &creatures_list[m_ptr->mptr];
 
             c_recall[m_ptr->mptr].r_cdefense |= cflag;
 
@@ -1983,7 +1983,7 @@ bool turn_undead() {
 
     for (int id = mfptr - 1; id >= MIN_MONIX; id--) {
         Monster_t *m_ptr = &m_list[id];
-        Creature_t *r_ptr = &c_list[m_ptr->mptr];
+        Creature_t *r_ptr = &creatures_list[m_ptr->mptr];
 
         if (m_ptr->cdis <= MAX_SIGHT && (CD_UNDEAD & r_ptr->cdefense) && los(char_row, char_col, (int) m_ptr->fy, (int) m_ptr->fx)) {
             vtype_t name;

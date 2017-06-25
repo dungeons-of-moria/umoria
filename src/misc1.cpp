@@ -459,7 +459,7 @@ char loc_symbol(int y, int x) {
     }
 
     if (cave_ptr->cptr > 1 && m_list[cave_ptr->cptr].ml) {
-        return c_list[m_list[cave_ptr->cptr].mptr].cchar;
+        return creatures_list[m_list[cave_ptr->cptr].mptr].cchar;
     }
 
     if (!cave_ptr->pl && !cave_ptr->tl && !cave_ptr->fm) {
@@ -517,7 +517,7 @@ bool compact_monsters() {
     while (!delete_any) {
         for (int i = mfptr - 1; i >= MIN_MONIX; i--) {
             if (cur_dis < m_list[i].cdis && randint(3) == 1) {
-                if (c_list[m_list[i].mptr].cmove & CM_WIN) {
+                if (creatures_list[m_list[i].mptr].cmove & CM_WIN) {
                     // Never compact away the Balrog!!
                 } else if (hack_monptr < i) {
                     // in case this is called from within creatures(), this is a horrible
@@ -606,14 +606,14 @@ bool place_monster(int y, int x, int monsterID, bool slp) {
     mon_ptr->fx = (uint8_t) x;
     mon_ptr->mptr = (uint16_t) monsterID;
 
-    if (c_list[monsterID].cdefense & CD_MAX_HP) {
-        mon_ptr->hp = (int16_t) max_hp(c_list[monsterID].hd);
+    if (creatures_list[monsterID].cdefense & CD_MAX_HP) {
+        mon_ptr->hp = (int16_t) max_hp(creatures_list[monsterID].hd);
     } else {
-        mon_ptr->hp = (int16_t) pdamroll(c_list[monsterID].hd);
+        mon_ptr->hp = (int16_t) pdamroll(creatures_list[monsterID].hd);
     }
 
-    // the c_list speed value is 10 greater, so that it can be a uint8_t
-    mon_ptr->cspeed = (int16_t) (c_list[monsterID].speed - 10 + py.flags.speed);
+    // the creatures_list speed value is 10 greater, so that it can be a uint8_t
+    mon_ptr->cspeed = (int16_t) (creatures_list[monsterID].speed - 10 + py.flags.speed);
     mon_ptr->stunned = 0;
     mon_ptr->cdis = (uint8_t) distance(char_row, char_col, y, x);
     mon_ptr->ml = false;
@@ -621,10 +621,10 @@ bool place_monster(int y, int x, int monsterID, bool slp) {
     cave[y][x].cptr = (uint8_t) cur_pos;
 
     if (slp) {
-        if (c_list[monsterID].sleep == 0) {
+        if (creatures_list[monsterID].sleep == 0) {
             mon_ptr->csleep = 0;
         } else {
-            mon_ptr->csleep = (int16_t) ((c_list[monsterID].sleep * 2) + randint((int) c_list[monsterID].sleep * 10));
+            mon_ptr->csleep = (int16_t) ((creatures_list[monsterID].sleep * 2) + randint((int) creatures_list[monsterID].sleep * 10));
         }
     } else {
         mon_ptr->csleep = 0;
@@ -659,14 +659,14 @@ void place_win_monster() {
     mon_ptr->fx = (uint8_t) x;
     mon_ptr->mptr = (uint16_t) (randint(WIN_MON_TOT) - 1 + m_level[MAX_MONS_LEVEL]);
 
-    if (c_list[mon_ptr->mptr].cdefense & CD_MAX_HP) {
-        mon_ptr->hp = (int16_t) max_hp(c_list[mon_ptr->mptr].hd);
+    if (creatures_list[mon_ptr->mptr].cdefense & CD_MAX_HP) {
+        mon_ptr->hp = (int16_t) max_hp(creatures_list[mon_ptr->mptr].hd);
     } else {
-        mon_ptr->hp = (int16_t) pdamroll(c_list[mon_ptr->mptr].hd);
+        mon_ptr->hp = (int16_t) pdamroll(creatures_list[mon_ptr->mptr].hd);
     }
 
-    // the c_list speed value is 10 greater, so that it can be a uint8_t
-    mon_ptr->cspeed = (int16_t) (c_list[mon_ptr->mptr].speed - 10 + py.flags.speed);
+    // the creatures_list speed value is 10 greater, so that it can be a uint8_t
+    mon_ptr->cspeed = (int16_t) (creatures_list[mon_ptr->mptr].speed - 10 + py.flags.speed);
     mon_ptr->stunned = 0;
     mon_ptr->cdis = (uint8_t) distance(char_row, char_col, y, x);
 
@@ -705,7 +705,7 @@ int get_mons_num(int level) {
         if (j > i) {
             i = j;
         }
-        level = c_list[i + m_level[0]].level;
+        level = creatures_list[i + m_level[0]].level;
     }
 
     return randint(m_level[level] - m_level[level - 1]) - 1 + m_level[level - 1];
@@ -725,7 +725,7 @@ void alloc_monster(int num, int dis, bool slp) {
 
         // Dragons are always created sleeping here,
         // so as to give the player a sporting chance.
-        if (c_list[l].cchar == 'd' || c_list[l].cchar == 'D') {
+        if (creatures_list[l].cchar == 'd' || creatures_list[l].cchar == 'D') {
             slp = true;
         }
 
@@ -776,7 +776,7 @@ bool summon_undead(int *y, int *x) {
     do {
         monsterID = randint(maxLevels) - 1;
         for (int i = 0; i <= 19;) {
-            if (c_list[monsterID].cdefense & CD_UNDEAD) {
+            if (creatures_list[monsterID].cdefense & CD_UNDEAD) {
                 i = 20;
                 maxLevels = 0;
             } else {
