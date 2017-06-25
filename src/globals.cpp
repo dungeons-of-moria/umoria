@@ -85,8 +85,8 @@ int panel_col_prt, panel_row_prt;
 Cave_t cave[MAX_HEIGHT][MAX_WIDTH];
 
 // Player variables
-bool light_flag             = false; // Track if temporary light about player.
-int32_t character_max_score  = 0;    // Maximum score for a character
+bool temporary_light_only    = false;  // Track if temporary light about player.
+int32_t character_max_score  = 0;      // Maximum score for a character
 
 // Creature arrays and variables
 Recall_t creature_recall[MAX_CREATURES]; // Monster memories

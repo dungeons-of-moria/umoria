@@ -298,7 +298,7 @@ void find_init(int dir) {
     // in this case while moving, so the only problem is on the first turn
     // of find mode, when the initial position of the character must be erased.
     // Hence we must do the erasure here.
-    if (!light_flag && !run_print_self) {
+    if (!temporary_light_only && !run_print_self) {
         print(loc_symbol(char_row, char_col), char_row, char_col);
     }
 

@@ -148,7 +148,7 @@ extern uint8_t blows_table[7][6];
 
 extern uint16_t normal_table[NORMAL_TABLE_SIZE];
 
-extern bool light_flag;
+extern bool temporary_light_only;
 
 // function return values
 
