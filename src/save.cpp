@@ -230,7 +230,7 @@ static bool sv_write() {
     wr_bool(py.flags.confuse_monster);
     wr_byte(py.flags.new_spells);
 
-    wr_short((uint16_t) missile_ctr);
+    wr_short((uint16_t) missiles_counter);
     wr_long((uint32_t) current_game_turn);
     wr_short((uint16_t) inven_ctr);
     for (int i = 0; i < inven_ctr; i++) {
@@ -689,7 +689,7 @@ bool get_char(bool *generate) {
             py.flags.confuse_monster = rd_bool();
             rd_byte(&py.flags.new_spells);
 
-            rd_short((uint16_t *) &missile_ctr);
+            rd_short((uint16_t *) &missiles_counter);
             rd_long((uint32_t *) &current_game_turn);
             rd_short((uint16_t *) &inven_ctr);
             if (inven_ctr > INVEN_WIELD) {

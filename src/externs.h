@@ -58,7 +58,7 @@ extern bool message_ready_to_print;
 extern vtype_t messages[MAX_SAVE_MSG];
 extern int16_t last_message_id;
 
-extern int16_t missile_ctr;
+extern int16_t missiles_counter;
 
 extern uint32_t randes_seed;
 extern uint32_t town_seed;

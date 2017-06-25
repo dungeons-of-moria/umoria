@@ -60,7 +60,7 @@ bool message_ready_to_print;           // Set with first message
 vtype_t messages[MAX_SAVE_MSG];        // Saved message history -CJS-
 int16_t last_message_id      = 0;      // Index of last message held in saved messages array
 
-int16_t missile_ctr      = 0;      // Counter for missiles
+int16_t missiles_counter     = 0;      // Counter for missiles
 
 uint32_t randes_seed;              // Seed for encoding colors / restarting randes_state
 uint32_t town_seed;                // Seed for town generation

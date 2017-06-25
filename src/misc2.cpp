@@ -931,13 +931,13 @@ void magic_treasure(int x, int level) {
                 t_ptr->number += randint(6);
             }
 
-            if (missile_ctr == MAX_SHORT) {
-                missile_ctr = -MAX_SHORT - 1;
+            if (missiles_counter == MAX_SHORT) {
+                missiles_counter = -MAX_SHORT - 1;
             } else {
-                missile_ctr++;
+                missiles_counter++;
             }
 
-            t_ptr->p1 = missile_ctr;
+            t_ptr->p1 = missiles_counter;
             break;
         case TV_FOOD:
             // make sure all food rations have the same level
