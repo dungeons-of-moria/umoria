@@ -364,7 +364,7 @@ char *title_string() {
     if (py.misc.lev < 1) {
         p = "Babe in arms";
     } else if (py.misc.lev <= MAX_PLAYER_LEVEL) {
-        p = player_title[py.misc.pclass][py.misc.lev - 1];
+        p = player_titles[py.misc.pclass][py.misc.lev - 1];
     } else if (py.misc.male) {
         p = "**KING**";
     } else {
