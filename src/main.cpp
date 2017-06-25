@@ -271,19 +271,19 @@ static void init_m_level() {
 // Initializes T_LEVEL array for use with PLACE_OBJECT -RAK-
 static void init_t_level() {
     for (int i = 0; i <= MAX_OBJ_LEVEL; i++) {
-        t_level[i] = 0;
+        treasure_levels[i] = 0;
     }
 
     for (int i = 0; i < MAX_DUNGEON_OBJ; i++) {
-        t_level[object_list[i].level]++;
+        treasure_levels[object_list[i].level]++;
     }
 
     for (int i = 1; i <= MAX_OBJ_LEVEL; i++) {
-        t_level[i] += t_level[i - 1];
+        treasure_levels[i] += treasure_levels[i - 1];
     }
 
     // now produce an array with object indexes sorted by level,
-    // by using the info in t_level, this is an O(n) sort!
+    // by using the info in treasure_levels, this is an O(n) sort!
     // this is not a stable sort, but that does not matter
     int objectIndexes[MAX_OBJ_LEVEL + 1];
     for (int i = 0; i <= MAX_OBJ_LEVEL; i++) {
@@ -292,7 +292,7 @@ static void init_t_level() {
 
     for (int i = 0; i < MAX_DUNGEON_OBJ; i++) {
         int level = object_list[i].level;
-        int objectID = t_level[level] - objectIndexes[level];
+        int objectID = treasure_levels[level] - objectIndexes[level];
         sorted_objects[objectID] = (int16_t) i;
         objectIndexes[level]++;
     }

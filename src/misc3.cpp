@@ -54,7 +54,7 @@ void place_gold(int y, int x) {
 // Returns the array number of a random object -RAK-
 int get_obj_num(int level, bool must_be_small) {
     if (level == 0) {
-        return randint(t_level[0]) - 1;
+        return randint(treasure_levels[0]) - 1;
     }
 
     if (level >= MAX_OBJ_LEVEL) {
@@ -75,18 +75,18 @@ int get_obj_num(int level, bool must_be_small) {
     // and 1/2n are 0th level.
     do {
         if (randint(2) == 1) {
-            objectID = randint(t_level[level]) - 1;
+            objectID = randint(treasure_levels[level]) - 1;
         } else {
             // Choose three objects, pick the highest level.
-            objectID = randint(t_level[level]) - 1;
+            objectID = randint(treasure_levels[level]) - 1;
 
-            int j = randint(t_level[level]) - 1;
+            int j = randint(treasure_levels[level]) - 1;
 
             if (objectID < j) {
                 objectID = j;
             }
 
-            j = randint(t_level[level]) - 1;
+            j = randint(treasure_levels[level]) - 1;
 
             if (objectID < j) {
                 objectID = j;
@@ -95,9 +95,9 @@ int get_obj_num(int level, bool must_be_small) {
             int foundLevel = object_list[sorted_objects[objectID]].level;
 
             if (foundLevel == 0) {
-                objectID = randint(t_level[0]) - 1;
+                objectID = randint(treasure_levels[0]) - 1;
             } else {
-                objectID = randint(t_level[foundLevel] - t_level[foundLevel - 1]) - 1 + t_level[foundLevel - 1];
+                objectID = randint(treasure_levels[foundLevel] - treasure_levels[foundLevel - 1]) - 1 + treasure_levels[foundLevel - 1];
             }
         }
     } while (must_be_small && set_large(&object_list[sorted_objects[objectID]]));
