@@ -18,7 +18,7 @@ int16_t char_col;
 
 // calculated base hp values for player at each level, store them
 // so that drain life + restore life does not affect hit points.
-uint16_t player_hp[MAX_PLAYER_LEVEL];
+uint16_t player_base_hp_levels[MAX_PLAYER_LEVEL];
 
 // Class titles for different levels
 const char *player_titles[MAX_CLASS][MAX_PLAYER_LEVEL] = {

@@ -384,14 +384,14 @@ static void get_class() {
             // if it is within 1/8 of average value.
             min_value = (MAX_PLAYER_LEVEL * 3 / 8 * (py.misc.hitdie - 1)) + MAX_PLAYER_LEVEL;
             max_value = (MAX_PLAYER_LEVEL * 5 / 8 * (py.misc.hitdie - 1)) + MAX_PLAYER_LEVEL;
-            player_hp[0] = py.misc.hitdie;
+            player_base_hp_levels[0] = py.misc.hitdie;
 
             do {
                 for (int i = 1; i < MAX_PLAYER_LEVEL; i++) {
-                    player_hp[i] = (uint16_t) randint((int) py.misc.hitdie);
-                    player_hp[i] += player_hp[i - 1];
+                    player_base_hp_levels[i] = (uint16_t) randint((int) py.misc.hitdie);
+                    player_base_hp_levels[i] += player_base_hp_levels[i - 1];
                 }
-            } while (player_hp[MAX_PLAYER_LEVEL - 1] < min_value || player_hp[MAX_PLAYER_LEVEL - 1] > max_value);
+            } while (player_base_hp_levels[MAX_PLAYER_LEVEL - 1] < min_value || player_base_hp_levels[MAX_PLAYER_LEVEL - 1] > max_value);
 
             py.misc.bth += c_ptr->mbth;
             py.misc.bthb += c_ptr->mbthb; // RAK
