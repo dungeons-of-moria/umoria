@@ -75,7 +75,7 @@ static bool sv_write() {
 
     uint32_t l = 0;
 
-    if (find_cut) {
+    if (run_cut_corners) {
         l |= 0x1;
     }
     if (find_examine) {
@@ -572,7 +572,7 @@ bool get_char(bool *generate) {
         uint32_t l;
         rd_long(&l);
 
-        find_cut = (l & 0x1) != 0;
+        run_cut_corners = (l & 0x1) != 0;
         find_examine = (l & 0x2) != 0;
         find_prself = (l & 0x4) != 0;
         find_bound = (l & 0x8) != 0;

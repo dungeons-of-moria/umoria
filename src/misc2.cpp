@@ -979,7 +979,7 @@ void magic_treasure(int x, int level) {
 static struct {
     const char *o_prompt;
     bool *o_var;
-} options[] = {{"Running: cut known corners",            &find_cut},
+} options[] = {{"Running: cut known corners",            &run_cut_corners},
                {"Running: examine potential corners",    &find_examine},
                {"Running: print self during run",        &find_prself},
                {"Running: stop when map sector changes", &find_bound},

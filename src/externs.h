@@ -16,7 +16,7 @@ extern FILE *highscore_fp;
 // These are options, set with set_options command `=` -CJS-
 extern bool display_counts;
 extern bool find_bound;
-extern bool find_cut;
+extern bool run_cut_corners;
 extern bool find_examine;
 extern bool find_ignore_doors;
 extern bool find_prself;

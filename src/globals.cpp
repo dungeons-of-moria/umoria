@@ -19,7 +19,7 @@ FILE *highscore_fp;        // High score file pointer
 // Game options as set on startup and with `=` set options command -CJS-
 bool display_counts      = true;   // Display rest/repeat counts
 bool find_bound          = false;  // Print yourself on a run (slower)
-bool find_cut            = true;   // Cut corners while running
+bool run_cut_corners     = true;   // Cut corners while running
 bool find_examine        = true;   // Check corners while running
 bool find_ignore_doors   = false;  // Run through open doors
 bool find_prself         = false;  // Stop running when the map shifts

@@ -448,7 +448,7 @@ void area_affect(int dir, int y, int x) {
 
     // choose a direction.
 
-    if (option2 == 0 || (find_examine && !find_cut)) {
+    if (option2 == 0 || (find_examine && !run_cut_corners)) {
         // There is only one option, or if two, then we always examine
         // potential corners and never cur known corners, so you step
         // into the straight option.
@@ -483,7 +483,7 @@ void area_affect(int dir, int y, int x) {
             // STOP: we are next to an intersection or a room
             end_find();
         }
-    } else if (find_cut) {
+    } else if (run_cut_corners) {
         // This corner is seen to be enclosed; we cut the corner.
         find_direction = option2;
         find_prevdir = option2;
