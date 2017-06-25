@@ -522,7 +522,7 @@ void objdes(obj_desc_t out_val, Inventory_t *i_ptr, bool pref) {
 
     if (i_ptr->name2 != SN_NULL && known2_p(i_ptr)) {
         (void) strcat(tmp_val, " ");
-        (void) strcat(tmp_val, special_names[i_ptr->name2]);
+        (void) strcat(tmp_val, special_item_names[i_ptr->name2]);
     }
 
     if (damstr[0] != '\0') {

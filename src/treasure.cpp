@@ -9,7 +9,7 @@
 
 #include "headers.h"
 
-// Following are treasure arrays  and variables
+// Following are treasure arrays and variables
 
 // Object description:  Objects are defined here.  Each object has
 // the following attributes:
@@ -524,7 +524,7 @@ Treasure_t object_list[MAX_OBJECTS] = {
         {"",                              0x00000000L, TV_NOTHING,  ' ', 0, 0, 0, 0,   0, 0, 0, 0, 0, {0, 0}, 0} // 419
 };
 
-const char *special_names[SN_ARRAY_SIZE] = {
+const char *special_item_names[SN_ARRAY_SIZE] = {
         CNIL,                "(R)",              "(RA)",
         "(RF)",              "(RC)",             "(RL)",
         "(HA)",              "(DF)",             "(SA)",
