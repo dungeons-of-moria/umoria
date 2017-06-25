@@ -42,13 +42,12 @@ extern bool player_carrying_light;
 extern bool weapon_is_heavy;
 extern int pack_heaviness;
 
-extern int32_t date_of_birth;
-extern vtype_t character_died_from;
-extern bool character_is_dead;
-
 extern bool total_winner;
 extern bool character_generated;
 extern bool character_saved;
+extern bool character_is_dead;
+extern int32_t character_birth_date;
+extern vtype_t character_died_from;
 
 extern char doing_inven;
 extern char last_command;
