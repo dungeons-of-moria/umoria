@@ -52,7 +52,7 @@ extern vtype_t character_died_from;
 extern char doing_inventory_command;
 extern char last_command;
 extern int command_count;
-extern bool default_dir;
+extern bool use_last_direction;
 
 extern bool msg_flag;
 extern vtype_t old_msgs[MAX_SAVE_MSG];

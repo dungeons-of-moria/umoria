@@ -54,7 +54,7 @@ vtype_t character_died_from;       // What the character died from: starvation, 
 char doing_inventory_command = 0;      // Track inventory commands -CJS-
 char last_command            = ' ';    // Save of the previous player command
 int command_count;                     // How many times to repeat a specific command -CJS-
-bool default_dir             = false;  // Direction to use for repeated commands
+bool use_last_direction      = false;  // True when repeat commands should use last known direction
 
 bool msg_flag;                     // Set with first message
 vtype_t old_msgs[MAX_SAVE_MSG];    // Saved messages -CJS-

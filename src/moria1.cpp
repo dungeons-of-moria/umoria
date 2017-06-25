@@ -1614,7 +1614,7 @@ bool get_dir(char *prompt, int *dir) {
     static char prev_dir; // Direction memory. -CJS-
 
     // used in counted commands. -CJS-
-    if (default_dir) {
+    if (use_last_direction) {
         *dir = prev_dir;
         return true;
     }

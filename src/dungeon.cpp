@@ -736,7 +736,7 @@ static void executeInputCommands(char *command, int *find_count) {
             prt_state();
         }
 
-        default_dir = false;
+        use_last_direction = false;
         player_free_turn = false;
 
         if (running_counter) {
@@ -754,7 +754,7 @@ static void executeInputCommands(char *command, int *find_count) {
 
             if (command_count > 0) {
                 msg_flag = false;
-                default_dir = true;
+                use_last_direction = true;
             } else {
                 msg_flag = false;
                 lastInputCommand = inkey();
