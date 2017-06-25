@@ -173,12 +173,12 @@ static void get_history() {
     do {
         bool flag = false;
         while (!flag) {
-            if (background[cur_ptr].chart == hist_ptr) {
+            if (backgrounds[cur_ptr].chart == hist_ptr) {
                 test_roll = randint(100);
-                while (test_roll > background[cur_ptr].roll) {
+                while (test_roll > backgrounds[cur_ptr].roll) {
                     cur_ptr++;
                 }
-                b_ptr = &background[cur_ptr];
+                b_ptr = &backgrounds[cur_ptr];
                 (void) strcat(history_block, b_ptr->info);
                 social_class += b_ptr->bonus - 50;
                 if (hist_ptr > b_ptr->next) {
