@@ -988,7 +988,7 @@ static struct {
                {"Rogue like commands",                   &use_roguelike_keys},
                {"Show weights in inventory",             &show_inventory_weights},
                {"Highlight and notice mineral seams",    &highlight_seams},
-               {"Beep for invalid character",            &sound_beep_flag},
+               {"Beep for invalid character",            &error_beep_sound},
                {"Display rest/repeat counts",            &display_counts},
                {0,                                       0},
 };

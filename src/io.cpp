@@ -453,7 +453,7 @@ void bell() {
     put_qio();
 
     // The player can turn off beeps if they find them annoying.
-    if (sound_beep_flag) {
+    if (error_beep_sound) {
         (void) write(1, "\007", 1);
     }
 }

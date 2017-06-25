@@ -102,7 +102,7 @@ static bool sv_write() {
     if (run_ignore_doors) {
         l |= 0x100;
     }
-    if (sound_beep_flag) {
+    if (error_beep_sound) {
         l |= 0x200;
     }
     if (display_counts) {
@@ -582,8 +582,8 @@ bool get_char(bool *generate) {
         highlight_seams = (l & 0x80) != 0;
         run_ignore_doors = (l & 0x100) != 0;
 
-        // save files before 5.2.2 don't have sound_beep_flag, set it on for compatibility
-        sound_beep_flag = version_min < 2 || (version_min == 2 && patch_level < 2) || (l & 0x200) != 0;
+        // save files before 5.2.2 don't have error_beep_sound, set it on for compatibility
+        error_beep_sound = version_min < 2 || (version_min == 2 && patch_level < 2) || (l & 0x200) != 0;
 
         // save files before 5.2.2 don't have display_counts, set it on for compatibility
         display_counts = version_min < 2 || (version_min == 2 && patch_level < 2) || (l & 0x400) != 0;

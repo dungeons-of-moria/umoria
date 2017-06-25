@@ -27,7 +27,7 @@ bool highlight_seams        = false;  // Highlight magma and quartz veins
 bool prompt_to_pickup       = false;  // Prompt to pick something up
 bool use_roguelike_keys     = false;  // Use classic Roguelike keys - set in config.h/main.c
 bool show_inventory_weights = false;  // Display weights in inventory
-bool sound_beep_flag        = true;   // Beep for invalid characters
+bool error_beep_sound       = true;   // Beep for invalid characters
 
 // Global flags
 int16_t dun_level        = 0;      // Current dungeon level

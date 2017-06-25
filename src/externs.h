@@ -24,7 +24,7 @@ extern bool highlight_seams;
 extern bool prompt_to_pickup;
 extern bool use_roguelike_keys;
 extern bool show_inventory_weights;
-extern bool sound_beep_flag;
+extern bool error_beep_sound;
 
 // Global flags
 extern int16_t dun_level;
