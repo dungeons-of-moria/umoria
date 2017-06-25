@@ -30,7 +30,7 @@ static void refill_lamp();
 // Reset flags and initialize variables
 static void resetDungeonFlags() {
     command_count = 0;
-    new_level_flag = false;
+    generate_new_level = false;
     find_flag = 0;
     teleport_flag = false;
     mon_tot_mult = 0;
@@ -641,7 +641,7 @@ static void playerUpdateWordOfRecall() {
     }
 
     if (py.flags.word_recall == 1) {
-        new_level_flag = true;
+        generate_new_level = true;
 
         py.flags.paralysis++;
         py.flags.word_recall = 0;
@@ -862,7 +862,7 @@ static void executeInputCommands(char *command, int *find_count) {
                 command_count--;
             }
         }
-    } while (free_turn_flag && !new_level_flag && !eof_flag);
+    } while (free_turn_flag && !generate_new_level && !eof_flag);
 
     *command = lastInputCommand;
 }
@@ -901,7 +901,7 @@ void dungeon() {
     char lastInputCommand;
 
     // Loop until dead,  or new level
-    // Exit when `new_level_flag` and `eof_flag` are both set
+    // Exit when `generate_new_level` and `eof_flag` are both set
     do {
         // Increment turn counter
         current_game_turn++;
@@ -1002,10 +1002,10 @@ void dungeon() {
         }
 
         // Move the creatures
-        if (!new_level_flag) {
+        if (!generate_new_level) {
             creatures(true);
         }
-    } while (!new_level_flag && !eof_flag);
+    } while (!generate_new_level && !eof_flag);
 }
 
 static char original_commands(char com_val) {
@@ -1293,7 +1293,7 @@ static void commandQuit() {
 
     if (get_check("Do you really want to quit?")) {
         death = true;
-        new_level_flag = true;
+        generate_new_level = true;
 
         (void) strcpy(died_from, "Quitting");
     }
@@ -1512,7 +1512,7 @@ static void doWizardCommands(char com_val) {
                 if (current_dungeon_level > 99) {
                     current_dungeon_level = 99;
                 }
-                new_level_flag = true;
+                generate_new_level = true;
             } else {
                 erase_line(MSG_LINE, 0);
             }
@@ -2082,7 +2082,7 @@ static void go_up() {
         msg_print("You enter a maze of up staircases.");
         msg_print("You pass through a one-way door.");
 
-        new_level_flag = true;
+        generate_new_level = true;
     } else {
         msg_print("I see no up staircase here.");
         free_turn_flag = true;
@@ -2099,7 +2099,7 @@ static void go_down() {
         msg_print("You enter a maze of down staircases.");
         msg_print("You pass through a one-way door.");
 
-        new_level_flag = true;
+        generate_new_level = true;
     } else {
         msg_print("I see no down staircase here.");
         free_turn_flag = true;

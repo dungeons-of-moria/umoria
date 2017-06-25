@@ -33,7 +33,7 @@ bool error_beep_sound       = true;   // Beep for invalid characters
 int16_t current_dungeon_level = 0;   // Current dungeon level
 int32_t current_game_turn     = -1;  // Current turn of game
 
-bool new_level_flag;               // Do next level when true
+bool generate_new_level;           // True will generate a new level on next loop iteration
 bool screen_change       = false;  // Track screen changes for inventory commands
 
 bool free_turn_flag;               // Player has a free turn, so do not move creatures

@@ -211,7 +211,7 @@ static void readTeleportLevelScroll() {
     if (current_dungeon_level < 1) {
         current_dungeon_level = 1;
     }
-    new_level_flag = true;
+    generate_new_level = true;
 }
 
 static bool readConfuseMonsterScroll() {

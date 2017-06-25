@@ -31,7 +31,7 @@ extern int16_t current_dungeon_level;
 extern int32_t character_max_score;
 extern int32_t current_game_turn;
 
-extern bool new_level_flag;
+extern bool generate_new_level;
 extern bool screen_change;
 
 extern bool free_turn_flag;

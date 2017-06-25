@@ -1956,5 +1956,5 @@ void take_hit(int damage, const char *hit_from) {
         total_winner = false;
     }
 
-    new_level_flag = true;
+    generate_new_level = true;
 }
