@@ -338,7 +338,7 @@ static void store_create(int store_num, int16_t max_cost) {
     int cur_pos = popt();
 
     for (int tries = 0; tries <= 3; tries++) {
-        int i = store_choice[store_num][randint(STORE_CHOICES) - 1];
+        int i = store_choices[store_num][randint(STORE_CHOICES) - 1];
         invcopy(&t_list[cur_pos], i);
         magic_treasure(cur_pos, OBJ_TOWN_LEVEL);
 

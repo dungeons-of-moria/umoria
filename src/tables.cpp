@@ -48,7 +48,7 @@ uint8_t rgold_adj[MAX_RACES][MAX_RACES] = {
 };
 
 // object_list[] index of objects that may appear in the store
-uint16_t store_choice[MAX_STORES][STORE_CHOICES] = {
+uint16_t store_choices[MAX_STORES][STORE_CHOICES] = {
         // General Store
         {
                 366, 365, 364,  84,  84, 365, 123, 366, 365, 350, 349, 348, 347,
