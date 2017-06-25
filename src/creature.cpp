@@ -54,7 +54,7 @@ void update_mon(int monsterID) {
             lite_spot((int) m_ptr->fy, (int) m_ptr->fx);
 
             // notify inven_command
-            screen_change = true;
+            screen_has_changed = true;
         }
     } else if (m_ptr->ml) {
         // Turn it off.
@@ -62,7 +62,7 @@ void update_mon(int monsterID) {
         lite_spot((int) m_ptr->fy, (int) m_ptr->fx);
 
         // notify inven_command
-        screen_change = true;
+        screen_has_changed = true;
     }
 }
 

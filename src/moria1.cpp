@@ -561,7 +561,7 @@ int verify(const char *prompt, int item) {
 // prompted to see if we should continue. This allows the player to see any
 // changes that take place on the screen during inventory command input.
 //
-// The global variable, screen_change, is cleared by inven_command, and set
+// The global variable, screen_has_changed, is cleared by inven_command, and set
 // when the screen is flushed. This is the means by which inven_command tell
 // if the screen has been flushed.
 //
@@ -640,7 +640,7 @@ static void setInventoryCommandScreenState(char command) {
         // If the screen has been flushed, we need to redraw. If the command
         // is a simple ' ' to recover the screen, just quit. Otherwise, check
         // and see what the user wants.
-        if (screen_change) {
+        if (screen_has_changed) {
             if (command == ' ' || !get_check("Continuing with inventory command?")) {
                 doing_inven = 0;
                 return;
@@ -1355,11 +1355,11 @@ void inven_command(char command) {
                 doing_inven = ' ';
             }
 
-            // flush last message before clearing screen_change and exiting
+            // flush last message before clearing screen_has_changed and exiting
             msg_print(CNIL);
 
             // This lets us know if the world changes
-            screen_change = false;
+            screen_has_changed = false;
 
             command = ESCAPE;
         } else {

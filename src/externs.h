@@ -32,7 +32,7 @@ extern int32_t character_max_score;
 extern int32_t current_game_turn;
 
 extern bool generate_new_level;
-extern bool screen_change;
+extern bool screen_has_changed;
 
 extern bool free_turn_flag;
 extern int find_flag;
