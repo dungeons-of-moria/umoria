@@ -87,7 +87,7 @@ static bool sv_write() {
     if (find_bound) {
         l |= 0x8;
     }
-    if (prompt_carry_flag) {
+    if (prompt_to_pickup) {
         l |= 0x10;
     }
     if (rogue_like_commands) {
@@ -576,7 +576,7 @@ bool get_char(bool *generate) {
         run_examine_corners = (l & 0x2) != 0;
         run_print_self = (l & 0x4) != 0;
         find_bound = (l & 0x8) != 0;
-        prompt_carry_flag = (l & 0x10) != 0;
+        prompt_to_pickup = (l & 0x10) != 0;
         rogue_like_commands = (l & 0x20) != 0;
         show_weight_flag = (l & 0x40) != 0;
         highlight_seams = (l & 0x80) != 0;

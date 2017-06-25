@@ -984,7 +984,7 @@ static struct {
                {"Running: print self during run",        &run_print_self},
                {"Running: stop when map sector changes", &find_bound},
                {"Running: run through open doors",       &run_ignore_doors},
-               {"Prompt to pick up objects",             &prompt_carry_flag},
+               {"Prompt to pick up objects",             &prompt_to_pickup},
                {"Rogue like commands",                   &rogue_like_commands},
                {"Show weights in inventory",             &show_weight_flag},
                {"Highlight and notice mineral seams",    &highlight_seams},
