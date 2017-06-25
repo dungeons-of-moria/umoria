@@ -2,7 +2,10 @@
 
 ## HEAD
 
+- Rename the `variable.cpp` file to `globals.cpp`.
 - Rename `typedef struct` names in `type.h` to the standard format of suffixing `_t`.
+- Pluralize many array's (`stores[]`, `magic_spells[]`, etc.), or made the
+  naming more clear: `object_ident[]` becomes `objects_identified[]`.
 - Other minor refactoring - see commit history for changes.
 
 
