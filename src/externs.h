@@ -110,10 +110,6 @@ extern Store_t stores[MAX_STORES];
 extern uint16_t store_choices[MAX_STORES][STORE_CHOICES];
 extern int (*store_buy[MAX_STORES])(int);
 
-// FIXME: why is this extern here, it's only used in store2.c. -MRC-
-// Save the store's last increment value.
-extern int16_t last_store_inc;
-
 // Following are treasure arrays  and variables
 extern Treasure_t object_list[MAX_OBJECTS];
 extern uint8_t objects_identified[OBJECT_IDENT_SIZE];

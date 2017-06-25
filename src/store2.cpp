@@ -9,6 +9,9 @@
 #include "headers.h"
 #include "externs.h"
 
+// Save the store's last increment value.
+static int16_t last_store_inc;
+
 static const char *comment1[14] = {
         "Done!",
         "Accepted!",

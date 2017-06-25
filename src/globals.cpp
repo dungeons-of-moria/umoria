@@ -9,10 +9,6 @@
 
 #include "headers.h"
 
-// FIXME: why is this here, it's only used in store2.c.
-// Save the store's last increment value.
-int16_t last_store_inc;
-
 // a horrible hack: needed because compact_monster() can be called from
 // creatures() via summon_monster() and place_monster()
 int hack_monptr                 = -1;
