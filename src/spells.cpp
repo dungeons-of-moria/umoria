@@ -56,7 +56,7 @@ bool sleep_monsters1(int row, int col) {
 
             if (randint(MAX_MONS_LEVEL) < r_ptr->level || (CD_NO_SLEEP & r_ptr->cdefense)) {
                 if (m_ptr->ml && (r_ptr->cdefense & CD_NO_SLEEP)) {
-                    c_recall[m_ptr->mptr].r_cdefense |= CD_NO_SLEEP;
+                    creature_recall[m_ptr->mptr].r_cdefense |= CD_NO_SLEEP;
                 }
 
                 printMonsterActionText(name, "is unaffected.");
@@ -493,7 +493,7 @@ static void lightLineTouchesMonster(int monsterID) {
 
     if (CD_LIGHT & creature->cdefense) {
         if (monster->ml) {
-            c_recall[monster->mptr].r_cdefense |= CD_LIGHT;
+            creature_recall[monster->mptr].r_cdefense |= CD_LIGHT;
         }
 
         if (mon_take_hit(monsterID, damroll(2, 8) >= 0)) {
@@ -670,12 +670,12 @@ static void fireBoltTouchesMonster(Cave_t *tile, int dam, int harmType, uint32_t
     if (harmType & creature->cdefense) {
         dam = dam * 2;
         if (monster->ml) {
-            c_recall[monster->mptr].r_cdefense |= harmType;
+            creature_recall[monster->mptr].r_cdefense |= harmType;
         }
     } else if (weaponID & creature->spells) {
         dam = dam / 4;
         if (monster->ml) {
-            c_recall[monster->mptr].r_spells |= weaponID;
+            creature_recall[monster->mptr].r_spells |= weaponID;
         }
     }
 
@@ -793,12 +793,12 @@ void fire_ball(int typ, int dir, int y, int x, int dam_hp, const char *descrip) 
                                 if (harm_type & r_ptr->cdefense) {
                                     dam = dam * 2;
                                     if (m_ptr->ml) {
-                                        c_recall[m_ptr->mptr].r_cdefense |= harm_type;
+                                        creature_recall[m_ptr->mptr].r_cdefense |= harm_type;
                                     }
                                 } else if (weapon_type & r_ptr->spells) {
                                     dam = dam / 4;
                                     if (m_ptr->ml) {
-                                        c_recall[m_ptr->mptr].r_spells |= weapon_type;
+                                        creature_recall[m_ptr->mptr].r_spells |= weapon_type;
                                     }
                                 }
 
@@ -910,11 +910,11 @@ void breath(int typ, int y, int x, int dam_hp, char *ddesc, int monptr) {
                             uint32_t treas = monster_death((int) m_ptr->fy, (int) m_ptr->fx, r_ptr->cmove);
 
                             if (m_ptr->ml) {
-                                uint32_t tmp = (uint32_t) ((c_recall[m_ptr->mptr].r_cmove & CM_TREASURE) >> CM_TR_SHIFT);
+                                uint32_t tmp = (uint32_t) ((creature_recall[m_ptr->mptr].r_cmove & CM_TREASURE) >> CM_TR_SHIFT);
                                 if (tmp > ((treas & CM_TREASURE) >> CM_TR_SHIFT)) {
                                     treas = (uint32_t) ((treas & ~CM_TREASURE) | (tmp << CM_TR_SHIFT));
                                 }
-                                c_recall[m_ptr->mptr].r_cmove = (uint32_t) (treas | (c_recall[m_ptr->mptr].r_cmove & ~CM_TREASURE));
+                                creature_recall[m_ptr->mptr].r_cmove = (uint32_t) (treas | (creature_recall[m_ptr->mptr].r_cmove & ~CM_TREASURE));
                             }
 
                             // It ate an already processed monster.Handle normally.
@@ -1086,7 +1086,7 @@ bool drain_life(int dir, int y, int x) {
 
                 drained = true;
             } else {
-                c_recall[m_ptr->mptr].r_cdefense |= CD_UNDEAD;
+                creature_recall[m_ptr->mptr].r_cdefense |= CD_UNDEAD;
             }
         }
     }
@@ -1170,7 +1170,7 @@ bool confuse_monster(int dir, int y, int x) {
 
             if (randint(MAX_MONS_LEVEL) < r_ptr->level || (CD_NO_SLEEP & r_ptr->cdefense)) {
                 if (m_ptr->ml && (r_ptr->cdefense & CD_NO_SLEEP)) {
-                    c_recall[m_ptr->mptr].r_cdefense |= CD_NO_SLEEP;
+                    creature_recall[m_ptr->mptr].r_cdefense |= CD_NO_SLEEP;
                 }
 
                 // Monsters which resisted the attack should wake up.
@@ -1224,7 +1224,7 @@ bool sleep_monster(int dir, int y, int x) {
 
             if (randint(MAX_MONS_LEVEL) < r_ptr->level || (CD_NO_SLEEP & r_ptr->cdefense)) {
                 if (m_ptr->ml && (r_ptr->cdefense & CD_NO_SLEEP)) {
-                    c_recall[m_ptr->mptr].r_cdefense |= CD_NO_SLEEP;
+                    creature_recall[m_ptr->mptr].r_cdefense |= CD_NO_SLEEP;
                 }
 
                 printMonsterActionText(name, "is unaffected.");
@@ -1307,11 +1307,11 @@ bool wall_to_mud(int dir, int y, int x) {
                 // Should get these messages even if the monster is not visible.
                 int i = mon_take_hit((int) c_ptr->cptr, 100);
                 if (i >= 0) {
-                    c_recall[i].r_cdefense |= CD_STONE;
+                    creature_recall[i].r_cdefense |= CD_STONE;
                     printMonsterActionText(name, "dissolves!");
                     prt_experience(); // print msg before calling prt_exp
                 } else {
-                    c_recall[m_ptr->mptr].r_cdefense |= CD_STONE;
+                    creature_recall[m_ptr->mptr].r_cdefense |= CD_STONE;
                     printMonsterActionText(name, "grunts in pain!");
                 }
                 finished = true;
@@ -1709,7 +1709,7 @@ bool sleep_monsters2() {
         if (randint(MAX_MONS_LEVEL) < r_ptr->level || (CD_NO_SLEEP & r_ptr->cdefense)) {
             if (m_ptr->ml) {
                 if (r_ptr->cdefense & CD_NO_SLEEP) {
-                    c_recall[m_ptr->mptr].r_cdefense |= CD_NO_SLEEP;
+                    creature_recall[m_ptr->mptr].r_cdefense |= CD_NO_SLEEP;
                 }
                 printMonsterActionText(name, "is unaffected.");
             }
@@ -1952,7 +1952,7 @@ bool dispel_creature(int cflag, int damage) {
         if (m_ptr->cdis <= MAX_SIGHT && (cflag & creatures_list[m_ptr->mptr].cdefense) && los(char_row, char_col, (int) m_ptr->fy, (int) m_ptr->fx)) {
             Creature_t *r_ptr = &creatures_list[m_ptr->mptr];
 
-            c_recall[m_ptr->mptr].r_cdefense |= cflag;
+            creature_recall[m_ptr->mptr].r_cdefense |= cflag;
 
             dispelled = true;
 
@@ -1991,7 +1991,7 @@ bool turn_undead() {
 
             if (py.misc.lev + 1 > r_ptr->level || randint(5) == 1) {
                 if (m_ptr->ml) {
-                    c_recall[m_ptr->mptr].r_cdefense |= CD_UNDEAD;
+                    creature_recall[m_ptr->mptr].r_cdefense |= CD_UNDEAD;
 
                     turned = true;
 

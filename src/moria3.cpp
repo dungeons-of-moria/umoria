@@ -716,7 +716,7 @@ int mon_take_hit(int monsterID, int damage) {
 
     uint32_t treasureFlags = monster_death((int) monster->fy, (int) monster->fx, creature->cmove);
 
-    Recall_t *memory = &c_recall[monster->mptr];
+    Recall_t *memory = &creature_recall[monster->mptr];
 
     if ((py.flags.blind < 1 && monster->ml) || (creature->cmove & CM_WIN)) {
         uint32_t tmp = (uint32_t) ((memory->r_cmove & CM_TREASURE) >> CM_TR_SHIFT);
@@ -853,7 +853,7 @@ void py_attack(int y, int x) {
             msg_print(msg);
 
             if (monster->ml && randint(4) == 1) {
-                c_recall[monster->mptr].r_cdefense |= creature->cdefense & CD_NO_SLEEP;
+                creature_recall[monster->mptr].r_cdefense |= creature->cdefense & CD_NO_SLEEP;
             }
         }
 

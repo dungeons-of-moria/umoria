@@ -138,7 +138,7 @@ bool bool_roff_recall(int monsterID) {
         return true;
     }
 
-    Recall_t *mp = &c_recall[monsterID];
+    Recall_t *mp = &creature_recall[monsterID];
 
     if (mp->r_cmove || mp->r_cdefense || mp->r_kills || mp->r_spells || mp->r_deaths) {
         return true;
@@ -667,7 +667,7 @@ static void attackNumberAndDamage(Recall_t *mp, Creature_t *cp) {
 
 // Print out what we have discovered about this monster.
 int roff_recall(int mon_num) {
-    Recall_t *mp = &c_recall[mon_num];
+    Recall_t *mp = &creature_recall[mon_num];
     Creature_t *cp = &creatures_list[mon_num];
 
     Recall_t save_mem;

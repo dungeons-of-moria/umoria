@@ -21,12 +21,12 @@ static bool checkMonsterIsVisible(Monster_t *m_ptr) {
             visible = true;
         } else if (py.flags.see_inv) {
             visible = true;
-            c_recall[m_ptr->mptr].r_cmove |= CM_INVISIBLE;
+            creature_recall[m_ptr->mptr].r_cmove |= CM_INVISIBLE;
         }
     } else if (py.flags.see_infra > 0 && m_ptr->cdis <= py.flags.see_infra && (CD_INFRA & r_ptr->cdefense)) {
         // Infra vision.
         visible = true;
-        c_recall[m_ptr->mptr].r_cdefense |= CD_INFRA;
+        creature_recall[m_ptr->mptr].r_cdefense |= CD_INFRA;
     }
 
     return visible;
@@ -796,7 +796,7 @@ static void confuseCreatureOnAttack(Creature_t *r_ptr, Monster_t *m_ptr, int ade
         msg_print(msg);
 
         if (visible && !death && randint(4) == 1) {
-            c_recall[m_ptr->mptr].r_cdefense |= r_ptr->cdefense & CD_NO_SLEEP;
+            creature_recall[m_ptr->mptr].r_cdefense |= r_ptr->cdefense & CD_NO_SLEEP;
         }
     }
 
@@ -836,7 +836,7 @@ static void make_attack(int monsterID) {
 
         if (py.flags.protevil > 0 && (r_ptr->cdefense & CD_EVIL) && py.misc.lev + 1 > r_ptr->level) {
             if (m_ptr->ml) {
-                c_recall[m_ptr->mptr].r_cdefense |= CD_EVIL;
+                creature_recall[m_ptr->mptr].r_cdefense |= CD_EVIL;
             }
             attype = 99;
             adesc = 99;
@@ -872,11 +872,11 @@ static void make_attack(int monsterID) {
             // had previously noticed the attack (in which case all this does
             // is help player learn damage), note that in the second case do
             // not increase attacks if creature repelled (no damage done)
-            if ((notice || (visible && c_recall[m_ptr->mptr].r_attacks[attackn] != 0 && attype != 99)) && c_recall[m_ptr->mptr].r_attacks[attackn] < MAX_UCHAR) {
-                c_recall[m_ptr->mptr].r_attacks[attackn]++;
+            if ((notice || (visible && creature_recall[m_ptr->mptr].r_attacks[attackn] != 0 && attype != 99)) && creature_recall[m_ptr->mptr].r_attacks[attackn] < MAX_UCHAR) {
+                creature_recall[m_ptr->mptr].r_attacks[attackn]++;
             }
-            if (death && c_recall[m_ptr->mptr].r_deaths < MAX_SHORT) {
-                c_recall[m_ptr->mptr].r_deaths++;
+            if (death && creature_recall[m_ptr->mptr].r_deaths < MAX_SHORT) {
+                creature_recall[m_ptr->mptr].r_deaths++;
             }
         } else {
             if ((adesc >= 1 && adesc <= 3) || adesc == 6) {
@@ -1318,12 +1318,12 @@ static bool mon_cast_spell(int monsterID) {
     creatureCastsSpell(m_ptr, monsterID, thrown_spell, r_ptr->level, cdesc, deathDescription);
 
     if (m_ptr->ml) {
-        c_recall[m_ptr->mptr].r_spells |= 1L << (thrown_spell - 1);
-        if ((c_recall[m_ptr->mptr].r_spells & CS_FREQ) != CS_FREQ) {
-            c_recall[m_ptr->mptr].r_spells++;
+        creature_recall[m_ptr->mptr].r_spells |= 1L << (thrown_spell - 1);
+        if ((creature_recall[m_ptr->mptr].r_spells & CS_FREQ) != CS_FREQ) {
+            creature_recall[m_ptr->mptr].r_spells++;
         }
-        if (death && c_recall[m_ptr->mptr].r_deaths < MAX_SHORT) {
-            c_recall[m_ptr->mptr].r_deaths++;
+        if (death && creature_recall[m_ptr->mptr].r_deaths < MAX_SHORT) {
+            creature_recall[m_ptr->mptr].r_deaths++;
         }
     }
 
@@ -1585,14 +1585,14 @@ static void mon_move(int monsterID, uint32_t *rcmove) {
         } else if ((r_ptr->cmove & CM_ONLY_MAGIC) && m_ptr->cdis < 2) {
             // A little hack for Quylthulgs, so that one will eventually
             // notice that they have no physical attacks.
-            if (c_recall[m_ptr->mptr].r_attacks[0] < MAX_UCHAR) {
-                c_recall[m_ptr->mptr].r_attacks[0]++;
+            if (creature_recall[m_ptr->mptr].r_attacks[0] < MAX_UCHAR) {
+                creature_recall[m_ptr->mptr].r_attacks[0]++;
             }
 
             // Another little hack for Quylthulgs, so that one can
             // eventually learn their speed.
-            if (c_recall[m_ptr->mptr].r_attacks[0] > 20) {
-                c_recall[m_ptr->mptr].r_cmove |= CM_ONLY_MAGIC;
+            if (creature_recall[m_ptr->mptr].r_attacks[0] > 20) {
+                creature_recall[m_ptr->mptr].r_cmove |= CM_ONLY_MAGIC;
             }
         }
     }
@@ -1603,7 +1603,7 @@ static void updateRecall(Monster_t *m_ptr, bool wake, bool ignore, int rcmove) {
         return;
     }
 
-    Recall_t *r_ptr = &c_recall[m_ptr->mptr];
+    Recall_t *r_ptr = &creature_recall[m_ptr->mptr];
 
     if (wake) {
         if (r_ptr->r_wake < MAX_UCHAR) {
