@@ -1342,8 +1342,8 @@ static void commandPreviousMessage() {
 }
 
 static void commandFlipWizardMode() {
-    if (wizard) {
-        wizard = false;
+    if (wizard_mode) {
+        wizard_mode = false;
         msg_print("Wizard mode off.");
     } else if (enter_wiz_mode()) {
         msg_print("Wizard mode on.");
@@ -1820,7 +1820,7 @@ static void do_command(char com_val) {
             // Wizard commands are free moves
             player_free_turn = true;
 
-            if (wizard) {
+            if (wizard_mode) {
                 doWizardCommands(com_val);
             } else {
                 prt("Type '?' for help.", 0, 0);

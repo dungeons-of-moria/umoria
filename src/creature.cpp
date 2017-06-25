@@ -38,7 +38,7 @@ void update_mon(int monsterID) {
     Monster_t *m_ptr = &monsters_list[monsterID];
 
     if (m_ptr->cdis <= MAX_SIGHT && !(py.flags.status & PY_BLIND) && panel_contains((int) m_ptr->fy, (int) m_ptr->fx)) {
-        if (wizard) {
+        if (wizard_mode) {
             // Wizard sight.
             visible = true;
         } else if (los(char_row, char_col, (int) m_ptr->fy, (int) m_ptr->fx)) {

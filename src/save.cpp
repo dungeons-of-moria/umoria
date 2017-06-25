@@ -418,7 +418,7 @@ bool _save_char(char *fnam) {
 
     int fd = open(fnam, O_RDWR | O_CREAT | O_EXCL, 0600);
 
-    if (fd < 0 && access(fnam, 0) >= 0 && (from_savefile || (wizard && get_check("Can't make new save file. Overwrite old?")))) {
+    if (fd < 0 && access(fnam, 0) >= 0 && (from_savefile || (wizard_mode && get_check("Can't make new save file. Overwrite old?")))) {
         (void) chmod(fnam, 0600);
         fd = open(fnam, O_RDWR | O_TRUNC, 0600);
     }

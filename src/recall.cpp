@@ -134,7 +134,7 @@ static int roffpline; // Place to print line now being loaded.
 
 // Do we know anything about this monster?
 bool bool_roff_recall(int monsterID) {
-    if (wizard) {
+    if (wizard_mode) {
         return true;
     }
 
@@ -672,7 +672,7 @@ int roff_recall(int mon_num) {
 
     Recall_t save_mem;
 
-    if (wizard) {
+    if (wizard_mode) {
         save_mem = *mp;
         wizardModeInit(mp, cp);
     }
@@ -746,7 +746,7 @@ int roff_recall(int mon_num) {
     roff("\n");
     prt("--pause--", roffpline, 0);
 
-    if (wizard) {
+    if (wizard_mode) {
         *mp = save_mem;
     }
 

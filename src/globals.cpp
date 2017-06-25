@@ -65,12 +65,12 @@ int16_t missiles_counter     = 0;      // Counter for missiles
 uint32_t magic_seed;                   // Seed for initializing magic items (Potions, Wands, Staves, Scrolls, etc.)
 uint32_t town_seed;                    // Seed for town generation
 
-int eof_flag             = 0;      // Is used to signal EOF/HANGUP condition
-bool panic_save          = false;  // True if playing from a panic save
-int16_t noscore          = 0;      // Don't save a score for this game. -CJS-
+int eof_flag                 = 0;      // Is used to signal EOF/HANGUP condition
+bool panic_save              = false;  // True if playing from a panic save
+int16_t noscore              = 0;      // Don't save a score for this game. -CJS-
 
-bool to_be_wizard        = false;  // Player requests to be Wizard - used during startup, when -w option used
-bool wizard              = false;  // Character is a Wizard when true
+bool to_be_wizard            = false;  // Player requests to be Wizard - used during startup, when -w option used
+bool wizard_mode             = false;  // Character is a Wizard when true
 
 // Dungeon and display panel sizes
 int16_t cur_height;  // Current dungeon height

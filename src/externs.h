@@ -68,7 +68,7 @@ extern bool panic_save;
 extern int16_t noscore;
 
 extern bool to_be_wizard;
-extern bool wizard;
+extern bool wizard_mode;
 
 // Dungeon and display panel sizes
 extern int16_t cur_height;

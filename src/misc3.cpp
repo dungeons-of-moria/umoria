@@ -560,7 +560,7 @@ void prt_study() {
 // Prints winner status on display -RAK-
 void prt_winner() {
     if (noscore & 0x2) {
-        if (wizard) {
+        if (wizard_mode) {
             put_buffer("Is wizard  ", 22, 0);
         } else {
             put_buffer("Was wizard ", 22, 0);
@@ -2091,7 +2091,7 @@ bool enter_wiz_mode() {
 
     if (noscore || answer) {
         noscore |= 0x2;
-        wizard = true;
+        wizard_mode = true;
         return true;
     }
 
