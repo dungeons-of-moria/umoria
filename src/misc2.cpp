@@ -983,7 +983,7 @@ static struct {
                {"Running: examine potential corners",    &run_examine_corners},
                {"Running: print self during run",        &find_prself},
                {"Running: stop when map sector changes", &find_bound},
-               {"Running: run through open doors",       &find_ignore_doors},
+               {"Running: run through open doors",       &run_ignore_doors},
                {"Prompt to pick up objects",             &prompt_carry_flag},
                {"Rogue like commands",                   &rogue_like_commands},
                {"Show weights in inventory",             &show_weight_flag},

@@ -341,7 +341,7 @@ static bool areaAffectStopLookingAtSquares(int i, int dir, int newDir, int y, in
         if (c_ptr->tptr != 0) {
             int tileID = treasure_list[c_ptr->tptr].tval;
 
-            if (tileID != TV_INVIS_TRAP && tileID != TV_SECRET_DOOR && (tileID != TV_OPEN_DOOR || !find_ignore_doors)) {
+            if (tileID != TV_INVIS_TRAP && tileID != TV_SECRET_DOOR && (tileID != TV_OPEN_DOOR || !run_ignore_doors)) {
                 end_find();
                 return true;
             }

@@ -99,7 +99,7 @@ static bool sv_write() {
     if (highlight_seams) {
         l |= 0x80;
     }
-    if (find_ignore_doors) {
+    if (run_ignore_doors) {
         l |= 0x100;
     }
     if (sound_beep_flag) {
@@ -580,7 +580,7 @@ bool get_char(bool *generate) {
         rogue_like_commands = (l & 0x20) != 0;
         show_weight_flag = (l & 0x40) != 0;
         highlight_seams = (l & 0x80) != 0;
-        find_ignore_doors = (l & 0x100) != 0;
+        run_ignore_doors = (l & 0x100) != 0;
 
         // save files before 5.2.2 don't have sound_beep_flag, set it on for compatibility
         sound_beep_flag = version_min < 2 || (version_min == 2 && patch_level < 2) || (l & 0x200) != 0;
