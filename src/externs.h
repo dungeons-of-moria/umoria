@@ -81,7 +81,7 @@ extern Cave_t cave[MAX_HEIGHT][MAX_WIDTH];
 // Following are player variables
 extern Player_t py;
 extern char *player_title[MAX_CLASS][MAX_PLAYER_LEVEL];
-extern Race_t race[MAX_RACES];
+extern Race_t races[MAX_RACES];
 extern Background_t background[MAX_BACKGROUND];
 extern uint32_t player_exp[MAX_PLAYER_LEVEL];
 extern uint16_t player_hp[MAX_PLAYER_LEVEL];

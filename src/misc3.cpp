@@ -841,7 +841,7 @@ int todam_adj() {
 
 // Prints character-screen info -RAK-
 void prt_stat_block() {
-    prt_field(race[py.misc.prace].trace, 2, STAT_COLUMN);
+    prt_field(races[py.misc.prace].trace, 2, STAT_COLUMN);
     prt_field(classes[py.misc.pclass].title, 3, STAT_COLUMN);
     prt_field(title_string(), 4, STAT_COLUMN);
 
@@ -916,7 +916,7 @@ void put_character() {
     }
 
     put_buffer(py.misc.name, 2, 15);
-    put_buffer(race[py.misc.prace].trace, 3, 15);
+    put_buffer(races[py.misc.prace].trace, 3, 15);
     put_buffer((py.misc.male ? "Male" : "Female"), 4, 15);
     put_buffer(classes[py.misc.pclass].title, 5, 15);
 }

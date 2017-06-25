@@ -66,7 +66,7 @@ static void change_stat(int stat, int16_t amount) {
 // generate all stats and modify for race. needed in a separate
 // module so looping of character selection would be allowed -RGM-
 static void get_all_stats() {
-    Race_t *r_ptr = &race[py.misc.prace];
+    Race_t *r_ptr = &races[py.misc.prace];
 
     get_stats();
     change_stat(A_STR, r_ptr->str_adj);
@@ -110,7 +110,7 @@ static void print_races(void) {
     for (int i = 0; i < MAX_RACES; i++) {
         char tmp_str[80];
 
-        (void) sprintf(tmp_str, "%c) %s", i + 'a', race[i].trace);
+        (void) sprintf(tmp_str, "%c) %s", i + 'a', races[i].trace);
         put_buffer(tmp_str, row, col);
 
         col += 15;
@@ -142,7 +142,7 @@ static void choose_race() {
 
     py.misc.prace = (uint8_t) i;
 
-    put_buffer(race[i].trace, 3, 15);
+    put_buffer(races[i].trace, 3, 15);
 }
 
 // Will print the history of a character -JWT-
@@ -277,15 +277,15 @@ static void get_sex() {
 // Computes character's age, height, and weight -JWT-
 static void get_ahw() {
     int i = py.misc.prace;
-    py.misc.age = (uint16_t) (race[i].b_age + randint((int) race[i].m_age));
+    py.misc.age = (uint16_t) (races[i].b_age + randint((int) races[i].m_age));
     if (py.misc.male) {
-        py.misc.ht = (uint16_t) randnor((int) race[i].m_b_ht, (int) race[i].m_m_ht);
-        py.misc.wt = (uint16_t) randnor((int) race[i].m_b_wt, (int) race[i].m_m_wt);
+        py.misc.ht = (uint16_t) randnor((int) races[i].m_b_ht, (int) races[i].m_m_ht);
+        py.misc.wt = (uint16_t) randnor((int) races[i].m_b_wt, (int) races[i].m_m_wt);
     } else {
-        py.misc.ht = (uint16_t) randnor((int) race[i].f_b_ht, (int) race[i].f_m_ht);
-        py.misc.wt = (uint16_t) randnor((int) race[i].f_b_wt, (int) race[i].f_m_wt);
+        py.misc.ht = (uint16_t) randnor((int) races[i].f_b_ht, (int) races[i].f_m_ht);
+        py.misc.wt = (uint16_t) randnor((int) races[i].f_b_wt, (int) races[i].f_m_wt);
     }
-    py.misc.disarm = (int16_t) (race[i].b_dis + todis_adj());
+    py.misc.disarm = (int16_t) (races[i].b_dis + todis_adj());
 }
 
 // Prints the classes for a given race: Rogue, Mage, Priest, etc.,
@@ -303,7 +303,7 @@ static int print_classes(int race_id, int *class_list) {
     put_buffer("Choose a class (? for Help):", 20, 2);
 
     for (int i = 0; i < MAX_CLASS; i++) {
-        if (race[race_id].rtclass & mask) {
+        if (races[race_id].rtclass & mask) {
             (void) sprintf(tmp_str, "%c) %s", class_id + 'a', classes[i].title);
             put_buffer(tmp_str, row, col);
             class_list[class_id] = i;

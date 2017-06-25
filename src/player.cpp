@@ -104,7 +104,7 @@ uint32_t player_exp[MAX_PLAYER_LEVEL] = {
 // Racial Bases for:
 //      dis, srh, stl, fos, bth, bthb, bsav, hitdie,
 //      infra, exp base, choice-classes
-Race_t race[MAX_RACES] = {
+Race_t races[MAX_RACES] = {
     {
         "Human", 0,  0,  0,  0,  0,  0,
         14,  6, 72,  6,180, 25, 66,  4,150, 20,
