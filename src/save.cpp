@@ -93,7 +93,7 @@ static bool sv_write() {
     if (use_roguelike_keys) {
         l |= 0x20;
     }
-    if (show_weight_flag) {
+    if (show_inventory_weights) {
         l |= 0x40;
     }
     if (highlight_seams) {
@@ -578,7 +578,7 @@ bool get_char(bool *generate) {
         find_bound = (l & 0x8) != 0;
         prompt_to_pickup = (l & 0x10) != 0;
         use_roguelike_keys = (l & 0x20) != 0;
-        show_weight_flag = (l & 0x40) != 0;
+        show_inventory_weights = (l & 0x40) != 0;
         highlight_seams = (l & 0x80) != 0;
         run_ignore_doors = (l & 0x100) != 0;
 

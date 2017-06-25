@@ -610,15 +610,15 @@ static void inven_screen(int new_scr) {
             line = 7;
             break;
         case INVEN_SCR:
-            scr_left = show_inven(0, inven_ctr - 1, show_weight_flag, scr_left, CNIL);
+            scr_left = show_inven(0, inven_ctr - 1, show_inventory_weights, scr_left, CNIL);
             line = inven_ctr;
             break;
         case WEAR_SCR:
-            scr_left = show_inven(wear_low, wear_high, show_weight_flag, scr_left, CNIL);
+            scr_left = show_inven(wear_low, wear_high, show_inventory_weights, scr_left, CNIL);
             line = wear_high - wear_low + 1;
             break;
         case EQUIP_SCR:
-            scr_left = show_equip(show_weight_flag, scr_left);
+            scr_left = show_equip(show_inventory_weights, scr_left);
             line = equip_ctr;
             break;
     }
@@ -767,7 +767,7 @@ static void inventoryUnwieldItem() {
     inventory[INVEN_WIELD] = savedItem;
 
     if (scr_state == EQUIP_SCR) {
-        scr_left = show_equip(show_weight_flag, scr_left);
+        scr_left = show_equip(show_inventory_weights, scr_left);
     }
 
     py_bonuses(&inventory[INVEN_AUX], -1);  // Subtract bonuses
@@ -1252,7 +1252,7 @@ static void inventoryDisplayAppropriateHeader() {
         int weightQuotient = inven_weight / 10;
         int weightRemainder = inven_weight % 10;
 
-        if (!show_weight_flag || inven_ctr == 0) {
+        if (!show_inventory_weights || inven_ctr == 0) {
             (void) sprintf(msg, "You are carrying %d.%d pounds. In your pack there is %s",
                            weightQuotient,
                            weightRemainder,

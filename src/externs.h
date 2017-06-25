@@ -23,7 +23,7 @@ extern bool run_print_self;
 extern bool highlight_seams;
 extern bool prompt_to_pickup;
 extern bool use_roguelike_keys;
-extern bool show_weight_flag;
+extern bool show_inventory_weights;
 extern bool sound_beep_flag;
 
 // Global flags

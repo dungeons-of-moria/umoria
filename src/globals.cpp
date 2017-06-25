@@ -17,17 +17,17 @@ vtype_t savegame_filename; // The save game filename -CJS-
 FILE *highscore_fp;        // High score file pointer
 
 // Game options as set on startup and with `=` set options command -CJS-
-bool display_counts      = true;   // Display rest/repeat counts
-bool find_bound          = false;  // Print yourself on a run (slower)
-bool run_cut_corners     = true;   // Cut corners while running
-bool run_examine_corners = true;   // Check corners while running
-bool run_ignore_doors    = false;  // Run through open doors
-bool run_print_self      = false;  // Stop running when the map shifts
-bool highlight_seams     = false;  // Highlight magma and quartz veins
-bool prompt_to_pickup    = false;  // Prompt to pick something up
-bool use_roguelike_keys  = false;  // Use classic Roguelike keys - set in config.h/main.c
-bool show_weight_flag    = false;  // Display weights in inventory
-bool sound_beep_flag     = true;   // Beep for invalid characters
+bool display_counts         = true;   // Display rest/repeat counts
+bool find_bound             = false;  // Print yourself on a run (slower)
+bool run_cut_corners        = true;   // Cut corners while running
+bool run_examine_corners    = true;   // Check corners while running
+bool run_ignore_doors       = false;  // Run through open doors
+bool run_print_self         = false;  // Stop running when the map shifts
+bool highlight_seams        = false;  // Highlight magma and quartz veins
+bool prompt_to_pickup       = false;  // Prompt to pick something up
+bool use_roguelike_keys     = false;  // Use classic Roguelike keys - set in config.h/main.c
+bool show_inventory_weights = false;  // Display weights in inventory
+bool sound_beep_flag        = true;   // Beep for invalid characters
 
 // Global flags
 int16_t dun_level        = 0;      // Current dungeon level
