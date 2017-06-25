@@ -981,7 +981,7 @@ static struct {
     bool *o_var;
 } options[] = {{"Running: cut known corners",            &run_cut_corners},
                {"Running: examine potential corners",    &run_examine_corners},
-               {"Running: print self during run",        &find_prself},
+               {"Running: print self during run",        &run_print_self},
                {"Running: stop when map sector changes", &find_bound},
                {"Running: run through open doors",       &run_ignore_doors},
                {"Prompt to pick up objects",             &prompt_carry_flag},

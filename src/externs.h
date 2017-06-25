@@ -19,7 +19,7 @@ extern bool find_bound;
 extern bool run_cut_corners;
 extern bool run_examine_corners;
 extern bool run_ignore_doors;
-extern bool find_prself;
+extern bool run_print_self;
 extern bool highlight_seams;
 extern bool prompt_carry_flag;
 extern bool rogue_like_commands;

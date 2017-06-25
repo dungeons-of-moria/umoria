@@ -1732,10 +1732,10 @@ static void sub1_move_light(int y1, int x1, int y2, int x2) {
                 cave[y][x].tl = false;
             }
         }
-        if (find_flag && !find_prself) {
+        if (find_flag && !run_print_self) {
             light_flag = false;
         }
-    } else if (!find_flag || find_prself) {
+    } else if (!find_flag || run_print_self) {
         light_flag = true;
     }
 
@@ -1798,11 +1798,11 @@ static void sub3_move_light(int y1, int x1, int y2, int x2) {
         }
 
         light_flag = false;
-    } else if (!find_flag || find_prself) {
+    } else if (!find_flag || run_print_self) {
         print(loc_symbol(y1, x1), y1, x1);
     }
 
-    if (!find_flag || find_prself) {
+    if (!find_flag || run_print_self) {
         print('@', y2, x2);
     }
 }

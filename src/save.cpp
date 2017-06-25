@@ -81,7 +81,7 @@ static bool sv_write() {
     if (run_examine_corners) {
         l |= 0x2;
     }
-    if (find_prself) {
+    if (run_print_self) {
         l |= 0x4;
     }
     if (find_bound) {
@@ -574,7 +574,7 @@ bool get_char(bool *generate) {
 
         run_cut_corners = (l & 0x1) != 0;
         run_examine_corners = (l & 0x2) != 0;
-        find_prself = (l & 0x4) != 0;
+        run_print_self = (l & 0x4) != 0;
         find_bound = (l & 0x8) != 0;
         prompt_carry_flag = (l & 0x10) != 0;
         rogue_like_commands = (l & 0x20) != 0;
