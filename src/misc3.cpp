@@ -1250,13 +1250,13 @@ void check_strength() {
     Inventory_t *i_ptr = &inventory[INVEN_WIELD];
 
     if (i_ptr->tval != TV_NOTHING && py.stats.use_stat[A_STR] * 15 < i_ptr->weight) {
-        if (!weapon_heavy) {
+        if (!weapon_is_heavy) {
             msg_print("You have trouble wielding such a heavy weapon.");
-            weapon_heavy = true;
+            weapon_is_heavy = true;
             calc_bonuses();
         }
-    } else if (weapon_heavy) {
-        weapon_heavy = false;
+    } else if (weapon_is_heavy) {
+        weapon_is_heavy = false;
         if (i_ptr->tval != TV_NOTHING) {
             msg_print("You are strong enough to wield your weapon.");
         }

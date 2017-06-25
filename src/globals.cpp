@@ -41,7 +41,7 @@ int running_counter;               // Used in MORIA for .(dir)
 bool teleport_player;              // Handle teleport traps
 
 bool player_carrying_light;        // True when player is carrying light
-bool weapon_heavy        = false;  // Weapon is too heavy -CJS-
+bool weapon_is_heavy     = false;  // Weapon is too heavy -CJS-
 int pack_heaviness       = 0;      // Heaviness of pack - used to calculate if pack is too heavy -CJS-
 
 int32_t birth_date;                // Unix time for when the character was created

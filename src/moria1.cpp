@@ -190,7 +190,7 @@ void calc_bonuses() {
 
     py.misc.dis_ac += py.misc.dis_tac;
 
-    if (weapon_heavy) {
+    if (weapon_is_heavy) {
         py.misc.dis_th += (py.stats.use_stat[A_STR] * 15 - inventory[INVEN_WIELD].weight);
     }
 
@@ -786,7 +786,7 @@ static void inventoryUnwieldItem() {
     }
 
     // this is a new weapon, so clear the heavy flag
-    weapon_heavy = false;
+    weapon_is_heavy = false;
     check_strength();
 }
 
@@ -1177,7 +1177,7 @@ static bool selectItemCommands(char *command, char *which, bool selecting) {
 
                 // this is a new weapon, so clear heavy flag
                 if (slot == INVEN_WIELD) {
-                    weapon_heavy = false;
+                    weapon_is_heavy = false;
                 }
                 check_strength();
 

@@ -39,7 +39,7 @@ extern int running_counter;
 extern bool teleport_player;
 
 extern bool player_carrying_light;
-extern bool weapon_heavy;
+extern bool weapon_is_heavy;
 extern int pack_heaviness;
 
 extern int32_t birth_date;

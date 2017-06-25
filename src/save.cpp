@@ -954,7 +954,7 @@ bool get_char(bool *generate) {
             }
 
             if (current_game_turn >= 0) { // Only if a full restoration.
-                weapon_heavy = false;
+                weapon_is_heavy = false;
                 pack_heaviness = 0;
                 check_strength();
 

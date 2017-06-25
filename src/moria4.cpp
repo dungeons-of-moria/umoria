@@ -46,7 +46,7 @@ static int playerDiggingAbility(Inventory_t *weapon) {
 
     // If this weapon is too heavy for the player to wield properly,
     // then also make it harder to dig with it.
-    if (weapon_heavy) {
+    if (weapon_is_heavy) {
         diggingAbility += (py.stats.use_stat[A_STR] * 15) - weapon->weight;
 
         if (diggingAbility < 0) {
