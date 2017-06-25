@@ -2170,7 +2170,7 @@ static void jamdoor() {
         free_turn_flag = false;
 
         char tmp_str[80];
-        (void) sprintf(tmp_str, "The %s is in your way!", creatures_list[m_list[c_ptr->cptr].mptr].name);
+        (void) sprintf(tmp_str, "The %s is in your way!", creatures_list[monsters_list[c_ptr->cptr].mptr].name);
         msg_print(tmp_str);
     }
 }

@@ -350,7 +350,7 @@ static bool areaAffectStopLookingAtSquares(int i, int dir, int newDir, int y, in
         // Also Creatures
         // The monster should be visible since update_mon() checks
         // for the special case of being in find mode
-        if (c_ptr->cptr > 1 && m_list[c_ptr->cptr].ml) {
+        if (c_ptr->cptr > 1 && monsters_list[c_ptr->cptr].ml) {
             end_find();
             return true;
         }

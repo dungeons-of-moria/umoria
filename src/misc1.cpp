@@ -458,8 +458,8 @@ char loc_symbol(int y, int x) {
         return (uint8_t) (randint(95) + 31);
     }
 
-    if (cave_ptr->cptr > 1 && m_list[cave_ptr->cptr].ml) {
-        return creatures_list[m_list[cave_ptr->cptr].mptr].cchar;
+    if (cave_ptr->cptr > 1 && monsters_list[cave_ptr->cptr].ml) {
+        return creatures_list[monsters_list[cave_ptr->cptr].mptr].cchar;
     }
 
     if (!cave_ptr->pl && !cave_ptr->tl && !cave_ptr->fm) {
@@ -516,12 +516,12 @@ bool compact_monsters() {
     bool delete_any = false;
     while (!delete_any) {
         for (int i = mfptr - 1; i >= MIN_MONIX; i--) {
-            if (cur_dis < m_list[i].cdis && randint(3) == 1) {
-                if (creatures_list[m_list[i].mptr].cmove & CM_WIN) {
+            if (cur_dis < monsters_list[i].cdis && randint(3) == 1) {
+                if (creatures_list[monsters_list[i].mptr].cmove & CM_WIN) {
                     // Never compact away the Balrog!!
                 } else if (hack_monptr < i) {
                     // in case this is called from within creatures(), this is a horrible
-                    // hack, the m_list/creatures() code needs to be rewritten.
+                    // hack, the monsters_list/creatures() code needs to be rewritten.
                     delete_monster(i);
                     delete_any = true;
                 } else {
@@ -600,7 +600,7 @@ bool place_monster(int y, int x, int monsterID, bool slp) {
         return false;
     }
 
-    Monster_t *mon_ptr = &m_list[cur_pos];
+    Monster_t *mon_ptr = &monsters_list[cur_pos];
 
     mon_ptr->fy = (uint8_t) y;
     mon_ptr->fx = (uint8_t) x;
@@ -647,7 +647,7 @@ void place_win_monster() {
         abort();
     }
 
-    Monster_t *mon_ptr = &m_list[cur_pos];
+    Monster_t *mon_ptr = &monsters_list[cur_pos];
 
     int y, x;
     do {

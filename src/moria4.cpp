@@ -631,8 +631,8 @@ static bool look_see(int x, int y, bool *transparent) {
     obj_desc_t msg;
     msg[0] = 0;
 
-    if (gl_rock == 0 && c_ptr->cptr > 1 && m_list[c_ptr->cptr].ml) {
-        j = m_list[c_ptr->cptr].mptr;
+    if (gl_rock == 0 && c_ptr->cptr > 1 && monsters_list[c_ptr->cptr].ml) {
+        j = monsters_list[c_ptr->cptr].mptr;
         (void) sprintf(msg, "%s %s %s. [(r)ecall]", description, is_a_vowel(creatures_list[j].name[0]) ? "an" : "a", creatures_list[j].name);
         description = "It is on";
         prt(msg, 0, 0);
@@ -911,7 +911,7 @@ void throw_object() {
             if (c_ptr->cptr > 1) {
                 flag = true;
 
-                Monster_t *m_ptr = &m_list[c_ptr->cptr];
+                Monster_t *m_ptr = &monsters_list[c_ptr->cptr];
 
                 tbth -= cur_dis;
 
@@ -982,7 +982,7 @@ void throw_object() {
 // Used to be part of bash above.
 static void py_bash(int y, int x) {
     int monsterID = cave[y][x].cptr;
-    Monster_t *m_ptr = &m_list[monsterID];
+    Monster_t *m_ptr = &monsters_list[monsterID];
     Creature_t *c_ptr = &creatures_list[m_ptr->mptr];
 
     m_ptr->csleep = 0;

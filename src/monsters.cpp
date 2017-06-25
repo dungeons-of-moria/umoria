@@ -669,7 +669,7 @@ MonsterAttack_t monster_attacks[N_MONS_ATTS] = {
         {24, 5, 0, 0},
 };
 
-Monster_t m_list[MAX_MALLOC];
+Monster_t monsters_list[MAX_MALLOC];
 int16_t m_level[MAX_MONS_LEVEL + 1];
 
 // Blank monster values

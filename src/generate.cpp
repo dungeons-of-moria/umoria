@@ -1123,7 +1123,7 @@ static void tlink() {
 // Link all free space in monster list together
 static void mlink() {
     for (int i = 0; i < MAX_MALLOC; i++) {
-        m_list[i] = blank_monster;
+        monsters_list[i] = blank_monster;
     }
     mfptr = MIN_MONIX;
 }
