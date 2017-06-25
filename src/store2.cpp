@@ -302,7 +302,7 @@ static bool increase_insults(int store_num) {
     Store_t *s_ptr = &stores[store_num];
     s_ptr->insult_cur++;
 
-    if (s_ptr->insult_cur > owners[s_ptr->owner].insult_max) {
+    if (s_ptr->insult_cur > store_owners[s_ptr->owner].insult_max) {
         prt_comment4();
         s_ptr->insult_cur = 0;
         s_ptr->bad_buy++;
@@ -438,7 +438,7 @@ static int purchase_haggle(int store_num, int32_t *price, Inventory_t *item) {
     int final_flag = 0;
 
     Store_t *s_ptr = &stores[store_num];
-    Owner_t *o_ptr = &owners[s_ptr->owner];
+    Owner_t *o_ptr = &store_owners[s_ptr->owner];
 
     int32_t max_sell, min_sell;
     int32_t cost = sell_price(store_num, &max_sell, &min_sell, item);
@@ -608,7 +608,7 @@ static int sell_haggle(int store_num, int32_t *price, Inventory_t *item) {
         sell = 3;
         flag = true;
     } else {
-        Owner_t *o_ptr = &owners[s_ptr->owner];
+        Owner_t *o_ptr = &store_owners[s_ptr->owner];
 
         cost = cost * (200 - chr_adj()) / 100;
         cost = cost * (200 - race_gold_adjustments[o_ptr->owner_race][py.misc.prace]) / 100;
@@ -1004,7 +1004,7 @@ void enter_store(int store_num) {
     }
 
     int cur_top = 0;
-    display_store(store_num, owners[s_ptr->owner].owner_name, cur_top);
+    display_store(store_num, store_owners[s_ptr->owner].owner_name, cur_top);
 
     bool exit_store = false;
     while (!exit_store) {

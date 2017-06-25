@@ -107,7 +107,7 @@ extern uint8_t spells_learned_order[32]; // remember order that spells are learn
 extern uint16_t player_base_provisions[MAX_CLASS][5];
 
 // Following are store definitions
-extern Owner_t owners[MAX_OWNERS];
+extern Owner_t store_owners[MAX_OWNERS];
 extern Store_t stores[MAX_STORES];
 extern uint16_t store_choices[MAX_STORES][STORE_CHOICES];
 extern int (*store_buy[MAX_STORES])(int);

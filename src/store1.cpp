@@ -167,7 +167,7 @@ int32_t sell_price(int snum, int32_t *max_sell, int32_t *min_sell, Inventory_t *
         return 0;
     }
 
-    Owner_t *owner = &owners[stores[snum].owner];
+    Owner_t *owner = &store_owners[stores[snum].owner];
 
     price = price * race_gold_adjustments[owner->owner_race][py.misc.prace] / 100;
     if (price < 1) {
@@ -384,7 +384,7 @@ void store_maint() {
                 j += STORE_MIN_INVEN - s_ptr->store_ctr;
             }
 
-            int16_t max_cost = owners[s_ptr->owner].max_cost;
+            int16_t max_cost = store_owners[s_ptr->owner].max_cost;
 
             while (--j >= 0) {
                 store_create(store_id, max_cost);
