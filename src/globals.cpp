@@ -14,7 +14,8 @@
 int hack_monptr                 = -1;
 
 bool weapon_heavy               = false;
-int pack_heavy                  = 0;
+int pack_heaviness              = 0;
+
 vtype_t died_from;
 int32_t birth_date;
 

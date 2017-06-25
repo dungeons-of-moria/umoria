@@ -1242,7 +1242,7 @@ bool inven_check_weight(Inventory_t *i_ptr) {
         limit = 0;
     }
 
-    return pack_heavy == limit;
+    return pack_heaviness == limit;
 }
 
 // Are we strong enough for the current pack and weapon? -CJS-
@@ -1271,14 +1271,14 @@ void check_strength() {
         limit = 0;
     }
 
-    if (pack_heavy != limit) {
-        if (pack_heavy < limit) {
+    if (pack_heaviness != limit) {
+        if (pack_heaviness < limit) {
             msg_print("Your pack is so heavy that it slows you down.");
         } else {
             msg_print("You move more easily under the weight of your pack.");
         }
-        change_speed(limit - pack_heavy);
-        pack_heavy = limit;
+        change_speed(limit - pack_heaviness);
+        pack_heaviness = limit;
     }
 
     py.flags.status &= ~PY_STR_WGT;

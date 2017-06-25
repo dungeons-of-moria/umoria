@@ -410,8 +410,8 @@ bool _save_char(char *fnam) {
 
     put_qio();
     disturb(1, 0);             // Turn off resting and searching.
-    change_speed(-pack_heavy); // Fix the speed
-    pack_heavy = 0;
+    change_speed(-pack_heaviness); // Fix the speed
+    pack_heaviness = 0;
     bool ok = false;
 
     fileptr = NULL; // Do not assume it has been init'ed
@@ -955,7 +955,7 @@ bool get_char(bool *generate) {
 
             if (turn >= 0) { // Only if a full restoration.
                 weapon_heavy = false;
-                pack_heavy = 0;
+                pack_heaviness = 0;
                 check_strength();
 
                 // rotate store inventory, depending on how old the save file

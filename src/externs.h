@@ -37,7 +37,7 @@ extern bool player_light;   // Player carrying light
 extern int find_flag;       // Used in MORIA
 extern bool free_turn_flag; // Used in MORIA
 extern bool weapon_heavy;   // Flag if the weapon too heavy -CJS-
-extern int pack_heavy;      // Flag if the pack too heavy -CJS-
+extern int pack_heaviness;  // Flag if the pack too heavy -CJS-
 extern char doing_inven;    // Track inventory commands
 extern bool screen_change;  // Screen changes (used in inven_commands)
 
