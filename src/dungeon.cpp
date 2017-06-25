@@ -31,7 +31,7 @@ static void refill_lamp();
 static void resetDungeonFlags() {
     command_count = 0;
     generate_new_level = false;
-    find_flag = 0;
+    running_counter = 0;
     teleport_flag = false;
     mon_tot_mult = 0;
     cave[char_row][char_col].cptr = 1;
@@ -739,7 +739,7 @@ static void executeInputCommands(char *command, int *find_count) {
         default_dir = false;
         player_free_turn = false;
 
-        if (find_flag) {
+        if (running_counter) {
             find_run();
             find_count--;
             if (find_count == 0) {
@@ -853,7 +853,7 @@ static void executeInputCommands(char *command, int *find_count) {
             do_command(lastInputCommand);
 
             // Find is counted differently, as the command changes.
-            if (find_flag) {
+            if (running_counter) {
                 *find_count = command_count - 1;
                 command_count = 0;
             } else if (player_free_turn) {
@@ -936,8 +936,8 @@ void dungeon() {
         playerUpdateRestingState();
 
         // Check for interrupts to find or rest.
-        int microseconds = (find_flag ? 0 : 10000);
-        if ((command_count > 0 || find_flag || py.flags.rest != 0) && check_input(microseconds)) {
+        int microseconds = (running_counter ? 0 : 10000);
+        if ((command_count > 0 || running_counter || py.flags.rest != 0) && check_input(microseconds)) {
             disturb(0, 0);
         }
 

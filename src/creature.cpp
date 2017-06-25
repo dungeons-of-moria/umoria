@@ -15,7 +15,7 @@ static bool checkMonsterIsVisible(Monster_t *m_ptr) {
     Cave_t *c_ptr = &cave[m_ptr->fy][m_ptr->fx];
     Creature_t *r_ptr = &creatures_list[m_ptr->mptr];
 
-    if (c_ptr->pl || c_ptr->tl || (find_flag && m_ptr->cdis < 2 && player_light)) {
+    if (c_ptr->pl || c_ptr->tl || (running_counter && m_ptr->cdis < 2 && player_light)) {
         // Normal sight.
         if ((CM_INVISIBLE & r_ptr->cmove) == 0) {
             visible = true;

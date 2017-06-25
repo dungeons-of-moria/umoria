@@ -37,7 +37,7 @@ bool generate_new_level;           // True will generate a new level on next loo
 bool screen_has_changed  = false;  // Track screen changes for inventory commands
 
 bool player_free_turn;             // Player has a free turn, so do not move creatures
-int find_flag;                     // Used in MORIA for .(dir)
+int running_counter;               // Used in MORIA for .(dir)
 bool teleport_flag;                // Handle teleport traps
 
 bool player_light;                 // True when player is carrying light

@@ -35,7 +35,7 @@ extern bool generate_new_level;
 extern bool screen_has_changed;
 
 extern bool player_free_turn;
-extern int find_flag;
+extern int running_counter;
 extern bool teleport_flag;
 
 extern bool player_light;

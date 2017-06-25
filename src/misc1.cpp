@@ -446,7 +446,7 @@ bool los(int fromY, int fromX, int toY, int toX) {
 char loc_symbol(int y, int x) {
     Cave_t *cave_ptr = &cave[y][x];
 
-    if (cave_ptr->cptr == 1 && (!find_flag || run_print_self)) {
+    if (cave_ptr->cptr == 1 && (!running_counter || run_print_self)) {
         return '@';
     }
 

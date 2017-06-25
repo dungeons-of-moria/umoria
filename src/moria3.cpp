@@ -938,7 +938,7 @@ void move_char(int dir, bool do_pickup) {
             }
 
             // Check to see if he should stop
-            if (find_flag) {
+            if (running_counter) {
                 area_affect(dir, char_row, char_col);
             }
 
@@ -995,7 +995,7 @@ void move_char(int dir, bool do_pickup) {
         } else {
             // Can't move onto floor space
 
-            if (!find_flag && tile->tptr != 0) {
+            if (!running_counter && tile->tptr != 0) {
                 if (treasure_list[tile->tptr].tval == TV_RUBBLE) {
                     msg_print("There is rubble blocking your way.");
                 } else if (treasure_list[tile->tptr].tval == TV_CLOSED_DOOR) {
@@ -1009,7 +1009,7 @@ void move_char(int dir, bool do_pickup) {
     } else {
         // Attacking a creature!
 
-        int old_find_flag = find_flag;
+        int old_find_flag = running_counter;
 
         end_find();
 

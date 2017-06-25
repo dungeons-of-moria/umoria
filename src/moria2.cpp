@@ -277,9 +277,9 @@ void find_init(int dir) {
     int col = char_col;
 
     if (!mmove(dir, &row, &col)) {
-        find_flag = 0;
+        running_counter = 0;
     } else {
-        find_flag = 1;
+        running_counter = 1;
 
         find_direction = dir;
         find_prevdir = dir;
@@ -304,14 +304,14 @@ void find_init(int dir) {
 
     move_char(dir, true);
 
-    if (find_flag == 0) {
+    if (running_counter == 0) {
         command_count = 0;
     }
 }
 
 void find_run() {
     // prevent infinite loops in find mode, will stop after moving 100 times
-    if (find_flag++ > 100) {
+    if (running_counter++ > 100) {
         msg_print("You stop running to catch your breath.");
         end_find();
         return;
@@ -322,11 +322,11 @@ void find_run() {
 
 // Switch off the run flag - and get the light correct. -CJS-
 void end_find() {
-    if (!find_flag) {
+    if (!running_counter) {
         return;
     }
 
-    find_flag = 0;
+    running_counter = 0;
 
     move_light(char_row, char_col, char_row, char_col);
 }
