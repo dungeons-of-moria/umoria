@@ -704,7 +704,7 @@ static void playerUpdateStatusFlags() {
 // Allow for a slim chance of detect enchantment -CJS-
 static void playerDetectEnchantment() {
     for (int i = 0; i < INVEN_ARRAY_SIZE; i++) {
-        if (i == inven_ctr) {
+        if (i == inventory_count) {
             i = 22;
         }
 

@@ -306,14 +306,14 @@ static void writeEquipmentListToFile(FILE *file1) {
 static void writeInventoryToFile(FILE *file1) {
     (void) fprintf(file1, "  [General Inventory List]\n\n");
 
-    if (inven_ctr == 0) {
+    if (inventory_count == 0) {
         (void) fprintf(file1, "  Character has no objects in inventory.\n");
         return;
     }
 
     obj_desc_t description;
 
-    for (int i = 0; i < inven_ctr; i++) {
+    for (int i = 0; i < inventory_count; i++) {
         objdes(description, &inventory[i], true);
         (void) fprintf(file1, "%c) %s\n", i + 'a', description);
     }

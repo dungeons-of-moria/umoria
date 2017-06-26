@@ -267,7 +267,7 @@ void identify(int *item) {
     int j;
     Inventory_t *t_ptr;
 
-    for (int i = 0; i < inven_ctr; i++) {
+    for (int i = 0; i < inventory_count; i++) {
         t_ptr = &inventory[i];
 
         if (t_ptr->tval == x1 && t_ptr->subval == x2 && i != *item && ((int) t_ptr->number + (int) i_ptr->number) < 256) {
@@ -281,9 +281,9 @@ void identify(int *item) {
             msg_print("You combine similar objects from the shop and dungeon.");
 
             inventory[*item].number += inventory[i].number;
-            inven_ctr--;
+            inventory_count--;
 
-            for (j = i; j < inven_ctr; j++) {
+            for (j = i; j < inventory_count; j++) {
                 inventory[j] = inventory[j + 1];
             }
 

@@ -30,7 +30,7 @@ static bool canPray(int *itemPosBegin, int *itemPosEnd) {
         return false;
     }
 
-    if (inven_ctr == 0) {
+    if (inventory_count == 0) {
         msg_print("But you are not carrying anything!");
         return false;
     }

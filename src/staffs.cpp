@@ -11,7 +11,7 @@
 
 
 static bool isCarryingStaff(int *j, int *k) {
-    if (inven_ctr == 0) {
+    if (inventory_count == 0) {
         msg_print("But you are not carrying anything.");
         return false;
     }

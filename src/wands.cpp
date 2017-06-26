@@ -119,7 +119,7 @@ static bool discharge_wand(Inventory_t *wand, int dir) {
 void aim() {
     player_free_turn = true;
 
-    if (inven_ctr == 0) {
+    if (inventory_count == 0) {
         msg_print("But you are not carrying anything.");
         return;
     }

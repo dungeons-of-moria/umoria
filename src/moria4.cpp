@@ -857,14 +857,14 @@ static void drop_throw(int y, int x, Inventory_t *t_ptr) {
 // Note: Extra damage and chance of hitting when missiles are used
 // with correct weapon. i.e. wield bow and throw arrow.
 void throw_object() {
-    if (inven_ctr == 0) {
+    if (inventory_count == 0) {
         msg_print("But you are not carrying anything.");
         player_free_turn = true;
         return;
     }
 
     int itemID;
-    if (!get_item(&itemID, "Fire/Throw which one?", 0, inven_ctr - 1, CNIL, CNIL)) {
+    if (!get_item(&itemID, "Fire/Throw which one?", 0, inventory_count - 1, CNIL, CNIL)) {
         return;
     }
 

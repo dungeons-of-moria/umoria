@@ -892,12 +892,12 @@ static bool store_purchase(int store_num, int *cur_top) {
 
 // Sell an item to the store -RAK-
 static bool store_sell(int store_num, int *cur_top) {
-    int first_item = inven_ctr;
+    int first_item = inventory_count;
     int last_item = -1;
 
     char mask[INVEN_WIELD];
 
-    for (int counter = 0; counter < inven_ctr; counter++) {
+    for (int counter = 0; counter < inventory_count; counter++) {
         int flag = (*store_buy[store_num])(inventory[counter].tval);
 
         mask[counter] = (char) flag;

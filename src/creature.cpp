@@ -318,7 +318,7 @@ static bool testAttackHits(int attackID, uint8_t level) {
             }
             break;
         case 13: // Steal Object
-            if (test_hit(2, (int) level, 0, (int) py.misc.lev, CLA_MISC_HIT) && inven_ctr > 0) {
+            if (test_hit(2, (int) level, 0, (int) py.misc.lev, CLA_MISC_HIT) && inventory_count > 0) {
                 success = true;
             }
             break;
@@ -372,7 +372,7 @@ static bool testAttackHits(int attackID, uint8_t level) {
             break;
         case 24: // Eat charges
             // check to make sure an object exists
-            if (test_hit(15, (int) level, 0, py.misc.pac + py.misc.ptoac, CLA_MISC_HIT) && inven_ctr > 0) {
+            if (test_hit(15, (int) level, 0, py.misc.pac + py.misc.ptoac, CLA_MISC_HIT) && inventory_count > 0) {
                 success = true;
             }
             break;
@@ -663,7 +663,7 @@ static bool executeAttack(Creature_t *r_ptr, Monster_t *m_ptr, int monsterID, in
             if (py.flags.paralysis < 1 && randint(124) < py.stats.use_stat[A_DEX]) {
                 msg_print("You grab hold of your backpack!");
             } else {
-                inven_destroy(randint(inven_ctr) - 1);
+                inven_destroy(randint(inventory_count) - 1);
                 msg_print("Your backpack feels lighter.");
             }
             if (randint(2) == 1) {
@@ -752,7 +752,7 @@ static bool executeAttack(Creature_t *r_ptr, Monster_t *m_ptr, int monsterID, in
             }
             break;
         case 24: // Eat charges
-            i_ptr = &inventory[randint(inven_ctr) - 1];
+            i_ptr = &inventory[randint(inventory_count) - 1];
             if ((i_ptr->tval == TV_STAFF || i_ptr->tval == TV_WAND) && i_ptr->p1 > 0) {
                 m_ptr->hp += r_ptr->level * i_ptr->p1;
                 i_ptr->p1 = 0;

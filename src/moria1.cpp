@@ -610,8 +610,8 @@ static void inven_screen(int new_scr) {
             line = 7;
             break;
         case INVEN_SCR:
-            scr_left = show_inven(0, inven_ctr - 1, show_inventory_weights, scr_left, CNIL);
-            line = inven_ctr;
+            scr_left = show_inven(0, inventory_count - 1, show_inventory_weights, scr_left, CNIL);
+            line = inventory_count;
             break;
         case WEAR_SCR:
             scr_left = show_inven(wear_low, wear_high, show_inventory_weights, scr_left, CNIL);
@@ -664,7 +664,7 @@ static void setInventoryCommandScreenState(char command) {
 }
 
 static void displayInventory() {
-    if (inven_ctr == 0) {
+    if (inventory_count == 0) {
         msg_print("You are not carrying anything.");
     } else {
         inven_screen(INVEN_SCR);
@@ -686,7 +686,7 @@ static bool inventoryTakeOffItem(bool selecting) {
         return selecting;
     }
 
-    if (inven_ctr >= INVEN_WIELD && !doing_inventory_command) {
+    if (inventory_count >= INVEN_WIELD && !doing_inventory_command) {
         msg_print("You will have to drop something first.");
         return selecting;
     }
@@ -699,7 +699,7 @@ static bool inventoryTakeOffItem(bool selecting) {
 }
 
 static bool inventoryDropItem(char *command, bool selecting) {
-    if (inven_ctr == 0 && equip_ctr == 0) {
+    if (inventory_count == 0 && equip_ctr == 0) {
         msg_print("But you're not carrying anything.");
         return selecting;
     }
@@ -709,7 +709,7 @@ static bool inventoryDropItem(char *command, bool selecting) {
         return selecting;
     }
 
-    if ((scr_state == EQUIP_SCR && equip_ctr > 0) || inven_ctr == 0) {
+    if ((scr_state == EQUIP_SCR && equip_ctr > 0) || inventory_count == 0) {
         if (scr_state != BLANK_SCR) {
             inven_screen(EQUIP_SCR);
         }
@@ -723,10 +723,10 @@ static bool inventoryDropItem(char *command, bool selecting) {
 
 static bool inventoryWearWieldItem(bool selecting) {
     // Note: simple loop to get wear_low value
-    for (wear_low = 0; wear_low < inven_ctr && inventory[wear_low].tval > TV_MAX_WEAR; wear_low++);
+    for (wear_low = 0; wear_low < inventory_count && inventory[wear_low].tval > TV_MAX_WEAR; wear_low++);
 
     // Note: simple loop to get wear_high value
-    for (wear_high = wear_low; wear_high < inven_ctr && inventory[wear_high].tval >= TV_MIN_WEAR; wear_high++);
+    for (wear_high = wear_low; wear_high < inventory_count && inventory[wear_high].tval >= TV_MIN_WEAR; wear_high++);
 
     wear_high--;
 
@@ -965,7 +965,7 @@ static bool selectItemCommands(char *command, char *which, bool selecting) {
         } else {
             from = 0;
             if (*command == 'd') {
-                to = inven_ctr - 1;
+                to = inventory_count - 1;
                 prompt = "Drop";
 
                 if (equip_ctr > 0) {
@@ -980,7 +980,7 @@ static bool selectItemCommands(char *command, char *which, bool selecting) {
                     // command == 'r'
 
                     prompt = "Throw off";
-                    if (inven_ctr > 0) {
+                    if (inventory_count > 0) {
                         swap = ", / for Inven";
                     }
                 }
@@ -1065,7 +1065,7 @@ static bool selectItemCommands(char *command, char *which, bool selecting) {
                     inven_drop(item, true);
                     // As a safety measure, set the player's inven
                     // weight to 0, when the last object is dropped.
-                    if (inven_ctr == 0 && equip_ctr == 0) {
+                    if (inventory_count == 0 && equip_ctr == 0) {
                         inven_weight = 0;
                     }
                 } else {
@@ -1130,13 +1130,13 @@ static bool selectItemCommands(char *command, char *which, bool selecting) {
                 // from equipment list, if necessary.
                 i_ptr = &inventory[slot];
                 if (i_ptr->tval != TV_NOTHING) {
-                    int savedCounter = inven_ctr;
+                    int savedCounter = inventory_count;
 
                     itemToTakeOff = inven_carry(i_ptr);
 
                     // If item removed did not stack with anything
                     // in inventory, then increment wear_high.
-                    if (inven_ctr != savedCounter) {
+                    if (inventory_count != savedCounter) {
                         wear_high++;
                     }
 
@@ -1232,7 +1232,7 @@ static bool selectItemCommands(char *command, char *which, bool selecting) {
 
             // As a safety measure, set the player's inven weight
             // to 0, when the last object is dropped.
-            if (inven_ctr == 0 && equip_ctr == 0) {
+            if (inventory_count == 0 && equip_ctr == 0) {
                 inven_weight = 0;
             }
         }
@@ -1252,11 +1252,11 @@ static void inventoryDisplayAppropriateHeader() {
         int weightQuotient = inven_weight / 10;
         int weightRemainder = inven_weight % 10;
 
-        if (!show_inventory_weights || inven_ctr == 0) {
+        if (!show_inventory_weights || inventory_count == 0) {
             (void) sprintf(msg, "You are carrying %d.%d pounds. In your pack there is %s",
                            weightQuotient,
                            weightRemainder,
-                           (inven_ctr == 0 ? "nothing." : "-")
+                           (inventory_count == 0 ? "nothing." : "-")
             );
         } else {
             int limitQuotient = weight_limit() / 10;
@@ -1387,15 +1387,15 @@ int get_item(int *com_val, const char *pmt, int i, int j, char *mask, const char
     if (j > INVEN_WIELD) {
         full = true;
 
-        if (inven_ctr == 0) {
+        if (inventory_count == 0) {
             screenID = 0;
             j = equip_ctr - 1;
         } else {
-            j = inven_ctr - 1;
+            j = inventory_count - 1;
         }
     }
 
-    if (inven_ctr < 1 && (!full || equip_ctr < 1)) {
+    if (inventory_count < 1 && (!full || equip_ctr < 1)) {
         prt("You are not carrying anything.", 0, 0);
         return false;
     }
@@ -1467,7 +1467,7 @@ int get_item(int *com_val, const char *pmt, int i, int j, char *mask, const char
                                 if (redrawScreen) {
                                     j = equip_ctr;
 
-                                    while (j < inven_ctr) {
+                                    while (j < inventory_count) {
                                         j++;
                                         erase_line(j, 0);
                                     }
@@ -1477,7 +1477,7 @@ int get_item(int *com_val, const char *pmt, int i, int j, char *mask, const char
 
                             prt(out_val, 0, 0);
                         } else {
-                            if (inven_ctr == 0) {
+                            if (inventory_count == 0) {
                                 prt("But you're not carrying anything -more-", 0, 0);
                                 (void) inkey();
                             } else {
@@ -1485,14 +1485,14 @@ int get_item(int *com_val, const char *pmt, int i, int j, char *mask, const char
                                 commandFinished = true;
 
                                 if (redrawScreen) {
-                                    j = inven_ctr;
+                                    j = inventory_count;
 
                                     while (j < equip_ctr) {
                                         j++;
                                         erase_line(j, 0);
                                     }
                                 }
-                                j = inven_ctr - 1;
+                                j = inventory_count - 1;
                             }
                         }
                     }

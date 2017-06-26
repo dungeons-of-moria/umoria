@@ -27,7 +27,7 @@ static bool canReadScroll(int *j, int *k) {
         return false;
     }
 
-    if (inven_ctr == 0) {
+    if (inventory_count == 0) {
         msg_print("You are not carrying anything!");
         return false;
     }

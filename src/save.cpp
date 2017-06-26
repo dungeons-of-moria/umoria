@@ -232,8 +232,8 @@ static bool sv_write() {
 
     wr_short((uint16_t) missiles_counter);
     wr_long((uint32_t) current_game_turn);
-    wr_short((uint16_t) inven_ctr);
-    for (int i = 0; i < inven_ctr; i++) {
+    wr_short((uint16_t) inventory_count);
+    for (int i = 0; i < inventory_count; i++) {
         wr_item(&inventory[i]);
     }
     for (int i = INVEN_WIELD; i < INVEN_ARRAY_SIZE; i++) {
@@ -691,11 +691,11 @@ bool get_char(bool *generate) {
 
             rd_short((uint16_t *) &missiles_counter);
             rd_long((uint32_t *) &current_game_turn);
-            rd_short((uint16_t *) &inven_ctr);
-            if (inven_ctr > INVEN_WIELD) {
+            rd_short((uint16_t *) &inventory_count);
+            if (inventory_count > INVEN_WIELD) {
                 goto error;
             }
-            for (int i = 0; i < inven_ctr; i++) {
+            for (int i = 0; i < inventory_count; i++) {
                 rd_item(&inventory[i]);
             }
             for (int i = INVEN_WIELD; i < INVEN_ARRAY_SIZE; i++) {

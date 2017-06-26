@@ -288,7 +288,7 @@ static bool drinkPotion(uint32_t flags, uint8_t itemID) {
 void quaff() {
     player_free_turn = true;
 
-    if (inven_ctr == 0) {
+    if (inventory_count == 0) {
         msg_print("But you are not carrying anything.");
         return;
     }

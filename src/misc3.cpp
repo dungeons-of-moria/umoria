@@ -1113,12 +1113,12 @@ void inven_destroy(int item_val) {
     } else {
         inven_weight -= i_ptr->weight * i_ptr->number;
 
-        for (int i = item_val; i < inven_ctr - 1; i++) {
+        for (int i = item_val; i < inventory_count - 1; i++) {
             inventory[i] = inventory[i + 1];
         }
 
-        invcopy(&inventory[inven_ctr - 1], OBJ_NOTHING);
-        inven_ctr--;
+        invcopy(&inventory[inventory_count - 1], OBJ_NOTHING);
+        inventory_count--;
     }
 
     py.flags.status |= PY_STR_WGT;
@@ -1152,14 +1152,14 @@ void inven_drop(int item_val, int drop_all) {
     } else {
         if (drop_all || i_ptr->number == 1) {
             inven_weight -= i_ptr->weight * i_ptr->number;
-            inven_ctr--;
+            inventory_count--;
 
-            while (item_val < inven_ctr) {
+            while (item_val < inventory_count) {
                 inventory[item_val] = inventory[item_val + 1];
                 item_val++;
             }
 
-            invcopy(&inventory[inven_ctr], OBJ_NOTHING);
+            invcopy(&inventory[inventory_count], OBJ_NOTHING);
         } else {
             treasure_list[treasureID].number = 1;
             inven_weight -= i_ptr->weight;
@@ -1179,7 +1179,7 @@ void inven_drop(int item_val, int drop_all) {
 int inven_damage(bool (*typ)(Inventory_t *), int perc) {
     int damage = 0;
 
-    for (int i = 0; i < inven_ctr; i++) {
+    for (int i = 0; i < inventory_count; i++) {
         if ((*typ)(&inventory[i]) && randint(100) < perc) {
             inven_destroy(i);
             damage++;
@@ -1202,7 +1202,7 @@ int weight_limit() {
 
 // this code must be identical to the inven_carry() code below
 bool inven_check_num(Inventory_t *t_ptr) {
-    if (inven_ctr < INVEN_WIELD) {
+    if (inventory_count < INVEN_WIELD) {
         return true;
     }
 
@@ -1210,7 +1210,7 @@ bool inven_check_num(Inventory_t *t_ptr) {
         return false;
     }
 
-    for (int i = 0; i < inven_ctr; i++) {
+    for (int i = 0; i < inventory_count; i++) {
         bool sameCharacter = inventory[i].tval == t_ptr->tval;
         bool sameCategory = inventory[i].subval == t_ptr->subval;
 
@@ -1311,12 +1311,12 @@ int inven_carry(Inventory_t *i_ptr) {
         if ((typ == t_ptr->tval && subt < t_ptr->subval && always_known1p) || typ > t_ptr->tval) {
             // For items which are always known1p, i.e. never have a 'color',
             // insert them into the inventory in sorted order.
-            for (int i = inven_ctr - 1; i >= locn; i--) {
+            for (int i = inventory_count - 1; i >= locn; i--) {
                 inventory[i + 1] = inventory[i];
             }
 
             inventory[locn] = *i_ptr;
-            inven_ctr++;
+            inventory_count++;
 
             break;
         }
@@ -1725,7 +1725,7 @@ static int lastKnownSpell() {
 static uint32_t playerDetermineLearnableSpells() {
     uint32_t spell_flag = 0;
 
-    for (int i = 0; i < inven_ctr; i++) {
+    for (int i = 0; i < inventory_count; i++) {
         if (inventory[i].tval == TV_MAGIC_BOOK) {
             spell_flag |= inventory[i].flags;
         }
@@ -2294,7 +2294,7 @@ int find_range(int item1, int item2, int *j, int *k) {
 
     bool flag = false;
 
-    for (int i = 0; i < inven_ctr; i++) {
+    for (int i = 0; i < inventory_count; i++) {
         int itemID = (int) inventory[i].tval;
 
         if (!flag) {
@@ -2311,7 +2311,7 @@ int find_range(int item1, int item2, int *j, int *k) {
     }
 
     if (flag && *k == -1) {
-        *k = inven_ctr - 1;
+        *k = inventory_count - 1;
     }
 
     return flag;

@@ -11,7 +11,7 @@
 
 // Add a comment to an object description. -CJS-
 void scribe_object() {
-    if (inven_ctr == 0 && equip_ctr == 0) {
+    if (inventory_count == 0 && equip_ctr == 0) {
         msg_print("You are not carrying anything to inscribe.");
         return;
     }
