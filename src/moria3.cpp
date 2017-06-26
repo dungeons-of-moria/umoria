@@ -873,7 +873,7 @@ void py_attack(int y, int x) {
             py.flags.status |= PY_STR_WGT;
 
             if (item->number == 0) {
-                equip_ctr--;
+                equipment_count--;
                 py_bonuses(item, -1);
                 invcopy(item, OBJ_NOTHING);
                 calc_bonuses();

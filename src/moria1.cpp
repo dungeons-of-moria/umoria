@@ -497,7 +497,7 @@ void takeoff(int item_val, int posn) {
     Inventory_t *t_ptr = &inventory[item_val];
 
     inventory_weight -= t_ptr->weight * t_ptr->number;
-    equip_ctr--;
+    equipment_count--;
 
     const char *p;
     if (item_val == INVEN_WIELD || item_val == INVEN_AUX) {
@@ -619,7 +619,7 @@ static void inven_screen(int new_scr) {
             break;
         case EQUIP_SCR:
             scr_left = show_equip(show_inventory_weights, scr_left);
-            line = equip_ctr;
+            line = equipment_count;
             break;
     }
 
@@ -672,7 +672,7 @@ static void displayInventory() {
 }
 
 static void displayEquipment() {
-    if (equip_ctr == 0) {
+    if (equipment_count == 0) {
         msg_print("You are not using any equipment.");
     } else {
         inven_screen(EQUIP_SCR);
@@ -680,7 +680,7 @@ static void displayEquipment() {
 }
 
 static bool inventoryTakeOffItem(bool selecting) {
-    if (equip_ctr == 0) {
+    if (equipment_count == 0) {
         msg_print("You are not using any equipment.");
         // don't print message restarting inven command after taking off something, it is confusing
         return selecting;
@@ -699,7 +699,7 @@ static bool inventoryTakeOffItem(bool selecting) {
 }
 
 static bool inventoryDropItem(char *command, bool selecting) {
-    if (inventory_count == 0 && equip_ctr == 0) {
+    if (inventory_count == 0 && equipment_count == 0) {
         msg_print("But you're not carrying anything.");
         return selecting;
     }
@@ -709,7 +709,7 @@ static bool inventoryDropItem(char *command, bool selecting) {
         return selecting;
     }
 
-    if ((scr_state == EQUIP_SCR && equip_ctr > 0) || inventory_count == 0) {
+    if ((scr_state == EQUIP_SCR && equipment_count > 0) || inventory_count == 0) {
         if (scr_state != BLANK_SCR) {
             inven_screen(EQUIP_SCR);
         }
@@ -968,11 +968,11 @@ static bool selectItemCommands(char *command, char *which, bool selecting) {
                 to = inventory_count - 1;
                 prompt = "Drop";
 
-                if (equip_ctr > 0) {
+                if (equipment_count > 0) {
                     swap = ", / for Equip";
                 }
             } else {
-                to = equip_ctr - 1;
+                to = equipment_count - 1;
 
                 if (*command == 't') {
                     prompt = "Take off";
@@ -1065,7 +1065,7 @@ static bool selectItemCommands(char *command, char *which, bool selecting) {
                     inven_drop(item, true);
                     // As a safety measure, set the player's inven
                     // weight to 0, when the last object is dropped.
-                    if (inventory_count == 0 && equip_ctr == 0) {
+                    if (inventory_count == 0 && equipment_count == 0) {
                         inventory_weight = 0;
                     }
                 } else {
@@ -1145,7 +1145,7 @@ static bool selectItemCommands(char *command, char *which, bool selecting) {
 
                 // third, wear new item
                 *i_ptr = savedItem;
-                equip_ctr++;
+                equipment_count++;
 
                 py_bonuses(i_ptr, 1);
 
@@ -1232,7 +1232,7 @@ static bool selectItemCommands(char *command, char *which, bool selecting) {
 
             // As a safety measure, set the player's inven weight
             // to 0, when the last object is dropped.
-            if (inventory_count == 0 && equip_ctr == 0) {
+            if (inventory_count == 0 && equipment_count == 0) {
                 inventory_weight = 0;
             }
         }
@@ -1278,7 +1278,7 @@ static void inventoryDisplayAppropriateHeader() {
             prt("You could wield -", 0, 0);
         }
     } else if (scr_state == EQUIP_SCR) {
-        if (equip_ctr == 0) {
+        if (equipment_count == 0) {
             prt("You are not using anything.", 0, 0);
         } else {
             prt("You are using -", 0, 0);
@@ -1389,13 +1389,13 @@ int get_item(int *com_val, const char *pmt, int i, int j, char *mask, const char
 
         if (inventory_count == 0) {
             screenID = 0;
-            j = equip_ctr - 1;
+            j = equipment_count - 1;
         } else {
             j = inventory_count - 1;
         }
     }
 
-    if (inventory_count < 1 && (!full || equip_ctr < 1)) {
+    if (inventory_count < 1 && (!full || equipment_count < 1)) {
         prt("You are not carrying anything.", 0, 0);
         return false;
     }
@@ -1457,7 +1457,7 @@ int get_item(int *com_val, const char *pmt, int i, int j, char *mask, const char
                 case '/':
                     if (full) {
                         if (screenID > 0) {
-                            if (equip_ctr == 0) {
+                            if (equipment_count == 0) {
                                 prt("But you're not using anything -more-", 0, 0);
                                 (void) inkey();
                             } else {
@@ -1465,14 +1465,14 @@ int get_item(int *com_val, const char *pmt, int i, int j, char *mask, const char
                                 commandFinished = true;
 
                                 if (redrawScreen) {
-                                    j = equip_ctr;
+                                    j = equipment_count;
 
                                     while (j < inventory_count) {
                                         j++;
                                         erase_line(j, 0);
                                     }
                                 }
-                                j = equip_ctr - 1;
+                                j = equipment_count - 1;
                             }
 
                             prt(out_val, 0, 0);
@@ -1487,7 +1487,7 @@ int get_item(int *com_val, const char *pmt, int i, int j, char *mask, const char
                                 if (redrawScreen) {
                                     j = inventory_count;
 
-                                    while (j < equip_ctr) {
+                                    while (j < equipment_count) {
                                         j++;
                                         erase_line(j, 0);
                                     }

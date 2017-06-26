@@ -240,7 +240,7 @@ static bool sv_write() {
         wr_item(&inventory[i]);
     }
     wr_short((uint16_t) inventory_weight);
-    wr_short((uint16_t) equip_ctr);
+    wr_short((uint16_t) equipment_count);
     wr_long(spells_learnt);
     wr_long(spells_worked);
     wr_long(spells_forgotten);
@@ -702,7 +702,7 @@ bool get_char(bool *generate) {
                 rd_item(&inventory[i]);
             }
             rd_short((uint16_t *) &inventory_weight);
-            rd_short((uint16_t *) &equip_ctr);
+            rd_short((uint16_t *) &equipment_count);
             rd_long(&spells_learnt);
             rd_long(&spells_worked);
             rd_long(&spells_forgotten);

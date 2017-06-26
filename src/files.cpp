@@ -280,7 +280,7 @@ static const char *equipmentPlacementDescription(int itemID) {
 static void writeEquipmentListToFile(FILE *file1) {
     (void) fprintf(file1, "\n  [Character's Equipment List]\n\n");
 
-    if (equip_ctr == 0) {
+    if (equipment_count == 0) {
         (void) fprintf(file1, "  Character has no equipment in use.\n");
         return;
     }
