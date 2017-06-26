@@ -849,32 +849,32 @@ static void compact_objects() {
 
 // Gives pointer to next free space -RAK-
 int popt() {
-    if (tcptr == MAX_TALLOC) {
+    if (current_treasure_id == MAX_TALLOC) {
         compact_objects();
     }
 
-    return tcptr++;
+    return current_treasure_id++;
 }
 
 // Pushs a record back onto free space list -RAK-
 // Delete_object() should always be called instead, unless the object
 // in question is not in the dungeon, e.g. in store1.c and files.c
 void pusht(uint8_t treasureID) {
-    if (treasureID != tcptr - 1) {
-        treasure_list[treasureID] = treasure_list[tcptr - 1];
+    if (treasureID != current_treasure_id - 1) {
+        treasure_list[treasureID] = treasure_list[current_treasure_id - 1];
 
         // must change the tptr in the cave of the object just moved
         for (int y = 0; y < dungeon_height; y++) {
             for (int x = 0; x < dungeon_width; x++) {
-                if (cave[y][x].tptr == tcptr - 1) {
+                if (cave[y][x].tptr == current_treasure_id - 1) {
                     cave[y][x].tptr = treasureID;
                 }
             }
         }
     }
-    tcptr--;
+    current_treasure_id--;
 
-    invcopy(&treasure_list[tcptr], OBJ_NOTHING);
+    invcopy(&treasure_list[current_treasure_id], OBJ_NOTHING);
 }
 
 // Should the object be enchanted -RAK-

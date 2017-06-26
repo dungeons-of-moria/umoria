@@ -362,8 +362,8 @@ static bool sv_write() {
     wr_byte((uint8_t) count);
     wr_byte(prev_char);
 
-    wr_short((uint16_t) tcptr);
-    for (int i = MIN_TRIX; i < tcptr; i++) {
+    wr_short((uint16_t) current_treasure_id);
+    for (int i = MIN_TRIX; i < current_treasure_id; i++) {
         wr_item(&treasure_list[i]);
     }
     wr_short((uint16_t) mfptr);
@@ -866,11 +866,11 @@ bool get_char(bool *generate) {
             total_count += count;
         }
 
-        rd_short((uint16_t *) &tcptr);
-        if (tcptr > MAX_TALLOC) {
+        rd_short((uint16_t *) &current_treasure_id);
+        if (current_treasure_id > MAX_TALLOC) {
             goto error;
         }
-        for (int i = MIN_TRIX; i < tcptr; i++) {
+        for (int i = MIN_TRIX; i < current_treasure_id; i++) {
             rd_item(&treasure_list[i]);
         }
         rd_short((uint16_t *) &mfptr);

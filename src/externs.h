@@ -119,10 +119,11 @@ extern Inventory_t treasure_list[MAX_TALLOC];
 extern Inventory_t inventory[INVEN_ARRAY_SIZE];
 extern char *special_item_names[SN_ARRAY_SIZE];
 extern int16_t sorted_objects[MAX_DUNGEON_OBJ];
-extern int16_t inventory_count;   // Total different objects
-extern int16_t inventory_weight;  // Current carried weight
-extern int16_t equipment_count;   // Current equipment count
-extern int16_t tcptr;             // Current treasure heap ptr
+
+extern int16_t inventory_count;
+extern int16_t inventory_weight;
+extern int16_t equipment_count;
+extern int16_t current_treasure_id;
 
 // Following are creature arrays and variables
 extern Creature_t creatures_list[MAX_CREATURES];

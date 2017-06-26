@@ -1117,7 +1117,7 @@ static void tlink() {
     for (int i = 0; i < MAX_TALLOC; i++) {
         invcopy(&treasure_list[i], OBJ_NOTHING);
     }
-    tcptr = MIN_TRIX;
+    current_treasure_id = MIN_TRIX;
 }
 
 // Link all free space in monster list together
