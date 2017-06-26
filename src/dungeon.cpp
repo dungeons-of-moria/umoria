@@ -2159,7 +2159,7 @@ static void jamdoor() {
 
             if (inventory[i].number > 1) {
                 inventory[i].number--;
-                inven_weight -= inventory[i].weight;
+                inventory_weight -= inventory[i].weight;
             } else {
                 inven_destroy(i);
             }

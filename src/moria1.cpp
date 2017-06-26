@@ -496,7 +496,7 @@ void takeoff(int item_val, int posn) {
 
     Inventory_t *t_ptr = &inventory[item_val];
 
-    inven_weight -= t_ptr->weight * t_ptr->number;
+    inventory_weight -= t_ptr->weight * t_ptr->number;
     equip_ctr--;
 
     const char *p;
@@ -1066,7 +1066,7 @@ static bool selectItemCommands(char *command, char *which, bool selecting) {
                     // As a safety measure, set the player's inven
                     // weight to 0, when the last object is dropped.
                     if (inventory_count == 0 && equip_ctr == 0) {
-                        inven_weight = 0;
+                        inventory_weight = 0;
                     }
                 } else {
                     slot = inven_carry(&inventory[item]);
@@ -1121,7 +1121,7 @@ static bool selectItemCommands(char *command, char *which, bool selecting) {
                     wear_high++;
                 }
 
-                inven_weight += i_ptr->weight * i_ptr->number;
+                inventory_weight += i_ptr->weight * i_ptr->number;
 
                 // Subtracts weight
                 inven_destroy(item);
@@ -1233,7 +1233,7 @@ static bool selectItemCommands(char *command, char *which, bool selecting) {
             // As a safety measure, set the player's inven weight
             // to 0, when the last object is dropped.
             if (inventory_count == 0 && equip_ctr == 0) {
-                inven_weight = 0;
+                inventory_weight = 0;
             }
         }
 
@@ -1249,8 +1249,8 @@ static bool selectItemCommands(char *command, char *which, bool selecting) {
 static void inventoryDisplayAppropriateHeader() {
     if (scr_state == INVEN_SCR) {
         obj_desc_t msg;
-        int weightQuotient = inven_weight / 10;
-        int weightRemainder = inven_weight % 10;
+        int weightQuotient = inventory_weight / 10;
+        int weightRemainder = inventory_weight % 10;
 
         if (!show_inventory_weights || inventory_count == 0) {
             (void) sprintf(msg, "You are carrying %d.%d pounds. In your pack there is %s",

@@ -556,6 +556,6 @@ Inventory_t inventory[INVEN_ARRAY_SIZE];
 
 // Treasure related values
 int16_t inventory_count = 0;    // Total different obj's
-int16_t inven_weight = 0; // Cur carried weight
+int16_t inventory_weight = 0; // Cur carried weight
 int16_t equip_ctr = 0;    // Cur equipment ctr
 int16_t tcptr;            // Cur treasure heap ptr

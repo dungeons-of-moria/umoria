@@ -718,7 +718,7 @@ static void inven_throw(int itemID, Inventory_t *treasure) {
     if (i_ptr->number > 1) {
         treasure->number = 1;
         i_ptr->number--;
-        inven_weight -= i_ptr->weight;
+        inventory_weight -= i_ptr->weight;
         py.flags.status |= PY_STR_WGT;
     } else {
         inven_destroy(itemID);

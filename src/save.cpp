@@ -239,7 +239,7 @@ static bool sv_write() {
     for (int i = INVEN_WIELD; i < INVEN_ARRAY_SIZE; i++) {
         wr_item(&inventory[i]);
     }
-    wr_short((uint16_t) inven_weight);
+    wr_short((uint16_t) inventory_weight);
     wr_short((uint16_t) equip_ctr);
     wr_long(spells_learnt);
     wr_long(spells_worked);
@@ -701,7 +701,7 @@ bool get_char(bool *generate) {
             for (int i = INVEN_WIELD; i < INVEN_ARRAY_SIZE; i++) {
                 rd_item(&inventory[i]);
             }
-            rd_short((uint16_t *) &inven_weight);
+            rd_short((uint16_t *) &inventory_weight);
             rd_short((uint16_t *) &equip_ctr);
             rd_long(&spells_learnt);
             rd_long(&spells_worked);

@@ -869,7 +869,7 @@ void py_attack(int y, int x) {
         // Use missiles up
         if (item->tval >= TV_SLING_AMMO && item->tval <= TV_SPIKE) {
             item->number--;
-            inven_weight -= item->weight;
+            inventory_weight -= item->weight;
             py.flags.status |= PY_STR_WGT;
 
             if (item->number == 0) {

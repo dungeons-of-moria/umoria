@@ -1109,9 +1109,9 @@ void inven_destroy(int item_val) {
 
     if (i_ptr->number > 1 && i_ptr->subval <= ITEM_SINGLE_STACK_MAX) {
         i_ptr->number--;
-        inven_weight -= i_ptr->weight;
+        inventory_weight -= i_ptr->weight;
     } else {
-        inven_weight -= i_ptr->weight * i_ptr->number;
+        inventory_weight -= i_ptr->weight * i_ptr->number;
 
         for (int i = item_val; i < inventory_count - 1; i++) {
             inventory[i] = inventory[i + 1];
@@ -1151,7 +1151,7 @@ void inven_drop(int item_val, int drop_all) {
         takeoff(item_val, -1);
     } else {
         if (drop_all || i_ptr->number == 1) {
-            inven_weight -= i_ptr->weight * i_ptr->number;
+            inventory_weight -= i_ptr->weight * i_ptr->number;
             inventory_count--;
 
             while (item_val < inventory_count) {
@@ -1162,7 +1162,7 @@ void inven_drop(int item_val, int drop_all) {
             invcopy(&inventory[inventory_count], OBJ_NOTHING);
         } else {
             treasure_list[treasureID].number = 1;
-            inven_weight -= i_ptr->weight;
+            inventory_weight -= i_ptr->weight;
             i_ptr->number--;
         }
 
@@ -1234,7 +1234,7 @@ bool inven_check_num(Inventory_t *t_ptr) {
 // return false if picking up an object would change the players speed
 bool inven_check_weight(Inventory_t *i_ptr) {
     int limit = weight_limit();
-    int newWeight = i_ptr->number * i_ptr->weight + inven_weight;
+    int newWeight = i_ptr->number * i_ptr->weight + inventory_weight;
 
     if (limit < newWeight) {
         limit = newWeight / (limit + 1);
@@ -1265,8 +1265,8 @@ void check_strength() {
 
     int limit = weight_limit();
 
-    if (limit < inven_weight) {
-        limit = inven_weight / (limit + 1);
+    if (limit < inventory_weight) {
+        limit = inventory_weight / (limit + 1);
     } else {
         limit = 0;
     }
@@ -1322,7 +1322,7 @@ int inven_carry(Inventory_t *i_ptr) {
         }
     }
 
-    inven_weight += i_ptr->number * i_ptr->weight;
+    inventory_weight += i_ptr->number * i_ptr->weight;
     py.flags.status |= PY_STR_WGT;
 
     return locn;
