@@ -515,7 +515,7 @@ bool compact_monsters() {
 
     bool delete_any = false;
     while (!delete_any) {
-        for (int i = mfptr - 1; i >= MIN_MONIX; i--) {
+        for (int i = next_free_monster_id - 1; i >= MIN_MONIX; i--) {
             if (cur_dis < monsters_list[i].cdis && randint(3) == 1) {
                 if (creatures_list[monsters_list[i].mptr].cmove & CM_WIN) {
                     // Never compact away the Balrog!!
@@ -525,7 +525,7 @@ bool compact_monsters() {
                     delete_monster(i);
                     delete_any = true;
                 } else {
-                    // fix1_delete_monster() does not decrement mfptr,
+                    // fix1_delete_monster() does not decrement next_free_monster_id,
                     // so don't set delete_any if this was called.
                     fix1_delete_monster(i);
                 }
@@ -579,12 +579,12 @@ void add_food(int num) {
 // Returns a pointer to next free space -RAK-
 // Returns -1 if could not allocate a monster.
 int popm() {
-    if (mfptr == MAX_MALLOC) {
+    if (next_free_monster_id == MAX_MALLOC) {
         if (!compact_monsters()) {
             return -1;
         }
     }
-    return mfptr++;
+    return next_free_monster_id++;
 }
 
 // Gives Max hit points -RAK-

@@ -1125,7 +1125,7 @@ static void mlink() {
     for (int i = 0; i < MAX_MALLOC; i++) {
         monsters_list[i] = blank_monster;
     }
-    mfptr = MIN_MONIX;
+    next_free_monster_id = MIN_MONIX;
 }
 
 static void placeTownStores() {

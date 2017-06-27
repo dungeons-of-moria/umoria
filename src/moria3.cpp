@@ -463,7 +463,7 @@ void delete_monster(int id) {
         lite_spot((int) monster->fy, (int) monster->fx);
     }
 
-    int lastID = mfptr - 1;
+    int lastID = next_free_monster_id - 1;
 
     if (id != lastID) {
         monster = &monsters_list[lastID];
@@ -471,8 +471,8 @@ void delete_monster(int id) {
         monsters_list[id] = monsters_list[lastID];
     }
 
-    mfptr--;
-    monsters_list[mfptr] = blank_monster;
+    next_free_monster_id--;
+    monsters_list[next_free_monster_id] = blank_monster;
 
     if (mon_tot_mult > 0) {
         mon_tot_mult--;
@@ -486,7 +486,7 @@ void delete_monster(int id) {
 // Hence the delete is done in two steps.
 //
 // fix1_delete_monster does everything delete_monster does except delete
-// the monster record and reduce mfptr, this is called in breathe, and
+// the monster record and reduce next_free_monster_id, this is called in breathe, and
 // a couple of places in creatures.c
 void fix1_delete_monster(int id) {
     Monster_t *monster = &monsters_list[id];
@@ -510,7 +510,7 @@ void fix1_delete_monster(int id) {
 // fix2_delete_monster does everything in delete_monster that wasn't done
 // by fix1_monster_delete above, this is only called in creatures()
 void fix2_delete_monster(int id) {
-    int lastID = mfptr - 1;
+    int lastID = next_free_monster_id - 1;
 
     if (id != lastID) {
         int y = monsters_list[lastID].fy;
@@ -521,7 +521,7 @@ void fix2_delete_monster(int id) {
     }
 
     monsters_list[lastID] = blank_monster;
-    mfptr--;
+    next_free_monster_id--;
 }
 
 // Creates objects nearby the coordinates given -RAK-

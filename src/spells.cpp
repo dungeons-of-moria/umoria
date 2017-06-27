@@ -176,7 +176,7 @@ bool detect_sdoor() {
 bool detect_invisible() {
     bool detected = false;
 
-    for (int id = mfptr - 1; id >= MIN_MONIX; id--) {
+    for (int id = next_free_monster_id - 1; id >= MIN_MONIX; id--) {
         Monster_t *m_ptr = &monsters_list[id];
 
         if (panel_contains((int) m_ptr->fy, (int) m_ptr->fx) && (CM_INVISIBLE & creatures_list[m_ptr->mptr].cmove)) {
@@ -335,7 +335,7 @@ bool ident_spell() {
 bool aggravate_monster(int dis_affect) {
     bool aggravated = false;
 
-    for (int id = mfptr - 1; id >= MIN_MONIX; id--) {
+    for (int id = next_free_monster_id - 1; id >= MIN_MONIX; id--) {
         Monster_t *m_ptr = &monsters_list[id];
         m_ptr->csleep = 0;
         if (m_ptr->cdis <= dis_affect && m_ptr->cspeed < 2) {
@@ -457,7 +457,7 @@ bool td_destroy() {
 bool detect_monsters() {
     bool detected = false;
 
-    for (int id = mfptr - 1; id >= MIN_MONIX; id--) {
+    for (int id = next_free_monster_id - 1; id >= MIN_MONIX; id--) {
         Monster_t *m_ptr = &monsters_list[id];
 
         if (panel_contains((int) m_ptr->fy, (int) m_ptr->fx) && (CM_INVISIBLE & creatures_list[m_ptr->mptr].cmove) == 0) {
@@ -1602,7 +1602,7 @@ bool teleport_monster(int dir, int y, int x) {
 bool mass_genocide() {
     bool killed = false;
 
-    for (int id = mfptr - 1; id >= MIN_MONIX; id--) {
+    for (int id = next_free_monster_id - 1; id >= MIN_MONIX; id--) {
         Monster_t *m_ptr = &monsters_list[id];
         Creature_t *r_ptr = &creatures_list[m_ptr->mptr];
 
@@ -1627,7 +1627,7 @@ bool genocide() {
 
     bool killed = false;
 
-    for (int id = mfptr - 1; id >= MIN_MONIX; id--) {
+    for (int id = next_free_monster_id - 1; id >= MIN_MONIX; id--) {
         Monster_t *m_ptr = &monsters_list[id];
         Creature_t *r_ptr = &creatures_list[m_ptr->mptr];
 
@@ -1655,7 +1655,7 @@ bool genocide() {
 bool speed_monsters(int spd) {
     bool speedy = false;
 
-    for (int id = mfptr - 1; id >= MIN_MONIX; id--) {
+    for (int id = next_free_monster_id - 1; id >= MIN_MONIX; id--) {
         Monster_t *m_ptr = &monsters_list[id];
         Creature_t *r_ptr = &creatures_list[m_ptr->mptr];
 
@@ -1695,7 +1695,7 @@ bool speed_monsters(int spd) {
 bool sleep_monsters2() {
     bool asleep = false;
 
-    for (int id = mfptr - 1; id >= MIN_MONIX; id--) {
+    for (int id = next_free_monster_id - 1; id >= MIN_MONIX; id--) {
         Monster_t *m_ptr = &monsters_list[id];
         Creature_t *r_ptr = &creatures_list[m_ptr->mptr];
 
@@ -1730,7 +1730,7 @@ bool sleep_monsters2() {
 bool mass_poly() {
     bool morphed = false;
 
-    for (int id = mfptr - 1; id >= MIN_MONIX; id--) {
+    for (int id = next_free_monster_id - 1; id >= MIN_MONIX; id--) {
         Monster_t *m_ptr = &monsters_list[id];
 
         if (m_ptr->cdis <= MAX_SIGHT) {
@@ -1754,7 +1754,7 @@ bool mass_poly() {
 bool detect_evil() {
     bool detected = false;
 
-    for (int id = mfptr - 1; id >= MIN_MONIX; id--) {
+    for (int id = next_free_monster_id - 1; id >= MIN_MONIX; id--) {
         Monster_t *m_ptr = &monsters_list[id];
 
         if (panel_contains((int) m_ptr->fy, (int) m_ptr->fx) && (CD_EVIL & creatures_list[m_ptr->mptr].cdefense)) {
@@ -1946,7 +1946,7 @@ void create_food() {
 bool dispel_creature(int cflag, int damage) {
     bool dispelled = false;
 
-    for (int id = mfptr - 1; id >= MIN_MONIX; id--) {
+    for (int id = next_free_monster_id - 1; id >= MIN_MONIX; id--) {
         Monster_t *m_ptr = &monsters_list[id];
 
         if (m_ptr->cdis <= MAX_SIGHT && (cflag & creatures_list[m_ptr->mptr].cdefense) && los(char_row, char_col, (int) m_ptr->fy, (int) m_ptr->fx)) {
@@ -1981,7 +1981,7 @@ bool dispel_creature(int cflag, int damage) {
 bool turn_undead() {
     bool turned = false;
 
-    for (int id = mfptr - 1; id >= MIN_MONIX; id--) {
+    for (int id = next_free_monster_id - 1; id >= MIN_MONIX; id--) {
         Monster_t *m_ptr = &monsters_list[id];
         Creature_t *r_ptr = &creatures_list[m_ptr->mptr];
 

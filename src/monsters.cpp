@@ -675,5 +675,5 @@ int16_t monster_levels[MAX_MONS_LEVEL + 1];
 // Blank monster values
 Monster_t blank_monster = {0, 0, 0, 0, 0, 0, 0, false, 0, 0};
 
-int16_t mfptr;        // Current free monster ptr
+int16_t next_free_monster_id;        // Current free monster ptr
 int16_t mon_tot_mult; // # of repro's of creature

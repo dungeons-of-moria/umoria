@@ -1678,7 +1678,7 @@ static void creatureAttackingUpdate(Monster_t *m_ptr, int monsterID, int moves) 
 // Creatures movement and attacking are done from here -RAK-
 void creatures(bool attack) {
     // Process the monsters
-    for (int id = mfptr - 1; id >= MIN_MONIX && !character_is_dead; id--) {
+    for (int id = next_free_monster_id - 1; id >= MIN_MONIX && !character_is_dead; id--) {
         Monster_t *m_ptr = &monsters_list[id];
 
         // Get rid of an eaten/breathed on monster.  Note: Be sure not to

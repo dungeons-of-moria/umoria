@@ -982,7 +982,7 @@ void dungeon() {
         // creature.c when monsters try to multiply.  Compact_monsters() is
         // much more likely to succeed if called from here, than if called
         // from within creatures().
-        if (MAX_MALLOC - mfptr < 10) {
+        if (MAX_MALLOC - next_free_monster_id < 10) {
             (void) compact_monsters();
         }
 

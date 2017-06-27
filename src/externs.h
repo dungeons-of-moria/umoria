@@ -131,9 +131,9 @@ extern Monster_t monsters_list[MAX_MALLOC];
 extern int16_t monster_levels[MAX_MONS_LEVEL + 1];
 extern MonsterAttack_t monster_attacks[N_MONS_ATTS];
 extern Recall_t creature_recall[MAX_CREATURES]; // Monster memories. -CJS-
-extern Monster_t blank_monster; // Blank monster values
-extern int16_t mfptr;           // Cur free monster ptr
-extern int16_t mon_tot_mult;    // # of repro's of creature
+extern Monster_t blank_monster;       // Blank monster values
+extern int16_t next_free_monster_id;  // ID for the next available monster ptr
+extern int16_t mon_tot_mult;          // # of repro's of creature
 
 // Following are arrays for descriptive pieces
 extern char *colors[MAX_COLORS];

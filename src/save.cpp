@@ -366,8 +366,8 @@ static bool sv_write() {
     for (int i = MIN_TRIX; i < current_treasure_id; i++) {
         wr_item(&treasure_list[i]);
     }
-    wr_short((uint16_t) mfptr);
-    for (int i = MIN_MONIX; i < mfptr; i++) {
+    wr_short((uint16_t) next_free_monster_id);
+    for (int i = MIN_MONIX; i < next_free_monster_id; i++) {
         wr_monster(&monsters_list[i]);
     }
 
@@ -873,11 +873,11 @@ bool get_char(bool *generate) {
         for (int i = MIN_TRIX; i < current_treasure_id; i++) {
             rd_item(&treasure_list[i]);
         }
-        rd_short((uint16_t *) &mfptr);
-        if (mfptr > MAX_MALLOC) {
+        rd_short((uint16_t *) &next_free_monster_id);
+        if (next_free_monster_id > MAX_MALLOC) {
             goto error;
         }
-        for (int i = MIN_MONIX; i < mfptr; i++) {
+        for (int i = MIN_MONIX; i < next_free_monster_id; i++) {
             rd_monster(&monsters_list[i]);
         }
 
