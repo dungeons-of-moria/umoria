@@ -150,9 +150,10 @@ extern uint16_t normal_table[NORMAL_TABLE_SIZE];
 
 extern bool temporary_light_only;
 
-// function return values
 
-// only extern functions declared here, static functions
+// Function return values
+//
+// Only extern functions declared here, static functions
 // declared inside the file that defines them.
 
 // create.c
@@ -210,7 +211,6 @@ void ident_char();
 
 // io.c
 void init_curses();
-void moriaterm();
 void put_buffer(const char *, int, int);
 void put_qio();
 void restore_term();
@@ -235,7 +235,6 @@ void save_screen();
 void restore_screen();
 void bell();
 void screen_map();
-void sleep_in_seconds(int);
 bool check_input(int);
 void user_name(char *);
 
@@ -252,9 +251,6 @@ int topen(const char *, int, int);
 // magic.c
 void cast();
 
-// main.c
-void check_file_permissions();
-
 // misc1.c
 void init_seeds(uint32_t);
 void set_seed(uint32_t);
@@ -263,7 +259,6 @@ int randint(int);
 int randnor(int, int);
 int bit_pos(uint32_t *);
 bool in_bounds(int, int);
-void panel_bounds();
 int get_panel(int, int, bool);
 bool panel_contains(int, int);
 int distance(int, int, int, int);
@@ -277,11 +272,8 @@ bool test_light(int, int);
 void prt_map();
 bool compact_monsters();
 void add_food(int);
-int popm();
-int max_hp(uint8_t *);
 bool place_monster(int, int, int, bool);
 void place_win_monster();
-int get_mons_num(int);
 void alloc_monster(int, int, bool);
 bool summon_monster(int *y, int *x, bool slp);
 bool summon_undead(int *, int *);
@@ -304,7 +296,6 @@ void alloc_object(bool (*)(int), int, int);
 void random_object(int, int, int);
 void cnv_stat(uint8_t, char *);
 void prt_stat(int);
-void prt_field(const char *, int, int);
 int stat_adj(int);
 int chr_adj();
 int con_adj();
@@ -326,7 +317,6 @@ void prt_state();
 void prt_speed();
 void prt_study();
 void prt_winner();
-uint8_t modify_stat(int, int16_t);
 void set_use_stat(int);
 bool inc_stat(int);
 bool dec_stat(int);
@@ -356,7 +346,6 @@ bool inven_check_num(Inventory_t *);
 bool inven_check_weight(Inventory_t *);
 void check_strength();
 int inven_carry(Inventory_t *);
-int spell_chance(int);
 void print_spells(int *, int, int, int);
 int get_spell(int *, int, int *, int *, const char *, int);
 void calc_spells(int);
@@ -389,7 +378,6 @@ int show_inven(int, int, bool, int, char *);
 const char *describe_use(int);
 int show_equip(bool, int);
 void takeoff(int, int);
-int verify(const char *, int);
 void inven_command(char);
 int get_item(int *, const char *, int, int, char *, const char *);
 bool no_light();
@@ -414,7 +402,6 @@ void find_init(int);
 void find_run();
 void end_find();
 void area_affect(int, int, int);
-int minus_ac(uint32_t);
 void corrode_gas(const char *);
 void poison_gas(int, const char *);
 void fire_dam(int, const char *);
@@ -430,7 +417,6 @@ void fix2_delete_monster(int);
 int delete_object(int, int);
 uint32_t monster_death(int, int, uint32_t);
 int mon_take_hit(int, int);
-void py_attack(int, int);
 void move_char(int, bool);
 void chest_trap(int, int);
 void openobject();
@@ -464,7 +450,6 @@ int32_t rnd();
 
 // save.c
 bool save_char();
-bool _save_char(char *);
 bool get_char(bool *);
 void set_fileptr(FILE *);
 void wr_highscore(HighScore_t *);

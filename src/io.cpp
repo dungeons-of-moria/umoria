@@ -17,6 +17,9 @@ static bool curses_on = false;
 // Spare window for saving the screen. -CJS-
 static WINDOW *savescr;
 
+static void moriaterm();
+static void sleep_in_seconds(int);
+
 // initializes curses routines
 void init_curses() {
     initscr();
@@ -40,7 +43,7 @@ void init_curses() {
 }
 
 // Set up the terminal into a suitable state -MRC-
-void moriaterm() {
+static void moriaterm() {
     raw();                 // <curses.h> disable control characters. I.e. Ctrl-C does not work!
     // cbreak();           // <curses.h> use raw() instead as it disables Ctrl chars
     noecho();              // <curses.h> do not echo typed characters
@@ -565,7 +568,7 @@ void screen_map() {
     restore_screen();
 }
 
-void sleep_in_seconds(int seconds) {
+static void sleep_in_seconds(int seconds) {
 #ifdef _WIN32
     Sleep(seconds * 1000);
 #else

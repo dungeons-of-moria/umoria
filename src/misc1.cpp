@@ -12,6 +12,11 @@
 // holds the previous rnd state
 static uint32_t old_seed;
 
+static void panel_bounds();
+static int popm();
+static int max_hp(uint8_t *);
+static int get_mons_num(int);
+
 // gets a new random seed for the random number generator
 void init_seeds(uint32_t seed) {
     uint32_t clock_var;
@@ -140,7 +145,7 @@ bool in_bounds(int y, int x) {
 }
 
 // Calculates current boundaries -RAK-
-void panel_bounds() {
+static void panel_bounds() {
     panel_row_min = panel_row * (SCREEN_HEIGHT / 2);
     panel_row_max = panel_row_min + SCREEN_HEIGHT - 1;
     panel_row_prt = panel_row_min - 1;
@@ -578,7 +583,7 @@ void add_food(int num) {
 
 // Returns a pointer to next free space -RAK-
 // Returns -1 if could not allocate a monster.
-int popm() {
+static int popm() {
     if (next_free_monster_id == MAX_MALLOC) {
         if (!compact_monsters()) {
             return -1;
@@ -588,7 +593,7 @@ int popm() {
 }
 
 // Gives Max hit points -RAK-
-int max_hp(uint8_t *array) {
+static int max_hp(uint8_t *array) {
     return (array[0] * array[1]);
 }
 
@@ -678,7 +683,7 @@ void place_win_monster() {
 // Return a monster suitable to be placed at a given level. This
 // makes high level monsters (up to the given level) slightly more
 // common than low level monsters at any given level. -CJS-
-int get_mons_num(int level) {
+static int get_mons_num(int level) {
     if (level == 0) {
         return randint(monster_levels[0]) - 1;
     }

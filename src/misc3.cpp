@@ -13,6 +13,10 @@ static const char *stat_names[] = {"STR : ", "INT : ", "WIS : ", "DEX : ", "CON 
 #define BLANK_LENGTH 24
 static char blank_string[] = "                        ";
 
+static void prt_field(const char *, int, int);
+static uint8_t modify_stat(int, int16_t);
+static int spell_chance(int);
+
 // Places a particular trap at location y, x -RAK-
 void place_trap(int y, int x, int subval) {
     int cur_pos = popt();
@@ -205,7 +209,7 @@ void prt_stat(int stat) {
 
 // Print character info in given row, column -RAK-
 // The longest title is 13 characters, so only pad to 13
-void prt_field(const char *info, int row, int column) {
+static void prt_field(const char *info, int row, int column) {
     put_buffer(&blank_string[BLANK_LENGTH - 13], row, column);
     put_buffer(info, row, column);
 }
@@ -574,7 +578,7 @@ void prt_winner() {
     }
 }
 
-uint8_t modify_stat(int stat, int16_t amount) {
+static uint8_t modify_stat(int stat, int16_t amount) {
     uint8_t newStat = py.stats.cur_stat[stat];
 
     int loop = (amount < 0 ? -amount : amount);
@@ -1329,7 +1333,7 @@ int inven_carry(Inventory_t *i_ptr) {
 }
 
 // Returns spell chance of failure for spell -RAK-
-int spell_chance(int spell) {
+static int spell_chance(int spell) {
     Spell_t *s_ptr = &magic_spells[py.misc.pclass - 1][spell];
 
     int chance = s_ptr->sfail - 3 * (py.misc.lev - s_ptr->slevel);

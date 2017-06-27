@@ -16,42 +16,25 @@
 
 DEBUG(static FILE *logfile);
 
+static bool _save_char(char *);
 static bool sv_write();
-
 static void wr_bool(bool c);
-
 static void wr_byte(uint8_t);
-
 static void wr_short(uint16_t);
-
 static void wr_long(uint32_t);
-
 static void wr_bytes(uint8_t *, int);
-
 static void wr_string(char *);
-
 static void wr_shorts(uint16_t *, int);
-
 static void wr_item(Inventory_t *);
-
 static void wr_monster(Monster_t *);
-
 static bool rd_bool();
-
 static void rd_byte(uint8_t *);
-
 static void rd_short(uint16_t *);
-
 static void rd_long(uint32_t *);
-
 static void rd_bytes(uint8_t *, int);
-
 static void rd_string(char *);
-
 static void rd_shorts(uint16_t *, int);
-
 static void rd_item(Inventory_t *);
-
 static void rd_monster(Monster_t *);
 
 // these are used for the save file, to avoid having to pass them to every procedure
@@ -403,7 +386,7 @@ bool save_char() {
     return true;
 }
 
-bool _save_char(char *fnam) {
+static bool _save_char(char *fnam) {
     if (character_saved) {
         return true; // Nothing to save.
     }

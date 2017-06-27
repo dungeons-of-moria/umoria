@@ -13,6 +13,7 @@
 static void char_inven_init();
 static void init_m_level();
 static void init_t_level();
+static void check_file_permissions();
 
 #if (COST_ADJ != 100)
 static void price_adjust();
@@ -310,7 +311,7 @@ static void price_adjust() {
 
 // Check user permissions on Unix based systems,
 // or if on Windows just return. -MRC-
-void check_file_permissions() {
+static void check_file_permissions() {
 #ifndef _WIN32
     if (0 != setuid(getuid())) {
         perror("Can't set permissions correctly!  Setuid call failed.\n");

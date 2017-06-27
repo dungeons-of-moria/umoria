@@ -9,6 +9,8 @@
 #include "headers.h"
 #include "externs.h"
 
+static int minus_ac(uint32_t);
+
 // Change a trap from invisible to visible -RAK-
 // Note: Secret doors are handled here
 void change_trap(int y, int x) {
@@ -498,7 +500,7 @@ void area_affect(int dir, int y, int x) {
 // AC gets worse -RAK-
 // Note: This routine affects magical AC bonuses so
 // that stores can detect the damage.
-int minus_ac(uint32_t typ_dam) {
+static int minus_ac(uint32_t typ_dam) {
     int itemsCount = 0;
     int items[6];
 

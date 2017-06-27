@@ -9,6 +9,8 @@
 #include "headers.h"
 #include "externs.h"
 
+static void py_attack(int, int);
+
 static void trapOpenPit(Inventory_t *t_ptr, int dam) {
     msg_print("You fell into a pit!");
 
@@ -783,7 +785,7 @@ static int playerCalculateBaseToHit(bool creatureLit, int tot_tohit) {
 }
 
 // Player attacks a (poor, defenseless) creature -RAK-
-void py_attack(int y, int x) {
+static void py_attack(int y, int x) {
     int creatureID = cave[y][x].cptr;
 
     Monster_t *monster = &monsters_list[creatureID];
