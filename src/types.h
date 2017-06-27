@@ -6,127 +6,28 @@
 
 // Global type declarations
 
-// some machines will not accept 'signed char' as a type, and some accept it
-// but still treat it like an unsigned character, let's just avoid it,
-// any variable which can ever hold a negative value must be 16 or 32 bits
-
-#define MORIA_MESSAGE_SIZE 80
-#define OBJECT_DESCRIPTION_SIZE 160
-
-typedef char vtype_t[MORIA_MESSAGE_SIZE];
-
-// note that since its output can easily exceed 80 characters, objdes must
-// always be called with a obj_desc_t as the first parameter
-typedef char obj_desc_t[OBJECT_DESCRIPTION_SIZE];
-
 // Many of the character fields used to be fixed length, which greatly
-// increased the size of the executable.  I have replaced many fixed
-// length fields with variable length ones.
+// increased the size of the executable. Many fixed length fields
+// have been replaced with variable length ones.
 //
-// all fields are given the smallest possible type, and all fields are
+// All fields are given the smallest possible type, and all fields are
 // aligned within the structure to their natural size boundary, so that
 // the structures contain no padding and are minimum size.
 
-typedef struct {
-    const char *name;  // Description of creature
-    uint32_t cmove;    // Bit field
-    uint32_t spells;   // Creature spells
-    uint16_t cdefense; // Bit field
-    uint16_t mexp;     // Exp value for kill
-    uint8_t sleep;     // Inactive counter/10
-    uint8_t aaf;       // Area affect radius
-    uint8_t ac;        // AC
-    uint8_t speed;     // Movement speed+10 (NOTE: +10 so that it can be a uint8_t)
-    uint8_t cchar;     // Character rep.
-    uint8_t hd[2];     // Creatures hit die
-    uint8_t damage[4]; // Type attack and damage
-    uint8_t level;     // Level of creature
-} Creature_t;
-
-// Monster attack and damage types
-typedef struct {
-    uint8_t attack_type;
-    uint8_t attack_desc;
-    uint8_t attack_dice;
-    uint8_t attack_sides;
-} MonsterAttack_t;
-
-// Monster memories. -CJS-
-typedef struct {
-    uint32_t r_cmove;
-    uint32_t r_spells;
-    uint16_t r_kills, r_deaths;
-    uint16_t r_cdefense;
-    uint8_t r_wake, r_ignore;
-    uint8_t r_attacks[MAX_MON_NATTACK];
-} Recall_t;
-
-typedef struct {
-    int16_t hp;     // Hit points
-    int16_t csleep; // Inactive counter
-    int16_t cspeed; // Movement speed
-    uint16_t mptr;  // Pointer into creature
-
-    // Note: fy, fx, and cdis constrain dungeon size to less than 256 by 256
-    uint8_t fy;   // Y Pointer into map
-    uint8_t fx;   // X Pointer into map
-    uint8_t cdis; // Cur dis from player
-
-    bool ml;
-    uint8_t stunned;
-    uint8_t confused;
-} Monster_t;
-
-typedef struct {
-    const char *name;  // Object name
-    uint32_t flags;    // Special flags
-    uint8_t tval;      // Category number
-    uint8_t tchar;     // Character representation
-    int16_t p1;        // Misc. use variable
-    int32_t cost;      // Cost of item
-    uint8_t subval;    // Sub-category number
-    uint8_t number;    // Number of items
-    uint16_t weight;   // Weight
-    int16_t tohit;     // Plusses to hit
-    int16_t todam;     // Plusses to damage
-    int16_t ac;        // Normal AC
-    int16_t toac;      // Plusses to AC
-    uint8_t damage[2]; // Damage when hits
-    uint8_t level;     // Level item first found
-} GameObject_t;
-
-// only damage, ac, and tchar are constant; level could possibly be made
-// constant by changing index instead; all are used rarely.
-//
-// extra fields x and y for location in dungeon would simplify pusht().
-//
-// making inscrip a pointer and malloc-ing space does not work, there are
-// two many places where `Inventory_t` are copied, which results in dangling
-// pointers, so we use a char array for them instead
-#define INSCRIP_SIZE 13 // notice alignment, must be 4*x + 1
-typedef struct {
-    uint16_t index;             // Index to object_list
-    uint8_t name2;              // Object special name
-    char inscrip[INSCRIP_SIZE]; // Object inscription
-    uint32_t flags;             // Special flags
-    uint8_t tval;               // Category number
-    uint8_t tchar;              // Character representation
-    int16_t p1;                 // Misc. use variable
-    int32_t cost;               // Cost of item
-    uint8_t subval;             // Sub-category number
-    uint8_t number;             // Number of items
-    uint16_t weight;            // Weight
-    int16_t tohit;              // Plusses to hit
-    int16_t todam;              // Plusses to damage
-    int16_t ac;                 // Normal AC
-    int16_t toac;               // Plusses to AC
-    uint8_t damage[2];          // Damage when hits
-    uint8_t level;              // Level item first found
-    uint8_t ident;              // Identify information
-} Inventory_t;
-
 #define PLAYER_NAME_SIZE 27
+#define MORIA_MESSAGE_SIZE 80
+#define OBJECT_DESCRIPTION_SIZE 160
 
+// Size of an inscription in the Inventory_t. Notice alignment, must be 4*x + 1
+#define INSCRIP_SIZE 13
+
+typedef char vtype_t[MORIA_MESSAGE_SIZE];
+
+// Note: since its output can easily exceed 80 characters, an object description
+// must always be called with a obj_desc_t type as the first parameter.
+typedef char obj_desc_t[OBJECT_DESCRIPTION_SIZE];
+
+// Player_t contains everything to be known about our player character
 typedef struct {
     struct {
         char name[PLAYER_NAME_SIZE]; // Name of character
@@ -225,17 +126,7 @@ typedef struct {
     } flags;
 } Player_t;
 
-// spell name is stored in spell_names[] array at index i, +31 if priest
-typedef struct {
-    uint8_t slevel;
-    uint8_t smana;
-    uint8_t sfail;
-    uint8_t sexp; // 1/4 of exp gained for learning spell
-} Spell_t;
-
-// Character class title. E.g. Novice, Mage (5th), Paladin, etc.
-typedef const char *ClassTitle_t;
-
+// Race_t for the generated player character
 typedef struct {
     const char *trace; // Type of race
     int16_t str_adj;   // adjustments
@@ -267,6 +158,7 @@ typedef struct {
     uint8_t rtclass; // Bit field for class types
 } Race_t;
 
+// Class_t for the generated player character
 typedef struct {
     const char *title;       // type of class
     uint8_t adj_hd;          // Adjust hit points
@@ -288,6 +180,7 @@ typedef struct {
     uint8_t first_spell_lev; // First level where class can use spells.
 } Class_t;
 
+// Class Background_t for the generated player character
 typedef struct {
     const char *info; // History information
     uint8_t roll;     // Die roll needed for history
@@ -296,17 +189,69 @@ typedef struct {
     uint8_t bonus;    // Bonus to the Social Class+50
 } Background_t;
 
+
+// Inventory_t is created for an item the player may wear about
+// their person, or store in their inventory pack.
+//
+// Only damage, ac, and tchar are constant; level could possibly be made
+// constant by changing index instead; all are used rarely.
+//
+// Extra fields x and y for location in dungeon would simplify pusht().
+//
+// Making inscrip[] a pointer and malloc-ing space does not work, there are
+// two many places where `Inventory_t` are copied, which results in dangling
+// pointers, so we use a char array for them instead.
 typedef struct {
-    uint8_t cptr;
-    uint8_t tptr;
-    uint8_t fval;
+    uint16_t index;             // Index to object_list
+    uint8_t name2;              // Object special name
+    char inscrip[INSCRIP_SIZE]; // Object inscription
+    uint32_t flags;             // Special flags
+    uint8_t tval;               // Category number
+    uint8_t tchar;              // Character representation
+    int16_t p1;                 // Misc. use variable
+    int32_t cost;               // Cost of item
+    uint8_t subval;             // Sub-category number
+    uint8_t number;             // Number of items
+    uint16_t weight;            // Weight
+    int16_t tohit;              // Plusses to hit
+    int16_t todam;              // Plusses to damage
+    int16_t ac;                 // Normal AC
+    int16_t toac;               // Plusses to AC
+    uint8_t damage[2];          // Damage when hits
+    uint8_t level;              // Level item first found
+    uint8_t ident;              // Identify information
+} Inventory_t;
 
-    bool lr; // Room should be lit with perm light, walls with this set should be perm lit after tunneled out.
-    bool fm; // Field mark, used for traps/doors/stairs, object is hidden if fm is false.
-    bool pl; // Permanent light, used for walls and lighted rooms.
-    bool tl; // Temporary light, used for player's lamp light,etc.
-} Cave_t;
 
+// Recall_t holds the player's known knowledge for any given monster, aka memories
+typedef struct {
+    uint32_t r_cmove;
+    uint32_t r_spells;
+    uint16_t r_kills, r_deaths;
+    uint16_t r_cdefense;
+    uint8_t r_wake, r_ignore;
+    uint8_t r_attacks[MAX_MON_NATTACK];
+} Recall_t;
+
+// Monster_t is created for any living monster found on the current dungeon level
+typedef struct {
+    int16_t hp;     // Hit points
+    int16_t csleep; // Inactive counter
+    int16_t cspeed; // Movement speed
+    uint16_t mptr;  // Pointer into creature
+
+    // Note: fy, fx, and cdis constrain dungeon size to less than 256 by 256
+    uint8_t fy;   // Y Pointer into map
+    uint8_t fx;   // X Pointer into map
+    uint8_t cdis; // Cur dis from player
+
+    bool ml;
+    uint8_t stunned;
+    uint8_t confused;
+} Monster_t;
+
+
+// Owner_t holds data about a given store owner
 typedef struct {
     const char *owner_name;
     int16_t max_cost;
@@ -317,11 +262,13 @@ typedef struct {
     uint8_t insult_max;
 } Owner_t;
 
+// InventoryRecord_t data for a store inventory item
 typedef struct {
     int32_t scost;
     Inventory_t sitem;
 } InventoryRecord_t;
 
+// Store_t holds all the data for any given store in the game
 typedef struct {
     int32_t store_open;
     int16_t insult_cur;
@@ -332,7 +279,8 @@ typedef struct {
     InventoryRecord_t store_inven[STORE_INVEN_MAX];
 } Store_t;
 
-// 64 bytes for this structure
+// HighScore_t is a score object used for saving to the high score file
+// This structure is 64 bytes in size
 typedef struct {
     int32_t points;
     int32_t birth_date;
@@ -348,3 +296,86 @@ typedef struct {
     char name[PLAYER_NAME_SIZE];
     char died_from[25];
 } HighScore_t;
+
+
+// Cave_t holds data about a specific tile in the dungeon.
+typedef struct {
+    uint8_t cptr;
+    uint8_t tptr;
+    uint8_t fval;
+
+    bool lr; // Room should be lit with perm light, walls with this set should be perm lit after tunneled out.
+    bool fm; // Field mark, used for traps/doors/stairs, object is hidden if fm is false.
+    bool pl; // Permanent light, used for walls and lighted rooms.
+    bool tl; // Temporary light, used for player's lamp light,etc.
+} Cave_t;
+
+
+//
+// The following are objects for storing the core game data,
+// which is loaded from the large hash maps at game start up.
+//
+
+
+// GameObject_t is a base data object.
+// Holds base game data for any given item in the game such
+// as: stairs, rubble, secret doors, gold, potions, etc.
+typedef struct {
+    const char *name;  // Object name
+    uint32_t flags;    // Special flags
+    uint8_t tval;      // Category number
+    uint8_t tchar;     // Character representation
+    int16_t p1;        // Misc. use variable
+    int32_t cost;      // Cost of item
+    uint8_t subval;    // Sub-category number
+    uint8_t number;    // Number of items
+    uint16_t weight;   // Weight
+    int16_t tohit;     // Plusses to hit
+    int16_t todam;     // Plusses to damage
+    int16_t ac;        // Normal AC
+    int16_t toac;      // Plusses to AC
+    uint8_t damage[2]; // Damage when hits
+    uint8_t level;     // Level item first found
+} GameObject_t;
+
+// Creature_t is a base data object.
+// Holds the base game data for any given creature in the game such
+// as: Kobold, Orc, Giant Red Ant, Quasit, Young Black Dragon, etc.
+typedef struct {
+    const char *name;  // Description of creature
+    uint32_t cmove;    // Bit field
+    uint32_t spells;   // Creature spells
+    uint16_t cdefense; // Bit field
+    uint16_t mexp;     // Exp value for kill
+    uint8_t sleep;     // Inactive counter/10
+    uint8_t aaf;       // Area affect radius
+    uint8_t ac;        // AC
+    uint8_t speed;     // Movement speed+10 (NOTE: +10 so that it can be a uint8_t)
+    uint8_t cchar;     // Character rep.
+    uint8_t hd[2];     // Creatures hit die
+    uint8_t damage[4]; // Type attack and damage
+    uint8_t level;     // Level of creature
+} Creature_t;
+
+// MonsterAttack_t is a base data object.
+// Holds the data for a monster's attack and damage type
+typedef struct {
+    uint8_t attack_type;
+    uint8_t attack_desc;
+    uint8_t attack_dice;
+    uint8_t attack_sides;
+} MonsterAttack_t;
+
+// ClassTitle_t is a base game object
+// Holds the base game data for all character Class titles: Novice, Mage (5th), Paladin, etc.
+typedef const char *ClassTitle_t;
+
+// Spell_t is a base data object.
+// Holds the base game data for a spell
+// Note: the names for the spells are stored in spell_names[] array at index i, +31 if priest
+typedef struct {
+    uint8_t slevel;
+    uint8_t smana;
+    uint8_t sfail;
+    uint8_t sexp; // 1/4 of exp gained for learning spell
+} Spell_t;
