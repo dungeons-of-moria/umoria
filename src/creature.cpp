@@ -1369,7 +1369,7 @@ bool multiply_monster(int y, int x, int creatureID, int monsterID) {
                             return false;
                         }
 
-                        mon_tot_mult++;
+                        monster_multiply_total++;
                         return check_mon_lite(row, col);
                     }
                 } else {
@@ -1385,7 +1385,7 @@ bool multiply_monster(int y, int x, int creatureID, int monsterID) {
                         return false;
                     }
 
-                    mon_tot_mult++;
+                    monster_multiply_total++;
                     return check_mon_lite(row, col);
                 }
             }
@@ -1508,7 +1508,7 @@ static void mon_move(int monsterID, uint32_t *rcmove) {
     // Does the critter multiply?
     // rest could be negative, to be safe, only use mod with positive values.
     int restPeriod = abs(py.flags.rest);
-    if ((r_ptr->cmove & CM_MULTIPLY) && MAX_MON_MULT >= mon_tot_mult && (restPeriod % MON_MULT_ADJ) == 0) {
+    if ((r_ptr->cmove & CM_MULTIPLY) && MAX_MON_MULT >= monster_multiply_total && (restPeriod % MON_MULT_ADJ) == 0) {
         multiplyCritter(m_ptr, monsterID, rcmove);
     }
 

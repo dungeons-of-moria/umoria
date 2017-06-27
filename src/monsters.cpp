@@ -672,8 +672,8 @@ MonsterAttack_t monster_attacks[N_MONS_ATTS] = {
 Monster_t monsters_list[MAX_MALLOC];
 int16_t monster_levels[MAX_MONS_LEVEL + 1];
 
-// Blank monster values
+// Values for a blank monster
 Monster_t blank_monster = {0, 0, 0, 0, 0, 0, 0, false, 0, 0};
 
-int16_t next_free_monster_id;        // Current free monster ptr
-int16_t mon_tot_mult; // # of repro's of creature
+int16_t next_free_monster_id;    // ID for the next available monster ptr
+int16_t monster_multiply_total;  // Total number of reproduction's of creatures

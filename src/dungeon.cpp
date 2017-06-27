@@ -33,7 +33,7 @@ static void resetDungeonFlags() {
     generate_new_level = false;
     running_counter = 0;
     teleport_player = false;
-    mon_tot_mult = 0;
+    monster_multiply_total = 0;
     cave[char_row][char_col].cptr = 1;
 }
 

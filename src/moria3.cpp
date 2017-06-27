@@ -474,8 +474,8 @@ void delete_monster(int id) {
     next_free_monster_id--;
     monsters_list[next_free_monster_id] = blank_monster;
 
-    if (mon_tot_mult > 0) {
-        mon_tot_mult--;
+    if (monster_multiply_total > 0) {
+        monster_multiply_total--;
     }
 }
 
@@ -502,8 +502,8 @@ void fix1_delete_monster(int id) {
         lite_spot((int) monster->fy, (int) monster->fx);
     }
 
-    if (mon_tot_mult > 0) {
-        mon_tot_mult--;
+    if (monster_multiply_total > 0) {
+        monster_multiply_total--;
     }
 }
 
