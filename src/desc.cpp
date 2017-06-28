@@ -9,7 +9,7 @@
 #include "headers.h"
 #include "externs.h"
 
-static void unsample(Inventory_t *);
+static void unsample(Inventory_t *i_ptr);
 
 char magic_item_titles[MAX_TITLES][10];
 

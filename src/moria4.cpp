@@ -9,8 +9,8 @@
 #include "headers.h"
 #include "externs.h"
 
-static bool look_ray(int, int, int);
-static bool look_see(int, int, bool *);
+static bool look_ray(int y, int from, int to);
+static bool look_see(int x, int y, bool *transparent);
 
 // Don't let the player tunnel somewhere illegal, this is necessary to
 // prevent the player from getting a free attack by trying to tunnel

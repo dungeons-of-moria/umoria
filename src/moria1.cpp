@@ -9,7 +9,7 @@
 #include "headers.h"
 #include "externs.h"
 
-static int verify(const char *, int);
+static int verify(const char *prompt, int item);
 
 // Changes speed of monsters relative to player -RAK-
 // Note: When the player is sped up or slowed down, I simply change

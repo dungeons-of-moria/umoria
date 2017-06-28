@@ -9,7 +9,6 @@
 #include "headers.h"
 #include "externs.h"
 
-
 static bool isCarryingStaff(int *j, int *k) {
     if (inventory_count == 0) {
         msg_print("But you are not carrying anything.");

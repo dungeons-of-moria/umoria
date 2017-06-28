@@ -13,9 +13,9 @@ static const char *stat_names[] = {"STR : ", "INT : ", "WIS : ", "DEX : ", "CON 
 #define BLANK_LENGTH 24
 static char blank_string[] = "                        ";
 
-static void prt_field(const char *, int, int);
-static uint8_t modify_stat(int, int16_t);
-static int spell_chance(int);
+static void prt_field(const char *info, int row, int column);
+static uint8_t modify_stat(int stat, int16_t amount);
+static int spell_chance(int spell);
 
 // Places a particular trap at location y, x -RAK-
 void place_trap(int y, int x, int subval) {

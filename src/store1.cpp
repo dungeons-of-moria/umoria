@@ -9,8 +9,7 @@
 #include "headers.h"
 #include "externs.h"
 
-static void insert_store(int, int, int32_t, Inventory_t *);
-
+static void insert_store(int store_num, int pos, int32_t icost, Inventory_t *i_ptr);
 static void store_create(int store_num, int16_t max_cost);
 
 static int32_t getWeaponArmorBuyPrice(Inventory_t *i_ptr);

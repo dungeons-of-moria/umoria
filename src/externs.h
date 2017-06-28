@@ -160,9 +160,9 @@ extern bool temporary_light_only;
 void create_character();
 
 // creature.c
-void update_mon(int);
-bool multiply_monster(int, int, int, int);
-void creatures(bool);
+void update_mon(int monsterID);
+bool multiply_monster(int y, int x, int creatureID, int monsterID);
+void creatures(bool attack);
 
 // death.c
 void display_scores();
@@ -171,24 +171,24 @@ int32_t total_points();
 void exit_game();
 
 // desc.c
-bool is_a_vowel(char);
+bool is_a_vowel(char ch);
 void magic_init();
-int16_t object_offset(Inventory_t *);
-void known1(Inventory_t *);
+int16_t object_offset(Inventory_t *t_ptr);
+void known1(Inventory_t *i_ptr);
 bool known1_p(Inventory_t *);
-void known2(Inventory_t *);
-bool known2_p(Inventory_t *);
-void clear_known2(Inventory_t *);
-void clear_empty(Inventory_t *);
-void store_bought(Inventory_t *);
-bool store_bought_p(Inventory_t *);
-void sample(Inventory_t *);
-void identify(int *);
-void unmagic_name(Inventory_t *);
+void known2(Inventory_t *i_ptr);
+bool known2_p(Inventory_t *i_ptr);
+void clear_known2(Inventory_t *i_ptr);
+void clear_empty(Inventory_t *i_ptr);
+void store_bought(Inventory_t *i_ptr);
+bool store_bought_p(Inventory_t *i_ptr);
+void sample(Inventory_t *i_ptr);
+void identify(int *item);
+void unmagic_name(Inventory_t *i_ptr);
 void objdes(obj_desc_t out_val, Inventory_t *i_ptr, bool pref);
-void invcopy(Inventory_t *, int);
-void desc_charges(int);
-void desc_remain(int);
+void invcopy(Inventory_t *to, int from_index);
+void desc_charges(int item_val);
+void desc_remain(int item_val);
 
 // dungeon.c
 void dungeon();
@@ -199,9 +199,9 @@ void eat();
 // files.c
 void init_scorefile();
 void read_times();
-void helpfile(const char *);
+void helpfile(const char *filename);
 void print_objects();
-bool file_character(char *);
+bool file_character(char *filename);
 
 // generate.c
 void generate_cave();
@@ -211,92 +211,92 @@ void ident_char();
 
 // io.c
 void init_curses();
-void put_buffer(const char *, int, int);
+void put_buffer(const char *out_str, int row, int col);
 void put_qio();
 void restore_term();
 void shell_out();
 char inkey();
 void flush();
-void erase_line(int, int);
+void erase_line(int row, int col);
 void clear_screen();
-void clear_from(int);
-void print(char, int, int);
-void move_cursor_relative(int, int);
-void count_msg_print(const char *);
-void prt(const char *, int, int);
-void move_cursor(int, int);
-void msg_print(const char *);
-bool get_check(const char *);
-int get_com(const char *, char *);
-bool get_string(char *, int, int, int);
-void pause_line(int);
-void pause_exit(int, int);
+void clear_from(int row);
+void print(char ch, int row, int col);
+void move_cursor_relative(int row, int col);
+void count_msg_print(const char *msg);
+void prt(const char *str, int row, int col);
+void move_cursor(int row, int col);
+void msg_print(const char *msg);
+bool get_check(const char *prompt);
+int get_com(const char *prompt, char *command);
+bool get_string(char *in_str, int row, int column, int slen);
+void pause_line(int lineNumber);
+void pause_exit(int lineNumber, int delay);
 void save_screen();
 void restore_screen();
 void bell();
 void screen_map();
-bool check_input(int);
-void user_name(char *);
+bool check_input(int microsec);
+void user_name(char *buf);
 
 #ifndef _WIN32
 // call functions which expand tilde before calling open/fopen
 #define open topen
 #define fopen tfopen
 
-bool tilde(const char *, char *);
-FILE *tfopen(const char *, const char *);
-int topen(const char *, int, int);
+bool tilde(const char *file, char *expanded);
+FILE *tfopen(const char *file, const char *mode);
+int topen(const char *file, int flags, int mode);
 #endif
 
 // magic.c
 void cast();
 
 // misc1.c
-void init_seeds(uint32_t);
-void set_seed(uint32_t);
+void init_seeds(uint32_t seed);
+void set_seed(uint32_t seed);
 void reset_seed();
-int randint(int);
-int randnor(int, int);
-int bit_pos(uint32_t *);
-bool in_bounds(int, int);
-int get_panel(int, int, bool);
-bool panel_contains(int, int);
-int distance(int, int, int, int);
-int next_to_walls(int, int);
-int next_to_corr(int, int);
-int damroll(int, int);
-int pdamroll(uint8_t *);
-bool los(int, int, int, int);
-char loc_symbol(int, int);
-bool test_light(int, int);
+int randint(int maxval);
+int randnor(int mean, int stand);
+int bit_pos(uint32_t *test);
+bool in_bounds(int y, int x);
+int get_panel(int y, int x, bool force);
+bool panel_contains(int y, int x);
+int distance(int y1, int x1, int y2, int x2);
+int next_to_walls(int y, int x);
+int next_to_corr(int y, int x);
+int damroll(int num, int sides);
+int pdamroll(uint8_t *array);
+bool los(int fromY, int fromX, int toY, int toX);
+char loc_symbol(int y, int x);
+bool test_light(int y, int x);
 void prt_map();
 bool compact_monsters();
-void add_food(int);
-bool place_monster(int, int, int, bool);
+void add_food(int num);
+bool place_monster(int y, int x, int monsterID, bool slp);
 void place_win_monster();
-void alloc_monster(int, int, bool);
+void alloc_monster(int num, int dis, bool slp);
 bool summon_monster(int *y, int *x, bool slp);
-bool summon_undead(int *, int *);
+bool summon_undead(int *y, int *x);
 int popt();
-void pusht(uint8_t);
-bool magik(int);
-int m_bonus(int, int, int);
+void pusht(uint8_t treasureID);
+bool magik(int chance);
+int m_bonus(int base, int max_std, int level);
 
 // misc2.c
-void magic_treasure(int, int);
+void magic_treasure(int x, int level);
 void set_options();
 
 // misc3.c
-void place_trap(int, int, int);
-void place_rubble(int, int);
-void place_gold(int, int);
-int get_obj_num(int, bool);
-void place_object(int, int, bool);
-void alloc_object(bool (*)(int), int, int);
-void random_object(int, int, int);
-void cnv_stat(uint8_t, char *);
-void prt_stat(int);
-int stat_adj(int);
+void place_trap(int y, int x, int subval);
+void place_rubble(int y, int x);
+void place_gold(int y, int x);
+int get_obj_num(int level, bool must_be_small);
+void place_object(int y, int x, bool must_be_small);
+void alloc_object(bool (*alloc_set)(int), int typ, int num);
+void random_object(int y, int x, int num);
+void cnv_stat(uint8_t stat, char *str);
+void prt_stat(int stat);
+int stat_adj(int stat);
 int chr_adj();
 int con_adj();
 char *title_string();
@@ -317,11 +317,11 @@ void prt_state();
 void prt_speed();
 void prt_study();
 void prt_winner();
-void set_use_stat(int);
-bool inc_stat(int);
-bool dec_stat(int);
-bool res_stat(int);
-void bst_stat(int, int);
+void set_use_stat(int stat);
+bool inc_stat(int stat);
+bool dec_stat(int stat);
+bool res_stat(int stat);
+void bst_stat(int stat, int amount);
 int tohit_adj();
 int toac_adj();
 int todis_adj();
@@ -330,108 +330,108 @@ void prt_stat_block();
 void draw_cave();
 void put_character();
 void put_stats();
-const char *likert(int, int);
+const char *likert(int x, int y);
 void put_misc1();
 void put_misc2();
 void put_misc3();
 void display_char();
 void get_name();
 void change_name();
-void inven_destroy(int);
-void take_one_item(Inventory_t *, Inventory_t *);
-void inven_drop(int, int);
-int inven_damage(bool (*)(Inventory_t *), int);
+void inven_destroy(int item_val);
+void take_one_item(Inventory_t *s_ptr, Inventory_t *i_ptr);
+void inven_drop(int item_val, int drop_all);
+int inven_damage(bool (*typ)(Inventory_t *), int perc);
 int weight_limit();
-bool inven_check_num(Inventory_t *);
-bool inven_check_weight(Inventory_t *);
+bool inven_check_num(Inventory_t *t_ptr);
+bool inven_check_weight(Inventory_t *t_ptr);
 void check_strength();
-int inven_carry(Inventory_t *);
-void print_spells(int *, int, int, int);
-int get_spell(int *, int, int *, int *, const char *, int);
-void calc_spells(int);
+int inven_carry(Inventory_t *t_ptr);
+void print_spells(int *spell, int num, int comment, int nonconsec);
+int get_spell(int *spell, int num, int *sn, int *sc, const char *prompt, int first_spell);
+void calc_spells(int stat);
 void gain_spells();
-void calc_mana(int);
+void calc_mana(int stat);
 void prt_experience();
 void calc_hitpoints();
-void insert_str(char *, const char *, const char *);
-void insert_lnum(char *, const char *, int32_t, int);
+void insert_str(char *object_str, const char *mtc_str, const char *insert);
+void insert_lnum(char *object_str, const char *mtc_str, int32_t number, int show_sign);
 bool enter_wiz_mode();
-int attack_blows(int, int *);
-int tot_dam(Inventory_t *, int, int);
-int critical_blow(int, int, int, int);
-bool mmove(int, int *, int *);
+int attack_blows(int weight, int *wtohit);
+int tot_dam(Inventory_t *i_ptr, int tdam, int monster);
+int critical_blow(int weight, int plus, int dam, int attack_type);
+bool mmove(int dir, int *y, int *x);
 bool player_saves();
-int find_range(int, int, int *, int *);
-void teleport(int);
+int find_range(int item1, int item2, int *j, int *k);
+void teleport(int dis);
 
 // misc4.c
 void scribe_object();
-void add_inscribe(Inventory_t *, uint8_t);
-void inscribe(Inventory_t *, const char *);
+void add_inscribe(Inventory_t *i_ptr, uint8_t type);
+void inscribe(Inventory_t *i_ptr, const char *str);
 void check_view();
 
 // moria1.c
-void change_speed(int);
-void py_bonuses(Inventory_t *, int);
+void change_speed(int num);
+void py_bonuses(Inventory_t *t_ptr, int factor);
 void calc_bonuses();
-int show_inven(int, int, bool, int, char *);
-const char *describe_use(int);
-int show_equip(bool, int);
-void takeoff(int, int);
-void inven_command(char);
-int get_item(int *, const char *, int, int, char *, const char *);
+int show_inven(int r1, int r2, bool weight, int col, char *mask);
+const char *describe_use(int positionID);
+int show_equip(bool weight, int col);
+void takeoff(int item_val, int posn);
+void inven_command(char command);
+int get_item(int *com_val, const char *pmt, int i, int j, char *mask, const char *message);
 bool no_light();
-bool get_dir(char *, int *);
-bool get_alldir(const char *, int *);
-void move_rec(int, int, int, int);
-void light_room(int, int);
-void lite_spot(int, int);
-void move_light(int, int, int, int);
-void disturb(int, int);
+bool get_dir(char *prompt, int *dir);
+bool get_alldir(const char *prompt, int *dir);
+void move_rec(int y1, int x1, int y2, int x2);
+void light_room(int posY, int posX);
+void lite_spot(int y, int x);
+void move_light(int y1, int x1, int y2, int x2);
+void disturb(int s, int l);
 void search_on();
 void search_off();
 void rest();
 void rest_off();
-bool test_hit(int, int, int, int, int);
-void take_hit(int, const char *);
+bool test_hit(int bth, int level, int pth, int ac, int attack_type);
+void take_hit(int damage, const char *hit_from);
 
 // moria2.c
-void change_trap(int, int);
-void search(int, int, int);
-void find_init(int);
+void change_trap(int y, int x);
+void search(int y, int x, int chance);
+void find_init(int dir);
 void find_run();
 void end_find();
-void area_affect(int, int, int);
-void corrode_gas(const char *);
-void poison_gas(int, const char *);
-void fire_dam(int, const char *);
-void cold_dam(int, const char *);
-void light_dam(int, const char *);
-void acid_dam(int, const char *);
+void area_affect(int dir, int y, int x);
+void corrode_gas(const char *kb_str);
+void poison_gas(int dam, const char *kb_str);
+void fire_dam(int dam, const char *kb_str);
+void cold_dam(int dam, const char *kb_str);
+void light_dam(int dam, const char *kb_str);
+void acid_dam(int dam, const char *kb_str);
 
 // moria3.c
-int cast_spell(const char *, int, int *, int *);
-void delete_monster(int);
-void fix1_delete_monster(int);
-void fix2_delete_monster(int);
-int delete_object(int, int);
-uint32_t monster_death(int, int, uint32_t);
-int mon_take_hit(int, int);
-void move_char(int, bool);
-void chest_trap(int, int);
+int cast_spell(const char *prompt, int item_val, int *sn, int *sc);
+void delete_monster(int id);
+void fix1_delete_monster(int id);
+void fix2_delete_monster(int id);
+int delete_object(int y, int x);
+uint32_t monster_death(int y, int x, uint32_t flags);
+int mon_take_hit(int monsterID, int damage);
+void move_char(int dir, bool do_pickup);
+void chest_trap(int y, int x);
 void openobject();
 void closeobject();
-int twall(int, int, int, int);
+int twall(int y, int x, int t1, int t2);
 void objectBlockedByMonster(int id);
 void playerAttackPosition(int y, int x);
 
 // moria4.c
-void tunnel(int);
+void tunnel(int dir);
 void disarm_trap();
 void look();
 void throw_object();
 void bash();
-int getRandomDirection(void);
+int getRandomDirection();
 
 // potions.c
 void quaff();
@@ -440,87 +440,87 @@ void quaff();
 void pray();
 
 // recall.c
-bool bool_roff_recall(int);
-int roff_recall(int);
+bool bool_roff_recall(int monsterID);
+int roff_recall(int mon_num);
 
 // rnd.c
 uint32_t get_rnd_seed();
-void set_rnd_seed(uint32_t);
+void set_rnd_seed(uint32_t seedval);
 int32_t rnd();
 
 // save.c
 bool save_char();
-bool get_char(bool *);
-void set_fileptr(FILE *);
-void wr_highscore(HighScore_t *);
-void rd_highscore(HighScore_t *);
+bool get_char(bool *generate);
+void set_fileptr(FILE *file);
+void wr_highscore(HighScore_t *score);
+void rd_highscore(HighScore_t *score);
 
 // scrolls.c
 void read_scroll();
 
 // sets.c
-bool set_room(int);
-bool set_corr(int);
-bool set_floor(int);
-bool set_corrodes(Inventory_t *);
-bool set_flammable(Inventory_t *);
-bool set_frost_destroy(Inventory_t *);
-bool set_acid_affect(Inventory_t *);
-bool set_lightning_destroy(Inventory_t *);
-bool set_null(Inventory_t *);
-bool set_acid_destroy(Inventory_t *);
-bool set_fire_destroy(Inventory_t *);
-bool set_large(GameObject_t *);
-bool general_store(int);
-bool armory(int);
-bool weaponsmith(int);
-bool temple(int);
-bool alchemist(int);
-bool magic_shop(int);
+bool set_room(int element);
+bool set_corr(int element);
+bool set_floor(int element);
+bool set_corrodes(Inventory_t *item);
+bool set_flammable(Inventory_t *item);
+bool set_frost_destroy(Inventory_t *item);
+bool set_acid_affect(Inventory_t *item);
+bool set_lightning_destroy(Inventory_t *item);
+bool set_null(Inventory_t *item);
+bool set_acid_destroy(Inventory_t *item);
+bool set_fire_destroy(Inventory_t *item);
+bool set_large(GameObject_t *item);
+bool general_store(int element);
+bool armory(int element);
+bool weaponsmith(int element);
+bool temple(int element);
+bool alchemist(int element);
+bool magic_shop(int element);
 
 // spells.c
-bool sleep_monsters1(int, int);
+bool sleep_monsters1(int row, int col);
 bool detect_treasure();
 bool detect_object();
 bool detect_trap();
 bool detect_sdoor();
 bool detect_invisible();
-bool light_area(int, int);
-bool unlight_area(int, int);
+bool light_area(int y, int x);
+bool unlight_area(int y, int x);
 void map_area();
 bool ident_spell();
-bool aggravate_monster(int);
+bool aggravate_monster(int dis_affect);
 bool trap_creation();
 bool door_creation();
 bool td_destroy();
 bool detect_monsters();
-void light_line(int, int, int);
-void starlite(int, int);
-bool disarm_all(int, int, int);
-void fire_bolt(int, int, int, int, int, char *);
-void fire_ball(int, int, int, int, int, const char *);
-void breath(int, int, int, int, char *, int);
-bool recharge(int);
-bool hp_monster(int, int, int, int);
-bool drain_life(int, int, int);
-bool speed_monster(int, int, int, int);
-bool confuse_monster(int, int, int);
-bool sleep_monster(int, int, int);
-bool wall_to_mud(int, int, int);
-bool td_destroy2(int, int, int);
-bool poly_monster(int, int, int);
-bool build_wall(int, int, int);
-bool clone_monster(int, int, int);
-void teleport_away(int, int);
-void teleport_to(int, int);
-bool teleport_monster(int, int, int);
+void light_line(int dir, int y, int x);
+void starlite(int y, int x);
+bool disarm_all(int dir, int y, int x);
+void fire_bolt(int typ, int dir, int y, int x, int dam, char *bolt_typ);
+void fire_ball(int typ, int dir, int y, int x, int dam_hp, const char *descrip);
+void breath(int typ, int y, int x, int dam_hp, char *ddesc, int monptr);
+bool recharge(int num);
+bool hp_monster(int dir, int y, int x, int dam);
+bool drain_life(int dir, int y, int x);
+bool speed_monster(int dir, int y, int x, int spd);
+bool confuse_monster(int dir, int y, int x);
+bool sleep_monster(int dir, int y, int x);
+bool wall_to_mud(int dir, int y, int x);
+bool td_destroy2(int dir, int y, int x);
+bool poly_monster(int dir, int y, int x);
+bool build_wall(int dir, int y, int x);
+bool clone_monster(int dir, int y, int x);
+void teleport_away(int monptr, int dis);
+void teleport_to(int ny, int nx);
+bool teleport_monster(int dir, int y, int x);
 bool mass_genocide();
 bool genocide();
-bool speed_monsters(int);
+bool speed_monsters(int spd);
 bool sleep_monsters2();
 bool mass_poly();
 bool detect_evil();
-bool hp_player(int);
+bool hp_player(int num);
 bool cure_confusion();
 bool cure_blindness();
 bool cure_poison();
@@ -528,7 +528,7 @@ bool remove_fear();
 void earthquake();
 bool protect_evil();
 void create_food();
-bool dispel_creature(int, int);
+bool dispel_creature(int cflag, int damage);
 bool turn_undead();
 void warding_glyph();
 void lose_str();
@@ -537,12 +537,12 @@ void lose_wis();
 void lose_dex();
 void lose_con();
 void lose_chr();
-void lose_exp(int32_t);
+void lose_exp(int32_t amount);
 bool slow_poison();
-void bless(int);
-void detect_inv2(int);
-void destroy_area(int, int);
-bool enchant(int16_t *, int16_t);
+void bless(int amount);
+void detect_inv2(int amount);
+void destroy_area(int y, int x);
+bool enchant(int16_t *plusses, int16_t limit);
 bool remove_curse();
 bool restore_level();
 
@@ -550,18 +550,18 @@ bool restore_level();
 void use();
 
 // store1.c
-int32_t item_value(Inventory_t *);
-int32_t sell_price(int, int32_t *, int32_t *, Inventory_t *);
-bool store_check_num(Inventory_t *, int);
-void store_carry(int, int *, Inventory_t *);
-void store_destroy(int, int, bool);
+int32_t item_value(Inventory_t *i_ptr);
+int32_t sell_price(int snum, int32_t *max_sell, int32_t *min_sell, Inventory_t *item);
+bool store_check_num(Inventory_t *t_ptr, int store_num);
+void store_carry(int store_num, int *ipos, Inventory_t *t_ptr);
+void store_destroy(int store_num, int item_val, bool one_of);
 void store_init();
 void store_maint();
-bool noneedtobargain(int, int32_t);
-void updatebargain(int, int32_t, int32_t);
+bool noneedtobargain(int store_num, int32_t minprice);
+void updatebargain(int store_num, int32_t price, int32_t minprice);
 
 // store2.c
-void enter_store(int);
+void enter_store(int store_num);
 
 // wands.c
 void aim();

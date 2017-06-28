@@ -9,12 +9,12 @@
 #include "headers.h"
 #include "externs.h"
 
-static char original_commands(char);
-static void do_command(char);
-static bool valid_countcommand(char);
-static void regenhp(int);
-static void regenmana(int);
-static bool enchanted(Inventory_t *);
+static char original_commands(char com_val);
+static void do_command(char com_val);
+static bool valid_countcommand(char c);
+static void regenhp(int percent);
+static void regenmana(int percent);
+static bool enchanted(Inventory_t *t_ptr);
 static void examine_book();
 static void go_up();
 static void go_down();

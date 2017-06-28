@@ -18,7 +18,7 @@ static bool curses_on = false;
 static WINDOW *savescr;
 
 static void moriaterm();
-static void sleep_in_seconds(int);
+static void sleep_in_seconds(int seconds);
 
 // initializes curses routines
 void init_curses() {

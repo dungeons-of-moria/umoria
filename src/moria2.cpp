@@ -9,7 +9,7 @@
 #include "headers.h"
 #include "externs.h"
 
-static int minus_ac(uint32_t);
+static int minus_ac(uint32_t typ_dam);
 
 // Change a trap from invisible to visible -RAK-
 // Note: Secret doors are handled here
