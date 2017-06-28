@@ -351,7 +351,7 @@ static bool sv_write() {
     }
     wr_short((uint16_t) next_free_monster_id);
     for (int i = MIN_MONIX; i < next_free_monster_id; i++) {
-        wr_monster(&monsters_list[i]);
+        wr_monster(&monsters[i]);
     }
 
     return !(ferror(fileptr) || fflush(fileptr) == EOF);
@@ -861,7 +861,7 @@ bool get_char(bool *generate) {
             goto error;
         }
         for (int i = MIN_MONIX; i < next_free_monster_id; i++) {
-            rd_monster(&monsters_list[i]);
+            rd_monster(&monsters[i]);
         }
 
         *generate = false; // We have restored a cave - no need to generate.

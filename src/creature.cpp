@@ -35,7 +35,7 @@ static bool checkMonsterIsVisible(Monster_t *m_ptr) {
 // Updates screen when monsters move about -RAK-
 void update_mon(int monsterID) {
     bool visible = false;
-    Monster_t *m_ptr = &monsters_list[monsterID];
+    Monster_t *m_ptr = &monsters[monsterID];
 
     if (m_ptr->cdis <= MAX_SIGHT && !(py.flags.status & PY_BLIND) && panel_contains((int) m_ptr->fy, (int) m_ptr->fx)) {
         if (wizard_mode) {
@@ -90,15 +90,15 @@ static bool check_mon_lite(int y, int x) {
     }
 
     update_mon(monsterID);
-    return monsters_list[monsterID].ml;
+    return monsters[monsterID].ml;
 }
 
 // Choose correct directions for monster movement -RAK-
 static void get_moves(int monsterID, int *mm) {
     int ay, ax, movement;
 
-    int y = monsters_list[monsterID].fy - char_row;
-    int x = monsters_list[monsterID].fx - char_col;
+    int y = monsters[monsterID].fy - char_row;
+    int x = monsters[monsterID].fx - char_col;
 
     if (y < 0) {
         movement = 8;
@@ -809,7 +809,7 @@ static void make_attack(int monsterID) {
         return;
     }
 
-    Monster_t *m_ptr = &monsters_list[monsterID];
+    Monster_t *m_ptr = &monsters[monsterID];
     Creature_t *r_ptr = &creatures_list[m_ptr->mptr];
 
     vtype_t cdesc;
@@ -992,8 +992,8 @@ static void creatureMovesOnPlayer(Monster_t *m_ptr, uint8_t creatureID, int mons
         // Creature is attempting to move on other creature?
 
         // Creature eats other creatures?
-        if ((movebits & CM_EATS_OTHER) && creatures_list[m_ptr->mptr].mexp >= creatures_list[monsters_list[creatureID].mptr].mexp) {
-            if (monsters_list[creatureID].ml) {
+        if ((movebits & CM_EATS_OTHER) && creatures_list[m_ptr->mptr].mexp >= creatures_list[monsters[creatureID].mptr].mexp) {
+            if (monsters[creatureID].ml) {
                 *rcmove |= CM_EATS_OTHER;
             }
 
@@ -1042,7 +1042,7 @@ static void make_move(int monsterID, int *mm, uint32_t *rcmove) {
     bool do_turn = false;
     bool do_move = false;
 
-    Monster_t *m_ptr = &monsters_list[monsterID];
+    Monster_t *m_ptr = &monsters[monsterID];
     uint32_t movebits = creatures_list[m_ptr->mptr].cmove;
 
     // Up to 5 attempts at moving, give up.
@@ -1267,7 +1267,7 @@ static bool mon_cast_spell(int monsterID) {
         return false;
     }
 
-    Monster_t *m_ptr = &monsters_list[monsterID];
+    Monster_t *m_ptr = &monsters[monsterID];
     Creature_t *r_ptr = &creatures_list[m_ptr->mptr];
 
     if (!canCreatureCastSpells(m_ptr, r_ptr->spells)) {
@@ -1348,7 +1348,7 @@ bool multiply_monster(int y, int x, int creatureID, int monsterID) {
                     // Some critters are cannibalistic!
                     if ((creatures_list[creatureID].cmove & CM_EATS_OTHER)
                         // Check the experience level -CJS-
-                        && creatures_list[creatureID].mexp >= creatures_list[monsters_list[c_ptr->cptr].mptr].mexp) {
+                        && creatures_list[creatureID].mexp >= creatures_list[monsters[c_ptr->cptr].mptr].mexp) {
                         // It ate an already processed monster.Handle * normally.
                         if (monsterID < c_ptr->cptr) {
                             delete_monster((int) c_ptr->cptr);
@@ -1502,7 +1502,7 @@ static void creatureMoveConfusedUndead(Monster_t *m_ptr, Creature_t *r_ptr, int 
 
 // Move the critters about the dungeon -RAK-
 static void mon_move(int monsterID, uint32_t *rcmove) {
-    Monster_t *m_ptr = &monsters_list[monsterID];
+    Monster_t *m_ptr = &monsters[monsterID];
     Creature_t *r_ptr = &creatures_list[m_ptr->mptr];
 
     // Does the critter multiply?
@@ -1679,11 +1679,11 @@ static void creatureAttackingUpdate(Monster_t *m_ptr, int monsterID, int moves) 
 void creatures(bool attack) {
     // Process the monsters
     for (int id = next_free_monster_id - 1; id >= MIN_MONIX && !character_is_dead; id--) {
-        Monster_t *m_ptr = &monsters_list[id];
+        Monster_t *m_ptr = &monsters[id];
 
         // Get rid of an eaten/breathed on monster.  Note: Be sure not to
         // process this monster. This is necessary because we can't delete
-        // monsters while scanning the monsters_list here.
+        // monsters while scanning the monsters here.
         if (m_ptr->hp < 0) {
             fix2_delete_monster(id);
             continue;
@@ -1705,7 +1705,7 @@ void creatures(bool attack) {
         }
 
         // Get rid of an eaten/breathed on monster. This is necessary because
-        // we can't delete monsters while scanning the monsters_list here.
+        // we can't delete monsters while scanning the monsters here.
         // This monster may have been killed during mon_move().
         if (m_ptr->hp < 0) {
             fix2_delete_monster(id);

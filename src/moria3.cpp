@@ -457,7 +457,7 @@ static void carry(int y, int x, bool pickup) {
 
 // Deletes a monster entry from the level -RAK-
 void delete_monster(int id) {
-    Monster_t *monster = &monsters_list[id];
+    Monster_t *monster = &monsters[id];
 
     cave[monster->fy][monster->fx].cptr = 0;
 
@@ -468,13 +468,13 @@ void delete_monster(int id) {
     int lastID = next_free_monster_id - 1;
 
     if (id != lastID) {
-        monster = &monsters_list[lastID];
+        monster = &monsters[lastID];
         cave[monster->fy][monster->fx].cptr = (uint8_t) id;
-        monsters_list[id] = monsters_list[lastID];
+        monsters[id] = monsters[lastID];
     }
 
     next_free_monster_id--;
-    monsters_list[next_free_monster_id] = blank_monster;
+    monsters[next_free_monster_id] = blank_monster;
 
     if (monster_multiply_total > 0) {
         monster_multiply_total--;
@@ -483,7 +483,7 @@ void delete_monster(int id) {
 
 // The following two procedures implement the same function as delete monster.
 // However, they are used within creatures(), because deleting a monster
-// while scanning the monsters_list causes two problems, monsters might get two
+// while scanning the monsters causes two problems, monsters might get two
 // turns, and m_ptr/monptr might be invalid after the delete_monster.
 // Hence the delete is done in two steps.
 //
@@ -491,7 +491,7 @@ void delete_monster(int id) {
 // the monster record and reduce next_free_monster_id, this is called in breathe, and
 // a couple of places in creatures.c
 void fix1_delete_monster(int id) {
-    Monster_t *monster = &monsters_list[id];
+    Monster_t *monster = &monsters[id];
 
     // force the hp negative to ensure that the monster is dead, for example,
     // if the monster was just eaten by another, it will still have positive
@@ -515,14 +515,14 @@ void fix2_delete_monster(int id) {
     int lastID = next_free_monster_id - 1;
 
     if (id != lastID) {
-        int y = monsters_list[lastID].fy;
-        int x = monsters_list[lastID].fx;
+        int y = monsters[lastID].fy;
+        int x = monsters[lastID].fx;
         cave[y][x].cptr = (uint8_t) id;
 
-        monsters_list[id] = monsters_list[lastID];
+        monsters[id] = monsters[lastID];
     }
 
-    monsters_list[lastID] = blank_monster;
+    monsters[lastID] = blank_monster;
     next_free_monster_id--;
 }
 
@@ -706,7 +706,7 @@ static void playerGainKillExperience(Creature_t *c_ptr) {
 // Decreases monsters hit points and deletes monster if needed.
 // (Picking on my babies.) -RAK-
 int mon_take_hit(int monsterID, int damage) {
-    Monster_t *monster = &monsters_list[monsterID];
+    Monster_t *monster = &monsters[monsterID];
     Creature_t *creature = &creatures_list[monster->mptr];
 
     monster->csleep = 0;
@@ -741,7 +741,7 @@ int mon_take_hit(int monsterID, int damage) {
     int m_take_hit = monster->mptr;
 
     // in case this is called from within creatures(), this is a horrible
-    // hack, the monsters_list/creatures() code needs to be rewritten.
+    // hack, the monsters/creatures() code needs to be rewritten.
     if (hack_monptr < monsterID) {
         delete_monster(monsterID);
     } else {
@@ -788,7 +788,7 @@ static int playerCalculateBaseToHit(bool creatureLit, int tot_tohit) {
 static void py_attack(int y, int x) {
     int creatureID = cave[y][x].cptr;
 
-    Monster_t *monster = &monsters_list[creatureID];
+    Monster_t *monster = &monsters[creatureID];
     Creature_t *creature = &creatures_list[monster->mptr];
     Inventory_t *item = &inventory[INVEN_WIELD];
 
@@ -914,7 +914,7 @@ void move_char(int dir, bool do_pickup) {
     }
 
     Cave_t *tile = &cave[y][x];
-    Monster_t *monster = &monsters_list[tile->cptr];
+    Monster_t *monster = &monsters[tile->cptr];
 
     // if there is no creature, or an unlit creature in the walls then...
     // disallow attacks against unlit creatures in walls because moving into
@@ -1323,7 +1323,7 @@ int twall(int y, int x, int t1, int t2) {
 void objectBlockedByMonster(int id) {
     vtype_t description, msg;
 
-    Monster_t *monster = &monsters_list[id];
+    Monster_t *monster = &monsters[id];
     const char *name = creatures_list[monster->mptr].name;
 
     if (monster->ml) {

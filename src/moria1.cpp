@@ -19,7 +19,7 @@ void change_speed(int num) {
     py.flags.status |= PY_SPEED;
 
     for (int i = next_free_monster_id - 1; i >= MIN_MONIX; i--) {
-        monsters_list[i].cspeed += num;
+        monsters[i].cspeed += num;
     }
 }
 
