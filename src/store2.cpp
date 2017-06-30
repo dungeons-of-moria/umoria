@@ -441,7 +441,7 @@ static int purchase_haggle(int store_num, int32_t *price, Inventory_t *item) {
     Owner_t *o_ptr = &store_owners[s_ptr->owner];
 
     int32_t max_sell, min_sell;
-    int32_t cost = sell_price(store_num, &max_sell, &min_sell, item);
+    int32_t cost = sell_price(store_num, &min_sell, &max_sell, item);
 
     max_sell = max_sell * chr_adj() / 100;
     if (max_sell <= 0) {
@@ -930,7 +930,7 @@ static bool store_sell(int store_num, int *cur_top) {
     (void) sprintf(out_val, "Selling %s (%c)", tmp_str, item_val + 'a');
     msg_print(out_val);
 
-    if (!store_check_num(&sold_obj, store_num)) {
+    if (!store_check_num(store_num, &sold_obj)) {
         msg_print("I have not the room in my store to keep it.");
         return false;
     }
@@ -995,8 +995,8 @@ static bool store_sell(int store_num, int *cur_top) {
 }
 
 // Entering a store -RAK-
-void enter_store(int store_num) {
-    Store_t *s_ptr = &stores[store_num];
+void enter_store(int store_id) {
+    Store_t *s_ptr = &stores[store_id];
 
     if (s_ptr->store_open >= current_game_turn) {
         msg_print("The doors are locked.");
@@ -1004,7 +1004,7 @@ void enter_store(int store_num) {
     }
 
     int cur_top = 0;
-    display_store(store_num, store_owners[s_ptr->owner].owner_name, cur_top);
+    display_store(store_id, store_owners[s_ptr->owner].owner_name, cur_top);
 
     bool exit_store = false;
     while (!exit_store) {
@@ -1022,13 +1022,13 @@ void enter_store(int store_num) {
                     if (cur_top == 0) {
                         if (s_ptr->store_ctr > 12) {
                             cur_top = 12;
-                            display_inventory(store_num, cur_top);
+                            display_inventory(store_id, cur_top);
                         } else {
                             msg_print("Entire inventory is shown.");
                         }
                     } else {
                         cur_top = 0;
-                        display_inventory(store_num, cur_top);
+                        display_inventory(store_id, cur_top);
                     }
                     break;
                 case 'E':
@@ -1050,16 +1050,16 @@ void enter_store(int store_num) {
 
                     // redisplay store prices if charisma changes
                     if (saved_chr != py.stats.use_stat[A_CHR]) {
-                        display_inventory(store_num, cur_top);
+                        display_inventory(store_id, cur_top);
                     }
 
                     player_free_turn = false; // No free moves here. -CJS-
                     break;
                 case 'p':
-                    exit_store = store_purchase(store_num, &cur_top);
+                    exit_store = store_purchase(store_id, &cur_top);
                     break;
                 case 's':
-                    exit_store = store_sell(store_num, &cur_top);
+                    exit_store = store_sell(store_id, &cur_top);
                     break;
                 default:
                     bell();

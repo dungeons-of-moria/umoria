@@ -133,12 +133,12 @@ static int roffpline; // Place to print line now being loaded.
 #define knowdamage(l, a, d) ((4 + (l)) * (a) > 80 * (d))
 
 // Do we know anything about this monster?
-bool bool_roff_recall(int monsterID) {
+bool bool_roff_recall(int monster_id) {
     if (wizard_mode) {
         return true;
     }
 
-    Recall_t *mp = &creature_recall[monsterID];
+    Recall_t *mp = &creature_recall[monster_id];
 
     if (mp->r_cmove || mp->r_cdefense || mp->r_kills || mp->r_spells || mp->r_deaths) {
         return true;
@@ -666,9 +666,9 @@ static void attackNumberAndDamage(Recall_t *mp, Creature_t *cp) {
 }
 
 // Print out what we have discovered about this monster.
-int roff_recall(int mon_num) {
-    Recall_t *mp = &creature_recall[mon_num];
-    Creature_t *cp = &creatures_list[mon_num];
+int roff_recall(int monster_id) {
+    Recall_t *mp = &creature_recall[monster_id];
+    Creature_t *cp = &creatures_list[monster_id];
 
     Recall_t save_mem;
 

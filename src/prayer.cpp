@@ -74,7 +74,7 @@ static void recitePrayer(int prayerType) {
             break;
         case 9:
             if (get_dir(CNIL, &dir)) {
-                (void) confuse_monster(dir, char_row, char_col);
+                (void) confuse_monster(char_row, char_col, dir);
             }
             break;
         case 10:
@@ -109,7 +109,7 @@ static void recitePrayer(int prayerType) {
             break;
         case 18:
             if (get_dir(CNIL, &dir)) {
-                fire_ball(GF_HOLY_ORB, dir, char_row, char_col, (damroll(3, 6) + py.misc.lev), "Black Sphere");
+                fire_ball(char_row, char_col, dir, (damroll(3, 6) + py.misc.lev), GF_HOLY_ORB, "Black Sphere");
             }
             break;
         case 19:

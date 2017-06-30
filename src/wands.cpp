@@ -25,82 +25,82 @@ static bool discharge_wand(Inventory_t *wand, int dir) {
         switch (kind) {
             case 1:
                 msg_print("A line of blue shimmering light appears.");
-                light_line(dir, char_row, char_col);
+                light_line(char_col, char_row, dir);
                 identified = true;
                 break;
             case 2:
-                fire_bolt(GF_LIGHTNING, dir, row, col, damroll(4, 8), spell_names[8]);
+                fire_bolt(row, col, dir, damroll(4, 8), GF_LIGHTNING, spell_names[8]);
                 identified = true;
                 break;
             case 3:
-                fire_bolt(GF_FROST, dir, row, col, damroll(6, 8), spell_names[14]);
+                fire_bolt(row, col, dir, damroll(6, 8), GF_FROST, spell_names[14]);
                 identified = true;
                 break;
             case 4:
-                fire_bolt(GF_FIRE, dir, row, col, damroll(9, 8), spell_names[22]);
+                fire_bolt(row, col, dir, damroll(9, 8), GF_FIRE, spell_names[22]);
                 identified = true;
                 break;
             case 5:
-                identified = wall_to_mud(dir, row, col);
+                identified = wall_to_mud(row, col, dir);
                 break;
             case 6:
-                identified = poly_monster(dir, row, col);
+                identified = poly_monster(row, col, dir);
                 break;
             case 7:
-                identified = hp_monster(dir, row, col, -damroll(4, 6));
+                identified = hp_monster(row, col, dir, -damroll(4, 6));
                 break;
             case 8:
-                identified = speed_monster(dir, row, col, 1);
+                identified = speed_monster(row, col, dir, 1);
                 break;
             case 9:
-                identified = speed_monster(dir, row, col, -1);
+                identified = speed_monster(row, col, dir, -1);
                 break;
             case 10:
-                identified = confuse_monster(dir, row, col);
+                identified = confuse_monster(row, col, dir);
                 break;
             case 11:
-                identified = sleep_monster(dir, row, col);
+                identified = sleep_monster(row, col, dir);
                 break;
             case 12:
-                identified = drain_life(dir, row, col);
+                identified = drain_life(row, col, dir);
                 break;
             case 13:
-                identified = td_destroy2(dir, row, col);
+                identified = td_destroy2(row, col, dir);
                 break;
             case 14:
-                fire_bolt(GF_MAGIC_MISSILE, dir, row, col, damroll(2, 6), spell_names[0]);
+                fire_bolt(row, col, dir, damroll(2, 6), GF_MAGIC_MISSILE, spell_names[0]);
                 identified = true;
                 break;
             case 15:
-                identified = build_wall(dir, row, col);
+                identified = build_wall(row, col, dir);
                 break;
             case 16:
-                identified = clone_monster(dir, row, col);
+                identified = clone_monster(row, col, dir);
                 break;
             case 17:
-                identified = teleport_monster(dir, row, col);
+                identified = teleport_monster(row, col, dir);
                 break;
             case 18:
-                identified = disarm_all(dir, row, col);
+                identified = disarm_all(row, col, dir);
                 break;
             case 19:
-                fire_ball(GF_LIGHTNING, dir, row, col, 32, "Lightning Ball");
+                fire_ball(row, col, dir, 32, GF_LIGHTNING, "Lightning Ball");
                 identified = true;
                 break;
             case 20:
-                fire_ball(GF_FROST, dir, row, col, 48, "Cold Ball");
+                fire_ball(row, col, dir, 48, GF_FROST, "Cold Ball");
                 identified = true;
                 break;
             case 21:
-                fire_ball(GF_FIRE, dir, row, col, 72, spell_names[28]);
+                fire_ball(row, col, dir, 72, GF_FIRE, spell_names[28]);
                 identified = true;
                 break;
             case 22:
-                fire_ball(GF_POISON_GAS, dir, row, col, 12, spell_names[6]);
+                fire_ball(row, col, dir, 12, GF_POISON_GAS, spell_names[6]);
                 identified = true;
                 break;
             case 23:
-                fire_ball(GF_ACID, dir, row, col, 60, "Acid Ball");
+                fire_ball(row, col, dir, 60, GF_ACID, "Acid Ball");
                 identified = true;
                 break;
             case 24:

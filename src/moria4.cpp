@@ -131,15 +131,15 @@ static bool digPosition(int y, int x, uint8_t wallType, int diggingAbility) {
 
 // Tunnels through rubble and walls -RAK-
 // Must take into account: secret doors, special tools
-void tunnel(int dir) {
+void tunnel(int direction) {
     // Confused?                    75% random movement
     if (py.flags.confused > 0 && randint(4) > 1) {
-        dir = randint(9);
+        direction = randint(9);
     }
 
     int y = char_row;
     int x = char_col;
-    (void) mmove(dir, &y, &x);
+    (void) mmove(direction, &y, &x);
 
     Cave_t *c_ptr = &cave[y][x];
     Inventory_t *i_ptr = &inventory[INVEN_WIELD];

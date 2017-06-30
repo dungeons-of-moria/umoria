@@ -18,10 +18,10 @@ static uint8_t modify_stat(int stat, int16_t amount);
 static int spell_chance(int spell);
 
 // Places a particular trap at location y, x -RAK-
-void place_trap(int y, int x, int subval) {
+void place_trap(int y, int x, int sub_type_id) {
     int cur_pos = popt();
     cave[y][x].tptr = (uint8_t) cur_pos;
-    invcopy(&treasure_list[cur_pos], OBJ_TRAP_LIST + subval);
+    invcopy(&treasure_list[cur_pos], OBJ_TRAP_LIST + sub_type_id);
 }
 
 // Places rubble at location y, x -RAK-
@@ -126,25 +126,25 @@ void place_object(int y, int x, bool must_be_small) {
 }
 
 // Allocates an object for tunnels and rooms -RAK-
-void alloc_object(bool (*alloc_set)(int), int typ, int num) {
+void alloc_object(bool (*set_function)(int), int object_type, int number) {
     int y, x;
 
-    for (int k = 0; k < num; k++) {
+    for (int k = 0; k < number; k++) {
         // don't put an object beneath the player, this could cause
         // problems if player is standing under rubble, or on a trap.
         do {
             y = randint(dungeon_height) - 1;
             x = randint(dungeon_width) - 1;
-        } while (!(*alloc_set)(cave[y][x].fval) || cave[y][x].tptr != 0 || (y == char_row && x == char_col));
+        } while (!(*set_function)(cave[y][x].fval) || cave[y][x].tptr != 0 || (y == char_row && x == char_col));
 
-        switch (typ) {
+        switch (object_type) {
             case 1:
                 place_trap(y, x, randint(MAX_TRAP) - 1);
                 break;
             case 2:
-                // NOTE: typ == 2 is not used - used to be visible traps.
+                // NOTE: object_type == 2 is not used - used to be visible traps.
                 // FIXME: no `break` here, is this correct?
-                // FIXME: typ == 2 was not handled directly and was caught by typ == 3 -MRC-
+                // FIXME: object_type == 2 was not handled directly and was caught by object_type == 3 -MRC-
             case 3:
                 place_rubble(y, x);
                 break;
@@ -161,7 +161,7 @@ void alloc_object(bool (*alloc_set)(int), int typ, int num) {
 }
 
 // Creates objects nearby the coordinates given -RAK-
-void random_object(int y, int x, int num) {
+void random_object(int y, int x, int tries) {
     do {
         for (int i = 0; i <= 10; i++) {
             int j = y - 3 + randint(5);
@@ -177,14 +177,14 @@ void random_object(int y, int x, int num) {
             }
         }
 
-        num--;
-    } while (num != 0);
+        tries--;
+    } while (tries != 0);
 }
 
 // Converts stat num into string -RAK-
-void cnv_stat(uint8_t stat, char *str) {
+void cnv_stat(uint8_t stat, char *stat_string) {
     if (stat <= 18) {
-        (void) sprintf(str, "%6d", stat);
+        (void) sprintf(stat_string, "%6d", stat);
         return;
     }
 
@@ -192,11 +192,11 @@ void cnv_stat(uint8_t stat, char *str) {
     int part2 = stat - 18;
 
     if (part2 == 100) {
-        (void) strcpy(str, "18/100");
+        (void) strcpy(stat_string, "18/100");
         return;
     }
 
-    (void) sprintf(str, " %2d/%02d", part1, part2);
+    (void) sprintf(stat_string, " %2d/%02d", part1, part2);
 }
 
 // Print character stat in given row, column -RAK-
@@ -947,7 +947,7 @@ void put_stats() {
 }
 
 // Returns a rating of x depending on y -JWT-
-const char *likert(int x, int y) {
+const char *likert(int y, int x) {
     switch (x / y) {
         case -3:
         case -2:
@@ -1026,23 +1026,23 @@ void put_misc3() {
 
     put_buffer("(Miscellaneous Abilities)", 15, 25);
     put_buffer("Fighting    :", 16, 1);
-    put_buffer(likert(xbth, 12), 16, 15);
+    put_buffer(likert(12, xbth), 16, 15);
     put_buffer("Bows/Throw  :", 17, 1);
-    put_buffer(likert(xbthb, 12), 17, 15);
+    put_buffer(likert(12, xbthb), 17, 15);
     put_buffer("Saving Throw:", 18, 1);
-    put_buffer(likert(xsave, 6), 18, 15);
+    put_buffer(likert(6, xsave), 18, 15);
 
     put_buffer("Stealth     :", 16, 28);
-    put_buffer(likert(xstl, 1), 16, 42);
+    put_buffer(likert(1, xstl), 16, 42);
     put_buffer("Disarming   :", 17, 28);
-    put_buffer(likert(xdis, 8), 17, 42);
+    put_buffer(likert(8, xdis), 17, 42);
     put_buffer("Magic Device:", 18, 28);
-    put_buffer(likert(xdev, 6), 18, 42);
+    put_buffer(likert(6, xdev), 18, 42);
 
     put_buffer("Perception  :", 16, 55);
-    put_buffer(likert(xfos, 3), 16, 69);
+    put_buffer(likert(3, xfos), 16, 69);
     put_buffer("Searching   :", 17, 55);
-    put_buffer(likert(xsrh, 6), 17, 69);
+    put_buffer(likert(6, xsrh), 17, 69);
     put_buffer("Infra-Vision:", 18, 55);
     put_buffer(xinfra, 18, 69);
 }
@@ -1108,8 +1108,8 @@ void change_name() {
 }
 
 // Destroy an item in the inventory -RAK-
-void inven_destroy(int item_val) {
-    Inventory_t *i_ptr = &inventory[item_val];
+void inven_destroy(int item_id) {
+    Inventory_t *i_ptr = &inventory[item_id];
 
     if (i_ptr->number > 1 && i_ptr->subval <= ITEM_SINGLE_STACK_MAX) {
         i_ptr->number--;
@@ -1117,7 +1117,7 @@ void inven_destroy(int item_val) {
     } else {
         inventory_weight -= i_ptr->weight * i_ptr->number;
 
-        for (int i = item_val; i < inventory_count - 1; i++) {
+        for (int i = item_id; i < inventory_count - 1; i++) {
             inventory[i] = inventory[i + 1];
         }
 
@@ -1130,37 +1130,37 @@ void inven_destroy(int item_val) {
 
 // Copies the object in the second argument over the first argument.
 // However, the second always gets a number of one except for ammo etc.
-void take_one_item(Inventory_t *s_ptr, Inventory_t *i_ptr) {
-    *s_ptr = *i_ptr;
+void take_one_item(Inventory_t *to_item, Inventory_t *from_item) {
+    *to_item = *from_item;
 
-    if (s_ptr->number > 1 && s_ptr->subval >= ITEM_SINGLE_STACK_MIN && s_ptr->subval <= ITEM_SINGLE_STACK_MAX) {
-        s_ptr->number = 1;
+    if (to_item->number > 1 && to_item->subval >= ITEM_SINGLE_STACK_MIN && to_item->subval <= ITEM_SINGLE_STACK_MAX) {
+        to_item->number = 1;
     }
 }
 
 // Drops an item from inventory to given location -RAK-
-void inven_drop(int item_val, int drop_all) {
+void inven_drop(int item_id, bool drop_all) {
     if (cave[char_row][char_col].tptr != 0) {
         (void) delete_object(char_row, char_col);
     }
 
     int treasureID = popt();
 
-    Inventory_t *i_ptr = &inventory[item_val];
+    Inventory_t *i_ptr = &inventory[item_id];
     treasure_list[treasureID] = *i_ptr;
 
     cave[char_row][char_col].tptr = (uint8_t) treasureID;
 
-    if (item_val >= INVEN_WIELD) {
-        takeoff(item_val, -1);
+    if (item_id >= INVEN_WIELD) {
+        takeoff(item_id, -1);
     } else {
         if (drop_all || i_ptr->number == 1) {
             inventory_weight -= i_ptr->weight * i_ptr->number;
             inventory_count--;
 
-            while (item_val < inventory_count) {
-                inventory[item_val] = inventory[item_val + 1];
-                item_val++;
+            while (item_id < inventory_count) {
+                inventory[item_id] = inventory[item_id + 1];
+                item_id++;
             }
 
             invcopy(&inventory[inventory_count], OBJ_NOTHING);
@@ -1180,11 +1180,11 @@ void inven_drop(int item_val, int drop_all) {
 }
 
 // Destroys a type of item on a given percent chance -RAK-
-int inven_damage(bool (*typ)(Inventory_t *), int perc) {
+int inven_damage(bool (*item_type)(Inventory_t *), int chance_percentage) {
     int damage = 0;
 
     for (int i = 0; i < inventory_count; i++) {
-        if ((*typ)(&inventory[i]) && randint(100) < perc) {
+        if ((*item_type)(&inventory[i]) && randint(100) < chance_percentage) {
             inven_destroy(i);
             damage++;
         }
@@ -1205,27 +1205,27 @@ int weight_limit() {
 }
 
 // this code must be identical to the inven_carry() code below
-bool inven_check_num(Inventory_t *t_ptr) {
+bool inven_check_num(Inventory_t *item) {
     if (inventory_count < INVEN_WIELD) {
         return true;
     }
 
-    if (t_ptr->subval < ITEM_SINGLE_STACK_MIN) {
+    if (item->subval < ITEM_SINGLE_STACK_MIN) {
         return false;
     }
 
     for (int i = 0; i < inventory_count; i++) {
-        bool sameCharacter = inventory[i].tval == t_ptr->tval;
-        bool sameCategory = inventory[i].subval == t_ptr->subval;
+        bool sameCharacter = inventory[i].tval == item->tval;
+        bool sameCategory = inventory[i].subval == item->subval;
 
         // make sure the number field doesn't overflow
-        bool sameNumber = inventory[i].number + t_ptr->number < 256;
+        bool sameNumber = inventory[i].number + item->number < 256;
 
         // they always stack (subval < 192), or else they have same p1
-        bool sameGroup = t_ptr->subval < ITEM_GROUP_MIN || inventory[i].p1 == t_ptr->p1;
+        bool sameGroup = item->subval < ITEM_GROUP_MIN || inventory[i].p1 == item->p1;
 
         // only stack if both or neither are identified
-        bool identification = known1_p(&inventory[i]) == known1_p(t_ptr);
+        bool identification = known1_p(&inventory[i]) == known1_p(item);
 
         if (sameCharacter && sameCategory && sameNumber && sameGroup && identification) {
             return true;
@@ -1236,9 +1236,9 @@ bool inven_check_num(Inventory_t *t_ptr) {
 }
 
 // return false if picking up an object would change the players speed
-bool inven_check_weight(Inventory_t *i_ptr) {
+bool inven_check_weight(Inventory_t *item) {
     int limit = weight_limit();
-    int newWeight = i_ptr->number * i_ptr->weight + inventory_weight;
+    int newWeight = item->number * item->weight + inventory_weight;
 
     if (limit < newWeight) {
         limit = newWeight / (limit + 1);
@@ -1291,11 +1291,11 @@ void check_strength() {
 // Add an item to players inventory.  Return the
 // item position for a description if needed. -RAK-
 // this code must be identical to the inven_check_num() code above
-int inven_carry(Inventory_t *i_ptr) {
-    int typ = i_ptr->tval;
-    int subt = i_ptr->subval;
-    bool known1p = known1_p(i_ptr);
-    int always_known1p = (object_offset(i_ptr) == -1);
+int inven_carry(Inventory_t *item) {
+    int typ = item->tval;
+    int subt = item->subval;
+    bool known1p = known1_p(item);
+    int always_known1p = (object_offset(item) == -1);
 
     int locn;
 
@@ -1303,11 +1303,11 @@ int inven_carry(Inventory_t *i_ptr) {
     for (locn = 0;; locn++) {
         Inventory_t *t_ptr = &inventory[locn];
 
-        if (typ == t_ptr->tval && subt == t_ptr->subval && subt >= ITEM_SINGLE_STACK_MIN && ((int) t_ptr->number + (int) i_ptr->number) < 256 &&
-            (subt < ITEM_GROUP_MIN || t_ptr->p1 == i_ptr->p1) &&
+        if (typ == t_ptr->tval && subt == t_ptr->subval && subt >= ITEM_SINGLE_STACK_MIN && ((int) t_ptr->number + (int) item->number) < 256 &&
+            (subt < ITEM_GROUP_MIN || t_ptr->p1 == item->p1) &&
             // only stack if both or neither are identified
             known1p == known1_p(t_ptr)) {
-            t_ptr->number += i_ptr->number;
+            t_ptr->number += item->number;
 
             break;
         }
@@ -1319,14 +1319,14 @@ int inven_carry(Inventory_t *i_ptr) {
                 inventory[i + 1] = inventory[i];
             }
 
-            inventory[locn] = *i_ptr;
+            inventory[locn] = *item;
             inventory_count++;
 
             break;
         }
     }
 
-    inventory_weight += i_ptr->number * i_ptr->weight;
+    inventory_weight += item->number * item->weight;
     py.flags.status |= PY_STR_WGT;
 
     return locn;
@@ -1363,7 +1363,7 @@ static int spell_chance(int spell) {
 // Print list of spells -RAK-
 // if nonconsec is  -1: spells numbered consecutively from 'a' to 'a'+num
 //                 >=0: spells numbered by offset from nonconsec
-void print_spells(int *spell, int num, int comment, int nonconsec) {
+void print_spells(int *spell, int number_of_choices, int comment, int non_consecutive) {
     int col;
     if (comment) {
         col = 22;
@@ -1378,11 +1378,11 @@ void print_spells(int *spell, int num, int comment, int nonconsec) {
     put_buffer("Lv Mana Fail", 1, col + 35);
 
     // only show the first 22 choices
-    if (num > 22) {
-        num = 22;
+    if (number_of_choices > 22) {
+        number_of_choices = 22;
     }
 
-    for (int i = 0; i < num; i++) {
+    for (int i = 0; i < number_of_choices; i++) {
         int spellID = spell[i];
         Spell_t *s_ptr = &magic_spells[py.misc.pclass - 1][spellID];
 
@@ -1399,13 +1399,13 @@ void print_spells(int *spell, int num, int comment, int nonconsec) {
             p = "";
         }
 
-        // determine whether or not to leave holes in character choices, nonconsec -1
+        // determine whether or not to leave holes in character choices, non_consecutive -1
         // when learning spells, consec offset>=0 when asking which spell to cast.
         char spell_char;
-        if (nonconsec == -1) {
+        if (non_consecutive == -1) {
             spell_char = (char) ('a' + i);
         } else {
-            spell_char = (char) ('a' + spellID - nonconsec);
+            spell_char = (char) ('a' + spellID - non_consecutive);
         }
 
         vtype_t out_val;
@@ -1415,11 +1415,11 @@ void print_spells(int *spell, int num, int comment, int nonconsec) {
 }
 
 // Returns spell pointer -RAK-
-int get_spell(int *spell, int num, int *sn, int *sc, const char *prompt, int first_spell) {
-    *sn = -1;
+int get_spell(int *spell, int number_of_choices, int *spell_id, int *spell_chances, const char *prompt, int first_spell) {
+    *spell_id = -1;
 
     vtype_t str;
-    (void) sprintf(str, "(Spells %c-%c, *=List, <ESCAPE>=exit) %s", spell[0] + 'a' - first_spell, spell[num - 1] + 'a' - first_spell, prompt);
+    (void) sprintf(str, "(Spells %c-%c, *=List, <ESCAPE>=exit) %s", spell[0] + 'a' - first_spell, spell[number_of_choices - 1] + 'a' - first_spell, prompt);
 
     bool flag = false;
     bool redraw = false;
@@ -1430,42 +1430,42 @@ int get_spell(int *spell, int num, int *sn, int *sc, const char *prompt, int fir
 
     while (!flag && get_com(str, &choice)) {
         if (isupper((int) choice)) {
-            *sn = choice - 'A' + first_spell;
+            *spell_id = choice - 'A' + first_spell;
 
             // verify that this is in spell[], at most 22 entries in spell[]
             int spellID;
-            for (spellID = 0; spellID < num; spellID++) {
-                if (*sn == spell[spellID]) {
+            for (spellID = 0; spellID < number_of_choices; spellID++) {
+                if (*spell_id == spell[spellID]) {
                     break;
                 }
             }
 
-            if (spellID == num) {
-                *sn = -2;
+            if (spellID == number_of_choices) {
+                *spell_id = -2;
             } else {
-                Spell_t *s_ptr = &magic_spells[py.misc.pclass - 1][*sn];
+                Spell_t *s_ptr = &magic_spells[py.misc.pclass - 1][*spell_id];
 
                 vtype_t tmp_str;
-                (void) sprintf(tmp_str, "Cast %s (%d mana, %d%% fail)?", spell_names[*sn + offset], s_ptr->smana, spell_chance(*sn));
+                (void) sprintf(tmp_str, "Cast %s (%d mana, %d%% fail)?", spell_names[*spell_id + offset], s_ptr->smana, spell_chance(*spell_id));
                 if (get_check(tmp_str)) {
                     flag = true;
                 } else {
-                    *sn = -1;
+                    *spell_id = -1;
                 }
             }
         } else if (islower((int) choice)) {
-            *sn = choice - 'a' + first_spell;
+            *spell_id = choice - 'a' + first_spell;
 
             // verify that this is in spell[], at most 22 entries in spell[]
             int spellID;
-            for (spellID = 0; spellID < num; spellID++) {
-                if (*sn == spell[spellID]) {
+            for (spellID = 0; spellID < number_of_choices; spellID++) {
+                if (*spell_id == spell[spellID]) {
                     break;
                 }
             }
 
-            if (spellID == num) {
-                *sn = -2;
+            if (spellID == number_of_choices) {
+                *spell_id = -2;
             } else {
                 flag = true;
             }
@@ -1474,16 +1474,16 @@ int get_spell(int *spell, int num, int *sn, int *sc, const char *prompt, int fir
             if (!redraw) {
                 save_screen();
                 redraw = true;
-                print_spells(spell, num, false, first_spell);
+                print_spells(spell, number_of_choices, false, first_spell);
             }
         } else if (isalpha((int) choice)) {
-            *sn = -2;
+            *spell_id = -2;
         } else {
-            *sn = -1;
+            *spell_id = -1;
             bell();
         }
 
-        if (*sn == -2) {
+        if (*spell_id == -2) {
             vtype_t tmp_str;
             (void) sprintf(tmp_str, "You don't know that %s.", (offset == SPELL_OFFSET ? "spell" : "prayer"));
             msg_print(tmp_str);
@@ -1497,7 +1497,7 @@ int get_spell(int *spell, int num, int *sn, int *sc, const char *prompt, int fir
     erase_line(MSG_LINE, 0);
 
     if (flag) {
-        *sc = spell_chance(*sn);
+        *spell_chances = spell_chance(*spell_id);
     }
 
     return flag;
@@ -2016,15 +2016,15 @@ void calc_hitpoints() {
 }
 
 // Inserts a string into a string
-void insert_str(char *object_str, const char *mtc_str, const char *insert) {
-    int mtc_len = (int) strlen(mtc_str);
-    int obj_len = (int) strlen(object_str);
-    char *bound = object_str + obj_len - mtc_len;
+void insert_str(char *to_string, const char *from_string, const char *str_to_insert) {
+    int mtc_len = (int) strlen(from_string);
+    int obj_len = (int) strlen(to_string);
+    char *bound = to_string + obj_len - mtc_len;
 
     char *pc;
-    for (pc = object_str; pc <= bound; pc++) {
+    for (pc = to_string; pc <= bound; pc++) {
         char *temp_obj = pc;
-        const char *temp_mtc = mtc_str;
+        const char *temp_mtc = from_string;
 
         int i;
         for (i = 0; i < mtc_len; i++) {
@@ -2040,29 +2040,29 @@ void insert_str(char *object_str, const char *mtc_str, const char *insert) {
     if (pc <= bound) {
         char out_val[80];
 
-        (void) strncpy(out_val, object_str, (pc - object_str));
+        (void) strncpy(out_val, to_string, (pc - to_string));
         // Turbo C needs int for array index.
-        out_val[(int) (pc - object_str)] = '\0';
-        if (insert) {
-            (void) strcat(out_val, insert);
+        out_val[(int) (pc - to_string)] = '\0';
+        if (str_to_insert) {
+            (void) strcat(out_val, str_to_insert);
         }
         (void) strcat(out_val, (pc + mtc_len));
-        (void) strcpy(object_str, out_val);
+        (void) strcpy(to_string, out_val);
     }
 }
 
-void insert_lnum(char *object_str, const char *mtc_str, int32_t number, int show_sign) {
-    size_t mlen = strlen(mtc_str);
-    char *tmp_str = object_str;
+void insert_lnum(char *to_string, const char *from_string, int32_t number, bool show_sign) {
+    size_t mlen = strlen(from_string);
+    char *tmp_str = to_string;
     char *string;
 
     int flag = 1;
     while (flag != 0) {
-        string = strchr(tmp_str, mtc_str[0]);
+        string = strchr(tmp_str, from_string[0]);
         if (string == 0) {
             flag = 0;
         } else {
-            flag = strncmp(string, mtc_str, mlen);
+            flag = strncmp(string, from_string, mlen);
             if (flag) {
                 tmp_str = string + 1;
             }
@@ -2072,14 +2072,14 @@ void insert_lnum(char *object_str, const char *mtc_str, int32_t number, int show
     if (string) {
         vtype_t str1, str2;
 
-        (void) strncpy(str1, object_str, string - object_str);
-        str1[string - object_str] = '\0';
+        (void) strncpy(str1, to_string, string - to_string);
+        str1[string - to_string] = '\0';
         (void) strcpy(str2, string + mlen);
 
         if (number >= 0 && show_sign) {
-            (void) sprintf(object_str, "%s+%d%s", str1, number, str2);
+            (void) sprintf(to_string, "%s+%d%s", str1, number, str2);
         } else {
-            (void) sprintf(object_str, "%s%d%s", str1, number, str2);
+            (void) sprintf(to_string, "%s%d%s", str1, number, str2);
         }
     }
 }
@@ -2103,14 +2103,14 @@ bool enter_wiz_mode() {
 }
 
 // Weapon weight VS strength and dexterity -RAK-
-int attack_blows(int weight, int *wtohit) {
+int attack_blows(int weight, int *weight_to_hit) {
     int s = py.stats.use_stat[A_STR];
     if (s * 15 < weight) {
-        *wtohit = s * 15 - weight;
+        *weight_to_hit = s * 15 - weight;
         return 1;
     }
 
-    *wtohit = 0;
+    *weight_to_hit = 0;
 
     int d = py.stats.use_stat[A_DEX];
     int dexterity;
@@ -2152,74 +2152,74 @@ int attack_blows(int weight, int *wtohit) {
 }
 
 // Special damage due to magical abilities of object -RAK-
-int tot_dam(Inventory_t *i_ptr, int tdam, int monster) {
-    bool isProjectile = i_ptr->tval >= TV_SLING_AMMO && i_ptr->tval <= TV_ARROW;
-    bool isHaftedSword = i_ptr->tval >= TV_HAFTED && i_ptr->tval <= TV_SWORD;
+int tot_dam(Inventory_t *item, int total_damage, int monster_id) {
+    bool isProjectile = item->tval >= TV_SLING_AMMO && item->tval <= TV_ARROW;
+    bool isHaftedSword = item->tval >= TV_HAFTED && item->tval <= TV_SWORD;
 
-    if ((i_ptr->flags & TR_EGO_WEAPON) && (isProjectile || isHaftedSword || i_ptr->tval == TV_FLASK)) {
-        Creature_t *m_ptr = &creatures_list[monster];
-        Recall_t *r_ptr = &creature_recall[monster];
+    if ((item->flags & TR_EGO_WEAPON) && (isProjectile || isHaftedSword || item->tval == TV_FLASK)) {
+        Creature_t *m_ptr = &creatures_list[monster_id];
+        Recall_t *r_ptr = &creature_recall[monster_id];
 
         // Slay Dragon
-        if ((m_ptr->cdefense & CD_DRAGON) && (i_ptr->flags & TR_SLAY_DRAGON)) {
+        if ((m_ptr->cdefense & CD_DRAGON) && (item->flags & TR_SLAY_DRAGON)) {
             r_ptr->r_cdefense |= CD_DRAGON;
-            return tdam * 4;
+            return total_damage * 4;
         }
 
         // Slay Undead
-        if ((m_ptr->cdefense & CD_UNDEAD) && (i_ptr->flags & TR_SLAY_UNDEAD)) {
+        if ((m_ptr->cdefense & CD_UNDEAD) && (item->flags & TR_SLAY_UNDEAD)) {
             r_ptr->r_cdefense |= CD_UNDEAD;
-            return tdam * 3;
+            return total_damage * 3;
         }
 
         // Slay Animal
-        if ((m_ptr->cdefense & CD_ANIMAL) && (i_ptr->flags & TR_SLAY_ANIMAL)) {
+        if ((m_ptr->cdefense & CD_ANIMAL) && (item->flags & TR_SLAY_ANIMAL)) {
             r_ptr->r_cdefense |= CD_ANIMAL;
-            return tdam * 2;
+            return total_damage * 2;
         }
 
         // Slay Evil
-        if ((m_ptr->cdefense & CD_EVIL) && (i_ptr->flags & TR_SLAY_EVIL)) {
+        if ((m_ptr->cdefense & CD_EVIL) && (item->flags & TR_SLAY_EVIL)) {
             r_ptr->r_cdefense |= CD_EVIL;
-            return tdam * 2;
+            return total_damage * 2;
         }
 
         // Frost
-        if ((m_ptr->cdefense & CD_FROST) && (i_ptr->flags & TR_FROST_BRAND)) {
+        if ((m_ptr->cdefense & CD_FROST) && (item->flags & TR_FROST_BRAND)) {
             r_ptr->r_cdefense |= CD_FROST;
-            return tdam * 3 / 2;
+            return total_damage * 3 / 2;
         }
 
         // Fire
-        if ((m_ptr->cdefense & CD_FIRE) && (i_ptr->flags & TR_FLAME_TONGUE)) {
+        if ((m_ptr->cdefense & CD_FIRE) && (item->flags & TR_FLAME_TONGUE)) {
             r_ptr->r_cdefense |= CD_FIRE;
-            return tdam * 3 / 2;
+            return total_damage * 3 / 2;
         }
     }
 
-    return tdam;
+    return total_damage;
 }
 
 // Critical hits, Nasty way to die. -RAK-
-int critical_blow(int weight, int plus, int dam, int attack_type) {
-    int critical = dam;
+int critical_blow(int weapon_weight, int plus_to_hit, int damage, int attack_type_id) {
+    int critical = damage;
 
     // Weight of weapon, plusses to hit, and character level all
     // contribute to the chance of a critical
-    if (randint(5000) <= weight + 5 * plus + (class_level_adj[py.misc.pclass][attack_type] * py.misc.lev)) {
-        weight += randint(650);
+    if (randint(5000) <= weapon_weight + 5 * plus_to_hit + (class_level_adj[py.misc.pclass][attack_type_id] * py.misc.lev)) {
+        weapon_weight += randint(650);
 
-        if (weight < 400) {
-            critical = 2 * dam + 5;
+        if (weapon_weight < 400) {
+            critical = 2 * damage + 5;
             msg_print("It was a good hit! (x2 damage)");
-        } else if (weight < 700) {
-            critical = 3 * dam + 10;
+        } else if (weapon_weight < 700) {
+            critical = 3 * damage + 10;
             msg_print("It was an excellent hit! (x3 damage)");
-        } else if (weight < 900) {
-            critical = 4 * dam + 15;
+        } else if (weapon_weight < 900) {
+            critical = 4 * damage + 15;
             msg_print("It was a superb hit! (x4 damage)");
         } else {
-            critical = 5 * dam + 20;
+            critical = 5 * damage + 20;
             msg_print("It was a *GREAT* hit! (x5 damage)");
         }
     }
@@ -2228,54 +2228,54 @@ int critical_blow(int weight, int plus, int dam, int attack_type) {
 }
 
 // Given direction "dir", returns new row, column location -RAK-
-bool mmove(int dir, int *y, int *x) {
+bool mmove(int dir, int *new_y, int *new_x) {
     int new_row = 0;
     int new_col = 0;
 
     switch (dir) {
         case 1:
-            new_row = *y + 1;
-            new_col = *x - 1;
+            new_row = *new_y + 1;
+            new_col = *new_x - 1;
             break;
         case 2:
-            new_row = *y + 1;
-            new_col = *x;
+            new_row = *new_y + 1;
+            new_col = *new_x;
             break;
         case 3:
-            new_row = *y + 1;
-            new_col = *x + 1;
+            new_row = *new_y + 1;
+            new_col = *new_x + 1;
             break;
         case 4:
-            new_row = *y;
-            new_col = *x - 1;
+            new_row = *new_y;
+            new_col = *new_x - 1;
             break;
         case 5:
-            new_row = *y;
-            new_col = *x;
+            new_row = *new_y;
+            new_col = *new_x;
             break;
         case 6:
-            new_row = *y;
-            new_col = *x + 1;
+            new_row = *new_y;
+            new_col = *new_x + 1;
             break;
         case 7:
-            new_row = *y - 1;
-            new_col = *x - 1;
+            new_row = *new_y - 1;
+            new_col = *new_x - 1;
             break;
         case 8:
-            new_row = *y - 1;
-            new_col = *x;
+            new_row = *new_y - 1;
+            new_col = *new_x;
             break;
         case 9:
-            new_row = *y - 1;
-            new_col = *x + 1;
+            new_row = *new_y - 1;
+            new_col = *new_x + 1;
             break;
     }
 
     bool moved = false;
 
     if (new_row >= 0 && new_row < dungeon_height && new_col >= 0 && new_col < dungeon_width) {
-        *y = new_row;
-        *x = new_col;
+        *new_y = new_row;
+        *new_x = new_col;
         moved = true;
     }
 
@@ -2292,7 +2292,7 @@ bool player_saves() {
 }
 
 // Finds range of item in inventory list -RAK-
-int find_range(int item1, int item2, int *j, int *k) {
+int find_range(int item_id_start, int item_id_end, int *j, int *k) {
     *j = -1;
     *k = -1;
 
@@ -2302,12 +2302,12 @@ int find_range(int item1, int item2, int *j, int *k) {
         int itemID = (int) inventory[i].tval;
 
         if (!flag) {
-            if (itemID == item1 || itemID == item2) {
+            if (itemID == item_id_start || itemID == item_id_end) {
                 flag = true;
                 *j = i;
             }
         } else {
-            if (itemID != item1 && itemID != item2) {
+            if (itemID != item_id_start && itemID != item_id_end) {
                 *k = i - 1;
                 break;
             }
@@ -2322,14 +2322,14 @@ int find_range(int item1, int item2, int *j, int *k) {
 }
 
 // Teleport the player to a new location -RAK-
-void teleport(int dis) {
+void teleport(int new_distance) {
     int y, x;
 
     do {
         y = randint(dungeon_height) - 1;
         x = randint(dungeon_width) - 1;
 
-        while (distance(y, x, char_row, char_col) > dis) {
+        while (distance(y, x, char_row, char_col) > new_distance) {
             y += (char_row - y) / 2;
             x += (char_col - x) / 2;
         }

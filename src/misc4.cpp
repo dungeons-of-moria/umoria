@@ -44,13 +44,13 @@ void scribe_object() {
 }
 
 // Append an additional comment to an object description. -CJS-
-void add_inscribe(Inventory_t *i_ptr, uint8_t type) {
-    i_ptr->ident |= type;
+void add_inscribe(Inventory_t *item, uint8_t item_ident_type) {
+    item->ident |= item_ident_type;
 }
 
 // Replace any existing comment in an object description with a new one. -CJS-
-void inscribe(Inventory_t *i_ptr, const char *str) {
-    (void) strcpy(i_ptr->inscrip, str);
+void inscribe(Inventory_t *item, const char *inscription) {
+    (void) strcpy(item->inscrip, inscription);
 }
 
 // We need to reset the view of things. -CJS-

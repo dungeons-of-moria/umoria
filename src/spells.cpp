@@ -39,16 +39,16 @@ static void lower_monster_name(char *description, bool monsterLit, const char *m
 }
 
 // Sleep creatures adjacent to player -RAK-
-bool sleep_monsters1(int row, int col) {
+bool sleep_monsters1(int y, int x) {
     bool asleep = false;
 
-    for (int y = row - 1; y <= row + 1; y++) {
-        for (int x = col - 1; x <= col + 1; x++) {
-            if (cave[y][x].cptr <= 1) {
+    for (int row = y - 1; row <= y + 1; row++) {
+        for (int col = x - 1; col <= x + 1; col++) {
+            if (cave[row][col].cptr <= 1) {
                 continue;
             }
 
-            Monster_t *m_ptr = &monsters[cave[y][x].cptr];
+            Monster_t *m_ptr = &monsters[cave[row][col].cptr];
             Creature_t *r_ptr = &creatures_list[m_ptr->mptr];
 
             vtype_t name;
@@ -332,13 +332,13 @@ bool ident_spell() {
 }
 
 // Get all the monsters on the level pissed off. -RAK-
-bool aggravate_monster(int dis_affect) {
+bool aggravate_monster(int distance_affect) {
     bool aggravated = false;
 
     for (int id = next_free_monster_id - 1; id >= MIN_MONIX; id--) {
         Monster_t *m_ptr = &monsters[id];
         m_ptr->csleep = 0;
-        if (m_ptr->cdis <= dis_affect && m_ptr->cspeed < 2) {
+        if (m_ptr->cdis <= distance_affect && m_ptr->cspeed < 2) {
             m_ptr->cspeed++;
             aggravated = true;
         }
@@ -506,7 +506,7 @@ static void lightLineTouchesMonster(int monsterID) {
 }
 
 // Leave a line of light in given dir, blue light can sometimes hurt creatures. -RAK-
-void light_line(int dir, int y, int x) {
+void light_line(int x, int y, int direction) {
     int dist = 0;
     bool finished = false;
 
@@ -514,7 +514,7 @@ void light_line(int dir, int y, int x) {
         Cave_t *c_ptr = &cave[y][x];
 
         if (dist > OBJ_BOLT_RANGE || c_ptr->fval >= MIN_CLOSED_SPACE) {
-            (void) mmove(dir, &y, &x);
+            (void) mmove(direction, &y, &x);
             finished = true;
             continue; // we're done here, break out of the loop
         }
@@ -540,7 +540,7 @@ void light_line(int dir, int y, int x) {
         }
 
         // move must be at end because want to light up current spot
-        (void) mmove(dir, &y, &x);
+        (void) mmove(direction, &y, &x);
         dist++;
     }
 }
@@ -553,13 +553,13 @@ void starlite(int y, int x) {
 
     for (int dir = 1; dir <= 9; dir++) {
         if (dir != 5) {
-            light_line(dir, y, x);
+            light_line(x, y, dir);
         }
     }
 }
 
 // Disarms all traps/chests in a given direction -RAK-
-bool disarm_all(int dir, int y, int x) {
+bool disarm_all(int y, int x, int direction) {
     int dist = 0;
     bool disarmed = false;
     Cave_t *c_ptr;
@@ -595,7 +595,7 @@ bool disarm_all(int dir, int y, int x) {
         }
 
         // move must be at end because want to light up current spot
-        (void) mmove(dir, &y, &x);
+        (void) mmove(direction, &y, &x);
         dist++;
     } while (dist <= OBJ_BOLT_RANGE && c_ptr->fval <= MAX_OPEN_SPACE);
 
@@ -690,11 +690,11 @@ static void fireBoltTouchesMonster(Cave_t *tile, int dam, int harmType, uint32_t
 }
 
 // Shoot a bolt in a given direction -RAK-
-void fire_bolt(int typ, int dir, int y, int x, int dam, char *bolt_typ) {
+void fire_bolt(int y, int x, int direction, int damage_hp, int spell_type_id, char *spell_name) {
     bool (*dummy)(Inventory_t *);
     int harm_type = 0;
     uint32_t weapon_type;
-    get_flags(typ, &weapon_type, &harm_type, &dummy);
+    get_flags(spell_type_id, &weapon_type, &harm_type, &dummy);
 
     int dist = 0;
     bool finished = false;
@@ -703,7 +703,7 @@ void fire_bolt(int typ, int dir, int y, int x, int dam, char *bolt_typ) {
         int oldy = y;
         int oldx = x;
 
-        (void) mmove(dir, &y, &x);
+        (void) mmove(direction, &y, &x);
         dist++;
 
         Cave_t *c_ptr = &cave[y][x];
@@ -717,7 +717,7 @@ void fire_bolt(int typ, int dir, int y, int x, int dam, char *bolt_typ) {
 
         if (c_ptr->cptr > 1) {
             finished = true;
-            fireBoltTouchesMonster(c_ptr, dam, harm_type, weapon_type, bolt_typ);
+            fireBoltTouchesMonster(c_ptr, damage_hp, harm_type, weapon_type, spell_name);
         } else if (panel_contains(y, x) && py.flags.blind < 1) {
             print('*', y, x);
 
@@ -728,7 +728,7 @@ void fire_bolt(int typ, int dir, int y, int x, int dam, char *bolt_typ) {
 }
 
 // Shoot a ball in a given direction.  Note that balls have an area affect. -RAK-
-void fire_ball(int typ, int dir, int y, int x, int dam_hp, const char *descrip) {
+void fire_ball(int y, int x, int direction, int damage_hp, int spell_type_id, const char *spell_name) {
     int thit = 0;
     int tkill = 0;
     int max_dis = 2;
@@ -736,7 +736,7 @@ void fire_ball(int typ, int dir, int y, int x, int dam_hp, const char *descrip) 
     bool (*destroy)(Inventory_t *);
     int harm_type;
     uint32_t weapon_type;
-    get_flags(typ, &weapon_type, &harm_type, &destroy);
+    get_flags(spell_type_id, &weapon_type, &harm_type, &destroy);
 
     int dist = 0;
 
@@ -745,7 +745,7 @@ void fire_ball(int typ, int dir, int y, int x, int dam_hp, const char *descrip) 
         int oldy = y;
         int oldx = x;
 
-        (void) mmove(dir, &y, &x);
+        (void) mmove(direction, &y, &x);
         dist++;
 
         lite_spot(oldy, oldx);
@@ -788,7 +788,7 @@ void fire_ball(int typ, int dir, int y, int x, int dam_hp, const char *descrip) 
                                 update_mon((int) c_ptr->cptr);
 
                                 thit++;
-                                int dam = dam_hp;
+                                int dam = damage_hp;
 
                                 if (harm_type & r_ptr->cdefense) {
                                     dam = dam * 2;
@@ -831,11 +831,11 @@ void fire_ball(int typ, int dir, int y, int x, int dam_hp, const char *descrip) 
 
             if (thit == 1) {
                 vtype_t out_val;
-                (void) sprintf(out_val, "The %s envelops a creature!", descrip);
+                (void) sprintf(out_val, "The %s envelops a creature!", spell_name);
                 msg_print(out_val);
             } else if (thit > 1) {
                 vtype_t out_val;
-                (void) sprintf(out_val, "The %s envelops several creatures!", descrip);
+                (void) sprintf(out_val, "The %s envelops several creatures!", spell_name);
                 msg_print(out_val);
             }
 
@@ -860,13 +860,13 @@ void fire_ball(int typ, int dir, int y, int x, int dam_hp, const char *descrip) 
 
 // Breath weapon works like a fire_ball, but affects the player.
 // Note the area affect. -RAK-
-void breath(int typ, int y, int x, int dam_hp, char *ddesc, int monptr) {
+void breath(int x, int y, int monster_id, int damage_hp, char *spell_name, int spell_type_id) {
     int max_dis = 2;
 
     bool (*destroy)(Inventory_t *);
     int harm_type;
     uint32_t weapon_type;
-    get_flags(typ, &weapon_type, &harm_type, &destroy);
+    get_flags(spell_type_id, &weapon_type, &harm_type, &destroy);
 
     int dam;
 
@@ -891,7 +891,7 @@ void breath(int typ, int y, int x, int dam_hp, char *ddesc, int monptr) {
                         Monster_t *m_ptr = &monsters[c_ptr->cptr];
                         Creature_t *r_ptr = &creatures_list[m_ptr->mptr];
 
-                        dam = dam_hp;
+                        dam = damage_hp;
 
                         if (harm_type & r_ptr->cdefense) {
                             dam = dam * 2;
@@ -917,8 +917,8 @@ void breath(int typ, int y, int x, int dam_hp, char *ddesc, int monptr) {
                                 creature_recall[m_ptr->mptr].r_cmove = (uint32_t) (treas | (creature_recall[m_ptr->mptr].r_cmove & ~CM_TREASURE));
                             }
 
-                            // It ate an already processed monster.Handle normally.
-                            if (monptr < c_ptr->cptr) {
+                            // It ate an already processed monster. Handle normally.
+                            if (monster_id < c_ptr->cptr) {
                                 delete_monster((int) c_ptr->cptr);
                             } else {
                                 // If it eats this monster, an already processed monster
@@ -928,7 +928,7 @@ void breath(int typ, int y, int x, int dam_hp, char *ddesc, int monptr) {
                             }
                         }
                     } else if (c_ptr->cptr == 1) {
-                        dam = (dam_hp / (distance(row, col, y, x) + 1));
+                        dam = (damage_hp / (distance(row, col, y, x) + 1));
 
                         // let's do at least one point of damage
                         // prevents randint(0) problem with poison_gas, also
@@ -936,21 +936,21 @@ void breath(int typ, int y, int x, int dam_hp, char *ddesc, int monptr) {
                             dam = 1;
                         }
 
-                        switch (typ) {
+                        switch (spell_type_id) {
                             case GF_LIGHTNING:
-                                light_dam(dam, ddesc);
+                                light_dam(dam, spell_name);
                                 break;
                             case GF_POISON_GAS:
-                                poison_gas(dam, ddesc);
+                                poison_gas(dam, spell_name);
                                 break;
                             case GF_ACID:
-                                acid_dam(dam, ddesc);
+                                acid_dam(dam, spell_name);
                                 break;
                             case GF_FROST:
-                                cold_dam(dam, ddesc);
+                                cold_dam(dam, spell_name);
                                 break;
                             case GF_FIRE:
-                                fire_dam(dam, ddesc);
+                                fire_dam(dam, spell_name);
                                 break;
                         }
                     }
@@ -972,7 +972,7 @@ void breath(int typ, int y, int x, int dam_hp, char *ddesc, int monptr) {
 }
 
 // Recharge a wand, staff, or rod.  Sometimes the item breaks. -RAK-
-bool recharge(int num) {
+bool recharge(int charges) {
     int i, j;
     if (!find_range(TV_STAFF, TV_WAND, &i, &j)) {
         msg_print("You have nothing to recharge.");
@@ -991,7 +991,7 @@ bool recharge(int num) {
     //
     // make it harder to recharge high level, and highly charged wands, note
     // that i can be negative, so check its value before trying to call randint().
-    int chance = num + 50 - (int) i_ptr->level - i_ptr->p1;
+    int chance = charges + 50 - (int) i_ptr->level - i_ptr->p1;
     if (chance < 19) {
         // Automatic failure.
         chance = 1;
@@ -1003,8 +1003,8 @@ bool recharge(int num) {
         msg_print("There is a bright flash of light.");
         inven_destroy(item_val);
     } else {
-        num = (num / (i_ptr->level + 2)) + 1;
-        i_ptr->p1 += 2 + randint(num);
+        charges = (charges / (i_ptr->level + 2)) + 1;
+        i_ptr->p1 += 2 + randint(charges);
         if (known2_p(i_ptr)) {
             clear_known2(i_ptr);
         }
@@ -1015,14 +1015,14 @@ bool recharge(int num) {
 }
 
 // Increase or decrease a creatures hit points -RAK-
-bool hp_monster(int dir, int y, int x, int dam) {
+bool hp_monster(int y, int x, int direction, int damage_hp) {
     bool changed = false;
 
     int dist = 0;
 
     bool finished = false;
     while (!finished) {
-        (void) mmove(dir, &y, &x);
+        (void) mmove(direction, &y, &x);
         dist++;
 
         Cave_t *c_ptr = &cave[y][x];
@@ -1038,10 +1038,10 @@ bool hp_monster(int dir, int y, int x, int dam) {
             vtype_t name;
             monster_name(name, m_ptr->ml, r_ptr->name);
 
-            if (mon_take_hit((int) c_ptr->cptr, dam) >= 0) {
+            if (mon_take_hit((int) c_ptr->cptr, damage_hp) >= 0) {
                 printMonsterActionText(name, "dies in a fit of agony.");
                 prt_experience();
-            } else if (dam > 0) {
+            } else if (damage_hp > 0) {
                 printMonsterActionText(name, "screams in agony.");
             }
 
@@ -1053,14 +1053,14 @@ bool hp_monster(int dir, int y, int x, int dam) {
 }
 
 // Drains life; note it must be living. -RAK-
-bool drain_life(int dir, int y, int x) {
+bool drain_life(int y, int x, int direction) {
     bool drained = false;
 
     int dist = 0;
 
     bool finished = false;
     while (!finished) {
-        (void) mmove(dir, &y, &x);
+        (void) mmove(direction, &y, &x);
         dist++;
 
         Cave_t *c_ptr = &cave[y][x];
@@ -1096,14 +1096,14 @@ bool drain_life(int dir, int y, int x) {
 
 // Increase or decrease a creatures speed -RAK-
 // NOTE: cannot slow a winning creature (BALROG)
-bool speed_monster(int dir, int y, int x, int spd) {
+bool speed_monster(int y, int x, int direction, int speed) {
     bool changed = false;
 
     int dist = 0;
 
     bool finished = false;
     while (!finished) {
-        (void) mmove(dir, &y, &x);
+        (void) mmove(direction, &y, &x);
         dist++;
 
         Cave_t *c_ptr = &cave[y][x];
@@ -1119,15 +1119,15 @@ bool speed_monster(int dir, int y, int x, int spd) {
             vtype_t name;
             monster_name(name, m_ptr->ml, r_ptr->name);
 
-            if (spd > 0) {
-                m_ptr->cspeed += spd;
+            if (speed > 0) {
+                m_ptr->cspeed += speed;
                 m_ptr->csleep = 0;
 
                 changed = true;
 
                 printMonsterActionText(name, "starts moving faster.");
             } else if (randint(MAX_MONS_LEVEL) > r_ptr->level) {
-                m_ptr->cspeed += spd;
+                m_ptr->cspeed += speed;
                 m_ptr->csleep = 0;
 
                 changed = true;
@@ -1145,14 +1145,14 @@ bool speed_monster(int dir, int y, int x, int spd) {
 }
 
 // Confuse a creature -RAK-
-bool confuse_monster(int dir, int y, int x) {
+bool confuse_monster(int y, int x, int direction) {
     bool confused = false;
 
     int dist = 0;
 
     bool finished = false;
     while (!finished) {
-        (void) mmove(dir, &y, &x);
+        (void) mmove(direction, &y, &x);
         dist++;
 
         Cave_t *c_ptr = &cave[y][x];
@@ -1199,14 +1199,14 @@ bool confuse_monster(int dir, int y, int x) {
 }
 
 // Sleep a creature. -RAK-
-bool sleep_monster(int dir, int y, int x) {
+bool sleep_monster(int y, int x, int direction) {
     bool asleep = false;
 
     int dist = 0;
 
     bool finished = false;
     while (!finished) {
-        (void) mmove(dir, &y, &x);
+        (void) mmove(direction, &y, &x);
         dist++;
 
         Cave_t *c_ptr = &cave[y][x];
@@ -1242,14 +1242,14 @@ bool sleep_monster(int dir, int y, int x) {
 }
 
 // Turn stone to mud, delete wall. -RAK-
-bool wall_to_mud(int dir, int y, int x) {
+bool wall_to_mud(int y, int x, int direction) {
     bool turned = false;
 
     int dist = 0;
 
     bool finished = false;
     while (!finished) {
-        (void) mmove(dir, &y, &x);
+        (void) mmove(direction, &y, &x);
         dist++;
 
         Cave_t *c_ptr = &cave[y][x];
@@ -1323,7 +1323,7 @@ bool wall_to_mud(int dir, int y, int x) {
 }
 
 // Destroy all traps and doors in a given direction -RAK-
-bool td_destroy2(int dir, int y, int x) {
+bool td_destroy2(int y, int x, int direction) {
     bool destroyed = false;
 
     int dist = 0;
@@ -1331,7 +1331,7 @@ bool td_destroy2(int dir, int y, int x) {
     Cave_t *c_ptr;
 
     do {
-        (void) mmove(dir, &y, &x);
+        (void) mmove(direction, &y, &x);
         dist++;
 
         c_ptr = &cave[y][x];
@@ -1366,14 +1366,14 @@ bool td_destroy2(int dir, int y, int x) {
 
 // Polymorph a monster -RAK-
 // NOTE: cannot polymorph a winning creature (BALROG)
-bool poly_monster(int dir, int y, int x) {
+bool poly_monster(int y, int x, int direction) {
     bool morphed = false;
 
     int dist = 0;
 
     bool finished = false;
     while (!finished) {
-        (void) mmove(dir, &y, &x);
+        (void) mmove(direction, &y, &x);
         dist++;
 
         Cave_t *c_ptr = &cave[y][x];
@@ -1408,14 +1408,14 @@ bool poly_monster(int dir, int y, int x) {
 }
 
 // Create a wall. -RAK-
-bool build_wall(int dir, int y, int x) {
+bool build_wall(int y, int x, int direction) {
     bool built = false;
 
     int dist = 0;
 
     bool finished = false;
     while (!finished) {
-        (void) mmove(dir, &y, &x);
+        (void) mmove(direction, &y, &x);
         dist++;
 
         Cave_t *c_ptr = &cave[y][x];
@@ -1478,12 +1478,12 @@ bool build_wall(int dir, int y, int x) {
 }
 
 // Replicate a creature -RAK-
-bool clone_monster(int dir, int y, int x) {
+bool clone_monster(int y, int x, int direction) {
     int dist = 0;
 
     bool finished = false;
     while (!finished) {
-        (void) mmove(dir, &y, &x);
+        (void) mmove(direction, &y, &x);
         dist++;
 
         Cave_t *c_ptr = &cave[y][x];
@@ -1502,22 +1502,22 @@ bool clone_monster(int dir, int y, int x) {
 }
 
 // Move the creature record to a new location -RAK-
-void teleport_away(int monptr, int dis) {
+void teleport_away(int monster_id, int distance_from_player) {
     int yn, xn;
 
-    Monster_t *m_ptr = &monsters[monptr];
+    Monster_t *m_ptr = &monsters[monster_id];
 
     int ctr = 0;
     do {
         do {
-            yn = m_ptr->fy + (randint(2 * dis + 1) - (dis + 1));
-            xn = m_ptr->fx + (randint(2 * dis + 1) - (dis + 1));
+            yn = m_ptr->fy + (randint(2 * distance_from_player + 1) - (distance_from_player + 1));
+            xn = m_ptr->fx + (randint(2 * distance_from_player + 1) - (distance_from_player + 1));
         } while (!in_bounds(yn, xn));
 
         ctr++;
         if (ctr > 9) {
             ctr = 0;
-            dis += 5;
+            distance_from_player += 5;
         }
     } while ((cave[yn][xn].fval >= MIN_CLOSED_SPACE) || (cave[yn][xn].cptr != 0));
 
@@ -1530,18 +1530,18 @@ void teleport_away(int monptr, int dis) {
     // not currently visible in its new position.
     m_ptr->ml = false;
     m_ptr->cdis = (uint8_t) distance(char_row, char_col, yn, xn);
-    update_mon(monptr);
+    update_mon(monster_id);
 }
 
 // Teleport player to spell casting creature -RAK-
-void teleport_to(int ny, int nx) {
+void teleport_to(int to_y, int to_x) {
     int y, x;
 
     int dis = 1;
     int ctr = 0;
     do {
-        y = ny + (randint(2 * dis + 1) - (dis + 1));
-        x = nx + (randint(2 * dis + 1) - (dis + 1));
+        y = to_y + (randint(2 * dis + 1) - (dis + 1));
+        x = to_x + (randint(2 * dis + 1) - (dis + 1));
         ctr++;
         if (ctr > 9) {
             ctr = 0;
@@ -1570,14 +1570,14 @@ void teleport_to(int ny, int nx) {
 }
 
 // Teleport all creatures in a given direction away -RAK-
-bool teleport_monster(int dir, int y, int x) {
+bool teleport_monster(int y, int x, int direction) {
     bool teleported = false;
 
     int dist = 0;
 
     bool finished = false;
     while (!finished) {
-        (void) mmove(dir, &y, &x);
+        (void) mmove(direction, &y, &x);
         dist++;
 
         Cave_t *c_ptr = &cave[y][x];
@@ -1652,7 +1652,7 @@ bool genocide() {
 
 // Change speed of any creature . -RAK-
 // NOTE: cannot slow a winning creature (BALROG)
-bool speed_monsters(int spd) {
+bool speed_monsters(int speed) {
     bool speedy = false;
 
     for (int id = next_free_monster_id - 1; id >= MIN_MONIX; id--) {
@@ -1666,8 +1666,8 @@ bool speed_monsters(int spd) {
             continue; // do nothing
         }
 
-        if (spd > 0) {
-            m_ptr->cspeed += spd;
+        if (speed > 0) {
+            m_ptr->cspeed += speed;
             m_ptr->csleep = 0;
 
             if (m_ptr->ml) {
@@ -1675,7 +1675,7 @@ bool speed_monsters(int spd) {
                 printMonsterActionText(name, "starts moving faster.");
             }
         } else if (randint(MAX_MONS_LEVEL) > r_ptr->level) {
-            m_ptr->cspeed += spd;
+            m_ptr->cspeed += speed;
             m_ptr->csleep = 0;
 
             if (m_ptr->ml) {
@@ -1779,27 +1779,27 @@ bool detect_evil() {
 }
 
 // Change players hit points in some manner -RAK-
-bool hp_player(int num) {
+bool hp_player(int adjustment) {
     if (py.misc.chp >= py.misc.mhp) {
         return false;
     }
 
-    py.misc.chp += num;
+    py.misc.chp += adjustment;
     if (py.misc.chp > py.misc.mhp) {
         py.misc.chp = py.misc.mhp;
         py.misc.chp_frac = 0;
     }
     prt_chp();
 
-    num = num / 5;
-    if (num < 3) {
-        if (num == 0) {
+    adjustment = adjustment / 5;
+    if (adjustment < 3) {
+        if (adjustment == 0) {
             msg_print("You feel a little better.");
         } else {
             msg_print("You feel better.");
         }
     } else {
-        if (num < 7) {
+        if (adjustment < 7) {
             msg_print("You feel much better.");
         } else {
             msg_print("You feel very good.");
@@ -1943,16 +1943,16 @@ void create_food() {
 
 // Attempts to destroy a type of creature.  Success depends on
 // the creatures level VS. the player's level -RAK-
-bool dispel_creature(int cflag, int damage) {
+bool dispel_creature(int creature_defense, int damage) {
     bool dispelled = false;
 
     for (int id = next_free_monster_id - 1; id >= MIN_MONIX; id--) {
         Monster_t *m_ptr = &monsters[id];
 
-        if (m_ptr->cdis <= MAX_SIGHT && (cflag & creatures_list[m_ptr->mptr].cdefense) && los(char_row, char_col, (int) m_ptr->fy, (int) m_ptr->fx)) {
+        if (m_ptr->cdis <= MAX_SIGHT && (creature_defense & creatures_list[m_ptr->mptr].cdefense) && los(char_row, char_col, (int) m_ptr->fy, (int) m_ptr->fx)) {
             Creature_t *r_ptr = &creatures_list[m_ptr->mptr];
 
-            creature_recall[m_ptr->mptr].r_cdefense |= cflag;
+            creature_recall[m_ptr->mptr].r_cdefense |= creature_defense;
 
             dispelled = true;
 
@@ -2078,11 +2078,11 @@ void lose_chr() {
 }
 
 // Lose experience -RAK-
-void lose_exp(int32_t amount) {
-    if (amount > py.misc.exp) {
+void lose_exp(int32_t adjustment) {
+    if (adjustment > py.misc.exp) {
         py.misc.exp = 0;
     } else {
-        py.misc.exp -= amount;
+        py.misc.exp -= adjustment;
     }
     prt_experience();
 
@@ -2128,13 +2128,13 @@ bool slow_poison() {
 }
 
 // Bless -RAK-
-void bless(int amount) {
-    py.flags.blessed += amount;
+void bless(int adjustment) {
+    py.flags.blessed += adjustment;
 }
 
 // Detect Invisible for period of time -RAK-
-void detect_inv2(int amount) {
-    py.flags.detect_inv += amount;
+void detect_inv2(int adjustment) {
+    py.flags.detect_inv += adjustment;
 }
 
 static void replace_spot(int y, int x, int typ) {
@@ -2206,9 +2206,9 @@ void destroy_area(int y, int x) {
 // Enchants a plus onto an item. -RAK-
 // `limit` param is the maximum bonus allowed; usually 10,
 // but weapon's maximum damage when enchanting melee weapons to damage.
-bool enchant(int16_t *plusses, int16_t limit) {
+bool enchant(int16_t *plusses, int16_t max_bonus_limit) {
     // avoid randint(0) call
-    if (limit <= 0) {
+    if (max_bonus_limit <= 0) {
         return false;
     }
 
@@ -2223,7 +2223,7 @@ bool enchant(int16_t *plusses, int16_t limit) {
         }
     }
 
-    if (randint(limit) > chance) {
+    if (randint(max_bonus_limit) > chance) {
         *plusses += 1;
         return true;
     }

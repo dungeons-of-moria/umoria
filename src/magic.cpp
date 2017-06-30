@@ -39,7 +39,7 @@ static void castSpell(int spellID) {
     switch (spellID) {
         case 1:
             if (get_dir(CNIL, &dir)) {
-                fire_bolt(GF_MAGIC_MISSILE, dir, char_row, char_col, damroll(2, 6), spell_names[0]);
+                fire_bolt(char_row, char_col, dir, damroll(2, 6), GF_MAGIC_MISSILE, spell_names[0]);
             }
             break;
         case 2:
@@ -60,17 +60,17 @@ static void castSpell(int spellID) {
             break;
         case 7:
             if (get_dir(CNIL, &dir)) {
-                fire_ball(GF_POISON_GAS, dir, char_row, char_col, 12, spell_names[6]);
+                fire_ball(char_row, char_col, dir, 12, GF_POISON_GAS, spell_names[6]);
             }
             break;
         case 8:
             if (get_dir(CNIL, &dir)) {
-                (void) confuse_monster(dir, char_row, char_col);
+                (void) confuse_monster(char_row, char_col, dir);
             }
             break;
         case 9:
             if (get_dir(CNIL, &dir)) {
-                fire_bolt(GF_LIGHTNING, dir, char_row, char_col, damroll(4, 8), spell_names[8]);
+                fire_bolt(char_row, char_col, dir, damroll(4, 8), GF_LIGHTNING, spell_names[8]);
             }
             break;
         case 10:
@@ -78,7 +78,7 @@ static void castSpell(int spellID) {
             break;
         case 11:
             if (get_dir(CNIL, &dir)) {
-                (void) sleep_monster(dir, char_row, char_col);
+                (void) sleep_monster(char_row, char_col, dir);
             }
             break;
         case 12:
@@ -94,12 +94,12 @@ static void castSpell(int spellID) {
             break;
         case 15:
             if (get_dir(CNIL, &dir)) {
-                fire_bolt(GF_FROST, dir, char_row, char_col, damroll(6, 8), spell_names[14]);
+                fire_bolt(char_row, char_col, dir, damroll(6, 8), GF_FROST, spell_names[14]);
             }
             break;
         case 16:
             if (get_dir(CNIL, &dir)) {
-                (void) wall_to_mud(dir, char_row, char_col);
+                (void) wall_to_mud(char_row, char_col, dir);
             }
             break;
         case 17:
@@ -113,7 +113,7 @@ static void castSpell(int spellID) {
             break;
         case 20:
             if (get_dir(CNIL, &dir)) {
-                (void) poly_monster(dir, char_row, char_col);
+                (void) poly_monster(char_row, char_col, dir);
             }
             break;
         case 21:
@@ -124,17 +124,17 @@ static void castSpell(int spellID) {
             break;
         case 23:
             if (get_dir(CNIL, &dir)) {
-                fire_bolt(GF_FIRE, dir, char_row, char_col, damroll(9, 8), spell_names[22]);
+                fire_bolt(char_row, char_col, dir, damroll(9, 8), GF_FIRE, spell_names[22]);
             }
             break;
         case 24:
             if (get_dir(CNIL, &dir)) {
-                (void) speed_monster(dir, char_row, char_col, -1);
+                (void) speed_monster(char_row, char_col, dir, -1);
             }
             break;
         case 25:
             if (get_dir(CNIL, &dir)) {
-                fire_ball(GF_FROST, dir, char_row, char_col, 48, spell_names[24]);
+                fire_ball(char_row, char_col, dir, 48, GF_FROST, spell_names[24]);
             }
             break;
         case 26:
@@ -142,7 +142,7 @@ static void castSpell(int spellID) {
             break;
         case 27:
             if (get_dir(CNIL, &dir)) {
-                (void) teleport_monster(dir, char_row, char_col);
+                (void) teleport_monster(char_row, char_col, dir);
             }
             break;
         case 28:
@@ -150,7 +150,7 @@ static void castSpell(int spellID) {
             break;
         case 29:
             if (get_dir(CNIL, &dir)) {
-                fire_ball(GF_FIRE, dir, char_row, char_col, 72, spell_names[28]);
+                fire_ball(char_row, char_col, dir, 72, GF_FIRE, spell_names[28]);
             }
             break;
         case 30:

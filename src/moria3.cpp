@@ -343,11 +343,11 @@ static void hit_trap(int y, int x) {
 // returns -1 if no spells in book
 // returns  1 if choose a spell in book to cast
 // returns  0 if don't choose a spell, i.e. exit with an escape
-int cast_spell(const char *prompt, int item_val, int *sn, int *sc) {
+int cast_spell(const char *prompt, int item_id, int *spell_id, int *spell_chance) {
     // NOTE: `flags` gets set again, since bit_pos modified it
-    uint32_t flags = inventory[item_val].flags;
+    uint32_t flags = inventory[item_id].flags;
     int first_spell = bit_pos(&flags);
-    flags = inventory[item_val].flags & spells_learnt;
+    flags = inventory[item_id].flags & spells_learnt;
 
     Spell_t *s_ptr = magic_spells[py.misc.pclass - 1];
 
@@ -369,9 +369,9 @@ int cast_spell(const char *prompt, int item_val, int *sn, int *sc) {
         return result;
     }
 
-    result = get_spell(spellList, spellCount, sn, sc, prompt, first_spell);
+    result = get_spell(spellList, spellCount, spell_id, spell_chance, prompt, first_spell);
 
-    if (result && magic_spells[py.misc.pclass - 1][*sn].smana > py.misc.cmana) {
+    if (result && magic_spells[py.misc.pclass - 1][*spell_id].smana > py.misc.cmana) {
         if (classes[py.misc.pclass].spell == MAGE) {
             result = (int) get_check("You summon your limited strength to cast this one! Confirm?");
         } else {
@@ -705,8 +705,8 @@ static void playerGainKillExperience(Creature_t *c_ptr) {
 
 // Decreases monsters hit points and deletes monster if needed.
 // (Picking on my babies.) -RAK-
-int mon_take_hit(int monsterID, int damage) {
-    Monster_t *monster = &monsters[monsterID];
+int mon_take_hit(int monster_id, int damage) {
+    Monster_t *monster = &monsters[monster_id];
     Creature_t *creature = &creatures_list[monster->mptr];
 
     monster->csleep = 0;
@@ -742,10 +742,10 @@ int mon_take_hit(int monsterID, int damage) {
 
     // in case this is called from within creatures(), this is a horrible
     // hack, the monsters/creatures() code needs to be rewritten.
-    if (hack_monptr < monsterID) {
-        delete_monster(monsterID);
+    if (hack_monptr < monster_id) {
+        delete_monster(monster_id);
     } else {
-        fix1_delete_monster(monsterID);
+        fix1_delete_monster(monster_id);
     }
 
     return m_take_hit;
@@ -899,9 +899,9 @@ static bool playerRandomMovement(int dir) {
 }
 
 // Moves player from one space to another. -RAK-
-void move_char(int dir, bool do_pickup) {
-    if (playerRandomMovement(dir)) {
-        dir = randint(9);
+void move_char(int direction, bool do_pickup) {
+    if (playerRandomMovement(direction)) {
+        direction = randint(9);
         end_find();
     }
 
@@ -909,7 +909,7 @@ void move_char(int dir, bool do_pickup) {
     int x = char_col;
 
     // Legal move?
-    if (!mmove(dir, &y, &x)) {
+    if (!mmove(direction, &y, &x)) {
         return;
     }
 
@@ -941,7 +941,7 @@ void move_char(int dir, bool do_pickup) {
 
             // Check to see if he should stop
             if (running_counter) {
-                area_affect(dir, char_row, char_col);
+                area_affect(direction, char_row, char_col);
             }
 
             // Check to see if he notices something
@@ -1276,8 +1276,8 @@ void closeobject() {
 
 // Tunneling through real wall: 10, 11, 12 -RAK-
 // Used by TUNNEL and WALL_TO_MUD
-int twall(int y, int x, int t1, int t2) {
-    if (t1 <= t2) {
+int twall(int y, int x, int digging_ability, int digging_chance) {
+    if (digging_ability <= digging_chance) {
         return false;
     }
 
@@ -1320,10 +1320,10 @@ int twall(int y, int x, int t1, int t2) {
     return true;
 }
 
-void objectBlockedByMonster(int id) {
+void objectBlockedByMonster(int monster_id) {
     vtype_t description, msg;
 
-    Monster_t *monster = &monsters[id];
+    Monster_t *monster = &monsters[monster_id];
     const char *name = creatures_list[monster->mptr].name;
 
     if (monster->ml) {

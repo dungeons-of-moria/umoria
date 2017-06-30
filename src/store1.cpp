@@ -21,34 +21,34 @@ static int32_t getWandStaffBuyPrice(Inventory_t *i_ptr);
 static int32_t getPickShovelBuyPrice(Inventory_t *i_ptr);
 
 // Returns the value for any given object -RAK-
-int32_t item_value(Inventory_t *i_ptr) {
+int32_t item_value(Inventory_t *item) {
     int32_t value;
 
-    if (i_ptr->ident & ID_DAMD) {
+    if (item->ident & ID_DAMD) {
         // don't purchase known cursed items
         value = 0;
-    } else if ((i_ptr->tval >= TV_BOW && i_ptr->tval <= TV_SWORD) || (i_ptr->tval >= TV_BOOTS && i_ptr->tval <= TV_SOFT_ARMOR)) {
-        value = getWeaponArmorBuyPrice(i_ptr);
-    } else if (i_ptr->tval >= TV_SLING_AMMO && i_ptr->tval <= TV_SPIKE) {
-        value = getAmmoBuyPrice(i_ptr);
-    } else if (i_ptr->tval == TV_SCROLL1 || i_ptr->tval == TV_SCROLL2 || i_ptr->tval == TV_POTION1 || i_ptr->tval == TV_POTION2) {
-        value = getPotionScrollBuyPrice(i_ptr);
-    } else if (i_ptr->tval == TV_FOOD) {
-        value = getFoodBuyPrice(i_ptr);
-    } else if (i_ptr->tval == TV_AMULET || i_ptr->tval == TV_RING) {
-        value = getRingAmuletBuyPrice(i_ptr);
-    } else if (i_ptr->tval == TV_STAFF || i_ptr->tval == TV_WAND) {
-        value = getWandStaffBuyPrice(i_ptr);
-    } else if (i_ptr->tval == TV_DIGGING) {
-        value = getPickShovelBuyPrice(i_ptr);
+    } else if ((item->tval >= TV_BOW && item->tval <= TV_SWORD) || (item->tval >= TV_BOOTS && item->tval <= TV_SOFT_ARMOR)) {
+        value = getWeaponArmorBuyPrice(item);
+    } else if (item->tval >= TV_SLING_AMMO && item->tval <= TV_SPIKE) {
+        value = getAmmoBuyPrice(item);
+    } else if (item->tval == TV_SCROLL1 || item->tval == TV_SCROLL2 || item->tval == TV_POTION1 || item->tval == TV_POTION2) {
+        value = getPotionScrollBuyPrice(item);
+    } else if (item->tval == TV_FOOD) {
+        value = getFoodBuyPrice(item);
+    } else if (item->tval == TV_AMULET || item->tval == TV_RING) {
+        value = getRingAmuletBuyPrice(item);
+    } else if (item->tval == TV_STAFF || item->tval == TV_WAND) {
+        value = getWandStaffBuyPrice(item);
+    } else if (item->tval == TV_DIGGING) {
+        value = getPickShovelBuyPrice(item);
     } else {
-        value = i_ptr->cost;
+        value = item->cost;
     }
 
     // Multiply value by number of items if it is a group stack item.
     // Do not include torches here.
-    if (i_ptr->subval > ITEM_GROUP_MIN) {
-        value = value * i_ptr->number;
+    if (item->subval > ITEM_GROUP_MIN) {
+        value = value * item->number;
     }
 
     return value;
@@ -157,7 +157,7 @@ static int32_t getPickShovelBuyPrice(Inventory_t *i_ptr) {
 }
 
 // Asking price for an item -RAK-
-int32_t sell_price(int snum, int32_t *max_sell, int32_t *min_sell, Inventory_t *item) {
+int32_t sell_price(int store_id, int32_t *min_price, int32_t *max_price, Inventory_t *item) {
     int32_t price = item_value(item);
 
     // check `item->cost` in case it is cursed, check `price` in case it is damaged
@@ -166,32 +166,32 @@ int32_t sell_price(int snum, int32_t *max_sell, int32_t *min_sell, Inventory_t *
         return 0;
     }
 
-    Owner_t *owner = &store_owners[stores[snum].owner];
+    Owner_t *owner = &store_owners[stores[store_id].owner];
 
     price = price * race_gold_adjustments[owner->owner_race][py.misc.prace] / 100;
     if (price < 1) {
         price = 1;
     }
 
-    *max_sell = price * owner->max_inflate / 100;
-    *min_sell = price * owner->min_inflate / 100;
+    *max_price = price * owner->max_inflate / 100;
+    *min_price = price * owner->min_inflate / 100;
 
-    if (*min_sell > *max_sell) {
-        *min_sell = *max_sell;
+    if (*min_price > *max_price) {
+        *min_price = *max_price;
     }
 
     return price;
 }
 
 // Check to see if he will be carrying too many objects -RAK-
-bool store_check_num(Inventory_t *t_ptr, int store_num) {
-    Store_t *s_ptr = &stores[store_num];
+bool store_check_num(int store_id, Inventory_t *item) {
+    Store_t *s_ptr = &stores[store_id];
 
     if (s_ptr->store_ctr < STORE_INVEN_MAX) {
         return true;
     }
 
-    if (t_ptr->subval < ITEM_SINGLE_STACK_MIN) {
+    if (item->subval < ITEM_SINGLE_STACK_MIN) {
         return false;
     }
 
@@ -202,8 +202,8 @@ bool store_check_num(Inventory_t *t_ptr, int store_num) {
 
         // note: items with subval of gte ITEM_SINGLE_STACK_MAX only stack
         // if their subvals match
-        if (i_ptr->tval == t_ptr->tval && i_ptr->subval == t_ptr->subval && (int) (i_ptr->number + t_ptr->number) < 256 &&
-            (t_ptr->subval < ITEM_GROUP_MIN || i_ptr->p1 == t_ptr->p1)) {
+        if (i_ptr->tval == item->tval && i_ptr->subval == item->subval && (int) (i_ptr->number + item->number) < 256 &&
+            (item->subval < ITEM_GROUP_MIN || i_ptr->p1 == item->p1)) {
             store_check = true;
         }
     }
@@ -225,20 +225,20 @@ static void insert_store(int store_num, int pos, int32_t icost, Inventory_t *i_p
 }
 
 // Add the item in INVEN_MAX to stores inventory. -RAK-
-void store_carry(int store_num, int *ipos, Inventory_t *t_ptr) {
-    *ipos = -1;
+void store_carry(int store_id, int *index_id, Inventory_t *item) {
+    *index_id = -1;
 
     int32_t icost, dummy;
-    if (sell_price(store_num, &icost, &dummy, t_ptr) < 1) {
+    if (sell_price(store_id, &dummy, &icost, item) < 1) {
         return;
     }
 
-    Store_t *s_ptr = &stores[store_num];
+    Store_t *s_ptr = &stores[store_id];
 
     int item_val = 0;
-    int item_num = t_ptr->number;
-    int typ = t_ptr->tval;
-    int subt = t_ptr->subval;
+    int item_num = item->number;
+    int typ = item->tval;
+    int subt = item->subval;
 
     bool flag = false;
     do {
@@ -246,15 +246,15 @@ void store_carry(int store_num, int *ipos, Inventory_t *t_ptr) {
 
         if (typ == i_ptr->tval) {
             if (subt == i_ptr->subval && // Adds to other item
-                subt >= ITEM_SINGLE_STACK_MIN && (subt < ITEM_GROUP_MIN || i_ptr->p1 == t_ptr->p1)) {
-                *ipos = item_val;
+                subt >= ITEM_SINGLE_STACK_MIN && (subt < ITEM_GROUP_MIN || i_ptr->p1 == item->p1)) {
+                *index_id = item_val;
                 i_ptr->number += item_num;
 
                 // must set new scost for group items, do this only for items
                 // strictly greater than group_min, not for torches, this
                 // must be recalculated for entire group
                 if (subt > ITEM_GROUP_MIN) {
-                    (void) sell_price(store_num, &icost, &dummy, i_ptr);
+                    (void) sell_price(store_id, &dummy, &icost, i_ptr);
                     s_ptr->store_inven[item_val].scost = -icost;
                 } else if (i_ptr->number > 24) {
                     // must let group objects (except torches) stack over 24
@@ -264,25 +264,25 @@ void store_carry(int store_num, int *ipos, Inventory_t *t_ptr) {
                 flag = true;
             }
         } else if (typ > i_ptr->tval) { // Insert into list
-            insert_store(store_num, item_val, icost, t_ptr);
+            insert_store(store_id, item_val, icost, item);
             flag = true;
-            *ipos = item_val;
+            *index_id = item_val;
         }
         item_val++;
     } while (item_val < s_ptr->store_ctr && !flag);
 
     // Becomes last item in list
     if (!flag) {
-        insert_store(store_num, (int) s_ptr->store_ctr, icost, t_ptr);
-        *ipos = s_ptr->store_ctr - 1;
+        insert_store(store_id, (int) s_ptr->store_ctr, icost, item);
+        *index_id = s_ptr->store_ctr - 1;
     }
 }
 
 // Destroy an item in the stores inventory.  Note that if
 // "one_of" is false, an entire slot is destroyed -RAK-
-void store_destroy(int store_num, int item_val, bool one_of) {
-    Store_t *s_ptr = &stores[store_num];
-    Inventory_t *i_ptr = &s_ptr->store_inven[item_val].sitem;
+void store_destroy(int store_id, int item_id, bool only_one) {
+    Store_t *s_ptr = &stores[store_id];
+    Inventory_t *i_ptr = &s_ptr->store_inven[item_id].sitem;
 
     int number;
 
@@ -290,7 +290,7 @@ void store_destroy(int store_num, int item_val, bool one_of) {
     // this will help ensure that general store and alchemist have
     // reasonable selection of objects
     if (i_ptr->subval >= ITEM_SINGLE_STACK_MIN && i_ptr->subval <= ITEM_SINGLE_STACK_MAX) {
-        if (one_of) {
+        if (only_one) {
             number = 1;
         } else {
             number = randint((int) i_ptr->number);
@@ -302,7 +302,7 @@ void store_destroy(int store_num, int item_val, bool one_of) {
     if (number != i_ptr->number) {
         i_ptr->number -= number;
     } else {
-        for (int j = item_val; j < s_ptr->store_ctr - 1; j++) {
+        for (int j = item_id; j < s_ptr->store_ctr - 1; j++) {
             s_ptr->store_inven[j] = s_ptr->store_inven[j + 1];
         }
         invcopy(&s_ptr->store_inven[s_ptr->store_ctr - 1].sitem, OBJ_NOTHING);
@@ -343,7 +343,7 @@ static void store_create(int store_num, int16_t max_cost) {
 
         Inventory_t *t_ptr = &treasure_list[cur_pos];
 
-        if (store_check_num(t_ptr, store_num)) {
+        if (store_check_num(store_num, t_ptr)) {
             // Item must be good: cost > 0.
             if (t_ptr->cost > 0 && t_ptr->cost < max_cost) {
                 // equivalent to calling ident_spell(),
@@ -393,8 +393,8 @@ void store_maint() {
 }
 
 // eliminate need to bargain if player has haggled well in the past -DJB-
-bool noneedtobargain(int store_num, int32_t minprice) {
-    Store_t *s_ptr = &stores[store_num];
+bool noneedtobargain(int store_id, int32_t min_price) {
+    Store_t *s_ptr = &stores[store_id];
 
     if (s_ptr->good_buy == MAX_SHORT) {
         return true;
@@ -402,15 +402,15 @@ bool noneedtobargain(int store_num, int32_t minprice) {
 
     int bargain_record = (s_ptr->good_buy - 3 * s_ptr->bad_buy - 5);
 
-    return ((bargain_record > 0) && ((int32_t) bargain_record * (int32_t) bargain_record > minprice / 50));
+    return ((bargain_record > 0) && ((int32_t) bargain_record * (int32_t) bargain_record > min_price / 50));
 }
 
 // update the bargain info -DJB-
-void updatebargain(int store_num, int32_t price, int32_t minprice) {
-    Store_t *s_ptr = &stores[store_num];
+void updatebargain(int store_id, int32_t price, int32_t min_price) {
+    Store_t *s_ptr = &stores[store_id];
 
-    if (minprice > 9) {
-        if (price == minprice) {
+    if (min_price > 9) {
+        if (price == min_price) {
             if (s_ptr->good_buy < MAX_SHORT) {
                 s_ptr->good_buy++;
             }

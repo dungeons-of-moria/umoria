@@ -70,9 +70,9 @@ uint32_t get_rnd_seed() {
     return rnd_seed;
 }
 
-void set_rnd_seed(uint32_t seedval) {
+void set_rnd_seed(uint32_t seed) {
     // set seed to value between 1 and m-1
-    rnd_seed = (uint32_t) ((seedval % (RNG_M - 1)) + 1);
+    rnd_seed = (uint32_t) ((seed % (RNG_M - 1)) + 1);
 }
 
 // returns a pseudo-random number from set 1, 2, ..., RNG_M - 1

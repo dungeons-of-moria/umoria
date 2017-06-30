@@ -352,17 +352,17 @@ int get_com(const char *prompt, char *command) {
 
 // Gets a string terminated by <RETURN>
 // Function returns false if <ESCAPE> is input
-bool get_string(char *in_str, int row, int column, int slen) {
-    (void) move(row, column);
+bool get_string(char *in_str, int row, int col, int slen) {
+    (void) move(row, col);
 
     for (int i = slen; i > 0; i--) {
         (void) addch(' ');
     }
 
-    (void) move(row, column);
+    (void) move(row, col);
 
-    int start_col = column;
-    int end_col = column + slen - 1;
+    int start_col = col;
+    int end_col = col + slen - 1;
 
     if (end_col > 79) {
         end_col = 79;
@@ -385,20 +385,20 @@ bool get_string(char *in_str, int row, int column, int slen) {
                 break;
             case DELETE:
             case CTRL_KEY('H'):
-                if (column > start_col) {
-                    column--;
-                    put_buffer(" ", row, column);
-                    move_cursor(row, column);
+                if (col > start_col) {
+                    col--;
+                    put_buffer(" ", row, col);
+                    move_cursor(row, col);
                     *--p = '\0';
                 }
                 break;
             default:
-                if (!isprint(key) || column > end_col) {
+                if (!isprint(key) || col > end_col) {
                     bell();
                 } else {
-                    use_value2 mvaddch(row, column, (char) key);
+                    use_value2 mvaddch(row, col, (char) key);
                     *p++ = (char) key;
-                    column++;
+                    col++;
                 }
                 break;
         }
@@ -418,20 +418,20 @@ bool get_string(char *in_str, int row, int column, int slen) {
 }
 
 // Pauses for user response before returning -RAK-
-void pause_line(int lineNumber) {
-    prt("[Press any key to continue.]", lineNumber, 23);
+void pause_line(int line_number) {
+    prt("[Press any key to continue.]", line_number, 23);
     (void) inkey();
-    erase_line(lineNumber, 0);
+    erase_line(line_number, 0);
 }
 
 // Pauses for user response before returning -RAK-
 // NOTE: Delay is for players trying to roll up "perfect"
 // characters.  Make them wait a bit.
-void pause_exit(int lineNumber, int delay) {
-    prt("[Press any key to continue, or Q to exit.]", lineNumber, 10);
+void pause_exit(int line_number, int delay) {
+    prt("[Press any key to continue, or Q to exit.]", line_number, 10);
 
     if (inkey() == 'Q') {
-        erase_line(lineNumber, 0);
+        erase_line(line_number, 0);
 
         if (delay > 0) {
             sleep_in_seconds(delay);
@@ -440,7 +440,7 @@ void pause_exit(int lineNumber, int delay) {
         exit_game();
     }
 
-    erase_line(lineNumber, 0);
+    erase_line(line_number, 0);
 }
 
 void save_screen() {
@@ -589,7 +589,7 @@ static void sleep_in_seconds(int seconds) {
 // might hack a static accumulation of times to wait. When the accumulation reaches
 // a certain point, sleep for a second. There would need to be a way of resetting
 // the count, with a call made for commands like run or rest.
-bool check_input(int microsec) {
+bool check_input(int microseconds) {
 #ifdef _WIN32
     // Ugly non-blocking read...Ugh! -MRC-
     timeout(8);
@@ -608,7 +608,7 @@ bool check_input(int microsec) {
 
     // Return true if a read on descriptor 1 will not block.
     tbuf.tv_sec = 0;
-    tbuf.tv_usec = microsec;
+    tbuf.tv_usec = microseconds;
 
     smask = 1; // i.e. (1 << 0)
     if (select(1, (fd_set *) &smask, (fd_set *) 0, (fd_set *) 0, &tbuf) == 1) {
@@ -626,15 +626,15 @@ bool check_input(int microsec) {
 }
 
 // Find a default user name from the system.
-void user_name(char *buf) {
+void user_name(char *buffer) {
     // Gotta have some name
     const char *defaultName = "X";
 
 #ifdef _WIN32
     unsigned long bufCharCount = PLAYER_NAME_SIZE;
 
-    if (!GetUserName(buf, &bufCharCount)) {
-        (void)strcpy(buf, defaultName);
+    if (!GetUserName(buffer, &bufCharCount)) {
+        (void)strcpy(buffer, defaultName);
     }
 #else
     extern char *getlogin();
@@ -642,16 +642,16 @@ void user_name(char *buf) {
     char *p = getlogin();
 
     if (p && p[0]) {
-        (void) strcpy(buf, p);
+        (void) strcpy(buffer, p);
     } else {
         struct passwd *pwline = getpwuid((int) getuid());
         if (pwline) {
-            (void) strcpy(buf, pwline->pw_name);
+            (void) strcpy(buffer, pwline->pw_name);
         }
     }
 
-    if (!buf[0]) {
-        (void) strcpy(buf, defaultName);
+    if (!buffer[0]) {
+        (void) strcpy(buffer, defaultName);
     }
 #endif
 }

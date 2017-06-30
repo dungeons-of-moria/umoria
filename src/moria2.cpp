@@ -274,23 +274,23 @@ static void findRunningBreak(int dir, int row, int col) {
     }
 }
 
-void find_init(int dir) {
+void find_init(int direction) {
     int row = char_row;
     int col = char_col;
 
-    if (!mmove(dir, &row, &col)) {
+    if (!mmove(direction, &row, &col)) {
         running_counter = 0;
     } else {
         running_counter = 1;
 
-        find_direction = dir;
-        find_prevdir = dir;
+        find_direction = direction;
+        find_prevdir = direction;
 
         find_breakright = false;
         find_breakleft = false;
 
         if (py.flags.blind < 1) {
-            findRunningBreak(dir, row, col);
+            findRunningBreak(direction, row, col);
         }
     }
 
@@ -304,7 +304,7 @@ void find_init(int dir) {
         print(loc_symbol(char_row, char_col), char_row, char_col);
     }
 
-    move_char(dir, true);
+    move_char(direction, true);
 
     if (running_counter == 0) {
         command_count = 0;
@@ -418,7 +418,7 @@ static bool areaAffectStopLookingAtSquares(int i, int dir, int newDir, int y, in
 }
 
 // Determine the next direction for a run, or if we should stop. -CJS-
-void area_affect(int dir, int y, int x) {
+void area_affect(int direction, int y, int x) {
     if (py.flags.blind >= 1) {
         return;
     }
@@ -427,20 +427,20 @@ void area_affect(int dir, int y, int x) {
     int option = 0;
     int option2 = 0;
 
-    dir = find_prevdir;
+    direction = find_prevdir;
 
-    int max = (dir & 1) + 1;
+    int max = (direction & 1) + 1;
 
     // Look at every newly adjacent square.
     for (int i = -max; i <= max; i++) {
-        int newdir = cycle[chome[dir] + i];
+        int newdir = cycle[chome[direction] + i];
 
         int row = y;
         int col = x;
 
         // Objects player can see (Including doors?) cause a stop.
         if (mmove(newdir, &row, &col)) {
-            areaAffectStopLookingAtSquares(i, dir, newdir, row, col, &check_dir, &option, &option2);
+            areaAffectStopLookingAtSquares(i, direction, newdir, row, col, &check_dir, &option, &option2);
         }
     }
 
@@ -566,9 +566,9 @@ static int minus_ac(uint32_t typ_dam) {
 }
 
 // Corrode the unsuspecting person's armor -RAK-
-void corrode_gas(const char *kb_str) {
+void corrode_gas(const char *creature_name) {
     if (!minus_ac((uint32_t) TR_RES_ACID)) {
-        take_hit(randint(8), kb_str);
+        take_hit(randint(8), creature_name);
     }
 
     if (inven_damage(set_corrodes, 5) > 0) {
@@ -577,14 +577,14 @@ void corrode_gas(const char *kb_str) {
 }
 
 // Poison gas the idiot. -RAK-
-void poison_gas(int dam, const char *kb_str) {
-    take_hit(dam, kb_str);
+void poison_gas(int dam, const char *creature_name) {
+    take_hit(dam, creature_name);
 
     py.flags.poisoned += 12 + randint(dam);
 }
 
 // Burn the fool up. -RAK-
-void fire_dam(int dam, const char *kb_str) {
+void fire_dam(int dam, const char *creature_name) {
     if (py.flags.fire_resist) {
         dam = dam / 3;
     }
@@ -593,7 +593,7 @@ void fire_dam(int dam, const char *kb_str) {
         dam = dam / 3;
     }
 
-    take_hit(dam, kb_str);
+    take_hit(dam, creature_name);
 
     if (inven_damage(set_flammable, 3) > 0) {
         msg_print("There is smoke coming from your pack!");
@@ -601,7 +601,7 @@ void fire_dam(int dam, const char *kb_str) {
 }
 
 // Freeze him to death. -RAK-
-void cold_dam(int dam, const char *kb_str) {
+void cold_dam(int dam, const char *creature_name) {
     if (py.flags.cold_resist) {
         dam = dam / 3;
     }
@@ -610,7 +610,7 @@ void cold_dam(int dam, const char *kb_str) {
         dam = dam / 3;
     }
 
-    take_hit(dam, kb_str);
+    take_hit(dam, creature_name);
 
     if (inven_damage(set_frost_destroy, 5) > 0) {
         msg_print("Something shatters inside your pack!");
@@ -618,12 +618,12 @@ void cold_dam(int dam, const char *kb_str) {
 }
 
 // Lightning bolt the sucker away. -RAK-
-void light_dam(int dam, const char *kb_str) {
+void light_dam(int dam, const char *creature_name) {
     if (py.flags.lght_resist) {
         dam = dam / 3;
     }
 
-    take_hit(dam, kb_str);
+    take_hit(dam, creature_name);
 
     if (inven_damage(set_lightning_destroy, 3) > 0) {
         msg_print("There are sparks coming from your pack!");
@@ -631,7 +631,7 @@ void light_dam(int dam, const char *kb_str) {
 }
 
 // Throw acid on the hapless victim -RAK-
-void acid_dam(int dam, const char *kb_str) {
+void acid_dam(int dam, const char *creature_name) {
     int flag = 0;
 
     if (minus_ac((uint32_t) TR_RES_ACID)) {
@@ -642,7 +642,7 @@ void acid_dam(int dam, const char *kb_str) {
         flag += 2;
     }
 
-    take_hit(dam / (flag + 1), kb_str);
+    take_hit(dam / (flag + 1), creature_name);
 
     if (inven_damage(set_acid_affect, 3) > 0) {
         msg_print("There is an acrid smell coming from your pack!");

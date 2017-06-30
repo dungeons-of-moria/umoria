@@ -55,24 +55,24 @@ void reset_seed() {
 }
 
 // Generates a random integer x where 1<=X<=MAXVAL -RAK-
-int randint(int maxval) {
-    return (rnd() % maxval) + 1;
+int randint(int max) {
+    return (rnd() % max) + 1;
 }
 
 // Generates a random integer number of NORMAL distribution -RAK-
-int randnor(int mean, int stand) {
+int randnor(int mean, int standard) {
     // alternate randnor code, slower but much smaller since no table
     // 2 per 1,000,000 will be > 4*SD, max is 5*SD
     //
     // tmp = damroll(8, 99);   // mean 400, SD 81
-    // tmp = (tmp - 400) * stand / 81;
+    // tmp = (tmp - 400) * standard / 81;
     // return tmp + mean;
 
     int tmp = randint(MAX_SHORT);
 
     // off scale, assign random value between 4 and 5 times SD
     if (tmp == MAX_SHORT) {
-        int offset = 4 * stand + randint(stand);
+        int offset = 4 * standard + randint(standard);
 
         // one half are negative
         if (randint(2) == 1) {
@@ -109,7 +109,7 @@ int randnor(int mean, int stand) {
 
     // normal_table is based on SD of 64, so adjust the
     // index value here, round the half way case up.
-    int offset = ((stand * iindex) + (NORMAL_TABLE_SD >> 1)) / NORMAL_TABLE_SD;
+    int offset = ((standard * iindex) + (NORMAL_TABLE_SD >> 1)) / NORMAL_TABLE_SD;
 
     // one half should be negative
     if (randint(2) == 1) {
@@ -119,14 +119,13 @@ int randnor(int mean, int stand) {
     return mean + offset;
 }
 
-// Returns position of first set bit -RAK-
-// and clears that bit
-int bit_pos(uint32_t *test) {
+// Returns position of first set bit and clears that bit -RAK-
+int bit_pos(uint32_t *flag) {
     uint32_t mask = 0x1;
 
-    for (int i = 0; i < (int) sizeof(*test) * 8; i++) {
-        if (*test & mask) {
-            *test &= ~mask;
+    for (int i = 0; i < (int) sizeof(*flag) * 8; i++) {
+        if (*flag & mask) {
+            *flag &= ~mask;
             return i;
         }
         mask <<= 1;
@@ -156,7 +155,7 @@ static void panel_bounds() {
 
 // Given an row (y) and col (x), this routine detects -RAK-
 // when a move off the screen has occurred and figures new borders.
-// Force, forces the panel bounds to be recalculated, useful for 'W'here.
+// `force` forces the panel bounds to be recalculated, useful for 'W'here.
 int get_panel(int y, int x, bool force) {
     int row = panel_row;
     int col = panel_col;
@@ -271,16 +270,16 @@ int next_to_corr(int y, int x) {
 }
 
 // generates damage for 2d6 style dice rolls
-int damroll(int num, int sides) {
+int damroll(int dice, int sides) {
     int sum = 0;
-    for (int i = 0; i < num; i++) {
+    for (int i = 0; i < dice; i++) {
         sum += randint(sides);
     }
     return sum;
 }
 
-int pdamroll(uint8_t *array) {
-    return damroll((int) array[0], (int) array[1]);
+int pdamroll(uint8_t *notation_array) {
+    return damroll((int) notation_array[0], (int) notation_array[1]);
 }
 
 // A simple, fast, integer-based line-of-sight algorithm.  By Joseph Hall,
@@ -551,28 +550,28 @@ bool compact_monsters() {
 }
 
 // Add to the players food time -RAK-
-void add_food(int num) {
+void add_food(int amount) {
     if (py.flags.food < 0) {
         py.flags.food = 0;
     }
 
-    py.flags.food += num;
+    py.flags.food += amount;
 
     if (py.flags.food > PLAYER_FOOD_MAX) {
         msg_print("You are bloated from overeating.");
 
-        // Calculate how much of num is responsible for the bloating. Give the
+        // Calculate how much of amount is responsible for the bloating. Give the
         // player food credit for 1/50, and slow him for that many turns also.
         int extra = py.flags.food - PLAYER_FOOD_MAX;
-        if (extra > num) {
-            extra = num;
+        if (extra > amount) {
+            extra = amount;
         }
         int penalty = extra / 50;
 
         py.flags.slow += penalty;
 
-        if (extra == num) {
-            py.flags.food = (int16_t) (py.flags.food - num + penalty);
+        if (extra == amount) {
+            py.flags.food = (int16_t) (py.flags.food - amount + penalty);
         } else {
             py.flags.food = (int16_t) (PLAYER_FOOD_MAX + penalty);
         }
@@ -598,7 +597,7 @@ static int max_hp(uint8_t *array) {
 }
 
 // Places a monster at given location -RAK-
-bool place_monster(int y, int x, int monsterID, bool slp) {
+bool place_monster(int y, int x, int monster_id, bool sleeping) {
     int cur_pos = popm();
 
     if (cur_pos == -1) {
@@ -609,27 +608,27 @@ bool place_monster(int y, int x, int monsterID, bool slp) {
 
     mon_ptr->fy = (uint8_t) y;
     mon_ptr->fx = (uint8_t) x;
-    mon_ptr->mptr = (uint16_t) monsterID;
+    mon_ptr->mptr = (uint16_t) monster_id;
 
-    if (creatures_list[monsterID].cdefense & CD_MAX_HP) {
-        mon_ptr->hp = (int16_t) max_hp(creatures_list[monsterID].hd);
+    if (creatures_list[monster_id].cdefense & CD_MAX_HP) {
+        mon_ptr->hp = (int16_t) max_hp(creatures_list[monster_id].hd);
     } else {
-        mon_ptr->hp = (int16_t) pdamroll(creatures_list[monsterID].hd);
+        mon_ptr->hp = (int16_t) pdamroll(creatures_list[monster_id].hd);
     }
 
     // the creatures_list speed value is 10 greater, so that it can be a uint8_t
-    mon_ptr->cspeed = (int16_t) (creatures_list[monsterID].speed - 10 + py.flags.speed);
+    mon_ptr->cspeed = (int16_t) (creatures_list[monster_id].speed - 10 + py.flags.speed);
     mon_ptr->stunned = 0;
     mon_ptr->cdis = (uint8_t) distance(char_row, char_col, y, x);
     mon_ptr->ml = false;
 
     cave[y][x].cptr = (uint8_t) cur_pos;
 
-    if (slp) {
-        if (creatures_list[monsterID].sleep == 0) {
+    if (sleeping) {
+        if (creatures_list[monster_id].sleep == 0) {
             mon_ptr->csleep = 0;
         } else {
-            mon_ptr->csleep = (int16_t) ((creatures_list[monsterID].sleep * 2) + randint((int) creatures_list[monsterID].sleep * 10));
+            mon_ptr->csleep = (int16_t) ((creatures_list[monster_id].sleep * 2) + randint((int) creatures_list[monster_id].sleep * 10));
         }
     } else {
         mon_ptr->csleep = 0;
@@ -717,26 +716,26 @@ static int get_mons_num(int level) {
 }
 
 // Allocates a random monster -RAK-
-void alloc_monster(int num, int dis, bool slp) {
+void alloc_monster(int number, int dist, bool sleeping) {
     int y, x;
 
-    for (int i = 0; i < num; i++) {
+    for (int i = 0; i < number; i++) {
         do {
             y = randint(dungeon_height - 2);
             x = randint(dungeon_width - 2);
-        } while (cave[y][x].fval >= MIN_CLOSED_SPACE || (cave[y][x].cptr != 0) || (distance(y, x, char_row, char_col) <= dis));
+        } while (cave[y][x].fval >= MIN_CLOSED_SPACE || (cave[y][x].cptr != 0) || (distance(y, x, char_row, char_col) <= dist));
 
         int l = get_mons_num(current_dungeon_level);
 
         // Dragons are always created sleeping here,
         // so as to give the player a sporting chance.
         if (creatures_list[l].cchar == 'd' || creatures_list[l].cchar == 'D') {
-            slp = true;
+            sleeping = true;
         }
 
         // Place_monster() should always return true here.
         // It does not matter if it fails though.
-        (void) place_monster(y, x, l, slp);
+        (void) place_monster(y, x, l, sleeping);
     }
 }
 
@@ -767,9 +766,9 @@ static bool placeMonsterAdjacentTo(int monsterID, int *y, int *x, bool slp) {
 }
 
 // Places creature adjacent to given location -RAK-
-bool summon_monster(int *y, int *x, bool slp) {
+bool summon_monster(int *y, int *x, bool sleeping) {
     int monsterID = get_mons_num(current_dungeon_level + MON_SUMMON_ADJ);
-    return placeMonsterAdjacentTo(monsterID, y, x, slp);
+    return placeMonsterAdjacentTo(monsterID, y, x, sleeping);
 }
 
 // Places undead adjacent to given location -RAK-
@@ -864,15 +863,15 @@ int popt() {
 // Pushs a record back onto free space list -RAK-
 // Delete_object() should always be called instead, unless the object
 // in question is not in the dungeon, e.g. in store1.c and files.c
-void pusht(uint8_t treasureID) {
-    if (treasureID != current_treasure_id - 1) {
-        treasure_list[treasureID] = treasure_list[current_treasure_id - 1];
+void pusht(uint8_t treasure_id) {
+    if (treasure_id != current_treasure_id - 1) {
+        treasure_list[treasure_id] = treasure_list[current_treasure_id - 1];
 
         // must change the tptr in the cave of the object just moved
         for (int y = 0; y < dungeon_height; y++) {
             for (int x = 0; x < dungeon_width; x++) {
                 if (cave[y][x].tptr == current_treasure_id - 1) {
-                    cave[y][x].tptr = treasureID;
+                    cave[y][x].tptr = treasure_id;
                 }
             }
         }
@@ -888,12 +887,12 @@ bool magik(int chance) {
 }
 
 // Enchant a bonus based on degree desired -RAK-
-int m_bonus(int base, int max_std, int level) {
+int m_bonus(int base, int max_standard, int level) {
     int stand_dev = (OBJ_STD_ADJ * level / 100) + OBJ_STD_MIN;
 
-    // Check for level > max_std since that may have generated an overflow.
-    if (stand_dev > max_std || level > max_std) {
-        stand_dev = max_std;
+    // Check for level > max_standard since that may have generated an overflow.
+    if (stand_dev > max_standard || level > max_standard) {
+        stand_dev = max_standard;
     }
 
     // abs may be a macro, don't call it with randnor as a parameter
