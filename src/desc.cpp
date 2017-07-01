@@ -148,15 +148,15 @@ static bool isObjectKnown(int16_t id) {
 }
 
 // Remove "Secret" symbol for identity of object
-void known1(Inventory_t *i_ptr) {
-    int16_t id = objectPositionOffset(i_ptr);
+void itemSetAsIdentified(Inventory_t *item) {
+    int16_t id = objectPositionOffset(item);
 
     if (id < 0) {
         return;
     }
 
     id <<= 6;
-    id += (uint8_t) (i_ptr->subval & (ITEM_SINGLE_STACK_MIN - 1));
+    id += (uint8_t) (item->subval & (ITEM_SINGLE_STACK_MIN - 1));
 
     objects_identified[id] |= OD_KNOWN1;
 
@@ -164,7 +164,7 @@ void known1(Inventory_t *i_ptr) {
     clearObjectTriedFlag(id);
 }
 
-// Items which don't have a 'color' are always known1,
+// Items which don't have a 'color' are always known / itemSetAsIdentified(),
 // so that they can be carried in order in the inventory.
 bool known1_p(Inventory_t *i_ptr) {
     int16_t id = objectPositionOffset(i_ptr);
@@ -254,7 +254,7 @@ void identify(int *item) {
         return;
     }
 
-    known1(i_ptr);
+    itemSetAsIdentified(i_ptr);
 
     int x1 = i_ptr->tval;
     int x2 = i_ptr->subval;

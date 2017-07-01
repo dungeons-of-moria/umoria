@@ -174,7 +174,7 @@ void exitGame();
 bool isVowel(char ch);
 void magicInitializeItemNames();
 int16_t objectPositionOffset(Inventory_t *item);
-void known1(Inventory_t *i_ptr);
+void itemSetAsIdentified(Inventory_t *item);
 bool known1_p(Inventory_t *);
 void known2(Inventory_t *i_ptr);
 bool known2_p(Inventory_t *i_ptr);

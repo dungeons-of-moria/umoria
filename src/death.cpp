@@ -174,7 +174,7 @@ static void print_tomb() {
 
     if (get_string(str, 22, 18, 60)) {
         for (int i = 0; i < INVEN_ARRAY_SIZE; i++) {
-            known1(&inventory[i]);
+            itemSetAsIdentified(&inventory[i]);
             known2(&inventory[i]);
         }
 
