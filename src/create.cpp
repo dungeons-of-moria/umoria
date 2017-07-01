@@ -437,7 +437,7 @@ static void get_money() {
 }
 
 // Main Character Creation Routine -JWT-
-void create_character() {
+void createCharacter() {
     put_character();
     choose_race();
     get_sex();
