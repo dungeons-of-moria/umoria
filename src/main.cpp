@@ -238,7 +238,7 @@ static void char_inven_init() {
         invcopy(&inven_init, class_base_provisions[py.misc.pclass][i]);
 
         // this makes it spellItemIdentifyAndRemoveRandomInscription and itemSetAsIdentified
-        store_bought(&inven_init);
+        itemIdentifyAsStoreBought(&inven_init);
 
         // must set this bit to display tohit/todam for stiletto
         if (inven_init.tval == TV_SWORD) {

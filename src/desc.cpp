@@ -200,9 +200,9 @@ void itemIdentificationClearEmpty(Inventory_t *item) {
     item->ident &= ~ID_EMPTY;
 }
 
-void store_bought(Inventory_t *i_ptr) {
-    i_ptr->ident |= ID_STOREBOUGHT;
-    spellItemIdentifyAndRemoveRandomInscription(i_ptr);
+void itemIdentifyAsStoreBought(Inventory_t *item) {
+    item->ident |= ID_STOREBOUGHT;
+    spellItemIdentifyAndRemoveRandomInscription(item);
 }
 
 bool store_bought_p(Inventory_t *i_ptr) {

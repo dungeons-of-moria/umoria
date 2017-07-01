@@ -130,7 +130,7 @@ void print_objects() {
                     magic_treasure(treasureID, level);
 
                     Inventory_t *i_ptr = &treasure_list[treasureID];
-                    store_bought(i_ptr);
+                    itemIdentifyAsStoreBought(i_ptr);
 
                     if (i_ptr->flags & TR_CURSED) {
                         add_inscribe(i_ptr, ID_DAMD);

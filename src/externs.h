@@ -180,7 +180,7 @@ void spellItemIdentifyAndRemoveRandomInscription(Inventory_t *item);
 bool spellItemIdentified(Inventory_t *item);
 void spellItemRemoveIdentification(Inventory_t *item);
 void itemIdentificationClearEmpty(Inventory_t *item);
-void store_bought(Inventory_t *i_ptr);
+void itemIdentifyAsStoreBought(Inventory_t *item);
 bool store_bought_p(Inventory_t *i_ptr);
 void sample(Inventory_t *i_ptr);
 void identify(int *item);
