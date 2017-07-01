@@ -185,7 +185,7 @@ void eat() {
     }
 
     if (identified) {
-        if (!known1_p(i_ptr)) {
+        if (!itemSetColorlessAsIdentifed(i_ptr)) {
             // use identified it, gain experience
             // round half-way case up
             py.misc.exp += (i_ptr->level + (py.misc.lev >> 1)) / py.misc.lev;
@@ -195,7 +195,7 @@ void eat() {
             identify(&item_val);
             i_ptr = &inventory[item_val];
         }
-    } else if (!known1_p(i_ptr)) {
+    } else if (!itemSetColorlessAsIdentifed(i_ptr)) {
         sample(i_ptr);
     }
 

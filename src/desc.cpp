@@ -166,18 +166,18 @@ void itemSetAsIdentified(Inventory_t *item) {
 
 // Items which don't have a 'color' are always known / itemSetAsIdentified(),
 // so that they can be carried in order in the inventory.
-bool known1_p(Inventory_t *i_ptr) {
-    int16_t id = objectPositionOffset(i_ptr);
+bool itemSetColorlessAsIdentifed(Inventory_t *item) {
+    int16_t id = objectPositionOffset(item);
 
     if (id < 0) {
         return OD_KNOWN1;
     }
-    if (store_bought_p(i_ptr)) {
+    if (store_bought_p(item)) {
         return OD_KNOWN1;
     }
 
     id <<= 6;
-    id += (uint8_t) (i_ptr->subval & (ITEM_SINGLE_STACK_MIN - 1));
+    id += (uint8_t) (item->subval & (ITEM_SINGLE_STACK_MIN - 1));
 
     return isObjectKnown(id);
 }
@@ -250,7 +250,7 @@ void identify(int *item) {
         add_inscribe(i_ptr, ID_DAMD);
     }
 
-    if (known1_p(i_ptr)) {
+    if (itemSetColorlessAsIdentifed(i_ptr)) {
         return;
     }
 
@@ -336,7 +336,7 @@ void objdes(obj_desc_t out_val, Inventory_t *i_ptr, bool pref) {
     int p1_use = IGNORED;
     bool append_name = false;
 
-    bool modify = !known1_p(i_ptr);
+    bool modify = !itemSetColorlessAsIdentifed(i_ptr);
 
     switch (i_ptr->tval) {
         case TV_MISC:

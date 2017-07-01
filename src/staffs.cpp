@@ -196,7 +196,7 @@ void use() {
     bool identified = dischargeStaff(staff_ptr);
 
     if (identified) {
-        if (!known1_p(staff_ptr)) {
+        if (!itemSetColorlessAsIdentifed(staff_ptr)) {
             // round half-way case up
             py.misc.exp += (staff_ptr->level + (py.misc.lev >> 1)) / py.misc.lev;
 
@@ -204,7 +204,7 @@ void use() {
 
             identify(&staff_id);
         }
-    } else if (!known1_p(staff_ptr)) {
+    } else if (!itemSetColorlessAsIdentifed(staff_ptr)) {
         sample(staff_ptr);
     }
 

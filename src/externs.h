@@ -175,7 +175,7 @@ bool isVowel(char ch);
 void magicInitializeItemNames();
 int16_t objectPositionOffset(Inventory_t *item);
 void itemSetAsIdentified(Inventory_t *item);
-bool known1_p(Inventory_t *);
+bool itemSetColorlessAsIdentifed(Inventory_t *item);
 void known2(Inventory_t *i_ptr);
 bool known2_p(Inventory_t *i_ptr);
 void clear_known2(Inventory_t *i_ptr);

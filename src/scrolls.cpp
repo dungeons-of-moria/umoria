@@ -586,14 +586,14 @@ void read_scroll() {
     i_ptr = &inventory[itemID];
 
     if (identified) {
-        if (!known1_p(i_ptr)) {
+        if (!itemSetColorlessAsIdentifed(i_ptr)) {
             // round half-way case up
             py.misc.exp += (i_ptr->level + (py.misc.lev >> 1)) / py.misc.lev;
             prt_experience();
 
             identify(&itemID);
         }
-    } else if (!known1_p(i_ptr)) {
+    } else if (!itemSetColorlessAsIdentifed(i_ptr)) {
         sample(i_ptr);
     }
 

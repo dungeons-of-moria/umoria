@@ -180,14 +180,14 @@ void aim() {
     bool ident = discharge_wand(item, dir);
 
     if (ident) {
-        if (!known1_p(item)) {
+        if (!itemSetColorlessAsIdentifed(item)) {
             // round half-way case up
             py.misc.exp += (item->level + (py.misc.lev >> 1)) / py.misc.lev;
             prt_experience();
 
             identify(&item_id);
         }
-    } else if (!known1_p(item)) {
+    } else if (!itemSetColorlessAsIdentifed(item)) {
         sample(item);
     }
 

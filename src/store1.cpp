@@ -89,7 +89,7 @@ static int32_t getAmmoBuyPrice(Inventory_t *i_ptr) {
 }
 
 static int32_t getPotionScrollBuyPrice(Inventory_t *i_ptr) {
-    if (!known1_p(i_ptr)) {
+    if (!itemSetColorlessAsIdentifed(i_ptr)) {
         return 20;
     }
 
@@ -97,7 +97,7 @@ static int32_t getPotionScrollBuyPrice(Inventory_t *i_ptr) {
 }
 
 static int32_t getFoodBuyPrice(Inventory_t *i_ptr) {
-    if (i_ptr->subval < ITEM_SINGLE_STACK_MIN + MAX_MUSH && !known1_p(i_ptr)) {
+    if (i_ptr->subval < ITEM_SINGLE_STACK_MIN + MAX_MUSH && !itemSetColorlessAsIdentifed(i_ptr)) {
         return 1;
     }
 
@@ -106,7 +106,7 @@ static int32_t getFoodBuyPrice(Inventory_t *i_ptr) {
 
 static int32_t getRingAmuletBuyPrice(Inventory_t *i_ptr) {
     // player does not know what type of ring/amulet this is
-    if (!known1_p(i_ptr)) {
+    if (!itemSetColorlessAsIdentifed(i_ptr)) {
         return 45;
     }
 
@@ -121,7 +121,7 @@ static int32_t getRingAmuletBuyPrice(Inventory_t *i_ptr) {
 }
 
 static int32_t getWandStaffBuyPrice(Inventory_t *i_ptr) {
-    if (!known1_p(i_ptr)) {
+    if (!itemSetColorlessAsIdentifed(i_ptr)) {
         if (i_ptr->tval == TV_WAND) {
             return 50;
         }

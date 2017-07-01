@@ -1225,7 +1225,7 @@ bool inven_check_num(Inventory_t *item) {
         bool sameGroup = item->subval < ITEM_GROUP_MIN || inventory[i].p1 == item->p1;
 
         // only stack if both or neither are identified
-        bool identification = known1_p(&inventory[i]) == known1_p(item);
+        bool identification = itemSetColorlessAsIdentifed(&inventory[i]) == itemSetColorlessAsIdentifed(item);
 
         if (sameCharacter && sameCategory && sameNumber && sameGroup && identification) {
             return true;
@@ -1294,7 +1294,7 @@ void check_strength() {
 int inven_carry(Inventory_t *item) {
     int typ = item->tval;
     int subt = item->subval;
-    bool known1p = known1_p(item);
+    bool known1p = itemSetColorlessAsIdentifed(item);
     int always_known1p = (objectPositionOffset(item) == -1);
 
     int locn;
@@ -1306,7 +1306,7 @@ int inven_carry(Inventory_t *item) {
         if (typ == t_ptr->tval && subt == t_ptr->subval && subt >= ITEM_SINGLE_STACK_MIN && ((int) t_ptr->number + (int) item->number) < 256 &&
             (subt < ITEM_GROUP_MIN || t_ptr->p1 == item->p1) &&
             // only stack if both or neither are identified
-            known1p == known1_p(t_ptr)) {
+            known1p == itemSetColorlessAsIdentifed(t_ptr)) {
             t_ptr->number += item->number;
 
             break;
