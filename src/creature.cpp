@@ -33,9 +33,9 @@ static bool checkMonsterIsVisible(Monster_t *m_ptr) {
 }
 
 // Updates screen when monsters move about -RAK-
-void update_mon(int monsterID) {
+void monsterUpdateVisibility(int monster_id) {
     bool visible = false;
-    Monster_t *m_ptr = &monsters[monsterID];
+    Monster_t *m_ptr = &monsters[monster_id];
 
     if (m_ptr->cdis <= MAX_SIGHT && !(py.flags.status & PY_BLIND) && panel_contains((int) m_ptr->fy, (int) m_ptr->fx)) {
         if (wizard_mode) {
@@ -89,7 +89,7 @@ static bool check_mon_lite(int y, int x) {
         return false;
     }
 
-    update_mon(monsterID);
+    monsterUpdateVisibility(monsterID);
     return monsters[monsterID].ml;
 }
 
@@ -979,11 +979,11 @@ static void glyphOfWardingProtection(uint16_t creatureID, uint32_t movebits, boo
 
 static void creatureMovesOnPlayer(Monster_t *m_ptr, uint8_t creatureID, int monsterID, uint32_t movebits, bool *do_move, bool *do_turn, uint32_t *rcmove, int y, int x) {
     if (creatureID == 1) {
-        // if the monster is not lit, must call update_mon, it
+        // if the monster is not lit, must call monsterUpdateVisibility, it
         // may be faster than character, and hence could have
         // just moved next to character this same turn.
         if (!m_ptr->ml) {
-            update_mon(monsterID);
+            monsterUpdateVisibility(monsterID);
         }
         make_attack(monsterID);
         *do_move = false;
@@ -1178,7 +1178,7 @@ void creatureCastsSpell(Monster_t *m_ptr, int monsterID, int spellID, uint8_t le
             hack_monptr = monsterID;
             (void) summon_monster(&y, &x, false);
             hack_monptr = -1;
-            update_mon((int) cave[y][x].cptr);
+            monsterUpdateVisibility((int) cave[y][x].cptr);
             break;
         case 15: // Summon Undead
             (void) strcat(cdesc, "magically summons an undead!");
@@ -1190,7 +1190,7 @@ void creatureCastsSpell(Monster_t *m_ptr, int monsterID, int spellID, uint8_t le
             hack_monptr = monsterID;
             (void) summon_undead(&y, &x);
             hack_monptr = -1;
-            update_mon((int) cave[y][x].cptr);
+            monsterUpdateVisibility((int) cave[y][x].cptr);
             break;
         case 16: // Slow Person
             if (py.flags.free_act) {
@@ -1277,7 +1277,7 @@ static bool mon_cast_spell(int monsterID) {
     // Creature is going to cast a spell
 
     // Check to see if monster should be lit.
-    update_mon(monsterID);
+    monsterUpdateVisibility(monsterID);
 
     // Describe the attack
     vtype_t cdesc;
@@ -1669,7 +1669,7 @@ static void creatureAttackingUpdate(Monster_t *m_ptr, int monsterID, int moves) 
             }
         }
 
-        update_mon(monsterID);
+        monsterUpdateVisibility(monsterID);
 
         updateRecall(m_ptr, wake, ignore, rcmove);
     }
@@ -1696,12 +1696,12 @@ void creatures(bool attack) {
             int moves = movement_rate(m_ptr->cspeed);
 
             if (moves <= 0) {
-                update_mon(id);
+                monsterUpdateVisibility(id);
             } else {
                 creatureAttackingUpdate(m_ptr, id, moves);
             }
         } else {
-            update_mon(id);
+            monsterUpdateVisibility(id);
         }
 
         // Get rid of an eaten/breathed on monster. This is necessary because

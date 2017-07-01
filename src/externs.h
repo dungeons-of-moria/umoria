@@ -160,7 +160,7 @@ extern bool temporary_light_only;
 void createCharacter();
 
 // creature.c
-void update_mon(int monsterID);
+void monsterUpdateVisibility(int monster_id);
 bool multiply_monster(int y, int x, int creatureID, int monsterID);
 void creatures(bool attack);
 

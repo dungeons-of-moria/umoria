@@ -486,7 +486,7 @@ static void lightLineTouchesMonster(int monsterID) {
     Creature_t *creature = &creatures_list[monster->mptr];
 
     // light up and draw monster
-    update_mon(monsterID);
+    monsterUpdateVisibility(monsterID);
 
     vtype_t name;
     monster_name(name, monster->ml, creature->name);
@@ -651,10 +651,10 @@ static void fireBoltTouchesMonster(Cave_t *tile, int dam, int harmType, uint32_t
     Creature_t *creature = &creatures_list[monster->mptr];
 
     // light up monster and draw monster, temporarily set
-    // pl so that update_mon() will work
+    // pl so that monsterUpdateVisibility() will work
     bool savedLitStatus = tile->pl;
     tile->pl = true;
-    update_mon((int) tile->cptr);
+    monsterUpdateVisibility((int) tile->cptr);
     tile->pl = savedLitStatus;
 
     // draw monster and clear previous bolt
@@ -782,10 +782,10 @@ void fire_ball(int y, int x, int direction, int damage_hp, int spell_type_id, co
                                 Monster_t *m_ptr = &monsters[c_ptr->cptr];
                                 Creature_t *r_ptr = &creatures_list[m_ptr->mptr];
 
-                                // lite up creature if visible, temp set pl so that update_mon works
+                                // lite up creature if visible, temp set pl so that monsterUpdateVisibility works
                                 bool savedLitStatus = c_ptr->pl;
                                 c_ptr->pl = true;
-                                update_mon((int) c_ptr->cptr);
+                                monsterUpdateVisibility((int) c_ptr->cptr);
 
                                 thit++;
                                 int dam = damage_hp;
@@ -1530,7 +1530,7 @@ void teleport_away(int monster_id, int distance_from_player) {
     // not currently visible in its new position.
     m_ptr->ml = false;
     m_ptr->cdis = (uint8_t) distance(char_row, char_col, yn, xn);
-    update_mon(monster_id);
+    monsterUpdateVisibility(monster_id);
 }
 
 // Teleport player to spell casting creature -RAK-
