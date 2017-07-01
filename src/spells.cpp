@@ -1008,7 +1008,7 @@ bool recharge(int charges) {
         if (spellItemIdentified(i_ptr)) {
             spellItemRemoveIdentification(i_ptr);
         }
-        clear_empty(i_ptr);
+        itemIdentificationClearEmpty(i_ptr);
     }
 
     return true;

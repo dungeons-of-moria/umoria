@@ -179,7 +179,7 @@ bool itemSetColorlessAsIdentifed(Inventory_t *item);
 void spellItemIdentifyAndRemoveRandomInscription(Inventory_t *item);
 bool spellItemIdentified(Inventory_t *item);
 void spellItemRemoveIdentification(Inventory_t *item);
-void clear_empty(Inventory_t *i_ptr);
+void itemIdentificationClearEmpty(Inventory_t *item);
 void store_bought(Inventory_t *i_ptr);
 bool store_bought_p(Inventory_t *i_ptr);
 void sample(Inventory_t *i_ptr);

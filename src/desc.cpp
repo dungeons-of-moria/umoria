@@ -196,8 +196,8 @@ void spellItemRemoveIdentification(Inventory_t *item) {
     item->ident &= ~ID_KNOWN2;
 }
 
-void clear_empty(Inventory_t *i_ptr) {
-    i_ptr->ident &= ~ID_EMPTY;
+void itemIdentificationClearEmpty(Inventory_t *item) {
+    item->ident &= ~ID_EMPTY;
 }
 
 void store_bought(Inventory_t *i_ptr) {
