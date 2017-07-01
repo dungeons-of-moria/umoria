@@ -60,7 +60,7 @@ int main(int argc, char *argv[]) {
                 force_keys_to = true;
                 break;
             case 's':
-                display_scores();
+                showScoresScreen();
                 exit_game();
             case 'w':
                 to_be_wizard = true;

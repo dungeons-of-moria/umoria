@@ -165,7 +165,7 @@ bool monsterMultiply(int y, int x, int creatureID, int monsterID);
 void updateMonsters(bool attack);
 
 // death.c
-void display_scores();
+void showScoresScreen();
 bool duplicate_character();
 int32_t total_points();
 void exit_game();

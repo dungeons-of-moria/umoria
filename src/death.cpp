@@ -26,7 +26,7 @@ static char *center_string(char *centered_str, const char *in_str) {
     return centered_str;
 }
 
-void display_scores() {
+void showScoresScreen() {
     char string[100];
 
     if ((highscore_fp = fopen(MORIA_TOP, "rb")) == NULL) {
@@ -299,7 +299,7 @@ static void highscores() {
             ) {
         // Support score files from 5.2.2 to present.
         // No need to print a message, a subsequent call to
-        // display_scores() will print a message.
+        // showScoresScreen() will print a message.
         (void) fclose(highscore_fp);
         return;
     }
@@ -455,7 +455,7 @@ void exit_game() {
         // been an eof on stdin detected.
         character_saved = false;
         highscores();
-        display_scores();
+        showScoresScreen();
     }
     erase_line(23, 0);
     restore_term();

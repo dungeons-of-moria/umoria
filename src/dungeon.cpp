@@ -1709,7 +1709,7 @@ static void do_command(char com_val) {
             break;
         case 'V': // (V)iew scores
             save_screen();
-            display_scores();
+            showScoresScreen();
             restore_screen();
             player_free_turn = true;
             break;
