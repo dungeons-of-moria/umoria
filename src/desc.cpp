@@ -172,7 +172,7 @@ bool itemSetColorlessAsIdentifed(Inventory_t *item) {
     if (id < 0) {
         return OD_KNOWN1;
     }
-    if (store_bought_p(item)) {
+    if (itemStoreBought(item)) {
         return OD_KNOWN1;
     }
 
@@ -205,8 +205,8 @@ void itemIdentifyAsStoreBought(Inventory_t *item) {
     spellItemIdentifyAndRemoveRandomInscription(item);
 }
 
-bool store_bought_p(Inventory_t *i_ptr) {
-    return (i_ptr->ident & ID_STOREBOUGHT) != 0;
+bool itemStoreBought(Inventory_t *item) {
+    return (item->ident & ID_STOREBOUGHT) != 0;
 }
 
 // Remove an automatically generated inscription. -CJS-
@@ -625,7 +625,7 @@ void objdes(obj_desc_t out_val, Inventory_t *i_ptr, bool pref) {
         indexx += (i_ptr->subval & (ITEM_SINGLE_STACK_MIN - 1));
 
         // don't print tried string for store bought items
-        if ((objects_identified[indexx] & OD_TRIED) && !store_bought_p(i_ptr)) {
+        if ((objects_identified[indexx] & OD_TRIED) && !itemStoreBought(i_ptr)) {
             (void) strcat(tmp_str, "tried ");
         }
     }

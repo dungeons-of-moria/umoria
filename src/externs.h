@@ -181,7 +181,7 @@ bool spellItemIdentified(Inventory_t *item);
 void spellItemRemoveIdentification(Inventory_t *item);
 void itemIdentificationClearEmpty(Inventory_t *item);
 void itemIdentifyAsStoreBought(Inventory_t *item);
-bool store_bought_p(Inventory_t *i_ptr);
+bool itemStoreBought(Inventory_t *item);
 void sample(Inventory_t *i_ptr);
 void identify(int *item);
 void unmagic_name(Inventory_t *i_ptr);
