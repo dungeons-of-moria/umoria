@@ -13,7 +13,7 @@ static void unsample(Inventory_t *i_ptr);
 
 char magic_item_titles[MAX_TITLES][10];
 
-bool is_a_vowel(char ch) {
+bool isVowel(char ch) {
     switch (ch) {
         case 'a':
         case 'e':
@@ -599,7 +599,7 @@ void objdes(obj_desc_t out_val, Inventory_t *i_ptr, bool pref) {
             (void) sprintf(out_val, "%d%s", (int) i_ptr->number, &tmp_val[1]);
         } else if (i_ptr->number < 1) {
             (void) sprintf(out_val, "%s%s", "no more", &tmp_val[1]);
-        } else if (is_a_vowel(tmp_val[2])) {
+        } else if (isVowel(tmp_val[2])) {
             (void) sprintf(out_val, "an%s", &tmp_val[1]);
         } else {
             (void) sprintf(out_val, "a%s", &tmp_val[1]);

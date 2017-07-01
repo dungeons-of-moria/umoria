@@ -246,7 +246,7 @@ static void get_moves(int monsterID, int *mm) {
 static void diedFromString(vtype_t *desc, const char *name, uint32_t move) {
     if (CM_WIN & move) {
         (void) sprintf(*desc, "The %s", name);
-    } else if (is_a_vowel(name[0])) {
+    } else if (isVowel(name[0])) {
         (void) sprintf(*desc, "an %s", name);
     } else {
         (void) sprintf(*desc, "a %s", name);

@@ -171,7 +171,7 @@ int32_t playerCalculateTotalPoints();
 void exitGame();
 
 // desc.c
-bool is_a_vowel(char ch);
+bool isVowel(char ch);
 void magic_init();
 int16_t object_offset(Inventory_t *t_ptr);
 void known1(Inventory_t *i_ptr);

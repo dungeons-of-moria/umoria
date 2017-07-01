@@ -633,7 +633,7 @@ static bool look_see(int x, int y, bool *transparent) {
 
     if (gl_rock == 0 && c_ptr->cptr > 1 && monsters[c_ptr->cptr].ml) {
         j = monsters[c_ptr->cptr].mptr;
-        (void) sprintf(msg, "%s %s %s. [(r)ecall]", description, is_a_vowel(creatures_list[j].name[0]) ? "an" : "a", creatures_list[j].name);
+        (void) sprintf(msg, "%s %s %s. [(r)ecall]", description, isVowel(creatures_list[j].name[0]) ? "an" : "a", creatures_list[j].name);
         description = "It is on";
         prt(msg, 0, 0);
 
