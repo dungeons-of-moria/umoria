@@ -1332,7 +1332,7 @@ static bool mon_cast_spell(int monsterID) {
 
 // Places creature adjacent to given location -RAK-
 // Rats and Flys are fun!
-bool multiply_monster(int y, int x, int creatureID, int monsterID) {
+bool monsterMultiply(int y, int x, int creatureID, int monsterID) {
     for (int i = 0; i <= 18; i++) {
         int row = y - 2 + randint(3);
         int col = x - 2 + randint(3);
@@ -1413,7 +1413,7 @@ static void multiplyCritter(Monster_t *m_ptr, int monsterID, uint32_t *rcmove) {
     }
 
     if (counter < 4 && randint(counter * MON_MULT_ADJ) == 1) {
-        if (multiply_monster((int) m_ptr->fy, (int) m_ptr->fx, (int) m_ptr->mptr, monsterID)) {
+        if (monsterMultiply((int) m_ptr->fy, (int) m_ptr->fx, (int) m_ptr->mptr, monsterID)) {
             *rcmove |= CM_MULTIPLY;
         }
     }
@@ -1676,7 +1676,7 @@ static void creatureAttackingUpdate(Monster_t *m_ptr, int monsterID, int moves) 
 }
 
 // Creatures movement and attacking are done from here -RAK-
-void creatures(bool attack) {
+void updateMonsters(bool attack) {
     // Process the monsters
     for (int id = next_free_monster_id - 1; id >= MIN_MONIX && !character_is_dead; id--) {
         Monster_t *m_ptr = &monsters[id];

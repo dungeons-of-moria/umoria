@@ -524,8 +524,8 @@ bool compact_monsters() {
                 if (creatures_list[monsters[i].mptr].cmove & CM_WIN) {
                     // Never compact away the Balrog!!
                 } else if (hack_monptr < i) {
-                    // in case this is called from within creatures(), this is a horrible
-                    // hack, the monsters/creatures() code needs to be rewritten.
+                    // in case this is called from within updateMonsters(), this is a horrible
+                    // hack, the monsters/updateMonsters() code needs to be rewritten.
                     delete_monster(i);
                     delete_any = true;
                 } else {

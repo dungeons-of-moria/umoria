@@ -161,8 +161,8 @@ void createCharacter();
 
 // creature.c
 void monsterUpdateVisibility(int monster_id);
-bool multiply_monster(int y, int x, int creatureID, int monsterID);
-void creatures(bool attack);
+bool monsterMultiply(int y, int x, int creatureID, int monsterID);
+void updateMonsters(bool attack);
 
 // death.c
 void display_scores();

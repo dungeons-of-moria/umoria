@@ -2350,7 +2350,7 @@ void teleport(int new_distance) {
     char_col = (int16_t) x;
 
     check_view();
-    creatures(false);
+    updateMonsters(false);
 
     teleport_player = false;
 }

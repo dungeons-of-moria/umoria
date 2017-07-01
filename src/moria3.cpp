@@ -482,7 +482,7 @@ void delete_monster(int id) {
 }
 
 // The following two procedures implement the same function as delete monster.
-// However, they are used within creatures(), because deleting a monster
+// However, they are used within updateMonsters(), because deleting a monster
 // while scanning the monsters causes two problems, monsters might get two
 // turns, and m_ptr/monptr might be invalid after the delete_monster.
 // Hence the delete is done in two steps.
@@ -510,7 +510,7 @@ void fix1_delete_monster(int id) {
 }
 
 // fix2_delete_monster does everything in delete_monster that wasn't done
-// by fix1_monster_delete above, this is only called in creatures()
+// by fix1_monster_delete above, this is only called in updateMonsters()
 void fix2_delete_monster(int id) {
     int lastID = next_free_monster_id - 1;
 
@@ -740,8 +740,8 @@ int mon_take_hit(int monster_id, int damage) {
     // message appearing before "monster dies" message.
     int m_take_hit = monster->mptr;
 
-    // in case this is called from within creatures(), this is a horrible
-    // hack, the monsters/creatures() code needs to be rewritten.
+    // in case this is called from within updateMonsters(), this is a horrible
+    // hack, the monsters/updateMonsters() code needs to be rewritten.
     if (hack_monptr < monster_id) {
         delete_monster(monster_id);
     } else {

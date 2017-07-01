@@ -194,7 +194,7 @@ bool detect_invisible() {
         msg_print(CNIL);
 
         // must unlight every monster just lighted
-        creatures(false);
+        updateMonsters(false);
     }
 
     return detected;
@@ -474,7 +474,7 @@ bool detect_monsters() {
         msg_print(CNIL);
 
         // must unlight every monster just lighted
-        creatures(false);
+        updateMonsters(false);
     }
 
     return detected;
@@ -1494,7 +1494,7 @@ bool clone_monster(int y, int x, int direction) {
             monsters[c_ptr->cptr].csleep = 0;
 
             // monptr of 0 is safe here, since can't reach here from creatures
-            return multiply_monster(y, x, (int) monsters[c_ptr->cptr].mptr, 0);
+            return monsterMultiply(y, x, (int) monsters[c_ptr->cptr].mptr, 0);
         }
     }
 
@@ -1566,7 +1566,7 @@ void teleport_to(int to_y, int to_x) {
     check_view();
 
     // light creatures
-    creatures(false);
+    updateMonsters(false);
 }
 
 // Teleport all creatures in a given direction away -RAK-
@@ -1772,7 +1772,7 @@ bool detect_evil() {
         msg_print(CNIL);
 
         // must unlight every monster just lighted
-        creatures(false);
+        updateMonsters(false);
     }
 
     return detected;

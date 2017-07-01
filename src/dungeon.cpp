@@ -63,7 +63,7 @@ static void playerUpdateLightStatus() {
                 disturb(0, 1);
 
                 // unlight creatures
-                creatures(false);
+                updateMonsters(false);
             } else if (i_ptr->p1 < 40 && randint(5) == 1 && py.flags.blind < 1) {
                 disturb(0, 0);
                 msg_print("Your light is growing faint.");
@@ -73,7 +73,7 @@ static void playerUpdateLightStatus() {
             disturb(0, 1);
 
             // unlight creatures
-            creatures(false);
+            updateMonsters(false);
         }
     } else if (i_ptr->p1 > 0) {
         i_ptr->p1--;
@@ -81,7 +81,7 @@ static void playerUpdateLightStatus() {
         disturb(0, 1);
 
         // light creatures
-        creatures(false);
+        updateMonsters(false);
     }
 }
 
@@ -256,7 +256,7 @@ static void playerUpdateBlindness() {
         disturb(0, 1);
 
         // unlight creatures
-        creatures(false);
+        updateMonsters(false);
     }
 
     py.flags.blind--;
@@ -269,7 +269,7 @@ static void playerUpdateBlindness() {
         disturb(0, 1);
 
         // light creatures
-        creatures(false);
+        updateMonsters(false);
 
         msg_print("The veil of darkness lifts.");
     }
@@ -593,7 +593,7 @@ static void playerUpdateDetectInvisible() {
         py.flags.see_inv = true;
 
         // light but don't move creatures
-        creatures(false);
+        updateMonsters(false);
     }
 
     py.flags.detect_inv--;
@@ -605,7 +605,7 @@ static void playerUpdateDetectInvisible() {
         calc_bonuses();
 
         // unlight but don't move creatures
-        creatures(false);
+        updateMonsters(false);
     }
 }
 
@@ -620,7 +620,7 @@ static void playerUpdateInfraVision() {
         py.flags.see_infra++;
 
         // light but don't move creatures
-        creatures(false);
+        updateMonsters(false);
     }
 
     py.flags.tim_infra--;
@@ -630,7 +630,7 @@ static void playerUpdateInfraVision() {
         py.flags.see_infra--;
 
         // unlight but don't move creatures
-        creatures(false);
+        updateMonsters(false);
     }
 }
 
@@ -891,7 +891,7 @@ void dungeon() {
     }
 
     // Light,  but do not move critters
-    creatures(false);
+    updateMonsters(false);
 
     // Print the depth
     prt_depth();
@@ -981,7 +981,7 @@ void dungeon() {
         // the monster list is nearly full.  This helps to avoid problems in
         // creature.c when monsters try to multiply.  Compact_monsters() is
         // much more likely to succeed if called from here, than if called
-        // from within creatures().
+        // from within updateMonsters().
         if (MAX_MALLOC - next_free_monster_id < 10) {
             (void) compact_monsters();
         }
@@ -1003,7 +1003,7 @@ void dungeon() {
 
         // Move the creatures
         if (!generate_new_level) {
-            creatures(true);
+            updateMonsters(true);
         }
     } while (!generate_new_level && !eof_flag);
 }
@@ -1555,7 +1555,7 @@ static void doWizardCommands(char com_val) {
             x = char_col;
             (void) summon_monster(&y, &x, true);
 
-            creatures(false);
+            updateMonsters(false);
             break;
         case '@':
             wizard_create();
