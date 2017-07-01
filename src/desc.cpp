@@ -192,8 +192,8 @@ bool spellItemIdentified(Inventory_t *item) {
     return (item->ident & ID_KNOWN2) != 0;
 }
 
-void clear_known2(Inventory_t *i_ptr) {
-    i_ptr->ident &= ~ID_KNOWN2;
+void spellItemRemoveIdentification(Inventory_t *item) {
+    item->ident &= ~ID_KNOWN2;
 }
 
 void clear_empty(Inventory_t *i_ptr) {

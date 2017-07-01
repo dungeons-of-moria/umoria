@@ -1006,7 +1006,7 @@ bool recharge(int charges) {
         charges = (charges / (i_ptr->level + 2)) + 1;
         i_ptr->p1 += 2 + randint(charges);
         if (spellItemIdentified(i_ptr)) {
-            clear_known2(i_ptr);
+            spellItemRemoveIdentification(i_ptr);
         }
         clear_empty(i_ptr);
     }

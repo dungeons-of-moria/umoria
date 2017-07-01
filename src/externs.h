@@ -178,7 +178,7 @@ void itemSetAsIdentified(Inventory_t *item);
 bool itemSetColorlessAsIdentifed(Inventory_t *item);
 void spellItemIdentifyAndRemoveRandomInscription(Inventory_t *item);
 bool spellItemIdentified(Inventory_t *item);
-void clear_known2(Inventory_t *i_ptr);
+void spellItemRemoveIdentification(Inventory_t *item);
 void clear_empty(Inventory_t *i_ptr);
 void store_bought(Inventory_t *i_ptr);
 bool store_bought_p(Inventory_t *i_ptr);
