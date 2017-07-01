@@ -255,7 +255,7 @@ static void disarmChestTrap(int y, int x, int tot, Inventory_t *item) {
 
             msg_print("You have disarmed the chest.");
 
-            known2(item);
+            spellItemIdentifyAndRemoveRandomInscription(item);
             py.misc.exp += level;
 
             prt_experience();
@@ -263,7 +263,7 @@ static void disarmChestTrap(int y, int x, int tot, Inventory_t *item) {
             count_msg_print("You failed to disarm the chest.");
         } else {
             msg_print("You set a trap off!");
-            known2(item);
+            spellItemIdentifyAndRemoveRandomInscription(item);
             chest_trap(y, x);
         }
         return;

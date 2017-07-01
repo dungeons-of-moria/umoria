@@ -131,7 +131,7 @@ bool detect_trap() {
                 detected = true;
             } else if (treasure_list[c_ptr->tptr].tval == TV_CHEST) {
                 Inventory_t *t_ptr = &treasure_list[c_ptr->tptr];
-                known2(t_ptr);
+                spellItemIdentifyAndRemoveRandomInscription(t_ptr);
             }
         }
     }
@@ -314,7 +314,7 @@ bool ident_spell() {
     identify(&item_val);
 
     Inventory_t *i_ptr = &inventory[item_val];
-    known2(i_ptr);
+    spellItemIdentifyAndRemoveRandomInscription(i_ptr);
 
     obj_desc_t tmp_str;
     objdes(tmp_str, i_ptr, true);
@@ -445,7 +445,7 @@ bool td_destroy() {
                 destroyed = true;
 
                 msg_print("You have disarmed the chest.");
-                known2(&treasure_list[c_ptr->tptr]);
+                spellItemIdentifyAndRemoveRandomInscription(&treasure_list[c_ptr->tptr]);
             }
         }
     }
@@ -590,7 +590,7 @@ bool disarm_all(int y, int x, int direction) {
                 msg_print("Click!");
                 t_ptr->flags &= ~(CH_TRAPPED | CH_LOCKED);
                 t_ptr->name2 = SN_UNLOCKED;
-                known2(t_ptr);
+                spellItemIdentifyAndRemoveRandomInscription(t_ptr);
             }
         }
 
@@ -1356,7 +1356,7 @@ bool td_destroy2(int y, int x, int direction) {
                 msg_print("Click!");
                 t_ptr->flags &= ~(CH_TRAPPED | CH_LOCKED);
                 t_ptr->name2 = SN_UNLOCKED;
-                known2(t_ptr);
+                spellItemIdentifyAndRemoveRandomInscription(t_ptr);
             }
         }
     } while ((dist <= OBJ_BOLT_RANGE) || c_ptr->fval <= MAX_OPEN_SPACE);

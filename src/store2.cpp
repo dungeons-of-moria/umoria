@@ -951,8 +951,8 @@ static bool store_sell(int store_num, int *cur_top) {
         // retake sold_obj so that it will be identified
         take_one_item(&sold_obj, &inventory[item_val]);
 
-        // call known2 for store item, so charges/pluses are known
-        known2(&sold_obj);
+        // call spellItemIdentifyAndRemoveRandomInscription for store item, so charges/pluses are known
+        spellItemIdentifyAndRemoveRandomInscription(&sold_obj);
         inven_destroy(item_val);
         objdes(tmp_str, &sold_obj, true);
         (void) sprintf(out_val, "You've sold %s", tmp_str);

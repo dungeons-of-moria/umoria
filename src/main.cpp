@@ -237,7 +237,7 @@ static void char_inven_init() {
     for (int i = 0; i < 5; i++) {
         invcopy(&inven_init, class_base_provisions[py.misc.pclass][i]);
 
-        // this makes it known2 and itemSetAsIdentified
+        // this makes it spellItemIdentifyAndRemoveRandomInscription and itemSetAsIdentified
         store_bought(&inven_init);
 
         // must set this bit to display tohit/todam for stiletto

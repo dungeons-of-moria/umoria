@@ -1170,7 +1170,7 @@ static void openClosedChest(int y, int x) {
     if (success) {
         item->flags &= ~CH_LOCKED;
         item->name2 = SN_EMPTY;
-        known2(item);
+        spellItemIdentifyAndRemoveRandomInscription(item);
         item->cost = 0;
     }
 

@@ -175,7 +175,7 @@ static void print_tomb() {
     if (get_string(str, 22, 18, 60)) {
         for (int i = 0; i < INVEN_ARRAY_SIZE; i++) {
             itemSetAsIdentified(&inventory[i]);
-            known2(&inventory[i]);
+            spellItemIdentifyAndRemoveRandomInscription(&inventory[i]);
         }
 
         calc_bonuses();
