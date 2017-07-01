@@ -594,7 +594,7 @@ void read_scroll() {
             identify(&itemID);
         }
     } else if (!itemSetColorlessAsIdentifed(i_ptr)) {
-        sample(i_ptr);
+        itemSetAsTried(i_ptr);
     }
 
     if (used_up) {

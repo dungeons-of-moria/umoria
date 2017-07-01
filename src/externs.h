@@ -182,7 +182,7 @@ void spellItemRemoveIdentification(Inventory_t *item);
 void itemIdentificationClearEmpty(Inventory_t *item);
 void itemIdentifyAsStoreBought(Inventory_t *item);
 bool itemStoreBought(Inventory_t *item);
-void sample(Inventory_t *i_ptr);
+void itemSetAsTried(Inventory_t *item);
 void identify(int *item);
 void unmagic_name(Inventory_t *i_ptr);
 void objdes(obj_desc_t out_val, Inventory_t *i_ptr, bool pref);

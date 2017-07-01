@@ -196,7 +196,7 @@ void eat() {
             i_ptr = &inventory[item_val];
         }
     } else if (!itemSetColorlessAsIdentifed(i_ptr)) {
-        sample(i_ptr);
+        itemSetAsTried(i_ptr);
     }
 
     add_food(i_ptr->p1);

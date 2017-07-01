@@ -205,7 +205,7 @@ void use() {
             identify(&staff_id);
         }
     } else if (!itemSetColorlessAsIdentifed(staff_ptr)) {
-        sample(staff_ptr);
+        itemSetAsTried(staff_ptr);
     }
 
     desc_charges(staff_id);

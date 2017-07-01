@@ -188,7 +188,7 @@ void aim() {
             identify(&item_id);
         }
     } else if (!itemSetColorlessAsIdentifed(item)) {
-        sample(item);
+        itemSetAsTried(item);
     }
 
     desc_charges(item_id);

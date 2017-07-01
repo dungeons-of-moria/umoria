@@ -326,7 +326,7 @@ void quaff() {
             i_ptr = &inventory[itemID];
         }
     } else if (!itemSetColorlessAsIdentifed(i_ptr)) {
-        sample(i_ptr);
+        itemSetAsTried(i_ptr);
     }
 
     add_food(i_ptr->p1);
