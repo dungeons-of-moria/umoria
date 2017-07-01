@@ -208,5 +208,5 @@ void use() {
         itemSetAsTried(staff_ptr);
     }
 
-    desc_charges(staff_id);
+    itemChargesRemainingDescription(staff_id);
 }

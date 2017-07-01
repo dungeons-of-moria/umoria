@@ -187,7 +187,7 @@ void itemIdentify(int *item_id);
 void itemRemoveMagicNaming(Inventory_t *item);
 void itemDescription(obj_desc_t description, Inventory_t *item, bool add_prefix);
 void inventoryItemCopyTo(int from_item_id, Inventory_t *to_item);
-void desc_charges(int item_val);
+void itemChargesRemainingDescription(int item_id);
 void desc_remain(int item_val);
 
 // dungeon.c

@@ -682,12 +682,12 @@ void inventoryItemCopyTo(int from_item_id, Inventory_t *to_item) {
 }
 
 // Describe number of remaining charges. -RAK-
-void desc_charges(int item_val) {
-    if (!spellItemIdentified(&inventory[item_val])) {
+void itemChargesRemainingDescription(int item_id) {
+    if (!spellItemIdentified(&inventory[item_id])) {
         return;
     }
 
-    int rem_num = inventory[item_val].p1;
+    int rem_num = inventory[item_id].p1;
 
     vtype_t out_val;
     (void) sprintf(out_val, "You have %d charges remaining.", rem_num);

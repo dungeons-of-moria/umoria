@@ -191,5 +191,5 @@ void aim() {
         itemSetAsTried(item);
     }
 
-    desc_charges(item_id);
+    itemChargesRemainingDescription(item_id);
 }
