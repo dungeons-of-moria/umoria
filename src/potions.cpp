@@ -330,6 +330,6 @@ void quaff() {
     }
 
     add_food(i_ptr->p1);
-    desc_remain(itemID);
+    itemTypeRemainingCountDescription(itemID);
     inven_destroy(itemID);
 }

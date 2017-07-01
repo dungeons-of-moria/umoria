@@ -873,7 +873,7 @@ void throw_object() {
         return;
     }
 
-    desc_remain(itemID);
+    itemTypeRemainingCountDescription(itemID);
 
     if (py.flags.confused > 0) {
         msg_print("You are confused.");

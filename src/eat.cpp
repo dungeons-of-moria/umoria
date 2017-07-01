@@ -205,6 +205,6 @@ void eat() {
 
     prt_hunger();
 
-    desc_remain(item_val);
+    itemTypeRemainingCountDescription(item_val);
     inven_destroy(item_val);
 }

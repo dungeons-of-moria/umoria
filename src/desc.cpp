@@ -695,8 +695,8 @@ void itemChargesRemainingDescription(int item_id) {
 }
 
 // Describe amount of item remaining. -RAK-
-void desc_remain(int item_val) {
-    Inventory_t *i_ptr = &inventory[item_val];
+void itemTypeRemainingCountDescription(int item_id) {
+    Inventory_t *i_ptr = &inventory[item_id];
 
     i_ptr->number--;
 

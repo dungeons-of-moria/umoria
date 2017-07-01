@@ -2208,6 +2208,6 @@ static void refill_lamp() {
         msg_print("Your lamp is less than half full.");
     }
 
-    desc_remain(i);
+    itemTypeRemainingCountDescription(i);
     inven_destroy(i);
 }

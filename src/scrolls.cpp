@@ -598,7 +598,7 @@ void read_scroll() {
     }
 
     if (used_up) {
-        desc_remain(itemID);
+        itemTypeRemainingCountDescription(itemID);
         inven_destroy(itemID);
     }
 }
