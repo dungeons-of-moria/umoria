@@ -45,7 +45,7 @@
 //  Level      : Minimum level on which item can be found.
 //  Cost       : Relative cost of item.
 //
-//  Special Abilities can be added to item by magic_init(),
+//  Special Abilities can be added to item by magicInitializeItemNames(),
 //  found in misc.c.
 //
 //  Scrolls, Potions, and Food:
@@ -56,10 +56,10 @@
 //
 //  Wands and Staffs:
 //  Flags defines a function, p1 contains number of charges
-//  for item.  p1 is set in magic_init() in misc.c.
+//  for item.  p1 is set in magicInitializeItemNames() in misc.c.
 //
 //  Chests:
-//  Traps are added randomly by magic_init() in misc.c.
+//  Traps are added randomly by magicInitializeItemNames() in misc.c.
 
 // Object list (All objects must be defined here)
 

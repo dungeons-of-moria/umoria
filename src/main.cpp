@@ -183,7 +183,7 @@ int main(int argc, char *argv[]) {
         use_roguelike_keys = force_keys_to;
     }
 
-    magic_init();
+    magicInitializeItemNames();
 
     //
     // Begin the game
