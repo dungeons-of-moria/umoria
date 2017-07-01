@@ -105,7 +105,7 @@ static void playerRecalculateBonusesFromInventory() {
             py.misc.ptoac += item->toac;
             py.misc.pac += item->ac;
 
-            if (known2_p(item)) {
+            if (spellItemIdentified(item)) {
                 py.misc.dis_th += item->tohit;
 
                 // Bows can't damage. -CJS-

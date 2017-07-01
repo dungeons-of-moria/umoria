@@ -188,8 +188,8 @@ void spellItemIdentifyAndRemoveRandomInscription(Inventory_t *item) {
     item->ident |= ID_KNOWN2;
 }
 
-bool known2_p(Inventory_t *i_ptr) {
-    return (i_ptr->ident & ID_KNOWN2) != 0;
+bool spellItemIdentified(Inventory_t *item) {
+    return (item->ident & ID_KNOWN2) != 0;
 }
 
 void clear_known2(Inventory_t *i_ptr) {
@@ -520,7 +520,7 @@ void objdes(obj_desc_t out_val, Inventory_t *i_ptr, bool pref) {
 
     vtype_t tmp_str;
 
-    if (i_ptr->name2 != SN_NULL && known2_p(i_ptr)) {
+    if (i_ptr->name2 != SN_NULL && spellItemIdentified(i_ptr)) {
         (void) strcat(tmp_val, " ");
         (void) strcat(tmp_val, special_item_names[i_ptr->name2]);
     }
@@ -529,7 +529,7 @@ void objdes(obj_desc_t out_val, Inventory_t *i_ptr, bool pref) {
         (void) strcat(tmp_val, damstr);
     }
 
-    if (known2_p(i_ptr)) {
+    if (spellItemIdentified(i_ptr)) {
         // originally used %+d, but several machines don't support it
         if (i_ptr->ident & ID_SHOW_HITDAM) {
             (void) sprintf(tmp_str, " (%c%d,%c%d)", (i_ptr->tohit < 0) ? '-' : '+', abs(i_ptr->tohit), (i_ptr->todam < 0) ? '-' : '+', abs(i_ptr->todam));
@@ -547,13 +547,13 @@ void objdes(obj_desc_t out_val, Inventory_t *i_ptr, bool pref) {
     if (i_ptr->ac != 0 || i_ptr->tval == TV_HELM) {
         (void) sprintf(tmp_str, " [%d", i_ptr->ac);
         (void) strcat(tmp_val, tmp_str);
-        if (known2_p(i_ptr)) {
+        if (spellItemIdentified(i_ptr)) {
             // originally used %+d, but several machines don't support it
             (void) sprintf(tmp_str, ",%c%d", (i_ptr->toac < 0) ? '-' : '+', abs(i_ptr->toac));
             (void) strcat(tmp_val, tmp_str);
         }
         (void) strcat(tmp_val, "]");
-    } else if (i_ptr->toac != 0 && known2_p(i_ptr)) {
+    } else if (i_ptr->toac != 0 && spellItemIdentified(i_ptr)) {
         // originally used %+d, but several machines don't support it
         (void) sprintf(tmp_str, " [%c%d]", (i_ptr->toac < 0) ? '-' : '+', abs(i_ptr->toac));
         (void) strcat(tmp_val, tmp_str);
@@ -572,7 +572,7 @@ void objdes(obj_desc_t out_val, Inventory_t *i_ptr, bool pref) {
         (void) sprintf(tmp_str, " with %d turns of light", i_ptr->p1);
     } else if (p1_use == IGNORED) {
         // NOOP
-    } else if (known2_p(i_ptr)) {
+    } else if (spellItemIdentified(i_ptr)) {
         if (p1_use == Z_PLUSSES) {
             // originally used %+d, but several machines don't support it
             (void) sprintf(tmp_str, " (%c%d)", (i_ptr->p1 < 0) ? '-' : '+', abs(i_ptr->p1));
@@ -683,7 +683,7 @@ void invcopy(Inventory_t *to, int from_index) {
 
 // Describe number of remaining charges. -RAK-
 void desc_charges(int item_val) {
-    if (!known2_p(&inventory[item_val])) {
+    if (!spellItemIdentified(&inventory[item_val])) {
         return;
     }
 

@@ -171,7 +171,7 @@ void aim() {
 
     if (item->p1 < 1) {
         msg_print("The wand has no charges left.");
-        if (!known2_p(item)) {
+        if (!spellItemIdentified(item)) {
             add_inscribe(item, ID_EMPTY);
         }
         return;

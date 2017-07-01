@@ -756,7 +756,7 @@ static bool executeAttack(Creature_t *r_ptr, Monster_t *m_ptr, int monsterID, in
             if ((i_ptr->tval == TV_STAFF || i_ptr->tval == TV_WAND) && i_ptr->p1 > 0) {
                 m_ptr->hp += r_ptr->level * i_ptr->p1;
                 i_ptr->p1 = 0;
-                if (!known2_p(i_ptr)) {
+                if (!spellItemIdentified(i_ptr)) {
                     add_inscribe(i_ptr, ID_EMPTY);
                 }
                 msg_print("Energy drains from your pack!");

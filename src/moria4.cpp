@@ -234,7 +234,7 @@ static void disarmFloorTrap(int y, int x, int tot, int level, int dir, int16_t p
 }
 
 static void disarmChestTrap(int y, int x, int tot, Inventory_t *item) {
-    if (!known2_p(item)) {
+    if (!spellItemIdentified(item)) {
         player_free_turn = true;
         msg_print("I don't see a trap.");
 

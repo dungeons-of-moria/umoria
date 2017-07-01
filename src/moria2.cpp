@@ -84,7 +84,7 @@ void search(int y, int x, int chance) {
 
                 // mask out the treasure bits
                 if ((t_ptr->flags & CH_TRAPPED) > 1) {
-                    if (!known2_p(t_ptr)) {
+                    if (!spellItemIdentified(t_ptr)) {
                         spellItemIdentifyAndRemoveRandomInscription(t_ptr);
                         msg_print("You have discovered a trap on the chest!");
                     } else {

@@ -1993,7 +1993,7 @@ static void regenmana(int percent) {
 static bool enchanted(Inventory_t *t_ptr) {
     if (t_ptr->tval < TV_MIN_ENCHANT || t_ptr->tval > TV_MAX_ENCHANT || (t_ptr->flags & TR_CURSED)) {
         return false;
-    } else if (known2_p(t_ptr)) {
+    } else if (spellItemIdentified(t_ptr)) {
         return false;
     } else if (t_ptr->ident & ID_MAGIK) {
         return false;
