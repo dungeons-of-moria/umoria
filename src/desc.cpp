@@ -109,8 +109,8 @@ void magicInitializeItemNames() {
     reset_seed();
 }
 
-int16_t object_offset(Inventory_t *t_ptr) {
-    switch (t_ptr->tval) {
+int16_t objectPositionOffset(Inventory_t *item) {
+    switch (item->tval) {
         case TV_AMULET:
             return 0;
         case TV_RING:
@@ -126,7 +126,7 @@ int16_t object_offset(Inventory_t *t_ptr) {
         case TV_POTION2:
             return 5;
         case TV_FOOD:
-            if ((t_ptr->subval & (ITEM_SINGLE_STACK_MIN - 1)) < MAX_MUSH) {
+            if ((item->subval & (ITEM_SINGLE_STACK_MIN - 1)) < MAX_MUSH) {
                 return 6;
             }
             return -1;
@@ -149,7 +149,7 @@ static bool isObjectKnown(int16_t id) {
 
 // Remove "Secret" symbol for identity of object
 void known1(Inventory_t *i_ptr) {
-    int16_t id = object_offset(i_ptr);
+    int16_t id = objectPositionOffset(i_ptr);
 
     if (id < 0) {
         return;
@@ -167,7 +167,7 @@ void known1(Inventory_t *i_ptr) {
 // Items which don't have a 'color' are always known1,
 // so that they can be carried in order in the inventory.
 bool known1_p(Inventory_t *i_ptr) {
-    int16_t id = object_offset(i_ptr);
+    int16_t id = objectPositionOffset(i_ptr);
 
     if (id < 0) {
         return OD_KNOWN1;
@@ -214,7 +214,7 @@ static void unsample(Inventory_t *i_ptr) {
     // this also used to clear ID_DAMD flag, but I think it should remain set
     i_ptr->ident &= ~(ID_MAGIK | ID_EMPTY);
 
-    int16_t id = object_offset(i_ptr);
+    int16_t id = objectPositionOffset(i_ptr);
 
     if (id < 0) {
         return;
@@ -229,7 +229,7 @@ static void unsample(Inventory_t *i_ptr) {
 
 // Somethings been sampled -CJS-
 void sample(Inventory_t *i_ptr) {
-    int16_t id = object_offset(i_ptr);
+    int16_t id = objectPositionOffset(i_ptr);
 
     if (id < 0) {
         return;
@@ -620,7 +620,7 @@ void objdes(obj_desc_t out_val, Inventory_t *i_ptr, bool pref) {
 
     tmp_str[0] = '\0';
 
-    if ((indexx = object_offset(i_ptr)) >= 0) {
+    if ((indexx = objectPositionOffset(i_ptr)) >= 0) {
         indexx <<= 6;
         indexx += (i_ptr->subval & (ITEM_SINGLE_STACK_MIN - 1));
 

@@ -1295,7 +1295,7 @@ int inven_carry(Inventory_t *item) {
     int typ = item->tval;
     int subt = item->subval;
     bool known1p = known1_p(item);
-    int always_known1p = (object_offset(item) == -1);
+    int always_known1p = (objectPositionOffset(item) == -1);
 
     int locn;
 
