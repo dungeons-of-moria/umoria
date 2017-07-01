@@ -1078,7 +1078,7 @@ static void bashClosedDoor(int y, int x, int dir, Cave_t *tile, Inventory_t *ite
     if (randint(chance * (20 + abs(item->p1))) < 10 * (chance - abs(item->p1))) {
         msg_print("The door crashes open!");
 
-        invcopy(&treasure_list[tile->tptr], OBJ_OPEN_DOOR);
+        inventoryItemCopyTo(OBJ_OPEN_DOOR, &treasure_list[tile->tptr]);
 
         // 50% chance of breaking door
         item->p1 = (int16_t) (1 - randint(2));

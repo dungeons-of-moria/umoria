@@ -21,7 +21,7 @@ static int spell_chance(int spell);
 void place_trap(int y, int x, int sub_type_id) {
     int cur_pos = popt();
     cave[y][x].tptr = (uint8_t) cur_pos;
-    invcopy(&treasure_list[cur_pos], OBJ_TRAP_LIST + sub_type_id);
+    inventoryItemCopyTo(OBJ_TRAP_LIST + sub_type_id, &treasure_list[cur_pos]);
 }
 
 // Places rubble at location y, x -RAK-
@@ -29,7 +29,7 @@ void place_rubble(int y, int x) {
     int cur_pos = popt();
     cave[y][x].tptr = (uint8_t) cur_pos;
     cave[y][x].fval = BLOCKED_FLOOR;
-    invcopy(&treasure_list[cur_pos], OBJ_RUBBLE);
+    inventoryItemCopyTo(OBJ_RUBBLE, &treasure_list[cur_pos]);
 }
 
 // Places a treasure (Gold or Gems) at given row, column -RAK-
@@ -47,7 +47,7 @@ void place_gold(int y, int x) {
     }
 
     cave[y][x].tptr = (uint8_t) cur_pos;
-    invcopy(&treasure_list[cur_pos], OBJ_GOLD_LIST + i);
+    inventoryItemCopyTo(OBJ_GOLD_LIST + i, &treasure_list[cur_pos]);
     treasure_list[cur_pos].cost += (8L * (int32_t) randint((int) treasure_list[cur_pos].cost)) + randint(8);
 
     if (cave[y][x].cptr == 1) {
@@ -116,7 +116,7 @@ void place_object(int y, int x, bool must_be_small) {
     cave[y][x].tptr = (uint8_t) cur_pos;
 
     int objectID = get_obj_num(current_dungeon_level, must_be_small);
-    invcopy(&treasure_list[cur_pos], sorted_objects[objectID]);
+    inventoryItemCopyTo(sorted_objects[objectID], &treasure_list[cur_pos]);
 
     magic_treasure(cur_pos, current_dungeon_level);
 
@@ -1121,7 +1121,7 @@ void inven_destroy(int item_id) {
             inventory[i] = inventory[i + 1];
         }
 
-        invcopy(&inventory[inventory_count - 1], OBJ_NOTHING);
+        inventoryItemCopyTo(OBJ_NOTHING, &inventory[inventory_count - 1]);
         inventory_count--;
     }
 
@@ -1163,7 +1163,7 @@ void inven_drop(int item_id, bool drop_all) {
                 item_id++;
             }
 
-            invcopy(&inventory[inventory_count], OBJ_NOTHING);
+            inventoryItemCopyTo(OBJ_NOTHING, &inventory[inventory_count]);
         } else {
             treasure_list[treasureID].number = 1;
             inventory_weight -= i_ptr->weight;

@@ -231,11 +231,11 @@ static void char_inven_init() {
 
     // this is needed for bash to work right, it can't hurt anyway
     for (int i = 0; i < INVEN_ARRAY_SIZE; i++) {
-        invcopy(&inventory[i], OBJ_NOTHING);
+        inventoryItemCopyTo(OBJ_NOTHING, &inventory[i]);
     }
 
     for (int i = 0; i < 5; i++) {
-        invcopy(&inven_init, class_base_provisions[py.misc.pclass][i]);
+        inventoryItemCopyTo(class_base_provisions[py.misc.pclass][i], &inven_init);
 
         // this makes it spellItemIdentifyAndRemoveRandomInscription and itemSetAsIdentified
         itemIdentifyAsStoreBought(&inven_init);

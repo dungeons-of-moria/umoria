@@ -305,7 +305,7 @@ void store_destroy(int store_id, int item_id, bool only_one) {
         for (int j = item_id; j < s_ptr->store_ctr - 1; j++) {
             s_ptr->store_inven[j] = s_ptr->store_inven[j + 1];
         }
-        invcopy(&s_ptr->store_inven[s_ptr->store_ctr - 1].sitem, OBJ_NOTHING);
+        inventoryItemCopyTo(OBJ_NOTHING, &s_ptr->store_inven[s_ptr->store_ctr - 1].sitem);
         s_ptr->store_inven[s_ptr->store_ctr - 1].scost = 0;
         s_ptr->store_ctr--;
     }
@@ -326,7 +326,7 @@ void store_init() {
         s_ptr->bad_buy = 0;
 
         for (int k = 0; k < STORE_INVEN_MAX; k++) {
-            invcopy(&s_ptr->store_inven[k].sitem, OBJ_NOTHING);
+            inventoryItemCopyTo(OBJ_NOTHING, &s_ptr->store_inven[k].sitem);
             s_ptr->store_inven[k].scost = 0;
         }
     }
@@ -338,7 +338,7 @@ static void store_create(int store_num, int16_t max_cost) {
 
     for (int tries = 0; tries <= 3; tries++) {
         int i = store_choices[store_num][randint(STORE_CHOICES) - 1];
-        invcopy(&treasure_list[cur_pos], i);
+        inventoryItemCopyTo(i, &treasure_list[cur_pos]);
         magic_treasure(cur_pos, OBJ_TOWN_LEVEL);
 
         Inventory_t *t_ptr = &treasure_list[cur_pos];

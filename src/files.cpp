@@ -125,7 +125,7 @@ void print_objects() {
 
                 for (int i = 0; i < nobj; i++) {
                     int objectID = get_obj_num(level, small_object);
-                    invcopy(&treasure_list[treasureID], sorted_objects[objectID]);
+                    inventoryItemCopyTo(sorted_objects[objectID], &treasure_list[treasureID]);
 
                     magic_treasure(treasureID, level);
 

@@ -287,7 +287,7 @@ void itemIdentify(int *item_id) {
                 inventory[j] = inventory[j + 1];
             }
 
-            invcopy(&inventory[j], OBJ_NOTHING);
+            inventoryItemCopyTo(OBJ_NOTHING, &inventory[j]);
         }
     }
 }
@@ -657,28 +657,28 @@ void itemDescription(obj_desc_t description, Inventory_t *item, bool add_prefix)
     (void) strcat(description, ".");
 }
 
-void invcopy(Inventory_t *to, int from_index) {
-    GameObject_t *from = &game_objects[from_index];
+void inventoryItemCopyTo(int from_item_id, Inventory_t *to_item) {
+    GameObject_t *from = &game_objects[from_item_id];
 
-    to->index = (uint16_t) from_index;
-    to->name2 = SN_NULL;
-    to->inscrip[0] = '\0';
-    to->flags = from->flags;
-    to->tval = from->tval;
-    to->tchar = from->tchar;
-    to->p1 = from->p1;
-    to->cost = from->cost;
-    to->subval = from->subval;
-    to->number = from->number;
-    to->weight = from->weight;
-    to->tohit = from->tohit;
-    to->todam = from->todam;
-    to->ac = from->ac;
-    to->toac = from->toac;
-    to->damage[0] = from->damage[0];
-    to->damage[1] = from->damage[1];
-    to->level = from->level;
-    to->ident = 0;
+    to_item->index = (uint16_t) from_item_id;
+    to_item->name2 = SN_NULL;
+    to_item->inscrip[0] = '\0';
+    to_item->flags = from->flags;
+    to_item->tval = from->tval;
+    to_item->tchar = from->tchar;
+    to_item->p1 = from->p1;
+    to_item->cost = from->cost;
+    to_item->subval = from->subval;
+    to_item->number = from->number;
+    to_item->weight = from->weight;
+    to_item->tohit = from->tohit;
+    to_item->todam = from->todam;
+    to_item->ac = from->ac;
+    to_item->toac = from->toac;
+    to_item->damage[0] = from->damage[0];
+    to_item->damage[1] = from->damage[1];
+    to_item->level = from->level;
+    to_item->ident = 0;
 }
 
 // Describe number of remaining charges. -RAK-

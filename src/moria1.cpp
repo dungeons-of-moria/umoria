@@ -526,7 +526,7 @@ void takeoff(int item_id, int pack_position_id) {
         py_bonuses(t_ptr, -1);
     }
 
-    invcopy(t_ptr, OBJ_NOTHING);
+    inventoryItemCopyTo(OBJ_NOTHING, t_ptr);
 }
 
 // Used to verify if this really is the item we wish to -CJS-

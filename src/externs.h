@@ -186,7 +186,7 @@ void itemSetAsTried(Inventory_t *item);
 void itemIdentify(int *item_id);
 void itemRemoveMagicNaming(Inventory_t *item);
 void itemDescription(obj_desc_t description, Inventory_t *item, bool add_prefix);
-void invcopy(Inventory_t *to, int from_index);
+void inventoryItemCopyTo(int from_item_id, Inventory_t *to_item);
 void desc_charges(int item_val);
 void desc_remain(int item_val);
 

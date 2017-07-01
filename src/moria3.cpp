@@ -877,7 +877,7 @@ static void py_attack(int y, int x) {
             if (item->number == 0) {
                 equipment_count--;
                 py_bonuses(item, -1);
-                invcopy(item, OBJ_NOTHING);
+                inventoryItemCopyTo(OBJ_NOTHING, item);
                 calc_bonuses();
             }
         }
@@ -1137,7 +1137,7 @@ static void openClosedDoor(int y, int x) {
     }
 
     if (item->p1 == 0) {
-        invcopy(&treasure_list[tile->tptr], OBJ_OPEN_DOOR);
+        inventoryItemCopyTo(OBJ_OPEN_DOOR, &treasure_list[tile->tptr]);
         tile->fval = CORR_FLOOR;
         lite_spot(y, x);
         command_count = 0;
@@ -1252,7 +1252,7 @@ void closeobject() {
         if (item->tval == TV_OPEN_DOOR) {
             if (tile->cptr == 0) {
                 if (item->p1 == 0) {
-                    invcopy(item, OBJ_CLOSED_DOOR);
+                    inventoryItemCopyTo(OBJ_CLOSED_DOOR, item);
                     tile->fval = BLOCKED_FLOOR;
                     lite_spot(y, x);
                 } else {

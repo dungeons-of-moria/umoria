@@ -407,7 +407,7 @@ bool door_creation() {
                 int k = popt();
                 c_ptr->fval = BLOCKED_FLOOR;
                 c_ptr->tptr = (uint8_t) k;
-                invcopy(&treasure_list[k], OBJ_CLOSED_DOOR);
+                inventoryItemCopyTo(OBJ_CLOSED_DOOR, &treasure_list[k]);
                 lite_spot(y, x);
 
                 created = true;
@@ -1938,7 +1938,7 @@ void create_food() {
     }
 
     place_object(char_row, char_col, false);
-    invcopy(&treasure_list[treasureID], OBJ_MUSH);
+    inventoryItemCopyTo(OBJ_MUSH, &treasure_list[treasureID]);
 }
 
 // Attempts to destroy a type of creature.  Success depends on
@@ -2013,7 +2013,7 @@ void warding_glyph() {
     if (cave[char_row][char_col].tptr == 0) {
         int newID = popt();
         cave[char_row][char_col].tptr = (uint8_t) newID;
-        invcopy(&treasure_list[newID], OBJ_SCARE_MON);
+        inventoryItemCopyTo(OBJ_SCARE_MON, &treasure_list[newID]);
     }
 }
 

@@ -930,7 +930,7 @@ static void creatureOpensDoor(Cave_t *c_ptr, int16_t monsterHP, uint32_t movebit
         }
 
         if (*do_move) {
-            invcopy(t_ptr, OBJ_OPEN_DOOR);
+            inventoryItemCopyTo(OBJ_OPEN_DOOR, t_ptr);
 
             // 50% chance of breaking door
             if (doorStuck) {
@@ -946,7 +946,7 @@ static void creatureOpensDoor(Cave_t *c_ptr, int16_t monsterHP, uint32_t movebit
         *do_turn = true;
 
         if (randint((monsterHP + 1) * (80 + abs(t_ptr->p1))) < 40 * (monsterHP - 20 - abs(t_ptr->p1))) {
-            invcopy(t_ptr, OBJ_OPEN_DOOR);
+            inventoryItemCopyTo(OBJ_OPEN_DOOR, t_ptr);
 
             // 50% chance of breaking door
             t_ptr->p1 = (int16_t) (1 - randint(2));
