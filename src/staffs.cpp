@@ -202,7 +202,7 @@ void use() {
 
             prt_experience();
 
-            identify(&staff_id);
+            itemIdentify(&staff_id);
         }
     } else if (!itemSetColorlessAsIdentifed(staff_ptr)) {
         itemSetAsTried(staff_ptr);

@@ -591,7 +591,7 @@ void read_scroll() {
             py.misc.exp += (i_ptr->level + (py.misc.lev >> 1)) / py.misc.lev;
             prt_experience();
 
-            identify(&itemID);
+            itemIdentify(&itemID);
         }
     } else if (!itemSetColorlessAsIdentifed(i_ptr)) {
         itemSetAsTried(i_ptr);

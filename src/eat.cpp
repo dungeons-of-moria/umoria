@@ -192,7 +192,7 @@ void eat() {
 
             prt_experience();
 
-            identify(&item_val);
+            itemIdentify(&item_val);
             i_ptr = &inventory[item_val];
         }
     } else if (!itemSetColorlessAsIdentifed(i_ptr)) {

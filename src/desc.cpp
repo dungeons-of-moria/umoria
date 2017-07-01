@@ -243,8 +243,8 @@ void itemSetAsTried(Inventory_t *item) {
 
 // Somethings been identified.
 // Extra complexity by CJS so that it can merge store/dungeon objects when appropriate.
-void identify(int *item) {
-    Inventory_t *i_ptr = &inventory[*item];
+void itemIdentify(int *item_id) {
+    Inventory_t *i_ptr = &inventory[*item_id];
 
     if (i_ptr->flags & TR_CURSED) {
         add_inscribe(i_ptr, ID_DAMD);
@@ -270,17 +270,17 @@ void identify(int *item) {
     for (int i = 0; i < inventory_count; i++) {
         t_ptr = &inventory[i];
 
-        if (t_ptr->tval == x1 && t_ptr->subval == x2 && i != *item && ((int) t_ptr->number + (int) i_ptr->number) < 256) {
-            // make *item the smaller number
-            if (*item > i) {
-                j = *item;
-                *item = i;
+        if (t_ptr->tval == x1 && t_ptr->subval == x2 && i != *item_id && ((int) t_ptr->number + (int) i_ptr->number) < 256) {
+            // make *item_id the smaller number
+            if (*item_id > i) {
+                j = *item_id;
+                *item_id = i;
                 i = j;
             }
 
             msg_print("You combine similar objects from the shop and dungeon.");
 
-            inventory[*item].number += inventory[i].number;
+            inventory[*item_id].number += inventory[i].number;
             inventory_count--;
 
             for (j = i; j < inventory_count; j++) {

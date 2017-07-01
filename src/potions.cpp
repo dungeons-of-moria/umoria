@@ -322,7 +322,7 @@ void quaff() {
             py.misc.exp += (i_ptr->level + (py.misc.lev >> 1)) / py.misc.lev;
             prt_experience();
 
-            identify(&itemID);
+            itemIdentify(&itemID);
             i_ptr = &inventory[itemID];
         }
     } else if (!itemSetColorlessAsIdentifed(i_ptr)) {

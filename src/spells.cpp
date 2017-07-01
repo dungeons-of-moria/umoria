@@ -311,7 +311,7 @@ bool ident_spell() {
         return false;
     }
 
-    identify(&item_val);
+    itemIdentify(&item_val);
 
     Inventory_t *i_ptr = &inventory[item_val];
     spellItemIdentifyAndRemoveRandomInscription(i_ptr);

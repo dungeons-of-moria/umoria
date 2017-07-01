@@ -185,7 +185,7 @@ void aim() {
             py.misc.exp += (item->level + (py.misc.lev >> 1)) / py.misc.lev;
             prt_experience();
 
-            identify(&item_id);
+            itemIdentify(&item_id);
         }
     } else if (!itemSetColorlessAsIdentifed(item)) {
         itemSetAsTried(item);
