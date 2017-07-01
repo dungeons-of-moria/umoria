@@ -203,7 +203,7 @@ static void print_tomb() {
 }
 
 // Calculates the total number of points earned -JWT-
-int32_t total_points() {
+int32_t playerCalculateTotalPoints() {
     int32_t total = py.misc.max_exp + (100 * py.misc.max_dlv);
     total += py.misc.au / 100;
 
@@ -235,7 +235,7 @@ static void highscores() {
     }
 
     HighScore_t new_entry;
-    new_entry.points = total_points();
+    new_entry.points = playerCalculateTotalPoints();
     new_entry.birth_date = character_birth_date;
     new_entry.uid = 0; // NOTE: do we not want to use `getuid()`? -MRC-
     new_entry.mhp = py.misc.mhp;

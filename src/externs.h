@@ -167,7 +167,7 @@ void updateMonsters(bool attack);
 // death.c
 void showScoresScreen();
 bool duplicate_character();
-int32_t total_points();
+int32_t playerCalculateTotalPoints();
 void exit_game();
 
 // desc.c

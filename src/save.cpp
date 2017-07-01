@@ -271,7 +271,7 @@ static bool sv_write() {
     wr_string(character_died_from);
 
     // starting with 5.2.2, put the character_max_score in the save file
-    l = (uint32_t) (total_points());
+    l = (uint32_t) (playerCalculateTotalPoints());
     wr_long(l);
 
     // starting with 5.2.2, put the character_birth_date in the save file
