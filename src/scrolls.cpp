@@ -95,7 +95,7 @@ static bool readEnchantWeaponToHitScroll() {
     }
 
     obj_desc_t msg, desc;
-    objdes(desc, i_ptr, false);
+    itemDescription(desc, i_ptr, false);
 
     (void) sprintf(msg, "Your %s glows faintly!", desc);
     msg_print(msg);
@@ -118,7 +118,7 @@ static bool readEnchantWeaponToDamageScroll() {
     }
 
     obj_desc_t msg, desc;
-    objdes(desc, i_ptr, false);
+    itemDescription(desc, i_ptr, false);
 
     (void) sprintf(msg, "Your %s glows faintly!", desc);
     msg_print(msg);
@@ -153,7 +153,7 @@ static bool readEnchantItemToACScroll() {
     Inventory_t *i_ptr = &inventory[id];
 
     obj_desc_t msg, desc;
-    objdes(desc, i_ptr, false);
+    itemDescription(desc, i_ptr, false);
 
     (void) sprintf(msg, "Your %s glows faintly!", desc);
     msg_print(msg);
@@ -231,7 +231,7 @@ static bool readEnchantWeaponScroll() {
     }
 
     obj_desc_t msg, desc;
-    objdes(desc, i_ptr, false);
+    itemDescription(desc, i_ptr, false);
 
     (void) sprintf(msg, "Your %s glows brightly!", desc);
     msg_print(msg);
@@ -278,7 +278,7 @@ static bool readCurseWeaponScroll() {
     }
 
     obj_desc_t msg, desc;
-    objdes(desc, i_ptr, false);
+    itemDescription(desc, i_ptr, false);
 
     (void) sprintf(msg, "Your %s glows black, fades.", desc);
     msg_print(msg);
@@ -309,7 +309,7 @@ static bool readEnchantArmorScroll() {
     Inventory_t *i_ptr = &inventory[id];
 
     obj_desc_t msg, desc;
-    objdes(desc, i_ptr, false);
+    itemDescription(desc, i_ptr, false);
 
     (void) sprintf(msg, "Your %s glows brightly!", desc);
     msg_print(msg);
@@ -370,7 +370,7 @@ static bool readCurseArmorScroll() {
     Inventory_t *i_ptr = &inventory[id];
 
     obj_desc_t msg, desc;
-    objdes(desc, i_ptr, false);
+    itemDescription(desc, i_ptr, false);
 
     (void) sprintf(msg, "Your %s glows black, fades.", desc);
     msg_print(msg);

@@ -1171,7 +1171,7 @@ void inven_drop(int item_id, bool drop_all) {
         }
 
         obj_desc_t prt1, prt2;
-        objdes(prt1, &treasure_list[treasureID], true);
+        itemDescription(prt1, &treasure_list[treasureID], true);
         (void) sprintf(prt2, "Dropped %s", prt1);
         msg_print(prt2);
     }

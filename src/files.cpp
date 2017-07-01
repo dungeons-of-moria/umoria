@@ -136,7 +136,7 @@ void print_objects() {
                         add_inscribe(i_ptr, ID_DAMD);
                     }
 
-                    objdes(tmp_str, i_ptr, true);
+                    itemDescription(tmp_str, i_ptr, true);
                     (void) fprintf(file1, "%d %s\n", i_ptr->level, tmp_str);
                 }
 
@@ -293,7 +293,7 @@ static void writeEquipmentListToFile(FILE *file1) {
             continue;
         }
 
-        objdes(description, &inventory[i], true);
+        itemDescription(description, &inventory[i], true);
         (void) fprintf(file1, "  %c) %-19s: %s\n", itemSlotID + 'a', equipmentPlacementDescription(i), description);
 
         itemSlotID++;
@@ -314,7 +314,7 @@ static void writeInventoryToFile(FILE *file1) {
     obj_desc_t description;
 
     for (int i = 0; i < inventory_count; i++) {
-        objdes(description, &inventory[i], true);
+        itemDescription(description, &inventory[i], true);
         (void) fprintf(file1, "%c) %s\n", i + 'a', description);
     }
 

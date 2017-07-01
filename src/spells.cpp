@@ -317,7 +317,7 @@ bool ident_spell() {
     spellItemIdentifyAndRemoveRandomInscription(i_ptr);
 
     obj_desc_t tmp_str;
-    objdes(tmp_str, i_ptr, true);
+    itemDescription(tmp_str, i_ptr, true);
 
     obj_desc_t out_val;
     if (item_val >= INVEN_WIELD) {
@@ -1275,7 +1275,7 @@ bool wall_to_mud(int y, int x, int direction) {
                 turned = true;
 
                 obj_desc_t description;
-                objdes(description, &treasure_list[c_ptr->tptr], false);
+                itemDescription(description, &treasure_list[c_ptr->tptr], false);
 
                 obj_desc_t out_val;
                 (void) sprintf(out_val, "The %s turns into mud.", description);

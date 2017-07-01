@@ -202,7 +202,7 @@ static void display_inventory(int store_num, int start) {
             i_ptr->number = 1;
         }
         obj_desc_t out_val1, out_val2;
-        objdes(out_val1, i_ptr, true);
+        itemDescription(out_val1, i_ptr, true);
 
         // Restore the number of items
         i_ptr->number = (uint8_t) x;
@@ -850,7 +850,7 @@ static bool store_purchase(int store_num, int *cur_top) {
             store_destroy(store_num, item_val, true);
 
             obj_desc_t out_val, tmp_str;
-            objdes(tmp_str, &inventory[item_new], true);
+            itemDescription(tmp_str, &inventory[item_new], true);
             (void) sprintf(out_val, "You have %s (%c)", tmp_str, item_new + 'a');
             prt(out_val, 0, 0);
 
@@ -925,7 +925,7 @@ static bool store_sell(int store_num, int *cur_top) {
     obj_desc_t out_val, tmp_str;
 
     take_one_item(&sold_obj, &inventory[item_val]);
-    objdes(tmp_str, &sold_obj, true);
+    itemDescription(tmp_str, &sold_obj, true);
 
     (void) sprintf(out_val, "Selling %s (%c)", tmp_str, item_val + 'a');
     msg_print(out_val);
@@ -954,7 +954,7 @@ static bool store_sell(int store_num, int *cur_top) {
         // call spellItemIdentifyAndRemoveRandomInscription for store item, so charges/pluses are known
         spellItemIdentifyAndRemoveRandomInscription(&sold_obj);
         inven_destroy(item_val);
-        objdes(tmp_str, &sold_obj, true);
+        itemDescription(tmp_str, &sold_obj, true);
         (void) sprintf(out_val, "You've sold %s", tmp_str);
         msg_print(out_val);
 

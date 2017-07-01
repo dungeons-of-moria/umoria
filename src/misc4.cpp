@@ -20,7 +20,7 @@ void scribe_object() {
     if (get_item(&item_val, "Which one? ", 0, INVEN_ARRAY_SIZE, CNIL, CNIL)) {
         obj_desc_t out_val, tmp_str;
 
-        objdes(tmp_str, &inventory[item_val], true);
+        itemDescription(tmp_str, &inventory[item_val], true);
         (void) sprintf(out_val, "Inscribing %s", tmp_str);
         msg_print(out_val);
 

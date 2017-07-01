@@ -321,13 +321,13 @@ int bowDamageValue(int16_t p1) {
 
 // Returns a description of item for inventory
 // `pref` indicates that there should be an article added (prefix).
-// Note that since out_val can easily exceed 80 characters, objdes
+// Note that since out_val can easily exceed 80 characters, itemDescription
 // must always be called with a obj_desc_t as the first parameter.
-void objdes(obj_desc_t out_val, Inventory_t *i_ptr, bool pref) {
-    int indexx = i_ptr->subval & (ITEM_SINGLE_STACK_MIN - 1);
+void itemDescription(obj_desc_t description, Inventory_t *item, bool add_prefix) {
+    int indexx = item->subval & (ITEM_SINGLE_STACK_MIN - 1);
 
     // base name, modifier string
-    const char *basenm = game_objects[i_ptr->index].name;
+    const char *basenm = game_objects[item->index].name;
     const char *modstr = CNIL;
 
     vtype_t damstr;
@@ -336,16 +336,16 @@ void objdes(obj_desc_t out_val, Inventory_t *i_ptr, bool pref) {
     int p1_use = IGNORED;
     bool append_name = false;
 
-    bool modify = !itemSetColorlessAsIdentifed(i_ptr);
+    bool modify = !itemSetColorlessAsIdentifed(item);
 
-    switch (i_ptr->tval) {
+    switch (item->tval) {
         case TV_MISC:
         case TV_CHEST:
             break;
         case TV_SLING_AMMO:
         case TV_BOLT:
         case TV_ARROW:
-            (void) sprintf(damstr, " (%dd%d)", i_ptr->damage[0], i_ptr->damage[1]);
+            (void) sprintf(damstr, " (%dd%d)", item->damage[0], item->damage[1]);
             break;
         case TV_LIGHT:
             p1_use = LIGHT;
@@ -353,17 +353,17 @@ void objdes(obj_desc_t out_val, Inventory_t *i_ptr, bool pref) {
         case TV_SPIKE:
             break;
         case TV_BOW:
-            (void) sprintf(damstr, " (x%d)", bowDamageValue(i_ptr->p1));
+            (void) sprintf(damstr, " (x%d)", bowDamageValue(item->p1));
             break;
         case TV_HAFTED:
         case TV_POLEARM:
         case TV_SWORD:
-            (void) sprintf(damstr, " (%dd%d)", i_ptr->damage[0], i_ptr->damage[1]);
+            (void) sprintf(damstr, " (%dd%d)", item->damage[0], item->damage[1]);
             p1_use = FLAGS;
             break;
         case TV_DIGGING:
             p1_use = Z_PLUSSES;
-            (void) sprintf(damstr, " (%dd%d)", i_ptr->damage[0], i_ptr->damage[1]);
+            (void) sprintf(damstr, " (%dd%d)", item->damage[0], item->damage[1]);
             break;
         case TV_BOOTS:
         case TV_GLOVES:
@@ -475,14 +475,14 @@ void objdes(obj_desc_t out_val, Inventory_t *i_ptr, bool pref) {
         case TV_VIS_TRAP:
         case TV_UP_STAIR:
         case TV_DOWN_STAIR:
-            (void) strcpy(out_val, game_objects[i_ptr->index].name);
-            (void) strcat(out_val, ".");
+            (void) strcpy(description, game_objects[item->index].name);
+            (void) strcat(description, ".");
             return;
         case TV_STORE_DOOR:
-            (void) sprintf(out_val, "the entrance to the %s.", game_objects[i_ptr->index].name);
+            (void) sprintf(description, "the entrance to the %s.", game_objects[item->index].name);
             return;
         default:
-            (void) strcpy(out_val, "Error in objdes()");
+            (void) strcpy(description, "Error in objdes()");
             return;
     }
 
@@ -496,47 +496,47 @@ void objdes(obj_desc_t out_val, Inventory_t *i_ptr, bool pref) {
 
     if (append_name) {
         (void) strcat(tmp_val, " of ");
-        (void) strcat(tmp_val, game_objects[i_ptr->index].name);
+        (void) strcat(tmp_val, game_objects[item->index].name);
     }
 
-    if (i_ptr->number != 1) {
+    if (item->number != 1) {
         insert_str(tmp_val, "ch~", "ches");
         insert_str(tmp_val, "~", "s");
     } else {
         insert_str(tmp_val, "~", CNIL);
     }
 
-    if (!pref) {
+    if (!add_prefix) {
         if (!strncmp("some", tmp_val, 4)) {
-            (void) strcpy(out_val, &tmp_val[5]);
+            (void) strcpy(description, &tmp_val[5]);
         } else if (tmp_val[0] == '&') {
             // eliminate the '& ' at the beginning
-            (void) strcpy(out_val, &tmp_val[2]);
+            (void) strcpy(description, &tmp_val[2]);
         } else {
-            (void) strcpy(out_val, tmp_val);
+            (void) strcpy(description, tmp_val);
         }
         return;
     }
 
     vtype_t tmp_str;
 
-    if (i_ptr->name2 != SN_NULL && spellItemIdentified(i_ptr)) {
+    if (item->name2 != SN_NULL && spellItemIdentified(item)) {
         (void) strcat(tmp_val, " ");
-        (void) strcat(tmp_val, special_item_names[i_ptr->name2]);
+        (void) strcat(tmp_val, special_item_names[item->name2]);
     }
 
     if (damstr[0] != '\0') {
         (void) strcat(tmp_val, damstr);
     }
 
-    if (spellItemIdentified(i_ptr)) {
+    if (spellItemIdentified(item)) {
         // originally used %+d, but several machines don't support it
-        if (i_ptr->ident & ID_SHOW_HITDAM) {
-            (void) sprintf(tmp_str, " (%c%d,%c%d)", (i_ptr->tohit < 0) ? '-' : '+', abs(i_ptr->tohit), (i_ptr->todam < 0) ? '-' : '+', abs(i_ptr->todam));
-        } else if (i_ptr->tohit != 0) {
-            (void) sprintf(tmp_str, " (%c%d)", (i_ptr->tohit < 0) ? '-' : '+', abs(i_ptr->tohit));
-        } else if (i_ptr->todam != 0) {
-            (void) sprintf(tmp_str, " (%c%d)", (i_ptr->todam < 0) ? '-' : '+', abs(i_ptr->todam));
+        if (item->ident & ID_SHOW_HITDAM) {
+            (void) sprintf(tmp_str, " (%c%d,%c%d)", (item->tohit < 0) ? '-' : '+', abs(item->tohit), (item->todam < 0) ? '-' : '+', abs(item->todam));
+        } else if (item->tohit != 0) {
+            (void) sprintf(tmp_str, " (%c%d)", (item->tohit < 0) ? '-' : '+', abs(item->tohit));
+        } else if (item->todam != 0) {
+            (void) sprintf(tmp_str, " (%c%d)", (item->todam < 0) ? '-' : '+', abs(item->todam));
         } else {
             tmp_str[0] = '\0';
         }
@@ -544,48 +544,48 @@ void objdes(obj_desc_t out_val, Inventory_t *i_ptr, bool pref) {
     }
 
     // Crowns have a zero base AC, so make a special test for them.
-    if (i_ptr->ac != 0 || i_ptr->tval == TV_HELM) {
-        (void) sprintf(tmp_str, " [%d", i_ptr->ac);
+    if (item->ac != 0 || item->tval == TV_HELM) {
+        (void) sprintf(tmp_str, " [%d", item->ac);
         (void) strcat(tmp_val, tmp_str);
-        if (spellItemIdentified(i_ptr)) {
+        if (spellItemIdentified(item)) {
             // originally used %+d, but several machines don't support it
-            (void) sprintf(tmp_str, ",%c%d", (i_ptr->toac < 0) ? '-' : '+', abs(i_ptr->toac));
+            (void) sprintf(tmp_str, ",%c%d", (item->toac < 0) ? '-' : '+', abs(item->toac));
             (void) strcat(tmp_val, tmp_str);
         }
         (void) strcat(tmp_val, "]");
-    } else if (i_ptr->toac != 0 && spellItemIdentified(i_ptr)) {
+    } else if (item->toac != 0 && spellItemIdentified(item)) {
         // originally used %+d, but several machines don't support it
-        (void) sprintf(tmp_str, " [%c%d]", (i_ptr->toac < 0) ? '-' : '+', abs(i_ptr->toac));
+        (void) sprintf(tmp_str, " [%c%d]", (item->toac < 0) ? '-' : '+', abs(item->toac));
         (void) strcat(tmp_val, tmp_str);
     }
 
     // override defaults, check for p1 flags in the ident field
-    if (i_ptr->ident & ID_NOSHOW_P1) {
+    if (item->ident & ID_NOSHOW_P1) {
         p1_use = IGNORED;
-    } else if (i_ptr->ident & ID_SHOW_P1) {
+    } else if (item->ident & ID_SHOW_P1) {
         p1_use = Z_PLUSSES;
     }
 
     tmp_str[0] = '\0';
 
     if (p1_use == LIGHT) {
-        (void) sprintf(tmp_str, " with %d turns of light", i_ptr->p1);
+        (void) sprintf(tmp_str, " with %d turns of light", item->p1);
     } else if (p1_use == IGNORED) {
         // NOOP
-    } else if (spellItemIdentified(i_ptr)) {
+    } else if (spellItemIdentified(item)) {
         if (p1_use == Z_PLUSSES) {
             // originally used %+d, but several machines don't support it
-            (void) sprintf(tmp_str, " (%c%d)", (i_ptr->p1 < 0) ? '-' : '+', abs(i_ptr->p1));
+            (void) sprintf(tmp_str, " (%c%d)", (item->p1 < 0) ? '-' : '+', abs(item->p1));
         } else if (p1_use == CHARGES) {
-            (void) sprintf(tmp_str, " (%d charges)", i_ptr->p1);
-        } else if (i_ptr->p1 != 0) {
+            (void) sprintf(tmp_str, " (%d charges)", item->p1);
+        } else if (item->p1 != 0) {
             if (p1_use == PLUSSES) {
-                (void) sprintf(tmp_str, " (%c%d)", (i_ptr->p1 < 0) ? '-' : '+', abs(i_ptr->p1));
+                (void) sprintf(tmp_str, " (%c%d)", (item->p1 < 0) ? '-' : '+', abs(item->p1));
             } else if (p1_use == FLAGS) {
-                if (i_ptr->flags & TR_STR) {
-                    (void) sprintf(tmp_str, " (%c%d to STR)", (i_ptr->p1 < 0) ? '-' : '+', abs(i_ptr->p1));
-                } else if (i_ptr->flags & TR_STEALTH) {
-                    (void) sprintf(tmp_str, " (%c%d to stealth)", (i_ptr->p1 < 0) ? '-' : '+', abs(i_ptr->p1));
+                if (item->flags & TR_STR) {
+                    (void) sprintf(tmp_str, " (%c%d to STR)", (item->p1 < 0) ? '-' : '+', abs(item->p1));
+                } else if (item->flags & TR_STEALTH) {
+                    (void) sprintf(tmp_str, " (%c%d to stealth)", (item->p1 < 0) ? '-' : '+', abs(item->p1));
                 }
             }
         }
@@ -595,55 +595,55 @@ void objdes(obj_desc_t out_val, Inventory_t *i_ptr, bool pref) {
     // ampersand is always the first character
     if (tmp_val[0] == '&') {
         // use &tmp_val[1], so that & does not appear in output
-        if (i_ptr->number > 1) {
-            (void) sprintf(out_val, "%d%s", (int) i_ptr->number, &tmp_val[1]);
-        } else if (i_ptr->number < 1) {
-            (void) sprintf(out_val, "%s%s", "no more", &tmp_val[1]);
+        if (item->number > 1) {
+            (void) sprintf(description, "%d%s", (int) item->number, &tmp_val[1]);
+        } else if (item->number < 1) {
+            (void) sprintf(description, "%s%s", "no more", &tmp_val[1]);
         } else if (isVowel(tmp_val[2])) {
-            (void) sprintf(out_val, "an%s", &tmp_val[1]);
+            (void) sprintf(description, "an%s", &tmp_val[1]);
         } else {
-            (void) sprintf(out_val, "a%s", &tmp_val[1]);
+            (void) sprintf(description, "a%s", &tmp_val[1]);
         }
-    } else if (i_ptr->number < 1) {
+    } else if (item->number < 1) {
         // handle 'no more' case specially
 
         // check for "some" at start
         if (!strncmp("some", tmp_val, 4)) {
-            (void) sprintf(out_val, "no more %s", &tmp_val[5]);
+            (void) sprintf(description, "no more %s", &tmp_val[5]);
         } else {
             // here if no article
-            (void) sprintf(out_val, "no more %s", tmp_val);
+            (void) sprintf(description, "no more %s", tmp_val);
         }
     } else {
-        (void) strcpy(out_val, tmp_val);
+        (void) strcpy(description, tmp_val);
     }
 
     tmp_str[0] = '\0';
 
-    if ((indexx = objectPositionOffset(i_ptr)) >= 0) {
+    if ((indexx = objectPositionOffset(item)) >= 0) {
         indexx <<= 6;
-        indexx += (i_ptr->subval & (ITEM_SINGLE_STACK_MIN - 1));
+        indexx += (item->subval & (ITEM_SINGLE_STACK_MIN - 1));
 
         // don't print tried string for store bought items
-        if ((objects_identified[indexx] & OD_TRIED) && !itemStoreBought(i_ptr)) {
+        if ((objects_identified[indexx] & OD_TRIED) && !itemStoreBought(item)) {
             (void) strcat(tmp_str, "tried ");
         }
     }
 
-    if (i_ptr->ident & (ID_MAGIK | ID_EMPTY | ID_DAMD)) {
-        if (i_ptr->ident & ID_MAGIK) {
+    if (item->ident & (ID_MAGIK | ID_EMPTY | ID_DAMD)) {
+        if (item->ident & ID_MAGIK) {
             (void) strcat(tmp_str, "magik ");
         }
-        if (i_ptr->ident & ID_EMPTY) {
+        if (item->ident & ID_EMPTY) {
             (void) strcat(tmp_str, "empty ");
         }
-        if (i_ptr->ident & ID_DAMD) {
+        if (item->ident & ID_DAMD) {
             (void) strcat(tmp_str, "damned ");
         }
     }
 
-    if (i_ptr->inscrip[0] != '\0') {
-        (void) strcat(tmp_str, i_ptr->inscrip);
+    if (item->inscrip[0] != '\0') {
+        (void) strcat(tmp_str, item->inscrip);
     } else if ((indexx = (int) strlen(tmp_str)) > 0) {
         // remove the extra blank at the end
         tmp_str[indexx - 1] = '\0';
@@ -651,10 +651,10 @@ void objdes(obj_desc_t out_val, Inventory_t *i_ptr, bool pref) {
 
     if (tmp_str[0]) {
         (void) sprintf(tmp_val, " {%s}", tmp_str);
-        (void) strcat(out_val, tmp_val);
+        (void) strcat(description, tmp_val);
     }
 
-    (void) strcat(out_val, ".");
+    (void) strcat(description, ".");
 }
 
 void invcopy(Inventory_t *to, int from_index) {
@@ -701,7 +701,7 @@ void desc_remain(int item_val) {
     i_ptr->number--;
 
     obj_desc_t tmp_str;
-    objdes(tmp_str, i_ptr, true);
+    itemDescription(tmp_str, i_ptr, true);
 
     i_ptr->number++;
 

@@ -20,14 +20,14 @@ static void trapOpenPit(Inventory_t *t_ptr, int dam) {
     }
 
     obj_desc_t description;
-    objdes(description, t_ptr, true);
+    itemDescription(description, t_ptr, true);
     take_hit(dam, description);
 }
 
 static void trapArrow(Inventory_t *t_ptr, int dam) {
     if (test_hit(125, 0, 0, py.misc.pac + py.misc.ptoac, CLA_MISC_HIT)) {
         obj_desc_t description;
-        objdes(description, t_ptr, true);
+        itemDescription(description, t_ptr, true);
         take_hit(dam, description);
 
         msg_print("An arrow hits you.");
@@ -44,7 +44,7 @@ static void trapCoveredPit(Inventory_t *t_ptr, int dam, int y, int x) {
         msg_print("You gently float down.");
     } else {
         obj_desc_t description;
-        objdes(description, t_ptr, true);
+        itemDescription(description, t_ptr, true);
         take_hit(dam, description);
     }
 
@@ -61,7 +61,7 @@ static void trapDoor(Inventory_t *t_ptr, int dam) {
         msg_print("You gently float down.");
     } else {
         obj_desc_t description;
-        objdes(description, t_ptr, true);
+        itemDescription(description, t_ptr, true);
         take_hit(dam, description);
     }
 
@@ -99,7 +99,7 @@ static void trapStrengthDart(Inventory_t *t_ptr, int dam) {
             (void) dec_stat(A_STR);
 
             obj_desc_t description;
-            objdes(description, t_ptr, true);
+            itemDescription(description, t_ptr, true);
             take_hit(dam, description);
 
             msg_print("A small dart weakens you!");
@@ -185,7 +185,7 @@ static void trapConfuseGas() {
 static void trapSlowDart(Inventory_t *t_ptr, int dam) {
     if (test_hit(125, 0, 0, py.misc.pac + py.misc.ptoac, CLA_MISC_HIT)) {
         obj_desc_t description;
-        objdes(description, t_ptr, true);
+        itemDescription(description, t_ptr, true);
         take_hit(dam, description);
 
         msg_print("A small dart hits you!");
@@ -206,7 +206,7 @@ static void trapConstitutionDart(Inventory_t *t_ptr, int dam) {
             (void) dec_stat(A_CON);
 
             obj_desc_t description;
-            objdes(description, t_ptr, true);
+            itemDescription(description, t_ptr, true);
             take_hit(dam, description);
 
             msg_print("A small dart saps your health!");
@@ -406,7 +406,7 @@ static void carry(int y, int x, bool pickup) {
     if (tileFlags == TV_GOLD) {
         py.misc.au += item->cost;
 
-        objdes(description, item, true);
+        itemDescription(description, item, true);
         (void) sprintf(msg, "You have found %d gold pieces worth of %s", item->cost, description);
 
         prt_gold();
@@ -421,7 +421,7 @@ static void carry(int y, int x, bool pickup) {
     if (inven_check_num(item)) {
         // Okay,  pick it up
         if (pickup && prompt_to_pickup) {
-            objdes(description, item, true);
+            itemDescription(description, item, true);
 
             // change the period to a question mark
             description[strlen(description) - 1] = '?';
@@ -431,7 +431,7 @@ static void carry(int y, int x, bool pickup) {
 
         // Check to see if it will change the players speed.
         if (pickup && !inven_check_weight(item)) {
-            objdes(description, item, true);
+            itemDescription(description, item, true);
 
             // change the period to a question mark
             description[strlen(description) - 1] = '?';
@@ -443,13 +443,13 @@ static void carry(int y, int x, bool pickup) {
         if (pickup) {
             int locn = inven_carry(item);
 
-            objdes(description, &inventory[locn], true);
+            itemDescription(description, &inventory[locn], true);
             (void) sprintf(msg, "You have %s (%c)", description, locn + 'a');
             msg_print(msg);
             (void) delete_object(y, x);
         }
     } else {
-        objdes(description, item, true);
+        itemDescription(description, item, true);
         (void) sprintf(msg, "You can't carry %s", description);
         msg_print(msg);
     }

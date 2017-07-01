@@ -290,7 +290,7 @@ GameObject_t game_objects[MAX_OBJECTS] = {
         {"Holy Prayer",                     0x00000080L, TV_SCROLL2,      '?',  0, 80,   101, 1, 5, 0, 0, 0, 0, {0, 0}, 24}, // 219
         {"Word-of-Recall",                  0x00000100L, TV_SCROLL2,      '?',  0, 150,  102, 1, 5, 0, 0, 0, 0, {0, 0}, 5}, // 220
         {"*Destruction*",                   0x00000200L, TV_SCROLL2,      '?',  0, 750,  103, 1, 5, 0, 0, 0, 0, {0, 0}, 40}, // 221
-        // SMJ, AJ, Water must be subval 64-66 resp. for objdes to work
+        // SMJ, AJ, Water must be subval 64-66 resp. for itemDescription to work
         {"Slime Mold Juice",                0x30000000L, TV_POTION1,      '!', 400,  2,    64,  1, 4, 0, 0, 0, 0, {1, 1}, 0}, // 222
         {"Apple Juice",                     0x00000000L, TV_POTION1,      '!', 250,  1,    65,  1, 4, 0, 0, 0, 0, {1, 1}, 0}, // 223
         {"Water",                           0x00000000L, TV_POTION1,      '!', 200,  0,    66,  1, 4, 0, 0, 0, 0, {1, 1}, 0}, // 224

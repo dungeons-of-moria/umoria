@@ -64,7 +64,7 @@ void search(int y, int x, int chance) {
                 // Trap on floor?
 
                 obj_desc_t description;
-                objdes(description, t_ptr, true);
+                itemDescription(description, t_ptr, true);
 
                 obj_desc_t msg;
                 (void) sprintf(msg, "You have found %s", description);
@@ -548,13 +548,13 @@ static int minus_ac(uint32_t typ_dam) {
     if (inventory[itemID].flags & typ_dam) {
         minus = true;
 
-        objdes(description, &inventory[itemID], false);
+        itemDescription(description, &inventory[itemID], false);
         (void) sprintf(msg, "Your %s resists damage!", description);
         msg_print(msg);
     } else if (inventory[itemID].ac + inventory[itemID].toac > 0) {
         minus = true;
 
-        objdes(description, &inventory[itemID], false);
+        itemDescription(description, &inventory[itemID], false);
         (void) sprintf(msg, "Your %s is damaged!", description);
         msg_print(msg);
 

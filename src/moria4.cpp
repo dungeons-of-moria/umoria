@@ -655,7 +655,7 @@ static bool look_see(int x, int y, bool *transparent) {
 
             if (gl_rock == 0 && treasure_list[c_ptr->tptr].tval != TV_INVIS_TRAP) {
                 obj_desc_t obj_string;
-                objdes(obj_string, &treasure_list[c_ptr->tptr], true);
+                itemDescription(obj_string, &treasure_list[c_ptr->tptr], true);
 
                 (void) sprintf(msg, "%s %s ---pause---", description, obj_string);
                 description = "It is in";
@@ -845,7 +845,7 @@ static void drop_throw(int y, int x, Inventory_t *t_ptr) {
         lite_spot(i, j);
     } else {
         obj_desc_t description, msg;
-        objdes(description, t_ptr, false);
+        itemDescription(description, t_ptr, false);
 
         (void) sprintf(msg, "The %s disappears.", description);
         msg_print(msg);
@@ -927,7 +927,7 @@ void throw_object() {
                     int damage = m_ptr->mptr;
 
                     obj_desc_t description, msg;
-                    objdes(description, &throw_obj, false);
+                    itemDescription(description, &throw_obj, false);
 
                     // Does the player know what he's fighting?
                     if (!m_ptr->ml) {
