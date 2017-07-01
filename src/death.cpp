@@ -426,9 +426,9 @@ static void kingly() {
     pause_line(23);
 }
 
-// Handles the gravestone end top-twenty routines -RAK-
-// What happens upon dying. -RAK-
-void exit_game() {
+// What happens upon dying -RAK-
+// Handles the gravestone and top-twenty routines -RAK-
+void exitGame() {
     msg_print(CNIL);
 
     // flush all input
@@ -451,7 +451,7 @@ void exit_game() {
     // add score to score file if applicable
     if (character_generated) {
         // Clear character_saved, strange thing to do, but it prevents
-        // inkey() from recursively calling exit_game() when there has
+        // inkey() from recursively calling exitGame() when there has
         // been an eof on stdin detected.
         character_saved = false;
         highscores();

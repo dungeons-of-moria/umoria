@@ -61,7 +61,7 @@ int main(int argc, char *argv[]) {
                 break;
             case 's':
                 showScoresScreen();
-                exit_game();
+                exitGame();
             case 'w':
                 to_be_wizard = true;
 
@@ -141,7 +141,7 @@ int main(int argc, char *argv[]) {
     // until after get_char in case it was just a resurrection
     if (to_be_wizard) {
         if (!enter_wiz_mode()) {
-            exit_game();
+            exitGame();
         }
     }
 
@@ -219,7 +219,7 @@ int main(int argc, char *argv[]) {
     }
 
     // Character gets buried.
-    exit_game();
+    exitGame();
 
     // should never reach here, but just in case
     return 0;

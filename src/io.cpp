@@ -33,7 +33,7 @@ void init_curses() {
     savescr = newwin(0, 0, 0, 0);
     if (savescr == NULL) {
         (void) printf("Out of memory in starting up curses.\n");
-        exit_game();
+        exitGame();
     }
 
     moriaterm();
@@ -130,7 +130,7 @@ char inkey() {
             (void) refresh();
 
             if (!character_generated || character_saved) {
-                exit_game();
+                exitGame();
             }
 
             disturb(1, 0);
@@ -144,7 +144,7 @@ char inkey() {
                     (void) strcpy(character_died_from, "panic: unexpected eof");
                     character_is_dead = true;
                 }
-                exit_game();
+                exitGame();
             }
             return ESCAPE;
         }
@@ -437,7 +437,7 @@ void pause_exit(int line_number, int delay) {
             sleep_in_seconds(delay);
         }
 
-        exit_game();
+        exitGame();
     }
 
     erase_line(line_number, 0);

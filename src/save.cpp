@@ -988,7 +988,7 @@ bool get_char(bool *generate) {
     current_game_turn = -1;
     prt("Please try again without that save file.", 1, 0);
 
-    exit_game();
+    exitGame();
 
     return false; // not reached
 }

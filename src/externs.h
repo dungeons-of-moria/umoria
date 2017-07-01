@@ -168,7 +168,7 @@ void updateMonsters(bool attack);
 void showScoresScreen();
 bool duplicate_character();
 int32_t playerCalculateTotalPoints();
-void exit_game();
+void exitGame();
 
 // desc.c
 bool is_a_vowel(char ch);
