@@ -294,8 +294,8 @@ void itemIdentify(int *item_id) {
 
 // If an object has lost magical properties,
 // remove the appropriate portion of the name. -CJS-
-void unmagic_name(Inventory_t *i_ptr) {
-    i_ptr->name2 = SN_NULL;
+void itemRemoveMagicNaming(Inventory_t *item) {
+    item->name2 = SN_NULL;
 }
 
 // defines for p1_use, determine how the p1 field is printed

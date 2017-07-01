@@ -283,7 +283,7 @@ static bool readCurseWeaponScroll() {
     (void) sprintf(msg, "Your %s glows black, fades.", desc);
     msg_print(msg);
 
-    unmagic_name(i_ptr);
+    itemRemoveMagicNaming(i_ptr);
 
     i_ptr->tohit = (int16_t) (-randint(5) - randint(5));
     i_ptr->todam = (int16_t) (-randint(5) - randint(5));
@@ -375,7 +375,7 @@ static bool readCurseArmorScroll() {
     (void) sprintf(msg, "Your %s glows black, fades.", desc);
     msg_print(msg);
 
-    unmagic_name(i_ptr);
+    itemRemoveMagicNaming(i_ptr);
 
     i_ptr->flags = TR_CURSED;
     i_ptr->tohit = 0;

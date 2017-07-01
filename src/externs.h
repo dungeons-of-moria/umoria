@@ -184,7 +184,7 @@ void itemIdentifyAsStoreBought(Inventory_t *item);
 bool itemStoreBought(Inventory_t *item);
 void itemSetAsTried(Inventory_t *item);
 void itemIdentify(int *item_id);
-void unmagic_name(Inventory_t *i_ptr);
+void itemRemoveMagicNaming(Inventory_t *item);
 void objdes(obj_desc_t out_val, Inventory_t *i_ptr, bool pref);
 void invcopy(Inventory_t *to, int from_index);
 void desc_charges(int item_val);
