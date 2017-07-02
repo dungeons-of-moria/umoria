@@ -248,7 +248,7 @@ int topen(const char *file, int flags, int mode);
 #endif
 
 // magic.c
-void cast();
+void getAndCastMagicSpell();
 
 // misc1.c
 void init_seeds(uint32_t seed);

@@ -165,7 +165,7 @@ static void castSpell(int spellID) {
 }
 
 // Throw a magic spell -RAK-
-void cast() {
+void getAndCastMagicSpell() {
     player_free_turn = true;
 
     if (!canReadSpells()) {

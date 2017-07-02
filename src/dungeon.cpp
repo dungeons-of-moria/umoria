@@ -1783,7 +1783,7 @@ static void do_command(char com_val) {
             player_free_turn = true;
             break;
         case 'm': // (m)agic spells
-            cast();
+            getAndCastMagicSpell();
             break;
         case 'o': // (o)pen something
             openobject();
