@@ -325,7 +325,7 @@ static void writeInventoryToFile(FILE *file1) {
 }
 
 // Print the character to a file or device -RAK-
-bool file_character(char *filename) {
+bool outputPlayerCharacterToFile(char *filename) {
     vtype_t msg;
 
     int fd = open(filename, O_WRONLY | O_CREAT | O_EXCL, 0644);

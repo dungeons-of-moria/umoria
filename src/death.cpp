@@ -181,7 +181,7 @@ static void print_tomb() {
         calc_bonuses();
 
         if (str[0]) {
-            if (!file_character(str)) {
+            if (!outputPlayerCharacterToFile(str)) {
                 goto retry;
             }
         } else {

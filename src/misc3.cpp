@@ -1089,7 +1089,7 @@ void change_name() {
                 prt("File name:", 0, 0);
 
                 if (get_string(temp, 0, 10, 60) && temp[0]) {
-                    if (file_character(temp)) {
+                    if (outputPlayerCharacterToFile(temp)) {
                         flag = true;
                     }
                 }

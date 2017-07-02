@@ -201,7 +201,7 @@ void initializeScoreFile();
 void displaySplashScreen();
 void displayTextHelpFile(const char *filename);
 void outputRandomLevelObjectsToFile();
-bool file_character(char *filename);
+bool outputPlayerCharacterToFile(char *filename);
 
 // generate.c
 void generate_cave();
