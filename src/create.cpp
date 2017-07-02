@@ -136,7 +136,7 @@ static void choose_race() {
         } else if (s == '?') {
             displayTextHelpFile(MORIA_WELCOME);
         } else {
-            bell();
+            terminalBellSound();
         }
     }
 
@@ -269,7 +269,7 @@ static void get_sex() {
         } else if (c == '?') {
             displayTextHelpFile(MORIA_WELCOME);
         } else {
-            bell();
+            terminalBellSound();
         }
     }
 }
@@ -404,7 +404,7 @@ static void get_class() {
         } else if (s == '?') {
             displayTextHelpFile(MORIA_WELCOME);
         } else {
-            bell();
+            terminalBellSound();
         }
     }
 }
@@ -467,7 +467,7 @@ void createCharacter() {
             put_misc1();
             put_stats();
         } else {
-            bell();
+            terminalBellSound();
         }
     }
     // done with stats generation

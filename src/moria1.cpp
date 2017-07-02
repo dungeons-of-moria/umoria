@@ -915,7 +915,7 @@ static int inventoryGetSlotToWearEquipment(int item) {
                         } else if (query == 'R') {
                             slot = INVEN_RIGHT;
                         } else {
-                            bell();
+                            terminalBellSound();
                         }
                         if (slot && !verify("Replace", slot)) {
                             slot = 0;
@@ -1028,7 +1028,7 @@ static bool selectItemCommands(char *command, char *which, bool selecting) {
         int item = inventoryGetItemMatchingInscription(*which, *command, from, to);
 
         if (item < from || item > to) {
-            bell();
+            terminalBellSound();
             continue;
         }
 
@@ -1212,7 +1212,7 @@ static bool selectItemCommands(char *command, char *which, bool selecting) {
 
                 if (query != 'y' && query != 'n') {
                     if (query != ESCAPE) {
-                        bell();
+                        terminalBellSound();
                     }
                     eraseLine(MSG_LINE, 0);
                     item = -1;
@@ -1333,7 +1333,7 @@ void inven_command(char command) {
                 break;
             default:
                 // Nonsense command
-                bell();
+                terminalBellSound();
                 break;
         }
 
@@ -1559,7 +1559,7 @@ int get_item(int *command_key_id, const char *prompt, int item_id_start, int ite
                         // Set commandFinished to force redraw of the question.
                         commandFinished = true;
                     } else {
-                        bell();
+                        terminalBellSound();
                     }
                     break;
             }
@@ -1648,7 +1648,7 @@ bool get_dir(char *prompt, int *direction) {
             return true;
         }
 
-        bell();
+        terminalBellSound();
     }
 }
 
@@ -1672,7 +1672,7 @@ bool get_alldir(const char *prompt, int *direction) {
             return true;
         }
 
-        bell();
+        terminalBellSound();
     }
 }
 

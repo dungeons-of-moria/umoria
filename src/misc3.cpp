@@ -1101,7 +1101,7 @@ void change_name() {
                 flag = true;
                 break;
             default:
-                bell();
+                terminalBellSound();
                 break;
         }
     }
@@ -1480,7 +1480,7 @@ int get_spell(int *spell, int number_of_choices, int *spell_id, int *spell_chanc
             *spell_id = -2;
         } else {
             *spell_id = -1;
-            bell();
+            terminalBellSound();
         }
 
         if (*spell_id == -2) {
@@ -1839,7 +1839,7 @@ void gain_spells() {
                 eraseLine(c + 1, 31);
                 print_spells(spells, spellID, false, -1);
             } else {
-                bell();
+                terminalBellSound();
             }
         }
 

@@ -1053,7 +1053,7 @@ void set_options() {
                 }
                 break;
             default:
-                bell();
+                terminalBellSound();
                 break;
         }
     }

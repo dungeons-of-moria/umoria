@@ -290,7 +290,7 @@ static bool get_store_item(int *com_val, const char *pmt, int i, int j) {
             *com_val = command;
             break;
         }
-        bell();
+        terminalBellSound();
     }
     eraseLine(MSG_LINE, 0);
 
@@ -1062,7 +1062,7 @@ void enter_store(int store_id) {
                     exit_store = store_sell(store_id, &cur_top);
                     break;
                 default:
-                    bell();
+                    terminalBellSound();
                     break;
             }
         } else {

@@ -780,7 +780,7 @@ static void executeInputCommands(char *command, int *find_count) {
                             putStringClearToEOL(tmp, 0, 14);
                         } else if (lastInputCommand >= '0' && lastInputCommand <= '9') {
                             if (counter > 99) {
-                                bell();
+                                terminalBellSound();
                             } else {
                                 counter = counter * 10 + lastInputCommand - '0';
                                 (void) sprintf(tmp, "%d", counter);

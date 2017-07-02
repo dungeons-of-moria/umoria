@@ -232,7 +232,7 @@ void waitForContinueKey(int line_number);
 void waitAndConfirmCharacterCreation(int line_number, int delay);
 void terminalSaveScreen();
 void terminalRestoreScreen();
-void bell();
+void terminalBellSound();
 void screen_map();
 bool check_input(int microseconds);
 void user_name(char *buffer);

@@ -390,7 +390,7 @@ bool getStringInput(char *in_str, int row, int col, int slen) {
                 break;
             default:
                 if (!isprint(key) || col > end_col) {
-                    bell();
+                    terminalBellSound();
                 } else {
                     use_value2 mvaddch(row, col, (char) key);
                     *p++ = (char) key;
@@ -448,7 +448,7 @@ void terminalRestoreScreen() {
     touchwin(stdscr);
 }
 
-void bell() {
+void terminalBellSound() {
     putQIO();
 
     // The player can turn off beeps if they find them annoying.
