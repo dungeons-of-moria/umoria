@@ -191,7 +191,7 @@ void itemChargesRemainingDescription(int item_id);
 void itemTypeRemainingCountDescription(int item_id);
 
 // dungeon.c
-void dungeon();
+void playDungeon();
 
 // eat.c
 void eat();

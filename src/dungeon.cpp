@@ -868,7 +868,7 @@ static void executeInputCommands(char *command, int *find_count) {
 }
 
 // Main procedure for dungeon. -RAK-
-void dungeon() {
+void playDungeon() {
     // Note: There is a lot of preliminary magic going on here at first
     playerInitializePlayerLight();
     playerUpdateDeepestDungeonLevelVisited();

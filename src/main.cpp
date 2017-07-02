@@ -198,7 +198,7 @@ int main(int argc, char *argv[]) {
     // Loop till dead, or exit
     while (!character_is_dead) {
         // Dungeon logic
-        dungeon();
+        playDungeon();
 
         // check for eof here, see inkey() in io.c
         // eof can occur if the process gets a HANGUP signal
