@@ -18,7 +18,7 @@ static int max_hp(uint8_t *array);
 static int get_mons_num(int level);
 
 // gets a new random seed for the random number generator
-void init_seeds(uint32_t seed) {
+void seedsInitialize(uint32_t seed) {
     uint32_t clock_var;
 
     if (seed == 0) {

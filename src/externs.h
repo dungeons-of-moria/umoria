@@ -251,7 +251,7 @@ int topen(const char *file, int flags, int mode);
 void getAndCastMagicSpell();
 
 // misc1.c
-void init_seeds(uint32_t seed);
+void seedsInitialize(uint32_t seed);
 void set_seed(uint32_t seed);
 void reset_seed();
 int randint(int max);

@@ -103,7 +103,7 @@ int main(int argc, char *argv[]) {
 #endif
 
     // Grab a random seed from the clock
-    init_seeds(seed);
+    seedsInitialize(seed);
 
     // Init monster and treasure levels for allocate
     init_m_level();
