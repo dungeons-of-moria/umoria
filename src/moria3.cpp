@@ -633,11 +633,11 @@ uint32_t monster_death(int y, int x, uint32_t flags) {
     }
 
     if (flags & CM_2D2_OBJ) {
-        number += damroll(2, 2);
+        number += diceDamageRoll(2, 2);
     }
 
     if (flags & CM_4D2_OBJ) {
-        number += damroll(4, 2);
+        number += diceDamageRoll(4, 2);
     }
 
     uint32_t dump;
@@ -828,7 +828,7 @@ static void py_attack(int y, int x) {
             damage = critical_blow((int) item->weight, tot_tohit, damage, CLA_BTH);
         } else {
             // Bare hands!?
-            damage = damroll(1, 1);
+            damage = diceDamageRoll(1, 1);
             damage = critical_blow(1, 0, damage, CLA_BTH);
         }
 
@@ -1035,7 +1035,7 @@ static void chestLooseStrength() {
 
     (void) dec_stat(A_STR);
 
-    take_hit(damroll(1, 4), "a poison needle");
+    take_hit(diceDamageRoll(1, 4), "a poison needle");
 
     printMessage("You feel weakened!");
 }
@@ -1043,7 +1043,7 @@ static void chestLooseStrength() {
 static void chestPoison() {
     printMessage("A small needle has pricked you!");
 
-    take_hit(damroll(1, 6), "a poison needle");
+    take_hit(diceDamageRoll(1, 6), "a poison needle");
 
     py.flags.poisoned += 10 + randomNumber(20);
 }
@@ -1073,7 +1073,7 @@ static void chestExplode(int y, int x) {
 
     (void) delete_object(y, x);
 
-    take_hit(damroll(5, 8), "an exploding chest");
+    take_hit(diceDamageRoll(5, 8), "an exploding chest");
 }
 
 // Chests have traps too. -RAK-

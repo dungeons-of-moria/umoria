@@ -64,7 +64,7 @@ int randomNumberNormalDistribution(int mean, int standard) {
     // alternate randomNumberNormalDistribution() code, slower but much smaller since no table
     // 2 per 1,000,000 will be > 4*SD, max is 5*SD
     //
-    // tmp = damroll(8, 99);   // mean 400, SD 81
+    // tmp = diceDamageRoll(8, 99);   // mean 400, SD 81
     // tmp = (tmp - 400) * standard / 81;
     // return tmp + mean;
 
@@ -269,7 +269,7 @@ int coordCorridorWallsNextTo(int y, int x) {
 }
 
 // generates damage for 2d6 style dice rolls
-int damroll(int dice, int sides) {
+int diceDamageRoll(int dice, int sides) {
     int sum = 0;
     for (int i = 0; i < dice; i++) {
         sum += randomNumber(sides);
@@ -278,7 +278,7 @@ int damroll(int dice, int sides) {
 }
 
 int pdamroll(uint8_t *notation_array) {
-    return damroll((int) notation_array[0], (int) notation_array[1]);
+    return diceDamageRoll((int) notation_array[0], (int) notation_array[1]);
 }
 
 // A simple, fast, integer-based line-of-sight algorithm.  By Joseph Hall,

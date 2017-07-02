@@ -496,7 +496,7 @@ static void lightLineTouchesMonster(int monsterID) {
             creature_recall[monster->mptr].r_cdefense |= CD_LIGHT;
         }
 
-        if (mon_take_hit(monsterID, damroll(2, 8) >= 0)) {
+        if (mon_take_hit(monsterID, diceDamageRoll(2, 8) >= 0)) {
             printMonsterActionText(name, "shrivels away in the light!");
             prt_experience();
         } else {
@@ -1442,7 +1442,7 @@ bool build_wall(int y, int x, int direction) {
                     // this will kill everything
                     damage = 3000;
                 } else {
-                    damage = damroll(4, 8);
+                    damage = diceDamageRoll(4, 8);
                 }
 
                 vtype_t name;
@@ -1457,7 +1457,7 @@ bool build_wall(int y, int x, int direction) {
             } else if (r_ptr->cchar == 'E' || r_ptr->cchar == 'X') {
                 // must be an earth elemental or an earth spirit, or a Xorn
                 // increase its hit points
-                m_ptr->hp += damroll(4, 8);
+                m_ptr->hp += diceDamageRoll(4, 8);
             }
         }
 
@@ -1855,7 +1855,7 @@ static void earthquakeHitsMonster(int monsterID) {
             // this will kill everything
             damage = 3000;
         } else {
-            damage = damroll(4, 8);
+            damage = diceDamageRoll(4, 8);
         }
 
         vtype_t name;
@@ -1870,7 +1870,7 @@ static void earthquakeHitsMonster(int monsterID) {
     } else if (creature->cchar == 'E' || creature->cchar == 'X') {
         // must be an earth elemental or an earth spirit, or a
         // Xorn increase its hit points
-        monster->hp += damroll(4, 8);
+        monster->hp += diceDamageRoll(4, 8);
     }
 }
 

@@ -86,13 +86,13 @@ static bool drinkPotion(uint32_t flags, uint8_t itemID) {
                 }
                 break;
             case 13:
-                identified = hp_player(damroll(2, 7));
+                identified = hp_player(diceDamageRoll(2, 7));
                 break;
             case 14:
-                identified = hp_player(damroll(4, 7));
+                identified = hp_player(diceDamageRoll(4, 7));
                 break;
             case 15:
-                identified = hp_player(damroll(6, 7));
+                identified = hp_player(diceDamageRoll(6, 7));
                 break;
             case 16:
                 identified = hp_player(1000);

@@ -860,7 +860,7 @@ static void make_attack(int monsterID) {
                 notice = false;
             }
 
-            int dam = damroll(adice, asides);
+            int dam = diceDamageRoll(adice, asides);
             notice = executeAttack(r_ptr, m_ptr, monsterID, attype, dam, deathDescription, notice);
 
             // Moved here from mon_move, so that monster only confused if it
@@ -1120,14 +1120,14 @@ void creatureCastsSpell(Monster_t *m_ptr, int monsterID, int spellID, uint8_t le
             if (player_saves()) {
                 printMessage("You resist the effects of the spell.");
             } else {
-                take_hit(damroll(3, 8), deathDescription);
+                take_hit(diceDamageRoll(3, 8), deathDescription);
             }
             break;
         case 9: // Serious Wound
             if (player_saves()) {
                 printMessage("You resist the effects of the spell.");
             } else {
-                take_hit(damroll(8, 8), deathDescription);
+                take_hit(diceDamageRoll(8, 8), deathDescription);
             }
             break;
         case 10: // Hold Person
@@ -1460,7 +1460,7 @@ static void creatureMoveOutOfWall(Monster_t *m_ptr, int monsterID, uint32_t *rcm
         // in case the monster dies, may need to callfix1_delete_monster()
         // instead of delete_monsters()
         hack_monptr = monsterID;
-        int i = mon_take_hit(monsterID, damroll(8, 8));
+        int i = mon_take_hit(monsterID, diceDamageRoll(8, 8));
         hack_monptr = -1;
 
         if (i >= 0) {

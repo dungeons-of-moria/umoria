@@ -39,7 +39,7 @@ static void castSpell(int spellID) {
     switch (spellID) {
         case 1:
             if (get_dir(CNIL, &dir)) {
-                fire_bolt(char_row, char_col, dir, damroll(2, 6), GF_MAGIC_MISSILE, spell_names[0]);
+                fire_bolt(char_row, char_col, dir, diceDamageRoll(2, 6), GF_MAGIC_MISSILE, spell_names[0]);
             }
             break;
         case 2:
@@ -52,7 +52,7 @@ static void castSpell(int spellID) {
             (void) light_area(char_row, char_col);
             break;
         case 5:
-            (void) hp_player(damroll(4, 4));
+            (void) hp_player(diceDamageRoll(4, 4));
             break;
         case 6:
             (void) detect_sdoor();
@@ -70,7 +70,7 @@ static void castSpell(int spellID) {
             break;
         case 9:
             if (get_dir(CNIL, &dir)) {
-                fire_bolt(char_row, char_col, dir, damroll(4, 8), GF_LIGHTNING, spell_names[8]);
+                fire_bolt(char_row, char_col, dir, diceDamageRoll(4, 8), GF_LIGHTNING, spell_names[8]);
             }
             break;
         case 10:
@@ -94,7 +94,7 @@ static void castSpell(int spellID) {
             break;
         case 15:
             if (get_dir(CNIL, &dir)) {
-                fire_bolt(char_row, char_col, dir, damroll(6, 8), GF_FROST, spell_names[14]);
+                fire_bolt(char_row, char_col, dir, diceDamageRoll(6, 8), GF_FROST, spell_names[14]);
             }
             break;
         case 16:
@@ -124,7 +124,7 @@ static void castSpell(int spellID) {
             break;
         case 23:
             if (get_dir(CNIL, &dir)) {
-                fire_bolt(char_row, char_col, dir, damroll(9, 8), GF_FIRE, spell_names[22]);
+                fire_bolt(char_row, char_col, dir, diceDamageRoll(9, 8), GF_FIRE, spell_names[22]);
             }
             break;
         case 24:

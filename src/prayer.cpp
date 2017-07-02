@@ -52,7 +52,7 @@ static void recitePrayer(int prayerType) {
             (void) detect_evil();
             break;
         case 2:
-            (void) hp_player(damroll(3, 3));
+            (void) hp_player(diceDamageRoll(3, 3));
             break;
         case 3:
             bless(randomNumber(12) + 12);
@@ -81,7 +81,7 @@ static void recitePrayer(int prayerType) {
             teleport((py.misc.lev * 3));
             break;
         case 11:
-            (void) hp_player(damroll(4, 4));
+            (void) hp_player(diceDamageRoll(4, 4));
             break;
         case 12:
             bless(randomNumber(24) + 24);
@@ -109,11 +109,11 @@ static void recitePrayer(int prayerType) {
             break;
         case 18:
             if (get_dir(CNIL, &dir)) {
-                fire_ball(char_row, char_col, dir, (damroll(3, 6) + py.misc.lev), GF_HOLY_ORB, "Black Sphere");
+                fire_ball(char_row, char_col, dir, (diceDamageRoll(3, 6) + py.misc.lev), GF_HOLY_ORB, "Black Sphere");
             }
             break;
         case 19:
-            (void) hp_player(damroll(8, 4));
+            (void) hp_player(diceDamageRoll(8, 4));
             break;
         case 20:
             detect_inv2(randomNumber(24) + 24);
@@ -128,7 +128,7 @@ static void recitePrayer(int prayerType) {
             map_area();
             break;
         case 24:
-            (void) hp_player(damroll(16, 4));
+            (void) hp_player(diceDamageRoll(16, 4));
             break;
         case 25:
             (void) turn_undead();
