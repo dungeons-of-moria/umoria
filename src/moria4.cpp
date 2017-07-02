@@ -733,7 +733,7 @@ static void facts(Inventory_t *i_ptr, int *tbth, int *tpth, int *tdam, int *tdis
     }
 
     // Throwing objects
-    *tdam = pdamroll(i_ptr->damage) + i_ptr->todam;
+    *tdam = dicePlayerDamageRoll(i_ptr->damage) + i_ptr->todam;
     *tbth = py.misc.bthb * 75 / 100;
     *tpth = py.misc.ptohit + i_ptr->tohit;
 
@@ -1010,7 +1010,7 @@ static void py_bash(int y, int x) {
         (void) sprintf(msg, "You hit %s.", name);
         printMessage(msg);
 
-        int damage = pdamroll(inventory[INVEN_ARM].damage);
+        int damage = dicePlayerDamageRoll(inventory[INVEN_ARM].damage);
         damage = critical_blow(inventory[INVEN_ARM].weight / 4 + py.stats.use_stat[A_STR], 0, damage, CLA_BTH);
         damage += py.misc.wt / 60;
         damage += 3;

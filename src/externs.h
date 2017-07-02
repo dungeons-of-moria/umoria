@@ -264,7 +264,7 @@ int coordDistanceBetween(int y1, int x1, int y2, int x2);
 int coordWallsNextTo(int y, int x);
 int coordCorridorWallsNextTo(int y, int x);
 int diceDamageRoll(int dice, int sides);
-int pdamroll(uint8_t *notation_array);
+int dicePlayerDamageRoll(uint8_t *notation_array);
 bool los(int fromY, int fromX, int toY, int toX);
 char loc_symbol(int y, int x);
 bool test_light(int y, int x);

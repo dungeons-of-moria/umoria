@@ -225,7 +225,7 @@ static void hit_trap(int y, int x) {
 
     Inventory_t *tile = &treasure_list[cave[y][x].tptr];
 
-    int dam = pdamroll(tile->damage);
+    int dam = dicePlayerDamageRoll(tile->damage);
 
     switch (tile->subval) {
         case 1:
@@ -823,7 +823,7 @@ static void py_attack(int y, int x) {
         printMessage(msg);
 
         if (item->tval != TV_NOTHING) {
-            damage = pdamroll(item->damage);
+            damage = dicePlayerDamageRoll(item->damage);
             damage = tot_dam(item, damage, monster->mptr);
             damage = critical_blow((int) item->weight, tot_tohit, damage, CLA_BTH);
         } else {

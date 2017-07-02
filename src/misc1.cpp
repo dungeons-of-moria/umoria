@@ -277,7 +277,7 @@ int diceDamageRoll(int dice, int sides) {
     return sum;
 }
 
-int pdamroll(uint8_t *notation_array) {
+int dicePlayerDamageRoll(uint8_t *notation_array) {
     return diceDamageRoll((int) notation_array[0], (int) notation_array[1]);
 }
 
@@ -612,7 +612,7 @@ bool place_monster(int y, int x, int monster_id, bool sleeping) {
     if (creatures_list[monster_id].cdefense & CD_MAX_HP) {
         mon_ptr->hp = (int16_t) max_hp(creatures_list[monster_id].hd);
     } else {
-        mon_ptr->hp = (int16_t) pdamroll(creatures_list[monster_id].hd);
+        mon_ptr->hp = (int16_t) dicePlayerDamageRoll(creatures_list[monster_id].hd);
     }
 
     // the creatures_list speed value is 10 greater, so that it can be a uint8_t
@@ -665,7 +665,7 @@ void place_win_monster() {
     if (creatures_list[mon_ptr->mptr].cdefense & CD_MAX_HP) {
         mon_ptr->hp = (int16_t) max_hp(creatures_list[mon_ptr->mptr].hd);
     } else {
-        mon_ptr->hp = (int16_t) pdamroll(creatures_list[mon_ptr->mptr].hd);
+        mon_ptr->hp = (int16_t) dicePlayerDamageRoll(creatures_list[mon_ptr->mptr].hd);
     }
 
     // the creatures_list speed value is 10 greater, so that it can be a uint8_t
