@@ -1311,7 +1311,7 @@ int twall(int y, int x, int digging_ability, int digging_chance) {
 
     c_ptr->fm = false;
 
-    if (panel_contains(y, x) && (c_ptr->tl || c_ptr->pl) && c_ptr->tptr != 0) {
+    if (coordInsidePanel(y, x) && (c_ptr->tl || c_ptr->pl) && c_ptr->tptr != 0) {
         printMessage("You have found something!");
     }
 

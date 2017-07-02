@@ -612,7 +612,7 @@ static bool look_see(int x, int y, bool *transparent) {
     y = char_row + gl_fyx * x + gl_fyy * y;
     x = j;
 
-    if (!panel_contains(y, x)) {
+    if (!coordInsidePanel(y, x)) {
         *transparent = false;
         return false;
     }
@@ -963,7 +963,7 @@ void throw_object() {
             } else {
                 // do not test c_ptr->fm here
 
-                if (panel_contains(y, x) && py.flags.blind < 1 && (c_ptr->tl || c_ptr->pl)) {
+                if (coordInsidePanel(y, x) && py.flags.blind < 1 && (c_ptr->tl || c_ptr->pl)) {
                     putChar(tchar, y, x);
                     putQIO(); // show object moving
                 }

@@ -179,7 +179,7 @@ bool detect_invisible() {
     for (int id = next_free_monster_id - 1; id >= MIN_MONIX; id--) {
         Monster_t *m_ptr = &monsters[id];
 
-        if (panel_contains((int) m_ptr->fy, (int) m_ptr->fx) && (CM_INVISIBLE & creatures_list[m_ptr->mptr].cmove)) {
+        if (coordInsidePanel((int) m_ptr->fy, (int) m_ptr->fx) && (CM_INVISIBLE & creatures_list[m_ptr->mptr].cmove)) {
             m_ptr->ml = true;
 
             // works correctly even if hallucinating
@@ -460,7 +460,7 @@ bool detect_monsters() {
     for (int id = next_free_monster_id - 1; id >= MIN_MONIX; id--) {
         Monster_t *m_ptr = &monsters[id];
 
-        if (panel_contains((int) m_ptr->fy, (int) m_ptr->fx) && (CM_INVISIBLE & creatures_list[m_ptr->mptr].cmove) == 0) {
+        if (coordInsidePanel((int) m_ptr->fy, (int) m_ptr->fx) && (CM_INVISIBLE & creatures_list[m_ptr->mptr].cmove) == 0) {
             m_ptr->ml = true;
             detected = true;
 
@@ -524,7 +524,7 @@ void light_line(int x, int y, int direction) {
             c_ptr->pl = true;
 
             if (c_ptr->fval == LIGHT_FLOOR) {
-                if (panel_contains(y, x)) {
+                if (coordInsidePanel(y, x)) {
                     light_room(y, x);
                 }
             } else {
@@ -718,7 +718,7 @@ void fire_bolt(int y, int x, int direction, int damage_hp, int spell_type_id, ch
         if (c_ptr->cptr > 1) {
             finished = true;
             fireBoltTouchesMonster(c_ptr, damage_hp, harm_type, weapon_type, spell_name);
-        } else if (panel_contains(y, x) && py.flags.blind < 1) {
+        } else if (coordInsidePanel(y, x) && py.flags.blind < 1) {
             putChar('*', y, x);
 
             // show the bolt
@@ -809,7 +809,7 @@ void fire_ball(int y, int x, int direction, int damage_hp, int spell_type_id, co
                                     tkill++;
                                 }
                                 c_ptr->pl = savedLitStatus;
-                            } else if (panel_contains(row, col) && py.flags.blind < 1) {
+                            } else if (coordInsidePanel(row, col) && py.flags.blind < 1) {
                                 putChar('*', row, col);
                             }
                         }
@@ -822,7 +822,7 @@ void fire_ball(int y, int x, int direction, int damage_hp, int spell_type_id, co
 
             for (int row = (y - 2); row <= (y + 2); row++) {
                 for (int col = (x - 2); col <= (x + 2); col++) {
-                    if (coordInBounds(row, col) && panel_contains(row, col) && distance(y, x, row, col) <= max_dis) {
+                    if (coordInBounds(row, col) && coordInsidePanel(row, col) && distance(y, x, row, col) <= max_dis) {
                         lite_spot(row, col);
                     }
                 }
@@ -849,7 +849,7 @@ void fire_ball(int y, int x, int direction, int damage_hp, int spell_type_id, co
                 prt_experience();
             }
             // End ball hitting.
-        } else if (panel_contains(y, x) && py.flags.blind < 1) {
+        } else if (coordInsidePanel(y, x) && py.flags.blind < 1) {
             putChar('*', y, x);
 
             // show bolt
@@ -883,7 +883,7 @@ void breath(int x, int y, int monster_id, int damage_hp, char *spell_name, int s
                     // must test status bit, not py.flags.blind here, flag could have
                     // been set by a previous monster, but the breath should still
                     // be visible until the blindness takes effect
-                    if (panel_contains(row, col) && !(py.flags.status & PY_BLIND)) {
+                    if (coordInsidePanel(row, col) && !(py.flags.status & PY_BLIND)) {
                         putChar('*', row, col);
                     }
 
@@ -964,7 +964,7 @@ void breath(int x, int y, int monster_id, int damage_hp, char *spell_name, int s
 
     for (int row = (y - 2); row <= (y + 2); row++) {
         for (int col = (x - 2); col <= (x + 2); col++) {
-            if (coordInBounds(row, col) && panel_contains(row, col) && distance(y, x, row, col) <= max_dis) {
+            if (coordInBounds(row, col) && coordInsidePanel(row, col) && distance(y, x, row, col) <= max_dis) {
                 lite_spot(row, col);
             }
         }
@@ -1271,7 +1271,7 @@ bool wall_to_mud(int y, int x, int direction) {
         } else if (c_ptr->tptr != 0 && c_ptr->fval >= MIN_CLOSED_SPACE) {
             finished = true;
 
-            if (panel_contains(y, x) && test_light(y, x)) {
+            if (coordInsidePanel(y, x) && test_light(y, x)) {
                 turned = true;
 
                 obj_desc_t description;
@@ -1393,7 +1393,7 @@ bool poly_monster(int y, int x, int direction) {
                 morphed = place_monster(y, x, randomNumber(monster_levels[MAX_MONS_LEVEL] - monster_levels[0]) - 1 + monster_levels[0], false);
 
                 // don't test c_ptr->fm here, only pl/tl
-                if (morphed && panel_contains(y, x) && (c_ptr->tl || c_ptr->pl)) {
+                if (morphed && coordInsidePanel(y, x) && (c_ptr->tl || c_ptr->pl)) {
                     morphed = true;
                 }
             } else {
@@ -1757,7 +1757,7 @@ bool detect_evil() {
     for (int id = next_free_monster_id - 1; id >= MIN_MONIX; id--) {
         Monster_t *m_ptr = &monsters[id];
 
-        if (panel_contains((int) m_ptr->fy, (int) m_ptr->fx) && (CD_EVIL & creatures_list[m_ptr->mptr].cdefense)) {
+        if (coordInsidePanel((int) m_ptr->fy, (int) m_ptr->fx) && (CD_EVIL & creatures_list[m_ptr->mptr].cdefense)) {
             m_ptr->ml = true;
 
             detected = true;

@@ -1719,7 +1719,7 @@ void light_room(int pos_y, int pos_x) {
 
 // Lights up given location -RAK-
 void lite_spot(int y, int x) {
-    if (panel_contains(y, x)) {
+    if (coordInsidePanel(y, x)) {
         putChar(loc_symbol(y, x), y, x);
     }
 }

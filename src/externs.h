@@ -259,7 +259,7 @@ int randomNumberNormalDistribution(int mean, int standard);
 int getAndClearFirstBit(uint32_t *flag);
 bool coordInBounds(int y, int x);
 bool coordOutsidePanel(int y, int x, bool force);
-bool panel_contains(int y, int x);
+bool coordInsidePanel(int y, int x);
 int distance(int y1, int x1, int y2, int x2);
 int next_to_walls(int y, int x);
 int next_to_corr(int y, int x);

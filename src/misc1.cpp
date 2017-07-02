@@ -196,13 +196,12 @@ bool coordOutsidePanel(int y, int x, bool force) {
     return false;
 }
 
-// Tests a given point to see if it is within the screen -RAK-
-// boundaries.
-bool panel_contains(int y, int x) {
-    bool validY = y >= panel_row_min && y <= panel_row_max;
-    bool validX = x >= panel_col_min && x <= panel_col_max;
+// Is the given coordinate within the screen panel boundaries -RAK-
+bool coordInsidePanel(int y, int x) {
+    bool valid_y = y >= panel_row_min && y <= panel_row_max;
+    bool valid_x = x >= panel_col_min && x <= panel_col_max;
 
-    return validY && validX;
+    return valid_y && valid_x;
 }
 
 // Distance between two points -RAK-

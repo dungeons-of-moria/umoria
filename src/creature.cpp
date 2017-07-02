@@ -37,7 +37,7 @@ void monsterUpdateVisibility(int monster_id) {
     bool visible = false;
     Monster_t *m_ptr = &monsters[monster_id];
 
-    if (m_ptr->cdis <= MAX_SIGHT && !(py.flags.status & PY_BLIND) && panel_contains((int) m_ptr->fy, (int) m_ptr->fx)) {
+    if (m_ptr->cdis <= MAX_SIGHT && !(py.flags.status & PY_BLIND) && coordInsidePanel((int) m_ptr->fy, (int) m_ptr->fx)) {
         if (wizard_mode) {
             // Wizard sight.
             visible = true;
