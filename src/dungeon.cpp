@@ -1333,7 +1333,7 @@ static void commandPreviousMessage() {
 
         eraseLine(lineNumber, 0);
         waitForContinueKey(lineNumber);
-        restore_screen();
+        terminalRestoreScreen();
     } else {
         // Distinguish real and recovered messages with a '>'. -CJS-
         putString(">", 0, 0);
@@ -1596,7 +1596,7 @@ static void do_command(char com_val) {
         case '=': // (=) set options
             terminalSaveScreen();
             set_options();
-            restore_screen();
+            terminalRestoreScreen();
             player_free_turn = true;
             break;
         case '{': // ({) inscribe an object
@@ -1692,7 +1692,7 @@ static void do_command(char com_val) {
         case 'C': // (C)haracter description
             terminalSaveScreen();
             change_name();
-            restore_screen();
+            terminalRestoreScreen();
             player_free_turn = true;
             break;
         case 'D': // (D)isarm trap
@@ -1710,7 +1710,7 @@ static void do_command(char com_val) {
         case 'V': // (V)iew scores
             terminalSaveScreen();
             showScoresScreen();
-            restore_screen();
+            terminalRestoreScreen();
             player_free_turn = true;
             break;
         case 'W': // (W)here are we on the map  (L)ocate on map
@@ -2068,7 +2068,7 @@ static void examine_book() {
         terminalSaveScreen();
         print_spells(spell_index, spellID, true, -1);
         waitForContinueKey(0);
-        restore_screen();
+        terminalRestoreScreen();
     }
 }
 

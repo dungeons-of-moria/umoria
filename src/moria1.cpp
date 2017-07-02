@@ -1375,7 +1375,7 @@ void inven_command(char command) {
     } while (command != ESCAPE);
 
     if (scr_state != BLANK_SCR) {
-        restore_screen();
+        terminalRestoreScreen();
     }
 
     calc_bonuses();
@@ -1567,7 +1567,7 @@ int get_item(int *command_key_id, const char *prompt, int item_id_start, int ite
     } while (screenID >= 0);
 
     if (redrawScreen) {
-        restore_screen();
+        terminalRestoreScreen();
     }
 
     eraseLine(MSG_LINE, 0);

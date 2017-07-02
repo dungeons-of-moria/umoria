@@ -1491,7 +1491,7 @@ int get_spell(int *spell, int number_of_choices, int *spell_id, int *spell_chanc
     }
 
     if (redraw) {
-        restore_screen();
+        terminalRestoreScreen();
     }
 
     eraseLine(MSG_LINE, 0);
@@ -1843,7 +1843,7 @@ void gain_spells() {
             }
         }
 
-        restore_screen();
+        terminalRestoreScreen();
     } else {
         // pick a prayer at random
         while (new_spells) {

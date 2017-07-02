@@ -443,7 +443,7 @@ void terminalSaveScreen() {
     overwrite(stdscr, savescr);
 }
 
-void restore_screen() {
+void terminalRestoreScreen() {
     overwrite(savescr, stdscr);
     touchwin(stdscr);
 }
@@ -561,7 +561,7 @@ void screen_map() {
     }
 
     (void) getKeyInput();
-    restore_screen();
+    terminalRestoreScreen();
 }
 
 static void sleep_in_seconds(int seconds) {

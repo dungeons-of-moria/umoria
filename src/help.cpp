@@ -232,7 +232,7 @@ static void printKnownMonsterMemories(char command) {
             n++;
 
             query = (char) roff_recall(i);
-            restore_screen();
+            terminalRestoreScreen();
             if (query == ESCAPE) {
                 break;
             }

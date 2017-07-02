@@ -76,7 +76,7 @@ void displayTextHelpFile(const char *filename) {
 
     (void) fclose(file);
 
-    restore_screen();
+    terminalRestoreScreen();
 }
 
 // Prints a list of random objects to a file. -RAK-

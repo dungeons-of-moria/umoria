@@ -643,7 +643,7 @@ static bool look_see(int x, int y, bool *transparent) {
         if (query == 'r' || query == 'R') {
             terminalSaveScreen();
             query = (char) roff_recall(j);
-            restore_screen();
+            terminalRestoreScreen();
         }
     }
 

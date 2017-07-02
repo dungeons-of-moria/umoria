@@ -231,7 +231,7 @@ bool getStringInput(char *in_str, int row, int col, int slen);
 void waitForContinueKey(int line_number);
 void waitAndConfirmCharacterCreation(int line_number, int delay);
 void terminalSaveScreen();
-void restore_screen();
+void terminalRestoreScreen();
 void bell();
 void screen_map();
 bool check_input(int microseconds);
