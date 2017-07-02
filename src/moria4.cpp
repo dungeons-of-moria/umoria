@@ -95,7 +95,7 @@ static void digRubble(int y, int x, int diggingAbility) {
         if (randomNumber(10) == 1) {
             place_object(y, x, false);
 
-            if (test_light(y, x)) {
+            if (caveTileVisible(y, x)) {
                 printMessage("You have found something!");
             }
         }

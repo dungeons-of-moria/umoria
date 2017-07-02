@@ -562,7 +562,7 @@ static int summon_object(int y, int x, int num, int typ) {
 
                     lite_spot(oy, ox);
 
-                    if (test_light(oy, ox)) {
+                    if (caveTileVisible(oy, ox)) {
                         result += real_typ;
                     }
 
@@ -592,7 +592,7 @@ int delete_object(int y, int x) {
 
     lite_spot(y, x);
 
-    return (test_light(y, x));
+    return (caveTileVisible(y, x));
 }
 
 // Allocates objects upon a creatures death -RAK-

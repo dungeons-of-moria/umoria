@@ -80,7 +80,7 @@ bool detect_treasure() {
         for (int x = panel_col_min; x <= panel_col_max; x++) {
             Cave_t *c_ptr = &cave[y][x];
 
-            if (c_ptr->tptr != 0 && treasure_list[c_ptr->tptr].tval == TV_GOLD && !test_light(y, x)) {
+            if (c_ptr->tptr != 0 && treasure_list[c_ptr->tptr].tval == TV_GOLD && !caveTileVisible(y, x)) {
                 c_ptr->fm = true;
                 lite_spot(y, x);
 
@@ -100,7 +100,7 @@ bool detect_object() {
         for (int x = panel_col_min; x <= panel_col_max; x++) {
             Cave_t *c_ptr = &cave[y][x];
 
-            if (c_ptr->tptr != 0 && treasure_list[c_ptr->tptr].tval < TV_MAX_OBJECT && !test_light(y, x)) {
+            if (c_ptr->tptr != 0 && treasure_list[c_ptr->tptr].tval < TV_MAX_OBJECT && !caveTileVisible(y, x)) {
                 c_ptr->fm = true;
                 lite_spot(y, x);
 
@@ -246,7 +246,7 @@ bool unlight_area(int y, int x) {
                     c_ptr->pl = false;
                     c_ptr->fval = DARK_FLOOR;
                     lite_spot(row, col);
-                    if (!test_light(row, col)) {
+                    if (!caveTileVisible(row, col)) {
                         darkened = true;
                     }
                 }
@@ -1264,14 +1264,14 @@ bool wall_to_mud(int y, int x, int direction) {
 
             (void) twall(y, x, 1, 0);
 
-            if (test_light(y, x)) {
+            if (caveTileVisible(y, x)) {
                 turned = true;
                 printMessage("The wall turns into mud.");
             }
         } else if (c_ptr->tptr != 0 && c_ptr->fval >= MIN_CLOSED_SPACE) {
             finished = true;
 
-            if (coordInsidePanel(y, x) && test_light(y, x)) {
+            if (coordInsidePanel(y, x) && caveTileVisible(y, x)) {
                 turned = true;
 
                 obj_desc_t description;
@@ -1286,7 +1286,7 @@ bool wall_to_mud(int y, int x, int direction) {
                 (void) delete_object(y, x);
                 if (randomNumber(10) == 1) {
                     place_object(y, x, false);
-                    if (test_light(y, x)) {
+                    if (caveTileVisible(y, x)) {
                         printMessage("You have found something!");
                     }
                 }

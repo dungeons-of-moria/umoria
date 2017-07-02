@@ -487,7 +487,7 @@ char caveGetTileSymbol(int y, int x) {
 }
 
 // Tests a spot for light or field mark status -RAK-
-bool test_light(int y, int x) {
+bool caveTileVisible(int y, int x) {
     return cave[y][x].pl || cave[y][x].tl || cave[y][x].fm;
 }
 
