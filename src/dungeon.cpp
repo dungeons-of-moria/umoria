@@ -937,7 +937,7 @@ void playDungeon() {
 
         // Check for interrupts to find or rest.
         int microseconds = (running_counter ? 0 : 10000);
-        if ((command_count > 0 || running_counter || py.flags.rest != 0) && check_input(microseconds)) {
+        if ((command_count > 0 || running_counter || py.flags.rest != 0) && checkForNonBlockingKeyPress(microseconds)) {
             disturb(0, 0);
         }
 

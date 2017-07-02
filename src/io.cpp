@@ -160,7 +160,7 @@ void flushInputBuffer() {
         return;
     }
 
-    while (check_input(0));
+    while (checkForNonBlockingKeyPress(0));
 }
 
 // Clears given line of text -RAK-
@@ -585,7 +585,7 @@ static void sleep_in_seconds(int seconds) {
 // might hack a static accumulation of times to wait. When the accumulation reaches
 // a certain point, sleep for a second. There would need to be a way of resetting
 // the count, with a call made for commands like run or rest.
-bool check_input(int microseconds) {
+bool checkForNonBlockingKeyPress(int microseconds) {
 #ifdef _WIN32
     // Ugly non-blocking read...Ugh! -MRC-
     timeout(8);

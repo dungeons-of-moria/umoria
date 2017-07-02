@@ -234,7 +234,7 @@ void terminalSaveScreen();
 void terminalRestoreScreen();
 void terminalBellSound();
 void displayDungeonMap();
-bool check_input(int microseconds);
+bool checkForNonBlockingKeyPress(int microseconds);
 void user_name(char *buffer);
 
 #ifndef _WIN32
