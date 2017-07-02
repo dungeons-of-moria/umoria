@@ -219,7 +219,7 @@ void flushInputBuffer();
 void eraseLine(int row, int col);
 void clearScreen();
 void clearToBottom(int row);
-void print(char ch, int row, int col);
+void putChar(char ch, int row, int col);
 void move_cursor_relative(int row, int col);
 void count_msg_print(const char *msg);
 void prt(const char *str, int row, int col);

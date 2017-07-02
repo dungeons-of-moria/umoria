@@ -504,7 +504,7 @@ void prt_map() {
         for (int x = panel_col_min; x <= panel_col_max; x++) {
             char ch = loc_symbol(y, x);
             if (ch != ' ') {
-                print(ch, y, x);
+                putChar(ch, y, x);
             }
         }
     }

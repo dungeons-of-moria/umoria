@@ -964,7 +964,7 @@ void throw_object() {
                 // do not test c_ptr->fm here
 
                 if (panel_contains(y, x) && py.flags.blind < 1 && (c_ptr->tl || c_ptr->pl)) {
-                    print(tchar, y, x);
+                    putChar(tchar, y, x);
                     putQIO(); // show object moving
                 }
             }

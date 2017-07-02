@@ -301,7 +301,7 @@ void find_init(int direction) {
     // of find mode, when the initial position of the character must be erased.
     // Hence we must do the erasure here.
     if (!temporary_light_only && !run_print_self) {
-        print(loc_symbol(char_row, char_col), char_row, char_col);
+        putChar(loc_symbol(char_row, char_col), char_row, char_col);
     }
 
     move_char(direction, true);

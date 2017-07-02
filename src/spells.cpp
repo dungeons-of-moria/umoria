@@ -183,7 +183,7 @@ bool detect_invisible() {
             m_ptr->ml = true;
 
             // works correctly even if hallucinating
-            print((char) creatures_list[m_ptr->mptr].cchar, (int) m_ptr->fy, (int) m_ptr->fx);
+            putChar((char) creatures_list[m_ptr->mptr].cchar, (int) m_ptr->fy, (int) m_ptr->fx);
 
             detected = true;
         }
@@ -465,7 +465,7 @@ bool detect_monsters() {
             detected = true;
 
             // works correctly even if hallucinating
-            print((char) creatures_list[m_ptr->mptr].cchar, (int) m_ptr->fy, (int) m_ptr->fx);
+            putChar((char) creatures_list[m_ptr->mptr].cchar, (int) m_ptr->fy, (int) m_ptr->fx);
         }
     }
 
@@ -719,7 +719,7 @@ void fire_bolt(int y, int x, int direction, int damage_hp, int spell_type_id, ch
             finished = true;
             fireBoltTouchesMonster(c_ptr, damage_hp, harm_type, weapon_type, spell_name);
         } else if (panel_contains(y, x) && py.flags.blind < 1) {
-            print('*', y, x);
+            putChar('*', y, x);
 
             // show the bolt
             putQIO();
@@ -810,7 +810,7 @@ void fire_ball(int y, int x, int direction, int damage_hp, int spell_type_id, co
                                 }
                                 c_ptr->pl = savedLitStatus;
                             } else if (panel_contains(row, col) && py.flags.blind < 1) {
-                                print('*', row, col);
+                                putChar('*', row, col);
                             }
                         }
                     }
@@ -850,7 +850,7 @@ void fire_ball(int y, int x, int direction, int damage_hp, int spell_type_id, co
             }
             // End ball hitting.
         } else if (panel_contains(y, x) && py.flags.blind < 1) {
-            print('*', y, x);
+            putChar('*', y, x);
 
             // show bolt
             putQIO();
@@ -884,7 +884,7 @@ void breath(int x, int y, int monster_id, int damage_hp, char *spell_name, int s
                     // been set by a previous monster, but the breath should still
                     // be visible until the blindness takes effect
                     if (panel_contains(row, col) && !(py.flags.status & PY_BLIND)) {
-                        print('*', row, col);
+                        putChar('*', row, col);
                     }
 
                     if (c_ptr->cptr > 1) {
@@ -1763,7 +1763,7 @@ bool detect_evil() {
             detected = true;
 
             // works correctly even if hallucinating
-            print((char) creatures_list[m_ptr->mptr].cchar, (int) m_ptr->fy, (int) m_ptr->fx);
+            putChar((char) creatures_list[m_ptr->mptr].cchar, (int) m_ptr->fy, (int) m_ptr->fx);
         }
     }
 
