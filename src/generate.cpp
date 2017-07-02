@@ -1199,7 +1199,7 @@ static void town_gen() {
 }
 
 // Generates a random dungeon level -RAK-
-void generate_cave() {
+void generateCave() {
     panel_row_min = 0;
     panel_row_max = 0;
     panel_col_min = 0;

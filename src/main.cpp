@@ -192,7 +192,7 @@ int main(int argc, char *argv[]) {
     prt_stat_block();
 
     if (generate) {
-        generate_cave();
+        generateCave();
     }
 
     // Loop till dead, or exit
@@ -214,7 +214,7 @@ int main(int argc, char *argv[]) {
 
         // New level if not dead
         if (!character_is_dead) {
-            generate_cave();
+            generateCave();
         }
     }
 

@@ -204,7 +204,7 @@ void outputRandomLevelObjectsToFile();
 bool outputPlayerCharacterToFile(char *filename);
 
 // generate.c
-void generate_cave();
+void generateCave();
 
 // help.c
 void ident_char();
