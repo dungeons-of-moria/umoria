@@ -134,7 +134,7 @@ static void choose_race() {
         if (i < MAX_RACES && i >= 0) {
             break;
         } else if (s == '?') {
-            helpfile(MORIA_WELCOME);
+            displayTextHelpFile(MORIA_WELCOME);
         } else {
             bell();
         }
@@ -267,7 +267,7 @@ static void get_sex() {
             put_buffer("Male", 4, 15);
             exit_flag = true;
         } else if (c == '?') {
-            helpfile(MORIA_WELCOME);
+            displayTextHelpFile(MORIA_WELCOME);
         } else {
             bell();
         }
@@ -402,7 +402,7 @@ static void get_class() {
             py.misc.save += c_ptr->msav;
             py.misc.expfact += c_ptr->m_exp;
         } else if (s == '?') {
-            helpfile(MORIA_WELCOME);
+            displayTextHelpFile(MORIA_WELCOME);
         } else {
             bell();
         }

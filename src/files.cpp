@@ -41,15 +41,17 @@ void displaySplashScreen() {
     }
 }
 
-// File perusal. -CJS-
-// primitive, but portable
-void helpfile(const char *filename) {
-    obj_desc_t tmp_str;
+// Open and display a text help file
+// File perusal, primitive, but portable -CJS-
+void displayTextHelpFile(const char *filename) {
+    int max_line_length = 80;
+    char line_buffer[max_line_length];
 
     FILE *file = fopen(filename, "r");
+
     if (file == NULL) {
-        (void) sprintf(tmp_str, "Can not find help file \"%s\".\n", filename);
-        prt(tmp_str, 0, 0);
+        (void) sprintf(line_buffer, "Can not find help file \"%s\".\n", filename);
+        prt(line_buffer, 0, 0);
         return;
     }
 
@@ -58,9 +60,10 @@ void helpfile(const char *filename) {
     char input;
     while (!feof(file)) {
         clear_screen();
+
         for (int i = 0; i < 23; i++) {
-            if (fgets(tmp_str, OBJECT_DESCRIPTION_SIZE - 1, file) != CNIL) {
-                put_buffer(tmp_str, i, 0);
+            if (fgets(line_buffer, max_line_length - 1, file) != CNIL) {
+                put_buffer(line_buffer, i, 0);
             }
         }
 
@@ -72,6 +75,7 @@ void helpfile(const char *filename) {
     }
 
     (void) fclose(file);
+
     restore_screen();
 }
 
