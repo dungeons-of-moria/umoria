@@ -373,9 +373,9 @@ int cast_spell(const char *prompt, int item_id, int *spell_id, int *spell_chance
 
     if (result && magic_spells[py.misc.pclass - 1][*spell_id].smana > py.misc.cmana) {
         if (classes[py.misc.pclass].spell == MAGE) {
-            result = (int) get_check("You summon your limited strength to cast this one! Confirm?");
+            result = (int) getInputConfirmation("You summon your limited strength to cast this one! Confirm?");
         } else {
-            result = (int) get_check("The gods may think you presumptuous for this! Confirm?");
+            result = (int) getInputConfirmation("The gods may think you presumptuous for this! Confirm?");
         }
     }
 
@@ -426,7 +426,7 @@ static void carry(int y, int x, bool pickup) {
             // change the period to a question mark
             description[strlen(description) - 1] = '?';
             (void) sprintf(msg, "Pick up %s", description);
-            pickup = get_check(msg);
+            pickup = getInputConfirmation(msg);
         }
 
         // Check to see if it will change the players speed.
@@ -436,7 +436,7 @@ static void carry(int y, int x, bool pickup) {
             // change the period to a question mark
             description[strlen(description) - 1] = '?';
             (void) sprintf(msg, "Exceed your weight limit to pick up %s", description);
-            pickup = get_check(msg);
+            pickup = getInputConfirmation(msg);
         }
 
         // Attempt to pick up an object.

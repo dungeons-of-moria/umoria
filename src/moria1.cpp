@@ -541,7 +541,7 @@ static int verify(const char *prompt, int item) {
     obj_desc_t msg;
     (void) sprintf(msg, "%s %s", prompt, description);
 
-    return get_check(msg);
+    return getInputConfirmation(msg);
 }
 
 // All inventory commands (wear, exchange, take off, drop, inventory and
@@ -643,7 +643,7 @@ static void setInventoryCommandScreenState(char command) {
         // is a simple ' ' to recover the screen, just quit. Otherwise, check
         // and see what the user wants.
         if (screen_has_changed) {
-            if (command == ' ' || !get_check("Continuing with inventory command?")) {
+            if (command == ' ' || !getInputConfirmation("Continuing with inventory command?")) {
                 doing_inventory_command = 0;
                 return;
             }
@@ -1055,7 +1055,7 @@ static bool selectItemCommands(char *command, char *which, bool selecting) {
                 if (cave[char_row][char_col].tptr != 0) {
                     item = -1;
                     printMessage("You can't carry it.");
-                } else if (get_check("You can't carry it.  Drop it?")) {
+                } else if (getInputConfirmation("You can't carry it.  Drop it?")) {
                     *command = 'r';
                 } else {
                     item = -1;

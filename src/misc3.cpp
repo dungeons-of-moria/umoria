@@ -1447,7 +1447,7 @@ int get_spell(int *spell, int number_of_choices, int *spell_id, int *spell_chanc
 
                 vtype_t tmp_str;
                 (void) sprintf(tmp_str, "Cast %s (%d mana, %d%% fail)?", spell_names[*spell_id + offset], s_ptr->smana, spell_chance(*spell_id));
-                if (get_check(tmp_str)) {
+                if (getInputConfirmation(tmp_str)) {
                     flag = true;
                 } else {
                     *spell_id = -1;
@@ -2090,7 +2090,7 @@ bool enter_wiz_mode() {
 
     if (!noscore) {
         printMessage("Wizard mode is for debugging and experimenting.");
-        answer = get_check("The game will not be scored if you enter wizard mode. Are you sure?");
+        answer = getInputConfirmation("The game will not be scored if you enter wizard mode. Are you sure?");
     }
 
     if (noscore || answer) {

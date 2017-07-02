@@ -1291,7 +1291,7 @@ static bool moveWithoutPickup(char *command) {
 static void commandQuit() {
     flushInputBuffer();
 
-    if (get_check("Do you really want to quit?")) {
+    if (getInputConfirmation("Do you really want to quit?")) {
         character_is_dead = true;
         generate_new_level = true;
 

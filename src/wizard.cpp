@@ -370,7 +370,7 @@ void wizard_create() {
     tmp_val = atoi(tmp_str);
     i_ptr->level = (uint8_t) tmp_val;
 
-    if (get_check("Allocate?")) {
+    if (getInputConfirmation("Allocate?")) {
         // delete object first if any, before call popt
         Cave_t *c_ptr = &cave[char_row][char_col];
         if (c_ptr->tptr != 0) {

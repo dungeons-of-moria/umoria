@@ -309,7 +309,7 @@ void printMessage(const char *msg) {
 }
 
 // Used to verify a choice - user gets the chance to abort choice. -CJS-
-bool get_check(const char *prompt) {
+bool getInputConfirmation(const char *prompt) {
     putStringClearToEOL(prompt, 0, 0);
 
     int y, x;

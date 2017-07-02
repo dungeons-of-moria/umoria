@@ -366,7 +366,7 @@ bool save_char() {
         printMessage(temp);
 
         int i = 0;
-        if (access(savegame_filename, 0) < 0 || get_check("File exists. Delete old save file?") == 0 || (i = unlink(savegame_filename)) < 0) {
+        if (access(savegame_filename, 0) < 0 || getInputConfirmation("File exists. Delete old save file?") == 0 || (i = unlink(savegame_filename)) < 0) {
             if (i < 0) {
                 (void) sprintf(temp, "Can't delete '%s'", savegame_filename);
                 printMessage(temp);
@@ -401,7 +401,7 @@ static bool _save_char(char *fnam) {
 
     int fd = open(fnam, O_RDWR | O_CREAT | O_EXCL, 0600);
 
-    if (fd < 0 && access(fnam, 0) >= 0 && (from_savefile || (wizard_mode && get_check("Can't make new save file. Overwrite old?")))) {
+    if (fd < 0 && access(fnam, 0) >= 0 && (from_savefile || (wizard_mode && getInputConfirmation("Can't make new save file. Overwrite old?")))) {
         (void) chmod(fnam, 0600);
         fd = open(fnam, O_RDWR | O_TRUNC, 0600);
     }
@@ -576,7 +576,7 @@ bool get_char(bool *generate) {
         if (to_be_wizard && (l & 0x40000000L)) {
             printMessage("Sorry, this character is retired from moria.");
             printMessage("You can not resurrect a retired character.");
-        } else if (to_be_wizard && (l & 0x80000000L) && get_check("Resurrect a dead character?")) {
+        } else if (to_be_wizard && (l & 0x80000000L) && getInputConfirmation("Resurrect a dead character?")) {
             l &= ~0x80000000L;
         }
 

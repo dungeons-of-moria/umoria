@@ -97,7 +97,7 @@ void outputRandomLevelObjectsToFile() {
     }
     int nobj = atoi(tmp_str);
 
-    bool small_object = get_check("Small objects only?");
+    bool small_object = getInputConfirmation("Small objects only?");
 
     if (nobj > 0 && level > -1 && level < 1201) {
         if (nobj > 10000) {
@@ -331,7 +331,7 @@ bool outputPlayerCharacterToFile(char *filename) {
     int fd = open(filename, O_WRONLY | O_CREAT | O_EXCL, 0644);
     if (fd < 0 && errno == EEXIST) {
         (void) sprintf(msg, "Replace existing file %s?", filename);
-        if (get_check(msg)) {
+        if (getInputConfirmation(msg)) {
             fd = open(filename, O_WRONLY, 0644);
         }
     }
