@@ -1178,7 +1178,7 @@ static void lightTown() {
 
 // Town logic flow for generation of new town
 static void town_gen() {
-    set_seed(town_seed);
+    seedSet(town_seed);
 
     placeTownStores();
 

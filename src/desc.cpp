@@ -36,7 +36,7 @@ void magicInitializeItemNames() {
     int j;
     char *tmp;
 
-    set_seed(magic_seed);
+    seedSet(magic_seed);
 
     // The first 3 entries for colors are fixed, (slime & apple juice, water)
     for (int i = 3; i < MAX_COLORS; i++) {

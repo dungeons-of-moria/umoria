@@ -42,7 +42,7 @@ void seedsInitialize(uint32_t seed) {
 }
 
 // change to different random number generator state
-void set_seed(uint32_t seed) {
+void seedSet(uint32_t seed) {
     old_seed = get_rnd_seed();
 
     // want reproducible state here
