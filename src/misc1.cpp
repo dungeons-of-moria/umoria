@@ -549,7 +549,7 @@ bool compactMonsters() {
 }
 
 // Add to the players food time -RAK-
-void add_food(int amount) {
+void playerIngestFood(int amount) {
     if (py.flags.food < 0) {
         py.flags.food = 0;
     }

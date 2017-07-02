@@ -270,7 +270,7 @@ char caveGetTileSymbol(int y, int x);
 bool caveTileVisible(int y, int x);
 void drawDungeonPanel();
 bool compactMonsters();
-void add_food(int amount);
+void playerIngestFood(int amount);
 bool place_monster(int y, int x, int monster_id, bool sleeping);
 void place_win_monster();
 void alloc_monster(int number, int dist, bool sleeping);
