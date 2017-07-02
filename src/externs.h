@@ -273,7 +273,7 @@ bool compactMonsters();
 void playerIngestFood(int amount);
 bool monsterPlaceNew(int y, int x, int creature_id, bool sleeping);
 void monsterPlaceWinning();
-void alloc_monster(int number, int dist, bool sleeping);
+void monsterPlaceNewWithinDistance(int number, int distance_from_source, bool sleeping);
 bool summon_monster(int *y, int *x, bool sleeping);
 bool summon_undead(int *y, int *x);
 int popt();

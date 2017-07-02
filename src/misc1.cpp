@@ -723,14 +723,14 @@ static int get_mons_num(int level) {
 }
 
 // Allocates a random monster -RAK-
-void alloc_monster(int number, int dist, bool sleeping) {
+void monsterPlaceNewWithinDistance(int number, int distance_from_source, bool sleeping) {
     int y, x;
 
     for (int i = 0; i < number; i++) {
         do {
             y = randomNumber(dungeon_height - 2);
             x = randomNumber(dungeon_width - 2);
-        } while (cave[y][x].fval >= MIN_CLOSED_SPACE || (cave[y][x].cptr != 0) || (coordDistanceBetween(y, x, char_row, char_col) <= dist));
+        } while (cave[y][x].fval >= MIN_CLOSED_SPACE || cave[y][x].cptr != 0 || coordDistanceBetween(y, x, char_row, char_col) <= distance_from_source);
 
         int l = get_mons_num(current_dungeon_level);
 

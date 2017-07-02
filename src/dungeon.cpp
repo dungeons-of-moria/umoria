@@ -913,7 +913,7 @@ void playDungeon() {
 
         // Check for creature generation
         if (randomNumber(MAX_MALLOC_CHANCE) == 1) {
-            alloc_monster(1, MAX_SIGHT, false);
+            monsterPlaceNewWithinDistance(1, MAX_SIGHT, false);
         }
 
         playerUpdateLightStatus();

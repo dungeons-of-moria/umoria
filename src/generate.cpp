@@ -1053,10 +1053,10 @@ static void cave_gen() {
     place_stairs(2, randomNumber(2) + 2, 3);
     place_stairs(1, randomNumber(2), 3);
 
-    // Set up the character coords, used by alloc_monster, monsterPlaceWinning
+    // Set up the character coords, used by monsterPlaceNewWithinDistance, monsterPlaceWinning
     new_spot(&char_row, &char_col);
 
-    alloc_monster((randomNumber(8) + MIN_MALLOC_LEVEL + alloc_level), 0, true);
+    monsterPlaceNewWithinDistance((randomNumber(8) + MIN_MALLOC_LEVEL + alloc_level), 0, true);
     alloc_object(set_corr, 3, randomNumber(alloc_level));
     alloc_object(set_room, 5, randomNumberNormalDistribution(TREAS_ROOM_ALLOC, 3));
     alloc_object(set_floor, 5, randomNumberNormalDistribution(TREAS_ANY_ALLOC, 3));
@@ -1164,7 +1164,7 @@ static void lightTown() {
                 }
             }
         }
-        alloc_monster(MIN_MALLOC_TN, 3, true);
+        monsterPlaceNewWithinDistance(MIN_MALLOC_TN, 3, true);
     } else {
         // ...it is day time
         for (int y = 0; y < dungeon_height; y++) {
@@ -1172,7 +1172,7 @@ static void lightTown() {
                 cave[y][x].pl = true;
             }
         }
-        alloc_monster(MIN_MALLOC_TD, 3, true);
+        monsterPlaceNewWithinDistance(MIN_MALLOC_TD, 3, true);
     }
 }
 
@@ -1190,7 +1190,7 @@ static void town_gen() {
 
     seedResetToOldSeed();
 
-    // Set up the character coords, used by alloc_monster below
+    // Set up the character coords, used by monsterPlaceNewWithinDistance below
     new_spot(&char_row, &char_col);
 
     lightTown();
