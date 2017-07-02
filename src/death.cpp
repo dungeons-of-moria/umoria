@@ -458,7 +458,7 @@ void exitGame() {
         showScoresScreen();
     }
     erase_line(23, 0);
-    restore_term();
+    terminalRestore();
 
     exit(0);
 }

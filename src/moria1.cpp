@@ -1898,7 +1898,7 @@ void rest() {
         py.flags.food_digested--;
 
         prt("Press any key to stop resting...", 0, 0);
-        put_qio();
+        putQIO();
 
         return;
     }

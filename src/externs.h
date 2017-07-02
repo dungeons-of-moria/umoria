@@ -212,8 +212,8 @@ void displayWorldObjectDescription();
 // io.c
 void terminalInitialize();
 void putString(const char *out_str, int row, int col);
-void put_qio();
-void restore_term();
+void putQIO();
+void terminalRestore();
 void shell_out();
 char inkey();
 void flush();

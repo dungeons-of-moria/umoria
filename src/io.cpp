@@ -75,7 +75,7 @@ void putString(const char *out_str, int row, int col) {
 }
 
 // Dump the IO buffer to terminal -RAK-
-void put_qio() {
+void putQIO() {
     // Let inven_command know something has changed.
     screen_has_changed = true;
 
@@ -83,13 +83,13 @@ void put_qio() {
 }
 
 // Put the terminal in the original mode. -CJS-
-void restore_term() {
+void terminalRestore() {
     if (!curses_on) {
         return;
     }
 
     // Dump any remaining buffer
-    put_qio();
+    putQIO();
 
     // this moves curses to bottom right corner
     int y = 0;
@@ -114,7 +114,7 @@ void shell_out() {
 // terminal, so that this operation can always be performed at
 // any input prompt. inkey() never returns ^R.
 char inkey() {
-    put_qio();         // Dump IO buffer
+    putQIO();         // Dump IO buffer
     command_count = 0; // Just to be safe -CJS-
 
     while (true) {
@@ -453,7 +453,7 @@ void restore_screen() {
 }
 
 void bell() {
-    put_qio();
+    putQIO();
 
     // The player can turn off beeps if they find them annoying.
     if (error_beep_sound) {

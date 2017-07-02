@@ -745,7 +745,7 @@ static void executeInputCommands(char *command, int *find_count) {
             if (find_count == 0) {
                 end_find();
             }
-            put_qio();
+            putQIO();
         } else if (doing_inventory_command) {
             inven_command(doing_inventory_command);
         } else {
@@ -848,7 +848,7 @@ static void executeInputCommands(char *command, int *find_count) {
             // Flash the message line.
             erase_line(MSG_LINE, 0);
             move_cursor_relative(char_row, char_col);
-            put_qio();
+            putQIO();
 
             do_command(lastInputCommand);
 
@@ -993,7 +993,7 @@ void playDungeon() {
             // if paralyzed, resting, or dead, flush output
             // but first move the cursor onto the player, for aesthetics
             move_cursor_relative(char_row, char_col);
-            put_qio();
+            putQIO();
         }
 
         // Teleport?

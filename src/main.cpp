@@ -43,7 +43,7 @@ int main(int argc, char *argv[]) {
     for (--argc, ++argv; argc > 0 && argv[0][0] == '-'; --argc, ++argv) {
         switch (argv[0][1]) {
             case 'v':
-                restore_term();
+                terminalRestore();
                 printf("%d.%d.%d\n", CURRENT_VERSION_MAJOR, CURRENT_VERSION_MINOR, CURRENT_VERSION_PATCH);
                 return 0;
             case 'n':
@@ -70,7 +70,7 @@ int main(int argc, char *argv[]) {
                 }
                 break;
             default:
-                restore_term();
+                terminalRestore();
                 printf("Robert A. Koeneke's classic dungeon crawler.\n");
                 printf("Umoria %d.%d.%d is released under a GPL v2 license.\n", CURRENT_VERSION_MAJOR, CURRENT_VERSION_MINOR, CURRENT_VERSION_PATCH);
                 printf("\n");

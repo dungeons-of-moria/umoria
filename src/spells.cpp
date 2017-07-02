@@ -658,7 +658,7 @@ static void fireBoltTouchesMonster(Cave_t *tile, int dam, int harmType, uint32_t
     tile->pl = savedLitStatus;
 
     // draw monster and clear previous bolt
-    put_qio();
+    putQIO();
 
     vtype_t name;
     lower_monster_name(name, monster->ml, creature->name);
@@ -722,7 +722,7 @@ void fire_bolt(int y, int x, int direction, int damage_hp, int spell_type_id, ch
             print('*', y, x);
 
             // show the bolt
-            put_qio();
+            putQIO();
         }
     }
 }
@@ -818,7 +818,7 @@ void fire_ball(int y, int x, int direction, int damage_hp, int spell_type_id, co
             }
 
             // show ball of whatever
-            put_qio();
+            putQIO();
 
             for (int row = (y - 2); row <= (y + 2); row++) {
                 for (int col = (x - 2); col <= (x + 2); col++) {
@@ -853,7 +853,7 @@ void fire_ball(int y, int x, int direction, int damage_hp, int spell_type_id, co
             print('*', y, x);
 
             // show bolt
-            put_qio();
+            putQIO();
         }
     }
 }
@@ -960,7 +960,7 @@ void breath(int x, int y, int monster_id, int damage_hp, char *spell_name, int s
     }
 
     // show the ball of gas
-    put_qio();
+    putQIO();
 
     for (int row = (y - 2); row <= (y + 2); row++) {
         for (int col = (x - 2); col <= (x + 2); col++) {

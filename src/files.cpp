@@ -116,7 +116,7 @@ void outputRandomLevelObjectsToFile() {
                 (void) sprintf(tmp_str, "%d", nobj);
                 prt(strcat(tmp_str, " random objects being produced..."), 0, 0);
 
-                put_qio();
+                putQIO();
 
                 (void) fprintf(file1, "*** Random Object Sampling:\n");
                 (void) fprintf(file1, "*** %d objects\n", nobj);
@@ -159,7 +159,7 @@ void outputRandomLevelObjectsToFile() {
 // Write character sheet to the file
 static void writeCharacterSheetToFile(FILE *file1) {
     prt("Writing character sheet...", 0, 0);
-    put_qio();
+    putQIO();
 
     const char *colon = ":";
     const char *blank = " ";

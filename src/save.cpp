@@ -391,7 +391,7 @@ static bool _save_char(char *fnam) {
         return true; // Nothing to save.
     }
 
-    put_qio();
+    putQIO();
     disturb(1, 0);             // Turn off resting and searching.
     change_speed(-pack_heaviness); // Fix the speed
     pack_heaviness = 0;
@@ -506,7 +506,7 @@ bool get_char(bool *generate) {
         }
 
         prt("Restoring Memory...", 0, 0);
-        put_qio();
+        putQIO();
 
         DEBUG(logfile = fopen("IO_LOG", "a"));
         DEBUG(fprintf(logfile, "Reading data from %s\n", savegame_filename));
@@ -779,7 +779,7 @@ bool get_char(bool *generate) {
                 msg_print("Restoring Memory of a departed spirit...");
                 current_game_turn = -1;
             }
-            put_qio();
+            putQIO();
             goto closefiles;
         }
         if (ungetc(c, fileptr) == EOF) {
@@ -787,7 +787,7 @@ bool get_char(bool *generate) {
         }
 
         prt("Restoring Character...", 0, 0);
-        put_qio();
+        putQIO();
 
         // only level specific info should follow,
         // not present for dead characters
