@@ -205,7 +205,7 @@ bool coordInsidePanel(int y, int x) {
 }
 
 // Distance between two points -RAK-
-int distance(int y1, int x1, int y2, int x2) {
+int coordDistanceBetween(int y1, int x1, int y2, int x2) {
     int dy = y1 - y2;
     if (dy < 0) {
         dy = -dy;
@@ -618,7 +618,7 @@ bool place_monster(int y, int x, int monster_id, bool sleeping) {
     // the creatures_list speed value is 10 greater, so that it can be a uint8_t
     mon_ptr->cspeed = (int16_t) (creatures_list[monster_id].speed - 10 + py.flags.speed);
     mon_ptr->stunned = 0;
-    mon_ptr->cdis = (uint8_t) distance(char_row, char_col, y, x);
+    mon_ptr->cdis = (uint8_t) coordDistanceBetween(char_row, char_col, y, x);
     mon_ptr->ml = false;
 
     cave[y][x].cptr = (uint8_t) cur_pos;
@@ -656,7 +656,7 @@ void place_win_monster() {
     do {
         y = randomNumber(dungeon_height - 2);
         x = randomNumber(dungeon_width - 2);
-    } while ((cave[y][x].fval >= MIN_CLOSED_SPACE) || (cave[y][x].cptr != 0) || (cave[y][x].tptr != 0) || (distance(y, x, char_row, char_col) <= MAX_SIGHT));
+    } while ((cave[y][x].fval >= MIN_CLOSED_SPACE) || (cave[y][x].cptr != 0) || (cave[y][x].tptr != 0) || (coordDistanceBetween(y, x, char_row, char_col) <= MAX_SIGHT));
 
     mon_ptr->fy = (uint8_t) y;
     mon_ptr->fx = (uint8_t) x;
@@ -671,7 +671,7 @@ void place_win_monster() {
     // the creatures_list speed value is 10 greater, so that it can be a uint8_t
     mon_ptr->cspeed = (int16_t) (creatures_list[mon_ptr->mptr].speed - 10 + py.flags.speed);
     mon_ptr->stunned = 0;
-    mon_ptr->cdis = (uint8_t) distance(char_row, char_col, y, x);
+    mon_ptr->cdis = (uint8_t) coordDistanceBetween(char_row, char_col, y, x);
 
     cave[y][x].cptr = (uint8_t) cur_pos;
 
@@ -722,7 +722,7 @@ void alloc_monster(int number, int dist, bool sleeping) {
         do {
             y = randomNumber(dungeon_height - 2);
             x = randomNumber(dungeon_width - 2);
-        } while (cave[y][x].fval >= MIN_CLOSED_SPACE || (cave[y][x].cptr != 0) || (distance(y, x, char_row, char_col) <= dist));
+        } while (cave[y][x].fval >= MIN_CLOSED_SPACE || (cave[y][x].cptr != 0) || (coordDistanceBetween(y, x, char_row, char_col) <= dist));
 
         int l = get_mons_num(current_dungeon_level);
 
@@ -806,7 +806,7 @@ static void compact_objects() {
     while (counter <= 0) {
         for (int y = 0; y < dungeon_height; y++) {
             for (int x = 0; x < dungeon_width; x++) {
-                if (cave[y][x].tptr != 0 && distance(y, x, char_row, char_col) > cur_dis) {
+                if (cave[y][x].tptr != 0 && coordDistanceBetween(y, x, char_row, char_col) > cur_dis) {
                     int chance;
 
                     switch (treasure_list[cave[y][x].tptr].tval) {

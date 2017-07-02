@@ -2329,7 +2329,7 @@ void teleport(int new_distance) {
         y = randomNumber(dungeon_height) - 1;
         x = randomNumber(dungeon_width) - 1;
 
-        while (distance(y, x, char_row, char_col) > new_distance) {
+        while (coordDistanceBetween(y, x, char_row, char_col) > new_distance) {
             y += (char_row - y) / 2;
             x += (char_col - x) / 2;
         }

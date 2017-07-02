@@ -1032,7 +1032,7 @@ static void creatureAllowedToMove(Monster_t *m_ptr, uint32_t movebits, bool *do_
 
     m_ptr->fy = (uint8_t) y;
     m_ptr->fx = (uint8_t) x;
-    m_ptr->cdis = (uint8_t) distance(char_row, char_col, y, x);
+    m_ptr->cdis = (uint8_t) coordDistanceBetween(char_row, char_col, y, x);
 
     *do_turn = true;
 }
@@ -1689,7 +1689,7 @@ void updateMonsters(bool attack) {
             continue;
         }
 
-        m_ptr->cdis = (uint8_t) distance(char_row, char_col, (int) m_ptr->fy, (int) m_ptr->fx);
+        m_ptr->cdis = (uint8_t) coordDistanceBetween(char_row, char_col, (int) m_ptr->fy, (int) m_ptr->fx);
 
         // Attack is argument passed to CREATURE
         if (attack) {

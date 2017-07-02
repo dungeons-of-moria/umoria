@@ -770,7 +770,7 @@ void fire_ball(int y, int x, int direction, int damage_hp, int spell_type_id, co
             // The explosion.
             for (int row = y - max_dis; row <= y + max_dis; row++) {
                 for (int col = x - max_dis; col <= x + max_dis; col++) {
-                    if (coordInBounds(row, col) && distance(y, x, row, col) <= max_dis && los(y, x, row, col)) {
+                    if (coordInBounds(row, col) && coordDistanceBetween(y, x, row, col) <= max_dis && los(y, x, row, col)) {
                         c_ptr = &cave[row][col];
 
                         if (c_ptr->tptr != 0 && (*destroy)(&treasure_list[c_ptr->tptr])) {
@@ -802,7 +802,7 @@ void fire_ball(int y, int x, int direction, int damage_hp, int spell_type_id, co
                                     }
                                 }
 
-                                dam = (dam / (distance(row, col, y, x) + 1));
+                                dam = (dam / (coordDistanceBetween(row, col, y, x) + 1));
                                 int k = mon_take_hit((int) c_ptr->cptr, dam);
 
                                 if (k >= 0) {
@@ -822,7 +822,7 @@ void fire_ball(int y, int x, int direction, int damage_hp, int spell_type_id, co
 
             for (int row = (y - 2); row <= (y + 2); row++) {
                 for (int col = (x - 2); col <= (x + 2); col++) {
-                    if (coordInBounds(row, col) && coordInsidePanel(row, col) && distance(y, x, row, col) <= max_dis) {
+                    if (coordInBounds(row, col) && coordInsidePanel(row, col) && coordDistanceBetween(y, x, row, col) <= max_dis) {
                         lite_spot(row, col);
                     }
                 }
@@ -872,7 +872,7 @@ void breath(int x, int y, int monster_id, int damage_hp, char *spell_name, int s
 
     for (int row = y - 2; row <= y + 2; row++) {
         for (int col = x - 2; col <= x + 2; col++) {
-            if (coordInBounds(row, col) && distance(y, x, row, col) <= max_dis && los(y, x, row, col)) {
+            if (coordInBounds(row, col) && coordDistanceBetween(y, x, row, col) <= max_dis && los(y, x, row, col)) {
                 Cave_t *c_ptr = &cave[row][col];
 
                 if (c_ptr->tptr != 0 && (*destroy)(&treasure_list[c_ptr->tptr])) {
@@ -899,7 +899,7 @@ void breath(int x, int y, int monster_id, int damage_hp, char *spell_name, int s
                             dam = (dam / 4);
                         }
 
-                        dam = (dam / (distance(row, col, y, x) + 1));
+                        dam = (dam / (coordDistanceBetween(row, col, y, x) + 1));
 
                         // can not call mon_take_hit here, since player does not
                         // get experience for kill
@@ -928,7 +928,7 @@ void breath(int x, int y, int monster_id, int damage_hp, char *spell_name, int s
                             }
                         }
                     } else if (c_ptr->cptr == 1) {
-                        dam = (damage_hp / (distance(row, col, y, x) + 1));
+                        dam = (damage_hp / (coordDistanceBetween(row, col, y, x) + 1));
 
                         // let's do at least one point of damage
                         // prevents randomNumber(0) problem with poison_gas, also
@@ -964,7 +964,7 @@ void breath(int x, int y, int monster_id, int damage_hp, char *spell_name, int s
 
     for (int row = (y - 2); row <= (y + 2); row++) {
         for (int col = (x - 2); col <= (x + 2); col++) {
-            if (coordInBounds(row, col) && coordInsidePanel(row, col) && distance(y, x, row, col) <= max_dis) {
+            if (coordInBounds(row, col) && coordInsidePanel(row, col) && coordDistanceBetween(y, x, row, col) <= max_dis) {
                 lite_spot(row, col);
             }
         }
@@ -1529,7 +1529,7 @@ void teleport_away(int monster_id, int distance_from_player) {
     // this is necessary, because the creature is
     // not currently visible in its new position.
     m_ptr->ml = false;
-    m_ptr->cdis = (uint8_t) distance(char_row, char_col, yn, xn);
+    m_ptr->cdis = (uint8_t) coordDistanceBetween(char_row, char_col, yn, xn);
     monsterUpdateVisibility(monster_id);
 }
 
@@ -2185,7 +2185,7 @@ void destroy_area(int y, int x) {
         for (int i = (y - 15); i <= (y + 15); i++) {
             for (int j = (x - 15); j <= (x + 15); j++) {
                 if (coordInBounds(i, j) && cave[i][j].fval != BOUNDARY_WALL) {
-                    int dist = distance(i, j, y, x);
+                    int dist = coordDistanceBetween(i, j, y, x);
 
                     // clear player's spot, but don't put wall there
                     if (dist == 0) {
