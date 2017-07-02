@@ -17,7 +17,7 @@ static bool discharge_wand(Inventory_t *wand, int dir) {
     (wand->p1)--; // decrement "use" variable
 
     while (flags != 0) {
-        int kind = bit_pos(&flags) + 1;
+        int kind = getAndClearFirstBit(&flags) + 1;
         int row = char_row;
         int col = char_col;
 

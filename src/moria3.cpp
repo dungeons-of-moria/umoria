@@ -344,9 +344,9 @@ static void hit_trap(int y, int x) {
 // returns  1 if choose a spell in book to cast
 // returns  0 if don't choose a spell, i.e. exit with an escape
 int cast_spell(const char *prompt, int item_id, int *spell_id, int *spell_chance) {
-    // NOTE: `flags` gets set again, since bit_pos modified it
+    // NOTE: `flags` gets set again, since getAndClearFirstBit modified it
     uint32_t flags = inventory[item_id].flags;
-    int first_spell = bit_pos(&flags);
+    int first_spell = getAndClearFirstBit(&flags);
     flags = inventory[item_id].flags & spells_learnt;
 
     Spell_t *s_ptr = magic_spells[py.misc.pclass - 1];
@@ -355,7 +355,7 @@ int cast_spell(const char *prompt, int item_id, int *spell_id, int *spell_chance
     int spellList[31];
 
     while (flags) {
-        int pos = bit_pos(&flags);
+        int pos = getAndClearFirstBit(&flags);
 
         if (s_ptr[pos].slevel <= py.misc.lev) {
             spellList[spellCount] = pos;

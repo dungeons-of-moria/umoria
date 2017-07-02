@@ -2057,7 +2057,7 @@ static void examine_book() {
 
         int spellID = 0;
         while (itemFlags) {
-            k = bit_pos(&itemFlags);
+            k = getAndClearFirstBit(&itemFlags);
 
             if (magic_spells[py.misc.pclass - 1][k].slevel < 99) {
                 spell_index[spellID] = k;

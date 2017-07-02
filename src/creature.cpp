@@ -1296,7 +1296,7 @@ static bool mon_cast_spell(int monsterID) {
 
     int id = 0;
     while (spellFlags != 0) {
-        spell_choice[id] = bit_pos(&spellFlags);
+        spell_choice[id] = getAndClearFirstBit(&spellFlags);
         id++;
     }
 

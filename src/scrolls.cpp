@@ -430,7 +430,7 @@ void read_scroll() {
     uint32_t flags = i_ptr->flags;
 
     while (flags != 0) {
-        int scrollType = bit_pos(&flags) + 1;
+        int scrollType = getAndClearFirstBit(&flags) + 1;
 
         if (i_ptr->tval == TV_SCROLL2) {
             scrollType += 32;

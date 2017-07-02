@@ -256,7 +256,7 @@ void seedSet(uint32_t seed);
 void seedResetToOldSeed();
 int randomNumber(int max);
 int randomNumberNormalDistribution(int mean, int standard);
-int bit_pos(uint32_t *flag);
+int getAndClearFirstBit(uint32_t *flag);
 bool in_bounds(int y, int x);
 int get_panel(int y, int x, bool force);
 bool panel_contains(int y, int x);
