@@ -1518,7 +1518,7 @@ static void doWizardCommands(char com_val) {
             }
             break;
         case CTRL_KEY('O'): // ^O = objects
-            print_objects();
+            outputRandomLevelObjectsToFile();
             break;
         case '\\': // \ wizard help
             if (use_roguelike_keys) {

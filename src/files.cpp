@@ -82,7 +82,7 @@ void displayTextHelpFile(const char *filename) {
 // Prints a list of random objects to a file. -RAK-
 // Note that the objects produced is a sampling of objects
 // which be expected to appear on that level.
-void print_objects() {
+void outputRandomLevelObjectsToFile() {
     obj_desc_t tmp_str;
 
     prt("Produce objects on what level?: ", 0, 0);

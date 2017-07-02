@@ -200,7 +200,7 @@ void playerEat();
 void initializeScoreFile();
 void displaySplashScreen();
 void displayTextHelpFile(const char *filename);
-void print_objects();
+void outputRandomLevelObjectsToFile();
 bool file_character(char *filename);
 
 // generate.c
