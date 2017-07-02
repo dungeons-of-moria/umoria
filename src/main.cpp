@@ -30,7 +30,7 @@ int main(int argc, char *argv[]) {
 
     // call this routine to grab a file pointer to the high score file
     // and prepare things to relinquish setuid privileges
-    init_scorefile();
+    initializeScoreFile();
 
     // Make sure we have access to all files -MRC-
     check_file_permissions();

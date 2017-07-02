@@ -197,7 +197,7 @@ void playDungeon();
 void playerEat();
 
 // files.c
-void init_scorefile();
+void initializeScoreFile();
 void read_times();
 void helpfile(const char *filename);
 void print_objects();

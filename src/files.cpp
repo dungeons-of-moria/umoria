@@ -12,12 +12,12 @@
 // systems.  Otherwise, the `open' prototype conflicts with the `topen' declaration.
 #include "externs.h"
 
-//  init_scorefile
+//  initializeScoreFile
 //  Open the score file while we still have the setuid privileges.  Later
 //  when the score is being written out, you must be sure to flock the file
 //  so we don't have multiple people trying to write to it at the same time.
 //  Craig Norborg (doc)    Mon Aug 10 16:41:59 EST 1987
-void init_scorefile() {
+void initializeScoreFile() {
     highscore_fp = fopen(MORIA_TOP, (char *) "rb+");
     if (highscore_fp == NULL) {
         (void) fprintf(stderr, "Can't open score file \"%s\"\n", MORIA_TOP);
