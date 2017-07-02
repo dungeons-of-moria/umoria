@@ -174,14 +174,14 @@ void eraseLine(int row, int col) {
 }
 
 // Clears screen
-void clear_screen() {
+void clearScreen() {
     if (message_ready_to_print) {
         msg_print(CNIL);
     }
     (void) clear();
 }
 
-void clear_from(int row) {
+void clearToBottom(int row) {
     (void) move(row, 0);
     clrtobot();
 }
@@ -495,7 +495,7 @@ void screen_map() {
     priority[32] = -15;  // char ' '
 
     save_screen();
-    clear_screen();
+    clearScreen();
     use_value2 mvaddch(0, 0, CH(TL));
 
     for (int i = 0; i < MAX_WIDTH / RATIO; i++) {

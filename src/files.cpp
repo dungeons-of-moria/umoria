@@ -31,7 +31,7 @@ void displaySplashScreen() {
 
     FILE *file1 = fopen(MORIA_MOR, "r");
     if (file1 != NULL) {
-        clear_screen();
+        clearScreen();
         for (int i = 0; fgets(in_line, 80, file1) != CNIL; i++) {
             putString(in_line, i, 0);
         }
@@ -59,7 +59,7 @@ void displayTextHelpFile(const char *filename) {
 
     char input;
     while (!feof(file)) {
-        clear_screen();
+        clearScreen();
 
         for (int i = 0; i < 23; i++) {
             if (fgets(line_buffer, max_line_length - 1, file) != CNIL) {

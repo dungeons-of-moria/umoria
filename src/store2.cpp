@@ -264,7 +264,7 @@ static void store_prt_gold() {
 
 // Displays store -RAK-
 static void display_store(int store_num, const char *owner_name, int cur_top) {
-    clear_screen();
+    clearScreen();
     putString(owner_name, 3, 9);
     putString("Item", 4, 3);
     putString("Asking Price", 4, 60);

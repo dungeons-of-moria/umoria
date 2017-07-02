@@ -163,12 +163,12 @@ int main(int argc, char *argv[]) {
 
         // Spell and Mana based on class: Mage or Clerical realm.
         if (classes[py.misc.pclass].spell == MAGE) {
-            clear_screen(); // makes spell list easier to read
+            clearScreen(); // makes spell list easier to read
             calc_spells(A_INT);
             calc_mana(A_INT);
         } else if (classes[py.misc.pclass].spell == PRIEST) {
             calc_spells(A_WIS);
-            clear_screen(); // force out the 'learn prayer' message
+            clearScreen(); // force out the 'learn prayer' message
             calc_mana(A_WIS);
         }
 
@@ -188,7 +188,7 @@ int main(int argc, char *argv[]) {
     //
     // Begin the game
     //
-    clear_screen();
+    clearScreen();
     prt_stat_block();
 
     if (generate) {

@@ -101,7 +101,7 @@ static void get_all_stats() {
 // Prints a list of the available races: Human, Elf, etc.,
 // shown during the character creation screens.
 static void print_races(void) {
-    clear_from(20);
+    clearToBottom(20);
     putString("Choose a race (? for Help):", 20, 2);
 
     int col = 2;
@@ -246,7 +246,7 @@ static void get_history() {
 
 // Gets the character's sex -JWT-
 static void get_sex() {
-    clear_from(20);
+    clearToBottom(20);
     putString("Choose a sex (? for Help):", 20, 2);
     putString("m) Male       f) Female", 21, 2);
 
@@ -299,7 +299,7 @@ static int print_classes(int race_id, int *class_list) {
     char tmp_str[80];
     uint32_t mask = 0x1;
 
-    clear_from(20);
+    clearToBottom(20);
     putString("Choose a class (? for Help):", 20, 2);
 
     for (int i = 0; i < MAX_CLASS; i++) {
@@ -348,7 +348,7 @@ static void get_class() {
 
             Class_t *c_ptr = &classes[py.misc.pclass];
 
-            clear_from(20);
+            clearToBottom(20);
             putString(c_ptr->title, 5, 15);
 
             // Adjust the stats for the class adjustment -RAK-
@@ -450,7 +450,7 @@ void createCharacter() {
     put_misc1();
     put_stats();
 
-    clear_from(20);
+    clearToBottom(20);
     putString("Hit space to re-roll or ESC to accept characteristics: ", 20, 2);
 
     bool exit_flag = true;

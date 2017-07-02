@@ -72,7 +72,7 @@ void showScoresScreen() {
 
     while (!feof(highscore_fp)) {
         i = 1;
-        clear_screen();
+        clearScreen();
         // Put twenty scores on each page, on lines 2 through 21.
         while (!feof(highscore_fp) && i < 21) {
             (void) sprintf(string,
@@ -106,7 +106,7 @@ static void print_tomb() {
     char *p;
     vtype_t str, tmp_str;
 
-    clear_screen();
+    clearScreen();
     putString("_______________________", 1, 15);
     putString("/", 2, 14);
     putString("\\         ___", 2, 38);
@@ -185,16 +185,16 @@ static void print_tomb() {
                 goto retry;
             }
         } else {
-            clear_screen();
+            clearScreen();
             display_char();
             putString("Type ESC to skip the inventory:", 23, 0);
             if (getKeyInput() != ESCAPE) {
-                clear_screen();
+                clearScreen();
                 msg_print("You are using:");
                 (void) show_equip(true, 0);
                 msg_print(CNIL);
                 msg_print("You are carrying:");
-                clear_from(1);
+                clearToBottom(1);
                 (void) show_inven(0, inventory_count - 1, true, 0, CNIL);
                 msg_print(CNIL);
             }
@@ -223,7 +223,7 @@ int32_t playerCalculateTotalPoints() {
 
 // Enters a players name on the top twenty list -JWT-
 static void highscores() {
-    clear_screen();
+    clearScreen();
 
     if (noscore) {
         return;
@@ -401,7 +401,7 @@ static void kingly() {
     py.misc.exp = py.misc.max_exp;
 
     // Let the player know that he did good.
-    clear_screen();
+    clearScreen();
     putString("#", 1, 34);
     putString("#####", 2, 32);
     putString("#", 3, 34);

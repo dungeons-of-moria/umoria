@@ -479,7 +479,7 @@ bool get_char(bool *generate) {
         return false; // Don't bother with messages here. File absent.
     }
 
-    clear_screen();
+    clearScreen();
 
     vtype_t temp;
     (void) sprintf(temp, "Save file %s present. Attempting restore.", savegame_filename);

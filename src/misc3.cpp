@@ -900,7 +900,7 @@ void prt_stat_block() {
 
 // Draws entire screen -RAK-
 void draw_cave() {
-    clear_screen();
+    clearScreen();
     prt_stat_block();
     prt_map();
     prt_depth();
@@ -908,7 +908,7 @@ void draw_cave() {
 
 // Prints the following information on the screen. -JWT-
 void put_character() {
-    clear_screen();
+    clearScreen();
 
     putString("Name        :", 2, 1);
     putString("Race        :", 3, 1);
@@ -1002,7 +1002,7 @@ void put_misc2() {
 
 // Prints ratings on certain abilities -RAK-
 void put_misc3() {
-    clear_from(14);
+    clearToBottom(14);
 
     int xbth = py.misc.bth + py.misc.ptohit * BTH_PLUS_ADJ + (class_level_adj[py.misc.pclass][CLA_BTH] * py.misc.lev);
     int xbthb = py.misc.bthb + py.misc.ptohit * BTH_PLUS_ADJ + (class_level_adj[py.misc.pclass][CLA_BTHB] * py.misc.lev);
@@ -1067,7 +1067,7 @@ void get_name() {
         putString(py.misc.name, 2, 15);
     }
 
-    clear_from(20);
+    clearToBottom(20);
 }
 
 // Changes the name of the character -JWT-
