@@ -12,7 +12,7 @@
 // Add a comment to an object description. -CJS-
 void scribe_object() {
     if (inventory_count == 0 && equipment_count == 0) {
-        msg_print("You are not carrying anything to inscribe.");
+        printMessage("You are not carrying anything to inscribe.");
         return;
     }
 
@@ -22,7 +22,7 @@ void scribe_object() {
 
         itemDescription(tmp_str, &inventory[item_val], true);
         (void) sprintf(out_val, "Inscribing %s", tmp_str);
-        msg_print(out_val);
+        printMessage(out_val);
 
         if (inventory[item_val].inscrip[0] != '\0') {
             (void) sprintf(out_val, "Replace %s New inscription:", inventory[item_val].inscrip);

@@ -68,14 +68,14 @@ void search(int y, int x, int chance) {
 
                 obj_desc_t msg;
                 (void) sprintf(msg, "You have found %s", description);
-                msg_print(msg);
+                printMessage(msg);
 
                 change_trap(i, j);
                 end_find();
             } else if (t_ptr->tval == TV_SECRET_DOOR) {
                 // Secret door?
 
-                msg_print("You have found a secret door.");
+                printMessage("You have found a secret door.");
 
                 change_trap(i, j);
                 end_find();
@@ -86,9 +86,9 @@ void search(int y, int x, int chance) {
                 if ((t_ptr->flags & CH_TRAPPED) > 1) {
                     if (!spellItemIdentified(t_ptr)) {
                         spellItemIdentifyAndRemoveRandomInscription(t_ptr);
-                        msg_print("You have discovered a trap on the chest!");
+                        printMessage("You have discovered a trap on the chest!");
                     } else {
-                        msg_print("The chest is trapped!");
+                        printMessage("The chest is trapped!");
                     }
                 }
             }
@@ -314,7 +314,7 @@ void find_init(int direction) {
 void find_run() {
     // prevent infinite loops in find mode, will stop after moving 100 times
     if (running_counter++ > 100) {
-        msg_print("You stop running to catch your breath.");
+        printMessage("You stop running to catch your breath.");
         end_find();
         return;
     }
@@ -550,13 +550,13 @@ static int minus_ac(uint32_t typ_dam) {
 
         itemDescription(description, &inventory[itemID], false);
         (void) sprintf(msg, "Your %s resists damage!", description);
-        msg_print(msg);
+        printMessage(msg);
     } else if (inventory[itemID].ac + inventory[itemID].toac > 0) {
         minus = true;
 
         itemDescription(description, &inventory[itemID], false);
         (void) sprintf(msg, "Your %s is damaged!", description);
-        msg_print(msg);
+        printMessage(msg);
 
         inventory[itemID].toac--;
         calc_bonuses();
@@ -572,7 +572,7 @@ void corrode_gas(const char *creature_name) {
     }
 
     if (inven_damage(set_corrodes, 5) > 0) {
-        msg_print("There is an acrid smell coming from your pack.");
+        printMessage("There is an acrid smell coming from your pack.");
     }
 }
 
@@ -596,7 +596,7 @@ void fire_dam(int dam, const char *creature_name) {
     take_hit(dam, creature_name);
 
     if (inven_damage(set_flammable, 3) > 0) {
-        msg_print("There is smoke coming from your pack!");
+        printMessage("There is smoke coming from your pack!");
     }
 }
 
@@ -613,7 +613,7 @@ void cold_dam(int dam, const char *creature_name) {
     take_hit(dam, creature_name);
 
     if (inven_damage(set_frost_destroy, 5) > 0) {
-        msg_print("Something shatters inside your pack!");
+        printMessage("Something shatters inside your pack!");
     }
 }
 
@@ -626,7 +626,7 @@ void light_dam(int dam, const char *creature_name) {
     take_hit(dam, creature_name);
 
     if (inven_damage(set_lightning_destroy, 3) > 0) {
-        msg_print("There are sparks coming from your pack!");
+        printMessage("There are sparks coming from your pack!");
     }
 }
 
@@ -645,6 +645,6 @@ void acid_dam(int dam, const char *creature_name) {
     take_hit(dam / (flag + 1), creature_name);
 
     if (inven_damage(set_acid_affect, 3) > 0) {
-        msg_print("There is an acrid smell coming from your pack!");
+        printMessage("There is an acrid smell coming from your pack!");
     }
 }

@@ -12,10 +12,10 @@
 static void py_attack(int y, int x);
 
 static void trapOpenPit(Inventory_t *t_ptr, int dam) {
-    msg_print("You fell into a pit!");
+    printMessage("You fell into a pit!");
 
     if (py.flags.ffall) {
-        msg_print("You gently float down.");
+        printMessage("You gently float down.");
         return;
     }
 
@@ -30,18 +30,18 @@ static void trapArrow(Inventory_t *t_ptr, int dam) {
         itemDescription(description, t_ptr, true);
         take_hit(dam, description);
 
-        msg_print("An arrow hits you.");
+        printMessage("An arrow hits you.");
         return;
     }
 
-    msg_print("An arrow barely misses you.");
+    printMessage("An arrow barely misses you.");
 }
 
 static void trapCoveredPit(Inventory_t *t_ptr, int dam, int y, int x) {
-    msg_print("You fell into a covered pit.");
+    printMessage("You fell into a covered pit.");
 
     if (py.flags.ffall) {
-        msg_print("You gently float down.");
+        printMessage("You gently float down.");
     } else {
         obj_desc_t description;
         itemDescription(description, t_ptr, true);
@@ -55,10 +55,10 @@ static void trapDoor(Inventory_t *t_ptr, int dam) {
     generate_new_level = true;
     current_dungeon_level++;
 
-    msg_print("You fell through a trap door!");
+    printMessage("You fell through a trap door!");
 
     if (py.flags.ffall) {
-        msg_print("You gently float down.");
+        printMessage("You gently float down.");
     } else {
         obj_desc_t description;
         itemDescription(description, t_ptr, true);
@@ -66,7 +66,7 @@ static void trapDoor(Inventory_t *t_ptr, int dam) {
     }
 
     // Force the messages to display before starting to generate the next level.
-    msg_print(CNIL);
+    printMessage(CNIL);
 }
 
 static void trapSleepingGas() {
@@ -74,15 +74,15 @@ static void trapSleepingGas() {
         return;
     }
 
-    msg_print("A strange white mist surrounds you!");
+    printMessage("A strange white mist surrounds you!");
 
     if (py.flags.free_act) {
-        msg_print("You are unaffected.");
+        printMessage("You are unaffected.");
         return;
     }
 
     py.flags.paralysis += randint(10) + 4;
-    msg_print("You fall asleep.");
+    printMessage("You fall asleep.");
 }
 
 static void trapHiddenObject(int y, int x) {
@@ -90,7 +90,7 @@ static void trapHiddenObject(int y, int x) {
 
     place_object(y, x, false);
 
-    msg_print("Hmmm, there was something under this rock.");
+    printMessage("Hmmm, there was something under this rock.");
 }
 
 static void trapStrengthDart(Inventory_t *t_ptr, int dam) {
@@ -102,19 +102,19 @@ static void trapStrengthDart(Inventory_t *t_ptr, int dam) {
             itemDescription(description, t_ptr, true);
             take_hit(dam, description);
 
-            msg_print("A small dart weakens you!");
+            printMessage("A small dart weakens you!");
         } else {
-            msg_print("A small dart hits you.");
+            printMessage("A small dart hits you.");
         }
     } else {
-        msg_print("A small dart barely misses you.");
+        printMessage("A small dart barely misses you.");
     }
 }
 
 static void trapTeleport(int y, int x) {
     teleport_player = true;
 
-    msg_print("You hit a teleport trap!");
+    printMessage("You hit a teleport trap!");
 
     // Light up the teleport trap, before we teleport away.
     move_light(y, x, y, x);
@@ -126,12 +126,12 @@ static void trapRockfall(int y, int x, int dam) {
     (void) delete_object(y, x);
     place_rubble(y, x);
 
-    msg_print("You are hit by falling rock.");
+    printMessage("You are hit by falling rock.");
 }
 
 static void trapCorrodeGas() {
     // Makes more sense to print the message first, then damage an object.
-    msg_print("A strange red gas surrounds you.");
+    printMessage("A strange red gas surrounds you.");
 
     corrode_gas("corrosion gas");
 }
@@ -151,33 +151,33 @@ static void trapSummonMonster(int y, int x) {
 
 static void trapFire(int dam) {
     // Makes more sense to print the message first, then damage an object.
-    msg_print("You are enveloped in flames!");
+    printMessage("You are enveloped in flames!");
 
     fire_dam(dam, "a fire trap");
 }
 
 static void trapAcid(int dam) {
     // Makes more sense to print the message first, then damage an object.
-    msg_print("You are splashed with acid!");
+    printMessage("You are splashed with acid!");
 
     acid_dam(dam, "an acid trap");
 }
 
 static void trapPoisonGas(int dam) {
     // Makes more sense to print the message first, then damage an object.
-    msg_print("A pungent green gas surrounds you!");
+    printMessage("A pungent green gas surrounds you!");
 
     poison_gas(dam, "a poison gas trap");
 }
 
 static void trapBlindGas() {
-    msg_print("A black gas surrounds you!");
+    printMessage("A black gas surrounds you!");
 
     py.flags.blind += randint(50) + 50;
 }
 
 static void trapConfuseGas() {
-    msg_print("A gas of scintillating colors surrounds you!");
+    printMessage("A gas of scintillating colors surrounds you!");
 
     py.flags.confused += randint(15) + 15;
 }
@@ -188,15 +188,15 @@ static void trapSlowDart(Inventory_t *t_ptr, int dam) {
         itemDescription(description, t_ptr, true);
         take_hit(dam, description);
 
-        msg_print("A small dart hits you!");
+        printMessage("A small dart hits you!");
 
         if (py.flags.free_act) {
-            msg_print("You are unaffected.");
+            printMessage("You are unaffected.");
         } else {
             py.flags.slow += randint(20) + 10;
         }
     } else {
-        msg_print("A small dart barely misses you.");
+        printMessage("A small dart barely misses you.");
     }
 }
 
@@ -209,12 +209,12 @@ static void trapConstitutionDart(Inventory_t *t_ptr, int dam) {
             itemDescription(description, t_ptr, true);
             take_hit(dam, description);
 
-            msg_print("A small dart saps your health!");
+            printMessage("A small dart saps your health!");
         } else {
-            msg_print("A small dart hits you.");
+            printMessage("A small dart hits you.");
         }
     } else {
-        msg_print("A small dart barely misses you.");
+        printMessage("A small dart barely misses you.");
     }
 }
 
@@ -334,7 +334,7 @@ static void hit_trap(int y, int x) {
             break;
 
         default:
-            msg_print("Unknown trap value.");
+            printMessage("Unknown trap value.");
             break;
     }
 }
@@ -412,7 +412,7 @@ static void carry(int y, int x, bool pickup) {
         prt_gold();
         (void) delete_object(y, x);
 
-        msg_print(msg);
+        printMessage(msg);
 
         return;
     }
@@ -445,13 +445,13 @@ static void carry(int y, int x, bool pickup) {
 
             itemDescription(description, &inventory[locn], true);
             (void) sprintf(msg, "You have %s (%c)", description, locn + 'a');
-            msg_print(msg);
+            printMessage(msg);
             (void) delete_object(y, x);
         }
     } else {
         itemDescription(description, item, true);
         (void) sprintf(msg, "You can't carry %s", description);
-        msg_print(msg);
+        printMessage(msg);
     }
 }
 
@@ -653,8 +653,8 @@ uint32_t monster_death(int y, int x, uint32_t flags) {
 
         prt_winner();
 
-        msg_print("*** CONGRATULATIONS *** You have won the game.");
-        msg_print("You cannot save this game, but you may retire when ready.");
+        printMessage("*** CONGRATULATIONS *** You have won the game.");
+        printMessage("You cannot save this game, but you may retire when ready.");
     }
 
     uint32_t result;
@@ -815,12 +815,12 @@ static void py_attack(int y, int x) {
     for (int i = blows; i > 0; i--) {
         if (!test_hit(base_tohit, (int) py.misc.lev, tot_tohit, (int) creature->ac, CLA_BTH)) {
             (void) sprintf(msg, "You miss %s.", name);
-            msg_print(msg);
+            printMessage(msg);
             continue;
         }
 
         (void) sprintf(msg, "You hit %s.", name);
-        msg_print(msg);
+        printMessage(msg);
 
         if (item->tval != TV_NOTHING) {
             damage = pdamroll(item->damage);
@@ -840,7 +840,7 @@ static void py_attack(int y, int x) {
         if (py.flags.confuse_monster) {
             py.flags.confuse_monster = false;
 
-            msg_print("Your hands stop glowing.");
+            printMessage("Your hands stop glowing.");
 
             if ((creature->cdefense & CD_NO_SLEEP) || randint(MAX_MONS_LEVEL) < creature->level) {
                 (void) sprintf(msg, "%s is unaffected.", name);
@@ -852,7 +852,7 @@ static void py_attack(int y, int x) {
                     monster->confused = (uint8_t) (2 + randint(16));
                 }
             }
-            msg_print(msg);
+            printMessage(msg);
 
             if (monster->ml && randint(4) == 1) {
                 creature_recall[monster->mptr].r_cdefense |= creature->cdefense & CD_NO_SLEEP;
@@ -862,7 +862,7 @@ static void py_attack(int y, int x) {
         // See if we done it in.
         if (mon_take_hit(creatureID, damage) >= 0) {
             (void) sprintf(msg, "You have slain %s.", name);
-            msg_print(msg);
+            printMessage(msg);
             prt_experience();
 
             return;
@@ -999,9 +999,9 @@ void move_char(int direction, bool do_pickup) {
 
             if (!running_counter && tile->tptr != 0) {
                 if (treasure_list[tile->tptr].tval == TV_RUBBLE) {
-                    msg_print("There is rubble blocking your way.");
+                    printMessage("There is rubble blocking your way.");
                 } else if (treasure_list[tile->tptr].tval == TV_CLOSED_DOOR) {
-                    msg_print("There is a closed door blocking your way.");
+                    printMessage("There is a closed door blocking your way.");
                 }
             } else {
                 end_find();
@@ -1026,10 +1026,10 @@ void move_char(int direction, bool do_pickup) {
 }
 
 static void chestLooseStrength() {
-    msg_print("A small needle has pricked you!");
+    printMessage("A small needle has pricked you!");
 
     if (py.flags.sustain_str) {
-        msg_print("You are unaffected.");
+        printMessage("You are unaffected.");
         return;
     }
 
@@ -1037,11 +1037,11 @@ static void chestLooseStrength() {
 
     take_hit(damroll(1, 4), "a poison needle");
 
-    msg_print("You feel weakened!");
+    printMessage("You feel weakened!");
 }
 
 static void chestPoison() {
-    msg_print("A small needle has pricked you!");
+    printMessage("A small needle has pricked you!");
 
     take_hit(damroll(1, 6), "a poison needle");
 
@@ -1049,14 +1049,14 @@ static void chestPoison() {
 }
 
 static void chestParalysed() {
-    msg_print("A puff of yellow gas surrounds you!");
+    printMessage("A puff of yellow gas surrounds you!");
 
     if (py.flags.free_act) {
-        msg_print("You are unaffected.");
+        printMessage("You are unaffected.");
         return;
     }
 
-    msg_print("You choke and pass out.");
+    printMessage("You choke and pass out.");
     py.flags.paralysis = (int16_t) (10 + randint(20));
 }
 
@@ -1069,7 +1069,7 @@ static void chestSummonMonster(int y, int x) {
 }
 
 static void chestExplode(int y, int x) {
-    msg_print("There is a sudden explosion!");
+    printMessage("There is a sudden explosion!");
 
     (void) delete_object(y, x);
 
@@ -1121,9 +1121,9 @@ static void openClosedDoor(int y, int x) {
         // It's locked.
 
         if (py.flags.confused > 0) {
-            msg_print("You are too confused to pick the lock.");
+            printMessage("You are too confused to pick the lock.");
         } else if (playerLockPickingSkill() - item->p1 > randint(100)) {
-            msg_print("You have picked the lock.");
+            printMessage("You have picked the lock.");
             py.misc.exp++;
             prt_experience();
             item->p1 = 0;
@@ -1133,7 +1133,7 @@ static void openClosedDoor(int y, int x) {
     } else if (item->p1 < 0) {
         // It's stuck
 
-        msg_print("It appears to be stuck.");
+        printMessage("It appears to be stuck.");
     }
 
     if (item->p1 == 0) {
@@ -1152,9 +1152,9 @@ static void openClosedChest(int y, int x) {
 
     if (CH_LOCKED & item->flags) {
         if (py.flags.confused > 0) {
-            msg_print("You are too confused to pick the lock.");
+            printMessage("You are too confused to pick the lock.");
         } else if (playerLockPickingSkill() - item->level > randint(100)) {
-            msg_print("You have picked the lock.");
+            printMessage("You have picked the lock.");
 
             py.misc.exp += item->level;
             prt_experience();
@@ -1227,7 +1227,7 @@ void openobject() {
 
     if (no_object) {
         player_free_turn = true;
-        msg_print("I do not see anything you can open there.");
+        printMessage("I do not see anything you can open there.");
     }
 }
 
@@ -1256,7 +1256,7 @@ void closeobject() {
                     tile->fval = BLOCKED_FLOOR;
                     lite_spot(y, x);
                 } else {
-                    msg_print("The door appears to be broken.");
+                    printMessage("The door appears to be broken.");
                 }
             } else {
                 objectBlockedByMonster(tile->cptr);
@@ -1270,7 +1270,7 @@ void closeobject() {
 
     if (no_object) {
         player_free_turn = true;
-        msg_print("I do not see anything you can close there.");
+        printMessage("I do not see anything you can close there.");
     }
 }
 
@@ -1312,7 +1312,7 @@ int twall(int y, int x, int digging_ability, int digging_chance) {
     c_ptr->fm = false;
 
     if (panel_contains(y, x) && (c_ptr->tl || c_ptr->pl) && c_ptr->tptr != 0) {
-        msg_print("You have found something!");
+        printMessage("You have found something!");
     }
 
     lite_spot(y, x);
@@ -1333,14 +1333,14 @@ void objectBlockedByMonster(int monster_id) {
     }
 
     (void) sprintf(msg, "%s is in your way!", description);
-    msg_print(msg);
+    printMessage(msg);
 }
 
 // let the player attack the creature
 void playerAttackPosition(int y, int x) {
     // Is a Coward?
     if (py.flags.afraid > 0) {
-        msg_print("You are too afraid!");
+        printMessage("You are too afraid!");
         return;
     }
 

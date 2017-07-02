@@ -59,14 +59,14 @@ static void playerUpdateLightStatus() {
 
             if (i_ptr->p1 == 0) {
                 player_carrying_light = false;
-                msg_print("Your light has gone out!");
+                printMessage("Your light has gone out!");
                 disturb(0, 1);
 
                 // unlight creatures
                 updateMonsters(false);
             } else if (i_ptr->p1 < 40 && randint(5) == 1 && py.flags.blind < 1) {
                 disturb(0, 0);
-                msg_print("Your light is growing faint.");
+                printMessage("Your light is growing faint.");
             }
         } else {
             player_carrying_light = false;
@@ -94,7 +94,7 @@ static void playerActivateHeroism() {
     py.misc.bth += 12;
     py.misc.bthb += 12;
 
-    msg_print("You feel like a HERO!");
+    printMessage("You feel like a HERO!");
     prt_mhp();
     prt_chp();
 }
@@ -112,7 +112,7 @@ static void playerDisableHeroism() {
     py.misc.bth -= 12;
     py.misc.bthb -= 12;
 
-    msg_print("The heroism wears off.");
+    printMessage("The heroism wears off.");
     prt_mhp();
 }
 
@@ -125,7 +125,7 @@ static void playerActivateSuperHeroism() {
     py.misc.bth += 24;
     py.misc.bthb += 24;
 
-    msg_print("You feel like a SUPER HERO!");
+    printMessage("You feel like a SUPER HERO!");
     prt_mhp();
     prt_chp();
 }
@@ -143,7 +143,7 @@ static void playerDisableSuperHeroism() {
     py.misc.bth -= 24;
     py.misc.bthb -= 24;
 
-    msg_print("The super heroism wears off.");
+    printMessage("The super heroism wears off.");
     prt_mhp();
 }
 
@@ -191,19 +191,19 @@ static int playerFoodConsumption() {
 
             if ((PY_WEAK & py.flags.status) == 0) {
                 py.flags.status |= PY_WEAK;
-                msg_print("You are getting weak from hunger.");
+                printMessage("You are getting weak from hunger.");
                 disturb(0, 0);
                 prt_hunger();
             }
 
             if (py.flags.food < PLAYER_FOOD_FAINT && randint(8) == 1) {
                 py.flags.paralysis += randint(5);
-                msg_print("You faint from the lack of food.");
+                printMessage("You faint from the lack of food.");
                 disturb(1, 0);
             }
         } else if ((PY_HUNGRY & py.flags.status) == 0) {
             py.flags.status |= PY_HUNGRY;
-            msg_print("You are getting hungry.");
+            printMessage("You are getting hungry.");
             disturb(0, 0);
             prt_hunger();
         }
@@ -271,7 +271,7 @@ static void playerUpdateBlindness() {
         // light creatures
         updateMonsters(false);
 
-        msg_print("The veil of darkness lifts.");
+        printMessage("The veil of darkness lifts.");
     }
 }
 
@@ -291,7 +291,7 @@ static void playerUpdateConfusion() {
         py.flags.status &= ~PY_CONFUSED;
 
         prt_confused();
-        msg_print("You feel less confused now.");
+        printMessage("You feel less confused now.");
 
         if (py.flags.rest != 0) {
             rest_off();
@@ -321,7 +321,7 @@ static void playerUpdateFearState() {
         py.flags.status &= ~PY_FEAR;
 
         prt_afraid();
-        msg_print("You feel bolder now.");
+        printMessage("You feel bolder now.");
         disturb(0, 0);
     }
 }
@@ -342,7 +342,7 @@ static void playerUpdatePoisonedState() {
         py.flags.status &= ~PY_POISONED;
 
         prt_poisoned();
-        msg_print("You feel better.");
+        printMessage("You feel better.");
         disturb(0, 0);
 
         return;
@@ -391,7 +391,7 @@ static void playerUpdateFastness() {
         py.flags.status |= PY_FAST;
         change_speed(-1);
 
-        msg_print("You feel yourself moving faster.");
+        printMessage("You feel yourself moving faster.");
         disturb(0, 0);
     }
 
@@ -401,7 +401,7 @@ static void playerUpdateFastness() {
         py.flags.status &= ~PY_FAST;
         change_speed(1);
 
-        msg_print("You feel yourself slow down.");
+        printMessage("You feel yourself slow down.");
         disturb(0, 0);
     }
 }
@@ -415,7 +415,7 @@ static void playerUpdateSlowness() {
         py.flags.status |= PY_SLOW;
         change_speed(1);
 
-        msg_print("You feel yourself moving slower.");
+        printMessage("You feel yourself moving slower.");
         disturb(0, 0);
     }
 
@@ -425,7 +425,7 @@ static void playerUpdateSlowness() {
         py.flags.status &= ~PY_SLOW;
         change_speed(-1);
 
-        msg_print("You feel yourself speed up.");
+        printMessage("You feel yourself speed up.");
         disturb(0, 0);
     }
 }
@@ -490,7 +490,7 @@ static void playerUpdateEvilProtection() {
     py.flags.protevil--;
 
     if (py.flags.protevil == 0) {
-        msg_print("You no longer feel safe from evil.");
+        printMessage("You no longer feel safe from evil.");
     }
 }
 
@@ -507,7 +507,7 @@ static void playerUpdateInvulnerability() {
         py.misc.dis_ac += 100;
 
         prt_pac();
-        msg_print("Your skin turns into steel!");
+        printMessage("Your skin turns into steel!");
     }
 
     py.flags.invuln--;
@@ -520,7 +520,7 @@ static void playerUpdateInvulnerability() {
         py.misc.dis_ac -= 100;
 
         prt_pac();
-        msg_print("Your skin returns to normal.");
+        printMessage("Your skin returns to normal.");
     }
 }
 
@@ -538,7 +538,7 @@ static void playerUpdateBlessedness() {
         py.misc.pac += 2;
         py.misc.dis_ac += 2;
 
-        msg_print("You feel righteous!");
+        printMessage("You feel righteous!");
         prt_pac();
     }
 
@@ -553,7 +553,7 @@ static void playerUpdateBlessedness() {
         py.misc.pac -= 2;
         py.misc.dis_ac -= 2;
 
-        msg_print("The prayer has expired.");
+        printMessage("The prayer has expired.");
         prt_pac();
     }
 }
@@ -567,7 +567,7 @@ static void playerUpdateHeatResistance() {
     py.flags.resist_heat--;
 
     if (py.flags.resist_heat == 0) {
-        msg_print("You no longer feel safe from flame.");
+        printMessage("You no longer feel safe from flame.");
     }
 }
 
@@ -579,7 +579,7 @@ static void playerUpdateColdResistance() {
     py.flags.resist_cold--;
 
     if (py.flags.resist_cold == 0) {
-        msg_print("You no longer feel safe from cold.");
+        printMessage("You no longer feel safe from cold.");
     }
 }
 
@@ -648,10 +648,10 @@ static void playerUpdateWordOfRecall() {
 
         if (current_dungeon_level > 0) {
             current_dungeon_level = 0;
-            msg_print("You feel yourself yanked upwards!");
+            printMessage("You feel yourself yanked upwards!");
         } else if (py.misc.max_dlv != 0) {
             current_dungeon_level = py.misc.max_dlv;
-            msg_print("You feel yourself yanked downwards!");
+            printMessage("You feel yourself yanked downwards!");
         }
     } else {
         py.flags.word_recall--;
@@ -720,7 +720,7 @@ static void playerDetectEnchantment() {
             vtype_t tmp_str;
             (void) sprintf(tmp_str, "There's something about what you are %s...", describe_use(i));
             disturb(0, 0);
-            msg_print(tmp_str);
+            printMessage(tmp_str);
             add_inscribe(i_ptr, ID_MAGIK);
         }
     }
@@ -818,7 +818,7 @@ static void executeInputCommands(char *command, int *find_count) {
                             lastInputCommand -= 'a' - 1;
                         } else {
                             lastInputCommand = ' ';
-                            msg_print("Type ^ <letter> for a control char");
+                            printMessage("Type ^ <letter> for a control char");
                         }
                     } else {
                         lastInputCommand = ' ';
@@ -837,7 +837,7 @@ static void executeInputCommands(char *command, int *find_count) {
                     if (!valid_countcommand(lastInputCommand)) {
                         player_free_turn = true;
                         lastInputCommand = ' ';
-                        msg_print("Invalid command with a count.");
+                        printMessage("Invalid command with a count.");
                     } else {
                         command_count = counter;
                         prt_state();
@@ -1344,9 +1344,9 @@ static void commandPreviousMessage() {
 static void commandFlipWizardMode() {
     if (wizard_mode) {
         wizard_mode = false;
-        msg_print("Wizard mode off.");
+        printMessage("Wizard mode off.");
     } else if (enter_wiz_mode()) {
-        msg_print("Wizard mode on.");
+        printMessage("Wizard mode on.");
     }
 
     prt_winner();
@@ -1354,16 +1354,16 @@ static void commandFlipWizardMode() {
 
 static void commandSaveAndExit() {
     if (total_winner) {
-        msg_print("You are a Total Winner,  your character must be retired.");
+        printMessage("You are a Total Winner,  your character must be retired.");
 
         if (use_roguelike_keys) {
-            msg_print("Use 'Q' to when you are ready to quit.");
+            printMessage("Use 'Q' to when you are ready to quit.");
         } else {
-            msg_print("Use <Control>-K when you are ready to quit.");
+            printMessage("Use <Control>-K when you are ready to quit.");
         }
     } else {
         (void) strcpy(character_died_from, "(saved)");
-        msg_print("Saving game...");
+        printMessage("Saving game...");
 
         if (save_char()) {
             exitGame();
@@ -1375,7 +1375,7 @@ static void commandSaveAndExit() {
 
 static void commandLocateOnMap() {
     if (py.flags.blind > 0 || no_light()) {
-        msg_print("You can't see your map.");
+        printMessage("You can't see your map.");
         return;
     }
 
@@ -1418,7 +1418,7 @@ static void commandLocateOnMap() {
             y -= ((dir_val - 1) / 3 - 1) * SCREEN_HEIGHT / 2;
 
             if (x < 0 || y < 0 || x >= dungeon_width || y >= dungeon_width) {
-                msg_print("You've gone past the end of your map.");
+                printMessage("You've gone past the end of your map.");
 
                 x -= ((dir_val - 1) % 3 - 1) * SCREEN_WIDTH / 2;
                 y += ((dir_val - 1) / 3 - 1) * SCREEN_HEIGHT / 2;
@@ -2011,22 +2011,22 @@ static bool enchanted(Inventory_t *t_ptr) {
 static void examine_book() {
     int i, k;
     if (!find_range(TV_MAGIC_BOOK, TV_PRAYER_BOOK, &i, &k)) {
-        msg_print("You are not carrying any books.");
+        printMessage("You are not carrying any books.");
         return;
     }
 
     if (py.flags.blind > 0) {
-        msg_print("You can't see to read your spell book!");
+        printMessage("You can't see to read your spell book!");
         return;
     }
 
     if (no_light()) {
-        msg_print("You have no light to read by.");
+        printMessage("You have no light to read by.");
         return;
     }
 
     if (py.flags.confused > 0) {
-        msg_print("You are too confused.");
+        printMessage("You are too confused.");
         return;
     }
 
@@ -2049,7 +2049,7 @@ static void examine_book() {
         }
 
         if (!canRead) {
-            msg_print("You do not understand the language.");
+            printMessage("You do not understand the language.");
             return;
         }
 
@@ -2079,12 +2079,12 @@ static void go_up() {
     if (tileID != 0 && treasure_list[tileID].tval == TV_UP_STAIR) {
         current_dungeon_level--;
 
-        msg_print("You enter a maze of up staircases.");
-        msg_print("You pass through a one-way door.");
+        printMessage("You enter a maze of up staircases.");
+        printMessage("You pass through a one-way door.");
 
         generate_new_level = true;
     } else {
-        msg_print("I see no up staircase here.");
+        printMessage("I see no up staircase here.");
         player_free_turn = true;
     }
 }
@@ -2096,12 +2096,12 @@ static void go_down() {
     if (tileID != 0 && treasure_list[tileID].tval == TV_DOWN_STAIR) {
         current_dungeon_level++;
 
-        msg_print("You enter a maze of down staircases.");
-        msg_print("You pass through a one-way door.");
+        printMessage("You enter a maze of down staircases.");
+        printMessage("You pass through a one-way door.");
 
         generate_new_level = true;
     } else {
-        msg_print("I see no down staircase here.");
+        printMessage("I see no down staircase here.");
         player_free_turn = true;
     }
 }
@@ -2122,7 +2122,7 @@ static void jamdoor() {
     Cave_t *c_ptr = &cave[y][x];
 
     if (c_ptr->tptr == 0) {
-        msg_print("That isn't a door!");
+        printMessage("That isn't a door!");
         return;
     }
 
@@ -2130,12 +2130,12 @@ static void jamdoor() {
 
     uint8_t itemID = t_ptr->tval;
     if (itemID != TV_CLOSED_DOOR && itemID != TV_OPEN_DOOR) {
-        msg_print("That isn't a door!");
+        printMessage("That isn't a door!");
         return;
     }
 
     if (itemID == TV_OPEN_DOOR) {
-        msg_print("The door must be closed first.");
+        printMessage("The door must be closed first.");
         return;
     }
 
@@ -2164,14 +2164,14 @@ static void jamdoor() {
                 inven_destroy(i);
             }
         } else {
-            msg_print("But you have no spikes.");
+            printMessage("But you have no spikes.");
         }
     } else {
         player_free_turn = false;
 
         char tmp_str[80];
         (void) sprintf(tmp_str, "The %s is in your way!", creatures_list[monsters[c_ptr->cptr].mptr].name);
-        msg_print(tmp_str);
+        printMessage(tmp_str);
     }
 }
 
@@ -2180,13 +2180,13 @@ static void refill_lamp() {
     player_free_turn = true;
 
     if (inventory[INVEN_LIGHT].subval != 0) {
-        msg_print("But you are not using a lamp.");
+        printMessage("But you are not using a lamp.");
         return;
     }
 
     int i, j;
     if (!find_range(TV_FLASK, TV_NEVER, &i, &j)) {
-        msg_print("You have no oil.");
+        printMessage("You have no oil.");
         return;
     }
 
@@ -2198,14 +2198,14 @@ static void refill_lamp() {
     if (i_ptr->p1 > OBJ_LAMP_MAX) {
         i_ptr->p1 = OBJ_LAMP_MAX;
 
-        msg_print("Your lamp overflows, spilling oil on the ground.");
-        msg_print("Your lamp is full.");
+        printMessage("Your lamp overflows, spilling oil on the ground.");
+        printMessage("Your lamp is full.");
     } else if (i_ptr->p1 > OBJ_LAMP_MAX / 2) {
-        msg_print("Your lamp is more than half full.");
+        printMessage("Your lamp is more than half full.");
     } else if (i_ptr->p1 == OBJ_LAMP_MAX / 2) {
-        msg_print("Your lamp is half full.");
+        printMessage("Your lamp is half full.");
     } else {
-        msg_print("Your lamp is less than half full.");
+        printMessage("Your lamp is less than half full.");
     }
 
     itemTypeRemainingCountDescription(i);

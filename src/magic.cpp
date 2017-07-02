@@ -11,22 +11,22 @@
 
 static bool canReadSpells() {
     if (py.flags.blind > 0) {
-        msg_print("You can't see to read your spell book!");
+        printMessage("You can't see to read your spell book!");
         return false;
     }
 
     if (no_light()) {
-        msg_print("You have no light to read by.");
+        printMessage("You have no light to read by.");
         return false;
     }
 
     if (py.flags.confused > 0) {
-        msg_print("You are too confused.");
+        printMessage("You are too confused.");
         return false;
     }
 
     if (classes[py.misc.pclass].spell != MAGE) {
-        msg_print("You can't cast spells!");
+        printMessage("You can't cast spells!");
         return false;
     }
 
@@ -174,7 +174,7 @@ void cast() {
 
     int i, j;
     if (!find_range(TV_MAGIC_BOOK, TV_NEVER, &i, &j)) {
-        msg_print("But you are not carrying any spell-books!");
+        printMessage("But you are not carrying any spell-books!");
         return;
     }
 
@@ -186,7 +186,7 @@ void cast() {
     int choice, chance;
     int result = cast_spell("Cast which spell?", item_val, &choice, &chance);
     if (result < 0) {
-        msg_print("You don't know any spells in that book.");
+        printMessage("You don't know any spells in that book.");
         return;
     } else if (result == 0) {
         return;
@@ -197,7 +197,7 @@ void cast() {
     Spell_t *m_ptr = &magic_spells[py.misc.pclass - 1][choice];
 
     if (randint(100) < chance) {
-        msg_print("You failed to get the spell off!");
+        printMessage("You failed to get the spell off!");
     } else {
         castSpell(choice + 1);
 
@@ -210,14 +210,14 @@ void cast() {
     }
 
     if (m_ptr->smana > py.misc.cmana) {
-        msg_print("You faint from the effort!");
+        printMessage("You faint from the effort!");
 
         py.flags.paralysis = (int16_t) randint((5 * (m_ptr->smana - py.misc.cmana)));
         py.misc.cmana = 0;
         py.misc.cmana_frac = 0;
 
         if (randint(3) == 1) {
-            msg_print("You have damaged your health!");
+            printMessage("You have damaged your health!");
             (void) dec_stat(A_CON);
         }
     } else {

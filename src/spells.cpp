@@ -14,7 +14,7 @@
 static void printMonsterActionText(std::string name, std::string action) {
     vtype_t msg;
     (void) sprintf(msg, "%s %s", name.c_str(), action.c_str());
-    msg_print(msg);
+    printMessage(msg);
 }
 
 // Following are spell procedure/functions -RAK-
@@ -190,8 +190,8 @@ bool detect_invisible() {
     }
 
     if (detected) {
-        msg_print("You sense the presence of invisible creatures!");
-        msg_print(CNIL);
+        printMessage("You sense the presence of invisible creatures!");
+        printMessage(CNIL);
 
         // must unlight every monster just lighted
         updateMonsters(false);
@@ -205,7 +205,7 @@ bool detect_invisible() {
 //     2.  If room      light entire room plus immediate area.
 bool light_area(int y, int x) {
     if (py.flags.blind < 1) {
-        msg_print("You are surrounded by a white light.");
+        printMessage("You are surrounded by a white light.");
     }
 
     // NOTE: this is not changed anywhere. A bug or correct? -MRC-
@@ -266,7 +266,7 @@ bool unlight_area(int y, int x) {
     }
 
     if (darkened && py.flags.blind < 1) {
-        msg_print("Darkness surrounds you.");
+        printMessage("Darkness surrounds you.");
     }
 
     return darkened;
@@ -326,7 +326,7 @@ bool ident_spell() {
     } else {
         (void) sprintf(out_val, "%c %s", item_val + 97, tmp_str);
     }
-    msg_print(out_val);
+    printMessage(out_val);
 
     return true;
 }
@@ -345,7 +345,7 @@ bool aggravate_monster(int distance_affect) {
     }
 
     if (aggravated) {
-        msg_print("You hear a sudden stirring in the distance!");
+        printMessage("You hear a sudden stirring in the distance!");
     }
 
     return aggravated;
@@ -444,7 +444,7 @@ bool td_destroy() {
 
                 destroyed = true;
 
-                msg_print("You have disarmed the chest.");
+                printMessage("You have disarmed the chest.");
                 spellItemIdentifyAndRemoveRandomInscription(&treasure_list[c_ptr->tptr]);
             }
         }
@@ -470,8 +470,8 @@ bool detect_monsters() {
     }
 
     if (detected) {
-        msg_print("You sense the presence of monsters!");
-        msg_print(CNIL);
+        printMessage("You sense the presence of monsters!");
+        printMessage(CNIL);
 
         // must unlight every monster just lighted
         updateMonsters(false);
@@ -548,7 +548,7 @@ void light_line(int x, int y, int direction) {
 // Light line in all directions -RAK-
 void starlite(int y, int x) {
     if (py.flags.blind < 1) {
-        msg_print("The end of the staff bursts into a blue shimmering light.");
+        printMessage("The end of the staff bursts into a blue shimmering light.");
     }
 
     for (int dir = 1; dir <= 9; dir++) {
@@ -587,7 +587,7 @@ bool disarm_all(int y, int x, int direction) {
             } else if (t_ptr->tval == TV_CHEST && t_ptr->flags != 0) {
                 disarmed = true;
 
-                msg_print("Click!");
+                printMessage("Click!");
                 t_ptr->flags &= ~(CH_TRAPPED | CH_LOCKED);
                 t_ptr->name2 = SN_UNLOCKED;
                 spellItemIdentifyAndRemoveRandomInscription(t_ptr);
@@ -641,7 +641,7 @@ static void get_flags(int typ, uint32_t *weapon_type, int *harm_type, bool (**de
             *destroy = set_null;
             break;
         default:
-            msg_print("ERROR in get_flags()\n");
+            printMessage("ERROR in get_flags()\n");
     }
 }
 
@@ -665,7 +665,7 @@ static void fireBoltTouchesMonster(Cave_t *tile, int dam, int harmType, uint32_t
 
     vtype_t msg;
     (void) sprintf(msg, "The %s strikes %s.", boltName.c_str(), name);
-    msg_print(msg);
+    printMessage(msg);
 
     if (harmType & creature->cdefense) {
         dam = dam * 2;
@@ -832,17 +832,17 @@ void fire_ball(int y, int x, int direction, int damage_hp, int spell_type_id, co
             if (thit == 1) {
                 vtype_t out_val;
                 (void) sprintf(out_val, "The %s envelops a creature!", spell_name);
-                msg_print(out_val);
+                printMessage(out_val);
             } else if (thit > 1) {
                 vtype_t out_val;
                 (void) sprintf(out_val, "The %s envelops several creatures!", spell_name);
-                msg_print(out_val);
+                printMessage(out_val);
             }
 
             if (tkill == 1) {
-                msg_print("There is a scream of agony!");
+                printMessage("There is a scream of agony!");
             } else if (tkill > 1) {
-                msg_print("There are several screams of agony!");
+                printMessage("There are several screams of agony!");
             }
 
             if (tkill >= 0) {
@@ -975,7 +975,7 @@ void breath(int x, int y, int monster_id, int damage_hp, char *spell_name, int s
 bool recharge(int charges) {
     int i, j;
     if (!find_range(TV_STAFF, TV_WAND, &i, &j)) {
-        msg_print("You have nothing to recharge.");
+        printMessage("You have nothing to recharge.");
         return false;
     }
 
@@ -1000,7 +1000,7 @@ bool recharge(int charges) {
     }
 
     if (chance == 1) {
-        msg_print("There is a bright flash of light.");
+        printMessage("There is a bright flash of light.");
         inven_destroy(item_val);
     } else {
         charges = (charges / (i_ptr->level + 2)) + 1;
@@ -1266,7 +1266,7 @@ bool wall_to_mud(int y, int x, int direction) {
 
             if (test_light(y, x)) {
                 turned = true;
-                msg_print("The wall turns into mud.");
+                printMessage("The wall turns into mud.");
             }
         } else if (c_ptr->tptr != 0 && c_ptr->fval >= MIN_CLOSED_SPACE) {
             finished = true;
@@ -1279,7 +1279,7 @@ bool wall_to_mud(int y, int x, int direction) {
 
                 obj_desc_t out_val;
                 (void) sprintf(out_val, "The %s turns into mud.", description);
-                msg_print(out_val);
+                printMessage(out_val);
             }
 
             if (treasure_list[c_ptr->tptr].tval == TV_RUBBLE) {
@@ -1287,7 +1287,7 @@ bool wall_to_mud(int y, int x, int direction) {
                 if (randint(10) == 1) {
                     place_object(y, x, false);
                     if (test_light(y, x)) {
-                        msg_print("You have found something!");
+                        printMessage("You have found something!");
                     }
                 }
                 lite_spot(y, x);
@@ -1348,12 +1348,12 @@ bool td_destroy2(int y, int x, int direction) {
                 if (delete_object(y, x)) {
                     destroyed = true;
 
-                    msg_print("There is a bright flash of light!");
+                    printMessage("There is a bright flash of light!");
                 }
             } else if (t_ptr->tval == TV_CHEST && t_ptr->flags != 0) {
                 destroyed = true;
 
-                msg_print("Click!");
+                printMessage("Click!");
                 t_ptr->flags &= ~(CH_TRAPPED | CH_LOCKED);
                 t_ptr->name2 = SN_UNLOCKED;
                 spellItemIdentifyAndRemoveRandomInscription(t_ptr);
@@ -1642,7 +1642,7 @@ bool genocide() {
                 // this message makes no sense otherwise
                 vtype_t msg;
                 (void) sprintf(msg, "The %s is unaffected.", r_ptr->name);
-                msg_print(msg);
+                printMessage(msg);
             }
         }
     }
@@ -1768,8 +1768,8 @@ bool detect_evil() {
     }
 
     if (detected) {
-        msg_print("You sense the presence of evil!");
-        msg_print(CNIL);
+        printMessage("You sense the presence of evil!");
+        printMessage(CNIL);
 
         // must unlight every monster just lighted
         updateMonsters(false);
@@ -1794,15 +1794,15 @@ bool hp_player(int adjustment) {
     adjustment = adjustment / 5;
     if (adjustment < 3) {
         if (adjustment == 0) {
-            msg_print("You feel a little better.");
+            printMessage("You feel a little better.");
         } else {
-            msg_print("You feel better.");
+            printMessage("You feel better.");
         }
     } else {
         if (adjustment < 7) {
-            msg_print("You feel much better.");
+            printMessage("You feel much better.");
         } else {
-            msg_print("You feel very good.");
+            printMessage("You feel very good.");
         }
     }
 
@@ -1932,7 +1932,7 @@ void create_food() {
         // set player_free_turn so that scroll/spell points won't be used
         player_free_turn = true;
 
-        msg_print("There is already an object under you.");
+        printMessage("There is already an object under you.");
 
         return;
     }
@@ -2021,9 +2021,9 @@ void warding_glyph() {
 void lose_str() {
     if (!py.flags.sustain_str) {
         (void) dec_stat(A_STR);
-        msg_print("You feel very sick.");
+        printMessage("You feel very sick.");
     } else {
-        msg_print("You feel sick for a moment,  it passes.");
+        printMessage("You feel sick for a moment,  it passes.");
     }
 }
 
@@ -2031,9 +2031,9 @@ void lose_str() {
 void lose_int() {
     if (!py.flags.sustain_int) {
         (void) dec_stat(A_INT);
-        msg_print("You become very dizzy.");
+        printMessage("You become very dizzy.");
     } else {
-        msg_print("You become dizzy for a moment,  it passes.");
+        printMessage("You become dizzy for a moment,  it passes.");
     }
 }
 
@@ -2041,9 +2041,9 @@ void lose_int() {
 void lose_wis() {
     if (!py.flags.sustain_wis) {
         (void) dec_stat(A_WIS);
-        msg_print("You feel very naive.");
+        printMessage("You feel very naive.");
     } else {
-        msg_print("You feel naive for a moment,  it passes.");
+        printMessage("You feel naive for a moment,  it passes.");
     }
 }
 
@@ -2051,9 +2051,9 @@ void lose_wis() {
 void lose_dex() {
     if (!py.flags.sustain_dex) {
         (void) dec_stat(A_DEX);
-        msg_print("You feel very sore.");
+        printMessage("You feel very sore.");
     } else {
-        msg_print("You feel sore for a moment,  it passes.");
+        printMessage("You feel sore for a moment,  it passes.");
     }
 }
 
@@ -2061,9 +2061,9 @@ void lose_dex() {
 void lose_con() {
     if (!py.flags.sustain_con) {
         (void) dec_stat(A_CON);
-        msg_print("You feel very sick.");
+        printMessage("You feel very sick.");
     } else {
-        msg_print("You feel sick for a moment,  it passes.");
+        printMessage("You feel sick for a moment,  it passes.");
     }
 }
 
@@ -2071,9 +2071,9 @@ void lose_con() {
 void lose_chr() {
     if (!py.flags.sustain_chr) {
         (void) dec_stat(A_CHR);
-        msg_print("Your skin starts to itch.");
+        printMessage("Your skin starts to itch.");
     } else {
-        msg_print("Your skin starts to itch, but feels better now.");
+        printMessage("Your skin starts to itch, but feels better now.");
     }
 }
 
@@ -2120,7 +2120,7 @@ bool slow_poison() {
         if (py.flags.poisoned < 1) {
             py.flags.poisoned = 1;
         }
-        msg_print("The effect of the poison has been reduced.");
+        printMessage("The effect of the poison has been reduced.");
         return true;
     }
 
@@ -2199,7 +2199,7 @@ void destroy_area(int y, int x) {
             }
         }
     }
-    msg_print("There is a searing blast of light!");
+    printMessage("There is a searing blast of light!");
     py.flags.blind += 10 + randint(10);
 }
 
@@ -2249,7 +2249,7 @@ bool remove_curse() {
 // Restores any drained experience -RAK-
 bool restore_level() {
     if (py.misc.max_exp > py.misc.exp) {
-        msg_print("You feel your life energies returning.");
+        printMessage("You feel your life energies returning.");
 
         // this while loop is not redundant, ptr_exp may reduce the exp level
         while (py.misc.exp < py.misc.max_exp) {

@@ -513,7 +513,7 @@ void prt_map() {
 // Compact monsters -RAK-
 // Return true if any monsters were deleted, false if could not delete any monsters.
 bool compact_monsters() {
-    msg_print("Compacting monsters...");
+    printMessage("Compacting monsters...");
 
     int cur_dis = 66;
 
@@ -558,7 +558,7 @@ void add_food(int amount) {
     py.flags.food += amount;
 
     if (py.flags.food > PLAYER_FOOD_MAX) {
-        msg_print("You are bloated from overeating.");
+        printMessage("You are bloated from overeating.");
 
         // Calculate how much of amount is responsible for the bloating. Give the
         // player food credit for 1/50, and slow him for that many turns also.
@@ -576,7 +576,7 @@ void add_food(int amount) {
             py.flags.food = (int16_t) (PLAYER_FOOD_MAX + penalty);
         }
     } else if (py.flags.food > PLAYER_FOOD_FULL) {
-        msg_print("You are full.");
+        printMessage("You are full.");
     }
 }
 
@@ -799,7 +799,7 @@ bool summon_undead(int *y, int *x) {
 
 // If too many objects on floor level, delete some of them-RAK-
 static void compact_objects() {
-    msg_print("Compacting objects...");
+    printMessage("Compacting objects...");
 
     int counter = 0;
     int cur_dis = 66;

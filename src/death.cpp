@@ -31,8 +31,8 @@ void showScoresScreen() {
 
     if ((highscore_fp = fopen(MORIA_TOP, "rb")) == NULL) {
         sprintf(string, "Error opening score file \"%s\"\n", MORIA_TOP);
-        msg_print(string);
-        msg_print(CNIL);
+        printMessage(string);
+        printMessage(CNIL);
         return;
     }
 
@@ -52,8 +52,8 @@ void showScoresScreen() {
                (version_min == 2 && patch_level < 2) ||
                 version_min < 2
             ) {
-        msg_print("Sorry. This score file is from a different version of umoria.");
-        msg_print(CNIL);
+        printMessage("Sorry. This score file is from a different version of umoria.");
+        printMessage(CNIL);
 
         (void) fclose(highscore_fp);
         return;
@@ -190,13 +190,13 @@ static void print_tomb() {
             putString("Type ESC to skip the inventory:", 23, 0);
             if (getKeyInput() != ESCAPE) {
                 clearScreen();
-                msg_print("You are using:");
+                printMessage("You are using:");
                 (void) show_equip(true, 0);
-                msg_print(CNIL);
-                msg_print("You are carrying:");
+                printMessage(CNIL);
+                printMessage("You are carrying:");
                 clearToBottom(1);
                 (void) show_inven(0, inventory_count - 1, true, 0, CNIL);
-                msg_print(CNIL);
+                printMessage(CNIL);
             }
         }
     }
@@ -230,7 +230,7 @@ static void highscores() {
     }
 
     if (panic_save) {
-        msg_print("Sorry, scores for games restored from panic save files are not saved.");
+        printMessage("Sorry, scores for games restored from panic save files are not saved.");
         return;
     }
 
@@ -263,8 +263,8 @@ static void highscores() {
         char string[100];
 
         (void) sprintf(string, "Error opening score file \"%s\"\n", MORIA_TOP);
-        msg_print(string);
-        msg_print(CNIL);
+        printMessage(string);
+        printMessage(CNIL);
         return;
     }
 
@@ -429,7 +429,7 @@ static void kingly() {
 // What happens upon dying -RAK-
 // Handles the gravestone and top-twenty routines -RAK-
 void exitGame() {
-    msg_print(CNIL);
+    printMessage(CNIL);
 
     // flush all input
     flushInputBuffer();

@@ -11,32 +11,32 @@
 
 static bool canPray(int *itemPosBegin, int *itemPosEnd) {
     if (py.flags.blind > 0) {
-        msg_print("You can't see to read your prayer!");
+        printMessage("You can't see to read your prayer!");
         return false;
     }
 
     if (no_light()) {
-        msg_print("You have no light to read by.");
+        printMessage("You have no light to read by.");
         return false;
     }
 
     if (py.flags.confused > 0) {
-        msg_print("You are too confused.");
+        printMessage("You are too confused.");
         return false;
     }
 
     if (classes[py.misc.pclass].spell != PRIEST) {
-        msg_print("Pray hard enough and your prayers may be answered.");
+        printMessage("Pray hard enough and your prayers may be answered.");
         return false;
     }
 
     if (inventory_count == 0) {
-        msg_print("But you are not carrying anything!");
+        printMessage("But you are not carrying anything!");
         return false;
     }
 
     if (!find_range(TV_PRAYER_BOOK, TV_NEVER, itemPosBegin, itemPosEnd)) {
-        msg_print("You are not carrying any Holy Books!");
+        printMessage("You are not carrying any Holy Books!");
         return false;
     }
 
@@ -188,14 +188,14 @@ void pray() {
     int choice, chance;
     int result = cast_spell("Recite which prayer?", item_val, &choice, &chance);
     if (result < 0) {
-        msg_print("You don't know any prayers in that book.");
+        printMessage("You don't know any prayers in that book.");
         return;
     } else if (result == 0) {
         return;
     }
 
     if (randint(100) < chance) {
-        msg_print("You lost your concentration!");
+        printMessage("You lost your concentration!");
         return;
     }
 
@@ -215,12 +215,12 @@ void pray() {
 
     if (!player_free_turn) {
         if (s_ptr->smana > py.misc.cmana) {
-            msg_print("You faint from fatigue!");
+            printMessage("You faint from fatigue!");
             py.flags.paralysis = (int16_t) randint((5 * (s_ptr->smana - py.misc.cmana)));
             py.misc.cmana = 0;
             py.misc.cmana_frac = 0;
             if (randint(3) == 1) {
-                msg_print("You have damaged your health!");
+                printMessage("You have damaged your health!");
                 (void) dec_stat(A_CON);
             }
         } else {

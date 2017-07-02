@@ -389,19 +389,19 @@ static bool testAttackHits(int attackID, uint8_t level) {
 static void monsterPrintAttackDescription(char *msg, int attackID) {
     switch (attackID) {
         case 1:
-            msg_print(strcat(msg, "hits you."));
+            printMessage(strcat(msg, "hits you."));
             break;
         case 2:
-            msg_print(strcat(msg, "bites you."));
+            printMessage(strcat(msg, "bites you."));
             break;
         case 3:
-            msg_print(strcat(msg, "claws you."));
+            printMessage(strcat(msg, "claws you."));
             break;
         case 4:
-            msg_print(strcat(msg, "stings you."));
+            printMessage(strcat(msg, "stings you."));
             break;
         case 5:
-            msg_print(strcat(msg, "touches you."));
+            printMessage(strcat(msg, "touches you."));
             break;
 #if 0
         case 6:
@@ -409,16 +409,16 @@ static void monsterPrintAttackDescription(char *msg, int attackID) {
                     break;
 #endif
         case 7:
-            msg_print(strcat(msg, "gazes at you."));
+            printMessage(strcat(msg, "gazes at you."));
             break;
         case 8:
-            msg_print(strcat(msg, "breathes on you."));
+            printMessage(strcat(msg, "breathes on you."));
             break;
         case 9:
-            msg_print(strcat(msg, "spits on you."));
+            printMessage(strcat(msg, "spits on you."));
             break;
         case 10:
-            msg_print(strcat(msg, "makes a horrible wail."));
+            printMessage(strcat(msg, "makes a horrible wail."));
             break;
 #if 0
         case 11:
@@ -426,59 +426,59 @@ static void monsterPrintAttackDescription(char *msg, int attackID) {
                     break;
 #endif
         case 12:
-            msg_print(strcat(msg, "crawls on you."));
+            printMessage(strcat(msg, "crawls on you."));
             break;
         case 13:
-            msg_print(strcat(msg, "releases a cloud of spores."));
+            printMessage(strcat(msg, "releases a cloud of spores."));
             break;
         case 14:
-            msg_print(strcat(msg, "begs you for money."));
+            printMessage(strcat(msg, "begs you for money."));
             break;
         case 15:
-            msg_print("You've been slimed!");
+            printMessage("You've been slimed!");
             break;
         case 16:
-            msg_print(strcat(msg, "crushes you."));
+            printMessage(strcat(msg, "crushes you."));
             break;
         case 17:
-            msg_print(strcat(msg, "tramples you."));
+            printMessage(strcat(msg, "tramples you."));
             break;
         case 18:
-            msg_print(strcat(msg, "drools on you."));
+            printMessage(strcat(msg, "drools on you."));
             break;
         case 19:
             switch (randint(9)) {
                 case 1:
-                    msg_print(strcat(msg, "insults you!"));
+                    printMessage(strcat(msg, "insults you!"));
                     break;
                 case 2:
-                    msg_print(strcat(msg, "insults your mother!"));
+                    printMessage(strcat(msg, "insults your mother!"));
                     break;
                 case 3:
-                    msg_print(strcat(msg, "gives you the finger!"));
+                    printMessage(strcat(msg, "gives you the finger!"));
                     break;
                 case 4:
-                    msg_print(strcat(msg, "humiliates you!"));
+                    printMessage(strcat(msg, "humiliates you!"));
                     break;
                 case 5:
-                    msg_print(strcat(msg, "wets on your leg!"));
+                    printMessage(strcat(msg, "wets on your leg!"));
                     break;
                 case 6:
-                    msg_print(strcat(msg, "defiles you!"));
+                    printMessage(strcat(msg, "defiles you!"));
                     break;
                 case 7:
-                    msg_print(strcat(msg, "dances around you!"));
+                    printMessage(strcat(msg, "dances around you!"));
                     break;
                 case 8:
-                    msg_print(strcat(msg, "makes obscene gestures!"));
+                    printMessage(strcat(msg, "makes obscene gestures!"));
                     break;
                 case 9:
-                    msg_print(strcat(msg, "moons you!!!"));
+                    printMessage(strcat(msg, "moons you!!!"));
                     break;
             }
             break;
         case 99:
-            msg_print(strcat(msg, "is repelled."));
+            printMessage(strcat(msg, "is repelled."));
             break;
         default:
             break;
@@ -561,9 +561,9 @@ static bool executeAttack(Creature_t *r_ptr, Monster_t *m_ptr, int monsterID, in
         case 2: // Lose Strength
             take_hit(damage, deathDescription);
             if (py.flags.sustain_str) {
-                msg_print("You feel weaker for a moment, but it passes.");
+                printMessage("You feel weaker for a moment, but it passes.");
             } else if (randint(2) == 1) {
-                msg_print("You feel weaker.");
+                printMessage("You feel weaker.");
                 (void) dec_stat(A_STR);
             } else {
                 notice = false;
@@ -573,7 +573,7 @@ static bool executeAttack(Creature_t *r_ptr, Monster_t *m_ptr, int monsterID, in
             take_hit(damage, deathDescription);
             if (randint(2) == 1) {
                 if (py.flags.confused < 1) {
-                    msg_print("You feel confused.");
+                    printMessage("You feel confused.");
                     py.flags.confused += randint((int) r_ptr->level);
                 } else {
                     notice = false;
@@ -586,9 +586,9 @@ static bool executeAttack(Creature_t *r_ptr, Monster_t *m_ptr, int monsterID, in
         case 4: // Fear attack
             take_hit(damage, deathDescription);
             if (player_saves()) {
-                msg_print("You resist the effects!");
+                printMessage("You resist the effects!");
             } else if (py.flags.afraid < 1) {
-                msg_print("You are suddenly afraid!");
+                printMessage("You are suddenly afraid!");
                 py.flags.afraid += 3 + randint((int) r_ptr->level);
             } else {
                 py.flags.afraid += 3;
@@ -596,23 +596,23 @@ static bool executeAttack(Creature_t *r_ptr, Monster_t *m_ptr, int monsterID, in
             }
             break;
         case 5: // Fire attack
-            msg_print("You are enveloped in flames!");
+            printMessage("You are enveloped in flames!");
             fire_dam(damage, deathDescription);
             break;
         case 6: // Acid attack
-            msg_print("You are covered in acid!");
+            printMessage("You are covered in acid!");
             acid_dam(damage, deathDescription);
             break;
         case 7: // Cold attack
-            msg_print("You are covered with frost!");
+            printMessage("You are covered with frost!");
             cold_dam(damage, deathDescription);
             break;
         case 8: // Lightning attack
-            msg_print("Lightning strikes you!");
+            printMessage("Lightning strikes you!");
             light_dam(damage, deathDescription);
             break;
         case 9: // Corrosion attack
-            msg_print("A stinging red gas swirls about you.");
+            printMessage("A stinging red gas swirls about you.");
             corrode_gas(deathDescription);
             take_hit(damage, deathDescription);
             break;
@@ -620,7 +620,7 @@ static bool executeAttack(Creature_t *r_ptr, Monster_t *m_ptr, int monsterID, in
             take_hit(damage, deathDescription);
             if (py.flags.blind < 1) {
                 py.flags.blind += 10 + randint((int) r_ptr->level);
-                msg_print("Your eyes begin to sting.");
+                printMessage("Your eyes begin to sting.");
             } else {
                 py.flags.blind += 5;
                 notice = false;
@@ -629,13 +629,13 @@ static bool executeAttack(Creature_t *r_ptr, Monster_t *m_ptr, int monsterID, in
         case 11: // Paralysis attack
             take_hit(damage, deathDescription);
             if (player_saves()) {
-                msg_print("You resist the effects!");
+                printMessage("You resist the effects!");
             } else if (py.flags.paralysis < 1) {
                 if (py.flags.free_act) {
-                    msg_print("You are unaffected.");
+                    printMessage("You are unaffected.");
                 } else {
                     py.flags.paralysis = (int16_t) (randint((int) r_ptr->level) + 3);
-                    msg_print("You are paralyzed.");
+                    printMessage("You are paralyzed.");
                 }
             } else {
                 notice = false;
@@ -643,7 +643,7 @@ static bool executeAttack(Creature_t *r_ptr, Monster_t *m_ptr, int monsterID, in
             break;
         case 12: // Steal Money
             if (py.flags.paralysis < 1 && randint(124) < py.stats.use_stat[A_DEX]) {
-                msg_print("You quickly protect your money pouch!");
+                printMessage("You quickly protect your money pouch!");
             } else {
                 gold = (py.misc.au / 10) + randint(25);
                 if (gold > py.misc.au) {
@@ -651,54 +651,54 @@ static bool executeAttack(Creature_t *r_ptr, Monster_t *m_ptr, int monsterID, in
                 } else {
                     py.misc.au -= gold;
                 }
-                msg_print("Your purse feels lighter.");
+                printMessage("Your purse feels lighter.");
                 prt_gold();
             }
             if (randint(2) == 1) {
-                msg_print("There is a puff of smoke!");
+                printMessage("There is a puff of smoke!");
                 teleport_away(monsterID, MAX_SIGHT);
             }
             break;
         case 13: // Steal Object
             if (py.flags.paralysis < 1 && randint(124) < py.stats.use_stat[A_DEX]) {
-                msg_print("You grab hold of your backpack!");
+                printMessage("You grab hold of your backpack!");
             } else {
                 inven_destroy(randint(inventory_count) - 1);
-                msg_print("Your backpack feels lighter.");
+                printMessage("Your backpack feels lighter.");
             }
             if (randint(2) == 1) {
-                msg_print("There is a puff of smoke!");
+                printMessage("There is a puff of smoke!");
                 teleport_away(monsterID, MAX_SIGHT);
             }
             break;
         case 14: // Poison
             take_hit(damage, deathDescription);
-            msg_print("You feel very sick.");
+            printMessage("You feel very sick.");
             py.flags.poisoned += randint((int) r_ptr->level) + 5;
             break;
         case 15: // Lose dexterity
             take_hit(damage, deathDescription);
             if (py.flags.sustain_dex) {
-                msg_print("You feel clumsy for a moment, but it passes.");
+                printMessage("You feel clumsy for a moment, but it passes.");
             } else {
-                msg_print("You feel more clumsy.");
+                printMessage("You feel more clumsy.");
                 (void) dec_stat(A_DEX);
             }
             break;
         case 16: // Lose constitution
             take_hit(damage, deathDescription);
             if (py.flags.sustain_con) {
-                msg_print("Your body resists the effects of the disease.");
+                printMessage("Your body resists the effects of the disease.");
             } else {
-                msg_print("Your health is damaged!");
+                printMessage("Your health is damaged!");
                 (void) dec_stat(A_CON);
             }
             break;
         case 17: // Lose intelligence
             take_hit(damage, deathDescription);
-            msg_print("You have trouble thinking clearly.");
+            printMessage("You have trouble thinking clearly.");
             if (py.flags.sustain_int) {
-                msg_print("But your mind quickly clears.");
+                printMessage("But your mind quickly clears.");
             } else {
                 (void) dec_stat(A_INT);
             }
@@ -706,14 +706,14 @@ static bool executeAttack(Creature_t *r_ptr, Monster_t *m_ptr, int monsterID, in
         case 18: // Lose wisdom
             take_hit(damage, deathDescription);
             if (py.flags.sustain_wis) {
-                msg_print("Your wisdom is sustained.");
+                printMessage("Your wisdom is sustained.");
             } else {
-                msg_print("Your wisdom is drained.");
+                printMessage("Your wisdom is drained.");
                 (void) dec_stat(A_WIS);
             }
             break;
         case 19: // Lose experience
-            msg_print("You feel your life draining away!");
+            printMessage("You feel your life draining away!");
             lose_exp(damage + (py.misc.exp / 100) * MON_DRAIN_LIFE);
             break;
         case 20: // Aggravate monster
@@ -721,7 +721,7 @@ static bool executeAttack(Creature_t *r_ptr, Monster_t *m_ptr, int monsterID, in
             break;
         case 21: // Disenchant
             if (executeDisenchantAttack()) {
-                msg_print("There is a static feeling in the air.");
+                printMessage("There is a static feeling in the air.");
                 calc_bonuses();
             } else {
                 notice = false;
@@ -730,7 +730,7 @@ static bool executeAttack(Creature_t *r_ptr, Monster_t *m_ptr, int monsterID, in
         case 22: // Eat food
             if (find_range(TV_FOOD, TV_NEVER, &i, &j)) {
                 inven_destroy(i);
-                msg_print("It got at your rations!");
+                printMessage("It got at your rations!");
             } else {
                 notice = false;
             }
@@ -743,7 +743,7 @@ static bool executeAttack(Creature_t *r_ptr, Monster_t *m_ptr, int monsterID, in
                     i_ptr->p1 = 1;
                 }
                 if (py.flags.blind < 1) {
-                    msg_print("Your light dims.");
+                    printMessage("Your light dims.");
                 } else {
                     notice = false;
                 }
@@ -759,7 +759,7 @@ static bool executeAttack(Creature_t *r_ptr, Monster_t *m_ptr, int monsterID, in
                 if (!spellItemIdentified(i_ptr)) {
                     add_inscribe(i_ptr, ID_EMPTY);
                 }
-                msg_print("Energy drains from your pack!");
+                printMessage("Energy drains from your pack!");
             } else {
                 notice = false;
             }
@@ -777,7 +777,7 @@ static bool executeAttack(Creature_t *r_ptr, Monster_t *m_ptr, int monsterID, in
 
 static void confuseCreatureOnAttack(Creature_t *r_ptr, Monster_t *m_ptr, int adesc, vtype_t cdesc, bool visible) {
     if (py.flags.confuse_monster && adesc != 99) {
-        msg_print("Your hands stop glowing.");
+        printMessage("Your hands stop glowing.");
         py.flags.confuse_monster = false;
 
         vtype_t msg;
@@ -793,7 +793,7 @@ static void confuseCreatureOnAttack(Creature_t *r_ptr, Monster_t *m_ptr, int ade
             }
         }
 
-        msg_print(msg);
+        printMessage(msg);
 
         if (visible && !character_is_dead && randint(4) == 1) {
             creature_recall[m_ptr->mptr].r_cdefense |= r_ptr->cdefense & CD_NO_SLEEP;
@@ -882,7 +882,7 @@ static void make_attack(int monsterID) {
             if ((adesc >= 1 && adesc <= 3) || adesc == 6) {
                 disturb(1, 0);
                 (void) strcpy(tmp_str, cdesc);
-                msg_print(strcat(tmp_str, "misses you."));
+                printMessage(strcat(tmp_str, "misses you."));
             }
         }
 
@@ -918,7 +918,7 @@ static void creatureOpensDoor(Cave_t *c_ptr, int16_t monsterHP, uint32_t movebit
                 // Stuck doors
 
                 if (randint((monsterHP + 1) * (50 - t_ptr->p1)) < 40 * (monsterHP - 10 + t_ptr->p1)) {
-                    msg_print("You hear a door burst open!");
+                    printMessage("You hear a door burst open!");
                     disturb(1, 0);
                     doorStuck = true;
                     *do_move = true;
@@ -952,7 +952,7 @@ static void creatureOpensDoor(Cave_t *c_ptr, int16_t monsterHP, uint32_t movebit
             t_ptr->p1 = (int16_t) (1 - randint(2));
             c_ptr->fval = CORR_FLOOR;
             lite_spot(y, x);
-            msg_print("You hear a door burst open!");
+            printMessage("You hear a door burst open!");
             disturb(1, 0);
         }
     }
@@ -961,7 +961,7 @@ static void creatureOpensDoor(Cave_t *c_ptr, int16_t monsterHP, uint32_t movebit
 static void glyphOfWardingProtection(uint16_t creatureID, uint32_t movebits, bool *do_move, bool *do_turn, int y, int x) {
     if (randint(OBJ_RUNE_PROT) < creatures_list[creatureID].level) {
         if (y == char_row && x == char_col) {
-            msg_print("The rune of protection is broken!");
+            printMessage("The rune of protection is broken!");
         }
         (void) delete_object(y, x);
         return;
@@ -1118,23 +1118,23 @@ void creatureCastsSpell(Monster_t *m_ptr, int monsterID, int spellID, uint8_t le
             break;
         case 8: // Light Wound
             if (player_saves()) {
-                msg_print("You resist the effects of the spell.");
+                printMessage("You resist the effects of the spell.");
             } else {
                 take_hit(damroll(3, 8), deathDescription);
             }
             break;
         case 9: // Serious Wound
             if (player_saves()) {
-                msg_print("You resist the effects of the spell.");
+                printMessage("You resist the effects of the spell.");
             } else {
                 take_hit(damroll(8, 8), deathDescription);
             }
             break;
         case 10: // Hold Person
             if (py.flags.free_act) {
-                msg_print("You are unaffected.");
+                printMessage("You are unaffected.");
             } else if (player_saves()) {
-                msg_print("You resist the effects of the spell.");
+                printMessage("You resist the effects of the spell.");
             } else if (py.flags.paralysis > 0) {
                 py.flags.paralysis += 2;
             } else {
@@ -1143,7 +1143,7 @@ void creatureCastsSpell(Monster_t *m_ptr, int monsterID, int spellID, uint8_t le
             break;
         case 11: // Cause Blindness
             if (player_saves()) {
-                msg_print("You resist the effects of the spell.");
+                printMessage("You resist the effects of the spell.");
             } else if (py.flags.blind > 0) {
                 py.flags.blind += 6;
             } else {
@@ -1152,7 +1152,7 @@ void creatureCastsSpell(Monster_t *m_ptr, int monsterID, int spellID, uint8_t le
             break;
         case 12: // Cause Confuse
             if (player_saves()) {
-                msg_print("You resist the effects of the spell.");
+                printMessage("You resist the effects of the spell.");
             } else if (py.flags.confused > 0) {
                 py.flags.confused += 2;
             } else {
@@ -1161,7 +1161,7 @@ void creatureCastsSpell(Monster_t *m_ptr, int monsterID, int spellID, uint8_t le
             break;
         case 13: // Cause Fear
             if (player_saves()) {
-                msg_print("You resist the effects of the spell.");
+                printMessage("You resist the effects of the spell.");
             } else if (py.flags.afraid > 0) {
                 py.flags.afraid += 2;
             } else {
@@ -1170,7 +1170,7 @@ void creatureCastsSpell(Monster_t *m_ptr, int monsterID, int spellID, uint8_t le
             break;
         case 14: // Summon Monster
             (void) strcat(cdesc, "magically summons a monster!");
-            msg_print(cdesc);
+            printMessage(cdesc);
             y = char_row;
             x = char_col;
 
@@ -1182,7 +1182,7 @@ void creatureCastsSpell(Monster_t *m_ptr, int monsterID, int spellID, uint8_t le
             break;
         case 15: // Summon Undead
             (void) strcat(cdesc, "magically summons an undead!");
-            msg_print(cdesc);
+            printMessage(cdesc);
             y = char_row;
             x = char_col;
 
@@ -1194,9 +1194,9 @@ void creatureCastsSpell(Monster_t *m_ptr, int monsterID, int spellID, uint8_t le
             break;
         case 16: // Slow Person
             if (py.flags.free_act) {
-                msg_print("You are unaffected.");
+                printMessage("You are unaffected.");
             } else if (player_saves()) {
-                msg_print("You resist the effects of the spell.");
+                printMessage("You resist the effects of the spell.");
             } else if (py.flags.slow > 0) {
                 py.flags.slow += 2;
             } else {
@@ -1209,11 +1209,11 @@ void creatureCastsSpell(Monster_t *m_ptr, int monsterID, int spellID, uint8_t le
 
                 vtype_t outval;
                 (void) sprintf(outval, "%sdraws psychic energy from you!", cdesc);
-                msg_print(outval);
+                printMessage(outval);
 
                 if (m_ptr->ml) {
                     (void) sprintf(outval, "%sappears healthier.", cdesc);
-                    msg_print(outval);
+                    printMessage(outval);
                 }
 
                 int r1 = (randint((int) level) >> 1) + 1;
@@ -1230,32 +1230,32 @@ void creatureCastsSpell(Monster_t *m_ptr, int monsterID, int spellID, uint8_t le
             break;
         case 20: // Breath Light
             (void) strcat(cdesc, "breathes lightning.");
-            msg_print(cdesc);
+            printMessage(cdesc);
             breath(char_col, char_row, monsterID, (m_ptr->hp / 4), deathDescription, GF_LIGHTNING);
             break;
         case 21: // Breath Gas
             (void) strcat(cdesc, "breathes gas.");
-            msg_print(cdesc);
+            printMessage(cdesc);
             breath(char_col, char_row, monsterID, (m_ptr->hp / 3), deathDescription, GF_POISON_GAS);
             break;
         case 22: // Breath Acid
             (void) strcat(cdesc, "breathes acid.");
-            msg_print(cdesc);
+            printMessage(cdesc);
             breath(char_col, char_row, monsterID, (m_ptr->hp / 3), deathDescription, GF_ACID);
             break;
         case 23: // Breath Frost
             (void) strcat(cdesc, "breathes frost.");
-            msg_print(cdesc);
+            printMessage(cdesc);
             breath(char_col, char_row, monsterID, (m_ptr->hp / 3), deathDescription, GF_FROST);
             break;
         case 24: // Breath Fire
             (void) strcat(cdesc, "breathes fire.");
-            msg_print(cdesc);
+            printMessage(cdesc);
             breath(char_col, char_row, monsterID, (m_ptr->hp / 3), deathDescription, GF_FIRE);
             break;
         default:
             (void) strcat(cdesc, "cast unknown spell.");
-            msg_print(cdesc);
+            printMessage(cdesc);
     }
 }
 
@@ -1312,7 +1312,7 @@ static bool mon_cast_spell(int monsterID) {
     // save some code/data space here, with a small time penalty
     if ((thrown_spell < 14 && thrown_spell > 6) || thrown_spell == 16) {
         (void) strcat(cdesc, "casts a spell.");
-        msg_print(cdesc);
+        printMessage(cdesc);
     }
 
     creatureCastsSpell(m_ptr, monsterID, thrown_spell, r_ptr->level, cdesc, deathDescription);
@@ -1464,10 +1464,10 @@ static void creatureMoveOutOfWall(Monster_t *m_ptr, int monsterID, uint32_t *rcm
         hack_monptr = -1;
 
         if (i >= 0) {
-            msg_print("You hear a scream muffled by rock!");
+            printMessage("You hear a scream muffled by rock!");
             prt_experience();
         } else {
-            msg_print("A creature digs itself out from the rock!");
+            printMessage("A creature digs itself out from the rock!");
             (void) twall((int) m_ptr->fy, (int) m_ptr->fx, 1, 0);
         }
     }
@@ -1660,7 +1660,7 @@ static void creatureAttackingUpdate(Monster_t *m_ptr, int monsterID, int moves) 
                     if (m_ptr->ml) {
                         vtype_t msg;
                         (void) sprintf(msg, "The %s ", creatures_list[m_ptr->mptr].name);
-                        msg_print(strcat(msg, "recovers and glares at you."));
+                        printMessage(strcat(msg, "recovers and glares at you."));
                     }
                 }
             }

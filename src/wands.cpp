@@ -24,7 +24,7 @@ static bool discharge_wand(Inventory_t *wand, int dir) {
         // Wand types
         switch (kind) {
             case 1:
-                msg_print("A line of blue shimmering light appears.");
+                printMessage("A line of blue shimmering light appears.");
                 light_line(char_col, char_row, dir);
                 identified = true;
                 break;
@@ -107,7 +107,7 @@ static bool discharge_wand(Inventory_t *wand, int dir) {
                 flags = (uint32_t) (1L << (randint(23) - 1));
                 break;
             default:
-                msg_print("Internal error in wands()");
+                printMessage("Internal error in wands()");
                 break;
         }
     }
@@ -120,13 +120,13 @@ void aim() {
     player_free_turn = true;
 
     if (inventory_count == 0) {
-        msg_print("But you are not carrying anything.");
+        printMessage("But you are not carrying anything.");
         return;
     }
 
     int j, k;
     if (!find_range(TV_WAND, TV_NEVER, &j, &k)) {
-        msg_print("You are not carrying any wands.");
+        printMessage("You are not carrying any wands.");
         return;
     }
 
@@ -143,7 +143,7 @@ void aim() {
     }
 
     if (py.flags.confused > 0) {
-        msg_print("You are confused.");
+        printMessage("You are confused.");
         dir = getRandomDirection();
     }
 
@@ -165,12 +165,12 @@ void aim() {
     }
 
     if (randint(chance) < USE_DEVICE) {
-        msg_print("You failed to use the wand properly.");
+        printMessage("You failed to use the wand properly.");
         return;
     }
 
     if (item->p1 < 1) {
-        msg_print("The wand has no charges left.");
+        printMessage("The wand has no charges left.");
         if (!spellItemIdentified(item)) {
             add_inscribe(item, ID_EMPTY);
         }

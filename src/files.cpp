@@ -351,7 +351,7 @@ bool outputPlayerCharacterToFile(char *filename) {
             (void) close(fd);
         }
         (void) sprintf(msg, "Can't open file %s:", filename);
-        msg_print(msg);
+        printMessage(msg);
         return false;
     }
 

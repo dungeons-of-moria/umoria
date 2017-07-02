@@ -51,7 +51,7 @@ void place_gold(int y, int x) {
     treasure_list[cur_pos].cost += (8L * (int32_t) randint((int) treasure_list[cur_pos].cost)) + randint(8);
 
     if (cave[y][x].cptr == 1) {
-        msg_print("You feel something roll beneath your feet.");
+        printMessage("You feel something roll beneath your feet.");
     }
 }
 
@@ -121,7 +121,7 @@ void place_object(int y, int x, bool must_be_small) {
     magic_treasure(cur_pos, current_dungeon_level);
 
     if (cave[y][x].cptr == 1) {
-        msg_print("You feel something roll beneath your feet."); // -CJS-
+        printMessage("You feel something roll beneath your feet."); // -CJS-
     }
 }
 
@@ -1173,7 +1173,7 @@ void inven_drop(int item_id, bool drop_all) {
         obj_desc_t prt1, prt2;
         itemDescription(prt1, &treasure_list[treasureID], true);
         (void) sprintf(prt2, "Dropped %s", prt1);
-        msg_print(prt2);
+        printMessage(prt2);
     }
 
     py.flags.status |= PY_STR_WGT;
@@ -1255,14 +1255,14 @@ void check_strength() {
 
     if (i_ptr->tval != TV_NOTHING && py.stats.use_stat[A_STR] * 15 < i_ptr->weight) {
         if (!weapon_is_heavy) {
-            msg_print("You have trouble wielding such a heavy weapon.");
+            printMessage("You have trouble wielding such a heavy weapon.");
             weapon_is_heavy = true;
             calc_bonuses();
         }
     } else if (weapon_is_heavy) {
         weapon_is_heavy = false;
         if (i_ptr->tval != TV_NOTHING) {
-            msg_print("You are strong enough to wield your weapon.");
+            printMessage("You are strong enough to wield your weapon.");
         }
         calc_bonuses();
     }
@@ -1277,9 +1277,9 @@ void check_strength() {
 
     if (pack_heaviness != limit) {
         if (pack_heaviness < limit) {
-            msg_print("Your pack is so heavy that it slows you down.");
+            printMessage("Your pack is so heavy that it slows you down.");
         } else {
-            msg_print("You move more easily under the weight of your pack.");
+            printMessage("You move more easily under the weight of your pack.");
         }
         change_speed(limit - pack_heaviness);
         pack_heaviness = limit;
@@ -1486,7 +1486,7 @@ int get_spell(int *spell, int number_of_choices, int *spell_id, int *spell_chanc
         if (*spell_id == -2) {
             vtype_t tmp_str;
             (void) sprintf(tmp_str, "You don't know that %s.", (offset == SPELL_OFFSET ? "spell" : "prayer"));
-            msg_print(tmp_str);
+            printMessage(tmp_str);
         }
     }
 
@@ -1515,7 +1515,7 @@ static void eliminateKnownSpellsGreaterThanLevel(Spell_t *msp_ptr, const char *p
 
                 vtype_t msg;
                 (void) sprintf(msg, "You have forgotten the %s of %s.", p, spell_names[i + offset]);
-                msg_print(msg);
+                printMessage(msg);
             } else {
                 break;
             }
@@ -1589,7 +1589,7 @@ static int rememberForgottenSpells(Spell_t *msp_ptr, int allowedSpells, int newS
 
                 vtype_t msg;
                 (void) sprintf(msg, "You have remembered the %s of %s.", p, spell_names[orderID + offset]);
-                msg_print(msg);
+                printMessage(msg);
             } else {
                 allowedSpells++;
             }
@@ -1648,7 +1648,7 @@ static void forgetSpells(int newSpells, const char *p, int offset) {
 
             vtype_t msg;
             (void) sprintf(msg, "You have forgotten the %s of %s.", p, spell_names[orderID + offset]);
-            msg_print(msg);
+            printMessage(msg);
         }
     }
 }
@@ -1693,7 +1693,7 @@ void calc_spells(int stat) {
         if (new_spells > 0 && py.flags.new_spells == 0) {
             vtype_t msg;
             (void) sprintf(msg, "You can learn some new %ss now.", p);
-            msg_print(msg);
+            printMessage(msg);
         }
 
         py.flags.new_spells = (uint8_t) new_spells;
@@ -1703,12 +1703,12 @@ void calc_spells(int stat) {
 
 static bool playerCanRead() {
     if (py.flags.blind > 0) {
-        msg_print("You can't see to read your spell book!");
+        printMessage("You can't see to read your spell book!");
         return false;
     }
 
     if (no_light()) {
-        msg_print("You have no light to read by.");
+        printMessage("You have no light to read by.");
         return false;
     }
 
@@ -1743,7 +1743,7 @@ void gain_spells() {
     // Priests don't need light because they get spells from their god, so only
     // fail when can't see if player has MAGE spells. This check is done below.
     if (py.flags.confused > 0) {
-        msg_print("You are too confused.");
+        printMessage("You are too confused.");
         return;
     }
 
@@ -1771,7 +1771,7 @@ void gain_spells() {
     if (!new_spells) {
         vtype_t tmp_str;
         (void) sprintf(tmp_str, "You can't learn any new %ss!", (stat == A_INT ? "spell" : "prayer"));
-        msg_print(tmp_str);
+        printMessage(tmp_str);
 
         player_free_turn = true;
         return;
@@ -1805,7 +1805,7 @@ void gain_spells() {
     }
 
     if (new_spells > spellID) {
-        msg_print("You seem to be missing a book.");
+        printMessage("You seem to be missing a book.");
 
         diff_spells = new_spells - spellID;
         new_spells = spellID;
@@ -1853,7 +1853,7 @@ void gain_spells() {
 
             vtype_t tmp_str;
             (void) sprintf(tmp_str, "You have learned the prayer of %s.", spell_names[spells[s] + offset]);
-            msg_print(tmp_str);
+            printMessage(tmp_str);
 
             for (; s <= spellID - 1; s++) {
                 spells[s] = spells[s + 1];
@@ -1942,7 +1942,7 @@ static void gain_level() {
 
     vtype_t out_val;
     (void) sprintf(out_val, "Welcome to level %d.", (int) py.misc.lev);
-    msg_print(out_val);
+    printMessage(out_val);
 
     calc_hitpoints();
 
@@ -2089,7 +2089,7 @@ bool enter_wiz_mode() {
     bool answer = false;
 
     if (!noscore) {
-        msg_print("Wizard mode is for debugging and experimenting.");
+        printMessage("Wizard mode is for debugging and experimenting.");
         answer = get_check("The game will not be scored if you enter wizard mode. Are you sure?");
     }
 
@@ -2211,16 +2211,16 @@ int critical_blow(int weapon_weight, int plus_to_hit, int damage, int attack_typ
 
         if (weapon_weight < 400) {
             critical = 2 * damage + 5;
-            msg_print("It was a good hit! (x2 damage)");
+            printMessage("It was a good hit! (x2 damage)");
         } else if (weapon_weight < 700) {
             critical = 3 * damage + 10;
-            msg_print("It was an excellent hit! (x3 damage)");
+            printMessage("It was an excellent hit! (x3 damage)");
         } else if (weapon_weight < 900) {
             critical = 4 * damage + 15;
-            msg_print("It was a superb hit! (x4 damage)");
+            printMessage("It was a superb hit! (x4 damage)");
         } else {
             critical = 5 * damage + 20;
-            msg_print("It was a *GREAT* hit! (x5 damage)");
+            printMessage("It was a *GREAT* hit! (x5 damage)");
         }
     }
 

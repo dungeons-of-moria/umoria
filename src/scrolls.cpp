@@ -13,27 +13,27 @@
 
 static bool canReadScroll(int *j, int *k) {
     if (py.flags.blind > 0) {
-        msg_print("You can't see to read the scroll.");
+        printMessage("You can't see to read the scroll.");
         return false;
     }
 
     if (no_light()) {
-        msg_print("You have no light to read by.");
+        printMessage("You have no light to read by.");
         return false;
     }
 
     if (py.flags.confused > 0) {
-        msg_print("You are too confused to read a scroll.");
+        printMessage("You are too confused to read a scroll.");
         return false;
     }
 
     if (inventory_count == 0) {
-        msg_print("You are not carrying anything!");
+        printMessage("You are not carrying anything!");
         return false;
     }
 
     if (!find_range(TV_SCROLL1, TV_SCROLL2, j, k)) {
-        msg_print("You are not carrying any scrolls!");
+        printMessage("You are not carrying any scrolls!");
         return false;
     }
 
@@ -98,13 +98,13 @@ static bool readEnchantWeaponToHitScroll() {
     itemDescription(desc, i_ptr, false);
 
     (void) sprintf(msg, "Your %s glows faintly!", desc);
-    msg_print(msg);
+    printMessage(msg);
 
     if (enchant(&i_ptr->tohit, 10)) {
         i_ptr->flags &= ~TR_CURSED;
         calc_bonuses();
     } else {
-        msg_print("The enchantment fails.");
+        printMessage("The enchantment fails.");
     }
 
     return true;
@@ -121,7 +121,7 @@ static bool readEnchantWeaponToDamageScroll() {
     itemDescription(desc, i_ptr, false);
 
     (void) sprintf(msg, "Your %s glows faintly!", desc);
-    msg_print(msg);
+    printMessage(msg);
 
     int16_t scrollType;
 
@@ -137,7 +137,7 @@ static bool readEnchantWeaponToDamageScroll() {
         i_ptr->flags &= ~TR_CURSED;
         calc_bonuses();
     } else {
-        msg_print("The enchantment fails.");
+        printMessage("The enchantment fails.");
     }
 
     return true;
@@ -156,20 +156,20 @@ static bool readEnchantItemToACScroll() {
     itemDescription(desc, i_ptr, false);
 
     (void) sprintf(msg, "Your %s glows faintly!", desc);
-    msg_print(msg);
+    printMessage(msg);
 
     if (enchant(&i_ptr->toac, 10)) {
         i_ptr->flags &= ~TR_CURSED;
         calc_bonuses();
     } else {
-        msg_print("The enchantment fails.");
+        printMessage("The enchantment fails.");
     }
 
     return true;
 }
 
 static int readIdentifyScroll(int itemID, bool *used_up) {
-    msg_print("This is an identify scroll.");
+    printMessage("This is an identify scroll.");
 
     *used_up = ident_spell();
 
@@ -188,7 +188,7 @@ static int readIdentifyScroll(int itemID, bool *used_up) {
 
 static bool readRemoveCurseScroll() {
     if (remove_curse()) {
-        msg_print("You feel as if someone is watching over you.");
+        printMessage("You feel as if someone is watching over you.");
         return true;
     }
     return false;
@@ -216,7 +216,7 @@ static void readTeleportLevelScroll() {
 
 static bool readConfuseMonsterScroll() {
     if (!py.flags.confuse_monster) {
-        msg_print("Your hands begin to glow.");
+        printMessage("Your hands begin to glow.");
         py.flags.confuse_monster = true;
         return true;
     }
@@ -234,7 +234,7 @@ static bool readEnchantWeaponScroll() {
     itemDescription(desc, i_ptr, false);
 
     (void) sprintf(msg, "Your %s glows brightly!", desc);
-    msg_print(msg);
+    printMessage(msg);
 
     bool flag = false;
 
@@ -264,7 +264,7 @@ static bool readEnchantWeaponScroll() {
         i_ptr->flags &= ~TR_CURSED;
         calc_bonuses();
     } else {
-        msg_print("The enchantment fails.");
+        printMessage("The enchantment fails.");
     }
 
     return true;
@@ -281,7 +281,7 @@ static bool readCurseWeaponScroll() {
     itemDescription(desc, i_ptr, false);
 
     (void) sprintf(msg, "Your %s glows black, fades.", desc);
-    msg_print(msg);
+    printMessage(msg);
 
     itemRemoveMagicNaming(i_ptr);
 
@@ -312,7 +312,7 @@ static bool readEnchantArmorScroll() {
     itemDescription(desc, i_ptr, false);
 
     (void) sprintf(msg, "Your %s glows brightly!", desc);
-    msg_print(msg);
+    printMessage(msg);
 
     bool flag = false;
 
@@ -326,7 +326,7 @@ static bool readEnchantArmorScroll() {
         i_ptr->flags &= ~TR_CURSED;
         calc_bonuses();
     } else {
-        msg_print("The enchantment fails.");
+        printMessage("The enchantment fails.");
     }
 
     return true;
@@ -373,7 +373,7 @@ static bool readCurseArmorScroll() {
     itemDescription(desc, i_ptr, false);
 
     (void) sprintf(msg, "Your %s glows black, fades.", desc);
-    msg_print(msg);
+    printMessage(msg);
 
     itemRemoveMagicNaming(i_ptr);
 
@@ -403,7 +403,7 @@ static void readWordOfRecallScroll() {
     if (py.flags.word_recall == 0) {
         py.flags.word_recall = (int16_t) (25 + randint(30));
     }
-    msg_print("The air about you becomes charged.");
+    printMessage("The air about you becomes charged.");
 }
 
 // Scrolls for the reading -RAK-
@@ -498,7 +498,7 @@ void read_scroll() {
                 identified = detect_sdoor();
                 break;
             case 19:
-                msg_print("This is a mass genocide scroll.");
+                printMessage("This is a mass genocide scroll.");
                 (void) mass_genocide();
                 identified = true;
                 break;
@@ -506,7 +506,7 @@ void read_scroll() {
                 identified = detect_invisible();
                 break;
             case 21:
-                msg_print("There is a high pitched humming noise.");
+                printMessage("There is a high pitched humming noise.");
                 (void) aggravate_monster(20);
                 identified = true;
                 break;
@@ -520,12 +520,12 @@ void read_scroll() {
                 identified = door_creation();
                 break;
             case 25:
-                msg_print("This is a Recharge-Item scroll.");
+                printMessage("This is a Recharge-Item scroll.");
                 used_up = recharge(60);
                 identified = true;
                 break;
             case 26:
-                msg_print("This is a genocide scroll.");
+                printMessage("This is a genocide scroll.");
                 (void) genocide();
                 identified = true;
                 break;
@@ -578,7 +578,7 @@ void read_scroll() {
                 identified = true;
                 break;
             default:
-                msg_print("Internal error in scroll()");
+                printMessage("Internal error in scroll()");
                 break;
         }
     }

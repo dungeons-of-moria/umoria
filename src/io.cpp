@@ -166,7 +166,7 @@ void flushInputBuffer() {
 // Clears given line of text -RAK-
 void eraseLine(int row, int col) {
     if (row == MSG_LINE && message_ready_to_print) {
-        msg_print(CNIL);
+        printMessage(CNIL);
     }
 
     (void) move(row, col);
@@ -176,7 +176,7 @@ void eraseLine(int row, int col) {
 // Clears screen
 void clearScreen() {
     if (message_ready_to_print) {
-        msg_print(CNIL);
+        printMessage(CNIL);
     }
     (void) clear();
 }
@@ -214,7 +214,7 @@ void printMessageNoCommandInterrupt(const char *msg) {
     // Save command count value
     int i = command_count;
 
-    msg_print(msg);
+    printMessage(msg);
 
     // Restore count value
     command_count = i;
@@ -223,7 +223,7 @@ void printMessageNoCommandInterrupt(const char *msg) {
 // Outputs a line to a given y, x position -RAK-
 void putStringClearToEOL(const char *str, int row, int col) {
     if (row == MSG_LINE && message_ready_to_print) {
-        msg_print(CNIL);
+        printMessage(CNIL);
     }
 
     (void) move(row, col);
@@ -238,7 +238,7 @@ void moveCursor(int y, int x) {
 
 // Outputs message to top line of screen
 // These messages are kept for later reference.
-void msg_print(const char *msg) {
+void printMessage(const char *msg) {
     int new_len = 0;
     int old_len = 0;
     bool combine_messages = false;

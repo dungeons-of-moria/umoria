@@ -363,13 +363,13 @@ bool save_char() {
         vtype_t temp;
 
         (void) sprintf(temp, "Save file '%s' fails.", savegame_filename);
-        msg_print(temp);
+        printMessage(temp);
 
         int i = 0;
         if (access(savegame_filename, 0) < 0 || get_check("File exists. Delete old save file?") == 0 || (i = unlink(savegame_filename)) < 0) {
             if (i < 0) {
                 (void) sprintf(temp, "Can't delete '%s'", savegame_filename);
-                msg_print(temp);
+                printMessage(temp);
             }
             putStringClearToEOL("New Save file [ESC to give up]:", 0, 0);
             if (!get_string(temp, 0, 31, 45)) {
@@ -447,7 +447,7 @@ static bool _save_char(char *fnam) {
         } else {
             (void) sprintf(temp, "Can't create new file %s", fnam);
         }
-        msg_print(temp);
+        printMessage(temp);
 
         return false;
     } else {
@@ -475,7 +475,7 @@ bool get_char(bool *generate) {
     // Not required for Mac, because the file name is obtained through a dialog.
     // There is no way for a nonexistent file to be specified. -BS-
     if (access(savegame_filename, 0) != 0) {
-        msg_print("Save file does not exist.");
+        printMessage("Save file does not exist.");
         return false; // Don't bother with messages here. File absent.
     }
 
@@ -487,12 +487,12 @@ bool get_char(bool *generate) {
 
     // FIXME: check this if/else logic! -- MRC
     if (current_game_turn >= 0) {
-        msg_print("IMPOSSIBLE! Attempt to restore while still alive!");
+        printMessage("IMPOSSIBLE! Attempt to restore while still alive!");
     } else if ((fd = open(savegame_filename, O_RDONLY, 0)) < 0 && (chmod(savegame_filename, 0400) < 0 || (fd = open(savegame_filename, O_RDONLY, 0)) < 0)) {
         // Allow restoring a file belonging to someone else, if we can delete it.
         // Hence first try to read without doing a chmod.
 
-        msg_print("Can't open file for reading.");
+        printMessage("Can't open file for reading.");
     } else {
         current_game_turn = -1;
         bool ok = true;
@@ -574,8 +574,8 @@ bool get_char(bool *generate) {
         // Don't allow resurrection of total_winner characters.  It causes
         // problems because the character level is out of the allowed range.
         if (to_be_wizard && (l & 0x40000000L)) {
-            msg_print("Sorry, this character is retired from moria.");
-            msg_print("You can not resurrect a retired character.");
+            printMessage("Sorry, this character is retired from moria.");
+            printMessage("You can not resurrect a retired character.");
         } else if (to_be_wizard && (l & 0x80000000L) && get_check("Resurrect a dead character?")) {
             l &= ~0x80000000L;
         }
@@ -776,7 +776,7 @@ bool get_char(bool *generate) {
             } else {
                 // Make sure that this message is seen, since it is a bit
                 // more interesting than the other messages.
-                msg_print("Restoring Memory of a departed spirit...");
+                printMessage("Restoring Memory of a departed spirit...");
                 current_game_turn = -1;
             }
             putQIO();
@@ -922,17 +922,17 @@ bool get_char(bool *generate) {
         }
 
         if (!ok) {
-            msg_print("Error during reading of file.");
+            printMessage("Error during reading of file.");
         } else {
             // let the user overwrite the old save file when save/quit
             from_savefile = 1;
 
             if (panic_save) {
                 (void) sprintf(temp, "This game is from a panic save.  Score will not be added to scoreboard.");
-                msg_print(temp);
+                printMessage(temp);
             } else if (((!noscore) & 0x04) && duplicate_character()) {
                 (void) sprintf(temp, "This character is already on the scoreboard; it will not be scored again.");
-                msg_print(temp);
+                printMessage(temp);
                 noscore |= 0x4;
             }
 
@@ -966,7 +966,7 @@ bool get_char(bool *generate) {
             }
 
             if (noscore) {
-                msg_print("This save file cannot be used to get on the score board.");
+                printMessage("This save file cannot be used to get on the score board.");
             }
 
             if (version_maj != CURRENT_VERSION_MAJOR || version_min != CURRENT_VERSION_MINOR) {
@@ -978,7 +978,7 @@ bool get_char(bool *generate) {
                         version_min <= CURRENT_VERSION_MINOR ? "accepted" : "risky",
                         CURRENT_VERSION_MAJOR, CURRENT_VERSION_MINOR
                 );
-                msg_print(temp);
+                printMessage(temp);
             }
 
             // if false: only restored options and monster memory.

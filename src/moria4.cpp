@@ -20,9 +20,9 @@ static bool canTunnel(int treasureID, int tileID) {
         player_free_turn = true;
 
         if (treasureID == 0) {
-            msg_print("Tunnel through what?  Empty air?!?");
+            printMessage("Tunnel through what?  Empty air?!?");
         } else {
-            msg_print("You can't tunnel through that.");
+            printMessage("You can't tunnel through that.");
         }
 
         return false;
@@ -61,7 +61,7 @@ static void digGraniteWall(int y, int x, int diggingAbility) {
     int i = randint(1200) + 80;
 
     if (twall(y, x, diggingAbility, i)) {
-        msg_print("You have finished the tunnel.");
+        printMessage("You have finished the tunnel.");
     } else {
         printMessageNoCommandInterrupt("You tunnel into the granite wall.");
     }
@@ -71,7 +71,7 @@ static void digMagmaWall(int y, int x, int diggingAbility) {
     int i = randint(600) + 10;
 
     if (twall(y, x, diggingAbility, i)) {
-        msg_print("You have finished the tunnel.");
+        printMessage("You have finished the tunnel.");
     } else {
         printMessageNoCommandInterrupt("You tunnel into the magma intrusion.");
     }
@@ -81,7 +81,7 @@ static void digQuartzWall(int y, int x, int diggingAbility) {
     int i = randint(400) + 10;
 
     if (twall(y, x, diggingAbility, i)) {
-        msg_print("You have finished the tunnel.");
+        printMessage("You have finished the tunnel.");
     } else {
         printMessageNoCommandInterrupt("You tunnel into the quartz vein.");
     }
@@ -90,13 +90,13 @@ static void digQuartzWall(int y, int x, int diggingAbility) {
 static void digRubble(int y, int x, int diggingAbility) {
     if (diggingAbility > randint(180)) {
         (void) delete_object(y, x);
-        msg_print("You have removed the rubble.");
+        printMessage("You have removed the rubble.");
 
         if (randint(10) == 1) {
             place_object(y, x, false);
 
             if (test_light(y, x)) {
-                msg_print("You have found something!");
+                printMessage("You have found something!");
             }
         }
 
@@ -121,7 +121,7 @@ static bool digPosition(int y, int x, uint8_t wallType, int diggingAbility) {
             digQuartzWall(y, x, diggingAbility);
             break;
         case BOUNDARY_WALL:
-            msg_print("This seems to be permanent rock.");
+            printMessage("This seems to be permanent rock.");
             break;
         default:
             return false;
@@ -177,7 +177,7 @@ void tunnel(int direction) {
         return;
     }
 
-    msg_print("You dig with your hands, making no progress.");
+    printMessage("You dig with your hands, making no progress.");
 }
 
 static int playerTrapDisarmAbility() {
@@ -206,7 +206,7 @@ static void disarmFloorTrap(int y, int x, int tot, int level, int dir, int16_t p
     int confused = py.flags.confused;
 
     if (tot + 100 - level > randint(100)) {
-        msg_print("You have disarmed the trap.");
+        printMessage("You have disarmed the trap.");
         py.misc.exp += p1;
         (void) delete_object(y, x);
 
@@ -225,7 +225,7 @@ static void disarmFloorTrap(int y, int x, int tot, int level, int dir, int16_t p
         return;
     }
 
-    msg_print("You set the trap off!");
+    printMessage("You set the trap off!");
 
     // make sure we move onto the trap even if confused
     py.flags.confused = 0;
@@ -236,7 +236,7 @@ static void disarmFloorTrap(int y, int x, int tot, int level, int dir, int16_t p
 static void disarmChestTrap(int y, int x, int tot, Inventory_t *item) {
     if (!spellItemIdentified(item)) {
         player_free_turn = true;
-        msg_print("I don't see a trap.");
+        printMessage("I don't see a trap.");
 
         return;
     }
@@ -253,7 +253,7 @@ static void disarmChestTrap(int y, int x, int tot, Inventory_t *item) {
                 item->name2 = SN_DISARMED;
             }
 
-            msg_print("You have disarmed the chest.");
+            printMessage("You have disarmed the chest.");
 
             spellItemIdentifyAndRemoveRandomInscription(item);
             py.misc.exp += level;
@@ -262,14 +262,14 @@ static void disarmChestTrap(int y, int x, int tot, Inventory_t *item) {
         } else if ((tot > 5) && (randint(tot) > 5)) {
             printMessageNoCommandInterrupt("You failed to disarm the chest.");
         } else {
-            msg_print("You set a trap off!");
+            printMessage("You set a trap off!");
             spellItemIdentifyAndRemoveRandomInscription(item);
             chest_trap(y, x);
         }
         return;
     }
 
-    msg_print("The chest was not trapped.");
+    printMessage("The chest was not trapped.");
     player_free_turn = true;
 }
 
@@ -307,7 +307,7 @@ void disarm_trap() {
     }
 
     if (no_disarm) {
-        msg_print("I do not see anything to disarm there.");
+        printMessage("I do not see anything to disarm there.");
         player_free_turn = true;
     }
 }
@@ -391,12 +391,12 @@ static int map_diag2[] = {2, 1, 0, 4, 3};
 // option is set.
 void look() {
     if (py.flags.blind > 0) {
-        msg_print("You can't see a damn thing!");
+        printMessage("You can't see a damn thing!");
         return;
     }
 
     if (py.flags.image > 0) {
-        msg_print("You can't believe what you are seeing! It's like a dream!");
+        printMessage("You can't believe what you are seeing! It's like a dream!");
         return;
     }
 
@@ -471,20 +471,20 @@ void look() {
     } while (!abort && highlight_seams && (++gl_rock < 2));
 
     if (abort) {
-        msg_print("--Aborting look--");
+        printMessage("--Aborting look--");
         return;
     }
 
     if (gl_nseen) {
         if (dir == 5) {
-            msg_print("That's all you see.");
+            printMessage("That's all you see.");
         } else {
-            msg_print("That's all you see in that direction.");
+            printMessage("That's all you see in that direction.");
         }
     } else if (dir == 5) {
-        msg_print("You see nothing of interest.");
+        printMessage("You see nothing of interest.");
     } else {
-        msg_print("You see nothing of interest in that direction.");
+        printMessage("You see nothing of interest in that direction.");
     }
 }
 
@@ -598,7 +598,7 @@ static bool look_see(int x, int y, bool *transparent) {
     if (x < 0 || y < 0 || y > x) {
         obj_desc_t errorMessage;
         (void) sprintf(errorMessage, "Illegal call to look_see(%d, %d)", x, y);
-        msg_print(errorMessage);
+        printMessage(errorMessage);
     }
 
     const char *description;
@@ -848,7 +848,7 @@ static void drop_throw(int y, int x, Inventory_t *t_ptr) {
         itemDescription(description, t_ptr, false);
 
         (void) sprintf(msg, "The %s disappears.", description);
-        msg_print(msg);
+        printMessage(msg);
     }
 }
 
@@ -858,7 +858,7 @@ static void drop_throw(int y, int x, Inventory_t *t_ptr) {
 // with correct weapon. i.e. wield bow and throw arrow.
 void throw_object() {
     if (inventory_count == 0) {
-        msg_print("But you are not carrying anything.");
+        printMessage("But you are not carrying anything.");
         player_free_turn = true;
         return;
     }
@@ -876,7 +876,7 @@ void throw_object() {
     itemTypeRemainingCountDescription(itemID);
 
     if (py.flags.confused > 0) {
-        msg_print("You are confused.");
+        printMessage("You are confused.");
         dir = getRandomDirection();
     }
 
@@ -937,7 +937,7 @@ void throw_object() {
                         (void) sprintf(msg, "The %s hits the %s.", description, creatures_list[damage].name);
                         visible = true;
                     }
-                    msg_print(msg);
+                    printMessage(msg);
 
                     tdam = tot_dam(&throw_obj, tdam, damage);
                     tdam = critical_blow((int) throw_obj.weight, tpth, tdam, CLA_BTHB);
@@ -950,10 +950,10 @@ void throw_object() {
 
                     if (damage >= 0) {
                         if (!visible) {
-                            msg_print("You have killed something!");
+                            printMessage("You have killed something!");
                         } else {
                             (void) sprintf(msg, "You have killed the %s.", creatures_list[damage].name);
-                            msg_print(msg);
+                            printMessage(msg);
                         }
                         prt_experience();
                     }
@@ -1008,7 +1008,7 @@ static void py_bash(int y, int x) {
     if (test_hit(base_tohit, (int) py.misc.lev, (int) py.stats.use_stat[A_DEX], (int) c_ptr->ac, CLA_BTH)) {
         vtype_t msg;
         (void) sprintf(msg, "You hit %s.", name);
-        msg_print(msg);
+        printMessage(msg);
 
         int damage = pdamroll(inventory[INVEN_ARM].damage);
         damage = critical_blow(inventory[INVEN_ARM].weight / 4 + py.stats.use_stat[A_STR], 0, damage, CLA_BTH);
@@ -1022,7 +1022,7 @@ static void py_bash(int y, int x) {
         // See if we done it in.
         if (mon_take_hit(monsterID, damage) >= 0) {
             (void) sprintf(msg, "You have slain %s.", name);
-            msg_print(msg);
+            printMessage(msg);
             prt_experience();
         } else {
             name[0] = (char) toupper((int) name[0]); // Capitalize
@@ -1045,16 +1045,16 @@ static void py_bash(int y, int x) {
             } else {
                 (void) sprintf(msg, "%s ignores your bash!", name);
             }
-            msg_print(msg);
+            printMessage(msg);
         }
     } else {
         vtype_t msg;
         (void) sprintf(msg, "You miss %s.", name);
-        msg_print(msg);
+        printMessage(msg);
     }
 
     if (randint(150) > py.stats.use_stat[A_DEX]) {
-        msg_print("You are off balance.");
+        printMessage("You are off balance.");
         py.flags.paralysis = (int16_t) (1 + randint(2));
     }
 }
@@ -1062,7 +1062,7 @@ static void py_bash(int y, int x) {
 static void playerBashPosition(int y, int x) {
     // Is a Coward?
     if (py.flags.afraid > 0) {
-        msg_print("You are afraid!");
+        printMessage("You are afraid!");
         return;
     }
 
@@ -1076,7 +1076,7 @@ static void bashClosedDoor(int y, int x, int dir, Cave_t *tile, Inventory_t *ite
 
     // Use (roughly) similar method as for monsters.
     if (randint(chance * (20 + abs(item->p1))) < 10 * (chance - abs(item->p1))) {
-        msg_print("The door crashes open!");
+        printMessage("The door crashes open!");
 
         inventoryItemCopyTo(OBJ_OPEN_DOOR, &treasure_list[tile->tptr]);
 
@@ -1095,20 +1095,20 @@ static void bashClosedDoor(int y, int x, int dir, Cave_t *tile, Inventory_t *ite
     }
 
     if (randint(150) > py.stats.use_stat[A_DEX]) {
-        msg_print("You are off-balance.");
+        printMessage("You are off-balance.");
         py.flags.paralysis = (int16_t) (1 + randint(2));
         return;
     }
 
     if (command_count == 0) {
-        msg_print("The door holds firm.");
+        printMessage("The door holds firm.");
     }
 }
 
 static void bashClosedChest(Inventory_t *item) {
     if (randint(10) == 1) {
-        msg_print("You have destroyed the chest.");
-        msg_print("and its contents!");
+        printMessage("You have destroyed the chest.");
+        printMessage("and its contents!");
 
         item->index = OBJ_RUINED_CHEST;
         item->flags = 0;
@@ -1117,7 +1117,7 @@ static void bashClosedChest(Inventory_t *item) {
     }
 
     if ((item->flags & CH_LOCKED) && randint(10) == 1) {
-        msg_print("The lock breaks open!");
+        printMessage("The lock breaks open!");
 
         item->flags &= ~CH_LOCKED;
 
@@ -1153,7 +1153,7 @@ void bash() {
     }
 
     if (py.flags.confused > 0) {
-        msg_print("You are confused.");
+        printMessage("You are confused.");
         dir = getRandomDirection();
     }
 
@@ -1178,18 +1178,18 @@ void bash() {
         } else {
             // Can't give free turn, or else player could try directions
             // until he found invisible creature
-            msg_print("You bash it, but nothing interesting happens.");
+            printMessage("You bash it, but nothing interesting happens.");
         }
         return;
     }
 
     if (c_ptr->fval < MIN_CAVE_WALL) {
-        msg_print("You bash at empty space.");
+        printMessage("You bash at empty space.");
         return;
     }
 
     // same message for wall as for secret door
-    msg_print("You bash it, but nothing interesting happens.");
+    printMessage("You bash it, but nothing interesting happens.");
 }
 
 int getRandomDirection() {

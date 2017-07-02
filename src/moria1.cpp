@@ -519,7 +519,7 @@ void takeoff(int item_id, int pack_position_id) {
     } else {
         (void) sprintf(msg, "%s%s", p, description);
     }
-    msg_print(msg);
+    printMessage(msg);
 
     // For secondary weapon
     if (item_id != INVEN_AUX) {
@@ -667,7 +667,7 @@ static void setInventoryCommandScreenState(char command) {
 
 static void displayInventory() {
     if (inventory_count == 0) {
-        msg_print("You are not carrying anything.");
+        printMessage("You are not carrying anything.");
     } else {
         inven_screen(INVEN_SCR);
     }
@@ -675,7 +675,7 @@ static void displayInventory() {
 
 static void displayEquipment() {
     if (equipment_count == 0) {
-        msg_print("You are not using any equipment.");
+        printMessage("You are not using any equipment.");
     } else {
         inven_screen(EQUIP_SCR);
     }
@@ -683,13 +683,13 @@ static void displayEquipment() {
 
 static bool inventoryTakeOffItem(bool selecting) {
     if (equipment_count == 0) {
-        msg_print("You are not using any equipment.");
+        printMessage("You are not using any equipment.");
         // don't print message restarting inven command after taking off something, it is confusing
         return selecting;
     }
 
     if (inventory_count >= INVEN_WIELD && !doing_inventory_command) {
-        msg_print("You will have to drop something first.");
+        printMessage("You will have to drop something first.");
         return selecting;
     }
 
@@ -702,12 +702,12 @@ static bool inventoryTakeOffItem(bool selecting) {
 
 static bool inventoryDropItem(char *command, bool selecting) {
     if (inventory_count == 0 && equipment_count == 0) {
-        msg_print("But you're not carrying anything.");
+        printMessage("But you're not carrying anything.");
         return selecting;
     }
 
     if (cave[char_row][char_col].tptr != 0) {
-        msg_print("There's no room to drop anything here.");
+        printMessage("There's no room to drop anything here.");
         return selecting;
     }
 
@@ -733,7 +733,7 @@ static bool inventoryWearWieldItem(bool selecting) {
     wear_high--;
 
     if (wear_low > wear_high) {
-        msg_print("You have nothing to wear or wield.");
+        printMessage("You have nothing to wear or wield.");
         return selecting;
     }
 
@@ -746,7 +746,7 @@ static bool inventoryWearWieldItem(bool selecting) {
 
 static void inventoryUnwieldItem() {
     if (inventory[INVEN_WIELD].tval == TV_NOTHING && inventory[INVEN_AUX].tval == TV_NOTHING) {
-        msg_print("But you are wielding no weapons.");
+        printMessage("But you are wielding no weapons.");
         return;
     }
 
@@ -757,7 +757,7 @@ static void inventoryUnwieldItem() {
         obj_desc_t msg;
         (void) sprintf(msg, "The %s you are wielding appears to be cursed.", description);
 
-        msg_print(msg);
+        printMessage(msg);
 
         return;
     }
@@ -782,9 +782,9 @@ static void inventoryUnwieldItem() {
         obj_desc_t description;
         itemDescription(description, &inventory[INVEN_WIELD], true);
 
-        msg_print(strcat(msgLabel, description));
+        printMessage(strcat(msgLabel, description));
     } else {
-        msg_print("No primary weapon.");
+        printMessage("No primary weapon.");
     }
 
     // this is a new weapon, so clear the heavy flag
@@ -926,7 +926,7 @@ static int inventoryGetSlotToWearEquipment(int item) {
             break;
         default:
             slot = -1;
-            msg_print("IMPOSSIBLE: I don't see how you can use that.");
+            printMessage("IMPOSSIBLE: I don't see how you can use that.");
             break;
     }
 
@@ -946,7 +946,7 @@ static void inventoryItemIsCursedMessage(int itemID) {
         (void) strcat(itemText, "wearing ");
     }
 
-    msg_print(strcat(itemText, "appears to be cursed."));
+    printMessage(strcat(itemText, "appears to be cursed."));
 }
 
 static bool selectItemCommands(char *command, char *which, bool selecting) {
@@ -1050,11 +1050,11 @@ static bool selectItemCommands(char *command, char *which, bool selecting) {
                 item = -1;
             } else if (TR_CURSED & inventory[item].flags) {
                 item = -1;
-                msg_print("Hmmm, it seems to be cursed.");
+                printMessage("Hmmm, it seems to be cursed.");
             } else if (*command == 't' && !inven_check_num(&inventory[item])) {
                 if (cave[char_row][char_col].tptr != 0) {
                     item = -1;
-                    msg_print("You can't carry it.");
+                    printMessage("You can't carry it.");
                 } else if (get_check("You can't carry it.  Drop it?")) {
                     *command = 'r';
                 } else {
@@ -1102,7 +1102,7 @@ static bool selectItemCommands(char *command, char *which, bool selecting) {
                 } else if (inventory[item].subval == ITEM_GROUP_MIN && inventory[item].number > 1 && !inven_check_num(&inventory[slot])) {
                     // this can happen if try to wield a torch,
                     // and have more than one in inventory
-                    msg_print("You will have to drop something first.");
+                    printMessage("You will have to drop something first.");
                     item = -1;
                 }
             }
@@ -1175,7 +1175,7 @@ static bool selectItemCommands(char *command, char *which, bool selecting) {
 
                 obj_desc_t msg;
                 (void) sprintf(msg, "%s %s (%c)", text, description, 'a' + item);
-                msg_print(msg);
+                printMessage(msg);
 
                 // this is a new weapon, so clear heavy flag
                 if (slot == INVEN_WIELD) {
@@ -1184,7 +1184,7 @@ static bool selectItemCommands(char *command, char *which, bool selecting) {
                 check_strength();
 
                 if (i_ptr->flags & TR_CURSED) {
-                    msg_print("Oops! It feels deathly cold!");
+                    printMessage("Oops! It feels deathly cold!");
                     add_inscribe(i_ptr, ID_DAMD);
 
                     // To force a cost of 0, even if unidentified.
@@ -1358,7 +1358,7 @@ void inven_command(char command) {
             }
 
             // flush last message before clearing screen_has_changed and exiting
-            msg_print(CNIL);
+            printMessage(CNIL);
 
             // This lets us know if the world changes
             screen_has_changed = false;
@@ -1554,7 +1554,7 @@ int get_item(int *command_key_id, const char *prompt, int item_id_start, int ite
 
                         itemFound = true;
                     } else if (message) {
-                        msg_print(message);
+                        printMessage(message);
 
                         // Set commandFinished to force redraw of the question.
                         commandFinished = true;
@@ -1905,7 +1905,7 @@ void rest() {
 
     // Something went wrong
     if (rest_num != 0) {
-        msg_print("Invalid rest count.");
+        printMessage("Invalid rest count.");
     }
     eraseLine(MSG_LINE, 0);
 
@@ -1919,7 +1919,7 @@ void rest_off() {
     prt_state();
 
     // flush last message, or delete "press any key" message
-    msg_print(CNIL);
+    printMessage(CNIL);
 
     py.flags.food_digested++;
 }

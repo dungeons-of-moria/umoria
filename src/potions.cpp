@@ -23,7 +23,7 @@ static bool drinkPotion(uint32_t flags, uint8_t itemID) {
         switch (potionID) {
             case 1:
                 if (inc_stat(A_STR)) {
-                    msg_print("Wow!  What bulging muscles!");
+                    printMessage("Wow!  What bulging muscles!");
                     identified = true;
                 }
                 break;
@@ -33,13 +33,13 @@ static bool drinkPotion(uint32_t flags, uint8_t itemID) {
                 break;
             case 3:
                 if (res_stat(A_STR)) {
-                    msg_print("You feel warm all over.");
+                    printMessage("You feel warm all over.");
                     identified = true;
                 }
                 break;
             case 4:
                 if (inc_stat(A_INT)) {
-                    msg_print("Aren't you brilliant!");
+                    printMessage("Aren't you brilliant!");
                     identified = true;
                 }
                 break;
@@ -49,13 +49,13 @@ static bool drinkPotion(uint32_t flags, uint8_t itemID) {
                 break;
             case 6:
                 if (res_stat(A_INT)) {
-                    msg_print("You have have a warm feeling.");
+                    printMessage("You have have a warm feeling.");
                     identified = true;
                 }
                 break;
             case 7:
                 if (inc_stat(A_WIS)) {
-                    msg_print("You suddenly have a profound thought!");
+                    printMessage("You suddenly have a profound thought!");
                     identified = true;
                 }
                 break;
@@ -65,13 +65,13 @@ static bool drinkPotion(uint32_t flags, uint8_t itemID) {
                 break;
             case 9:
                 if (res_stat(A_WIS)) {
-                    msg_print("You feel your wisdom returning.");
+                    printMessage("You feel your wisdom returning.");
                     identified = true;
                 }
                 break;
             case 10:
                 if (inc_stat(A_CHR)) {
-                    msg_print("Gee, ain't you cute!");
+                    printMessage("Gee, ain't you cute!");
                     identified = true;
                 }
                 break;
@@ -81,7 +81,7 @@ static bool drinkPotion(uint32_t flags, uint8_t itemID) {
                 break;
             case 12:
                 if (res_stat(A_CHR)) {
-                    msg_print("You feel your looks returning.");
+                    printMessage("You feel your looks returning.");
                     identified = true;
                 }
                 break;
@@ -99,7 +99,7 @@ static bool drinkPotion(uint32_t flags, uint8_t itemID) {
                 break;
             case 17:
                 if (inc_stat(A_CON)) {
-                    msg_print("You feel tingly for a moment.");
+                    printMessage("You feel tingly for a moment.");
                     identified = true;
                 }
                 break;
@@ -111,7 +111,7 @@ static bool drinkPotion(uint32_t flags, uint8_t itemID) {
                     }
                     py.misc.exp += l;
 
-                    msg_print("You feel more experienced.");
+                    printMessage("You feel more experienced.");
                     prt_experience();
                     identified = true;
                 }
@@ -119,28 +119,28 @@ static bool drinkPotion(uint32_t flags, uint8_t itemID) {
             case 19:
                 if (!py.flags.free_act) {
                     // paralysis must == 0, otherwise could not drink potion
-                    msg_print("You fall asleep.");
+                    printMessage("You fall asleep.");
                     py.flags.paralysis += randint(4) + 4;
                     identified = true;
                 }
                 break;
             case 20:
                 if (py.flags.blind == 0) {
-                    msg_print("You are covered by a veil of darkness.");
+                    printMessage("You are covered by a veil of darkness.");
                     identified = true;
                 }
                 py.flags.blind += randint(100) + 100;
                 break;
             case 21:
                 if (py.flags.confused == 0) {
-                    msg_print("Hey!  This is good stuff!  * Hick! *");
+                    printMessage("Hey!  This is good stuff!  * Hick! *");
                     identified = true;
                 }
                 py.flags.confused += randint(20) + 12;
                 break;
             case 22:
                 if (py.flags.poisoned == 0) {
-                    msg_print("You feel very sick.");
+                    printMessage("You feel very sick.");
                     identified = true;
                 }
                 py.flags.poisoned += randint(15) + 10;
@@ -159,19 +159,19 @@ static bool drinkPotion(uint32_t flags, uint8_t itemID) {
                 break;
             case 26:
                 if (inc_stat(A_DEX)) {
-                    msg_print("You feel more limber!");
+                    printMessage("You feel more limber!");
                     identified = true;
                 }
                 break;
             case 27:
                 if (res_stat(A_DEX)) {
-                    msg_print("You feel less clumsy.");
+                    printMessage("You feel less clumsy.");
                     identified = true;
                 }
                 break;
             case 28:
                 if (res_stat(A_CON)) {
-                    msg_print("You feel your health returning!");
+                    printMessage("You feel your health returning!");
                     identified = true;
                 }
                 break;
@@ -187,7 +187,7 @@ static bool drinkPotion(uint32_t flags, uint8_t itemID) {
                 // case 33: break; // this is no longer useful, now that there is a 'G'ain magic spells command
             case 34:
                 if (py.misc.exp > 0) {
-                    msg_print("You feel your memories fade.");
+                    printMessage("You feel your memories fade.");
 
                     // Lose between 1/5 and 2/5 of your experience
                     int32_t m = py.misc.exp / 5;
@@ -209,7 +209,7 @@ static bool drinkPotion(uint32_t flags, uint8_t itemID) {
                 }
                 py.flags.paralysis = 4;
 
-                msg_print("The potion makes you vomit!");
+                printMessage("The potion makes you vomit!");
                 identified = true;
                 break;
             case 36:
@@ -263,20 +263,20 @@ static bool drinkPotion(uint32_t flags, uint8_t itemID) {
             case 46:
                 if (py.misc.cmana < py.misc.mana) {
                     py.misc.cmana = py.misc.mana;
-                    msg_print("Your feel your head clear.");
+                    printMessage("Your feel your head clear.");
                     prt_cmana();
                     identified = true;
                 }
                 break;
             case 47:
                 if (py.flags.tim_infra == 0) {
-                    msg_print("Your eyes begin to tingle.");
+                    printMessage("Your eyes begin to tingle.");
                     identified = true;
                 }
                 py.flags.tim_infra += 100 + randint(100);
                 break;
             default:
-                msg_print("Internal error in potion()");
+                printMessage("Internal error in potion()");
                 break;
         }
     }
@@ -289,13 +289,13 @@ void quaff() {
     player_free_turn = true;
 
     if (inventory_count == 0) {
-        msg_print("But you are not carrying anything.");
+        printMessage("But you are not carrying anything.");
         return;
     }
 
     int itemPosBegin, itemPosEnd;
     if (!find_range(TV_POTION1, TV_POTION2, &itemPosBegin, &itemPosEnd)) {
-        msg_print("You are not carrying any potions.");
+        printMessage("You are not carrying any potions.");
         return;
     }
 
@@ -310,7 +310,7 @@ void quaff() {
     Inventory_t *i_ptr = &inventory[itemID];
 
     if (i_ptr->flags == 0) {
-        msg_print("You feel less thirsty.");
+        printMessage("You feel less thirsty.");
         identified = true;
     } else {
         identified = drinkPotion(i_ptr->flags, i_ptr->tval);

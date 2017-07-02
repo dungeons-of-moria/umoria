@@ -248,7 +248,7 @@ void wizard_create() {
     int tmp_val;
     vtype_t tmp_str;
 
-    msg_print("Warning: This routine can cause a fatal error.");
+    printMessage("Warning: This routine can cause a fatal error.");
 
     Inventory_t forge;
     Inventory_t *i_ptr = &forge;
@@ -380,8 +380,8 @@ void wizard_create() {
         tmp_val = popt();
         treasure_list[tmp_val] = forge;
         c_ptr->tptr = (uint8_t) tmp_val;
-        msg_print("Allocated.");
+        printMessage("Allocated.");
     } else {
-        msg_print("Aborted.");
+        printMessage("Aborted.");
     }
 }

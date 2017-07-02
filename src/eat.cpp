@@ -14,13 +14,13 @@ void playerEat() {
     player_free_turn = true;
 
     if (inventory_count == 0) {
-        msg_print("But you are not carrying anything.");
+        printMessage("But you are not carrying anything.");
         return;
     }
 
     int j, k;
     if (!find_range(TV_FOOD, TV_NEVER, &j, &k)) {
-        msg_print("You are not carrying any food.");
+        printMessage("You are not carrying any food.");
         return;
     }
 
@@ -48,22 +48,22 @@ void playerEat() {
             case 2:
                 py.flags.blind += randint(250) + 10 * i_ptr->level + 100;
                 draw_cave();
-                msg_print("A veil of darkness surrounds you.");
+                printMessage("A veil of darkness surrounds you.");
                 identified = true;
                 break;
             case 3:
                 py.flags.afraid += randint(10) + i_ptr->level;
-                msg_print("You feel terrified!");
+                printMessage("You feel terrified!");
                 identified = true;
                 break;
             case 4:
                 py.flags.confused += randint(10) + i_ptr->level;
-                msg_print("You feel drugged.");
+                printMessage("You feel drugged.");
                 identified = true;
                 break;
             case 5:
                 py.flags.image += randint(200) + 25 * i_ptr->level + 200;
-                msg_print("You feel drugged.");
+                printMessage("You feel drugged.");
                 identified = true;
                 break;
             case 6:
@@ -109,37 +109,37 @@ void playerEat() {
 #endif
             case 16:
                 if (res_stat(A_STR)) {
-                    msg_print("You feel your strength returning.");
+                    printMessage("You feel your strength returning.");
                     identified = true;
                 }
                 break;
             case 17:
                 if (res_stat(A_CON)) {
-                    msg_print("You feel your health returning.");
+                    printMessage("You feel your health returning.");
                     identified = true;
                 }
                 break;
             case 18:
                 if (res_stat(A_INT)) {
-                    msg_print("Your head spins a moment.");
+                    printMessage("Your head spins a moment.");
                     identified = true;
                 }
                 break;
             case 19:
                 if (res_stat(A_WIS)) {
-                    msg_print("You feel your wisdom returning.");
+                    printMessage("You feel your wisdom returning.");
                     identified = true;
                 }
                 break;
             case 20:
                 if (res_stat(A_DEX)) {
-                    msg_print("You feel more dexterous.");
+                    printMessage("You feel more dexterous.");
                     identified = true;
                 }
                 break;
             case 21:
                 if (res_stat(A_CHR)) {
-                    msg_print("Your skin stops itching.");
+                    printMessage("Your skin stops itching.");
                     identified = true;
                 }
                 break;
@@ -179,7 +179,7 @@ void playerEat() {
                 break;
 #endif
             default:
-                msg_print("Internal error in playerEat()");
+                printMessage("Internal error in playerEat()");
                 break;
         }
     }

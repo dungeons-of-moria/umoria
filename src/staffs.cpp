@@ -11,12 +11,12 @@
 
 static bool isCarryingStaff(int *j, int *k) {
     if (inventory_count == 0) {
-        msg_print("But you are not carrying anything.");
+        printMessage("But you are not carrying anything.");
         return false;
     }
 
     if (!find_range(TV_STAFF, TV_NEVER, j, k)) {
-        msg_print("You are not carrying any staffs.");
+        printMessage("You are not carrying any staffs.");
         return false;
     }
 
@@ -40,12 +40,12 @@ static bool canUseStaff(Inventory_t *staff_ptr) {
     }
 
     if (randint(chance) < USE_DEVICE) {
-        msg_print("You failed to use the staff properly.");
+        printMessage("You failed to use the staff properly.");
         return false;
     }
 
     if (staff_ptr->p1 < 1) {
-        msg_print("The staff has no charges left.");
+        printMessage("The staff has no charges left.");
         if (!spellItemIdentified(staff_ptr)) {
             add_inscribe(staff_ptr, ID_EMPTY);
         }
@@ -138,7 +138,7 @@ static bool dischargeStaff(Inventory_t *staff_ptr) {
             case 20:
                 if (remove_curse()) {
                     if (py.flags.blind < 1) {
-                        msg_print("The staff glows blue for a moment..");
+                        printMessage("The staff glows blue for a moment..");
                     }
                     identified = true;
                 }
@@ -161,7 +161,7 @@ static bool dischargeStaff(Inventory_t *staff_ptr) {
                 // store bought flag
                 break;
             default:
-                msg_print("Internal error in staffs()");
+                printMessage("Internal error in staffs()");
                 break;
         }
     }

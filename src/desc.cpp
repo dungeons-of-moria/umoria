@@ -278,7 +278,7 @@ void itemIdentify(int *item_id) {
                 i = j;
             }
 
-            msg_print("You combine similar objects from the shop and dungeon.");
+            printMessage("You combine similar objects from the shop and dungeon.");
 
             inventory[*item_id].number += inventory[i].number;
             inventory_count--;
@@ -691,7 +691,7 @@ void itemChargesRemainingDescription(int item_id) {
 
     vtype_t out_val;
     (void) sprintf(out_val, "You have %d charges remaining.", rem_num);
-    msg_print(out_val);
+    printMessage(out_val);
 }
 
 // Describe amount of item remaining. -RAK-
@@ -708,5 +708,5 @@ void itemTypeRemainingCountDescription(int item_id) {
     // the string already has a dot at the end.
     obj_desc_t out_val;
     (void) sprintf(out_val, "You have %s", tmp_str);
-    msg_print(out_val);
+    printMessage(out_val);
 }

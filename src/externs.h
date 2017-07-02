@@ -224,7 +224,7 @@ void moveCursorRelative(int row, int col);
 void printMessageNoCommandInterrupt(const char *msg);
 void putStringClearToEOL(const char *str, int row, int col);
 void moveCursor(int y, int x);
-void msg_print(const char *msg);
+void printMessage(const char *msg);
 bool get_check(const char *prompt);
 int get_com(const char *prompt, char *command);
 bool get_string(char *in_str, int row, int col, int slen);

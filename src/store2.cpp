@@ -114,7 +114,7 @@ static const char *comment6[5] = {
 // Comments vary. -RAK-
 // Comment one : Finished haggling
 static void prt_comment1() {
-    msg_print(comment1[randint(14) - 1]);
+    printMessage(comment1[randint(14) - 1]);
 }
 
 // %A1 is offer, %A2 is asking.
@@ -129,7 +129,7 @@ static void prt_comment2(int32_t offer, int32_t asking, int final) {
 
     insert_lnum(comment, "%A1", offer, false);
     insert_lnum(comment, "%A2", asking, false);
-    msg_print(comment);
+    printMessage(comment);
 }
 
 static void prt_comment3(int32_t offer, int32_t asking, int final) {
@@ -143,22 +143,22 @@ static void prt_comment3(int32_t offer, int32_t asking, int final) {
 
     insert_lnum(comment, "%A1", offer, false);
     insert_lnum(comment, "%A2", asking, false);
-    msg_print(comment);
+    printMessage(comment);
 }
 
 // Kick 'da bum out. -RAK-
 static void prt_comment4() {
     int tmp = randint(5) - 1;
-    msg_print(comment4a[tmp]);
-    msg_print(comment4b[tmp]);
+    printMessage(comment4a[tmp]);
+    printMessage(comment4b[tmp]);
 }
 
 static void prt_comment5() {
-    msg_print(comment5[randint(10) - 1]);
+    printMessage(comment5[randint(10) - 1]);
 }
 
 static void prt_comment6() {
-    msg_print(comment6[randint(5) - 1]);
+    printMessage(comment6[randint(5) - 1]);
 }
 
 // Displays the set of commands -RAK-
@@ -329,7 +329,7 @@ static bool haggle_insults(int store_num) {
     prt_comment5();
 
     // keep insult separate from rest of haggle
-    msg_print(CNIL);
+    printMessage(CNIL);
 
     return false;
 }
@@ -385,7 +385,7 @@ static bool get_haggle(const char *comment, int32_t *new_offer, int num_offer) {
 
         // don't allow incremental haggling, if player has not made an offer yet
         if (flag && num_offer == 0 && increment) {
-            msg_print("You haven't even made your first offer yet!");
+            printMessage("You haven't even made your first offer yet!");
             offer_adjust = 0;
             increment = false;
         }
@@ -474,7 +474,7 @@ static int purchase_haggle(int store_num, int32_t *price, Inventory_t *item) {
 
     // go right to final price if player has bargained well
     if (noneedtobargain(store_num, final_ask)) {
-        msg_print("After a long bargaining session, you agree upon the price.");
+        printMessage("After a long bargaining session, you agree upon the price.");
         cur_ask = min_sell;
         comment = "Final offer";
         didnt_haggle = true;
@@ -651,7 +651,7 @@ static int sell_haggle(int store_num, int32_t *price, Inventory_t *item) {
             last_store_inc = 0;
             cur_ask = max_gold;
             final_ask = max_gold;
-            msg_print("I am sorry, but I have not the money to afford such a fine item.");
+            printMessage("I am sorry, but I have not the money to afford such a fine item.");
             didnt_haggle = true;
         } else {
             cur_ask = max_buy;
@@ -663,7 +663,7 @@ static int sell_haggle(int store_num, int32_t *price, Inventory_t *item) {
 
             // go right to final price if player has bargained well
             if (noneedtobargain(store_num, final_ask)) {
-                msg_print("After a long bargaining session, you agree upon the price.");
+                printMessage("After a long bargaining session, you agree upon the price.");
                 cur_ask = final_ask;
                 comment = "Final offer";
                 didnt_haggle = true;
@@ -806,7 +806,7 @@ static bool store_purchase(int store_num, int *cur_top) {
     Store_t *s_ptr = &stores[store_num];
 
     if (s_ptr->store_ctr < 1) {
-        msg_print("I am currently out of stock.");
+        printMessage("I am currently out of stock.");
         return false;
     }
 
@@ -876,7 +876,7 @@ static bool store_purchase(int store_num, int *cur_top) {
                 purchased = true;
             } else {
                 prt_comment1();
-                msg_print("Liar!  You have not the gold!");
+                printMessage("Liar!  You have not the gold!");
             }
         }
     } else if (choice == 2) {
@@ -912,7 +912,7 @@ static bool store_sell(int store_num, int *cur_top) {
     }
 
     if (last_item == -1) {
-        msg_print("You have nothing to sell to this store!");
+        printMessage("You have nothing to sell to this store!");
         return false;
     }
 
@@ -928,10 +928,10 @@ static bool store_sell(int store_num, int *cur_top) {
     itemDescription(tmp_str, &sold_obj, true);
 
     (void) sprintf(out_val, "Selling %s (%c)", tmp_str, item_val + 'a');
-    msg_print(out_val);
+    printMessage(out_val);
 
     if (!store_check_num(store_num, &sold_obj)) {
-        msg_print("I have not the room in my store to keep it.");
+        printMessage("I have not the room in my store to keep it.");
         return false;
     }
 
@@ -956,7 +956,7 @@ static bool store_sell(int store_num, int *cur_top) {
         inven_destroy(item_val);
         itemDescription(tmp_str, &sold_obj, true);
         (void) sprintf(out_val, "You've sold %s", tmp_str);
-        msg_print(out_val);
+        printMessage(out_val);
 
         int item_pos;
         store_carry(store_num, &item_pos, &sold_obj);
@@ -982,8 +982,8 @@ static bool store_sell(int store_num, int *cur_top) {
     } else if (choice == 2) {
         sold = true;
     } else if (choice == 3) {
-        msg_print("How dare you!");
-        msg_print("I will not buy that!");
+        printMessage("How dare you!");
+        printMessage("I will not buy that!");
         sold = increase_insults(store_num);
     }
 
@@ -999,7 +999,7 @@ void enter_store(int store_id) {
     Store_t *s_ptr = &stores[store_id];
 
     if (s_ptr->store_open >= current_game_turn) {
-        msg_print("The doors are locked.");
+        printMessage("The doors are locked.");
         return;
     }
 
@@ -1024,7 +1024,7 @@ void enter_store(int store_id) {
                             cur_top = 12;
                             display_inventory(store_id, cur_top);
                         } else {
-                            msg_print("Entire inventory is shown.");
+                            printMessage("Entire inventory is shown.");
                         }
                     } else {
                         cur_top = 0;
