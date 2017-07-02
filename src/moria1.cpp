@@ -1711,7 +1711,7 @@ void light_room(int pos_y, int pos_x) {
                         c_ptr->fm = true;
                     }
                 }
-                putChar(loc_symbol(y, x), y, x);
+                putChar(caveGetTileSymbol(y, x), y, x);
             }
         }
     }
@@ -1720,7 +1720,7 @@ void light_room(int pos_y, int pos_x) {
 // Lights up given location -RAK-
 void lite_spot(int y, int x) {
     if (coordInsidePanel(y, x)) {
-        putChar(loc_symbol(y, x), y, x);
+        putChar(caveGetTileSymbol(y, x), y, x);
     }
 }
 
@@ -1783,7 +1783,7 @@ static void sub1_move_light(int y1, int x1, int y2, int x2) {
     for (int y = top; y <= bottom; y++) {
         // Leftmost to rightmost do
         for (int x = left; x <= right; x++) {
-            putChar(loc_symbol(y, x), y, x);
+            putChar(caveGetTileSymbol(y, x), y, x);
         }
     }
 }
@@ -1795,13 +1795,13 @@ static void sub3_move_light(int y1, int x1, int y2, int x2) {
         for (int y = y1 - 1; y <= y1 + 1; y++) {
             for (int x = x1 - 1; x <= x1 + 1; x++) {
                 cave[y][x].tl = false;
-                putChar(loc_symbol(y, x), y, x);
+                putChar(caveGetTileSymbol(y, x), y, x);
             }
         }
 
         temporary_light_only = false;
     } else if (!running_counter || run_print_self) {
-        putChar(loc_symbol(y1, x1), y1, x1);
+        putChar(caveGetTileSymbol(y1, x1), y1, x1);
     }
 
     if (!running_counter || run_print_self) {

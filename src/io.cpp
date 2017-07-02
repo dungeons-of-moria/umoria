@@ -529,7 +529,7 @@ void displayDungeonMap() {
 
         for (int j = 0; j < MAX_WIDTH; j++) {
             int col = j / RATIO;
-            char tmpChar = loc_symbol(i, j);
+            char tmpChar = caveGetTileSymbol(i, j);
             if (priority[(uint8_t) map[col]] < priority[(uint8_t) tmpChar]) {
                 map[col] = tmpChar;
             }

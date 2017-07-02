@@ -213,7 +213,7 @@ static bool see_wall(int dir, int y, int x) {
         return true;
     }
 
-    char c = loc_symbol(y, x);
+    char c = caveGetTileSymbol(y, x);
 
     return c == '#' || c == '%';
 }
@@ -221,7 +221,7 @@ static bool see_wall(int dir, int y, int x) {
 // Do we see anything? Used in running. -CJS-
 static bool see_nothing(int dir, int y, int x) {
     // check to see if movement there possible
-    return mmove(dir, &y, &x) && loc_symbol(y, x) == ' ';
+    return mmove(dir, &y, &x) && caveGetTileSymbol(y, x) == ' ';
 }
 
 static void findRunningBreak(int dir, int row, int col) {
@@ -301,7 +301,7 @@ void find_init(int direction) {
     // of find mode, when the initial position of the character must be erased.
     // Hence we must do the erasure here.
     if (!temporary_light_only && !run_print_self) {
-        putChar(loc_symbol(char_row, char_col), char_row, char_col);
+        putChar(caveGetTileSymbol(char_row, char_col), char_row, char_col);
     }
 
     move_char(direction, true);

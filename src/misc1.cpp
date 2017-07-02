@@ -446,7 +446,7 @@ bool los(int from_y, int from_x, int to_y, int to_x) {
 }
 
 // Returns symbol for given row, column -RAK-
-char loc_symbol(int y, int x) {
+char caveGetTileSymbol(int y, int x) {
     Cave_t *cave_ptr = &cave[y][x];
 
     if (cave_ptr->cptr == 1 && (!running_counter || run_print_self)) {
@@ -501,7 +501,7 @@ void prt_map() {
 
         // Left to right
         for (int x = panel_col_min; x <= panel_col_max; x++) {
-            char ch = loc_symbol(y, x);
+            char ch = caveGetTileSymbol(y, x);
             if (ch != ' ') {
                 putChar(ch, y, x);
             }
