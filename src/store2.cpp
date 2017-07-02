@@ -283,7 +283,7 @@ static bool get_store_item(int *com_val, const char *pmt, int i, int j) {
     char command;
     bool flag = false;
 
-    while (get_com(out_val, &command)) {
+    while (getCommand(out_val, &command)) {
         command -= 'a';
         if (command >= i && command <= j) {
             flag = true;
@@ -1014,7 +1014,7 @@ void enter_store(int store_id) {
         message_ready_to_print = false;
 
         char command;
-        if (get_com(CNIL, &command)) {
+        if (getCommand(CNIL, &command)) {
             int saved_chr;
 
             switch (command) {

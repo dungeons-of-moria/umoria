@@ -811,7 +811,7 @@ static void executeInputCommands(char *command, int *find_count) {
                         prt_state();
                     }
 
-                    if (get_com("Control-", &lastInputCommand)) {
+                    if (getCommand("Control-", &lastInputCommand)) {
                         if (lastInputCommand >= 'A' && lastInputCommand <= 'Z') {
                             lastInputCommand -= 'A' - 1;
                         } else if (lastInputCommand >= 'a' && lastInputCommand <= 'z') {

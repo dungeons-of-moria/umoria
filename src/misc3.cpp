@@ -1428,7 +1428,7 @@ int get_spell(int *spell, int number_of_choices, int *spell_id, int *spell_chanc
 
     char choice;
 
-    while (!flag && get_com(str, &choice)) {
+    while (!flag && getCommand(str, &choice)) {
         if (isupper((int) choice)) {
             *spell_id = choice - 'A' + first_spell;
 
@@ -1819,7 +1819,7 @@ void gain_spells() {
         print_spells(spells, spellID, false, -1);
 
         char query;
-        while (new_spells && get_com("Learn which spell?", &query)) {
+        while (new_spells && getCommand("Learn which spell?", &query)) {
             int c = query - 'a';
 
             // test j < 23 in case i is greater than 22, only 22 spells

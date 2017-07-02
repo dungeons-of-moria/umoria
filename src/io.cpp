@@ -335,7 +335,7 @@ bool getInputConfirmation(const char *prompt) {
 
 // Prompts (optional) and returns ord value of input char
 // Function returns false if <ESCAPE> is input
-int get_com(const char *prompt, char *command) {
+int getCommand(const char *prompt, char *command) {
     if (prompt) {
         putStringClearToEOL(prompt, 0, 0);
     }

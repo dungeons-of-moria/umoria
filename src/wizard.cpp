@@ -231,7 +231,7 @@ void change_character() {
         return;
     }
 
-    while (get_com("Alter speed? (+/-)", tmp_str)) {
+    while (getCommand("Alter speed? (+/-)", tmp_str)) {
         if (*tmp_str == '+') {
             change_speed(-1);
         } else if (*tmp_str == '-') {

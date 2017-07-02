@@ -226,7 +226,7 @@ void putStringClearToEOL(const char *str, int row, int col);
 void moveCursor(int y, int x);
 void printMessage(const char *msg);
 bool getInputConfirmation(const char *prompt);
-int get_com(const char *prompt, char *command);
+int getCommand(const char *prompt, char *command);
 bool get_string(char *in_str, int row, int col, int slen);
 void pause_line(int line_number);
 void pause_exit(int line_number, int delay);

@@ -1621,7 +1621,7 @@ bool mass_genocide() {
 // NOTE : Winning creatures can not be killed by genocide.
 bool genocide() {
     char typ;
-    if (!get_com("Which type of creature do you wish exterminated?", &typ)) {
+    if (!getCommand("Which type of creature do you wish exterminated?", &typ)) {
         return false;
     }
 
