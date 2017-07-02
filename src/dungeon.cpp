@@ -1699,7 +1699,7 @@ static void do_command(char com_val) {
             disarm_trap();
             break;
         case 'E': // (E)at food
-            eat();
+            playerEat();
             break;
         case 'F': // (F)ill lamp
             refill_lamp();

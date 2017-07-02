@@ -10,7 +10,7 @@
 #include "externs.h"
 
 // Eat some food. -RAK-
-void eat() {
+void playerEat() {
     player_free_turn = true;
 
     if (inventory_count == 0) {
@@ -179,7 +179,7 @@ void eat() {
                 break;
 #endif
             default:
-                msg_print("Internal error in eat()");
+                msg_print("Internal error in playerEat()");
                 break;
         }
     }

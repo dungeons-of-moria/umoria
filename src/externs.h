@@ -194,7 +194,7 @@ void itemTypeRemainingCountDescription(int item_id);
 void playDungeon();
 
 // eat.c
-void eat();
+void playerEat();
 
 // files.c
 void init_scorefile();
