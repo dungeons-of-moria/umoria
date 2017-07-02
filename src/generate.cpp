@@ -1184,11 +1184,11 @@ static void town_gen() {
 
     fill_cave(DARK_FLOOR);
 
-    // make stairs before reset_seed, so that they don't move around
+    // make stairs before seedResetToOldSeed, so that they don't move around
     place_boundary();
     place_stairs(2, 1, 0);
 
-    reset_seed();
+    seedResetToOldSeed();
 
     // Set up the character coords, used by alloc_monster below
     new_spot(&char_row, &char_col);

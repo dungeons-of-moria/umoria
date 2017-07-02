@@ -253,7 +253,7 @@ void getAndCastMagicSpell();
 // misc1.c
 void seedsInitialize(uint32_t seed);
 void seedSet(uint32_t seed);
-void reset_seed();
+void seedResetToOldSeed();
 int randint(int max);
 int randnor(int mean, int standard);
 int bit_pos(uint32_t *flag);

@@ -50,7 +50,7 @@ void seedSet(uint32_t seed) {
 }
 
 // restore the normal random generator state
-void reset_seed() {
+void seedResetToOldSeed() {
     set_rnd_seed(old_seed);
 }
 

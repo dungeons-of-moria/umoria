@@ -106,7 +106,7 @@ void magicInitializeItemNames() {
         (void) strcpy(magic_item_titles[h], string);
     }
 
-    reset_seed();
+    seedResetToOldSeed();
 }
 
 int16_t objectPositionOffset(Inventory_t *item) {
