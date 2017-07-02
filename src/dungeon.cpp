@@ -983,7 +983,7 @@ void playDungeon() {
         // much more likely to succeed if called from here, than if called
         // from within updateMonsters().
         if (MAX_MALLOC - next_free_monster_id < 10) {
-            (void) compact_monsters();
+            (void) compactMonsters();
         }
 
         // Accept a command?

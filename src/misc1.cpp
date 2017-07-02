@@ -511,7 +511,7 @@ void drawDungeonPanel() {
 
 // Compact monsters -RAK-
 // Return true if any monsters were deleted, false if could not delete any monsters.
-bool compact_monsters() {
+bool compactMonsters() {
     printMessage("Compacting monsters...");
 
     int cur_dis = 66;
@@ -583,7 +583,7 @@ void add_food(int amount) {
 // Returns -1 if could not allocate a monster.
 static int popm() {
     if (next_free_monster_id == MAX_MALLOC) {
-        if (!compact_monsters()) {
+        if (!compactMonsters()) {
             return -1;
         }
     }
