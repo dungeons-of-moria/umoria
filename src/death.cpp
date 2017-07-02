@@ -167,7 +167,7 @@ static void print_tomb() {
     putString("________)/\\\\_)_/___(\\/___(//_\\)/_\\//__\\\\(/_|_)_______", 19, 0);
 
     retry:
-    flush();
+    flushInputBuffer();
 
     putString("(ESC to abort, return to print on screen, or file name)", 23, 0);
     putString("Character record?", 22, 0);
@@ -422,7 +422,7 @@ static void kingly() {
     } else {
         putString("All Hail the Mighty Queen!", 17, 22);
     }
-    flush();
+    flushInputBuffer();
     pause_line(23);
 }
 
@@ -432,7 +432,7 @@ void exitGame() {
     msg_print(CNIL);
 
     // flush all input
-    flush();
+    flushInputBuffer();
 
     // If the game has been saved, then save sets turn back to -1,
     // which inhibits the printing of the tomb.

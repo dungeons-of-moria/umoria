@@ -1289,7 +1289,7 @@ static bool moveWithoutPickup(char *command) {
 }
 
 static void commandQuit() {
-    flush();
+    flushInputBuffer();
 
     if (get_check("Do you really want to quit?")) {
         character_is_dead = true;

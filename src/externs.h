@@ -215,7 +215,7 @@ void putString(const char *out_str, int row, int col);
 void putQIO();
 void terminalRestore();
 char getKeyInput();
-void flush();
+void flushInputBuffer();
 void erase_line(int row, int col);
 void clear_screen();
 void clear_from(int row);

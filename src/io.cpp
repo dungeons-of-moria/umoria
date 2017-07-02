@@ -155,7 +155,7 @@ char getKeyInput() {
 }
 
 // Flush the buffer -RAK-
-void flush() {
+void flushInputBuffer() {
     if (eof_flag) {
         return;
     }

@@ -1838,7 +1838,7 @@ void disturb(int major_disturbance, int light_disturbance) {
         check_view();
     }
 
-    flush();
+    flushInputBuffer();
 }
 
 // Search Mode enhancement -RAK-
