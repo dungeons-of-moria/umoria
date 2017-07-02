@@ -232,8 +232,8 @@ void putStringClearToEOL(const char *str, int row, int col) {
 }
 
 // move cursor to a given y, x position
-void move_cursor(int row, int col) {
-    (void) move(row, col);
+void moveCursor(int y, int x) {
+    (void) move(y, x);
 }
 
 // Outputs message to top line of screen
@@ -384,7 +384,7 @@ bool get_string(char *in_str, int row, int col, int slen) {
                 if (col > start_col) {
                     col--;
                     putString(" ", row, col);
-                    move_cursor(row, col);
+                    moveCursor(row, col);
                     *--p = '\0';
                 }
                 break;

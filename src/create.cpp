@@ -128,7 +128,7 @@ static void choose_race() {
     int i = 0;
 
     while (true) {
-        move_cursor(20, 30);
+        moveCursor(20, 30);
         char s = getKeyInput();
         i = s - 'a';
         if (i < MAX_RACES && i >= 0) {
@@ -254,7 +254,7 @@ static void get_sex() {
 
     bool exit_flag = false;
     while (!exit_flag) {
-        move_cursor(20, 29);
+        moveCursor(20, 29);
 
         // speed not important here
         c = getKeyInput();
@@ -336,7 +336,7 @@ static void get_class() {
 
     bool exit_flag = false;
     while (!exit_flag) {
-        move_cursor(20, 31);
+        moveCursor(20, 31);
 
         char s = getKeyInput();
 
@@ -455,7 +455,7 @@ void createCharacter() {
 
     bool exit_flag = true;
     while (exit_flag) {
-        move_cursor(20, 56);
+        moveCursor(20, 56);
         char c = getKeyInput();
         if (c == ESCAPE) {
             exit_flag = false;

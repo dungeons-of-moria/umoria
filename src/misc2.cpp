@@ -1007,7 +1007,7 @@ void set_options() {
 
     int optionID = 0;
     while (true) {
-        move_cursor(optionID + 1, 40);
+        moveCursor(optionID + 1, 40);
 
         switch (getKeyInput()) {
             case ESCAPE:
