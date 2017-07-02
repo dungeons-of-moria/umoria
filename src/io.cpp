@@ -423,7 +423,7 @@ void waitForContinueKey(int line_number) {
 // Pauses for user response before returning -RAK-
 // NOTE: Delay is for players trying to roll up "perfect"
 // characters.  Make them wait a bit.
-void pause_exit(int line_number, int delay) {
+void waitAndConfirmCharacterCreation(int line_number, int delay) {
     putStringClearToEOL("[Press any key to continue, or Q to exit.]", line_number, 10);
 
     if (getKeyInput() == 'Q') {

@@ -481,5 +481,5 @@ void createCharacter() {
 
     // This delay may be reduced, but is recommended to keep players from
     // continuously rolling up characters, which can be VERY expensive CPU wise.
-    pause_exit(23, PLAYER_EXIT_PAUSE);
+    waitAndConfirmCharacterCreation(23, PLAYER_EXIT_PAUSE);
 }
