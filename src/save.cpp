@@ -372,7 +372,7 @@ bool save_char() {
                 printMessage(temp);
             }
             putStringClearToEOL("New Save file [ESC to give up]:", 0, 0);
-            if (!get_string(temp, 0, 31, 45)) {
+            if (!getStringInput(temp, 0, 31, 45)) {
                 return false;
             }
             if (temp[0]) {

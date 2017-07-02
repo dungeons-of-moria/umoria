@@ -42,7 +42,7 @@ void change_character() {
     uint8_t *a_ptr = py.stats.max_stat;
 
     putStringClearToEOL("(3 - 118) Strength     = ", 0, 0);
-    if (get_string(tmp_str, 0, 25, 3)) {
+    if (getStringInput(tmp_str, 0, 25, 3)) {
         tmp_val = atoi(tmp_str);
         if (tmp_val > 2 && tmp_val < 119) {
             a_ptr[A_STR] = (uint8_t) tmp_val;
@@ -53,7 +53,7 @@ void change_character() {
     }
 
     putStringClearToEOL("(3 - 118) Intelligence = ", 0, 0);
-    if (get_string(tmp_str, 0, 25, 3)) {
+    if (getStringInput(tmp_str, 0, 25, 3)) {
         tmp_val = atoi(tmp_str);
         if (tmp_val > 2 && tmp_val < 119) {
             a_ptr[A_INT] = (uint8_t) tmp_val;
@@ -64,7 +64,7 @@ void change_character() {
     }
 
     putStringClearToEOL("(3 - 118) Wisdom       = ", 0, 0);
-    if (get_string(tmp_str, 0, 25, 3)) {
+    if (getStringInput(tmp_str, 0, 25, 3)) {
         tmp_val = atoi(tmp_str);
         if (tmp_val > 2 && tmp_val < 119) {
             a_ptr[A_WIS] = (uint8_t) tmp_val;
@@ -75,7 +75,7 @@ void change_character() {
     }
 
     putStringClearToEOL("(3 - 118) Dexterity    = ", 0, 0);
-    if (get_string(tmp_str, 0, 25, 3)) {
+    if (getStringInput(tmp_str, 0, 25, 3)) {
         tmp_val = atoi(tmp_str);
         if (tmp_val > 2 && tmp_val < 119) {
             a_ptr[A_DEX] = (uint8_t) tmp_val;
@@ -86,7 +86,7 @@ void change_character() {
     }
 
     putStringClearToEOL("(3 - 118) Constitution = ", 0, 0);
-    if (get_string(tmp_str, 0, 25, 3)) {
+    if (getStringInput(tmp_str, 0, 25, 3)) {
         tmp_val = atoi(tmp_str);
         if (tmp_val > 2 && tmp_val < 119) {
             a_ptr[A_CON] = (uint8_t) tmp_val;
@@ -97,7 +97,7 @@ void change_character() {
     }
 
     putStringClearToEOL("(3 - 118) Charisma     = ", 0, 0);
-    if (get_string(tmp_str, 0, 25, 3)) {
+    if (getStringInput(tmp_str, 0, 25, 3)) {
         tmp_val = atoi(tmp_str);
         if (tmp_val > 2 && tmp_val < 119) {
             a_ptr[A_CHR] = (uint8_t) tmp_val;
@@ -108,7 +108,7 @@ void change_character() {
     }
 
     putStringClearToEOL("(1 - 32767) Hit points = ", 0, 0);
-    if (get_string(tmp_str, 0, 25, 5)) {
+    if (getStringInput(tmp_str, 0, 25, 5)) {
         tmp_val = atoi(tmp_str);
         if (tmp_val > 0 && tmp_val <= MAX_SHORT) {
             py.misc.mhp = (int16_t) tmp_val;
@@ -122,7 +122,7 @@ void change_character() {
     }
 
     putStringClearToEOL("(0 - 32767) Mana       = ", 0, 0);
-    if (get_string(tmp_str, 0, 25, 5)) {
+    if (getStringInput(tmp_str, 0, 25, 5)) {
         tmp_val = atoi(tmp_str);
         if (tmp_val > -1 && tmp_val <= MAX_SHORT && (*tmp_str != '\0')) {
             py.misc.mana = (int16_t) tmp_val;
@@ -137,7 +137,7 @@ void change_character() {
     (void) sprintf(tmp_str, "Current=%d  Gold = ", py.misc.au);
     tmp_val = (int) strlen(tmp_str);
     putStringClearToEOL(tmp_str, 0, 0);
-    if (get_string(tmp_str, 0, tmp_val, 7)) {
+    if (getStringInput(tmp_str, 0, tmp_val, 7)) {
         int32_t tmp_lval = (int32_t) atol(tmp_str);
         if (tmp_lval > -1 && (*tmp_str != '\0')) {
             py.misc.au = tmp_lval;
@@ -150,7 +150,7 @@ void change_character() {
     (void) sprintf(tmp_str, "Current=%d  (0-200) Searching = ", py.misc.srh);
     tmp_val = (int) strlen(tmp_str);
     putStringClearToEOL(tmp_str, 0, 0);
-    if (get_string(tmp_str, 0, tmp_val, 3)) {
+    if (getStringInput(tmp_str, 0, tmp_val, 3)) {
         tmp_val = atoi(tmp_str);
         if (tmp_val > -1 && tmp_val < 201 && (*tmp_str != '\0')) {
             py.misc.srh = (int16_t) tmp_val;
@@ -162,7 +162,7 @@ void change_character() {
     (void) sprintf(tmp_str, "Current=%d  (-1-18) Stealth = ", py.misc.stl);
     tmp_val = (int) strlen(tmp_str);
     putStringClearToEOL(tmp_str, 0, 0);
-    if (get_string(tmp_str, 0, tmp_val, 3)) {
+    if (getStringInput(tmp_str, 0, tmp_val, 3)) {
         tmp_val = atoi(tmp_str);
         if (tmp_val > -2 && tmp_val < 19 && (*tmp_str != '\0')) {
             py.misc.stl = (int16_t) tmp_val;
@@ -174,7 +174,7 @@ void change_character() {
     (void) sprintf(tmp_str, "Current=%d  (0-200) Disarming = ", py.misc.disarm);
     tmp_val = (int) strlen(tmp_str);
     putStringClearToEOL(tmp_str, 0, 0);
-    if (get_string(tmp_str, 0, tmp_val, 3)) {
+    if (getStringInput(tmp_str, 0, tmp_val, 3)) {
         tmp_val = atoi(tmp_str);
         if (tmp_val > -1 && tmp_val < 201 && (*tmp_str != '\0')) {
             py.misc.disarm = (int16_t) tmp_val;
@@ -186,7 +186,7 @@ void change_character() {
     (void) sprintf(tmp_str, "Current=%d  (0-100) Save = ", py.misc.save);
     tmp_val = (int) strlen(tmp_str);
     putStringClearToEOL(tmp_str, 0, 0);
-    if (get_string(tmp_str, 0, tmp_val, 3)) {
+    if (getStringInput(tmp_str, 0, tmp_val, 3)) {
         tmp_val = atoi(tmp_str);
         if (tmp_val > -1 && tmp_val < 201 && (*tmp_str != '\0')) {
             py.misc.save = (int16_t) tmp_val;
@@ -198,7 +198,7 @@ void change_character() {
     (void) sprintf(tmp_str, "Current=%d  (0-200) Base to hit = ", py.misc.bth);
     tmp_val = (int) strlen(tmp_str);
     putStringClearToEOL(tmp_str, 0, 0);
-    if (get_string(tmp_str, 0, tmp_val, 3)) {
+    if (getStringInput(tmp_str, 0, tmp_val, 3)) {
         tmp_val = atoi(tmp_str);
         if (tmp_val > -1 && tmp_val < 201 && (*tmp_str != '\0')) {
             py.misc.bth = (int16_t) tmp_val;
@@ -210,7 +210,7 @@ void change_character() {
     (void) sprintf(tmp_str, "Current=%d  (0-200) Bows/Throwing = ", py.misc.bthb);
     tmp_val = (int) strlen(tmp_str);
     putStringClearToEOL(tmp_str, 0, 0);
-    if (get_string(tmp_str, 0, tmp_val, 3)) {
+    if (getStringInput(tmp_str, 0, tmp_val, 3)) {
         tmp_val = atoi(tmp_str);
         if (tmp_val > -1 && tmp_val < 201 && (*tmp_str != '\0')) {
             py.misc.bthb = (int16_t) tmp_val;
@@ -222,7 +222,7 @@ void change_character() {
     (void) sprintf(tmp_str, "Current=%d  Weight = ", py.misc.wt);
     tmp_val = (int) strlen(tmp_str);
     putStringClearToEOL(tmp_str, 0, 0);
-    if (get_string(tmp_str, 0, tmp_val, 3)) {
+    if (getStringInput(tmp_str, 0, tmp_val, 3)) {
         tmp_val = atoi(tmp_str);
         if (tmp_val > -1 && (*tmp_str != '\0')) {
             py.misc.wt = (uint16_t) tmp_val;
@@ -259,90 +259,90 @@ void wizard_create() {
     i_ptr->ident = ID_KNOWN2 | ID_STOREBOUGHT;
 
     putStringClearToEOL("Tval   : ", 0, 0);
-    if (!get_string(tmp_str, 0, 9, 3)) {
+    if (!getStringInput(tmp_str, 0, 9, 3)) {
         return;
     }
     tmp_val = atoi(tmp_str);
     i_ptr->tval = (uint8_t) tmp_val;
 
     putStringClearToEOL("Tchar  : ", 0, 0);
-    if (!get_string(tmp_str, 0, 9, 1)) {
+    if (!getStringInput(tmp_str, 0, 9, 1)) {
         return;
     }
     i_ptr->tchar = (uint8_t) tmp_str[0];
 
     putStringClearToEOL("Subval : ", 0, 0);
-    if (!get_string(tmp_str, 0, 9, 5)) {
+    if (!getStringInput(tmp_str, 0, 9, 5)) {
         return;
     }
     tmp_val = atoi(tmp_str);
     i_ptr->subval = (uint8_t) tmp_val;
 
     putStringClearToEOL("Weight : ", 0, 0);
-    if (!get_string(tmp_str, 0, 9, 5)) {
+    if (!getStringInput(tmp_str, 0, 9, 5)) {
         return;
     }
     tmp_val = atoi(tmp_str);
     i_ptr->weight = (uint16_t) tmp_val;
 
     putStringClearToEOL("Number : ", 0, 0);
-    if (!get_string(tmp_str, 0, 9, 5)) {
+    if (!getStringInput(tmp_str, 0, 9, 5)) {
         return;
     }
     tmp_val = atoi(tmp_str);
     i_ptr->number = (uint8_t) tmp_val;
 
     putStringClearToEOL("Damage (dice): ", 0, 0);
-    if (!get_string(tmp_str, 0, 15, 3)) {
+    if (!getStringInput(tmp_str, 0, 15, 3)) {
         return;
     }
     tmp_val = atoi(tmp_str);
     i_ptr->damage[0] = (uint8_t) tmp_val;
 
     putStringClearToEOL("Damage (sides): ", 0, 0);
-    if (!get_string(tmp_str, 0, 16, 3)) {
+    if (!getStringInput(tmp_str, 0, 16, 3)) {
         return;
     }
     tmp_val = atoi(tmp_str);
     i_ptr->damage[1] = (uint8_t) tmp_val;
 
     putStringClearToEOL("+To hit: ", 0, 0);
-    if (!get_string(tmp_str, 0, 9, 3)) {
+    if (!getStringInput(tmp_str, 0, 9, 3)) {
         return;
     }
     tmp_val = atoi(tmp_str);
     i_ptr->tohit = (int16_t) tmp_val;
 
     putStringClearToEOL("+To dam: ", 0, 0);
-    if (!get_string(tmp_str, 0, 9, 3)) {
+    if (!getStringInput(tmp_str, 0, 9, 3)) {
         return;
     }
     tmp_val = atoi(tmp_str);
     i_ptr->todam = (int16_t) tmp_val;
 
     putStringClearToEOL("AC     : ", 0, 0);
-    if (!get_string(tmp_str, 0, 9, 3)) {
+    if (!getStringInput(tmp_str, 0, 9, 3)) {
         return;
     }
     tmp_val = atoi(tmp_str);
     i_ptr->ac = (int16_t) tmp_val;
 
     putStringClearToEOL("+To AC : ", 0, 0);
-    if (!get_string(tmp_str, 0, 9, 3)) {
+    if (!getStringInput(tmp_str, 0, 9, 3)) {
         return;
     }
     tmp_val = atoi(tmp_str);
     i_ptr->toac = (int16_t) tmp_val;
 
     putStringClearToEOL("P1     : ", 0, 0);
-    if (!get_string(tmp_str, 0, 9, 5)) {
+    if (!getStringInput(tmp_str, 0, 9, 5)) {
         return;
     }
     tmp_val = atoi(tmp_str);
     i_ptr->p1 = (int16_t) tmp_val;
 
     putStringClearToEOL("Flags (In HEX): ", 0, 0);
-    if (!get_string(tmp_str, 0, 16, 8)) {
+    if (!getStringInput(tmp_str, 0, 16, 8)) {
         return;
     }
 
@@ -357,14 +357,14 @@ void wizard_create() {
     i_ptr->flags = (uint32_t) tmp_lval;
 
     putStringClearToEOL("Cost : ", 0, 0);
-    if (!get_string(tmp_str, 0, 9, 8)) {
+    if (!getStringInput(tmp_str, 0, 9, 8)) {
         return;
     }
     tmp_lval = (int) atol(tmp_str);
     i_ptr->cost = tmp_lval;
 
     putStringClearToEOL("Level : ", 0, 0);
-    if (!get_string(tmp_str, 0, 10, 3)) {
+    if (!getStringInput(tmp_str, 0, 10, 3)) {
         return;
     }
     tmp_val = atoi(tmp_str);

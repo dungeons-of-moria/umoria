@@ -37,7 +37,7 @@ void scribe_object() {
 
         putStringClearToEOL(out_val, 0, 0);
 
-        if (get_string(out_val, 0, (int) strlen(out_val), j)) {
+        if (getStringInput(out_val, 0, (int) strlen(out_val), j)) {
             inscribe(&inventory[item_val], out_val);
         }
     }

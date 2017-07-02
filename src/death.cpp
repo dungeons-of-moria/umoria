@@ -172,7 +172,7 @@ static void print_tomb() {
     putString("(ESC to abort, return to print on screen, or file name)", 23, 0);
     putString("Character record?", 22, 0);
 
-    if (get_string(str, 22, 18, 60)) {
+    if (getStringInput(str, 22, 18, 60)) {
         for (int i = 0; i < INVEN_ARRAY_SIZE; i++) {
             itemSetAsIdentified(&inventory[i]);
             spellItemIdentifyAndRemoveRandomInscription(&inventory[i]);

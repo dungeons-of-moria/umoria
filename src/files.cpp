@@ -86,13 +86,13 @@ void outputRandomLevelObjectsToFile() {
     obj_desc_t tmp_str;
 
     putStringClearToEOL("Produce objects on what level?: ", 0, 0);
-    if (!get_string(tmp_str, 0, 32, 10)) {
+    if (!getStringInput(tmp_str, 0, 32, 10)) {
         return;
     }
     int level = atoi(tmp_str);
 
     putStringClearToEOL("Produce how many objects?: ", 0, 0);
-    if (!get_string(tmp_str, 0, 27, 10)) {
+    if (!getStringInput(tmp_str, 0, 27, 10)) {
         return;
     }
     int nobj = atoi(tmp_str);
@@ -106,7 +106,7 @@ void outputRandomLevelObjectsToFile() {
 
         putStringClearToEOL("File name: ", 0, 0);
         vtype_t filename1;
-        if (get_string(filename1, 0, 11, 64)) {
+        if (getStringInput(filename1, 0, 11, 64)) {
             if (strlen(filename1) == 0) {
                 return;
             }

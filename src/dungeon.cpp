@@ -1502,7 +1502,7 @@ static void doWizardCommands(char com_val) {
                 i = -1;
 
                 vtype_t tmp_str;
-                if (get_string(tmp_str, 0, 27, 10)) {
+                if (getStringInput(tmp_str, 0, 27, 10)) {
                     i = atoi(tmp_str);
                 }
             }

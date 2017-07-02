@@ -227,7 +227,7 @@ void moveCursor(int y, int x);
 void printMessage(const char *msg);
 bool getInputConfirmation(const char *prompt);
 int getCommand(const char *prompt, char *command);
-bool get_string(char *in_str, int row, int col, int slen);
+bool getStringInput(char *in_str, int row, int col, int slen);
 void pause_line(int line_number);
 void pause_exit(int line_number, int delay);
 void save_screen();

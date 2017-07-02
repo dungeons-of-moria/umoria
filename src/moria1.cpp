@@ -1876,7 +1876,7 @@ void rest() {
         rest_num = 0;
 
         vtype_t rest_str;
-        if (get_string(rest_str, 0, 19, 5)) {
+        if (getStringInput(rest_str, 0, 19, 5)) {
             if (rest_str[0] == '*') {
                 rest_num = -MAX_SHORT;
             } else {

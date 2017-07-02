@@ -348,7 +348,7 @@ int getCommand(const char *prompt, char *command) {
 
 // Gets a string terminated by <RETURN>
 // Function returns false if <ESCAPE> is input
-bool get_string(char *in_str, int row, int col, int slen) {
+bool getStringInput(char *in_str, int row, int col, int slen) {
     (void) move(row, col);
 
     for (int i = slen; i > 0; i--) {

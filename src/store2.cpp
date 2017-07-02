@@ -357,7 +357,7 @@ static bool get_haggle(const char *comment, int32_t *new_offer, int num_offer) {
             putStringClearToEOL(default_offer, 0, orig_clen);
             clen = orig_clen + (int) strlen(default_offer);
         }
-        if (!get_string(out_val, 0, clen, 40)) {
+        if (!getStringInput(out_val, 0, clen, 40)) {
             flag = false;
         }
         for (p = out_val; *p == ' '; p++) { ;
