@@ -25,11 +25,10 @@ void initializeScoreFile() {
     }
 }
 
-// Attempt to open the intro file -RAK-
-void read_times() {
+// Attempt to open and print the file containing the intro splash screen text -RAK-
+void displaySplashScreen() {
     vtype_t in_line;
 
-    // Print the introduction message, news, etc.
     FILE *file1 = fopen(MORIA_MOR, "r");
     if (file1 != NULL) {
         clear_screen();

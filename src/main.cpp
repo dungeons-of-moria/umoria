@@ -93,7 +93,7 @@ int main(int argc, char *argv[]) {
     }
 
     // Show the game splash screen
-    read_times();
+    displaySplashScreen();
 
     // Some necessary initializations
     // all made into constants or initialized in variables.c

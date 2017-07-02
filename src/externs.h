@@ -198,7 +198,7 @@ void playerEat();
 
 // files.c
 void initializeScoreFile();
-void read_times();
+void displaySplashScreen();
 void helpfile(const char *filename);
 void print_objects();
 bool file_character(char *filename);
