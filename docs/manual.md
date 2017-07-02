@@ -1506,7 +1506,7 @@ complete without a swarm of half-drunk warriors, who take offense or
 become annoyed just for the fun of it.
 
 Most of the townspeople should be avoided by the largest possible
-distance when wandering from store to stores. Fights will break out
+distance when wandering from store to store. Fights will break out
 though, so be prepared. Since the character grew up in this world of
 intrigue, no experience is awarded for killing on the town level.
 
@@ -1539,7 +1539,7 @@ will go directly to the final offer instead of haggling with you. Items
 which cost less than 10 gold pieces do not count, as haggling well with
 these items is usually either very easy or almost impossible.
 
-Once inside a store, the stores inventory will appear on the screen along
+Once inside a store, the store inventory will appear on the screen along
 with a set of options for the character. The store’s inventory can be
 browsed if there is more than one page to View. Items can be sold to,
 or purchased from the character’s backpack. Regular inventory and
