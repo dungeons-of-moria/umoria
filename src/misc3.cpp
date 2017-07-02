@@ -1472,7 +1472,7 @@ int get_spell(int *spell, int number_of_choices, int *spell_id, int *spell_chanc
         } else if (choice == '*') {
             // only do this drawing once
             if (!redraw) {
-                save_screen();
+                terminalSaveScreen();
                 redraw = true;
                 print_spells(spell, number_of_choices, false, first_spell);
             }
@@ -1815,7 +1815,7 @@ void gain_spells() {
         // do nothing
     } else if (stat == A_INT) {
         // get to choose which mage spells will be learned
-        save_screen();
+        terminalSaveScreen();
         print_spells(spells, spellID, false, -1);
 
         char query;

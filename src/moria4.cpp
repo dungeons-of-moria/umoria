@@ -641,7 +641,7 @@ static bool look_see(int x, int y, bool *transparent) {
         query = getKeyInput();
 
         if (query == 'r' || query == 'R') {
-            save_screen();
+            terminalSaveScreen();
             query = (char) roff_recall(j);
             restore_screen();
         }

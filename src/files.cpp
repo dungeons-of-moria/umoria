@@ -55,7 +55,7 @@ void displayTextHelpFile(const char *filename) {
         return;
     }
 
-    save_screen();
+    terminalSaveScreen();
 
     char input;
     while (!feof(file)) {

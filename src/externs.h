@@ -230,7 +230,7 @@ int getCommand(const char *prompt, char *command);
 bool getStringInput(char *in_str, int row, int col, int slen);
 void waitForContinueKey(int line_number);
 void waitAndConfirmCharacterCreation(int line_number, int delay);
-void save_screen();
+void terminalSaveScreen();
 void restore_screen();
 void bell();
 void screen_map();

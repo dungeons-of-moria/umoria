@@ -439,7 +439,7 @@ void waitAndConfirmCharacterCreation(int line_number, int delay) {
     eraseLine(line_number, 0);
 }
 
-void save_screen() {
+void terminalSaveScreen() {
     overwrite(stdscr, savescr);
 }
 
@@ -494,7 +494,7 @@ void screen_map() {
     priority[92] = -3;   // char '\'
     priority[32] = -15;  // char ' '
 
-    save_screen();
+    terminalSaveScreen();
     clearScreen();
     use_value2 mvaddch(0, 0, CH(TL));
 

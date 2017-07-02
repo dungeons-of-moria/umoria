@@ -1315,7 +1315,7 @@ static void commandPreviousMessage() {
     int msgID = last_message_id;
 
     if (maxMessages > 1) {
-        save_screen();
+        terminalSaveScreen();
 
         int lineNumber = maxMessages;
 
@@ -1594,7 +1594,7 @@ static void do_command(char com_val) {
             player_free_turn = true;
             break;
         case '=': // (=) set options
-            save_screen();
+            terminalSaveScreen();
             set_options();
             restore_screen();
             player_free_turn = true;
@@ -1690,7 +1690,7 @@ static void do_command(char com_val) {
             bash();
             break;
         case 'C': // (C)haracter description
-            save_screen();
+            terminalSaveScreen();
             change_name();
             restore_screen();
             player_free_turn = true;
@@ -1708,7 +1708,7 @@ static void do_command(char com_val) {
             gain_spells();
             break;
         case 'V': // (V)iew scores
-            save_screen();
+            terminalSaveScreen();
             showScoresScreen();
             restore_screen();
             player_free_turn = true;
@@ -2065,7 +2065,7 @@ static void examine_book() {
             }
         }
 
-        save_screen();
+        terminalSaveScreen();
         print_spells(spell_index, spellID, true, -1);
         waitForContinueKey(0);
         restore_screen();

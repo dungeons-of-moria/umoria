@@ -1296,7 +1296,7 @@ static void inventoryDisplayAppropriateHeader() {
 void inven_command(char command) {
     player_free_turn = true;
 
-    save_screen();
+    terminalSaveScreen();
     setInventoryCommandScreenState(command);
 
     do {
@@ -1502,7 +1502,7 @@ int get_item(int *command_key_id, const char *prompt, int item_id_start, int ite
                 case '*':
                     if (!redrawScreen) {
                         commandFinished = true;
-                        save_screen();
+                        terminalSaveScreen();
                         redrawScreen = true;
                     }
                     break;
