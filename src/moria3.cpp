@@ -935,7 +935,7 @@ void move_char(int direction, bool do_pickup) {
             move_rec(old_row, old_col, char_row, char_col);
 
             // Check for new panel
-            if (get_panel(char_row, char_col, false)) {
+            if (coordOutsidePanel(char_row, char_col, false)) {
                 prt_map();
             }
 

@@ -1381,7 +1381,7 @@ static void commandLocateOnMap() {
 
     int y = char_row;
     int x = char_col;
-    if (get_panel(y, x, true)) {
+    if (coordOutsidePanel(y, x, true)) {
         prt_map();
     }
 
@@ -1426,7 +1426,7 @@ static void commandLocateOnMap() {
                 break;
             }
 
-            if (get_panel(y, x, true)) {
+            if (coordOutsidePanel(y, x, true)) {
                 prt_map();
                 break;
             }
@@ -1434,7 +1434,7 @@ static void commandLocateOnMap() {
     }
 
     // Move to a new panel - but only if really necessary.
-    if (get_panel(char_row, char_col, false)) {
+    if (coordOutsidePanel(char_row, char_col, false)) {
         prt_map();
     }
 }

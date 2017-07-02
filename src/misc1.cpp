@@ -156,7 +156,7 @@ static void panel_bounds() {
 // Given an row (y) and col (x), this routine detects -RAK-
 // when a move off the screen has occurred and figures new borders.
 // `force` forces the panel bounds to be recalculated, useful for 'W'here.
-int get_panel(int y, int x, bool force) {
+bool coordOutsidePanel(int y, int x, bool force) {
     int row = panel_row;
     int col = panel_col;
 
@@ -179,21 +179,21 @@ int get_panel(int y, int x, bool force) {
         }
     }
 
-    bool panel = false;
-
     if (row != panel_row || col != panel_col) {
         panel_row = row;
         panel_col = col;
         panel_bounds();
-        panel = true;
 
         // stop movement if any
         if (find_bound) {
             end_find();
         }
+
+        // Yes, the coordinates are beyond the current panel boundary
+        return true;
     }
 
-    return panel;
+    return false;
 }
 
 // Tests a given point to see if it is within the screen -RAK-

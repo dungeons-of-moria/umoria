@@ -58,7 +58,7 @@ void check_view() {
     Cave_t *c_ptr = &cave[char_row][char_col];
 
     // Check for new panel
-    if (get_panel(char_row, char_col, false)) {
+    if (coordOutsidePanel(char_row, char_col, false)) {
         prt_map();
     }
 
