@@ -622,7 +622,7 @@ bool checkForNonBlockingKeyPress(int microseconds) {
 }
 
 // Find a default user name from the system.
-void user_name(char *buffer) {
+void getDefaultPlayerName(char *buffer) {
     // Gotta have some name
     const char *defaultName = "X";
 

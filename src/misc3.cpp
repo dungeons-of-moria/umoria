@@ -1063,7 +1063,7 @@ void get_name() {
     putString(&blank_string[BLANK_LENGTH - 23], 2, 15);
 
     if (!getStringInput(py.misc.name, 2, 15, 23) || py.misc.name[0] == 0) {
-        user_name(py.misc.name);
+        getDefaultPlayerName(py.misc.name);
         putString(py.misc.name, 2, 15);
     }
 
