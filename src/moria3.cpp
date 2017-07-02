@@ -543,7 +543,7 @@ static int summon_object(int y, int x, int num, int typ) {
             int oy = y - 3 + randomNumber(5);
             int ox = x - 3 + randomNumber(5);
 
-            if (in_bounds(oy, ox) && los(y, x, oy, ox)) {
+            if (coordInBounds(oy, ox) && los(y, x, oy, ox)) {
                 if (cave[oy][ox].fval <= MAX_OPEN_SPACE && cave[oy][ox].tptr == 0) {
                     // typ == 3 -> 50% objects, 50% gold
                     if (typ == 3 || typ == 7) {

@@ -824,7 +824,7 @@ static void drop_throw(int y, int x, Inventory_t *t_ptr) {
 
     if (randomNumber(10) > 1) {
         for (int k = 0; !flag && k <= 9;) {
-            if (in_bounds(i, j)) {
+            if (coordInBounds(i, j)) {
                 if (cave[i][j].fval <= MAX_OPEN_SPACE && cave[i][j].tptr == 0) {
                     flag = true;
                 }

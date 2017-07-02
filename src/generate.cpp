@@ -148,7 +148,7 @@ static void place_streamer(uint8_t rockType, int treas_chance) {
             int ty = y + randomNumber(t1) - t2;
             int tx = x + randomNumber(t1) - t2;
 
-            if (in_bounds(ty, tx)) {
+            if (coordInBounds(ty, tx)) {
                 if (cave[ty][tx].fval == GRANITE_WALL) {
                     cave[ty][tx].fval = rockType;
 
@@ -819,7 +819,7 @@ static void build_tunnel(int row1, int col1, int row2, int col2) {
         int tmp_row = row1 + row_dir;
         int tmp_col = col1 + col_dir;
 
-        while (!in_bounds(tmp_row, tmp_col)) {
+        while (!coordInBounds(tmp_row, tmp_col)) {
             if (randomNumber(DUN_TUN_RND) == 1) {
                 rand_dir(&row_dir, &col_dir);
             } else {
@@ -855,7 +855,7 @@ static void build_tunnel(int row1, int col1, int row2, int col2) {
 
                 for (int y = row1 - 1; y <= row1 + 1; y++) {
                     for (int x = col1 - 1; x <= col1 + 1; x++) {
-                        if (in_bounds(y, x)) {
+                        if (coordInBounds(y, x)) {
                             // values 11 and 12 are impossible here, place_streamer
                             // is never run before build_tunnel
                             if (cave[y][x].fval == GRANITE_WALL) {

@@ -136,11 +136,11 @@ int getAndClearFirstBit(uint32_t *flag) {
 }
 
 // Checks a co-ordinate for in bounds status -RAK-
-bool in_bounds(int y, int x) {
-    bool validY = y > 0 && y < dungeon_height - 1;
-    bool validX = x > 0 && x < dungeon_width - 1;
+bool coordInBounds(int y, int x) {
+    bool valid_y = y > 0 && y < dungeon_height - 1;
+    bool valid_x = x > 0 && x < dungeon_width - 1;
 
-    return validY && validX;
+    return valid_y && valid_x;
 }
 
 // Calculates current boundaries -RAK-
@@ -224,7 +224,7 @@ int distance(int y1, int x1, int y2, int x2) {
 }
 
 // Checks points north, south, east, and west for a wall -RAK-
-// note that y,x is always in_bounds(), i.e. 0 < y < dungeon_height-1,
+// note that y,x is always coordInBounds(), i.e. 0 < y < dungeon_height-1,
 // and 0 < x < dungeon_width-1
 int next_to_walls(int y, int x) {
     int walls = 0;
@@ -249,8 +249,8 @@ int next_to_walls(int y, int x) {
 }
 
 // Checks all adjacent spots for corridors -RAK-
-// note that y, x is always in_bounds(), hence no need to check that
-// j, k are in_bounds(), even if they are 0 or cur_x-1 is still works
+// note that y, x is always coordInBounds(), hence no need to check that
+// j, k are coordInBounds(), even if they are 0 or cur_x-1 is still works
 int next_to_corr(int y, int x) {
     int walls = 0;
 
@@ -746,7 +746,7 @@ static bool placeMonsterAdjacentTo(int monsterID, int *y, int *x, bool slp) {
         int yy = *y - 2 + randomNumber(3);
         int xx = *x - 2 + randomNumber(3);
 
-        if (in_bounds(yy, xx)) {
+        if (coordInBounds(yy, xx)) {
             if (cave[yy][xx].fval <= MAX_OPEN_SPACE && cave[yy][xx].cptr == 0) {
                 // Place_monster() should always return true here.
                 if (!place_monster(yy, xx, monsterID, slp)) {

@@ -167,7 +167,7 @@ void random_object(int y, int x, int tries) {
             int j = y - 3 + randomNumber(5);
             int k = x - 4 + randomNumber(7);
 
-            if (in_bounds(j, k) && cave[j][k].fval <= MAX_CAVE_FLOOR && cave[j][k].tptr == 0) {
+            if (coordInBounds(j, k) && cave[j][k].fval <= MAX_CAVE_FLOOR && cave[j][k].tptr == 0) {
                 if (randomNumber(100) < 75) {
                     place_object(j, k, false);
                 } else {

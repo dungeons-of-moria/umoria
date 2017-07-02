@@ -295,7 +295,7 @@ void map_area() {
 
     for (int row = rowMin; row <= rowMax; row++) {
         for (int col = colMin; col <= colMax; col++) {
-            if (in_bounds(row, col) && cave[row][col].fval <= MAX_CAVE_FLOOR) {
+            if (coordInBounds(row, col) && cave[row][col].fval <= MAX_CAVE_FLOOR) {
                 lightTileArea(row, col);
             }
         }
@@ -770,7 +770,7 @@ void fire_ball(int y, int x, int direction, int damage_hp, int spell_type_id, co
             // The explosion.
             for (int row = y - max_dis; row <= y + max_dis; row++) {
                 for (int col = x - max_dis; col <= x + max_dis; col++) {
-                    if (in_bounds(row, col) && distance(y, x, row, col) <= max_dis && los(y, x, row, col)) {
+                    if (coordInBounds(row, col) && distance(y, x, row, col) <= max_dis && los(y, x, row, col)) {
                         c_ptr = &cave[row][col];
 
                         if (c_ptr->tptr != 0 && (*destroy)(&treasure_list[c_ptr->tptr])) {
@@ -822,7 +822,7 @@ void fire_ball(int y, int x, int direction, int damage_hp, int spell_type_id, co
 
             for (int row = (y - 2); row <= (y + 2); row++) {
                 for (int col = (x - 2); col <= (x + 2); col++) {
-                    if (in_bounds(row, col) && panel_contains(row, col) && distance(y, x, row, col) <= max_dis) {
+                    if (coordInBounds(row, col) && panel_contains(row, col) && distance(y, x, row, col) <= max_dis) {
                         lite_spot(row, col);
                     }
                 }
@@ -872,7 +872,7 @@ void breath(int x, int y, int monster_id, int damage_hp, char *spell_name, int s
 
     for (int row = y - 2; row <= y + 2; row++) {
         for (int col = x - 2; col <= x + 2; col++) {
-            if (in_bounds(row, col) && distance(y, x, row, col) <= max_dis && los(y, x, row, col)) {
+            if (coordInBounds(row, col) && distance(y, x, row, col) <= max_dis && los(y, x, row, col)) {
                 Cave_t *c_ptr = &cave[row][col];
 
                 if (c_ptr->tptr != 0 && (*destroy)(&treasure_list[c_ptr->tptr])) {
@@ -964,7 +964,7 @@ void breath(int x, int y, int monster_id, int damage_hp, char *spell_name, int s
 
     for (int row = (y - 2); row <= (y + 2); row++) {
         for (int col = (x - 2); col <= (x + 2); col++) {
-            if (in_bounds(row, col) && panel_contains(row, col) && distance(y, x, row, col) <= max_dis) {
+            if (coordInBounds(row, col) && panel_contains(row, col) && distance(y, x, row, col) <= max_dis) {
                 lite_spot(row, col);
             }
         }
@@ -1512,7 +1512,7 @@ void teleport_away(int monster_id, int distance_from_player) {
         do {
             yn = m_ptr->fy + (randomNumber(2 * distance_from_player + 1) - (distance_from_player + 1));
             xn = m_ptr->fx + (randomNumber(2 * distance_from_player + 1) - (distance_from_player + 1));
-        } while (!in_bounds(yn, xn));
+        } while (!coordInBounds(yn, xn));
 
         ctr++;
         if (ctr > 9) {
@@ -1547,7 +1547,7 @@ void teleport_to(int to_y, int to_x) {
             ctr = 0;
             dis++;
         }
-    } while (!in_bounds(y, x) || (cave[y][x].fval >= MIN_CLOSED_SPACE) || (cave[y][x].cptr >= 2));
+    } while (!coordInBounds(y, x) || (cave[y][x].fval >= MIN_CLOSED_SPACE) || (cave[y][x].cptr >= 2));
 
     move_rec(char_row, char_col, y, x);
 
@@ -1880,7 +1880,7 @@ static void earthquakeHitsMonster(int monsterID) {
 void earthquake() {
     for (int y = char_row - 8; y <= char_row + 8; y++) {
         for (int x = char_col - 8; x <= char_col + 8; x++) {
-            if ((y != char_row || x != char_col) && in_bounds(y, x) && randomNumber(8) == 1) {
+            if ((y != char_row || x != char_col) && coordInBounds(y, x) && randomNumber(8) == 1) {
                 Cave_t *c_ptr = &cave[y][x];
 
                 if (c_ptr->tptr != 0) {
@@ -2184,7 +2184,7 @@ void destroy_area(int y, int x) {
     if (current_dungeon_level > 0) {
         for (int i = (y - 15); i <= (y + 15); i++) {
             for (int j = (x - 15); j <= (x + 15); j++) {
-                if (in_bounds(i, j) && cave[i][j].fval != BOUNDARY_WALL) {
+                if (coordInBounds(i, j) && cave[i][j].fval != BOUNDARY_WALL) {
                     int dist = distance(i, j, y, x);
 
                     // clear player's spot, but don't put wall there

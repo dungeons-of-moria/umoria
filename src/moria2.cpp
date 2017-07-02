@@ -47,7 +47,7 @@ void search(int y, int x, int chance) {
 
     for (int i = y - 1; i <= y + 1; i++) {
         for (int j = x - 1; j <= x + 1; j++) {
-            // always in_bounds here
+            // always coordInBounds here
             if (randomNumber(100) >= chance) {
                 continue;
             }

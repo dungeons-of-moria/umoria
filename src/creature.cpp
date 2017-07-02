@@ -1339,7 +1339,7 @@ bool monsterMultiply(int y, int x, int creatureID, int monsterID) {
 
         // don't create a new creature on top of the old one, that
         // causes invincible/invisible creatures to appear.
-        if (in_bounds(row, col) && (row != y || col != x)) {
+        if (coordInBounds(row, col) && (row != y || col != x)) {
             Cave_t *c_ptr = &cave[row][col];
 
             if (c_ptr->fval <= MAX_OPEN_SPACE && c_ptr->tptr == 0 && c_ptr->cptr != 1) {
@@ -1400,7 +1400,7 @@ static void multiplyCritter(Monster_t *m_ptr, int monsterID, uint32_t *rcmove) {
 
     for (int y = m_ptr->fy - 1; y <= m_ptr->fy + 1; y++) {
         for (int x = m_ptr->fx - 1; x <= m_ptr->fx + 1; x++) {
-            if (in_bounds(y, x) && (cave[y][x].cptr > 1)) {
+            if (coordInBounds(y, x) && (cave[y][x].cptr > 1)) {
                 counter++;
             }
         }
