@@ -18,7 +18,7 @@ static int doorindex;
 
 // Returns a Dark/Light floor tile based on current_dungeon_level, and random number
 static uint8_t floorTileForDungeonLevel() {
-    if (current_dungeon_level <= randint(25)) {
+    if (current_dungeon_level <= randomNumber(25)) {
         return LIGHT_FLOOR;
     }
     return DARK_FLOOR;
@@ -43,7 +43,7 @@ static void correct_dir(int *rowDir, int *colDir, int y1, int x1, int y2, int x2
     }
 
     if (*rowDir != 0 && *colDir != 0) {
-        if (randint(2) == 1) {
+        if (randomNumber(2) == 1) {
             *rowDir = 0;
         } else {
             *colDir = 0;
@@ -53,7 +53,7 @@ static void correct_dir(int *rowDir, int *colDir, int y1, int x1, int y2, int x2
 
 // Chance of wandering direction
 static void rand_dir(int *rowDir, int *colDir) {
-    int tmp = randint(4);
+    int tmp = randomNumber(4);
     if (tmp < 3) {
         *colDir = 0;
         *rowDir = -3 + (tmp << 1); // tmp=1 -> *rdir=-1; tmp=2 -> *rdir=1
@@ -130,11 +130,11 @@ static void place_boundary() {
 // Places "streamers" of rock through dungeon -RAK-
 static void place_streamer(uint8_t rockType, int treas_chance) {
     // Choose starting point and direction
-    int y = (dungeon_height / 2) + 11 - randint(23);
-    int x = (dungeon_width / 2) + 16 - randint(33);
+    int y = (dungeon_height / 2) + 11 - randomNumber(23);
+    int x = (dungeon_width / 2) + 16 - randomNumber(33);
 
     // Get random direction. Numbers 1-4, 6-9
-    int dir = randint(8);
+    int dir = randomNumber(8);
     if (dir > 4) {
         dir += 1;
     }
@@ -145,14 +145,14 @@ static void place_streamer(uint8_t rockType, int treas_chance) {
 
     do {
         for (int i = 0; i < DUN_STR_DEN; i++) {
-            int ty = y + randint(t1) - t2;
-            int tx = x + randint(t1) - t2;
+            int ty = y + randomNumber(t1) - t2;
+            int tx = x + randomNumber(t1) - t2;
 
             if (in_bounds(ty, tx)) {
                 if (cave[ty][tx].fval == GRANITE_WALL) {
                     cave[ty][tx].fval = rockType;
 
-                    if (randint(treas_chance) == 1) {
+                    if (randomNumber(treas_chance) == 1) {
                         place_gold(ty, tx);
                     }
                 }
@@ -188,7 +188,7 @@ static void place_locked_door(int y, int x) {
     cave[y][x].tptr = (uint8_t) cur_pos;
     inventoryItemCopyTo(OBJ_CLOSED_DOOR, &treasure_list[cur_pos]);
     cave[y][x].fval = BLOCKED_FLOOR;
-    treasure_list[cur_pos].p1 = (int16_t) (randint(10) + 10);
+    treasure_list[cur_pos].p1 = (int16_t) (randomNumber(10) + 10);
 }
 
 static void place_stuck_door(int y, int x) {
@@ -196,7 +196,7 @@ static void place_stuck_door(int y, int x) {
     cave[y][x].tptr = (uint8_t) cur_pos;
     inventoryItemCopyTo(OBJ_CLOSED_DOOR, &treasure_list[cur_pos]);
     cave[y][x].fval = BLOCKED_FLOOR;
-    treasure_list[cur_pos].p1 = (int16_t) (-randint(10) - 10);
+    treasure_list[cur_pos].p1 = (int16_t) (-randomNumber(10) - 10);
 }
 
 static void place_secret_door(int y, int x) {
@@ -207,16 +207,16 @@ static void place_secret_door(int y, int x) {
 }
 
 static void place_door(int y, int x) {
-    int doorType = randint(3);
+    int doorType = randomNumber(3);
 
     if (doorType == 1) {
-        if (randint(4) == 1) {
+        if (randomNumber(4) == 1) {
             place_broken_door(y, x);
         } else {
             place_open_door(y, x);
         }
     } else if (doorType == 2) {
-        doorType = randint(12);
+        doorType = randomNumber(12);
 
         if (doorType > 3) {
             place_closed_door(y, x);
@@ -265,8 +265,8 @@ static void place_stairs(int stairType, int num, int walls) {
                 // don't let y1/x1 be zero,
                 // don't let y2/x2 be equal to dungeon_height-1/dungeon_width-1,
                 // these values are always BOUNDARY_ROCK.
-                int y1 = randint(dungeon_height - 14);
-                int x1 = randint(dungeon_width - 14);
+                int y1 = randomNumber(dungeon_height - 14);
+                int x1 = randomNumber(dungeon_width - 14);
                 int y2 = y1 + 12;
                 int x2 = x1 + 12;
 
@@ -301,11 +301,11 @@ static void vault_trap(int y, int x, int yd, int xd, int num) {
         bool flag = false;
 
         for (int count = 0; !flag && count <= 5; count++) {
-            int y1 = y - yd - 1 + randint(2 * yd + 1);
-            int x1 = x - xd - 1 + randint(2 * xd + 1);
+            int y1 = y - yd - 1 + randomNumber(2 * yd + 1);
+            int x1 = x - xd - 1 + randomNumber(2 * xd + 1);
 
             if (cave[y1][x1].fval != NULL_WALL && cave[y1][x1].fval <= MAX_CAVE_FLOOR && cave[y1][x1].tptr == 0) {
-                place_trap(y1, x1, randint(MAX_TRAP) - 1);
+                place_trap(y1, x1, randomNumber(MAX_TRAP) - 1);
                 flag = true;
             }
         }
@@ -327,10 +327,10 @@ static void vault_monster(int y, int x, int num) {
 static void build_room(int y, int x) {
     uint8_t floor = floorTileForDungeonLevel();
 
-    int height = y - randint(4);
-    int depth = y + randint(3);
-    int left = x - randint(11);
-    int right = x + randint(11);
+    int height = y - randomNumber(4);
+    int depth = y + randomNumber(3);
+    int left = x - randomNumber(11);
+    int right = x + randomNumber(11);
 
     // the x dim of rooms tends to be much larger than the y dim,
     // so don't bother rewriting the y loop.
@@ -364,13 +364,13 @@ static void build_room(int y, int x) {
 static void build_type1(int y, int x) {
     uint8_t floor = floorTileForDungeonLevel();
 
-    int limit = 1 + randint(2);
+    int limit = 1 + randomNumber(2);
 
     for (int i0 = 0; i0 < limit; i0++) {
-        int height = y - randint(4);
-        int depth = y + randint(3);
-        int left = x - randint(11);
-        int right = x + randint(11);
+        int height = y - randomNumber(4);
+        int depth = y + randomNumber(3);
+        int left = x - randomNumber(11);
+        int right = x + randomNumber(11);
 
         // the x dim of rooms tends to be much larger than the y dim,
         // so don't bother rewriting the y loop.
@@ -408,7 +408,7 @@ static void build_type1(int y, int x) {
 }
 
 static void placeRandomSecretDoor(int y, int x, int depth, int height, int left, int right) {
-    switch (randint(4)) {
+    switch (randomNumber(4)) {
         case 1:
             place_secret_door(height - 1, x);
             break;
@@ -440,7 +440,7 @@ static void placeTreasureVault(int y, int x, int depth, int height, int left, in
     placeVault(y, x);
 
     // Place a locked door
-    int offset = randint(4);
+    int offset = randomNumber(4);
     if (offset < 3) {
         // 1 -> y-1; 2 -> y+1
         place_locked_door(y - 3 + (offset << 1), x);
@@ -456,11 +456,11 @@ static void placeInnerPillars(int y, int x) {
         }
     }
 
-    if (randint(2) != 1) {
+    if (randomNumber(2) != 1) {
         return;
     }
 
-    int offset = randint(2);
+    int offset = randomNumber(2);
 
     for (int i = y - 1; i <= y + 1; i++) {
         for (int j = x - 5 - offset; j <= x - 3 - offset; j++) {
@@ -495,14 +495,14 @@ static void placeFourSmallRooms(int y, int x, int depth, int height, int left, i
     }
 
     // place random secret door
-    if (randint(2) == 1) {
-        int offsetX = randint(10);
+    if (randomNumber(2) == 1) {
+        int offsetX = randomNumber(10);
         place_secret_door(height - 1, x - offsetX);
         place_secret_door(height - 1, x + offsetX);
         place_secret_door(depth + 1, x - offsetX);
         place_secret_door(depth + 1, x + offsetX);
     } else {
-        int offsetY = randint(3);
+        int offsetY = randomNumber(3);
         place_secret_door(y + offsetY, left - 1);
         place_secret_door(y - offsetY, left - 1);
         place_secret_door(y + offsetY, right + 1);
@@ -568,7 +568,7 @@ static void build_type2(int y, int x) {
     }
 
     // Inner room variations
-    switch (randint(5)) {
+    switch (randomNumber(5)) {
         case 1: // Just an inner room.
             placeRandomSecretDoor(y, x, depth, height, left, right);
             vault_monster(y, x, 1);
@@ -577,17 +577,17 @@ static void build_type2(int y, int x) {
             placeTreasureVault(y, x, depth, height, left, right);
 
             // Guard the treasure well
-            vault_monster(y, x, 2 + randint(3));
+            vault_monster(y, x, 2 + randomNumber(3));
 
             // If the monsters don't get 'em.
-            vault_trap(y, x, 4, 10, 2 + randint(3));
+            vault_trap(y, x, 4, 10, 2 + randomNumber(3));
             break;
         case 3: // Inner pillar(s).
             placeRandomSecretDoor(y, x, depth, height, left, right);
 
             placeInnerPillars(y, x);
 
-            if (randint(3) != 1) {
+            if (randomNumber(3) != 1) {
                 break;
             }
 
@@ -599,19 +599,19 @@ static void build_type2(int y, int x) {
             cave[y][x - 5].fval = TMP1_WALL;
             cave[y][x + 5].fval = TMP1_WALL;
 
-            place_secret_door(y - 3 + (randint(2) << 1), x - 3);
-            place_secret_door(y - 3 + (randint(2) << 1), x + 3);
+            place_secret_door(y - 3 + (randomNumber(2) << 1), x - 3);
+            place_secret_door(y - 3 + (randomNumber(2) << 1), x + 3);
 
-            if (randint(3) == 1) {
+            if (randomNumber(3) == 1) {
                 place_object(y, x - 2, false);
             }
 
-            if (randint(3) == 1) {
+            if (randomNumber(3) == 1) {
                 place_object(y, x + 2, false);
             }
 
-            vault_monster(y, x - 2, randint(2));
-            vault_monster(y, x + 2, randint(2));
+            vault_monster(y, x - 2, randomNumber(2));
+            vault_monster(y, x + 2, randomNumber(2));
             break;
         case 4: // Maze inside.
             placeRandomSecretDoor(y, x, depth, height, left, right);
@@ -619,12 +619,12 @@ static void build_type2(int y, int x) {
             placeMazeInsideRoom(depth, height, left, right);
 
             // Monsters just love mazes.
-            vault_monster(y, x - 5, randint(3));
-            vault_monster(y, x + 5, randint(3));
+            vault_monster(y, x - 5, randomNumber(3));
+            vault_monster(y, x + 5, randomNumber(3));
 
             // Traps make them entertaining.
-            vault_trap(y, x - 3, 2, 8, randint(3));
-            vault_trap(y, x + 3, 2, 8, randint(3));
+            vault_trap(y, x - 3, 2, 8, randomNumber(3));
+            vault_trap(y, x + 3, 2, 8, randomNumber(3));
 
             // Mazes should have some treasure too..
             for (int i = 0; i < 3; i++) {
@@ -635,13 +635,13 @@ static void build_type2(int y, int x) {
             placeFourSmallRooms(y, x, depth, height, left, right);
 
             // Treasure in each one.
-            random_object(y, x, 2 + randint(2));
+            random_object(y, x, 2 + randomNumber(2));
 
             // Gotta have some monsters.
-            vault_monster(y + 2, x - 4, randint(2));
-            vault_monster(y + 2, x + 4, randint(2));
-            vault_monster(y - 2, x - 4, randint(2));
-            vault_monster(y - 2, x + 4, randint(2));
+            vault_monster(y + 2, x - 4, randomNumber(2));
+            vault_monster(y + 2, x + 4, randomNumber(2));
+            vault_monster(y - 2, x - 4, randomNumber(2));
+            vault_monster(y - 2, x + 4, randomNumber(2));
             break;
     }
 }
@@ -659,7 +659,7 @@ static void placeLargeMiddlePillar(int y, int x) {
 static void build_type3(int y, int x) {
     uint8_t floor = floorTileForDungeonLevel();
 
-    int randomOffset = 2 + randint(2);
+    int randomOffset = 2 + randomNumber(2);
 
     int height = y - randomOffset;
     int depth = y + randomOffset;
@@ -689,7 +689,7 @@ static void build_type3(int y, int x) {
         cave[depth + 1][i].lr = true;
     }
 
-    randomOffset = 2 + randint(9);
+    randomOffset = 2 + randomNumber(9);
 
     height = y - 1;
     depth = y + 1;
@@ -728,7 +728,7 @@ static void build_type3(int y, int x) {
     }
 
     // Special features.
-    switch (randint(4)) {
+    switch (randomNumber(4)) {
         case 1: // Large middle pillar
             placeLargeMiddlePillar(y, x);
             break;
@@ -736,7 +736,7 @@ static void build_type3(int y, int x) {
             placeVault(y, x);
 
             // Place a secret door
-            randomOffset = randint(4);
+            randomOffset = randomNumber(4);
             if (randomOffset < 3) {
                 place_secret_door(y - 3 + (randomOffset << 1), x);
             } else {
@@ -747,13 +747,13 @@ static void build_type3(int y, int x) {
             place_object(y, x, false);
 
             // Let's guard the treasure well.
-            vault_monster(y, x, 2 + randint(2));
+            vault_monster(y, x, 2 + randomNumber(2));
 
             // Traps naturally
-            vault_trap(y, x, 4, 4, 1 + randint(3));
+            vault_trap(y, x, 4, 4, 1 + randomNumber(3));
             break;
         case 3:
-            if (randint(3) == 1) {
+            if (randomNumber(3) == 1) {
                 cave[y - 1][x - 2].fval = TMP1_WALL;
                 cave[y + 1][x - 2].fval = TMP1_WALL;
                 cave[y - 1][x + 2].fval = TMP1_WALL;
@@ -762,19 +762,19 @@ static void build_type3(int y, int x) {
                 cave[y - 2][x + 1].fval = TMP1_WALL;
                 cave[y + 2][x - 1].fval = TMP1_WALL;
                 cave[y + 2][x + 1].fval = TMP1_WALL;
-                if (randint(3) == 1) {
+                if (randomNumber(3) == 1) {
                     place_secret_door(y, x - 2);
                     place_secret_door(y, x + 2);
                     place_secret_door(y - 2, x);
                     place_secret_door(y + 2, x);
                 }
-            } else if (randint(3) == 1) {
+            } else if (randomNumber(3) == 1) {
                 cave[y][x].fval = TMP1_WALL;
                 cave[y - 1][x].fval = TMP1_WALL;
                 cave[y + 1][x].fval = TMP1_WALL;
                 cave[y][x - 1].fval = TMP1_WALL;
                 cave[y][x + 1].fval = TMP1_WALL;
-            } else if (randint(3) == 1) {
+            } else if (randomNumber(3) == 1) {
                 cave[y][x].fval = TMP1_WALL;
             }
             break;
@@ -808,8 +808,8 @@ static void build_tunnel(int row1, int col1, int row2, int col2) {
             stop_flag = true;
         }
 
-        if (randint(100) > DUN_TUN_CHG) {
-            if (randint(DUN_TUN_RND) == 1) {
+        if (randomNumber(100) > DUN_TUN_CHG) {
+            if (randomNumber(DUN_TUN_RND) == 1) {
                 rand_dir(&row_dir, &col_dir);
             } else {
                 correct_dir(&row_dir, &col_dir, row1, col1, row2, col2);
@@ -820,7 +820,7 @@ static void build_tunnel(int row1, int col1, int row2, int col2) {
         int tmp_col = col1 + col_dir;
 
         while (!in_bounds(tmp_row, tmp_col)) {
-            if (randint(DUN_TUN_RND) == 1) {
+            if (randomNumber(DUN_TUN_RND) == 1) {
                 rand_dir(&row_dir, &col_dir);
             } else {
                 correct_dir(&row_dir, &col_dir, row1, col1, row2, col2);
@@ -879,7 +879,7 @@ static void build_tunnel(int row1, int col1, int row2, int col2) {
                     door_flag = true;
                 }
 
-                if (randint(100) > DUN_TUN_CON) {
+                if (randomNumber(100) > DUN_TUN_CON) {
                     // make sure that tunnel has gone a reasonable distance
                     // before stopping it, this helps prevent isolated rooms
                     tmp_row = row1 - start_row;
@@ -912,7 +912,7 @@ static void build_tunnel(int row1, int col1, int row2, int col2) {
         Cave_t *c_ptr = &cave[wallstk[i].y][wallstk[i].x];
 
         if (c_ptr->fval == TMP2_WALL) {
-            if (randint(100) < DUN_TUN_PEN) {
+            if (randomNumber(100) < DUN_TUN_PEN) {
                 place_door(wallstk[i].y, wallstk[i].x);
             } else {
                 // these have to be doorways to rooms
@@ -935,7 +935,7 @@ static bool next_to(int y, int x) {
 
 // Places door at y, x position if at least 2 walls found
 static void try_door(int y, int x) {
-    if (cave[y][x].fval == CORR_FLOOR && randint(100) > DUN_TUN_JCT && next_to(y, x)) {
+    if (cave[y][x].fval == CORR_FLOOR && randomNumber(100) > DUN_TUN_JCT && next_to(y, x)) {
         place_door(y, x);
     }
 }
@@ -946,8 +946,8 @@ static void new_spot(int16_t *y, int16_t *x) {
     Cave_t *c_ptr;
 
     do {
-        yy = randint(dungeon_height - 2);
-        xx = randint(dungeon_width - 2);
+        yy = randomNumber(dungeon_height - 2);
+        xx = randomNumber(dungeon_width - 2);
         c_ptr = &cave[yy][xx];
     } while (c_ptr->fval >= MIN_CLOSED_SPACE || c_ptr->cptr != 0 || c_ptr->tptr != 0);
 
@@ -970,7 +970,7 @@ static void cave_gen() {
 
     int randRoomCounter = randnor(DUN_ROO_MEA, 2);
     for (int i = 0; i < randRoomCounter; i++) {
-        room_map[randint(row_rooms) - 1][randint(col_rooms) - 1] = true;
+        room_map[randomNumber(row_rooms) - 1][randomNumber(col_rooms) - 1] = true;
     }
 
     // Build rooms
@@ -982,8 +982,8 @@ static void cave_gen() {
             if (room_map[row][col]) {
                 yloc[locationID] = (int16_t) (row * (SCREEN_HEIGHT >> 1) + QUART_HEIGHT);
                 xloc[locationID] = (int16_t) (col * (SCREEN_WIDTH >> 1) + QUART_WIDTH);
-                if (current_dungeon_level > randint(DUN_UNUSUAL)) {
-                    int buildType = randint(3);
+                if (current_dungeon_level > randomNumber(DUN_UNUSUAL)) {
+                    int buildType = randomNumber(3);
 
                     if (buildType == 1) {
                         build_type1(yloc[locationID], xloc[locationID]);
@@ -1001,8 +1001,8 @@ static void cave_gen() {
     }
 
     for (int i = 0; i < locationID; i++) {
-        int pick1 = randint(locationID) - 1;
-        int pick2 = randint(locationID) - 1;
+        int pick1 = randomNumber(locationID) - 1;
+        int pick2 = randomNumber(locationID) - 1;
         int y1 = yloc[pick1];
         int x1 = xloc[pick1];
         yloc[pick1] = yloc[pick2];
@@ -1050,18 +1050,18 @@ static void cave_gen() {
         alloc_level = 10;
     }
 
-    place_stairs(2, randint(2) + 2, 3);
-    place_stairs(1, randint(2), 3);
+    place_stairs(2, randomNumber(2) + 2, 3);
+    place_stairs(1, randomNumber(2), 3);
 
     // Set up the character coords, used by alloc_monster, place_win_monster
     new_spot(&char_row, &char_col);
 
-    alloc_monster((randint(8) + MIN_MALLOC_LEVEL + alloc_level), 0, true);
-    alloc_object(set_corr, 3, randint(alloc_level));
+    alloc_monster((randomNumber(8) + MIN_MALLOC_LEVEL + alloc_level), 0, true);
+    alloc_object(set_corr, 3, randomNumber(alloc_level));
     alloc_object(set_room, 5, randnor(TREAS_ROOM_ALLOC, 3));
     alloc_object(set_floor, 5, randnor(TREAS_ANY_ALLOC, 3));
     alloc_object(set_floor, 4, randnor(TREAS_GOLD_ALLOC, 3));
-    alloc_object(set_floor, 1, randint(alloc_level));
+    alloc_object(set_floor, 1, randomNumber(alloc_level));
 
     if (current_dungeon_level >= WIN_MON_APPEAR) {
         place_win_monster();
@@ -1072,10 +1072,10 @@ static void cave_gen() {
 static void build_store(int store_num, int y, int x) {
     int yval = y * 10 + 5;
     int xval = x * 16 + 16;
-    int y_height = yval - randint(3);
-    int y_depth = yval + randint(4);
-    int x_left = xval - randint(6);
-    int x_right = xval + randint(6);
+    int y_height = yval - randomNumber(3);
+    int y_depth = yval + randomNumber(4);
+    int x_left = xval - randomNumber(6);
+    int x_right = xval + randomNumber(6);
 
     int yy, xx;
 
@@ -1085,9 +1085,9 @@ static void build_store(int store_num, int y, int x) {
         }
     }
 
-    int tmp = randint(4);
+    int tmp = randomNumber(4);
     if (tmp < 3) {
-        yy = randint(y_depth - y_height) + y_height - 1;
+        yy = randomNumber(y_depth - y_height) + y_height - 1;
 
         if (tmp == 1) {
             xx = x_left;
@@ -1095,7 +1095,7 @@ static void build_store(int store_num, int y, int x) {
             xx = x_right;
         }
     } else {
-        xx = randint(x_right - x_left) + x_left - 1;
+        xx = randomNumber(x_right - x_left) + x_left - 1;
 
         if (tmp == 3) {
             yy = y_depth;
@@ -1138,7 +1138,7 @@ static void placeTownStores() {
 
     for (int y = 0; y < 2; y++) {
         for (int x = 0; x < 3; x++) {
-            int randRoomID = randint(roomsCounter) - 1;
+            int randRoomID = randomNumber(roomsCounter) - 1;
             build_store(rooms[randRoomID], y, x);
 
             for (int i = randRoomID; i < roomsCounter - 1; i++) {

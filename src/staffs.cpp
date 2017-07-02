@@ -31,7 +31,7 @@ static bool canUseStaff(Inventory_t *staff_ptr) {
     }
 
     // Give everyone a slight chance
-    if (chance < USE_DEVICE && randint(USE_DEVICE - chance + 1) == 1) {
+    if (chance < USE_DEVICE && randomNumber(USE_DEVICE - chance + 1) == 1) {
         chance = USE_DEVICE;
     }
 
@@ -39,7 +39,7 @@ static bool canUseStaff(Inventory_t *staff_ptr) {
         chance = 1;
     }
 
-    if (randint(chance) < USE_DEVICE) {
+    if (randomNumber(chance) < USE_DEVICE) {
         printMessage("You failed to use the staff properly.");
         return false;
     }
@@ -91,7 +91,7 @@ static bool dischargeStaff(Inventory_t *staff_ptr) {
             case 8:
                 identified = false;
 
-                for (int k = 0; k < randint(4); k++) {
+                for (int k = 0; k < randomNumber(4); k++) {
                     int y = char_row;
                     int x = char_col;
                     identified |= summon_monster(&y, &x, false);
@@ -115,7 +115,7 @@ static bool dischargeStaff(Inventory_t *staff_ptr) {
                 identified = sleep_monsters2();
                 break;
             case 15:
-                identified = hp_player(randint(8));
+                identified = hp_player(randomNumber(8));
                 break;
             case 16:
                 identified = detect_invisible();
@@ -124,13 +124,13 @@ static bool dischargeStaff(Inventory_t *staff_ptr) {
                 if (py.flags.fast == 0) {
                     identified = true;
                 }
-                py.flags.fast += randint(30) + 15;
+                py.flags.fast += randomNumber(30) + 15;
                 break;
             case 18:
                 if (py.flags.slow == 0) {
                     identified = true;
                 }
-                py.flags.slow += randint(30) + 15;
+                py.flags.slow += randomNumber(30) + 15;
                 break;
             case 19:
                 identified = mass_poly();

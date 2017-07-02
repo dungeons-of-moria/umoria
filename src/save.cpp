@@ -423,7 +423,7 @@ static bool _save_char(char *fnam) {
         wr_byte((uint8_t) CURRENT_VERSION_PATCH);
         xor_byte = 0;
 
-        uint8_t char_tmp = (uint8_t) (randint(256) - 1);
+        uint8_t char_tmp = (uint8_t) (randomNumber(256) - 1);
         wr_byte(char_tmp);
         // Note that xor_byte is now equal to char_tmp
 

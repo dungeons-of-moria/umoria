@@ -293,7 +293,7 @@ void store_destroy(int store_id, int item_id, bool only_one) {
         if (only_one) {
             number = 1;
         } else {
-            number = randint((int) i_ptr->number);
+            number = randomNumber((int) i_ptr->number);
         }
     } else {
         number = i_ptr->number;
@@ -318,7 +318,7 @@ void store_init() {
     for (int j = 0; j < MAX_STORES; j++) {
         Store_t *s_ptr = &stores[j];
 
-        s_ptr->owner = (uint8_t) (MAX_STORES * (randint(i) - 1) + j);
+        s_ptr->owner = (uint8_t) (MAX_STORES * (randomNumber(i) - 1) + j);
         s_ptr->insult_cur = 0;
         s_ptr->store_open = 0;
         s_ptr->store_ctr = 0;
@@ -337,7 +337,7 @@ static void store_create(int store_num, int16_t max_cost) {
     int cur_pos = popt();
 
     for (int tries = 0; tries <= 3; tries++) {
-        int i = store_choices[store_num][randint(STORE_CHOICES) - 1];
+        int i = store_choices[store_num][randomNumber(STORE_CHOICES) - 1];
         inventoryItemCopyTo(i, &treasure_list[cur_pos]);
         magic_treasure(cur_pos, OBJ_TOWN_LEVEL);
 
@@ -368,17 +368,17 @@ void store_maint() {
 
         s_ptr->insult_cur = 0;
         if (s_ptr->store_ctr >= STORE_MIN_INVEN) {
-            int j = randint(STORE_TURN_AROUND);
+            int j = randomNumber(STORE_TURN_AROUND);
             if (s_ptr->store_ctr >= STORE_MAX_INVEN) {
                 j += 1 + s_ptr->store_ctr - STORE_MAX_INVEN;
             }
             while (--j >= 0) {
-                store_destroy(store_id, randint((int) s_ptr->store_ctr) - 1, false);
+                store_destroy(store_id, randomNumber((int) s_ptr->store_ctr) - 1, false);
             }
         }
 
         if (s_ptr->store_ctr <= STORE_MAX_INVEN) {
-            int j = randint(STORE_TURN_AROUND);
+            int j = randomNumber(STORE_TURN_AROUND);
             if (s_ptr->store_ctr < STORE_MIN_INVEN) {
                 j += STORE_MIN_INVEN - s_ptr->store_ctr;
             }

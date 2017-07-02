@@ -447,7 +447,7 @@ static void monsterPrintAttackDescription(char *msg, int attackID) {
             printMessage(strcat(msg, "drools on you."));
             break;
         case 19:
-            switch (randint(9)) {
+            switch (randomNumber(9)) {
                 case 1:
                     printMessage(strcat(msg, "insults you!"));
                     break;
@@ -489,7 +489,7 @@ static bool executeDisenchantAttack() {
     bool success = false;
     int itemID;
 
-    switch (randint(7)) {
+    switch (randomNumber(7)) {
         case 1:
             itemID = INVEN_WIELD;
             break;
@@ -516,7 +516,7 @@ static bool executeDisenchantAttack() {
     Inventory_t *i_ptr = &inventory[itemID];
 
     if (i_ptr->tohit > 0) {
-        i_ptr->tohit -= randint(2);
+        i_ptr->tohit -= randomNumber(2);
 
         // don't send it below zero
         if (i_ptr->tohit < 0) {
@@ -525,7 +525,7 @@ static bool executeDisenchantAttack() {
         success = true;
     }
     if (i_ptr->todam > 0) {
-        i_ptr->todam -= randint(2);
+        i_ptr->todam -= randomNumber(2);
 
         // don't send it below zero
         if (i_ptr->todam < 0) {
@@ -534,7 +534,7 @@ static bool executeDisenchantAttack() {
         success = true;
     }
     if (i_ptr->toac > 0) {
-        i_ptr->toac -= randint(2);
+        i_ptr->toac -= randomNumber(2);
 
         // don't send it below zero
         if (i_ptr->toac < 0) {
@@ -562,7 +562,7 @@ static bool executeAttack(Creature_t *r_ptr, Monster_t *m_ptr, int monsterID, in
             take_hit(damage, deathDescription);
             if (py.flags.sustain_str) {
                 printMessage("You feel weaker for a moment, but it passes.");
-            } else if (randint(2) == 1) {
+            } else if (randomNumber(2) == 1) {
                 printMessage("You feel weaker.");
                 (void) dec_stat(A_STR);
             } else {
@@ -571,10 +571,10 @@ static bool executeAttack(Creature_t *r_ptr, Monster_t *m_ptr, int monsterID, in
             break;
         case 3: // Confusion attack
             take_hit(damage, deathDescription);
-            if (randint(2) == 1) {
+            if (randomNumber(2) == 1) {
                 if (py.flags.confused < 1) {
                     printMessage("You feel confused.");
-                    py.flags.confused += randint((int) r_ptr->level);
+                    py.flags.confused += randomNumber((int) r_ptr->level);
                 } else {
                     notice = false;
                 }
@@ -589,7 +589,7 @@ static bool executeAttack(Creature_t *r_ptr, Monster_t *m_ptr, int monsterID, in
                 printMessage("You resist the effects!");
             } else if (py.flags.afraid < 1) {
                 printMessage("You are suddenly afraid!");
-                py.flags.afraid += 3 + randint((int) r_ptr->level);
+                py.flags.afraid += 3 + randomNumber((int) r_ptr->level);
             } else {
                 py.flags.afraid += 3;
                 notice = false;
@@ -619,7 +619,7 @@ static bool executeAttack(Creature_t *r_ptr, Monster_t *m_ptr, int monsterID, in
         case 10: // Blindness attack
             take_hit(damage, deathDescription);
             if (py.flags.blind < 1) {
-                py.flags.blind += 10 + randint((int) r_ptr->level);
+                py.flags.blind += 10 + randomNumber((int) r_ptr->level);
                 printMessage("Your eyes begin to sting.");
             } else {
                 py.flags.blind += 5;
@@ -634,7 +634,7 @@ static bool executeAttack(Creature_t *r_ptr, Monster_t *m_ptr, int monsterID, in
                 if (py.flags.free_act) {
                     printMessage("You are unaffected.");
                 } else {
-                    py.flags.paralysis = (int16_t) (randint((int) r_ptr->level) + 3);
+                    py.flags.paralysis = (int16_t) (randomNumber((int) r_ptr->level) + 3);
                     printMessage("You are paralyzed.");
                 }
             } else {
@@ -642,10 +642,10 @@ static bool executeAttack(Creature_t *r_ptr, Monster_t *m_ptr, int monsterID, in
             }
             break;
         case 12: // Steal Money
-            if (py.flags.paralysis < 1 && randint(124) < py.stats.use_stat[A_DEX]) {
+            if (py.flags.paralysis < 1 && randomNumber(124) < py.stats.use_stat[A_DEX]) {
                 printMessage("You quickly protect your money pouch!");
             } else {
-                gold = (py.misc.au / 10) + randint(25);
+                gold = (py.misc.au / 10) + randomNumber(25);
                 if (gold > py.misc.au) {
                     py.misc.au = 0;
                 } else {
@@ -654,19 +654,19 @@ static bool executeAttack(Creature_t *r_ptr, Monster_t *m_ptr, int monsterID, in
                 printMessage("Your purse feels lighter.");
                 prt_gold();
             }
-            if (randint(2) == 1) {
+            if (randomNumber(2) == 1) {
                 printMessage("There is a puff of smoke!");
                 teleport_away(monsterID, MAX_SIGHT);
             }
             break;
         case 13: // Steal Object
-            if (py.flags.paralysis < 1 && randint(124) < py.stats.use_stat[A_DEX]) {
+            if (py.flags.paralysis < 1 && randomNumber(124) < py.stats.use_stat[A_DEX]) {
                 printMessage("You grab hold of your backpack!");
             } else {
-                inven_destroy(randint(inventory_count) - 1);
+                inven_destroy(randomNumber(inventory_count) - 1);
                 printMessage("Your backpack feels lighter.");
             }
-            if (randint(2) == 1) {
+            if (randomNumber(2) == 1) {
                 printMessage("There is a puff of smoke!");
                 teleport_away(monsterID, MAX_SIGHT);
             }
@@ -674,7 +674,7 @@ static bool executeAttack(Creature_t *r_ptr, Monster_t *m_ptr, int monsterID, in
         case 14: // Poison
             take_hit(damage, deathDescription);
             printMessage("You feel very sick.");
-            py.flags.poisoned += randint((int) r_ptr->level) + 5;
+            py.flags.poisoned += randomNumber((int) r_ptr->level) + 5;
             break;
         case 15: // Lose dexterity
             take_hit(damage, deathDescription);
@@ -738,7 +738,7 @@ static bool executeAttack(Creature_t *r_ptr, Monster_t *m_ptr, int monsterID, in
         case 23: // Eat light
             i_ptr = &inventory[INVEN_LIGHT];
             if (i_ptr->p1 > 0) {
-                i_ptr->p1 -= (250 + randint(250));
+                i_ptr->p1 -= (250 + randomNumber(250));
                 if (i_ptr->p1 < 1) {
                     i_ptr->p1 = 1;
                 }
@@ -752,7 +752,7 @@ static bool executeAttack(Creature_t *r_ptr, Monster_t *m_ptr, int monsterID, in
             }
             break;
         case 24: // Eat charges
-            i_ptr = &inventory[randint(inventory_count) - 1];
+            i_ptr = &inventory[randomNumber(inventory_count) - 1];
             if ((i_ptr->tval == TV_STAFF || i_ptr->tval == TV_WAND) && i_ptr->p1 > 0) {
                 m_ptr->hp += r_ptr->level * i_ptr->p1;
                 i_ptr->p1 = 0;
@@ -782,20 +782,20 @@ static void confuseCreatureOnAttack(Creature_t *r_ptr, Monster_t *m_ptr, int ade
 
         vtype_t msg;
 
-        if (randint(MAX_MONS_LEVEL) < r_ptr->level || (CD_NO_SLEEP & r_ptr->cdefense)) {
+        if (randomNumber(MAX_MONS_LEVEL) < r_ptr->level || (CD_NO_SLEEP & r_ptr->cdefense)) {
             (void) sprintf(msg, "%sis unaffected.", cdesc);
         } else {
             (void) sprintf(msg, "%sappears confused.", cdesc);
             if (m_ptr->confused) {
                 m_ptr->confused += 3;
             } else {
-                m_ptr->confused = (uint8_t) (2 + randint(16));
+                m_ptr->confused = (uint8_t) (2 + randomNumber(16));
             }
         }
 
         printMessage(msg);
 
-        if (visible && !character_is_dead && randint(4) == 1) {
+        if (visible && !character_is_dead && randomNumber(4) == 1) {
             creature_recall[m_ptr->mptr].r_cdefense |= r_ptr->cdefense & CD_NO_SLEEP;
         }
     }
@@ -911,13 +911,13 @@ static void creatureOpensDoor(Cave_t *c_ptr, int16_t monsterHP, uint32_t movebit
             } else if (t_ptr->p1 > 0) {
                 // Locked doors
 
-                if (randint((monsterHP + 1) * (50 + t_ptr->p1)) < 40 * (monsterHP - 10 - t_ptr->p1)) {
+                if (randomNumber((monsterHP + 1) * (50 + t_ptr->p1)) < 40 * (monsterHP - 10 - t_ptr->p1)) {
                     t_ptr->p1 = 0;
                 }
             } else if (t_ptr->p1 < 0) {
                 // Stuck doors
 
-                if (randint((monsterHP + 1) * (50 - t_ptr->p1)) < 40 * (monsterHP - 10 + t_ptr->p1)) {
+                if (randomNumber((monsterHP + 1) * (50 - t_ptr->p1)) < 40 * (monsterHP - 10 + t_ptr->p1)) {
                     printMessage("You hear a door burst open!");
                     disturb(1, 0);
                     doorStuck = true;
@@ -934,7 +934,7 @@ static void creatureOpensDoor(Cave_t *c_ptr, int16_t monsterHP, uint32_t movebit
 
             // 50% chance of breaking door
             if (doorStuck) {
-                t_ptr->p1 = (int16_t) (1 - randint(2));
+                t_ptr->p1 = (int16_t) (1 - randomNumber(2));
             }
             c_ptr->fval = CORR_FLOOR;
             lite_spot(y, x);
@@ -945,11 +945,11 @@ static void creatureOpensDoor(Cave_t *c_ptr, int16_t monsterHP, uint32_t movebit
         // Creature can not open doors, must bash them
         *do_turn = true;
 
-        if (randint((monsterHP + 1) * (80 + abs(t_ptr->p1))) < 40 * (monsterHP - 20 - abs(t_ptr->p1))) {
+        if (randomNumber((monsterHP + 1) * (80 + abs(t_ptr->p1))) < 40 * (monsterHP - 20 - abs(t_ptr->p1))) {
             inventoryItemCopyTo(OBJ_OPEN_DOOR, t_ptr);
 
             // 50% chance of breaking door
-            t_ptr->p1 = (int16_t) (1 - randint(2));
+            t_ptr->p1 = (int16_t) (1 - randomNumber(2));
             c_ptr->fval = CORR_FLOOR;
             lite_spot(y, x);
             printMessage("You hear a door burst open!");
@@ -959,7 +959,7 @@ static void creatureOpensDoor(Cave_t *c_ptr, int16_t monsterHP, uint32_t movebit
 }
 
 static void glyphOfWardingProtection(uint16_t creatureID, uint32_t movebits, bool *do_move, bool *do_turn, int y, int x) {
-    if (randint(OBJ_RUNE_PROT) < creatures_list[creatureID].level) {
+    if (randomNumber(OBJ_RUNE_PROT) < creatures_list[creatureID].level) {
         if (y == char_row && x == char_col) {
             printMessage("The rune of protection is broken!");
         }
@@ -1089,7 +1089,7 @@ static void make_move(int monsterID, int *mm, uint32_t *rcmove) {
 
 static bool canCreatureCastSpells(Monster_t *m_ptr, uint32_t spells) {
     // 1 in x chance of casting spell
-    if (randint((int) (spells & CS_FREQ)) != 1) {
+    if (randomNumber((int) (spells & CS_FREQ)) != 1) {
         return false;
     }
 
@@ -1138,7 +1138,7 @@ void creatureCastsSpell(Monster_t *m_ptr, int monsterID, int spellID, uint8_t le
             } else if (py.flags.paralysis > 0) {
                 py.flags.paralysis += 2;
             } else {
-                py.flags.paralysis = (int16_t) (randint(5) + 4);
+                py.flags.paralysis = (int16_t) (randomNumber(5) + 4);
             }
             break;
         case 11: // Cause Blindness
@@ -1147,7 +1147,7 @@ void creatureCastsSpell(Monster_t *m_ptr, int monsterID, int spellID, uint8_t le
             } else if (py.flags.blind > 0) {
                 py.flags.blind += 6;
             } else {
-                py.flags.blind += 12 + randint(3);
+                py.flags.blind += 12 + randomNumber(3);
             }
             break;
         case 12: // Cause Confuse
@@ -1156,7 +1156,7 @@ void creatureCastsSpell(Monster_t *m_ptr, int monsterID, int spellID, uint8_t le
             } else if (py.flags.confused > 0) {
                 py.flags.confused += 2;
             } else {
-                py.flags.confused = (int16_t) (randint(5) + 3);
+                py.flags.confused = (int16_t) (randomNumber(5) + 3);
             }
             break;
         case 13: // Cause Fear
@@ -1165,7 +1165,7 @@ void creatureCastsSpell(Monster_t *m_ptr, int monsterID, int spellID, uint8_t le
             } else if (py.flags.afraid > 0) {
                 py.flags.afraid += 2;
             } else {
-                py.flags.afraid = (int16_t) (randint(5) + 3);
+                py.flags.afraid = (int16_t) (randomNumber(5) + 3);
             }
             break;
         case 14: // Summon Monster
@@ -1200,7 +1200,7 @@ void creatureCastsSpell(Monster_t *m_ptr, int monsterID, int spellID, uint8_t le
             } else if (py.flags.slow > 0) {
                 py.flags.slow += 2;
             } else {
-                py.flags.slow = (int16_t) (randint(5) + 3);
+                py.flags.slow = (int16_t) (randomNumber(5) + 3);
             }
             break;
         case 17: // Drain Mana
@@ -1216,7 +1216,7 @@ void creatureCastsSpell(Monster_t *m_ptr, int monsterID, int spellID, uint8_t le
                     printMessage(outval);
                 }
 
-                int r1 = (randint((int) level) >> 1) + 1;
+                int r1 = (randomNumber((int) level) >> 1) + 1;
                 if (r1 > py.misc.cmana) {
                     r1 = py.misc.cmana;
                     py.misc.cmana = 0;
@@ -1301,7 +1301,7 @@ static bool mon_cast_spell(int monsterID) {
     }
 
     // Choose a spell to cast
-    int thrown_spell = spell_choice[randint(id) - 1];
+    int thrown_spell = spell_choice[randomNumber(id) - 1];
     thrown_spell++;
 
     // all except teleport_away() and drain mana spells always disturb
@@ -1334,8 +1334,8 @@ static bool mon_cast_spell(int monsterID) {
 // Rats and Flys are fun!
 bool monsterMultiply(int y, int x, int creatureID, int monsterID) {
     for (int i = 0; i <= 18; i++) {
-        int row = y - 2 + randint(3);
-        int col = x - 2 + randint(3);
+        int row = y - 2 + randomNumber(3);
+        int col = x - 2 + randomNumber(3);
 
         // don't create a new creature on top of the old one, that
         // causes invincible/invisible creatures to appear.
@@ -1406,13 +1406,13 @@ static void multiplyCritter(Monster_t *m_ptr, int monsterID, uint32_t *rcmove) {
         }
     }
 
-    // can't call randint with a value of zero, increment
+    // can't call randomNumber with a value of zero, increment
     // counter to allow creature multiplication.
     if (counter == 0) {
         counter++;
     }
 
-    if (counter < 4 && randint(counter * MON_MULT_ADJ) == 1) {
+    if (counter < 4 && randomNumber(counter * MON_MULT_ADJ) == 1) {
         if (monsterMultiply((int) m_ptr->fy, (int) m_ptr->fx, (int) m_ptr->mptr, monsterID)) {
             *rcmove |= CM_MULTIPLY;
         }
@@ -1447,7 +1447,7 @@ static void creatureMoveOutOfWall(Monster_t *m_ptr, int monsterID, uint32_t *rcm
 
     if (id != 0) {
         // put a random direction first
-        dir = randint(id) - 1;
+        dir = randomNumber(id) - 1;
         int savedID = mm[0];
         mm[0] = mm[dir];
         mm[dir] = savedID;
@@ -1482,14 +1482,14 @@ static void creatureMoveConfusedUndead(Monster_t *m_ptr, Creature_t *r_ptr, int 
         mm[0] = 10 - mm[0];
         mm[1] = 10 - mm[1];
         mm[2] = 10 - mm[2];
-        mm[3] = randint(9); // May attack only if cornered
-        mm[4] = randint(9);
+        mm[3] = randomNumber(9); // May attack only if cornered
+        mm[4] = randomNumber(9);
     } else {
-        mm[0] = randint(9);
-        mm[1] = randint(9);
-        mm[2] = randint(9);
-        mm[3] = randint(9);
-        mm[4] = randint(9);
+        mm[0] = randomNumber(9);
+        mm[1] = randomNumber(9);
+        mm[2] = randomNumber(9);
+        mm[3] = randomNumber(9);
+        mm[4] = randomNumber(9);
     }
 
     // don't move him if he is not supposed to move!
@@ -1532,41 +1532,41 @@ static void mon_move(int monsterID, uint32_t *rcmove) {
 
     int mm[9];
     if (!doMove) {
-        if ((r_ptr->cmove & CM_75_RANDOM) && randint(100) < 75) {
+        if ((r_ptr->cmove & CM_75_RANDOM) && randomNumber(100) < 75) {
             // 75% random movement
-            mm[0] = randint(9);
-            mm[1] = randint(9);
-            mm[2] = randint(9);
-            mm[3] = randint(9);
-            mm[4] = randint(9);
+            mm[0] = randomNumber(9);
+            mm[1] = randomNumber(9);
+            mm[2] = randomNumber(9);
+            mm[3] = randomNumber(9);
+            mm[4] = randomNumber(9);
             *rcmove |= CM_75_RANDOM;
             make_move(monsterID, mm, rcmove);
-        } else if ((r_ptr->cmove & CM_40_RANDOM) && randint(100) < 40) {
+        } else if ((r_ptr->cmove & CM_40_RANDOM) && randomNumber(100) < 40) {
             // 40% random movement
-            mm[0] = randint(9);
-            mm[1] = randint(9);
-            mm[2] = randint(9);
-            mm[3] = randint(9);
-            mm[4] = randint(9);
+            mm[0] = randomNumber(9);
+            mm[1] = randomNumber(9);
+            mm[2] = randomNumber(9);
+            mm[3] = randomNumber(9);
+            mm[4] = randomNumber(9);
             *rcmove |= CM_40_RANDOM;
             make_move(monsterID, mm, rcmove);
-        } else if ((r_ptr->cmove & CM_20_RANDOM) && randint(100) < 20) {
+        } else if ((r_ptr->cmove & CM_20_RANDOM) && randomNumber(100) < 20) {
             // 20% random movement
-            mm[0] = randint(9);
-            mm[1] = randint(9);
-            mm[2] = randint(9);
-            mm[3] = randint(9);
-            mm[4] = randint(9);
+            mm[0] = randomNumber(9);
+            mm[1] = randomNumber(9);
+            mm[2] = randomNumber(9);
+            mm[3] = randomNumber(9);
+            mm[4] = randomNumber(9);
             *rcmove |= CM_20_RANDOM;
             make_move(monsterID, mm, rcmove);
         } else if (r_ptr->cmove & CM_MOVE_NORMAL) {
             // Normal movement
-            if (randint(200) == 1) {
-                mm[0] = randint(9);
-                mm[1] = randint(9);
-                mm[2] = randint(9);
-                mm[3] = randint(9);
-                mm[4] = randint(9);
+            if (randomNumber(200) == 1) {
+                mm[0] = randomNumber(9);
+                mm[1] = randomNumber(9);
+                mm[2] = randomNumber(9);
+                mm[3] = randomNumber(9);
+                mm[4] = randomNumber(9);
             } else {
                 get_moves(monsterID, mm);
             }
@@ -1631,8 +1631,8 @@ static void creatureAttackingUpdate(Monster_t *m_ptr, int monsterID, int moves) 
             if (m_ptr->csleep > 0) {
                 if (py.flags.aggravate) {
                     m_ptr->csleep = 0;
-                } else if ((py.flags.rest == 0 && py.flags.paralysis < 1) || (randint(50) == 1)) {
-                    int notice = randint(1024);
+                } else if ((py.flags.rest == 0 && py.flags.paralysis < 1) || (randomNumber(50) == 1)) {
+                    int notice = randomNumber(1024);
 
                     if (notice * notice * notice <= (1L << (29 - py.misc.stl))) {
                         m_ptr->csleep -= (100 / m_ptr->cdis);
@@ -1650,7 +1650,7 @@ static void creatureAttackingUpdate(Monster_t *m_ptr, int monsterID, int moves) 
 
             if (m_ptr->stunned != 0) {
                 // NOTE: Balrog = 100*100 = 10000, it always recovers instantly
-                if (randint(5000) < creatures_list[m_ptr->mptr].level * creatures_list[m_ptr->mptr].level) {
+                if (randomNumber(5000) < creatures_list[m_ptr->mptr].level * creatures_list[m_ptr->mptr].level) {
                     m_ptr->stunned = 0;
                 } else {
                     m_ptr->stunned--;

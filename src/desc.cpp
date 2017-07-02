@@ -40,42 +40,42 @@ void magicInitializeItemNames() {
 
     // The first 3 entries for colors are fixed, (slime & apple juice, water)
     for (int i = 3; i < MAX_COLORS; i++) {
-        j = randint(MAX_COLORS - 3) + 2;
+        j = randomNumber(MAX_COLORS - 3) + 2;
         tmp = colors[i];
         colors[i] = colors[j];
         colors[j] = tmp;
     }
 
     for (int i = 0; i < MAX_WOODS; i++) {
-        j = randint(MAX_WOODS) - 1;
+        j = randomNumber(MAX_WOODS) - 1;
         tmp = woods[i];
         woods[i] = woods[j];
         woods[j] = tmp;
     }
 
     for (int i = 0; i < MAX_METALS; i++) {
-        j = randint(MAX_METALS) - 1;
+        j = randomNumber(MAX_METALS) - 1;
         tmp = metals[i];
         metals[i] = metals[j];
         metals[j] = tmp;
     }
 
     for (int i = 0; i < MAX_ROCKS; i++) {
-        j = randint(MAX_ROCKS) - 1;
+        j = randomNumber(MAX_ROCKS) - 1;
         tmp = rocks[i];
         rocks[i] = rocks[j];
         rocks[j] = tmp;
     }
 
     for (int i = 0; i < MAX_AMULETS; i++) {
-        j = randint(MAX_AMULETS) - 1;
+        j = randomNumber(MAX_AMULETS) - 1;
         tmp = amulets[i];
         amulets[i] = amulets[j];
         amulets[j] = tmp;
     }
 
     for (int i = 0; i < MAX_MUSH; i++) {
-        j = randint(MAX_MUSH) - 1;
+        j = randomNumber(MAX_MUSH) - 1;
         tmp = mushrooms[i];
         mushrooms[i] = mushrooms[j];
         mushrooms[j] = tmp;
@@ -86,11 +86,11 @@ void magicInitializeItemNames() {
 
     for (int h = 0; h < MAX_TITLES; h++) {
         string[0] = '\0';
-        k = randint(2) + 1;
+        k = randomNumber(2) + 1;
 
         for (int i = 0; i < k; i++) {
-            for (int s = randint(2); s > 0; s--) {
-                (void) strcat(string, syllables[randint(MAX_SYLLABLES) - 1]);
+            for (int s = randomNumber(2); s > 0; s--) {
+                (void) strcat(string, syllables[randomNumber(MAX_SYLLABLES) - 1]);
             }
             if (i < k - 1) {
                 (void) strcat(string, " ");

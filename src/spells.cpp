@@ -54,7 +54,7 @@ bool sleep_monsters1(int y, int x) {
             vtype_t name;
             monster_name(name, m_ptr->ml, r_ptr->name);
 
-            if (randint(MAX_MONS_LEVEL) < r_ptr->level || (CD_NO_SLEEP & r_ptr->cdefense)) {
+            if (randomNumber(MAX_MONS_LEVEL) < r_ptr->level || (CD_NO_SLEEP & r_ptr->cdefense)) {
                 if (m_ptr->ml && (r_ptr->cdefense & CD_NO_SLEEP)) {
                     creature_recall[m_ptr->mptr].r_cdefense |= CD_NO_SLEEP;
                 }
@@ -288,10 +288,10 @@ static void lightTileArea(int row, int col) {
 
 // Map the current area plus some -RAK-
 void map_area() {
-    int rowMin = panel_row_min - randint(10);
-    int rowMax = panel_row_max + randint(10);
-    int colMin = panel_col_min - randint(20);
-    int colMax = panel_col_max + randint(20);
+    int rowMin = panel_row_min - randomNumber(10);
+    int rowMax = panel_row_max + randomNumber(10);
+    int colMin = panel_col_min - randomNumber(20);
+    int colMax = panel_col_max + randomNumber(20);
 
     for (int row = rowMin; row <= rowMax; row++) {
         for (int col = colMin; col <= colMax; col++) {
@@ -372,7 +372,7 @@ bool trap_creation() {
                 if (c_ptr->tptr != 0) {
                     (void) delete_object(y, x);
                 }
-                place_trap(y, x, randint(MAX_TRAP) - 1);
+                place_trap(y, x, randomNumber(MAX_TRAP) - 1);
 
                 // don't let player gain exp from the newly created traps
                 treasure_list[c_ptr->tptr].p1 = 0;
@@ -931,7 +931,7 @@ void breath(int x, int y, int monster_id, int damage_hp, char *spell_name, int s
                         dam = (damage_hp / (distance(row, col, y, x) + 1));
 
                         // let's do at least one point of damage
-                        // prevents randint(0) problem with poison_gas, also
+                        // prevents randomNumber(0) problem with poison_gas, also
                         if (dam == 0) {
                             dam = 1;
                         }
@@ -990,13 +990,13 @@ bool recharge(int charges) {
     // recharge II = recharge(60) = 1/10 failure for empty 10th level wand
     //
     // make it harder to recharge high level, and highly charged wands, note
-    // that i can be negative, so check its value before trying to call randint().
+    // that i can be negative, so check its value before trying to call randomNumber().
     int chance = charges + 50 - (int) i_ptr->level - i_ptr->p1;
     if (chance < 19) {
         // Automatic failure.
         chance = 1;
     } else {
-        chance = randint(chance / 10);
+        chance = randomNumber(chance / 10);
     }
 
     if (chance == 1) {
@@ -1004,7 +1004,7 @@ bool recharge(int charges) {
         inven_destroy(item_val);
     } else {
         charges = (charges / (i_ptr->level + 2)) + 1;
-        i_ptr->p1 += 2 + randint(charges);
+        i_ptr->p1 += 2 + randomNumber(charges);
         if (spellItemIdentified(i_ptr)) {
             spellItemRemoveIdentification(i_ptr);
         }
@@ -1126,7 +1126,7 @@ bool speed_monster(int y, int x, int direction, int speed) {
                 changed = true;
 
                 printMonsterActionText(name, "starts moving faster.");
-            } else if (randint(MAX_MONS_LEVEL) > r_ptr->level) {
+            } else if (randomNumber(MAX_MONS_LEVEL) > r_ptr->level) {
                 m_ptr->cspeed += speed;
                 m_ptr->csleep = 0;
 
@@ -1168,7 +1168,7 @@ bool confuse_monster(int y, int x, int direction) {
             vtype_t name;
             monster_name(name, m_ptr->ml, r_ptr->name);
 
-            if (randint(MAX_MONS_LEVEL) < r_ptr->level || (CD_NO_SLEEP & r_ptr->cdefense)) {
+            if (randomNumber(MAX_MONS_LEVEL) < r_ptr->level || (CD_NO_SLEEP & r_ptr->cdefense)) {
                 if (m_ptr->ml && (r_ptr->cdefense & CD_NO_SLEEP)) {
                     creature_recall[m_ptr->mptr].r_cdefense |= CD_NO_SLEEP;
                 }
@@ -1184,7 +1184,7 @@ bool confuse_monster(int y, int x, int direction) {
                 if (m_ptr->confused) {
                     m_ptr->confused += 3;
                 } else {
-                    m_ptr->confused = (uint8_t) (2 + randint(16));
+                    m_ptr->confused = (uint8_t) (2 + randomNumber(16));
                 }
                 m_ptr->csleep = 0;
 
@@ -1222,7 +1222,7 @@ bool sleep_monster(int y, int x, int direction) {
             vtype_t name;
             monster_name(name, m_ptr->ml, r_ptr->name);
 
-            if (randint(MAX_MONS_LEVEL) < r_ptr->level || (CD_NO_SLEEP & r_ptr->cdefense)) {
+            if (randomNumber(MAX_MONS_LEVEL) < r_ptr->level || (CD_NO_SLEEP & r_ptr->cdefense)) {
                 if (m_ptr->ml && (r_ptr->cdefense & CD_NO_SLEEP)) {
                     creature_recall[m_ptr->mptr].r_cdefense |= CD_NO_SLEEP;
                 }
@@ -1284,7 +1284,7 @@ bool wall_to_mud(int y, int x, int direction) {
 
             if (treasure_list[c_ptr->tptr].tval == TV_RUBBLE) {
                 (void) delete_object(y, x);
-                if (randint(10) == 1) {
+                if (randomNumber(10) == 1) {
                     place_object(y, x, false);
                     if (test_light(y, x)) {
                         printMessage("You have found something!");
@@ -1384,13 +1384,13 @@ bool poly_monster(int y, int x, int direction) {
             Monster_t *m_ptr = &monsters[c_ptr->cptr];
             Creature_t *r_ptr = &creatures_list[m_ptr->mptr];
 
-            if (randint(MAX_MONS_LEVEL) > r_ptr->level) {
+            if (randomNumber(MAX_MONS_LEVEL) > r_ptr->level) {
                 finished = true;
 
                 delete_monster((int) c_ptr->cptr);
 
                 // Place_monster() should always return true here.
-                morphed = place_monster(y, x, randint(monster_levels[MAX_MONS_LEVEL] - monster_levels[0]) - 1 + monster_levels[0], false);
+                morphed = place_monster(y, x, randomNumber(monster_levels[MAX_MONS_LEVEL] - monster_levels[0]) - 1 + monster_levels[0], false);
 
                 // don't test c_ptr->fm here, only pl/tl
                 if (morphed && panel_contains(y, x) && (c_ptr->tl || c_ptr->pl)) {
@@ -1510,8 +1510,8 @@ void teleport_away(int monster_id, int distance_from_player) {
     int ctr = 0;
     do {
         do {
-            yn = m_ptr->fy + (randint(2 * distance_from_player + 1) - (distance_from_player + 1));
-            xn = m_ptr->fx + (randint(2 * distance_from_player + 1) - (distance_from_player + 1));
+            yn = m_ptr->fy + (randomNumber(2 * distance_from_player + 1) - (distance_from_player + 1));
+            xn = m_ptr->fx + (randomNumber(2 * distance_from_player + 1) - (distance_from_player + 1));
         } while (!in_bounds(yn, xn));
 
         ctr++;
@@ -1540,8 +1540,8 @@ void teleport_to(int to_y, int to_x) {
     int dis = 1;
     int ctr = 0;
     do {
-        y = to_y + (randint(2 * dis + 1) - (dis + 1));
-        x = to_x + (randint(2 * dis + 1) - (dis + 1));
+        y = to_y + (randomNumber(2 * dis + 1) - (dis + 1));
+        x = to_x + (randomNumber(2 * dis + 1) - (dis + 1));
         ctr++;
         if (ctr > 9) {
             ctr = 0;
@@ -1674,7 +1674,7 @@ bool speed_monsters(int speed) {
                 speedy = true;
                 printMonsterActionText(name, "starts moving faster.");
             }
-        } else if (randint(MAX_MONS_LEVEL) > r_ptr->level) {
+        } else if (randomNumber(MAX_MONS_LEVEL) > r_ptr->level) {
             m_ptr->cspeed += speed;
             m_ptr->csleep = 0;
 
@@ -1706,7 +1706,7 @@ bool sleep_monsters2() {
             continue; // do nothing
         }
 
-        if (randint(MAX_MONS_LEVEL) < r_ptr->level || (CD_NO_SLEEP & r_ptr->cdefense)) {
+        if (randomNumber(MAX_MONS_LEVEL) < r_ptr->level || (CD_NO_SLEEP & r_ptr->cdefense)) {
             if (m_ptr->ml) {
                 if (r_ptr->cdefense & CD_NO_SLEEP) {
                     creature_recall[m_ptr->mptr].r_cdefense |= CD_NO_SLEEP;
@@ -1742,7 +1742,7 @@ bool mass_poly() {
                 delete_monster(id);
 
                 // Place_monster() should always return true here.
-                morphed = place_monster(y, x, randint(monster_levels[MAX_MONS_LEVEL] - monster_levels[0]) - 1 + monster_levels[0], false);
+                morphed = place_monster(y, x, randomNumber(monster_levels[MAX_MONS_LEVEL] - monster_levels[0]) - 1 + monster_levels[0], false);
             }
         }
     }
@@ -1880,7 +1880,7 @@ static void earthquakeHitsMonster(int monsterID) {
 void earthquake() {
     for (int y = char_row - 8; y <= char_row + 8; y++) {
         for (int x = char_col - 8; x <= char_col + 8; x++) {
-            if ((y != char_row || x != char_col) && in_bounds(y, x) && randint(8) == 1) {
+            if ((y != char_row || x != char_col) && in_bounds(y, x) && randomNumber(8) == 1) {
                 Cave_t *c_ptr = &cave[y][x];
 
                 if (c_ptr->tptr != 0) {
@@ -1896,7 +1896,7 @@ void earthquake() {
                     c_ptr->pl = false;
                     c_ptr->fm = false;
                 } else if (c_ptr->fval <= MAX_CAVE_FLOOR) {
-                    int tmp = randint(10);
+                    int tmp = randomNumber(10);
 
                     if (tmp < 6) {
                         c_ptr->fval = QUARTZ_WALL;
@@ -1918,7 +1918,7 @@ void earthquake() {
 bool protect_evil() {
     bool isProtected = py.flags.protevil == 0;
 
-    py.flags.protevil += randint(25) + 3 * py.misc.lev;
+    py.flags.protevil += randomNumber(25) + 3 * py.misc.lev;
 
     return isProtected;
 }
@@ -1959,7 +1959,7 @@ bool dispel_creature(int creature_defense, int damage) {
             vtype_t name;
             monster_name(name, m_ptr->ml, r_ptr->name);
 
-            int hit = mon_take_hit(id, randint(damage));
+            int hit = mon_take_hit(id, randomNumber(damage));
 
             // Should get these messages even if the monster is not visible.
             if (hit >= 0) {
@@ -1989,7 +1989,7 @@ bool turn_undead() {
             vtype_t name;
             monster_name(name, m_ptr->ml, r_ptr->name);
 
-            if (py.misc.lev + 1 > r_ptr->level || randint(5) == 1) {
+            if (py.misc.lev + 1 > r_ptr->level || randomNumber(5) == 1) {
                 if (m_ptr->ml) {
                     creature_recall[m_ptr->mptr].r_cdefense |= CD_UNDEAD;
 
@@ -2191,23 +2191,23 @@ void destroy_area(int y, int x) {
                     if (dist == 0) {
                         replace_spot(i, j, 1);
                     } else if (dist < 13) {
-                        replace_spot(i, j, randint(6));
+                        replace_spot(i, j, randomNumber(6));
                     } else if (dist < 16) {
-                        replace_spot(i, j, randint(9));
+                        replace_spot(i, j, randomNumber(9));
                     }
                 }
             }
         }
     }
     printMessage("There is a searing blast of light!");
-    py.flags.blind += 10 + randint(10);
+    py.flags.blind += 10 + randomNumber(10);
 }
 
 // Enchants a plus onto an item. -RAK-
 // `limit` param is the maximum bonus allowed; usually 10,
 // but weapon's maximum damage when enchanting melee weapons to damage.
 bool enchant(int16_t *plusses, int16_t max_bonus_limit) {
-    // avoid randint(0) call
+    // avoid randomNumber(0) call
     if (max_bonus_limit <= 0) {
         return false;
     }
@@ -2218,12 +2218,12 @@ bool enchant(int16_t *plusses, int16_t max_bonus_limit) {
         chance = *plusses;
 
         // very rarely allow enchantment over limit
-        if (randint(100) == 1) {
-            chance = randint(chance) - 1;
+        if (randomNumber(100) == 1) {
+            chance = randomNumber(chance) - 1;
         }
     }
 
-    if (randint(max_bonus_limit) > chance) {
+    if (randomNumber(max_bonus_limit) > chance) {
         *plusses += 1;
         return true;
     }

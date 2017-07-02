@@ -36,10 +36,10 @@ void place_rubble(int y, int x) {
 void place_gold(int y, int x) {
     int cur_pos = popt();
 
-    int i = ((randint(current_dungeon_level + 2) + 2) / 2) - 1;
+    int i = ((randomNumber(current_dungeon_level + 2) + 2) / 2) - 1;
 
-    if (randint(OBJ_GREAT) == 1) {
-        i += randint(current_dungeon_level + 1);
+    if (randomNumber(OBJ_GREAT) == 1) {
+        i += randomNumber(current_dungeon_level + 1);
     }
 
     if (i >= MAX_GOLD) {
@@ -48,7 +48,7 @@ void place_gold(int y, int x) {
 
     cave[y][x].tptr = (uint8_t) cur_pos;
     inventoryItemCopyTo(OBJ_GOLD_LIST + i, &treasure_list[cur_pos]);
-    treasure_list[cur_pos].cost += (8L * (int32_t) randint((int) treasure_list[cur_pos].cost)) + randint(8);
+    treasure_list[cur_pos].cost += (8L * (int32_t) randomNumber((int) treasure_list[cur_pos].cost)) + randomNumber(8);
 
     if (cave[y][x].cptr == 1) {
         printMessage("You feel something roll beneath your feet.");
@@ -58,13 +58,13 @@ void place_gold(int y, int x) {
 // Returns the array number of a random object -RAK-
 int get_obj_num(int level, bool must_be_small) {
     if (level == 0) {
-        return randint(treasure_levels[0]) - 1;
+        return randomNumber(treasure_levels[0]) - 1;
     }
 
     if (level >= MAX_OBJ_LEVEL) {
         level = MAX_OBJ_LEVEL;
-    } else if (randint(OBJ_GREAT) == 1) {
-        level = level * MAX_OBJ_LEVEL / randint(MAX_OBJ_LEVEL) + 1;
+    } else if (randomNumber(OBJ_GREAT) == 1) {
+        level = level * MAX_OBJ_LEVEL / randomNumber(MAX_OBJ_LEVEL) + 1;
         if (level > MAX_OBJ_LEVEL) {
             level = MAX_OBJ_LEVEL;
         }
@@ -78,19 +78,19 @@ int get_obj_num(int level, bool must_be_small) {
     // makes a level n objects occur approx 2/n% of the time on level n,
     // and 1/2n are 0th level.
     do {
-        if (randint(2) == 1) {
-            objectID = randint(treasure_levels[level]) - 1;
+        if (randomNumber(2) == 1) {
+            objectID = randomNumber(treasure_levels[level]) - 1;
         } else {
             // Choose three objects, pick the highest level.
-            objectID = randint(treasure_levels[level]) - 1;
+            objectID = randomNumber(treasure_levels[level]) - 1;
 
-            int j = randint(treasure_levels[level]) - 1;
+            int j = randomNumber(treasure_levels[level]) - 1;
 
             if (objectID < j) {
                 objectID = j;
             }
 
-            j = randint(treasure_levels[level]) - 1;
+            j = randomNumber(treasure_levels[level]) - 1;
 
             if (objectID < j) {
                 objectID = j;
@@ -99,9 +99,9 @@ int get_obj_num(int level, bool must_be_small) {
             int foundLevel = game_objects[sorted_objects[objectID]].level;
 
             if (foundLevel == 0) {
-                objectID = randint(treasure_levels[0]) - 1;
+                objectID = randomNumber(treasure_levels[0]) - 1;
             } else {
-                objectID = randint(treasure_levels[foundLevel] - treasure_levels[foundLevel - 1]) - 1 + treasure_levels[foundLevel - 1];
+                objectID = randomNumber(treasure_levels[foundLevel] - treasure_levels[foundLevel - 1]) - 1 + treasure_levels[foundLevel - 1];
             }
         }
     } while (must_be_small && set_large(&game_objects[sorted_objects[objectID]]));
@@ -133,13 +133,13 @@ void alloc_object(bool (*set_function)(int), int object_type, int number) {
         // don't put an object beneath the player, this could cause
         // problems if player is standing under rubble, or on a trap.
         do {
-            y = randint(dungeon_height) - 1;
-            x = randint(dungeon_width) - 1;
+            y = randomNumber(dungeon_height) - 1;
+            x = randomNumber(dungeon_width) - 1;
         } while (!(*set_function)(cave[y][x].fval) || cave[y][x].tptr != 0 || (y == char_row && x == char_col));
 
         switch (object_type) {
             case 1:
-                place_trap(y, x, randint(MAX_TRAP) - 1);
+                place_trap(y, x, randomNumber(MAX_TRAP) - 1);
                 break;
             case 2:
                 // NOTE: object_type == 2 is not used - used to be visible traps.
@@ -164,11 +164,11 @@ void alloc_object(bool (*set_function)(int), int object_type, int number) {
 void random_object(int y, int x, int tries) {
     do {
         for (int i = 0; i <= 10; i++) {
-            int j = y - 3 + randint(5);
-            int k = x - 4 + randint(7);
+            int j = y - 3 + randomNumber(5);
+            int k = x - 4 + randomNumber(7);
 
             if (in_bounds(j, k) && cave[j][k].fval <= MAX_CAVE_FLOOR && cave[j][k].tptr == 0) {
-                if (randint(100) < 75) {
+                if (randomNumber(100) < 75) {
                     place_object(j, k, false);
                 } else {
                     place_gold(j, k);
@@ -640,7 +640,7 @@ bool inc_stat(int stat) {
         // stat increases by 1/6 to 1/3 of difference from max
         int gain = ((118 - newStat) / 3 + 1) >> 1;
 
-        newStat += randint(gain) + gain;
+        newStat += randomNumber(gain) + gain;
     } else {
         newStat++;
     }
@@ -669,7 +669,7 @@ bool dec_stat(int stat) {
         newStat--;
     } else if (newStat < 117) {
         int loss = (((118 - newStat) >> 1) + 1) >> 1;
-        newStat += -randint(loss) - loss;
+        newStat += -randomNumber(loss) - loss;
 
         if (newStat < 18) {
             newStat = 18;
@@ -1184,7 +1184,7 @@ int inven_damage(bool (*item_type)(Inventory_t *), int chance_percentage) {
     int damage = 0;
 
     for (int i = 0; i < inventory_count; i++) {
-        if ((*item_type)(&inventory[i]) && randint(100) < chance_percentage) {
+        if ((*item_type)(&inventory[i]) && randomNumber(100) < chance_percentage) {
             inven_destroy(i);
             damage++;
         }
@@ -1847,7 +1847,7 @@ void gain_spells() {
     } else {
         // pick a prayer at random
         while (new_spells) {
-            int s = randint(spellID) - 1;
+            int s = randomNumber(spellID) - 1;
             spells_learnt |= 1L << spells[s];
             spells_learned_order[last_known++] = (uint8_t) spells[s];
 
@@ -2206,8 +2206,8 @@ int critical_blow(int weapon_weight, int plus_to_hit, int damage, int attack_typ
 
     // Weight of weapon, plusses to hit, and character level all
     // contribute to the chance of a critical
-    if (randint(5000) <= weapon_weight + 5 * plus_to_hit + (class_level_adj[py.misc.pclass][attack_type_id] * py.misc.lev)) {
-        weapon_weight += randint(650);
+    if (randomNumber(5000) <= weapon_weight + 5 * plus_to_hit + (class_level_adj[py.misc.pclass][attack_type_id] * py.misc.lev)) {
+        weapon_weight += randomNumber(650);
 
         if (weapon_weight < 400) {
             critical = 2 * damage + 5;
@@ -2288,7 +2288,7 @@ bool player_saves() {
 
     int saving = py.misc.save + stat_adj(A_WIS) + classLevelAdjustment;
 
-    return randint(100) <= saving;
+    return randomNumber(100) <= saving;
 }
 
 // Finds range of item in inventory list -RAK-
@@ -2326,8 +2326,8 @@ void teleport(int new_distance) {
     int y, x;
 
     do {
-        y = randint(dungeon_height) - 1;
-        x = randint(dungeon_width) - 1;
+        y = randomNumber(dungeon_height) - 1;
+        x = randomNumber(dungeon_width) - 1;
 
         while (distance(y, x, char_row, char_col) > new_distance) {
             y += (char_row - y) / 2;

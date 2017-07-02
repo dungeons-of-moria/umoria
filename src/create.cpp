@@ -18,7 +18,7 @@ static void get_stats() {
         tot = 0;
         for (int i = 0; i < 18; i++) {
             // Roll 3,4,5 sided dice once each
-            dice[i] = randint(3 + i % 3);
+            dice[i] = randomNumber(3 + i % 3);
             tot += dice[i];
         }
     } while (tot <= 42 || tot >= 54);
@@ -37,9 +37,9 @@ static void change_stat(int stat, int16_t amount) {
             if (tmp_stat > 108) {
                 tmp_stat--;
             } else if (tmp_stat > 88) {
-                tmp_stat += -randint(6) - 2;
+                tmp_stat += -randomNumber(6) - 2;
             } else if (tmp_stat > 18) {
-                tmp_stat += -randint(15) - 5;
+                tmp_stat += -randomNumber(15) - 5;
                 if (tmp_stat < 18) {
                     tmp_stat = 18;
                 }
@@ -52,9 +52,9 @@ static void change_stat(int stat, int16_t amount) {
             if (tmp_stat < 18) {
                 tmp_stat++;
             } else if (tmp_stat < 88) {
-                tmp_stat += randint(15) + 5;
+                tmp_stat += randomNumber(15) + 5;
             } else if (tmp_stat < 108) {
-                tmp_stat += randint(6) + 2;
+                tmp_stat += randomNumber(6) + 2;
             } else if (tmp_stat < 118) {
                 tmp_stat++;
             }
@@ -165,7 +165,7 @@ static void get_history() {
     int test_roll;
 
     int hist_ptr = py.misc.prace * 3 + 1;
-    int social_class = randint(4);
+    int social_class = randomNumber(4);
     int cur_ptr = 0;
     history_block[0] = '\0';
 
@@ -174,7 +174,7 @@ static void get_history() {
         bool flag = false;
         while (!flag) {
             if (character_backgrounds[cur_ptr].chart == hist_ptr) {
-                test_roll = randint(100);
+                test_roll = randomNumber(100);
                 while (test_roll > character_backgrounds[cur_ptr].roll) {
                     cur_ptr++;
                 }
@@ -277,7 +277,7 @@ static void get_sex() {
 // Computes character's age, height, and weight -JWT-
 static void get_ahw() {
     int i = py.misc.prace;
-    py.misc.age = (uint16_t) (character_races[i].b_age + randint((int) character_races[i].m_age));
+    py.misc.age = (uint16_t) (character_races[i].b_age + randomNumber((int) character_races[i].m_age));
     if (py.misc.male) {
         py.misc.ht = (uint16_t) randnor((int) character_races[i].m_b_ht, (int) character_races[i].m_m_ht);
         py.misc.wt = (uint16_t) randnor((int) character_races[i].m_b_wt, (int) character_races[i].m_m_wt);
@@ -388,7 +388,7 @@ static void get_class() {
 
             do {
                 for (int i = 1; i < MAX_PLAYER_LEVEL; i++) {
-                    player_base_hp_levels[i] = (uint16_t) randint((int) py.misc.hitdie);
+                    player_base_hp_levels[i] = (uint16_t) randomNumber((int) py.misc.hitdie);
                     player_base_hp_levels[i] += player_base_hp_levels[i - 1];
                 }
             } while (player_base_hp_levels[MAX_PLAYER_LEVEL - 1] < min_value || player_base_hp_levels[MAX_PLAYER_LEVEL - 1] > max_value);
@@ -419,7 +419,7 @@ static void get_money() {
     uint8_t *a_ptr = py.stats.max_stat;
     int tmp = monval(a_ptr[A_STR]) + monval(a_ptr[A_INT]) + monval(a_ptr[A_WIS]) + monval(a_ptr[A_CON]) + monval(a_ptr[A_DEX]);
 
-    int gold = py.misc.sc * 6 + randint(25) + 325; // Social Class adj
+    int gold = py.misc.sc * 6 + randomNumber(25) + 325; // Social Class adj
     gold -= tmp;                                   // Stat adj
     gold += monval(a_ptr[A_CHR]);                  // Charisma adj
 

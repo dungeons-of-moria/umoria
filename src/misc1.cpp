@@ -36,7 +36,7 @@ void seedsInitialize(uint32_t seed) {
     set_rnd_seed(clock_var);
 
     // make it a little more random
-    for (clock_var = (uint32_t) randint(100); clock_var != 0; clock_var--) {
+    for (clock_var = (uint32_t) randomNumber(100); clock_var != 0; clock_var--) {
         (void) rnd();
     }
 }
@@ -55,7 +55,7 @@ void seedResetToOldSeed() {
 }
 
 // Generates a random integer x where 1<=X<=MAXVAL -RAK-
-int randint(int max) {
+int randomNumber(int max) {
     return (rnd() % max) + 1;
 }
 
@@ -68,14 +68,14 @@ int randnor(int mean, int standard) {
     // tmp = (tmp - 400) * standard / 81;
     // return tmp + mean;
 
-    int tmp = randint(MAX_SHORT);
+    int tmp = randomNumber(MAX_SHORT);
 
     // off scale, assign random value between 4 and 5 times SD
     if (tmp == MAX_SHORT) {
-        int offset = 4 * standard + randint(standard);
+        int offset = 4 * standard + randomNumber(standard);
 
         // one half are negative
-        if (randint(2) == 1) {
+        if (randomNumber(2) == 1) {
             offset = -offset;
         }
 
@@ -112,7 +112,7 @@ int randnor(int mean, int standard) {
     int offset = ((standard * iindex) + (NORMAL_TABLE_SD >> 1)) / NORMAL_TABLE_SD;
 
     // one half should be negative
-    if (randint(2) == 1) {
+    if (randomNumber(2) == 1) {
         offset = -offset;
     }
 
@@ -273,7 +273,7 @@ int next_to_corr(int y, int x) {
 int damroll(int dice, int sides) {
     int sum = 0;
     for (int i = 0; i < dice; i++) {
-        sum += randint(sides);
+        sum += randomNumber(sides);
     }
     return sum;
 }
@@ -458,8 +458,8 @@ char loc_symbol(int y, int x) {
         return ' ';
     }
 
-    if (py.flags.image > 0 && randint(12) == 1) {
-        return (uint8_t) (randint(95) + 31);
+    if (py.flags.image > 0 && randomNumber(12) == 1) {
+        return (uint8_t) (randomNumber(95) + 31);
     }
 
     if (cave_ptr->cptr > 1 && monsters[cave_ptr->cptr].ml) {
@@ -520,7 +520,7 @@ bool compact_monsters() {
     bool delete_any = false;
     while (!delete_any) {
         for (int i = next_free_monster_id - 1; i >= MIN_MONIX; i--) {
-            if (cur_dis < monsters[i].cdis && randint(3) == 1) {
+            if (cur_dis < monsters[i].cdis && randomNumber(3) == 1) {
                 if (creatures_list[monsters[i].mptr].cmove & CM_WIN) {
                     // Never compact away the Balrog!!
                 } else if (hack_monptr < i) {
@@ -628,7 +628,7 @@ bool place_monster(int y, int x, int monster_id, bool sleeping) {
         if (creatures_list[monster_id].sleep == 0) {
             mon_ptr->csleep = 0;
         } else {
-            mon_ptr->csleep = (int16_t) ((creatures_list[monster_id].sleep * 2) + randint((int) creatures_list[monster_id].sleep * 10));
+            mon_ptr->csleep = (int16_t) ((creatures_list[monster_id].sleep * 2) + randomNumber((int) creatures_list[monster_id].sleep * 10));
         }
     } else {
         mon_ptr->csleep = 0;
@@ -655,13 +655,13 @@ void place_win_monster() {
 
     int y, x;
     do {
-        y = randint(dungeon_height - 2);
-        x = randint(dungeon_width - 2);
+        y = randomNumber(dungeon_height - 2);
+        x = randomNumber(dungeon_width - 2);
     } while ((cave[y][x].fval >= MIN_CLOSED_SPACE) || (cave[y][x].cptr != 0) || (cave[y][x].tptr != 0) || (distance(y, x, char_row, char_col) <= MAX_SIGHT));
 
     mon_ptr->fy = (uint8_t) y;
     mon_ptr->fx = (uint8_t) x;
-    mon_ptr->mptr = (uint16_t) (randint(WIN_MON_TOT) - 1 + monster_levels[MAX_MONS_LEVEL]);
+    mon_ptr->mptr = (uint16_t) (randomNumber(WIN_MON_TOT) - 1 + monster_levels[MAX_MONS_LEVEL]);
 
     if (creatures_list[mon_ptr->mptr].cdefense & CD_MAX_HP) {
         mon_ptr->hp = (int16_t) max_hp(creatures_list[mon_ptr->mptr].hd);
@@ -684,14 +684,14 @@ void place_win_monster() {
 // common than low level monsters at any given level. -CJS-
 static int get_mons_num(int level) {
     if (level == 0) {
-        return randint(monster_levels[0]) - 1;
+        return randomNumber(monster_levels[0]) - 1;
     }
 
     if (level > MAX_MONS_LEVEL) {
         level = MAX_MONS_LEVEL;
     }
 
-    if (randint(MON_NASTY) == 1) {
+    if (randomNumber(MON_NASTY) == 1) {
         level = level + abs(randnor(0, 4)) + 1;
 
         if (level > MAX_MONS_LEVEL) {
@@ -704,15 +704,15 @@ static int get_mons_num(int level) {
         // This distribution makes a level n monster occur approx 2/n% of the
         // time on level n, and 1/n*n% are 1st level.
         int num = monster_levels[level] - monster_levels[0];
-        int i = randint(num) - 1;
-        int j = randint(num) - 1;
+        int i = randomNumber(num) - 1;
+        int j = randomNumber(num) - 1;
         if (j > i) {
             i = j;
         }
         level = creatures_list[i + monster_levels[0]].level;
     }
 
-    return randint(monster_levels[level] - monster_levels[level - 1]) - 1 + monster_levels[level - 1];
+    return randomNumber(monster_levels[level] - monster_levels[level - 1]) - 1 + monster_levels[level - 1];
 }
 
 // Allocates a random monster -RAK-
@@ -721,8 +721,8 @@ void alloc_monster(int number, int dist, bool sleeping) {
 
     for (int i = 0; i < number; i++) {
         do {
-            y = randint(dungeon_height - 2);
-            x = randint(dungeon_width - 2);
+            y = randomNumber(dungeon_height - 2);
+            x = randomNumber(dungeon_width - 2);
         } while (cave[y][x].fval >= MIN_CLOSED_SPACE || (cave[y][x].cptr != 0) || (distance(y, x, char_row, char_col) <= dist));
 
         int l = get_mons_num(current_dungeon_level);
@@ -743,8 +743,8 @@ static bool placeMonsterAdjacentTo(int monsterID, int *y, int *x, bool slp) {
     bool placed = false;
 
     for (int i = 0; i <= 9; i++) {
-        int yy = *y - 2 + randint(3);
-        int xx = *x - 2 + randint(3);
+        int yy = *y - 2 + randomNumber(3);
+        int xx = *x - 2 + randomNumber(3);
 
         if (in_bounds(yy, xx)) {
             if (cave[yy][xx].fval <= MAX_OPEN_SPACE && cave[yy][xx].cptr == 0) {
@@ -778,7 +778,7 @@ bool summon_undead(int *y, int *x) {
     int maxLevels = monster_levels[MAX_MONS_LEVEL];
 
     do {
-        monsterID = randint(maxLevels) - 1;
+        monsterID = randomNumber(maxLevels) - 1;
         for (int i = 0; i <= 19;) {
             if (creatures_list[monsterID].cdefense & CD_UNDEAD) {
                 i = 20;
@@ -833,7 +833,7 @@ static void compact_objects() {
                         default:
                             chance = 10;
                     }
-                    if (randint(100) <= chance) {
+                    if (randomNumber(100) <= chance) {
                         (void) delete_object(y, x);
                         counter++;
                     }
@@ -883,7 +883,7 @@ void pusht(uint8_t treasure_id) {
 
 // Should the object be enchanted -RAK-
 bool magik(int chance) {
-    return randint(100) <= chance;
+    return randomNumber(100) <= chance;
 }
 
 // Enchant a bonus based on degree desired -RAK-

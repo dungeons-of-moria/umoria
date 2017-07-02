@@ -16,7 +16,7 @@ static void magicalArmor(Inventory_t *t_ptr, int special, int level) {
         return;
     }
 
-    switch (randint(9)) {
+    switch (randomNumber(9)) {
         case 1:
             t_ptr->flags |= (TR_RES_LIGHT | TR_RES_COLD | TR_RES_ACID | TR_RES_FIRE);
             t_ptr->name2 = SN_R;
@@ -71,16 +71,16 @@ static void magicalSword(Inventory_t *t_ptr, int special, int level) {
     // before change to treasure distribution, this helps keep same
     // number of ego weapons same as before, see also missiles
     if (magik(3 * special / 2)) {
-        switch (randint(16)) {
+        switch (randomNumber(16)) {
             case 1: // Holy Avenger
                 t_ptr->flags |= (TR_SEE_INVIS | TR_SUST_STAT | TR_SLAY_UNDEAD | TR_SLAY_EVIL | TR_STR);
                 t_ptr->tohit += 5;
                 t_ptr->todam += 5;
-                t_ptr->toac += randint(4);
+                t_ptr->toac += randomNumber(4);
 
                 // the value in p1 is used for strength increase
                 // p1 is also used for sustain stat
-                t_ptr->p1 = (int16_t) randint(4);
+                t_ptr->p1 = (int16_t) randomNumber(4);
                 t_ptr->name2 = SN_HA;
                 t_ptr->cost += t_ptr->p1 * 500;
                 t_ptr->cost += 10000;
@@ -89,11 +89,11 @@ static void magicalSword(Inventory_t *t_ptr, int special, int level) {
                 t_ptr->flags |= (TR_FFALL | TR_RES_LIGHT | TR_SEE_INVIS | TR_FREE_ACT | TR_RES_COLD | TR_RES_ACID | TR_RES_FIRE | TR_REGEN | TR_STEALTH);
                 t_ptr->tohit += 3;
                 t_ptr->todam += 3;
-                t_ptr->toac += 5 + randint(5);
+                t_ptr->toac += 5 + randomNumber(5);
                 t_ptr->name2 = SN_DF;
 
                 // the value in p1 is used for stealth
-                t_ptr->p1 = (int16_t) randint(3);
+                t_ptr->p1 = (int16_t) randomNumber(3);
                 t_ptr->cost += t_ptr->p1 * 500;
                 t_ptr->cost += 7500;
                 break;
@@ -196,14 +196,14 @@ static void magicalGloves(Inventory_t *t_ptr, int special, int level) {
         return;
     }
 
-    if (randint(2) == 1) {
+    if (randomNumber(2) == 1) {
         t_ptr->flags |= TR_FREE_ACT;
         t_ptr->name2 = SN_FREE_ACTION;
         t_ptr->cost += 1000;
     } else {
         t_ptr->ident |= ID_SHOW_HITDAM;
-        t_ptr->tohit += 1 + randint(3);
-        t_ptr->todam += 1 + randint(3);
+        t_ptr->tohit += 1 + randomNumber(3);
+        t_ptr->todam += 1 + randomNumber(3);
         t_ptr->name2 = SN_SLAYING;
         t_ptr->cost += (t_ptr->tohit + t_ptr->todam) * 250;
     }
@@ -211,7 +211,7 @@ static void magicalGloves(Inventory_t *t_ptr, int special, int level) {
 
 static void cursedGloves(Inventory_t *t_ptr, int special, int level) {
     if (magik(special)) {
-        if (randint(2) == 1) {
+        if (randomNumber(2) == 1) {
             t_ptr->flags |= TR_DEX;
             t_ptr->name2 = SN_CLUMSINESS;
         } else {
@@ -234,7 +234,7 @@ static void magicalBoots(Inventory_t *t_ptr, int special, int level) {
         return;
     }
 
-    int magicType = randint(12);
+    int magicType = randomNumber(12);
 
     if (magicType > 5) {
         t_ptr->flags |= TR_FFALL;
@@ -250,14 +250,14 @@ static void magicalBoots(Inventory_t *t_ptr, int special, int level) {
         // 2 - 5
         t_ptr->flags |= TR_STEALTH;
         t_ptr->ident |= ID_SHOW_P1;
-        t_ptr->p1 = (int16_t) randint(3);
+        t_ptr->p1 = (int16_t) randomNumber(3);
         t_ptr->name2 = SN_STEALTH;
         t_ptr->cost += 500;
     }
 }
 
 static void cursedBoots(Inventory_t *t_ptr, int level) {
-    int magicType = randint(3);
+    int magicType = randomNumber(3);
 
     if (magicType == 1) {
         t_ptr->flags |= TR_SPEED;
@@ -287,20 +287,20 @@ static void magicalHelms(Inventory_t *t_ptr, int special, int level) {
     if (t_ptr->subval < 6) {
         t_ptr->ident |= ID_SHOW_P1;
 
-        int magicType = randint(3);
+        int magicType = randomNumber(3);
 
         if (magicType == 1) {
-            t_ptr->p1 = (int16_t) randint(2);
+            t_ptr->p1 = (int16_t) randomNumber(2);
             t_ptr->flags |= TR_INT;
             t_ptr->name2 = SN_INTELLIGENCE;
             t_ptr->cost += t_ptr->p1 * 500;
         } else if (magicType == 2) {
-            t_ptr->p1 = (int16_t) randint(2);
+            t_ptr->p1 = (int16_t) randomNumber(2);
             t_ptr->flags |= TR_WIS;
             t_ptr->name2 = SN_WISDOM;
             t_ptr->cost += t_ptr->p1 * 500;
         } else {
-            t_ptr->p1 = (int16_t) (1 + randint(4));
+            t_ptr->p1 = (int16_t) (1 + randomNumber(4));
             t_ptr->flags |= TR_INFRA;
             t_ptr->name2 = SN_INFRAVISION;
             t_ptr->cost += t_ptr->p1 * 250;
@@ -309,38 +309,38 @@ static void magicalHelms(Inventory_t *t_ptr, int special, int level) {
         return;
     }
 
-    switch (randint(6)) {
+    switch (randomNumber(6)) {
         case 1:
             t_ptr->ident |= ID_SHOW_P1;
-            t_ptr->p1 = (int16_t) randint(3);
+            t_ptr->p1 = (int16_t) randomNumber(3);
             t_ptr->flags |= (TR_FREE_ACT | TR_CON | TR_DEX | TR_STR);
             t_ptr->name2 = SN_MIGHT;
             t_ptr->cost += 1000 + t_ptr->p1 * 500;
             break;
         case 2:
             t_ptr->ident |= ID_SHOW_P1;
-            t_ptr->p1 = (int16_t) randint(3);
+            t_ptr->p1 = (int16_t) randomNumber(3);
             t_ptr->flags |= (TR_CHR | TR_WIS);
             t_ptr->name2 = SN_LORDLINESS;
             t_ptr->cost += 1000 + t_ptr->p1 * 500;
             break;
         case 3:
             t_ptr->ident |= ID_SHOW_P1;
-            t_ptr->p1 = (int16_t) randint(3);
+            t_ptr->p1 = (int16_t) randomNumber(3);
             t_ptr->flags |= (TR_RES_LIGHT | TR_RES_COLD | TR_RES_ACID | TR_RES_FIRE | TR_INT);
             t_ptr->name2 = SN_MAGI;
             t_ptr->cost += 3000 + t_ptr->p1 * 500;
             break;
         case 4:
             t_ptr->ident |= ID_SHOW_P1;
-            t_ptr->p1 = (int16_t) randint(3);
+            t_ptr->p1 = (int16_t) randomNumber(3);
             t_ptr->flags |= TR_CHR;
             t_ptr->name2 = SN_BEAUTY;
             t_ptr->cost += 750;
             break;
         case 5:
             t_ptr->ident |= ID_SHOW_P1;
-            t_ptr->p1 = (int16_t) (5 * (1 + randint(4)));
+            t_ptr->p1 = (int16_t) (5 * (1 + randomNumber(4)));
             t_ptr->flags |= (TR_SEE_INVIS | TR_SEARCH);
             t_ptr->name2 = SN_SEEING;
             t_ptr->cost += 1000 + t_ptr->p1 * 100;
@@ -362,16 +362,16 @@ static void cursedHelms(Inventory_t *t_ptr, int special, int level) {
         return;
     }
 
-    switch (randint(7)) {
+    switch (randomNumber(7)) {
         case 1:
             t_ptr->ident |= ID_SHOW_P1;
-            t_ptr->p1 = (int16_t) -randint(5);
+            t_ptr->p1 = (int16_t) -randomNumber(5);
             t_ptr->flags |= TR_INT;
             t_ptr->name2 = SN_STUPIDITY;
             break;
         case 2:
             t_ptr->ident |= ID_SHOW_P1;
-            t_ptr->p1 = (int16_t) -randint(5);
+            t_ptr->p1 = (int16_t) -randomNumber(5);
             t_ptr->flags |= TR_WIS;
             t_ptr->name2 = SN_DULLNESS;
             break;
@@ -385,7 +385,7 @@ static void cursedHelms(Inventory_t *t_ptr, int special, int level) {
             break;
         case 5:
             t_ptr->ident |= ID_SHOW_P1;
-            t_ptr->p1 = (int16_t) -randint(5);
+            t_ptr->p1 = (int16_t) -randomNumber(5);
             t_ptr->flags |= TR_STR;
             t_ptr->name2 = SN_WEAKNESS;
             break;
@@ -395,7 +395,7 @@ static void cursedHelms(Inventory_t *t_ptr, int special, int level) {
             break;
         case 7:
             t_ptr->ident |= ID_SHOW_P1;
-            t_ptr->p1 = (int16_t) -randint(5);
+            t_ptr->p1 = (int16_t) -randomNumber(5);
             t_ptr->flags |= TR_CHR;
             t_ptr->name2 = SN_UGLINESS;
             break;
@@ -419,7 +419,7 @@ static void processRings(Inventory_t *t_ptr, int level, int cursed) {
             break;
         case 4:
             if (magik(cursed)) {
-                t_ptr->p1 = (int16_t) -randint(3);
+                t_ptr->p1 = (int16_t) -randomNumber(3);
                 t_ptr->flags |= TR_CURSED;
                 t_ptr->cost = -t_ptr->cost;
             } else {
@@ -516,53 +516,53 @@ static void processAmulets(Inventory_t *t_ptr, int level, int cursed) {
 static int wandMagic(uint8_t id) {
     switch (id) {
         case 0:
-            return randint(10) + 6;
+            return randomNumber(10) + 6;
         case 1:
-            return randint(8) + 6;
+            return randomNumber(8) + 6;
         case 2:
-            return randint(5) + 6;
+            return randomNumber(5) + 6;
         case 3:
-            return randint(8) + 6;
+            return randomNumber(8) + 6;
         case 4:
-            return randint(4) + 3;
+            return randomNumber(4) + 3;
         case 5:
-            return randint(8) + 6;
+            return randomNumber(8) + 6;
         case 6:
-            return randint(20) + 12;
+            return randomNumber(20) + 12;
         case 7:
-            return randint(20) + 12;
+            return randomNumber(20) + 12;
         case 8:
-            return randint(10) + 6;
+            return randomNumber(10) + 6;
         case 9:
-            return randint(12) + 6;
+            return randomNumber(12) + 6;
         case 10:
-            return randint(10) + 12;
+            return randomNumber(10) + 12;
         case 11:
-            return randint(3) + 3;
+            return randomNumber(3) + 3;
         case 12:
-            return randint(8) + 6;
+            return randomNumber(8) + 6;
         case 13:
-            return randint(10) + 6;
+            return randomNumber(10) + 6;
         case 14:
-            return randint(5) + 3;
+            return randomNumber(5) + 3;
         case 15:
-            return randint(5) + 3;
+            return randomNumber(5) + 3;
         case 16:
-            return randint(5) + 6;
+            return randomNumber(5) + 6;
         case 17:
-            return randint(5) + 4;
+            return randomNumber(5) + 4;
         case 18:
-            return randint(8) + 4;
+            return randomNumber(8) + 4;
         case 19:
-            return randint(6) + 2;
+            return randomNumber(6) + 2;
         case 20:
-            return randint(4) + 2;
+            return randomNumber(4) + 2;
         case 21:
-            return randint(8) + 6;
+            return randomNumber(8) + 6;
         case 22:
-            return randint(5) + 2;
+            return randomNumber(5) + 2;
         case 23:
-            return randint(12) + 12;
+            return randomNumber(12) + 12;
         default:
             return -1;
     }
@@ -571,51 +571,51 @@ static int wandMagic(uint8_t id) {
 static int staffMagic(uint8_t id) {
     switch (id) {
         case 0:
-            return randint(20) + 12;
+            return randomNumber(20) + 12;
         case 1:
-            return randint(8) + 6;
+            return randomNumber(8) + 6;
         case 2:
-            return randint(5) + 6;
+            return randomNumber(5) + 6;
         case 3:
-            return randint(20) + 12;
+            return randomNumber(20) + 12;
         case 4:
-            return randint(15) + 6;
+            return randomNumber(15) + 6;
         case 5:
-            return randint(4) + 5;
+            return randomNumber(4) + 5;
         case 6:
-            return randint(5) + 3;
+            return randomNumber(5) + 3;
         case 7:
-            return randint(3) + 1;
+            return randomNumber(3) + 1;
         case 8:
-            return randint(3) + 1;
+            return randomNumber(3) + 1;
         case 9:
-            return randint(5) + 6;
+            return randomNumber(5) + 6;
         case 10:
-            return randint(10) + 12;
+            return randomNumber(10) + 12;
         case 11:
-            return randint(5) + 6;
+            return randomNumber(5) + 6;
         case 12:
-            return randint(5) + 6;
+            return randomNumber(5) + 6;
         case 13:
-            return randint(5) + 6;
+            return randomNumber(5) + 6;
         case 14:
-            return randint(10) + 12;
+            return randomNumber(10) + 12;
         case 15:
-            return randint(3) + 4;
+            return randomNumber(3) + 4;
         case 16:
-            return randint(5) + 6;
+            return randomNumber(5) + 6;
         case 17:
-            return randint(5) + 6;
+            return randomNumber(5) + 6;
         case 18:
-            return randint(3) + 4;
+            return randomNumber(3) + 4;
         case 19:
-            return randint(10) + 12;
+            return randomNumber(10) + 12;
         case 20:
-            return randint(3) + 4;
+            return randomNumber(3) + 4;
         case 21:
-            return randint(3) + 4;
+            return randomNumber(3) + 4;
         case 22:
-            return randint(10) + 6;
+            return randomNumber(10) + 6;
         default:
             return -1;
     }
@@ -627,7 +627,7 @@ static void magicalCloak(Inventory_t *t_ptr, int special, int level) {
         return;
     }
 
-    if (randint(2) == 1) {
+    if (randomNumber(2) == 1) {
         t_ptr->name2 = SN_PROTECTION;
         t_ptr->toac += m_bonus(2, 40, level);
         t_ptr->cost += 250;
@@ -636,14 +636,14 @@ static void magicalCloak(Inventory_t *t_ptr, int special, int level) {
 
     t_ptr->toac += m_bonus(1, 20, level);
     t_ptr->ident |= ID_SHOW_P1;
-    t_ptr->p1 = (int16_t) randint(3);
+    t_ptr->p1 = (int16_t) randomNumber(3);
     t_ptr->flags |= TR_STEALTH;
     t_ptr->name2 = SN_STEALTH;
     t_ptr->cost += 500;
 }
 
 static void cursedCloak(Inventory_t *t_ptr, int level) {
-    int magicType = randint(3);
+    int magicType = randomNumber(3);
 
     if (magicType == 1) {
         t_ptr->flags |= TR_AGGRAVATE;
@@ -670,7 +670,7 @@ static void cursedCloak(Inventory_t *t_ptr, int level) {
 }
 
 static void magicalChests(Inventory_t *t_ptr, int level) {
-    switch (randint(level + 4)) {
+    switch (randomNumber(level + 4)) {
         case 1:
             t_ptr->flags = 0;
             t_ptr->name2 = SN_EMPTY;
@@ -725,7 +725,7 @@ static void magicalProjectiles(Inventory_t *t_ptr, int special, int level) {
 
     // see comment for weapons
     if (magik(3 * special / 2)) {
-        switch (randint(10)) {
+        switch (randomNumber(10)) {
             case 1:
             case 2:
             case 3:
@@ -833,7 +833,7 @@ void magic_treasure(int item_id, int level) {
             t_ptr->ident |= ID_SHOW_HITDAM;
 
             if (magik(chance)) {
-                if (randint(3) < 3) {
+                if (randomNumber(3) < 3) {
                     magicalDiggingTool(t_ptr, level);
                 } else {
                     cursedDiggingTool(t_ptr, level);
@@ -877,7 +877,7 @@ void magic_treasure(int item_id, int level) {
             // Subval should be even for store, odd for dungeon
             // Dungeon found ones will be partially charged
             if ((t_ptr->subval % 2) == 1) {
-                t_ptr->p1 = (int16_t) randint(t_ptr->p1);
+                t_ptr->p1 = (int16_t) randomNumber(t_ptr->p1);
                 t_ptr->subval -= 1;
             }
             break;
@@ -928,7 +928,7 @@ void magic_treasure(int item_id, int level) {
             t_ptr->number = 0;
 
             for (int i = 0; i < 7; i++) {
-                t_ptr->number += randint(6);
+                t_ptr->number += randomNumber(6);
             }
 
             if (missiles_counter == MAX_SHORT) {

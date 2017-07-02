@@ -120,7 +120,7 @@ static bool drinkPotion(uint32_t flags, uint8_t itemID) {
                 if (!py.flags.free_act) {
                     // paralysis must == 0, otherwise could not drink potion
                     printMessage("You fall asleep.");
-                    py.flags.paralysis += randint(4) + 4;
+                    py.flags.paralysis += randomNumber(4) + 4;
                     identified = true;
                 }
                 break;
@@ -129,33 +129,33 @@ static bool drinkPotion(uint32_t flags, uint8_t itemID) {
                     printMessage("You are covered by a veil of darkness.");
                     identified = true;
                 }
-                py.flags.blind += randint(100) + 100;
+                py.flags.blind += randomNumber(100) + 100;
                 break;
             case 21:
                 if (py.flags.confused == 0) {
                     printMessage("Hey!  This is good stuff!  * Hick! *");
                     identified = true;
                 }
-                py.flags.confused += randint(20) + 12;
+                py.flags.confused += randomNumber(20) + 12;
                 break;
             case 22:
                 if (py.flags.poisoned == 0) {
                     printMessage("You feel very sick.");
                     identified = true;
                 }
-                py.flags.poisoned += randint(15) + 10;
+                py.flags.poisoned += randomNumber(15) + 10;
                 break;
             case 23:
                 if (py.flags.fast == 0) {
                     identified = true;
                 }
-                py.flags.fast += randint(25) + 15;
+                py.flags.fast += randomNumber(25) + 15;
                 break;
             case 24:
                 if (py.flags.slow == 0) {
                     identified = true;
                 }
-                py.flags.slow += randint(25) + 15;
+                py.flags.slow += randomNumber(25) + 15;
                 break;
             case 26:
                 if (inc_stat(A_DEX)) {
@@ -194,9 +194,9 @@ static bool drinkPotion(uint32_t flags, uint8_t itemID) {
 
                     if (py.misc.exp > MAX_SHORT) {
                         int32_t scale = (int32_t) (MAX_LONG / py.misc.exp);
-                        m += (randint((int) scale) * py.misc.exp) / (scale * 5);
+                        m += (randomNumber((int) scale) * py.misc.exp) / (scale * 5);
                     } else {
-                        m += randint((int) py.misc.exp) / 5;
+                        m += randomNumber((int) py.misc.exp) / 5;
                     }
                     lose_exp(m);
                     identified = true;
@@ -216,19 +216,19 @@ static bool drinkPotion(uint32_t flags, uint8_t itemID) {
                 if (py.flags.invuln == 0) {
                     identified = true;
                 }
-                py.flags.invuln += randint(10) + 10;
+                py.flags.invuln += randomNumber(10) + 10;
                 break;
             case 37:
                 if (py.flags.hero == 0) {
                     identified = true;
                 }
-                py.flags.hero += randint(25) + 25;
+                py.flags.hero += randomNumber(25) + 25;
                 break;
             case 38:
                 if (py.flags.shero == 0) {
                     identified = true;
                 }
-                py.flags.shero += randint(25) + 25;
+                py.flags.shero += randomNumber(25) + 25;
                 break;
             case 39:
                 identified = remove_fear();
@@ -240,19 +240,19 @@ static bool drinkPotion(uint32_t flags, uint8_t itemID) {
                 if (py.flags.resist_heat == 0) {
                     identified = true;
                 }
-                py.flags.resist_heat += randint(10) + 10;
+                py.flags.resist_heat += randomNumber(10) + 10;
                 break;
             case 42:
                 if (py.flags.resist_cold == 0) {
                     identified = true;
                 }
-                py.flags.resist_cold += randint(10) + 10;
+                py.flags.resist_cold += randomNumber(10) + 10;
                 break;
             case 43:
                 if (py.flags.detect_inv == 0) {
                     identified = true;
                 }
-                detect_inv2(randint(12) + 12);
+                detect_inv2(randomNumber(12) + 12);
                 break;
             case 44:
                 identified = slow_poison();
@@ -273,7 +273,7 @@ static bool drinkPotion(uint32_t flags, uint8_t itemID) {
                     printMessage("Your eyes begin to tingle.");
                     identified = true;
                 }
-                py.flags.tim_infra += 100 + randint(100);
+                py.flags.tim_infra += 100 + randomNumber(100);
                 break;
             default:
                 printMessage("Internal error in potion()");

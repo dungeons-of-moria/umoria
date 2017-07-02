@@ -55,7 +55,7 @@ static void recitePrayer(int prayerType) {
             (void) hp_player(damroll(3, 3));
             break;
         case 3:
-            bless(randint(12) + 12);
+            bless(randomNumber(12) + 12);
             break;
         case 4:
             (void) remove_fear();
@@ -84,7 +84,7 @@ static void recitePrayer(int prayerType) {
             (void) hp_player(damroll(4, 4));
             break;
         case 12:
-            bless(randint(24) + 24);
+            bless(randomNumber(24) + 24);
             break;
         case 13:
             (void) sleep_monsters1(char_row, char_col);
@@ -101,8 +101,8 @@ static void recitePrayer(int prayerType) {
             }
             break;
         case 16:
-            py.flags.resist_heat += randint(10) + 10;
-            py.flags.resist_cold += randint(10) + 10;
+            py.flags.resist_heat += randomNumber(10) + 10;
+            py.flags.resist_cold += randomNumber(10) + 10;
             break;
         case 17:
             (void) cure_poison();
@@ -116,7 +116,7 @@ static void recitePrayer(int prayerType) {
             (void) hp_player(damroll(8, 4));
             break;
         case 20:
-            detect_inv2(randint(24) + 24);
+            detect_inv2(randomNumber(24) + 24);
             break;
         case 21:
             (void) protect_evil();
@@ -134,7 +134,7 @@ static void recitePrayer(int prayerType) {
             (void) turn_undead();
             break;
         case 26:
-            bless(randint(48) + 48);
+            bless(randomNumber(48) + 48);
             break;
         case 27:
             (void) dispel_creature(CD_UNDEAD, (3 * py.misc.lev));
@@ -194,7 +194,7 @@ void pray() {
         return;
     }
 
-    if (randint(100) < chance) {
+    if (randomNumber(100) < chance) {
         printMessage("You lost your concentration!");
         return;
     }
@@ -216,10 +216,10 @@ void pray() {
     if (!player_free_turn) {
         if (s_ptr->smana > py.misc.cmana) {
             printMessage("You faint from fatigue!");
-            py.flags.paralysis = (int16_t) randint((5 * (s_ptr->smana - py.misc.cmana)));
+            py.flags.paralysis = (int16_t) randomNumber((5 * (s_ptr->smana - py.misc.cmana)));
             py.misc.cmana = 0;
             py.misc.cmana_frac = 0;
-            if (randint(3) == 1) {
+            if (randomNumber(3) == 1) {
                 printMessage("You have damaged your health!");
                 (void) dec_stat(A_CON);
             }

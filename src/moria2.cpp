@@ -48,7 +48,7 @@ void search(int y, int x, int chance) {
     for (int i = y - 1; i <= y + 1; i++) {
         for (int j = x - 1; j <= x + 1; j++) {
             // always in_bounds here
-            if (randint(100) >= chance) {
+            if (randomNumber(100) >= chance) {
                 continue;
             }
 
@@ -541,7 +541,7 @@ static int minus_ac(uint32_t typ_dam) {
         return minus;
     }
 
-    int itemID = items[randint(itemsCount) - 1];
+    int itemID = items[randomNumber(itemsCount) - 1];
 
     obj_desc_t description, msg;
 
@@ -568,7 +568,7 @@ static int minus_ac(uint32_t typ_dam) {
 // Corrode the unsuspecting person's armor -RAK-
 void corrode_gas(const char *creature_name) {
     if (!minus_ac((uint32_t) TR_RES_ACID)) {
-        take_hit(randint(8), creature_name);
+        take_hit(randomNumber(8), creature_name);
     }
 
     if (inven_damage(set_corrodes, 5) > 0) {
@@ -580,7 +580,7 @@ void corrode_gas(const char *creature_name) {
 void poison_gas(int dam, const char *creature_name) {
     take_hit(dam, creature_name);
 
-    py.flags.poisoned += 12 + randint(dam);
+    py.flags.poisoned += 12 + randomNumber(dam);
 }
 
 // Burn the fool up. -RAK-

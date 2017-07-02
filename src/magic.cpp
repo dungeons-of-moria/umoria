@@ -146,7 +146,7 @@ static void castSpell(int spellID) {
             }
             break;
         case 28:
-            py.flags.fast += randint(20) + py.misc.lev;
+            py.flags.fast += randomNumber(20) + py.misc.lev;
             break;
         case 29:
             if (get_dir(CNIL, &dir)) {
@@ -196,7 +196,7 @@ void getAndCastMagicSpell() {
 
     Spell_t *m_ptr = &magic_spells[py.misc.pclass - 1][choice];
 
-    if (randint(100) < chance) {
+    if (randomNumber(100) < chance) {
         printMessage("You failed to get the spell off!");
     } else {
         castSpell(choice + 1);
@@ -212,11 +212,11 @@ void getAndCastMagicSpell() {
     if (m_ptr->smana > py.misc.cmana) {
         printMessage("You faint from the effort!");
 
-        py.flags.paralysis = (int16_t) randint((5 * (m_ptr->smana - py.misc.cmana)));
+        py.flags.paralysis = (int16_t) randomNumber((5 * (m_ptr->smana - py.misc.cmana)));
         py.misc.cmana = 0;
         py.misc.cmana_frac = 0;
 
-        if (randint(3) == 1) {
+        if (randomNumber(3) == 1) {
             printMessage("You have damaged your health!");
             (void) dec_stat(A_CON);
         }

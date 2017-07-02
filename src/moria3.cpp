@@ -81,7 +81,7 @@ static void trapSleepingGas() {
         return;
     }
 
-    py.flags.paralysis += randint(10) + 4;
+    py.flags.paralysis += randomNumber(10) + 4;
     printMessage("You fall asleep.");
 }
 
@@ -140,7 +140,7 @@ static void trapSummonMonster(int y, int x) {
     // Rune disappears.
     (void) delete_object(y, x);
 
-    int num = 2 + randint(3);
+    int num = 2 + randomNumber(3);
 
     for (int i = 0; i < num; i++) {
         int ty = y;
@@ -173,13 +173,13 @@ static void trapPoisonGas(int dam) {
 static void trapBlindGas() {
     printMessage("A black gas surrounds you!");
 
-    py.flags.blind += randint(50) + 50;
+    py.flags.blind += randomNumber(50) + 50;
 }
 
 static void trapConfuseGas() {
     printMessage("A gas of scintillating colors surrounds you!");
 
-    py.flags.confused += randint(15) + 15;
+    py.flags.confused += randomNumber(15) + 15;
 }
 
 static void trapSlowDart(Inventory_t *t_ptr, int dam) {
@@ -193,7 +193,7 @@ static void trapSlowDart(Inventory_t *t_ptr, int dam) {
         if (py.flags.free_act) {
             printMessage("You are unaffected.");
         } else {
-            py.flags.slow += randint(20) + 10;
+            py.flags.slow += randomNumber(20) + 10;
         }
     } else {
         printMessage("A small dart barely misses you.");
@@ -540,14 +540,14 @@ static int summon_object(int y, int x, int num, int typ) {
 
     do {
         for (int i = 0; i <= 20; i++) {
-            int oy = y - 3 + randint(5);
-            int ox = x - 3 + randint(5);
+            int oy = y - 3 + randomNumber(5);
+            int ox = x - 3 + randomNumber(5);
 
             if (in_bounds(oy, ox) && los(y, x, oy, ox)) {
                 if (cave[oy][ox].fval <= MAX_OPEN_SPACE && cave[oy][ox].tptr == 0) {
                     // typ == 3 -> 50% objects, 50% gold
                     if (typ == 3 || typ == 7) {
-                        if (randint(100) < 50) {
+                        if (randomNumber(100) < 50) {
                             real_typ = 1;
                         } else {
                             real_typ = 256;
@@ -620,16 +620,16 @@ uint32_t monster_death(int y, int x, uint32_t flags) {
 
     int number = 0;
 
-    if ((flags & CM_60_RANDOM) && randint(100) < 60) {
+    if ((flags & CM_60_RANDOM) && randomNumber(100) < 60) {
         number++;
     }
 
-    if ((flags & CM_90_RANDOM) && randint(100) < 90) {
+    if ((flags & CM_90_RANDOM) && randomNumber(100) < 90) {
         number++;
     }
 
     if (flags & CM_1D2_OBJ) {
-        number += randint(2);
+        number += randomNumber(2);
     }
 
     if (flags & CM_2D2_OBJ) {
@@ -842,19 +842,19 @@ static void py_attack(int y, int x) {
 
             printMessage("Your hands stop glowing.");
 
-            if ((creature->cdefense & CD_NO_SLEEP) || randint(MAX_MONS_LEVEL) < creature->level) {
+            if ((creature->cdefense & CD_NO_SLEEP) || randomNumber(MAX_MONS_LEVEL) < creature->level) {
                 (void) sprintf(msg, "%s is unaffected.", name);
             } else {
                 (void) sprintf(msg, "%s appears confused.", name);
                 if (monster->confused) {
                     monster->confused += 3;
                 } else {
-                    monster->confused = (uint8_t) (2 + randint(16));
+                    monster->confused = (uint8_t) (2 + randomNumber(16));
                 }
             }
             printMessage(msg);
 
-            if (monster->ml && randint(4) == 1) {
+            if (monster->ml && randomNumber(4) == 1) {
                 creature_recall[monster->mptr].r_cdefense |= creature->cdefense & CD_NO_SLEEP;
             }
         }
@@ -891,7 +891,7 @@ static bool playerRandomMovement(int dir) {
     }
 
     // 75% random movement
-    bool playerRandomMove = randint(4) > 1;
+    bool playerRandomMove = randomNumber(4) > 1;
 
     bool playerIsConfused = py.flags.confused > 0;
 
@@ -901,7 +901,7 @@ static bool playerRandomMovement(int dir) {
 // Moves player from one space to another. -RAK-
 void move_char(int direction, bool do_pickup) {
     if (playerRandomMovement(direction)) {
-        direction = randint(9);
+        direction = randomNumber(9);
         end_find();
     }
 
@@ -946,7 +946,7 @@ void move_char(int direction, bool do_pickup) {
 
             // Check to see if he notices something
             // fos may be negative if have good rings of searching
-            if (py.misc.fos <= 1 || randint(py.misc.fos) == 1 || (py.flags.status & PY_SEARCH)) {
+            if (py.misc.fos <= 1 || randomNumber(py.misc.fos) == 1 || (py.flags.status & PY_SEARCH)) {
                 search(char_row, char_col, py.misc.srh);
             }
 
@@ -1045,7 +1045,7 @@ static void chestPoison() {
 
     take_hit(damroll(1, 6), "a poison needle");
 
-    py.flags.poisoned += 10 + randint(20);
+    py.flags.poisoned += 10 + randomNumber(20);
 }
 
 static void chestParalysed() {
@@ -1057,7 +1057,7 @@ static void chestParalysed() {
     }
 
     printMessage("You choke and pass out.");
-    py.flags.paralysis = (int16_t) (10 + randint(20));
+    py.flags.paralysis = (int16_t) (10 + randomNumber(20));
 }
 
 static void chestSummonMonster(int y, int x) {
@@ -1122,7 +1122,7 @@ static void openClosedDoor(int y, int x) {
 
         if (py.flags.confused > 0) {
             printMessage("You are too confused to pick the lock.");
-        } else if (playerLockPickingSkill() - item->p1 > randint(100)) {
+        } else if (playerLockPickingSkill() - item->p1 > randomNumber(100)) {
             printMessage("You have picked the lock.");
             py.misc.exp++;
             prt_experience();
@@ -1153,7 +1153,7 @@ static void openClosedChest(int y, int x) {
     if (CH_LOCKED & item->flags) {
         if (py.flags.confused > 0) {
             printMessage("You are too confused to pick the lock.");
-        } else if (playerLockPickingSkill() - item->level > randint(100)) {
+        } else if (playerLockPickingSkill() - item->level > randomNumber(100)) {
             printMessage("You have picked the lock.");
 
             py.misc.exp += item->level;

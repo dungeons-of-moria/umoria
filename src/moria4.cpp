@@ -58,7 +58,7 @@ static int playerDiggingAbility(Inventory_t *weapon) {
 }
 
 static void digGraniteWall(int y, int x, int diggingAbility) {
-    int i = randint(1200) + 80;
+    int i = randomNumber(1200) + 80;
 
     if (twall(y, x, diggingAbility, i)) {
         printMessage("You have finished the tunnel.");
@@ -68,7 +68,7 @@ static void digGraniteWall(int y, int x, int diggingAbility) {
 }
 
 static void digMagmaWall(int y, int x, int diggingAbility) {
-    int i = randint(600) + 10;
+    int i = randomNumber(600) + 10;
 
     if (twall(y, x, diggingAbility, i)) {
         printMessage("You have finished the tunnel.");
@@ -78,7 +78,7 @@ static void digMagmaWall(int y, int x, int diggingAbility) {
 }
 
 static void digQuartzWall(int y, int x, int diggingAbility) {
-    int i = randint(400) + 10;
+    int i = randomNumber(400) + 10;
 
     if (twall(y, x, diggingAbility, i)) {
         printMessage("You have finished the tunnel.");
@@ -88,11 +88,11 @@ static void digQuartzWall(int y, int x, int diggingAbility) {
 }
 
 static void digRubble(int y, int x, int diggingAbility) {
-    if (diggingAbility > randint(180)) {
+    if (diggingAbility > randomNumber(180)) {
         (void) delete_object(y, x);
         printMessage("You have removed the rubble.");
 
-        if (randint(10) == 1) {
+        if (randomNumber(10) == 1) {
             place_object(y, x, false);
 
             if (test_light(y, x)) {
@@ -133,8 +133,8 @@ static bool digPosition(int y, int x, uint8_t wallType, int diggingAbility) {
 // Must take into account: secret doors, special tools
 void tunnel(int direction) {
     // Confused?                    75% random movement
-    if (py.flags.confused > 0 && randint(4) > 1) {
-        direction = randint(9);
+    if (py.flags.confused > 0 && randomNumber(4) > 1) {
+        direction = randomNumber(9);
     }
 
     int y = char_row;
@@ -205,7 +205,7 @@ static int playerTrapDisarmAbility() {
 static void disarmFloorTrap(int y, int x, int tot, int level, int dir, int16_t p1) {
     int confused = py.flags.confused;
 
-    if (tot + 100 - level > randint(100)) {
+    if (tot + 100 - level > randomNumber(100)) {
         printMessage("You have disarmed the trap.");
         py.misc.exp += p1;
         (void) delete_object(y, x);
@@ -219,8 +219,8 @@ static void disarmFloorTrap(int y, int x, int tot, int level, int dir, int16_t p
         return;
     }
 
-    // avoid randint(0) call
-    if (tot > 5 && randint(tot) > 5) {
+    // avoid randomNumber(0) call
+    if (tot > 5 && randomNumber(tot) > 5) {
         printMessageNoCommandInterrupt("You failed to disarm the trap.");
         return;
     }
@@ -244,7 +244,7 @@ static void disarmChestTrap(int y, int x, int tot, Inventory_t *item) {
     if (item->flags & CH_TRAPPED) {
         int level = item->level;
 
-        if ((tot - level) > randint(100)) {
+        if ((tot - level) > randomNumber(100)) {
             item->flags &= ~CH_TRAPPED;
 
             if (item->flags & CH_LOCKED) {
@@ -259,7 +259,7 @@ static void disarmChestTrap(int y, int x, int tot, Inventory_t *item) {
             py.misc.exp += level;
 
             prt_experience();
-        } else if ((tot > 5) && (randint(tot) > 5)) {
+        } else if ((tot > 5) && (randomNumber(tot) > 5)) {
             printMessageNoCommandInterrupt("You failed to disarm the chest.");
         } else {
             printMessage("You set a trap off!");
@@ -822,7 +822,7 @@ static void drop_throw(int y, int x, Inventory_t *t_ptr) {
 
     bool flag = false;
 
-    if (randint(10) > 1) {
+    if (randomNumber(10) > 1) {
         for (int k = 0; !flag && k <= 9;) {
             if (in_bounds(i, j)) {
                 if (cave[i][j].fval <= MAX_OPEN_SPACE && cave[i][j].tptr == 0) {
@@ -831,8 +831,8 @@ static void drop_throw(int y, int x, Inventory_t *t_ptr) {
             }
 
             if (!flag) {
-                i = y + randint(3) - 2;
-                j = x + randint(3) - 2;
+                i = y + randomNumber(3) - 2;
+                j = x + randomNumber(3) - 2;
                 k++;
             }
         }
@@ -1035,8 +1035,8 @@ static void py_bash(int y, int x) {
                 avg_max_hp = (c_ptr->hd[0] * (c_ptr->hd[1] + 1)) >> 1;
             }
 
-            if (100 + randint(400) + randint(400) > m_ptr->hp + avg_max_hp) {
-                m_ptr->stunned += randint(3) + 1;
+            if (100 + randomNumber(400) + randomNumber(400) > m_ptr->hp + avg_max_hp) {
+                m_ptr->stunned += randomNumber(3) + 1;
                 if (m_ptr->stunned > 24) {
                     m_ptr->stunned = 24;
                 }
@@ -1053,9 +1053,9 @@ static void py_bash(int y, int x) {
         printMessage(msg);
     }
 
-    if (randint(150) > py.stats.use_stat[A_DEX]) {
+    if (randomNumber(150) > py.stats.use_stat[A_DEX]) {
         printMessage("You are off balance.");
-        py.flags.paralysis = (int16_t) (1 + randint(2));
+        py.flags.paralysis = (int16_t) (1 + randomNumber(2));
     }
 }
 
@@ -1075,13 +1075,13 @@ static void bashClosedDoor(int y, int x, int dir, Cave_t *tile, Inventory_t *ite
     int chance = py.stats.use_stat[A_STR] + py.misc.wt / 2;
 
     // Use (roughly) similar method as for monsters.
-    if (randint(chance * (20 + abs(item->p1))) < 10 * (chance - abs(item->p1))) {
+    if (randomNumber(chance * (20 + abs(item->p1))) < 10 * (chance - abs(item->p1))) {
         printMessage("The door crashes open!");
 
         inventoryItemCopyTo(OBJ_OPEN_DOOR, &treasure_list[tile->tptr]);
 
         // 50% chance of breaking door
-        item->p1 = (int16_t) (1 - randint(2));
+        item->p1 = (int16_t) (1 - randomNumber(2));
 
         tile->fval = CORR_FLOOR;
 
@@ -1094,9 +1094,9 @@ static void bashClosedDoor(int y, int x, int dir, Cave_t *tile, Inventory_t *ite
         return;
     }
 
-    if (randint(150) > py.stats.use_stat[A_DEX]) {
+    if (randomNumber(150) > py.stats.use_stat[A_DEX]) {
         printMessage("You are off-balance.");
-        py.flags.paralysis = (int16_t) (1 + randint(2));
+        py.flags.paralysis = (int16_t) (1 + randomNumber(2));
         return;
     }
 
@@ -1106,7 +1106,7 @@ static void bashClosedDoor(int y, int x, int dir, Cave_t *tile, Inventory_t *ite
 }
 
 static void bashClosedChest(Inventory_t *item) {
-    if (randint(10) == 1) {
+    if (randomNumber(10) == 1) {
         printMessage("You have destroyed the chest.");
         printMessage("and its contents!");
 
@@ -1116,7 +1116,7 @@ static void bashClosedChest(Inventory_t *item) {
         return;
     }
 
-    if ((item->flags & CH_LOCKED) && randint(10) == 1) {
+    if ((item->flags & CH_LOCKED) && randomNumber(10) == 1) {
         printMessage("The lock breaks open!");
 
         item->flags &= ~CH_LOCKED;
@@ -1196,7 +1196,7 @@ int getRandomDirection() {
     int dir;
 
     do {
-        dir = randint(9);
+        dir = randomNumber(9);
     } while (dir == 5);
 
     return dir;

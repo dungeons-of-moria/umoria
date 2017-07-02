@@ -67,7 +67,7 @@ static int getEnchantedItemID() {
     int item = 0;
 
     if (itemCount > 0) {
-        item = items[randint(itemCount) - 1];
+        item = items[randomNumber(itemCount) - 1];
     }
 
     if (TR_CURSED & inventory[INVEN_BODY].flags) {
@@ -197,7 +197,7 @@ static bool readRemoveCurseScroll() {
 static bool readSummonMonsterScroll() {
     bool identified = false;
 
-    for (int k = 0; k < randint(3); k++) {
+    for (int k = 0; k < randomNumber(3); k++) {
         int y = (int) char_row;
         int x = (int) char_col;
         identified |= summon_monster(&y, &x, false);
@@ -207,7 +207,7 @@ static bool readSummonMonsterScroll() {
 }
 
 static void readTeleportLevelScroll() {
-    current_dungeon_level += (-3) + 2 * randint(2);
+    current_dungeon_level += (-3) + 2 * randomNumber(2);
     if (current_dungeon_level < 1) {
         current_dungeon_level = 1;
     }
@@ -238,7 +238,7 @@ static bool readEnchantWeaponScroll() {
 
     bool flag = false;
 
-    for (int k = 0; k < randint(2); k++) {
+    for (int k = 0; k < randomNumber(2); k++) {
         if (enchant(&i_ptr->tohit, 10)) {
             flag = true;
         }
@@ -254,7 +254,7 @@ static bool readEnchantWeaponScroll() {
         scrollType = 10;
     }
 
-    for (int k = 0; k < randint(2); k++) {
+    for (int k = 0; k < randomNumber(2); k++) {
         if (enchant(&i_ptr->todam, scrollType)) {
             flag = true;
         }
@@ -285,8 +285,8 @@ static bool readCurseWeaponScroll() {
 
     itemRemoveMagicNaming(i_ptr);
 
-    i_ptr->tohit = (int16_t) (-randint(5) - randint(5));
-    i_ptr->todam = (int16_t) (-randint(5) - randint(5));
+    i_ptr->tohit = (int16_t) (-randomNumber(5) - randomNumber(5));
+    i_ptr->todam = (int16_t) (-randomNumber(5) - randomNumber(5));
     i_ptr->toac = 0;
 
     // Must call py_bonuses() before set (clear) flags, and
@@ -316,7 +316,7 @@ static bool readEnchantArmorScroll() {
 
     bool flag = false;
 
-    for (int k = 0; k < randint(2) + 1; k++) {
+    for (int k = 0; k < randomNumber(2) + 1; k++) {
         if (enchant(&i_ptr->toac, 10)) {
             flag = true;
         }
@@ -335,17 +335,17 @@ static bool readEnchantArmorScroll() {
 static bool readCurseArmorScroll() {
     int id;
 
-    if (inventory[INVEN_BODY].tval != TV_NOTHING && randint(4) == 1) {
+    if (inventory[INVEN_BODY].tval != TV_NOTHING && randomNumber(4) == 1) {
         id = INVEN_BODY;
-    } else if (inventory[INVEN_ARM].tval != TV_NOTHING && randint(3) == 1) {
+    } else if (inventory[INVEN_ARM].tval != TV_NOTHING && randomNumber(3) == 1) {
         id = INVEN_ARM;
-    } else if (inventory[INVEN_OUTER].tval != TV_NOTHING && randint(3) == 1) {
+    } else if (inventory[INVEN_OUTER].tval != TV_NOTHING && randomNumber(3) == 1) {
         id = INVEN_OUTER;
-    } else if (inventory[INVEN_HEAD].tval != TV_NOTHING && randint(3) == 1) {
+    } else if (inventory[INVEN_HEAD].tval != TV_NOTHING && randomNumber(3) == 1) {
         id = INVEN_HEAD;
-    } else if (inventory[INVEN_HANDS].tval != TV_NOTHING && randint(3) == 1) {
+    } else if (inventory[INVEN_HANDS].tval != TV_NOTHING && randomNumber(3) == 1) {
         id = INVEN_HANDS;
-    } else if (inventory[INVEN_FEET].tval != TV_NOTHING && randint(3) == 1) {
+    } else if (inventory[INVEN_FEET].tval != TV_NOTHING && randomNumber(3) == 1) {
         id = INVEN_FEET;
     } else if (inventory[INVEN_BODY].tval != TV_NOTHING) {
         id = INVEN_BODY;
@@ -380,7 +380,7 @@ static bool readCurseArmorScroll() {
     i_ptr->flags = TR_CURSED;
     i_ptr->tohit = 0;
     i_ptr->todam = 0;
-    i_ptr->toac = (int16_t) (-randint(5) - randint(5));
+    i_ptr->toac = (int16_t) (-randomNumber(5) - randomNumber(5));
 
     calc_bonuses();
 
@@ -390,7 +390,7 @@ static bool readCurseArmorScroll() {
 static bool readSummonUndeadScroll() {
     bool identified = false;
 
-    for (int k = 0; k < randint(3); k++) {
+    for (int k = 0; k < randomNumber(3); k++) {
         int y = char_row;
         int x = char_col;
         identified |= summon_undead(&y, &x);
@@ -401,7 +401,7 @@ static bool readSummonUndeadScroll() {
 
 static void readWordOfRecallScroll() {
     if (py.flags.word_recall == 0) {
-        py.flags.word_recall = (int16_t) (25 + randint(30));
+        py.flags.word_recall = (int16_t) (25 + randomNumber(30));
     }
     printMessage("The air about you becomes charged.");
 }
@@ -558,15 +558,15 @@ void read_scroll() {
                 identified = readSummonUndeadScroll();
                 break;
             case 38:
-                bless(randint(12) + 6);
+                bless(randomNumber(12) + 6);
                 identified = true;
                 break;
             case 39:
-                bless(randint(24) + 12);
+                bless(randomNumber(24) + 12);
                 identified = true;
                 break;
             case 40:
-                bless(randint(48) + 24);
+                bless(randomNumber(48) + 24);
                 identified = true;
                 break;
             case 41:

@@ -104,7 +104,7 @@ static bool discharge_wand(Inventory_t *wand, int dir) {
                 identified = true;
                 break;
             case 24:
-                flags = (uint32_t) (1L << (randint(23) - 1));
+                flags = (uint32_t) (1L << (randomNumber(23) - 1));
                 break;
             default:
                 printMessage("Internal error in wands()");
@@ -156,7 +156,7 @@ void aim() {
         chance = chance / 2;
     }
 
-    if (chance < USE_DEVICE && randint(USE_DEVICE - chance + 1) == 1) {
+    if (chance < USE_DEVICE && randomNumber(USE_DEVICE - chance + 1) == 1) {
         chance = USE_DEVICE; // Give everyone a slight chance
     }
 
@@ -164,7 +164,7 @@ void aim() {
         chance = 1;
     }
 
-    if (randint(chance) < USE_DEVICE) {
+    if (randomNumber(chance) < USE_DEVICE) {
         printMessage("You failed to use the wand properly.");
         return;
     }

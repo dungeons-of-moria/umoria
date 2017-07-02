@@ -64,7 +64,7 @@ static void playerUpdateLightStatus() {
 
                 // unlight creatures
                 updateMonsters(false);
-            } else if (i_ptr->p1 < 40 && randint(5) == 1 && py.flags.blind < 1) {
+            } else if (i_ptr->p1 < 40 && randomNumber(5) == 1 && py.flags.blind < 1) {
                 disturb(0, 0);
                 printMessage("Your light is growing faint.");
             }
@@ -196,8 +196,8 @@ static int playerFoodConsumption() {
                 prt_hunger();
             }
 
-            if (py.flags.food < PLAYER_FOOD_FAINT && randint(8) == 1) {
-                py.flags.paralysis += randint(5);
+            if (py.flags.food < PLAYER_FOOD_FAINT && randomNumber(8) == 1) {
+                py.flags.paralysis += randomNumber(5);
                 printMessage("You faint from the lack of food.");
                 disturb(1, 0);
             }
@@ -714,7 +714,7 @@ static void playerDetectEnchantment() {
         // if in equipment list, success 1 out of 10 times
         int chance = (i < 22 ? 50 : 10);
 
-        if (i_ptr->tval != TV_NOTHING && enchanted(i_ptr) && randint(chance) == 1) {
+        if (i_ptr->tval != TV_NOTHING && enchanted(i_ptr) && randomNumber(chance) == 1) {
             extern const char *describe_use(int);
 
             vtype_t tmp_str;
@@ -912,7 +912,7 @@ void playDungeon() {
         }
 
         // Check for creature generation
-        if (randint(MAX_MALLOC_CHANCE) == 1) {
+        if (randomNumber(MAX_MALLOC_CHANCE) == 1) {
             alloc_monster(1, MAX_SIGHT, false);
         }
 
@@ -953,7 +953,7 @@ void playDungeon() {
         playerUpdateWordOfRecall();
 
         // Random teleportation
-        if (py.flags.teleport && randint(100) == 1) {
+        if (py.flags.teleport && randomNumber(100) == 1) {
             disturb(0, 0);
             teleport(40);
         }
@@ -973,7 +973,7 @@ void playDungeon() {
         // for 1st level char, check once every 2160 turns
         // for 40th level char, check once every 416 turns
         int chance = 10 + 750 / (5 + py.misc.lev);
-        if ((current_game_turn & 0xF) == 0 && py.flags.confused == 0 && randint(chance) == 1) {
+        if ((current_game_turn & 0xF) == 0 && py.flags.confused == 0 && randomNumber(chance) == 1) {
             playerDetectEnchantment();
         }
 

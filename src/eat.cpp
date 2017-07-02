@@ -42,27 +42,27 @@ void playerEat() {
         // Foods
         switch (foodID) {
             case 1:
-                py.flags.poisoned += randint(10) + i_ptr->level;
+                py.flags.poisoned += randomNumber(10) + i_ptr->level;
                 identified = true;
                 break;
             case 2:
-                py.flags.blind += randint(250) + 10 * i_ptr->level + 100;
+                py.flags.blind += randomNumber(250) + 10 * i_ptr->level + 100;
                 draw_cave();
                 printMessage("A veil of darkness surrounds you.");
                 identified = true;
                 break;
             case 3:
-                py.flags.afraid += randint(10) + i_ptr->level;
+                py.flags.afraid += randomNumber(10) + i_ptr->level;
                 printMessage("You feel terrified!");
                 identified = true;
                 break;
             case 4:
-                py.flags.confused += randint(10) + i_ptr->level;
+                py.flags.confused += randomNumber(10) + i_ptr->level;
                 printMessage("You feel drugged.");
                 identified = true;
                 break;
             case 5:
-                py.flags.image += randint(200) + 25 * i_ptr->level + 200;
+                py.flags.image += randomNumber(200) + 25 * i_ptr->level + 200;
                 printMessage("You feel drugged.");
                 identified = true;
                 break;
@@ -144,13 +144,13 @@ void playerEat() {
                 }
                 break;
             case 22:
-                identified = hp_player(randint(6));
+                identified = hp_player(randomNumber(6));
                 break;
             case 23:
-                identified = hp_player(randint(12));
+                identified = hp_player(randomNumber(12));
                 break;
             case 24:
-                identified = hp_player(randint(18));
+                identified = hp_player(randomNumber(18));
                 break;
 #if 0 // 25 is no longer used
             case 25:
@@ -161,7 +161,7 @@ void playerEat() {
                 identified = hp_player(damroll(3, 12));
                 break;
             case 27:
-                take_hit(randint(18), "poisonous food.");
+                take_hit(randomNumber(18), "poisonous food.");
                 identified = true;
                 break;
 #if 0 // 28 through 30 are no longer used

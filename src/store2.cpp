@@ -114,7 +114,7 @@ static const char *comment6[5] = {
 // Comments vary. -RAK-
 // Comment one : Finished haggling
 static void prt_comment1() {
-    printMessage(comment1[randint(14) - 1]);
+    printMessage(comment1[randomNumber(14) - 1]);
 }
 
 // %A1 is offer, %A2 is asking.
@@ -122,9 +122,9 @@ static void prt_comment2(int32_t offer, int32_t asking, int final) {
     vtype_t comment;
 
     if (final > 0) {
-        (void) strcpy(comment, comment2a[randint(3) - 1]);
+        (void) strcpy(comment, comment2a[randomNumber(3) - 1]);
     } else {
-        (void) strcpy(comment, comment2b[randint(16) - 1]);
+        (void) strcpy(comment, comment2b[randomNumber(16) - 1]);
     }
 
     insert_lnum(comment, "%A1", offer, false);
@@ -136,9 +136,9 @@ static void prt_comment3(int32_t offer, int32_t asking, int final) {
     vtype_t comment;
 
     if (final > 0) {
-        (void) strcpy(comment, comment3a[randint(3) - 1]);
+        (void) strcpy(comment, comment3a[randomNumber(3) - 1]);
     } else {
-        (void) strcpy(comment, comment3b[randint(15) - 1]);
+        (void) strcpy(comment, comment3b[randomNumber(15) - 1]);
     }
 
     insert_lnum(comment, "%A1", offer, false);
@@ -148,17 +148,17 @@ static void prt_comment3(int32_t offer, int32_t asking, int final) {
 
 // Kick 'da bum out. -RAK-
 static void prt_comment4() {
-    int tmp = randint(5) - 1;
+    int tmp = randomNumber(5) - 1;
     printMessage(comment4a[tmp]);
     printMessage(comment4b[tmp]);
 }
 
 static void prt_comment5() {
-    printMessage(comment5[randint(10) - 1]);
+    printMessage(comment5[randomNumber(10) - 1]);
 }
 
 static void prt_comment6() {
-    printMessage(comment6[randint(5) - 1]);
+    printMessage(comment6[randomNumber(5) - 1]);
 }
 
 // Displays the set of commands -RAK-
@@ -306,7 +306,7 @@ static bool increase_insults(int store_num) {
         prt_comment4();
         s_ptr->insult_cur = 0;
         s_ptr->bad_buy++;
-        s_ptr->store_open = current_game_turn + 2500 + randint(2500);
+        s_ptr->store_open = current_game_turn + 2500 + randomNumber(2500);
         return true;
     }
 
@@ -532,7 +532,7 @@ static int purchase_haggle(int store_num, int32_t *price, Inventory_t *item) {
                     x1 = max_per;
                 }
             }
-            int32_t x2 = x1 + randint(5) - 3;
+            int32_t x2 = x1 + randomNumber(5) - 3;
             int32_t x3 = ((cur_ask - new_offer) * x2 / 100) + 1;
 
             // don't let the price go up
@@ -730,7 +730,7 @@ static int sell_haggle(int store_num, int32_t *price, Inventory_t *item) {
                         x1 = max_per;
                     }
                 }
-                int32_t x2 = x1 + randint(5) - 3;
+                int32_t x2 = x1 + randomNumber(5) - 3;
                 int32_t x3 = ((new_offer - cur_ask) * x2 / 100) + 1;
 
                 // don't let the price go down
