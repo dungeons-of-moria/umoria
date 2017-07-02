@@ -221,7 +221,7 @@ void printMessageNoCommandInterrupt(const char *msg) {
 }
 
 // Outputs a line to a given y, x position -RAK-
-void prt(const char *str, int row, int col) {
+void putStringClearToEOL(const char *str, int row, int col) {
     if (row == MSG_LINE && message_ready_to_print) {
         msg_print(CNIL);
     }
@@ -310,7 +310,7 @@ void msg_print(const char *msg) {
 
 // Used to verify a choice - user gets the chance to abort choice. -CJS-
 bool get_check(const char *prompt) {
-    prt(prompt, 0, 0);
+    putStringClearToEOL(prompt, 0, 0);
 
     int y, x;
     getyx(stdscr, y, x);
@@ -337,7 +337,7 @@ bool get_check(const char *prompt) {
 // Function returns false if <ESCAPE> is input
 int get_com(const char *prompt, char *command) {
     if (prompt) {
-        prt(prompt, 0, 0);
+        putStringClearToEOL(prompt, 0, 0);
     }
     *command = getKeyInput();
 
@@ -415,7 +415,7 @@ bool get_string(char *in_str, int row, int col, int slen) {
 
 // Pauses for user response before returning -RAK-
 void pause_line(int line_number) {
-    prt("[Press any key to continue.]", line_number, 23);
+    putStringClearToEOL("[Press any key to continue.]", line_number, 23);
     (void) getKeyInput();
     eraseLine(line_number, 0);
 }
@@ -424,7 +424,7 @@ void pause_line(int line_number) {
 // NOTE: Delay is for players trying to roll up "perfect"
 // characters.  Make them wait a bit.
 void pause_exit(int line_number, int delay) {
-    prt("[Press any key to continue, or Q to exit.]", line_number, 10);
+    putStringClearToEOL("[Press any key to continue, or Q to exit.]", line_number, 10);
 
     if (getKeyInput() == 'Q') {
         eraseLine(line_number, 0);

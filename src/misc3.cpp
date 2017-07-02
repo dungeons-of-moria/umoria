@@ -425,7 +425,7 @@ void prt_depth() {
         (void) sprintf(depths, "%d feet", depth);
     }
 
-    prt(depths, 23, 65);
+    putStringClearToEOL(depths, 23, 65);
 }
 
 // Prints status of hunger -RAK-
@@ -988,7 +988,7 @@ void put_misc2() {
     prt_7lnum("Max Exp    ", py.misc.max_exp, 11, 28);
 
     if (py.misc.lev >= MAX_PLAYER_LEVEL) {
-        prt("Exp to Adv.: *******", 12, 28);
+        putStringClearToEOL("Exp to Adv.: *******", 12, 28);
     } else {
         prt_7lnum("Exp to Adv.", (int32_t) (player_base_exp_levels[py.misc.lev - 1] * py.misc.expfact / 100), 12, 28);
     }
@@ -1058,7 +1058,7 @@ void display_char() {
 
 // Gets a name for the character -JWT-
 void get_name() {
-    prt("Enter your player's name  [press <RETURN> when finished]", 21, 2);
+    putStringClearToEOL("Enter your player's name  [press <RETURN> when finished]", 21, 2);
 
     putString(&blank_string[BLANK_LENGTH - 23], 2, 15);
 
@@ -1078,7 +1078,7 @@ void change_name() {
     display_char();
 
     while (!flag) {
-        prt("<f>ile character description. <c>hange character name.", 21, 2);
+        putStringClearToEOL("<f>ile character description. <c>hange character name.", 21, 2);
 
         switch (getKeyInput()) {
             case 'c':
@@ -1086,7 +1086,7 @@ void change_name() {
                 flag = true;
                 break;
             case 'f':
-                prt("File name:", 0, 0);
+                putStringClearToEOL("File name:", 0, 0);
 
                 if (get_string(temp, 0, 10, 60) && temp[0]) {
                     if (outputPlayerCharacterToFile(temp)) {
@@ -1410,7 +1410,7 @@ void print_spells(int *spell, int number_of_choices, int comment, int non_consec
 
         vtype_t out_val;
         (void) sprintf(out_val, "  %c) %-30s%2d %4d %3d%%%s", spell_char, spell_names[spellID + offset], s_ptr->slevel, s_ptr->smana, spell_chance(spellID), p);
-        prt(out_val, 2 + i, col);
+        putStringClearToEOL(out_val, 2 + i, col);
     }
 }
 

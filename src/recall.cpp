@@ -744,7 +744,7 @@ int roff_recall(int monster_id) {
     }
 
     roff("\n");
-    prt("--pause--", roffpline, 0);
+    putStringClearToEOL("--pause--", roffpline, 0);
 
     if (wizard_mode) {
         *mp = save_mem;
@@ -766,7 +766,7 @@ static void roff(const char *p) {
                 }
             }
             *q = 0;
-            prt(roffbuf, roffpline, 0);
+            putStringClearToEOL(roffbuf, roffpline, 0);
             roffpline++;
 
             char *r = roffbuf;

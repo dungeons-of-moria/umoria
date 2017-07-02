@@ -51,7 +51,7 @@ void displayTextHelpFile(const char *filename) {
 
     if (file == NULL) {
         (void) sprintf(line_buffer, "Can not find help file \"%s\".\n", filename);
-        prt(line_buffer, 0, 0);
+        putStringClearToEOL(line_buffer, 0, 0);
         return;
     }
 
@@ -67,7 +67,7 @@ void displayTextHelpFile(const char *filename) {
             }
         }
 
-        prt("[Press any key to continue.]", 23, 23);
+        putStringClearToEOL("[Press any key to continue.]", 23, 23);
         input = getKeyInput();
         if (input == ESCAPE) {
             break;
@@ -85,13 +85,13 @@ void displayTextHelpFile(const char *filename) {
 void outputRandomLevelObjectsToFile() {
     obj_desc_t tmp_str;
 
-    prt("Produce objects on what level?: ", 0, 0);
+    putStringClearToEOL("Produce objects on what level?: ", 0, 0);
     if (!get_string(tmp_str, 0, 32, 10)) {
         return;
     }
     int level = atoi(tmp_str);
 
-    prt("Produce how many objects?: ", 0, 0);
+    putStringClearToEOL("Produce how many objects?: ", 0, 0);
     if (!get_string(tmp_str, 0, 27, 10)) {
         return;
     }
@@ -104,7 +104,7 @@ void outputRandomLevelObjectsToFile() {
             nobj = 10000;
         }
 
-        prt("File name: ", 0, 0);
+        putStringClearToEOL("File name: ", 0, 0);
         vtype_t filename1;
         if (get_string(filename1, 0, 11, 64)) {
             if (strlen(filename1) == 0) {
@@ -114,7 +114,7 @@ void outputRandomLevelObjectsToFile() {
             FILE *file1 = fopen(filename1, "w");
             if (file1 != NULL) {
                 (void) sprintf(tmp_str, "%d", nobj);
-                prt(strcat(tmp_str, " random objects being produced..."), 0, 0);
+                putStringClearToEOL(strcat(tmp_str, " random objects being produced..."), 0, 0);
 
                 putQIO();
 
@@ -146,19 +146,19 @@ void outputRandomLevelObjectsToFile() {
                 pusht((uint8_t) treasureID);
 
                 (void) fclose(file1);
-                prt("Completed.", 0, 0);
+                putStringClearToEOL("Completed.", 0, 0);
             } else {
-                prt("File could not be opened.", 0, 0);
+                putStringClearToEOL("File could not be opened.", 0, 0);
             }
         }
     } else {
-        prt("Parameters no good.", 0, 0);
+        putStringClearToEOL("Parameters no good.", 0, 0);
     }
 }
 
 // Write character sheet to the file
 static void writeCharacterSheetToFile(FILE *file1) {
-    prt("Writing character sheet...", 0, 0);
+    putStringClearToEOL("Writing character sheet...", 0, 0);
     putQIO();
 
     const char *colon = ":";
@@ -361,7 +361,7 @@ bool outputPlayerCharacterToFile(char *filename) {
 
     (void) fclose(file);
 
-    prt("Completed.", 0, 0);
+    putStringClearToEOL("Completed.", 0, 0);
 
     return true;
 }

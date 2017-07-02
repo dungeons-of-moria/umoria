@@ -765,7 +765,7 @@ static void executeInputCommands(char *command, int *find_count) {
                 if ((use_roguelike_keys && lastInputCommand >= '0' && lastInputCommand <= '9') || (!use_roguelike_keys && lastInputCommand == '#')) {
                     char tmp[8];
 
-                    prt("Repeat count:", 0, 0);
+                    putStringClearToEOL("Repeat count:", 0, 0);
 
                     if (lastInputCommand == '#') {
                         lastInputCommand = '0';
@@ -777,14 +777,14 @@ static void executeInputCommands(char *command, int *find_count) {
                         if (lastInputCommand == DELETE || lastInputCommand == CTRL_KEY('H')) {
                             counter = counter / 10;
                             (void) sprintf(tmp, "%d", counter);
-                            prt(tmp, 0, 14);
+                            putStringClearToEOL(tmp, 0, 14);
                         } else if (lastInputCommand >= '0' && lastInputCommand <= '9') {
                             if (counter > 99) {
                                 bell();
                             } else {
                                 counter = counter * 10 + lastInputCommand - '0';
                                 (void) sprintf(tmp, "%d", counter);
-                                prt(tmp, 0, 14);
+                                putStringClearToEOL(tmp, 0, 14);
                             }
                         } else {
                             break;
@@ -795,12 +795,12 @@ static void executeInputCommands(char *command, int *find_count) {
                     if (counter == 0) {
                         counter = 99;
                         (void) sprintf(tmp, "%d", counter);
-                        prt(tmp, 0, 14);
+                        putStringClearToEOL(tmp, 0, 14);
                     }
 
                     // a special hack to allow numbers as commands
                     if (lastInputCommand == ' ') {
-                        prt("Command:", 0, 20);
+                        putStringClearToEOL("Command:", 0, 20);
                         lastInputCommand = getKeyInput();
                     }
                 }
@@ -1322,7 +1322,7 @@ static void commandPreviousMessage() {
         while (maxMessages > 0) {
             maxMessages--;
 
-            prt(messages[msgID], maxMessages, 0);
+            putStringClearToEOL(messages[msgID], maxMessages, 0);
 
             if (msgID == 0) {
                 msgID = MAX_SAVE_MSG - 1;
@@ -1337,7 +1337,7 @@ static void commandPreviousMessage() {
     } else {
         // Distinguish real and recovered messages with a '>'. -CJS-
         putString(">", 0, 0);
-        prt(messages[msgID], 0, 1);
+        putStringClearToEOL(messages[msgID], 0, 1);
     }
 }
 
@@ -1498,7 +1498,7 @@ static void doWizardCommands(char com_val) {
                 }
                 command_count = 0;
             } else {
-                prt("Go to which level (0-99) ? ", 0, 0);
+                putStringClearToEOL("Go to which level (0-99) ? ", 0, 0);
                 i = -1;
 
                 vtype_t tmp_str;
@@ -1562,9 +1562,9 @@ static void doWizardCommands(char com_val) {
             break;
         default:
             if (use_roguelike_keys) {
-                prt("Type '?' or '\\' for help.", 0, 0);
+                putStringClearToEOL("Type '?' or '\\' for help.", 0, 0);
             } else {
-                prt("Type '?' or ^H for help.", 0, 0);
+                putStringClearToEOL("Type '?' or ^H for help.", 0, 0);
             }
     }
 }
@@ -1823,7 +1823,7 @@ static void do_command(char com_val) {
             if (wizard_mode) {
                 doWizardCommands(com_val);
             } else {
-                prt("Type '?' for help.", 0, 0);
+                putStringClearToEOL("Type '?' for help.", 0, 0);
             }
     }
     last_command = com_val;

@@ -80,13 +80,13 @@ void showScoresScreen() {
                            rank, score.points, score.name, score.sex,
                            character_races[score.race].trace, classes[score.character_class].title,
                            score.lev, score.died_from);
-            prt(string, ++i, 0);
+            putStringClearToEOL(string, ++i, 0);
             rank++;
             rd_highscore(&score);
         }
-        prt("Rank  Points Name              Sex Race       Class  Lvl Killed By", 0, 0);
+        putStringClearToEOL("Rank  Points Name              Sex Race       Class  Lvl Killed By", 0, 0);
         eraseLine(1, 0);
-        prt("[Press any key to continue.]", 23, 23);
+        putStringClearToEOL("[Press any key to continue.]", 23, 23);
         input = getKeyInput();
         if (input == ESCAPE) {
             break;

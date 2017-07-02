@@ -150,7 +150,7 @@ static void print_history() {
     putString("Character Background", 14, 27);
 
     for (int i = 0; i < 4; i++) {
-        prt(py.misc.history[i], i + 15, 10);
+        putStringClearToEOL(py.misc.history[i], i + 15, 10);
     }
 }
 

@@ -995,13 +995,13 @@ static struct {
 
 // Set or unset various boolean options. -CJS-
 void set_options() {
-    prt("  ESC when finished, y/n to set options, <return> or - to move cursor", 0, 0);
+    putStringClearToEOL("  ESC when finished, y/n to set options, <return> or - to move cursor", 0, 0);
 
     int max;
     for (max = 0; options[max].o_prompt != 0; max++) {
         vtype_t string;
         (void) sprintf(string, "%-38s: %s", options[max].o_prompt, (*options[max].o_var ? "yes" : "no "));
-        prt(string, max + 1, 0);
+        putStringClearToEOL(string, max + 1, 0);
     }
     eraseLine(max + 1, 0);
 

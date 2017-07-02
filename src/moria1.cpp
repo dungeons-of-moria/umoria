@@ -329,16 +329,16 @@ int show_inven(int item_id_start, int item_id_end, bool weighted, int column, ch
 
         // don't need first two spaces if in first column
         if (column == 0) {
-            prt(descriptions[i], current_line, column);
+            putStringClearToEOL(descriptions[i], current_line, column);
         } else {
             putString("  ", current_line, column);
-            prt(descriptions[i], current_line, column + 2);
+            putStringClearToEOL(descriptions[i], current_line, column + 2);
         }
 
         if (weighted) {
             obj_desc_t text;
             inventoryItemWeightText(text, i);
-            prt(text, current_line, 71);
+            putStringClearToEOL(text, current_line, 71);
         }
 
         current_line++;
@@ -473,16 +473,16 @@ int show_equip(bool weighted, int column) {
 
         // don't need first two spaces when using whole screen
         if (column == 0) {
-            prt(descriptions[line], line + 1, column);
+            putStringClearToEOL(descriptions[line], line + 1, column);
         } else {
             putString("  ", line + 1, column);
-            prt(descriptions[line], line + 1, column + 2);
+            putStringClearToEOL(descriptions[line], line + 1, column + 2);
         }
 
         if (weighted) {
             obj_desc_t text;
             inventoryItemWeightText(text, i);
-            prt(text, line + 1, 71);
+            putStringClearToEOL(text, line + 1, 71);
         }
 
         line++;
@@ -601,13 +601,13 @@ static void inven_screen(int new_scr) {
                 scr_left = 52;
             }
 
-            prt("  ESC: exit", 1, scr_left);
-            prt("  w  : wear or wield object", 2, scr_left);
-            prt("  t  : take off item", 3, scr_left);
-            prt("  d  : drop object", 4, scr_left);
-            prt("  x  : exchange weapons", 5, scr_left);
-            prt("  i  : inventory of pack", 6, scr_left);
-            prt("  e  : list used equipment", 7, scr_left);
+            putStringClearToEOL("  ESC: exit", 1, scr_left);
+            putStringClearToEOL("  w  : wear or wield object", 2, scr_left);
+            putStringClearToEOL("  t  : take off item", 3, scr_left);
+            putStringClearToEOL("  d  : drop object", 4, scr_left);
+            putStringClearToEOL("  x  : exchange weapons", 5, scr_left);
+            putStringClearToEOL("  i  : inventory of pack", 6, scr_left);
+            putStringClearToEOL("  e  : list used equipment", 7, scr_left);
 
             line = 7;
             break;
@@ -1206,7 +1206,7 @@ static bool selectItemCommands(char *command, char *which, bool selecting) {
                 (void) sprintf(msg, "Drop all %s [y/n]", description);
                 msg[strlen(description) - 1] = '.';
 
-                prt(msg, 0, 0);
+                putStringClearToEOL(msg, 0, 0);
 
                 query = getKeyInput();
 
@@ -1272,21 +1272,21 @@ static void inventoryDisplayAppropriateHeader() {
             );
         }
 
-        prt(msg, 0, 0);
+        putStringClearToEOL(msg, 0, 0);
     } else if (scr_state == WEAR_SCR) {
         if (wear_high < wear_low) {
-            prt("You have nothing you could wield.", 0, 0);
+            putStringClearToEOL("You have nothing you could wield.", 0, 0);
         } else {
-            prt("You could wield -", 0, 0);
+            putStringClearToEOL("You could wield -", 0, 0);
         }
     } else if (scr_state == EQUIP_SCR) {
         if (equipment_count == 0) {
-            prt("You are not using anything.", 0, 0);
+            putStringClearToEOL("You are not using anything.", 0, 0);
         } else {
-            prt("You are using -", 0, 0);
+            putStringClearToEOL("You are using -", 0, 0);
         }
     } else {
-        prt("Allowed commands:", 0, 0);
+        putStringClearToEOL("Allowed commands:", 0, 0);
     }
 
     eraseLine(scr_base, scr_left);
@@ -1398,7 +1398,7 @@ int get_item(int *command_key_id, const char *prompt, int item_id_start, int ite
     }
 
     if (inventory_count < 1 && (!full || equipment_count < 1)) {
-        prt("You are not carrying anything.", 0, 0);
+        putStringClearToEOL("You are not carrying anything.", 0, 0);
         return false;
     }
 
@@ -1442,7 +1442,7 @@ int get_item(int *command_key_id, const char *prompt, int item_id_start, int ite
             );
         }
 
-        prt(out_val, 0, 0);
+        putStringClearToEOL(out_val, 0, 0);
 
         bool commandFinished = false;
         while (!commandFinished) {
@@ -1460,7 +1460,7 @@ int get_item(int *command_key_id, const char *prompt, int item_id_start, int ite
                     if (full) {
                         if (screenID > 0) {
                             if (equipment_count == 0) {
-                                prt("But you're not using anything -more-", 0, 0);
+                                putStringClearToEOL("But you're not using anything -more-", 0, 0);
                                 (void) getKeyInput();
                             } else {
                                 screenID = 0;
@@ -1477,10 +1477,10 @@ int get_item(int *command_key_id, const char *prompt, int item_id_start, int ite
                                 item_id_end = equipment_count - 1;
                             }
 
-                            prt(out_val, 0, 0);
+                            putStringClearToEOL(out_val, 0, 0);
                         } else {
                             if (inventory_count == 0) {
-                                prt("But you're not carrying anything -more-", 0, 0);
+                                putStringClearToEOL("But you're not carrying anything -more-", 0, 0);
                                 (void) getKeyInput();
                             } else {
                                 screenID = 1;
@@ -1872,7 +1872,7 @@ void rest() {
         rest_num = command_count;
         command_count = 0;
     } else {
-        prt("Rest for how long? ", 0, 0);
+        putStringClearToEOL("Rest for how long? ", 0, 0);
         rest_num = 0;
 
         vtype_t rest_str;
@@ -1897,7 +1897,7 @@ void rest() {
         prt_state();
         py.flags.food_digested--;
 
-        prt("Press any key to stop resting...", 0, 0);
+        putStringClearToEOL("Press any key to stop resting...", 0, 0);
         putQIO();
 
         return;

@@ -222,7 +222,7 @@ void clearToBottom(int row);
 void putChar(char ch, int row, int col);
 void moveCursorRelative(int row, int col);
 void printMessageNoCommandInterrupt(const char *msg);
-void prt(const char *str, int row, int col);
+void putStringClearToEOL(const char *str, int row, int col);
 void move_cursor(int row, int col);
 void msg_print(const char *msg);
 bool get_check(const char *prompt);

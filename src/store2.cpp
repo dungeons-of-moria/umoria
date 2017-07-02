@@ -163,21 +163,21 @@ static void prt_comment6() {
 
 // Displays the set of commands -RAK-
 static void display_commands() {
-    prt("You may:", 20, 0);
-    prt(" p) Purchase an item.           b) Browse store's inventory.", 21, 0);
-    prt(" s) Sell an item.               i/e/t/w/x) Inventory/Equipment Lists.", 22, 0);
-    prt("ESC) Exit from Building.        ^R) Redraw the screen.", 23, 0);
+    putStringClearToEOL("You may:", 20, 0);
+    putStringClearToEOL(" p) Purchase an item.           b) Browse store's inventory.", 21, 0);
+    putStringClearToEOL(" s) Sell an item.               i/e/t/w/x) Inventory/Equipment Lists.", 22, 0);
+    putStringClearToEOL("ESC) Exit from Building.        ^R) Redraw the screen.", 23, 0);
 }
 
 // Displays the set of commands -RAK-
 static void haggle_commands(int typ) {
     if (typ == -1) {
-        prt("Specify an asking-price in gold pieces.", 21, 0);
+        putStringClearToEOL("Specify an asking-price in gold pieces.", 21, 0);
     } else {
-        prt("Specify an offer in gold pieces.", 21, 0);
+        putStringClearToEOL("Specify an offer in gold pieces.", 21, 0);
     }
 
-    prt("ESC) Quit Haggling.", 22, 0);
+    putStringClearToEOL("ESC) Quit Haggling.", 22, 0);
     eraseLine(23, 0); // clear last line
 }
 
@@ -208,7 +208,7 @@ static void display_inventory(int store_num, int start) {
         i_ptr->number = (uint8_t) x;
 
         (void) sprintf(out_val2, "%c) %s", 'a' + i, out_val1);
-        prt(out_val2, i + 5, 0);
+        putStringClearToEOL(out_val2, i + 5, 0);
 
         x = s_ptr->store_inven[start].scost;
         if (x <= 0) {
@@ -222,7 +222,7 @@ static void display_inventory(int store_num, int start) {
             (void) sprintf(out_val2, "%9d [Fixed]", x);
         }
 
-        prt(out_val2, i + 5, 59);
+        putStringClearToEOL(out_val2, i + 5, 59);
         start++;
     }
 
@@ -252,14 +252,14 @@ static void display_cost(int store_num, int pos) {
     } else {
         (void) sprintf(out_val, "%9d [Fixed]", cost);
     }
-    prt(out_val, (pos % 12) + 5, 59);
+    putStringClearToEOL(out_val, (pos % 12) + 5, 59);
 }
 
 // Displays players gold -RAK-
 static void store_prt_gold() {
     vtype_t out_val;
     (void) sprintf(out_val, "Gold Remaining : %d", py.misc.au);
-    prt(out_val, 18, 17);
+    putStringClearToEOL(out_val, 18, 17);
 }
 
 // Displays store -RAK-
@@ -351,10 +351,10 @@ static bool get_haggle(const char *comment, int32_t *new_offer, int num_offer) {
     int32_t offer_adjust = 0;
 
     while (flag && offer_adjust == 0) {
-        prt(comment, 0, 0);
+        putStringClearToEOL(comment, 0, 0);
         if (num_offer && last_store_inc != 0) {
             (void) sprintf(default_offer, "[%c%d] ", (last_store_inc < 0) ? '-' : '+', abs(last_store_inc));
-            prt(default_offer, 0, orig_clen);
+            putStringClearToEOL(default_offer, 0, orig_clen);
             clen = orig_clen + (int) strlen(default_offer);
         }
         if (!get_string(out_val, 0, clen, 40)) {
@@ -824,7 +824,7 @@ static bool store_purchase(int store_num, int *cur_top) {
     take_one_item(&sell_obj, &s_ptr->store_inven[item_val].sitem);
 
     if (!inven_check_num(&sell_obj)) {
-        prt("You cannot carry that many different items.", 0, 0);
+        putStringClearToEOL("You cannot carry that many different items.", 0, 0);
         return false;
     }
 
@@ -852,7 +852,7 @@ static bool store_purchase(int store_num, int *cur_top) {
             obj_desc_t out_val, tmp_str;
             itemDescription(tmp_str, &inventory[item_new], true);
             (void) sprintf(out_val, "You have %s (%c)", tmp_str, item_new + 'a');
-            prt(out_val, 0, 0);
+            putStringClearToEOL(out_val, 0, 0);
 
             check_strength();
             if (*cur_top >= s_ptr->store_ctr) {

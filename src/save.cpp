@@ -371,7 +371,7 @@ bool save_char() {
                 (void) sprintf(temp, "Can't delete '%s'", savegame_filename);
                 msg_print(temp);
             }
-            prt("New Save file [ESC to give up]:", 0, 0);
+            putStringClearToEOL("New Save file [ESC to give up]:", 0, 0);
             if (!get_string(temp, 0, 31, 45)) {
                 return false;
             }
@@ -380,7 +380,7 @@ bool save_char() {
             }
         }
         (void) sprintf(temp, "Saving with %s...", savegame_filename);
-        prt(temp, 0, 0);
+        putStringClearToEOL(temp, 0, 0);
     }
 
     return true;
@@ -505,7 +505,7 @@ bool get_char(bool *generate) {
             goto error;
         }
 
-        prt("Restoring Memory...", 0, 0);
+        putStringClearToEOL("Restoring Memory...", 0, 0);
         putQIO();
 
         DEBUG(logfile = fopen("IO_LOG", "a"));
@@ -525,7 +525,7 @@ bool get_char(bool *generate) {
         // As of version 5.4, accept save files even if they have higher version numbers.
         // The save file format was frozen as of version 5.2.2.
         if (version_maj != CURRENT_VERSION_MAJOR || (version_min == 0 && patch_level < 14)) {
-            prt("Sorry. This save file is from a different version of umoria.", 2, 0);
+            putStringClearToEOL("Sorry. This save file is from a different version of umoria.", 2, 0);
             goto error;
         }
 
@@ -750,7 +750,7 @@ bool get_char(bool *generate) {
                 if (!to_be_wizard || current_game_turn < 0) {
                     goto error;
                 }
-                prt("Attempting a resurrection!", 0, 0);
+                putStringClearToEOL("Attempting a resurrection!", 0, 0);
                 if (py.misc.chp < 0) {
                     py.misc.chp = 0;
                     py.misc.chp_frac = 0;
@@ -786,7 +786,7 @@ bool get_char(bool *generate) {
             goto error;
         }
 
-        prt("Restoring Character...", 0, 0);
+        putStringClearToEOL("Restoring Character...", 0, 0);
         putQIO();
 
         // only level specific info should follow,
@@ -986,7 +986,7 @@ bool get_char(bool *generate) {
         }
     }
     current_game_turn = -1;
-    prt("Please try again without that save file.", 1, 0);
+    putStringClearToEOL("Please try again without that save file.", 1, 0);
 
     exitGame();
 
