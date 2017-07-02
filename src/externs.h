@@ -268,7 +268,7 @@ int dicePlayerDamageRoll(uint8_t *notation_array);
 bool los(int from_y, int from_x, int to_y, int to_x);
 char caveGetTileSymbol(int y, int x);
 bool caveTileVisible(int y, int x);
-void prt_map();
+void drawDungeonPanel();
 bool compact_monsters();
 void add_food(int amount);
 bool place_monster(int y, int x, int monster_id, bool sleeping);

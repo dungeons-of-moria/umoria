@@ -251,7 +251,7 @@ static void playerUpdateBlindness() {
     if ((PY_BLIND & py.flags.status) == 0) {
         py.flags.status |= PY_BLIND;
 
-        prt_map();
+        drawDungeonPanel();
         prt_blind();
         disturb(0, 1);
 
@@ -265,7 +265,7 @@ static void playerUpdateBlindness() {
         py.flags.status &= ~PY_BLIND;
 
         prt_blind();
-        prt_map();
+        drawDungeonPanel();
         disturb(0, 1);
 
         // light creatures
@@ -466,7 +466,7 @@ static void playerUpdateHallucination() {
 
     if (py.flags.image == 0) {
         // Used to draw entire screen! -CJS-
-        prt_map();
+        drawDungeonPanel();
     }
 }
 
@@ -1382,7 +1382,7 @@ static void commandLocateOnMap() {
     int y = char_row;
     int x = char_col;
     if (coordOutsidePanel(y, x, true)) {
-        prt_map();
+        drawDungeonPanel();
     }
 
     int cy, cx, p_y, p_x;
@@ -1427,7 +1427,7 @@ static void commandLocateOnMap() {
             }
 
             if (coordOutsidePanel(y, x, true)) {
-                prt_map();
+                drawDungeonPanel();
                 break;
             }
         }
@@ -1435,7 +1435,7 @@ static void commandLocateOnMap() {
 
     // Move to a new panel - but only if really necessary.
     if (coordOutsidePanel(char_row, char_col, false)) {
-        prt_map();
+        drawDungeonPanel();
     }
 }
 
@@ -1487,7 +1487,7 @@ static void doWizardCommands(char com_val) {
             }
             random_object(char_row, char_col, i);
 
-            prt_map();
+            drawDungeonPanel();
             break;
         case CTRL_KEY('D'): // ^D = up/down
             if (command_count > 0) {

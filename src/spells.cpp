@@ -301,7 +301,7 @@ void map_area() {
         }
     }
 
-    prt_map();
+    drawDungeonPanel();
 }
 
 // Identify an object -RAK-

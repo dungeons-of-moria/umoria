@@ -492,7 +492,7 @@ bool caveTileVisible(int y, int x) {
 }
 
 // Prints the map of the dungeon -RAK-
-void prt_map() {
+void drawDungeonPanel() {
     int line = 1;
 
     // Top to bottom
@@ -846,7 +846,7 @@ static void compact_objects() {
     }
 
     if (cur_dis < 66) {
-        prt_map();
+        drawDungeonPanel();
     }
 }
 

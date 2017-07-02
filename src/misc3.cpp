@@ -902,7 +902,7 @@ void prt_stat_block() {
 void draw_cave() {
     clearScreen();
     prt_stat_block();
-    prt_map();
+    drawDungeonPanel();
     prt_depth();
 }
 

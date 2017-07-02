@@ -31,7 +31,7 @@ void wizard_light() {
             }
         }
     }
-    prt_map();
+    drawDungeonPanel();
 }
 
 // Wizard routine for gaining on stats -RAK-

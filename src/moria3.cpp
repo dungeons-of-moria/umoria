@@ -936,7 +936,7 @@ void move_char(int direction, bool do_pickup) {
 
             // Check for new panel
             if (coordOutsidePanel(char_row, char_col, false)) {
-                prt_map();
+                drawDungeonPanel();
             }
 
             // Check to see if he should stop

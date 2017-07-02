@@ -59,7 +59,7 @@ void check_view() {
 
     // Check for new panel
     if (coordOutsidePanel(char_row, char_col, false)) {
-        prt_map();
+        drawDungeonPanel();
     }
 
     // Move the light source
