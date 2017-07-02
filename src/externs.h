@@ -265,7 +265,7 @@ int coordWallsNextTo(int y, int x);
 int coordCorridorWallsNextTo(int y, int x);
 int diceDamageRoll(int dice, int sides);
 int dicePlayerDamageRoll(uint8_t *notation_array);
-bool los(int fromY, int fromX, int toY, int toX);
+bool los(int from_y, int from_x, int to_y, int to_x);
 char loc_symbol(int y, int x);
 bool test_light(int y, int x);
 void prt_map();

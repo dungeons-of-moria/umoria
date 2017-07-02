@@ -296,25 +296,25 @@ int dicePlayerDamageRoll(uint8_t *notation_array) {
 
 // Because this function uses (short) ints for all calculations, overflow may
 // occur if deltaX and deltaY exceed 90.
-bool los(int fromY, int fromX, int toY, int toX) {
-    int deltaX = toX - fromX;
-    int deltaY = toY - fromY;
+bool los(int from_y, int from_x, int to_y, int to_x) {
+    int delta_x = to_x - from_x;
+    int delta_y = to_y - from_y;
 
     // Adjacent?
-    if (deltaX < 2 && deltaX > -2 && deltaY < 2 && deltaY > -2) {
+    if (delta_x < 2 && delta_x > -2 && delta_y < 2 && delta_y > -2) {
         return true;
     }
 
-    // Handle the cases where deltaX or deltaY == 0.
-    if (deltaX == 0) {
-        if (deltaY < 0) {
-            int tmp = fromY;
-            fromY = toY;
-            toY = tmp;
+    // Handle the cases where delta_x or delta_y == 0.
+    if (delta_x == 0) {
+        if (delta_y < 0) {
+            int tmp = from_y;
+            from_y = to_y;
+            to_y = tmp;
         }
 
-        for (int yy = fromY + 1; yy < toY; yy++) {
-            if (cave[yy][fromX].fval >= MIN_CLOSED_SPACE) {
+        for (int yy = from_y + 1; yy < to_y; yy++) {
+            if (cave[yy][from_x].fval >= MIN_CLOSED_SPACE) {
                 return false;
             }
         }
@@ -322,15 +322,15 @@ bool los(int fromY, int fromX, int toY, int toX) {
         return true;
     }
 
-    if (deltaY == 0) {
-        if (deltaX < 0) {
-            int tmp = fromX;
-            fromX = toX;
-            toX = tmp;
+    if (delta_y == 0) {
+        if (delta_x < 0) {
+            int tmp = from_x;
+            from_x = to_x;
+            to_x = tmp;
         }
 
-        for (int xx = fromX + 1; xx < toX; xx++) {
-            if (cave[fromY][xx].fval >= MIN_CLOSED_SPACE) {
+        for (int xx = from_x + 1; xx < to_x; xx++) {
+            if (cave[from_y][xx].fval >= MIN_CLOSED_SPACE) {
                 return false;
             }
         }
@@ -340,65 +340,65 @@ bool los(int fromY, int fromX, int toY, int toX) {
 
     // Now, we've eliminated all the degenerate cases.
     // In the computations below, dy (or dx) and m are multiplied by a scale factor,
-    // scale = abs(deltaX * deltaY * 2), so that we can use integer arithmetic.
+    // scale = abs(delta_x * delta_y * 2), so that we can use integer arithmetic.
     {
-        int xx;         // x position
-        int yy;         // y position
-        int scale;      // above scale factor
-        int scaleHalf;  // above scale factor / 2
-        int xSign;      // sign of deltaX
-        int ySign;      // sign of deltaY
-        int slope;      // slope or 1/slope of LOS
+        int xx;          // x position
+        int yy;          // y position
+        int scale;       // above scale factor
+        int scale_half;  // above scale factor / 2
+        int x_sign;      // sign of delta_x
+        int y_sign;      // sign of delta_y
+        int slope;       // slope or 1/slope of LOS
 
-        scaleHalf = abs(deltaX * deltaY);
-        scale = scaleHalf << 1;
-        xSign = deltaX < 0 ? -1 : 1;
-        ySign = deltaY < 0 ? -1 : 1;
+        scale_half = abs(delta_x * delta_y);
+        scale = scale_half << 1;
+        x_sign = delta_x < 0 ? -1 : 1;
+        y_sign = delta_y < 0 ? -1 : 1;
 
         // Travel from one end of the line to the other, oriented along the longer axis.
 
-        if (abs(deltaX) >= abs(deltaY)) {
+        if (abs(delta_x) >= abs(delta_y)) {
             int dy; // "fractional" y position
 
             // We start at the border between the first and second tiles, where
             // the y offset = .5 * slope.  Remember the scale factor.
             //
-            // We have:     slope = deltaY / deltaX * 2 * (deltaY * deltaX)
-            //                    = 2 * deltaY * deltaY.
+            // We have:     slope = delta_y / delta_x * 2 * (delta_y * delta_x)
+            //                    = 2 * delta_y * delta_y.
 
-            dy = deltaY * deltaY;
+            dy = delta_y * delta_y;
             slope = dy << 1;
-            xx = fromX + xSign;
+            xx = from_x + x_sign;
 
             // Consider the special case where slope == 1.
-            if (dy == scaleHalf) {
-                yy = fromY + ySign;
+            if (dy == scale_half) {
+                yy = from_y + y_sign;
                 dy -= scale;
             } else {
-                yy = fromY;
+                yy = from_y;
             }
 
-            while (toX - xx) {
+            while (to_x - xx) {
                 if (cave[yy][xx].fval >= MIN_CLOSED_SPACE) {
                     return false;
                 }
 
                 dy += slope;
 
-                if (dy < scaleHalf) {
-                    xx += xSign;
-                } else if (dy > scaleHalf) {
-                    yy += ySign;
+                if (dy < scale_half) {
+                    xx += x_sign;
+                } else if (dy > scale_half) {
+                    yy += y_sign;
                     if (cave[yy][xx].fval >= MIN_CLOSED_SPACE) {
                         return false;
                     }
-                    xx += xSign;
+                    xx += x_sign;
                     dy -= scale;
                 } else {
-                    // This is the case, dy == scaleHalf, where the LOS
+                    // This is the case, dy == scale_half, where the LOS
                     // exactly meets the corner of a tile.
-                    xx += xSign;
-                    yy += ySign;
+                    xx += x_sign;
+                    yy += y_sign;
                     dy -= scale;
                 }
             }
@@ -407,37 +407,37 @@ bool los(int fromY, int fromX, int toY, int toX) {
 
         int dx; // "fractional" x position
 
-        dx = deltaX * deltaX;
+        dx = delta_x * delta_x;
         slope = dx << 1;
 
-        yy = fromY + ySign;
+        yy = from_y + y_sign;
 
-        if (dx == scaleHalf) {
-            xx = fromX + xSign;
+        if (dx == scale_half) {
+            xx = from_x + x_sign;
             dx -= scale;
         } else {
-            xx = fromX;
+            xx = from_x;
         }
 
-        while (toY - yy) {
+        while (to_y - yy) {
             if (cave[yy][xx].fval >= MIN_CLOSED_SPACE) {
                 return false;
             }
 
             dx += slope;
 
-            if (dx < scaleHalf) {
-                yy += ySign;
-            } else if (dx > scaleHalf) {
-                xx += xSign;
+            if (dx < scale_half) {
+                yy += y_sign;
+            } else if (dx > scale_half) {
+                xx += x_sign;
                 if (cave[yy][xx].fval >= MIN_CLOSED_SPACE) {
                     return false;
                 }
-                yy += ySign;
+                yy += y_sign;
                 dx -= scale;
             } else {
-                xx += xSign;
-                yy += ySign;
+                xx += x_sign;
+                yy += y_sign;
                 dx -= scale;
             }
         }
