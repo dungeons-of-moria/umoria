@@ -773,9 +773,9 @@ static bool placeMonsterAdjacentTo(int monsterID, int *y, int *x, bool slp) {
 }
 
 // Places creature adjacent to given location -RAK-
-bool summon_monster(int *y, int *x, bool sleeping) {
-    int monsterID = get_mons_num(current_dungeon_level + MON_SUMMON_ADJ);
-    return placeMonsterAdjacentTo(monsterID, y, x, sleeping);
+bool monsterSummon(int *y, int *x, bool sleeping) {
+    int monster_id = get_mons_num(current_dungeon_level + MON_SUMMON_ADJ);
+    return placeMonsterAdjacentTo(monster_id, y, x, sleeping);
 }
 
 // Places undead adjacent to given location -RAK-

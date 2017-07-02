@@ -94,7 +94,7 @@ static bool dischargeStaff(Inventory_t *staff_ptr) {
                 for (int k = 0; k < randomNumber(4); k++) {
                     int y = char_row;
                     int x = char_col;
-                    identified |= summon_monster(&y, &x, false);
+                    identified |= monsterSummon(&y, &x, false);
                 }
                 break;
             case 10:

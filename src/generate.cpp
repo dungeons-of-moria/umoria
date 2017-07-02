@@ -319,7 +319,7 @@ static void vault_monster(int y, int x, int num) {
     for (int i = 0; i < num; i++) {
         y1 = y;
         x1 = x;
-        (void) summon_monster(&y1, &x1, true);
+        (void) monsterSummon(&y1, &x1, true);
     }
 }
 

@@ -200,7 +200,7 @@ static bool readSummonMonsterScroll() {
     for (int k = 0; k < randomNumber(3); k++) {
         int y = (int) char_row;
         int x = (int) char_col;
-        identified |= summon_monster(&y, &x, false);
+        identified |= monsterSummon(&y, &x, false);
     }
 
     return identified;
