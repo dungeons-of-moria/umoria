@@ -423,7 +423,7 @@ static void kingly() {
         putString("All Hail the Mighty Queen!", 17, 22);
     }
     flushInputBuffer();
-    pause_line(23);
+    waitForContinueKey(23);
 }
 
 // What happens upon dying -RAK-

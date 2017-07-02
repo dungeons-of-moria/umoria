@@ -414,7 +414,7 @@ bool getStringInput(char *in_str, int row, int col, int slen) {
 }
 
 // Pauses for user response before returning -RAK-
-void pause_line(int line_number) {
+void waitForContinueKey(int line_number) {
     putStringClearToEOL("[Press any key to continue.]", line_number, 23);
     (void) getKeyInput();
     eraseLine(line_number, 0);

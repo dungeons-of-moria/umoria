@@ -1332,7 +1332,7 @@ static void commandPreviousMessage() {
         }
 
         eraseLine(lineNumber, 0);
-        pause_line(lineNumber);
+        waitForContinueKey(lineNumber);
         restore_screen();
     } else {
         // Distinguish real and recovered messages with a '>'. -CJS-
@@ -2067,7 +2067,7 @@ static void examine_book() {
 
         save_screen();
         print_spells(spell_index, spellID, true, -1);
-        pause_line(0);
+        waitForContinueKey(0);
         restore_screen();
     }
 }

@@ -228,7 +228,7 @@ void printMessage(const char *msg);
 bool getInputConfirmation(const char *prompt);
 int getCommand(const char *prompt, char *command);
 bool getStringInput(char *in_str, int row, int col, int slen);
-void pause_line(int line_number);
+void waitForContinueKey(int line_number);
 void pause_exit(int line_number, int delay);
 void save_screen();
 void restore_screen();

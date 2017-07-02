@@ -35,7 +35,7 @@ void displaySplashScreen() {
         for (int i = 0; fgets(in_line, 80, file1) != CNIL; i++) {
             putString(in_line, i, 0);
         }
-        pause_line(23);
+        waitForContinueKey(23);
 
         (void) fclose(file1);
     }
