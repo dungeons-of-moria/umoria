@@ -234,7 +234,7 @@ static void display_inventory(int store_num, int start) {
     }
 
     if (s_ptr->store_ctr > 12) {
-        put_buffer("- cont. -", 17, 60);
+        putString("- cont. -", 17, 60);
     } else {
         erase_line(17, 60);
     }
@@ -265,9 +265,9 @@ static void store_prt_gold() {
 // Displays store -RAK-
 static void display_store(int store_num, const char *owner_name, int cur_top) {
     clear_screen();
-    put_buffer(owner_name, 3, 9);
-    put_buffer("Item", 4, 3);
-    put_buffer("Asking Price", 4, 60);
+    putString(owner_name, 3, 9);
+    putString("Item", 4, 3);
+    putString("Asking Price", 4, 60);
     store_prt_gold();
     display_commands();
     display_inventory(store_num, cur_top);
@@ -493,7 +493,7 @@ static int purchase_haggle(int store_num, int32_t *price, Inventory_t *item) {
             loop_flag = true;
 
             (void) sprintf(out_val, "%s :  %d", comment, cur_ask);
-            put_buffer(out_val, 1, 0);
+            putString(out_val, 1, 0);
 
             purchase = receive_offer(store_num, "What do you offer? ", &new_offer, last_offer, num_offer, 1);
             if (purchase != 0) {
@@ -565,7 +565,7 @@ static int purchase_haggle(int store_num, int32_t *price, Inventory_t *item) {
                 num_offer++; // enable incremental haggling
                 erase_line(1, 0);
                 (void) sprintf(out_val, "Your last offer : %d", last_offer);
-                put_buffer(out_val, 1, 39);
+                putString(out_val, 1, 39);
                 prt_comment2(last_offer, cur_ask, final_flag);
 
                 // If the current increment would take you over the store's
@@ -690,7 +690,7 @@ static int sell_haggle(int store_num, int32_t *price, Inventory_t *item) {
 
                 vtype_t out_val;
                 (void) sprintf(out_val, "%s :  %d", comment, cur_ask);
-                put_buffer(out_val, 1, 0);
+                putString(out_val, 1, 0);
                 sell = receive_offer(store_num, "What price do you ask? ", &new_offer, last_offer, num_offer, -1);
                 if (sell != 0) {
                     flag = true;
@@ -767,7 +767,7 @@ static int sell_haggle(int store_num, int32_t *price, Inventory_t *item) {
 
                     vtype_t out_val;
                     (void) sprintf(out_val, "Your last bid %d", last_offer);
-                    put_buffer(out_val, 1, 39);
+                    putString(out_val, 1, 39);
                     prt_comment3(cur_ask, last_offer, final_flag);
 
                     // If the current decrement would take you under the store's

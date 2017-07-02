@@ -107,26 +107,26 @@ static void print_tomb() {
     vtype_t str, tmp_str;
 
     clear_screen();
-    put_buffer("_______________________", 1, 15);
-    put_buffer("/", 2, 14);
-    put_buffer("\\         ___", 2, 38);
-    put_buffer("/", 3, 13);
-    put_buffer("\\ ___   /   \\      ___", 3, 39);
-    put_buffer("/            RIP            \\   \\  :   :     /   \\", 4, 12);
-    put_buffer("/", 5, 11);
-    put_buffer("\\  : _;,,,;_    :   :", 5, 41);
+    putString("_______________________", 1, 15);
+    putString("/", 2, 14);
+    putString("\\         ___", 2, 38);
+    putString("/", 3, 13);
+    putString("\\ ___   /   \\      ___", 3, 39);
+    putString("/            RIP            \\   \\  :   :     /   \\", 4, 12);
+    putString("/", 5, 11);
+    putString("\\  : _;,,,;_    :   :", 5, 41);
     (void) sprintf(str, "/%s\\,;_          _;,,,;_", center_string(tmp_str, py.misc.name));
-    put_buffer(str, 6, 10);
-    put_buffer("|               the               |   ___", 7, 9);
+    putString(str, 6, 10);
+    putString("|               the               |   ___", 7, 9);
     if (!total_winner) {
         p = title_string();
     } else {
         p = (char *) "Magnificent";
     }
     (void) sprintf(str, "| %s |  /   \\", center_string(tmp_str, p));
-    put_buffer(str, 8, 9);
-    put_buffer("|", 9, 9);
-    put_buffer("|  :   :", 9, 43);
+    putString(str, 8, 9);
+    putString("|", 9, 9);
+    putString("|  :   :", 9, 43);
     if (!total_winner) {
         p = (char *) classes[py.misc.pclass].title;
     } else if (py.misc.male) {
@@ -135,42 +135,42 @@ static void print_tomb() {
         p = (char *) "*Queen*";
     }
     (void) sprintf(str, "| %s | _;,,,;_   ____", center_string(tmp_str, p));
-    put_buffer(str, 10, 9);
+    putString(str, 10, 9);
     (void) sprintf(str, "Level : %d", (int) py.misc.lev);
     (void) sprintf(str, "| %s |          /    \\", center_string(tmp_str, str));
-    put_buffer(str, 11, 9);
+    putString(str, 11, 9);
     (void) sprintf(str, "%d Exp", py.misc.exp);
     (void) sprintf(str, "| %s |          :    :", center_string(tmp_str, str));
-    put_buffer(str, 12, 9);
+    putString(str, 12, 9);
     (void) sprintf(str, "%d Au", py.misc.au);
     (void) sprintf(str, "| %s |          :    :", center_string(tmp_str, str));
-    put_buffer(str, 13, 9);
+    putString(str, 13, 9);
     (void) sprintf(str, "Died on Level : %d", current_dungeon_level);
     (void) sprintf(str, "| %s |         _;,,,,;_", center_string(tmp_str, str));
-    put_buffer(str, 14, 9);
-    put_buffer("|            killed by            |", 15, 9);
+    putString(str, 14, 9);
+    putString("|            killed by            |", 15, 9);
     p = character_died_from;
 
     int len = (int) strlen(p);
     p[len] = '.'; // add a trailing period
     p[len + 1] = '\0';
     (void) sprintf(str, "| %s |", center_string(tmp_str, p));
-    put_buffer(str, 16, 9);
+    putString(str, 16, 9);
     p[len] = '\0'; // strip off the period
 
     char day[11];
     date(day);
     (void) sprintf(str, "| %s |", center_string(tmp_str, day));
 
-    put_buffer(str, 17, 9);
-    put_buffer("*|   *     *     *    *   *     *  | *", 18, 8);
-    put_buffer("________)/\\\\_)_/___(\\/___(//_\\)/_\\//__\\\\(/_|_)_______", 19, 0);
+    putString(str, 17, 9);
+    putString("*|   *     *     *    *   *     *  | *", 18, 8);
+    putString("________)/\\\\_)_/___(\\/___(//_\\)/_\\//__\\\\(/_|_)_______", 19, 0);
 
     retry:
     flush();
 
-    put_buffer("(ESC to abort, return to print on screen, or file name)", 23, 0);
-    put_buffer("Character record?", 22, 0);
+    putString("(ESC to abort, return to print on screen, or file name)", 23, 0);
+    putString("Character record?", 22, 0);
 
     if (get_string(str, 22, 18, 60)) {
         for (int i = 0; i < INVEN_ARRAY_SIZE; i++) {
@@ -187,7 +187,7 @@ static void print_tomb() {
         } else {
             clear_screen();
             display_char();
-            put_buffer("Type ESC to skip the inventory:", 23, 0);
+            putString("Type ESC to skip the inventory:", 23, 0);
             if (inkey() != ESCAPE) {
                 clear_screen();
                 msg_print("You are using:");
@@ -402,25 +402,25 @@ static void kingly() {
 
     // Let the player know that he did good.
     clear_screen();
-    put_buffer("#", 1, 34);
-    put_buffer("#####", 2, 32);
-    put_buffer("#", 3, 34);
-    put_buffer(",,,  $$$  ,,,", 4, 28);
-    put_buffer(",,=$   \"$$$$$\"   $=,,", 5, 24);
-    put_buffer(",$$        $$$        $$,", 6, 22);
-    put_buffer("*>         <*>         <*", 7, 22);
-    put_buffer("$$         $$$         $$", 8, 22);
-    put_buffer("\"$$        $$$        $$\"", 9, 22);
-    put_buffer("\"$$       $$$       $$\"", 10, 23);
+    putString("#", 1, 34);
+    putString("#####", 2, 32);
+    putString("#", 3, 34);
+    putString(",,,  $$$  ,,,", 4, 28);
+    putString(",,=$   \"$$$$$\"   $=,,", 5, 24);
+    putString(",$$        $$$        $$,", 6, 22);
+    putString("*>         <*>         <*", 7, 22);
+    putString("$$         $$$         $$", 8, 22);
+    putString("\"$$        $$$        $$\"", 9, 22);
+    putString("\"$$       $$$       $$\"", 10, 23);
     p = "*#########*#########*";
-    put_buffer(p, 11, 24);
-    put_buffer(p, 12, 24);
-    put_buffer("Veni, Vidi, Vici!", 15, 26);
-    put_buffer("I came, I saw, I conquered!", 16, 21);
+    putString(p, 11, 24);
+    putString(p, 12, 24);
+    putString("Veni, Vidi, Vici!", 15, 26);
+    putString("I came, I saw, I conquered!", 16, 21);
     if (py.misc.male) {
-        put_buffer("All Hail the Mighty King!", 17, 22);
+        putString("All Hail the Mighty King!", 17, 22);
     } else {
-        put_buffer("All Hail the Mighty Queen!", 17, 22);
+        putString("All Hail the Mighty Queen!", 17, 22);
     }
     flush();
     pause_line(23);

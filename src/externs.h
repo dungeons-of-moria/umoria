@@ -210,8 +210,8 @@ void generateCave();
 void displayWorldObjectDescription();
 
 // io.c
-void init_curses();
-void put_buffer(const char *out_str, int row, int col);
+void terminalInitialize();
+void putString(const char *out_str, int row, int col);
 void put_qio();
 void restore_term();
 void shell_out();

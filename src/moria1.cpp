@@ -331,7 +331,7 @@ int show_inven(int item_id_start, int item_id_end, bool weighted, int column, ch
         if (column == 0) {
             prt(descriptions[i], current_line, column);
         } else {
-            put_buffer("  ", current_line, column);
+            putString("  ", current_line, column);
             prt(descriptions[i], current_line, column + 2);
         }
 
@@ -475,7 +475,7 @@ int show_equip(bool weighted, int column) {
         if (column == 0) {
             prt(descriptions[line], line + 1, column);
         } else {
-            put_buffer("  ", line + 1, column);
+            putString("  ", line + 1, column);
             prt(descriptions[line], line + 1, column + 2);
         }
 
@@ -1367,7 +1367,7 @@ void inven_command(char command) {
         } else {
             inventoryDisplayAppropriateHeader();
 
-            put_buffer("e/i/t/w/x/d/?/ESC:", scr_base, 60);
+            putString("e/i/t/w/x/d/?/ESC:", scr_base, 60);
             command = inkey();
 
             erase_line(scr_base, scr_left);

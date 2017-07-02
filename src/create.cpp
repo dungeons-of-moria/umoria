@@ -102,7 +102,7 @@ static void get_all_stats() {
 // shown during the character creation screens.
 static void print_races(void) {
     clear_from(20);
-    put_buffer("Choose a race (? for Help):", 20, 2);
+    putString("Choose a race (? for Help):", 20, 2);
 
     int col = 2;
     int row = 21;
@@ -111,7 +111,7 @@ static void print_races(void) {
         char tmp_str[80];
 
         (void) sprintf(tmp_str, "%c) %s", i + 'a', character_races[i].trace);
-        put_buffer(tmp_str, row, col);
+        putString(tmp_str, row, col);
 
         col += 15;
         if (col > 70) {
@@ -142,12 +142,12 @@ static void choose_race() {
 
     py.misc.prace = (uint8_t) i;
 
-    put_buffer(character_races[i].trace, 3, 15);
+    putString(character_races[i].trace, 3, 15);
 }
 
 // Will print the history of a character -JWT-
 static void print_history() {
-    put_buffer("Character Background", 14, 27);
+    putString("Character Background", 14, 27);
 
     for (int i = 0; i < 4; i++) {
         prt(py.misc.history[i], i + 15, 10);
@@ -247,8 +247,8 @@ static void get_history() {
 // Gets the character's sex -JWT-
 static void get_sex() {
     clear_from(20);
-    put_buffer("Choose a sex (? for Help):", 20, 2);
-    put_buffer("m) Male       f) Female", 21, 2);
+    putString("Choose a sex (? for Help):", 20, 2);
+    putString("m) Male       f) Female", 21, 2);
 
     char c;
 
@@ -260,11 +260,11 @@ static void get_sex() {
         c = inkey();
         if (c == 'f' || c == 'F') {
             py.misc.male = false;
-            put_buffer("Female", 4, 15);
+            putString("Female", 4, 15);
             exit_flag = true;
         } else if (c == 'm' || c == 'M') {
             py.misc.male = true;
-            put_buffer("Male", 4, 15);
+            putString("Male", 4, 15);
             exit_flag = true;
         } else if (c == '?') {
             displayTextHelpFile(MORIA_WELCOME);
@@ -300,12 +300,12 @@ static int print_classes(int race_id, int *class_list) {
     uint32_t mask = 0x1;
 
     clear_from(20);
-    put_buffer("Choose a class (? for Help):", 20, 2);
+    putString("Choose a class (? for Help):", 20, 2);
 
     for (int i = 0; i < MAX_CLASS; i++) {
         if (character_races[race_id].rtclass & mask) {
             (void) sprintf(tmp_str, "%c) %s", class_id + 'a', classes[i].title);
-            put_buffer(tmp_str, row, col);
+            putString(tmp_str, row, col);
             class_list[class_id] = i;
 
             col += 15;
@@ -349,7 +349,7 @@ static void get_class() {
             Class_t *c_ptr = &classes[py.misc.pclass];
 
             clear_from(20);
-            put_buffer(c_ptr->title, 5, 15);
+            putString(c_ptr->title, 5, 15);
 
             // Adjust the stats for the class adjustment -RAK-
             change_stat(A_STR, c_ptr->madj_str);
@@ -451,7 +451,7 @@ void createCharacter() {
     put_stats();
 
     clear_from(20);
-    put_buffer("Hit space to re-roll or ESC to accept characteristics: ", 20, 2);
+    putString("Hit space to re-roll or ESC to accept characteristics: ", 20, 2);
 
     bool exit_flag = true;
     while (exit_flag) {

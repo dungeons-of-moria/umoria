@@ -20,8 +20,8 @@ static WINDOW *savescr;
 static void moriaterm();
 static void sleep_in_seconds(int seconds);
 
-// initializes curses routines
-void init_curses() {
+// initializes the terminal / curses routines
+void terminalInitialize() {
     initscr();
 
     // Check we have enough screen. -CJS-
@@ -59,7 +59,7 @@ static void moriaterm() {
 }
 
 // Dump IO to buffer -RAK-
-void put_buffer(const char *out_str, int row, int col) {
+void putString(const char *out_str, int row, int col) {
     // truncate the string, to make sure that it won't go past right edge of screen.
     if (col > 79) {
         col = 79;
@@ -105,7 +105,7 @@ void restore_term() {
 }
 
 void shell_out() {
-    put_buffer("[Opening new shells is not currently supported]\n", 0, 0);
+    putString("[Opening new shells is not currently supported]\n", 0, 0);
 }
 
 // Returns a single character input from the terminal. -CJS-
@@ -232,7 +232,7 @@ void prt(const char *str, int row, int col) {
 
     (void) move(row, col);
     clrtoeol();
-    put_buffer(str, row, col);
+    putString(str, row, col);
 }
 
 // move cursor to a given y, x position
@@ -266,7 +266,7 @@ void msg_print(const char *msg) {
                 old_len = 73;
             }
 
-            put_buffer(" -more-", MSG_LINE, old_len);
+            putString(" -more-", MSG_LINE, old_len);
 
             char in_char;
             do {
@@ -296,11 +296,11 @@ void msg_print(const char *msg) {
     // display them on the same line.
 
     if (combine_messages) {
-        put_buffer(msg, MSG_LINE, old_len + 2);
+        putString(msg, MSG_LINE, old_len + 2);
         strcat(messages[last_message_id], "  ");
         strcat(messages[last_message_id], msg);
     } else {
-        put_buffer(msg, MSG_LINE, 0);
+        putString(msg, MSG_LINE, 0);
         last_message_id++;
 
         if (last_message_id >= MAX_SAVE_MSG) {
@@ -387,7 +387,7 @@ bool get_string(char *in_str, int row, int col, int slen) {
             case CTRL_KEY('H'):
                 if (col > start_col) {
                     col--;
-                    put_buffer(" ", row, col);
+                    putString(" ", row, col);
                     move_cursor(row, col);
                     *--p = '\0';
                 }

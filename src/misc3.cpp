@@ -203,50 +203,50 @@ void cnv_stat(uint8_t stat, char *stat_string) {
 void prt_stat(int stat) {
     char text[7];
     cnv_stat(py.stats.use_stat[stat], text);
-    put_buffer(stat_names[stat], 6 + stat, STAT_COLUMN);
-    put_buffer(text, 6 + stat, STAT_COLUMN + 6);
+    putString(stat_names[stat], 6 + stat, STAT_COLUMN);
+    putString(text, 6 + stat, STAT_COLUMN + 6);
 }
 
 // Print character info in given row, column -RAK-
 // The longest title is 13 characters, so only pad to 13
 static void prt_field(const char *info, int row, int column) {
-    put_buffer(&blank_string[BLANK_LENGTH - 13], row, column);
-    put_buffer(info, row, column);
+    putString(&blank_string[BLANK_LENGTH - 13], row, column);
+    putString(info, row, column);
 }
 
 // Print long number with header at given row, column
 static void prt_lnum(const char *header, int32_t num, int row, int column) {
     vtype_t str;
     (void) sprintf(str, "%s: %6d", header, num);
-    put_buffer(str, row, column);
+    putString(str, row, column);
 }
 
 // Print long number (7 digits of space) with header at given row, column
 static void prt_7lnum(const char *header, int32_t num, int row, int column) {
     vtype_t str;
     (void) sprintf(str, "%s: %7d", header, num);
-    put_buffer(str, row, column);
+    putString(str, row, column);
 }
 
 // Print number with header at given row, column -RAK-
 static void prt_num(const char *header, int num, int row, int column) {
     vtype_t str;
     (void) sprintf(str, "%s: %6d", header, num);
-    put_buffer(str, row, column);
+    putString(str, row, column);
 }
 
 // Print long number at given row, column
 static void prt_long(int32_t num, int row, int column) {
     vtype_t str;
     (void) sprintf(str, "%6d", num);
-    put_buffer(str, row, column);
+    putString(str, row, column);
 }
 
 // Print number at given row, column -RAK-
 static void prt_int(int num, int row, int column) {
     vtype_t str;
     (void) sprintf(str, "%6d", num);
-    put_buffer(str, row, column);
+    putString(str, row, column);
 }
 
 // Adjustment for wisdom/intelligence -JWT-
@@ -431,47 +431,47 @@ void prt_depth() {
 // Prints status of hunger -RAK-
 void prt_hunger() {
     if (PY_WEAK & py.flags.status) {
-        put_buffer("Weak  ", 23, 0);
+        putString("Weak  ", 23, 0);
     } else if (PY_HUNGRY & py.flags.status) {
-        put_buffer("Hungry", 23, 0);
+        putString("Hungry", 23, 0);
     } else {
-        put_buffer(&blank_string[BLANK_LENGTH - 6], 23, 0);
+        putString(&blank_string[BLANK_LENGTH - 6], 23, 0);
     }
 }
 
 // Prints Blind status -RAK-
 void prt_blind() {
     if (PY_BLIND & py.flags.status) {
-        put_buffer("Blind", 23, 7);
+        putString("Blind", 23, 7);
     } else {
-        put_buffer(&blank_string[BLANK_LENGTH - 5], 23, 7);
+        putString(&blank_string[BLANK_LENGTH - 5], 23, 7);
     }
 }
 
 // Prints Confusion status -RAK-
 void prt_confused() {
     if (PY_CONFUSED & py.flags.status) {
-        put_buffer("Confused", 23, 13);
+        putString("Confused", 23, 13);
     } else {
-        put_buffer(&blank_string[BLANK_LENGTH - 8], 23, 13);
+        putString(&blank_string[BLANK_LENGTH - 8], 23, 13);
     }
 }
 
 // Prints Fear status -RAK-
 void prt_afraid() {
     if (PY_FEAR & py.flags.status) {
-        put_buffer("Afraid", 23, 22);
+        putString("Afraid", 23, 22);
     } else {
-        put_buffer(&blank_string[BLANK_LENGTH - 6], 23, 22);
+        putString(&blank_string[BLANK_LENGTH - 6], 23, 22);
     }
 }
 
 // Prints Poisoned status -RAK-
 void prt_poisoned() {
     if (PY_POISONED & py.flags.status) {
-        put_buffer("Poisoned", 23, 29);
+        putString("Poisoned", 23, 29);
     } else {
-        put_buffer(&blank_string[BLANK_LENGTH - 8], 23, 29);
+        putString(&blank_string[BLANK_LENGTH - 8], 23, 29);
     }
 }
 
@@ -480,7 +480,7 @@ void prt_state() {
     py.flags.status &= ~PY_REPEAT;
 
     if (py.flags.paralysis > 1) {
-        put_buffer("Paralysed", 23, 38);
+        putString("Paralysed", 23, 38);
         return;
     }
 
@@ -495,7 +495,7 @@ void prt_state() {
             (void) strcpy(restString, "Rest");
         }
 
-        put_buffer(restString, 23, 38);
+        putString(restString, 23, 38);
 
         return;
     }
@@ -511,22 +511,22 @@ void prt_state() {
 
         py.flags.status |= PY_REPEAT;
 
-        put_buffer(repeatString, 23, 38);
+        putString(repeatString, 23, 38);
 
         if (PY_SEARCH & py.flags.status) {
-            put_buffer("Search", 23, 38);
+            putString("Search", 23, 38);
         }
 
         return;
     }
 
     if (PY_SEARCH & py.flags.status) {
-        put_buffer("Searching", 23, 38);
+        putString("Searching", 23, 38);
         return;
     }
 
     // "repeat 999" is 10 characters
-    put_buffer(&blank_string[BLANK_LENGTH - 10], 23, 38);
+    putString(&blank_string[BLANK_LENGTH - 10], 23, 38);
 }
 
 // Prints the speed of a character. -CJS-
@@ -539,15 +539,15 @@ void prt_speed() {
     }
 
     if (speed > 1) {
-        put_buffer("Very Slow", 23, 49);
+        putString("Very Slow", 23, 49);
     } else if (speed == 1) {
-        put_buffer("Slow     ", 23, 49);
+        putString("Slow     ", 23, 49);
     } else if (speed == 0) {
-        put_buffer(&blank_string[BLANK_LENGTH - 9], 23, 49);
+        putString(&blank_string[BLANK_LENGTH - 9], 23, 49);
     } else if (speed == -1) {
-        put_buffer("Fast     ", 23, 49);
+        putString("Fast     ", 23, 49);
     } else {
-        put_buffer("Very Fast", 23, 49);
+        putString("Very Fast", 23, 49);
     }
 }
 
@@ -555,9 +555,9 @@ void prt_study() {
     py.flags.status &= ~PY_STUDY;
 
     if (py.flags.new_spells == 0) {
-        put_buffer(&blank_string[BLANK_LENGTH - 5], 23, 59);
+        putString(&blank_string[BLANK_LENGTH - 5], 23, 59);
     } else {
-        put_buffer("Study", 23, 59);
+        putString("Study", 23, 59);
     }
 }
 
@@ -565,16 +565,16 @@ void prt_study() {
 void prt_winner() {
     if (noscore & 0x2) {
         if (wizard_mode) {
-            put_buffer("Is wizard  ", 22, 0);
+            putString("Is wizard  ", 22, 0);
         } else {
-            put_buffer("Was wizard ", 22, 0);
+            putString("Was wizard ", 22, 0);
         }
     } else if (noscore & 0x1) {
-        put_buffer("Resurrected", 22, 0);
+        putString("Resurrected", 22, 0);
     } else if (noscore & 0x4) {
-        put_buffer("Duplicate", 22, 0);
+        putString("Duplicate", 22, 0);
     } else if (total_winner) {
-        put_buffer("*Winner*   ", 22, 0);
+        putString("*Winner*   ", 22, 0);
     }
 }
 
@@ -910,19 +910,19 @@ void draw_cave() {
 void put_character() {
     clear_screen();
 
-    put_buffer("Name        :", 2, 1);
-    put_buffer("Race        :", 3, 1);
-    put_buffer("Sex         :", 4, 1);
-    put_buffer("Class       :", 5, 1);
+    putString("Name        :", 2, 1);
+    putString("Race        :", 3, 1);
+    putString("Sex         :", 4, 1);
+    putString("Class       :", 5, 1);
 
     if (!character_generated) {
         return;
     }
 
-    put_buffer(py.misc.name, 2, 15);
-    put_buffer(character_races[py.misc.prace].trace, 3, 15);
-    put_buffer((py.misc.male ? "Male" : "Female"), 4, 15);
-    put_buffer(classes[py.misc.pclass].title, 5, 15);
+    putString(py.misc.name, 2, 15);
+    putString(character_races[py.misc.prace].trace, 3, 15);
+    putString((py.misc.male ? "Male" : "Female"), 4, 15);
+    putString(classes[py.misc.pclass].title, 5, 15);
 }
 
 // Prints the following information on the screen. -JWT-
@@ -931,12 +931,12 @@ void put_stats() {
         vtype_t buf;
 
         cnv_stat(py.stats.use_stat[i], buf);
-        put_buffer(stat_names[i], 2 + i, 61);
-        put_buffer(buf, 2 + i, 66);
+        putString(stat_names[i], 2 + i, 61);
+        putString(buf, 2 + i, 66);
 
         if (py.stats.max_stat[i] > py.stats.cur_stat[i]) {
             cnv_stat(py.stats.max_stat[i], buf);
-            put_buffer(buf, 2 + i, 73);
+            putString(buf, 2 + i, 73);
         }
     }
 
@@ -1024,27 +1024,27 @@ void put_misc3() {
     vtype_t xinfra;
     (void) sprintf(xinfra, "%d feet", py.flags.see_infra * 10);
 
-    put_buffer("(Miscellaneous Abilities)", 15, 25);
-    put_buffer("Fighting    :", 16, 1);
-    put_buffer(likert(12, xbth), 16, 15);
-    put_buffer("Bows/Throw  :", 17, 1);
-    put_buffer(likert(12, xbthb), 17, 15);
-    put_buffer("Saving Throw:", 18, 1);
-    put_buffer(likert(6, xsave), 18, 15);
+    putString("(Miscellaneous Abilities)", 15, 25);
+    putString("Fighting    :", 16, 1);
+    putString(likert(12, xbth), 16, 15);
+    putString("Bows/Throw  :", 17, 1);
+    putString(likert(12, xbthb), 17, 15);
+    putString("Saving Throw:", 18, 1);
+    putString(likert(6, xsave), 18, 15);
 
-    put_buffer("Stealth     :", 16, 28);
-    put_buffer(likert(1, xstl), 16, 42);
-    put_buffer("Disarming   :", 17, 28);
-    put_buffer(likert(8, xdis), 17, 42);
-    put_buffer("Magic Device:", 18, 28);
-    put_buffer(likert(6, xdev), 18, 42);
+    putString("Stealth     :", 16, 28);
+    putString(likert(1, xstl), 16, 42);
+    putString("Disarming   :", 17, 28);
+    putString(likert(8, xdis), 17, 42);
+    putString("Magic Device:", 18, 28);
+    putString(likert(6, xdev), 18, 42);
 
-    put_buffer("Perception  :", 16, 55);
-    put_buffer(likert(3, xfos), 16, 69);
-    put_buffer("Searching   :", 17, 55);
-    put_buffer(likert(6, xsrh), 17, 69);
-    put_buffer("Infra-Vision:", 18, 55);
-    put_buffer(xinfra, 18, 69);
+    putString("Perception  :", 16, 55);
+    putString(likert(3, xfos), 16, 69);
+    putString("Searching   :", 17, 55);
+    putString(likert(6, xsrh), 17, 69);
+    putString("Infra-Vision:", 18, 55);
+    putString(xinfra, 18, 69);
 }
 
 // Used to display the character on the screen. -RAK-
@@ -1060,11 +1060,11 @@ void display_char() {
 void get_name() {
     prt("Enter your player's name  [press <RETURN> when finished]", 21, 2);
 
-    put_buffer(&blank_string[BLANK_LENGTH - 23], 2, 15);
+    putString(&blank_string[BLANK_LENGTH - 23], 2, 15);
 
     if (!get_string(py.misc.name, 2, 15, 23) || py.misc.name[0] == 0) {
         user_name(py.misc.name);
-        put_buffer(py.misc.name, 2, 15);
+        putString(py.misc.name, 2, 15);
     }
 
     clear_from(20);
@@ -1374,8 +1374,8 @@ void print_spells(int *spell, int number_of_choices, int comment, int non_consec
     int offset = (classes[py.misc.pclass].spell == MAGE ? SPELL_OFFSET : PRAYER_OFFSET);
 
     erase_line(1, col);
-    put_buffer("Name", 1, col + 5);
-    put_buffer("Lv Mana Fail", 1, col + 35);
+    putString("Name", 1, col + 5);
+    putString("Lv Mana Fail", 1, col + 35);
 
     // only show the first 22 choices
     if (number_of_choices > 22) {

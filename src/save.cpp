@@ -483,7 +483,7 @@ bool get_char(bool *generate) {
 
     vtype_t temp;
     (void) sprintf(temp, "Save file %s present. Attempting restore.", savegame_filename);
-    put_buffer(temp, 23, 0);
+    putString(temp, 23, 0);
 
     // FIXME: check this if/else logic! -- MRC
     if (current_game_turn >= 0) {

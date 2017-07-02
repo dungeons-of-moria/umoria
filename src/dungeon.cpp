@@ -1336,7 +1336,7 @@ static void commandPreviousMessage() {
         restore_screen();
     } else {
         // Distinguish real and recovered messages with a '>'. -CJS-
-        put_buffer(">", 0, 0);
+        putString(">", 0, 0);
         prt(messages[msgID], 0, 1);
     }
 }

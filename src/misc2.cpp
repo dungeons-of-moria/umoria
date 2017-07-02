@@ -1030,7 +1030,7 @@ void set_options() {
                 break;
             case 'y':
             case 'Y':
-                put_buffer("yes", optionID + 1, 40);
+                putString("yes", optionID + 1, 40);
 
                 *options[optionID].o_var = true;
 
@@ -1042,7 +1042,7 @@ void set_options() {
                 break;
             case 'n':
             case 'N':
-                put_buffer("no ", optionID + 1, 40);
+                putString("no ", optionID + 1, 40);
 
                 *options[optionID].o_var = false;
 

@@ -33,7 +33,7 @@ void displaySplashScreen() {
     if (file1 != NULL) {
         clear_screen();
         for (int i = 0; fgets(in_line, 80, file1) != CNIL; i++) {
-            put_buffer(in_line, i, 0);
+            putString(in_line, i, 0);
         }
         pause_line(23);
 
@@ -63,7 +63,7 @@ void displayTextHelpFile(const char *filename) {
 
         for (int i = 0; i < 23; i++) {
             if (fgets(line_buffer, max_line_length - 1, file) != CNIL) {
-                put_buffer(line_buffer, i, 0);
+                putString(line_buffer, i, 0);
             }
         }
 

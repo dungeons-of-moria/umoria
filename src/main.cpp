@@ -35,7 +35,7 @@ int main(int argc, char *argv[]) {
     // Make sure we have access to all files -MRC-
     check_file_permissions();
 
-    init_curses();
+    terminalInitialize();
 
     uint32_t seed = 0; // let wizard specify rng seed
 
