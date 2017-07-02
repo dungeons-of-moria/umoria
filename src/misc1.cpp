@@ -225,7 +225,7 @@ int coordDistanceBetween(int y1, int x1, int y2, int x2) {
 // Checks points north, south, east, and west for a wall -RAK-
 // note that y,x is always coordInBounds(), i.e. 0 < y < dungeon_height-1,
 // and 0 < x < dungeon_width-1
-int next_to_walls(int y, int x) {
+int coordWallsNextTo(int y, int x) {
     int walls = 0;
 
     if (cave[y - 1][x].fval >= MIN_CAVE_WALL) {

@@ -261,7 +261,7 @@ bool coordInBounds(int y, int x);
 bool coordOutsidePanel(int y, int x, bool force);
 bool coordInsidePanel(int y, int x);
 int coordDistanceBetween(int y1, int x1, int y2, int x2);
-int next_to_walls(int y, int x);
+int coordWallsNextTo(int y, int x);
 int next_to_corr(int y, int x);
 int damroll(int dice, int sides);
 int pdamroll(uint8_t *notation_array);

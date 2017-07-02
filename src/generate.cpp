@@ -272,7 +272,7 @@ static void place_stairs(int stairType, int num, int walls) {
 
                 do {
                     do {
-                        if (cave[y1][x1].fval <= MAX_OPEN_SPACE && cave[y1][x1].tptr == 0 && next_to_walls(y1, x1) >= walls) {
+                        if (cave[y1][x1].fval <= MAX_OPEN_SPACE && cave[y1][x1].tptr == 0 && coordWallsNextTo(y1, x1) >= walls) {
                             flag = true;
                             if (stairType == 1) {
                                 place_up_stairs(y1, x1);
