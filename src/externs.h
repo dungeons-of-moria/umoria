@@ -275,7 +275,7 @@ bool monsterPlaceNew(int y, int x, int creature_id, bool sleeping);
 void monsterPlaceWinning();
 void monsterPlaceNewWithinDistance(int number, int distance_from_source, bool sleeping);
 bool monsterSummon(int *y, int *x, bool sleeping);
-bool summon_undead(int *y, int *x);
+bool monsterSummonUndead(int *y, int *x);
 int popt();
 void pusht(uint8_t treasure_id);
 bool magik(int chance);

@@ -393,7 +393,7 @@ static bool readSummonUndeadScroll() {
     for (int k = 0; k < randomNumber(3); k++) {
         int y = char_row;
         int x = char_col;
-        identified |= summon_undead(&y, &x);
+        identified |= monsterSummonUndead(&y, &x);
     }
 
     return identified;

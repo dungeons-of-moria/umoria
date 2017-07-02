@@ -779,29 +779,28 @@ bool monsterSummon(int *y, int *x, bool sleeping) {
 }
 
 // Places undead adjacent to given location -RAK-
-bool summon_undead(int *y, int *x) {
-    int monsterID;
-
-    int maxLevels = monster_levels[MAX_MONS_LEVEL];
+bool monsterSummonUndead(int *y, int *x) {
+    int monster_id;
+    int max_levels = monster_levels[MAX_MONS_LEVEL];
 
     do {
-        monsterID = randomNumber(maxLevels) - 1;
+        monster_id = randomNumber(max_levels) - 1;
         for (int i = 0; i <= 19;) {
-            if (creatures_list[monsterID].cdefense & CD_UNDEAD) {
+            if (creatures_list[monster_id].cdefense & CD_UNDEAD) {
                 i = 20;
-                maxLevels = 0;
+                max_levels = 0;
             } else {
-                monsterID++;
-                if (monsterID > maxLevels) {
+                monster_id++;
+                if (monster_id > max_levels) {
                     i = 20;
                 } else {
                     i++;
                 }
             }
         }
-    } while (maxLevels != 0);
+    } while (max_levels != 0);
 
-    return placeMonsterAdjacentTo(monsterID, y, x, false);
+    return placeMonsterAdjacentTo(monster_id, y, x, false);
 }
 
 // If too many objects on floor level, delete some of them-RAK-

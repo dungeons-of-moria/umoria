@@ -1188,7 +1188,7 @@ void creatureCastsSpell(Monster_t *m_ptr, int monsterID, int spellID, uint8_t le
 
             // in case compact_monster() is called,it needs monsterID
             hack_monptr = monsterID;
-            (void) summon_undead(&y, &x);
+            (void) monsterSummonUndead(&y, &x);
             hack_monptr = -1;
             monsterUpdateVisibility((int) cave[y][x].cptr);
             break;
