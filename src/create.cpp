@@ -129,7 +129,7 @@ static void choose_race() {
 
     while (true) {
         move_cursor(20, 30);
-        char s = inkey();
+        char s = getKeyInput();
         i = s - 'a';
         if (i < MAX_RACES && i >= 0) {
             break;
@@ -257,7 +257,7 @@ static void get_sex() {
         move_cursor(20, 29);
 
         // speed not important here
-        c = inkey();
+        c = getKeyInput();
         if (c == 'f' || c == 'F') {
             py.misc.male = false;
             putString("Female", 4, 15);
@@ -338,7 +338,7 @@ static void get_class() {
     while (!exit_flag) {
         move_cursor(20, 31);
 
-        char s = inkey();
+        char s = getKeyInput();
 
         int cid = s - 'a';
         if (cid < class_count && cid >= 0) {
@@ -456,7 +456,7 @@ void createCharacter() {
     bool exit_flag = true;
     while (exit_flag) {
         move_cursor(20, 56);
-        char c = inkey();
+        char c = getKeyInput();
         if (c == ESCAPE) {
             exit_flag = false;
         } else if (c == ' ') {

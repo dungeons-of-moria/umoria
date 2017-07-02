@@ -200,7 +200,7 @@ int main(int argc, char *argv[]) {
         // Dungeon logic
         playDungeon();
 
-        // check for eof here, see inkey() in io.c
+        // check for eof here, see getKeyInput() in io.c
         // eof can occur if the process gets a HANGUP signal
         if (eof_flag) {
             (void) strcpy(character_died_from, "(end of input: saved)");

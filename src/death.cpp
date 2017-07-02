@@ -87,7 +87,7 @@ void showScoresScreen() {
         prt("Rank  Points Name              Sex Race       Class  Lvl Killed By", 0, 0);
         erase_line(1, 0);
         prt("[Press any key to continue.]", 23, 23);
-        input = inkey();
+        input = getKeyInput();
         if (input == ESCAPE) {
             break;
         }
@@ -188,7 +188,7 @@ static void print_tomb() {
             clear_screen();
             display_char();
             putString("Type ESC to skip the inventory:", 23, 0);
-            if (inkey() != ESCAPE) {
+            if (getKeyInput() != ESCAPE) {
                 clear_screen();
                 msg_print("You are using:");
                 (void) show_equip(true, 0);
@@ -451,7 +451,7 @@ void exitGame() {
     // add score to score file if applicable
     if (character_generated) {
         // Clear character_saved, strange thing to do, but it prevents
-        // inkey() from recursively calling exitGame() when there has
+        // getKeyInput() from recursively calling exitGame() when there has
         // been an eof on stdin detected.
         character_saved = false;
         highscores();

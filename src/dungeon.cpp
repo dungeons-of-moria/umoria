@@ -757,7 +757,7 @@ static void executeInputCommands(char *command, int *find_count) {
                 use_last_direction = true;
             } else {
                 message_ready_to_print = false;
-                lastInputCommand = inkey();
+                lastInputCommand = getKeyInput();
 
                 int counter = 0;
 
@@ -789,7 +789,7 @@ static void executeInputCommands(char *command, int *find_count) {
                         } else {
                             break;
                         }
-                        lastInputCommand = inkey();
+                        lastInputCommand = getKeyInput();
                     }
 
                     if (counter == 0) {
@@ -801,7 +801,7 @@ static void executeInputCommands(char *command, int *find_count) {
                     // a special hack to allow numbers as commands
                     if (lastInputCommand == ' ') {
                         prt("Command:", 0, 20);
-                        lastInputCommand = inkey();
+                        lastInputCommand = getKeyInput();
                     }
                 }
 

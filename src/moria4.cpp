@@ -638,7 +638,7 @@ static bool look_see(int x, int y, bool *transparent) {
         prt(msg, 0, 0);
 
         move_cursor_relative(y, x);
-        query = inkey();
+        query = getKeyInput();
 
         if (query == 'r' || query == 'R') {
             save_screen();
@@ -662,7 +662,7 @@ static bool look_see(int x, int y, bool *transparent) {
                 prt(msg, 0, 0);
 
                 move_cursor_relative(y, x);
-                query = inkey();
+                query = getKeyInput();
             }
         }
 
@@ -695,7 +695,7 @@ static bool look_see(int x, int y, bool *transparent) {
                 (void) sprintf(msg, "%s %s ---pause---", description, wall_description);
                 prt(msg, 0, 0);
                 move_cursor_relative(y, x);
-                query = inkey();
+                query = getKeyInput();
             }
         }
     }

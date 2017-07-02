@@ -1009,7 +1009,7 @@ void set_options() {
     while (true) {
         move_cursor(optionID + 1, 40);
 
-        switch (inkey()) {
+        switch (getKeyInput()) {
             case ESCAPE:
                 return;
             case '-':

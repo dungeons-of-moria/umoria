@@ -68,7 +68,7 @@ void displayTextHelpFile(const char *filename) {
         }
 
         prt("[Press any key to continue.]", 23, 23);
-        input = inkey();
+        input = getKeyInput();
         if (input == ESCAPE) {
             break;
         }

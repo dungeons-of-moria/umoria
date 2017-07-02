@@ -750,7 +750,7 @@ int roff_recall(int monster_id) {
         *mp = save_mem;
     }
 
-    return inkey();
+    return getKeyInput();
 }
 
 // Print out strings, filling up lines as we go.

@@ -108,8 +108,8 @@ void terminalRestore() {
 //
 // This silently consumes ^R to redraw the screen and reset the
 // terminal, so that this operation can always be performed at
-// any input prompt. inkey() never returns ^R.
-char inkey() {
+// any input prompt. getKeyInput() never returns ^R.
+char getKeyInput() {
     putQIO();         // Dump IO buffer
     command_count = 0; // Just to be safe -CJS-
 
@@ -118,7 +118,7 @@ char inkey() {
 
         // some machines may not sign extend.
         if (ch == EOF) {
-            // avoid infinite loops while trying to call inkey() for a -more- prompt.
+            // avoid infinite loops while trying to call getKeyInput() for a -more- prompt.
             message_ready_to_print = false;
 
             eof_flag++;
@@ -266,7 +266,7 @@ void msg_print(const char *msg) {
 
             char in_char;
             do {
-                in_char = inkey();
+                in_char = getKeyInput();
             } while ((in_char != ' ') && (in_char != ESCAPE) && (in_char != '\n') && (in_char != '\r'));
         } else {
             combine_messages = true;
@@ -325,7 +325,7 @@ bool get_check(const char *prompt) {
 
     char input = ' ';
     while (input == ' ') {
-        input = inkey();
+        input = getKeyInput();
     }
 
     erase_line(0, 0);
@@ -339,7 +339,7 @@ int get_com(const char *prompt, char *command) {
     if (prompt) {
         prt(prompt, 0, 0);
     }
-    *command = inkey();
+    *command = getKeyInput();
 
     erase_line(MSG_LINE, 0);
 
@@ -370,7 +370,7 @@ bool get_string(char *in_str, int row, int col, int slen) {
     bool aborted = false;
 
     while (!flag && !aborted) {
-        int key = inkey();
+        int key = getKeyInput();
         switch (key) {
             case ESCAPE:
                 aborted = true;
@@ -416,7 +416,7 @@ bool get_string(char *in_str, int row, int col, int slen) {
 // Pauses for user response before returning -RAK-
 void pause_line(int line_number) {
     prt("[Press any key to continue.]", line_number, 23);
-    (void) inkey();
+    (void) getKeyInput();
     erase_line(line_number, 0);
 }
 
@@ -426,7 +426,7 @@ void pause_line(int line_number) {
 void pause_exit(int line_number, int delay) {
     prt("[Press any key to continue, or Q to exit.]", line_number, 10);
 
-    if (inkey() == 'Q') {
+    if (getKeyInput() == 'Q') {
         erase_line(line_number, 0);
 
         if (delay > 0) {
@@ -560,7 +560,7 @@ void screen_map() {
         (void) move(myrow, mycol);
     }
 
-    (void) inkey();
+    (void) getKeyInput();
     restore_screen();
 }
 

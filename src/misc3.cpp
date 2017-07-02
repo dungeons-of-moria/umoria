@@ -1080,7 +1080,7 @@ void change_name() {
     while (!flag) {
         prt("<f>ile character description. <c>hange character name.", 21, 2);
 
-        switch (inkey()) {
+        switch (getKeyInput()) {
             case 'c':
                 get_name();
                 flag = true;

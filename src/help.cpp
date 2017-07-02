@@ -220,7 +220,7 @@ static void printKnownMonsterMemories(char command) {
         if (creatures_list[i].cchar == command && bool_roff_recall(i)) {
             if (n == 0) {
                 putString("You recall those details? [y/n]", 0, 40);
-                query = inkey();
+                query = getKeyInput();
 
                 if (query != 'y' && query != 'Y') {
                     break;

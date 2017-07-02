@@ -214,7 +214,7 @@ void terminalInitialize();
 void putString(const char *out_str, int row, int col);
 void putQIO();
 void terminalRestore();
-char inkey();
+char getKeyInput();
 void flush();
 void erase_line(int row, int col);
 void clear_screen();

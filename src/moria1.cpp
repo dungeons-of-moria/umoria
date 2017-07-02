@@ -1208,7 +1208,7 @@ static bool selectItemCommands(char *command, char *which, bool selecting) {
 
                 prt(msg, 0, 0);
 
-                query = inkey();
+                query = getKeyInput();
 
                 if (query != 'y' && query != 'n') {
                     if (query != ESCAPE) {
@@ -1368,7 +1368,7 @@ void inven_command(char command) {
             inventoryDisplayAppropriateHeader();
 
             putString("e/i/t/w/x/d/?/ESC:", scr_base, 60);
-            command = inkey();
+            command = getKeyInput();
 
             erase_line(scr_base, scr_left);
         }
@@ -1446,7 +1446,7 @@ int get_item(int *command_key_id, const char *prompt, int item_id_start, int ite
 
         bool commandFinished = false;
         while (!commandFinished) {
-            char which = inkey();
+            char which = getKeyInput();
 
             switch (which) {
                 case ESCAPE:
@@ -1461,7 +1461,7 @@ int get_item(int *command_key_id, const char *prompt, int item_id_start, int ite
                         if (screenID > 0) {
                             if (equipment_count == 0) {
                                 prt("But you're not using anything -more-", 0, 0);
-                                (void) inkey();
+                                (void) getKeyInput();
                             } else {
                                 screenID = 0;
                                 commandFinished = true;
@@ -1481,7 +1481,7 @@ int get_item(int *command_key_id, const char *prompt, int item_id_start, int ite
                         } else {
                             if (inventory_count == 0) {
                                 prt("But you're not carrying anything -more-", 0, 0);
-                                (void) inkey();
+                                (void) getKeyInput();
                             } else {
                                 screenID = 1;
                                 commandFinished = true;
