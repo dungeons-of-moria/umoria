@@ -250,16 +250,16 @@ int coordWallsNextTo(int y, int x) {
 // Checks all adjacent spots for corridors -RAK-
 // note that y, x is always coordInBounds(), hence no need to check that
 // j, k are coordInBounds(), even if they are 0 or cur_x-1 is still works
-int next_to_corr(int y, int x) {
+int coordCorridorWallsNextTo(int y, int x) {
     int walls = 0;
 
     for (int yy = y - 1; yy <= y + 1; yy++) {
         for (int xx = x - 1; xx <= x + 1; xx++) {
-            int tileID = cave[yy][xx].fval;
-            int treasureID = cave[yy][xx].tptr;
+            int tile_id = cave[yy][xx].fval;
+            int treasure_id = cave[yy][xx].tptr;
 
             // should fail if there is already a door present
-            if (tileID == CORR_FLOOR && (treasureID == 0 || treasure_list[treasureID].tval < TV_MIN_DOORS)) {
+            if (tile_id == CORR_FLOOR && (treasure_id == 0 || treasure_list[treasure_id].tval < TV_MIN_DOORS)) {
                 walls++;
             }
         }
