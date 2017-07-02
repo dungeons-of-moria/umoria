@@ -1661,7 +1661,7 @@ static void do_command(char com_val) {
             find_init(9);
             break;
         case '/': // (/) identify a symbol
-            ident_char();
+            displayWorldObjectDescription();
             player_free_turn = true;
             break;
         case '.': // (.) stay in one place (5)

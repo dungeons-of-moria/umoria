@@ -207,7 +207,7 @@ bool outputPlayerCharacterToFile(char *filename);
 void generateCave();
 
 // help.c
-void ident_char();
+void displayWorldObjectDescription();
 
 // io.c
 void init_curses();

@@ -240,7 +240,7 @@ static void printKnownMonsterMemories(char command) {
     }
 }
 
-void ident_char() {
+void displayWorldObjectDescription() {
     char command;
     if (!get_com("Enter character to be identified :", &command)) {
         return;
