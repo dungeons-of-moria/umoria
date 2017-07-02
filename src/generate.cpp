@@ -1053,7 +1053,7 @@ static void cave_gen() {
     place_stairs(2, randomNumber(2) + 2, 3);
     place_stairs(1, randomNumber(2), 3);
 
-    // Set up the character coords, used by alloc_monster, place_win_monster
+    // Set up the character coords, used by alloc_monster, monsterPlaceWinning
     new_spot(&char_row, &char_col);
 
     alloc_monster((randomNumber(8) + MIN_MALLOC_LEVEL + alloc_level), 0, true);
@@ -1064,7 +1064,7 @@ static void cave_gen() {
     alloc_object(set_floor, 1, randomNumber(alloc_level));
 
     if (current_dungeon_level >= WIN_MON_APPEAR) {
-        place_win_monster();
+        monsterPlaceWinning();
     }
 }
 

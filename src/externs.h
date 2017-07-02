@@ -272,7 +272,7 @@ void drawDungeonPanel();
 bool compactMonsters();
 void playerIngestFood(int amount);
 bool monsterPlaceNew(int y, int x, int creature_id, bool sleeping);
-void place_win_monster();
+void monsterPlaceWinning();
 void alloc_monster(int number, int dist, bool sleeping);
 bool summon_monster(int *y, int *x, bool sleeping);
 bool summon_undead(int *y, int *x);

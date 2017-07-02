@@ -599,6 +599,7 @@ static int max_hp(uint8_t *array) {
 bool monsterPlaceNew(int y, int x, int creature_id, bool sleeping) {
     int monster_id = popm();
 
+    // Check for case where could not allocate space for the monster
     if (monster_id == -1) {
         return false;
     }
@@ -637,20 +638,10 @@ bool monsterPlaceNew(int y, int x, int creature_id, bool sleeping) {
 }
 
 // Places a monster at given location -RAK-
-void place_win_monster() {
+void monsterPlaceWinning() {
     if (total_winner) {
         return;
     }
-
-    int cur_pos = popm();
-
-    // Check for case where could not allocate space for
-    // the win monster, this should never happen.
-    if (cur_pos == -1) {
-        abort();
-    }
-
-    Monster_t *mon_ptr = &monsters[cur_pos];
 
     int y, x;
     do {
@@ -658,24 +649,41 @@ void place_win_monster() {
         x = randomNumber(dungeon_width - 2);
     } while ((cave[y][x].fval >= MIN_CLOSED_SPACE) || (cave[y][x].cptr != 0) || (cave[y][x].tptr != 0) || (coordDistanceBetween(y, x, char_row, char_col) <= MAX_SIGHT));
 
-    mon_ptr->fy = (uint8_t) y;
-    mon_ptr->fx = (uint8_t) x;
-    mon_ptr->mptr = (uint16_t) (randomNumber(WIN_MON_TOT) - 1 + monster_levels[MAX_MONS_LEVEL]);
+    int creature_id = randomNumber(WIN_MON_TOT) - 1 + monster_levels[MAX_MONS_LEVEL];
 
-    if (creatures_list[mon_ptr->mptr].cdefense & CD_MAX_HP) {
-        mon_ptr->hp = (int16_t) max_hp(creatures_list[mon_ptr->mptr].hd);
+    // FIXME: duplicate code -MRC-
+    // The following code is now exactly the same as monsterPlaceNew() except here
+    // we `abort()` on failed placement, and do not set `monster->ml = false`.
+    // Perhaps we can find a way to call `monsterPlaceNew()` instead of
+    // duplicating everything here.
+
+    int monster_id = popm();
+
+    // Check for case where could not allocate space for the win monster, this should never happen.
+    if (monster_id == -1) {
+        abort();
+    }
+
+    Monster_t *monster = &monsters[monster_id];
+
+    monster->fy = (uint8_t) y;
+    monster->fx = (uint8_t) x;
+    monster->mptr = (uint16_t) creature_id;
+
+    if (creatures_list[creature_id].cdefense & CD_MAX_HP) {
+        monster->hp = (int16_t) max_hp(creatures_list[creature_id].hd);
     } else {
-        mon_ptr->hp = (int16_t) dicePlayerDamageRoll(creatures_list[mon_ptr->mptr].hd);
+        monster->hp = (int16_t) dicePlayerDamageRoll(creatures_list[creature_id].hd);
     }
 
     // the creatures_list speed value is 10 greater, so that it can be a uint8_t
-    mon_ptr->cspeed = (int16_t) (creatures_list[mon_ptr->mptr].speed - 10 + py.flags.speed);
-    mon_ptr->stunned = 0;
-    mon_ptr->cdis = (uint8_t) coordDistanceBetween(char_row, char_col, y, x);
+    monster->cspeed = (int16_t) (creatures_list[creature_id].speed - 10 + py.flags.speed);
+    monster->stunned = 0;
+    monster->cdis = (uint8_t) coordDistanceBetween(char_row, char_col, y, x);
 
-    cave[y][x].cptr = (uint8_t) cur_pos;
+    cave[y][x].cptr = (uint8_t) monster_id;
 
-    mon_ptr->csleep = 0;
+    monster->csleep = 0;
 }
 
 // Return a monster suitable to be placed at a given level. This
