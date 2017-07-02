@@ -1605,7 +1605,7 @@ static void do_command(char com_val) {
             break;
         case '!': // (!) escape to the shell
         case '$':
-            shell_out();
+            // escaping to shell disabled -MRC-
             player_free_turn = true;
             break;
         case ESCAPE: // (ESC)   do nothing.

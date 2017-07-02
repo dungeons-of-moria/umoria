@@ -104,10 +104,6 @@ void terminalRestore() {
     curses_on = false;
 }
 
-void shell_out() {
-    putString("[Opening new shells is not currently supported]\n", 0, 0);
-}
-
 // Returns a single character input from the terminal. -CJS-
 //
 // This silently consumes ^R to redraw the screen and reset the
