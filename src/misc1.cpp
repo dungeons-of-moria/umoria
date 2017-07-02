@@ -60,8 +60,8 @@ int randomNumber(int max) {
 }
 
 // Generates a random integer number of NORMAL distribution -RAK-
-int randnor(int mean, int standard) {
-    // alternate randnor code, slower but much smaller since no table
+int randomNumberNormalDistribution(int mean, int standard) {
+    // alternate randomNumberNormalDistribution() code, slower but much smaller since no table
     // 2 per 1,000,000 will be > 4*SD, max is 5*SD
     //
     // tmp = damroll(8, 99);   // mean 400, SD 81
@@ -692,7 +692,7 @@ static int get_mons_num(int level) {
     }
 
     if (randomNumber(MON_NASTY) == 1) {
-        level = level + abs(randnor(0, 4)) + 1;
+        level = level + abs(randomNumberNormalDistribution(0, 4)) + 1;
 
         if (level > MAX_MONS_LEVEL) {
             level = MAX_MONS_LEVEL;
@@ -895,8 +895,8 @@ int m_bonus(int base, int max_standard, int level) {
         stand_dev = max_standard;
     }
 
-    // abs may be a macro, don't call it with randnor as a parameter
-    int tmp = randnor(0, stand_dev);
+    // abs may be a macro, don't call it with randomNumberNormalDistribution() as a parameter
+    int tmp = randomNumberNormalDistribution(0, stand_dev);
     int x = (abs(tmp) / 10) + base;
 
     if (x < base) {

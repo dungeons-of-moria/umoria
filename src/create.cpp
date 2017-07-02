@@ -279,11 +279,11 @@ static void get_ahw() {
     int i = py.misc.prace;
     py.misc.age = (uint16_t) (character_races[i].b_age + randomNumber((int) character_races[i].m_age));
     if (py.misc.male) {
-        py.misc.ht = (uint16_t) randnor((int) character_races[i].m_b_ht, (int) character_races[i].m_m_ht);
-        py.misc.wt = (uint16_t) randnor((int) character_races[i].m_b_wt, (int) character_races[i].m_m_wt);
+        py.misc.ht = (uint16_t) randomNumberNormalDistribution((int) character_races[i].m_b_ht, (int) character_races[i].m_m_ht);
+        py.misc.wt = (uint16_t) randomNumberNormalDistribution((int) character_races[i].m_b_wt, (int) character_races[i].m_m_wt);
     } else {
-        py.misc.ht = (uint16_t) randnor((int) character_races[i].f_b_ht, (int) character_races[i].f_m_ht);
-        py.misc.wt = (uint16_t) randnor((int) character_races[i].f_b_wt, (int) character_races[i].f_m_wt);
+        py.misc.ht = (uint16_t) randomNumberNormalDistribution((int) character_races[i].f_b_ht, (int) character_races[i].f_m_ht);
+        py.misc.wt = (uint16_t) randomNumberNormalDistribution((int) character_races[i].f_b_wt, (int) character_races[i].f_m_wt);
     }
     py.misc.disarm = (int16_t) (character_races[i].b_dis + todis_adj());
 }

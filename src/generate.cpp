@@ -968,7 +968,7 @@ static void cave_gen() {
         }
     }
 
-    int randRoomCounter = randnor(DUN_ROO_MEA, 2);
+    int randRoomCounter = randomNumberNormalDistribution(DUN_ROO_MEA, 2);
     for (int i = 0; i < randRoomCounter; i++) {
         room_map[randomNumber(row_rooms) - 1][randomNumber(col_rooms) - 1] = true;
     }
@@ -1058,9 +1058,9 @@ static void cave_gen() {
 
     alloc_monster((randomNumber(8) + MIN_MALLOC_LEVEL + alloc_level), 0, true);
     alloc_object(set_corr, 3, randomNumber(alloc_level));
-    alloc_object(set_room, 5, randnor(TREAS_ROOM_ALLOC, 3));
-    alloc_object(set_floor, 5, randnor(TREAS_ANY_ALLOC, 3));
-    alloc_object(set_floor, 4, randnor(TREAS_GOLD_ALLOC, 3));
+    alloc_object(set_room, 5, randomNumberNormalDistribution(TREAS_ROOM_ALLOC, 3));
+    alloc_object(set_floor, 5, randomNumberNormalDistribution(TREAS_ANY_ALLOC, 3));
+    alloc_object(set_floor, 4, randomNumberNormalDistribution(TREAS_GOLD_ALLOC, 3));
     alloc_object(set_floor, 1, randomNumber(alloc_level));
 
     if (current_dungeon_level >= WIN_MON_APPEAR) {

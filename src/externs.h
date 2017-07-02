@@ -255,7 +255,7 @@ void seedsInitialize(uint32_t seed);
 void seedSet(uint32_t seed);
 void seedResetToOldSeed();
 int randomNumber(int max);
-int randnor(int mean, int standard);
+int randomNumberNormalDistribution(int mean, int standard);
 int bit_pos(uint32_t *flag);
 bool in_bounds(int y, int x);
 int get_panel(int y, int x, bool force);
