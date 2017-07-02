@@ -85,7 +85,7 @@ void showScoresScreen() {
             rd_highscore(&score);
         }
         prt("Rank  Points Name              Sex Race       Class  Lvl Killed By", 0, 0);
-        erase_line(1, 0);
+        eraseLine(1, 0);
         prt("[Press any key to continue.]", 23, 23);
         input = getKeyInput();
         if (input == ESCAPE) {
@@ -457,7 +457,7 @@ void exitGame() {
         highscores();
         showScoresScreen();
     }
-    erase_line(23, 0);
+    eraseLine(23, 0);
     terminalRestore();
 
     exit(0);

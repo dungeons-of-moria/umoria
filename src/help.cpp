@@ -226,7 +226,7 @@ static void printKnownMonsterMemories(char command) {
                     break;
                 }
 
-                erase_line(0, 40);
+                eraseLine(0, 40);
                 save_screen();
             }
             n++;

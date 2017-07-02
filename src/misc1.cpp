@@ -498,7 +498,7 @@ void prt_map() {
 
     // Top to bottom
     for (int y = panel_row_min; y <= panel_row_max; y++) {
-        erase_line(line++, 13);
+        eraseLine(line++, 13);
 
         // Left to right
         for (int x = panel_col_min; x <= panel_col_max; x++) {

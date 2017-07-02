@@ -178,7 +178,7 @@ static void haggle_commands(int typ) {
     }
 
     prt("ESC) Quit Haggling.", 22, 0);
-    erase_line(23, 0); // clear last line
+    eraseLine(23, 0); // clear last line
 }
 
 // Displays a store's inventory -RAK-
@@ -229,14 +229,14 @@ static void display_inventory(int store_num, int start) {
     if (i < 12) {
         for (int j = 0; j < (11 - i + 1); j++) {
             // clear remaining lines
-            erase_line(j + i + 5, 0);
+            eraseLine(j + i + 5, 0);
         }
     }
 
     if (s_ptr->store_ctr > 12) {
         putString("- cont. -", 17, 60);
     } else {
-        erase_line(17, 60);
+        eraseLine(17, 60);
     }
 }
 
@@ -292,7 +292,7 @@ static bool get_store_item(int *com_val, const char *pmt, int i, int j) {
         }
         bell();
     }
-    erase_line(MSG_LINE, 0);
+    eraseLine(MSG_LINE, 0);
 
     return flag;
 }
@@ -398,7 +398,7 @@ static bool get_haggle(const char *comment, int32_t *new_offer, int num_offer) {
             *new_offer = offer_adjust;
         }
     } else {
-        erase_line(0, 0);
+        eraseLine(0, 0);
     }
 
     return flag;
@@ -563,7 +563,7 @@ static int purchase_haggle(int store_num, int32_t *price, Inventory_t *item) {
             if (!flag) {
                 last_offer = new_offer;
                 num_offer++; // enable incremental haggling
-                erase_line(1, 0);
+                eraseLine(1, 0);
                 (void) sprintf(out_val, "Your last offer : %d", last_offer);
                 putString(out_val, 1, 39);
                 prt_comment2(last_offer, cur_ask, final_flag);
@@ -763,7 +763,7 @@ static int sell_haggle(int store_num, int32_t *price, Inventory_t *item) {
                 if (!flag) {
                     last_offer = new_offer;
                     num_offer++; // enable incremental haggling
-                    erase_line(1, 0);
+                    eraseLine(1, 0);
 
                     vtype_t out_val;
                     (void) sprintf(out_val, "Your last bid %d", last_offer);
@@ -885,7 +885,7 @@ static bool store_purchase(int store_num, int *cur_top) {
 
     // Less intuitive, but looks better here than in purchase_haggle.
     display_commands();
-    erase_line(1, 0);
+    eraseLine(1, 0);
 
     return purchased;
 }
@@ -988,7 +988,7 @@ static bool store_sell(int store_num, int *cur_top) {
     }
 
     // Less intuitive, but looks better here than in sell_haggle.
-    erase_line(1, 0);
+    eraseLine(1, 0);
     display_commands();
 
     return sold;

@@ -164,7 +164,7 @@ void flushInputBuffer() {
 }
 
 // Clears given line of text -RAK-
-void erase_line(int row, int col) {
+void eraseLine(int row, int col) {
     if (row == MSG_LINE && message_ready_to_print) {
         msg_print(CNIL);
     }
@@ -328,7 +328,7 @@ bool get_check(const char *prompt) {
         input = getKeyInput();
     }
 
-    erase_line(0, 0);
+    eraseLine(0, 0);
 
     return (input == 'Y' || input == 'y');
 }
@@ -341,7 +341,7 @@ int get_com(const char *prompt, char *command) {
     }
     *command = getKeyInput();
 
-    erase_line(MSG_LINE, 0);
+    eraseLine(MSG_LINE, 0);
 
     return *command != ESCAPE;
 }
@@ -417,7 +417,7 @@ bool get_string(char *in_str, int row, int col, int slen) {
 void pause_line(int line_number) {
     prt("[Press any key to continue.]", line_number, 23);
     (void) getKeyInput();
-    erase_line(line_number, 0);
+    eraseLine(line_number, 0);
 }
 
 // Pauses for user response before returning -RAK-
@@ -427,7 +427,7 @@ void pause_exit(int line_number, int delay) {
     prt("[Press any key to continue, or Q to exit.]", line_number, 10);
 
     if (getKeyInput() == 'Q') {
-        erase_line(line_number, 0);
+        eraseLine(line_number, 0);
 
         if (delay > 0) {
             sleep_in_seconds(delay);
@@ -436,7 +436,7 @@ void pause_exit(int line_number, int delay) {
         exitGame();
     }
 
-    erase_line(line_number, 0);
+    eraseLine(line_number, 0);
 }
 
 void save_screen() {

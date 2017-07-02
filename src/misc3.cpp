@@ -1373,7 +1373,7 @@ void print_spells(int *spell, int number_of_choices, int comment, int non_consec
 
     int offset = (classes[py.misc.pclass].spell == MAGE ? SPELL_OFFSET : PRAYER_OFFSET);
 
-    erase_line(1, col);
+    eraseLine(1, col);
     putString("Name", 1, col + 5);
     putString("Lv Mana Fail", 1, col + 35);
 
@@ -1494,7 +1494,7 @@ int get_spell(int *spell, int number_of_choices, int *spell_id, int *spell_chanc
         restore_screen();
     }
 
-    erase_line(MSG_LINE, 0);
+    eraseLine(MSG_LINE, 0);
 
     if (flag) {
         *spell_chances = spell_chance(*spell_id);
@@ -1836,7 +1836,7 @@ void gain_spells() {
 
                 spellID--;
 
-                erase_line(c + 1, 31);
+                eraseLine(c + 1, 31);
                 print_spells(spells, spellID, false, -1);
             } else {
                 bell();

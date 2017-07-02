@@ -487,7 +487,7 @@ int show_equip(bool weighted, int column) {
 
         line++;
     }
-    erase_line(line + 1, column);
+    eraseLine(line + 1, column);
 
     return column;
 }
@@ -627,12 +627,12 @@ static void inven_screen(int new_scr) {
 
     if (line >= scr_base) {
         scr_base = line + 1;
-        erase_line(scr_base, scr_left);
+        eraseLine(scr_base, scr_left);
         return;
     }
 
     while (++line <= scr_base) {
-        erase_line(line, scr_left);
+        eraseLine(line, scr_left);
     }
 }
 
@@ -1214,7 +1214,7 @@ static bool selectItemCommands(char *command, char *which, bool selecting) {
                     if (query != ESCAPE) {
                         bell();
                     }
-                    erase_line(MSG_LINE, 0);
+                    eraseLine(MSG_LINE, 0);
                     item = -1;
                 }
             } else if (isupper((int) *which) && !verify((char *) prompt, item)) {
@@ -1289,7 +1289,7 @@ static void inventoryDisplayAppropriateHeader() {
         prt("Allowed commands:", 0, 0);
     }
 
-    erase_line(scr_base, scr_left);
+    eraseLine(scr_base, scr_left);
 }
 
 // This does all the work.
@@ -1370,7 +1370,7 @@ void inven_command(char command) {
             putString("e/i/t/w/x/d/?/ESC:", scr_base, 60);
             command = getKeyInput();
 
-            erase_line(scr_base, scr_left);
+            eraseLine(scr_base, scr_left);
         }
     } while (command != ESCAPE);
 
@@ -1471,7 +1471,7 @@ int get_item(int *command_key_id, const char *prompt, int item_id_start, int ite
 
                                     while (item_id_end < inventory_count) {
                                         item_id_end++;
-                                        erase_line(item_id_end, 0);
+                                        eraseLine(item_id_end, 0);
                                     }
                                 }
                                 item_id_end = equipment_count - 1;
@@ -1491,7 +1491,7 @@ int get_item(int *command_key_id, const char *prompt, int item_id_start, int ite
 
                                     while (item_id_end < equipment_count) {
                                         item_id_end++;
-                                        erase_line(item_id_end, 0);
+                                        eraseLine(item_id_end, 0);
                                     }
                                 }
                                 item_id_end = inventory_count - 1;
@@ -1570,7 +1570,7 @@ int get_item(int *command_key_id, const char *prompt, int item_id_start, int ite
         restore_screen();
     }
 
-    erase_line(MSG_LINE, 0);
+    eraseLine(MSG_LINE, 0);
 
     return itemFound;
 }
@@ -1907,7 +1907,7 @@ void rest() {
     if (rest_num != 0) {
         msg_print("Invalid rest count.");
     }
-    erase_line(MSG_LINE, 0);
+    eraseLine(MSG_LINE, 0);
 
     player_free_turn = true;
 }

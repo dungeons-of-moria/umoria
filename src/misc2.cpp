@@ -1003,7 +1003,7 @@ void set_options() {
         (void) sprintf(string, "%-38s: %s", options[max].o_prompt, (*options[max].o_var ? "yes" : "no "));
         prt(string, max + 1, 0);
     }
-    erase_line(max + 1, 0);
+    eraseLine(max + 1, 0);
 
     int optionID = 0;
     while (true) {
