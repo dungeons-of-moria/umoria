@@ -63,7 +63,7 @@ static void digGraniteWall(int y, int x, int diggingAbility) {
     if (twall(y, x, diggingAbility, i)) {
         msg_print("You have finished the tunnel.");
     } else {
-        count_msg_print("You tunnel into the granite wall.");
+        printMessageNoCommandInterrupt("You tunnel into the granite wall.");
     }
 }
 
@@ -73,7 +73,7 @@ static void digMagmaWall(int y, int x, int diggingAbility) {
     if (twall(y, x, diggingAbility, i)) {
         msg_print("You have finished the tunnel.");
     } else {
-        count_msg_print("You tunnel into the magma intrusion.");
+        printMessageNoCommandInterrupt("You tunnel into the magma intrusion.");
     }
 }
 
@@ -83,7 +83,7 @@ static void digQuartzWall(int y, int x, int diggingAbility) {
     if (twall(y, x, diggingAbility, i)) {
         msg_print("You have finished the tunnel.");
     } else {
-        count_msg_print("You tunnel into the quartz vein.");
+        printMessageNoCommandInterrupt("You tunnel into the quartz vein.");
     }
 }
 
@@ -102,7 +102,7 @@ static void digRubble(int y, int x, int diggingAbility) {
 
         lite_spot(y, x);
     } else {
-        count_msg_print("You dig in the rubble.");
+        printMessageNoCommandInterrupt("You dig in the rubble.");
     }
 }
 
@@ -164,7 +164,7 @@ void tunnel(int direction) {
                     digRubble(y, x, diggingAbility);
                 } else if (treasure_list[c_ptr->tptr].tval == TV_SECRET_DOOR) {
                     // Found secret door!
-                    count_msg_print("You tunnel into the granite wall.");
+                    printMessageNoCommandInterrupt("You tunnel into the granite wall.");
                     search(char_row, char_col, py.misc.srh);
                 } else {
                     abort();
@@ -221,7 +221,7 @@ static void disarmFloorTrap(int y, int x, int tot, int level, int dir, int16_t p
 
     // avoid randint(0) call
     if (tot > 5 && randint(tot) > 5) {
-        count_msg_print("You failed to disarm the trap.");
+        printMessageNoCommandInterrupt("You failed to disarm the trap.");
         return;
     }
 
@@ -260,7 +260,7 @@ static void disarmChestTrap(int y, int x, int tot, Inventory_t *item) {
 
             prt_experience();
         } else if ((tot > 5) && (randint(tot) > 5)) {
-            count_msg_print("You failed to disarm the chest.");
+            printMessageNoCommandInterrupt("You failed to disarm the chest.");
         } else {
             msg_print("You set a trap off!");
             spellItemIdentifyAndRemoveRandomInscription(item);
@@ -637,7 +637,7 @@ static bool look_see(int x, int y, bool *transparent) {
         description = "It is on";
         prt(msg, 0, 0);
 
-        move_cursor_relative(y, x);
+        moveCursorRelative(y, x);
         query = getKeyInput();
 
         if (query == 'r' || query == 'R') {
@@ -661,7 +661,7 @@ static bool look_see(int x, int y, bool *transparent) {
                 description = "It is in";
                 prt(msg, 0, 0);
 
-                move_cursor_relative(y, x);
+                moveCursorRelative(y, x);
                 query = getKeyInput();
             }
         }
@@ -694,7 +694,7 @@ static bool look_see(int x, int y, bool *transparent) {
             if (wall_description) {
                 (void) sprintf(msg, "%s %s ---pause---", description, wall_description);
                 prt(msg, 0, 0);
-                move_cursor_relative(y, x);
+                moveCursorRelative(y, x);
                 query = getKeyInput();
             }
         }
@@ -1070,7 +1070,7 @@ static void playerBashPosition(int y, int x) {
 }
 
 static void bashClosedDoor(int y, int x, int dir, Cave_t *tile, Inventory_t *item) {
-    count_msg_print("You smash into the door!");
+    printMessageNoCommandInterrupt("You smash into the door!");
 
     int chance = py.stats.use_stat[A_STR] + py.misc.wt / 2;
 
@@ -1124,7 +1124,7 @@ static void bashClosedChest(Inventory_t *item) {
         return;
     }
 
-    count_msg_print("The chest holds firm.");
+    printMessageNoCommandInterrupt("The chest holds firm.");
 }
 
 // Bash open a door or chest -RAK-

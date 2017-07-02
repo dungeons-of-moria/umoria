@@ -1128,7 +1128,7 @@ static void openClosedDoor(int y, int x) {
             prt_experience();
             item->p1 = 0;
         } else {
-            count_msg_print("You failed to pick the lock.");
+            printMessageNoCommandInterrupt("You failed to pick the lock.");
         }
     } else if (item->p1 < 0) {
         // It's stuck
@@ -1161,7 +1161,7 @@ static void openClosedChest(int y, int x) {
 
             success = true;
         } else {
-            count_msg_print("You failed to pick the lock.");
+            printMessageNoCommandInterrupt("You failed to pick the lock.");
         }
     } else {
         success = true;

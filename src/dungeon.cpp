@@ -750,7 +750,7 @@ static void executeInputCommands(char *command, int *find_count) {
             inven_command(doing_inventory_command);
         } else {
             // move the cursor to the players character
-            move_cursor_relative(char_row, char_col);
+            moveCursorRelative(char_row, char_col);
 
             if (command_count > 0) {
                 message_ready_to_print = false;
@@ -826,7 +826,7 @@ static void executeInputCommands(char *command, int *find_count) {
                 }
 
                 // move cursor to player char again, in case it moved
-                move_cursor_relative(char_row, char_col);
+                moveCursorRelative(char_row, char_col);
 
                 // Commands are always converted to rogue form. -CJS-
                 if (!use_roguelike_keys) {
@@ -847,7 +847,7 @@ static void executeInputCommands(char *command, int *find_count) {
 
             // Flash the message line.
             eraseLine(MSG_LINE, 0);
-            move_cursor_relative(char_row, char_col);
+            moveCursorRelative(char_row, char_col);
             putQIO();
 
             do_command(lastInputCommand);
@@ -992,7 +992,7 @@ void playDungeon() {
         } else {
             // if paralyzed, resting, or dead, flush output
             // but first move the cursor onto the player, for aesthetics
-            move_cursor_relative(char_row, char_col);
+            moveCursorRelative(char_row, char_col);
             putQIO();
         }
 
@@ -2146,7 +2146,7 @@ static void jamdoor() {
         if (find_range(TV_SPIKE, TV_NEVER, &i, &j)) {
             player_free_turn = false;
 
-            count_msg_print("You jam the door with a spike.");
+            printMessageNoCommandInterrupt("You jam the door with a spike.");
 
             if (t_ptr->p1 > 0) {
                 // Make locked to stuck.

@@ -199,7 +199,7 @@ void putChar(char ch, int row, int col) {
 }
 
 // Moves the cursor to a given interpolated y, x position -RAK-
-void move_cursor_relative(int row, int col) {
+void moveCursorRelative(int row, int col) {
     // Real coords convert to screen positions
     row -= panel_row_prt;
     col -= panel_col_prt;
@@ -210,7 +210,7 @@ void move_cursor_relative(int row, int col) {
 }
 
 // Print a message so as not to interrupt a counted command. -CJS-
-void count_msg_print(const char *msg) {
+void printMessageNoCommandInterrupt(const char *msg) {
     // Save command count value
     int i = command_count;
 
