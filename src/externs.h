@@ -233,7 +233,7 @@ void waitAndConfirmCharacterCreation(int line_number, int delay);
 void terminalSaveScreen();
 void terminalRestoreScreen();
 void terminalBellSound();
-void screen_map();
+void displayDungeonMap();
 bool check_input(int microseconds);
 void user_name(char *buffer);
 

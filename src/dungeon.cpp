@@ -1753,7 +1753,7 @@ static void do_command(char com_val) {
             aim();
             break;
         case 'M':
-            screen_map();
+            displayDungeonMap();
             player_free_turn = true;
             break;
         case 'P': // (P)eruse a book  (B)rowse in a book

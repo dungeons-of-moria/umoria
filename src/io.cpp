@@ -457,7 +457,7 @@ void terminalBellSound() {
     }
 }
 
-// definitions used by screen_map()
+// definitions used by displayDungeonMap()
 // index into border character array
 #define TL 0 // top left
 #define TR 1
@@ -472,7 +472,7 @@ void terminalBellSound() {
 // Display highest priority object in the RATIO by RATIO area
 #define RATIO 3
 
-void screen_map() {
+void displayDungeonMap() {
     static uint8_t screen_border[2][6] = {{'+', '+', '+', '+', '-', '|'}, // normal chars
                                           {201, 187, 200, 188, 205, 186}, // graphics chars
     };
