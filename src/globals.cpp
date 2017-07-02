@@ -10,7 +10,7 @@
 #include "headers.h"
 
 // A horrible hack, needed because compact_monster() is called from
-// deep within updateMonsters() via place_monster() and summon_monster()
+// deep within updateMonsters() via monsterPlaceNew() and summon_monster()
 int hack_monptr = -1;
 
 vtype_t savegame_filename; // The save game filename -CJS-

@@ -271,7 +271,7 @@ bool caveTileVisible(int y, int x);
 void drawDungeonPanel();
 bool compactMonsters();
 void playerIngestFood(int amount);
-bool place_monster(int y, int x, int monster_id, bool sleeping);
+bool monsterPlaceNew(int y, int x, int creature_id, bool sleeping);
 void place_win_monster();
 void alloc_monster(int number, int dist, bool sleeping);
 bool summon_monster(int *y, int *x, bool sleeping);

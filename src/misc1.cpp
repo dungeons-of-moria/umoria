@@ -596,41 +596,41 @@ static int max_hp(uint8_t *array) {
 }
 
 // Places a monster at given location -RAK-
-bool place_monster(int y, int x, int monster_id, bool sleeping) {
-    int cur_pos = popm();
+bool monsterPlaceNew(int y, int x, int creature_id, bool sleeping) {
+    int monster_id = popm();
 
-    if (cur_pos == -1) {
+    if (monster_id == -1) {
         return false;
     }
 
-    Monster_t *mon_ptr = &monsters[cur_pos];
+    Monster_t *monster = &monsters[monster_id];
 
-    mon_ptr->fy = (uint8_t) y;
-    mon_ptr->fx = (uint8_t) x;
-    mon_ptr->mptr = (uint16_t) monster_id;
+    monster->fy = (uint8_t) y;
+    monster->fx = (uint8_t) x;
+    monster->mptr = (uint16_t) creature_id;
 
-    if (creatures_list[monster_id].cdefense & CD_MAX_HP) {
-        mon_ptr->hp = (int16_t) max_hp(creatures_list[monster_id].hd);
+    if (creatures_list[creature_id].cdefense & CD_MAX_HP) {
+        monster->hp = (int16_t) max_hp(creatures_list[creature_id].hd);
     } else {
-        mon_ptr->hp = (int16_t) dicePlayerDamageRoll(creatures_list[monster_id].hd);
+        monster->hp = (int16_t) dicePlayerDamageRoll(creatures_list[creature_id].hd);
     }
 
-    // the creatures_list speed value is 10 greater, so that it can be a uint8_t
-    mon_ptr->cspeed = (int16_t) (creatures_list[monster_id].speed - 10 + py.flags.speed);
-    mon_ptr->stunned = 0;
-    mon_ptr->cdis = (uint8_t) coordDistanceBetween(char_row, char_col, y, x);
-    mon_ptr->ml = false;
+    // the creatures_list[] speed value is 10 greater, so that it can be a uint8_t
+    monster->cspeed = (int16_t) (creatures_list[creature_id].speed - 10 + py.flags.speed);
+    monster->stunned = 0;
+    monster->cdis = (uint8_t) coordDistanceBetween(char_row, char_col, y, x);
+    monster->ml = false;
 
-    cave[y][x].cptr = (uint8_t) cur_pos;
+    cave[y][x].cptr = (uint8_t) monster_id;
 
     if (sleeping) {
-        if (creatures_list[monster_id].sleep == 0) {
-            mon_ptr->csleep = 0;
+        if (creatures_list[creature_id].sleep == 0) {
+            monster->csleep = 0;
         } else {
-            mon_ptr->csleep = (int16_t) ((creatures_list[monster_id].sleep * 2) + randomNumber((int) creatures_list[monster_id].sleep * 10));
+            monster->csleep = (int16_t) ((creatures_list[creature_id].sleep * 2) + randomNumber((int) creatures_list[creature_id].sleep * 10));
         }
     } else {
-        mon_ptr->csleep = 0;
+        monster->csleep = 0;
     }
 
     return true;
@@ -734,7 +734,7 @@ void alloc_monster(int number, int dist, bool sleeping) {
 
         // Place_monster() should always return true here.
         // It does not matter if it fails though.
-        (void) place_monster(y, x, l, sleeping);
+        (void) monsterPlaceNew(y, x, l, sleeping);
     }
 }
 
@@ -748,7 +748,7 @@ static bool placeMonsterAdjacentTo(int monsterID, int *y, int *x, bool slp) {
         if (coordInBounds(yy, xx)) {
             if (cave[yy][xx].fval <= MAX_OPEN_SPACE && cave[yy][xx].cptr == 0) {
                 // Place_monster() should always return true here.
-                if (!place_monster(yy, xx, monsterID, slp)) {
+                if (!monsterPlaceNew(yy, xx, monsterID, slp)) {
                     return false;
                 }
 

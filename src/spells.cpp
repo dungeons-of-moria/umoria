@@ -1390,7 +1390,7 @@ bool poly_monster(int y, int x, int direction) {
                 delete_monster((int) c_ptr->cptr);
 
                 // Place_monster() should always return true here.
-                morphed = place_monster(y, x, randomNumber(monster_levels[MAX_MONS_LEVEL] - monster_levels[0]) - 1 + monster_levels[0], false);
+                morphed = monsterPlaceNew(y, x, randomNumber(monster_levels[MAX_MONS_LEVEL] - monster_levels[0]) - 1 + monster_levels[0], false);
 
                 // don't test c_ptr->fm here, only pl/tl
                 if (morphed && coordInsidePanel(y, x) && (c_ptr->tl || c_ptr->pl)) {
@@ -1742,7 +1742,7 @@ bool mass_poly() {
                 delete_monster(id);
 
                 // Place_monster() should always return true here.
-                morphed = place_monster(y, x, randomNumber(monster_levels[MAX_MONS_LEVEL] - monster_levels[0]) - 1 + monster_levels[0], false);
+                morphed = monsterPlaceNew(y, x, randomNumber(monster_levels[MAX_MONS_LEVEL] - monster_levels[0]) - 1 + monster_levels[0], false);
             }
         }
     }

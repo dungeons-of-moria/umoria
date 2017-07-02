@@ -1362,7 +1362,7 @@ bool monsterMultiply(int y, int x, int creatureID, int monsterID) {
                         // in case compact_monster() is called, it needs monsterID.
                         hack_monptr = monsterID;
                         // Place_monster() may fail if monster list full.
-                        int result = place_monster(row, col, creatureID, false);
+                        int result = monsterPlaceNew(row, col, creatureID, false);
                         hack_monptr = -1;
 
                         if (!result) {
@@ -1378,7 +1378,7 @@ bool monsterMultiply(int y, int x, int creatureID, int monsterID) {
                     // in case compact_monster() is called,it needs monsterID
                     hack_monptr = monsterID;
                     // Place_monster() may fail if monster list full.
-                    int result = place_monster(row, col, creatureID, false);
+                    int result = monsterPlaceNew(row, col, creatureID, false);
                     hack_monptr = -1;
 
                     if (!result) {
