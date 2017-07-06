@@ -686,14 +686,14 @@ bool playerStatRandomDecrease(int stat) {
 }
 
 // Restore a stat.  Return true only if this actually makes a difference.
-bool res_stat(int stat) {
-    int newStat = py.stats.max_stat[stat] - py.stats.cur_stat[stat];
+bool playerStatRestore(int stat) {
+    int new_stat = py.stats.max_stat[stat] - py.stats.cur_stat[stat];
 
-    if (newStat == 0) {
+    if (new_stat == 0) {
         return false;
     }
 
-    py.stats.cur_stat[stat] += newStat;
+    py.stats.cur_stat[stat] += new_stat;
 
     playerSetAndUseStat(stat);
     displayCharacterStats(stat);

@@ -46,7 +46,7 @@ void change_character() {
         tmp_val = atoi(tmp_str);
         if (tmp_val > 2 && tmp_val < 119) {
             a_ptr[A_STR] = (uint8_t) tmp_val;
-            (void) res_stat(A_STR);
+            (void) playerStatRestore(A_STR);
         }
     } else {
         return;
@@ -57,7 +57,7 @@ void change_character() {
         tmp_val = atoi(tmp_str);
         if (tmp_val > 2 && tmp_val < 119) {
             a_ptr[A_INT] = (uint8_t) tmp_val;
-            (void) res_stat(A_INT);
+            (void) playerStatRestore(A_INT);
         }
     } else {
         return;
@@ -68,7 +68,7 @@ void change_character() {
         tmp_val = atoi(tmp_str);
         if (tmp_val > 2 && tmp_val < 119) {
             a_ptr[A_WIS] = (uint8_t) tmp_val;
-            (void) res_stat(A_WIS);
+            (void) playerStatRestore(A_WIS);
         }
     } else {
         return;
@@ -79,7 +79,7 @@ void change_character() {
         tmp_val = atoi(tmp_str);
         if (tmp_val > 2 && tmp_val < 119) {
             a_ptr[A_DEX] = (uint8_t) tmp_val;
-            (void) res_stat(A_DEX);
+            (void) playerStatRestore(A_DEX);
         }
     } else {
         return;
@@ -90,7 +90,7 @@ void change_character() {
         tmp_val = atoi(tmp_str);
         if (tmp_val > 2 && tmp_val < 119) {
             a_ptr[A_CON] = (uint8_t) tmp_val;
-            (void) res_stat(A_CON);
+            (void) playerStatRestore(A_CON);
         }
     } else {
         return;
@@ -101,7 +101,7 @@ void change_character() {
         tmp_val = atoi(tmp_str);
         if (tmp_val > 2 && tmp_val < 119) {
             a_ptr[A_CHR] = (uint8_t) tmp_val;
-            (void) res_stat(A_CHR);
+            (void) playerStatRestore(A_CHR);
         }
     } else {
         return;

@@ -319,7 +319,7 @@ void printCharacterWinner();
 void playerSetAndUseStat(int stat);
 bool playerStatRandomIncrease(int stat);
 bool playerStatRandomDecrease(int stat);
-bool res_stat(int stat);
+bool playerStatRestore(int stat);
 void bst_stat(int stat, int amount);
 int tohit_adj();
 int toac_adj();

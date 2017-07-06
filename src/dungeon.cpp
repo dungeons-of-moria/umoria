@@ -1457,12 +1457,12 @@ static void doWizardCommands(char com_val) {
             (void) cure_confusion();
             (void) cure_poison();
             (void) remove_fear();
-            (void) res_stat(A_STR);
-            (void) res_stat(A_INT);
-            (void) res_stat(A_WIS);
-            (void) res_stat(A_CON);
-            (void) res_stat(A_DEX);
-            (void) res_stat(A_CHR);
+            (void) playerStatRestore(A_STR);
+            (void) playerStatRestore(A_INT);
+            (void) playerStatRestore(A_WIS);
+            (void) playerStatRestore(A_CON);
+            (void) playerStatRestore(A_DEX);
+            (void) playerStatRestore(A_CHR);
 
             if (py.flags.slow > 1) {
                 py.flags.slow = 1;

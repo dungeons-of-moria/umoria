@@ -32,7 +32,7 @@ static bool drinkPotion(uint32_t flags, uint8_t itemID) {
                 identified = true;
                 break;
             case 3:
-                if (res_stat(A_STR)) {
+                if (playerStatRestore(A_STR)) {
                     printMessage("You feel warm all over.");
                     identified = true;
                 }
@@ -48,7 +48,7 @@ static bool drinkPotion(uint32_t flags, uint8_t itemID) {
                 identified = true;
                 break;
             case 6:
-                if (res_stat(A_INT)) {
+                if (playerStatRestore(A_INT)) {
                     printMessage("You have have a warm feeling.");
                     identified = true;
                 }
@@ -64,7 +64,7 @@ static bool drinkPotion(uint32_t flags, uint8_t itemID) {
                 identified = true;
                 break;
             case 9:
-                if (res_stat(A_WIS)) {
+                if (playerStatRestore(A_WIS)) {
                     printMessage("You feel your wisdom returning.");
                     identified = true;
                 }
@@ -80,7 +80,7 @@ static bool drinkPotion(uint32_t flags, uint8_t itemID) {
                 identified = true;
                 break;
             case 12:
-                if (res_stat(A_CHR)) {
+                if (playerStatRestore(A_CHR)) {
                     printMessage("You feel your looks returning.");
                     identified = true;
                 }
@@ -164,13 +164,13 @@ static bool drinkPotion(uint32_t flags, uint8_t itemID) {
                 }
                 break;
             case 27:
-                if (res_stat(A_DEX)) {
+                if (playerStatRestore(A_DEX)) {
                     printMessage("You feel less clumsy.");
                     identified = true;
                 }
                 break;
             case 28:
-                if (res_stat(A_CON)) {
+                if (playerStatRestore(A_CON)) {
                     printMessage("You feel your health returning!");
                     identified = true;
                 }

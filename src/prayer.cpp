@@ -154,7 +154,7 @@ static void recitePrayer(int prayerType) {
             (void) hp_player(1000);
 
             for (int i = A_STR; i <= A_CHR; i++) {
-                (void) res_stat(i);
+                (void) playerStatRestore(i);
             }
 
             (void) dispel_creature(CD_EVIL, (4 * py.misc.lev));

@@ -108,37 +108,37 @@ void playerEat() {
                 break;
 #endif
             case 16:
-                if (res_stat(A_STR)) {
+                if (playerStatRestore(A_STR)) {
                     printMessage("You feel your strength returning.");
                     identified = true;
                 }
                 break;
             case 17:
-                if (res_stat(A_CON)) {
+                if (playerStatRestore(A_CON)) {
                     printMessage("You feel your health returning.");
                     identified = true;
                 }
                 break;
             case 18:
-                if (res_stat(A_INT)) {
+                if (playerStatRestore(A_INT)) {
                     printMessage("Your head spins a moment.");
                     identified = true;
                 }
                 break;
             case 19:
-                if (res_stat(A_WIS)) {
+                if (playerStatRestore(A_WIS)) {
                     printMessage("You feel your wisdom returning.");
                     identified = true;
                 }
                 break;
             case 20:
-                if (res_stat(A_DEX)) {
+                if (playerStatRestore(A_DEX)) {
                     printMessage("You feel more dexterous.");
                     identified = true;
                 }
                 break;
             case 21:
-                if (res_stat(A_CHR)) {
+                if (playerStatRestore(A_CHR)) {
                     printMessage("Your skin stops itching.");
                     identified = true;
                 }
