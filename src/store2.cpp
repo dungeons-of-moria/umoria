@@ -213,7 +213,7 @@ static void display_inventory(int store_num, int start) {
         x = s_ptr->store_inven[start].scost;
         if (x <= 0) {
             int32_t value = -x;
-            value = value * chr_adj() / 100;
+            value = value * playerStatAdjustmentCharisma() / 100;
             if (value <= 0) {
                 value = 1;
             }
@@ -247,7 +247,7 @@ static void display_cost(int store_num, int pos) {
     vtype_t out_val;
     if (cost < 0) {
         int32_t j = -cost;
-        j = j * chr_adj() / 100;
+        j = j * playerStatAdjustmentCharisma() / 100;
         (void) sprintf(out_val, "%d", j);
     } else {
         (void) sprintf(out_val, "%9d [Fixed]", cost);
@@ -443,12 +443,12 @@ static int purchase_haggle(int store_num, int32_t *price, Inventory_t *item) {
     int32_t max_sell, min_sell;
     int32_t cost = sell_price(store_num, &min_sell, &max_sell, item);
 
-    max_sell = max_sell * chr_adj() / 100;
+    max_sell = max_sell * playerStatAdjustmentCharisma() / 100;
     if (max_sell <= 0) {
         max_sell = 1;
     }
 
-    min_sell = min_sell * chr_adj() / 100;
+    min_sell = min_sell * playerStatAdjustmentCharisma() / 100;
     if (min_sell <= 0) {
         min_sell = 1;
     }
@@ -610,7 +610,7 @@ static int sell_haggle(int store_num, int32_t *price, Inventory_t *item) {
     } else {
         Owner_t *o_ptr = &store_owners[s_ptr->owner];
 
-        cost = cost * (200 - chr_adj()) / 100;
+        cost = cost * (200 - playerStatAdjustmentCharisma()) / 100;
         cost = cost * (200 - race_gold_adjustments[o_ptr->owner_race][py.misc.prace]) / 100;
         if (cost < 1) {
             cost = 1;

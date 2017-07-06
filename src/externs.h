@@ -296,7 +296,7 @@ void dungeonPlaceRandomObjectNear(int y, int x, int tries);
 void statsAsString(uint8_t stat, char *stat_string);
 void displayCharacterStats(int stat);
 int playerStatAdjustmentWisdomIntelligence(int stat);
-int chr_adj();
+int playerStatAdjustmentCharisma();
 int con_adj();
 char *title_string();
 void prt_title();

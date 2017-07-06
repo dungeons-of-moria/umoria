@@ -274,7 +274,7 @@ int playerStatAdjustmentWisdomIntelligence(int stat) {
 
 // Adjustment for charisma -RAK-
 // Percent decrease or increase in price of goods
-int chr_adj() {
+int playerStatAdjustmentCharisma() {
     int charisma = py.stats.use_stat[A_CHR];
 
     if (charisma > 117) {
