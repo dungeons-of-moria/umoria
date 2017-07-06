@@ -1179,7 +1179,7 @@ void inventoryDropItem(int item_id, bool drop_all) {
 }
 
 // Destroys a type of item on a given percent chance -RAK-
-int inven_damage(bool (*item_type)(Inventory_t *), int chance_percentage) {
+int inventoryDamageItem(bool (*item_type)(Inventory_t *), int chance_percentage) {
     int damage = 0;
 
     for (int i = 0; i < inventory_count; i++) {

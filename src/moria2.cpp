@@ -571,7 +571,7 @@ void corrode_gas(const char *creature_name) {
         take_hit(randomNumber(8), creature_name);
     }
 
-    if (inven_damage(set_corrodes, 5) > 0) {
+    if (inventoryDamageItem(set_corrodes, 5) > 0) {
         printMessage("There is an acrid smell coming from your pack.");
     }
 }
@@ -595,7 +595,7 @@ void fire_dam(int dam, const char *creature_name) {
 
     take_hit(dam, creature_name);
 
-    if (inven_damage(set_flammable, 3) > 0) {
+    if (inventoryDamageItem(set_flammable, 3) > 0) {
         printMessage("There is smoke coming from your pack!");
     }
 }
@@ -612,7 +612,7 @@ void cold_dam(int dam, const char *creature_name) {
 
     take_hit(dam, creature_name);
 
-    if (inven_damage(set_frost_destroy, 5) > 0) {
+    if (inventoryDamageItem(set_frost_destroy, 5) > 0) {
         printMessage("Something shatters inside your pack!");
     }
 }
@@ -625,7 +625,7 @@ void light_dam(int dam, const char *creature_name) {
 
     take_hit(dam, creature_name);
 
-    if (inven_damage(set_lightning_destroy, 3) > 0) {
+    if (inventoryDamageItem(set_lightning_destroy, 3) > 0) {
         printMessage("There are sparks coming from your pack!");
     }
 }
@@ -644,7 +644,7 @@ void acid_dam(int dam, const char *creature_name) {
 
     take_hit(dam / (flag + 1), creature_name);
 
-    if (inven_damage(set_acid_affect, 3) > 0) {
+    if (inventoryDamageItem(set_acid_affect, 3) > 0) {
         printMessage("There is an acrid smell coming from your pack!");
     }
 }
