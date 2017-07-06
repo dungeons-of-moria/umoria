@@ -13,7 +13,6 @@ static const char *stat_names[] = {"STR : ", "INT : ", "WIS : ", "DEX : ", "CON 
 #define BLANK_LENGTH 24
 static char blank_string[] = "                        ";
 
-static uint8_t modify_stat(int stat, int16_t amount);
 static int spell_chance(int spell);
 
 // Places a particular trap at location y, x -RAK-
@@ -578,37 +577,37 @@ void printCharacterWinner() {
     }
 }
 
-static uint8_t modify_stat(int stat, int16_t amount) {
-    uint8_t newStat = py.stats.cur_stat[stat];
+static uint8_t playerModifyStat(int stat, int16_t amount) {
+    uint8_t new_stat = py.stats.cur_stat[stat];
 
     int loop = (amount < 0 ? -amount : amount);
 
     for (int i = 0; i < loop; i++) {
         if (amount > 0) {
-            if (newStat < 18) {
-                newStat++;
-            } else if (newStat < 108) {
-                newStat += 10;
+            if (new_stat < 18) {
+                new_stat++;
+            } else if (new_stat < 108) {
+                new_stat += 10;
             } else {
-                newStat = 118;
+                new_stat = 118;
             }
         } else {
-            if (newStat > 27) {
-                newStat -= 10;
-            } else if (newStat > 18) {
-                newStat = 18;
-            } else if (newStat > 3) {
-                newStat--;
+            if (new_stat > 27) {
+                new_stat -= 10;
+            } else if (new_stat > 18) {
+                new_stat = 18;
+            } else if (new_stat > 3) {
+                new_stat--;
             }
         }
     }
 
-    return newStat;
+    return new_stat;
 }
 
 // Set the value of the stat which is actually used. -CJS-
 void set_use_stat(int stat) {
-    py.stats.use_stat[stat] = modify_stat(stat, py.stats.mod_stat[stat]);
+    py.stats.use_stat[stat] = playerModifyStat(stat, py.stats.mod_stat[stat]);
 
     if (stat == A_STR) {
         py.flags.status |= PY_STR_WGT;
