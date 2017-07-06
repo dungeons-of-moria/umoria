@@ -48,7 +48,7 @@ static void trapCoveredPit(Inventory_t *t_ptr, int dam, int y, int x) {
         take_hit(dam, description);
     }
 
-    place_trap(y, x, 0);
+    dungeonSetTrap(y, x, 0);
 }
 
 static void trapDoor(Inventory_t *t_ptr, int dam) {

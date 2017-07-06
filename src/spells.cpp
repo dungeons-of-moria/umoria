@@ -372,7 +372,7 @@ bool trap_creation() {
                 if (c_ptr->tptr != 0) {
                     (void) delete_object(y, x);
                 }
-                place_trap(y, x, randomNumber(MAX_TRAP) - 1);
+                dungeonSetTrap(y, x, randomNumber(MAX_TRAP) - 1);
 
                 // don't let player gain exp from the newly created traps
                 treasure_list[c_ptr->tptr].p1 = 0;

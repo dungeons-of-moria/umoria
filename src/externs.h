@@ -286,7 +286,7 @@ void magicTreasureMagicalAbility(int item_id, int level);
 void setGameOptions();
 
 // misc3.c
-void place_trap(int y, int x, int sub_type_id);
+void dungeonSetTrap(int y, int x, int sub_type_id);
 void place_rubble(int y, int x);
 void place_gold(int y, int x);
 int get_obj_num(int level, bool must_be_small);

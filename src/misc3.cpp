@@ -18,10 +18,10 @@ static uint8_t modify_stat(int stat, int16_t amount);
 static int spell_chance(int spell);
 
 // Places a particular trap at location y, x -RAK-
-void place_trap(int y, int x, int sub_type_id) {
-    int cur_pos = popt();
-    cave[y][x].tptr = (uint8_t) cur_pos;
-    inventoryItemCopyTo(OBJ_TRAP_LIST + sub_type_id, &treasure_list[cur_pos]);
+void dungeonSetTrap(int y, int x, int sub_type_id) {
+    int free_treasure_id = popt();
+    cave[y][x].tptr = (uint8_t) free_treasure_id;
+    inventoryItemCopyTo(OBJ_TRAP_LIST + sub_type_id, &treasure_list[free_treasure_id]);
 }
 
 // Places rubble at location y, x -RAK-
@@ -139,7 +139,7 @@ void alloc_object(bool (*set_function)(int), int object_type, int number) {
 
         switch (object_type) {
             case 1:
-                place_trap(y, x, randomNumber(MAX_TRAP) - 1);
+                dungeonSetTrap(y, x, randomNumber(MAX_TRAP) - 1);
                 break;
             case 2:
                 // NOTE: object_type == 2 is not used - used to be visible traps.
