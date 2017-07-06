@@ -448,7 +448,7 @@ void createCharacter() {
     get_ahw();
     print_history();
     put_misc1();
-    put_stats();
+    printCharacterStats();
 
     clearToBottom(20);
     putString("Hit space to re-roll or ESC to accept characteristics: ", 20, 2);
@@ -465,7 +465,7 @@ void createCharacter() {
             get_ahw();
             print_history();
             put_misc1();
-            put_stats();
+            printCharacterStats();
         } else {
             terminalBellSound();
         }
@@ -474,7 +474,7 @@ void createCharacter() {
 
     get_class();
     get_money();
-    put_stats();
+    printCharacterStats();
     put_misc2();
     put_misc3();
     get_name();

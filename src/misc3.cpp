@@ -925,7 +925,7 @@ void printCharacterInformation() {
 }
 
 // Prints the following information on the screen. -JWT-
-void put_stats() {
+void printCharacterStats() {
     for (int i = 0; i < 6; i++) {
         vtype_t buf;
 
@@ -1050,7 +1050,7 @@ void put_misc3() {
 void display_char() {
     printCharacterInformation();
     put_misc1();
-    put_stats();
+    printCharacterStats();
     put_misc2();
     put_misc3();
 }
