@@ -1235,7 +1235,7 @@ bool inventoryCanCarryItemCount(Inventory_t *item) {
 }
 
 // return false if picking up an object would change the players speed
-bool inven_check_weight(Inventory_t *item) {
+bool inventoryCanCarryItem(Inventory_t *item) {
     int limit = playerCarryingLoadLimit();
     int newWeight = item->number * item->weight + inventory_weight;
 

@@ -430,7 +430,7 @@ static void carry(int y, int x, bool pickup) {
         }
 
         // Check to see if it will change the players speed.
-        if (pickup && !inven_check_weight(item)) {
+        if (pickup && !inventoryCanCarryItem(item)) {
             itemDescription(description, item, true);
 
             // change the period to a question mark

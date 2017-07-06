@@ -342,7 +342,7 @@ void inventoryDropItem(int item_id, bool drop_all);
 int inventoryDamageItem(bool (*item_type)(Inventory_t *), int chance_percentage);
 int playerCarryingLoadLimit();
 bool inventoryCanCarryItemCount(Inventory_t *item);
-bool inven_check_weight(Inventory_t *item);
+bool inventoryCanCarryItem(Inventory_t *item);
 void check_strength();
 int inven_carry(Inventory_t *item);
 void print_spells(int *spell, int number_of_choices, int comment, int non_consecutive);
