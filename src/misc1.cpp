@@ -893,21 +893,21 @@ bool magicShouldBeEnchanted(int chance) {
 }
 
 // Enchant a bonus based on degree desired -RAK-
-int m_bonus(int base, int max_standard, int level) {
-    int stand_dev = (OBJ_STD_ADJ * level / 100) + OBJ_STD_MIN;
+int magicEnchantmentBonus(int base, int max_standard, int level) {
+    int stand_deviation = (OBJ_STD_ADJ * level / 100) + OBJ_STD_MIN;
 
     // Check for level > max_standard since that may have generated an overflow.
-    if (stand_dev > max_standard || level > max_standard) {
-        stand_dev = max_standard;
+    if (stand_deviation > max_standard || level > max_standard) {
+        stand_deviation = max_standard;
     }
 
     // abs may be a macro, don't call it with randomNumberNormalDistribution() as a parameter
-    int tmp = randomNumberNormalDistribution(0, stand_dev);
-    int x = (abs(tmp) / 10) + base;
+    int distribution = randomNumberNormalDistribution(0, stand_deviation);
+    int bonus = (abs(distribution) / 10) + base;
 
-    if (x < base) {
+    if (bonus < base) {
         return base;
     }
 
-    return x;
+    return bonus;
 }
