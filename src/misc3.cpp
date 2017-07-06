@@ -126,10 +126,10 @@ void dungeonPlaceRandomObjectAt(int y, int x, bool must_be_small) {
 }
 
 // Allocates an object for tunnels and rooms -RAK-
-void alloc_object(bool (*set_function)(int), int object_type, int number) {
+void dungeonAllocateAndPlaceObject(bool (*set_function)(int), int object_type, int number) {
     int y, x;
 
-    for (int k = 0; k < number; k++) {
+    for (int i = 0; i < number; i++) {
         // don't put an object beneath the player, this could cause
         // problems if player is standing under rubble, or on a trap.
         do {
@@ -142,9 +142,8 @@ void alloc_object(bool (*set_function)(int), int object_type, int number) {
                 dungeonSetTrap(y, x, randomNumber(MAX_TRAP) - 1);
                 break;
             case 2:
-                // NOTE: object_type == 2 is not used - used to be visible traps.
-                // FIXME: no `break` here, is this correct?
-                // FIXME: object_type == 2 was not handled directly and was caught by object_type == 3 -MRC-
+                // NOTE: object_type == 2 is no longer used - it used to be visible traps.
+                // FIXME: there was no `break` here so `case 3` catches it? -MRC-
             case 3:
                 dungeonPlaceRubble(y, x);
                 break;
