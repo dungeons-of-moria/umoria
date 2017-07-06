@@ -1070,7 +1070,7 @@ void getCharacterName() {
 }
 
 // Changes the name of the character -JWT-
-void change_name() {
+void changeCharacterName() {
     vtype_t temp;
     bool flag = false;
 

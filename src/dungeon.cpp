@@ -1691,7 +1691,7 @@ static void do_command(char com_val) {
             break;
         case 'C': // (C)haracter description
             terminalSaveScreen();
-            change_name();
+            changeCharacterName();
             terminalRestoreScreen();
             player_free_turn = true;
             break;
