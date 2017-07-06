@@ -888,7 +888,7 @@ void pusht(uint8_t treasure_id) {
 }
 
 // Should the object be enchanted -RAK-
-bool magik(int chance) {
+bool magicShouldBeEnchanted(int chance) {
     return randomNumber(100) <= chance;
 }
 

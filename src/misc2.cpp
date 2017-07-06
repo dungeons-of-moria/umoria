@@ -12,7 +12,7 @@
 static void magicalArmor(Inventory_t *t_ptr, int special, int level) {
     t_ptr->toac += m_bonus(1, 30, level);
 
-    if (!magik(special)) {
+    if (!magicShouldBeEnchanted(special)) {
         return;
     }
 
@@ -70,7 +70,7 @@ static void magicalSword(Inventory_t *t_ptr, int special, int level) {
     // the 3*special/2 is needed because weapons are not as common as
     // before change to treasure distribution, this helps keep same
     // number of ego weapons same as before, see also missiles
-    if (magik(3 * special / 2)) {
+    if (magicShouldBeEnchanted(3 * special / 2)) {
         switch (randomNumber(16)) {
             case 1: // Holy Avenger
                 t_ptr->flags |= (TR_SEE_INVIS | TR_SUST_STAT | TR_SLAY_UNDEAD | TR_SLAY_EVIL | TR_STR);
@@ -192,7 +192,7 @@ static void cursedDiggingTool(Inventory_t *t_ptr, int level) {
 static void magicalGloves(Inventory_t *t_ptr, int special, int level) {
     t_ptr->toac += m_bonus(1, 20, level);
 
-    if (!magik(special)) {
+    if (!magicShouldBeEnchanted(special)) {
         return;
     }
 
@@ -210,7 +210,7 @@ static void magicalGloves(Inventory_t *t_ptr, int special, int level) {
 }
 
 static void cursedGloves(Inventory_t *t_ptr, int special, int level) {
-    if (magik(special)) {
+    if (magicShouldBeEnchanted(special)) {
         if (randomNumber(2) == 1) {
             t_ptr->flags |= TR_DEX;
             t_ptr->name2 = SN_CLUMSINESS;
@@ -230,7 +230,7 @@ static void cursedGloves(Inventory_t *t_ptr, int special, int level) {
 static void magicalBoots(Inventory_t *t_ptr, int special, int level) {
     t_ptr->toac += m_bonus(1, 20, level);
 
-    if (!magik(special)) {
+    if (!magicShouldBeEnchanted(special)) {
         return;
     }
 
@@ -280,7 +280,7 @@ static void cursedBoots(Inventory_t *t_ptr, int level) {
 static void magicalHelms(Inventory_t *t_ptr, int special, int level) {
     t_ptr->toac += m_bonus(1, 20, level);
 
-    if (!magik(special)) {
+    if (!magicShouldBeEnchanted(special)) {
         return;
     }
 
@@ -358,7 +358,7 @@ static void cursedHelms(Inventory_t *t_ptr, int special, int level) {
     t_ptr->flags |= TR_CURSED;
     t_ptr->cost = 0;
 
-    if (!magik(special)) {
+    if (!magicShouldBeEnchanted(special)) {
         return;
     }
 
@@ -408,7 +408,7 @@ static void processRings(Inventory_t *t_ptr, int level, int cursed) {
         case 1:
         case 2:
         case 3:
-            if (magik(cursed)) {
+            if (magicShouldBeEnchanted(cursed)) {
                 t_ptr->p1 = (int16_t) -m_bonus(1, 20, level);
                 t_ptr->flags |= TR_CURSED;
                 t_ptr->cost = -t_ptr->cost;
@@ -418,7 +418,7 @@ static void processRings(Inventory_t *t_ptr, int level, int cursed) {
             }
             break;
         case 4:
-            if (magik(cursed)) {
+            if (magicShouldBeEnchanted(cursed)) {
                 t_ptr->p1 = (int16_t) -randomNumber(3);
                 t_ptr->flags |= TR_CURSED;
                 t_ptr->cost = -t_ptr->cost;
@@ -429,7 +429,7 @@ static void processRings(Inventory_t *t_ptr, int level, int cursed) {
         case 5:
             t_ptr->p1 = (int16_t) (5 * m_bonus(1, 20, level));
             t_ptr->cost += t_ptr->p1 * 50;
-            if (magik(cursed)) {
+            if (magicShouldBeEnchanted(cursed)) {
                 t_ptr->p1 = -t_ptr->p1;
                 t_ptr->flags |= TR_CURSED;
                 t_ptr->cost = -t_ptr->cost;
@@ -438,7 +438,7 @@ static void processRings(Inventory_t *t_ptr, int level, int cursed) {
         case 19: // Increase damage
             t_ptr->todam += m_bonus(1, 20, level);
             t_ptr->cost += t_ptr->todam * 100;
-            if (magik(cursed)) {
+            if (magicShouldBeEnchanted(cursed)) {
                 t_ptr->todam = -t_ptr->todam;
                 t_ptr->flags |= TR_CURSED;
                 t_ptr->cost = -t_ptr->cost;
@@ -447,7 +447,7 @@ static void processRings(Inventory_t *t_ptr, int level, int cursed) {
         case 20: // Increase To-Hit
             t_ptr->tohit += m_bonus(1, 20, level);
             t_ptr->cost += t_ptr->tohit * 100;
-            if (magik(cursed)) {
+            if (magicShouldBeEnchanted(cursed)) {
                 t_ptr->tohit = -t_ptr->tohit;
                 t_ptr->flags |= TR_CURSED;
                 t_ptr->cost = -t_ptr->cost;
@@ -456,7 +456,7 @@ static void processRings(Inventory_t *t_ptr, int level, int cursed) {
         case 21: // Protection
             t_ptr->toac += m_bonus(1, 20, level);
             t_ptr->cost += t_ptr->toac * 100;
-            if (magik(cursed)) {
+            if (magicShouldBeEnchanted(cursed)) {
                 t_ptr->toac = -t_ptr->toac;
                 t_ptr->flags |= TR_CURSED;
                 t_ptr->cost = -t_ptr->cost;
@@ -475,7 +475,7 @@ static void processRings(Inventory_t *t_ptr, int level, int cursed) {
             t_ptr->todam += m_bonus(1, 25, level);
             t_ptr->tohit += m_bonus(1, 25, level);
             t_ptr->cost += (t_ptr->tohit + t_ptr->todam) * 100;
-            if (magik(cursed)) {
+            if (magicShouldBeEnchanted(cursed)) {
                 t_ptr->tohit = -t_ptr->tohit;
                 t_ptr->todam = -t_ptr->todam;
                 t_ptr->flags |= TR_CURSED;
@@ -489,7 +489,7 @@ static void processRings(Inventory_t *t_ptr, int level, int cursed) {
 
 static void processAmulets(Inventory_t *t_ptr, int level, int cursed) {
     if (t_ptr->subval < 2) {
-        if (magik(cursed)) {
+        if (magicShouldBeEnchanted(cursed)) {
             t_ptr->p1 = (int16_t) -m_bonus(1, 20, level);
             t_ptr->flags |= TR_CURSED;
             t_ptr->cost = -t_ptr->cost;
@@ -499,7 +499,7 @@ static void processAmulets(Inventory_t *t_ptr, int level, int cursed) {
         }
     } else if (t_ptr->subval == 2) {
         t_ptr->p1 = (int16_t) (5 * m_bonus(1, 25, level));
-        if (magik(cursed)) {
+        if (magicShouldBeEnchanted(cursed)) {
             t_ptr->p1 = -t_ptr->p1;
             t_ptr->cost = -t_ptr->cost;
             t_ptr->flags |= TR_CURSED;
@@ -622,7 +622,7 @@ static int staffMagic(uint8_t id) {
 }
 
 static void magicalCloak(Inventory_t *t_ptr, int special, int level) {
-    if (!magik(special)) {
+    if (!magicShouldBeEnchanted(special)) {
         t_ptr->toac += m_bonus(1, 20, level);
         return;
     }
@@ -724,7 +724,7 @@ static void magicalProjectiles(Inventory_t *t_ptr, int special, int level) {
     t_ptr->todam += m_bonus(1, 35, level);
 
     // see comment for weapons
-    if (magik(3 * special / 2)) {
+    if (magicShouldBeEnchanted(3 * special / 2)) {
         switch (randomNumber(10)) {
             case 1:
             case 2:
@@ -800,9 +800,9 @@ void magic_treasure(int item_id, int level) {
         case TV_SHIELD:
         case TV_HARD_ARMOR:
         case TV_SOFT_ARMOR:
-            if (magik(chance)) {
+            if (magicShouldBeEnchanted(chance)) {
                 magicalArmor(t_ptr, special, level);
-            } else if (magik(cursed)) {
+            } else if (magicShouldBeEnchanted(cursed)) {
                 cursedArmor(t_ptr, level);
             }
             break;
@@ -812,9 +812,9 @@ void magic_treasure(int item_id, int level) {
             // always show tohit/todam values if identified
             t_ptr->ident |= ID_SHOW_HITDAM;
 
-            if (magik(chance)) {
+            if (magicShouldBeEnchanted(chance)) {
                 magicalSword(t_ptr, special, level);
-            } else if (magik(cursed)) {
+            } else if (magicShouldBeEnchanted(cursed)) {
                 cursedSword(t_ptr, level);
             }
             break;
@@ -822,9 +822,9 @@ void magic_treasure(int item_id, int level) {
             // always show tohit/todam values if identified
             t_ptr->ident |= ID_SHOW_HITDAM;
 
-            if (magik(chance)) {
+            if (magicShouldBeEnchanted(chance)) {
                 magicalBow(t_ptr, level);
-            } else if (magik(cursed)) {
+            } else if (magicShouldBeEnchanted(cursed)) {
                 cursedBow(t_ptr, level);
             }
             break;
@@ -832,7 +832,7 @@ void magic_treasure(int item_id, int level) {
             // always show tohit/todam values if identified
             t_ptr->ident |= ID_SHOW_HITDAM;
 
-            if (magik(chance)) {
+            if (magicShouldBeEnchanted(chance)) {
                 if (randomNumber(3) < 3) {
                     magicalDiggingTool(t_ptr, level);
                 } else {
@@ -841,16 +841,16 @@ void magic_treasure(int item_id, int level) {
             }
             break;
         case TV_GLOVES:
-            if (magik(chance)) {
+            if (magicShouldBeEnchanted(chance)) {
                 magicalGloves(t_ptr, special, level);
-            } else if (magik(cursed)) {
+            } else if (magicShouldBeEnchanted(cursed)) {
                 cursedGloves(t_ptr, special, level);
             }
             break;
         case TV_BOOTS:
-            if (magik(chance)) {
+            if (magicShouldBeEnchanted(chance)) {
                 magicalBoots(t_ptr, special, level);
-            } else if (magik(cursed)) {
+            } else if (magicShouldBeEnchanted(cursed)) {
                 cursedBoots(t_ptr, level);
             }
             break;
@@ -861,9 +861,9 @@ void magic_treasure(int item_id, int level) {
                 special += special;
             }
 
-            if (magik(chance)) {
+            if (magicShouldBeEnchanted(chance)) {
                 magicalHelms(t_ptr, special, level);
-            } else if (magik(cursed)) {
+            } else if (magicShouldBeEnchanted(cursed)) {
                 cursedHelms(t_ptr, special, level);
             }
             break;
@@ -901,9 +901,9 @@ void magic_treasure(int item_id, int level) {
             }
             break;
         case TV_CLOAK:
-            if (magik(chance)) {
+            if (magicShouldBeEnchanted(chance)) {
                 magicalCloak(t_ptr, special, level);
-            } else if (magik(cursed)) {
+            } else if (magicShouldBeEnchanted(cursed)) {
                 cursedCloak(t_ptr, level);
             }
             break;
@@ -918,9 +918,9 @@ void magic_treasure(int item_id, int level) {
                 // always show tohit/todam values if identified
                 t_ptr->ident |= ID_SHOW_HITDAM;
 
-                if (magik(chance)) {
+                if (magicShouldBeEnchanted(chance)) {
                     magicalProjectiles(t_ptr, special, level);
-                } else if (magik(cursed)) {
+                } else if (magicShouldBeEnchanted(cursed)) {
                     cursedProjectiles(t_ptr, level);
                 }
             }

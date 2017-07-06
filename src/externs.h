@@ -278,7 +278,7 @@ bool monsterSummon(int *y, int *x, bool sleeping);
 bool monsterSummonUndead(int *y, int *x);
 int popt();
 void pusht(uint8_t treasure_id);
-bool magik(int chance);
+bool magicShouldBeEnchanted(int chance);
 int m_bonus(int base, int max_standard, int level);
 
 // misc2.c
