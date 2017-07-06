@@ -843,7 +843,7 @@ int playerDamageAdjustment() {
 }
 
 // Prints character-screen info -RAK-
-void prt_stat_block() {
+void printCharacterStatsBlock() {
     printCharacterInfoInField(character_races[py.misc.prace].trace, 2, STAT_COLUMN);
     printCharacterInfoInField(classes[py.misc.pclass].title, 3, STAT_COLUMN);
     printCharacterInfoInField(playerTitle(), 4, STAT_COLUMN);
@@ -900,7 +900,7 @@ void prt_stat_block() {
 // Draws entire screen -RAK-
 void draw_cave() {
     clearScreen();
-    prt_stat_block();
+    printCharacterStatsBlock();
     drawDungeonPanel();
     printCharacterCurrentDepth();
 }

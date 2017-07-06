@@ -325,7 +325,7 @@ int playerToHitAdjustment();
 int playerArmorClassAdjustment();
 int playerDisarmAdjustment();
 int playerDamageAdjustment();
-void prt_stat_block();
+void printCharacterStatsBlock();
 void draw_cave();
 void put_character();
 void put_stats();

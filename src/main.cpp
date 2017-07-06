@@ -189,7 +189,7 @@ int main(int argc, char *argv[]) {
     // Begin the game
     //
     clearScreen();
-    prt_stat_block();
+    printCharacterStatsBlock();
 
     if (generate) {
         generateCave();
