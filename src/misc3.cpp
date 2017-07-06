@@ -606,7 +606,7 @@ static uint8_t playerModifyStat(int stat, int16_t amount) {
 }
 
 // Set the value of the stat which is actually used. -CJS-
-void set_use_stat(int stat) {
+void playerSetAndUseStat(int stat) {
     py.stats.use_stat[stat] = playerModifyStat(stat, py.stats.mod_stat[stat]);
 
     if (stat == A_STR) {
@@ -650,7 +650,7 @@ bool inc_stat(int stat) {
         py.stats.max_stat[stat] = (uint8_t) newStat;
     }
 
-    set_use_stat(stat);
+    playerSetAndUseStat(stat);
     displayCharacterStats(stat);
 
     return true;
@@ -679,7 +679,7 @@ bool dec_stat(int stat) {
 
     py.stats.cur_stat[stat] = (uint8_t) newStat;
 
-    set_use_stat(stat);
+    playerSetAndUseStat(stat);
     displayCharacterStats(stat);
 
     return true;
@@ -695,7 +695,7 @@ bool res_stat(int stat) {
 
     py.stats.cur_stat[stat] += newStat;
 
-    set_use_stat(stat);
+    playerSetAndUseStat(stat);
     displayCharacterStats(stat);
 
     return true;
@@ -706,7 +706,7 @@ bool res_stat(int stat) {
 void bst_stat(int stat, int amount) {
     py.stats.mod_stat[stat] += amount;
 
-    set_use_stat(stat);
+    playerSetAndUseStat(stat);
 
     // can not call displayCharacterStats() here, may be in store, may be in inven_command
     py.flags.status |= (PY_STR << stat);

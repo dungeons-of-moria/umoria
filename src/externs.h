@@ -316,7 +316,7 @@ void printCharacterMovementState();
 void printCharacterSpeed();
 void printCharacterStudyInstruction();
 void printCharacterWinner();
-void set_use_stat(int stat);
+void playerSetAndUseStat(int stat);
 bool inc_stat(int stat);
 bool dec_stat(int stat);
 bool res_stat(int stat);

@@ -80,7 +80,7 @@ static void get_all_stats() {
 
     for (int j = 0; j < 6; j++) {
         py.stats.cur_stat[j] = py.stats.max_stat[j];
-        set_use_stat(j);
+        playerSetAndUseStat(j);
     }
 
     py.misc.srh = r_ptr->srh;
@@ -361,7 +361,7 @@ static void get_class() {
 
             for (int i = 0; i < 6; i++) {
                 py.stats.cur_stat[i] = py.stats.max_stat[i];
-                set_use_stat(i);
+                playerSetAndUseStat(i);
             }
 
             py.misc.ptodam = (int16_t) todam_adj(); // Real values
