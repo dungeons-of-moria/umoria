@@ -329,7 +329,7 @@ void printCharacterStatsBlock();
 void drawCavePanel();
 void printCharacterInformation();
 void printCharacterStats();
-const char *likert(int y, int x);
+const char *statRating(int y, int x);
 void put_misc1();
 void put_misc2();
 void put_misc3();

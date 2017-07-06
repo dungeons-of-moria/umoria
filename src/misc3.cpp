@@ -946,7 +946,7 @@ void printCharacterStats() {
 }
 
 // Returns a rating of x depending on y -JWT-
-const char *likert(int y, int x) {
+const char *statRating(int y, int x) {
     switch (x / y) {
         case -3:
         case -2:
@@ -1025,23 +1025,23 @@ void put_misc3() {
 
     putString("(Miscellaneous Abilities)", 15, 25);
     putString("Fighting    :", 16, 1);
-    putString(likert(12, xbth), 16, 15);
+    putString(statRating(12, xbth), 16, 15);
     putString("Bows/Throw  :", 17, 1);
-    putString(likert(12, xbthb), 17, 15);
+    putString(statRating(12, xbthb), 17, 15);
     putString("Saving Throw:", 18, 1);
-    putString(likert(6, xsave), 18, 15);
+    putString(statRating(6, xsave), 18, 15);
 
     putString("Stealth     :", 16, 28);
-    putString(likert(1, xstl), 16, 42);
+    putString(statRating(1, xstl), 16, 42);
     putString("Disarming   :", 17, 28);
-    putString(likert(8, xdis), 17, 42);
+    putString(statRating(8, xdis), 17, 42);
     putString("Magic Device:", 18, 28);
-    putString(likert(6, xdev), 18, 42);
+    putString(statRating(6, xdev), 18, 42);
 
     putString("Perception  :", 16, 55);
-    putString(likert(3, xfos), 16, 69);
+    putString(statRating(3, xfos), 16, 69);
     putString("Searching   :", 17, 55);
-    putString(likert(6, xsrh), 17, 69);
+    putString(statRating(6, xsrh), 17, 69);
     putString("Infra-Vision:", 18, 55);
     putString(xinfra, 18, 69);
 }
