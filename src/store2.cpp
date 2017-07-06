@@ -1071,5 +1071,5 @@ void enter_store(int store_id) {
     }
 
     // Can't save and restore the screen because inven_command does that.
-    draw_cave();
+    drawCavePanel();
 }

@@ -326,7 +326,7 @@ int playerArmorClassAdjustment();
 int playerDisarmAdjustment();
 int playerDamageAdjustment();
 void printCharacterStatsBlock();
-void draw_cave();
+void drawCavePanel();
 void put_character();
 void put_stats();
 const char *likert(int y, int x);

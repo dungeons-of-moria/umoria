@@ -898,7 +898,7 @@ void printCharacterStatsBlock() {
 }
 
 // Draws entire screen -RAK-
-void draw_cave() {
+void drawCavePanel() {
     clearScreen();
     printCharacterStatsBlock();
     drawDungeonPanel();

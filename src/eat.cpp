@@ -47,7 +47,7 @@ void playerEat() {
                 break;
             case 2:
                 py.flags.blind += randomNumber(250) + 10 * i_ptr->level + 100;
-                draw_cave();
+                drawCavePanel();
                 printMessage("A veil of darkness surrounds you.");
                 identified = true;
                 break;
