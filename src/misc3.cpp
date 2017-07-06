@@ -626,28 +626,28 @@ void playerSetAndUseStat(int stat) {
 }
 
 // Increases a stat by one randomized level -RAK-
-bool inc_stat(int stat) {
-    int newStat = py.stats.cur_stat[stat];
+bool playerStatRandomIncrease(int stat) {
+    int new_stat = py.stats.cur_stat[stat];
 
-    if (newStat >= 118) {
+    if (new_stat >= 118) {
         return false;
     }
 
-    if (newStat < 18) {
-        newStat++;
-    } else if (newStat < 116) {
+    if (new_stat < 18) {
+        new_stat++;
+    } else if (new_stat < 116) {
         // stat increases by 1/6 to 1/3 of difference from max
-        int gain = ((118 - newStat) / 3 + 1) >> 1;
+        int gain = ((118 - new_stat) / 3 + 1) >> 1;
 
-        newStat += randomNumber(gain) + gain;
+        new_stat += randomNumber(gain) + gain;
     } else {
-        newStat++;
+        new_stat++;
     }
 
-    py.stats.cur_stat[stat] = (uint8_t) newStat;
+    py.stats.cur_stat[stat] = (uint8_t) new_stat;
 
-    if (newStat > py.stats.max_stat[stat]) {
-        py.stats.max_stat[stat] = (uint8_t) newStat;
+    if (new_stat > py.stats.max_stat[stat]) {
+        py.stats.max_stat[stat] = (uint8_t) new_stat;
     }
 
     playerSetAndUseStat(stat);
@@ -657,27 +657,27 @@ bool inc_stat(int stat) {
 }
 
 // Decreases a stat by one randomized level -RAK-
-bool dec_stat(int stat) {
-    int newStat = py.stats.cur_stat[stat];
+bool playerStatRandomDecrease(int stat) {
+    int new_stat = py.stats.cur_stat[stat];
 
-    if (newStat <= 3) {
+    if (new_stat <= 3) {
         return false;
     }
 
-    if (newStat < 19) {
-        newStat--;
-    } else if (newStat < 117) {
-        int loss = (((118 - newStat) >> 1) + 1) >> 1;
-        newStat += -randomNumber(loss) - loss;
+    if (new_stat < 19) {
+        new_stat--;
+    } else if (new_stat < 117) {
+        int loss = (((118 - new_stat) >> 1) + 1) >> 1;
+        new_stat += -randomNumber(loss) - loss;
 
-        if (newStat < 18) {
-            newStat = 18;
+        if (new_stat < 18) {
+            new_stat = 18;
         }
     } else {
-        newStat--;
+        new_stat--;
     }
 
-    py.stats.cur_stat[stat] = (uint8_t) newStat;
+    py.stats.cur_stat[stat] = (uint8_t) new_stat;
 
     playerSetAndUseStat(stat);
     displayCharacterStats(stat);

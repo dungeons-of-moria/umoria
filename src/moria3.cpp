@@ -96,7 +96,7 @@ static void trapHiddenObject(int y, int x) {
 static void trapStrengthDart(Inventory_t *t_ptr, int dam) {
     if (test_hit(125, 0, 0, py.misc.pac + py.misc.ptoac, CLA_MISC_HIT)) {
         if (!py.flags.sustain_str) {
-            (void) dec_stat(A_STR);
+            (void) playerStatRandomDecrease(A_STR);
 
             obj_desc_t description;
             itemDescription(description, t_ptr, true);
@@ -203,7 +203,7 @@ static void trapSlowDart(Inventory_t *t_ptr, int dam) {
 static void trapConstitutionDart(Inventory_t *t_ptr, int dam) {
     if (test_hit(125, 0, 0, py.misc.pac + py.misc.ptoac, CLA_MISC_HIT)) {
         if (!py.flags.sustain_con) {
-            (void) dec_stat(A_CON);
+            (void) playerStatRandomDecrease(A_CON);
 
             obj_desc_t description;
             itemDescription(description, t_ptr, true);
@@ -1033,7 +1033,7 @@ static void chestLooseStrength() {
         return;
     }
 
-    (void) dec_stat(A_STR);
+    (void) playerStatRandomDecrease(A_STR);
 
     take_hit(diceDamageRoll(1, 4), "a poison needle");
 

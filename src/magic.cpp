@@ -218,7 +218,7 @@ void getAndCastMagicSpell() {
 
         if (randomNumber(3) == 1) {
             printMessage("You have damaged your health!");
-            (void) dec_stat(A_CON);
+            (void) playerStatRandomDecrease(A_CON);
         }
     } else {
         py.misc.cmana -= m_ptr->smana;

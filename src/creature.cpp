@@ -564,7 +564,7 @@ static bool executeAttack(Creature_t *r_ptr, Monster_t *m_ptr, int monsterID, in
                 printMessage("You feel weaker for a moment, but it passes.");
             } else if (randomNumber(2) == 1) {
                 printMessage("You feel weaker.");
-                (void) dec_stat(A_STR);
+                (void) playerStatRandomDecrease(A_STR);
             } else {
                 notice = false;
             }
@@ -682,7 +682,7 @@ static bool executeAttack(Creature_t *r_ptr, Monster_t *m_ptr, int monsterID, in
                 printMessage("You feel clumsy for a moment, but it passes.");
             } else {
                 printMessage("You feel more clumsy.");
-                (void) dec_stat(A_DEX);
+                (void) playerStatRandomDecrease(A_DEX);
             }
             break;
         case 16: // Lose constitution
@@ -691,7 +691,7 @@ static bool executeAttack(Creature_t *r_ptr, Monster_t *m_ptr, int monsterID, in
                 printMessage("Your body resists the effects of the disease.");
             } else {
                 printMessage("Your health is damaged!");
-                (void) dec_stat(A_CON);
+                (void) playerStatRandomDecrease(A_CON);
             }
             break;
         case 17: // Lose intelligence
@@ -700,7 +700,7 @@ static bool executeAttack(Creature_t *r_ptr, Monster_t *m_ptr, int monsterID, in
             if (py.flags.sustain_int) {
                 printMessage("But your mind quickly clears.");
             } else {
-                (void) dec_stat(A_INT);
+                (void) playerStatRandomDecrease(A_INT);
             }
             break;
         case 18: // Lose wisdom
@@ -709,7 +709,7 @@ static bool executeAttack(Creature_t *r_ptr, Monster_t *m_ptr, int monsterID, in
                 printMessage("Your wisdom is sustained.");
             } else {
                 printMessage("Your wisdom is drained.");
-                (void) dec_stat(A_WIS);
+                (void) playerStatRandomDecrease(A_WIS);
             }
             break;
         case 19: // Lose experience

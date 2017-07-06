@@ -2020,7 +2020,7 @@ void warding_glyph() {
 // Lose a strength point. -RAK-
 void lose_str() {
     if (!py.flags.sustain_str) {
-        (void) dec_stat(A_STR);
+        (void) playerStatRandomDecrease(A_STR);
         printMessage("You feel very sick.");
     } else {
         printMessage("You feel sick for a moment,  it passes.");
@@ -2030,7 +2030,7 @@ void lose_str() {
 // Lose an intelligence point. -RAK-
 void lose_int() {
     if (!py.flags.sustain_int) {
-        (void) dec_stat(A_INT);
+        (void) playerStatRandomDecrease(A_INT);
         printMessage("You become very dizzy.");
     } else {
         printMessage("You become dizzy for a moment,  it passes.");
@@ -2040,7 +2040,7 @@ void lose_int() {
 // Lose a wisdom point. -RAK-
 void lose_wis() {
     if (!py.flags.sustain_wis) {
-        (void) dec_stat(A_WIS);
+        (void) playerStatRandomDecrease(A_WIS);
         printMessage("You feel very naive.");
     } else {
         printMessage("You feel naive for a moment,  it passes.");
@@ -2050,7 +2050,7 @@ void lose_wis() {
 // Lose a dexterity point. -RAK-
 void lose_dex() {
     if (!py.flags.sustain_dex) {
-        (void) dec_stat(A_DEX);
+        (void) playerStatRandomDecrease(A_DEX);
         printMessage("You feel very sore.");
     } else {
         printMessage("You feel sore for a moment,  it passes.");
@@ -2060,7 +2060,7 @@ void lose_dex() {
 // Lose a constitution point. -RAK-
 void lose_con() {
     if (!py.flags.sustain_con) {
-        (void) dec_stat(A_CON);
+        (void) playerStatRandomDecrease(A_CON);
         printMessage("You feel very sick.");
     } else {
         printMessage("You feel sick for a moment,  it passes.");
@@ -2070,7 +2070,7 @@ void lose_con() {
 // Lose a charisma point. -RAK-
 void lose_chr() {
     if (!py.flags.sustain_chr) {
-        (void) dec_stat(A_CHR);
+        (void) playerStatRandomDecrease(A_CHR);
         printMessage("Your skin starts to itch.");
     } else {
         printMessage("Your skin starts to itch, but feels better now.");

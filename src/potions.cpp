@@ -22,7 +22,7 @@ static bool drinkPotion(uint32_t flags, uint8_t itemID) {
         // Potions
         switch (potionID) {
             case 1:
-                if (inc_stat(A_STR)) {
+                if (playerStatRandomIncrease(A_STR)) {
                     printMessage("Wow!  What bulging muscles!");
                     identified = true;
                 }
@@ -38,7 +38,7 @@ static bool drinkPotion(uint32_t flags, uint8_t itemID) {
                 }
                 break;
             case 4:
-                if (inc_stat(A_INT)) {
+                if (playerStatRandomIncrease(A_INT)) {
                     printMessage("Aren't you brilliant!");
                     identified = true;
                 }
@@ -54,7 +54,7 @@ static bool drinkPotion(uint32_t flags, uint8_t itemID) {
                 }
                 break;
             case 7:
-                if (inc_stat(A_WIS)) {
+                if (playerStatRandomIncrease(A_WIS)) {
                     printMessage("You suddenly have a profound thought!");
                     identified = true;
                 }
@@ -70,7 +70,7 @@ static bool drinkPotion(uint32_t flags, uint8_t itemID) {
                 }
                 break;
             case 10:
-                if (inc_stat(A_CHR)) {
+                if (playerStatRandomIncrease(A_CHR)) {
                     printMessage("Gee, ain't you cute!");
                     identified = true;
                 }
@@ -98,7 +98,7 @@ static bool drinkPotion(uint32_t flags, uint8_t itemID) {
                 identified = hp_player(1000);
                 break;
             case 17:
-                if (inc_stat(A_CON)) {
+                if (playerStatRandomIncrease(A_CON)) {
                     printMessage("You feel tingly for a moment.");
                     identified = true;
                 }
@@ -158,7 +158,7 @@ static bool drinkPotion(uint32_t flags, uint8_t itemID) {
                 py.flags.slow += randomNumber(25) + 15;
                 break;
             case 26:
-                if (inc_stat(A_DEX)) {
+                if (playerStatRandomIncrease(A_DEX)) {
                     printMessage("You feel more limber!");
                     identified = true;
                 }

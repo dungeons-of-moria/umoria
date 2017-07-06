@@ -221,7 +221,7 @@ void pray() {
             py.misc.cmana_frac = 0;
             if (randomNumber(3) == 1) {
                 printMessage("You have damaged your health!");
-                (void) dec_stat(A_CON);
+                (void) playerStatRandomDecrease(A_CON);
             }
         } else {
             py.misc.cmana -= s_ptr->smana;
