@@ -821,7 +821,7 @@ static bool store_purchase(int store_num, int *cur_top) {
     item_val = item_val + *cur_top; // true item_val
 
     Inventory_t sell_obj;
-    take_one_item(&sell_obj, &s_ptr->store_inven[item_val].sitem);
+    inventoryTakeOneItem(&sell_obj, &s_ptr->store_inven[item_val].sitem);
 
     if (!inven_check_num(&sell_obj)) {
         putStringClearToEOL("You cannot carry that many different items.", 0, 0);
@@ -924,7 +924,7 @@ static bool store_sell(int store_num, int *cur_top) {
     Inventory_t sold_obj;
     obj_desc_t out_val, tmp_str;
 
-    take_one_item(&sold_obj, &inventory[item_val]);
+    inventoryTakeOneItem(&sold_obj, &inventory[item_val]);
     itemDescription(tmp_str, &sold_obj, true);
 
     (void) sprintf(out_val, "Selling %s (%c)", tmp_str, item_val + 'a');
@@ -949,7 +949,7 @@ static bool store_sell(int store_num, int *cur_top) {
         itemIdentify(&item_val);
 
         // retake sold_obj so that it will be identified
-        take_one_item(&sold_obj, &inventory[item_val]);
+        inventoryTakeOneItem(&sold_obj, &inventory[item_val]);
 
         // call spellItemIdentifyAndRemoveRandomInscription for store item, so charges/pluses are known
         spellItemIdentifyAndRemoveRandomInscription(&sold_obj);

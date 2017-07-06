@@ -1129,7 +1129,7 @@ void inventoryDestroyItem(int item_id) {
 
 // Copies the object in the second argument over the first argument.
 // However, the second always gets a number of one except for ammo etc.
-void take_one_item(Inventory_t *to_item, Inventory_t *from_item) {
+void inventoryTakeOneItem(Inventory_t *to_item, Inventory_t *from_item) {
     *to_item = *from_item;
 
     if (to_item->number > 1 && to_item->subval >= ITEM_SINGLE_STACK_MIN && to_item->subval <= ITEM_SINGLE_STACK_MAX) {
