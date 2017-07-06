@@ -96,7 +96,7 @@ static void playerActivateHeroism() {
 
     printMessage("You feel like a HERO!");
     printCharacterMaxHitPoints();
-    prt_chp();
+    printCharacterCurrentHitPoints();
 }
 
 static void playerDisableHeroism() {
@@ -107,7 +107,7 @@ static void playerDisableHeroism() {
     if (py.misc.chp > py.misc.mhp) {
         py.misc.chp = py.misc.mhp;
         py.misc.chp_frac = 0;
-        prt_chp();
+        printCharacterCurrentHitPoints();
     }
     py.misc.bth -= 12;
     py.misc.bthb -= 12;
@@ -127,7 +127,7 @@ static void playerActivateSuperHeroism() {
 
     printMessage("You feel like a SUPER HERO!");
     printCharacterMaxHitPoints();
-    prt_chp();
+    printCharacterCurrentHitPoints();
 }
 
 static void playerDisableSuperHeroism() {
@@ -138,7 +138,7 @@ static void playerDisableSuperHeroism() {
     if (py.misc.chp > py.misc.mhp) {
         py.misc.chp = py.misc.mhp;
         py.misc.chp_frac = 0;
-        prt_chp();
+        printCharacterCurrentHitPoints();
     }
     py.misc.bth -= 24;
     py.misc.bthb -= 24;
@@ -691,7 +691,7 @@ static void playerUpdateStatusFlags() {
 
     if (py.flags.status & PY_HP) {
         printCharacterMaxHitPoints();
-        prt_chp();
+        printCharacterCurrentHitPoints();
         py.flags.status &= ~PY_HP;
     }
 
@@ -1950,7 +1950,7 @@ static void regenhp(int percent) {
     }
 
     if (old_chp != py.misc.chp) {
-        prt_chp();
+        printCharacterCurrentHitPoints();
     }
 }
 

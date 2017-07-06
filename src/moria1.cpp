@@ -1946,7 +1946,7 @@ void take_hit(int damage, const char *creature_name_label) {
     py.misc.chp -= damage;
 
     if (py.misc.chp >= 0) {
-        prt_chp();
+        printCharacterCurrentHitPoints();
         return;
     }
 

@@ -399,7 +399,7 @@ void printCharacterMaxHitPoints() {
 }
 
 // Prints players current hit points -RAK-
-void prt_chp() {
+void printCharacterCurrentHitPoints() {
     printNumber(py.misc.chp, 17, STAT_COLUMN + 6);
 }
 

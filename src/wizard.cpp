@@ -115,7 +115,7 @@ void change_character() {
             py.misc.chp = (int16_t) tmp_val;
             py.misc.chp_frac = 0;
             printCharacterMaxHitPoints();
-            prt_chp();
+            printCharacterCurrentHitPoints();
         }
     } else {
         return;

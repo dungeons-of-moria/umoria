@@ -1789,7 +1789,7 @@ bool hp_player(int adjustment) {
         py.misc.chp = py.misc.mhp;
         py.misc.chp_frac = 0;
     }
-    prt_chp();
+    printCharacterCurrentHitPoints();
 
     adjustment = adjustment / 5;
     if (adjustment < 3) {

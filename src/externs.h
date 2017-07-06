@@ -303,7 +303,7 @@ void printCharacterTitle();
 void printCharacterLevel();
 void printCharacterCurrentMana();
 void printCharacterMaxHitPoints();
-void prt_chp();
+void printCharacterCurrentHitPoints();
 void prt_pac();
 void prt_gold();
 void prt_depth();
