@@ -1485,7 +1485,7 @@ static void doWizardCommands(char com_val) {
             } else {
                 i = 1;
             }
-            random_object(char_row, char_col, i);
+            dungeonPlaceRandomObjectNear(char_row, char_col, i);
 
             drawDungeonPanel();
             break;

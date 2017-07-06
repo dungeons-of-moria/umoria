@@ -628,14 +628,14 @@ static void build_type2(int y, int x) {
 
             // Mazes should have some treasure too..
             for (int i = 0; i < 3; i++) {
-                random_object(y, x, 1);
+                dungeonPlaceRandomObjectNear(y, x, 1);
             }
             break;
         case 5: // Four small rooms.
             placeFourSmallRooms(y, x, depth, height, left, right);
 
             // Treasure in each one.
-            random_object(y, x, 2 + randomNumber(2));
+            dungeonPlaceRandomObjectNear(y, x, 2 + randomNumber(2));
 
             // Gotta have some monsters.
             vault_monster(y + 2, x - 4, randomNumber(2));

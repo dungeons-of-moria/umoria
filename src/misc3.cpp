@@ -160,7 +160,7 @@ void dungeonAllocateAndPlaceObject(bool (*set_function)(int), int object_type, i
 }
 
 // Creates objects nearby the coordinates given -RAK-
-void random_object(int y, int x, int tries) {
+void dungeonPlaceRandomObjectNear(int y, int x, int tries) {
     do {
         for (int i = 0; i <= 10; i++) {
             int j = y - 3 + randomNumber(5);

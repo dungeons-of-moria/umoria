@@ -292,7 +292,7 @@ void dungeonPlaceGold(int y, int x);
 int itemGetRandomObjectId(int level, bool must_be_small);
 void dungeonPlaceRandomObjectAt(int y, int x, bool must_be_small);
 void dungeonAllocateAndPlaceObject(bool (*set_function)(int), int object_type, int number);
-void random_object(int y, int x, int tries);
+void dungeonPlaceRandomObjectNear(int y, int x, int tries);
 void cnv_stat(uint8_t stat, char *stat_string);
 void prt_stat(int stat);
 int stat_adj(int stat);
