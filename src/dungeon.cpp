@@ -282,7 +282,7 @@ static void playerUpdateConfusion() {
 
     if ((PY_CONFUSED & py.flags.status) == 0) {
         py.flags.status |= PY_CONFUSED;
-        prt_confused();
+        printCharacterConfusedState();
     }
 
     py.flags.confused--;
@@ -290,7 +290,7 @@ static void playerUpdateConfusion() {
     if (py.flags.confused == 0) {
         py.flags.status &= ~PY_CONFUSED;
 
-        prt_confused();
+        printCharacterConfusedState();
         printMessage("You feel less confused now.");
 
         if (py.flags.rest != 0) {

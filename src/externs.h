@@ -309,7 +309,7 @@ void printCharacterGoldValue();
 void printCharacterCurrentDepth();
 void printCharacterHungerstatus();
 void printCharacterBlindStatus();
-void prt_confused();
+void printCharacterConfusedState();
 void prt_afraid();
 void prt_poisoned();
 void prt_state();

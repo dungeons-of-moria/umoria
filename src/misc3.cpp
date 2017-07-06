@@ -449,7 +449,7 @@ void printCharacterBlindStatus() {
 }
 
 // Prints Confusion status -RAK-
-void prt_confused() {
+void printCharacterConfusedState() {
     if (PY_CONFUSED & py.flags.status) {
         putString("Confused", 23, 13);
     } else {
@@ -873,7 +873,7 @@ void prt_stat_block() {
     }
 
     if (PY_CONFUSED & status) {
-        prt_confused();
+        printCharacterConfusedState();
     }
 
     if (PY_FEAR & status) {
