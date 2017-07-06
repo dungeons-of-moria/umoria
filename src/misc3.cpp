@@ -906,7 +906,7 @@ void drawCavePanel() {
 }
 
 // Prints the following information on the screen. -JWT-
-void put_character() {
+void printCharacterInformation() {
     clearScreen();
 
     putString("Name        :", 2, 1);
@@ -1048,7 +1048,7 @@ void put_misc3() {
 
 // Used to display the character on the screen. -RAK-
 void display_char() {
-    put_character();
+    printCharacterInformation();
     put_misc1();
     put_stats();
     put_misc2();
