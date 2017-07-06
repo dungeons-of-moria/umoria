@@ -124,7 +124,7 @@ static void trapRockfall(int y, int x, int dam) {
     take_hit(dam, "a falling rock");
 
     (void) delete_object(y, x);
-    place_rubble(y, x);
+    dungeonPlaceRubble(y, x);
 
     printMessage("You are hit by falling rock.");
 }

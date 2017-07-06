@@ -287,7 +287,7 @@ void setGameOptions();
 
 // misc3.c
 void dungeonSetTrap(int y, int x, int sub_type_id);
-void place_rubble(int y, int x);
+void dungeonPlaceRubble(int y, int x);
 void place_gold(int y, int x);
 int get_obj_num(int level, bool must_be_small);
 void place_object(int y, int x, bool must_be_small);

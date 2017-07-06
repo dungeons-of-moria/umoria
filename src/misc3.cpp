@@ -25,11 +25,11 @@ void dungeonSetTrap(int y, int x, int sub_type_id) {
 }
 
 // Places rubble at location y, x -RAK-
-void place_rubble(int y, int x) {
-    int cur_pos = popt();
-    cave[y][x].tptr = (uint8_t) cur_pos;
+void dungeonPlaceRubble(int y, int x) {
+    int free_treasure_id = popt();
+    cave[y][x].tptr = (uint8_t) free_treasure_id;
     cave[y][x].fval = BLOCKED_FLOOR;
-    inventoryItemCopyTo(OBJ_RUBBLE, &treasure_list[cur_pos]);
+    inventoryItemCopyTo(OBJ_RUBBLE, &treasure_list[free_treasure_id]);
 }
 
 // Places a treasure (Gold or Gems) at given row, column -RAK-
@@ -146,7 +146,7 @@ void alloc_object(bool (*set_function)(int), int object_type, int number) {
                 // FIXME: no `break` here, is this correct?
                 // FIXME: object_type == 2 was not handled directly and was caught by object_type == 3 -MRC-
             case 3:
-                place_rubble(y, x);
+                dungeonPlaceRubble(y, x);
                 break;
             case 4:
                 place_gold(y, x);
