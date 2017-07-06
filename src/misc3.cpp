@@ -404,7 +404,7 @@ void printCharacterCurrentHitPoints() {
 }
 
 // prints current AC -RAK-
-void prt_pac() {
+void printCharacterCurrentArmorClass() {
     printNumber(py.misc.dis_ac, 19, STAT_COLUMN + 6);
 }
 

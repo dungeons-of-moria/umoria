@@ -506,7 +506,7 @@ static void playerUpdateInvulnerability() {
         py.misc.pac += 100;
         py.misc.dis_ac += 100;
 
-        prt_pac();
+        printCharacterCurrentArmorClass();
         printMessage("Your skin turns into steel!");
     }
 
@@ -519,7 +519,7 @@ static void playerUpdateInvulnerability() {
         py.misc.pac -= 100;
         py.misc.dis_ac -= 100;
 
-        prt_pac();
+        printCharacterCurrentArmorClass();
         printMessage("Your skin returns to normal.");
     }
 }
@@ -539,7 +539,7 @@ static void playerUpdateBlessedness() {
         py.misc.dis_ac += 2;
 
         printMessage("You feel righteous!");
-        prt_pac();
+        printCharacterCurrentArmorClass();
     }
 
     py.flags.blessed--;
@@ -554,7 +554,7 @@ static void playerUpdateBlessedness() {
         py.misc.dis_ac -= 2;
 
         printMessage("The prayer has expired.");
-        prt_pac();
+        printCharacterCurrentArmorClass();
     }
 }
 
@@ -675,7 +675,7 @@ static void playerUpdateStatusFlags() {
     }
 
     if ((py.flags.status & PY_ARMOR) != 0) {
-        prt_pac();
+        printCharacterCurrentArmorClass();
         py.flags.status &= ~PY_ARMOR;
     }
 

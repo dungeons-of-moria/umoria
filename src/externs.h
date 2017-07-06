@@ -304,7 +304,7 @@ void printCharacterLevel();
 void printCharacterCurrentMana();
 void printCharacterMaxHitPoints();
 void printCharacterCurrentHitPoints();
-void prt_pac();
+void printCharacterCurrentArmorClass();
 void prt_gold();
 void prt_depth();
 void prt_hunger();
