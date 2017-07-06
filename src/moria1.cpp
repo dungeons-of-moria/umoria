@@ -1126,7 +1126,7 @@ static bool selectItemCommands(char *command, char *which, bool selecting) {
                 inventory_weight += i_ptr->weight * i_ptr->number;
 
                 // Subtracts weight
-                inven_destroy(item);
+                inventoryDestroyItem(item);
 
                 // Second, add old item to inv and remove
                 // from equipment list, if necessary.

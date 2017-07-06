@@ -599,6 +599,6 @@ void read_scroll() {
 
     if (used_up) {
         itemTypeRemainingCountDescription(itemID);
-        inven_destroy(itemID);
+        inventoryDestroyItem(itemID);
     }
 }

@@ -721,7 +721,7 @@ static void inven_throw(int itemID, Inventory_t *treasure) {
         inventory_weight -= i_ptr->weight;
         py.flags.status |= PY_STR_WGT;
     } else {
-        inven_destroy(itemID);
+        inventoryDestroyItem(itemID);
     }
 }
 

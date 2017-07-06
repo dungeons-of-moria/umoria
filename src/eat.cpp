@@ -206,5 +206,5 @@ void playerEat() {
     printCharacterHungerstatus();
 
     itemTypeRemainingCountDescription(item_val);
-    inven_destroy(item_val);
+    inventoryDestroyItem(item_val);
 }

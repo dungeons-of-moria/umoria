@@ -1107,7 +1107,7 @@ void changeCharacterName() {
 }
 
 // Destroy an item in the inventory -RAK-
-void inven_destroy(int item_id) {
+void inventoryDestroyItem(int item_id) {
     Inventory_t *i_ptr = &inventory[item_id];
 
     if (i_ptr->number > 1 && i_ptr->subval <= ITEM_SINGLE_STACK_MAX) {
@@ -1184,7 +1184,7 @@ int inven_damage(bool (*item_type)(Inventory_t *), int chance_percentage) {
 
     for (int i = 0; i < inventory_count; i++) {
         if ((*item_type)(&inventory[i]) && randomNumber(100) < chance_percentage) {
-            inven_destroy(i);
+            inventoryDestroyItem(i);
             damage++;
         }
     }

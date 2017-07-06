@@ -2161,7 +2161,7 @@ static void jamdoor() {
                 inventory[i].number--;
                 inventory_weight -= inventory[i].weight;
             } else {
-                inven_destroy(i);
+                inventoryDestroyItem(i);
             }
         } else {
             printMessage("But you have no spikes.");
@@ -2209,5 +2209,5 @@ static void refill_lamp() {
     }
 
     itemTypeRemainingCountDescription(i);
-    inven_destroy(i);
+    inventoryDestroyItem(i);
 }

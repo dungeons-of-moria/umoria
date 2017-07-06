@@ -331,5 +331,5 @@ void quaff() {
 
     playerIngestFood(i_ptr->p1);
     itemTypeRemainingCountDescription(itemID);
-    inven_destroy(itemID);
+    inventoryDestroyItem(itemID);
 }

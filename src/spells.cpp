@@ -1001,7 +1001,7 @@ bool recharge(int charges) {
 
     if (chance == 1) {
         printMessage("There is a bright flash of light.");
-        inven_destroy(item_val);
+        inventoryDestroyItem(item_val);
     } else {
         charges = (charges / (i_ptr->level + 2)) + 1;
         i_ptr->p1 += 2 + randomNumber(charges);
