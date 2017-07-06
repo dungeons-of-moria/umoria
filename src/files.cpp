@@ -223,9 +223,9 @@ static void writeCharacterSheetToFile(FILE *file1) {
 
     // this results in a range from 0 to 9
     int xstl = py.misc.stl + 1;
-    int xdis = py.misc.disarm + 2 * todis_adj() + stat_adj(A_INT) + (class_level_adj[py.misc.pclass][CLA_DISARM] * py.misc.lev / 3);
-    int xsave = py.misc.save + stat_adj(A_WIS) + (class_level_adj[py.misc.pclass][CLA_SAVE] * py.misc.lev / 3);
-    int xdev = py.misc.save + stat_adj(A_INT) + (class_level_adj[py.misc.pclass][CLA_DEVICE] * py.misc.lev / 3);
+    int xdis = py.misc.disarm + 2 * todis_adj() + playerStatAdjustmentWisdomIntelligence(A_INT) + (class_level_adj[py.misc.pclass][CLA_DISARM] * py.misc.lev / 3);
+    int xsave = py.misc.save + playerStatAdjustmentWisdomIntelligence(A_WIS) + (class_level_adj[py.misc.pclass][CLA_SAVE] * py.misc.lev / 3);
+    int xdev = py.misc.save + playerStatAdjustmentWisdomIntelligence(A_INT) + (class_level_adj[py.misc.pclass][CLA_DEVICE] * py.misc.lev / 3);
 
     vtype_t xinfra;
     (void) sprintf(xinfra, "%d feet", py.flags.see_infra * 10);

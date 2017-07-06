@@ -184,7 +184,7 @@ static int playerTrapDisarmAbility() {
     int ability = py.misc.disarm;
     ability += 2;
     ability *= todis_adj();
-    ability += stat_adj(A_INT);
+    ability += playerStatAdjustmentWisdomIntelligence(A_INT);
     ability += class_level_adj[py.misc.pclass][CLA_DISARM] * py.misc.lev / 3;
 
     if (py.flags.blind > 0 || no_light()) {

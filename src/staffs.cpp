@@ -24,7 +24,7 @@ static bool isCarryingStaff(int *j, int *k) {
 }
 
 static bool canUseStaff(Inventory_t *staff_ptr) {
-    int chance = py.misc.save + stat_adj(A_INT) - (int) staff_ptr->level - 5 + (class_level_adj[py.misc.pclass][CLA_DEVICE] * py.misc.lev / 3);
+    int chance = py.misc.save + playerStatAdjustmentWisdomIntelligence(A_INT) - (int) staff_ptr->level - 5 + (class_level_adj[py.misc.pclass][CLA_DEVICE] * py.misc.lev / 3);
 
     if (py.flags.confused > 0) {
         chance = chance / 2;

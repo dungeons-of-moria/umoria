@@ -250,7 +250,7 @@ static void printNumber(int num, int row, int column) {
 }
 
 // Adjustment for wisdom/intelligence -JWT-
-int stat_adj(int stat) {
+int playerStatAdjustmentWisdomIntelligence(int stat) {
     int value = py.stats.use_stat[stat];
 
     if (value > 117) {
@@ -1017,9 +1017,9 @@ void put_misc3() {
 
     // this results in a range from 0 to 9
     int xstl = py.misc.stl + 1;
-    int xdis = py.misc.disarm + 2 * todis_adj() + stat_adj(A_INT) + (class_level_adj[py.misc.pclass][CLA_DISARM] * py.misc.lev / 3);
-    int xsave = py.misc.save + stat_adj(A_WIS) + (class_level_adj[py.misc.pclass][CLA_SAVE] * py.misc.lev / 3);
-    int xdev = py.misc.save + stat_adj(A_INT) + (class_level_adj[py.misc.pclass][CLA_DEVICE] * py.misc.lev / 3);
+    int xdis = py.misc.disarm + 2 * todis_adj() + playerStatAdjustmentWisdomIntelligence(A_INT) + (class_level_adj[py.misc.pclass][CLA_DISARM] * py.misc.lev / 3);
+    int xsave = py.misc.save + playerStatAdjustmentWisdomIntelligence(A_WIS) + (class_level_adj[py.misc.pclass][CLA_SAVE] * py.misc.lev / 3);
+    int xdev = py.misc.save + playerStatAdjustmentWisdomIntelligence(A_INT) + (class_level_adj[py.misc.pclass][CLA_DEVICE] * py.misc.lev / 3);
 
     vtype_t xinfra;
     (void) sprintf(xinfra, "%d feet", py.flags.see_infra * 10);
@@ -1345,7 +1345,7 @@ static int spell_chance(int spell) {
         stat = A_WIS;
     }
 
-    chance -= 3 * (stat_adj(stat) - 1);
+    chance -= 3 * (playerStatAdjustmentWisdomIntelligence(stat) - 1);
 
     if (s_ptr->smana > py.misc.cmana) {
         chance += 5 * (s_ptr->smana - py.misc.cmana);
@@ -1528,7 +1528,7 @@ static int numberOfSpellsAllowed(int stat) {
 
     int levels = py.misc.lev - classes[py.misc.pclass].first_spell_lev + 1;
 
-    switch (stat_adj(stat)) {
+    switch (playerStatAdjustmentWisdomIntelligence(stat)) {
         case 0:
             allowed = 0;
             break;
@@ -1878,7 +1878,7 @@ void gain_spells() {
 static int newMana(int stat) {
     int levels = py.misc.lev - classes[py.misc.pclass].first_spell_lev + 1;
 
-    switch (stat_adj(stat)) {
+    switch (playerStatAdjustmentWisdomIntelligence(stat)) {
         case 0:
             return 0;
         case 1:
@@ -2286,7 +2286,7 @@ bool mmove(int dir, int *new_y, int *new_x) {
 bool player_saves() {
     int classLevelAdjustment = class_level_adj[py.misc.pclass][CLA_SAVE] * py.misc.lev / 3;
 
-    int saving = py.misc.save + stat_adj(A_WIS) + classLevelAdjustment;
+    int saving = py.misc.save + playerStatAdjustmentWisdomIntelligence(A_WIS) + classLevelAdjustment;
 
     return randomNumber(100) <= saving;
 }
