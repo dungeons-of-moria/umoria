@@ -960,7 +960,7 @@ void playDungeon() {
 
         // See if we are too weak to handle the weapon or pack. -CJS-
         if (py.flags.status & PY_STR_WGT) {
-            check_strength();
+            playerStrength();
         }
 
         if (py.flags.status & PY_STUDY) {

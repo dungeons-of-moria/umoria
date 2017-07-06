@@ -854,7 +854,7 @@ static bool store_purchase(int store_num, int *cur_top) {
             (void) sprintf(out_val, "You have %s (%c)", tmp_str, item_new + 'a');
             putStringClearToEOL(out_val, 0, 0);
 
-            check_strength();
+            playerStrength();
             if (*cur_top >= s_ptr->store_ctr) {
                 *cur_top = 0;
                 display_inventory(store_num, *cur_top);
@@ -961,7 +961,7 @@ static bool store_sell(int store_num, int *cur_top) {
         int item_pos;
         store_carry(store_num, &item_pos, &sold_obj);
 
-        check_strength();
+        playerStrength();
 
         if (item_pos >= 0) {
             if (item_pos < 12) {

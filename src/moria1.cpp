@@ -789,7 +789,7 @@ static void inventoryUnwieldItem() {
 
     // this is a new weapon, so clear the heavy flag
     weapon_is_heavy = false;
-    check_strength();
+    playerStrength();
 }
 
 // look for item whose inscription matches "which"
@@ -1075,7 +1075,7 @@ static bool selectItemCommands(char *command, char *which, bool selecting) {
                     takeoff(item, slot);
                 }
 
-                check_strength();
+                playerStrength();
 
                 player_free_turn = false;
 
@@ -1181,7 +1181,7 @@ static bool selectItemCommands(char *command, char *which, bool selecting) {
                 if (slot == INVEN_WIELD) {
                     weapon_is_heavy = false;
                 }
-                check_strength();
+                playerStrength();
 
                 if (i_ptr->flags & TR_CURSED) {
                     printMessage("Oops! It feels deathly cold!");
@@ -1227,7 +1227,7 @@ static bool selectItemCommands(char *command, char *which, bool selecting) {
                 player_free_turn = false;
 
                 inventoryDropItem(item, query == 'y');
-                check_strength();
+                playerStrength();
             }
 
             selecting = false;

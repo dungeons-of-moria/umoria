@@ -1249,7 +1249,7 @@ bool inventoryCanCarryItem(Inventory_t *item) {
 }
 
 // Are we strong enough for the current pack and weapon? -CJS-
-void check_strength() {
+void playerStrength() {
     Inventory_t *i_ptr = &inventory[INVEN_WIELD];
 
     if (i_ptr->tval != TV_NOTHING && py.stats.use_stat[A_STR] * 15 < i_ptr->weight) {

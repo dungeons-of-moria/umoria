@@ -939,7 +939,7 @@ bool get_char(bool *generate) {
             if (current_game_turn >= 0) { // Only if a full restoration.
                 weapon_is_heavy = false;
                 pack_heaviness = 0;
-                check_strength();
+                playerStrength();
 
                 // rotate store inventory, depending on how old the save file
                 // is foreach day old (rounded up), call store_maint
