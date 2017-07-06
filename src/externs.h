@@ -331,7 +331,7 @@ void printCharacterInformation();
 void printCharacterStats();
 const char *statRating(int y, int x);
 void printCharacterVitalStatistics();
-void put_misc2();
+void printCharacterLevelExperience();
 void put_misc3();
 void display_char();
 void get_name();

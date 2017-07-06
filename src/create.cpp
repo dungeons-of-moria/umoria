@@ -475,7 +475,7 @@ void createCharacter() {
     get_class();
     get_money();
     printCharacterStats();
-    put_misc2();
+    printCharacterLevelExperience();
     put_misc3();
     get_name();
 

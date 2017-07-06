@@ -981,7 +981,7 @@ void printCharacterVitalStatistics() {
 }
 
 // Prints the following information on the screen. -JWT-
-void put_misc2() {
+void printCharacterLevelExperience() {
     printHeaderLongNumber7Spaces("Level      ", (int32_t) py.misc.lev, 9, 28);
     printHeaderLongNumber7Spaces("Experience ", py.misc.exp, 10, 28);
     printHeaderLongNumber7Spaces("Max Exp    ", py.misc.max_exp, 11, 28);
@@ -1051,7 +1051,7 @@ void display_char() {
     printCharacterInformation();
     printCharacterVitalStatistics();
     printCharacterStats();
-    put_misc2();
+    printCharacterLevelExperience();
     put_misc3();
 }
 
