@@ -440,7 +440,7 @@ void printCharacterHungerstatus() {
 }
 
 // Prints Blind status -RAK-
-void prt_blind() {
+void printCharacterBlindStatus() {
     if (PY_BLIND & py.flags.status) {
         putString("Blind", 23, 7);
     } else {
@@ -869,7 +869,7 @@ void prt_stat_block() {
     }
 
     if (PY_BLIND & status) {
-        prt_blind();
+        printCharacterBlindStatus();
     }
 
     if (PY_CONFUSED & status) {

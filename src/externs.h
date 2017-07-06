@@ -308,7 +308,7 @@ void printCharacterCurrentArmorClass();
 void printCharacterGoldValue();
 void printCharacterCurrentDepth();
 void printCharacterHungerstatus();
-void prt_blind();
+void printCharacterBlindStatus();
 void prt_confused();
 void prt_afraid();
 void prt_poisoned();

@@ -252,7 +252,7 @@ static void playerUpdateBlindness() {
         py.flags.status |= PY_BLIND;
 
         drawDungeonPanel();
-        prt_blind();
+        printCharacterBlindStatus();
         disturb(0, 1);
 
         // unlight creatures
@@ -264,7 +264,7 @@ static void playerUpdateBlindness() {
     if (py.flags.blind == 0) {
         py.flags.status &= ~PY_BLIND;
 
-        prt_blind();
+        printCharacterBlindStatus();
         drawDungeonPanel();
         disturb(0, 1);
 
