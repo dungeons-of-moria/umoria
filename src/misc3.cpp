@@ -562,7 +562,7 @@ void printCharacterStudyInstruction() {
 }
 
 // Prints winner status on display -RAK-
-void prt_winner() {
+void printCharacterWinner() {
     if (noscore & 0x2) {
         if (wizard_mode) {
             putString("Is wizard  ", 22, 0);
@@ -860,7 +860,7 @@ void prt_stat_block() {
     printHeaderNumber("CHP ", py.misc.chp, 17, STAT_COLUMN);
     printHeaderNumber("AC  ", py.misc.dis_ac, 19, STAT_COLUMN);
     printHeaderLongNumber("GOLD", py.misc.au, 20, STAT_COLUMN);
-    prt_winner();
+    printCharacterWinner();
 
     uint32_t status = py.flags.status;
 

@@ -315,7 +315,7 @@ void printCharacterPoisonedState();
 void printCharacterMovementState();
 void printCharacterSpeed();
 void printCharacterStudyInstruction();
-void prt_winner();
+void printCharacterWinner();
 void set_use_stat(int stat);
 bool inc_stat(int stat);
 bool dec_stat(int stat);

@@ -1349,7 +1349,7 @@ static void commandFlipWizardMode() {
         printMessage("Wizard mode on.");
     }
 
-    prt_winner();
+    printCharacterWinner();
 }
 
 static void commandSaveAndExit() {

@@ -651,7 +651,7 @@ uint32_t monster_death(int y, int x, uint32_t flags) {
     if ((flags & CM_WIN) && !character_is_dead) {
         total_winner = true;
 
-        prt_winner();
+        printCharacterWinner();
 
         printMessage("*** CONGRATULATIONS *** You have won the game.");
         printMessage("You cannot save this game, but you may retire when ready.");
