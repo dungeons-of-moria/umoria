@@ -119,7 +119,7 @@ static void print_tomb() {
     putString(str, 6, 10);
     putString("|               the               |   ___", 7, 9);
     if (!total_winner) {
-        p = title_string();
+        p = playerTitle();
     } else {
         p = (char *) "Magnificent";
     }

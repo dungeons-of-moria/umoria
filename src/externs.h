@@ -298,7 +298,7 @@ void displayCharacterStats(int stat);
 int playerStatAdjustmentWisdomIntelligence(int stat);
 int playerStatAdjustmentCharisma();
 int playerStatAdjustmentConstitution();
-char *title_string();
+char *playerTitle();
 void prt_title();
 void prt_level();
 void prt_cmana();

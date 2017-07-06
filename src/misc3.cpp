@@ -362,7 +362,7 @@ int playerStatAdjustmentConstitution() {
     return 4;
 }
 
-char *title_string() {
+char *playerTitle() {
     const char *p;
 
     if (py.misc.lev < 1) {
@@ -380,7 +380,7 @@ char *title_string() {
 
 // Prints title of character -RAK-
 void prt_title() {
-    printCharacterInfoInField(title_string(), 4, STAT_COLUMN);
+    printCharacterInfoInField(playerTitle(), 4, STAT_COLUMN);
 }
 
 // Prints level -RAK-
@@ -847,7 +847,7 @@ int todam_adj() {
 void prt_stat_block() {
     printCharacterInfoInField(character_races[py.misc.prace].trace, 2, STAT_COLUMN);
     printCharacterInfoInField(classes[py.misc.pclass].title, 3, STAT_COLUMN);
-    printCharacterInfoInField(title_string(), 4, STAT_COLUMN);
+    printCharacterInfoInField(playerTitle(), 4, STAT_COLUMN);
 
     for (int i = 0; i < 6; i++) {
         displayCharacterStats(i);
