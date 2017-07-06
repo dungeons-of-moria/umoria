@@ -458,7 +458,7 @@ void printCharacterConfusedState() {
 }
 
 // Prints Fear status -RAK-
-void prt_afraid() {
+void printCharacterFearState() {
     if (PY_FEAR & py.flags.status) {
         putString("Afraid", 23, 22);
     } else {
@@ -877,7 +877,7 @@ void prt_stat_block() {
     }
 
     if (PY_FEAR & status) {
-        prt_afraid();
+        printCharacterFearState();
     }
 
     if (PY_POISONED & status) {

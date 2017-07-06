@@ -309,7 +309,7 @@ static void playerUpdateFearState() {
             py.flags.afraid = 0;
         } else {
             py.flags.status |= PY_FEAR;
-            prt_afraid();
+            printCharacterFearState();
         }
     } else if (py.flags.shero + py.flags.hero > 0) {
         py.flags.afraid = 1;
@@ -320,7 +320,7 @@ static void playerUpdateFearState() {
     if (py.flags.afraid == 0) {
         py.flags.status &= ~PY_FEAR;
 
-        prt_afraid();
+        printCharacterFearState();
         printMessage("You feel bolder now.");
         disturb(0, 0);
     }

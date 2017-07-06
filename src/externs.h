@@ -310,7 +310,7 @@ void printCharacterCurrentDepth();
 void printCharacterHungerstatus();
 void printCharacterBlindStatus();
 void printCharacterConfusedState();
-void prt_afraid();
+void printCharacterFearState();
 void prt_poisoned();
 void prt_state();
 void prt_speed();
