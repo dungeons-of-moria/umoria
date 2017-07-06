@@ -56,7 +56,7 @@ void dungeonPlaceGold(int y, int x) {
 }
 
 // Returns the array number of a random object -RAK-
-int get_obj_num(int level, bool must_be_small) {
+int itemGetRandomObjectId(int level, bool must_be_small) {
     if (level == 0) {
         return randomNumber(treasure_levels[0]) - 1;
     }
@@ -70,7 +70,7 @@ int get_obj_num(int level, bool must_be_small) {
         }
     }
 
-    int objectID;
+    int object_id;
 
     // This code has been added to make it slightly more likely to get the
     // higher level objects.  Originally a uniform distribution over all
@@ -79,34 +79,34 @@ int get_obj_num(int level, bool must_be_small) {
     // and 1/2n are 0th level.
     do {
         if (randomNumber(2) == 1) {
-            objectID = randomNumber(treasure_levels[level]) - 1;
+            object_id = randomNumber(treasure_levels[level]) - 1;
         } else {
             // Choose three objects, pick the highest level.
-            objectID = randomNumber(treasure_levels[level]) - 1;
+            object_id = randomNumber(treasure_levels[level]) - 1;
 
             int j = randomNumber(treasure_levels[level]) - 1;
 
-            if (objectID < j) {
-                objectID = j;
+            if (object_id < j) {
+                object_id = j;
             }
 
             j = randomNumber(treasure_levels[level]) - 1;
 
-            if (objectID < j) {
-                objectID = j;
+            if (object_id < j) {
+                object_id = j;
             }
 
-            int foundLevel = game_objects[sorted_objects[objectID]].level;
+            int foundLevel = game_objects[sorted_objects[object_id]].level;
 
             if (foundLevel == 0) {
-                objectID = randomNumber(treasure_levels[0]) - 1;
+                object_id = randomNumber(treasure_levels[0]) - 1;
             } else {
-                objectID = randomNumber(treasure_levels[foundLevel] - treasure_levels[foundLevel - 1]) - 1 + treasure_levels[foundLevel - 1];
+                object_id = randomNumber(treasure_levels[foundLevel] - treasure_levels[foundLevel - 1]) - 1 + treasure_levels[foundLevel - 1];
             }
         }
-    } while (must_be_small && set_large(&game_objects[sorted_objects[objectID]]));
+    } while (must_be_small && set_large(&game_objects[sorted_objects[object_id]]));
 
-    return objectID;
+    return object_id;
 }
 
 // Places an object at given row, column co-ordinate -RAK-
@@ -115,7 +115,7 @@ void place_object(int y, int x, bool must_be_small) {
 
     cave[y][x].tptr = (uint8_t) cur_pos;
 
-    int objectID = get_obj_num(current_dungeon_level, must_be_small);
+    int objectID = itemGetRandomObjectId(current_dungeon_level, must_be_small);
     inventoryItemCopyTo(sorted_objects[objectID], &treasure_list[cur_pos]);
 
     magicTreasureMagicalAbility(cur_pos, current_dungeon_level);
