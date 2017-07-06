@@ -243,7 +243,7 @@ static void printLongNumber(int32_t num, int row, int column) {
 }
 
 // Print number at given row, column -RAK-
-static void prt_int(int num, int row, int column) {
+static void printNumber(int num, int row, int column) {
     vtype_t str;
     (void) sprintf(str, "%6d", num);
     putString(str, row, column);
@@ -385,27 +385,27 @@ void prt_title() {
 
 // Prints level -RAK-
 void prt_level() {
-    prt_int((int) py.misc.lev, 13, STAT_COLUMN + 6);
+    printNumber((int) py.misc.lev, 13, STAT_COLUMN + 6);
 }
 
 // Prints players current mana points. -RAK-
 void prt_cmana() {
-    prt_int(py.misc.cmana, 15, STAT_COLUMN + 6);
+    printNumber(py.misc.cmana, 15, STAT_COLUMN + 6);
 }
 
 // Prints Max hit points -RAK-
 void prt_mhp() {
-    prt_int(py.misc.mhp, 16, STAT_COLUMN + 6);
+    printNumber(py.misc.mhp, 16, STAT_COLUMN + 6);
 }
 
 // Prints players current hit points -RAK-
 void prt_chp() {
-    prt_int(py.misc.chp, 17, STAT_COLUMN + 6);
+    printNumber(py.misc.chp, 17, STAT_COLUMN + 6);
 }
 
 // prints current AC -RAK-
 void prt_pac() {
-    prt_int(py.misc.dis_ac, 19, STAT_COLUMN + 6);
+    printNumber(py.misc.dis_ac, 19, STAT_COLUMN + 6);
 }
 
 // Prints current gold -RAK-
