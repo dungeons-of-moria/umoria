@@ -193,7 +193,7 @@ static int playerFoodConsumption() {
                 py.flags.status |= PY_WEAK;
                 printMessage("You are getting weak from hunger.");
                 disturb(0, 0);
-                prt_hunger();
+                printCharacterHungerstatus();
             }
 
             if (py.flags.food < PLAYER_FOOD_FAINT && randomNumber(8) == 1) {
@@ -205,7 +205,7 @@ static int playerFoodConsumption() {
             py.flags.status |= PY_HUNGRY;
             printMessage("You are getting hungry.");
             disturb(0, 0);
-            prt_hunger();
+            printCharacterHungerstatus();
         }
     }
 

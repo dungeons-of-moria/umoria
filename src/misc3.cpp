@@ -429,7 +429,7 @@ void printCharacterCurrentDepth() {
 }
 
 // Prints status of hunger -RAK-
-void prt_hunger() {
+void printCharacterHungerstatus() {
     if (PY_WEAK & py.flags.status) {
         putString("Weak  ", 23, 0);
     } else if (PY_HUNGRY & py.flags.status) {
@@ -865,7 +865,7 @@ void prt_stat_block() {
     uint32_t status = py.flags.status;
 
     if ((PY_HUNGRY | PY_WEAK) & status) {
-        prt_hunger();
+        printCharacterHungerstatus();
     }
 
     if (PY_BLIND & status) {

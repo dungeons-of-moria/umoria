@@ -307,7 +307,7 @@ void printCharacterCurrentHitPoints();
 void printCharacterCurrentArmorClass();
 void printCharacterGoldValue();
 void printCharacterCurrentDepth();
-void prt_hunger();
+void printCharacterHungerstatus();
 void prt_blind();
 void prt_confused();
 void prt_afraid();
