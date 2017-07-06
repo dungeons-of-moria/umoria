@@ -130,7 +130,7 @@ void outputRandomLevelObjectsToFile() {
                     int objectID = get_obj_num(level, small_object);
                     inventoryItemCopyTo(sorted_objects[objectID], &treasure_list[treasureID]);
 
-                    magic_treasure(treasureID, level);
+                    magicTreasureMagicalAbility(treasureID, level);
 
                     Inventory_t *i_ptr = &treasure_list[treasureID];
                     itemIdentifyAsStoreBought(i_ptr);

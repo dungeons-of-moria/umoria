@@ -118,7 +118,7 @@ void place_object(int y, int x, bool must_be_small) {
     int objectID = get_obj_num(current_dungeon_level, must_be_small);
     inventoryItemCopyTo(sorted_objects[objectID], &treasure_list[cur_pos]);
 
-    magic_treasure(cur_pos, current_dungeon_level);
+    magicTreasureMagicalAbility(cur_pos, current_dungeon_level);
 
     if (cave[y][x].cptr == 1) {
         printMessage("You feel something roll beneath your feet."); // -CJS-

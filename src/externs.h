@@ -282,7 +282,7 @@ bool magicShouldBeEnchanted(int chance);
 int magicEnchantmentBonus(int base, int max_standard, int level);
 
 // misc2.c
-void magic_treasure(int item_id, int level);
+void magicTreasureMagicalAbility(int item_id, int level);
 void set_options();
 
 // misc3.c

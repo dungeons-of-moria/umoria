@@ -339,7 +339,7 @@ static void store_create(int store_num, int16_t max_cost) {
     for (int tries = 0; tries <= 3; tries++) {
         int i = store_choices[store_num][randomNumber(STORE_CHOICES) - 1];
         inventoryItemCopyTo(i, &treasure_list[cur_pos]);
-        magic_treasure(cur_pos, OBJ_TOWN_LEVEL);
+        magicTreasureMagicalAbility(cur_pos, OBJ_TOWN_LEVEL);
 
         Inventory_t *t_ptr = &treasure_list[cur_pos];
 
