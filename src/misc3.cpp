@@ -222,7 +222,7 @@ static void printHeaderLongNumber(const char *header, int32_t num, int row, int 
 }
 
 // Print long number (7 digits of space) with header at given row, column
-static void prt_7lnum(const char *header, int32_t num, int row, int column) {
+static void printHeaderLongNumber7Spaces(const char *header, int32_t num, int row, int column) {
     vtype_t str;
     (void) sprintf(str, "%s: %7d", header, num);
     putString(str, row, column);
@@ -983,17 +983,17 @@ void put_misc1() {
 
 // Prints the following information on the screen. -JWT-
 void put_misc2() {
-    prt_7lnum("Level      ", (int32_t) py.misc.lev, 9, 28);
-    prt_7lnum("Experience ", py.misc.exp, 10, 28);
-    prt_7lnum("Max Exp    ", py.misc.max_exp, 11, 28);
+    printHeaderLongNumber7Spaces("Level      ", (int32_t) py.misc.lev, 9, 28);
+    printHeaderLongNumber7Spaces("Experience ", py.misc.exp, 10, 28);
+    printHeaderLongNumber7Spaces("Max Exp    ", py.misc.max_exp, 11, 28);
 
     if (py.misc.lev >= MAX_PLAYER_LEVEL) {
         putStringClearToEOL("Exp to Adv.: *******", 12, 28);
     } else {
-        prt_7lnum("Exp to Adv.", (int32_t) (player_base_exp_levels[py.misc.lev - 1] * py.misc.expfact / 100), 12, 28);
+        printHeaderLongNumber7Spaces("Exp to Adv.", (int32_t) (player_base_exp_levels[py.misc.lev - 1] * py.misc.expfact / 100), 12, 28);
     }
 
-    prt_7lnum("Gold       ", py.misc.au, 13, 28);
+    printHeaderLongNumber7Spaces("Gold       ", py.misc.au, 13, 28);
     prt_num("Max Hit Points ", py.misc.mhp, 9, 52);
     prt_num("Cur Hit Points ", py.misc.chp, 10, 52);
     prt_num("Max Mana       ", py.misc.mana, 11, 52);
