@@ -414,7 +414,7 @@ void printCharacterGoldValue() {
 }
 
 // Prints depth in stat area -RAK-
-void prt_depth() {
+void printCharacterCurrentDepth() {
     vtype_t depths;
 
     int depth = current_dungeon_level * 50;
@@ -903,7 +903,7 @@ void draw_cave() {
     clearScreen();
     prt_stat_block();
     drawDungeonPanel();
-    prt_depth();
+    printCharacterCurrentDepth();
 }
 
 // Prints the following information on the screen. -JWT-

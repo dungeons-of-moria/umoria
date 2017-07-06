@@ -894,7 +894,7 @@ void playDungeon() {
     updateMonsters(false);
 
     // Print the depth
-    prt_depth();
+    printCharacterCurrentDepth();
 
     // Note: yes, this last input command needs to be persisted
     // over different iterations of the main loop below -MRC-
