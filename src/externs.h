@@ -338,7 +338,7 @@ void getCharacterName();
 void changeCharacterName();
 void inventoryDestroyItem(int item_id);
 void inventoryTakeOneItem(Inventory_t *to_item, Inventory_t *from_item);
-void inven_drop(int item_id, bool drop_all);
+void inventoryDropItem(int item_id, bool drop_all);
 int inven_damage(bool (*item_type)(Inventory_t *), int chance_percentage);
 int weight_limit();
 bool inven_check_num(Inventory_t *item);

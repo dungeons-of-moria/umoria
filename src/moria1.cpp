@@ -1064,7 +1064,7 @@ static bool selectItemCommands(char *command, char *which, bool selecting) {
 
             if (item >= 0) {
                 if (*command == 'r') {
-                    inven_drop(item, true);
+                    inventoryDropItem(item, true);
                     // As a safety measure, set the player's inven
                     // weight to 0, when the last object is dropped.
                     if (inventory_count == 0 && equipment_count == 0) {
@@ -1226,7 +1226,7 @@ static bool selectItemCommands(char *command, char *which, bool selecting) {
             if (item >= 0) {
                 player_free_turn = false;
 
-                inven_drop(item, query == 'y');
+                inventoryDropItem(item, query == 'y');
                 check_strength();
             }
 
