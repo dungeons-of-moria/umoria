@@ -467,7 +467,7 @@ void printCharacterFearState() {
 }
 
 // Prints Poisoned status -RAK-
-void prt_poisoned() {
+void printCharacterPoisonedState() {
     if (PY_POISONED & py.flags.status) {
         putString("Poisoned", 23, 29);
     } else {
@@ -881,7 +881,7 @@ void prt_stat_block() {
     }
 
     if (PY_POISONED & status) {
-        prt_poisoned();
+        printCharacterPoisonedState();
     }
 
     if ((PY_SEARCH | PY_REST) & status) {

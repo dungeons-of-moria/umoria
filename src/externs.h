@@ -311,7 +311,7 @@ void printCharacterHungerstatus();
 void printCharacterBlindStatus();
 void printCharacterConfusedState();
 void printCharacterFearState();
-void prt_poisoned();
+void printCharacterPoisonedState();
 void prt_state();
 void prt_speed();
 void prt_study();

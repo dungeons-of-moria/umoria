@@ -333,7 +333,7 @@ static void playerUpdatePoisonedState() {
 
     if ((PY_POISONED & py.flags.status) == 0) {
         py.flags.status |= PY_POISONED;
-        prt_poisoned();
+        printCharacterPoisonedState();
     }
 
     py.flags.poisoned--;
@@ -341,7 +341,7 @@ static void playerUpdatePoisonedState() {
     if (py.flags.poisoned == 0) {
         py.flags.status &= ~PY_POISONED;
 
-        prt_poisoned();
+        printCharacterPoisonedState();
         printMessage("You feel better.");
         disturb(0, 0);
 
