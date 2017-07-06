@@ -33,22 +33,22 @@ void dungeonPlaceRubble(int y, int x) {
 }
 
 // Places a treasure (Gold or Gems) at given row, column -RAK-
-void place_gold(int y, int x) {
-    int cur_pos = popt();
+void dungeonPlaceGold(int y, int x) {
+    int free_treasure_id = popt();
 
-    int i = ((randomNumber(current_dungeon_level + 2) + 2) / 2) - 1;
+    int gold_type_id = ((randomNumber(current_dungeon_level + 2) + 2) / 2) - 1;
 
     if (randomNumber(OBJ_GREAT) == 1) {
-        i += randomNumber(current_dungeon_level + 1);
+        gold_type_id += randomNumber(current_dungeon_level + 1);
     }
 
-    if (i >= MAX_GOLD) {
-        i = MAX_GOLD - 1;
+    if (gold_type_id >= MAX_GOLD) {
+        gold_type_id = MAX_GOLD - 1;
     }
 
-    cave[y][x].tptr = (uint8_t) cur_pos;
-    inventoryItemCopyTo(OBJ_GOLD_LIST + i, &treasure_list[cur_pos]);
-    treasure_list[cur_pos].cost += (8L * (int32_t) randomNumber((int) treasure_list[cur_pos].cost)) + randomNumber(8);
+    cave[y][x].tptr = (uint8_t) free_treasure_id;
+    inventoryItemCopyTo(OBJ_GOLD_LIST + gold_type_id, &treasure_list[free_treasure_id]);
+    treasure_list[free_treasure_id].cost += (8L * (int32_t) randomNumber((int) treasure_list[free_treasure_id].cost)) + randomNumber(8);
 
     if (cave[y][x].cptr == 1) {
         printMessage("You feel something roll beneath your feet.");
@@ -149,7 +149,7 @@ void alloc_object(bool (*set_function)(int), int object_type, int number) {
                 dungeonPlaceRubble(y, x);
                 break;
             case 4:
-                place_gold(y, x);
+                dungeonPlaceGold(y, x);
                 break;
             case 5:
                 place_object(y, x, false);
@@ -171,7 +171,7 @@ void random_object(int y, int x, int tries) {
                 if (randomNumber(100) < 75) {
                     place_object(j, k, false);
                 } else {
-                    place_gold(j, k);
+                    dungeonPlaceGold(j, k);
                 }
                 i = 9;
             }

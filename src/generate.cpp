@@ -153,7 +153,7 @@ static void place_streamer(uint8_t rockType, int treas_chance) {
                     cave[ty][tx].fval = rockType;
 
                     if (randomNumber(treas_chance) == 1) {
-                        place_gold(ty, tx);
+                        dungeonPlaceGold(ty, tx);
                     }
                 }
             }

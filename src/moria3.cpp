@@ -557,7 +557,7 @@ static int summon_object(int y, int x, int num, int typ) {
                     if (real_typ == 1) {
                         place_object(oy, ox, (typ >= 4));
                     } else {
-                        place_gold(oy, ox);
+                        dungeonPlaceGold(oy, ox);
                     }
 
                     lite_spot(oy, ox);
