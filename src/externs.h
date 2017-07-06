@@ -300,7 +300,7 @@ int playerStatAdjustmentCharisma();
 int playerStatAdjustmentConstitution();
 char *playerTitle();
 void printCharacterTitle();
-void prt_level();
+void printCharacterLevel();
 void prt_cmana();
 void prt_mhp();
 void prt_chp();

@@ -2108,7 +2108,7 @@ void lose_exp(int32_t adjustment) {
             calc_spells(A_WIS);
             calc_mana(A_WIS);
         }
-        prt_level();
+        printCharacterLevel();
         printCharacterTitle();
     }
 }

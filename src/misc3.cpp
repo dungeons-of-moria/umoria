@@ -384,7 +384,7 @@ void printCharacterTitle() {
 }
 
 // Prints level -RAK-
-void prt_level() {
+void printCharacterLevel() {
     printNumber((int) py.misc.lev, 13, STAT_COLUMN + 6);
 }
 
@@ -1953,7 +1953,7 @@ static void gain_level() {
         py.misc.exp = need_exp + (dif_exp / 2);
     }
 
-    prt_level();
+    printCharacterLevel();
     printCharacterTitle();
 
     Class_t *c_ptr = &classes[py.misc.pclass];
