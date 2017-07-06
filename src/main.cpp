@@ -245,7 +245,7 @@ static void char_inven_init() {
             inven_init.ident |= ID_SHOW_HITDAM;
         }
 
-        (void) inven_carry(&inven_init);
+        (void) inventoryCarryItem(&inven_init);
     }
 
     // weird place for it, but why not?

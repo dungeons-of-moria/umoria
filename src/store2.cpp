@@ -844,7 +844,7 @@ static bool store_purchase(int store_num, int *cur_top) {
             decrease_insults(store_num);
             py.misc.au -= price;
 
-            int item_new = inven_carry(&sell_obj);
+            int item_new = inventoryCarryItem(&sell_obj);
             int saved_store_counter = s_ptr->store_ctr;
 
             store_destroy(store_num, item_val, true);

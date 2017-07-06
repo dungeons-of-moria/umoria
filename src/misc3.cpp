@@ -1203,7 +1203,7 @@ int playerCarryingLoadLimit() {
     return weight_cap;
 }
 
-// this code must be identical to the inven_carry() code below
+// this code must be identical to the inventoryCarryItem() code below
 bool inventoryCanCarryItemCount(Inventory_t *item) {
     if (inventory_count < INVEN_WIELD) {
         return true;
@@ -1290,7 +1290,7 @@ void playerStrength() {
 // Add an item to players inventory.  Return the
 // item position for a description if needed. -RAK-
 // this code must be identical to the inventoryCanCarryItemCount() code above
-int inven_carry(Inventory_t *item) {
+int inventoryCarryItem(Inventory_t *item) {
     int typ = item->tval;
     int subt = item->subval;
     bool known1p = itemSetColorlessAsIdentifed(item);

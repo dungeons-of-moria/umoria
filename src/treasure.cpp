@@ -516,7 +516,7 @@ GameObject_t game_objects[MAX_OBJECTS] = {
         {"mithril",                       0x00000000L, TV_GOLD,     '$', 0, 80, 18, 1, 0, 0, 0, 0, 0, {0, 0}, 1}, // 416
 
         // nothing, used as inventory place holder
-        // must be stackable, so that can be picked up by inven_carry
+        // must be stackable, so that can be picked up by inventoryCarryItem
         {"nothing",                       0x00000000L, TV_NOTHING,  ' ', 0, 0, 64, 0, 0, 0, 0, 0, 0, {0, 0}, 0}, // 417
 
         // these next two are needed only for the names

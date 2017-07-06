@@ -1071,7 +1071,7 @@ static bool selectItemCommands(char *command, char *which, bool selecting) {
                         inventory_weight = 0;
                     }
                 } else {
-                    slot = inven_carry(&inventory[item]);
+                    slot = inventoryCarryItem(&inventory[item]);
                     takeoff(item, slot);
                 }
 
@@ -1134,7 +1134,7 @@ static bool selectItemCommands(char *command, char *which, bool selecting) {
                 if (i_ptr->tval != TV_NOTHING) {
                     int savedCounter = inventory_count;
 
-                    itemToTakeOff = inven_carry(i_ptr);
+                    itemToTakeOff = inventoryCarryItem(i_ptr);
 
                     // If item removed did not stack with anything
                     // in inventory, then increment wear_high.
