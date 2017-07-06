@@ -321,7 +321,7 @@ bool playerStatRandomIncrease(int stat);
 bool playerStatRandomDecrease(int stat);
 bool playerStatRestore(int stat);
 void playerStatBoost(int stat, int amount);
-int tohit_adj();
+int playerToHitAdjustment();
 int toac_adj();
 int todis_adj();
 int todam_adj();

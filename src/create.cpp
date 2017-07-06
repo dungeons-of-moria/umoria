@@ -91,7 +91,7 @@ static void get_all_stats() {
     py.misc.save = r_ptr->bsav;
     py.misc.hitdie = r_ptr->bhitdie;
     py.misc.ptodam = (int16_t) todam_adj();
-    py.misc.ptohit = (int16_t) tohit_adj();
+    py.misc.ptohit = (int16_t) playerToHitAdjustment();
     py.misc.ptoac = 0;
     py.misc.pac = (int16_t) toac_adj();
     py.misc.expfact = r_ptr->b_exp;
@@ -365,7 +365,7 @@ static void get_class() {
             }
 
             py.misc.ptodam = (int16_t) todam_adj(); // Real values
-            py.misc.ptohit = (int16_t) tohit_adj();
+            py.misc.ptohit = (int16_t) playerToHitAdjustment();
             py.misc.ptoac = (int16_t) toac_adj();
             py.misc.pac = 0;
             py.misc.dis_td = py.misc.ptodam; // Displayed values

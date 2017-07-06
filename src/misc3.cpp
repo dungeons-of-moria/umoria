@@ -713,7 +713,7 @@ void playerStatBoost(int stat, int amount) {
 }
 
 // Returns a character's adjustment to hit. -JWT-
-int tohit_adj() {
+int playerToHitAdjustment() {
     int total;
 
     int dexterity = py.stats.use_stat[A_DEX];
