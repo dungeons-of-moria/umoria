@@ -199,7 +199,7 @@ void statsAsString(uint8_t stat, char *stat_string) {
 }
 
 // Print character stat in given row, column -RAK-
-void prt_stat(int stat) {
+void displayCharacterStats(int stat) {
     char text[7];
     statsAsString(py.stats.use_stat[stat], text);
     putString(stat_names[stat], 6 + stat, STAT_COLUMN);
@@ -651,7 +651,7 @@ bool inc_stat(int stat) {
     }
 
     set_use_stat(stat);
-    prt_stat(stat);
+    displayCharacterStats(stat);
 
     return true;
 }
@@ -680,7 +680,7 @@ bool dec_stat(int stat) {
     py.stats.cur_stat[stat] = (uint8_t) newStat;
 
     set_use_stat(stat);
-    prt_stat(stat);
+    displayCharacterStats(stat);
 
     return true;
 }
@@ -696,7 +696,7 @@ bool res_stat(int stat) {
     py.stats.cur_stat[stat] += newStat;
 
     set_use_stat(stat);
-    prt_stat(stat);
+    displayCharacterStats(stat);
 
     return true;
 }
@@ -708,7 +708,7 @@ void bst_stat(int stat, int amount) {
 
     set_use_stat(stat);
 
-    // can not call prt_stat() here, may be in store, may be in inven_command
+    // can not call displayCharacterStats() here, may be in store, may be in inven_command
     py.flags.status |= (PY_STR << stat);
 }
 
@@ -849,7 +849,7 @@ void prt_stat_block() {
     prt_field(title_string(), 4, STAT_COLUMN);
 
     for (int i = 0; i < 6; i++) {
-        prt_stat(i);
+        displayCharacterStats(i);
     }
 
     prt_num("LEV ", (int) py.misc.lev, 13, STAT_COLUMN);

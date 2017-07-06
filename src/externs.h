@@ -294,7 +294,7 @@ void dungeonPlaceRandomObjectAt(int y, int x, bool must_be_small);
 void dungeonAllocateAndPlaceObject(bool (*set_function)(int), int object_type, int number);
 void dungeonPlaceRandomObjectNear(int y, int x, int tries);
 void statsAsString(uint8_t stat, char *stat_string);
-void prt_stat(int stat);
+void displayCharacterStats(int stat);
 int stat_adj(int stat);
 int chr_adj();
 int con_adj();

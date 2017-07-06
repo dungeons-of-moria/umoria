@@ -682,7 +682,7 @@ static void playerUpdateStatusFlags() {
     if ((py.flags.status & PY_STATS) != 0) {
         for (int n = 0; n < 6; n++) {
             if ((PY_STR << n) & py.flags.status) {
-                prt_stat(n);
+                displayCharacterStats(n);
             }
         }
 
