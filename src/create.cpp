@@ -476,7 +476,7 @@ void createCharacter() {
     get_money();
     printCharacterStats();
     printCharacterLevelExperience();
-    put_misc3();
+    printCharacterAbilities();
     get_name();
 
     // This delay may be reduced, but is recommended to keep players from

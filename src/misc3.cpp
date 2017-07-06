@@ -1000,7 +1000,7 @@ void printCharacterLevelExperience() {
 }
 
 // Prints ratings on certain abilities -RAK-
-void put_misc3() {
+void printCharacterAbilities() {
     clearToBottom(14);
 
     int xbth = py.misc.bth + py.misc.ptohit * BTH_PLUS_ADJ + (class_level_adj[py.misc.pclass][CLA_BTH] * py.misc.lev);
@@ -1052,7 +1052,7 @@ void display_char() {
     printCharacterVitalStatistics();
     printCharacterStats();
     printCharacterLevelExperience();
-    put_misc3();
+    printCharacterAbilities();
 }
 
 // Gets a name for the character -JWT-

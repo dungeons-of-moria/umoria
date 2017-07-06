@@ -332,7 +332,7 @@ void printCharacterStats();
 const char *statRating(int y, int x);
 void printCharacterVitalStatistics();
 void printCharacterLevelExperience();
-void put_misc3();
+void printCharacterAbilities();
 void display_char();
 void get_name();
 void change_name();
