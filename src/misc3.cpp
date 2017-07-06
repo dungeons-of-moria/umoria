@@ -181,7 +181,7 @@ void dungeonPlaceRandomObjectNear(int y, int x, int tries) {
 }
 
 // Converts stat num into string -RAK-
-void cnv_stat(uint8_t stat, char *stat_string) {
+void statsAsString(uint8_t stat, char *stat_string) {
     if (stat <= 18) {
         (void) sprintf(stat_string, "%6d", stat);
         return;
@@ -201,7 +201,7 @@ void cnv_stat(uint8_t stat, char *stat_string) {
 // Print character stat in given row, column -RAK-
 void prt_stat(int stat) {
     char text[7];
-    cnv_stat(py.stats.use_stat[stat], text);
+    statsAsString(py.stats.use_stat[stat], text);
     putString(stat_names[stat], 6 + stat, STAT_COLUMN);
     putString(text, 6 + stat, STAT_COLUMN + 6);
 }
@@ -929,12 +929,12 @@ void put_stats() {
     for (int i = 0; i < 6; i++) {
         vtype_t buf;
 
-        cnv_stat(py.stats.use_stat[i], buf);
+        statsAsString(py.stats.use_stat[i], buf);
         putString(stat_names[i], 2 + i, 61);
         putString(buf, 2 + i, 66);
 
         if (py.stats.max_stat[i] > py.stats.cur_stat[i]) {
-            cnv_stat(py.stats.max_stat[i], buf);
+            statsAsString(py.stats.max_stat[i], buf);
             putString(buf, 2 + i, 73);
         }
     }

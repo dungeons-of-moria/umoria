@@ -170,27 +170,27 @@ static void writeCharacterSheetToFile(FILE *file1) {
 
     (void) fprintf(file1, " Name%9s %-23s", colon, py.misc.name);
     (void) fprintf(file1, " Age%11s %6d", colon, (int) py.misc.age);
-    cnv_stat(py.stats.use_stat[A_STR], statDescription);
+    statsAsString(py.stats.use_stat[A_STR], statDescription);
     (void) fprintf(file1, "   STR : %s\n", statDescription);
     (void) fprintf(file1, " Race%9s %-23s", colon, character_races[py.misc.prace].trace);
     (void) fprintf(file1, " Height%8s %6d", colon, (int) py.misc.ht);
-    cnv_stat(py.stats.use_stat[A_INT], statDescription);
+    statsAsString(py.stats.use_stat[A_INT], statDescription);
     (void) fprintf(file1, "   INT : %s\n", statDescription);
     (void) fprintf(file1, " Sex%10s %-23s", colon, (py.misc.male ? "Male" : "Female"));
     (void) fprintf(file1, " Weight%8s %6d", colon, (int) py.misc.wt);
-    cnv_stat(py.stats.use_stat[A_WIS], statDescription);
+    statsAsString(py.stats.use_stat[A_WIS], statDescription);
     (void) fprintf(file1, "   WIS : %s\n", statDescription);
     (void) fprintf(file1, " Class%8s %-23s", colon, classes[py.misc.pclass].title);
     (void) fprintf(file1, " Social Class : %6d", py.misc.sc);
-    cnv_stat(py.stats.use_stat[A_DEX], statDescription);
+    statsAsString(py.stats.use_stat[A_DEX], statDescription);
     (void) fprintf(file1, "   DEX : %s\n", statDescription);
     (void) fprintf(file1, " Title%8s %-23s", colon, title_string());
     (void) fprintf(file1, "%22s", blank);
-    cnv_stat(py.stats.use_stat[A_CON], statDescription);
+    statsAsString(py.stats.use_stat[A_CON], statDescription);
     (void) fprintf(file1, "   CON : %s\n", statDescription);
     (void) fprintf(file1, "%34s", blank);
     (void) fprintf(file1, "%26s", blank);
-    cnv_stat(py.stats.use_stat[A_CHR], statDescription);
+    statsAsString(py.stats.use_stat[A_CHR], statDescription);
     (void) fprintf(file1, "   CHR : %s\n\n", statDescription);
 
     (void) fprintf(file1, " + To Hit    : %6d", py.misc.dis_th);
