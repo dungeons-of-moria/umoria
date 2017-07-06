@@ -373,9 +373,9 @@ static void get_class() {
             py.misc.dis_tac = py.misc.ptoac;
             py.misc.dis_ac = py.misc.pac + py.misc.dis_tac;
 
-            // now set misc stats, do this after setting stats because of con_adj() for hit-points
+            // now set misc stats, do this after setting stats because of playerStatAdjustmentConstitution() for hit-points
             py.misc.hitdie += c_ptr->adj_hd;
-            py.misc.mhp = (int16_t) (con_adj() + py.misc.hitdie);
+            py.misc.mhp = (int16_t) (playerStatAdjustmentConstitution() + py.misc.hitdie);
             py.misc.chp = py.misc.mhp;
             py.misc.chp_frac = 0;
 

@@ -297,7 +297,7 @@ void statsAsString(uint8_t stat, char *stat_string);
 void displayCharacterStats(int stat);
 int playerStatAdjustmentWisdomIntelligence(int stat);
 int playerStatAdjustmentCharisma();
-int con_adj();
+int playerStatAdjustmentConstitution();
 char *title_string();
 void prt_title();
 void prt_level();

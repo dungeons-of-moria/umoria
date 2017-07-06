@@ -350,7 +350,7 @@ static void playerUpdatePoisonedState() {
 
     int damage = 0;
 
-    switch (con_adj()) {
+    switch (playerStatAdjustmentConstitution()) {
         case -4:
             damage = 4;
             break;

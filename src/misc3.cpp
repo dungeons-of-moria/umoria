@@ -336,7 +336,7 @@ int playerStatAdjustmentCharisma() {
 }
 
 // Returns a character's adjustment to hit points -JWT-
-int con_adj() {
+int playerStatAdjustmentConstitution() {
     int con = py.stats.use_stat[A_CON];
 
     if (con < 7) {
@@ -1986,7 +1986,7 @@ void prt_experience() {
 
 // Calculate the players hit points
 void calc_hitpoints() {
-    int hitpoints = player_base_hp_levels[py.misc.lev - 1] + (con_adj() * py.misc.lev);
+    int hitpoints = player_base_hp_levels[py.misc.lev - 1] + (playerStatAdjustmentConstitution() * py.misc.lev);
 
     // always give at least one point per level + 1
     if (hitpoints < (py.misc.lev + 1)) {
