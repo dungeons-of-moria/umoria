@@ -394,7 +394,7 @@ void printCharacterCurrentMana() {
 }
 
 // Prints Max hit points -RAK-
-void prt_mhp() {
+void printCharacterMaxHitPoints() {
     printNumber(py.misc.mhp, 16, STAT_COLUMN + 6);
 }
 

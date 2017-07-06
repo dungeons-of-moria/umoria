@@ -95,7 +95,7 @@ static void playerActivateHeroism() {
     py.misc.bthb += 12;
 
     printMessage("You feel like a HERO!");
-    prt_mhp();
+    printCharacterMaxHitPoints();
     prt_chp();
 }
 
@@ -113,7 +113,7 @@ static void playerDisableHeroism() {
     py.misc.bthb -= 12;
 
     printMessage("The heroism wears off.");
-    prt_mhp();
+    printCharacterMaxHitPoints();
 }
 
 static void playerActivateSuperHeroism() {
@@ -126,7 +126,7 @@ static void playerActivateSuperHeroism() {
     py.misc.bthb += 24;
 
     printMessage("You feel like a SUPER HERO!");
-    prt_mhp();
+    printCharacterMaxHitPoints();
     prt_chp();
 }
 
@@ -144,7 +144,7 @@ static void playerDisableSuperHeroism() {
     py.misc.bthb -= 24;
 
     printMessage("The super heroism wears off.");
-    prt_mhp();
+    printCharacterMaxHitPoints();
 }
 
 static void playerUpdateHeroStatus() {
@@ -690,7 +690,7 @@ static void playerUpdateStatusFlags() {
     }
 
     if (py.flags.status & PY_HP) {
-        prt_mhp();
+        printCharacterMaxHitPoints();
         prt_chp();
         py.flags.status &= ~PY_HP;
     }

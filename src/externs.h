@@ -302,7 +302,7 @@ char *playerTitle();
 void printCharacterTitle();
 void printCharacterLevel();
 void printCharacterCurrentMana();
-void prt_mhp();
+void printCharacterMaxHitPoints();
 void prt_chp();
 void prt_pac();
 void prt_gold();
