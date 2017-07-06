@@ -964,7 +964,7 @@ void playDungeon() {
         }
 
         if (py.flags.status & PY_STUDY) {
-            prt_study();
+            printCharacterStudyInstruction();
         }
 
         playerUpdateStatusFlags();

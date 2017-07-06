@@ -551,7 +551,7 @@ void printCharacterSpeed() {
     }
 }
 
-void prt_study() {
+void printCharacterStudyInstruction() {
     py.flags.status &= ~PY_STUDY;
 
     if (py.flags.new_spells == 0) {
@@ -895,7 +895,7 @@ void prt_stat_block() {
     }
 
     // display the study field
-    prt_study();
+    printCharacterStudyInstruction();
 }
 
 // Draws entire screen -RAK-
