@@ -324,7 +324,7 @@ void playerStatBoost(int stat, int amount);
 int playerToHitAdjustment();
 int playerArmorClassAdjustment();
 int playerDisarmAdjustment();
-int todam_adj();
+int playerDamageAdjustment();
 void prt_stat_block();
 void draw_cave();
 void put_character();

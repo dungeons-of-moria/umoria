@@ -180,7 +180,7 @@ void calc_bonuses() {
     playerResetFlags();
 
     py.misc.ptohit = (int16_t) playerToHitAdjustment();  // Real To Hit
-    py.misc.ptodam = (int16_t) todam_adj();  // Real To Dam
+    py.misc.ptodam = (int16_t) playerDamageAdjustment();  // Real To Dam
     py.misc.ptoac = (int16_t) playerArmorClassAdjustment();    // Real To AC
     py.misc.pac = 0;                         // Real AC
     py.misc.dis_th = py.misc.ptohit;         // Display To Hit

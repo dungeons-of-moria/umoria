@@ -818,7 +818,7 @@ int playerDisarmAdjustment() {
 }
 
 // Returns a character's adjustment to damage -JWT-
-int todam_adj() {
+int playerDamageAdjustment() {
     int stat = py.stats.use_stat[A_STR];
 
     if (stat < 4) {

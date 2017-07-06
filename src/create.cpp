@@ -90,7 +90,7 @@ static void get_all_stats() {
     py.misc.stl = r_ptr->stl;
     py.misc.save = r_ptr->bsav;
     py.misc.hitdie = r_ptr->bhitdie;
-    py.misc.ptodam = (int16_t) todam_adj();
+    py.misc.ptodam = (int16_t) playerDamageAdjustment();
     py.misc.ptohit = (int16_t) playerToHitAdjustment();
     py.misc.ptoac = 0;
     py.misc.pac = (int16_t) playerArmorClassAdjustment();
@@ -364,7 +364,7 @@ static void get_class() {
                 playerSetAndUseStat(i);
             }
 
-            py.misc.ptodam = (int16_t) todam_adj(); // Real values
+            py.misc.ptodam = (int16_t) playerDamageAdjustment(); // Real values
             py.misc.ptohit = (int16_t) playerToHitAdjustment();
             py.misc.ptoac = (int16_t) playerArmorClassAdjustment();
             py.misc.pac = 0;
