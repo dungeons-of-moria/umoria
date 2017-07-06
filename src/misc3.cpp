@@ -1204,7 +1204,7 @@ int playerCarryingLoadLimit() {
 }
 
 // this code must be identical to the inven_carry() code below
-bool inven_check_num(Inventory_t *item) {
+bool inventoryCanCarryItemCount(Inventory_t *item) {
     if (inventory_count < INVEN_WIELD) {
         return true;
     }
@@ -1214,19 +1214,19 @@ bool inven_check_num(Inventory_t *item) {
     }
 
     for (int i = 0; i < inventory_count; i++) {
-        bool sameCharacter = inventory[i].tval == item->tval;
-        bool sameCategory = inventory[i].subval == item->subval;
+        bool same_character = inventory[i].tval == item->tval;
+        bool same_category = inventory[i].subval == item->subval;
 
         // make sure the number field doesn't overflow
-        bool sameNumber = inventory[i].number + item->number < 256;
+        bool same_number = inventory[i].number + item->number < 256;
 
         // they always stack (subval < 192), or else they have same p1
-        bool sameGroup = item->subval < ITEM_GROUP_MIN || inventory[i].p1 == item->p1;
+        bool same_group = item->subval < ITEM_GROUP_MIN || inventory[i].p1 == item->p1;
 
         // only stack if both or neither are identified
         bool identification = itemSetColorlessAsIdentifed(&inventory[i]) == itemSetColorlessAsIdentifed(item);
 
-        if (sameCharacter && sameCategory && sameNumber && sameGroup && identification) {
+        if (same_character && same_category && same_number && same_group && identification) {
             return true;
         }
     }
@@ -1289,7 +1289,7 @@ void check_strength() {
 
 // Add an item to players inventory.  Return the
 // item position for a description if needed. -RAK-
-// this code must be identical to the inven_check_num() code above
+// this code must be identical to the inventoryCanCarryItemCount() code above
 int inven_carry(Inventory_t *item) {
     int typ = item->tval;
     int subt = item->subval;

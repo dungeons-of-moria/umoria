@@ -823,7 +823,7 @@ static bool store_purchase(int store_num, int *cur_top) {
     Inventory_t sell_obj;
     inventoryTakeOneItem(&sell_obj, &s_ptr->store_inven[item_val].sitem);
 
-    if (!inven_check_num(&sell_obj)) {
+    if (!inventoryCanCarryItemCount(&sell_obj)) {
         putStringClearToEOL("You cannot carry that many different items.", 0, 0);
         return false;
     }

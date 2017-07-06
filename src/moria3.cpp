@@ -418,7 +418,7 @@ static void carry(int y, int x, bool pickup) {
     }
 
     // Too many objects?
-    if (inven_check_num(item)) {
+    if (inventoryCanCarryItemCount(item)) {
         // Okay,  pick it up
         if (pickup && prompt_to_pickup) {
             itemDescription(description, item, true);
