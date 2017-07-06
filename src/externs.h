@@ -333,7 +333,7 @@ const char *statRating(int y, int x);
 void printCharacterVitalStatistics();
 void printCharacterLevelExperience();
 void printCharacterAbilities();
-void display_char();
+void printCharacter();
 void get_name();
 void change_name();
 void inven_destroy(int item_id);

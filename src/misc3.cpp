@@ -1047,7 +1047,7 @@ void printCharacterAbilities() {
 }
 
 // Used to display the character on the screen. -RAK-
-void display_char() {
+void printCharacter() {
     printCharacterInformation();
     printCharacterVitalStatistics();
     printCharacterStats();
@@ -1074,7 +1074,7 @@ void change_name() {
     vtype_t temp;
     bool flag = false;
 
-    display_char();
+    printCharacter();
 
     while (!flag) {
         putStringClearToEOL("<f>ile character description. <c>hange character name.", 21, 2);

@@ -186,7 +186,7 @@ static void print_tomb() {
             }
         } else {
             clearScreen();
-            display_char();
+            printCharacter();
             putString("Type ESC to skip the inventory:", 23, 0);
             if (getKeyInput() != ESCAPE) {
                 clearScreen();
