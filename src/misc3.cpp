@@ -229,7 +229,7 @@ static void printHeaderLongNumber7Spaces(const char *header, int32_t num, int ro
 }
 
 // Print number with header at given row, column -RAK-
-static void prt_num(const char *header, int num, int row, int column) {
+static void printHeaderNumber(const char *header, int num, int row, int column) {
     vtype_t str;
     (void) sprintf(str, "%s: %6d", header, num);
     putString(str, row, column);
@@ -853,12 +853,12 @@ void prt_stat_block() {
         displayCharacterStats(i);
     }
 
-    prt_num("LEV ", (int) py.misc.lev, 13, STAT_COLUMN);
+    printHeaderNumber("LEV ", (int) py.misc.lev, 13, STAT_COLUMN);
     printHeaderLongNumber("EXP ", py.misc.exp, 14, STAT_COLUMN);
-    prt_num("MANA", py.misc.cmana, 15, STAT_COLUMN);
-    prt_num("MHP ", py.misc.mhp, 16, STAT_COLUMN);
-    prt_num("CHP ", py.misc.chp, 17, STAT_COLUMN);
-    prt_num("AC  ", py.misc.dis_ac, 19, STAT_COLUMN);
+    printHeaderNumber("MANA", py.misc.cmana, 15, STAT_COLUMN);
+    printHeaderNumber("MHP ", py.misc.mhp, 16, STAT_COLUMN);
+    printHeaderNumber("CHP ", py.misc.chp, 17, STAT_COLUMN);
+    printHeaderNumber("AC  ", py.misc.dis_ac, 19, STAT_COLUMN);
     printHeaderLongNumber("GOLD", py.misc.au, 20, STAT_COLUMN);
     prt_winner();
 
@@ -940,10 +940,10 @@ void put_stats() {
         }
     }
 
-    prt_num("+ To Hit    ", py.misc.dis_th, 9, 1);
-    prt_num("+ To Damage ", py.misc.dis_td, 10, 1);
-    prt_num("+ To AC     ", py.misc.dis_tac, 11, 1);
-    prt_num("  Total AC  ", py.misc.dis_ac, 12, 1);
+    printHeaderNumber("+ To Hit    ", py.misc.dis_th, 9, 1);
+    printHeaderNumber("+ To Damage ", py.misc.dis_td, 10, 1);
+    printHeaderNumber("+ To AC     ", py.misc.dis_tac, 11, 1);
+    printHeaderNumber("  Total AC  ", py.misc.dis_ac, 12, 1);
 }
 
 // Returns a rating of x depending on y -JWT-
@@ -975,10 +975,10 @@ const char *likert(int y, int x) {
 
 // Prints age, height, weight, and SC -JWT-
 void put_misc1() {
-    prt_num("Age          ", (int) py.misc.age, 2, 38);
-    prt_num("Height       ", (int) py.misc.ht, 3, 38);
-    prt_num("Weight       ", (int) py.misc.wt, 4, 38);
-    prt_num("Social Class ", (int) py.misc.sc, 5, 38);
+    printHeaderNumber("Age          ", (int) py.misc.age, 2, 38);
+    printHeaderNumber("Height       ", (int) py.misc.ht, 3, 38);
+    printHeaderNumber("Weight       ", (int) py.misc.wt, 4, 38);
+    printHeaderNumber("Social Class ", (int) py.misc.sc, 5, 38);
 }
 
 // Prints the following information on the screen. -JWT-
@@ -994,10 +994,10 @@ void put_misc2() {
     }
 
     printHeaderLongNumber7Spaces("Gold       ", py.misc.au, 13, 28);
-    prt_num("Max Hit Points ", py.misc.mhp, 9, 52);
-    prt_num("Cur Hit Points ", py.misc.chp, 10, 52);
-    prt_num("Max Mana       ", py.misc.mana, 11, 52);
-    prt_num("Cur Mana       ", py.misc.cmana, 12, 52);
+    printHeaderNumber("Max Hit Points ", py.misc.mhp, 9, 52);
+    printHeaderNumber("Cur Hit Points ", py.misc.chp, 10, 52);
+    printHeaderNumber("Max Mana       ", py.misc.mana, 11, 52);
+    printHeaderNumber("Cur Mana       ", py.misc.cmana, 12, 52);
 }
 
 // Prints ratings on certain abilities -RAK-
