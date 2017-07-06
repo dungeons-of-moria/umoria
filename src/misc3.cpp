@@ -703,7 +703,7 @@ bool playerStatRestore(int stat) {
 
 // Boost a stat artificially (by wearing something). If the display
 // argument is true, then increase is shown on the screen.
-void bst_stat(int stat, int amount) {
+void playerStatBoost(int stat, int amount) {
     py.stats.mod_stat[stat] += amount;
 
     playerSetAndUseStat(stat);

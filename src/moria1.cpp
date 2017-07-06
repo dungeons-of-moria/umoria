@@ -37,7 +37,7 @@ void py_bonuses(Inventory_t *item, int factor) {
     if (item->flags & TR_STATS) {
         for (int i = 0; i < 6; i++) {
             if ((1 << i) & item->flags) {
-                bst_stat(i, amount);
+                playerStatBoost(i, amount);
             }
         }
     }
