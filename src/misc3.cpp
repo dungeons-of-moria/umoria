@@ -379,7 +379,7 @@ char *playerTitle() {
 }
 
 // Prints title of character -RAK-
-void prt_title() {
+void printCharacterTitle() {
     printCharacterInfoInField(playerTitle(), 4, STAT_COLUMN);
 }
 
@@ -1954,7 +1954,7 @@ static void gain_level() {
     }
 
     prt_level();
-    prt_title();
+    printCharacterTitle();
 
     Class_t *c_ptr = &classes[py.misc.pclass];
 

@@ -299,7 +299,7 @@ int playerStatAdjustmentWisdomIntelligence(int stat);
 int playerStatAdjustmentCharisma();
 int playerStatAdjustmentConstitution();
 char *playerTitle();
-void prt_title();
+void printCharacterTitle();
 void prt_level();
 void prt_cmana();
 void prt_mhp();
