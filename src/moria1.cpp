@@ -1261,8 +1261,8 @@ static void inventoryDisplayAppropriateHeader() {
                            (inventory_count == 0 ? "nothing." : "-")
             );
         } else {
-            int limitQuotient = weight_limit() / 10;
-            int limitRemainder = weight_limit() % 10;
+            int limitQuotient = playerCarryingLoadLimit() / 10;
+            int limitRemainder = playerCarryingLoadLimit() % 10;
 
             (void) sprintf(msg, "You are carrying %d.%d pounds. Your capacity is %d.%d pounds. In your pack is -",
                            weightQuotient,

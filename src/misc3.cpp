@@ -1193,7 +1193,7 @@ int inventoryDamageItem(bool (*item_type)(Inventory_t *), int chance_percentage)
 }
 
 // Computes current weight limit -RAK-
-int weight_limit() {
+int playerCarryingLoadLimit() {
     int weight_cap = py.stats.use_stat[A_STR] * PLAYER_WEIGHT_CAP + py.misc.wt;
 
     if (weight_cap > 3000) {
@@ -1236,7 +1236,7 @@ bool inven_check_num(Inventory_t *item) {
 
 // return false if picking up an object would change the players speed
 bool inven_check_weight(Inventory_t *item) {
-    int limit = weight_limit();
+    int limit = playerCarryingLoadLimit();
     int newWeight = item->number * item->weight + inventory_weight;
 
     if (limit < newWeight) {
@@ -1266,7 +1266,7 @@ void check_strength() {
         calc_bonuses();
     }
 
-    int limit = weight_limit();
+    int limit = playerCarryingLoadLimit();
 
     if (limit < inventory_weight) {
         limit = inventory_weight / (limit + 1);
