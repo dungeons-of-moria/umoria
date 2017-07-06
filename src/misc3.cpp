@@ -13,7 +13,6 @@ static const char *stat_names[] = {"STR : ", "INT : ", "WIS : ", "DEX : ", "CON 
 #define BLANK_LENGTH 24
 static char blank_string[] = "                        ";
 
-static void prt_field(const char *info, int row, int column);
 static uint8_t modify_stat(int stat, int16_t amount);
 static int spell_chance(int spell);
 
@@ -208,8 +207,10 @@ void displayCharacterStats(int stat) {
 
 // Print character info in given row, column -RAK-
 // The longest title is 13 characters, so only pad to 13
-static void prt_field(const char *info, int row, int column) {
+static void printCharacterInfoInField(const char *info, int row, int column) {
+    // blank out the current field space
     putString(&blank_string[BLANK_LENGTH - 13], row, column);
+
     putString(info, row, column);
 }
 
@@ -379,7 +380,7 @@ char *title_string() {
 
 // Prints title of character -RAK-
 void prt_title() {
-    prt_field(title_string(), 4, STAT_COLUMN);
+    printCharacterInfoInField(title_string(), 4, STAT_COLUMN);
 }
 
 // Prints level -RAK-
@@ -844,9 +845,9 @@ int todam_adj() {
 
 // Prints character-screen info -RAK-
 void prt_stat_block() {
-    prt_field(character_races[py.misc.prace].trace, 2, STAT_COLUMN);
-    prt_field(classes[py.misc.pclass].title, 3, STAT_COLUMN);
-    prt_field(title_string(), 4, STAT_COLUMN);
+    printCharacterInfoInField(character_races[py.misc.prace].trace, 2, STAT_COLUMN);
+    printCharacterInfoInField(classes[py.misc.pclass].title, 3, STAT_COLUMN);
+    printCharacterInfoInField(title_string(), 4, STAT_COLUMN);
 
     for (int i = 0; i < 6; i++) {
         displayCharacterStats(i);
