@@ -322,7 +322,7 @@ bool playerStatRandomDecrease(int stat);
 bool playerStatRestore(int stat);
 void playerStatBoost(int stat, int amount);
 int playerToHitAdjustment();
-int toac_adj();
+int playerArmorClassAdjustment();
 int todis_adj();
 int todam_adj();
 void prt_stat_block();

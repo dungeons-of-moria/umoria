@@ -760,7 +760,7 @@ int playerToHitAdjustment() {
 }
 
 // Returns a character's adjustment to armor class -JWT-
-int toac_adj() {
+int playerArmorClassAdjustment() {
     int stat = py.stats.use_stat[A_DEX];
 
     if (stat < 4) {
