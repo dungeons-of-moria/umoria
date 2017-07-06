@@ -215,7 +215,7 @@ static void printCharacterInfoInField(const char *info, int row, int column) {
 }
 
 // Print long number with header at given row, column
-static void prt_lnum(const char *header, int32_t num, int row, int column) {
+static void printHeaderLongNumber(const char *header, int32_t num, int row, int column) {
     vtype_t str;
     (void) sprintf(str, "%s: %6d", header, num);
     putString(str, row, column);
@@ -854,12 +854,12 @@ void prt_stat_block() {
     }
 
     prt_num("LEV ", (int) py.misc.lev, 13, STAT_COLUMN);
-    prt_lnum("EXP ", py.misc.exp, 14, STAT_COLUMN);
+    printHeaderLongNumber("EXP ", py.misc.exp, 14, STAT_COLUMN);
     prt_num("MANA", py.misc.cmana, 15, STAT_COLUMN);
     prt_num("MHP ", py.misc.mhp, 16, STAT_COLUMN);
     prt_num("CHP ", py.misc.chp, 17, STAT_COLUMN);
     prt_num("AC  ", py.misc.dis_ac, 19, STAT_COLUMN);
-    prt_lnum("GOLD", py.misc.au, 20, STAT_COLUMN);
+    printHeaderLongNumber("GOLD", py.misc.au, 20, STAT_COLUMN);
     prt_winner();
 
     uint32_t status = py.flags.status;
