@@ -652,7 +652,7 @@ static bool executeAttack(Creature_t *r_ptr, Monster_t *m_ptr, int monsterID, in
                     py.misc.au -= gold;
                 }
                 printMessage("Your purse feels lighter.");
-                prt_gold();
+                printCharacterGoldValue();
             }
             if (randomNumber(2) == 1) {
                 printMessage("There is a puff of smoke!");

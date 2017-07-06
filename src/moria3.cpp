@@ -409,7 +409,7 @@ static void carry(int y, int x, bool pickup) {
         itemDescription(description, item, true);
         (void) sprintf(msg, "You have found %d gold pieces worth of %s", item->cost, description);
 
-        prt_gold();
+        printCharacterGoldValue();
         (void) delete_object(y, x);
 
         printMessage(msg);

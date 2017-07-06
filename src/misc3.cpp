@@ -409,7 +409,7 @@ void printCharacterCurrentArmorClass() {
 }
 
 // Prints current gold -RAK-
-void prt_gold() {
+void printCharacterGoldValue() {
     printLongNumber(py.misc.au, 20, STAT_COLUMN + 6);
 }
 

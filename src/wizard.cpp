@@ -141,7 +141,7 @@ void change_character() {
         int32_t tmp_lval = (int32_t) atol(tmp_str);
         if (tmp_lval > -1 && (*tmp_str != '\0')) {
             py.misc.au = tmp_lval;
-            prt_gold();
+            printCharacterGoldValue();
         }
     } else {
         return;
