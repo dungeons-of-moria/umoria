@@ -285,7 +285,7 @@ static void get_ahw() {
         py.misc.ht = (uint16_t) randomNumberNormalDistribution((int) character_races[i].f_b_ht, (int) character_races[i].f_m_ht);
         py.misc.wt = (uint16_t) randomNumberNormalDistribution((int) character_races[i].f_b_wt, (int) character_races[i].f_m_wt);
     }
-    py.misc.disarm = (int16_t) (character_races[i].b_dis + todis_adj());
+    py.misc.disarm = (int16_t) (character_races[i].b_dis + playerDisarmAdjustment());
 }
 
 // Prints the classes for a given race: Rogue, Mage, Priest, etc.,

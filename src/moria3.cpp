@@ -1106,7 +1106,7 @@ static int16_t playerLockPickingSkill() {
     int16_t skill = py.misc.disarm;
 
     skill += 2;
-    skill *= todis_adj();
+    skill *= playerDisarmAdjustment();
     skill += playerStatAdjustmentWisdomIntelligence(A_INT);
     skill += class_level_adj[py.misc.pclass][CLA_DISARM] * py.misc.lev / 3;
 

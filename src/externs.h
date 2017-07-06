@@ -323,7 +323,7 @@ bool playerStatRestore(int stat);
 void playerStatBoost(int stat, int amount);
 int playerToHitAdjustment();
 int playerArmorClassAdjustment();
-int todis_adj();
+int playerDisarmAdjustment();
 int todam_adj();
 void prt_stat_block();
 void draw_cave();
