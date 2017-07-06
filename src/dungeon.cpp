@@ -696,7 +696,7 @@ static void playerUpdateStatusFlags() {
     }
 
     if (py.flags.status & PY_MANA) {
-        prt_cmana();
+        printCharacterCurrentMana();
         py.flags.status &= ~PY_MANA;
     }
 }
@@ -1984,7 +1984,7 @@ static void regenmana(int percent) {
     }
 
     if (old_cmana != py.misc.cmana) {
-        prt_cmana();
+        printCharacterCurrentMana();
     }
 }
 

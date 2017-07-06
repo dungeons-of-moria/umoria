@@ -264,7 +264,7 @@ static bool drinkPotion(uint32_t flags, uint8_t itemID) {
                 if (py.misc.cmana < py.misc.mana) {
                     py.misc.cmana = py.misc.mana;
                     printMessage("Your feel your head clear.");
-                    prt_cmana();
+                    printCharacterCurrentMana();
                     identified = true;
                 }
                 break;

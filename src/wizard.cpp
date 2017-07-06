@@ -128,7 +128,7 @@ void change_character() {
             py.misc.mana = (int16_t) tmp_val;
             py.misc.cmana = (int16_t) tmp_val;
             py.misc.cmana_frac = 0;
-            prt_cmana();
+            printCharacterCurrentMana();
         }
     } else {
         return;

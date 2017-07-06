@@ -1224,7 +1224,7 @@ void creatureCastsSpell(Monster_t *m_ptr, int monsterID, int spellID, uint8_t le
                 } else {
                     py.misc.cmana -= r1;
                 }
-                prt_cmana();
+                printCharacterCurrentMana();
                 m_ptr->hp += 6 * (r1);
             }
             break;

@@ -227,6 +227,6 @@ void pray() {
             py.misc.cmana -= s_ptr->smana;
         }
 
-        prt_cmana();
+        printCharacterCurrentMana();
     }
 }

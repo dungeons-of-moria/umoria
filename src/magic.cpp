@@ -224,5 +224,5 @@ void getAndCastMagicSpell() {
         py.misc.cmana -= m_ptr->smana;
     }
 
-    prt_cmana();
+    printCharacterCurrentMana();
 }

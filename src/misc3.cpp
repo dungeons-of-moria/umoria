@@ -389,7 +389,7 @@ void printCharacterLevel() {
 }
 
 // Prints players current mana points. -RAK-
-void prt_cmana() {
+void printCharacterCurrentMana() {
     printNumber(py.misc.cmana, 15, STAT_COLUMN + 6);
 }
 

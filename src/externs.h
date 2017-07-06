@@ -301,7 +301,7 @@ int playerStatAdjustmentConstitution();
 char *playerTitle();
 void printCharacterTitle();
 void printCharacterLevel();
-void prt_cmana();
+void printCharacterCurrentMana();
 void prt_mhp();
 void prt_chp();
 void prt_pac();
