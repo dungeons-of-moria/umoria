@@ -334,7 +334,7 @@ void printCharacterVitalStatistics();
 void printCharacterLevelExperience();
 void printCharacterAbilities();
 void printCharacter();
-void get_name();
+void getCharacterName();
 void change_name();
 void inven_destroy(int item_id);
 void take_one_item(Inventory_t *to_item, Inventory_t *from_item);

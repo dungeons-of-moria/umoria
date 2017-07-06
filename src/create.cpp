@@ -477,7 +477,7 @@ void createCharacter() {
     printCharacterStats();
     printCharacterLevelExperience();
     printCharacterAbilities();
-    get_name();
+    getCharacterName();
 
     // This delay may be reduced, but is recommended to keep players from
     // continuously rolling up characters, which can be VERY expensive CPU wise.

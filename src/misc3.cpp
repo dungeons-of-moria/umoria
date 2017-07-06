@@ -1056,7 +1056,7 @@ void printCharacter() {
 }
 
 // Gets a name for the character -JWT-
-void get_name() {
+void getCharacterName() {
     putStringClearToEOL("Enter your player's name  [press <RETURN> when finished]", 21, 2);
 
     putString(&blank_string[BLANK_LENGTH - 23], 2, 15);
@@ -1081,7 +1081,7 @@ void change_name() {
 
         switch (getKeyInput()) {
             case 'c':
-                get_name();
+                getCharacterName();
                 flag = true;
                 break;
             case 'f':
