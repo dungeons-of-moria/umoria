@@ -88,7 +88,7 @@ static void trapSleepingGas() {
 static void trapHiddenObject(int y, int x) {
     (void) delete_object(y, x);
 
-    place_object(y, x, false);
+    dungeonPlaceRandomObjectAt(y, x, false);
 
     printMessage("Hmmm, there was something under this rock.");
 }
@@ -555,7 +555,7 @@ static int summon_object(int y, int x, int num, int typ) {
                     }
 
                     if (real_typ == 1) {
-                        place_object(oy, ox, (typ >= 4));
+                        dungeonPlaceRandomObjectAt(oy, ox, (typ >= 4));
                     } else {
                         dungeonPlaceGold(oy, ox);
                     }

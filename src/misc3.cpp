@@ -110,15 +110,15 @@ int itemGetRandomObjectId(int level, bool must_be_small) {
 }
 
 // Places an object at given row, column co-ordinate -RAK-
-void place_object(int y, int x, bool must_be_small) {
-    int cur_pos = popt();
+void dungeonPlaceRandomObjectAt(int y, int x, bool must_be_small) {
+    int free_treasure_id = popt();
 
-    cave[y][x].tptr = (uint8_t) cur_pos;
+    cave[y][x].tptr = (uint8_t) free_treasure_id;
 
-    int objectID = itemGetRandomObjectId(current_dungeon_level, must_be_small);
-    inventoryItemCopyTo(sorted_objects[objectID], &treasure_list[cur_pos]);
+    int object_id = itemGetRandomObjectId(current_dungeon_level, must_be_small);
+    inventoryItemCopyTo(sorted_objects[object_id], &treasure_list[free_treasure_id]);
 
-    magicTreasureMagicalAbility(cur_pos, current_dungeon_level);
+    magicTreasureMagicalAbility(free_treasure_id, current_dungeon_level);
 
     if (cave[y][x].cptr == 1) {
         printMessage("You feel something roll beneath your feet."); // -CJS-
@@ -152,7 +152,7 @@ void alloc_object(bool (*set_function)(int), int object_type, int number) {
                 dungeonPlaceGold(y, x);
                 break;
             case 5:
-                place_object(y, x, false);
+                dungeonPlaceRandomObjectAt(y, x, false);
                 break;
             default:
                 break;
@@ -169,7 +169,7 @@ void random_object(int y, int x, int tries) {
 
             if (coordInBounds(j, k) && cave[j][k].fval <= MAX_CAVE_FLOOR && cave[j][k].tptr == 0) {
                 if (randomNumber(100) < 75) {
-                    place_object(j, k, false);
+                    dungeonPlaceRandomObjectAt(j, k, false);
                 } else {
                     dungeonPlaceGold(j, k);
                 }

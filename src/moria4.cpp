@@ -93,7 +93,7 @@ static void digRubble(int y, int x, int diggingAbility) {
         printMessage("You have removed the rubble.");
 
         if (randomNumber(10) == 1) {
-            place_object(y, x, false);
+            dungeonPlaceRandomObjectAt(y, x, false);
 
             if (caveTileVisible(y, x)) {
                 printMessage("You have found something!");

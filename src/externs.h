@@ -290,7 +290,7 @@ void dungeonSetTrap(int y, int x, int sub_type_id);
 void dungeonPlaceRubble(int y, int x);
 void dungeonPlaceGold(int y, int x);
 int itemGetRandomObjectId(int level, bool must_be_small);
-void place_object(int y, int x, bool must_be_small);
+void dungeonPlaceRandomObjectAt(int y, int x, bool must_be_small);
 void alloc_object(bool (*set_function)(int), int object_type, int number);
 void random_object(int y, int x, int tries);
 void cnv_stat(uint8_t stat, char *stat_string);

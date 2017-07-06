@@ -1285,7 +1285,7 @@ bool wall_to_mud(int y, int x, int direction) {
             if (treasure_list[c_ptr->tptr].tval == TV_RUBBLE) {
                 (void) delete_object(y, x);
                 if (randomNumber(10) == 1) {
-                    place_object(y, x, false);
+                    dungeonPlaceRandomObjectAt(y, x, false);
                     if (caveTileVisible(y, x)) {
                         printMessage("You have found something!");
                     }
@@ -1937,7 +1937,7 @@ void create_food() {
         return;
     }
 
-    place_object(char_row, char_col, false);
+    dungeonPlaceRandomObjectAt(char_row, char_col, false);
     inventoryItemCopyTo(OBJ_MUSH, &treasure_list[treasureID]);
 }
 

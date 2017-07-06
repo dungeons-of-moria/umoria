@@ -603,11 +603,11 @@ static void build_type2(int y, int x) {
             place_secret_door(y - 3 + (randomNumber(2) << 1), x + 3);
 
             if (randomNumber(3) == 1) {
-                place_object(y, x - 2, false);
+                dungeonPlaceRandomObjectAt(y, x - 2, false);
             }
 
             if (randomNumber(3) == 1) {
-                place_object(y, x + 2, false);
+                dungeonPlaceRandomObjectAt(y, x + 2, false);
             }
 
             vault_monster(y, x - 2, randomNumber(2));
@@ -744,7 +744,7 @@ static void build_type3(int y, int x) {
             }
 
             // Place a treasure in the vault
-            place_object(y, x, false);
+            dungeonPlaceRandomObjectAt(y, x, false);
 
             // Let's guard the treasure well.
             vault_monster(y, x, 2 + randomNumber(2));
