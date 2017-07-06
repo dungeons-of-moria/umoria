@@ -239,7 +239,7 @@ void change_character() {
         } else {
             break;
         }
-        prt_speed();
+        printCharacterSpeed();
     }
 }
 

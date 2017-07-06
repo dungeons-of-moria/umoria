@@ -313,7 +313,7 @@ void printCharacterConfusedState();
 void printCharacterFearState();
 void printCharacterPoisonedState();
 void printCharacterMovementState();
-void prt_speed();
+void printCharacterSpeed();
 void prt_study();
 void prt_winner();
 void set_use_stat(int stat);

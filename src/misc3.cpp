@@ -530,7 +530,7 @@ void printCharacterMovementState() {
 }
 
 // Prints the speed of a character. -CJS-
-void prt_speed() {
+void printCharacterSpeed() {
     int speed = py.flags.speed;
 
     // Search mode.
@@ -891,7 +891,7 @@ void prt_stat_block() {
     // if speed non zero, print it, modify speed if Searching
     int16_t speed = py.flags.speed - (int16_t) ((PY_SEARCH & status) >> 8);
     if (speed != 0) {
-        prt_speed();
+        printCharacterSpeed();
     }
 
     // display the study field

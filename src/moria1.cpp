@@ -1848,7 +1848,7 @@ void search_on() {
     py.flags.status |= PY_SEARCH;
 
     printCharacterMovementState();
-    prt_speed();
+    printCharacterSpeed();
 
     py.flags.food_digested++;
 }
@@ -1860,7 +1860,7 @@ void search_off() {
     py.flags.status &= ~PY_SEARCH;
 
     printCharacterMovementState();
-    prt_speed();
+    printCharacterSpeed();
     py.flags.food_digested--;
 }
 

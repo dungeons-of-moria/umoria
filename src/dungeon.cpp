@@ -661,7 +661,7 @@ static void playerUpdateWordOfRecall() {
 static void playerUpdateStatusFlags() {
     if (py.flags.status & PY_SPEED) {
         py.flags.status &= ~PY_SPEED;
-        prt_speed();
+        printCharacterSpeed();
     }
 
     if ((py.flags.status & PY_PARALYSED) && py.flags.paralysis < 1) {
