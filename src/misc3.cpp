@@ -476,7 +476,7 @@ void printCharacterPoisonedState() {
 }
 
 // Prints Searching, Resting, Paralysis, or 'count' status -RAK-
-void prt_state() {
+void printCharacterMovementState() {
     py.flags.status &= ~PY_REPEAT;
 
     if (py.flags.paralysis > 1) {
@@ -885,7 +885,7 @@ void prt_stat_block() {
     }
 
     if ((PY_SEARCH | PY_REST) & status) {
-        prt_state();
+        printCharacterMovementState();
     }
 
     // if speed non zero, print it, modify speed if Searching

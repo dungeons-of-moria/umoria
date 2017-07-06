@@ -1847,7 +1847,7 @@ void search_on() {
 
     py.flags.status |= PY_SEARCH;
 
-    prt_state();
+    printCharacterMovementState();
     prt_speed();
 
     py.flags.food_digested++;
@@ -1859,7 +1859,7 @@ void search_off() {
 
     py.flags.status &= ~PY_SEARCH;
 
-    prt_state();
+    printCharacterMovementState();
     prt_speed();
     py.flags.food_digested--;
 }
@@ -1894,7 +1894,7 @@ void rest() {
 
         py.flags.rest = (int16_t) rest_num;
         py.flags.status |= PY_REST;
-        prt_state();
+        printCharacterMovementState();
         py.flags.food_digested--;
 
         putStringClearToEOL("Press any key to stop resting...", 0, 0);
@@ -1916,7 +1916,7 @@ void rest_off() {
     py.flags.rest = 0;
     py.flags.status &= ~PY_REST;
 
-    prt_state();
+    printCharacterMovementState();
 
     // flush last message, or delete "press any key" message
     printMessage(CNIL);

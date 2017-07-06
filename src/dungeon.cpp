@@ -665,13 +665,13 @@ static void playerUpdateStatusFlags() {
     }
 
     if ((py.flags.status & PY_PARALYSED) && py.flags.paralysis < 1) {
-        prt_state();
+        printCharacterMovementState();
         py.flags.status &= ~PY_PARALYSED;
     } else if (py.flags.paralysis > 0) {
-        prt_state();
+        printCharacterMovementState();
         py.flags.status |= PY_PARALYSED;
     } else if (py.flags.rest != 0) {
-        prt_state();
+        printCharacterMovementState();
     }
 
     if ((py.flags.status & PY_ARMOR) != 0) {
@@ -733,7 +733,7 @@ static void executeInputCommands(char *command, int *find_count) {
     // Accept a command and execute it
     do {
         if (py.flags.status & PY_REPEAT) {
-            prt_state();
+            printCharacterMovementState();
         }
 
         use_last_direction = false;
@@ -808,7 +808,7 @@ static void executeInputCommands(char *command, int *find_count) {
                 // Another way of typing control codes -CJS-
                 if (lastInputCommand == '^') {
                     if (command_count > 0) {
-                        prt_state();
+                        printCharacterMovementState();
                     }
 
                     if (getCommand("Control-", &lastInputCommand)) {
@@ -840,7 +840,7 @@ static void executeInputCommands(char *command, int *find_count) {
                         printMessage("Invalid command with a count.");
                     } else {
                         command_count = counter;
-                        prt_state();
+                        printCharacterMovementState();
                     }
                 }
             }
