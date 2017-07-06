@@ -236,7 +236,7 @@ static void printHeaderNumber(const char *header, int num, int row, int column) 
 }
 
 // Print long number at given row, column
-static void prt_long(int32_t num, int row, int column) {
+static void printLongNumber(int32_t num, int row, int column) {
     vtype_t str;
     (void) sprintf(str, "%6d", num);
     putString(str, row, column);
@@ -410,7 +410,7 @@ void prt_pac() {
 
 // Prints current gold -RAK-
 void prt_gold() {
-    prt_long(py.misc.au, 20, STAT_COLUMN + 6);
+    printLongNumber(py.misc.au, 20, STAT_COLUMN + 6);
 }
 
 // Prints depth in stat area -RAK-
@@ -1981,7 +1981,7 @@ void prt_experience() {
         py.misc.max_exp = py.misc.exp;
     }
 
-    prt_long(py.misc.exp, 14, STAT_COLUMN + 6);
+    printLongNumber(py.misc.exp, 14, STAT_COLUMN + 6);
 }
 
 // Calculate the players hit points
