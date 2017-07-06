@@ -447,7 +447,7 @@ void createCharacter() {
     get_history();
     get_ahw();
     print_history();
-    put_misc1();
+    printCharacterVitalStatistics();
     printCharacterStats();
 
     clearToBottom(20);
@@ -464,7 +464,7 @@ void createCharacter() {
             get_history();
             get_ahw();
             print_history();
-            put_misc1();
+            printCharacterVitalStatistics();
             printCharacterStats();
         } else {
             terminalBellSound();

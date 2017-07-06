@@ -330,7 +330,7 @@ void drawCavePanel();
 void printCharacterInformation();
 void printCharacterStats();
 const char *statRating(int y, int x);
-void put_misc1();
+void printCharacterVitalStatistics();
 void put_misc2();
 void put_misc3();
 void display_char();

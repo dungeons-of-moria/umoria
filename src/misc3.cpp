@@ -973,7 +973,7 @@ const char *statRating(int y, int x) {
 }
 
 // Prints age, height, weight, and SC -JWT-
-void put_misc1() {
+void printCharacterVitalStatistics() {
     printHeaderNumber("Age          ", (int) py.misc.age, 2, 38);
     printHeaderNumber("Height       ", (int) py.misc.ht, 3, 38);
     printHeaderNumber("Weight       ", (int) py.misc.wt, 4, 38);
@@ -1049,7 +1049,7 @@ void put_misc3() {
 // Used to display the character on the screen. -RAK-
 void display_char() {
     printCharacterInformation();
-    put_misc1();
+    printCharacterVitalStatistics();
     printCharacterStats();
     put_misc2();
     put_misc3();
