@@ -995,7 +995,7 @@ static struct {
 };
 
 // Set or unset various boolean options. -CJS-
-void set_options() {
+void setGameOptions() {
     putStringClearToEOL("  ESC when finished, y/n to set options, <return> or - to move cursor", 0, 0);
 
     int max;

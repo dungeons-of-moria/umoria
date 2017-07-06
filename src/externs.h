@@ -283,7 +283,7 @@ int magicEnchantmentBonus(int base, int max_standard, int level);
 
 // misc2.c
 void magicTreasureMagicalAbility(int item_id, int level);
-void set_options();
+void setGameOptions();
 
 // misc3.c
 void place_trap(int y, int x, int sub_type_id);

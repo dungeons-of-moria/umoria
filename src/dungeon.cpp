@@ -1595,7 +1595,7 @@ static void do_command(char com_val) {
             break;
         case '=': // (=) set options
             terminalSaveScreen();
-            set_options();
+            setGameOptions();
             terminalRestoreScreen();
             player_free_turn = true;
             break;
