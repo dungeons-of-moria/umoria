@@ -2108,51 +2108,55 @@ bool enterWizardMode() {
     return false;
 }
 
+static int playerAttackBlowsDexterity(int dexterity) {
+    if (dexterity < 10) {
+        return 0;
+    } else if (dexterity < 19) {
+        return 1;
+    } else if (dexterity < 68) {
+        return 2;
+    } else if (dexterity < 108) {
+        return 3;
+    } else if (dexterity < 118) {
+        return 4;
+    } else {
+        return 5;
+    }
+}
+
+static int playerAttackBlowsStrength(int strength, int weight) {
+    int adj_weight = (strength * 10 / weight);
+
+    if (adj_weight < 2) {
+        return 0;
+    } else if (adj_weight < 3) {
+        return 1;
+    } else if (adj_weight < 4) {
+        return 2;
+    } else if (adj_weight < 5) {
+        return 3;
+    } else if (adj_weight < 7) {
+        return = 4;
+    } else if (adj_weight < 9) {
+        return 5;
+    } else {
+        return 6;
+    }
+}
+
 // Weapon weight VS strength and dexterity -RAK-
-int attack_blows(int weight, int *weight_to_hit) {
-    int s = py.stats.use_stat[A_STR];
-    if (s * 15 < weight) {
-        *weight_to_hit = s * 15 - weight;
+int playerAttackBlows(int weight, int *weight_to_hit) {
+    *weight_to_hit = 0;
+
+    int player_strength = py.stats.use_stat[A_STR];
+
+    if (player_strength * 15 < weight) {
+        *weight_to_hit = player_strength * 15 - weight;
         return 1;
     }
 
-    *weight_to_hit = 0;
-
-    int d = py.stats.use_stat[A_DEX];
-    int dexterity;
-
-    if (d < 10) {
-        dexterity = 0;
-    } else if (d < 19) {
-        dexterity = 1;
-    } else if (d < 68) {
-        dexterity = 2;
-    } else if (d < 108) {
-        dexterity = 3;
-    } else if (d < 118) {
-        dexterity = 4;
-    } else {
-        dexterity = 5;
-    }
-
-    int adj_weight = (s * 10 / weight);
-    int strength;
-
-    if (adj_weight < 2) {
-        strength = 0;
-    } else if (adj_weight < 3) {
-        strength = 1;
-    } else if (adj_weight < 4) {
-        strength = 2;
-    } else if (adj_weight < 5) {
-        strength = 3;
-    } else if (adj_weight < 7) {
-        strength = 4;
-    } else if (adj_weight < 9) {
-        strength = 5;
-    } else {
-        strength = 6;
-    }
+    int dexterity = playerAttackBlowsDexterity(py.stats.use_stat[A_DEX]);
+    int strength = playerAttackBlowsStrength(player_strength, weight);
 
     return (int) blows_table[strength][dexterity];
 }

@@ -754,7 +754,7 @@ int mon_take_hit(int monster_id, int damage) {
 static void playerCalculateToHitBlows(int weaponID, int weaponWeight, int *blows, int *tot_tohit) {
     if (weaponID != TV_NOTHING) {
         // Proper weapon
-        *blows = attack_blows(weaponWeight, tot_tohit);
+        *blows = playerAttackBlows(weaponWeight, tot_tohit);
     } else {
         // Bare hands?
         *blows = 2;
