@@ -621,7 +621,7 @@ void playerSetAndUseStat(int stat) {
         playerCalculateAllowedSpellsCount(A_WIS);
         playerGainMana(A_WIS);
     } else if (stat == A_CON) {
-        calc_hitpoints();
+        playerCalculateHitPoints();
     }
 }
 
@@ -1944,7 +1944,7 @@ static void playerGainLevel() {
     (void) sprintf(msg, "Welcome to level %d.", (int) py.misc.lev);
     printMessage(msg);
 
-    calc_hitpoints();
+    playerCalculateHitPoints();
 
     int32_t new_exp = player_base_exp_levels[py.misc.lev - 1] * py.misc.expfact / 100;
 
@@ -1986,30 +1986,30 @@ void displayCharacterExperience() {
 }
 
 // Calculate the players hit points
-void calc_hitpoints() {
-    int hitpoints = player_base_hp_levels[py.misc.lev - 1] + (playerStatAdjustmentConstitution() * py.misc.lev);
+void playerCalculateHitPoints() {
+    int hp = player_base_hp_levels[py.misc.lev - 1] + (playerStatAdjustmentConstitution() * py.misc.lev);
 
-    // always give at least one point per level + 1
-    if (hitpoints < (py.misc.lev + 1)) {
-        hitpoints = py.misc.lev + 1;
+    // Always give at least one point per level + 1
+    if (hp < (py.misc.lev + 1)) {
+        hp = py.misc.lev + 1;
     }
 
     if (py.flags.status & PY_HERO) {
-        hitpoints += 10;
+        hp += 10;
     }
 
     if (py.flags.status & PY_SHERO) {
-        hitpoints += 20;
+        hp += 20;
     }
 
-    // mhp can equal zero while character is being created
-    if (hitpoints != py.misc.mhp && py.misc.mhp != 0) {
-        // change current hit points proportionately to change of mhp,
+    // MHP can equal zero while character is being created
+    if (hp != py.misc.mhp && py.misc.mhp != 0) {
+        // Change current hit points proportionately to change of MHP,
         // divide first to avoid overflow, little loss of accuracy
-        int32_t value = (((int32_t) py.misc.chp << 16) + py.misc.chp_frac) / py.misc.mhp * hitpoints;
+        int32_t value = (((int32_t) py.misc.chp << 16) + py.misc.chp_frac) / py.misc.mhp * hp;
         py.misc.chp = (int16_t) (value >> 16);
         py.misc.chp_frac = (uint16_t) (value & 0xFFFF);
-        py.misc.mhp = (int16_t) hitpoints;
+        py.misc.mhp = (int16_t) hp;
 
         // can't print hit points here, may be in store or inventory mode
         py.flags.status |= PY_HP;

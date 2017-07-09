@@ -2097,7 +2097,7 @@ void lose_exp(int32_t adjustment) {
     if (py.misc.lev != exp) {
         py.misc.lev = (uint16_t) exp;
 
-        calc_hitpoints();
+        playerCalculateHitPoints();
 
         Class_t *c_ptr = &classes[py.misc.pclass];
 

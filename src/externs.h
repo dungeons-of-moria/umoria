@@ -351,7 +351,7 @@ void playerCalculateAllowedSpellsCount(int stat);
 void playerGainSpells();
 void playerGainMana(int stat);
 void displayCharacterExperience();
-void calc_hitpoints();
+void playerCalculateHitPoints();
 void insert_str(char *to_string, const char *from_string, const char *str_to_insert);
 void insert_lnum(char *to_string, const char *from_string, int32_t number, bool show_sign);
 bool enter_wiz_mode();
