@@ -715,10 +715,10 @@ static void playerDetectEnchantment() {
         int chance = (i < 22 ? 50 : 10);
 
         if (i_ptr->tval != TV_NOTHING && enchanted(i_ptr) && randomNumber(chance) == 1) {
-            extern const char *describe_use(int);
+            // extern const char *describe_use(int); // FIXME: Why here? We have it in externs.
 
             vtype_t tmp_str;
-            (void) sprintf(tmp_str, "There's something about what you are %s...", describe_use(i));
+            (void) sprintf(tmp_str, "There's something about what you are %s...", playerItemWearingDescription(i));
             disturb(0, 0);
             printMessage(tmp_str);
             itemAppendToInscription(i_ptr, ID_MAGIK);

@@ -348,7 +348,7 @@ int displayInventory(int item_id_start, int item_id_end, bool weighted, int colu
 }
 
 // Return a string describing how a given equipment item is carried. -CJS-
-const char *describe_use(int body_location) {
+const char *playerItemWearingDescription(int body_location) {
     switch (body_location) {
         case INVEN_WIELD:
             return "wielding";

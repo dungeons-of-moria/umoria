@@ -322,7 +322,7 @@ bool ident_spell() {
     obj_desc_t out_val;
     if (item_val >= INVEN_WIELD) {
         playerRecalculateBonuses();
-        (void) sprintf(out_val, "%s: %s", describe_use(item_val), tmp_str);
+        (void) sprintf(out_val, "%s: %s", playerItemWearingDescription(item_val), tmp_str);
     } else {
         (void) sprintf(out_val, "%c %s", item_val + 97, tmp_str);
     }
