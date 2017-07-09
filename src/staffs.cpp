@@ -15,7 +15,7 @@ static bool isCarryingStaff(int *j, int *k) {
         return false;
     }
 
-    if (!find_range(TV_STAFF, TV_NEVER, j, k)) {
+    if (!inventoryFindRange(TV_STAFF, TV_NEVER, j, k)) {
         printMessage("You are not carrying any staffs.");
         return false;
     }

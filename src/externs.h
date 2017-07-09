@@ -360,7 +360,7 @@ int itemMagicAbilityDamage(Inventory_t *item, int total_damage, int monster_id);
 int playerWeaponCriticalBlow(int weapon_weight, int plus_to_hit, int damage, int attack_type_id);
 bool playerMovePosition(int dir, int *new_y, int *new_x);
 bool playerSavingThrow();
-int find_range(int item_id_start, int item_id_end, int *j, int *k);
+bool inventoryFindRange(int item_id_start, int item_id_end, int *j, int *k);
 void teleport(int new_distance);
 
 // misc4.c

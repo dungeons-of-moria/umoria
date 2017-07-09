@@ -32,7 +32,7 @@ static bool canReadScroll(int *j, int *k) {
         return false;
     }
 
-    if (!find_range(TV_SCROLL1, TV_SCROLL2, j, k)) {
+    if (!inventoryFindRange(TV_SCROLL1, TV_SCROLL2, j, k)) {
         printMessage("You are not carrying any scrolls!");
         return false;
     }

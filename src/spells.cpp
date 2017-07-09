@@ -974,7 +974,7 @@ void breath(int x, int y, int monster_id, int damage_hp, char *spell_name, int s
 // Recharge a wand, staff, or rod.  Sometimes the item breaks. -RAK-
 bool recharge(int charges) {
     int i, j;
-    if (!find_range(TV_STAFF, TV_WAND, &i, &j)) {
+    if (!inventoryFindRange(TV_STAFF, TV_WAND, &i, &j)) {
         printMessage("You have nothing to recharge.");
         return false;
     }

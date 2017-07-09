@@ -35,7 +35,7 @@ static bool canPray(int *itemPosBegin, int *itemPosEnd) {
         return false;
     }
 
-    if (!find_range(TV_PRAYER_BOOK, TV_NEVER, itemPosBegin, itemPosEnd)) {
+    if (!inventoryFindRange(TV_PRAYER_BOOK, TV_NEVER, itemPosBegin, itemPosEnd)) {
         printMessage("You are not carrying any Holy Books!");
         return false;
     }

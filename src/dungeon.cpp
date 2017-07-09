@@ -2010,7 +2010,7 @@ static bool enchanted(Inventory_t *t_ptr) {
 // Examine a Book -RAK-
 static void examine_book() {
     int i, k;
-    if (!find_range(TV_MAGIC_BOOK, TV_PRAYER_BOOK, &i, &k)) {
+    if (!inventoryFindRange(TV_MAGIC_BOOK, TV_PRAYER_BOOK, &i, &k)) {
         printMessage("You are not carrying any books.");
         return;
     }
@@ -2143,7 +2143,7 @@ static void jamdoor() {
 
     if (c_ptr->cptr == 0) {
         int i, j;
-        if (find_range(TV_SPIKE, TV_NEVER, &i, &j)) {
+        if (inventoryFindRange(TV_SPIKE, TV_NEVER, &i, &j)) {
             player_free_turn = false;
 
             printMessageNoCommandInterrupt("You jam the door with a spike.");
@@ -2185,7 +2185,7 @@ static void refill_lamp() {
     }
 
     int i, j;
-    if (!find_range(TV_FLASK, TV_NEVER, &i, &j)) {
+    if (!inventoryFindRange(TV_FLASK, TV_NEVER, &i, &j)) {
         printMessage("You have no oil.");
         return;
     }

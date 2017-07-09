@@ -2136,7 +2136,7 @@ static int playerAttackBlowsStrength(int strength, int weight) {
     } else if (adj_weight < 5) {
         return 3;
     } else if (adj_weight < 7) {
-        return = 4;
+        return 4;
     } else if (adj_weight < 9) {
         return 5;
     } else {
@@ -2304,33 +2304,33 @@ bool playerSavingThrow() {
 }
 
 // Finds range of item in inventory list -RAK-
-int find_range(int item_id_start, int item_id_end, int *j, int *k) {
+bool inventoryFindRange(int item_id_start, int item_id_end, int *j, int *k) {
     *j = -1;
     *k = -1;
 
-    bool flag = false;
+    bool at_end_of_range = false;
 
     for (int i = 0; i < inventory_count; i++) {
-        int itemID = (int) inventory[i].tval;
+        int item_id = (int) inventory[i].tval;
 
-        if (!flag) {
-            if (itemID == item_id_start || itemID == item_id_end) {
-                flag = true;
+        if (!at_end_of_range) {
+            if (item_id == item_id_start || item_id == item_id_end) {
+                at_end_of_range = true;
                 *j = i;
             }
         } else {
-            if (itemID != item_id_start && itemID != item_id_end) {
+            if (item_id != item_id_start && item_id != item_id_end) {
                 *k = i - 1;
                 break;
             }
         }
     }
 
-    if (flag && *k == -1) {
+    if (at_end_of_range && *k == -1) {
         *k = inventory_count - 1;
     }
 
-    return flag;
+    return at_end_of_range;
 }
 
 // Teleport the player to a new location -RAK-

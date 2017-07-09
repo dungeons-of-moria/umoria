@@ -19,7 +19,7 @@ void playerEat() {
     }
 
     int j, k;
-    if (!find_range(TV_FOOD, TV_NEVER, &j, &k)) {
+    if (!inventoryFindRange(TV_FOOD, TV_NEVER, &j, &k)) {
         printMessage("You are not carrying any food.");
         return;
     }

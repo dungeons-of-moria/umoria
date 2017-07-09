@@ -173,7 +173,7 @@ void getAndCastMagicSpell() {
     }
 
     int i, j;
-    if (!find_range(TV_MAGIC_BOOK, TV_NEVER, &i, &j)) {
+    if (!inventoryFindRange(TV_MAGIC_BOOK, TV_NEVER, &i, &j)) {
         printMessage("But you are not carrying any spell-books!");
         return;
     }

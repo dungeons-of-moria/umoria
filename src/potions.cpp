@@ -294,7 +294,7 @@ void quaff() {
     }
 
     int itemPosBegin, itemPosEnd;
-    if (!find_range(TV_POTION1, TV_POTION2, &itemPosBegin, &itemPosEnd)) {
+    if (!inventoryFindRange(TV_POTION1, TV_POTION2, &itemPosBegin, &itemPosEnd)) {
         printMessage("You are not carrying any potions.");
         return;
     }

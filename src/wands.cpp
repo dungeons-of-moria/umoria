@@ -125,7 +125,7 @@ void aim() {
     }
 
     int j, k;
-    if (!find_range(TV_WAND, TV_NEVER, &j, &k)) {
+    if (!inventoryFindRange(TV_WAND, TV_NEVER, &j, &k)) {
         printMessage("You are not carrying any wands.");
         return;
     }

@@ -728,7 +728,7 @@ static bool executeAttack(Creature_t *r_ptr, Monster_t *m_ptr, int monsterID, in
             }
             break;
         case 22: // Eat food
-            if (find_range(TV_FOOD, TV_NEVER, &i, &j)) {
+            if (inventoryFindRange(TV_FOOD, TV_NEVER, &i, &j)) {
                 inventoryDestroyItem(i);
                 printMessage("It got at your rations!");
             } else {
