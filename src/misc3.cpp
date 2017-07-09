@@ -1280,7 +1280,7 @@ void playerStrength() {
         } else {
             printMessage("You move more easily under the weight of your pack.");
         }
-        change_speed(limit - pack_heaviness);
+        playerChangeSpeed(limit - pack_heaviness);
         pack_heaviness = limit;
     }
 

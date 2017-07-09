@@ -389,7 +389,7 @@ static void playerUpdateFastness() {
 
     if ((PY_FAST & py.flags.status) == 0) {
         py.flags.status |= PY_FAST;
-        change_speed(-1);
+        playerChangeSpeed(-1);
 
         printMessage("You feel yourself moving faster.");
         disturb(0, 0);
@@ -399,7 +399,7 @@ static void playerUpdateFastness() {
 
     if (py.flags.fast == 0) {
         py.flags.status &= ~PY_FAST;
-        change_speed(1);
+        playerChangeSpeed(1);
 
         printMessage("You feel yourself slow down.");
         disturb(0, 0);
@@ -413,7 +413,7 @@ static void playerUpdateSlowness() {
 
     if ((PY_SLOW & py.flags.status) == 0) {
         py.flags.status |= PY_SLOW;
-        change_speed(1);
+        playerChangeSpeed(1);
 
         printMessage("You feel yourself moving slower.");
         disturb(0, 0);
@@ -423,7 +423,7 @@ static void playerUpdateSlowness() {
 
     if (py.flags.slow == 0) {
         py.flags.status &= ~PY_SLOW;
-        change_speed(-1);
+        playerChangeSpeed(-1);
 
         printMessage("You feel yourself speed up.");
         disturb(0, 0);

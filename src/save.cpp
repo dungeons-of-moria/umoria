@@ -393,7 +393,7 @@ static bool _save_char(char *fnam) {
 
     putQIO();
     disturb(1, 0);             // Turn off resting and searching.
-    change_speed(-pack_heaviness); // Fix the speed
+    playerChangeSpeed(-pack_heaviness); // Fix the speed
     pack_heaviness = 0;
     bool ok = false;
 

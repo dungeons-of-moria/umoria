@@ -233,9 +233,9 @@ void change_character() {
 
     while (getCommand("Alter speed? (+/-)", tmp_str)) {
         if (*tmp_str == '+') {
-            change_speed(-1);
+            playerChangeSpeed(-1);
         } else if (*tmp_str == '-') {
-            change_speed(1);
+            playerChangeSpeed(1);
         } else {
             break;
         }

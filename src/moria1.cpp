@@ -14,7 +14,7 @@ static int verify(const char *prompt, int item);
 // Changes speed of monsters relative to player -RAK-
 // Note: When the player is sped up or slowed down, I simply change
 // the speed of all the monsters. This greatly simplified the logic.
-void change_speed(int speed) {
+void playerChangeSpeed(int speed) {
     py.flags.speed += speed;
     py.flags.status |= PY_SPEED;
 
@@ -52,7 +52,7 @@ void py_bonuses(Inventory_t *item, int factor) {
     }
 
     if (TR_SPEED & item->flags) {
-        change_speed(-amount);
+        playerChangeSpeed(-amount);
     }
 
     if ((TR_BLIND & item->flags) && factor > 0) {
@@ -1843,7 +1843,7 @@ void disturb(int major_disturbance, int light_disturbance) {
 
 // Search Mode enhancement -RAK-
 void search_on() {
-    change_speed(1);
+    playerChangeSpeed(1);
 
     py.flags.status |= PY_SEARCH;
 
@@ -1855,7 +1855,7 @@ void search_on() {
 
 void search_off() {
     dungeonResetView();
-    change_speed(-1);
+    playerChangeSpeed(-1);
 
     py.flags.status &= ~PY_SEARCH;
 
