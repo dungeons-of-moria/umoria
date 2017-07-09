@@ -1928,17 +1928,17 @@ void playerRestOff() {
 }
 
 // Attacker's level and plusses,  defender's AC -RAK-
-bool test_hit(int base_to_hit, int level, int plus_to_hit, int armor_class, int attack_type_id) {
+bool playerTestBeingHit(int base_to_hit, int level, int plus_to_hit, int armor_class, int attack_type_id) {
     playerDisturb(1, 0);
 
     // plus_to_hit could be less than 0 if player wielding weapon too heavy for him
-    int i = base_to_hit + plus_to_hit * BTH_PLUS_ADJ + (level * class_level_adj[py.misc.pclass][attack_type_id]);
+    int hit_chance = base_to_hit + plus_to_hit * BTH_PLUS_ADJ + (level * class_level_adj[py.misc.pclass][attack_type_id]);
 
     // always miss 1 out of 20, always hit 1 out of 20
     int die = randomNumber(20);
 
     // normal hit
-    return (die != 1 && (die == 20 || (i > 0 && randomNumber(i) > armor_class)));
+    return (die != 1 && (die == 20 || (hit_chance > 0 && randomNumber(hit_chance) > armor_class)));
 }
 
 // Decreases players hit points and sets character_is_dead flag if necessary -RAK-

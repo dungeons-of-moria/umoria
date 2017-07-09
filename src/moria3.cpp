@@ -25,7 +25,7 @@ static void trapOpenPit(Inventory_t *t_ptr, int dam) {
 }
 
 static void trapArrow(Inventory_t *t_ptr, int dam) {
-    if (test_hit(125, 0, 0, py.misc.pac + py.misc.ptoac, CLA_MISC_HIT)) {
+    if (playerTestBeingHit(125, 0, 0, py.misc.pac + py.misc.ptoac, CLA_MISC_HIT)) {
         obj_desc_t description;
         itemDescription(description, t_ptr, true);
         take_hit(dam, description);
@@ -94,7 +94,7 @@ static void trapHiddenObject(int y, int x) {
 }
 
 static void trapStrengthDart(Inventory_t *t_ptr, int dam) {
-    if (test_hit(125, 0, 0, py.misc.pac + py.misc.ptoac, CLA_MISC_HIT)) {
+    if (playerTestBeingHit(125, 0, 0, py.misc.pac + py.misc.ptoac, CLA_MISC_HIT)) {
         if (!py.flags.sustain_str) {
             (void) playerStatRandomDecrease(A_STR);
 
@@ -183,7 +183,7 @@ static void trapConfuseGas() {
 }
 
 static void trapSlowDart(Inventory_t *t_ptr, int dam) {
-    if (test_hit(125, 0, 0, py.misc.pac + py.misc.ptoac, CLA_MISC_HIT)) {
+    if (playerTestBeingHit(125, 0, 0, py.misc.pac + py.misc.ptoac, CLA_MISC_HIT)) {
         obj_desc_t description;
         itemDescription(description, t_ptr, true);
         take_hit(dam, description);
@@ -201,7 +201,7 @@ static void trapSlowDart(Inventory_t *t_ptr, int dam) {
 }
 
 static void trapConstitutionDart(Inventory_t *t_ptr, int dam) {
-    if (test_hit(125, 0, 0, py.misc.pac + py.misc.ptoac, CLA_MISC_HIT)) {
+    if (playerTestBeingHit(125, 0, 0, py.misc.pac + py.misc.ptoac, CLA_MISC_HIT)) {
         if (!py.flags.sustain_con) {
             (void) playerStatRandomDecrease(A_CON);
 
@@ -813,7 +813,7 @@ static void py_attack(int y, int x) {
     // Loop for number of blows, trying to hit the critter.
     // Note: blows will always be greater than 0 at the start of the loop -MRC-
     for (int i = blows; i > 0; i--) {
-        if (!test_hit(base_tohit, (int) py.misc.lev, tot_tohit, (int) creature->ac, CLA_BTH)) {
+        if (!playerTestBeingHit(base_tohit, (int) py.misc.lev, tot_tohit, (int) creature->ac, CLA_BTH)) {
             (void) sprintf(msg, "You miss %s.", name);
             printMessage(msg);
             continue;

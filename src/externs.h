@@ -391,7 +391,7 @@ void playerSearchOn();
 void playerSearchOff();
 void playerRestOn();
 void playerRestOff();
-bool test_hit(int base_to_hit, int level, int plus_to_hit, int armor_class, int attack_type_id);
+bool playerTestBeingHit(int base_to_hit, int level, int plus_to_hit, int armor_class, int attack_type_id);
 void take_hit(int damage, const char *creature_name);
 
 // moria2.c

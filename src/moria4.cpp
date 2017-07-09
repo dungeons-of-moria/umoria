@@ -923,7 +923,7 @@ void throw_object() {
                     tbth -= tpth * (BTH_PLUS_ADJ - 1);
                 }
 
-                if (test_hit(tbth, (int) py.misc.lev, tpth, (int) creatures_list[m_ptr->mptr].ac, CLA_BTHB)) {
+                if (playerTestBeingHit(tbth, (int) py.misc.lev, tpth, (int) creatures_list[m_ptr->mptr].ac, CLA_BTHB)) {
                     int damage = m_ptr->mptr;
 
                     obj_desc_t description, msg;
@@ -1005,7 +1005,7 @@ static void py_bash(int y, int x) {
         base_tohit -= py.misc.lev * class_level_adj[py.misc.pclass][CLA_BTH] / 2;
     }
 
-    if (test_hit(base_tohit, (int) py.misc.lev, (int) py.stats.use_stat[A_DEX], (int) c_ptr->ac, CLA_BTH)) {
+    if (playerTestBeingHit(base_tohit, (int) py.misc.lev, (int) py.stats.use_stat[A_DEX], (int) c_ptr->ac, CLA_BTH)) {
         vtype_t msg;
         (void) sprintf(msg, "You hit %s.", name);
         printMessage(msg);
