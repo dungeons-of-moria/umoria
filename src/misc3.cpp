@@ -708,7 +708,7 @@ void playerStatBoost(int stat, int amount) {
 
     playerSetAndUseStat(stat);
 
-    // can not call displayCharacterStats() here, may be in store, may be in inven_command
+    // can not call displayCharacterStats() here, may be in store, may be in inventoryExecuteCommand()
     py.flags.status |= (PY_STR << stat);
 }
 

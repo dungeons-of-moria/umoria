@@ -551,20 +551,20 @@ static int verify(const char *prompt, int item) {
 // It is intended that this function be called several times in succession,
 // as some commands take up a turn, and the rest of moria must proceed in the
 // interim. A global variable is provided, doing_inventory_command, which is normally
-// zero; however if on return from inven_command it is expected that
-// inven_command should be called *again*, (being still in inventory command
+// zero; however if on return from inventoryExecuteCommand() it is expected that
+// inventoryExecuteCommand() should be called *again*, (being still in inventory command
 // input mode), then doing_inventory_command is set to the inventory command character
-// which should be used in the next call to inven_command.
+// which should be used in the next call to inventoryExecuteCommand().
 //
 // On return, the screen is restored, but not flushed. Provided no flush of
-// the screen takes place before the next call to inven_command, the inventory
+// the screen takes place before the next call to inventoryExecuteCommand(), the inventory
 // command screen is silently redisplayed, and no actual output takes place at
 // all. If the screen is flushed before a subsequent call, then the player is
 // prompted to see if we should continue. This allows the player to see any
 // changes that take place on the screen during inventory command input.
 //
-// The global variable, screen_has_changed, is cleared by inven_command, and set
-// when the screen is flushed. This is the means by which inven_command tell
+// The global variable, screen_has_changed, is cleared by inventoryExecuteCommand(), and set
+// when the screen is flushed. This is the means by which inventoryExecuteCommand() tell
 // if the screen has been flushed.
 //
 // The display of inventory items is kept to the right of the screen to
@@ -661,7 +661,7 @@ static void setInventoryCommandScreenState(char command) {
     scr_left = 50;
     scr_base = 0;
 
-    // this forces exit of inven_command() if selecting is not set true
+    // this forces exit of inventoryExecuteCommand() if selecting is not set true
     scr_state = BLANK_SCR;
 }
 
@@ -1293,7 +1293,7 @@ static void inventoryDisplayAppropriateHeader() {
 }
 
 // This does all the work.
-void inven_command(char command) {
+void inventoryExecuteCommand(char command) {
     player_free_turn = true;
 
     terminalSaveScreen();

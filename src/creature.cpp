@@ -53,7 +53,7 @@ void monsterUpdateVisibility(int monster_id) {
             m_ptr->ml = true;
             lite_spot((int) m_ptr->fy, (int) m_ptr->fx);
 
-            // notify inven_command
+            // notify inventoryExecuteCommand()
             screen_has_changed = true;
         }
     } else if (m_ptr->ml) {
@@ -61,7 +61,7 @@ void monsterUpdateVisibility(int monster_id) {
         m_ptr->ml = false;
         lite_spot((int) m_ptr->fy, (int) m_ptr->fx);
 
-        // notify inven_command
+        // notify inventoryExecuteCommand()
         screen_has_changed = true;
     }
 }

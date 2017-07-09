@@ -377,7 +377,7 @@ int displayInventory(int item_id_start, int item_id_end, bool weighted, int colu
 const char *playerItemWearingDescription(int body_location);
 int displayEquipment(bool weighted, int column);
 void playerTakeOff(int item_id, int pack_position_id);
-void inven_command(char command);
+void inventoryExecuteCommand(char command);
 int get_item(int *command_key_id, const char *prompt, int item_id_start, int item_id_end, char *mask, const char *message);
 bool no_light();
 bool get_dir(char *prompt, int *direction);

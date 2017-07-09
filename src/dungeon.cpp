@@ -747,7 +747,7 @@ static void executeInputCommands(char *command, int *find_count) {
             }
             putQIO();
         } else if (doing_inventory_command) {
-            inven_command(doing_inventory_command);
+            inventoryExecuteCommand(doing_inventory_command);
         } else {
             // move the cursor to the players character
             moveCursorRelative(char_row, char_col);
@@ -1764,16 +1764,16 @@ static void do_command(char com_val) {
             closeobject();
             break;
         case 'd': // (d)rop something
-            inven_command('d');
+            inventoryExecuteCommand('d');
             break;
         case 'e': // (e)quipment list
-            inven_command('e');
+            inventoryExecuteCommand('e');
             break;
         case 't': // (t)hrow something  (f)ire something
             throw_object();
             break;
         case 'i': // (i)nventory list
-            inven_command('i');
+            inventoryExecuteCommand('i');
             break;
         case 'S': // (S)pike a door  (j)am a door
             jamdoor();
@@ -1801,7 +1801,7 @@ static void do_command(char com_val) {
             search(char_row, char_col, py.misc.srh);
             break;
         case 'T': // (T)ake off something  (t)ake off
-            inven_command('t');
+            inventoryExecuteCommand('t');
             break;
         case 'Z': // (Z)ap a staff  (u)se a staff
             use();
@@ -1811,10 +1811,10 @@ static void do_command(char com_val) {
             player_free_turn = true;
             break;
         case 'w': // (w)ear or wield
-            inven_command('w');
+            inventoryExecuteCommand('w');
             break;
         case 'X': // e(X)change weapons  e(x)change
-            inven_command('x');
+            inventoryExecuteCommand('x');
             break;
         default:
             // Wizard commands are free moves

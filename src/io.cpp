@@ -76,7 +76,7 @@ void putString(const char *out_str, int row, int col) {
 
 // Dump the IO buffer to terminal -RAK-
 void putQIO() {
-    // Let inven_command know something has changed.
+    // Let inventoryExecuteCommand() know something has changed.
     screen_has_changed = true;
 
     (void) refresh();

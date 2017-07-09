@@ -1044,7 +1044,7 @@ void enter_store(int store_id) {
                     saved_chr = py.stats.use_stat[A_CHR];
 
                     do {
-                        inven_command(command);
+                        inventoryExecuteCommand(command);
                         command = doing_inventory_command;
                     } while (command);
 
@@ -1070,6 +1070,6 @@ void enter_store(int store_id) {
         }
     }
 
-    // Can't save and restore the screen because inven_command does that.
+    // Can't save and restore the screen because inventoryExecuteCommand() does that.
     drawCavePanel();
 }
