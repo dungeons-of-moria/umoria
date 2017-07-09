@@ -375,7 +375,7 @@ void playerAdjustBonusesForItem(Inventory_t *item, int factor);
 void playerRecalculateBonuses();
 int displayInventory(int item_id_start, int item_id_end, bool weighted, int column, char *mask);
 const char *playerItemWearingDescription(int body_location);
-int show_equip(bool weighted, int column);
+int displayEquipment(bool weighted, int column);
 void takeoff(int item_id, int pack_position_id);
 void inven_command(char command);
 int get_item(int *command_key_id, const char *prompt, int item_id_start, int item_id_end, char *mask, const char *message);

@@ -191,7 +191,7 @@ static void print_tomb() {
             if (getKeyInput() != ESCAPE) {
                 clearScreen();
                 printMessage("You are using:");
-                (void) show_equip(true, 0);
+                (void) displayEquipment(true, 0);
                 printMessage(CNIL);
                 printMessage("You are carrying:");
                 clearToBottom(1);

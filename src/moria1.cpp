@@ -416,7 +416,7 @@ static const char *itemPostitionDescription(int positionID, uint16_t weight) {
 
 // Displays equipment items from r1 to end -RAK-
 // Keep display as far right as possible. -CJS-
-int show_equip(bool weighted, int column) {
+int displayEquipment(bool weighted, int column) {
     vtype_t descriptions[INVEN_ARRAY_SIZE - INVEN_WIELD];
 
     int len = 79 - column;
@@ -436,7 +436,7 @@ int show_equip(bool weighted, int column) {
         }
 
         // Get position
-        const char *positionDescription = itemPostitionDescription(i, inventory[i].weight);
+        const char *position_description = itemPostitionDescription(i, inventory[i].weight);
 
         obj_desc_t description;
         itemDescription(description, &inventory[i], true);
@@ -444,7 +444,7 @@ int show_equip(bool weighted, int column) {
         // Truncate if necessary
         description[lim] = 0;
 
-        (void) sprintf(descriptions[line], "%c) %-14s: %s", line + 'a', positionDescription, description);
+        (void) sprintf(descriptions[line], "%c) %-14s: %s", line + 'a', position_description, description);
 
         int l = (int) strlen(descriptions[line]) + 2;
 
@@ -620,7 +620,7 @@ static void inven_screen(int new_scr) {
             line = wear_high - wear_low + 1;
             break;
         case EQUIP_SCR:
-            scr_left = show_equip(show_inventory_weights, scr_left);
+            scr_left = displayEquipment(show_inventory_weights, scr_left);
             line = equipment_count;
             break;
     }
@@ -769,7 +769,7 @@ static void inventoryUnwieldItem() {
     inventory[INVEN_WIELD] = savedItem;
 
     if (scr_state == EQUIP_SCR) {
-        scr_left = show_equip(show_inventory_weights, scr_left);
+        scr_left = displayEquipment(show_inventory_weights, scr_left);
     }
 
     playerAdjustBonusesForItem(&inventory[INVEN_AUX], -1);  // Subtract bonuses
@@ -1412,7 +1412,7 @@ int get_item(int *command_key_id, const char *prompt, int item_id_start, int ite
             if (screenID > 0) {
                 (void) displayInventory(item_id_start, item_id_end, false, 80, mask);
             } else {
-                (void) show_equip(false, 80);
+                (void) displayEquipment(false, 80);
             }
         }
 
