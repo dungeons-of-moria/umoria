@@ -589,7 +589,7 @@ void read_scroll() {
         if (!itemSetColorlessAsIdentifed(i_ptr)) {
             // round half-way case up
             py.misc.exp += (i_ptr->level + (py.misc.lev >> 1)) / py.misc.lev;
-            prt_experience();
+            displayCharacterExperience();
 
             itemIdentify(&itemID);
         }

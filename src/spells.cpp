@@ -498,7 +498,7 @@ static void lightLineTouchesMonster(int monsterID) {
 
         if (mon_take_hit(monsterID, diceDamageRoll(2, 8) >= 0)) {
             printMonsterActionText(name, "shrivels away in the light!");
-            prt_experience();
+            displayCharacterExperience();
         } else {
             printMonsterActionText(name, "cringes from the light!");
         }
@@ -683,7 +683,7 @@ static void fireBoltTouchesMonster(Cave_t *tile, int dam, int harmType, uint32_t
 
     if (mon_take_hit((int) tile->cptr, dam) >= 0) {
         printMonsterActionText(name, "dies in a fit of agony.");
-        prt_experience();
+        displayCharacterExperience();
     } else if (dam > 0) {
         printMonsterActionText(name, "screams in agony.");
     }
@@ -846,7 +846,7 @@ void fire_ball(int y, int x, int direction, int damage_hp, int spell_type_id, co
             }
 
             if (tkill >= 0) {
-                prt_experience();
+                displayCharacterExperience();
             }
             // End ball hitting.
         } else if (coordInsidePanel(y, x) && py.flags.blind < 1) {
@@ -1040,7 +1040,7 @@ bool hp_monster(int y, int x, int direction, int damage_hp) {
 
             if (mon_take_hit((int) c_ptr->cptr, damage_hp) >= 0) {
                 printMonsterActionText(name, "dies in a fit of agony.");
-                prt_experience();
+                displayCharacterExperience();
             } else if (damage_hp > 0) {
                 printMonsterActionText(name, "screams in agony.");
             }
@@ -1079,7 +1079,7 @@ bool drain_life(int y, int x, int direction) {
 
                 if (mon_take_hit((int) c_ptr->cptr, 75) >= 0) {
                     printMonsterActionText(name, "dies in a fit of agony.");
-                    prt_experience();
+                    displayCharacterExperience();
                 } else {
                     printMonsterActionText(name, "screams in agony.");
                 }
@@ -1309,7 +1309,7 @@ bool wall_to_mud(int y, int x, int direction) {
                 if (i >= 0) {
                     creature_recall[i].r_cdefense |= CD_STONE;
                     printMonsterActionText(name, "dissolves!");
-                    prt_experience(); // print msg before calling prt_exp
+                    displayCharacterExperience(); // print msg before calling prt_exp
                 } else {
                     creature_recall[m_ptr->mptr].r_cdefense |= CD_STONE;
                     printMonsterActionText(name, "grunts in pain!");
@@ -1452,7 +1452,7 @@ bool build_wall(int y, int x, int direction) {
 
                 if (mon_take_hit((int) c_ptr->cptr, damage) >= 0) {
                     printMonsterActionText(name, "is embedded in the rock.");
-                    prt_experience();
+                    displayCharacterExperience();
                 }
             } else if (r_ptr->cchar == 'E' || r_ptr->cchar == 'X') {
                 // must be an earth elemental or an earth spirit, or a Xorn
@@ -1865,7 +1865,7 @@ static void earthquakeHitsMonster(int monsterID) {
 
         if (mon_take_hit(monsterID, damage) >= 0) {
             printMonsterActionText(name, "is embedded in the rock.");
-            prt_experience();
+            displayCharacterExperience();
         }
     } else if (creature->cchar == 'E' || creature->cchar == 'X') {
         // must be an earth elemental or an earth spirit, or a
@@ -1969,7 +1969,7 @@ bool dispel_creature(int creature_defense, int damage) {
             }
 
             if (hit >= 0) {
-                prt_experience();
+                displayCharacterExperience();
             }
         }
     }
@@ -2084,7 +2084,7 @@ void lose_exp(int32_t adjustment) {
     } else {
         py.misc.exp -= adjustment;
     }
-    prt_experience();
+    displayCharacterExperience();
 
     int exp = 0;
     while ((signed) (player_base_exp_levels[exp] * py.misc.expfact / 100) <= py.misc.exp) {
@@ -2254,7 +2254,7 @@ bool restore_level() {
         // this while loop is not redundant, ptr_exp may reduce the exp level
         while (py.misc.exp < py.misc.max_exp) {
             py.misc.exp = py.misc.max_exp;
-            prt_experience();
+            displayCharacterExperience();
         }
 
         return true;

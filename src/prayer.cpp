@@ -208,7 +208,7 @@ void pray() {
     if (!player_free_turn) {
         if ((spells_worked & (1L << choice)) == 0) {
             py.misc.exp += s_ptr->sexp << 2;
-            prt_experience();
+            displayCharacterExperience();
             spells_worked |= (1L << choice);
         }
     }

@@ -190,7 +190,7 @@ void playerEat() {
             // round half-way case up
             py.misc.exp += (i_ptr->level + (py.misc.lev >> 1)) / py.misc.lev;
 
-            prt_experience();
+            displayCharacterExperience();
 
             itemIdentify(&item_val);
             i_ptr = &inventory[item_val];

@@ -1969,7 +1969,7 @@ static void playerGainLevel() {
 }
 
 // Prints experience -RAK-
-void prt_experience() {
+void displayCharacterExperience() {
     if (py.misc.exp > MAX_EXP) {
         py.misc.exp = MAX_EXP;
     }

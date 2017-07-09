@@ -205,7 +205,7 @@ void getAndCastMagicSpell() {
             py.misc.exp += m_ptr->sexp << 2;
             spells_worked |= (1L << choice);
 
-            prt_experience();
+            displayCharacterExperience();
         }
     }
 

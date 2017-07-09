@@ -215,7 +215,7 @@ static void disarmFloorTrap(int y, int x, int tot, int level, int dir, int16_t p
         move_char(dir, false);
         py.flags.confused = (int16_t) confused;
 
-        prt_experience();
+        displayCharacterExperience();
         return;
     }
 
@@ -258,7 +258,7 @@ static void disarmChestTrap(int y, int x, int tot, Inventory_t *item) {
             spellItemIdentifyAndRemoveRandomInscription(item);
             py.misc.exp += level;
 
-            prt_experience();
+            displayCharacterExperience();
         } else if ((tot > 5) && (randomNumber(tot) > 5)) {
             printMessageNoCommandInterrupt("You failed to disarm the chest.");
         } else {
@@ -955,7 +955,7 @@ void throw_object() {
                             (void) sprintf(msg, "You have killed the %s.", creatures_list[damage].name);
                             printMessage(msg);
                         }
-                        prt_experience();
+                        displayCharacterExperience();
                     }
                 } else {
                     drop_throw(oldy, oldx, &throw_obj);
@@ -1023,7 +1023,7 @@ static void py_bash(int y, int x) {
         if (mon_take_hit(monsterID, damage) >= 0) {
             (void) sprintf(msg, "You have slain %s.", name);
             printMessage(msg);
-            prt_experience();
+            displayCharacterExperience();
         } else {
             name[0] = (char) toupper((int) name[0]); // Capitalize
 

@@ -736,7 +736,7 @@ int mon_take_hit(int monster_id, int damage) {
 
     playerGainKillExperience(creature);
 
-    // can't call prt_experience() here, as that would result in "new level"
+    // can't call displayCharacterExperience() here, as that would result in "new level"
     // message appearing before "monster dies" message.
     int m_take_hit = monster->mptr;
 
@@ -863,7 +863,7 @@ static void py_attack(int y, int x) {
         if (mon_take_hit(creatureID, damage) >= 0) {
             (void) sprintf(msg, "You have slain %s.", name);
             printMessage(msg);
-            prt_experience();
+            displayCharacterExperience();
 
             return;
         }
@@ -1125,7 +1125,7 @@ static void openClosedDoor(int y, int x) {
         } else if (playerLockPickingSkill() - item->p1 > randomNumber(100)) {
             printMessage("You have picked the lock.");
             py.misc.exp++;
-            prt_experience();
+            displayCharacterExperience();
             item->p1 = 0;
         } else {
             printMessageNoCommandInterrupt("You failed to pick the lock.");
@@ -1157,7 +1157,7 @@ static void openClosedChest(int y, int x) {
             printMessage("You have picked the lock.");
 
             py.misc.exp += item->level;
-            prt_experience();
+            displayCharacterExperience();
 
             success = true;
         } else {

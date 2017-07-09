@@ -183,7 +183,7 @@ void aim() {
         if (!itemSetColorlessAsIdentifed(item)) {
             // round half-way case up
             py.misc.exp += (item->level + (py.misc.lev >> 1)) / py.misc.lev;
-            prt_experience();
+            displayCharacterExperience();
 
             itemIdentify(&item_id);
         }

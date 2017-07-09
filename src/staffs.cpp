@@ -200,7 +200,7 @@ void use() {
             // round half-way case up
             py.misc.exp += (staff_ptr->level + (py.misc.lev >> 1)) / py.misc.lev;
 
-            prt_experience();
+            displayCharacterExperience();
 
             itemIdentify(&staff_id);
         }

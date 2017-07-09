@@ -1548,7 +1548,7 @@ static void doWizardCommands(char com_val) {
             } else {
                 py.misc.exp = py.misc.exp * 2;
             }
-            prt_experience();
+            displayCharacterExperience();
             break;
         case '&': // & = summon
             y = char_row;

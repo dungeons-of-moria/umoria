@@ -112,7 +112,7 @@ static bool drinkPotion(uint32_t flags, uint8_t itemID) {
                     py.misc.exp += l;
 
                     printMessage("You feel more experienced.");
-                    prt_experience();
+                    displayCharacterExperience();
                     identified = true;
                 }
                 break;
@@ -320,7 +320,7 @@ void quaff() {
         if (!itemSetColorlessAsIdentifed(i_ptr)) {
             // round half-way case up
             py.misc.exp += (i_ptr->level + (py.misc.lev >> 1)) / py.misc.lev;
-            prt_experience();
+            displayCharacterExperience();
 
             itemIdentify(&itemID);
             i_ptr = &inventory[itemID];

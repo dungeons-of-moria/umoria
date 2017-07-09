@@ -350,7 +350,7 @@ bool spellGetId(int *spell, int number_of_choices, int *spell_id, int *spell_cha
 void playerCalculateAllowedSpellsCount(int stat);
 void playerGainSpells();
 void playerGainMana(int stat);
-void prt_experience();
+void displayCharacterExperience();
 void calc_hitpoints();
 void insert_str(char *to_string, const char *from_string, const char *str_to_insert);
 void insert_lnum(char *to_string, const char *from_string, int32_t number, bool show_sign);
