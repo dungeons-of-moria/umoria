@@ -172,7 +172,7 @@ void aim() {
     if (item->p1 < 1) {
         printMessage("The wand has no charges left.");
         if (!spellItemIdentified(item)) {
-            add_inscribe(item, ID_EMPTY);
+            itemAppendToInscription(item, ID_EMPTY);
         }
         return;
     }

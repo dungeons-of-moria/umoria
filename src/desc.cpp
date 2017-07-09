@@ -247,7 +247,7 @@ void itemIdentify(int *item_id) {
     Inventory_t *i_ptr = &inventory[*item_id];
 
     if (i_ptr->flags & TR_CURSED) {
-        add_inscribe(i_ptr, ID_DAMD);
+        itemAppendToInscription(i_ptr, ID_DAMD);
     }
 
     if (itemSetColorlessAsIdentifed(i_ptr)) {

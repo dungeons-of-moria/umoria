@@ -136,7 +136,7 @@ void outputRandomLevelObjectsToFile() {
                     itemIdentifyAsStoreBought(i_ptr);
 
                     if (i_ptr->flags & TR_CURSED) {
-                        add_inscribe(i_ptr, ID_DAMD);
+                        itemAppendToInscription(i_ptr, ID_DAMD);
                     }
 
                     itemDescription(tmp_str, i_ptr, true);

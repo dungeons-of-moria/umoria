@@ -47,7 +47,7 @@ static bool canUseStaff(Inventory_t *staff_ptr) {
     if (staff_ptr->p1 < 1) {
         printMessage("The staff has no charges left.");
         if (!spellItemIdentified(staff_ptr)) {
-            add_inscribe(staff_ptr, ID_EMPTY);
+            itemAppendToInscription(staff_ptr, ID_EMPTY);
         }
         return false;
     }
