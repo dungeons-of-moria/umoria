@@ -218,7 +218,7 @@ static int playerFoodConsumption() {
     py.flags.food -= py.flags.food_digested;
 
     if (py.flags.food < 0) {
-        take_hit(-py.flags.food / 16, "starvation"); // -CJS-
+        playerTakesHit(-py.flags.food / 16, "starvation"); // -CJS-
         playerDisturb(1, 0);
     }
 
@@ -378,7 +378,7 @@ static void playerUpdatePoisonedState() {
             break;
     }
 
-    take_hit(damage, "poison");
+    playerTakesHit(damage, "poison");
     playerDisturb(1, 0);
 }
 

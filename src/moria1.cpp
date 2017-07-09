@@ -1942,7 +1942,7 @@ bool playerTestBeingHit(int base_to_hit, int level, int plus_to_hit, int armor_c
 }
 
 // Decreases players hit points and sets character_is_dead flag if necessary -RAK-
-void take_hit(int damage, const char *creature_name_label) {
+void playerTakesHit(int damage, const char *creature_name_label) {
     if (py.flags.invuln > 0) {
         damage = 0;
     }

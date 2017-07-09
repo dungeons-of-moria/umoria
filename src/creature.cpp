@@ -556,10 +556,10 @@ static bool executeAttack(Creature_t *r_ptr, Monster_t *m_ptr, int monsterID, in
         case 1: // Normal attack
             // round half-way case down
             damage -= ((py.misc.pac + py.misc.ptoac) * damage) / 200;
-            take_hit(damage, deathDescription);
+            playerTakesHit(damage, deathDescription);
             break;
         case 2: // Lose Strength
-            take_hit(damage, deathDescription);
+            playerTakesHit(damage, deathDescription);
             if (py.flags.sustain_str) {
                 printMessage("You feel weaker for a moment, but it passes.");
             } else if (randomNumber(2) == 1) {
@@ -570,7 +570,7 @@ static bool executeAttack(Creature_t *r_ptr, Monster_t *m_ptr, int monsterID, in
             }
             break;
         case 3: // Confusion attack
-            take_hit(damage, deathDescription);
+            playerTakesHit(damage, deathDescription);
             if (randomNumber(2) == 1) {
                 if (py.flags.confused < 1) {
                     printMessage("You feel confused.");
@@ -584,7 +584,7 @@ static bool executeAttack(Creature_t *r_ptr, Monster_t *m_ptr, int monsterID, in
             }
             break;
         case 4: // Fear attack
-            take_hit(damage, deathDescription);
+            playerTakesHit(damage, deathDescription);
             if (playerSavingThrow()) {
                 printMessage("You resist the effects!");
             } else if (py.flags.afraid < 1) {
@@ -614,10 +614,10 @@ static bool executeAttack(Creature_t *r_ptr, Monster_t *m_ptr, int monsterID, in
         case 9: // Corrosion attack
             printMessage("A stinging red gas swirls about you.");
             corrode_gas(deathDescription);
-            take_hit(damage, deathDescription);
+            playerTakesHit(damage, deathDescription);
             break;
         case 10: // Blindness attack
-            take_hit(damage, deathDescription);
+            playerTakesHit(damage, deathDescription);
             if (py.flags.blind < 1) {
                 py.flags.blind += 10 + randomNumber((int) r_ptr->level);
                 printMessage("Your eyes begin to sting.");
@@ -627,7 +627,7 @@ static bool executeAttack(Creature_t *r_ptr, Monster_t *m_ptr, int monsterID, in
             }
             break;
         case 11: // Paralysis attack
-            take_hit(damage, deathDescription);
+            playerTakesHit(damage, deathDescription);
             if (playerSavingThrow()) {
                 printMessage("You resist the effects!");
             } else if (py.flags.paralysis < 1) {
@@ -672,12 +672,12 @@ static bool executeAttack(Creature_t *r_ptr, Monster_t *m_ptr, int monsterID, in
             }
             break;
         case 14: // Poison
-            take_hit(damage, deathDescription);
+            playerTakesHit(damage, deathDescription);
             printMessage("You feel very sick.");
             py.flags.poisoned += randomNumber((int) r_ptr->level) + 5;
             break;
         case 15: // Lose dexterity
-            take_hit(damage, deathDescription);
+            playerTakesHit(damage, deathDescription);
             if (py.flags.sustain_dex) {
                 printMessage("You feel clumsy for a moment, but it passes.");
             } else {
@@ -686,7 +686,7 @@ static bool executeAttack(Creature_t *r_ptr, Monster_t *m_ptr, int monsterID, in
             }
             break;
         case 16: // Lose constitution
-            take_hit(damage, deathDescription);
+            playerTakesHit(damage, deathDescription);
             if (py.flags.sustain_con) {
                 printMessage("Your body resists the effects of the disease.");
             } else {
@@ -695,7 +695,7 @@ static bool executeAttack(Creature_t *r_ptr, Monster_t *m_ptr, int monsterID, in
             }
             break;
         case 17: // Lose intelligence
-            take_hit(damage, deathDescription);
+            playerTakesHit(damage, deathDescription);
             printMessage("You have trouble thinking clearly.");
             if (py.flags.sustain_int) {
                 printMessage("But your mind quickly clears.");
@@ -704,7 +704,7 @@ static bool executeAttack(Creature_t *r_ptr, Monster_t *m_ptr, int monsterID, in
             }
             break;
         case 18: // Lose wisdom
-            take_hit(damage, deathDescription);
+            playerTakesHit(damage, deathDescription);
             if (py.flags.sustain_wis) {
                 printMessage("Your wisdom is sustained.");
             } else {
@@ -1120,14 +1120,14 @@ void creatureCastsSpell(Monster_t *m_ptr, int monsterID, int spellID, uint8_t le
             if (playerSavingThrow()) {
                 printMessage("You resist the effects of the spell.");
             } else {
-                take_hit(diceDamageRoll(3, 8), deathDescription);
+                playerTakesHit(diceDamageRoll(3, 8), deathDescription);
             }
             break;
         case 9: // Serious Wound
             if (playerSavingThrow()) {
                 printMessage("You resist the effects of the spell.");
             } else {
-                take_hit(diceDamageRoll(8, 8), deathDescription);
+                playerTakesHit(diceDamageRoll(8, 8), deathDescription);
             }
             break;
         case 10: // Hold Person

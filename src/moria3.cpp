@@ -21,14 +21,14 @@ static void trapOpenPit(Inventory_t *t_ptr, int dam) {
 
     obj_desc_t description;
     itemDescription(description, t_ptr, true);
-    take_hit(dam, description);
+    playerTakesHit(dam, description);
 }
 
 static void trapArrow(Inventory_t *t_ptr, int dam) {
     if (playerTestBeingHit(125, 0, 0, py.misc.pac + py.misc.ptoac, CLA_MISC_HIT)) {
         obj_desc_t description;
         itemDescription(description, t_ptr, true);
-        take_hit(dam, description);
+        playerTakesHit(dam, description);
 
         printMessage("An arrow hits you.");
         return;
@@ -45,7 +45,7 @@ static void trapCoveredPit(Inventory_t *t_ptr, int dam, int y, int x) {
     } else {
         obj_desc_t description;
         itemDescription(description, t_ptr, true);
-        take_hit(dam, description);
+        playerTakesHit(dam, description);
     }
 
     dungeonSetTrap(y, x, 0);
@@ -62,7 +62,7 @@ static void trapDoor(Inventory_t *t_ptr, int dam) {
     } else {
         obj_desc_t description;
         itemDescription(description, t_ptr, true);
-        take_hit(dam, description);
+        playerTakesHit(dam, description);
     }
 
     // Force the messages to display before starting to generate the next level.
@@ -100,7 +100,7 @@ static void trapStrengthDart(Inventory_t *t_ptr, int dam) {
 
             obj_desc_t description;
             itemDescription(description, t_ptr, true);
-            take_hit(dam, description);
+            playerTakesHit(dam, description);
 
             printMessage("A small dart weakens you!");
         } else {
@@ -121,7 +121,7 @@ static void trapTeleport(int y, int x) {
 }
 
 static void trapRockfall(int y, int x, int dam) {
-    take_hit(dam, "a falling rock");
+    playerTakesHit(dam, "a falling rock");
 
     (void) delete_object(y, x);
     dungeonPlaceRubble(y, x);
@@ -186,7 +186,7 @@ static void trapSlowDart(Inventory_t *t_ptr, int dam) {
     if (playerTestBeingHit(125, 0, 0, py.misc.pac + py.misc.ptoac, CLA_MISC_HIT)) {
         obj_desc_t description;
         itemDescription(description, t_ptr, true);
-        take_hit(dam, description);
+        playerTakesHit(dam, description);
 
         printMessage("A small dart hits you!");
 
@@ -207,7 +207,7 @@ static void trapConstitutionDart(Inventory_t *t_ptr, int dam) {
 
             obj_desc_t description;
             itemDescription(description, t_ptr, true);
-            take_hit(dam, description);
+            playerTakesHit(dam, description);
 
             printMessage("A small dart saps your health!");
         } else {
@@ -1035,7 +1035,7 @@ static void chestLooseStrength() {
 
     (void) playerStatRandomDecrease(A_STR);
 
-    take_hit(diceDamageRoll(1, 4), "a poison needle");
+    playerTakesHit(diceDamageRoll(1, 4), "a poison needle");
 
     printMessage("You feel weakened!");
 }
@@ -1043,7 +1043,7 @@ static void chestLooseStrength() {
 static void chestPoison() {
     printMessage("A small needle has pricked you!");
 
-    take_hit(diceDamageRoll(1, 6), "a poison needle");
+    playerTakesHit(diceDamageRoll(1, 6), "a poison needle");
 
     py.flags.poisoned += 10 + randomNumber(20);
 }
@@ -1073,7 +1073,7 @@ static void chestExplode(int y, int x) {
 
     (void) delete_object(y, x);
 
-    take_hit(diceDamageRoll(5, 8), "an exploding chest");
+    playerTakesHit(diceDamageRoll(5, 8), "an exploding chest");
 }
 
 // Chests have traps too. -RAK-

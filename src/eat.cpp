@@ -161,7 +161,7 @@ void playerEat() {
                 identified = hp_player(diceDamageRoll(3, 12));
                 break;
             case 27:
-                take_hit(randomNumber(18), "poisonous food.");
+                playerTakesHit(randomNumber(18), "poisonous food.");
                 identified = true;
                 break;
 #if 0 // 28 through 30 are no longer used
