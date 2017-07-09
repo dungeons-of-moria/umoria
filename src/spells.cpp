@@ -82,7 +82,7 @@ bool detect_treasure() {
 
             if (c_ptr->tptr != 0 && treasure_list[c_ptr->tptr].tval == TV_GOLD && !caveTileVisible(y, x)) {
                 c_ptr->fm = true;
-                lite_spot(y, x);
+                dungeonLiteSpot(y, x);
 
                 detected = true;
             }
@@ -102,7 +102,7 @@ bool detect_object() {
 
             if (c_ptr->tptr != 0 && treasure_list[c_ptr->tptr].tval < TV_MAX_OBJECT && !caveTileVisible(y, x)) {
                 c_ptr->fm = true;
-                lite_spot(y, x);
+                dungeonLiteSpot(y, x);
 
                 detected = true;
             }
@@ -162,7 +162,7 @@ bool detect_sdoor() {
                 // Staircases
 
                 c_ptr->fm = true;
-                lite_spot(y, x);
+                dungeonLiteSpot(y, x);
 
                 detected = true;
             }
@@ -220,7 +220,7 @@ bool light_area(int y, int x) {
     for (int i = y - 1; i <= y + 1; i++) {
         for (int j = x - 1; j <= x + 1; j++) {
             cave[i][j].pl = true;
-            lite_spot(i, j);
+            dungeonLiteSpot(i, j);
         }
     }
 
@@ -245,7 +245,7 @@ bool unlight_area(int y, int x) {
                 if (c_ptr->lr && c_ptr->fval <= MAX_CAVE_FLOOR) {
                     c_ptr->pl = false;
                     c_ptr->fval = DARK_FLOOR;
-                    lite_spot(row, col);
+                    dungeonLiteSpot(row, col);
                     if (!caveTileVisible(row, col)) {
                         darkened = true;
                     }
@@ -377,8 +377,8 @@ bool trap_creation() {
                 // don't let player gain exp from the newly created traps
                 treasure_list[c_ptr->tptr].p1 = 0;
 
-                // open pits are immediately visible, so call lite_spot
-                lite_spot(y, x);
+                // open pits are immediately visible, so call dungeonLiteSpot
+                dungeonLiteSpot(y, x);
             }
         }
     }
@@ -408,7 +408,7 @@ bool door_creation() {
                 c_ptr->fval = BLOCKED_FLOOR;
                 c_ptr->tptr = (uint8_t) k;
                 inventoryItemCopyTo(OBJ_CLOSED_DOOR, &treasure_list[k]);
-                lite_spot(y, x);
+                dungeonLiteSpot(y, x);
 
                 created = true;
             }
@@ -520,7 +520,7 @@ void light_line(int x, int y, int direction) {
         }
 
         if (!c_ptr->pl && !c_ptr->tl) {
-            // set pl so that lite_spot will work
+            // set pl so that dungeonLiteSpot will work
             c_ptr->pl = true;
 
             if (c_ptr->fval == LIGHT_FLOOR) {
@@ -528,7 +528,7 @@ void light_line(int x, int y, int direction) {
                     dungeonLightRoom(y, x);
                 }
             } else {
-                lite_spot(y, x);
+                dungeonLiteSpot(y, x);
             }
         }
 
@@ -708,7 +708,7 @@ void fire_bolt(int y, int x, int direction, int damage_hp, int spell_type_id, ch
 
         Cave_t *c_ptr = &cave[y][x];
 
-        lite_spot(oldy, oldx);
+        dungeonLiteSpot(oldy, oldx);
 
         if (dist > OBJ_BOLT_RANGE || c_ptr->fval >= MIN_CLOSED_SPACE) {
             finished = true;
@@ -748,7 +748,7 @@ void fire_ball(int y, int x, int direction, int damage_hp, int spell_type_id, co
         (void) playerMovePosition(direction, &y, &x);
         dist++;
 
-        lite_spot(oldy, oldx);
+        dungeonLiteSpot(oldy, oldx);
 
         if (dist > OBJ_BOLT_RANGE) {
             finished = true;
@@ -823,7 +823,7 @@ void fire_ball(int y, int x, int direction, int damage_hp, int spell_type_id, co
             for (int row = (y - 2); row <= (y + 2); row++) {
                 for (int col = (x - 2); col <= (x + 2); col++) {
                     if (coordInBounds(row, col) && coordInsidePanel(row, col) && coordDistanceBetween(y, x, row, col) <= max_dis) {
-                        lite_spot(row, col);
+                        dungeonLiteSpot(row, col);
                     }
                 }
             }
@@ -965,7 +965,7 @@ void breath(int x, int y, int monster_id, int damage_hp, char *spell_name, int s
     for (int row = (y - 2); row <= (y + 2); row++) {
         for (int col = (x - 2); col <= (x + 2); col++) {
             if (coordInBounds(row, col) && coordInsidePanel(row, col) && coordDistanceBetween(y, x, row, col) <= max_dis) {
-                lite_spot(row, col);
+                dungeonLiteSpot(row, col);
             }
         }
     }
@@ -1290,7 +1290,7 @@ bool wall_to_mud(int y, int x, int direction) {
                         printMessage("You have found something!");
                     }
                 }
-                lite_spot(y, x);
+                dungeonLiteSpot(y, x);
             } else {
                 (void) delete_object(y, x);
             }
@@ -1466,7 +1466,7 @@ bool build_wall(int y, int x, int direction) {
 
         // Permanently light this wall if it is lit by player's lamp.
         c_ptr->pl = (c_ptr->tl || c_ptr->pl);
-        lite_spot(y, x);
+        dungeonLiteSpot(y, x);
 
         // NOTE: this was never used anywhere. Is that a bug or just obsolete code?
         // i++;
@@ -1522,7 +1522,7 @@ void teleport_away(int monster_id, int distance_from_player) {
     } while ((cave[yn][xn].fval >= MIN_CLOSED_SPACE) || (cave[yn][xn].cptr != 0));
 
     dungeonMoveCreatureRecord((int) m_ptr->fy, (int) m_ptr->fx, yn, xn);
-    lite_spot((int) m_ptr->fy, (int) m_ptr->fx);
+    dungeonLiteSpot((int) m_ptr->fy, (int) m_ptr->fx);
     m_ptr->fy = (uint8_t) yn;
     m_ptr->fx = (uint8_t) xn;
 
@@ -1555,11 +1555,11 @@ void teleport_to(int to_y, int to_x) {
         for (int col = char_col - 1; col <= char_col + 1; col++) {
             Cave_t *c_ptr = &cave[row][col];
             c_ptr->tl = false;
-            lite_spot(row, col);
+            dungeonLiteSpot(row, col);
         }
     }
 
-    lite_spot(char_row, char_col);
+    dungeonLiteSpot(char_row, char_col);
 
     char_row = (int16_t) y;
     char_col = (int16_t) x;
@@ -1908,7 +1908,7 @@ void earthquake() {
 
                     c_ptr->fm = false;
                 }
-                lite_spot(y, x);
+                dungeonLiteSpot(y, x);
             }
         }
     }

@@ -51,7 +51,7 @@ void monsterUpdateVisibility(int monster_id) {
         if (!m_ptr->ml) {
             disturb(1, 0);
             m_ptr->ml = true;
-            lite_spot((int) m_ptr->fy, (int) m_ptr->fx);
+            dungeonLiteSpot((int) m_ptr->fy, (int) m_ptr->fx);
 
             // notify inventoryExecuteCommand()
             screen_has_changed = true;
@@ -59,7 +59,7 @@ void monsterUpdateVisibility(int monster_id) {
     } else if (m_ptr->ml) {
         // Turn it off.
         m_ptr->ml = false;
-        lite_spot((int) m_ptr->fy, (int) m_ptr->fx);
+        dungeonLiteSpot((int) m_ptr->fy, (int) m_ptr->fx);
 
         // notify inventoryExecuteCommand()
         screen_has_changed = true;
@@ -937,7 +937,7 @@ static void creatureOpensDoor(Cave_t *c_ptr, int16_t monsterHP, uint32_t movebit
                 t_ptr->p1 = (int16_t) (1 - randomNumber(2));
             }
             c_ptr->fval = CORR_FLOOR;
-            lite_spot(y, x);
+            dungeonLiteSpot(y, x);
             *rcmove |= CM_OPEN_DOOR;
             *do_move = false;
         }
@@ -951,7 +951,7 @@ static void creatureOpensDoor(Cave_t *c_ptr, int16_t monsterHP, uint32_t movebit
             // 50% chance of breaking door
             t_ptr->p1 = (int16_t) (1 - randomNumber(2));
             c_ptr->fval = CORR_FLOOR;
-            lite_spot(y, x);
+            dungeonLiteSpot(y, x);
             printMessage("You hear a door burst open!");
             disturb(1, 0);
         }
@@ -1027,7 +1027,7 @@ static void creatureAllowedToMove(Monster_t *m_ptr, uint32_t movebits, bool *do_
 
     if (m_ptr->ml) {
         m_ptr->ml = false;
-        lite_spot((int) m_ptr->fy, (int) m_ptr->fx);
+        dungeonLiteSpot((int) m_ptr->fy, (int) m_ptr->fx);
     }
 
     m_ptr->fy = (uint8_t) y;

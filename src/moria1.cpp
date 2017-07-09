@@ -1718,10 +1718,13 @@ void dungeonLightRoom(int pos_y, int pos_x) {
 }
 
 // Lights up given location -RAK-
-void lite_spot(int y, int x) {
-    if (coordInsidePanel(y, x)) {
-        putChar(caveGetTileSymbol(y, x), y, x);
+void dungeonLiteSpot(int y, int x) {
+    if (!coordInsidePanel(y, x)) {
+        return;
     }
+
+    char symbol = caveGetTileSymbol(y, x);
+    putChar(symbol, y, x);
 }
 
 // Normal movement

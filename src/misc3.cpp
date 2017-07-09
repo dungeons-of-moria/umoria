@@ -2352,11 +2352,11 @@ void playerTeleport(int new_distance) {
     for (int y = char_row - 1; y <= char_row + 1; y++) {
         for (int x = char_col - 1; x <= char_col + 1; x++) {
             cave[y][x].tl = false;
-            lite_spot(y, x);
+            dungeonLiteSpot(y, x);
         }
     }
 
-    lite_spot(char_row, char_col);
+    dungeonLiteSpot(char_row, char_col);
 
     char_row = (int16_t) new_y;
     char_col = (int16_t) new_x;

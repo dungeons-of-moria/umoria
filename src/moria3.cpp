@@ -462,7 +462,7 @@ void delete_monster(int id) {
     cave[monster->fy][monster->fx].cptr = 0;
 
     if (monster->ml) {
-        lite_spot((int) monster->fy, (int) monster->fx);
+        dungeonLiteSpot((int) monster->fy, (int) monster->fx);
     }
 
     int lastID = next_free_monster_id - 1;
@@ -501,7 +501,7 @@ void fix1_delete_monster(int id) {
     cave[monster->fy][monster->fx].cptr = 0;
 
     if (monster->ml) {
-        lite_spot((int) monster->fy, (int) monster->fx);
+        dungeonLiteSpot((int) monster->fy, (int) monster->fx);
     }
 
     if (monster_multiply_total > 0) {
@@ -560,7 +560,7 @@ static int summon_object(int y, int x, int num, int typ) {
                         dungeonPlaceGold(oy, ox);
                     }
 
-                    lite_spot(oy, ox);
+                    dungeonLiteSpot(oy, ox);
 
                     if (caveTileVisible(oy, ox)) {
                         result += real_typ;
@@ -590,7 +590,7 @@ int delete_object(int y, int x) {
     tile->tptr = 0;
     tile->fm = false;
 
-    lite_spot(y, x);
+    dungeonLiteSpot(y, x);
 
     return (caveTileVisible(y, x));
 }
@@ -1139,7 +1139,7 @@ static void openClosedDoor(int y, int x) {
     if (item->p1 == 0) {
         inventoryItemCopyTo(OBJ_OPEN_DOOR, &treasure_list[tile->tptr]);
         tile->fval = CORR_FLOOR;
-        lite_spot(y, x);
+        dungeonLiteSpot(y, x);
         command_count = 0;
     }
 }
@@ -1254,7 +1254,7 @@ void closeobject() {
                 if (item->p1 == 0) {
                     inventoryItemCopyTo(OBJ_CLOSED_DOOR, item);
                     tile->fval = BLOCKED_FLOOR;
-                    lite_spot(y, x);
+                    dungeonLiteSpot(y, x);
                 } else {
                     printMessage("The door appears to be broken.");
                 }
@@ -1315,7 +1315,7 @@ int twall(int y, int x, int digging_ability, int digging_chance) {
         printMessage("You have found something!");
     }
 
-    lite_spot(y, x);
+    dungeonLiteSpot(y, x);
 
     return true;
 }

@@ -100,7 +100,7 @@ static void digRubble(int y, int x, int diggingAbility) {
             }
         }
 
-        lite_spot(y, x);
+        dungeonLiteSpot(y, x);
     } else {
         printMessageNoCommandInterrupt("You dig in the rubble.");
     }
@@ -842,7 +842,7 @@ static void drop_throw(int y, int x, Inventory_t *t_ptr) {
         int cur_pos = popt();
         cave[i][j].tptr = (uint8_t) cur_pos;
         treasure_list[cur_pos] = *t_ptr;
-        lite_spot(i, j);
+        dungeonLiteSpot(i, j);
     } else {
         obj_desc_t description, msg;
         itemDescription(description, t_ptr, false);
@@ -899,7 +899,7 @@ void throw_object() {
     while (!flag) {
         (void) playerMovePosition(dir, &y, &x);
         cur_dis++;
-        lite_spot(oldy, oldx);
+        dungeonLiteSpot(oldy, oldx);
 
         if (cur_dis > tdis) {
             flag = true;
@@ -1088,7 +1088,7 @@ static void bashClosedDoor(int y, int x, int dir, Cave_t *tile, Inventory_t *ite
         if (py.flags.confused == 0) {
             move_char(dir, false);
         } else {
-            lite_spot(y, x);
+            dungeonLiteSpot(y, x);
         }
 
         return;

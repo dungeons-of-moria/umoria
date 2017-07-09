@@ -18,7 +18,7 @@ void change_trap(int y, int x) {
 
     if (t_ptr->tval == TV_INVIS_TRAP) {
         t_ptr->tval = TV_VIS_TRAP;
-        lite_spot(y, x);
+        dungeonLiteSpot(y, x);
         return;
     }
 
@@ -27,7 +27,7 @@ void change_trap(int y, int x) {
         t_ptr->index = OBJ_CLOSED_DOOR;
         t_ptr->tval = game_objects[OBJ_CLOSED_DOOR].tval;
         t_ptr->tchar = game_objects[OBJ_CLOSED_DOOR].tchar;
-        lite_spot(y, x);
+        dungeonLiteSpot(y, x);
     }
 }
 
