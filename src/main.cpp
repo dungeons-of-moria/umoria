@@ -164,10 +164,10 @@ int main(int argc, char *argv[]) {
         // Spell and Mana based on class: Mage or Clerical realm.
         if (classes[py.misc.pclass].spell == MAGE) {
             clearScreen(); // makes spell list easier to read
-            calc_spells(A_INT);
+            playerCalculateAllowedSpellsCount(A_INT);
             calc_mana(A_INT);
         } else if (classes[py.misc.pclass].spell == PRIEST) {
-            calc_spells(A_WIS);
+            playerCalculateAllowedSpellsCount(A_WIS);
             clearScreen(); // force out the 'learn prayer' message
             calc_mana(A_WIS);
         }

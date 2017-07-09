@@ -615,10 +615,10 @@ void playerSetAndUseStat(int stat) {
     } else if (stat == A_DEX) {
         calc_bonuses();
     } else if (stat == A_INT && classes[py.misc.pclass].spell == MAGE) {
-        calc_spells(A_INT);
+        playerCalculateAllowedSpellsCount(A_INT);
         calc_mana(A_INT);
     } else if (stat == A_WIS && classes[py.misc.pclass].spell == PRIEST) {
-        calc_spells(A_WIS);
+        playerCalculateAllowedSpellsCount(A_WIS);
         calc_mana(A_WIS);
     } else if (stat == A_CON) {
         calc_hitpoints();
@@ -1654,22 +1654,22 @@ static void forgetSpells(int newSpells, const char *p, int offset) {
 
 // calculate number of spells player should have, and
 // learn forget spells until that number is met -JEW-
-void calc_spells(int stat) {
-    Spell_t *msp_ptr = &magic_spells[py.misc.pclass - 1][0];
+void playerCalculateAllowedSpellsCount(int stat) {
+    Spell_t *spell = &magic_spells[py.misc.pclass - 1][0];
 
-    const char *p;
+    const char *magic_type_str;
     int offset;
 
     if (stat == A_INT) {
-        p = "spell";
+        magic_type_str = "spell";
         offset = SPELL_OFFSET;
     } else {
-        p = "prayer";
+        magic_type_str = "prayer";
         offset = PRAYER_OFFSET;
     }
 
     // check to see if know any spells greater than level, eliminate them
-    eliminateKnownSpellsGreaterThanLevel(msp_ptr, p, offset);
+    eliminateKnownSpellsGreaterThanLevel(spell, magic_type_str, offset);
 
     // calc number of spells allowed
     int num_allowed = numberOfSpellsAllowed(stat);
@@ -1677,21 +1677,21 @@ void calc_spells(int stat) {
     int new_spells = num_allowed - num_known;
 
     if (new_spells > 0) {
-        new_spells = rememberForgottenSpells(msp_ptr, num_allowed, new_spells, p, offset);
+        new_spells = rememberForgottenSpells(spell, num_allowed, new_spells, magic_type_str, offset);
 
         // If new spells is still greater than zero
         if (new_spells > 0) {
-            new_spells = learnableSpells(msp_ptr, new_spells);
+            new_spells = learnableSpells(spell, new_spells);
         }
     } else if (new_spells < 0) {
-        forgetSpells(new_spells, p, offset);
+        forgetSpells(new_spells, magic_type_str, offset);
         new_spells = 0;
     }
 
     if (new_spells != py.flags.new_spells) {
         if (new_spells > 0 && py.flags.new_spells == 0) {
             vtype_t msg;
-            (void) sprintf(msg, "You can learn some new %ss now.", p);
+            (void) sprintf(msg, "You can learn some new %ss now.", magic_type_str);
             printMessage(msg);
         }
 
@@ -1958,10 +1958,10 @@ static void gain_level() {
     Class_t *c_ptr = &classes[py.misc.pclass];
 
     if (c_ptr->spell == MAGE) {
-        calc_spells(A_INT);
+        playerCalculateAllowedSpellsCount(A_INT);
         calc_mana(A_INT);
     } else if (c_ptr->spell == PRIEST) {
-        calc_spells(A_WIS);
+        playerCalculateAllowedSpellsCount(A_WIS);
         calc_mana(A_WIS);
     }
 }

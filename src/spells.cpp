@@ -2102,10 +2102,10 @@ void lose_exp(int32_t adjustment) {
         Class_t *c_ptr = &classes[py.misc.pclass];
 
         if (c_ptr->spell == MAGE) {
-            calc_spells(A_INT);
+            playerCalculateAllowedSpellsCount(A_INT);
             calc_mana(A_INT);
         } else if (c_ptr->spell == PRIEST) {
-            calc_spells(A_WIS);
+            playerCalculateAllowedSpellsCount(A_WIS);
             calc_mana(A_WIS);
         }
         printCharacterLevel();
