@@ -1825,7 +1825,7 @@ void dungeonMoveCharacterLight(int y1, int x1, int y2, int x2) {
 // Something happens to disturb the player. -CJS-
 // The first arg indicates a major disturbance, which affects search.
 // The second arg indicates a light change.
-void disturb(int major_disturbance, int light_disturbance) {
+void playerDisturb(int major_disturbance, int light_disturbance) {
     command_count = 0;
 
     if (major_disturbance && (py.flags.status & PY_SEARCH)) {
@@ -1929,7 +1929,7 @@ void rest_off() {
 
 // Attacker's level and plusses,  defender's AC -RAK-
 bool test_hit(int base_to_hit, int level, int plus_to_hit, int armor_class, int attack_type_id) {
-    disturb(1, 0);
+    playerDisturb(1, 0);
 
     // plus_to_hit could be less than 0 if player wielding weapon too heavy for him
     int i = base_to_hit + plus_to_hit * BTH_PLUS_ADJ + (level * class_level_adj[py.misc.pclass][attack_type_id]);

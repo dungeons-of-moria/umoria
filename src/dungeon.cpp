@@ -60,17 +60,17 @@ static void playerUpdateLightStatus() {
             if (i_ptr->p1 == 0) {
                 player_carrying_light = false;
                 printMessage("Your light has gone out!");
-                disturb(0, 1);
+                playerDisturb(0, 1);
 
                 // unlight creatures
                 updateMonsters(false);
             } else if (i_ptr->p1 < 40 && randomNumber(5) == 1 && py.flags.blind < 1) {
-                disturb(0, 0);
+                playerDisturb(0, 0);
                 printMessage("Your light is growing faint.");
             }
         } else {
             player_carrying_light = false;
-            disturb(0, 1);
+            playerDisturb(0, 1);
 
             // unlight creatures
             updateMonsters(false);
@@ -78,7 +78,7 @@ static void playerUpdateLightStatus() {
     } else if (i_ptr->p1 > 0) {
         i_ptr->p1--;
         player_carrying_light = true;
-        disturb(0, 1);
+        playerDisturb(0, 1);
 
         // light creatures
         updateMonsters(false);
@@ -87,7 +87,7 @@ static void playerUpdateLightStatus() {
 
 static void playerActivateHeroism() {
     py.flags.status |= PY_HERO;
-    disturb(0, 0);
+    playerDisturb(0, 0);
 
     py.misc.mhp += 10;
     py.misc.chp += 10;
@@ -101,7 +101,7 @@ static void playerActivateHeroism() {
 
 static void playerDisableHeroism() {
     py.flags.status &= ~PY_HERO;
-    disturb(0, 0);
+    playerDisturb(0, 0);
 
     py.misc.mhp -= 10;
     if (py.misc.chp > py.misc.mhp) {
@@ -118,7 +118,7 @@ static void playerDisableHeroism() {
 
 static void playerActivateSuperHeroism() {
     py.flags.status |= PY_SHERO;
-    disturb(0, 0);
+    playerDisturb(0, 0);
 
     py.misc.mhp += 20;
     py.misc.chp += 20;
@@ -132,7 +132,7 @@ static void playerActivateSuperHeroism() {
 
 static void playerDisableSuperHeroism() {
     py.flags.status &= ~PY_SHERO;
-    disturb(0, 0);
+    playerDisturb(0, 0);
 
     py.misc.mhp -= 20;
     if (py.misc.chp > py.misc.mhp) {
@@ -192,19 +192,19 @@ static int playerFoodConsumption() {
             if ((PY_WEAK & py.flags.status) == 0) {
                 py.flags.status |= PY_WEAK;
                 printMessage("You are getting weak from hunger.");
-                disturb(0, 0);
+                playerDisturb(0, 0);
                 printCharacterHungerstatus();
             }
 
             if (py.flags.food < PLAYER_FOOD_FAINT && randomNumber(8) == 1) {
                 py.flags.paralysis += randomNumber(5);
                 printMessage("You faint from the lack of food.");
-                disturb(1, 0);
+                playerDisturb(1, 0);
             }
         } else if ((PY_HUNGRY & py.flags.status) == 0) {
             py.flags.status |= PY_HUNGRY;
             printMessage("You are getting hungry.");
-            disturb(0, 0);
+            playerDisturb(0, 0);
             printCharacterHungerstatus();
         }
     }
@@ -219,7 +219,7 @@ static int playerFoodConsumption() {
 
     if (py.flags.food < 0) {
         take_hit(-py.flags.food / 16, "starvation"); // -CJS-
-        disturb(1, 0);
+        playerDisturb(1, 0);
     }
 
     return regen_amount;
@@ -253,7 +253,7 @@ static void playerUpdateBlindness() {
 
         drawDungeonPanel();
         printCharacterBlindStatus();
-        disturb(0, 1);
+        playerDisturb(0, 1);
 
         // unlight creatures
         updateMonsters(false);
@@ -266,7 +266,7 @@ static void playerUpdateBlindness() {
 
         printCharacterBlindStatus();
         drawDungeonPanel();
-        disturb(0, 1);
+        playerDisturb(0, 1);
 
         // light creatures
         updateMonsters(false);
@@ -322,7 +322,7 @@ static void playerUpdateFearState() {
 
         printCharacterFearState();
         printMessage("You feel bolder now.");
-        disturb(0, 0);
+        playerDisturb(0, 0);
     }
 }
 
@@ -343,7 +343,7 @@ static void playerUpdatePoisonedState() {
 
         printCharacterPoisonedState();
         printMessage("You feel better.");
-        disturb(0, 0);
+        playerDisturb(0, 0);
 
         return;
     }
@@ -379,7 +379,7 @@ static void playerUpdatePoisonedState() {
     }
 
     take_hit(damage, "poison");
-    disturb(1, 0);
+    playerDisturb(1, 0);
 }
 
 static void playerUpdateFastness() {
@@ -392,7 +392,7 @@ static void playerUpdateFastness() {
         playerChangeSpeed(-1);
 
         printMessage("You feel yourself moving faster.");
-        disturb(0, 0);
+        playerDisturb(0, 0);
     }
 
     py.flags.fast--;
@@ -402,7 +402,7 @@ static void playerUpdateFastness() {
         playerChangeSpeed(1);
 
         printMessage("You feel yourself slow down.");
-        disturb(0, 0);
+        playerDisturb(0, 0);
     }
 }
 
@@ -416,7 +416,7 @@ static void playerUpdateSlowness() {
         playerChangeSpeed(1);
 
         printMessage("You feel yourself moving slower.");
-        disturb(0, 0);
+        playerDisturb(0, 0);
     }
 
     py.flags.slow--;
@@ -426,7 +426,7 @@ static void playerUpdateSlowness() {
         playerChangeSpeed(-1);
 
         printMessage("You feel yourself speed up.");
-        disturb(0, 0);
+        playerDisturb(0, 0);
     }
 }
 
@@ -478,7 +478,7 @@ static void playerUpdateParalysis() {
     // when paralysis true, you can not see any movement that occurs
     py.flags.paralysis--;
 
-    disturb(1, 0);
+    playerDisturb(1, 0);
 }
 
 // Protection from evil counter
@@ -501,7 +501,7 @@ static void playerUpdateInvulnerability() {
 
     if ((PY_INVULN & py.flags.status) == 0) {
         py.flags.status |= PY_INVULN;
-        disturb(0, 0);
+        playerDisturb(0, 0);
 
         py.misc.pac += 100;
         py.misc.dis_ac += 100;
@@ -514,7 +514,7 @@ static void playerUpdateInvulnerability() {
 
     if (py.flags.invuln == 0) {
         py.flags.status &= ~PY_INVULN;
-        disturb(0, 0);
+        playerDisturb(0, 0);
 
         py.misc.pac -= 100;
         py.misc.dis_ac -= 100;
@@ -531,7 +531,7 @@ static void playerUpdateBlessedness() {
 
     if ((PY_BLESSED & py.flags.status) == 0) {
         py.flags.status |= PY_BLESSED;
-        disturb(0, 0);
+        playerDisturb(0, 0);
 
         py.misc.bth += 5;
         py.misc.bthb += 5;
@@ -546,7 +546,7 @@ static void playerUpdateBlessedness() {
 
     if (py.flags.blessed == 0) {
         py.flags.status &= ~PY_BLESSED;
-        disturb(0, 0);
+        playerDisturb(0, 0);
 
         py.misc.bth -= 5;
         py.misc.bthb -= 5;
@@ -719,7 +719,7 @@ static void playerDetectEnchantment() {
 
             vtype_t tmp_str;
             (void) sprintf(tmp_str, "There's something about what you are %s...", playerItemWearingDescription(i));
-            disturb(0, 0);
+            playerDisturb(0, 0);
             printMessage(tmp_str);
             itemAppendToInscription(i_ptr, ID_MAGIK);
         }
@@ -938,7 +938,7 @@ void playDungeon() {
         // Check for interrupts to find or rest.
         int microseconds = (running_counter ? 0 : 10000);
         if ((command_count > 0 || running_counter || py.flags.rest != 0) && checkForNonBlockingKeyPress(microseconds)) {
-            disturb(0, 0);
+            playerDisturb(0, 0);
         }
 
         playerUpdateHallucination();
@@ -954,7 +954,7 @@ void playDungeon() {
 
         // Random teleportation
         if (py.flags.teleport && randomNumber(100) == 1) {
-            disturb(0, 0);
+            playerDisturb(0, 0);
             playerTeleport(40);
         }
 

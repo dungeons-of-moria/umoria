@@ -129,7 +129,7 @@ char getKeyInput() {
                 exitGame();
             }
 
-            disturb(1, 0);
+            playerDisturb(1, 0);
 
             if (eof_flag > 100) {
                 // just in case, to make sure that the process eventually dies

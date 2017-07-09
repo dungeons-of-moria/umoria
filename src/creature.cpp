@@ -49,7 +49,7 @@ void monsterUpdateVisibility(int monster_id) {
     if (visible) {
         // Light it up.
         if (!m_ptr->ml) {
-            disturb(1, 0);
+            playerDisturb(1, 0);
             m_ptr->ml = true;
             dungeonLiteSpot((int) m_ptr->fy, (int) m_ptr->fx);
 
@@ -843,7 +843,7 @@ static void make_attack(int monsterID) {
         }
 
         if (testAttackHits(attype, r_ptr->level)) {
-            disturb(1, 0);
+            playerDisturb(1, 0);
 
             // can not strcat to cdesc because the creature may have multiple attacks.
             (void) strcpy(tmp_str, cdesc);
@@ -880,7 +880,7 @@ static void make_attack(int monsterID) {
             }
         } else {
             if ((adesc >= 1 && adesc <= 3) || adesc == 6) {
-                disturb(1, 0);
+                playerDisturb(1, 0);
                 (void) strcpy(tmp_str, cdesc);
                 printMessage(strcat(tmp_str, "misses you."));
             }
@@ -919,7 +919,7 @@ static void creatureOpensDoor(Cave_t *c_ptr, int16_t monsterHP, uint32_t movebit
 
                 if (randomNumber((monsterHP + 1) * (50 - t_ptr->p1)) < 40 * (monsterHP - 10 + t_ptr->p1)) {
                     printMessage("You hear a door burst open!");
-                    disturb(1, 0);
+                    playerDisturb(1, 0);
                     doorStuck = true;
                     *do_move = true;
                 }
@@ -953,7 +953,7 @@ static void creatureOpensDoor(Cave_t *c_ptr, int16_t monsterHP, uint32_t movebit
             c_ptr->fval = CORR_FLOOR;
             dungeonLiteSpot(y, x);
             printMessage("You hear a door burst open!");
-            disturb(1, 0);
+            playerDisturb(1, 0);
         }
     }
 }
@@ -1205,7 +1205,7 @@ void creatureCastsSpell(Monster_t *m_ptr, int monsterID, int spellID, uint8_t le
             break;
         case 17: // Drain Mana
             if (py.misc.cmana > 0) {
-                disturb(1, 0);
+                playerDisturb(1, 0);
 
                 vtype_t outval;
                 (void) sprintf(outval, "%sdraws psychic energy from you!", cdesc);
@@ -1306,7 +1306,7 @@ static bool mon_cast_spell(int monsterID) {
 
     // all except teleport_away() and drain mana spells always disturb
     if (thrown_spell > 6 && thrown_spell != 17) {
-        disturb(1, 0);
+        playerDisturb(1, 0);
     }
 
     // save some code/data space here, with a small time penalty

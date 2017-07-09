@@ -386,7 +386,7 @@ void dungeonMoveCreatureRecord(int y1, int x1, int y2, int x2);
 void dungeonLightRoom(int pos_y, int pos_x);
 void dungeonLiteSpot(int y, int x);
 void dungeonMoveCharacterLight(int y1, int x1, int y2, int x2);
-void disturb(int major_disturbance, int light_disturbance);
+void playerDisturb(int major_disturbance, int light_disturbance);
 void search_on();
 void search_off();
 void rest();
