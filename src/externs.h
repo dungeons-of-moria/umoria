@@ -354,7 +354,7 @@ void displayCharacterExperience();
 void playerCalculateHitPoints();
 void insertStringIntoString(char *to_string, const char *from_string, const char *str_to_insert);
 void intertNumberIntoString(char *to_string, const char *from_string, int32_t number, bool show_sign);
-bool enter_wiz_mode();
+bool enterWizardMode();
 int attack_blows(int weight, int *weight_to_hit);
 int tot_dam(Inventory_t *item, int total_damage, int monster_id);
 int critical_blow(int weapon_weight, int plus_to_hit, int damage, int attack_type_id);

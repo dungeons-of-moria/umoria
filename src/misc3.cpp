@@ -2091,7 +2091,7 @@ void intertNumberIntoString(char *to_string, const char *from_string, int32_t nu
 }
 
 // lets anyone enter wizard mode after a disclaimer... -JEW-
-bool enter_wiz_mode() {
+bool enterWizardMode() {
     bool answer = false;
 
     if (!noscore) {

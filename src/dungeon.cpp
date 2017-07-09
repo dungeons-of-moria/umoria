@@ -1345,7 +1345,7 @@ static void commandFlipWizardMode() {
     if (wizard_mode) {
         wizard_mode = false;
         printMessage("Wizard mode off.");
-    } else if (enter_wiz_mode()) {
+    } else if (enterWizardMode()) {
         printMessage("Wizard mode on.");
     }
 

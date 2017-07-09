@@ -140,7 +140,7 @@ int main(int argc, char *argv[]) {
     // enter wizard mode before showing the character display, but must wait
     // until after get_char in case it was just a resurrection
     if (to_be_wizard) {
-        if (!enter_wiz_mode()) {
+        if (!enterWizardMode()) {
             exitGame();
         }
     }
