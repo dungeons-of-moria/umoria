@@ -31,7 +31,7 @@ void playerChangeSpeed(int speed) {
 //
 // Only calculates properties with cumulative effect.  Properties that
 // depend on everything being worn are recalculated by calc_bonuses() -CJS-
-void py_bonuses(Inventory_t *item, int factor) {
+void playerAdjustBonusesForItem(Inventory_t *item, int factor) {
     int amount = item->p1 * factor;
 
     if (item->flags & TR_STATS) {
@@ -523,7 +523,7 @@ void takeoff(int item_id, int pack_position_id) {
 
     // For secondary weapon
     if (item_id != INVEN_AUX) {
-        py_bonuses(t_ptr, -1);
+        playerAdjustBonusesForItem(t_ptr, -1);
     }
 
     inventoryItemCopyTo(OBJ_NOTHING, t_ptr);
@@ -772,8 +772,8 @@ static void inventoryUnwieldItem() {
         scr_left = show_equip(show_inventory_weights, scr_left);
     }
 
-    py_bonuses(&inventory[INVEN_AUX], -1);  // Subtract bonuses
-    py_bonuses(&inventory[INVEN_WIELD], 1); // Add bonuses
+    playerAdjustBonusesForItem(&inventory[INVEN_AUX], -1);  // Subtract bonuses
+    playerAdjustBonusesForItem(&inventory[INVEN_WIELD], 1); // Add bonuses
 
     if (inventory[INVEN_WIELD].tval != TV_NOTHING) {
         obj_desc_t msgLabel;
@@ -1149,7 +1149,7 @@ static bool selectItemCommands(char *command, char *which, bool selecting) {
                 *i_ptr = savedItem;
                 equipment_count++;
 
-                py_bonuses(i_ptr, 1);
+                playerAdjustBonusesForItem(i_ptr, 1);
 
                 const char *text;
                 if (slot == INVEN_WIELD) {

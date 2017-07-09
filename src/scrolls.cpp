@@ -289,10 +289,10 @@ static bool readCurseWeaponScroll() {
     i_ptr->todam = (int16_t) (-randomNumber(5) - randomNumber(5));
     i_ptr->toac = 0;
 
-    // Must call py_bonuses() before set (clear) flags, and
+    // Must call playerAdjustBonusesForItem() before set (clear) flags, and
     // must call calc_bonuses() after set (clear) flags, so that
     // all attributes will be properly turned off.
-    py_bonuses(i_ptr, -1);
+    playerAdjustBonusesForItem(i_ptr, -1);
     i_ptr->flags = TR_CURSED;
     calc_bonuses();
 
