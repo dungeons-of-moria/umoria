@@ -277,7 +277,7 @@ static void inventoryItemWeightText(char *text, int itemID) {
 // does not fit, it may be moved left.  The return value is the left edge
 // used. If mask is non-zero, then only display those items which have a
 // non-zero entry in the mask array.
-int show_inven(int item_id_start, int item_id_end, bool weighted, int column, char *mask) {
+int displayInventory(int item_id_start, int item_id_end, bool weighted, int column, char *mask) {
     vtype_t descriptions[23];
 
     int len = 79 - column;
@@ -612,11 +612,11 @@ static void inven_screen(int new_scr) {
             line = 7;
             break;
         case INVEN_SCR:
-            scr_left = show_inven(0, inventory_count - 1, show_inventory_weights, scr_left, CNIL);
+            scr_left = displayInventory(0, inventory_count - 1, show_inventory_weights, scr_left, CNIL);
             line = inventory_count;
             break;
         case WEAR_SCR:
-            scr_left = show_inven(wear_low, wear_high, show_inventory_weights, scr_left, CNIL);
+            scr_left = displayInventory(wear_low, wear_high, show_inventory_weights, scr_left, CNIL);
             line = wear_high - wear_low + 1;
             break;
         case EQUIP_SCR:
@@ -1410,7 +1410,7 @@ int get_item(int *command_key_id, const char *prompt, int item_id_start, int ite
     do {
         if (redrawScreen) {
             if (screenID > 0) {
-                (void) show_inven(item_id_start, item_id_end, false, 80, mask);
+                (void) displayInventory(item_id_start, item_id_end, false, 80, mask);
             } else {
                 (void) show_equip(false, 80);
             }

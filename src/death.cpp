@@ -195,7 +195,7 @@ static void print_tomb() {
                 printMessage(CNIL);
                 printMessage("You are carrying:");
                 clearToBottom(1);
-                (void) show_inven(0, inventory_count - 1, true, 0, CNIL);
+                (void) displayInventory(0, inventory_count - 1, true, 0, CNIL);
                 printMessage(CNIL);
             }
         }
