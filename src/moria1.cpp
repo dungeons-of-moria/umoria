@@ -1686,30 +1686,29 @@ void dungeonMoveCreatureRecord(int y1, int x1, int y2, int x2) {
 }
 
 // Room is lit, make it appear -RAK-
-void light_room(int pos_y, int pos_x) {
-    int heightMiddle = (SCREEN_HEIGHT / 2);
-    int widthMiddle = (SCREEN_WIDTH / 2);
+void dungeonLightRoom(int pos_y, int pos_x) {
+    int height_middle = (SCREEN_HEIGHT / 2);
+    int width_middle = (SCREEN_WIDTH / 2);
 
-    int top = (pos_y / heightMiddle) * heightMiddle;
-    int left = (pos_x / widthMiddle) * widthMiddle;
-    int bottom = top + heightMiddle - 1;
-    int right = left + widthMiddle - 1;
+    int top = (pos_y / height_middle) * height_middle;
+    int left = (pos_x / width_middle) * width_middle;
+    int bottom = top + height_middle - 1;
+    int right = left + width_middle - 1;
 
     for (int y = top; y <= bottom; y++) {
         for (int x = left; x <= right; x++) {
-            Cave_t *c_ptr = &cave[y][x];
+            Cave_t *tile = &cave[y][x];
 
-            if (c_ptr->lr && !c_ptr->pl) {
-                c_ptr->pl = true;
+            if (tile->lr && !tile->pl) {
+                tile->pl = true;
 
-                if (c_ptr->fval == DARK_FLOOR) {
-                    c_ptr->fval = LIGHT_FLOOR;
+                if (tile->fval == DARK_FLOOR) {
+                    tile->fval = LIGHT_FLOOR;
                 }
-                if (!c_ptr->fm && c_ptr->tptr != 0) {
-                    int tval = treasure_list[c_ptr->tptr].tval;
-
-                    if (tval >= TV_MIN_VISIBLE && tval <= TV_MAX_VISIBLE) {
-                        c_ptr->fm = true;
+                if (!tile->fm && tile->tptr != 0) {
+                    int treasure_id = treasure_list[tile->tptr].tval;
+                    if (treasure_id >= TV_MIN_VISIBLE && treasure_id <= TV_MAX_VISIBLE) {
+                        tile->fm = true;
                     }
                 }
                 putChar(caveGetTileSymbol(y, x), y, x);

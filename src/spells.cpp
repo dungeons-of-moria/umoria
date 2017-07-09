@@ -212,7 +212,7 @@ bool light_area(int y, int x) {
     bool lit = true;
 
     if (cave[y][x].lr && current_dungeon_level > 0) {
-        light_room(y, x);
+        dungeonLightRoom(y, x);
     }
 
     // Must always light immediate area, because one might be standing on
@@ -525,7 +525,7 @@ void light_line(int x, int y, int direction) {
 
             if (c_ptr->fval == LIGHT_FLOOR) {
                 if (coordInsidePanel(y, x)) {
-                    light_room(y, x);
+                    dungeonLightRoom(y, x);
                 }
             } else {
                 lite_spot(y, x);

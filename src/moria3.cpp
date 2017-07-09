@@ -954,7 +954,7 @@ void move_char(int direction, bool do_pickup) {
                 // A room of light should be lit.
 
                 if (!tile->pl && !py.flags.blind) {
-                    light_room(char_row, char_col);
+                    dungeonLightRoom(char_row, char_col);
                 }
             } else if (tile->lr && py.flags.blind < 1) {
                 // In doorway of light-room?
@@ -962,7 +962,7 @@ void move_char(int direction, bool do_pickup) {
                 for (int row = (char_row - 1); row <= (char_row + 1); row++) {
                     for (int col = (char_col - 1); col <= (char_col + 1); col++) {
                         if (cave[row][col].fval == LIGHT_FLOOR && !cave[row][col].pl) {
-                            light_room(row, col);
+                            dungeonLightRoom(row, col);
                         }
                     }
                 }

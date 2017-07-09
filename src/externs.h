@@ -383,7 +383,7 @@ bool playerNoLight();
 bool getDirectionWithMemory(char *prompt, int *direction);
 bool getAllDirections(const char *prompt, int *direction);
 void dungeonMoveCreatureRecord(int y1, int x1, int y2, int x2);
-void light_room(int pos_y, int pos_x);
+void dungeonLightRoom(int pos_y, int pos_x);
 void lite_spot(int y, int x);
 void move_light(int y1, int x1, int y2, int x2);
 void disturb(int major_disturbance, int light_disturbance);
