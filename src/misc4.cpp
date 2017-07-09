@@ -43,7 +43,7 @@ void itemInscribe() {
     putStringClearToEOL(inscription, 0, 0);
 
     if (getStringInput(inscription, 0, (int) strlen(inscription), msg_len)) {
-        inscribe(&inventory[item_id], inscription);
+        itemReplaceInscription(&inventory[item_id], inscription);
     }
 }
 
@@ -53,7 +53,7 @@ void itemAppendToInscription(Inventory_t *item, uint8_t item_ident_type) {
 }
 
 // Replace any existing comment in an object description with a new one. -CJS-
-void inscribe(Inventory_t *item, const char *inscription) {
+void itemReplaceInscription(Inventory_t *item, const char *inscription) {
     (void) strcpy(item->inscrip, inscription);
 }
 

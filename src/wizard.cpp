@@ -255,7 +255,7 @@ void wizard_create() {
 
     i_ptr->index = OBJ_WIZARD;
     i_ptr->name2 = 0;
-    inscribe(i_ptr, "wizard item");
+    itemReplaceInscription(i_ptr, "wizard item");
     i_ptr->ident = ID_KNOWN2 | ID_STOREBOUGHT;
 
     putStringClearToEOL("Tval   : ", 0, 0);
