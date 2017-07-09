@@ -367,7 +367,7 @@ void playerTeleport(int new_distance);
 void itemInscribe();
 void itemAppendToInscription(Inventory_t *item, uint8_t item_ident_type);
 void itemReplaceInscription(Inventory_t *item, const char *inscription);
-void check_view();
+void dungeonResetView();
 
 // moria1.c
 void change_speed(int speed);

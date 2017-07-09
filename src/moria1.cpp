@@ -1835,7 +1835,7 @@ void disturb(int major_disturbance, int light_disturbance) {
 
     if (light_disturbance || running_counter) {
         running_counter = 0;
-        check_view();
+        dungeonResetView();
     }
 
     flushInputBuffer();
@@ -1854,7 +1854,7 @@ void search_on() {
 }
 
 void search_off() {
-    check_view();
+    dungeonResetView();
     change_speed(-1);
 
     py.flags.status &= ~PY_SEARCH;

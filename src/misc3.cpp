@@ -2361,7 +2361,7 @@ void playerTeleport(int new_distance) {
     char_row = (int16_t) new_y;
     char_col = (int16_t) new_x;
 
-    check_view();
+    dungeonResetView();
     updateMonsters(false);
 
     teleport_player = false;

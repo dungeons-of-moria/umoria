@@ -1563,7 +1563,7 @@ void teleport_to(int to_y, int to_x) {
 
     char_row = (int16_t) y;
     char_col = (int16_t) x;
-    check_view();
+    dungeonResetView();
 
     // light creatures
     updateMonsters(false);

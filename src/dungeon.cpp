@@ -881,10 +881,10 @@ void playDungeon() {
     panel_row = panel_col = -1;
 
     // Light up the area around character
-    check_view();
+    dungeonResetView();
 
     // must do this after panel_row/col set to -1, because search_off() will
-    // call check_view(), and so the panel_* variables must be valid before
+    // call dungeonResetView(), and so the panel_* variables must be valid before
     // search_off() is called
     if (py.flags.status & PY_SEARCH) {
         search_off();
