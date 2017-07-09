@@ -616,10 +616,10 @@ void playerSetAndUseStat(int stat) {
         calc_bonuses();
     } else if (stat == A_INT && classes[py.misc.pclass].spell == MAGE) {
         playerCalculateAllowedSpellsCount(A_INT);
-        calc_mana(A_INT);
+        playerGainMana(A_INT);
     } else if (stat == A_WIS && classes[py.misc.pclass].spell == PRIEST) {
         playerCalculateAllowedSpellsCount(A_WIS);
-        calc_mana(A_WIS);
+        playerGainMana(A_WIS);
     } else if (stat == A_CON) {
         calc_hitpoints();
     }
@@ -1871,7 +1871,7 @@ void playerGainSpells() {
 
     // set the mana for first level characters when they learn their first spell.
     if (py.misc.mana == 0) {
-        calc_mana(stat);
+        playerGainMana(stat);
     }
 }
 
@@ -1900,7 +1900,7 @@ static int newMana(int stat) {
 }
 
 // Gain some mana if you know at least one spell -RAK-
-void calc_mana(int stat) {
+void playerGainMana(int stat) {
     if (spells_learnt != 0) {
         int new_mana = newMana(stat);
 
@@ -1960,10 +1960,10 @@ static void gain_level() {
 
     if (c_ptr->spell == MAGE) {
         playerCalculateAllowedSpellsCount(A_INT);
-        calc_mana(A_INT);
+        playerGainMana(A_INT);
     } else if (c_ptr->spell == PRIEST) {
         playerCalculateAllowedSpellsCount(A_WIS);
-        calc_mana(A_WIS);
+        playerGainMana(A_WIS);
     }
 }
 

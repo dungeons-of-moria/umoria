@@ -165,11 +165,11 @@ int main(int argc, char *argv[]) {
         if (classes[py.misc.pclass].spell == MAGE) {
             clearScreen(); // makes spell list easier to read
             playerCalculateAllowedSpellsCount(A_INT);
-            calc_mana(A_INT);
+            playerGainMana(A_INT);
         } else if (classes[py.misc.pclass].spell == PRIEST) {
             playerCalculateAllowedSpellsCount(A_WIS);
             clearScreen(); // force out the 'learn prayer' message
-            calc_mana(A_WIS);
+            playerGainMana(A_WIS);
         }
 
         // prevent ^c quit from entering score into scoreboard,

@@ -349,7 +349,7 @@ void displaySpellsList(int *spell, int number_of_choices, int comment, int non_c
 bool spellGetId(int *spell, int number_of_choices, int *spell_id, int *spell_chances, const char *prompt, int first_spell);
 void playerCalculateAllowedSpellsCount(int stat);
 void playerGainSpells();
-void calc_mana(int stat);
+void playerGainMana(int stat);
 void prt_experience();
 void calc_hitpoints();
 void insert_str(char *to_string, const char *from_string, const char *str_to_insert);

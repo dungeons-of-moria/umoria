@@ -2103,10 +2103,10 @@ void lose_exp(int32_t adjustment) {
 
         if (c_ptr->spell == MAGE) {
             playerCalculateAllowedSpellsCount(A_INT);
-            calc_mana(A_INT);
+            playerGainMana(A_INT);
         } else if (c_ptr->spell == PRIEST) {
             playerCalculateAllowedSpellsCount(A_WIS);
-            calc_mana(A_WIS);
+            playerGainMana(A_WIS);
         }
         printCharacterLevel();
         printCharacterTitle();
