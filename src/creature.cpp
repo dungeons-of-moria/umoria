@@ -585,7 +585,7 @@ static bool executeAttack(Creature_t *r_ptr, Monster_t *m_ptr, int monsterID, in
             break;
         case 4: // Fear attack
             take_hit(damage, deathDescription);
-            if (player_saves()) {
+            if (playerSavingThrow()) {
                 printMessage("You resist the effects!");
             } else if (py.flags.afraid < 1) {
                 printMessage("You are suddenly afraid!");
@@ -628,7 +628,7 @@ static bool executeAttack(Creature_t *r_ptr, Monster_t *m_ptr, int monsterID, in
             break;
         case 11: // Paralysis attack
             take_hit(damage, deathDescription);
-            if (player_saves()) {
+            if (playerSavingThrow()) {
                 printMessage("You resist the effects!");
             } else if (py.flags.paralysis < 1) {
                 if (py.flags.free_act) {
@@ -1117,14 +1117,14 @@ void creatureCastsSpell(Monster_t *m_ptr, int monsterID, int spellID, uint8_t le
             teleport_to((int) m_ptr->fy, (int) m_ptr->fx);
             break;
         case 8: // Light Wound
-            if (player_saves()) {
+            if (playerSavingThrow()) {
                 printMessage("You resist the effects of the spell.");
             } else {
                 take_hit(diceDamageRoll(3, 8), deathDescription);
             }
             break;
         case 9: // Serious Wound
-            if (player_saves()) {
+            if (playerSavingThrow()) {
                 printMessage("You resist the effects of the spell.");
             } else {
                 take_hit(diceDamageRoll(8, 8), deathDescription);
@@ -1133,7 +1133,7 @@ void creatureCastsSpell(Monster_t *m_ptr, int monsterID, int spellID, uint8_t le
         case 10: // Hold Person
             if (py.flags.free_act) {
                 printMessage("You are unaffected.");
-            } else if (player_saves()) {
+            } else if (playerSavingThrow()) {
                 printMessage("You resist the effects of the spell.");
             } else if (py.flags.paralysis > 0) {
                 py.flags.paralysis += 2;
@@ -1142,7 +1142,7 @@ void creatureCastsSpell(Monster_t *m_ptr, int monsterID, int spellID, uint8_t le
             }
             break;
         case 11: // Cause Blindness
-            if (player_saves()) {
+            if (playerSavingThrow()) {
                 printMessage("You resist the effects of the spell.");
             } else if (py.flags.blind > 0) {
                 py.flags.blind += 6;
@@ -1151,7 +1151,7 @@ void creatureCastsSpell(Monster_t *m_ptr, int monsterID, int spellID, uint8_t le
             }
             break;
         case 12: // Cause Confuse
-            if (player_saves()) {
+            if (playerSavingThrow()) {
                 printMessage("You resist the effects of the spell.");
             } else if (py.flags.confused > 0) {
                 py.flags.confused += 2;
@@ -1160,7 +1160,7 @@ void creatureCastsSpell(Monster_t *m_ptr, int monsterID, int spellID, uint8_t le
             }
             break;
         case 13: // Cause Fear
-            if (player_saves()) {
+            if (playerSavingThrow()) {
                 printMessage("You resist the effects of the spell.");
             } else if (py.flags.afraid > 0) {
                 py.flags.afraid += 2;
@@ -1195,7 +1195,7 @@ void creatureCastsSpell(Monster_t *m_ptr, int monsterID, int spellID, uint8_t le
         case 16: // Slow Person
             if (py.flags.free_act) {
                 printMessage("You are unaffected.");
-            } else if (player_saves()) {
+            } else if (playerSavingThrow()) {
                 printMessage("You resist the effects of the spell.");
             } else if (py.flags.slow > 0) {
                 py.flags.slow += 2;

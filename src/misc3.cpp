@@ -2295,10 +2295,10 @@ bool playerMovePosition(int dir, int *new_y, int *new_x) {
 }
 
 // Saving throws for player character. -RAK-
-bool player_saves() {
-    int classLevelAdjustment = class_level_adj[py.misc.pclass][CLA_SAVE] * py.misc.lev / 3;
+bool playerSavingThrow() {
+    int class_level_adjustment = class_level_adj[py.misc.pclass][CLA_SAVE] * py.misc.lev / 3;
 
-    int saving = py.misc.save + playerStatAdjustmentWisdomIntelligence(A_WIS) + classLevelAdjustment;
+    int saving = py.misc.save + playerStatAdjustmentWisdomIntelligence(A_WIS) + class_level_adjustment;
 
     return randomNumber(100) <= saving;
 }
