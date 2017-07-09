@@ -10,36 +10,40 @@
 #include "externs.h"
 
 // Add a comment to an object description. -CJS-
-void scribe_object() {
+void itemInscribe() {
     if (inventory_count == 0 && equipment_count == 0) {
         printMessage("You are not carrying anything to inscribe.");
         return;
     }
 
-    int item_val;
-    if (get_item(&item_val, "Which one? ", 0, INVEN_ARRAY_SIZE, CNIL, CNIL)) {
-        obj_desc_t out_val, tmp_str;
+    int item_id;
+    if (!get_item(&item_id, "Which one? ", 0, INVEN_ARRAY_SIZE, CNIL, CNIL)) {
+        return;
+    }
 
-        itemDescription(tmp_str, &inventory[item_val], true);
-        (void) sprintf(out_val, "Inscribing %s", tmp_str);
-        printMessage(out_val);
+    obj_desc_t msg;
+    itemDescription(msg, &inventory[item_id], true);
 
-        if (inventory[item_val].inscrip[0] != '\0') {
-            (void) sprintf(out_val, "Replace %s New inscription:", inventory[item_val].inscrip);
-        } else {
-            (void) strcpy(out_val, "Inscription: ");
-        }
+    obj_desc_t inscription;
+    (void) sprintf(inscription, "Inscribing %s", msg);
 
-        int j = 78 - (int) strlen(tmp_str);
-        if (j > 12) {
-            j = 12;
-        }
+    printMessage(inscription);
 
-        putStringClearToEOL(out_val, 0, 0);
+    if (inventory[item_id].inscrip[0] != '\0') {
+        (void) sprintf(inscription, "Replace %s New inscription:", inventory[item_id].inscrip);
+    } else {
+        (void) strcpy(inscription, "Inscription: ");
+    }
 
-        if (getStringInput(out_val, 0, (int) strlen(out_val), j)) {
-            inscribe(&inventory[item_val], out_val);
-        }
+    int msg_len = 78 - (int) strlen(msg);
+    if (msg_len > 12) {
+        msg_len = 12;
+    }
+
+    putStringClearToEOL(inscription, 0, 0);
+
+    if (getStringInput(inscription, 0, (int) strlen(inscription), msg_len)) {
+        inscribe(&inventory[item_id], inscription);
     }
 }
 

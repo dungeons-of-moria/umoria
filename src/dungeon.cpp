@@ -1600,7 +1600,7 @@ static void do_command(char com_val) {
             player_free_turn = true;
             break;
         case '{': // ({) inscribe an object
-            scribe_object();
+            itemInscribe();
             player_free_turn = true;
             break;
         case '!': // (!) escape to the shell

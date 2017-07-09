@@ -364,7 +364,7 @@ bool inventoryFindRange(int item_id_start, int item_id_end, int *j, int *k);
 void playerTeleport(int new_distance);
 
 // misc4.c
-void scribe_object();
+void itemInscribe();
 void add_inscribe(Inventory_t *item, uint8_t item_ident_type);
 void inscribe(Inventory_t *item, const char *inscription);
 void check_view();
