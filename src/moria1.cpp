@@ -493,12 +493,12 @@ int displayEquipment(bool weighted, int column) {
 }
 
 // Remove item from equipment list -RAK-
-void takeoff(int item_id, int pack_position_id) {
+void playerTakeOff(int item_id, int pack_position_id) {
     py.flags.status |= PY_STR_WGT;
 
-    Inventory_t *t_ptr = &inventory[item_id];
+    Inventory_t *item = &inventory[item_id];
 
-    inventory_weight -= t_ptr->weight * t_ptr->number;
+    inventory_weight -= item->weight * item->number;
     equipment_count--;
 
     const char *p;
@@ -511,7 +511,7 @@ void takeoff(int item_id, int pack_position_id) {
     }
 
     obj_desc_t description;
-    itemDescription(description, t_ptr, true);
+    itemDescription(description, item, true);
 
     obj_desc_t msg;
     if (pack_position_id >= 0) {
@@ -523,10 +523,10 @@ void takeoff(int item_id, int pack_position_id) {
 
     // For secondary weapon
     if (item_id != INVEN_AUX) {
-        playerAdjustBonusesForItem(t_ptr, -1);
+        playerAdjustBonusesForItem(item, -1);
     }
 
-    inventoryItemCopyTo(OBJ_NOTHING, t_ptr);
+    inventoryItemCopyTo(OBJ_NOTHING, item);
 }
 
 // Used to verify if this really is the item we wish to -CJS-
@@ -1072,7 +1072,7 @@ static bool selectItemCommands(char *command, char *which, bool selecting) {
                     }
                 } else {
                     slot = inventoryCarryItem(&inventory[item]);
-                    takeoff(item, slot);
+                    playerTakeOff(item, slot);
                 }
 
                 playerStrength();
@@ -1142,7 +1142,7 @@ static bool selectItemCommands(char *command, char *which, bool selecting) {
                         wear_high++;
                     }
 
-                    takeoff(slot, itemToTakeOff);
+                    playerTakeOff(slot, itemToTakeOff);
                 }
 
                 // third, wear new item

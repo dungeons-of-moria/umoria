@@ -1151,7 +1151,7 @@ void inventoryDropItem(int item_id, bool drop_all) {
     cave[char_row][char_col].tptr = (uint8_t) treasureID;
 
     if (item_id >= INVEN_WIELD) {
-        takeoff(item_id, -1);
+        playerTakeOff(item_id, -1);
     } else {
         if (drop_all || i_ptr->number == 1) {
             inventory_weight -= i_ptr->weight * i_ptr->number;
