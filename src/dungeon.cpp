@@ -1028,7 +1028,7 @@ static char original_commands(char com_val) {
         case '$':
             break;
         case '.':
-            if (get_dir(CNIL, &dir_val)) {
+            if (getDirectionWithMemory(CNIL, &dir_val)) {
                 switch (dir_val) {
                     case 1:
                         com_val = 'B';
@@ -1118,7 +1118,7 @@ static char original_commands(char com_val) {
             com_val = '#';
             break;
         case 'T':
-            if (get_dir(CNIL, &dir_val)) {
+            if (getDirectionWithMemory(CNIL, &dir_val)) {
                 switch (dir_val) {
                     case 1:
                         com_val = CTRL_KEY('B');
@@ -1243,10 +1243,10 @@ static bool moveWithoutPickup(char *command) {
 
     int dir_val;
 
-    // Save current command_count as get_dir() may change it
+    // Save current command_count as getDirectionWithMemory() may change it
     int countSave = command_count;
 
-    if (get_dir(CNIL, &dir_val)) {
+    if (getDirectionWithMemory(CNIL, &dir_val)) {
         // Restore command_count
         command_count = countSave;
 
@@ -1405,7 +1405,7 @@ static void commandLocateOnMap() {
 
         (void) sprintf(out_val, "Map sector [%d,%d], which is%s your sector. Look which direction?", p_y, p_x, tmp_str);
 
-        if (!get_dir(out_val, &dir_val)) {
+        if (!getDirectionWithMemory(out_val, &dir_val)) {
             break;
         }
 
@@ -2114,7 +2114,7 @@ static void jamdoor() {
     int x = char_col;
 
     int dir;
-    if (!get_dir(CNIL, &dir)) {
+    if (!getDirectionWithMemory(CNIL, &dir)) {
         return;
     }
     (void) playerMovePosition(dir, &y, &x);

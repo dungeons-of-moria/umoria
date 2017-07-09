@@ -73,7 +73,7 @@ static void recitePrayer(int prayerType) {
             (void) slow_poison();
             break;
         case 9:
-            if (get_dir(CNIL, &dir)) {
+            if (getDirectionWithMemory(CNIL, &dir)) {
                 (void) confuse_monster(char_row, char_col, dir);
             }
             break;
@@ -108,7 +108,7 @@ static void recitePrayer(int prayerType) {
             (void) cure_poison();
             break;
         case 18:
-            if (get_dir(CNIL, &dir)) {
+            if (getDirectionWithMemory(CNIL, &dir)) {
                 fire_ball(char_row, char_col, dir, (diceDamageRoll(3, 6) + py.misc.lev), GF_HOLY_ORB, "Black Sphere");
             }
             break;

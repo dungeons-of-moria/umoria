@@ -1198,7 +1198,7 @@ static void openClosedChest(int y, int x) {
 void openobject() {
     int dir;
 
-    if (!get_dir(CNIL, &dir)) {
+    if (!getDirectionWithMemory(CNIL, &dir)) {
         return;
     }
 
@@ -1235,7 +1235,7 @@ void openobject() {
 void closeobject() {
     int dir;
 
-    if (!get_dir(CNIL, &dir)) {
+    if (!getDirectionWithMemory(CNIL, &dir)) {
         return;
     }
 

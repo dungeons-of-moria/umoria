@@ -138,7 +138,7 @@ void aim() {
     player_free_turn = false;
 
     int dir;
-    if (!get_dir(CNIL, &dir)) {
+    if (!getDirectionWithMemory(CNIL, &dir)) {
         return;
     }
 

@@ -276,7 +276,7 @@ static void disarmChestTrap(int y, int x, int tot, Inventory_t *item) {
 // Disarms a trap -RAK-
 void disarm_trap() {
     int dir;
-    if (!get_dir(CNIL, &dir)) {
+    if (!getDirectionWithMemory(CNIL, &dir)) {
         return;
     }
 
@@ -869,7 +869,7 @@ void throw_object() {
     }
 
     int dir;
-    if (!get_dir(CNIL, &dir)) {
+    if (!getDirectionWithMemory(CNIL, &dir)) {
         return;
     }
 
@@ -1148,7 +1148,7 @@ static void bashClosedChest(Inventory_t *item) {
 // A creature with no such ability will attempt to bash a non-secret door.
 void bash() {
     int dir;
-    if (!get_dir(CNIL, &dir)) {
+    if (!getDirectionWithMemory(CNIL, &dir)) {
         return;
     }
 

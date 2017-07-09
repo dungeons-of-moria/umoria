@@ -38,7 +38,7 @@ static void castSpell(int spellID) {
 
     switch (spellID) {
         case 1:
-            if (get_dir(CNIL, &dir)) {
+            if (getDirectionWithMemory(CNIL, &dir)) {
                 fire_bolt(char_row, char_col, dir, diceDamageRoll(2, 6), GF_MAGIC_MISSILE, spell_names[0]);
             }
             break;
@@ -59,17 +59,17 @@ static void castSpell(int spellID) {
             (void) detect_trap();
             break;
         case 7:
-            if (get_dir(CNIL, &dir)) {
+            if (getDirectionWithMemory(CNIL, &dir)) {
                 fire_ball(char_row, char_col, dir, 12, GF_POISON_GAS, spell_names[6]);
             }
             break;
         case 8:
-            if (get_dir(CNIL, &dir)) {
+            if (getDirectionWithMemory(CNIL, &dir)) {
                 (void) confuse_monster(char_row, char_col, dir);
             }
             break;
         case 9:
-            if (get_dir(CNIL, &dir)) {
+            if (getDirectionWithMemory(CNIL, &dir)) {
                 fire_bolt(char_row, char_col, dir, diceDamageRoll(4, 8), GF_LIGHTNING, spell_names[8]);
             }
             break;
@@ -77,7 +77,7 @@ static void castSpell(int spellID) {
             (void) td_destroy();
             break;
         case 11:
-            if (get_dir(CNIL, &dir)) {
+            if (getDirectionWithMemory(CNIL, &dir)) {
                 (void) sleep_monster(char_row, char_col, dir);
             }
             break;
@@ -93,12 +93,12 @@ static void castSpell(int spellID) {
             }
             break;
         case 15:
-            if (get_dir(CNIL, &dir)) {
+            if (getDirectionWithMemory(CNIL, &dir)) {
                 fire_bolt(char_row, char_col, dir, diceDamageRoll(6, 8), GF_FROST, spell_names[14]);
             }
             break;
         case 16:
-            if (get_dir(CNIL, &dir)) {
+            if (getDirectionWithMemory(CNIL, &dir)) {
                 (void) wall_to_mud(char_row, char_col, dir);
             }
             break;
@@ -112,7 +112,7 @@ static void castSpell(int spellID) {
             (void) sleep_monsters1(char_row, char_col);
             break;
         case 20:
-            if (get_dir(CNIL, &dir)) {
+            if (getDirectionWithMemory(CNIL, &dir)) {
                 (void) poly_monster(char_row, char_col, dir);
             }
             break;
@@ -123,17 +123,17 @@ static void castSpell(int spellID) {
             (void) sleep_monsters2();
             break;
         case 23:
-            if (get_dir(CNIL, &dir)) {
+            if (getDirectionWithMemory(CNIL, &dir)) {
                 fire_bolt(char_row, char_col, dir, diceDamageRoll(9, 8), GF_FIRE, spell_names[22]);
             }
             break;
         case 24:
-            if (get_dir(CNIL, &dir)) {
+            if (getDirectionWithMemory(CNIL, &dir)) {
                 (void) speed_monster(char_row, char_col, dir, -1);
             }
             break;
         case 25:
-            if (get_dir(CNIL, &dir)) {
+            if (getDirectionWithMemory(CNIL, &dir)) {
                 fire_ball(char_row, char_col, dir, 48, GF_FROST, spell_names[24]);
             }
             break;
@@ -141,7 +141,7 @@ static void castSpell(int spellID) {
             (void) recharge(60);
             break;
         case 27:
-            if (get_dir(CNIL, &dir)) {
+            if (getDirectionWithMemory(CNIL, &dir)) {
                 (void) teleport_monster(char_row, char_col, dir);
             }
             break;
@@ -149,7 +149,7 @@ static void castSpell(int spellID) {
             py.flags.fast += randomNumber(20) + py.misc.lev;
             break;
         case 29:
-            if (get_dir(CNIL, &dir)) {
+            if (getDirectionWithMemory(CNIL, &dir)) {
                 fire_ball(char_row, char_col, dir, 72, GF_FIRE, spell_names[28]);
             }
             break;
