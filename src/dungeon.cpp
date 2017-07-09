@@ -1443,7 +1443,7 @@ static void commandToggleSearch() {
     if (py.flags.status & PY_SEARCH) {
         search_off();
     } else {
-        search_on();
+        playerSearchOn();
     }
 }
 

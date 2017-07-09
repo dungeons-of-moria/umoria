@@ -387,7 +387,7 @@ void dungeonLightRoom(int pos_y, int pos_x);
 void dungeonLiteSpot(int y, int x);
 void dungeonMoveCharacterLight(int y1, int x1, int y2, int x2);
 void playerDisturb(int major_disturbance, int light_disturbance);
-void search_on();
+void playerSearchOn();
 void search_off();
 void rest();
 void rest_off();

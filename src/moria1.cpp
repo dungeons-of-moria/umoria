@@ -1845,7 +1845,7 @@ void playerDisturb(int major_disturbance, int light_disturbance) {
 }
 
 // Search Mode enhancement -RAK-
-void search_on() {
+void playerSearchOn() {
     playerChangeSpeed(1);
 
     py.flags.status |= PY_SEARCH;
