@@ -67,7 +67,7 @@ void dungeonResetView() {
     }
 
     // Move the light source
-    move_light(char_row, char_col, char_row, char_col);
+    dungeonMoveCharacterLight(char_row, char_col, char_row, char_col);
 
     // A room of light should be lit.
     if (tile->fval == LIGHT_FLOOR) {

@@ -117,7 +117,7 @@ static void trapTeleport(int y, int x) {
     printMessage("You hit a teleport trap!");
 
     // Light up the teleport trap, before we teleport away.
-    move_light(y, x, y, x);
+    dungeonMoveCharacterLight(y, x, y, x);
 }
 
 static void trapRockfall(int y, int x, int dam) {
@@ -969,7 +969,7 @@ void move_char(int direction, bool do_pickup) {
             }
 
             // Move the light source
-            move_light(old_row, old_col, char_row, char_col);
+            dungeonMoveCharacterLight(old_row, old_col, char_row, char_col);
 
             // An object is beneath him.
             if (tile->tptr != 0) {
@@ -979,7 +979,7 @@ void move_char(int direction, bool do_pickup) {
                 // rubble, then step back into a clear area
                 if (treasure_list[tile->tptr].tval == TV_RUBBLE) {
                     dungeonMoveCreatureRecord(char_row, char_col, old_row, old_col);
-                    move_light(char_row, char_col, old_row, old_col);
+                    dungeonMoveCharacterLight(char_row, char_col, old_row, old_col);
 
                     char_row = (int16_t) old_row;
                     char_col = (int16_t) old_col;

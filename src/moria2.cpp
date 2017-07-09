@@ -330,7 +330,7 @@ void end_find() {
 
     running_counter = 0;
 
-    move_light(char_row, char_col, char_row, char_col);
+    dungeonMoveCharacterLight(char_row, char_col, char_row, char_col);
 }
 
 static bool areaAffectStopLookingAtSquares(int i, int dir, int newDir, int y, int x, int *check_dir, int *option, int *option2) {
