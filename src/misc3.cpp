@@ -2055,20 +2055,22 @@ void insertStringIntoString(char *to_string, const char *from_string, const char
     }
 }
 
-void insert_lnum(char *to_string, const char *from_string, int32_t number, bool show_sign) {
-    size_t mlen = strlen(from_string);
-    char *tmp_str = to_string;
+void intertNumberIntoString(char *to_string, const char *from_string, int32_t number, bool show_sign) {
+    size_t from_len = strlen(from_string);
+    char *to_str_tmp = to_string;
     char *string;
 
+    // must be int for strncmp()
     int flag = 1;
+
     while (flag != 0) {
-        string = strchr(tmp_str, from_string[0]);
+        string = strchr(to_str_tmp, from_string[0]);
         if (string == 0) {
             flag = 0;
         } else {
-            flag = strncmp(string, from_string, mlen);
+            flag = strncmp(string, from_string, from_len);
             if (flag) {
-                tmp_str = string + 1;
+                to_str_tmp = string + 1;
             }
         }
     }
@@ -2078,7 +2080,7 @@ void insert_lnum(char *to_string, const char *from_string, int32_t number, bool 
 
         (void) strncpy(str1, to_string, string - to_string);
         str1[string - to_string] = '\0';
-        (void) strcpy(str2, string + mlen);
+        (void) strcpy(str2, string + from_len);
 
         if (number >= 0 && show_sign) {
             (void) sprintf(to_string, "%s+%d%s", str1, number, str2);

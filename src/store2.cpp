@@ -127,8 +127,8 @@ static void prt_comment2(int32_t offer, int32_t asking, int final) {
         (void) strcpy(comment, comment2b[randomNumber(16) - 1]);
     }
 
-    insert_lnum(comment, "%A1", offer, false);
-    insert_lnum(comment, "%A2", asking, false);
+    intertNumberIntoString(comment, "%A1", offer, false);
+    intertNumberIntoString(comment, "%A2", asking, false);
     printMessage(comment);
 }
 
@@ -141,8 +141,8 @@ static void prt_comment3(int32_t offer, int32_t asking, int final) {
         (void) strcpy(comment, comment3b[randomNumber(15) - 1]);
     }
 
-    insert_lnum(comment, "%A1", offer, false);
-    insert_lnum(comment, "%A2", asking, false);
+    intertNumberIntoString(comment, "%A1", offer, false);
+    intertNumberIntoString(comment, "%A2", asking, false);
     printMessage(comment);
 }
 

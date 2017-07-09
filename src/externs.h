@@ -353,7 +353,7 @@ void playerGainMana(int stat);
 void displayCharacterExperience();
 void playerCalculateHitPoints();
 void insertStringIntoString(char *to_string, const char *from_string, const char *str_to_insert);
-void insert_lnum(char *to_string, const char *from_string, int32_t number, bool show_sign);
+void intertNumberIntoString(char *to_string, const char *from_string, int32_t number, bool show_sign);
 bool enter_wiz_mode();
 int attack_blows(int weight, int *weight_to_hit);
 int tot_dam(Inventory_t *item, int total_damage, int monster_id);
