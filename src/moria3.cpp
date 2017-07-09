@@ -825,11 +825,11 @@ static void py_attack(int y, int x) {
         if (item->tval != TV_NOTHING) {
             damage = dicePlayerDamageRoll(item->damage);
             damage = itemMagicAbilityDamage(item, damage, monster->mptr);
-            damage = critical_blow((int) item->weight, tot_tohit, damage, CLA_BTH);
+            damage = playerWeaponCriticalBlow((int) item->weight, tot_tohit, damage, CLA_BTH);
         } else {
             // Bare hands!?
             damage = diceDamageRoll(1, 1);
-            damage = critical_blow(1, 0, damage, CLA_BTH);
+            damage = playerWeaponCriticalBlow(1, 0, damage, CLA_BTH);
         }
 
         damage += py.misc.ptodam;

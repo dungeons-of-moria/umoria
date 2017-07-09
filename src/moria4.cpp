@@ -940,7 +940,7 @@ void throw_object() {
                     printMessage(msg);
 
                     tdam = itemMagicAbilityDamage(&throw_obj, tdam, damage);
-                    tdam = critical_blow((int) throw_obj.weight, tpth, tdam, CLA_BTHB);
+                    tdam = playerWeaponCriticalBlow((int) throw_obj.weight, tpth, tdam, CLA_BTHB);
 
                     if (tdam < 0) {
                         tdam = 0;
@@ -1011,7 +1011,7 @@ static void py_bash(int y, int x) {
         printMessage(msg);
 
         int damage = dicePlayerDamageRoll(inventory[INVEN_ARM].damage);
-        damage = critical_blow(inventory[INVEN_ARM].weight / 4 + py.stats.use_stat[A_STR], 0, damage, CLA_BTH);
+        damage = playerWeaponCriticalBlow(inventory[INVEN_ARM].weight / 4 + py.stats.use_stat[A_STR], 0, damage, CLA_BTH);
         damage += py.misc.wt / 60;
         damage += 3;
 

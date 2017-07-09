@@ -2213,7 +2213,7 @@ int itemMagicAbilityDamage(Inventory_t *item, int total_damage, int monster_id) 
 }
 
 // Critical hits, Nasty way to die. -RAK-
-int critical_blow(int weapon_weight, int plus_to_hit, int damage, int attack_type_id) {
+int playerWeaponCriticalBlow(int weapon_weight, int plus_to_hit, int damage, int attack_type_id) {
     int critical = damage;
 
     // Weight of weapon, plusses to hit, and character level all
