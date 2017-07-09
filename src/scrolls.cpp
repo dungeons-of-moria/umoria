@@ -460,11 +460,11 @@ void read_scroll() {
                 identified = readSummonMonsterScroll();
                 break;
             case 8:
-                teleport(10); // Teleport Short, aka Phase Door
+                playerTeleport(10); // Teleport Short, aka Phase Door
                 identified = true;
                 break;
             case 9:
-                teleport(100); // Teleport Long
+                playerTeleport(100); // Teleport Long
                 identified = true;
                 break;
             case 10:

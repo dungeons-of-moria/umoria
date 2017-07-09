@@ -81,7 +81,7 @@ static bool dischargeStaff(Inventory_t *staff_ptr) {
                 identified = detect_object();
                 break;
             case 6:
-                teleport(100);
+                playerTeleport(100);
                 identified = true;
                 break;
             case 7:

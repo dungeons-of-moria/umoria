@@ -78,7 +78,7 @@ static void recitePrayer(int prayerType) {
             }
             break;
         case 10:
-            teleport((py.misc.lev * 3));
+            playerTeleport((py.misc.lev * 3));
             break;
         case 11:
             (void) hp_player(diceDamageRoll(4, 4));

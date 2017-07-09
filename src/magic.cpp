@@ -46,7 +46,7 @@ static void castSpell(int spellID) {
             (void) detect_monsters();
             break;
         case 3:
-            teleport(10);
+            playerTeleport(10);
             break;
         case 4:
             (void) light_area(char_row, char_col);
@@ -85,7 +85,7 @@ static void castSpell(int spellID) {
             (void) cure_poison();
             break;
         case 13:
-            teleport((py.misc.lev * 5));
+            playerTeleport((py.misc.lev * 5));
             break;
         case 14:
             for (int id = 22; id < INVEN_ARRAY_SIZE; id++) {

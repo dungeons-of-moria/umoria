@@ -2334,32 +2334,32 @@ bool inventoryFindRange(int item_id_start, int item_id_end, int *j, int *k) {
 }
 
 // Teleport the player to a new location -RAK-
-void teleport(int new_distance) {
-    int y, x;
+void playerTeleport(int new_distance) {
+    int new_y, new_x;
 
     do {
-        y = randomNumber(dungeon_height) - 1;
-        x = randomNumber(dungeon_width) - 1;
+        new_y = randomNumber(dungeon_height) - 1;
+        new_x = randomNumber(dungeon_width) - 1;
 
-        while (coordDistanceBetween(y, x, char_row, char_col) > new_distance) {
-            y += (char_row - y) / 2;
-            x += (char_col - x) / 2;
+        while (coordDistanceBetween(new_y, new_x, char_row, char_col) > new_distance) {
+            new_y += (char_row - new_y) / 2;
+            new_x += (char_col - new_x) / 2;
         }
-    } while (cave[y][x].fval >= MIN_CLOSED_SPACE || cave[y][x].cptr >= 2);
+    } while (cave[new_y][new_x].fval >= MIN_CLOSED_SPACE || cave[new_y][new_x].cptr >= 2);
 
-    move_rec(char_row, char_col, y, x);
+    move_rec(char_row, char_col, new_y, new_x);
 
-    for (int yy = char_row - 1; yy <= char_row + 1; yy++) {
-        for (int xx = char_col - 1; xx <= char_col + 1; xx++) {
-            cave[yy][xx].tl = false;
-            lite_spot(yy, xx);
+    for (int y = char_row - 1; y <= char_row + 1; y++) {
+        for (int x = char_col - 1; x <= char_col + 1; x++) {
+            cave[y][x].tl = false;
+            lite_spot(y, x);
         }
     }
 
     lite_spot(char_row, char_col);
 
-    char_row = (int16_t) y;
-    char_col = (int16_t) x;
+    char_row = (int16_t) new_y;
+    char_col = (int16_t) new_x;
 
     check_view();
     updateMonsters(false);

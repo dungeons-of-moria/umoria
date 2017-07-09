@@ -955,7 +955,7 @@ void playDungeon() {
         // Random teleportation
         if (py.flags.teleport && randomNumber(100) == 1) {
             disturb(0, 0);
-            teleport(40);
+            playerTeleport(40);
         }
 
         // See if we are too weak to handle the weapon or pack. -CJS-
@@ -998,7 +998,7 @@ void playDungeon() {
 
         // Teleport?
         if (teleport_player) {
-            teleport(100);
+            playerTeleport(100);
         }
 
         // Move the creatures
@@ -1537,7 +1537,7 @@ static void doWizardCommands(char com_val) {
             map_area();
             break;
         case CTRL_KEY('T'): // ^T = teleport
-            teleport(100);
+            playerTeleport(100);
             break;
         case '+':
             if (command_count > 0) {
