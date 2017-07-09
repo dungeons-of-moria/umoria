@@ -401,7 +401,7 @@ void look() {
     }
 
     int dir;
-    if (!get_alldir("Look which direction?", &dir)) {
+    if (!getAllDirections("Look which direction?", &dir)) {
         return;
     }
 

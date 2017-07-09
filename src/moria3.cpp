@@ -932,7 +932,7 @@ void move_char(int direction, bool do_pickup) {
             char_col = (int16_t) x;
 
             // Move character record (-1)
-            move_rec(old_row, old_col, char_row, char_col);
+            dungeonMoveCreatureRecord(old_row, old_col, char_row, char_col);
 
             // Check for new panel
             if (coordOutsidePanel(char_row, char_col, false)) {
@@ -978,7 +978,7 @@ void move_char(int direction, bool do_pickup) {
                 // if stepped on falling rock trap, and space contains
                 // rubble, then step back into a clear area
                 if (treasure_list[tile->tptr].tval == TV_RUBBLE) {
-                    move_rec(char_row, char_col, old_row, old_col);
+                    dungeonMoveCreatureRecord(char_row, char_col, old_row, old_col);
                     move_light(char_row, char_col, old_row, old_col);
 
                     char_row = (int16_t) old_row;

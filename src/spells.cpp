@@ -1521,7 +1521,7 @@ void teleport_away(int monster_id, int distance_from_player) {
         }
     } while ((cave[yn][xn].fval >= MIN_CLOSED_SPACE) || (cave[yn][xn].cptr != 0));
 
-    move_rec((int) m_ptr->fy, (int) m_ptr->fx, yn, xn);
+    dungeonMoveCreatureRecord((int) m_ptr->fy, (int) m_ptr->fx, yn, xn);
     lite_spot((int) m_ptr->fy, (int) m_ptr->fx);
     m_ptr->fy = (uint8_t) yn;
     m_ptr->fx = (uint8_t) xn;
@@ -1549,7 +1549,7 @@ void teleport_to(int to_y, int to_x) {
         }
     } while (!coordInBounds(y, x) || (cave[y][x].fval >= MIN_CLOSED_SPACE) || (cave[y][x].cptr >= 2));
 
-    move_rec(char_row, char_col, y, x);
+    dungeonMoveCreatureRecord(char_row, char_col, y, x);
 
     for (int row = char_row - 1; row <= char_row + 1; row++) {
         for (int col = char_col - 1; col <= char_col + 1; col++) {

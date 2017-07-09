@@ -1653,9 +1653,9 @@ bool getDirectionWithMemory(char *prompt, int *direction) {
     }
 }
 
-// Similar to getDirectionWithMemory, except that no memory exists, and it is -CJS-
-// allowed to enter the null direction.
-bool get_alldir(const char *prompt, int *direction) {
+// Similar to getDirectionWithMemory(), except that no memory exists,
+// and it is allowed to enter the null direction. -CJS-
+bool getAllDirections(const char *prompt, int *direction) {
     char command;
 
     while (true) {
@@ -1679,7 +1679,7 @@ bool get_alldir(const char *prompt, int *direction) {
 
 // Moves creature record from one space to another -RAK-
 // this always works correctly, even if y1==y2 and x1==x2
-void move_rec(int y1, int x1, int y2, int x2) {
+void dungeonMoveCreatureRecord(int y1, int x1, int y2, int x2) {
     int id = cave[y1][x1].cptr;
     cave[y1][x1].cptr = 0;
     cave[y2][x2].cptr = (uint8_t) id;

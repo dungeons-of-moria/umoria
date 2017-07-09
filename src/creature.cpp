@@ -1023,7 +1023,7 @@ static void creatureAllowedToMove(Monster_t *m_ptr, uint32_t movebits, bool *do_
     }
 
     // Move creature record
-    move_rec((int) m_ptr->fy, (int) m_ptr->fx, y, x);
+    dungeonMoveCreatureRecord((int) m_ptr->fy, (int) m_ptr->fx, y, x);
 
     if (m_ptr->ml) {
         m_ptr->ml = false;

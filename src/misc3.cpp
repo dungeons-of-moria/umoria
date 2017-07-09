@@ -2347,7 +2347,7 @@ void playerTeleport(int new_distance) {
         }
     } while (cave[new_y][new_x].fval >= MIN_CLOSED_SPACE || cave[new_y][new_x].cptr >= 2);
 
-    move_rec(char_row, char_col, new_y, new_x);
+    dungeonMoveCreatureRecord(char_row, char_col, new_y, new_x);
 
     for (int y = char_row - 1; y <= char_row + 1; y++) {
         for (int x = char_col - 1; x <= char_col + 1; x++) {
