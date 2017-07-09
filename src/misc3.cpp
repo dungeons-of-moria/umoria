@@ -1937,31 +1937,32 @@ void playerGainMana(int stat) {
 }
 
 // Increases hit points and level -RAK-
-static void gain_level() {
+static void playerGainLevel() {
     py.misc.lev++;
 
-    vtype_t out_val;
-    (void) sprintf(out_val, "Welcome to level %d.", (int) py.misc.lev);
-    printMessage(out_val);
+    vtype_t msg;
+    (void) sprintf(msg, "Welcome to level %d.", (int) py.misc.lev);
+    printMessage(msg);
 
     calc_hitpoints();
 
-    int32_t need_exp = player_base_exp_levels[py.misc.lev - 1] * py.misc.expfact / 100;
-    if (py.misc.exp > need_exp) {
+    int32_t new_exp = player_base_exp_levels[py.misc.lev - 1] * py.misc.expfact / 100;
+
+    if (py.misc.exp > new_exp) {
         // lose some of the 'extra' exp when gaining several levels at once
-        int32_t dif_exp = py.misc.exp - need_exp;
-        py.misc.exp = need_exp + (dif_exp / 2);
+        int32_t dif_exp = py.misc.exp - new_exp;
+        py.misc.exp = new_exp + (dif_exp / 2);
     }
 
     printCharacterLevel();
     printCharacterTitle();
 
-    Class_t *c_ptr = &classes[py.misc.pclass];
+    Class_t *player_class = &classes[py.misc.pclass];
 
-    if (c_ptr->spell == MAGE) {
+    if (player_class->spell == MAGE) {
         playerCalculateAllowedSpellsCount(A_INT);
         playerGainMana(A_INT);
-    } else if (c_ptr->spell == PRIEST) {
+    } else if (player_class->spell == PRIEST) {
         playerCalculateAllowedSpellsCount(A_WIS);
         playerGainMana(A_WIS);
     }
@@ -1974,7 +1975,7 @@ void prt_experience() {
     }
 
     while ((py.misc.lev < MAX_PLAYER_LEVEL) && (signed) (player_base_exp_levels[py.misc.lev - 1] * py.misc.expfact / 100) <= py.misc.exp) {
-        gain_level();
+        playerGainLevel();
     }
 
     if (py.misc.exp > py.misc.max_exp) {
