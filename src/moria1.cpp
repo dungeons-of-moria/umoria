@@ -1868,7 +1868,7 @@ void playerSearchOff() {
 }
 
 // Resting allows a player to safely restore his hp -RAK-
-void rest() {
+void playerRestOn() {
     int rest_num;
 
     if (command_count > 0) {

@@ -389,7 +389,7 @@ void dungeonMoveCharacterLight(int y1, int x1, int y2, int x2);
 void playerDisturb(int major_disturbance, int light_disturbance);
 void playerSearchOn();
 void playerSearchOff();
-void rest();
+void playerRestOn();
 void rest_off();
 bool test_hit(int base_to_hit, int level, int plus_to_hit, int armor_class, int attack_type_id);
 void take_hit(int damage, const char *creature_name);

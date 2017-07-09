@@ -1669,7 +1669,7 @@ static void do_command(char com_val) {
 
             if (command_count > 1) {
                 command_count--;
-                rest();
+                playerRestOn();
             }
             break;
         case '<': // (<) go down a staircase
@@ -1718,7 +1718,7 @@ static void do_command(char com_val) {
             player_free_turn = true;
             break;
         case 'R': // (R)est a while
-            rest();
+            playerRestOn();
             break;
         case '#': // (#) search toggle  (S)earch toggle
             commandToggleSearch();
