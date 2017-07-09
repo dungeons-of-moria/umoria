@@ -1585,8 +1585,8 @@ bool playerNoLight() {
     return !cave[char_row][char_col].tl && !cave[char_row][char_col].pl;
 }
 
-// map rogue_like direction commands into numbers
-static char map_roguedir(char command) {
+// map roguelike direction commands into numbers
+static char mapRoguelikeKeysToKeypad(char command) {
     switch (command) {
         case 'h':
             return '4';
@@ -1640,7 +1640,7 @@ bool get_dir(char *prompt, int *direction) {
         command_count = save;
 
         if (use_roguelike_keys) {
-            command = map_roguedir(command);
+            command = mapRoguelikeKeysToKeypad(command);
         }
 
         if (command >= '1' && command <= '9' && command != '5') {
@@ -1665,7 +1665,7 @@ bool get_alldir(const char *prompt, int *direction) {
         }
 
         if (use_roguelike_keys) {
-            command = map_roguedir(command);
+            command = mapRoguelikeKeysToKeypad(command);
         }
 
         if (command >= '1' && command <= '9') {
