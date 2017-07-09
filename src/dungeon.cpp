@@ -883,11 +883,11 @@ void playDungeon() {
     // Light up the area around character
     dungeonResetView();
 
-    // must do this after panel_row/col set to -1, because search_off() will
+    // must do this after panel_row/col set to -1, because playerSearchOff() will
     // call dungeonResetView(), and so the panel_* variables must be valid before
-    // search_off() is called
+    // playerSearchOff() is called
     if (py.flags.status & PY_SEARCH) {
-        search_off();
+        playerSearchOff();
     }
 
     // Light,  but do not move critters
@@ -1441,7 +1441,7 @@ static void commandLocateOnMap() {
 
 static void commandToggleSearch() {
     if (py.flags.status & PY_SEARCH) {
-        search_off();
+        playerSearchOff();
     } else {
         playerSearchOn();
     }

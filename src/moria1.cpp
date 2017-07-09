@@ -1829,7 +1829,7 @@ void playerDisturb(int major_disturbance, int light_disturbance) {
     command_count = 0;
 
     if (major_disturbance && (py.flags.status & PY_SEARCH)) {
-        search_off();
+        playerSearchOff();
     }
 
     if (py.flags.rest != 0) {
@@ -1856,7 +1856,7 @@ void playerSearchOn() {
     py.flags.food_digested++;
 }
 
-void search_off() {
+void playerSearchOff() {
     dungeonResetView();
     playerChangeSpeed(-1);
 
@@ -1892,7 +1892,7 @@ void rest() {
     // in range of a short, or must be -MAX_SHORT
     if (rest_num == -MAX_SHORT || (rest_num > 0 && rest_num < MAX_SHORT)) {
         if (py.flags.status & PY_SEARCH) {
-            search_off();
+            playerSearchOff();
         }
 
         py.flags.rest = (int16_t) rest_num;
