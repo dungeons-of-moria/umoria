@@ -722,7 +722,7 @@ static bool executeAttack(Creature_t *r_ptr, Monster_t *m_ptr, int monsterID, in
         case 21: // Disenchant
             if (executeDisenchantAttack()) {
                 printMessage("There is a static feeling in the air.");
-                calc_bonuses();
+                playerRecalculateBonuses();
             } else {
                 notice = false;
             }

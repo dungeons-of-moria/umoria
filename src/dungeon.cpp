@@ -602,7 +602,7 @@ static void playerUpdateDetectInvisible() {
         py.flags.status &= ~PY_DET_INV;
 
         // may still be able to see_inv if wearing magic item
-        calc_bonuses();
+        playerRecalculateBonuses();
 
         // unlight but don't move creatures
         updateMonsters(false);

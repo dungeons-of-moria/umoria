@@ -559,7 +559,7 @@ static int minus_ac(uint32_t typ_dam) {
         printMessage(msg);
 
         inventory[itemID].toac--;
-        calc_bonuses();
+        playerRecalculateBonuses();
     }
 
     return minus;

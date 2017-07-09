@@ -102,7 +102,7 @@ static bool readEnchantWeaponToHitScroll() {
 
     if (enchant(&i_ptr->tohit, 10)) {
         i_ptr->flags &= ~TR_CURSED;
-        calc_bonuses();
+        playerRecalculateBonuses();
     } else {
         printMessage("The enchantment fails.");
     }
@@ -135,7 +135,7 @@ static bool readEnchantWeaponToDamageScroll() {
 
     if (enchant(&i_ptr->todam, scrollType)) {
         i_ptr->flags &= ~TR_CURSED;
-        calc_bonuses();
+        playerRecalculateBonuses();
     } else {
         printMessage("The enchantment fails.");
     }
@@ -160,7 +160,7 @@ static bool readEnchantItemToACScroll() {
 
     if (enchant(&i_ptr->toac, 10)) {
         i_ptr->flags &= ~TR_CURSED;
-        calc_bonuses();
+        playerRecalculateBonuses();
     } else {
         printMessage("The enchantment fails.");
     }
@@ -262,7 +262,7 @@ static bool readEnchantWeaponScroll() {
 
     if (flag) {
         i_ptr->flags &= ~TR_CURSED;
-        calc_bonuses();
+        playerRecalculateBonuses();
     } else {
         printMessage("The enchantment fails.");
     }
@@ -290,11 +290,11 @@ static bool readCurseWeaponScroll() {
     i_ptr->toac = 0;
 
     // Must call playerAdjustBonusesForItem() before set (clear) flags, and
-    // must call calc_bonuses() after set (clear) flags, so that
+    // must call playerRecalculateBonuses() after set (clear) flags, so that
     // all attributes will be properly turned off.
     playerAdjustBonusesForItem(i_ptr, -1);
     i_ptr->flags = TR_CURSED;
-    calc_bonuses();
+    playerRecalculateBonuses();
 
     return true;
 }
@@ -324,7 +324,7 @@ static bool readEnchantArmorScroll() {
 
     if (flag) {
         i_ptr->flags &= ~TR_CURSED;
-        calc_bonuses();
+        playerRecalculateBonuses();
     } else {
         printMessage("The enchantment fails.");
     }
@@ -382,7 +382,7 @@ static bool readCurseArmorScroll() {
     i_ptr->todam = 0;
     i_ptr->toac = (int16_t) (-randomNumber(5) - randomNumber(5));
 
-    calc_bonuses();
+    playerRecalculateBonuses();
 
     return true;
 }

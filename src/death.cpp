@@ -178,7 +178,7 @@ static void print_tomb() {
             spellItemIdentifyAndRemoveRandomInscription(&inventory[i]);
         }
 
-        calc_bonuses();
+        playerRecalculateBonuses();
 
         if (str[0]) {
             if (!outputPlayerCharacterToFile(str)) {

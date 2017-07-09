@@ -321,7 +321,7 @@ bool ident_spell() {
 
     obj_desc_t out_val;
     if (item_val >= INVEN_WIELD) {
-        calc_bonuses();
+        playerRecalculateBonuses();
         (void) sprintf(out_val, "%s: %s", describe_use(item_val), tmp_str);
     } else {
         (void) sprintf(out_val, "%c %s", item_val + 97, tmp_str);
@@ -2238,7 +2238,7 @@ bool remove_curse() {
     for (int id = INVEN_WIELD; id <= INVEN_OUTER; id++) {
         if (TR_CURSED & inventory[id].flags) {
             inventory[id].flags &= ~TR_CURSED;
-            calc_bonuses();
+            playerRecalculateBonuses();
             removed = true;
         }
     }

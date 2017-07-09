@@ -372,7 +372,7 @@ void dungeonResetView();
 // moria1.c
 void playerChangeSpeed(int speed);
 void playerAdjustBonusesForItem(Inventory_t *item, int factor);
-void calc_bonuses();
+void playerRecalculateBonuses();
 int show_inven(int item_id_start, int item_id_end, bool weighted, int column, char *mask);
 const char *describe_use(int body_location);
 int show_equip(bool weighted, int column);

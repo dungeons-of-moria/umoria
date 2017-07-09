@@ -878,7 +878,7 @@ static void py_attack(int y, int x) {
                 equipment_count--;
                 playerAdjustBonusesForItem(item, -1);
                 inventoryItemCopyTo(OBJ_NOTHING, item);
-                calc_bonuses();
+                playerRecalculateBonuses();
             }
         }
     }

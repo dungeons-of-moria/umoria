@@ -30,7 +30,7 @@ void playerChangeSpeed(int speed) {
 //     Factor = -1 : removed
 //
 // Only calculates properties with cumulative effect.  Properties that
-// depend on everything being worn are recalculated by calc_bonuses() -CJS-
+// depend on everything being worn are recalculated by playerRecalculateBonuses() -CJS-
 void playerAdjustBonusesForItem(Inventory_t *item, int factor) {
     int amount = item->p1 * factor;
 
@@ -166,7 +166,7 @@ static void playerRecalculateSustainStatsFromInventory() {
 }
 
 // Recalculate the effect of all the stuff we use. -CJS-
-void calc_bonuses() {
+void playerRecalculateBonuses() {
     // Temporarily adjust food_digested
     if (py.flags.slow_digest) {
         py.flags.food_digested++;
@@ -1378,7 +1378,7 @@ void inven_command(char command) {
         terminalRestoreScreen();
     }
 
-    calc_bonuses();
+    playerRecalculateBonuses();
 }
 
 // Get the ID of an item and return the CTR value of it -RAK-

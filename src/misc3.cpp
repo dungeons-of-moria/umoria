@@ -611,9 +611,9 @@ void playerSetAndUseStat(int stat) {
 
     if (stat == A_STR) {
         py.flags.status |= PY_STR_WGT;
-        calc_bonuses();
+        playerRecalculateBonuses();
     } else if (stat == A_DEX) {
-        calc_bonuses();
+        playerRecalculateBonuses();
     } else if (stat == A_INT && classes[py.misc.pclass].spell == MAGE) {
         playerCalculateAllowedSpellsCount(A_INT);
         playerGainMana(A_INT);
@@ -1256,14 +1256,14 @@ void playerStrength() {
         if (!weapon_is_heavy) {
             printMessage("You have trouble wielding such a heavy weapon.");
             weapon_is_heavy = true;
-            calc_bonuses();
+            playerRecalculateBonuses();
         }
     } else if (weapon_is_heavy) {
         weapon_is_heavy = false;
         if (i_ptr->tval != TV_NOTHING) {
             printMessage("You are strong enough to wield your weapon.");
         }
-        calc_bonuses();
+        playerRecalculateBonuses();
     }
 
     int limit = playerCarryingLoadLimit();
