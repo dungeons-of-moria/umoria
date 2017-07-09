@@ -1374,7 +1374,7 @@ static void commandSaveAndExit() {
 }
 
 static void commandLocateOnMap() {
-    if (py.flags.blind > 0 || no_light()) {
+    if (py.flags.blind > 0 || playerNoLight()) {
         printMessage("You can't see your map.");
         return;
     }
@@ -2020,7 +2020,7 @@ static void examine_book() {
         return;
     }
 
-    if (no_light()) {
+    if (playerNoLight()) {
         printMessage("You have no light to read by.");
         return;
     }

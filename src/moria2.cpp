@@ -37,7 +37,7 @@ void search(int y, int x, int chance) {
         chance = chance / 10;
     }
 
-    if (py.flags.blind > 0 || no_light()) {
+    if (py.flags.blind > 0 || playerNoLight()) {
         chance = chance / 10;
     }
 

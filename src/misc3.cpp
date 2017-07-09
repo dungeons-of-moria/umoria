@@ -1706,7 +1706,7 @@ static bool playerCanRead() {
         return false;
     }
 
-    if (no_light()) {
+    if (playerNoLight()) {
         printMessage("You have no light to read by.");
         return false;
     }

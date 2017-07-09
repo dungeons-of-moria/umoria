@@ -1581,7 +1581,7 @@ bool inventoryGetInputForItemId(int *command_key_id, const char *prompt, int ite
 // hooks which I have not had time to re-think. -RAK-
 
 // Returns true if player has no light -RAK-
-bool no_light() {
+bool playerNoLight() {
     return !cave[char_row][char_col].tl && !cave[char_row][char_col].pl;
 }
 

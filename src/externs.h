@@ -379,7 +379,7 @@ int displayEquipment(bool weighted, int column);
 void playerTakeOff(int item_id, int pack_position_id);
 void inventoryExecuteCommand(char command);
 bool inventoryGetInputForItemId(int *command_key_id, const char *prompt, int item_id_start, int item_id_end, char *mask, const char *message);
-bool no_light();
+bool playerNoLight();
 bool get_dir(char *prompt, int *direction);
 bool get_alldir(const char *prompt, int *direction);
 void move_rec(int y1, int x1, int y2, int x2);
