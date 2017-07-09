@@ -180,7 +180,7 @@ void use() {
     }
 
     int staff_id;
-    if (!get_item(&staff_id, "Use which staff?", j, k, CNIL, CNIL)) {
+    if (!inventoryGetInputForItemId(&staff_id, "Use which staff?", j, k, CNIL, CNIL)) {
         return;
     }
 

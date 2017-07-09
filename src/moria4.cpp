@@ -864,7 +864,7 @@ void throw_object() {
     }
 
     int itemID;
-    if (!get_item(&itemID, "Fire/Throw which one?", 0, inventory_count - 1, CNIL, CNIL)) {
+    if (!inventoryGetInputForItemId(&itemID, "Fire/Throw which one?", 0, inventory_count - 1, CNIL, CNIL)) {
         return;
     }
 

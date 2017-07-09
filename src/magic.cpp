@@ -179,7 +179,7 @@ void getAndCastMagicSpell() {
     }
 
     int item_val;
-    if (!get_item(&item_val, "Use which spell-book?", i, j, CNIL, CNIL)) {
+    if (!inventoryGetInputForItemId(&item_val, "Use which spell-book?", i, j, CNIL, CNIL)) {
         return;
     }
 

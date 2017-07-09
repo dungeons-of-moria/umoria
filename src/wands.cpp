@@ -131,7 +131,7 @@ void aim() {
     }
 
     int item_id;
-    if (!get_item(&item_id, "Aim which wand?", j, k, CNIL, CNIL)) {
+    if (!inventoryGetInputForItemId(&item_id, "Aim which wand?", j, k, CNIL, CNIL)) {
         return;
     }
 

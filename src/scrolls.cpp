@@ -416,7 +416,7 @@ void read_scroll() {
     }
 
     int itemID;
-    if (!get_item(&itemID, "Read which scroll?", j, k, CNIL, CNIL)) {
+    if (!inventoryGetInputForItemId(&itemID, "Read which scroll?", j, k, CNIL, CNIL)) {
         return;
     }
 

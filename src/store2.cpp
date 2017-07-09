@@ -917,7 +917,7 @@ static bool store_sell(int store_num, int *cur_top) {
     }
 
     int item_val;
-    if (!get_item(&item_val, "Which one? ", first_item, last_item, mask, "I do not buy such items.")) {
+    if (!inventoryGetInputForItemId(&item_val, "Which one? ", first_item, last_item, mask, "I do not buy such items.")) {
         return false;
     }
 

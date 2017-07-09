@@ -300,7 +300,7 @@ void quaff() {
     }
 
     int itemID;
-    if (!get_item(&itemID, "Quaff which potion?", itemPosBegin, itemPosEnd, CNIL, CNIL)) {
+    if (!inventoryGetInputForItemId(&itemID, "Quaff which potion?", itemPosBegin, itemPosEnd, CNIL, CNIL)) {
         return;
     }
 

@@ -307,7 +307,7 @@ void map_area() {
 // Identify an object -RAK-
 bool ident_spell() {
     int item_val;
-    if (!get_item(&item_val, "Item you wish identified?", 0, INVEN_ARRAY_SIZE, CNIL, CNIL)) {
+    if (!inventoryGetInputForItemId(&item_val, "Item you wish identified?", 0, INVEN_ARRAY_SIZE, CNIL, CNIL)) {
         return false;
     }
 
@@ -980,7 +980,7 @@ bool recharge(int charges) {
     }
 
     int item_val;
-    if (!get_item(&item_val, "Recharge which item?", i, j, CNIL, CNIL)) {
+    if (!inventoryGetInputForItemId(&item_val, "Recharge which item?", i, j, CNIL, CNIL)) {
         return false;
     }
 

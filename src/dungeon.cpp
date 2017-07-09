@@ -2031,7 +2031,7 @@ static void examine_book() {
     }
 
     int item_val;
-    if (get_item(&item_val, "Which Book?", i, k, CNIL, CNIL)) {
+    if (inventoryGetInputForItemId(&item_val, "Which Book?", i, k, CNIL, CNIL)) {
         int spell_index[31];
         bool canRead = true;
 

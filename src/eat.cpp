@@ -25,7 +25,7 @@ void playerEat() {
     }
 
     int item_val;
-    if (!get_item(&item_val, "Eat what?", j, k, CNIL, CNIL)) {
+    if (!inventoryGetInputForItemId(&item_val, "Eat what?", j, k, CNIL, CNIL)) {
         return;
     }
 

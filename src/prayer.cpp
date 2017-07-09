@@ -181,7 +181,7 @@ void pray() {
     }
 
     int item_val;
-    if (!get_item(&item_val, "Use which Holy Book?", itemPosBegin, itemposEnd, CNIL, CNIL)) {
+    if (!inventoryGetInputForItemId(&item_val, "Use which Holy Book?", itemPosBegin, itemposEnd, CNIL, CNIL)) {
         return;
     }
 

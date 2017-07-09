@@ -1382,15 +1382,15 @@ void inventoryExecuteCommand(char command) {
 }
 
 // Get the ID of an item and return the CTR value of it -RAK-
-int get_item(int *command_key_id, const char *prompt, int item_id_start, int item_id_end, char *mask, const char *message) {
-    int screenID = 1;
+bool inventoryGetInputForItemId(int *command_key_id, const char *prompt, int item_id_start, int item_id_end, char *mask, const char *message) {
+    int screen_id = 1;
     bool full = false;
 
     if (item_id_end > INVEN_WIELD) {
         full = true;
 
         if (inventory_count == 0) {
-            screenID = 0;
+            screen_id = 0;
             item_id_end = equipment_count - 1;
         } else {
             item_id_end = inventory_count - 1;
@@ -1404,69 +1404,70 @@ int get_item(int *command_key_id, const char *prompt, int item_id_start, int ite
 
     *command_key_id = 0;
 
-    bool itemFound = false;
-    bool redrawScreen = false;
+    bool item_found = false;
+    bool redraw_screen = false;
 
     do {
-        if (redrawScreen) {
-            if (screenID > 0) {
+        if (redraw_screen) {
+            if (screen_id > 0) {
                 (void) displayInventory(item_id_start, item_id_end, false, 80, mask);
             } else {
                 (void) displayEquipment(false, 80);
             }
         }
 
-        vtype_t out_val;
+        vtype_t description;
 
         if (full) {
             (void) sprintf(
-                    out_val,
-                    "(%s: %c-%c,%s%s / for %s, or ESC) %s",
-                    (screenID > 0 ? "Inven" : "Equip"),
-                    item_id_start + 'a',
-                    item_id_end + 'a',
-                    (screenID > 0 ? " 0-9," : ""),
-                    (redrawScreen ? "" : " * to see,"),
-                    (screenID > 0 ? "Equip" : "Inven"),
-                    prompt
+                description,
+                "(%s: %c-%c,%s%s / for %s, or ESC) %s",
+                (screen_id > 0 ? "Inven" : "Equip"),
+                item_id_start + 'a',
+                item_id_end + 'a',
+                (screen_id > 0 ? " 0-9," : ""),
+                (redraw_screen ? "" : " * to see,"),
+                (screen_id > 0 ? "Equip" : "Inven"),
+                prompt
             );
         } else {
             (void) sprintf(
-                    out_val,
-                    "(Items %c-%c,%s%s ESC to exit) %s",
-                    item_id_start + 'a',
-                    item_id_end + 'a',
-                    (screenID > 0 ? " 0-9," : ""),
-                    (redrawScreen ? "" : " * for inventory list,"),
-                    prompt
+                description,
+                "(Items %c-%c,%s%s ESC to exit) %s",
+                item_id_start + 'a',
+                item_id_end + 'a',
+                (screen_id > 0 ? " 0-9," : ""),
+                (redraw_screen ? "" : " * for inventory list,"),
+                prompt
             );
         }
 
-        putStringClearToEOL(out_val, 0, 0);
+        putStringClearToEOL(description, 0, 0);
 
-        bool commandFinished = false;
-        while (!commandFinished) {
+        bool command_finished = false;
+
+        while (!command_finished) {
             char which = getKeyInput();
 
             switch (which) {
                 case ESCAPE:
-                    screenID = -1;
-                    commandFinished = true;
+                    screen_id = -1;
+                    command_finished = true;
 
                     player_free_turn = true;
 
                     break;
                 case '/':
                     if (full) {
-                        if (screenID > 0) {
+                        if (screen_id > 0) {
                             if (equipment_count == 0) {
                                 putStringClearToEOL("But you're not using anything -more-", 0, 0);
                                 (void) getKeyInput();
                             } else {
-                                screenID = 0;
-                                commandFinished = true;
+                                screen_id = 0;
+                                command_finished = true;
 
-                                if (redrawScreen) {
+                                if (redraw_screen) {
                                     item_id_end = equipment_count;
 
                                     while (item_id_end < inventory_count) {
@@ -1477,16 +1478,16 @@ int get_item(int *command_key_id, const char *prompt, int item_id_start, int ite
                                 item_id_end = equipment_count - 1;
                             }
 
-                            putStringClearToEOL(out_val, 0, 0);
+                            putStringClearToEOL(description, 0, 0);
                         } else {
                             if (inventory_count == 0) {
                                 putStringClearToEOL("But you're not carrying anything -more-", 0, 0);
                                 (void) getKeyInput();
                             } else {
-                                screenID = 1;
-                                commandFinished = true;
+                                screen_id = 1;
+                                command_finished = true;
 
-                                if (redrawScreen) {
+                                if (redraw_screen) {
                                     item_id_end = inventory_count;
 
                                     while (item_id_end < equipment_count) {
@@ -1500,15 +1501,15 @@ int get_item(int *command_key_id, const char *prompt, int item_id_start, int ite
                     }
                     break;
                 case '*':
-                    if (!redrawScreen) {
-                        commandFinished = true;
+                    if (!redraw_screen) {
+                        command_finished = true;
                         terminalSaveScreen();
-                        redrawScreen = true;
+                        redraw_screen = true;
                     }
                     break;
                 default:
                     // look for item whose inscription matches "which"
-                    if (which >= '0' && which <= '9' && screenID != 0) {
+                    if (which >= '0' && which <= '9' && screen_id != 0) {
                         int m;
 
                         // Note: loop to find the inventory item
@@ -1526,7 +1527,7 @@ int get_item(int *command_key_id, const char *prompt, int item_id_start, int ite
                     }
 
                     if (*command_key_id >= item_id_start && *command_key_id <= item_id_end && (mask == CNIL || mask[*command_key_id])) {
-                        if (screenID == 0) {
+                        if (screen_id == 0) {
                             item_id_start = 21;
                             item_id_end = *command_key_id;
 
@@ -1541,38 +1542,38 @@ int get_item(int *command_key_id, const char *prompt, int item_id_start, int ite
                         }
 
                         if (isupper((int) which) && !verify("Try", *command_key_id)) {
-                            screenID = -1;
-                            commandFinished = true;
+                            screen_id = -1;
+                            command_finished = true;
 
                             player_free_turn = true;
 
                             break;
                         }
 
-                        screenID = -1;
-                        commandFinished = true;
+                        screen_id = -1;
+                        command_finished = true;
 
-                        itemFound = true;
+                        item_found = true;
                     } else if (message) {
                         printMessage(message);
 
-                        // Set commandFinished to force redraw of the question.
-                        commandFinished = true;
+                        // Set command_finished to force redraw of the question.
+                        command_finished = true;
                     } else {
                         terminalBellSound();
                     }
                     break;
             }
         }
-    } while (screenID >= 0);
+    } while (screen_id >= 0);
 
-    if (redrawScreen) {
+    if (redraw_screen) {
         terminalRestoreScreen();
     }
 
     eraseLine(MSG_LINE, 0);
 
-    return itemFound;
+    return item_found;
 }
 
 // I may have written the town level code, but I'm not exactly
