@@ -1050,7 +1050,7 @@ static void make_move(int monsterID, int *mm, uint32_t *rcmove) {
         // Get new position
         int y = m_ptr->fy;
         int x = m_ptr->fx;
-        (void) mmove(mm[i], &y, &x);
+        (void) playerMovePosition(mm[i], &y, &x);
 
         Cave_t *c_ptr = &cave[y][x];
 

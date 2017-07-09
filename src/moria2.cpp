@@ -209,7 +209,7 @@ static int find_direction; // Keep a record of which way we are going.
 // Do we see a wall? Used in running. -CJS-
 static bool see_wall(int dir, int y, int x) {
     // check to see if movement there possible
-    if (!mmove(dir, &y, &x)) {
+    if (!playerMovePosition(dir, &y, &x)) {
         return true;
     }
 
@@ -221,7 +221,7 @@ static bool see_wall(int dir, int y, int x) {
 // Do we see anything? Used in running. -CJS-
 static bool see_nothing(int dir, int y, int x) {
     // check to see if movement there possible
-    return mmove(dir, &y, &x) && caveGetTileSymbol(y, x) == ' ';
+    return playerMovePosition(dir, &y, &x) && caveGetTileSymbol(y, x) == ' ';
 }
 
 static void findRunningBreak(int dir, int row, int col) {
@@ -278,7 +278,7 @@ void find_init(int direction) {
     int row = char_row;
     int col = char_col;
 
-    if (!mmove(direction, &row, &col)) {
+    if (!playerMovePosition(direction, &row, &col)) {
         running_counter = 0;
     } else {
         running_counter = 1;
@@ -439,7 +439,7 @@ void area_affect(int direction, int y, int x) {
         int col = x;
 
         // Objects player can see (Including doors?) cause a stop.
-        if (mmove(newdir, &row, &col)) {
+        if (playerMovePosition(newdir, &row, &col)) {
             areaAffectStopLookingAtSquares(i, direction, newdir, row, col, &check_dir, &option, &option2);
         }
     }
@@ -471,7 +471,7 @@ void area_affect(int direction, int y, int x) {
     int row = y;
     int col = x;
 
-    (void) mmove(option, &row, &col);
+    (void) playerMovePosition(option, &row, &col);
 
     if (!see_wall(option, row, col) || !see_wall(check_dir, row, col)) {
         // Don't see that it is closed off.  This could be a

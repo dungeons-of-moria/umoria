@@ -158,7 +158,7 @@ static void place_streamer(uint8_t rockType, int treas_chance) {
                 }
             }
         }
-    } while (mmove(dir, &y, &x));
+    } while (playerMovePosition(dir, &y, &x));
 }
 
 static void place_open_door(int y, int x) {

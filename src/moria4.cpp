@@ -139,7 +139,7 @@ void tunnel(int direction) {
 
     int y = char_row;
     int x = char_col;
-    (void) mmove(direction, &y, &x);
+    (void) playerMovePosition(direction, &y, &x);
 
     Cave_t *c_ptr = &cave[y][x];
     Inventory_t *i_ptr = &inventory[INVEN_WIELD];
@@ -282,7 +282,7 @@ void disarm_trap() {
 
     int y = char_row;
     int x = char_col;
-    (void) mmove(dir, &y, &x);
+    (void) playerMovePosition(dir, &y, &x);
 
     Cave_t *c_ptr = &cave[y][x];
 
@@ -897,7 +897,7 @@ void throw_object() {
     bool flag = false;
 
     while (!flag) {
-        (void) mmove(dir, &y, &x);
+        (void) playerMovePosition(dir, &y, &x);
         cur_dis++;
         lite_spot(oldy, oldx);
 
@@ -1159,7 +1159,7 @@ void bash() {
 
     int y = char_row;
     int x = char_col;
-    (void) mmove(dir, &y, &x);
+    (void) playerMovePosition(dir, &y, &x);
 
     Cave_t *c_ptr = &cave[y][x];
 

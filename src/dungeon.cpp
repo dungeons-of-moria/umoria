@@ -2117,7 +2117,7 @@ static void jamdoor() {
     if (!get_dir(CNIL, &dir)) {
         return;
     }
-    (void) mmove(dir, &y, &x);
+    (void) playerMovePosition(dir, &y, &x);
 
     Cave_t *c_ptr = &cave[y][x];
 

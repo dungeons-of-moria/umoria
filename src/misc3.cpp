@@ -2240,7 +2240,7 @@ int playerWeaponCriticalBlow(int weapon_weight, int plus_to_hit, int damage, int
 }
 
 // Given direction "dir", returns new row, column location -RAK-
-bool mmove(int dir, int *new_y, int *new_x) {
+bool playerMovePosition(int dir, int *new_y, int *new_x) {
     int new_row = 0;
     int new_col = 0;
 
@@ -2283,15 +2283,15 @@ bool mmove(int dir, int *new_y, int *new_x) {
             break;
     }
 
-    bool moved = false;
+    bool can_move = false;
 
     if (new_row >= 0 && new_row < dungeon_height && new_col >= 0 && new_col < dungeon_width) {
         *new_y = new_row;
         *new_x = new_col;
-        moved = true;
+        can_move = true;
     }
 
-    return moved;
+    return can_move;
 }
 
 // Saving throws for player character. -RAK-

@@ -909,7 +909,7 @@ void move_char(int direction, bool do_pickup) {
     int x = char_col;
 
     // Legal move?
-    if (!mmove(direction, &y, &x)) {
+    if (!playerMovePosition(direction, &y, &x)) {
         return;
     }
 
@@ -1204,7 +1204,7 @@ void openobject() {
 
     int y = char_row;
     int x = char_col;
-    (void) mmove(dir, &y, &x);
+    (void) playerMovePosition(dir, &y, &x);
 
     bool no_object = false;
 
@@ -1241,7 +1241,7 @@ void closeobject() {
 
     int y = char_row;
     int x = char_col;
-    (void) mmove(dir, &y, &x);
+    (void) playerMovePosition(dir, &y, &x);
 
     Cave_t *tile = &cave[y][x];
     Inventory_t *item = &treasure_list[tile->tptr];

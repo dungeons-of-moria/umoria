@@ -358,7 +358,7 @@ bool enterWizardMode();
 int playerAttackBlows(int weight, int *weight_to_hit);
 int itemMagicAbilityDamage(Inventory_t *item, int total_damage, int monster_id);
 int playerWeaponCriticalBlow(int weapon_weight, int plus_to_hit, int damage, int attack_type_id);
-bool mmove(int dir, int *new_y, int *new_x);
+bool playerMovePosition(int dir, int *new_y, int *new_x);
 bool player_saves();
 int find_range(int item_id_start, int item_id_end, int *j, int *k);
 void teleport(int new_distance);

@@ -514,7 +514,7 @@ void light_line(int x, int y, int direction) {
         Cave_t *c_ptr = &cave[y][x];
 
         if (dist > OBJ_BOLT_RANGE || c_ptr->fval >= MIN_CLOSED_SPACE) {
-            (void) mmove(direction, &y, &x);
+            (void) playerMovePosition(direction, &y, &x);
             finished = true;
             continue; // we're done here, break out of the loop
         }
@@ -540,7 +540,7 @@ void light_line(int x, int y, int direction) {
         }
 
         // move must be at end because want to light up current spot
-        (void) mmove(direction, &y, &x);
+        (void) playerMovePosition(direction, &y, &x);
         dist++;
     }
 }
@@ -595,7 +595,7 @@ bool disarm_all(int y, int x, int direction) {
         }
 
         // move must be at end because want to light up current spot
-        (void) mmove(direction, &y, &x);
+        (void) playerMovePosition(direction, &y, &x);
         dist++;
     } while (dist <= OBJ_BOLT_RANGE && c_ptr->fval <= MAX_OPEN_SPACE);
 
@@ -703,7 +703,7 @@ void fire_bolt(int y, int x, int direction, int damage_hp, int spell_type_id, ch
         int oldy = y;
         int oldx = x;
 
-        (void) mmove(direction, &y, &x);
+        (void) playerMovePosition(direction, &y, &x);
         dist++;
 
         Cave_t *c_ptr = &cave[y][x];
@@ -745,7 +745,7 @@ void fire_ball(int y, int x, int direction, int damage_hp, int spell_type_id, co
         int oldy = y;
         int oldx = x;
 
-        (void) mmove(direction, &y, &x);
+        (void) playerMovePosition(direction, &y, &x);
         dist++;
 
         lite_spot(oldy, oldx);
@@ -1022,7 +1022,7 @@ bool hp_monster(int y, int x, int direction, int damage_hp) {
 
     bool finished = false;
     while (!finished) {
-        (void) mmove(direction, &y, &x);
+        (void) playerMovePosition(direction, &y, &x);
         dist++;
 
         Cave_t *c_ptr = &cave[y][x];
@@ -1060,7 +1060,7 @@ bool drain_life(int y, int x, int direction) {
 
     bool finished = false;
     while (!finished) {
-        (void) mmove(direction, &y, &x);
+        (void) playerMovePosition(direction, &y, &x);
         dist++;
 
         Cave_t *c_ptr = &cave[y][x];
@@ -1103,7 +1103,7 @@ bool speed_monster(int y, int x, int direction, int speed) {
 
     bool finished = false;
     while (!finished) {
-        (void) mmove(direction, &y, &x);
+        (void) playerMovePosition(direction, &y, &x);
         dist++;
 
         Cave_t *c_ptr = &cave[y][x];
@@ -1152,7 +1152,7 @@ bool confuse_monster(int y, int x, int direction) {
 
     bool finished = false;
     while (!finished) {
-        (void) mmove(direction, &y, &x);
+        (void) playerMovePosition(direction, &y, &x);
         dist++;
 
         Cave_t *c_ptr = &cave[y][x];
@@ -1206,7 +1206,7 @@ bool sleep_monster(int y, int x, int direction) {
 
     bool finished = false;
     while (!finished) {
-        (void) mmove(direction, &y, &x);
+        (void) playerMovePosition(direction, &y, &x);
         dist++;
 
         Cave_t *c_ptr = &cave[y][x];
@@ -1249,7 +1249,7 @@ bool wall_to_mud(int y, int x, int direction) {
 
     bool finished = false;
     while (!finished) {
-        (void) mmove(direction, &y, &x);
+        (void) playerMovePosition(direction, &y, &x);
         dist++;
 
         Cave_t *c_ptr = &cave[y][x];
@@ -1331,7 +1331,7 @@ bool td_destroy2(int y, int x, int direction) {
     Cave_t *c_ptr;
 
     do {
-        (void) mmove(direction, &y, &x);
+        (void) playerMovePosition(direction, &y, &x);
         dist++;
 
         c_ptr = &cave[y][x];
@@ -1373,7 +1373,7 @@ bool poly_monster(int y, int x, int direction) {
 
     bool finished = false;
     while (!finished) {
-        (void) mmove(direction, &y, &x);
+        (void) playerMovePosition(direction, &y, &x);
         dist++;
 
         Cave_t *c_ptr = &cave[y][x];
@@ -1415,7 +1415,7 @@ bool build_wall(int y, int x, int direction) {
 
     bool finished = false;
     while (!finished) {
-        (void) mmove(direction, &y, &x);
+        (void) playerMovePosition(direction, &y, &x);
         dist++;
 
         Cave_t *c_ptr = &cave[y][x];
@@ -1483,7 +1483,7 @@ bool clone_monster(int y, int x, int direction) {
 
     bool finished = false;
     while (!finished) {
-        (void) mmove(direction, &y, &x);
+        (void) playerMovePosition(direction, &y, &x);
         dist++;
 
         Cave_t *c_ptr = &cave[y][x];
@@ -1577,7 +1577,7 @@ bool teleport_monster(int y, int x, int direction) {
 
     bool finished = false;
     while (!finished) {
-        (void) mmove(direction, &y, &x);
+        (void) playerMovePosition(direction, &y, &x);
         dist++;
 
         Cave_t *c_ptr = &cave[y][x];
