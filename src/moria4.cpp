@@ -939,7 +939,7 @@ void throw_object() {
                     }
                     printMessage(msg);
 
-                    tdam = tot_dam(&throw_obj, tdam, damage);
+                    tdam = itemMagicAbilityDamage(&throw_obj, tdam, damage);
                     tdam = critical_blow((int) throw_obj.weight, tpth, tdam, CLA_BTHB);
 
                     if (tdam < 0) {

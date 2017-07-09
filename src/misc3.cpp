@@ -2162,47 +2162,49 @@ int playerAttackBlows(int weight, int *weight_to_hit) {
 }
 
 // Special damage due to magical abilities of object -RAK-
-int tot_dam(Inventory_t *item, int total_damage, int monster_id) {
-    bool isProjectile = item->tval >= TV_SLING_AMMO && item->tval <= TV_ARROW;
-    bool isHaftedSword = item->tval >= TV_HAFTED && item->tval <= TV_SWORD;
+int itemMagicAbilityDamage(Inventory_t *item, int total_damage, int monster_id) {
+    bool is_ego_weapon = (item->flags & TR_EGO_WEAPON) != 0;
+    bool is_projectile = item->tval >= TV_SLING_AMMO && item->tval <= TV_ARROW;
+    bool is_hafted_sword = item->tval >= TV_HAFTED && item->tval <= TV_SWORD;
+    bool is_flask = item->tval == TV_FLASK;
 
-    if ((item->flags & TR_EGO_WEAPON) && (isProjectile || isHaftedSword || item->tval == TV_FLASK)) {
-        Creature_t *m_ptr = &creatures_list[monster_id];
-        Recall_t *r_ptr = &creature_recall[monster_id];
+    if (is_ego_weapon && (is_projectile || is_hafted_sword || is_flask)) {
+        Creature_t *creature = &creatures_list[monster_id];
+        Recall_t *memory = &creature_recall[monster_id];
 
         // Slay Dragon
-        if ((m_ptr->cdefense & CD_DRAGON) && (item->flags & TR_SLAY_DRAGON)) {
-            r_ptr->r_cdefense |= CD_DRAGON;
+        if ((creature->cdefense & CD_DRAGON) && (item->flags & TR_SLAY_DRAGON)) {
+            memory->r_cdefense |= CD_DRAGON;
             return total_damage * 4;
         }
 
         // Slay Undead
-        if ((m_ptr->cdefense & CD_UNDEAD) && (item->flags & TR_SLAY_UNDEAD)) {
-            r_ptr->r_cdefense |= CD_UNDEAD;
+        if ((creature->cdefense & CD_UNDEAD) && (item->flags & TR_SLAY_UNDEAD)) {
+            memory->r_cdefense |= CD_UNDEAD;
             return total_damage * 3;
         }
 
         // Slay Animal
-        if ((m_ptr->cdefense & CD_ANIMAL) && (item->flags & TR_SLAY_ANIMAL)) {
-            r_ptr->r_cdefense |= CD_ANIMAL;
+        if ((creature->cdefense & CD_ANIMAL) && (item->flags & TR_SLAY_ANIMAL)) {
+            memory->r_cdefense |= CD_ANIMAL;
             return total_damage * 2;
         }
 
         // Slay Evil
-        if ((m_ptr->cdefense & CD_EVIL) && (item->flags & TR_SLAY_EVIL)) {
-            r_ptr->r_cdefense |= CD_EVIL;
+        if ((creature->cdefense & CD_EVIL) && (item->flags & TR_SLAY_EVIL)) {
+            memory->r_cdefense |= CD_EVIL;
             return total_damage * 2;
         }
 
         // Frost
-        if ((m_ptr->cdefense & CD_FROST) && (item->flags & TR_FROST_BRAND)) {
-            r_ptr->r_cdefense |= CD_FROST;
+        if ((creature->cdefense & CD_FROST) && (item->flags & TR_FROST_BRAND)) {
+            memory->r_cdefense |= CD_FROST;
             return total_damage * 3 / 2;
         }
 
         // Fire
-        if ((m_ptr->cdefense & CD_FIRE) && (item->flags & TR_FLAME_TONGUE)) {
-            r_ptr->r_cdefense |= CD_FIRE;
+        if ((creature->cdefense & CD_FIRE) && (item->flags & TR_FLAME_TONGUE)) {
+            memory->r_cdefense |= CD_FIRE;
             return total_damage * 3 / 2;
         }
     }
