@@ -2066,7 +2066,7 @@ static void examine_book() {
         }
 
         terminalSaveScreen();
-        print_spells(spell_index, spellID, true, -1);
+        displaySpellsList(spell_index, spellID, true, -1);
         waitForContinueKey(0);
         terminalRestoreScreen();
     }

@@ -1360,9 +1360,9 @@ static int spellChanceOfSuccess(int spell) {
 }
 
 // Print list of spells -RAK-
-// if nonconsec is  -1: spells numbered consecutively from 'a' to 'a'+num
-//                 >=0: spells numbered by offset from nonconsec
-void print_spells(int *spell, int number_of_choices, int comment, int non_consecutive) {
+// if non_consecutive is  -1: spells numbered consecutively from 'a' to 'a'+num
+//                       >=0: spells numbered by offset from non_consecutive
+void displaySpellsList(int *spell, int number_of_choices, int comment, int non_consecutive) {
     int col;
     if (comment) {
         col = 22;
@@ -1370,7 +1370,7 @@ void print_spells(int *spell, int number_of_choices, int comment, int non_consec
         col = 31;
     }
 
-    int offset = (classes[py.misc.pclass].spell == MAGE ? SPELL_OFFSET : PRAYER_OFFSET);
+    int consecutive_offset = (classes[py.misc.pclass].spell == MAGE ? SPELL_OFFSET : PRAYER_OFFSET);
 
     eraseLine(1, col);
     putString("Name", 1, col + 5);
@@ -1399,7 +1399,7 @@ void print_spells(int *spell, int number_of_choices, int comment, int non_consec
         }
 
         // determine whether or not to leave holes in character choices, non_consecutive -1
-        // when learning spells, consec offset>=0 when asking which spell to cast.
+        // when learning spells, consecutive_offset>=0 when asking which spell to cast.
         char spell_char;
         if (non_consecutive == -1) {
             spell_char = (char) ('a' + i);
@@ -1408,7 +1408,7 @@ void print_spells(int *spell, int number_of_choices, int comment, int non_consec
         }
 
         vtype_t out_val;
-        (void) sprintf(out_val, "  %c) %-30s%2d %4d %3d%%%s", spell_char, spell_names[spellID + offset], s_ptr->slevel, s_ptr->smana, spellChanceOfSuccess(spellID), p);
+        (void) sprintf(out_val, "  %c) %-30s%2d %4d %3d%%%s", spell_char, spell_names[spellID + consecutive_offset], s_ptr->slevel, s_ptr->smana, spellChanceOfSuccess(spellID), p);
         putStringClearToEOL(out_val, 2 + i, col);
     }
 }
@@ -1473,7 +1473,7 @@ int get_spell(int *spell, int number_of_choices, int *spell_id, int *spell_chanc
             if (!redraw) {
                 terminalSaveScreen();
                 redraw = true;
-                print_spells(spell, number_of_choices, false, first_spell);
+                displaySpellsList(spell, number_of_choices, false, first_spell);
             }
         } else if (isalpha((int) choice)) {
             *spell_id = -2;
@@ -1815,7 +1815,7 @@ void gain_spells() {
     } else if (stat == A_INT) {
         // get to choose which mage spells will be learned
         terminalSaveScreen();
-        print_spells(spells, spellID, false, -1);
+        displaySpellsList(spells, spellID, false, -1);
 
         char query;
         while (new_spells && getCommand("Learn which spell?", &query)) {
@@ -1836,7 +1836,7 @@ void gain_spells() {
                 spellID--;
 
                 eraseLine(c + 1, 31);
-                print_spells(spells, spellID, false, -1);
+                displaySpellsList(spells, spellID, false, -1);
             } else {
                 terminalBellSound();
             }
