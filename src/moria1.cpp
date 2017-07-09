@@ -1833,7 +1833,7 @@ void playerDisturb(int major_disturbance, int light_disturbance) {
     }
 
     if (py.flags.rest != 0) {
-        rest_off();
+        playerRestOff();
     }
 
     if (light_disturbance || running_counter) {
@@ -1915,7 +1915,7 @@ void playerRestOn() {
     player_free_turn = true;
 }
 
-void rest_off() {
+void playerRestOff() {
     py.flags.rest = 0;
     py.flags.status &= ~PY_REST;
 

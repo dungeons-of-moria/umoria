@@ -294,7 +294,7 @@ static void playerUpdateConfusion() {
         printMessage("You feel less confused now.");
 
         if (py.flags.rest != 0) {
-            rest_off();
+            playerRestOff();
         }
     }
 }
@@ -442,14 +442,14 @@ static void playerUpdateRestingState() {
 
         // Resting over
         if (py.flags.rest == 0) {
-            rest_off();
+            playerRestOff();
         }
     } else if (py.flags.rest < 0) {
         // Rest until reach max mana and max hit points.
         py.flags.rest++;
 
         if ((py.misc.chp == py.misc.mhp && py.misc.cmana == py.misc.mana) || py.flags.rest == 0) {
-            rest_off();
+            playerRestOff();
         }
     }
 }

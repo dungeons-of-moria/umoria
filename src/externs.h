@@ -390,7 +390,7 @@ void playerDisturb(int major_disturbance, int light_disturbance);
 void playerSearchOn();
 void playerSearchOff();
 void playerRestOn();
-void rest_off();
+void playerRestOff();
 bool test_hit(int base_to_hit, int level, int plus_to_hit, int armor_class, int attack_type_id);
 void take_hit(int damage, const char *creature_name);
 
