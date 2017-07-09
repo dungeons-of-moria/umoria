@@ -2017,38 +2017,41 @@ void playerCalculateHitPoints() {
 }
 
 // Inserts a string into a string
-void insert_str(char *to_string, const char *from_string, const char *str_to_insert) {
-    int mtc_len = (int) strlen(from_string);
-    int obj_len = (int) strlen(to_string);
-    char *bound = to_string + obj_len - mtc_len;
+void insertStringIntoString(char *to_string, const char *from_string, const char *str_to_insert) {
+    int from_len = (int) strlen(from_string);
+    int to_len = (int) strlen(to_string);
 
+    char *bound = to_string + to_len - from_len;
     char *pc;
+
     for (pc = to_string; pc <= bound; pc++) {
         char *temp_obj = pc;
         const char *temp_mtc = from_string;
 
         int i;
-        for (i = 0; i < mtc_len; i++) {
+        for (i = 0; i < from_len; i++) {
             if (*temp_obj++ != *temp_mtc++) {
                 break;
             }
         }
-        if (i == mtc_len) {
+        if (i == from_len) {
             break;
         }
     }
 
     if (pc <= bound) {
-        char out_val[80];
+        char new_string[MORIA_MESSAGE_SIZE];
 
-        (void) strncpy(out_val, to_string, (pc - to_string));
-        // Turbo C needs int for array index.
-        out_val[(int) (pc - to_string)] = '\0';
+        (void) strncpy(new_string, to_string, (pc - to_string));
+
+        new_string[pc - to_string] = '\0';
+
         if (str_to_insert) {
-            (void) strcat(out_val, str_to_insert);
+            (void) strcat(new_string, str_to_insert);
         }
-        (void) strcat(out_val, (pc + mtc_len));
-        (void) strcpy(to_string, out_val);
+
+        (void) strcat(new_string, (pc + from_len));
+        (void) strcpy(to_string, new_string);
     }
 }
 

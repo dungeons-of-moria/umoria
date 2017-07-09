@@ -500,10 +500,10 @@ void itemDescription(obj_desc_t description, Inventory_t *item, bool add_prefix)
     }
 
     if (item->number != 1) {
-        insert_str(tmp_val, "ch~", "ches");
-        insert_str(tmp_val, "~", "s");
+        insertStringIntoString(tmp_val, "ch~", "ches");
+        insertStringIntoString(tmp_val, "~", "s");
     } else {
-        insert_str(tmp_val, "~", CNIL);
+        insertStringIntoString(tmp_val, "~", CNIL);
     }
 
     if (!add_prefix) {
