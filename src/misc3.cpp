@@ -13,7 +13,7 @@ static const char *stat_names[] = {"STR : ", "INT : ", "WIS : ", "DEX : ", "CON 
 #define BLANK_LENGTH 24
 static char blank_string[] = "                        ";
 
-static int spell_chance(int spell);
+static int spellChanceOfSuccess(int spell);
 
 // Places a particular trap at location y, x -RAK-
 void dungeonSetTrap(int y, int x, int sub_type_id) {
@@ -1332,7 +1332,7 @@ int inventoryCarryItem(Inventory_t *item) {
 }
 
 // Returns spell chance of failure for spell -RAK-
-static int spell_chance(int spell) {
+static int spellChanceOfSuccess(int spell) {
     Spell_t *s_ptr = &magic_spells[py.misc.pclass - 1][spell];
 
     int chance = s_ptr->sfail - 3 * (py.misc.lev - s_ptr->slevel);
@@ -1408,7 +1408,7 @@ void print_spells(int *spell, int number_of_choices, int comment, int non_consec
         }
 
         vtype_t out_val;
-        (void) sprintf(out_val, "  %c) %-30s%2d %4d %3d%%%s", spell_char, spell_names[spellID + offset], s_ptr->slevel, s_ptr->smana, spell_chance(spellID), p);
+        (void) sprintf(out_val, "  %c) %-30s%2d %4d %3d%%%s", spell_char, spell_names[spellID + offset], s_ptr->slevel, s_ptr->smana, spellChanceOfSuccess(spellID), p);
         putStringClearToEOL(out_val, 2 + i, col);
     }
 }
@@ -1445,7 +1445,7 @@ int get_spell(int *spell, int number_of_choices, int *spell_id, int *spell_chanc
                 Spell_t *s_ptr = &magic_spells[py.misc.pclass - 1][*spell_id];
 
                 vtype_t tmp_str;
-                (void) sprintf(tmp_str, "Cast %s (%d mana, %d%% fail)?", spell_names[*spell_id + offset], s_ptr->smana, spell_chance(*spell_id));
+                (void) sprintf(tmp_str, "Cast %s (%d mana, %d%% fail)?", spell_names[*spell_id + offset], s_ptr->smana, spellChanceOfSuccess(*spell_id));
                 if (getInputConfirmation(tmp_str)) {
                     flag = true;
                 } else {
@@ -1496,7 +1496,7 @@ int get_spell(int *spell, int number_of_choices, int *spell_id, int *spell_chanc
     eraseLine(MSG_LINE, 0);
 
     if (flag) {
-        *spell_chances = spell_chance(*spell_id);
+        *spell_chances = spellChanceOfSuccess(*spell_id);
     }
 
     return flag;
