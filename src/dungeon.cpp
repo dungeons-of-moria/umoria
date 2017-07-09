@@ -1705,7 +1705,7 @@ static void do_command(char com_val) {
             refill_lamp();
             break;
         case 'G': // (G)ain magic spells
-            gain_spells();
+            playerGainSpells();
             break;
         case 'V': // (V)iew scores
             terminalSaveScreen();

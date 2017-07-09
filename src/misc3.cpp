@@ -1737,8 +1737,8 @@ static uint32_t playerDetermineLearnableSpells() {
     return spell_flag;
 }
 
-// gain spells when player wants to    - jw
-void gain_spells() {
+// gain spells when player wants to -JW-
+void playerGainSpells() {
     // Priests don't need light because they get spells from their god, so only
     // fail when can't see if player has MAGE spells. This check is done below.
     if (py.flags.confused > 0) {
@@ -1749,12 +1749,12 @@ void gain_spells() {
     int new_spells = py.flags.new_spells;
     int diff_spells = 0;
 
-    Spell_t *msp_ptr = &magic_spells[py.misc.pclass - 1][0];
+    Spell_t *spell = &magic_spells[py.misc.pclass - 1][0];
 
     int stat, offset;
 
     if (classes[py.misc.pclass].spell == MAGE) {
-        // People with MAGE spells can't learn spells if they can't read their books.
+        // People with MAGE spells can't learn spell_bank if they can't read their books.
         if (!playerCanRead()) {
             return;
         }
@@ -1789,25 +1789,25 @@ void gain_spells() {
     // clear bits for spells already learned
     spell_flag &= ~spells_learnt;
 
-    int spellID = 0;
-    int spells[31];
+    int spell_id = 0;
+    int spell_bank[31];
     uint32_t mask = 0x1;
 
     for (int i = 0; spell_flag; mask <<= 1, i++) {
         if (spell_flag & mask) {
             spell_flag &= ~mask;
-            if (msp_ptr[i].slevel <= py.misc.lev) {
-                spells[spellID] = i;
-                spellID++;
+            if (spell[i].slevel <= py.misc.lev) {
+                spell_bank[spell_id] = i;
+                spell_id++;
             }
         }
     }
 
-    if (new_spells > spellID) {
+    if (new_spells > spell_id) {
         printMessage("You seem to be missing a book.");
 
-        diff_spells = new_spells - spellID;
-        new_spells = spellID;
+        diff_spells = new_spells - spell_id;
+        new_spells = spell_id;
     }
 
     if (new_spells == 0) {
@@ -1815,7 +1815,7 @@ void gain_spells() {
     } else if (stat == A_INT) {
         // get to choose which mage spells will be learned
         terminalSaveScreen();
-        displaySpellsList(spells, spellID, false, -1);
+        displaySpellsList(spell_bank, spell_id, false, -1);
 
         char query;
         while (new_spells && getCommand("Learn which spell?", &query)) {
@@ -1823,20 +1823,20 @@ void gain_spells() {
 
             // test j < 23 in case i is greater than 22, only 22 spells
             // are actually shown on the screen, so limit choice to those
-            if (c >= 0 && c < spellID && c < 22) {
+            if (c >= 0 && c < spell_id && c < 22) {
                 new_spells--;
 
-                spells_learnt |= 1L << spells[c];
-                spells_learned_order[last_known++] = (uint8_t) spells[c];
+                spells_learnt |= 1L << spell_bank[c];
+                spells_learned_order[last_known++] = (uint8_t) spell_bank[c];
 
-                for (; c <= spellID - 1; c++) {
-                    spells[c] = spells[c + 1];
+                for (; c <= spell_id - 1; c++) {
+                    spell_bank[c] = spell_bank[c + 1];
                 }
 
-                spellID--;
+                spell_id--;
 
                 eraseLine(c + 1, 31);
-                displaySpellsList(spells, spellID, false, -1);
+                displaySpellsList(spell_bank, spell_id, false, -1);
             } else {
                 terminalBellSound();
             }
@@ -1846,18 +1846,19 @@ void gain_spells() {
     } else {
         // pick a prayer at random
         while (new_spells) {
-            int s = randomNumber(spellID) - 1;
-            spells_learnt |= 1L << spells[s];
-            spells_learned_order[last_known++] = (uint8_t) spells[s];
+            int id = randomNumber(spell_id) - 1;
+            spells_learnt |= 1L << spell_bank[id];
+            spells_learned_order[last_known++] = (uint8_t) spell_bank[id];
 
             vtype_t tmp_str;
-            (void) sprintf(tmp_str, "You have learned the prayer of %s.", spell_names[spells[s] + offset]);
+            (void) sprintf(tmp_str, "You have learned the prayer of %s.", spell_names[spell_bank[id] + offset]);
             printMessage(tmp_str);
 
-            for (; s <= spellID - 1; s++) {
-                spells[s] = spells[s + 1];
+            for (; id <= spell_id - 1; id++) {
+                spell_bank[id] = spell_bank[id + 1];
             }
-            spellID--;
+
+            spell_id--;
             new_spells--;
         }
     }
