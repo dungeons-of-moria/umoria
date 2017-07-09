@@ -1414,20 +1414,20 @@ void displaySpellsList(int *spell, int number_of_choices, int comment, int non_c
 }
 
 // Returns spell pointer -RAK-
-int get_spell(int *spell, int number_of_choices, int *spell_id, int *spell_chances, const char *prompt, int first_spell) {
+bool spellGetId(int *spell, int number_of_choices, int *spell_id, int *spell_chances, const char *prompt, int first_spell) {
     *spell_id = -1;
 
     vtype_t str;
     (void) sprintf(str, "(Spells %c-%c, *=List, <ESCAPE>=exit) %s", spell[0] + 'a' - first_spell, spell[number_of_choices - 1] + 'a' - first_spell, prompt);
 
-    bool flag = false;
+    bool spell_found = false;
     bool redraw = false;
 
     int offset = (classes[py.misc.pclass].spell == MAGE ? SPELL_OFFSET : PRAYER_OFFSET);
 
     char choice;
 
-    while (!flag && getCommand(str, &choice)) {
+    while (!spell_found && getCommand(str, &choice)) {
         if (isupper((int) choice)) {
             *spell_id = choice - 'A' + first_spell;
 
@@ -1447,7 +1447,7 @@ int get_spell(int *spell, int number_of_choices, int *spell_id, int *spell_chanc
                 vtype_t tmp_str;
                 (void) sprintf(tmp_str, "Cast %s (%d mana, %d%% fail)?", spell_names[*spell_id + offset], s_ptr->smana, spellChanceOfSuccess(*spell_id));
                 if (getInputConfirmation(tmp_str)) {
-                    flag = true;
+                    spell_found = true;
                 } else {
                     *spell_id = -1;
                 }
@@ -1466,7 +1466,7 @@ int get_spell(int *spell, int number_of_choices, int *spell_id, int *spell_chanc
             if (spellID == number_of_choices) {
                 *spell_id = -2;
             } else {
-                flag = true;
+                spell_found = true;
             }
         } else if (choice == '*') {
             // only do this drawing once
@@ -1495,11 +1495,11 @@ int get_spell(int *spell, int number_of_choices, int *spell_id, int *spell_chanc
 
     eraseLine(MSG_LINE, 0);
 
-    if (flag) {
+    if (spell_found) {
         *spell_chances = spellChanceOfSuccess(*spell_id);
     }
 
-    return flag;
+    return spell_found;
 }
 
 // check to see if know any spells greater than level, eliminate them

@@ -369,7 +369,7 @@ int cast_spell(const char *prompt, int item_id, int *spell_id, int *spell_chance
         return result;
     }
 
-    result = get_spell(spellList, spellCount, spell_id, spell_chance, prompt, first_spell);
+    result = spellGetId(spellList, spellCount, spell_id, spell_chance, prompt, first_spell);
 
     if (result && magic_spells[py.misc.pclass - 1][*spell_id].smana > py.misc.cmana) {
         if (classes[py.misc.pclass].spell == MAGE) {
