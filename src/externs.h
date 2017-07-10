@@ -397,7 +397,7 @@ void playerTakesHit(int damage, const char *creature_name);
 // moria2.c
 void dungeonChangeTrapVisibility(int y, int x);
 void dungeonSearch(int y, int x, int chance);
-void find_init(int direction);
+void playerFindInitialize(int direction);
 void find_run();
 void end_find();
 void area_affect(int direction, int y, int x);

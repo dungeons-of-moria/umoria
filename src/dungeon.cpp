@@ -1637,28 +1637,28 @@ static void do_command(char com_val) {
             move_char(9, do_pickup);
             break;
         case 'B': // (B) run down, left  (. 1)
-            find_init(1);
+            playerFindInitialize(1);
             break;
         case 'J': // (J) run down    (. 2)
-            find_init(2);
+            playerFindInitialize(2);
             break;
         case 'N': // (N) run down, right  (. 3)
-            find_init(3);
+            playerFindInitialize(3);
             break;
         case 'H': // (H) run left    (. 4)
-            find_init(4);
+            playerFindInitialize(4);
             break;
         case 'L': // (L) run right  (. 6)
-            find_init(6);
+            playerFindInitialize(6);
             break;
         case 'Y': // (Y) run up, left  (. 7)
-            find_init(7);
+            playerFindInitialize(7);
             break;
         case 'K': // (K) run up    (. 8)
-            find_init(8);
+            playerFindInitialize(8);
             break;
         case 'U': // (U) run up, right  (. 9)
-            find_init(9);
+            playerFindInitialize(9);
             break;
         case '/': // (/) identify a symbol
             displayWorldObjectDescription();

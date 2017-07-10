@@ -120,7 +120,7 @@ void dungeonSearch(int y, int x, int chance) {
 //      find_breakright  You have a wall on the right, and will
 //                       stop if it opens
 //
-// To initialize these conditions is the task of find_init. If moving from the
+// To initialize these conditions is the task of playerFindInitialize. If moving from the
 // square marked @ to the square marked . (in the two diagrams below), then two
 // adjacent squares on the left and the right (L and R) are considered. If either
 // one is seen to be closed, then that side is considered to be closed. If both
@@ -276,11 +276,11 @@ static void findRunningBreak(int dir, int row, int col) {
     }
 }
 
-void find_init(int direction) {
-    int row = char_row;
-    int col = char_col;
+void playerFindInitialize(int direction) {
+    int y = char_row;
+    int x = char_col;
 
-    if (!playerMovePosition(direction, &row, &col)) {
+    if (!playerMovePosition(direction, &y, &x)) {
         running_counter = 0;
     } else {
         running_counter = 1;
@@ -292,7 +292,7 @@ void find_init(int direction) {
         find_breakleft = false;
 
         if (py.flags.blind < 1) {
-            findRunningBreak(direction, row, col);
+            findRunningBreak(direction, y, x);
         }
     }
 
