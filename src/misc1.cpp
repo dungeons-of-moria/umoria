@@ -186,7 +186,7 @@ bool coordOutsidePanel(int y, int x, bool force) {
 
         // stop movement if any
         if (find_bound) {
-            end_find();
+            playerEndRunning();
         }
 
         // Yes, the coordinates are beyond the current panel boundary

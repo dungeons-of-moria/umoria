@@ -399,7 +399,7 @@ void dungeonChangeTrapVisibility(int y, int x);
 void dungeonSearch(int y, int x, int chance);
 void playerFindInitialize(int direction);
 void playerRunAndFind();
-void end_find();
+void playerEndRunning();
 void area_affect(int direction, int y, int x);
 void corrode_gas(const char *creature_name);
 void poison_gas(int dam, const char *creature_name);

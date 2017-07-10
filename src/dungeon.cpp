@@ -460,7 +460,7 @@ static void playerUpdateHallucination() {
         return;
     }
 
-    end_find();
+    playerEndRunning();
 
     py.flags.image--;
 
@@ -743,7 +743,7 @@ static void executeInputCommands(char *command, int *find_count) {
             playerRunAndFind();
             find_count--;
             if (find_count == 0) {
-                end_find();
+                playerEndRunning();
             }
             putQIO();
         } else if (doing_inventory_command) {

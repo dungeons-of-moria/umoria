@@ -73,14 +73,14 @@ void dungeonSearch(int y, int x, int chance) {
                 printMessage(msg);
 
                 dungeonChangeTrapVisibility(i, j);
-                end_find();
+                playerEndRunning();
             } else if (item->tval == TV_SECRET_DOOR) {
                 // Secret door?
 
                 printMessage("You have found a secret door.");
 
                 dungeonChangeTrapVisibility(i, j);
-                end_find();
+                playerEndRunning();
             } else if (item->tval == TV_CHEST) {
                 // Chest is trapped?
 
@@ -317,7 +317,7 @@ void playerRunAndFind() {
     // prevent infinite loops in find mode, will stop after moving 100 times
     if (running_counter++ > 100) {
         printMessage("You stop running to catch your breath.");
-        end_find();
+        playerEndRunning();
         return;
     }
 
@@ -325,7 +325,7 @@ void playerRunAndFind() {
 }
 
 // Switch off the run flag - and get the light correct. -CJS-
-void end_find() {
+void playerEndRunning() {
     if (!running_counter) {
         return;
     }
@@ -346,7 +346,7 @@ static bool areaAffectStopLookingAtSquares(int i, int dir, int newDir, int y, in
             int tileID = treasure_list[c_ptr->tptr].tval;
 
             if (tileID != TV_INVIS_TRAP && tileID != TV_SECRET_DOOR && (tileID != TV_OPEN_DOOR || !run_ignore_doors)) {
-                end_find();
+                playerEndRunning();
                 return true;
             }
         }
@@ -355,7 +355,7 @@ static bool areaAffectStopLookingAtSquares(int i, int dir, int newDir, int y, in
         // The monster should be visible since monsterUpdateVisibility() checks
         // for the special case of being in find mode
         if (c_ptr->cptr > 1 && monsters[c_ptr->cptr].ml) {
-            end_find();
+            playerEndRunning();
             return true;
         }
 
@@ -367,12 +367,12 @@ static bool areaAffectStopLookingAtSquares(int i, int dir, int newDir, int y, in
             // Have we found a break?
             if (i < 0) {
                 if (find_breakright) {
-                    end_find();
+                    playerEndRunning();
                     return true;
                 }
             } else if (i > 0) {
                 if (find_breakleft) {
-                    end_find();
+                    playerEndRunning();
                     return true;
                 }
             }
@@ -381,11 +381,11 @@ static bool areaAffectStopLookingAtSquares(int i, int dir, int newDir, int y, in
             *option = newDir;
         } else if (*option2 != 0) {
             // Three new directions. STOP.
-            end_find();
+            playerEndRunning();
             return true;
         } else if (*option != cycle[chome[dir] + i - 1]) {
             // If not adjacent to prev, STOP
-            end_find();
+            playerEndRunning();
             return true;
         } else {
             // Two adjacent choices. Make option2 the diagonal, and
@@ -403,13 +403,13 @@ static bool areaAffectStopLookingAtSquares(int i, int dir, int newDir, int y, in
         // We see an obstacle. In open area, STOP if on a side previously open.
         if (i < 0) {
             if (find_breakleft) {
-                end_find();
+                playerEndRunning();
                 return true;
             }
             find_breakright = true;
         } else if (i > 0) {
             if (find_breakright) {
-                end_find();
+                playerEndRunning();
                 return true;
             }
             find_breakleft = true;
@@ -485,7 +485,7 @@ void area_affect(int direction, int y, int x) {
             find_prevdir = option2;
         } else {
             // STOP: we are next to an intersection or a room
-            end_find();
+            playerEndRunning();
         }
     } else if (run_cut_corners) {
         // This corner is seen to be enclosed; we cut the corner.

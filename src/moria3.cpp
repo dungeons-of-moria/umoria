@@ -220,7 +220,7 @@ static void trapConstitutionDart(Inventory_t *t_ptr, int dam) {
 
 // Player hit a trap.  (Chuckle) -RAK-
 static void hit_trap(int y, int x) {
-    end_find();
+    playerEndRunning();
     dungeonChangeTrapVisibility(y, x);
 
     Inventory_t *tile = &treasure_list[cave[y][x].tptr];
@@ -400,7 +400,7 @@ static void carry(int y, int x, bool pickup) {
 
     obj_desc_t description, msg;
 
-    end_find();
+    playerEndRunning();
 
     // There's GOLD in them thar hills!
     if (tileFlags == TV_GOLD) {
@@ -902,7 +902,7 @@ static bool playerRandomMovement(int dir) {
 void move_char(int direction, bool do_pickup) {
     if (playerRandomMovement(direction)) {
         direction = randomNumber(9);
-        end_find();
+        playerEndRunning();
     }
 
     int y = char_row;
@@ -1004,7 +1004,7 @@ void move_char(int direction, bool do_pickup) {
                     printMessage("There is a closed door blocking your way.");
                 }
             } else {
-                end_find();
+                playerEndRunning();
             }
             player_free_turn = true;
         }
@@ -1013,7 +1013,7 @@ void move_char(int direction, bool do_pickup) {
 
         int old_find_flag = running_counter;
 
-        end_find();
+        playerEndRunning();
 
         // if player can see monster, and was in find mode, then nothing
         if (monster->ml && old_find_flag) {
