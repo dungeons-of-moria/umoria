@@ -947,7 +947,7 @@ void move_char(int direction, bool do_pickup) {
             // Check to see if he notices something
             // fos may be negative if have good rings of searching
             if (py.misc.fos <= 1 || randomNumber(py.misc.fos) == 1 || (py.flags.status & PY_SEARCH)) {
-                search(char_row, char_col, py.misc.srh);
+                dungeonSearch(char_row, char_col, py.misc.srh);
             }
 
             if (tile->fval == LIGHT_FLOOR) {

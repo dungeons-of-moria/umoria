@@ -34,7 +34,7 @@ void dungeonChangeTrapVisibility(int y, int x) {
 }
 
 // Searches for hidden things. -RAK-
-void search(int y, int x, int chance) {
+void dungeonSearch(int y, int x, int chance) {
     if (py.flags.confused > 0) {
         chance = chance / 10;
     }
@@ -49,7 +49,7 @@ void search(int y, int x, int chance) {
 
     for (int i = y - 1; i <= y + 1; i++) {
         for (int j = x - 1; j <= x + 1; j++) {
-            // always coordInBounds here
+            // always coordInBounds() here
             if (randomNumber(100) >= chance) {
                 continue;
             }
@@ -60,13 +60,13 @@ void search(int y, int x, int chance) {
 
             // Search for hidden objects
 
-            Inventory_t *t_ptr = &treasure_list[cave[i][j].tptr];
+            Inventory_t *item = &treasure_list[cave[i][j].tptr];
 
-            if (t_ptr->tval == TV_INVIS_TRAP) {
+            if (item->tval == TV_INVIS_TRAP) {
                 // Trap on floor?
 
                 obj_desc_t description;
-                itemDescription(description, t_ptr, true);
+                itemDescription(description, item, true);
 
                 obj_desc_t msg;
                 (void) sprintf(msg, "You have found %s", description);
@@ -74,20 +74,20 @@ void search(int y, int x, int chance) {
 
                 dungeonChangeTrapVisibility(i, j);
                 end_find();
-            } else if (t_ptr->tval == TV_SECRET_DOOR) {
+            } else if (item->tval == TV_SECRET_DOOR) {
                 // Secret door?
 
                 printMessage("You have found a secret door.");
 
                 dungeonChangeTrapVisibility(i, j);
                 end_find();
-            } else if (t_ptr->tval == TV_CHEST) {
+            } else if (item->tval == TV_CHEST) {
                 // Chest is trapped?
 
                 // mask out the treasure bits
-                if ((t_ptr->flags & CH_TRAPPED) > 1) {
-                    if (!spellItemIdentified(t_ptr)) {
-                        spellItemIdentifyAndRemoveRandomInscription(t_ptr);
+                if ((item->flags & CH_TRAPPED) > 1) {
+                    if (!spellItemIdentified(item)) {
+                        spellItemIdentifyAndRemoveRandomInscription(item);
                         printMessage("You have discovered a trap on the chest!");
                     } else {
                         printMessage("The chest is trapped!");

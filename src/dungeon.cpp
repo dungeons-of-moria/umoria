@@ -1798,7 +1798,7 @@ static void do_command(char com_val) {
             read_scroll();
             break;
         case 's': // (s)earch for a turn
-            search(char_row, char_col, py.misc.srh);
+            dungeonSearch(char_row, char_col, py.misc.srh);
             break;
         case 'T': // (T)ake off something  (t)ake off
             inventoryExecuteCommand('t');
