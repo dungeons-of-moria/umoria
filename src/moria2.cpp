@@ -13,20 +13,22 @@ static int minus_ac(uint32_t typ_dam);
 
 // Change a trap from invisible to visible -RAK-
 // Note: Secret doors are handled here
-void change_trap(int y, int x) {
-    Inventory_t *t_ptr = &treasure_list[cave[y][x].tptr];
+void dungeonChangeTrapVisibility(int y, int x) {
+    uint8_t treasure_id = cave[y][x].tptr;
 
-    if (t_ptr->tval == TV_INVIS_TRAP) {
-        t_ptr->tval = TV_VIS_TRAP;
+    Inventory_t *item = &treasure_list[treasure_id];
+
+    if (item->tval == TV_INVIS_TRAP) {
+        item->tval = TV_VIS_TRAP;
         dungeonLiteSpot(y, x);
         return;
     }
 
     // change secret door to closed door
-    if (t_ptr->tval == TV_SECRET_DOOR) {
-        t_ptr->index = OBJ_CLOSED_DOOR;
-        t_ptr->tval = game_objects[OBJ_CLOSED_DOOR].tval;
-        t_ptr->tchar = game_objects[OBJ_CLOSED_DOOR].tchar;
+    if (item->tval == TV_SECRET_DOOR) {
+        item->index = OBJ_CLOSED_DOOR;
+        item->tval = game_objects[OBJ_CLOSED_DOOR].tval;
+        item->tchar = game_objects[OBJ_CLOSED_DOOR].tchar;
         dungeonLiteSpot(y, x);
     }
 }
@@ -70,14 +72,14 @@ void search(int y, int x, int chance) {
                 (void) sprintf(msg, "You have found %s", description);
                 printMessage(msg);
 
-                change_trap(i, j);
+                dungeonChangeTrapVisibility(i, j);
                 end_find();
             } else if (t_ptr->tval == TV_SECRET_DOOR) {
                 // Secret door?
 
                 printMessage("You have found a secret door.");
 
-                change_trap(i, j);
+                dungeonChangeTrapVisibility(i, j);
                 end_find();
             } else if (t_ptr->tval == TV_CHEST) {
                 // Chest is trapped?

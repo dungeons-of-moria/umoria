@@ -395,7 +395,7 @@ bool playerTestBeingHit(int base_to_hit, int level, int plus_to_hit, int armor_c
 void playerTakesHit(int damage, const char *creature_name);
 
 // moria2.c
-void change_trap(int y, int x);
+void dungeonChangeTrapVisibility(int y, int x);
 void search(int y, int x, int chance);
 void find_init(int direction);
 void find_run();

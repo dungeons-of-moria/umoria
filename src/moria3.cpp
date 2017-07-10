@@ -221,7 +221,7 @@ static void trapConstitutionDart(Inventory_t *t_ptr, int dam) {
 // Player hit a trap.  (Chuckle) -RAK-
 static void hit_trap(int y, int x) {
     end_find();
-    change_trap(y, x);
+    dungeonChangeTrapVisibility(y, x);
 
     Inventory_t *tile = &treasure_list[cave[y][x].tptr];
 

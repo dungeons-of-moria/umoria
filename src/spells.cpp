@@ -126,7 +126,7 @@ bool detect_trap() {
 
             if (treasure_list[c_ptr->tptr].tval == TV_INVIS_TRAP) {
                 c_ptr->fm = true;
-                change_trap(y, x);
+                dungeonChangeTrapVisibility(y, x);
 
                 detected = true;
             } else if (treasure_list[c_ptr->tptr].tval == TV_CHEST) {
@@ -155,7 +155,7 @@ bool detect_sdoor() {
                 // Secret doors
 
                 c_ptr->fm = true;
-                change_trap(y, x);
+                dungeonChangeTrapVisibility(y, x);
 
                 detected = true;
             } else if ((treasure_list[c_ptr->tptr].tval == TV_UP_STAIR || treasure_list[c_ptr->tptr].tval == TV_DOWN_STAIR) && !c_ptr->fm) {
@@ -581,7 +581,7 @@ bool disarm_all(int y, int x, int direction) {
                 t_ptr->p1 = 0;
             } else if (t_ptr->tval == TV_SECRET_DOOR) {
                 c_ptr->fm = true;
-                change_trap(y, x);
+                dungeonChangeTrapVisibility(y, x);
 
                 disarmed = true;
             } else if (t_ptr->tval == TV_CHEST && t_ptr->flags != 0) {
