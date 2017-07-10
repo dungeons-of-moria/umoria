@@ -398,7 +398,7 @@ void playerTakesHit(int damage, const char *creature_name);
 void dungeonChangeTrapVisibility(int y, int x);
 void dungeonSearch(int y, int x, int chance);
 void playerFindInitialize(int direction);
-void find_run();
+void playerRunAndFind();
 void end_find();
 void area_affect(int direction, int y, int x);
 void corrode_gas(const char *creature_name);

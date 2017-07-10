@@ -313,7 +313,7 @@ void playerFindInitialize(int direction) {
     }
 }
 
-void find_run() {
+void playerRunAndFind() {
     // prevent infinite loops in find mode, will stop after moving 100 times
     if (running_counter++ > 100) {
         printMessage("You stop running to catch your breath.");

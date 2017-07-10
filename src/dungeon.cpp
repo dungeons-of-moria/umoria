@@ -740,7 +740,7 @@ static void executeInputCommands(char *command, int *find_count) {
         player_free_turn = false;
 
         if (running_counter) {
-            find_run();
+            playerRunAndFind();
             find_count--;
             if (find_count == 0) {
                 end_find();
