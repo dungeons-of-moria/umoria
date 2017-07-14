@@ -931,7 +931,7 @@ void breath(int x, int y, int monster_id, int damage_hp, char *spell_name, int s
                         dam = (damage_hp / (coordDistanceBetween(row, col, y, x) + 1));
 
                         // let's do at least one point of damage
-                        // prevents randomNumber(0) problem with poison_gas, also
+                        // prevents randomNumber(0) problem with damagePoisonedGas, also
                         if (dam == 0) {
                             dam = 1;
                         }
@@ -941,7 +941,7 @@ void breath(int x, int y, int monster_id, int damage_hp, char *spell_name, int s
                                 light_dam(dam, spell_name);
                                 break;
                             case GF_POISON_GAS:
-                                poison_gas(dam, spell_name);
+                                damagePoisonedGas(dam, spell_name);
                                 break;
                             case GF_ACID:
                                 acid_dam(dam, spell_name);

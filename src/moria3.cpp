@@ -167,7 +167,7 @@ static void trapPoisonGas(int dam) {
     // Makes more sense to print the message first, then damage an object.
     printMessage("A pungent green gas surrounds you!");
 
-    poison_gas(dam, "a poison gas trap");
+    damagePoisonedGas(dam, "a poison gas trap");
 }
 
 static void trapBlindGas() {

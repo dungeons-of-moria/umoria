@@ -579,10 +579,10 @@ void damageCorrodingGas(const char *creature_name) {
 }
 
 // Poison gas the idiot. -RAK-
-void poison_gas(int dam, const char *creature_name) {
-    playerTakesHit(dam, creature_name);
+void damagePoisonedGas(int damage, const char *creature_name) {
+    playerTakesHit(damage, creature_name);
 
-    py.flags.poisoned += 12 + randomNumber(dam);
+    py.flags.poisoned += 12 + randomNumber(damage);
 }
 
 // Burn the fool up. -RAK-
