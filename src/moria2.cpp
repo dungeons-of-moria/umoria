@@ -9,7 +9,7 @@
 #include "headers.h"
 #include "externs.h"
 
-static int minus_ac(uint32_t typ_dam);
+static int damageMinusAC(uint32_t typ_dam);
 
 // Change a trap from invisible to visible -RAK-
 // Note: Secret doors are handled here
@@ -502,7 +502,7 @@ void playerAreaAffect(int direction, int y, int x) {
 // AC gets worse -RAK-
 // Note: This routine affects magical AC bonuses so
 // that stores can detect the damage.
-static int minus_ac(uint32_t typ_dam) {
+static int damageMinusAC(uint32_t typ_dam) {
     int itemsCount = 0;
     int items[6];
 
@@ -569,7 +569,7 @@ static int minus_ac(uint32_t typ_dam) {
 
 // Corrode the unsuspecting person's armor -RAK-
 void damageCorrodingGas(const char *creature_name) {
-    if (!minus_ac((uint32_t) TR_RES_ACID)) {
+    if (!damageMinusAC((uint32_t) TR_RES_ACID)) {
         playerTakesHit(randomNumber(8), creature_name);
     }
 
@@ -636,7 +636,7 @@ void damageLightningBolt(int damage, const char *creature_name) {
 void damageAcid(int damage, const char *creature_name) {
     int flag = 0;
 
-    if (minus_ac((uint32_t) TR_RES_ACID)) {
+    if (damageMinusAC((uint32_t) TR_RES_ACID)) {
         flag = 1;
     }
 
