@@ -586,16 +586,16 @@ void damagePoisonedGas(int damage, const char *creature_name) {
 }
 
 // Burn the fool up. -RAK-
-void fire_dam(int dam, const char *creature_name) {
+void damageFire(int damage, const char *creature_name) {
     if (py.flags.fire_resist) {
-        dam = dam / 3;
+        damage = damage / 3;
     }
 
     if (py.flags.resist_heat > 0) {
-        dam = dam / 3;
+        damage = damage / 3;
     }
 
-    playerTakesHit(dam, creature_name);
+    playerTakesHit(damage, creature_name);
 
     if (inventoryDamageItem(set_flammable, 3) > 0) {
         printMessage("There is smoke coming from your pack!");

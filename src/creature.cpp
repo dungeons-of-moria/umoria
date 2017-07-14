@@ -597,7 +597,7 @@ static bool executeAttack(Creature_t *r_ptr, Monster_t *m_ptr, int monsterID, in
             break;
         case 5: // Fire attack
             printMessage("You are enveloped in flames!");
-            fire_dam(damage, deathDescription);
+            damageFire(damage, deathDescription);
             break;
         case 6: // Acid attack
             printMessage("You are covered in acid!");

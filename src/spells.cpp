@@ -950,7 +950,7 @@ void breath(int x, int y, int monster_id, int damage_hp, char *spell_name, int s
                                 cold_dam(dam, spell_name);
                                 break;
                             case GF_FIRE:
-                                fire_dam(dam, spell_name);
+                                damageFire(dam, spell_name);
                                 break;
                         }
                     }

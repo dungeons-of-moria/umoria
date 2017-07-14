@@ -153,7 +153,7 @@ static void trapFire(int dam) {
     // Makes more sense to print the message first, then damage an object.
     printMessage("You are enveloped in flames!");
 
-    fire_dam(dam, "a fire trap");
+    damageFire(dam, "a fire trap");
 }
 
 static void trapAcid(int dam) {
