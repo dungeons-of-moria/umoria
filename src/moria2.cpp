@@ -603,16 +603,16 @@ void damageFire(int damage, const char *creature_name) {
 }
 
 // Freeze him to death. -RAK-
-void cold_dam(int dam, const char *creature_name) {
+void damageCold(int damage, const char *creature_name) {
     if (py.flags.cold_resist) {
-        dam = dam / 3;
+        damage = damage / 3;
     }
 
     if (py.flags.resist_cold > 0) {
-        dam = dam / 3;
+        damage = damage / 3;
     }
 
-    playerTakesHit(dam, creature_name);
+    playerTakesHit(damage, creature_name);
 
     if (inventoryDamageItem(set_frost_destroy, 5) > 0) {
         printMessage("Something shatters inside your pack!");

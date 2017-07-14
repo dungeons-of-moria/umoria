@@ -605,7 +605,7 @@ static bool executeAttack(Creature_t *r_ptr, Monster_t *m_ptr, int monsterID, in
             break;
         case 7: // Cold attack
             printMessage("You are covered with frost!");
-            cold_dam(damage, deathDescription);
+            damageCold(damage, deathDescription);
             break;
         case 8: // Lightning attack
             printMessage("Lightning strikes you!");
