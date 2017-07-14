@@ -221,7 +221,7 @@ static bool playerCanSeeDungeonWall(int dir, int y, int x) {
 }
 
 // Do we see anything? Used in running. -CJS-
-static bool see_nothing(int dir, int y, int x) {
+static bool playerSeeNothing(int dir, int y, int x) {
     // check to see if movement there possible
     return playerMovePosition(dir, &y, &x) && caveGetTileSymbol(y, x) == ' ';
 }
@@ -478,7 +478,7 @@ void playerAreaAffect(int direction, int y, int x) {
     if (!playerCanSeeDungeonWall(option, row, col) || !playerCanSeeDungeonWall(check_dir, row, col)) {
         // Don't see that it is closed off.  This could be a
         // potential corner or an intersection.
-        if (run_examine_corners && see_nothing(option, row, col) && see_nothing(option2, row, col)) {
+        if (run_examine_corners && playerSeeNothing(option, row, col) && playerSeeNothing(option2, row, col)) {
             // Can not see anything ahead and in the direction we are
             // turning, assume that it is a potential corner.
             find_direction = option;
