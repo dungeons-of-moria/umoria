@@ -620,12 +620,12 @@ void damageCold(int damage, const char *creature_name) {
 }
 
 // Lightning bolt the sucker away. -RAK-
-void light_dam(int dam, const char *creature_name) {
+void damageLightningBolt(int damage, const char *creature_name) {
     if (py.flags.lght_resist) {
-        dam = dam / 3;
+        damage = damage / 3;
     }
 
-    playerTakesHit(dam, creature_name);
+    playerTakesHit(damage, creature_name);
 
     if (inventoryDamageItem(set_lightning_destroy, 3) > 0) {
         printMessage("There are sparks coming from your pack!");

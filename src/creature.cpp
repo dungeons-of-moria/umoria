@@ -609,7 +609,7 @@ static bool executeAttack(Creature_t *r_ptr, Monster_t *m_ptr, int monsterID, in
             break;
         case 8: // Lightning attack
             printMessage("Lightning strikes you!");
-            light_dam(damage, deathDescription);
+            damageLightningBolt(damage, deathDescription);
             break;
         case 9: // Corrosion attack
             printMessage("A stinging red gas swirls about you.");

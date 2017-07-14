@@ -938,7 +938,7 @@ void breath(int x, int y, int monster_id, int damage_hp, char *spell_name, int s
 
                         switch (spell_type_id) {
                             case GF_LIGHTNING:
-                                light_dam(dam, spell_name);
+                                damageLightningBolt(dam, spell_name);
                                 break;
                             case GF_POISON_GAS:
                                 damagePoisonedGas(dam, spell_name);

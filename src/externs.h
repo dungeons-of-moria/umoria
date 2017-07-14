@@ -405,7 +405,7 @@ void damageCorrodingGas(const char *creature_name);
 void damagePoisonedGas(int damage, const char *creature_name);
 void damageFire(int damage, const char *creature_name);
 void damageCold(int damage, const char *creature_name);
-void light_dam(int dam, const char *creature_name);
+void damageLightningBolt(int damage, const char *creature_name);
 void acid_dam(int dam, const char *creature_name);
 
 // moria3.c
