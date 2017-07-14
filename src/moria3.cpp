@@ -219,30 +219,30 @@ static void trapConstitutionDart(Inventory_t *t_ptr, int dam) {
 }
 
 // Player hit a trap.  (Chuckle) -RAK-
-static void hit_trap(int y, int x) {
+static void playerStepsOnTrap(int y, int x) {
     playerEndRunning();
     dungeonChangeTrapVisibility(y, x);
 
     Inventory_t *tile = &treasure_list[cave[y][x].tptr];
 
-    int dam = dicePlayerDamageRoll(tile->damage);
+    int damage = dicePlayerDamageRoll(tile->damage);
 
     switch (tile->subval) {
         case 1:
             // Open pit
-            trapOpenPit(tile, dam);
+            trapOpenPit(tile, damage);
             break;
         case 2:
             // Arrow trap
-            trapArrow(tile, dam);
+            trapArrow(tile, damage);
             break;
         case 3:
             // Covered pit
-            trapCoveredPit(tile, dam, y, x);
+            trapCoveredPit(tile, damage, y, x);
             break;
         case 4:
             // Trap door
-            trapDoor(tile, dam);
+            trapDoor(tile, damage);
             break;
         case 5:
             // Sleep gas
@@ -254,7 +254,7 @@ static void hit_trap(int y, int x) {
             break;
         case 7:
             // STR Dart
-            trapStrengthDart(tile, dam);
+            trapStrengthDart(tile, damage);
             break;
         case 8:
             // Teleport
@@ -262,7 +262,7 @@ static void hit_trap(int y, int x) {
             break;
         case 9:
             // Rockfall
-            trapRockfall(y, x, dam);
+            trapRockfall(y, x, damage);
             break;
         case 10:
             // Corrode gas
@@ -274,15 +274,15 @@ static void hit_trap(int y, int x) {
             break;
         case 12:
             // Fire trap
-            trapFire(dam);
+            trapFire(damage);
             break;
         case 13:
             // Acid trap
-            trapAcid(dam);
+            trapAcid(damage);
             break;
         case 14:
             // Poison gas
-            trapPoisonGas(dam);
+            trapPoisonGas(damage);
             break;
         case 15:
             // Blind Gas
@@ -294,11 +294,11 @@ static void hit_trap(int y, int x) {
             break;
         case 17:
             // Slow Dart
-            trapSlowDart(tile, dam);
+            trapSlowDart(tile, damage);
             break;
         case 18:
             // CON Dart
-            trapConstitutionDart(tile, dam);
+            trapConstitutionDart(tile, damage);
             break;
         case 19:
             // Secret Door
@@ -393,7 +393,7 @@ static void carry(int y, int x, bool pickup) {
     if (tileFlags > TV_MAX_PICK_UP) {
         if (tileFlags == TV_INVIS_TRAP || tileFlags == TV_VIS_TRAP || tileFlags == TV_STORE_DOOR) {
             // OOPS!
-            hit_trap(y, x);
+            playerStepsOnTrap(y, x);
         }
         return;
     }
@@ -989,7 +989,7 @@ void move_char(int direction, bool do_pickup) {
                     if (id != 0) {
                         int val = treasure_list[id].tval;
                         if (val == TV_INVIS_TRAP || val == TV_VIS_TRAP || val == TV_STORE_DOOR) {
-                            hit_trap(char_row, char_col);
+                            playerStepsOnTrap(char_row, char_col);
                         }
                     }
                 }
