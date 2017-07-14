@@ -160,7 +160,7 @@ static void trapAcid(int dam) {
     // Makes more sense to print the message first, then damage an object.
     printMessage("You are splashed with acid!");
 
-    acid_dam(dam, "an acid trap");
+    damageAcid(dam, "an acid trap");
 }
 
 static void trapPoisonGas(int dam) {

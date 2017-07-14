@@ -633,7 +633,7 @@ void damageLightningBolt(int damage, const char *creature_name) {
 }
 
 // Throw acid on the hapless victim -RAK-
-void acid_dam(int dam, const char *creature_name) {
+void damageAcid(int damage, const char *creature_name) {
     int flag = 0;
 
     if (minus_ac((uint32_t) TR_RES_ACID)) {
@@ -644,7 +644,7 @@ void acid_dam(int dam, const char *creature_name) {
         flag += 2;
     }
 
-    playerTakesHit(dam / (flag + 1), creature_name);
+    playerTakesHit(damage / (flag + 1), creature_name);
 
     if (inventoryDamageItem(set_acid_affect, 3) > 0) {
         printMessage("There is an acrid smell coming from your pack!");

@@ -601,7 +601,7 @@ static bool executeAttack(Creature_t *r_ptr, Monster_t *m_ptr, int monsterID, in
             break;
         case 6: // Acid attack
             printMessage("You are covered in acid!");
-            acid_dam(damage, deathDescription);
+            damageAcid(damage, deathDescription);
             break;
         case 7: // Cold attack
             printMessage("You are covered with frost!");

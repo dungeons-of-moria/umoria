@@ -944,7 +944,7 @@ void breath(int x, int y, int monster_id, int damage_hp, char *spell_name, int s
                                 damagePoisonedGas(dam, spell_name);
                                 break;
                             case GF_ACID:
-                                acid_dam(dam, spell_name);
+                                damageAcid(dam, spell_name);
                                 break;
                             case GF_FROST:
                                 damageCold(dam, spell_name);

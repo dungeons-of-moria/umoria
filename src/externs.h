@@ -406,7 +406,7 @@ void damagePoisonedGas(int damage, const char *creature_name);
 void damageFire(int damage, const char *creature_name);
 void damageCold(int damage, const char *creature_name);
 void damageLightningBolt(int damage, const char *creature_name);
-void acid_dam(int dam, const char *creature_name);
+void damageAcid(int damage, const char *creature_name);
 
 // moria3.c
 int cast_spell(const char *prompt, int item_id, int *spell_id, int *spell_chance);
