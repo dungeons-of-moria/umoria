@@ -209,7 +209,7 @@ static int find_prevdir;
 static int find_direction; // Keep a record of which way we are going.
 
 // Do we see a wall? Used in running. -CJS-
-static bool see_wall(int dir, int y, int x) {
+static bool playerCanSeeDungeonWall(int dir, int y, int x) {
     // check to see if movement there possible
     if (!playerMovePosition(dir, &y, &x)) {
         return true;
@@ -234,18 +234,18 @@ static void findRunningBreak(int dir, int row, int col) {
 
     int cycleIndex = chome[dir];
 
-    if (see_wall(cycle[cycleIndex + 1], char_row, char_col)) {
+    if (playerCanSeeDungeonWall(cycle[cycleIndex + 1], char_row, char_col)) {
         find_breakleft = true;
         shortLeft = true;
-    } else if (see_wall(cycle[cycleIndex + 1], row, col)) {
+    } else if (playerCanSeeDungeonWall(cycle[cycleIndex + 1], row, col)) {
         find_breakleft = true;
         deepLeft = true;
     }
 
-    if (see_wall(cycle[cycleIndex - 1], char_row, char_col)) {
+    if (playerCanSeeDungeonWall(cycle[cycleIndex - 1], char_row, char_col)) {
         find_breakright = true;
         shortRight = true;
-    } else if (see_wall(cycle[cycleIndex - 1], row, col)) {
+    } else if (playerCanSeeDungeonWall(cycle[cycleIndex - 1], row, col)) {
         find_breakright = true;
         deepRight = true;
     }
@@ -260,7 +260,7 @@ static void findRunningBreak(int dir, int row, int col) {
             } else if (deepRight && !deepLeft) {
                 find_prevdir = cycle[cycleIndex + 1];
             }
-        } else if (see_wall(cycle[cycleIndex], row, col)) {
+        } else if (playerCanSeeDungeonWall(cycle[cycleIndex], row, col)) {
             // else if there is a wall two spaces ahead and seem to be in a
             // corridor, then force a turn into the side corridor, must
             // be moving straight into a corridor here
@@ -475,7 +475,7 @@ void playerAreaAffect(int direction, int y, int x) {
 
     (void) playerMovePosition(option, &row, &col);
 
-    if (!see_wall(option, row, col) || !see_wall(check_dir, row, col)) {
+    if (!playerCanSeeDungeonWall(option, row, col) || !playerCanSeeDungeonWall(check_dir, row, col)) {
         // Don't see that it is closed off.  This could be a
         // potential corner or an intersection.
         if (run_examine_corners && see_nothing(option, row, col) && see_nothing(option2, row, col)) {
