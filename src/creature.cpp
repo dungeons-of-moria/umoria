@@ -999,7 +999,7 @@ static void creatureMovesOnPlayer(Monster_t *m_ptr, uint8_t creatureID, int mons
 
             // It ate an already processed monster. Handle normally.
             if (monsterID < creatureID) {
-                delete_monster((int) creatureID);
+                dungeonDeleteMonster((int) creatureID);
             } else {
                 // If it eats this monster, an already processed
                 // monster will take its place, causing all kinds
@@ -1351,7 +1351,7 @@ bool monsterMultiply(int y, int x, int creatureID, int monsterID) {
                         && creatures_list[creatureID].mexp >= creatures_list[monsters[c_ptr->cptr].mptr].mexp) {
                         // It ate an already processed monster.Handle * normally.
                         if (monsterID < c_ptr->cptr) {
-                            delete_monster((int) c_ptr->cptr);
+                            dungeonDeleteMonster((int) c_ptr->cptr);
                         } else {
                             // If it eats this monster, an already processed
                             // monster will take its place, causing all kinds

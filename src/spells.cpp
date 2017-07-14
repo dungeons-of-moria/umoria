@@ -919,7 +919,7 @@ void breath(int x, int y, int monster_id, int damage_hp, char *spell_name, int s
 
                             // It ate an already processed monster. Handle normally.
                             if (monster_id < c_ptr->cptr) {
-                                delete_monster((int) c_ptr->cptr);
+                                dungeonDeleteMonster((int) c_ptr->cptr);
                             } else {
                                 // If it eats this monster, an already processed monster
                                 // will take its place, causing all kinds of havoc.
@@ -1387,7 +1387,7 @@ bool poly_monster(int y, int x, int direction) {
             if (randomNumber(MAX_MONS_LEVEL) > r_ptr->level) {
                 finished = true;
 
-                delete_monster((int) c_ptr->cptr);
+                dungeonDeleteMonster((int) c_ptr->cptr);
 
                 // Place_monster() should always return true here.
                 morphed = monsterPlaceNew(y, x, randomNumber(monster_levels[MAX_MONS_LEVEL] - monster_levels[0]) - 1 + monster_levels[0], false);
@@ -1607,7 +1607,7 @@ bool mass_genocide() {
         Creature_t *r_ptr = &creatures_list[m_ptr->mptr];
 
         if (m_ptr->cdis <= MAX_SIGHT && (r_ptr->cmove & CM_WIN) == 0) {
-            delete_monster(id);
+            dungeonDeleteMonster(id);
 
             killed = true;
         }
@@ -1633,7 +1633,7 @@ bool genocide() {
 
         if (typ == creatures_list[m_ptr->mptr].cchar) {
             if ((r_ptr->cmove & CM_WIN) == 0) {
-                delete_monster(id);
+                dungeonDeleteMonster(id);
 
                 killed = true;
             } else {
@@ -1739,7 +1739,7 @@ bool mass_poly() {
             if ((r_ptr->cmove & CM_WIN) == 0) {
                 int y = m_ptr->fy;
                 int x = m_ptr->fx;
-                delete_monster(id);
+                dungeonDeleteMonster(id);
 
                 // Place_monster() should always return true here.
                 morphed = monsterPlaceNew(y, x, randomNumber(monster_levels[MAX_MONS_LEVEL] - monster_levels[0]) - 1 + monster_levels[0], false);
@@ -2172,7 +2172,7 @@ static void replace_spot(int y, int x, int typ) {
     }
 
     if (c_ptr->cptr > 1) {
-        delete_monster((int) c_ptr->cptr);
+        dungeonDeleteMonster((int) c_ptr->cptr);
     }
 }
 

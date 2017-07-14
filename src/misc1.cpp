@@ -525,7 +525,7 @@ bool compactMonsters() {
                 } else if (hack_monptr < i) {
                     // in case this is called from within updateMonsters(), this is a horrible
                     // hack, the monsters/updateMonsters() code needs to be rewritten.
-                    delete_monster(i);
+                    dungeonDeleteMonster(i);
                     delete_any = true;
                 } else {
                     // fix1_delete_monster() does not decrement next_free_monster_id,

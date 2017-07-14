@@ -456,7 +456,7 @@ static void carry(int y, int x, bool pickup) {
 }
 
 // Deletes a monster entry from the level -RAK-
-void delete_monster(int id) {
+void dungeonDeleteMonster(int id) {
     Monster_t *monster = &monsters[id];
 
     cave[monster->fy][monster->fx].cptr = 0;
@@ -465,12 +465,12 @@ void delete_monster(int id) {
         dungeonLiteSpot((int) monster->fy, (int) monster->fx);
     }
 
-    int lastID = next_free_monster_id - 1;
+    int last_id = next_free_monster_id - 1;
 
-    if (id != lastID) {
-        monster = &monsters[lastID];
+    if (id != last_id) {
+        monster = &monsters[last_id];
         cave[monster->fy][monster->fx].cptr = (uint8_t) id;
-        monsters[id] = monsters[lastID];
+        monsters[id] = monsters[last_id];
     }
 
     next_free_monster_id--;
@@ -484,10 +484,10 @@ void delete_monster(int id) {
 // The following two procedures implement the same function as delete monster.
 // However, they are used within updateMonsters(), because deleting a monster
 // while scanning the monsters causes two problems, monsters might get two
-// turns, and m_ptr/monptr might be invalid after the delete_monster.
+// turns, and m_ptr/monptr might be invalid after the dungeonDeleteMonster.
 // Hence the delete is done in two steps.
 //
-// fix1_delete_monster does everything delete_monster does except delete
+// fix1_delete_monster does everything dungeonDeleteMonster does except delete
 // the monster record and reduce next_free_monster_id, this is called in breathe, and
 // a couple of places in creatures.c
 void fix1_delete_monster(int id) {
@@ -509,7 +509,7 @@ void fix1_delete_monster(int id) {
     }
 }
 
-// fix2_delete_monster does everything in delete_monster that wasn't done
+// fix2_delete_monster does everything in dungeonDeleteMonster that wasn't done
 // by fix1_monster_delete above, this is only called in updateMonsters()
 void fix2_delete_monster(int id) {
     int lastID = next_free_monster_id - 1;
@@ -743,7 +743,7 @@ int mon_take_hit(int monster_id, int damage) {
     // in case this is called from within updateMonsters(), this is a horrible
     // hack, the monsters/updateMonsters() code needs to be rewritten.
     if (hack_monptr < monster_id) {
-        delete_monster(monster_id);
+        dungeonDeleteMonster(monster_id);
     } else {
         fix1_delete_monster(monster_id);
     }
