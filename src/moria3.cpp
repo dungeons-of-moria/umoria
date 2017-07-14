@@ -487,10 +487,10 @@ void dungeonDeleteMonster(int id) {
 // turns, and m_ptr/monptr might be invalid after the dungeonDeleteMonster.
 // Hence the delete is done in two steps.
 //
-// fix1_delete_monster does everything dungeonDeleteMonster does except delete
+// dungeonDeleteMonsterFix1 does everything dungeonDeleteMonster does except delete
 // the monster record and reduce next_free_monster_id, this is called in breathe, and
 // a couple of places in creatures.c
-void fix1_delete_monster(int id) {
+void dungeonDeleteMonsterFix1(int id) {
     Monster_t *monster = &monsters[id];
 
     // force the hp negative to ensure that the monster is dead, for example,
@@ -509,20 +509,20 @@ void fix1_delete_monster(int id) {
     }
 }
 
-// fix2_delete_monster does everything in dungeonDeleteMonster that wasn't done
+// dungeonDeleteMonsterFix2 does everything in dungeonDeleteMonster that wasn't done
 // by fix1_monster_delete above, this is only called in updateMonsters()
-void fix2_delete_monster(int id) {
-    int lastID = next_free_monster_id - 1;
+void dungeonDeleteMonsterFix2(int id) {
+    int last_id = next_free_monster_id - 1;
 
-    if (id != lastID) {
-        int y = monsters[lastID].fy;
-        int x = monsters[lastID].fx;
+    if (id != last_id) {
+        int y = monsters[last_id].fy;
+        int x = monsters[last_id].fx;
         cave[y][x].cptr = (uint8_t) id;
 
-        monsters[id] = monsters[lastID];
+        monsters[id] = monsters[last_id];
     }
 
-    monsters[lastID] = blank_monster;
+    monsters[last_id] = blank_monster;
     next_free_monster_id--;
 }
 
@@ -745,7 +745,7 @@ int mon_take_hit(int monster_id, int damage) {
     if (hack_monptr < monster_id) {
         dungeonDeleteMonster(monster_id);
     } else {
-        fix1_delete_monster(monster_id);
+        dungeonDeleteMonsterFix1(monster_id);
     }
 
     return m_take_hit;

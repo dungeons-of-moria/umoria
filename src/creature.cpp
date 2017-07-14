@@ -1004,7 +1004,7 @@ static void creatureMovesOnPlayer(Monster_t *m_ptr, uint8_t creatureID, int mons
                 // If it eats this monster, an already processed
                 // monster will take its place, causing all kinds
                 // of havoc. Delay the kill a bit.
-                fix1_delete_monster((int) creatureID);
+                dungeonDeleteMonsterFix1((int) creatureID);
             }
         } else {
             *do_move = false;
@@ -1356,7 +1356,7 @@ bool monsterMultiply(int y, int x, int creatureID, int monsterID) {
                             // If it eats this monster, an already processed
                             // monster will take its place, causing all kinds
                             // of havoc. Delay the kill a bit.
-                            fix1_delete_monster((int) c_ptr->cptr);
+                            dungeonDeleteMonsterFix1((int) c_ptr->cptr);
                         }
 
                         // in case compact_monster() is called, it needs monsterID.
@@ -1685,7 +1685,7 @@ void updateMonsters(bool attack) {
         // process this monster. This is necessary because we can't delete
         // monsters while scanning the monsters here.
         if (m_ptr->hp < 0) {
-            fix2_delete_monster(id);
+            dungeonDeleteMonsterFix2(id);
             continue;
         }
 
@@ -1708,7 +1708,7 @@ void updateMonsters(bool attack) {
         // we can't delete monsters while scanning the monsters here.
         // This monster may have been killed during mon_move().
         if (m_ptr->hp < 0) {
-            fix2_delete_monster(id);
+            dungeonDeleteMonsterFix2(id);
             continue;
         }
     }

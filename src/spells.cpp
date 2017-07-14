@@ -924,7 +924,7 @@ void breath(int x, int y, int monster_id, int damage_hp, char *spell_name, int s
                                 // If it eats this monster, an already processed monster
                                 // will take its place, causing all kinds of havoc.
                                 // Delay the kill a bit.
-                                fix1_delete_monster((int) c_ptr->cptr);
+                                dungeonDeleteMonsterFix1((int) c_ptr->cptr);
                             }
                         }
                     } else if (c_ptr->cptr == 1) {

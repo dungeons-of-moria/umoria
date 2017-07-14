@@ -411,8 +411,8 @@ void damageAcid(int damage, const char *creature_name);
 // moria3.c
 int castSpellGetId(const char *prompt, int item_id, int *spell_id, int *spell_chance);
 void dungeonDeleteMonster(int id);
-void fix1_delete_monster(int id);
-void fix2_delete_monster(int id);
+void dungeonDeleteMonsterFix1(int id);
+void dungeonDeleteMonsterFix2(int id);
 int delete_object(int y, int x);
 uint32_t monster_death(int y, int x, uint32_t flags);
 int mon_take_hit(int monster_id, int damage);

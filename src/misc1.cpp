@@ -528,9 +528,9 @@ bool compactMonsters() {
                     dungeonDeleteMonster(i);
                     delete_any = true;
                 } else {
-                    // fix1_delete_monster() does not decrement next_free_monster_id,
+                    // dungeonDeleteMonsterFix1() does not decrement next_free_monster_id,
                     // so don't set delete_any if this was called.
-                    fix1_delete_monster(i);
+                    dungeonDeleteMonsterFix1(i);
                 }
             }
         }
