@@ -613,7 +613,7 @@ static bool executeAttack(Creature_t *r_ptr, Monster_t *m_ptr, int monsterID, in
             break;
         case 9: // Corrosion attack
             printMessage("A stinging red gas swirls about you.");
-            corrode_gas(deathDescription);
+            damageCorrodingGas(deathDescription);
             playerTakesHit(damage, deathDescription);
             break;
         case 10: // Blindness attack

@@ -568,7 +568,7 @@ static int minus_ac(uint32_t typ_dam) {
 }
 
 // Corrode the unsuspecting person's armor -RAK-
-void corrode_gas(const char *creature_name) {
+void damageCorrodingGas(const char *creature_name) {
     if (!minus_ac((uint32_t) TR_RES_ACID)) {
         playerTakesHit(randomNumber(8), creature_name);
     }

@@ -401,7 +401,7 @@ void playerFindInitialize(int direction);
 void playerRunAndFind();
 void playerEndRunning();
 void playerAreaAffect(int direction, int y, int x);
-void corrode_gas(const char *creature_name);
+void damageCorrodingGas(const char *creature_name);
 void poison_gas(int dam, const char *creature_name);
 void fire_dam(int dam, const char *creature_name);
 void cold_dam(int dam, const char *creature_name);

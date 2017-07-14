@@ -133,7 +133,7 @@ static void trapCorrodeGas() {
     // Makes more sense to print the message first, then damage an object.
     printMessage("A strange red gas surrounds you.");
 
-    corrode_gas("corrosion gas");
+    damageCorrodingGas("corrosion gas");
 }
 
 static void trapSummonMonster(int y, int x) {
