@@ -156,7 +156,7 @@ void dungeonSearch(int y, int x, int chance) {
 //      #############
 //      #
 //
-// After any move, the function area_affect is called to determine the new
+// After any move, the function playerAreaAffect is called to determine the new
 // surroundings, and the direction of subsequent moves. It takes a location (at
 // which the runner has just arrived) and the previous direction (from which the
 // runner is considered to have come). Moving one square in some direction places
@@ -420,7 +420,7 @@ static bool areaAffectStopLookingAtSquares(int i, int dir, int newDir, int y, in
 }
 
 // Determine the next direction for a run, or if we should stop. -CJS-
-void area_affect(int direction, int y, int x) {
+void playerAreaAffect(int direction, int y, int x) {
     if (py.flags.blind >= 1) {
         return;
     }
@@ -435,14 +435,14 @@ void area_affect(int direction, int y, int x) {
 
     // Look at every newly adjacent square.
     for (int i = -max; i <= max; i++) {
-        int newdir = cycle[chome[direction] + i];
+        int new_dir = cycle[chome[direction] + i];
 
         int row = y;
         int col = x;
 
         // Objects player can see (Including doors?) cause a stop.
-        if (playerMovePosition(newdir, &row, &col)) {
-            areaAffectStopLookingAtSquares(i, direction, newdir, row, col, &check_dir, &option, &option2);
+        if (playerMovePosition(new_dir, &row, &col)) {
+            areaAffectStopLookingAtSquares(i, direction, new_dir, row, col, &check_dir, &option, &option2);
         }
     }
 

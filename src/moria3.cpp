@@ -941,7 +941,7 @@ void move_char(int direction, bool do_pickup) {
 
             // Check to see if he should stop
             if (running_counter) {
-                area_affect(direction, char_row, char_col);
+                playerAreaAffect(direction, char_row, char_col);
             }
 
             // Check to see if he notices something
