@@ -186,7 +186,7 @@ void pray() {
     }
 
     int choice, chance;
-    int result = cast_spell("Recite which prayer?", item_val, &choice, &chance);
+    int result = castSpellGetId("Recite which prayer?", item_val, &choice, &chance);
     if (result < 0) {
         printMessage("You don't know any prayers in that book.");
         return;

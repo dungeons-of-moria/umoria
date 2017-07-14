@@ -409,7 +409,7 @@ void damageLightningBolt(int damage, const char *creature_name);
 void damageAcid(int damage, const char *creature_name);
 
 // moria3.c
-int cast_spell(const char *prompt, int item_id, int *spell_id, int *spell_chance);
+int castSpellGetId(const char *prompt, int item_id, int *spell_id, int *spell_chance);
 void delete_monster(int id);
 void fix1_delete_monster(int id);
 void fix2_delete_monster(int id);

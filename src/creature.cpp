@@ -1260,7 +1260,7 @@ void creatureCastsSpell(Monster_t *m_ptr, int monsterID, int spellID, uint8_t le
 }
 
 // Creatures can cast spells too.  (Dragon Breath) -RAK-
-//   cast_spell = true if creature changes position
+//   castSpellGetId = true if creature changes position
 //   return true (took_turn) if creature casts a spell
 static bool mon_cast_spell(int monsterID) {
     if (character_is_dead) {

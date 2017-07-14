@@ -343,7 +343,7 @@ static void playerStepsOnTrap(int y, int x) {
 // returns -1 if no spells in book
 // returns  1 if choose a spell in book to cast
 // returns  0 if don't choose a spell, i.e. exit with an escape
-int cast_spell(const char *prompt, int item_id, int *spell_id, int *spell_chance) {
+int castSpellGetId(const char *prompt, int item_id, int *spell_id, int *spell_chance) {
     // NOTE: `flags` gets set again, since getAndClearFirstBit modified it
     uint32_t flags = inventory[item_id].flags;
     int first_spell = getAndClearFirstBit(&flags);
@@ -351,25 +351,25 @@ int cast_spell(const char *prompt, int item_id, int *spell_id, int *spell_chance
 
     Spell_t *s_ptr = magic_spells[py.misc.pclass - 1];
 
-    int spellCount = 0;
-    int spellList[31];
+    int spell_count = 0;
+    int spell_list[31];
 
     while (flags) {
         int pos = getAndClearFirstBit(&flags);
 
         if (s_ptr[pos].slevel <= py.misc.lev) {
-            spellList[spellCount] = pos;
-            spellCount++;
+            spell_list[spell_count] = pos;
+            spell_count++;
         }
     }
 
     int result = -1;
 
-    if (spellCount == 0) {
+    if (spell_count == 0) {
         return result;
     }
 
-    result = spellGetId(spellList, spellCount, spell_id, spell_chance, prompt, first_spell);
+    result = spellGetId(spell_list, spell_count, spell_id, spell_chance, prompt, first_spell);
 
     if (result && magic_spells[py.misc.pclass - 1][*spell_id].smana > py.misc.cmana) {
         if (classes[py.misc.pclass].spell == MAGE) {
