@@ -57,38 +57,38 @@ static int playerDiggingAbility(Inventory_t *weapon) {
     return diggingAbility;
 }
 
-static void digGraniteWall(int y, int x, int diggingAbility) {
+static void dungeonDigGraniteWall(int y, int x, int digging_ability) {
     int i = randomNumber(1200) + 80;
 
-    if (dungeonTunnelWall(y, x, diggingAbility, i)) {
+    if (dungeonTunnelWall(y, x, digging_ability, i)) {
         printMessage("You have finished the tunnel.");
     } else {
         printMessageNoCommandInterrupt("You tunnel into the granite wall.");
     }
 }
 
-static void digMagmaWall(int y, int x, int diggingAbility) {
+static void dungeonDigMagmaWall(int y, int x, int digging_ability) {
     int i = randomNumber(600) + 10;
 
-    if (dungeonTunnelWall(y, x, diggingAbility, i)) {
+    if (dungeonTunnelWall(y, x, digging_ability, i)) {
         printMessage("You have finished the tunnel.");
     } else {
         printMessageNoCommandInterrupt("You tunnel into the magma intrusion.");
     }
 }
 
-static void digQuartzWall(int y, int x, int diggingAbility) {
+static void dungeonDigQuartzWall(int y, int x, int digging_ability) {
     int i = randomNumber(400) + 10;
 
-    if (dungeonTunnelWall(y, x, diggingAbility, i)) {
+    if (dungeonTunnelWall(y, x, digging_ability, i)) {
         printMessage("You have finished the tunnel.");
     } else {
         printMessageNoCommandInterrupt("You tunnel into the quartz vein.");
     }
 }
 
-static void digRubble(int y, int x, int diggingAbility) {
-    if (diggingAbility > randomNumber(180)) {
+static void dungeonDigRubble(int y, int x, int digging_ability) {
+    if (digging_ability > randomNumber(180)) {
         (void) dungeonDeleteObject(y, x);
         printMessage("You have removed the rubble.");
 
@@ -109,16 +109,16 @@ static void digRubble(int y, int x, int diggingAbility) {
 // Dig regular walls; Granite, magma intrusion, quartz vein
 // Don't forget the boundary walls, made of titanium (255)
 // Return `true` if a wall was dug at
-static bool digPosition(int y, int x, uint8_t wallType, int diggingAbility) {
-    switch (wallType) {
+static bool dungeonDigAtLocation(int y, int x, uint8_t wall_type, int digging_ability) {
+    switch (wall_type) {
         case GRANITE_WALL:
-            digGraniteWall(y, x, diggingAbility);
+            dungeonDigGraniteWall(y, x, digging_ability);
             break;
         case MAGMA_WALL:
-            digMagmaWall(y, x, diggingAbility);
+            dungeonDigMagmaWall(y, x, digging_ability);
             break;
         case QUARTZ_WALL:
-            digQuartzWall(y, x, diggingAbility);
+            dungeonDigQuartzWall(y, x, digging_ability);
             break;
         case BOUNDARY_WALL:
             printMessage("This seems to be permanent rock.");
@@ -157,11 +157,11 @@ void tunnel(int direction) {
     if (i_ptr->tval != TV_NOTHING) {
         int diggingAbility = playerDiggingAbility(i_ptr);
 
-        if (!digPosition(y, x, c_ptr->fval, diggingAbility)) {
+        if (!dungeonDigAtLocation(y, x, c_ptr->fval, diggingAbility)) {
             // Is there an object in the way?  (Rubble and secret doors)
             if (c_ptr->tptr != 0) {
                 if (treasure_list[c_ptr->tptr].tval == TV_RUBBLE) {
-                    digRubble(y, x, diggingAbility);
+                    dungeonDigRubble(y, x, diggingAbility);
                 } else if (treasure_list[c_ptr->tptr].tval == TV_SECRET_DOOR) {
                     // Found secret door!
                     printMessageNoCommandInterrupt("You tunnel into the granite wall.");
