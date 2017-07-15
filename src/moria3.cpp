@@ -9,8 +9,6 @@
 #include "headers.h"
 #include "externs.h"
 
-static void py_attack(int y, int x);
-
 static void trapOpenPit(Inventory_t *t_ptr, int dam) {
     printMessage("You fell into a pit!");
 
@@ -793,10 +791,10 @@ static int playerCalculateBaseToHit(bool creatureLit, int tot_tohit) {
 }
 
 // Player attacks a (poor, defenseless) creature -RAK-
-static void py_attack(int y, int x) {
-    int creatureID = cave[y][x].cptr;
+static void playerAttackMonster(int y, int x) {
+    int creature_id = cave[y][x].cptr;
 
-    Monster_t *monster = &monsters[creatureID];
+    Monster_t *monster = &monsters[creature_id];
     Creature_t *creature = &creatures_list[monster->mptr];
     Inventory_t *item = &inventory[INVEN_WIELD];
 
@@ -810,10 +808,10 @@ static void py_attack(int y, int x) {
         (void) sprintf(name, "the %s", creature->name);
     }
 
-    int blows, tot_tohit;
-    playerCalculateToHitBlows(item->tval, item->weight, &blows, &tot_tohit);
+    int blows, total_to_hit;
+    playerCalculateToHitBlows(item->tval, item->weight, &blows, &total_to_hit);
 
-    int base_tohit = playerCalculateBaseToHit(monster->ml, tot_tohit);
+    int base_to_hit = playerCalculateBaseToHit(monster->ml, total_to_hit);
 
     int damage;
     vtype_t msg;
@@ -821,7 +819,7 @@ static void py_attack(int y, int x) {
     // Loop for number of blows, trying to hit the critter.
     // Note: blows will always be greater than 0 at the start of the loop -MRC-
     for (int i = blows; i > 0; i--) {
-        if (!playerTestBeingHit(base_tohit, (int) py.misc.lev, tot_tohit, (int) creature->ac, CLA_BTH)) {
+        if (!playerTestBeingHit(base_to_hit, (int) py.misc.lev, total_to_hit, (int) creature->ac, CLA_BTH)) {
             (void) sprintf(msg, "You miss %s.", name);
             printMessage(msg);
             continue;
@@ -833,7 +831,7 @@ static void py_attack(int y, int x) {
         if (item->tval != TV_NOTHING) {
             damage = dicePlayerDamageRoll(item->damage);
             damage = itemMagicAbilityDamage(item, damage, monster->mptr);
-            damage = playerWeaponCriticalBlow((int) item->weight, tot_tohit, damage, CLA_BTH);
+            damage = playerWeaponCriticalBlow((int) item->weight, total_to_hit, damage, CLA_BTH);
         } else {
             // Bare hands!?
             damage = diceDamageRoll(1, 1);
@@ -868,7 +866,7 @@ static void py_attack(int y, int x) {
         }
 
         // See if we done it in.
-        if (monsterTakeHit(creatureID, damage) >= 0) {
+        if (monsterTakeHit(creature_id, damage) >= 0) {
             (void) sprintf(msg, "You have slain %s.", name);
             printMessage(msg);
             displayCharacterExperience();
@@ -1352,5 +1350,5 @@ void playerAttackPosition(int y, int x) {
         return;
     }
 
-    py_attack(y, x);
+    playerAttackMonster(y, x);
 }
