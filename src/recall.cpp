@@ -665,61 +665,61 @@ static void memoryAttackNumberAndDamage(Recall_t *memory, Creature_t *creature) 
 }
 
 // Print out what we have discovered about this monster.
-int roff_recall(int monster_id) {
-    Recall_t *mp = &creature_recall[monster_id];
-    Creature_t *cp = &creatures_list[monster_id];
+int memoryRecall(int monster_id) {
+    Recall_t *memory = &creature_recall[monster_id];
+    Creature_t *creature = &creatures_list[monster_id];
 
-    Recall_t save_mem;
+    Recall_t saved_memory;
 
     if (wizard_mode) {
-        save_mem = *mp;
-        memoryWizardModeInit(mp, cp);
+        saved_memory = *memory;
+        memoryWizardModeInit(memory, creature);
     }
 
     roff_print_line = 0;
     roff_buffer_pointer = roff_buffer;
 
-    uint32_t rspells = (uint32_t) (mp->r_spells & cp->spells & ~CS_FREQ);
+    uint32_t spells = (uint32_t) (memory->r_spells & creature->spells & ~CS_FREQ);
 
     // the CM_WIN property is always known, set it if a win monster
-    uint32_t rcmove = (uint32_t) (mp->r_cmove | (CM_WIN & cp->cmove));
+    uint32_t move = (uint32_t) (memory->r_cmove | (CM_WIN & creature->cmove));
 
-    uint16_t rcdefense = mp->r_cdefense & cp->cdefense;
+    uint16_t defense = memory->r_cdefense & creature->cdefense;
 
     bool known;
 
     // Start the paragraph for the core monster description
-    vtype_t temp;
-    (void) sprintf(temp, "The %s:\n", cp->name);
-    roff(temp);
+    vtype_t msg;
+    (void) sprintf(msg, "The %s:\n", creature->name);
+    roff(msg);
 
-    memoryConflictHistory(mp->r_deaths, mp->r_kills);
-    known = memoryDepthFoundAt(cp->level, mp->r_kills);
-    known = memoryMovement(rcmove, cp->speed, known);
+    memoryConflictHistory(memory->r_deaths, memory->r_kills);
+    known = memoryDepthFoundAt(creature->level, memory->r_kills);
+    known = memoryMovement(move, creature->speed, known);
 
     // Finish off the paragraph with a period!
     if (known) {
         roff(".");
     }
 
-    if (mp->r_kills) {
-        memoryKillPoints(cp->cdefense, cp->mexp, cp->level);
+    if (memory->r_kills) {
+        memoryKillPoints(creature->cdefense, creature->mexp, creature->level);
     }
 
-    memoryMagicSkills(rspells, mp->r_spells, cp->spells);
+    memoryMagicSkills(spells, memory->r_spells, creature->spells);
 
-    memoryKillDifficulty(cp, mp->r_kills);
+    memoryKillDifficulty(creature, memory->r_kills);
 
-    memorySpecialAbilities(rcmove);
+    memorySpecialAbilities(move);
 
-    memoryWeaknesses(rcdefense);
+    memoryWeaknesses(defense);
 
-    if (rcdefense & CD_INFRA) {
+    if (defense & CD_INFRA) {
         roff(" It is warm blooded");
     }
 
-    if (rcdefense & CD_NO_SLEEP) {
-        if (rcdefense & CD_INFRA) {
+    if (defense & CD_NO_SLEEP) {
+        if (defense & CD_INFRA) {
             roff(", and");
         } else {
             roff(" It");
@@ -727,18 +727,18 @@ int roff_recall(int monster_id) {
         roff(" cannot be charmed or slept");
     }
 
-    if (rcdefense & (CD_NO_SLEEP | CD_INFRA)) {
+    if (defense & (CD_NO_SLEEP | CD_INFRA)) {
         roff(".");
     }
 
-    memoryAwareness(cp, mp);
+    memoryAwareness(creature, memory);
 
-    memoryLootCarried(cp->cmove, rcmove);
+    memoryLootCarried(creature->cmove, move);
 
-    memoryAttackNumberAndDamage(mp, cp);
+    memoryAttackNumberAndDamage(memory, creature);
 
     // Always know the win creature.
-    if (cp->cmove & CM_WIN) {
+    if (creature->cmove & CM_WIN) {
         roff(" Killing one of these wins the game!");
     }
 
@@ -746,7 +746,7 @@ int roff_recall(int monster_id) {
     putStringClearToEOL("--pause--", roff_print_line, 0);
 
     if (wizard_mode) {
-        *mp = save_mem;
+        *memory = saved_memory;
     }
 
     return getKeyInput();

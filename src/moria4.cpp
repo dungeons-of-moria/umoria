@@ -642,7 +642,7 @@ static bool lookSee(int x, int y, bool *transparent) {
 
         if (query == 'r' || query == 'R') {
             terminalSaveScreen();
-            query = (char) roff_recall(j);
+            query = (char) memoryRecall(j);
             terminalRestoreScreen();
         }
     }

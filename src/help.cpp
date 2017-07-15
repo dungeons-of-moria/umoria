@@ -231,7 +231,7 @@ static void printKnownMonsterMemories(char command) {
             }
             n++;
 
-            query = (char) roff_recall(i);
+            query = (char) memoryRecall(i);
             terminalRestoreScreen();
             if (query == ESCAPE) {
                 break;

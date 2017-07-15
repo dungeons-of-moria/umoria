@@ -440,7 +440,7 @@ void pray();
 
 // recall.c
 bool memoryMonsterKnown(int monster_id);
-int roff_recall(int monster_id);
+int memoryRecall(int monster_id);
 
 // rnd.c
 uint32_t get_rnd_seed();
