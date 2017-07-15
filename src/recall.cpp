@@ -304,26 +304,26 @@ static bool memoryMovement(uint32_t rc_move, int monster_speed, bool is_known) {
 
 // Kill it once to know experience, and quality (evil, undead, monstrous).
 // The quality of being a dragon is obvious.
-static void killPoints(uint16_t cdefense, uint16_t mexp, uint8_t level) {
+static void memoryKillPoints(uint16_t creature_defense, uint16_t monster_exp, uint8_t level) {
     roff(" A kill of this");
 
-    if (cdefense & CD_ANIMAL) {
+    if (creature_defense & CD_ANIMAL) {
         roff(" natural");
     }
-    if (cdefense & CD_EVIL) {
+    if (creature_defense & CD_EVIL) {
         roff(" evil");
     }
-    if (cdefense & CD_UNDEAD) {
+    if (creature_defense & CD_UNDEAD) {
         roff(" undead");
     }
 
     // calculate the integer exp part, can be larger than 64K when first
     // level character looks at Balrog info, so must store in long
-    int32_t quotient = (int32_t) mexp * level / py.misc.lev;
+    int32_t quotient = (int32_t) monster_exp * level / py.misc.lev;
 
     // calculate the fractional exp part scaled by 100,
     // must use long arithmetic to avoid overflow
-    int remainder = (uint32_t) ((((int32_t) mexp * level % py.misc.lev) * (int32_t) 1000 / py.misc.lev + 5) / 10);
+    int remainder = (uint32_t) ((((int32_t) monster_exp * level % py.misc.lev) * (int32_t) 1000 / py.misc.lev + 5) / 10);
 
     char plural;
     if (quotient == 1 && remainder == 0) {
@@ -702,7 +702,7 @@ int roff_recall(int monster_id) {
     }
 
     if (mp->r_kills) {
-        killPoints(cp->cdefense, cp->mexp, cp->level);
+        memoryKillPoints(cp->cdefense, cp->mexp, cp->level);
     }
 
     magicSkills(rspells, mp->r_spells, cp->spells);
