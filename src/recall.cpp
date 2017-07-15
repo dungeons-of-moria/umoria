@@ -11,7 +11,7 @@
 
 static void roff(const char *);
 
-static const char *desc_atype[] = {
+static const char *description_attack_type[] = {
         "do something undefined",
         "attack",
         "weaken",
@@ -39,7 +39,7 @@ static const char *desc_atype[] = {
         "absorb charges",
 };
 
-static const char *desc_amethod[] = {
+static const char *description_attack_method[] = {
         "make an undefined advance",
         "hit",
         "bite",
@@ -62,7 +62,7 @@ static const char *desc_amethod[] = {
         "insult",
 };
 
-static const char *desc_howmuch[] = {
+static const char *description_how_much[] = {
         " not at all",
         " a bit",
         "",
@@ -73,7 +73,7 @@ static const char *desc_howmuch[] = {
         " extremely",
 };
 
-static const char *desc_move[] = {
+static const char *description_move[] = {
         "move invisibly",
         "open doors",
         "pass through walls",
@@ -82,7 +82,7 @@ static const char *desc_move[] = {
         "breed explosively",
 };
 
-static const char *desc_spell[] = {
+static const char *description_spell[] = {
         "teleport short distances",
         "teleport long distances",
         "teleport its prey",
@@ -100,7 +100,7 @@ static const char *desc_spell[] = {
         "unknown 2",
 };
 
-static const char *desc_breath[] = {
+static const char *description_breath[] = {
         "lightning",
         "poison gases",
         "acid",
@@ -108,7 +108,7 @@ static const char *desc_breath[] = {
         "fire",
 };
 
-static const char *desc_weakness[] = {
+static const char *description_weakness[] = {
         "frost",
         "fire",
         "poison",
@@ -117,9 +117,9 @@ static const char *desc_weakness[] = {
         "rock remover",
 };
 
-static vtype_t roffbuf; // Line buffer.
-static char *roffp;   // Pointer into line buffer.
-static int roffpline; // Place to print line now being loaded.
+static vtype_t roff_buffer;       // Line buffer.
+static char *roff_buffer_pointer; // Pointer into line buffer.
+static int roff_print_line;       // Place to print line now being loaded.
 
 #define plural(c, ss, sp) ((c) == 1 ? (ss) : (sp))
 
@@ -250,7 +250,7 @@ static bool movement(uint32_t rcmove, int mspeed, bool known) {
         roff(" moves");
 
         if (rcmove & CM_RANDOM_MOVE) {
-            roff(desc_howmuch[(rcmove & CM_RANDOM_MOVE) >> 3]);
+            roff(description_how_much[(rcmove & CM_RANDOM_MOVE) >> 3]);
             roff(" erratically");
         }
 
@@ -388,7 +388,7 @@ static void magicSkills(uint32_t rspells, uint32_t mp_r_spells, uint32_t cp_spel
             } else {
                 roff(" and ");
             }
-            roff(desc_breath[i]);
+            roff(description_breath[i]);
         }
     }
 
@@ -411,7 +411,7 @@ static void magicSkills(uint32_t rspells, uint32_t mp_r_spells, uint32_t cp_spel
             } else {
                 roff(" or ");
             }
-            roff(desc_spell[i]);
+            roff(description_spell[i]);
         }
     }
 
@@ -457,7 +457,7 @@ static void specialAbilities(uint32_t rcmove) {
             } else {
                 roff(" and ");
             }
-            roff(desc_move[i]);
+            roff(description_move[i]);
         }
     }
 
@@ -481,7 +481,7 @@ static void weaknesses(uint32_t rcdefense) {
             } else {
                 roff(" and ");
             }
-            roff(desc_weakness[i]);
+            roff(description_weakness[i]);
         }
     }
 
@@ -628,7 +628,7 @@ static void attackNumberAndDamage(Recall_t *mp, Creature_t *cp) {
             att_how = 0;
         }
 
-        roff(desc_amethod[att_how]);
+        roff(description_attack_method[att_how]);
 
         if (att_type != 1 || (d1 > 0 && d2 > 0)) {
             roff(" to ");
@@ -637,7 +637,7 @@ static void attackNumberAndDamage(Recall_t *mp, Creature_t *cp) {
                 att_type = 0;
             }
 
-            roff(desc_atype[att_type]);
+            roff(description_attack_type[att_type]);
 
             if (d1 && d2) {
                 if (knowdamage(cp->level, mp->r_attacks[i], d1 * d2)) {
@@ -677,8 +677,8 @@ int roff_recall(int monster_id) {
         wizardModeInit(mp, cp);
     }
 
-    roffpline = 0;
-    roffp = roffbuf;
+    roff_print_line = 0;
+    roff_buffer_pointer = roff_buffer;
 
     uint32_t rspells = (uint32_t) (mp->r_spells & cp->spells & ~CS_FREQ);
 
@@ -744,7 +744,7 @@ int roff_recall(int monster_id) {
     }
 
     roff("\n");
-    putStringClearToEOL("--pause--", roffpline, 0);
+    putStringClearToEOL("--pause--", roff_print_line, 0);
 
     if (wizard_mode) {
         *mp = save_mem;
@@ -756,29 +756,29 @@ int roff_recall(int monster_id) {
 // Print out strings, filling up lines as we go.
 static void roff(const char *p) {
     while (*p) {
-        *roffp = *p;
+        *roff_buffer_pointer = *p;
 
-        if (*p == '\n' || roffp >= roffbuf + sizeof(roffbuf) - 1) {
-            char *q = roffp;
+        if (*p == '\n' || roff_buffer_pointer >= roff_buffer + sizeof(roff_buffer) - 1) {
+            char *q = roff_buffer_pointer;
             if (*p != '\n') {
                 while (*q != ' ') {
                     q--;
                 }
             }
             *q = 0;
-            putStringClearToEOL(roffbuf, roffpline, 0);
-            roffpline++;
+            putStringClearToEOL(roff_buffer, roff_print_line, 0);
+            roff_print_line++;
 
-            char *r = roffbuf;
+            char *r = roff_buffer;
 
-            while (q < roffp) {
+            while (q < roff_buffer_pointer) {
                 q++;
                 *r = *q;
                 r++;
             }
-            roffp = r;
+            roff_buffer_pointer = r;
         } else {
-            roffp++;
+            roff_buffer_pointer++;
         }
         p++;
     }
