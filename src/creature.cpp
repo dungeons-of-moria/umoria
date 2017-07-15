@@ -963,7 +963,7 @@ static void glyphOfWardingProtection(uint16_t creatureID, uint32_t movebits, boo
         if (y == char_row && x == char_col) {
             printMessage("The rune of protection is broken!");
         }
-        (void) delete_object(y, x);
+        (void) dungeonDeleteObject(y, x);
         return;
     }
 
@@ -1018,7 +1018,7 @@ static void creatureAllowedToMove(Monster_t *m_ptr, uint32_t movebits, bool *do_
         uint8_t treasureID = cave[y][x].tptr;
         if (treasureID != 0 && treasure_list[treasureID].tval <= TV_MAX_OBJECT) {
             *rcmove |= CM_PICKS_UP;
-            (void) delete_object(y, x);
+            (void) dungeonDeleteObject(y, x);
         }
     }
 

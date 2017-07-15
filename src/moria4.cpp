@@ -89,7 +89,7 @@ static void digQuartzWall(int y, int x, int diggingAbility) {
 
 static void digRubble(int y, int x, int diggingAbility) {
     if (diggingAbility > randomNumber(180)) {
-        (void) delete_object(y, x);
+        (void) dungeonDeleteObject(y, x);
         printMessage("You have removed the rubble.");
 
         if (randomNumber(10) == 1) {
@@ -208,7 +208,7 @@ static void disarmFloorTrap(int y, int x, int tot, int level, int dir, int16_t p
     if (tot + 100 - level > randomNumber(100)) {
         printMessage("You have disarmed the trap.");
         py.misc.exp += p1;
-        (void) delete_object(y, x);
+        (void) dungeonDeleteObject(y, x);
 
         // make sure we move onto the trap even if confused
         py.flags.confused = 0;

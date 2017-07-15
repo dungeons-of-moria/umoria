@@ -233,7 +233,7 @@ static void place_door(int y, int x) {
 // Place an up staircase at given y, x -RAK-
 static void place_up_stairs(int y, int x) {
     if (cave[y][x].tptr != 0) {
-        (void) delete_object(y, x);
+        (void) dungeonDeleteObject(y, x);
     }
 
     int cur_pos = popt();
@@ -244,7 +244,7 @@ static void place_up_stairs(int y, int x) {
 // Place a down staircase at given y, x -RAK-
 static void place_down_stairs(int y, int x) {
     if (cave[y][x].tptr != 0) {
-        (void) delete_object(y, x);
+        (void) dungeonDeleteObject(y, x);
     }
 
     int cur_pos = popt();

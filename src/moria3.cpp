@@ -86,7 +86,7 @@ static void trapSleepingGas() {
 }
 
 static void trapHiddenObject(int y, int x) {
-    (void) delete_object(y, x);
+    (void) dungeonDeleteObject(y, x);
 
     dungeonPlaceRandomObjectAt(y, x, false);
 
@@ -123,7 +123,7 @@ static void trapTeleport(int y, int x) {
 static void trapRockfall(int y, int x, int dam) {
     playerTakesHit(dam, "a falling rock");
 
-    (void) delete_object(y, x);
+    (void) dungeonDeleteObject(y, x);
     dungeonPlaceRubble(y, x);
 
     printMessage("You are hit by falling rock.");
@@ -138,7 +138,7 @@ static void trapCorrodeGas() {
 
 static void trapSummonMonster(int y, int x) {
     // Rune disappears.
-    (void) delete_object(y, x);
+    (void) dungeonDeleteObject(y, x);
 
     int num = 2 + randomNumber(3);
 
@@ -410,7 +410,7 @@ static void carry(int y, int x, bool pickup) {
         (void) sprintf(msg, "You have found %d gold pieces worth of %s", item->cost, description);
 
         printCharacterGoldValue();
-        (void) delete_object(y, x);
+        (void) dungeonDeleteObject(y, x);
 
         printMessage(msg);
 
@@ -446,7 +446,7 @@ static void carry(int y, int x, bool pickup) {
             itemDescription(description, &inventory[locn], true);
             (void) sprintf(msg, "You have %s (%c)", description, locn + 'a');
             printMessage(msg);
-            (void) delete_object(y, x);
+            (void) dungeonDeleteObject(y, x);
         }
     } else {
         itemDescription(description, item, true);
@@ -578,7 +578,7 @@ static int dungeonSummonObject(int y, int x, int amount, int object_type) {
 }
 
 // Deletes object from given location -RAK-
-int delete_object(int y, int x) {
+int dungeonDeleteObject(int y, int x) {
     Cave_t *tile = &cave[y][x];
 
     if (tile->fval == BLOCKED_FLOOR) {
@@ -1071,7 +1071,7 @@ static void chestSummonMonster(int y, int x) {
 static void chestExplode(int y, int x) {
     printMessage("There is a sudden explosion!");
 
-    (void) delete_object(y, x);
+    (void) dungeonDeleteObject(y, x);
 
     playerTakesHit(diceDamageRoll(5, 8), "an exploding chest");
 }

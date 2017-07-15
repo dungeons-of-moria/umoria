@@ -370,7 +370,7 @@ bool trap_creation() {
 
             if (c_ptr->fval <= MAX_CAVE_FLOOR) {
                 if (c_ptr->tptr != 0) {
-                    (void) delete_object(y, x);
+                    (void) dungeonDeleteObject(y, x);
                 }
                 dungeonSetTrap(y, x, randomNumber(MAX_TRAP) - 1);
 
@@ -401,7 +401,7 @@ bool door_creation() {
 
             if (c_ptr->fval <= MAX_CAVE_FLOOR) {
                 if (c_ptr->tptr != 0) {
-                    (void) delete_object(y, x);
+                    (void) dungeonDeleteObject(y, x);
                 }
 
                 int k = popt();
@@ -434,7 +434,7 @@ bool td_destroy() {
                  treasure_list[c_ptr->tptr].tval <= TV_CLOSED_DOOR &&
                  treasure_list[c_ptr->tptr].tval != TV_RUBBLE) ||
                 treasure_list[c_ptr->tptr].tval == TV_SECRET_DOOR) {
-                if (delete_object(y, x)) {
+                if (dungeonDeleteObject(y, x)) {
                     destroyed = true;
                 }
             } else if (treasure_list[c_ptr->tptr].tval == TV_CHEST && treasure_list[c_ptr->tptr].flags != 0) {
@@ -573,7 +573,7 @@ bool disarm_all(int y, int x, int direction) {
             Inventory_t *t_ptr = &treasure_list[c_ptr->tptr];
 
             if (t_ptr->tval == TV_INVIS_TRAP || t_ptr->tval == TV_VIS_TRAP) {
-                if (delete_object(y, x)) {
+                if (dungeonDeleteObject(y, x)) {
                     disarmed = true;
                 }
             } else if (t_ptr->tval == TV_CLOSED_DOOR) {
@@ -774,7 +774,7 @@ void fire_ball(int y, int x, int direction, int damage_hp, int spell_type_id, co
                         c_ptr = &cave[row][col];
 
                         if (c_ptr->tptr != 0 && (*destroy)(&treasure_list[c_ptr->tptr])) {
-                            (void) delete_object(row, col);
+                            (void) dungeonDeleteObject(row, col);
                         }
 
                         if (c_ptr->fval <= MAX_OPEN_SPACE) {
@@ -876,7 +876,7 @@ void breath(int x, int y, int monster_id, int damage_hp, char *spell_name, int s
                 Cave_t *c_ptr = &cave[row][col];
 
                 if (c_ptr->tptr != 0 && (*destroy)(&treasure_list[c_ptr->tptr])) {
-                    (void) delete_object(row, col);
+                    (void) dungeonDeleteObject(row, col);
                 }
 
                 if (c_ptr->fval <= MAX_OPEN_SPACE) {
@@ -1283,7 +1283,7 @@ bool wall_to_mud(int y, int x, int direction) {
             }
 
             if (treasure_list[c_ptr->tptr].tval == TV_RUBBLE) {
-                (void) delete_object(y, x);
+                (void) dungeonDeleteObject(y, x);
                 if (randomNumber(10) == 1) {
                     dungeonPlaceRandomObjectAt(y, x, false);
                     if (caveTileVisible(y, x)) {
@@ -1292,7 +1292,7 @@ bool wall_to_mud(int y, int x, int direction) {
                 }
                 dungeonLiteSpot(y, x);
             } else {
-                (void) delete_object(y, x);
+                (void) dungeonDeleteObject(y, x);
             }
         }
 
@@ -1345,7 +1345,7 @@ bool td_destroy2(int y, int x, int direction) {
                 t_ptr->tval == TV_VIS_TRAP ||
                 t_ptr->tval == TV_OPEN_DOOR ||
                 t_ptr->tval == TV_SECRET_DOOR) {
-                if (delete_object(y, x)) {
+                if (dungeonDeleteObject(y, x)) {
                     destroyed = true;
 
                     printMessage("There is a bright flash of light!");
@@ -1426,7 +1426,7 @@ bool build_wall(int y, int x, int direction) {
         }
 
         if (c_ptr->tptr != 0) {
-            (void) delete_object(y, x);
+            (void) dungeonDeleteObject(y, x);
         }
 
         if (c_ptr->cptr > 1) {
@@ -1884,7 +1884,7 @@ void earthquake() {
                 Cave_t *c_ptr = &cave[y][x];
 
                 if (c_ptr->tptr != 0) {
-                    (void) delete_object(y, x);
+                    (void) dungeonDeleteObject(y, x);
                 }
 
                 if (c_ptr->cptr > 1) {
@@ -2168,7 +2168,7 @@ static void replace_spot(int y, int x, int typ) {
     c_ptr->lr = false; // this is no longer part of a room
 
     if (c_ptr->tptr != 0) {
-        (void) delete_object(y, x);
+        (void) dungeonDeleteObject(y, x);
     }
 
     if (c_ptr->cptr > 1) {

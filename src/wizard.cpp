@@ -374,7 +374,7 @@ void wizard_create() {
         // delete object first if any, before call popt
         Cave_t *c_ptr = &cave[char_row][char_col];
         if (c_ptr->tptr != 0) {
-            (void) delete_object(char_row, char_col);
+            (void) dungeonDeleteObject(char_row, char_col);
         }
 
         tmp_val = popt();

@@ -840,7 +840,7 @@ static void compact_objects() {
                             chance = 10;
                     }
                     if (randomNumber(100) <= chance) {
-                        (void) delete_object(y, x);
+                        (void) dungeonDeleteObject(y, x);
                         counter++;
                     }
                 }

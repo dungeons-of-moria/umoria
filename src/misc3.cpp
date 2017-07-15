@@ -1140,7 +1140,7 @@ void inventoryTakeOneItem(Inventory_t *to_item, Inventory_t *from_item) {
 // Drops an item from inventory to given location -RAK-
 void inventoryDropItem(int item_id, bool drop_all) {
     if (cave[char_row][char_col].tptr != 0) {
-        (void) delete_object(char_row, char_col);
+        (void) dungeonDeleteObject(char_row, char_col);
     }
 
     int treasureID = popt();

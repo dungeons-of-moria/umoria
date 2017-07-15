@@ -413,7 +413,7 @@ int castSpellGetId(const char *prompt, int item_id, int *spell_id, int *spell_ch
 void dungeonDeleteMonster(int id);
 void dungeonDeleteMonsterFix1(int id);
 void dungeonDeleteMonsterFix2(int id);
-int delete_object(int y, int x);
+int dungeonDeleteObject(int y, int x);
 uint32_t monster_death(int y, int x, uint32_t flags);
 int mon_take_hit(int monster_id, int damage);
 void move_char(int direction, bool do_pickup);
