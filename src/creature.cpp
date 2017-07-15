@@ -1468,7 +1468,7 @@ static void creatureMoveOutOfWall(Monster_t *m_ptr, int monsterID, uint32_t *rcm
             displayCharacterExperience();
         } else {
             printMessage("A creature digs itself out from the rock!");
-            (void) twall((int) m_ptr->fy, (int) m_ptr->fx, 1, 0);
+            (void) dungeonTunnelWall((int) m_ptr->fy, (int) m_ptr->fx, 1, 0);
         }
     }
 }

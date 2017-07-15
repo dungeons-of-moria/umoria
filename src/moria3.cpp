@@ -1282,23 +1282,23 @@ void dungeonCloseDoor() {
 
 // Tunneling through real wall: 10, 11, 12 -RAK-
 // Used by TUNNEL and WALL_TO_MUD
-int twall(int y, int x, int digging_ability, int digging_chance) {
+int dungeonTunnelWall(int y, int x, int digging_ability, int digging_chance) {
     if (digging_ability <= digging_chance) {
         return false;
     }
 
-    Cave_t *c_ptr = &cave[y][x];
+    Cave_t *tile = &cave[y][x];
 
-    if (c_ptr->lr) {
+    if (tile->lr) {
         // Should become a room space, check to see whether
         // it should be LIGHT_FLOOR or DARK_FLOOR.
         bool found = false;
 
-        for (int i = y - 1; i <= y + 1; i++) {
-            for (int j = x - 1; j <= x + 1; j++) {
-                if (cave[i][j].fval <= MAX_CAVE_ROOM) {
-                    c_ptr->fval = cave[i][j].fval;
-                    c_ptr->pl = cave[i][j].pl;
+        for (int yy = y - 1; yy <= y + 1; yy++) {
+            for (int xx = x - 1; xx <= x + 1; xx++) {
+                if (cave[yy][xx].fval <= MAX_CAVE_ROOM) {
+                    tile->fval = cave[yy][xx].fval;
+                    tile->pl = cave[yy][xx].pl;
                     found = true;
                     break;
                 }
@@ -1306,18 +1306,18 @@ int twall(int y, int x, int digging_ability, int digging_chance) {
         }
 
         if (!found) {
-            c_ptr->fval = CORR_FLOOR;
-            c_ptr->pl = false;
+            tile->fval = CORR_FLOOR;
+            tile->pl = false;
         }
     } else {
         // should become a corridor space
-        c_ptr->fval = CORR_FLOOR;
-        c_ptr->pl = false;
+        tile->fval = CORR_FLOOR;
+        tile->pl = false;
     }
 
-    c_ptr->fm = false;
+    tile->fm = false;
 
-    if (coordInsidePanel(y, x) && (c_ptr->tl || c_ptr->pl) && c_ptr->tptr != 0) {
+    if (coordInsidePanel(y, x) && (tile->tl || tile->pl) && tile->tptr != 0) {
         printMessage("You have found something!");
     }
 

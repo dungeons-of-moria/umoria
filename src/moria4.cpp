@@ -60,7 +60,7 @@ static int playerDiggingAbility(Inventory_t *weapon) {
 static void digGraniteWall(int y, int x, int diggingAbility) {
     int i = randomNumber(1200) + 80;
 
-    if (twall(y, x, diggingAbility, i)) {
+    if (dungeonTunnelWall(y, x, diggingAbility, i)) {
         printMessage("You have finished the tunnel.");
     } else {
         printMessageNoCommandInterrupt("You tunnel into the granite wall.");
@@ -70,7 +70,7 @@ static void digGraniteWall(int y, int x, int diggingAbility) {
 static void digMagmaWall(int y, int x, int diggingAbility) {
     int i = randomNumber(600) + 10;
 
-    if (twall(y, x, diggingAbility, i)) {
+    if (dungeonTunnelWall(y, x, diggingAbility, i)) {
         printMessage("You have finished the tunnel.");
     } else {
         printMessageNoCommandInterrupt("You tunnel into the magma intrusion.");
@@ -80,7 +80,7 @@ static void digMagmaWall(int y, int x, int diggingAbility) {
 static void digQuartzWall(int y, int x, int diggingAbility) {
     int i = randomNumber(400) + 10;
 
-    if (twall(y, x, diggingAbility, i)) {
+    if (dungeonTunnelWall(y, x, diggingAbility, i)) {
         printMessage("You have finished the tunnel.");
     } else {
         printMessageNoCommandInterrupt("You tunnel into the quartz vein.");

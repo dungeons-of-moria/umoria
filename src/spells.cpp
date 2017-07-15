@@ -1262,7 +1262,7 @@ bool wall_to_mud(int y, int x, int direction) {
         if (c_ptr->fval >= MIN_CAVE_WALL && c_ptr->fval != BOUNDARY_WALL) {
             finished = true;
 
-            (void) twall(y, x, 1, 0);
+            (void) dungeonTunnelWall(y, x, 1, 0);
 
             if (caveTileVisible(y, x)) {
                 turned = true;
