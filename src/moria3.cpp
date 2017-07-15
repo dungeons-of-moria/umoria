@@ -527,43 +527,43 @@ void dungeonDeleteMonsterFix2(int id) {
 }
 
 // Creates objects nearby the coordinates given -RAK-
-static int summon_object(int y, int x, int num, int typ) {
-    int real_typ;
+static int dungeonSummonObject(int y, int x, int amount, int object_type) {
+    int real_type;
 
-    if (typ == 1 || typ == 5) {
-        real_typ = 1; // typ == 1 -> objects
+    if (object_type == 1 || object_type == 5) {
+        real_type = 1;   // object_type == 1 -> objects
     } else {
-        real_typ = 256; // typ == 2 -> gold
+        real_type = 256; // object_type == 2 -> gold
     }
 
     int result = 0;
 
     do {
         for (int i = 0; i <= 20; i++) {
-            int oy = y - 3 + randomNumber(5);
-            int ox = x - 3 + randomNumber(5);
+            int pos_y = y - 3 + randomNumber(5);
+            int pos_x = x - 3 + randomNumber(5);
 
-            if (coordInBounds(oy, ox) && los(y, x, oy, ox)) {
-                if (cave[oy][ox].fval <= MAX_OPEN_SPACE && cave[oy][ox].tptr == 0) {
-                    // typ == 3 -> 50% objects, 50% gold
-                    if (typ == 3 || typ == 7) {
+            if (coordInBounds(pos_y, pos_x) && los(y, x, pos_y, pos_x)) {
+                if (cave[pos_y][pos_x].fval <= MAX_OPEN_SPACE && cave[pos_y][pos_x].tptr == 0) {
+                    // object_type == 3 -> 50% objects, 50% gold
+                    if (object_type == 3 || object_type == 7) {
                         if (randomNumber(100) < 50) {
-                            real_typ = 1;
+                            real_type = 1;
                         } else {
-                            real_typ = 256;
+                            real_type = 256;
                         }
                     }
 
-                    if (real_typ == 1) {
-                        dungeonPlaceRandomObjectAt(oy, ox, (typ >= 4));
+                    if (real_type == 1) {
+                        dungeonPlaceRandomObjectAt(pos_y, pos_x, (object_type >= 4));
                     } else {
-                        dungeonPlaceGold(oy, ox);
+                        dungeonPlaceGold(pos_y, pos_x);
                     }
 
-                    dungeonLiteSpot(oy, ox);
+                    dungeonLiteSpot(pos_y, pos_x);
 
-                    if (caveTileVisible(oy, ox)) {
-                        result += real_typ;
+                    if (caveTileVisible(pos_y, pos_x)) {
+                        result += real_type;
                     }
 
                     i = 20;
@@ -571,8 +571,8 @@ static int summon_object(int y, int x, int num, int typ) {
             }
         }
 
-        num--;
-    } while (num != 0);
+        amount--;
+    } while (amount != 0);
 
     return result;
 }
@@ -642,7 +642,7 @@ uint32_t monster_death(int y, int x, uint32_t flags) {
 
     uint32_t dump;
     if (number > 0) {
-        dump = (uint32_t) summon_object(y, x, number, objectType);
+        dump = (uint32_t) dungeonSummonObject(y, x, number, objectType);
     } else {
         dump = 0;
     }
