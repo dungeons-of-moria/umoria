@@ -188,21 +188,21 @@ static void memoryWizardModeInit(Recall_t *memory, Creature_t *creature) {
 }
 
 // Conflict history.
-static void conflictHistory(uint16_t r_deaths, uint16_t r_kills) {
+static void memoryConflictHistory(uint16_t deaths, uint16_t kills) {
     vtype_t desc;
 
-    if (r_deaths) {
-        (void) sprintf(desc, "%d of the contributors to your monster memory %s", r_deaths, plural(r_deaths, "has", "have"));
+    if (deaths) {
+        (void) sprintf(desc, "%d of the contributors to your monster memory %s", deaths, plural(deaths, "has", "have"));
         roff(desc);
         roff(" been killed by this creature, and ");
-        if (r_kills == 0) {
+        if (kills == 0) {
             roff("it is not ever known to have been defeated.");
         } else {
-            (void) sprintf(desc, "at least %d of the beasts %s been exterminated.", r_kills, plural(r_kills, "has", "have"));
+            (void) sprintf(desc, "at least %d of the beasts %s been exterminated.", kills, plural(kills, "has", "have"));
             roff(desc);
         }
-    } else if (r_kills) {
-        (void) sprintf(desc, "At least %d of these creatures %s", r_kills, plural(r_kills, "has", "have"));
+    } else if (kills) {
+        (void) sprintf(desc, "At least %d of these creatures %s", kills, plural(kills, "has", "have"));
         roff(desc);
         roff(" been killed by contributors to your monster memory.");
     } else {
@@ -692,7 +692,7 @@ int roff_recall(int monster_id) {
     (void) sprintf(temp, "The %s:\n", cp->name);
     roff(temp);
 
-    conflictHistory(mp->r_deaths, mp->r_kills);
+    memoryConflictHistory(mp->r_deaths, mp->r_kills);
     known = depthFoundAt(cp->level, mp->r_kills);
     known = movement(rcmove, cp->speed, known);
 
