@@ -710,18 +710,18 @@ static bool lookSee(int x, int y, bool *transparent) {
     return false;
 }
 
-static void inven_throw(int itemID, Inventory_t *treasure) {
-    Inventory_t *i_ptr = &inventory[itemID];
+static void inventoryThrow(int item_id, Inventory_t *treasure) {
+    Inventory_t *item = &inventory[item_id];
 
-    *treasure = *i_ptr;
+    *treasure = *item;
 
-    if (i_ptr->number > 1) {
+    if (item->number > 1) {
         treasure->number = 1;
-        i_ptr->number--;
-        inventory_weight -= i_ptr->weight;
+        item->number--;
+        inventory_weight -= item->weight;
         py.flags.status |= PY_STR_WGT;
     } else {
-        inventoryDestroyItem(itemID);
+        inventoryDestroyItem(item_id);
     }
 }
 
@@ -881,7 +881,7 @@ void throw_object() {
     }
 
     Inventory_t throw_obj;
-    inven_throw(itemID, &throw_obj);
+    inventoryThrow(itemID, &throw_obj);
 
     int tbth, tpth, tdam, tdis;
     facts(&throw_obj, &tbth, &tpth, &tdam, &tdis);
