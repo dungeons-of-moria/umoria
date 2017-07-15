@@ -465,16 +465,16 @@ static void memorySpecialAbilities(uint32_t move) {
 }
 
 // Do we know its special weaknesses? Most cdefense flags.
-static void weaknesses(uint32_t rcdefense) {
+static void memoryWeaknesses(uint32_t defense) {
     bool known = true;
 
-    for (int i = 0; rcdefense & CD_WEAKNESS; i++) {
-        if (rcdefense & (CD_FROST << i)) {
-            rcdefense &= ~(CD_FROST << i);
+    for (int i = 0; defense & CD_WEAKNESS; i++) {
+        if (defense & (CD_FROST << i)) {
+            defense &= ~(CD_FROST << i);
             if (known) {
                 roff(" It is susceptible to ");
                 known = false;
-            } else if (rcdefense & CD_WEAKNESS) {
+            } else if (defense & CD_WEAKNESS) {
                 roff(", ");
             } else {
                 roff(" and ");
@@ -711,7 +711,7 @@ int roff_recall(int monster_id) {
 
     memorySpecialAbilities(rcmove);
 
-    weaknesses(rcdefense);
+    memoryWeaknesses(rcdefense);
 
     if (rcdefense & CD_INFRA) {
         roff(" It is warm blooded");
