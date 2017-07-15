@@ -583,80 +583,81 @@ static void memoryLootCarried(uint32_t creature_move, uint32_t memory_move) {
     }
 }
 
-static void attackNumberAndDamage(Recall_t *mp, Creature_t *cp) {
+static void memoryAttackNumberAndDamage(Recall_t *memory, Creature_t *creature) {
     // We know about attacks it has used on us, and maybe the damage they do.
     // known_attacks is the total number of known attacks, used for punctuation
     int known_attacks = 0;
 
     for (int id = 0; id < 4; id++) {
-        if (mp->r_attacks[id]) {
+        if (memory->r_attacks[id]) {
             known_attacks++;
         }
     }
 
-    // attackCount counts the attacks as printed, used for punctuation
-    int attackCount = 0;
+    // attack_count counts the attacks as printed, used for punctuation
+    int attack_count = 0;
 
-    uint8_t *pu = cp->damage;
+    uint8_t *pu = creature->damage;
 
     for (int i = 0; *pu != 0 && i < 4; pu++, i++) {
-        int att_type, att_how, d1, d2;
+        int attack_type, attack_description_id;
+        int attack_dice, attack_sides;
 
         // don't print out unknown attacks
-        if (!mp->r_attacks[i]) {
+        if (!memory->r_attacks[i]) {
             continue;
         }
 
-        att_type = monster_attacks[*pu].attack_type;
-        att_how = monster_attacks[*pu].attack_desc;
-        d1 = monster_attacks[*pu].attack_dice;
-        d2 = monster_attacks[*pu].attack_sides;
+        attack_type = monster_attacks[*pu].attack_type;
+        attack_description_id = monster_attacks[*pu].attack_desc;
+        attack_dice = monster_attacks[*pu].attack_dice;
+        attack_sides = monster_attacks[*pu].attack_sides;
 
-        attackCount++;
+        attack_count++;
 
-        if (attackCount == 1) {
+        if (attack_count == 1) {
             roff(" It can ");
-        } else if (attackCount == known_attacks) {
+        } else if (attack_count == known_attacks) {
             roff(", and ");
         } else {
             roff(", ");
         }
 
-        if (att_how > 19) {
-            att_how = 0;
+        if (attack_description_id > 19) {
+            attack_description_id = 0;
         }
 
-        roff(description_attack_method[att_how]);
+        roff(description_attack_method[attack_description_id]);
 
-        if (att_type != 1 || (d1 > 0 && d2 > 0)) {
+        if (attack_type != 1 || (attack_dice > 0 && attack_sides > 0)) {
             roff(" to ");
 
-            if (att_type > 24) {
-                att_type = 0;
+            if (attack_type > 24) {
+                attack_type = 0;
             }
 
-            roff(description_attack_type[att_type]);
+            roff(description_attack_type[attack_type]);
 
-            if (d1 && d2) {
-                if (knowdamage(cp->level, mp->r_attacks[i], d1 * d2)) {
+            if (attack_dice && attack_sides) {
+                if (knowdamage(creature->level, memory->r_attacks[i], attack_dice * attack_sides)) {
                     // Loss of experience
-                    if (att_type == 19) {
+                    if (attack_type == 19) {
                         roff(" by");
                     } else {
                         roff(" with damage");
                     }
 
-                    vtype_t temp;
-                    (void) sprintf(temp, " %dd%d", d1, d2);
-                    roff(temp);
+                    vtype_t msg;
+                    (void) sprintf(msg, " %dd%d", attack_dice, attack_sides);
+                    roff(msg);
                 }
             }
         }
     }
 
-    if (attackCount) {
+    if (attack_count) {
         roff(".");
-    } else if (known_attacks > 0 && mp->r_attacks[0] >= 10) {
+    } else if (known_attacks > 0 && memory->r_attacks[0] >= 10) {
         roff(" It has no physical attacks.");
     } else {
         roff(" Nothing is known about its attack.");
@@ -734,7 +735,7 @@ int roff_recall(int monster_id) {
 
     memoryLootCarried(cp->cmove, rcmove);
 
-    attackNumberAndDamage(mp, cp);
+    memoryAttackNumberAndDamage(mp, cp);
 
     // Always know the win creature.
     if (cp->cmove & CM_WIN) {
