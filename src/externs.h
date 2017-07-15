@@ -426,7 +426,7 @@ void playerAttackPosition(int y, int x);
 
 // moria4.c
 void playerTunnel(int direction);
-void disarm_trap();
+void playerDisarmTrap();
 void look();
 void throw_object();
 void bash();

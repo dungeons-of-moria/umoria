@@ -1696,7 +1696,7 @@ static void do_command(char com_val) {
             player_free_turn = true;
             break;
         case 'D': // (D)isarm trap
-            disarm_trap();
+            playerDisarmTrap();
             break;
         case 'E': // (E)at food
             playerEat();

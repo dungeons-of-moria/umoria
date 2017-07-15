@@ -274,7 +274,7 @@ static void playerDisarmChestTrap(int y, int x, int total, Inventory_t *item) {
 }
 
 // Disarms a trap -RAK-
-void disarm_trap() {
+void playerDisarmTrap() {
     int dir;
     if (!getDirectionWithMemory(CNIL, &dir)) {
         return;
@@ -284,21 +284,21 @@ void disarm_trap() {
     int x = char_col;
     (void) playerMovePosition(dir, &y, &x);
 
-    Cave_t *c_ptr = &cave[y][x];
+    Cave_t *tile = &cave[y][x];
 
     bool no_disarm = false;
 
-    if (c_ptr->cptr > 1 && c_ptr->tptr != 0 && (treasure_list[c_ptr->tptr].tval == TV_VIS_TRAP || treasure_list[c_ptr->tptr].tval == TV_CHEST)) {
-        objectBlockedByMonster(c_ptr->cptr);
-    } else if (c_ptr->tptr != 0) {
-        int disarmAbility = playerTrapDisarmAbility();
+    if (tile->cptr > 1 && tile->tptr != 0 && (treasure_list[tile->tptr].tval == TV_VIS_TRAP || treasure_list[tile->tptr].tval == TV_CHEST)) {
+        objectBlockedByMonster(tile->cptr);
+    } else if (tile->tptr != 0) {
+        int disarm_ability = playerTrapDisarmAbility();
 
-        Inventory_t *t_ptr = &treasure_list[c_ptr->tptr];
+        Inventory_t *item = &treasure_list[tile->tptr];
 
-        if (t_ptr->tval == TV_VIS_TRAP) {
-            playerDisarmFloorTrap(y, x, disarmAbility, t_ptr->level, dir, t_ptr->p1);
-        } else if (t_ptr->tval == TV_CHEST) {
-            playerDisarmChestTrap(y, x, disarmAbility, t_ptr);
+        if (item->tval == TV_VIS_TRAP) {
+            playerDisarmFloorTrap(y, x, disarm_ability, item->level, dir, item->p1);
+        } else if (item->tval == TV_CHEST) {
+            playerDisarmChestTrap(y, x, disarm_ability, item);
         } else {
             no_disarm = true;
         }
