@@ -816,23 +816,23 @@ static void weaponMissileFacts(Inventory_t *item, int *tbth, int *tpth, int *tda
     }
 }
 
-static void drop_throw(int y, int x, Inventory_t *t_ptr) {
-    int i = y;
-    int j = x;
+static void inventoryDropOrThrowItem(int y, int x, Inventory_t *item) {
+    int pos_y = y;
+    int pos_x = x;
 
     bool flag = false;
 
     if (randomNumber(10) > 1) {
         for (int k = 0; !flag && k <= 9;) {
-            if (coordInBounds(i, j)) {
-                if (cave[i][j].fval <= MAX_OPEN_SPACE && cave[i][j].tptr == 0) {
+            if (coordInBounds(pos_y, pos_x)) {
+                if (cave[pos_y][pos_x].fval <= MAX_OPEN_SPACE && cave[pos_y][pos_x].tptr == 0) {
                     flag = true;
                 }
             }
 
             if (!flag) {
-                i = y + randomNumber(3) - 2;
-                j = x + randomNumber(3) - 2;
+                pos_y = y + randomNumber(3) - 2;
+                pos_x = x + randomNumber(3) - 2;
                 k++;
             }
         }
@@ -840,12 +840,12 @@ static void drop_throw(int y, int x, Inventory_t *t_ptr) {
 
     if (flag) {
         int cur_pos = popt();
-        cave[i][j].tptr = (uint8_t) cur_pos;
-        treasure_list[cur_pos] = *t_ptr;
-        dungeonLiteSpot(i, j);
+        cave[pos_y][pos_x].tptr = (uint8_t) cur_pos;
+        treasure_list[cur_pos] = *item;
+        dungeonLiteSpot(pos_y, pos_x);
     } else {
         obj_desc_t description, msg;
-        itemDescription(description, t_ptr, false);
+        itemDescription(description, item, false);
 
         (void) sprintf(msg, "The %s disappears.", description);
         printMessage(msg);
@@ -958,7 +958,7 @@ void throw_object() {
                         displayCharacterExperience();
                     }
                 } else {
-                    drop_throw(oldy, oldx, &throw_obj);
+                    inventoryDropOrThrowItem(oldy, oldx, &throw_obj);
                 }
             } else {
                 // do not test c_ptr->fm here
@@ -970,7 +970,7 @@ void throw_object() {
             }
         } else {
             flag = true;
-            drop_throw(oldy, oldx, &throw_obj);
+            inventoryDropOrThrowItem(oldy, oldx, &throw_obj);
         }
 
         oldy = y;
