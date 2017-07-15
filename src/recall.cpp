@@ -365,23 +365,23 @@ static void memoryKillPoints(uint16_t creature_defense, uint16_t monster_exp, ui
 
 // Spells known, if have been used against us.
 // Breath weapons or resistance might be known only because we cast spells at it.
-static void magicSkills(uint32_t rspells, uint32_t mp_r_spells, uint32_t cp_spells) {
+static void memoryMagicSkills(uint32_t memory_spell_flags, uint32_t monster_spell_flags, uint32_t creature_spell_flags) {
     bool known = true;
 
-    uint32_t spell = rspells;
+    uint32_t spell_flags = memory_spell_flags;
 
-    for (int i = 0; spell & CS_BREATHE; i++) {
-        if (spell & (CS_BR_LIGHT << i)) {
-            spell &= ~(CS_BR_LIGHT << i);
+    for (int i = 0; spell_flags & CS_BREATHE; i++) {
+        if (spell_flags & (CS_BR_LIGHT << i)) {
+            spell_flags &= ~(CS_BR_LIGHT << i);
 
             if (known) {
-                if (mp_r_spells & CS_FREQ) {
+                if (monster_spell_flags & CS_FREQ) {
                     roff(" It can breathe ");
                 } else {
                     roff(" It is resistant to ");
                 }
                 known = false;
-            } else if (spell & CS_BREATHE) {
+            } else if (spell_flags & CS_BREATHE) {
                 roff(", ");
             } else {
                 roff(" and ");
@@ -392,19 +392,19 @@ static void magicSkills(uint32_t rspells, uint32_t mp_r_spells, uint32_t cp_spel
 
     known = true;
 
-    for (int i = 0; spell & CS_SPELLS; i++) {
-        if (spell & (CS_TEL_SHORT << i)) {
-            spell &= ~(CS_TEL_SHORT << i);
+    for (int i = 0; spell_flags & CS_SPELLS; i++) {
+        if (spell_flags & (CS_TEL_SHORT << i)) {
+            spell_flags &= ~(CS_TEL_SHORT << i);
 
             if (known) {
-                if (rspells & CS_BREATHE) {
+                if (memory_spell_flags & CS_BREATHE) {
                     roff(", and is also");
                 } else {
                     roff(" It is");
                 }
                 roff(" magical, casting spells which ");
                 known = false;
-            } else if (spell & CS_SPELLS) {
+            } else if (spell_flags & CS_SPELLS) {
                 roff(", ");
             } else {
                 roff(" or ");
@@ -413,11 +413,11 @@ static void magicSkills(uint32_t rspells, uint32_t mp_r_spells, uint32_t cp_spel
         }
     }
 
-    if (rspells & (CS_BREATHE | CS_SPELLS)) {
+    if (memory_spell_flags & (CS_BREATHE | CS_SPELLS)) {
         // Could offset by level
-        if ((mp_r_spells & CS_FREQ) > 5) {
+        if ((monster_spell_flags & CS_FREQ) > 5) {
             vtype_t temp;
-            (void) sprintf(temp, "; 1 time in %ld", cp_spells & CS_FREQ);
+            (void) sprintf(temp, "; 1 time in %ld", creature_spell_flags & CS_FREQ);
             roff(temp);
         }
         roff(".");
@@ -705,7 +705,7 @@ int roff_recall(int monster_id) {
         memoryKillPoints(cp->cdefense, cp->mexp, cp->level);
     }
 
-    magicSkills(rspells, mp->r_spells, cp->spells);
+    memoryMagicSkills(rspells, mp->r_spells, cp->spells);
 
     killDifficulty(cp, mp->r_kills);
 
