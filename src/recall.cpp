@@ -153,39 +153,37 @@ bool memoryMonsterKnown(int monster_id) {
     return false;
 }
 
-static void wizardModeInit(Recall_t *mp, Creature_t *cp) {
-    mp->r_kills = MAX_SHORT;
-    mp->r_wake = mp->r_ignore = MAX_UCHAR;
+static void memoryWizardModeInit(Recall_t *memory, Creature_t *creature) {
+    memory->r_kills = MAX_SHORT;
+    memory->r_wake = memory->r_ignore = MAX_UCHAR;
 
-    int i = (uint32_t) (
-            (((cp->cmove & CM_4D2_OBJ) != 0) * 8) +
-            (((cp->cmove & CM_2D2_OBJ) != 0) * 4) +
-            (((cp->cmove & CM_1D2_OBJ) != 0) * 2) +
-            ((cp->cmove & CM_90_RANDOM) != 0) +
-            ((cp->cmove & CM_60_RANDOM) != 0)
-    );
+    uint32_t move = (uint32_t) ((creature->cmove & CM_4D2_OBJ) != 0) * 8;
+    move += (uint32_t) ((creature->cmove & CM_2D2_OBJ) != 0) * 4;
+    move += (uint32_t) ((creature->cmove & CM_1D2_OBJ) != 0) * 2;
+    move += (uint32_t) ((creature->cmove & CM_90_RANDOM) != 0);
+    move += (uint32_t) ((creature->cmove & CM_60_RANDOM) != 0);
 
-    mp->r_cmove = (uint32_t) ((cp->cmove & ~CM_TREASURE) | (i << CM_TR_SHIFT));
-    mp->r_cdefense = cp->cdefense;
+    memory->r_cmove = (uint32_t) ((creature->cmove & ~CM_TREASURE) | (move << CM_TR_SHIFT));
+    memory->r_cdefense = creature->cdefense;
 
-    if (cp->spells & CS_FREQ) {
-        mp->r_spells = (uint32_t) (cp->spells | CS_FREQ);
+    if (creature->spells & CS_FREQ) {
+        memory->r_spells = (uint32_t) (creature->spells | CS_FREQ);
     } else {
-        mp->r_spells = cp->spells;
+        memory->r_spells = creature->spells;
     }
 
-    uint8_t *pu = cp->damage;
+    uint8_t *pu = creature->damage;
 
-    int attackID = 0;
-    while (*pu != 0 && attackID < 4) {
-        mp->r_attacks[attackID] = MAX_UCHAR;
-        attackID++;
+    int attack_id = 0;
+    while (*pu != 0 && attack_id < 4) {
+        memory->r_attacks[attack_id] = MAX_UCHAR;
+        attack_id++;
         pu++;
     }
 
     // A little hack to enable the display of info for Quylthulgs.
-    if (mp->r_cmove & CM_ONLY_MAGIC) {
-        mp->r_attacks[0] = MAX_UCHAR;
+    if (memory->r_cmove & CM_ONLY_MAGIC) {
+        memory->r_attacks[0] = MAX_UCHAR;
     }
 }
 
@@ -674,7 +672,7 @@ int roff_recall(int monster_id) {
 
     if (wizard_mode) {
         save_mem = *mp;
-        wizardModeInit(mp, cp);
+        memoryWizardModeInit(mp, cp);
     }
 
     roff_print_line = 0;
