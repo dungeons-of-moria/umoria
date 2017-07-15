@@ -907,7 +907,7 @@ void breath(int x, int y, int monster_id, int damage_hp, char *spell_name, int s
                         m_ptr->csleep = 0;
 
                         if (m_ptr->hp < 0) {
-                            uint32_t treas = monster_death((int) m_ptr->fy, (int) m_ptr->fx, r_ptr->cmove);
+                            uint32_t treas = monsterDeath((int) m_ptr->fy, (int) m_ptr->fx, r_ptr->cmove);
 
                             if (m_ptr->ml) {
                                 uint32_t tmp = (uint32_t) ((creature_recall[m_ptr->mptr].r_cmove & CM_TREASURE) >> CM_TR_SHIFT);

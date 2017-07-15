@@ -414,7 +414,7 @@ void dungeonDeleteMonster(int id);
 void dungeonDeleteMonsterFix1(int id);
 void dungeonDeleteMonsterFix2(int id);
 int dungeonDeleteObject(int y, int x);
-uint32_t monster_death(int y, int x, uint32_t flags);
+uint32_t monsterDeath(int y, int x, uint32_t flags);
 int mon_take_hit(int monster_id, int damage);
 void move_char(int direction, bool do_pickup);
 void chest_trap(int y, int x);

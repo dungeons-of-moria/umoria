@@ -595,56 +595,66 @@ int dungeonDeleteObject(int y, int x) {
     return (caveTileVisible(y, x));
 }
 
+static int monsterDeathItemDropType(uint32_t flags) {
+    int object;
+
+    if (flags & CM_CARRY_OBJ) {
+        object = 1;
+    } else {
+        object = 0;
+    }
+
+    if (flags & CM_CARRY_GOLD) {
+        object += 2;
+    }
+
+    if (flags & CM_SMALL_OBJ) {
+        object += 4;
+    }
+
+    return object;
+}
+
+static int monsterDeathItemDropCount(uint32_t flags) {
+    int count = 0;
+
+    if ((flags & CM_60_RANDOM) && randomNumber(100) < 60) {
+        count++;
+    }
+
+    if ((flags & CM_90_RANDOM) && randomNumber(100) < 90) {
+        count++;
+    }
+
+    if (flags & CM_1D2_OBJ) {
+        count += randomNumber(2);
+    }
+
+    if (flags & CM_2D2_OBJ) {
+        count += diceDamageRoll(2, 2);
+    }
+
+    if (flags & CM_4D2_OBJ) {
+        count += diceDamageRoll(4, 2);
+    }
+
+    return count;
+}
+
 // Allocates objects upon a creatures death -RAK-
 // Oh well,  another creature bites the dust. Reward the
 // victor based on flags set in the main creature record.
 //
 // Returns a mask of bits from the given flags which indicates what the
 // monster is seen to have dropped.  This may be added to monster memory.
-uint32_t monster_death(int y, int x, uint32_t flags) {
-    int objectType;
+uint32_t monsterDeath(int y, int x, uint32_t flags) {
+    int item_type = monsterDeathItemDropType(flags);
+    int item_count = monsterDeathItemDropCount(flags);
 
-    if (flags & CM_CARRY_OBJ) {
-        objectType = 1;
-    } else {
-        objectType = 0;
-    }
+    uint32_t dropped_item_id = 0;
 
-    if (flags & CM_CARRY_GOLD) {
-        objectType += 2;
-    }
-
-    if (flags & CM_SMALL_OBJ) {
-        objectType += 4;
-    }
-
-    int number = 0;
-
-    if ((flags & CM_60_RANDOM) && randomNumber(100) < 60) {
-        number++;
-    }
-
-    if ((flags & CM_90_RANDOM) && randomNumber(100) < 90) {
-        number++;
-    }
-
-    if (flags & CM_1D2_OBJ) {
-        number += randomNumber(2);
-    }
-
-    if (flags & CM_2D2_OBJ) {
-        number += diceDamageRoll(2, 2);
-    }
-
-    if (flags & CM_4D2_OBJ) {
-        number += diceDamageRoll(4, 2);
-    }
-
-    uint32_t dump;
-    if (number > 0) {
-        dump = (uint32_t) dungeonSummonObject(y, x, number, objectType);
-    } else {
-        dump = 0;
+    if (item_count > 0) {
+        dropped_item_id = (uint32_t) dungeonSummonObject(y, x, item_count, item_type);
     }
 
     // maybe the player died in mid-turn
@@ -657,30 +667,28 @@ uint32_t monster_death(int y, int x, uint32_t flags) {
         printMessage("You cannot save this game, but you may retire when ready.");
     }
 
-    uint32_t result;
-
-    if (dump) {
-        result = 0;
-
-        if (dump & 255) {
-            result |= CM_CARRY_OBJ;
-
-            if (objectType & 0x04) {
-                result |= CM_SMALL_OBJ;
-            }
-        }
-
-        if (dump >= 256) {
-            result |= CM_CARRY_GOLD;
-        }
-
-        dump = (dump % 256) + (dump / 256); // number of items
-        result |= dump << CM_TR_SHIFT;
-    } else {
-        result = 0;
+    if (dropped_item_id == 0) {
+        return 0;
     }
 
-    return result;
+    uint32_t return_flags = 0;
+
+    if (dropped_item_id & 255) {
+        return_flags |= CM_CARRY_OBJ;
+
+        if (item_type & 0x04) {
+            return_flags |= CM_SMALL_OBJ;
+        }
+    }
+
+    if (dropped_item_id >= 256) {
+        return_flags |= CM_CARRY_GOLD;
+    }
+
+    int number_of_items = (dropped_item_id % 256) + (dropped_item_id / 256);
+    number_of_items = number_of_items << CM_TR_SHIFT;
+
+    return return_flags | number_of_items;
 }
 
 static void playerGainKillExperience(Creature_t *c_ptr) {
@@ -716,7 +724,7 @@ int mon_take_hit(int monster_id, int damage) {
         return -1;
     }
 
-    uint32_t treasureFlags = monster_death((int) monster->fy, (int) monster->fx, creature->cmove);
+    uint32_t treasureFlags = monsterDeath((int) monster->fy, (int) monster->fx, creature->cmove);
 
     Recall_t *memory = &creature_recall[monster->mptr];
 
@@ -1188,7 +1196,7 @@ static void openClosedChest(int y, int x) {
         // can not win by opening a cursed chest
         treasure_list[tile->tptr].flags &= ~TR_CURSED;
 
-        (void) monster_death(y, x, treasure_list[tile->tptr].flags);
+        (void) monsterDeath(y, x, treasure_list[tile->tptr].flags);
 
         treasure_list[tile->tptr].flags = 0;
     }
