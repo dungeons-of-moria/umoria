@@ -202,10 +202,10 @@ static int playerTrapDisarmAbility() {
     return ability;
 }
 
-static void disarmFloorTrap(int y, int x, int tot, int level, int dir, int16_t p1) {
+static void playerDisarmFloorTrap(int y, int x, int total, int level, int dir, int16_t p1) {
     int confused = py.flags.confused;
 
-    if (tot + 100 - level > randomNumber(100)) {
+    if (total + 100 - level > randomNumber(100)) {
         printMessage("You have disarmed the trap.");
         py.misc.exp += p1;
         (void) dungeonDeleteObject(y, x);
@@ -220,7 +220,7 @@ static void disarmFloorTrap(int y, int x, int tot, int level, int dir, int16_t p
     }
 
     // avoid randomNumber(0) call
-    if (tot > 5 && randomNumber(tot) > 5) {
+    if (total > 5 && randomNumber(total) > 5) {
         printMessageNoCommandInterrupt("You failed to disarm the trap.");
         return;
     }
@@ -296,7 +296,7 @@ void disarm_trap() {
         Inventory_t *t_ptr = &treasure_list[c_ptr->tptr];
 
         if (t_ptr->tval == TV_VIS_TRAP) {
-            disarmFloorTrap(y, x, disarmAbility, t_ptr->level, dir, t_ptr->p1);
+            playerDisarmFloorTrap(y, x, disarmAbility, t_ptr->level, dir, t_ptr->p1);
         } else if (t_ptr->tval == TV_CHEST) {
             disarmChestTrap(y, x, disarmAbility, t_ptr);
         } else {
