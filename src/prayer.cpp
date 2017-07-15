@@ -175,18 +175,18 @@ static void playerRecitePrayer(int prayer_type) {
 void pray() {
     player_free_turn = true;
 
-    int itemPosBegin, itemposEnd;
-    if (!playerCanPray(&itemPosBegin, &itemposEnd)) {
+    int item_pos_begin, item_pos_end;
+    if (!playerCanPray(&item_pos_begin, &item_pos_end)) {
         return;
     }
 
-    int item_val;
-    if (!inventoryGetInputForItemId(&item_val, "Use which Holy Book?", itemPosBegin, itemposEnd, CNIL, CNIL)) {
+    int item_id;
+    if (!inventoryGetInputForItemId(&item_id, "Use which Holy Book?", item_pos_begin, item_pos_end, CNIL, CNIL)) {
         return;
     }
 
     int choice, chance;
-    int result = castSpellGetId("Recite which prayer?", item_val, &choice, &chance);
+    int result = castSpellGetId("Recite which prayer?", item_id, &choice, &chance);
     if (result < 0) {
         printMessage("You don't know any prayers in that book.");
         return;
@@ -199,7 +199,7 @@ void pray() {
         return;
     }
 
-    Spell_t *s_ptr = &magic_spells[py.misc.pclass - 1][choice];
+    Spell_t *spell = &magic_spells[py.misc.pclass - 1][choice];
 
     // NOTE: at least one function called by `playerRecitePrayer()` sets `player_free_turn = true`,
     // e.g. `create_food()`, so this check is required. -MRC-
@@ -207,16 +207,16 @@ void pray() {
     playerRecitePrayer(choice);
     if (!player_free_turn) {
         if ((spells_worked & (1L << choice)) == 0) {
-            py.misc.exp += s_ptr->sexp << 2;
+            py.misc.exp += spell->sexp << 2;
             displayCharacterExperience();
             spells_worked |= (1L << choice);
         }
     }
 
     if (!player_free_turn) {
-        if (s_ptr->smana > py.misc.cmana) {
+        if (spell->smana > py.misc.cmana) {
             printMessage("You faint from fatigue!");
-            py.flags.paralysis = (int16_t) randomNumber((5 * (s_ptr->smana - py.misc.cmana)));
+            py.flags.paralysis = (int16_t) randomNumber((5 * (spell->smana - py.misc.cmana)));
             py.misc.cmana = 0;
             py.misc.cmana_frac = 0;
             if (randomNumber(3) == 1) {
@@ -224,7 +224,7 @@ void pray() {
                 (void) playerStatRandomDecrease(A_CON);
             }
         } else {
-            py.misc.cmana -= s_ptr->smana;
+            py.misc.cmana -= spell->smana;
         }
 
         printCharacterCurrentMana();
