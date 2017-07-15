@@ -44,10 +44,10 @@ static bool playerCanPray(int *item_pos_begin, int *item_pos_end) {
 }
 
 // Recite a prayers.
-static void recitePrayer(int prayerType) {
+static void playerRecitePrayer(int prayer_type) {
     int dir;
 
-    switch (prayerType + 1) {
+    switch (prayer_type + 1) {
         case 1:
             (void) detect_evil();
             break;
@@ -201,10 +201,10 @@ void pray() {
 
     Spell_t *s_ptr = &magic_spells[py.misc.pclass - 1][choice];
 
-    // NOTE: at least one function called by `recitePrayer()` sets `player_free_turn = true`,
+    // NOTE: at least one function called by `playerRecitePrayer()` sets `player_free_turn = true`,
     // e.g. `create_food()`, so this check is required. -MRC-
     player_free_turn = false;
-    recitePrayer(choice);
+    playerRecitePrayer(choice);
     if (!player_free_turn) {
         if ((spells_worked & (1L << choice)) == 0) {
             py.misc.exp += s_ptr->sexp << 2;
