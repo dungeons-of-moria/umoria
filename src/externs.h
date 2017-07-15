@@ -439,7 +439,7 @@ void quaff();
 void pray();
 
 // recall.c
-bool bool_roff_recall(int monster_id);
+bool memoryMonsterKnown(int monster_id);
 int roff_recall(int monster_id);
 
 // rnd.c

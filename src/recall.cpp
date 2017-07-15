@@ -133,19 +133,19 @@ static int roff_print_line;       // Place to print line now being loaded.
 #define knowdamage(l, a, d) ((4 + (l)) * (a) > 80 * (d))
 
 // Do we know anything about this monster?
-bool bool_roff_recall(int monster_id) {
+bool memoryMonsterKnown(int monster_id) {
     if (wizard_mode) {
         return true;
     }
 
-    Recall_t *mp = &creature_recall[monster_id];
+    Recall_t *memory = &creature_recall[monster_id];
 
-    if (mp->r_cmove || mp->r_cdefense || mp->r_kills || mp->r_spells || mp->r_deaths) {
+    if (memory->r_cmove || memory->r_cdefense || memory->r_kills || memory->r_spells || memory->r_deaths) {
         return true;
     }
 
     for (int i = 0; i < 4; i++) {
-        if (mp->r_attacks[i]) {
+        if (memory->r_attacks[i]) {
             return true;
         }
     }
