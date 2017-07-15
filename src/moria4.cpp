@@ -1070,7 +1070,7 @@ static void playerBashPosition(int y, int x) {
     playerBashAttack(y, x);
 }
 
-static void bashClosedDoor(int y, int x, int dir, Cave_t *tile, Inventory_t *item) {
+static void playerBashClosedDoor(int y, int x, int dir, Cave_t *tile, Inventory_t *item) {
     printMessageNoCommandInterrupt("You smash into the door!");
 
     int chance = py.stats.use_stat[A_STR] + py.misc.wt / 2;
@@ -1173,7 +1173,7 @@ void bash() {
         Inventory_t *t_ptr = &treasure_list[c_ptr->tptr];
 
         if (t_ptr->tval == TV_CLOSED_DOOR) {
-            bashClosedDoor(y, x, dir, c_ptr, t_ptr);
+            playerBashClosedDoor(y, x, dir, c_ptr, t_ptr);
         } else if (t_ptr->tval == TV_CHEST) {
             bashClosedChest(t_ptr);
         } else {
