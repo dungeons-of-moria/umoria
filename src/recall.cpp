@@ -211,13 +211,13 @@ static void memoryConflictHistory(uint16_t deaths, uint16_t kills) {
 }
 
 // Immediately obvious.
-static bool depthFoundAt(uint8_t level, uint16_t r_kills) {
+static bool memoryDepthFoundAt(uint8_t level, uint16_t kills) {
     bool known = false;
 
     if (level == 0) {
         known = true;
         roff(" It lives in the town");
-    } else if (r_kills) {
+    } else if (kills) {
         known = true;
 
         // The Balrog is a level 100 monster, but appears at 50 feet.
@@ -693,7 +693,7 @@ int roff_recall(int monster_id) {
     roff(temp);
 
     memoryConflictHistory(mp->r_deaths, mp->r_kills);
-    known = depthFoundAt(cp->level, mp->r_kills);
+    known = memoryDepthFoundAt(cp->level, mp->r_kills);
     known = movement(rcmove, cp->speed, known);
 
     // Finish off the paragraph with a period!
