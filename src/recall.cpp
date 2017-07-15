@@ -425,18 +425,18 @@ static void memoryMagicSkills(uint32_t memory_spell_flags, uint32_t monster_spel
 }
 
 // Do we know how hard they are to kill? Armor class, hit die.
-static void killDifficulty(Creature_t *cp, uint32_t mp_r_kills) {
-    if (!knowarmor(cp->level, mp_r_kills)) {
+static void memoryKillDifficulty(Creature_t *creature, uint32_t monster_kills) {
+    if (!knowarmor(creature->level, monster_kills)) {
         return;
     }
 
-    vtype_t temp;
+    vtype_t description;
 
-    (void) sprintf(temp, " It has an armor rating of %d", cp->ac);
-    roff(temp);
+    (void) sprintf(description, " It has an armor rating of %d", creature->ac);
+    roff(description);
 
-    (void) sprintf(temp, " and a%s life rating of %dd%d.", ((cp->cdefense & CD_MAX_HP) ? " maximized" : ""), cp->hd[0], cp->hd[1]);
-    roff(temp);
+    (void) sprintf(description, " and a%s life rating of %dd%d.", ((creature->cdefense & CD_MAX_HP) ? " maximized" : ""), creature->hd[0], creature->hd[1]);
+    roff(description);
 }
 
 // Do we know how clever they are? Special abilities.
@@ -707,7 +707,7 @@ int roff_recall(int monster_id) {
 
     memoryMagicSkills(rspells, mp->r_spells, cp->spells);
 
-    killDifficulty(cp, mp->r_kills);
+    memoryKillDifficulty(cp, mp->r_kills);
 
     specialAbilities(rcmove);
 
