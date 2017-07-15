@@ -981,32 +981,32 @@ void playerThrowItem() {
 
 // Make a bash attack on someone. -CJS-
 // Used to be part of bash above.
-static void py_bash(int y, int x) {
-    int monsterID = cave[y][x].cptr;
-    Monster_t *m_ptr = &monsters[monsterID];
-    Creature_t *c_ptr = &creatures_list[m_ptr->mptr];
+static void playerBashAttack(int y, int x) {
+    int monster_id = cave[y][x].cptr;
+    Monster_t *monster = &monsters[monster_id];
+    Creature_t *creature = &creatures_list[monster->mptr];
 
-    m_ptr->csleep = 0;
+    monster->csleep = 0;
 
     // Does the player know what he's fighting?
     vtype_t name;
-    if (!m_ptr->ml) {
+    if (!monster->ml) {
         (void) strcpy(name, "it");
     } else {
-        (void) sprintf(name, "the %s", c_ptr->name);
+        (void) sprintf(name, "the %s", creature->name);
     }
 
-    int base_tohit = py.stats.use_stat[A_STR];
-    base_tohit += inventory[INVEN_ARM].weight / 2;
-    base_tohit += py.misc.wt / 10;
+    int base_to_hit = py.stats.use_stat[A_STR];
+    base_to_hit += inventory[INVEN_ARM].weight / 2;
+    base_to_hit += py.misc.wt / 10;
 
-    if (!m_ptr->ml) {
-        base_tohit /= 2;
-        base_tohit -= py.stats.use_stat[A_DEX] * (BTH_PLUS_ADJ - 1);
-        base_tohit -= py.misc.lev * class_level_adj[py.misc.pclass][CLA_BTH] / 2;
+    if (!monster->ml) {
+        base_to_hit /= 2;
+        base_to_hit -= py.stats.use_stat[A_DEX] * (BTH_PLUS_ADJ - 1);
+        base_to_hit -= py.misc.lev * class_level_adj[py.misc.pclass][CLA_BTH] / 2;
     }
 
-    if (playerTestBeingHit(base_tohit, (int) py.misc.lev, (int) py.stats.use_stat[A_DEX], (int) c_ptr->ac, CLA_BTH)) {
+    if (playerTestBeingHit(base_to_hit, (int) py.misc.lev, (int) py.stats.use_stat[A_DEX], (int) creature->ac, CLA_BTH)) {
         vtype_t msg;
         (void) sprintf(msg, "You hit %s.", name);
         printMessage(msg);
@@ -1021,7 +1021,7 @@ static void py_bash(int y, int x) {
         }
 
         // See if we done it in.
-        if (monsterTakeHit(monsterID, damage) >= 0) {
+        if (monsterTakeHit(monster_id, damage) >= 0) {
             (void) sprintf(msg, "You have slain %s.", name);
             printMessage(msg);
             displayCharacterExperience();
@@ -1030,16 +1030,16 @@ static void py_bash(int y, int x) {
 
             // Can not stun Balrog
             int avg_max_hp;
-            if (c_ptr->cdefense & CD_MAX_HP) {
-                avg_max_hp = c_ptr->hd[0] * c_ptr->hd[1];
+            if (creature->cdefense & CD_MAX_HP) {
+                avg_max_hp = creature->hd[0] * creature->hd[1];
             } else {
-                avg_max_hp = (c_ptr->hd[0] * (c_ptr->hd[1] + 1)) >> 1;
+                avg_max_hp = (creature->hd[0] * (creature->hd[1] + 1)) >> 1;
             }
 
-            if (100 + randomNumber(400) + randomNumber(400) > m_ptr->hp + avg_max_hp) {
-                m_ptr->stunned += randomNumber(3) + 1;
-                if (m_ptr->stunned > 24) {
-                    m_ptr->stunned = 24;
+            if (100 + randomNumber(400) + randomNumber(400) > monster->hp + avg_max_hp) {
+                monster->stunned += randomNumber(3) + 1;
+                if (monster->stunned > 24) {
+                    monster->stunned = 24;
                 }
 
                 (void) sprintf(msg, "%s appears stunned!", name);
@@ -1067,7 +1067,7 @@ static void playerBashPosition(int y, int x) {
         return;
     }
 
-    py_bash(y, x);
+    playerBashAttack(y, x);
 }
 
 static void bashClosedDoor(int y, int x, int dir, Cave_t *tile, Inventory_t *item) {
