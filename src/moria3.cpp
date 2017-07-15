@@ -713,7 +713,7 @@ static void playerGainKillExperience(Creature_t *c_ptr) {
 
 // Decreases monsters hit points and deletes monster if needed.
 // (Picking on my babies.) -RAK-
-int mon_take_hit(int monster_id, int damage) {
+int monsterTakeHit(int monster_id, int damage) {
     Monster_t *monster = &monsters[monster_id];
     Creature_t *creature = &creatures_list[monster->mptr];
 
@@ -724,18 +724,18 @@ int mon_take_hit(int monster_id, int damage) {
         return -1;
     }
 
-    uint32_t treasureFlags = monsterDeath((int) monster->fy, (int) monster->fx, creature->cmove);
+    uint32_t treasure_flags = monsterDeath((int) monster->fy, (int) monster->fx, creature->cmove);
 
     Recall_t *memory = &creature_recall[monster->mptr];
 
     if ((py.flags.blind < 1 && monster->ml) || (creature->cmove & CM_WIN)) {
         uint32_t tmp = (uint32_t) ((memory->r_cmove & CM_TREASURE) >> CM_TR_SHIFT);
 
-        if (tmp > ((treasureFlags & CM_TREASURE) >> CM_TR_SHIFT)) {
-            treasureFlags = (uint32_t) ((treasureFlags & ~CM_TREASURE) | (tmp << CM_TR_SHIFT));
+        if (tmp > ((treasure_flags & CM_TREASURE) >> CM_TR_SHIFT)) {
+            treasure_flags = (uint32_t) ((treasure_flags & ~CM_TREASURE) | (tmp << CM_TR_SHIFT));
         }
 
-        memory->r_cmove = (uint32_t) ((memory->r_cmove & ~CM_TREASURE) | treasureFlags);
+        memory->r_cmove = (uint32_t) ((memory->r_cmove & ~CM_TREASURE) | treasure_flags);
 
         if (memory->r_kills < MAX_SHORT) {
             memory->r_kills++;
@@ -868,7 +868,7 @@ static void py_attack(int y, int x) {
         }
 
         // See if we done it in.
-        if (mon_take_hit(creatureID, damage) >= 0) {
+        if (monsterTakeHit(creatureID, damage) >= 0) {
             (void) sprintf(msg, "You have slain %s.", name);
             printMessage(msg);
             displayCharacterExperience();

@@ -1460,7 +1460,7 @@ static void creatureMoveOutOfWall(Monster_t *m_ptr, int monsterID, uint32_t *rcm
         // in case the monster dies, may need to callfix1_delete_monster()
         // instead of delete_monsters()
         hack_monptr = monsterID;
-        int i = mon_take_hit(monsterID, diceDamageRoll(8, 8));
+        int i = monsterTakeHit(monsterID, diceDamageRoll(8, 8));
         hack_monptr = -1;
 
         if (i >= 0) {

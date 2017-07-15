@@ -496,7 +496,7 @@ static void lightLineTouchesMonster(int monsterID) {
             creature_recall[monster->mptr].r_cdefense |= CD_LIGHT;
         }
 
-        if (mon_take_hit(monsterID, diceDamageRoll(2, 8) >= 0)) {
+        if (monsterTakeHit(monsterID, diceDamageRoll(2, 8) >= 0)) {
             printMonsterActionText(name, "shrivels away in the light!");
             displayCharacterExperience();
         } else {
@@ -681,7 +681,7 @@ static void fireBoltTouchesMonster(Cave_t *tile, int dam, int harmType, uint32_t
 
     monster_name(name, monster->ml, creature->name);
 
-    if (mon_take_hit((int) tile->cptr, dam) >= 0) {
+    if (monsterTakeHit((int) tile->cptr, dam) >= 0) {
         printMonsterActionText(name, "dies in a fit of agony.");
         displayCharacterExperience();
     } else if (dam > 0) {
@@ -803,7 +803,7 @@ void fire_ball(int y, int x, int direction, int damage_hp, int spell_type_id, co
                                 }
 
                                 dam = (dam / (coordDistanceBetween(row, col, y, x) + 1));
-                                int k = mon_take_hit((int) c_ptr->cptr, dam);
+                                int k = monsterTakeHit((int) c_ptr->cptr, dam);
 
                                 if (k >= 0) {
                                     tkill++;
@@ -901,7 +901,7 @@ void breath(int x, int y, int monster_id, int damage_hp, char *spell_name, int s
 
                         dam = (dam / (coordDistanceBetween(row, col, y, x) + 1));
 
-                        // can not call mon_take_hit here, since player does not
+                        // can not call monsterTakeHit here, since player does not
                         // get experience for kill
                         m_ptr->hp = (int16_t) (m_ptr->hp - dam);
                         m_ptr->csleep = 0;
@@ -1038,7 +1038,7 @@ bool hp_monster(int y, int x, int direction, int damage_hp) {
             vtype_t name;
             monster_name(name, m_ptr->ml, r_ptr->name);
 
-            if (mon_take_hit((int) c_ptr->cptr, damage_hp) >= 0) {
+            if (monsterTakeHit((int) c_ptr->cptr, damage_hp) >= 0) {
                 printMonsterActionText(name, "dies in a fit of agony.");
                 displayCharacterExperience();
             } else if (damage_hp > 0) {
@@ -1077,7 +1077,7 @@ bool drain_life(int y, int x, int direction) {
                 vtype_t name;
                 monster_name(name, m_ptr->ml, r_ptr->name);
 
-                if (mon_take_hit((int) c_ptr->cptr, 75) >= 0) {
+                if (monsterTakeHit((int) c_ptr->cptr, 75) >= 0) {
                     printMonsterActionText(name, "dies in a fit of agony.");
                     displayCharacterExperience();
                 } else {
@@ -1305,7 +1305,7 @@ bool wall_to_mud(int y, int x, int direction) {
                 monster_name(name, m_ptr->ml, r_ptr->name);
 
                 // Should get these messages even if the monster is not visible.
-                int i = mon_take_hit((int) c_ptr->cptr, 100);
+                int i = monsterTakeHit((int) c_ptr->cptr, 100);
                 if (i >= 0) {
                     creature_recall[i].r_cdefense |= CD_STONE;
                     printMonsterActionText(name, "dissolves!");
@@ -1450,7 +1450,7 @@ bool build_wall(int y, int x, int direction) {
 
                 printMonsterActionText(name, "wails out in pain!");
 
-                if (mon_take_hit((int) c_ptr->cptr, damage) >= 0) {
+                if (monsterTakeHit((int) c_ptr->cptr, damage) >= 0) {
                     printMonsterActionText(name, "is embedded in the rock.");
                     displayCharacterExperience();
                 }
@@ -1863,7 +1863,7 @@ static void earthquakeHitsMonster(int monsterID) {
 
         printMonsterActionText(name, "wails out in pain!");
 
-        if (mon_take_hit(monsterID, damage) >= 0) {
+        if (monsterTakeHit(monsterID, damage) >= 0) {
             printMonsterActionText(name, "is embedded in the rock.");
             displayCharacterExperience();
         }
@@ -1959,7 +1959,7 @@ bool dispel_creature(int creature_defense, int damage) {
             vtype_t name;
             monster_name(name, m_ptr->ml, r_ptr->name);
 
-            int hit = mon_take_hit(id, randomNumber(damage));
+            int hit = monsterTakeHit(id, randomNumber(damage));
 
             // Should get these messages even if the monster is not visible.
             if (hit >= 0) {

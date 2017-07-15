@@ -946,7 +946,7 @@ void throw_object() {
                         tdam = 0;
                     }
 
-                    damage = mon_take_hit((int) c_ptr->cptr, tdam);
+                    damage = monsterTakeHit((int) c_ptr->cptr, tdam);
 
                     if (damage >= 0) {
                         if (!visible) {
@@ -1020,7 +1020,7 @@ static void py_bash(int y, int x) {
         }
 
         // See if we done it in.
-        if (mon_take_hit(monsterID, damage) >= 0) {
+        if (monsterTakeHit(monsterID, damage) >= 0) {
             (void) sprintf(msg, "You have slain %s.", name);
             printMessage(msg);
             displayCharacterExperience();
