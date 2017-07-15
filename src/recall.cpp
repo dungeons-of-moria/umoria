@@ -524,22 +524,22 @@ static void memoryAwareness(Creature_t *creature, Recall_t *memory) {
 }
 
 // Do we know what it might carry?
-static void lootCarried(uint32_t cp_cmove, uint32_t rcmove) {
-    if (!(rcmove & (CM_CARRY_OBJ | CM_CARRY_GOLD))) {
+static void memoryLootCarried(uint32_t creature_move, uint32_t memory_move) {
+    if (!(memory_move & (CM_CARRY_OBJ | CM_CARRY_GOLD))) {
         return;
     }
 
     roff(" It may");
 
-    uint32_t carryingChance = (uint32_t) ((rcmove & CM_TREASURE) >> CM_TR_SHIFT);
+    uint32_t carrying_chance = (uint32_t) ((memory_move & CM_TREASURE) >> CM_TR_SHIFT);
 
-    if (carryingChance == 1) {
-        if ((cp_cmove & CM_TREASURE) == CM_60_RANDOM) {
+    if (carrying_chance == 1) {
+        if ((creature_move & CM_TREASURE) == CM_60_RANDOM) {
             roff(" sometimes");
         } else {
             roff(" often");
         }
-    } else if (carryingChance == 2 && (cp_cmove & CM_TREASURE) == (CM_60_RANDOM | CM_90_RANDOM)) {
+    } else if (carrying_chance == 2 && (creature_move & CM_TREASURE) == (CM_60_RANDOM | CM_90_RANDOM)) {
         roff(" often");
     }
 
@@ -547,36 +547,36 @@ static void lootCarried(uint32_t cp_cmove, uint32_t rcmove) {
 
     const char *p;
 
-    if (rcmove & CM_SMALL_OBJ) {
+    if (memory_move & CM_SMALL_OBJ) {
         p = " small objects";
     } else {
         p = " objects";
     }
 
-    if (carryingChance == 1) {
-        if (rcmove & CM_SMALL_OBJ) {
+    if (carrying_chance == 1) {
+        if (memory_move & CM_SMALL_OBJ) {
             p = " a small object";
         } else {
             p = " an object";
         }
-    } else if (carryingChance == 2) {
+    } else if (carrying_chance == 2) {
         roff(" one or two");
     } else {
-        vtype_t temp;
-        (void) sprintf(temp, " up to %d", carryingChance);
-        roff(temp);
+        vtype_t msg;
+        (void) sprintf(msg, " up to %d", carrying_chance);
+        roff(msg);
     }
 
-    if (rcmove & CM_CARRY_OBJ) {
+    if (memory_move & CM_CARRY_OBJ) {
         roff(p);
-        if (rcmove & CM_CARRY_GOLD) {
+        if (memory_move & CM_CARRY_GOLD) {
             roff(" or treasure");
-            if (carryingChance > 1) {
+            if (carrying_chance > 1) {
                 roff("s");
             }
         }
         roff(".");
-    } else if (carryingChance != 1) {
+    } else if (carrying_chance != 1) {
         roff(" treasures.");
     } else {
         roff(" treasure.");
@@ -732,7 +732,7 @@ int roff_recall(int monster_id) {
 
     memoryAwareness(cp, mp);
 
-    lootCarried(cp->cmove, rcmove);
+    memoryLootCarried(cp->cmove, rcmove);
 
     attackNumberAndDamage(mp, cp);
 
