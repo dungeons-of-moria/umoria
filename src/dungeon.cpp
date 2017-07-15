@@ -1687,7 +1687,7 @@ static void do_command(char com_val) {
             player_free_turn = true;
             break;
         case 'f': // (f)orce    (B)ash
-            bash();
+            playerBash();
             break;
         case 'C': // (C)haracter description
             terminalSaveScreen();

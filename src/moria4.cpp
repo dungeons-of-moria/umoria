@@ -1147,7 +1147,7 @@ static void playerBashClosedChest(Inventory_t *item) {
 // in the line of sight or not, such a creature may unlock or unstick a door.
 //
 // A creature with no such ability will attempt to bash a non-secret door.
-void bash() {
+void playerBash() {
     int dir;
     if (!getDirectionWithMemory(CNIL, &dir)) {
         return;
@@ -1162,20 +1162,20 @@ void bash() {
     int x = char_col;
     (void) playerMovePosition(dir, &y, &x);
 
-    Cave_t *c_ptr = &cave[y][x];
+    Cave_t *tile = &cave[y][x];
 
-    if (c_ptr->cptr > 1) {
+    if (tile->cptr > 1) {
         playerBashPosition(y, x);
         return;
     }
 
-    if (c_ptr->tptr != 0) {
-        Inventory_t *t_ptr = &treasure_list[c_ptr->tptr];
+    if (tile->tptr != 0) {
+        Inventory_t *item = &treasure_list[tile->tptr];
 
-        if (t_ptr->tval == TV_CLOSED_DOOR) {
-            playerBashClosedDoor(y, x, dir, c_ptr, t_ptr);
-        } else if (t_ptr->tval == TV_CHEST) {
-            playerBashClosedChest(t_ptr);
+        if (item->tval == TV_CLOSED_DOOR) {
+            playerBashClosedDoor(y, x, dir, tile, item);
+        } else if (item->tval == TV_CHEST) {
+            playerBashClosedChest(item);
         } else {
             // Can't give free turn, or else player could try directions
             // until he found invisible creature
@@ -1184,7 +1184,7 @@ void bash() {
         return;
     }
 
-    if (c_ptr->fval < MIN_CAVE_WALL) {
+    if (tile->fval < MIN_CAVE_WALL) {
         printMessage("You bash at empty space.");
         return;
     }

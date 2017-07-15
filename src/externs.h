@@ -429,7 +429,7 @@ void playerTunnel(int direction);
 void playerDisarmTrap();
 void look();
 void playerThrowItem();
-void bash();
+void playerBash();
 int getRandomDirection();
 
 // potions.c
