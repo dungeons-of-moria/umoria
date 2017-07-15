@@ -1106,7 +1106,7 @@ static void playerBashClosedDoor(int y, int x, int dir, Cave_t *tile, Inventory_
     }
 }
 
-static void bashClosedChest(Inventory_t *item) {
+static void playerBashClosedChest(Inventory_t *item) {
     if (randomNumber(10) == 1) {
         printMessage("You have destroyed the chest.");
         printMessage("and its contents!");
@@ -1175,7 +1175,7 @@ void bash() {
         if (t_ptr->tval == TV_CLOSED_DOOR) {
             playerBashClosedDoor(y, x, dir, c_ptr, t_ptr);
         } else if (t_ptr->tval == TV_CHEST) {
-            bashClosedChest(t_ptr);
+            playerBashClosedChest(t_ptr);
         } else {
             // Can't give free turn, or else player could try directions
             // until he found invisible creature
