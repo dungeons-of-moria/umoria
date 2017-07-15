@@ -416,7 +416,7 @@ void dungeonDeleteMonsterFix2(int id);
 int dungeonDeleteObject(int y, int x);
 uint32_t monsterDeath(int y, int x, uint32_t flags);
 int monsterTakeHit(int monster_id, int damage);
-void move_char(int direction, bool do_pickup);
+void playerMove(int direction, bool do_pickup);
 void chest_trap(int y, int x);
 void openobject();
 void closeobject();

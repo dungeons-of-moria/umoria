@@ -905,7 +905,7 @@ static bool playerRandomMovement(int dir) {
 }
 
 // Moves player from one space to another. -RAK-
-void move_char(int direction, bool do_pickup) {
+void playerMove(int direction, bool do_pickup) {
     if (playerRandomMovement(direction)) {
         direction = randomNumber(9);
         playerEndRunning();

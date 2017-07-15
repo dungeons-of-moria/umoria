@@ -306,7 +306,7 @@ void playerFindInitialize(int direction) {
         putChar(caveGetTileSymbol(char_row, char_col), char_row, char_col);
     }
 
-    move_char(direction, true);
+    playerMove(direction, true);
 
     if (running_counter == 0) {
         command_count = 0;
@@ -321,7 +321,7 @@ void playerRunAndFind() {
         return;
     }
 
-    move_char(find_direction, true);
+    playerMove(find_direction, true);
 }
 
 // Switch off the run flag - and get the light correct. -CJS-

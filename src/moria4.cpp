@@ -212,7 +212,7 @@ static void disarmFloorTrap(int y, int x, int tot, int level, int dir, int16_t p
 
         // make sure we move onto the trap even if confused
         py.flags.confused = 0;
-        move_char(dir, false);
+        playerMove(dir, false);
         py.flags.confused = (int16_t) confused;
 
         displayCharacterExperience();
@@ -229,7 +229,7 @@ static void disarmFloorTrap(int y, int x, int tot, int level, int dir, int16_t p
 
     // make sure we move onto the trap even if confused
     py.flags.confused = 0;
-    move_char(dir, false);
+    playerMove(dir, false);
     py.flags.confused += confused;
 }
 
@@ -1086,7 +1086,7 @@ static void bashClosedDoor(int y, int x, int dir, Cave_t *tile, Inventory_t *ite
         tile->fval = CORR_FLOOR;
 
         if (py.flags.confused == 0) {
-            move_char(dir, false);
+            playerMove(dir, false);
         } else {
             dungeonLiteSpot(y, x);
         }
