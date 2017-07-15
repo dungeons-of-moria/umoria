@@ -9,18 +9,18 @@
 #include "headers.h"
 #include "externs.h"
 
-static bool drinkPotion(uint32_t flags, uint8_t itemID) {
+static bool playerDrinkPotion(uint32_t flags, uint8_t item_id) {
     bool identified = false;
 
     while (flags != 0) {
-        int potionID = getAndClearFirstBit(&flags) + 1;
+        int potion_id = getAndClearFirstBit(&flags) + 1;
 
-        if (itemID == TV_POTION2) {
-            potionID += 32;
+        if (item_id == TV_POTION2) {
+            potion_id += 32;
         }
 
         // Potions
-        switch (potionID) {
+        switch (potion_id) {
             case 1:
                 if (playerStatRandomIncrease(A_STR)) {
                     printMessage("Wow!  What bulging muscles!");
@@ -105,11 +105,11 @@ static bool drinkPotion(uint32_t flags, uint8_t itemID) {
                 break;
             case 18:
                 if (py.misc.exp < MAX_EXP) {
-                    uint32_t l = (uint32_t) ((py.misc.exp / 2) + 10);
-                    if (l > 100000L) {
-                        l = 100000L;
+                    uint32_t exp = (uint32_t) ((py.misc.exp / 2) + 10);
+                    if (exp > 100000L) {
+                        exp = 100000L;
                     }
-                    py.misc.exp += l;
+                    py.misc.exp += exp;
 
                     printMessage("You feel more experienced.");
                     displayCharacterExperience();
@@ -190,15 +190,15 @@ static bool drinkPotion(uint32_t flags, uint8_t itemID) {
                     printMessage("You feel your memories fade.");
 
                     // Lose between 1/5 and 2/5 of your experience
-                    int32_t m = py.misc.exp / 5;
+                    int32_t exp = py.misc.exp / 5;
 
                     if (py.misc.exp > MAX_SHORT) {
                         int32_t scale = (int32_t) (MAX_LONG / py.misc.exp);
-                        m += (randomNumber((int) scale) * py.misc.exp) / (scale * 5);
+                        exp += (randomNumber((int) scale) * py.misc.exp) / (scale * 5);
                     } else {
-                        m += randomNumber((int) py.misc.exp) / 5;
+                        exp += randomNumber((int) py.misc.exp) / 5;
                     }
-                    lose_exp(m);
+                    lose_exp(exp);
                     identified = true;
                 }
                 break;
@@ -313,7 +313,7 @@ void quaff() {
         printMessage("You feel less thirsty.");
         identified = true;
     } else {
-        identified = drinkPotion(i_ptr->flags, i_ptr->tval);
+        identified = playerDrinkPotion(i_ptr->flags, i_ptr->tval);
     }
 
     if (identified) {
