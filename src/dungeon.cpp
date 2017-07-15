@@ -1761,7 +1761,7 @@ static void do_command(char com_val) {
             player_free_turn = true;
             break;
         case 'c': // (c)lose an object
-            closeobject();
+            dungeonCloseDoor();
             break;
         case 'd': // (d)rop something
             inventoryExecuteCommand('d');

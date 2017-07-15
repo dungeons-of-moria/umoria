@@ -1238,7 +1238,7 @@ void objectOpen() {
 }
 
 // Closes an open door. -RAK-
-void closeobject() {
+void dungeonCloseDoor() {
     int dir;
 
     if (!getDirectionWithMemory(CNIL, &dir)) {
