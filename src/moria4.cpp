@@ -9,8 +9,8 @@
 #include "headers.h"
 #include "externs.h"
 
-static bool look_ray(int y, int from, int to);
-static bool look_see(int x, int y, bool *transparent);
+static bool lookRay(int y, int from, int to);
+static bool lookSee(int x, int y, bool *transparent);
 
 // Don't let the player tunnel somewhere illegal, this is necessary to
 // prevent the player from getting a free attack by trying to tunnel
@@ -345,7 +345,7 @@ void playerDisarmTrap() {
          transparent, it would be visible.
        - Location 4 is completely obscured by a single #.
 
-  The function which does the work is look_ray. It sets up its own co-ordinate
+  The function which does the work is lookRay(). It sets up its own co-ordinate
   frame (global variables map back to the dungeon frame) and looks for
   everything between two angles specified from a central line. It is recursive,
   and each call looks at stuff visible along a line parallel to the center line,
@@ -353,29 +353,29 @@ void playerDisarmTrap() {
   vision from the closest horizontal and vertical directions; horizontal or
   vertical looks take a call for each side of the central line.
 
-  Globally accessed variables: gl_nseen counts the number of places where
-  something is seen. gl_rock indicates a look for rock or objects.
+  Globally accessed variables: los_num_places_seen counts the number of places where
+  something is seen. los_rocks_and_objects indicates a look for rock or objects.
 
   The others map coords in the ray frame to dungeon coords.
 
-  dungeon y = char_row   + gl_fyx * (ray x)  + gl_fyy * (ray y)
-  dungeon x = char_col   + gl_fxx * (ray x)  + gl_fxy * (ray y)
+  dungeon y = char_row   + los_fyx * (ray x)  + los_fyy * (ray y)
+  dungeon x = char_col   + los_fxx * (ray x)  + los_fxy * (ray y)
 */
-static int gl_fxx, gl_fxy, gl_fyx, gl_fyy;
-static int gl_nseen;
-static bool gl_noquery;
-static int gl_rock;
+static int los_fxx, los_fxy, los_fyx, los_fyy;
+static int los_num_places_seen;
+static bool los_hack_no_query;
+static int los_rocks_and_objects;
 
 // Intended to be indexed by dir/2, since is only
 // relevant to horizontal or vertical directions.
-static int set_fxy[] = {0, 1, 0, 0, -1};
-static int set_fxx[] = {0, 0, -1, 1, 0};
-static int set_fyy[] = {0, 0, 1, -1, 0};
-static int set_fyx[] = {0, 1, 0, 0, -1};
+static int los_dir_set_fxy[] = {0, 1, 0, 0, -1};
+static int los_dir_set_fxx[] = {0, 0, -1, 1, 0};
+static int los_dir_set_fyy[] = {0, 0, 1, -1, 0};
+static int los_dir_set_fyx[] = {0, 1, 0, 0, -1};
 
 // Map diagonal-dir/2 to a normal-dir/2.
-static int map_diag1[] = {1, 3, 0, 2, 4};
-static int map_diag2[] = {2, 1, 0, 4, 3};
+static int los_map_diagonals1[] = {1, 3, 0, 2, 4};
+static int los_map_diagonals2[] = {2, 1, 0, 4, 3};
 
 #define GRADF 10000 // Any sufficiently big number will do
 
@@ -405,14 +405,14 @@ void look() {
         return;
     }
 
-    gl_nseen = 0;
-    gl_rock = 0;
+    los_num_places_seen = 0;
+    los_rocks_and_objects = 0;
 
-    // Have to set this up for the look_see
-    gl_noquery = false;
+    // Have to set this up for the lookSee
+    los_hack_no_query = false;
 
     bool dummy;
-    if (look_see(0, 0, &dummy)) {
+    if (lookSee(0, 0, &dummy)) {
         return;
     }
 
@@ -421,17 +421,17 @@ void look() {
         abort = false;
         if (dir == 5) {
             for (int i = 1; i <= 4; i++) {
-                gl_fxx = set_fxx[i];
-                gl_fyx = set_fyx[i];
-                gl_fxy = set_fxy[i];
-                gl_fyy = set_fyy[i];
-                if (look_ray(0, 2 * GRADF - 1, 1)) {
+                los_fxx = los_dir_set_fxx[i];
+                los_fyx = los_dir_set_fyx[i];
+                los_fxy = los_dir_set_fxy[i];
+                los_fyy = los_dir_set_fyy[i];
+                if (lookRay(0, 2 * GRADF - 1, 1)) {
                     abort = true;
                     break;
                 }
-                gl_fxy = -gl_fxy;
-                gl_fyy = -gl_fyy;
-                if (look_ray(0, 2 * GRADF, 2)) {
+                los_fxy = -los_fxy;
+                los_fyy = -los_fyy;
+                if (lookRay(0, 2 * GRADF, 2)) {
                     abort = true;
                     break;
                 }
@@ -440,42 +440,42 @@ void look() {
             // Straight directions
 
             int i = dir >> 1;
-            gl_fxx = set_fxx[i];
-            gl_fyx = set_fyx[i];
-            gl_fxy = set_fxy[i];
-            gl_fyy = set_fyy[i];
-            if (look_ray(0, GRADF, 1)) {
+            los_fxx = los_dir_set_fxx[i];
+            los_fyx = los_dir_set_fyx[i];
+            los_fxy = los_dir_set_fxy[i];
+            los_fyy = los_dir_set_fyy[i];
+            if (lookRay(0, GRADF, 1)) {
                 abort = true;
             } else {
-                gl_fxy = -gl_fxy;
-                gl_fyy = -gl_fyy;
-                abort = look_ray(0, GRADF, 2);
+                los_fxy = -los_fxy;
+                los_fyy = -los_fyy;
+                abort = lookRay(0, GRADF, 2);
             }
         } else {
-            int i = map_diag1[dir >> 1];
-            gl_fxx = set_fxx[i];
-            gl_fyx = set_fyx[i];
-            gl_fxy = -set_fxy[i];
-            gl_fyy = -set_fyy[i];
-            if (look_ray(1, 2 * GRADF, GRADF)) {
+            int i = los_map_diagonals1[dir >> 1];
+            los_fxx = los_dir_set_fxx[i];
+            los_fyx = los_dir_set_fyx[i];
+            los_fxy = -los_dir_set_fxy[i];
+            los_fyy = -los_dir_set_fyy[i];
+            if (lookRay(1, 2 * GRADF, GRADF)) {
                 abort = true;
             } else {
-                i = map_diag2[dir >> 1];
-                gl_fxx = set_fxx[i];
-                gl_fyx = set_fyx[i];
-                gl_fxy = set_fxy[i];
-                gl_fyy = set_fyy[i];
-                abort = look_ray(1, 2 * GRADF - 1, GRADF);
+                i = los_map_diagonals2[dir >> 1];
+                los_fxx = los_dir_set_fxx[i];
+                los_fyx = los_dir_set_fyx[i];
+                los_fxy = los_dir_set_fxy[i];
+                los_fyy = los_dir_set_fyy[i];
+                abort = lookRay(1, 2 * GRADF - 1, GRADF);
             }
         }
-    } while (!abort && highlight_seams && (++gl_rock < 2));
+    } while (!abort && highlight_seams && (++los_rocks_and_objects < 2));
 
     if (abort) {
         printMessage("--Aborting look--");
         return;
     }
 
-    if (gl_nseen) {
+    if (los_num_places_seen) {
         if (dir == 5) {
             printMessage("That's all you see.");
         } else {
@@ -504,7 +504,7 @@ void look() {
 //     @-------------------->   direction in which you are looking. (x axis)
 //     |
 //     |
-static bool look_ray(int y, int from, int to) {
+static bool lookRay(int y, int from, int to) {
     // from is the larger angle of the ray, since we scan towards the
     // center line. If from is smaller, then the ray does not exist.
     if (from <= to || y > MAX_SIGHT) {
@@ -530,20 +530,20 @@ static bool look_ray(int y, int from, int to) {
         return false;
     }
 
-    // gl_noquery is a HACK to prevent doubling up on direct lines of
+    // los_hack_no_query is a HACK to prevent doubling up on direct lines of
     // sight. If 'to' is  greater than 1, we do not really look at
     // stuff along the direct line of sight, but we do have to see
     // what is opaque for the purposes of obscuring other objects.
-    gl_noquery = (y == 0 && to > 1) || (y == x && from < GRADF * 2);
+    los_hack_no_query = (y == 0 && to > 1) || (y == x && from < GRADF * 2);
 
     bool transparent;
 
-    if (look_see(x, y, &transparent)) {
+    if (lookSee(x, y, &transparent)) {
         return true;
     }
 
     if (y == x) {
-        gl_noquery = false;
+        los_hack_no_query = false;
     }
 
     if (transparent) {
@@ -552,7 +552,7 @@ static bool look_ray(int y, int from, int to) {
 
     while (true) {
         // Look down the window we've found.
-        if (look_ray(y + 1, from, ((2 * y + 1) * (int32_t) GRADF / x))) {
+        if (lookRay(y + 1, from, ((2 * y + 1) * (int32_t) GRADF / x))) {
             return true;
         }
 
@@ -571,7 +571,7 @@ static bool look_ray(int y, int from, int to) {
 
             x++;
 
-            if (look_see(x, y, &transparent)) {
+            if (lookSee(x, y, &transparent)) {
                 return true;
             }
         } while (!transparent);
@@ -582,22 +582,22 @@ static bool look_ray(int y, int from, int to) {
         do {
             if (x == max_x) {
                 // The window is trimmed by an earlier limit.
-                return look_ray(y + 1, from, to);
+                return lookRay(y + 1, from, to);
             }
 
             x++;
 
-            if (look_see(x, y, &transparent)) {
+            if (lookSee(x, y, &transparent)) {
                 return true;
             }
         } while (transparent);
     }
 }
 
-static bool look_see(int x, int y, bool *transparent) {
+static bool lookSee(int x, int y, bool *transparent) {
     if (x < 0 || y < 0 || y > x) {
         obj_desc_t errorMessage;
-        (void) sprintf(errorMessage, "Illegal call to look_see(%d, %d)", x, y);
+        (void) sprintf(errorMessage, "Illegal call to lookSee(%d, %d)", x, y);
         printMessage(errorMessage);
     }
 
@@ -608,8 +608,8 @@ static bool look_see(int x, int y, bool *transparent) {
         description = "You see";
     }
 
-    int j = char_col + gl_fxx * x + gl_fxy * y;
-    y = char_row + gl_fyx * x + gl_fyy * y;
+    int j = char_col + los_fxx * x + los_fxy * y;
+    y = char_row + los_fyx * x + los_fyy * y;
     x = j;
 
     if (!coordInsidePanel(y, x)) {
@@ -617,10 +617,10 @@ static bool look_see(int x, int y, bool *transparent) {
         return false;
     }
 
-    Cave_t *c_ptr = &cave[y][x];
-    *transparent = c_ptr->fval <= MAX_OPEN_SPACE;
+    Cave_t *tile = &cave[y][x];
+    *transparent = tile->fval <= MAX_OPEN_SPACE;
 
-    if (gl_noquery) {
+    if (los_hack_no_query) {
         return false; // Don't look at a direct line of sight. A hack.
     }
 
@@ -631,8 +631,8 @@ static bool look_see(int x, int y, bool *transparent) {
     obj_desc_t msg;
     msg[0] = 0;
 
-    if (gl_rock == 0 && c_ptr->cptr > 1 && monsters[c_ptr->cptr].ml) {
-        j = monsters[c_ptr->cptr].mptr;
+    if (los_rocks_and_objects == 0 && tile->cptr > 1 && monsters[tile->cptr].ml) {
+        j = monsters[tile->cptr].mptr;
         (void) sprintf(msg, "%s %s %s. [(r)ecall]", description, isVowel(creatures_list[j].name[0]) ? "an" : "a", creatures_list[j].name);
         description = "It is on";
         putStringClearToEOL(msg, 0, 0);
@@ -647,15 +647,15 @@ static bool look_see(int x, int y, bool *transparent) {
         }
     }
 
-    if (c_ptr->tl || c_ptr->pl || c_ptr->fm) {
-        if (c_ptr->tptr != 0) {
-            if (treasure_list[c_ptr->tptr].tval == TV_SECRET_DOOR) {
+    if (tile->tl || tile->pl || tile->fm) {
+        if (tile->tptr != 0) {
+            if (treasure_list[tile->tptr].tval == TV_SECRET_DOOR) {
                 goto granite;
             }
 
-            if (gl_rock == 0 && treasure_list[c_ptr->tptr].tval != TV_INVIS_TRAP) {
+            if (los_rocks_and_objects == 0 && treasure_list[tile->tptr].tval != TV_INVIS_TRAP) {
                 obj_desc_t obj_string;
-                itemDescription(obj_string, &treasure_list[c_ptr->tptr], true);
+                itemDescription(obj_string, &treasure_list[tile->tptr], true);
 
                 (void) sprintf(msg, "%s %s ---pause---", description, obj_string);
                 description = "It is in";
@@ -666,10 +666,10 @@ static bool look_see(int x, int y, bool *transparent) {
             }
         }
 
-        if ((gl_rock || msg[0]) && c_ptr->fval >= MIN_CLOSED_SPACE) {
+        if ((los_rocks_and_objects || msg[0]) && tile->fval >= MIN_CLOSED_SPACE) {
             const char *wall_description;
 
-            switch (c_ptr->fval) {
+            switch (tile->fval) {
                 case BOUNDARY_WALL:
                 case GRANITE_WALL:
                 granite:
@@ -701,7 +701,7 @@ static bool look_see(int x, int y, bool *transparent) {
     }
 
     if (msg[0]) {
-        gl_nseen++;
+        los_num_places_seen++;
         if (query == ESCAPE) {
             return true;
         }
