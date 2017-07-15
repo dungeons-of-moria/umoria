@@ -15,11 +15,11 @@ static bool look_see(int x, int y, bool *transparent);
 // Don't let the player tunnel somewhere illegal, this is necessary to
 // prevent the player from getting a free attack by trying to tunnel
 // somewhere where it has no effect.
-static bool canTunnel(int treasureID, int tileID) {
-    if (tileID < MIN_CAVE_WALL && (treasureID == 0 || (treasure_list[treasureID].tval != TV_RUBBLE && treasure_list[treasureID].tval != TV_SECRET_DOOR))) {
+static bool playerCanTunnel(int treasure_id, int tile_id) {
+    if (tile_id < MIN_CAVE_WALL && (treasure_id == 0 || (treasure_list[treasure_id].tval != TV_RUBBLE && treasure_list[treasure_id].tval != TV_SECRET_DOOR))) {
         player_free_turn = true;
 
-        if (treasureID == 0) {
+        if (treasure_id == 0) {
             printMessage("Tunnel through what?  Empty air?!?");
         } else {
             printMessage("You can't tunnel through that.");
@@ -144,7 +144,7 @@ void tunnel(int direction) {
     Cave_t *c_ptr = &cave[y][x];
     Inventory_t *i_ptr = &inventory[INVEN_WIELD];
 
-    if (!canTunnel(c_ptr->tptr, c_ptr->fval)) {
+    if (!playerCanTunnel(c_ptr->tptr, c_ptr->fval)) {
         return;
     }
 
