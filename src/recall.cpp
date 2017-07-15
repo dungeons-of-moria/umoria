@@ -233,43 +233,43 @@ static bool memoryDepthFoundAt(uint8_t level, uint16_t kills) {
     return known;
 }
 
-static bool movement(uint32_t rcmove, int mspeed, bool known) {
+static bool memoryMovement(uint32_t rc_move, int monster_speed, bool is_known) {
     // the creatures_list speed value is 10 greater, so that it can be a uint8_t
-    mspeed -= 10;
+    monster_speed -= 10;
 
-    if (rcmove & CM_ALL_MV_FLAGS) {
-        if (known) {
+    if (rc_move & CM_ALL_MV_FLAGS) {
+        if (is_known) {
             roff(", and");
         } else {
             roff(" It");
-            known = true;
+            is_known = true;
         }
 
         roff(" moves");
 
-        if (rcmove & CM_RANDOM_MOVE) {
-            roff(description_how_much[(rcmove & CM_RANDOM_MOVE) >> 3]);
+        if (rc_move & CM_RANDOM_MOVE) {
+            roff(description_how_much[(rc_move & CM_RANDOM_MOVE) >> 3]);
             roff(" erratically");
         }
 
-        if (mspeed == 1) {
+        if (monster_speed == 1) {
             roff(" at normal speed");
         } else {
-            if (rcmove & CM_RANDOM_MOVE) {
+            if (rc_move & CM_RANDOM_MOVE) {
                 roff(", and");
             }
 
-            if (mspeed <= 0) {
-                if (mspeed == -1) {
+            if (monster_speed <= 0) {
+                if (monster_speed == -1) {
                     roff(" very");
-                } else if (mspeed < -1) {
+                } else if (monster_speed < -1) {
                     roff(" incredibly");
                 }
                 roff(" slowly");
             } else {
-                if (mspeed == 3) {
+                if (monster_speed == 3) {
                     roff(" very");
-                } else if (mspeed > 3) {
+                } else if (monster_speed > 3) {
                     roff(" unbelievably");
                 }
                 roff(" quickly");
@@ -277,29 +277,29 @@ static bool movement(uint32_t rcmove, int mspeed, bool known) {
         }
     }
 
-    if (rcmove & CM_ATTACK_ONLY) {
-        if (known) {
+    if (rc_move & CM_ATTACK_ONLY) {
+        if (is_known) {
             roff(", but");
         } else {
             roff(" It");
-            known = true;
+            is_known = true;
         }
 
         roff(" does not deign to chase intruders");
     }
 
-    if (rcmove & CM_ONLY_MAGIC) {
-        if (known) {
+    if (rc_move & CM_ONLY_MAGIC) {
+        if (is_known) {
             roff(", but");
         } else {
             roff(" It");
-            known = true;
+            is_known = true;
         }
 
         roff(" always moves and attacks by using magic");
     }
 
-    return known;
+    return is_known;
 }
 
 // Kill it once to know experience, and quality (evil, undead, monstrous).
@@ -694,7 +694,7 @@ int roff_recall(int monster_id) {
 
     memoryConflictHistory(mp->r_deaths, mp->r_kills);
     known = memoryDepthFoundAt(cp->level, mp->r_kills);
-    known = movement(rcmove, cp->speed, known);
+    known = memoryMovement(rcmove, cp->speed, known);
 
     // Finish off the paragraph with a period!
     if (known) {
