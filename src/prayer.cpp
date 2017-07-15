@@ -9,7 +9,7 @@
 #include "headers.h"
 #include "externs.h"
 
-static bool canPray(int *itemPosBegin, int *itemPosEnd) {
+static bool playerCanPray(int *item_pos_begin, int *item_pos_end) {
     if (py.flags.blind > 0) {
         printMessage("You can't see to read your prayer!");
         return false;
@@ -35,7 +35,7 @@ static bool canPray(int *itemPosBegin, int *itemPosEnd) {
         return false;
     }
 
-    if (!inventoryFindRange(TV_PRAYER_BOOK, TV_NEVER, itemPosBegin, itemPosEnd)) {
+    if (!inventoryFindRange(TV_PRAYER_BOOK, TV_NEVER, item_pos_begin, item_pos_end)) {
         printMessage("You are not carrying any Holy Books!");
         return false;
     }
@@ -176,7 +176,7 @@ void pray() {
     player_free_turn = true;
 
     int itemPosBegin, itemposEnd;
-    if (!canPray(&itemPosBegin, &itemposEnd)) {
+    if (!playerCanPray(&itemPosBegin, &itemposEnd)) {
         return;
     }
 
