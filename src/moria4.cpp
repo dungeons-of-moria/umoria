@@ -233,7 +233,7 @@ static void playerDisarmFloorTrap(int y, int x, int total, int level, int dir, i
     py.flags.confused += confused;
 }
 
-static void disarmChestTrap(int y, int x, int tot, Inventory_t *item) {
+static void playerDisarmChestTrap(int y, int x, int total, Inventory_t *item) {
     if (!spellItemIdentified(item)) {
         player_free_turn = true;
         printMessage("I don't see a trap.");
@@ -244,7 +244,7 @@ static void disarmChestTrap(int y, int x, int tot, Inventory_t *item) {
     if (item->flags & CH_TRAPPED) {
         int level = item->level;
 
-        if ((tot - level) > randomNumber(100)) {
+        if ((total - level) > randomNumber(100)) {
             item->flags &= ~CH_TRAPPED;
 
             if (item->flags & CH_LOCKED) {
@@ -259,7 +259,7 @@ static void disarmChestTrap(int y, int x, int tot, Inventory_t *item) {
             py.misc.exp += level;
 
             displayCharacterExperience();
-        } else if ((tot > 5) && (randomNumber(tot) > 5)) {
+        } else if ((total > 5) && (randomNumber(total) > 5)) {
             printMessageNoCommandInterrupt("You failed to disarm the chest.");
         } else {
             printMessage("You set a trap off!");
@@ -298,7 +298,7 @@ void disarm_trap() {
         if (t_ptr->tval == TV_VIS_TRAP) {
             playerDisarmFloorTrap(y, x, disarmAbility, t_ptr->level, dir, t_ptr->p1);
         } else if (t_ptr->tval == TV_CHEST) {
-            disarmChestTrap(y, x, disarmAbility, t_ptr);
+            playerDisarmChestTrap(y, x, disarmAbility, t_ptr);
         } else {
             no_disarm = true;
         }
