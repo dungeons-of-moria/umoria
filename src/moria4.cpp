@@ -726,16 +726,16 @@ static void inventoryThrow(int item_id, Inventory_t *treasure) {
 }
 
 // Obtain the hit and damage bonuses and the maximum distance for a thrown missile.
-static void facts(Inventory_t *i_ptr, int *tbth, int *tpth, int *tdam, int *tdis) {
-    int weight = i_ptr->weight;
+static void weaponMissileFacts(Inventory_t *item, int *tbth, int *tpth, int *tdam, int *tdis) {
+    int weight = item->weight;
     if (weight < 1) {
         weight = 1;
     }
 
     // Throwing objects
-    *tdam = dicePlayerDamageRoll(i_ptr->damage) + i_ptr->todam;
+    *tdam = dicePlayerDamageRoll(item->damage) + item->todam;
     *tbth = py.misc.bthb * 75 / 100;
-    *tpth = py.misc.ptohit + i_ptr->tohit;
+    *tpth = py.misc.ptohit + item->tohit;
 
     // Add this back later if the correct throwing device. -CJS-
     if (inventory[INVEN_WIELD].tval != TV_NOTHING) {
@@ -757,7 +757,7 @@ static void facts(Inventory_t *i_ptr, int *tbth, int *tpth, int *tdam, int *tdis
 
     switch (inventory[INVEN_WIELD].p1) {
         case 1:
-            if (i_ptr->tval == TV_SLING_AMMO) { // Sling and ammo
+            if (item->tval == TV_SLING_AMMO) { // Sling and ammo
                 *tbth = py.misc.bthb;
                 *tpth += 2 * inventory[INVEN_WIELD].tohit;
                 *tdam += inventory[INVEN_WIELD].todam;
@@ -766,7 +766,7 @@ static void facts(Inventory_t *i_ptr, int *tbth, int *tpth, int *tdam, int *tdis
             }
             break;
         case 2:
-            if (i_ptr->tval == TV_ARROW) { // Short Bow and Arrow
+            if (item->tval == TV_ARROW) { // Short Bow and Arrow
                 *tbth = py.misc.bthb;
                 *tpth += 2 * inventory[INVEN_WIELD].tohit;
                 *tdam += inventory[INVEN_WIELD].todam;
@@ -775,7 +775,7 @@ static void facts(Inventory_t *i_ptr, int *tbth, int *tpth, int *tdam, int *tdis
             }
             break;
         case 3:
-            if (i_ptr->tval == TV_ARROW) { // Long Bow and Arrow
+            if (item->tval == TV_ARROW) { // Long Bow and Arrow
                 *tbth = py.misc.bthb;
                 *tpth += 2 * inventory[INVEN_WIELD].tohit;
                 *tdam += inventory[INVEN_WIELD].todam;
@@ -784,7 +784,7 @@ static void facts(Inventory_t *i_ptr, int *tbth, int *tpth, int *tdam, int *tdis
             }
             break;
         case 4:
-            if (i_ptr->tval == TV_ARROW) { // Composite Bow and Arrow
+            if (item->tval == TV_ARROW) { // Composite Bow and Arrow
                 *tbth = py.misc.bthb;
                 *tpth += 2 * inventory[INVEN_WIELD].tohit;
                 *tdam += inventory[INVEN_WIELD].todam;
@@ -793,7 +793,7 @@ static void facts(Inventory_t *i_ptr, int *tbth, int *tpth, int *tdam, int *tdis
             }
             break;
         case 5:
-            if (i_ptr->tval == TV_BOLT) { // Light Crossbow and Bolt
+            if (item->tval == TV_BOLT) { // Light Crossbow and Bolt
                 *tbth = py.misc.bthb;
                 *tpth += 2 * inventory[INVEN_WIELD].tohit;
                 *tdam += inventory[INVEN_WIELD].todam;
@@ -802,7 +802,7 @@ static void facts(Inventory_t *i_ptr, int *tbth, int *tpth, int *tdam, int *tdis
             }
             break;
         case 6:
-            if (i_ptr->tval == TV_BOLT) { // Heavy Crossbow and Bolt
+            if (item->tval == TV_BOLT) { // Heavy Crossbow and Bolt
                 *tbth = py.misc.bthb;
                 *tpth += 2 * inventory[INVEN_WIELD].tohit;
                 *tdam += inventory[INVEN_WIELD].todam;
@@ -884,7 +884,7 @@ void throw_object() {
     inventoryThrow(itemID, &throw_obj);
 
     int tbth, tpth, tdam, tdis;
-    facts(&throw_obj, &tbth, &tpth, &tdam, &tdis);
+    weaponMissileFacts(&throw_obj, &tbth, &tpth, &tdam, &tdis);
 
     char tchar = throw_obj.tchar;
     bool visible;
