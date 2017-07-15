@@ -489,36 +489,36 @@ static void memoryWeaknesses(uint32_t defense) {
 }
 
 // Do we know how aware it is?
-static void awareness(Creature_t *cp, Recall_t *mp) {
-    if (mp->r_wake * mp->r_wake > cp->sleep || mp->r_ignore == MAX_UCHAR || (cp->sleep == 0 && mp->r_kills >= 10)) {
+static void memoryAwareness(Creature_t *creature, Recall_t *memory) {
+    if (memory->r_wake * memory->r_wake > creature->sleep || memory->r_ignore == MAX_UCHAR || (creature->sleep == 0 && memory->r_kills >= 10)) {
         roff(" It ");
 
-        if (cp->sleep > 200) {
+        if (creature->sleep > 200) {
             roff("prefers to ignore");
-        } else if (cp->sleep > 95) {
+        } else if (creature->sleep > 95) {
             roff("pays very little attention to");
-        } else if (cp->sleep > 75) {
+        } else if (creature->sleep > 75) {
             roff("pays little attention to");
-        } else if (cp->sleep > 45) {
+        } else if (creature->sleep > 45) {
             roff("tends to overlook");
-        } else if (cp->sleep > 25) {
+        } else if (creature->sleep > 25) {
             roff("takes quite a while to see");
-        } else if (cp->sleep > 10) {
+        } else if (creature->sleep > 10) {
             roff("takes a while to see");
-        } else if (cp->sleep > 5) {
+        } else if (creature->sleep > 5) {
             roff("is fairly observant of");
-        } else if (cp->sleep > 3) {
+        } else if (creature->sleep > 3) {
             roff("is observant of");
-        } else if (cp->sleep > 1) {
+        } else if (creature->sleep > 1) {
             roff("is very observant of");
-        } else if (cp->sleep != 0) {
+        } else if (creature->sleep != 0) {
             roff("is vigilant for");
         } else {
             roff("is ever vigilant for");
         }
 
         vtype_t text;
-        (void) sprintf(text, " intruders, which it may notice from %d feet.", 10 * cp->aaf);
+        (void) sprintf(text, " intruders, which it may notice from %d feet.", 10 * creature->aaf);
         roff(text);
     }
 }
@@ -730,7 +730,7 @@ int roff_recall(int monster_id) {
         roff(".");
     }
 
-    awareness(cp, mp);
+    memoryAwareness(cp, mp);
 
     lootCarried(cp->cmove, rcmove);
 
