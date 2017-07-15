@@ -440,17 +440,17 @@ static void memoryKillDifficulty(Creature_t *creature, uint32_t monster_kills) {
 }
 
 // Do we know how clever they are? Special abilities.
-static void specialAbilities(uint32_t rcmove) {
+static void memorySpecialAbilities(uint32_t move) {
     bool known = true;
 
-    for (int i = 0; rcmove & CM_SPECIAL; i++) {
-        if (rcmove & (CM_INVISIBLE << i)) {
-            rcmove &= ~(CM_INVISIBLE << i);
+    for (int i = 0; move & CM_SPECIAL; i++) {
+        if (move & (CM_INVISIBLE << i)) {
+            move &= ~(CM_INVISIBLE << i);
 
             if (known) {
                 roff(" It can ");
                 known = false;
-            } else if (rcmove & CM_SPECIAL) {
+            } else if (move & CM_SPECIAL) {
                 roff(", ");
             } else {
                 roff(" and ");
@@ -709,7 +709,7 @@ int roff_recall(int monster_id) {
 
     memoryKillDifficulty(cp, mp->r_kills);
 
-    specialAbilities(rcmove);
+    memorySpecialAbilities(rcmove);
 
     weaknesses(rcdefense);
 
