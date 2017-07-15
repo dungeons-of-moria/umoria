@@ -1725,29 +1725,29 @@ static void do_command(char com_val) {
             player_free_turn = true;
             break;
         case CTRL_KEY('B'): // (^B) tunnel down left  (T 1)
-            tunnel(1);
+            playerTunnel(1);
             break;
         case CTRL_KEY('M'): // cr must be treated same as lf.
         case CTRL_KEY('J'): // (^J) tunnel down    (T 2)
-            tunnel(2);
+            playerTunnel(2);
             break;
         case CTRL_KEY('N'): // (^N) tunnel down right  (T 3)
-            tunnel(3);
+            playerTunnel(3);
             break;
         case CTRL_KEY('H'): // (^H) tunnel left    (T 4)
-            tunnel(4);
+            playerTunnel(4);
             break;
         case CTRL_KEY('L'): // (^L) tunnel right    (T 6)
-            tunnel(6);
+            playerTunnel(6);
             break;
         case CTRL_KEY('Y'): // (^Y) tunnel up left    (T 7)
-            tunnel(7);
+            playerTunnel(7);
             break;
         case CTRL_KEY('K'): // (^K) tunnel up    (T 8)
-            tunnel(8);
+            playerTunnel(8);
             break;
         case CTRL_KEY('U'): // (^U) tunnel up right    (T 9)
-            tunnel(9);
+            playerTunnel(9);
             break;
         case 'z': // (z)ap a wand    (a)im a wand
             aim();

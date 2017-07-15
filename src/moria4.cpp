@@ -131,7 +131,7 @@ static bool dungeonDigAtLocation(int y, int x, uint8_t wall_type, int digging_ab
 
 // Tunnels through rubble and walls -RAK-
 // Must take into account: secret doors, special tools
-void tunnel(int direction) {
+void playerTunnel(int direction) {
     // Confused?                    75% random movement
     if (py.flags.confused > 0 && randomNumber(4) > 1) {
         direction = randomNumber(9);
@@ -141,28 +141,28 @@ void tunnel(int direction) {
     int x = char_col;
     (void) playerMovePosition(direction, &y, &x);
 
-    Cave_t *c_ptr = &cave[y][x];
-    Inventory_t *i_ptr = &inventory[INVEN_WIELD];
+    Cave_t *tile = &cave[y][x];
+    Inventory_t *item = &inventory[INVEN_WIELD];
 
-    if (!playerCanTunnel(c_ptr->tptr, c_ptr->fval)) {
+    if (!playerCanTunnel(tile->tptr, tile->fval)) {
         return;
     }
 
-    if (c_ptr->cptr > 1) {
-        objectBlockedByMonster(c_ptr->cptr);
+    if (tile->cptr > 1) {
+        objectBlockedByMonster(tile->cptr);
         playerAttackPosition(y, x);
         return;
     }
 
-    if (i_ptr->tval != TV_NOTHING) {
-        int diggingAbility = playerDiggingAbility(i_ptr);
+    if (item->tval != TV_NOTHING) {
+        int diggingAbility = playerDiggingAbility(item);
 
-        if (!dungeonDigAtLocation(y, x, c_ptr->fval, diggingAbility)) {
+        if (!dungeonDigAtLocation(y, x, tile->fval, diggingAbility)) {
             // Is there an object in the way?  (Rubble and secret doors)
-            if (c_ptr->tptr != 0) {
-                if (treasure_list[c_ptr->tptr].tval == TV_RUBBLE) {
+            if (tile->tptr != 0) {
+                if (treasure_list[tile->tptr].tval == TV_RUBBLE) {
                     dungeonDigRubble(y, x, diggingAbility);
-                } else if (treasure_list[c_ptr->tptr].tval == TV_SECRET_DOOR) {
+                } else if (treasure_list[tile->tptr].tval == TV_SECRET_DOOR) {
                     // Found secret door!
                     printMessageNoCommandInterrupt("You tunnel into the granite wall.");
                     dungeonSearch(char_row, char_col, py.misc.srh);

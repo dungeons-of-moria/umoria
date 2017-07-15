@@ -425,7 +425,7 @@ void objectBlockedByMonster(int monster_id);
 void playerAttackPosition(int y, int x);
 
 // moria4.c
-void tunnel(int direction);
+void playerTunnel(int direction);
 void disarm_trap();
 void look();
 void throw_object();
