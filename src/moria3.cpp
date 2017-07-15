@@ -1084,7 +1084,7 @@ static void chestExplode(int y, int x) {
 
 // Chests have traps too. -RAK-
 // Note: Chest traps are based on the FLAGS value
-void chest_trap(int y, int x) {
+void chestTrap(int y, int x) {
     uint32_t flags = treasure_list[cave[y][x].tptr].flags;
 
     if (flags & CH_LOSE_STR) {
@@ -1186,7 +1186,7 @@ static void openClosedChest(int y, int x) {
     }
 
     // Oh, yes it was...   (Snicker)
-    chest_trap(y, x);
+    chestTrap(y, x);
 
     if (tile->tptr != 0) {
         // Chest treasure is allocated as if a creature had been killed.

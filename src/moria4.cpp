@@ -264,7 +264,7 @@ static void disarmChestTrap(int y, int x, int tot, Inventory_t *item) {
         } else {
             printMessage("You set a trap off!");
             spellItemIdentifyAndRemoveRandomInscription(item);
-            chest_trap(y, x);
+            chestTrap(y, x);
         }
         return;
     }
