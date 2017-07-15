@@ -418,7 +418,7 @@ uint32_t monsterDeath(int y, int x, uint32_t flags);
 int monsterTakeHit(int monster_id, int damage);
 void playerMove(int direction, bool do_pickup);
 void chestTrap(int y, int x);
-void openobject();
+void objectOpen();
 void closeobject();
 int twall(int y, int x, int digging_ability, int digging_chance);
 void objectBlockedByMonster(int monster_id);

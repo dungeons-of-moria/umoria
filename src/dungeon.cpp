@@ -1786,7 +1786,7 @@ static void do_command(char com_val) {
             getAndCastMagicSpell();
             break;
         case 'o': // (o)pen something
-            openobject();
+            objectOpen();
             break;
         case 'p': // (p)ray
             pray();

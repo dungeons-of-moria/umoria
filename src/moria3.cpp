@@ -1201,7 +1201,7 @@ static void openClosedChest(int y, int x) {
 }
 
 // Opens a closed door or closed chest. -RAK-
-void openobject() {
+void objectOpen() {
     int dir;
 
     if (!getDirectionWithMemory(CNIL, &dir)) {
