@@ -293,21 +293,21 @@ void quaff() {
         return;
     }
 
-    int itemPosBegin, itemPosEnd;
-    if (!inventoryFindRange(TV_POTION1, TV_POTION2, &itemPosBegin, &itemPosEnd)) {
+    int item_pos_begin, item_pos_end;
+    if (!inventoryFindRange(TV_POTION1, TV_POTION2, &item_pos_begin, &item_pos_end)) {
         printMessage("You are not carrying any potions.");
         return;
     }
 
-    int itemID;
-    if (!inventoryGetInputForItemId(&itemID, "Quaff which potion?", itemPosBegin, itemPosEnd, CNIL, CNIL)) {
+    int item_id;
+    if (!inventoryGetInputForItemId(&item_id, "Quaff which potion?", item_pos_begin, item_pos_end, CNIL, CNIL)) {
         return;
     }
 
     player_free_turn = false;
 
     bool identified;
-    Inventory_t *i_ptr = &inventory[itemID];
+    Inventory_t *i_ptr = &inventory[item_id];
 
     if (i_ptr->flags == 0) {
         printMessage("You feel less thirsty.");
@@ -322,14 +322,14 @@ void quaff() {
             py.misc.exp += (i_ptr->level + (py.misc.lev >> 1)) / py.misc.lev;
             displayCharacterExperience();
 
-            itemIdentify(&itemID);
-            i_ptr = &inventory[itemID];
+            itemIdentify(&item_id);
+            i_ptr = &inventory[item_id];
         }
     } else if (!itemSetColorlessAsIdentifed(i_ptr)) {
         itemSetAsTried(i_ptr);
     }
 
     playerIngestFood(i_ptr->p1);
-    itemTypeRemainingCountDescription(itemID);
-    inventoryDestroyItem(itemID);
+    itemTypeRemainingCountDescription(item_id);
+    inventoryDestroyItem(item_id);
 }
