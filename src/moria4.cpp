@@ -856,15 +856,15 @@ static void inventoryDropOrThrowItem(int y, int x, Inventory_t *item) {
 // Note: Flasks of oil do fire damage
 // Note: Extra damage and chance of hitting when missiles are used
 // with correct weapon. i.e. wield bow and throw arrow.
-void throw_object() {
+void playerThrowItem() {
     if (inventory_count == 0) {
         printMessage("But you are not carrying anything.");
         player_free_turn = true;
         return;
     }
 
-    int itemID;
-    if (!inventoryGetInputForItemId(&itemID, "Fire/Throw which one?", 0, inventory_count - 1, CNIL, CNIL)) {
+    int item_id;
+    if (!inventoryGetInputForItemId(&item_id, "Fire/Throw which one?", 0, inventory_count - 1, CNIL, CNIL)) {
         return;
     }
 
@@ -873,52 +873,53 @@ void throw_object() {
         return;
     }
 
-    itemTypeRemainingCountDescription(itemID);
+    itemTypeRemainingCountDescription(item_id);
 
     if (py.flags.confused > 0) {
         printMessage("You are confused.");
         dir = getRandomDirection();
     }
 
-    Inventory_t throw_obj;
-    inventoryThrow(itemID, &throw_obj);
+    Inventory_t thrown_item;
+    inventoryThrow(item_id, &thrown_item);
 
     int tbth, tpth, tdam, tdis;
-    weaponMissileFacts(&throw_obj, &tbth, &tpth, &tdam, &tdis);
+    weaponMissileFacts(&thrown_item, &tbth, &tpth, &tdam, &tdis);
 
-    char tchar = throw_obj.tchar;
+    char tile_char = thrown_item.tchar;
     bool visible;
     int y = char_row;
     int x = char_col;
-    int oldy = char_row;
-    int oldx = char_col;
-    int cur_dis = 0;
+    int old_y = char_row;
+    int old_x = char_col;
+    int current_distance = 0;
 
+    Cave_t *tile;
     bool flag = false;
 
     while (!flag) {
         (void) playerMovePosition(dir, &y, &x);
-        cur_dis++;
-        dungeonLiteSpot(oldy, oldx);
+        current_distance++;
+        dungeonLiteSpot(old_y, old_x);
 
-        if (cur_dis > tdis) {
+        if (current_distance > tdis) {
             flag = true;
         }
 
-        Cave_t *c_ptr = &cave[y][x];
+        tile = &cave[y][x];
 
-        if (c_ptr->fval <= MAX_OPEN_SPACE && !flag) {
-            if (c_ptr->cptr > 1) {
+        if (tile->fval <= MAX_OPEN_SPACE && !flag) {
+            if (tile->cptr > 1) {
                 flag = true;
 
-                Monster_t *m_ptr = &monsters[c_ptr->cptr];
+                Monster_t *m_ptr = &monsters[tile->cptr];
 
-                tbth -= cur_dis;
+                tbth -= current_distance;
 
                 // if monster not lit, make it much more difficult to hit, subtract
                 // off most bonuses, and reduce bthb depending on distance.
                 if (!m_ptr->ml) {
-                    tbth /= cur_dis + 2;
+                    tbth /= current_distance + 2;
                     tbth -= py.misc.lev * class_level_adj[py.misc.pclass][CLA_BTHB] / 2;
                     tbth -= tpth * (BTH_PLUS_ADJ - 1);
                 }
@@ -927,7 +928,7 @@ void throw_object() {
                     int damage = m_ptr->mptr;
 
                     obj_desc_t description, msg;
-                    itemDescription(description, &throw_obj, false);
+                    itemDescription(description, &thrown_item, false);
 
                     // Does the player know what he's fighting?
                     if (!m_ptr->ml) {
@@ -939,14 +940,14 @@ void throw_object() {
                     }
                     printMessage(msg);
 
-                    tdam = itemMagicAbilityDamage(&throw_obj, tdam, damage);
-                    tdam = playerWeaponCriticalBlow((int) throw_obj.weight, tpth, tdam, CLA_BTHB);
+                    tdam = itemMagicAbilityDamage(&thrown_item, tdam, damage);
+                    tdam = playerWeaponCriticalBlow((int) thrown_item.weight, tpth, tdam, CLA_BTHB);
 
                     if (tdam < 0) {
                         tdam = 0;
                     }
 
-                    damage = monsterTakeHit((int) c_ptr->cptr, tdam);
+                    damage = monsterTakeHit((int) tile->cptr, tdam);
 
                     if (damage >= 0) {
                         if (!visible) {
@@ -958,23 +959,23 @@ void throw_object() {
                         displayCharacterExperience();
                     }
                 } else {
-                    inventoryDropOrThrowItem(oldy, oldx, &throw_obj);
+                    inventoryDropOrThrowItem(old_y, old_x, &thrown_item);
                 }
             } else {
-                // do not test c_ptr->fm here
+                // do not test tile->fm here
 
-                if (coordInsidePanel(y, x) && py.flags.blind < 1 && (c_ptr->tl || c_ptr->pl)) {
-                    putChar(tchar, y, x);
+                if (coordInsidePanel(y, x) && py.flags.blind < 1 && (tile->tl || tile->pl)) {
+                    putChar(tile_char, y, x);
                     putQIO(); // show object moving
                 }
             }
         } else {
             flag = true;
-            inventoryDropOrThrowItem(oldy, oldx, &throw_obj);
+            inventoryDropOrThrowItem(old_y, old_x, &thrown_item);
         }
 
-        oldy = y;
-        oldx = x;
+        old_y = y;
+        old_x = x;
     }
 }
 

@@ -428,7 +428,7 @@ void playerAttackPosition(int y, int x);
 void playerTunnel(int direction);
 void playerDisarmTrap();
 void look();
-void throw_object();
+void playerThrowItem();
 void bash();
 int getRandomDirection();
 

@@ -1770,7 +1770,7 @@ static void do_command(char com_val) {
             inventoryExecuteCommand('e');
             break;
         case 't': // (t)hrow something  (f)ire something
-            throw_object();
+            playerThrowItem();
             break;
         case 'i': // (i)nventory list
             inventoryExecuteCommand('i');
