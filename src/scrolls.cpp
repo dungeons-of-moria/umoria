@@ -511,7 +511,7 @@ void readScroll() {
                 identified = true;
                 break;
             case 22:
-                identified = trap_creation();
+                identified = spellSurroundPlayerWithTraps();
                 break;
             case 23:
                 identified = td_destroy();

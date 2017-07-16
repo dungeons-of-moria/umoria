@@ -354,10 +354,7 @@ bool spellAggravateMonsters(int affect_distance) {
 }
 
 // Surround the fool with traps (chuckle) -RAK-
-bool trap_creation() {
-    // NOTE: this is not changed anywhere. A bug or correct? -MRC-
-    bool trapped = true;
-
+bool spellSurroundPlayerWithTraps() {
     for (int y = char_row - 1; y <= char_row + 1; y++) {
         for (int x = char_col - 1; x <= char_col + 1; x++) {
             // Don't put a trap under the player, since this can lead to
@@ -368,16 +365,17 @@ bool trap_creation() {
                 continue;
             }
 
-            Cave_t *c_ptr = &cave[y][x];
+            Cave_t *tile = &cave[y][x];
 
-            if (c_ptr->fval <= MAX_CAVE_FLOOR) {
-                if (c_ptr->tptr != 0) {
+            if (tile->fval <= MAX_CAVE_FLOOR) {
+                if (tile->tptr != 0) {
                     (void) dungeonDeleteObject(y, x);
                 }
+
                 dungeonSetTrap(y, x, randomNumber(MAX_TRAP) - 1);
 
                 // don't let player gain exp from the newly created traps
-                treasure_list[c_ptr->tptr].p1 = 0;
+                treasure_list[tile->tptr].p1 = 0;
 
                 // open pits are immediately visible, so call dungeonLiteSpot
                 dungeonLiteSpot(y, x);
@@ -385,7 +383,8 @@ bool trap_creation() {
         }
     }
 
-    return trapped;
+    // traps are always placed, so just return true
+    return true;
 }
 
 // Surround the player with doors. -RAK-
