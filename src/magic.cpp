@@ -82,7 +82,7 @@ static void castSpell(int spellID) {
             }
             break;
         case 12:
-            (void) cure_poison();
+            (void) playerCurePoison();
             break;
         case 13:
             playerTeleport((py.misc.lev * 5));

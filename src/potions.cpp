@@ -182,7 +182,7 @@ static bool playerDrinkPotion(uint32_t flags, uint8_t item_id) {
                 identified = playerCureConfusion();
                 break;
             case 31:
-                identified = cure_poison();
+                identified = playerCurePoison();
                 break;
                 // case 33: break; // this is no longer useful, now that there is a 'G'ain magic spells command
             case 34:
@@ -203,7 +203,7 @@ static bool playerDrinkPotion(uint32_t flags, uint8_t item_id) {
                 }
                 break;
             case 35:
-                (void) cure_poison();
+                (void) playerCurePoison();
                 if (py.flags.food > 150) {
                     py.flags.food = 150;
                 }
@@ -258,7 +258,7 @@ static bool playerDrinkPotion(uint32_t flags, uint8_t item_id) {
                 identified = slow_poison();
                 break;
             case 45:
-                identified = cure_poison();
+                identified = playerCurePoison();
                 break;
             case 46:
                 if (py.misc.cmana < py.misc.mana) {

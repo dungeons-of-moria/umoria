@@ -67,7 +67,7 @@ void playerEat() {
                 identified = true;
                 break;
             case 6:
-                identified = cure_poison();
+                identified = playerCurePoison();
                 break;
             case 7:
                 identified = playerCureBlindness();

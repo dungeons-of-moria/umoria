@@ -105,7 +105,7 @@ static void playerRecitePrayer(int prayer_type) {
             py.flags.resist_cold += randomNumber(10) + 10;
             break;
         case 17:
-            (void) cure_poison();
+            (void) playerCurePoison();
             break;
         case 18:
             if (getDirectionWithMemory(CNIL, &dir)) {
@@ -150,7 +150,7 @@ static void playerRecitePrayer(int prayer_type) {
             break;
         case 31:
             (void) remove_fear();
-            (void) cure_poison();
+            (void) playerCurePoison();
             (void) spellChangePlayerHitPoints(1000);
 
             for (int i = A_STR; i <= A_CHR; i++) {

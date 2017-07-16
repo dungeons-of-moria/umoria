@@ -1837,7 +1837,7 @@ bool playerCureBlindness() {
 }
 
 // Cure poisoning -RAK-
-bool cure_poison() {
+bool playerCurePoison() {
     if (py.flags.poisoned > 1) {
         py.flags.poisoned = 1;
         return true;

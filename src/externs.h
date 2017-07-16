@@ -522,7 +522,7 @@ bool spellDetectEvil();
 bool spellChangePlayerHitPoints(int adjustment);
 bool playerCureConfusion();
 bool playerCureBlindness();
-bool cure_poison();
+bool playerCurePoison();
 bool remove_fear();
 void earthquake();
 bool protect_evil();
