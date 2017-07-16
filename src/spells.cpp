@@ -1735,18 +1735,18 @@ bool spellSleepAllMonsters() {
 
 // Polymorph any creature that player can see. -RAK-
 // NOTE: cannot polymorph a winning creature (BALROG)
-bool mass_poly() {
+bool spellMassPolymorph() {
     bool morphed = false;
 
     for (int id = next_free_monster_id - 1; id >= MIN_MONIX; id--) {
-        Monster_t *m_ptr = &monsters[id];
+        Monster_t *monster = &monsters[id];
 
-        if (m_ptr->cdis <= MAX_SIGHT) {
-            Creature_t *r_ptr = &creatures_list[m_ptr->mptr];
+        if (monster->cdis <= MAX_SIGHT) {
+            Creature_t *creature = &creatures_list[monster->mptr];
 
-            if ((r_ptr->cmove & CM_WIN) == 0) {
-                int y = m_ptr->fy;
-                int x = m_ptr->fx;
+            if ((creature->cmove & CM_WIN) == 0) {
+                int y = monster->fy;
+                int x = monster->fx;
                 dungeonDeleteMonster(id);
 
                 // Place_monster() should always return true here.

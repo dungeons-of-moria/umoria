@@ -133,7 +133,7 @@ static bool dischargeStaff(Inventory_t *staff_ptr) {
                 py.flags.slow += randomNumber(30) + 15;
                 break;
             case 19:
-                identified = mass_poly();
+                identified = spellMassPolymorph();
                 break;
             case 20:
                 if (remove_curse()) {

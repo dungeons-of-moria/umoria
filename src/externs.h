@@ -517,7 +517,7 @@ bool spellMassGenocide();
 bool spellGenocide();
 bool spellSpeedAllMonsters(int speed);
 bool spellSleepAllMonsters();
-bool mass_poly();
+bool spellMassPolymorph();
 bool detect_evil();
 bool hp_player(int adjustment);
 bool cure_confusion();
