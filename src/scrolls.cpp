@@ -399,7 +399,7 @@ static bool scrollSummonUndead() {
     return identified;
 }
 
-static void readWordOfRecallScroll() {
+static void scrollWordOfRecall() {
     if (py.flags.word_recall == 0) {
         py.flags.word_recall = (int16_t) (25 + randomNumber(30));
     }
@@ -570,7 +570,7 @@ void read_scroll() {
                 identified = true;
                 break;
             case 41:
-                readWordOfRecallScroll();
+                scrollWordOfRecall();
                 identified = true;
                 break;
             case 42:
