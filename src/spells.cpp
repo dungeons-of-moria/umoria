@@ -273,15 +273,15 @@ bool dungeonDarkenArea(int y, int x) {
     return darkened;
 }
 
-static void lightTileArea(int row, int col) {
-    for (int y = row - 1; y <= row + 1; y++) {
-        for (int x = col - 1; x <= col + 1; x++) {
-            Cave_t *c_ptr = &cave[y][x];
+static void dungeonLightAreaAroundFloorTile(int y, int x) {
+    for (int yy = y - 1; yy <= y + 1; yy++) {
+        for (int xx = x - 1; xx <= x + 1; xx++) {
+            Cave_t *tile = &cave[yy][xx];
 
-            if (c_ptr->fval >= MIN_CAVE_WALL) {
-                c_ptr->pl = true;
-            } else if (c_ptr->tptr != 0 && treasure_list[c_ptr->tptr].tval >= TV_MIN_VISIBLE && treasure_list[c_ptr->tptr].tval <= TV_MAX_VISIBLE) {
-                c_ptr->fm = true;
+            if (tile->fval >= MIN_CAVE_WALL) {
+                tile->pl = true;
+            } else if (tile->tptr != 0 && treasure_list[tile->tptr].tval >= TV_MIN_VISIBLE && treasure_list[tile->tptr].tval <= TV_MAX_VISIBLE) {
+                tile->fm = true;
             }
         }
     }
@@ -297,7 +297,7 @@ void map_area() {
     for (int row = rowMin; row <= rowMax; row++) {
         for (int col = colMin; col <= colMax; col++) {
             if (coordInBounds(row, col) && cave[row][col].fval <= MAX_CAVE_FLOOR) {
-                lightTileArea(row, col);
+                dungeonLightAreaAroundFloorTile(row, col);
             }
         }
     }
