@@ -1628,29 +1628,28 @@ bool spellMassGenocide() {
 // Delete all creatures of a given type from level. -RAK-
 // This does not keep creatures of type from appearing later.
 // NOTE : Winning creatures can not be killed by genocide.
-bool genocide() {
-    char typ;
-    if (!getCommand("Which type of creature do you wish exterminated?", &typ)) {
+bool spellGenocide() {
+    char creature_char;
+    if (!getCommand("Which type of creature do you wish exterminated?", &creature_char)) {
         return false;
     }
 
     bool killed = false;
 
     for (int id = next_free_monster_id - 1; id >= MIN_MONIX; id--) {
-        Monster_t *m_ptr = &monsters[id];
-        Creature_t *r_ptr = &creatures_list[m_ptr->mptr];
+        Monster_t *monster = &monsters[id];
+        Creature_t *creature = &creatures_list[monster->mptr];
 
-        if (typ == creatures_list[m_ptr->mptr].cchar) {
-            if ((r_ptr->cmove & CM_WIN) == 0) {
-                dungeonDeleteMonster(id);
-
+        if (creature_char == creatures_list[monster->mptr].cchar) {
+            if ((creature->cmove & CM_WIN) == 0) {
                 killed = true;
+                dungeonDeleteMonster(id);
             } else {
                 // genocide is a powerful spell, so we will let the player
                 // know the names of the creatures he did not destroy,
                 // this message makes no sense otherwise
                 vtype_t msg;
-                (void) sprintf(msg, "The %s is unaffected.", r_ptr->name);
+                (void) sprintf(msg, "The %s is unaffected.", creature->name);
                 printMessage(msg);
             }
         }

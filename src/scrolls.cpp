@@ -526,7 +526,7 @@ void readScroll() {
                 break;
             case 26:
                 printMessage("This is a genocide scroll.");
-                (void) genocide();
+                (void) spellGenocide();
                 identified = true;
                 break;
             case 27:
