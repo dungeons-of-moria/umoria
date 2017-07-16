@@ -516,7 +516,7 @@ bool spellTeleportAwayMonsterInDirection(int y, int x, int direction);
 bool spellMassGenocide();
 bool spellGenocide();
 bool spellSpeedAllMonsters(int speed);
-bool sleep_monsters2();
+bool spellSleepAllMonsters();
 bool mass_poly();
 bool detect_evil();
 bool hp_player(int adjustment);

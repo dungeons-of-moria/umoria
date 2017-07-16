@@ -1700,30 +1700,30 @@ bool spellSpeedAllMonsters(int speed) {
 }
 
 // Sleep any creature . -RAK-
-bool sleep_monsters2() {
+bool spellSleepAllMonsters() {
     bool asleep = false;
 
     for (int id = next_free_monster_id - 1; id >= MIN_MONIX; id--) {
-        Monster_t *m_ptr = &monsters[id];
-        Creature_t *r_ptr = &creatures_list[m_ptr->mptr];
+        Monster_t *monster = &monsters[id];
+        Creature_t *creature = &creatures_list[monster->mptr];
 
         vtype_t name;
-        monsterNameDescription(name, m_ptr->ml, r_ptr->name);
+        monsterNameDescription(name, monster->ml, creature->name);
 
-        if (m_ptr->cdis > MAX_SIGHT || !los(char_row, char_col, (int) m_ptr->fy, (int) m_ptr->fx)) {
+        if (monster->cdis > MAX_SIGHT || !los(char_row, char_col, (int) monster->fy, (int) monster->fx)) {
             continue; // do nothing
         }
 
-        if (randomNumber(MAX_MONS_LEVEL) < r_ptr->level || (CD_NO_SLEEP & r_ptr->cdefense)) {
-            if (m_ptr->ml) {
-                if (r_ptr->cdefense & CD_NO_SLEEP) {
-                    creature_recall[m_ptr->mptr].r_cdefense |= CD_NO_SLEEP;
+        if (randomNumber(MAX_MONS_LEVEL) < creature->level || (CD_NO_SLEEP & creature->cdefense)) {
+            if (monster->ml) {
+                if (creature->cdefense & CD_NO_SLEEP) {
+                    creature_recall[monster->mptr].r_cdefense |= CD_NO_SLEEP;
                 }
                 printMonsterActionText(name, "is unaffected.");
             }
         } else {
-            m_ptr->csleep = 500;
-            if (m_ptr->ml) {
+            monster->csleep = 500;
+            if (monster->ml) {
                 asleep = true;
                 printMonsterActionText(name, "falls asleep.");
             }

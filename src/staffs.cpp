@@ -112,7 +112,7 @@ static bool dischargeStaff(Inventory_t *staff_ptr) {
                 identified = spellSpeedAllMonsters(-1);
                 break;
             case 14:
-                identified = sleep_monsters2();
+                identified = spellSleepAllMonsters();
                 break;
             case 15:
                 identified = hp_player(randomNumber(8));

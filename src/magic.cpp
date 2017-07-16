@@ -120,7 +120,7 @@ static void castSpell(int spellID) {
             (void) spellIdentifyItem();
             break;
         case 22:
-            (void) sleep_monsters2();
+            (void) spellSleepAllMonsters();
             break;
         case 23:
             if (getDirectionWithMemory(CNIL, &dir)) {
