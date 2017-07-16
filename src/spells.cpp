@@ -388,7 +388,7 @@ bool spellSurroundPlayerWithTraps() {
 }
 
 // Surround the player with doors. -RAK-
-bool door_creation() {
+bool spellSurroundPlayerWithDoors() {
     bool created = false;
 
     for (int y = char_row - 1; y <= char_row + 1; y++) {
@@ -398,17 +398,18 @@ bool door_creation() {
                 continue;
             }
 
-            Cave_t *c_ptr = &cave[y][x];
+            Cave_t *tile = &cave[y][x];
 
-            if (c_ptr->fval <= MAX_CAVE_FLOOR) {
-                if (c_ptr->tptr != 0) {
+            if (tile->fval <= MAX_CAVE_FLOOR) {
+                if (tile->tptr != 0) {
                     (void) dungeonDeleteObject(y, x);
                 }
 
-                int k = popt();
-                c_ptr->fval = BLOCKED_FLOOR;
-                c_ptr->tptr = (uint8_t) k;
-                inventoryItemCopyTo(OBJ_CLOSED_DOOR, &treasure_list[k]);
+                int free_id = popt();
+                tile->fval = BLOCKED_FLOOR;
+                tile->tptr = (uint8_t) free_id;
+
+                inventoryItemCopyTo(OBJ_CLOSED_DOOR, &treasure_list[free_id]);
                 dungeonLiteSpot(y, x);
 
                 created = true;

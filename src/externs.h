@@ -490,7 +490,7 @@ void dungeonMapCurrentArea();
 bool spellIdentifyItem();
 bool spellAggravateMonsters(int affect_distance);
 bool spellSurroundPlayerWithTraps();
-bool door_creation();
+bool spellSurroundPlayerWithDoors();
 bool td_destroy();
 bool detect_monsters();
 void light_line(int x, int y, int direction);

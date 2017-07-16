@@ -517,7 +517,7 @@ void readScroll() {
                 identified = td_destroy();
                 break;
             case 24:
-                identified = door_creation();
+                identified = spellSurroundPlayerWithDoors();
                 break;
             case 25:
                 printMessage("This is a Recharge-Item scroll.");
