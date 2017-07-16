@@ -109,7 +109,7 @@ static void castSpell(int spellID) {
             (void) recharge(20);
             break;
         case 19:
-            (void) sleep_monsters1(char_row, char_col);
+            (void) monsterSleep(char_row, char_col);
             break;
         case 20:
             if (getDirectionWithMemory(CNIL, &dir)) {

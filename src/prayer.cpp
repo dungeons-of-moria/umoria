@@ -87,7 +87,7 @@ static void playerRecitePrayer(int prayer_type) {
             bless(randomNumber(24) + 24);
             break;
         case 13:
-            (void) sleep_monsters1(char_row, char_col);
+            (void) monsterSleep(char_row, char_col);
             break;
         case 14:
             create_food();

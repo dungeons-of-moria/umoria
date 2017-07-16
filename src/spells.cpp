@@ -39,29 +39,31 @@ static void monsterNameDescriptionLowercase(char *name_description, bool is_lit,
 }
 
 // Sleep creatures adjacent to player -RAK-
-bool sleep_monsters1(int y, int x) {
+bool monsterSleep(int y, int x) {
     bool asleep = false;
 
     for (int row = y - 1; row <= y + 1; row++) {
         for (int col = x - 1; col <= x + 1; col++) {
-            if (cave[row][col].cptr <= 1) {
+            uint8_t monster_id = cave[row][col].cptr;
+
+            if (monster_id <= 1) {
                 continue;
             }
 
-            Monster_t *m_ptr = &monsters[cave[row][col].cptr];
-            Creature_t *r_ptr = &creatures_list[m_ptr->mptr];
+            Monster_t *monster = &monsters[monster_id];
+            Creature_t *creature = &creatures_list[monster->mptr];
 
             vtype_t name;
-            monsterNameDescription(name, m_ptr->ml, r_ptr->name);
+            monsterNameDescription(name, monster->ml, creature->name);
 
-            if (randomNumber(MAX_MONS_LEVEL) < r_ptr->level || (CD_NO_SLEEP & r_ptr->cdefense)) {
-                if (m_ptr->ml && (r_ptr->cdefense & CD_NO_SLEEP)) {
-                    creature_recall[m_ptr->mptr].r_cdefense |= CD_NO_SLEEP;
+            if (randomNumber(MAX_MONS_LEVEL) < creature->level || (CD_NO_SLEEP & creature->cdefense)) {
+                if (monster->ml && (creature->cdefense & CD_NO_SLEEP)) {
+                    creature_recall[monster->mptr].r_cdefense |= CD_NO_SLEEP;
                 }
 
                 printMonsterActionText(name, "is unaffected.");
             } else {
-                m_ptr->csleep = 500;
+                monster->csleep = 500;
                 asleep = true;
 
                 printMonsterActionText(name, "falls asleep.");

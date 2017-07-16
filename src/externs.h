@@ -478,7 +478,7 @@ bool setAlchemistItems(int item_id);
 bool setMagicShopItems(int item_id);
 
 // spells.c
-bool sleep_monsters1(int y, int x);
+bool monsterSleep(int y, int x);
 bool detect_treasure();
 bool detect_object();
 bool detect_trap();

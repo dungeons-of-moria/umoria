@@ -479,7 +479,7 @@ void readScroll() {
                 identified = true;
                 break;
             case 13:
-                identified = sleep_monsters1(char_row, char_col);
+                identified = monsterSleep(char_row, char_col);
                 break;
             case 14:
                 warding_glyph();
