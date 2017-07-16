@@ -1018,30 +1018,32 @@ bool spellRechargeItem(int number_of_charges) {
 }
 
 // Increase or decrease a creatures hit points -RAK-
-bool hp_monster(int y, int x, int direction, int damage_hp) {
+bool spellChangeMonsterHitPoints(int y, int x, int direction, int damage_hp) {
+    int distance = 0;
     bool changed = false;
-
-    int dist = 0;
-
     bool finished = false;
+
     while (!finished) {
         (void) playerMovePosition(direction, &y, &x);
-        dist++;
+        distance++;
 
-        Cave_t *c_ptr = &cave[y][x];
+        Cave_t *tile = &cave[y][x];
 
-        if (dist > OBJ_BOLT_RANGE || c_ptr->fval >= MIN_CLOSED_SPACE) {
+        if (distance > OBJ_BOLT_RANGE || tile->fval >= MIN_CLOSED_SPACE) {
             finished = true;
-        } else if (c_ptr->cptr > 1) {
+            continue;
+        }
+
+        if (tile->cptr > 1) {
             finished = true;
 
-            Monster_t *m_ptr = &monsters[c_ptr->cptr];
-            Creature_t *r_ptr = &creatures_list[m_ptr->mptr];
+            Monster_t *monster = &monsters[tile->cptr];
+            Creature_t *creature = &creatures_list[monster->mptr];
 
             vtype_t name;
-            monsterNameDescription(name, m_ptr->ml, r_ptr->name);
+            monsterNameDescription(name, monster->ml, creature->name);
 
-            if (monsterTakeHit((int) c_ptr->cptr, damage_hp) >= 0) {
+            if (monsterTakeHit((int) tile->cptr, damage_hp) >= 0) {
                 printMonsterActionText(name, "dies in a fit of agony.");
                 displayCharacterExperience();
             } else if (damage_hp > 0) {

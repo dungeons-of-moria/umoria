@@ -47,7 +47,7 @@ static bool discharge_wand(Inventory_t *wand, int dir) {
                 identified = poly_monster(row, col, dir);
                 break;
             case 7:
-                identified = hp_monster(row, col, dir, -diceDamageRoll(4, 6));
+                identified = spellChangeMonsterHitPoints(row, col, dir, -diceDamageRoll(4, 6));
                 break;
             case 8:
                 identified = speed_monster(row, col, dir, 1);

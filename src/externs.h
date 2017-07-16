@@ -500,7 +500,7 @@ void spellFireBolt(int y, int x, int direction, int damage_hp, int spell_type, c
 void spellFireBall(int y, int x, int direction, int damage_hp, int spell_type, const char *spell_name);
 void spellBreath(int y, int x, int monster_id, int damage_hp, int spell_type, char *spell_name);
 bool spellRechargeItem(int number_of_charges);
-bool hp_monster(int y, int x, int direction, int damage_hp);
+bool spellChangeMonsterHitPoints(int y, int x, int direction, int damage_hp);
 bool drain_life(int y, int x, int direction);
 bool speed_monster(int y, int x, int direction, int speed);
 bool confuse_monster(int y, int x, int direction);
