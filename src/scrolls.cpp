@@ -214,7 +214,7 @@ static void scrollTeleportLevel() {
     generate_new_level = true;
 }
 
-static bool readConfuseMonsterScroll() {
+static bool scrollConfuseMonster() {
     if (!py.flags.confuse_monster) {
         printMessage("Your hands begin to glow.");
         py.flags.confuse_monster = true;
@@ -472,7 +472,7 @@ void read_scroll() {
                 identified = true;
                 break;
             case 11:
-                identified = readConfuseMonsterScroll();
+                identified = scrollConfuseMonster();
                 break;
             case 12:
                 map_area();
