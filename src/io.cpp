@@ -136,7 +136,7 @@ char getKeyInput() {
                 panic_save = true;
 
                 (void) strcpy(character_died_from, "(end of input: panic saved)");
-                if (!save_char()) {
+                if (!saveGame()) {
                     (void) strcpy(character_died_from, "panic: unexpected eof");
                     character_is_dead = true;
                 }

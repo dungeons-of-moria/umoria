@@ -204,7 +204,7 @@ int main(int argc, char *argv[]) {
         // eof can occur if the process gets a HANGUP signal
         if (eof_flag) {
             (void) strcpy(character_died_from, "(end of input: saved)");
-            if (!save_char()) {
+            if (!saveGame()) {
                 (void) strcpy(character_died_from, "unexpected eof");
             }
 

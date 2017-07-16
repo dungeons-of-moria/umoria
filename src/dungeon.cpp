@@ -1365,7 +1365,7 @@ static void commandSaveAndExit() {
         (void) strcpy(character_died_from, "(saved)");
         printMessage("Saving game...");
 
-        if (save_char()) {
+        if (saveGame()) {
             exitGame();
         }
 

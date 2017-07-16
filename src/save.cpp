@@ -358,7 +358,7 @@ static bool sv_write() {
 }
 
 // Set up prior to actual save, do the save, then clean up
-bool save_char() {
+bool saveGame() {
     while (!_save_char(savegame_filename)) {
         vtype_t temp;
 

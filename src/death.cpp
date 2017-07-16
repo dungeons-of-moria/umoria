@@ -445,7 +445,7 @@ void exitGame() {
 
     if (character_generated && !character_saved) {
         // Save the memory at least.
-        (void) save_char();
+        (void) saveGame();
     }
 
     // add score to score file if applicable
