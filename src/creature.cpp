@@ -656,7 +656,7 @@ static bool executeAttack(Creature_t *r_ptr, Monster_t *m_ptr, int monsterID, in
             }
             if (randomNumber(2) == 1) {
                 printMessage("There is a puff of smoke!");
-                teleport_away(monsterID, MAX_SIGHT);
+                spellTeleportAwayMonster(monsterID, MAX_SIGHT);
             }
             break;
         case 13: // Steal Object
@@ -668,7 +668,7 @@ static bool executeAttack(Creature_t *r_ptr, Monster_t *m_ptr, int monsterID, in
             }
             if (randomNumber(2) == 1) {
                 printMessage("There is a puff of smoke!");
-                teleport_away(monsterID, MAX_SIGHT);
+                spellTeleportAwayMonster(monsterID, MAX_SIGHT);
             }
             break;
         case 14: // Poison
@@ -1108,10 +1108,10 @@ void creatureCastsSpell(Monster_t *m_ptr, int monsterID, int spellID, uint8_t le
     // Cast the spell.
     switch (spellID) {
         case 5: // Teleport Short
-            teleport_away(monsterID, 5);
+            spellTeleportAwayMonster(monsterID, 5);
             break;
         case 6: // Teleport Long
-            teleport_away(monsterID, MAX_SIGHT);
+            spellTeleportAwayMonster(monsterID, MAX_SIGHT);
             break;
         case 7: // Teleport To
             teleport_to((int) m_ptr->fy, (int) m_ptr->fx);
@@ -1304,7 +1304,7 @@ static bool mon_cast_spell(int monsterID) {
     int thrown_spell = spell_choice[randomNumber(id) - 1];
     thrown_spell++;
 
-    // all except teleport_away() and drain mana spells always disturb
+    // all except spellTeleportAwayMonster() and drain mana spells always disturb
     if (thrown_spell > 6 && thrown_spell != 17) {
         playerDisturb(1, 0);
     }

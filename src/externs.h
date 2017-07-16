@@ -510,7 +510,7 @@ bool spellDestroyDoorsTrapsInDirection(int y, int x, int direction);
 bool spellPolymorphMonster(int y, int x, int direction);
 bool spellBuildWall(int y, int x, int direction);
 bool spellCloneMonster(int y, int x, int direction);
-void teleport_away(int monster_id, int distance_from_player);
+void spellTeleportAwayMonster(int monster_id, int distance_from_player);
 void teleport_to(int to_y, int to_x);
 bool teleport_monster(int y, int x, int direction);
 bool mass_genocide();

@@ -1508,34 +1508,35 @@ bool spellCloneMonster(int y, int x, int direction) {
 }
 
 // Move the creature record to a new location -RAK-
-void teleport_away(int monster_id, int distance_from_player) {
-    int yn, xn;
+void spellTeleportAwayMonster(int monster_id, int distance_from_player) {
+    int y, x;
+    int counter = 0;
+    Monster_t *monster = &monsters[monster_id];
 
-    Monster_t *m_ptr = &monsters[monster_id];
-
-    int ctr = 0;
     do {
         do {
-            yn = m_ptr->fy + (randomNumber(2 * distance_from_player + 1) - (distance_from_player + 1));
-            xn = m_ptr->fx + (randomNumber(2 * distance_from_player + 1) - (distance_from_player + 1));
-        } while (!coordInBounds(yn, xn));
+            y = monster->fy + (randomNumber(2 * distance_from_player + 1) - (distance_from_player + 1));
+            x = monster->fx + (randomNumber(2 * distance_from_player + 1) - (distance_from_player + 1));
+        } while (!coordInBounds(y, x));
 
-        ctr++;
-        if (ctr > 9) {
-            ctr = 0;
+        counter++;
+        if (counter > 9) {
+            counter = 0;
             distance_from_player += 5;
         }
-    } while ((cave[yn][xn].fval >= MIN_CLOSED_SPACE) || (cave[yn][xn].cptr != 0));
+    } while ((cave[y][x].fval >= MIN_CLOSED_SPACE) || (cave[y][x].cptr != 0));
 
-    dungeonMoveCreatureRecord((int) m_ptr->fy, (int) m_ptr->fx, yn, xn);
-    dungeonLiteSpot((int) m_ptr->fy, (int) m_ptr->fx);
-    m_ptr->fy = (uint8_t) yn;
-    m_ptr->fx = (uint8_t) xn;
+    dungeonMoveCreatureRecord((int) monster->fy, (int) monster->fx, y, x);
+    dungeonLiteSpot((int) monster->fy, (int) monster->fx);
+
+    monster->fy = (uint8_t) y;
+    monster->fx = (uint8_t) x;
 
     // this is necessary, because the creature is
     // not currently visible in its new position.
-    m_ptr->ml = false;
-    m_ptr->cdis = (uint8_t) coordDistanceBetween(char_row, char_col, yn, xn);
+    monster->ml = false;
+    monster->cdis = (uint8_t) coordDistanceBetween(char_row, char_col, y, x);
+
     monsterUpdateVisibility(monster_id);
 }
 
@@ -1594,7 +1595,7 @@ bool teleport_monster(int y, int x, int direction) {
             // wake it up
             monsters[c_ptr->cptr].csleep = 0;
 
-            teleport_away((int) c_ptr->cptr, MAX_SIGHT);
+            spellTeleportAwayMonster((int) c_ptr->cptr, MAX_SIGHT);
 
             teleported = true;
         }
