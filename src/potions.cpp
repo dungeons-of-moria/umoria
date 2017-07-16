@@ -86,16 +86,16 @@ static bool playerDrinkPotion(uint32_t flags, uint8_t item_id) {
                 }
                 break;
             case 13:
-                identified = hp_player(diceDamageRoll(2, 7));
+                identified = spellChangePlayerHitPoints(diceDamageRoll(2, 7));
                 break;
             case 14:
-                identified = hp_player(diceDamageRoll(4, 7));
+                identified = spellChangePlayerHitPoints(diceDamageRoll(4, 7));
                 break;
             case 15:
-                identified = hp_player(diceDamageRoll(6, 7));
+                identified = spellChangePlayerHitPoints(diceDamageRoll(6, 7));
                 break;
             case 16:
-                identified = hp_player(1000);
+                identified = spellChangePlayerHitPoints(1000);
                 break;
             case 17:
                 if (playerStatRandomIncrease(A_CON)) {

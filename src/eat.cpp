@@ -144,13 +144,13 @@ void playerEat() {
                 }
                 break;
             case 22:
-                identified = hp_player(randomNumber(6));
+                identified = spellChangePlayerHitPoints(randomNumber(6));
                 break;
             case 23:
-                identified = hp_player(randomNumber(12));
+                identified = spellChangePlayerHitPoints(randomNumber(12));
                 break;
             case 24:
-                identified = hp_player(randomNumber(18));
+                identified = spellChangePlayerHitPoints(randomNumber(18));
                 break;
 #if 0 // 25 is no longer used
             case 25:
@@ -158,7 +158,7 @@ void playerEat() {
                 break;
 #endif
             case 26:
-                identified = hp_player(diceDamageRoll(3, 12));
+                identified = spellChangePlayerHitPoints(diceDamageRoll(3, 12));
                 break;
             case 27:
                 playerTakesHit(randomNumber(18), "poisonous food.");

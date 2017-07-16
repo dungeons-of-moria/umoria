@@ -115,7 +115,7 @@ static bool dischargeStaff(Inventory_t *staff_ptr) {
                 identified = spellSleepAllMonsters();
                 break;
             case 15:
-                identified = hp_player(randomNumber(8));
+                identified = spellChangePlayerHitPoints(randomNumber(8));
                 break;
             case 16:
                 identified = spellDetectInvisibleCreaturesOnPanel();

@@ -52,7 +52,7 @@ static void playerRecitePrayer(int prayer_type) {
             (void) spellDetectEvil();
             break;
         case 2:
-            (void) hp_player(diceDamageRoll(3, 3));
+            (void) spellChangePlayerHitPoints(diceDamageRoll(3, 3));
             break;
         case 3:
             bless(randomNumber(12) + 12);
@@ -81,7 +81,7 @@ static void playerRecitePrayer(int prayer_type) {
             playerTeleport((py.misc.lev * 3));
             break;
         case 11:
-            (void) hp_player(diceDamageRoll(4, 4));
+            (void) spellChangePlayerHitPoints(diceDamageRoll(4, 4));
             break;
         case 12:
             bless(randomNumber(24) + 24);
@@ -113,7 +113,7 @@ static void playerRecitePrayer(int prayer_type) {
             }
             break;
         case 19:
-            (void) hp_player(diceDamageRoll(8, 4));
+            (void) spellChangePlayerHitPoints(diceDamageRoll(8, 4));
             break;
         case 20:
             detect_inv2(randomNumber(24) + 24);
@@ -128,7 +128,7 @@ static void playerRecitePrayer(int prayer_type) {
             spellMapCurrentArea();
             break;
         case 24:
-            (void) hp_player(diceDamageRoll(16, 4));
+            (void) spellChangePlayerHitPoints(diceDamageRoll(16, 4));
             break;
         case 25:
             (void) turn_undead();
@@ -140,7 +140,7 @@ static void playerRecitePrayer(int prayer_type) {
             (void) dispel_creature(CD_UNDEAD, (3 * py.misc.lev));
             break;
         case 28:
-            (void) hp_player(200);
+            (void) spellChangePlayerHitPoints(200);
             break;
         case 29:
             (void) dispel_creature(CD_EVIL, (3 * py.misc.lev));
@@ -151,7 +151,7 @@ static void playerRecitePrayer(int prayer_type) {
         case 31:
             (void) remove_fear();
             (void) cure_poison();
-            (void) hp_player(1000);
+            (void) spellChangePlayerHitPoints(1000);
 
             for (int i = A_STR; i <= A_CHR; i++) {
                 (void) playerStatRestore(i);

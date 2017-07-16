@@ -1787,7 +1787,7 @@ bool spellDetectEvil() {
 }
 
 // Change players hit points in some manner -RAK-
-bool hp_player(int adjustment) {
+bool spellChangePlayerHitPoints(int adjustment) {
     if (py.misc.chp >= py.misc.mhp) {
         return false;
     }
@@ -1800,6 +1800,7 @@ bool hp_player(int adjustment) {
     printCharacterCurrentHitPoints();
 
     adjustment = adjustment / 5;
+
     if (adjustment < 3) {
         if (adjustment == 0) {
             printMessage("You feel a little better.");

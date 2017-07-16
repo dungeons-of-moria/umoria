@@ -519,7 +519,7 @@ bool spellSpeedAllMonsters(int speed);
 bool spellSleepAllMonsters();
 bool spellMassPolymorph();
 bool spellDetectEvil();
-bool hp_player(int adjustment);
+bool spellChangePlayerHitPoints(int adjustment);
 bool cure_confusion();
 bool cure_blindness();
 bool cure_poison();

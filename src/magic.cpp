@@ -52,7 +52,7 @@ static void castSpell(int spellID) {
             (void) spellLightArea(char_row, char_col);
             break;
         case 5:
-            (void) hp_player(diceDamageRoll(4, 4));
+            (void) spellChangePlayerHitPoints(diceDamageRoll(4, 4));
             break;
         case 6:
             (void) dungeonDetectSecretDoorsOnPanel();
