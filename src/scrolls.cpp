@@ -492,7 +492,7 @@ void readScroll() {
                 identified = dungeonDetectObjectOnPanel();
                 break;
             case 17:
-                identified = detect_trap();
+                identified = dungeonDetectTrapOnPanel();
                 break;
             case 18:
                 identified = detect_sdoor();

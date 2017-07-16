@@ -56,7 +56,7 @@ static void castSpell(int spellID) {
             break;
         case 6:
             (void) detect_sdoor();
-            (void) detect_trap();
+            (void) dungeonDetectTrapOnPanel();
             break;
         case 7:
             if (getDirectionWithMemory(CNIL, &dir)) {

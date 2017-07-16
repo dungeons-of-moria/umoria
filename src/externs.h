@@ -481,7 +481,7 @@ bool setMagicShopItems(int item_id);
 bool monsterSleep(int y, int x);
 bool dungeonDetectTreasureOnPanel();
 bool dungeonDetectObjectOnPanel();
-bool detect_trap();
+bool dungeonDetectTrapOnPanel();
 bool detect_sdoor();
 bool detect_invisible();
 bool light_area(int y, int x);

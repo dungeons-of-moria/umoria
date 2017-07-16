@@ -72,7 +72,7 @@ static bool dischargeStaff(Inventory_t *staff_ptr) {
                 identified = detect_sdoor();
                 break;
             case 3:
-                identified = detect_trap();
+                identified = dungeonDetectTrapOnPanel();
                 break;
             case 4:
                 identified = dungeonDetectTreasureOnPanel();

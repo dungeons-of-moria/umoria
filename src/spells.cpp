@@ -113,25 +113,24 @@ bool dungeonDetectObjectOnPanel() {
 }
 
 // Locates and displays traps on current panel -RAK-
-bool detect_trap() {
+bool dungeonDetectTrapOnPanel() {
     bool detected = false;
 
     for (int y = panel_row_min; y <= panel_row_max; y++) {
         for (int x = panel_col_min; x <= panel_col_max; x++) {
-            Cave_t *c_ptr = &cave[y][x];
+            Cave_t *tile = &cave[y][x];
 
-            if (c_ptr->tptr == 0) {
+            if (tile->tptr == 0) {
                 continue;
             }
 
-            if (treasure_list[c_ptr->tptr].tval == TV_INVIS_TRAP) {
-                c_ptr->fm = true;
+            if (treasure_list[tile->tptr].tval == TV_INVIS_TRAP) {
+                tile->fm = true;
                 dungeonChangeTrapVisibility(y, x);
-
                 detected = true;
-            } else if (treasure_list[c_ptr->tptr].tval == TV_CHEST) {
-                Inventory_t *t_ptr = &treasure_list[c_ptr->tptr];
-                spellItemIdentifyAndRemoveRandomInscription(t_ptr);
+            } else if (treasure_list[tile->tptr].tval == TV_CHEST) {
+                Inventory_t *item = &treasure_list[tile->tptr];
+                spellItemIdentifyAndRemoveRandomInscription(item);
             }
         }
     }
