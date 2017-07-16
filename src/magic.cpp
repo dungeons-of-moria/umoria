@@ -43,7 +43,7 @@ static void castSpell(int spellID) {
             }
             break;
         case 2:
-            (void) detect_monsters();
+            (void) spellDetectMonsters();
             break;
         case 3:
             playerTeleport(10);
