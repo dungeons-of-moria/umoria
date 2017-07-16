@@ -9,16 +9,16 @@
 #include "headers.h"
 #include "externs.h"
 
-static void insert_store(int store_num, int pos, int32_t icost, Inventory_t *i_ptr);
-static void store_create(int store_num, int16_t max_cost);
+static void storeItemInsert(int store_id, int pos, int32_t i_cost, Inventory_t *item);
+static void storeItemCreate(int store_id, int16_t max_cost);
 
-static int32_t getWeaponArmorBuyPrice(Inventory_t *i_ptr);
-static int32_t getAmmoBuyPrice(Inventory_t *i_ptr);
-static int32_t getPotionScrollBuyPrice(Inventory_t *i_ptr);
-static int32_t getFoodBuyPrice(Inventory_t *i_ptr);
-static int32_t getRingAmuletBuyPrice(Inventory_t *i_ptr);
-static int32_t getWandStaffBuyPrice(Inventory_t *i_ptr);
-static int32_t getPickShovelBuyPrice(Inventory_t *i_ptr);
+static int32_t getWeaponArmorBuyPrice(Inventory_t *item);
+static int32_t getAmmoBuyPrice(Inventory_t *item);
+static int32_t getPotionScrollBuyPrice(Inventory_t *item);
+static int32_t getFoodBuyPrice(Inventory_t *item);
+static int32_t getRingAmuletBuyPrice(Inventory_t *item);
+static int32_t getWandStaffBuyPrice(Inventory_t *item);
+static int32_t getPickShovelBuyPrice(Inventory_t *item);
 
 // Returns the value for any given object -RAK-
 int32_t item_value(Inventory_t *item) {
@@ -54,100 +54,100 @@ int32_t item_value(Inventory_t *item) {
     return value;
 }
 
-static int32_t getWeaponArmorBuyPrice(Inventory_t *i_ptr) {
-    if (!spellItemIdentified(i_ptr)) {
-        return game_objects[i_ptr->index].cost;
+static int32_t getWeaponArmorBuyPrice(Inventory_t *item) {
+    if (!spellItemIdentified(item)) {
+        return game_objects[item->index].cost;
     }
 
-    if (i_ptr->tval >= TV_BOW && i_ptr->tval <= TV_SWORD) {
-        if (i_ptr->tohit < 0 || i_ptr->todam < 0 || i_ptr->toac < 0) {
+    if (item->tval >= TV_BOW && item->tval <= TV_SWORD) {
+        if (item->tohit < 0 || item->todam < 0 || item->toac < 0) {
             return 0;
         }
 
-        return i_ptr->cost + (i_ptr->tohit + i_ptr->todam + i_ptr->toac) * 100;
+        return item->cost + (item->tohit + item->todam + item->toac) * 100;
     }
 
-    if (i_ptr->toac < 0) {
+    if (item->toac < 0) {
         return 0;
     }
 
-    return i_ptr->cost + i_ptr->toac * 100;
+    return item->cost + item->toac * 100;
 }
 
-static int32_t getAmmoBuyPrice(Inventory_t *i_ptr) {
-    if (!spellItemIdentified(i_ptr)) {
-        return game_objects[i_ptr->index].cost;
+static int32_t getAmmoBuyPrice(Inventory_t *item) {
+    if (!spellItemIdentified(item)) {
+        return game_objects[item->index].cost;
     }
 
-    if (i_ptr->tohit < 0 || i_ptr->todam < 0 || i_ptr->toac < 0) {
+    if (item->tohit < 0 || item->todam < 0 || item->toac < 0) {
         return 0;
     }
 
     // use 5, because missiles generally appear in groups of 20,
     // so 20 * 5 == 100, which is comparable to weapon bonus above
-    return i_ptr->cost + (i_ptr->tohit + i_ptr->todam + i_ptr->toac) * 5;
+    return item->cost + (item->tohit + item->todam + item->toac) * 5;
 }
 
-static int32_t getPotionScrollBuyPrice(Inventory_t *i_ptr) {
-    if (!itemSetColorlessAsIdentifed(i_ptr)) {
+static int32_t getPotionScrollBuyPrice(Inventory_t *item) {
+    if (!itemSetColorlessAsIdentifed(item)) {
         return 20;
     }
 
-    return i_ptr->cost;
+    return item->cost;
 }
 
-static int32_t getFoodBuyPrice(Inventory_t *i_ptr) {
-    if (i_ptr->subval < ITEM_SINGLE_STACK_MIN + MAX_MUSH && !itemSetColorlessAsIdentifed(i_ptr)) {
+static int32_t getFoodBuyPrice(Inventory_t *item) {
+    if (item->subval < ITEM_SINGLE_STACK_MIN + MAX_MUSH && !itemSetColorlessAsIdentifed(item)) {
         return 1;
     }
 
-    return i_ptr->cost;
+    return item->cost;
 }
 
-static int32_t getRingAmuletBuyPrice(Inventory_t *i_ptr) {
+static int32_t getRingAmuletBuyPrice(Inventory_t *item) {
     // player does not know what type of ring/amulet this is
-    if (!itemSetColorlessAsIdentifed(i_ptr)) {
+    if (!itemSetColorlessAsIdentifed(item)) {
         return 45;
     }
 
     // player knows what type of ring, but does not know whether it
     // is cursed or not, if refuse to buy cursed objects here, then
     // player can use this to 'identify' cursed objects
-    if (!spellItemIdentified(i_ptr)) {
-        return game_objects[i_ptr->index].cost;
+    if (!spellItemIdentified(item)) {
+        return game_objects[item->index].cost;
     }
 
-    return i_ptr->cost;
+    return item->cost;
 }
 
-static int32_t getWandStaffBuyPrice(Inventory_t *i_ptr) {
-    if (!itemSetColorlessAsIdentifed(i_ptr)) {
-        if (i_ptr->tval == TV_WAND) {
+static int32_t getWandStaffBuyPrice(Inventory_t *item) {
+    if (!itemSetColorlessAsIdentifed(item)) {
+        if (item->tval == TV_WAND) {
             return 50;
         }
 
         return 70;
     }
 
-    if (spellItemIdentified(i_ptr)) {
-        return i_ptr->cost + (i_ptr->cost / 20) * i_ptr->p1;
+    if (spellItemIdentified(item)) {
+        return item->cost + (item->cost / 20) * item->p1;
     }
 
-    return i_ptr->cost;
+    return item->cost;
 }
 
-static int32_t getPickShovelBuyPrice(Inventory_t *i_ptr) {
-    if (!spellItemIdentified(i_ptr)) {
-        return game_objects[i_ptr->index].cost;
+static int32_t getPickShovelBuyPrice(Inventory_t *item) {
+    if (!spellItemIdentified(item)) {
+        return game_objects[item->index].cost;
     }
 
-    if (i_ptr->p1 < 0) {
+    if (item->p1 < 0) {
         return 0;
     }
 
     // some digging tools start with non-zero p1 values, so only
     // multiply the plusses by 100, make sure result is positive
-    int32_t value = i_ptr->cost + (i_ptr->p1 - game_objects[i_ptr->index].p1) * 100;
+    int32_t value = item->cost + (item->p1 - game_objects[item->index].p1) * 100;
 
     if (value < 0) {
         value = 0;
@@ -212,16 +212,16 @@ bool store_check_num(int store_id, Inventory_t *item) {
 }
 
 // Insert INVEN_MAX at given location
-static void insert_store(int store_num, int pos, int32_t icost, Inventory_t *i_ptr) {
-    Store_t *s_ptr = &stores[store_num];
+static void storeItemInsert(int store_id, int pos, int32_t i_cost, Inventory_t *item) {
+    Store_t *store = &stores[store_id];
 
-    for (int i = s_ptr->store_ctr - 1; i >= pos; i--) {
-        s_ptr->store_inven[i + 1] = s_ptr->store_inven[i];
+    for (int i = store->store_ctr - 1; i >= pos; i--) {
+        store->store_inven[i + 1] = store->store_inven[i];
     }
 
-    s_ptr->store_inven[pos].sitem = *i_ptr;
-    s_ptr->store_inven[pos].scost = -icost;
-    s_ptr->store_ctr++;
+    store->store_inven[pos].sitem = *item;
+    store->store_inven[pos].scost = -i_cost;
+    store->store_ctr++;
 }
 
 // Add the item in INVEN_MAX to stores inventory. -RAK-
@@ -264,7 +264,7 @@ void store_carry(int store_id, int *index_id, Inventory_t *item) {
                 flag = true;
             }
         } else if (typ > i_ptr->tval) { // Insert into list
-            insert_store(store_id, item_val, icost, item);
+            storeItemInsert(store_id, item_val, icost, item);
             flag = true;
             *index_id = item_val;
         }
@@ -273,7 +273,7 @@ void store_carry(int store_id, int *index_id, Inventory_t *item) {
 
     // Becomes last item in list
     if (!flag) {
-        insert_store(store_id, (int) s_ptr->store_ctr, icost, item);
+        storeItemInsert(store_id, (int) s_ptr->store_ctr, icost, item);
         *index_id = s_ptr->store_ctr - 1;
     }
 }
@@ -333,32 +333,32 @@ void store_init() {
 }
 
 // Creates an item and inserts it into store's inven -RAK-
-static void store_create(int store_num, int16_t max_cost) {
-    int cur_pos = popt();
+static void storeItemCreate(int store_id, int16_t max_cost) {
+    int free_id = popt();
 
     for (int tries = 0; tries <= 3; tries++) {
-        int i = store_choices[store_num][randomNumber(STORE_CHOICES) - 1];
-        inventoryItemCopyTo(i, &treasure_list[cur_pos]);
-        magicTreasureMagicalAbility(cur_pos, OBJ_TOWN_LEVEL);
+        int id = store_choices[store_id][randomNumber(STORE_CHOICES) - 1];
+        inventoryItemCopyTo(id, &treasure_list[free_id]);
+        magicTreasureMagicalAbility(free_id, OBJ_TOWN_LEVEL);
 
-        Inventory_t *t_ptr = &treasure_list[cur_pos];
+        Inventory_t *item = &treasure_list[free_id];
 
-        if (store_check_num(store_num, t_ptr)) {
+        if (store_check_num(store_id, item)) {
             // Item must be good: cost > 0.
-            if (t_ptr->cost > 0 && t_ptr->cost < max_cost) {
+            if (item->cost > 0 && item->cost < max_cost) {
                 // equivalent to calling spellIdentifyItem(),
                 // except will not change the objects_identified array.
-                itemIdentifyAsStoreBought(t_ptr);
+                itemIdentifyAsStoreBought(item);
 
                 int dummy;
-                store_carry(store_num, &dummy, t_ptr);
+                store_carry(store_id, &dummy, item);
 
                 tries = 10;
             }
         }
     }
 
-    pusht((uint8_t) cur_pos);
+    pusht((uint8_t) free_id);
 }
 
 // Initialize and up-keep the store's inventory. -RAK-
@@ -386,7 +386,7 @@ void store_maint() {
             int16_t max_cost = store_owners[s_ptr->owner].max_cost;
 
             while (--j >= 0) {
-                store_create(store_id, max_cost);
+                storeItemCreate(store_id, max_cost);
             }
         }
     }
