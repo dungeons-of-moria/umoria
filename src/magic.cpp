@@ -60,7 +60,7 @@ static void castSpell(int spellID) {
             break;
         case 7:
             if (getDirectionWithMemory(CNIL, &dir)) {
-                fire_ball(char_row, char_col, dir, 12, GF_POISON_GAS, spell_names[6]);
+                spellFireBall(char_row, char_col, dir, 12, GF_POISON_GAS, spell_names[6]);
             }
             break;
         case 8:
@@ -134,7 +134,7 @@ static void castSpell(int spellID) {
             break;
         case 25:
             if (getDirectionWithMemory(CNIL, &dir)) {
-                fire_ball(char_row, char_col, dir, 48, GF_FROST, spell_names[24]);
+                spellFireBall(char_row, char_col, dir, 48, GF_FROST, spell_names[24]);
             }
             break;
         case 26:
@@ -150,7 +150,7 @@ static void castSpell(int spellID) {
             break;
         case 29:
             if (getDirectionWithMemory(CNIL, &dir)) {
-                fire_ball(char_row, char_col, dir, 72, GF_FIRE, spell_names[28]);
+                spellFireBall(char_row, char_col, dir, 72, GF_FIRE, spell_names[28]);
             }
             break;
         case 30:

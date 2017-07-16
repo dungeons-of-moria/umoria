@@ -84,23 +84,23 @@ static bool discharge_wand(Inventory_t *wand, int dir) {
                 identified = spellDisarmAllInDirection(row, col, dir);
                 break;
             case 19:
-                fire_ball(row, col, dir, 32, GF_LIGHTNING, "Lightning Ball");
+                spellFireBall(row, col, dir, 32, GF_LIGHTNING, "Lightning Ball");
                 identified = true;
                 break;
             case 20:
-                fire_ball(row, col, dir, 48, GF_FROST, "Cold Ball");
+                spellFireBall(row, col, dir, 48, GF_FROST, "Cold Ball");
                 identified = true;
                 break;
             case 21:
-                fire_ball(row, col, dir, 72, GF_FIRE, spell_names[28]);
+                spellFireBall(row, col, dir, 72, GF_FIRE, spell_names[28]);
                 identified = true;
                 break;
             case 22:
-                fire_ball(row, col, dir, 12, GF_POISON_GAS, spell_names[6]);
+                spellFireBall(row, col, dir, 12, GF_POISON_GAS, spell_names[6]);
                 identified = true;
                 break;
             case 23:
-                fire_ball(row, col, dir, 60, GF_ACID, "Acid Ball");
+                spellFireBall(row, col, dir, 60, GF_ACID, "Acid Ball");
                 identified = true;
                 break;
             case 24:

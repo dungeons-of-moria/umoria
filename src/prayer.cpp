@@ -109,7 +109,7 @@ static void playerRecitePrayer(int prayer_type) {
             break;
         case 18:
             if (getDirectionWithMemory(CNIL, &dir)) {
-                fire_ball(char_row, char_col, dir, (diceDamageRoll(3, 6) + py.misc.lev), GF_HOLY_ORB, "Black Sphere");
+                spellFireBall(char_row, char_col, dir, (diceDamageRoll(3, 6) + py.misc.lev), GF_HOLY_ORB, "Black Sphere");
             }
             break;
         case 19:

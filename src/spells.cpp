@@ -731,87 +731,86 @@ void spellFireBolt(int y, int x, int direction, int damage_hp, int spell_type, c
 }
 
 // Shoot a ball in a given direction.  Note that balls have an area affect. -RAK-
-void fire_ball(int y, int x, int direction, int damage_hp, int spell_type_id, const char *spell_name) {
-    int thit = 0;
-    int tkill = 0;
-    int max_dis = 2;
+void spellFireBall(int y, int x, int direction, int damage_hp, int spell_type, const char *spell_name) {
+    int total_hits = 0;
+    int total_kills = 0;
+    int max_distance = 2;
 
     bool (*destroy)(Inventory_t *);
     int harm_type;
     uint32_t weapon_type;
-    getAreaAffectFlags(spell_type_id, &weapon_type, &harm_type, &destroy);
+    getAreaAffectFlags(spell_type, &weapon_type, &harm_type, &destroy);
 
-    int dist = 0;
+    int distance = 0;
 
     bool finished = false;
     while (!finished) {
-        int oldy = y;
-        int oldx = x;
+        int old_y = y;
+        int old_x = x;
 
         (void) playerMovePosition(direction, &y, &x);
-        dist++;
+        distance++;
 
-        dungeonLiteSpot(oldy, oldx);
+        dungeonLiteSpot(old_y, old_x);
 
-        if (dist > OBJ_BOLT_RANGE) {
+        if (distance > OBJ_BOLT_RANGE) {
             finished = true;
             continue;
         }
 
-        Cave_t *c_ptr = &cave[y][x];
+        Cave_t *tile = &cave[y][x];
 
-        if (c_ptr->fval >= MIN_CLOSED_SPACE || c_ptr->cptr > 1) {
+        if (tile->fval >= MIN_CLOSED_SPACE || tile->cptr > 1) {
             finished = true;
 
-            if (c_ptr->fval >= MIN_CLOSED_SPACE) {
-                y = oldy;
-                x = oldx;
+            if (tile->fval >= MIN_CLOSED_SPACE) {
+                y = old_y;
+                x = old_x;
             }
 
             // The ball hits and explodes.
 
             // The explosion.
-            for (int row = y - max_dis; row <= y + max_dis; row++) {
-                for (int col = x - max_dis; col <= x + max_dis; col++) {
-                    if (coordInBounds(row, col) && coordDistanceBetween(y, x, row, col) <= max_dis && los(y, x, row, col)) {
-                        c_ptr = &cave[row][col];
+            for (int row = y - max_distance; row <= y + max_distance; row++) {
+                for (int col = x - max_distance; col <= x + max_distance; col++) {
+                    if (coordInBounds(row, col) && coordDistanceBetween(y, x, row, col) <= max_distance && los(y, x, row, col)) {
+                        tile = &cave[row][col];
 
-                        if (c_ptr->tptr != 0 && (*destroy)(&treasure_list[c_ptr->tptr])) {
+                        if (tile->tptr != 0 && (*destroy)(&treasure_list[tile->tptr])) {
                             (void) dungeonDeleteObject(row, col);
                         }
 
-                        if (c_ptr->fval <= MAX_OPEN_SPACE) {
-                            if (c_ptr->cptr > 1) {
-                                Monster_t *m_ptr = &monsters[c_ptr->cptr];
-                                Creature_t *r_ptr = &creatures_list[m_ptr->mptr];
+                        if (tile->fval <= MAX_OPEN_SPACE) {
+                            if (tile->cptr > 1) {
+                                Monster_t *monster = &monsters[tile->cptr];
+                                Creature_t *creature = &creatures_list[monster->mptr];
 
                                 // lite up creature if visible, temp set pl so that monsterUpdateVisibility works
-                                bool savedLitStatus = c_ptr->pl;
-                                c_ptr->pl = true;
-                                monsterUpdateVisibility((int) c_ptr->cptr);
+                                bool saved_lit_status = tile->pl;
+                                tile->pl = true;
+                                monsterUpdateVisibility((int) tile->cptr);
 
-                                thit++;
-                                int dam = damage_hp;
+                                total_hits++;
+                                int damage = damage_hp;
 
-                                if (harm_type & r_ptr->cdefense) {
-                                    dam = dam * 2;
-                                    if (m_ptr->ml) {
-                                        creature_recall[m_ptr->mptr].r_cdefense |= harm_type;
+                                if (harm_type & creature->cdefense) {
+                                    damage = damage * 2;
+                                    if (monster->ml) {
+                                        creature_recall[monster->mptr].r_cdefense |= harm_type;
                                     }
-                                } else if (weapon_type & r_ptr->spells) {
-                                    dam = dam / 4;
-                                    if (m_ptr->ml) {
-                                        creature_recall[m_ptr->mptr].r_spells |= weapon_type;
+                                } else if (weapon_type & creature->spells) {
+                                    damage = damage / 4;
+                                    if (monster->ml) {
+                                        creature_recall[monster->mptr].r_spells |= weapon_type;
                                     }
                                 }
 
-                                dam = (dam / (coordDistanceBetween(row, col, y, x) + 1));
-                                int k = monsterTakeHit((int) c_ptr->cptr, dam);
+                                damage = (damage / (coordDistanceBetween(row, col, y, x) + 1));
 
-                                if (k >= 0) {
-                                    tkill++;
+                                if (monsterTakeHit((int) tile->cptr, damage) >= 0) {
+                                    total_kills++;
                                 }
-                                c_ptr->pl = savedLitStatus;
+                                tile->pl = saved_lit_status;
                             } else if (coordInsidePanel(row, col) && py.flags.blind < 1) {
                                 putChar('*', row, col);
                             }
@@ -825,30 +824,29 @@ void fire_ball(int y, int x, int direction, int damage_hp, int spell_type_id, co
 
             for (int row = (y - 2); row <= (y + 2); row++) {
                 for (int col = (x - 2); col <= (x + 2); col++) {
-                    if (coordInBounds(row, col) && coordInsidePanel(row, col) && coordDistanceBetween(y, x, row, col) <= max_dis) {
+                    if (coordInBounds(row, col) && coordInsidePanel(row, col) && coordDistanceBetween(y, x, row, col) <= max_distance) {
                         dungeonLiteSpot(row, col);
                     }
                 }
             }
             // End  explosion.
 
-            if (thit == 1) {
-                vtype_t out_val;
-                (void) sprintf(out_val, "The %s envelops a creature!", spell_name);
-                printMessage(out_val);
-            } else if (thit > 1) {
-                vtype_t out_val;
-                (void) sprintf(out_val, "The %s envelops several creatures!", spell_name);
-                printMessage(out_val);
+            vtype_t msg;
+            if (total_hits == 1) {
+                (void) sprintf(msg, "The %s envelops a creature!", spell_name);
+                printMessage(msg);
+            } else if (total_hits > 1) {
+                (void) sprintf(msg, "The %s envelops several creatures!", spell_name);
+                printMessage(msg);
             }
 
-            if (tkill == 1) {
+            if (total_kills == 1) {
                 printMessage("There is a scream of agony!");
-            } else if (tkill > 1) {
+            } else if (total_kills > 1) {
                 printMessage("There are several screams of agony!");
             }
 
-            if (tkill >= 0) {
+            if (total_kills >= 0) {
                 displayCharacterExperience();
             }
             // End ball hitting.
@@ -861,7 +859,7 @@ void fire_ball(int y, int x, int direction, int damage_hp, int spell_type_id, co
     }
 }
 
-// Breath weapon works like a fire_ball, but affects the player.
+// Breath weapon works like a spellFireBall, but affects the player.
 // Note the area affect. -RAK-
 void breath(int x, int y, int monster_id, int damage_hp, char *spell_name, int spell_type_id) {
     int max_dis = 2;
