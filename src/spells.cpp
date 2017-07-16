@@ -1484,23 +1484,23 @@ bool spellBuildWall(int y, int x, int direction) {
 }
 
 // Replicate a creature -RAK-
-bool clone_monster(int y, int x, int direction) {
-    int dist = 0;
-
+bool spellCloneMonster(int y, int x, int direction) {
+    int distance = 0;
     bool finished = false;
+
     while (!finished) {
         (void) playerMovePosition(direction, &y, &x);
-        dist++;
+        distance++;
 
-        Cave_t *c_ptr = &cave[y][x];
+        Cave_t *tile = &cave[y][x];
 
-        if (dist > OBJ_BOLT_RANGE || c_ptr->fval >= MIN_CLOSED_SPACE) {
+        if (distance > OBJ_BOLT_RANGE || tile->fval >= MIN_CLOSED_SPACE) {
             finished = true;
-        } else if (c_ptr->cptr > 1) {
-            monsters[c_ptr->cptr].csleep = 0;
+        } else if (tile->cptr > 1) {
+            monsters[tile->cptr].csleep = 0;
 
             // monptr of 0 is safe here, since can't reach here from creatures
-            return monsterMultiply(y, x, (int) monsters[c_ptr->cptr].mptr, 0);
+            return monsterMultiply(y, x, (int) monsters[tile->cptr].mptr, 0);
         }
     }
 
