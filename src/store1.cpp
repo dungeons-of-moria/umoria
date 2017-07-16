@@ -312,22 +312,22 @@ void storeDestroy(int store_id, int item_id, bool only_one_of) {
 }
 
 // Initializes the stores with owners -RAK-
-void store_init() {
-    int i = MAX_OWNERS / MAX_STORES;
+void storeInitializeOwners() {
+    int count = MAX_OWNERS / MAX_STORES;
 
-    for (int j = 0; j < MAX_STORES; j++) {
-        Store_t *s_ptr = &stores[j];
+    for (int store_id = 0; store_id < MAX_STORES; store_id++) {
+        Store_t *store = &stores[store_id];
 
-        s_ptr->owner = (uint8_t) (MAX_STORES * (randomNumber(i) - 1) + j);
-        s_ptr->insult_cur = 0;
-        s_ptr->store_open = 0;
-        s_ptr->store_ctr = 0;
-        s_ptr->good_buy = 0;
-        s_ptr->bad_buy = 0;
+        store->owner = (uint8_t) (MAX_STORES * (randomNumber(count) - 1) + store_id);
+        store->insult_cur = 0;
+        store->store_open = 0;
+        store->store_ctr = 0;
+        store->good_buy = 0;
+        store->bad_buy = 0;
 
-        for (int k = 0; k < STORE_INVEN_MAX; k++) {
-            inventoryItemCopyTo(OBJ_NOTHING, &s_ptr->store_inven[k].sitem);
-            s_ptr->store_inven[k].scost = 0;
+        for (int item_id = 0; item_id < STORE_INVEN_MAX; item_id++) {
+            inventoryItemCopyTo(OBJ_NOTHING, &store->store_inven[item_id].sitem);
+            store->store_inven[item_id].scost = 0;
         }
     }
 }

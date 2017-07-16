@@ -110,7 +110,7 @@ int main(int argc, char *argv[]) {
     init_t_level();
 
     // Init the store inventories
-    store_init();
+    storeInitializeOwners();
 
     // If -n is not passed, the calling routine will know
     // save file name, hence, this code is not necessary.
