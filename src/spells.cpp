@@ -1058,31 +1058,33 @@ bool spellChangeMonsterHitPoints(int y, int x, int direction, int damage_hp) {
 }
 
 // Drains life; note it must be living. -RAK-
-bool drain_life(int y, int x, int direction) {
+bool spellDrainLifeFromMonster(int y, int x, int direction) {
+    int distance = 0;
     bool drained = false;
-
-    int dist = 0;
-
     bool finished = false;
+
     while (!finished) {
         (void) playerMovePosition(direction, &y, &x);
-        dist++;
+        distance++;
 
-        Cave_t *c_ptr = &cave[y][x];
+        Cave_t *tile = &cave[y][x];
 
-        if (dist > OBJ_BOLT_RANGE || c_ptr->fval >= MIN_CLOSED_SPACE) {
+        if (distance > OBJ_BOLT_RANGE || tile->fval >= MIN_CLOSED_SPACE) {
             finished = true;
-        } else if (c_ptr->cptr > 1) {
+            continue;
+        }
+
+        if (tile->cptr > 1) {
             finished = true;
 
-            Monster_t *m_ptr = &monsters[c_ptr->cptr];
-            Creature_t *r_ptr = &creatures_list[m_ptr->mptr];
+            Monster_t *monster = &monsters[tile->cptr];
+            Creature_t *creature = &creatures_list[monster->mptr];
 
-            if ((r_ptr->cdefense & CD_UNDEAD) == 0) {
+            if ((creature->cdefense & CD_UNDEAD) == 0) {
                 vtype_t name;
-                monsterNameDescription(name, m_ptr->ml, r_ptr->name);
+                monsterNameDescription(name, monster->ml, creature->name);
 
-                if (monsterTakeHit((int) c_ptr->cptr, 75) >= 0) {
+                if (monsterTakeHit((int) tile->cptr, 75) >= 0) {
                     printMonsterActionText(name, "dies in a fit of agony.");
                     displayCharacterExperience();
                 } else {
@@ -1091,7 +1093,7 @@ bool drain_life(int y, int x, int direction) {
 
                 drained = true;
             } else {
-                creature_recall[m_ptr->mptr].r_cdefense |= CD_UNDEAD;
+                creature_recall[monster->mptr].r_cdefense |= CD_UNDEAD;
             }
         }
     }

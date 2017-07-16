@@ -62,7 +62,7 @@ static bool discharge_wand(Inventory_t *wand, int dir) {
                 identified = sleep_monster(row, col, dir);
                 break;
             case 12:
-                identified = drain_life(row, col, dir);
+                identified = spellDrainLifeFromMonster(row, col, dir);
                 break;
             case 13:
                 identified = td_destroy2(row, col, dir);
