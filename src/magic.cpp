@@ -65,7 +65,7 @@ static void castSpell(int spellID) {
             break;
         case 8:
             if (getDirectionWithMemory(CNIL, &dir)) {
-                (void) confuse_monster(char_row, char_col, dir);
+                (void) spellConfuseMonster(char_row, char_col, dir);
             }
             break;
         case 9:

@@ -74,7 +74,7 @@ static void playerRecitePrayer(int prayer_type) {
             break;
         case 9:
             if (getDirectionWithMemory(CNIL, &dir)) {
-                (void) confuse_monster(char_row, char_col, dir);
+                (void) spellConfuseMonster(char_row, char_col, dir);
             }
             break;
         case 10:

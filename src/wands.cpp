@@ -56,7 +56,7 @@ static bool discharge_wand(Inventory_t *wand, int dir) {
                 identified = spellSpeedMonster(row, col, dir, -1);
                 break;
             case 10:
-                identified = confuse_monster(row, col, dir);
+                identified = spellConfuseMonster(row, col, dir);
                 break;
             case 11:
                 identified = sleep_monster(row, col, dir);
