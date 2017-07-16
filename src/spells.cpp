@@ -1846,7 +1846,7 @@ bool playerCurePoison() {
 }
 
 // Cure the players fear -RAK-
-bool remove_fear() {
+bool playerRemoveFear() {
     if (py.flags.afraid > 1) {
         py.flags.afraid = 1;
         return true;

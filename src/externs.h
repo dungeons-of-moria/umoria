@@ -523,7 +523,7 @@ bool spellChangePlayerHitPoints(int adjustment);
 bool playerCureConfusion();
 bool playerCureBlindness();
 bool playerCurePoison();
-bool remove_fear();
+bool playerRemoveFear();
 void earthquake();
 bool protect_evil();
 void create_food();

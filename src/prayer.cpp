@@ -58,7 +58,7 @@ static void playerRecitePrayer(int prayer_type) {
             bless(randomNumber(12) + 12);
             break;
         case 4:
-            (void) remove_fear();
+            (void) playerRemoveFear();
             break;
         case 5:
             (void) spellLightArea(char_row, char_col);
@@ -149,7 +149,7 @@ static void playerRecitePrayer(int prayer_type) {
             warding_glyph();
             break;
         case 31:
-            (void) remove_fear();
+            (void) playerRemoveFear();
             (void) playerCurePoison();
             (void) spellChangePlayerHitPoints(1000);
 

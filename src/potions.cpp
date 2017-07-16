@@ -231,7 +231,7 @@ static bool playerDrinkPotion(uint32_t flags, uint8_t item_id) {
                 py.flags.shero += randomNumber(25) + 25;
                 break;
             case 39:
-                identified = remove_fear();
+                identified = playerRemoveFear();
                 break;
             case 40:
                 identified = restore_level();

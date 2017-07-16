@@ -1456,7 +1456,7 @@ static void doWizardCommands(char com_val) {
             (void) playerCureBlindness();
             (void) playerCureConfusion();
             (void) playerCurePoison();
-            (void) remove_fear();
+            (void) playerRemoveFear();
             (void) playerStatRestore(A_STR);
             (void) playerStatRestore(A_INT);
             (void) playerStatRestore(A_WIS);
