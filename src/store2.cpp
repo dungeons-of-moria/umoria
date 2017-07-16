@@ -959,7 +959,7 @@ static bool store_sell(int store_num, int *cur_top) {
         printMessage(out_val);
 
         int item_pos;
-        store_carry(store_num, &item_pos, &sold_obj);
+        storeCarry(store_num, &item_pos, &sold_obj);
 
         playerStrength();
 

@@ -225,56 +225,56 @@ static void storeItemInsert(int store_id, int pos, int32_t i_cost, Inventory_t *
 }
 
 // Add the item in INVEN_MAX to stores inventory. -RAK-
-void store_carry(int store_id, int *index_id, Inventory_t *item) {
+void storeCarry(int store_id, int *index_id, Inventory_t *item) {
     *index_id = -1;
 
-    int32_t icost, dummy;
-    if (storeItemSellPrice(store_id, &dummy, &icost, item) < 1) {
+    int32_t i_cost, dummy;
+    if (storeItemSellPrice(store_id, &dummy, &i_cost, item) < 1) {
         return;
     }
 
-    Store_t *s_ptr = &stores[store_id];
+    Store_t *store = &stores[store_id];
 
-    int item_val = 0;
+    int item_id = 0;
     int item_num = item->number;
-    int typ = item->tval;
-    int subt = item->subval;
+    int item_category = item->tval;
+    int item_sub_catory = item->subval;
 
     bool flag = false;
     do {
-        Inventory_t *i_ptr = &s_ptr->store_inven[item_val].sitem;
+        Inventory_t *store_item = &store->store_inven[item_id].sitem;
 
-        if (typ == i_ptr->tval) {
-            if (subt == i_ptr->subval && // Adds to other item
-                subt >= ITEM_SINGLE_STACK_MIN && (subt < ITEM_GROUP_MIN || i_ptr->p1 == item->p1)) {
-                *index_id = item_val;
-                i_ptr->number += item_num;
+        if (item_category == store_item->tval) {
+            if (item_sub_catory == store_item->subval && // Adds to other item
+                item_sub_catory >= ITEM_SINGLE_STACK_MIN && (item_sub_catory < ITEM_GROUP_MIN || store_item->p1 == item->p1)) {
+                *index_id = item_id;
+                store_item->number += item_num;
 
                 // must set new scost for group items, do this only for items
                 // strictly greater than group_min, not for torches, this
                 // must be recalculated for entire group
-                if (subt > ITEM_GROUP_MIN) {
-                    (void) storeItemSellPrice(store_id, &dummy, &icost, i_ptr);
-                    s_ptr->store_inven[item_val].scost = -icost;
-                } else if (i_ptr->number > 24) {
+                if (item_sub_catory > ITEM_GROUP_MIN) {
+                    (void) storeItemSellPrice(store_id, &dummy, &i_cost, store_item);
+                    store->store_inven[item_id].scost = -i_cost;
+                } else if (store_item->number > 24) {
                     // must let group objects (except torches) stack over 24
                     // since there may be more than 24 in the group
-                    i_ptr->number = 24;
+                    store_item->number = 24;
                 }
                 flag = true;
             }
-        } else if (typ > i_ptr->tval) { // Insert into list
-            storeItemInsert(store_id, item_val, icost, item);
+        } else if (item_category > store_item->tval) { // Insert into list
+            storeItemInsert(store_id, item_id, i_cost, item);
             flag = true;
-            *index_id = item_val;
+            *index_id = item_id;
         }
-        item_val++;
-    } while (item_val < s_ptr->store_ctr && !flag);
+        item_id++;
+    } while (item_id < store->store_ctr && !flag);
 
     // Becomes last item in list
     if (!flag) {
-        storeItemInsert(store_id, (int) s_ptr->store_ctr, icost, item);
-        *index_id = s_ptr->store_ctr - 1;
+        storeItemInsert(store_id, (int) store->store_ctr, i_cost, item);
+        *index_id = store->store_ctr - 1;
     }
 }
 
@@ -351,7 +351,7 @@ static void storeItemCreate(int store_id, int16_t max_cost) {
                 itemIdentifyAsStoreBought(item);
 
                 int dummy;
-                store_carry(store_id, &dummy, item);
+                storeCarry(store_id, &dummy, item);
 
                 tries = 10;
             }
