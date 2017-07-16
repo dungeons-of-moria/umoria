@@ -299,31 +299,31 @@ static bool scrollCurseWeapon() {
     return true;
 }
 
-static bool readEnchantArmorScroll() {
-    int id = inventoryItemIdOfCursedEquipment();
+static bool scrollEnchantArmor() {
+    int item_id = inventoryItemIdOfCursedEquipment();
 
-    if (id <= 0) {
+    if (item_id <= 0) {
         return false;
     }
 
-    Inventory_t *i_ptr = &inventory[id];
+    Inventory_t *item = &inventory[item_id];
 
     obj_desc_t msg, desc;
-    itemDescription(desc, i_ptr, false);
+    itemDescription(desc, item, false);
 
     (void) sprintf(msg, "Your %s glows brightly!", desc);
     printMessage(msg);
 
-    bool flag = false;
+    bool enchanted = false;
 
-    for (int k = 0; k < randomNumber(2) + 1; k++) {
-        if (enchant(&i_ptr->toac, 10)) {
-            flag = true;
+    for (int i = 0; i < randomNumber(2) + 1; i++) {
+        if (enchant(&item->toac, 10)) {
+            enchanted = true;
         }
     }
 
-    if (flag) {
-        i_ptr->flags &= ~TR_CURSED;
+    if (enchanted) {
+        item->flags &= ~TR_CURSED;
         playerRecalculateBonuses();
     } else {
         printMessage("The enchantment fails.");
@@ -549,7 +549,7 @@ void read_scroll() {
                 identified = scrollCurseWeapon();
                 break;
             case 35:
-                identified = readEnchantArmorScroll();
+                identified = scrollEnchantArmor();
                 break;
             case 36:
                 identified = readCurseArmorScroll();
