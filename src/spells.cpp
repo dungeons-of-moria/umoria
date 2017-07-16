@@ -22,11 +22,11 @@ static void printMonsterActionText(std::string name, std::string action) {
 // staves routines, and are occasionally called from other areas.
 // Now included are creature spells also.           -RAK
 
-static void monster_name(char *description, bool monsterLit, const char *monsterName) {
-    if (!monsterLit) {
-        (void) strcpy(description, "It");
+static void monsterNameDescription(char *name_description, bool is_lit, const char *real_name) {
+    if (!is_lit) {
+        (void) strcpy(name_description, "It");
     } else {
-        (void) sprintf(description, "The %s", monsterName);
+        (void) sprintf(name_description, "The %s", real_name);
     }
 }
 
@@ -52,7 +52,7 @@ bool sleep_monsters1(int y, int x) {
             Creature_t *r_ptr = &creatures_list[m_ptr->mptr];
 
             vtype_t name;
-            monster_name(name, m_ptr->ml, r_ptr->name);
+            monsterNameDescription(name, m_ptr->ml, r_ptr->name);
 
             if (randomNumber(MAX_MONS_LEVEL) < r_ptr->level || (CD_NO_SLEEP & r_ptr->cdefense)) {
                 if (m_ptr->ml && (r_ptr->cdefense & CD_NO_SLEEP)) {
@@ -489,7 +489,7 @@ static void lightLineTouchesMonster(int monsterID) {
     monsterUpdateVisibility(monsterID);
 
     vtype_t name;
-    monster_name(name, monster->ml, creature->name);
+    monsterNameDescription(name, monster->ml, creature->name);
 
     if (CD_LIGHT & creature->cdefense) {
         if (monster->ml) {
@@ -679,7 +679,7 @@ static void fireBoltTouchesMonster(Cave_t *tile, int dam, int harmType, uint32_t
         }
     }
 
-    monster_name(name, monster->ml, creature->name);
+    monsterNameDescription(name, monster->ml, creature->name);
 
     if (monsterTakeHit((int) tile->cptr, dam) >= 0) {
         printMonsterActionText(name, "dies in a fit of agony.");
@@ -1036,7 +1036,7 @@ bool hp_monster(int y, int x, int direction, int damage_hp) {
             Creature_t *r_ptr = &creatures_list[m_ptr->mptr];
 
             vtype_t name;
-            monster_name(name, m_ptr->ml, r_ptr->name);
+            monsterNameDescription(name, m_ptr->ml, r_ptr->name);
 
             if (monsterTakeHit((int) c_ptr->cptr, damage_hp) >= 0) {
                 printMonsterActionText(name, "dies in a fit of agony.");
@@ -1075,7 +1075,7 @@ bool drain_life(int y, int x, int direction) {
 
             if ((r_ptr->cdefense & CD_UNDEAD) == 0) {
                 vtype_t name;
-                monster_name(name, m_ptr->ml, r_ptr->name);
+                monsterNameDescription(name, m_ptr->ml, r_ptr->name);
 
                 if (monsterTakeHit((int) c_ptr->cptr, 75) >= 0) {
                     printMonsterActionText(name, "dies in a fit of agony.");
@@ -1117,7 +1117,7 @@ bool speed_monster(int y, int x, int direction, int speed) {
             Creature_t *r_ptr = &creatures_list[m_ptr->mptr];
 
             vtype_t name;
-            monster_name(name, m_ptr->ml, r_ptr->name);
+            monsterNameDescription(name, m_ptr->ml, r_ptr->name);
 
             if (speed > 0) {
                 m_ptr->cspeed += speed;
@@ -1166,7 +1166,7 @@ bool confuse_monster(int y, int x, int direction) {
             Creature_t *r_ptr = &creatures_list[m_ptr->mptr];
 
             vtype_t name;
-            monster_name(name, m_ptr->ml, r_ptr->name);
+            monsterNameDescription(name, m_ptr->ml, r_ptr->name);
 
             if (randomNumber(MAX_MONS_LEVEL) < r_ptr->level || (CD_NO_SLEEP & r_ptr->cdefense)) {
                 if (m_ptr->ml && (r_ptr->cdefense & CD_NO_SLEEP)) {
@@ -1220,7 +1220,7 @@ bool sleep_monster(int y, int x, int direction) {
             Creature_t *r_ptr = &creatures_list[m_ptr->mptr];
 
             vtype_t name;
-            monster_name(name, m_ptr->ml, r_ptr->name);
+            monsterNameDescription(name, m_ptr->ml, r_ptr->name);
 
             if (randomNumber(MAX_MONS_LEVEL) < r_ptr->level || (CD_NO_SLEEP & r_ptr->cdefense)) {
                 if (m_ptr->ml && (r_ptr->cdefense & CD_NO_SLEEP)) {
@@ -1302,7 +1302,7 @@ bool wall_to_mud(int y, int x, int direction) {
 
             if (CD_STONE & r_ptr->cdefense) {
                 vtype_t name;
-                monster_name(name, m_ptr->ml, r_ptr->name);
+                monsterNameDescription(name, m_ptr->ml, r_ptr->name);
 
                 // Should get these messages even if the monster is not visible.
                 int i = monsterTakeHit((int) c_ptr->cptr, 100);
@@ -1398,7 +1398,7 @@ bool poly_monster(int y, int x, int direction) {
                 }
             } else {
                 vtype_t name;
-                monster_name(name, m_ptr->ml, r_ptr->name);
+                monsterNameDescription(name, m_ptr->ml, r_ptr->name);
                 printMonsterActionText(name, "is unaffected.");
             }
         }
@@ -1446,7 +1446,7 @@ bool build_wall(int y, int x, int direction) {
                 }
 
                 vtype_t name;
-                monster_name(name, m_ptr->ml, r_ptr->name);
+                monsterNameDescription(name, m_ptr->ml, r_ptr->name);
 
                 printMonsterActionText(name, "wails out in pain!");
 
@@ -1660,7 +1660,7 @@ bool speed_monsters(int speed) {
         Creature_t *r_ptr = &creatures_list[m_ptr->mptr];
 
         vtype_t name;
-        monster_name(name, m_ptr->ml, r_ptr->name);
+        monsterNameDescription(name, m_ptr->ml, r_ptr->name);
 
         if (m_ptr->cdis > MAX_SIGHT || !los(char_row, char_col, (int) m_ptr->fy, (int) m_ptr->fx)) {
             continue; // do nothing
@@ -1700,7 +1700,7 @@ bool sleep_monsters2() {
         Creature_t *r_ptr = &creatures_list[m_ptr->mptr];
 
         vtype_t name;
-        monster_name(name, m_ptr->ml, r_ptr->name);
+        monsterNameDescription(name, m_ptr->ml, r_ptr->name);
 
         if (m_ptr->cdis > MAX_SIGHT || !los(char_row, char_col, (int) m_ptr->fy, (int) m_ptr->fx)) {
             continue; // do nothing
@@ -1859,7 +1859,7 @@ static void earthquakeHitsMonster(int monsterID) {
         }
 
         vtype_t name;
-        monster_name(name, monster->ml, creature->name);
+        monsterNameDescription(name, monster->ml, creature->name);
 
         printMonsterActionText(name, "wails out in pain!");
 
@@ -1957,7 +1957,7 @@ bool dispel_creature(int creature_defense, int damage) {
             dispelled = true;
 
             vtype_t name;
-            monster_name(name, m_ptr->ml, r_ptr->name);
+            monsterNameDescription(name, m_ptr->ml, r_ptr->name);
 
             int hit = monsterTakeHit(id, randomNumber(damage));
 
@@ -1987,7 +1987,7 @@ bool turn_undead() {
 
         if (m_ptr->cdis <= MAX_SIGHT && (CD_UNDEAD & r_ptr->cdefense) && los(char_row, char_col, (int) m_ptr->fy, (int) m_ptr->fx)) {
             vtype_t name;
-            monster_name(name, m_ptr->ml, r_ptr->name);
+            monsterNameDescription(name, m_ptr->ml, r_ptr->name);
 
             if (py.misc.lev + 1 > r_ptr->level || randomNumber(5) == 1) {
                 if (m_ptr->ml) {
