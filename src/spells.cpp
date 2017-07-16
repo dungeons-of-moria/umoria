@@ -225,24 +225,27 @@ bool dungeonLightArea(int y, int x) {
 }
 
 // Darken an area, opposite of light area -RAK-
-bool unlight_area(int y, int x) {
+bool dungeonDarkenArea(int y, int x) {
     bool darkened = false;
 
     if (cave[y][x].lr && current_dungeon_level > 0) {
-        int tmp1 = (SCREEN_HEIGHT / 2);
-        int tmp2 = (SCREEN_WIDTH / 2);
-        int start_row = (y / tmp1) * tmp1 + 1;
-        int start_col = (x / tmp2) * tmp2 + 1;
-        int end_row = start_row + tmp1 - 1;
-        int end_col = start_col + tmp2 - 1;
+        int half_height = (SCREEN_HEIGHT / 2);
+        int half_width = (SCREEN_WIDTH / 2);
+        int start_row = (y / half_height) * half_height + 1;
+        int start_col = (x / half_width) * half_width + 1;
+        int end_row = start_row + half_height - 1;
+        int end_col = start_col + half_width - 1;
 
         for (int row = start_row; row <= end_row; row++) {
             for (int col = start_col; col <= end_col; col++) {
-                Cave_t *c_ptr = &cave[row][col];
-                if (c_ptr->lr && c_ptr->fval <= MAX_CAVE_FLOOR) {
-                    c_ptr->pl = false;
-                    c_ptr->fval = DARK_FLOOR;
+                Cave_t *tile = &cave[row][col];
+
+                if (tile->lr && tile->fval <= MAX_CAVE_FLOOR) {
+                    tile->pl = false;
+                    tile->fval = DARK_FLOOR;
+
                     dungeonLiteSpot(row, col);
+
                     if (!caveTileVisible(row, col)) {
                         darkened = true;
                     }
@@ -252,10 +255,11 @@ bool unlight_area(int y, int x) {
     } else {
         for (int row = y - 1; row <= y + 1; row++) {
             for (int col = x - 1; col <= x + 1; col++) {
-                Cave_t *c_ptr = &cave[row][col];
-                if (c_ptr->fval == CORR_FLOOR && c_ptr->pl) {
+                Cave_t *tile = &cave[row][col];
+
+                if (tile->fval == CORR_FLOOR && tile->pl) {
                     // pl could have been set by star-lite wand, etc
-                    c_ptr->pl = false;
+                    tile->pl = false;
                     darkened = true;
                 }
             }

@@ -530,7 +530,7 @@ void readScroll() {
                 identified = true;
                 break;
             case 27:
-                identified = unlight_area(char_row, char_col);
+                identified = dungeonDarkenArea(char_row, char_col);
                 break;
             case 28:
                 identified = protect_evil();
