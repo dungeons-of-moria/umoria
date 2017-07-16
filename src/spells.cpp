@@ -482,12 +482,12 @@ bool spellDetectMonsters() {
 }
 
 // Update monster when light line spell touches it.
-static void lightLineTouchesMonster(int monsterID) {
-    Monster_t *monster = &monsters[monsterID];
+static void spellLightLineTouchesMonster(int monster_id) {
+    Monster_t *monster = &monsters[monster_id];
     Creature_t *creature = &creatures_list[monster->mptr];
 
     // light up and draw monster
-    monsterUpdateVisibility(monsterID);
+    monsterUpdateVisibility(monster_id);
 
     vtype_t name;
     monsterNameDescription(name, monster->ml, creature->name);
@@ -497,7 +497,7 @@ static void lightLineTouchesMonster(int monsterID) {
             creature_recall[monster->mptr].r_cdefense |= CD_LIGHT;
         }
 
-        if (monsterTakeHit(monsterID, diceDamageRoll(2, 8) >= 0)) {
+        if (monsterTakeHit(monster_id, diceDamageRoll(2, 8) >= 0)) {
             printMonsterActionText(name, "shrivels away in the light!");
             displayCharacterExperience();
         } else {
@@ -537,7 +537,7 @@ void light_line(int x, int y, int direction) {
         c_ptr->pl = true;
 
         if (c_ptr->cptr > 1) {
-            lightLineTouchesMonster((int) c_ptr->cptr);
+            spellLightLineTouchesMonster((int) c_ptr->cptr);
         }
 
         // move must be at end because want to light up current spot
