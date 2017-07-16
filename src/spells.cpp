@@ -2242,7 +2242,7 @@ bool spellEnchantItem(int16_t *plusses, int16_t max_bonus_limit) {
 }
 
 // Removes curses from items in inventory -RAK-
-bool remove_curse() {
+bool spellRemoveCurseFromAllItems() {
     bool removed = false;
 
     for (int id = INVEN_WIELD; id <= INVEN_OUTER; id++) {

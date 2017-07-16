@@ -136,7 +136,7 @@ static bool dischargeStaff(Inventory_t *staff_ptr) {
                 identified = spellMassPolymorph();
                 break;
             case 20:
-                if (remove_curse()) {
+                if (spellRemoveCurseFromAllItems()) {
                     if (py.flags.blind < 1) {
                         printMessage("The staff glows blue for a moment..");
                     }

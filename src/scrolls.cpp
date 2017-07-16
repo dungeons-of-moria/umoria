@@ -187,7 +187,7 @@ static int scrollIdentifyItem(int item_id, bool *is_used_up) {
 }
 
 static bool scrollRemoveCurse() {
-    if (remove_curse()) {
+    if (spellRemoveCurseFromAllItems()) {
         printMessage("You feel as if someone is watching over you.");
         return true;
     }
