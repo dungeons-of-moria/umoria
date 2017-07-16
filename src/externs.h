@@ -537,7 +537,7 @@ void spellLoseDEX();
 void spellLoseCON();
 void spellLoseCHR();
 void spellLoseEXP(int32_t adjustment);
-bool slow_poison();
+bool spellSlowPoison();
 void bless(int adjustment);
 void detect_inv2(int adjustment);
 void destroy_area(int y, int x);

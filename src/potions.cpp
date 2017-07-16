@@ -255,7 +255,7 @@ static bool playerDrinkPotion(uint32_t flags, uint8_t item_id) {
                 detect_inv2(randomNumber(12) + 12);
                 break;
             case 44:
-                identified = slow_poison();
+                identified = spellSlowPoison();
                 break;
             case 45:
                 identified = playerCurePoison();

@@ -70,7 +70,7 @@ static void playerRecitePrayer(int prayer_type) {
             (void) dungeonDetectSecretDoorsOnPanel();
             break;
         case 8:
-            (void) slow_poison();
+            (void) spellSlowPoison();
             break;
         case 9:
             if (getDirectionWithMemory(CNIL, &dir)) {

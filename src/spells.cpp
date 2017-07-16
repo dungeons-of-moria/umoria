@@ -2123,7 +2123,7 @@ void spellLoseEXP(int32_t adjustment) {
 }
 
 // Slow Poison -RAK-
-bool slow_poison() {
+bool spellSlowPoison() {
     if (py.flags.poisoned > 0) {
         py.flags.poisoned = (int16_t) (py.flags.poisoned / 2);
         if (py.flags.poisoned < 1) {
