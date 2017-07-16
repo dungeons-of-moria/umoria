@@ -186,7 +186,7 @@ static int scrollIdentifyItem(int item_id, bool *is_used_up) {
     return item_id;
 }
 
-static bool readRemoveCurseScroll() {
+static bool scrollRemoveCurse() {
     if (remove_curse()) {
         printMessage("You feel as if someone is watching over you.");
         return true;
@@ -451,7 +451,7 @@ void read_scroll() {
                 identified = true;
                 break;
             case 5:
-                identified = readRemoveCurseScroll();
+                identified = scrollRemoveCurse();
                 break;
             case 6:
                 identified = light_area(char_row, char_col);
