@@ -579,7 +579,7 @@ static int purchase_haggle(int store_num, int32_t *price, Inventory_t *item) {
 
     // update bargaining info
     if (purchase == 0 && !didnt_haggle) {
-        updatebargain(store_num, *price, final_ask);
+        storeUpdateBargainInfo(store_num, *price, final_ask);
     }
 
     return purchase;
@@ -782,7 +782,7 @@ static int sell_haggle(int store_num, int32_t *price, Inventory_t *item) {
 
     // update bargaining info
     if (sell == 0 && !didnt_haggle) {
-        updatebargain(store_num, *price, final_ask);
+        storeUpdateBargainInfo(store_num, *price, final_ask);
     }
 
     return sell;

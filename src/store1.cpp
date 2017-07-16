@@ -406,17 +406,17 @@ bool storeNoNeedToBargain(int store_id, int32_t min_price) {
 }
 
 // update the bargain info -DJB-
-void updatebargain(int store_id, int32_t price, int32_t min_price) {
-    Store_t *s_ptr = &stores[store_id];
+void storeUpdateBargainInfo(int store_id, int32_t price, int32_t min_price) {
+    Store_t *store = &stores[store_id];
 
     if (min_price > 9) {
         if (price == min_price) {
-            if (s_ptr->good_buy < MAX_SHORT) {
-                s_ptr->good_buy++;
+            if (store->good_buy < MAX_SHORT) {
+                store->good_buy++;
             }
         } else {
-            if (s_ptr->bad_buy < MAX_SHORT) {
-                s_ptr->bad_buy++;
+            if (store->bad_buy < MAX_SHORT) {
+                store->bad_buy++;
             }
         }
     }
