@@ -527,7 +527,7 @@ bool playerRemoveFear();
 void dungeonEarthquake();
 bool playerProtectEvil();
 void spellCreateFood();
-bool dispel_creature(int creature_defense, int damage);
+bool spellDispelCreature(int creature_defense, int damage);
 bool turn_undead();
 void warding_glyph();
 void lose_str();

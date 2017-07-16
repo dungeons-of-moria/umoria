@@ -1952,21 +1952,21 @@ void spellCreateFood() {
 
 // Attempts to destroy a type of creature.  Success depends on
 // the creatures level VS. the player's level -RAK-
-bool dispel_creature(int creature_defense, int damage) {
+bool spellDispelCreature(int creature_defense, int damage) {
     bool dispelled = false;
 
     for (int id = next_free_monster_id - 1; id >= MIN_MONIX; id--) {
-        Monster_t *m_ptr = &monsters[id];
+        Monster_t *monster = &monsters[id];
 
-        if (m_ptr->cdis <= MAX_SIGHT && (creature_defense & creatures_list[m_ptr->mptr].cdefense) && los(char_row, char_col, (int) m_ptr->fy, (int) m_ptr->fx)) {
-            Creature_t *r_ptr = &creatures_list[m_ptr->mptr];
+        if (monster->cdis <= MAX_SIGHT && (creature_defense & creatures_list[monster->mptr].cdefense) && los(char_row, char_col, (int) monster->fy, (int) monster->fx)) {
+            Creature_t *creature = &creatures_list[monster->mptr];
 
-            creature_recall[m_ptr->mptr].r_cdefense |= creature_defense;
+            creature_recall[monster->mptr].r_cdefense |= creature_defense;
 
             dispelled = true;
 
             vtype_t name;
-            monsterNameDescription(name, m_ptr->ml, r_ptr->name);
+            monsterNameDescription(name, monster->ml, creature->name);
 
             int hit = monsterTakeHit(id, randomNumber(damage));
 

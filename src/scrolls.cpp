@@ -540,7 +540,7 @@ void readScroll() {
                 identified = true;
                 break;
             case 30:
-                identified = dispel_creature(CD_UNDEAD, 60);
+                identified = spellDispelCreature(CD_UNDEAD, 60);
                 break;
             case 33:
                 identified = scrollEnchantWeapon();

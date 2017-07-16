@@ -137,13 +137,13 @@ static void playerRecitePrayer(int prayer_type) {
             bless(randomNumber(48) + 48);
             break;
         case 27:
-            (void) dispel_creature(CD_UNDEAD, (3 * py.misc.lev));
+            (void) spellDispelCreature(CD_UNDEAD, (3 * py.misc.lev));
             break;
         case 28:
             (void) spellChangePlayerHitPoints(200);
             break;
         case 29:
-            (void) dispel_creature(CD_EVIL, (3 * py.misc.lev));
+            (void) spellDispelCreature(CD_EVIL, (3 * py.misc.lev));
             break;
         case 30:
             warding_glyph();
@@ -157,7 +157,7 @@ static void playerRecitePrayer(int prayer_type) {
                 (void) playerStatRestore(i);
             }
 
-            (void) dispel_creature(CD_EVIL, (4 * py.misc.lev));
+            (void) spellDispelCreature(CD_EVIL, (4 * py.misc.lev));
             (void) turn_undead();
 
             if (py.flags.invuln < 3) {

@@ -152,7 +152,7 @@ static bool dischargeStaff(Inventory_t *staff_ptr) {
                 }
                 break;
             case 23:
-                identified = dispel_creature(CD_EVIL, 60);
+                identified = spellDispelCreature(CD_EVIL, 60);
                 break;
             case 25:
                 identified = spellDarkenArea(char_row, char_col);
