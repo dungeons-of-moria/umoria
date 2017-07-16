@@ -1578,25 +1578,27 @@ void spellTeleportPlayerTo(int y, int x) {
 }
 
 // Teleport all creatures in a given direction away -RAK-
-bool teleport_monster(int y, int x, int direction) {
+bool spellTeleportAwayMonsterInDirection(int y, int x, int direction) {
+    int distance = 0;
     bool teleported = false;
-
-    int dist = 0;
-
     bool finished = false;
+
     while (!finished) {
         (void) playerMovePosition(direction, &y, &x);
-        dist++;
+        distance++;
 
-        Cave_t *c_ptr = &cave[y][x];
+        Cave_t *tile = &cave[y][x];
 
-        if (dist > OBJ_BOLT_RANGE || c_ptr->fval >= MIN_CLOSED_SPACE) {
+        if (distance > OBJ_BOLT_RANGE || tile->fval >= MIN_CLOSED_SPACE) {
             finished = true;
-        } else if (c_ptr->cptr > 1) {
-            // wake it up
-            monsters[c_ptr->cptr].csleep = 0;
+            continue;
+        }
 
-            spellTeleportAwayMonster((int) c_ptr->cptr, MAX_SIGHT);
+        if (tile->cptr > 1) {
+            // wake it up
+            monsters[tile->cptr].csleep = 0;
+
+            spellTeleportAwayMonster((int) tile->cptr, MAX_SIGHT);
 
             teleported = true;
         }

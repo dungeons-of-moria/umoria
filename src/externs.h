@@ -512,7 +512,7 @@ bool spellBuildWall(int y, int x, int direction);
 bool spellCloneMonster(int y, int x, int direction);
 void spellTeleportAwayMonster(int monster_id, int distance_from_player);
 void spellTeleportPlayerTo(int y, int x);
-bool teleport_monster(int y, int x, int direction);
+bool spellTeleportAwayMonsterInDirection(int y, int x, int direction);
 bool mass_genocide();
 bool genocide();
 bool speed_monsters(int speed);

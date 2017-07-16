@@ -78,7 +78,7 @@ static bool discharge_wand(Inventory_t *wand, int dir) {
                 identified = spellCloneMonster(row, col, dir);
                 break;
             case 17:
-                identified = teleport_monster(row, col, dir);
+                identified = spellTeleportAwayMonsterInDirection(row, col, dir);
                 break;
             case 18:
                 identified = spellDisarmAllInDirection(row, col, dir);

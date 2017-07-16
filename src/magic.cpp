@@ -142,7 +142,7 @@ static void castSpell(int spellID) {
             break;
         case 27:
             if (getDirectionWithMemory(CNIL, &dir)) {
-                (void) teleport_monster(char_row, char_col, dir);
+                (void) spellTeleportAwayMonsterInDirection(char_row, char_col, dir);
             }
             break;
         case 28:
