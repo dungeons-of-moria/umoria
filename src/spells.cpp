@@ -306,28 +306,28 @@ void dungeonMapCurrentArea() {
 }
 
 // Identify an object -RAK-
-bool ident_spell() {
-    int item_val;
-    if (!inventoryGetInputForItemId(&item_val, "Item you wish identified?", 0, INVEN_ARRAY_SIZE, CNIL, CNIL)) {
+bool spellIdentifyItem() {
+    int item_id;
+    if (!inventoryGetInputForItemId(&item_id, "Item you wish identified?", 0, INVEN_ARRAY_SIZE, CNIL, CNIL)) {
         return false;
     }
 
-    itemIdentify(&item_val);
+    itemIdentify(&item_id);
 
-    Inventory_t *i_ptr = &inventory[item_val];
-    spellItemIdentifyAndRemoveRandomInscription(i_ptr);
+    Inventory_t *item = &inventory[item_id];
+    spellItemIdentifyAndRemoveRandomInscription(item);
 
-    obj_desc_t tmp_str;
-    itemDescription(tmp_str, i_ptr, true);
+    obj_desc_t description;
+    itemDescription(description, item, true);
 
-    obj_desc_t out_val;
-    if (item_val >= INVEN_WIELD) {
+    obj_desc_t msg;
+    if (item_id >= INVEN_WIELD) {
         playerRecalculateBonuses();
-        (void) sprintf(out_val, "%s: %s", playerItemWearingDescription(item_val), tmp_str);
+        (void) sprintf(msg, "%s: %s", playerItemWearingDescription(item_id), description);
     } else {
-        (void) sprintf(out_val, "%c %s", item_val + 97, tmp_str);
+        (void) sprintf(msg, "%c %s", item_id + 97, description);
     }
-    printMessage(out_val);
+    printMessage(msg);
 
     return true;
 }

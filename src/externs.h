@@ -487,7 +487,7 @@ bool dungeonDetectInvisibleCreaturesOnPanel();
 bool dungeonLightArea(int y, int x);
 bool dungeonDarkenArea(int y, int x);
 void dungeonMapCurrentArea();
-bool ident_spell();
+bool spellIdentifyItem();
 bool aggravate_monster(int distance_affect);
 bool trap_creation();
 bool door_creation();

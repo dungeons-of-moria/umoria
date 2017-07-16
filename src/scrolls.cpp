@@ -171,7 +171,7 @@ static bool scrollEnchantItemToAC() {
 static int scrollIdentifyItem(int item_id, bool *is_used_up) {
     printMessage("This is an identify scroll.");
 
-    *is_used_up = ident_spell();
+    *is_used_up = spellIdentifyItem();
 
     // The identify may merge objects, causing the identify scroll
     // to move to a different place.  Check for that here.  It can

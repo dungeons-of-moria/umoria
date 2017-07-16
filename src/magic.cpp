@@ -117,7 +117,7 @@ static void castSpell(int spellID) {
             }
             break;
         case 21:
-            (void) ident_spell();
+            (void) spellIdentifyItem();
             break;
         case 22:
             (void) sleep_monsters2();

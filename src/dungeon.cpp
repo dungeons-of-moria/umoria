@@ -1528,7 +1528,7 @@ static void doWizardCommands(char com_val) {
             }
             break;
         case CTRL_KEY('I'): // ^I = identify
-            (void) ident_spell();
+            (void) spellIdentifyItem();
             break;
         case '*':
             wizard_light();
