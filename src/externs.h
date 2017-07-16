@@ -444,7 +444,7 @@ int memoryRecall(int monster_id);
 
 // rnd.c
 uint32_t getRandomSeed();
-void set_rnd_seed(uint32_t seed);
+void setRandomSeed(uint32_t seed);
 int32_t rnd();
 
 // save.c

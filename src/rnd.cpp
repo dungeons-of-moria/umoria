@@ -70,7 +70,7 @@ uint32_t getRandomSeed() {
     return rnd_seed;
 }
 
-void set_rnd_seed(uint32_t seed) {
+void setRandomSeed(uint32_t seed) {
     // set seed to value between 1 and m-1
     rnd_seed = (uint32_t) ((seed % (RNG_M - 1)) + 1);
 }
@@ -92,14 +92,16 @@ int32_t rnd() {
 #ifdef TEST_RNG
 
 main() {
-    set_rnd_seed(0L);
+    setRandomSeed(0L);
 
     for (int32_t i = 1; i < 10000; i++) {
         (void)rnd();
     }
 
     int32_t random = rnd();
+
     printf("z[10001] = %ld, should be 1043618065\n", random);
+
     if (random == 1043618065L) {
         printf("success!!!\n");
     }

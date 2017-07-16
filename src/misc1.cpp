@@ -33,7 +33,7 @@ void seedsInitialize(uint32_t seed) {
     town_seed = (int32_t) clock_var;
 
     clock_var += 113452L;
-    set_rnd_seed(clock_var);
+    setRandomSeed(clock_var);
 
     // make it a little more random
     for (clock_var = (uint32_t) randomNumber(100); clock_var != 0; clock_var--) {
@@ -46,12 +46,12 @@ void seedSet(uint32_t seed) {
     old_seed = getRandomSeed();
 
     // want reproducible state here
-    set_rnd_seed(seed);
+    setRandomSeed(seed);
 }
 
 // restore the normal random generator state
 void seedResetToOldSeed() {
-    set_rnd_seed(old_seed);
+    setRandomSeed(old_seed);
 }
 
 // Generates a random integer x where 1<=X<=MAXVAL -RAK-
