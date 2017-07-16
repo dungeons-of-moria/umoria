@@ -170,7 +170,7 @@ bool dungeonDetectSecretDoorsOnPanel() {
 }
 
 // Locates and displays all invisible creatures on current panel -RAK-
-bool dungeonDetectInvisibleCreaturesOnPanel() {
+bool spellDetectInvisibleCreaturesOnPanel() {
     bool detected = false;
 
     for (int id = next_free_monster_id - 1; id >= MIN_MONIX; id--) {

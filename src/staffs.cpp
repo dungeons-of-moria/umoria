@@ -118,7 +118,7 @@ static bool dischargeStaff(Inventory_t *staff_ptr) {
                 identified = hp_player(randomNumber(8));
                 break;
             case 16:
-                identified = dungeonDetectInvisibleCreaturesOnPanel();
+                identified = spellDetectInvisibleCreaturesOnPanel();
                 break;
             case 17:
                 if (py.flags.fast == 0) {

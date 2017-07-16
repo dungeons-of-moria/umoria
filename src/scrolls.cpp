@@ -503,7 +503,7 @@ void readScroll() {
                 identified = true;
                 break;
             case 20:
-                identified = dungeonDetectInvisibleCreaturesOnPanel();
+                identified = spellDetectInvisibleCreaturesOnPanel();
                 break;
             case 21:
                 printMessage("There is a high pitched humming noise.");
