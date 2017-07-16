@@ -1221,7 +1221,7 @@ static void rd_monster(Monster_t *mon) {
 // functions called from death.c to implement the score file
 
 // set the local fileptr to the score file fileptr
-void set_fileptr(FILE *file) {
+void setFileptr(FILE *file) {
     fileptr = file;
 }
 

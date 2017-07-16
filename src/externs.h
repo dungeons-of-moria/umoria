@@ -450,7 +450,7 @@ int32_t rnd();
 // save.c
 bool saveGame();
 bool loadGame(bool *generate);
-void set_fileptr(FILE *file);
+void setFileptr(FILE *file);
 void wr_highscore(HighScore_t *score);
 void rd_highscore(HighScore_t *score);
 

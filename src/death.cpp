@@ -60,7 +60,7 @@ void showScoresScreen() {
     }
 
     // set the static fileptr in save.c to the high score file pointer
-    set_fileptr(highscore_fp);
+    setFileptr(highscore_fp);
 
     HighScore_t score;
     rd_highscore(&score);
@@ -305,7 +305,7 @@ static void highscores() {
     }
 
     // set the static fileptr in save.c to the high score file pointer
-    set_fileptr(highscore_fp);
+    setFileptr(highscore_fp);
 
     HighScore_t old_entry, entry;
 
