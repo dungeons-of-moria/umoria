@@ -1335,43 +1335,39 @@ bool spellWallToMud(int y, int x, int direction) {
 }
 
 // Destroy all traps and doors in a given direction -RAK-
-bool td_destroy2(int y, int x, int direction) {
+bool spellDestroyDoorsTrapsInDirection(int y, int x, int direction) {
     bool destroyed = false;
 
-    int dist = 0;
+    int distance = 0;
 
-    Cave_t *c_ptr;
+    Cave_t *tile;
 
     do {
         (void) playerMovePosition(direction, &y, &x);
-        dist++;
+        distance++;
 
-        c_ptr = &cave[y][x];
+        tile = &cave[y][x];
 
         // must move into first closed spot, as it might be a secret door
-        if (c_ptr->tptr != 0) {
-            Inventory_t *t_ptr = &treasure_list[c_ptr->tptr];
+        if (tile->tptr != 0) {
+            Inventory_t *item = &treasure_list[tile->tptr];
 
-            if (t_ptr->tval == TV_INVIS_TRAP ||
-                t_ptr->tval == TV_CLOSED_DOOR ||
-                t_ptr->tval == TV_VIS_TRAP ||
-                t_ptr->tval == TV_OPEN_DOOR ||
-                t_ptr->tval == TV_SECRET_DOOR) {
+            if (item->tval == TV_INVIS_TRAP || item->tval == TV_CLOSED_DOOR || item->tval == TV_VIS_TRAP || item->tval == TV_OPEN_DOOR || item->tval == TV_SECRET_DOOR) {
                 if (dungeonDeleteObject(y, x)) {
                     destroyed = true;
-
                     printMessage("There is a bright flash of light!");
                 }
-            } else if (t_ptr->tval == TV_CHEST && t_ptr->flags != 0) {
+            } else if (item->tval == TV_CHEST && item->flags != 0) {
                 destroyed = true;
-
                 printMessage("Click!");
-                t_ptr->flags &= ~(CH_TRAPPED | CH_LOCKED);
-                t_ptr->name2 = SN_UNLOCKED;
-                spellItemIdentifyAndRemoveRandomInscription(t_ptr);
+
+                item->flags &= ~(CH_TRAPPED | CH_LOCKED);
+                item->name2 = SN_UNLOCKED;
+
+                spellItemIdentifyAndRemoveRandomInscription(item);
             }
         }
-    } while ((dist <= OBJ_BOLT_RANGE) || c_ptr->fval <= MAX_OPEN_SPACE);
+    } while ((distance <= OBJ_BOLT_RANGE) || tile->fval <= MAX_OPEN_SPACE);
 
     return destroyed;
 }

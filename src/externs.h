@@ -506,7 +506,7 @@ bool spellSpeedMonster(int y, int x, int direction, int speed);
 bool spellConfuseMonster(int y, int x, int direction);
 bool spellSleepMonster(int y, int x, int direction);
 bool spellWallToMud(int y, int x, int direction);
-bool td_destroy2(int y, int x, int direction);
+bool spellDestroyDoorsTrapsInDirection(int y, int x, int direction);
 bool poly_monster(int y, int x, int direction);
 bool build_wall(int y, int x, int direction);
 bool clone_monster(int y, int x, int direction);

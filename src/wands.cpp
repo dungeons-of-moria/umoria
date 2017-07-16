@@ -65,7 +65,7 @@ static bool discharge_wand(Inventory_t *wand, int dir) {
                 identified = spellDrainLifeFromMonster(row, col, dir);
                 break;
             case 13:
-                identified = td_destroy2(row, col, dir);
+                identified = spellDestroyDoorsTrapsInDirection(row, col, dir);
                 break;
             case 14:
                 spellFireBolt(row, col, dir, diceDamageRoll(2, 6), GF_MAGIC_MISSILE, spell_names[0]);
