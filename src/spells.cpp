@@ -649,16 +649,16 @@ static void getAreaAffectFlags(int spell_type, uint32_t *weapon_type, int *harm_
 }
 
 // Light up, draw, and check for monster damage when Fire Bolt touches it.
-static void fireBoltTouchesMonster(Cave_t *tile, int dam, int harmType, uint32_t weaponID, std::string boltName) {
+static void spellFireBoltTouchesMonster(Cave_t *tile, int damage, int harm_type, uint32_t weapon_id, std::string bolt_name) {
     Monster_t *monster = &monsters[tile->cptr];
     Creature_t *creature = &creatures_list[monster->mptr];
 
     // light up monster and draw monster, temporarily set
     // pl so that monsterUpdateVisibility() will work
-    bool savedLitStatus = tile->pl;
+    bool saved_lit_status = tile->pl;
     tile->pl = true;
     monsterUpdateVisibility((int) tile->cptr);
-    tile->pl = savedLitStatus;
+    tile->pl = saved_lit_status;
 
     // draw monster and clear previous bolt
     putQIO();
@@ -667,27 +667,27 @@ static void fireBoltTouchesMonster(Cave_t *tile, int dam, int harmType, uint32_t
     monsterNameDescriptionLowercase(name, monster->ml, creature->name);
 
     vtype_t msg;
-    (void) sprintf(msg, "The %s strikes %s.", boltName.c_str(), name);
+    (void) sprintf(msg, "The %s strikes %s.", bolt_name.c_str(), name);
     printMessage(msg);
 
-    if (harmType & creature->cdefense) {
-        dam = dam * 2;
+    if (harm_type & creature->cdefense) {
+        damage = damage * 2;
         if (monster->ml) {
-            creature_recall[monster->mptr].r_cdefense |= harmType;
+            creature_recall[monster->mptr].r_cdefense |= harm_type;
         }
-    } else if (weaponID & creature->spells) {
-        dam = dam / 4;
+    } else if (weapon_id & creature->spells) {
+        damage = damage / 4;
         if (monster->ml) {
-            creature_recall[monster->mptr].r_spells |= weaponID;
+            creature_recall[monster->mptr].r_spells |= weapon_id;
         }
     }
 
     monsterNameDescription(name, monster->ml, creature->name);
 
-    if (monsterTakeHit((int) tile->cptr, dam) >= 0) {
+    if (monsterTakeHit((int) tile->cptr, damage) >= 0) {
         printMonsterActionText(name, "dies in a fit of agony.");
         displayCharacterExperience();
-    } else if (dam > 0) {
+    } else if (damage > 0) {
         printMonsterActionText(name, "screams in agony.");
     }
 }
@@ -720,7 +720,7 @@ void fire_bolt(int y, int x, int direction, int damage_hp, int spell_type_id, ch
 
         if (c_ptr->cptr > 1) {
             finished = true;
-            fireBoltTouchesMonster(c_ptr, damage_hp, harm_type, weapon_type, spell_name);
+            spellFireBoltTouchesMonster(c_ptr, damage_hp, harm_type, weapon_type, spell_name);
         } else if (coordInsidePanel(y, x) && py.flags.blind < 1) {
             putChar('*', y, x);
 
