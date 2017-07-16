@@ -100,7 +100,7 @@ static bool scrollEnchantWeaponToHit() {
     (void) sprintf(msg, "Your %s glows faintly!", desc);
     printMessage(msg);
 
-    if (enchant(&item->tohit, 10)) {
+    if (spellEnchantItem(&item->tohit, 10)) {
         item->flags &= ~TR_CURSED;
         playerRecalculateBonuses();
     } else {
@@ -133,7 +133,7 @@ static bool scrollEnchantWeaponToDamage() {
         scroll_type = 10;
     }
 
-    if (enchant(&item->todam, scroll_type)) {
+    if (spellEnchantItem(&item->todam, scroll_type)) {
         item->flags &= ~TR_CURSED;
         playerRecalculateBonuses();
     } else {
@@ -158,7 +158,7 @@ static bool scrollEnchantItemToAC() {
     (void) sprintf(msg, "Your %s glows faintly!", desc);
     printMessage(msg);
 
-    if (enchant(&item->toac, 10)) {
+    if (spellEnchantItem(&item->toac, 10)) {
         item->flags &= ~TR_CURSED;
         playerRecalculateBonuses();
     } else {
@@ -239,7 +239,7 @@ static bool scrollEnchantWeapon() {
     bool enchanted = false;
 
     for (int i = 0; i < randomNumber(2); i++) {
-        if (enchant(&item->tohit, 10)) {
+        if (spellEnchantItem(&item->tohit, 10)) {
             enchanted = true;
         }
     }
@@ -255,7 +255,7 @@ static bool scrollEnchantWeapon() {
     }
 
     for (int i = 0; i < randomNumber(2); i++) {
-        if (enchant(&item->todam, scroll_type)) {
+        if (spellEnchantItem(&item->todam, scroll_type)) {
             enchanted = true;
         }
     }
@@ -317,7 +317,7 @@ static bool scrollEnchantArmor() {
     bool enchanted = false;
 
     for (int i = 0; i < randomNumber(2) + 1; i++) {
-        if (enchant(&item->toac, 10)) {
+        if (spellEnchantItem(&item->toac, 10)) {
             enchanted = true;
         }
     }

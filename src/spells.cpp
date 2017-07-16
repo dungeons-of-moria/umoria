@@ -2216,7 +2216,7 @@ void spellDestroyArea(int y, int x) {
 // Enchants a plus onto an item. -RAK-
 // `limit` param is the maximum bonus allowed; usually 10,
 // but weapon's maximum damage when enchanting melee weapons to damage.
-bool enchant(int16_t *plusses, int16_t max_bonus_limit) {
+bool spellEnchantItem(int16_t *plusses, int16_t max_bonus_limit) {
     // avoid randomNumber(0) call
     if (max_bonus_limit <= 0) {
         return false;
