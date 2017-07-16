@@ -66,7 +66,7 @@
 // 32 bit seed
 static uint32_t rnd_seed;
 
-uint32_t get_rnd_seed() {
+uint32_t getRandomSeed() {
     return rnd_seed;
 }
 
