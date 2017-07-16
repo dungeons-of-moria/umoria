@@ -847,7 +847,7 @@ static bool store_purchase(int store_num, int *cur_top) {
             int item_new = inventoryCarryItem(&sell_obj);
             int saved_store_counter = s_ptr->store_ctr;
 
-            store_destroy(store_num, item_val, true);
+            storeDestroy(store_num, item_val, true);
 
             obj_desc_t out_val, tmp_str;
             itemDescription(tmp_str, &inventory[item_new], true);

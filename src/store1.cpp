@@ -279,35 +279,35 @@ void storeCarry(int store_id, int *index_id, Inventory_t *item) {
 }
 
 // Destroy an item in the stores inventory.  Note that if
-// "one_of" is false, an entire slot is destroyed -RAK-
-void store_destroy(int store_id, int item_id, bool only_one) {
-    Store_t *s_ptr = &stores[store_id];
-    Inventory_t *i_ptr = &s_ptr->store_inven[item_id].sitem;
+// `only_one_of` is false, an entire slot is destroyed -RAK-
+void storeDestroy(int store_id, int item_id, bool only_one_of) {
+    Store_t *store = &stores[store_id];
+    Inventory_t *store_item = &store->store_inven[item_id].sitem;
 
     int number;
 
     // for single stackable objects, only destroy one half on average,
     // this will help ensure that general store and alchemist have
     // reasonable selection of objects
-    if (i_ptr->subval >= ITEM_SINGLE_STACK_MIN && i_ptr->subval <= ITEM_SINGLE_STACK_MAX) {
-        if (only_one) {
+    if (store_item->subval >= ITEM_SINGLE_STACK_MIN && store_item->subval <= ITEM_SINGLE_STACK_MAX) {
+        if (only_one_of) {
             number = 1;
         } else {
-            number = randomNumber((int) i_ptr->number);
+            number = randomNumber((int) store_item->number);
         }
     } else {
-        number = i_ptr->number;
+        number = store_item->number;
     }
 
-    if (number != i_ptr->number) {
-        i_ptr->number -= number;
+    if (number != store_item->number) {
+        store_item->number -= number;
     } else {
-        for (int j = item_id; j < s_ptr->store_ctr - 1; j++) {
-            s_ptr->store_inven[j] = s_ptr->store_inven[j + 1];
+        for (int i = item_id; i < store->store_ctr - 1; i++) {
+            store->store_inven[i] = store->store_inven[i + 1];
         }
-        inventoryItemCopyTo(OBJ_NOTHING, &s_ptr->store_inven[s_ptr->store_ctr - 1].sitem);
-        s_ptr->store_inven[s_ptr->store_ctr - 1].scost = 0;
-        s_ptr->store_ctr--;
+        inventoryItemCopyTo(OBJ_NOTHING, &store->store_inven[store->store_ctr - 1].sitem);
+        store->store_inven[store->store_ctr - 1].scost = 0;
+        store->store_ctr--;
     }
 }
 
@@ -373,7 +373,7 @@ void store_maint() {
                 j += 1 + s_ptr->store_ctr - STORE_MAX_INVEN;
             }
             while (--j >= 0) {
-                store_destroy(store_id, randomNumber((int) s_ptr->store_ctr) - 1, false);
+                storeDestroy(store_id, randomNumber((int) s_ptr->store_ctr) - 1, false);
             }
         }
 
