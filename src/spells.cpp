@@ -200,7 +200,7 @@ bool dungeonDetectInvisibleCreaturesOnPanel() {
 // Light an area: -RAK-
 //     1.  If corridor  light immediate area
 //     2.  If room      light entire room plus immediate area.
-bool light_area(int y, int x) {
+bool dungeonLightArea(int y, int x) {
     if (py.flags.blind < 1) {
         printMessage("You are surrounded by a white light.");
     }

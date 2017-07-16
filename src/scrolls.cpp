@@ -454,7 +454,7 @@ void readScroll() {
                 identified = scrollRemoveCurse();
                 break;
             case 6:
-                identified = light_area(char_row, char_col);
+                identified = dungeonLightArea(char_row, char_col);
                 break;
             case 7:
                 identified = scrollSummonMonster();
