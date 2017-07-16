@@ -1660,38 +1660,38 @@ bool spellGenocide() {
 
 // Change speed of any creature . -RAK-
 // NOTE: cannot slow a winning creature (BALROG)
-bool speed_monsters(int speed) {
+bool spellSpeedAllMonsters(int speed) {
     bool speedy = false;
 
     for (int id = next_free_monster_id - 1; id >= MIN_MONIX; id--) {
-        Monster_t *m_ptr = &monsters[id];
-        Creature_t *r_ptr = &creatures_list[m_ptr->mptr];
+        Monster_t *monster = &monsters[id];
+        Creature_t *creature = &creatures_list[monster->mptr];
 
         vtype_t name;
-        monsterNameDescription(name, m_ptr->ml, r_ptr->name);
+        monsterNameDescription(name, monster->ml, creature->name);
 
-        if (m_ptr->cdis > MAX_SIGHT || !los(char_row, char_col, (int) m_ptr->fy, (int) m_ptr->fx)) {
+        if (monster->cdis > MAX_SIGHT || !los(char_row, char_col, (int) monster->fy, (int) monster->fx)) {
             continue; // do nothing
         }
 
         if (speed > 0) {
-            m_ptr->cspeed += speed;
-            m_ptr->csleep = 0;
+            monster->cspeed += speed;
+            monster->csleep = 0;
 
-            if (m_ptr->ml) {
+            if (monster->ml) {
                 speedy = true;
                 printMonsterActionText(name, "starts moving faster.");
             }
-        } else if (randomNumber(MAX_MONS_LEVEL) > r_ptr->level) {
-            m_ptr->cspeed += speed;
-            m_ptr->csleep = 0;
+        } else if (randomNumber(MAX_MONS_LEVEL) > creature->level) {
+            monster->cspeed += speed;
+            monster->csleep = 0;
 
-            if (m_ptr->ml) {
+            if (monster->ml) {
                 speedy = true;
                 printMonsterActionText(name, "starts moving slower.");
             }
-        } else if (m_ptr->ml) {
-            m_ptr->csleep = 0;
+        } else if (monster->ml) {
+            monster->csleep = 0;
             printMonsterActionText(name, "is unaffected.");
         }
     }
