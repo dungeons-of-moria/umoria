@@ -30,11 +30,11 @@ static void monsterNameDescription(char *name_description, bool is_lit, const ch
     }
 }
 
-static void lower_monster_name(char *description, bool monsterLit, const char *monsterName) {
-    if (!monsterLit) {
-        (void) strcpy(description, "it");
+static void monsterNameDescriptionLowercase(char *name_description, bool is_lit, const char *real_name) {
+    if (!is_lit) {
+        (void) strcpy(name_description, "it");
     } else {
-        (void) sprintf(description, "the %s", monsterName);
+        (void) sprintf(name_description, "the %s", real_name);
     }
 }
 
@@ -661,7 +661,7 @@ static void fireBoltTouchesMonster(Cave_t *tile, int dam, int harmType, uint32_t
     putQIO();
 
     vtype_t name;
-    lower_monster_name(name, monster->ml, creature->name);
+    monsterNameDescriptionLowercase(name, monster->ml, creature->name);
 
     vtype_t msg;
     (void) sprintf(msg, "The %s strikes %s.", boltName.c_str(), name);
