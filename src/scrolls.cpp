@@ -332,55 +332,55 @@ static bool scrollEnchantArmor() {
     return true;
 }
 
-static bool readCurseArmorScroll() {
-    int id;
+static bool scrollCurseArmor() {
+    int item_id;
 
     if (inventory[INVEN_BODY].tval != TV_NOTHING && randomNumber(4) == 1) {
-        id = INVEN_BODY;
+        item_id = INVEN_BODY;
     } else if (inventory[INVEN_ARM].tval != TV_NOTHING && randomNumber(3) == 1) {
-        id = INVEN_ARM;
+        item_id = INVEN_ARM;
     } else if (inventory[INVEN_OUTER].tval != TV_NOTHING && randomNumber(3) == 1) {
-        id = INVEN_OUTER;
+        item_id = INVEN_OUTER;
     } else if (inventory[INVEN_HEAD].tval != TV_NOTHING && randomNumber(3) == 1) {
-        id = INVEN_HEAD;
+        item_id = INVEN_HEAD;
     } else if (inventory[INVEN_HANDS].tval != TV_NOTHING && randomNumber(3) == 1) {
-        id = INVEN_HANDS;
+        item_id = INVEN_HANDS;
     } else if (inventory[INVEN_FEET].tval != TV_NOTHING && randomNumber(3) == 1) {
-        id = INVEN_FEET;
+        item_id = INVEN_FEET;
     } else if (inventory[INVEN_BODY].tval != TV_NOTHING) {
-        id = INVEN_BODY;
+        item_id = INVEN_BODY;
     } else if (inventory[INVEN_ARM].tval != TV_NOTHING) {
-        id = INVEN_ARM;
+        item_id = INVEN_ARM;
     } else if (inventory[INVEN_OUTER].tval != TV_NOTHING) {
-        id = INVEN_OUTER;
+        item_id = INVEN_OUTER;
     } else if (inventory[INVEN_HEAD].tval != TV_NOTHING) {
-        id = INVEN_HEAD;
+        item_id = INVEN_HEAD;
     } else if (inventory[INVEN_HANDS].tval != TV_NOTHING) {
-        id = INVEN_HANDS;
+        item_id = INVEN_HANDS;
     } else if (inventory[INVEN_FEET].tval != TV_NOTHING) {
-        id = INVEN_FEET;
+        item_id = INVEN_FEET;
     } else {
-        id = 0;
+        item_id = 0;
     }
 
-    if (id <= 0) {
+    if (item_id <= 0) {
         return false;
     }
 
-    Inventory_t *i_ptr = &inventory[id];
+    Inventory_t *item = &inventory[item_id];
 
     obj_desc_t msg, desc;
-    itemDescription(desc, i_ptr, false);
+    itemDescription(desc, item, false);
 
     (void) sprintf(msg, "Your %s glows black, fades.", desc);
     printMessage(msg);
 
-    itemRemoveMagicNaming(i_ptr);
+    itemRemoveMagicNaming(item);
 
-    i_ptr->flags = TR_CURSED;
-    i_ptr->tohit = 0;
-    i_ptr->todam = 0;
-    i_ptr->toac = (int16_t) (-randomNumber(5) - randomNumber(5));
+    item->flags = TR_CURSED;
+    item->tohit = 0;
+    item->todam = 0;
+    item->toac = (int16_t) (-randomNumber(5) - randomNumber(5));
 
     playerRecalculateBonuses();
 
@@ -552,7 +552,7 @@ void read_scroll() {
                 identified = scrollEnchantArmor();
                 break;
             case 36:
-                identified = readCurseArmorScroll();
+                identified = scrollCurseArmor();
                 break;
             case 37:
                 identified = readSummonUndeadScroll();
