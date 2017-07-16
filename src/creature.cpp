@@ -1114,7 +1114,7 @@ void creatureCastsSpell(Monster_t *m_ptr, int monsterID, int spellID, uint8_t le
             spellTeleportAwayMonster(monsterID, MAX_SIGHT);
             break;
         case 7: // Teleport To
-            teleport_to((int) m_ptr->fy, (int) m_ptr->fx);
+            spellTeleportPlayerTo((int) m_ptr->fy, (int) m_ptr->fx);
             break;
         case 8: // Light Wound
             if (playerSavingThrow()) {

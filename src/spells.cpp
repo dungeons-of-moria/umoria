@@ -1541,35 +1541,36 @@ void spellTeleportAwayMonster(int monster_id, int distance_from_player) {
 }
 
 // Teleport player to spell casting creature -RAK-
-void teleport_to(int to_y, int to_x) {
-    int y, x;
+void spellTeleportPlayerTo(int y, int x) {
+    int to_y, to_x;
+    int distance = 1;
+    int counter = 0;
 
-    int dis = 1;
-    int ctr = 0;
     do {
-        y = to_y + (randomNumber(2 * dis + 1) - (dis + 1));
-        x = to_x + (randomNumber(2 * dis + 1) - (dis + 1));
-        ctr++;
-        if (ctr > 9) {
-            ctr = 0;
-            dis++;
+        to_y = y + (randomNumber(2 * distance + 1) - (distance + 1));
+        to_x = x + (randomNumber(2 * distance + 1) - (distance + 1));
+        counter++;
+        if (counter > 9) {
+            counter = 0;
+            distance++;
         }
-    } while (!coordInBounds(y, x) || (cave[y][x].fval >= MIN_CLOSED_SPACE) || (cave[y][x].cptr >= 2));
+    } while (!coordInBounds(to_y, to_x) || (cave[to_y][to_x].fval >= MIN_CLOSED_SPACE) || (cave[to_y][to_x].cptr >= 2));
 
-    dungeonMoveCreatureRecord(char_row, char_col, y, x);
+    dungeonMoveCreatureRecord(char_row, char_col, to_y, to_x);
 
     for (int row = char_row - 1; row <= char_row + 1; row++) {
         for (int col = char_col - 1; col <= char_col + 1; col++) {
-            Cave_t *c_ptr = &cave[row][col];
-            c_ptr->tl = false;
+            Cave_t *tile = &cave[row][col];
+            tile->tl = false;
             dungeonLiteSpot(row, col);
         }
     }
 
     dungeonLiteSpot(char_row, char_col);
 
-    char_row = (int16_t) y;
-    char_col = (int16_t) x;
+    char_row = (int16_t) to_y;
+    char_col = (int16_t) to_x;
+
     dungeonResetView();
 
     // light creatures
