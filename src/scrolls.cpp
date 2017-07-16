@@ -387,10 +387,10 @@ static bool scrollCurseArmor() {
     return true;
 }
 
-static bool readSummonUndeadScroll() {
+static bool scrollSummonUndead() {
     bool identified = false;
 
-    for (int k = 0; k < randomNumber(3); k++) {
+    for (int i = 0; i < randomNumber(3); i++) {
         int y = char_row;
         int x = char_col;
         identified |= monsterSummonUndead(&y, &x);
@@ -555,7 +555,7 @@ void read_scroll() {
                 identified = scrollCurseArmor();
                 break;
             case 37:
-                identified = readSummonUndeadScroll();
+                identified = scrollSummonUndead();
                 break;
             case 38:
                 bless(randomNumber(12) + 6);
