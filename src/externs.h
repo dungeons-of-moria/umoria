@@ -455,7 +455,7 @@ void saveHighScore(HighScore_t *score);
 void readHighScore(HighScore_t *score);
 
 // scrolls.c
-void read_scroll();
+void readScroll();
 
 // sets.c
 bool set_room(int element);

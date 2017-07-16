@@ -407,16 +407,16 @@ static void scrollWordOfRecall() {
 }
 
 // Scrolls for the reading -RAK-
-void read_scroll() {
+void readScroll() {
     player_free_turn = true;
 
-    int j, k;
-    if (!playerCanReadScroll(&j, &k)) {
+    int item_pos_start, item_pos_end;
+    if (!playerCanReadScroll(&item_pos_start, &item_pos_end)) {
         return;
     }
 
-    int itemID;
-    if (!inventoryGetInputForItemId(&itemID, "Read which scroll?", j, k, CNIL, CNIL)) {
+    int item_id;
+    if (!inventoryGetInputForItemId(&item_id, "Read which scroll?", item_pos_start, item_pos_end, CNIL, CNIL)) {
         return;
     }
 
@@ -426,17 +426,17 @@ void read_scroll() {
     bool used_up = true;
     bool identified = false;
 
-    Inventory_t *i_ptr = &inventory[itemID];
-    uint32_t flags = i_ptr->flags;
+    Inventory_t *item = &inventory[item_id];
+    uint32_t item_flags = item->flags;
 
-    while (flags != 0) {
-        int scrollType = getAndClearFirstBit(&flags) + 1;
+    while (item_flags != 0) {
+        int scroll_type = getAndClearFirstBit(&item_flags) + 1;
 
-        if (i_ptr->tval == TV_SCROLL2) {
-            scrollType += 32;
+        if (item->tval == TV_SCROLL2) {
+            scroll_type += 32;
         }
 
-        switch (scrollType) {
+        switch (scroll_type) {
             case 1:
                 identified = scrollEnchantWeaponToHit();
                 break;
@@ -447,7 +447,7 @@ void read_scroll() {
                 identified = scrollEnchantItemToAC();
                 break;
             case 4:
-                itemID = scrollIdentifyItem(itemID, &used_up);
+                item_id = scrollIdentifyItem(item_id, &used_up);
                 identified = true;
                 break;
             case 5:
@@ -583,22 +583,22 @@ void read_scroll() {
         }
     }
 
-    i_ptr = &inventory[itemID];
+    item = &inventory[item_id];
 
     if (identified) {
-        if (!itemSetColorlessAsIdentifed(i_ptr)) {
+        if (!itemSetColorlessAsIdentifed(item)) {
             // round half-way case up
-            py.misc.exp += (i_ptr->level + (py.misc.lev >> 1)) / py.misc.lev;
+            py.misc.exp += (item->level + (py.misc.lev >> 1)) / py.misc.lev;
             displayCharacterExperience();
 
-            itemIdentify(&itemID);
+            itemIdentify(&item_id);
         }
-    } else if (!itemSetColorlessAsIdentifed(i_ptr)) {
-        itemSetAsTried(i_ptr);
+    } else if (!itemSetColorlessAsIdentifed(item)) {
+        itemSetAsTried(item);
     }
 
     if (used_up) {
-        itemTypeRemainingCountDescription(itemID);
-        inventoryDestroyItem(itemID);
+        itemTypeRemainingCountDescription(item_id);
+        inventoryDestroyItem(item_id);
     }
 }

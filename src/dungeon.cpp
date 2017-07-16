@@ -1795,7 +1795,7 @@ static void do_command(char com_val) {
             quaff();
             break;
         case 'r': // (r)ead
-            read_scroll();
+            readScroll();
             break;
         case 's': // (s)earch for a turn
             dungeonSearch(char_row, char_col, py.misc.srh);
