@@ -507,24 +507,24 @@ static void spellLightLineTouchesMonster(int monster_id) {
 }
 
 // Leave a line of light in given dir, blue light can sometimes hurt creatures. -RAK-
-void light_line(int x, int y, int direction) {
-    int dist = 0;
+void spellLightLine(int x, int y, int direction) {
+    int distance = 0;
     bool finished = false;
 
     while (!finished) {
-        Cave_t *c_ptr = &cave[y][x];
+        Cave_t *tile = &cave[y][x];
 
-        if (dist > OBJ_BOLT_RANGE || c_ptr->fval >= MIN_CLOSED_SPACE) {
+        if (distance > OBJ_BOLT_RANGE || tile->fval >= MIN_CLOSED_SPACE) {
             (void) playerMovePosition(direction, &y, &x);
             finished = true;
             continue; // we're done here, break out of the loop
         }
 
-        if (!c_ptr->pl && !c_ptr->tl) {
+        if (!tile->pl && !tile->tl) {
             // set pl so that dungeonLiteSpot will work
-            c_ptr->pl = true;
+            tile->pl = true;
 
-            if (c_ptr->fval == LIGHT_FLOOR) {
+            if (tile->fval == LIGHT_FLOOR) {
                 if (coordInsidePanel(y, x)) {
                     dungeonLightRoom(y, x);
                 }
@@ -534,15 +534,15 @@ void light_line(int x, int y, int direction) {
         }
 
         // set pl in case tl was true above
-        c_ptr->pl = true;
+        tile->pl = true;
 
-        if (c_ptr->cptr > 1) {
-            spellLightLineTouchesMonster((int) c_ptr->cptr);
+        if (tile->cptr > 1) {
+            spellLightLineTouchesMonster((int) tile->cptr);
         }
 
         // move must be at end because want to light up current spot
         (void) playerMovePosition(direction, &y, &x);
-        dist++;
+        distance++;
     }
 }
 
@@ -554,7 +554,7 @@ void starlite(int y, int x) {
 
     for (int dir = 1; dir <= 9; dir++) {
         if (dir != 5) {
-            light_line(x, y, dir);
+            spellLightLine(x, y, dir);
         }
     }
 }

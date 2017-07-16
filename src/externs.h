@@ -493,7 +493,7 @@ bool spellSurroundPlayerWithTraps();
 bool spellSurroundPlayerWithDoors();
 bool spellDestroyAdjacentDoorsTraps();
 bool spellDetectMonsters();
-void light_line(int x, int y, int direction);
+void spellLightLine(int x, int y, int direction);
 void starlite(int y, int x);
 bool disarm_all(int y, int x, int direction);
 void fire_bolt(int y, int x, int direction, int damage_hp, int spell_type_id, char *spell_name);

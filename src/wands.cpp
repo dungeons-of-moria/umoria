@@ -25,7 +25,7 @@ static bool discharge_wand(Inventory_t *wand, int dir) {
         switch (kind) {
             case 1:
                 printMessage("A line of blue shimmering light appears.");
-                light_line(char_col, char_row, dir);
+                spellLightLine(char_col, char_row, dir);
                 identified = true;
                 break;
             case 2:
