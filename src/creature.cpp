@@ -714,7 +714,7 @@ static bool executeAttack(Creature_t *r_ptr, Monster_t *m_ptr, int monsterID, in
             break;
         case 19: // Lose experience
             printMessage("You feel your life draining away!");
-            lose_exp(damage + (py.misc.exp / 100) * MON_DRAIN_LIFE);
+            spellLoseEXP(damage + (py.misc.exp / 100) * MON_DRAIN_LIFE);
             break;
         case 20: // Aggravate monster
             (void) spellAggravateMonsters(20);

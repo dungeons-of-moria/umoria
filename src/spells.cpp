@@ -2027,7 +2027,7 @@ void spellWardingGlyph() {
 }
 
 // Lose a strength point. -RAK-
-void lose_str() {
+void spellLoseSTR() {
     if (!py.flags.sustain_str) {
         (void) playerStatRandomDecrease(A_STR);
         printMessage("You feel very sick.");
@@ -2037,7 +2037,7 @@ void lose_str() {
 }
 
 // Lose an intelligence point. -RAK-
-void lose_int() {
+void spellLoseINT() {
     if (!py.flags.sustain_int) {
         (void) playerStatRandomDecrease(A_INT);
         printMessage("You become very dizzy.");
@@ -2047,7 +2047,7 @@ void lose_int() {
 }
 
 // Lose a wisdom point. -RAK-
-void lose_wis() {
+void spellLoseWIS() {
     if (!py.flags.sustain_wis) {
         (void) playerStatRandomDecrease(A_WIS);
         printMessage("You feel very naive.");
@@ -2057,7 +2057,7 @@ void lose_wis() {
 }
 
 // Lose a dexterity point. -RAK-
-void lose_dex() {
+void spellLoseDEX() {
     if (!py.flags.sustain_dex) {
         (void) playerStatRandomDecrease(A_DEX);
         printMessage("You feel very sore.");
@@ -2067,7 +2067,7 @@ void lose_dex() {
 }
 
 // Lose a constitution point. -RAK-
-void lose_con() {
+void spellLoseCON() {
     if (!py.flags.sustain_con) {
         (void) playerStatRandomDecrease(A_CON);
         printMessage("You feel very sick.");
@@ -2077,7 +2077,7 @@ void lose_con() {
 }
 
 // Lose a charisma point. -RAK-
-void lose_chr() {
+void spellLoseCHR() {
     if (!py.flags.sustain_chr) {
         (void) playerStatRandomDecrease(A_CHR);
         printMessage("Your skin starts to itch.");
@@ -2087,7 +2087,7 @@ void lose_chr() {
 }
 
 // Lose experience -RAK-
-void lose_exp(int32_t adjustment) {
+void spellLoseEXP(int32_t adjustment) {
     if (adjustment > py.misc.exp) {
         py.misc.exp = 0;
     } else {
@@ -2108,12 +2108,12 @@ void lose_exp(int32_t adjustment) {
 
         playerCalculateHitPoints();
 
-        Class_t *c_ptr = &classes[py.misc.pclass];
+        Class_t *character_class = &classes[py.misc.pclass];
 
-        if (c_ptr->spell == MAGE) {
+        if (character_class->spell == MAGE) {
             playerCalculateAllowedSpellsCount(A_INT);
             playerGainMana(A_INT);
-        } else if (c_ptr->spell == PRIEST) {
+        } else if (character_class->spell == PRIEST) {
             playerCalculateAllowedSpellsCount(A_WIS);
             playerGainMana(A_WIS);
         }

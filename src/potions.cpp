@@ -28,7 +28,7 @@ static bool playerDrinkPotion(uint32_t flags, uint8_t item_id) {
                 }
                 break;
             case 2:
-                lose_str();
+                spellLoseSTR();
                 identified = true;
                 break;
             case 3:
@@ -44,7 +44,7 @@ static bool playerDrinkPotion(uint32_t flags, uint8_t item_id) {
                 }
                 break;
             case 5:
-                lose_int();
+                spellLoseINT();
                 identified = true;
                 break;
             case 6:
@@ -60,7 +60,7 @@ static bool playerDrinkPotion(uint32_t flags, uint8_t item_id) {
                 }
                 break;
             case 8:
-                lose_wis();
+                spellLoseWIS();
                 identified = true;
                 break;
             case 9:
@@ -76,7 +76,7 @@ static bool playerDrinkPotion(uint32_t flags, uint8_t item_id) {
                 }
                 break;
             case 11:
-                lose_chr();
+                spellLoseCHR();
                 identified = true;
                 break;
             case 12:
@@ -198,7 +198,7 @@ static bool playerDrinkPotion(uint32_t flags, uint8_t item_id) {
                     } else {
                         exp += randomNumber((int) py.misc.exp) / 5;
                     }
-                    lose_exp(exp);
+                    spellLoseEXP(exp);
                     identified = true;
                 }
                 break;

@@ -82,11 +82,11 @@ void playerEat() {
                 identified = playerCureConfusion();
                 break;
             case 10:
-                lose_str();
+                spellLoseSTR();
                 identified = true;
                 break;
             case 11:
-                lose_con();
+                spellLoseCON();
                 identified = true;
                 break;
 #if 0 // 12 through 15 are no longer used
