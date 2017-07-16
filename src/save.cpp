@@ -1248,7 +1248,7 @@ void saveHighScore(HighScore_t *score) {
     DEBUG(fclose(logfile));
 }
 
-void rd_highscore(HighScore_t *score) {
+void readHighScore(HighScore_t *score) {
     DEBUG(logfile = fopen("IO_LOG", "a"));
     DEBUG(fprintf(logfile, "Reading score:\n"));
 

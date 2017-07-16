@@ -63,7 +63,7 @@ void showScoresScreen() {
     setFileptr(highscore_fp);
 
     HighScore_t score;
-    rd_highscore(&score);
+    readHighScore(&score);
 
     char input;
 
@@ -82,7 +82,7 @@ void showScoresScreen() {
                            score.lev, score.died_from);
             putStringClearToEOL(string, ++i, 0);
             rank++;
-            rd_highscore(&score);
+            readHighScore(&score);
         }
         putStringClearToEOL("Rank  Points Name              Sex Race       Class  Lvl Killed By", 0, 0);
         eraseLine(1, 0);
@@ -311,7 +311,7 @@ static void highscores() {
 
     int i = 0;
     off_t curpos = ftell(highscore_fp);
-    rd_highscore(&old_entry);
+    readHighScore(&old_entry);
 
     while (!feof(highscore_fp)) {
         if (new_entry.points >= old_entry.points) {
@@ -339,7 +339,7 @@ static void highscores() {
         }
 
         curpos = ftell(highscore_fp);
-        rd_highscore(&old_entry);
+        readHighScore(&old_entry);
     }
 
     if (feof(highscore_fp)) {
@@ -373,7 +373,7 @@ static void highscores() {
             (void) fseek(highscore_fp, (long) 0, SEEK_CUR);
 
             curpos = ftell(highscore_fp);
-            rd_highscore(&old_entry);
+            readHighScore(&old_entry);
         }
         if (feof(highscore_fp)) {
             (void) fseek(highscore_fp, curpos, SEEK_SET);

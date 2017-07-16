@@ -452,7 +452,7 @@ bool saveGame();
 bool loadGame(bool *generate);
 void setFileptr(FILE *file);
 void saveHighScore(HighScore_t *score);
-void rd_highscore(HighScore_t *score);
+void readHighScore(HighScore_t *score);
 
 // scrolls.c
 void read_scroll();
