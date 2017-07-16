@@ -110,31 +110,31 @@ static bool scrollEnchantWeaponToHit() {
     return true;
 }
 
-static bool readEnchantWeaponToDamageScroll() {
-    Inventory_t *i_ptr = &inventory[INVEN_WIELD];
+static bool scrollEnchantWeaponToDamage() {
+    Inventory_t *item = &inventory[INVEN_WIELD];
 
-    if (i_ptr->tval == TV_NOTHING) {
+    if (item->tval == TV_NOTHING) {
         return false;
     }
 
     obj_desc_t msg, desc;
-    itemDescription(desc, i_ptr, false);
+    itemDescription(desc, item, false);
 
     (void) sprintf(msg, "Your %s glows faintly!", desc);
     printMessage(msg);
 
-    int16_t scrollType;
+    int16_t scroll_type;
 
-    if (i_ptr->tval >= TV_HAFTED && i_ptr->tval <= TV_DIGGING) {
-        scrollType = i_ptr->damage[0] * i_ptr->damage[1];
+    if (item->tval >= TV_HAFTED && item->tval <= TV_DIGGING) {
+        scroll_type = item->damage[0] * item->damage[1];
     } else {
         // Bows' and arrows' enchantments should not be
         // limited by their low base damages
-        scrollType = 10;
+        scroll_type = 10;
     }
 
-    if (enchant(&i_ptr->todam, scrollType)) {
-        i_ptr->flags &= ~TR_CURSED;
+    if (enchant(&item->todam, scroll_type)) {
+        item->flags &= ~TR_CURSED;
         playerRecalculateBonuses();
     } else {
         printMessage("The enchantment fails.");
@@ -441,7 +441,7 @@ void read_scroll() {
                 identified = scrollEnchantWeaponToHit();
                 break;
             case 2:
-                identified = readEnchantWeaponToDamageScroll();
+                identified = scrollEnchantWeaponToDamage();
                 break;
             case 3:
                 identified = readEnchantItemToACScroll();
