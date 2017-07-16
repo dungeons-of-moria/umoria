@@ -543,7 +543,7 @@ void playerDetectInvisible(int adjustment);
 void spellDestroyArea(int y, int x);
 bool spellEnchantItem(int16_t *plusses, int16_t max_bonus_limit);
 bool spellRemoveCurseFromAllItems();
-bool restore_level();
+bool spellRestorePlayerLevels();
 
 // staffs.c
 void use();

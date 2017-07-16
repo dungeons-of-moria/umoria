@@ -393,7 +393,7 @@ static void kingly() {
     current_dungeon_level = 0;
     (void) strcpy(character_died_from, "Ripe Old Age");
 
-    (void) restore_level();
+    (void) spellRestorePlayerLevels();
 
     py.misc.lev += MAX_PLAYER_LEVEL;
     py.misc.au += 250000L;

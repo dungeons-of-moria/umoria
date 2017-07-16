@@ -2257,7 +2257,7 @@ bool spellRemoveCurseFromAllItems() {
 }
 
 // Restores any drained experience -RAK-
-bool restore_level() {
+bool spellRestorePlayerLevels() {
     if (py.misc.max_exp > py.misc.exp) {
         printMessage("You feel your life energies returning.");
 

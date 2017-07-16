@@ -234,7 +234,7 @@ static bool playerDrinkPotion(uint32_t flags, uint8_t item_id) {
                 identified = playerRemoveFear();
                 break;
             case 40:
-                identified = restore_level();
+                identified = spellRestorePlayerLevels();
                 break;
             case 41:
                 if (py.flags.resist_heat == 0) {
