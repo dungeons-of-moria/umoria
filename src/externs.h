@@ -486,7 +486,7 @@ bool dungeonDetectSecretDoorsOnPanel();
 bool spellDetectInvisibleCreaturesOnPanel();
 bool spellLightArea(int y, int x);
 bool spellDarkenArea(int y, int x);
-void dungeonMapCurrentArea();
+void spellMapCurrentArea();
 bool spellIdentifyItem();
 bool spellAggravateMonsters(int affect_distance);
 bool spellSurroundPlayerWithTraps();

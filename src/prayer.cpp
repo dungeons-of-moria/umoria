@@ -125,7 +125,7 @@ static void playerRecitePrayer(int prayer_type) {
             earthquake();
             break;
         case 23:
-            dungeonMapCurrentArea();
+            spellMapCurrentArea();
             break;
         case 24:
             (void) hp_player(diceDamageRoll(16, 4));

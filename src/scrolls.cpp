@@ -475,7 +475,7 @@ void readScroll() {
                 identified = scrollConfuseMonster();
                 break;
             case 12:
-                dungeonMapCurrentArea();
+                spellMapCurrentArea();
                 identified = true;
                 break;
             case 13:

@@ -288,7 +288,7 @@ static void dungeonLightAreaAroundFloorTile(int y, int x) {
 }
 
 // Map the current area plus some -RAK-
-void dungeonMapCurrentArea() {
+void spellMapCurrentArea() {
     int row_min = panel_row_min - randomNumber(10);
     int row_max = panel_row_max + randomNumber(10);
     int col_min = panel_col_min - randomNumber(20);
