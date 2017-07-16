@@ -49,7 +49,7 @@ static void castSpell(int spellID) {
             playerTeleport(10);
             break;
         case 4:
-            (void) dungeonLightArea(char_row, char_col);
+            (void) spellLightArea(char_row, char_col);
             break;
         case 5:
             (void) hp_player(diceDamageRoll(4, 4));

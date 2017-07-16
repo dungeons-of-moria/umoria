@@ -66,7 +66,7 @@ static bool dischargeStaff(Inventory_t *staff_ptr) {
 
         switch (staff_type) {
             case 1:
-                identified = dungeonLightArea(char_row, char_col);
+                identified = spellLightArea(char_row, char_col);
                 break;
             case 2:
                 identified = dungeonDetectSecretDoorsOnPanel();
