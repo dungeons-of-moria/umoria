@@ -538,7 +538,7 @@ void spellLoseCON();
 void spellLoseCHR();
 void spellLoseEXP(int32_t adjustment);
 bool spellSlowPoison();
-void bless(int adjustment);
+void playerBless(int adjustment);
 void detect_inv2(int adjustment);
 void destroy_area(int y, int x);
 bool enchant(int16_t *plusses, int16_t max_bonus_limit);

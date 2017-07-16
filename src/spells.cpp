@@ -2137,7 +2137,7 @@ bool spellSlowPoison() {
 }
 
 // Bless -RAK-
-void bless(int adjustment) {
+void playerBless(int adjustment) {
     py.flags.blessed += adjustment;
 }
 

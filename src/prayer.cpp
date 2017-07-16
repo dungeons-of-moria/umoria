@@ -55,7 +55,7 @@ static void playerRecitePrayer(int prayer_type) {
             (void) spellChangePlayerHitPoints(diceDamageRoll(3, 3));
             break;
         case 3:
-            bless(randomNumber(12) + 12);
+            playerBless(randomNumber(12) + 12);
             break;
         case 4:
             (void) playerRemoveFear();
@@ -84,7 +84,7 @@ static void playerRecitePrayer(int prayer_type) {
             (void) spellChangePlayerHitPoints(diceDamageRoll(4, 4));
             break;
         case 12:
-            bless(randomNumber(24) + 24);
+            playerBless(randomNumber(24) + 24);
             break;
         case 13:
             (void) monsterSleep(char_row, char_col);
@@ -134,7 +134,7 @@ static void playerRecitePrayer(int prayer_type) {
             (void) spellTurnUndead();
             break;
         case 26:
-            bless(randomNumber(48) + 48);
+            playerBless(randomNumber(48) + 48);
             break;
         case 27:
             (void) spellDispelCreature(CD_UNDEAD, (3 * py.misc.lev));

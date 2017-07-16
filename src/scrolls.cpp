@@ -558,15 +558,15 @@ void readScroll() {
                 identified = scrollSummonUndead();
                 break;
             case 38:
-                bless(randomNumber(12) + 6);
+                playerBless(randomNumber(12) + 6);
                 identified = true;
                 break;
             case 39:
-                bless(randomNumber(24) + 12);
+                playerBless(randomNumber(24) + 12);
                 identified = true;
                 break;
             case 40:
-                bless(randomNumber(48) + 24);
+                playerBless(randomNumber(48) + 24);
                 identified = true;
                 break;
             case 41:
