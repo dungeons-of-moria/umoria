@@ -170,17 +170,17 @@ bool dungeonDetectSecretDoorsOnPanel() {
 }
 
 // Locates and displays all invisible creatures on current panel -RAK-
-bool detect_invisible() {
+bool dungeonDetectInvisibleCreaturesOnPanel() {
     bool detected = false;
 
     for (int id = next_free_monster_id - 1; id >= MIN_MONIX; id--) {
-        Monster_t *m_ptr = &monsters[id];
+        Monster_t *monster = &monsters[id];
 
-        if (coordInsidePanel((int) m_ptr->fy, (int) m_ptr->fx) && (CM_INVISIBLE & creatures_list[m_ptr->mptr].cmove)) {
-            m_ptr->ml = true;
+        if (coordInsidePanel((int) monster->fy, (int) monster->fx) && (CM_INVISIBLE & creatures_list[monster->mptr].cmove)) {
+            monster->ml = true;
 
             // works correctly even if hallucinating
-            putChar((char) creatures_list[m_ptr->mptr].cchar, (int) m_ptr->fy, (int) m_ptr->fx);
+            putChar((char) creatures_list[monster->mptr].cchar, (int) monster->fy, (int) monster->fx);
 
             detected = true;
         }

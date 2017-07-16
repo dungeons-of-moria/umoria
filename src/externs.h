@@ -483,7 +483,7 @@ bool dungeonDetectTreasureOnPanel();
 bool dungeonDetectObjectOnPanel();
 bool dungeonDetectTrapOnPanel();
 bool dungeonDetectSecretDoorsOnPanel();
-bool detect_invisible();
+bool dungeonDetectInvisibleCreaturesOnPanel();
 bool light_area(int y, int x);
 bool unlight_area(int y, int x);
 void map_area();
