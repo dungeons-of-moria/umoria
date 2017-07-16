@@ -482,7 +482,7 @@ void readScroll() {
                 identified = monsterSleep(char_row, char_col);
                 break;
             case 14:
-                warding_glyph();
+                spellWardingGlyph();
                 identified = true;
                 break;
             case 15:

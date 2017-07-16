@@ -2018,11 +2018,11 @@ bool spellTurnUndead() {
 }
 
 // Leave a glyph of warding. Creatures will not pass over! -RAK-
-void warding_glyph() {
+void spellWardingGlyph() {
     if (cave[char_row][char_col].tptr == 0) {
-        int newID = popt();
-        cave[char_row][char_col].tptr = (uint8_t) newID;
-        inventoryItemCopyTo(OBJ_SCARE_MON, &treasure_list[newID]);
+        int free_id = popt();
+        cave[char_row][char_col].tptr = (uint8_t) free_id;
+        inventoryItemCopyTo(OBJ_SCARE_MON, &treasure_list[free_id]);
     }
 }
 

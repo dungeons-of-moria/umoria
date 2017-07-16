@@ -529,7 +529,7 @@ bool playerProtectEvil();
 void spellCreateFood();
 bool spellDispelCreature(int creature_defense, int damage);
 bool spellTurnUndead();
-void warding_glyph();
+void spellWardingGlyph();
 void lose_str();
 void lose_int();
 void lose_wis();

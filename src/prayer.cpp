@@ -146,7 +146,7 @@ static void playerRecitePrayer(int prayer_type) {
             (void) spellDispelCreature(CD_EVIL, (3 * py.misc.lev));
             break;
         case 30:
-            warding_glyph();
+            spellWardingGlyph();
             break;
         case 31:
             (void) playerRemoveFear();
