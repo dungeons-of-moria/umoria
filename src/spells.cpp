@@ -225,7 +225,7 @@ bool spellLightArea(int y, int x) {
 }
 
 // Darken an area, opposite of light area -RAK-
-bool dungeonDarkenArea(int y, int x) {
+bool spellDarkenArea(int y, int x) {
     bool darkened = false;
 
     if (cave[y][x].lr && current_dungeon_level > 0) {
