@@ -90,7 +90,7 @@ static void playerRecitePrayer(int prayer_type) {
             (void) monsterSleep(char_row, char_col);
             break;
         case 14:
-            create_food();
+            spellCreateFood();
             break;
         case 15:
             for (int i = 0; i < INVEN_ARRAY_SIZE; i++) {
@@ -202,7 +202,7 @@ void pray() {
     Spell_t *spell = &magic_spells[py.misc.pclass - 1][choice];
 
     // NOTE: at least one function called by `playerRecitePrayer()` sets `player_free_turn = true`,
-    // e.g. `create_food()`, so this check is required. -MRC-
+    // e.g. `spellCreateFood()`, so this check is required. -MRC-
     player_free_turn = false;
     playerRecitePrayer(choice);
     if (!player_free_turn) {

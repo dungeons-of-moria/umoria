@@ -103,7 +103,7 @@ static void castSpell(int spellID) {
             }
             break;
         case 17:
-            create_food();
+            spellCreateFood();
             break;
         case 18:
             (void) spellRechargeItem(20);

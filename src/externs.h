@@ -526,7 +526,7 @@ bool playerCurePoison();
 bool playerRemoveFear();
 void dungeonEarthquake();
 bool playerProtectEvil();
-void create_food();
+void spellCreateFood();
 bool dispel_creature(int creature_defense, int damage);
 bool turn_undead();
 void warding_glyph();

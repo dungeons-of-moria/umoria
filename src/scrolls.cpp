@@ -536,7 +536,7 @@ void readScroll() {
                 identified = playerProtectEvil();
                 break;
             case 29:
-                create_food();
+                spellCreateFood();
                 identified = true;
                 break;
             case 30:
