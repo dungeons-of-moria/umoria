@@ -288,16 +288,16 @@ static void dungeonLightAreaAroundFloorTile(int y, int x) {
 }
 
 // Map the current area plus some -RAK-
-void map_area() {
-    int rowMin = panel_row_min - randomNumber(10);
-    int rowMax = panel_row_max + randomNumber(10);
-    int colMin = panel_col_min - randomNumber(20);
-    int colMax = panel_col_max + randomNumber(20);
+void dungeonMapCurrentArea() {
+    int row_min = panel_row_min - randomNumber(10);
+    int row_max = panel_row_max + randomNumber(10);
+    int col_min = panel_col_min - randomNumber(20);
+    int col_max = panel_col_max + randomNumber(20);
 
-    for (int row = rowMin; row <= rowMax; row++) {
-        for (int col = colMin; col <= colMax; col++) {
-            if (coordInBounds(row, col) && cave[row][col].fval <= MAX_CAVE_FLOOR) {
-                dungeonLightAreaAroundFloorTile(row, col);
+    for (int y = row_min; y <= row_max; y++) {
+        for (int x = col_min; x <= col_max; x++) {
+            if (coordInBounds(y, x) && cave[y][x].fval <= MAX_CAVE_FLOOR) {
+                dungeonLightAreaAroundFloorTile(y, x);
             }
         }
     }

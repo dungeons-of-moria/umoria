@@ -1534,7 +1534,7 @@ static void doWizardCommands(char com_val) {
             wizard_light();
             break;
         case ':':
-            map_area();
+            dungeonMapCurrentArea();
             break;
         case CTRL_KEY('T'): // ^T = teleport
             playerTeleport(100);
