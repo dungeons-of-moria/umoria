@@ -1418,37 +1418,36 @@ bool spellPolymorphMonster(int y, int x, int direction) {
 }
 
 // Create a wall. -RAK-
-bool build_wall(int y, int x, int direction) {
+bool spellBuildWall(int y, int x, int direction) {
+    int distance = 0;
     bool built = false;
-
-    int dist = 0;
-
     bool finished = false;
+
     while (!finished) {
         (void) playerMovePosition(direction, &y, &x);
-        dist++;
+        distance++;
 
-        Cave_t *c_ptr = &cave[y][x];
+        Cave_t *tile = &cave[y][x];
 
-        if (dist > OBJ_BOLT_RANGE || c_ptr->fval >= MIN_CLOSED_SPACE) {
+        if (distance > OBJ_BOLT_RANGE || tile->fval >= MIN_CLOSED_SPACE) {
             finished = true;
             continue; // we're done here, break out of the loop
         }
 
-        if (c_ptr->tptr != 0) {
+        if (tile->tptr != 0) {
             (void) dungeonDeleteObject(y, x);
         }
 
-        if (c_ptr->cptr > 1) {
+        if (tile->cptr > 1) {
             finished = true;
 
-            Monster_t *m_ptr = &monsters[c_ptr->cptr];
-            Creature_t *r_ptr = &creatures_list[m_ptr->mptr];
+            Monster_t *monster = &monsters[tile->cptr];
+            Creature_t *creature = &creatures_list[monster->mptr];
 
-            if (!(r_ptr->cmove & CM_PHASE)) {
+            if (!(creature->cmove & CM_PHASE)) {
                 // monster does not move, can't escape the wall
                 int damage;
-                if (r_ptr->cmove & CM_ATTACK_ONLY) {
+                if (creature->cmove & CM_ATTACK_ONLY) {
                     // this will kill everything
                     damage = 3000;
                 } else {
@@ -1456,30 +1455,27 @@ bool build_wall(int y, int x, int direction) {
                 }
 
                 vtype_t name;
-                monsterNameDescription(name, m_ptr->ml, r_ptr->name);
+                monsterNameDescription(name, monster->ml, creature->name);
 
                 printMonsterActionText(name, "wails out in pain!");
 
-                if (monsterTakeHit((int) c_ptr->cptr, damage) >= 0) {
+                if (monsterTakeHit((int) tile->cptr, damage) >= 0) {
                     printMonsterActionText(name, "is embedded in the rock.");
                     displayCharacterExperience();
                 }
-            } else if (r_ptr->cchar == 'E' || r_ptr->cchar == 'X') {
-                // must be an earth elemental or an earth spirit, or a Xorn
-                // increase its hit points
-                m_ptr->hp += diceDamageRoll(4, 8);
+            } else if (creature->cchar == 'E' || creature->cchar == 'X') {
+                // must be an earth elemental, an earth spirit,
+                // or a Xorn to increase its hit points
+                monster->hp += diceDamageRoll(4, 8);
             }
         }
 
-        c_ptr->fval = MAGMA_WALL;
-        c_ptr->fm = false;
+        tile->fval = MAGMA_WALL;
+        tile->fm = false;
 
         // Permanently light this wall if it is lit by player's lamp.
-        c_ptr->pl = (c_ptr->tl || c_ptr->pl);
+        tile->pl = (tile->tl || tile->pl);
         dungeonLiteSpot(y, x);
-
-        // NOTE: this was never used anywhere. Is that a bug or just obsolete code?
-        // i++;
 
         built = true;
     }

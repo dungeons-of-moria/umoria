@@ -72,7 +72,7 @@ static bool discharge_wand(Inventory_t *wand, int dir) {
                 identified = true;
                 break;
             case 15:
-                identified = build_wall(row, col, dir);
+                identified = spellBuildWall(row, col, dir);
                 break;
             case 16:
                 identified = clone_monster(row, col, dir);

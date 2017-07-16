@@ -508,7 +508,7 @@ bool spellSleepMonster(int y, int x, int direction);
 bool spellWallToMud(int y, int x, int direction);
 bool spellDestroyDoorsTrapsInDirection(int y, int x, int direction);
 bool spellPolymorphMonster(int y, int x, int direction);
-bool build_wall(int y, int x, int direction);
+bool spellBuildWall(int y, int x, int direction);
 bool clone_monster(int y, int x, int direction);
 void teleport_away(int monster_id, int distance_from_player);
 void teleport_to(int to_y, int to_x);
