@@ -9,13 +9,13 @@
 #include "headers.h"
 #include "externs.h"
 
-static bool isCarryingStaff(int *j, int *k) {
+static bool staffPlayerIsCarrying(int *item_pos_start, int *item_pos_end) {
     if (inventory_count == 0) {
         printMessage("But you are not carrying anything.");
         return false;
     }
 
-    if (!inventoryFindRange(TV_STAFF, TV_NEVER, j, k)) {
+    if (!inventoryFindRange(TV_STAFF, TV_NEVER, item_pos_start, item_pos_end)) {
         printMessage("You are not carrying any staffs.");
         return false;
     }
@@ -23,8 +23,11 @@ static bool isCarryingStaff(int *j, int *k) {
     return true;
 }
 
-static bool canUseStaff(Inventory_t *staff_ptr) {
-    int chance = py.misc.save + playerStatAdjustmentWisdomIntelligence(A_INT) - (int) staff_ptr->level - 5 + (class_level_adj[py.misc.pclass][CLA_DEVICE] * py.misc.lev / 3);
+static bool staffPlayerCanUse(Inventory_t *item) {
+    int chance = py.misc.save;
+    chance += playerStatAdjustmentWisdomIntelligence(A_INT);
+    chance -= item->level - 5;
+    chance += class_level_adj[py.misc.pclass][CLA_DEVICE] * py.misc.lev / 3;
 
     if (py.flags.confused > 0) {
         chance = chance / 2;
@@ -44,10 +47,10 @@ static bool canUseStaff(Inventory_t *staff_ptr) {
         return false;
     }
 
-    if (staff_ptr->p1 < 1) {
+    if (item->p1 < 1) {
         printMessage("The staff has no charges left.");
-        if (!spellItemIdentified(staff_ptr)) {
-            itemAppendToInscription(staff_ptr, ID_EMPTY);
+        if (!spellItemIdentified(item)) {
+            itemAppendToInscription(item, ID_EMPTY);
         }
         return false;
     }
@@ -55,12 +58,12 @@ static bool canUseStaff(Inventory_t *staff_ptr) {
     return true;
 }
 
-static bool dischargeStaff(Inventory_t *staff_ptr) {
+static bool staffDischarge(Inventory_t *item) {
     bool identified = false;
 
-    staff_ptr->p1--;
+    item->p1--;
 
-    uint32_t flags = staff_ptr->flags;
+    uint32_t flags = item->flags;
     while (flags != 0) {
         int staff_type = getAndClearFirstBit(&flags) + 1;
 
@@ -91,7 +94,7 @@ static bool dischargeStaff(Inventory_t *staff_ptr) {
             case 8:
                 identified = false;
 
-                for (int k = 0; k < randomNumber(4); k++) {
+                for (int i = 0; i < randomNumber(4); i++) {
                     int y = char_row;
                     int x = char_col;
                     identified |= monsterSummon(&y, &x, false);
@@ -175,7 +178,7 @@ void use() {
 
     player_free_turn = true;
 
-    if (!isCarryingStaff(&j, &k)) {
+    if (!staffPlayerIsCarrying(&j, &k)) {
         return;
     }
 
@@ -189,11 +192,11 @@ void use() {
 
     Inventory_t *staff_ptr = &inventory[staff_id];
 
-    if (!canUseStaff(staff_ptr)) {
+    if (!staffPlayerCanUse(staff_ptr)) {
         return;
     }
 
-    bool identified = dischargeStaff(staff_ptr);
+    bool identified = staffDischarge(staff_ptr);
 
     if (identified) {
         if (!itemSetColorlessAsIdentifed(staff_ptr)) {
