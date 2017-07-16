@@ -113,7 +113,7 @@ static void castSpell(int spellID) {
             break;
         case 20:
             if (getDirectionWithMemory(CNIL, &dir)) {
-                (void) poly_monster(char_row, char_col, dir);
+                (void) spellPolymorphMonster(char_row, char_col, dir);
             }
             break;
         case 21:

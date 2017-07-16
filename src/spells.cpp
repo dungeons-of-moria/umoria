@@ -1374,39 +1374,41 @@ bool spellDestroyDoorsTrapsInDirection(int y, int x, int direction) {
 
 // Polymorph a monster -RAK-
 // NOTE: cannot polymorph a winning creature (BALROG)
-bool poly_monster(int y, int x, int direction) {
+bool spellPolymorphMonster(int y, int x, int direction) {
+    int distance = 0;
     bool morphed = false;
-
-    int dist = 0;
-
     bool finished = false;
+
     while (!finished) {
         (void) playerMovePosition(direction, &y, &x);
-        dist++;
+        distance++;
 
-        Cave_t *c_ptr = &cave[y][x];
+        Cave_t *tile = &cave[y][x];
 
-        if (dist > OBJ_BOLT_RANGE || c_ptr->fval >= MIN_CLOSED_SPACE) {
+        if (distance > OBJ_BOLT_RANGE || tile->fval >= MIN_CLOSED_SPACE) {
             finished = true;
-        } else if (c_ptr->cptr > 1) {
-            Monster_t *m_ptr = &monsters[c_ptr->cptr];
-            Creature_t *r_ptr = &creatures_list[m_ptr->mptr];
+            continue;
+        }
 
-            if (randomNumber(MAX_MONS_LEVEL) > r_ptr->level) {
+        if (tile->cptr > 1) {
+            Monster_t *monster = &monsters[tile->cptr];
+            Creature_t *creature = &creatures_list[monster->mptr];
+
+            if (randomNumber(MAX_MONS_LEVEL) > creature->level) {
                 finished = true;
 
-                dungeonDeleteMonster((int) c_ptr->cptr);
+                dungeonDeleteMonster((int) tile->cptr);
 
                 // Place_monster() should always return true here.
                 morphed = monsterPlaceNew(y, x, randomNumber(monster_levels[MAX_MONS_LEVEL] - monster_levels[0]) - 1 + monster_levels[0], false);
 
-                // don't test c_ptr->fm here, only pl/tl
-                if (morphed && coordInsidePanel(y, x) && (c_ptr->tl || c_ptr->pl)) {
+                // don't test tile->fm here, only pl/tl
+                if (morphed && coordInsidePanel(y, x) && (tile->tl || tile->pl)) {
                     morphed = true;
                 }
             } else {
                 vtype_t name;
-                monsterNameDescription(name, m_ptr->ml, r_ptr->name);
+                monsterNameDescription(name, monster->ml, creature->name);
                 printMonsterActionText(name, "is unaffected.");
             }
         }

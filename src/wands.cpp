@@ -44,7 +44,7 @@ static bool discharge_wand(Inventory_t *wand, int dir) {
                 identified = spellWallToMud(row, col, dir);
                 break;
             case 6:
-                identified = poly_monster(row, col, dir);
+                identified = spellPolymorphMonster(row, col, dir);
                 break;
             case 7:
                 identified = spellChangeMonsterHitPoints(row, col, dir, -diceDamageRoll(4, 6));
