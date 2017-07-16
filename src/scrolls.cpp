@@ -11,7 +11,7 @@
 
 // Note: naming of all the scroll functions needs verifying -MRC-
 
-static bool canReadScroll(int *j, int *k) {
+static bool playerCanReadScroll(int *item_pos_start, int *item_pos_end) {
     if (py.flags.blind > 0) {
         printMessage("You can't see to read the scroll.");
         return false;
@@ -32,7 +32,7 @@ static bool canReadScroll(int *j, int *k) {
         return false;
     }
 
-    if (!inventoryFindRange(TV_SCROLL1, TV_SCROLL2, j, k)) {
+    if (!inventoryFindRange(TV_SCROLL1, TV_SCROLL2, item_pos_start, item_pos_end)) {
         printMessage("You are not carrying any scrolls!");
         return false;
     }
@@ -411,7 +411,7 @@ void read_scroll() {
     player_free_turn = true;
 
     int j, k;
-    if (!canReadScroll(&j, &k)) {
+    if (!playerCanReadScroll(&j, &k)) {
         return;
     }
 
