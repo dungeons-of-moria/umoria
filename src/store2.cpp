@@ -473,7 +473,7 @@ static int purchase_haggle(int store_num, int32_t *price, Inventory_t *item) {
     const char *comment = "Asking";
 
     // go right to final price if player has bargained well
-    if (noneedtobargain(store_num, final_ask)) {
+    if (storeNoNeedToBargain(store_num, final_ask)) {
         printMessage("After a long bargaining session, you agree upon the price.");
         cur_ask = min_sell;
         comment = "Final offer";
@@ -662,7 +662,7 @@ static int sell_haggle(int store_num, int32_t *price, Inventory_t *item) {
             comment = "Offer";
 
             // go right to final price if player has bargained well
-            if (noneedtobargain(store_num, final_ask)) {
+            if (storeNoNeedToBargain(store_num, final_ask)) {
                 printMessage("After a long bargaining session, you agree upon the price.");
                 cur_ask = final_ask;
                 comment = "Final offer";

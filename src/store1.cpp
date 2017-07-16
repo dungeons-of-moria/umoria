@@ -393,14 +393,14 @@ void storeMaintenance() {
 }
 
 // eliminate need to bargain if player has haggled well in the past -DJB-
-bool noneedtobargain(int store_id, int32_t min_price) {
-    Store_t *s_ptr = &stores[store_id];
+bool storeNoNeedToBargain(int store_id, int32_t min_price) {
+    Store_t *store = &stores[store_id];
 
-    if (s_ptr->good_buy == MAX_SHORT) {
+    if (store->good_buy == MAX_SHORT) {
         return true;
     }
 
-    int bargain_record = (s_ptr->good_buy - 3 * s_ptr->bad_buy - 5);
+    int bargain_record = (store->good_buy - 3 * store->bad_buy - 5);
 
     return ((bargain_record > 0) && ((int32_t) bargain_record * (int32_t) bargain_record > min_price / 50));
 }

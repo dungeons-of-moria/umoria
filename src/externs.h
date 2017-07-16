@@ -556,7 +556,7 @@ void storeCarry(int store_id, int *index_id, Inventory_t *item);
 void storeDestroy(int store_id, int item_id, bool only_one_of);
 void storeInitializeOwners();
 void storeMaintenance();
-bool noneedtobargain(int store_id, int32_t min_price);
+bool storeNoNeedToBargain(int store_id, int32_t min_price);
 void updatebargain(int store_id, int32_t price, int32_t min_price);
 
 // store2.c
