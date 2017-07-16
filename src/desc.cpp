@@ -33,77 +33,76 @@ bool isVowel(char ch) {
 
 // Initialize all Potions, wands, staves, scrolls, etc.
 void magicInitializeItemNames() {
-    int j;
-    char *tmp;
+    int id;
 
     seedSet(magic_seed);
 
     // The first 3 entries for colors are fixed, (slime & apple juice, water)
     for (int i = 3; i < MAX_COLORS; i++) {
-        j = randomNumber(MAX_COLORS - 3) + 2;
-        tmp = colors[i];
-        colors[i] = colors[j];
-        colors[j] = tmp;
+        id = randomNumber(MAX_COLORS - 3) + 2;
+        const char *color = colors[i];
+        colors[i] = colors[id];
+        colors[id] = color;
     }
 
     for (int i = 0; i < MAX_WOODS; i++) {
-        j = randomNumber(MAX_WOODS) - 1;
-        tmp = woods[i];
-        woods[i] = woods[j];
-        woods[j] = tmp;
+        id = randomNumber(MAX_WOODS) - 1;
+        const char *wood = woods[i];
+        woods[i] = woods[id];
+        woods[id] = wood;
     }
 
     for (int i = 0; i < MAX_METALS; i++) {
-        j = randomNumber(MAX_METALS) - 1;
-        tmp = metals[i];
-        metals[i] = metals[j];
-        metals[j] = tmp;
+        id = randomNumber(MAX_METALS) - 1;
+        const char *metal = metals[i];
+        metals[i] = metals[id];
+        metals[id] = metal;
     }
 
     for (int i = 0; i < MAX_ROCKS; i++) {
-        j = randomNumber(MAX_ROCKS) - 1;
-        tmp = rocks[i];
-        rocks[i] = rocks[j];
-        rocks[j] = tmp;
+        id = randomNumber(MAX_ROCKS) - 1;
+        const char *rock = rocks[i];
+        rocks[i] = rocks[id];
+        rocks[id] = rock;
     }
 
     for (int i = 0; i < MAX_AMULETS; i++) {
-        j = randomNumber(MAX_AMULETS) - 1;
-        tmp = amulets[i];
-        amulets[i] = amulets[j];
-        amulets[j] = tmp;
+        id = randomNumber(MAX_AMULETS) - 1;
+        const char *amulet = amulets[i];
+        amulets[i] = amulets[id];
+        amulets[id] = amulet;
     }
 
     for (int i = 0; i < MAX_MUSH; i++) {
-        j = randomNumber(MAX_MUSH) - 1;
-        tmp = mushrooms[i];
-        mushrooms[i] = mushrooms[j];
-        mushrooms[j] = tmp;
+        id = randomNumber(MAX_MUSH) - 1;
+        const char *mushroom = mushrooms[i];
+        mushrooms[i] = mushrooms[id];
+        mushrooms[id] = mushroom;
     }
 
     int k;
-    vtype_t string;
+    vtype_t title;
 
     for (int h = 0; h < MAX_TITLES; h++) {
-        string[0] = '\0';
+        title[0] = '\0';
         k = randomNumber(2) + 1;
 
         for (int i = 0; i < k; i++) {
             for (int s = randomNumber(2); s > 0; s--) {
-                (void) strcat(string, syllables[randomNumber(MAX_SYLLABLES) - 1]);
+                (void) strcat(title, syllables[randomNumber(MAX_SYLLABLES) - 1]);
             }
             if (i < k - 1) {
-                (void) strcat(string, " ");
+                (void) strcat(title, " ");
             }
         }
 
-        if (string[8] == ' ') {
-            string[8] = '\0';
+        if (title[8] == ' ') {
+            title[8] = '\0';
         } else {
-            string[9] = '\0';
+            title[9] = '\0';
         }
 
-        (void) strcpy(magic_item_titles[h], string);
+        (void) strcpy(magic_item_titles[h], title);
     }
 
     seedResetToOldSeed();

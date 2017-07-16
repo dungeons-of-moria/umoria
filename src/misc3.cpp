@@ -102,7 +102,7 @@ int itemGetRandomObjectId(int level, bool must_be_small) {
                 object_id = randomNumber(treasure_levels[foundLevel] - treasure_levels[foundLevel - 1]) - 1 + treasure_levels[foundLevel - 1];
             }
         }
-    } while (must_be_small && set_large(&game_objects[sorted_objects[object_id]]));
+    } while (must_be_small && setItemsLargerThanChests(&game_objects[sorted_objects[object_id]]));
 
     return object_id;
 }

@@ -608,37 +608,37 @@ static void get_flags(int typ, uint32_t *weapon_type, int *harm_type, bool (**de
         case GF_MAGIC_MISSILE:
             *weapon_type = 0;
             *harm_type = 0;
-            *destroy = set_null;
+            *destroy = setNull;
             break;
         case GF_LIGHTNING:
             *weapon_type = CS_BR_LIGHT;
             *harm_type = CD_LIGHT;
-            *destroy = set_lightning_destroy;
+            *destroy = setLightningDestroyableItems;
             break;
         case GF_POISON_GAS:
             *weapon_type = CS_BR_GAS;
             *harm_type = CD_POISON;
-            *destroy = set_null;
+            *destroy = setNull;
             break;
         case GF_ACID:
             *weapon_type = CS_BR_ACID;
             *harm_type = CD_ACID;
-            *destroy = set_acid_destroy;
+            *destroy = setAcidDestroyableItems;
             break;
         case GF_FROST:
             *weapon_type = CS_BR_FROST;
             *harm_type = CD_FROST;
-            *destroy = set_frost_destroy;
+            *destroy = setFrostDestroyableItems;
             break;
         case GF_FIRE:
             *weapon_type = CS_BR_FIRE;
             *harm_type = CD_FIRE;
-            *destroy = set_fire_destroy;
+            *destroy = setFireDestroyableItems;
             break;
         case GF_HOLY_ORB:
             *weapon_type = 0;
             *harm_type = CD_EVIL;
-            *destroy = set_null;
+            *destroy = setNull;
             break;
         default:
             printMessage("ERROR in get_flags()\n");

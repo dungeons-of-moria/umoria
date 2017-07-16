@@ -109,7 +109,7 @@ extern uint8_t spells_learned_order[32]; // remember order that spells are learn
 extern Owner_t store_owners[MAX_OWNERS];
 extern Store_t stores[MAX_STORES];
 extern uint16_t store_choices[MAX_STORES][STORE_CHOICES];
-extern int (*store_buy[MAX_STORES])(int);
+extern bool (*store_buy[MAX_STORES])(int);
 
 // Following are treasure arrays  and variables
 extern GameObject_t game_objects[MAX_OBJECTS];
@@ -136,13 +136,13 @@ extern int16_t next_free_monster_id;
 extern int16_t monster_multiply_total;
 
 // Following are arrays for descriptive pieces
-extern char *colors[MAX_COLORS];
-extern char *mushrooms[MAX_MUSH];
-extern char *woods[MAX_WOODS];
-extern char *metals[MAX_METALS];
-extern char *rocks[MAX_ROCKS];
-extern char *amulets[MAX_AMULETS];
-extern char *syllables[MAX_SYLLABLES];
+extern const char *colors[MAX_COLORS];
+extern const char *mushrooms[MAX_MUSH];
+extern const char *woods[MAX_WOODS];
+extern const char *metals[MAX_METALS];
+extern const char *rocks[MAX_ROCKS];
+extern const char *amulets[MAX_AMULETS];
+extern const char *syllables[MAX_SYLLABLES];
 
 extern uint8_t blows_table[7][6];
 
@@ -458,24 +458,24 @@ void readHighScore(HighScore_t *score);
 void readScroll();
 
 // sets.c
-bool set_room(int element);
-bool set_corr(int element);
-bool set_floor(int element);
-bool set_corrodes(Inventory_t *item);
-bool set_flammable(Inventory_t *item);
-bool set_frost_destroy(Inventory_t *item);
-bool set_acid_affect(Inventory_t *item);
-bool set_lightning_destroy(Inventory_t *item);
-bool set_null(Inventory_t *item);
-bool set_acid_destroy(Inventory_t *item);
-bool set_fire_destroy(Inventory_t *item);
-bool set_large(GameObject_t *item);
-bool general_store(int element);
-bool armory(int element);
-bool weaponsmith(int element);
-bool temple(int element);
-bool alchemist(int element);
-bool magic_shop(int element);
+bool setRooms(int tile_id);
+bool setCorridors(int tile_id);
+bool setFloors(int tile_id);
+bool setCorrodableItems(Inventory_t *item);
+bool setFlammableItems(Inventory_t *item);
+bool setFrostDestroyableItems(Inventory_t *item);
+bool setAcidAffectedItems(Inventory_t *item);
+bool setLightningDestroyableItems(Inventory_t *item);
+bool setNull(Inventory_t *item);
+bool setAcidDestroyableItems(Inventory_t *item);
+bool setFireDestroyableItems(Inventory_t *item);
+bool setItemsLargerThanChests(GameObject_t *item);
+bool setGeneralStoreItems(int item_id);
+bool setArmoryItems(int item_id);
+bool setWeaponsmithItems(int item_id);
+bool setTempleItems(int item_id);
+bool setAlchemistItems(int item_id);
+bool setMagicShopItems(int item_id);
 
 // spells.c
 bool sleep_monsters1(int y, int x);

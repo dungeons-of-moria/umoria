@@ -1057,11 +1057,11 @@ static void cave_gen() {
     new_spot(&char_row, &char_col);
 
     monsterPlaceNewWithinDistance((randomNumber(8) + MIN_MALLOC_LEVEL + alloc_level), 0, true);
-    dungeonAllocateAndPlaceObject(set_corr, 3, randomNumber(alloc_level));
-    dungeonAllocateAndPlaceObject(set_room, 5, randomNumberNormalDistribution(TREAS_ROOM_ALLOC, 3));
-    dungeonAllocateAndPlaceObject(set_floor, 5, randomNumberNormalDistribution(TREAS_ANY_ALLOC, 3));
-    dungeonAllocateAndPlaceObject(set_floor, 4, randomNumberNormalDistribution(TREAS_GOLD_ALLOC, 3));
-    dungeonAllocateAndPlaceObject(set_floor, 1, randomNumber(alloc_level));
+    dungeonAllocateAndPlaceObject(setCorridors, 3, randomNumber(alloc_level));
+    dungeonAllocateAndPlaceObject(setRooms, 5, randomNumberNormalDistribution(TREAS_ROOM_ALLOC, 3));
+    dungeonAllocateAndPlaceObject(setFloors, 5, randomNumberNormalDistribution(TREAS_ANY_ALLOC, 3));
+    dungeonAllocateAndPlaceObject(setFloors, 4, randomNumberNormalDistribution(TREAS_GOLD_ALLOC, 3));
+    dungeonAllocateAndPlaceObject(setFloors, 1, randomNumber(alloc_level));
 
     if (current_dungeon_level >= WIN_MON_APPEAR) {
         monsterPlaceWinning();

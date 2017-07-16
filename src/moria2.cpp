@@ -573,7 +573,7 @@ void damageCorrodingGas(const char *creature_name) {
         playerTakesHit(randomNumber(8), creature_name);
     }
 
-    if (inventoryDamageItem(set_corrodes, 5) > 0) {
+    if (inventoryDamageItem(setCorrodableItems, 5) > 0) {
         printMessage("There is an acrid smell coming from your pack.");
     }
 }
@@ -597,7 +597,7 @@ void damageFire(int damage, const char *creature_name) {
 
     playerTakesHit(damage, creature_name);
 
-    if (inventoryDamageItem(set_flammable, 3) > 0) {
+    if (inventoryDamageItem(setFlammableItems, 3) > 0) {
         printMessage("There is smoke coming from your pack!");
     }
 }
@@ -614,7 +614,7 @@ void damageCold(int damage, const char *creature_name) {
 
     playerTakesHit(damage, creature_name);
 
-    if (inventoryDamageItem(set_frost_destroy, 5) > 0) {
+    if (inventoryDamageItem(setFrostDestroyableItems, 5) > 0) {
         printMessage("Something shatters inside your pack!");
     }
 }
@@ -627,7 +627,7 @@ void damageLightningBolt(int damage, const char *creature_name) {
 
     playerTakesHit(damage, creature_name);
 
-    if (inventoryDamageItem(set_lightning_destroy, 3) > 0) {
+    if (inventoryDamageItem(setLightningDestroyableItems, 3) > 0) {
         printMessage("There are sparks coming from your pack!");
     }
 }
@@ -646,7 +646,7 @@ void damageAcid(int damage, const char *creature_name) {
 
     playerTakesHit(damage / (flag + 1), creature_name);
 
-    if (inventoryDamageItem(set_acid_affect, 3) > 0) {
+    if (inventoryDamageItem(setAcidAffectedItems, 3) > 0) {
         printMessage("There is an acrid smell coming from your pack!");
     }
 }

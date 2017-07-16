@@ -8,6 +8,7 @@
 // clang-format off
 
 #include "headers.h"
+#include "externs.h"
 
 Store_t stores[MAX_STORES];
 
@@ -81,17 +82,14 @@ uint16_t store_choices[MAX_STORES][STORE_CHOICES] = {
         },
 };
 
-// functions defined in sets.c
-extern bool general_store(int), armory(int), weaponsmith(int), temple(int), alchemist(int), magic_shop(int);
-
 // Each store will buy only certain items, based on TVAL
 bool (*store_buy[MAX_STORES])(int) = {
-        general_store,
-        armory,
-        weaponsmith,
-        temple,
-        alchemist,
-        magic_shop,
+        setGeneralStoreItems,
+        setArmoryItems,
+        setWeaponsmithItems,
+        setTempleItems,
+        setAlchemistItems,
+        setMagicShopItems,
 };
 
 // Following are arrays for descriptive pieces
