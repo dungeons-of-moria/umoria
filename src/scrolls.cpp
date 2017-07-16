@@ -521,7 +521,7 @@ void readScroll() {
                 break;
             case 25:
                 printMessage("This is a Recharge-Item scroll.");
-                used_up = recharge(60);
+                used_up = spellRechargeItem(60);
                 identified = true;
                 break;
             case 26:

@@ -971,43 +971,47 @@ void spellBreath(int y, int x, int monster_id, int damage_hp, int spell_type, ch
 }
 
 // Recharge a wand, staff, or rod.  Sometimes the item breaks. -RAK-
-bool recharge(int charges) {
-    int i, j;
-    if (!inventoryFindRange(TV_STAFF, TV_WAND, &i, &j)) {
+bool spellRechargeItem(int number_of_charges) {
+    int item_pos_start, item_pos_end;
+    if (!inventoryFindRange(TV_STAFF, TV_WAND, &item_pos_start, &item_pos_end)) {
         printMessage("You have nothing to recharge.");
         return false;
     }
 
-    int item_val;
-    if (!inventoryGetInputForItemId(&item_val, "Recharge which item?", i, j, CNIL, CNIL)) {
+    int item_id;
+    if (!inventoryGetInputForItemId(&item_id, "Recharge which item?", item_pos_start, item_pos_end, CNIL, CNIL)) {
         return false;
     }
 
-    Inventory_t *i_ptr = &inventory[item_val];
+    Inventory_t *item = &inventory[item_id];
 
     // recharge  I = recharge(20) = 1/6  failure for empty 10th level wand
     // recharge II = recharge(60) = 1/10 failure for empty 10th level wand
     //
-    // make it harder to recharge high level, and highly charged wands, note
-    // that i can be negative, so check its value before trying to call randomNumber().
-    int chance = charges + 50 - (int) i_ptr->level - i_ptr->p1;
-    if (chance < 19) {
-        // Automatic failure.
-        chance = 1;
+    // make it harder to recharge high level, and highly charged wands,
+    // note that `fail_chance` can be negative, so check its value before
+    // trying to call randomNumber().
+    int fail_chance = number_of_charges + 50 - (int) item->level - item->p1;
+
+    // Automatic failure.
+    if (fail_chance < 19) {
+        fail_chance = 1;
     } else {
-        chance = randomNumber(chance / 10);
+        fail_chance = randomNumber(fail_chance / 10);
     }
 
-    if (chance == 1) {
+    if (fail_chance == 1) {
         printMessage("There is a bright flash of light.");
-        inventoryDestroyItem(item_val);
+        inventoryDestroyItem(item_id);
     } else {
-        charges = (charges / (i_ptr->level + 2)) + 1;
-        i_ptr->p1 += 2 + randomNumber(charges);
-        if (spellItemIdentified(i_ptr)) {
-            spellItemRemoveIdentification(i_ptr);
+        number_of_charges = (number_of_charges / (item->level + 2)) + 1;
+        item->p1 += 2 + randomNumber(number_of_charges);
+
+        if (spellItemIdentified(item)) {
+            spellItemRemoveIdentification(item);
         }
-        itemIdentificationClearEmpty(i_ptr);
+
+        itemIdentificationClearEmpty(item);
     }
 
     return true;

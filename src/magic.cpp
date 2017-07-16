@@ -106,7 +106,7 @@ static void castSpell(int spellID) {
             create_food();
             break;
         case 18:
-            (void) recharge(20);
+            (void) spellRechargeItem(20);
             break;
         case 19:
             (void) monsterSleep(char_row, char_col);
@@ -138,7 +138,7 @@ static void castSpell(int spellID) {
             }
             break;
         case 26:
-            (void) recharge(60);
+            (void) spellRechargeItem(60);
             break;
         case 27:
             if (getDirectionWithMemory(CNIL, &dir)) {
