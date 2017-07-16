@@ -1231,27 +1231,27 @@ void creatureCastsSpell(Monster_t *m_ptr, int monsterID, int spellID, uint8_t le
         case 20: // Breath Light
             (void) strcat(cdesc, "breathes lightning.");
             printMessage(cdesc);
-            breath(char_col, char_row, monsterID, (m_ptr->hp / 4), deathDescription, GF_LIGHTNING);
+            spellBreath(char_row, char_col, monsterID, (m_ptr->hp / 4), GF_LIGHTNING, deathDescription);
             break;
         case 21: // Breath Gas
             (void) strcat(cdesc, "breathes gas.");
             printMessage(cdesc);
-            breath(char_col, char_row, monsterID, (m_ptr->hp / 3), deathDescription, GF_POISON_GAS);
+            spellBreath(char_row, char_col, monsterID, (m_ptr->hp / 3), GF_POISON_GAS, deathDescription);
             break;
         case 22: // Breath Acid
             (void) strcat(cdesc, "breathes acid.");
             printMessage(cdesc);
-            breath(char_col, char_row, monsterID, (m_ptr->hp / 3), deathDescription, GF_ACID);
+            spellBreath(char_row, char_col, monsterID, (m_ptr->hp / 3), GF_ACID, deathDescription);
             break;
         case 23: // Breath Frost
             (void) strcat(cdesc, "breathes frost.");
             printMessage(cdesc);
-            breath(char_col, char_row, monsterID, (m_ptr->hp / 3), deathDescription, GF_FROST);
+            spellBreath(char_row, char_col, monsterID, (m_ptr->hp / 3), GF_FROST, deathDescription);
             break;
         case 24: // Breath Fire
             (void) strcat(cdesc, "breathes fire.");
             printMessage(cdesc);
-            breath(char_col, char_row, monsterID, (m_ptr->hp / 3), deathDescription, GF_FIRE);
+            spellBreath(char_row, char_col, monsterID, (m_ptr->hp / 3), GF_FIRE, deathDescription);
             break;
         default:
             (void) strcat(cdesc, "cast unknown spell.");

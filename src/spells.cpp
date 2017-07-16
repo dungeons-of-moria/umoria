@@ -859,28 +859,26 @@ void spellFireBall(int y, int x, int direction, int damage_hp, int spell_type, c
     }
 }
 
-// Breath weapon works like a spellFireBall, but affects the player.
+// Breath weapon works like a spellFireBall(), but affects the player.
 // Note the area affect. -RAK-
-void breath(int x, int y, int monster_id, int damage_hp, char *spell_name, int spell_type_id) {
-    int max_dis = 2;
+void spellBreath(int y, int x, int monster_id, int damage_hp, int spell_type, char *spell_name) {
+    int max_distance = 2;
 
     bool (*destroy)(Inventory_t *);
     int harm_type;
     uint32_t weapon_type;
-    getAreaAffectFlags(spell_type_id, &weapon_type, &harm_type, &destroy);
-
-    int dam;
+    getAreaAffectFlags(spell_type, &weapon_type, &harm_type, &destroy);
 
     for (int row = y - 2; row <= y + 2; row++) {
         for (int col = x - 2; col <= x + 2; col++) {
-            if (coordInBounds(row, col) && coordDistanceBetween(y, x, row, col) <= max_dis && los(y, x, row, col)) {
-                Cave_t *c_ptr = &cave[row][col];
+            if (coordInBounds(row, col) && coordDistanceBetween(y, x, row, col) <= max_distance && los(y, x, row, col)) {
+                Cave_t *tile = &cave[row][col];
 
-                if (c_ptr->tptr != 0 && (*destroy)(&treasure_list[c_ptr->tptr])) {
+                if (tile->tptr != 0 && (*destroy)(&treasure_list[tile->tptr])) {
                     (void) dungeonDeleteObject(row, col);
                 }
 
-                if (c_ptr->fval <= MAX_OPEN_SPACE) {
+                if (tile->fval <= MAX_OPEN_SPACE) {
                     // must test status bit, not py.flags.blind here, flag could have
                     // been set by a previous monster, but the breath should still
                     // be visible until the blindness takes effect
@@ -888,70 +886,70 @@ void breath(int x, int y, int monster_id, int damage_hp, char *spell_name, int s
                         putChar('*', row, col);
                     }
 
-                    if (c_ptr->cptr > 1) {
-                        Monster_t *m_ptr = &monsters[c_ptr->cptr];
-                        Creature_t *r_ptr = &creatures_list[m_ptr->mptr];
+                    if (tile->cptr > 1) {
+                        Monster_t *monster = &monsters[tile->cptr];
+                        Creature_t *creature = &creatures_list[monster->mptr];
 
-                        dam = damage_hp;
+                        int damage = damage_hp;
 
-                        if (harm_type & r_ptr->cdefense) {
-                            dam = dam * 2;
-                        } else if (weapon_type & r_ptr->spells) {
-                            dam = (dam / 4);
+                        if (harm_type & creature->cdefense) {
+                            damage = damage * 2;
+                        } else if (weapon_type & creature->spells) {
+                            damage = (damage / 4);
                         }
 
-                        dam = (dam / (coordDistanceBetween(row, col, y, x) + 1));
+                        damage = (damage / (coordDistanceBetween(row, col, y, x) + 1));
 
                         // can not call monsterTakeHit here, since player does not
                         // get experience for kill
-                        m_ptr->hp = (int16_t) (m_ptr->hp - dam);
-                        m_ptr->csleep = 0;
+                        monster->hp = (int16_t) (monster->hp - damage);
+                        monster->csleep = 0;
 
-                        if (m_ptr->hp < 0) {
-                            uint32_t treas = monsterDeath((int) m_ptr->fy, (int) m_ptr->fx, r_ptr->cmove);
+                        if (monster->hp < 0) {
+                            uint32_t treasure_id = monsterDeath((int) monster->fy, (int) monster->fx, creature->cmove);
 
-                            if (m_ptr->ml) {
-                                uint32_t tmp = (uint32_t) ((creature_recall[m_ptr->mptr].r_cmove & CM_TREASURE) >> CM_TR_SHIFT);
-                                if (tmp > ((treas & CM_TREASURE) >> CM_TR_SHIFT)) {
-                                    treas = (uint32_t) ((treas & ~CM_TREASURE) | (tmp << CM_TR_SHIFT));
+                            if (monster->ml) {
+                                uint32_t tmp = (uint32_t) ((creature_recall[monster->mptr].r_cmove & CM_TREASURE) >> CM_TR_SHIFT);
+                                if (tmp > ((treasure_id & CM_TREASURE) >> CM_TR_SHIFT)) {
+                                    treasure_id = (uint32_t) ((treasure_id & ~CM_TREASURE) | (tmp << CM_TR_SHIFT));
                                 }
-                                creature_recall[m_ptr->mptr].r_cmove = (uint32_t) (treas | (creature_recall[m_ptr->mptr].r_cmove & ~CM_TREASURE));
+                                creature_recall[monster->mptr].r_cmove = (uint32_t) (treasure_id | (creature_recall[monster->mptr].r_cmove & ~CM_TREASURE));
                             }
 
                             // It ate an already processed monster. Handle normally.
-                            if (monster_id < c_ptr->cptr) {
-                                dungeonDeleteMonster((int) c_ptr->cptr);
+                            if (monster_id < tile->cptr) {
+                                dungeonDeleteMonster((int) tile->cptr);
                             } else {
                                 // If it eats this monster, an already processed monster
                                 // will take its place, causing all kinds of havoc.
                                 // Delay the kill a bit.
-                                dungeonDeleteMonsterFix1((int) c_ptr->cptr);
+                                dungeonDeleteMonsterFix1((int) tile->cptr);
                             }
                         }
-                    } else if (c_ptr->cptr == 1) {
-                        dam = (damage_hp / (coordDistanceBetween(row, col, y, x) + 1));
+                    } else if (tile->cptr == 1) {
+                        int damage = (damage_hp / (coordDistanceBetween(row, col, y, x) + 1));
 
                         // let's do at least one point of damage
                         // prevents randomNumber(0) problem with damagePoisonedGas, also
-                        if (dam == 0) {
-                            dam = 1;
+                        if (damage == 0) {
+                            damage = 1;
                         }
 
-                        switch (spell_type_id) {
+                        switch (spell_type) {
                             case GF_LIGHTNING:
-                                damageLightningBolt(dam, spell_name);
+                                damageLightningBolt(damage, spell_name);
                                 break;
                             case GF_POISON_GAS:
-                                damagePoisonedGas(dam, spell_name);
+                                damagePoisonedGas(damage, spell_name);
                                 break;
                             case GF_ACID:
-                                damageAcid(dam, spell_name);
+                                damageAcid(damage, spell_name);
                                 break;
                             case GF_FROST:
-                                damageCold(dam, spell_name);
+                                damageCold(damage, spell_name);
                                 break;
                             case GF_FIRE:
-                                damageFire(dam, spell_name);
+                                damageFire(damage, spell_name);
                                 break;
                         }
                     }
@@ -965,7 +963,7 @@ void breath(int x, int y, int monster_id, int damage_hp, char *spell_name, int s
 
     for (int row = (y - 2); row <= (y + 2); row++) {
         for (int col = (x - 2); col <= (x + 2); col++) {
-            if (coordInBounds(row, col) && coordInsidePanel(row, col) && coordDistanceBetween(y, x, row, col) <= max_dis) {
+            if (coordInBounds(row, col) && coordInsidePanel(row, col) && coordDistanceBetween(y, x, row, col) <= max_distance) {
                 dungeonLiteSpot(row, col);
             }
         }

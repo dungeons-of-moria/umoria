@@ -498,7 +498,7 @@ void spellStarlite(int y, int x);
 bool spellDisarmAllInDirection(int y, int x, int direction);
 void spellFireBolt(int y, int x, int direction, int damage_hp, int spell_type, char *spell_name);
 void spellFireBall(int y, int x, int direction, int damage_hp, int spell_type, const char *spell_name);
-void breath(int x, int y, int monster_id, int damage_hp, char *spell_name, int spell_type_id);
+void spellBreath(int y, int x, int monster_id, int damage_hp, int spell_type, char *spell_name);
 bool recharge(int charges);
 bool hp_monster(int y, int x, int direction, int damage_hp);
 bool drain_life(int y, int x, int direction);
