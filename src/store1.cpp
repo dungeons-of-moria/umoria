@@ -21,7 +21,7 @@ static int32_t getWandStaffBuyPrice(Inventory_t *item);
 static int32_t getPickShovelBuyPrice(Inventory_t *item);
 
 // Returns the value for any given object -RAK-
-int32_t item_value(Inventory_t *item) {
+int32_t storeItemValue(Inventory_t *item) {
     int32_t value;
 
     if (item->ident & ID_DAMD) {
@@ -158,7 +158,7 @@ static int32_t getPickShovelBuyPrice(Inventory_t *item) {
 
 // Asking price for an item -RAK-
 int32_t sell_price(int store_id, int32_t *min_price, int32_t *max_price, Inventory_t *item) {
-    int32_t price = item_value(item);
+    int32_t price = storeItemValue(item);
 
     // check `item->cost` in case it is cursed, check `price` in case it is damaged
     // don't let the item get into the store inventory

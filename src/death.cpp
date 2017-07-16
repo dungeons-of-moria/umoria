@@ -208,7 +208,7 @@ int32_t playerCalculateTotalPoints() {
     total += py.misc.au / 100;
 
     for (int i = 0; i < INVEN_ARRAY_SIZE; i++) {
-        total += item_value(&inventory[i]);
+        total += storeItemValue(&inventory[i]);
     }
 
     total += current_dungeon_level * 50;

@@ -603,7 +603,7 @@ static int sell_haggle(int store_num, int32_t *price, Inventory_t *item) {
 
     Store_t *s_ptr = &stores[store_num];
 
-    int32_t cost = item_value(item);
+    int32_t cost = storeItemValue(item);
     if (cost < 1) {
         sell = 3;
         flag = true;
