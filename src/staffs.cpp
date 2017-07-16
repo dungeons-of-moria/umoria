@@ -78,7 +78,7 @@ static bool dischargeStaff(Inventory_t *staff_ptr) {
                 identified = dungeonDetectTreasureOnPanel();
                 break;
             case 5:
-                identified = detect_object();
+                identified = dungeonDetectObjectOnPanel();
                 break;
             case 6:
                 playerTeleport(100);

@@ -94,17 +94,16 @@ bool dungeonDetectTreasureOnPanel() {
 }
 
 // Detect all objects on the current panel -RAK-
-bool detect_object() {
+bool dungeonDetectObjectOnPanel() {
     bool detected = false;
 
     for (int y = panel_row_min; y <= panel_row_max; y++) {
         for (int x = panel_col_min; x <= panel_col_max; x++) {
-            Cave_t *c_ptr = &cave[y][x];
+            Cave_t *tile = &cave[y][x];
 
-            if (c_ptr->tptr != 0 && treasure_list[c_ptr->tptr].tval < TV_MAX_OBJECT && !caveTileVisible(y, x)) {
-                c_ptr->fm = true;
+            if (tile->tptr != 0 && treasure_list[tile->tptr].tval < TV_MAX_OBJECT && !caveTileVisible(y, x)) {
+                tile->fm = true;
                 dungeonLiteSpot(y, x);
-
                 detected = true;
             }
         }

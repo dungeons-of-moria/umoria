@@ -489,7 +489,7 @@ void readScroll() {
                 identified = dungeonDetectTreasureOnPanel();
                 break;
             case 16:
-                identified = detect_object();
+                identified = dungeonDetectObjectOnPanel();
                 break;
             case 17:
                 identified = detect_trap();
