@@ -87,21 +87,21 @@ static int inventoryItemIdOfCursedEquipment() {
     return item_id;
 }
 
-static bool readEnchantWeaponToHitScroll() {
-    Inventory_t *i_ptr = &inventory[INVEN_WIELD];
+static bool scrollEnchantWeaponToHit() {
+    Inventory_t *item = &inventory[INVEN_WIELD];
 
-    if (i_ptr->tval == TV_NOTHING) {
+    if (item->tval == TV_NOTHING) {
         return false;
     }
 
     obj_desc_t msg, desc;
-    itemDescription(desc, i_ptr, false);
+    itemDescription(desc, item, false);
 
     (void) sprintf(msg, "Your %s glows faintly!", desc);
     printMessage(msg);
 
-    if (enchant(&i_ptr->tohit, 10)) {
-        i_ptr->flags &= ~TR_CURSED;
+    if (enchant(&item->tohit, 10)) {
+        item->flags &= ~TR_CURSED;
         playerRecalculateBonuses();
     } else {
         printMessage("The enchantment fails.");
@@ -438,7 +438,7 @@ void read_scroll() {
 
         switch (scrollType) {
             case 1:
-                identified = readEnchantWeaponToHitScroll();
+                identified = scrollEnchantWeaponToHit();
                 break;
             case 2:
                 identified = readEnchantWeaponToDamageScroll();
