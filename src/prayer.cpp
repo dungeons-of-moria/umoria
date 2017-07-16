@@ -119,7 +119,7 @@ static void playerRecitePrayer(int prayer_type) {
             detect_inv2(randomNumber(24) + 24);
             break;
         case 21:
-            (void) protect_evil();
+            (void) playerProtectEvil();
             break;
         case 22:
             dungeonEarthquake();

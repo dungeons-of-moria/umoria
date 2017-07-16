@@ -1924,12 +1924,12 @@ void dungeonEarthquake() {
 }
 
 // Evil creatures don't like this. -RAK-
-bool protect_evil() {
-    bool isProtected = py.flags.protevil == 0;
+bool playerProtectEvil() {
+    bool is_protected = py.flags.protevil == 0;
 
     py.flags.protevil += randomNumber(25) + 3 * py.misc.lev;
 
-    return isProtected;
+    return is_protected;
 }
 
 // Create some high quality mush for the player. -RAK-

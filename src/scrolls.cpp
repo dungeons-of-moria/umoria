@@ -533,7 +533,7 @@ void readScroll() {
                 identified = spellDarkenArea(char_row, char_col);
                 break;
             case 28:
-                identified = protect_evil();
+                identified = playerProtectEvil();
                 break;
             case 29:
                 create_food();
