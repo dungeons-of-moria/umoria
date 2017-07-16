@@ -157,7 +157,7 @@ static int32_t getPickShovelBuyPrice(Inventory_t *item) {
 }
 
 // Asking price for an item -RAK-
-int32_t sell_price(int store_id, int32_t *min_price, int32_t *max_price, Inventory_t *item) {
+int32_t storeItemSellPrice(int store_id, int32_t *min_price, int32_t *max_price, Inventory_t *item) {
     int32_t price = storeItemValue(item);
 
     // check `item->cost` in case it is cursed, check `price` in case it is damaged
@@ -229,7 +229,7 @@ void store_carry(int store_id, int *index_id, Inventory_t *item) {
     *index_id = -1;
 
     int32_t icost, dummy;
-    if (sell_price(store_id, &dummy, &icost, item) < 1) {
+    if (storeItemSellPrice(store_id, &dummy, &icost, item) < 1) {
         return;
     }
 
@@ -254,7 +254,7 @@ void store_carry(int store_id, int *index_id, Inventory_t *item) {
                 // strictly greater than group_min, not for torches, this
                 // must be recalculated for entire group
                 if (subt > ITEM_GROUP_MIN) {
-                    (void) sell_price(store_id, &dummy, &icost, i_ptr);
+                    (void) storeItemSellPrice(store_id, &dummy, &icost, i_ptr);
                     s_ptr->store_inven[item_val].scost = -icost;
                 } else if (i_ptr->number > 24) {
                     // must let group objects (except torches) stack over 24

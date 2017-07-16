@@ -441,7 +441,7 @@ static int purchase_haggle(int store_num, int32_t *price, Inventory_t *item) {
     Owner_t *o_ptr = &store_owners[s_ptr->owner];
 
     int32_t max_sell, min_sell;
-    int32_t cost = sell_price(store_num, &min_sell, &max_sell, item);
+    int32_t cost = storeItemSellPrice(store_num, &min_sell, &max_sell, item);
 
     max_sell = max_sell * playerStatAdjustmentCharisma() / 100;
     if (max_sell <= 0) {
