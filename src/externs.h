@@ -524,7 +524,7 @@ bool playerCureConfusion();
 bool playerCureBlindness();
 bool playerCurePoison();
 bool playerRemoveFear();
-void earthquake();
+void dungeonEarthquake();
 bool protect_evil();
 void create_food();
 bool dispel_creature(int creature_defense, int damage);

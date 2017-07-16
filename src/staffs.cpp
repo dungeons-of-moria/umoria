@@ -86,7 +86,7 @@ static bool dischargeStaff(Inventory_t *staff_ptr) {
                 break;
             case 7:
                 identified = true;
-                earthquake();
+                dungeonEarthquake();
                 break;
             case 8:
                 identified = false;

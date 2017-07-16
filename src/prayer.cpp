@@ -122,7 +122,7 @@ static void playerRecitePrayer(int prayer_type) {
             (void) protect_evil();
             break;
         case 22:
-            earthquake();
+            dungeonEarthquake();
             break;
         case 23:
             spellMapCurrentArea();

@@ -1886,7 +1886,7 @@ static void earthquakeHitsMonster(int monsterID) {
 // This is a fun one.  In a given block, pick some walls and
 // turn them into open spots.  Pick some open spots and current_game_turn
 // them into walls.  An "Earthquake" effect. -RAK-
-void earthquake() {
+void dungeonEarthquake() {
     for (int y = char_row - 8; y <= char_row + 8; y++) {
         for (int x = char_col - 8; x <= char_col + 8; x++) {
             if ((y != char_row || x != char_col) && coordInBounds(y, x) && randomNumber(8) == 1) {
