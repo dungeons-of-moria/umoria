@@ -560,45 +560,47 @@ void spellStarlite(int y, int x) {
 }
 
 // Disarms all traps/chests in a given direction -RAK-
-bool disarm_all(int y, int x, int direction) {
-    int dist = 0;
+bool spellDisarmAllInDirection(int y, int x, int direction) {
+    int distance = 0;
     bool disarmed = false;
-    Cave_t *c_ptr;
+
+    Cave_t *tile;
 
     do {
-        c_ptr = &cave[y][x];
+        tile = &cave[y][x];
 
         // note, must continue up to and including the first non open space,
         // because secret doors have fval greater than MAX_OPEN_SPACE
-        if (c_ptr->tptr != 0) {
-            Inventory_t *t_ptr = &treasure_list[c_ptr->tptr];
+        if (tile->tptr != 0) {
+            Inventory_t *item = &treasure_list[tile->tptr];
 
-            if (t_ptr->tval == TV_INVIS_TRAP || t_ptr->tval == TV_VIS_TRAP) {
+            if (item->tval == TV_INVIS_TRAP || item->tval == TV_VIS_TRAP) {
                 if (dungeonDeleteObject(y, x)) {
                     disarmed = true;
                 }
-            } else if (t_ptr->tval == TV_CLOSED_DOOR) {
+            } else if (item->tval == TV_CLOSED_DOOR) {
                 // Locked or jammed doors become merely closed.
-                t_ptr->p1 = 0;
-            } else if (t_ptr->tval == TV_SECRET_DOOR) {
-                c_ptr->fm = true;
+                item->p1 = 0;
+            } else if (item->tval == TV_SECRET_DOOR) {
+                tile->fm = true;
                 dungeonChangeTrapVisibility(y, x);
-
                 disarmed = true;
-            } else if (t_ptr->tval == TV_CHEST && t_ptr->flags != 0) {
+            } else if (item->tval == TV_CHEST && item->flags != 0) {
                 disarmed = true;
-
                 printMessage("Click!");
-                t_ptr->flags &= ~(CH_TRAPPED | CH_LOCKED);
-                t_ptr->name2 = SN_UNLOCKED;
-                spellItemIdentifyAndRemoveRandomInscription(t_ptr);
+
+                item->flags &= ~(CH_TRAPPED | CH_LOCKED);
+                item->name2 = SN_UNLOCKED;
+
+                spellItemIdentifyAndRemoveRandomInscription(item);
             }
         }
 
         // move must be at end because want to light up current spot
         (void) playerMovePosition(direction, &y, &x);
-        dist++;
-    } while (dist <= OBJ_BOLT_RANGE && c_ptr->fval <= MAX_OPEN_SPACE);
+
+        distance++;
+    } while (distance <= OBJ_BOLT_RANGE && tile->fval <= MAX_OPEN_SPACE);
 
     return disarmed;
 }

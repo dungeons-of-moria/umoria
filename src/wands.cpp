@@ -81,7 +81,7 @@ static bool discharge_wand(Inventory_t *wand, int dir) {
                 identified = teleport_monster(row, col, dir);
                 break;
             case 18:
-                identified = disarm_all(row, col, dir);
+                identified = spellDisarmAllInDirection(row, col, dir);
                 break;
             case 19:
                 fire_ball(row, col, dir, 32, GF_LIGHTNING, "Lightning Ball");
