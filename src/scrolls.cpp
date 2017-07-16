@@ -574,7 +574,7 @@ void readScroll() {
                 identified = true;
                 break;
             case 42:
-                destroy_area(char_row, char_col);
+                spellDestroyArea(char_row, char_col);
                 identified = true;
                 break;
             default:

@@ -99,7 +99,7 @@ static bool dischargeStaff(Inventory_t *staff_ptr) {
                 break;
             case 10:
                 identified = true;
-                destroy_area(char_row, char_col);
+                spellDestroyArea(char_row, char_col);
                 break;
             case 11:
                 identified = true;

@@ -154,7 +154,7 @@ static void castSpell(int spellID) {
             }
             break;
         case 30:
-            destroy_area(char_row, char_col);
+            spellDestroyArea(char_row, char_col);
             break;
         case 31:
             (void) spellGenocide();

@@ -2186,28 +2186,29 @@ static void replace_spot(int y, int x, int typ) {
 }
 
 // The spell of destruction. -RAK-
-// NOTE : Winning creatures that are deleted will be considered
-//        as teleporting to another level.  This will NOT win
-//        the game.
-void destroy_area(int y, int x) {
+// NOTE:
+//   Winning creatures that are deleted will be considered as teleporting to another level.
+//   This will NOT win the game.
+void spellDestroyArea(int y, int x) {
     if (current_dungeon_level > 0) {
-        for (int i = (y - 15); i <= (y + 15); i++) {
-            for (int j = (x - 15); j <= (x + 15); j++) {
-                if (coordInBounds(i, j) && cave[i][j].fval != BOUNDARY_WALL) {
-                    int dist = coordDistanceBetween(i, j, y, x);
+        for (int pos_y = y - 15; pos_y <= y + 15; pos_y++) {
+            for (int pos_x = x - 15; pos_x <= x + 15; pos_x++) {
+                if (coordInBounds(pos_y, pos_x) && cave[pos_y][pos_x].fval != BOUNDARY_WALL) {
+                    int distance = coordDistanceBetween(pos_y, pos_x, y, x);
 
                     // clear player's spot, but don't put wall there
-                    if (dist == 0) {
-                        replace_spot(i, j, 1);
-                    } else if (dist < 13) {
-                        replace_spot(i, j, randomNumber(6));
-                    } else if (dist < 16) {
-                        replace_spot(i, j, randomNumber(9));
+                    if (distance == 0) {
+                        replace_spot(pos_y, pos_x, 1);
+                    } else if (distance < 13) {
+                        replace_spot(pos_y, pos_x, randomNumber(6));
+                    } else if (distance < 16) {
+                        replace_spot(pos_y, pos_x, randomNumber(9));
                     }
                 }
             }
         }
     }
+
     printMessage("There is a searing blast of light!");
     py.flags.blind += 10 + randomNumber(10);
 }

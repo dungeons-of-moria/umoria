@@ -540,7 +540,7 @@ void spellLoseEXP(int32_t adjustment);
 bool spellSlowPoison();
 void playerBless(int adjustment);
 void playerDetectInvisible(int adjustment);
-void destroy_area(int y, int x);
+void spellDestroyArea(int y, int x);
 bool enchant(int16_t *plusses, int16_t max_bonus_limit);
 bool remove_curse();
 bool restore_level();
