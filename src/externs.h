@@ -449,7 +449,7 @@ int32_t rnd();
 
 // save.c
 bool saveGame();
-bool get_char(bool *generate);
+bool loadGame(bool *generate);
 void set_fileptr(FILE *file);
 void wr_highscore(HighScore_t *score);
 void rd_highscore(HighScore_t *score);

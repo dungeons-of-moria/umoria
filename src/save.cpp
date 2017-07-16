@@ -460,7 +460,7 @@ static bool _save_char(char *fnam) {
 }
 
 // Certain checks are omitted for the wizard. -CJS-
-bool get_char(bool *generate) {
+bool loadGame(bool *generate) {
     int c;
     Cave_t *c_ptr;
     uint32_t time_saved = 0;

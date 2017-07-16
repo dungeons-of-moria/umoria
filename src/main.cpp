@@ -50,7 +50,7 @@ int main(int argc, char *argv[]) {
                 new_game = true;
                 break;
             case 'o':
-                // use_roguelike_keys may be set in get_char(),
+                // use_roguelike_keys may be set in loadGame(),
                 // so delay this until after read save file if any.
                 force_rogue_like = true;
                 force_keys_to = false;
@@ -126,19 +126,19 @@ int main(int argc, char *argv[]) {
     }
 
     // This restoration of a saved character may get ONLY the monster memory. In
-    // this case, get_char returns false. It may also resurrect a dead character
+    // this case, loadGame() returns false. It may also resurrect a dead character
     // (if you are the wizard). In this case, it returns true, but also sets the
     // parameter "generate" to true, as it does not recover any cave details.
 
     bool result = false;
     bool generate = false;
 
-    if (!new_game && !access(savegame_filename, 0) && get_char(&generate)) {
+    if (!new_game && !access(savegame_filename, 0) && loadGame(&generate)) {
         result = true;
     }
 
     // enter wizard mode before showing the character display, but must wait
-    // until after get_char in case it was just a resurrection
+    // until after loadGame() in case it was just a resurrection
     if (to_be_wizard) {
         if (!enterWizardMode()) {
             exitGame();
