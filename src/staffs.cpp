@@ -144,7 +144,7 @@ static bool dischargeStaff(Inventory_t *staff_ptr) {
                 }
                 break;
             case 21:
-                identified = detect_evil();
+                identified = spellDetectEvil();
                 break;
             case 22:
                 if (cure_blindness() || cure_poison() || cure_confusion()) {

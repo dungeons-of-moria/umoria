@@ -49,7 +49,7 @@ static void playerRecitePrayer(int prayer_type) {
 
     switch (prayer_type + 1) {
         case 1:
-            (void) detect_evil();
+            (void) spellDetectEvil();
             break;
         case 2:
             (void) hp_player(diceDamageRoll(3, 3));

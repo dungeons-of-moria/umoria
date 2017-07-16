@@ -1759,19 +1759,19 @@ bool spellMassPolymorph() {
 }
 
 // Display evil creatures on current panel -RAK-
-bool detect_evil() {
+bool spellDetectEvil() {
     bool detected = false;
 
     for (int id = next_free_monster_id - 1; id >= MIN_MONIX; id--) {
-        Monster_t *m_ptr = &monsters[id];
+        Monster_t *monster = &monsters[id];
 
-        if (coordInsidePanel((int) m_ptr->fy, (int) m_ptr->fx) && (CD_EVIL & creatures_list[m_ptr->mptr].cdefense)) {
-            m_ptr->ml = true;
+        if (coordInsidePanel((int) monster->fy, (int) monster->fx) && (CD_EVIL & creatures_list[monster->mptr].cdefense)) {
+            monster->ml = true;
 
             detected = true;
 
             // works correctly even if hallucinating
-            putChar((char) creatures_list[m_ptr->mptr].cchar, (int) m_ptr->fy, (int) m_ptr->fx);
+            putChar((char) creatures_list[monster->mptr].cchar, (int) monster->fy, (int) monster->fx);
         }
     }
 
