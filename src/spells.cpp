@@ -547,7 +547,7 @@ void spellLightLine(int x, int y, int direction) {
 }
 
 // Light line in all directions -RAK-
-void starlite(int y, int x) {
+void spellStarlite(int y, int x) {
     if (py.flags.blind < 1) {
         printMessage("The end of the staff bursts into a blue shimmering light.");
     }

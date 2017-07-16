@@ -494,7 +494,7 @@ bool spellSurroundPlayerWithDoors();
 bool spellDestroyAdjacentDoorsTraps();
 bool spellDetectMonsters();
 void spellLightLine(int x, int y, int direction);
-void starlite(int y, int x);
+void spellStarlite(int y, int x);
 bool disarm_all(int y, int x, int direction);
 void fire_bolt(int y, int x, int direction, int damage_hp, int spell_type_id, char *spell_name);
 void fire_ball(int y, int x, int direction, int damage_hp, int spell_type_id, const char *spell_name);

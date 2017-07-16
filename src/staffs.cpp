@@ -103,7 +103,7 @@ static bool dischargeStaff(Inventory_t *staff_ptr) {
                 break;
             case 11:
                 identified = true;
-                starlite(char_row, char_col);
+                spellStarlite(char_row, char_col);
                 break;
             case 12:
                 identified = speed_monsters(1);
