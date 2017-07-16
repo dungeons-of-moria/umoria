@@ -270,30 +270,30 @@ static bool scrollEnchantWeapon() {
     return true;
 }
 
-static bool readCurseWeaponScroll() {
-    Inventory_t *i_ptr = &inventory[INVEN_WIELD];
+static bool scrollCurseWeapon() {
+    Inventory_t *item = &inventory[INVEN_WIELD];
 
-    if (i_ptr->tval == TV_NOTHING) {
+    if (item->tval == TV_NOTHING) {
         return false;
     }
 
     obj_desc_t msg, desc;
-    itemDescription(desc, i_ptr, false);
+    itemDescription(desc, item, false);
 
     (void) sprintf(msg, "Your %s glows black, fades.", desc);
     printMessage(msg);
 
-    itemRemoveMagicNaming(i_ptr);
+    itemRemoveMagicNaming(item);
 
-    i_ptr->tohit = (int16_t) (-randomNumber(5) - randomNumber(5));
-    i_ptr->todam = (int16_t) (-randomNumber(5) - randomNumber(5));
-    i_ptr->toac = 0;
+    item->tohit = (int16_t) (-randomNumber(5) - randomNumber(5));
+    item->todam = (int16_t) (-randomNumber(5) - randomNumber(5));
+    item->toac = 0;
 
     // Must call playerAdjustBonusesForItem() before set (clear) flags, and
     // must call playerRecalculateBonuses() after set (clear) flags, so that
     // all attributes will be properly turned off.
-    playerAdjustBonusesForItem(i_ptr, -1);
-    i_ptr->flags = TR_CURSED;
+    playerAdjustBonusesForItem(item, -1);
+    item->flags = TR_CURSED;
     playerRecalculateBonuses();
 
     return true;
@@ -546,7 +546,7 @@ void read_scroll() {
                 identified = scrollEnchantWeapon();
                 break;
             case 34:
-                identified = readCurseWeaponScroll();
+                identified = scrollCurseWeapon();
                 break;
             case 35:
                 identified = readEnchantArmorScroll();
