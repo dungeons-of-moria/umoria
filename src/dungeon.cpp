@@ -908,7 +908,7 @@ void playDungeon() {
 
         // turn over the store contents every, say, 1000 turns
         if (current_dungeon_level != 0 && current_game_turn % 1000 == 0) {
-            store_maint();
+            storeMaintenance();
         }
 
         // Check for creature generation

@@ -362,30 +362,30 @@ static void storeItemCreate(int store_id, int16_t max_cost) {
 }
 
 // Initialize and up-keep the store's inventory. -RAK-
-void store_maint() {
+void storeMaintenance() {
     for (int store_id = 0; store_id < MAX_STORES; store_id++) {
-        Store_t *s_ptr = &stores[store_id];
+        Store_t *store = &stores[store_id];
 
-        s_ptr->insult_cur = 0;
-        if (s_ptr->store_ctr >= STORE_MIN_INVEN) {
-            int j = randomNumber(STORE_TURN_AROUND);
-            if (s_ptr->store_ctr >= STORE_MAX_INVEN) {
-                j += 1 + s_ptr->store_ctr - STORE_MAX_INVEN;
+        store->insult_cur = 0;
+        if (store->store_ctr >= STORE_MIN_INVEN) {
+            int turnaround = randomNumber(STORE_TURN_AROUND);
+            if (store->store_ctr >= STORE_MAX_INVEN) {
+                turnaround += 1 + store->store_ctr - STORE_MAX_INVEN;
             }
-            while (--j >= 0) {
-                storeDestroy(store_id, randomNumber((int) s_ptr->store_ctr) - 1, false);
+            while (--turnaround >= 0) {
+                storeDestroy(store_id, randomNumber((int) store->store_ctr) - 1, false);
             }
         }
 
-        if (s_ptr->store_ctr <= STORE_MAX_INVEN) {
-            int j = randomNumber(STORE_TURN_AROUND);
-            if (s_ptr->store_ctr < STORE_MIN_INVEN) {
-                j += STORE_MIN_INVEN - s_ptr->store_ctr;
+        if (store->store_ctr <= STORE_MAX_INVEN) {
+            int turnaround = randomNumber(STORE_TURN_AROUND);
+            if (store->store_ctr < STORE_MIN_INVEN) {
+                turnaround += STORE_MIN_INVEN - store->store_ctr;
             }
 
-            int16_t max_cost = store_owners[s_ptr->owner].max_cost;
+            int16_t max_cost = store_owners[store->owner].max_cost;
 
-            while (--j >= 0) {
+            while (--turnaround >= 0) {
                 storeItemCreate(store_id, max_cost);
             }
         }

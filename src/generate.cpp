@@ -1195,7 +1195,7 @@ static void town_gen() {
 
     lightTown();
 
-    store_maint();
+    storeMaintenance();
 }
 
 // Generates a random dungeon level -RAK-

@@ -942,7 +942,7 @@ bool loadGame(bool *generate) {
                 playerStrength();
 
                 // rotate store inventory, depending on how old the save file
-                // is foreach day old (rounded up), call store_maint
+                // is foreach day old (rounded up), call storeMaintenance
                 // calculate age in seconds
                 start_time = (uint32_t) time((time_t *) 0);
 
@@ -961,7 +961,7 @@ bool loadGame(bool *generate) {
                 }
 
                 for (int i = 0; i < (int) age; i++) {
-                    store_maint();
+                    storeMaintenance();
                 }
             }
 

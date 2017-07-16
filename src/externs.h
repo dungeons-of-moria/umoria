@@ -555,7 +555,7 @@ bool storeCheckPlayerItemsCount(int store_id, Inventory_t *item);
 void storeCarry(int store_id, int *index_id, Inventory_t *item);
 void storeDestroy(int store_id, int item_id, bool only_one_of);
 void storeInitializeOwners();
-void store_maint();
+void storeMaintenance();
 bool noneedtobargain(int store_id, int32_t min_price);
 void updatebargain(int store_id, int32_t price, int32_t min_price);
 
