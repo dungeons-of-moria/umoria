@@ -40,51 +40,51 @@ static bool playerCanReadScroll(int *item_pos_start, int *item_pos_end) {
     return true;
 }
 
-static int getEnchantedItemID() {
-    int itemCount = 0;
+static int inventoryItemIdOfCursedEquipment() {
+    int item_count = 0;
     int items[6];
 
     if (inventory[INVEN_BODY].tval != TV_NOTHING) {
-        items[itemCount++] = INVEN_BODY;
+        items[item_count++] = INVEN_BODY;
     }
     if (inventory[INVEN_ARM].tval != TV_NOTHING) {
-        items[itemCount++] = INVEN_ARM;
+        items[item_count++] = INVEN_ARM;
     }
     if (inventory[INVEN_OUTER].tval != TV_NOTHING) {
-        items[itemCount++] = INVEN_OUTER;
+        items[item_count++] = INVEN_OUTER;
     }
     if (inventory[INVEN_HANDS].tval != TV_NOTHING) {
-        items[itemCount++] = INVEN_HANDS;
+        items[item_count++] = INVEN_HANDS;
     }
     if (inventory[INVEN_HEAD].tval != TV_NOTHING) {
-        items[itemCount++] = INVEN_HEAD;
+        items[item_count++] = INVEN_HEAD;
     }
     // also enchant boots
     if (inventory[INVEN_FEET].tval != TV_NOTHING) {
-        items[itemCount++] = INVEN_FEET;
+        items[item_count++] = INVEN_FEET;
     }
 
-    int item = 0;
+    int item_id = 0;
 
-    if (itemCount > 0) {
-        item = items[randomNumber(itemCount) - 1];
+    if (item_count > 0) {
+        item_id = items[randomNumber(item_count) - 1];
     }
 
-    if (TR_CURSED & inventory[INVEN_BODY].flags) {
-        item = INVEN_BODY;
-    } else if (TR_CURSED & inventory[INVEN_ARM].flags) {
-        item = INVEN_ARM;
-    } else if (TR_CURSED & inventory[INVEN_OUTER].flags) {
-        item = INVEN_OUTER;
-    } else if (TR_CURSED & inventory[INVEN_HEAD].flags) {
-        item = INVEN_HEAD;
-    } else if (TR_CURSED & inventory[INVEN_HANDS].flags) {
-        item = INVEN_HANDS;
-    } else if (TR_CURSED & inventory[INVEN_FEET].flags) {
-        item = INVEN_FEET;
+    if (inventory[INVEN_BODY].flags & TR_CURSED) {
+        item_id = INVEN_BODY;
+    } else if (inventory[INVEN_ARM].flags & TR_CURSED) {
+        item_id = INVEN_ARM;
+    } else if (inventory[INVEN_OUTER].flags & TR_CURSED) {
+        item_id = INVEN_OUTER;
+    } else if (inventory[INVEN_HEAD].flags & TR_CURSED) {
+        item_id = INVEN_HEAD;
+    } else if (inventory[INVEN_HANDS].flags & TR_CURSED) {
+        item_id = INVEN_HANDS;
+    } else if (inventory[INVEN_FEET].flags & TR_CURSED) {
+        item_id = INVEN_FEET;
     }
 
-    return item;
+    return item_id;
 }
 
 static bool readEnchantWeaponToHitScroll() {
@@ -144,7 +144,7 @@ static bool readEnchantWeaponToDamageScroll() {
 }
 
 static bool readEnchantItemToACScroll() {
-    int id = getEnchantedItemID();
+    int id = inventoryItemIdOfCursedEquipment();
 
     if (id <= 0) {
         return false;
@@ -300,7 +300,7 @@ static bool readCurseWeaponScroll() {
 }
 
 static bool readEnchantArmorScroll() {
-    int id = getEnchantedItemID();
+    int id = inventoryItemIdOfCursedEquipment();
 
     if (id <= 0) {
         return false;
