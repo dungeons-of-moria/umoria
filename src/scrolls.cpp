@@ -168,22 +168,22 @@ static bool scrollEnchantItemToAC() {
     return true;
 }
 
-static int readIdentifyScroll(int itemID, bool *used_up) {
+static int scrollIdentifyItem(int item_id, bool *is_used_up) {
     printMessage("This is an identify scroll.");
 
-    *used_up = ident_spell();
+    *is_used_up = ident_spell();
 
     // The identify may merge objects, causing the identify scroll
     // to move to a different place.  Check for that here.  It can
     // move arbitrarily far if an identify scroll was used on
     // another identify scroll, but it always moves down.
-    Inventory_t *i_ptr = &inventory[itemID];
-    while (itemID > 0 && (i_ptr->tval != TV_SCROLL1 || i_ptr->flags != 0x00000008)) {
-        itemID--;
-        i_ptr = &inventory[itemID];
+    Inventory_t *item = &inventory[item_id];
+    while (item_id > 0 && (item->tval != TV_SCROLL1 || item->flags != 0x00000008)) {
+        item_id--;
+        item = &inventory[item_id];
     }
 
-    return itemID;
+    return item_id;
 }
 
 static bool readRemoveCurseScroll() {
@@ -447,7 +447,7 @@ void read_scroll() {
                 identified = scrollEnchantItemToAC();
                 break;
             case 4:
-                itemID = readIdentifyScroll(itemID, &used_up);
+                itemID = scrollIdentifyItem(itemID, &used_up);
                 identified = true;
                 break;
             case 5:
