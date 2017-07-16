@@ -194,10 +194,10 @@ static bool scrollRemoveCurse() {
     return false;
 }
 
-static bool readSummonMonsterScroll() {
+static bool scrollSummonMonster() {
     bool identified = false;
 
-    for (int k = 0; k < randomNumber(3); k++) {
+    for (int i = 0; i < randomNumber(3); i++) {
         int y = (int) char_row;
         int x = (int) char_col;
         identified |= monsterSummon(&y, &x, false);
@@ -457,7 +457,7 @@ void read_scroll() {
                 identified = light_area(char_row, char_col);
                 break;
             case 7:
-                identified = readSummonMonsterScroll();
+                identified = scrollSummonMonster();
                 break;
             case 8:
                 playerTeleport(10); // Teleport Short, aka Phase Door
