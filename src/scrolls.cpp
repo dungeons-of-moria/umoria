@@ -486,7 +486,7 @@ void readScroll() {
                 identified = true;
                 break;
             case 15:
-                identified = detect_treasure();
+                identified = dungeonDetectTreasureOnPanel();
                 break;
             case 16:
                 identified = detect_object();

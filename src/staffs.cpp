@@ -75,7 +75,7 @@ static bool dischargeStaff(Inventory_t *staff_ptr) {
                 identified = detect_trap();
                 break;
             case 4:
-                identified = detect_treasure();
+                identified = dungeonDetectTreasureOnPanel();
                 break;
             case 5:
                 identified = detect_object();

@@ -479,7 +479,7 @@ bool setMagicShopItems(int item_id);
 
 // spells.c
 bool monsterSleep(int y, int x);
-bool detect_treasure();
+bool dungeonDetectTreasureOnPanel();
 bool detect_object();
 bool detect_trap();
 bool detect_sdoor();
