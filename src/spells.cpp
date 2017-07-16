@@ -1819,7 +1819,7 @@ bool spellChangePlayerHitPoints(int adjustment) {
 }
 
 // Cure players confusion -RAK-
-bool cure_confusion() {
+bool playerCureConfusion() {
     if (py.flags.confused > 1) {
         py.flags.confused = 1;
         return true;

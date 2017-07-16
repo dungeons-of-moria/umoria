@@ -520,7 +520,7 @@ bool spellSleepAllMonsters();
 bool spellMassPolymorph();
 bool spellDetectEvil();
 bool spellChangePlayerHitPoints(int adjustment);
-bool cure_confusion();
+bool playerCureConfusion();
 bool cure_blindness();
 bool cure_poison();
 bool remove_fear();

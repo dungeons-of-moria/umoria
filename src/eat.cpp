@@ -79,7 +79,7 @@ void playerEat() {
                 }
                 break;
             case 9:
-                identified = cure_confusion();
+                identified = playerCureConfusion();
                 break;
             case 10:
                 lose_str();
