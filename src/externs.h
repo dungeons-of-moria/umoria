@@ -546,7 +546,7 @@ bool spellRemoveCurseFromAllItems();
 bool spellRestorePlayerLevels();
 
 // staffs.c
-void use();
+void useStaff();
 
 // store1.c
 int32_t item_value(Inventory_t *item);

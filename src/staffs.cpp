@@ -173,43 +173,42 @@ static bool staffDischarge(Inventory_t *item) {
 }
 
 // Use a staff. -RAK-
-void use() {
-    int j, k;
-
+void useStaff() {
     player_free_turn = true;
 
-    if (!staffPlayerIsCarrying(&j, &k)) {
+    int item_pos_start, item_pos_end;
+    if (!staffPlayerIsCarrying(&item_pos_start, &item_pos_end)) {
         return;
     }
 
-    int staff_id;
-    if (!inventoryGetInputForItemId(&staff_id, "Use which staff?", j, k, CNIL, CNIL)) {
+    int item_id;
+    if (!inventoryGetInputForItemId(&item_id, "Use which staff?", item_pos_start, item_pos_end, CNIL, CNIL)) {
         return;
     }
 
     // From here on player uses up a turn
     player_free_turn = false;
 
-    Inventory_t *staff_ptr = &inventory[staff_id];
+    Inventory_t *item = &inventory[item_id];
 
-    if (!staffPlayerCanUse(staff_ptr)) {
+    if (!staffPlayerCanUse(item)) {
         return;
     }
 
-    bool identified = staffDischarge(staff_ptr);
+    bool identified = staffDischarge(item);
 
     if (identified) {
-        if (!itemSetColorlessAsIdentifed(staff_ptr)) {
+        if (!itemSetColorlessAsIdentifed(item)) {
             // round half-way case up
-            py.misc.exp += (staff_ptr->level + (py.misc.lev >> 1)) / py.misc.lev;
+            py.misc.exp += (item->level + (py.misc.lev >> 1)) / py.misc.lev;
 
             displayCharacterExperience();
 
-            itemIdentify(&staff_id);
+            itemIdentify(&item_id);
         }
-    } else if (!itemSetColorlessAsIdentifed(staff_ptr)) {
-        itemSetAsTried(staff_ptr);
+    } else if (!itemSetColorlessAsIdentifed(item)) {
+        itemSetAsTried(item);
     }
 
-    itemChargesRemainingDescription(staff_id);
+    itemChargesRemainingDescription(item_id);
 }

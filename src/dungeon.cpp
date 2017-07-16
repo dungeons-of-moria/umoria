@@ -1804,7 +1804,7 @@ static void do_command(char com_val) {
             inventoryExecuteCommand('t');
             break;
         case 'Z': // (Z)ap a staff  (u)se a staff
-            use();
+            useStaff();
             break;
         case 'v': // (v)ersion of game
             displayTextHelpFile(MORIA_VER);
