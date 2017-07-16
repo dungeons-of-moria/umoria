@@ -206,7 +206,7 @@ static bool scrollSummonMonster() {
     return identified;
 }
 
-static void readTeleportLevelScroll() {
+static void scrollTeleportLevel() {
     current_dungeon_level += (-3) + 2 * randomNumber(2);
     if (current_dungeon_level < 1) {
         current_dungeon_level = 1;
@@ -468,7 +468,7 @@ void read_scroll() {
                 identified = true;
                 break;
             case 10:
-                readTeleportLevelScroll();
+                scrollTeleportLevel();
                 identified = true;
                 break;
             case 11:
