@@ -1255,24 +1255,23 @@ bool spellSleepMonster(int y, int x, int direction) {
 }
 
 // Turn stone to mud, delete wall. -RAK-
-bool wall_to_mud(int y, int x, int direction) {
+bool spellWallToMud(int y, int x, int direction) {
+    int distance = 0;
     bool turned = false;
-
-    int dist = 0;
-
     bool finished = false;
+
     while (!finished) {
         (void) playerMovePosition(direction, &y, &x);
-        dist++;
+        distance++;
 
-        Cave_t *c_ptr = &cave[y][x];
+        Cave_t *tile = &cave[y][x];
 
         // note, this ray can move through walls as it turns them to mud
-        if (dist == OBJ_BOLT_RANGE) {
+        if (distance == OBJ_BOLT_RANGE) {
             finished = true;
         }
 
-        if (c_ptr->fval >= MIN_CAVE_WALL && c_ptr->fval != BOUNDARY_WALL) {
+        if (tile->fval >= MIN_CAVE_WALL && tile->fval != BOUNDARY_WALL) {
             finished = true;
 
             (void) dungeonTunnelWall(y, x, 1, 0);
@@ -1281,21 +1280,21 @@ bool wall_to_mud(int y, int x, int direction) {
                 turned = true;
                 printMessage("The wall turns into mud.");
             }
-        } else if (c_ptr->tptr != 0 && c_ptr->fval >= MIN_CLOSED_SPACE) {
+        } else if (tile->tptr != 0 && tile->fval >= MIN_CLOSED_SPACE) {
             finished = true;
 
             if (coordInsidePanel(y, x) && caveTileVisible(y, x)) {
                 turned = true;
 
                 obj_desc_t description;
-                itemDescription(description, &treasure_list[c_ptr->tptr], false);
+                itemDescription(description, &treasure_list[tile->tptr], false);
 
                 obj_desc_t out_val;
                 (void) sprintf(out_val, "The %s turns into mud.", description);
                 printMessage(out_val);
             }
 
-            if (treasure_list[c_ptr->tptr].tval == TV_RUBBLE) {
+            if (treasure_list[tile->tptr].tval == TV_RUBBLE) {
                 (void) dungeonDeleteObject(y, x);
                 if (randomNumber(10) == 1) {
                     dungeonPlaceRandomObjectAt(y, x, false);
@@ -1309,22 +1308,22 @@ bool wall_to_mud(int y, int x, int direction) {
             }
         }
 
-        if (c_ptr->cptr > 1) {
-            Monster_t *m_ptr = &monsters[c_ptr->cptr];
-            Creature_t *r_ptr = &creatures_list[m_ptr->mptr];
+        if (tile->cptr > 1) {
+            Monster_t *monster = &monsters[tile->cptr];
+            Creature_t *creature = &creatures_list[monster->mptr];
 
-            if (CD_STONE & r_ptr->cdefense) {
+            if (CD_STONE & creature->cdefense) {
                 vtype_t name;
-                monsterNameDescription(name, m_ptr->ml, r_ptr->name);
+                monsterNameDescription(name, monster->ml, creature->name);
 
                 // Should get these messages even if the monster is not visible.
-                int i = monsterTakeHit((int) c_ptr->cptr, 100);
-                if (i >= 0) {
-                    creature_recall[i].r_cdefense |= CD_STONE;
+                int creature_id = monsterTakeHit((int) tile->cptr, 100);
+                if (creature_id >= 0) {
+                    creature_recall[creature_id].r_cdefense |= CD_STONE;
                     printMonsterActionText(name, "dissolves!");
                     displayCharacterExperience(); // print msg before calling prt_exp
                 } else {
-                    creature_recall[m_ptr->mptr].r_cdefense |= CD_STONE;
+                    creature_recall[monster->mptr].r_cdefense |= CD_STONE;
                     printMonsterActionText(name, "grunts in pain!");
                 }
                 finished = true;

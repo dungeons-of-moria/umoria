@@ -99,7 +99,7 @@ static void castSpell(int spellID) {
             break;
         case 16:
             if (getDirectionWithMemory(CNIL, &dir)) {
-                (void) wall_to_mud(char_row, char_col, dir);
+                (void) spellWallToMud(char_row, char_col, dir);
             }
             break;
         case 17:
