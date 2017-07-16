@@ -521,7 +521,7 @@ bool spellMassPolymorph();
 bool spellDetectEvil();
 bool spellChangePlayerHitPoints(int adjustment);
 bool playerCureConfusion();
-bool cure_blindness();
+bool playerCureBlindness();
 bool cure_poison();
 bool remove_fear();
 void earthquake();

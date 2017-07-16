@@ -1453,7 +1453,7 @@ static void doWizardCommands(char com_val) {
     switch (com_val) {
         case CTRL_KEY('A'): // ^A = Cure all
             (void) remove_curse();
-            (void) cure_blindness();
+            (void) playerCureBlindness();
             (void) playerCureConfusion();
             (void) cure_poison();
             (void) remove_fear();

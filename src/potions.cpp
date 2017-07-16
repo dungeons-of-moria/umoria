@@ -176,7 +176,7 @@ static bool playerDrinkPotion(uint32_t flags, uint8_t item_id) {
                 }
                 break;
             case 29:
-                identified = cure_blindness();
+                identified = playerCureBlindness();
                 break;
             case 30:
                 identified = playerCureConfusion();

@@ -70,7 +70,7 @@ void playerEat() {
                 identified = cure_poison();
                 break;
             case 7:
-                identified = cure_blindness();
+                identified = playerCureBlindness();
                 break;
             case 8:
                 if (py.flags.afraid > 1) {

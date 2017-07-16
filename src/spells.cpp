@@ -1828,7 +1828,7 @@ bool playerCureConfusion() {
 }
 
 // Cure players blindness -RAK-
-bool cure_blindness() {
+bool playerCureBlindness() {
     if (py.flags.blind > 1) {
         py.flags.blind = 1;
         return true;
