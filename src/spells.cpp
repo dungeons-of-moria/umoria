@@ -333,14 +333,15 @@ bool spellIdentifyItem() {
 }
 
 // Get all the monsters on the level pissed off. -RAK-
-bool aggravate_monster(int distance_affect) {
+bool spellAggravateMonsters(int affect_distance) {
     bool aggravated = false;
 
     for (int id = next_free_monster_id - 1; id >= MIN_MONIX; id--) {
-        Monster_t *m_ptr = &monsters[id];
-        m_ptr->csleep = 0;
-        if (m_ptr->cdis <= distance_affect && m_ptr->cspeed < 2) {
-            m_ptr->cspeed++;
+        Monster_t *monster = &monsters[id];
+        monster->csleep = 0;
+
+        if (monster->cdis <= affect_distance && monster->cspeed < 2) {
+            monster->cspeed++;
             aggravated = true;
         }
     }

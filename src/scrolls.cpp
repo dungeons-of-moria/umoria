@@ -507,7 +507,7 @@ void readScroll() {
                 break;
             case 21:
                 printMessage("There is a high pitched humming noise.");
-                (void) aggravate_monster(20);
+                (void) spellAggravateMonsters(20);
                 identified = true;
                 break;
             case 22:

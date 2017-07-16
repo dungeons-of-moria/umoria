@@ -488,7 +488,7 @@ bool dungeonLightArea(int y, int x);
 bool dungeonDarkenArea(int y, int x);
 void dungeonMapCurrentArea();
 bool spellIdentifyItem();
-bool aggravate_monster(int distance_affect);
+bool spellAggravateMonsters(int affect_distance);
 bool trap_creation();
 bool door_creation();
 bool td_destroy();
