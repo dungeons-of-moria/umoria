@@ -1987,28 +1987,28 @@ bool spellDispelCreature(int creature_defense, int damage) {
 }
 
 // Attempt to turn (confuse) undead creatures. -RAK-
-bool turn_undead() {
+bool spellTurnUndead() {
     bool turned = false;
 
     for (int id = next_free_monster_id - 1; id >= MIN_MONIX; id--) {
-        Monster_t *m_ptr = &monsters[id];
-        Creature_t *r_ptr = &creatures_list[m_ptr->mptr];
+        Monster_t *monster = &monsters[id];
+        Creature_t *creature = &creatures_list[monster->mptr];
 
-        if (m_ptr->cdis <= MAX_SIGHT && (CD_UNDEAD & r_ptr->cdefense) && los(char_row, char_col, (int) m_ptr->fy, (int) m_ptr->fx)) {
+        if (monster->cdis <= MAX_SIGHT && (CD_UNDEAD & creature->cdefense) && los(char_row, char_col, (int) monster->fy, (int) monster->fx)) {
             vtype_t name;
-            monsterNameDescription(name, m_ptr->ml, r_ptr->name);
+            monsterNameDescription(name, monster->ml, creature->name);
 
-            if (py.misc.lev + 1 > r_ptr->level || randomNumber(5) == 1) {
-                if (m_ptr->ml) {
-                    creature_recall[m_ptr->mptr].r_cdefense |= CD_UNDEAD;
+            if (py.misc.lev + 1 > creature->level || randomNumber(5) == 1) {
+                if (monster->ml) {
+                    creature_recall[monster->mptr].r_cdefense |= CD_UNDEAD;
 
                     turned = true;
 
                     printMonsterActionText(name, "runs frantically!");
                 }
 
-                m_ptr->confused = (uint8_t) py.misc.lev;
-            } else if (m_ptr->ml) {
+                monster->confused = (uint8_t) py.misc.lev;
+            } else if (monster->ml) {
                 printMonsterActionText(name, "is unaffected.");
             }
         }

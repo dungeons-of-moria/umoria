@@ -131,7 +131,7 @@ static void playerRecitePrayer(int prayer_type) {
             (void) spellChangePlayerHitPoints(diceDamageRoll(16, 4));
             break;
         case 25:
-            (void) turn_undead();
+            (void) spellTurnUndead();
             break;
         case 26:
             bless(randomNumber(48) + 48);
@@ -158,7 +158,7 @@ static void playerRecitePrayer(int prayer_type) {
             }
 
             (void) spellDispelCreature(CD_EVIL, (4 * py.misc.lev));
-            (void) turn_undead();
+            (void) spellTurnUndead();
 
             if (py.flags.invuln < 3) {
                 py.flags.invuln = 3;
