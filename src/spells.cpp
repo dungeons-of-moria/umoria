@@ -606,8 +606,8 @@ bool spellDisarmAllInDirection(int y, int x, int direction) {
 }
 
 // Return flags for given type area affect -RAK-
-static void get_flags(int typ, uint32_t *weapon_type, int *harm_type, bool (**destroy)(Inventory_t *)) {
-    switch (typ) {
+static void getAreaAffectFlags(int spell_type, uint32_t *weapon_type, int *harm_type, bool (**destroy)(Inventory_t *)) {
+    switch (spell_type) {
         case GF_MAGIC_MISSILE:
             *weapon_type = 0;
             *harm_type = 0;
@@ -644,7 +644,7 @@ static void get_flags(int typ, uint32_t *weapon_type, int *harm_type, bool (**de
             *destroy = setNull;
             break;
         default:
-            printMessage("ERROR in get_flags()\n");
+            printMessage("ERROR in getAreaAffectFlags()\n");
     }
 }
 
@@ -697,7 +697,7 @@ void fire_bolt(int y, int x, int direction, int damage_hp, int spell_type_id, ch
     bool (*dummy)(Inventory_t *);
     int harm_type = 0;
     uint32_t weapon_type;
-    get_flags(spell_type_id, &weapon_type, &harm_type, &dummy);
+    getAreaAffectFlags(spell_type_id, &weapon_type, &harm_type, &dummy);
 
     int dist = 0;
     bool finished = false;
@@ -739,7 +739,7 @@ void fire_ball(int y, int x, int direction, int damage_hp, int spell_type_id, co
     bool (*destroy)(Inventory_t *);
     int harm_type;
     uint32_t weapon_type;
-    get_flags(spell_type_id, &weapon_type, &harm_type, &destroy);
+    getAreaAffectFlags(spell_type_id, &weapon_type, &harm_type, &destroy);
 
     int dist = 0;
 
@@ -869,7 +869,7 @@ void breath(int x, int y, int monster_id, int damage_hp, char *spell_name, int s
     bool (*destroy)(Inventory_t *);
     int harm_type;
     uint32_t weapon_type;
-    get_flags(spell_type_id, &weapon_type, &harm_type, &destroy);
+    getAreaAffectFlags(spell_type_id, &weapon_type, &harm_type, &destroy);
 
     int dam;
 
