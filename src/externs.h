@@ -491,7 +491,7 @@ bool spellIdentifyItem();
 bool spellAggravateMonsters(int affect_distance);
 bool spellSurroundPlayerWithTraps();
 bool spellSurroundPlayerWithDoors();
-bool td_destroy();
+bool spellDestroyAdjacentDoorsTraps();
 bool detect_monsters();
 void light_line(int x, int y, int direction);
 void starlite(int y, int x);

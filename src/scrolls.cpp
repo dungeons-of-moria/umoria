@@ -514,7 +514,7 @@ void readScroll() {
                 identified = spellSurroundPlayerWithTraps();
                 break;
             case 23:
-                identified = td_destroy();
+                identified = spellDestroyAdjacentDoorsTraps();
                 break;
             case 24:
                 identified = spellSurroundPlayerWithDoors();

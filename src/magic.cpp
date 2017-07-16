@@ -74,7 +74,7 @@ static void castSpell(int spellID) {
             }
             break;
         case 10:
-            (void) td_destroy();
+            (void) spellDestroyAdjacentDoorsTraps();
             break;
         case 11:
             if (getDirectionWithMemory(CNIL, &dir)) {

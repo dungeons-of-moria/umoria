@@ -421,33 +421,32 @@ bool spellSurroundPlayerWithDoors() {
 }
 
 // Destroys any adjacent door(s)/trap(s) -RAK-
-bool td_destroy() {
+bool spellDestroyAdjacentDoorsTraps() {
     bool destroyed = false;
 
     for (int y = char_row - 1; y <= char_row + 1; y++) {
         for (int x = char_col - 1; x <= char_col + 1; x++) {
-            Cave_t *c_ptr = &cave[y][x];
+            Cave_t *tile = &cave[y][x];
 
-            if (c_ptr->tptr == 0) {
+            if (tile->tptr == 0) {
                 continue;
             }
 
-            if ((treasure_list[c_ptr->tptr].tval >= TV_INVIS_TRAP &&
-                 treasure_list[c_ptr->tptr].tval <= TV_CLOSED_DOOR &&
-                 treasure_list[c_ptr->tptr].tval != TV_RUBBLE) ||
-                treasure_list[c_ptr->tptr].tval == TV_SECRET_DOOR) {
+            Inventory_t *item = &treasure_list[tile->tptr];
+
+            if ((item->tval >= TV_INVIS_TRAP && item->tval <= TV_CLOSED_DOOR && item->tval != TV_RUBBLE) || item->tval == TV_SECRET_DOOR) {
                 if (dungeonDeleteObject(y, x)) {
                     destroyed = true;
                 }
-            } else if (treasure_list[c_ptr->tptr].tval == TV_CHEST && treasure_list[c_ptr->tptr].flags != 0) {
+            } else if (item->tval == TV_CHEST && item->flags != 0) {
                 // destroy traps on chest and unlock
-                treasure_list[c_ptr->tptr].flags &= ~(CH_TRAPPED | CH_LOCKED);
-                treasure_list[c_ptr->tptr].name2 = SN_UNLOCKED;
+                item->flags &= ~(CH_TRAPPED | CH_LOCKED);
+                item->name2 = SN_UNLOCKED;
 
                 destroyed = true;
 
                 printMessage("You have disarmed the chest.");
-                spellItemIdentifyAndRemoveRandomInscription(&treasure_list[c_ptr->tptr]);
+                spellItemIdentifyAndRemoveRandomInscription(item);
             }
         }
     }
