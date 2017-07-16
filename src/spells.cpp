@@ -2142,7 +2142,7 @@ void playerBless(int adjustment) {
 }
 
 // Detect Invisible for period of time -RAK-
-void detect_inv2(int adjustment) {
+void playerDetectInvisible(int adjustment) {
     py.flags.detect_inv += adjustment;
 }
 

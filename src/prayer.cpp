@@ -116,7 +116,7 @@ static void playerRecitePrayer(int prayer_type) {
             (void) spellChangePlayerHitPoints(diceDamageRoll(8, 4));
             break;
         case 20:
-            detect_inv2(randomNumber(24) + 24);
+            playerDetectInvisible(randomNumber(24) + 24);
             break;
         case 21:
             (void) playerProtectEvil();

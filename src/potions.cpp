@@ -252,7 +252,7 @@ static bool playerDrinkPotion(uint32_t flags, uint8_t item_id) {
                 if (py.flags.detect_inv == 0) {
                     identified = true;
                 }
-                detect_inv2(randomNumber(12) + 12);
+                playerDetectInvisible(randomNumber(12) + 12);
                 break;
             case 44:
                 identified = spellSlowPoison();
