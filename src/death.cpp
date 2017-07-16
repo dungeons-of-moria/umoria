@@ -346,14 +346,14 @@ static void highscores() {
         // write out new_entry at end of file
         (void) fseek(highscore_fp, curpos, SEEK_SET);
 
-        wr_highscore(&new_entry);
+        saveHighScore(&new_entry);
     } else {
         entry = new_entry;
 
         while (!feof(highscore_fp)) {
             (void) fseek(highscore_fp, -(long) sizeof(HighScore_t) - (long) sizeof(char), SEEK_CUR);
 
-            wr_highscore(&entry);
+            saveHighScore(&entry);
 
             // under unix, only allow one sex/race/class combo per person,
             // on single user system, allow any number of entries, but try
@@ -378,7 +378,7 @@ static void highscores() {
         if (feof(highscore_fp)) {
             (void) fseek(highscore_fp, curpos, SEEK_SET);
 
-            wr_highscore(&entry);
+            saveHighScore(&entry);
         }
     }
 

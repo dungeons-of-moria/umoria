@@ -451,7 +451,7 @@ int32_t rnd();
 bool saveGame();
 bool loadGame(bool *generate);
 void setFileptr(FILE *file);
-void wr_highscore(HighScore_t *score);
+void saveHighScore(HighScore_t *score);
 void rd_highscore(HighScore_t *score);
 
 // scrolls.c
