@@ -29,15 +29,15 @@ static bool discharge_wand(Inventory_t *wand, int dir) {
                 identified = true;
                 break;
             case 2:
-                fire_bolt(row, col, dir, diceDamageRoll(4, 8), GF_LIGHTNING, spell_names[8]);
+                spellFireBolt(row, col, dir, diceDamageRoll(4, 8), GF_LIGHTNING, spell_names[8]);
                 identified = true;
                 break;
             case 3:
-                fire_bolt(row, col, dir, diceDamageRoll(6, 8), GF_FROST, spell_names[14]);
+                spellFireBolt(row, col, dir, diceDamageRoll(6, 8), GF_FROST, spell_names[14]);
                 identified = true;
                 break;
             case 4:
-                fire_bolt(row, col, dir, diceDamageRoll(9, 8), GF_FIRE, spell_names[22]);
+                spellFireBolt(row, col, dir, diceDamageRoll(9, 8), GF_FIRE, spell_names[22]);
                 identified = true;
                 break;
             case 5:
@@ -68,7 +68,7 @@ static bool discharge_wand(Inventory_t *wand, int dir) {
                 identified = td_destroy2(row, col, dir);
                 break;
             case 14:
-                fire_bolt(row, col, dir, diceDamageRoll(2, 6), GF_MAGIC_MISSILE, spell_names[0]);
+                spellFireBolt(row, col, dir, diceDamageRoll(2, 6), GF_MAGIC_MISSILE, spell_names[0]);
                 identified = true;
                 break;
             case 15:

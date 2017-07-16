@@ -496,7 +496,7 @@ bool spellDetectMonsters();
 void spellLightLine(int x, int y, int direction);
 void spellStarlite(int y, int x);
 bool spellDisarmAllInDirection(int y, int x, int direction);
-void fire_bolt(int y, int x, int direction, int damage_hp, int spell_type_id, char *spell_name);
+void spellFireBolt(int y, int x, int direction, int damage_hp, int spell_type_id, char *spell_name);
 void fire_ball(int y, int x, int direction, int damage_hp, int spell_type_id, const char *spell_name);
 void breath(int x, int y, int monster_id, int damage_hp, char *spell_name, int spell_type_id);
 bool recharge(int charges);

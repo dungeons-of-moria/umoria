@@ -693,34 +693,34 @@ static void spellFireBoltTouchesMonster(Cave_t *tile, int damage, int harm_type,
 }
 
 // Shoot a bolt in a given direction -RAK-
-void fire_bolt(int y, int x, int direction, int damage_hp, int spell_type_id, char *spell_name) {
+void spellFireBolt(int y, int x, int direction, int damage_hp, int spell_type, char *spell_name) {
     bool (*dummy)(Inventory_t *);
     int harm_type = 0;
     uint32_t weapon_type;
-    getAreaAffectFlags(spell_type_id, &weapon_type, &harm_type, &dummy);
+    getAreaAffectFlags(spell_type, &weapon_type, &harm_type, &dummy);
 
-    int dist = 0;
+    int distance = 0;
     bool finished = false;
 
     while (!finished) {
-        int oldy = y;
-        int oldx = x;
+        int old_y = y;
+        int old_x = x;
 
         (void) playerMovePosition(direction, &y, &x);
-        dist++;
+        distance++;
 
-        Cave_t *c_ptr = &cave[y][x];
+        Cave_t *tile = &cave[y][x];
 
-        dungeonLiteSpot(oldy, oldx);
+        dungeonLiteSpot(old_y, old_x);
 
-        if (dist > OBJ_BOLT_RANGE || c_ptr->fval >= MIN_CLOSED_SPACE) {
+        if (distance > OBJ_BOLT_RANGE || tile->fval >= MIN_CLOSED_SPACE) {
             finished = true;
             continue; // we're done here, break out of the loop
         }
 
-        if (c_ptr->cptr > 1) {
+        if (tile->cptr > 1) {
             finished = true;
-            spellFireBoltTouchesMonster(c_ptr, damage_hp, harm_type, weapon_type, spell_name);
+            spellFireBoltTouchesMonster(tile, damage_hp, harm_type, weapon_type, spell_name);
         } else if (coordInsidePanel(y, x) && py.flags.blind < 1) {
             putChar('*', y, x);
 
