@@ -495,7 +495,7 @@ void readScroll() {
                 identified = dungeonDetectTrapOnPanel();
                 break;
             case 18:
-                identified = detect_sdoor();
+                identified = dungeonDetectSecretDoorsOnPanel();
                 break;
             case 19:
                 printMessage("This is a mass genocide scroll.");

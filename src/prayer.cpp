@@ -67,7 +67,7 @@ static void playerRecitePrayer(int prayer_type) {
             (void) dungeonDetectTrapOnPanel();
             break;
         case 7:
-            (void) detect_sdoor();
+            (void) dungeonDetectSecretDoorsOnPanel();
             break;
         case 8:
             (void) slow_poison();

@@ -139,30 +139,28 @@ bool dungeonDetectTrapOnPanel() {
 }
 
 // Locates and displays all secret doors on current panel -RAK-
-bool detect_sdoor() {
+bool dungeonDetectSecretDoorsOnPanel() {
     bool detected = false;
 
     for (int y = panel_row_min; y <= panel_row_max; y++) {
         for (int x = panel_col_min; x <= panel_col_max; x++) {
-            Cave_t *c_ptr = &cave[y][x];
+            Cave_t *tile = &cave[y][x];
 
-            if (c_ptr->tptr == 0) {
+            if (tile->tptr == 0) {
                 continue;
             }
 
-            if (treasure_list[c_ptr->tptr].tval == TV_SECRET_DOOR) {
+            if (treasure_list[tile->tptr].tval == TV_SECRET_DOOR) {
                 // Secret doors
 
-                c_ptr->fm = true;
+                tile->fm = true;
                 dungeonChangeTrapVisibility(y, x);
-
                 detected = true;
-            } else if ((treasure_list[c_ptr->tptr].tval == TV_UP_STAIR || treasure_list[c_ptr->tptr].tval == TV_DOWN_STAIR) && !c_ptr->fm) {
+            } else if ((treasure_list[tile->tptr].tval == TV_UP_STAIR || treasure_list[tile->tptr].tval == TV_DOWN_STAIR) && !tile->fm) {
                 // Staircases
 
-                c_ptr->fm = true;
+                tile->fm = true;
                 dungeonLiteSpot(y, x);
-
                 detected = true;
             }
         }

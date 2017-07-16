@@ -482,7 +482,7 @@ bool monsterSleep(int y, int x);
 bool dungeonDetectTreasureOnPanel();
 bool dungeonDetectObjectOnPanel();
 bool dungeonDetectTrapOnPanel();
-bool detect_sdoor();
+bool dungeonDetectSecretDoorsOnPanel();
 bool detect_invisible();
 bool light_area(int y, int x);
 bool unlight_area(int y, int x);

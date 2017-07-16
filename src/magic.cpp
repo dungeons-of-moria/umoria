@@ -55,7 +55,7 @@ static void castSpell(int spellID) {
             (void) hp_player(diceDamageRoll(4, 4));
             break;
         case 6:
-            (void) detect_sdoor();
+            (void) dungeonDetectSecretDoorsOnPanel();
             (void) dungeonDetectTrapOnPanel();
             break;
         case 7:
