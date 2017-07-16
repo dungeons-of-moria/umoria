@@ -1609,17 +1609,16 @@ bool spellTeleportAwayMonsterInDirection(int y, int x, int direction) {
 
 // Delete all creatures within max_sight distance -RAK-
 // NOTE : Winning creatures cannot be killed by genocide.
-bool mass_genocide() {
+bool spellMassGenocide() {
     bool killed = false;
 
     for (int id = next_free_monster_id - 1; id >= MIN_MONIX; id--) {
-        Monster_t *m_ptr = &monsters[id];
-        Creature_t *r_ptr = &creatures_list[m_ptr->mptr];
+        Monster_t *monster = &monsters[id];
+        Creature_t *creature = &creatures_list[monster->mptr];
 
-        if (m_ptr->cdis <= MAX_SIGHT && (r_ptr->cmove & CM_WIN) == 0) {
-            dungeonDeleteMonster(id);
-
+        if (monster->cdis <= MAX_SIGHT && (creature->cmove & CM_WIN) == 0) {
             killed = true;
+            dungeonDeleteMonster(id);
         }
     }
 

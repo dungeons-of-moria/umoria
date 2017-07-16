@@ -513,7 +513,7 @@ bool spellCloneMonster(int y, int x, int direction);
 void spellTeleportAwayMonster(int monster_id, int distance_from_player);
 void spellTeleportPlayerTo(int y, int x);
 bool spellTeleportAwayMonsterInDirection(int y, int x, int direction);
-bool mass_genocide();
+bool spellMassGenocide();
 bool genocide();
 bool speed_monsters(int speed);
 bool sleep_monsters2();

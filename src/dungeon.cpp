@@ -1476,7 +1476,7 @@ static void doWizardCommands(char com_val) {
             eraseLine(MSG_LINE, 0);
             break;
         case CTRL_KEY('F'): // ^F = genocide
-            (void) mass_genocide();
+            (void) spellMassGenocide();
             break;
         case CTRL_KEY('G'): // ^G = treasure
             if (command_count > 0) {

@@ -499,7 +499,7 @@ void readScroll() {
                 break;
             case 19:
                 printMessage("This is a mass genocide scroll.");
-                (void) mass_genocide();
+                (void) spellMassGenocide();
                 identified = true;
                 break;
             case 20:
