@@ -930,7 +930,7 @@ static bool store_sell(int store_num, int *cur_top) {
     (void) sprintf(out_val, "Selling %s (%c)", tmp_str, item_val + 'a');
     printMessage(out_val);
 
-    if (!store_check_num(store_num, &sold_obj)) {
+    if (!storeCheckPlayerItemsCount(store_num, &sold_obj)) {
         printMessage("I have not the room in my store to keep it.");
         return false;
     }

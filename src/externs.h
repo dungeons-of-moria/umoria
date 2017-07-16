@@ -551,7 +551,7 @@ void useStaff();
 // store1.c
 int32_t storeItemValue(Inventory_t *item);
 int32_t storeItemSellPrice(int store_id, int32_t *min_price, int32_t *max_price, Inventory_t *item);
-bool store_check_num(int store_id, Inventory_t *item);
+bool storeCheckPlayerItemsCount(int store_id, Inventory_t *item);
 void store_carry(int store_id, int *index_id, Inventory_t *item);
 void store_destroy(int store_id, int item_id, bool only_one);
 void store_init();

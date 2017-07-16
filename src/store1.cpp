@@ -184,10 +184,10 @@ int32_t storeItemSellPrice(int store_id, int32_t *min_price, int32_t *max_price,
 }
 
 // Check to see if he will be carrying too many objects -RAK-
-bool store_check_num(int store_id, Inventory_t *item) {
-    Store_t *s_ptr = &stores[store_id];
+bool storeCheckPlayerItemsCount(int store_id, Inventory_t *item) {
+    Store_t *store = &stores[store_id];
 
-    if (s_ptr->store_ctr < STORE_INVEN_MAX) {
+    if (store->store_ctr < STORE_INVEN_MAX) {
         return true;
     }
 
@@ -197,13 +197,13 @@ bool store_check_num(int store_id, Inventory_t *item) {
 
     bool store_check = false;
 
-    for (int i = 0; i < s_ptr->store_ctr; i++) {
-        Inventory_t *i_ptr = &s_ptr->store_inven[i].sitem;
+    for (int i = 0; i < store->store_ctr; i++) {
+        Inventory_t *store_item = &store->store_inven[i].sitem;
 
         // note: items with subval of gte ITEM_SINGLE_STACK_MAX only stack
         // if their subvals match
-        if (i_ptr->tval == item->tval && i_ptr->subval == item->subval && (int) (i_ptr->number + item->number) < 256 &&
-            (item->subval < ITEM_GROUP_MIN || i_ptr->p1 == item->p1)) {
+        if (store_item->tval == item->tval && store_item->subval == item->subval && (int) (store_item->number + item->number) < 256 &&
+            (item->subval < ITEM_GROUP_MIN || store_item->p1 == item->p1)) {
             store_check = true;
         }
     }
@@ -343,7 +343,7 @@ static void storeItemCreate(int store_id, int16_t max_cost) {
 
         Inventory_t *item = &treasure_list[free_id];
 
-        if (store_check_num(store_id, item)) {
+        if (storeCheckPlayerItemsCount(store_id, item)) {
             // Item must be good: cost > 0.
             if (item->cost > 0 && item->cost < max_cost) {
                 // equivalent to calling spellIdentifyItem(),
