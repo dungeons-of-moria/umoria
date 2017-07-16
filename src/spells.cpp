@@ -1103,45 +1103,47 @@ bool spellDrainLifeFromMonster(int y, int x, int direction) {
 
 // Increase or decrease a creatures speed -RAK-
 // NOTE: cannot slow a winning creature (BALROG)
-bool speed_monster(int y, int x, int direction, int speed) {
+bool spellSpeedMonster(int y, int x, int direction, int speed) {
+    int distance = 0;
     bool changed = false;
-
-    int dist = 0;
-
     bool finished = false;
+
     while (!finished) {
         (void) playerMovePosition(direction, &y, &x);
-        dist++;
+        distance++;
 
-        Cave_t *c_ptr = &cave[y][x];
+        Cave_t *tile = &cave[y][x];
 
-        if (dist > OBJ_BOLT_RANGE || c_ptr->fval >= MIN_CLOSED_SPACE) {
+        if (distance > OBJ_BOLT_RANGE || tile->fval >= MIN_CLOSED_SPACE) {
             finished = true;
-        } else if (c_ptr->cptr > 1) {
+            continue;
+        }
+
+        if (tile->cptr > 1) {
             finished = true;
 
-            Monster_t *m_ptr = &monsters[c_ptr->cptr];
-            Creature_t *r_ptr = &creatures_list[m_ptr->mptr];
+            Monster_t *monster = &monsters[tile->cptr];
+            Creature_t *creature = &creatures_list[monster->mptr];
 
             vtype_t name;
-            monsterNameDescription(name, m_ptr->ml, r_ptr->name);
+            monsterNameDescription(name, monster->ml, creature->name);
 
             if (speed > 0) {
-                m_ptr->cspeed += speed;
-                m_ptr->csleep = 0;
+                monster->cspeed += speed;
+                monster->csleep = 0;
 
                 changed = true;
 
                 printMonsterActionText(name, "starts moving faster.");
-            } else if (randomNumber(MAX_MONS_LEVEL) > r_ptr->level) {
-                m_ptr->cspeed += speed;
-                m_ptr->csleep = 0;
+            } else if (randomNumber(MAX_MONS_LEVEL) > creature->level) {
+                monster->cspeed += speed;
+                monster->csleep = 0;
 
                 changed = true;
 
                 printMonsterActionText(name, "starts moving slower.");
             } else {
-                m_ptr->csleep = 0;
+                monster->csleep = 0;
 
                 printMonsterActionText(name, "is unaffected.");
             }

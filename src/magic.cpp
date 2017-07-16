@@ -129,7 +129,7 @@ static void castSpell(int spellID) {
             break;
         case 24:
             if (getDirectionWithMemory(CNIL, &dir)) {
-                (void) speed_monster(char_row, char_col, dir, -1);
+                (void) spellSpeedMonster(char_row, char_col, dir, -1);
             }
             break;
         case 25:

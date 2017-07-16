@@ -50,10 +50,10 @@ static bool discharge_wand(Inventory_t *wand, int dir) {
                 identified = spellChangeMonsterHitPoints(row, col, dir, -diceDamageRoll(4, 6));
                 break;
             case 8:
-                identified = speed_monster(row, col, dir, 1);
+                identified = spellSpeedMonster(row, col, dir, 1);
                 break;
             case 9:
-                identified = speed_monster(row, col, dir, -1);
+                identified = spellSpeedMonster(row, col, dir, -1);
                 break;
             case 10:
                 identified = confuse_monster(row, col, dir);
