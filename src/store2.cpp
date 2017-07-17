@@ -10,9 +10,9 @@
 #include "externs.h"
 
 // Save the store's last increment value.
-static int16_t last_store_inc;
+static int16_t store_last_increment;
 
-static const char *comment1[14] = {
+static const char *speech_sale_accepted[14] = {
         "Done!",
         "Accepted!",
         "Fine.",
@@ -29,13 +29,13 @@ static const char *comment1[14] = {
         "My spouse will skin me, but accepted.",
 };
 
-static const char *comment2a[3] = {
+static const char *speech_selling_haggle_final[3] = {
         "%A2 is my final offer; take it or leave it.",
         "I'll give you no more than %A2.",
         "My patience grows thin.  %A2 is final.",
 };
 
-static const char *comment2b[16] = {
+static const char *speech_selling_haggle[16] = {
         "%A1 for such a fine item?  HA!  No less than %A2.",
         "%A1 is an insult!  Try %A2 gold pieces.",
         "%A1?!?  You would rob my poor starving children?",
@@ -54,13 +54,13 @@ static const char *comment2b[16] = {
         "Your mother was a Troll!  %A2 or I'll tell.",
 };
 
-static const char *comment3a[3] = {
+static const char *speech_buying_haggle_final[3] = {
         "I'll pay no more than %A1; take it or leave it.",
         "You'll get no more than %A1 from me.",
         "%A1 and that's final.",
 };
 
-static const char *comment3b[15] = {
+static const char *speech_buying_haggle[15] = {
         "%A2 for that piece of junk?  No more than %A1.",
         "For %A2 I could own ten of those.  Try %A1.",
         "%A2?  NEVER!  %A1 is more like it.",
@@ -78,7 +78,7 @@ static const char *comment3b[15] = {
         "%A2 is too much, let us say %A1 gold.",
 };
 
-static const char *comment4a[5] = {
+static const char *speech_insulted_haggling_done[5] = {
         "ENOUGH!  You have abused me once too often!",
         "THAT DOES IT!  You shall waste my time no more!",
         "This is getting nowhere.  I'm going home!",
@@ -86,13 +86,13 @@ static const char *comment4a[5] = {
         "Begone!  I have had enough abuse for one day.",
 };
 
-static const char *comment4b[5] = {
+static const char *speech_get_out_of_my_store[5] = {
         "Out of my place!", "out... Out... OUT!!!",
         "Come back tomorrow.", "Leave my place.  Begone!",
         "Come back when thou art richer.",
 };
 
-static const char *comment5[10] = {
+static const char *speech_haggling_try_again[10] = {
         "You will have to do better than that!",
         "That's an insult!",
         "Do you wish to do business or not?",
@@ -105,7 +105,7 @@ static const char *comment5[10] = {
         "Hmmm, nice weather we're having.",
 };
 
-static const char *comment6[5] = {
+static const char *speech_sorry[5] = {
         "I must have heard you wrong.", "What was that?",
         "I'm sorry, say that again.", "What did you say?",
         "Sorry, what was that again?",
@@ -114,7 +114,7 @@ static const char *comment6[5] = {
 // Comments vary. -RAK-
 // Comment one : Finished haggling
 static void prt_comment1() {
-    printMessage(comment1[randomNumber(14) - 1]);
+    printMessage(speech_sale_accepted[randomNumber(14) - 1]);
 }
 
 // %A1 is offer, %A2 is asking.
@@ -122,9 +122,9 @@ static void prt_comment2(int32_t offer, int32_t asking, int final) {
     vtype_t comment;
 
     if (final > 0) {
-        (void) strcpy(comment, comment2a[randomNumber(3) - 1]);
+        (void) strcpy(comment, speech_selling_haggle_final[randomNumber(3) - 1]);
     } else {
-        (void) strcpy(comment, comment2b[randomNumber(16) - 1]);
+        (void) strcpy(comment, speech_selling_haggle[randomNumber(16) - 1]);
     }
 
     intertNumberIntoString(comment, "%A1", offer, false);
@@ -136,9 +136,9 @@ static void prt_comment3(int32_t offer, int32_t asking, int final) {
     vtype_t comment;
 
     if (final > 0) {
-        (void) strcpy(comment, comment3a[randomNumber(3) - 1]);
+        (void) strcpy(comment, speech_buying_haggle_final[randomNumber(3) - 1]);
     } else {
-        (void) strcpy(comment, comment3b[randomNumber(15) - 1]);
+        (void) strcpy(comment, speech_buying_haggle[randomNumber(15) - 1]);
     }
 
     intertNumberIntoString(comment, "%A1", offer, false);
@@ -149,16 +149,16 @@ static void prt_comment3(int32_t offer, int32_t asking, int final) {
 // Kick 'da bum out. -RAK-
 static void prt_comment4() {
     int tmp = randomNumber(5) - 1;
-    printMessage(comment4a[tmp]);
-    printMessage(comment4b[tmp]);
+    printMessage(speech_insulted_haggling_done[tmp]);
+    printMessage(speech_get_out_of_my_store[tmp]);
 }
 
 static void prt_comment5() {
-    printMessage(comment5[randomNumber(10) - 1]);
+    printMessage(speech_haggling_try_again[randomNumber(10) - 1]);
 }
 
 static void prt_comment6() {
-    printMessage(comment6[randomNumber(5) - 1]);
+    printMessage(speech_sorry[randomNumber(5) - 1]);
 }
 
 // Displays the set of commands -RAK-
@@ -336,7 +336,7 @@ static bool haggle_insults(int store_num) {
 
 static bool get_haggle(const char *comment, int32_t *new_offer, int num_offer) {
     if (num_offer == 0) {
-        last_store_inc = 0;
+        store_last_increment = 0;
     }
 
     bool increment = false;
@@ -352,8 +352,8 @@ static bool get_haggle(const char *comment, int32_t *new_offer, int num_offer) {
 
     while (flag && offer_adjust == 0) {
         putStringClearToEOL(comment, 0, 0);
-        if (num_offer && last_store_inc != 0) {
-            (void) sprintf(default_offer, "[%c%d] ", (last_store_inc < 0) ? '-' : '+', abs(last_store_inc));
+        if (num_offer && store_last_increment != 0) {
+            (void) sprintf(default_offer, "[%c%d] ", (store_last_increment < 0) ? '-' : '+', abs(store_last_increment));
             putStringClearToEOL(default_offer, 0, orig_clen);
             clen = orig_clen + (int) strlen(default_offer);
         }
@@ -374,10 +374,10 @@ static bool get_haggle(const char *comment, int32_t *new_offer, int num_offer) {
             if (offer_adjust == 0) {
                 increment = false;
             } else {
-                last_store_inc = (int16_t) offer_adjust;
+                store_last_increment = (int16_t) offer_adjust;
             }
         } else if (num_offer && *out_val == '\0') {
-            offer_adjust = last_store_inc;
+            offer_adjust = store_last_increment;
             increment = true;
         } else {
             offer_adjust = (int32_t) atol(out_val);
@@ -480,7 +480,7 @@ static int purchase_haggle(int store_num, int32_t *price, Inventory_t *item) {
         didnt_haggle = true;
 
         // Set up automatic increment, so that a return will accept the final price.
-        last_store_inc = (int16_t) min_sell;
+        store_last_increment = (int16_t) min_sell;
         num_offer = 1;
     }
 
@@ -507,8 +507,8 @@ static int purchase_haggle(int store_num, int32_t *price, Inventory_t *item) {
                     // If the automatic increment is large enough to overflow,
                     // then the player must have made a mistake.  Clear it
                     // because it is useless.
-                    if (last_offer + last_store_inc > cur_ask) {
-                        last_store_inc = 0;
+                    if (last_offer + store_last_increment > cur_ask) {
+                        store_last_increment = 0;
                     }
                 } else if (new_offer == cur_ask) {
                     flag = true;
@@ -546,7 +546,7 @@ static int purchase_haggle(int store_num, int32_t *price, Inventory_t *item) {
 
                 // Set the automatic haggle increment so that RET will give
                 // a new_offer equal to the final_ask price.
-                last_store_inc = (int16_t) (final_ask - new_offer);
+                store_last_increment = (int16_t) (final_ask - new_offer);
                 final_flag++;
                 if (final_flag > 3) {
                     if (increase_insults(store_num)) {
@@ -570,8 +570,8 @@ static int purchase_haggle(int store_num, int32_t *price, Inventory_t *item) {
 
                 // If the current increment would take you over the store's
                 // price, then decrease it to an exact match.
-                if (cur_ask - last_offer < last_store_inc) {
-                    last_store_inc = (int16_t) (cur_ask - last_offer);
+                if (cur_ask - last_offer < store_last_increment) {
+                    store_last_increment = (int16_t) (cur_ask - last_offer);
                 }
             }
         }
@@ -648,7 +648,7 @@ static int sell_haggle(int store_num, int32_t *price, Inventory_t *item) {
             comment = "Final Offer";
 
             // Disable the automatic haggle increment on RET.
-            last_store_inc = 0;
+            store_last_increment = 0;
             cur_ask = max_gold;
             final_ask = max_gold;
             printMessage("I am sorry, but I have not the money to afford such a fine item.");
@@ -670,7 +670,7 @@ static int sell_haggle(int store_num, int32_t *price, Inventory_t *item) {
 
                 // Set up automatic increment, so that a return
                 // will accept the final price.
-                last_store_inc = (int16_t) final_ask;
+                store_last_increment = (int16_t) final_ask;
                 num_offer = 1;
             }
         }
@@ -704,8 +704,8 @@ static int sell_haggle(int store_num, int32_t *price, Inventory_t *item) {
                         // If the automatic increment is large enough to
                         // overflow, then the player must have made a mistake.
                         // Clear it because it is useless.
-                        if (last_offer + last_store_inc < cur_ask) {
-                            last_store_inc = 0;
+                        if (last_offer + store_last_increment < cur_ask) {
+                            store_last_increment = 0;
                         }
                     } else if (new_offer == cur_ask) {
                         flag = true;
@@ -745,7 +745,7 @@ static int sell_haggle(int store_num, int32_t *price, Inventory_t *item) {
 
                     // Set the automatic haggle increment so that RET will give
                     // a new_offer equal to the final_ask price.
-                    last_store_inc = (int16_t) (final_ask - new_offer);
+                    store_last_increment = (int16_t) (final_ask - new_offer);
                     final_flag++;
                     if (final_flag > 3) {
                         if (increase_insults(store_num)) {
@@ -772,8 +772,8 @@ static int sell_haggle(int store_num, int32_t *price, Inventory_t *item) {
 
                     // If the current decrement would take you under the store's
                     // price, then increase it to an exact match.
-                    if (cur_ask - last_offer > last_store_inc) {
-                        last_store_inc = (int16_t) (cur_ask - last_offer);
+                    if (cur_ask - last_offer > store_last_increment) {
+                        store_last_increment = (int16_t) (cur_ask - last_offer);
                     }
                 }
             }
