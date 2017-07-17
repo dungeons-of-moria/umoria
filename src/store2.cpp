@@ -277,27 +277,27 @@ static void displayStore(int store_id, const char *owner_name, int current_top_i
 }
 
 // Get the ID of a store item and return it's value -RAK-
-static bool get_store_item(int *com_val, const char *pmt, int i, int j) {
-    *com_val = -1;
+static bool storeGetItemID(int *item_id, const char *prompt, int item_pos_start, int item_pos_end) {
+    *item_id = -1;
 
-    vtype_t out_val;
-    (void) sprintf(out_val, "(Items %c-%c, ESC to exit) %s", i + 'a', j + 'a', pmt);
+    vtype_t msg;
+    (void) sprintf(msg, "(Items %c-%c, ESC to exit) %s", item_pos_start + 'a', item_pos_end + 'a', prompt);
 
     char command;
-    bool flag = false;
+    bool item_found = false;
 
-    while (getCommand(out_val, &command)) {
+    while (getCommand(msg, &command)) {
         command -= 'a';
-        if (command >= i && command <= j) {
-            flag = true;
-            *com_val = command;
+        if (command >= item_pos_start && command <= item_pos_end) {
+            item_found = true;
+            *item_id = command;
             break;
         }
         terminalBellSound();
     }
     eraseLine(MSG_LINE, 0);
 
-    return flag;
+    return item_found;
 }
 
 // Increase the insult counter and get angry if too many -RAK-
@@ -815,7 +815,7 @@ static bool store_purchase(int store_num, int *cur_top) {
 
     int item_val;
     int item_count = store_items_to_display(s_ptr->store_ctr, *cur_top);
-    if (!get_store_item(&item_val, "Which item are you interested in? ", 0, item_count)) {
+    if (!storeGetItemID(&item_val, "Which item are you interested in? ", 0, item_count)) {
         return false;
     }
 
