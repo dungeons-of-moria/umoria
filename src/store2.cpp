@@ -170,8 +170,8 @@ static void displayStoreCommands() {
 }
 
 // Displays the set of commands -RAK-
-static void haggle_commands(int typ) {
-    if (typ == -1) {
+static void displayStoreHaggleCommands(int haggle_type) {
+    if (haggle_type == -1) {
         putStringClearToEOL("Specify an asking-price in gold pieces.", 21, 0);
     } else {
         putStringClearToEOL("Specify an offer in gold pieces.", 21, 0);
@@ -462,7 +462,7 @@ static int purchase_haggle(int store_num, int32_t *price, Inventory_t *item) {
     int32_t min_per = o_ptr->haggle_per;
     int32_t max_per = min_per * 3;
 
-    haggle_commands(1);
+    displayStoreHaggleCommands(1);
 
     int32_t cur_ask = max_sell;
     int32_t final_ask = min_sell;
@@ -639,7 +639,7 @@ static int sell_haggle(int store_num, int32_t *price, Inventory_t *item) {
     const char *comment;
 
     if (!flag) {
-        haggle_commands(-1);
+        displayStoreHaggleCommands(-1);
 
         int num_offer = 0; // this prevents incremental haggling on first try
 
