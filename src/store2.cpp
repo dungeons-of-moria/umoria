@@ -832,28 +832,28 @@ static int storeItemsToDisplay(int store_counter, int current_top_item_id) {
 }
 
 // Buy an item from a store -RAK-
-static bool store_purchase(int store_num, int *cur_top) {
-    Store_t *s_ptr = &stores[store_num];
+static bool storePurchaseAnItem(int store_id, int *current_top_item_id) {
+    Store_t *store = &stores[store_id];
 
-    if (s_ptr->store_ctr < 1) {
+    if (store->store_ctr < 1) {
         printMessage("I am currently out of stock.");
         return false;
     }
 
-    int item_val;
-    int item_count = storeItemsToDisplay(s_ptr->store_ctr, *cur_top);
-    if (!storeGetItemID(&item_val, "Which item are you interested in? ", 0, item_count)) {
+    int item_id;
+    int item_count = storeItemsToDisplay(store->store_ctr, *current_top_item_id);
+    if (!storeGetItemID(&item_id, "Which item are you interested in? ", 0, item_count)) {
         return false;
     }
 
     // Get the item number to be bought
 
-    item_val = item_val + *cur_top; // true item_val
+    item_id = item_id + *current_top_item_id; // true item_id
 
-    Inventory_t sell_obj;
-    inventoryTakeOneItem(&sell_obj, &s_ptr->store_inven[item_val].sitem);
+    Inventory_t sell_item;
+    inventoryTakeOneItem(&sell_item, &store->store_inven[item_id].sitem);
 
-    if (!inventoryCanCarryItemCount(&sell_obj)) {
+    if (!inventoryCanCarryItemCount(&sell_item)) {
         putStringClearToEOL("You cannot carry that many different items.", 0, 0);
         return false;
     }
@@ -862,47 +862,50 @@ static bool store_purchase(int store_num, int *cur_top) {
     int32_t price;
     bool purchased = false;
 
-    if (s_ptr->store_inven[item_val].scost > 0) {
-        price = s_ptr->store_inven[item_val].scost;
+    if (store->store_inven[item_id].scost > 0) {
+        price = store->store_inven[item_id].scost;
     } else {
-        choice = storePurchaseHaggle(store_num, &price, &sell_obj);
+        choice = storePurchaseHaggle(store_id, &price, &sell_item);
     }
 
     if (choice == 0) {
         if (py.misc.au >= price) {
             printSpeechFinishedHaggling();
-            storeDecreaseInsults(store_num);
+            storeDecreaseInsults(store_id);
             py.misc.au -= price;
 
-            int item_new = inventoryCarryItem(&sell_obj);
-            int saved_store_counter = s_ptr->store_ctr;
+            int new_item_id = inventoryCarryItem(&sell_item);
+            int saved_store_counter = store->store_ctr;
 
-            storeDestroy(store_num, item_val, true);
+            storeDestroy(store_id, item_id, true);
 
-            obj_desc_t out_val, tmp_str;
-            itemDescription(tmp_str, &inventory[item_new], true);
-            (void) sprintf(out_val, "You have %s (%c)", tmp_str, item_new + 'a');
-            putStringClearToEOL(out_val, 0, 0);
+            obj_desc_t description;
+            itemDescription(description, &inventory[new_item_id], true);
+
+            obj_desc_t msg;
+            (void) sprintf(msg, "You have %s (%c)", description, new_item_id + 'a');
+            putStringClearToEOL(msg, 0, 0);
 
             playerStrength();
-            if (*cur_top >= s_ptr->store_ctr) {
-                *cur_top = 0;
-                displayStoreInventory(store_num, *cur_top);
-            } else {
-                InventoryRecord_t *r_ptr = &s_ptr->store_inven[item_val];
 
-                if (saved_store_counter == s_ptr->store_ctr) {
-                    if (r_ptr->scost < 0) {
-                        r_ptr->scost = price;
-                        displaySingleCost(store_num, item_val);
+            if (*current_top_item_id >= store->store_ctr) {
+                *current_top_item_id = 0;
+                displayStoreInventory(store_id, *current_top_item_id);
+            } else {
+                InventoryRecord_t *store_item = &store->store_inven[item_id];
+
+                if (saved_store_counter == store->store_ctr) {
+                    if (store_item->scost < 0) {
+                        store_item->scost = price;
+                        displaySingleCost(store_id, item_id);
                     }
                 } else {
-                    displayStoreInventory(store_num, item_val);
+                    displayStoreInventory(store_id, item_id);
                 }
             }
             displayPlayerRemainingGold();
         } else {
-            if (storeIncreaseInsults(store_num)) {
+            if (storeIncreaseInsults(store_id)) {
                 purchased = true;
             } else {
                 printSpeechFinishedHaggling();
@@ -1086,7 +1089,7 @@ void enter_store(int store_id) {
                     player_free_turn = false; // No free moves here. -CJS-
                     break;
                 case 'p':
-                    exit_store = store_purchase(store_id, &cur_top);
+                    exit_store = storePurchaseAnItem(store_id, &cur_top);
                     break;
                 case 's':
                     exit_store = store_sell(store_id, &cur_top);
