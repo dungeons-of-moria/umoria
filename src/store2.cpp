@@ -118,7 +118,7 @@ static void printSpeechFinishedHaggling() {
 }
 
 // %A1 is offer, %A2 is asking.
-static void prt_comment2(int32_t offer, int32_t asking, int final) {
+static void printSpeechSellingHaggle(int32_t offer, int32_t asking, int final) {
     vtype_t comment;
 
     if (final > 0) {
@@ -566,7 +566,7 @@ static int purchase_haggle(int store_num, int32_t *price, Inventory_t *item) {
                 eraseLine(1, 0);
                 (void) sprintf(out_val, "Your last offer : %d", last_offer);
                 putString(out_val, 1, 39);
-                prt_comment2(last_offer, cur_ask, final_flag);
+                printSpeechSellingHaggle(last_offer, cur_ask, final_flag);
 
                 // If the current increment would take you over the store's
                 // price, then decrease it to an exact match.
