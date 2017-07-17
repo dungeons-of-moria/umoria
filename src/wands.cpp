@@ -9,98 +9,98 @@
 #include "headers.h"
 #include "externs.h"
 
-static bool discharge_wand(Inventory_t *wand, int dir) {
+static bool wandDischarge(Inventory_t *item, int direction) {
     bool identified = false;
 
-    uint32_t flags = wand->flags;
+    uint32_t flags = item->flags;
 
-    (wand->p1)--; // decrement "use" variable
+    (item->p1)--; // decrement "use" variable
 
     while (flags != 0) {
         int kind = getAndClearFirstBit(&flags) + 1;
-        int row = char_row;
-        int col = char_col;
+        int y = char_row;
+        int x = char_col;
 
         // Wand types
         switch (kind) {
             case 1:
                 printMessage("A line of blue shimmering light appears.");
-                spellLightLine(char_col, char_row, dir);
+                spellLightLine(char_col, char_row, direction);
                 identified = true;
                 break;
             case 2:
-                spellFireBolt(row, col, dir, diceDamageRoll(4, 8), GF_LIGHTNING, spell_names[8]);
+                spellFireBolt(y, x, direction, diceDamageRoll(4, 8), GF_LIGHTNING, spell_names[8]);
                 identified = true;
                 break;
             case 3:
-                spellFireBolt(row, col, dir, diceDamageRoll(6, 8), GF_FROST, spell_names[14]);
+                spellFireBolt(y, x, direction, diceDamageRoll(6, 8), GF_FROST, spell_names[14]);
                 identified = true;
                 break;
             case 4:
-                spellFireBolt(row, col, dir, diceDamageRoll(9, 8), GF_FIRE, spell_names[22]);
+                spellFireBolt(y, x, direction, diceDamageRoll(9, 8), GF_FIRE, spell_names[22]);
                 identified = true;
                 break;
             case 5:
-                identified = spellWallToMud(row, col, dir);
+                identified = spellWallToMud(y, x, direction);
                 break;
             case 6:
-                identified = spellPolymorphMonster(row, col, dir);
+                identified = spellPolymorphMonster(y, x, direction);
                 break;
             case 7:
-                identified = spellChangeMonsterHitPoints(row, col, dir, -diceDamageRoll(4, 6));
+                identified = spellChangeMonsterHitPoints(y, x, direction, -diceDamageRoll(4, 6));
                 break;
             case 8:
-                identified = spellSpeedMonster(row, col, dir, 1);
+                identified = spellSpeedMonster(y, x, direction, 1);
                 break;
             case 9:
-                identified = spellSpeedMonster(row, col, dir, -1);
+                identified = spellSpeedMonster(y, x, direction, -1);
                 break;
             case 10:
-                identified = spellConfuseMonster(row, col, dir);
+                identified = spellConfuseMonster(y, x, direction);
                 break;
             case 11:
-                identified = spellSleepMonster(row, col, dir);
+                identified = spellSleepMonster(y, x, direction);
                 break;
             case 12:
-                identified = spellDrainLifeFromMonster(row, col, dir);
+                identified = spellDrainLifeFromMonster(y, x, direction);
                 break;
             case 13:
-                identified = spellDestroyDoorsTrapsInDirection(row, col, dir);
+                identified = spellDestroyDoorsTrapsInDirection(y, x, direction);
                 break;
             case 14:
-                spellFireBolt(row, col, dir, diceDamageRoll(2, 6), GF_MAGIC_MISSILE, spell_names[0]);
+                spellFireBolt(y, x, direction, diceDamageRoll(2, 6), GF_MAGIC_MISSILE, spell_names[0]);
                 identified = true;
                 break;
             case 15:
-                identified = spellBuildWall(row, col, dir);
+                identified = spellBuildWall(y, x, direction);
                 break;
             case 16:
-                identified = spellCloneMonster(row, col, dir);
+                identified = spellCloneMonster(y, x, direction);
                 break;
             case 17:
-                identified = spellTeleportAwayMonsterInDirection(row, col, dir);
+                identified = spellTeleportAwayMonsterInDirection(y, x, direction);
                 break;
             case 18:
-                identified = spellDisarmAllInDirection(row, col, dir);
+                identified = spellDisarmAllInDirection(y, x, direction);
                 break;
             case 19:
-                spellFireBall(row, col, dir, 32, GF_LIGHTNING, "Lightning Ball");
+                spellFireBall(y, x, direction, 32, GF_LIGHTNING, "Lightning Ball");
                 identified = true;
                 break;
             case 20:
-                spellFireBall(row, col, dir, 48, GF_FROST, "Cold Ball");
+                spellFireBall(y, x, direction, 48, GF_FROST, "Cold Ball");
                 identified = true;
                 break;
             case 21:
-                spellFireBall(row, col, dir, 72, GF_FIRE, spell_names[28]);
+                spellFireBall(y, x, direction, 72, GF_FIRE, spell_names[28]);
                 identified = true;
                 break;
             case 22:
-                spellFireBall(row, col, dir, 12, GF_POISON_GAS, spell_names[6]);
+                spellFireBall(y, x, direction, 12, GF_POISON_GAS, spell_names[6]);
                 identified = true;
                 break;
             case 23:
-                spellFireBall(row, col, dir, 60, GF_ACID, "Acid Ball");
+                spellFireBall(y, x, direction, 60, GF_ACID, "Acid Ball");
                 identified = true;
                 break;
             case 24:
@@ -177,7 +177,7 @@ void aim() {
         return;
     }
 
-    bool ident = discharge_wand(item, dir);
+    bool ident = wandDischarge(item, dir);
 
     if (ident) {
         if (!itemSetColorlessAsIdentifed(item)) {
