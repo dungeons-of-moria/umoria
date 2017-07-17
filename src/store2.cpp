@@ -266,14 +266,14 @@ static void displayPlayerRemainingGold() {
 }
 
 // Displays store -RAK-
-static void display_store(int store_num, const char *owner_name, int cur_top) {
+static void displayStore(int store_id, const char *owner_name, int current_top_item_id) {
     clearScreen();
     putString(owner_name, 3, 9);
     putString("Item", 4, 3);
     putString("Asking Price", 4, 60);
     displayPlayerRemainingGold();
     displayStoreCommands();
-    displayStoreInventory(store_num, cur_top);
+    displayStoreInventory(store_id, current_top_item_id);
 }
 
 // Get the ID of a store item and return it's value -RAK-
@@ -1007,7 +1007,7 @@ void enter_store(int store_id) {
     }
 
     int cur_top = 0;
-    display_store(store_id, store_owners[s_ptr->owner].owner_name, cur_top);
+    displayStore(store_id, store_owners[s_ptr->owner].owner_name, cur_top);
 
     bool exit_store = false;
     while (!exit_store) {
