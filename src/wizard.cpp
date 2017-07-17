@@ -10,27 +10,27 @@
 #include "externs.h"
 
 // Light up the dungeon -RAK-
-void wizard_light() {
+void wizardLightUpDungeon() {
     bool flag;
 
     flag = !cave[char_row][char_col].pl;
 
-    for (int i = 0; i < dungeon_height; i++) {
-        for (int j = 0; j < dungeon_width; j++) {
-            if (cave[i][j].fval <= MAX_CAVE_FLOOR) {
-                for (int k = i - 1; k <= i + 1; k++) {
-                    for (int l = j - 1; l <= j + 1; l++) {
-                        Cave_t *c_ptr = &cave[k][l];
-                        c_ptr->pl = flag;
-
+    for (int y = 0; y < dungeon_height; y++) {
+        for (int x = 0; x < dungeon_width; x++) {
+            if (cave[y][x].fval <= MAX_CAVE_FLOOR) {
+                for (int yy = y - 1; yy <= y + 1; yy++) {
+                    for (int xx = x - 1; xx <= x + 1; xx++) {
+                        Cave_t *tile = &cave[yy][xx];
+                        tile->pl = flag;
                         if (!flag) {
-                            c_ptr->fm = false;
+                            tile->fm = false;
                         }
                     }
                 }
             }
         }
     }
+
     drawDungeonPanel();
 }
 

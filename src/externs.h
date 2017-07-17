@@ -566,6 +566,6 @@ void storeEnter(int store_id);
 void wandAim();
 
 // wizard.c
-void wizard_light();
+void wizardLightUpDungeon();
 void change_character();
 void wizard_create();

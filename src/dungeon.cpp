@@ -1531,7 +1531,7 @@ static void doWizardCommands(char com_val) {
             (void) spellIdentifyItem();
             break;
         case '*':
-            wizard_light();
+            wizardLightUpDungeon();
             break;
         case ':':
             spellMapCurrentArea();
