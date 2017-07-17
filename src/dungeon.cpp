@@ -1472,7 +1472,7 @@ static void doWizardCommands(char com_val) {
             }
             break;
         case CTRL_KEY('E'): // ^E = wizchar
-            change_character();
+            wizardCharacterAdjustment();
             eraseLine(MSG_LINE, 0);
             break;
         case CTRL_KEY('F'): // ^F = genocide
