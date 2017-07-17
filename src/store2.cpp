@@ -113,7 +113,7 @@ static const char *speech_sorry[5] = {
 
 // Comments vary. -RAK-
 // Comment one : Finished haggling
-static void prt_comment1() {
+static void printSpeechFinishedHaggling() {
     printMessage(speech_sale_accepted[randomNumber(14) - 1]);
 }
 
@@ -840,7 +840,7 @@ static bool store_purchase(int store_num, int *cur_top) {
 
     if (choice == 0) {
         if (py.misc.au >= price) {
-            prt_comment1();
+            printSpeechFinishedHaggling();
             decrease_insults(store_num);
             py.misc.au -= price;
 
@@ -875,7 +875,7 @@ static bool store_purchase(int store_num, int *cur_top) {
             if (increase_insults(store_num)) {
                 purchased = true;
             } else {
-                prt_comment1();
+                printSpeechFinishedHaggling();
                 printMessage("Liar!  You have not the gold!");
             }
         }
@@ -941,7 +941,7 @@ static bool store_sell(int store_num, int *cur_top) {
     int choice = sell_haggle(store_num, &price, &sold_obj);
 
     if (choice == 0) {
-        prt_comment1();
+        printSpeechFinishedHaggling();
         decrease_insults(store_num);
         py.misc.au += price;
 
