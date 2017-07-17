@@ -325,8 +325,8 @@ static void storeDecreaseInsults(int store_id) {
 }
 
 // Have insulted while haggling -RAK-
-static bool haggle_insults(int store_num) {
-    if (storeIncreaseInsults(store_num)) {
+static bool storeHaggleInsults(int store_id) {
+    if (storeIncreaseInsults(store_id)) {
         return true;
     }
 
@@ -416,7 +416,7 @@ static int receive_offer(int store_num, const char *comment, int32_t *new_offer,
         if (get_haggle(comment, new_offer, num_offer)) {
             if (*new_offer * factor >= last_offer * factor) {
                 success = true;
-            } else if (haggle_insults(store_num)) {
+            } else if (storeHaggleInsults(store_num)) {
                 receive = 2;
                 success = true;
             } else {
@@ -526,7 +526,7 @@ static int purchase_haggle(int store_num, int32_t *price, Inventory_t *item) {
         if (!flag) {
             int32_t x1 = (new_offer - last_offer) * 100 / (cur_ask - last_offer);
             if (x1 < min_per) {
-                flag = haggle_insults(store_num);
+                flag = storeHaggleInsults(store_num);
                 if (flag) {
                     purchase = 2;
                 }
@@ -724,7 +724,7 @@ static int sell_haggle(int store_num, int32_t *price, Inventory_t *item) {
                 int32_t x1 = (last_offer - new_offer) * 100 / (last_offer - cur_ask);
 
                 if (x1 < min_per) {
-                    flag = haggle_insults(store_num);
+                    flag = storeHaggleInsults(store_num);
                     if (flag) {
                         sell = 2;
                     }
