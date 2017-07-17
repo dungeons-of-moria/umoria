@@ -153,7 +153,7 @@ static void printSpeechGetOutOfMyStore() {
     printMessage(speech_get_out_of_my_store[comment]);
 }
 
-static void prt_comment5() {
+static void printSpeechTryAgain() {
     printMessage(speech_haggling_try_again[randomNumber(10) - 1]);
 }
 
@@ -326,7 +326,7 @@ static bool haggle_insults(int store_num) {
         return true;
     }
 
-    prt_comment5();
+    printSpeechTryAgain();
 
     // keep insult separate from rest of haggle
     printMessage(CNIL);
