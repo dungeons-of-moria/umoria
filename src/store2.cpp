@@ -157,7 +157,7 @@ static void printSpeechTryAgain() {
     printMessage(speech_haggling_try_again[randomNumber(10) - 1]);
 }
 
-static void prt_comment6() {
+static void printSpeechSorry() {
     printMessage(speech_sorry[randomNumber(5) - 1]);
 }
 
@@ -500,7 +500,7 @@ static int purchase_haggle(int store_num, int32_t *price, Inventory_t *item) {
                 flag = true;
             } else {
                 if (new_offer > cur_ask) {
-                    prt_comment6();
+                    printSpeechSorry();
                     // rejected, reset new_offer for incremental haggling
                     new_offer = last_offer;
 
@@ -696,7 +696,7 @@ static int sell_haggle(int store_num, int32_t *price, Inventory_t *item) {
                     flag = true;
                 } else {
                     if (new_offer < cur_ask) {
-                        prt_comment6();
+                        printSpeechSorry();
 
                         // rejected, reset new_offer for incremental haggling
                         new_offer = last_offer;
