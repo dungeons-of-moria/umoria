@@ -440,18 +440,18 @@ static int storeReceiveOffer(int store_id, const char *comment, int32_t *new_off
 }
 
 // Haggling routine -RAK-
-static int purchase_haggle(int store_num, int32_t *price, Inventory_t *item) {
-    bool didnt_haggle = false;
+static int storePurchaseHaggle(int store_id, int32_t *price, Inventory_t *item) {
+    bool did_not_haggle = false;
 
     *price = 0;
     int purchase = 0;
     int final_flag = 0;
 
-    Store_t *s_ptr = &stores[store_num];
-    Owner_t *o_ptr = &store_owners[s_ptr->owner];
+    Store_t *store = &stores[store_id];
+    Owner_t *owner = &store_owners[store->owner];
 
     int32_t max_sell, min_sell;
-    int32_t cost = storeItemSellPrice(store_num, &min_sell, &max_sell, item);
+    int32_t cost = storeItemSellPrice(store_id, &min_sell, &max_sell, item);
 
     max_sell = max_sell * playerStatAdjustmentCharisma() / 100;
     if (max_sell <= 0) {
@@ -464,18 +464,18 @@ static int purchase_haggle(int store_num, int32_t *price, Inventory_t *item) {
     }
 
     // cast max_inflate to signed so that subtraction works correctly
-    int32_t max_buy = cost * (200 - (int) o_ptr->max_inflate) / 100;
+    int32_t max_buy = cost * (200 - (int) owner->max_inflate) / 100;
     if (max_buy <= 0) {
         max_buy = 1;
     }
 
-    int32_t min_per = o_ptr->haggle_per;
+    int32_t min_per = owner->haggle_per;
     int32_t max_per = min_per * 3;
 
     displayStoreHaggleCommands(1);
 
-    int32_t cur_ask = max_sell;
-    int32_t final_ask = min_sell;
+    int32_t current_asking_price = max_sell;
+    int32_t final_asking_price = min_sell;
     int32_t min_offer = max_buy;
     int32_t last_offer = min_offer;
     int32_t new_offer = 0;
@@ -483,33 +483,34 @@ static int purchase_haggle(int store_num, int32_t *price, Inventory_t *item) {
     const char *comment = "Asking";
 
     // go right to final price if player has bargained well
-    if (storeNoNeedToBargain(store_num, final_ask)) {
+    if (storeNoNeedToBargain(store_id, final_asking_price)) {
         printMessage("After a long bargaining session, you agree upon the price.");
-        cur_ask = min_sell;
+        current_asking_price = min_sell;
         comment = "Final offer";
-        didnt_haggle = true;
+        did_not_haggle = true;
 
         // Set up automatic increment, so that a return will accept the final price.
         store_last_increment = (int16_t) min_sell;
         num_offer = 1;
     }
 
-    vtype_t out_val;
-
+    vtype_t msg;
     bool flag = false;
+
     while (!flag) {
         bool loop_flag;
         do {
             loop_flag = true;
 
-            (void) sprintf(out_val, "%s :  %d", comment, cur_ask);
-            putString(out_val, 1, 0);
+            (void) sprintf(msg, "%s :  %d", comment, current_asking_price);
+            putString(msg, 1, 0);
 
-            purchase = storeReceiveOffer(store_num, "What do you offer? ", &new_offer, last_offer, num_offer, 1);
+            purchase = storeReceiveOffer(store_id, "What do you offer? ", &new_offer, last_offer, num_offer, 1);
+
             if (purchase != 0) {
                 flag = true;
             } else {
-                if (new_offer > cur_ask) {
+                if (new_offer > current_asking_price) {
                     printSpeechSorry();
                     // rejected, reset new_offer for incremental haggling
                     new_offer = last_offer;
@@ -517,10 +518,10 @@ static int purchase_haggle(int store_num, int32_t *price, Inventory_t *item) {
                     // If the automatic increment is large enough to overflow,
                     // then the player must have made a mistake.  Clear it
                     // because it is useless.
-                    if (last_offer + store_last_increment > cur_ask) {
+                    if (last_offer + store_last_increment > current_asking_price) {
                         store_last_increment = 0;
                     }
-                } else if (new_offer == cur_ask) {
+                } else if (new_offer == current_asking_price) {
                     flag = true;
                     *price = new_offer;
                 } else {
@@ -530,9 +531,10 @@ static int purchase_haggle(int store_num, int32_t *price, Inventory_t *item) {
         } while (!flag && loop_flag);
 
         if (!flag) {
-            int32_t x1 = (new_offer - last_offer) * 100 / (cur_ask - last_offer);
+            int32_t x1 = (new_offer - last_offer) * 100 / (current_asking_price - last_offer);
+
             if (x1 < min_per) {
-                flag = storeHaggleInsults(store_num);
+                flag = storeHaggleInsults(store_id);
                 if (flag) {
                     purchase = 2;
                 }
@@ -542,31 +544,35 @@ static int purchase_haggle(int store_num, int32_t *price, Inventory_t *item) {
                     x1 = max_per;
                 }
             }
+
             int32_t x2 = x1 + randomNumber(5) - 3;
-            int32_t x3 = ((cur_ask - new_offer) * x2 / 100) + 1;
+            int32_t x3 = ((current_asking_price - new_offer) * x2 / 100) + 1;
 
             // don't let the price go up
             if (x3 < 0) {
                 x3 = 0;
             }
-            cur_ask -= x3;
-            if (cur_ask < final_ask) {
-                cur_ask = final_ask;
+
+            current_asking_price -= x3;
+
+            if (current_asking_price < final_asking_price) {
+                current_asking_price = final_asking_price;
                 comment = "Final Offer";
 
                 // Set the automatic haggle increment so that RET will give
-                // a new_offer equal to the final_ask price.
-                store_last_increment = (int16_t) (final_ask - new_offer);
+                // a new_offer equal to the final_asking_price price.
+                store_last_increment = (int16_t) (final_asking_price - new_offer);
                 final_flag++;
+
                 if (final_flag > 3) {
-                    if (storeIncreaseInsults(store_num)) {
+                    if (storeIncreaseInsults(store_id)) {
                         purchase = 2;
                     } else {
                         purchase = 1;
                     }
                     flag = true;
                 }
-            } else if (new_offer >= cur_ask) {
+            } else if (new_offer >= current_asking_price) {
                 flag = true;
                 *price = new_offer;
             }
@@ -574,22 +580,22 @@ static int purchase_haggle(int store_num, int32_t *price, Inventory_t *item) {
                 last_offer = new_offer;
                 num_offer++; // enable incremental haggling
                 eraseLine(1, 0);
-                (void) sprintf(out_val, "Your last offer : %d", last_offer);
-                putString(out_val, 1, 39);
-                printSpeechSellingHaggle(last_offer, cur_ask, final_flag);
+                (void) sprintf(msg, "Your last offer : %d", last_offer);
+                putString(msg, 1, 39);
+                printSpeechSellingHaggle(last_offer, current_asking_price, final_flag);
 
                 // If the current increment would take you over the store's
                 // price, then decrease it to an exact match.
-                if (cur_ask - last_offer < store_last_increment) {
-                    store_last_increment = (int16_t) (cur_ask - last_offer);
+                if (current_asking_price - last_offer < store_last_increment) {
+                    store_last_increment = (int16_t) (current_asking_price - last_offer);
                 }
             }
         }
     }
 
     // update bargaining info
-    if (purchase == 0 && !didnt_haggle) {
-        storeUpdateBargainInfo(store_num, *price, final_ask);
+    if (purchase == 0 && !did_not_haggle) {
+        storeUpdateBargainInfo(store_id, *price, final_asking_price);
     }
 
     return purchase;
@@ -845,7 +851,7 @@ static bool store_purchase(int store_num, int *cur_top) {
     if (s_ptr->store_inven[item_val].scost > 0) {
         price = s_ptr->store_inven[item_val].scost;
     } else {
-        choice = purchase_haggle(store_num, &price, &sell_obj);
+        choice = storePurchaseHaggle(store_num, &price, &sell_obj);
     }
 
     if (choice == 0) {
@@ -893,7 +899,7 @@ static bool store_purchase(int store_num, int *cur_top) {
         purchased = true;
     }
 
-    // Less intuitive, but looks better here than in purchase_haggle.
+    // Less intuitive, but looks better here than in storePurchaseHaggle.
     displayStoreCommands();
     eraseLine(1, 0);
 
