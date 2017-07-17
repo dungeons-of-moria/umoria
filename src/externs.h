@@ -560,7 +560,7 @@ bool storeNoNeedToBargain(int store_id, int32_t min_price);
 void storeUpdateBargainInfo(int store_id, int32_t price, int32_t min_price);
 
 // store2.c
-void enter_store(int store_id);
+void storeEnter(int store_id);
 
 // wands.c
 void aim();

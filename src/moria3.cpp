@@ -308,27 +308,27 @@ static void playerStepsOnTrap(int y, int x) {
             // Town level traps are special, the stores.
         case 101:
             // General
-            enter_store(0);
+            storeEnter(0);
             break;
         case 102:
             // Armory
-            enter_store(1);
+            storeEnter(1);
             break;
         case 103:
             // Weaponsmith
-            enter_store(2);
+            storeEnter(2);
             break;
         case 104:
             // Temple
-            enter_store(3);
+            storeEnter(3);
             break;
         case 105:
             // Alchemy
-            enter_store(4);
+            storeEnter(4);
             break;
         case 106:
             // Magic-User
-            enter_store(5);
+            storeEnter(5);
             break;
 
         default:

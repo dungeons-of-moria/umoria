@@ -1030,16 +1030,16 @@ static bool storeSellAnItem(int store_id, int *current_top_item_id) {
 }
 
 // Entering a store -RAK-
-void enter_store(int store_id) {
-    Store_t *s_ptr = &stores[store_id];
+void storeEnter(int store_id) {
+    Store_t *store = &stores[store_id];
 
-    if (s_ptr->store_open >= current_game_turn) {
+    if (store->store_open >= current_game_turn) {
         printMessage("The doors are locked.");
         return;
     }
 
-    int cur_top = 0;
-    displayStore(store_id, store_owners[s_ptr->owner].owner_name, cur_top);
+    int current_top_item_id = 0;
+    displayStore(store_id, store_owners[store->owner].owner_name, current_top_item_id);
 
     bool exit_store = false;
     while (!exit_store) {
@@ -1054,16 +1054,16 @@ void enter_store(int store_id) {
 
             switch (command) {
                 case 'b':
-                    if (cur_top == 0) {
-                        if (s_ptr->store_ctr > 12) {
-                            cur_top = 12;
-                            displayStoreInventory(store_id, cur_top);
+                    if (current_top_item_id == 0) {
+                        if (store->store_ctr > 12) {
+                            current_top_item_id = 12;
+                            displayStoreInventory(store_id, current_top_item_id);
                         } else {
                             printMessage("Entire inventory is shown.");
                         }
                     } else {
-                        cur_top = 0;
-                        displayStoreInventory(store_id, cur_top);
+                        current_top_item_id = 0;
+                        displayStoreInventory(store_id, current_top_item_id);
                     }
                     break;
                 case 'E':
@@ -1085,16 +1085,16 @@ void enter_store(int store_id) {
 
                     // redisplay store prices if charisma changes
                     if (saved_chr != py.stats.use_stat[A_CHR]) {
-                        displayStoreInventory(store_id, cur_top);
+                        displayStoreInventory(store_id, current_top_item_id);
                     }
 
                     player_free_turn = false; // No free moves here. -CJS-
                     break;
                 case 'p':
-                    exit_store = storePurchaseAnItem(store_id, &cur_top);
+                    exit_store = storePurchaseAnItem(store_id, &current_top_item_id);
                     break;
                 case 's':
-                    exit_store = storeSellAnItem(store_id, &cur_top);
+                    exit_store = storeSellAnItem(store_id, &current_top_item_id);
                     break;
                 default:
                     terminalBellSound();
