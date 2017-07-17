@@ -338,39 +338,45 @@ static bool storeHaggleInsults(int store_id) {
     return false;
 }
 
-static bool get_haggle(const char *comment, int32_t *new_offer, int num_offer) {
+static bool storeGetHaggle(const char *comment, int32_t *new_offer, int num_offer) {
     if (num_offer == 0) {
         store_last_increment = 0;
     }
 
     bool increment = false;
 
-    int clen = (int) strlen(comment);
-    int orig_clen = clen;
+    int comment_len = (int) strlen(comment);
+    int save_comment_len = comment_len;
 
     char *p;
-    vtype_t out_val, default_offer;
+    vtype_t msg, default_offer;
 
     bool flag = true;
     int32_t offer_adjust = 0;
 
     while (flag && offer_adjust == 0) {
         putStringClearToEOL(comment, 0, 0);
+
         if (num_offer && store_last_increment != 0) {
             (void) sprintf(default_offer, "[%c%d] ", (store_last_increment < 0) ? '-' : '+', abs(store_last_increment));
-            putStringClearToEOL(default_offer, 0, orig_clen);
-            clen = orig_clen + (int) strlen(default_offer);
+            putStringClearToEOL(default_offer, 0, save_comment_len);
+            comment_len = save_comment_len + (int) strlen(default_offer);
         }
-        if (!getStringInput(out_val, 0, clen, 40)) {
+
+        if (!getStringInput(msg, 0, comment_len, 40)) {
             flag = false;
         }
-        for (p = out_val; *p == ' '; p++) { ;
+
+        for (p = msg; *p == ' '; p++) {
+            // fast forward to next space character
         }
+
         if (*p == '+' || *p == '-') {
             increment = true;
         }
+
         if (num_offer && increment) {
-            offer_adjust = (int32_t) atol(out_val);
+            offer_adjust = (int32_t) atol(msg);
 
             // Don't accept a zero here.  Turn off increment if it was zero
             // because a zero will not exit.  This can be zero if the user
@@ -380,11 +386,11 @@ static bool get_haggle(const char *comment, int32_t *new_offer, int num_offer) {
             } else {
                 store_last_increment = (int16_t) offer_adjust;
             }
-        } else if (num_offer && *out_val == '\0') {
+        } else if (num_offer && *msg == '\0') {
             offer_adjust = store_last_increment;
             increment = true;
         } else {
-            offer_adjust = (int32_t) atol(out_val);
+            offer_adjust = (int32_t) atol(msg);
         }
 
         // don't allow incremental haggling, if player has not made an offer yet
@@ -413,7 +419,7 @@ static int receive_offer(int store_num, const char *comment, int32_t *new_offer,
     bool success = false;
 
     while (!success) {
-        if (get_haggle(comment, new_offer, num_offer)) {
+        if (storeGetHaggle(comment, new_offer, num_offer)) {
             if (*new_offer * factor >= last_offer * factor) {
                 success = true;
             } else if (storeHaggleInsults(store_num)) {
