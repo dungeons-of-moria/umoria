@@ -819,16 +819,16 @@ static int storeSellHaggle(int store_id, int32_t *price, Inventory_t *item) {
 }
 
 // Get the number of store items to display on the screen
-static int store_items_to_display(int store_ctr, int cur_top) {
-    if (cur_top == 12) {
-        return store_ctr - 1 - 12;
+static int storeItemsToDisplay(int store_counter, int current_top_item_id) {
+    if (current_top_item_id == 12) {
+        return store_counter - 1 - 12;
     }
 
-    if (store_ctr > 11) {
+    if (store_counter > 11) {
         return 11;
     }
 
-    return store_ctr - 1;
+    return store_counter - 1;
 }
 
 // Buy an item from a store -RAK-
@@ -841,7 +841,7 @@ static bool store_purchase(int store_num, int *cur_top) {
     }
 
     int item_val;
-    int item_count = store_items_to_display(s_ptr->store_ctr, *cur_top);
+    int item_count = storeItemsToDisplay(s_ptr->store_ctr, *cur_top);
     if (!storeGetItemID(&item_val, "Which item are you interested in? ", 0, item_count)) {
         return false;
     }
