@@ -1750,7 +1750,7 @@ static void do_command(char com_val) {
             playerTunnel(9);
             break;
         case 'z': // (z)ap a wand    (a)im a wand
-            aim();
+            wandAim();
             break;
         case 'M':
             displayDungeonMap();

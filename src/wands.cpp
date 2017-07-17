@@ -116,7 +116,7 @@ static bool wandDischarge(Inventory_t *item, int direction) {
 }
 
 // Wands for the aiming.
-void aim() {
+void wandAim() {
     player_free_turn = true;
 
     if (inventory_count == 0) {
@@ -124,27 +124,27 @@ void aim() {
         return;
     }
 
-    int j, k;
-    if (!inventoryFindRange(TV_WAND, TV_NEVER, &j, &k)) {
+    int item_pos_start, item_pos_end;
+    if (!inventoryFindRange(TV_WAND, TV_NEVER, &item_pos_start, &item_pos_end)) {
         printMessage("You are not carrying any wands.");
         return;
     }
 
     int item_id;
-    if (!inventoryGetInputForItemId(&item_id, "Aim which wand?", j, k, CNIL, CNIL)) {
+    if (!inventoryGetInputForItemId(&item_id, "Aim which wand?", item_pos_start, item_pos_end, CNIL, CNIL)) {
         return;
     }
 
     player_free_turn = false;
 
-    int dir;
-    if (!getDirectionWithMemory(CNIL, &dir)) {
+    int direction;
+    if (!getDirectionWithMemory(CNIL, &direction)) {
         return;
     }
 
     if (py.flags.confused > 0) {
         printMessage("You are confused.");
-        dir = getRandomDirection();
+        direction = getRandomDirection();
     }
 
     Inventory_t *item = &inventory[item_id];
@@ -177,9 +177,9 @@ void aim() {
         return;
     }
 
-    bool ident = wandDischarge(item, dir);
+    bool identified = wandDischarge(item, direction);
 
-    if (ident) {
+    if (identified) {
         if (!itemSetColorlessAsIdentifed(item)) {
             // round half-way case up
             py.misc.exp += (item->level + (py.misc.lev >> 1)) / py.misc.lev;

@@ -563,7 +563,7 @@ void storeUpdateBargainInfo(int store_id, int32_t price, int32_t min_price);
 void storeEnter(int store_id);
 
 // wands.c
-void aim();
+void wandAim();
 
 // wizard.c
 void wizard_light();
