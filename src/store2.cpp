@@ -924,14 +924,14 @@ static bool storePurchaseAnItem(int store_id, int *current_top_item_id) {
 }
 
 // Sell an item to the store -RAK-
-static bool store_sell(int store_num, int *cur_top) {
+static bool storeSellAnItem(int store_id, int *current_top_item_id) {
     int first_item = inventory_count;
     int last_item = -1;
 
     char mask[INVEN_WIELD];
 
     for (int counter = 0; counter < inventory_count; counter++) {
-        int flag = (*store_buy[store_num])(inventory[counter].tval);
+        int flag = (*store_buy[store_id])(inventory[counter].tval);
 
         mask[counter] = (char) flag;
         if (flag) {
@@ -949,21 +949,22 @@ static bool store_sell(int store_num, int *cur_top) {
         return false;
     }
 
-    int item_val;
-    if (!inventoryGetInputForItemId(&item_val, "Which one? ", first_item, last_item, mask, "I do not buy such items.")) {
+    int item_id;
+    if (!inventoryGetInputForItemId(&item_id, "Which one? ", first_item, last_item, mask, "I do not buy such items.")) {
         return false;
     }
 
-    Inventory_t sold_obj;
-    obj_desc_t out_val, tmp_str;
+    Inventory_t sold_item;
+    inventoryTakeOneItem(&sold_item, &inventory[item_id]);
 
-    inventoryTakeOneItem(&sold_obj, &inventory[item_val]);
-    itemDescription(tmp_str, &sold_obj, true);
+    obj_desc_t description;
+    itemDescription(description, &sold_item, true);
 
-    (void) sprintf(out_val, "Selling %s (%c)", tmp_str, item_val + 'a');
-    printMessage(out_val);
+    obj_desc_t msg;
+    (void) sprintf(msg, "Selling %s (%c)", description, item_id + 'a');
+    printMessage(msg);
 
-    if (!storeCheckPlayerItemsCount(store_num, &sold_obj)) {
+    if (!storeCheckPlayerItemsCount(store_id, &sold_item)) {
         printMessage("I have not the room in my store to keep it.");
         return false;
     }
@@ -971,44 +972,45 @@ static bool store_sell(int store_num, int *cur_top) {
     int32_t price;
     bool sold = false;
 
-    int choice = storeSellHaggle(store_num, &price, &sold_obj);
+    int choice = storeSellHaggle(store_id, &price, &sold_item);
 
     if (choice == 0) {
         printSpeechFinishedHaggling();
-        storeDecreaseInsults(store_num);
+        storeDecreaseInsults(store_id);
         py.misc.au += price;
 
         // identify object in inventory to set objects_identified array
-        itemIdentify(&item_val);
+        itemIdentify(&item_id);
 
-        // retake sold_obj so that it will be identified
-        inventoryTakeOneItem(&sold_obj, &inventory[item_val]);
+        // retake sold_item so that it will be identified
+        inventoryTakeOneItem(&sold_item, &inventory[item_id]);
 
         // call spellItemIdentifyAndRemoveRandomInscription for store item, so charges/pluses are known
-        spellItemIdentifyAndRemoveRandomInscription(&sold_obj);
-        inventoryDestroyItem(item_val);
-        itemDescription(tmp_str, &sold_obj, true);
-        (void) sprintf(out_val, "You've sold %s", tmp_str);
-        printMessage(out_val);
+        spellItemIdentifyAndRemoveRandomInscription(&sold_item);
+        inventoryDestroyItem(item_id);
+
+        itemDescription(description, &sold_item, true);
+        (void) sprintf(msg, "You've sold %s", description);
+        printMessage(msg);
 
         int item_pos;
-        storeCarry(store_num, &item_pos, &sold_obj);
+        storeCarry(store_id, &item_pos, &sold_item);
 
         playerStrength();
 
         if (item_pos >= 0) {
             if (item_pos < 12) {
-                if (*cur_top < 12) {
-                    displayStoreInventory(store_num, item_pos);
+                if (*current_top_item_id < 12) {
+                    displayStoreInventory(store_id, item_pos);
                 } else {
-                    *cur_top = 0;
-                    displayStoreInventory(store_num, *cur_top);
+                    *current_top_item_id = 0;
+                    displayStoreInventory(store_id, *current_top_item_id);
                 }
-            } else if (*cur_top > 11) {
-                displayStoreInventory(store_num, item_pos);
+            } else if (*current_top_item_id > 11) {
+                displayStoreInventory(store_id, item_pos);
             } else {
-                *cur_top = 12;
-                displayStoreInventory(store_num, *cur_top);
+                *current_top_item_id = 12;
+                displayStoreInventory(store_id, *current_top_item_id);
             }
         }
         displayPlayerRemainingGold();
@@ -1017,7 +1019,7 @@ static bool store_sell(int store_num, int *cur_top) {
     } else if (choice == 3) {
         printMessage("How dare you!");
         printMessage("I will not buy that!");
-        sold = storeIncreaseInsults(store_num);
+        sold = storeIncreaseInsults(store_id);
     }
 
     // Less intuitive, but looks better here than in storeSellHaggle.
@@ -1092,7 +1094,7 @@ void enter_store(int store_id) {
                     exit_store = storePurchaseAnItem(store_id, &cur_top);
                     break;
                 case 's':
-                    exit_store = store_sell(store_id, &cur_top);
+                    exit_store = storeSellAnItem(store_id, &cur_top);
                     break;
                 default:
                     terminalBellSound();
