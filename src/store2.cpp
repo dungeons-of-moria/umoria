@@ -162,7 +162,7 @@ static void printSpeechSorry() {
 }
 
 // Displays the set of commands -RAK-
-static void display_commands() {
+static void displayStoreCommands() {
     putStringClearToEOL("You may:", 20, 0);
     putStringClearToEOL(" p) Purchase an item.           b) Browse store's inventory.", 21, 0);
     putStringClearToEOL(" s) Sell an item.               i/e/t/w/x) Inventory/Equipment Lists.", 22, 0);
@@ -269,7 +269,7 @@ static void display_store(int store_num, const char *owner_name, int cur_top) {
     putString("Item", 4, 3);
     putString("Asking Price", 4, 60);
     store_prt_gold();
-    display_commands();
+    displayStoreCommands();
     display_inventory(store_num, cur_top);
 }
 
@@ -884,7 +884,7 @@ static bool store_purchase(int store_num, int *cur_top) {
     }
 
     // Less intuitive, but looks better here than in purchase_haggle.
-    display_commands();
+    displayStoreCommands();
     eraseLine(1, 0);
 
     return purchased;
@@ -989,7 +989,7 @@ static bool store_sell(int store_num, int *cur_top) {
 
     // Less intuitive, but looks better here than in sell_haggle.
     eraseLine(1, 0);
-    display_commands();
+    displayStoreCommands();
 
     return sold;
 }
