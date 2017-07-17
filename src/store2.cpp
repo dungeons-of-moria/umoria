@@ -147,10 +147,10 @@ static void printSpeechBuyingHaggle(int32_t offer, int32_t asking, int final) {
 }
 
 // Kick 'da bum out. -RAK-
-static void prt_comment4() {
-    int tmp = randomNumber(5) - 1;
-    printMessage(speech_insulted_haggling_done[tmp]);
-    printMessage(speech_get_out_of_my_store[tmp]);
+static void printSpeechGetOutOfMyStore() {
+    int comment = randomNumber(5) - 1;
+    printMessage(speech_insulted_haggling_done[comment]);
+    printMessage(speech_get_out_of_my_store[comment]);
 }
 
 static void prt_comment5() {
@@ -303,7 +303,7 @@ static bool increase_insults(int store_num) {
     s_ptr->insult_cur++;
 
     if (s_ptr->insult_cur > store_owners[s_ptr->owner].insult_max) {
-        prt_comment4();
+        printSpeechGetOutOfMyStore();
         s_ptr->insult_cur = 0;
         s_ptr->bad_buy++;
         s_ptr->store_open = current_game_turn + 2500 + randomNumber(2500);
