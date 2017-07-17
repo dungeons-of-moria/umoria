@@ -1558,7 +1558,7 @@ static void doWizardCommands(char com_val) {
             updateMonsters(false);
             break;
         case '@':
-            wizard_create();
+            wizardCreateObjects();
             break;
         default:
             if (use_roguelike_keys) {

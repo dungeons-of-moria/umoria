@@ -242,105 +242,105 @@ void wizardCharacterAdjustment() {
 }
 
 // Wizard routine for creating objects -RAK-
-void wizard_create() {
-    int tmp_val;
-    vtype_t tmp_str;
+void wizardCreateObjects() {
+    int number;
+    vtype_t input;
 
     printMessage("Warning: This routine can cause a fatal error.");
 
     Inventory_t forge;
-    Inventory_t *i_ptr = &forge;
+    Inventory_t *item = &forge;
 
-    i_ptr->index = OBJ_WIZARD;
-    i_ptr->name2 = 0;
-    itemReplaceInscription(i_ptr, "wizard item");
-    i_ptr->ident = ID_KNOWN2 | ID_STOREBOUGHT;
+    item->index = OBJ_WIZARD;
+    item->name2 = 0;
+    itemReplaceInscription(item, "wizard item");
+    item->ident = ID_KNOWN2 | ID_STOREBOUGHT;
 
     putStringClearToEOL("Tval   : ", 0, 0);
-    if (!getStringInput(tmp_str, 0, 9, 3)) {
+    if (!getStringInput(input, 0, 9, 3)) {
         return;
     }
-    tmp_val = atoi(tmp_str);
-    i_ptr->tval = (uint8_t) tmp_val;
+    number = atoi(input);
+    item->tval = (uint8_t) number;
 
     putStringClearToEOL("Tchar  : ", 0, 0);
-    if (!getStringInput(tmp_str, 0, 9, 1)) {
+    if (!getStringInput(input, 0, 9, 1)) {
         return;
     }
-    i_ptr->tchar = (uint8_t) tmp_str[0];
+    item->tchar = (uint8_t) input[0];
 
     putStringClearToEOL("Subval : ", 0, 0);
-    if (!getStringInput(tmp_str, 0, 9, 5)) {
+    if (!getStringInput(input, 0, 9, 5)) {
         return;
     }
-    tmp_val = atoi(tmp_str);
-    i_ptr->subval = (uint8_t) tmp_val;
+    number = atoi(input);
+    item->subval = (uint8_t) number;
 
     putStringClearToEOL("Weight : ", 0, 0);
-    if (!getStringInput(tmp_str, 0, 9, 5)) {
+    if (!getStringInput(input, 0, 9, 5)) {
         return;
     }
-    tmp_val = atoi(tmp_str);
-    i_ptr->weight = (uint16_t) tmp_val;
+    number = atoi(input);
+    item->weight = (uint16_t) number;
 
     putStringClearToEOL("Number : ", 0, 0);
-    if (!getStringInput(tmp_str, 0, 9, 5)) {
+    if (!getStringInput(input, 0, 9, 5)) {
         return;
     }
-    tmp_val = atoi(tmp_str);
-    i_ptr->number = (uint8_t) tmp_val;
+    number = atoi(input);
+    item->number = (uint8_t) number;
 
     putStringClearToEOL("Damage (dice): ", 0, 0);
-    if (!getStringInput(tmp_str, 0, 15, 3)) {
+    if (!getStringInput(input, 0, 15, 3)) {
         return;
     }
-    tmp_val = atoi(tmp_str);
-    i_ptr->damage[0] = (uint8_t) tmp_val;
+    number = atoi(input);
+    item->damage[0] = (uint8_t) number;
 
     putStringClearToEOL("Damage (sides): ", 0, 0);
-    if (!getStringInput(tmp_str, 0, 16, 3)) {
+    if (!getStringInput(input, 0, 16, 3)) {
         return;
     }
-    tmp_val = atoi(tmp_str);
-    i_ptr->damage[1] = (uint8_t) tmp_val;
+    number = atoi(input);
+    item->damage[1] = (uint8_t) number;
 
     putStringClearToEOL("+To hit: ", 0, 0);
-    if (!getStringInput(tmp_str, 0, 9, 3)) {
+    if (!getStringInput(input, 0, 9, 3)) {
         return;
     }
-    tmp_val = atoi(tmp_str);
-    i_ptr->tohit = (int16_t) tmp_val;
+    number = atoi(input);
+    item->tohit = (int16_t) number;
 
     putStringClearToEOL("+To dam: ", 0, 0);
-    if (!getStringInput(tmp_str, 0, 9, 3)) {
+    if (!getStringInput(input, 0, 9, 3)) {
         return;
     }
-    tmp_val = atoi(tmp_str);
-    i_ptr->todam = (int16_t) tmp_val;
+    number = atoi(input);
+    item->todam = (int16_t) number;
 
     putStringClearToEOL("AC     : ", 0, 0);
-    if (!getStringInput(tmp_str, 0, 9, 3)) {
+    if (!getStringInput(input, 0, 9, 3)) {
         return;
     }
-    tmp_val = atoi(tmp_str);
-    i_ptr->ac = (int16_t) tmp_val;
+    number = atoi(input);
+    item->ac = (int16_t) number;
 
     putStringClearToEOL("+To AC : ", 0, 0);
-    if (!getStringInput(tmp_str, 0, 9, 3)) {
+    if (!getStringInput(input, 0, 9, 3)) {
         return;
     }
-    tmp_val = atoi(tmp_str);
-    i_ptr->toac = (int16_t) tmp_val;
+    number = atoi(input);
+    item->toac = (int16_t) number;
 
     putStringClearToEOL("P1     : ", 0, 0);
-    if (!getStringInput(tmp_str, 0, 9, 5)) {
+    if (!getStringInput(input, 0, 9, 5)) {
         return;
     }
-    tmp_val = atoi(tmp_str);
-    i_ptr->p1 = (int16_t) tmp_val;
+    number = atoi(input);
+    item->p1 = (int16_t) number;
 
     putStringClearToEOL("Flags (In HEX): ", 0, 0);
-    if (!getStringInput(tmp_str, 0, 16, 8)) {
+    if (!getStringInput(input, 0, 16, 8)) {
         return;
     }
 
@@ -350,34 +350,37 @@ void wizard_create() {
 
     (void) strcpy(pattern, "%lx");
 
-    int32_t tmp_lval;
-    (void) sscanf(tmp_str, pattern, &tmp_lval);
-    i_ptr->flags = (uint32_t) tmp_lval;
+    int32_t input_number;
+    (void) sscanf(input, pattern, &input_number);
+    item->flags = (uint32_t) input_number;
 
     putStringClearToEOL("Cost : ", 0, 0);
-    if (!getStringInput(tmp_str, 0, 9, 8)) {
+    if (!getStringInput(input, 0, 9, 8)) {
         return;
     }
-    tmp_lval = (int) atol(tmp_str);
-    i_ptr->cost = tmp_lval;
+    input_number = (int) atol(input);
+    item->cost = input_number;
 
     putStringClearToEOL("Level : ", 0, 0);
-    if (!getStringInput(tmp_str, 0, 10, 3)) {
+    if (!getStringInput(input, 0, 10, 3)) {
         return;
     }
-    tmp_val = atoi(tmp_str);
-    i_ptr->level = (uint8_t) tmp_val;
+    number = atoi(input);
+    item->level = (uint8_t) number;
 
     if (getInputConfirmation("Allocate?")) {
-        // delete object first if any, before call popt
-        Cave_t *c_ptr = &cave[char_row][char_col];
-        if (c_ptr->tptr != 0) {
+        // delete object first if any, before call popt()
+        Cave_t *tile = &cave[char_row][char_col];
+
+        if (tile->tptr != 0) {
             (void) dungeonDeleteObject(char_row, char_col);
         }
 
-        tmp_val = popt();
-        treasure_list[tmp_val] = forge;
-        c_ptr->tptr = (uint8_t) tmp_val;
+        number = popt();
+
+        treasure_list[number] = forge;
+        tile->tptr = (uint8_t) number;
+
         printMessage("Allocated.");
     } else {
         printMessage("Aborted.");
