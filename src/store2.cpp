@@ -182,58 +182,61 @@ static void displayStoreHaggleCommands(int haggle_type) {
 }
 
 // Displays a store's inventory -RAK-
-static void display_inventory(int store_num, int start) {
-    Store_t *s_ptr = &stores[store_num];
+static void displayStoreInventory(int store_id, int item_pos_start) {
+    Store_t *store = &stores[store_id];
 
-    int stop = ((start / 12) + 1) * 12;
-    if (stop > s_ptr->store_ctr) {
-        stop = s_ptr->store_ctr;
+    int item_pos_end = ((item_pos_start / 12) + 1) * 12;
+    if (item_pos_end > store->store_ctr) {
+        item_pos_end = store->store_ctr;
     }
 
-    int i;
+    int item_identifier;
 
-    for (i = (start % 12); start < stop; i++) {
-        Inventory_t *i_ptr = &s_ptr->store_inven[start].sitem;
+    for (item_identifier = (item_pos_start % 12); item_pos_start < item_pos_end; item_identifier++) {
+        Inventory_t *item = &store->store_inven[item_pos_start].sitem;
 
         // Save the current number of items
-        int32_t x = i_ptr->number;
+        int32_t current_item_count = item->number;
 
-        if (i_ptr->subval >= ITEM_SINGLE_STACK_MIN && i_ptr->subval <= ITEM_SINGLE_STACK_MAX) {
-            i_ptr->number = 1;
+        if (item->subval >= ITEM_SINGLE_STACK_MIN && item->subval <= ITEM_SINGLE_STACK_MAX) {
+            item->number = 1;
         }
-        obj_desc_t out_val1, out_val2;
-        itemDescription(out_val1, i_ptr, true);
+
+        obj_desc_t description;
+        itemDescription(description, item, true);
 
         // Restore the number of items
-        i_ptr->number = (uint8_t) x;
+        item->number = (uint8_t) current_item_count;
 
-        (void) sprintf(out_val2, "%c) %s", 'a' + i, out_val1);
-        putStringClearToEOL(out_val2, i + 5, 0);
+        obj_desc_t msg;
+        (void) sprintf(msg, "%c) %s", 'a' + item_identifier, description);
+        putStringClearToEOL(msg, item_identifier + 5, 0);
 
-        x = s_ptr->store_inven[start].scost;
-        if (x <= 0) {
-            int32_t value = -x;
+        current_item_count = store->store_inven[item_pos_start].scost;
+
+        if (current_item_count <= 0) {
+            int32_t value = -current_item_count;
             value = value * playerStatAdjustmentCharisma() / 100;
             if (value <= 0) {
                 value = 1;
             }
-            (void) sprintf(out_val2, "%9d", value);
+            (void) sprintf(msg, "%9d", value);
         } else {
-            (void) sprintf(out_val2, "%9d [Fixed]", x);
+            (void) sprintf(msg, "%9d [Fixed]", current_item_count);
         }
 
-        putStringClearToEOL(out_val2, i + 5, 59);
-        start++;
+        putStringClearToEOL(msg, item_identifier + 5, 59);
+        item_pos_start++;
     }
 
-    if (i < 12) {
-        for (int j = 0; j < (11 - i + 1); j++) {
+    if (item_identifier < 12) {
+        for (int i = 0; i < (11 - item_identifier + 1); i++) {
             // clear remaining lines
-            eraseLine(j + i + 5, 0);
+            eraseLine(i + item_identifier + 5, 0);
         }
     }
 
-    if (s_ptr->store_ctr > 12) {
+    if (store->store_ctr > 12) {
         putString("- cont. -", 17, 60);
     } else {
         eraseLine(17, 60);
@@ -270,7 +273,7 @@ static void display_store(int store_num, const char *owner_name, int cur_top) {
     putString("Asking Price", 4, 60);
     store_prt_gold();
     displayStoreCommands();
-    display_inventory(store_num, cur_top);
+    displayStoreInventory(store_num, cur_top);
 }
 
 // Get the ID of a store item and return it's value -RAK-
@@ -857,7 +860,7 @@ static bool store_purchase(int store_num, int *cur_top) {
             playerStrength();
             if (*cur_top >= s_ptr->store_ctr) {
                 *cur_top = 0;
-                display_inventory(store_num, *cur_top);
+                displayStoreInventory(store_num, *cur_top);
             } else {
                 InventoryRecord_t *r_ptr = &s_ptr->store_inven[item_val];
 
@@ -867,7 +870,7 @@ static bool store_purchase(int store_num, int *cur_top) {
                         display_cost(store_num, item_val);
                     }
                 } else {
-                    display_inventory(store_num, item_val);
+                    displayStoreInventory(store_num, item_val);
                 }
             }
             store_prt_gold();
@@ -966,16 +969,16 @@ static bool store_sell(int store_num, int *cur_top) {
         if (item_pos >= 0) {
             if (item_pos < 12) {
                 if (*cur_top < 12) {
-                    display_inventory(store_num, item_pos);
+                    displayStoreInventory(store_num, item_pos);
                 } else {
                     *cur_top = 0;
-                    display_inventory(store_num, *cur_top);
+                    displayStoreInventory(store_num, *cur_top);
                 }
             } else if (*cur_top > 11) {
-                display_inventory(store_num, item_pos);
+                displayStoreInventory(store_num, item_pos);
             } else {
                 *cur_top = 12;
-                display_inventory(store_num, *cur_top);
+                displayStoreInventory(store_num, *cur_top);
             }
         }
         store_prt_gold();
@@ -1022,13 +1025,13 @@ void enter_store(int store_id) {
                     if (cur_top == 0) {
                         if (s_ptr->store_ctr > 12) {
                             cur_top = 12;
-                            display_inventory(store_id, cur_top);
+                            displayStoreInventory(store_id, cur_top);
                         } else {
                             printMessage("Entire inventory is shown.");
                         }
                     } else {
                         cur_top = 0;
-                        display_inventory(store_id, cur_top);
+                        displayStoreInventory(store_id, cur_top);
                     }
                     break;
                 case 'E':
@@ -1050,7 +1053,7 @@ void enter_store(int store_id) {
 
                     // redisplay store prices if charisma changes
                     if (saved_chr != py.stats.use_stat[A_CHR]) {
-                        display_inventory(store_id, cur_top);
+                        displayStoreInventory(store_id, cur_top);
                     }
 
                     player_free_turn = false; // No free moves here. -CJS-
