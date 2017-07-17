@@ -244,18 +244,18 @@ static void displayStoreInventory(int store_id, int item_pos_start) {
 }
 
 // Re-displays only a single cost -RAK-
-static void display_cost(int store_num, int pos) {
-    int cost = stores[store_num].store_inven[pos].scost;
+static void displaySingleCost(int store_id, int item_id) {
+    int cost = stores[store_id].store_inven[item_id].scost;
 
-    vtype_t out_val;
+    vtype_t msg;
     if (cost < 0) {
-        int32_t j = -cost;
-        j = j * playerStatAdjustmentCharisma() / 100;
-        (void) sprintf(out_val, "%d", j);
+        int32_t c = -cost;
+        c = c * playerStatAdjustmentCharisma() / 100;
+        (void) sprintf(msg, "%d", c);
     } else {
-        (void) sprintf(out_val, "%9d [Fixed]", cost);
+        (void) sprintf(msg, "%9d [Fixed]", cost);
     }
-    putStringClearToEOL(out_val, (pos % 12) + 5, 59);
+    putStringClearToEOL(msg, (item_id % 12) + 5, 59);
 }
 
 // Displays players gold -RAK-
@@ -867,7 +867,7 @@ static bool store_purchase(int store_num, int *cur_top) {
                 if (saved_store_counter == s_ptr->store_ctr) {
                     if (r_ptr->scost < 0) {
                         r_ptr->scost = price;
-                        display_cost(store_num, item_val);
+                        displaySingleCost(store_num, item_val);
                     }
                 } else {
                     displayStoreInventory(store_num, item_val);
