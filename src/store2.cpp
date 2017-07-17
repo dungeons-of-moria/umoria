@@ -318,9 +318,9 @@ static bool storeIncreaseInsults(int store_id) {
 }
 
 // Decrease insults -RAK-
-static void decrease_insults(int store_num) {
-    if (stores[store_num].insult_cur != 0) {
-        stores[store_num].insult_cur--;
+static void storeDecreaseInsults(int store_id) {
+    if (stores[store_id].insult_cur != 0) {
+        stores[store_id].insult_cur--;
     }
 }
 
@@ -845,7 +845,7 @@ static bool store_purchase(int store_num, int *cur_top) {
     if (choice == 0) {
         if (py.misc.au >= price) {
             printSpeechFinishedHaggling();
-            decrease_insults(store_num);
+            storeDecreaseInsults(store_num);
             py.misc.au -= price;
 
             int item_new = inventoryCarryItem(&sell_obj);
@@ -946,7 +946,7 @@ static bool store_sell(int store_num, int *cur_top) {
 
     if (choice == 0) {
         printSpeechFinishedHaggling();
-        decrease_insults(store_num);
+        storeDecreaseInsults(store_num);
         py.misc.au += price;
 
         // identify object in inventory to set objects_identified array
