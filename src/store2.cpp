@@ -414,7 +414,7 @@ static bool storeGetHaggle(const char *comment, int32_t *new_offer, int num_offe
     return flag;
 }
 
-static int receive_offer(int store_num, const char *comment, int32_t *new_offer, int32_t last_offer, int num_offer, int factor) {
+static int storeReceiveOffer(int store_id, const char *comment, int32_t *new_offer, int32_t last_offer, int num_offer, int factor) {
     int receive = 0;
     bool success = false;
 
@@ -422,7 +422,7 @@ static int receive_offer(int store_num, const char *comment, int32_t *new_offer,
         if (storeGetHaggle(comment, new_offer, num_offer)) {
             if (*new_offer * factor >= last_offer * factor) {
                 success = true;
-            } else if (storeHaggleInsults(store_num)) {
+            } else if (storeHaggleInsults(store_id)) {
                 receive = 2;
                 success = true;
             } else {
@@ -505,7 +505,7 @@ static int purchase_haggle(int store_num, int32_t *price, Inventory_t *item) {
             (void) sprintf(out_val, "%s :  %d", comment, cur_ask);
             putString(out_val, 1, 0);
 
-            purchase = receive_offer(store_num, "What do you offer? ", &new_offer, last_offer, num_offer, 1);
+            purchase = storeReceiveOffer(store_num, "What do you offer? ", &new_offer, last_offer, num_offer, 1);
             if (purchase != 0) {
                 flag = true;
             } else {
@@ -701,7 +701,7 @@ static int sell_haggle(int store_num, int32_t *price, Inventory_t *item) {
                 vtype_t out_val;
                 (void) sprintf(out_val, "%s :  %d", comment, cur_ask);
                 putString(out_val, 1, 0);
-                sell = receive_offer(store_num, "What price do you ask? ", &new_offer, last_offer, num_offer, -1);
+                sell = storeReceiveOffer(store_num, "What price do you ask? ", &new_offer, last_offer, num_offer, -1);
                 if (sell != 0) {
                     flag = true;
                 } else {
