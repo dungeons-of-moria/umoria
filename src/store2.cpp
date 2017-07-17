@@ -259,10 +259,10 @@ static void displaySingleCost(int store_id, int item_id) {
 }
 
 // Displays players gold -RAK-
-static void store_prt_gold() {
-    vtype_t out_val;
-    (void) sprintf(out_val, "Gold Remaining : %d", py.misc.au);
-    putStringClearToEOL(out_val, 18, 17);
+static void displayPlayerRemainingGold() {
+    vtype_t msg;
+    (void) sprintf(msg, "Gold Remaining : %d", py.misc.au);
+    putStringClearToEOL(msg, 18, 17);
 }
 
 // Displays store -RAK-
@@ -271,7 +271,7 @@ static void display_store(int store_num, const char *owner_name, int cur_top) {
     putString(owner_name, 3, 9);
     putString("Item", 4, 3);
     putString("Asking Price", 4, 60);
-    store_prt_gold();
+    displayPlayerRemainingGold();
     displayStoreCommands();
     displayStoreInventory(store_num, cur_top);
 }
@@ -873,7 +873,7 @@ static bool store_purchase(int store_num, int *cur_top) {
                     displayStoreInventory(store_num, item_val);
                 }
             }
-            store_prt_gold();
+            displayPlayerRemainingGold();
         } else {
             if (increase_insults(store_num)) {
                 purchased = true;
@@ -981,7 +981,7 @@ static bool store_sell(int store_num, int *cur_top) {
                 displayStoreInventory(store_num, *cur_top);
             }
         }
-        store_prt_gold();
+        displayPlayerRemainingGold();
     } else if (choice == 2) {
         sold = true;
     } else if (choice == 3) {
