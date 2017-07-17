@@ -301,15 +301,16 @@ static bool storeGetItemID(int *item_id, const char *prompt, int item_pos_start,
 }
 
 // Increase the insult counter and get angry if too many -RAK-
-static bool increase_insults(int store_num) {
-    Store_t *s_ptr = &stores[store_num];
-    s_ptr->insult_cur++;
+static bool storeIncreaseInsults(int store_id) {
+    Store_t *store = &stores[store_id];
 
-    if (s_ptr->insult_cur > store_owners[s_ptr->owner].insult_max) {
+    store->insult_cur++;
+
+    if (store->insult_cur > store_owners[store->owner].insult_max) {
         printSpeechGetOutOfMyStore();
-        s_ptr->insult_cur = 0;
-        s_ptr->bad_buy++;
-        s_ptr->store_open = current_game_turn + 2500 + randomNumber(2500);
+        store->insult_cur = 0;
+        store->bad_buy++;
+        store->store_open = current_game_turn + 2500 + randomNumber(2500);
         return true;
     }
 
@@ -325,7 +326,7 @@ static void decrease_insults(int store_num) {
 
 // Have insulted while haggling -RAK-
 static bool haggle_insults(int store_num) {
-    if (increase_insults(store_num)) {
+    if (storeIncreaseInsults(store_num)) {
         return true;
     }
 
@@ -552,7 +553,7 @@ static int purchase_haggle(int store_num, int32_t *price, Inventory_t *item) {
                 store_last_increment = (int16_t) (final_ask - new_offer);
                 final_flag++;
                 if (final_flag > 3) {
-                    if (increase_insults(store_num)) {
+                    if (storeIncreaseInsults(store_num)) {
                         purchase = 2;
                     } else {
                         purchase = 1;
@@ -751,7 +752,7 @@ static int sell_haggle(int store_num, int32_t *price, Inventory_t *item) {
                     store_last_increment = (int16_t) (final_ask - new_offer);
                     final_flag++;
                     if (final_flag > 3) {
-                        if (increase_insults(store_num)) {
+                        if (storeIncreaseInsults(store_num)) {
                             sell = 2;
                         } else {
                             sell = 1;
@@ -875,7 +876,7 @@ static bool store_purchase(int store_num, int *cur_top) {
             }
             displayPlayerRemainingGold();
         } else {
-            if (increase_insults(store_num)) {
+            if (storeIncreaseInsults(store_num)) {
                 purchased = true;
             } else {
                 printSpeechFinishedHaggling();
@@ -987,7 +988,7 @@ static bool store_sell(int store_num, int *cur_top) {
     } else if (choice == 3) {
         printMessage("How dare you!");
         printMessage("I will not buy that!");
-        sold = increase_insults(store_num);
+        sold = storeIncreaseInsults(store_num);
     }
 
     // Less intuitive, but looks better here than in sell_haggle.
