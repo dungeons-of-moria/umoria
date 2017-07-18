@@ -325,7 +325,7 @@ static void dungeonPlaceVaultMonster(int y, int x, int number) {
 }
 
 // Builds a room at a row, column coordinate -RAK-
-static void build_room(int y, int x) {
+static void dungeonBuildRoom(int y, int x) {
     uint8_t floor = dungeonFloorTileForLevel();
 
     int height = y - randomNumber(4);
@@ -343,7 +343,7 @@ static void build_room(int y, int x) {
         }
     }
 
-    for (int i = (height - 1); i <= (depth + 1); i++) {
+    for (int i = height - 1; i <= depth + 1; i++) {
         cave[i][left - 1].fval = GRANITE_WALL;
         cave[i][left - 1].lr = true;
 
@@ -994,7 +994,7 @@ static void cave_gen() {
                         build_type3(yloc[locationID], xloc[locationID]);
                     }
                 } else {
-                    build_room(yloc[locationID], xloc[locationID]);
+                    dungeonBuildRoom(yloc[locationID], xloc[locationID]);
                 }
                 locationID++;
             }
