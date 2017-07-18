@@ -785,21 +785,21 @@ static void dungeonBuildRoomCrossShaped(int y, int x) {
 }
 
 // Constructs a tunnel between two points
-static void build_tunnel(int row1, int col1, int row2, int col2) {
-    Coord_t tunstk[1000], wallstk[1000];
+static void dungeonBuildTunnel(int y_start, int x_start, int y_end, int x_end) {
+    Coord_t tunnels_tk[1000], walls_tk[1000];
 
     // Main procedure for Tunnel
     // Note: 9 is a temporary value
     bool door_flag = false;
     bool stop_flag = false;
     int main_loop_count = 0;
-    int start_row = row1;
-    int start_col = col1;
-    int tunindex = 0;
-    int wallindex = 0;
+    int start_row = y_start;
+    int start_col = x_start;
+    int tunnel_index = 0;
+    int wall_index = 0;
 
     int row_dir, col_dir;
-    pickCorrectDirection(&row_dir, &col_dir, row1, col1, row2, col2);
+    pickCorrectDirection(&row_dir, &col_dir, y_start, x_start, y_end, x_end);
 
     do {
         // prevent infinite loops, just in case
@@ -812,31 +812,31 @@ static void build_tunnel(int row1, int col1, int row2, int col2) {
             if (randomNumber(DUN_TUN_RND) == 1) {
                 chanceOfRandomDirection(&row_dir, &col_dir);
             } else {
-                pickCorrectDirection(&row_dir, &col_dir, row1, col1, row2, col2);
+                pickCorrectDirection(&row_dir, &col_dir, y_start, x_start, y_end, x_end);
             }
         }
 
-        int tmp_row = row1 + row_dir;
-        int tmp_col = col1 + col_dir;
+        int tmp_row = y_start + row_dir;
+        int tmp_col = x_start + col_dir;
 
         while (!coordInBounds(tmp_row, tmp_col)) {
             if (randomNumber(DUN_TUN_RND) == 1) {
                 chanceOfRandomDirection(&row_dir, &col_dir);
             } else {
-                pickCorrectDirection(&row_dir, &col_dir, row1, col1, row2, col2);
+                pickCorrectDirection(&row_dir, &col_dir, y_start, x_start, y_end, x_end);
             }
-            tmp_row = row1 + row_dir;
-            tmp_col = col1 + col_dir;
+            tmp_row = y_start + row_dir;
+            tmp_col = x_start + col_dir;
         }
 
         switch (cave[tmp_row][tmp_col].fval) {
             case NULL_WALL:
-                row1 = tmp_row;
-                col1 = tmp_col;
-                if (tunindex < 1000) {
-                    tunstk[tunindex].y = row1;
-                    tunstk[tunindex].x = col1;
-                    tunindex++;
+                y_start = tmp_row;
+                x_start = tmp_col;
+                if (tunnel_index < 1000) {
+                    tunnels_tk[tunnel_index].y = y_start;
+                    tunnels_tk[tunnel_index].x = x_start;
+                    tunnel_index++;
                 }
                 door_flag = false;
                 break;
@@ -844,20 +844,20 @@ static void build_tunnel(int row1, int col1, int row2, int col2) {
                 // do nothing
                 break;
             case GRANITE_WALL:
-                row1 = tmp_row;
-                col1 = tmp_col;
+                y_start = tmp_row;
+                x_start = tmp_col;
 
-                if (wallindex < 1000) {
-                    wallstk[wallindex].y = row1;
-                    wallstk[wallindex].x = col1;
-                    wallindex++;
+                if (wall_index < 1000) {
+                    walls_tk[wall_index].y = y_start;
+                    walls_tk[wall_index].x = x_start;
+                    wall_index++;
                 }
 
-                for (int y = row1 - 1; y <= row1 + 1; y++) {
-                    for (int x = col1 - 1; x <= col1 + 1; x++) {
+                for (int y = y_start - 1; y <= y_start + 1; y++) {
+                    for (int x = x_start - 1; x <= x_start + 1; x++) {
                         if (coordInBounds(y, x)) {
                             // values 11 and 12 are impossible here, dungeonPlaceStreamerRock
-                            // is never run before build_tunnel
+                            // is never run before dungeonBuildTunnel
                             if (cave[y][x].fval == GRANITE_WALL) {
                                 cave[y][x].fval = TMP2_WALL;
                             }
@@ -867,13 +867,13 @@ static void build_tunnel(int row1, int col1, int row2, int col2) {
                 break;
             case CORR_FLOOR:
             case BLOCKED_FLOOR:
-                row1 = tmp_row;
-                col1 = tmp_col;
+                y_start = tmp_row;
+                x_start = tmp_col;
 
                 if (!door_flag) {
                     if (door_index < 100) {
-                        doors_tk[door_index].y = row1;
-                        doors_tk[door_index].x = col1;
+                        doors_tk[door_index].y = y_start;
+                        doors_tk[door_index].x = x_start;
                         door_index++;
                     }
                     door_flag = true;
@@ -882,12 +882,12 @@ static void build_tunnel(int row1, int col1, int row2, int col2) {
                 if (randomNumber(100) > DUN_TUN_CON) {
                     // make sure that tunnel has gone a reasonable distance
                     // before stopping it, this helps prevent isolated rooms
-                    tmp_row = row1 - start_row;
+                    tmp_row = y_start - start_row;
                     if (tmp_row < 0) {
                         tmp_row = -tmp_row;
                     }
 
-                    tmp_col = col1 - start_col;
+                    tmp_col = x_start - start_col;
                     if (tmp_col < 0) {
                         tmp_col = -tmp_col;
                     }
@@ -899,24 +899,24 @@ static void build_tunnel(int row1, int col1, int row2, int col2) {
                 break;
             default:
                 // none of: NULL, TMP2, GRANITE, CORR
-                row1 = tmp_row;
-                col1 = tmp_col;
+                y_start = tmp_row;
+                x_start = tmp_col;
         }
-    } while ((row1 != row2 || col1 != col2) && !stop_flag);
+    } while ((y_start != y_end || x_start != x_end) && !stop_flag);
 
-    for (int i = 0; i < tunindex; i++) {
-        cave[tunstk[i].y][tunstk[i].x].fval = CORR_FLOOR;
+    for (int i = 0; i < tunnel_index; i++) {
+        cave[tunnels_tk[i].y][tunnels_tk[i].x].fval = CORR_FLOOR;
     }
 
-    for (int i = 0; i < wallindex; i++) {
-        Cave_t *c_ptr = &cave[wallstk[i].y][wallstk[i].x];
+    for (int i = 0; i < wall_index; i++) {
+        Cave_t *tile = &cave[walls_tk[i].y][walls_tk[i].x];
 
-        if (c_ptr->fval == TMP2_WALL) {
+        if (tile->fval == TMP2_WALL) {
             if (randomNumber(100) < DUN_TUN_PEN) {
-                dungeonPlaceDoor(wallstk[i].y, wallstk[i].x);
+                dungeonPlaceDoor(walls_tk[i].y, walls_tk[i].x);
             } else {
                 // these have to be doorways to rooms
-                c_ptr->fval = CORR_FLOOR;
+                tile->fval = CORR_FLOOR;
             }
         }
     }
@@ -1013,7 +1013,7 @@ static void cave_gen() {
 
     door_index = 0;
 
-    // move zero entry to locationID, so that can call build_tunnel all locationID times
+    // move zero entry to locationID, so that can call dungeonBuildTunnel all locationID times
     yloc[locationID] = yloc[0];
     xloc[locationID] = xloc[0];
 
@@ -1022,7 +1022,7 @@ static void cave_gen() {
         int x1 = xloc[i];
         int y2 = yloc[i + 1];
         int x2 = xloc[i + 1];
-        build_tunnel(y2, x2, y1, x1);
+        dungeonBuildTunnel(y2, x2, y1, x1);
     }
 
     // Generate walls and streamers
