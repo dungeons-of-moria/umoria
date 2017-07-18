@@ -11,7 +11,7 @@
 #include "version.h"
 
 static void initializeCharacterInventory();
-static void init_m_level();
+static void initializeMonsterLevels();
 static void init_t_level();
 static void check_file_permissions();
 
@@ -106,7 +106,7 @@ int main(int argc, char *argv[]) {
     seedsInitialize(seed);
 
     // Init monster and treasure levels for allocate
-    init_m_level();
+    initializeMonsterLevels();
     init_t_level();
 
     // Init the store inventories
@@ -255,7 +255,7 @@ static void initializeCharacterInventory() {
 }
 
 // Initializes M_LEVEL array for use with PLACE_MONSTER -RAK-
-static void init_m_level() {
+static void initializeMonsterLevels() {
     for (int i = 0; i <= MAX_MONS_LEVEL; i++) {
         monster_levels[i] = 0;
     }
