@@ -291,17 +291,19 @@ static void characterSetGender() {
 }
 
 // Computes character's age, height, and weight -JWT-
-static void get_ahw() {
-    int i = py.misc.prace;
-    py.misc.age = (uint16_t) (character_races[i].b_age + randomNumber((int) character_races[i].m_age));
+static void characterSetAgeHeightWeight() {
+    int race_id = py.misc.prace;
+    py.misc.age = (uint16_t) (character_races[race_id].b_age + randomNumber((int) character_races[race_id].m_age));
+
     if (py.misc.male) {
-        py.misc.ht = (uint16_t) randomNumberNormalDistribution((int) character_races[i].m_b_ht, (int) character_races[i].m_m_ht);
-        py.misc.wt = (uint16_t) randomNumberNormalDistribution((int) character_races[i].m_b_wt, (int) character_races[i].m_m_wt);
+        py.misc.ht = (uint16_t) randomNumberNormalDistribution((int) character_races[race_id].m_b_ht, (int) character_races[race_id].m_m_ht);
+        py.misc.wt = (uint16_t) randomNumberNormalDistribution((int) character_races[race_id].m_b_wt, (int) character_races[race_id].m_m_wt);
     } else {
-        py.misc.ht = (uint16_t) randomNumberNormalDistribution((int) character_races[i].f_b_ht, (int) character_races[i].f_m_ht);
-        py.misc.wt = (uint16_t) randomNumberNormalDistribution((int) character_races[i].f_b_wt, (int) character_races[i].f_m_wt);
+        py.misc.ht = (uint16_t) randomNumberNormalDistribution((int) character_races[race_id].f_b_ht, (int) character_races[race_id].f_m_ht);
+        py.misc.wt = (uint16_t) randomNumberNormalDistribution((int) character_races[race_id].f_b_wt, (int) character_races[race_id].f_m_wt);
     }
-    py.misc.disarm = (int16_t) (character_races[i].b_dis + playerDisarmAdjustment());
+
+    py.misc.disarm = (int16_t) (character_races[race_id].b_dis + playerDisarmAdjustment());
 }
 
 // Prints the classes for a given race: Rogue, Mage, Priest, etc.,
@@ -461,7 +463,7 @@ void createCharacter() {
     // here we start a loop giving a player a choice of characters -RGM-
     characterGenerateStatsAndRace();
     characterGetHistory();
-    get_ahw();
+    characterSetAgeHeightWeight();
     displayCharacterHistory();
     printCharacterVitalStatistics();
     printCharacterStats();
@@ -478,7 +480,7 @@ void createCharacter() {
         } else if (c == ' ') {
             characterGenerateStatsAndRace();
             characterGetHistory();
-            get_ahw();
+            characterSetAgeHeightWeight();
             displayCharacterHistory();
             printCharacterVitalStatistics();
             printCharacterStats();
