@@ -102,7 +102,7 @@ bool duplicate_character() {
 }
 
 // Prints the gravestone of the character -RAK-
-static void print_tomb() {
+static void printTomb() {
     char *p;
     vtype_t str, tmp_str;
 
@@ -440,7 +440,7 @@ void exitGame() {
         if (total_winner) {
             kingly();
         }
-        print_tomb();
+        printTomb();
     }
 
     if (character_generated && !character_saved) {
