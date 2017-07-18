@@ -656,13 +656,13 @@ static void dungeonPlaceLargeMiddlePillar(int y, int x) {
 
 // Builds a room at a row, column coordinate -RAK-
 // Type 3 unusual rooms are cross shaped
-static void build_type3(int y, int x) {
+static void dungeonBuildRoomCrossShaped(int y, int x) {
     uint8_t floor = dungeonFloorTileForLevel();
 
-    int randomOffset = 2 + randomNumber(2);
+    int random_offset = 2 + randomNumber(2);
 
-    int height = y - randomOffset;
-    int depth = y + randomOffset;
+    int height = y - random_offset;
+    int depth = y + random_offset;
     int left = x - 1;
     int right = x + 1;
 
@@ -689,12 +689,12 @@ static void build_type3(int y, int x) {
         cave[depth + 1][i].lr = true;
     }
 
-    randomOffset = 2 + randomNumber(9);
+    random_offset = 2 + randomNumber(9);
 
     height = y - 1;
     depth = y + 1;
-    left = x - randomOffset;
-    right = x + randomOffset;
+    left = x - random_offset;
+    right = x + random_offset;
 
     for (int i = height; i <= depth; i++) {
         for (int j = left; j <= right; j++) {
@@ -736,11 +736,11 @@ static void build_type3(int y, int x) {
             dungeonPlaceVault(y, x);
 
             // Place a secret door
-            randomOffset = randomNumber(4);
-            if (randomOffset < 3) {
-                dungeonPlaceSecretDoor(y - 3 + (randomOffset << 1), x);
+            random_offset = randomNumber(4);
+            if (random_offset < 3) {
+                dungeonPlaceSecretDoor(y - 3 + (random_offset << 1), x);
             } else {
-                dungeonPlaceSecretDoor(y, x - 7 + (randomOffset << 1));
+                dungeonPlaceSecretDoor(y, x - 7 + (random_offset << 1));
             }
 
             // Place a treasure in the vault
@@ -990,7 +990,7 @@ static void cave_gen() {
                     } else if (buildType == 2) {
                         dungeonBuildRoomWithInnerRooms(yloc[locationID], xloc[locationID]);
                     } else {
-                        build_type3(yloc[locationID], xloc[locationID]);
+                        dungeonBuildRoomCrossShaped(yloc[locationID], xloc[locationID]);
                     }
                 } else {
                     dungeonBuildRoom(yloc[locationID], xloc[locationID]);
