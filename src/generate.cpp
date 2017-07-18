@@ -243,7 +243,7 @@ static void dungeonPlaceUpStairs(int y, int x) {
 }
 
 // Place a down staircase at given y, x -RAK-
-static void place_down_stairs(int y, int x) {
+static void dungeonPlaceDownStairs(int y, int x) {
     if (cave[y][x].tptr != 0) {
         (void) dungeonDeleteObject(y, x);
     }
@@ -278,7 +278,7 @@ static void place_stairs(int stairType, int num, int walls) {
                             if (stairType == 1) {
                                 dungeonPlaceUpStairs(y1, x1);
                             } else {
-                                place_down_stairs(y1, x1);
+                                dungeonPlaceDownStairs(y1, x1);
                             }
                         }
                         x1++;
