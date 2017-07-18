@@ -517,7 +517,7 @@ static void dungeonPlaceFourSmallRooms(int y, int x, int depth, int height, int 
 //   3 - An inner room with pillar(s)
 //   4 - Inner room has a maze
 //   5 - A set of four inner rooms
-static void build_type2(int y, int x) {
+static void dungeonBuildRoomWithInnerRooms(int y, int x) {
     uint8_t floor = dungeonFloorTileForLevel();
 
     int height = y - 4;
@@ -988,7 +988,7 @@ static void cave_gen() {
                     if (buildType == 1) {
                         dungeonBuildRoomOverlappingRectangles(yloc[locationID], xloc[locationID]);
                     } else if (buildType == 2) {
-                        build_type2(yloc[locationID], xloc[locationID]);
+                        dungeonBuildRoomWithInnerRooms(yloc[locationID], xloc[locationID]);
                     } else {
                         build_type3(yloc[locationID], xloc[locationID]);
                     }
