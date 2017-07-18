@@ -14,8 +14,8 @@ static void doCommand(char command);
 static bool validCountCommand(char command);
 static void playerRegenerateHitPoints(int percent);
 static void playerRegenerateMana(int percent);
-static bool enchanted(Inventory_t *t_ptr);
-static void examine_book();
+static bool itemEnchanted(Inventory_t *item);
+static void examineBook();
 static void go_up();
 static void go_down();
 static void jamdoor();
@@ -714,7 +714,7 @@ static void playerDetectEnchantment() {
         // if in equipment list, success 1 out of 10 times
         int chance = (i < 22 ? 50 : 10);
 
-        if (i_ptr->tval != TV_NOTHING && enchanted(i_ptr) && randomNumber(chance) == 1) {
+        if (i_ptr->tval != TV_NOTHING && itemEnchanted(i_ptr) && randomNumber(chance) == 1) {
             // extern const char *describe_use(int); // FIXME: Why here? We have it in externs.
 
             vtype_t tmp_str;
@@ -1757,7 +1757,7 @@ static void doCommand(char command) {
             player_free_turn = true;
             break;
         case 'P': // (P)eruse a book  (B)rowse in a book
-            examine_book();
+            examineBook();
             player_free_turn = true;
             break;
         case 'c': // (c)lose an object
@@ -1990,27 +1990,27 @@ static void playerRegenerateMana(int percent) {
 
 // Is an item an enchanted weapon or armor and we don't know? -CJS-
 // only returns true if it is a good enchantment
-static bool enchanted(Inventory_t *t_ptr) {
-    if (t_ptr->tval < TV_MIN_ENCHANT || t_ptr->tval > TV_MAX_ENCHANT || (t_ptr->flags & TR_CURSED)) {
+static bool itemEnchanted(Inventory_t *item) {
+    if (item->tval < TV_MIN_ENCHANT || item->tval > TV_MAX_ENCHANT || (item->flags & TR_CURSED)) {
         return false;
-    } else if (spellItemIdentified(t_ptr)) {
+    } else if (spellItemIdentified(item)) {
         return false;
-    } else if (t_ptr->ident & ID_MAGIK) {
+    } else if (item->ident & ID_MAGIK) {
         return false;
-    } else if (t_ptr->tohit > 0 || t_ptr->todam > 0 || t_ptr->toac > 0) {
+    } else if (item->tohit > 0 || item->todam > 0 || item->toac > 0) {
         return true;
-    } else if ((0x4000107fL & t_ptr->flags) && t_ptr->p1 > 0) {
+    } else if ((0x4000107fL & item->flags) && item->p1 > 0) {
         return true;
-    } else if (0x07ffe980L & t_ptr->flags) {
+    } else if (0x07ffe980L & item->flags) {
         return true;
     }
     return false;
 }
 
 // Examine a Book -RAK-
-static void examine_book() {
-    int i, k;
-    if (!inventoryFindRange(TV_MAGIC_BOOK, TV_PRAYER_BOOK, &i, &k)) {
+static void examineBook() {
+    int item_pos_start, item_pos_end;
+    if (!inventoryFindRange(TV_MAGIC_BOOK, TV_PRAYER_BOOK, &item_pos_start, &item_pos_end)) {
         printMessage("You are not carrying any books.");
         return;
     }
@@ -2030,43 +2030,44 @@ static void examine_book() {
         return;
     }
 
-    int item_val;
-    if (inventoryGetInputForItemId(&item_val, "Which Book?", i, k, CNIL, CNIL)) {
+    int item_id;
+    if (inventoryGetInputForItemId(&item_id, "Which Book?", item_pos_start, item_pos_end, CNIL, CNIL)) {
         int spell_index[31];
-        bool canRead = true;
+        bool can_read = true;
 
-        uint8_t treasureType = inventory[item_val].tval;
+        uint8_t treasure_type = inventory[item_id].tval;
+
         if (classes[py.misc.pclass].spell == MAGE) {
-            if (treasureType != TV_MAGIC_BOOK) {
-                canRead = false;
+            if (treasure_type != TV_MAGIC_BOOK) {
+                can_read = false;
             }
         } else if (classes[py.misc.pclass].spell == PRIEST) {
-            if (treasureType != TV_PRAYER_BOOK) {
-                canRead = false;
+            if (treasure_type != TV_PRAYER_BOOK) {
+                can_read = false;
             }
         } else {
-            canRead = false;
+            can_read = false;
         }
 
-        if (!canRead) {
+        if (!can_read) {
             printMessage("You do not understand the language.");
             return;
         }
 
-        uint32_t itemFlags = inventory[item_val].flags;
+        uint32_t item_flags = inventory[item_id].flags;
 
-        int spellID = 0;
-        while (itemFlags) {
-            k = getAndClearFirstBit(&itemFlags);
+        int spell_id = 0;
+        while (item_flags) {
+            item_pos_end = getAndClearFirstBit(&item_flags);
 
-            if (magic_spells[py.misc.pclass - 1][k].slevel < 99) {
-                spell_index[spellID] = k;
-                spellID++;
+            if (magic_spells[py.misc.pclass - 1][item_pos_end].slevel < 99) {
+                spell_index[spell_id] = item_pos_end;
+                spell_id++;
             }
         }
 
         terminalSaveScreen();
-        displaySpellsList(spell_index, spellID, true, -1);
+        displaySpellsList(spell_index, spell_id, true, -1);
         waitForContinueKey(0);
         terminalRestoreScreen();
     }
