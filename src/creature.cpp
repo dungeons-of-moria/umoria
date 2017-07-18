@@ -1104,7 +1104,7 @@ static bool monsterCanCastSpells(Monster_t *monster, uint32_t spells) {
     return los(char_row, char_col, (int) monster->fy, (int) monster->fx);
 }
 
-void monsterCastSpell(Monster_t *monster, int monster_id, int spell_id, uint8_t level, vtype_t monster_name, vtype_t death_description) {
+void monsterExecuteCastingOfSpell(Monster_t *monster, int monster_id, int spell_id, uint8_t level, vtype_t monster_name, vtype_t death_description) {
     int y, x;
 
     // Cast the spell.
@@ -1317,7 +1317,7 @@ static bool mon_cast_spell(int monsterID) {
         printMessage(cdesc);
     }
 
-    monsterCastSpell(m_ptr, monsterID, thrown_spell, r_ptr->level, cdesc, deathDescription);
+    monsterExecuteCastingOfSpell(m_ptr, monsterID, thrown_spell, r_ptr->level, cdesc, deathDescription);
 
     if (m_ptr->ml) {
         creature_recall[m_ptr->mptr].r_spells |= 1L << (thrown_spell - 1);
