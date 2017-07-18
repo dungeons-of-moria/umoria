@@ -18,7 +18,7 @@ static bool curses_on = false;
 static WINDOW *save_screen;
 
 static void moriaTerminalInitialize();
-static void sleep_in_seconds(int seconds);
+static void sleepInSeconds(int seconds);
 
 // initializes the terminal / curses routines
 void terminalInitialize() {
@@ -430,7 +430,7 @@ void waitAndConfirmCharacterCreation(int line_number, int delay) {
         eraseLine(line_number, 0);
 
         if (delay > 0) {
-            sleep_in_seconds(delay);
+            sleepInSeconds(delay);
         }
 
         exitGame();
@@ -564,7 +564,7 @@ void displayDungeonMap() {
     terminalRestoreScreen();
 }
 
-static void sleep_in_seconds(int seconds) {
+static void sleepInSeconds(int seconds) {
 #ifdef _WIN32
     Sleep(seconds * 1000);
 #else
