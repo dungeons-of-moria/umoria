@@ -386,8 +386,8 @@ static bool playerTestAttackHits(int attack_id, uint8_t level) {
     return success;
 }
 
-static void monsterPrintAttackDescription(char *msg, int attackID) {
-    switch (attackID) {
+static void monsterPrintAttackDescription(char *msg, int attack_id) {
+    switch (attack_id) {
         case 1:
             printMessage(strcat(msg, "hits you."));
             break;
@@ -487,58 +487,58 @@ static void monsterPrintAttackDescription(char *msg, int attackID) {
 
 static bool executeDisenchantAttack() {
     bool success = false;
-    int itemID;
+    int item_id;
 
     switch (randomNumber(7)) {
         case 1:
-            itemID = INVEN_WIELD;
+            item_id = INVEN_WIELD;
             break;
         case 2:
-            itemID = INVEN_BODY;
+            item_id = INVEN_BODY;
             break;
         case 3:
-            itemID = INVEN_ARM;
+            item_id = INVEN_ARM;
             break;
         case 4:
-            itemID = INVEN_OUTER;
+            item_id = INVEN_OUTER;
             break;
         case 5:
-            itemID = INVEN_HANDS;
+            item_id = INVEN_HANDS;
             break;
         case 6:
-            itemID = INVEN_HEAD;
+            item_id = INVEN_HEAD;
             break;
         case 7:
-            itemID = INVEN_FEET;
+            item_id = INVEN_FEET;
             break;
     }
 
-    Inventory_t *i_ptr = &inventory[itemID];
+    Inventory_t *item = &inventory[item_id];
 
-    if (i_ptr->tohit > 0) {
-        i_ptr->tohit -= randomNumber(2);
+    if (item->tohit > 0) {
+        item->tohit -= randomNumber(2);
 
         // don't send it below zero
-        if (i_ptr->tohit < 0) {
-            i_ptr->tohit = 0;
+        if (item->tohit < 0) {
+            item->tohit = 0;
         }
         success = true;
     }
-    if (i_ptr->todam > 0) {
-        i_ptr->todam -= randomNumber(2);
+    if (item->todam > 0) {
+        item->todam -= randomNumber(2);
 
         // don't send it below zero
-        if (i_ptr->todam < 0) {
-            i_ptr->todam = 0;
+        if (item->todam < 0) {
+            item->todam = 0;
         }
         success = true;
     }
-    if (i_ptr->toac > 0) {
-        i_ptr->toac -= randomNumber(2);
+    if (item->toac > 0) {
+        item->toac -= randomNumber(2);
 
         // don't send it below zero
-        if (i_ptr->toac < 0) {
-            i_ptr->toac = 0;
+        if (item->toac < 0) {
+            item->toac = 0;
         }
         success = true;
     }
@@ -546,99 +546,99 @@ static bool executeDisenchantAttack() {
     return success;
 }
 
-static bool executeAttack(Creature_t *r_ptr, Monster_t *m_ptr, int monsterID, int attype, int damage, vtype_t deathDescription, bool notice) {
-    int i;
-    int j;
+static bool executeAttackOnPlayer(Creature_t *creature, Monster_t *monster, int monster_id, int attack_type, int damage, vtype_t death_description, bool noticed) {
+    int item_pos_start;
+    int item_pos_end;
     int32_t gold;
-    Inventory_t *i_ptr;
+    Inventory_t *item;
 
-    switch (attype) {
+    switch (attack_type) {
         case 1: // Normal attack
             // round half-way case down
             damage -= ((py.misc.pac + py.misc.ptoac) * damage) / 200;
-            playerTakesHit(damage, deathDescription);
+            playerTakesHit(damage, death_description);
             break;
         case 2: // Lose Strength
-            playerTakesHit(damage, deathDescription);
+            playerTakesHit(damage, death_description);
             if (py.flags.sustain_str) {
                 printMessage("You feel weaker for a moment, but it passes.");
             } else if (randomNumber(2) == 1) {
                 printMessage("You feel weaker.");
                 (void) playerStatRandomDecrease(A_STR);
             } else {
-                notice = false;
+                noticed = false;
             }
             break;
         case 3: // Confusion attack
-            playerTakesHit(damage, deathDescription);
+            playerTakesHit(damage, death_description);
             if (randomNumber(2) == 1) {
                 if (py.flags.confused < 1) {
                     printMessage("You feel confused.");
-                    py.flags.confused += randomNumber((int) r_ptr->level);
+                    py.flags.confused += randomNumber((int) creature->level);
                 } else {
-                    notice = false;
+                    noticed = false;
                 }
                 py.flags.confused += 3;
             } else {
-                notice = false;
+                noticed = false;
             }
             break;
         case 4: // Fear attack
-            playerTakesHit(damage, deathDescription);
+            playerTakesHit(damage, death_description);
             if (playerSavingThrow()) {
                 printMessage("You resist the effects!");
             } else if (py.flags.afraid < 1) {
                 printMessage("You are suddenly afraid!");
-                py.flags.afraid += 3 + randomNumber((int) r_ptr->level);
+                py.flags.afraid += 3 + randomNumber((int) creature->level);
             } else {
                 py.flags.afraid += 3;
-                notice = false;
+                noticed = false;
             }
             break;
         case 5: // Fire attack
             printMessage("You are enveloped in flames!");
-            damageFire(damage, deathDescription);
+            damageFire(damage, death_description);
             break;
         case 6: // Acid attack
             printMessage("You are covered in acid!");
-            damageAcid(damage, deathDescription);
+            damageAcid(damage, death_description);
             break;
         case 7: // Cold attack
             printMessage("You are covered with frost!");
-            damageCold(damage, deathDescription);
+            damageCold(damage, death_description);
             break;
         case 8: // Lightning attack
             printMessage("Lightning strikes you!");
-            damageLightningBolt(damage, deathDescription);
+            damageLightningBolt(damage, death_description);
             break;
         case 9: // Corrosion attack
             printMessage("A stinging red gas swirls about you.");
-            damageCorrodingGas(deathDescription);
-            playerTakesHit(damage, deathDescription);
+            damageCorrodingGas(death_description);
+            playerTakesHit(damage, death_description);
             break;
         case 10: // Blindness attack
-            playerTakesHit(damage, deathDescription);
+            playerTakesHit(damage, death_description);
             if (py.flags.blind < 1) {
-                py.flags.blind += 10 + randomNumber((int) r_ptr->level);
+                py.flags.blind += 10 + randomNumber((int) creature->level);
                 printMessage("Your eyes begin to sting.");
             } else {
                 py.flags.blind += 5;
-                notice = false;
+                noticed = false;
             }
             break;
         case 11: // Paralysis attack
-            playerTakesHit(damage, deathDescription);
+            playerTakesHit(damage, death_description);
             if (playerSavingThrow()) {
                 printMessage("You resist the effects!");
             } else if (py.flags.paralysis < 1) {
                 if (py.flags.free_act) {
                     printMessage("You are unaffected.");
                 } else {
-                    py.flags.paralysis = (int16_t) (randomNumber((int) r_ptr->level) + 3);
+                    py.flags.paralysis = (int16_t) (randomNumber((int) creature->level) + 3);
                     printMessage("You are paralyzed.");
                 }
             } else {
-                notice = false;
+                noticed = false;
             }
             break;
         case 12: // Steal Money
@@ -656,7 +656,7 @@ static bool executeAttack(Creature_t *r_ptr, Monster_t *m_ptr, int monsterID, in
             }
             if (randomNumber(2) == 1) {
                 printMessage("There is a puff of smoke!");
-                spellTeleportAwayMonster(monsterID, MAX_SIGHT);
+                spellTeleportAwayMonster(monster_id, MAX_SIGHT);
             }
             break;
         case 13: // Steal Object
@@ -668,16 +668,16 @@ static bool executeAttack(Creature_t *r_ptr, Monster_t *m_ptr, int monsterID, in
             }
             if (randomNumber(2) == 1) {
                 printMessage("There is a puff of smoke!");
-                spellTeleportAwayMonster(monsterID, MAX_SIGHT);
+                spellTeleportAwayMonster(monster_id, MAX_SIGHT);
             }
             break;
         case 14: // Poison
-            playerTakesHit(damage, deathDescription);
+            playerTakesHit(damage, death_description);
             printMessage("You feel very sick.");
-            py.flags.poisoned += randomNumber((int) r_ptr->level) + 5;
+            py.flags.poisoned += randomNumber((int) creature->level) + 5;
             break;
         case 15: // Lose dexterity
-            playerTakesHit(damage, deathDescription);
+            playerTakesHit(damage, death_description);
             if (py.flags.sustain_dex) {
                 printMessage("You feel clumsy for a moment, but it passes.");
             } else {
@@ -686,7 +686,7 @@ static bool executeAttack(Creature_t *r_ptr, Monster_t *m_ptr, int monsterID, in
             }
             break;
         case 16: // Lose constitution
-            playerTakesHit(damage, deathDescription);
+            playerTakesHit(damage, death_description);
             if (py.flags.sustain_con) {
                 printMessage("Your body resists the effects of the disease.");
             } else {
@@ -695,7 +695,7 @@ static bool executeAttack(Creature_t *r_ptr, Monster_t *m_ptr, int monsterID, in
             }
             break;
         case 17: // Lose intelligence
-            playerTakesHit(damage, deathDescription);
+            playerTakesHit(damage, death_description);
             printMessage("You have trouble thinking clearly.");
             if (py.flags.sustain_int) {
                 printMessage("But your mind quickly clears.");
@@ -704,7 +704,7 @@ static bool executeAttack(Creature_t *r_ptr, Monster_t *m_ptr, int monsterID, in
             }
             break;
         case 18: // Lose wisdom
-            playerTakesHit(damage, deathDescription);
+            playerTakesHit(damage, death_description);
             if (py.flags.sustain_wis) {
                 printMessage("Your wisdom is sustained.");
             } else {
@@ -724,55 +724,55 @@ static bool executeAttack(Creature_t *r_ptr, Monster_t *m_ptr, int monsterID, in
                 printMessage("There is a static feeling in the air.");
                 playerRecalculateBonuses();
             } else {
-                notice = false;
+                noticed = false;
             }
             break;
         case 22: // Eat food
-            if (inventoryFindRange(TV_FOOD, TV_NEVER, &i, &j)) {
-                inventoryDestroyItem(i);
+            if (inventoryFindRange(TV_FOOD, TV_NEVER, &item_pos_start, &item_pos_end)) {
+                inventoryDestroyItem(item_pos_start);
                 printMessage("It got at your rations!");
             } else {
-                notice = false;
+                noticed = false;
             }
             break;
         case 23: // Eat light
-            i_ptr = &inventory[INVEN_LIGHT];
-            if (i_ptr->p1 > 0) {
-                i_ptr->p1 -= (250 + randomNumber(250));
-                if (i_ptr->p1 < 1) {
-                    i_ptr->p1 = 1;
+            item = &inventory[INVEN_LIGHT];
+            if (item->p1 > 0) {
+                item->p1 -= (250 + randomNumber(250));
+                if (item->p1 < 1) {
+                    item->p1 = 1;
                 }
                 if (py.flags.blind < 1) {
                     printMessage("Your light dims.");
                 } else {
-                    notice = false;
+                    noticed = false;
                 }
             } else {
-                notice = false;
+                noticed = false;
             }
             break;
         case 24: // Eat charges
-            i_ptr = &inventory[randomNumber(inventory_count) - 1];
-            if ((i_ptr->tval == TV_STAFF || i_ptr->tval == TV_WAND) && i_ptr->p1 > 0) {
-                m_ptr->hp += r_ptr->level * i_ptr->p1;
-                i_ptr->p1 = 0;
-                if (!spellItemIdentified(i_ptr)) {
-                    itemAppendToInscription(i_ptr, ID_EMPTY);
+            item = &inventory[randomNumber(inventory_count) - 1];
+            if ((item->tval == TV_STAFF || item->tval == TV_WAND) && item->p1 > 0) {
+                monster->hp += creature->level * item->p1;
+                item->p1 = 0;
+                if (!spellItemIdentified(item)) {
+                    itemAppendToInscription(item, ID_EMPTY);
                 }
                 printMessage("Energy drains from your pack!");
             } else {
-                notice = false;
+                noticed = false;
             }
             break;
         case 99:
-            notice = false;
+            noticed = false;
             break;
         default:
-            notice = false;
+            noticed = false;
             break;
     }
 
-    return notice;
+    return noticed;
 }
 
 static void confuseCreatureOnAttack(Creature_t *r_ptr, Monster_t *m_ptr, int adesc, vtype_t cdesc, bool visible) {
@@ -861,7 +861,7 @@ static void make_attack(int monsterID) {
             }
 
             int dam = diceDamageRoll(adice, asides);
-            notice = executeAttack(r_ptr, m_ptr, monsterID, attype, dam, deathDescription, notice);
+            notice = executeAttackOnPlayer(r_ptr, m_ptr, monsterID, attype, dam, deathDescription, notice);
 
             // Moved here from mon_move, so that monster only confused if it
             // actually hits. A monster that has been repelled has not hit
