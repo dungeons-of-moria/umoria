@@ -254,11 +254,11 @@ static void dungeonPlaceDownStairs(int y, int x) {
 }
 
 // Places a staircase 1=up, 2=down -RAK-
-static void place_stairs(int stairType, int num, int walls) {
-    for (int i = 0; i < num; i++) {
-        bool flag = false;
+static void dungeonPlaceStairs(int stair_type, int number, int walls) {
+    for (int i = 0; i < number; i++) {
+        bool placed = false;
 
-        while (!flag) {
+        while (!placed) {
             int j = 0;
 
             do {
@@ -274,22 +274,22 @@ static void place_stairs(int stairType, int num, int walls) {
                 do {
                     do {
                         if (cave[y1][x1].fval <= MAX_OPEN_SPACE && cave[y1][x1].tptr == 0 && coordWallsNextTo(y1, x1) >= walls) {
-                            flag = true;
-                            if (stairType == 1) {
+                            placed = true;
+                            if (stair_type == 1) {
                                 dungeonPlaceUpStairs(y1, x1);
                             } else {
                                 dungeonPlaceDownStairs(y1, x1);
                             }
                         }
                         x1++;
-                    } while ((x1 != x2) && (!flag));
+                    } while ((x1 != x2) && (!placed));
 
                     x1 = x2 - 12;
                     y1++;
-                } while ((y1 != y2) && (!flag));
+                } while ((y1 != y2) && (!placed));
 
                 j++;
-            } while ((!flag) && (j <= 30));
+            } while ((!placed) && (j <= 30));
 
             walls--;
         }
@@ -1051,8 +1051,8 @@ static void cave_gen() {
         alloc_level = 10;
     }
 
-    place_stairs(2, randomNumber(2) + 2, 3);
-    place_stairs(1, randomNumber(2), 3);
+    dungeonPlaceStairs(2, randomNumber(2) + 2, 3);
+    dungeonPlaceStairs(1, randomNumber(2), 3);
 
     // Set up the character coords, used by monsterPlaceNewWithinDistance, monsterPlaceWinning
     new_spot(&char_row, &char_col);
@@ -1187,7 +1187,7 @@ static void town_gen() {
 
     // make stairs before seedResetToOldSeed, so that they don't move around
     dungeonPlaceBoundaryWalls();
-    place_stairs(2, 1, 0);
+    dungeonPlaceStairs(2, 1, 0);
 
     seedResetToOldSeed();
 
