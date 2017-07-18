@@ -425,7 +425,7 @@ static void dungeonPlaceRandomSecretDoor(int y, int x, int depth, int height, in
     }
 }
 
-static void placeVault(int y, int x) {
+static void dungeonPlaceVault(int y, int x) {
     for (int i = y - 1; i <= y + 1; i++) {
         cave[i][x - 1].fval = TMP1_WALL;
         cave[i][x + 1].fval = TMP1_WALL;
@@ -438,7 +438,7 @@ static void placeVault(int y, int x) {
 static void placeTreasureVault(int y, int x, int depth, int height, int left, int right) {
     dungeonPlaceRandomSecretDoor(y, x, depth, height, left, right);
 
-    placeVault(y, x);
+    dungeonPlaceVault(y, x);
 
     // Place a locked door
     int offset = randomNumber(4);
@@ -734,7 +734,7 @@ static void build_type3(int y, int x) {
             placeLargeMiddlePillar(y, x);
             break;
         case 2: // Inner treasure vault
-            placeVault(y, x);
+            dungeonPlaceVault(y, x);
 
             // Place a secret door
             randomOffset = randomNumber(4);
