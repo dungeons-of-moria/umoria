@@ -803,86 +803,88 @@ static void monsterConfuseOnAttack(Creature_t *creature, Monster_t *monster, int
 }
 
 // Make an attack on the player (chuckle.) -RAK-
-static void make_attack(int monsterID) {
+static void monsterAttackPlayer(int monster_id) {
     // don't beat a dead body!
     if (character_is_dead) {
         return;
     }
 
-    Monster_t *m_ptr = &monsters[monsterID];
-    Creature_t *r_ptr = &creatures_list[m_ptr->mptr];
+    Monster_t *monster = &monsters[monster_id];
+    Creature_t *creature = &creatures_list[monster->mptr];
 
-    vtype_t cdesc;
-    if (!m_ptr->ml) {
-        (void) strcpy(cdesc, "It ");
+    vtype_t name;
+    if (!monster->ml) {
+        (void) strcpy(name, "It ");
     } else {
-        (void) sprintf(cdesc, "The %s ", r_ptr->name);
+        (void) sprintf(name, "The %s ", creature->name);
     }
 
-    vtype_t deathDescription;
-    playerDiedFromString(&deathDescription, r_ptr->name, r_ptr->cmove);
+    vtype_t death_description;
+    playerDiedFromString(&death_description, creature->name, creature->cmove);
 
     int attype, adesc, adice, asides;
     int attackn = 0;
-    vtype_t tmp_str;
+    vtype_t description;
 
-    uint8_t *attstr = r_ptr->damage;
+    uint8_t *attstr = creature->damage;
     while ((*attstr != 0) && !character_is_dead) {
         attype = monster_attacks[*attstr].attack_type;
         adesc = monster_attacks[*attstr].attack_desc;
         adice = monster_attacks[*attstr].attack_dice;
         asides = monster_attacks[*attstr].attack_sides;
+
         attstr++;
 
-        if (py.flags.protevil > 0 && (r_ptr->cdefense & CD_EVIL) && py.misc.lev + 1 > r_ptr->level) {
-            if (m_ptr->ml) {
-                creature_recall[m_ptr->mptr].r_cdefense |= CD_EVIL;
+        if (py.flags.protevil > 0 && (creature->cdefense & CD_EVIL) && py.misc.lev + 1 > creature->level) {
+            if (monster->ml) {
+                creature_recall[monster->mptr].r_cdefense |= CD_EVIL;
             }
             attype = 99;
             adesc = 99;
         }
 
-        if (playerTestAttackHits(attype, r_ptr->level)) {
+        if (playerTestAttackHits(attype, creature->level)) {
             playerDisturb(1, 0);
 
-            // can not strcat to cdesc because the creature may have multiple attacks.
-            (void) strcpy(tmp_str, cdesc);
+            // can not strcat to name because the creature may have multiple attacks.
+            (void) strcpy(description, name);
 
-            monsterPrintAttackDescription(tmp_str, adesc);
+            monsterPrintAttackDescription(description, adesc);
 
             // always fail to notice attack if creature invisible, set notice
             // and visible here since creature may be visible when attacking
             // and then teleport afterwards (becoming effectively invisible)
             bool notice = true;
             bool visible = true;
-            if (!m_ptr->ml) {
+            if (!monster->ml) {
                 visible = false;
                 notice = false;
             }
 
-            int dam = diceDamageRoll(adice, asides);
-            notice = executeAttackOnPlayer(r_ptr, m_ptr, monsterID, attype, dam, deathDescription, notice);
+            int damage = diceDamageRoll(adice, asides);
+            notice = executeAttackOnPlayer(creature, monster, monster_id, attype, damage, death_description, notice);
 
             // Moved here from mon_move, so that monster only confused if it
             // actually hits. A monster that has been repelled has not hit
             // the player, so it should not be confused.
-            monsterConfuseOnAttack(r_ptr, m_ptr, adesc, cdesc, visible);
+            monsterConfuseOnAttack(creature, monster, adesc, name, visible);
 
             // increase number of attacks if notice true, or if visible and
             // had previously noticed the attack (in which case all this does
             // is help player learn damage), note that in the second case do
             // not increase attacks if creature repelled (no damage done)
-            if ((notice || (visible && creature_recall[m_ptr->mptr].r_attacks[attackn] != 0 && attype != 99)) && creature_recall[m_ptr->mptr].r_attacks[attackn] < MAX_UCHAR) {
-                creature_recall[m_ptr->mptr].r_attacks[attackn]++;
+            if ((notice || (visible && creature_recall[monster->mptr].r_attacks[attackn] != 0 && attype != 99)) && creature_recall[monster->mptr].r_attacks[attackn] < MAX_UCHAR) {
+                creature_recall[monster->mptr].r_attacks[attackn]++;
             }
-            if (character_is_dead && creature_recall[m_ptr->mptr].r_deaths < MAX_SHORT) {
-                creature_recall[m_ptr->mptr].r_deaths++;
+
+            if (character_is_dead && creature_recall[monster->mptr].r_deaths < MAX_SHORT) {
+                creature_recall[monster->mptr].r_deaths++;
             }
         } else {
             if ((adesc >= 1 && adesc <= 3) || adesc == 6) {
                 playerDisturb(1, 0);
-                (void) strcpy(tmp_str, cdesc);
-                printMessage(strcat(tmp_str, "misses you."));
+                (void) strcpy(description, name);
+                printMessage(strcat(description, "misses you."));
             }
         }
 
@@ -985,7 +987,7 @@ static void creatureMovesOnPlayer(Monster_t *m_ptr, uint8_t creatureID, int mons
         if (!m_ptr->ml) {
             monsterUpdateVisibility(monsterID);
         }
-        make_attack(monsterID);
+        monsterAttackPlayer(monsterID);
         *do_move = false;
         *do_turn = true;
     } else if (creatureID > 1 && (y != m_ptr->fy || x != m_ptr->fx)) {
