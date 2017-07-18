@@ -314,13 +314,13 @@ static void dungeonPlaceVaultTrap(int y, int x, int yd, int xd, int number) {
 }
 
 // Place a trap with a given displacement of point -RAK-
-static void vault_monster(int y, int x, int num) {
-    int y1, x1;
+static void dungeonPlaceVaultMonster(int y, int x, int number) {
+    int pos_y, pos_x;
 
-    for (int i = 0; i < num; i++) {
-        y1 = y;
-        x1 = x;
-        (void) monsterSummon(&y1, &x1, true);
+    for (int i = 0; i < number; i++) {
+        pos_y = y;
+        pos_x = x;
+        (void) monsterSummon(&pos_y, &pos_x, true);
     }
 }
 
@@ -572,13 +572,13 @@ static void build_type2(int y, int x) {
     switch (randomNumber(5)) {
         case 1: // Just an inner room.
             placeRandomSecretDoor(y, x, depth, height, left, right);
-            vault_monster(y, x, 1);
+            dungeonPlaceVaultMonster(y, x, 1);
             break;
         case 2: // Treasure Vault
             placeTreasureVault(y, x, depth, height, left, right);
 
             // Guard the treasure well
-            vault_monster(y, x, 2 + randomNumber(3));
+            dungeonPlaceVaultMonster(y, x, 2 + randomNumber(3));
 
             // If the monsters don't get 'em.
             dungeonPlaceVaultTrap(y, x, 4, 10, 2 + randomNumber(3));
@@ -611,8 +611,8 @@ static void build_type2(int y, int x) {
                 dungeonPlaceRandomObjectAt(y, x + 2, false);
             }
 
-            vault_monster(y, x - 2, randomNumber(2));
-            vault_monster(y, x + 2, randomNumber(2));
+            dungeonPlaceVaultMonster(y, x - 2, randomNumber(2));
+            dungeonPlaceVaultMonster(y, x + 2, randomNumber(2));
             break;
         case 4: // Maze inside.
             placeRandomSecretDoor(y, x, depth, height, left, right);
@@ -620,8 +620,8 @@ static void build_type2(int y, int x) {
             placeMazeInsideRoom(depth, height, left, right);
 
             // Monsters just love mazes.
-            vault_monster(y, x - 5, randomNumber(3));
-            vault_monster(y, x + 5, randomNumber(3));
+            dungeonPlaceVaultMonster(y, x - 5, randomNumber(3));
+            dungeonPlaceVaultMonster(y, x + 5, randomNumber(3));
 
             // Traps make them entertaining.
             dungeonPlaceVaultTrap(y, x - 3, 2, 8, randomNumber(3));
@@ -639,10 +639,10 @@ static void build_type2(int y, int x) {
             dungeonPlaceRandomObjectNear(y, x, 2 + randomNumber(2));
 
             // Gotta have some monsters.
-            vault_monster(y + 2, x - 4, randomNumber(2));
-            vault_monster(y + 2, x + 4, randomNumber(2));
-            vault_monster(y - 2, x - 4, randomNumber(2));
-            vault_monster(y - 2, x + 4, randomNumber(2));
+            dungeonPlaceVaultMonster(y + 2, x - 4, randomNumber(2));
+            dungeonPlaceVaultMonster(y + 2, x + 4, randomNumber(2));
+            dungeonPlaceVaultMonster(y - 2, x - 4, randomNumber(2));
+            dungeonPlaceVaultMonster(y - 2, x + 4, randomNumber(2));
             break;
     }
 }
@@ -748,7 +748,7 @@ static void build_type3(int y, int x) {
             dungeonPlaceRandomObjectAt(y, x, false);
 
             // Let's guard the treasure well.
-            vault_monster(y, x, 2 + randomNumber(2));
+            dungeonPlaceVaultMonster(y, x, 2 + randomNumber(2));
 
             // Traps naturally
             dungeonPlaceVaultTrap(y, x, 4, 4, 1 + randomNumber(3));
