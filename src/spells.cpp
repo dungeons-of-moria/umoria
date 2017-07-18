@@ -1934,10 +1934,12 @@ bool playerProtectEvil() {
 
 // Create some high quality mush for the player. -RAK-
 void spellCreateFood() {
-    uint8_t treasure_id = cave[char_row][char_col].tptr;
+    // Note: must take reference to this location as dungeonPlaceRandomObjectAt()
+    // below, changes the tile values.
+    Cave_t *tile = &cave[char_row][char_col];
 
     // take no action here, don't want to destroy object under player
-    if (treasure_id != 0) {
+    if (tile->tptr != 0) {
         // set player_free_turn so that scroll/spell points won't be used
         player_free_turn = true;
 
@@ -1947,7 +1949,7 @@ void spellCreateFood() {
     }
 
     dungeonPlaceRandomObjectAt(char_row, char_col, false);
-    inventoryItemCopyTo(OBJ_MUSH, &treasure_list[treasure_id]);
+    inventoryItemCopyTo(OBJ_MUSH, &treasure_list[tile->tptr]);
 }
 
 // Attempts to destroy a type of creature.  Success depends on
