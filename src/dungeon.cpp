@@ -18,7 +18,7 @@ static bool itemEnchanted(Inventory_t *item);
 static void examineBook();
 static void dungeonGoUpLevel();
 static void dungeonGoDownLevel();
-static void jamdoor();
+static void dungeonJamDoor();
 static void refill_lamp();
 
 // Moria game module -RAK-
@@ -1776,7 +1776,7 @@ static void doCommand(char command) {
             inventoryExecuteCommand('i');
             break;
         case 'S': // (S)pike a door  (j)am a door
-            jamdoor();
+            dungeonJamDoor();
             break;
         case 'x': // e(x)amine surrounds  (l)ook about
             look();
@@ -2108,61 +2108,61 @@ static void dungeonGoDownLevel() {
 }
 
 // Jam a closed door -RAK-
-static void jamdoor() {
+static void dungeonJamDoor() {
     player_free_turn = true;
 
     int y = char_row;
     int x = char_col;
 
-    int dir;
-    if (!getDirectionWithMemory(CNIL, &dir)) {
+    int direction;
+    if (!getDirectionWithMemory(CNIL, &direction)) {
         return;
     }
-    (void) playerMovePosition(dir, &y, &x);
+    (void) playerMovePosition(direction, &y, &x);
 
-    Cave_t *c_ptr = &cave[y][x];
+    Cave_t *tile = &cave[y][x];
 
-    if (c_ptr->tptr == 0) {
+    if (tile->tptr == 0) {
         printMessage("That isn't a door!");
         return;
     }
 
-    Inventory_t *t_ptr = &treasure_list[c_ptr->tptr];
+    Inventory_t *item = &treasure_list[tile->tptr];
 
-    uint8_t itemID = t_ptr->tval;
-    if (itemID != TV_CLOSED_DOOR && itemID != TV_OPEN_DOOR) {
+    uint8_t item_id = item->tval;
+    if (item_id != TV_CLOSED_DOOR && item_id != TV_OPEN_DOOR) {
         printMessage("That isn't a door!");
         return;
     }
 
-    if (itemID == TV_OPEN_DOOR) {
+    if (item_id == TV_OPEN_DOOR) {
         printMessage("The door must be closed first.");
         return;
     }
 
     // If we reach here, the door is closed and we can try to jam it -MRC-
 
-    if (c_ptr->cptr == 0) {
-        int i, j;
-        if (inventoryFindRange(TV_SPIKE, TV_NEVER, &i, &j)) {
+    if (tile->cptr == 0) {
+        int item_pos_start, item_pos_end;
+        if (inventoryFindRange(TV_SPIKE, TV_NEVER, &item_pos_start, &item_pos_end)) {
             player_free_turn = false;
 
             printMessageNoCommandInterrupt("You jam the door with a spike.");
 
-            if (t_ptr->p1 > 0) {
+            if (item->p1 > 0) {
                 // Make locked to stuck.
-                t_ptr->p1 = -t_ptr->p1;
+                item->p1 = -item->p1;
             }
 
             // Successive spikes have a progressively smaller effect.
             // Series is: 0 20 30 37 43 48 52 56 60 64 67 70 ...
-            t_ptr->p1 -= 1 + 190 / (10 - t_ptr->p1);
+            item->p1 -= 1 + 190 / (10 - item->p1);
 
-            if (inventory[i].number > 1) {
-                inventory[i].number--;
-                inventory_weight -= inventory[i].weight;
+            if (inventory[item_pos_start].number > 1) {
+                inventory[item_pos_start].number--;
+                inventory_weight -= inventory[item_pos_start].weight;
             } else {
-                inventoryDestroyItem(i);
+                inventoryDestroyItem(item_pos_start);
             }
         } else {
             printMessage("But you have no spikes.");
@@ -2170,9 +2170,9 @@ static void jamdoor() {
     } else {
         player_free_turn = false;
 
-        char tmp_str[80];
-        (void) sprintf(tmp_str, "The %s is in your way!", creatures_list[monsters[c_ptr->cptr].mptr].name);
-        printMessage(tmp_str);
+        vtype_t msg;
+        (void) sprintf(msg, "The %s is in your way!", creatures_list[monsters[tile->cptr].mptr].name);
+        printMessage(msg);
     }
 }
 
