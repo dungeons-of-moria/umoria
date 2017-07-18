@@ -1177,7 +1177,7 @@ static void lightTown() {
 }
 
 // Town logic flow for generation of new town
-static void town_gen() {
+static void townGeneration() {
     seedSet(town_seed);
 
     dungeonPlaceTownStores();
@@ -1228,7 +1228,7 @@ void generateCave() {
     panel_col = max_panel_cols;
 
     if (current_dungeon_level == 0) {
-        town_gen();
+        townGeneration();
     } else {
         dungeonGenerate();
     }
