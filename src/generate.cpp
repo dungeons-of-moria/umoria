@@ -129,10 +129,10 @@ static void dungeonPlaceBoundaryWalls() {
 }
 
 // Places "streamers" of rock through dungeon -RAK-
-static void place_streamer(uint8_t rockType, int treas_chance) {
+static void dungeonPlaceStreamerRock(uint8_t rock_type, int chance_of_treasure) {
     // Choose starting point and direction
-    int y = (dungeon_height / 2) + 11 - randomNumber(23);
-    int x = (dungeon_width / 2) + 16 - randomNumber(33);
+    int pos_y = (dungeon_height / 2) + 11 - randomNumber(23);
+    int pos_x = (dungeon_width / 2) + 16 - randomNumber(33);
 
     // Get random direction. Numbers 1-4, 6-9
     int dir = randomNumber(8);
@@ -146,20 +146,20 @@ static void place_streamer(uint8_t rockType, int treas_chance) {
 
     do {
         for (int i = 0; i < DUN_STR_DEN; i++) {
-            int ty = y + randomNumber(t1) - t2;
-            int tx = x + randomNumber(t1) - t2;
+            int y = pos_y + randomNumber(t1) - t2;
+            int x = pos_x + randomNumber(t1) - t2;
 
-            if (coordInBounds(ty, tx)) {
-                if (cave[ty][tx].fval == GRANITE_WALL) {
-                    cave[ty][tx].fval = rockType;
+            if (coordInBounds(y, x)) {
+                if (cave[y][x].fval == GRANITE_WALL) {
+                    cave[y][x].fval = rock_type;
 
-                    if (randomNumber(treas_chance) == 1) {
-                        dungeonPlaceGold(ty, tx);
+                    if (randomNumber(chance_of_treasure) == 1) {
+                        dungeonPlaceGold(y, x);
                     }
                 }
             }
         }
-    } while (playerMovePosition(dir, &y, &x));
+    } while (playerMovePosition(dir, &pos_y, &pos_x));
 }
 
 static void place_open_door(int y, int x) {
@@ -857,7 +857,7 @@ static void build_tunnel(int row1, int col1, int row2, int col2) {
                 for (int y = row1 - 1; y <= row1 + 1; y++) {
                     for (int x = col1 - 1; x <= col1 + 1; x++) {
                         if (coordInBounds(y, x)) {
-                            // values 11 and 12 are impossible here, place_streamer
+                            // values 11 and 12 are impossible here, dungeonPlaceStreamerRock
                             // is never run before build_tunnel
                             if (cave[y][x].fval == GRANITE_WALL) {
                                 cave[y][x].fval = TMP2_WALL;
@@ -1029,10 +1029,10 @@ static void cave_gen() {
     // Generate walls and streamers
     dungeonFillEmptyTilesWith(GRANITE_WALL);
     for (int i = 0; i < DUN_STR_MAG; i++) {
-        place_streamer(MAGMA_WALL, DUN_STR_MC);
+        dungeonPlaceStreamerRock(MAGMA_WALL, DUN_STR_MC);
     }
     for (int i = 0; i < DUN_STR_QUA; i++) {
-        place_streamer(QUARTZ_WALL, DUN_STR_QC);
+        dungeonPlaceStreamerRock(QUARTZ_WALL, DUN_STR_QC);
     }
     dungeonPlaceBoundaryWalls();
 
