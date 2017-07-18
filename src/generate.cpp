@@ -362,12 +362,12 @@ static void dungeonBuildRoom(int y, int x) {
 
 // Builds a room at a row, column coordinate -RAK-
 // Type 1 unusual rooms are several overlapping rectangular ones
-static void build_type1(int y, int x) {
+static void dungeonBuildRoomOverlappingRectangles(int y, int x) {
     uint8_t floor = dungeonFloorTileForLevel();
 
     int limit = 1 + randomNumber(2);
 
-    for (int i0 = 0; i0 < limit; i0++) {
+    for (int count = 0; count < limit; count++) {
         int height = y - randomNumber(4);
         int depth = y + randomNumber(3);
         int left = x - randomNumber(11);
@@ -987,7 +987,7 @@ static void cave_gen() {
                     int buildType = randomNumber(3);
 
                     if (buildType == 1) {
-                        build_type1(yloc[locationID], xloc[locationID]);
+                        dungeonBuildRoomOverlappingRectangles(yloc[locationID], xloc[locationID]);
                     } else if (buildType == 2) {
                         build_type2(yloc[locationID], xloc[locationID]);
                     } else {
