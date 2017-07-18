@@ -90,7 +90,7 @@ static void dungeonFillEmptyTilesWith(uint8_t rock_type) {
 #endif
 
 // Places indestructible rock around edges of dungeon -RAK-
-static void place_boundary() {
+static void dungeonPlaceBoundaryWalls() {
     Cave_t(*left_ptr)[MAX_WIDTH];
     Cave_t(*right_ptr)[MAX_WIDTH];
 
@@ -1034,7 +1034,7 @@ static void cave_gen() {
     for (int i = 0; i < DUN_STR_QUA; i++) {
         place_streamer(QUARTZ_WALL, DUN_STR_QC);
     }
-    place_boundary();
+    dungeonPlaceBoundaryWalls();
 
     // Place intersection doors
     for (int i = 0; i < door_index; i++) {
@@ -1186,7 +1186,7 @@ static void town_gen() {
     dungeonFillEmptyTilesWith(DARK_FLOOR);
 
     // make stairs before seedResetToOldSeed, so that they don't move around
-    place_boundary();
+    dungeonPlaceBoundaryWalls();
     place_stairs(2, 1, 0);
 
     seedResetToOldSeed();
