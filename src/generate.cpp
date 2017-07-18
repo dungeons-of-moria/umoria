@@ -941,22 +941,22 @@ static void dungeonPlaceDoorIfNextToTwoWalls(int y, int x) {
 }
 
 // Returns random co-ordinates -RAK-
-static void new_spot(int16_t *y, int16_t *x) {
-    int yy, xx;
-    Cave_t *c_ptr;
+static void dungeonNewSpot(int16_t *y, int16_t *x) {
+    int pos_y, pos_x;
+    Cave_t *tile;
 
     do {
-        yy = randomNumber(dungeon_height - 2);
-        xx = randomNumber(dungeon_width - 2);
-        c_ptr = &cave[yy][xx];
-    } while (c_ptr->fval >= MIN_CLOSED_SPACE || c_ptr->cptr != 0 || c_ptr->tptr != 0);
+        pos_y = randomNumber(dungeon_height - 2);
+        pos_x = randomNumber(dungeon_width - 2);
+        tile = &cave[pos_y][pos_x];
+    } while (tile->fval >= MIN_CLOSED_SPACE || tile->cptr != 0 || tile->tptr != 0);
 
-    *y = (int16_t) yy;
-    *x = (int16_t) xx;
+    *y = (int16_t) pos_y;
+    *x = (int16_t) pos_x;
 }
 
 // Cave logic flow for generation of new dungeon
-static void cave_gen() {
+static void dungeonGenerate() {
     // Room initialization
     int row_rooms = 2 * (dungeon_height / SCREEN_HEIGHT);
     int col_rooms = 2 * (dungeon_width / SCREEN_WIDTH);
@@ -968,60 +968,60 @@ static void cave_gen() {
         }
     }
 
-    int randRoomCounter = randomNumberNormalDistribution(DUN_ROO_MEA, 2);
-    for (int i = 0; i < randRoomCounter; i++) {
+    int random_room_count = randomNumberNormalDistribution(DUN_ROO_MEA, 2);
+    for (int i = 0; i < random_room_count; i++) {
         room_map[randomNumber(row_rooms) - 1][randomNumber(col_rooms) - 1] = true;
     }
 
     // Build rooms
-    int locationID = 0;
-    int16_t yloc[400], xloc[400];
+    int location_id = 0;
+    int16_t y_locations[400], x_locations[400];
 
     for (int row = 0; row < row_rooms; row++) {
         for (int col = 0; col < col_rooms; col++) {
             if (room_map[row][col]) {
-                yloc[locationID] = (int16_t) (row * (SCREEN_HEIGHT >> 1) + QUART_HEIGHT);
-                xloc[locationID] = (int16_t) (col * (SCREEN_WIDTH >> 1) + QUART_WIDTH);
+                y_locations[location_id] = (int16_t) (row * (SCREEN_HEIGHT >> 1) + QUART_HEIGHT);
+                x_locations[location_id] = (int16_t) (col * (SCREEN_WIDTH >> 1) + QUART_WIDTH);
                 if (current_dungeon_level > randomNumber(DUN_UNUSUAL)) {
-                    int buildType = randomNumber(3);
+                    int room_type = randomNumber(3);
 
-                    if (buildType == 1) {
-                        dungeonBuildRoomOverlappingRectangles(yloc[locationID], xloc[locationID]);
-                    } else if (buildType == 2) {
-                        dungeonBuildRoomWithInnerRooms(yloc[locationID], xloc[locationID]);
+                    if (room_type == 1) {
+                        dungeonBuildRoomOverlappingRectangles(y_locations[location_id], x_locations[location_id]);
+                    } else if (room_type == 2) {
+                        dungeonBuildRoomWithInnerRooms(y_locations[location_id], x_locations[location_id]);
                     } else {
-                        dungeonBuildRoomCrossShaped(yloc[locationID], xloc[locationID]);
+                        dungeonBuildRoomCrossShaped(y_locations[location_id], x_locations[location_id]);
                     }
                 } else {
-                    dungeonBuildRoom(yloc[locationID], xloc[locationID]);
+                    dungeonBuildRoom(y_locations[location_id], x_locations[location_id]);
                 }
-                locationID++;
+                location_id++;
             }
         }
     }
 
-    for (int i = 0; i < locationID; i++) {
-        int pick1 = randomNumber(locationID) - 1;
-        int pick2 = randomNumber(locationID) - 1;
-        int y1 = yloc[pick1];
-        int x1 = xloc[pick1];
-        yloc[pick1] = yloc[pick2];
-        xloc[pick1] = xloc[pick2];
-        yloc[pick2] = (int16_t) y1;
-        xloc[pick2] = (int16_t) x1;
+    for (int i = 0; i < location_id; i++) {
+        int pick1 = randomNumber(location_id) - 1;
+        int pick2 = randomNumber(location_id) - 1;
+        int y1 = y_locations[pick1];
+        int x1 = x_locations[pick1];
+        y_locations[pick1] = y_locations[pick2];
+        x_locations[pick1] = x_locations[pick2];
+        y_locations[pick2] = (int16_t) y1;
+        x_locations[pick2] = (int16_t) x1;
     }
 
     door_index = 0;
 
-    // move zero entry to locationID, so that can call dungeonBuildTunnel all locationID times
-    yloc[locationID] = yloc[0];
-    xloc[locationID] = xloc[0];
+    // move zero entry to location_id, so that can call dungeonBuildTunnel all location_id times
+    y_locations[location_id] = y_locations[0];
+    x_locations[location_id] = x_locations[0];
 
-    for (int i = 0; i < locationID; i++) {
-        int y1 = yloc[i];
-        int x1 = xloc[i];
-        int y2 = yloc[i + 1];
-        int x2 = xloc[i + 1];
+    for (int i = 0; i < location_id; i++) {
+        int y1 = y_locations[i];
+        int x1 = x_locations[i];
+        int y2 = y_locations[i + 1];
+        int x2 = x_locations[i + 1];
         dungeonBuildTunnel(y2, x2, y1, x1);
     }
 
@@ -1054,7 +1054,7 @@ static void cave_gen() {
     dungeonPlaceStairs(1, randomNumber(2), 3);
 
     // Set up the character coords, used by monsterPlaceNewWithinDistance, monsterPlaceWinning
-    new_spot(&char_row, &char_col);
+    dungeonNewSpot(&char_row, &char_col);
 
     monsterPlaceNewWithinDistance((randomNumber(8) + MIN_MALLOC_LEVEL + alloc_level), 0, true);
     dungeonAllocateAndPlaceObject(setCorridors, 3, randomNumber(alloc_level));
@@ -1191,7 +1191,7 @@ static void town_gen() {
     seedResetToOldSeed();
 
     // Set up the character coords, used by monsterPlaceNewWithinDistance below
-    new_spot(&char_row, &char_col);
+    dungeonNewSpot(&char_row, &char_col);
 
     lightTown();
 
@@ -1230,6 +1230,6 @@ void generateCave() {
     if (current_dungeon_level == 0) {
         town_gen();
     } else {
-        cave_gen();
+        dungeonGenerate();
     }
 }
