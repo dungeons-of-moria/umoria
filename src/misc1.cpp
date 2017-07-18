@@ -14,7 +14,7 @@ static uint32_t old_seed;
 
 static void panelBounds();
 static int popm();
-static int max_hp(uint8_t *array);
+static int maxHitPoints(uint8_t *array);
 static int get_mons_num(int level);
 
 // gets a new random seed for the random number generator
@@ -591,7 +591,7 @@ static int popm() {
 }
 
 // Gives Max hit points -RAK-
-static int max_hp(uint8_t *array) {
+static int maxHitPoints(uint8_t *array) {
     return (array[0] * array[1]);
 }
 
@@ -611,7 +611,7 @@ bool monsterPlaceNew(int y, int x, int creature_id, bool sleeping) {
     monster->mptr = (uint16_t) creature_id;
 
     if (creatures_list[creature_id].cdefense & CD_MAX_HP) {
-        monster->hp = (int16_t) max_hp(creatures_list[creature_id].hd);
+        monster->hp = (int16_t) maxHitPoints(creatures_list[creature_id].hd);
     } else {
         monster->hp = (int16_t) dicePlayerDamageRoll(creatures_list[creature_id].hd);
     }
@@ -671,7 +671,7 @@ void monsterPlaceWinning() {
     monster->mptr = (uint16_t) creature_id;
 
     if (creatures_list[creature_id].cdefense & CD_MAX_HP) {
-        monster->hp = (int16_t) max_hp(creatures_list[creature_id].hd);
+        monster->hp = (int16_t) maxHitPoints(creatures_list[creature_id].hd);
     } else {
         monster->hp = (int16_t) dicePlayerDamageRoll(creatures_list[creature_id].hd);
     }
