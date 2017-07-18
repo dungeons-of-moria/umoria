@@ -100,30 +100,30 @@ static void characterGenerateStatsAndRace() {
 
 // Prints a list of the available races: Human, Elf, etc.,
 // shown during the character creation screens.
-static void print_races(void) {
+static void displayCharacterRaces(void) {
     clearToBottom(20);
     putString("Choose a race (? for Help):", 20, 2);
 
-    int col = 2;
-    int row = 21;
+    int y = 2;
+    int x = 21;
 
     for (int i = 0; i < MAX_RACES; i++) {
-        char tmp_str[80];
+        char description[80];
 
-        (void) sprintf(tmp_str, "%c) %s", i + 'a', character_races[i].trace);
-        putString(tmp_str, row, col);
+        (void) sprintf(description, "%c) %s", i + 'a', character_races[i].trace);
+        putString(description, x, y);
 
-        col += 15;
-        if (col > 70) {
-            col = 2;
-            row++;
+        y += 15;
+        if (y > 70) {
+            y = 2;
+            x++;
         }
     }
 }
 
 // Allows player to select a race -JWT-
 static void choose_race() {
-    print_races();
+    displayCharacterRaces();
 
     int i = 0;
 
