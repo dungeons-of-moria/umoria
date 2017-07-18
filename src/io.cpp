@@ -17,7 +17,7 @@ static bool curses_on = false;
 // Spare window for saving the screen. -CJS-
 static WINDOW *save_screen;
 
-static void moriaterm();
+static void moriaTerminalInitialize();
 static void sleep_in_seconds(int seconds);
 
 // initializes the terminal / curses routines
@@ -36,14 +36,14 @@ void terminalInitialize() {
         exitGame();
     }
 
-    moriaterm();
+    moriaTerminalInitialize();
 
     (void) clear();
     (void) refresh();
 }
 
 // Set up the terminal into a suitable state -MRC-
-static void moriaterm() {
+static void moriaTerminalInitialize() {
     raw();                 // <curses.h> disable control characters. I.e. Ctrl-C does not work!
     // cbreak();           // <curses.h> use raw() instead as it disables Ctrl chars
     noecho();              // <curses.h> do not echo typed characters
@@ -150,7 +150,7 @@ char getKeyInput() {
         }
 
         (void) wrefresh(curscr);
-        moriaterm();
+        moriaTerminalInitialize();
     }
 }
 
