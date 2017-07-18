@@ -2,11 +2,18 @@
 
 ## HEAD
 
-- Rename the file `variable.cpp` to `globals.cpp`.
-- Lots and lots of renaming: types, global variables, arrays, etc.
-- Pluralize many array's (`stores[]`, `magic_spells[]`, etc.), or made the
-  naming more clear: `object_ident[]` becomes `objects_identified[]`.
-- Lots of other refactoring - see the commit history for all changes.
+### Bug Fixes
+
+- The create food spell was creating random items instead of just food.
+
+### Code
+
+The main focus of this release was to rename all functions, function variables,
+and global variables. The old naming did not reveal their purpose very well,
+which made understanding the code more difficult. These are not meant to be
+final names, they have been chosen to aid future refactoring tasks.
+
+Also note that the `variable` file was renamed to `globals`.
 
 
 
