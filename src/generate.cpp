@@ -475,7 +475,7 @@ static void dungeonPlaceInnerPillars(int y, int x) {
     }
 }
 
-static void placeMazeInsideRoom(int depth, int height, int left, int right) {
+static void dungeonPlaceMazeInsideRoom(int depth, int height, int left, int right) {
     for (int y = height; y <= depth; y++) {
         for (int x = left; x <= right; x++) {
             if (0x1 & (x + y)) {
@@ -616,7 +616,7 @@ static void build_type2(int y, int x) {
         case 4: // Maze inside.
             dungeonPlaceRandomSecretDoor(y, x, depth, height, left, right);
 
-            placeMazeInsideRoom(depth, height, left, right);
+            dungeonPlaceMazeInsideRoom(depth, height, left, right);
 
             // Monsters just love mazes.
             dungeonPlaceVaultMonster(y, x - 5, randomNumber(3));
