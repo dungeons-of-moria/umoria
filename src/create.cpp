@@ -148,7 +148,7 @@ static void characterChooseRace() {
 }
 
 // Will print the history of a character -JWT-
-static void print_history() {
+static void displayCharacterHistory() {
     putString("Character Background", 14, 27);
 
     for (int i = 0; i < 4; i++) {
@@ -448,7 +448,7 @@ void createCharacter() {
     characterGenerateStatsAndRace();
     get_history();
     get_ahw();
-    print_history();
+    displayCharacterHistory();
     printCharacterVitalStatistics();
     printCharacterStats();
 
@@ -465,7 +465,7 @@ void createCharacter() {
             characterGenerateStatsAndRace();
             get_history();
             get_ahw();
-            print_history();
+            displayCharacterHistory();
             printCharacterVitalStatistics();
             printCharacterStats();
         } else {
