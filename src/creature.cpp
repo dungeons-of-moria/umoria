@@ -896,63 +896,63 @@ static void monsterAttackPlayer(int monster_id) {
     }
 }
 
-static void creatureOpensDoor(Cave_t *c_ptr, int16_t monsterHP, uint32_t movebits, bool *do_turn, bool *do_move, uint32_t *rcmove, int y, int x) {
-    Inventory_t *t_ptr = &treasure_list[c_ptr->tptr];
+static void monsterOpenDoor(Cave_t *tile, int16_t monster_hp, uint32_t move_bits, bool *do_turn, bool *do_move, uint32_t *rcmove, int y, int x) {
+    Inventory_t *item = &treasure_list[tile->tptr];
 
     // Creature can open doors.
-    if (movebits & CM_OPEN_DOOR) {
-        bool doorStuck = false;
+    if (move_bits & CM_OPEN_DOOR) {
+        bool door_is_stuck = false;
 
-        if (t_ptr->tval == TV_CLOSED_DOOR) {
+        if (item->tval == TV_CLOSED_DOOR) {
             *do_turn = true;
 
-            if (t_ptr->p1 == 0) {
+            if (item->p1 == 0) {
                 // Closed doors
 
                 *do_move = true;
-            } else if (t_ptr->p1 > 0) {
+            } else if (item->p1 > 0) {
                 // Locked doors
 
-                if (randomNumber((monsterHP + 1) * (50 + t_ptr->p1)) < 40 * (monsterHP - 10 - t_ptr->p1)) {
-                    t_ptr->p1 = 0;
+                if (randomNumber((monster_hp + 1) * (50 + item->p1)) < 40 * (monster_hp - 10 - item->p1)) {
+                    item->p1 = 0;
                 }
-            } else if (t_ptr->p1 < 0) {
+            } else if (item->p1 < 0) {
                 // Stuck doors
 
-                if (randomNumber((monsterHP + 1) * (50 - t_ptr->p1)) < 40 * (monsterHP - 10 + t_ptr->p1)) {
+                if (randomNumber((monster_hp + 1) * (50 - item->p1)) < 40 * (monster_hp - 10 + item->p1)) {
                     printMessage("You hear a door burst open!");
                     playerDisturb(1, 0);
-                    doorStuck = true;
+                    door_is_stuck = true;
                     *do_move = true;
                 }
             }
-        } else if (t_ptr->tval == TV_SECRET_DOOR) {
+        } else if (item->tval == TV_SECRET_DOOR) {
             *do_turn = true;
             *do_move = true;
         }
 
         if (*do_move) {
-            inventoryItemCopyTo(OBJ_OPEN_DOOR, t_ptr);
+            inventoryItemCopyTo(OBJ_OPEN_DOOR, item);
 
             // 50% chance of breaking door
-            if (doorStuck) {
-                t_ptr->p1 = (int16_t) (1 - randomNumber(2));
+            if (door_is_stuck) {
+                item->p1 = (int16_t) (1 - randomNumber(2));
             }
-            c_ptr->fval = CORR_FLOOR;
+            tile->fval = CORR_FLOOR;
             dungeonLiteSpot(y, x);
             *rcmove |= CM_OPEN_DOOR;
             *do_move = false;
         }
-    } else if (t_ptr->tval == TV_CLOSED_DOOR) {
+    } else if (item->tval == TV_CLOSED_DOOR) {
         // Creature can not open doors, must bash them
         *do_turn = true;
 
-        if (randomNumber((monsterHP + 1) * (80 + abs(t_ptr->p1))) < 40 * (monsterHP - 20 - abs(t_ptr->p1))) {
-            inventoryItemCopyTo(OBJ_OPEN_DOOR, t_ptr);
+        if (randomNumber((monster_hp + 1) * (80 + abs(item->p1))) < 40 * (monster_hp - 20 - abs(item->p1))) {
+            inventoryItemCopyTo(OBJ_OPEN_DOOR, item);
 
             // 50% chance of breaking door
-            t_ptr->p1 = (int16_t) (1 - randomNumber(2));
-            c_ptr->fval = CORR_FLOOR;
+            item->p1 = (int16_t) (1 - randomNumber(2));
+            tile->fval = CORR_FLOOR;
             dungeonLiteSpot(y, x);
             printMessage("You hear a door burst open!");
             playerDisturb(1, 0);
@@ -1069,7 +1069,7 @@ static void make_move(int monsterID, int *mm, uint32_t *rcmove) {
             *rcmove |= CM_PHASE;
         } else if (c_ptr->tptr != 0) {
             // Creature can open doors?
-            creatureOpensDoor(c_ptr, m_ptr->hp, movebits, &do_turn, &do_move, rcmove, y, x);
+            monsterOpenDoor(c_ptr, m_ptr->hp, movebits, &do_turn, &do_move, rcmove, y, x);
         }
 
         // Glyph of warding present?
