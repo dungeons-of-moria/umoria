@@ -1040,51 +1040,51 @@ static void monsterAllowedToMove(Monster_t *monster, uint32_t move_bits, bool *d
 }
 
 // Make the move if possible, five choices -RAK-
-static void make_move(int monsterID, int *mm, uint32_t *rcmove) {
+static void makeMove(int monster_id, int *directions, uint32_t *rcmove) {
     bool do_turn = false;
     bool do_move = false;
 
-    Monster_t *m_ptr = &monsters[monsterID];
-    uint32_t movebits = creatures_list[m_ptr->mptr].cmove;
+    Monster_t *monster = &monsters[monster_id];
+    uint32_t move_bits = creatures_list[monster->mptr].cmove;
 
     // Up to 5 attempts at moving, give up.
     for (int i = 0; !do_turn && i < 5; i++) {
         // Get new position
-        int y = m_ptr->fy;
-        int x = m_ptr->fx;
-        (void) playerMovePosition(mm[i], &y, &x);
+        int y = monster->fy;
+        int x = monster->fx;
+        (void) playerMovePosition(directions[i], &y, &x);
 
-        Cave_t *c_ptr = &cave[y][x];
+        Cave_t *tile = &cave[y][x];
 
-        if (c_ptr->fval == BOUNDARY_WALL) {
+        if (tile->fval == BOUNDARY_WALL) {
             continue;
         }
 
         // Floor is open?
-        if (c_ptr->fval <= MAX_OPEN_SPACE) {
+        if (tile->fval <= MAX_OPEN_SPACE) {
             do_move = true;
-        } else if (movebits & CM_PHASE) {
+        } else if (move_bits & CM_PHASE) {
             // Creature moves through walls?
             do_move = true;
             *rcmove |= CM_PHASE;
-        } else if (c_ptr->tptr != 0) {
+        } else if (tile->tptr != 0) {
             // Creature can open doors?
-            monsterOpenDoor(c_ptr, m_ptr->hp, movebits, &do_turn, &do_move, rcmove, y, x);
+            monsterOpenDoor(tile, monster->hp, move_bits, &do_turn, &do_move, rcmove, y, x);
         }
 
         // Glyph of warding present?
-        if (do_move && c_ptr->tptr != 0 && treasure_list[c_ptr->tptr].tval == TV_VIS_TRAP && treasure_list[c_ptr->tptr].subval == 99) {
-            glyphOfWardingProtection(m_ptr->mptr, movebits, &do_move, &do_turn, y, x);
+        if (do_move && tile->tptr != 0 && treasure_list[tile->tptr].tval == TV_VIS_TRAP && treasure_list[tile->tptr].subval == 99) {
+            glyphOfWardingProtection(monster->mptr, move_bits, &do_move, &do_turn, y, x);
         }
 
         // Creature has attempted to move on player?
         if (do_move) {
-            monsterMovesOnPlayer(m_ptr, c_ptr->cptr, monsterID, movebits, &do_move, &do_turn, rcmove, y, x);
+            monsterMovesOnPlayer(monster, tile->cptr, monster_id, move_bits, &do_move, &do_turn, rcmove, y, x);
         }
 
         // Creature has been allowed move.
         if (do_move) {
-            monsterAllowedToMove(m_ptr, movebits, &do_turn, rcmove, y, x);
+            monsterAllowedToMove(monster, move_bits, &do_turn, rcmove, y, x);
         }
     }
 }
@@ -1453,7 +1453,7 @@ static void creatureMoveOutOfWall(Monster_t *m_ptr, int monsterID, uint32_t *rcm
         int savedID = mm[0];
         mm[0] = mm[dir];
         mm[dir] = savedID;
-        make_move(monsterID, mm, rcmove);
+        makeMove(monsterID, mm, rcmove);
         // this can only fail if mm[0] has a rune of protection
     }
 
@@ -1496,7 +1496,7 @@ static void creatureMoveConfusedUndead(Monster_t *m_ptr, Creature_t *r_ptr, int 
 
     // don't move him if he is not supposed to move!
     if (!(r_ptr->cmove & CM_ATTACK_ONLY)) {
-        make_move(monsterID, mm, rcmove);
+        makeMove(monsterID, mm, rcmove);
     }
 
     m_ptr->confused--;
@@ -1542,7 +1542,7 @@ static void mon_move(int monsterID, uint32_t *rcmove) {
             mm[3] = randomNumber(9);
             mm[4] = randomNumber(9);
             *rcmove |= CM_75_RANDOM;
-            make_move(monsterID, mm, rcmove);
+            makeMove(monsterID, mm, rcmove);
         } else if ((r_ptr->cmove & CM_40_RANDOM) && randomNumber(100) < 40) {
             // 40% random movement
             mm[0] = randomNumber(9);
@@ -1551,7 +1551,7 @@ static void mon_move(int monsterID, uint32_t *rcmove) {
             mm[3] = randomNumber(9);
             mm[4] = randomNumber(9);
             *rcmove |= CM_40_RANDOM;
-            make_move(monsterID, mm, rcmove);
+            makeMove(monsterID, mm, rcmove);
         } else if ((r_ptr->cmove & CM_20_RANDOM) && randomNumber(100) < 20) {
             // 20% random movement
             mm[0] = randomNumber(9);
@@ -1560,7 +1560,7 @@ static void mon_move(int monsterID, uint32_t *rcmove) {
             mm[3] = randomNumber(9);
             mm[4] = randomNumber(9);
             *rcmove |= CM_20_RANDOM;
-            make_move(monsterID, mm, rcmove);
+            makeMove(monsterID, mm, rcmove);
         } else if (r_ptr->cmove & CM_MOVE_NORMAL) {
             // Normal movement
             if (randomNumber(200) == 1) {
@@ -1573,12 +1573,12 @@ static void mon_move(int monsterID, uint32_t *rcmove) {
                 monsterGetMoveDirection(monsterID, mm);
             }
             *rcmove |= CM_MOVE_NORMAL;
-            make_move(monsterID, mm, rcmove);
+            makeMove(monsterID, mm, rcmove);
         } else if (r_ptr->cmove & CM_ATTACK_ONLY) {
             // Attack, but don't move
             if (m_ptr->cdis < 2) {
                 monsterGetMoveDirection(monsterID, mm);
-                make_move(monsterID, mm, rcmove);
+                makeMove(monsterID, mm, rcmove);
             } else {
                 // Learn that the monster does does not move when
                 // it should have moved, but didn't.
