@@ -13,8 +13,8 @@ typedef struct {
     int x, y;
 } Coord_t;
 
-static Coord_t doorstk[100];
-static int doorindex;
+static Coord_t doors_tk[100];
+static int door_index;
 
 // Returns a Dark/Light floor tile based on current_dungeon_level, and random number
 static uint8_t floorTileForDungeonLevel() {
@@ -871,10 +871,10 @@ static void build_tunnel(int row1, int col1, int row2, int col2) {
                 col1 = tmp_col;
 
                 if (!door_flag) {
-                    if (doorindex < 100) {
-                        doorstk[doorindex].y = row1;
-                        doorstk[doorindex].x = col1;
-                        doorindex++;
+                    if (door_index < 100) {
+                        doors_tk[door_index].y = row1;
+                        doors_tk[door_index].x = col1;
+                        door_index++;
                     }
                     door_flag = true;
                 }
@@ -1011,7 +1011,7 @@ static void cave_gen() {
         xloc[pick2] = (int16_t) x1;
     }
 
-    doorindex = 0;
+    door_index = 0;
 
     // move zero entry to locationID, so that can call build_tunnel all locationID times
     yloc[locationID] = yloc[0];
@@ -1036,11 +1036,11 @@ static void cave_gen() {
     place_boundary();
 
     // Place intersection doors
-    for (int i = 0; i < doorindex; i++) {
-        try_door(doorstk[i].y, doorstk[i].x - 1);
-        try_door(doorstk[i].y, doorstk[i].x + 1);
-        try_door(doorstk[i].y - 1, doorstk[i].x);
-        try_door(doorstk[i].y + 1, doorstk[i].x);
+    for (int i = 0; i < door_index; i++) {
+        try_door(doors_tk[i].y, doors_tk[i].x - 1);
+        try_door(doors_tk[i].y, doors_tk[i].x + 1);
+        try_door(doors_tk[i].y - 1, doors_tk[i].x);
+        try_door(doors_tk[i].y + 1, doors_tk[i].x);
     }
 
     int alloc_level = (current_dungeon_level / 3);
