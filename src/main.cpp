@@ -12,7 +12,7 @@
 
 static void initializeCharacterInventory();
 static void initializeMonsterLevels();
-static void init_t_level();
+static void initializeTreasureLevels();
 static void check_file_permissions();
 
 #if (COST_ADJ != 100)
@@ -107,7 +107,7 @@ int main(int argc, char *argv[]) {
 
     // Init monster and treasure levels for allocate
     initializeMonsterLevels();
-    init_t_level();
+    initializeTreasureLevels();
 
     // Init the store inventories
     storeInitializeOwners();
@@ -270,7 +270,7 @@ static void initializeMonsterLevels() {
 }
 
 // Initializes T_LEVEL array for use with PLACE_OBJECT -RAK-
-static void init_t_level() {
+static void initializeTreasureLevels() {
     for (int i = 0; i <= MAX_OBJ_LEVEL; i++) {
         treasure_levels[i] = 0;
     }
@@ -286,16 +286,18 @@ static void init_t_level() {
     // now produce an array with object indexes sorted by level,
     // by using the info in treasure_levels, this is an O(n) sort!
     // this is not a stable sort, but that does not matter
-    int objectIndexes[MAX_OBJ_LEVEL + 1];
+    int indexes[MAX_OBJ_LEVEL + 1];
     for (int i = 0; i <= MAX_OBJ_LEVEL; i++) {
-        objectIndexes[i] = 1;
+        indexes[i] = 1;
     }
 
     for (int i = 0; i < MAX_DUNGEON_OBJ; i++) {
         int level = game_objects[i].level;
-        int objectID = treasure_levels[level] - objectIndexes[level];
-        sorted_objects[objectID] = (int16_t) i;
-        objectIndexes[level]++;
+        int object_id = treasure_levels[level] - indexes[level];
+
+        sorted_objects[object_id] = (int16_t) i;
+
+        indexes[level]++;
     }
 }
 
