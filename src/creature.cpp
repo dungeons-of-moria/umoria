@@ -1400,11 +1400,11 @@ bool monsterMultiply(int y, int x, int creature_id, int monster_id) {
     return false;
 }
 
-static void multiplyCritter(Monster_t *m_ptr, int monsterID, uint32_t *rcmove) {
+static void monsterMultiplyCritter(Monster_t *monster, int monster_id, uint32_t *rcmove) {
     int counter = 0;
 
-    for (int y = m_ptr->fy - 1; y <= m_ptr->fy + 1; y++) {
-        for (int x = m_ptr->fx - 1; x <= m_ptr->fx + 1; x++) {
+    for (int y = monster->fy - 1; y <= monster->fy + 1; y++) {
+        for (int x = monster->fx - 1; x <= monster->fx + 1; x++) {
             if (coordInBounds(y, x) && (cave[y][x].cptr > 1)) {
                 counter++;
             }
@@ -1418,7 +1418,7 @@ static void multiplyCritter(Monster_t *m_ptr, int monsterID, uint32_t *rcmove) {
     }
 
     if (counter < 4 && randomNumber(counter * MON_MULT_ADJ) == 1) {
-        if (monsterMultiply((int) m_ptr->fy, (int) m_ptr->fx, (int) m_ptr->mptr, monsterID)) {
+        if (monsterMultiply((int) monster->fy, (int) monster->fx, (int) monster->mptr, monster_id)) {
             *rcmove |= CM_MULTIPLY;
         }
     }
@@ -1514,7 +1514,7 @@ static void mon_move(int monsterID, uint32_t *rcmove) {
     // rest could be negative, to be safe, only use mod with positive values.
     int restPeriod = abs(py.flags.rest);
     if ((r_ptr->cmove & CM_MULTIPLY) && MAX_MON_MULT >= monster_multiply_total && (restPeriod % MON_MULT_ADJ) == 0) {
-        multiplyCritter(m_ptr, monsterID, rcmove);
+        monsterMultiplyCritter(m_ptr, monsterID, rcmove);
     }
 
     // if in wall, must immediately escape to a clear area
