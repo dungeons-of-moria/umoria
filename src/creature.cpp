@@ -960,8 +960,8 @@ static void monsterOpenDoor(Cave_t *tile, int16_t monster_hp, uint32_t move_bits
     }
 }
 
-static void glyphOfWardingProtection(uint16_t creatureID, uint32_t movebits, bool *do_move, bool *do_turn, int y, int x) {
-    if (randomNumber(OBJ_RUNE_PROT) < creatures_list[creatureID].level) {
+static void glyphOfWardingProtection(uint16_t creature_id, uint32_t move_bits, bool *do_move, bool *do_turn, int y, int x) {
+    if (randomNumber(OBJ_RUNE_PROT) < creatures_list[creature_id].level) {
         if (y == char_row && x == char_col) {
             printMessage("The rune of protection is broken!");
         }
@@ -971,42 +971,41 @@ static void glyphOfWardingProtection(uint16_t creatureID, uint32_t movebits, boo
 
     *do_move = false;
 
-    // If the creature moves only to attack,
-    // don't let it move if the glyph prevents
-    // it from attacking
-    if (movebits & CM_ATTACK_ONLY) {
+    // If the creature moves only to attack, don't let it
+    // move if the glyph prevents it from attacking
+    if (move_bits & CM_ATTACK_ONLY) {
         *do_turn = true;
     }
 }
 
-static void creatureMovesOnPlayer(Monster_t *m_ptr, uint8_t creatureID, int monsterID, uint32_t movebits, bool *do_move, bool *do_turn, uint32_t *rcmove, int y, int x) {
-    if (creatureID == 1) {
+static void monsterMovesOnPlayer(Monster_t *monster, uint8_t creature_id, int monster_id, uint32_t move_bits, bool *do_move, bool *do_turn, uint32_t *rcmove, int y, int x) {
+    if (creature_id == 1) {
         // if the monster is not lit, must call monsterUpdateVisibility, it
         // may be faster than character, and hence could have
         // just moved next to character this same turn.
-        if (!m_ptr->ml) {
-            monsterUpdateVisibility(monsterID);
+        if (!monster->ml) {
+            monsterUpdateVisibility(monster_id);
         }
-        monsterAttackPlayer(monsterID);
+        monsterAttackPlayer(monster_id);
         *do_move = false;
         *do_turn = true;
-    } else if (creatureID > 1 && (y != m_ptr->fy || x != m_ptr->fx)) {
+    } else if (creature_id > 1 && (y != monster->fy || x != monster->fx)) {
         // Creature is attempting to move on other creature?
 
         // Creature eats other creatures?
-        if ((movebits & CM_EATS_OTHER) && creatures_list[m_ptr->mptr].mexp >= creatures_list[monsters[creatureID].mptr].mexp) {
-            if (monsters[creatureID].ml) {
+        if ((move_bits & CM_EATS_OTHER) && creatures_list[monster->mptr].mexp >= creatures_list[monsters[creature_id].mptr].mexp) {
+            if (monsters[creature_id].ml) {
                 *rcmove |= CM_EATS_OTHER;
             }
 
             // It ate an already processed monster. Handle normally.
-            if (monsterID < creatureID) {
-                dungeonDeleteMonster((int) creatureID);
+            if (monster_id < creature_id) {
+                dungeonDeleteMonster((int) creature_id);
             } else {
                 // If it eats this monster, an already processed
                 // monster will take its place, causing all kinds
                 // of havoc. Delay the kill a bit.
-                dungeonDeleteMonsterFix1((int) creatureID);
+                dungeonDeleteMonsterFix1((int) creature_id);
             }
         } else {
             *do_move = false;
@@ -1079,7 +1078,7 @@ static void make_move(int monsterID, int *mm, uint32_t *rcmove) {
 
         // Creature has attempted to move on player?
         if (do_move) {
-            creatureMovesOnPlayer(m_ptr, c_ptr->cptr, monsterID, movebits, &do_move, &do_turn, rcmove, y, x);
+            monsterMovesOnPlayer(m_ptr, c_ptr->cptr, monsterID, movebits, &do_move, &do_turn, rcmove, y, x);
         }
 
         // Creature has been allowed move.
