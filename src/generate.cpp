@@ -162,7 +162,7 @@ static void dungeonPlaceStreamerRock(uint8_t rock_type, int chance_of_treasure) 
     } while (playerMovePosition(dir, &pos_y, &pos_x));
 }
 
-static void place_open_door(int y, int x) {
+static void dungeonPlaceOpenDoor(int y, int x) {
     int cur_pos = popt();
     cave[y][x].tptr = (uint8_t) cur_pos;
     inventoryItemCopyTo(OBJ_OPEN_DOOR, &treasure_list[cur_pos]);
@@ -214,7 +214,7 @@ static void place_door(int y, int x) {
         if (randomNumber(4) == 1) {
             place_broken_door(y, x);
         } else {
-            place_open_door(y, x);
+            dungeonPlaceOpenDoor(y, x);
         }
     } else if (doorType == 2) {
         doorType = randomNumber(12);
