@@ -15,7 +15,7 @@
 static bool curses_on = false;
 
 // Spare window for saving the screen. -CJS-
-static WINDOW *savescr;
+static WINDOW *save_screen;
 
 static void moriaterm();
 static void sleep_in_seconds(int seconds);
@@ -30,8 +30,8 @@ void terminalInitialize() {
         exit(1);
     }
 
-    savescr = newwin(0, 0, 0, 0);
-    if (savescr == NULL) {
+    save_screen = newwin(0, 0, 0, 0);
+    if (save_screen == NULL) {
         (void) printf("Out of memory in starting up curses.\n");
         exitGame();
     }
@@ -440,11 +440,11 @@ void waitAndConfirmCharacterCreation(int line_number, int delay) {
 }
 
 void terminalSaveScreen() {
-    overwrite(stdscr, savescr);
+    overwrite(stdscr, save_screen);
 }
 
 void terminalRestoreScreen() {
-    overwrite(savescr, stdscr);
+    overwrite(save_screen, stdscr);
     touchwin(stdscr);
 }
 
