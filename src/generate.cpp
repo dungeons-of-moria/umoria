@@ -52,14 +52,15 @@ static void pickCorrectDirection(int *row_dir, int *col_dir, int y1, int x1, int
 }
 
 // Chance of wandering direction
-static void rand_dir(int *rowDir, int *colDir) {
-    int tmp = randomNumber(4);
-    if (tmp < 3) {
-        *colDir = 0;
-        *rowDir = -3 + (tmp << 1); // tmp=1 -> *rdir=-1; tmp=2 -> *rdir=1
+static void chanceOfRandomDirection(int *y, int *x) {
+    int direction = randomNumber(4);
+
+    if (direction < 3) {
+        *x = 0;
+        *y = -3 + (direction << 1); // direction=1 -> *y=-1; direction=2 -> *y=1
     } else {
-        *rowDir = 0;
-        *colDir = -7 + (tmp << 1); // tmp=3 -> *cdir=-1; tmp=4 -> *cdir=1
+        *y = 0;
+        *x = -7 + (direction << 1); // direction=3 -> *x=-1; direction=4 -> *x=1
     }
 }
 
@@ -810,7 +811,7 @@ static void build_tunnel(int row1, int col1, int row2, int col2) {
 
         if (randomNumber(100) > DUN_TUN_CHG) {
             if (randomNumber(DUN_TUN_RND) == 1) {
-                rand_dir(&row_dir, &col_dir);
+                chanceOfRandomDirection(&row_dir, &col_dir);
             } else {
                 pickCorrectDirection(&row_dir, &col_dir, row1, col1, row2, col2);
             }
@@ -821,7 +822,7 @@ static void build_tunnel(int row1, int col1, int row2, int col2) {
 
         while (!coordInBounds(tmp_row, tmp_col)) {
             if (randomNumber(DUN_TUN_RND) == 1) {
-                rand_dir(&row_dir, &col_dir);
+                chanceOfRandomDirection(&row_dir, &col_dir);
             } else {
                 pickCorrectDirection(&row_dir, &col_dir, row1, col1, row2, col2);
             }
