@@ -18,14 +18,14 @@ void playerEat() {
         return;
     }
 
-    int j, k;
-    if (!inventoryFindRange(TV_FOOD, TV_NEVER, &j, &k)) {
+    int item_pos_start, item_pos_end;
+    if (!inventoryFindRange(TV_FOOD, TV_NEVER, &item_pos_start, &item_pos_end)) {
         printMessage("You are not carrying any food.");
         return;
     }
 
-    int item_val;
-    if (!inventoryGetInputForItemId(&item_val, "Eat what?", j, k, CNIL, CNIL)) {
+    int item_id;
+    if (!inventoryGetInputForItemId(&item_id, "Eat what?", item_pos_start, item_pos_end, CNIL, CNIL)) {
         return;
     }
 
@@ -33,36 +33,36 @@ void playerEat() {
 
     bool identified = false;
 
-    Inventory_t *i_ptr = &inventory[item_val];
-    uint32_t itemFlags = i_ptr->flags;
+    Inventory_t *item = &inventory[item_id];
+    uint32_t item_flags = item->flags;
 
-    while (itemFlags != 0) {
-        int foodID = getAndClearFirstBit(&itemFlags) + 1;
+    while (item_flags != 0) {
+        int food_id = getAndClearFirstBit(&item_flags) + 1;
 
         // Foods
-        switch (foodID) {
+        switch (food_id) {
             case 1:
-                py.flags.poisoned += randomNumber(10) + i_ptr->level;
+                py.flags.poisoned += randomNumber(10) + item->level;
                 identified = true;
                 break;
             case 2:
-                py.flags.blind += randomNumber(250) + 10 * i_ptr->level + 100;
+                py.flags.blind += randomNumber(250) + 10 * item->level + 100;
                 drawCavePanel();
                 printMessage("A veil of darkness surrounds you.");
                 identified = true;
                 break;
             case 3:
-                py.flags.afraid += randomNumber(10) + i_ptr->level;
+                py.flags.afraid += randomNumber(10) + item->level;
                 printMessage("You feel terrified!");
                 identified = true;
                 break;
             case 4:
-                py.flags.confused += randomNumber(10) + i_ptr->level;
+                py.flags.confused += randomNumber(10) + item->level;
                 printMessage("You feel drugged.");
                 identified = true;
                 break;
             case 5:
-                py.flags.image += randomNumber(200) + 25 * i_ptr->level + 200;
+                py.flags.image += randomNumber(200) + 25 * item->level + 200;
                 printMessage("You feel drugged.");
                 identified = true;
                 break;
@@ -185,26 +185,26 @@ void playerEat() {
     }
 
     if (identified) {
-        if (!itemSetColorlessAsIdentifed(i_ptr)) {
+        if (!itemSetColorlessAsIdentifed(item)) {
             // use identified it, gain experience
             // round half-way case up
-            py.misc.exp += (i_ptr->level + (py.misc.lev >> 1)) / py.misc.lev;
+            py.misc.exp += (item->level + (py.misc.lev >> 1)) / py.misc.lev;
 
             displayCharacterExperience();
 
-            itemIdentify(&item_val);
-            i_ptr = &inventory[item_val];
+            itemIdentify(&item_id);
+            item = &inventory[item_id];
         }
-    } else if (!itemSetColorlessAsIdentifed(i_ptr)) {
-        itemSetAsTried(i_ptr);
+    } else if (!itemSetColorlessAsIdentifed(item)) {
+        itemSetAsTried(item);
     }
 
-    playerIngestFood(i_ptr->p1);
+    playerIngestFood(item->p1);
 
     py.flags.status &= ~(PY_WEAK | PY_HUNGRY);
 
     printCharacterHungerstatus();
 
-    itemTypeRemainingCountDescription(item_val);
-    inventoryDestroyItem(item_val);
+    itemTypeRemainingCountDescription(item_id);
+    inventoryDestroyItem(item_id);
 }
