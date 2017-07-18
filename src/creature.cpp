@@ -243,13 +243,13 @@ static void monsterGetMoveDirection(int monster_id, int *directions) {
 }
 
 // For "DIED_FROM" string
-static void diedFromString(vtype_t *desc, const char *name, uint32_t move) {
-    if (CM_WIN & move) {
-        (void) sprintf(*desc, "The %s", name);
-    } else if (isVowel(name[0])) {
-        (void) sprintf(*desc, "an %s", name);
+static void playerDiedFromString(vtype_t *description, const char *monster_name, uint32_t move) {
+    if (move & CM_WIN) {
+        (void) sprintf(*description, "The %s", monster_name);
+    } else if (isVowel(monster_name[0])) {
+        (void) sprintf(*description, "an %s", monster_name);
     } else {
-        (void) sprintf(*desc, "a %s", name);
+        (void) sprintf(*description, "a %s", monster_name);
     }
 }
 
@@ -820,7 +820,7 @@ static void make_attack(int monsterID) {
     }
 
     vtype_t deathDescription;
-    diedFromString(&deathDescription, r_ptr->name, r_ptr->cmove);
+    playerDiedFromString(&deathDescription, r_ptr->name, r_ptr->cmove);
 
     int attype, adesc, adice, asides;
     int attackn = 0;
@@ -1288,7 +1288,7 @@ static bool mon_cast_spell(int monsterID) {
     }
 
     vtype_t deathDescription;
-    diedFromString(&deathDescription, r_ptr->name, r_ptr->cmove);
+    playerDiedFromString(&deathDescription, r_ptr->name, r_ptr->cmove);
 
     // Extract all possible spells into spell_choice
     int spell_choice[30];
