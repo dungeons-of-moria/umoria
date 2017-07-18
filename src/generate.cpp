@@ -934,7 +934,7 @@ static bool dungeonIsNextTo(int y, int x) {
 }
 
 // Places door at y, x position if at least 2 walls found
-static void try_door(int y, int x) {
+static void dungeonPlaceDoorIfNextToTwoWalls(int y, int x) {
     if (cave[y][x].fval == CORR_FLOOR && randomNumber(100) > DUN_TUN_JCT && dungeonIsNextTo(y, x)) {
         dungeonPlaceDoor(y, x);
     }
@@ -1037,10 +1037,10 @@ static void cave_gen() {
 
     // Place intersection doors
     for (int i = 0; i < door_index; i++) {
-        try_door(doors_tk[i].y, doors_tk[i].x - 1);
-        try_door(doors_tk[i].y, doors_tk[i].x + 1);
-        try_door(doors_tk[i].y - 1, doors_tk[i].x);
-        try_door(doors_tk[i].y + 1, doors_tk[i].x);
+        dungeonPlaceDoorIfNextToTwoWalls(doors_tk[i].y, doors_tk[i].x - 1);
+        dungeonPlaceDoorIfNextToTwoWalls(doors_tk[i].y, doors_tk[i].x + 1);
+        dungeonPlaceDoorIfNextToTwoWalls(doors_tk[i].y - 1, doors_tk[i].x);
+        dungeonPlaceDoorIfNextToTwoWalls(doors_tk[i].y + 1, doors_tk[i].x);
     }
 
     int alloc_level = (current_dungeon_level / 3);
