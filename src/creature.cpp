@@ -69,7 +69,7 @@ void monsterUpdateVisibility(int monster_id) {
 // Given speed, returns number of moves this turn. -RAK-
 // NOTE: Player must always move at least once per iteration,
 // a slowed player is handled by moving monsters faster
-static int movement_rate(int16_t speed) {
+static int monsterMovementRate(int16_t speed) {
     if (speed > 0) {
         if (py.flags.rest != 0) {
             return 1;
@@ -1693,7 +1693,7 @@ void updateMonsters(bool attack) {
 
         // Attack is argument passed to CREATURE
         if (attack) {
-            int moves = movement_rate(m_ptr->cspeed);
+            int moves = monsterMovementRate(m_ptr->cspeed);
 
             if (moves <= 0) {
                 monsterUpdateVisibility(id);
