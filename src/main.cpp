@@ -10,7 +10,7 @@
 #include "externs.h"
 #include "version.h"
 
-static void char_inven_init();
+static void initializeCharacterInventory();
 static void init_m_level();
 static void init_t_level();
 static void check_file_permissions();
@@ -157,7 +157,7 @@ int main(int argc, char *argv[]) {
 
         character_birth_date = (int32_t) time((time_t *) 0);
 
-        char_inven_init();
+        initializeCharacterInventory();
         py.flags.food = 7500;
         py.flags.food_digested = 2;
 
@@ -226,8 +226,8 @@ int main(int argc, char *argv[]) {
 }
 
 // Init players with some belongings -RAK-
-static void char_inven_init() {
-    Inventory_t inven_init;
+static void initializeCharacterInventory() {
+    Inventory_t item;
 
     // this is needed for bash to work right, it can't hurt anyway
     for (int i = 0; i < INVEN_ARRAY_SIZE; i++) {
@@ -235,17 +235,17 @@ static void char_inven_init() {
     }
 
     for (int i = 0; i < 5; i++) {
-        inventoryItemCopyTo(class_base_provisions[py.misc.pclass][i], &inven_init);
+        inventoryItemCopyTo(class_base_provisions[py.misc.pclass][i], &item);
 
         // this makes it spellItemIdentifyAndRemoveRandomInscription and itemSetAsIdentified
-        itemIdentifyAsStoreBought(&inven_init);
+        itemIdentifyAsStoreBought(&item);
 
         // must set this bit to display tohit/todam for stiletto
-        if (inven_init.tval == TV_SWORD) {
-            inven_init.ident |= ID_SHOW_HITDAM;
+        if (item.tval == TV_SWORD) {
+            item.ident |= ID_SHOW_HITDAM;
         }
 
-        (void) inventoryCarryItem(&inven_init);
+        (void) inventoryCarryItem(&item);
     }
 
     // weird place for it, but why not?
