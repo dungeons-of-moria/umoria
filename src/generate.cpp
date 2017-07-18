@@ -1069,7 +1069,7 @@ static void dungeonGenerate() {
 }
 
 // Builds a store at a row, column coordinate
-static void build_store(int store_num, int y, int x) {
+static void dungeonBuildStore(int store_id, int y, int x) {
     int yval = y * 10 + 5;
     int xval = x * 16 + 16;
     int y_height = yval - randomNumber(3);
@@ -1077,39 +1077,39 @@ static void build_store(int store_num, int y, int x) {
     int x_left = xval - randomNumber(6);
     int x_right = xval + randomNumber(6);
 
-    int yy, xx;
+    int pos_y, pos_x;
 
-    for (yy = y_height; yy <= y_depth; yy++) {
-        for (xx = x_left; xx <= x_right; xx++) {
-            cave[yy][xx].fval = BOUNDARY_WALL;
+    for (pos_y = y_height; pos_y <= y_depth; pos_y++) {
+        for (pos_x = x_left; pos_x <= x_right; pos_x++) {
+            cave[pos_y][pos_x].fval = BOUNDARY_WALL;
         }
     }
 
     int tmp = randomNumber(4);
     if (tmp < 3) {
-        yy = randomNumber(y_depth - y_height) + y_height - 1;
+        pos_y = randomNumber(y_depth - y_height) + y_height - 1;
 
         if (tmp == 1) {
-            xx = x_left;
+            pos_x = x_left;
         } else {
-            xx = x_right;
+            pos_x = x_right;
         }
     } else {
-        xx = randomNumber(x_right - x_left) + x_left - 1;
+        pos_x = randomNumber(x_right - x_left) + x_left - 1;
 
         if (tmp == 3) {
-            yy = y_depth;
+            pos_y = y_depth;
         } else {
-            yy = y_height;
+            pos_y = y_height;
         }
     }
 
-    cave[yy][xx].fval = CORR_FLOOR;
+    cave[pos_y][pos_x].fval = CORR_FLOOR;
 
     int cur_pos = popt();
-    cave[yy][xx].tptr = (uint8_t) cur_pos;
+    cave[pos_y][pos_x].tptr = (uint8_t) cur_pos;
 
-    inventoryItemCopyTo(OBJ_STORE_DOOR + store_num, &treasure_list[cur_pos]);
+    inventoryItemCopyTo(OBJ_STORE_DOOR + store_id, &treasure_list[cur_pos]);
 }
 
 // Link all free space in treasure list together
@@ -1139,7 +1139,7 @@ static void placeTownStores() {
     for (int y = 0; y < 2; y++) {
         for (int x = 0; x < 3; x++) {
             int randRoomID = randomNumber(roomsCounter) - 1;
-            build_store(rooms[randRoomID], y, x);
+            dungeonBuildStore(rooms[randRoomID], y, x);
 
             for (int i = randRoomID; i < roomsCounter - 1; i++) {
                 rooms[i] = rooms[i + 1];
