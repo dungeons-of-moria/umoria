@@ -864,7 +864,7 @@ static void monsterAttackPlayer(int monster_id) {
             int damage = diceDamageRoll(adice, asides);
             notice = executeAttackOnPlayer(creature, monster, monster_id, attype, damage, death_description, notice);
 
-            // Moved here from mon_move, so that monster only confused if it
+            // Moved here from monsterMove, so that monster only confused if it
             // actually hits. A monster that has been repelled has not hit
             // the player, so it should not be confused.
             monsterConfuseOnAttack(creature, monster, adesc, name, visible);
@@ -1481,126 +1481,141 @@ static void monsterMoveOutOfWall(Monster_t *monster, int monster_id, uint32_t *r
     }
 }
 
-static void creatureMoveConfusedUndead(Monster_t *m_ptr, Creature_t *r_ptr, int monsterID, uint32_t *rcmove) {
-    int mm[9];
+// Undead only get confused from turn undead, so they should flee
+static void monsterMoveUndead(Monster_t *monster, Creature_t *creature, int monster_id, uint32_t *rcmove) {
+    int directions[9];
+    monsterGetMoveDirection(monster_id, directions);
 
-    // Undead only get confused from turn undead, so they should flee
-    if (r_ptr->cdefense & CD_UNDEAD) {
-        monsterGetMoveDirection(monsterID, mm);
-        mm[0] = 10 - mm[0];
-        mm[1] = 10 - mm[1];
-        mm[2] = 10 - mm[2];
-        mm[3] = randomNumber(9); // May attack only if cornered
-        mm[4] = randomNumber(9);
-    } else {
-        mm[0] = randomNumber(9);
-        mm[1] = randomNumber(9);
-        mm[2] = randomNumber(9);
-        mm[3] = randomNumber(9);
-        mm[4] = randomNumber(9);
-    }
+    directions[0] = 10 - directions[0];
+    directions[1] = 10 - directions[1];
+    directions[2] = 10 - directions[2];
+    directions[3] = randomNumber(9); // May attack only if cornered
+    directions[4] = randomNumber(9);
 
     // don't move him if he is not supposed to move!
-    if (!(r_ptr->cmove & CM_ATTACK_ONLY)) {
-        makeMove(monsterID, mm, rcmove);
+    if (!(creature->cmove & CM_ATTACK_ONLY)) {
+        makeMove(monster_id, directions, rcmove);
     }
 
-    m_ptr->confused--;
+    monster->confused--;
+}
+
+static void monsterMoveConfused(Monster_t *monster, Creature_t *creature, int monster_id, uint32_t *rcmove) {
+    int directions[9];
+
+    directions[0] = randomNumber(9);
+    directions[1] = randomNumber(9);
+    directions[2] = randomNumber(9);
+    directions[3] = randomNumber(9);
+    directions[4] = randomNumber(9);
+
+    // don't move him if he is not supposed to move!
+    if (!(creature->cmove & CM_ATTACK_ONLY)) {
+        makeMove(monster_id, directions, rcmove);
+    }
+
+    monster->confused--;
 }
 
 // Move the critters about the dungeon -RAK-
-static void mon_move(int monsterID, uint32_t *rcmove) {
-    Monster_t *m_ptr = &monsters[monsterID];
-    Creature_t *r_ptr = &creatures_list[m_ptr->mptr];
+static void monsterMove(int monster_id, uint32_t *rcmove) {
+    Monster_t *monster = &monsters[monster_id];
+    Creature_t *creature = &creatures_list[monster->mptr];
 
     // Does the critter multiply?
     // rest could be negative, to be safe, only use mod with positive values.
-    int restPeriod = abs(py.flags.rest);
-    if ((r_ptr->cmove & CM_MULTIPLY) && MAX_MON_MULT >= monster_multiply_total && (restPeriod % MON_MULT_ADJ) == 0) {
-        monsterMultiplyCritter(m_ptr, monsterID, rcmove);
+    int rest_period = abs(py.flags.rest);
+    if ((creature->cmove & CM_MULTIPLY) && MAX_MON_MULT >= monster_multiply_total && (rest_period % MON_MULT_ADJ) == 0) {
+        monsterMultiplyCritter(monster, monster_id, rcmove);
     }
 
     // if in wall, must immediately escape to a clear area
     // then monster movement finished
-    if (!(r_ptr->cmove & CM_PHASE) && cave[m_ptr->fy][m_ptr->fx].fval >= MIN_CAVE_WALL) {
-        monsterMoveOutOfWall(m_ptr, monsterID, rcmove);
+    if (!(creature->cmove & CM_PHASE) && cave[monster->fy][monster->fx].fval >= MIN_CAVE_WALL) {
+        monsterMoveOutOfWall(monster, monster_id, rcmove);
         return;
     }
 
-    bool doMove = false;
+    bool do_move = false;
 
-    if (m_ptr->confused) {
+    if (monster->confused) {
         // Creature is confused or undead turned?
-        creatureMoveConfusedUndead(m_ptr, r_ptr, monsterID, rcmove);
-        doMove = true;
-    } else if (r_ptr->spells & CS_FREQ) {
+        if (creature->cdefense & CD_UNDEAD) {
+            monsterMoveUndead(monster, creature, monster_id, rcmove);
+        } else {
+            monsterMoveConfused(monster, creature, monster_id, rcmove);
+        }
+
+        do_move = true;
+    } else if (creature->spells & CS_FREQ) {
         // Creature may cast a spell
-        doMove = monsterCastSpell(monsterID);
+        do_move = monsterCastSpell(monster_id);
     }
 
-    int mm[9];
-    if (!doMove) {
-        if ((r_ptr->cmove & CM_75_RANDOM) && randomNumber(100) < 75) {
+    int directions[9];
+
+    if (!do_move) {
+        if ((creature->cmove & CM_75_RANDOM) && randomNumber(100) < 75) {
             // 75% random movement
-            mm[0] = randomNumber(9);
-            mm[1] = randomNumber(9);
-            mm[2] = randomNumber(9);
-            mm[3] = randomNumber(9);
-            mm[4] = randomNumber(9);
+            directions[0] = randomNumber(9);
+            directions[1] = randomNumber(9);
+            directions[2] = randomNumber(9);
+            directions[3] = randomNumber(9);
+            directions[4] = randomNumber(9);
             *rcmove |= CM_75_RANDOM;
-            makeMove(monsterID, mm, rcmove);
-        } else if ((r_ptr->cmove & CM_40_RANDOM) && randomNumber(100) < 40) {
+            makeMove(monster_id, directions, rcmove);
+        } else if ((creature->cmove & CM_40_RANDOM) && randomNumber(100) < 40) {
             // 40% random movement
-            mm[0] = randomNumber(9);
-            mm[1] = randomNumber(9);
-            mm[2] = randomNumber(9);
-            mm[3] = randomNumber(9);
-            mm[4] = randomNumber(9);
+            directions[0] = randomNumber(9);
+            directions[1] = randomNumber(9);
+            directions[2] = randomNumber(9);
+            directions[3] = randomNumber(9);
+            directions[4] = randomNumber(9);
             *rcmove |= CM_40_RANDOM;
-            makeMove(monsterID, mm, rcmove);
-        } else if ((r_ptr->cmove & CM_20_RANDOM) && randomNumber(100) < 20) {
+            makeMove(monster_id, directions, rcmove);
+        } else if ((creature->cmove & CM_20_RANDOM) && randomNumber(100) < 20) {
             // 20% random movement
-            mm[0] = randomNumber(9);
-            mm[1] = randomNumber(9);
-            mm[2] = randomNumber(9);
-            mm[3] = randomNumber(9);
-            mm[4] = randomNumber(9);
+            directions[0] = randomNumber(9);
+            directions[1] = randomNumber(9);
+            directions[2] = randomNumber(9);
+            directions[3] = randomNumber(9);
+            directions[4] = randomNumber(9);
             *rcmove |= CM_20_RANDOM;
-            makeMove(monsterID, mm, rcmove);
-        } else if (r_ptr->cmove & CM_MOVE_NORMAL) {
+            makeMove(monster_id, directions, rcmove);
+        } else if (creature->cmove & CM_MOVE_NORMAL) {
             // Normal movement
             if (randomNumber(200) == 1) {
-                mm[0] = randomNumber(9);
-                mm[1] = randomNumber(9);
-                mm[2] = randomNumber(9);
-                mm[3] = randomNumber(9);
-                mm[4] = randomNumber(9);
+                directions[0] = randomNumber(9);
+                directions[1] = randomNumber(9);
+                directions[2] = randomNumber(9);
+                directions[3] = randomNumber(9);
+                directions[4] = randomNumber(9);
             } else {
-                monsterGetMoveDirection(monsterID, mm);
+                monsterGetMoveDirection(monster_id, directions);
             }
             *rcmove |= CM_MOVE_NORMAL;
-            makeMove(monsterID, mm, rcmove);
-        } else if (r_ptr->cmove & CM_ATTACK_ONLY) {
+            makeMove(monster_id, directions, rcmove);
+        } else if (creature->cmove & CM_ATTACK_ONLY) {
             // Attack, but don't move
-            if (m_ptr->cdis < 2) {
-                monsterGetMoveDirection(monsterID, mm);
-                makeMove(monsterID, mm, rcmove);
+            if (monster->cdis < 2) {
+                monsterGetMoveDirection(monster_id, directions);
+                makeMove(monster_id, directions, rcmove);
             } else {
                 // Learn that the monster does does not move when
                 // it should have moved, but didn't.
                 *rcmove |= CM_ATTACK_ONLY;
             }
-        } else if ((r_ptr->cmove & CM_ONLY_MAGIC) && m_ptr->cdis < 2) {
+        } else if ((creature->cmove & CM_ONLY_MAGIC) && monster->cdis < 2) {
             // A little hack for Quylthulgs, so that one will eventually
             // notice that they have no physical attacks.
-            if (creature_recall[m_ptr->mptr].r_attacks[0] < MAX_UCHAR) {
-                creature_recall[m_ptr->mptr].r_attacks[0]++;
+            if (creature_recall[monster->mptr].r_attacks[0] < MAX_UCHAR) {
+                creature_recall[monster->mptr].r_attacks[0]++;
             }
 
             // Another little hack for Quylthulgs, so that one can
             // eventually learn their speed.
-            if (creature_recall[m_ptr->mptr].r_attacks[0] > 20) {
-                creature_recall[m_ptr->mptr].r_cmove |= CM_ONLY_MAGIC;
+            if (creature_recall[monster->mptr].r_attacks[0] > 20) {
+                creature_recall[monster->mptr].r_cmove |= CM_ONLY_MAGIC;
             }
         }
     }
@@ -1673,7 +1688,7 @@ static void creatureAttackingUpdate(Monster_t *m_ptr, int monsterID, int moves) 
                 }
             }
             if ((m_ptr->csleep == 0) && (m_ptr->stunned == 0)) {
-                mon_move(monsterID, &rcmove);
+                monsterMove(monsterID, &rcmove);
             }
         }
 
@@ -1714,7 +1729,7 @@ void updateMonsters(bool attack) {
 
         // Get rid of an eaten/breathed on monster. This is necessary because
         // we can't delete monsters while scanning the monsters here.
-        // This monster may have been killed during mon_move().
+        // This monster may have been killed during monsterMove().
         if (m_ptr->hp < 0) {
             dungeonDeleteMonsterFix2(id);
             continue;
