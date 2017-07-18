@@ -297,17 +297,17 @@ static void dungeonPlaceStairs(int stair_type, int number, int walls) {
 }
 
 // Place a trap with a given displacement of point -RAK-
-static void vault_trap(int y, int x, int yd, int xd, int num) {
-    for (int i = 0; i < num; i++) {
-        bool flag = false;
+static void dungeonPlaceVaultTrap(int y, int x, int yd, int xd, int number) {
+    for (int i = 0; i < number; i++) {
+        bool placed = false;
 
-        for (int count = 0; !flag && count <= 5; count++) {
+        for (int count = 0; !placed && count <= 5; count++) {
             int y1 = y - yd - 1 + randomNumber(2 * yd + 1);
             int x1 = x - xd - 1 + randomNumber(2 * xd + 1);
 
             if (cave[y1][x1].fval != NULL_WALL && cave[y1][x1].fval <= MAX_CAVE_FLOOR && cave[y1][x1].tptr == 0) {
                 dungeonSetTrap(y1, x1, randomNumber(MAX_TRAP) - 1);
-                flag = true;
+                placed = true;
             }
         }
     }
@@ -581,7 +581,7 @@ static void build_type2(int y, int x) {
             vault_monster(y, x, 2 + randomNumber(3));
 
             // If the monsters don't get 'em.
-            vault_trap(y, x, 4, 10, 2 + randomNumber(3));
+            dungeonPlaceVaultTrap(y, x, 4, 10, 2 + randomNumber(3));
             break;
         case 3: // Inner pillar(s).
             placeRandomSecretDoor(y, x, depth, height, left, right);
@@ -624,8 +624,8 @@ static void build_type2(int y, int x) {
             vault_monster(y, x + 5, randomNumber(3));
 
             // Traps make them entertaining.
-            vault_trap(y, x - 3, 2, 8, randomNumber(3));
-            vault_trap(y, x + 3, 2, 8, randomNumber(3));
+            dungeonPlaceVaultTrap(y, x - 3, 2, 8, randomNumber(3));
+            dungeonPlaceVaultTrap(y, x + 3, 2, 8, randomNumber(3));
 
             // Mazes should have some treasure too..
             for (int i = 0; i < 3; i++) {
@@ -751,7 +751,7 @@ static void build_type3(int y, int x) {
             vault_monster(y, x, 2 + randomNumber(2));
 
             // Traps naturally
-            vault_trap(y, x, 4, 4, 1 + randomNumber(3));
+            dungeonPlaceVaultTrap(y, x, 4, 4, 1 + randomNumber(3));
             break;
         case 3:
             if (randomNumber(3) == 1) {
