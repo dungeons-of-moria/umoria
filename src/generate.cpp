@@ -922,7 +922,7 @@ static void dungeonBuildTunnel(int y_start, int x_start, int y_end, int x_end) {
     }
 }
 
-static bool next_to(int y, int x) {
+static bool dungeonIsNextTo(int y, int x) {
     if (coordCorridorWallsNextTo(y, x) > 2) {
         bool vertical = cave[y - 1][x].fval >= MIN_CAVE_WALL && cave[y + 1][x].fval >= MIN_CAVE_WALL;
         bool horizontal = cave[y][x - 1].fval >= MIN_CAVE_WALL && cave[y][x + 1].fval >= MIN_CAVE_WALL;
@@ -935,7 +935,7 @@ static bool next_to(int y, int x) {
 
 // Places door at y, x position if at least 2 walls found
 static void try_door(int y, int x) {
-    if (cave[y][x].fval == CORR_FLOOR && randomNumber(100) > DUN_TUN_JCT && next_to(y, x)) {
+    if (cave[y][x].fval == CORR_FLOOR && randomNumber(100) > DUN_TUN_JCT && dungeonIsNextTo(y, x)) {
         dungeonPlaceDoor(y, x);
     }
 }
