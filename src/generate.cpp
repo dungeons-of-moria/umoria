@@ -1113,7 +1113,7 @@ static void dungeonBuildStore(int store_id, int y, int x) {
 }
 
 // Link all free space in treasure list together
-static void tlink() {
+static void treasureLinker() {
     for (int i = 0; i < MAX_TALLOC; i++) {
         inventoryItemCopyTo(OBJ_NOTHING, &treasure_list[i]);
     }
@@ -1208,7 +1208,7 @@ void generateCave() {
     char_row = -1;
     char_col = -1;
 
-    tlink();
+    treasureLinker();
     mlink();
     dungeonBlankEntireCave();
 
