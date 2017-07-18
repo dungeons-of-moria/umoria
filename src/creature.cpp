@@ -94,11 +94,11 @@ static bool monsterMakeVisible(int y, int x) {
 }
 
 // Choose correct directions for monster movement -RAK-
-static void get_moves(int monsterID, int *mm) {
+static void monsterGetMoveDirection(int monster_id, int *directions) {
     int ay, ax, movement;
 
-    int y = monsters[monsterID].fy - char_row;
-    int x = monsters[monsterID].fx - char_col;
+    int y = monsters[monster_id].fy - char_row;
+    int x = monsters[monster_id].fx - char_col;
 
     if (y < 0) {
         movement = 8;
@@ -123,120 +123,120 @@ static void get_moves(int monsterID, int *mm) {
 
     switch (movement) {
         case 0:
-            mm[0] = 9;
+            directions[0] = 9;
             if (ay > ax) {
-                mm[1] = 8;
-                mm[2] = 6;
-                mm[3] = 7;
-                mm[4] = 3;
+                directions[1] = 8;
+                directions[2] = 6;
+                directions[3] = 7;
+                directions[4] = 3;
             } else {
-                mm[1] = 6;
-                mm[2] = 8;
-                mm[3] = 3;
-                mm[4] = 7;
+                directions[1] = 6;
+                directions[2] = 8;
+                directions[3] = 3;
+                directions[4] = 7;
             }
             break;
         case 1:
         case 9:
-            mm[0] = 6;
+            directions[0] = 6;
             if (y < 0) {
-                mm[1] = 3;
+                directions[1] = 3;
 
-                mm[2] = 9;
-                mm[3] = 2;
-                mm[4] = 8;
+                directions[2] = 9;
+                directions[3] = 2;
+                directions[4] = 8;
             } else {
-                mm[1] = 9;
-                mm[2] = 3;
-                mm[3] = 8;
-                mm[4] = 2;
+                directions[1] = 9;
+                directions[2] = 3;
+                directions[3] = 8;
+                directions[4] = 2;
             }
             break;
         case 2:
         case 6:
-            mm[0] = 8;
+            directions[0] = 8;
             if (x < 0) {
-                mm[1] = 9;
-                mm[2] = 7;
-                mm[3] = 6;
-                mm[4] = 4;
+                directions[1] = 9;
+                directions[2] = 7;
+                directions[3] = 6;
+                directions[4] = 4;
             } else {
-                mm[1] = 7;
-                mm[2] = 9;
-                mm[3] = 4;
-                mm[4] = 6;
+                directions[1] = 7;
+                directions[2] = 9;
+                directions[3] = 4;
+                directions[4] = 6;
             }
             break;
         case 4:
-            mm[0] = 7;
+            directions[0] = 7;
             if (ay > ax) {
-                mm[1] = 8;
-                mm[2] = 4;
-                mm[3] = 9;
-                mm[4] = 1;
+                directions[1] = 8;
+                directions[2] = 4;
+                directions[3] = 9;
+                directions[4] = 1;
             } else {
-                mm[1] = 4;
-                mm[2] = 8;
-                mm[3] = 1;
-                mm[4] = 9;
+                directions[1] = 4;
+                directions[2] = 8;
+                directions[3] = 1;
+                directions[4] = 9;
             }
             break;
         case 5:
         case 13:
-            mm[0] = 4;
+            directions[0] = 4;
             if (y < 0) {
-                mm[1] = 1;
-                mm[2] = 7;
-                mm[3] = 2;
-                mm[4] = 8;
+                directions[1] = 1;
+                directions[2] = 7;
+                directions[3] = 2;
+                directions[4] = 8;
             } else {
-                mm[1] = 7;
-                mm[2] = 1;
-                mm[3] = 8;
-                mm[4] = 2;
+                directions[1] = 7;
+                directions[2] = 1;
+                directions[3] = 8;
+                directions[4] = 2;
             }
             break;
         case 8:
-            mm[0] = 3;
+            directions[0] = 3;
             if (ay > ax) {
-                mm[1] = 2;
-                mm[2] = 6;
-                mm[3] = 1;
-                mm[4] = 9;
+                directions[1] = 2;
+                directions[2] = 6;
+                directions[3] = 1;
+                directions[4] = 9;
             } else {
-                mm[1] = 6;
-                mm[2] = 2;
-                mm[3] = 9;
-                mm[4] = 1;
+                directions[1] = 6;
+                directions[2] = 2;
+                directions[3] = 9;
+                directions[4] = 1;
             }
             break;
         case 10:
         case 14:
-            mm[0] = 2;
+            directions[0] = 2;
             if (x < 0) {
-                mm[1] = 3;
-                mm[2] = 1;
-                mm[3] = 6;
-                mm[4] = 4;
+                directions[1] = 3;
+                directions[2] = 1;
+                directions[3] = 6;
+                directions[4] = 4;
             } else {
-                mm[1] = 1;
-                mm[2] = 3;
-                mm[3] = 4;
-                mm[4] = 6;
+                directions[1] = 1;
+                directions[2] = 3;
+                directions[3] = 4;
+                directions[4] = 6;
             }
             break;
         case 12:
-            mm[0] = 1;
+            directions[0] = 1;
             if (ay > ax) {
-                mm[1] = 2;
-                mm[2] = 4;
-                mm[3] = 3;
-                mm[4] = 7;
+                directions[1] = 2;
+                directions[2] = 4;
+                directions[3] = 3;
+                directions[4] = 7;
             } else {
-                mm[1] = 4;
-                mm[2] = 2;
-                mm[3] = 7;
-                mm[4] = 3;
+                directions[1] = 4;
+                directions[2] = 2;
+                directions[3] = 7;
+                directions[4] = 3;
             }
             break;
     }
@@ -1478,7 +1478,7 @@ static void creatureMoveConfusedUndead(Monster_t *m_ptr, Creature_t *r_ptr, int 
 
     // Undead only get confused from turn undead, so they should flee
     if (r_ptr->cdefense & CD_UNDEAD) {
-        get_moves(monsterID, mm);
+        monsterGetMoveDirection(monsterID, mm);
         mm[0] = 10 - mm[0];
         mm[1] = 10 - mm[1];
         mm[2] = 10 - mm[2];
@@ -1568,14 +1568,14 @@ static void mon_move(int monsterID, uint32_t *rcmove) {
                 mm[3] = randomNumber(9);
                 mm[4] = randomNumber(9);
             } else {
-                get_moves(monsterID, mm);
+                monsterGetMoveDirection(monsterID, mm);
             }
             *rcmove |= CM_MOVE_NORMAL;
             make_move(monsterID, mm, rcmove);
         } else if (r_ptr->cmove & CM_ATTACK_ONLY) {
             // Attack, but don't move
             if (m_ptr->cdis < 2) {
-                get_moves(monsterID, mm);
+                monsterGetMoveDirection(monsterID, mm);
                 make_move(monsterID, mm, rcmove);
             } else {
                 // Learn that the monster does does not move when
