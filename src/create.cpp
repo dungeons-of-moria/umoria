@@ -308,13 +308,13 @@ static void characterSetAgeHeightWeight() {
 
 // Prints the classes for a given race: Rogue, Mage, Priest, etc.,
 // shown during the character creation screens.
-static int print_classes(int race_id, int *class_list) {
-    int col = 2;
-    int row = 21;
+static int displayRaceClasses(int race_id, int *class_list) {
+    int y = 2;
+    int x = 21;
 
     int class_id = 0;
 
-    char tmp_str[80];
+    char description[80];
     uint32_t mask = 0x1;
 
     clearToBottom(20);
@@ -322,14 +322,14 @@ static int print_classes(int race_id, int *class_list) {
 
     for (int i = 0; i < MAX_CLASS; i++) {
         if (character_races[race_id].rtclass & mask) {
-            (void) sprintf(tmp_str, "%c) %s", class_id + 'a', classes[i].title);
-            putString(tmp_str, row, col);
+            (void) sprintf(description, "%c) %s", class_id + 'a', classes[i].title);
+            putString(description, x, y);
             class_list[class_id] = i;
 
-            col += 15;
-            if (col > 70) {
-                col = 2;
-                row++;
+            y += 15;
+            if (y > 70) {
+                y = 2;
+                x++;
             }
             class_id++;
         }
@@ -346,7 +346,7 @@ static void get_class() {
         class_list[cid] = 0;
     }
 
-    int class_count = print_classes(py.misc.prace, class_list);
+    int class_count = displayRaceClasses(py.misc.prace, class_list);
 
     py.misc.pclass = 0;
 
