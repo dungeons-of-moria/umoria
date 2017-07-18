@@ -122,27 +122,29 @@ static void displayCharacterRaces(void) {
 }
 
 // Allows player to select a race -JWT-
-static void choose_race() {
+static void characterChooseRace() {
     displayCharacterRaces();
 
-    int i = 0;
+    int race_id = 0;
 
     while (true) {
         moveCursor(20, 30);
-        char s = getKeyInput();
-        i = s - 'a';
-        if (i < MAX_RACES && i >= 0) {
+
+        char input = getKeyInput();
+        race_id = input - 'a';
+
+        if (race_id < MAX_RACES && race_id >= 0) {
             break;
-        } else if (s == '?') {
+        } else if (input == '?') {
             displayTextHelpFile(MORIA_WELCOME);
         } else {
             terminalBellSound();
         }
     }
 
-    py.misc.prace = (uint8_t) i;
+    py.misc.prace = (uint8_t) race_id;
 
-    putString(character_races[i].trace, 3, 15);
+    putString(character_races[race_id].trace, 3, 15);
 }
 
 // Will print the history of a character -JWT-
@@ -439,7 +441,7 @@ static void get_money() {
 // Main Character Creation Routine -JWT-
 void createCharacter() {
     printCharacterInformation();
-    choose_race();
+    characterChooseRace();
     get_sex();
 
     // here we start a loop giving a player a choice of characters -RGM-
