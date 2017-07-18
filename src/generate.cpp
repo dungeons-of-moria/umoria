@@ -207,21 +207,21 @@ static void dungeonPlaceSecretDoor(int y, int x) {
     cave[y][x].fval = BLOCKED_FLOOR;
 }
 
-static void place_door(int y, int x) {
-    int doorType = randomNumber(3);
+static void dungeonPlaceDoor(int y, int x) {
+    int door_type = randomNumber(3);
 
-    if (doorType == 1) {
+    if (door_type == 1) {
         if (randomNumber(4) == 1) {
             dungeonPlaceBrokenDoor(y, x);
         } else {
             dungeonPlaceOpenDoor(y, x);
         }
-    } else if (doorType == 2) {
-        doorType = randomNumber(12);
+    } else if (door_type == 2) {
+        door_type = randomNumber(12);
 
-        if (doorType > 3) {
+        if (door_type > 3) {
             dungeonPlaceClosedDoor(y, x);
-        } else if (doorType == 3) {
+        } else if (door_type == 3) {
             dungeonPlaceStuckDoor(y, x);
         } else {
             dungeonPlaceLockedDoor(y, x);
@@ -914,7 +914,7 @@ static void build_tunnel(int row1, int col1, int row2, int col2) {
 
         if (c_ptr->fval == TMP2_WALL) {
             if (randomNumber(100) < DUN_TUN_PEN) {
-                place_door(wallstk[i].y, wallstk[i].x);
+                dungeonPlaceDoor(wallstk[i].y, wallstk[i].x);
             } else {
                 // these have to be doorways to rooms
                 c_ptr->fval = CORR_FLOOR;
@@ -937,7 +937,7 @@ static bool next_to(int y, int x) {
 // Places door at y, x position if at least 2 walls found
 static void try_door(int y, int x) {
     if (cave[y][x].fval == CORR_FLOOR && randomNumber(100) > DUN_TUN_JCT && next_to(y, x)) {
-        place_door(y, x);
+        dungeonPlaceDoor(y, x);
     }
 }
 
