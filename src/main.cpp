@@ -13,7 +13,7 @@
 static void initializeCharacterInventory();
 static void initializeMonsterLevels();
 static void initializeTreasureLevels();
-static void check_file_permissions();
+static void checkFilePermissions();
 
 #if (COST_ADJ != 100)
 static void price_adjust();
@@ -33,7 +33,7 @@ int main(int argc, char *argv[]) {
     initializeScoreFile();
 
     // Make sure we have access to all files -MRC-
-    check_file_permissions();
+    checkFilePermissions();
 
     terminalInitialize();
 
@@ -310,18 +310,3 @@ static void price_adjust() {
     }
 }
 #endif
-
-// Check user permissions on Unix based systems,
-// or if on Windows just return. -MRC-
-static void check_file_permissions() {
-#ifndef _WIN32
-    if (0 != setuid(getuid())) {
-        perror("Can't set permissions correctly!  Setuid call failed.\n");
-        exit(0);
-    }
-    if (0 != setgid(getgid())) {
-        perror("Can't set permissions correctly!  Setgid call failed.\n");
-        exit(0);
-    }
-#endif
-}
