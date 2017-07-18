@@ -17,7 +17,7 @@ static Coord_t doors_tk[100];
 static int door_index;
 
 // Returns a Dark/Light floor tile based on current_dungeon_level, and random number
-static uint8_t floorTileForDungeonLevel() {
+static uint8_t dungeonFloorTileForLevel() {
     if (current_dungeon_level <= randomNumber(25)) {
         return LIGHT_FLOOR;
     }
@@ -325,7 +325,7 @@ static void vault_monster(int y, int x, int num) {
 
 // Builds a room at a row, column coordinate -RAK-
 static void build_room(int y, int x) {
-    uint8_t floor = floorTileForDungeonLevel();
+    uint8_t floor = dungeonFloorTileForLevel();
 
     int height = y - randomNumber(4);
     int depth = y + randomNumber(3);
@@ -362,7 +362,7 @@ static void build_room(int y, int x) {
 // Builds a room at a row, column coordinate -RAK-
 // Type 1 unusual rooms are several overlapping rectangular ones
 static void build_type1(int y, int x) {
-    uint8_t floor = floorTileForDungeonLevel();
+    uint8_t floor = dungeonFloorTileForLevel();
 
     int limit = 1 + randomNumber(2);
 
@@ -518,7 +518,7 @@ static void placeFourSmallRooms(int y, int x, int depth, int height, int left, i
 //   4 - Inner room has a maze
 //   5 - A set of four inner rooms
 static void build_type2(int y, int x) {
-    uint8_t floor = floorTileForDungeonLevel();
+    uint8_t floor = dungeonFloorTileForLevel();
 
     int height = y - 4;
     int depth = y + 4;
@@ -657,7 +657,7 @@ static void placeLargeMiddlePillar(int y, int x) {
 // Builds a room at a row, column coordinate -RAK-
 // Type 3 unusual rooms are cross shaped
 static void build_type3(int y, int x) {
-    uint8_t floor = floorTileForDungeonLevel();
+    uint8_t floor = dungeonFloorTileForLevel();
 
     int randomOffset = 2 + randomNumber(2);
 
