@@ -83,14 +83,14 @@ static int monsterMovementRate(int16_t speed) {
 }
 
 // Makes sure a new creature gets lit up. -CJS-
-static bool check_mon_lite(int y, int x) {
-    int monsterID = cave[y][x].cptr;
-    if (monsterID <= 1) {
+static bool monsterMakeVisible(int y, int x) {
+    int monster_id = cave[y][x].cptr;
+    if (monster_id <= 1) {
         return false;
     }
 
-    monsterUpdateVisibility(monsterID);
-    return monsters[monsterID].ml;
+    monsterUpdateVisibility(monster_id);
+    return monsters[monster_id].ml;
 }
 
 // Choose correct directions for monster movement -RAK-
@@ -1370,7 +1370,7 @@ bool monsterMultiply(int y, int x, int creatureID, int monsterID) {
                         }
 
                         monster_multiply_total++;
-                        return check_mon_lite(row, col);
+                        return monsterMakeVisible(row, col);
                     }
                 } else {
                     // All clear,  place a monster
@@ -1386,7 +1386,7 @@ bool monsterMultiply(int y, int x, int creatureID, int monsterID) {
                     }
 
                     monster_multiply_total++;
-                    return check_mon_lite(row, col);
+                    return monsterMakeVisible(row, col);
                 }
             }
         }
