@@ -1424,27 +1424,27 @@ static void monsterMultiplyCritter(Monster_t *monster, int monster_id, uint32_t 
     }
 }
 
-static void creatureMoveOutOfWall(Monster_t *m_ptr, int monsterID, uint32_t *rcmove) {
+static void monsterMoveOutOfWall(Monster_t *monster, int monster_id, uint32_t *rcmove) {
     // If the monster is already dead, don't kill it again!
     // This can happen for monsters moving faster than the player. They
     // will get multiple moves, but should not if they die on the first
     // move.  This is only a problem for monsters stuck in rock.
-    if (m_ptr->hp < 0) {
+    if (monster->hp < 0) {
         return;
     }
 
     int id = 0;
     int dir = 1;
-    int mm[9];
+    int directions[9];
 
     // Note direction of for loops matches direction of keypad from 1 to 9
     // Do not allow attack against the player.
     // Must cast fy-1 to signed int, so that a negative value
     // of i will fail the comparison.
-    for (int y = m_ptr->fy + 1; y >= (m_ptr->fy - 1); y--) {
-        for (int x = m_ptr->fx - 1; x <= m_ptr->fx + 1; x++) {
+    for (int y = monster->fy + 1; y >= (monster->fy - 1); y--) {
+        for (int x = monster->fx - 1; x <= monster->fx + 1; x++) {
             if (dir != 5 && cave[y][x].fval <= MAX_OPEN_SPACE && cave[y][x].cptr != 1) {
-                mm[id++] = dir;
+                directions[id++] = dir;
             }
             dir++;
         }
@@ -1453,19 +1453,22 @@ static void creatureMoveOutOfWall(Monster_t *m_ptr, int monsterID, uint32_t *rcm
     if (id != 0) {
         // put a random direction first
         dir = randomNumber(id) - 1;
-        int savedID = mm[0];
-        mm[0] = mm[dir];
-        mm[dir] = savedID;
-        makeMove(monsterID, mm, rcmove);
-        // this can only fail if mm[0] has a rune of protection
+
+        int saved_id = directions[0];
+
+        directions[0] = directions[dir];
+        directions[dir] = saved_id;
+
+        // this can only fail if directions[0] has a rune of protection
+        makeMove(monster_id, directions, rcmove);
     }
 
     // if still in a wall, let it dig itself out, but also apply some more damage
-    if (cave[m_ptr->fy][m_ptr->fx].fval >= MIN_CAVE_WALL) {
+    if (cave[monster->fy][monster->fx].fval >= MIN_CAVE_WALL) {
         // in case the monster dies, may need to callfix1_delete_monster()
         // instead of delete_monsters()
-        hack_monptr = monsterID;
-        int i = monsterTakeHit(monsterID, diceDamageRoll(8, 8));
+        hack_monptr = monster_id;
+        int i = monsterTakeHit(monster_id, diceDamageRoll(8, 8));
         hack_monptr = -1;
 
         if (i >= 0) {
@@ -1473,7 +1476,7 @@ static void creatureMoveOutOfWall(Monster_t *m_ptr, int monsterID, uint32_t *rcm
             displayCharacterExperience();
         } else {
             printMessage("A creature digs itself out from the rock!");
-            (void) dungeonTunnelWall((int) m_ptr->fy, (int) m_ptr->fx, 1, 0);
+            (void) dungeonTunnelWall((int) monster->fy, (int) monster->fx, 1, 0);
         }
     }
 }
@@ -1520,7 +1523,7 @@ static void mon_move(int monsterID, uint32_t *rcmove) {
     // if in wall, must immediately escape to a clear area
     // then monster movement finished
     if (!(r_ptr->cmove & CM_PHASE) && cave[m_ptr->fy][m_ptr->fx].fval >= MIN_CAVE_WALL) {
-        creatureMoveOutOfWall(m_ptr, monsterID, rcmove);
+        monsterMoveOutOfWall(m_ptr, monsterID, rcmove);
         return;
     }
 
