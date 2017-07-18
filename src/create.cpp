@@ -10,18 +10,18 @@
 #include "externs.h"
 
 // Generates character's stats -JWT-
-static void get_stats() {
-    int tot;
+static void characterGenerateStats() {
+    int total;
     int dice[18];
 
     do {
-        tot = 0;
+        total = 0;
         for (int i = 0; i < 18; i++) {
             // Roll 3,4,5 sided dice once each
             dice[i] = randomNumber(3 + i % 3);
-            tot += dice[i];
+            total += dice[i];
         }
-    } while (tot <= 42 || tot >= 54);
+    } while (total <= 42 || total >= 54);
 
     for (int i = 0; i < 6; i++) {
         py.stats.max_stat[i] = (uint8_t) (5 + dice[3 * i] + dice[3 * i + 1] + dice[3 * i + 2]);
@@ -68,7 +68,7 @@ static void change_stat(int stat, int16_t amount) {
 static void get_all_stats() {
     Race_t *r_ptr = &character_races[py.misc.prace];
 
-    get_stats();
+    characterGenerateStats();
     change_stat(A_STR, r_ptr->str_adj);
     change_stat(A_INT, r_ptr->int_adj);
     change_stat(A_WIS, r_ptr->wis_adj);
