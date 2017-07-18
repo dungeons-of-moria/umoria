@@ -1121,7 +1121,7 @@ static void treasureLinker() {
 }
 
 // Link all free space in monster list together
-static void mlink() {
+static void monsterLinker() {
     for (int i = 0; i < MAX_MALLOC; i++) {
         monsters[i] = blank_monster;
     }
@@ -1209,7 +1209,7 @@ void generateCave() {
     char_col = -1;
 
     treasureLinker();
-    mlink();
+    monsterLinker();
     dungeonBlankEntireCave();
 
     // We're in the dungeon more than the town, so let's default to that -MRC-
