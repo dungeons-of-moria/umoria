@@ -13,7 +13,7 @@ static char originalCommands(char command);
 static void doCommand(char command);
 static bool validCountCommand(char command);
 static void playerRegenerateHitPoints(int percent);
-static void regenmana(int percent);
+static void playerRegenerateMana(int percent);
 static bool enchanted(Inventory_t *t_ptr);
 static void examine_book();
 static void go_up();
@@ -239,7 +239,7 @@ static void playerUpdateRegeneration(int amount) {
     }
 
     if (py.misc.cmana < py.misc.mana) {
-        regenmana(amount);
+        playerRegenerateMana(amount);
     }
 }
 
@@ -1955,7 +1955,7 @@ static void playerRegenerateHitPoints(int percent) {
 }
 
 // Regenerate mana points -RAK-
-static void regenmana(int percent) {
+static void playerRegenerateMana(int percent) {
     int old_cmana = py.misc.cmana;
     int32_t new_mana = (int32_t) py.misc.mana * percent + PLAYER_REGEN_MNBASE;
 
@@ -1968,13 +1968,13 @@ static void regenmana(int percent) {
     }
 
     // mod 65536
-    int32_t new_mana_frac = (new_mana & 0xFFFF) + py.misc.cmana_frac;
+    int32_t new_mana_fraction = (new_mana & 0xFFFF) + py.misc.cmana_frac;
 
-    if (new_mana_frac >= 0x10000L) {
-        py.misc.cmana_frac = (uint16_t) (new_mana_frac - 0x10000L);
+    if (new_mana_fraction >= 0x10000L) {
+        py.misc.cmana_frac = (uint16_t) (new_mana_fraction - 0x10000L);
         py.misc.cmana++;
     } else {
-        py.misc.cmana_frac = (uint16_t) new_mana_frac;
+        py.misc.cmana_frac = (uint16_t) new_mana_fraction;
     }
 
     // must set frac to zero even if equal
