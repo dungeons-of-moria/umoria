@@ -10,7 +10,7 @@
 #include "externs.h"
 
 static char originalCommands(char command);
-static void do_command(char com_val);
+static void doCommand(char command);
 static bool valid_countcommand(char c);
 static void regenhp(int percent);
 static void regenmana(int percent);
@@ -850,7 +850,7 @@ static void executeInputCommands(char *command, int *find_count) {
             moveCursorRelative(char_row, char_col);
             putQIO();
 
-            do_command(lastInputCommand);
+            doCommand(lastInputCommand);
 
             // Find is counted differently, as the command changes.
             if (running_counter) {
@@ -1569,10 +1569,10 @@ static void doWizardCommands(char com_val) {
     }
 }
 
-static void do_command(char com_val) {
-    bool do_pickup = moveWithoutPickup(&com_val);
+static void doCommand(char command) {
+    bool do_pickup = moveWithoutPickup(&command);
 
-    switch (com_val) {
+    switch (command) {
         case 'Q': // (Q)uit    (^K)ill
             commandQuit();
             player_free_turn = true;
@@ -1821,12 +1821,12 @@ static void do_command(char com_val) {
             player_free_turn = true;
 
             if (wizard_mode) {
-                doWizardCommands(com_val);
+                doWizardCommands(command);
             } else {
                 putStringClearToEOL("Type '?' for help.", 0, 0);
             }
     }
-    last_command = com_val;
+    last_command = command;
 }
 
 // Check whether this command will accept a count. -CJS-
