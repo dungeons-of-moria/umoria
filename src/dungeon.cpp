@@ -11,7 +11,7 @@
 
 static char originalCommands(char command);
 static void doCommand(char command);
-static bool valid_countcommand(char c);
+static bool validCountCommand(char command);
 static void regenhp(int percent);
 static void regenmana(int percent);
 static bool enchanted(Inventory_t *t_ptr);
@@ -834,7 +834,7 @@ static void executeInputCommands(char *command, int *find_count) {
                 }
 
                 if (counter > 0) {
-                    if (!valid_countcommand(lastInputCommand)) {
+                    if (!validCountCommand(lastInputCommand)) {
                         player_free_turn = true;
                         lastInputCommand = ' ';
                         printMessage("Invalid command with a count.");
@@ -1830,8 +1830,8 @@ static void doCommand(char command) {
 }
 
 // Check whether this command will accept a count. -CJS-
-static bool valid_countcommand(char c) {
-    switch (c) {
+static bool validCountCommand(char command) {
+    switch (command) {
         case 'Q':
         case CTRL_KEY('W'):
         case CTRL_KEY('X'):
