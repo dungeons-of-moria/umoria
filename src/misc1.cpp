@@ -15,7 +15,7 @@ static uint32_t old_seed;
 static void panelBounds();
 static int popm();
 static int maxHitPoints(uint8_t *array);
-static int get_mons_num(int level);
+static int monsterGetOneSuitableForLevel(int level);
 
 // gets a new random seed for the random number generator
 void seedsInitialize(uint32_t seed) {
@@ -689,7 +689,7 @@ void monsterPlaceWinning() {
 // Return a monster suitable to be placed at a given level. This
 // makes high level monsters (up to the given level) slightly more
 // common than low level monsters at any given level. -CJS-
-static int get_mons_num(int level) {
+static int monsterGetOneSuitableForLevel(int level) {
     if (level == 0) {
         return randomNumber(monster_levels[0]) - 1;
     }
@@ -732,7 +732,7 @@ void monsterPlaceNewWithinDistance(int number, int distance_from_source, bool sl
             x = randomNumber(dungeon_width - 2);
         } while (cave[y][x].fval >= MIN_CLOSED_SPACE || cave[y][x].cptr != 0 || coordDistanceBetween(y, x, char_row, char_col) <= distance_from_source);
 
-        int l = get_mons_num(current_dungeon_level);
+        int l = monsterGetOneSuitableForLevel(current_dungeon_level);
 
         // Dragons are always created sleeping here,
         // so as to give the player a sporting chance.
@@ -774,7 +774,7 @@ static bool placeMonsterAdjacentTo(int monsterID, int *y, int *x, bool slp) {
 
 // Places creature adjacent to given location -RAK-
 bool monsterSummon(int *y, int *x, bool sleeping) {
-    int monster_id = get_mons_num(current_dungeon_level + MON_SUMMON_ADJ);
+    int monster_id = monsterGetOneSuitableForLevel(current_dungeon_level + MON_SUMMON_ADJ);
     return placeMonsterAdjacentTo(monster_id, y, x, sleeping);
 }
 
@@ -804,16 +804,16 @@ bool monsterSummonUndead(int *y, int *x) {
 }
 
 // If too many objects on floor level, delete some of them-RAK-
-static void compact_objects() {
+static void compactObjects() {
     printMessage("Compacting objects...");
 
     int counter = 0;
-    int cur_dis = 66;
+    int current_distance = 66;
 
     while (counter <= 0) {
         for (int y = 0; y < dungeon_height; y++) {
             for (int x = 0; x < dungeon_width; x++) {
-                if (cave[y][x].tptr != 0 && coordDistanceBetween(y, x, char_row, char_col) > cur_dis) {
+                if (cave[y][x].tptr != 0 && coordDistanceBetween(y, x, char_row, char_col) > current_distance) {
                     int chance;
 
                     switch (treasure_list[cave[y][x].tptr].tval) {
@@ -848,11 +848,11 @@ static void compact_objects() {
         }
 
         if (counter == 0) {
-            cur_dis -= 6;
+            current_distance -= 6;
         }
     }
 
-    if (cur_dis < 66) {
+    if (current_distance < 66) {
         drawDungeonPanel();
     }
 }
@@ -860,7 +860,7 @@ static void compact_objects() {
 // Gives pointer to next free space -RAK-
 int popt() {
     if (current_treasure_id == MAX_TALLOC) {
-        compact_objects();
+        compactObjects();
     }
 
     return current_treasure_id++;
