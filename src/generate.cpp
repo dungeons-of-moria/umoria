@@ -408,7 +408,7 @@ static void dungeonBuildRoomOverlappingRectangles(int y, int x) {
     }
 }
 
-static void placeRandomSecretDoor(int y, int x, int depth, int height, int left, int right) {
+static void dungeonPlaceRandomSecretDoor(int y, int x, int depth, int height, int left, int right) {
     switch (randomNumber(4)) {
         case 1:
             dungeonPlaceSecretDoor(height - 1, x);
@@ -436,7 +436,7 @@ static void placeVault(int y, int x) {
 }
 
 static void placeTreasureVault(int y, int x, int depth, int height, int left, int right) {
-    placeRandomSecretDoor(y, x, depth, height, left, right);
+    dungeonPlaceRandomSecretDoor(y, x, depth, height, left, right);
 
     placeVault(y, x);
 
@@ -571,7 +571,7 @@ static void build_type2(int y, int x) {
     // Inner room variations
     switch (randomNumber(5)) {
         case 1: // Just an inner room.
-            placeRandomSecretDoor(y, x, depth, height, left, right);
+            dungeonPlaceRandomSecretDoor(y, x, depth, height, left, right);
             dungeonPlaceVaultMonster(y, x, 1);
             break;
         case 2: // Treasure Vault
@@ -584,7 +584,7 @@ static void build_type2(int y, int x) {
             dungeonPlaceVaultTrap(y, x, 4, 10, 2 + randomNumber(3));
             break;
         case 3: // Inner pillar(s).
-            placeRandomSecretDoor(y, x, depth, height, left, right);
+            dungeonPlaceRandomSecretDoor(y, x, depth, height, left, right);
 
             placeInnerPillars(y, x);
 
@@ -615,7 +615,7 @@ static void build_type2(int y, int x) {
             dungeonPlaceVaultMonster(y, x + 2, randomNumber(2));
             break;
         case 4: // Maze inside.
-            placeRandomSecretDoor(y, x, depth, height, left, right);
+            dungeonPlaceRandomSecretDoor(y, x, depth, height, left, right);
 
             placeMazeInsideRoom(depth, height, left, right);
 
