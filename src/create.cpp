@@ -65,37 +65,37 @@ static void characterChangeStat(int stat, int16_t amount) {
 
 // generate all stats and modify for race. needed in a separate
 // module so looping of character selection would be allowed -RGM-
-static void get_all_stats() {
-    Race_t *r_ptr = &character_races[py.misc.prace];
+static void characterGenerateStatsAndRace() {
+    Race_t *race = &character_races[py.misc.prace];
 
     characterGenerateStats();
-    characterChangeStat(A_STR, r_ptr->str_adj);
-    characterChangeStat(A_INT, r_ptr->int_adj);
-    characterChangeStat(A_WIS, r_ptr->wis_adj);
-    characterChangeStat(A_DEX, r_ptr->dex_adj);
-    characterChangeStat(A_CON, r_ptr->con_adj);
-    characterChangeStat(A_CHR, r_ptr->chr_adj);
+    characterChangeStat(A_STR, race->str_adj);
+    characterChangeStat(A_INT, race->int_adj);
+    characterChangeStat(A_WIS, race->wis_adj);
+    characterChangeStat(A_DEX, race->dex_adj);
+    characterChangeStat(A_CON, race->con_adj);
+    characterChangeStat(A_CHR, race->chr_adj);
 
     py.misc.lev = 1;
 
-    for (int j = 0; j < 6; j++) {
-        py.stats.cur_stat[j] = py.stats.max_stat[j];
-        playerSetAndUseStat(j);
+    for (int i = 0; i < 6; i++) {
+        py.stats.cur_stat[i] = py.stats.max_stat[i];
+        playerSetAndUseStat(i);
     }
 
-    py.misc.srh = r_ptr->srh;
-    py.misc.bth = r_ptr->bth;
-    py.misc.bthb = r_ptr->bthb;
-    py.misc.fos = r_ptr->fos;
-    py.misc.stl = r_ptr->stl;
-    py.misc.save = r_ptr->bsav;
-    py.misc.hitdie = r_ptr->bhitdie;
+    py.misc.srh = race->srh;
+    py.misc.bth = race->bth;
+    py.misc.bthb = race->bthb;
+    py.misc.fos = race->fos;
+    py.misc.stl = race->stl;
+    py.misc.save = race->bsav;
+    py.misc.hitdie = race->bhitdie;
     py.misc.ptodam = (int16_t) playerDamageAdjustment();
     py.misc.ptohit = (int16_t) playerToHitAdjustment();
     py.misc.ptoac = 0;
     py.misc.pac = (int16_t) playerArmorClassAdjustment();
-    py.misc.expfact = r_ptr->b_exp;
-    py.flags.see_infra = r_ptr->infra;
+    py.misc.expfact = race->b_exp;
+    py.flags.see_infra = race->infra;
 }
 
 // Prints a list of the available races: Human, Elf, etc.,
@@ -443,7 +443,7 @@ void createCharacter() {
     get_sex();
 
     // here we start a loop giving a player a choice of characters -RGM-
-    get_all_stats();
+    characterGenerateStatsAndRace();
     get_history();
     get_ahw();
     print_history();
@@ -460,7 +460,7 @@ void createCharacter() {
         if (c == ESCAPE) {
             exit_flag = false;
         } else if (c == ' ') {
-            get_all_stats();
+            characterGenerateStatsAndRace();
             get_history();
             get_ahw();
             print_history();
