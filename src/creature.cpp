@@ -1104,32 +1104,32 @@ static bool monsterCanCastSpells(Monster_t *monster, uint32_t spells) {
     return los(char_row, char_col, (int) monster->fy, (int) monster->fx);
 }
 
-void creatureCastsSpell(Monster_t *m_ptr, int monsterID, int spellID, uint8_t level, vtype_t cdesc, vtype_t deathDescription) {
+void monsterCastSpell(Monster_t *monster, int monster_id, int spell_id, uint8_t level, vtype_t monster_name, vtype_t death_description) {
     int y, x;
 
     // Cast the spell.
-    switch (spellID) {
+    switch (spell_id) {
         case 5: // Teleport Short
-            spellTeleportAwayMonster(monsterID, 5);
+            spellTeleportAwayMonster(monster_id, 5);
             break;
         case 6: // Teleport Long
-            spellTeleportAwayMonster(monsterID, MAX_SIGHT);
+            spellTeleportAwayMonster(monster_id, MAX_SIGHT);
             break;
         case 7: // Teleport To
-            spellTeleportPlayerTo((int) m_ptr->fy, (int) m_ptr->fx);
+            spellTeleportPlayerTo((int) monster->fy, (int) monster->fx);
             break;
         case 8: // Light Wound
             if (playerSavingThrow()) {
                 printMessage("You resist the effects of the spell.");
             } else {
-                playerTakesHit(diceDamageRoll(3, 8), deathDescription);
+                playerTakesHit(diceDamageRoll(3, 8), death_description);
             }
             break;
         case 9: // Serious Wound
             if (playerSavingThrow()) {
                 printMessage("You resist the effects of the spell.");
             } else {
-                playerTakesHit(diceDamageRoll(8, 8), deathDescription);
+                playerTakesHit(diceDamageRoll(8, 8), death_description);
             }
             break;
         case 10: // Hold Person
@@ -1171,25 +1171,25 @@ void creatureCastsSpell(Monster_t *m_ptr, int monsterID, int spellID, uint8_t le
             }
             break;
         case 14: // Summon Monster
-            (void) strcat(cdesc, "magically summons a monster!");
-            printMessage(cdesc);
+            (void) strcat(monster_name, "magically summons a monster!");
+            printMessage(monster_name);
             y = char_row;
             x = char_col;
 
-            // in case compact_monster() is called,it needs monsterID
-            hack_monptr = monsterID;
+            // in case compact_monster() is called,it needs monster_id
+            hack_monptr = monster_id;
             (void) monsterSummon(&y, &x, false);
             hack_monptr = -1;
             monsterUpdateVisibility((int) cave[y][x].cptr);
             break;
         case 15: // Summon Undead
-            (void) strcat(cdesc, "magically summons an undead!");
-            printMessage(cdesc);
+            (void) strcat(monster_name, "magically summons an undead!");
+            printMessage(monster_name);
             y = char_row;
             x = char_col;
 
-            // in case compact_monster() is called,it needs monsterID
-            hack_monptr = monsterID;
+            // in case compact_monster() is called,it needs monster_id
+            hack_monptr = monster_id;
             (void) monsterSummonUndead(&y, &x);
             hack_monptr = -1;
             monsterUpdateVisibility((int) cave[y][x].cptr);
@@ -1209,13 +1209,13 @@ void creatureCastsSpell(Monster_t *m_ptr, int monsterID, int spellID, uint8_t le
             if (py.misc.cmana > 0) {
                 playerDisturb(1, 0);
 
-                vtype_t outval;
-                (void) sprintf(outval, "%sdraws psychic energy from you!", cdesc);
-                printMessage(outval);
+                vtype_t msg;
+                (void) sprintf(msg, "%sdraws psychic energy from you!", monster_name);
+                printMessage(msg);
 
-                if (m_ptr->ml) {
-                    (void) sprintf(outval, "%sappears healthier.", cdesc);
-                    printMessage(outval);
+                if (monster->ml) {
+                    (void) sprintf(msg, "%sappears healthier.", monster_name);
+                    printMessage(msg);
                 }
 
                 int r1 = (randomNumber((int) level) >> 1) + 1;
@@ -1227,37 +1227,37 @@ void creatureCastsSpell(Monster_t *m_ptr, int monsterID, int spellID, uint8_t le
                     py.misc.cmana -= r1;
                 }
                 printCharacterCurrentMana();
-                m_ptr->hp += 6 * (r1);
+                monster->hp += 6 * (r1);
             }
             break;
         case 20: // Breath Light
-            (void) strcat(cdesc, "breathes lightning.");
-            printMessage(cdesc);
-            spellBreath(char_row, char_col, monsterID, (m_ptr->hp / 4), GF_LIGHTNING, deathDescription);
+            (void) strcat(monster_name, "breathes lightning.");
+            printMessage(monster_name);
+            spellBreath(char_row, char_col, monster_id, (monster->hp / 4), GF_LIGHTNING, death_description);
             break;
         case 21: // Breath Gas
-            (void) strcat(cdesc, "breathes gas.");
-            printMessage(cdesc);
-            spellBreath(char_row, char_col, monsterID, (m_ptr->hp / 3), GF_POISON_GAS, deathDescription);
+            (void) strcat(monster_name, "breathes gas.");
+            printMessage(monster_name);
+            spellBreath(char_row, char_col, monster_id, (monster->hp / 3), GF_POISON_GAS, death_description);
             break;
         case 22: // Breath Acid
-            (void) strcat(cdesc, "breathes acid.");
-            printMessage(cdesc);
-            spellBreath(char_row, char_col, monsterID, (m_ptr->hp / 3), GF_ACID, deathDescription);
+            (void) strcat(monster_name, "breathes acid.");
+            printMessage(monster_name);
+            spellBreath(char_row, char_col, monster_id, (monster->hp / 3), GF_ACID, death_description);
             break;
         case 23: // Breath Frost
-            (void) strcat(cdesc, "breathes frost.");
-            printMessage(cdesc);
-            spellBreath(char_row, char_col, monsterID, (m_ptr->hp / 3), GF_FROST, deathDescription);
+            (void) strcat(monster_name, "breathes frost.");
+            printMessage(monster_name);
+            spellBreath(char_row, char_col, monster_id, (monster->hp / 3), GF_FROST, death_description);
             break;
         case 24: // Breath Fire
-            (void) strcat(cdesc, "breathes fire.");
-            printMessage(cdesc);
-            spellBreath(char_row, char_col, monsterID, (m_ptr->hp / 3), GF_FIRE, deathDescription);
+            (void) strcat(monster_name, "breathes fire.");
+            printMessage(monster_name);
+            spellBreath(char_row, char_col, monster_id, (monster->hp / 3), GF_FIRE, death_description);
             break;
         default:
-            (void) strcat(cdesc, "cast unknown spell.");
-            printMessage(cdesc);
+            (void) strcat(monster_name, "cast unknown spell.");
+            printMessage(monster_name);
     }
 }
 
@@ -1317,7 +1317,7 @@ static bool mon_cast_spell(int monsterID) {
         printMessage(cdesc);
     }
 
-    creatureCastsSpell(m_ptr, monsterID, thrown_spell, r_ptr->level, cdesc, deathDescription);
+    monsterCastSpell(m_ptr, monsterID, thrown_spell, r_ptr->level, cdesc, deathDescription);
 
     if (m_ptr->ml) {
         creature_recall[m_ptr->mptr].r_spells |= 1L << (thrown_spell - 1);
