@@ -200,7 +200,7 @@ static void dungeonPlaceStuckDoor(int y, int x) {
     treasure_list[cur_pos].p1 = (int16_t) (-randomNumber(10) - 10);
 }
 
-static void place_secret_door(int y, int x) {
+static void dungeonPlaceSecretDoor(int y, int x) {
     int cur_pos = popt();
     cave[y][x].tptr = (uint8_t) cur_pos;
     inventoryItemCopyTo(OBJ_SECRET_DOOR, &treasure_list[cur_pos]);
@@ -227,7 +227,7 @@ static void place_door(int y, int x) {
             dungeonPlaceLockedDoor(y, x);
         }
     } else {
-        place_secret_door(y, x);
+        dungeonPlaceSecretDoor(y, x);
     }
 }
 
@@ -411,16 +411,16 @@ static void build_type1(int y, int x) {
 static void placeRandomSecretDoor(int y, int x, int depth, int height, int left, int right) {
     switch (randomNumber(4)) {
         case 1:
-            place_secret_door(height - 1, x);
+            dungeonPlaceSecretDoor(height - 1, x);
             break;
         case 2:
-            place_secret_door(depth + 1, x);
+            dungeonPlaceSecretDoor(depth + 1, x);
             break;
         case 3:
-            place_secret_door(y, left - 1);
+            dungeonPlaceSecretDoor(y, left - 1);
             break;
         default:
-            place_secret_door(y, right + 1);
+            dungeonPlaceSecretDoor(y, right + 1);
             break;
     }
 }
@@ -498,16 +498,16 @@ static void placeFourSmallRooms(int y, int x, int depth, int height, int left, i
     // place random secret door
     if (randomNumber(2) == 1) {
         int offsetX = randomNumber(10);
-        place_secret_door(height - 1, x - offsetX);
-        place_secret_door(height - 1, x + offsetX);
-        place_secret_door(depth + 1, x - offsetX);
-        place_secret_door(depth + 1, x + offsetX);
+        dungeonPlaceSecretDoor(height - 1, x - offsetX);
+        dungeonPlaceSecretDoor(height - 1, x + offsetX);
+        dungeonPlaceSecretDoor(depth + 1, x - offsetX);
+        dungeonPlaceSecretDoor(depth + 1, x + offsetX);
     } else {
         int offsetY = randomNumber(3);
-        place_secret_door(y + offsetY, left - 1);
-        place_secret_door(y - offsetY, left - 1);
-        place_secret_door(y + offsetY, right + 1);
-        place_secret_door(y - offsetY, right + 1);
+        dungeonPlaceSecretDoor(y + offsetY, left - 1);
+        dungeonPlaceSecretDoor(y - offsetY, left - 1);
+        dungeonPlaceSecretDoor(y + offsetY, right + 1);
+        dungeonPlaceSecretDoor(y - offsetY, right + 1);
     }
 }
 
@@ -600,8 +600,8 @@ static void build_type2(int y, int x) {
             cave[y][x - 5].fval = TMP1_WALL;
             cave[y][x + 5].fval = TMP1_WALL;
 
-            place_secret_door(y - 3 + (randomNumber(2) << 1), x - 3);
-            place_secret_door(y - 3 + (randomNumber(2) << 1), x + 3);
+            dungeonPlaceSecretDoor(y - 3 + (randomNumber(2) << 1), x - 3);
+            dungeonPlaceSecretDoor(y - 3 + (randomNumber(2) << 1), x + 3);
 
             if (randomNumber(3) == 1) {
                 dungeonPlaceRandomObjectAt(y, x - 2, false);
@@ -739,9 +739,9 @@ static void build_type3(int y, int x) {
             // Place a secret door
             randomOffset = randomNumber(4);
             if (randomOffset < 3) {
-                place_secret_door(y - 3 + (randomOffset << 1), x);
+                dungeonPlaceSecretDoor(y - 3 + (randomOffset << 1), x);
             } else {
-                place_secret_door(y, x - 7 + (randomOffset << 1));
+                dungeonPlaceSecretDoor(y, x - 7 + (randomOffset << 1));
             }
 
             // Place a treasure in the vault
@@ -764,10 +764,10 @@ static void build_type3(int y, int x) {
                 cave[y + 2][x - 1].fval = TMP1_WALL;
                 cave[y + 2][x + 1].fval = TMP1_WALL;
                 if (randomNumber(3) == 1) {
-                    place_secret_door(y, x - 2);
-                    place_secret_door(y, x + 2);
-                    place_secret_door(y - 2, x);
-                    place_secret_door(y + 2, x);
+                    dungeonPlaceSecretDoor(y, x - 2);
+                    dungeonPlaceSecretDoor(y, x + 2);
+                    dungeonPlaceSecretDoor(y - 2, x);
+                    dungeonPlaceSecretDoor(y + 2, x);
                 }
             } else if (randomNumber(3) == 1) {
                 cave[y][x].fval = TMP1_WALL;
