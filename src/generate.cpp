@@ -485,7 +485,7 @@ static void dungeonPlaceMazeInsideRoom(int depth, int height, int left, int righ
     }
 }
 
-static void placeFourSmallRooms(int y, int x, int depth, int height, int left, int right) {
+static void dungeonPlaceFourSmallRooms(int y, int x, int depth, int height, int left, int right) {
     for (int i = height; i <= depth; i++) {
         cave[i][x].fval = TMP1_WALL;
     }
@@ -632,7 +632,7 @@ static void build_type2(int y, int x) {
             }
             break;
         case 5: // Four small rooms.
-            placeFourSmallRooms(y, x, depth, height, left, right);
+            dungeonPlaceFourSmallRooms(y, x, depth, height, left, right);
 
             // Treasure in each one.
             dungeonPlaceRandomObjectNear(y, x, 2 + randomNumber(2));
