@@ -259,29 +259,30 @@ static void characterGetHistory() {
     py.misc.sc = (int16_t) social_class;
 }
 
-// Gets the character's sex -JWT-
-static void get_sex() {
+// Gets the character's gender -JWT-
+static void characterSetGender() {
     clearToBottom(20);
     putString("Choose a sex (? for Help):", 20, 2);
     putString("m) Male       f) Female", 21, 2);
 
-    char c;
+    char input;
+    bool is_set = false;
 
-    bool exit_flag = false;
-    while (!exit_flag) {
+    while (!is_set) {
         moveCursor(20, 29);
 
         // speed not important here
-        c = getKeyInput();
-        if (c == 'f' || c == 'F') {
+        input = getKeyInput();
+
+        if (input == 'f' || input == 'F') {
             py.misc.male = false;
             putString("Female", 4, 15);
-            exit_flag = true;
-        } else if (c == 'm' || c == 'M') {
+            is_set = true;
+        } else if (input == 'm' || input == 'M') {
             py.misc.male = true;
             putString("Male", 4, 15);
-            exit_flag = true;
-        } else if (c == '?') {
+            is_set = true;
+        } else if (input == '?') {
             displayTextHelpFile(MORIA_WELCOME);
         } else {
             terminalBellSound();
@@ -455,7 +456,7 @@ static void get_money() {
 void createCharacter() {
     printCharacterInformation();
     characterChooseRace();
-    get_sex();
+    characterSetGender();
 
     // here we start a loop giving a player a choice of characters -RGM-
     characterGenerateStatsAndRace();
