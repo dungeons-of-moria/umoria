@@ -19,7 +19,7 @@ static void examineBook();
 static void dungeonGoUpLevel();
 static void dungeonGoDownLevel();
 static void dungeonJamDoor();
-static void refill_lamp();
+static void inventoryRefillLamp();
 
 // Moria game module -RAK-
 // The code in this section has gone through many revisions, and
@@ -1702,7 +1702,7 @@ static void doCommand(char command) {
             playerEat();
             break;
         case 'F': // (F)ill lamp
-            refill_lamp();
+            inventoryRefillLamp();
             break;
         case 'G': // (G)ain magic spells
             playerGainSpells();
@@ -2177,7 +2177,7 @@ static void dungeonJamDoor() {
 }
 
 // Refill the players lamp -RAK-
-static void refill_lamp() {
+static void inventoryRefillLamp() {
     player_free_turn = true;
 
     if (inventory[INVEN_LIGHT].subval != 0) {
@@ -2185,30 +2185,29 @@ static void refill_lamp() {
         return;
     }
 
-    int i, j;
-    if (!inventoryFindRange(TV_FLASK, TV_NEVER, &i, &j)) {
+    int item_pos_start, item_pos_end;
+    if (!inventoryFindRange(TV_FLASK, TV_NEVER, &item_pos_start, &item_pos_end)) {
         printMessage("You have no oil.");
         return;
     }
 
     player_free_turn = false;
 
-    Inventory_t *i_ptr = &inventory[INVEN_LIGHT];
-    i_ptr->p1 += inventory[i].p1;
+    Inventory_t *item = &inventory[INVEN_LIGHT];
+    item->p1 += inventory[item_pos_start].p1;
 
-    if (i_ptr->p1 > OBJ_LAMP_MAX) {
-        i_ptr->p1 = OBJ_LAMP_MAX;
-
+    if (item->p1 > OBJ_LAMP_MAX) {
+        item->p1 = OBJ_LAMP_MAX;
         printMessage("Your lamp overflows, spilling oil on the ground.");
         printMessage("Your lamp is full.");
-    } else if (i_ptr->p1 > OBJ_LAMP_MAX / 2) {
+    } else if (item->p1 > OBJ_LAMP_MAX / 2) {
         printMessage("Your lamp is more than half full.");
-    } else if (i_ptr->p1 == OBJ_LAMP_MAX / 2) {
+    } else if (item->p1 == OBJ_LAMP_MAX / 2) {
         printMessage("Your lamp is half full.");
     } else {
         printMessage("Your lamp is less than half full.");
     }
 
-    itemTypeRemainingCountDescription(i);
-    inventoryDestroyItem(i);
+    itemTypeRemainingCountDescription(item_pos_start);
+    inventoryDestroyItem(item_pos_start);
 }
