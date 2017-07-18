@@ -156,85 +156,97 @@ static void displayCharacterHistory() {
     }
 }
 
+// Clear the previous history strings
+static void playerClearHistory() {
+    for (int i = 0; i < 4; i++) {
+        py.misc.history[i][0] = '\0';
+    }
+}
+
 // Get the racial history, determines social class -RAK-
 //
 // Assumptions:
 //   - Each race has init history beginning at (race-1)*3+1
 //   - All history parts are in ascending order
-static void get_history() {
-    char history_block[240];
-    Background_t *b_ptr;
-    int test_roll;
-
-    int hist_ptr = py.misc.prace * 3 + 1;
+static void characterGetHistory() {
+    int history_id = py.misc.prace * 3 + 1;
     int social_class = randomNumber(4);
-    int cur_ptr = 0;
+
+    char history_block[240];
     history_block[0] = '\0';
+
+    int background_id = 0;
 
     // Get a block of history text
     do {
         bool flag = false;
         while (!flag) {
-            if (character_backgrounds[cur_ptr].chart == hist_ptr) {
-                test_roll = randomNumber(100);
-                while (test_roll > character_backgrounds[cur_ptr].roll) {
-                    cur_ptr++;
+            if (character_backgrounds[background_id].chart == history_id) {
+                int test_roll = randomNumber(100);
+
+                while (test_roll > character_backgrounds[background_id].roll) {
+                    background_id++;
                 }
-                b_ptr = &character_backgrounds[cur_ptr];
-                (void) strcat(history_block, b_ptr->info);
-                social_class += b_ptr->bonus - 50;
-                if (hist_ptr > b_ptr->next) {
-                    cur_ptr = 0;
+
+                Background_t *background = &character_backgrounds[background_id];
+
+                (void) strcat(history_block, background->info);
+                social_class += background->bonus - 50;
+
+                if (history_id > background->next) {
+                    background_id = 0;
                 }
-                hist_ptr = b_ptr->next;
+
+                history_id = background->next;
                 flag = true;
             } else {
-                cur_ptr++;
+                background_id++;
             }
         }
-    } while (hist_ptr >= 1);
+    } while (history_id >= 1);
 
-    // Clear the previous history strings
-    for (int i = 0; i < 4; i++) {
-        py.misc.history[i][0] = '\0';
-    }
+    playerClearHistory();
 
     // Process block of history text for pretty output
-    int end_pos = (int) strlen(history_block) - 1;
-    while (history_block[end_pos] == ' ') {
-        end_pos--;
+    int cursor_start = 0;
+    int cursor_end = (int) strlen(history_block) - 1;
+    while (history_block[cursor_end] == ' ') {
+        cursor_end--;
     }
 
-    int cur_len;
-    int new_start = 0;
-
-    int start_pos = 0;
-    int line_ctr = 0;
+    int line_number = 0;
+    int new_cursor_start = 0;
+    int current_cursor_position;
 
     bool flag = false;
     while (!flag) {
-        while (history_block[start_pos] == ' ') {
-            start_pos++;
+        while (history_block[cursor_start] == ' ') {
+            cursor_start++;
         }
 
-        cur_len = end_pos - start_pos + 1;
-        if (cur_len > 60) {
-            cur_len = 60;
-            while (history_block[start_pos + cur_len - 1] != ' ') {
-                cur_len--;
+        current_cursor_position = cursor_end - cursor_start + 1;
+
+        if (current_cursor_position > 60) {
+            current_cursor_position = 60;
+
+            while (history_block[cursor_start + current_cursor_position - 1] != ' ') {
+                current_cursor_position--;
             }
-            new_start = start_pos + cur_len;
-            while (history_block[start_pos + cur_len - 1] == ' ') {
-                cur_len--;
+
+            new_cursor_start = cursor_start + current_cursor_position;
+
+            while (history_block[cursor_start + current_cursor_position - 1] == ' ') {
+                current_cursor_position--;
             }
         } else {
             flag = true;
         }
 
-        (void) strncpy(py.misc.history[line_ctr], &history_block[start_pos], (size_t) cur_len);
-        py.misc.history[line_ctr][cur_len] = '\0';
-        line_ctr++;
-        start_pos = new_start;
+        (void) strncpy(py.misc.history[line_number], &history_block[cursor_start], (size_t) current_cursor_position);
+        py.misc.history[line_number][current_cursor_position] = '\0';
+
+        line_number++;
+        cursor_start = new_cursor_start;
     }
 
     // Compute social class for player
@@ -243,6 +255,7 @@ static void get_history() {
     } else if (social_class < 1) {
         social_class = 1;
     }
+
     py.misc.sc = (int16_t) social_class;
 }
 
@@ -446,7 +459,7 @@ void createCharacter() {
 
     // here we start a loop giving a player a choice of characters -RGM-
     characterGenerateStatsAndRace();
-    get_history();
+    characterGetHistory();
     get_ahw();
     displayCharacterHistory();
     printCharacterVitalStatistics();
@@ -463,7 +476,7 @@ void createCharacter() {
             exit_flag = false;
         } else if (c == ' ') {
             characterGenerateStatsAndRace();
-            get_history();
+            characterGetHistory();
             get_ahw();
             displayCharacterHistory();
             printCharacterVitalStatistics();
