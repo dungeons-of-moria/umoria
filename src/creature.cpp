@@ -1641,7 +1641,7 @@ static void memoryUpdateRecall(Monster_t *monster, bool wake, bool ignore, int r
     memory->r_cmove |= rcmove;
 }
 
-static void creatureAttackingUpdate(Monster_t *m_ptr, int monsterID, int moves) {
+static void monsterAttackingUpdate(Monster_t *monster, int monster_id, int moves) {
     for (int i = moves; i > 0; i--) {
         bool wake = false;
         bool ignore = false;
@@ -1650,51 +1650,50 @@ static void creatureAttackingUpdate(Monster_t *m_ptr, int monsterID, int moves) 
 
         // Monsters trapped in rock must be given a turn also,
         // so that they will die/dig out immediately.
-        if (m_ptr->ml || m_ptr->cdis <= creatures_list[m_ptr->mptr].aaf || ((!(creatures_list[m_ptr->mptr].cmove & CM_PHASE)) && cave[m_ptr->fy][m_ptr->fx].fval >= MIN_CAVE_WALL)) {
-            if (m_ptr->csleep > 0) {
+        if (monster->ml || monster->cdis <= creatures_list[monster->mptr].aaf || ((!(creatures_list[monster->mptr].cmove & CM_PHASE)) && cave[monster->fy][monster->fx].fval >= MIN_CAVE_WALL)) {
+            if (monster->csleep > 0) {
                 if (py.flags.aggravate) {
-                    m_ptr->csleep = 0;
+                    monster->csleep = 0;
                 } else if ((py.flags.rest == 0 && py.flags.paralysis < 1) || (randomNumber(50) == 1)) {
                     int notice = randomNumber(1024);
 
                     if (notice * notice * notice <= (1L << (29 - py.misc.stl))) {
-                        m_ptr->csleep -= (100 / m_ptr->cdis);
-                        if (m_ptr->csleep > 0) {
+                        monster->csleep -= (100 / monster->cdis);
+                        if (monster->csleep > 0) {
                             ignore = true;
                         } else {
                             wake = true;
 
                             // force it to be exactly zero
-                            m_ptr->csleep = 0;
+                            monster->csleep = 0;
                         }
                     }
                 }
             }
 
-            if (m_ptr->stunned != 0) {
+            if (monster->stunned != 0) {
                 // NOTE: Balrog = 100*100 = 10000, it always recovers instantly
-                if (randomNumber(5000) < creatures_list[m_ptr->mptr].level * creatures_list[m_ptr->mptr].level) {
-                    m_ptr->stunned = 0;
+                if (randomNumber(5000) < creatures_list[monster->mptr].level * creatures_list[monster->mptr].level) {
+                    monster->stunned = 0;
                 } else {
-                    m_ptr->stunned--;
+                    monster->stunned--;
                 }
 
-                if (m_ptr->stunned == 0) {
-                    if (m_ptr->ml) {
+                if (monster->stunned == 0) {
+                    if (monster->ml) {
                         vtype_t msg;
-                        (void) sprintf(msg, "The %s ", creatures_list[m_ptr->mptr].name);
+                        (void) sprintf(msg, "The %s ", creatures_list[monster->mptr].name);
                         printMessage(strcat(msg, "recovers and glares at you."));
                     }
                 }
             }
-            if ((m_ptr->csleep == 0) && (m_ptr->stunned == 0)) {
-                monsterMove(monsterID, &rcmove);
+            if ((monster->csleep == 0) && (monster->stunned == 0)) {
+                monsterMove(monster_id, &rcmove);
             }
         }
 
-        monsterUpdateVisibility(monsterID);
-
-        memoryUpdateRecall(m_ptr, wake, ignore, rcmove);
+        monsterUpdateVisibility(monster_id);
+        memoryUpdateRecall(monster, wake, ignore, rcmove);
     }
 }
 
@@ -1702,26 +1701,26 @@ static void creatureAttackingUpdate(Monster_t *m_ptr, int monsterID, int moves) 
 void updateMonsters(bool attack) {
     // Process the monsters
     for (int id = next_free_monster_id - 1; id >= MIN_MONIX && !character_is_dead; id--) {
-        Monster_t *m_ptr = &monsters[id];
+        Monster_t *monster = &monsters[id];
 
         // Get rid of an eaten/breathed on monster.  Note: Be sure not to
         // process this monster. This is necessary because we can't delete
         // monsters while scanning the monsters here.
-        if (m_ptr->hp < 0) {
+        if (monster->hp < 0) {
             dungeonDeleteMonsterFix2(id);
             continue;
         }
 
-        m_ptr->cdis = (uint8_t) coordDistanceBetween(char_row, char_col, (int) m_ptr->fy, (int) m_ptr->fx);
+        monster->cdis = (uint8_t) coordDistanceBetween(char_row, char_col, (int) monster->fy, (int) monster->fx);
 
         // Attack is argument passed to CREATURE
         if (attack) {
-            int moves = monsterMovementRate(m_ptr->cspeed);
+            int moves = monsterMovementRate(monster->cspeed);
 
             if (moves <= 0) {
                 monsterUpdateVisibility(id);
             } else {
-                creatureAttackingUpdate(m_ptr, id, moves);
+                monsterAttackingUpdate(monster, id, moves);
             }
         } else {
             monsterUpdateVisibility(id);
@@ -1730,7 +1729,7 @@ void updateMonsters(bool attack) {
         // Get rid of an eaten/breathed on monster. This is necessary because
         // we can't delete monsters while scanning the monsters here.
         // This monster may have been killed during monsterMove().
-        if (m_ptr->hp < 0) {
+        if (monster->hp < 0) {
             dungeonDeleteMonsterFix2(id);
             continue;
         }
