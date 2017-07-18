@@ -1013,27 +1013,28 @@ static void monsterMovesOnPlayer(Monster_t *monster, uint8_t creature_id, int mo
     }
 }
 
-static void creatureAllowedToMove(Monster_t *m_ptr, uint32_t movebits, bool *do_turn, uint32_t *rcmove, int y, int x) {
+static void monsterAllowedToMove(Monster_t *monster, uint32_t move_bits, bool *do_turn, uint32_t *rcmove, int y, int x) {
     // Pick up or eat an object
-    if (movebits & CM_PICKS_UP) {
-        uint8_t treasureID = cave[y][x].tptr;
-        if (treasureID != 0 && treasure_list[treasureID].tval <= TV_MAX_OBJECT) {
+    if (move_bits & CM_PICKS_UP) {
+        uint8_t treasure_id = cave[y][x].tptr;
+
+        if (treasure_id != 0 && treasure_list[treasure_id].tval <= TV_MAX_OBJECT) {
             *rcmove |= CM_PICKS_UP;
             (void) dungeonDeleteObject(y, x);
         }
     }
 
     // Move creature record
-    dungeonMoveCreatureRecord((int) m_ptr->fy, (int) m_ptr->fx, y, x);
+    dungeonMoveCreatureRecord((int) monster->fy, (int) monster->fx, y, x);
 
-    if (m_ptr->ml) {
-        m_ptr->ml = false;
-        dungeonLiteSpot((int) m_ptr->fy, (int) m_ptr->fx);
+    if (monster->ml) {
+        monster->ml = false;
+        dungeonLiteSpot((int) monster->fy, (int) monster->fx);
     }
 
-    m_ptr->fy = (uint8_t) y;
-    m_ptr->fx = (uint8_t) x;
-    m_ptr->cdis = (uint8_t) coordDistanceBetween(char_row, char_col, y, x);
+    monster->fy = (uint8_t) y;
+    monster->fx = (uint8_t) x;
+    monster->cdis = (uint8_t) coordDistanceBetween(char_row, char_col, y, x);
 
     *do_turn = true;
 }
@@ -1083,7 +1084,7 @@ static void make_move(int monsterID, int *mm, uint32_t *rcmove) {
 
         // Creature has been allowed move.
         if (do_move) {
-            creatureAllowedToMove(m_ptr, movebits, &do_turn, rcmove, y, x);
+            monsterAllowedToMove(m_ptr, movebits, &do_turn, rcmove, y, x);
         }
     }
 }
