@@ -1334,37 +1334,40 @@ static bool monsterCastSpell(int monster_id) {
 
 // Places creature adjacent to given location -RAK-
 // Rats and Flys are fun!
-bool monsterMultiply(int y, int x, int creatureID, int monsterID) {
+bool monsterMultiply(int y, int x, int creature_id, int monster_id) {
     for (int i = 0; i <= 18; i++) {
-        int row = y - 2 + randomNumber(3);
-        int col = x - 2 + randomNumber(3);
+        int pos_y = y - 2 + randomNumber(3);
+        int pos_x = x - 2 + randomNumber(3);
 
         // don't create a new creature on top of the old one, that
         // causes invincible/invisible creatures to appear.
-        if (coordInBounds(row, col) && (row != y || col != x)) {
-            Cave_t *c_ptr = &cave[row][col];
+        if (coordInBounds(pos_y, pos_x) && (pos_y != y || pos_x != x)) {
+            Cave_t *tile = &cave[pos_y][pos_x];
 
-            if (c_ptr->fval <= MAX_OPEN_SPACE && c_ptr->tptr == 0 && c_ptr->cptr != 1) {
+            if (tile->fval <= MAX_OPEN_SPACE && tile->tptr == 0 && tile->cptr != 1) {
                 // Creature there already?
-                if (c_ptr->cptr > 1) {
+                if (tile->cptr > 1) {
                     // Some critters are cannibalistic!
-                    if ((creatures_list[creatureID].cmove & CM_EATS_OTHER)
-                        // Check the experience level -CJS-
-                        && creatures_list[creatureID].mexp >= creatures_list[monsters[c_ptr->cptr].mptr].mexp) {
-                        // It ate an already processed monster.Handle * normally.
-                        if (monsterID < c_ptr->cptr) {
-                            dungeonDeleteMonster((int) c_ptr->cptr);
+                    bool cannibalistic = (creatures_list[creature_id].cmove & CM_EATS_OTHER) != 0;
+
+                    // Check the experience level -CJS-
+                    bool experienced = creatures_list[creature_id].mexp >= creatures_list[monsters[tile->cptr].mptr].mexp;
+
+                    if (cannibalistic && experienced) {
+                        // It ate an already processed monster. Handle * normally.
+                        if (monster_id < tile->cptr) {
+                            dungeonDeleteMonster((int) tile->cptr);
                         } else {
                             // If it eats this monster, an already processed
                             // monster will take its place, causing all kinds
                             // of havoc. Delay the kill a bit.
-                            dungeonDeleteMonsterFix1((int) c_ptr->cptr);
+                            dungeonDeleteMonsterFix1((int) tile->cptr);
                         }
 
-                        // in case compact_monster() is called, it needs monsterID.
-                        hack_monptr = monsterID;
+                        // in case compact_monster() is called, it needs monster_id.
+                        hack_monptr = monster_id;
                         // Place_monster() may fail if monster list full.
-                        int result = monsterPlaceNew(row, col, creatureID, false);
+                        int result = monsterPlaceNew(pos_y, pos_x, creature_id, false);
                         hack_monptr = -1;
 
                         if (!result) {
@@ -1372,15 +1375,15 @@ bool monsterMultiply(int y, int x, int creatureID, int monsterID) {
                         }
 
                         monster_multiply_total++;
-                        return monsterMakeVisible(row, col);
+                        return monsterMakeVisible(pos_y, pos_x);
                     }
                 } else {
                     // All clear,  place a monster
 
-                    // in case compact_monster() is called,it needs monsterID
-                    hack_monptr = monsterID;
+                    // in case compact_monster() is called,it needs monster_id
+                    hack_monptr = monster_id;
                     // Place_monster() may fail if monster list full.
-                    int result = monsterPlaceNew(row, col, creatureID, false);
+                    int result = monsterPlaceNew(pos_y, pos_x, creature_id, false);
                     hack_monptr = -1;
 
                     if (!result) {
@@ -1388,7 +1391,7 @@ bool monsterMultiply(int y, int x, int creatureID, int monsterID) {
                     }
 
                     monster_multiply_total++;
-                    return monsterMakeVisible(row, col);
+                    return monsterMakeVisible(pos_y, pos_x);
                 }
             }
         }
