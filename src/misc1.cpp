@@ -12,7 +12,7 @@
 // holds the previous rnd state
 static uint32_t old_seed;
 
-static void panel_bounds();
+static void panelBounds();
 static int popm();
 static int max_hp(uint8_t *array);
 static int get_mons_num(int level);
@@ -144,7 +144,7 @@ bool coordInBounds(int y, int x) {
 }
 
 // Calculates current boundaries -RAK-
-static void panel_bounds() {
+static void panelBounds() {
     panel_row_min = panel_row * (SCREEN_HEIGHT / 2);
     panel_row_max = panel_row_min + SCREEN_HEIGHT - 1;
     panel_row_prt = panel_row_min - 1;
@@ -182,7 +182,7 @@ bool coordOutsidePanel(int y, int x, bool force) {
     if (row != panel_row || col != panel_col) {
         panel_row = row;
         panel_col = col;
-        panel_bounds();
+        panelBounds();
 
         // stop movement if any
         if (find_bound) {
