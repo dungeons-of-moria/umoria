@@ -1128,24 +1128,24 @@ static void monsterLinker() {
     next_free_monster_id = MIN_MONIX;
 }
 
-static void placeTownStores() {
+static void dungeonPlaceTownStores() {
     int rooms[6];
     for (int i = 0; i < 6; i++) {
         rooms[i] = i;
     }
 
-    int roomsCounter = 6;
+    int rooms_count = 6;
 
     for (int y = 0; y < 2; y++) {
         for (int x = 0; x < 3; x++) {
-            int randRoomID = randomNumber(roomsCounter) - 1;
-            dungeonBuildStore(rooms[randRoomID], y, x);
+            int room_id = randomNumber(rooms_count) - 1;
+            dungeonBuildStore(rooms[room_id], y, x);
 
-            for (int i = randRoomID; i < roomsCounter - 1; i++) {
+            for (int i = room_id; i < rooms_count - 1; i++) {
                 rooms[i] = rooms[i + 1];
             }
 
-            roomsCounter--;
+            rooms_count--;
         }
     }
 }
@@ -1180,7 +1180,7 @@ static void lightTown() {
 static void town_gen() {
     seedSet(town_seed);
 
-    placeTownStores();
+    dungeonPlaceTownStores();
 
     dungeonFillEmptyTilesWith(DARK_FLOOR);
 
