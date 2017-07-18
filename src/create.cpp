@@ -463,7 +463,7 @@ static void playerCalculateStartGold() {
 }
 
 // Main Character Creation Routine -JWT-
-void createCharacter() {
+void characterCreate() {
     printCharacterInformation();
     characterChooseRace();
     characterSetGender();
@@ -482,10 +482,12 @@ void createCharacter() {
     bool exit_flag = true;
     while (exit_flag) {
         moveCursor(20, 56);
-        char c = getKeyInput();
-        if (c == ESCAPE) {
+
+        char input = getKeyInput();
+
+        if (input == ESCAPE) {
             exit_flag = false;
-        } else if (c == ' ') {
+        } else if (input == ' ') {
             characterGenerateStatsAndRace();
             characterGetHistory();
             characterSetAgeHeightWeight();

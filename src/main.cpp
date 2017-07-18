@@ -153,7 +153,7 @@ int main(int argc, char *argv[]) {
             character_is_dead = true;
         }
     } else { // Create character
-        createCharacter();
+        characterCreate();
 
         character_birth_date = (int32_t) time((time_t *) 0);
 

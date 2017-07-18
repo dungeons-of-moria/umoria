@@ -157,7 +157,7 @@ extern bool temporary_light_only;
 // declared inside the file that defines them.
 
 // create.c
-void createCharacter();
+void characterCreate();
 
 // creature.c
 void monsterUpdateVisibility(int monster_id);
