@@ -9,7 +9,7 @@
 #include "headers.h"
 #include "externs.h"
 
-static char original_commands(char com_val);
+static char originalCommands(char command);
 static void do_command(char com_val);
 static bool valid_countcommand(char c);
 static void regenhp(int percent);
@@ -830,7 +830,7 @@ static void executeInputCommands(char *command, int *find_count) {
 
                 // Commands are always converted to rogue form. -CJS-
                 if (!use_roguelike_keys) {
-                    lastInputCommand = original_commands(lastInputCommand);
+                    lastInputCommand = originalCommands(lastInputCommand);
                 }
 
                 if (counter > 0) {
@@ -1008,16 +1008,16 @@ void playDungeon() {
     } while (!generate_new_level && !eof_flag);
 }
 
-static char original_commands(char com_val) {
-    int dir_val;
+static char originalCommands(char command) {
+    int direction;
 
-    switch (com_val) {
+    switch (command) {
         case CTRL_KEY('K'): // ^K = exit
-            com_val = 'Q';
+            command = 'Q';
             break;
         case CTRL_KEY('J'):
         case CTRL_KEY('M'):
-            com_val = '+';
+            command = '+';
             break;
         case CTRL_KEY('P'): // ^P = repeat
         case CTRL_KEY('W'): // ^W = password
@@ -1028,38 +1028,38 @@ static char original_commands(char com_val) {
         case '$':
             break;
         case '.':
-            if (getDirectionWithMemory(CNIL, &dir_val)) {
-                switch (dir_val) {
+            if (getDirectionWithMemory(CNIL, &direction)) {
+                switch (direction) {
                     case 1:
-                        com_val = 'B';
+                        command = 'B';
                         break;
                     case 2:
-                        com_val = 'J';
+                        command = 'J';
                         break;
                     case 3:
-                        com_val = 'N';
+                        command = 'N';
                         break;
                     case 4:
-                        com_val = 'H';
+                        command = 'H';
                         break;
                     case 6:
-                        com_val = 'L';
+                        command = 'L';
                         break;
                     case 7:
-                        com_val = 'Y';
+                        command = 'Y';
                         break;
                     case 8:
-                        com_val = 'K';
+                        command = 'K';
                         break;
                     case 9:
-                        com_val = 'U';
+                        command = 'U';
                         break;
                     default:
-                        com_val = ' ';
+                        command = ' ';
                         break;
                 }
             } else {
-                com_val = ' ';
+                command = ' ';
             }
             break;
         case '/':
@@ -1072,34 +1072,34 @@ static char original_commands(char com_val) {
         case 'A':
             break;
         case '1':
-            com_val = 'b';
+            command = 'b';
             break;
         case '2':
-            com_val = 'j';
+            command = 'j';
             break;
         case '3':
-            com_val = 'n';
+            command = 'n';
             break;
         case '4':
-            com_val = 'h';
+            command = 'h';
             break;
         case '5': // Rest one turn
-            com_val = '.';
+            command = '.';
             break;
         case '6':
-            com_val = 'l';
+            command = 'l';
             break;
         case '7':
-            com_val = 'y';
+            command = 'y';
             break;
         case '8':
-            com_val = 'k';
+            command = 'k';
             break;
         case '9':
-            com_val = 'u';
+            command = 'u';
             break;
         case 'B':
-            com_val = 'f';
+            command = 'f';
             break;
         case 'C':
         case 'D':
@@ -1108,75 +1108,75 @@ static char original_commands(char com_val) {
         case 'G':
             break;
         case 'L':
-            com_val = 'W';
+            command = 'W';
             break;
         case 'M':
             break;
         case 'R':
             break;
         case 'S':
-            com_val = '#';
+            command = '#';
             break;
         case 'T':
-            if (getDirectionWithMemory(CNIL, &dir_val)) {
-                switch (dir_val) {
+            if (getDirectionWithMemory(CNIL, &direction)) {
+                switch (direction) {
                     case 1:
-                        com_val = CTRL_KEY('B');
+                        command = CTRL_KEY('B');
                         break;
                     case 2:
-                        com_val = CTRL_KEY('J');
+                        command = CTRL_KEY('J');
                         break;
                     case 3:
-                        com_val = CTRL_KEY('N');
+                        command = CTRL_KEY('N');
                         break;
                     case 4:
-                        com_val = CTRL_KEY('H');
+                        command = CTRL_KEY('H');
                         break;
                     case 6:
-                        com_val = CTRL_KEY('L');
+                        command = CTRL_KEY('L');
                         break;
                     case 7:
-                        com_val = CTRL_KEY('Y');
+                        command = CTRL_KEY('Y');
                         break;
                     case 8:
-                        com_val = CTRL_KEY('K');
+                        command = CTRL_KEY('K');
                         break;
                     case 9:
-                        com_val = CTRL_KEY('U');
+                        command = CTRL_KEY('U');
                         break;
                     default:
-                        com_val = ' ';
+                        command = ' ';
                         break;
                 }
             } else {
-                com_val = ' ';
+                command = ' ';
             }
             break;
         case 'V':
             break;
         case 'a':
-            com_val = 'z';
+            command = 'z';
             break;
         case 'b':
-            com_val = 'P';
+            command = 'P';
             break;
         case 'c':
         case 'd':
         case 'e':
             break;
         case 'f':
-            com_val = 't';
+            command = 't';
             break;
         case 'h':
-            com_val = '?';
+            command = '?';
             break;
         case 'i':
             break;
         case 'j':
-            com_val = 'S';
+            command = 'S';
             break;
         case 'l':
-            com_val = 'x';
+            command = 'x';
             break;
         case 'm':
         case 'o':
@@ -1186,33 +1186,33 @@ static char original_commands(char com_val) {
         case 's':
             break;
         case 't':
-            com_val = 'T';
+            command = 'T';
             break;
         case 'u':
-            com_val = 'Z';
+            command = 'Z';
             break;
         case 'v':
         case 'w':
             break;
         case 'x':
-            com_val = 'X';
+            command = 'X';
             break;
 
             // wizard mode commands follow
         case CTRL_KEY('A'): // ^A = cure all
             break;
         case CTRL_KEY('B'): // ^B = objects
-            com_val = CTRL_KEY('O');
+            command = CTRL_KEY('O');
             break;
         case CTRL_KEY('D'): // ^D = up/down
             break;
         case CTRL_KEY('H'): // ^H = wizhelp
-            com_val = '\\';
+            command = '\\';
             break;
         case CTRL_KEY('I'): // ^I = identify
             break;
         case CTRL_KEY('L'): // ^L = wizlight
-            com_val = '*';
+            command = '*';
             break;
         case ':':
         case CTRL_KEY('T'): // ^T = teleport
@@ -1223,14 +1223,14 @@ static char original_commands(char com_val) {
         case '+':
             break;
         case CTRL_KEY('U'): // ^U = summon
-            com_val = '&';
+            command = '&';
             break;
         default:
-            com_val = '~'; // Anything illegal.
+            command = '~'; // Anything illegal.
             break;
     }
 
-    return com_val;
+    return command;
 }
 
 static bool moveWithoutPickup(char *command) {
