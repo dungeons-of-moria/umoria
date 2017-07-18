@@ -646,7 +646,7 @@ static void dungeonBuildRoomWithInnerRooms(int y, int x) {
     }
 }
 
-static void placeLargeMiddlePillar(int y, int x) {
+static void dungeonPlaceLargeMiddlePillar(int y, int x) {
     for (int i = y - 1; i <= y + 1; i++) {
         for (int j = x - 1; j <= x + 1; j++) {
             cave[i][j].fval = TMP1_WALL;
@@ -730,7 +730,7 @@ static void build_type3(int y, int x) {
     // Special features.
     switch (randomNumber(4)) {
         case 1: // Large middle pillar
-            placeLargeMiddlePillar(y, x);
+            dungeonPlaceLargeMiddlePillar(y, x);
             break;
         case 2: // Inner treasure vault
             dungeonPlaceVault(y, x);
