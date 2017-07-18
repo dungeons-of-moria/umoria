@@ -71,14 +71,14 @@ static void dungeonBlankEntireCave() {
 
 // Fills in empty spots with desired rock -RAK-
 // Note: 9 is a temporary value.
-static void fill_cave(uint8_t rockType) {
+static void dungeonFillEmptyTilesWith(uint8_t rock_type) {
     // no need to check the border of the cave
     for (int y = dungeon_height - 2; y > 0; y--) {
         int x = 1;
 
         for (int j = dungeon_width - 2; j > 0; j--) {
             if (cave[y][x].fval == NULL_WALL || cave[y][x].fval == TMP1_WALL || cave[y][x].fval == TMP2_WALL) {
-                cave[y][x].fval = rockType;
+                cave[y][x].fval = rock_type;
             }
             x++;
         }
@@ -1027,7 +1027,7 @@ static void cave_gen() {
     }
 
     // Generate walls and streamers
-    fill_cave(GRANITE_WALL);
+    dungeonFillEmptyTilesWith(GRANITE_WALL);
     for (int i = 0; i < DUN_STR_MAG; i++) {
         place_streamer(MAGMA_WALL, DUN_STR_MC);
     }
@@ -1183,7 +1183,7 @@ static void town_gen() {
 
     placeTownStores();
 
-    fill_cave(DARK_FLOOR);
+    dungeonFillEmptyTilesWith(DARK_FLOOR);
 
     // make stairs before seedResetToOldSeed, so that they don't move around
     place_boundary();
