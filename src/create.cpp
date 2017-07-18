@@ -340,10 +340,10 @@ static int displayRaceClasses(int race_id, int *class_list) {
 }
 
 // Gets a character class -JWT-
-static void get_class() {
+static void characterGetClass() {
     int class_list[MAX_CLASS];
-    for (int cid = 0; cid < MAX_CLASS; cid++) {
-        class_list[cid] = 0;
+    for (int id = 0; id < MAX_CLASS; id++) {
+        class_list[id] = 0;
     }
 
     int class_count = displayRaceClasses(py.misc.prace, class_list);
@@ -351,31 +351,31 @@ static void get_class() {
     py.misc.pclass = 0;
 
     int min_value, max_value;
+    bool is_set = false;
 
-    bool exit_flag = false;
-    while (!exit_flag) {
+    while (!is_set) {
         moveCursor(20, 31);
 
-        char s = getKeyInput();
+        char input = getKeyInput();
+        int class_id = input - 'a';
 
-        int cid = s - 'a';
-        if (cid < class_count && cid >= 0) {
-            exit_flag = true;
+        if (class_id < class_count && class_id >= 0) {
+            is_set = true;
 
-            py.misc.pclass = (uint8_t) class_list[cid];
+            py.misc.pclass = (uint8_t) class_list[class_id];
 
-            Class_t *c_ptr = &classes[py.misc.pclass];
+            Class_t *klass = &classes[py.misc.pclass];
 
             clearToBottom(20);
-            putString(c_ptr->title, 5, 15);
+            putString(klass->title, 5, 15);
 
             // Adjust the stats for the class adjustment -RAK-
-            characterChangeStat(A_STR, c_ptr->madj_str);
-            characterChangeStat(A_INT, c_ptr->madj_int);
-            characterChangeStat(A_WIS, c_ptr->madj_wis);
-            characterChangeStat(A_DEX, c_ptr->madj_dex);
-            characterChangeStat(A_CON, c_ptr->madj_con);
-            characterChangeStat(A_CHR, c_ptr->madj_chr);
+            characterChangeStat(A_STR, klass->madj_str);
+            characterChangeStat(A_INT, klass->madj_int);
+            characterChangeStat(A_WIS, klass->madj_wis);
+            characterChangeStat(A_DEX, klass->madj_dex);
+            characterChangeStat(A_CON, klass->madj_con);
+            characterChangeStat(A_CHR, klass->madj_chr);
 
             for (int i = 0; i < 6; i++) {
                 py.stats.cur_stat[i] = py.stats.max_stat[i];
@@ -392,7 +392,7 @@ static void get_class() {
             py.misc.dis_ac = py.misc.pac + py.misc.dis_tac;
 
             // now set misc stats, do this after setting stats because of playerStatAdjustmentConstitution() for hit-points
-            py.misc.hitdie += c_ptr->adj_hd;
+            py.misc.hitdie += klass->adj_hd;
             py.misc.mhp = (int16_t) (playerStatAdjustmentConstitution() + py.misc.hitdie);
             py.misc.chp = py.misc.mhp;
             py.misc.chp_frac = 0;
@@ -411,15 +411,15 @@ static void get_class() {
                 }
             } while (player_base_hp_levels[MAX_PLAYER_LEVEL - 1] < min_value || player_base_hp_levels[MAX_PLAYER_LEVEL - 1] > max_value);
 
-            py.misc.bth += c_ptr->mbth;
-            py.misc.bthb += c_ptr->mbthb; // RAK
-            py.misc.srh += c_ptr->msrh;
-            py.misc.disarm += c_ptr->mdis;
-            py.misc.fos += c_ptr->mfos;
-            py.misc.stl += c_ptr->mstl;
-            py.misc.save += c_ptr->msav;
-            py.misc.expfact += c_ptr->m_exp;
-        } else if (s == '?') {
+            py.misc.bth += klass->mbth;
+            py.misc.bthb += klass->mbthb; // RAK
+            py.misc.srh += klass->msrh;
+            py.misc.disarm += klass->mdis;
+            py.misc.fos += klass->mfos;
+            py.misc.stl += klass->mstl;
+            py.misc.save += klass->msav;
+            py.misc.expfact += klass->m_exp;
+        } else if (input == '?') {
             displayTextHelpFile(MORIA_WELCOME);
         } else {
             terminalBellSound();
@@ -490,7 +490,7 @@ void createCharacter() {
     }
     // done with stats generation
 
-    get_class();
+    characterGetClass();
     get_money();
     printCharacterStats();
     printCharacterLevelExperience();
