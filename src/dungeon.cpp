@@ -17,7 +17,7 @@ static void playerRegenerateMana(int percent);
 static bool itemEnchanted(Inventory_t *item);
 static void examineBook();
 static void dungeonGoUpLevel();
-static void go_down();
+static void dungeonGoDownLevel();
 static void jamdoor();
 static void refill_lamp();
 
@@ -1676,7 +1676,7 @@ static void doCommand(char command) {
             dungeonGoUpLevel();
             break;
         case '>': // (>) go up a staircase
-            go_down();
+            dungeonGoDownLevel();
             break;
         case '?': // (?) help with commands
             if (use_roguelike_keys) {
@@ -2091,10 +2091,10 @@ static void dungeonGoUpLevel() {
 }
 
 // Go down one level -RAK-
-static void go_down() {
-    uint8_t tileID = cave[char_row][char_col].tptr;
+static void dungeonGoDownLevel() {
+    uint8_t tile_id = cave[char_row][char_col].tptr;
 
-    if (tileID != 0 && treasure_list[tileID].tval == TV_DOWN_STAIR) {
+    if (tile_id != 0 && treasure_list[tile_id].tval == TV_DOWN_STAIR) {
         current_dungeon_level++;
 
         printMessage("You enter a maze of down staircases.");
