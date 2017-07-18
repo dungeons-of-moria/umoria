@@ -12,7 +12,7 @@
 static char originalCommands(char command);
 static void doCommand(char command);
 static bool validCountCommand(char command);
-static void regenhp(int percent);
+static void playerRegenerateHitPoints(int percent);
 static void regenmana(int percent);
 static bool enchanted(Inventory_t *t_ptr);
 static void examine_book();
@@ -235,7 +235,7 @@ static void playerUpdateRegeneration(int amount) {
     }
 
     if (py.flags.poisoned < 1 && py.misc.chp < py.misc.mhp) {
-        regenhp(amount);
+        playerRegenerateHitPoints(amount);
     }
 
     if (py.misc.cmana < py.misc.mana) {
@@ -1921,7 +1921,7 @@ static bool validCountCommand(char command) {
 }
 
 // Regenerate hit points -RAK-
-static void regenhp(int percent) {
+static void playerRegenerateHitPoints(int percent) {
     int old_chp = py.misc.chp;
     int32_t new_chp = (int32_t) py.misc.mhp * percent + PLAYER_REGEN_HPBASE;
 
@@ -1934,13 +1934,13 @@ static void regenhp(int percent) {
     }
 
     // mod 65536
-    int32_t new_chp_frac = (new_chp & 0xFFFF) + py.misc.chp_frac;
+    int32_t new_chp_fraction = (new_chp & 0xFFFF) + py.misc.chp_frac;
 
-    if (new_chp_frac >= 0x10000L) {
-        py.misc.chp_frac = (uint16_t) (new_chp_frac - 0x10000L);
+    if (new_chp_fraction >= 0x10000L) {
+        py.misc.chp_frac = (uint16_t) (new_chp_fraction - 0x10000L);
         py.misc.chp++;
     } else {
-        py.misc.chp_frac = (uint16_t) new_chp_frac;
+        py.misc.chp_frac = (uint16_t) new_chp_fraction;
     }
 
     // must set frac to zero even if equal
