@@ -253,10 +253,10 @@ static void playerDiedFromString(vtype_t *description, const char *monster_name,
     }
 }
 
-static bool testAttackHits(int attackID, uint8_t level) {
+static bool playerTestAttackHits(int attack_id, uint8_t level) {
     bool success = false;
 
-    switch (attackID) {
+    switch (attack_id) {
         case 1: // Normal attack
             if (playerTestBeingHit(60, (int) level, 0, py.misc.pac + py.misc.ptoac, CLA_MISC_HIT)) {
                 success = true;
@@ -842,7 +842,7 @@ static void make_attack(int monsterID) {
             adesc = 99;
         }
 
-        if (testAttackHits(attype, r_ptr->level)) {
+        if (playerTestAttackHits(attype, r_ptr->level)) {
             playerDisturb(1, 0);
 
             // can not strcat to cdesc because the creature may have multiple attacks.
