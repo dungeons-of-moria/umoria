@@ -29,38 +29,38 @@ static void characterGenerateStats() {
 }
 
 // Changes stats by given amount -JWT-
-static void change_stat(int stat, int16_t amount) {
-    int tmp_stat = py.stats.max_stat[stat];
+static void characterChangeStat(int stat, int16_t amount) {
+    int new_stat = py.stats.max_stat[stat];
 
     if (amount < 0) {
         for (int i = 0; i > amount; i--) {
-            if (tmp_stat > 108) {
-                tmp_stat--;
-            } else if (tmp_stat > 88) {
-                tmp_stat += -randomNumber(6) - 2;
-            } else if (tmp_stat > 18) {
-                tmp_stat += -randomNumber(15) - 5;
-                if (tmp_stat < 18) {
-                    tmp_stat = 18;
+            if (new_stat > 108) {
+                new_stat--;
+            } else if (new_stat > 88) {
+                new_stat += -randomNumber(6) - 2;
+            } else if (new_stat > 18) {
+                new_stat += -randomNumber(15) - 5;
+                if (new_stat < 18) {
+                    new_stat = 18;
                 }
-            } else if (tmp_stat > 3) {
-                tmp_stat--;
+            } else if (new_stat > 3) {
+                new_stat--;
             }
         }
     } else {
         for (int i = 0; i < amount; i++) {
-            if (tmp_stat < 18) {
-                tmp_stat++;
-            } else if (tmp_stat < 88) {
-                tmp_stat += randomNumber(15) + 5;
-            } else if (tmp_stat < 108) {
-                tmp_stat += randomNumber(6) + 2;
-            } else if (tmp_stat < 118) {
-                tmp_stat++;
+            if (new_stat < 18) {
+                new_stat++;
+            } else if (new_stat < 88) {
+                new_stat += randomNumber(15) + 5;
+            } else if (new_stat < 108) {
+                new_stat += randomNumber(6) + 2;
+            } else if (new_stat < 118) {
+                new_stat++;
             }
         }
     }
-    py.stats.max_stat[stat] = (uint8_t) tmp_stat;
+    py.stats.max_stat[stat] = (uint8_t) new_stat;
 }
 
 // generate all stats and modify for race. needed in a separate
@@ -69,12 +69,12 @@ static void get_all_stats() {
     Race_t *r_ptr = &character_races[py.misc.prace];
 
     characterGenerateStats();
-    change_stat(A_STR, r_ptr->str_adj);
-    change_stat(A_INT, r_ptr->int_adj);
-    change_stat(A_WIS, r_ptr->wis_adj);
-    change_stat(A_DEX, r_ptr->dex_adj);
-    change_stat(A_CON, r_ptr->con_adj);
-    change_stat(A_CHR, r_ptr->chr_adj);
+    characterChangeStat(A_STR, r_ptr->str_adj);
+    characterChangeStat(A_INT, r_ptr->int_adj);
+    characterChangeStat(A_WIS, r_ptr->wis_adj);
+    characterChangeStat(A_DEX, r_ptr->dex_adj);
+    characterChangeStat(A_CON, r_ptr->con_adj);
+    characterChangeStat(A_CHR, r_ptr->chr_adj);
 
     py.misc.lev = 1;
 
@@ -352,12 +352,12 @@ static void get_class() {
             putString(c_ptr->title, 5, 15);
 
             // Adjust the stats for the class adjustment -RAK-
-            change_stat(A_STR, c_ptr->madj_str);
-            change_stat(A_INT, c_ptr->madj_int);
-            change_stat(A_WIS, c_ptr->madj_wis);
-            change_stat(A_DEX, c_ptr->madj_dex);
-            change_stat(A_CON, c_ptr->madj_con);
-            change_stat(A_CHR, c_ptr->madj_chr);
+            characterChangeStat(A_STR, c_ptr->madj_str);
+            characterChangeStat(A_INT, c_ptr->madj_int);
+            characterChangeStat(A_WIS, c_ptr->madj_wis);
+            characterChangeStat(A_DEX, c_ptr->madj_dex);
+            characterChangeStat(A_CON, c_ptr->madj_con);
+            characterChangeStat(A_CHR, c_ptr->madj_chr);
 
             for (int i = 0; i < 6; i++) {
                 py.stats.cur_stat[i] = py.stats.max_stat[i];
