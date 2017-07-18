@@ -1089,19 +1089,19 @@ static void makeMove(int monster_id, int *directions, uint32_t *rcmove) {
     }
 }
 
-static bool canCreatureCastSpells(Monster_t *m_ptr, uint32_t spells) {
+static bool monsterCanCastSpells(Monster_t *monster, uint32_t spells) {
     // 1 in x chance of casting spell
     if (randomNumber((int) (spells & CS_FREQ)) != 1) {
         return false;
     }
 
     // Must be within certain range
-    if (m_ptr->cdis > MAX_SPELL_DIS) {
+    if (monster->cdis > MAX_SPELL_DIS) {
         return false;
     }
 
     // Must have unobstructed Line-Of-Sight
-    return los(char_row, char_col, (int) m_ptr->fy, (int) m_ptr->fx);
+    return los(char_row, char_col, (int) monster->fy, (int) monster->fx);
 }
 
 void creatureCastsSpell(Monster_t *m_ptr, int monsterID, int spellID, uint8_t level, vtype_t cdesc, vtype_t deathDescription) {
@@ -1272,7 +1272,7 @@ static bool mon_cast_spell(int monsterID) {
     Monster_t *m_ptr = &monsters[monsterID];
     Creature_t *r_ptr = &creatures_list[m_ptr->mptr];
 
-    if (!canCreatureCastSpells(m_ptr, r_ptr->spells)) {
+    if (!monsterCanCastSpells(m_ptr, r_ptr->spells)) {
         return false;
     }
 
