@@ -429,29 +429,37 @@ static void characterGetClass() {
 
 // Given a stat value, return a monetary value,
 // which affects the amount of gold a player has.
-static int monval(uint8_t i) {
-    return 5 * ((int) i - 10);
+static int monetaryValueCalculatedFromStat(uint8_t stat) {
+    return 5 * ((int) stat - 10);
 }
 
-static void get_money() {
-    uint8_t *a_ptr = py.stats.max_stat;
-    int tmp = monval(a_ptr[A_STR]) + monval(a_ptr[A_INT]) + monval(a_ptr[A_WIS]) + monval(a_ptr[A_CON]) + monval(a_ptr[A_DEX]);
+static void playerCalculateStartGold() {
+    int value = monetaryValueCalculatedFromStat(py.stats.max_stat[A_STR]);
+    value += monetaryValueCalculatedFromStat(py.stats.max_stat[A_INT]);
+    value += monetaryValueCalculatedFromStat(py.stats.max_stat[A_WIS]);
+    value += monetaryValueCalculatedFromStat(py.stats.max_stat[A_CON]);
+    value += monetaryValueCalculatedFromStat(py.stats.max_stat[A_DEX]);
 
-    int gold = py.misc.sc * 6 + randomNumber(25) + 325; // Social Class adj
-    gold -= tmp;                                   // Stat adj
-    gold += monval(a_ptr[A_CHR]);                  // Charisma adj
+    // Social Class adjustment
+    int new_gold = py.misc.sc * 6 + randomNumber(25) + 325;
+
+    // Stat adjustment
+    new_gold -= value;
+
+    // Charisma adjustment
+    new_gold += monetaryValueCalculatedFromStat(py.stats.max_stat[A_CHR]);
 
     // She charmed the banker into it! -CJS-
     if (!py.misc.male) {
-        gold += 50;
+        new_gold += 50;
     }
 
     // Minimum
-    if (gold < 80) {
-        gold = 80;
+    if (new_gold < 80) {
+        new_gold = 80;
     }
 
-    py.misc.au = gold;
+    py.misc.au = new_gold;
 }
 
 // Main Character Creation Routine -JWT-
@@ -491,7 +499,7 @@ void createCharacter() {
     // done with stats generation
 
     characterGetClass();
-    get_money();
+    playerCalculateStartGold();
     printCharacterStats();
     printCharacterLevelExperience();
     printCharacterAbilities();
