@@ -25,28 +25,28 @@ static uint8_t dungeonFloorTileForLevel() {
 }
 
 // Always picks a correct direction
-static void correct_dir(int *rowDir, int *colDir, int y1, int x1, int y2, int x2) {
+static void pickCorrectDirection(int *row_dir, int *col_dir, int y1, int x1, int y2, int x2) {
     if (y1 < y2) {
-        *rowDir = 1;
+        *row_dir = 1;
     } else if (y1 == y2) {
-        *rowDir = 0;
+        *row_dir = 0;
     } else {
-        *rowDir = -1;
+        *row_dir = -1;
     }
 
     if (x1 < x2) {
-        *colDir = 1;
+        *col_dir = 1;
     } else if (x1 == x2) {
-        *colDir = 0;
+        *col_dir = 0;
     } else {
-        *colDir = -1;
+        *col_dir = -1;
     }
 
-    if (*rowDir != 0 && *colDir != 0) {
+    if (*row_dir != 0 && *col_dir != 0) {
         if (randomNumber(2) == 1) {
-            *rowDir = 0;
+            *row_dir = 0;
         } else {
-            *colDir = 0;
+            *col_dir = 0;
         }
     }
 }
@@ -799,7 +799,7 @@ static void build_tunnel(int row1, int col1, int row2, int col2) {
     int wallindex = 0;
 
     int row_dir, col_dir;
-    correct_dir(&row_dir, &col_dir, row1, col1, row2, col2);
+    pickCorrectDirection(&row_dir, &col_dir, row1, col1, row2, col2);
 
     do {
         // prevent infinite loops, just in case
@@ -812,7 +812,7 @@ static void build_tunnel(int row1, int col1, int row2, int col2) {
             if (randomNumber(DUN_TUN_RND) == 1) {
                 rand_dir(&row_dir, &col_dir);
             } else {
-                correct_dir(&row_dir, &col_dir, row1, col1, row2, col2);
+                pickCorrectDirection(&row_dir, &col_dir, row1, col1, row2, col2);
             }
         }
 
@@ -823,7 +823,7 @@ static void build_tunnel(int row1, int col1, int row2, int col2) {
             if (randomNumber(DUN_TUN_RND) == 1) {
                 rand_dir(&row_dir, &col_dir);
             } else {
-                correct_dir(&row_dir, &col_dir, row1, col1, row2, col2);
+                pickCorrectDirection(&row_dir, &col_dir, row1, col1, row2, col2);
             }
             tmp_row = row1 + row_dir;
             tmp_col = col1 + col_dir;
