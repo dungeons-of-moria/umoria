@@ -1264,41 +1264,41 @@ void monsterExecuteCastingOfSpell(Monster_t *monster, int monster_id, int spell_
 // Creatures can cast spells too.  (Dragon Breath) -RAK-
 //   castSpellGetId = true if creature changes position
 //   return true (took_turn) if creature casts a spell
-static bool mon_cast_spell(int monsterID) {
+static bool monsterCastSpell(int monster_id) {
     if (character_is_dead) {
         return false;
     }
 
-    Monster_t *m_ptr = &monsters[monsterID];
-    Creature_t *r_ptr = &creatures_list[m_ptr->mptr];
+    Monster_t *monster = &monsters[monster_id];
+    Creature_t *creature = &creatures_list[monster->mptr];
 
-    if (!monsterCanCastSpells(m_ptr, r_ptr->spells)) {
+    if (!monsterCanCastSpells(monster, creature->spells)) {
         return false;
     }
 
     // Creature is going to cast a spell
 
     // Check to see if monster should be lit.
-    monsterUpdateVisibility(monsterID);
+    monsterUpdateVisibility(monster_id);
 
     // Describe the attack
-    vtype_t cdesc;
-    if (m_ptr->ml) {
-        (void) sprintf(cdesc, "The %s ", r_ptr->name);
+    vtype_t name;
+    if (monster->ml) {
+        (void) sprintf(name, "The %s ", creature->name);
     } else {
-        (void) strcpy(cdesc, "It ");
+        (void) strcpy(name, "It ");
     }
 
-    vtype_t deathDescription;
-    playerDiedFromString(&deathDescription, r_ptr->name, r_ptr->cmove);
+    vtype_t death_description;
+    playerDiedFromString(&death_description, creature->name, creature->cmove);
 
     // Extract all possible spells into spell_choice
     int spell_choice[30];
-    uint32_t spellFlags = (uint32_t) (r_ptr->spells & ~CS_FREQ);
+    uint32_t spell_flags = (uint32_t) (creature->spells & ~CS_FREQ);
 
     int id = 0;
-    while (spellFlags != 0) {
-        spell_choice[id] = getAndClearFirstBit(&spellFlags);
+    while (spell_flags != 0) {
+        spell_choice[id] = getAndClearFirstBit(&spell_flags);
         id++;
     }
 
@@ -1313,19 +1313,19 @@ static bool mon_cast_spell(int monsterID) {
 
     // save some code/data space here, with a small time penalty
     if ((thrown_spell < 14 && thrown_spell > 6) || thrown_spell == 16) {
-        (void) strcat(cdesc, "casts a spell.");
-        printMessage(cdesc);
+        (void) strcat(name, "casts a spell.");
+        printMessage(name);
     }
 
-    monsterExecuteCastingOfSpell(m_ptr, monsterID, thrown_spell, r_ptr->level, cdesc, deathDescription);
+    monsterExecuteCastingOfSpell(monster, monster_id, thrown_spell, creature->level, name, death_description);
 
-    if (m_ptr->ml) {
-        creature_recall[m_ptr->mptr].r_spells |= 1L << (thrown_spell - 1);
-        if ((creature_recall[m_ptr->mptr].r_spells & CS_FREQ) != CS_FREQ) {
-            creature_recall[m_ptr->mptr].r_spells++;
+    if (monster->ml) {
+        creature_recall[monster->mptr].r_spells |= 1L << (thrown_spell - 1);
+        if ((creature_recall[monster->mptr].r_spells & CS_FREQ) != CS_FREQ) {
+            creature_recall[monster->mptr].r_spells++;
         }
-        if (character_is_dead && creature_recall[m_ptr->mptr].r_deaths < MAX_SHORT) {
-            creature_recall[m_ptr->mptr].r_deaths++;
+        if (character_is_dead && creature_recall[monster->mptr].r_deaths < MAX_SHORT) {
+            creature_recall[monster->mptr].r_deaths++;
         }
     }
 
@@ -1529,7 +1529,7 @@ static void mon_move(int monsterID, uint32_t *rcmove) {
         doMove = true;
     } else if (r_ptr->spells & CS_FREQ) {
         // Creature may cast a spell
-        doMove = mon_cast_spell(monsterID);
+        doMove = monsterCastSpell(monsterID);
     }
 
     int mm[9];
