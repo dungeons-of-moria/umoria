@@ -579,60 +579,60 @@ static int verify(const char *prompt, int item) {
 #define WRONG_SCR 5
 
 // Keep track of the state of the inventory screen.
-static int scr_state, scr_left, scr_base;
+static int screen_state, screen_left, screen_base;
 static int wear_low, wear_high;
 
 // Draw the inventory screen.
-static void inven_screen(int new_scr) {
-    if (new_scr == scr_state) {
+static void displayInventoryScreen(int new_screen) {
+    if (new_screen == screen_state) {
         return;
     } else {
-        scr_state = new_scr;
+        screen_state = new_screen;
     }
 
     int line = 0;
 
-    switch (new_scr) {
+    switch (new_screen) {
         case BLANK_SCR:
             line = 0;
             break;
         case HELP_SCR:
-            if (scr_left > 52) {
-                scr_left = 52;
+            if (screen_left > 52) {
+                screen_left = 52;
             }
 
-            putStringClearToEOL("  ESC: exit", 1, scr_left);
-            putStringClearToEOL("  w  : wear or wield object", 2, scr_left);
-            putStringClearToEOL("  t  : take off item", 3, scr_left);
-            putStringClearToEOL("  d  : drop object", 4, scr_left);
-            putStringClearToEOL("  x  : exchange weapons", 5, scr_left);
-            putStringClearToEOL("  i  : inventory of pack", 6, scr_left);
-            putStringClearToEOL("  e  : list used equipment", 7, scr_left);
+            putStringClearToEOL("  ESC: exit", 1, screen_left);
+            putStringClearToEOL("  w  : wear or wield object", 2, screen_left);
+            putStringClearToEOL("  t  : take off item", 3, screen_left);
+            putStringClearToEOL("  d  : drop object", 4, screen_left);
+            putStringClearToEOL("  x  : exchange weapons", 5, screen_left);
+            putStringClearToEOL("  i  : inventory of pack", 6, screen_left);
+            putStringClearToEOL("  e  : list used equipment", 7, screen_left);
 
             line = 7;
             break;
         case INVEN_SCR:
-            scr_left = displayInventory(0, inventory_count - 1, show_inventory_weights, scr_left, CNIL);
+            screen_left = displayInventory(0, inventory_count - 1, show_inventory_weights, screen_left, CNIL);
             line = inventory_count;
             break;
         case WEAR_SCR:
-            scr_left = displayInventory(wear_low, wear_high, show_inventory_weights, scr_left, CNIL);
+            screen_left = displayInventory(wear_low, wear_high, show_inventory_weights, screen_left, CNIL);
             line = wear_high - wear_low + 1;
             break;
         case EQUIP_SCR:
-            scr_left = displayEquipment(show_inventory_weights, scr_left);
+            screen_left = displayEquipment(show_inventory_weights, screen_left);
             line = equipment_count;
             break;
     }
 
-    if (line >= scr_base) {
-        scr_base = line + 1;
-        eraseLine(scr_base, scr_left);
+    if (line >= screen_base) {
+        screen_base = line + 1;
+        eraseLine(screen_base, screen_left);
         return;
     }
 
-    while (++line <= scr_base) {
-        eraseLine(line, scr_left);
+    while (++line <= screen_base) {
+        eraseLine(line, screen_left);
     }
 }
 
@@ -647,29 +647,29 @@ static void setInventoryCommandScreenState(char command) {
                 doing_inventory_command = 0;
                 return;
             }
-            scr_left = 50;
-            scr_base = 0;
+            screen_left = 50;
+            screen_base = 0;
         }
 
-        int savedState = scr_state;
-        scr_state = WRONG_SCR;
-        inven_screen(savedState);
+        int savedState = screen_state;
+        screen_state = WRONG_SCR;
+        displayInventoryScreen(savedState);
 
         return;
     }
 
-    scr_left = 50;
-    scr_base = 0;
+    screen_left = 50;
+    screen_base = 0;
 
     // this forces exit of inventoryExecuteCommand() if selecting is not set true
-    scr_state = BLANK_SCR;
+    screen_state = BLANK_SCR;
 }
 
 static void displayInventory() {
     if (inventory_count == 0) {
         printMessage("You are not carrying anything.");
     } else {
-        inven_screen(INVEN_SCR);
+        displayInventoryScreen(INVEN_SCR);
     }
 }
 
@@ -677,7 +677,7 @@ static void displayEquipment() {
     if (equipment_count == 0) {
         printMessage("You are not using any equipment.");
     } else {
-        inven_screen(EQUIP_SCR);
+        displayInventoryScreen(EQUIP_SCR);
     }
 }
 
@@ -693,8 +693,8 @@ static bool inventoryTakeOffItem(bool selecting) {
         return selecting;
     }
 
-    if (scr_state != BLANK_SCR) {
-        inven_screen(EQUIP_SCR);
+    if (screen_state != BLANK_SCR) {
+        displayInventoryScreen(EQUIP_SCR);
     }
 
     return true;
@@ -711,13 +711,13 @@ static bool inventoryDropItem(char *command, bool selecting) {
         return selecting;
     }
 
-    if ((scr_state == EQUIP_SCR && equipment_count > 0) || inventory_count == 0) {
-        if (scr_state != BLANK_SCR) {
-            inven_screen(EQUIP_SCR);
+    if ((screen_state == EQUIP_SCR && equipment_count > 0) || inventory_count == 0) {
+        if (screen_state != BLANK_SCR) {
+            displayInventoryScreen(EQUIP_SCR);
         }
         *command = 'r'; // Remove - or take off and drop.
-    } else if (scr_state != BLANK_SCR) {
-        inven_screen(INVEN_SCR);
+    } else if (screen_state != BLANK_SCR) {
+        displayInventoryScreen(INVEN_SCR);
     }
 
     return true;
@@ -737,8 +737,8 @@ static bool inventoryWearWieldItem(bool selecting) {
         return selecting;
     }
 
-    if (scr_state != BLANK_SCR && scr_state != INVEN_SCR) {
-        inven_screen(WEAR_SCR);
+    if (screen_state != BLANK_SCR && screen_state != INVEN_SCR) {
+        displayInventoryScreen(WEAR_SCR);
     }
 
     return true;
@@ -768,8 +768,8 @@ static void inventoryUnwieldItem() {
     inventory[INVEN_AUX] = inventory[INVEN_WIELD];
     inventory[INVEN_WIELD] = savedItem;
 
-    if (scr_state == EQUIP_SCR) {
-        scr_left = displayEquipment(show_inventory_weights, scr_left);
+    if (screen_state == EQUIP_SCR) {
+        screen_left = displayEquipment(show_inventory_weights, screen_left);
     }
 
     playerAdjustBonusesForItem(&inventory[INVEN_AUX], -1);  // Subtract bonuses
@@ -821,7 +821,7 @@ static void buildCommandHeading(char *prt1, int from, int to, const char *swap, 
     to = to + 'a';
 
     const char *listItems = "";
-    if (scr_state == BLANK_SCR) {
+    if (screen_state == BLANK_SCR) {
         listItems = ", * to list";
     }
 
@@ -835,19 +835,19 @@ static void buildCommandHeading(char *prt1, int from, int to, const char *swap, 
 
 static void drawInventoryScreenForCommand(char command) {
     if (command == 't' || command == 'r') {
-        inven_screen(EQUIP_SCR);
-    } else if (command == 'w' && scr_state != INVEN_SCR) {
-        inven_screen(WEAR_SCR);
+        displayInventoryScreen(EQUIP_SCR);
+    } else if (command == 'w' && screen_state != INVEN_SCR) {
+        displayInventoryScreen(WEAR_SCR);
     } else {
-        inven_screen(INVEN_SCR);
+        displayInventoryScreen(INVEN_SCR);
     }
 }
 
 static void swapInventoryScreenForDrop() {
-    if (scr_state == EQUIP_SCR) {
-        inven_screen(INVEN_SCR);
-    } else if (scr_state == INVEN_SCR) {
-        inven_screen(EQUIP_SCR);
+    if (screen_state == EQUIP_SCR) {
+        displayInventoryScreen(INVEN_SCR);
+    } else if (screen_state == INVEN_SCR) {
+        displayInventoryScreen(EQUIP_SCR);
     }
 }
 
@@ -1239,7 +1239,7 @@ static bool selectItemCommands(char *command, char *which, bool selecting) {
             }
         }
 
-        if (!player_free_turn && scr_state == BLANK_SCR) {
+        if (!player_free_turn && screen_state == BLANK_SCR) {
             selecting = false;
         }
     }
@@ -1249,7 +1249,7 @@ static bool selectItemCommands(char *command, char *which, bool selecting) {
 
 // Put an appropriate header.
 static void inventoryDisplayAppropriateHeader() {
-    if (scr_state == INVEN_SCR) {
+    if (screen_state == INVEN_SCR) {
         obj_desc_t msg;
         int weightQuotient = inventory_weight / 10;
         int weightRemainder = inventory_weight % 10;
@@ -1273,13 +1273,13 @@ static void inventoryDisplayAppropriateHeader() {
         }
 
         putStringClearToEOL(msg, 0, 0);
-    } else if (scr_state == WEAR_SCR) {
+    } else if (screen_state == WEAR_SCR) {
         if (wear_high < wear_low) {
             putStringClearToEOL("You have nothing you could wield.", 0, 0);
         } else {
             putStringClearToEOL("You could wield -", 0, 0);
         }
-    } else if (scr_state == EQUIP_SCR) {
+    } else if (screen_state == EQUIP_SCR) {
         if (equipment_count == 0) {
             putStringClearToEOL("You are not using anything.", 0, 0);
         } else {
@@ -1289,7 +1289,7 @@ static void inventoryDisplayAppropriateHeader() {
         putStringClearToEOL("Allowed commands:", 0, 0);
     }
 
-    eraseLine(scr_base, scr_left);
+    eraseLine(screen_base, screen_left);
 }
 
 // This does all the work.
@@ -1329,7 +1329,7 @@ void inventoryExecuteCommand(char command) {
                 // Dummy command to return again to main prompt.
                 break;
             case '?':
-                inven_screen(HELP_SCR);
+                displayInventoryScreen(HELP_SCR);
                 break;
             default:
                 // Nonsense command
@@ -1346,7 +1346,7 @@ void inventoryExecuteCommand(char command) {
 
         selecting = selectItemCommands(&command, &which, selecting);
 
-        if (which == ESCAPE || scr_state == BLANK_SCR) {
+        if (which == ESCAPE || screen_state == BLANK_SCR) {
             command = ESCAPE;
         } else if (!player_free_turn) {
             // Save state for recovery if they want to call us again next turn.
@@ -1367,14 +1367,14 @@ void inventoryExecuteCommand(char command) {
         } else {
             inventoryDisplayAppropriateHeader();
 
-            putString("e/i/t/w/x/d/?/ESC:", scr_base, 60);
+            putString("e/i/t/w/x/d/?/ESC:", screen_base, 60);
             command = getKeyInput();
 
-            eraseLine(scr_base, scr_left);
+            eraseLine(screen_base, screen_left);
         }
     } while (command != ESCAPE);
 
-    if (scr_state != BLANK_SCR) {
+    if (screen_state != BLANK_SCR) {
         terminalRestoreScreen();
     }
 
