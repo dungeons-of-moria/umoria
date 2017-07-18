@@ -1621,24 +1621,24 @@ static void monsterMove(int monster_id, uint32_t *rcmove) {
     }
 }
 
-static void updateRecall(Monster_t *m_ptr, bool wake, bool ignore, int rcmove) {
-    if (!m_ptr->ml) {
+static void memoryUpdateRecall(Monster_t *monster, bool wake, bool ignore, int rcmove) {
+    if (!monster->ml) {
         return;
     }
 
-    Recall_t *r_ptr = &creature_recall[m_ptr->mptr];
+    Recall_t *memory = &creature_recall[monster->mptr];
 
     if (wake) {
-        if (r_ptr->r_wake < MAX_UCHAR) {
-            r_ptr->r_wake++;
+        if (memory->r_wake < MAX_UCHAR) {
+            memory->r_wake++;
         }
     } else if (ignore) {
-        if (r_ptr->r_ignore < MAX_UCHAR) {
-            r_ptr->r_ignore++;
+        if (memory->r_ignore < MAX_UCHAR) {
+            memory->r_ignore++;
         }
     }
 
-    r_ptr->r_cmove |= rcmove;
+    memory->r_cmove |= rcmove;
 }
 
 static void creatureAttackingUpdate(Monster_t *m_ptr, int monsterID, int moves) {
@@ -1694,7 +1694,7 @@ static void creatureAttackingUpdate(Monster_t *m_ptr, int monsterID, int moves) 
 
         monsterUpdateVisibility(monsterID);
 
-        updateRecall(m_ptr, wake, ignore, rcmove);
+        memoryUpdateRecall(m_ptr, wake, ignore, rcmove);
     }
 }
 
