@@ -177,7 +177,7 @@ static void dungeonPlaceBrokenDoor(int y, int x) {
     treasure_list[cur_pos].p1 = 1;
 }
 
-static void place_closed_door(int y, int x) {
+static void dungeonPlaceClosedDoor(int y, int x) {
     int cur_pos = popt();
     cave[y][x].tptr = (uint8_t) cur_pos;
     inventoryItemCopyTo(OBJ_CLOSED_DOOR, &treasure_list[cur_pos]);
@@ -220,7 +220,7 @@ static void place_door(int y, int x) {
         doorType = randomNumber(12);
 
         if (doorType > 3) {
-            place_closed_door(y, x);
+            dungeonPlaceClosedDoor(y, x);
         } else if (doorType == 3) {
             place_stuck_door(y, x);
         } else {
