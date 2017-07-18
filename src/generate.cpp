@@ -65,7 +65,7 @@ static void chanceOfRandomDirection(int *y, int *x) {
 }
 
 // Blanks out entire cave -RAK-
-static void blank_cave() {
+static void dungeonBlankEntireCave() {
     memset((char *) &cave[0][0], 0, sizeof(cave));
 }
 
@@ -1211,7 +1211,7 @@ void generateCave() {
 
     tlink();
     mlink();
-    blank_cave();
+    dungeonBlankEntireCave();
 
     // We're in the dungeon more than the town, so let's default to that -MRC-
     dungeon_height = MAX_HEIGHT;
