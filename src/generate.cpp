@@ -184,7 +184,7 @@ static void dungeonPlaceClosedDoor(int y, int x) {
     cave[y][x].fval = BLOCKED_FLOOR;
 }
 
-static void place_locked_door(int y, int x) {
+static void dungeonPlaceLockedDoor(int y, int x) {
     int cur_pos = popt();
     cave[y][x].tptr = (uint8_t) cur_pos;
     inventoryItemCopyTo(OBJ_CLOSED_DOOR, &treasure_list[cur_pos]);
@@ -224,7 +224,7 @@ static void place_door(int y, int x) {
         } else if (doorType == 3) {
             place_stuck_door(y, x);
         } else {
-            place_locked_door(y, x);
+            dungeonPlaceLockedDoor(y, x);
         }
     } else {
         place_secret_door(y, x);
@@ -444,9 +444,9 @@ static void placeTreasureVault(int y, int x, int depth, int height, int left, in
     int offset = randomNumber(4);
     if (offset < 3) {
         // 1 -> y-1; 2 -> y+1
-        place_locked_door(y - 3 + (offset << 1), x);
+        dungeonPlaceLockedDoor(y - 3 + (offset << 1), x);
     } else {
-        place_locked_door(y, x - 7 + (offset << 1));
+        dungeonPlaceLockedDoor(y, x - 7 + (offset << 1));
     }
 }
 
