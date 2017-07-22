@@ -14,12 +14,12 @@
 // aligned within the structure to their natural size boundary, so that
 // the structures contain no padding and are minimum size.
 
-#define PLAYER_NAME_SIZE 27
-#define MORIA_MESSAGE_SIZE 80
-#define OBJECT_DESCRIPTION_SIZE 160
+constexpr int PLAYER_NAME_SIZE = 27;
+constexpr int MORIA_MESSAGE_SIZE = 80;
+constexpr int OBJECT_DESCRIPTION_SIZE = 160;
 
 // Size of an inscription in the Inventory_t. Notice alignment, must be 4*x + 1
-#define INSCRIP_SIZE 13
+constexpr int INSCRIP_SIZE = 13;
 
 typedef char vtype_t[MORIA_MESSAGE_SIZE];
 

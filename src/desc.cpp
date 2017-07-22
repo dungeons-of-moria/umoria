@@ -298,12 +298,12 @@ void itemRemoveMagicNaming(Inventory_t *item) {
 }
 
 // defines for p1_use, determine how the p1 field is printed
-#define IGNORED 0
-#define CHARGES 1
-#define PLUSSES 2
-#define LIGHT 3
-#define FLAGS 4
-#define Z_PLUSSES 5
+constexpr int IGNORED = 0;
+constexpr int CHARGES = 1;
+constexpr int PLUSSES = 2;
+constexpr int LIGHT = 3;
+constexpr int FLAGS = 4;
+constexpr int Z_PLUSSES = 5;
 
 int bowDamageValue(int16_t p1) {
     if (p1 == 1 || p1 == 2) {
