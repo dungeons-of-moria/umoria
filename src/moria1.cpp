@@ -571,12 +571,12 @@ static int verify(const char *prompt, int item) {
 // minimize the work done to restore the screen afterwards. -CJS-
 
 // Inventory command screen states.
-#define BLANK_SCR 0
-#define EQUIP_SCR 1
-#define INVEN_SCR 2
-#define WEAR_SCR 3
-#define HELP_SCR 4
-#define WRONG_SCR 5
+constexpr int BLANK_SCR = 0;
+constexpr int EQUIP_SCR = 1;
+constexpr int INVEN_SCR = 2;
+constexpr int WEAR_SCR = 3;
+constexpr int HELP_SCR = 4;
+constexpr int WRONG_SCR = 5;
 
 // Keep track of the state of the inventory screen.
 static int screen_state, screen_left, screen_base;
