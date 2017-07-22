@@ -126,7 +126,7 @@ static int roff_print_line;       // Place to print line now being loaded.
 // Number of kills needed for information.
 
 // the higher the level of the monster, the fewer the kills you need
-#define knowarmor(l, d) ((d) > 304 / (4 + (l)))
+#define knowarmor(l, d) ((d) > 304u / (4u + (l)))
 
 // the higher the level of the monster, the fewer the attacks you need,
 // the more damage an attack does, the more attacks you need.
