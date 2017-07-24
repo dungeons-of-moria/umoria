@@ -43,6 +43,8 @@
 #include <string.h>
 #include <time.h>
 
+#include <limits>
+
 #include <sys/stat.h>
 
 

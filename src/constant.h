@@ -7,8 +7,7 @@
 // Global constants used by Moria
 // clang-format off
 
-#include <limits>
-#include <cstdint>
+#include "headers.h"
 
 constexpr unsigned char MAX_UCHAR = std::numeric_limits<unsigned char>::max();
 constexpr short MAX_SHORT = std::numeric_limits<short>::max(); // maximum short/long signed ints
