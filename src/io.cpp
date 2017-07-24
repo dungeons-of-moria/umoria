@@ -467,7 +467,7 @@ void terminalBellSound() {
 #define VE 5
 
 // Display highest priority object in the RATIO by RATIO area
-#define RATIO 3
+constexpr int RATIO = 3;
 
 static uint8_t screen_border [2][6] = {{'+', '+', '+', '+', '-', '|'}, // normal chars
 									  {201, 187, 200, 188, 205, 186} // graphics chars
