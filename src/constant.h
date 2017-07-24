@@ -30,7 +30,7 @@ constexpr int32_t MAX_LONG = std::numeric_limits<int32_t>::max();
 // constants at your own risk. -JEW-
 
 // message line location
-constexpr unsigned int32_t MSG_LINE = 0;
+constexpr int32_t MSG_LINE = 0;
 
 // number of messages to save in a buffer
 constexpr int32_t MAX_SAVE_MSG = 22; // How many messages to save -CJS-
