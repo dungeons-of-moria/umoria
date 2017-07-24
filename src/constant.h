@@ -7,6 +7,8 @@
 // Global constants used by Moria
 // clang-format off
 
+#pragma once
+
 #include "headers.h"
 
 constexpr int32_t MAX_UCHAR = std::numeric_limits<unsigned char>::max();
