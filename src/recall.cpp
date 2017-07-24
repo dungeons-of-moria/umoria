@@ -425,7 +425,7 @@ static void memoryMagicSkills(uint32_t memory_spell_flags, uint32_t monster_spel
 static void memoryKillDifficulty(Creature_t *creature, uint32_t monster_kills) {
     // the higher the level of the monster, the fewer the kills you need
     // Original knowarmor macro inlined
-        if (monster_kills <= 304 / (4 + creature->level)) {
+		if (monster_kills <= 304u / (4u + creature->level)) {
 	    return;
     }
 
