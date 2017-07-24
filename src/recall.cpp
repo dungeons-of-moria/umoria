@@ -125,11 +125,6 @@ static int roff_print_line;       // Place to print line now being loaded.
 
 // Number of kills needed for information.
 
-// the higher the level of the monster, the fewer the kills you need
-unsigned int knowarmor(unsigned int l, unsigned int d) {
-	return d > 304u / (4u + l);
-}
-
 // the higher the level of the monster, the fewer the attacks you need,
 // the more damage an attack does, the more attacks you need.
 #define knowdamage(l, a, d) ((4 + (l)) * (a) > 80 * (d))
@@ -428,8 +423,10 @@ static void memoryMagicSkills(uint32_t memory_spell_flags, uint32_t monster_spel
 
 // Do we know how hard they are to kill? Armor class, hit die.
 static void memoryKillDifficulty(Creature_t *creature, uint32_t monster_kills) {
-    if (!knowarmor(creature->level, monster_kills)) {
-        return;
+    // the higher the level of the monster, the fewer the kills you need
+    // Original knowarmor macro inlined
+        if (monster_kills <= 304 / (4 + creature->level)) {
+	    return;
     }
 
     vtype_t description;
