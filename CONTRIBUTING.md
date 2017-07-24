@@ -66,6 +66,10 @@ General points worth remembering before making your Pull Request (PR):
 
 At present there are no strong style requirements, but here are a few ideas that I would like to start thinking about.
 
+#### General Formatting
+
+* Indentation: one indent should be *4 spaces*, so please be careful to avoid the use of _tabs_.
+
 #### Use Standard Types
 
 At present I'm using only _standard types_, so please do continue this practice.
