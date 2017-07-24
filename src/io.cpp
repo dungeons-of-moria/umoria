@@ -474,7 +474,7 @@ static uint8_t screen_border [2][6] = {{'+', '+', '+', '+', '-', '|'}, // normal
 };
 
 // character set to use
-char CH(uint8_t x)  {
+static char CH(uint8_t x)  {
 	return screen_border[0][x];
 }
 
