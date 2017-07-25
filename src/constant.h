@@ -11,7 +11,7 @@
 
 #include "headers.h"
 
-constexpr int32_t MAX_UCHAR = std::numeric_limits<unsigned char>::max();
+constexpr int32_t MAX_UCHAR = std::numeric_limits<uint8_t>::max();
 constexpr int32_t MAX_SHORT = std::numeric_limits<short>::max(); // maximum short/int32_t signed int32_ts
 constexpr int32_t MAX_LONG = std::numeric_limits<int32_t>::max();
 
