@@ -38,8 +38,8 @@ constexpr int32_t MSG_LINE = 0;
 constexpr int32_t MAX_SAVE_MSG = 22; // How many messages to save -CJS-
 
 // Dungeon size parameters
-constexpr int32_t MAX_HEIGHT = 66; // Multiple of = 11; >= = 22
-constexpr int32_t MAX_WIDTH = 198; // Multiple of = 33; >= = 66
+constexpr int32_t MAX_HEIGHT = 66; // Multiple of 11; >= 22
+constexpr int32_t MAX_WIDTH = 198; // Multiple of 33; >= = 66
 constexpr int32_t SCREEN_HEIGHT = 22;
 constexpr int32_t SCREEN_WIDTH = 66;
 constexpr int32_t QUART_HEIGHT = (SCREEN_HEIGHT / 4);
@@ -108,13 +108,13 @@ constexpr int32_t TREAS_GOLD_ALLOC = 2; // Amount of gold (and gems)
 
 // Magic Treasure Generation constants
 // Note: Number of special objects, and degree of enchantments can be adjusted here.
-constexpr int32_t OBJ_STD_ADJ = 125; // Adjust STD per level * = 100
+constexpr int32_t OBJ_STD_ADJ = 125; // Adjust STD per level * 100
 constexpr int32_t OBJ_STD_MIN = 7; // Minimum STD
 constexpr int32_t OBJ_TOWN_LEVEL = 7; // Town object generation level
 constexpr int32_t OBJ_BASE_MAGIC = 15; // Base amount of magic
 constexpr int32_t OBJ_BASE_MAX = 70; // Max amount of magic
 constexpr int32_t OBJ_DIV_SPECIAL = 6; // magic_chance/# special magic
-constexpr int32_t OBJ_DIV_CURSED = 13; // = 10*magic_chance/# cursed items
+constexpr int32_t OBJ_DIV_CURSED = 13; // 10*magic_chance/# cursed items
 
 // Constants describing limits of certain objects
 constexpr int32_t OBJ_LAMP_MAX = 15000; // Maximum amount that lamp can be filled
@@ -173,7 +173,7 @@ constexpr int32_t PLAYER_FOOD_MAX = 15000; // Maximum food value, beyond is wast
 constexpr int32_t PLAYER_FOOD_FAINT = 300; // Character begins fainting
 constexpr int32_t PLAYER_FOOD_WEAK = 1000; // Warn player that he is getting very low
 constexpr int32_t PLAYER_FOOD_ALERT = 2000; // Warn player that he is getting low
-constexpr int32_t PLAYER_REGEN_FAINT = 33; // Regen factor*2^16 when faint32_ting
+constexpr int32_t PLAYER_REGEN_FAINT = 33; // Regen factor*2^16 when fainting
 constexpr int32_t PLAYER_REGEN_WEAK = 98; // Regen factor*2^16 when weak
 constexpr int32_t PLAYER_REGEN_NORMAL = 197; // Regen factor*2^16 when full
 constexpr int32_t PLAYER_REGEN_HPBASE = 1442; // Min amount hp regen*2^16
@@ -464,7 +464,7 @@ constexpr int32_t ID_SHOW_HITDAM = 0x20;
 constexpr int32_t ID_NOSHOW_P1 = 0x40;
 constexpr int32_t ID_SHOW_P1 = 0x80;
 
-// indexes int32_to the special name table
+// indexes intt the special name table
 constexpr int32_t SN_NULL = 0;
 constexpr int32_t SN_R = 1;
 constexpr int32_t SN_RA = 2;
