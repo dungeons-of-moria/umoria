@@ -47,7 +47,7 @@ constexpr int32_t QUART_WIDTH = (SCREEN_WIDTH / 4);
 
 // Dungeon generation values
 // Note: The entire design of dungeon can be changed by only slight adjustments here.
-constexpr int32_t DUN_TUN_RND = 9; // = 1/Chance of Random direction
+constexpr int32_t DUN_TUN_RND = 9; // 1/Chance of Random direction
 constexpr int32_t DUN_TUN_CHG = 70; // Chance of changing direction (99 max)
 constexpr int32_t DUN_TUN_CON = 15; // Chance of extra tunneling
 constexpr int32_t DUN_ROO_MEA = 32; // Mean of # of rooms, standard dev2
@@ -56,9 +56,9 @@ constexpr int32_t DUN_TUN_JCT = 15; // % chance of doors at tunnel junctions
 constexpr int32_t DUN_STR_DEN = 5; // Density of streamers
 constexpr int32_t DUN_STR_RNG = 2; // Width of streamers
 constexpr int32_t DUN_STR_MAG = 3; // Number of magma streamers
-constexpr int32_t DUN_STR_MC = 90; // = 1/x chance of treasure per magma
+constexpr int32_t DUN_STR_MC = 90; // 1/x chance of treasure per magma
 constexpr int32_t DUN_STR_QUA = 2; // Number of quartz streamers
-constexpr int32_t DUN_STR_QC = 40; // = 1/x chance of treasure per quartz
+constexpr int32_t DUN_STR_QC = 40; // 1/x chance of treasure per quartz
 constexpr int32_t DUN_UNUSUAL = 300; // Level/x chance of unusual room
 
 // Store constants
@@ -74,7 +74,7 @@ constexpr int32_t COST_ADJ = 100; // Adjust prices for buying and selling
 // Treasure constants
 constexpr int32_t INVEN_ARRAY_SIZE = 34; // Size of inventory array(Do not change)
 constexpr int32_t MAX_OBJ_LEVEL = 50; // Maximum level of magic in dungeon
-constexpr int32_t OBJ_GREAT = 12; // = 1/n Chance of item being a Great Item
+constexpr int32_t OBJ_GREAT = 12; // 1/n Chance of item being a Great Item
 
 // Note that the following constants are all related, if you change one, you
 // must also change all succeeding ones. Also, player_base_provisions[] and
@@ -95,7 +95,7 @@ constexpr int32_t OBJ_GOLD_LIST = 399;
 constexpr int32_t OBJ_NOTHING = 417;
 constexpr int32_t OBJ_RUINED_CHEST = 418;
 constexpr int32_t OBJ_WIZARD = 419;
-constexpr int32_t OBJECT_IDENT_SIZE = 448; // = 7*64, see object_offset() in desc.c, could be MAX_OBJECTS o_o() rewritten
+constexpr int32_t OBJECT_IDENT_SIZE = 448; // 7*64, see object_offset() in desc.c, could be MAX_OBJECTS o_o() rewritten
 constexpr int32_t MAX_GOLD = 18; // Number of different types of gold
 
 // with MAX_TALLOC = 150, it is possible to get compacting objects during
@@ -178,7 +178,7 @@ constexpr int32_t PLAYER_REGEN_WEAK = 98; // Regen factor*2^16 when weak
 constexpr int32_t PLAYER_REGEN_NORMAL = 197; // Regen factor*2^16 when full
 constexpr int32_t PLAYER_REGEN_HPBASE = 1442; // Min amount hp regen*2^16
 constexpr int32_t PLAYER_REGEN_MNBASE = 524; // Min amount mana regen*2^16
-constexpr int32_t PLAYER_WEIGHT_CAP = 130; // "#"*(1/10 pounds) per strength point32_t
+constexpr int32_t PLAYER_WEIGHT_CAP = 130; // "#"*(1/10 pounds) per strength point
 constexpr int32_t PLAYER_EXIT_PAUSE = 2; // Pause time before player can re-roll
 
 // class level adjustment constants
@@ -234,7 +234,7 @@ constexpr char* CNIL = 0;
 #endif
 
 // Fval definitions: these describe the various types of dungeon floors and
-// walls, if numbers above = 15 are ever used, then the test against MIN_CAVE_WALL
+// walls, if numbers above 15 are ever used, then the test against MIN_CAVE_WALL
 // will have to be changed, also the save routines will have to be changed.
 constexpr int32_t NULL_WALL = 0;
 constexpr int32_t DARK_FLOOR = 1;
@@ -435,10 +435,10 @@ constexpr int32_t CD_MAX_HP = 0x4000;
 // FIXME: some of these const are not used anywhere!
 // inventory stacking subvals
 // these never stack
-//constexpr int32_t ITEM_NEVER_STACK_MIN 0;
+//constexpr int32_t ITEM_NEVER_STACK_MIN = 0;
 //constexpr int32_t ITEM_NEVER_STACK_MAX = 63;
 // these items always stack with others of same subval, always treated as
-// single objects, must be power of = 2;
+// single objects, must be power of 2;
 constexpr int32_t ITEM_SINGLE_STACK_MIN = 64;
 constexpr int32_t ITEM_SINGLE_STACK_MAX = 192; // see NOTE below
 // these items stack with others only if have same subval and same p1,
