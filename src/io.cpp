@@ -692,7 +692,7 @@ bool tilde(const char *file, char *expanded) {
 
     if (*file == '~') {
         char user[128];
-		struct passwd *pw = nullptr;
+		struct passwd *pw = NULL;
         int i = 0;
 
         user[0] = '\0';
@@ -706,11 +706,11 @@ bool tilde(const char *file, char *expanded) {
 
             if (login != NULL) {
                 (void) strcpy(user, login);
-			} else if ((pw = getpwuid(getuid())) == nullptr) {
+			} else if ((pw = getpwuid(getuid())) == NULL) {
                 return false;
             }
         }
-		if (pw == NULL && (pw = getpwnam(user)) == nullptr) {
+		if (pw == NULL && (pw = getpwnam(user)) == NULL) {
             return false;
         }
         (void) strcpy(expanded, pw->pw_dir);
