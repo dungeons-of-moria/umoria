@@ -1,4 +1,4 @@
-// Copyright (c) = 1989-94 James E. Wilson, Robert A. Koeneke
+// Copyright (c) 1989-94 James E. Wilson, Robert A. Koeneke
 //
 // Umoria is free software released under a GPL v2 license and comes with
 // ABSOLUTELY NO WARRANTY. See https://www.gnu.org/licenses/gpl-2.0.html
@@ -12,7 +12,7 @@
 #include "headers.h"
 
 constexpr int32_t MAX_UCHAR = std::numeric_limits<uint8_t>::max();
-constexpr int32_t MAX_SHORT = std::numeric_limits<short>::max(); // maximum short/int32_t signed int32_ts
+constexpr int32_t MAX_SHORT = std::numeric_limits<short>::max(); // maximum short/long signed ints
 constexpr int32_t MAX_LONG = std::numeric_limits<int32_t>::max();
 
 // Note to the Wizard:
@@ -128,13 +128,13 @@ constexpr int32_t N_MONS_ATTS = 215; // Number of monster attack types.
 // with MAX_MALLOC = 101, it is possible to get compacting monsters messages
 // while breeding/cloning monsters
 constexpr int32_t MAX_MALLOC = 125; // Max that can be allocated
-constexpr int32_t MAX_MALLOC_CHANCE = 160; // = 1/x chance of new monster each round
+constexpr int32_t MAX_MALLOC_CHANCE = 160; // 1/x chance of new monster each round
 constexpr int32_t MAX_MONS_LEVEL = 40; // Maximum level of creatures
 constexpr int32_t MAX_SIGHT = 20; // Maximum dis a creature can be seen
 constexpr int32_t MAX_SPELL_DIS = 20; // Maximum dis creature spell can be cast
 constexpr int32_t MAX_MON_MULT = 75; // Maximum reproductions on a level
 constexpr int32_t MON_MULT_ADJ = 7; // High value slows multiplication
-constexpr int32_t MON_NASTY = 50; // = 1/x chance of high level creature
+constexpr int32_t MON_NASTY = 50; // 1/x chance of high level creature
 constexpr int32_t MIN_MALLOC_LEVEL = 14; // Minimum number of monsters/level
 constexpr int32_t MIN_MALLOC_TD = 4; // Number of people on town level (day)
 constexpr int32_t MIN_MALLOC_TN = 8; // Number of people on town level (night)
@@ -170,7 +170,7 @@ constexpr int32_t USE_DEVICE = 3; // x> Harder devices x< Easier devices
 constexpr int32_t MAX_BACKGROUND = 128; // Number of types of histories for univ
 constexpr int32_t PLAYER_FOOD_FULL = 10000; // Getting full
 constexpr int32_t PLAYER_FOOD_MAX = 15000; // Maximum food value, beyond is wasted
-constexpr int32_t PLAYER_FOOD_FAINT = 300; // Character begins faint32_ting
+constexpr int32_t PLAYER_FOOD_FAINT = 300; // Character begins fainting
 constexpr int32_t PLAYER_FOOD_WEAK = 1000; // Warn player that he is getting very low
 constexpr int32_t PLAYER_FOOD_ALERT = 2000; // Warn player that he is getting low
 constexpr int32_t PLAYER_REGEN_FAINT = 33; // Regen factor*2^16 when faint32_ting
@@ -228,7 +228,7 @@ constexpr char DELETE = 0x7f;
 constexpr char ESCAPE = '\033'; // ESCAPE character -CJS-
 
 // This used to be NULL, but that was technically incorrect.
-// CNIL is used instead of null to help avoid lint32_t errors.
+// CNIL is used instead of null to help avoid lint errors.
 #ifndef CNIL
 constexpr char* CNIL = 0;
 #endif
@@ -298,7 +298,7 @@ constexpr int32_t PY_REPEAT = 0x00200000L;
 constexpr int32_t PY_ARMOR = 0x00400000L;
 
 constexpr int32_t PY_STATS = 0x3F000000L;
-constexpr int32_t PY_STR = 0x01000000L; // these = 6 stat flags must be adjacent
+constexpr int32_t PY_STR = 0x01000000L; // these 6 stat flags must be adjacent
 
 // FIXME: these const are not used anywhere!
 //constexpr int32_t PY_INT = 0x02000000L;
@@ -311,7 +311,7 @@ constexpr int32_t PY_HP = 0x40000000L;
 constexpr int32_t PY_MANA = 0x80000000L;
 
 // definitions for objects that can be worn
-constexpr int32_t TR_STATS = 0x0000003FL; // the stats must be the low = 6 bits
+constexpr int32_t TR_STATS = 0x0000003FL; // the stats must be the low 6 bits
 constexpr int32_t TR_STR = 0x00000001L;
 constexpr int32_t TR_INT = 0x00000002L;
 constexpr int32_t TR_WIS = 0x00000004L;
