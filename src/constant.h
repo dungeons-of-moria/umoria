@@ -39,7 +39,7 @@ constexpr int32_t MAX_SAVE_MSG = 22; // How many messages to save -CJS-
 
 // Dungeon size parameters
 constexpr int32_t MAX_HEIGHT = 66; // Multiple of 11; >= 22
-constexpr int32_t MAX_WIDTH = 198; // Multiple of 33; >= = 66
+constexpr int32_t MAX_WIDTH = 198; // Multiple of 33; >= 66
 constexpr int32_t SCREEN_HEIGHT = 22;
 constexpr int32_t SCREEN_WIDTH = 66;
 constexpr int32_t QUART_HEIGHT = (SCREEN_HEIGHT / 4);
