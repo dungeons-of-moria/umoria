@@ -66,6 +66,22 @@ General points worth remembering before making your Pull Request (PR):
 
 At present there are no strong style requirements, but here are a few ideas that I would like to start thinking about.
 
+#### General Formatting
+
+* Indentation: one indent should be *4 spaces*, so please be careful to avoid the use of _tabs_.
+
+#### Use Standard Types
+
+At present I'm using only _standard types_, so please do continue this practice.
+The common standard types are:
+
+* `int8_t`, `int16_t`, `int32_t`, `int64_t` — signed integers
+* `uint8_t`, `uint16_t`, `uint32_t`, `uint64_t` — unsigned integers
+* `float` — standard 32-bit floating point
+* `double` - standard 64-bit floating point
+
+When representing ASCII characters we should be using the `char` type.
+
 #### Naming
 
 * **Classes / Structs / Types**: `CamelCase`, with the first character uppercase.
