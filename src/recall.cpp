@@ -414,7 +414,7 @@ static void memoryMagicSkills(uint32_t memory_spell_flags, uint32_t monster_spel
         // Could offset by level
         if ((monster_spell_flags & CS_FREQ) > 5) {
             vtype_t temp;
-			(void) sprintf(temp, "; 1 time in %ld", creature_spell_flags & (long) CS_FREQ);
+            (void) sprintf(temp, "; 1 time in %ld", creature_spell_flags & (long) CS_FREQ);
             memoryPrint(temp);
         }
         memoryPrint(".");
@@ -425,8 +425,8 @@ static void memoryMagicSkills(uint32_t memory_spell_flags, uint32_t monster_spel
 static void memoryKillDifficulty(Creature_t *creature, uint32_t monster_kills) {
     // the higher the level of the monster, the fewer the kills you need
     // Original knowarmor macro inlined
-		if (monster_kills <= 304u / (4u + creature->level)) {
-	    return;
+        if (monster_kills <= 304u / (4u + creature->level)) {
+        return;
     }
 
     vtype_t description;

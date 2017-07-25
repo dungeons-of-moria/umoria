@@ -470,12 +470,12 @@ void terminalBellSound() {
 constexpr int RATIO = 3;
 
 static uint8_t screen_border [2][6] = {{'+', '+', '+', '+', '-', '|'}, // normal chars
-									  {201, 187, 200, 188, 205, 186} // graphics chars
+                                      {201, 187, 200, 188, 205, 186} // graphics chars
 };
 
 // character set to use
 static char CH(uint8_t x)  {
-	return screen_border[0][x];
+    return screen_border[0][x];
 }
 
 void displayDungeonMap() {
@@ -692,7 +692,7 @@ bool tilde(const char *file, char *expanded) {
 
     if (*file == '~') {
         char user[128];
-		struct passwd *pw = NULL;
+        struct passwd *pw = NULL;
         int i = 0;
 
         user[0] = '\0';
@@ -706,11 +706,11 @@ bool tilde(const char *file, char *expanded) {
 
             if (login != NULL) {
                 (void) strcpy(user, login);
-			} else if ((pw = getpwuid(getuid())) == NULL) {
+            } else if ((pw = getpwuid(getuid())) == NULL) {
                 return false;
             }
         }
-		if (pw == NULL && (pw = getpwnam(user)) == NULL) {
+        if (pw == NULL && (pw = getpwnam(user)) == NULL) {
             return false;
         }
         (void) strcpy(expanded, pw->pw_dir);

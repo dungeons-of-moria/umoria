@@ -218,7 +218,7 @@ constexpr int32_t A_CON = 4;
 constexpr int32_t A_CHR = 5;
 
 constexpr char CTRL_KEY (char x) {
-	return ((x) & 0x1F);
+    return ((x) & 0x1F);
 }
 
 #undef DELETE
