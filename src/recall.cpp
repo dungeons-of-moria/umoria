@@ -414,7 +414,7 @@ static void memoryMagicSkills(uint32_t memory_spell_flags, uint32_t monster_spel
         // Could offset by level
         if ((monster_spell_flags & CS_FREQ) > 5) {
             vtype_t temp;
-            (void) sprintf(temp, "; 1 time in %ld", creature_spell_flags & (long) CS_FREQ);
+			(void) sprintf(temp, "; 1 time in %d", creature_spell_flags & CS_FREQ);
             memoryPrint(temp);
         }
         memoryPrint(".");
