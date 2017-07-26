@@ -12,7 +12,7 @@
 #include "headers.h"
 
 constexpr uint8_t MAX_UCHAR = std::numeric_limits<uint8_t>::max();
-constexpr int16_t MAX_SHORT = std::numeric_limits<short>::max(); // maximum short/long signed ints
+constexpr int16_t MAX_SHORT = std::numeric_limits<int16_t>::max(); // maximum short/long signed ints
 constexpr int32_t MAX_LONG = std::numeric_limits<int32_t>::max();
 
 // Note to the Wizard:
