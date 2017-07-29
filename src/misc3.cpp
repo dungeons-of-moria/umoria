@@ -10,7 +10,7 @@
 #include "externs.h"
 
 static const char *stat_names[] = {"STR : ", "INT : ", "WIS : ", "DEX : ", "CON : ", "CHR : ",};
-static constexpr int32_t BLANK_LENGTH = 24;
+#define BLANK_LENGTH 24
 static char blank_string[] = "                        ";
 
 static int spellChanceOfSuccess(int spell);
