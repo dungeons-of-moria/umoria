@@ -13,7 +13,6 @@
 static void initializeCharacterInventory();
 static void initializeMonsterLevels();
 static void initializeTreasureLevels();
-static void checkFilePermissions();
 
 #if (COST_ADJ != 100)
 static void price_adjust();

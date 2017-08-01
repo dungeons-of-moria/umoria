@@ -466,17 +466,19 @@ void terminalBellSound() {
 #define HE 4 // horizontal edge
 #define VE 5
 
-// character set to use
-#define CH(x) (screen_border[0][x])
-
 // Display highest priority object in the RATIO by RATIO area
-#define RATIO 3
+constexpr int RATIO = 3;
+
+static uint8_t screen_border [2][6] = {{'+', '+', '+', '+', '-', '|'}, // normal chars
+                                      {201, 187, 200, 188, 205, 186} // graphics chars
+};
+
+// character set to use
+static char CH(uint8_t x)  {
+    return screen_border[0][x];
+}
 
 void displayDungeonMap() {
-    static uint8_t screen_border[2][6] = {{'+', '+', '+', '+', '-', '|'}, // normal chars
-                                          {201, 187, 200, 188, 205, 186}, // graphics chars
-    };
-
     char map[MAX_WIDTH / RATIO + 1];
     int priority[256];
 

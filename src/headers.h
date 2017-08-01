@@ -19,13 +19,7 @@
     #include <io.h>
     #include <sys/types.h>
 
-#elif __APPLE__
-
-    #include <pwd.h>
-    #include <unistd.h>
-    #include <sys/param.h>
-
-#elif __linux__
+#elif __APPLE__ ||  __linux__
 
     #include <pwd.h>
     #include <unistd.h>
@@ -48,6 +42,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
+
+#include <limits>
 
 #include <sys/stat.h>
 

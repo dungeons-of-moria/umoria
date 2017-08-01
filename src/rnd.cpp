@@ -58,10 +58,10 @@
 //  Has a full period of 2^31 - 1.
 //  Returns integers in the range 1 to 2^31-1.
 
-#define RNG_M 2147483647L // m = 2^31 - 1
-#define RNG_A 16807L
-#define RNG_Q 127773L // m div a
-#define RNG_R 2836L   // m mod a
+constexpr int32_t RNG_M = MAX_LONG; // m = 2^31 - 1
+constexpr int32_t RNG_A = 16807L;
+constexpr int32_t RNG_Q = RNG_M / RNG_A; // m div a 127773L
+constexpr int32_t RNG_R = RNG_M % RNG_A;   // m mod a 2836L
 
 // 32 bit seed
 static uint32_t rnd_seed;

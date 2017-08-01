@@ -6,6 +6,8 @@
 
 // Umoria version number
 
-#define CURRENT_VERSION_MAJOR 5
-#define CURRENT_VERSION_MINOR 7
-#define CURRENT_VERSION_PATCH 3
+#include <cstdint>
+
+constexpr uint8_t CURRENT_VERSION_MAJOR = 5;
+constexpr uint8_t CURRENT_VERSION_MINOR = 7;
+constexpr uint8_t CURRENT_VERSION_PATCH = 3;
