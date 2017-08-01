@@ -13,7 +13,10 @@ and global variables. The old naming did not reveal their purpose very well,
 which made understanding the code more difficult. These are not meant to be
 final names, they have been chosen to aid future refactoring tasks.
 
-Also note that the `variable` file was renamed to `globals`.
+Additionally:
+
+* The `variable` file was renamed to `globals`.
+* Many defines (mainly in `constant.h`) changed to a `constexpr`.
 
 
 
