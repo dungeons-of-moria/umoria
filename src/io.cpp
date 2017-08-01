@@ -469,13 +469,13 @@ void terminalBellSound() {
 // Display highest priority object in the RATIO by RATIO area
 constexpr int RATIO = 3;
 
-static uint8_t screen_border [2][6] = {{'+', '+', '+', '+', '-', '|'}, // normal chars
-                                      {201, 187, 200, 188, 205, 186} // graphics chars
+static uint8_t screen_border[2][6] = {{'+', '+', '+', '+', '-', '|'}, // normal chars
+                                      {201, 187, 200, 188, 205, 186}  // graphics chars
 };
 
 // character set to use
-static char CH(uint8_t x)  {
-    return screen_border[0][x];
+static char getBorderTile(uint8_t id) {
+    return screen_border[0][id];
 }
 
 void displayDungeonMap() {
@@ -498,13 +498,13 @@ void displayDungeonMap() {
 
     terminalSaveScreen();
     clearScreen();
-    use_value2 mvaddch(0, 0, CH(TL));
+    use_value2 mvaddch(0, 0, getBorderTile(TL));
 
     for (int i = 0; i < MAX_WIDTH / RATIO; i++) {
-        (void) addch(CH(HE));
+        (void) addch(getBorderTile(HE));
     }
 
-    (void) addch(CH(TR));
+    (void) addch(getBorderTile(TR));
     map[MAX_WIDTH / RATIO] = '\0';
 
     int myrow = 0;
@@ -518,7 +518,7 @@ void displayDungeonMap() {
                 // can not use mvprintw() on IBM PC, because PC-Curses is horribly
                 // written, and mvprintw() causes the fp emulation library to be
                 // linked with PC-Moria, makes the program 10K bigger
-                (void) sprintf(prntscrnbuf, "%c%s%c", CH(VE), map, CH(VE));
+                (void) sprintf(prntscrnbuf, "%c%s%c", getBorderTile(VE), map, getBorderTile(VE));
                 use_value2 mvaddstr(orow + 1, 0, prntscrnbuf);
             }
 
@@ -544,17 +544,17 @@ void displayDungeonMap() {
     }
 
     if (orow >= 0) {
-        (void) sprintf(prntscrnbuf, "%c%s%c", CH(VE), map, CH(VE));
+        (void) sprintf(prntscrnbuf, "%c%s%c", getBorderTile(VE), map, getBorderTile(VE));
         use_value2 mvaddstr(orow + 1, 0, prntscrnbuf);
     }
 
-    use_value2 mvaddch(orow + 2, 0, CH(BL));
+    use_value2 mvaddch(orow + 2, 0, getBorderTile(BL));
 
     for (int i = 0; i < MAX_WIDTH / RATIO; i++) {
-        (void) addch(CH(HE));
+        (void) addch(getBorderTile(HE));
     }
 
-    (void) addch(CH(BR));
+    (void) addch(getBorderTile(BR));
 
     use_value2 mvaddstr(23, 23, "Hit any key to continue");
 
