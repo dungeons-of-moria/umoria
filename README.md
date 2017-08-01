@@ -12,38 +12,38 @@ Supported Platforms:
 
   - Windows
   - macOS
-  - Linux* (Ubuntu/Debian, Fedora)
+  - Linux* (Ubuntu, Debian, Fedora)
 
 _* other Linux distros may work, but have not yet been tested._
 
 
 ## Umoria Restoration Release: v5.7
 
-The main focus of the `v5.7` release was to provide support for Windows
-and macOS users, while at the same time removing support for the many
-outdated computer system such as, MS DOS, "Classic" Mac OS (pre OS X), Amiga,
-and Atari ST.
+The main focus of the `v5.7` release is to provide support for Windows and
+macOS users, while at the same time removing support for the many outdated
+computer system such as, MS DOS, "Classic" Mac OS (pre OS X), Amiga, and
+Atari ST.
 
 _Note: there are no gameplay changes in this release._
 
-During the process a great deal of _code restoration_ was undertaken to aid
-future development of the game. This included tasks such as reformatting the
-source code with the help of `clang-tidy` and `clang-format`, modernising the
-code to use standard C types, and fixing all warnings while compiling against
-recent versions of GCC. Details of all changes can be found in the
+A great deal of _code restoration_ has also been undertaken to aid future
+development of the game. This included tasks such as reformatting the source
+code with the help of `clang-tidy` and `clang-format`, modernizing the code
+to use standard C types, and fixing all warnings while compiling against recent
+versions of GCC. Full details of all changes can be found in the
 [CHANGELOG](CHANGELOG.md), and by browsing the commit history.
 
 Due to its lack of Windows and Mac support, Moria was unplayable for many
 people. Hopefully these changes will give more people a chance to play this
-classic game.
+classic roguelike game.
 
 
 ## Notes on Compiling Umoria
 
 At present Umoria has only been tested against `GCC 6.2` and `ncurses 6.0`,
-although earlier versions should also work fine. You will require these
-along with `CMake`, the `ZIP` archiving program, and the C++ build tools for
-your system.
+although earlier versions should also work fine. You will require these along
+with `CMake`, the `ZIP` archiving program, and the C++ build tools for your
+system.
 
 
 ### macOS and Linux
