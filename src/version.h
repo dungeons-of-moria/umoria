@@ -8,4 +8,4 @@
 
 constexpr uint8_t CURRENT_VERSION_MAJOR = 5;
 constexpr uint8_t CURRENT_VERSION_MINOR = 7;
-constexpr uint8_t CURRENT_VERSION_PATCH = 3;
+constexpr uint8_t CURRENT_VERSION_PATCH = 4;

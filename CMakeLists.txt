@@ -5,7 +5,7 @@ project(umoria)
 # Current version number
 set(CURRENT_VERSION_MAJOR 5)
 set(CURRENT_VERSION_MINOR 7)
-set(CURRENT_VERSION_PATCH 3)
+set(CURRENT_VERSION_PATCH 4)
 
 set(SOURCE_FILES_DIR ${PROJECT_SOURCE_DIR}/src)
 

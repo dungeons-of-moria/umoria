@@ -2,6 +2,10 @@
 
 ## HEAD
 
+
+
+## 5.7.4 (2017-08-06)
+
 ### Bug Fixes
 
 - The create food spell was creating random items instead of just food.

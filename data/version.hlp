@@ -1,25 +1,25 @@
-                                Umoria 5.7.3
+                          Umoria 5.7.4  (2017-08-06)
 
-    Version 5.7.3  :  2017-06-21
-    Version 5.6    :  2015-03-03
-    Version 5.5    :  1992-08-12
-    Version 5.4    :  1991-10-12
-    Version 5.3    :  1991-03-25
-    Version 5.2    :  1991-05-09
-    Version 5.0    :  1989-11-02
-    Version 4.87   :  1988-05-27
-    Version 4.85   :  1987-10-26
-    Version 4.83   :  1987-05-14
+Previous major releases:
 
-Umoria 5.7 developed and maintained by Michael R. Cook.
+            2016-11-27 : v5.7.0
+            2015-03-03 : v5.6.0
+            1992-08-12 : v5.5.0
+            1991-10-12 : v5.4.0
+            1991-03-25 : v5.3.0
+            1991-05-09 : v5.2.0
+            1989-11-02 : v5.0.0
+            1988-05-27 : v4.87
+            1987-10-26 : v4.85
+            1987-05-14 : v4.83
+
+Umoria 5.7.x developed and maintained by Michael R. Cook.
 Bug reports and contributions can be made to the Umoria repository:
 https://github.com/dungeons-of-moria/umoria
 
-Umoria maintainer: David J. Grabiner
-                   grabiner@alumni.princeton.edu
+Maintainer: David J. Grabiner (grabiner@alumni.princeton.edu)
 
-
-        Umoria is free software, released under the GPL v2 license.
+         Umoria is free software, released under the GPL v2 license.
 
                             VMS Moria Version 4.8
 
