@@ -299,7 +299,7 @@ void printMessage(const char *msg) {
         putString(msg, MSG_LINE, 0);
         last_message_id++;
 
-        if (last_message_id >= MAX_SAVE_MSG) {
+        if (last_message_id >= MESSAGE_HISTORY_SIZE) {
             last_message_id = 0;
         }
 

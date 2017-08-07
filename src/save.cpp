@@ -232,7 +232,7 @@ static bool sv_write() {
     wr_long(magic_seed);
     wr_long(town_seed);
     wr_short((uint16_t) last_message_id);
-    for (int i = 0; i < MAX_SAVE_MSG; i++) {
+    for (int i = 0; i < MESSAGE_HISTORY_SIZE; i++) {
         wr_string(messages[i]);
     }
 
@@ -694,7 +694,7 @@ bool loadGame(bool *generate) {
             rd_long(&magic_seed);
             rd_long(&town_seed);
             rd_short((uint16_t *) &last_message_id);
-            for (int i = 0; i < MAX_SAVE_MSG; i++) {
+            for (int i = 0; i < MESSAGE_HISTORY_SIZE; i++) {
                 rd_string(messages[i]);
             }
 

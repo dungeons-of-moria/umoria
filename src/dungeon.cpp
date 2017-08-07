@@ -1300,12 +1300,12 @@ static void commandQuit() {
 }
 
 static void commandPreviousMessage() {
-    int maxMessages = MAX_SAVE_MSG;
+    int maxMessages = MESSAGE_HISTORY_SIZE;
 
     if (command_count > 0) {
         maxMessages = command_count;
-        if (maxMessages > MAX_SAVE_MSG) {
-            maxMessages = MAX_SAVE_MSG;
+        if (maxMessages > MESSAGE_HISTORY_SIZE) {
+            maxMessages = MESSAGE_HISTORY_SIZE;
         }
         command_count = 0;
     } else if (last_command != CTRL_KEY('P')) {
@@ -1325,7 +1325,7 @@ static void commandPreviousMessage() {
             putStringClearToEOL(messages[msgID], maxMessages, 0);
 
             if (msgID == 0) {
-                msgID = MAX_SAVE_MSG - 1;
+                msgID = MESSAGE_HISTORY_SIZE - 1;
             } else {
                 msgID--;
             }

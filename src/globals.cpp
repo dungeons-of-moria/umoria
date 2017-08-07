@@ -56,7 +56,7 @@ int command_count;                      // How many times to repeat a specific c
 bool use_last_direction       = false;  // True when repeat commands should use last known direction
 
 bool message_ready_to_print;            // Set with first message
-vtype_t messages[MAX_SAVE_MSG];         // Saved message history -CJS-
+vtype_t messages[MESSAGE_HISTORY_SIZE]; // Saved message history -CJS-
 int16_t last_message_id       = 0;      // Index of last message held in saved messages array
 
 int16_t missiles_counter      = 0;      // Counter for missiles

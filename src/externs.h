@@ -51,7 +51,7 @@ extern int command_count;
 extern bool use_last_direction;
 
 extern bool message_ready_to_print;
-extern vtype_t messages[MAX_SAVE_MSG];
+extern vtype_t messages[MESSAGE_HISTORY_SIZE];
 extern int16_t last_message_id;
 
 extern int16_t missiles_counter;

@@ -29,8 +29,8 @@ constexpr int32_t MAX_LONG = std::numeric_limits<int32_t>::max();  // maximum lo
 // message line location
 constexpr uint8_t MSG_LINE = 0;
 
-// number of messages to save in a buffer
-constexpr uint8_t MAX_SAVE_MSG = 22; // How many messages to save -CJS-
+// How many messages to save in the buffer -CJS-
+constexpr uint8_t MESSAGE_HISTORY_SIZE = 22;
 
 // Dungeon size parameters
 constexpr uint8_t MAX_HEIGHT = 66; // Multiple of 11; >= 22
