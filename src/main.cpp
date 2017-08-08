@@ -229,7 +229,7 @@ static void initializeCharacterInventory() {
     Inventory_t item;
 
     // this is needed for bash to work right, it can't hurt anyway
-    for (int i = 0; i < INVEN_ARRAY_SIZE; i++) {
+    for (int i = 0; i < PLAYER_INVENTORY_SIZE; i++) {
         inventoryItemCopyTo(OBJ_NOTHING, &inventory[i]);
     }
 

@@ -88,7 +88,7 @@ static void castSpell(int spellID) {
             playerTeleport((py.misc.lev * 5));
             break;
         case 14:
-            for (int id = 22; id < INVEN_ARRAY_SIZE; id++) {
+            for (int id = 22; id < PLAYER_INVENTORY_SIZE; id++) {
                 inventory[id].flags = (uint32_t) (inventory[id].flags & ~TR_CURSED);
             }
             break;

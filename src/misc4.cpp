@@ -17,7 +17,7 @@ void itemInscribe() {
     }
 
     int item_id;
-    if (!inventoryGetInputForItemId(&item_id, "Which one? ", 0, INVEN_ARRAY_SIZE, CNIL, CNIL)) {
+    if (!inventoryGetInputForItemId(&item_id, "Which one? ", 0, PLAYER_INVENTORY_SIZE, CNIL, CNIL)) {
         return;
     }
 

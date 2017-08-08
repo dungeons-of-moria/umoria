@@ -291,7 +291,7 @@ static void writeEquipmentListToFile(FILE *file1) {
     obj_desc_t description;
     int itemSlotID = 0;
 
-    for (int i = INVEN_WIELD; i < INVEN_ARRAY_SIZE; i++) {
+    for (int i = INVEN_WIELD; i < PLAYER_INVENTORY_SIZE; i++) {
         if (inventory[i].tval == TV_NOTHING) {
             continue;
         }

@@ -93,7 +93,7 @@ static void playerRecitePrayer(int prayer_type) {
             spellCreateFood();
             break;
         case 15:
-            for (int i = 0; i < INVEN_ARRAY_SIZE; i++) {
+            for (int i = 0; i < PLAYER_INVENTORY_SIZE; i++) {
                 // only clear flag for items that are wielded or worn
                 if (inventory[i].tval >= TV_MIN_WEAR && inventory[i].tval <= TV_MAX_WEAR) {
                     inventory[i].flags &= ~TR_CURSED;

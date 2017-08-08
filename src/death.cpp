@@ -173,7 +173,7 @@ static void printTomb() {
     putString("Character record?", 22, 0);
 
     if (getStringInput(str, 22, 18, 60)) {
-        for (int i = 0; i < INVEN_ARRAY_SIZE; i++) {
+        for (int i = 0; i < PLAYER_INVENTORY_SIZE; i++) {
             itemSetAsIdentified(&inventory[i]);
             spellItemIdentifyAndRemoveRandomInscription(&inventory[i]);
         }
@@ -207,7 +207,7 @@ int32_t playerCalculateTotalPoints() {
     int32_t total = py.misc.max_exp + (100 * py.misc.max_dlv);
     total += py.misc.au / 100;
 
-    for (int i = 0; i < INVEN_ARRAY_SIZE; i++) {
+    for (int i = 0; i < PLAYER_INVENTORY_SIZE; i++) {
         total += storeItemValue(&inventory[i]);
     }
 

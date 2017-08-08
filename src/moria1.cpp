@@ -417,7 +417,7 @@ static const char *itemPostitionDescription(int positionID, uint16_t weight) {
 // Displays equipment items from r1 to end -RAK-
 // Keep display as far right as possible. -CJS-
 int displayEquipment(bool weighted, int column) {
-    vtype_t descriptions[INVEN_ARRAY_SIZE - INVEN_WIELD];
+    vtype_t descriptions[PLAYER_INVENTORY_SIZE - INVEN_WIELD];
 
     int len = 79 - column;
 
@@ -430,7 +430,7 @@ int displayEquipment(bool weighted, int column) {
 
     // Range of equipment
     int line = 0;
-    for (int i = INVEN_WIELD; i < INVEN_ARRAY_SIZE; i++) {
+    for (int i = INVEN_WIELD; i < PLAYER_INVENTORY_SIZE; i++) {
         if (inventory[i].tval == TV_NOTHING) {
             continue;
         }
@@ -466,7 +466,7 @@ int displayEquipment(bool weighted, int column) {
 
     // Range of equipment
     line = 0;
-    for (int i = INVEN_WIELD; i < INVEN_ARRAY_SIZE; i++) {
+    for (int i = INVEN_WIELD; i < PLAYER_INVENTORY_SIZE; i++) {
         if (inventory[i].tval == TV_NOTHING) {
             continue;
         }

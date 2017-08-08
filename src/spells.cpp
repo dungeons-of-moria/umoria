@@ -308,7 +308,7 @@ void spellMapCurrentArea() {
 // Identify an object -RAK-
 bool spellIdentifyItem() {
     int item_id;
-    if (!inventoryGetInputForItemId(&item_id, "Item you wish identified?", 0, INVEN_ARRAY_SIZE, CNIL, CNIL)) {
+    if (!inventoryGetInputForItemId(&item_id, "Item you wish identified?", 0, PLAYER_INVENTORY_SIZE, CNIL, CNIL)) {
         return false;
     }
 
