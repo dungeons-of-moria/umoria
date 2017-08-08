@@ -201,7 +201,7 @@ static void magicalGloves(Inventory_t *t_ptr, int special, int level) {
         t_ptr->name2 = SN_FREE_ACTION;
         t_ptr->cost += 1000;
     } else {
-        t_ptr->ident |= ID_SHOW_HITDAM;
+        t_ptr->ident |= ID_SHOW_HIT_DAM;
         t_ptr->tohit += 1 + randomNumber(3);
         t_ptr->todam += 1 + randomNumber(3);
         t_ptr->name2 = SN_SLAYING;
@@ -468,10 +468,10 @@ static void processRings(Inventory_t *t_ptr, int level, int cursed) {
         case 27:
         case 28:
         case 29:
-            t_ptr->ident |= ID_NOSHOW_P1;
+            t_ptr->ident |= ID_NO_SHOW_P1;
             break;
         case 30: // Slaying
-            t_ptr->ident |= ID_SHOW_HITDAM;
+            t_ptr->ident |= ID_SHOW_HIT_DAM;
             t_ptr->todam += magicEnchantmentBonus(1, 25, level);
             t_ptr->tohit += magicEnchantmentBonus(1, 25, level);
             t_ptr->cost += (t_ptr->tohit + t_ptr->todam) * 100;
@@ -649,7 +649,7 @@ static void cursedCloak(Inventory_t *t_ptr, int level) {
         t_ptr->flags |= TR_AGGRAVATE;
         t_ptr->name2 = SN_IRRITATION;
         t_ptr->toac -= magicEnchantmentBonus(1, 10, level);
-        t_ptr->ident |= ID_SHOW_HITDAM;
+        t_ptr->ident |= ID_SHOW_HIT_DAM;
         t_ptr->tohit -= magicEnchantmentBonus(1, 10, level);
         t_ptr->todam -= magicEnchantmentBonus(1, 10, level);
         t_ptr->cost = 0;
@@ -660,7 +660,7 @@ static void cursedCloak(Inventory_t *t_ptr, int level) {
     } else {
         t_ptr->name2 = SN_ENVELOPING;
         t_ptr->toac -= magicEnchantmentBonus(1, 10, level);
-        t_ptr->ident |= ID_SHOW_HITDAM;
+        t_ptr->ident |= ID_SHOW_HIT_DAM;
         t_ptr->tohit -= magicEnchantmentBonus(2, 40, level + 10);
         t_ptr->todam -= magicEnchantmentBonus(2, 40, level + 10);
         t_ptr->cost = 0;
@@ -811,7 +811,7 @@ void magicTreasureMagicalAbility(int item_id, int level) {
         case TV_POLEARM:
         case TV_SWORD:
             // always show tohit/todam values if identified
-            t_ptr->ident |= ID_SHOW_HITDAM;
+            t_ptr->ident |= ID_SHOW_HIT_DAM;
 
             if (magicShouldBeEnchanted(chance)) {
                 magicalSword(t_ptr, special, level);
@@ -821,7 +821,7 @@ void magicTreasureMagicalAbility(int item_id, int level) {
             break;
         case TV_BOW:
             // always show tohit/todam values if identified
-            t_ptr->ident |= ID_SHOW_HITDAM;
+            t_ptr->ident |= ID_SHOW_HIT_DAM;
 
             if (magicShouldBeEnchanted(chance)) {
                 magicalBow(t_ptr, level);
@@ -831,7 +831,7 @@ void magicTreasureMagicalAbility(int item_id, int level) {
             break;
         case TV_DIGGING:
             // always show tohit/todam values if identified
-            t_ptr->ident |= ID_SHOW_HITDAM;
+            t_ptr->ident |= ID_SHOW_HIT_DAM;
 
             if (magicShouldBeEnchanted(chance)) {
                 if (randomNumber(3) < 3) {
@@ -917,7 +917,7 @@ void magicTreasureMagicalAbility(int item_id, int level) {
         case TV_ARROW:
             if (t_ptr->tval == TV_SLING_AMMO || t_ptr->tval == TV_BOLT || t_ptr->tval == TV_ARROW) {
                 // always show tohit/todam values if identified
-                t_ptr->ident |= ID_SHOW_HITDAM;
+                t_ptr->ident |= ID_SHOW_HIT_DAM;
 
                 if (magicShouldBeEnchanted(chance)) {
                     magicalProjectiles(t_ptr, special, level);

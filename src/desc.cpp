@@ -200,12 +200,12 @@ void itemIdentificationClearEmpty(Inventory_t *item) {
 }
 
 void itemIdentifyAsStoreBought(Inventory_t *item) {
-    item->ident |= ID_STOREBOUGHT;
+    item->ident |= ID_STORE_BOUGHT;
     spellItemIdentifyAndRemoveRandomInscription(item);
 }
 
 bool itemStoreBought(Inventory_t *item) {
-    return (item->ident & ID_STOREBOUGHT) != 0;
+    return (item->ident & ID_STORE_BOUGHT) != 0;
 }
 
 // Remove an automatically generated inscription. -CJS-
@@ -530,7 +530,7 @@ void itemDescription(obj_desc_t description, Inventory_t *item, bool add_prefix)
 
     if (spellItemIdentified(item)) {
         // originally used %+d, but several machines don't support it
-        if (item->ident & ID_SHOW_HITDAM) {
+        if (item->ident & ID_SHOW_HIT_DAM) {
             (void) sprintf(tmp_str, " (%c%d,%c%d)", (item->tohit < 0) ? '-' : '+', abs(item->tohit), (item->todam < 0) ? '-' : '+', abs(item->todam));
         } else if (item->tohit != 0) {
             (void) sprintf(tmp_str, " (%c%d)", (item->tohit < 0) ? '-' : '+', abs(item->tohit));
@@ -559,7 +559,7 @@ void itemDescription(obj_desc_t description, Inventory_t *item, bool add_prefix)
     }
 
     // override defaults, check for p1 flags in the ident field
-    if (item->ident & ID_NOSHOW_P1) {
+    if (item->ident & ID_NO_SHOW_P1) {
         p1_use = IGNORED;
     } else if (item->ident & ID_SHOW_P1) {
         p1_use = Z_PLUSSES;

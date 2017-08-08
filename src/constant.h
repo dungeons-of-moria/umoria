@@ -448,12 +448,12 @@ constexpr uint8_t ID_MAGIK = 0x1;
 constexpr uint8_t ID_DAMD = 0x2;
 constexpr uint8_t ID_EMPTY = 0x4;
 constexpr uint8_t ID_KNOWN2 = 0x8;
-constexpr uint8_t ID_STOREBOUGHT = 0x10;
-constexpr uint8_t ID_SHOW_HITDAM = 0x20;
-constexpr uint8_t ID_NOSHOW_P1 = 0x40;
+constexpr uint8_t ID_STORE_BOUGHT = 0x10;
+constexpr uint8_t ID_SHOW_HIT_DAM = 0x20;
+constexpr uint8_t ID_NO_SHOW_P1 = 0x40;
 constexpr uint8_t ID_SHOW_P1 = 0x80;
 
-// indexes intt the special name table
+// indexes into the special name table
 constexpr uint8_t SN_NULL = 0;
 constexpr uint8_t SN_R = 1;
 constexpr uint8_t SN_RA = 2;
