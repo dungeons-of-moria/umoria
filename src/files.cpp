@@ -203,7 +203,7 @@ static void writeCharacterSheetToFile(FILE *file1) {
     (void) fprintf(file1, "%7sMax Exp    : %7d", blank, py.misc.max_exp);
     (void) fprintf(file1, "    Max Mana%8s %6d\n", colon, py.misc.mana);
     (void) fprintf(file1, "   Total AC  : %6d", py.misc.dis_ac);
-    if (py.misc.lev >= MAX_PLAYER_LEVEL) {
+    if (py.misc.lev >= PLAYER_MAX_LEVEL) {
         (void) fprintf(file1, "%7sExp to Adv : *******", blank);
     } else {
         (void) fprintf(file1, "%7sExp to Adv : %7d", blank, (int32_t) (player_base_exp_levels[py.misc.lev - 1] * py.misc.expfact / 100));

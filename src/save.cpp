@@ -240,7 +240,7 @@ static bool sv_write() {
     wr_short((uint16_t) panic_save);
     wr_short((uint16_t) total_winner);
     wr_short((uint16_t) noscore);
-    wr_shorts(player_base_hp_levels, MAX_PLAYER_LEVEL);
+    wr_shorts(player_base_hp_levels, PLAYER_MAX_LEVEL);
 
     for (int i = 0; i < MAX_STORES; i++) {
         Store_t *st_ptr = &stores[i];
@@ -701,7 +701,7 @@ bool loadGame(bool *generate) {
             rd_short((uint16_t *) &panic_save);
             rd_short((uint16_t *) &total_winner);
             rd_short((uint16_t *) &noscore);
-            rd_shorts(player_base_hp_levels, MAX_PLAYER_LEVEL);
+            rd_shorts(player_base_hp_levels, PLAYER_MAX_LEVEL);
 
             if (version_min >= 2 || (version_min == 1 && patch_level >= 3)) {
                 for (int i = 0; i < MAX_STORES; i++) {

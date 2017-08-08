@@ -104,7 +104,7 @@ static bool playerDrinkPotion(uint32_t flags, uint8_t item_id) {
                 }
                 break;
             case 18:
-                if (py.misc.exp < MAX_EXP) {
+                if (py.misc.exp < PLAYER_MAX_EXP) {
                     uint32_t exp = (uint32_t) ((py.misc.exp / 2) + 10);
                     if (exp > 100000L) {
                         exp = 100000L;

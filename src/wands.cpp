@@ -156,15 +156,15 @@ void wandAim() {
         chance = chance / 2;
     }
 
-    if (chance < USE_DEVICE && randomNumber(USE_DEVICE - chance + 1) == 1) {
-        chance = USE_DEVICE; // Give everyone a slight chance
+    if (chance < PLAYER_USE_DEVICE_DIFFICULTY && randomNumber(PLAYER_USE_DEVICE_DIFFICULTY - chance + 1) == 1) {
+        chance = PLAYER_USE_DEVICE_DIFFICULTY; // Give everyone a slight chance
     }
 
     if (chance <= 0) {
         chance = 1;
     }
 
-    if (randomNumber(chance) < USE_DEVICE) {
+    if (randomNumber(chance) < PLAYER_USE_DEVICE_DIFFICULTY) {
         printMessage("You failed to use the wand properly.");
         return;
     }

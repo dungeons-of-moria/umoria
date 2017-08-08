@@ -18,10 +18,10 @@ int16_t char_col;
 
 // calculated base hp values for player at each level, store them
 // so that drain life + restore life does not affect hit points.
-uint16_t player_base_hp_levels[MAX_PLAYER_LEVEL];
+uint16_t player_base_hp_levels[PLAYER_MAX_LEVEL];
 
 // Class titles for different levels
-ClassTitle_t class_titles[MAX_CLASS][MAX_PLAYER_LEVEL] = {
+ClassTitle_t class_titles[PLAYER_MAX_CLASSES][PLAYER_MAX_LEVEL] = {
     // Warrior
     {"Rookie",       "Private",      "Soldier",      "Mercenary",
      "Veteran(1st)", "Veteran(2nd)", "Veteran(3rd)", "Warrior(1st)",
@@ -91,7 +91,7 @@ ClassTitle_t class_titles[MAX_CLASS][MAX_PLAYER_LEVEL] = {
 };
 
 // Base experience levels, may be adjusted up for race and/or class
-uint32_t player_base_exp_levels[MAX_PLAYER_LEVEL] = {
+uint32_t player_base_exp_levels[PLAYER_MAX_LEVEL] = {
      10,      25,      45,      70,      100,      140,      200,       280,
     380,     500,     650,     850,     1100,     1400,     1800,      2300,
    2900,    3600,    4400,    5400,     6800,     8400,    10200,     12500,
@@ -104,7 +104,7 @@ uint32_t player_base_exp_levels[MAX_PLAYER_LEVEL] = {
 // Racial Bases for:
 //      dis, srh, stl, fos, bth, bthb, bsav, hitdie,
 //      infra, exp base, choice-classes
-Race_t character_races[MAX_RACES] = {
+Race_t character_races[PLAYER_MAX_RACES] = {
     {
         "Human", 0,  0,  0,  0,  0,  0,
         14,  6, 72,  6,180, 25, 66,  4,150, 20,
@@ -148,7 +148,7 @@ Race_t character_races[MAX_RACES] = {
 };
 
 // Background information
-Background_t character_backgrounds[MAX_BACKGROUND] = {
+Background_t character_backgrounds[PLAYER_MAX_BACKGROUNDS] = {
     {"You are the illegitimate and unacknowledged child ",   10,  1,  2,  25},
     {"You are the illegitimate but acknowledged child ",     20,  1,  2,  35},
     {"You are one of several children ",                     95,  1,  2,  45},
@@ -280,7 +280,7 @@ Background_t character_backgrounds[MAX_BACKGROUND] = {
 };
 
 // Classes.
-Class_t classes[MAX_CLASS] = {
+Class_t classes[PLAYER_MAX_CLASSES] = {
     // HP Dis Src Stl Fos bth btb sve S  I  W  D Co Ch  Spell Exp  spl
     {"Warrior", 9, 25, 14, 1, 38, 70, 55, 18,  5, -2, -2,  2,  2, -1, NONE,    0, 0},
     {"Mage",    0, 30, 16, 2, 20, 34, 20, 36, -5,  3,  0,  1, -2,  1, MAGE,   30, 1},
@@ -294,7 +294,7 @@ Class_t classes[MAX_CLASS] = {
 // headaches in its use.
 // CLA_MISC_HIT is identical to CLA_SAVE, which takes advantage of
 // the fact that the save values are independent of the class.
-int16_t class_level_adj[MAX_CLASS][MAX_LEV_ADJ] = {
+int16_t class_level_adj[PLAYER_MAX_CLASSES][MAX_LEV_ADJ] = {
     //bth    bthb   device disarm save/misc hit
     { 4,     4,     2,     2,     3 }, // Warrior
     { 2,     2,     4,     3,     3 }, // Mage
@@ -312,7 +312,7 @@ uint8_t  spells_learned_order[32];     // order spells learned/remembered/forgot
 // Warriors don't have spells, so there is no entry for them.
 // Note that this means you must always subtract one from the
 // py.misc.pclass before indexing into magic_spells[].
-Spell_t magic_spells[MAX_CLASS - 1][31] = {
+Spell_t magic_spells[PLAYER_MAX_CLASSES - 1][31] = {
     {
         // Mage
         {  1,  1, 22,   1},
@@ -517,7 +517,7 @@ const char *spell_names[62] = {
 //      103 = Soft Leather Armor
 //       30 = Stiletto
 //      322 = Beginners Handbook
-uint16_t class_base_provisions[MAX_CLASS][5] = {
+uint16_t class_base_provisions[PLAYER_MAX_CLASSES][5] = {
     {344, 365, 123, 30, 103}, // Warrior
     {344, 365, 123, 30, 318}, // Mage
     {344, 365, 123, 30, 322}, // Priest

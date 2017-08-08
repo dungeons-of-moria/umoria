@@ -82,21 +82,21 @@ extern Cave_t cave[MAX_HEIGHT][MAX_WIDTH];
 extern Player_t py;
 extern int16_t char_row;
 extern int16_t char_col;
-extern uint32_t player_base_exp_levels[MAX_PLAYER_LEVEL];
-extern uint16_t player_base_hp_levels[MAX_PLAYER_LEVEL];
+extern uint32_t player_base_exp_levels[PLAYER_MAX_LEVEL];
+extern uint16_t player_base_hp_levels[PLAYER_MAX_LEVEL];
 
-extern ClassTitle_t class_titles[MAX_CLASS][MAX_PLAYER_LEVEL];
-extern Race_t character_races[MAX_RACES];
-extern Background_t character_backgrounds[MAX_BACKGROUND];
+extern ClassTitle_t class_titles[PLAYER_MAX_CLASSES][PLAYER_MAX_LEVEL];
+extern Race_t character_races[PLAYER_MAX_RACES];
+extern Background_t character_backgrounds[PLAYER_MAX_BACKGROUNDS];
 
-extern uint8_t race_gold_adjustments[MAX_RACES][MAX_RACES];
+extern uint8_t race_gold_adjustments[PLAYER_MAX_RACES][PLAYER_MAX_RACES];
 
-extern Class_t classes[MAX_CLASS];
-extern int16_t class_level_adj[MAX_CLASS][MAX_LEV_ADJ];
-extern uint16_t class_base_provisions[MAX_CLASS][5];
+extern Class_t classes[PLAYER_MAX_CLASSES];
+extern int16_t class_level_adj[PLAYER_MAX_CLASSES][MAX_LEV_ADJ];
+extern uint16_t class_base_provisions[PLAYER_MAX_CLASSES][5];
 
 // Warriors don't have spells, so there is no entry for them.
-extern Spell_t magic_spells[MAX_CLASS - 1][31];
+extern Spell_t magic_spells[PLAYER_MAX_CLASSES - 1][31];
 extern char *spell_names[62];
 extern uint32_t spells_learnt;           // Bit field for spells learnt -CJS-
 extern uint32_t spells_worked;           // Bit field for spells tried -CJS-

@@ -366,7 +366,7 @@ char *playerTitle() {
 
     if (py.misc.lev < 1) {
         p = "Babe in arms";
-    } else if (py.misc.lev <= MAX_PLAYER_LEVEL) {
+    } else if (py.misc.lev <= PLAYER_MAX_LEVEL) {
         p = class_titles[py.misc.pclass][py.misc.lev - 1];
     } else if (py.misc.male) {
         p = "**KING**";
@@ -986,7 +986,7 @@ void printCharacterLevelExperience() {
     printHeaderLongNumber7Spaces("Experience ", py.misc.exp, 10, 28);
     printHeaderLongNumber7Spaces("Max Exp    ", py.misc.max_exp, 11, 28);
 
-    if (py.misc.lev >= MAX_PLAYER_LEVEL) {
+    if (py.misc.lev >= PLAYER_MAX_LEVEL) {
         putStringClearToEOL("Exp to Adv.: *******", 12, 28);
     } else {
         printHeaderLongNumber7Spaces("Exp to Adv.", (int32_t) (player_base_exp_levels[py.misc.lev - 1] * py.misc.expfact / 100), 12, 28);
@@ -1970,11 +1970,11 @@ static void playerGainLevel() {
 
 // Prints experience -RAK-
 void displayCharacterExperience() {
-    if (py.misc.exp > MAX_EXP) {
-        py.misc.exp = MAX_EXP;
+    if (py.misc.exp > PLAYER_MAX_EXP) {
+        py.misc.exp = PLAYER_MAX_EXP;
     }
 
-    while ((py.misc.lev < MAX_PLAYER_LEVEL) && (signed) (player_base_exp_levels[py.misc.lev - 1] * py.misc.expfact / 100) <= py.misc.exp) {
+    while ((py.misc.lev < PLAYER_MAX_LEVEL) && (signed) (player_base_exp_levels[py.misc.lev - 1] * py.misc.expfact / 100) <= py.misc.exp) {
         playerGainLevel();
     }
 

@@ -34,15 +34,15 @@ static bool staffPlayerCanUse(Inventory_t *item) {
     }
 
     // Give everyone a slight chance
-    if (chance < USE_DEVICE && randomNumber(USE_DEVICE - chance + 1) == 1) {
-        chance = USE_DEVICE;
+    if (chance < PLAYER_USE_DEVICE_DIFFICULTY && randomNumber(PLAYER_USE_DEVICE_DIFFICULTY - chance + 1) == 1) {
+        chance = PLAYER_USE_DEVICE_DIFFICULTY;
     }
 
     if (chance < 1) {
         chance = 1;
     }
 
-    if (randomNumber(chance) < USE_DEVICE) {
+    if (randomNumber(chance) < PLAYER_USE_DEVICE_DIFFICULTY) {
         printMessage("You failed to use the staff properly.");
         return false;
     }

@@ -107,7 +107,7 @@ static void displayCharacterRaces(void) {
     int y = 2;
     int x = 21;
 
-    for (int i = 0; i < MAX_RACES; i++) {
+    for (int i = 0; i < PLAYER_MAX_RACES; i++) {
         char description[80];
 
         (void) sprintf(description, "%c) %s", i + 'a', character_races[i].trace);
@@ -133,7 +133,7 @@ static void characterChooseRace() {
         char input = getKeyInput();
         race_id = input - 'a';
 
-        if (race_id < MAX_RACES && race_id >= 0) {
+        if (race_id < PLAYER_MAX_RACES && race_id >= 0) {
             break;
         } else if (input == '?') {
             displayTextHelpFile(MORIA_WELCOME);
@@ -320,7 +320,7 @@ static int displayRaceClasses(int race_id, int *class_list) {
     clearToBottom(20);
     putString("Choose a class (? for Help):", 20, 2);
 
-    for (int i = 0; i < MAX_CLASS; i++) {
+    for (int i = 0; i < PLAYER_MAX_CLASSES; i++) {
         if (character_races[race_id].rtclass & mask) {
             (void) sprintf(description, "%c) %s", class_id + 'a', classes[i].title);
             putString(description, x, y);
@@ -341,8 +341,8 @@ static int displayRaceClasses(int race_id, int *class_list) {
 
 // Gets a character class -JWT-
 static void characterGetClass() {
-    int class_list[MAX_CLASS];
-    for (int id = 0; id < MAX_CLASS; id++) {
+    int class_list[PLAYER_MAX_CLASSES];
+    for (int id = 0; id < PLAYER_MAX_CLASSES; id++) {
         class_list[id] = 0;
     }
 
@@ -400,16 +400,16 @@ static void characterGetClass() {
             // Initialize hit_points array.
             // Put bounds on total possible hp, only succeed
             // if it is within 1/8 of average value.
-            min_value = (MAX_PLAYER_LEVEL * 3 / 8 * (py.misc.hitdie - 1)) + MAX_PLAYER_LEVEL;
-            max_value = (MAX_PLAYER_LEVEL * 5 / 8 * (py.misc.hitdie - 1)) + MAX_PLAYER_LEVEL;
+            min_value = (PLAYER_MAX_LEVEL * 3 / 8 * (py.misc.hitdie - 1)) + PLAYER_MAX_LEVEL;
+            max_value = (PLAYER_MAX_LEVEL * 5 / 8 * (py.misc.hitdie - 1)) + PLAYER_MAX_LEVEL;
             player_base_hp_levels[0] = py.misc.hitdie;
 
             do {
-                for (int i = 1; i < MAX_PLAYER_LEVEL; i++) {
+                for (int i = 1; i < PLAYER_MAX_LEVEL; i++) {
                     player_base_hp_levels[i] = (uint16_t) randomNumber((int) py.misc.hitdie);
                     player_base_hp_levels[i] += player_base_hp_levels[i - 1];
                 }
-            } while (player_base_hp_levels[MAX_PLAYER_LEVEL - 1] < min_value || player_base_hp_levels[MAX_PLAYER_LEVEL - 1] > max_value);
+            } while (player_base_hp_levels[PLAYER_MAX_LEVEL - 1] < min_value || player_base_hp_levels[PLAYER_MAX_LEVEL - 1] > max_value);
 
             py.misc.bth += klass->mbth;
             py.misc.bthb += klass->mbthb; // RAK

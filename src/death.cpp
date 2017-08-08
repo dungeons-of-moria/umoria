@@ -395,7 +395,7 @@ static void kingly() {
 
     (void) spellRestorePlayerLevels();
 
-    py.misc.lev += MAX_PLAYER_LEVEL;
+    py.misc.lev += PLAYER_MAX_LEVEL;
     py.misc.au += 250000L;
     py.misc.max_exp += 5000000L;
     py.misc.exp = py.misc.max_exp;

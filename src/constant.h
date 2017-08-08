@@ -157,24 +157,24 @@ constexpr uint8_t MAX_TITLES = 45;     // Used with scrolls
 constexpr uint8_t MAX_SYLLABLES = 153; // Used with scrolls
 
 // Player constants
-constexpr uint8_t MAX_PLAYER_LEVEL = 40;       // Maximum possible character level
-constexpr int32_t MAX_EXP = 9999999L;          // Maximum amount of experience -CJS-
-constexpr uint8_t MAX_RACES = 8;               // Number of defined races
-constexpr uint8_t MAX_CLASS = 6;               // Number of defined classes
-constexpr uint8_t USE_DEVICE = 3;              // x> Harder devices x< Easier devices
-constexpr uint8_t MAX_BACKGROUND = 128;        // Number of types of histories for univ
-constexpr uint16_t PLAYER_FOOD_FULL = 10000;   // Getting full
-constexpr uint16_t PLAYER_FOOD_MAX = 15000;    // Maximum food value, beyond is wasted
-constexpr uint16_t PLAYER_FOOD_FAINT = 300;    // Character begins fainting
-constexpr uint16_t PLAYER_FOOD_WEAK = 1000;    // Warn player that he is getting very low
-constexpr uint16_t PLAYER_FOOD_ALERT = 2000;   // Warn player that he is getting low
-constexpr uint8_t PLAYER_REGEN_FAINT = 33;     // Regen factor*2^16 when fainting
-constexpr uint8_t PLAYER_REGEN_WEAK = 98;      // Regen factor*2^16 when weak
-constexpr uint8_t PLAYER_REGEN_NORMAL = 197;   // Regen factor*2^16 when full
-constexpr uint16_t PLAYER_REGEN_HPBASE = 1442; // Min amount hp regen*2^16
-constexpr uint16_t PLAYER_REGEN_MNBASE = 524;  // Min amount mana regen*2^16
-constexpr uint8_t PLAYER_WEIGHT_CAP = 130;     // "#"*(1/10 pounds) per strength point
-constexpr uint8_t PLAYER_EXIT_PAUSE = 2;       // Pause time before player can re-roll
+constexpr uint8_t PLAYER_MAX_LEVEL = 40;            // Maximum possible character level
+constexpr int32_t PLAYER_MAX_EXP = 9999999L;        // Maximum amount of experience -CJS-
+constexpr uint8_t PLAYER_MAX_RACES = 8;             // Number of defined races
+constexpr uint8_t PLAYER_MAX_CLASSES = 6;           // Number of defined classes
+constexpr uint8_t PLAYER_USE_DEVICE_DIFFICULTY = 3; // x> Harder devices x< Easier devices
+constexpr uint8_t PLAYER_MAX_BACKGROUNDS = 128;     // Number of types of histories for univ
+constexpr uint16_t PLAYER_FOOD_FULL = 10000;        // Getting full
+constexpr uint16_t PLAYER_FOOD_MAX = 15000;         // Maximum food value, beyond is wasted
+constexpr uint16_t PLAYER_FOOD_FAINT = 300;         // Character begins fainting
+constexpr uint16_t PLAYER_FOOD_WEAK = 1000;         // Warn player that he is getting very low
+constexpr uint16_t PLAYER_FOOD_ALERT = 2000;        // Warn player that he is getting low
+constexpr uint8_t PLAYER_REGEN_FAINT = 33;          // Regen factor*2^16 when fainting
+constexpr uint8_t PLAYER_REGEN_WEAK = 98;           // Regen factor*2^16 when weak
+constexpr uint8_t PLAYER_REGEN_NORMAL = 197;        // Regen factor*2^16 when full
+constexpr uint16_t PLAYER_REGEN_HPBASE = 1442;      // Min amount hp regen*2^16
+constexpr uint16_t PLAYER_REGEN_MNBASE = 524;       // Min amount mana regen*2^16
+constexpr uint8_t PLAYER_WEIGHT_CAP = 130;          // "#"*(1/10 pounds) per strength point
+constexpr uint8_t PLAYER_EXIT_PAUSE = 2;            // Pause time before player can re-roll
 
 // class level adjustment constants
 constexpr uint8_t CLA_BTH = 0;
