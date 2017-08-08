@@ -713,7 +713,7 @@ bool loadGame(bool *generate) {
                     rd_byte(&st_ptr->store_ctr);
                     rd_short(&st_ptr->good_buy);
                     rd_short(&st_ptr->bad_buy);
-                    if (st_ptr->store_ctr > STORE_INVEN_MAX) {
+                    if (st_ptr->store_ctr > STORE_MAX_DISCRETE_ITEMS) {
                         goto error;
                     }
                     for (int j = 0; j < st_ptr->store_ctr; j++) {
@@ -876,7 +876,7 @@ bool loadGame(bool *generate) {
                 rd_byte(&st_ptr->store_ctr);
                 rd_short(&st_ptr->good_buy);
                 rd_short(&st_ptr->bad_buy);
-                if (st_ptr->store_ctr > STORE_INVEN_MAX) {
+                if (st_ptr->store_ctr > STORE_MAX_DISCRETE_ITEMS) {
                     goto error;
                 }
                 for (int j = 0; j < st_ptr->store_ctr; j++) {

@@ -106,7 +106,7 @@ extern uint8_t spells_learned_order[32]; // remember order that spells are learn
 // Following are store definitions
 extern Owner_t store_owners[MAX_OWNERS];
 extern Store_t stores[MAX_STORES];
-extern uint16_t store_choices[MAX_STORES][STORE_CHOICES];
+extern uint16_t store_choices[MAX_STORES][STORE_MAX_ITEM_TYPES];
 extern bool (*store_buy[MAX_STORES])(int);
 
 // Following are treasure arrays  and variables

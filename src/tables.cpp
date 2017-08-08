@@ -49,7 +49,7 @@ uint8_t race_gold_adjustments[MAX_RACES][MAX_RACES] = {
 };
 
 // game_objects[] index of objects that may appear in the store
-uint16_t store_choices[MAX_STORES][STORE_CHOICES] = {
+uint16_t store_choices[MAX_STORES][STORE_MAX_ITEM_TYPES] = {
         // General Store
         {
                 366, 365, 364,  84,  84, 365, 123, 366, 365, 350, 349, 348, 347,

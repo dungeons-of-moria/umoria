@@ -301,11 +301,13 @@ static void initializeTreasureLevels() {
 }
 
 #if (COST_ADJ != 100)
+
 // Adjust prices of objects -RAK-
 static void price_adjust() {
     // round half-way cases up
     for (int i = 0; i < MAX_OBJECTS; i++) {
-        game_objects[i].cost = ((game_objects[i].cost * COST_ADJ) + 50) / 100;
+        game_objects[i].cost = ((game_objects[i].cost * COST_ADJUSTMENT) + 50) / 100;
     }
 }
+
 #endif

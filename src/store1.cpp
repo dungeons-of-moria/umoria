@@ -187,7 +187,7 @@ int32_t storeItemSellPrice(int store_id, int32_t *min_price, int32_t *max_price,
 bool storeCheckPlayerItemsCount(int store_id, Inventory_t *item) {
     Store_t *store = &stores[store_id];
 
-    if (store->store_ctr < STORE_INVEN_MAX) {
+    if (store->store_ctr < STORE_MAX_DISCRETE_ITEMS) {
         return true;
     }
 
@@ -325,7 +325,7 @@ void storeInitializeOwners() {
         store->good_buy = 0;
         store->bad_buy = 0;
 
-        for (int item_id = 0; item_id < STORE_INVEN_MAX; item_id++) {
+        for (int item_id = 0; item_id < STORE_MAX_DISCRETE_ITEMS; item_id++) {
             inventoryItemCopyTo(OBJ_NOTHING, &store->store_inven[item_id].sitem);
             store->store_inven[item_id].scost = 0;
         }
@@ -337,7 +337,7 @@ static void storeItemCreate(int store_id, int16_t max_cost) {
     int free_id = popt();
 
     for (int tries = 0; tries <= 3; tries++) {
-        int id = store_choices[store_id][randomNumber(STORE_CHOICES) - 1];
+        int id = store_choices[store_id][randomNumber(STORE_MAX_ITEM_TYPES) - 1];
         inventoryItemCopyTo(id, &treasure_list[free_id]);
         magicTreasureMagicalAbility(free_id, OBJ_TOWN_LEVEL);
 
@@ -367,20 +367,20 @@ void storeMaintenance() {
         Store_t *store = &stores[store_id];
 
         store->insult_cur = 0;
-        if (store->store_ctr >= STORE_MIN_INVEN) {
-            int turnaround = randomNumber(STORE_TURN_AROUND);
-            if (store->store_ctr >= STORE_MAX_INVEN) {
-                turnaround += 1 + store->store_ctr - STORE_MAX_INVEN;
+        if (store->store_ctr >= STORE_MIN_AUTO_SELL_ITEMS) {
+            int turnaround = randomNumber(STORE_STOCK_TURN_AROUND);
+            if (store->store_ctr >= STORE_MAX_AUTO_BUY_ITEMS) {
+                turnaround += 1 + store->store_ctr - STORE_MAX_AUTO_BUY_ITEMS;
             }
             while (--turnaround >= 0) {
                 storeDestroy(store_id, randomNumber((int) store->store_ctr) - 1, false);
             }
         }
 
-        if (store->store_ctr <= STORE_MAX_INVEN) {
-            int turnaround = randomNumber(STORE_TURN_AROUND);
-            if (store->store_ctr < STORE_MIN_INVEN) {
-                turnaround += STORE_MIN_INVEN - store->store_ctr;
+        if (store->store_ctr <= STORE_MAX_AUTO_BUY_ITEMS) {
+            int turnaround = randomNumber(STORE_STOCK_TURN_AROUND);
+            if (store->store_ctr < STORE_MIN_AUTO_SELL_ITEMS) {
+                turnaround += STORE_MIN_AUTO_SELL_ITEMS - store->store_ctr;
             }
 
             int16_t max_cost = store_owners[store->owner].max_cost;

@@ -57,14 +57,14 @@ constexpr uint8_t DUN_QUARTZ_TREASURE = 40; // 1/x chance of treasure per quartz
 constexpr uint16_t DUN_UNUSUAL_ROOMS = 300; // Level/x chance of unusual room
 
 // Store constants
-constexpr uint8_t MAX_OWNERS = 18;       // Number of owners to choose from
-constexpr uint8_t MAX_STORES = 6;        // Number of different stores
-constexpr uint8_t STORE_INVEN_MAX = 24;  // Max number of discrete objects in inventory
-constexpr uint8_t STORE_CHOICES = 26;    // NUMBER of items to choose stock from
-constexpr uint8_t STORE_MAX_INVEN = 18;  // Max diff objects in stock for auto buy
-constexpr uint8_t STORE_MIN_INVEN = 10;  // Min diff objects in stock for auto sell
-constexpr uint8_t STORE_TURN_AROUND = 9; // Amount of buying and selling normally
-constexpr uint8_t COST_ADJ = 100;        // Adjust prices for buying and selling
+constexpr uint8_t MAX_OWNERS = 18;                // Number of owners to choose from
+constexpr uint8_t MAX_STORES = 6;                 // Number of different stores
+constexpr uint8_t STORE_MAX_DISCRETE_ITEMS = 24;  // Max number of discrete objects in inventory
+constexpr uint8_t STORE_MAX_ITEM_TYPES = 26;      // Number of items to choose stock from
+constexpr uint8_t STORE_MAX_AUTO_BUY_ITEMS = 18;  // Max diff objects in stock for auto buy
+constexpr uint8_t STORE_MIN_AUTO_SELL_ITEMS = 10; // Min diff objects in stock for auto sell
+constexpr uint8_t STORE_STOCK_TURN_AROUND = 9;    // Amount of buying and selling normally
+constexpr uint8_t COST_ADJUSTMENT = 100;          // Adjust prices for buying and selling
 
 // Treasure constants
 constexpr uint8_t INVEN_ARRAY_SIZE = 34; // Size of inventory array(Do not change)

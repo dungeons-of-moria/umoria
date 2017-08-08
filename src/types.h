@@ -276,7 +276,7 @@ typedef struct {
     uint8_t store_ctr;
     uint16_t good_buy;
     uint16_t bad_buy;
-    InventoryRecord_t store_inven[STORE_INVEN_MAX];
+    InventoryRecord_t store_inven[STORE_MAX_DISCRETE_ITEMS];
 } Store_t;
 
 // HighScore_t is a score object used for saving to the high score file
