@@ -551,7 +551,7 @@ int16_t sorted_objects[MAX_DUNGEON_OBJECTS];
 // Identified objects flags
 uint8_t objects_identified[OBJECT_IDENT_SIZE];
 int16_t treasure_levels[TREASURE_MAX_LEVELS + 1];
-Inventory_t treasure_list[MAX_TALLOC];
+Inventory_t treasure_list[LEVEL_MAX_OBJECTS];
 Inventory_t inventory[PLAYER_INVENTORY_SIZE];
 
 // Treasure related values

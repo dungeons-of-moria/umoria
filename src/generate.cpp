@@ -1058,9 +1058,9 @@ static void dungeonGenerate() {
 
     monsterPlaceNewWithinDistance((randomNumber(8) + MIN_MALLOC_LEVEL + alloc_level), 0, true);
     dungeonAllocateAndPlaceObject(setCorridors, 3, randomNumber(alloc_level));
-    dungeonAllocateAndPlaceObject(setRooms, 5, randomNumberNormalDistribution(TREAS_ROOM_ALLOC, 3));
-    dungeonAllocateAndPlaceObject(setFloors, 5, randomNumberNormalDistribution(TREAS_ANY_ALLOC, 3));
-    dungeonAllocateAndPlaceObject(setFloors, 4, randomNumberNormalDistribution(TREAS_GOLD_ALLOC, 3));
+    dungeonAllocateAndPlaceObject(setRooms, 5, randomNumberNormalDistribution(LEVEL_OBJECTS_PER_ROOM, 3));
+    dungeonAllocateAndPlaceObject(setFloors, 5, randomNumberNormalDistribution(LEVEL_OBJECTS_PER_CORRIDOR, 3));
+    dungeonAllocateAndPlaceObject(setFloors, 4, randomNumberNormalDistribution(LEVEL_TOTAL_GOLD_AND_GEMS, 3));
     dungeonAllocateAndPlaceObject(setFloors, 1, randomNumber(alloc_level));
 
     if (current_dungeon_level >= WIN_MON_APPEAR) {
@@ -1114,10 +1114,10 @@ static void dungeonBuildStore(int store_id, int y, int x) {
 
 // Link all free space in treasure list together
 static void treasureLinker() {
-    for (int i = 0; i < MAX_TALLOC; i++) {
+    for (int i = 0; i < LEVEL_MAX_OBJECTS; i++) {
         inventoryItemCopyTo(OBJ_NOTHING, &treasure_list[i]);
     }
-    current_treasure_id = MIN_TRIX;
+    current_treasure_id = MIN_TREASURE_LIST_ID;
 }
 
 // Link all free space in monster list together

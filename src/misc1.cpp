@@ -859,7 +859,7 @@ static void compactObjects() {
 
 // Gives pointer to next free space -RAK-
 int popt() {
-    if (current_treasure_id == MAX_TALLOC) {
+    if (current_treasure_id == LEVEL_MAX_OBJECTS) {
         compactObjects();
     }
 

@@ -94,13 +94,13 @@ constexpr uint16_t OBJECT_IDENT_SIZE = 448; // 7*64, see object_offset() in desc
 
 constexpr uint8_t MAX_GOLD_TYPES = 18; // Number of different types of gold
 
-// with MAX_TALLOC = 150, it is possible to get compacting objects during
-// level generation, although it is extremely rare
-constexpr uint8_t MAX_TALLOC = 175;     // Max objects per level
-constexpr uint8_t MIN_TRIX = 1;         // Minimum treasure_list index used
-constexpr uint8_t TREAS_ROOM_ALLOC = 7; // Amount of objects for rooms
-constexpr uint8_t TREAS_ANY_ALLOC = 2;  // Amount of objects for corridors
-constexpr uint8_t TREAS_GOLD_ALLOC = 2; // Amount of gold (and gems)
+// With LEVEL_MAX_OBJECTS set to 150, it's possible to get compacting
+// objects during level generation, although it is extremely rare.
+constexpr uint8_t LEVEL_MAX_OBJECTS = 175;        // Max objects per level
+constexpr uint8_t MIN_TREASURE_LIST_ID = 1;       // Minimum treasure_list index used
+constexpr uint8_t LEVEL_OBJECTS_PER_ROOM = 7;     // Amount of objects for rooms
+constexpr uint8_t LEVEL_OBJECTS_PER_CORRIDOR = 2; // Amount of objects for corridors
+constexpr uint8_t LEVEL_TOTAL_GOLD_AND_GEMS = 2;  // Amount of gold (and gems)
 
 // Magic Treasure Generation constants
 // Note: Number of special objects, and degree of enchantments can be adjusted here.
