@@ -255,15 +255,15 @@ static void initializeCharacterInventory() {
 
 // Initializes M_LEVEL array for use with PLACE_MONSTER -RAK-
 static void initializeMonsterLevels() {
-    for (int i = 0; i <= MAX_MONS_LEVEL; i++) {
+    for (int i = 0; i <= MON_MAX_LEVELS; i++) {
         monster_levels[i] = 0;
     }
 
-    for (int i = 0; i < MAX_CREATURES - WIN_MON_TOT; i++) {
+    for (int i = 0; i < MON_MAX_CREATURES - MON_ENDGAME_MONSTERS; i++) {
         monster_levels[creatures_list[i].level]++;
     }
 
-    for (int i = 1; i <= MAX_MONS_LEVEL; i++) {
+    for (int i = 1; i <= MON_MAX_LEVELS; i++) {
         monster_levels[i] += monster_levels[i - 1];
     }
 }

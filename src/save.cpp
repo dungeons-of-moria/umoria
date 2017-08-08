@@ -99,7 +99,7 @@ static bool sv_write() {
         l |= 0x40000000L;
     }
 
-    for (int i = 0; i < MAX_CREATURES; i++) {
+    for (int i = 0; i < MON_MAX_CREATURES; i++) {
         Recall_t *r_ptr = &creature_recall[i];
 
         if (r_ptr->r_cmove || r_ptr->r_cdefense || r_ptr->r_kills ||
@@ -113,7 +113,7 @@ static bool sv_write() {
             wr_short(r_ptr->r_cdefense);
             wr_byte(r_ptr->r_wake);
             wr_byte(r_ptr->r_ignore);
-            wr_bytes(r_ptr->r_attacks, MAX_MON_NATTACK);
+            wr_bytes(r_ptr->r_attacks, MON_MAX_ATTACKS);
         }
     }
 
@@ -350,7 +350,7 @@ static bool sv_write() {
         wr_item(&treasure_list[i]);
     }
     wr_short((uint16_t) next_free_monster_id);
-    for (int i = MIN_MONIX; i < next_free_monster_id; i++) {
+    for (int i = MON_MIN_INDEX_ID; i < next_free_monster_id; i++) {
         wr_monster(&monsters[i]);
     }
 
@@ -532,7 +532,7 @@ bool loadGame(bool *generate) {
         uint16_t uint16_t_tmp;
         rd_short(&uint16_t_tmp);
         while (uint16_t_tmp != 0xFFFF) {
-            if (uint16_t_tmp >= MAX_CREATURES) {
+            if (uint16_t_tmp >= MON_MAX_CREATURES) {
                 goto error;
             }
             Recall_t *r_ptr = &creature_recall[uint16_t_tmp];
@@ -543,7 +543,7 @@ bool loadGame(bool *generate) {
             rd_short(&r_ptr->r_cdefense);
             rd_byte(&r_ptr->r_wake);
             rd_byte(&r_ptr->r_ignore);
-            rd_bytes(r_ptr->r_attacks, MAX_MON_NATTACK);
+            rd_bytes(r_ptr->r_attacks, MON_MAX_ATTACKS);
             rd_short(&uint16_t_tmp);
         }
 
@@ -857,10 +857,10 @@ bool loadGame(bool *generate) {
             rd_item(&treasure_list[i]);
         }
         rd_short((uint16_t *) &next_free_monster_id);
-        if (next_free_monster_id > MAX_MALLOC) {
+        if (next_free_monster_id > MON_TOTAL_ALLOCATIONS) {
             goto error;
         }
-        for (int i = MIN_MONIX; i < next_free_monster_id; i++) {
+        for (int i = MON_MIN_INDEX_ID; i < next_free_monster_id; i++) {
             rd_monster(&monsters[i]);
         }
 

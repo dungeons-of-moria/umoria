@@ -118,28 +118,28 @@ constexpr uint8_t OBJECT_BOLTS_MAX_RANGE = 18;       // Maximum range of bolts a
 constexpr uint16_t OBJECTS_RUNE_PROTECTION = 3000;   // Rune of protection resistance
 
 // Creature constants
-constexpr uint16_t MAX_CREATURES = 279;       // Number of creatures defined for univ
-constexpr uint8_t MONSTER_ATTACK_TYPES = 215; // Number of monster attack types.
+constexpr uint16_t MON_MAX_CREATURES = 279; // Number of creatures defined for univ
+constexpr uint8_t MON_ATTACK_TYPES = 215;   // Number of monster attack types.
 
-// with MAX_MALLOC = 101, it is possible to get compacting monsters messages
-// while breeding/cloning monsters
-constexpr uint8_t MAX_MALLOC = 125;        // Max that can be allocated
-constexpr uint8_t MAX_MALLOC_CHANCE = 160; // 1/x chance of new monster each round
-constexpr uint8_t MAX_MONS_LEVEL = 40;     // Maximum level of creatures
-constexpr uint8_t MAX_SIGHT = 20;          // Maximum dis a creature can be seen
-constexpr uint8_t MAX_SPELL_DIS = 20;      // Maximum dis creature spell can be cast
-constexpr uint8_t MAX_MON_MULT = 75;       // Maximum reproductions on a level
-constexpr uint8_t MON_MULT_ADJ = 7;        // High value slows multiplication
-constexpr uint8_t MON_NASTY = 50;          // 1/x chance of high level creature
-constexpr uint8_t MIN_MALLOC_LEVEL = 14;   // Minimum number of monsters/level
-constexpr uint8_t MIN_MALLOC_TD = 4;       // Number of people on town level (day)
-constexpr uint8_t MIN_MALLOC_TN = 8;       // Number of people on town level (night)
-constexpr uint8_t WIN_MON_TOT = 2;         // Total number of "win" creatures
-constexpr uint8_t WIN_MON_APPEAR = 50;     // Level where winning creatures begin
-constexpr uint8_t MON_SUMMON_ADJ = 2;      // Adjust level of summoned creatures
-constexpr uint8_t MON_DRAIN_LIFE = 2;      // Percent of player exp drained per hit
-constexpr uint8_t MAX_MON_NATTACK = 4;     // Max num attacks (used in mons memory) -CJS-
-constexpr uint8_t MIN_MONIX = 2;           // Minimum index in m_list (1 = py, 0 = no mon)
+// With MON_TOTAL_ALLOCATIONS set to 101, it is possible to get compacting
+// monsters messages while breeding/cloning monsters.
+constexpr uint8_t MON_TOTAL_ALLOCATIONS = 125;        // Max that can be allocated
+constexpr uint8_t MON_MAX_LEVELS = 40;                // Maximum level of creatures
+constexpr uint8_t MON_CHANCE_OF_NEW = 160;            // 1/x chance of new monster each round
+constexpr uint8_t MON_MAX_SIGHT = 20;                 // Maximum dis a creature can be seen
+constexpr uint8_t MON_MAX_SPELL_CAST_DISTANCE = 20;   // Maximum dis creature spell can be cast
+constexpr uint8_t MON_MAX_MULTIPLY_PER_LEVEL = 75;    // Maximum reproductions on a level
+constexpr uint8_t MON_MULTIPLY_ADJUST = 7;            // High value slows multiplication
+constexpr uint8_t MON_CHANCE_OF_NASTY = 50;           // 1/x chance of high level creature
+constexpr uint8_t MON_MIN_PER_LEVEL = 14;             // Minimum number of monsters/level
+constexpr uint8_t MON_MIN_TOWNSFOLK_DAY = 4;          // Number of people on town level (day)
+constexpr uint8_t MON_MIN_TOWNSFOLK_NIGHT = 8;        // Number of people on town level (night)
+constexpr uint8_t MON_ENDGAME_MONSTERS = 2;           // Total number of "win" creatures
+constexpr uint8_t MON_ENDGAME_LEVEL = 50;             // Level where winning creatures begin
+constexpr uint8_t MON_SUMMONED_LEVEL_ADJUST = 2;      // Adjust level of summoned creatures
+constexpr uint8_t MON_PLAYER_EXP_DRAINED_PER_HIT = 2; // Percent of player exp drained per hit
+constexpr uint8_t MON_MAX_ATTACKS = 4;                // Max num attacks (used in mons memory) -CJS-
+constexpr uint8_t MON_MIN_INDEX_ID = 2;               // Minimum index in m_list (1 = py, 0 = no mon)
 
 // Trap constants
 constexpr uint8_t MAX_TRAP = 18; // Number of defined traps

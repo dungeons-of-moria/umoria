@@ -230,7 +230,7 @@ typedef struct {
     uint16_t r_kills, r_deaths;
     uint16_t r_cdefense;
     uint8_t r_wake, r_ignore;
-    uint8_t r_attacks[MAX_MON_NATTACK];
+    uint8_t r_attacks[MON_MAX_ATTACKS];
 } Recall_t;
 
 // Monster_t is created for any living monster found on the current dungeon level

@@ -37,7 +37,7 @@ void monsterUpdateVisibility(int monster_id) {
     bool visible = false;
     Monster_t *m_ptr = &monsters[monster_id];
 
-    if (m_ptr->cdis <= MAX_SIGHT && !(py.flags.status & PY_BLIND) && coordInsidePanel((int) m_ptr->fy, (int) m_ptr->fx)) {
+    if (m_ptr->cdis <= MON_MAX_SIGHT && !(py.flags.status & PY_BLIND) && coordInsidePanel((int) m_ptr->fy, (int) m_ptr->fx)) {
         if (wizard_mode) {
             // Wizard sight.
             visible = true;
@@ -656,7 +656,7 @@ static bool executeAttackOnPlayer(Creature_t *creature, Monster_t *monster, int 
             }
             if (randomNumber(2) == 1) {
                 printMessage("There is a puff of smoke!");
-                spellTeleportAwayMonster(monster_id, MAX_SIGHT);
+                spellTeleportAwayMonster(monster_id, MON_MAX_SIGHT);
             }
             break;
         case 13: // Steal Object
@@ -668,7 +668,7 @@ static bool executeAttackOnPlayer(Creature_t *creature, Monster_t *monster, int 
             }
             if (randomNumber(2) == 1) {
                 printMessage("There is a puff of smoke!");
-                spellTeleportAwayMonster(monster_id, MAX_SIGHT);
+                spellTeleportAwayMonster(monster_id, MON_MAX_SIGHT);
             }
             break;
         case 14: // Poison
@@ -714,7 +714,7 @@ static bool executeAttackOnPlayer(Creature_t *creature, Monster_t *monster, int 
             break;
         case 19: // Lose experience
             printMessage("You feel your life draining away!");
-            spellLoseEXP(damage + (py.misc.exp / 100) * MON_DRAIN_LIFE);
+            spellLoseEXP(damage + (py.misc.exp / 100) * MON_PLAYER_EXP_DRAINED_PER_HIT);
             break;
         case 20: // Aggravate monster
             (void) spellAggravateMonsters(20);
@@ -782,7 +782,7 @@ static void monsterConfuseOnAttack(Creature_t *creature, Monster_t *monster, int
 
         vtype_t msg;
 
-        if (randomNumber(MAX_MONS_LEVEL) < creature->level || (CD_NO_SLEEP & creature->cdefense)) {
+        if (randomNumber(MON_MAX_LEVELS) < creature->level || (CD_NO_SLEEP & creature->cdefense)) {
             (void) sprintf(msg, "%sis unaffected.", monster_name);
         } else {
             (void) sprintf(msg, "%sappears confused.", monster_name);
@@ -888,7 +888,7 @@ static void monsterAttackPlayer(int monster_id) {
             }
         }
 
-        if (attackn < MAX_MON_NATTACK - 1) {
+        if (attackn < MON_MAX_ATTACKS - 1) {
             attackn++;
         } else {
             break;
@@ -1096,7 +1096,7 @@ static bool monsterCanCastSpells(Monster_t *monster, uint32_t spells) {
     }
 
     // Must be within certain range
-    if (monster->cdis > MAX_SPELL_DIS) {
+    if (monster->cdis > MON_MAX_SPELL_CAST_DISTANCE) {
         return false;
     }
 
@@ -1113,7 +1113,7 @@ void monsterExecuteCastingOfSpell(Monster_t *monster, int monster_id, int spell_
             spellTeleportAwayMonster(monster_id, 5);
             break;
         case 6: // Teleport Long
-            spellTeleportAwayMonster(monster_id, MAX_SIGHT);
+            spellTeleportAwayMonster(monster_id, MON_MAX_SIGHT);
             break;
         case 7: // Teleport To
             spellTeleportPlayerTo((int) monster->fy, (int) monster->fx);
@@ -1417,7 +1417,7 @@ static void monsterMultiplyCritter(Monster_t *monster, int monster_id, uint32_t 
         counter++;
     }
 
-    if (counter < 4 && randomNumber(counter * MON_MULT_ADJ) == 1) {
+    if (counter < 4 && randomNumber(counter * MON_MULTIPLY_ADJUST) == 1) {
         if (monsterMultiply((int) monster->fy, (int) monster->fx, (int) monster->mptr, monster_id)) {
             *rcmove |= CM_MULTIPLY;
         }
@@ -1525,7 +1525,7 @@ static void monsterMove(int monster_id, uint32_t *rcmove) {
     // Does the critter multiply?
     // rest could be negative, to be safe, only use mod with positive values.
     int rest_period = abs(py.flags.rest);
-    if ((creature->cmove & CM_MULTIPLY) && MAX_MON_MULT >= monster_multiply_total && (rest_period % MON_MULT_ADJ) == 0) {
+    if ((creature->cmove & CM_MULTIPLY) && MON_MAX_MULTIPLY_PER_LEVEL >= monster_multiply_total && (rest_period % MON_MULTIPLY_ADJUST) == 0) {
         monsterMultiplyCritter(monster, monster_id, rcmove);
     }
 
@@ -1700,7 +1700,7 @@ static void monsterAttackingUpdate(Monster_t *monster, int monster_id, int moves
 // Creatures movement and attacking are done from here -RAK-
 void updateMonsters(bool attack) {
     // Process the monsters
-    for (int id = next_free_monster_id - 1; id >= MIN_MONIX && !character_is_dead; id--) {
+    for (int id = next_free_monster_id - 1; id >= MON_MIN_INDEX_ID && !character_is_dead; id--) {
         Monster_t *monster = &monsters[id];
 
         // Get rid of an eaten/breathed on monster.  Note: Be sure not to

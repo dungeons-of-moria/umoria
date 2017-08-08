@@ -90,4 +90,4 @@ bool temporary_light_only    = false;  // Track if temporary light about player.
 int32_t character_max_score  = 0;      // Maximum score for a character
 
 // Creature arrays and variables
-Recall_t creature_recall[MAX_CREATURES]; // Monster memories
+Recall_t creature_recall[MON_MAX_CREATURES]; // Monster memories

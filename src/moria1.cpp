@@ -18,7 +18,7 @@ void playerChangeSpeed(int speed) {
     py.flags.speed += speed;
     py.flags.status |= PY_SPEED;
 
-    for (int i = next_free_monster_id - 1; i >= MIN_MONIX; i--) {
+    for (int i = next_free_monster_id - 1; i >= MON_MIN_INDEX_ID; i--) {
         monsters[i].cspeed += speed;
     }
 }

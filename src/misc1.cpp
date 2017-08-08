@@ -518,7 +518,7 @@ bool compactMonsters() {
 
     bool delete_any = false;
     while (!delete_any) {
-        for (int i = next_free_monster_id - 1; i >= MIN_MONIX; i--) {
+        for (int i = next_free_monster_id - 1; i >= MON_MIN_INDEX_ID; i--) {
             if (cur_dis < monsters[i].cdis && randomNumber(3) == 1) {
                 if (creatures_list[monsters[i].mptr].cmove & CM_WIN) {
                     // Never compact away the Balrog!!
@@ -582,7 +582,7 @@ void playerIngestFood(int amount) {
 // Returns a pointer to next free space -RAK-
 // Returns -1 if could not allocate a monster.
 static int popm() {
-    if (next_free_monster_id == MAX_MALLOC) {
+    if (next_free_monster_id == MON_TOTAL_ALLOCATIONS) {
         if (!compactMonsters()) {
             return -1;
         }
@@ -647,9 +647,9 @@ void monsterPlaceWinning() {
     do {
         y = randomNumber(dungeon_height - 2);
         x = randomNumber(dungeon_width - 2);
-    } while ((cave[y][x].fval >= MIN_CLOSED_SPACE) || (cave[y][x].cptr != 0) || (cave[y][x].tptr != 0) || (coordDistanceBetween(y, x, char_row, char_col) <= MAX_SIGHT));
+    } while ((cave[y][x].fval >= MIN_CLOSED_SPACE) || (cave[y][x].cptr != 0) || (cave[y][x].tptr != 0) || (coordDistanceBetween(y, x, char_row, char_col) <= MON_MAX_SIGHT));
 
-    int creature_id = randomNumber(WIN_MON_TOT) - 1 + monster_levels[MAX_MONS_LEVEL];
+    int creature_id = randomNumber(MON_ENDGAME_MONSTERS) - 1 + monster_levels[MON_MAX_LEVELS];
 
     // FIXME: duplicate code -MRC-
     // The following code is now exactly the same as monsterPlaceNew() except here
@@ -694,15 +694,15 @@ static int monsterGetOneSuitableForLevel(int level) {
         return randomNumber(monster_levels[0]) - 1;
     }
 
-    if (level > MAX_MONS_LEVEL) {
-        level = MAX_MONS_LEVEL;
+    if (level > MON_MAX_LEVELS) {
+        level = MON_MAX_LEVELS;
     }
 
-    if (randomNumber(MON_NASTY) == 1) {
+    if (randomNumber(MON_CHANCE_OF_NASTY) == 1) {
         level = level + abs(randomNumberNormalDistribution(0, 4)) + 1;
 
-        if (level > MAX_MONS_LEVEL) {
-            level = MAX_MONS_LEVEL;
+        if (level > MON_MAX_LEVELS) {
+            level = MON_MAX_LEVELS;
         }
     } else {
         // This code has been added to make it slightly more likely to get
@@ -774,14 +774,14 @@ static bool placeMonsterAdjacentTo(int monsterID, int *y, int *x, bool slp) {
 
 // Places creature adjacent to given location -RAK-
 bool monsterSummon(int *y, int *x, bool sleeping) {
-    int monster_id = monsterGetOneSuitableForLevel(current_dungeon_level + MON_SUMMON_ADJ);
+    int monster_id = monsterGetOneSuitableForLevel(current_dungeon_level + MON_SUMMONED_LEVEL_ADJUST);
     return placeMonsterAdjacentTo(monster_id, y, x, sleeping);
 }
 
 // Places undead adjacent to given location -RAK-
 bool monsterSummonUndead(int *y, int *x) {
     int monster_id;
-    int max_levels = monster_levels[MAX_MONS_LEVEL];
+    int max_levels = monster_levels[MON_MAX_LEVELS];
 
     do {
         monster_id = randomNumber(max_levels) - 1;

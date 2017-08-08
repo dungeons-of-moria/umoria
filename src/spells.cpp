@@ -56,7 +56,7 @@ bool monsterSleep(int y, int x) {
             vtype_t name;
             monsterNameDescription(name, monster->ml, creature->name);
 
-            if (randomNumber(MAX_MONS_LEVEL) < creature->level || (CD_NO_SLEEP & creature->cdefense)) {
+            if (randomNumber(MON_MAX_LEVELS) < creature->level || (CD_NO_SLEEP & creature->cdefense)) {
                 if (monster->ml && (creature->cdefense & CD_NO_SLEEP)) {
                     creature_recall[monster->mptr].r_cdefense |= CD_NO_SLEEP;
                 }
@@ -173,7 +173,7 @@ bool dungeonDetectSecretDoorsOnPanel() {
 bool spellDetectInvisibleCreaturesOnPanel() {
     bool detected = false;
 
-    for (int id = next_free_monster_id - 1; id >= MIN_MONIX; id--) {
+    for (int id = next_free_monster_id - 1; id >= MON_MIN_INDEX_ID; id--) {
         Monster_t *monster = &monsters[id];
 
         if (coordInsidePanel((int) monster->fy, (int) monster->fx) && (CM_INVISIBLE & creatures_list[monster->mptr].cmove)) {
@@ -336,7 +336,7 @@ bool spellIdentifyItem() {
 bool spellAggravateMonsters(int affect_distance) {
     bool aggravated = false;
 
-    for (int id = next_free_monster_id - 1; id >= MIN_MONIX; id--) {
+    for (int id = next_free_monster_id - 1; id >= MON_MIN_INDEX_ID; id--) {
         Monster_t *monster = &monsters[id];
         monster->csleep = 0;
 
@@ -458,7 +458,7 @@ bool spellDestroyAdjacentDoorsTraps() {
 bool spellDetectMonsters() {
     bool detected = false;
 
-    for (int id = next_free_monster_id - 1; id >= MIN_MONIX; id--) {
+    for (int id = next_free_monster_id - 1; id >= MON_MIN_INDEX_ID; id--) {
         Monster_t *monster = &monsters[id];
 
         if (coordInsidePanel((int) monster->fy, (int) monster->fx) && (CM_INVISIBLE & creatures_list[monster->mptr].cmove) == 0) {
@@ -1135,7 +1135,7 @@ bool spellSpeedMonster(int y, int x, int direction, int speed) {
                 changed = true;
 
                 printMonsterActionText(name, "starts moving faster.");
-            } else if (randomNumber(MAX_MONS_LEVEL) > creature->level) {
+            } else if (randomNumber(MON_MAX_LEVELS) > creature->level) {
                 monster->cspeed += speed;
                 monster->csleep = 0;
 
@@ -1179,7 +1179,7 @@ bool spellConfuseMonster(int y, int x, int direction) {
             vtype_t name;
             monsterNameDescription(name, monster->ml, creature->name);
 
-            if (randomNumber(MAX_MONS_LEVEL) < creature->level || (CD_NO_SLEEP & creature->cdefense)) {
+            if (randomNumber(MON_MAX_LEVELS) < creature->level || (CD_NO_SLEEP & creature->cdefense)) {
                 if (monster->ml && (creature->cdefense & CD_NO_SLEEP)) {
                     creature_recall[monster->mptr].r_cdefense |= CD_NO_SLEEP;
                 }
@@ -1235,7 +1235,7 @@ bool spellSleepMonster(int y, int x, int direction) {
             vtype_t name;
             monsterNameDescription(name, monster->ml, creature->name);
 
-            if (randomNumber(MAX_MONS_LEVEL) < creature->level || (CD_NO_SLEEP & creature->cdefense)) {
+            if (randomNumber(MON_MAX_LEVELS) < creature->level || (CD_NO_SLEEP & creature->cdefense)) {
                 if (monster->ml && (creature->cdefense & CD_NO_SLEEP)) {
                     creature_recall[monster->mptr].r_cdefense |= CD_NO_SLEEP;
                 }
@@ -1394,13 +1394,13 @@ bool spellPolymorphMonster(int y, int x, int direction) {
             Monster_t *monster = &monsters[tile->cptr];
             Creature_t *creature = &creatures_list[monster->mptr];
 
-            if (randomNumber(MAX_MONS_LEVEL) > creature->level) {
+            if (randomNumber(MON_MAX_LEVELS) > creature->level) {
                 finished = true;
 
                 dungeonDeleteMonster((int) tile->cptr);
 
                 // Place_monster() should always return true here.
-                morphed = monsterPlaceNew(y, x, randomNumber(monster_levels[MAX_MONS_LEVEL] - monster_levels[0]) - 1 + monster_levels[0], false);
+                morphed = monsterPlaceNew(y, x, randomNumber(monster_levels[MON_MAX_LEVELS] - monster_levels[0]) - 1 + monster_levels[0], false);
 
                 // don't test tile->fm here, only pl/tl
                 if (morphed && coordInsidePanel(y, x) && (tile->tl || tile->pl)) {
@@ -1598,7 +1598,7 @@ bool spellTeleportAwayMonsterInDirection(int y, int x, int direction) {
             // wake it up
             monsters[tile->cptr].csleep = 0;
 
-            spellTeleportAwayMonster((int) tile->cptr, MAX_SIGHT);
+            spellTeleportAwayMonster((int) tile->cptr, MON_MAX_SIGHT);
 
             teleported = true;
         }
@@ -1612,11 +1612,11 @@ bool spellTeleportAwayMonsterInDirection(int y, int x, int direction) {
 bool spellMassGenocide() {
     bool killed = false;
 
-    for (int id = next_free_monster_id - 1; id >= MIN_MONIX; id--) {
+    for (int id = next_free_monster_id - 1; id >= MON_MIN_INDEX_ID; id--) {
         Monster_t *monster = &monsters[id];
         Creature_t *creature = &creatures_list[monster->mptr];
 
-        if (monster->cdis <= MAX_SIGHT && (creature->cmove & CM_WIN) == 0) {
+        if (monster->cdis <= MON_MAX_SIGHT && (creature->cmove & CM_WIN) == 0) {
             killed = true;
             dungeonDeleteMonster(id);
         }
@@ -1636,7 +1636,7 @@ bool spellGenocide() {
 
     bool killed = false;
 
-    for (int id = next_free_monster_id - 1; id >= MIN_MONIX; id--) {
+    for (int id = next_free_monster_id - 1; id >= MON_MIN_INDEX_ID; id--) {
         Monster_t *monster = &monsters[id];
         Creature_t *creature = &creatures_list[monster->mptr];
 
@@ -1663,14 +1663,14 @@ bool spellGenocide() {
 bool spellSpeedAllMonsters(int speed) {
     bool speedy = false;
 
-    for (int id = next_free_monster_id - 1; id >= MIN_MONIX; id--) {
+    for (int id = next_free_monster_id - 1; id >= MON_MIN_INDEX_ID; id--) {
         Monster_t *monster = &monsters[id];
         Creature_t *creature = &creatures_list[monster->mptr];
 
         vtype_t name;
         monsterNameDescription(name, monster->ml, creature->name);
 
-        if (monster->cdis > MAX_SIGHT || !los(char_row, char_col, (int) monster->fy, (int) monster->fx)) {
+        if (monster->cdis > MON_MAX_SIGHT || !los(char_row, char_col, (int) monster->fy, (int) monster->fx)) {
             continue; // do nothing
         }
 
@@ -1682,7 +1682,7 @@ bool spellSpeedAllMonsters(int speed) {
                 speedy = true;
                 printMonsterActionText(name, "starts moving faster.");
             }
-        } else if (randomNumber(MAX_MONS_LEVEL) > creature->level) {
+        } else if (randomNumber(MON_MAX_LEVELS) > creature->level) {
             monster->cspeed += speed;
             monster->csleep = 0;
 
@@ -1703,18 +1703,18 @@ bool spellSpeedAllMonsters(int speed) {
 bool spellSleepAllMonsters() {
     bool asleep = false;
 
-    for (int id = next_free_monster_id - 1; id >= MIN_MONIX; id--) {
+    for (int id = next_free_monster_id - 1; id >= MON_MIN_INDEX_ID; id--) {
         Monster_t *monster = &monsters[id];
         Creature_t *creature = &creatures_list[monster->mptr];
 
         vtype_t name;
         monsterNameDescription(name, monster->ml, creature->name);
 
-        if (monster->cdis > MAX_SIGHT || !los(char_row, char_col, (int) monster->fy, (int) monster->fx)) {
+        if (monster->cdis > MON_MAX_SIGHT || !los(char_row, char_col, (int) monster->fy, (int) monster->fx)) {
             continue; // do nothing
         }
 
-        if (randomNumber(MAX_MONS_LEVEL) < creature->level || (CD_NO_SLEEP & creature->cdefense)) {
+        if (randomNumber(MON_MAX_LEVELS) < creature->level || (CD_NO_SLEEP & creature->cdefense)) {
             if (monster->ml) {
                 if (creature->cdefense & CD_NO_SLEEP) {
                     creature_recall[monster->mptr].r_cdefense |= CD_NO_SLEEP;
@@ -1738,10 +1738,10 @@ bool spellSleepAllMonsters() {
 bool spellMassPolymorph() {
     bool morphed = false;
 
-    for (int id = next_free_monster_id - 1; id >= MIN_MONIX; id--) {
+    for (int id = next_free_monster_id - 1; id >= MON_MIN_INDEX_ID; id--) {
         Monster_t *monster = &monsters[id];
 
-        if (monster->cdis <= MAX_SIGHT) {
+        if (monster->cdis <= MON_MAX_SIGHT) {
             Creature_t *creature = &creatures_list[monster->mptr];
 
             if ((creature->cmove & CM_WIN) == 0) {
@@ -1750,7 +1750,7 @@ bool spellMassPolymorph() {
                 dungeonDeleteMonster(id);
 
                 // Place_monster() should always return true here.
-                morphed = monsterPlaceNew(y, x, randomNumber(monster_levels[MAX_MONS_LEVEL] - monster_levels[0]) - 1 + monster_levels[0], false);
+                morphed = monsterPlaceNew(y, x, randomNumber(monster_levels[MON_MAX_LEVELS] - monster_levels[0]) - 1 + monster_levels[0], false);
             }
         }
     }
@@ -1762,7 +1762,7 @@ bool spellMassPolymorph() {
 bool spellDetectEvil() {
     bool detected = false;
 
-    for (int id = next_free_monster_id - 1; id >= MIN_MONIX; id--) {
+    for (int id = next_free_monster_id - 1; id >= MON_MIN_INDEX_ID; id--) {
         Monster_t *monster = &monsters[id];
 
         if (coordInsidePanel((int) monster->fy, (int) monster->fx) && (CD_EVIL & creatures_list[monster->mptr].cdefense)) {
@@ -1957,10 +1957,10 @@ void spellCreateFood() {
 bool spellDispelCreature(int creature_defense, int damage) {
     bool dispelled = false;
 
-    for (int id = next_free_monster_id - 1; id >= MIN_MONIX; id--) {
+    for (int id = next_free_monster_id - 1; id >= MON_MIN_INDEX_ID; id--) {
         Monster_t *monster = &monsters[id];
 
-        if (monster->cdis <= MAX_SIGHT && (creature_defense & creatures_list[monster->mptr].cdefense) && los(char_row, char_col, (int) monster->fy, (int) monster->fx)) {
+        if (monster->cdis <= MON_MAX_SIGHT && (creature_defense & creatures_list[monster->mptr].cdefense) && los(char_row, char_col, (int) monster->fy, (int) monster->fx)) {
             Creature_t *creature = &creatures_list[monster->mptr];
 
             creature_recall[monster->mptr].r_cdefense |= creature_defense;
@@ -1992,11 +1992,11 @@ bool spellDispelCreature(int creature_defense, int damage) {
 bool spellTurnUndead() {
     bool turned = false;
 
-    for (int id = next_free_monster_id - 1; id >= MIN_MONIX; id--) {
+    for (int id = next_free_monster_id - 1; id >= MON_MIN_INDEX_ID; id--) {
         Monster_t *monster = &monsters[id];
         Creature_t *creature = &creatures_list[monster->mptr];
 
-        if (monster->cdis <= MAX_SIGHT && (CD_UNDEAD & creature->cdefense) && los(char_row, char_col, (int) monster->fy, (int) monster->fx)) {
+        if (monster->cdis <= MON_MAX_SIGHT && (CD_UNDEAD & creature->cdefense) && los(char_row, char_col, (int) monster->fy, (int) monster->fx)) {
             vtype_t name;
             monsterNameDescription(name, monster->ml, creature->name);
 

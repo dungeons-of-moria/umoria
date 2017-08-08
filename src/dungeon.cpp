@@ -912,8 +912,8 @@ void playDungeon() {
         }
 
         // Check for creature generation
-        if (randomNumber(MAX_MALLOC_CHANCE) == 1) {
-            monsterPlaceNewWithinDistance(1, MAX_SIGHT, false);
+        if (randomNumber(MON_CHANCE_OF_NEW) == 1) {
+            monsterPlaceNewWithinDistance(1, MON_MAX_SIGHT, false);
         }
 
         playerUpdateLightStatus();
@@ -982,7 +982,7 @@ void playDungeon() {
         // creature.c when monsters try to multiply.  Compact_monsters() is
         // much more likely to succeed if called from here, than if called
         // from within updateMonsters().
-        if (MAX_MALLOC - next_free_monster_id < 10) {
+        if (MON_TOTAL_ALLOCATIONS - next_free_monster_id < 10) {
             (void) compactMonsters();
         }
 

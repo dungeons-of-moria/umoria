@@ -124,11 +124,11 @@ extern int16_t equipment_count;
 extern int16_t current_treasure_id;
 
 // Following are creature arrays and variables
-extern Creature_t creatures_list[MAX_CREATURES];
-extern Monster_t monsters[MAX_MALLOC];
-extern int16_t monster_levels[MAX_MONS_LEVEL + 1];
-extern MonsterAttack_t monster_attacks[N_MONS_ATTS];
-extern Recall_t creature_recall[MAX_CREATURES]; // Monster memories. -CJS-
+extern Creature_t creatures_list[MON_MAX_CREATURES];
+extern Monster_t monsters[MON_TOTAL_ALLOCATIONS];
+extern int16_t monster_levels[MON_MAX_LEVELS + 1];
+extern MonsterAttack_t monster_attacks[MON_ATTACK_TYPES];
+extern Recall_t creature_recall[MON_MAX_CREATURES]; // Monster memories. -CJS-
 extern Monster_t blank_monster;
 extern int16_t next_free_monster_id;
 extern int16_t monster_multiply_total;

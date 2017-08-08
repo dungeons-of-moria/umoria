@@ -147,7 +147,7 @@
 //  Area of affect (aaf) :  Max range that creature is able to
 //                          "notice" the player.
 
-Creature_t creatures_list[MAX_CREATURES] = {
+Creature_t creatures_list[MON_MAX_CREATURES] = {
         {"Filthy Street Urchin",      0x0012000AL, 0x00000000L, 0x2034,     0,  40,  4,   1, 11, 'p', {  1,  4}, { 72, 148,   0,   0},   0},
         {"Blubbering Idiot",          0x0012000AL, 0x00000000L, 0x2030,     0,   0,  6,   1, 11, 'p', {  1,  2}, { 79,   0,   0,   0},   0},
         {"Pitiful-Looking Beggar",    0x0012000AL, 0x00000000L, 0x2030,     0,  40, 10,   1, 11, 'p', {  1,  4}, { 72,   0,   0,   0},   0},
@@ -439,7 +439,7 @@ Creature_t creatures_list[MAX_CREATURES] = {
 };
 
 // ERROR: attack #35 is no longer used
-MonsterAttack_t monster_attacks[MONSTER_ATTACK_TYPES] = {
+MonsterAttack_t monster_attacks[MON_ATTACK_TYPES] = {
         // 0
         {0, 0, 0, 0},
         {1, 1, 1, 2},
@@ -669,8 +669,8 @@ MonsterAttack_t monster_attacks[MONSTER_ATTACK_TYPES] = {
         {24, 5, 0, 0},
 };
 
-Monster_t monsters[MAX_MALLOC];
-int16_t monster_levels[MAX_MONS_LEVEL + 1];
+Monster_t monsters[MON_TOTAL_ALLOCATIONS];
+int16_t monster_levels[MON_MAX_LEVELS + 1];
 
 // Values for a blank monster
 Monster_t blank_monster = {0, 0, 0, 0, 0, 0, 0, false, 0, 0};
