@@ -135,7 +135,7 @@ extern int16_t monster_multiply_total;
 
 // Following are arrays for descriptive pieces
 extern const char *colors[MAX_COLORS];
-extern const char *mushrooms[MAX_MUSH];
+extern const char *mushrooms[MAX_MUSHROOMS];
 extern const char *woods[MAX_WOODS];
 extern const char *metals[MAX_METALS];
 extern const char *rocks[MAX_ROCKS];

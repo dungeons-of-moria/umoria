@@ -106,7 +106,7 @@ const char *colors[MAX_COLORS] = {
         "Tangerine", "Violet", "Vermilion", "White", "Yellow",
 };
 
-const char *mushrooms[MAX_MUSH] = {
+const char *mushrooms[MAX_MUSHROOMS] = {
         "Blue", "Black", "Black Spotted", "Brown", "Dark Blue", "Dark Green", "Dark Red",
         "Ecru", "Furry", "Green", "Grey", "Light Blue", "Light Green", "Plaid", "Red",
         "Slimy", "Tan", "White", "White Spotted", "Wooden", "Wrinkled", "Yellow",

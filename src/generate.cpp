@@ -306,7 +306,7 @@ static void dungeonPlaceVaultTrap(int y, int x, int yd, int xd, int number) {
             int x1 = x - xd - 1 + randomNumber(2 * xd + 1);
 
             if (cave[y1][x1].fval != NULL_WALL && cave[y1][x1].fval <= MAX_CAVE_FLOOR && cave[y1][x1].tptr == 0) {
-                dungeonSetTrap(y1, x1, randomNumber(MAX_TRAP) - 1);
+                dungeonSetTrap(y1, x1, randomNumber(MAX_TRAPS) - 1);
                 placed = true;
             }
         }

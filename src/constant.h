@@ -142,13 +142,13 @@ constexpr uint8_t MON_MAX_ATTACKS = 4;                // Max num attacks (used i
 constexpr uint8_t MON_MIN_INDEX_ID = 2;               // Minimum index in m_list (1 = py, 0 = no mon)
 
 // Trap constants
-constexpr uint8_t MAX_TRAP = 18; // Number of defined traps
+constexpr uint8_t MAX_TRAPS = 18; // Number of defined traps
 
 constexpr uint8_t SCARE_MONSTER = 99;
 
 // Descriptive constants
 constexpr uint8_t MAX_COLORS = 49;     // Used with potions
-constexpr uint8_t MAX_MUSH = 22;       // Used with mushrooms
+constexpr uint8_t MAX_MUSHROOMS = 22;  // Used with mushrooms
 constexpr uint8_t MAX_WOODS = 25;      // Used with staffs
 constexpr uint8_t MAX_METALS = 25;     // Used with wands
 constexpr uint8_t MAX_ROCKS = 32;      // Used with rings

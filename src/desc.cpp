@@ -73,8 +73,8 @@ void magicInitializeItemNames() {
         amulets[id] = amulet;
     }
 
-    for (int i = 0; i < MAX_MUSH; i++) {
-        id = randomNumber(MAX_MUSH) - 1;
+    for (int i = 0; i < MAX_MUSHROOMS; i++) {
+        id = randomNumber(MAX_MUSHROOMS) - 1;
         const char *mushroom = mushrooms[i];
         mushrooms[i] = mushrooms[id];
         mushrooms[id] = mushroom;
@@ -125,7 +125,7 @@ int16_t objectPositionOffset(Inventory_t *item) {
         case TV_POTION2:
             return 5;
         case TV_FOOD:
-            if ((item->subval & (ITEM_SINGLE_STACK_MIN - 1)) < MAX_MUSH) {
+            if ((item->subval & (ITEM_SINGLE_STACK_MIN - 1)) < MAX_MUSHROOMS) {
                 return 6;
             }
             return -1;

@@ -97,7 +97,7 @@ static int32_t getPotionScrollBuyPrice(Inventory_t *item) {
 }
 
 static int32_t getFoodBuyPrice(Inventory_t *item) {
-    if (item->subval < ITEM_SINGLE_STACK_MIN + MAX_MUSH && !itemSetColorlessAsIdentifed(item)) {
+    if (item->subval < ITEM_SINGLE_STACK_MIN + MAX_MUSHROOMS && !itemSetColorlessAsIdentifed(item)) {
         return 1;
     }
 

@@ -137,7 +137,7 @@ void dungeonAllocateAndPlaceObject(bool (*set_function)(int), int object_type, i
 
         switch (object_type) {
             case 1:
-                dungeonSetTrap(y, x, randomNumber(MAX_TRAP) - 1);
+                dungeonSetTrap(y, x, randomNumber(MAX_TRAPS) - 1);
                 break;
             case 2:
                 // NOTE: object_type == 2 is no longer used - it used to be visible traps.

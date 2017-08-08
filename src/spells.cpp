@@ -372,7 +372,7 @@ bool spellSurroundPlayerWithTraps() {
                     (void) dungeonDeleteObject(y, x);
                 }
 
-                dungeonSetTrap(y, x, randomNumber(MAX_TRAP) - 1);
+                dungeonSetTrap(y, x, randomNumber(MAX_TRAPS) - 1);
 
                 // don't let player gain exp from the newly created traps
                 treasure_list[tile->tptr].p1 = 0;
