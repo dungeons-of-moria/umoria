@@ -2,6 +2,10 @@
 
 ## HEAD
 
+### Code
+
+- Rename many constants for better clarity on their purpose.
+
 
 
 ## 5.7.4 (2017-08-06)
