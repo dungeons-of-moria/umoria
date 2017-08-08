@@ -894,7 +894,7 @@ bool magicShouldBeEnchanted(int chance) {
 
 // Enchant a bonus based on degree desired -RAK-
 int magicEnchantmentBonus(int base, int max_standard, int level) {
-    int stand_deviation = (OBJ_STD_ADJ * level / 100) + OBJ_STD_MIN;
+    int stand_deviation = (LEVEL_STD_OBJECT_ADJUST * level / 100) + LEVEL_MIN_OBJECT_STD;
 
     // Check for level > max_standard since that may have generated an overflow.
     if (stand_deviation > max_standard || level > max_standard) {

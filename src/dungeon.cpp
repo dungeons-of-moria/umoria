@@ -2196,13 +2196,13 @@ static void inventoryRefillLamp() {
     Inventory_t *item = &inventory[INVEN_LIGHT];
     item->p1 += inventory[item_pos_start].p1;
 
-    if (item->p1 > OBJ_LAMP_MAX) {
-        item->p1 = OBJ_LAMP_MAX;
+    if (item->p1 > OBJECT_LAMP_MAX_CAPACITY) {
+        item->p1 = OBJECT_LAMP_MAX_CAPACITY;
         printMessage("Your lamp overflows, spilling oil on the ground.");
         printMessage("Your lamp is full.");
-    } else if (item->p1 > OBJ_LAMP_MAX / 2) {
+    } else if (item->p1 > OBJECT_LAMP_MAX_CAPACITY / 2) {
         printMessage("Your lamp is more than half full.");
-    } else if (item->p1 == OBJ_LAMP_MAX / 2) {
+    } else if (item->p1 == OBJECT_LAMP_MAX_CAPACITY / 2) {
         printMessage("Your lamp is half full.");
     } else {
         printMessage("Your lamp is less than half full.");

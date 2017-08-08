@@ -514,7 +514,7 @@ void spellLightLine(int x, int y, int direction) {
     while (!finished) {
         Cave_t *tile = &cave[y][x];
 
-        if (distance > OBJ_BOLT_RANGE || tile->fval >= MIN_CLOSED_SPACE) {
+        if (distance > OBJECT_BOLTS_MAX_RANGE || tile->fval >= MIN_CLOSED_SPACE) {
             (void) playerMovePosition(direction, &y, &x);
             finished = true;
             continue; // we're done here, break out of the loop
@@ -600,7 +600,7 @@ bool spellDisarmAllInDirection(int y, int x, int direction) {
         (void) playerMovePosition(direction, &y, &x);
 
         distance++;
-    } while (distance <= OBJ_BOLT_RANGE && tile->fval <= MAX_OPEN_SPACE);
+    } while (distance <= OBJECT_BOLTS_MAX_RANGE && tile->fval <= MAX_OPEN_SPACE);
 
     return disarmed;
 }
@@ -713,7 +713,7 @@ void spellFireBolt(int y, int x, int direction, int damage_hp, int spell_type, c
 
         dungeonLiteSpot(old_y, old_x);
 
-        if (distance > OBJ_BOLT_RANGE || tile->fval >= MIN_CLOSED_SPACE) {
+        if (distance > OBJECT_BOLTS_MAX_RANGE || tile->fval >= MIN_CLOSED_SPACE) {
             finished = true;
             continue; // we're done here, break out of the loop
         }
@@ -753,7 +753,7 @@ void spellFireBall(int y, int x, int direction, int damage_hp, int spell_type, c
 
         dungeonLiteSpot(old_y, old_x);
 
-        if (distance > OBJ_BOLT_RANGE) {
+        if (distance > OBJECT_BOLTS_MAX_RANGE) {
             finished = true;
             continue;
         }
@@ -1029,7 +1029,7 @@ bool spellChangeMonsterHitPoints(int y, int x, int direction, int damage_hp) {
 
         Cave_t *tile = &cave[y][x];
 
-        if (distance > OBJ_BOLT_RANGE || tile->fval >= MIN_CLOSED_SPACE) {
+        if (distance > OBJECT_BOLTS_MAX_RANGE || tile->fval >= MIN_CLOSED_SPACE) {
             finished = true;
             continue;
         }
@@ -1069,7 +1069,7 @@ bool spellDrainLifeFromMonster(int y, int x, int direction) {
 
         Cave_t *tile = &cave[y][x];
 
-        if (distance > OBJ_BOLT_RANGE || tile->fval >= MIN_CLOSED_SPACE) {
+        if (distance > OBJECT_BOLTS_MAX_RANGE || tile->fval >= MIN_CLOSED_SPACE) {
             finished = true;
             continue;
         }
@@ -1114,7 +1114,7 @@ bool spellSpeedMonster(int y, int x, int direction, int speed) {
 
         Cave_t *tile = &cave[y][x];
 
-        if (distance > OBJ_BOLT_RANGE || tile->fval >= MIN_CLOSED_SPACE) {
+        if (distance > OBJECT_BOLTS_MAX_RANGE || tile->fval >= MIN_CLOSED_SPACE) {
             finished = true;
             continue;
         }
@@ -1165,7 +1165,7 @@ bool spellConfuseMonster(int y, int x, int direction) {
 
         Cave_t *tile = &cave[y][x];
 
-        if (distance > OBJ_BOLT_RANGE || tile->fval >= MIN_CLOSED_SPACE) {
+        if (distance > OBJECT_BOLTS_MAX_RANGE || tile->fval >= MIN_CLOSED_SPACE) {
             finished = true;
             continue;
         }
@@ -1221,7 +1221,7 @@ bool spellSleepMonster(int y, int x, int direction) {
 
         Cave_t *tile = &cave[y][x];
 
-        if (distance > OBJ_BOLT_RANGE || tile->fval >= MIN_CLOSED_SPACE) {
+        if (distance > OBJECT_BOLTS_MAX_RANGE || tile->fval >= MIN_CLOSED_SPACE) {
             finished = true;
             continue;
         }
@@ -1267,7 +1267,7 @@ bool spellWallToMud(int y, int x, int direction) {
         Cave_t *tile = &cave[y][x];
 
         // note, this ray can move through walls as it turns them to mud
-        if (distance == OBJ_BOLT_RANGE) {
+        if (distance == OBJECT_BOLTS_MAX_RANGE) {
             finished = true;
         }
 
@@ -1367,7 +1367,7 @@ bool spellDestroyDoorsTrapsInDirection(int y, int x, int direction) {
                 spellItemIdentifyAndRemoveRandomInscription(item);
             }
         }
-    } while ((distance <= OBJ_BOLT_RANGE) || tile->fval <= MAX_OPEN_SPACE);
+    } while ((distance <= OBJECT_BOLTS_MAX_RANGE) || tile->fval <= MAX_OPEN_SPACE);
 
     return destroyed;
 }
@@ -1385,7 +1385,7 @@ bool spellPolymorphMonster(int y, int x, int direction) {
 
         Cave_t *tile = &cave[y][x];
 
-        if (distance > OBJ_BOLT_RANGE || tile->fval >= MIN_CLOSED_SPACE) {
+        if (distance > OBJECT_BOLTS_MAX_RANGE || tile->fval >= MIN_CLOSED_SPACE) {
             finished = true;
             continue;
         }
@@ -1429,7 +1429,7 @@ bool spellBuildWall(int y, int x, int direction) {
 
         Cave_t *tile = &cave[y][x];
 
-        if (distance > OBJ_BOLT_RANGE || tile->fval >= MIN_CLOSED_SPACE) {
+        if (distance > OBJECT_BOLTS_MAX_RANGE || tile->fval >= MIN_CLOSED_SPACE) {
             finished = true;
             continue; // we're done here, break out of the loop
         }
@@ -1494,7 +1494,7 @@ bool spellCloneMonster(int y, int x, int direction) {
 
         Cave_t *tile = &cave[y][x];
 
-        if (distance > OBJ_BOLT_RANGE || tile->fval >= MIN_CLOSED_SPACE) {
+        if (distance > OBJECT_BOLTS_MAX_RANGE || tile->fval >= MIN_CLOSED_SPACE) {
             finished = true;
         } else if (tile->cptr > 1) {
             monsters[tile->cptr].csleep = 0;
@@ -1589,7 +1589,7 @@ bool spellTeleportAwayMonsterInDirection(int y, int x, int direction) {
 
         Cave_t *tile = &cave[y][x];
 
-        if (distance > OBJ_BOLT_RANGE || tile->fval >= MIN_CLOSED_SPACE) {
+        if (distance > OBJECT_BOLTS_MAX_RANGE || tile->fval >= MIN_CLOSED_SPACE) {
             finished = true;
             continue;
         }

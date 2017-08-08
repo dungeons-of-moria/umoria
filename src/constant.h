@@ -104,18 +104,18 @@ constexpr uint8_t LEVEL_TOTAL_GOLD_AND_GEMS = 2;  // Amount of gold (and gems)
 
 // Magic Treasure Generation constants
 // Note: Number of special objects, and degree of enchantments can be adjusted here.
-constexpr uint8_t OBJ_STD_ADJ = 125;   // Adjust STD per level * 100
-constexpr uint8_t OBJ_STD_MIN = 7;     // Minimum STD
-constexpr uint8_t OBJ_TOWN_LEVEL = 7;  // Town object generation level
-constexpr uint8_t OBJ_BASE_MAGIC = 15; // Base amount of magic
-constexpr uint8_t OBJ_BASE_MAX = 70;   // Max amount of magic
-constexpr uint8_t OBJ_DIV_SPECIAL = 6; // magic_chance/# special magic
-constexpr uint8_t OBJ_DIV_CURSED = 13; // 10*magic_chance/# cursed items
+constexpr uint8_t LEVEL_STD_OBJECT_ADJUST = 125; // Adjust STD per level * 100
+constexpr uint8_t LEVEL_MIN_OBJECT_STD = 7;      // Minimum STD
+constexpr uint8_t LEVEL_TOWN_OBJECTS = 7;        // Town object generation level
+constexpr uint8_t OBJECT_BASE_MAGIC = 15;        // Base amount of magic
+constexpr uint8_t OBJECT_MAX_BASE_MAGIC = 70;    // Max amount of magic
+constexpr uint8_t OBJECT_CHANCE_SPECIAL = 6;     // magic_chance/# special magic
+constexpr uint8_t OBJECT_CHANCE_CURSED = 13;     // 10*magic_chance/# cursed items
 
 // Constants describing limits of certain objects
-constexpr uint16_t OBJ_LAMP_MAX = 15000; // Maximum amount that lamp can be filled
-constexpr uint8_t OBJ_BOLT_RANGE = 18;   // Maximum range of bolts and balls
-constexpr uint16_t OBJ_RUNE_PROT = 3000; // Rune of protection resistance
+constexpr uint16_t OBJECT_LAMP_MAX_CAPACITY = 15000; // Maximum amount that lamp can be filled
+constexpr uint8_t OBJECT_BOLTS_MAX_RANGE = 18;       // Maximum range of bolts and balls
+constexpr uint16_t OBJECTS_RUNE_PROTECTION = 3000;   // Rune of protection resistance
 
 // Creature constants
 constexpr uint16_t MAX_CREATURES = 279; // Number of creatures defined for univ

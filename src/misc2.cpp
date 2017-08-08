@@ -779,13 +779,13 @@ static void cursedProjectiles(Inventory_t *t_ptr, int level) {
 // Chance of treasure having magic abilities -RAK-
 // Chance increases with each dungeon level
 void magicTreasureMagicalAbility(int item_id, int level) {
-    int chance = OBJ_BASE_MAGIC + level;
-    if (chance > OBJ_BASE_MAX) {
-        chance = OBJ_BASE_MAX;
+    int chance = OBJECT_BASE_MAGIC + level;
+    if (chance > OBJECT_MAX_BASE_MAGIC) {
+        chance = OBJECT_MAX_BASE_MAGIC;
     }
 
-    int special = chance / OBJ_DIV_SPECIAL;
-    int cursed = (10 * chance) / OBJ_DIV_CURSED;
+    int special = chance / OBJECT_CHANCE_SPECIAL;
+    int cursed = (10 * chance) / OBJECT_CHANCE_CURSED;
 
     int magicAmount;
 
