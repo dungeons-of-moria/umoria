@@ -211,8 +211,8 @@ static void writeCharacterSheetToFile(FILE *file1) {
     (void) fprintf(file1, "    Cur Mana%8s %6d\n", colon, py.misc.cmana);
     (void) fprintf(file1, "%28sGold%8s %7d\n\n", blank, colon, py.misc.au);
 
-    int xbth = py.misc.bth + py.misc.ptohit * BTH_PLUS_ADJ + (class_level_adj[py.misc.pclass][CLA_BTH] * py.misc.lev);
-    int xbthb = py.misc.bthb + py.misc.ptohit * BTH_PLUS_ADJ + (class_level_adj[py.misc.pclass][CLA_BTHB] * py.misc.lev);
+    int xbth = py.misc.bth + py.misc.ptohit * BTH_PER_PLUS_TO_HIT_ADJUST + (class_level_adj[py.misc.pclass][CLASS_BTH] * py.misc.lev);
+    int xbthb = py.misc.bthb + py.misc.ptohit * BTH_PER_PLUS_TO_HIT_ADJUST + (class_level_adj[py.misc.pclass][CLASS_BTHB] * py.misc.lev);
 
     // this results in a range from 0 to 29
     int xfos = 40 - py.misc.fos;
@@ -223,9 +223,9 @@ static void writeCharacterSheetToFile(FILE *file1) {
 
     // this results in a range from 0 to 9
     int xstl = py.misc.stl + 1;
-    int xdis = py.misc.disarm + 2 * playerDisarmAdjustment() + playerStatAdjustmentWisdomIntelligence(A_INT) + (class_level_adj[py.misc.pclass][CLA_DISARM] * py.misc.lev / 3);
-    int xsave = py.misc.save + playerStatAdjustmentWisdomIntelligence(A_WIS) + (class_level_adj[py.misc.pclass][CLA_SAVE] * py.misc.lev / 3);
-    int xdev = py.misc.save + playerStatAdjustmentWisdomIntelligence(A_INT) + (class_level_adj[py.misc.pclass][CLA_DEVICE] * py.misc.lev / 3);
+    int xdis = py.misc.disarm + 2 * playerDisarmAdjustment() + playerStatAdjustmentWisdomIntelligence(A_INT) + (class_level_adj[py.misc.pclass][CLASS_DISARM] * py.misc.lev / 3);
+    int xsave = py.misc.save + playerStatAdjustmentWisdomIntelligence(A_WIS) + (class_level_adj[py.misc.pclass][CLASS_SAVE] * py.misc.lev / 3);
+    int xdev = py.misc.save + playerStatAdjustmentWisdomIntelligence(A_INT) + (class_level_adj[py.misc.pclass][CLASS_DEVICE] * py.misc.lev / 3);
 
     vtype_t xinfra;
     (void) sprintf(xinfra, "%d feet", py.flags.see_infra * 10);

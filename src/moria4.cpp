@@ -185,7 +185,7 @@ static int playerTrapDisarmAbility() {
     ability += 2;
     ability *= playerDisarmAdjustment();
     ability += playerStatAdjustmentWisdomIntelligence(A_INT);
-    ability += class_level_adj[py.misc.pclass][CLA_DISARM] * py.misc.lev / 3;
+    ability += class_level_adj[py.misc.pclass][CLASS_DISARM] * py.misc.lev / 3;
 
     if (py.flags.blind > 0 || playerNoLight()) {
         ability = ability / 10;
@@ -920,11 +920,11 @@ void playerThrowItem() {
                 // off most bonuses, and reduce bthb depending on distance.
                 if (!m_ptr->ml) {
                     tbth /= current_distance + 2;
-                    tbth -= py.misc.lev * class_level_adj[py.misc.pclass][CLA_BTHB] / 2;
-                    tbth -= tpth * (BTH_PLUS_ADJ - 1);
+                    tbth -= py.misc.lev * class_level_adj[py.misc.pclass][CLASS_BTHB] / 2;
+                    tbth -= tpth * (BTH_PER_PLUS_TO_HIT_ADJUST - 1);
                 }
 
-                if (playerTestBeingHit(tbth, (int) py.misc.lev, tpth, (int) creatures_list[m_ptr->mptr].ac, CLA_BTHB)) {
+                if (playerTestBeingHit(tbth, (int) py.misc.lev, tpth, (int) creatures_list[m_ptr->mptr].ac, CLASS_BTHB)) {
                     int damage = m_ptr->mptr;
 
                     obj_desc_t description, msg;
@@ -941,7 +941,7 @@ void playerThrowItem() {
                     printMessage(msg);
 
                     tdam = itemMagicAbilityDamage(&thrown_item, tdam, damage);
-                    tdam = playerWeaponCriticalBlow((int) thrown_item.weight, tpth, tdam, CLA_BTHB);
+                    tdam = playerWeaponCriticalBlow((int) thrown_item.weight, tpth, tdam, CLASS_BTHB);
 
                     if (tdam < 0) {
                         tdam = 0;
@@ -1002,17 +1002,17 @@ static void playerBashAttack(int y, int x) {
 
     if (!monster->ml) {
         base_to_hit /= 2;
-        base_to_hit -= py.stats.use_stat[A_DEX] * (BTH_PLUS_ADJ - 1);
-        base_to_hit -= py.misc.lev * class_level_adj[py.misc.pclass][CLA_BTH] / 2;
+        base_to_hit -= py.stats.use_stat[A_DEX] * (BTH_PER_PLUS_TO_HIT_ADJUST - 1);
+        base_to_hit -= py.misc.lev * class_level_adj[py.misc.pclass][CLASS_BTH] / 2;
     }
 
-    if (playerTestBeingHit(base_to_hit, (int) py.misc.lev, (int) py.stats.use_stat[A_DEX], (int) creature->ac, CLA_BTH)) {
+    if (playerTestBeingHit(base_to_hit, (int) py.misc.lev, (int) py.stats.use_stat[A_DEX], (int) creature->ac, CLASS_BTH)) {
         vtype_t msg;
         (void) sprintf(msg, "You hit %s.", name);
         printMessage(msg);
 
         int damage = dicePlayerDamageRoll(inventory[INVEN_ARM].damage);
-        damage = playerWeaponCriticalBlow(inventory[INVEN_ARM].weight / 4 + py.stats.use_stat[A_STR], 0, damage, CLA_BTH);
+        damage = playerWeaponCriticalBlow(inventory[INVEN_ARM].weight / 4 + py.stats.use_stat[A_STR], 0, damage, CLASS_BTH);
         damage += py.misc.wt / 60;
         damage += 3;
 

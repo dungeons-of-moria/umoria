@@ -92,7 +92,7 @@ extern Background_t character_backgrounds[PLAYER_MAX_BACKGROUNDS];
 extern uint8_t race_gold_adjustments[PLAYER_MAX_RACES][PLAYER_MAX_RACES];
 
 extern Class_t classes[PLAYER_MAX_CLASSES];
-extern int16_t class_level_adj[PLAYER_MAX_CLASSES][MAX_LEV_ADJ];
+extern int16_t class_level_adj[PLAYER_MAX_CLASSES][CLASS_MAX_LEVEL_ADJUST];
 extern uint16_t class_base_provisions[PLAYER_MAX_CLASSES][5];
 
 // Warriors don't have spells, so there is no entry for them.

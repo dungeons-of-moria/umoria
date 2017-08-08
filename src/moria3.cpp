@@ -23,7 +23,7 @@ static void trapOpenPit(Inventory_t *t_ptr, int dam) {
 }
 
 static void trapArrow(Inventory_t *t_ptr, int dam) {
-    if (playerTestBeingHit(125, 0, 0, py.misc.pac + py.misc.ptoac, CLA_MISC_HIT)) {
+    if (playerTestBeingHit(125, 0, 0, py.misc.pac + py.misc.ptoac, CLASS_MISC_HIT)) {
         obj_desc_t description;
         itemDescription(description, t_ptr, true);
         playerTakesHit(dam, description);
@@ -92,7 +92,7 @@ static void trapHiddenObject(int y, int x) {
 }
 
 static void trapStrengthDart(Inventory_t *t_ptr, int dam) {
-    if (playerTestBeingHit(125, 0, 0, py.misc.pac + py.misc.ptoac, CLA_MISC_HIT)) {
+    if (playerTestBeingHit(125, 0, 0, py.misc.pac + py.misc.ptoac, CLASS_MISC_HIT)) {
         if (!py.flags.sustain_str) {
             (void) playerStatRandomDecrease(A_STR);
 
@@ -181,7 +181,7 @@ static void trapConfuseGas() {
 }
 
 static void trapSlowDart(Inventory_t *t_ptr, int dam) {
-    if (playerTestBeingHit(125, 0, 0, py.misc.pac + py.misc.ptoac, CLA_MISC_HIT)) {
+    if (playerTestBeingHit(125, 0, 0, py.misc.pac + py.misc.ptoac, CLASS_MISC_HIT)) {
         obj_desc_t description;
         itemDescription(description, t_ptr, true);
         playerTakesHit(dam, description);
@@ -199,7 +199,7 @@ static void trapSlowDart(Inventory_t *t_ptr, int dam) {
 }
 
 static void trapConstitutionDart(Inventory_t *t_ptr, int dam) {
-    if (playerTestBeingHit(125, 0, 0, py.misc.pac + py.misc.ptoac, CLA_MISC_HIT)) {
+    if (playerTestBeingHit(125, 0, 0, py.misc.pac + py.misc.ptoac, CLASS_MISC_HIT)) {
         if (!py.flags.sustain_con) {
             (void) playerStatRandomDecrease(A_CON);
 
@@ -784,8 +784,8 @@ static int playerCalculateBaseToHit(bool creatureLit, int tot_tohit) {
     int bth;
 
     bth = py.misc.bth / 2;
-    bth -= tot_tohit * (BTH_PLUS_ADJ - 1);
-    bth -= py.misc.lev * class_level_adj[py.misc.pclass][CLA_BTH] / 2;
+    bth -= tot_tohit * (BTH_PER_PLUS_TO_HIT_ADJUST - 1);
+    bth -= py.misc.lev * class_level_adj[py.misc.pclass][CLASS_BTH] / 2;
 
     return bth;
 }
@@ -819,7 +819,7 @@ static void playerAttackMonster(int y, int x) {
     // Loop for number of blows, trying to hit the critter.
     // Note: blows will always be greater than 0 at the start of the loop -MRC-
     for (int i = blows; i > 0; i--) {
-        if (!playerTestBeingHit(base_to_hit, (int) py.misc.lev, total_to_hit, (int) creature->ac, CLA_BTH)) {
+        if (!playerTestBeingHit(base_to_hit, (int) py.misc.lev, total_to_hit, (int) creature->ac, CLASS_BTH)) {
             (void) sprintf(msg, "You miss %s.", name);
             printMessage(msg);
             continue;
@@ -831,11 +831,11 @@ static void playerAttackMonster(int y, int x) {
         if (item->tval != TV_NOTHING) {
             damage = dicePlayerDamageRoll(item->damage);
             damage = itemMagicAbilityDamage(item, damage, monster->mptr);
-            damage = playerWeaponCriticalBlow((int) item->weight, total_to_hit, damage, CLA_BTH);
+            damage = playerWeaponCriticalBlow((int) item->weight, total_to_hit, damage, CLASS_BTH);
         } else {
             // Bare hands!?
             damage = diceDamageRoll(1, 1);
-            damage = playerWeaponCriticalBlow(1, 0, damage, CLA_BTH);
+            damage = playerWeaponCriticalBlow(1, 0, damage, CLASS_BTH);
         }
 
         damage += py.misc.ptodam;
@@ -1114,7 +1114,7 @@ static int16_t playerLockPickingSkill() {
     skill += 2;
     skill *= playerDisarmAdjustment();
     skill += playerStatAdjustmentWisdomIntelligence(A_INT);
-    skill += class_level_adj[py.misc.pclass][CLA_DISARM] * py.misc.lev / 3;
+    skill += class_level_adj[py.misc.pclass][CLASS_DISARM] * py.misc.lev / 3;
 
     return skill;
 }
