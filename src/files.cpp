@@ -250,29 +250,29 @@ static void writeCharacterSheetToFile(FILE *file1) {
 
 static const char *equipmentPlacementDescription(int itemID) {
     switch (itemID) {
-        case INVEN_WIELD:
+        case EQUIPMENT_WIELD:
             return "You are wielding";
-        case INVEN_HEAD:
+        case EQUIPMENT_HEAD:
             return "Worn on head";
-        case INVEN_NECK:
+        case EQUIPMENT_NECK:
             return "Worn around neck";
-        case INVEN_BODY:
+        case EQUIPMENT_BODY:
             return "Worn on body";
-        case INVEN_ARM:
+        case EQUIPMENT_ARM:
             return "Worn on shield arm";
-        case INVEN_HANDS:
+        case EQUIPMENT_HANDS:
             return "Worn on hands";
-        case INVEN_RIGHT:
+        case EQUIPMENT_RIGHT:
             return "Right ring finger";
-        case INVEN_LEFT:
+        case EQUIPMENT_LEFT:
             return "Left  ring finger";
-        case INVEN_FEET:
+        case EQUIPMENT_FEET:
             return "Worn on feet";
-        case INVEN_OUTER:
+        case EQUIPMENT_OUTER:
             return "Worn about body";
-        case INVEN_LIGHT:
+        case EQUIPMENT_LIGHT:
             return "Light source is";
-        case INVEN_AUX:
+        case EQUIPMENT_AUX:
             return "Secondary weapon";
         default:
             return "*Unknown value*";
@@ -291,7 +291,7 @@ static void writeEquipmentListToFile(FILE *file1) {
     obj_desc_t description;
     int itemSlotID = 0;
 
-    for (int i = INVEN_WIELD; i < PLAYER_INVENTORY_SIZE; i++) {
+    for (int i = EQUIPMENT_WIELD; i < PLAYER_INVENTORY_SIZE; i++) {
         if (inventory[i].tval == TV_NOTHING) {
             continue;
         }

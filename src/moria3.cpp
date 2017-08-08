@@ -796,7 +796,7 @@ static void playerAttackMonster(int y, int x) {
 
     Monster_t *monster = &monsters[creature_id];
     Creature_t *creature = &creatures_list[monster->mptr];
-    Inventory_t *item = &inventory[INVEN_WIELD];
+    Inventory_t *item = &inventory[EQUIPMENT_WIELD];
 
     monster->csleep = 0;
 

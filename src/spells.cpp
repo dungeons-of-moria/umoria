@@ -321,7 +321,7 @@ bool spellIdentifyItem() {
     itemDescription(description, item, true);
 
     obj_desc_t msg;
-    if (item_id >= INVEN_WIELD) {
+    if (item_id >= EQUIPMENT_WIELD) {
         playerRecalculateBonuses();
         (void) sprintf(msg, "%s: %s", playerItemWearingDescription(item_id), description);
     } else {
@@ -2247,7 +2247,7 @@ bool spellEnchantItem(int16_t *plusses, int16_t max_bonus_limit) {
 bool spellRemoveCurseFromAllItems() {
     bool removed = false;
 
-    for (int id = INVEN_WIELD; id <= INVEN_OUTER; id++) {
+    for (int id = EQUIPMENT_WIELD; id <= EQUIPMENT_OUTER; id++) {
         if (TR_CURSED & inventory[id].flags) {
             inventory[id].flags &= ~TR_CURSED;
             playerRecalculateBonuses();

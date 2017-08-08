@@ -928,7 +928,7 @@ static bool storeSellAnItem(int store_id, int *current_top_item_id) {
     int first_item = inventory_count;
     int last_item = -1;
 
-    char mask[INVEN_WIELD];
+    char mask[EQUIPMENT_WIELD];
 
     for (int counter = 0; counter < inventory_count; counter++) {
         int flag = (*store_buy[store_id])(inventory[counter].tval);

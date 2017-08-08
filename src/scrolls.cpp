@@ -44,24 +44,24 @@ static int inventoryItemIdOfCursedEquipment() {
     int item_count = 0;
     int items[6];
 
-    if (inventory[INVEN_BODY].tval != TV_NOTHING) {
-        items[item_count++] = INVEN_BODY;
+    if (inventory[EQUIPMENT_BODY].tval != TV_NOTHING) {
+        items[item_count++] = EQUIPMENT_BODY;
     }
-    if (inventory[INVEN_ARM].tval != TV_NOTHING) {
-        items[item_count++] = INVEN_ARM;
+    if (inventory[EQUIPMENT_ARM].tval != TV_NOTHING) {
+        items[item_count++] = EQUIPMENT_ARM;
     }
-    if (inventory[INVEN_OUTER].tval != TV_NOTHING) {
-        items[item_count++] = INVEN_OUTER;
+    if (inventory[EQUIPMENT_OUTER].tval != TV_NOTHING) {
+        items[item_count++] = EQUIPMENT_OUTER;
     }
-    if (inventory[INVEN_HANDS].tval != TV_NOTHING) {
-        items[item_count++] = INVEN_HANDS;
+    if (inventory[EQUIPMENT_HANDS].tval != TV_NOTHING) {
+        items[item_count++] = EQUIPMENT_HANDS;
     }
-    if (inventory[INVEN_HEAD].tval != TV_NOTHING) {
-        items[item_count++] = INVEN_HEAD;
+    if (inventory[EQUIPMENT_HEAD].tval != TV_NOTHING) {
+        items[item_count++] = EQUIPMENT_HEAD;
     }
     // also enchant boots
-    if (inventory[INVEN_FEET].tval != TV_NOTHING) {
-        items[item_count++] = INVEN_FEET;
+    if (inventory[EQUIPMENT_FEET].tval != TV_NOTHING) {
+        items[item_count++] = EQUIPMENT_FEET;
     }
 
     int item_id = 0;
@@ -70,25 +70,25 @@ static int inventoryItemIdOfCursedEquipment() {
         item_id = items[randomNumber(item_count) - 1];
     }
 
-    if (inventory[INVEN_BODY].flags & TR_CURSED) {
-        item_id = INVEN_BODY;
-    } else if (inventory[INVEN_ARM].flags & TR_CURSED) {
-        item_id = INVEN_ARM;
-    } else if (inventory[INVEN_OUTER].flags & TR_CURSED) {
-        item_id = INVEN_OUTER;
-    } else if (inventory[INVEN_HEAD].flags & TR_CURSED) {
-        item_id = INVEN_HEAD;
-    } else if (inventory[INVEN_HANDS].flags & TR_CURSED) {
-        item_id = INVEN_HANDS;
-    } else if (inventory[INVEN_FEET].flags & TR_CURSED) {
-        item_id = INVEN_FEET;
+    if (inventory[EQUIPMENT_BODY].flags & TR_CURSED) {
+        item_id = EQUIPMENT_BODY;
+    } else if (inventory[EQUIPMENT_ARM].flags & TR_CURSED) {
+        item_id = EQUIPMENT_ARM;
+    } else if (inventory[EQUIPMENT_OUTER].flags & TR_CURSED) {
+        item_id = EQUIPMENT_OUTER;
+    } else if (inventory[EQUIPMENT_HEAD].flags & TR_CURSED) {
+        item_id = EQUIPMENT_HEAD;
+    } else if (inventory[EQUIPMENT_HANDS].flags & TR_CURSED) {
+        item_id = EQUIPMENT_HANDS;
+    } else if (inventory[EQUIPMENT_FEET].flags & TR_CURSED) {
+        item_id = EQUIPMENT_FEET;
     }
 
     return item_id;
 }
 
 static bool scrollEnchantWeaponToHit() {
-    Inventory_t *item = &inventory[INVEN_WIELD];
+    Inventory_t *item = &inventory[EQUIPMENT_WIELD];
 
     if (item->tval == TV_NOTHING) {
         return false;
@@ -111,7 +111,7 @@ static bool scrollEnchantWeaponToHit() {
 }
 
 static bool scrollEnchantWeaponToDamage() {
-    Inventory_t *item = &inventory[INVEN_WIELD];
+    Inventory_t *item = &inventory[EQUIPMENT_WIELD];
 
     if (item->tval == TV_NOTHING) {
         return false;
@@ -224,7 +224,7 @@ static bool scrollConfuseMonster() {
 }
 
 static bool scrollEnchantWeapon() {
-    Inventory_t *item = &inventory[INVEN_WIELD];
+    Inventory_t *item = &inventory[EQUIPMENT_WIELD];
 
     if (item->tval == TV_NOTHING) {
         return false;
@@ -271,7 +271,7 @@ static bool scrollEnchantWeapon() {
 }
 
 static bool scrollCurseWeapon() {
-    Inventory_t *item = &inventory[INVEN_WIELD];
+    Inventory_t *item = &inventory[EQUIPMENT_WIELD];
 
     if (item->tval == TV_NOTHING) {
         return false;
@@ -335,30 +335,30 @@ static bool scrollEnchantArmor() {
 static bool scrollCurseArmor() {
     int item_id;
 
-    if (inventory[INVEN_BODY].tval != TV_NOTHING && randomNumber(4) == 1) {
-        item_id = INVEN_BODY;
-    } else if (inventory[INVEN_ARM].tval != TV_NOTHING && randomNumber(3) == 1) {
-        item_id = INVEN_ARM;
-    } else if (inventory[INVEN_OUTER].tval != TV_NOTHING && randomNumber(3) == 1) {
-        item_id = INVEN_OUTER;
-    } else if (inventory[INVEN_HEAD].tval != TV_NOTHING && randomNumber(3) == 1) {
-        item_id = INVEN_HEAD;
-    } else if (inventory[INVEN_HANDS].tval != TV_NOTHING && randomNumber(3) == 1) {
-        item_id = INVEN_HANDS;
-    } else if (inventory[INVEN_FEET].tval != TV_NOTHING && randomNumber(3) == 1) {
-        item_id = INVEN_FEET;
-    } else if (inventory[INVEN_BODY].tval != TV_NOTHING) {
-        item_id = INVEN_BODY;
-    } else if (inventory[INVEN_ARM].tval != TV_NOTHING) {
-        item_id = INVEN_ARM;
-    } else if (inventory[INVEN_OUTER].tval != TV_NOTHING) {
-        item_id = INVEN_OUTER;
-    } else if (inventory[INVEN_HEAD].tval != TV_NOTHING) {
-        item_id = INVEN_HEAD;
-    } else if (inventory[INVEN_HANDS].tval != TV_NOTHING) {
-        item_id = INVEN_HANDS;
-    } else if (inventory[INVEN_FEET].tval != TV_NOTHING) {
-        item_id = INVEN_FEET;
+    if (inventory[EQUIPMENT_BODY].tval != TV_NOTHING && randomNumber(4) == 1) {
+        item_id = EQUIPMENT_BODY;
+    } else if (inventory[EQUIPMENT_ARM].tval != TV_NOTHING && randomNumber(3) == 1) {
+        item_id = EQUIPMENT_ARM;
+    } else if (inventory[EQUIPMENT_OUTER].tval != TV_NOTHING && randomNumber(3) == 1) {
+        item_id = EQUIPMENT_OUTER;
+    } else if (inventory[EQUIPMENT_HEAD].tval != TV_NOTHING && randomNumber(3) == 1) {
+        item_id = EQUIPMENT_HEAD;
+    } else if (inventory[EQUIPMENT_HANDS].tval != TV_NOTHING && randomNumber(3) == 1) {
+        item_id = EQUIPMENT_HANDS;
+    } else if (inventory[EQUIPMENT_FEET].tval != TV_NOTHING && randomNumber(3) == 1) {
+        item_id = EQUIPMENT_FEET;
+    } else if (inventory[EQUIPMENT_BODY].tval != TV_NOTHING) {
+        item_id = EQUIPMENT_BODY;
+    } else if (inventory[EQUIPMENT_ARM].tval != TV_NOTHING) {
+        item_id = EQUIPMENT_ARM;
+    } else if (inventory[EQUIPMENT_OUTER].tval != TV_NOTHING) {
+        item_id = EQUIPMENT_OUTER;
+    } else if (inventory[EQUIPMENT_HEAD].tval != TV_NOTHING) {
+        item_id = EQUIPMENT_HEAD;
+    } else if (inventory[EQUIPMENT_HANDS].tval != TV_NOTHING) {
+        item_id = EQUIPMENT_HANDS;
+    } else if (inventory[EQUIPMENT_FEET].tval != TV_NOTHING) {
+        item_id = EQUIPMENT_FEET;
     } else {
         item_id = 0;
     }

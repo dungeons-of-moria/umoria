@@ -191,19 +191,19 @@ constexpr uint8_t CLASS_MAX_LEVEL_ADJUST = 5;
 // Base to hit constants
 constexpr uint8_t BTH_PER_PLUS_TO_HIT_ADJUST = 3; // Adjust BTH per plus-to-hit
 
-// magic numbers for players inventory array
-constexpr uint8_t INVEN_WIELD = 22; // must be first item in equipment list
-constexpr uint8_t INVEN_HEAD = 23;
-constexpr uint8_t INVEN_NECK = 24;
-constexpr uint8_t INVEN_BODY = 25;
-constexpr uint8_t INVEN_ARM = 26;
-constexpr uint8_t INVEN_HANDS = 27;
-constexpr uint8_t INVEN_RIGHT = 28;
-constexpr uint8_t INVEN_LEFT = 29;
-constexpr uint8_t INVEN_FEET = 30;
-constexpr uint8_t INVEN_OUTER = 31;
-constexpr uint8_t INVEN_LIGHT = 32;
-constexpr uint8_t INVEN_AUX = 33;
+// magic numbers for players equipment inventory array
+constexpr uint8_t EQUIPMENT_WIELD = 22; // must be first item in equipment list
+constexpr uint8_t EQUIPMENT_HEAD = 23;
+constexpr uint8_t EQUIPMENT_NECK = 24;
+constexpr uint8_t EQUIPMENT_BODY = 25;
+constexpr uint8_t EQUIPMENT_ARM = 26;
+constexpr uint8_t EQUIPMENT_HANDS = 27;
+constexpr uint8_t EQUIPMENT_RIGHT = 28;
+constexpr uint8_t EQUIPMENT_LEFT = 29;
+constexpr uint8_t EQUIPMENT_FEET = 30;
+constexpr uint8_t EQUIPMENT_OUTER = 31;
+constexpr uint8_t EQUIPMENT_LIGHT = 32;
+constexpr uint8_t EQUIPMENT_AUX = 33;
 
 // Attribute indexes -CJS-
 constexpr uint8_t A_STR = 0;

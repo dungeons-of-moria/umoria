@@ -219,7 +219,7 @@ static bool sv_write() {
     for (int i = 0; i < inventory_count; i++) {
         wr_item(&inventory[i]);
     }
-    for (int i = INVEN_WIELD; i < PLAYER_INVENTORY_SIZE; i++) {
+    for (int i = EQUIPMENT_WIELD; i < PLAYER_INVENTORY_SIZE; i++) {
         wr_item(&inventory[i]);
     }
     wr_short((uint16_t) inventory_weight);
@@ -675,13 +675,13 @@ bool loadGame(bool *generate) {
             rd_short((uint16_t *) &missiles_counter);
             rd_long((uint32_t *) &current_game_turn);
             rd_short((uint16_t *) &inventory_count);
-            if (inventory_count > INVEN_WIELD) {
+            if (inventory_count > EQUIPMENT_WIELD) {
                 goto error;
             }
             for (int i = 0; i < inventory_count; i++) {
                 rd_item(&inventory[i]);
             }
-            for (int i = INVEN_WIELD; i < PLAYER_INVENTORY_SIZE; i++) {
+            for (int i = EQUIPMENT_WIELD; i < PLAYER_INVENTORY_SIZE; i++) {
                 rd_item(&inventory[i]);
             }
             rd_short((uint16_t *) &inventory_weight);

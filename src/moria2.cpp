@@ -506,34 +506,34 @@ static int damageMinusAC(uint32_t typ_dam) {
     int itemsCount = 0;
     int items[6];
 
-    if (inventory[INVEN_BODY].tval != TV_NOTHING) {
-        items[itemsCount] = INVEN_BODY;
+    if (inventory[EQUIPMENT_BODY].tval != TV_NOTHING) {
+        items[itemsCount] = EQUIPMENT_BODY;
         itemsCount++;
     }
 
-    if (inventory[INVEN_ARM].tval != TV_NOTHING) {
-        items[itemsCount] = INVEN_ARM;
+    if (inventory[EQUIPMENT_ARM].tval != TV_NOTHING) {
+        items[itemsCount] = EQUIPMENT_ARM;
         itemsCount++;
     }
 
-    if (inventory[INVEN_OUTER].tval != TV_NOTHING) {
-        items[itemsCount] = INVEN_OUTER;
+    if (inventory[EQUIPMENT_OUTER].tval != TV_NOTHING) {
+        items[itemsCount] = EQUIPMENT_OUTER;
         itemsCount++;
     }
 
-    if (inventory[INVEN_HANDS].tval != TV_NOTHING) {
-        items[itemsCount] = INVEN_HANDS;
+    if (inventory[EQUIPMENT_HANDS].tval != TV_NOTHING) {
+        items[itemsCount] = EQUIPMENT_HANDS;
         itemsCount++;
     }
 
-    if (inventory[INVEN_HEAD].tval != TV_NOTHING) {
-        items[itemsCount] = INVEN_HEAD;
+    if (inventory[EQUIPMENT_HEAD].tval != TV_NOTHING) {
+        items[itemsCount] = EQUIPMENT_HEAD;
         itemsCount++;
     }
 
     // also affect boots
-    if (inventory[INVEN_FEET].tval != TV_NOTHING) {
-        items[itemsCount] = INVEN_FEET;
+    if (inventory[EQUIPMENT_FEET].tval != TV_NOTHING) {
+        items[itemsCount] = EQUIPMENT_FEET;
         itemsCount++;
     }
 

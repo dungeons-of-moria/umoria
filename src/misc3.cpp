@@ -1150,7 +1150,7 @@ void inventoryDropItem(int item_id, bool drop_all) {
 
     cave[char_row][char_col].tptr = (uint8_t) treasureID;
 
-    if (item_id >= INVEN_WIELD) {
+    if (item_id >= EQUIPMENT_WIELD) {
         playerTakeOff(item_id, -1);
     } else {
         if (drop_all || i_ptr->number == 1) {
@@ -1205,7 +1205,7 @@ int playerCarryingLoadLimit() {
 
 // this code must be identical to the inventoryCarryItem() code below
 bool inventoryCanCarryItemCount(Inventory_t *item) {
-    if (inventory_count < INVEN_WIELD) {
+    if (inventory_count < EQUIPMENT_WIELD) {
         return true;
     }
 
@@ -1250,7 +1250,7 @@ bool inventoryCanCarryItem(Inventory_t *item) {
 
 // Are we strong enough for the current pack and weapon? -CJS-
 void playerStrength() {
-    Inventory_t *i_ptr = &inventory[INVEN_WIELD];
+    Inventory_t *i_ptr = &inventory[EQUIPMENT_WIELD];
 
     if (i_ptr->tval != TV_NOTHING && py.stats.use_stat[A_STR] * 15 < i_ptr->weight) {
         if (!weapon_is_heavy) {

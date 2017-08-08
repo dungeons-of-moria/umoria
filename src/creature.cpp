@@ -491,25 +491,25 @@ static bool executeDisenchantAttack() {
 
     switch (randomNumber(7)) {
         case 1:
-            item_id = INVEN_WIELD;
+            item_id = EQUIPMENT_WIELD;
             break;
         case 2:
-            item_id = INVEN_BODY;
+            item_id = EQUIPMENT_BODY;
             break;
         case 3:
-            item_id = INVEN_ARM;
+            item_id = EQUIPMENT_ARM;
             break;
         case 4:
-            item_id = INVEN_OUTER;
+            item_id = EQUIPMENT_OUTER;
             break;
         case 5:
-            item_id = INVEN_HANDS;
+            item_id = EQUIPMENT_HANDS;
             break;
         case 6:
-            item_id = INVEN_HEAD;
+            item_id = EQUIPMENT_HEAD;
             break;
         case 7:
-            item_id = INVEN_FEET;
+            item_id = EQUIPMENT_FEET;
             break;
     }
 
@@ -736,7 +736,7 @@ static bool executeAttackOnPlayer(Creature_t *creature, Monster_t *monster, int 
             }
             break;
         case 23: // Eat light
-            item = &inventory[INVEN_LIGHT];
+            item = &inventory[EQUIPMENT_LIGHT];
             if (item->p1 > 0) {
                 item->p1 -= (250 + randomNumber(250));
                 if (item->p1 < 1) {

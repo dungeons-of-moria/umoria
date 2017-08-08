@@ -142,7 +142,7 @@ void playerTunnel(int direction) {
     (void) playerMovePosition(direction, &y, &x);
 
     Cave_t *tile = &cave[y][x];
-    Inventory_t *item = &inventory[INVEN_WIELD];
+    Inventory_t *item = &inventory[EQUIPMENT_WIELD];
 
     if (!playerCanTunnel(tile->tptr, tile->fval)) {
         return;
@@ -738,8 +738,8 @@ static void weaponMissileFacts(Inventory_t *item, int *tbth, int *tpth, int *tda
     *tpth = py.misc.ptohit + item->tohit;
 
     // Add this back later if the correct throwing device. -CJS-
-    if (inventory[INVEN_WIELD].tval != TV_NOTHING) {
-        *tpth -= inventory[INVEN_WIELD].tohit;
+    if (inventory[EQUIPMENT_WIELD].tval != TV_NOTHING) {
+        *tpth -= inventory[EQUIPMENT_WIELD].tohit;
     }
 
     *tdis = (((py.stats.use_stat[A_STR] + 20) * 10) / weight);
@@ -751,16 +751,16 @@ static void weaponMissileFacts(Inventory_t *item, int *tbth, int *tpth, int *tda
     // missile/weapon combo, this makes them much more useful
 
     // Using Bows, slings, or crossbows?
-    if (inventory[INVEN_WIELD].tval != TV_BOW) {
+    if (inventory[EQUIPMENT_WIELD].tval != TV_BOW) {
         return;
     }
 
-    switch (inventory[INVEN_WIELD].p1) {
+    switch (inventory[EQUIPMENT_WIELD].p1) {
         case 1:
             if (item->tval == TV_SLING_AMMO) { // Sling and ammo
                 *tbth = py.misc.bthb;
-                *tpth += 2 * inventory[INVEN_WIELD].tohit;
-                *tdam += inventory[INVEN_WIELD].todam;
+                *tpth += 2 * inventory[EQUIPMENT_WIELD].tohit;
+                *tdam += inventory[EQUIPMENT_WIELD].todam;
                 *tdam = *tdam * 2;
                 *tdis = 20;
             }
@@ -768,8 +768,8 @@ static void weaponMissileFacts(Inventory_t *item, int *tbth, int *tpth, int *tda
         case 2:
             if (item->tval == TV_ARROW) { // Short Bow and Arrow
                 *tbth = py.misc.bthb;
-                *tpth += 2 * inventory[INVEN_WIELD].tohit;
-                *tdam += inventory[INVEN_WIELD].todam;
+                *tpth += 2 * inventory[EQUIPMENT_WIELD].tohit;
+                *tdam += inventory[EQUIPMENT_WIELD].todam;
                 *tdam = *tdam * 2;
                 *tdis = 25;
             }
@@ -777,8 +777,8 @@ static void weaponMissileFacts(Inventory_t *item, int *tbth, int *tpth, int *tda
         case 3:
             if (item->tval == TV_ARROW) { // Long Bow and Arrow
                 *tbth = py.misc.bthb;
-                *tpth += 2 * inventory[INVEN_WIELD].tohit;
-                *tdam += inventory[INVEN_WIELD].todam;
+                *tpth += 2 * inventory[EQUIPMENT_WIELD].tohit;
+                *tdam += inventory[EQUIPMENT_WIELD].todam;
                 *tdam = *tdam * 3;
                 *tdis = 30;
             }
@@ -786,8 +786,8 @@ static void weaponMissileFacts(Inventory_t *item, int *tbth, int *tpth, int *tda
         case 4:
             if (item->tval == TV_ARROW) { // Composite Bow and Arrow
                 *tbth = py.misc.bthb;
-                *tpth += 2 * inventory[INVEN_WIELD].tohit;
-                *tdam += inventory[INVEN_WIELD].todam;
+                *tpth += 2 * inventory[EQUIPMENT_WIELD].tohit;
+                *tdam += inventory[EQUIPMENT_WIELD].todam;
                 *tdam = *tdam * 4;
                 *tdis = 35;
             }
@@ -795,8 +795,8 @@ static void weaponMissileFacts(Inventory_t *item, int *tbth, int *tpth, int *tda
         case 5:
             if (item->tval == TV_BOLT) { // Light Crossbow and Bolt
                 *tbth = py.misc.bthb;
-                *tpth += 2 * inventory[INVEN_WIELD].tohit;
-                *tdam += inventory[INVEN_WIELD].todam;
+                *tpth += 2 * inventory[EQUIPMENT_WIELD].tohit;
+                *tdam += inventory[EQUIPMENT_WIELD].todam;
                 *tdam = *tdam * 3;
                 *tdis = 25;
             }
@@ -804,8 +804,8 @@ static void weaponMissileFacts(Inventory_t *item, int *tbth, int *tpth, int *tda
         case 6:
             if (item->tval == TV_BOLT) { // Heavy Crossbow and Bolt
                 *tbth = py.misc.bthb;
-                *tpth += 2 * inventory[INVEN_WIELD].tohit;
-                *tdam += inventory[INVEN_WIELD].todam;
+                *tpth += 2 * inventory[EQUIPMENT_WIELD].tohit;
+                *tdam += inventory[EQUIPMENT_WIELD].todam;
                 *tdam = *tdam * 4;
                 *tdis = 35;
             }
@@ -997,7 +997,7 @@ static void playerBashAttack(int y, int x) {
     }
 
     int base_to_hit = py.stats.use_stat[A_STR];
-    base_to_hit += inventory[INVEN_ARM].weight / 2;
+    base_to_hit += inventory[EQUIPMENT_ARM].weight / 2;
     base_to_hit += py.misc.wt / 10;
 
     if (!monster->ml) {
@@ -1011,8 +1011,8 @@ static void playerBashAttack(int y, int x) {
         (void) sprintf(msg, "You hit %s.", name);
         printMessage(msg);
 
-        int damage = dicePlayerDamageRoll(inventory[INVEN_ARM].damage);
-        damage = playerWeaponCriticalBlow(inventory[INVEN_ARM].weight / 4 + py.stats.use_stat[A_STR], 0, damage, CLASS_BTH);
+        int damage = dicePlayerDamageRoll(inventory[EQUIPMENT_ARM].damage);
+        damage = playerWeaponCriticalBlow(inventory[EQUIPMENT_ARM].weight / 4 + py.stats.use_stat[A_STR], 0, damage, CLASS_BTH);
         damage += py.misc.wt / 60;
         damage += 3;
 

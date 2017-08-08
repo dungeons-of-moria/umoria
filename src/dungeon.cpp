@@ -39,7 +39,7 @@ static void resetDungeonFlags() {
 
 // Check light status for dungeon setup
 static void playerInitializePlayerLight() {
-    player_carrying_light = (inventory[INVEN_LIGHT].p1 > 0);
+    player_carrying_light = (inventory[EQUIPMENT_LIGHT].p1 > 0);
 }
 
 // Check for a maximum level
@@ -51,7 +51,7 @@ static void playerUpdateDeepestDungeonLevelVisited() {
 
 // Check light status
 static void playerUpdateLightStatus() {
-    Inventory_t *i_ptr = &inventory[INVEN_LIGHT];
+    Inventory_t *i_ptr = &inventory[EQUIPMENT_LIGHT];
 
     if (player_carrying_light) {
         if (i_ptr->p1 > 0) {
@@ -2180,7 +2180,7 @@ static void dungeonJamDoor() {
 static void inventoryRefillLamp() {
     player_free_turn = true;
 
-    if (inventory[INVEN_LIGHT].subval != 0) {
+    if (inventory[EQUIPMENT_LIGHT].subval != 0) {
         printMessage("But you are not using a lamp.");
         return;
     }
@@ -2193,7 +2193,7 @@ static void inventoryRefillLamp() {
 
     player_free_turn = false;
 
-    Inventory_t *item = &inventory[INVEN_LIGHT];
+    Inventory_t *item = &inventory[EQUIPMENT_LIGHT];
     item->p1 += inventory[item_pos_start].p1;
 
     if (item->p1 > OBJECT_LAMP_MAX_CAPACITY) {
