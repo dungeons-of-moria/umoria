@@ -938,7 +938,7 @@ static void monsterOpenDoor(Cave_t *tile, int16_t monster_hp, uint32_t move_bits
             if (door_is_stuck) {
                 item->p1 = (int16_t) (1 - randomNumber(2));
             }
-            tile->fval = CORR_FLOOR;
+            tile->fval = TILE_CORR_FLOOR;
             dungeonLiteSpot(y, x);
             *rcmove |= CM_OPEN_DOOR;
             *do_move = false;
@@ -952,7 +952,7 @@ static void monsterOpenDoor(Cave_t *tile, int16_t monster_hp, uint32_t move_bits
 
             // 50% chance of breaking door
             item->p1 = (int16_t) (1 - randomNumber(2));
-            tile->fval = CORR_FLOOR;
+            tile->fval = TILE_CORR_FLOOR;
             dungeonLiteSpot(y, x);
             printMessage("You hear a door burst open!");
             playerDisturb(1, 0);
@@ -1056,7 +1056,7 @@ static void makeMove(int monster_id, int *directions, uint32_t *rcmove) {
 
         Cave_t *tile = &cave[y][x];
 
-        if (tile->fval == BOUNDARY_WALL) {
+        if (tile->fval == TILE_BOUNDARY_WALL) {
             continue;
         }
 

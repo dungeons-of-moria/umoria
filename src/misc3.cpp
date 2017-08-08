@@ -26,7 +26,7 @@ void dungeonSetTrap(int y, int x, int sub_type_id) {
 void dungeonPlaceRubble(int y, int x) {
     int free_treasure_id = popt();
     cave[y][x].tptr = (uint8_t) free_treasure_id;
-    cave[y][x].fval = BLOCKED_FLOOR;
+    cave[y][x].fval = TILE_BLOCKED_FLOOR;
     inventoryItemCopyTo(OBJ_RUBBLE, &treasure_list[free_treasure_id]);
 }
 

@@ -70,7 +70,7 @@ void dungeonResetView() {
     dungeonMoveCharacterLight(char_row, char_col, char_row, char_col);
 
     // A room of light should be lit.
-    if (tile->fval == LIGHT_FLOOR) {
+    if (tile->fval == TILE_LIGHT_FLOOR) {
         if (py.flags.blind < 1 && !tile->pl) {
             dungeonLightRoom(char_row, char_col);
         }
@@ -81,7 +81,7 @@ void dungeonResetView() {
     if (tile->lr && py.flags.blind < 1) {
         for (int i = char_row - 1; i <= char_row + 1; i++) {
             for (int j = char_col - 1; j <= char_col + 1; j++) {
-                if (cave[i][j].fval == LIGHT_FLOOR && !cave[i][j].pl) {
+                if (cave[i][j].fval == TILE_LIGHT_FLOOR && !cave[i][j].pl) {
                     dungeonLightRoom(i, j);
                 }
             }

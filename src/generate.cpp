@@ -19,9 +19,9 @@ static int door_index;
 // Returns a Dark/Light floor tile based on current_dungeon_level, and random number
 static uint8_t dungeonFloorTileForLevel() {
     if (current_dungeon_level <= randomNumber(25)) {
-        return LIGHT_FLOOR;
+        return TILE_LIGHT_FLOOR;
     }
-    return DARK_FLOOR;
+    return TILE_DARK_FLOOR;
 }
 
 // Always picks a correct direction
@@ -77,7 +77,7 @@ static void dungeonFillEmptyTilesWith(uint8_t rock_type) {
         int x = 1;
 
         for (int j = dungeon_width - 2; j > 0; j--) {
-            if (cave[y][x].fval == NULL_WALL || cave[y][x].fval == TMP1_WALL || cave[y][x].fval == TMP2_WALL) {
+            if (cave[y][x].fval == TILE_NULL_WALL || cave[y][x].fval == TMP1_WALL || cave[y][x].fval == TMP2_WALL) {
                 cave[y][x].fval = rock_type;
             }
             x++;
@@ -104,10 +104,10 @@ static void dungeonPlaceBoundaryWalls() {
         assert((Cave_t *)right_ptr == &cave[i][dungeon_width - 1]);
 #endif
 
-        ((Cave_t *) left_ptr)->fval = BOUNDARY_WALL;
+        ((Cave_t *) left_ptr)->fval = TILE_BOUNDARY_WALL;
         left_ptr++;
 
-        ((Cave_t *) right_ptr)->fval = BOUNDARY_WALL;
+        ((Cave_t *) right_ptr)->fval = TILE_BOUNDARY_WALL;
         right_ptr++;
     }
 
@@ -120,10 +120,10 @@ static void dungeonPlaceBoundaryWalls() {
         assert(top_ptr == &cave[0][i]);
         assert(bottom_ptr == &cave[dungeon_height - 1][i]);
 #endif
-        top_ptr->fval = BOUNDARY_WALL;
+        top_ptr->fval = TILE_BOUNDARY_WALL;
         top_ptr++;
 
-        bottom_ptr->fval = BOUNDARY_WALL;
+        bottom_ptr->fval = TILE_BOUNDARY_WALL;
         bottom_ptr++;
     }
 }
@@ -150,7 +150,7 @@ static void dungeonPlaceStreamerRock(uint8_t rock_type, int chance_of_treasure) 
             int x = pos_x + randomNumber(t1) - t2;
 
             if (coordInBounds(y, x)) {
-                if (cave[y][x].fval == GRANITE_WALL) {
+                if (cave[y][x].fval == TILE_GRANITE_WALL) {
                     cave[y][x].fval = rock_type;
 
                     if (randomNumber(chance_of_treasure) == 1) {
@@ -166,14 +166,14 @@ static void dungeonPlaceOpenDoor(int y, int x) {
     int cur_pos = popt();
     cave[y][x].tptr = (uint8_t) cur_pos;
     inventoryItemCopyTo(OBJ_OPEN_DOOR, &treasure_list[cur_pos]);
-    cave[y][x].fval = CORR_FLOOR;
+    cave[y][x].fval = TILE_CORR_FLOOR;
 }
 
 static void dungeonPlaceBrokenDoor(int y, int x) {
     int cur_pos = popt();
     cave[y][x].tptr = (uint8_t) cur_pos;
     inventoryItemCopyTo(OBJ_OPEN_DOOR, &treasure_list[cur_pos]);
-    cave[y][x].fval = CORR_FLOOR;
+    cave[y][x].fval = TILE_CORR_FLOOR;
     treasure_list[cur_pos].p1 = 1;
 }
 
@@ -181,14 +181,14 @@ static void dungeonPlaceClosedDoor(int y, int x) {
     int cur_pos = popt();
     cave[y][x].tptr = (uint8_t) cur_pos;
     inventoryItemCopyTo(OBJ_CLOSED_DOOR, &treasure_list[cur_pos]);
-    cave[y][x].fval = BLOCKED_FLOOR;
+    cave[y][x].fval = TILE_BLOCKED_FLOOR;
 }
 
 static void dungeonPlaceLockedDoor(int y, int x) {
     int cur_pos = popt();
     cave[y][x].tptr = (uint8_t) cur_pos;
     inventoryItemCopyTo(OBJ_CLOSED_DOOR, &treasure_list[cur_pos]);
-    cave[y][x].fval = BLOCKED_FLOOR;
+    cave[y][x].fval = TILE_BLOCKED_FLOOR;
     treasure_list[cur_pos].p1 = (int16_t) (randomNumber(10) + 10);
 }
 
@@ -196,7 +196,7 @@ static void dungeonPlaceStuckDoor(int y, int x) {
     int cur_pos = popt();
     cave[y][x].tptr = (uint8_t) cur_pos;
     inventoryItemCopyTo(OBJ_CLOSED_DOOR, &treasure_list[cur_pos]);
-    cave[y][x].fval = BLOCKED_FLOOR;
+    cave[y][x].fval = TILE_BLOCKED_FLOOR;
     treasure_list[cur_pos].p1 = (int16_t) (-randomNumber(10) - 10);
 }
 
@@ -204,7 +204,7 @@ static void dungeonPlaceSecretDoor(int y, int x) {
     int cur_pos = popt();
     cave[y][x].tptr = (uint8_t) cur_pos;
     inventoryItemCopyTo(OBJ_SECRET_DOOR, &treasure_list[cur_pos]);
-    cave[y][x].fval = BLOCKED_FLOOR;
+    cave[y][x].fval = TILE_BLOCKED_FLOOR;
 }
 
 static void dungeonPlaceDoor(int y, int x) {
@@ -305,7 +305,7 @@ static void dungeonPlaceVaultTrap(int y, int x, int yd, int xd, int number) {
             int y1 = y - yd - 1 + randomNumber(2 * yd + 1);
             int x1 = x - xd - 1 + randomNumber(2 * xd + 1);
 
-            if (cave[y1][x1].fval != NULL_WALL && cave[y1][x1].fval <= MAX_CAVE_FLOOR && cave[y1][x1].tptr == 0) {
+            if (cave[y1][x1].fval != TILE_NULL_WALL && cave[y1][x1].fval <= MAX_CAVE_FLOOR && cave[y1][x1].tptr == 0) {
                 dungeonSetTrap(y1, x1, randomNumber(MAX_TRAPS) - 1);
                 placed = true;
             }
@@ -344,18 +344,18 @@ static void dungeonBuildRoom(int y, int x) {
     }
 
     for (int i = height - 1; i <= depth + 1; i++) {
-        cave[i][left - 1].fval = GRANITE_WALL;
+        cave[i][left - 1].fval = TILE_GRANITE_WALL;
         cave[i][left - 1].lr = true;
 
-        cave[i][right + 1].fval = GRANITE_WALL;
+        cave[i][right + 1].fval = TILE_GRANITE_WALL;
         cave[i][right + 1].lr = true;
     }
 
     for (int i = left; i <= right; i++) {
-        cave[height - 1][i].fval = GRANITE_WALL;
+        cave[height - 1][i].fval = TILE_GRANITE_WALL;
         cave[height - 1][i].lr = true;
 
-        cave[depth + 1][i].fval = GRANITE_WALL;
+        cave[depth + 1][i].fval = TILE_GRANITE_WALL;
         cave[depth + 1][i].lr = true;
     }
 }
@@ -384,24 +384,24 @@ static void dungeonBuildRoomOverlappingRectangles(int y, int x) {
         }
         for (int i = (height - 1); i <= (depth + 1); i++) {
             if (cave[i][left - 1].fval != floor) {
-                cave[i][left - 1].fval = GRANITE_WALL;
+                cave[i][left - 1].fval = TILE_GRANITE_WALL;
                 cave[i][left - 1].lr = true;
             }
 
             if (cave[i][right + 1].fval != floor) {
-                cave[i][right + 1].fval = GRANITE_WALL;
+                cave[i][right + 1].fval = TILE_GRANITE_WALL;
                 cave[i][right + 1].lr = true;
             }
         }
 
         for (int i = left; i <= right; i++) {
             if (cave[height - 1][i].fval != floor) {
-                cave[height - 1][i].fval = GRANITE_WALL;
+                cave[height - 1][i].fval = TILE_GRANITE_WALL;
                 cave[height - 1][i].lr = true;
             }
 
             if (cave[depth + 1][i].fval != floor) {
-                cave[depth + 1][i].fval = GRANITE_WALL;
+                cave[depth + 1][i].fval = TILE_GRANITE_WALL;
                 cave[depth + 1][i].lr = true;
             }
         }
@@ -536,18 +536,18 @@ static void dungeonBuildRoomWithInnerRooms(int y, int x) {
     }
 
     for (int i = (height - 1); i <= (depth + 1); i++) {
-        cave[i][left - 1].fval = GRANITE_WALL;
+        cave[i][left - 1].fval = TILE_GRANITE_WALL;
         cave[i][left - 1].lr = true;
 
-        cave[i][right + 1].fval = GRANITE_WALL;
+        cave[i][right + 1].fval = TILE_GRANITE_WALL;
         cave[i][right + 1].lr = true;
     }
 
     for (int i = left; i <= right; i++) {
-        cave[height - 1][i].fval = GRANITE_WALL;
+        cave[height - 1][i].fval = TILE_GRANITE_WALL;
         cave[height - 1][i].lr = true;
 
-        cave[depth + 1][i].fval = GRANITE_WALL;
+        cave[depth + 1][i].fval = TILE_GRANITE_WALL;
         cave[depth + 1][i].lr = true;
     }
 
@@ -674,18 +674,18 @@ static void dungeonBuildRoomCrossShaped(int y, int x) {
     }
 
     for (int i = height - 1; i <= depth + 1; i++) {
-        cave[i][left - 1].fval = GRANITE_WALL;
+        cave[i][left - 1].fval = TILE_GRANITE_WALL;
         cave[i][left - 1].lr = true;
 
-        cave[i][right + 1].fval = GRANITE_WALL;
+        cave[i][right + 1].fval = TILE_GRANITE_WALL;
         cave[i][right + 1].lr = true;
     }
 
     for (int i = left; i <= right; i++) {
-        cave[height - 1][i].fval = GRANITE_WALL;
+        cave[height - 1][i].fval = TILE_GRANITE_WALL;
         cave[height - 1][i].lr = true;
 
-        cave[depth + 1][i].fval = GRANITE_WALL;
+        cave[depth + 1][i].fval = TILE_GRANITE_WALL;
         cave[depth + 1][i].lr = true;
     }
 
@@ -705,24 +705,24 @@ static void dungeonBuildRoomCrossShaped(int y, int x) {
 
     for (int i = height - 1; i <= depth + 1; i++) {
         if (cave[i][left - 1].fval != floor) {
-            cave[i][left - 1].fval = GRANITE_WALL;
+            cave[i][left - 1].fval = TILE_GRANITE_WALL;
             cave[i][left - 1].lr = true;
         }
 
         if (cave[i][right + 1].fval != floor) {
-            cave[i][right + 1].fval = GRANITE_WALL;
+            cave[i][right + 1].fval = TILE_GRANITE_WALL;
             cave[i][right + 1].lr = true;
         }
     }
 
     for (int i = left; i <= right; i++) {
         if (cave[height - 1][i].fval != floor) {
-            cave[height - 1][i].fval = GRANITE_WALL;
+            cave[height - 1][i].fval = TILE_GRANITE_WALL;
             cave[height - 1][i].lr = true;
         }
 
         if (cave[depth + 1][i].fval != floor) {
-            cave[depth + 1][i].fval = GRANITE_WALL;
+            cave[depth + 1][i].fval = TILE_GRANITE_WALL;
             cave[depth + 1][i].lr = true;
         }
     }
@@ -830,7 +830,7 @@ static void dungeonBuildTunnel(int y_start, int x_start, int y_end, int x_end) {
         }
 
         switch (cave[tmp_row][tmp_col].fval) {
-            case NULL_WALL:
+            case TILE_NULL_WALL:
                 y_start = tmp_row;
                 x_start = tmp_col;
                 if (tunnel_index < 1000) {
@@ -843,7 +843,7 @@ static void dungeonBuildTunnel(int y_start, int x_start, int y_end, int x_end) {
             case TMP2_WALL:
                 // do nothing
                 break;
-            case GRANITE_WALL:
+            case TILE_GRANITE_WALL:
                 y_start = tmp_row;
                 x_start = tmp_col;
 
@@ -858,15 +858,15 @@ static void dungeonBuildTunnel(int y_start, int x_start, int y_end, int x_end) {
                         if (coordInBounds(y, x)) {
                             // values 11 and 12 are impossible here, dungeonPlaceStreamerRock
                             // is never run before dungeonBuildTunnel
-                            if (cave[y][x].fval == GRANITE_WALL) {
+                            if (cave[y][x].fval == TILE_GRANITE_WALL) {
                                 cave[y][x].fval = TMP2_WALL;
                             }
                         }
                     }
                 }
                 break;
-            case CORR_FLOOR:
-            case BLOCKED_FLOOR:
+            case TILE_CORR_FLOOR:
+            case TILE_BLOCKED_FLOOR:
                 y_start = tmp_row;
                 x_start = tmp_col;
 
@@ -905,7 +905,7 @@ static void dungeonBuildTunnel(int y_start, int x_start, int y_end, int x_end) {
     } while ((y_start != y_end || x_start != x_end) && !stop_flag);
 
     for (int i = 0; i < tunnel_index; i++) {
-        cave[tunnels_tk[i].y][tunnels_tk[i].x].fval = CORR_FLOOR;
+        cave[tunnels_tk[i].y][tunnels_tk[i].x].fval = TILE_CORR_FLOOR;
     }
 
     for (int i = 0; i < wall_index; i++) {
@@ -916,7 +916,7 @@ static void dungeonBuildTunnel(int y_start, int x_start, int y_end, int x_end) {
                 dungeonPlaceDoor(walls_tk[i].y, walls_tk[i].x);
             } else {
                 // these have to be doorways to rooms
-                tile->fval = CORR_FLOOR;
+                tile->fval = TILE_CORR_FLOOR;
             }
         }
     }
@@ -935,7 +935,7 @@ static bool dungeonIsNextTo(int y, int x) {
 
 // Places door at y, x position if at least 2 walls found
 static void dungeonPlaceDoorIfNextToTwoWalls(int y, int x) {
-    if (cave[y][x].fval == CORR_FLOOR && randomNumber(100) > DUN_TUNNEL_DOORS && dungeonIsNextTo(y, x)) {
+    if (cave[y][x].fval == TILE_CORR_FLOOR && randomNumber(100) > DUN_TUNNEL_DOORS && dungeonIsNextTo(y, x)) {
         dungeonPlaceDoor(y, x);
     }
 }
@@ -1026,12 +1026,12 @@ static void dungeonGenerate() {
     }
 
     // Generate walls and streamers
-    dungeonFillEmptyTilesWith(GRANITE_WALL);
+    dungeonFillEmptyTilesWith(TILE_GRANITE_WALL);
     for (int i = 0; i < DUN_MAGMA_STREAMER; i++) {
-        dungeonPlaceStreamerRock(MAGMA_WALL, DUN_MAGMA_TREASURE);
+        dungeonPlaceStreamerRock(TILE_MAGMA_WALL, DUN_MAGMA_TREASURE);
     }
     for (int i = 0; i < DUN_QUARTZ_STREAMER; i++) {
-        dungeonPlaceStreamerRock(QUARTZ_WALL, DUN_QUARTZ_TREASURE);
+        dungeonPlaceStreamerRock(TILE_QUARTZ_WALL, DUN_QUARTZ_TREASURE);
     }
     dungeonPlaceBoundaryWalls();
 
@@ -1081,7 +1081,7 @@ static void dungeonBuildStore(int store_id, int y, int x) {
 
     for (pos_y = y_height; pos_y <= y_depth; pos_y++) {
         for (pos_x = x_left; pos_x <= x_right; pos_x++) {
-            cave[pos_y][pos_x].fval = BOUNDARY_WALL;
+            cave[pos_y][pos_x].fval = TILE_BOUNDARY_WALL;
         }
     }
 
@@ -1104,7 +1104,7 @@ static void dungeonBuildStore(int store_id, int y, int x) {
         }
     }
 
-    cave[pos_y][pos_x].fval = CORR_FLOOR;
+    cave[pos_y][pos_x].fval = TILE_CORR_FLOOR;
 
     int cur_pos = popt();
     cave[pos_y][pos_x].tptr = (uint8_t) cur_pos;
@@ -1159,7 +1159,7 @@ static void lightTown() {
     if (isNighTime()) {
         for (int y = 0; y < dungeon_height; y++) {
             for (int x = 0; x < dungeon_width; x++) {
-                if (cave[y][x].fval != DARK_FLOOR) {
+                if (cave[y][x].fval != TILE_DARK_FLOOR) {
                     cave[y][x].pl = true;
                 }
             }
@@ -1182,7 +1182,7 @@ static void townGeneration() {
 
     dungeonPlaceTownStores();
 
-    dungeonFillEmptyTilesWith(DARK_FLOOR);
+    dungeonFillEmptyTilesWith(TILE_DARK_FLOOR);
 
     // make stairs before seedResetToOldSeed, so that they don't move around
     dungeonPlaceBoundaryWalls();

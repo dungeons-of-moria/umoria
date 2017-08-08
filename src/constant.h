@@ -230,12 +230,12 @@ constexpr char *CNIL = 0;
 // Fval definitions: these describe the various types of dungeon floors and
 // walls, if numbers above 15 are ever used, then the test against MIN_CAVE_WALL
 // will have to be changed, also the save routines will have to be changed.
-constexpr uint8_t NULL_WALL = 0;
-constexpr uint8_t DARK_FLOOR = 1;
-constexpr uint8_t LIGHT_FLOOR = 2;
+constexpr uint8_t TILE_NULL_WALL = 0;
+constexpr uint8_t TILE_DARK_FLOOR = 1;
+constexpr uint8_t TILE_LIGHT_FLOOR = 2;
 constexpr uint8_t MAX_CAVE_ROOM = 2;
-constexpr uint8_t CORR_FLOOR = 3;
-constexpr uint8_t BLOCKED_FLOOR = 4; // a corridor space with cl/st/se door or rubble
+constexpr uint8_t TILE_CORR_FLOOR = 3;
+constexpr uint8_t TILE_BLOCKED_FLOOR = 4; // a corridor space with cl/st/se door or rubble
 constexpr uint8_t MAX_CAVE_FLOOR = 4;
 
 constexpr uint8_t MAX_OPEN_SPACE = 3;
@@ -245,10 +245,10 @@ constexpr uint8_t TMP1_WALL = 8;
 constexpr uint8_t TMP2_WALL = 9;
 
 constexpr uint8_t MIN_CAVE_WALL = 12;
-constexpr uint8_t GRANITE_WALL = 12;
-constexpr uint8_t MAGMA_WALL = 13;
-constexpr uint8_t QUARTZ_WALL = 14;
-constexpr uint8_t BOUNDARY_WALL = 15;
+constexpr uint8_t TILE_GRANITE_WALL = 12;
+constexpr uint8_t TILE_MAGMA_WALL = 13;
+constexpr uint8_t TILE_QUARTZ_WALL = 14;
+constexpr uint8_t TILE_BOUNDARY_WALL = 15;
 
 // Column for stats
 constexpr uint8_t STAT_COLUMN = 0;

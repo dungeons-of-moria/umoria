@@ -1702,8 +1702,8 @@ void dungeonLightRoom(int pos_y, int pos_x) {
             if (tile->lr && !tile->pl) {
                 tile->pl = true;
 
-                if (tile->fval == DARK_FLOOR) {
-                    tile->fval = LIGHT_FLOOR;
+                if (tile->fval == TILE_DARK_FLOOR) {
+                    tile->fval = TILE_LIGHT_FLOOR;
                 }
                 if (!tile->fm && tile->tptr != 0) {
                     int treasure_id = treasure_list[tile->tptr].tval;

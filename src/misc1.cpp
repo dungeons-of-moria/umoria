@@ -259,7 +259,7 @@ int coordCorridorWallsNextTo(int y, int x) {
             int treasure_id = cave[yy][xx].tptr;
 
             // should fail if there is already a door present
-            if (tile_id == CORR_FLOOR && (treasure_id == 0 || treasure_list[treasure_id].tval < TV_MIN_DOORS)) {
+            if (tile_id == TILE_CORR_FLOOR && (treasure_id == 0 || treasure_list[treasure_id].tval < TV_MIN_DOORS)) {
                 walls++;
             }
         }
@@ -477,7 +477,7 @@ char caveGetTileSymbol(int y, int x) {
         return '.';
     }
 
-    if (cave_ptr->fval == GRANITE_WALL || cave_ptr->fval == BOUNDARY_WALL || !highlight_seams) {
+    if (cave_ptr->fval == TILE_GRANITE_WALL || cave_ptr->fval == TILE_BOUNDARY_WALL || !highlight_seams) {
         return '#';
     }
 

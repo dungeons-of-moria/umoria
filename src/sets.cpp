@@ -9,11 +9,11 @@
 #include "headers.h"
 
 bool setRooms(int tile_id) {
-    return (tile_id == DARK_FLOOR || tile_id == LIGHT_FLOOR);
+    return (tile_id == TILE_DARK_FLOOR || tile_id == TILE_LIGHT_FLOOR);
 }
 
 bool setCorridors(int tile_id) {
-    return (tile_id == CORR_FLOOR || tile_id == BLOCKED_FLOOR);
+    return (tile_id == TILE_CORR_FLOOR || tile_id == TILE_BLOCKED_FLOOR);
 }
 
 bool setFloors(int tile_id) {

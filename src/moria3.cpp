@@ -579,8 +579,8 @@ static int dungeonSummonObject(int y, int x, int amount, int object_type) {
 int dungeonDeleteObject(int y, int x) {
     Cave_t *tile = &cave[y][x];
 
-    if (tile->fval == BLOCKED_FLOOR) {
-        tile->fval = CORR_FLOOR;
+    if (tile->fval == TILE_BLOCKED_FLOOR) {
+        tile->fval = TILE_CORR_FLOOR;
     }
 
     pusht(tile->tptr);
@@ -956,7 +956,7 @@ void playerMove(int direction, bool do_pickup) {
                 dungeonSearch(char_row, char_col, py.misc.srh);
             }
 
-            if (tile->fval == LIGHT_FLOOR) {
+            if (tile->fval == TILE_LIGHT_FLOOR) {
                 // A room of light should be lit.
 
                 if (!tile->pl && !py.flags.blind) {
@@ -967,7 +967,7 @@ void playerMove(int direction, bool do_pickup) {
 
                 for (int row = (char_row - 1); row <= (char_row + 1); row++) {
                     for (int col = (char_col - 1); col <= (char_col + 1); col++) {
-                        if (cave[row][col].fval == LIGHT_FLOOR && !cave[row][col].pl) {
+                        if (cave[row][col].fval == TILE_LIGHT_FLOOR && !cave[row][col].pl) {
                             dungeonLightRoom(row, col);
                         }
                     }
@@ -1144,7 +1144,7 @@ static void openClosedDoor(int y, int x) {
 
     if (item->p1 == 0) {
         inventoryItemCopyTo(OBJ_OPEN_DOOR, &treasure_list[tile->tptr]);
-        tile->fval = CORR_FLOOR;
+        tile->fval = TILE_CORR_FLOOR;
         dungeonLiteSpot(y, x);
         command_count = 0;
     }
@@ -1259,7 +1259,7 @@ void dungeonCloseDoor() {
             if (tile->cptr == 0) {
                 if (item->p1 == 0) {
                     inventoryItemCopyTo(OBJ_CLOSED_DOOR, item);
-                    tile->fval = BLOCKED_FLOOR;
+                    tile->fval = TILE_BLOCKED_FLOOR;
                     dungeonLiteSpot(y, x);
                 } else {
                     printMessage("The door appears to be broken.");
@@ -1291,7 +1291,7 @@ int dungeonTunnelWall(int y, int x, int digging_ability, int digging_chance) {
 
     if (tile->lr) {
         // Should become a room space, check to see whether
-        // it should be LIGHT_FLOOR or DARK_FLOOR.
+        // it should be TILE_LIGHT_FLOOR or TILE_DARK_FLOOR.
         bool found = false;
 
         for (int yy = y - 1; yy <= y + 1; yy++) {
@@ -1306,12 +1306,12 @@ int dungeonTunnelWall(int y, int x, int digging_ability, int digging_chance) {
         }
 
         if (!found) {
-            tile->fval = CORR_FLOOR;
+            tile->fval = TILE_CORR_FLOOR;
             tile->pl = false;
         }
     } else {
         // should become a corridor space
-        tile->fval = CORR_FLOOR;
+        tile->fval = TILE_CORR_FLOOR;
         tile->pl = false;
     }
 

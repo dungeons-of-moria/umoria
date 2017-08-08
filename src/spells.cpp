@@ -242,7 +242,7 @@ bool spellDarkenArea(int y, int x) {
 
                 if (tile->lr && tile->fval <= MAX_CAVE_FLOOR) {
                     tile->pl = false;
-                    tile->fval = DARK_FLOOR;
+                    tile->fval = TILE_DARK_FLOOR;
 
                     dungeonLiteSpot(row, col);
 
@@ -257,7 +257,7 @@ bool spellDarkenArea(int y, int x) {
             for (int col = x - 1; col <= x + 1; col++) {
                 Cave_t *tile = &cave[row][col];
 
-                if (tile->fval == CORR_FLOOR && tile->pl) {
+                if (tile->fval == TILE_CORR_FLOOR && tile->pl) {
                     // pl could have been set by star-lite wand, etc
                     tile->pl = false;
                     darkened = true;
@@ -406,7 +406,7 @@ bool spellSurroundPlayerWithDoors() {
                 }
 
                 int free_id = popt();
-                tile->fval = BLOCKED_FLOOR;
+                tile->fval = TILE_BLOCKED_FLOOR;
                 tile->tptr = (uint8_t) free_id;
 
                 inventoryItemCopyTo(OBJ_CLOSED_DOOR, &treasure_list[free_id]);
@@ -524,7 +524,7 @@ void spellLightLine(int x, int y, int direction) {
             // set pl so that dungeonLiteSpot will work
             tile->pl = true;
 
-            if (tile->fval == LIGHT_FLOOR) {
+            if (tile->fval == TILE_LIGHT_FLOOR) {
                 if (coordInsidePanel(y, x)) {
                     dungeonLightRoom(y, x);
                 }
@@ -1271,7 +1271,7 @@ bool spellWallToMud(int y, int x, int direction) {
             finished = true;
         }
 
-        if (tile->fval >= MIN_CAVE_WALL && tile->fval != BOUNDARY_WALL) {
+        if (tile->fval >= MIN_CAVE_WALL && tile->fval != TILE_BOUNDARY_WALL) {
             finished = true;
 
             (void) dungeonTunnelWall(y, x, 1, 0);
@@ -1470,7 +1470,7 @@ bool spellBuildWall(int y, int x, int direction) {
             }
         }
 
-        tile->fval = MAGMA_WALL;
+        tile->fval = TILE_MAGMA_WALL;
         tile->fm = false;
 
         // Permanently light this wall if it is lit by player's lamp.
@@ -1900,19 +1900,19 @@ void dungeonEarthquake() {
                     earthquakeHitsMonster(c_ptr->cptr);
                 }
 
-                if (c_ptr->fval >= MIN_CAVE_WALL && c_ptr->fval != BOUNDARY_WALL) {
-                    c_ptr->fval = CORR_FLOOR;
+                if (c_ptr->fval >= MIN_CAVE_WALL && c_ptr->fval != TILE_BOUNDARY_WALL) {
+                    c_ptr->fval = TILE_CORR_FLOOR;
                     c_ptr->pl = false;
                     c_ptr->fm = false;
                 } else if (c_ptr->fval <= MAX_CAVE_FLOOR) {
                     int tmp = randomNumber(10);
 
                     if (tmp < 6) {
-                        c_ptr->fval = QUARTZ_WALL;
+                        c_ptr->fval = TILE_QUARTZ_WALL;
                     } else if (tmp < 9) {
-                        c_ptr->fval = MAGMA_WALL;
+                        c_ptr->fval = TILE_MAGMA_WALL;
                     } else {
-                        c_ptr->fval = GRANITE_WALL;
+                        c_ptr->fval = TILE_GRANITE_WALL;
                     }
 
                     c_ptr->fm = false;
@@ -2155,22 +2155,22 @@ static void replace_spot(int y, int x, int typ) {
         case 1:
         case 2:
         case 3:
-            c_ptr->fval = CORR_FLOOR;
+            c_ptr->fval = TILE_CORR_FLOOR;
             break;
         case 4:
         case 7:
         case 10:
-            c_ptr->fval = GRANITE_WALL;
+            c_ptr->fval = TILE_GRANITE_WALL;
             break;
         case 5:
         case 8:
         case 11:
-            c_ptr->fval = MAGMA_WALL;
+            c_ptr->fval = TILE_MAGMA_WALL;
             break;
         case 6:
         case 9:
         case 12:
-            c_ptr->fval = QUARTZ_WALL;
+            c_ptr->fval = TILE_QUARTZ_WALL;
             break;
     }
 
@@ -2195,7 +2195,7 @@ void spellDestroyArea(int y, int x) {
     if (current_dungeon_level > 0) {
         for (int pos_y = y - 15; pos_y <= y + 15; pos_y++) {
             for (int pos_x = x - 15; pos_x <= x + 15; pos_x++) {
-                if (coordInBounds(pos_y, pos_x) && cave[pos_y][pos_x].fval != BOUNDARY_WALL) {
+                if (coordInBounds(pos_y, pos_x) && cave[pos_y][pos_x].fval != TILE_BOUNDARY_WALL) {
                     int distance = coordDistanceBetween(pos_y, pos_x, y, x);
 
                     // clear player's spot, but don't put wall there

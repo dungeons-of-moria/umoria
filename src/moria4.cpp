@@ -111,16 +111,16 @@ static void dungeonDigRubble(int y, int x, int digging_ability) {
 // Return `true` if a wall was dug at
 static bool dungeonDigAtLocation(int y, int x, uint8_t wall_type, int digging_ability) {
     switch (wall_type) {
-        case GRANITE_WALL:
+        case TILE_GRANITE_WALL:
             dungeonDigGraniteWall(y, x, digging_ability);
             break;
-        case MAGMA_WALL:
+        case TILE_MAGMA_WALL:
             dungeonDigMagmaWall(y, x, digging_ability);
             break;
-        case QUARTZ_WALL:
+        case TILE_QUARTZ_WALL:
             dungeonDigQuartzWall(y, x, digging_ability);
             break;
-        case BOUNDARY_WALL:
+        case TILE_BOUNDARY_WALL:
             printMessage("This seems to be permanent rock.");
             break;
         default:
@@ -670,8 +670,8 @@ static bool lookSee(int x, int y, bool *transparent) {
             const char *wall_description;
 
             switch (tile->fval) {
-                case BOUNDARY_WALL:
-                case GRANITE_WALL:
+                case TILE_BOUNDARY_WALL:
+                case TILE_GRANITE_WALL:
                 granite:
                     // Granite is only interesting if it contains something.
                     if (msg[0]) {
@@ -680,10 +680,10 @@ static bool lookSee(int x, int y, bool *transparent) {
                         wall_description = CNIL; // In case we jump here
                     }
                     break;
-                case MAGMA_WALL:
+                case TILE_MAGMA_WALL:
                     wall_description = "some dark rock";
                     break;
-                case QUARTZ_WALL:
+                case TILE_QUARTZ_WALL:
                     wall_description = "a quartz vein";
                     break;
                 default:
@@ -1084,7 +1084,7 @@ static void playerBashClosedDoor(int y, int x, int dir, Cave_t *tile, Inventory_
         // 50% chance of breaking door
         item->p1 = (int16_t) (1 - randomNumber(2));
 
-        tile->fval = CORR_FLOOR;
+        tile->fval = TILE_CORR_FLOOR;
 
         if (py.flags.confused == 0) {
             playerMove(dir, false);
