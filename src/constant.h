@@ -118,8 +118,8 @@ constexpr uint8_t OBJECT_BOLTS_MAX_RANGE = 18;       // Maximum range of bolts a
 constexpr uint16_t OBJECTS_RUNE_PROTECTION = 3000;   // Rune of protection resistance
 
 // Creature constants
-constexpr uint16_t MAX_CREATURES = 279; // Number of creatures defined for univ
-constexpr uint8_t N_MONS_ATTS = 215;    // Number of monster attack types.
+constexpr uint16_t MAX_CREATURES = 279;       // Number of creatures defined for univ
+constexpr uint8_t MONSTER_ATTACK_TYPES = 215; // Number of monster attack types.
 
 // with MAX_MALLOC = 101, it is possible to get compacting monsters messages
 // while breeding/cloning monsters
