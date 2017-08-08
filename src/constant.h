@@ -67,9 +67,9 @@ constexpr uint8_t STORE_STOCK_TURN_AROUND = 9;    // Amount of buying and sellin
 constexpr uint8_t COST_ADJUSTMENT = 100;          // Adjust prices for buying and selling
 
 // Treasure constants
-constexpr uint8_t PLAYER_INVENTORY_SIZE = 34; // Size of inventory array(Do not change)
-constexpr uint8_t MAX_OBJ_LEVEL = 50;    // Maximum level of magic in dungeon
-constexpr uint8_t OBJ_GREAT = 12;        // 1/n Chance of item being a Great Item
+constexpr uint8_t PLAYER_INVENTORY_SIZE = 34;         // Size of inventory array (DO NOT CHANGE)
+constexpr uint8_t TREASURE_MAX_LEVELS = 50;           // Maximum level of magic in dungeon
+constexpr uint8_t TREASURE_CHANCE_OF_GREAT_ITEM = 12; // 1/n Chance of item being a Great Item
 
 // Note that the following constants are all related, if you change one, you
 // must also change all succeeding ones. Also, player_base_provisions[] and

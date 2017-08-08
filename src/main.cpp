@@ -270,7 +270,7 @@ static void initializeMonsterLevels() {
 
 // Initializes T_LEVEL array for use with PLACE_OBJECT -RAK-
 static void initializeTreasureLevels() {
-    for (int i = 0; i <= MAX_OBJ_LEVEL; i++) {
+    for (int i = 0; i <= TREASURE_MAX_LEVELS; i++) {
         treasure_levels[i] = 0;
     }
 
@@ -278,15 +278,15 @@ static void initializeTreasureLevels() {
         treasure_levels[game_objects[i].level]++;
     }
 
-    for (int i = 1; i <= MAX_OBJ_LEVEL; i++) {
+    for (int i = 1; i <= TREASURE_MAX_LEVELS; i++) {
         treasure_levels[i] += treasure_levels[i - 1];
     }
 
     // now produce an array with object indexes sorted by level,
     // by using the info in treasure_levels, this is an O(n) sort!
     // this is not a stable sort, but that does not matter
-    int indexes[MAX_OBJ_LEVEL + 1];
-    for (int i = 0; i <= MAX_OBJ_LEVEL; i++) {
+    int indexes[TREASURE_MAX_LEVELS + 1];
+    for (int i = 0; i <= TREASURE_MAX_LEVELS; i++) {
         indexes[i] = 1;
     }
 

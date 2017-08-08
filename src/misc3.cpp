@@ -36,7 +36,7 @@ void dungeonPlaceGold(int y, int x) {
 
     int gold_type_id = ((randomNumber(current_dungeon_level + 2) + 2) / 2) - 1;
 
-    if (randomNumber(OBJ_GREAT) == 1) {
+    if (randomNumber(TREASURE_CHANCE_OF_GREAT_ITEM) == 1) {
         gold_type_id += randomNumber(current_dungeon_level + 1);
     }
 
@@ -59,12 +59,12 @@ int itemGetRandomObjectId(int level, bool must_be_small) {
         return randomNumber(treasure_levels[0]) - 1;
     }
 
-    if (level >= MAX_OBJ_LEVEL) {
-        level = MAX_OBJ_LEVEL;
-    } else if (randomNumber(OBJ_GREAT) == 1) {
-        level = level * MAX_OBJ_LEVEL / randomNumber(MAX_OBJ_LEVEL) + 1;
-        if (level > MAX_OBJ_LEVEL) {
-            level = MAX_OBJ_LEVEL;
+    if (level >= TREASURE_MAX_LEVELS) {
+        level = TREASURE_MAX_LEVELS;
+    } else if (randomNumber(TREASURE_CHANCE_OF_GREAT_ITEM) == 1) {
+        level = level * TREASURE_MAX_LEVELS / randomNumber(TREASURE_MAX_LEVELS) + 1;
+        if (level > TREASURE_MAX_LEVELS) {
+            level = TREASURE_MAX_LEVELS;
         }
     }
 
