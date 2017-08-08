@@ -40,8 +40,8 @@ void dungeonPlaceGold(int y, int x) {
         gold_type_id += randomNumber(current_dungeon_level + 1);
     }
 
-    if (gold_type_id >= MAX_GOLD) {
-        gold_type_id = MAX_GOLD - 1;
+    if (gold_type_id >= MAX_GOLD_TYPES) {
+        gold_type_id = MAX_GOLD_TYPES - 1;
     }
 
     cave[y][x].tptr = (uint8_t) free_treasure_id;

@@ -63,8 +63,8 @@
 
 // Object list (All objects must be defined here)
 
-// Dungeon items from 0 to MAX_DUNGEON_OBJ
-GameObject_t game_objects[MAX_OBJECTS] = {
+// Dungeon items from 0 to MAX_DUNGEON_OBJECTS
+GameObject_t game_objects[MAX_OBJECTS_IN_GAME] = {
         {"Poison",                          0x00000001L, TV_FOOD,        ',', 500,  0,    64,  1, 1,    0,  0, 0,   0, {0, 0}, 7}, // 0
         {"Blindness",                       0x00000002L, TV_FOOD,        ',', 500,  0,    65,  1, 1,    0,  0, 0,   0, {0, 0}, 9}, // 1
         {"Paranoia",                        0x00000004L, TV_FOOD,        ',', 500,  0,    66,  1, 1,    0,  0, 0,   0, {0, 0}, 9}, // 2
@@ -546,7 +546,7 @@ const char *special_item_names[SN_ARRAY_SIZE] = {
         "(Unlocked)",        "of Slay Animal"
 };
 
-int16_t sorted_objects[MAX_DUNGEON_OBJ];
+int16_t sorted_objects[MAX_DUNGEON_OBJECTS];
 
 // Identified objects flags
 uint8_t objects_identified[OBJECT_IDENT_SIZE];

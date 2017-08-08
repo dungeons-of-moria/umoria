@@ -72,10 +72,10 @@ constexpr uint8_t TREASURE_MAX_LEVELS = 50;           // Maximum level of magic 
 constexpr uint8_t TREASURE_CHANCE_OF_GREAT_ITEM = 12; // 1/n Chance of item being a Great Item
 
 // Note that the following constants are all related, if you change one, you
-// must also change all succeeding ones. Also, player_base_provisions[] and
-// store_choices[] may also have to be changed.
-constexpr uint16_t MAX_OBJECTS = 420;     // Number of objects for universe
-constexpr uint16_t MAX_DUNGEON_OBJ = 344; // Number of dungeon objects
+// must also change all succeeding ones.
+// Also, player_base_provisions[] and store_choices[] may also have to be changed.
+constexpr uint16_t MAX_OBJECTS_IN_GAME = 420; // Number of objects for universe
+constexpr uint16_t MAX_DUNGEON_OBJECTS = 344; // Number of dungeon objects
 constexpr uint16_t OBJ_OPEN_DOOR = 367;
 constexpr uint16_t OBJ_CLOSED_DOOR = 368;
 constexpr uint16_t OBJ_SECRET_DOOR = 369;
@@ -90,9 +90,9 @@ constexpr uint16_t OBJ_GOLD_LIST = 399;
 constexpr uint16_t OBJ_NOTHING = 417;
 constexpr uint16_t OBJ_RUINED_CHEST = 418;
 constexpr uint16_t OBJ_WIZARD = 419;
-constexpr uint16_t OBJECT_IDENT_SIZE = 448; // 7*64, see object_offset() in desc.c, could be MAX_OBJECTS o_o() rewritten
+constexpr uint16_t OBJECT_IDENT_SIZE = 448; // 7*64, see object_offset() in desc.cpp, could be MAX_OBJECTS o_o() rewritten
 
-constexpr uint8_t MAX_GOLD = 18; // Number of different types of gold
+constexpr uint8_t MAX_GOLD_TYPES = 18; // Number of different types of gold
 
 // with MAX_TALLOC = 150, it is possible to get compacting objects during
 // level generation, although it is extremely rare

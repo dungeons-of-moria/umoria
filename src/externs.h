@@ -110,13 +110,13 @@ extern uint16_t store_choices[MAX_STORES][STORE_MAX_ITEM_TYPES];
 extern bool (*store_buy[MAX_STORES])(int);
 
 // Following are treasure arrays  and variables
-extern GameObject_t game_objects[MAX_OBJECTS];
+extern GameObject_t game_objects[MAX_OBJECTS_IN_GAME];
 extern uint8_t objects_identified[OBJECT_IDENT_SIZE];
 extern int16_t treasure_levels[TREASURE_MAX_LEVELS + 1];
 extern Inventory_t treasure_list[MAX_TALLOC];
 extern Inventory_t inventory[PLAYER_INVENTORY_SIZE];
 extern char *special_item_names[SN_ARRAY_SIZE];
-extern int16_t sorted_objects[MAX_DUNGEON_OBJ];
+extern int16_t sorted_objects[MAX_DUNGEON_OBJECTS];
 
 extern int16_t inventory_count;
 extern int16_t inventory_weight;
