@@ -58,37 +58,37 @@ static bool sv_write() {
 
     uint32_t l = 0;
 
-    if (run_cut_corners) {
+    if (config.run_cut_corners) {
         l |= 0x1;
     }
-    if (run_examine_corners) {
+    if (config.run_examine_corners) {
         l |= 0x2;
     }
-    if (run_print_self) {
+    if (config.run_print_self) {
         l |= 0x4;
     }
-    if (find_bound) {
+    if (config.find_bound) {
         l |= 0x8;
     }
-    if (prompt_to_pickup) {
+    if (config.prompt_to_pickup) {
         l |= 0x10;
     }
-    if (use_roguelike_keys) {
+    if (config.use_roguelike_keys) {
         l |= 0x20;
     }
-    if (show_inventory_weights) {
+    if (config.show_inventory_weights) {
         l |= 0x40;
     }
-    if (highlight_seams) {
+    if (config.highlight_seams) {
         l |= 0x80;
     }
-    if (run_ignore_doors) {
+    if (config.run_ignore_doors) {
         l |= 0x100;
     }
-    if (error_beep_sound) {
+    if (config.error_beep_sound) {
         l |= 0x200;
     }
-    if (display_counts) {
+    if (config.display_counts) {
         l |= 0x400;
     }
     if (character_is_dead) {
@@ -555,21 +555,21 @@ bool loadGame(bool *generate) {
         uint32_t l;
         rd_long(&l);
 
-        run_cut_corners = (l & 0x1) != 0;
-        run_examine_corners = (l & 0x2) != 0;
-        run_print_self = (l & 0x4) != 0;
-        find_bound = (l & 0x8) != 0;
-        prompt_to_pickup = (l & 0x10) != 0;
-        use_roguelike_keys = (l & 0x20) != 0;
-        show_inventory_weights = (l & 0x40) != 0;
-        highlight_seams = (l & 0x80) != 0;
-        run_ignore_doors = (l & 0x100) != 0;
+        config.run_cut_corners = (l & 0x1) != 0;
+        config.run_examine_corners = (l & 0x2) != 0;
+        config.run_print_self = (l & 0x4) != 0;
+        config.find_bound = (l & 0x8) != 0;
+        config.prompt_to_pickup = (l & 0x10) != 0;
+        config.use_roguelike_keys = (l & 0x20) != 0;
+        config.show_inventory_weights = (l & 0x40) != 0;
+        config.highlight_seams = (l & 0x80) != 0;
+        config.run_ignore_doors = (l & 0x100) != 0;
 
-        // save files before 5.2.2 don't have error_beep_sound, set it on for compatibility
-        error_beep_sound = version_min < 2 || (version_min == 2 && patch_level < 2) || (l & 0x200) != 0;
+        // save files before 5.2.2 don't have `error_beep_sound`, set it on for compatibility
+        config.error_beep_sound = version_min < 2 || (version_min == 2 && patch_level < 2) || (l & 0x200) != 0;
 
-        // save files before 5.2.2 don't have display_counts, set it on for compatibility
-        display_counts = version_min < 2 || (version_min == 2 && patch_level < 2) || (l & 0x400) != 0;
+        // save files before 5.2.2 don't have `display_counts`, set it on for compatibility
+        config.display_counts = version_min < 2 || (version_min == 2 && patch_level < 2) || (l & 0x400) != 0;
 
         // Don't allow resurrection of total_winner characters.  It causes
         // problems because the character level is out of the allowed range.

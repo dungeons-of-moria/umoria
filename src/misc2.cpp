@@ -980,21 +980,21 @@ void magicTreasureMagicalAbility(int item_id, int level) {
 static struct {
     const char *o_prompt;
     bool *o_var;
-} options[] = {{"Running: cut known corners",            &run_cut_corners},
-               {"Running: examine potential corners",    &run_examine_corners},
-               {"Running: print self during run",        &run_print_self},
-               {"Running: stop when map sector changes", &find_bound},
-               {"Running: run through open doors",       &run_ignore_doors},
-               {"Prompt to pick up objects",             &prompt_to_pickup},
-               {"Rogue like commands",                   &use_roguelike_keys},
-               {"Show weights in inventory",             &show_inventory_weights},
-               {"Highlight and notice mineral seams",    &highlight_seams},
-               {"Beep for invalid character",            &error_beep_sound},
-               {"Display rest/repeat counts",            &display_counts},
+} options[] = {{"Running: cut known corners",            &config.run_cut_corners},
+               {"Running: examine potential corners",    &config.run_examine_corners},
+               {"Running: print self during run",        &config.run_print_self},
+               {"Running: stop when map sector changes", &config.find_bound},
+               {"Running: run through open doors",       &config.run_ignore_doors},
+               {"Prompt to pick up objects",             &config.prompt_to_pickup},
+               {"Rogue like commands",                   &config.use_roguelike_keys},
+               {"Show weights in inventory",             &config.show_inventory_weights},
+               {"Highlight and notice mineral seams",    &config.highlight_seams},
+               {"Beep for invalid character",            &config.error_beep_sound},
+               {"Display rest/repeat counts",            &config.display_counts},
                {0,                                       0},
 };
 
-// Set or unset various boolean options. -CJS-
+// Set or unset various boolean config.display_counts -CJS-
 void setGameOptions() {
     putStringClearToEOL("  ESC when finished, y/n to set options, <return> or - to move cursor", 0, 0);
 

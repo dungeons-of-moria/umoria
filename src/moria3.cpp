@@ -418,7 +418,7 @@ static void carry(int y, int x, bool pickup) {
     // Too many objects?
     if (inventoryCanCarryItemCount(item)) {
         // Okay,  pick it up
-        if (pickup && prompt_to_pickup) {
+        if (pickup && config.prompt_to_pickup) {
             itemDescription(description, item, true);
 
             // change the period to a question mark

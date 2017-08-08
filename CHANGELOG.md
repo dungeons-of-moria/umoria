@@ -5,6 +5,7 @@
 ### Code
 
 - Rename many constants for better clarity on their purpose.
+- Move the game options globals into a Config_t struct.
 
 
 

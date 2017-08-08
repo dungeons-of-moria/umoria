@@ -452,7 +452,7 @@ void terminalBellSound() {
     putQIO();
 
     // The player can turn off beeps if they find them annoying.
-    if (error_beep_sound) {
+    if (config.error_beep_sound) {
         (void) write(1, "\007", 1);
     }
 }

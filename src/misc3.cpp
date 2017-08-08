@@ -488,7 +488,7 @@ void printCharacterMovementState() {
 
         if (py.flags.rest < 0) {
             (void) strcpy(restString, "Rest *");
-        } else if (display_counts) {
+        } else if (config.display_counts) {
             (void) sprintf(restString, "Rest %-5d", py.flags.rest);
         } else {
             (void) strcpy(restString, "Rest");
@@ -502,7 +502,7 @@ void printCharacterMovementState() {
     if (command_count > 0) {
         char repeatString[16];
 
-        if (display_counts) {
+        if (config.display_counts) {
             (void) sprintf(repeatString, "Repeat %-3d", command_count);
         } else {
             (void) strcpy(repeatString, "Repeat");

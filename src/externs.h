@@ -11,17 +11,7 @@ extern int hack_monptr;
 extern vtype_t savegame_filename;
 extern FILE *highscore_fp;
 
-extern bool display_counts;
-extern bool find_bound;
-extern bool run_cut_corners;
-extern bool run_examine_corners;
-extern bool run_ignore_doors;
-extern bool run_print_self;
-extern bool highlight_seams;
-extern bool prompt_to_pickup;
-extern bool use_roguelike_keys;
-extern bool show_inventory_weights;
-extern bool error_beep_sound;
+extern Config_t config;
 
 extern int16_t current_dungeon_level;
 extern int32_t character_max_score;

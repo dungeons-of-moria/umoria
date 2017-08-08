@@ -762,7 +762,7 @@ static void executeInputCommands(char *command, int *find_count) {
                 int counter = 0;
 
                 // Get a count for a command.
-                if ((use_roguelike_keys && lastInputCommand >= '0' && lastInputCommand <= '9') || (!use_roguelike_keys && lastInputCommand == '#')) {
+                if ((config.use_roguelike_keys && lastInputCommand >= '0' && lastInputCommand <= '9') || (!config.use_roguelike_keys && lastInputCommand == '#')) {
                     char tmp[8];
 
                     putStringClearToEOL("Repeat count:", 0, 0);
@@ -829,7 +829,7 @@ static void executeInputCommands(char *command, int *find_count) {
                 moveCursorRelative(char_row, char_col);
 
                 // Commands are always converted to rogue form. -CJS-
-                if (!use_roguelike_keys) {
+                if (!config.use_roguelike_keys) {
                     lastInputCommand = originalCommands(lastInputCommand);
                 }
 
@@ -1356,7 +1356,7 @@ static void commandSaveAndExit() {
     if (total_winner) {
         printMessage("You are a Total Winner,  your character must be retired.");
 
-        if (use_roguelike_keys) {
+        if (config.use_roguelike_keys) {
             printMessage("Use 'Q' to when you are ready to quit.");
         } else {
             printMessage("Use <Control>-K when you are ready to quit.");
@@ -1521,7 +1521,7 @@ static void doWizardCommands(char com_val) {
             outputRandomLevelObjectsToFile();
             break;
         case '\\': // \ wizard help
-            if (use_roguelike_keys) {
+            if (config.use_roguelike_keys) {
                 displayTextHelpFile(MORIA_WIZ_HELP);
             } else {
                 displayTextHelpFile(MORIA_OWIZ_HELP);
@@ -1561,7 +1561,7 @@ static void doWizardCommands(char com_val) {
             wizardCreateObjects();
             break;
         default:
-            if (use_roguelike_keys) {
+            if (config.use_roguelike_keys) {
                 putStringClearToEOL("Type '?' or '\\' for help.", 0, 0);
             } else {
                 putStringClearToEOL("Type '?' or ^H for help.", 0, 0);
@@ -1679,7 +1679,7 @@ static void doCommand(char command) {
             dungeonGoDownLevel();
             break;
         case '?': // (?) help with commands
-            if (use_roguelike_keys) {
+            if (config.use_roguelike_keys) {
                 displayTextHelpFile(MORIA_HELP);
             } else {
                 displayTextHelpFile(MORIA_ORIG_HELP);

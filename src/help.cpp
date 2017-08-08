@@ -24,7 +24,7 @@ static const char *asciiCharacterDescription(char command) {
         case '$':
             return "$ - Treasure.";
         case '%':
-            if (!highlight_seams) {
+            if (!config.highlight_seams) {
                 return "% - Not used.";
             }
             return "% - A magma or quartz vein.";

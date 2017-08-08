@@ -612,15 +612,15 @@ static void displayInventoryScreen(int new_screen) {
             line = 7;
             break;
         case INVEN_SCR:
-            screen_left = displayInventory(0, inventory_count - 1, show_inventory_weights, screen_left, CNIL);
+            screen_left = displayInventory(0, inventory_count - 1, config.show_inventory_weights, screen_left, CNIL);
             line = inventory_count;
             break;
         case WEAR_SCR:
-            screen_left = displayInventory(wear_low, wear_high, show_inventory_weights, screen_left, CNIL);
+            screen_left = displayInventory(wear_low, wear_high, config.show_inventory_weights, screen_left, CNIL);
             line = wear_high - wear_low + 1;
             break;
         case EQUIP_SCR:
-            screen_left = displayEquipment(show_inventory_weights, screen_left);
+            screen_left = displayEquipment(config.show_inventory_weights, screen_left);
             line = equipment_count;
             break;
     }
@@ -769,7 +769,7 @@ static void inventoryUnwieldItem() {
     inventory[EQUIPMENT_WIELD] = savedItem;
 
     if (screen_state == EQUIP_SCR) {
-        screen_left = displayEquipment(show_inventory_weights, screen_left);
+        screen_left = displayEquipment(config.show_inventory_weights, screen_left);
     }
 
     playerAdjustBonusesForItem(&inventory[EQUIPMENT_AUX], -1);  // Subtract bonuses
@@ -1254,7 +1254,7 @@ static void inventoryDisplayAppropriateHeader() {
         int weightQuotient = inventory_weight / 10;
         int weightRemainder = inventory_weight % 10;
 
-        if (!show_inventory_weights || inventory_count == 0) {
+        if (!config.show_inventory_weights || inventory_count == 0) {
             (void) sprintf(msg, "You are carrying %d.%d pounds. In your pack there is %s",
                            weightQuotient,
                            weightRemainder,
@@ -1639,7 +1639,7 @@ bool getDirectionWithMemory(char *prompt, int *direction) {
 
         command_count = save;
 
-        if (use_roguelike_keys) {
+        if (config.use_roguelike_keys) {
             command = mapRoguelikeKeysToKeypad(command);
         }
 
@@ -1664,7 +1664,7 @@ bool getAllDirections(const char *prompt, int *direction) {
             return false;
         }
 
-        if (use_roguelike_keys) {
+        if (config.use_roguelike_keys) {
             command = mapRoguelikeKeysToKeypad(command);
         }
 
@@ -1737,10 +1737,10 @@ static void sub1_move_light(int y1, int x1, int y2, int x2) {
                 cave[y][x].tl = false;
             }
         }
-        if (running_counter && !run_print_self) {
+        if (running_counter && !config.run_print_self) {
             temporary_light_only = false;
         }
-    } else if (!running_counter || run_print_self) {
+    } else if (!running_counter || config.run_print_self) {
         temporary_light_only = true;
     }
 
@@ -1803,11 +1803,11 @@ static void sub3_move_light(int y1, int x1, int y2, int x2) {
         }
 
         temporary_light_only = false;
-    } else if (!running_counter || run_print_self) {
+    } else if (!running_counter || config.run_print_self) {
         putChar(caveGetTileSymbol(y1, x1), y1, x1);
     }
 
-    if (!running_counter || run_print_self) {
+    if (!running_counter || config.run_print_self) {
         putChar('@', y2, x2);
     }
 }

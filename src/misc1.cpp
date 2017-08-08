@@ -185,7 +185,7 @@ bool coordOutsidePanel(int y, int x, bool force) {
         panelBounds();
 
         // stop movement if any
-        if (find_bound) {
+        if (config.find_bound) {
             playerEndRunning();
         }
 
@@ -449,7 +449,7 @@ bool los(int from_y, int from_x, int to_y, int to_x) {
 char caveGetTileSymbol(int y, int x) {
     Cave_t *cave_ptr = &cave[y][x];
 
-    if (cave_ptr->cptr == 1 && (!running_counter || run_print_self)) {
+    if (cave_ptr->cptr == 1 && (!running_counter || config.run_print_self)) {
         return '@';
     }
 
@@ -477,7 +477,7 @@ char caveGetTileSymbol(int y, int x) {
         return '.';
     }
 
-    if (cave_ptr->fval == TILE_GRANITE_WALL || cave_ptr->fval == TILE_BOUNDARY_WALL || !highlight_seams) {
+    if (cave_ptr->fval == TILE_GRANITE_WALL || cave_ptr->fval == TILE_BOUNDARY_WALL || !config.highlight_seams) {
         return '#';
     }
 

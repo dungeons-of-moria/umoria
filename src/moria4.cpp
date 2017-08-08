@@ -387,7 +387,7 @@ static int los_map_diagonals2[] = {2, 1, 0, 4, 3};
 // ESCAPE will abort the entire look.
 //
 // Looks first at real objects and monsters, and looks at rock types only after all
-// other things have been seen.  Only looks at rock types if the highlight_seams
+// other things have been seen.  Only looks at rock types if the config.highlight_seams
 // option is set.
 void look() {
     if (py.flags.blind > 0) {
@@ -468,7 +468,7 @@ void look() {
                 abort = lookRay(1, 2 * GRADF - 1, GRADF);
             }
         }
-    } while (!abort && highlight_seams && (++los_rocks_and_objects < 2));
+    } while (!abort && config.highlight_seams && (++los_rocks_and_objects < 2));
 
     if (abort) {
         printMessage("--Aborting look--");

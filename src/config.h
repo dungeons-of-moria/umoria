@@ -18,8 +18,17 @@
 #define MORIA_WELCOME "data/welcome.hlp"
 #define MORIA_VER "data/version.hlp"
 
-// This sets the default user interface.
-// To use the original key bindings (keypad for movement) set ROGUE_LIKE to false;
-// to use the rogue-like key bindings (vi style movement) set ROGUE_LIKE to true.
-// If you change this, you only need to recompile main.c.
-constexpr bool ROGUE_LIKE = false;
+// Game options as set on startup and with `=` set options command -CJS-
+typedef struct {
+    bool display_counts = true;          // Display rest/repeat counts
+    bool find_bound = false;             // Print yourself on a run (slower)
+    bool run_cut_corners = true;         // Cut corners while running
+    bool run_examine_corners = true;     // Check corners while running
+    bool run_ignore_doors = false;       // Run through open doors
+    bool run_print_self = false;         // Stop running when the map shifts
+    bool highlight_seams = false;        // Highlight magma and quartz veins
+    bool prompt_to_pickup = false;       // Prompt to pick something up
+    bool use_roguelike_keys = false;     // Use classic Roguelike keys
+    bool show_inventory_weights = false; // Display weights in inventory
+    bool error_beep_sound = true;        // Beep for invalid characters
+} Config_t;
