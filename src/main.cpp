@@ -161,11 +161,11 @@ int main(int argc, char *argv[]) {
         py.flags.food_digested = 2;
 
         // Spell and Mana based on class: Mage or Clerical realm.
-        if (classes[py.misc.pclass].spell == MAGE) {
+        if (classes[py.misc.pclass].spell == SPELL_TYPE_MAGE) {
             clearScreen(); // makes spell list easier to read
             playerCalculateAllowedSpellsCount(A_INT);
             playerGainMana(A_INT);
-        } else if (classes[py.misc.pclass].spell == PRIEST) {
+        } else if (classes[py.misc.pclass].spell == SPELL_TYPE_PRIEST) {
             playerCalculateAllowedSpellsCount(A_WIS);
             clearScreen(); // force out the 'learn prayer' message
             playerGainMana(A_WIS);

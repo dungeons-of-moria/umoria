@@ -282,12 +282,12 @@ Background_t character_backgrounds[PLAYER_MAX_BACKGROUNDS] = {
 // Classes.
 Class_t classes[PLAYER_MAX_CLASSES] = {
     // HP Dis Src Stl Fos bth btb sve S  I  W  D Co Ch  Spell Exp  spl
-    {"Warrior", 9, 25, 14, 1, 38, 70, 55, 18,  5, -2, -2,  2,  2, -1, NONE,    0, 0},
-    {"Mage",    0, 30, 16, 2, 20, 34, 20, 36, -5,  3,  0,  1, -2,  1, MAGE,   30, 1},
-    {"Priest",  2, 25, 16, 2, 32, 48, 35, 30, -3, -3,  3, -1,  0,  2, PRIEST, 20, 1},
-    {"Rogue",   6, 45, 32, 5, 16, 60, 66, 30,  2,  1, -2,  3,  1, -1, MAGE,    0, 5},
-    {"Ranger",  4, 30, 24, 3, 24, 56, 72, 30,  2,  2,  0,  1,  1,  1, MAGE,   40, 3},
-    {"Paladin", 6, 20, 12, 1, 38, 68, 40, 24,  3, -3,  1,  0,  2,  2, PRIEST, 35, 1},
+    {"Warrior", 9, 25, 14, 1, 38, 70, 55, 18,  5, -2, -2,  2,  2, -1, SPELL_TYPE_NONE,    0, 0},
+    {"Mage",    0, 30, 16, 2, 20, 34, 20, 36, -5,  3,  0,  1, -2,  1, SPELL_TYPE_MAGE,   30, 1},
+    {"Priest",  2, 25, 16, 2, 32, 48, 35, 30, -3, -3,  3, -1,  0,  2, SPELL_TYPE_PRIEST, 20, 1},
+    {"Rogue",   6, 45, 32, 5, 16, 60, 66, 30,  2,  1, -2,  3,  1, -1, SPELL_TYPE_MAGE,    0, 5},
+    {"Ranger",  4, 30, 24, 3, 24, 56, 72, 30,  2,  2,  0,  1,  1,  1, SPELL_TYPE_MAGE,   40, 3},
+    {"Paladin", 6, 20, 12, 1, 38, 68, 40, 24,  3, -3,  1,  0,  2,  2, SPELL_TYPE_PRIEST, 35, 1},
 };
 
 // making it 16 bits wastes a little space, but saves much signed/unsigned

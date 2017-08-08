@@ -370,7 +370,7 @@ int castSpellGetId(const char *prompt, int item_id, int *spell_id, int *spell_ch
     result = spellGetId(spell_list, spell_count, spell_id, spell_chance, prompt, first_spell);
 
     if (result && magic_spells[py.misc.pclass - 1][*spell_id].smana > py.misc.cmana) {
-        if (classes[py.misc.pclass].spell == MAGE) {
+        if (classes[py.misc.pclass].spell == SPELL_TYPE_MAGE) {
             result = (int) getInputConfirmation("You summon your limited strength to cast this one! Confirm?");
         } else {
             result = (int) getInputConfirmation("The gods may think you presumptuous for this! Confirm?");

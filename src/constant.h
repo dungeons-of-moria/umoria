@@ -254,13 +254,13 @@ constexpr uint8_t TILE_BOUNDARY_WALL = 15;
 constexpr uint8_t STAT_COLUMN = 0;
 
 // Class spell types
-constexpr uint8_t NONE = 0;
-constexpr uint8_t MAGE = 1;
-constexpr uint8_t PRIEST = 2;
+constexpr uint8_t SPELL_TYPE_NONE = 0;
+constexpr uint8_t SPELL_TYPE_MAGE = 1;
+constexpr uint8_t SPELL_TYPE_PRIEST = 2;
 
 // offsets to spell names in spell_names[] array
-constexpr uint8_t SPELL_OFFSET = 0;
-constexpr uint8_t PRAYER_OFFSET = 31;
+constexpr uint8_t NAME_OFFSET_SPELLS = 0;
+constexpr uint8_t NAME_OFFSET_PRAYERS = 31;
 
 // definitions for the pseudo-normal distribution generation
 constexpr uint16_t NORMAL_TABLE_SIZE = 256;

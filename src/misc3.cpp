@@ -614,10 +614,10 @@ void playerSetAndUseStat(int stat) {
         playerRecalculateBonuses();
     } else if (stat == A_DEX) {
         playerRecalculateBonuses();
-    } else if (stat == A_INT && classes[py.misc.pclass].spell == MAGE) {
+    } else if (stat == A_INT && classes[py.misc.pclass].spell == SPELL_TYPE_MAGE) {
         playerCalculateAllowedSpellsCount(A_INT);
         playerGainMana(A_INT);
-    } else if (stat == A_WIS && classes[py.misc.pclass].spell == PRIEST) {
+    } else if (stat == A_WIS && classes[py.misc.pclass].spell == SPELL_TYPE_PRIEST) {
         playerCalculateAllowedSpellsCount(A_WIS);
         playerGainMana(A_WIS);
     } else if (stat == A_CON) {
@@ -1338,7 +1338,7 @@ static int spellChanceOfSuccess(int spell) {
     int chance = s_ptr->sfail - 3 * (py.misc.lev - s_ptr->slevel);
 
     int stat;
-    if (classes[py.misc.pclass].spell == MAGE) {
+    if (classes[py.misc.pclass].spell == SPELL_TYPE_MAGE) {
         stat = A_INT;
     } else {
         stat = A_WIS;
@@ -1370,7 +1370,7 @@ void displaySpellsList(int *spell, int number_of_choices, int comment, int non_c
         col = 31;
     }
 
-    int consecutive_offset = (classes[py.misc.pclass].spell == MAGE ? SPELL_OFFSET : PRAYER_OFFSET);
+    int consecutive_offset = (classes[py.misc.pclass].spell == SPELL_TYPE_MAGE ? NAME_OFFSET_SPELLS : NAME_OFFSET_PRAYERS);
 
     eraseLine(1, col);
     putString("Name", 1, col + 5);
@@ -1423,7 +1423,7 @@ bool spellGetId(int *spell, int number_of_choices, int *spell_id, int *spell_cha
     bool spell_found = false;
     bool redraw = false;
 
-    int offset = (classes[py.misc.pclass].spell == MAGE ? SPELL_OFFSET : PRAYER_OFFSET);
+    int offset = (classes[py.misc.pclass].spell == SPELL_TYPE_MAGE ? NAME_OFFSET_SPELLS : NAME_OFFSET_PRAYERS);
 
     char choice;
 
@@ -1484,7 +1484,7 @@ bool spellGetId(int *spell, int number_of_choices, int *spell_id, int *spell_cha
 
         if (*spell_id == -2) {
             vtype_t tmp_str;
-            (void) sprintf(tmp_str, "You don't know that %s.", (offset == SPELL_OFFSET ? "spell" : "prayer"));
+            (void) sprintf(tmp_str, "You don't know that %s.", (offset == NAME_OFFSET_SPELLS ? "spell" : "prayer"));
             printMessage(tmp_str);
         }
     }
@@ -1662,10 +1662,10 @@ void playerCalculateAllowedSpellsCount(int stat) {
 
     if (stat == A_INT) {
         magic_type_str = "spell";
-        offset = SPELL_OFFSET;
+        offset = NAME_OFFSET_SPELLS;
     } else {
         magic_type_str = "prayer";
-        offset = PRAYER_OFFSET;
+        offset = NAME_OFFSET_PRAYERS;
     }
 
     // check to see if know any spells greater than level, eliminate them
@@ -1740,7 +1740,7 @@ static uint32_t playerDetermineLearnableSpells() {
 // gain spells when player wants to -JW-
 void playerGainSpells() {
     // Priests don't need light because they get spells from their god, so only
-    // fail when can't see if player has MAGE spells. This check is done below.
+    // fail when can't see if player has SPELL_TYPE_MAGE spells. This check is done below.
     if (py.flags.confused > 0) {
         printMessage("You are too confused.");
         return;
@@ -1753,16 +1753,16 @@ void playerGainSpells() {
 
     int stat, offset;
 
-    if (classes[py.misc.pclass].spell == MAGE) {
-        // People with MAGE spells can't learn spell_bank if they can't read their books.
+    if (classes[py.misc.pclass].spell == SPELL_TYPE_MAGE) {
+        // People with SPELL_TYPE_MAGE spells can't learn spell_bank if they can't read their books.
         if (!playerCanRead()) {
             return;
         }
         stat = A_INT;
-        offset = SPELL_OFFSET;
+        offset = NAME_OFFSET_SPELLS;
     } else {
         stat = A_WIS;
-        offset = PRAYER_OFFSET;
+        offset = NAME_OFFSET_PRAYERS;
     }
 
     int last_known = lastKnownSpell();
@@ -1959,10 +1959,10 @@ static void playerGainLevel() {
 
     Class_t *player_class = &classes[py.misc.pclass];
 
-    if (player_class->spell == MAGE) {
+    if (player_class->spell == SPELL_TYPE_MAGE) {
         playerCalculateAllowedSpellsCount(A_INT);
         playerGainMana(A_INT);
-    } else if (player_class->spell == PRIEST) {
+    } else if (player_class->spell == SPELL_TYPE_PRIEST) {
         playerCalculateAllowedSpellsCount(A_WIS);
         playerGainMana(A_WIS);
     }

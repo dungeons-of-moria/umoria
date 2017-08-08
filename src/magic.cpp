@@ -25,7 +25,7 @@ static bool canReadSpells() {
         return false;
     }
 
-    if (classes[py.misc.pclass].spell != MAGE) {
+    if (classes[py.misc.pclass].spell != SPELL_TYPE_MAGE) {
         printMessage("You can't cast spells!");
         return false;
     }

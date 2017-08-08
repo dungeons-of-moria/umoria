@@ -25,7 +25,7 @@ static bool playerCanPray(int *item_pos_begin, int *item_pos_end) {
         return false;
     }
 
-    if (classes[py.misc.pclass].spell != PRIEST) {
+    if (classes[py.misc.pclass].spell != SPELL_TYPE_PRIEST) {
         printMessage("Pray hard enough and your prayers may be answered.");
         return false;
     }
