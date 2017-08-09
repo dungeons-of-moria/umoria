@@ -12,16 +12,16 @@
 static void initializeCharacterInventory();
 static void initializeMonsterLevels();
 static void initializeTreasureLevels();
-static void price_adjust();
+static void priceAdjust();
 
 void startMoria(int seed, bool start_new_game, bool use_roguelike_keys) {
+    priceAdjust();
+
     // Show the game splash screen
     displaySplashScreen();
 
     // Some necessary initializations
     // all made into constants or initialized in `globals.cpp`
-
-    price_adjust();
 
     // Grab a random seed from the clock
     seedsInitialize(seed);
@@ -48,6 +48,7 @@ void startMoria(int seed, bool start_new_game, bool use_roguelike_keys) {
         result = true;
     }
 
+    // Executing after game load to override saved game settings
     if (use_roguelike_keys) {
         config.use_roguelike_keys = true;
     }
@@ -211,7 +212,7 @@ static void initializeTreasureLevels() {
 }
 
 // Adjust prices of objects -RAK-
-static void price_adjust() {
+static void priceAdjust() {
 #if (COST_ADJUSTMENT != 100)
     // round half-way cases up
     for (int i = 0; i < MAX_OBJECTS_IN_GAME; i++) {
