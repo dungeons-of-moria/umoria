@@ -23,6 +23,7 @@ include_directories(${SOURCE_FILES_DIR})
 
 set(SOURCE_FILES
     ${SOURCE_FILES_DIR}/main.cpp
+    ${SOURCE_FILES_DIR}/moria.cpp
     ${SOURCE_FILES_DIR}/misc1.cpp
     ${SOURCE_FILES_DIR}/misc2.cpp
     ${SOURCE_FILES_DIR}/misc3.cpp

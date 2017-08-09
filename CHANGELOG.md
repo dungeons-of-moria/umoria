@@ -2,11 +2,15 @@
 
 ## HEAD
 
+- Umoria CLI: Now has just one option (`-r`) for specifying (forcing) the
+  use of roguelike keys (`hjkl`).
+
 ### Code
 
 - Rename many constants for better clarity on their purpose.
 - Move the game options globals into a Config_t struct.
-
+- Refactor `main.cpp` to contain [mostly] just CLI arg parsing, and some
+  basic game initialization. All other game logic moved to `moria.cpp`.
 
 
 ## 5.7.4 (2017-08-06)
