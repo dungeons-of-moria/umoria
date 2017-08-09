@@ -79,9 +79,7 @@ int main(int argc, char *argv[]) {
 
     // Auto-restart of saved file
     if (argv[0] != CNIL) {
-        (void) strcpy(savegame_filename, argv[0]);
-    } else {
-        (void) strcpy(savegame_filename, MORIA_SAV);
+        (void) strcpy(config.save_game_filename, argv[0]);
     }
 
     startMoria(seed, new_game, roguelike_keys);

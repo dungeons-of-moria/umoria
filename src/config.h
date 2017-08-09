@@ -18,8 +18,11 @@
 #define MORIA_WELCOME "data/welcome.hlp"
 #define MORIA_VER "data/version.hlp"
 
-// Game options as set on startup and with `=` set options command -CJS-
+// Game configuration
 typedef struct {
+    vtype_t save_game_filename = MORIA_SAV; // The save game filename
+
+    // Game options as set on startup and with `=` set options command -CJS-
     bool display_counts = true;          // Display rest/repeat counts
     bool find_bound = false;             // Print yourself on a run (slower)
     bool run_cut_corners = true;         // Cut corners while running

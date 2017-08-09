@@ -8,7 +8,6 @@
 
 extern int hack_monptr;
 
-extern vtype_t savegame_filename;
 extern FILE *highscore_fp;
 
 extern Config_t config;

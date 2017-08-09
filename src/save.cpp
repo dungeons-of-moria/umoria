@@ -359,16 +359,16 @@ static bool sv_write() {
 
 // Set up prior to actual save, do the save, then clean up
 bool saveGame() {
-    while (!_save_char(savegame_filename)) {
+    while (!_save_char(config.save_game_filename)) {
         vtype_t temp;
 
-        (void) sprintf(temp, "Save file '%s' fails.", savegame_filename);
+        (void) sprintf(temp, "Save file '%s' fails.", config.save_game_filename);
         printMessage(temp);
 
         int i = 0;
-        if (access(savegame_filename, 0) < 0 || getInputConfirmation("File exists. Delete old save file?") == 0 || (i = unlink(savegame_filename)) < 0) {
+        if (access(config.save_game_filename, 0) < 0 || getInputConfirmation("File exists. Delete old save file?") == 0 || (i = unlink(config.save_game_filename)) < 0) {
             if (i < 0) {
-                (void) sprintf(temp, "Can't delete '%s'", savegame_filename);
+                (void) sprintf(temp, "Can't delete '%s'", config.save_game_filename);
                 printMessage(temp);
             }
             putStringClearToEOL("New Save file [ESC to give up]:", 0, 0);
@@ -376,10 +376,10 @@ bool saveGame() {
                 return false;
             }
             if (temp[0]) {
-                (void) strcpy(savegame_filename, temp);
+                (void) strcpy(config.save_game_filename, temp);
             }
         }
-        (void) sprintf(temp, "Saving with %s...", savegame_filename);
+        (void) sprintf(temp, "Saving with %s...", config.save_game_filename);
         putStringClearToEOL(temp, 0, 0);
     }
 
@@ -408,11 +408,11 @@ static bool _save_char(char *fnam) {
 
     if (fd >= 0) {
         (void) close(fd);
-        fileptr = fopen(savegame_filename, "wb");
+        fileptr = fopen(config.save_game_filename, "wb");
     }
 
     DEBUG(logfile = fopen("IO_LOG", "a"));
-    DEBUG(fprintf(logfile, "Saving data to %s\n", savegame_filename));
+    DEBUG(fprintf(logfile, "Saving data to %s\n", config.save_game_filename));
 
     if (fileptr != NULL) {
         xor_byte = 0;
@@ -474,7 +474,7 @@ bool loadGame(bool *generate) {
 
     // Not required for Mac, because the file name is obtained through a dialog.
     // There is no way for a nonexistent file to be specified. -BS-
-    if (access(savegame_filename, 0) != 0) {
+    if (access(config.save_game_filename, 0) != 0) {
         printMessage("Save file does not exist.");
         return false; // Don't bother with messages here. File absent.
     }
@@ -482,13 +482,13 @@ bool loadGame(bool *generate) {
     clearScreen();
 
     vtype_t temp;
-    (void) sprintf(temp, "Save file %s present. Attempting restore.", savegame_filename);
+    (void) sprintf(temp, "Save file %s present. Attempting restore.", config.save_game_filename);
     putString(temp, 23, 0);
 
     // FIXME: check this if/else logic! -- MRC
     if (current_game_turn >= 0) {
         printMessage("IMPOSSIBLE! Attempt to restore while still alive!");
-    } else if ((fd = open(savegame_filename, O_RDONLY, 0)) < 0 && (chmod(savegame_filename, 0400) < 0 || (fd = open(savegame_filename, O_RDONLY, 0)) < 0)) {
+    } else if ((fd = open(config.save_game_filename, O_RDONLY, 0)) < 0 && (chmod(config.save_game_filename, 0400) < 0 || (fd = open(config.save_game_filename, O_RDONLY, 0)) < 0)) {
         // Allow restoring a file belonging to someone else, if we can delete it.
         // Hence first try to read without doing a chmod.
 
@@ -499,7 +499,7 @@ bool loadGame(bool *generate) {
 
         (void) close(fd);
         fd = -1; // Make sure it isn't closed again
-        fileptr = fopen(savegame_filename, "rb");
+        fileptr = fopen(config.save_game_filename, "rb");
 
         if (fileptr == NULL) {
             goto error;
@@ -509,7 +509,7 @@ bool loadGame(bool *generate) {
         putQIO();
 
         DEBUG(logfile = fopen("IO_LOG", "a"));
-        DEBUG(fprintf(logfile, "Reading data from %s\n", savegame_filename));
+        DEBUG(fprintf(logfile, "Reading data from %s\n", config.save_game_filename));
 
         xor_byte = 0;
         rd_byte(&version_maj);

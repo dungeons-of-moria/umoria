@@ -13,7 +13,6 @@
 // deep within updateMonsters() via monsterPlaceNew() and monsterSummon()
 int hack_monptr = -1;
 
-vtype_t savegame_filename; // The save game filename -CJS-
 FILE *highscore_fp;        // High score file pointer
 
 // Game options as set on startup and with `=` set options command -CJS-
