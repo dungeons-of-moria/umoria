@@ -44,15 +44,12 @@ other roguelikes), and will require a dedicated player to win.
 ## 2. Running The Game
 
 
-    umoria [ -v ] [ -o ] [ -r ] [ -s ] [ -n ] [ -w[seed] ] [ savefile ]
+    umoria [ -h ] [ -v ] [ -r ] [ -d ] [ -n ] [ -w ] [ -s ] [ SAVEGAME ]
 
 
 By default, *moria* will save and restore games from a file called
-moria.save in the home directory. If the environment variable `MORIA_SAV`
-is defined, then *moria* will use that file name instead of the default.
-If `MORIA_SAV` is not a complete path name, then the save file will be
-created or restored from the current directory. The save file can also be
-explicitly specified on the command line.
+`game.sav` in the directory where the game is located. The save file
+can also be explicitly specified on the command line.
 
 When the `-n` option is used, *moria* will create a new game, ignoring any
 save file which may already exist. This works best when a save file name
@@ -62,24 +59,27 @@ game.
 
 Movement in various directions is accomplished by pressing the numeric keypad
 keys. When `-r` is specified, movement is accomplished in the same way as the
-original _Rogue_ game (`hjkl`). When `-o` is specified, it forces the keypad
-based command set. These options will override defaults stored in the
-save file. If these options are given multiple times, only the last one will
-take effect.
+original _Rogue_ game (`hjkl`). This option will override defaults stored in the
+save file.
 
-When `-s` is specified, *moria* displays all of the scores in the score
+When `-d` is specified, *moria* displays all of the scores in the score
 file and exits.
 
 When `-w` is specified, *moria* will start up in wizard mode. Dead
 characters can be resurrected using this option when starting the game.
 Resurrected characters are teleported to the town level and given zero
 hit-points. Wizard mode is intended for debugging the game, and for
-experimenting with new features. To make random events happen in a
-predictable manner a seed number can be given to the `-w` option. Using
-wizard mode to win the game is considered cheating. Games played with
-wizard mode are not scored.
+experimenting with new features.
+
+*Using wizard mode to win the game is considered cheating. Games played with
+wizard mode are not scored.*
+
+To make random events happen in a predictable manner a `seed` number can be
+given with the `-s` option (only for new games).
 
 Use `-v` to show the current version of Umoria.
+
+Use `-h` to show the help screen.
 
 
 ## 3. The Character
