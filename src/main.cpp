@@ -59,6 +59,7 @@ int main(int argc, char *argv[]) {
             case 's':
                 showScoresScreen();
                 exitGame();
+                break;
             case 'w':
                 to_be_wizard = true;
 
