@@ -1206,7 +1206,7 @@ void monsterExecuteCastingOfSpell(Monster_t *monster, int monster_id, int spell_
             }
             break;
         case 17: // Drain Mana
-            if (py.misc.cmana > 0) {
+            if (py.misc.current_mana > 0) {
                 playerDisturb(1, 0);
 
                 vtype_t msg;
@@ -1219,12 +1219,12 @@ void monsterExecuteCastingOfSpell(Monster_t *monster, int monster_id, int spell_
                 }
 
                 int r1 = (randomNumber((int) level) >> 1) + 1;
-                if (r1 > py.misc.cmana) {
-                    r1 = py.misc.cmana;
-                    py.misc.cmana = 0;
-                    py.misc.cmana_frac = 0;
+                if (r1 > py.misc.current_mana) {
+                    r1 = py.misc.current_mana;
+                    py.misc.current_mana = 0;
+                    py.misc.current_mana_fraction = 0;
                 } else {
-                    py.misc.cmana -= r1;
+                    py.misc.current_mana -= r1;
                 }
                 printCharacterCurrentMana();
                 monster->hp += 6 * (r1);

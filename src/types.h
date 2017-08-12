@@ -30,44 +30,44 @@ typedef char obj_desc_t[OBJECT_DESCRIPTION_SIZE];
 // Player_t contains everything to be known about our player character
 typedef struct {
     struct {
-        char name[PLAYER_NAME_SIZE]; // Name of character
-        bool gender;                 // Gender of character (Female = 0, Male = 1)
-        int32_t au;                  // Gold
-        int32_t max_exp;             // Max experience
-        int32_t exp;                 // Cur experience
-        uint16_t exp_frac;           // Cur exp fraction * 2^16
-        uint16_t age;                // Characters age
-        uint16_t height;             // Height
-        uint16_t weight;             // Weight
-        uint16_t level;              // Level
-        uint16_t max_dungeon_depth;  // Max level explored
-        int16_t chance_in_search;    // Chance in search
-        int16_t freng_of_search;     // Frenq of search
-        int16_t bth;                 // Base to hit
-        int16_t bth_with_bows;       // BTH with bows
-        int16_t mana;                // Mana points
-        int16_t max_hp;              // Max hit pts
-        int16_t plusses_to_hit;      // Plusses to hit
-        int16_t plusses_to_damage;   // Plusses to dam
-        int16_t ac;                  // Total AC
-        int16_t magical_ac;          // Magical AC
-        int16_t display_to_hit;      // Display +ToHit
-        int16_t display_to_damage;   // Display +ToDam
-        int16_t display_ac;          // Display +ToTAC
-        int16_t display_to_ac;       // Display +ToAC
-        int16_t disarm;              // % to Disarm
-        int16_t saving_throw;        // Saving throw
-        int16_t social_class;        // Social Class
-        int16_t stealth_factor;      // Stealth factor
-        uint8_t class_id;            // # of class
-        uint8_t race_id;             // # of race
-        uint8_t hit_die;             // Char hit die
-        uint8_t experience_factor;   // Experience factor
-        int16_t cmana;               // Cur mana pts
-        uint16_t cmana_frac;         // Cur mana fraction * 2^16
-        int16_t chp;                 // Cur hit pts
-        uint16_t chp_frac;           // Cur hit fraction * 2^16
-        char history[4][60];         // History record
+        char name[PLAYER_NAME_SIZE];    // Name of character
+        bool gender;                    // Gender of character (Female = 0, Male = 1)
+        int32_t au;                     // Gold
+        int32_t max_exp;                // Max experience
+        int32_t exp;                    // Cur experience
+        uint16_t exp_frac;              // Cur exp fraction * 2^16
+        uint16_t age;                   // Characters age
+        uint16_t height;                // Height
+        uint16_t weight;                // Weight
+        uint16_t level;                 // Level
+        uint16_t max_dungeon_depth;     // Max level explored
+        int16_t chance_in_search;       // Chance in search
+        int16_t freng_of_search;        // Frenq of search
+        int16_t bth;                    // Base to hit
+        int16_t bth_with_bows;          // BTH with bows
+        int16_t mana;                   // Mana points
+        int16_t max_hp;                 // Max hit pts
+        int16_t plusses_to_hit;         // Plusses to hit
+        int16_t plusses_to_damage;      // Plusses to dam
+        int16_t ac;                     // Total AC
+        int16_t magical_ac;             // Magical AC
+        int16_t display_to_hit;         // Display +ToHit
+        int16_t display_to_damage;      // Display +ToDam
+        int16_t display_ac;             // Display +ToTAC
+        int16_t display_to_ac;          // Display +ToAC
+        int16_t disarm;                 // % to Disarm
+        int16_t saving_throw;           // Saving throw
+        int16_t social_class;           // Social Class
+        int16_t stealth_factor;         // Stealth factor
+        uint8_t class_id;               // # of class
+        uint8_t race_id;                // # of race
+        uint8_t hit_die;                // Char hit die
+        uint8_t experience_factor;      // Experience factor
+        int16_t current_mana;           // Current mana pts
+        uint16_t current_mana_fraction; // Current mana fraction * 2^16
+        int16_t chp;                    // Cur hit pts
+        uint16_t chp_frac;              // Cur hit fraction * 2^16
+        char history[4][60];            // History record
     } misc;
 
     // Stats now kept in arrays, for more efficient access. -CJS-

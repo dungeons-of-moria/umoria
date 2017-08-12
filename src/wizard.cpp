@@ -124,8 +124,8 @@ void wizardCharacterAdjustment() {
         number = atoi(input);
         if (number > -1 && number <= MAX_SHORT && (*input != '\0')) {
             py.misc.mana = (int16_t) number;
-            py.misc.cmana = (int16_t) number;
-            py.misc.cmana_frac = 0;
+            py.misc.current_mana = (int16_t) number;
+            py.misc.current_mana_fraction = 0;
             printCharacterCurrentMana();
         }
     } else {

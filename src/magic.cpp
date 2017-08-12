@@ -209,19 +209,19 @@ void getAndCastMagicSpell() {
         }
     }
 
-    if (m_ptr->smana > py.misc.cmana) {
+    if (m_ptr->smana > py.misc.current_mana) {
         printMessage("You faint from the effort!");
 
-        py.flags.paralysis = (int16_t) randomNumber((5 * (m_ptr->smana - py.misc.cmana)));
-        py.misc.cmana = 0;
-        py.misc.cmana_frac = 0;
+        py.flags.paralysis = (int16_t) randomNumber((5 * (m_ptr->smana - py.misc.current_mana)));
+        py.misc.current_mana = 0;
+        py.misc.current_mana_fraction = 0;
 
         if (randomNumber(3) == 1) {
             printMessage("You have damaged your health!");
             (void) playerStatRandomDecrease(A_CON);
         }
     } else {
-        py.misc.cmana -= m_ptr->smana;
+        py.misc.current_mana -= m_ptr->smana;
     }
 
     printCharacterCurrentMana();

@@ -238,7 +238,7 @@ static void playerUpdateRegeneration(int amount) {
         playerRegenerateHitPoints(amount);
     }
 
-    if (py.misc.cmana < py.misc.mana) {
+    if (py.misc.current_mana < py.misc.mana) {
         playerRegenerateMana(amount);
     }
 }
@@ -448,7 +448,7 @@ static void playerUpdateRestingState() {
         // Rest until reach max mana and max hit points.
         py.flags.rest++;
 
-        if ((py.misc.chp == py.misc.max_hp && py.misc.cmana == py.misc.mana) || py.flags.rest == 0) {
+        if ((py.misc.chp == py.misc.max_hp && py.misc.current_mana == py.misc.mana) || py.flags.rest == 0) {
             playerRestOff();
         }
     }
@@ -1956,34 +1956,34 @@ static void playerRegenerateHitPoints(int percent) {
 
 // Regenerate mana points -RAK-
 static void playerRegenerateMana(int percent) {
-    int old_cmana = py.misc.cmana;
+    int old_cmana = py.misc.current_mana;
     int32_t new_mana = (int32_t) py.misc.mana * percent + PLAYER_REGEN_MNBASE;
 
     // div 65536
-    py.misc.cmana += new_mana >> 16;
+    py.misc.current_mana += new_mana >> 16;
 
     // check for overflow
-    if (py.misc.cmana < 0 && old_cmana > 0) {
-        py.misc.cmana = MAX_SHORT;
+    if (py.misc.current_mana < 0 && old_cmana > 0) {
+        py.misc.current_mana = MAX_SHORT;
     }
 
     // mod 65536
-    int32_t new_mana_fraction = (new_mana & 0xFFFF) + py.misc.cmana_frac;
+    int32_t new_mana_fraction = (new_mana & 0xFFFF) + py.misc.current_mana_fraction;
 
     if (new_mana_fraction >= 0x10000L) {
-        py.misc.cmana_frac = (uint16_t) (new_mana_fraction - 0x10000L);
-        py.misc.cmana++;
+        py.misc.current_mana_fraction = (uint16_t) (new_mana_fraction - 0x10000L);
+        py.misc.current_mana++;
     } else {
-        py.misc.cmana_frac = (uint16_t) new_mana_fraction;
+        py.misc.current_mana_fraction = (uint16_t) new_mana_fraction;
     }
 
     // must set frac to zero even if equal
-    if (py.misc.cmana >= py.misc.mana) {
-        py.misc.cmana = py.misc.mana;
-        py.misc.cmana_frac = 0;
+    if (py.misc.current_mana >= py.misc.mana) {
+        py.misc.current_mana = py.misc.mana;
+        py.misc.current_mana_fraction = 0;
     }
 
-    if (old_cmana != py.misc.cmana) {
+    if (old_cmana != py.misc.current_mana) {
         printCharacterCurrentMana();
     }
 }

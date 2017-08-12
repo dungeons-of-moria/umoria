@@ -261,8 +261,8 @@ static bool playerDrinkPotion(uint32_t flags, uint8_t item_id) {
                 identified = playerCurePoison();
                 break;
             case 46:
-                if (py.misc.cmana < py.misc.mana) {
-                    py.misc.cmana = py.misc.mana;
+                if (py.misc.current_mana < py.misc.mana) {
+                    py.misc.current_mana = py.misc.mana;
                     printMessage("Your feel your head clear.");
                     printCharacterCurrentMana();
                     identified = true;

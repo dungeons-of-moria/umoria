@@ -389,7 +389,7 @@ void printCharacterLevel() {
 
 // Prints players current mana points. -RAK-
 void printCharacterCurrentMana() {
-    printNumber(py.misc.cmana, 15, STAT_COLUMN + 6);
+    printNumber(py.misc.current_mana, 15, STAT_COLUMN + 6);
 }
 
 // Prints Max hit points -RAK-
@@ -854,7 +854,7 @@ void printCharacterStatsBlock() {
 
     printHeaderNumber("LEV ", (int) py.misc.level, 13, STAT_COLUMN);
     printHeaderLongNumber("EXP ", py.misc.exp, 14, STAT_COLUMN);
-    printHeaderNumber("MANA", py.misc.cmana, 15, STAT_COLUMN);
+    printHeaderNumber("MANA", py.misc.current_mana, 15, STAT_COLUMN);
     printHeaderNumber("MHP ", py.misc.max_hp, 16, STAT_COLUMN);
     printHeaderNumber("CHP ", py.misc.chp, 17, STAT_COLUMN);
     printHeaderNumber("AC  ", py.misc.display_ac, 19, STAT_COLUMN);
@@ -996,7 +996,7 @@ void printCharacterLevelExperience() {
     printHeaderNumber("Max Hit Points ", py.misc.max_hp, 9, 52);
     printHeaderNumber("Cur Hit Points ", py.misc.chp, 10, 52);
     printHeaderNumber("Max Mana       ", py.misc.mana, 11, 52);
-    printHeaderNumber("Cur Mana       ", py.misc.cmana, 12, 52);
+    printHeaderNumber("Cur Mana       ", py.misc.current_mana, 12, 52);
 }
 
 // Prints ratings on certain abilities -RAK-
@@ -1346,8 +1346,8 @@ static int spellChanceOfSuccess(int spell) {
 
     chance -= 3 * (playerStatAdjustmentWisdomIntelligence(stat) - 1);
 
-    if (s_ptr->smana > py.misc.cmana) {
-        chance += 5 * (s_ptr->smana - py.misc.cmana);
+    if (s_ptr->smana > py.misc.current_mana) {
+        chance += 5 * (s_ptr->smana - py.misc.current_mana);
     }
 
     if (chance > 95) {
@@ -1914,12 +1914,12 @@ void playerGainMana(int stat) {
             if (py.misc.mana != 0) {
                 // change current mana proportionately to change of max mana,
                 // divide first to avoid overflow, little loss of accuracy
-                int32_t value = (((int32_t) py.misc.cmana << 16) + py.misc.cmana_frac) / py.misc.mana * new_mana;
-                py.misc.cmana = (int16_t) (value >> 16);
-                py.misc.cmana_frac = (uint16_t) (value & 0xFFFF);
+                int32_t value = (((int32_t) py.misc.current_mana << 16) + py.misc.current_mana_fraction) / py.misc.mana * new_mana;
+                py.misc.current_mana = (int16_t) (value >> 16);
+                py.misc.current_mana_fraction = (uint16_t) (value & 0xFFFF);
             } else {
-                py.misc.cmana = (int16_t) new_mana;
-                py.misc.cmana_frac = 0;
+                py.misc.current_mana = (int16_t) new_mana;
+                py.misc.current_mana_fraction = 0;
             }
 
             py.misc.mana = (int16_t) new_mana;
@@ -1929,7 +1929,7 @@ void playerGainMana(int stat) {
         }
     } else if (py.misc.mana != 0) {
         py.misc.mana = 0;
-        py.misc.cmana = 0;
+        py.misc.current_mana = 0;
 
         // can't print mana here, may be in store or inventory mode
         py.flags.status |= PY_MANA;

@@ -214,17 +214,17 @@ void pray() {
     }
 
     if (!player_free_turn) {
-        if (spell->smana > py.misc.cmana) {
+        if (spell->smana > py.misc.current_mana) {
             printMessage("You faint from fatigue!");
-            py.flags.paralysis = (int16_t) randomNumber((5 * (spell->smana - py.misc.cmana)));
-            py.misc.cmana = 0;
-            py.misc.cmana_frac = 0;
+            py.flags.paralysis = (int16_t) randomNumber((5 * (spell->smana - py.misc.current_mana)));
+            py.misc.current_mana = 0;
+            py.misc.current_mana_fraction = 0;
             if (randomNumber(3) == 1) {
                 printMessage("You have damaged your health!");
                 (void) playerStatRandomDecrease(A_CON);
             }
         } else {
-            py.misc.cmana -= spell->smana;
+            py.misc.current_mana -= spell->smana;
         }
 
         printCharacterCurrentMana();
