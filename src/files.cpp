@@ -176,7 +176,7 @@ static void writeCharacterSheetToFile(FILE *file1) {
     (void) fprintf(file1, " Height%8s %6d", colon, (int) py.misc.ht);
     statsAsString(py.stats.use_stat[A_INT], statDescription);
     (void) fprintf(file1, "   INT : %s\n", statDescription);
-    (void) fprintf(file1, " Sex%10s %-23s", colon, (py.misc.male ? "Male" : "Female"));
+    (void) fprintf(file1, " Sex%10s %-23s", colon, (playerGetGenderLabel()));
     (void) fprintf(file1, " Weight%8s %6d", colon, (int) py.misc.wt);
     statsAsString(py.stats.use_stat[A_WIS], statDescription);
     (void) fprintf(file1, "   WIS : %s\n", statDescription);

@@ -525,3 +525,18 @@ uint16_t class_base_provisions[PLAYER_MAX_CLASSES][5] = {
     {344, 365, 123, 30, 318}, // Ranger
     {344, 365, 123, 30, 322}  // Paladin
 };
+
+bool playerIsMale() {
+    return py.misc.gender;
+}
+
+void playerSetGender(bool is_male) {
+    py.misc.gender = is_male;
+}
+
+const char *playerGetGenderLabel() {
+    if (playerIsMale()) {
+        return "Male";
+    }
+    return "Female";
+}

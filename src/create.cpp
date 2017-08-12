@@ -275,11 +275,11 @@ static void characterSetGender() {
         input = getKeyInput();
 
         if (input == 'f' || input == 'F') {
-            py.misc.male = false;
+            playerSetGender(false);
             putString("Female", 4, 15);
             is_set = true;
         } else if (input == 'm' || input == 'M') {
-            py.misc.male = true;
+            playerSetGender(true);
             putString("Male", 4, 15);
             is_set = true;
         } else if (input == '?') {
@@ -295,7 +295,7 @@ static void characterSetAgeHeightWeight() {
     int race_id = py.misc.prace;
     py.misc.age = (uint16_t) (character_races[race_id].b_age + randomNumber((int) character_races[race_id].m_age));
 
-    if (py.misc.male) {
+    if (playerIsMale()) {
         py.misc.ht = (uint16_t) randomNumberNormalDistribution((int) character_races[race_id].m_b_ht, (int) character_races[race_id].m_m_ht);
         py.misc.wt = (uint16_t) randomNumberNormalDistribution((int) character_races[race_id].m_b_wt, (int) character_races[race_id].m_m_wt);
     } else {
@@ -450,7 +450,7 @@ static void playerCalculateStartGold() {
     new_gold += monetaryValueCalculatedFromStat(py.stats.max_stat[A_CHR]);
 
     // She charmed the banker into it! -CJS-
-    if (!py.misc.male) {
+    if (!playerIsMale()) {
         new_gold += 50;
     }
 

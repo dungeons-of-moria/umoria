@@ -75,11 +75,13 @@ void showScoresScreen() {
         clearScreen();
         // Put twenty scores on each page, on lines 2 through 21.
         while (!feof(highscore_fp) && i < 21) {
-            (void) sprintf(string,
-                           "%-4d%8d %-19.19s %c %-10.10s %-7.7s%3d %-22.22s",
-                           rank, score.points, score.name, score.sex,
-                           character_races[score.race].trace, classes[score.character_class].title,
-                           score.lev, score.died_from);
+            (void) sprintf(
+                string,
+                "%-4d%8d %-19.19s %c %-10.10s %-7.7s%3d %-22.22s",
+                rank, score.points, score.name, score.gender,
+                character_races[score.race].trace, classes[score.character_class].title,
+                score.lev, score.died_from
+            );
             putStringClearToEOL(string, ++i, 0);
             rank++;
             readHighScore(&score);
@@ -129,7 +131,7 @@ static void printTomb() {
     putString("|  :   :", 9, 43);
     if (!total_winner) {
         p = (char *) classes[py.misc.pclass].title;
-    } else if (py.misc.male) {
+    } else if (playerIsMale()) {
         p = (char *) "*King*";
     } else {
         p = (char *) "*Queen*";
@@ -243,7 +245,7 @@ static void highscores() {
     new_entry.dun_level = (uint8_t) current_dungeon_level;
     new_entry.lev = (uint8_t) py.misc.lev;
     new_entry.max_dlv = (uint8_t) py.misc.max_dlv;
-    new_entry.sex = (py.misc.male ? 'M' : 'F');
+    new_entry.gender = highScoreGenderLabel();
     new_entry.race = py.misc.prace;
     new_entry.character_class = py.misc.pclass;
     (void) strcpy(new_entry.name, py.misc.name);
@@ -269,7 +271,7 @@ static void highscores() {
     }
 
     // Search file to find where to insert this character, if uid != 0 and
-    // find same uid/sex/race/class combo then exit without saving this score.
+    // find same uid/gender/race/class combo then exit without saving this score.
     // Seek to the beginning of the file just to be safe.
     (void) fseek(highscore_fp, (long) 0, SEEK_SET);
 
@@ -318,14 +320,14 @@ static void highscores() {
             break;
         }
 
-        // under unix, only allow one sex/race/class combo per person,
+        // under unix, only allow one gender/race/class combo per person,
         // on single user system, allow any number of entries, but try to
         // prevent multiple entries per character by checking for case when
-        // birthdate/sex/race/class are the same, and character_died_from of score file
+        // birthdate/gender/race/class are the same, and character_died_from of score file
         // entry is "(saved)"
         if (((new_entry.uid != 0 && new_entry.uid == old_entry.uid) ||
              (new_entry.uid == 0 && !strcmp(old_entry.died_from, "(saved)") && new_entry.birth_date == old_entry.birth_date)) &&
-            new_entry.sex == old_entry.sex &&
+            new_entry.gender == old_entry.gender &&
             new_entry.race == old_entry.race &&
             new_entry.character_class == old_entry.character_class) {
             (void) fclose(highscore_fp);
@@ -355,14 +357,14 @@ static void highscores() {
 
             saveHighScore(&entry);
 
-            // under unix, only allow one sex/race/class combo per person,
+            // under unix, only allow one gender/race/class combo per person,
             // on single user system, allow any number of entries, but try
             // to prevent multiple entries per character by checking for
-            // case when birthdate/sex/race/class are the same, and character_died_from
+            // case when birthdate/gender/race/class are the same, and character_died_from
             // of score file entry is "(saved)"
             if (((new_entry.uid != 0 && new_entry.uid == old_entry.uid) ||
                  (new_entry.uid == 0 && !strcmp(old_entry.died_from, "(saved)") && new_entry.birth_date == old_entry.birth_date)) &&
-                new_entry.sex == old_entry.sex &&
+                new_entry.gender == old_entry.gender &&
                 new_entry.race == old_entry.race &&
                 new_entry.character_class == old_entry.character_class) {
                 break;
@@ -417,7 +419,7 @@ static void kingly() {
     putString(p, 12, 24);
     putString("Veni, Vidi, Vici!", 15, 26);
     putString("I came, I saw, I conquered!", 16, 21);
-    if (py.misc.male) {
+    if (playerIsMale()) {
         putString("All Hail the Mighty King!", 17, 22);
     } else {
         putString("All Hail the Mighty Queen!", 17, 22);
@@ -461,4 +463,11 @@ void exitGame() {
     terminalRestore();
 
     exit(0);
+}
+
+uint8_t highScoreGenderLabel() {
+    if (playerIsMale()) {
+        return 'M';
+    }
+    return 'F';
 }

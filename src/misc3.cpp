@@ -368,7 +368,7 @@ char *playerTitle() {
         p = "Babe in arms";
     } else if (py.misc.lev <= PLAYER_MAX_LEVEL) {
         p = class_titles[py.misc.pclass][py.misc.lev - 1];
-    } else if (py.misc.male) {
+    } else if (playerIsMale()) {
         p = "**KING**";
     } else {
         p = "**QUEEN**";
@@ -920,7 +920,7 @@ void printCharacterInformation() {
 
     putString(py.misc.name, 2, 15);
     putString(character_races[py.misc.prace].trace, 3, 15);
-    putString((py.misc.male ? "Male" : "Female"), 4, 15);
+    putString((playerGetGenderLabel()), 4, 15);
     putString(classes[py.misc.pclass].title, 5, 15);
 }
 

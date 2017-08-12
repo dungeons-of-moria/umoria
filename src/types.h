@@ -31,7 +31,7 @@ typedef char obj_desc_t[OBJECT_DESCRIPTION_SIZE];
 typedef struct {
     struct {
         char name[PLAYER_NAME_SIZE]; // Name of character
-        bool male;                   // Sex of character
+        bool gender;                 // Gender of character (Female = 0, Male = 1)
         int32_t au;                  // Gold
         int32_t max_exp;             // Max experience
         int32_t exp;                 // Cur experience
@@ -290,7 +290,7 @@ typedef struct {
     uint8_t dun_level;
     uint8_t lev;
     uint8_t max_dlv;
-    uint8_t sex;
+    uint8_t gender;
     uint8_t race;
     uint8_t character_class;
     char name[PLAYER_NAME_SIZE];

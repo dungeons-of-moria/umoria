@@ -156,6 +156,7 @@ void showScoresScreen();
 bool duplicate_character();
 int32_t playerCalculateTotalPoints();
 void exitGame();
+uint8_t highScoreGenderLabel();
 
 // desc.c
 bool isVowel(char ch);
@@ -422,6 +423,11 @@ void look();
 void playerThrowItem();
 void playerBash();
 int getRandomDirection();
+
+// player.cpp
+bool playerIsMale();
+void playerSetGender(bool is_male);
+const char *playerGetGenderLabel();
 
 // potions.c
 void quaff();

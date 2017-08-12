@@ -123,7 +123,7 @@ static bool sv_write() {
     wr_long(l);
 
     wr_string(py.misc.name);
-    wr_bool(py.misc.male);
+    wr_bool(py.misc.gender);
     wr_long((uint32_t) py.misc.au);
     wr_long((uint32_t) py.misc.max_exp);
     wr_long((uint32_t) py.misc.exp);
@@ -582,7 +582,7 @@ bool loadGame(bool *generate) {
 
         if ((l & 0x80000000L) == 0) {
             rd_string(py.misc.name);
-            py.misc.male = rd_bool();
+            py.misc.gender = rd_bool();
             rd_long((uint32_t *) &py.misc.au);
             rd_long((uint32_t *) &py.misc.max_exp);
             rd_long((uint32_t *) &py.misc.exp);
@@ -1240,7 +1240,7 @@ void saveHighScore(HighScore_t *score) {
     wr_byte(score->dun_level);
     wr_byte(score->lev);
     wr_byte(score->max_dlv);
-    wr_byte(score->sex);
+    wr_byte(score->gender);
     wr_byte(score->race);
     wr_byte(score->character_class);
     wr_bytes((uint8_t *) score->name, PLAYER_NAME_SIZE);
@@ -1263,7 +1263,7 @@ void readHighScore(HighScore_t *score) {
     rd_byte(&score->dun_level);
     rd_byte(&score->lev);
     rd_byte(&score->max_dlv);
-    rd_byte(&score->sex);
+    rd_byte(&score->gender);
     rd_byte(&score->race);
     rd_byte(&score->character_class);
     rd_bytes((uint8_t *) score->name, PLAYER_NAME_SIZE);
