@@ -256,7 +256,7 @@ static void characterGetHistory() {
         social_class = 1;
     }
 
-    py.misc.sc = (int16_t) social_class;
+    py.misc.social_class = (int16_t) social_class;
 }
 
 // Gets the character's gender -JWT-
@@ -444,7 +444,7 @@ static void playerCalculateStartGold() {
     value += monetaryValueCalculatedFromStat(py.stats.max_stat[A_DEX]);
 
     // Social Class adjustment
-    int new_gold = py.misc.sc * 6 + randomNumber(25) + 325;
+    int new_gold = py.misc.social_class * 6 + randomNumber(25) + 325;
 
     // Stat adjustment
     new_gold -= value;

@@ -977,7 +977,7 @@ void printCharacterVitalStatistics() {
     printHeaderNumber("Age          ", (int) py.misc.age, 2, 38);
     printHeaderNumber("Height       ", (int) py.misc.height, 3, 38);
     printHeaderNumber("Weight       ", (int) py.misc.weight, 4, 38);
-    printHeaderNumber("Social Class ", (int) py.misc.sc, 5, 38);
+    printHeaderNumber("Social Class ", (int) py.misc.social_class, 5, 38);
 }
 
 // Prints the following information on the screen. -JWT-

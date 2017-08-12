@@ -57,7 +57,7 @@ typedef struct {
         int16_t display_to_ac;       // Display +ToAC
         int16_t disarm;              // % to Disarm
         int16_t saving_throw;        // Saving throw
-        int16_t sc;                  // Social Class
+        int16_t social_class;        // Social Class
         int16_t stl;                 // Stealth factor
         uint8_t pclass;              // # of class
         uint8_t prace;               // # of race
