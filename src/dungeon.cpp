@@ -89,7 +89,7 @@ static void playerActivateHeroism() {
     py.flags.status |= PY_HERO;
     playerDisturb(0, 0);
 
-    py.misc.mhp += 10;
+    py.misc.max_hp += 10;
     py.misc.chp += 10;
     py.misc.bth += 12;
     py.misc.bth_with_bows += 12;
@@ -103,9 +103,9 @@ static void playerDisableHeroism() {
     py.flags.status &= ~PY_HERO;
     playerDisturb(0, 0);
 
-    py.misc.mhp -= 10;
-    if (py.misc.chp > py.misc.mhp) {
-        py.misc.chp = py.misc.mhp;
+    py.misc.max_hp -= 10;
+    if (py.misc.chp > py.misc.max_hp) {
+        py.misc.chp = py.misc.max_hp;
         py.misc.chp_frac = 0;
         printCharacterCurrentHitPoints();
     }
@@ -120,7 +120,7 @@ static void playerActivateSuperHeroism() {
     py.flags.status |= PY_SHERO;
     playerDisturb(0, 0);
 
-    py.misc.mhp += 20;
+    py.misc.max_hp += 20;
     py.misc.chp += 20;
     py.misc.bth += 24;
     py.misc.bth_with_bows += 24;
@@ -134,9 +134,9 @@ static void playerDisableSuperHeroism() {
     py.flags.status &= ~PY_SHERO;
     playerDisturb(0, 0);
 
-    py.misc.mhp -= 20;
-    if (py.misc.chp > py.misc.mhp) {
-        py.misc.chp = py.misc.mhp;
+    py.misc.max_hp -= 20;
+    if (py.misc.chp > py.misc.max_hp) {
+        py.misc.chp = py.misc.max_hp;
         py.misc.chp_frac = 0;
         printCharacterCurrentHitPoints();
     }
@@ -234,7 +234,7 @@ static void playerUpdateRegeneration(int amount) {
         amount = amount * 2;
     }
 
-    if (py.flags.poisoned < 1 && py.misc.chp < py.misc.mhp) {
+    if (py.flags.poisoned < 1 && py.misc.chp < py.misc.max_hp) {
         playerRegenerateHitPoints(amount);
     }
 
@@ -448,7 +448,7 @@ static void playerUpdateRestingState() {
         // Rest until reach max mana and max hit points.
         py.flags.rest++;
 
-        if ((py.misc.chp == py.misc.mhp && py.misc.cmana == py.misc.mana) || py.flags.rest == 0) {
+        if ((py.misc.chp == py.misc.max_hp && py.misc.cmana == py.misc.mana) || py.flags.rest == 0) {
             playerRestOff();
         }
     }
@@ -1923,7 +1923,7 @@ static bool validCountCommand(char command) {
 // Regenerate hit points -RAK-
 static void playerRegenerateHitPoints(int percent) {
     int old_chp = py.misc.chp;
-    int32_t new_chp = (int32_t) py.misc.mhp * percent + PLAYER_REGEN_HPBASE;
+    int32_t new_chp = (int32_t) py.misc.max_hp * percent + PLAYER_REGEN_HPBASE;
 
     // div 65536
     py.misc.chp += new_chp >> 16;
@@ -1944,8 +1944,8 @@ static void playerRegenerateHitPoints(int percent) {
     }
 
     // must set frac to zero even if equal
-    if (py.misc.chp >= py.misc.mhp) {
-        py.misc.chp = py.misc.mhp;
+    if (py.misc.chp >= py.misc.max_hp) {
+        py.misc.chp = py.misc.max_hp;
         py.misc.chp_frac = 0;
     }
 

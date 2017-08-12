@@ -393,8 +393,8 @@ static void characterGetClass() {
 
             // now set misc stats, do this after setting stats because of playerStatAdjustmentConstitution() for hit-points
             py.misc.hitdie += klass->adj_hd;
-            py.misc.mhp = (int16_t) (playerStatAdjustmentConstitution() + py.misc.hitdie);
-            py.misc.chp = py.misc.mhp;
+            py.misc.max_hp = (int16_t) (playerStatAdjustmentConstitution() + py.misc.hitdie);
+            py.misc.chp = py.misc.max_hp;
             py.misc.chp_frac = 0;
 
             // Initialize hit_points array.

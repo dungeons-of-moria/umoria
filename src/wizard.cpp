@@ -109,7 +109,7 @@ void wizardCharacterAdjustment() {
     if (getStringInput(input, 0, 25, 5)) {
         number = atoi(input);
         if (number > 0 && number <= MAX_SHORT) {
-            py.misc.mhp = (int16_t) number;
+            py.misc.max_hp = (int16_t) number;
             py.misc.chp = (int16_t) number;
             py.misc.chp_frac = 0;
             printCharacterMaxHitPoints();

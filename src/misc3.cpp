@@ -394,7 +394,7 @@ void printCharacterCurrentMana() {
 
 // Prints Max hit points -RAK-
 void printCharacterMaxHitPoints() {
-    printNumber(py.misc.mhp, 16, STAT_COLUMN + 6);
+    printNumber(py.misc.max_hp, 16, STAT_COLUMN + 6);
 }
 
 // Prints players current hit points -RAK-
@@ -855,7 +855,7 @@ void printCharacterStatsBlock() {
     printHeaderNumber("LEV ", (int) py.misc.level, 13, STAT_COLUMN);
     printHeaderLongNumber("EXP ", py.misc.exp, 14, STAT_COLUMN);
     printHeaderNumber("MANA", py.misc.cmana, 15, STAT_COLUMN);
-    printHeaderNumber("MHP ", py.misc.mhp, 16, STAT_COLUMN);
+    printHeaderNumber("MHP ", py.misc.max_hp, 16, STAT_COLUMN);
     printHeaderNumber("CHP ", py.misc.chp, 17, STAT_COLUMN);
     printHeaderNumber("AC  ", py.misc.dis_ac, 19, STAT_COLUMN);
     printHeaderLongNumber("GOLD", py.misc.au, 20, STAT_COLUMN);
@@ -993,7 +993,7 @@ void printCharacterLevelExperience() {
     }
 
     printHeaderLongNumber7Spaces("Gold       ", py.misc.au, 13, 28);
-    printHeaderNumber("Max Hit Points ", py.misc.mhp, 9, 52);
+    printHeaderNumber("Max Hit Points ", py.misc.max_hp, 9, 52);
     printHeaderNumber("Cur Hit Points ", py.misc.chp, 10, 52);
     printHeaderNumber("Max Mana       ", py.misc.mana, 11, 52);
     printHeaderNumber("Cur Mana       ", py.misc.cmana, 12, 52);
@@ -2003,13 +2003,13 @@ void playerCalculateHitPoints() {
     }
 
     // MHP can equal zero while character is being created
-    if (hp != py.misc.mhp && py.misc.mhp != 0) {
+    if (hp != py.misc.max_hp && py.misc.max_hp != 0) {
         // Change current hit points proportionately to change of MHP,
         // divide first to avoid overflow, little loss of accuracy
-        int32_t value = (((int32_t) py.misc.chp << 16) + py.misc.chp_frac) / py.misc.mhp * hp;
+        int32_t value = (((int32_t) py.misc.chp << 16) + py.misc.chp_frac) / py.misc.max_hp * hp;
         py.misc.chp = (int16_t) (value >> 16);
         py.misc.chp_frac = (uint16_t) (value & 0xFFFF);
-        py.misc.mhp = (int16_t) hp;
+        py.misc.max_hp = (int16_t) hp;
 
         // can't print hit points here, may be in store or inventory mode
         py.flags.status |= PY_HP;

@@ -46,7 +46,7 @@ typedef struct {
         int16_t bth;                 // Base to hit
         int16_t bth_with_bows;       // BTH with bows
         int16_t mana;                // Mana points
-        int16_t mhp;                 // Max hit pts
+        int16_t max_hp;              // Max hit pts
         int16_t ptohit;              // Plusses to hit
         int16_t ptodam;              // Plusses to dam
         int16_t pac;                 // Total AC
