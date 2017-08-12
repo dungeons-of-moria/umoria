@@ -106,19 +106,19 @@ static void playerRecalculateBonusesFromInventory() {
             py.misc.ac += item->ac;
 
             if (spellItemIdentified(item)) {
-                py.misc.dis_th += item->tohit;
+                py.misc.display_to_hit += item->tohit;
 
                 // Bows can't damage. -CJS-
                 if (item->tval != TV_BOW) {
-                    py.misc.dis_td += item->todam;
+                    py.misc.display_to_damage += item->todam;
                 }
 
-                py.misc.dis_tac += item->toac;
-                py.misc.dis_ac += item->ac;
+                py.misc.display_to_ac += item->toac;
+                py.misc.display_ac += item->ac;
             } else if (!(TR_CURSED & item->flags)) {
                 // Base AC values should always be visible,
                 // as long as the item is not cursed.
-                py.misc.dis_ac += item->ac;
+                py.misc.display_ac += item->ac;
             }
         }
     }
@@ -175,7 +175,7 @@ void playerRecalculateBonuses() {
         py.flags.food_digested -= 3;
     }
 
-    int savedDisplayAC = py.misc.dis_ac;
+    int savedDisplayAC = py.misc.display_ac;
 
     playerResetFlags();
 
@@ -186,28 +186,28 @@ void playerRecalculateBonuses() {
     py.misc.ac = 0;
 
     // Display values
-    py.misc.dis_th = py.misc.plusses_to_hit;
-    py.misc.dis_td = py.misc.plusses_to_damage;
-    py.misc.dis_ac = 0;
-    py.misc.dis_tac = py.misc.magical_ac;
+    py.misc.display_to_hit = py.misc.plusses_to_hit;
+    py.misc.display_to_damage = py.misc.plusses_to_damage;
+    py.misc.display_ac = 0;
+    py.misc.display_to_ac = py.misc.magical_ac;
 
     playerRecalculateBonusesFromInventory();
 
-    py.misc.dis_ac += py.misc.dis_tac;
+    py.misc.display_ac += py.misc.display_to_ac;
 
     if (weapon_is_heavy) {
-        py.misc.dis_th += (py.stats.use_stat[A_STR] * 15 - inventory[EQUIPMENT_WIELD].weight);
+        py.misc.display_to_hit += (py.stats.use_stat[A_STR] * 15 - inventory[EQUIPMENT_WIELD].weight);
     }
 
     // Add in temporary spell increases
     if (py.flags.invuln > 0) {
         py.misc.ac += 100;
-        py.misc.dis_ac += 100;
+        py.misc.display_ac += 100;
     }
 
     if (py.flags.blessed > 0) {
         py.misc.ac += 2;
-        py.misc.dis_ac += 2;
+        py.misc.display_ac += 2;
     }
 
     if (py.flags.detect_inv > 0) {
@@ -215,7 +215,7 @@ void playerRecalculateBonuses() {
     }
 
     // can't print AC here because might be in a store
-    if (savedDisplayAC != py.misc.dis_ac) {
+    if (savedDisplayAC != py.misc.display_ac) {
         py.flags.status |= PY_ARMOR;
     }
 

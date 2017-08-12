@@ -504,7 +504,7 @@ static void playerUpdateInvulnerability() {
         playerDisturb(0, 0);
 
         py.misc.ac += 100;
-        py.misc.dis_ac += 100;
+        py.misc.display_ac += 100;
 
         printCharacterCurrentArmorClass();
         printMessage("Your skin turns into steel!");
@@ -517,7 +517,7 @@ static void playerUpdateInvulnerability() {
         playerDisturb(0, 0);
 
         py.misc.ac -= 100;
-        py.misc.dis_ac -= 100;
+        py.misc.display_ac -= 100;
 
         printCharacterCurrentArmorClass();
         printMessage("Your skin returns to normal.");
@@ -536,7 +536,7 @@ static void playerUpdateBlessedness() {
         py.misc.bth += 5;
         py.misc.bth_with_bows += 5;
         py.misc.ac += 2;
-        py.misc.dis_ac += 2;
+        py.misc.display_ac += 2;
 
         printMessage("You feel righteous!");
         printCharacterCurrentArmorClass();
@@ -551,7 +551,7 @@ static void playerUpdateBlessedness() {
         py.misc.bth -= 5;
         py.misc.bth_with_bows -= 5;
         py.misc.ac -= 2;
-        py.misc.dis_ac -= 2;
+        py.misc.display_ac -= 2;
 
         printMessage("The prayer has expired.");
         printCharacterCurrentArmorClass();

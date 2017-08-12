@@ -404,7 +404,7 @@ void printCharacterCurrentHitPoints() {
 
 // prints current AC -RAK-
 void printCharacterCurrentArmorClass() {
-    printNumber(py.misc.dis_ac, 19, STAT_COLUMN + 6);
+    printNumber(py.misc.display_ac, 19, STAT_COLUMN + 6);
 }
 
 // Prints current gold -RAK-
@@ -857,7 +857,7 @@ void printCharacterStatsBlock() {
     printHeaderNumber("MANA", py.misc.cmana, 15, STAT_COLUMN);
     printHeaderNumber("MHP ", py.misc.max_hp, 16, STAT_COLUMN);
     printHeaderNumber("CHP ", py.misc.chp, 17, STAT_COLUMN);
-    printHeaderNumber("AC  ", py.misc.dis_ac, 19, STAT_COLUMN);
+    printHeaderNumber("AC  ", py.misc.display_ac, 19, STAT_COLUMN);
     printHeaderLongNumber("GOLD", py.misc.au, 20, STAT_COLUMN);
     printCharacterWinner();
 
@@ -939,10 +939,10 @@ void printCharacterStats() {
         }
     }
 
-    printHeaderNumber("+ To Hit    ", py.misc.dis_th, 9, 1);
-    printHeaderNumber("+ To Damage ", py.misc.dis_td, 10, 1);
-    printHeaderNumber("+ To AC     ", py.misc.dis_tac, 11, 1);
-    printHeaderNumber("  Total AC  ", py.misc.dis_ac, 12, 1);
+    printHeaderNumber("+ To Hit    ", py.misc.display_to_hit, 9, 1);
+    printHeaderNumber("+ To Damage ", py.misc.display_to_damage, 10, 1);
+    printHeaderNumber("+ To AC     ", py.misc.display_to_ac, 11, 1);
+    printHeaderNumber("  Total AC  ", py.misc.display_ac, 12, 1);
 }
 
 // Returns a rating of x depending on y -JWT-

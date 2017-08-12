@@ -193,16 +193,16 @@ static void writeCharacterSheetToFile(FILE *file1) {
     statsAsString(py.stats.use_stat[A_CHR], statDescription);
     (void) fprintf(file1, "   CHR : %s\n\n", statDescription);
 
-    (void) fprintf(file1, " + To Hit    : %6d", py.misc.dis_th);
+    (void) fprintf(file1, " + To Hit    : %6d", py.misc.display_to_hit);
     (void) fprintf(file1, "%7sLevel      : %7d", blank, (int) py.misc.level);
     (void) fprintf(file1, "    Max Hit Points : %6d\n", py.misc.max_hp);
-    (void) fprintf(file1, " + To Damage : %6d", py.misc.dis_td);
+    (void) fprintf(file1, " + To Damage : %6d", py.misc.display_to_damage);
     (void) fprintf(file1, "%7sExperience : %7d", blank, py.misc.exp);
     (void) fprintf(file1, "    Cur Hit Points : %6d\n", py.misc.chp);
-    (void) fprintf(file1, " + To AC     : %6d", py.misc.dis_tac);
+    (void) fprintf(file1, " + To AC     : %6d", py.misc.display_to_ac);
     (void) fprintf(file1, "%7sMax Exp    : %7d", blank, py.misc.max_exp);
     (void) fprintf(file1, "    Max Mana%8s %6d\n", colon, py.misc.mana);
-    (void) fprintf(file1, "   Total AC  : %6d", py.misc.dis_ac);
+    (void) fprintf(file1, "   Total AC  : %6d", py.misc.display_ac);
     if (py.misc.level >= PLAYER_MAX_LEVEL) {
         (void) fprintf(file1, "%7sExp to Adv : *******", blank);
     } else {

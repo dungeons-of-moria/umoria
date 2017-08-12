@@ -389,10 +389,10 @@ static void characterGetClass() {
             py.misc.ac = 0;
 
             // Displayed values
-            py.misc.dis_td = py.misc.plusses_to_damage;
-            py.misc.dis_th = py.misc.plusses_to_hit;
-            py.misc.dis_tac = py.misc.magical_ac;
-            py.misc.dis_ac = py.misc.ac + py.misc.dis_tac;
+            py.misc.display_to_damage = py.misc.plusses_to_damage;
+            py.misc.display_to_hit = py.misc.plusses_to_hit;
+            py.misc.display_to_ac = py.misc.magical_ac;
+            py.misc.display_ac = py.misc.ac + py.misc.display_to_ac;
 
             // now set misc stats, do this after setting stats because of playerStatAdjustmentConstitution() for hit-points
             py.misc.hitdie += klass->adj_hd;
