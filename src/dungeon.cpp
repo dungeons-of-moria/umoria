@@ -43,9 +43,9 @@ static void playerInitializePlayerLight() {
 }
 
 // Check for a maximum level
-static void playerUpdateDeepestDungeonLevelVisited() {
-    if (current_dungeon_level > py.misc.max_dlv) {
-        py.misc.max_dlv = (uint16_t) current_dungeon_level;
+static void playerUpdateMaxDungeonDepth() {
+    if (current_dungeon_level > py.misc.max_dungeon_depth) {
+        py.misc.max_dungeon_depth = (uint16_t) current_dungeon_level;
     }
 }
 
@@ -649,8 +649,8 @@ static void playerUpdateWordOfRecall() {
         if (current_dungeon_level > 0) {
             current_dungeon_level = 0;
             printMessage("You feel yourself yanked upwards!");
-        } else if (py.misc.max_dlv != 0) {
-            current_dungeon_level = py.misc.max_dlv;
+        } else if (py.misc.max_dungeon_depth != 0) {
+            current_dungeon_level = py.misc.max_dungeon_depth;
             printMessage("You feel yourself yanked downwards!");
         }
     } else {
@@ -871,7 +871,7 @@ static void executeInputCommands(char *command, int *find_count) {
 void playDungeon() {
     // Note: There is a lot of preliminary magic going on here at first
     playerInitializePlayerLight();
-    playerUpdateDeepestDungeonLevelVisited();
+    playerUpdateMaxDungeonDepth();
     resetDungeonFlags();
 
     // Initialize find counter to `0`

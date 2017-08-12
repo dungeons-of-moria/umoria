@@ -206,7 +206,7 @@ static void printTomb() {
 
 // Calculates the total number of points earned -JWT-
 int32_t playerCalculateTotalPoints() {
-    int32_t total = py.misc.max_exp + (100 * py.misc.max_dlv);
+    int32_t total = py.misc.max_exp + (100 * py.misc.max_dungeon_depth);
     total += py.misc.au / 100;
 
     for (int i = 0; i < PLAYER_INVENTORY_SIZE; i++) {
@@ -244,7 +244,7 @@ static void highscores() {
     new_entry.chp = py.misc.chp;
     new_entry.dun_level = (uint8_t) current_dungeon_level;
     new_entry.lev = (uint8_t) py.misc.level;
-    new_entry.max_dlv = (uint8_t) py.misc.max_dlv;
+    new_entry.max_dlv = (uint8_t) py.misc.max_dungeon_depth;
     new_entry.gender = highScoreGenderLabel();
     new_entry.race = py.misc.prace;
     new_entry.character_class = py.misc.pclass;

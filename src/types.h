@@ -40,7 +40,7 @@ typedef struct {
         uint16_t height;             // Height
         uint16_t weight;             // Weight
         uint16_t level;              // Level
-        uint16_t max_dlv;            // Max level explored
+        uint16_t max_dungeon_depth;  // Max level explored
         int16_t srh;                 // Chance in search
         int16_t fos;                 // Frenq of search
         int16_t bth;                 // Base to hit
