@@ -61,8 +61,8 @@ typedef struct {
         int16_t stealth_factor;      // Stealth factor
         uint8_t class_id;            // # of class
         uint8_t race_id;             // # of race
-        uint8_t hitdie;              // Char hit die
-        uint8_t expfact;             // Experience factor
+        uint8_t hit_die;             // Char hit die
+        uint8_t experience_factor;   // Experience factor
         int16_t cmana;               // Cur mana pts
         uint16_t cmana_frac;         // Cur mana fraction * 2^16
         int16_t chp;                 // Cur hit pts

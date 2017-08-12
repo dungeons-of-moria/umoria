@@ -989,7 +989,7 @@ void printCharacterLevelExperience() {
     if (py.misc.level >= PLAYER_MAX_LEVEL) {
         putStringClearToEOL("Exp to Adv.: *******", 12, 28);
     } else {
-        printHeaderLongNumber7Spaces("Exp to Adv.", (int32_t) (player_base_exp_levels[py.misc.level - 1] * py.misc.expfact / 100), 12, 28);
+        printHeaderLongNumber7Spaces("Exp to Adv.", (int32_t) (player_base_exp_levels[py.misc.level - 1] * py.misc.experience_factor / 100), 12, 28);
     }
 
     printHeaderLongNumber7Spaces("Gold       ", py.misc.au, 13, 28);
@@ -1946,7 +1946,7 @@ static void playerGainLevel() {
 
     playerCalculateHitPoints();
 
-    int32_t new_exp = player_base_exp_levels[py.misc.level - 1] * py.misc.expfact / 100;
+    int32_t new_exp = player_base_exp_levels[py.misc.level - 1] * py.misc.experience_factor / 100;
 
     if (py.misc.exp > new_exp) {
         // lose some of the 'extra' exp when gaining several levels at once
@@ -1974,7 +1974,7 @@ void displayCharacterExperience() {
         py.misc.exp = PLAYER_MAX_EXP;
     }
 
-    while ((py.misc.level < PLAYER_MAX_LEVEL) && (signed) (player_base_exp_levels[py.misc.level - 1] * py.misc.expfact / 100) <= py.misc.exp) {
+    while ((py.misc.level < PLAYER_MAX_LEVEL) && (signed) (player_base_exp_levels[py.misc.level - 1] * py.misc.experience_factor / 100) <= py.misc.exp) {
         playerGainLevel();
     }
 

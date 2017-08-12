@@ -89,12 +89,12 @@ static void characterGenerateStatsAndRace() {
     py.misc.freng_of_search = race->fos;
     py.misc.stealth_factor = race->stl;
     py.misc.saving_throw = race->bsav;
-    py.misc.hitdie = race->bhitdie;
+    py.misc.hit_die = race->bhitdie;
     py.misc.plusses_to_damage = (int16_t) playerDamageAdjustment();
     py.misc.plusses_to_hit = (int16_t) playerToHitAdjustment();
     py.misc.magical_ac = 0;
     py.misc.ac = (int16_t) playerArmorClassAdjustment();
-    py.misc.expfact = race->b_exp;
+    py.misc.experience_factor = race->b_exp;
     py.flags.see_infra = race->infra;
 }
 
@@ -395,21 +395,21 @@ static void characterGetClass() {
             py.misc.display_ac = py.misc.ac + py.misc.display_to_ac;
 
             // now set misc stats, do this after setting stats because of playerStatAdjustmentConstitution() for hit-points
-            py.misc.hitdie += klass->adj_hd;
-            py.misc.max_hp = (int16_t) (playerStatAdjustmentConstitution() + py.misc.hitdie);
+            py.misc.hit_die += klass->adj_hd;
+            py.misc.max_hp = (int16_t) (playerStatAdjustmentConstitution() + py.misc.hit_die);
             py.misc.chp = py.misc.max_hp;
             py.misc.chp_frac = 0;
 
             // Initialize hit_points array.
             // Put bounds on total possible hp, only succeed
             // if it is within 1/8 of average value.
-            min_value = (PLAYER_MAX_LEVEL * 3 / 8 * (py.misc.hitdie - 1)) + PLAYER_MAX_LEVEL;
-            max_value = (PLAYER_MAX_LEVEL * 5 / 8 * (py.misc.hitdie - 1)) + PLAYER_MAX_LEVEL;
-            player_base_hp_levels[0] = py.misc.hitdie;
+            min_value = (PLAYER_MAX_LEVEL * 3 / 8 * (py.misc.hit_die - 1)) + PLAYER_MAX_LEVEL;
+            max_value = (PLAYER_MAX_LEVEL * 5 / 8 * (py.misc.hit_die - 1)) + PLAYER_MAX_LEVEL;
+            player_base_hp_levels[0] = py.misc.hit_die;
 
             do {
                 for (int i = 1; i < PLAYER_MAX_LEVEL; i++) {
-                    player_base_hp_levels[i] = (uint16_t) randomNumber((int) py.misc.hitdie);
+                    player_base_hp_levels[i] = (uint16_t) randomNumber((int) py.misc.hit_die);
                     player_base_hp_levels[i] += player_base_hp_levels[i - 1];
                 }
             } while (player_base_hp_levels[PLAYER_MAX_LEVEL - 1] < min_value || player_base_hp_levels[PLAYER_MAX_LEVEL - 1] > max_value);
@@ -421,7 +421,7 @@ static void characterGetClass() {
             py.misc.freng_of_search += klass->mfos;
             py.misc.stealth_factor += klass->mstl;
             py.misc.saving_throw += klass->msav;
-            py.misc.expfact += klass->m_exp;
+            py.misc.experience_factor += klass->m_exp;
         } else if (input == '?') {
             displayTextHelpFile(MORIA_WELCOME);
         } else {

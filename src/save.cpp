@@ -153,8 +153,8 @@ static bool sv_write() {
     wr_short((uint16_t) py.misc.stealth_factor);
     wr_byte(py.misc.class_id);
     wr_byte(py.misc.race_id);
-    wr_byte(py.misc.hitdie);
-    wr_byte(py.misc.expfact);
+    wr_byte(py.misc.hit_die);
+    wr_byte(py.misc.experience_factor);
     wr_short((uint16_t) py.misc.cmana);
     wr_short(py.misc.cmana_frac);
     wr_short((uint16_t) py.misc.chp);
@@ -612,8 +612,8 @@ bool loadGame(bool *generate) {
             rd_short((uint16_t *) &py.misc.stealth_factor);
             rd_byte(&py.misc.class_id);
             rd_byte(&py.misc.race_id);
-            rd_byte(&py.misc.hitdie);
-            rd_byte(&py.misc.expfact);
+            rd_byte(&py.misc.hit_die);
+            rd_byte(&py.misc.experience_factor);
             rd_short((uint16_t *) &py.misc.cmana);
             rd_short(&py.misc.cmana_frac);
             rd_short((uint16_t *) &py.misc.chp);
