@@ -975,8 +975,8 @@ const char *statRating(int y, int x) {
 // Prints age, height, weight, and SC -JWT-
 void printCharacterVitalStatistics() {
     printHeaderNumber("Age          ", (int) py.misc.age, 2, 38);
-    printHeaderNumber("Height       ", (int) py.misc.ht, 3, 38);
-    printHeaderNumber("Weight       ", (int) py.misc.wt, 4, 38);
+    printHeaderNumber("Height       ", (int) py.misc.height, 3, 38);
+    printHeaderNumber("Weight       ", (int) py.misc.weight, 4, 38);
     printHeaderNumber("Social Class ", (int) py.misc.sc, 5, 38);
 }
 
@@ -1194,7 +1194,7 @@ int inventoryDamageItem(bool (*item_type)(Inventory_t *), int chance_percentage)
 
 // Computes current weight limit -RAK-
 int playerCarryingLoadLimit() {
-    int weight_cap = py.stats.use_stat[A_STR] * PLAYER_WEIGHT_CAP + py.misc.wt;
+    int weight_cap = py.stats.use_stat[A_STR] * PLAYER_WEIGHT_CAP + py.misc.weight;
 
     if (weight_cap > 3000) {
         weight_cap = 3000;

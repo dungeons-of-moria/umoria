@@ -37,8 +37,8 @@ typedef struct {
         int32_t exp;                 // Cur experience
         uint16_t exp_frac;           // Cur exp fraction * 2^16
         uint16_t age;                // Characters age
-        uint16_t ht;                 // Height
-        uint16_t wt;                 // Weight
+        uint16_t height;             // Height
+        uint16_t weight;             // Weight
         uint16_t lev;                // Level
         uint16_t max_dlv;            // Max level explored
         int16_t srh;                 // Chance in search

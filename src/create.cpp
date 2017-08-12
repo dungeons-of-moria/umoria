@@ -296,11 +296,11 @@ static void characterSetAgeHeightWeight() {
     py.misc.age = (uint16_t) (character_races[race_id].b_age + randomNumber((int) character_races[race_id].m_age));
 
     if (playerIsMale()) {
-        py.misc.ht = (uint16_t) randomNumberNormalDistribution((int) character_races[race_id].m_b_ht, (int) character_races[race_id].m_m_ht);
-        py.misc.wt = (uint16_t) randomNumberNormalDistribution((int) character_races[race_id].m_b_wt, (int) character_races[race_id].m_m_wt);
+        py.misc.height = (uint16_t) randomNumberNormalDistribution((int) character_races[race_id].m_b_ht, (int) character_races[race_id].m_m_ht);
+        py.misc.weight = (uint16_t) randomNumberNormalDistribution((int) character_races[race_id].m_b_wt, (int) character_races[race_id].m_m_wt);
     } else {
-        py.misc.ht = (uint16_t) randomNumberNormalDistribution((int) character_races[race_id].f_b_ht, (int) character_races[race_id].f_m_ht);
-        py.misc.wt = (uint16_t) randomNumberNormalDistribution((int) character_races[race_id].f_b_wt, (int) character_races[race_id].f_m_wt);
+        py.misc.height = (uint16_t) randomNumberNormalDistribution((int) character_races[race_id].f_b_ht, (int) character_races[race_id].f_m_ht);
+        py.misc.weight = (uint16_t) randomNumberNormalDistribution((int) character_races[race_id].f_b_wt, (int) character_races[race_id].f_m_wt);
     }
 
     py.misc.disarm = (int16_t) (character_races[race_id].b_dis + playerDisarmAdjustment());

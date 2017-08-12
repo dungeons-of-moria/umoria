@@ -217,13 +217,13 @@ void wizardCharacterAdjustment() {
         return;
     }
 
-    (void) sprintf(input, "Current=%d  Weight = ", py.misc.wt);
+    (void) sprintf(input, "Current=%d  Weight = ", py.misc.weight);
     number = (int) strlen(input);
     putStringClearToEOL(input, 0, 0);
     if (getStringInput(input, 0, number, 3)) {
         number = atoi(input);
         if (number > -1 && (*input != '\0')) {
-            py.misc.wt = (uint16_t) number;
+            py.misc.weight = (uint16_t) number;
         }
     } else {
         return;

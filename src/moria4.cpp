@@ -998,7 +998,7 @@ static void playerBashAttack(int y, int x) {
 
     int base_to_hit = py.stats.use_stat[A_STR];
     base_to_hit += inventory[EQUIPMENT_ARM].weight / 2;
-    base_to_hit += py.misc.wt / 10;
+    base_to_hit += py.misc.weight / 10;
 
     if (!monster->ml) {
         base_to_hit /= 2;
@@ -1013,7 +1013,7 @@ static void playerBashAttack(int y, int x) {
 
         int damage = dicePlayerDamageRoll(inventory[EQUIPMENT_ARM].damage);
         damage = playerWeaponCriticalBlow(inventory[EQUIPMENT_ARM].weight / 4 + py.stats.use_stat[A_STR], 0, damage, CLASS_BTH);
-        damage += py.misc.wt / 60;
+        damage += py.misc.weight / 60;
         damage += 3;
 
         if (damage < 0) {
@@ -1073,7 +1073,7 @@ static void playerBashPosition(int y, int x) {
 static void playerBashClosedDoor(int y, int x, int dir, Cave_t *tile, Inventory_t *item) {
     printMessageNoCommandInterrupt("You smash into the door!");
 
-    int chance = py.stats.use_stat[A_STR] + py.misc.wt / 2;
+    int chance = py.stats.use_stat[A_STR] + py.misc.weight / 2;
 
     // Use (roughly) similar method as for monsters.
     if (randomNumber(chance * (20 + abs(item->p1))) < 10 * (chance - abs(item->p1))) {
