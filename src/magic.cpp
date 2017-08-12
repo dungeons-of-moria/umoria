@@ -85,7 +85,7 @@ static void castSpell(int spellID) {
             (void) playerCurePoison();
             break;
         case 13:
-            playerTeleport((py.misc.lev * 5));
+            playerTeleport((py.misc.level * 5));
             break;
         case 14:
             for (int id = 22; id < PLAYER_INVENTORY_SIZE; id++) {
@@ -146,7 +146,7 @@ static void castSpell(int spellID) {
             }
             break;
         case 28:
-            py.flags.fast += randomNumber(20) + py.misc.lev;
+            py.flags.fast += randomNumber(20) + py.misc.level;
             break;
         case 29:
             if (getDirectionWithMemory(CNIL, &dir)) {

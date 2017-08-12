@@ -588,7 +588,7 @@ void readScroll() {
     if (identified) {
         if (!itemSetColorlessAsIdentifed(item)) {
             // round half-way case up
-            py.misc.exp += (item->level + (py.misc.lev >> 1)) / py.misc.lev;
+            py.misc.exp += (item->level + (py.misc.level >> 1)) / py.misc.level;
             displayCharacterExperience();
 
             itemIdentify(&item_id);

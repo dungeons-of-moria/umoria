@@ -1927,7 +1927,7 @@ void dungeonEarthquake() {
 bool playerProtectEvil() {
     bool is_protected = py.flags.protevil == 0;
 
-    py.flags.protevil += randomNumber(25) + 3 * py.misc.lev;
+    py.flags.protevil += randomNumber(25) + 3 * py.misc.level;
 
     return is_protected;
 }
@@ -2000,7 +2000,7 @@ bool spellTurnUndead() {
             vtype_t name;
             monsterNameDescription(name, monster->ml, creature->name);
 
-            if (py.misc.lev + 1 > creature->level || randomNumber(5) == 1) {
+            if (py.misc.level + 1 > creature->level || randomNumber(5) == 1) {
                 if (monster->ml) {
                     creature_recall[monster->mptr].r_cdefense |= CD_UNDEAD;
 
@@ -2009,7 +2009,7 @@ bool spellTurnUndead() {
                     printMonsterActionText(name, "runs frantically!");
                 }
 
-                monster->confused = (uint8_t) py.misc.lev;
+                monster->confused = (uint8_t) py.misc.level;
             } else if (monster->ml) {
                 printMonsterActionText(name, "is unaffected.");
             }
@@ -2105,8 +2105,8 @@ void spellLoseEXP(int32_t adjustment) {
     // increment exp once more, because level 1 exp is stored in player_base_exp_levels[0]
     exp++;
 
-    if (py.misc.lev != exp) {
-        py.misc.lev = (uint16_t) exp;
+    if (py.misc.level != exp) {
+        py.misc.level = (uint16_t) exp;
 
         playerCalculateHitPoints();
 

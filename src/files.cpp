@@ -194,7 +194,7 @@ static void writeCharacterSheetToFile(FILE *file1) {
     (void) fprintf(file1, "   CHR : %s\n\n", statDescription);
 
     (void) fprintf(file1, " + To Hit    : %6d", py.misc.dis_th);
-    (void) fprintf(file1, "%7sLevel      : %7d", blank, (int) py.misc.lev);
+    (void) fprintf(file1, "%7sLevel      : %7d", blank, (int) py.misc.level);
     (void) fprintf(file1, "    Max Hit Points : %6d\n", py.misc.mhp);
     (void) fprintf(file1, " + To Damage : %6d", py.misc.dis_td);
     (void) fprintf(file1, "%7sExperience : %7d", blank, py.misc.exp);
@@ -203,16 +203,16 @@ static void writeCharacterSheetToFile(FILE *file1) {
     (void) fprintf(file1, "%7sMax Exp    : %7d", blank, py.misc.max_exp);
     (void) fprintf(file1, "    Max Mana%8s %6d\n", colon, py.misc.mana);
     (void) fprintf(file1, "   Total AC  : %6d", py.misc.dis_ac);
-    if (py.misc.lev >= PLAYER_MAX_LEVEL) {
+    if (py.misc.level >= PLAYER_MAX_LEVEL) {
         (void) fprintf(file1, "%7sExp to Adv : *******", blank);
     } else {
-        (void) fprintf(file1, "%7sExp to Adv : %7d", blank, (int32_t) (player_base_exp_levels[py.misc.lev - 1] * py.misc.expfact / 100));
+        (void) fprintf(file1, "%7sExp to Adv : %7d", blank, (int32_t) (player_base_exp_levels[py.misc.level - 1] * py.misc.expfact / 100));
     }
     (void) fprintf(file1, "    Cur Mana%8s %6d\n", colon, py.misc.cmana);
     (void) fprintf(file1, "%28sGold%8s %7d\n\n", blank, colon, py.misc.au);
 
-    int xbth = py.misc.bth + py.misc.ptohit * BTH_PER_PLUS_TO_HIT_ADJUST + (class_level_adj[py.misc.pclass][CLASS_BTH] * py.misc.lev);
-    int xbthb = py.misc.bthb + py.misc.ptohit * BTH_PER_PLUS_TO_HIT_ADJUST + (class_level_adj[py.misc.pclass][CLASS_BTHB] * py.misc.lev);
+    int xbth = py.misc.bth + py.misc.ptohit * BTH_PER_PLUS_TO_HIT_ADJUST + (class_level_adj[py.misc.pclass][CLASS_BTH] * py.misc.level);
+    int xbthb = py.misc.bthb + py.misc.ptohit * BTH_PER_PLUS_TO_HIT_ADJUST + (class_level_adj[py.misc.pclass][CLASS_BTHB] * py.misc.level);
 
     // this results in a range from 0 to 29
     int xfos = 40 - py.misc.fos;
@@ -223,9 +223,9 @@ static void writeCharacterSheetToFile(FILE *file1) {
 
     // this results in a range from 0 to 9
     int xstl = py.misc.stl + 1;
-    int xdis = py.misc.disarm + 2 * playerDisarmAdjustment() + playerStatAdjustmentWisdomIntelligence(A_INT) + (class_level_adj[py.misc.pclass][CLASS_DISARM] * py.misc.lev / 3);
-    int xsave = py.misc.save + playerStatAdjustmentWisdomIntelligence(A_WIS) + (class_level_adj[py.misc.pclass][CLASS_SAVE] * py.misc.lev / 3);
-    int xdev = py.misc.save + playerStatAdjustmentWisdomIntelligence(A_INT) + (class_level_adj[py.misc.pclass][CLASS_DEVICE] * py.misc.lev / 3);
+    int xdis = py.misc.disarm + 2 * playerDisarmAdjustment() + playerStatAdjustmentWisdomIntelligence(A_INT) + (class_level_adj[py.misc.pclass][CLASS_DISARM] * py.misc.level / 3);
+    int xsave = py.misc.save + playerStatAdjustmentWisdomIntelligence(A_WIS) + (class_level_adj[py.misc.pclass][CLASS_SAVE] * py.misc.level / 3);
+    int xdev = py.misc.save + playerStatAdjustmentWisdomIntelligence(A_INT) + (class_level_adj[py.misc.pclass][CLASS_DEVICE] * py.misc.level / 3);
 
     vtype_t xinfra;
     (void) sprintf(xinfra, "%d feet", py.flags.see_infra * 10);

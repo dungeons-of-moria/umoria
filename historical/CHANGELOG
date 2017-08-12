@@ -2687,7 +2687,7 @@ wands.c, variable.c: modify how misc abilities vary with level, new variable
 externs.h, misc2.c, moria2.c: critical_hits() has fourth paramter, that
 	indicates whether to use CLA_BTH or CLA_BTHB class level adj
 moria2.c: penalty for attacking invisible creatures modified, was minus
-	lev * BTH_LEV_ADJ-1, now minus lev * BTH_LEV_ADJ/2, hence warriors
+	lev * BTH_LEV_ADJ-1, now minus level * BTH_LEV_ADJ/2, hence warriors
 	have less penalty than mages/priests
 creature.c, externs.h, misc2.c, moria2.c: test_hit has a fifth paramter, that
 	indicates whether to use CLA_BTH or CLA_BTHB (or even CLA_SAVE)

@@ -316,11 +316,11 @@ static void memoryKillPoints(uint16_t creature_defense, uint16_t monster_exp, ui
 
     // calculate the integer exp part, can be larger than 64K when first
     // level character looks at Balrog info, so must store in long
-    int32_t quotient = (int32_t) monster_exp * level / py.misc.lev;
+    int32_t quotient = (int32_t) monster_exp * level / py.misc.level;
 
     // calculate the fractional exp part scaled by 100,
     // must use long arithmetic to avoid overflow
-    int remainder = (uint32_t) ((((int32_t) monster_exp * level % py.misc.lev) * (int32_t) 1000 / py.misc.lev + 5) / 10);
+    int remainder = (uint32_t) ((((int32_t) monster_exp * level % py.misc.level) * (int32_t) 1000 / py.misc.level + 5) / 10);
 
     char plural;
     if (quotient == 1 && remainder == 0) {
@@ -335,10 +335,10 @@ static void memoryKillPoints(uint16_t creature_defense, uint16_t monster_exp, ui
 
     const char *p, *q;
 
-    if (py.misc.lev / 10 == 1) {
+    if (py.misc.level / 10 == 1) {
         p = "th";
     } else {
-        int ord = py.misc.lev % 10;
+        int ord = py.misc.level % 10;
         if (ord == 1) {
             p = "st";
         } else if (ord == 2) {
@@ -350,13 +350,13 @@ static void memoryKillPoints(uint16_t creature_defense, uint16_t monster_exp, ui
         }
     }
 
-    if (py.misc.lev == 8 || py.misc.lev == 11 || py.misc.lev == 18) {
+    if (py.misc.level == 8 || py.misc.level == 11 || py.misc.level == 18) {
         q = "n";
     } else {
         q = "";
     }
 
-    (void) sprintf(desc, " for a%s %d%s level character.", q, py.misc.lev, p);
+    (void) sprintf(desc, " for a%s %d%s level character.", q, py.misc.level, p);
     memoryPrint(desc);
 }
 

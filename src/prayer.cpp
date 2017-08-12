@@ -78,7 +78,7 @@ static void playerRecitePrayer(int prayer_type) {
             }
             break;
         case 10:
-            playerTeleport((py.misc.lev * 3));
+            playerTeleport((py.misc.level * 3));
             break;
         case 11:
             (void) spellChangePlayerHitPoints(diceDamageRoll(4, 4));
@@ -109,7 +109,7 @@ static void playerRecitePrayer(int prayer_type) {
             break;
         case 18:
             if (getDirectionWithMemory(CNIL, &dir)) {
-                spellFireBall(char_row, char_col, dir, (diceDamageRoll(3, 6) + py.misc.lev), GF_HOLY_ORB, "Black Sphere");
+                spellFireBall(char_row, char_col, dir, (diceDamageRoll(3, 6) + py.misc.level), GF_HOLY_ORB, "Black Sphere");
             }
             break;
         case 19:
@@ -137,13 +137,13 @@ static void playerRecitePrayer(int prayer_type) {
             playerBless(randomNumber(48) + 48);
             break;
         case 27:
-            (void) spellDispelCreature(CD_UNDEAD, (3 * py.misc.lev));
+            (void) spellDispelCreature(CD_UNDEAD, (3 * py.misc.level));
             break;
         case 28:
             (void) spellChangePlayerHitPoints(200);
             break;
         case 29:
-            (void) spellDispelCreature(CD_EVIL, (3 * py.misc.lev));
+            (void) spellDispelCreature(CD_EVIL, (3 * py.misc.level));
             break;
         case 30:
             spellWardingGlyph();
@@ -157,7 +157,7 @@ static void playerRecitePrayer(int prayer_type) {
                 (void) playerStatRestore(i);
             }
 
-            (void) spellDispelCreature(CD_EVIL, (4 * py.misc.lev));
+            (void) spellDispelCreature(CD_EVIL, (4 * py.misc.level));
             (void) spellTurnUndead();
 
             if (py.flags.invuln < 3) {

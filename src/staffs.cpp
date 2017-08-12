@@ -27,7 +27,7 @@ static bool staffPlayerCanUse(Inventory_t *item) {
     int chance = py.misc.save;
     chance += playerStatAdjustmentWisdomIntelligence(A_INT);
     chance -= item->level - 5;
-    chance += class_level_adj[py.misc.pclass][CLASS_DEVICE] * py.misc.lev / 3;
+    chance += class_level_adj[py.misc.pclass][CLASS_DEVICE] * py.misc.level / 3;
 
     if (py.flags.confused > 0) {
         chance = chance / 2;
@@ -200,7 +200,7 @@ void useStaff() {
     if (identified) {
         if (!itemSetColorlessAsIdentifed(item)) {
             // round half-way case up
-            py.misc.exp += (item->level + (py.misc.lev >> 1)) / py.misc.lev;
+            py.misc.exp += (item->level + (py.misc.level >> 1)) / py.misc.level;
 
             displayCharacterExperience();
 

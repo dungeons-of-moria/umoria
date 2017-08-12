@@ -185,7 +185,7 @@ static int playerTrapDisarmAbility() {
     ability += 2;
     ability *= playerDisarmAdjustment();
     ability += playerStatAdjustmentWisdomIntelligence(A_INT);
-    ability += class_level_adj[py.misc.pclass][CLASS_DISARM] * py.misc.lev / 3;
+    ability += class_level_adj[py.misc.pclass][CLASS_DISARM] * py.misc.level / 3;
 
     if (py.flags.blind > 0 || playerNoLight()) {
         ability = ability / 10;
@@ -920,11 +920,11 @@ void playerThrowItem() {
                 // off most bonuses, and reduce bthb depending on distance.
                 if (!m_ptr->ml) {
                     tbth /= current_distance + 2;
-                    tbth -= py.misc.lev * class_level_adj[py.misc.pclass][CLASS_BTHB] / 2;
+                    tbth -= py.misc.level * class_level_adj[py.misc.pclass][CLASS_BTHB] / 2;
                     tbth -= tpth * (BTH_PER_PLUS_TO_HIT_ADJUST - 1);
                 }
 
-                if (playerTestBeingHit(tbth, (int) py.misc.lev, tpth, (int) creatures_list[m_ptr->mptr].ac, CLASS_BTHB)) {
+                if (playerTestBeingHit(tbth, (int) py.misc.level, tpth, (int) creatures_list[m_ptr->mptr].ac, CLASS_BTHB)) {
                     int damage = m_ptr->mptr;
 
                     obj_desc_t description, msg;
@@ -1003,10 +1003,10 @@ static void playerBashAttack(int y, int x) {
     if (!monster->ml) {
         base_to_hit /= 2;
         base_to_hit -= py.stats.use_stat[A_DEX] * (BTH_PER_PLUS_TO_HIT_ADJUST - 1);
-        base_to_hit -= py.misc.lev * class_level_adj[py.misc.pclass][CLASS_BTH] / 2;
+        base_to_hit -= py.misc.level * class_level_adj[py.misc.pclass][CLASS_BTH] / 2;
     }
 
-    if (playerTestBeingHit(base_to_hit, (int) py.misc.lev, (int) py.stats.use_stat[A_DEX], (int) creature->ac, CLASS_BTH)) {
+    if (playerTestBeingHit(base_to_hit, (int) py.misc.level, (int) py.stats.use_stat[A_DEX], (int) creature->ac, CLASS_BTH)) {
         vtype_t msg;
         (void) sprintf(msg, "You hit %s.", name);
         printMessage(msg);

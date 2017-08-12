@@ -76,7 +76,7 @@ static void characterGenerateStatsAndRace() {
     characterChangeStat(A_CON, race->con_adj);
     characterChangeStat(A_CHR, race->chr_adj);
 
-    py.misc.lev = 1;
+    py.misc.level = 1;
 
     for (int i = 0; i < 6; i++) {
         py.stats.cur_stat[i] = py.stats.max_stat[i];

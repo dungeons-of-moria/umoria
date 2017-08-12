@@ -364,10 +364,10 @@ int playerStatAdjustmentConstitution() {
 char *playerTitle() {
     const char *p;
 
-    if (py.misc.lev < 1) {
+    if (py.misc.level < 1) {
         p = "Babe in arms";
-    } else if (py.misc.lev <= PLAYER_MAX_LEVEL) {
-        p = class_titles[py.misc.pclass][py.misc.lev - 1];
+    } else if (py.misc.level <= PLAYER_MAX_LEVEL) {
+        p = class_titles[py.misc.pclass][py.misc.level - 1];
     } else if (playerIsMale()) {
         p = "**KING**";
     } else {
@@ -384,7 +384,7 @@ void printCharacterTitle() {
 
 // Prints level -RAK-
 void printCharacterLevel() {
-    printNumber((int) py.misc.lev, 13, STAT_COLUMN + 6);
+    printNumber((int) py.misc.level, 13, STAT_COLUMN + 6);
 }
 
 // Prints players current mana points. -RAK-
@@ -852,7 +852,7 @@ void printCharacterStatsBlock() {
         displayCharacterStats(i);
     }
 
-    printHeaderNumber("LEV ", (int) py.misc.lev, 13, STAT_COLUMN);
+    printHeaderNumber("LEV ", (int) py.misc.level, 13, STAT_COLUMN);
     printHeaderLongNumber("EXP ", py.misc.exp, 14, STAT_COLUMN);
     printHeaderNumber("MANA", py.misc.cmana, 15, STAT_COLUMN);
     printHeaderNumber("MHP ", py.misc.mhp, 16, STAT_COLUMN);
@@ -982,14 +982,14 @@ void printCharacterVitalStatistics() {
 
 // Prints the following information on the screen. -JWT-
 void printCharacterLevelExperience() {
-    printHeaderLongNumber7Spaces("Level      ", (int32_t) py.misc.lev, 9, 28);
+    printHeaderLongNumber7Spaces("Level      ", (int32_t) py.misc.level, 9, 28);
     printHeaderLongNumber7Spaces("Experience ", py.misc.exp, 10, 28);
     printHeaderLongNumber7Spaces("Max Exp    ", py.misc.max_exp, 11, 28);
 
-    if (py.misc.lev >= PLAYER_MAX_LEVEL) {
+    if (py.misc.level >= PLAYER_MAX_LEVEL) {
         putStringClearToEOL("Exp to Adv.: *******", 12, 28);
     } else {
-        printHeaderLongNumber7Spaces("Exp to Adv.", (int32_t) (player_base_exp_levels[py.misc.lev - 1] * py.misc.expfact / 100), 12, 28);
+        printHeaderLongNumber7Spaces("Exp to Adv.", (int32_t) (player_base_exp_levels[py.misc.level - 1] * py.misc.expfact / 100), 12, 28);
     }
 
     printHeaderLongNumber7Spaces("Gold       ", py.misc.au, 13, 28);
@@ -1003,8 +1003,8 @@ void printCharacterLevelExperience() {
 void printCharacterAbilities() {
     clearToBottom(14);
 
-    int xbth = py.misc.bth + py.misc.ptohit * BTH_PER_PLUS_TO_HIT_ADJUST + (class_level_adj[py.misc.pclass][CLASS_BTH] * py.misc.lev);
-    int xbthb = py.misc.bthb + py.misc.ptohit * BTH_PER_PLUS_TO_HIT_ADJUST + (class_level_adj[py.misc.pclass][CLASS_BTHB] * py.misc.lev);
+    int xbth = py.misc.bth + py.misc.ptohit * BTH_PER_PLUS_TO_HIT_ADJUST + (class_level_adj[py.misc.pclass][CLASS_BTH] * py.misc.level);
+    int xbthb = py.misc.bthb + py.misc.ptohit * BTH_PER_PLUS_TO_HIT_ADJUST + (class_level_adj[py.misc.pclass][CLASS_BTHB] * py.misc.level);
 
     // this results in a range from 0 to 29
     int xfos = 40 - py.misc.fos;
@@ -1016,9 +1016,9 @@ void printCharacterAbilities() {
 
     // this results in a range from 0 to 9
     int xstl = py.misc.stl + 1;
-    int xdis = py.misc.disarm + 2 * playerDisarmAdjustment() + playerStatAdjustmentWisdomIntelligence(A_INT) + (class_level_adj[py.misc.pclass][CLASS_DISARM] * py.misc.lev / 3);
-    int xsave = py.misc.save + playerStatAdjustmentWisdomIntelligence(A_WIS) + (class_level_adj[py.misc.pclass][CLASS_SAVE] * py.misc.lev / 3);
-    int xdev = py.misc.save + playerStatAdjustmentWisdomIntelligence(A_INT) + (class_level_adj[py.misc.pclass][CLASS_DEVICE] * py.misc.lev / 3);
+    int xdis = py.misc.disarm + 2 * playerDisarmAdjustment() + playerStatAdjustmentWisdomIntelligence(A_INT) + (class_level_adj[py.misc.pclass][CLASS_DISARM] * py.misc.level / 3);
+    int xsave = py.misc.save + playerStatAdjustmentWisdomIntelligence(A_WIS) + (class_level_adj[py.misc.pclass][CLASS_SAVE] * py.misc.level / 3);
+    int xdev = py.misc.save + playerStatAdjustmentWisdomIntelligence(A_INT) + (class_level_adj[py.misc.pclass][CLASS_DEVICE] * py.misc.level / 3);
 
     vtype_t xinfra;
     (void) sprintf(xinfra, "%d feet", py.flags.see_infra * 10);
@@ -1335,7 +1335,7 @@ int inventoryCarryItem(Inventory_t *item) {
 static int spellChanceOfSuccess(int spell) {
     Spell_t *s_ptr = &magic_spells[py.misc.pclass - 1][spell];
 
-    int chance = s_ptr->sfail - 3 * (py.misc.lev - s_ptr->slevel);
+    int chance = s_ptr->sfail - 3 * (py.misc.level - s_ptr->slevel);
 
     int stat;
     if (classes[py.misc.pclass].spell == SPELL_TYPE_MAGE) {
@@ -1508,7 +1508,7 @@ static void eliminateKnownSpellsGreaterThanLevel(Spell_t *msp_ptr, const char *p
 
     for (int i = 31; mask; mask >>= 1, i--) {
         if (mask & spells_learnt) {
-            if (msp_ptr[i].slevel > py.misc.lev) {
+            if (msp_ptr[i].slevel > py.misc.level) {
                 spells_learnt &= ~mask;
                 spells_forgotten |= mask;
 
@@ -1525,7 +1525,7 @@ static void eliminateKnownSpellsGreaterThanLevel(Spell_t *msp_ptr, const char *p
 static int numberOfSpellsAllowed(int stat) {
     int allowed = 0;
 
-    int levels = py.misc.lev - classes[py.misc.pclass].first_spell_lev + 1;
+    int levels = py.misc.level - classes[py.misc.pclass].first_spell_lev + 1;
 
     switch (playerStatAdjustmentWisdomIntelligence(stat)) {
         case 0:
@@ -1581,7 +1581,7 @@ static int rememberForgottenSpells(Spell_t *msp_ptr, int allowedSpells, int newS
         }
 
         if (mask & spells_forgotten) {
-            if (msp_ptr[orderID].slevel <= py.misc.lev) {
+            if (msp_ptr[orderID].slevel <= py.misc.level) {
                 newSpells--;
                 spells_forgotten &= ~mask;
                 spells_learnt |= mask;
@@ -1609,7 +1609,7 @@ static int learnableSpells(Spell_t *msp_ptr, int newSpells) {
     for (int i = 0; spell_flag; mask <<= 1, i++) {
         if (spell_flag & mask) {
             spell_flag &= ~mask;
-            if (msp_ptr[i].slevel <= py.misc.lev) {
+            if (msp_ptr[i].slevel <= py.misc.level) {
                 id++;
             }
         }
@@ -1796,7 +1796,7 @@ void playerGainSpells() {
     for (int i = 0; spell_flag; mask <<= 1, i++) {
         if (spell_flag & mask) {
             spell_flag &= ~mask;
-            if (spell[i].slevel <= py.misc.lev) {
+            if (spell[i].slevel <= py.misc.level) {
                 spell_bank[spell_id] = i;
                 spell_id++;
             }
@@ -1876,7 +1876,7 @@ void playerGainSpells() {
 }
 
 static int newMana(int stat) {
-    int levels = py.misc.lev - classes[py.misc.pclass].first_spell_lev + 1;
+    int levels = py.misc.level - classes[py.misc.pclass].first_spell_lev + 1;
 
     switch (playerStatAdjustmentWisdomIntelligence(stat)) {
         case 0:
@@ -1938,15 +1938,15 @@ void playerGainMana(int stat) {
 
 // Increases hit points and level -RAK-
 static void playerGainLevel() {
-    py.misc.lev++;
+    py.misc.level++;
 
     vtype_t msg;
-    (void) sprintf(msg, "Welcome to level %d.", (int) py.misc.lev);
+    (void) sprintf(msg, "Welcome to level %d.", (int) py.misc.level);
     printMessage(msg);
 
     playerCalculateHitPoints();
 
-    int32_t new_exp = player_base_exp_levels[py.misc.lev - 1] * py.misc.expfact / 100;
+    int32_t new_exp = player_base_exp_levels[py.misc.level - 1] * py.misc.expfact / 100;
 
     if (py.misc.exp > new_exp) {
         // lose some of the 'extra' exp when gaining several levels at once
@@ -1974,7 +1974,7 @@ void displayCharacterExperience() {
         py.misc.exp = PLAYER_MAX_EXP;
     }
 
-    while ((py.misc.lev < PLAYER_MAX_LEVEL) && (signed) (player_base_exp_levels[py.misc.lev - 1] * py.misc.expfact / 100) <= py.misc.exp) {
+    while ((py.misc.level < PLAYER_MAX_LEVEL) && (signed) (player_base_exp_levels[py.misc.level - 1] * py.misc.expfact / 100) <= py.misc.exp) {
         playerGainLevel();
     }
 
@@ -1987,11 +1987,11 @@ void displayCharacterExperience() {
 
 // Calculate the players hit points
 void playerCalculateHitPoints() {
-    int hp = player_base_hp_levels[py.misc.lev - 1] + (playerStatAdjustmentConstitution() * py.misc.lev);
+    int hp = player_base_hp_levels[py.misc.level - 1] + (playerStatAdjustmentConstitution() * py.misc.level);
 
     // Always give at least one point per level + 1
-    if (hp < (py.misc.lev + 1)) {
-        hp = py.misc.lev + 1;
+    if (hp < (py.misc.level + 1)) {
+        hp = py.misc.level + 1;
     }
 
     if (py.flags.status & PY_HERO) {
@@ -2218,7 +2218,7 @@ int playerWeaponCriticalBlow(int weapon_weight, int plus_to_hit, int damage, int
 
     // Weight of weapon, plusses to hit, and character level all
     // contribute to the chance of a critical
-    if (randomNumber(5000) <= weapon_weight + 5 * plus_to_hit + (class_level_adj[py.misc.pclass][attack_type_id] * py.misc.lev)) {
+    if (randomNumber(5000) <= weapon_weight + 5 * plus_to_hit + (class_level_adj[py.misc.pclass][attack_type_id] * py.misc.level)) {
         weapon_weight += randomNumber(650);
 
         if (weapon_weight < 400) {
@@ -2296,7 +2296,7 @@ bool playerMovePosition(int dir, int *new_y, int *new_x) {
 
 // Saving throws for player character. -RAK-
 bool playerSavingThrow() {
-    int class_level_adjustment = class_level_adj[py.misc.pclass][CLASS_SAVE] * py.misc.lev / 3;
+    int class_level_adjustment = class_level_adj[py.misc.pclass][CLASS_SAVE] * py.misc.level / 3;
 
     int saving = py.misc.save + playerStatAdjustmentWisdomIntelligence(A_WIS) + class_level_adjustment;
 

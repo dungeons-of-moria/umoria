@@ -138,7 +138,7 @@ static void printTomb() {
     }
     (void) sprintf(str, "| %s | _;,,,;_   ____", center_string(tmp_str, p));
     putString(str, 10, 9);
-    (void) sprintf(str, "Level : %d", (int) py.misc.lev);
+    (void) sprintf(str, "Level : %d", (int) py.misc.level);
     (void) sprintf(str, "| %s |          /    \\", center_string(tmp_str, str));
     putString(str, 11, 9);
     (void) sprintf(str, "%d Exp", py.misc.exp);
@@ -243,7 +243,7 @@ static void highscores() {
     new_entry.mhp = py.misc.mhp;
     new_entry.chp = py.misc.chp;
     new_entry.dun_level = (uint8_t) current_dungeon_level;
-    new_entry.lev = (uint8_t) py.misc.lev;
+    new_entry.lev = (uint8_t) py.misc.level;
     new_entry.max_dlv = (uint8_t) py.misc.max_dlv;
     new_entry.gender = highScoreGenderLabel();
     new_entry.race = py.misc.prace;
@@ -397,7 +397,7 @@ static void kingly() {
 
     (void) spellRestorePlayerLevels();
 
-    py.misc.lev += PLAYER_MAX_LEVEL;
+    py.misc.level += PLAYER_MAX_LEVEL;
     py.misc.au += 250000L;
     py.misc.max_exp += 5000000L;
     py.misc.exp = py.misc.max_exp;

@@ -355,7 +355,7 @@ int castSpellGetId(const char *prompt, int item_id, int *spell_id, int *spell_ch
     while (flags) {
         int pos = getAndClearFirstBit(&flags);
 
-        if (s_ptr[pos].slevel <= py.misc.lev) {
+        if (s_ptr[pos].slevel <= py.misc.level) {
             spell_list[spell_count] = pos;
             spell_count++;
         }
@@ -692,11 +692,11 @@ uint32_t monsterDeath(int y, int x, uint32_t flags) {
 static void playerGainKillExperience(Creature_t *c_ptr) {
     uint16_t exp = c_ptr->mexp * c_ptr->level;
 
-    int32_t quotient = exp / py.misc.lev;
-    int32_t remainder = exp % py.misc.lev;
+    int32_t quotient = exp / py.misc.level;
+    int32_t remainder = exp % py.misc.level;
 
     remainder *= 0x10000L;
-    remainder /= py.misc.lev;
+    remainder /= py.misc.level;
     remainder += py.misc.exp_frac;
 
     if (remainder >= 0x10000L) {
@@ -785,7 +785,7 @@ static int playerCalculateBaseToHit(bool creatureLit, int tot_tohit) {
 
     bth = py.misc.bth / 2;
     bth -= tot_tohit * (BTH_PER_PLUS_TO_HIT_ADJUST - 1);
-    bth -= py.misc.lev * class_level_adj[py.misc.pclass][CLASS_BTH] / 2;
+    bth -= py.misc.level * class_level_adj[py.misc.pclass][CLASS_BTH] / 2;
 
     return bth;
 }
@@ -819,7 +819,7 @@ static void playerAttackMonster(int y, int x) {
     // Loop for number of blows, trying to hit the critter.
     // Note: blows will always be greater than 0 at the start of the loop -MRC-
     for (int i = blows; i > 0; i--) {
-        if (!playerTestBeingHit(base_to_hit, (int) py.misc.lev, total_to_hit, (int) creature->ac, CLASS_BTH)) {
+        if (!playerTestBeingHit(base_to_hit, (int) py.misc.level, total_to_hit, (int) creature->ac, CLASS_BTH)) {
             (void) sprintf(msg, "You miss %s.", name);
             printMessage(msg);
             continue;
@@ -1114,7 +1114,7 @@ static int16_t playerLockPickingSkill() {
     skill += 2;
     skill *= playerDisarmAdjustment();
     skill += playerStatAdjustmentWisdomIntelligence(A_INT);
-    skill += class_level_adj[py.misc.pclass][CLASS_DISARM] * py.misc.lev / 3;
+    skill += class_level_adj[py.misc.pclass][CLASS_DISARM] * py.misc.level / 3;
 
     return skill;
 }

@@ -131,7 +131,7 @@ static bool sv_write() {
     wr_short(py.misc.age);
     wr_short(py.misc.height);
     wr_short(py.misc.weight);
-    wr_short(py.misc.lev);
+    wr_short(py.misc.level);
     wr_short(py.misc.max_dlv);
     wr_short((uint16_t) py.misc.srh);
     wr_short((uint16_t) py.misc.fos);
@@ -590,7 +590,7 @@ bool loadGame(bool *generate) {
             rd_short(&py.misc.age);
             rd_short(&py.misc.height);
             rd_short(&py.misc.weight);
-            rd_short(&py.misc.lev);
+            rd_short(&py.misc.level);
             rd_short(&py.misc.max_dlv);
             rd_short((uint16_t *) &py.misc.srh);
             rd_short((uint16_t *) &py.misc.fos);

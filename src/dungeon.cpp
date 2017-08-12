@@ -972,7 +972,7 @@ void playDungeon() {
         // Allow for a slim chance of detect enchantment -CJS-
         // for 1st level char, check once every 2160 turns
         // for 40th level char, check once every 416 turns
-        int chance = 10 + 750 / (5 + py.misc.lev);
+        int chance = 10 + 750 / (5 + py.misc.level);
         if ((current_game_turn & 0xF) == 0 && py.flags.confused == 0 && randomNumber(chance) == 1) {
             playerDetectEnchantment();
         }

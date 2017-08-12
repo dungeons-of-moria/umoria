@@ -313,12 +313,12 @@ static bool playerTestAttackHits(int attack_id, uint8_t level) {
             }
             break;
         case 12: // Steal Money
-            if (playerTestBeingHit(5, (int) level, 0, (int) py.misc.lev, CLASS_MISC_HIT) && py.misc.au > 0) {
+            if (playerTestBeingHit(5, (int) level, 0, (int) py.misc.level, CLASS_MISC_HIT) && py.misc.au > 0) {
                 success = true;
             }
             break;
         case 13: // Steal Object
-            if (playerTestBeingHit(2, (int) level, 0, (int) py.misc.lev, CLASS_MISC_HIT) && inventory_count > 0) {
+            if (playerTestBeingHit(2, (int) level, 0, (int) py.misc.level, CLASS_MISC_HIT) && inventory_count > 0) {
                 success = true;
             }
             break;
@@ -835,7 +835,7 @@ static void monsterAttackPlayer(int monster_id) {
 
         attstr++;
 
-        if (py.flags.protevil > 0 && (creature->cdefense & CD_EVIL) && py.misc.lev + 1 > creature->level) {
+        if (py.flags.protevil > 0 && (creature->cdefense & CD_EVIL) && py.misc.level + 1 > creature->level) {
             if (monster->ml) {
                 creature_recall[monster->mptr].r_cdefense |= CD_EVIL;
             }
