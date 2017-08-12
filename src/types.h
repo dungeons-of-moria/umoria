@@ -63,10 +63,10 @@ typedef struct {
         uint8_t race_id;                // # of race
         uint8_t hit_die;                // Char hit die
         uint8_t experience_factor;      // Experience factor
-        int16_t current_mana;           // Current mana pts
+        int16_t current_mana;           // Current mana points
         uint16_t current_mana_fraction; // Current mana fraction * 2^16
-        int16_t chp;                    // Cur hit pts
-        uint16_t chp_frac;              // Cur hit fraction * 2^16
+        int16_t current_hp;             // Current hit points
+        uint16_t current_hp_fraction;   // Current hit points fraction * 2^16
         char history[4][60];            // History record
     } misc;
 

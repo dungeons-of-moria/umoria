@@ -241,7 +241,7 @@ static void highscores() {
     new_entry.birth_date = character_birth_date;
     new_entry.uid = 0; // NOTE: do we not want to use `getuid()`? -MRC-
     new_entry.mhp = py.misc.max_hp;
-    new_entry.chp = py.misc.chp;
+    new_entry.chp = py.misc.current_hp;
     new_entry.dun_level = (uint8_t) current_dungeon_level;
     new_entry.lev = (uint8_t) py.misc.level;
     new_entry.max_dlv = (uint8_t) py.misc.max_dungeon_depth;

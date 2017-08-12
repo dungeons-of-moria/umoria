@@ -1949,9 +1949,9 @@ void playerTakesHit(int damage, const char *creature_name_label) {
     if (py.flags.invuln > 0) {
         damage = 0;
     }
-    py.misc.chp -= damage;
+    py.misc.current_hp -= damage;
 
-    if (py.misc.chp >= 0) {
+    if (py.misc.current_hp >= 0) {
         printCharacterCurrentHitPoints();
         return;
     }

@@ -157,8 +157,8 @@ static bool sv_write() {
     wr_byte(py.misc.experience_factor);
     wr_short((uint16_t) py.misc.current_mana);
     wr_short(py.misc.current_mana_fraction);
-    wr_short((uint16_t) py.misc.chp);
-    wr_short(py.misc.chp_frac);
+    wr_short((uint16_t) py.misc.current_hp);
+    wr_short(py.misc.current_hp_fraction);
     for (int i = 0; i < 4; i++) {
         wr_string(py.misc.history[i]);
     }
@@ -616,8 +616,8 @@ bool loadGame(bool *generate) {
             rd_byte(&py.misc.experience_factor);
             rd_short((uint16_t *) &py.misc.current_mana);
             rd_short(&py.misc.current_mana_fraction);
-            rd_short((uint16_t *) &py.misc.chp);
-            rd_short(&py.misc.chp_frac);
+            rd_short((uint16_t *) &py.misc.current_hp);
+            rd_short(&py.misc.current_hp_fraction);
             for (int i = 0; i < 4; i++) {
                 rd_string(py.misc.history[i]);
             }
@@ -751,9 +751,9 @@ bool loadGame(bool *generate) {
                     goto error;
                 }
                 putStringClearToEOL("Attempting a resurrection!", 0, 0);
-                if (py.misc.chp < 0) {
-                    py.misc.chp = 0;
-                    py.misc.chp_frac = 0;
+                if (py.misc.current_hp < 0) {
+                    py.misc.current_hp = 0;
+                    py.misc.current_hp_fraction = 0;
                 }
 
                 // don't let him starve to death immediately
@@ -902,7 +902,7 @@ bool loadGame(bool *generate) {
             ok = false; // Assume bad data.
         } else {
             // don't overwrite the killed by string if character is dead
-            if (py.misc.chp >= 0) {
+            if (py.misc.current_hp >= 0) {
                 (void) strcpy(character_died_from, "(alive and well)");
             }
             character_generated = true;

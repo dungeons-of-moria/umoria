@@ -399,7 +399,7 @@ void printCharacterMaxHitPoints() {
 
 // Prints players current hit points -RAK-
 void printCharacterCurrentHitPoints() {
-    printNumber(py.misc.chp, 17, STAT_COLUMN + 6);
+    printNumber(py.misc.current_hp, 17, STAT_COLUMN + 6);
 }
 
 // prints current AC -RAK-
@@ -856,7 +856,7 @@ void printCharacterStatsBlock() {
     printHeaderLongNumber("EXP ", py.misc.exp, 14, STAT_COLUMN);
     printHeaderNumber("MANA", py.misc.current_mana, 15, STAT_COLUMN);
     printHeaderNumber("MHP ", py.misc.max_hp, 16, STAT_COLUMN);
-    printHeaderNumber("CHP ", py.misc.chp, 17, STAT_COLUMN);
+    printHeaderNumber("CHP ", py.misc.current_hp, 17, STAT_COLUMN);
     printHeaderNumber("AC  ", py.misc.display_ac, 19, STAT_COLUMN);
     printHeaderLongNumber("GOLD", py.misc.au, 20, STAT_COLUMN);
     printCharacterWinner();
@@ -994,7 +994,7 @@ void printCharacterLevelExperience() {
 
     printHeaderLongNumber7Spaces("Gold       ", py.misc.au, 13, 28);
     printHeaderNumber("Max Hit Points ", py.misc.max_hp, 9, 52);
-    printHeaderNumber("Cur Hit Points ", py.misc.chp, 10, 52);
+    printHeaderNumber("Cur Hit Points ", py.misc.current_hp, 10, 52);
     printHeaderNumber("Max Mana       ", py.misc.mana, 11, 52);
     printHeaderNumber("Cur Mana       ", py.misc.current_mana, 12, 52);
 }
@@ -2006,9 +2006,9 @@ void playerCalculateHitPoints() {
     if (hp != py.misc.max_hp && py.misc.max_hp != 0) {
         // Change current hit points proportionately to change of MHP,
         // divide first to avoid overflow, little loss of accuracy
-        int32_t value = (((int32_t) py.misc.chp << 16) + py.misc.chp_frac) / py.misc.max_hp * hp;
-        py.misc.chp = (int16_t) (value >> 16);
-        py.misc.chp_frac = (uint16_t) (value & 0xFFFF);
+        int32_t value = (((int32_t) py.misc.current_hp << 16) + py.misc.current_hp_fraction) / py.misc.max_hp * hp;
+        py.misc.current_hp = (int16_t) (value >> 16);
+        py.misc.current_hp_fraction = (uint16_t) (value & 0xFFFF);
         py.misc.max_hp = (int16_t) hp;
 
         // can't print hit points here, may be in store or inventory mode

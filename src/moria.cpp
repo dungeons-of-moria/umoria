@@ -65,7 +65,7 @@ void startMoria(int seed, bool start_new_game, bool use_roguelike_keys) {
         changeCharacterName();
 
         // could be restoring a dead character after a signal or HANGUP
-        if (py.misc.chp < 0) {
+        if (py.misc.current_hp < 0) {
             character_is_dead = true;
         }
     } else {

@@ -1788,14 +1788,14 @@ bool spellDetectEvil() {
 
 // Change players hit points in some manner -RAK-
 bool spellChangePlayerHitPoints(int adjustment) {
-    if (py.misc.chp >= py.misc.max_hp) {
+    if (py.misc.current_hp >= py.misc.max_hp) {
         return false;
     }
 
-    py.misc.chp += adjustment;
-    if (py.misc.chp > py.misc.max_hp) {
-        py.misc.chp = py.misc.max_hp;
-        py.misc.chp_frac = 0;
+    py.misc.current_hp += adjustment;
+    if (py.misc.current_hp > py.misc.max_hp) {
+        py.misc.current_hp = py.misc.max_hp;
+        py.misc.current_hp_fraction = 0;
     }
     printCharacterCurrentHitPoints();
 

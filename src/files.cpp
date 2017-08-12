@@ -198,7 +198,7 @@ static void writeCharacterSheetToFile(FILE *file1) {
     (void) fprintf(file1, "    Max Hit Points : %6d\n", py.misc.max_hp);
     (void) fprintf(file1, " + To Damage : %6d", py.misc.display_to_damage);
     (void) fprintf(file1, "%7sExperience : %7d", blank, py.misc.exp);
-    (void) fprintf(file1, "    Cur Hit Points : %6d\n", py.misc.chp);
+    (void) fprintf(file1, "    Cur Hit Points : %6d\n", py.misc.current_hp);
     (void) fprintf(file1, " + To AC     : %6d", py.misc.display_to_ac);
     (void) fprintf(file1, "%7sMax Exp    : %7d", blank, py.misc.max_exp);
     (void) fprintf(file1, "    Max Mana%8s %6d\n", colon, py.misc.mana);
