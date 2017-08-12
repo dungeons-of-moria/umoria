@@ -102,7 +102,7 @@ uint32_t player_base_exp_levels[PLAYER_MAX_LEVEL] = {
 // Race, STR, INT, WIS, DEX, CON, CHR,
 // Ages, heights, and weights (male then female)
 // Racial Bases for:
-//      dis, srh, stl, fos, bth, bthb, bsav, hitdie,
+//      dis, chance_in_search, stl, freng_of_search, bth, bthb, bsav, hitdie,
 //      infra, exp base, choice-classes
 Race_t character_races[PLAYER_MAX_RACES] = {
     {

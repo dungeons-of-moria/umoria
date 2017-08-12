@@ -145,13 +145,13 @@ void wizardCharacterAdjustment() {
         return;
     }
 
-    (void) sprintf(input, "Current=%d  (0-200) Searching = ", py.misc.srh);
+    (void) sprintf(input, "Current=%d  (0-200) Searching = ", py.misc.chance_in_search);
     number = (int) strlen(input);
     putStringClearToEOL(input, 0, 0);
     if (getStringInput(input, 0, number, 3)) {
         number = atoi(input);
         if (number > -1 && number < 201 && (*input != '\0')) {
-            py.misc.srh = (int16_t) number;
+            py.misc.chance_in_search = (int16_t) number;
         }
     } else {
         return;

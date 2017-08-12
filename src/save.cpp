@@ -133,8 +133,8 @@ static bool sv_write() {
     wr_short(py.misc.weight);
     wr_short(py.misc.level);
     wr_short(py.misc.max_dungeon_depth);
-    wr_short((uint16_t) py.misc.srh);
-    wr_short((uint16_t) py.misc.fos);
+    wr_short((uint16_t) py.misc.chance_in_search);
+    wr_short((uint16_t) py.misc.freng_of_search);
     wr_short((uint16_t) py.misc.bth);
     wr_short((uint16_t) py.misc.bthb);
     wr_short((uint16_t) py.misc.mana);
@@ -592,8 +592,8 @@ bool loadGame(bool *generate) {
             rd_short(&py.misc.weight);
             rd_short(&py.misc.level);
             rd_short(&py.misc.max_dungeon_depth);
-            rd_short((uint16_t *) &py.misc.srh);
-            rd_short((uint16_t *) &py.misc.fos);
+            rd_short((uint16_t *) &py.misc.chance_in_search);
+            rd_short((uint16_t *) &py.misc.freng_of_search);
             rd_short((uint16_t *) &py.misc.bth);
             rd_short((uint16_t *) &py.misc.bthb);
             rd_short((uint16_t *) &py.misc.mana);

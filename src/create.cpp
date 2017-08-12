@@ -83,10 +83,10 @@ static void characterGenerateStatsAndRace() {
         playerSetAndUseStat(i);
     }
 
-    py.misc.srh = race->srh;
+    py.misc.chance_in_search = race->srh;
     py.misc.bth = race->bth;
     py.misc.bthb = race->bthb;
-    py.misc.fos = race->fos;
+    py.misc.freng_of_search = race->fos;
     py.misc.stl = race->stl;
     py.misc.save = race->bsav;
     py.misc.hitdie = race->bhitdie;
@@ -413,9 +413,9 @@ static void characterGetClass() {
 
             py.misc.bth += klass->mbth;
             py.misc.bthb += klass->mbthb; // RAK
-            py.misc.srh += klass->msrh;
+            py.misc.chance_in_search += klass->msrh;
             py.misc.disarm += klass->mdis;
-            py.misc.fos += klass->mfos;
+            py.misc.freng_of_search += klass->mfos;
             py.misc.stl += klass->mstl;
             py.misc.save += klass->msav;
             py.misc.expfact += klass->m_exp;

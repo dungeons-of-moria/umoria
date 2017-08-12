@@ -43,8 +43,8 @@ void playerAdjustBonusesForItem(Inventory_t *item, int factor) {
     }
 
     if (TR_SEARCH & item->flags) {
-        py.misc.srh += amount;
-        py.misc.fos -= amount;
+        py.misc.chance_in_search += amount;
+        py.misc.freng_of_search -= amount;
     }
 
     if (TR_STEALTH & item->flags) {

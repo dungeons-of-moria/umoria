@@ -41,8 +41,8 @@ typedef struct {
         uint16_t weight;             // Weight
         uint16_t level;              // Level
         uint16_t max_dungeon_depth;  // Max level explored
-        int16_t srh;                 // Chance in search
-        int16_t fos;                 // Frenq of search
+        int16_t chance_in_search;    // Chance in search
+        int16_t freng_of_search;     // Frenq of search
         int16_t bth;                 // Base to hit
         int16_t bthb;                // BTH with bows
         int16_t mana;                // Mana points

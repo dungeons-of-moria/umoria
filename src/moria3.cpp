@@ -951,9 +951,9 @@ void playerMove(int direction, bool do_pickup) {
             }
 
             // Check to see if he notices something
-            // fos may be negative if have good rings of searching
-            if (py.misc.fos <= 1 || randomNumber(py.misc.fos) == 1 || (py.flags.status & PY_SEARCH)) {
-                dungeonSearch(char_row, char_col, py.misc.srh);
+            // freng_of_search may be negative if have good rings of searching
+            if (py.misc.freng_of_search <= 1 || randomNumber(py.misc.freng_of_search) == 1 || (py.flags.status & PY_SEARCH)) {
+                dungeonSearch(char_row, char_col, py.misc.chance_in_search);
             }
 
             if (tile->fval == TILE_LIGHT_FLOOR) {
