@@ -23,7 +23,7 @@ static void trapOpenPit(Inventory_t *t_ptr, int dam) {
 }
 
 static void trapArrow(Inventory_t *t_ptr, int dam) {
-    if (playerTestBeingHit(125, 0, 0, py.misc.pac + py.misc.ptoac, CLASS_MISC_HIT)) {
+    if (playerTestBeingHit(125, 0, 0, py.misc.ac + py.misc.magical_ac, CLASS_MISC_HIT)) {
         obj_desc_t description;
         itemDescription(description, t_ptr, true);
         playerTakesHit(dam, description);
@@ -92,7 +92,7 @@ static void trapHiddenObject(int y, int x) {
 }
 
 static void trapStrengthDart(Inventory_t *t_ptr, int dam) {
-    if (playerTestBeingHit(125, 0, 0, py.misc.pac + py.misc.ptoac, CLASS_MISC_HIT)) {
+    if (playerTestBeingHit(125, 0, 0, py.misc.ac + py.misc.magical_ac, CLASS_MISC_HIT)) {
         if (!py.flags.sustain_str) {
             (void) playerStatRandomDecrease(A_STR);
 
@@ -181,7 +181,7 @@ static void trapConfuseGas() {
 }
 
 static void trapSlowDart(Inventory_t *t_ptr, int dam) {
-    if (playerTestBeingHit(125, 0, 0, py.misc.pac + py.misc.ptoac, CLASS_MISC_HIT)) {
+    if (playerTestBeingHit(125, 0, 0, py.misc.ac + py.misc.magical_ac, CLASS_MISC_HIT)) {
         obj_desc_t description;
         itemDescription(description, t_ptr, true);
         playerTakesHit(dam, description);
@@ -199,7 +199,7 @@ static void trapSlowDart(Inventory_t *t_ptr, int dam) {
 }
 
 static void trapConstitutionDart(Inventory_t *t_ptr, int dam) {
-    if (playerTestBeingHit(125, 0, 0, py.misc.pac + py.misc.ptoac, CLASS_MISC_HIT)) {
+    if (playerTestBeingHit(125, 0, 0, py.misc.ac + py.misc.magical_ac, CLASS_MISC_HIT)) {
         if (!py.flags.sustain_con) {
             (void) playerStatRandomDecrease(A_CON);
 

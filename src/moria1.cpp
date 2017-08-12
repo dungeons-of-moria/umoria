@@ -102,8 +102,8 @@ static void playerRecalculateBonusesFromInventory() {
                 py.misc.plusses_to_damage += item->todam;
             }
 
-            py.misc.ptoac += item->toac;
-            py.misc.pac += item->ac;
+            py.misc.magical_ac += item->toac;
+            py.misc.ac += item->ac;
 
             if (spellItemIdentified(item)) {
                 py.misc.dis_th += item->tohit;
@@ -182,14 +182,14 @@ void playerRecalculateBonuses() {
     // Real values
     py.misc.plusses_to_hit = (int16_t) playerToHitAdjustment();
     py.misc.plusses_to_damage = (int16_t) playerDamageAdjustment();
-    py.misc.ptoac = (int16_t) playerArmorClassAdjustment();
-    py.misc.pac = 0;
+    py.misc.magical_ac = (int16_t) playerArmorClassAdjustment();
+    py.misc.ac = 0;
 
     // Display values
     py.misc.dis_th = py.misc.plusses_to_hit;
     py.misc.dis_td = py.misc.plusses_to_damage;
     py.misc.dis_ac = 0;
-    py.misc.dis_tac = py.misc.ptoac;
+    py.misc.dis_tac = py.misc.magical_ac;
 
     playerRecalculateBonusesFromInventory();
 
@@ -201,12 +201,12 @@ void playerRecalculateBonuses() {
 
     // Add in temporary spell increases
     if (py.flags.invuln > 0) {
-        py.misc.pac += 100;
+        py.misc.ac += 100;
         py.misc.dis_ac += 100;
     }
 
     if (py.flags.blessed > 0) {
-        py.misc.pac += 2;
+        py.misc.ac += 2;
         py.misc.dis_ac += 2;
     }
 

@@ -92,8 +92,8 @@ static void characterGenerateStatsAndRace() {
     py.misc.hitdie = race->bhitdie;
     py.misc.plusses_to_damage = (int16_t) playerDamageAdjustment();
     py.misc.plusses_to_hit = (int16_t) playerToHitAdjustment();
-    py.misc.ptoac = 0;
-    py.misc.pac = (int16_t) playerArmorClassAdjustment();
+    py.misc.magical_ac = 0;
+    py.misc.ac = (int16_t) playerArmorClassAdjustment();
     py.misc.expfact = race->b_exp;
     py.flags.see_infra = race->infra;
 }
@@ -385,14 +385,14 @@ static void characterGetClass() {
             // Real values
             py.misc.plusses_to_damage = (int16_t) playerDamageAdjustment();
             py.misc.plusses_to_hit = (int16_t) playerToHitAdjustment();
-            py.misc.ptoac = (int16_t) playerArmorClassAdjustment();
-            py.misc.pac = 0;
+            py.misc.magical_ac = (int16_t) playerArmorClassAdjustment();
+            py.misc.ac = 0;
 
             // Displayed values
             py.misc.dis_td = py.misc.plusses_to_damage;
             py.misc.dis_th = py.misc.plusses_to_hit;
-            py.misc.dis_tac = py.misc.ptoac;
-            py.misc.dis_ac = py.misc.pac + py.misc.dis_tac;
+            py.misc.dis_tac = py.misc.magical_ac;
+            py.misc.dis_ac = py.misc.ac + py.misc.dis_tac;
 
             // now set misc stats, do this after setting stats because of playerStatAdjustmentConstitution() for hit-points
             py.misc.hitdie += klass->adj_hd;

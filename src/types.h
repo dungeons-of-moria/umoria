@@ -49,8 +49,8 @@ typedef struct {
         int16_t max_hp;              // Max hit pts
         int16_t plusses_to_hit;      // Plusses to hit
         int16_t plusses_to_damage;   // Plusses to dam
-        int16_t pac;                 // Total AC
-        int16_t ptoac;               // Magical AC
+        int16_t ac;                  // Total AC
+        int16_t magical_ac;          // Magical AC
         int16_t dis_th;              // Display +ToHit
         int16_t dis_td;              // Display +ToDam
         int16_t dis_ac;              // Display +ToTAC

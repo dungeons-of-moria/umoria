@@ -258,57 +258,57 @@ static bool playerTestAttackHits(int attack_id, uint8_t level) {
 
     switch (attack_id) {
         case 1: // Normal attack
-            if (playerTestBeingHit(60, (int) level, 0, py.misc.pac + py.misc.ptoac, CLASS_MISC_HIT)) {
+            if (playerTestBeingHit(60, (int) level, 0, py.misc.ac + py.misc.magical_ac, CLASS_MISC_HIT)) {
                 success = true;
             }
             break;
         case 2: // Lose Strength
-            if (playerTestBeingHit(-3, (int) level, 0, py.misc.pac + py.misc.ptoac, CLASS_MISC_HIT)) {
+            if (playerTestBeingHit(-3, (int) level, 0, py.misc.ac + py.misc.magical_ac, CLASS_MISC_HIT)) {
                 success = true;
             }
             break;
         case 3: // Confusion attack
-            if (playerTestBeingHit(10, (int) level, 0, py.misc.pac + py.misc.ptoac, CLASS_MISC_HIT)) {
+            if (playerTestBeingHit(10, (int) level, 0, py.misc.ac + py.misc.magical_ac, CLASS_MISC_HIT)) {
                 success = true;
             }
             break;
         case 4: // Fear attack
-            if (playerTestBeingHit(10, (int) level, 0, py.misc.pac + py.misc.ptoac, CLASS_MISC_HIT)) {
+            if (playerTestBeingHit(10, (int) level, 0, py.misc.ac + py.misc.magical_ac, CLASS_MISC_HIT)) {
                 success = true;
             }
             break;
         case 5: // Fire attack
-            if (playerTestBeingHit(10, (int) level, 0, py.misc.pac + py.misc.ptoac, CLASS_MISC_HIT)) {
+            if (playerTestBeingHit(10, (int) level, 0, py.misc.ac + py.misc.magical_ac, CLASS_MISC_HIT)) {
                 success = true;
             }
             break;
         case 6: // Acid attack
-            if (playerTestBeingHit(0, (int) level, 0, py.misc.pac + py.misc.ptoac, CLASS_MISC_HIT)) {
+            if (playerTestBeingHit(0, (int) level, 0, py.misc.ac + py.misc.magical_ac, CLASS_MISC_HIT)) {
                 success = true;
             }
             break;
         case 7: // Cold attack
-            if (playerTestBeingHit(10, (int) level, 0, py.misc.pac + py.misc.ptoac, CLASS_MISC_HIT)) {
+            if (playerTestBeingHit(10, (int) level, 0, py.misc.ac + py.misc.magical_ac, CLASS_MISC_HIT)) {
                 success = true;
             }
             break;
         case 8: // Lightning attack
-            if (playerTestBeingHit(10, (int) level, 0, py.misc.pac + py.misc.ptoac, CLASS_MISC_HIT)) {
+            if (playerTestBeingHit(10, (int) level, 0, py.misc.ac + py.misc.magical_ac, CLASS_MISC_HIT)) {
                 success = true;
             }
             break;
         case 9: // Corrosion attack
-            if (playerTestBeingHit(0, (int) level, 0, py.misc.pac + py.misc.ptoac, CLASS_MISC_HIT)) {
+            if (playerTestBeingHit(0, (int) level, 0, py.misc.ac + py.misc.magical_ac, CLASS_MISC_HIT)) {
                 success = true;
             }
             break;
         case 10: // Blindness attack
-            if (playerTestBeingHit(2, (int) level, 0, py.misc.pac + py.misc.ptoac, CLASS_MISC_HIT)) {
+            if (playerTestBeingHit(2, (int) level, 0, py.misc.ac + py.misc.magical_ac, CLASS_MISC_HIT)) {
                 success = true;
             }
             break;
         case 11: // Paralysis attack
-            if (playerTestBeingHit(2, (int) level, 0, py.misc.pac + py.misc.ptoac, CLASS_MISC_HIT)) {
+            if (playerTestBeingHit(2, (int) level, 0, py.misc.ac + py.misc.magical_ac, CLASS_MISC_HIT)) {
                 success = true;
             }
             break;
@@ -323,32 +323,32 @@ static bool playerTestAttackHits(int attack_id, uint8_t level) {
             }
             break;
         case 14: // Poison
-            if (playerTestBeingHit(5, (int) level, 0, py.misc.pac + py.misc.ptoac, CLASS_MISC_HIT)) {
+            if (playerTestBeingHit(5, (int) level, 0, py.misc.ac + py.misc.magical_ac, CLASS_MISC_HIT)) {
                 success = true;
             }
             break;
         case 15: // Lose dexterity
-            if (playerTestBeingHit(0, (int) level, 0, py.misc.pac + py.misc.ptoac, CLASS_MISC_HIT)) {
+            if (playerTestBeingHit(0, (int) level, 0, py.misc.ac + py.misc.magical_ac, CLASS_MISC_HIT)) {
                 success = true;
             }
             break;
         case 16: // Lose constitution
-            if (playerTestBeingHit(0, (int) level, 0, py.misc.pac + py.misc.ptoac, CLASS_MISC_HIT)) {
+            if (playerTestBeingHit(0, (int) level, 0, py.misc.ac + py.misc.magical_ac, CLASS_MISC_HIT)) {
                 success = true;
             }
             break;
         case 17: // Lose intelligence
-            if (playerTestBeingHit(2, (int) level, 0, py.misc.pac + py.misc.ptoac, CLASS_MISC_HIT)) {
+            if (playerTestBeingHit(2, (int) level, 0, py.misc.ac + py.misc.magical_ac, CLASS_MISC_HIT)) {
                 success = true;
             }
             break;
         case 18: // Lose wisdom
-            if (playerTestBeingHit(2, (int) level, 0, py.misc.pac + py.misc.ptoac, CLASS_MISC_HIT)) {
+            if (playerTestBeingHit(2, (int) level, 0, py.misc.ac + py.misc.magical_ac, CLASS_MISC_HIT)) {
                 success = true;
             }
             break;
         case 19: // Lose experience
-            if (playerTestBeingHit(5, (int) level, 0, py.misc.pac + py.misc.ptoac, CLASS_MISC_HIT)) {
+            if (playerTestBeingHit(5, (int) level, 0, py.misc.ac + py.misc.magical_ac, CLASS_MISC_HIT)) {
                 success = true;
             }
             break;
@@ -356,23 +356,23 @@ static bool playerTestAttackHits(int attack_id, uint8_t level) {
             success = true;
             break;
         case 21: // Disenchant
-            if (playerTestBeingHit(20, (int) level, 0, py.misc.pac + py.misc.ptoac, CLASS_MISC_HIT)) {
+            if (playerTestBeingHit(20, (int) level, 0, py.misc.ac + py.misc.magical_ac, CLASS_MISC_HIT)) {
                 success = true;
             }
             break;
         case 22: // Eat food
-            if (playerTestBeingHit(5, (int) level, 0, py.misc.pac + py.misc.ptoac, CLASS_MISC_HIT)) {
+            if (playerTestBeingHit(5, (int) level, 0, py.misc.ac + py.misc.magical_ac, CLASS_MISC_HIT)) {
                 success = true;
             }
             break;
         case 23: // Eat light
-            if (playerTestBeingHit(5, (int) level, 0, py.misc.pac + py.misc.ptoac, CLASS_MISC_HIT)) {
+            if (playerTestBeingHit(5, (int) level, 0, py.misc.ac + py.misc.magical_ac, CLASS_MISC_HIT)) {
                 success = true;
             }
             break;
         case 24: // Eat charges
             // check to make sure an object exists
-            if (playerTestBeingHit(15, (int) level, 0, py.misc.pac + py.misc.ptoac, CLASS_MISC_HIT) && inventory_count > 0) {
+            if (playerTestBeingHit(15, (int) level, 0, py.misc.ac + py.misc.magical_ac, CLASS_MISC_HIT) && inventory_count > 0) {
                 success = true;
             }
             break;
@@ -555,7 +555,7 @@ static bool executeAttackOnPlayer(Creature_t *creature, Monster_t *monster, int 
     switch (attack_type) {
         case 1: // Normal attack
             // round half-way case down
-            damage -= ((py.misc.pac + py.misc.ptoac) * damage) / 200;
+            damage -= ((py.misc.ac + py.misc.magical_ac) * damage) / 200;
             playerTakesHit(damage, death_description);
             break;
         case 2: // Lose Strength

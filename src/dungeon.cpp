@@ -503,7 +503,7 @@ static void playerUpdateInvulnerability() {
         py.flags.status |= PY_INVULN;
         playerDisturb(0, 0);
 
-        py.misc.pac += 100;
+        py.misc.ac += 100;
         py.misc.dis_ac += 100;
 
         printCharacterCurrentArmorClass();
@@ -516,7 +516,7 @@ static void playerUpdateInvulnerability() {
         py.flags.status &= ~PY_INVULN;
         playerDisturb(0, 0);
 
-        py.misc.pac -= 100;
+        py.misc.ac -= 100;
         py.misc.dis_ac -= 100;
 
         printCharacterCurrentArmorClass();
@@ -535,7 +535,7 @@ static void playerUpdateBlessedness() {
 
         py.misc.bth += 5;
         py.misc.bth_with_bows += 5;
-        py.misc.pac += 2;
+        py.misc.ac += 2;
         py.misc.dis_ac += 2;
 
         printMessage("You feel righteous!");
@@ -550,7 +550,7 @@ static void playerUpdateBlessedness() {
 
         py.misc.bth -= 5;
         py.misc.bth_with_bows -= 5;
-        py.misc.pac -= 2;
+        py.misc.ac -= 2;
         py.misc.dis_ac -= 2;
 
         printMessage("The prayer has expired.");
