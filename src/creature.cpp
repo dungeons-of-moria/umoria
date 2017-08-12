@@ -1657,7 +1657,7 @@ static void monsterAttackingUpdate(Monster_t *monster, int monster_id, int moves
                 } else if ((py.flags.rest == 0 && py.flags.paralysis < 1) || (randomNumber(50) == 1)) {
                     int notice = randomNumber(1024);
 
-                    if (notice * notice * notice <= (1L << (29 - py.misc.stl))) {
+                    if (notice * notice * notice <= (1L << (29 - py.misc.stealth_factor))) {
                         monster->csleep -= (100 / monster->cdis);
                         if (monster->csleep > 0) {
                             ignore = true;

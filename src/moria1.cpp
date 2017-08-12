@@ -48,7 +48,7 @@ void playerAdjustBonusesForItem(Inventory_t *item, int factor) {
     }
 
     if (TR_STEALTH & item->flags) {
-        py.misc.stl += amount;
+        py.misc.stealth_factor += amount;
     }
 
     if (TR_SPEED & item->flags) {

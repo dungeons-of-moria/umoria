@@ -150,7 +150,7 @@ static bool sv_write() {
     wr_short((uint16_t) py.misc.disarm);
     wr_short((uint16_t) py.misc.saving_throw);
     wr_short((uint16_t) py.misc.social_class);
-    wr_short((uint16_t) py.misc.stl);
+    wr_short((uint16_t) py.misc.stealth_factor);
     wr_byte(py.misc.pclass);
     wr_byte(py.misc.prace);
     wr_byte(py.misc.hitdie);
@@ -609,7 +609,7 @@ bool loadGame(bool *generate) {
             rd_short((uint16_t *) &py.misc.disarm);
             rd_short((uint16_t *) &py.misc.saving_throw);
             rd_short((uint16_t *) &py.misc.social_class);
-            rd_short((uint16_t *) &py.misc.stl);
+            rd_short((uint16_t *) &py.misc.stealth_factor);
             rd_byte(&py.misc.pclass);
             rd_byte(&py.misc.prace);
             rd_byte(&py.misc.hitdie);

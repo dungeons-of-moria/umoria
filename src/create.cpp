@@ -87,7 +87,7 @@ static void characterGenerateStatsAndRace() {
     py.misc.bth = race->bth;
     py.misc.bth_with_bows = race->bthb;
     py.misc.freng_of_search = race->fos;
-    py.misc.stl = race->stl;
+    py.misc.stealth_factor = race->stl;
     py.misc.saving_throw = race->bsav;
     py.misc.hitdie = race->bhitdie;
     py.misc.plusses_to_damage = (int16_t) playerDamageAdjustment();
@@ -419,7 +419,7 @@ static void characterGetClass() {
             py.misc.chance_in_search += klass->msrh;
             py.misc.disarm += klass->mdis;
             py.misc.freng_of_search += klass->mfos;
-            py.misc.stl += klass->mstl;
+            py.misc.stealth_factor += klass->mstl;
             py.misc.saving_throw += klass->msav;
             py.misc.expfact += klass->m_exp;
         } else if (input == '?') {

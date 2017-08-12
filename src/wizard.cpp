@@ -157,13 +157,13 @@ void wizardCharacterAdjustment() {
         return;
     }
 
-    (void) sprintf(input, "Current=%d  (-1-18) Stealth = ", py.misc.stl);
+    (void) sprintf(input, "Current=%d  (-1-18) Stealth = ", py.misc.stealth_factor);
     number = (int) strlen(input);
     putStringClearToEOL(input, 0, 0);
     if (getStringInput(input, 0, number, 3)) {
         number = atoi(input);
         if (number > -2 && number < 19 && (*input != '\0')) {
-            py.misc.stl = (int16_t) number;
+            py.misc.stealth_factor = (int16_t) number;
         }
     } else {
         return;
