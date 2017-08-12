@@ -25,7 +25,7 @@ static bool playerCanPray(int *item_pos_begin, int *item_pos_end) {
         return false;
     }
 
-    if (classes[py.misc.pclass].spell != SPELL_TYPE_PRIEST) {
+    if (classes[py.misc.class_id].spell != SPELL_TYPE_PRIEST) {
         printMessage("Pray hard enough and your prayers may be answered.");
         return false;
     }
@@ -199,7 +199,7 @@ void pray() {
         return;
     }
 
-    Spell_t *spell = &magic_spells[py.misc.pclass - 1][choice];
+    Spell_t *spell = &magic_spells[py.misc.class_id - 1][choice];
 
     // NOTE: at least one function called by `playerRecitePrayer()` sets `player_free_turn = true`,
     // e.g. `spellCreateFood()`, so this check is required. -MRC-

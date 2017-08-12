@@ -79,11 +79,11 @@ void startMoria(int seed, bool start_new_game, bool use_roguelike_keys) {
         py.flags.food_digested = 2;
 
         // Spell and Mana based on class: Mage or Clerical realm.
-        if (classes[py.misc.pclass].spell == SPELL_TYPE_MAGE) {
+        if (classes[py.misc.class_id].spell == SPELL_TYPE_MAGE) {
             clearScreen(); // makes spell list easier to read
             playerCalculateAllowedSpellsCount(A_INT);
             playerGainMana(A_INT);
-        } else if (classes[py.misc.pclass].spell == SPELL_TYPE_PRIEST) {
+        } else if (classes[py.misc.class_id].spell == SPELL_TYPE_PRIEST) {
             playerCalculateAllowedSpellsCount(A_WIS);
             clearScreen(); // force out the 'learn prayer' message
             playerGainMana(A_WIS);
@@ -145,7 +145,7 @@ static void initializeCharacterInventory() {
     }
 
     for (int i = 0; i < 5; i++) {
-        inventoryItemCopyTo(class_base_provisions[py.misc.pclass][i], &item);
+        inventoryItemCopyTo(class_base_provisions[py.misc.class_id][i], &item);
 
         // this makes it spellItemIdentifyAndRemoveRandomInscription and itemSetAsIdentified
         itemIdentifyAsStoreBought(&item);

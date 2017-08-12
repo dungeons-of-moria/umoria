@@ -168,7 +168,7 @@ int32_t storeItemSellPrice(int store_id, int32_t *min_price, int32_t *max_price,
 
     Owner_t *owner = &store_owners[stores[store_id].owner];
 
-    price = price * race_gold_adjustments[owner->owner_race][py.misc.prace] / 100;
+    price = price * race_gold_adjustments[owner->owner_race][py.misc.race_id] / 100;
     if (price < 1) {
         price = 1;
     }

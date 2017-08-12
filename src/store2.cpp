@@ -627,7 +627,7 @@ static int storeSellHaggle(int store_id, int32_t *price, Inventory_t *item) {
         Owner_t *owner = &store_owners[store->owner];
 
         cost = cost * (200 - playerStatAdjustmentCharisma()) / 100;
-        cost = cost * (200 - race_gold_adjustments[owner->owner_race][py.misc.prace]) / 100;
+        cost = cost * (200 - race_gold_adjustments[owner->owner_race][py.misc.race_id]) / 100;
 
         if (cost < 1) {
             cost = 1;

@@ -149,7 +149,7 @@ void wandAim() {
 
     Inventory_t *item = &inventory[item_id];
 
-    int player_class_lev_adj = class_level_adj[py.misc.pclass][CLASS_DEVICE] * py.misc.level / 3;
+    int player_class_lev_adj = class_level_adj[py.misc.class_id][CLASS_DEVICE] * py.misc.level / 3;
     int chance = py.misc.saving_throw + playerStatAdjustmentWisdomIntelligence(A_INT) - (int) item->level + player_class_lev_adj;
 
     if (py.flags.confused > 0) {

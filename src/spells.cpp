@@ -2110,7 +2110,7 @@ void spellLoseEXP(int32_t adjustment) {
 
         playerCalculateHitPoints();
 
-        Class_t *character_class = &classes[py.misc.pclass];
+        Class_t *character_class = &classes[py.misc.class_id];
 
         if (character_class->spell == SPELL_TYPE_MAGE) {
             playerCalculateAllowedSpellsCount(A_INT);

@@ -25,7 +25,7 @@ static bool canReadSpells() {
         return false;
     }
 
-    if (classes[py.misc.pclass].spell != SPELL_TYPE_MAGE) {
+    if (classes[py.misc.class_id].spell != SPELL_TYPE_MAGE) {
         printMessage("You can't cast spells!");
         return false;
     }
@@ -194,7 +194,7 @@ void getAndCastMagicSpell() {
 
     player_free_turn = false;
 
-    Spell_t *m_ptr = &magic_spells[py.misc.pclass - 1][choice];
+    Spell_t *m_ptr = &magic_spells[py.misc.class_id - 1][choice];
 
     if (randomNumber(100) < chance) {
         printMessage("You failed to get the spell off!");

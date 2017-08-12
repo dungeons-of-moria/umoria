@@ -27,7 +27,7 @@ static bool staffPlayerCanUse(Inventory_t *item) {
     int chance = py.misc.saving_throw;
     chance += playerStatAdjustmentWisdomIntelligence(A_INT);
     chance -= item->level - 5;
-    chance += class_level_adj[py.misc.pclass][CLASS_DEVICE] * py.misc.level / 3;
+    chance += class_level_adj[py.misc.class_id][CLASS_DEVICE] * py.misc.level / 3;
 
     if (py.flags.confused > 0) {
         chance = chance / 2;

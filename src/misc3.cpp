@@ -367,7 +367,7 @@ char *playerTitle() {
     if (py.misc.level < 1) {
         p = "Babe in arms";
     } else if (py.misc.level <= PLAYER_MAX_LEVEL) {
-        p = class_titles[py.misc.pclass][py.misc.level - 1];
+        p = class_titles[py.misc.class_id][py.misc.level - 1];
     } else if (playerIsMale()) {
         p = "**KING**";
     } else {
@@ -614,10 +614,10 @@ void playerSetAndUseStat(int stat) {
         playerRecalculateBonuses();
     } else if (stat == A_DEX) {
         playerRecalculateBonuses();
-    } else if (stat == A_INT && classes[py.misc.pclass].spell == SPELL_TYPE_MAGE) {
+    } else if (stat == A_INT && classes[py.misc.class_id].spell == SPELL_TYPE_MAGE) {
         playerCalculateAllowedSpellsCount(A_INT);
         playerGainMana(A_INT);
-    } else if (stat == A_WIS && classes[py.misc.pclass].spell == SPELL_TYPE_PRIEST) {
+    } else if (stat == A_WIS && classes[py.misc.class_id].spell == SPELL_TYPE_PRIEST) {
         playerCalculateAllowedSpellsCount(A_WIS);
         playerGainMana(A_WIS);
     } else if (stat == A_CON) {
@@ -844,8 +844,8 @@ int playerDamageAdjustment() {
 
 // Prints character-screen info -RAK-
 void printCharacterStatsBlock() {
-    printCharacterInfoInField(character_races[py.misc.prace].trace, 2, STAT_COLUMN);
-    printCharacterInfoInField(classes[py.misc.pclass].title, 3, STAT_COLUMN);
+    printCharacterInfoInField(character_races[py.misc.race_id].trace, 2, STAT_COLUMN);
+    printCharacterInfoInField(classes[py.misc.class_id].title, 3, STAT_COLUMN);
     printCharacterInfoInField(playerTitle(), 4, STAT_COLUMN);
 
     for (int i = 0; i < 6; i++) {
@@ -919,9 +919,9 @@ void printCharacterInformation() {
     }
 
     putString(py.misc.name, 2, 15);
-    putString(character_races[py.misc.prace].trace, 3, 15);
+    putString(character_races[py.misc.race_id].trace, 3, 15);
     putString((playerGetGenderLabel()), 4, 15);
-    putString(classes[py.misc.pclass].title, 5, 15);
+    putString(classes[py.misc.class_id].title, 5, 15);
 }
 
 // Prints the following information on the screen. -JWT-
@@ -1003,8 +1003,8 @@ void printCharacterLevelExperience() {
 void printCharacterAbilities() {
     clearToBottom(14);
 
-    int xbth = py.misc.bth + py.misc.plusses_to_hit * BTH_PER_PLUS_TO_HIT_ADJUST + (class_level_adj[py.misc.pclass][CLASS_BTH] * py.misc.level);
-    int xbthb = py.misc.bth_with_bows + py.misc.plusses_to_hit * BTH_PER_PLUS_TO_HIT_ADJUST + (class_level_adj[py.misc.pclass][CLASS_BTHB] * py.misc.level);
+    int xbth = py.misc.bth + py.misc.plusses_to_hit * BTH_PER_PLUS_TO_HIT_ADJUST + (class_level_adj[py.misc.class_id][CLASS_BTH] * py.misc.level);
+    int xbthb = py.misc.bth_with_bows + py.misc.plusses_to_hit * BTH_PER_PLUS_TO_HIT_ADJUST + (class_level_adj[py.misc.class_id][CLASS_BTHB] * py.misc.level);
 
     // this results in a range from 0 to 29
     int xfos = 40 - py.misc.freng_of_search;
@@ -1016,9 +1016,9 @@ void printCharacterAbilities() {
 
     // this results in a range from 0 to 9
     int xstl = py.misc.stealth_factor + 1;
-    int xdis = py.misc.disarm + 2 * playerDisarmAdjustment() + playerStatAdjustmentWisdomIntelligence(A_INT) + (class_level_adj[py.misc.pclass][CLASS_DISARM] * py.misc.level / 3);
-    int xsave = py.misc.saving_throw + playerStatAdjustmentWisdomIntelligence(A_WIS) + (class_level_adj[py.misc.pclass][CLASS_SAVE] * py.misc.level / 3);
-    int xdev = py.misc.saving_throw + playerStatAdjustmentWisdomIntelligence(A_INT) + (class_level_adj[py.misc.pclass][CLASS_DEVICE] * py.misc.level / 3);
+    int xdis = py.misc.disarm + 2 * playerDisarmAdjustment() + playerStatAdjustmentWisdomIntelligence(A_INT) + (class_level_adj[py.misc.class_id][CLASS_DISARM] * py.misc.level / 3);
+    int xsave = py.misc.saving_throw + playerStatAdjustmentWisdomIntelligence(A_WIS) + (class_level_adj[py.misc.class_id][CLASS_SAVE] * py.misc.level / 3);
+    int xdev = py.misc.saving_throw + playerStatAdjustmentWisdomIntelligence(A_INT) + (class_level_adj[py.misc.class_id][CLASS_DEVICE] * py.misc.level / 3);
 
     vtype_t xinfra;
     (void) sprintf(xinfra, "%d feet", py.flags.see_infra * 10);
@@ -1333,12 +1333,12 @@ int inventoryCarryItem(Inventory_t *item) {
 
 // Returns spell chance of failure for spell -RAK-
 static int spellChanceOfSuccess(int spell) {
-    Spell_t *s_ptr = &magic_spells[py.misc.pclass - 1][spell];
+    Spell_t *s_ptr = &magic_spells[py.misc.class_id - 1][spell];
 
     int chance = s_ptr->sfail - 3 * (py.misc.level - s_ptr->slevel);
 
     int stat;
-    if (classes[py.misc.pclass].spell == SPELL_TYPE_MAGE) {
+    if (classes[py.misc.class_id].spell == SPELL_TYPE_MAGE) {
         stat = A_INT;
     } else {
         stat = A_WIS;
@@ -1370,7 +1370,7 @@ void displaySpellsList(int *spell, int number_of_choices, int comment, int non_c
         col = 31;
     }
 
-    int consecutive_offset = (classes[py.misc.pclass].spell == SPELL_TYPE_MAGE ? NAME_OFFSET_SPELLS : NAME_OFFSET_PRAYERS);
+    int consecutive_offset = (classes[py.misc.class_id].spell == SPELL_TYPE_MAGE ? NAME_OFFSET_SPELLS : NAME_OFFSET_PRAYERS);
 
     eraseLine(1, col);
     putString("Name", 1, col + 5);
@@ -1383,7 +1383,7 @@ void displaySpellsList(int *spell, int number_of_choices, int comment, int non_c
 
     for (int i = 0; i < number_of_choices; i++) {
         int spellID = spell[i];
-        Spell_t *s_ptr = &magic_spells[py.misc.pclass - 1][spellID];
+        Spell_t *s_ptr = &magic_spells[py.misc.class_id - 1][spellID];
 
         const char *p;
         if (comment == 0) {
@@ -1423,7 +1423,7 @@ bool spellGetId(int *spell, int number_of_choices, int *spell_id, int *spell_cha
     bool spell_found = false;
     bool redraw = false;
 
-    int offset = (classes[py.misc.pclass].spell == SPELL_TYPE_MAGE ? NAME_OFFSET_SPELLS : NAME_OFFSET_PRAYERS);
+    int offset = (classes[py.misc.class_id].spell == SPELL_TYPE_MAGE ? NAME_OFFSET_SPELLS : NAME_OFFSET_PRAYERS);
 
     char choice;
 
@@ -1442,7 +1442,7 @@ bool spellGetId(int *spell, int number_of_choices, int *spell_id, int *spell_cha
             if (spellID == number_of_choices) {
                 *spell_id = -2;
             } else {
-                Spell_t *s_ptr = &magic_spells[py.misc.pclass - 1][*spell_id];
+                Spell_t *s_ptr = &magic_spells[py.misc.class_id - 1][*spell_id];
 
                 vtype_t tmp_str;
                 (void) sprintf(tmp_str, "Cast %s (%d mana, %d%% fail)?", spell_names[*spell_id + offset], s_ptr->smana, spellChanceOfSuccess(*spell_id));
@@ -1525,7 +1525,7 @@ static void eliminateKnownSpellsGreaterThanLevel(Spell_t *msp_ptr, const char *p
 static int numberOfSpellsAllowed(int stat) {
     int allowed = 0;
 
-    int levels = py.misc.level - classes[py.misc.pclass].first_spell_lev + 1;
+    int levels = py.misc.level - classes[py.misc.class_id].first_spell_lev + 1;
 
     switch (playerStatAdjustmentWisdomIntelligence(stat)) {
         case 0:
@@ -1655,7 +1655,7 @@ static void forgetSpells(int newSpells, const char *p, int offset) {
 // calculate number of spells player should have, and
 // learn forget spells until that number is met -JEW-
 void playerCalculateAllowedSpellsCount(int stat) {
-    Spell_t *spell = &magic_spells[py.misc.pclass - 1][0];
+    Spell_t *spell = &magic_spells[py.misc.class_id - 1][0];
 
     const char *magic_type_str;
     int offset;
@@ -1749,11 +1749,11 @@ void playerGainSpells() {
     int new_spells = py.flags.new_spells;
     int diff_spells = 0;
 
-    Spell_t *spell = &magic_spells[py.misc.pclass - 1][0];
+    Spell_t *spell = &magic_spells[py.misc.class_id - 1][0];
 
     int stat, offset;
 
-    if (classes[py.misc.pclass].spell == SPELL_TYPE_MAGE) {
+    if (classes[py.misc.class_id].spell == SPELL_TYPE_MAGE) {
         // People with SPELL_TYPE_MAGE spells can't learn spell_bank if they can't read their books.
         if (!playerCanRead()) {
             return;
@@ -1876,7 +1876,7 @@ void playerGainSpells() {
 }
 
 static int newMana(int stat) {
-    int levels = py.misc.level - classes[py.misc.pclass].first_spell_lev + 1;
+    int levels = py.misc.level - classes[py.misc.class_id].first_spell_lev + 1;
 
     switch (playerStatAdjustmentWisdomIntelligence(stat)) {
         case 0:
@@ -1957,7 +1957,7 @@ static void playerGainLevel() {
     printCharacterLevel();
     printCharacterTitle();
 
-    Class_t *player_class = &classes[py.misc.pclass];
+    Class_t *player_class = &classes[py.misc.class_id];
 
     if (player_class->spell == SPELL_TYPE_MAGE) {
         playerCalculateAllowedSpellsCount(A_INT);
@@ -2218,7 +2218,7 @@ int playerWeaponCriticalBlow(int weapon_weight, int plus_to_hit, int damage, int
 
     // Weight of weapon, plusses to hit, and character level all
     // contribute to the chance of a critical
-    if (randomNumber(5000) <= weapon_weight + 5 * plus_to_hit + (class_level_adj[py.misc.pclass][attack_type_id] * py.misc.level)) {
+    if (randomNumber(5000) <= weapon_weight + 5 * plus_to_hit + (class_level_adj[py.misc.class_id][attack_type_id] * py.misc.level)) {
         weapon_weight += randomNumber(650);
 
         if (weapon_weight < 400) {
@@ -2296,7 +2296,7 @@ bool playerMovePosition(int dir, int *new_y, int *new_x) {
 
 // Saving throws for player character. -RAK-
 bool playerSavingThrow() {
-    int class_level_adjustment = class_level_adj[py.misc.pclass][CLASS_SAVE] * py.misc.level / 3;
+    int class_level_adjustment = class_level_adj[py.misc.class_id][CLASS_SAVE] * py.misc.level / 3;
 
     int saving = py.misc.saving_throw + playerStatAdjustmentWisdomIntelligence(A_WIS) + class_level_adjustment;
 

@@ -130,7 +130,7 @@ static void printTomb() {
     putString("|", 9, 9);
     putString("|  :   :", 9, 43);
     if (!total_winner) {
-        p = (char *) classes[py.misc.pclass].title;
+        p = (char *) classes[py.misc.class_id].title;
     } else if (playerIsMale()) {
         p = (char *) "*King*";
     } else {
@@ -246,8 +246,8 @@ static void highscores() {
     new_entry.lev = (uint8_t) py.misc.level;
     new_entry.max_dlv = (uint8_t) py.misc.max_dungeon_depth;
     new_entry.gender = highScoreGenderLabel();
-    new_entry.race = py.misc.prace;
-    new_entry.character_class = py.misc.pclass;
+    new_entry.race = py.misc.race_id;
+    new_entry.character_class = py.misc.class_id;
     (void) strcpy(new_entry.name, py.misc.name);
 
     char *tmp = character_died_from;

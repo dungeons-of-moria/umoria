@@ -66,7 +66,7 @@ static void characterChangeStat(int stat, int16_t amount) {
 // generate all stats and modify for race. needed in a separate
 // module so looping of character selection would be allowed -RGM-
 static void characterGenerateStatsAndRace() {
-    Race_t *race = &character_races[py.misc.prace];
+    Race_t *race = &character_races[py.misc.race_id];
 
     characterGenerateStats();
     characterChangeStat(A_STR, race->str_adj);
@@ -142,7 +142,7 @@ static void characterChooseRace() {
         }
     }
 
-    py.misc.prace = (uint8_t) race_id;
+    py.misc.race_id = (uint8_t) race_id;
 
     putString(character_races[race_id].trace, 3, 15);
 }
@@ -169,7 +169,7 @@ static void playerClearHistory() {
 //   - Each race has init history beginning at (race-1)*3+1
 //   - All history parts are in ascending order
 static void characterGetHistory() {
-    int history_id = py.misc.prace * 3 + 1;
+    int history_id = py.misc.race_id * 3 + 1;
     int social_class = randomNumber(4);
 
     char history_block[240];
@@ -292,7 +292,7 @@ static void characterSetGender() {
 
 // Computes character's age, height, and weight -JWT-
 static void characterSetAgeHeightWeight() {
-    int race_id = py.misc.prace;
+    int race_id = py.misc.race_id;
     py.misc.age = (uint16_t) (character_races[race_id].b_age + randomNumber((int) character_races[race_id].m_age));
 
     if (playerIsMale()) {
@@ -346,9 +346,9 @@ static void characterGetClass() {
         class_list[id] = 0;
     }
 
-    int class_count = displayRaceClasses(py.misc.prace, class_list);
+    int class_count = displayRaceClasses(py.misc.race_id, class_list);
 
-    py.misc.pclass = 0;
+    py.misc.class_id = 0;
 
     int min_value, max_value;
     bool is_set = false;
@@ -362,9 +362,9 @@ static void characterGetClass() {
         if (class_id < class_count && class_id >= 0) {
             is_set = true;
 
-            py.misc.pclass = (uint8_t) class_list[class_id];
+            py.misc.class_id = (uint8_t) class_list[class_id];
 
-            Class_t *klass = &classes[py.misc.pclass];
+            Class_t *klass = &classes[py.misc.class_id];
 
             clearToBottom(20);
             putString(klass->title, 5, 15);

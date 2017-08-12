@@ -2037,11 +2037,11 @@ static void examineBook() {
 
         uint8_t treasure_type = inventory[item_id].tval;
 
-        if (classes[py.misc.pclass].spell == SPELL_TYPE_MAGE) {
+        if (classes[py.misc.class_id].spell == SPELL_TYPE_MAGE) {
             if (treasure_type != TV_MAGIC_BOOK) {
                 can_read = false;
             }
-        } else if (classes[py.misc.pclass].spell == SPELL_TYPE_PRIEST) {
+        } else if (classes[py.misc.class_id].spell == SPELL_TYPE_PRIEST) {
             if (treasure_type != TV_PRAYER_BOOK) {
                 can_read = false;
             }
@@ -2060,7 +2060,7 @@ static void examineBook() {
         while (item_flags) {
             item_pos_end = getAndClearFirstBit(&item_flags);
 
-            if (magic_spells[py.misc.pclass - 1][item_pos_end].slevel < 99) {
+            if (magic_spells[py.misc.class_id - 1][item_pos_end].slevel < 99) {
                 spell_index[spell_id] = item_pos_end;
                 spell_id++;
             }
