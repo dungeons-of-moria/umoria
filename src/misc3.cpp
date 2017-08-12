@@ -1003,8 +1003,8 @@ void printCharacterLevelExperience() {
 void printCharacterAbilities() {
     clearToBottom(14);
 
-    int xbth = py.misc.bth + py.misc.ptohit * BTH_PER_PLUS_TO_HIT_ADJUST + (class_level_adj[py.misc.pclass][CLASS_BTH] * py.misc.level);
-    int xbthb = py.misc.bth_with_bows + py.misc.ptohit * BTH_PER_PLUS_TO_HIT_ADJUST + (class_level_adj[py.misc.pclass][CLASS_BTHB] * py.misc.level);
+    int xbth = py.misc.bth + py.misc.plusses_to_hit * BTH_PER_PLUS_TO_HIT_ADJUST + (class_level_adj[py.misc.pclass][CLASS_BTH] * py.misc.level);
+    int xbthb = py.misc.bth_with_bows + py.misc.plusses_to_hit * BTH_PER_PLUS_TO_HIT_ADJUST + (class_level_adj[py.misc.pclass][CLASS_BTHB] * py.misc.level);
 
     // this results in a range from 0 to 29
     int xfos = 40 - py.misc.freng_of_search;

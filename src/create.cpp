@@ -90,8 +90,8 @@ static void characterGenerateStatsAndRace() {
     py.misc.stl = race->stl;
     py.misc.save = race->bsav;
     py.misc.hitdie = race->bhitdie;
-    py.misc.ptodam = (int16_t) playerDamageAdjustment();
-    py.misc.ptohit = (int16_t) playerToHitAdjustment();
+    py.misc.plusses_to_damage = (int16_t) playerDamageAdjustment();
+    py.misc.plusses_to_hit = (int16_t) playerToHitAdjustment();
     py.misc.ptoac = 0;
     py.misc.pac = (int16_t) playerArmorClassAdjustment();
     py.misc.expfact = race->b_exp;
@@ -382,12 +382,15 @@ static void characterGetClass() {
                 playerSetAndUseStat(i);
             }
 
-            py.misc.ptodam = (int16_t) playerDamageAdjustment(); // Real values
-            py.misc.ptohit = (int16_t) playerToHitAdjustment();
+            // Real values
+            py.misc.plusses_to_damage = (int16_t) playerDamageAdjustment();
+            py.misc.plusses_to_hit = (int16_t) playerToHitAdjustment();
             py.misc.ptoac = (int16_t) playerArmorClassAdjustment();
             py.misc.pac = 0;
-            py.misc.dis_td = py.misc.ptodam; // Displayed values
-            py.misc.dis_th = py.misc.ptohit;
+
+            // Displayed values
+            py.misc.dis_td = py.misc.plusses_to_damage;
+            py.misc.dis_th = py.misc.plusses_to_hit;
             py.misc.dis_tac = py.misc.ptoac;
             py.misc.dis_ac = py.misc.pac + py.misc.dis_tac;
 

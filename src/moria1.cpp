@@ -95,11 +95,11 @@ static void playerRecalculateBonusesFromInventory() {
         item = &inventory[i];
 
         if (item->tval != TV_NOTHING) {
-            py.misc.ptohit += item->tohit;
+            py.misc.plusses_to_hit += item->tohit;
 
             // Bows can't damage. -CJS-
             if (item->tval != TV_BOW) {
-                py.misc.ptodam += item->todam;
+                py.misc.plusses_to_damage += item->todam;
             }
 
             py.misc.ptoac += item->toac;
@@ -179,14 +179,17 @@ void playerRecalculateBonuses() {
 
     playerResetFlags();
 
-    py.misc.ptohit = (int16_t) playerToHitAdjustment();  // Real To Hit
-    py.misc.ptodam = (int16_t) playerDamageAdjustment();  // Real To Dam
-    py.misc.ptoac = (int16_t) playerArmorClassAdjustment();    // Real To AC
-    py.misc.pac = 0;                         // Real AC
-    py.misc.dis_th = py.misc.ptohit;         // Display To Hit
-    py.misc.dis_td = py.misc.ptodam;         // Display To Dam
-    py.misc.dis_ac = 0;                      // Display AC
-    py.misc.dis_tac = py.misc.ptoac;         // Display To AC
+    // Real values
+    py.misc.plusses_to_hit = (int16_t) playerToHitAdjustment();
+    py.misc.plusses_to_damage = (int16_t) playerDamageAdjustment();
+    py.misc.ptoac = (int16_t) playerArmorClassAdjustment();
+    py.misc.pac = 0;
+
+    // Display values
+    py.misc.dis_th = py.misc.plusses_to_hit;
+    py.misc.dis_td = py.misc.plusses_to_damage;
+    py.misc.dis_ac = 0;
+    py.misc.dis_tac = py.misc.ptoac;
 
     playerRecalculateBonusesFromInventory();
 

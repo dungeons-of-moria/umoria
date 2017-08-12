@@ -735,7 +735,7 @@ static void weaponMissileFacts(Inventory_t *item, int *tbth, int *tpth, int *tda
     // Throwing objects
     *tdam = dicePlayerDamageRoll(item->damage) + item->todam;
     *tbth = py.misc.bth_with_bows * 75 / 100;
-    *tpth = py.misc.ptohit + item->tohit;
+    *tpth = py.misc.plusses_to_hit + item->tohit;
 
     // Add this back later if the correct throwing device. -CJS-
     if (inventory[EQUIPMENT_WIELD].tval != TV_NOTHING) {

@@ -772,7 +772,7 @@ static void playerCalculateToHitBlows(int weaponID, int weaponWeight, int *blows
         *blows = 1;
     }
 
-    *tot_tohit += py.misc.ptohit;
+    *tot_tohit += py.misc.plusses_to_hit;
 }
 
 static int playerCalculateBaseToHit(bool creatureLit, int tot_tohit) {
@@ -838,7 +838,7 @@ static void playerAttackMonster(int y, int x) {
             damage = playerWeaponCriticalBlow(1, 0, damage, CLASS_BTH);
         }
 
-        damage += py.misc.ptodam;
+        damage += py.misc.plusses_to_damage;
         if (damage < 0) {
             damage = 0;
         }
