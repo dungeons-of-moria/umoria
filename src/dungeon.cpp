@@ -92,7 +92,7 @@ static void playerActivateHeroism() {
     py.misc.mhp += 10;
     py.misc.chp += 10;
     py.misc.bth += 12;
-    py.misc.bthb += 12;
+    py.misc.bth_with_bows += 12;
 
     printMessage("You feel like a HERO!");
     printCharacterMaxHitPoints();
@@ -110,7 +110,7 @@ static void playerDisableHeroism() {
         printCharacterCurrentHitPoints();
     }
     py.misc.bth -= 12;
-    py.misc.bthb -= 12;
+    py.misc.bth_with_bows -= 12;
 
     printMessage("The heroism wears off.");
     printCharacterMaxHitPoints();
@@ -123,7 +123,7 @@ static void playerActivateSuperHeroism() {
     py.misc.mhp += 20;
     py.misc.chp += 20;
     py.misc.bth += 24;
-    py.misc.bthb += 24;
+    py.misc.bth_with_bows += 24;
 
     printMessage("You feel like a SUPER HERO!");
     printCharacterMaxHitPoints();
@@ -141,7 +141,7 @@ static void playerDisableSuperHeroism() {
         printCharacterCurrentHitPoints();
     }
     py.misc.bth -= 24;
-    py.misc.bthb -= 24;
+    py.misc.bth_with_bows -= 24;
 
     printMessage("The super heroism wears off.");
     printCharacterMaxHitPoints();
@@ -534,7 +534,7 @@ static void playerUpdateBlessedness() {
         playerDisturb(0, 0);
 
         py.misc.bth += 5;
-        py.misc.bthb += 5;
+        py.misc.bth_with_bows += 5;
         py.misc.pac += 2;
         py.misc.dis_ac += 2;
 
@@ -549,7 +549,7 @@ static void playerUpdateBlessedness() {
         playerDisturb(0, 0);
 
         py.misc.bth -= 5;
-        py.misc.bthb -= 5;
+        py.misc.bth_with_bows -= 5;
         py.misc.pac -= 2;
         py.misc.dis_ac -= 2;
 

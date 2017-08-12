@@ -85,7 +85,7 @@ static void characterGenerateStatsAndRace() {
 
     py.misc.chance_in_search = race->srh;
     py.misc.bth = race->bth;
-    py.misc.bthb = race->bthb;
+    py.misc.bth_with_bows = race->bthb;
     py.misc.freng_of_search = race->fos;
     py.misc.stl = race->stl;
     py.misc.save = race->bsav;
@@ -412,7 +412,7 @@ static void characterGetClass() {
             } while (player_base_hp_levels[PLAYER_MAX_LEVEL - 1] < min_value || player_base_hp_levels[PLAYER_MAX_LEVEL - 1] > max_value);
 
             py.misc.bth += klass->mbth;
-            py.misc.bthb += klass->mbthb; // RAK
+            py.misc.bth_with_bows += klass->mbthb; // RAK
             py.misc.chance_in_search += klass->msrh;
             py.misc.disarm += klass->mdis;
             py.misc.freng_of_search += klass->mfos;

@@ -205,13 +205,13 @@ void wizardCharacterAdjustment() {
         return;
     }
 
-    (void) sprintf(input, "Current=%d  (0-200) Bows/Throwing = ", py.misc.bthb);
+    (void) sprintf(input, "Current=%d  (0-200) Bows/Throwing = ", py.misc.bth_with_bows);
     number = (int) strlen(input);
     putStringClearToEOL(input, 0, 0);
     if (getStringInput(input, 0, number, 3)) {
         number = atoi(input);
         if (number > -1 && number < 201 && (*input != '\0')) {
-            py.misc.bthb = (int16_t) number;
+            py.misc.bth_with_bows = (int16_t) number;
         }
     } else {
         return;

@@ -100,10 +100,10 @@ uint32_t player_base_exp_levels[PLAYER_MAX_LEVEL] = {
 };
 
 // Race, STR, INT, WIS, DEX, CON, CHR,
-// Ages, heights, and weights (male then female)
+//   ages, heights, and weights (male then female)
 // Racial Bases for:
-//      dis, chance_in_search, stl, freng_of_search, bth, bthb, bsav, hitdie,
-//      infra, exp base, choice-classes
+//   dis, chance_in_search, stl, freng_of_search, bth, bth_with_bows, bsav,
+//   hitdie, infra, exp base, choice-classes
 Race_t character_races[PLAYER_MAX_RACES] = {
     {
         "Human", 0,  0,  0,  0,  0,  0,
@@ -281,7 +281,7 @@ Background_t character_backgrounds[PLAYER_MAX_BACKGROUNDS] = {
 
 // Classes.
 Class_t classes[PLAYER_MAX_CLASSES] = {
-    // HP Dis Src Stl Fos bth btb sve S  I  W  D Co Ch  Spell Exp  spl
+    // class   hp dis src stl fos bth btb sve  s   i   w   d  co  ch  spell             exp  spl
     {"Warrior", 9, 25, 14, 1, 38, 70, 55, 18,  5, -2, -2,  2,  2, -1, SPELL_TYPE_NONE,    0, 0},
     {"Mage",    0, 30, 16, 2, 20, 34, 20, 36, -5,  3,  0,  1, -2,  1, SPELL_TYPE_MAGE,   30, 1},
     {"Priest",  2, 25, 16, 2, 32, 48, 35, 30, -3, -3,  3, -1,  0,  2, SPELL_TYPE_PRIEST, 20, 1},
@@ -294,20 +294,20 @@ Class_t classes[PLAYER_MAX_CLASSES] = {
 // headaches in its use.
 // CLASS_MISC_HIT is identical to CLASS_SAVE, which takes advantage of
 // the fact that the save values are independent of the class.
+// Columns: bth, bth_with_bows, device, disarm, save/misc hit
 int16_t class_level_adj[PLAYER_MAX_CLASSES][CLASS_MAX_LEVEL_ADJUST] = {
-    //bth    bthb   device disarm save/misc hit
-    { 4,     4,     2,     2,     3 }, // Warrior
-    { 2,     2,     4,     3,     3 }, // Mage
-    { 2,     2,     4,     3,     3 }, // Priest
-    { 3,     4,     3,     4,     3 }, // Rogue
-    { 3,     4,     3,     3,     3 }, // Ranger
-    { 3,     3,     3,     2,     3 }, // Paladin
+    { 4, 4, 2, 2, 3 }, // Warrior
+    { 2, 2, 4, 3, 3 }, // Mage
+    { 2, 2, 4, 3, 3 }, // Priest
+    { 3, 4, 3, 4, 3 }, // Rogue
+    { 3, 4, 3, 3, 3 }, // Ranger
+    { 3, 3, 3, 2, 3 }, // Paladin
 };
 
-uint32_t spells_learnt   = 0; // bit mask of spells learned
-uint32_t spells_worked    = 0; // bit mask of spells tried and worked
-uint32_t spells_forgotten = 0; // bit mask of spells learned but forgotten
-uint8_t  spells_learned_order[32];     // order spells learned/remembered/forgotten
+uint32_t spells_learnt   = 0;      // bit mask of spells learned
+uint32_t spells_worked    = 0;     // bit mask of spells tried and worked
+uint32_t spells_forgotten = 0;     // bit mask of spells learned but forgotten
+uint8_t  spells_learned_order[32]; // order spells learned/remembered/forgotten
 
 // Warriors don't have spells, so there is no entry for them.
 // Note that this means you must always subtract one from the

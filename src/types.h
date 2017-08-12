@@ -44,7 +44,7 @@ typedef struct {
         int16_t chance_in_search;    // Chance in search
         int16_t freng_of_search;     // Frenq of search
         int16_t bth;                 // Base to hit
-        int16_t bthb;                // BTH with bows
+        int16_t bth_with_bows;       // BTH with bows
         int16_t mana;                // Mana points
         int16_t mhp;                 // Max hit pts
         int16_t ptohit;              // Plusses to hit

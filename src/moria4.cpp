@@ -734,7 +734,7 @@ static void weaponMissileFacts(Inventory_t *item, int *tbth, int *tpth, int *tda
 
     // Throwing objects
     *tdam = dicePlayerDamageRoll(item->damage) + item->todam;
-    *tbth = py.misc.bthb * 75 / 100;
+    *tbth = py.misc.bth_with_bows * 75 / 100;
     *tpth = py.misc.ptohit + item->tohit;
 
     // Add this back later if the correct throwing device. -CJS-
@@ -758,7 +758,7 @@ static void weaponMissileFacts(Inventory_t *item, int *tbth, int *tpth, int *tda
     switch (inventory[EQUIPMENT_WIELD].p1) {
         case 1:
             if (item->tval == TV_SLING_AMMO) { // Sling and ammo
-                *tbth = py.misc.bthb;
+                *tbth = py.misc.bth_with_bows;
                 *tpth += 2 * inventory[EQUIPMENT_WIELD].tohit;
                 *tdam += inventory[EQUIPMENT_WIELD].todam;
                 *tdam = *tdam * 2;
@@ -767,7 +767,7 @@ static void weaponMissileFacts(Inventory_t *item, int *tbth, int *tpth, int *tda
             break;
         case 2:
             if (item->tval == TV_ARROW) { // Short Bow and Arrow
-                *tbth = py.misc.bthb;
+                *tbth = py.misc.bth_with_bows;
                 *tpth += 2 * inventory[EQUIPMENT_WIELD].tohit;
                 *tdam += inventory[EQUIPMENT_WIELD].todam;
                 *tdam = *tdam * 2;
@@ -776,7 +776,7 @@ static void weaponMissileFacts(Inventory_t *item, int *tbth, int *tpth, int *tda
             break;
         case 3:
             if (item->tval == TV_ARROW) { // Long Bow and Arrow
-                *tbth = py.misc.bthb;
+                *tbth = py.misc.bth_with_bows;
                 *tpth += 2 * inventory[EQUIPMENT_WIELD].tohit;
                 *tdam += inventory[EQUIPMENT_WIELD].todam;
                 *tdam = *tdam * 3;
@@ -785,7 +785,7 @@ static void weaponMissileFacts(Inventory_t *item, int *tbth, int *tpth, int *tda
             break;
         case 4:
             if (item->tval == TV_ARROW) { // Composite Bow and Arrow
-                *tbth = py.misc.bthb;
+                *tbth = py.misc.bth_with_bows;
                 *tpth += 2 * inventory[EQUIPMENT_WIELD].tohit;
                 *tdam += inventory[EQUIPMENT_WIELD].todam;
                 *tdam = *tdam * 4;
@@ -794,7 +794,7 @@ static void weaponMissileFacts(Inventory_t *item, int *tbth, int *tpth, int *tda
             break;
         case 5:
             if (item->tval == TV_BOLT) { // Light Crossbow and Bolt
-                *tbth = py.misc.bthb;
+                *tbth = py.misc.bth_with_bows;
                 *tpth += 2 * inventory[EQUIPMENT_WIELD].tohit;
                 *tdam += inventory[EQUIPMENT_WIELD].todam;
                 *tdam = *tdam * 3;
@@ -803,7 +803,7 @@ static void weaponMissileFacts(Inventory_t *item, int *tbth, int *tpth, int *tda
             break;
         case 6:
             if (item->tval == TV_BOLT) { // Heavy Crossbow and Bolt
-                *tbth = py.misc.bthb;
+                *tbth = py.misc.bth_with_bows;
                 *tpth += 2 * inventory[EQUIPMENT_WIELD].tohit;
                 *tdam += inventory[EQUIPMENT_WIELD].todam;
                 *tdam = *tdam * 4;
@@ -917,7 +917,7 @@ void playerThrowItem() {
                 tbth -= current_distance;
 
                 // if monster not lit, make it much more difficult to hit, subtract
-                // off most bonuses, and reduce bthb depending on distance.
+                // off most bonuses, and reduce bth_with_bows depending on distance.
                 if (!m_ptr->ml) {
                     tbth /= current_distance + 2;
                     tbth -= py.misc.level * class_level_adj[py.misc.pclass][CLASS_BTHB] / 2;
