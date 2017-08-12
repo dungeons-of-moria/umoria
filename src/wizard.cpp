@@ -181,13 +181,13 @@ void wizardCharacterAdjustment() {
         return;
     }
 
-    (void) sprintf(input, "Current=%d  (0-100) Save = ", py.misc.save);
+    (void) sprintf(input, "Current=%d  (0-100) Save = ", py.misc.saving_throw);
     number = (int) strlen(input);
     putStringClearToEOL(input, 0, 0);
     if (getStringInput(input, 0, number, 3)) {
         number = atoi(input);
         if (number > -1 && number < 201 && (*input != '\0')) {
-            py.misc.save = (int16_t) number;
+            py.misc.saving_throw = (int16_t) number;
         }
     } else {
         return;

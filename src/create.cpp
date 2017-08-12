@@ -88,7 +88,7 @@ static void characterGenerateStatsAndRace() {
     py.misc.bth_with_bows = race->bthb;
     py.misc.freng_of_search = race->fos;
     py.misc.stl = race->stl;
-    py.misc.save = race->bsav;
+    py.misc.saving_throw = race->bsav;
     py.misc.hitdie = race->bhitdie;
     py.misc.plusses_to_damage = (int16_t) playerDamageAdjustment();
     py.misc.plusses_to_hit = (int16_t) playerToHitAdjustment();
@@ -420,7 +420,7 @@ static void characterGetClass() {
             py.misc.disarm += klass->mdis;
             py.misc.freng_of_search += klass->mfos;
             py.misc.stl += klass->mstl;
-            py.misc.save += klass->msav;
+            py.misc.saving_throw += klass->msav;
             py.misc.expfact += klass->m_exp;
         } else if (input == '?') {
             displayTextHelpFile(MORIA_WELCOME);

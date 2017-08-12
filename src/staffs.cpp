@@ -24,7 +24,7 @@ static bool staffPlayerIsCarrying(int *item_pos_start, int *item_pos_end) {
 }
 
 static bool staffPlayerCanUse(Inventory_t *item) {
-    int chance = py.misc.save;
+    int chance = py.misc.saving_throw;
     chance += playerStatAdjustmentWisdomIntelligence(A_INT);
     chance -= item->level - 5;
     chance += class_level_adj[py.misc.pclass][CLASS_DEVICE] * py.misc.level / 3;
