@@ -690,7 +690,7 @@ uint32_t monsterDeath(int y, int x, uint32_t flags) {
 }
 
 static void playerGainKillExperience(Creature_t *c_ptr) {
-    uint16_t exp = c_ptr->mexp * c_ptr->level;
+    uint16_t exp = c_ptr->kill_exp_value * c_ptr->level;
 
     int32_t quotient = exp / py.misc.level;
     int32_t remainder = exp % py.misc.level;

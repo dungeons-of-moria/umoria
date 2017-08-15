@@ -344,11 +344,11 @@ typedef struct {
 // Holds the base game data for any given creature in the game such
 // as: Kobold, Orc, Giant Red Ant, Quasit, Young Black Dragon, etc.
 typedef struct {
-    const char *name;  // Description of creature
-    uint32_t movement; // Bit field
-    uint32_t spells;   // Creature spells
-    uint16_t defenses; // Bit field
-    uint16_t mexp;     // Exp value for kill
+    const char *name;        // Description of creature
+    uint32_t movement;       // Bit field
+    uint32_t spells;         // Creature spells
+    uint16_t defenses;       // Bit field
+    uint16_t kill_exp_value; // Exp value for kill
     uint8_t sleep;     // Inactive counter/10
     uint8_t aaf;       // Area affect radius
     uint8_t ac;        // AC

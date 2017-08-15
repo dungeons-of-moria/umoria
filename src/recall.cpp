@@ -702,7 +702,7 @@ int memoryRecall(int monster_id) {
     }
 
     if (memory->kills) {
-        memoryKillPoints(creature->defenses, creature->mexp, creature->level);
+        memoryKillPoints(creature->defenses, creature->kill_exp_value, creature->level);
     }
 
     memoryMagicSkills(spells, memory->spells, creature->spells);

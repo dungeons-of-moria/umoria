@@ -993,7 +993,7 @@ static void monsterMovesOnPlayer(Monster_t *monster, uint8_t creature_id, int mo
         // Creature is attempting to move on other creature?
 
         // Creature eats other creatures?
-        if ((move_bits & CM_EATS_OTHER) && creatures_list[monster->creature_id].mexp >= creatures_list[monsters[creature_id].creature_id].mexp) {
+        if ((move_bits & CM_EATS_OTHER) && creatures_list[monster->creature_id].kill_exp_value >= creatures_list[monsters[creature_id].creature_id].kill_exp_value) {
             if (monsters[creature_id].lit) {
                 *rcmove |= CM_EATS_OTHER;
             }
@@ -1351,7 +1351,7 @@ bool monsterMultiply(int y, int x, int creature_id, int monster_id) {
                     bool cannibalistic = (creatures_list[creature_id].movement & CM_EATS_OTHER) != 0;
 
                     // Check the experience level -CJS-
-                    bool experienced = creatures_list[creature_id].mexp >= creatures_list[monsters[tile->creature_id].creature_id].mexp;
+                    bool experienced = creatures_list[creature_id].kill_exp_value >= creatures_list[monsters[tile->creature_id].creature_id].kill_exp_value;
 
                     if (cannibalistic && experienced) {
                         // It ate an already processed monster. Handle * normally.
