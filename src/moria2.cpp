@@ -640,7 +640,7 @@ void damageAcid(int damage, const char *creature_name) {
         flag = 1;
     }
 
-    if (py.flags.acid_resist) {
+    if (py.flags.resist_acid) {
         flag += 2;
     }
 

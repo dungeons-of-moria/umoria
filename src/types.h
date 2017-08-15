@@ -111,7 +111,7 @@ typedef struct {
         bool aggravate;           // Aggravate monsters
         bool resist_fire;         // Resistance to fire
         bool resist_cold;         // Resistance to cold
-        bool acid_resist;         // Resistance to acid
+        bool resist_acid;         // Resistance to acid
         bool regenerate;          // Regenerate hit pts
         bool lght_resist;         // Resistance to light
         bool ffall;               // No damage falling
