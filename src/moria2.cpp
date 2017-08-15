@@ -621,7 +621,7 @@ void damageCold(int damage, const char *creature_name) {
 
 // Lightning bolt the sucker away. -RAK-
 void damageLightningBolt(int damage, const char *creature_name) {
-    if (py.flags.lght_resist) {
+    if (py.flags.resist_light) {
         damage = damage / 3;
     }
 

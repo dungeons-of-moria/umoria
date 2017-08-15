@@ -84,7 +84,7 @@ static void playerResetFlags() {
     py.flags.resist_acid = false;
     py.flags.resist_cold = false;
     py.flags.regenerate = false;
-    py.flags.lght_resist = false;
+    py.flags.resist_light = false;
     py.flags.ffall = false;
 }
 
@@ -249,7 +249,7 @@ void playerRecalculateBonuses() {
         py.flags.see_invisible = true;
     }
     if (TR_RES_LIGHT & item_flags) {
-        py.flags.lght_resist = true;
+        py.flags.resist_light = true;
     }
     if (TR_FFALL & item_flags) {
         py.flags.ffall = true;
