@@ -560,25 +560,25 @@ static void playerUpdateBlessedness() {
 
 // Resist Heat
 static void playerUpdateHeatResistance() {
-    if (py.flags.resist_heat <= 0) {
+    if (py.flags.heat_resistance <= 0) {
         return;
     }
 
-    py.flags.resist_heat--;
+    py.flags.heat_resistance--;
 
-    if (py.flags.resist_heat == 0) {
+    if (py.flags.heat_resistance == 0) {
         printMessage("You no longer feel safe from flame.");
     }
 }
 
 static void playerUpdateColdResistance() {
-    if (py.flags.resist_cold <= 0) {
+    if (py.flags.cold_resistance <= 0) {
         return;
     }
 
-    py.flags.resist_cold--;
+    py.flags.cold_resistance--;
 
-    if (py.flags.resist_cold == 0) {
+    if (py.flags.cold_resistance == 0) {
         printMessage("You no longer feel safe from cold.");
     }
 }

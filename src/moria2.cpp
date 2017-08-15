@@ -591,7 +591,7 @@ void damageFire(int damage, const char *creature_name) {
         damage = damage / 3;
     }
 
-    if (py.flags.resist_heat > 0) {
+    if (py.flags.heat_resistance > 0) {
         damage = damage / 3;
     }
 
@@ -608,7 +608,7 @@ void damageCold(int damage, const char *creature_name) {
         damage = damage / 3;
     }
 
-    if (py.flags.resist_cold > 0) {
+    if (py.flags.cold_resistance > 0) {
         damage = damage / 3;
     }
 

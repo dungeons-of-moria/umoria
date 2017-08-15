@@ -237,16 +237,16 @@ static bool playerDrinkPotion(uint32_t flags, uint8_t item_id) {
                 identified = spellRestorePlayerLevels();
                 break;
             case 41:
-                if (py.flags.resist_heat == 0) {
+                if (py.flags.heat_resistance == 0) {
                     identified = true;
                 }
-                py.flags.resist_heat += randomNumber(10) + 10;
+                py.flags.heat_resistance += randomNumber(10) + 10;
                 break;
             case 42:
-                if (py.flags.resist_cold == 0) {
+                if (py.flags.cold_resistance == 0) {
                     identified = true;
                 }
-                py.flags.resist_cold += randomNumber(10) + 10;
+                py.flags.cold_resistance += randomNumber(10) + 10;
                 break;
             case 43:
                 if (py.flags.detect_invisible == 0) {

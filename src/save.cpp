@@ -187,8 +187,8 @@ static bool sv_write() {
     wr_short((uint16_t) py.flags.heroism);
     wr_short((uint16_t) py.flags.super_heroism);
     wr_short((uint16_t) py.flags.blessed);
-    wr_short((uint16_t) py.flags.resist_heat);
-    wr_short((uint16_t) py.flags.resist_cold);
+    wr_short((uint16_t) py.flags.heat_resistance);
+    wr_short((uint16_t) py.flags.cold_resistance);
     wr_short((uint16_t) py.flags.detect_invisible);
     wr_short((uint16_t) py.flags.word_of_recall);
     wr_short((uint16_t) py.flags.see_infra);
@@ -646,8 +646,8 @@ bool loadGame(bool *generate) {
             rd_short((uint16_t *) &py.flags.heroism);
             rd_short((uint16_t *) &py.flags.super_heroism);
             rd_short((uint16_t *) &py.flags.blessed);
-            rd_short((uint16_t *) &py.flags.resist_heat);
-            rd_short((uint16_t *) &py.flags.resist_cold);
+            rd_short((uint16_t *) &py.flags.heat_resistance);
+            rd_short((uint16_t *) &py.flags.cold_resistance);
             rd_short((uint16_t *) &py.flags.detect_invisible);
             rd_short((uint16_t *) &py.flags.word_of_recall);
             rd_short((uint16_t *) &py.flags.see_infra);

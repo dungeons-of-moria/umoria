@@ -101,8 +101,8 @@ static void playerRecitePrayer(int prayer_type) {
             }
             break;
         case 16:
-            py.flags.resist_heat += randomNumber(10) + 10;
-            py.flags.resist_cold += randomNumber(10) + 10;
+            py.flags.heat_resistance += randomNumber(10) + 10;
+            py.flags.cold_resistance += randomNumber(10) + 10;
             break;
         case 17:
             (void) playerCurePoison();
