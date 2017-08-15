@@ -470,7 +470,7 @@ char caveGetTileSymbol(int y, int x) {
     }
 
     if (cave_ptr->tptr != 0 && treasure_list[cave_ptr->tptr].category_id != TV_INVIS_TRAP) {
-        return treasure_list[cave_ptr->tptr].tchar;
+        return treasure_list[cave_ptr->tptr].sprite;
     }
 
     if (cave_ptr->fval <= MAX_CAVE_FLOOR) {

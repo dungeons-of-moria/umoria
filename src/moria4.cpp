@@ -886,7 +886,7 @@ void playerThrowItem() {
     int tbth, tpth, tdam, tdis;
     weaponMissileFacts(&thrown_item, &tbth, &tpth, &tdam, &tdis);
 
-    char tile_char = thrown_item.tchar;
+    char tile_char = thrown_item.sprite;
     bool visible;
     int y = char_row;
     int x = char_col;

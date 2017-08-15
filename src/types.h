@@ -207,7 +207,7 @@ typedef struct {
     char inscription[INSCRIP_SIZE]; // Object inscription
     uint32_t flags;                 // Special flags
     uint8_t category_id;            // Category number (tval)
-    uint8_t tchar;                  // Character representation
+    uint8_t sprite;                 // Character representation - ASCII symbol (tchar)
     int16_t p1;                     // Misc. use variable
     int32_t cost;                   // Cost of item
     uint8_t subval;                 // Sub-category number

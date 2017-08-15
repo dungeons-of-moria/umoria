@@ -28,7 +28,7 @@ void dungeonChangeTrapVisibility(int y, int x) {
     if (item->category_id == TV_SECRET_DOOR) {
         item->id = OBJ_CLOSED_DOOR;
         item->category_id = game_objects[OBJ_CLOSED_DOOR].tval;
-        item->tchar = game_objects[OBJ_CLOSED_DOOR].tchar;
+        item->sprite = game_objects[OBJ_CLOSED_DOOR].tchar;
         dungeonLiteSpot(y, x);
     }
 }

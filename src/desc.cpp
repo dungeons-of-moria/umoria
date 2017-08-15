@@ -664,7 +664,7 @@ void inventoryItemCopyTo(int from_item_id, Inventory_t *to_item) {
     to_item->inscription[0] = '\0';
     to_item->flags = from->flags;
     to_item->category_id = from->tval;
-    to_item->tchar = from->tchar;
+    to_item->sprite = from->tchar;
     to_item->p1 = from->p1;
     to_item->cost = from->cost;
     to_item->subval = from->subval;

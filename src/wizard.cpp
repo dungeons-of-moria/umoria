@@ -267,7 +267,7 @@ void wizardCreateObjects() {
     if (!getStringInput(input, 0, 9, 1)) {
         return;
     }
-    item->tchar = (uint8_t) input[0];
+    item->sprite = (uint8_t) input[0];
 
     putStringClearToEOL("Subval : ", 0, 0);
     if (!getStringInput(input, 0, 9, 5)) {
