@@ -71,17 +71,17 @@ void dungeonResetView() {
 
     // A room of light should be lit.
     if (tile->feature_id == TILE_LIGHT_FLOOR) {
-        if (py.flags.blind < 1 && !tile->pl) {
+        if (py.flags.blind < 1 && !tile->permanent_light) {
             dungeonLightRoom(char_row, char_col);
         }
         return;
     }
 
     // In doorway of light-room?
-    if (tile->lr && py.flags.blind < 1) {
+    if (tile->perma_lit_room && py.flags.blind < 1) {
         for (int i = char_row - 1; i <= char_row + 1; i++) {
             for (int j = char_col - 1; j <= char_col + 1; j++) {
-                if (cave[i][j].feature_id == TILE_LIGHT_FLOOR && !cave[i][j].pl) {
+                if (cave[i][j].feature_id == TILE_LIGHT_FLOOR && !cave[i][j].permanent_light) {
                     dungeonLightRoom(i, j);
                 }
             }

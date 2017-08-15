@@ -339,24 +339,24 @@ static void dungeonBuildRoom(int y, int x) {
     for (int i = height; i <= depth; i++) {
         for (int j = left; j <= right; j++) {
             cave[i][j].feature_id = floor;
-            cave[i][j].lr = true;
+            cave[i][j].perma_lit_room = true;
         }
     }
 
     for (int i = height - 1; i <= depth + 1; i++) {
         cave[i][left - 1].feature_id = TILE_GRANITE_WALL;
-        cave[i][left - 1].lr = true;
+        cave[i][left - 1].perma_lit_room = true;
 
         cave[i][right + 1].feature_id = TILE_GRANITE_WALL;
-        cave[i][right + 1].lr = true;
+        cave[i][right + 1].perma_lit_room = true;
     }
 
     for (int i = left; i <= right; i++) {
         cave[height - 1][i].feature_id = TILE_GRANITE_WALL;
-        cave[height - 1][i].lr = true;
+        cave[height - 1][i].perma_lit_room = true;
 
         cave[depth + 1][i].feature_id = TILE_GRANITE_WALL;
-        cave[depth + 1][i].lr = true;
+        cave[depth + 1][i].perma_lit_room = true;
     }
 }
 
@@ -379,30 +379,30 @@ static void dungeonBuildRoomOverlappingRectangles(int y, int x) {
         for (int i = height; i <= depth; i++) {
             for (int j = left; j <= right; j++) {
                 cave[i][j].feature_id = floor;
-                cave[i][j].lr = true;
+                cave[i][j].perma_lit_room = true;
             }
         }
         for (int i = (height - 1); i <= (depth + 1); i++) {
             if (cave[i][left - 1].feature_id != floor) {
                 cave[i][left - 1].feature_id = TILE_GRANITE_WALL;
-                cave[i][left - 1].lr = true;
+                cave[i][left - 1].perma_lit_room = true;
             }
 
             if (cave[i][right + 1].feature_id != floor) {
                 cave[i][right + 1].feature_id = TILE_GRANITE_WALL;
-                cave[i][right + 1].lr = true;
+                cave[i][right + 1].perma_lit_room = true;
             }
         }
 
         for (int i = left; i <= right; i++) {
             if (cave[height - 1][i].feature_id != floor) {
                 cave[height - 1][i].feature_id = TILE_GRANITE_WALL;
-                cave[height - 1][i].lr = true;
+                cave[height - 1][i].perma_lit_room = true;
             }
 
             if (cave[depth + 1][i].feature_id != floor) {
                 cave[depth + 1][i].feature_id = TILE_GRANITE_WALL;
-                cave[depth + 1][i].lr = true;
+                cave[depth + 1][i].perma_lit_room = true;
             }
         }
     }
@@ -531,24 +531,24 @@ static void dungeonBuildRoomWithInnerRooms(int y, int x) {
     for (int i = height; i <= depth; i++) {
         for (int j = left; j <= right; j++) {
             cave[i][j].feature_id = floor;
-            cave[i][j].lr = true;
+            cave[i][j].perma_lit_room = true;
         }
     }
 
     for (int i = (height - 1); i <= (depth + 1); i++) {
         cave[i][left - 1].feature_id = TILE_GRANITE_WALL;
-        cave[i][left - 1].lr = true;
+        cave[i][left - 1].perma_lit_room = true;
 
         cave[i][right + 1].feature_id = TILE_GRANITE_WALL;
-        cave[i][right + 1].lr = true;
+        cave[i][right + 1].perma_lit_room = true;
     }
 
     for (int i = left; i <= right; i++) {
         cave[height - 1][i].feature_id = TILE_GRANITE_WALL;
-        cave[height - 1][i].lr = true;
+        cave[height - 1][i].perma_lit_room = true;
 
         cave[depth + 1][i].feature_id = TILE_GRANITE_WALL;
-        cave[depth + 1][i].lr = true;
+        cave[depth + 1][i].perma_lit_room = true;
     }
 
     // The inner room
@@ -669,24 +669,24 @@ static void dungeonBuildRoomCrossShaped(int y, int x) {
     for (int i = height; i <= depth; i++) {
         for (int j = left; j <= right; j++) {
             cave[i][j].feature_id = floor;
-            cave[i][j].lr = true;
+            cave[i][j].perma_lit_room = true;
         }
     }
 
     for (int i = height - 1; i <= depth + 1; i++) {
         cave[i][left - 1].feature_id = TILE_GRANITE_WALL;
-        cave[i][left - 1].lr = true;
+        cave[i][left - 1].perma_lit_room = true;
 
         cave[i][right + 1].feature_id = TILE_GRANITE_WALL;
-        cave[i][right + 1].lr = true;
+        cave[i][right + 1].perma_lit_room = true;
     }
 
     for (int i = left; i <= right; i++) {
         cave[height - 1][i].feature_id = TILE_GRANITE_WALL;
-        cave[height - 1][i].lr = true;
+        cave[height - 1][i].perma_lit_room = true;
 
         cave[depth + 1][i].feature_id = TILE_GRANITE_WALL;
-        cave[depth + 1][i].lr = true;
+        cave[depth + 1][i].perma_lit_room = true;
     }
 
     random_offset = 2 + randomNumber(9);
@@ -699,31 +699,31 @@ static void dungeonBuildRoomCrossShaped(int y, int x) {
     for (int i = height; i <= depth; i++) {
         for (int j = left; j <= right; j++) {
             cave[i][j].feature_id = floor;
-            cave[i][j].lr = true;
+            cave[i][j].perma_lit_room = true;
         }
     }
 
     for (int i = height - 1; i <= depth + 1; i++) {
         if (cave[i][left - 1].feature_id != floor) {
             cave[i][left - 1].feature_id = TILE_GRANITE_WALL;
-            cave[i][left - 1].lr = true;
+            cave[i][left - 1].perma_lit_room = true;
         }
 
         if (cave[i][right + 1].feature_id != floor) {
             cave[i][right + 1].feature_id = TILE_GRANITE_WALL;
-            cave[i][right + 1].lr = true;
+            cave[i][right + 1].perma_lit_room = true;
         }
     }
 
     for (int i = left; i <= right; i++) {
         if (cave[height - 1][i].feature_id != floor) {
             cave[height - 1][i].feature_id = TILE_GRANITE_WALL;
-            cave[height - 1][i].lr = true;
+            cave[height - 1][i].perma_lit_room = true;
         }
 
         if (cave[depth + 1][i].feature_id != floor) {
             cave[depth + 1][i].feature_id = TILE_GRANITE_WALL;
-            cave[depth + 1][i].lr = true;
+            cave[depth + 1][i].perma_lit_room = true;
         }
     }
 
@@ -1160,7 +1160,7 @@ static void lightTown() {
         for (int y = 0; y < dungeon_height; y++) {
             for (int x = 0; x < dungeon_width; x++) {
                 if (cave[y][x].feature_id != TILE_DARK_FLOOR) {
-                    cave[y][x].pl = true;
+                    cave[y][x].permanent_light = true;
                 }
             }
         }
@@ -1169,7 +1169,7 @@ static void lightTown() {
         // ...it is day time
         for (int y = 0; y < dungeon_height; y++) {
             for (int x = 0; x < dungeon_width; x++) {
-                cave[y][x].pl = true;
+                cave[y][x].permanent_light = true;
             }
         }
         monsterPlaceNewWithinDistance(MON_MIN_TOWNSFOLK_DAY, 3, true);

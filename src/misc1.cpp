@@ -465,7 +465,7 @@ char caveGetTileSymbol(int y, int x) {
         return creatures_list[monsters[cave_ptr->creature_id].creature_id].cchar;
     }
 
-    if (!cave_ptr->pl && !cave_ptr->tl && !cave_ptr->fm) {
+    if (!cave_ptr->permanent_light && !cave_ptr->temporary_light && !cave_ptr->field_mark) {
         return ' ';
     }
 
@@ -488,7 +488,7 @@ char caveGetTileSymbol(int y, int x) {
 
 // Tests a spot for light or field mark status -RAK-
 bool caveTileVisible(int y, int x) {
-    return cave[y][x].pl || cave[y][x].tl || cave[y][x].fm;
+    return cave[y][x].permanent_light || cave[y][x].temporary_light || cave[y][x].field_mark;
 }
 
 // Prints the map of the dungeon -RAK-

@@ -586,7 +586,7 @@ int dungeonDeleteObject(int y, int x) {
     pusht(tile->treasure_id);
 
     tile->treasure_id = 0;
-    tile->fm = false;
+    tile->field_mark = false;
 
     dungeonLiteSpot(y, x);
 
@@ -959,15 +959,15 @@ void playerMove(int direction, bool do_pickup) {
             if (tile->feature_id == TILE_LIGHT_FLOOR) {
                 // A room of light should be lit.
 
-                if (!tile->pl && !py.flags.blind) {
+                if (!tile->permanent_light && !py.flags.blind) {
                     dungeonLightRoom(char_row, char_col);
                 }
-            } else if (tile->lr && py.flags.blind < 1) {
+            } else if (tile->perma_lit_room && py.flags.blind < 1) {
                 // In doorway of light-room?
 
                 for (int row = (char_row - 1); row <= (char_row + 1); row++) {
                     for (int col = (char_col - 1); col <= (char_col + 1); col++) {
-                        if (cave[row][col].feature_id == TILE_LIGHT_FLOOR && !cave[row][col].pl) {
+                        if (cave[row][col].feature_id == TILE_LIGHT_FLOOR && !cave[row][col].permanent_light) {
                             dungeonLightRoom(row, col);
                         }
                     }
@@ -1289,7 +1289,7 @@ int dungeonTunnelWall(int y, int x, int digging_ability, int digging_chance) {
 
     Cave_t *tile = &cave[y][x];
 
-    if (tile->lr) {
+    if (tile->perma_lit_room) {
         // Should become a room space, check to see whether
         // it should be TILE_LIGHT_FLOOR or TILE_DARK_FLOOR.
         bool found = false;
@@ -1298,7 +1298,7 @@ int dungeonTunnelWall(int y, int x, int digging_ability, int digging_chance) {
             for (int xx = x - 1; xx <= x + 1; xx++) {
                 if (cave[yy][xx].feature_id <= MAX_CAVE_ROOM) {
                     tile->feature_id = cave[yy][xx].feature_id;
-                    tile->pl = cave[yy][xx].pl;
+                    tile->permanent_light = cave[yy][xx].permanent_light;
                     found = true;
                     break;
                 }
@@ -1307,17 +1307,17 @@ int dungeonTunnelWall(int y, int x, int digging_ability, int digging_chance) {
 
         if (!found) {
             tile->feature_id = TILE_CORR_FLOOR;
-            tile->pl = false;
+            tile->permanent_light = false;
         }
     } else {
         // should become a corridor space
         tile->feature_id = TILE_CORR_FLOOR;
-        tile->pl = false;
+        tile->permanent_light = false;
     }
 
-    tile->fm = false;
+    tile->field_mark = false;
 
-    if (coordInsidePanel(y, x) && (tile->tl || tile->pl) && tile->treasure_id != 0) {
+    if (coordInsidePanel(y, x) && (tile->temporary_light || tile->permanent_light) && tile->treasure_id != 0) {
         printMessage("You have found something!");
     }
 

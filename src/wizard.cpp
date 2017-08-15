@@ -13,7 +13,7 @@
 void wizardLightUpDungeon() {
     bool flag;
 
-    flag = !cave[char_row][char_col].pl;
+    flag = !cave[char_row][char_col].permanent_light;
 
     for (int y = 0; y < dungeon_height; y++) {
         for (int x = 0; x < dungeon_width; x++) {
@@ -21,9 +21,9 @@ void wizardLightUpDungeon() {
                 for (int yy = y - 1; yy <= y + 1; yy++) {
                     for (int xx = x - 1; xx <= x + 1; xx++) {
                         Cave_t *tile = &cave[yy][xx];
-                        tile->pl = flag;
+                        tile->permanent_light = flag;
                         if (!flag) {
-                            tile->fm = false;
+                            tile->field_mark = false;
                         }
                     }
                 }

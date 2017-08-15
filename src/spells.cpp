@@ -83,7 +83,7 @@ bool dungeonDetectTreasureOnPanel() {
             Cave_t *tile = &cave[y][x];
 
             if (tile->treasure_id != 0 && treasure_list[tile->treasure_id].category_id == TV_GOLD && !caveTileVisible(y, x)) {
-                tile->fm = true;
+                tile->field_mark = true;
                 dungeonLiteSpot(y, x);
                 detected = true;
             }
@@ -102,7 +102,7 @@ bool dungeonDetectObjectOnPanel() {
             Cave_t *tile = &cave[y][x];
 
             if (tile->treasure_id != 0 && treasure_list[tile->treasure_id].category_id < TV_MAX_OBJECT && !caveTileVisible(y, x)) {
-                tile->fm = true;
+                tile->field_mark = true;
                 dungeonLiteSpot(y, x);
                 detected = true;
             }
@@ -125,7 +125,7 @@ bool dungeonDetectTrapOnPanel() {
             }
 
             if (treasure_list[tile->treasure_id].category_id == TV_INVIS_TRAP) {
-                tile->fm = true;
+                tile->field_mark = true;
                 dungeonChangeTrapVisibility(y, x);
                 detected = true;
             } else if (treasure_list[tile->treasure_id].category_id == TV_CHEST) {
@@ -153,13 +153,13 @@ bool dungeonDetectSecretDoorsOnPanel() {
             if (treasure_list[tile->treasure_id].category_id == TV_SECRET_DOOR) {
                 // Secret doors
 
-                tile->fm = true;
+                tile->field_mark = true;
                 dungeonChangeTrapVisibility(y, x);
                 detected = true;
-            } else if ((treasure_list[tile->treasure_id].category_id == TV_UP_STAIR || treasure_list[tile->treasure_id].category_id == TV_DOWN_STAIR) && !tile->fm) {
+            } else if ((treasure_list[tile->treasure_id].category_id == TV_UP_STAIR || treasure_list[tile->treasure_id].category_id == TV_DOWN_STAIR) && !tile->field_mark) {
                 // Staircases
 
-                tile->fm = true;
+                tile->field_mark = true;
                 dungeonLiteSpot(y, x);
                 detected = true;
             }
@@ -208,7 +208,7 @@ bool spellLightArea(int y, int x) {
     // NOTE: this is not changed anywhere. A bug or correct? -MRC-
     bool lit = true;
 
-    if (cave[y][x].lr && current_dungeon_level > 0) {
+    if (cave[y][x].perma_lit_room && current_dungeon_level > 0) {
         dungeonLightRoom(y, x);
     }
 
@@ -216,7 +216,7 @@ bool spellLightArea(int y, int x) {
     // the edge of a room, or next to a destroyed area, etc.
     for (int i = y - 1; i <= y + 1; i++) {
         for (int j = x - 1; j <= x + 1; j++) {
-            cave[i][j].pl = true;
+            cave[i][j].permanent_light = true;
             dungeonLiteSpot(i, j);
         }
     }
@@ -228,7 +228,7 @@ bool spellLightArea(int y, int x) {
 bool spellDarkenArea(int y, int x) {
     bool darkened = false;
 
-    if (cave[y][x].lr && current_dungeon_level > 0) {
+    if (cave[y][x].perma_lit_room && current_dungeon_level > 0) {
         int half_height = (SCREEN_HEIGHT / 2);
         int half_width = (SCREEN_WIDTH / 2);
         int start_row = (y / half_height) * half_height + 1;
@@ -240,8 +240,8 @@ bool spellDarkenArea(int y, int x) {
             for (int col = start_col; col <= end_col; col++) {
                 Cave_t *tile = &cave[row][col];
 
-                if (tile->lr && tile->feature_id <= MAX_CAVE_FLOOR) {
-                    tile->pl = false;
+                if (tile->perma_lit_room && tile->feature_id <= MAX_CAVE_FLOOR) {
+                    tile->permanent_light = false;
                     tile->feature_id = TILE_DARK_FLOOR;
 
                     dungeonLiteSpot(row, col);
@@ -257,9 +257,9 @@ bool spellDarkenArea(int y, int x) {
             for (int col = x - 1; col <= x + 1; col++) {
                 Cave_t *tile = &cave[row][col];
 
-                if (tile->feature_id == TILE_CORR_FLOOR && tile->pl) {
-                    // pl could have been set by star-lite wand, etc
-                    tile->pl = false;
+                if (tile->feature_id == TILE_CORR_FLOOR && tile->permanent_light) {
+                    // permanent_light could have been set by star-lite wand, etc
+                    tile->permanent_light = false;
                     darkened = true;
                 }
             }
@@ -279,9 +279,9 @@ static void dungeonLightAreaAroundFloorTile(int y, int x) {
             Cave_t *tile = &cave[yy][xx];
 
             if (tile->feature_id >= MIN_CAVE_WALL) {
-                tile->pl = true;
+                tile->permanent_light = true;
             } else if (tile->treasure_id != 0 && treasure_list[tile->treasure_id].category_id >= TV_MIN_VISIBLE && treasure_list[tile->treasure_id].category_id <= TV_MAX_VISIBLE) {
-                tile->fm = true;
+                tile->field_mark = true;
             }
         }
     }
@@ -520,9 +520,9 @@ void spellLightLine(int x, int y, int direction) {
             continue; // we're done here, break out of the loop
         }
 
-        if (!tile->pl && !tile->tl) {
-            // set pl so that dungeonLiteSpot will work
-            tile->pl = true;
+        if (!tile->permanent_light && !tile->temporary_light) {
+            // set permanent_light so that dungeonLiteSpot will work
+            tile->permanent_light = true;
 
             if (tile->feature_id == TILE_LIGHT_FLOOR) {
                 if (coordInsidePanel(y, x)) {
@@ -533,8 +533,8 @@ void spellLightLine(int x, int y, int direction) {
             }
         }
 
-        // set pl in case tl was true above
-        tile->pl = true;
+        // set permanent_light in case temporary_light was true above
+        tile->permanent_light = true;
 
         if (tile->creature_id > 1) {
             spellLightLineTouchesMonster((int) tile->creature_id);
@@ -582,7 +582,7 @@ bool spellDisarmAllInDirection(int y, int x, int direction) {
                 // Locked or jammed doors become merely closed.
                 item->misc_use = 0;
             } else if (item->category_id == TV_SECRET_DOOR) {
-                tile->fm = true;
+                tile->field_mark = true;
                 dungeonChangeTrapVisibility(y, x);
                 disarmed = true;
             } else if (item->category_id == TV_CHEST && item->flags != 0) {
@@ -654,11 +654,11 @@ static void spellFireBoltTouchesMonster(Cave_t *tile, int damage, int harm_type,
     Creature_t *creature = &creatures_list[monster->creature_id];
 
     // light up monster and draw monster, temporarily set
-    // pl so that monsterUpdateVisibility() will work
-    bool saved_lit_status = tile->pl;
-    tile->pl = true;
+    // permanent_light so that monsterUpdateVisibility() will work
+    bool saved_lit_status = tile->permanent_light;
+    tile->permanent_light = true;
     monsterUpdateVisibility((int) tile->creature_id);
-    tile->pl = saved_lit_status;
+    tile->permanent_light = saved_lit_status;
 
     // draw monster and clear previous bolt
     putQIO();
@@ -785,9 +785,9 @@ void spellFireBall(int y, int x, int direction, int damage_hp, int spell_type, c
                                 Monster_t *monster = &monsters[tile->creature_id];
                                 Creature_t *creature = &creatures_list[monster->creature_id];
 
-                                // lite up creature if visible, temp set pl so that monsterUpdateVisibility works
-                                bool saved_lit_status = tile->pl;
-                                tile->pl = true;
+                                // lite up creature if visible, temp set permanent_light so that monsterUpdateVisibility works
+                                bool saved_lit_status = tile->permanent_light;
+                                tile->permanent_light = true;
                                 monsterUpdateVisibility((int) tile->creature_id);
 
                                 total_hits++;
@@ -810,7 +810,7 @@ void spellFireBall(int y, int x, int direction, int damage_hp, int spell_type, c
                                 if (monsterTakeHit((int) tile->creature_id, damage) >= 0) {
                                     total_kills++;
                                 }
-                                tile->pl = saved_lit_status;
+                                tile->permanent_light = saved_lit_status;
                             } else if (coordInsidePanel(row, col) && py.flags.blind < 1) {
                                 putChar('*', row, col);
                             }
@@ -1402,8 +1402,8 @@ bool spellPolymorphMonster(int y, int x, int direction) {
                 // Place_monster() should always return true here.
                 morphed = monsterPlaceNew(y, x, randomNumber(monster_levels[MON_MAX_LEVELS] - monster_levels[0]) - 1 + monster_levels[0], false);
 
-                // don't test tile->fm here, only pl/tl
-                if (morphed && coordInsidePanel(y, x) && (tile->tl || tile->pl)) {
+                // don't test tile->field_mark here, only permanent_light/temporary_light
+                if (morphed && coordInsidePanel(y, x) && (tile->temporary_light || tile->permanent_light)) {
                     morphed = true;
                 }
             } else {
@@ -1471,10 +1471,10 @@ bool spellBuildWall(int y, int x, int direction) {
         }
 
         tile->feature_id = TILE_MAGMA_WALL;
-        tile->fm = false;
+        tile->field_mark = false;
 
         // Permanently light this wall if it is lit by player's lamp.
-        tile->pl = (tile->tl || tile->pl);
+        tile->permanent_light = (tile->temporary_light || tile->permanent_light);
         dungeonLiteSpot(y, x);
 
         built = true;
@@ -1561,7 +1561,7 @@ void spellTeleportPlayerTo(int y, int x) {
     for (int row = char_row - 1; row <= char_row + 1; row++) {
         for (int col = char_col - 1; col <= char_col + 1; col++) {
             Cave_t *tile = &cave[row][col];
-            tile->tl = false;
+            tile->temporary_light = false;
             dungeonLiteSpot(row, col);
         }
     }
@@ -1902,8 +1902,8 @@ void dungeonEarthquake() {
 
                 if (c_ptr->feature_id >= MIN_CAVE_WALL && c_ptr->feature_id != TILE_BOUNDARY_WALL) {
                     c_ptr->feature_id = TILE_CORR_FLOOR;
-                    c_ptr->pl = false;
-                    c_ptr->fm = false;
+                    c_ptr->permanent_light = false;
+                    c_ptr->field_mark = false;
                 } else if (c_ptr->feature_id <= MAX_CAVE_FLOOR) {
                     int tmp = randomNumber(10);
 
@@ -1915,7 +1915,7 @@ void dungeonEarthquake() {
                         c_ptr->feature_id = TILE_GRANITE_WALL;
                     }
 
-                    c_ptr->fm = false;
+                    c_ptr->field_mark = false;
                 }
                 dungeonLiteSpot(y, x);
             }
@@ -2174,9 +2174,9 @@ static void replace_spot(int y, int x, int typ) {
             break;
     }
 
-    c_ptr->pl = false;
-    c_ptr->fm = false;
-    c_ptr->lr = false; // this is no longer part of a room
+    c_ptr->permanent_light = false;
+    c_ptr->field_mark = false;
+    c_ptr->perma_lit_room = false; // this is no longer part of a room
 
     if (c_ptr->treasure_id != 0) {
         (void) dungeonDeleteObject(y, x);

@@ -647,7 +647,7 @@ static bool lookSee(int x, int y, bool *transparent) {
         }
     }
 
-    if (tile->tl || tile->pl || tile->fm) {
+    if (tile->temporary_light || tile->permanent_light || tile->field_mark) {
         if (tile->treasure_id != 0) {
             if (treasure_list[tile->treasure_id].category_id == TV_SECRET_DOOR) {
                 goto granite;
@@ -962,9 +962,9 @@ void playerThrowItem() {
                     inventoryDropOrThrowItem(old_y, old_x, &thrown_item);
                 }
             } else {
-                // do not test tile->fm here
+                // do not test tile->field_mark here
 
-                if (coordInsidePanel(y, x) && py.flags.blind < 1 && (tile->tl || tile->pl)) {
+                if (coordInsidePanel(y, x) && py.flags.blind < 1 && (tile->temporary_light || tile->permanent_light)) {
                     putChar(tile_char, y, x);
                     putQIO(); // show object moving
                 }

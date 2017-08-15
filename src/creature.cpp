@@ -15,7 +15,7 @@ static bool monsterIsVisible(Monster_t *monster) {
     Cave_t *tile = &cave[monster->y][monster->x];
     Creature_t *creature = &creatures_list[monster->creature_id];
 
-    if (tile->pl || tile->tl || (running_counter && monster->distance_from_player < 2 && player_carrying_light)) {
+    if (tile->permanent_light || tile->temporary_light || (running_counter && monster->distance_from_player < 2 && player_carrying_light)) {
         // Normal sight.
         if ((CM_INVISIBLE & creature->cmove) == 0) {
             visible = true;

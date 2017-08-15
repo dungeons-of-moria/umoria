@@ -1585,7 +1585,7 @@ bool inventoryGetInputForItemId(int *command_key_id, const char *prompt, int ite
 
 // Returns true if player has no light -RAK-
 bool playerNoLight() {
-    return !cave[char_row][char_col].tl && !cave[char_row][char_col].pl;
+    return !cave[char_row][char_col].temporary_light && !cave[char_row][char_col].permanent_light;
 }
 
 // map roguelike direction commands into numbers
@@ -1702,16 +1702,16 @@ void dungeonLightRoom(int pos_y, int pos_x) {
         for (int x = left; x <= right; x++) {
             Cave_t *tile = &cave[y][x];
 
-            if (tile->lr && !tile->pl) {
-                tile->pl = true;
+            if (tile->perma_lit_room && !tile->permanent_light) {
+                tile->permanent_light = true;
 
                 if (tile->feature_id == TILE_DARK_FLOOR) {
                     tile->feature_id = TILE_LIGHT_FLOOR;
                 }
-                if (!tile->fm && tile->treasure_id != 0) {
+                if (!tile->field_mark && tile->treasure_id != 0) {
                     int treasure_id = treasure_list[tile->treasure_id].category_id;
                     if (treasure_id >= TV_MIN_VISIBLE && treasure_id <= TV_MAX_VISIBLE) {
-                        tile->fm = true;
+                        tile->field_mark = true;
                     }
                 }
                 putChar(caveGetTileSymbol(y, x), y, x);
@@ -1737,7 +1737,7 @@ static void sub1_move_light(int y1, int x1, int y2, int x2) {
         // Turn off lamp light
         for (int y = y1 - 1; y <= y1 + 1; y++) {
             for (int x = x1 - 1; x <= x1 + 1; x++) {
-                cave[y][x].tl = false;
+                cave[y][x].temporary_light = false;
             }
         }
         if (running_counter && !config.run_print_self) {
@@ -1753,16 +1753,16 @@ static void sub1_move_light(int y1, int x1, int y2, int x2) {
 
             // only light up if normal movement
             if (temporary_light_only) {
-                c_ptr->tl = true;
+                c_ptr->temporary_light = true;
             }
 
             if (c_ptr->feature_id >= MIN_CAVE_WALL) {
-                c_ptr->pl = true;
-            } else if (!c_ptr->fm && c_ptr->treasure_id != 0) {
+                c_ptr->permanent_light = true;
+            } else if (!c_ptr->field_mark && c_ptr->treasure_id != 0) {
                 int tval = treasure_list[c_ptr->treasure_id].category_id;
 
                 if (tval >= TV_MIN_VISIBLE && tval <= TV_MAX_VISIBLE) {
-                    c_ptr->fm = true;
+                    c_ptr->field_mark = true;
                 }
             }
         }
@@ -1800,7 +1800,7 @@ static void sub3_move_light(int y1, int x1, int y2, int x2) {
     if (temporary_light_only) {
         for (int y = y1 - 1; y <= y1 + 1; y++) {
             for (int x = x1 - 1; x <= x1 + 1; x++) {
-                cave[y][x].tl = false;
+                cave[y][x].temporary_light = false;
                 putChar(caveGetTileSymbol(y, x), y, x);
             }
         }

@@ -306,10 +306,10 @@ typedef struct {
     uint8_t treasure_id; // ID for any treasure item occupying the tile
     uint8_t feature_id;  // ID of cave feature; walls, floors, open space, etc.
 
-    bool lr; // Room should be lit with perm light, walls with this set should be perm lit after tunneled out.
-    bool fm; // Field mark, used for traps/doors/stairs, object is hidden if fm is false.
-    bool pl; // Permanent light, used for walls and lighted rooms.
-    bool tl; // Temporary light, used for player's lamp light,etc.
+    bool perma_lit_room;  // Room should be lit with perm light, walls with this set should be perm lit after tunneled out.
+    bool field_mark;      // Field mark, used for traps/doors/stairs, object is hidden if fm is false.
+    bool permanent_light; // Permanent light, used for walls and lighted rooms.
+    bool temporary_light; // Temporary light, used for player's lamp light,etc.
 } Cave_t;
 
 

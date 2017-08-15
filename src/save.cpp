@@ -328,7 +328,7 @@ static bool sv_write() {
         for (int j = 0; j < MAX_WIDTH; j++) {
             Cave_t *c_ptr = &cave[i][j];
 
-            uint8_t char_tmp = (uint8_t) (c_ptr->feature_id | (c_ptr->lr << 4) | (c_ptr->fm << 5) | (c_ptr->pl << 6) | (c_ptr->tl << 7));
+            uint8_t char_tmp = (uint8_t) (c_ptr->feature_id | (c_ptr->perma_lit_room << 4) | (c_ptr->field_mark << 5) | (c_ptr->permanent_light << 6) | (c_ptr->temporary_light << 7));
 
             if (char_tmp != prev_char || count == MAX_UCHAR) {
                 wr_byte((uint8_t) count);
@@ -840,10 +840,10 @@ bool loadGame(bool *generate) {
                     goto error;
                 }
                 c_ptr->feature_id = (uint8_t) (char_tmp & 0xF);
-                c_ptr->lr = (char_tmp >> 4) != 0;
-                c_ptr->fm = (char_tmp >> 5) != 0;
-                c_ptr->pl = (char_tmp >> 6) != 0;
-                c_ptr->tl = (char_tmp >> 7) != 0;
+                c_ptr->perma_lit_room = (char_tmp >> 4) != 0;
+                c_ptr->field_mark = (char_tmp >> 5) != 0;
+                c_ptr->permanent_light = (char_tmp >> 6) != 0;
+                c_ptr->temporary_light = (char_tmp >> 7) != 0;
                 c_ptr++;
             }
             total_count += count;
