@@ -1651,21 +1651,21 @@ static void monsterAttackingUpdate(Monster_t *monster, int monster_id, int moves
         // Monsters trapped in rock must be given a turn also,
         // so that they will die/dig out immediately.
         if (monster->ml || monster->cdis <= creatures_list[monster->mptr].aaf || ((!(creatures_list[monster->mptr].cmove & CM_PHASE)) && cave[monster->fy][monster->fx].fval >= MIN_CAVE_WALL)) {
-            if (monster->csleep > 0) {
+            if (monster->sleep_count > 0) {
                 if (py.flags.aggravate) {
-                    monster->csleep = 0;
+                    monster->sleep_count = 0;
                 } else if ((py.flags.rest == 0 && py.flags.paralysis < 1) || (randomNumber(50) == 1)) {
                     int notice = randomNumber(1024);
 
                     if (notice * notice * notice <= (1L << (29 - py.misc.stealth_factor))) {
-                        monster->csleep -= (100 / monster->cdis);
-                        if (monster->csleep > 0) {
+                        monster->sleep_count -= (100 / monster->cdis);
+                        if (monster->sleep_count > 0) {
                             ignore = true;
                         } else {
                             wake = true;
 
                             // force it to be exactly zero
-                            monster->csleep = 0;
+                            monster->sleep_count = 0;
                         }
                     }
                 }
@@ -1687,7 +1687,7 @@ static void monsterAttackingUpdate(Monster_t *monster, int monster_id, int moves
                     }
                 }
             }
-            if ((monster->csleep == 0) && (monster->stunned == 0)) {
+            if ((monster->sleep_count == 0) && (monster->stunned == 0)) {
                 monsterMove(monster_id, &rcmove);
             }
         }

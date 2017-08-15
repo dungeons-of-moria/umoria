@@ -63,7 +63,7 @@ bool monsterSleep(int y, int x) {
 
                 printMonsterActionText(name, "is unaffected.");
             } else {
-                monster->csleep = 500;
+                monster->sleep_count = 500;
                 asleep = true;
 
                 printMonsterActionText(name, "falls asleep.");
@@ -338,7 +338,7 @@ bool spellAggravateMonsters(int affect_distance) {
 
     for (int id = next_free_monster_id - 1; id >= MON_MIN_INDEX_ID; id--) {
         Monster_t *monster = &monsters[id];
-        monster->csleep = 0;
+        monster->sleep_count = 0;
 
         if (monster->cdis <= affect_distance && monster->cspeed < 2) {
             monster->cspeed++;
@@ -903,7 +903,7 @@ void spellBreath(int y, int x, int monster_id, int damage_hp, int spell_type, ch
                         // can not call monsterTakeHit here, since player does not
                         // get experience for kill
                         monster->hp = (int16_t) (monster->hp - damage);
-                        monster->csleep = 0;
+                        monster->sleep_count = 0;
 
                         if (monster->hp < 0) {
                             uint32_t treasure_id = monsterDeath((int) monster->fy, (int) monster->fx, creature->cmove);
@@ -1130,20 +1130,20 @@ bool spellSpeedMonster(int y, int x, int direction, int speed) {
 
             if (speed > 0) {
                 monster->cspeed += speed;
-                monster->csleep = 0;
+                monster->sleep_count = 0;
 
                 changed = true;
 
                 printMonsterActionText(name, "starts moving faster.");
             } else if (randomNumber(MON_MAX_LEVELS) > creature->level) {
                 monster->cspeed += speed;
-                monster->csleep = 0;
+                monster->sleep_count = 0;
 
                 changed = true;
 
                 printMonsterActionText(name, "starts moving slower.");
             } else {
-                monster->csleep = 0;
+                monster->sleep_count = 0;
 
                 printMonsterActionText(name, "is unaffected.");
             }
@@ -1187,7 +1187,7 @@ bool spellConfuseMonster(int y, int x, int direction) {
                 // Monsters which resisted the attack should wake up.
                 // Monsters with innate resistance ignore the attack.
                 if (!(CD_NO_SLEEP & creature->cdefense)) {
-                    monster->csleep = 0;
+                    monster->sleep_count = 0;
                 }
 
                 printMonsterActionText(name, "is unaffected.");
@@ -1197,7 +1197,7 @@ bool spellConfuseMonster(int y, int x, int direction) {
                 } else {
                     monster->confused = (uint8_t) (2 + randomNumber(16));
                 }
-                monster->csleep = 0;
+                monster->sleep_count = 0;
 
                 confused = true;
 
@@ -1242,7 +1242,7 @@ bool spellSleepMonster(int y, int x, int direction) {
 
                 printMonsterActionText(name, "is unaffected.");
             } else {
-                monster->csleep = 500;
+                monster->sleep_count = 500;
 
                 asleep = true;
 
@@ -1497,7 +1497,7 @@ bool spellCloneMonster(int y, int x, int direction) {
         if (distance > OBJECT_BOLTS_MAX_RANGE || tile->fval >= MIN_CLOSED_SPACE) {
             finished = true;
         } else if (tile->cptr > 1) {
-            monsters[tile->cptr].csleep = 0;
+            monsters[tile->cptr].sleep_count = 0;
 
             // monptr of 0 is safe here, since can't reach here from creatures
             return monsterMultiply(y, x, (int) monsters[tile->cptr].mptr, 0);
@@ -1596,7 +1596,7 @@ bool spellTeleportAwayMonsterInDirection(int y, int x, int direction) {
 
         if (tile->cptr > 1) {
             // wake it up
-            monsters[tile->cptr].csleep = 0;
+            monsters[tile->cptr].sleep_count = 0;
 
             spellTeleportAwayMonster((int) tile->cptr, MON_MAX_SIGHT);
 
@@ -1676,7 +1676,7 @@ bool spellSpeedAllMonsters(int speed) {
 
         if (speed > 0) {
             monster->cspeed += speed;
-            monster->csleep = 0;
+            monster->sleep_count = 0;
 
             if (monster->ml) {
                 speedy = true;
@@ -1684,14 +1684,14 @@ bool spellSpeedAllMonsters(int speed) {
             }
         } else if (randomNumber(MON_MAX_LEVELS) > creature->level) {
             monster->cspeed += speed;
-            monster->csleep = 0;
+            monster->sleep_count = 0;
 
             if (monster->ml) {
                 speedy = true;
                 printMonsterActionText(name, "starts moving slower.");
             }
         } else if (monster->ml) {
-            monster->csleep = 0;
+            monster->sleep_count = 0;
             printMonsterActionText(name, "is unaffected.");
         }
     }
@@ -1722,7 +1722,7 @@ bool spellSleepAllMonsters() {
                 printMonsterActionText(name, "is unaffected.");
             }
         } else {
-            monster->csleep = 500;
+            monster->sleep_count = 500;
             if (monster->ml) {
                 asleep = true;
                 printMonsterActionText(name, "falls asleep.");

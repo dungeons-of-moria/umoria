@@ -1094,7 +1094,7 @@ static void wr_item(Inventory_t *item) {
 static void wr_monster(Monster_t *mon) {
     DEBUG(fprintf(logfile, "MONSTER:\n"));
     wr_short((uint16_t) mon->hp);
-    wr_short((uint16_t) mon->csleep);
+    wr_short((uint16_t) mon->sleep_count);
     wr_short((uint16_t) mon->cspeed);
     wr_short(mon->mptr);
     wr_byte(mon->fy);
@@ -1207,7 +1207,7 @@ static void rd_item(Inventory_t *item) {
 static void rd_monster(Monster_t *mon) {
     DEBUG(fprintf(logfile, "MONSTER:\n"));
     rd_short((uint16_t *) &mon->hp);
-    rd_short((uint16_t *) &mon->csleep);
+    rd_short((uint16_t *) &mon->sleep_count);
     rd_short((uint16_t *) &mon->cspeed);
     rd_short(&mon->mptr);
     rd_byte(&mon->fy);

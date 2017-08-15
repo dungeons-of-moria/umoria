@@ -715,7 +715,7 @@ int monsterTakeHit(int monster_id, int damage) {
     Monster_t *monster = &monsters[monster_id];
     Creature_t *creature = &creatures_list[monster->mptr];
 
-    monster->csleep = 0;
+    monster->sleep_count = 0;
     monster->hp -= damage;
 
     if (monster->hp >= 0) {
@@ -798,7 +798,7 @@ static void playerAttackMonster(int y, int x) {
     Creature_t *creature = &creatures_list[monster->mptr];
     Inventory_t *item = &inventory[EQUIPMENT_WIELD];
 
-    monster->csleep = 0;
+    monster->sleep_count = 0;
 
     // Does the player know what he's fighting?
     vtype_t name;

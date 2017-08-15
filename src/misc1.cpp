@@ -626,12 +626,12 @@ bool monsterPlaceNew(int y, int x, int creature_id, bool sleeping) {
 
     if (sleeping) {
         if (creatures_list[creature_id].sleep == 0) {
-            monster->csleep = 0;
+            monster->sleep_count = 0;
         } else {
-            monster->csleep = (int16_t) ((creatures_list[creature_id].sleep * 2) + randomNumber((int) creatures_list[creature_id].sleep * 10));
+            monster->sleep_count = (int16_t) ((creatures_list[creature_id].sleep * 2) + randomNumber((int) creatures_list[creature_id].sleep * 10));
         }
     } else {
-        monster->csleep = 0;
+        monster->sleep_count = 0;
     }
 
     return true;
@@ -683,7 +683,7 @@ void monsterPlaceWinning() {
 
     cave[y][x].cptr = (uint8_t) monster_id;
 
-    monster->csleep = 0;
+    monster->sleep_count = 0;
 }
 
 // Return a monster suitable to be placed at a given level. This

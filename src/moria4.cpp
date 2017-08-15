@@ -986,7 +986,7 @@ static void playerBashAttack(int y, int x) {
     Monster_t *monster = &monsters[monster_id];
     Creature_t *creature = &creatures_list[monster->mptr];
 
-    monster->csleep = 0;
+    monster->sleep_count = 0;
 
     // Does the player know what he's fighting?
     vtype_t name;
