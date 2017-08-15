@@ -141,7 +141,7 @@ bool setFireDestroyableItems(Inventory_t *item) {
 // Items too large to fit in chests -DJG-
 // Use GameObject_t since item not yet created
 bool setItemsLargerThanChests(GameObject_t *item) {
-    switch (item->tval) {
+    switch (item->category_id) {
         case TV_CHEST:
         case TV_BOW:
         case TV_POLEARM:

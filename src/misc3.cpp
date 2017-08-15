@@ -94,7 +94,7 @@ int itemGetRandomObjectId(int level, bool must_be_small) {
                 object_id = j;
             }
 
-            int foundLevel = game_objects[sorted_objects[object_id]].level;
+            int foundLevel = game_objects[sorted_objects[object_id]].depth_first_found;
 
             if (foundLevel == 0) {
                 object_id = randomNumber(treasure_levels[0]) - 1;

@@ -323,21 +323,21 @@ typedef struct {
 // Holds base game data for any given item in the game such
 // as: stairs, rubble, secret doors, gold, potions, etc.
 typedef struct {
-    const char *name;  // Object name
-    uint32_t flags;    // Special flags
-    uint8_t tval;      // Category number
-    uint8_t tchar;     // Character representation
-    int16_t misc_use;  // Misc. use variable (p1)
-    int32_t cost;      // Cost of item
-    uint8_t subval;    // Sub-category number
-    uint8_t number;    // Number of items
-    uint16_t weight;   // Weight
-    int16_t tohit;     // Plusses to hit
-    int16_t todam;     // Plusses to damage
-    int16_t ac;        // Normal AC
-    int16_t toac;      // Plusses to AC
-    uint8_t damage[2]; // Damage when hits
-    uint8_t level;     // Level item first found
+    const char *name;          // Object name
+    uint32_t flags;            // Special flags
+    uint8_t category_id;       // Category number (tval)
+    uint8_t sprite;            // Character representation - ASCII symbol (tchar)
+    int16_t misc_use;          // Misc. use variable (p1)
+    int32_t cost;              // Cost of item
+    uint8_t sub_category_id;   // Sub-category number (subval)
+    uint8_t items_count;       // Number of items
+    uint16_t weight;           // Weight
+    int16_t to_hit;            // Plusses to hit
+    int16_t to_damage;         // Plusses to damage
+    int16_t ac;                // Normal AC
+    int16_t to_ac;             // Plusses to AC
+    uint8_t damage[2];         // Damage when hits
+    uint8_t depth_first_found; // Dungeon level item first found
 } GameObject_t;
 
 // Creature_t is a base data object.

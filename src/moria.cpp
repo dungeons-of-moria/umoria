@@ -186,7 +186,7 @@ static void initializeTreasureLevels() {
     }
 
     for (int i = 0; i < MAX_DUNGEON_OBJECTS; i++) {
-        treasure_levels[game_objects[i].level]++;
+        treasure_levels[game_objects[i].depth_first_found]++;
     }
 
     for (int i = 1; i <= TREASURE_MAX_LEVELS; i++) {
@@ -202,7 +202,7 @@ static void initializeTreasureLevels() {
     }
 
     for (int i = 0; i < MAX_DUNGEON_OBJECTS; i++) {
-        int level = game_objects[i].level;
+        int level = game_objects[i].depth_first_found;
         int object_id = treasure_levels[level] - indexes[level];
 
         sorted_objects[object_id] = (int16_t) i;
