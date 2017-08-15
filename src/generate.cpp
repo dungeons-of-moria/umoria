@@ -164,14 +164,14 @@ static void dungeonPlaceStreamerRock(uint8_t rock_type, int chance_of_treasure) 
 
 static void dungeonPlaceOpenDoor(int y, int x) {
     int cur_pos = popt();
-    cave[y][x].tptr = (uint8_t) cur_pos;
+    cave[y][x].treasure_id = (uint8_t) cur_pos;
     inventoryItemCopyTo(OBJ_OPEN_DOOR, &treasure_list[cur_pos]);
     cave[y][x].fval = TILE_CORR_FLOOR;
 }
 
 static void dungeonPlaceBrokenDoor(int y, int x) {
     int cur_pos = popt();
-    cave[y][x].tptr = (uint8_t) cur_pos;
+    cave[y][x].treasure_id = (uint8_t) cur_pos;
     inventoryItemCopyTo(OBJ_OPEN_DOOR, &treasure_list[cur_pos]);
     cave[y][x].fval = TILE_CORR_FLOOR;
     treasure_list[cur_pos].misc_use = 1;
@@ -179,14 +179,14 @@ static void dungeonPlaceBrokenDoor(int y, int x) {
 
 static void dungeonPlaceClosedDoor(int y, int x) {
     int cur_pos = popt();
-    cave[y][x].tptr = (uint8_t) cur_pos;
+    cave[y][x].treasure_id = (uint8_t) cur_pos;
     inventoryItemCopyTo(OBJ_CLOSED_DOOR, &treasure_list[cur_pos]);
     cave[y][x].fval = TILE_BLOCKED_FLOOR;
 }
 
 static void dungeonPlaceLockedDoor(int y, int x) {
     int cur_pos = popt();
-    cave[y][x].tptr = (uint8_t) cur_pos;
+    cave[y][x].treasure_id = (uint8_t) cur_pos;
     inventoryItemCopyTo(OBJ_CLOSED_DOOR, &treasure_list[cur_pos]);
     cave[y][x].fval = TILE_BLOCKED_FLOOR;
     treasure_list[cur_pos].misc_use = (int16_t) (randomNumber(10) + 10);
@@ -194,7 +194,7 @@ static void dungeonPlaceLockedDoor(int y, int x) {
 
 static void dungeonPlaceStuckDoor(int y, int x) {
     int cur_pos = popt();
-    cave[y][x].tptr = (uint8_t) cur_pos;
+    cave[y][x].treasure_id = (uint8_t) cur_pos;
     inventoryItemCopyTo(OBJ_CLOSED_DOOR, &treasure_list[cur_pos]);
     cave[y][x].fval = TILE_BLOCKED_FLOOR;
     treasure_list[cur_pos].misc_use = (int16_t) (-randomNumber(10) - 10);
@@ -202,7 +202,7 @@ static void dungeonPlaceStuckDoor(int y, int x) {
 
 static void dungeonPlaceSecretDoor(int y, int x) {
     int cur_pos = popt();
-    cave[y][x].tptr = (uint8_t) cur_pos;
+    cave[y][x].treasure_id = (uint8_t) cur_pos;
     inventoryItemCopyTo(OBJ_SECRET_DOOR, &treasure_list[cur_pos]);
     cave[y][x].fval = TILE_BLOCKED_FLOOR;
 }
@@ -233,23 +233,23 @@ static void dungeonPlaceDoor(int y, int x) {
 
 // Place an up staircase at given y, x -RAK-
 static void dungeonPlaceUpStairs(int y, int x) {
-    if (cave[y][x].tptr != 0) {
+    if (cave[y][x].treasure_id != 0) {
         (void) dungeonDeleteObject(y, x);
     }
 
     int cur_pos = popt();
-    cave[y][x].tptr = (uint8_t) cur_pos;
+    cave[y][x].treasure_id = (uint8_t) cur_pos;
     inventoryItemCopyTo(OBJ_UP_STAIR, &treasure_list[cur_pos]);
 }
 
 // Place a down staircase at given y, x -RAK-
 static void dungeonPlaceDownStairs(int y, int x) {
-    if (cave[y][x].tptr != 0) {
+    if (cave[y][x].treasure_id != 0) {
         (void) dungeonDeleteObject(y, x);
     }
 
     int cur_pos = popt();
-    cave[y][x].tptr = (uint8_t) cur_pos;
+    cave[y][x].treasure_id = (uint8_t) cur_pos;
     inventoryItemCopyTo(OBJ_DOWN_STAIR, &treasure_list[cur_pos]);
 }
 
@@ -273,7 +273,7 @@ static void dungeonPlaceStairs(int stair_type, int number, int walls) {
 
                 do {
                     do {
-                        if (cave[y1][x1].fval <= MAX_OPEN_SPACE && cave[y1][x1].tptr == 0 && coordWallsNextTo(y1, x1) >= walls) {
+                        if (cave[y1][x1].fval <= MAX_OPEN_SPACE && cave[y1][x1].treasure_id == 0 && coordWallsNextTo(y1, x1) >= walls) {
                             placed = true;
                             if (stair_type == 1) {
                                 dungeonPlaceUpStairs(y1, x1);
@@ -305,7 +305,7 @@ static void dungeonPlaceVaultTrap(int y, int x, int yd, int xd, int number) {
             int y1 = y - yd - 1 + randomNumber(2 * yd + 1);
             int x1 = x - xd - 1 + randomNumber(2 * xd + 1);
 
-            if (cave[y1][x1].fval != TILE_NULL_WALL && cave[y1][x1].fval <= MAX_CAVE_FLOOR && cave[y1][x1].tptr == 0) {
+            if (cave[y1][x1].fval != TILE_NULL_WALL && cave[y1][x1].fval <= MAX_CAVE_FLOOR && cave[y1][x1].treasure_id == 0) {
                 dungeonSetTrap(y1, x1, randomNumber(MAX_TRAPS) - 1);
                 placed = true;
             }
@@ -949,7 +949,7 @@ static void dungeonNewSpot(int16_t *y, int16_t *x) {
         pos_y = randomNumber(dungeon_height - 2);
         pos_x = randomNumber(dungeon_width - 2);
         tile = &cave[pos_y][pos_x];
-    } while (tile->fval >= MIN_CLOSED_SPACE || tile->creature_id != 0 || tile->tptr != 0);
+    } while (tile->fval >= MIN_CLOSED_SPACE || tile->creature_id != 0 || tile->treasure_id != 0);
 
     *y = (int16_t) pos_y;
     *x = (int16_t) pos_x;
@@ -1107,7 +1107,7 @@ static void dungeonBuildStore(int store_id, int y, int x) {
     cave[pos_y][pos_x].fval = TILE_CORR_FLOOR;
 
     int cur_pos = popt();
-    cave[pos_y][pos_x].tptr = (uint8_t) cur_pos;
+    cave[pos_y][pos_x].treasure_id = (uint8_t) cur_pos;
 
     inventoryItemCopyTo(OBJ_STORE_DOOR + store_id, &treasure_list[cur_pos]);
 }

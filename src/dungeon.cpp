@@ -2075,7 +2075,7 @@ static void examineBook() {
 
 // Go up one level -RAK-
 static void dungeonGoUpLevel() {
-    uint8_t tile_id = cave[char_row][char_col].tptr;
+    uint8_t tile_id = cave[char_row][char_col].treasure_id;
 
     if (tile_id != 0 && treasure_list[tile_id].category_id == TV_UP_STAIR) {
         current_dungeon_level--;
@@ -2092,7 +2092,7 @@ static void dungeonGoUpLevel() {
 
 // Go down one level -RAK-
 static void dungeonGoDownLevel() {
-    uint8_t tile_id = cave[char_row][char_col].tptr;
+    uint8_t tile_id = cave[char_row][char_col].treasure_id;
 
     if (tile_id != 0 && treasure_list[tile_id].category_id == TV_DOWN_STAIR) {
         current_dungeon_level++;
@@ -2122,12 +2122,12 @@ static void dungeonJamDoor() {
 
     Cave_t *tile = &cave[y][x];
 
-    if (tile->tptr == 0) {
+    if (tile->treasure_id == 0) {
         printMessage("That isn't a door!");
         return;
     }
 
-    Inventory_t *item = &treasure_list[tile->tptr];
+    Inventory_t *item = &treasure_list[tile->treasure_id];
 
     uint8_t item_id = item->category_id;
     if (item_id != TV_CLOSED_DOOR && item_id != TV_OPEN_DOOR) {

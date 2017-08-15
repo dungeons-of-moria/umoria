@@ -303,7 +303,7 @@ typedef struct {
 // Cave_t holds data about a specific tile in the dungeon.
 typedef struct {
     uint8_t creature_id;
-    uint8_t tptr;
+    uint8_t treasure_id;
     uint8_t fval;
 
     bool lr; // Room should be lit with perm light, walls with this set should be perm lit after tunneled out.

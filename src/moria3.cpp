@@ -221,7 +221,7 @@ static void playerStepsOnTrap(int y, int x) {
     playerEndRunning();
     dungeonChangeTrapVisibility(y, x);
 
-    Inventory_t *tile = &treasure_list[cave[y][x].tptr];
+    Inventory_t *tile = &treasure_list[cave[y][x].treasure_id];
 
     int damage = dicePlayerDamageRoll(tile->damage);
 
@@ -384,9 +384,9 @@ int castSpellGetId(const char *prompt, int item_id, int *spell_id, int *spell_ch
 // on the TVAL of the object. Traps are set off, money and most objects
 // are picked up. Some objects, such as open doors, just sit there.
 static void carry(int y, int x, bool pickup) {
-    Inventory_t *item = &treasure_list[cave[y][x].tptr];
+    Inventory_t *item = &treasure_list[cave[y][x].treasure_id];
 
-    int tileFlags = treasure_list[cave[y][x].tptr].category_id;
+    int tileFlags = treasure_list[cave[y][x].treasure_id].category_id;
 
     if (tileFlags > TV_MAX_PICK_UP) {
         if (tileFlags == TV_INVIS_TRAP || tileFlags == TV_VIS_TRAP || tileFlags == TV_STORE_DOOR) {
@@ -542,7 +542,7 @@ static int dungeonSummonObject(int y, int x, int amount, int object_type) {
             int pos_x = x - 3 + randomNumber(5);
 
             if (coordInBounds(pos_y, pos_x) && los(y, x, pos_y, pos_x)) {
-                if (cave[pos_y][pos_x].fval <= MAX_OPEN_SPACE && cave[pos_y][pos_x].tptr == 0) {
+                if (cave[pos_y][pos_x].fval <= MAX_OPEN_SPACE && cave[pos_y][pos_x].treasure_id == 0) {
                     // object_type == 3 -> 50% objects, 50% gold
                     if (object_type == 3 || object_type == 7) {
                         if (randomNumber(100) < 50) {
@@ -583,9 +583,9 @@ int dungeonDeleteObject(int y, int x) {
         tile->fval = TILE_CORR_FLOOR;
     }
 
-    pusht(tile->tptr);
+    pusht(tile->treasure_id);
 
-    tile->tptr = 0;
+    tile->treasure_id = 0;
     tile->fm = false;
 
     dungeonLiteSpot(y, x);
@@ -978,12 +978,12 @@ void playerMove(int direction, bool do_pickup) {
             dungeonMoveCharacterLight(old_row, old_col, char_row, char_col);
 
             // An object is beneath him.
-            if (tile->tptr != 0) {
+            if (tile->treasure_id != 0) {
                 carry(char_row, char_col, do_pickup);
 
                 // if stepped on falling rock trap, and space contains
                 // rubble, then step back into a clear area
-                if (treasure_list[tile->tptr].category_id == TV_RUBBLE) {
+                if (treasure_list[tile->treasure_id].category_id == TV_RUBBLE) {
                     dungeonMoveCreatureRecord(char_row, char_col, old_row, old_col);
                     dungeonMoveCharacterLight(char_row, char_col, old_row, old_col);
 
@@ -991,7 +991,7 @@ void playerMove(int direction, bool do_pickup) {
                     char_col = (int16_t) old_col;
 
                     // check to see if we have stepped back onto another trap, if so, set it off
-                    uint8_t id = cave[char_row][char_col].tptr;
+                    uint8_t id = cave[char_row][char_col].treasure_id;
                     if (id != 0) {
                         int val = treasure_list[id].category_id;
                         if (val == TV_INVIS_TRAP || val == TV_VIS_TRAP || val == TV_STORE_DOOR) {
@@ -1003,10 +1003,10 @@ void playerMove(int direction, bool do_pickup) {
         } else {
             // Can't move onto floor space
 
-            if (!running_counter && tile->tptr != 0) {
-                if (treasure_list[tile->tptr].category_id == TV_RUBBLE) {
+            if (!running_counter && tile->treasure_id != 0) {
+                if (treasure_list[tile->treasure_id].category_id == TV_RUBBLE) {
                     printMessage("There is rubble blocking your way.");
-                } else if (treasure_list[tile->tptr].category_id == TV_CLOSED_DOOR) {
+                } else if (treasure_list[tile->treasure_id].category_id == TV_CLOSED_DOOR) {
                     printMessage("There is a closed door blocking your way.");
                 }
             } else {
@@ -1085,7 +1085,7 @@ static void chestExplode(int y, int x) {
 // Chests have traps too. -RAK-
 // Note: Chest traps are based on the FLAGS value
 void chestTrap(int y, int x) {
-    uint32_t flags = treasure_list[cave[y][x].tptr].flags;
+    uint32_t flags = treasure_list[cave[y][x].treasure_id].flags;
 
     if (flags & CH_LOSE_STR) {
         chestLooseStrength();
@@ -1121,7 +1121,7 @@ static int16_t playerLockPickingSkill() {
 
 static void openClosedDoor(int y, int x) {
     Cave_t *tile = &cave[y][x];
-    Inventory_t *item = &treasure_list[tile->tptr];
+    Inventory_t *item = &treasure_list[tile->treasure_id];
 
     if (item->misc_use > 0) {
         // It's locked.
@@ -1143,7 +1143,7 @@ static void openClosedDoor(int y, int x) {
     }
 
     if (item->misc_use == 0) {
-        inventoryItemCopyTo(OBJ_OPEN_DOOR, &treasure_list[tile->tptr]);
+        inventoryItemCopyTo(OBJ_OPEN_DOOR, &treasure_list[tile->treasure_id]);
         tile->fval = TILE_CORR_FLOOR;
         dungeonLiteSpot(y, x);
         command_count = 0;
@@ -1152,7 +1152,7 @@ static void openClosedDoor(int y, int x) {
 
 static void openClosedChest(int y, int x) {
     Cave_t *tile = &cave[y][x];
-    Inventory_t *item = &treasure_list[tile->tptr];
+    Inventory_t *item = &treasure_list[tile->treasure_id];
 
     bool success = false;
 
@@ -1188,15 +1188,15 @@ static void openClosedChest(int y, int x) {
     // Oh, yes it was...   (Snicker)
     chestTrap(y, x);
 
-    if (tile->tptr != 0) {
+    if (tile->treasure_id != 0) {
         // Chest treasure is allocated as if a creature had been killed.
         // clear the cursed chest/monster win flag, so that people
         // can not win by opening a cursed chest
-        treasure_list[tile->tptr].flags &= ~TR_CURSED;
+        treasure_list[tile->treasure_id].flags &= ~TR_CURSED;
 
-        (void) monsterDeath(y, x, treasure_list[tile->tptr].flags);
+        (void) monsterDeath(y, x, treasure_list[tile->treasure_id].flags);
 
-        treasure_list[tile->tptr].flags = 0;
+        treasure_list[tile->treasure_id].flags = 0;
     }
 }
 
@@ -1215,11 +1215,11 @@ void objectOpen() {
     bool no_object = false;
 
     Cave_t *tile = &cave[y][x];
-    Inventory_t *item = &treasure_list[tile->tptr];
+    Inventory_t *item = &treasure_list[tile->treasure_id];
 
-    if (tile->creature_id > 1 && tile->tptr != 0 && (item->category_id == TV_CLOSED_DOOR || item->category_id == TV_CHEST)) {
+    if (tile->creature_id > 1 && tile->treasure_id != 0 && (item->category_id == TV_CLOSED_DOOR || item->category_id == TV_CHEST)) {
         objectBlockedByMonster(tile->creature_id);
-    } else if (tile->tptr != 0) {
+    } else if (tile->treasure_id != 0) {
         if (item->category_id == TV_CLOSED_DOOR) {
             openClosedDoor(y, x);
         } else if (item->category_id == TV_CHEST) {
@@ -1250,11 +1250,11 @@ void dungeonCloseDoor() {
     (void) playerMovePosition(dir, &y, &x);
 
     Cave_t *tile = &cave[y][x];
-    Inventory_t *item = &treasure_list[tile->tptr];
+    Inventory_t *item = &treasure_list[tile->treasure_id];
 
     bool no_object = false;
 
-    if (tile->tptr != 0) {
+    if (tile->treasure_id != 0) {
         if (item->category_id == TV_OPEN_DOOR) {
             if (tile->creature_id == 0) {
                 if (item->misc_use == 0) {
@@ -1317,7 +1317,7 @@ int dungeonTunnelWall(int y, int x, int digging_ability, int digging_chance) {
 
     tile->fm = false;
 
-    if (coordInsidePanel(y, x) && (tile->tl || tile->pl) && tile->tptr != 0) {
+    if (coordInsidePanel(y, x) && (tile->tl || tile->pl) && tile->treasure_id != 0) {
         printMessage("You have found something!");
     }
 

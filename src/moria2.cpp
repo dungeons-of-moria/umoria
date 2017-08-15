@@ -14,7 +14,7 @@ static int damageMinusAC(uint32_t typ_dam);
 // Change a trap from invisible to visible -RAK-
 // Note: Secret doors are handled here
 void dungeonChangeTrapVisibility(int y, int x) {
-    uint8_t treasure_id = cave[y][x].tptr;
+    uint8_t treasure_id = cave[y][x].treasure_id;
 
     Inventory_t *item = &treasure_list[treasure_id];
 
@@ -54,13 +54,13 @@ void dungeonSearch(int y, int x, int chance) {
                 continue;
             }
 
-            if (cave[i][j].tptr == 0) {
+            if (cave[i][j].treasure_id == 0) {
                 continue;
             }
 
             // Search for hidden objects
 
-            Inventory_t *item = &treasure_list[cave[i][j].tptr];
+            Inventory_t *item = &treasure_list[cave[i][j].treasure_id];
 
             if (item->category_id == TV_INVIS_TRAP) {
                 // Trap on floor?
@@ -342,8 +342,8 @@ static bool areaAffectStopLookingAtSquares(int i, int dir, int newDir, int y, in
     bool invisible = true;
 
     if (player_carrying_light || c_ptr->tl || c_ptr->pl || c_ptr->fm) {
-        if (c_ptr->tptr != 0) {
-            int tileID = treasure_list[c_ptr->tptr].category_id;
+        if (c_ptr->treasure_id != 0) {
+            int tileID = treasure_list[c_ptr->treasure_id].category_id;
 
             if (tileID != TV_INVIS_TRAP && tileID != TV_SECRET_DOOR && (tileID != TV_OPEN_DOOR || !config.run_ignore_doors)) {
                 playerEndRunning();

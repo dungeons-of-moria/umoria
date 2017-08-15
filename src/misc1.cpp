@@ -256,7 +256,7 @@ int coordCorridorWallsNextTo(int y, int x) {
     for (int yy = y - 1; yy <= y + 1; yy++) {
         for (int xx = x - 1; xx <= x + 1; xx++) {
             int tile_id = cave[yy][xx].fval;
-            int treasure_id = cave[yy][xx].tptr;
+            int treasure_id = cave[yy][xx].treasure_id;
 
             // should fail if there is already a door present
             if (tile_id == TILE_CORR_FLOOR && (treasure_id == 0 || treasure_list[treasure_id].category_id < TV_MIN_DOORS)) {
@@ -469,8 +469,8 @@ char caveGetTileSymbol(int y, int x) {
         return ' ';
     }
 
-    if (cave_ptr->tptr != 0 && treasure_list[cave_ptr->tptr].category_id != TV_INVIS_TRAP) {
-        return treasure_list[cave_ptr->tptr].sprite;
+    if (cave_ptr->treasure_id != 0 && treasure_list[cave_ptr->treasure_id].category_id != TV_INVIS_TRAP) {
+        return treasure_list[cave_ptr->treasure_id].sprite;
     }
 
     if (cave_ptr->fval <= MAX_CAVE_FLOOR) {
@@ -647,7 +647,7 @@ void monsterPlaceWinning() {
     do {
         y = randomNumber(dungeon_height - 2);
         x = randomNumber(dungeon_width - 2);
-    } while ((cave[y][x].fval >= MIN_CLOSED_SPACE) || (cave[y][x].creature_id != 0) || (cave[y][x].tptr != 0) || (coordDistanceBetween(y, x, char_row, char_col) <= MON_MAX_SIGHT));
+    } while ((cave[y][x].fval >= MIN_CLOSED_SPACE) || (cave[y][x].creature_id != 0) || (cave[y][x].treasure_id != 0) || (coordDistanceBetween(y, x, char_row, char_col) <= MON_MAX_SIGHT));
 
     int creature_id = randomNumber(MON_ENDGAME_MONSTERS) - 1 + monster_levels[MON_MAX_LEVELS];
 
@@ -813,10 +813,10 @@ static void compactObjects() {
     while (counter <= 0) {
         for (int y = 0; y < dungeon_height; y++) {
             for (int x = 0; x < dungeon_width; x++) {
-                if (cave[y][x].tptr != 0 && coordDistanceBetween(y, x, char_row, char_col) > current_distance) {
+                if (cave[y][x].treasure_id != 0 && coordDistanceBetween(y, x, char_row, char_col) > current_distance) {
                     int chance;
 
-                    switch (treasure_list[cave[y][x].tptr].category_id) {
+                    switch (treasure_list[cave[y][x].treasure_id].category_id) {
                         case TV_VIS_TRAP:
                             chance = 15;
                             break;
@@ -873,11 +873,11 @@ void pusht(uint8_t treasure_id) {
     if (treasure_id != current_treasure_id - 1) {
         treasure_list[treasure_id] = treasure_list[current_treasure_id - 1];
 
-        // must change the tptr in the cave of the object just moved
+        // must change the treasure_id in the cave of the object just moved
         for (int y = 0; y < dungeon_height; y++) {
             for (int x = 0; x < dungeon_width; x++) {
-                if (cave[y][x].tptr == current_treasure_id - 1) {
-                    cave[y][x].tptr = treasure_id;
+                if (cave[y][x].treasure_id == current_treasure_id - 1) {
+                    cave[y][x].treasure_id = treasure_id;
                 }
             }
         }

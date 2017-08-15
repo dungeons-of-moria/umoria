@@ -82,7 +82,7 @@ bool dungeonDetectTreasureOnPanel() {
         for (int x = panel_col_min; x <= panel_col_max; x++) {
             Cave_t *tile = &cave[y][x];
 
-            if (tile->tptr != 0 && treasure_list[tile->tptr].category_id == TV_GOLD && !caveTileVisible(y, x)) {
+            if (tile->treasure_id != 0 && treasure_list[tile->treasure_id].category_id == TV_GOLD && !caveTileVisible(y, x)) {
                 tile->fm = true;
                 dungeonLiteSpot(y, x);
                 detected = true;
@@ -101,7 +101,7 @@ bool dungeonDetectObjectOnPanel() {
         for (int x = panel_col_min; x <= panel_col_max; x++) {
             Cave_t *tile = &cave[y][x];
 
-            if (tile->tptr != 0 && treasure_list[tile->tptr].category_id < TV_MAX_OBJECT && !caveTileVisible(y, x)) {
+            if (tile->treasure_id != 0 && treasure_list[tile->treasure_id].category_id < TV_MAX_OBJECT && !caveTileVisible(y, x)) {
                 tile->fm = true;
                 dungeonLiteSpot(y, x);
                 detected = true;
@@ -120,16 +120,16 @@ bool dungeonDetectTrapOnPanel() {
         for (int x = panel_col_min; x <= panel_col_max; x++) {
             Cave_t *tile = &cave[y][x];
 
-            if (tile->tptr == 0) {
+            if (tile->treasure_id == 0) {
                 continue;
             }
 
-            if (treasure_list[tile->tptr].category_id == TV_INVIS_TRAP) {
+            if (treasure_list[tile->treasure_id].category_id == TV_INVIS_TRAP) {
                 tile->fm = true;
                 dungeonChangeTrapVisibility(y, x);
                 detected = true;
-            } else if (treasure_list[tile->tptr].category_id == TV_CHEST) {
-                Inventory_t *item = &treasure_list[tile->tptr];
+            } else if (treasure_list[tile->treasure_id].category_id == TV_CHEST) {
+                Inventory_t *item = &treasure_list[tile->treasure_id];
                 spellItemIdentifyAndRemoveRandomInscription(item);
             }
         }
@@ -146,17 +146,17 @@ bool dungeonDetectSecretDoorsOnPanel() {
         for (int x = panel_col_min; x <= panel_col_max; x++) {
             Cave_t *tile = &cave[y][x];
 
-            if (tile->tptr == 0) {
+            if (tile->treasure_id == 0) {
                 continue;
             }
 
-            if (treasure_list[tile->tptr].category_id == TV_SECRET_DOOR) {
+            if (treasure_list[tile->treasure_id].category_id == TV_SECRET_DOOR) {
                 // Secret doors
 
                 tile->fm = true;
                 dungeonChangeTrapVisibility(y, x);
                 detected = true;
-            } else if ((treasure_list[tile->tptr].category_id == TV_UP_STAIR || treasure_list[tile->tptr].category_id == TV_DOWN_STAIR) && !tile->fm) {
+            } else if ((treasure_list[tile->treasure_id].category_id == TV_UP_STAIR || treasure_list[tile->treasure_id].category_id == TV_DOWN_STAIR) && !tile->fm) {
                 // Staircases
 
                 tile->fm = true;
@@ -280,7 +280,7 @@ static void dungeonLightAreaAroundFloorTile(int y, int x) {
 
             if (tile->fval >= MIN_CAVE_WALL) {
                 tile->pl = true;
-            } else if (tile->tptr != 0 && treasure_list[tile->tptr].category_id >= TV_MIN_VISIBLE && treasure_list[tile->tptr].category_id <= TV_MAX_VISIBLE) {
+            } else if (tile->treasure_id != 0 && treasure_list[tile->treasure_id].category_id >= TV_MIN_VISIBLE && treasure_list[tile->treasure_id].category_id <= TV_MAX_VISIBLE) {
                 tile->fm = true;
             }
         }
@@ -368,14 +368,14 @@ bool spellSurroundPlayerWithTraps() {
             Cave_t *tile = &cave[y][x];
 
             if (tile->fval <= MAX_CAVE_FLOOR) {
-                if (tile->tptr != 0) {
+                if (tile->treasure_id != 0) {
                     (void) dungeonDeleteObject(y, x);
                 }
 
                 dungeonSetTrap(y, x, randomNumber(MAX_TRAPS) - 1);
 
                 // don't let player gain exp from the newly created traps
-                treasure_list[tile->tptr].misc_use = 0;
+                treasure_list[tile->treasure_id].misc_use = 0;
 
                 // open pits are immediately visible, so call dungeonLiteSpot
                 dungeonLiteSpot(y, x);
@@ -401,13 +401,13 @@ bool spellSurroundPlayerWithDoors() {
             Cave_t *tile = &cave[y][x];
 
             if (tile->fval <= MAX_CAVE_FLOOR) {
-                if (tile->tptr != 0) {
+                if (tile->treasure_id != 0) {
                     (void) dungeonDeleteObject(y, x);
                 }
 
                 int free_id = popt();
                 tile->fval = TILE_BLOCKED_FLOOR;
-                tile->tptr = (uint8_t) free_id;
+                tile->treasure_id = (uint8_t) free_id;
 
                 inventoryItemCopyTo(OBJ_CLOSED_DOOR, &treasure_list[free_id]);
                 dungeonLiteSpot(y, x);
@@ -428,11 +428,11 @@ bool spellDestroyAdjacentDoorsTraps() {
         for (int x = char_col - 1; x <= char_col + 1; x++) {
             Cave_t *tile = &cave[y][x];
 
-            if (tile->tptr == 0) {
+            if (tile->treasure_id == 0) {
                 continue;
             }
 
-            Inventory_t *item = &treasure_list[tile->tptr];
+            Inventory_t *item = &treasure_list[tile->treasure_id];
 
             if ((item->category_id >= TV_INVIS_TRAP && item->category_id <= TV_CLOSED_DOOR && item->category_id != TV_RUBBLE) || item->category_id == TV_SECRET_DOOR) {
                 if (dungeonDeleteObject(y, x)) {
@@ -571,8 +571,8 @@ bool spellDisarmAllInDirection(int y, int x, int direction) {
 
         // note, must continue up to and including the first non open space,
         // because secret doors have fval greater than MAX_OPEN_SPACE
-        if (tile->tptr != 0) {
-            Inventory_t *item = &treasure_list[tile->tptr];
+        if (tile->treasure_id != 0) {
+            Inventory_t *item = &treasure_list[tile->treasure_id];
 
             if (item->category_id == TV_INVIS_TRAP || item->category_id == TV_VIS_TRAP) {
                 if (dungeonDeleteObject(y, x)) {
@@ -776,7 +776,7 @@ void spellFireBall(int y, int x, int direction, int damage_hp, int spell_type, c
                     if (coordInBounds(row, col) && coordDistanceBetween(y, x, row, col) <= max_distance && los(y, x, row, col)) {
                         tile = &cave[row][col];
 
-                        if (tile->tptr != 0 && (*destroy)(&treasure_list[tile->tptr])) {
+                        if (tile->treasure_id != 0 && (*destroy)(&treasure_list[tile->treasure_id])) {
                             (void) dungeonDeleteObject(row, col);
                         }
 
@@ -874,7 +874,7 @@ void spellBreath(int y, int x, int monster_id, int damage_hp, int spell_type, ch
             if (coordInBounds(row, col) && coordDistanceBetween(y, x, row, col) <= max_distance && los(y, x, row, col)) {
                 Cave_t *tile = &cave[row][col];
 
-                if (tile->tptr != 0 && (*destroy)(&treasure_list[tile->tptr])) {
+                if (tile->treasure_id != 0 && (*destroy)(&treasure_list[tile->treasure_id])) {
                     (void) dungeonDeleteObject(row, col);
                 }
 
@@ -1280,21 +1280,21 @@ bool spellWallToMud(int y, int x, int direction) {
                 turned = true;
                 printMessage("The wall turns into mud.");
             }
-        } else if (tile->tptr != 0 && tile->fval >= MIN_CLOSED_SPACE) {
+        } else if (tile->treasure_id != 0 && tile->fval >= MIN_CLOSED_SPACE) {
             finished = true;
 
             if (coordInsidePanel(y, x) && caveTileVisible(y, x)) {
                 turned = true;
 
                 obj_desc_t description;
-                itemDescription(description, &treasure_list[tile->tptr], false);
+                itemDescription(description, &treasure_list[tile->treasure_id], false);
 
                 obj_desc_t out_val;
                 (void) sprintf(out_val, "The %s turns into mud.", description);
                 printMessage(out_val);
             }
 
-            if (treasure_list[tile->tptr].category_id == TV_RUBBLE) {
+            if (treasure_list[tile->treasure_id].category_id == TV_RUBBLE) {
                 (void) dungeonDeleteObject(y, x);
                 if (randomNumber(10) == 1) {
                     dungeonPlaceRandomObjectAt(y, x, false);
@@ -1349,8 +1349,8 @@ bool spellDestroyDoorsTrapsInDirection(int y, int x, int direction) {
         tile = &cave[y][x];
 
         // must move into first closed spot, as it might be a secret door
-        if (tile->tptr != 0) {
-            Inventory_t *item = &treasure_list[tile->tptr];
+        if (tile->treasure_id != 0) {
+            Inventory_t *item = &treasure_list[tile->treasure_id];
 
             if (item->category_id == TV_INVIS_TRAP || item->category_id == TV_CLOSED_DOOR || item->category_id == TV_VIS_TRAP || item->category_id == TV_OPEN_DOOR || item->category_id == TV_SECRET_DOOR) {
                 if (dungeonDeleteObject(y, x)) {
@@ -1434,7 +1434,7 @@ bool spellBuildWall(int y, int x, int direction) {
             continue; // we're done here, break out of the loop
         }
 
-        if (tile->tptr != 0) {
+        if (tile->treasure_id != 0) {
             (void) dungeonDeleteObject(y, x);
         }
 
@@ -1892,7 +1892,7 @@ void dungeonEarthquake() {
             if ((y != char_row || x != char_col) && coordInBounds(y, x) && randomNumber(8) == 1) {
                 Cave_t *c_ptr = &cave[y][x];
 
-                if (c_ptr->tptr != 0) {
+                if (c_ptr->treasure_id != 0) {
                     (void) dungeonDeleteObject(y, x);
                 }
 
@@ -1939,7 +1939,7 @@ void spellCreateFood() {
     Cave_t *tile = &cave[char_row][char_col];
 
     // take no action here, don't want to destroy object under player
-    if (tile->tptr != 0) {
+    if (tile->treasure_id != 0) {
         // set player_free_turn so that scroll/spell points won't be used
         player_free_turn = true;
 
@@ -1949,7 +1949,7 @@ void spellCreateFood() {
     }
 
     dungeonPlaceRandomObjectAt(char_row, char_col, false);
-    inventoryItemCopyTo(OBJ_MUSH, &treasure_list[tile->tptr]);
+    inventoryItemCopyTo(OBJ_MUSH, &treasure_list[tile->treasure_id]);
 }
 
 // Attempts to destroy a type of creature.  Success depends on
@@ -2021,9 +2021,9 @@ bool spellTurnUndead() {
 
 // Leave a glyph of warding. Creatures will not pass over! -RAK-
 void spellWardingGlyph() {
-    if (cave[char_row][char_col].tptr == 0) {
+    if (cave[char_row][char_col].treasure_id == 0) {
         int free_id = popt();
-        cave[char_row][char_col].tptr = (uint8_t) free_id;
+        cave[char_row][char_col].treasure_id = (uint8_t) free_id;
         inventoryItemCopyTo(OBJ_SCARE_MON, &treasure_list[free_id]);
     }
 }
@@ -2178,7 +2178,7 @@ static void replace_spot(int y, int x, int typ) {
     c_ptr->fm = false;
     c_ptr->lr = false; // this is no longer part of a room
 
-    if (c_ptr->tptr != 0) {
+    if (c_ptr->treasure_id != 0) {
         (void) dungeonDeleteObject(y, x);
     }
 

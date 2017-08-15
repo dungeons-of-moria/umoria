@@ -372,14 +372,14 @@ void wizardCreateObjects() {
         // delete object first if any, before call popt()
         Cave_t *tile = &cave[char_row][char_col];
 
-        if (tile->tptr != 0) {
+        if (tile->treasure_id != 0) {
             (void) dungeonDeleteObject(char_row, char_col);
         }
 
         number = popt();
 
         treasure_list[number] = forge;
-        tile->tptr = (uint8_t) number;
+        tile->treasure_id = (uint8_t) number;
 
         printMessage("Allocated.");
     } else {

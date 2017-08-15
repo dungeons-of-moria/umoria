@@ -144,7 +144,7 @@ void playerTunnel(int direction) {
     Cave_t *tile = &cave[y][x];
     Inventory_t *item = &inventory[EQUIPMENT_WIELD];
 
-    if (!playerCanTunnel(tile->tptr, tile->fval)) {
+    if (!playerCanTunnel(tile->treasure_id, tile->fval)) {
         return;
     }
 
@@ -159,10 +159,10 @@ void playerTunnel(int direction) {
 
         if (!dungeonDigAtLocation(y, x, tile->fval, diggingAbility)) {
             // Is there an object in the way?  (Rubble and secret doors)
-            if (tile->tptr != 0) {
-                if (treasure_list[tile->tptr].category_id == TV_RUBBLE) {
+            if (tile->treasure_id != 0) {
+                if (treasure_list[tile->treasure_id].category_id == TV_RUBBLE) {
                     dungeonDigRubble(y, x, diggingAbility);
-                } else if (treasure_list[tile->tptr].category_id == TV_SECRET_DOOR) {
+                } else if (treasure_list[tile->treasure_id].category_id == TV_SECRET_DOOR) {
                     // Found secret door!
                     printMessageNoCommandInterrupt("You tunnel into the granite wall.");
                     dungeonSearch(char_row, char_col, py.misc.chance_in_search);
@@ -288,12 +288,12 @@ void playerDisarmTrap() {
 
     bool no_disarm = false;
 
-    if (tile->creature_id > 1 && tile->tptr != 0 && (treasure_list[tile->tptr].category_id == TV_VIS_TRAP || treasure_list[tile->tptr].category_id == TV_CHEST)) {
+    if (tile->creature_id > 1 && tile->treasure_id != 0 && (treasure_list[tile->treasure_id].category_id == TV_VIS_TRAP || treasure_list[tile->treasure_id].category_id == TV_CHEST)) {
         objectBlockedByMonster(tile->creature_id);
-    } else if (tile->tptr != 0) {
+    } else if (tile->treasure_id != 0) {
         int disarm_ability = playerTrapDisarmAbility();
 
-        Inventory_t *item = &treasure_list[tile->tptr];
+        Inventory_t *item = &treasure_list[tile->treasure_id];
 
         if (item->category_id == TV_VIS_TRAP) {
             playerDisarmFloorTrap(y, x, disarm_ability, item->depth_first_found, dir, item->misc_use);
@@ -648,14 +648,14 @@ static bool lookSee(int x, int y, bool *transparent) {
     }
 
     if (tile->tl || tile->pl || tile->fm) {
-        if (tile->tptr != 0) {
-            if (treasure_list[tile->tptr].category_id == TV_SECRET_DOOR) {
+        if (tile->treasure_id != 0) {
+            if (treasure_list[tile->treasure_id].category_id == TV_SECRET_DOOR) {
                 goto granite;
             }
 
-            if (los_rocks_and_objects == 0 && treasure_list[tile->tptr].category_id != TV_INVIS_TRAP) {
+            if (los_rocks_and_objects == 0 && treasure_list[tile->treasure_id].category_id != TV_INVIS_TRAP) {
                 obj_desc_t obj_string;
-                itemDescription(obj_string, &treasure_list[tile->tptr], true);
+                itemDescription(obj_string, &treasure_list[tile->treasure_id], true);
 
                 (void) sprintf(msg, "%s %s ---pause---", description, obj_string);
                 description = "It is in";
@@ -825,7 +825,7 @@ static void inventoryDropOrThrowItem(int y, int x, Inventory_t *item) {
     if (randomNumber(10) > 1) {
         for (int k = 0; !flag && k <= 9;) {
             if (coordInBounds(pos_y, pos_x)) {
-                if (cave[pos_y][pos_x].fval <= MAX_OPEN_SPACE && cave[pos_y][pos_x].tptr == 0) {
+                if (cave[pos_y][pos_x].fval <= MAX_OPEN_SPACE && cave[pos_y][pos_x].treasure_id == 0) {
                     flag = true;
                 }
             }
@@ -840,7 +840,7 @@ static void inventoryDropOrThrowItem(int y, int x, Inventory_t *item) {
 
     if (flag) {
         int cur_pos = popt();
-        cave[pos_y][pos_x].tptr = (uint8_t) cur_pos;
+        cave[pos_y][pos_x].treasure_id = (uint8_t) cur_pos;
         treasure_list[cur_pos] = *item;
         dungeonLiteSpot(pos_y, pos_x);
     } else {
@@ -1079,7 +1079,7 @@ static void playerBashClosedDoor(int y, int x, int dir, Cave_t *tile, Inventory_
     if (randomNumber(chance * (20 + abs(item->misc_use))) < 10 * (chance - abs(item->misc_use))) {
         printMessage("The door crashes open!");
 
-        inventoryItemCopyTo(OBJ_OPEN_DOOR, &treasure_list[tile->tptr]);
+        inventoryItemCopyTo(OBJ_OPEN_DOOR, &treasure_list[tile->treasure_id]);
 
         // 50% chance of breaking door
         item->misc_use = (int16_t) (1 - randomNumber(2));
@@ -1169,8 +1169,8 @@ void playerBash() {
         return;
     }
 
-    if (tile->tptr != 0) {
-        Inventory_t *item = &treasure_list[tile->tptr];
+    if (tile->treasure_id != 0) {
+        Inventory_t *item = &treasure_list[tile->treasure_id];
 
         if (item->category_id == TV_CLOSED_DOOR) {
             playerBashClosedDoor(y, x, dir, tile, item);

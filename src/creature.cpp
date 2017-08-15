@@ -897,7 +897,7 @@ static void monsterAttackPlayer(int monster_id) {
 }
 
 static void monsterOpenDoor(Cave_t *tile, int16_t monster_hp, uint32_t move_bits, bool *do_turn, bool *do_move, uint32_t *rcmove, int y, int x) {
-    Inventory_t *item = &treasure_list[tile->tptr];
+    Inventory_t *item = &treasure_list[tile->treasure_id];
 
     // Creature can open doors.
     if (move_bits & CM_OPEN_DOOR) {
@@ -1016,7 +1016,7 @@ static void monsterMovesOnPlayer(Monster_t *monster, uint8_t creature_id, int mo
 static void monsterAllowedToMove(Monster_t *monster, uint32_t move_bits, bool *do_turn, uint32_t *rcmove, int y, int x) {
     // Pick up or eat an object
     if (move_bits & CM_PICKS_UP) {
-        uint8_t treasure_id = cave[y][x].tptr;
+        uint8_t treasure_id = cave[y][x].treasure_id;
 
         if (treasure_id != 0 && treasure_list[treasure_id].category_id <= TV_MAX_OBJECT) {
             *rcmove |= CM_PICKS_UP;
@@ -1067,13 +1067,13 @@ static void makeMove(int monster_id, int *directions, uint32_t *rcmove) {
             // Creature moves through walls?
             do_move = true;
             *rcmove |= CM_PHASE;
-        } else if (tile->tptr != 0) {
+        } else if (tile->treasure_id != 0) {
             // Creature can open doors?
             monsterOpenDoor(tile, monster->hp, move_bits, &do_turn, &do_move, rcmove, y, x);
         }
 
         // Glyph of warding present?
-        if (do_move && tile->tptr != 0 && treasure_list[tile->tptr].category_id == TV_VIS_TRAP && treasure_list[tile->tptr].sub_category_id == 99) {
+        if (do_move && tile->treasure_id != 0 && treasure_list[tile->treasure_id].category_id == TV_VIS_TRAP && treasure_list[tile->treasure_id].sub_category_id == 99) {
             glyphOfWardingProtection(monster->creature_id, move_bits, &do_move, &do_turn, y, x);
         }
 
@@ -1344,7 +1344,7 @@ bool monsterMultiply(int y, int x, int creature_id, int monster_id) {
         if (coordInBounds(pos_y, pos_x) && (pos_y != y || pos_x != x)) {
             Cave_t *tile = &cave[pos_y][pos_x];
 
-            if (tile->fval <= MAX_OPEN_SPACE && tile->tptr == 0 && tile->creature_id != 1) {
+            if (tile->fval <= MAX_OPEN_SPACE && tile->treasure_id == 0 && tile->creature_id != 1) {
                 // Creature there already?
                 if (tile->creature_id > 1) {
                     // Some critters are cannibalistic!

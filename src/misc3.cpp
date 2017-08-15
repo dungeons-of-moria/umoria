@@ -18,14 +18,14 @@ static int spellChanceOfSuccess(int spell);
 // Places a particular trap at location y, x -RAK-
 void dungeonSetTrap(int y, int x, int sub_type_id) {
     int free_treasure_id = popt();
-    cave[y][x].tptr = (uint8_t) free_treasure_id;
+    cave[y][x].treasure_id = (uint8_t) free_treasure_id;
     inventoryItemCopyTo(OBJ_TRAP_LIST + sub_type_id, &treasure_list[free_treasure_id]);
 }
 
 // Places rubble at location y, x -RAK-
 void dungeonPlaceRubble(int y, int x) {
     int free_treasure_id = popt();
-    cave[y][x].tptr = (uint8_t) free_treasure_id;
+    cave[y][x].treasure_id = (uint8_t) free_treasure_id;
     cave[y][x].fval = TILE_BLOCKED_FLOOR;
     inventoryItemCopyTo(OBJ_RUBBLE, &treasure_list[free_treasure_id]);
 }
@@ -44,7 +44,7 @@ void dungeonPlaceGold(int y, int x) {
         gold_type_id = MAX_GOLD_TYPES - 1;
     }
 
-    cave[y][x].tptr = (uint8_t) free_treasure_id;
+    cave[y][x].treasure_id = (uint8_t) free_treasure_id;
     inventoryItemCopyTo(OBJ_GOLD_LIST + gold_type_id, &treasure_list[free_treasure_id]);
     treasure_list[free_treasure_id].cost += (8L * (int32_t) randomNumber((int) treasure_list[free_treasure_id].cost)) + randomNumber(8);
 
@@ -111,7 +111,7 @@ int itemGetRandomObjectId(int level, bool must_be_small) {
 void dungeonPlaceRandomObjectAt(int y, int x, bool must_be_small) {
     int free_treasure_id = popt();
 
-    cave[y][x].tptr = (uint8_t) free_treasure_id;
+    cave[y][x].treasure_id = (uint8_t) free_treasure_id;
 
     int object_id = itemGetRandomObjectId(current_dungeon_level, must_be_small);
     inventoryItemCopyTo(sorted_objects[object_id], &treasure_list[free_treasure_id]);
@@ -133,7 +133,7 @@ void dungeonAllocateAndPlaceObject(bool (*set_function)(int), int object_type, i
         do {
             y = randomNumber(dungeon_height) - 1;
             x = randomNumber(dungeon_width) - 1;
-        } while (!(*set_function)(cave[y][x].fval) || cave[y][x].tptr != 0 || (y == char_row && x == char_col));
+        } while (!(*set_function)(cave[y][x].fval) || cave[y][x].treasure_id != 0 || (y == char_row && x == char_col));
 
         switch (object_type) {
             case 1:
@@ -164,7 +164,7 @@ void dungeonPlaceRandomObjectNear(int y, int x, int tries) {
             int j = y - 3 + randomNumber(5);
             int k = x - 4 + randomNumber(7);
 
-            if (coordInBounds(j, k) && cave[j][k].fval <= MAX_CAVE_FLOOR && cave[j][k].tptr == 0) {
+            if (coordInBounds(j, k) && cave[j][k].fval <= MAX_CAVE_FLOOR && cave[j][k].treasure_id == 0) {
                 if (randomNumber(100) < 75) {
                     dungeonPlaceRandomObjectAt(j, k, false);
                 } else {
@@ -1139,7 +1139,7 @@ void inventoryTakeOneItem(Inventory_t *to_item, Inventory_t *from_item) {
 
 // Drops an item from inventory to given location -RAK-
 void inventoryDropItem(int item_id, bool drop_all) {
-    if (cave[char_row][char_col].tptr != 0) {
+    if (cave[char_row][char_col].treasure_id != 0) {
         (void) dungeonDeleteObject(char_row, char_col);
     }
 
@@ -1148,7 +1148,7 @@ void inventoryDropItem(int item_id, bool drop_all) {
     Inventory_t *i_ptr = &inventory[item_id];
     treasure_list[treasureID] = *i_ptr;
 
-    cave[char_row][char_col].tptr = (uint8_t) treasureID;
+    cave[char_row][char_col].treasure_id = (uint8_t) treasureID;
 
     if (item_id >= EQUIPMENT_WIELD) {
         playerTakeOff(item_id, -1);

@@ -709,7 +709,7 @@ static bool inventoryDropItem(char *command, bool selecting) {
         return selecting;
     }
 
-    if (cave[char_row][char_col].tptr != 0) {
+    if (cave[char_row][char_col].treasure_id != 0) {
         printMessage("There's no room to drop anything here.");
         return selecting;
     }
@@ -1055,7 +1055,7 @@ static bool selectItemCommands(char *command, char *which, bool selecting) {
                 item = -1;
                 printMessage("Hmmm, it seems to be cursed.");
             } else if (*command == 't' && !inventoryCanCarryItemCount(&inventory[item])) {
-                if (cave[char_row][char_col].tptr != 0) {
+                if (cave[char_row][char_col].treasure_id != 0) {
                     item = -1;
                     printMessage("You can't carry it.");
                 } else if (getInputConfirmation("You can't carry it.  Drop it?")) {
@@ -1708,8 +1708,8 @@ void dungeonLightRoom(int pos_y, int pos_x) {
                 if (tile->fval == TILE_DARK_FLOOR) {
                     tile->fval = TILE_LIGHT_FLOOR;
                 }
-                if (!tile->fm && tile->tptr != 0) {
-                    int treasure_id = treasure_list[tile->tptr].category_id;
+                if (!tile->fm && tile->treasure_id != 0) {
+                    int treasure_id = treasure_list[tile->treasure_id].category_id;
                     if (treasure_id >= TV_MIN_VISIBLE && treasure_id <= TV_MAX_VISIBLE) {
                         tile->fm = true;
                     }
@@ -1758,8 +1758,8 @@ static void sub1_move_light(int y1, int x1, int y2, int x2) {
 
             if (c_ptr->fval >= MIN_CAVE_WALL) {
                 c_ptr->pl = true;
-            } else if (!c_ptr->fm && c_ptr->tptr != 0) {
-                int tval = treasure_list[c_ptr->tptr].category_id;
+            } else if (!c_ptr->fm && c_ptr->treasure_id != 0) {
+                int tval = treasure_list[c_ptr->treasure_id].category_id;
 
                 if (tval >= TV_MIN_VISIBLE && tval <= TV_MAX_VISIBLE) {
                     c_ptr->fm = true;

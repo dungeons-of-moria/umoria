@@ -309,15 +309,15 @@ static bool sv_write() {
     for (int i = 0; i < MAX_HEIGHT; i++) {
         for (int j = 0; j < MAX_WIDTH; j++) {
             Cave_t *c_ptr = &cave[i][j];
-            if (c_ptr->tptr != 0) {
+            if (c_ptr->treasure_id != 0) {
                 wr_byte((uint8_t) i);
                 wr_byte((uint8_t) j);
-                wr_byte(c_ptr->tptr);
+                wr_byte(c_ptr->treasure_id);
             }
         }
     }
 
-    // marks end of tptr info
+    // marks end of treasure_id info
     wr_byte((uint8_t) 0xFF);
 
     // must set counter to zero, note that code may write out two bytes unnecessarily
@@ -825,7 +825,7 @@ bool loadGame(bool *generate) {
             if (xchar > MAX_WIDTH || ychar > MAX_HEIGHT) {
                 goto error;
             }
-            cave[ychar][xchar].tptr = char_tmp;
+            cave[ychar][xchar].treasure_id = char_tmp;
             rd_byte(&char_tmp);
         }
 
