@@ -697,13 +697,13 @@ static void playerGainKillExperience(Creature_t *c_ptr) {
 
     remainder *= 0x10000L;
     remainder /= py.misc.level;
-    remainder += py.misc.exp_frac;
+    remainder += py.misc.exp_fraction;
 
     if (remainder >= 0x10000L) {
         quotient++;
-        py.misc.exp_frac = (uint16_t) (remainder - 0x10000L);
+        py.misc.exp_fraction = (uint16_t) (remainder - 0x10000L);
     } else {
-        py.misc.exp_frac = (uint16_t) remainder;
+        py.misc.exp_fraction = (uint16_t) remainder;
     }
 
     py.misc.exp += quotient;
@@ -951,8 +951,8 @@ void playerMove(int direction, bool do_pickup) {
             }
 
             // Check to see if he notices something
-            // freng_of_search may be negative if have good rings of searching
-            if (py.misc.freng_of_search <= 1 || randomNumber(py.misc.freng_of_search) == 1 || (py.flags.status & PY_SEARCH)) {
+            // fos may be negative if have good rings of searching
+            if (py.misc.fos <= 1 || randomNumber(py.misc.fos) == 1 || (py.flags.status & PY_SEARCH)) {
                 dungeonSearch(char_row, char_col, py.misc.chance_in_search);
             }
 

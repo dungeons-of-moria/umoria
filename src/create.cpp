@@ -86,7 +86,7 @@ static void characterGenerateStatsAndRace() {
     py.misc.chance_in_search = race->search_chance_base;
     py.misc.bth = race->base_to_hit;
     py.misc.bth_with_bows = race->base_to_hit_bows;
-    py.misc.freng_of_search = race->fos;
+    py.misc.fos = race->fos;
     py.misc.stealth_factor = race->stealth;
     py.misc.saving_throw = race->saving_throw_base;
     py.misc.hit_die = race->hit_points_base;
@@ -418,7 +418,7 @@ static void characterGetClass() {
             py.misc.bth_with_bows += klass->base_to_hit_with_bows; // RAK
             py.misc.chance_in_search += klass->searching;
             py.misc.disarm += klass->disarm_traps;
-            py.misc.freng_of_search += klass->fos;
+            py.misc.fos += klass->fos;
             py.misc.stealth_factor += klass->stealth;
             py.misc.saving_throw += klass->saving_throw;
             py.misc.experience_factor += klass->experience_factor;

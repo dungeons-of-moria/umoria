@@ -35,14 +35,14 @@ typedef struct {
         int32_t au;                     // Gold
         int32_t max_exp;                // Max experience
         int32_t exp;                    // Cur experience
-        uint16_t exp_frac;              // Cur exp fraction * 2^16
+        uint16_t exp_fraction;          // Cur exp fraction * 2^16
         uint16_t age;                   // Characters age
         uint16_t height;                // Height
         uint16_t weight;                // Weight
         uint16_t level;                 // Level
         uint16_t max_dungeon_depth;     // Max level explored
         int16_t chance_in_search;       // Chance in search
-        int16_t freng_of_search;        // Frenq of search
+        int16_t fos;                    // Frequency of search
         int16_t bth;                    // Base to hit
         int16_t bth_with_bows;          // BTH with bows
         int16_t mana;                   // Mana points
