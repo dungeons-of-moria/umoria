@@ -606,8 +606,8 @@ bool monsterPlaceNew(int y, int x, int creature_id, bool sleeping) {
 
     Monster_t *monster = &monsters[monster_id];
 
-    monster->fy = (uint8_t) y;
-    monster->fx = (uint8_t) x;
+    monster->y = (uint8_t) y;
+    monster->x = (uint8_t) x;
     monster->creature_id = (uint16_t) creature_id;
 
     if (creatures_list[creature_id].cdefense & CD_MAX_HP) {
@@ -666,8 +666,8 @@ void monsterPlaceWinning() {
 
     Monster_t *monster = &monsters[monster_id];
 
-    monster->fy = (uint8_t) y;
-    monster->fx = (uint8_t) x;
+    monster->y = (uint8_t) y;
+    monster->x = (uint8_t) x;
     monster->creature_id = (uint16_t) creature_id;
 
     if (creatures_list[creature_id].cdefense & CD_MAX_HP) {

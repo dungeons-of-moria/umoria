@@ -457,17 +457,17 @@ static void carry(int y, int x, bool pickup) {
 void dungeonDeleteMonster(int id) {
     Monster_t *monster = &monsters[id];
 
-    cave[monster->fy][monster->fx].cptr = 0;
+    cave[monster->y][monster->x].cptr = 0;
 
     if (monster->ml) {
-        dungeonLiteSpot((int) monster->fy, (int) monster->fx);
+        dungeonLiteSpot((int) monster->y, (int) monster->x);
     }
 
     int last_id = next_free_monster_id - 1;
 
     if (id != last_id) {
         monster = &monsters[last_id];
-        cave[monster->fy][monster->fx].cptr = (uint8_t) id;
+        cave[monster->y][monster->x].cptr = (uint8_t) id;
         monsters[id] = monsters[last_id];
     }
 
@@ -496,10 +496,10 @@ void dungeonDeleteMonsterFix1(int id) {
     // hit points
     monster->hp = -1;
 
-    cave[monster->fy][monster->fx].cptr = 0;
+    cave[monster->y][monster->x].cptr = 0;
 
     if (monster->ml) {
-        dungeonLiteSpot((int) monster->fy, (int) monster->fx);
+        dungeonLiteSpot((int) monster->y, (int) monster->x);
     }
 
     if (monster_multiply_total > 0) {
@@ -513,8 +513,8 @@ void dungeonDeleteMonsterFix2(int id) {
     int last_id = next_free_monster_id - 1;
 
     if (id != last_id) {
-        int y = monsters[last_id].fy;
-        int x = monsters[last_id].fx;
+        int y = monsters[last_id].y;
+        int x = monsters[last_id].x;
         cave[y][x].cptr = (uint8_t) id;
 
         monsters[id] = monsters[last_id];
@@ -722,7 +722,7 @@ int monsterTakeHit(int monster_id, int damage) {
         return -1;
     }
 
-    uint32_t treasure_flags = monsterDeath((int) monster->fy, (int) monster->fx, creature->cmove);
+    uint32_t treasure_flags = monsterDeath((int) monster->y, (int) monster->x, creature->cmove);
 
     Recall_t *memory = &creature_recall[monster->creature_id];
 

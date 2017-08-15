@@ -12,7 +12,7 @@
 static bool monsterIsVisible(Monster_t *monster) {
     bool visible = false;
 
-    Cave_t *tile = &cave[monster->fy][monster->fx];
+    Cave_t *tile = &cave[monster->y][monster->x];
     Creature_t *creature = &creatures_list[monster->creature_id];
 
     if (tile->pl || tile->tl || (running_counter && monster->cdis < 2 && player_carrying_light)) {
@@ -37,11 +37,11 @@ void monsterUpdateVisibility(int monster_id) {
     bool visible = false;
     Monster_t *m_ptr = &monsters[monster_id];
 
-    if (m_ptr->cdis <= MON_MAX_SIGHT && !(py.flags.status & PY_BLIND) && coordInsidePanel((int) m_ptr->fy, (int) m_ptr->fx)) {
+    if (m_ptr->cdis <= MON_MAX_SIGHT && !(py.flags.status & PY_BLIND) && coordInsidePanel((int) m_ptr->y, (int) m_ptr->x)) {
         if (wizard_mode) {
             // Wizard sight.
             visible = true;
-        } else if (los(char_row, char_col, (int) m_ptr->fy, (int) m_ptr->fx)) {
+        } else if (los(char_row, char_col, (int) m_ptr->y, (int) m_ptr->x)) {
             visible = monsterIsVisible(m_ptr);
         }
     }
@@ -51,7 +51,7 @@ void monsterUpdateVisibility(int monster_id) {
         if (!m_ptr->ml) {
             playerDisturb(1, 0);
             m_ptr->ml = true;
-            dungeonLiteSpot((int) m_ptr->fy, (int) m_ptr->fx);
+            dungeonLiteSpot((int) m_ptr->y, (int) m_ptr->x);
 
             // notify inventoryExecuteCommand()
             screen_has_changed = true;
@@ -59,7 +59,7 @@ void monsterUpdateVisibility(int monster_id) {
     } else if (m_ptr->ml) {
         // Turn it off.
         m_ptr->ml = false;
-        dungeonLiteSpot((int) m_ptr->fy, (int) m_ptr->fx);
+        dungeonLiteSpot((int) m_ptr->y, (int) m_ptr->x);
 
         // notify inventoryExecuteCommand()
         screen_has_changed = true;
@@ -97,8 +97,8 @@ static bool monsterMakeVisible(int y, int x) {
 static void monsterGetMoveDirection(int monster_id, int *directions) {
     int ay, ax, movement;
 
-    int y = monsters[monster_id].fy - char_row;
-    int x = monsters[monster_id].fx - char_col;
+    int y = monsters[monster_id].y - char_row;
+    int x = monsters[monster_id].x - char_col;
 
     if (y < 0) {
         movement = 8;
@@ -989,7 +989,7 @@ static void monsterMovesOnPlayer(Monster_t *monster, uint8_t creature_id, int mo
         monsterAttackPlayer(monster_id);
         *do_move = false;
         *do_turn = true;
-    } else if (creature_id > 1 && (y != monster->fy || x != monster->fx)) {
+    } else if (creature_id > 1 && (y != monster->y || x != monster->x)) {
         // Creature is attempting to move on other creature?
 
         // Creature eats other creatures?
@@ -1025,15 +1025,15 @@ static void monsterAllowedToMove(Monster_t *monster, uint32_t move_bits, bool *d
     }
 
     // Move creature record
-    dungeonMoveCreatureRecord((int) monster->fy, (int) monster->fx, y, x);
+    dungeonMoveCreatureRecord((int) monster->y, (int) monster->x, y, x);
 
     if (monster->ml) {
         monster->ml = false;
-        dungeonLiteSpot((int) monster->fy, (int) monster->fx);
+        dungeonLiteSpot((int) monster->y, (int) monster->x);
     }
 
-    monster->fy = (uint8_t) y;
-    monster->fx = (uint8_t) x;
+    monster->y = (uint8_t) y;
+    monster->x = (uint8_t) x;
     monster->cdis = (uint8_t) coordDistanceBetween(char_row, char_col, y, x);
 
     *do_turn = true;
@@ -1050,8 +1050,8 @@ static void makeMove(int monster_id, int *directions, uint32_t *rcmove) {
     // Up to 5 attempts at moving, give up.
     for (int i = 0; !do_turn && i < 5; i++) {
         // Get new position
-        int y = monster->fy;
-        int x = monster->fx;
+        int y = monster->y;
+        int x = monster->x;
         (void) playerMovePosition(directions[i], &y, &x);
 
         Cave_t *tile = &cave[y][x];
@@ -1101,7 +1101,7 @@ static bool monsterCanCastSpells(Monster_t *monster, uint32_t spells) {
     }
 
     // Must have unobstructed Line-Of-Sight
-    return los(char_row, char_col, (int) monster->fy, (int) monster->fx);
+    return los(char_row, char_col, (int) monster->y, (int) monster->x);
 }
 
 void monsterExecuteCastingOfSpell(Monster_t *monster, int monster_id, int spell_id, uint8_t level, vtype_t monster_name, vtype_t death_description) {
@@ -1116,7 +1116,7 @@ void monsterExecuteCastingOfSpell(Monster_t *monster, int monster_id, int spell_
             spellTeleportAwayMonster(monster_id, MON_MAX_SIGHT);
             break;
         case 7: // Teleport To
-            spellTeleportPlayerTo((int) monster->fy, (int) monster->fx);
+            spellTeleportPlayerTo((int) monster->y, (int) monster->x);
             break;
         case 8: // Light Wound
             if (playerSavingThrow()) {
@@ -1403,8 +1403,8 @@ bool monsterMultiply(int y, int x, int creature_id, int monster_id) {
 static void monsterMultiplyCritter(Monster_t *monster, int monster_id, uint32_t *rcmove) {
     int counter = 0;
 
-    for (int y = monster->fy - 1; y <= monster->fy + 1; y++) {
-        for (int x = monster->fx - 1; x <= monster->fx + 1; x++) {
+    for (int y = monster->y - 1; y <= monster->y + 1; y++) {
+        for (int x = monster->x - 1; x <= monster->x + 1; x++) {
             if (coordInBounds(y, x) && (cave[y][x].cptr > 1)) {
                 counter++;
             }
@@ -1418,7 +1418,7 @@ static void monsterMultiplyCritter(Monster_t *monster, int monster_id, uint32_t 
     }
 
     if (counter < 4 && randomNumber(counter * MON_MULTIPLY_ADJUST) == 1) {
-        if (monsterMultiply((int) monster->fy, (int) monster->fx, (int) monster->creature_id, monster_id)) {
+        if (monsterMultiply((int) monster->y, (int) monster->x, (int) monster->creature_id, monster_id)) {
             *rcmove |= CM_MULTIPLY;
         }
     }
@@ -1439,10 +1439,10 @@ static void monsterMoveOutOfWall(Monster_t *monster, int monster_id, uint32_t *r
 
     // Note direction of for loops matches direction of keypad from 1 to 9
     // Do not allow attack against the player.
-    // Must cast fy-1 to signed int, so that a negative value
+    // Must cast y-1 to signed int, so that a negative value
     // of i will fail the comparison.
-    for (int y = monster->fy + 1; y >= (monster->fy - 1); y--) {
-        for (int x = monster->fx - 1; x <= monster->fx + 1; x++) {
+    for (int y = monster->y + 1; y >= (monster->y - 1); y--) {
+        for (int x = monster->x - 1; x <= monster->x + 1; x++) {
             if (dir != 5 && cave[y][x].fval <= MAX_OPEN_SPACE && cave[y][x].cptr != 1) {
                 directions[id++] = dir;
             }
@@ -1464,7 +1464,7 @@ static void monsterMoveOutOfWall(Monster_t *monster, int monster_id, uint32_t *r
     }
 
     // if still in a wall, let it dig itself out, but also apply some more damage
-    if (cave[monster->fy][monster->fx].fval >= MIN_CAVE_WALL) {
+    if (cave[monster->y][monster->x].fval >= MIN_CAVE_WALL) {
         // in case the monster dies, may need to callfix1_delete_monster()
         // instead of delete_monsters()
         hack_monptr = monster_id;
@@ -1476,7 +1476,7 @@ static void monsterMoveOutOfWall(Monster_t *monster, int monster_id, uint32_t *r
             displayCharacterExperience();
         } else {
             printMessage("A creature digs itself out from the rock!");
-            (void) dungeonTunnelWall((int) monster->fy, (int) monster->fx, 1, 0);
+            (void) dungeonTunnelWall((int) monster->y, (int) monster->x, 1, 0);
         }
     }
 }
@@ -1531,7 +1531,7 @@ static void monsterMove(int monster_id, uint32_t *rcmove) {
 
     // if in wall, must immediately escape to a clear area
     // then monster movement finished
-    if (!(creature->cmove & CM_PHASE) && cave[monster->fy][monster->fx].fval >= MIN_CAVE_WALL) {
+    if (!(creature->cmove & CM_PHASE) && cave[monster->y][monster->x].fval >= MIN_CAVE_WALL) {
         monsterMoveOutOfWall(monster, monster_id, rcmove);
         return;
     }
@@ -1650,7 +1650,7 @@ static void monsterAttackingUpdate(Monster_t *monster, int monster_id, int moves
 
         // Monsters trapped in rock must be given a turn also,
         // so that they will die/dig out immediately.
-        if (monster->ml || monster->cdis <= creatures_list[monster->creature_id].aaf || ((!(creatures_list[monster->creature_id].cmove & CM_PHASE)) && cave[monster->fy][monster->fx].fval >= MIN_CAVE_WALL)) {
+        if (monster->ml || monster->cdis <= creatures_list[monster->creature_id].aaf || ((!(creatures_list[monster->creature_id].cmove & CM_PHASE)) && cave[monster->y][monster->x].fval >= MIN_CAVE_WALL)) {
             if (monster->sleep_count > 0) {
                 if (py.flags.aggravate) {
                     monster->sleep_count = 0;
@@ -1711,7 +1711,7 @@ void updateMonsters(bool attack) {
             continue;
         }
 
-        monster->cdis = (uint8_t) coordDistanceBetween(char_row, char_col, (int) monster->fy, (int) monster->fx);
+        monster->cdis = (uint8_t) coordDistanceBetween(char_row, char_col, (int) monster->y, (int) monster->x);
 
         // Attack is argument passed to CREATURE
         if (attack) {
