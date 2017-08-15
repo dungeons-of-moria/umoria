@@ -1335,7 +1335,7 @@ int inventoryCarryItem(Inventory_t *item) {
 static int spellChanceOfSuccess(int spell) {
     Spell_t *s_ptr = &magic_spells[py.misc.class_id - 1][spell];
 
-    int chance = s_ptr->sfail - 3 * (py.misc.level - s_ptr->slevel);
+    int chance = s_ptr->sfail - 3 * (py.misc.level - s_ptr->level_required);
 
     int stat;
     if (classes[py.misc.class_id].class_to_use_mage_spells == SPELL_TYPE_MAGE) {
@@ -1408,7 +1408,7 @@ void displaySpellsList(int *spell, int number_of_choices, int comment, int non_c
         }
 
         vtype_t out_val;
-        (void) sprintf(out_val, "  %c) %-30s%2d %4d %3d%%%s", spell_char, spell_names[spellID + consecutive_offset], s_ptr->slevel, s_ptr->smana, spellChanceOfSuccess(spellID), p);
+        (void) sprintf(out_val, "  %c) %-30s%2d %4d %3d%%%s", spell_char, spell_names[spellID + consecutive_offset], s_ptr->level_required, s_ptr->smana, spellChanceOfSuccess(spellID), p);
         putStringClearToEOL(out_val, 2 + i, col);
     }
 }
@@ -1508,7 +1508,7 @@ static void eliminateKnownSpellsGreaterThanLevel(Spell_t *msp_ptr, const char *p
 
     for (int i = 31; mask; mask >>= 1, i--) {
         if (mask & spells_learnt) {
-            if (msp_ptr[i].slevel > py.misc.level) {
+            if (msp_ptr[i].level_required > py.misc.level) {
                 spells_learnt &= ~mask;
                 spells_forgotten |= mask;
 
@@ -1581,7 +1581,7 @@ static int rememberForgottenSpells(Spell_t *msp_ptr, int allowedSpells, int newS
         }
 
         if (mask & spells_forgotten) {
-            if (msp_ptr[orderID].slevel <= py.misc.level) {
+            if (msp_ptr[orderID].level_required <= py.misc.level) {
                 newSpells--;
                 spells_forgotten &= ~mask;
                 spells_learnt |= mask;
@@ -1609,7 +1609,7 @@ static int learnableSpells(Spell_t *msp_ptr, int newSpells) {
     for (int i = 0; spell_flag; mask <<= 1, i++) {
         if (spell_flag & mask) {
             spell_flag &= ~mask;
-            if (msp_ptr[i].slevel <= py.misc.level) {
+            if (msp_ptr[i].level_required <= py.misc.level) {
                 id++;
             }
         }
@@ -1796,7 +1796,7 @@ void playerGainSpells() {
     for (int i = 0; spell_flag; mask <<= 1, i++) {
         if (spell_flag & mask) {
             spell_flag &= ~mask;
-            if (spell[i].slevel <= py.misc.level) {
+            if (spell[i].level_required <= py.misc.level) {
                 spell_bank[spell_id] = i;
                 spell_id++;
             }

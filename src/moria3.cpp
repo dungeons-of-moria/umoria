@@ -355,7 +355,7 @@ int castSpellGetId(const char *prompt, int item_id, int *spell_id, int *spell_ch
     while (flags) {
         int pos = getAndClearFirstBit(&flags);
 
-        if (s_ptr[pos].slevel <= py.misc.level) {
+        if (s_ptr[pos].level_required <= py.misc.level) {
             spell_list[spell_count] = pos;
             spell_count++;
         }

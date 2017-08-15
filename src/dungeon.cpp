@@ -2060,7 +2060,7 @@ static void examineBook() {
         while (item_flags) {
             item_pos_end = getAndClearFirstBit(&item_flags);
 
-            if (magic_spells[py.misc.class_id - 1][item_pos_end].slevel < 99) {
+            if (magic_spells[py.misc.class_id - 1][item_pos_end].level_required < 99) {
                 spell_index[spell_id] = item_pos_end;
                 spell_id++;
             }
