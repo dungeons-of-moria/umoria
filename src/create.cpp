@@ -24,13 +24,13 @@ static void characterGenerateStats() {
     } while (total <= 42 || total >= 54);
 
     for (int i = 0; i < 6; i++) {
-        py.stats.max_stat[i] = (uint8_t) (5 + dice[3 * i] + dice[3 * i + 1] + dice[3 * i + 2]);
+        py.stats.max[i] = (uint8_t) (5 + dice[3 * i] + dice[3 * i + 1] + dice[3 * i + 2]);
     }
 }
 
 // Changes stats by given amount -JWT-
 static void characterChangeStat(int stat, int16_t amount) {
-    int new_stat = py.stats.max_stat[stat];
+    int new_stat = py.stats.max[stat];
 
     if (amount < 0) {
         for (int i = 0; i > amount; i--) {
@@ -60,7 +60,7 @@ static void characterChangeStat(int stat, int16_t amount) {
             }
         }
     }
-    py.stats.max_stat[stat] = (uint8_t) new_stat;
+    py.stats.max[stat] = (uint8_t) new_stat;
 }
 
 // generate all stats and modify for race. needed in a separate
@@ -79,7 +79,7 @@ static void characterGenerateStatsAndRace() {
     py.misc.level = 1;
 
     for (int i = 0; i < 6; i++) {
-        py.stats.cur_stat[i] = py.stats.max_stat[i];
+        py.stats.current[i] = py.stats.max[i];
         playerSetAndUseStat(i);
     }
 
@@ -378,7 +378,7 @@ static void characterGetClass() {
             characterChangeStat(A_CHR, klass->madj_chr);
 
             for (int i = 0; i < 6; i++) {
-                py.stats.cur_stat[i] = py.stats.max_stat[i];
+                py.stats.current[i] = py.stats.max[i];
                 playerSetAndUseStat(i);
             }
 
@@ -437,11 +437,11 @@ static int monetaryValueCalculatedFromStat(uint8_t stat) {
 }
 
 static void playerCalculateStartGold() {
-    int value = monetaryValueCalculatedFromStat(py.stats.max_stat[A_STR]);
-    value += monetaryValueCalculatedFromStat(py.stats.max_stat[A_INT]);
-    value += monetaryValueCalculatedFromStat(py.stats.max_stat[A_WIS]);
-    value += monetaryValueCalculatedFromStat(py.stats.max_stat[A_CON]);
-    value += monetaryValueCalculatedFromStat(py.stats.max_stat[A_DEX]);
+    int value = monetaryValueCalculatedFromStat(py.stats.max[A_STR]);
+    value += monetaryValueCalculatedFromStat(py.stats.max[A_INT]);
+    value += monetaryValueCalculatedFromStat(py.stats.max[A_WIS]);
+    value += monetaryValueCalculatedFromStat(py.stats.max[A_CON]);
+    value += monetaryValueCalculatedFromStat(py.stats.max[A_DEX]);
 
     // Social Class adjustment
     int new_gold = py.misc.social_class * 6 + randomNumber(25) + 325;
@@ -450,7 +450,7 @@ static void playerCalculateStartGold() {
     new_gold -= value;
 
     // Charisma adjustment
-    new_gold += monetaryValueCalculatedFromStat(py.stats.max_stat[A_CHR]);
+    new_gold += monetaryValueCalculatedFromStat(py.stats.max[A_CHR]);
 
     // She charmed the banker into it! -CJS-
     if (!playerIsMale()) {

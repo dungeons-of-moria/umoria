@@ -199,7 +199,7 @@ void statsAsString(uint8_t stat, char *stat_string) {
 // Print character stat in given row, column -RAK-
 void displayCharacterStats(int stat) {
     char text[7];
-    statsAsString(py.stats.use_stat[stat], text);
+    statsAsString(py.stats.used[stat], text);
     putString(stat_names[stat], 6 + stat, STAT_COLUMN);
     putString(text, 6 + stat, STAT_COLUMN + 6);
 }
@@ -250,7 +250,7 @@ static void printNumber(int num, int row, int column) {
 
 // Adjustment for wisdom/intelligence -JWT-
 int playerStatAdjustmentWisdomIntelligence(int stat) {
-    int value = py.stats.use_stat[stat];
+    int value = py.stats.used[stat];
 
     if (value > 117) {
         return 7;
@@ -274,7 +274,7 @@ int playerStatAdjustmentWisdomIntelligence(int stat) {
 // Adjustment for charisma -RAK-
 // Percent decrease or increase in price of goods
 int playerStatAdjustmentCharisma() {
-    int charisma = py.stats.use_stat[A_CHR];
+    int charisma = py.stats.used[A_CHR];
 
     if (charisma > 117) {
         return 90;
@@ -336,7 +336,7 @@ int playerStatAdjustmentCharisma() {
 
 // Returns a character's adjustment to hit points -JWT-
 int playerStatAdjustmentConstitution() {
-    int con = py.stats.use_stat[A_CON];
+    int con = py.stats.used[A_CON];
 
     if (con < 7) {
         return (con - 7);
@@ -578,7 +578,7 @@ void printCharacterWinner() {
 }
 
 static uint8_t playerModifyStat(int stat, int16_t amount) {
-    uint8_t new_stat = py.stats.cur_stat[stat];
+    uint8_t new_stat = py.stats.current[stat];
 
     int loop = (amount < 0 ? -amount : amount);
 
@@ -607,7 +607,7 @@ static uint8_t playerModifyStat(int stat, int16_t amount) {
 
 // Set the value of the stat which is actually used. -CJS-
 void playerSetAndUseStat(int stat) {
-    py.stats.use_stat[stat] = playerModifyStat(stat, py.stats.mod_stat[stat]);
+    py.stats.used[stat] = playerModifyStat(stat, py.stats.modified[stat]);
 
     if (stat == A_STR) {
         py.flags.status |= PY_STR_WGT;
@@ -627,7 +627,7 @@ void playerSetAndUseStat(int stat) {
 
 // Increases a stat by one randomized level -RAK-
 bool playerStatRandomIncrease(int stat) {
-    int new_stat = py.stats.cur_stat[stat];
+    int new_stat = py.stats.current[stat];
 
     if (new_stat >= 118) {
         return false;
@@ -644,10 +644,10 @@ bool playerStatRandomIncrease(int stat) {
         new_stat++;
     }
 
-    py.stats.cur_stat[stat] = (uint8_t) new_stat;
+    py.stats.current[stat] = (uint8_t) new_stat;
 
-    if (new_stat > py.stats.max_stat[stat]) {
-        py.stats.max_stat[stat] = (uint8_t) new_stat;
+    if (new_stat > py.stats.max[stat]) {
+        py.stats.max[stat] = (uint8_t) new_stat;
     }
 
     playerSetAndUseStat(stat);
@@ -658,7 +658,7 @@ bool playerStatRandomIncrease(int stat) {
 
 // Decreases a stat by one randomized level -RAK-
 bool playerStatRandomDecrease(int stat) {
-    int new_stat = py.stats.cur_stat[stat];
+    int new_stat = py.stats.current[stat];
 
     if (new_stat <= 3) {
         return false;
@@ -677,7 +677,7 @@ bool playerStatRandomDecrease(int stat) {
         new_stat--;
     }
 
-    py.stats.cur_stat[stat] = (uint8_t) new_stat;
+    py.stats.current[stat] = (uint8_t) new_stat;
 
     playerSetAndUseStat(stat);
     displayCharacterStats(stat);
@@ -687,13 +687,13 @@ bool playerStatRandomDecrease(int stat) {
 
 // Restore a stat.  Return true only if this actually makes a difference.
 bool playerStatRestore(int stat) {
-    int new_stat = py.stats.max_stat[stat] - py.stats.cur_stat[stat];
+    int new_stat = py.stats.max[stat] - py.stats.current[stat];
 
     if (new_stat == 0) {
         return false;
     }
 
-    py.stats.cur_stat[stat] += new_stat;
+    py.stats.current[stat] += new_stat;
 
     playerSetAndUseStat(stat);
     displayCharacterStats(stat);
@@ -704,7 +704,7 @@ bool playerStatRestore(int stat) {
 // Boost a stat artificially (by wearing something). If the display
 // argument is true, then increase is shown on the screen.
 void playerStatBoost(int stat, int amount) {
-    py.stats.mod_stat[stat] += amount;
+    py.stats.modified[stat] += amount;
 
     playerSetAndUseStat(stat);
 
@@ -716,7 +716,7 @@ void playerStatBoost(int stat, int amount) {
 int playerToHitAdjustment() {
     int total;
 
-    int dexterity = py.stats.use_stat[A_DEX];
+    int dexterity = py.stats.used[A_DEX];
     if (dexterity < 4) {
         total = -3;
     } else if (dexterity < 6) {
@@ -737,7 +737,7 @@ int playerToHitAdjustment() {
         total = 5;
     }
 
-    int strength = py.stats.use_stat[A_STR];
+    int strength = py.stats.used[A_STR];
     if (strength < 4) {
         total -= 3;
     } else if (strength < 5) {
@@ -761,7 +761,7 @@ int playerToHitAdjustment() {
 
 // Returns a character's adjustment to armor class -JWT-
 int playerArmorClassAdjustment() {
-    int stat = py.stats.use_stat[A_DEX];
+    int stat = py.stats.used[A_DEX];
 
     if (stat < 4) {
         return -4;
@@ -788,7 +788,7 @@ int playerArmorClassAdjustment() {
 
 // Returns a character's adjustment to disarm -RAK-
 int playerDisarmAdjustment() {
-    int stat = py.stats.use_stat[A_DEX];
+    int stat = py.stats.used[A_DEX];
 
     if (stat < 4) {
         return -8;
@@ -819,7 +819,7 @@ int playerDisarmAdjustment() {
 
 // Returns a character's adjustment to damage -JWT-
 int playerDamageAdjustment() {
-    int stat = py.stats.use_stat[A_STR];
+    int stat = py.stats.used[A_STR];
 
     if (stat < 4) {
         return -2;
@@ -929,12 +929,12 @@ void printCharacterStats() {
     for (int i = 0; i < 6; i++) {
         vtype_t buf;
 
-        statsAsString(py.stats.use_stat[i], buf);
+        statsAsString(py.stats.used[i], buf);
         putString(stat_names[i], 2 + i, 61);
         putString(buf, 2 + i, 66);
 
-        if (py.stats.max_stat[i] > py.stats.cur_stat[i]) {
-            statsAsString(py.stats.max_stat[i], buf);
+        if (py.stats.max[i] > py.stats.current[i]) {
+            statsAsString(py.stats.max[i], buf);
             putString(buf, 2 + i, 73);
         }
     }
@@ -1194,7 +1194,7 @@ int inventoryDamageItem(bool (*item_type)(Inventory_t *), int chance_percentage)
 
 // Computes current weight limit -RAK-
 int playerCarryingLoadLimit() {
-    int weight_cap = py.stats.use_stat[A_STR] * PLAYER_WEIGHT_CAP + py.misc.weight;
+    int weight_cap = py.stats.used[A_STR] * PLAYER_WEIGHT_CAP + py.misc.weight;
 
     if (weight_cap > 3000) {
         weight_cap = 3000;
@@ -1252,7 +1252,7 @@ bool inventoryCanCarryItem(Inventory_t *item) {
 void playerStrength() {
     Inventory_t *i_ptr = &inventory[EQUIPMENT_WIELD];
 
-    if (i_ptr->tval != TV_NOTHING && py.stats.use_stat[A_STR] * 15 < i_ptr->weight) {
+    if (i_ptr->tval != TV_NOTHING && py.stats.used[A_STR] * 15 < i_ptr->weight) {
         if (!weapon_is_heavy) {
             printMessage("You have trouble wielding such a heavy weapon.");
             weapon_is_heavy = true;
@@ -2148,14 +2148,14 @@ static int playerAttackBlowsStrength(int strength, int weight) {
 int playerAttackBlows(int weight, int *weight_to_hit) {
     *weight_to_hit = 0;
 
-    int player_strength = py.stats.use_stat[A_STR];
+    int player_strength = py.stats.used[A_STR];
 
     if (player_strength * 15 < weight) {
         *weight_to_hit = player_strength * 15 - weight;
         return 1;
     }
 
-    int dexterity = playerAttackBlowsDexterity(py.stats.use_stat[A_DEX]);
+    int dexterity = playerAttackBlowsDexterity(py.stats.used[A_DEX]);
     int strength = playerAttackBlowsStrength(player_strength, weight);
 
     return (int) blows_table[strength][dexterity];

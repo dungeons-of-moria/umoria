@@ -43,7 +43,7 @@ void wizardCharacterAdjustment() {
     if (getStringInput(input, 0, 25, 3)) {
         number = atoi(input);
         if (number > 2 && number < 119) {
-            py.stats.max_stat[A_STR] = (uint8_t) number;
+            py.stats.max[A_STR] = (uint8_t) number;
             (void) playerStatRestore(A_STR);
         }
     } else {
@@ -54,7 +54,7 @@ void wizardCharacterAdjustment() {
     if (getStringInput(input, 0, 25, 3)) {
         number = atoi(input);
         if (number > 2 && number < 119) {
-            py.stats.max_stat[A_INT] = (uint8_t) number;
+            py.stats.max[A_INT] = (uint8_t) number;
             (void) playerStatRestore(A_INT);
         }
     } else {
@@ -65,7 +65,7 @@ void wizardCharacterAdjustment() {
     if (getStringInput(input, 0, 25, 3)) {
         number = atoi(input);
         if (number > 2 && number < 119) {
-            py.stats.max_stat[A_WIS] = (uint8_t) number;
+            py.stats.max[A_WIS] = (uint8_t) number;
             (void) playerStatRestore(A_WIS);
         }
     } else {
@@ -76,7 +76,7 @@ void wizardCharacterAdjustment() {
     if (getStringInput(input, 0, 25, 3)) {
         number = atoi(input);
         if (number > 2 && number < 119) {
-            py.stats.max_stat[A_DEX] = (uint8_t) number;
+            py.stats.max[A_DEX] = (uint8_t) number;
             (void) playerStatRestore(A_DEX);
         }
     } else {
@@ -87,7 +87,7 @@ void wizardCharacterAdjustment() {
     if (getStringInput(input, 0, 25, 3)) {
         number = atoi(input);
         if (number > 2 && number < 119) {
-            py.stats.max_stat[A_CON] = (uint8_t) number;
+            py.stats.max[A_CON] = (uint8_t) number;
             (void) playerStatRestore(A_CON);
         }
     } else {
@@ -98,7 +98,7 @@ void wizardCharacterAdjustment() {
     if (getStringInput(input, 0, 25, 3)) {
         number = atoi(input);
         if (number > 2 && number < 119) {
-            py.stats.max_stat[A_CHR] = (uint8_t) number;
+            py.stats.max[A_CHR] = (uint8_t) number;
             (void) playerStatRestore(A_CHR);
         }
     } else {

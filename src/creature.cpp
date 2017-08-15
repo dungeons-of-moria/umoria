@@ -642,7 +642,7 @@ static bool executeAttackOnPlayer(Creature_t *creature, Monster_t *monster, int 
             }
             break;
         case 12: // Steal Money
-            if (py.flags.paralysis < 1 && randomNumber(124) < py.stats.use_stat[A_DEX]) {
+            if (py.flags.paralysis < 1 && randomNumber(124) < py.stats.used[A_DEX]) {
                 printMessage("You quickly protect your money pouch!");
             } else {
                 gold = (py.misc.au / 10) + randomNumber(25);
@@ -660,7 +660,7 @@ static bool executeAttackOnPlayer(Creature_t *creature, Monster_t *monster, int 
             }
             break;
         case 13: // Steal Object
-            if (py.flags.paralysis < 1 && randomNumber(124) < py.stats.use_stat[A_DEX]) {
+            if (py.flags.paralysis < 1 && randomNumber(124) < py.stats.used[A_DEX]) {
                 printMessage("You grab hold of your backpack!");
             } else {
                 inventoryDestroyItem(randomNumber(inventory_count) - 1);

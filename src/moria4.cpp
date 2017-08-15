@@ -33,7 +33,7 @@ static bool playerCanTunnel(int treasure_id, int tile_id) {
 
 // Compute the digging ability of player; based on strength, and type of tool used
 static int playerDiggingAbility(Inventory_t *weapon) {
-    int diggingAbility = py.stats.use_stat[A_STR];
+    int diggingAbility = py.stats.used[A_STR];
 
     if (weapon->flags & TR_TUNNEL) {
         diggingAbility += 25 + weapon->p1 * 50;
@@ -47,7 +47,7 @@ static int playerDiggingAbility(Inventory_t *weapon) {
     // If this weapon is too heavy for the player to wield properly,
     // then also make it harder to dig with it.
     if (weapon_is_heavy) {
-        diggingAbility += (py.stats.use_stat[A_STR] * 15) - weapon->weight;
+        diggingAbility += (py.stats.used[A_STR] * 15) - weapon->weight;
 
         if (diggingAbility < 0) {
             diggingAbility = 0;
@@ -742,7 +742,7 @@ static void weaponMissileFacts(Inventory_t *item, int *tbth, int *tpth, int *tda
         *tpth -= inventory[EQUIPMENT_WIELD].tohit;
     }
 
-    *tdis = (((py.stats.use_stat[A_STR] + 20) * 10) / weight);
+    *tdis = (((py.stats.used[A_STR] + 20) * 10) / weight);
     if (*tdis > 10) {
         *tdis = 10;
     }
@@ -996,23 +996,23 @@ static void playerBashAttack(int y, int x) {
         (void) sprintf(name, "the %s", creature->name);
     }
 
-    int base_to_hit = py.stats.use_stat[A_STR];
+    int base_to_hit = py.stats.used[A_STR];
     base_to_hit += inventory[EQUIPMENT_ARM].weight / 2;
     base_to_hit += py.misc.weight / 10;
 
     if (!monster->ml) {
         base_to_hit /= 2;
-        base_to_hit -= py.stats.use_stat[A_DEX] * (BTH_PER_PLUS_TO_HIT_ADJUST - 1);
+        base_to_hit -= py.stats.used[A_DEX] * (BTH_PER_PLUS_TO_HIT_ADJUST - 1);
         base_to_hit -= py.misc.level * class_level_adj[py.misc.class_id][CLASS_BTH] / 2;
     }
 
-    if (playerTestBeingHit(base_to_hit, (int) py.misc.level, (int) py.stats.use_stat[A_DEX], (int) creature->ac, CLASS_BTH)) {
+    if (playerTestBeingHit(base_to_hit, (int) py.misc.level, (int) py.stats.used[A_DEX], (int) creature->ac, CLASS_BTH)) {
         vtype_t msg;
         (void) sprintf(msg, "You hit %s.", name);
         printMessage(msg);
 
         int damage = dicePlayerDamageRoll(inventory[EQUIPMENT_ARM].damage);
-        damage = playerWeaponCriticalBlow(inventory[EQUIPMENT_ARM].weight / 4 + py.stats.use_stat[A_STR], 0, damage, CLASS_BTH);
+        damage = playerWeaponCriticalBlow(inventory[EQUIPMENT_ARM].weight / 4 + py.stats.used[A_STR], 0, damage, CLASS_BTH);
         damage += py.misc.weight / 60;
         damage += 3;
 
@@ -1054,7 +1054,7 @@ static void playerBashAttack(int y, int x) {
         printMessage(msg);
     }
 
-    if (randomNumber(150) > py.stats.use_stat[A_DEX]) {
+    if (randomNumber(150) > py.stats.used[A_DEX]) {
         printMessage("You are off balance.");
         py.flags.paralysis = (int16_t) (1 + randomNumber(2));
     }
@@ -1073,7 +1073,7 @@ static void playerBashPosition(int y, int x) {
 static void playerBashClosedDoor(int y, int x, int dir, Cave_t *tile, Inventory_t *item) {
     printMessageNoCommandInterrupt("You smash into the door!");
 
-    int chance = py.stats.use_stat[A_STR] + py.misc.weight / 2;
+    int chance = py.stats.used[A_STR] + py.misc.weight / 2;
 
     // Use (roughly) similar method as for monsters.
     if (randomNumber(chance * (20 + abs(item->p1))) < 10 * (chance - abs(item->p1))) {
@@ -1095,7 +1095,7 @@ static void playerBashClosedDoor(int y, int x, int dir, Cave_t *tile, Inventory_
         return;
     }
 
-    if (randomNumber(150) > py.stats.use_stat[A_DEX]) {
+    if (randomNumber(150) > py.stats.used[A_DEX]) {
         printMessage("You are off-balance.");
         py.flags.paralysis = (int16_t) (1 + randomNumber(2));
         return;

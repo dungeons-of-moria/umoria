@@ -163,10 +163,10 @@ static bool sv_write() {
         wr_string(py.misc.history[i]);
     }
 
-    wr_bytes(py.stats.max_stat, 6);
-    wr_bytes(py.stats.cur_stat, 6);
-    wr_shorts((uint16_t *) py.stats.mod_stat, 6);
-    wr_bytes(py.stats.use_stat, 6);
+    wr_bytes(py.stats.max, 6);
+    wr_bytes(py.stats.current, 6);
+    wr_shorts((uint16_t *) py.stats.modified, 6);
+    wr_bytes(py.stats.used, 6);
 
     wr_long(py.flags.status);
     wr_short((uint16_t) py.flags.rest);
@@ -622,10 +622,10 @@ bool loadGame(bool *generate) {
                 rd_string(py.misc.history[i]);
             }
 
-            rd_bytes(py.stats.max_stat, 6);
-            rd_bytes(py.stats.cur_stat, 6);
-            rd_shorts((uint16_t *) py.stats.mod_stat, 6);
-            rd_bytes(py.stats.use_stat, 6);
+            rd_bytes(py.stats.max, 6);
+            rd_bytes(py.stats.current, 6);
+            rd_shorts((uint16_t *) py.stats.modified, 6);
+            rd_bytes(py.stats.used, 6);
 
             rd_long(&py.flags.status);
             rd_short((uint16_t *) &py.flags.rest);

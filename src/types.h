@@ -72,10 +72,10 @@ typedef struct {
 
     // Stats now kept in arrays, for more efficient access. -CJS-
     struct {
-        uint8_t max_stat[6]; // What is restored
-        uint8_t cur_stat[6]; // What is natural
-        int16_t mod_stat[6]; // What is modified, may be +/-
-        uint8_t use_stat[6]; // What is used
+        uint8_t max[6];      // What is restored
+        uint8_t current[6];  // What is natural
+        int16_t modified[6]; // What is modified, may be +/-
+        uint8_t used[6];     // What is used
     } stats;
 
     struct {

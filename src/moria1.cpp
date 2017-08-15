@@ -196,7 +196,7 @@ void playerRecalculateBonuses() {
     py.misc.display_ac += py.misc.display_to_ac;
 
     if (weapon_is_heavy) {
-        py.misc.display_to_hit += (py.stats.use_stat[A_STR] * 15 - inventory[EQUIPMENT_WIELD].weight);
+        py.misc.display_to_hit += (py.stats.used[A_STR] * 15 - inventory[EQUIPMENT_WIELD].weight);
     }
 
     // Add in temporary spell increases
@@ -385,7 +385,7 @@ const char *playerItemWearingDescription(int body_location) {
 static const char *itemPostitionDescription(int positionID, uint16_t weight) {
     switch (positionID) {
         case EQUIPMENT_WIELD:
-            if (py.stats.use_stat[A_STR] * 15 < weight) {
+            if (py.stats.used[A_STR] * 15 < weight) {
                 return "Just lifting";
             }
 
