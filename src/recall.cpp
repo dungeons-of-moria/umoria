@@ -154,13 +154,13 @@ static void memoryWizardModeInit(Recall_t *memory, Creature_t *creature) {
     memory->kills = MAX_SHORT;
     memory->wake = memory->ignore = MAX_UCHAR;
 
-    uint32_t move = (uint32_t) ((creature->cmove & CM_4D2_OBJ) != 0) * 8;
-    move += (uint32_t) ((creature->cmove & CM_2D2_OBJ) != 0) * 4;
-    move += (uint32_t) ((creature->cmove & CM_1D2_OBJ) != 0) * 2;
-    move += (uint32_t) ((creature->cmove & CM_90_RANDOM) != 0);
-    move += (uint32_t) ((creature->cmove & CM_60_RANDOM) != 0);
+    uint32_t move = (uint32_t) ((creature->movement & CM_4D2_OBJ) != 0) * 8;
+    move += (uint32_t) ((creature->movement & CM_2D2_OBJ) != 0) * 4;
+    move += (uint32_t) ((creature->movement & CM_1D2_OBJ) != 0) * 2;
+    move += (uint32_t) ((creature->movement & CM_90_RANDOM) != 0);
+    move += (uint32_t) ((creature->movement & CM_60_RANDOM) != 0);
 
-    memory->movement = (uint32_t) ((creature->cmove & ~CM_TREASURE) | (move << CM_TR_SHIFT));
+    memory->movement = (uint32_t) ((creature->movement & ~CM_TREASURE) | (move << CM_TR_SHIFT));
     memory->defenses = creature->cdefense;
 
     if (creature->spells & CS_FREQ) {
@@ -681,7 +681,7 @@ int memoryRecall(int monster_id) {
     uint32_t spells = (uint32_t) (memory->spells & creature->spells & ~CS_FREQ);
 
     // the CM_WIN property is always known, set it if a win monster
-    uint32_t move = (uint32_t) (memory->movement | (CM_WIN & creature->cmove));
+    uint32_t move = (uint32_t) (memory->movement | (CM_WIN & creature->movement));
 
     uint16_t defense = memory->defenses & creature->cdefense;
 
@@ -732,12 +732,12 @@ int memoryRecall(int monster_id) {
 
     memoryAwareness(creature, memory);
 
-    memoryLootCarried(creature->cmove, move);
+    memoryLootCarried(creature->movement, move);
 
     memoryAttackNumberAndDamage(memory, creature);
 
     // Always know the win creature.
-    if (creature->cmove & CM_WIN) {
+    if (creature->movement & CM_WIN) {
         memoryPrint(" Killing one of these wins the game!");
     }
 

@@ -345,7 +345,7 @@ typedef struct {
 // as: Kobold, Orc, Giant Red Ant, Quasit, Young Black Dragon, etc.
 typedef struct {
     const char *name;  // Description of creature
-    uint32_t cmove;    // Bit field
+    uint32_t movement; // Bit field
     uint32_t spells;   // Creature spells
     uint16_t cdefense; // Bit field
     uint16_t mexp;     // Exp value for kill

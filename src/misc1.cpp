@@ -520,7 +520,7 @@ bool compactMonsters() {
     while (!delete_any) {
         for (int i = next_free_monster_id - 1; i >= MON_MIN_INDEX_ID; i--) {
             if (cur_dis < monsters[i].distance_from_player && randomNumber(3) == 1) {
-                if (creatures_list[monsters[i].creature_id].cmove & CM_WIN) {
+                if (creatures_list[monsters[i].creature_id].movement & CM_WIN) {
                     // Never compact away the Balrog!!
                 } else if (hack_monptr < i) {
                     // in case this is called from within updateMonsters(), this is a horrible

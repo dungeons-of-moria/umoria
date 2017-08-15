@@ -176,7 +176,7 @@ bool spellDetectInvisibleCreaturesOnPanel() {
     for (int id = next_free_monster_id - 1; id >= MON_MIN_INDEX_ID; id--) {
         Monster_t *monster = &monsters[id];
 
-        if (coordInsidePanel((int) monster->y, (int) monster->x) && (CM_INVISIBLE & creatures_list[monster->creature_id].cmove)) {
+        if (coordInsidePanel((int) monster->y, (int) monster->x) && (CM_INVISIBLE & creatures_list[monster->creature_id].movement)) {
             monster->lit = true;
 
             // works correctly even if hallucinating
@@ -461,7 +461,7 @@ bool spellDetectMonsters() {
     for (int id = next_free_monster_id - 1; id >= MON_MIN_INDEX_ID; id--) {
         Monster_t *monster = &monsters[id];
 
-        if (coordInsidePanel((int) monster->y, (int) monster->x) && (CM_INVISIBLE & creatures_list[monster->creature_id].cmove) == 0) {
+        if (coordInsidePanel((int) monster->y, (int) monster->x) && (CM_INVISIBLE & creatures_list[monster->creature_id].movement) == 0) {
             monster->lit = true;
             detected = true;
 
@@ -906,7 +906,7 @@ void spellBreath(int y, int x, int monster_id, int damage_hp, int spell_type, ch
                         monster->sleep_count = 0;
 
                         if (monster->hp < 0) {
-                            uint32_t treasure_id = monsterDeath((int) monster->y, (int) monster->x, creature->cmove);
+                            uint32_t treasure_id = monsterDeath((int) monster->y, (int) monster->x, creature->movement);
 
                             if (monster->lit) {
                                 uint32_t tmp = (uint32_t) ((creature_recall[monster->creature_id].movement & CM_TREASURE) >> CM_TR_SHIFT);
@@ -1444,10 +1444,10 @@ bool spellBuildWall(int y, int x, int direction) {
             Monster_t *monster = &monsters[tile->creature_id];
             Creature_t *creature = &creatures_list[monster->creature_id];
 
-            if (!(creature->cmove & CM_PHASE)) {
+            if (!(creature->movement & CM_PHASE)) {
                 // monster does not move, can't escape the wall
                 int damage;
-                if (creature->cmove & CM_ATTACK_ONLY) {
+                if (creature->movement & CM_ATTACK_ONLY) {
                     // this will kill everything
                     damage = 3000;
                 } else {
@@ -1616,7 +1616,7 @@ bool spellMassGenocide() {
         Monster_t *monster = &monsters[id];
         Creature_t *creature = &creatures_list[monster->creature_id];
 
-        if (monster->distance_from_player <= MON_MAX_SIGHT && (creature->cmove & CM_WIN) == 0) {
+        if (monster->distance_from_player <= MON_MAX_SIGHT && (creature->movement & CM_WIN) == 0) {
             killed = true;
             dungeonDeleteMonster(id);
         }
@@ -1641,7 +1641,7 @@ bool spellGenocide() {
         Creature_t *creature = &creatures_list[monster->creature_id];
 
         if (creature_char == creatures_list[monster->creature_id].cchar) {
-            if ((creature->cmove & CM_WIN) == 0) {
+            if ((creature->movement & CM_WIN) == 0) {
                 killed = true;
                 dungeonDeleteMonster(id);
             } else {
@@ -1744,7 +1744,7 @@ bool spellMassPolymorph() {
         if (monster->distance_from_player <= MON_MAX_SIGHT) {
             Creature_t *creature = &creatures_list[monster->creature_id];
 
-            if ((creature->cmove & CM_WIN) == 0) {
+            if ((creature->movement & CM_WIN) == 0) {
                 int y = monster->y;
                 int x = monster->x;
                 dungeonDeleteMonster(id);
@@ -1858,9 +1858,9 @@ static void earthquakeHitsMonster(int monsterID) {
     Monster_t *monster = &monsters[monsterID];
     Creature_t *creature = &creatures_list[monster->creature_id];
 
-    if (!(creature->cmove & CM_PHASE)) {
+    if (!(creature->movement & CM_PHASE)) {
         int damage;
-        if (creature->cmove & CM_ATTACK_ONLY) {
+        if (creature->movement & CM_ATTACK_ONLY) {
             // this will kill everything
             damage = 3000;
         } else {
