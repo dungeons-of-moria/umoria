@@ -83,18 +83,18 @@ static void characterGenerateStatsAndRace() {
         playerSetAndUseStat(i);
     }
 
-    py.misc.chance_in_search = race->srh;
+    py.misc.chance_in_search = race->search_chance_base;
     py.misc.bth = race->bth;
     py.misc.bth_with_bows = race->bthb;
     py.misc.freng_of_search = race->fos;
     py.misc.stealth_factor = race->stl;
-    py.misc.saving_throw = race->bsav;
-    py.misc.hit_die = race->bhitdie;
+    py.misc.saving_throw = race->saving_throw_base;
+    py.misc.hit_die = race->hit_points_base;
     py.misc.plusses_to_damage = (int16_t) playerDamageAdjustment();
     py.misc.plusses_to_hit = (int16_t) playerToHitAdjustment();
     py.misc.magical_ac = 0;
     py.misc.ac = (int16_t) playerArmorClassAdjustment();
-    py.misc.experience_factor = race->b_exp;
+    py.misc.experience_factor = race->exp_factor_base;
     py.flags.see_infra = race->infra;
 }
 
@@ -303,7 +303,7 @@ static void characterSetAgeHeightWeight() {
         py.misc.weight = (uint16_t) randomNumberNormalDistribution((int) character_races[race_id].female_weight_base, (int) character_races[race_id].female_weight_mod);
     }
 
-    py.misc.disarm = (int16_t) (character_races[race_id].b_dis + playerDisarmAdjustment());
+    py.misc.disarm = (int16_t) (character_races[race_id].disarm_chance_base + playerDisarmAdjustment());
 }
 
 // Prints the classes for a given race: Rogue, Mage, Priest, etc.,

@@ -145,16 +145,16 @@ typedef struct {
     uint8_t female_height_mod;   // mod height for females
     uint8_t female_weight_base;  // base weight for female
     uint8_t female_weight_mod;   // mod weight for females
-    int16_t b_dis;   // base chance to disarm
-    int16_t srh;     // base chance for search
+    int16_t disarm_chance_base;  // base chance to disarm
+    int16_t search_chance_base;  // base chance for search
     int16_t stl;     // Stealth of character
     int16_t fos;     // frequency of auto search
     int16_t bth;     // adj base chance to hit
     int16_t bthb;    // adj base to hit with bows
-    int16_t bsav;    // Race base for saving throw
-    uint8_t bhitdie; // Base hit points for race
+    int16_t saving_throw_base;   // Race base for saving throw
+    uint8_t hit_points_base;     // Base hit points for race
     uint8_t infra;   // See infra-red
-    uint8_t b_exp;   // Base experience factor
+    uint8_t exp_factor_base;     // Base experience factor
     uint8_t rtclass; // Bit field for class types
 } Race_t;
 
