@@ -459,7 +459,7 @@ void dungeonDeleteMonster(int id) {
 
     cave[monster->y][monster->x].cptr = 0;
 
-    if (monster->ml) {
+    if (monster->lit) {
         dungeonLiteSpot((int) monster->y, (int) monster->x);
     }
 
@@ -498,7 +498,7 @@ void dungeonDeleteMonsterFix1(int id) {
 
     cave[monster->y][monster->x].cptr = 0;
 
-    if (monster->ml) {
+    if (monster->lit) {
         dungeonLiteSpot((int) monster->y, (int) monster->x);
     }
 
@@ -726,7 +726,7 @@ int monsterTakeHit(int monster_id, int damage) {
 
     Recall_t *memory = &creature_recall[monster->creature_id];
 
-    if ((py.flags.blind < 1 && monster->ml) || (creature->cmove & CM_WIN)) {
+    if ((py.flags.blind < 1 && monster->lit) || (creature->cmove & CM_WIN)) {
         uint32_t tmp = (uint32_t) ((memory->movement & CM_TREASURE) >> CM_TR_SHIFT);
 
         if (tmp > ((treasure_flags & CM_TREASURE) >> CM_TR_SHIFT)) {
@@ -802,7 +802,7 @@ static void playerAttackMonster(int y, int x) {
 
     // Does the player know what he's fighting?
     vtype_t name;
-    if (!monster->ml) {
+    if (!monster->lit) {
         (void) strcpy(name, "it");
     } else {
         (void) sprintf(name, "the %s", creature->name);
@@ -811,7 +811,7 @@ static void playerAttackMonster(int y, int x) {
     int blows, total_to_hit;
     playerCalculateToHitBlows(item->category_id, item->weight, &blows, &total_to_hit);
 
-    int base_to_hit = playerCalculateBaseToHit(monster->ml, total_to_hit);
+    int base_to_hit = playerCalculateBaseToHit(monster->lit, total_to_hit);
 
     int damage;
     vtype_t msg;
@@ -860,7 +860,7 @@ static void playerAttackMonster(int y, int x) {
             }
             printMessage(msg);
 
-            if (monster->ml && randomNumber(4) == 1) {
+            if (monster->lit && randomNumber(4) == 1) {
                 creature_recall[monster->creature_id].defenses |= creature->cdefense & CD_NO_SLEEP;
             }
         }
@@ -927,7 +927,7 @@ void playerMove(int direction, bool do_pickup) {
     // a wall is a free turn normally, hence don't give player free turns
     // attacking each wall in an attempt to locate the invisible creature,
     // instead force player to tunnel into walls which always takes a turn
-    if (tile->cptr < 2 || (!monster->ml && tile->fval >= MIN_CLOSED_SPACE)) {
+    if (tile->cptr < 2 || (!monster->lit && tile->fval >= MIN_CLOSED_SPACE)) {
         // Open floor spot
         if (tile->fval <= MAX_OPEN_SPACE) {
             // Make final assignments of char coords
@@ -1022,7 +1022,7 @@ void playerMove(int direction, bool do_pickup) {
         playerEndRunning();
 
         // if player can see monster, and was in find mode, then nothing
-        if (monster->ml && old_find_flag) {
+        if (monster->lit && old_find_flag) {
             // did not do anything this turn
             player_free_turn = true;
         } else {
@@ -1332,7 +1332,7 @@ void objectBlockedByMonster(int monster_id) {
     Monster_t *monster = &monsters[monster_id];
     const char *name = creatures_list[monster->creature_id].name;
 
-    if (monster->ml) {
+    if (monster->lit) {
         (void) sprintf(description, "The %s", name);
     } else {
         (void) strcpy(description, "Something");

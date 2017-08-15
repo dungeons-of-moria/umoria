@@ -461,7 +461,7 @@ char caveGetTileSymbol(int y, int x) {
         return (uint8_t) (randomNumber(95) + 31);
     }
 
-    if (cave_ptr->cptr > 1 && monsters[cave_ptr->cptr].ml) {
+    if (cave_ptr->cptr > 1 && monsters[cave_ptr->cptr].lit) {
         return creatures_list[monsters[cave_ptr->cptr].creature_id].cchar;
     }
 
@@ -620,7 +620,7 @@ bool monsterPlaceNew(int y, int x, int creature_id, bool sleeping) {
     monster->speed = (int16_t) (creatures_list[creature_id].speed - 10 + py.flags.speed);
     monster->stunned = 0;
     monster->distance_from_player = (uint8_t) coordDistanceBetween(char_row, char_col, y, x);
-    monster->ml = false;
+    monster->lit = false;
 
     cave[y][x].cptr = (uint8_t) monster_id;
 
@@ -653,7 +653,7 @@ void monsterPlaceWinning() {
 
     // FIXME: duplicate code -MRC-
     // The following code is now exactly the same as monsterPlaceNew() except here
-    // we `abort()` on failed placement, and do not set `monster->ml = false`.
+    // we `abort()` on failed placement, and do not set `monster->lit = false`.
     // Perhaps we can find a way to call `monsterPlaceNew()` instead of
     // duplicating everything here.
 

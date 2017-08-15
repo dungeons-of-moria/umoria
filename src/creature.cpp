@@ -48,17 +48,17 @@ void monsterUpdateVisibility(int monster_id) {
 
     if (visible) {
         // Light it up.
-        if (!m_ptr->ml) {
+        if (!m_ptr->lit) {
             playerDisturb(1, 0);
-            m_ptr->ml = true;
+            m_ptr->lit = true;
             dungeonLiteSpot((int) m_ptr->y, (int) m_ptr->x);
 
             // notify inventoryExecuteCommand()
             screen_has_changed = true;
         }
-    } else if (m_ptr->ml) {
+    } else if (m_ptr->lit) {
         // Turn it off.
-        m_ptr->ml = false;
+        m_ptr->lit = false;
         dungeonLiteSpot((int) m_ptr->y, (int) m_ptr->x);
 
         // notify inventoryExecuteCommand()
@@ -90,7 +90,7 @@ static bool monsterMakeVisible(int y, int x) {
     }
 
     monsterUpdateVisibility(monster_id);
-    return monsters[monster_id].ml;
+    return monsters[monster_id].lit;
 }
 
 // Choose correct directions for monster movement -RAK-
@@ -813,7 +813,7 @@ static void monsterAttackPlayer(int monster_id) {
     Creature_t *creature = &creatures_list[monster->creature_id];
 
     vtype_t name;
-    if (!monster->ml) {
+    if (!monster->lit) {
         (void) strcpy(name, "It ");
     } else {
         (void) sprintf(name, "The %s ", creature->name);
@@ -836,7 +836,7 @@ static void monsterAttackPlayer(int monster_id) {
         attstr++;
 
         if (py.flags.protect_evil > 0 && (creature->cdefense & CD_EVIL) && py.misc.level + 1 > creature->level) {
-            if (monster->ml) {
+            if (monster->lit) {
                 creature_recall[monster->creature_id].defenses |= CD_EVIL;
             }
             attype = 99;
@@ -856,7 +856,7 @@ static void monsterAttackPlayer(int monster_id) {
             // and then teleport afterwards (becoming effectively invisible)
             bool notice = true;
             bool visible = true;
-            if (!monster->ml) {
+            if (!monster->lit) {
                 visible = false;
                 notice = false;
             }
@@ -983,7 +983,7 @@ static void monsterMovesOnPlayer(Monster_t *monster, uint8_t creature_id, int mo
         // if the monster is not lit, must call monsterUpdateVisibility, it
         // may be faster than character, and hence could have
         // just moved next to character this same turn.
-        if (!monster->ml) {
+        if (!monster->lit) {
             monsterUpdateVisibility(monster_id);
         }
         monsterAttackPlayer(monster_id);
@@ -994,7 +994,7 @@ static void monsterMovesOnPlayer(Monster_t *monster, uint8_t creature_id, int mo
 
         // Creature eats other creatures?
         if ((move_bits & CM_EATS_OTHER) && creatures_list[monster->creature_id].mexp >= creatures_list[monsters[creature_id].creature_id].mexp) {
-            if (monsters[creature_id].ml) {
+            if (monsters[creature_id].lit) {
                 *rcmove |= CM_EATS_OTHER;
             }
 
@@ -1027,8 +1027,8 @@ static void monsterAllowedToMove(Monster_t *monster, uint32_t move_bits, bool *d
     // Move creature record
     dungeonMoveCreatureRecord((int) monster->y, (int) monster->x, y, x);
 
-    if (monster->ml) {
-        monster->ml = false;
+    if (monster->lit) {
+        monster->lit = false;
         dungeonLiteSpot((int) monster->y, (int) monster->x);
     }
 
@@ -1213,7 +1213,7 @@ void monsterExecuteCastingOfSpell(Monster_t *monster, int monster_id, int spell_
                 (void) sprintf(msg, "%sdraws psychic energy from you!", monster_name);
                 printMessage(msg);
 
-                if (monster->ml) {
+                if (monster->lit) {
                     (void) sprintf(msg, "%sappears healthier.", monster_name);
                     printMessage(msg);
                 }
@@ -1283,7 +1283,7 @@ static bool monsterCastSpell(int monster_id) {
 
     // Describe the attack
     vtype_t name;
-    if (monster->ml) {
+    if (monster->lit) {
         (void) sprintf(name, "The %s ", creature->name);
     } else {
         (void) strcpy(name, "It ");
@@ -1319,7 +1319,7 @@ static bool monsterCastSpell(int monster_id) {
 
     monsterExecuteCastingOfSpell(monster, monster_id, thrown_spell, creature->level, name, death_description);
 
-    if (monster->ml) {
+    if (monster->lit) {
         creature_recall[monster->creature_id].spells |= 1L << (thrown_spell - 1);
         if ((creature_recall[monster->creature_id].spells & CS_FREQ) != CS_FREQ) {
             creature_recall[monster->creature_id].spells++;
@@ -1622,7 +1622,7 @@ static void monsterMove(int monster_id, uint32_t *rcmove) {
 }
 
 static void memoryUpdateRecall(Monster_t *monster, bool wake, bool ignore, int rcmove) {
-    if (!monster->ml) {
+    if (!monster->lit) {
         return;
     }
 
@@ -1650,7 +1650,7 @@ static void monsterAttackingUpdate(Monster_t *monster, int monster_id, int moves
 
         // Monsters trapped in rock must be given a turn also,
         // so that they will die/dig out immediately.
-        if (monster->ml || monster->distance_from_player <= creatures_list[monster->creature_id].aaf || ((!(creatures_list[monster->creature_id].cmove & CM_PHASE)) && cave[monster->y][monster->x].fval >= MIN_CAVE_WALL)) {
+        if (monster->lit || monster->distance_from_player <= creatures_list[monster->creature_id].aaf || ((!(creatures_list[monster->creature_id].cmove & CM_PHASE)) && cave[monster->y][monster->x].fval >= MIN_CAVE_WALL)) {
             if (monster->sleep_count > 0) {
                 if (py.flags.aggravate) {
                     monster->sleep_count = 0;
@@ -1680,7 +1680,7 @@ static void monsterAttackingUpdate(Monster_t *monster, int monster_id, int moves
                 }
 
                 if (monster->stunned == 0) {
-                    if (monster->ml) {
+                    if (monster->lit) {
                         vtype_t msg;
                         (void) sprintf(msg, "The %s ", creatures_list[monster->creature_id].name);
                         printMessage(strcat(msg, "recovers and glares at you."));

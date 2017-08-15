@@ -631,7 +631,7 @@ static bool lookSee(int x, int y, bool *transparent) {
     obj_desc_t msg;
     msg[0] = 0;
 
-    if (los_rocks_and_objects == 0 && tile->cptr > 1 && monsters[tile->cptr].ml) {
+    if (los_rocks_and_objects == 0 && tile->cptr > 1 && monsters[tile->cptr].lit) {
         j = monsters[tile->cptr].creature_id;
         (void) sprintf(msg, "%s %s %s. [(r)ecall]", description, isVowel(creatures_list[j].name[0]) ? "an" : "a", creatures_list[j].name);
         description = "It is on";
@@ -918,7 +918,7 @@ void playerThrowItem() {
 
                 // if monster not lit, make it much more difficult to hit, subtract
                 // off most bonuses, and reduce bth_with_bows depending on distance.
-                if (!m_ptr->ml) {
+                if (!m_ptr->lit) {
                     tbth /= current_distance + 2;
                     tbth -= py.misc.level * class_level_adj[py.misc.class_id][CLASS_BTHB] / 2;
                     tbth -= tpth * (BTH_PER_PLUS_TO_HIT_ADJUST - 1);
@@ -931,7 +931,7 @@ void playerThrowItem() {
                     itemDescription(description, &thrown_item, false);
 
                     // Does the player know what he's fighting?
-                    if (!m_ptr->ml) {
+                    if (!m_ptr->lit) {
                         (void) sprintf(msg, "You hear a cry as the %s finds a mark.", description);
                         visible = false;
                     } else {
@@ -990,7 +990,7 @@ static void playerBashAttack(int y, int x) {
 
     // Does the player know what he's fighting?
     vtype_t name;
-    if (!monster->ml) {
+    if (!monster->lit) {
         (void) strcpy(name, "it");
     } else {
         (void) sprintf(name, "the %s", creature->name);
@@ -1000,7 +1000,7 @@ static void playerBashAttack(int y, int x) {
     base_to_hit += inventory[EQUIPMENT_ARM].weight / 2;
     base_to_hit += py.misc.weight / 10;
 
-    if (!monster->ml) {
+    if (!monster->lit) {
         base_to_hit /= 2;
         base_to_hit -= py.stats.used[A_DEX] * (BTH_PER_PLUS_TO_HIT_ADJUST - 1);
         base_to_hit -= py.misc.level * class_level_adj[py.misc.class_id][CLASS_BTH] / 2;

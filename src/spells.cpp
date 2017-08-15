@@ -54,10 +54,10 @@ bool monsterSleep(int y, int x) {
             Creature_t *creature = &creatures_list[monster->creature_id];
 
             vtype_t name;
-            monsterNameDescription(name, monster->ml, creature->name);
+            monsterNameDescription(name, monster->lit, creature->name);
 
             if (randomNumber(MON_MAX_LEVELS) < creature->level || (CD_NO_SLEEP & creature->cdefense)) {
-                if (monster->ml && (creature->cdefense & CD_NO_SLEEP)) {
+                if (monster->lit && (creature->cdefense & CD_NO_SLEEP)) {
                     creature_recall[monster->creature_id].defenses |= CD_NO_SLEEP;
                 }
 
@@ -177,7 +177,7 @@ bool spellDetectInvisibleCreaturesOnPanel() {
         Monster_t *monster = &monsters[id];
 
         if (coordInsidePanel((int) monster->y, (int) monster->x) && (CM_INVISIBLE & creatures_list[monster->creature_id].cmove)) {
-            monster->ml = true;
+            monster->lit = true;
 
             // works correctly even if hallucinating
             putChar((char) creatures_list[monster->creature_id].cchar, (int) monster->y, (int) monster->x);
@@ -462,7 +462,7 @@ bool spellDetectMonsters() {
         Monster_t *monster = &monsters[id];
 
         if (coordInsidePanel((int) monster->y, (int) monster->x) && (CM_INVISIBLE & creatures_list[monster->creature_id].cmove) == 0) {
-            monster->ml = true;
+            monster->lit = true;
             detected = true;
 
             // works correctly even if hallucinating
@@ -490,10 +490,10 @@ static void spellLightLineTouchesMonster(int monster_id) {
     monsterUpdateVisibility(monster_id);
 
     vtype_t name;
-    monsterNameDescription(name, monster->ml, creature->name);
+    monsterNameDescription(name, monster->lit, creature->name);
 
     if (CD_LIGHT & creature->cdefense) {
-        if (monster->ml) {
+        if (monster->lit) {
             creature_recall[monster->creature_id].defenses |= CD_LIGHT;
         }
 
@@ -664,7 +664,7 @@ static void spellFireBoltTouchesMonster(Cave_t *tile, int damage, int harm_type,
     putQIO();
 
     vtype_t name;
-    monsterNameDescriptionLowercase(name, monster->ml, creature->name);
+    monsterNameDescriptionLowercase(name, monster->lit, creature->name);
 
     vtype_t msg;
     (void) sprintf(msg, "The %s strikes %s.", bolt_name.c_str(), name);
@@ -672,17 +672,17 @@ static void spellFireBoltTouchesMonster(Cave_t *tile, int damage, int harm_type,
 
     if (harm_type & creature->cdefense) {
         damage = damage * 2;
-        if (monster->ml) {
+        if (monster->lit) {
             creature_recall[monster->creature_id].defenses |= harm_type;
         }
     } else if (weapon_id & creature->spells) {
         damage = damage / 4;
-        if (monster->ml) {
+        if (monster->lit) {
             creature_recall[monster->creature_id].spells |= weapon_id;
         }
     }
 
-    monsterNameDescription(name, monster->ml, creature->name);
+    monsterNameDescription(name, monster->lit, creature->name);
 
     if (monsterTakeHit((int) tile->cptr, damage) >= 0) {
         printMonsterActionText(name, "dies in a fit of agony.");
@@ -795,12 +795,12 @@ void spellFireBall(int y, int x, int direction, int damage_hp, int spell_type, c
 
                                 if (harm_type & creature->cdefense) {
                                     damage = damage * 2;
-                                    if (monster->ml) {
+                                    if (monster->lit) {
                                         creature_recall[monster->creature_id].defenses |= harm_type;
                                     }
                                 } else if (weapon_type & creature->spells) {
                                     damage = damage / 4;
-                                    if (monster->ml) {
+                                    if (monster->lit) {
                                         creature_recall[monster->creature_id].spells |= weapon_type;
                                     }
                                 }
@@ -908,7 +908,7 @@ void spellBreath(int y, int x, int monster_id, int damage_hp, int spell_type, ch
                         if (monster->hp < 0) {
                             uint32_t treasure_id = monsterDeath((int) monster->y, (int) monster->x, creature->cmove);
 
-                            if (monster->ml) {
+                            if (monster->lit) {
                                 uint32_t tmp = (uint32_t) ((creature_recall[monster->creature_id].movement & CM_TREASURE) >> CM_TR_SHIFT);
                                 if (tmp > ((treasure_id & CM_TREASURE) >> CM_TR_SHIFT)) {
                                     treasure_id = (uint32_t) ((treasure_id & ~CM_TREASURE) | (tmp << CM_TR_SHIFT));
@@ -1041,7 +1041,7 @@ bool spellChangeMonsterHitPoints(int y, int x, int direction, int damage_hp) {
             Creature_t *creature = &creatures_list[monster->creature_id];
 
             vtype_t name;
-            monsterNameDescription(name, monster->ml, creature->name);
+            monsterNameDescription(name, monster->lit, creature->name);
 
             if (monsterTakeHit((int) tile->cptr, damage_hp) >= 0) {
                 printMonsterActionText(name, "dies in a fit of agony.");
@@ -1082,7 +1082,7 @@ bool spellDrainLifeFromMonster(int y, int x, int direction) {
 
             if ((creature->cdefense & CD_UNDEAD) == 0) {
                 vtype_t name;
-                monsterNameDescription(name, monster->ml, creature->name);
+                monsterNameDescription(name, monster->lit, creature->name);
 
                 if (monsterTakeHit((int) tile->cptr, 75) >= 0) {
                     printMonsterActionText(name, "dies in a fit of agony.");
@@ -1126,7 +1126,7 @@ bool spellSpeedMonster(int y, int x, int direction, int speed) {
             Creature_t *creature = &creatures_list[monster->creature_id];
 
             vtype_t name;
-            monsterNameDescription(name, monster->ml, creature->name);
+            monsterNameDescription(name, monster->lit, creature->name);
 
             if (speed > 0) {
                 monster->speed += speed;
@@ -1177,10 +1177,10 @@ bool spellConfuseMonster(int y, int x, int direction) {
             Creature_t *creature = &creatures_list[monster->creature_id];
 
             vtype_t name;
-            monsterNameDescription(name, monster->ml, creature->name);
+            monsterNameDescription(name, monster->lit, creature->name);
 
             if (randomNumber(MON_MAX_LEVELS) < creature->level || (CD_NO_SLEEP & creature->cdefense)) {
-                if (monster->ml && (creature->cdefense & CD_NO_SLEEP)) {
+                if (monster->lit && (creature->cdefense & CD_NO_SLEEP)) {
                     creature_recall[monster->creature_id].defenses |= CD_NO_SLEEP;
                 }
 
@@ -1233,10 +1233,10 @@ bool spellSleepMonster(int y, int x, int direction) {
             Creature_t *creature = &creatures_list[monster->creature_id];
 
             vtype_t name;
-            monsterNameDescription(name, monster->ml, creature->name);
+            monsterNameDescription(name, monster->lit, creature->name);
 
             if (randomNumber(MON_MAX_LEVELS) < creature->level || (CD_NO_SLEEP & creature->cdefense)) {
-                if (monster->ml && (creature->cdefense & CD_NO_SLEEP)) {
+                if (monster->lit && (creature->cdefense & CD_NO_SLEEP)) {
                     creature_recall[monster->creature_id].defenses |= CD_NO_SLEEP;
                 }
 
@@ -1314,7 +1314,7 @@ bool spellWallToMud(int y, int x, int direction) {
 
             if (CD_STONE & creature->cdefense) {
                 vtype_t name;
-                monsterNameDescription(name, monster->ml, creature->name);
+                monsterNameDescription(name, monster->lit, creature->name);
 
                 // Should get these messages even if the monster is not visible.
                 int creature_id = monsterTakeHit((int) tile->cptr, 100);
@@ -1408,7 +1408,7 @@ bool spellPolymorphMonster(int y, int x, int direction) {
                 }
             } else {
                 vtype_t name;
-                monsterNameDescription(name, monster->ml, creature->name);
+                monsterNameDescription(name, monster->lit, creature->name);
                 printMonsterActionText(name, "is unaffected.");
             }
         }
@@ -1455,7 +1455,7 @@ bool spellBuildWall(int y, int x, int direction) {
                 }
 
                 vtype_t name;
-                monsterNameDescription(name, monster->ml, creature->name);
+                monsterNameDescription(name, monster->lit, creature->name);
 
                 printMonsterActionText(name, "wails out in pain!");
 
@@ -1534,7 +1534,7 @@ void spellTeleportAwayMonster(int monster_id, int distance_from_player) {
 
     // this is necessary, because the creature is
     // not currently visible in its new position.
-    monster->ml = false;
+    monster->lit = false;
     monster->distance_from_player = (uint8_t) coordDistanceBetween(char_row, char_col, y, x);
 
     monsterUpdateVisibility(monster_id);
@@ -1668,7 +1668,7 @@ bool spellSpeedAllMonsters(int speed) {
         Creature_t *creature = &creatures_list[monster->creature_id];
 
         vtype_t name;
-        monsterNameDescription(name, monster->ml, creature->name);
+        monsterNameDescription(name, monster->lit, creature->name);
 
         if (monster->distance_from_player > MON_MAX_SIGHT || !los(char_row, char_col, (int) monster->y, (int) monster->x)) {
             continue; // do nothing
@@ -1678,7 +1678,7 @@ bool spellSpeedAllMonsters(int speed) {
             monster->speed += speed;
             monster->sleep_count = 0;
 
-            if (monster->ml) {
+            if (monster->lit) {
                 speedy = true;
                 printMonsterActionText(name, "starts moving faster.");
             }
@@ -1686,11 +1686,11 @@ bool spellSpeedAllMonsters(int speed) {
             monster->speed += speed;
             monster->sleep_count = 0;
 
-            if (monster->ml) {
+            if (monster->lit) {
                 speedy = true;
                 printMonsterActionText(name, "starts moving slower.");
             }
-        } else if (monster->ml) {
+        } else if (monster->lit) {
             monster->sleep_count = 0;
             printMonsterActionText(name, "is unaffected.");
         }
@@ -1708,14 +1708,14 @@ bool spellSleepAllMonsters() {
         Creature_t *creature = &creatures_list[monster->creature_id];
 
         vtype_t name;
-        monsterNameDescription(name, monster->ml, creature->name);
+        monsterNameDescription(name, monster->lit, creature->name);
 
         if (monster->distance_from_player > MON_MAX_SIGHT || !los(char_row, char_col, (int) monster->y, (int) monster->x)) {
             continue; // do nothing
         }
 
         if (randomNumber(MON_MAX_LEVELS) < creature->level || (CD_NO_SLEEP & creature->cdefense)) {
-            if (monster->ml) {
+            if (monster->lit) {
                 if (creature->cdefense & CD_NO_SLEEP) {
                     creature_recall[monster->creature_id].defenses |= CD_NO_SLEEP;
                 }
@@ -1723,7 +1723,7 @@ bool spellSleepAllMonsters() {
             }
         } else {
             monster->sleep_count = 500;
-            if (monster->ml) {
+            if (monster->lit) {
                 asleep = true;
                 printMonsterActionText(name, "falls asleep.");
             }
@@ -1766,7 +1766,7 @@ bool spellDetectEvil() {
         Monster_t *monster = &monsters[id];
 
         if (coordInsidePanel((int) monster->y, (int) monster->x) && (CD_EVIL & creatures_list[monster->creature_id].cdefense)) {
-            monster->ml = true;
+            monster->lit = true;
 
             detected = true;
 
@@ -1868,7 +1868,7 @@ static void earthquakeHitsMonster(int monsterID) {
         }
 
         vtype_t name;
-        monsterNameDescription(name, monster->ml, creature->name);
+        monsterNameDescription(name, monster->lit, creature->name);
 
         printMonsterActionText(name, "wails out in pain!");
 
@@ -1968,7 +1968,7 @@ bool spellDispelCreature(int creature_defense, int damage) {
             dispelled = true;
 
             vtype_t name;
-            monsterNameDescription(name, monster->ml, creature->name);
+            monsterNameDescription(name, monster->lit, creature->name);
 
             int hit = monsterTakeHit(id, randomNumber(damage));
 
@@ -1998,10 +1998,10 @@ bool spellTurnUndead() {
 
         if (monster->distance_from_player <= MON_MAX_SIGHT && (CD_UNDEAD & creature->cdefense) && los(char_row, char_col, (int) monster->y, (int) monster->x)) {
             vtype_t name;
-            monsterNameDescription(name, monster->ml, creature->name);
+            monsterNameDescription(name, monster->lit, creature->name);
 
             if (py.misc.level + 1 > creature->level || randomNumber(5) == 1) {
-                if (monster->ml) {
+                if (monster->lit) {
                     creature_recall[monster->creature_id].defenses |= CD_UNDEAD;
 
                     turned = true;
@@ -2010,7 +2010,7 @@ bool spellTurnUndead() {
                 }
 
                 monster->confused = (uint8_t) py.misc.level;
-            } else if (monster->ml) {
+            } else if (monster->lit) {
                 printMonsterActionText(name, "is unaffected.");
             }
         }
