@@ -272,13 +272,13 @@ typedef struct {
 
 // Store_t holds all the data for any given store in the game
 typedef struct {
-    int32_t store_open;
-    int16_t insult_cur;
+    int32_t turns_left_before_closing;
+    int16_t insults_counter;
     uint8_t owner;
-    uint8_t store_ctr;
-    uint16_t good_buy;
-    uint16_t bad_buy;
-    InventoryRecord_t store_inven[STORE_MAX_DISCRETE_ITEMS];
+    uint8_t store_id;
+    uint16_t good_purchases;
+    uint16_t bad_purchases;
+    InventoryRecord_t inventory[STORE_MAX_DISCRETE_ITEMS];
 } Store_t;
 
 // HighScore_t is a score object used for saving to the high score file

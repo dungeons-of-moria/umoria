@@ -245,15 +245,15 @@ static bool sv_write() {
     for (int i = 0; i < MAX_STORES; i++) {
         Store_t *st_ptr = &stores[i];
 
-        wr_long((uint32_t) st_ptr->store_open);
-        wr_short((uint16_t) st_ptr->insult_cur);
+        wr_long((uint32_t) st_ptr->turns_left_before_closing);
+        wr_short((uint16_t) st_ptr->insults_counter);
         wr_byte(st_ptr->owner);
-        wr_byte(st_ptr->store_ctr);
-        wr_short(st_ptr->good_buy);
-        wr_short(st_ptr->bad_buy);
-        for (int j = 0; j < st_ptr->store_ctr; j++) {
-            wr_long((uint32_t) st_ptr->store_inven[j].cost);
-            wr_item(&st_ptr->store_inven[j].item);
+        wr_byte(st_ptr->store_id);
+        wr_short(st_ptr->good_purchases);
+        wr_short(st_ptr->bad_purchases);
+        for (int j = 0; j < st_ptr->store_id; j++) {
+            wr_long((uint32_t) st_ptr->inventory[j].cost);
+            wr_item(&st_ptr->inventory[j].item);
         }
     }
 
@@ -707,18 +707,18 @@ bool loadGame(bool *generate) {
                 for (int i = 0; i < MAX_STORES; i++) {
                     Store_t *st_ptr = &stores[i];
 
-                    rd_long((uint32_t *) &st_ptr->store_open);
-                    rd_short((uint16_t *) &st_ptr->insult_cur);
+                    rd_long((uint32_t *) &st_ptr->turns_left_before_closing);
+                    rd_short((uint16_t *) &st_ptr->insults_counter);
                     rd_byte(&st_ptr->owner);
-                    rd_byte(&st_ptr->store_ctr);
-                    rd_short(&st_ptr->good_buy);
-                    rd_short(&st_ptr->bad_buy);
-                    if (st_ptr->store_ctr > STORE_MAX_DISCRETE_ITEMS) {
+                    rd_byte(&st_ptr->store_id);
+                    rd_short(&st_ptr->good_purchases);
+                    rd_short(&st_ptr->bad_purchases);
+                    if (st_ptr->store_id > STORE_MAX_DISCRETE_ITEMS) {
                         goto error;
                     }
-                    for (int j = 0; j < st_ptr->store_ctr; j++) {
-                        rd_long((uint32_t *) &st_ptr->store_inven[j].cost);
-                        rd_item(&st_ptr->store_inven[j].item);
+                    for (int j = 0; j < st_ptr->store_id; j++) {
+                        rd_long((uint32_t *) &st_ptr->inventory[j].cost);
+                        rd_item(&st_ptr->inventory[j].item);
                     }
                 }
             }
@@ -870,18 +870,18 @@ bool loadGame(bool *generate) {
             for (int i = 0; i < MAX_STORES; i++) {
                 Store_t *st_ptr = &stores[i];
 
-                rd_long((uint32_t *) &st_ptr->store_open);
-                rd_short((uint16_t *) &st_ptr->insult_cur);
+                rd_long((uint32_t *) &st_ptr->turns_left_before_closing);
+                rd_short((uint16_t *) &st_ptr->insults_counter);
                 rd_byte(&st_ptr->owner);
-                rd_byte(&st_ptr->store_ctr);
-                rd_short(&st_ptr->good_buy);
-                rd_short(&st_ptr->bad_buy);
-                if (st_ptr->store_ctr > STORE_MAX_DISCRETE_ITEMS) {
+                rd_byte(&st_ptr->store_id);
+                rd_short(&st_ptr->good_purchases);
+                rd_short(&st_ptr->bad_purchases);
+                if (st_ptr->store_id > STORE_MAX_DISCRETE_ITEMS) {
                     goto error;
                 }
-                for (int j = 0; j < st_ptr->store_ctr; j++) {
-                    rd_long((uint32_t *) &st_ptr->store_inven[j].cost);
-                    rd_item(&st_ptr->store_inven[j].item);
+                for (int j = 0; j < st_ptr->store_id; j++) {
+                    rd_long((uint32_t *) &st_ptr->inventory[j].cost);
+                    rd_item(&st_ptr->inventory[j].item);
                 }
             }
         }

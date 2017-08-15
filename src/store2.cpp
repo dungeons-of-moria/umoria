@@ -186,14 +186,14 @@ static void displayStoreInventory(int store_id, int item_pos_start) {
     Store_t *store = &stores[store_id];
 
     int item_pos_end = ((item_pos_start / 12) + 1) * 12;
-    if (item_pos_end > store->store_ctr) {
-        item_pos_end = store->store_ctr;
+    if (item_pos_end > store->store_id) {
+        item_pos_end = store->store_id;
     }
 
     int item_identifier;
 
     for (item_identifier = (item_pos_start % 12); item_pos_start < item_pos_end; item_identifier++) {
-        Inventory_t *item = &store->store_inven[item_pos_start].item;
+        Inventory_t *item = &store->inventory[item_pos_start].item;
 
         // Save the current number of items
         int32_t current_item_count = item->items_count;
@@ -212,7 +212,7 @@ static void displayStoreInventory(int store_id, int item_pos_start) {
         (void) sprintf(msg, "%c) %s", 'a' + item_identifier, description);
         putStringClearToEOL(msg, item_identifier + 5, 0);
 
-        current_item_count = store->store_inven[item_pos_start].cost;
+        current_item_count = store->inventory[item_pos_start].cost;
 
         if (current_item_count <= 0) {
             int32_t value = -current_item_count;
@@ -236,7 +236,7 @@ static void displayStoreInventory(int store_id, int item_pos_start) {
         }
     }
 
-    if (store->store_ctr > 12) {
+    if (store->store_id > 12) {
         putString("- cont. -", 17, 60);
     } else {
         eraseLine(17, 60);
@@ -245,7 +245,7 @@ static void displayStoreInventory(int store_id, int item_pos_start) {
 
 // Re-displays only a single cost -RAK-
 static void displaySingleCost(int store_id, int item_id) {
-    int cost = stores[store_id].store_inven[item_id].cost;
+    int cost = stores[store_id].inventory[item_id].cost;
 
     vtype_t msg;
     if (cost < 0) {
@@ -304,13 +304,13 @@ static bool storeGetItemID(int *item_id, const char *prompt, int item_pos_start,
 static bool storeIncreaseInsults(int store_id) {
     Store_t *store = &stores[store_id];
 
-    store->insult_cur++;
+    store->insults_counter++;
 
-    if (store->insult_cur > store_owners[store->owner].max_insults) {
+    if (store->insults_counter > store_owners[store->owner].max_insults) {
         printSpeechGetOutOfMyStore();
-        store->insult_cur = 0;
-        store->bad_buy++;
-        store->store_open = current_game_turn + 2500 + randomNumber(2500);
+        store->insults_counter = 0;
+        store->bad_purchases++;
+        store->turns_left_before_closing = current_game_turn + 2500 + randomNumber(2500);
         return true;
     }
 
@@ -319,8 +319,8 @@ static bool storeIncreaseInsults(int store_id) {
 
 // Decrease insults -RAK-
 static void storeDecreaseInsults(int store_id) {
-    if (stores[store_id].insult_cur != 0) {
-        stores[store_id].insult_cur--;
+    if (stores[store_id].insults_counter != 0) {
+        stores[store_id].insults_counter--;
     }
 }
 
@@ -835,13 +835,13 @@ static int storeItemsToDisplay(int store_counter, int current_top_item_id) {
 static bool storePurchaseAnItem(int store_id, int *current_top_item_id) {
     Store_t *store = &stores[store_id];
 
-    if (store->store_ctr < 1) {
+    if (store->store_id < 1) {
         printMessage("I am currently out of stock.");
         return false;
     }
 
     int item_id;
-    int item_count = storeItemsToDisplay(store->store_ctr, *current_top_item_id);
+    int item_count = storeItemsToDisplay(store->store_id, *current_top_item_id);
     if (!storeGetItemID(&item_id, "Which item are you interested in? ", 0, item_count)) {
         return false;
     }
@@ -851,7 +851,7 @@ static bool storePurchaseAnItem(int store_id, int *current_top_item_id) {
     item_id = item_id + *current_top_item_id; // true item_id
 
     Inventory_t sell_item;
-    inventoryTakeOneItem(&sell_item, &store->store_inven[item_id].item);
+    inventoryTakeOneItem(&sell_item, &store->inventory[item_id].item);
 
     if (!inventoryCanCarryItemCount(&sell_item)) {
         putStringClearToEOL("You cannot carry that many different items.", 0, 0);
@@ -862,8 +862,8 @@ static bool storePurchaseAnItem(int store_id, int *current_top_item_id) {
     int32_t price;
     bool purchased = false;
 
-    if (store->store_inven[item_id].cost > 0) {
-        price = store->store_inven[item_id].cost;
+    if (store->inventory[item_id].cost > 0) {
+        price = store->inventory[item_id].cost;
     } else {
         choice = storePurchaseHaggle(store_id, &price, &sell_item);
     }
@@ -875,7 +875,7 @@ static bool storePurchaseAnItem(int store_id, int *current_top_item_id) {
             py.misc.au -= price;
 
             int new_item_id = inventoryCarryItem(&sell_item);
-            int saved_store_counter = store->store_ctr;
+            int saved_store_counter = store->store_id;
 
             storeDestroy(store_id, item_id, true);
 
@@ -888,13 +888,13 @@ static bool storePurchaseAnItem(int store_id, int *current_top_item_id) {
 
             playerStrength();
 
-            if (*current_top_item_id >= store->store_ctr) {
+            if (*current_top_item_id >= store->store_id) {
                 *current_top_item_id = 0;
                 displayStoreInventory(store_id, *current_top_item_id);
             } else {
-                InventoryRecord_t *store_item = &store->store_inven[item_id];
+                InventoryRecord_t *store_item = &store->inventory[item_id];
 
-                if (saved_store_counter == store->store_ctr) {
+                if (saved_store_counter == store->store_id) {
                     if (store_item->cost < 0) {
                         store_item->cost = price;
                         displaySingleCost(store_id, item_id);
@@ -1033,7 +1033,7 @@ static bool storeSellAnItem(int store_id, int *current_top_item_id) {
 void storeEnter(int store_id) {
     Store_t *store = &stores[store_id];
 
-    if (store->store_open >= current_game_turn) {
+    if (store->turns_left_before_closing >= current_game_turn) {
         printMessage("The doors are locked.");
         return;
     }
@@ -1055,7 +1055,7 @@ void storeEnter(int store_id) {
             switch (command) {
                 case 'b':
                     if (current_top_item_id == 0) {
-                        if (store->store_ctr > 12) {
+                        if (store->store_id > 12) {
                             current_top_item_id = 12;
                             displayStoreInventory(store_id, current_top_item_id);
                         } else {
