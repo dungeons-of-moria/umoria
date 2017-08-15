@@ -607,10 +607,10 @@ static void memoryAttackNumberAndDamage(Recall_t *memory, Creature_t *creature) 
             continue;
         }
 
-        attack_type = monster_attacks[*pu].attack_type;
-        attack_description_id = monster_attacks[*pu].attack_desc;
-        attack_dice = monster_attacks[*pu].attack_dice;
-        attack_sides = monster_attacks[*pu].attack_sides;
+        attack_type = monster_attacks[*pu].type_id;
+        attack_description_id = monster_attacks[*pu].description_id;
+        attack_dice = monster_attacks[*pu].dice;
+        attack_sides = monster_attacks[*pu].sides;
 
         attack_count++;
 

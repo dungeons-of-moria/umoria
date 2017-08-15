@@ -828,10 +828,10 @@ static void monsterAttackPlayer(int monster_id) {
 
     uint8_t *attstr = creature->damage;
     while ((*attstr != 0) && !character_is_dead) {
-        attype = monster_attacks[*attstr].attack_type;
-        adesc = monster_attacks[*attstr].attack_desc;
-        adice = monster_attacks[*attstr].attack_dice;
-        asides = monster_attacks[*attstr].attack_sides;
+        attype = monster_attacks[*attstr].type_id;
+        adesc = monster_attacks[*attstr].description_id;
+        adice = monster_attacks[*attstr].dice;
+        asides = monster_attacks[*attstr].sides;
 
         attstr++;
 

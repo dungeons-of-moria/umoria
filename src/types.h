@@ -362,10 +362,10 @@ typedef struct {
 // MonsterAttack_t is a base data object.
 // Holds the data for a monster's attack and damage type
 typedef struct {
-    uint8_t attack_type;
-    uint8_t attack_desc;
-    uint8_t attack_dice;
-    uint8_t attack_sides;
+    uint8_t type_id;
+    uint8_t description_id;
+    uint8_t dice;
+    uint8_t sides;
 } MonsterAttack_t;
 
 // ClassTitle_t is a base game object
