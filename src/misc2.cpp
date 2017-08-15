@@ -896,9 +896,9 @@ void magicTreasureMagicalAbility(int item_id, int level) {
 
             // Change the level the items was first found on value
             if (t_ptr->sub_category_id == 7) {
-                t_ptr->level = 10;
+                t_ptr->depth_first_found = 10;
             } else if (t_ptr->sub_category_id == 22) {
-                t_ptr->level = 5;
+                t_ptr->depth_first_found = 5;
             }
             break;
         case TV_CLOAK:
@@ -943,33 +943,33 @@ void magicTreasureMagicalAbility(int item_id, int level) {
         case TV_FOOD:
             // make sure all food rations have the same level
             if (t_ptr->sub_category_id == 90) {
-                t_ptr->level = 0;
+                t_ptr->depth_first_found = 0;
             }
 
             // give all Elvish waybread the same level
             if (t_ptr->sub_category_id == 92) {
-                t_ptr->level = 6;
+                t_ptr->depth_first_found = 6;
             }
             break;
         case TV_SCROLL1:
             if (t_ptr->sub_category_id == 67) {
                 // give all identify scrolls the same level
-                t_ptr->level = 1;
+                t_ptr->depth_first_found = 1;
             } else if (t_ptr->sub_category_id == 69) {
                 // scroll of light
-                t_ptr->level = 0;
+                t_ptr->depth_first_found = 0;
             } else if (t_ptr->sub_category_id == 80) {
                 // scroll of trap detection
-                t_ptr->level = 5;
+                t_ptr->depth_first_found = 5;
             } else if (t_ptr->sub_category_id == 81) {
                 // scroll of door/stair location
-                t_ptr->level = 5;
+                t_ptr->depth_first_found = 5;
             }
             break;
         case TV_POTION1:
             // cure light
             if (t_ptr->sub_category_id == 76) {
-                t_ptr->level = 0;
+                t_ptr->depth_first_found = 0;
             }
             break;
         default:

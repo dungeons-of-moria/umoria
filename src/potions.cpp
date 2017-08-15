@@ -319,7 +319,7 @@ void quaff() {
     if (identified) {
         if (!itemSetColorlessAsIdentifed(i_ptr)) {
             // round half-way case up
-            py.misc.exp += (i_ptr->level + (py.misc.level >> 1)) / py.misc.level;
+            py.misc.exp += (i_ptr->depth_first_found + (py.misc.level >> 1)) / py.misc.level;
             displayCharacterExperience();
 
             itemIdentify(&item_id);

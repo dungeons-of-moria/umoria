@@ -140,7 +140,7 @@ void outputRandomLevelObjectsToFile() {
                     }
 
                     itemDescription(tmp_str, i_ptr, true);
-                    (void) fprintf(file1, "%d %s\n", i_ptr->level, tmp_str);
+                    (void) fprintf(file1, "%d %s\n", i_ptr->depth_first_found, tmp_str);
                 }
 
                 pusht((uint8_t) treasureID);

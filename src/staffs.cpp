@@ -26,7 +26,7 @@ static bool staffPlayerIsCarrying(int *item_pos_start, int *item_pos_end) {
 static bool staffPlayerCanUse(Inventory_t *item) {
     int chance = py.misc.saving_throw;
     chance += playerStatAdjustmentWisdomIntelligence(A_INT);
-    chance -= item->level - 5;
+    chance -= item->depth_first_found - 5;
     chance += class_level_adj[py.misc.class_id][CLASS_DEVICE] * py.misc.level / 3;
 
     if (py.flags.confused > 0) {
@@ -200,7 +200,7 @@ void useStaff() {
     if (identified) {
         if (!itemSetColorlessAsIdentifed(item)) {
             // round half-way case up
-            py.misc.exp += (item->level + (py.misc.level >> 1)) / py.misc.level;
+            py.misc.exp += (item->depth_first_found + (py.misc.level >> 1)) / py.misc.level;
 
             displayCharacterExperience();
 

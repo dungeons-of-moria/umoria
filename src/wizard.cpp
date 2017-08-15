@@ -366,7 +366,7 @@ void wizardCreateObjects() {
         return;
     }
     number = atoi(input);
-    item->level = (uint8_t) number;
+    item->depth_first_found = (uint8_t) number;
 
     if (getInputConfirmation("Allocate?")) {
         // delete object first if any, before call popt()

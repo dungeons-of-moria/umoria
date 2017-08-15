@@ -150,7 +150,7 @@ void wandAim() {
     Inventory_t *item = &inventory[item_id];
 
     int player_class_lev_adj = class_level_adj[py.misc.class_id][CLASS_DEVICE] * py.misc.level / 3;
-    int chance = py.misc.saving_throw + playerStatAdjustmentWisdomIntelligence(A_INT) - (int) item->level + player_class_lev_adj;
+    int chance = py.misc.saving_throw + playerStatAdjustmentWisdomIntelligence(A_INT) - (int) item->depth_first_found + player_class_lev_adj;
 
     if (py.flags.confused > 0) {
         chance = chance / 2;
@@ -182,7 +182,7 @@ void wandAim() {
     if (identified) {
         if (!itemSetColorlessAsIdentifed(item)) {
             // round half-way case up
-            py.misc.exp += (item->level + (py.misc.level >> 1)) / py.misc.level;
+            py.misc.exp += (item->depth_first_found + (py.misc.level >> 1)) / py.misc.level;
             displayCharacterExperience();
 
             itemIdentify(&item_id);

@@ -1159,10 +1159,10 @@ static void openClosedChest(int y, int x) {
     if (CH_LOCKED & item->flags) {
         if (py.flags.confused > 0) {
             printMessage("You are too confused to pick the lock.");
-        } else if (playerLockPickingSkill() - item->level > randomNumber(100)) {
+        } else if (playerLockPickingSkill() - item->depth_first_found > randomNumber(100)) {
             printMessage("You have picked the lock.");
 
-            py.misc.exp += item->level;
+            py.misc.exp += item->depth_first_found;
             displayCharacterExperience();
 
             success = true;

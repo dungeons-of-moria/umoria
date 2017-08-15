@@ -991,7 +991,7 @@ bool spellRechargeItem(int number_of_charges) {
     // make it harder to recharge high level, and highly charged wands,
     // note that `fail_chance` can be negative, so check its value before
     // trying to call randomNumber().
-    int fail_chance = number_of_charges + 50 - (int) item->level - item->misc_use;
+    int fail_chance = number_of_charges + 50 - (int) item->depth_first_found - item->misc_use;
 
     // Automatic failure.
     if (fail_chance < 19) {
@@ -1004,7 +1004,7 @@ bool spellRechargeItem(int number_of_charges) {
         printMessage("There is a bright flash of light.");
         inventoryDestroyItem(item_id);
     } else {
-        number_of_charges = (number_of_charges / (item->level + 2)) + 1;
+        number_of_charges = (number_of_charges / (item->depth_first_found + 2)) + 1;
         item->misc_use += 2 + randomNumber(number_of_charges);
 
         if (spellItemIdentified(item)) {

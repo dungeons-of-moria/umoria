@@ -242,7 +242,7 @@ static void playerDisarmChestTrap(int y, int x, int total, Inventory_t *item) {
     }
 
     if (item->flags & CH_TRAPPED) {
-        int level = item->level;
+        int level = item->depth_first_found;
 
         if ((total - level) > randomNumber(100)) {
             item->flags &= ~CH_TRAPPED;
@@ -296,7 +296,7 @@ void playerDisarmTrap() {
         Inventory_t *item = &treasure_list[tile->tptr];
 
         if (item->category_id == TV_VIS_TRAP) {
-            playerDisarmFloorTrap(y, x, disarm_ability, item->level, dir, item->misc_use);
+            playerDisarmFloorTrap(y, x, disarm_ability, item->depth_first_found, dir, item->misc_use);
         } else if (item->category_id == TV_CHEST) {
             playerDisarmChestTrap(y, x, disarm_ability, item);
         } else {

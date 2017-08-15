@@ -1087,7 +1087,7 @@ static void wr_item(Inventory_t *item) {
     wr_short((uint16_t) item->ac);
     wr_short((uint16_t) item->to_ac);
     wr_bytes(item->damage, 2);
-    wr_byte(item->level);
+    wr_byte(item->depth_first_found);
     wr_byte(item->ident);
 }
 
@@ -1200,7 +1200,7 @@ static void rd_item(Inventory_t *item) {
     rd_short((uint16_t *) &item->ac);
     rd_short((uint16_t *) &item->to_ac);
     rd_bytes(item->damage, 2);
-    rd_byte(&item->level);
+    rd_byte(&item->depth_first_found);
     rd_byte(&item->ident);
 }
 

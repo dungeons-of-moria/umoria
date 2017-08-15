@@ -676,7 +676,7 @@ void inventoryItemCopyTo(int from_item_id, Inventory_t *to_item) {
     to_item->to_ac = from->toac;
     to_item->damage[0] = from->damage[0];
     to_item->damage[1] = from->damage[1];
-    to_item->level = from->level;
+    to_item->depth_first_found = from->level;
     to_item->ident = 0;
 }
 
