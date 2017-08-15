@@ -641,8 +641,8 @@ void itemDescription(obj_desc_t description, Inventory_t *item, bool add_prefix)
         }
     }
 
-    if (item->inscrip[0] != '\0') {
-        (void) strcat(tmp_str, item->inscrip);
+    if (item->inscription[0] != '\0') {
+        (void) strcat(tmp_str, item->inscription);
     } else if ((indexx = (int) strlen(tmp_str)) > 0) {
         // remove the extra blank at the end
         tmp_str[indexx - 1] = '\0';
@@ -661,7 +661,7 @@ void inventoryItemCopyTo(int from_item_id, Inventory_t *to_item) {
 
     to_item->id = (uint16_t) from_item_id;
     to_item->special_name_id = SN_NULL;
-    to_item->inscrip[0] = '\0';
+    to_item->inscription[0] = '\0';
     to_item->flags = from->flags;
     to_item->tval = from->tval;
     to_item->tchar = from->tchar;

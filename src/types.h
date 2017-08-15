@@ -202,24 +202,24 @@ typedef struct {
 // two many places where `Inventory_t` are copied, which results in dangling
 // pointers, so we use a char array for them instead.
 typedef struct {
-    uint16_t id;                // Index to object_list
-    uint8_t special_name_id;    // Object special name
-    char inscrip[INSCRIP_SIZE]; // Object inscription
-    uint32_t flags;             // Special flags
-    uint8_t tval;               // Category number
-    uint8_t tchar;              // Character representation
-    int16_t p1;                 // Misc. use variable
-    int32_t cost;               // Cost of item
-    uint8_t subval;             // Sub-category number
-    uint8_t number;             // Number of items
-    uint16_t weight;            // Weight
-    int16_t tohit;              // Plusses to hit
-    int16_t todam;              // Plusses to damage
-    int16_t ac;                 // Normal AC
-    int16_t toac;               // Plusses to AC
-    uint8_t damage[2];          // Damage when hits
-    uint8_t level;              // Level item first found
-    uint8_t ident;              // Identify information
+    uint16_t id;                    // Index to object_list
+    uint8_t special_name_id;        // Object special name
+    char inscription[INSCRIP_SIZE]; // Object inscription
+    uint32_t flags;                 // Special flags
+    uint8_t tval;                   // Category number
+    uint8_t tchar;                  // Character representation
+    int16_t p1;                     // Misc. use variable
+    int32_t cost;                   // Cost of item
+    uint8_t subval;                 // Sub-category number
+    uint8_t number;                 // Number of items
+    uint16_t weight;                // Weight
+    int16_t tohit;                  // Plusses to hit
+    int16_t todam;                  // Plusses to damage
+    int16_t ac;                     // Normal AC
+    int16_t toac;                   // Plusses to AC
+    uint8_t damage[2];              // Damage when hits
+    uint8_t level;                  // Level item first found
+    uint8_t ident;                  // Identify information
 } Inventory_t;
 
 

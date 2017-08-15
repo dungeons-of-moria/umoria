@@ -29,8 +29,8 @@ void itemInscribe() {
 
     printMessage(inscription);
 
-    if (inventory[item_id].inscrip[0] != '\0') {
-        (void) sprintf(inscription, "Replace %s New inscription:", inventory[item_id].inscrip);
+    if (inventory[item_id].inscription[0] != '\0') {
+        (void) sprintf(inscription, "Replace %s New inscription:", inventory[item_id].inscription);
     } else {
         (void) strcpy(inscription, "Inscription: ");
     }
@@ -54,7 +54,7 @@ void itemAppendToInscription(Inventory_t *item, uint8_t item_ident_type) {
 
 // Replace any existing comment in an object description with a new one. -CJS-
 void itemReplaceInscription(Inventory_t *item, const char *inscription) {
-    (void) strcpy(item->inscrip, inscription);
+    (void) strcpy(item->inscription, inscription);
 }
 
 // We need to reset the view of things. -CJS-

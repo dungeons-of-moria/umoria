@@ -803,7 +803,7 @@ static int inventoryGetItemMatchingInscription(char which, char command, int fro
         int m;
 
         // Note: simple loop to get id
-        for (m = from; m <= to && ((inventory[m].inscrip[0] != which) || (inventory[m].inscrip[1] != '\0')); m++);
+        for (m = from; m <= to && ((inventory[m].inscription[0] != which) || (inventory[m].inscription[1] != '\0')); m++);
 
         if (m <= to) {
             item = m;
@@ -1516,7 +1516,7 @@ bool inventoryGetInputForItemId(int *command_key_id, const char *prompt, int ite
                         int m;
 
                         // Note: loop to find the inventory item
-                        for (m = item_id_start; m < EQUIPMENT_WIELD && (inventory[m].inscrip[0] != which || inventory[m].inscrip[1] != '\0'); m++);
+                        for (m = item_id_start; m < EQUIPMENT_WIELD && (inventory[m].inscription[0] != which || inventory[m].inscription[1] != '\0'); m++);
 
                         if (m < EQUIPMENT_WIELD) {
                             *command_key_id = m;
