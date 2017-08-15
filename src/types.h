@@ -237,10 +237,10 @@ typedef struct {
 
 // Monster_t is created for any living monster found on the current dungeon level
 typedef struct {
-    int16_t hp;          // Hit points
-    int16_t sleep_count; // Inactive counter
-    int16_t speed;       // Movement speed
-    uint16_t mptr;  // Pointer into creature
+    int16_t hp;           // Hit points
+    int16_t sleep_count;  // Inactive counter
+    int16_t speed;        // Movement speed
+    uint16_t creature_id; // Pointer into creature
 
     // Note: fy, fx, and cdis constrain dungeon size to less than 256 by 256
     uint8_t fy;   // Y Pointer into map

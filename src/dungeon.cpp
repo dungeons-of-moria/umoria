@@ -2171,7 +2171,7 @@ static void dungeonJamDoor() {
         player_free_turn = false;
 
         vtype_t msg;
-        (void) sprintf(msg, "The %s is in your way!", creatures_list[monsters[tile->cptr].mptr].name);
+        (void) sprintf(msg, "The %s is in your way!", creatures_list[monsters[tile->cptr].creature_id].name);
         printMessage(msg);
     }
 }

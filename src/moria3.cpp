@@ -713,7 +713,7 @@ static void playerGainKillExperience(Creature_t *c_ptr) {
 // (Picking on my babies.) -RAK-
 int monsterTakeHit(int monster_id, int damage) {
     Monster_t *monster = &monsters[monster_id];
-    Creature_t *creature = &creatures_list[monster->mptr];
+    Creature_t *creature = &creatures_list[monster->creature_id];
 
     monster->sleep_count = 0;
     monster->hp -= damage;
@@ -724,7 +724,7 @@ int monsterTakeHit(int monster_id, int damage) {
 
     uint32_t treasure_flags = monsterDeath((int) monster->fy, (int) monster->fx, creature->cmove);
 
-    Recall_t *memory = &creature_recall[monster->mptr];
+    Recall_t *memory = &creature_recall[monster->creature_id];
 
     if ((py.flags.blind < 1 && monster->ml) || (creature->cmove & CM_WIN)) {
         uint32_t tmp = (uint32_t) ((memory->movement & CM_TREASURE) >> CM_TR_SHIFT);
@@ -744,7 +744,7 @@ int monsterTakeHit(int monster_id, int damage) {
 
     // can't call displayCharacterExperience() here, as that would result in "new level"
     // message appearing before "monster dies" message.
-    int m_take_hit = monster->mptr;
+    int m_take_hit = monster->creature_id;
 
     // in case this is called from within updateMonsters(), this is a horrible
     // hack, the monsters/updateMonsters() code needs to be rewritten.
@@ -795,7 +795,7 @@ static void playerAttackMonster(int y, int x) {
     int creature_id = cave[y][x].cptr;
 
     Monster_t *monster = &monsters[creature_id];
-    Creature_t *creature = &creatures_list[monster->mptr];
+    Creature_t *creature = &creatures_list[monster->creature_id];
     Inventory_t *item = &inventory[EQUIPMENT_WIELD];
 
     monster->sleep_count = 0;
@@ -830,7 +830,7 @@ static void playerAttackMonster(int y, int x) {
 
         if (item->category_id != TV_NOTHING) {
             damage = dicePlayerDamageRoll(item->damage);
-            damage = itemMagicAbilityDamage(item, damage, monster->mptr);
+            damage = itemMagicAbilityDamage(item, damage, monster->creature_id);
             damage = playerWeaponCriticalBlow((int) item->weight, total_to_hit, damage, CLASS_BTH);
         } else {
             // Bare hands!?
@@ -861,7 +861,7 @@ static void playerAttackMonster(int y, int x) {
             printMessage(msg);
 
             if (monster->ml && randomNumber(4) == 1) {
-                creature_recall[monster->mptr].defenses |= creature->cdefense & CD_NO_SLEEP;
+                creature_recall[monster->creature_id].defenses |= creature->cdefense & CD_NO_SLEEP;
             }
         }
 
@@ -1330,7 +1330,7 @@ void objectBlockedByMonster(int monster_id) {
     vtype_t description, msg;
 
     Monster_t *monster = &monsters[monster_id];
-    const char *name = creatures_list[monster->mptr].name;
+    const char *name = creatures_list[monster->creature_id].name;
 
     if (monster->ml) {
         (void) sprintf(description, "The %s", name);

@@ -632,7 +632,7 @@ static bool lookSee(int x, int y, bool *transparent) {
     msg[0] = 0;
 
     if (los_rocks_and_objects == 0 && tile->cptr > 1 && monsters[tile->cptr].ml) {
-        j = monsters[tile->cptr].mptr;
+        j = monsters[tile->cptr].creature_id;
         (void) sprintf(msg, "%s %s %s. [(r)ecall]", description, isVowel(creatures_list[j].name[0]) ? "an" : "a", creatures_list[j].name);
         description = "It is on";
         putStringClearToEOL(msg, 0, 0);
@@ -924,8 +924,8 @@ void playerThrowItem() {
                     tbth -= tpth * (BTH_PER_PLUS_TO_HIT_ADJUST - 1);
                 }
 
-                if (playerTestBeingHit(tbth, (int) py.misc.level, tpth, (int) creatures_list[m_ptr->mptr].ac, CLASS_BTHB)) {
-                    int damage = m_ptr->mptr;
+                if (playerTestBeingHit(tbth, (int) py.misc.level, tpth, (int) creatures_list[m_ptr->creature_id].ac, CLASS_BTHB)) {
+                    int damage = m_ptr->creature_id;
 
                     obj_desc_t description, msg;
                     itemDescription(description, &thrown_item, false);
@@ -984,7 +984,7 @@ void playerThrowItem() {
 static void playerBashAttack(int y, int x) {
     int monster_id = cave[y][x].cptr;
     Monster_t *monster = &monsters[monster_id];
-    Creature_t *creature = &creatures_list[monster->mptr];
+    Creature_t *creature = &creatures_list[monster->creature_id];
 
     monster->sleep_count = 0;
 
