@@ -160,10 +160,10 @@ static void playerRecitePrayer(int prayer_type) {
             (void) spellDispelCreature(CD_EVIL, (4 * py.misc.level));
             (void) spellTurnUndead();
 
-            if (py.flags.invuln < 3) {
-                py.flags.invuln = 3;
+            if (py.flags.invulnerability < 3) {
+                py.flags.invulnerability = 3;
             } else {
-                py.flags.invuln++;
+                py.flags.invulnerability++;
             }
             break;
         default:

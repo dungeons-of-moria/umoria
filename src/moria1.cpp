@@ -200,7 +200,7 @@ void playerRecalculateBonuses() {
     }
 
     // Add in temporary spell increases
-    if (py.flags.invuln > 0) {
+    if (py.flags.invulnerability > 0) {
         py.misc.ac += 100;
         py.misc.display_ac += 100;
     }
@@ -1946,7 +1946,7 @@ bool playerTestBeingHit(int base_to_hit, int level, int plus_to_hit, int armor_c
 
 // Decreases players hit points and sets character_is_dead flag if necessary -RAK-
 void playerTakesHit(int damage, const char *creature_name_label) {
-    if (py.flags.invuln > 0) {
+    if (py.flags.invulnerability > 0) {
         damage = 0;
     }
     py.misc.current_hp -= damage;

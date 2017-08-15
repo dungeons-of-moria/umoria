@@ -495,7 +495,7 @@ static void playerUpdateEvilProtection() {
 }
 
 static void playerUpdateInvulnerability() {
-    if (py.flags.invuln <= 0) {
+    if (py.flags.invulnerability <= 0) {
         return;
     }
 
@@ -510,9 +510,9 @@ static void playerUpdateInvulnerability() {
         printMessage("Your skin turns into steel!");
     }
 
-    py.flags.invuln--;
+    py.flags.invulnerability--;
 
-    if (py.flags.invuln == 0) {
+    if (py.flags.invulnerability == 0) {
         py.flags.status &= ~PY_INVULN;
         playerDisturb(0, 0);
 

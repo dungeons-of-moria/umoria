@@ -213,10 +213,10 @@ static bool playerDrinkPotion(uint32_t flags, uint8_t item_id) {
                 identified = true;
                 break;
             case 36:
-                if (py.flags.invuln == 0) {
+                if (py.flags.invulnerability == 0) {
                     identified = true;
                 }
-                py.flags.invuln += randomNumber(10) + 10;
+                py.flags.invulnerability += randomNumber(10) + 10;
                 break;
             case 37:
                 if (py.flags.hero == 0) {
