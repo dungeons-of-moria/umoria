@@ -137,14 +137,14 @@ typedef struct {
     int16_t chr_adjustment;
     uint8_t base_age;            // Base age of character
     uint8_t max_age;             // Maximum age of character
-    uint8_t m_b_ht;  // base height for males
-    uint8_t m_m_ht;  // mod height for males
-    uint8_t m_b_wt;  // base weight for males
-    uint8_t m_m_wt;  // mod weight for males
-    uint8_t f_b_ht;  // base height females
-    uint8_t f_m_ht;  // mod height for females
-    uint8_t f_b_wt;  // base weight for female
-    uint8_t f_m_wt;  // mod weight for females
+    uint8_t male_height_base;    // base height for males
+    uint8_t male_height_mod;     // mod height for males
+    uint8_t male_weight_base;    // base weight for males
+    uint8_t male_weight_mod;     // mod weight for males
+    uint8_t female_height_base;  // base height females
+    uint8_t female_height_mod;   // mod height for females
+    uint8_t female_weight_base;  // base weight for female
+    uint8_t female_weight_mod;   // mod weight for females
     int16_t b_dis;   // base chance to disarm
     int16_t srh;     // base chance for search
     int16_t stl;     // Stealth of character
