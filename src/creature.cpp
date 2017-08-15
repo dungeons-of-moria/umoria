@@ -1715,7 +1715,7 @@ void updateMonsters(bool attack) {
 
         // Attack is argument passed to CREATURE
         if (attack) {
-            int moves = monsterMovementRate(monster->cspeed);
+            int moves = monsterMovementRate(monster->speed);
 
             if (moves <= 0) {
                 monsterUpdateVisibility(id);

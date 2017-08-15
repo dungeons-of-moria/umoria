@@ -239,7 +239,7 @@ typedef struct {
 typedef struct {
     int16_t hp;          // Hit points
     int16_t sleep_count; // Inactive counter
-    int16_t cspeed; // Movement speed
+    int16_t speed;       // Movement speed
     uint16_t mptr;  // Pointer into creature
 
     // Note: fy, fx, and cdis constrain dungeon size to less than 256 by 256

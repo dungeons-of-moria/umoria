@@ -617,7 +617,7 @@ bool monsterPlaceNew(int y, int x, int creature_id, bool sleeping) {
     }
 
     // the creatures_list[] speed value is 10 greater, so that it can be a uint8_t
-    monster->cspeed = (int16_t) (creatures_list[creature_id].speed - 10 + py.flags.speed);
+    monster->speed = (int16_t) (creatures_list[creature_id].speed - 10 + py.flags.speed);
     monster->stunned = 0;
     monster->cdis = (uint8_t) coordDistanceBetween(char_row, char_col, y, x);
     monster->ml = false;
@@ -677,7 +677,7 @@ void monsterPlaceWinning() {
     }
 
     // the creatures_list speed value is 10 greater, so that it can be a uint8_t
-    monster->cspeed = (int16_t) (creatures_list[creature_id].speed - 10 + py.flags.speed);
+    monster->speed = (int16_t) (creatures_list[creature_id].speed - 10 + py.flags.speed);
     monster->stunned = 0;
     monster->cdis = (uint8_t) coordDistanceBetween(char_row, char_col, y, x);
 

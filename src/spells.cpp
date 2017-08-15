@@ -340,8 +340,8 @@ bool spellAggravateMonsters(int affect_distance) {
         Monster_t *monster = &monsters[id];
         monster->sleep_count = 0;
 
-        if (monster->cdis <= affect_distance && monster->cspeed < 2) {
-            monster->cspeed++;
+        if (monster->cdis <= affect_distance && monster->speed < 2) {
+            monster->speed++;
             aggravated = true;
         }
     }
@@ -1129,14 +1129,14 @@ bool spellSpeedMonster(int y, int x, int direction, int speed) {
             monsterNameDescription(name, monster->ml, creature->name);
 
             if (speed > 0) {
-                monster->cspeed += speed;
+                monster->speed += speed;
                 monster->sleep_count = 0;
 
                 changed = true;
 
                 printMonsterActionText(name, "starts moving faster.");
             } else if (randomNumber(MON_MAX_LEVELS) > creature->level) {
-                monster->cspeed += speed;
+                monster->speed += speed;
                 monster->sleep_count = 0;
 
                 changed = true;
@@ -1675,7 +1675,7 @@ bool spellSpeedAllMonsters(int speed) {
         }
 
         if (speed > 0) {
-            monster->cspeed += speed;
+            monster->speed += speed;
             monster->sleep_count = 0;
 
             if (monster->ml) {
@@ -1683,7 +1683,7 @@ bool spellSpeedAllMonsters(int speed) {
                 printMonsterActionText(name, "starts moving faster.");
             }
         } else if (randomNumber(MON_MAX_LEVELS) > creature->level) {
-            monster->cspeed += speed;
+            monster->speed += speed;
             monster->sleep_count = 0;
 
             if (monster->ml) {
