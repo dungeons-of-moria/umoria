@@ -109,11 +109,11 @@ typedef struct {
         bool free_action;            // Never paralyzed
         bool slow_digest;            // Lower food needs
         bool aggravate;              // Aggravate monsters
-        bool resist_fire;            // Resistance to fire
-        bool resist_cold;            // Resistance to cold
-        bool resist_acid;            // Resistance to acid
+        bool resistant_to_fire;      // Resistance to fire
+        bool resistant_to_cold;      // Resistance to cold
+        bool resistant_to_acid;      // Resistance to acid
         bool regenerate_hp;          // Regenerate hit pts
-        bool resist_light;           // Resistance to light
+        bool resistant_to_light;     // Resistance to light
         bool free_fall;              // No damage falling
         bool sustain_str;            // Keep strength
         bool sustain_int;            // Keep intelligence

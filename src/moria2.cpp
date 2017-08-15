@@ -587,7 +587,7 @@ void damagePoisonedGas(int damage, const char *creature_name) {
 
 // Burn the fool up. -RAK-
 void damageFire(int damage, const char *creature_name) {
-    if (py.flags.resist_fire) {
+    if (py.flags.resistant_to_fire) {
         damage = damage / 3;
     }
 
@@ -604,7 +604,7 @@ void damageFire(int damage, const char *creature_name) {
 
 // Freeze him to death. -RAK-
 void damageCold(int damage, const char *creature_name) {
-    if (py.flags.resist_cold) {
+    if (py.flags.resistant_to_cold) {
         damage = damage / 3;
     }
 
@@ -621,7 +621,7 @@ void damageCold(int damage, const char *creature_name) {
 
 // Lightning bolt the sucker away. -RAK-
 void damageLightningBolt(int damage, const char *creature_name) {
-    if (py.flags.resist_light) {
+    if (py.flags.resistant_to_light) {
         damage = damage / 3;
     }
 
@@ -640,7 +640,7 @@ void damageAcid(int damage, const char *creature_name) {
         flag = 1;
     }
 
-    if (py.flags.resist_acid) {
+    if (py.flags.resistant_to_acid) {
         flag += 2;
     }
 

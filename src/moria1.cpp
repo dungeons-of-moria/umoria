@@ -80,11 +80,11 @@ static void playerResetFlags() {
     py.flags.sustain_con = false;
     py.flags.sustain_dex = false;
     py.flags.sustain_chr = false;
-    py.flags.resist_fire = false;
-    py.flags.resist_acid = false;
-    py.flags.resist_cold = false;
+    py.flags.resistant_to_fire = false;
+    py.flags.resistant_to_acid = false;
+    py.flags.resistant_to_cold = false;
     py.flags.regenerate_hp = false;
-    py.flags.resist_light = false;
+    py.flags.resistant_to_light = false;
     py.flags.free_fall = false;
 }
 
@@ -234,13 +234,13 @@ void playerRecalculateBonuses() {
         py.flags.regenerate_hp = true;
     }
     if (TR_RES_FIRE & item_flags) {
-        py.flags.resist_fire = true;
+        py.flags.resistant_to_fire = true;
     }
     if (TR_RES_ACID & item_flags) {
-        py.flags.resist_acid = true;
+        py.flags.resistant_to_acid = true;
     }
     if (TR_RES_COLD & item_flags) {
-        py.flags.resist_cold = true;
+        py.flags.resistant_to_cold = true;
     }
     if (TR_FREE_ACT & item_flags) {
         py.flags.free_action = true;
@@ -249,7 +249,7 @@ void playerRecalculateBonuses() {
         py.flags.see_invisible = true;
     }
     if (TR_RES_LIGHT & item_flags) {
-        py.flags.resist_light = true;
+        py.flags.resistant_to_light = true;
     }
     if (TR_FFALL & item_flags) {
         py.flags.free_fall = true;
