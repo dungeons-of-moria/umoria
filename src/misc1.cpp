@@ -449,7 +449,7 @@ bool los(int from_y, int from_x, int to_y, int to_x) {
 char caveGetTileSymbol(int y, int x) {
     Cave_t *cave_ptr = &cave[y][x];
 
-    if (cave_ptr->cptr == 1 && (!running_counter || config.run_print_self)) {
+    if (cave_ptr->creature_id == 1 && (!running_counter || config.run_print_self)) {
         return '@';
     }
 
@@ -461,8 +461,8 @@ char caveGetTileSymbol(int y, int x) {
         return (uint8_t) (randomNumber(95) + 31);
     }
 
-    if (cave_ptr->cptr > 1 && monsters[cave_ptr->cptr].lit) {
-        return creatures_list[monsters[cave_ptr->cptr].creature_id].cchar;
+    if (cave_ptr->creature_id > 1 && monsters[cave_ptr->creature_id].lit) {
+        return creatures_list[monsters[cave_ptr->creature_id].creature_id].cchar;
     }
 
     if (!cave_ptr->pl && !cave_ptr->tl && !cave_ptr->fm) {
@@ -622,7 +622,7 @@ bool monsterPlaceNew(int y, int x, int creature_id, bool sleeping) {
     monster->distance_from_player = (uint8_t) coordDistanceBetween(char_row, char_col, y, x);
     monster->lit = false;
 
-    cave[y][x].cptr = (uint8_t) monster_id;
+    cave[y][x].creature_id = (uint8_t) monster_id;
 
     if (sleeping) {
         if (creatures_list[creature_id].sleep == 0) {
@@ -647,7 +647,7 @@ void monsterPlaceWinning() {
     do {
         y = randomNumber(dungeon_height - 2);
         x = randomNumber(dungeon_width - 2);
-    } while ((cave[y][x].fval >= MIN_CLOSED_SPACE) || (cave[y][x].cptr != 0) || (cave[y][x].tptr != 0) || (coordDistanceBetween(y, x, char_row, char_col) <= MON_MAX_SIGHT));
+    } while ((cave[y][x].fval >= MIN_CLOSED_SPACE) || (cave[y][x].creature_id != 0) || (cave[y][x].tptr != 0) || (coordDistanceBetween(y, x, char_row, char_col) <= MON_MAX_SIGHT));
 
     int creature_id = randomNumber(MON_ENDGAME_MONSTERS) - 1 + monster_levels[MON_MAX_LEVELS];
 
@@ -681,7 +681,7 @@ void monsterPlaceWinning() {
     monster->stunned_amount = 0;
     monster->distance_from_player = (uint8_t) coordDistanceBetween(char_row, char_col, y, x);
 
-    cave[y][x].cptr = (uint8_t) monster_id;
+    cave[y][x].creature_id = (uint8_t) monster_id;
 
     monster->sleep_count = 0;
 }
@@ -730,7 +730,7 @@ void monsterPlaceNewWithinDistance(int number, int distance_from_source, bool sl
         do {
             y = randomNumber(dungeon_height - 2);
             x = randomNumber(dungeon_width - 2);
-        } while (cave[y][x].fval >= MIN_CLOSED_SPACE || cave[y][x].cptr != 0 || coordDistanceBetween(y, x, char_row, char_col) <= distance_from_source);
+        } while (cave[y][x].fval >= MIN_CLOSED_SPACE || cave[y][x].creature_id != 0 || coordDistanceBetween(y, x, char_row, char_col) <= distance_from_source);
 
         int l = monsterGetOneSuitableForLevel(current_dungeon_level);
 
@@ -754,7 +754,7 @@ static bool placeMonsterAdjacentTo(int monsterID, int *y, int *x, bool slp) {
         int xx = *x - 2 + randomNumber(3);
 
         if (coordInBounds(yy, xx)) {
-            if (cave[yy][xx].fval <= MAX_OPEN_SPACE && cave[yy][xx].cptr == 0) {
+            if (cave[yy][xx].fval <= MAX_OPEN_SPACE && cave[yy][xx].creature_id == 0) {
                 // Place_monster() should always return true here.
                 if (!monsterPlaceNew(yy, xx, monsterID, slp)) {
                     return false;

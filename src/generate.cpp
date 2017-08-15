@@ -949,7 +949,7 @@ static void dungeonNewSpot(int16_t *y, int16_t *x) {
         pos_y = randomNumber(dungeon_height - 2);
         pos_x = randomNumber(dungeon_width - 2);
         tile = &cave[pos_y][pos_x];
-    } while (tile->fval >= MIN_CLOSED_SPACE || tile->cptr != 0 || tile->tptr != 0);
+    } while (tile->fval >= MIN_CLOSED_SPACE || tile->creature_id != 0 || tile->tptr != 0);
 
     *y = (int16_t) pos_y;
     *x = (int16_t) pos_x;

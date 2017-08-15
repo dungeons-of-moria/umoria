@@ -84,7 +84,7 @@ static int monsterMovementRate(int16_t speed) {
 
 // Makes sure a new creature gets lit up. -CJS-
 static bool monsterMakeVisible(int y, int x) {
-    int monster_id = cave[y][x].cptr;
+    int monster_id = cave[y][x].creature_id;
     if (monster_id <= 1) {
         return false;
     }
@@ -1079,7 +1079,7 @@ static void makeMove(int monster_id, int *directions, uint32_t *rcmove) {
 
         // Creature has attempted to move on player?
         if (do_move) {
-            monsterMovesOnPlayer(monster, tile->cptr, monster_id, move_bits, &do_move, &do_turn, rcmove, y, x);
+            monsterMovesOnPlayer(monster, tile->creature_id, monster_id, move_bits, &do_move, &do_turn, rcmove, y, x);
         }
 
         // Creature has been allowed move.
@@ -1180,7 +1180,7 @@ void monsterExecuteCastingOfSpell(Monster_t *monster, int monster_id, int spell_
             hack_monptr = monster_id;
             (void) monsterSummon(&y, &x, false);
             hack_monptr = -1;
-            monsterUpdateVisibility((int) cave[y][x].cptr);
+            monsterUpdateVisibility((int) cave[y][x].creature_id);
             break;
         case 15: // Summon Undead
             (void) strcat(monster_name, "magically summons an undead!");
@@ -1192,7 +1192,7 @@ void monsterExecuteCastingOfSpell(Monster_t *monster, int monster_id, int spell_
             hack_monptr = monster_id;
             (void) monsterSummonUndead(&y, &x);
             hack_monptr = -1;
-            monsterUpdateVisibility((int) cave[y][x].cptr);
+            monsterUpdateVisibility((int) cave[y][x].creature_id);
             break;
         case 16: // Slow Person
             if (py.flags.free_action) {
@@ -1344,24 +1344,24 @@ bool monsterMultiply(int y, int x, int creature_id, int monster_id) {
         if (coordInBounds(pos_y, pos_x) && (pos_y != y || pos_x != x)) {
             Cave_t *tile = &cave[pos_y][pos_x];
 
-            if (tile->fval <= MAX_OPEN_SPACE && tile->tptr == 0 && tile->cptr != 1) {
+            if (tile->fval <= MAX_OPEN_SPACE && tile->tptr == 0 && tile->creature_id != 1) {
                 // Creature there already?
-                if (tile->cptr > 1) {
+                if (tile->creature_id > 1) {
                     // Some critters are cannibalistic!
                     bool cannibalistic = (creatures_list[creature_id].cmove & CM_EATS_OTHER) != 0;
 
                     // Check the experience level -CJS-
-                    bool experienced = creatures_list[creature_id].mexp >= creatures_list[monsters[tile->cptr].creature_id].mexp;
+                    bool experienced = creatures_list[creature_id].mexp >= creatures_list[monsters[tile->creature_id].creature_id].mexp;
 
                     if (cannibalistic && experienced) {
                         // It ate an already processed monster. Handle * normally.
-                        if (monster_id < tile->cptr) {
-                            dungeonDeleteMonster((int) tile->cptr);
+                        if (monster_id < tile->creature_id) {
+                            dungeonDeleteMonster((int) tile->creature_id);
                         } else {
                             // If it eats this monster, an already processed
                             // monster will take its place, causing all kinds
                             // of havoc. Delay the kill a bit.
-                            dungeonDeleteMonsterFix1((int) tile->cptr);
+                            dungeonDeleteMonsterFix1((int) tile->creature_id);
                         }
 
                         // in case compact_monster() is called, it needs monster_id.
@@ -1405,7 +1405,7 @@ static void monsterMultiplyCritter(Monster_t *monster, int monster_id, uint32_t 
 
     for (int y = monster->y - 1; y <= monster->y + 1; y++) {
         for (int x = monster->x - 1; x <= monster->x + 1; x++) {
-            if (coordInBounds(y, x) && (cave[y][x].cptr > 1)) {
+            if (coordInBounds(y, x) && (cave[y][x].creature_id > 1)) {
                 counter++;
             }
         }
@@ -1443,7 +1443,7 @@ static void monsterMoveOutOfWall(Monster_t *monster, int monster_id, uint32_t *r
     // of i will fail the comparison.
     for (int y = monster->y + 1; y >= (monster->y - 1); y--) {
         for (int x = monster->x - 1; x <= monster->x + 1; x++) {
-            if (dir != 5 && cave[y][x].fval <= MAX_OPEN_SPACE && cave[y][x].cptr != 1) {
+            if (dir != 5 && cave[y][x].fval <= MAX_OPEN_SPACE && cave[y][x].creature_id != 1) {
                 directions[id++] = dir;
             }
             dir++;

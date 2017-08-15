@@ -48,7 +48,7 @@ void dungeonPlaceGold(int y, int x) {
     inventoryItemCopyTo(OBJ_GOLD_LIST + gold_type_id, &treasure_list[free_treasure_id]);
     treasure_list[free_treasure_id].cost += (8L * (int32_t) randomNumber((int) treasure_list[free_treasure_id].cost)) + randomNumber(8);
 
-    if (cave[y][x].cptr == 1) {
+    if (cave[y][x].creature_id == 1) {
         printMessage("You feel something roll beneath your feet.");
     }
 }
@@ -118,7 +118,7 @@ void dungeonPlaceRandomObjectAt(int y, int x, bool must_be_small) {
 
     magicTreasureMagicalAbility(free_treasure_id, current_dungeon_level);
 
-    if (cave[y][x].cptr == 1) {
+    if (cave[y][x].creature_id == 1) {
         printMessage("You feel something roll beneath your feet."); // -CJS-
     }
 }
@@ -2345,7 +2345,7 @@ void playerTeleport(int new_distance) {
             new_y += (char_row - new_y) / 2;
             new_x += (char_col - new_x) / 2;
         }
-    } while (cave[new_y][new_x].fval >= MIN_CLOSED_SPACE || cave[new_y][new_x].cptr >= 2);
+    } while (cave[new_y][new_x].fval >= MIN_CLOSED_SPACE || cave[new_y][new_x].creature_id >= 2);
 
     dungeonMoveCreatureRecord(char_row, char_col, new_y, new_x);
 

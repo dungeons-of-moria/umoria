@@ -457,7 +457,7 @@ static void carry(int y, int x, bool pickup) {
 void dungeonDeleteMonster(int id) {
     Monster_t *monster = &monsters[id];
 
-    cave[monster->y][monster->x].cptr = 0;
+    cave[monster->y][monster->x].creature_id = 0;
 
     if (monster->lit) {
         dungeonLiteSpot((int) monster->y, (int) monster->x);
@@ -467,7 +467,7 @@ void dungeonDeleteMonster(int id) {
 
     if (id != last_id) {
         monster = &monsters[last_id];
-        cave[monster->y][monster->x].cptr = (uint8_t) id;
+        cave[monster->y][monster->x].creature_id = (uint8_t) id;
         monsters[id] = monsters[last_id];
     }
 
@@ -496,7 +496,7 @@ void dungeonDeleteMonsterFix1(int id) {
     // hit points
     monster->hp = -1;
 
-    cave[monster->y][monster->x].cptr = 0;
+    cave[monster->y][monster->x].creature_id = 0;
 
     if (monster->lit) {
         dungeonLiteSpot((int) monster->y, (int) monster->x);
@@ -515,7 +515,7 @@ void dungeonDeleteMonsterFix2(int id) {
     if (id != last_id) {
         int y = monsters[last_id].y;
         int x = monsters[last_id].x;
-        cave[y][x].cptr = (uint8_t) id;
+        cave[y][x].creature_id = (uint8_t) id;
 
         monsters[id] = monsters[last_id];
     }
@@ -792,7 +792,7 @@ static int playerCalculateBaseToHit(bool creatureLit, int tot_tohit) {
 
 // Player attacks a (poor, defenseless) creature -RAK-
 static void playerAttackMonster(int y, int x) {
-    int creature_id = cave[y][x].cptr;
+    int creature_id = cave[y][x].creature_id;
 
     Monster_t *monster = &monsters[creature_id];
     Creature_t *creature = &creatures_list[monster->creature_id];
@@ -920,14 +920,14 @@ void playerMove(int direction, bool do_pickup) {
     }
 
     Cave_t *tile = &cave[y][x];
-    Monster_t *monster = &monsters[tile->cptr];
+    Monster_t *monster = &monsters[tile->creature_id];
 
     // if there is no creature, or an unlit creature in the walls then...
     // disallow attacks against unlit creatures in walls because moving into
     // a wall is a free turn normally, hence don't give player free turns
     // attacking each wall in an attempt to locate the invisible creature,
     // instead force player to tunnel into walls which always takes a turn
-    if (tile->cptr < 2 || (!monster->lit && tile->fval >= MIN_CLOSED_SPACE)) {
+    if (tile->creature_id < 2 || (!monster->lit && tile->fval >= MIN_CLOSED_SPACE)) {
         // Open floor spot
         if (tile->fval <= MAX_OPEN_SPACE) {
             // Make final assignments of char coords
@@ -1217,8 +1217,8 @@ void objectOpen() {
     Cave_t *tile = &cave[y][x];
     Inventory_t *item = &treasure_list[tile->tptr];
 
-    if (tile->cptr > 1 && tile->tptr != 0 && (item->category_id == TV_CLOSED_DOOR || item->category_id == TV_CHEST)) {
-        objectBlockedByMonster(tile->cptr);
+    if (tile->creature_id > 1 && tile->tptr != 0 && (item->category_id == TV_CLOSED_DOOR || item->category_id == TV_CHEST)) {
+        objectBlockedByMonster(tile->creature_id);
     } else if (tile->tptr != 0) {
         if (item->category_id == TV_CLOSED_DOOR) {
             openClosedDoor(y, x);
@@ -1256,7 +1256,7 @@ void dungeonCloseDoor() {
 
     if (tile->tptr != 0) {
         if (item->category_id == TV_OPEN_DOOR) {
-            if (tile->cptr == 0) {
+            if (tile->creature_id == 0) {
                 if (item->misc_use == 0) {
                     inventoryItemCopyTo(OBJ_CLOSED_DOOR, item);
                     tile->fval = TILE_BLOCKED_FLOOR;
@@ -1265,7 +1265,7 @@ void dungeonCloseDoor() {
                     printMessage("The door appears to be broken.");
                 }
             } else {
-                objectBlockedByMonster(tile->cptr);
+                objectBlockedByMonster(tile->creature_id);
             }
         } else {
             no_object = true;

@@ -1683,9 +1683,9 @@ bool getAllDirections(const char *prompt, int *direction) {
 // Moves creature record from one space to another -RAK-
 // this always works correctly, even if y1==y2 and x1==x2
 void dungeonMoveCreatureRecord(int y1, int x1, int y2, int x2) {
-    int id = cave[y1][x1].cptr;
-    cave[y1][x1].cptr = 0;
-    cave[y2][x2].cptr = (uint8_t) id;
+    int id = cave[y1][x1].creature_id;
+    cave[y1][x1].creature_id = 0;
+    cave[y2][x2].creature_id = (uint8_t) id;
 }
 
 // Room is lit, make it appear -RAK-

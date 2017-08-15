@@ -34,7 +34,7 @@ static void resetDungeonFlags() {
     running_counter = 0;
     teleport_player = false;
     monster_multiply_total = 0;
-    cave[char_row][char_col].cptr = 1;
+    cave[char_row][char_col].creature_id = 1;
 }
 
 // Check light status for dungeon setup
@@ -2142,7 +2142,7 @@ static void dungeonJamDoor() {
 
     // If we reach here, the door is closed and we can try to jam it -MRC-
 
-    if (tile->cptr == 0) {
+    if (tile->creature_id == 0) {
         int item_pos_start, item_pos_end;
         if (inventoryFindRange(TV_SPIKE, TV_NEVER, &item_pos_start, &item_pos_end)) {
             player_free_turn = false;
@@ -2171,7 +2171,7 @@ static void dungeonJamDoor() {
         player_free_turn = false;
 
         vtype_t msg;
-        (void) sprintf(msg, "The %s is in your way!", creatures_list[monsters[tile->cptr].creature_id].name);
+        (void) sprintf(msg, "The %s is in your way!", creatures_list[monsters[tile->creature_id].creature_id].name);
         printMessage(msg);
     }
 }

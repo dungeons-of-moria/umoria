@@ -295,15 +295,15 @@ static bool sv_write() {
     for (int i = 0; i < MAX_HEIGHT; i++) {
         for (int j = 0; j < MAX_WIDTH; j++) {
             Cave_t *c_ptr = &cave[i][j];
-            if (c_ptr->cptr != 0) {
+            if (c_ptr->creature_id != 0) {
                 wr_byte((uint8_t) i);
                 wr_byte((uint8_t) j);
-                wr_byte(c_ptr->cptr);
+                wr_byte(c_ptr->creature_id);
             }
         }
     }
 
-    // marks end of cptr info
+    // marks end of creature_id info
     wr_byte((uint8_t) 0xFF);
 
     for (int i = 0; i < MAX_HEIGHT; i++) {
@@ -812,7 +812,7 @@ bool loadGame(bool *generate) {
             if (xchar > MAX_WIDTH || ychar > MAX_HEIGHT) {
                 goto error;
             }
-            cave[ychar][xchar].cptr = char_tmp;
+            cave[ychar][xchar].creature_id = char_tmp;
             rd_byte(&char_tmp);
         }
 

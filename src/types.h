@@ -302,7 +302,7 @@ typedef struct {
 
 // Cave_t holds data about a specific tile in the dungeon.
 typedef struct {
-    uint8_t cptr;
+    uint8_t creature_id;
     uint8_t tptr;
     uint8_t fval;
 

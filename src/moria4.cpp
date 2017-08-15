@@ -148,8 +148,8 @@ void playerTunnel(int direction) {
         return;
     }
 
-    if (tile->cptr > 1) {
-        objectBlockedByMonster(tile->cptr);
+    if (tile->creature_id > 1) {
+        objectBlockedByMonster(tile->creature_id);
         playerAttackPosition(y, x);
         return;
     }
@@ -288,8 +288,8 @@ void playerDisarmTrap() {
 
     bool no_disarm = false;
 
-    if (tile->cptr > 1 && tile->tptr != 0 && (treasure_list[tile->tptr].category_id == TV_VIS_TRAP || treasure_list[tile->tptr].category_id == TV_CHEST)) {
-        objectBlockedByMonster(tile->cptr);
+    if (tile->creature_id > 1 && tile->tptr != 0 && (treasure_list[tile->tptr].category_id == TV_VIS_TRAP || treasure_list[tile->tptr].category_id == TV_CHEST)) {
+        objectBlockedByMonster(tile->creature_id);
     } else if (tile->tptr != 0) {
         int disarm_ability = playerTrapDisarmAbility();
 
@@ -631,8 +631,8 @@ static bool lookSee(int x, int y, bool *transparent) {
     obj_desc_t msg;
     msg[0] = 0;
 
-    if (los_rocks_and_objects == 0 && tile->cptr > 1 && monsters[tile->cptr].lit) {
-        j = monsters[tile->cptr].creature_id;
+    if (los_rocks_and_objects == 0 && tile->creature_id > 1 && monsters[tile->creature_id].lit) {
+        j = monsters[tile->creature_id].creature_id;
         (void) sprintf(msg, "%s %s %s. [(r)ecall]", description, isVowel(creatures_list[j].name[0]) ? "an" : "a", creatures_list[j].name);
         description = "It is on";
         putStringClearToEOL(msg, 0, 0);
@@ -909,10 +909,10 @@ void playerThrowItem() {
         tile = &cave[y][x];
 
         if (tile->fval <= MAX_OPEN_SPACE && !flag) {
-            if (tile->cptr > 1) {
+            if (tile->creature_id > 1) {
                 flag = true;
 
-                Monster_t *m_ptr = &monsters[tile->cptr];
+                Monster_t *m_ptr = &monsters[tile->creature_id];
 
                 tbth -= current_distance;
 
@@ -947,7 +947,7 @@ void playerThrowItem() {
                         tdam = 0;
                     }
 
-                    damage = monsterTakeHit((int) tile->cptr, tdam);
+                    damage = monsterTakeHit((int) tile->creature_id, tdam);
 
                     if (damage >= 0) {
                         if (!visible) {
@@ -982,7 +982,7 @@ void playerThrowItem() {
 // Make a bash attack on someone. -CJS-
 // Used to be part of bash above.
 static void playerBashAttack(int y, int x) {
-    int monster_id = cave[y][x].cptr;
+    int monster_id = cave[y][x].creature_id;
     Monster_t *monster = &monsters[monster_id];
     Creature_t *creature = &creatures_list[monster->creature_id];
 
@@ -1164,7 +1164,7 @@ void playerBash() {
 
     Cave_t *tile = &cave[y][x];
 
-    if (tile->cptr > 1) {
+    if (tile->creature_id > 1) {
         playerBashPosition(y, x);
         return;
     }
