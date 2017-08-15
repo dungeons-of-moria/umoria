@@ -80,7 +80,7 @@ static void playerResetFlags() {
     py.flags.sustain_con = false;
     py.flags.sustain_dex = false;
     py.flags.sustain_chr = false;
-    py.flags.fire_resist = false;
+    py.flags.resist_fire = false;
     py.flags.acid_resist = false;
     py.flags.cold_resist = false;
     py.flags.regenerate = false;
@@ -234,7 +234,7 @@ void playerRecalculateBonuses() {
         py.flags.regenerate = true;
     }
     if (TR_RES_FIRE & item_flags) {
-        py.flags.fire_resist = true;
+        py.flags.resist_fire = true;
     }
     if (TR_RES_ACID & item_flags) {
         py.flags.acid_resist = true;

@@ -587,7 +587,7 @@ void damagePoisonedGas(int damage, const char *creature_name) {
 
 // Burn the fool up. -RAK-
 void damageFire(int damage, const char *creature_name) {
-    if (py.flags.fire_resist) {
+    if (py.flags.resist_fire) {
         damage = damage / 3;
     }
 
