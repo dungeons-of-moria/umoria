@@ -848,7 +848,7 @@ static void playerAttackMonster(int y, int x) {
 
             printMessage("Your hands stop glowing.");
 
-            if ((creature->cdefense & CD_NO_SLEEP) || randomNumber(MON_MAX_LEVELS) < creature->level) {
+            if ((creature->defenses & CD_NO_SLEEP) || randomNumber(MON_MAX_LEVELS) < creature->level) {
                 (void) sprintf(msg, "%s is unaffected.", name);
             } else {
                 (void) sprintf(msg, "%s appears confused.", name);
@@ -861,7 +861,7 @@ static void playerAttackMonster(int y, int x) {
             printMessage(msg);
 
             if (monster->lit && randomNumber(4) == 1) {
-                creature_recall[monster->creature_id].defenses |= creature->cdefense & CD_NO_SLEEP;
+                creature_recall[monster->creature_id].defenses |= creature->defenses & CD_NO_SLEEP;
             }
         }
 

@@ -610,7 +610,7 @@ bool monsterPlaceNew(int y, int x, int creature_id, bool sleeping) {
     monster->x = (uint8_t) x;
     monster->creature_id = (uint16_t) creature_id;
 
-    if (creatures_list[creature_id].cdefense & CD_MAX_HP) {
+    if (creatures_list[creature_id].defenses & CD_MAX_HP) {
         monster->hp = (int16_t) maxHitPoints(creatures_list[creature_id].hd);
     } else {
         monster->hp = (int16_t) dicePlayerDamageRoll(creatures_list[creature_id].hd);
@@ -670,7 +670,7 @@ void monsterPlaceWinning() {
     monster->x = (uint8_t) x;
     monster->creature_id = (uint16_t) creature_id;
 
-    if (creatures_list[creature_id].cdefense & CD_MAX_HP) {
+    if (creatures_list[creature_id].defenses & CD_MAX_HP) {
         monster->hp = (int16_t) maxHitPoints(creatures_list[creature_id].hd);
     } else {
         monster->hp = (int16_t) dicePlayerDamageRoll(creatures_list[creature_id].hd);
@@ -786,7 +786,7 @@ bool monsterSummonUndead(int *y, int *x) {
     do {
         monster_id = randomNumber(max_levels) - 1;
         for (int i = 0; i <= 19;) {
-            if (creatures_list[monster_id].cdefense & CD_UNDEAD) {
+            if (creatures_list[monster_id].defenses & CD_UNDEAD) {
                 i = 20;
                 max_levels = 0;
             } else {

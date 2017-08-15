@@ -161,7 +161,7 @@ static void memoryWizardModeInit(Recall_t *memory, Creature_t *creature) {
     move += (uint32_t) ((creature->movement & CM_60_RANDOM) != 0);
 
     memory->movement = (uint32_t) ((creature->movement & ~CM_TREASURE) | (move << CM_TR_SHIFT));
-    memory->defenses = creature->cdefense;
+    memory->defenses = creature->defenses;
 
     if (creature->spells & CS_FREQ) {
         memory->spells = (uint32_t) (creature->spells | CS_FREQ);
@@ -434,7 +434,7 @@ static void memoryKillDifficulty(Creature_t *creature, uint32_t monster_kills) {
     (void) sprintf(description, " It has an armor rating of %d", creature->ac);
     memoryPrint(description);
 
-    (void) sprintf(description, " and a%s life rating of %dd%d.", ((creature->cdefense & CD_MAX_HP) ? " maximized" : ""), creature->hd[0], creature->hd[1]);
+    (void) sprintf(description, " and a%s life rating of %dd%d.", ((creature->defenses & CD_MAX_HP) ? " maximized" : ""), creature->hd[0], creature->hd[1]);
     memoryPrint(description);
 }
 
@@ -463,7 +463,7 @@ static void memorySpecialAbilities(uint32_t move) {
     }
 }
 
-// Do we know its special weaknesses? Most cdefense flags.
+// Do we know its special weaknesses? Most defenses flags.
 static void memoryWeaknesses(uint32_t defense) {
     bool known = true;
 
@@ -683,7 +683,7 @@ int memoryRecall(int monster_id) {
     // the CM_WIN property is always known, set it if a win monster
     uint32_t move = (uint32_t) (memory->movement | (CM_WIN & creature->movement));
 
-    uint16_t defense = memory->defenses & creature->cdefense;
+    uint16_t defense = memory->defenses & creature->defenses;
 
     bool known;
 
@@ -702,7 +702,7 @@ int memoryRecall(int monster_id) {
     }
 
     if (memory->kills) {
-        memoryKillPoints(creature->cdefense, creature->mexp, creature->level);
+        memoryKillPoints(creature->defenses, creature->mexp, creature->level);
     }
 
     memoryMagicSkills(spells, memory->spells, creature->spells);

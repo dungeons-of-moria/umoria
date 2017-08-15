@@ -347,7 +347,7 @@ typedef struct {
     const char *name;  // Description of creature
     uint32_t movement; // Bit field
     uint32_t spells;   // Creature spells
-    uint16_t cdefense; // Bit field
+    uint16_t defenses; // Bit field
     uint16_t mexp;     // Exp value for kill
     uint8_t sleep;     // Inactive counter/10
     uint8_t aaf;       // Area affect radius

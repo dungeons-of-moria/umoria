@@ -1030,7 +1030,7 @@ static void playerBashAttack(int y, int x) {
 
             // Can not stun Balrog
             int avg_max_hp;
-            if (creature->cdefense & CD_MAX_HP) {
+            if (creature->defenses & CD_MAX_HP) {
                 avg_max_hp = creature->hd[0] * creature->hd[1];
             } else {
                 avg_max_hp = (creature->hd[0] * (creature->hd[1] + 1)) >> 1;

@@ -23,7 +23,7 @@ static bool monsterIsVisible(Monster_t *monster) {
             visible = true;
             creature_recall[monster->creature_id].movement |= CM_INVISIBLE;
         }
-    } else if (py.flags.see_infra > 0 && monster->distance_from_player <= py.flags.see_infra && (CD_INFRA & creature->cdefense)) {
+    } else if (py.flags.see_infra > 0 && monster->distance_from_player <= py.flags.see_infra && (CD_INFRA & creature->defenses)) {
         // Infra vision.
         visible = true;
         creature_recall[monster->creature_id].defenses |= CD_INFRA;
@@ -782,7 +782,7 @@ static void monsterConfuseOnAttack(Creature_t *creature, Monster_t *monster, int
 
         vtype_t msg;
 
-        if (randomNumber(MON_MAX_LEVELS) < creature->level || (CD_NO_SLEEP & creature->cdefense)) {
+        if (randomNumber(MON_MAX_LEVELS) < creature->level || (CD_NO_SLEEP & creature->defenses)) {
             (void) sprintf(msg, "%sis unaffected.", monster_name);
         } else {
             (void) sprintf(msg, "%sappears confused.", monster_name);
@@ -796,7 +796,7 @@ static void monsterConfuseOnAttack(Creature_t *creature, Monster_t *monster, int
         printMessage(msg);
 
         if (visible && !character_is_dead && randomNumber(4) == 1) {
-            creature_recall[monster->creature_id].defenses |= creature->cdefense & CD_NO_SLEEP;
+            creature_recall[monster->creature_id].defenses |= creature->defenses & CD_NO_SLEEP;
         }
     }
 
@@ -835,7 +835,7 @@ static void monsterAttackPlayer(int monster_id) {
 
         attstr++;
 
-        if (py.flags.protect_evil > 0 && (creature->cdefense & CD_EVIL) && py.misc.level + 1 > creature->level) {
+        if (py.flags.protect_evil > 0 && (creature->defenses & CD_EVIL) && py.misc.level + 1 > creature->level) {
             if (monster->lit) {
                 creature_recall[monster->creature_id].defenses |= CD_EVIL;
             }
@@ -1540,7 +1540,7 @@ static void monsterMove(int monster_id, uint32_t *rcmove) {
 
     if (monster->confused_amount) {
         // Creature is confused or undead turned?
-        if (creature->cdefense & CD_UNDEAD) {
+        if (creature->defenses & CD_UNDEAD) {
             monsterMoveUndead(monster, creature, monster_id, rcmove);
         } else {
             monsterMoveConfused(monster, creature, monster_id, rcmove);

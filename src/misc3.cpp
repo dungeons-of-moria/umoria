@@ -2173,37 +2173,37 @@ int itemMagicAbilityDamage(Inventory_t *item, int total_damage, int monster_id) 
         Recall_t *memory = &creature_recall[monster_id];
 
         // Slay Dragon
-        if ((creature->cdefense & CD_DRAGON) && (item->flags & TR_SLAY_DRAGON)) {
+        if ((creature->defenses & CD_DRAGON) && (item->flags & TR_SLAY_DRAGON)) {
             memory->defenses |= CD_DRAGON;
             return total_damage * 4;
         }
 
         // Slay Undead
-        if ((creature->cdefense & CD_UNDEAD) && (item->flags & TR_SLAY_UNDEAD)) {
+        if ((creature->defenses & CD_UNDEAD) && (item->flags & TR_SLAY_UNDEAD)) {
             memory->defenses |= CD_UNDEAD;
             return total_damage * 3;
         }
 
         // Slay Animal
-        if ((creature->cdefense & CD_ANIMAL) && (item->flags & TR_SLAY_ANIMAL)) {
+        if ((creature->defenses & CD_ANIMAL) && (item->flags & TR_SLAY_ANIMAL)) {
             memory->defenses |= CD_ANIMAL;
             return total_damage * 2;
         }
 
         // Slay Evil
-        if ((creature->cdefense & CD_EVIL) && (item->flags & TR_SLAY_EVIL)) {
+        if ((creature->defenses & CD_EVIL) && (item->flags & TR_SLAY_EVIL)) {
             memory->defenses |= CD_EVIL;
             return total_damage * 2;
         }
 
         // Frost
-        if ((creature->cdefense & CD_FROST) && (item->flags & TR_FROST_BRAND)) {
+        if ((creature->defenses & CD_FROST) && (item->flags & TR_FROST_BRAND)) {
             memory->defenses |= CD_FROST;
             return total_damage * 3 / 2;
         }
 
         // Fire
-        if ((creature->cdefense & CD_FIRE) && (item->flags & TR_FLAME_TONGUE)) {
+        if ((creature->defenses & CD_FIRE) && (item->flags & TR_FLAME_TONGUE)) {
             memory->defenses |= CD_FIRE;
             return total_damage * 3 / 2;
         }
