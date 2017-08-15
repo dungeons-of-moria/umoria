@@ -1192,10 +1192,10 @@ bool spellConfuseMonster(int y, int x, int direction) {
 
                 printMonsterActionText(name, "is unaffected.");
             } else {
-                if (monster->confused) {
-                    monster->confused += 3;
+                if (monster->confused_amount) {
+                    monster->confused_amount += 3;
                 } else {
-                    monster->confused = (uint8_t) (2 + randomNumber(16));
+                    monster->confused_amount = (uint8_t) (2 + randomNumber(16));
                 }
                 monster->sleep_count = 0;
 
@@ -2009,7 +2009,7 @@ bool spellTurnUndead() {
                     printMonsterActionText(name, "runs frantically!");
                 }
 
-                monster->confused = (uint8_t) py.misc.level;
+                monster->confused_amount = (uint8_t) py.misc.level;
             } else if (monster->lit) {
                 printMonsterActionText(name, "is unaffected.");
             }

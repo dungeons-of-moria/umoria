@@ -786,10 +786,10 @@ static void monsterConfuseOnAttack(Creature_t *creature, Monster_t *monster, int
             (void) sprintf(msg, "%sis unaffected.", monster_name);
         } else {
             (void) sprintf(msg, "%sappears confused.", monster_name);
-            if (monster->confused) {
-                monster->confused += 3;
+            if (monster->confused_amount) {
+                monster->confused_amount += 3;
             } else {
-                monster->confused = (uint8_t) (2 + randomNumber(16));
+                monster->confused_amount = (uint8_t) (2 + randomNumber(16));
             }
         }
 
@@ -1497,7 +1497,7 @@ static void monsterMoveUndead(Monster_t *monster, Creature_t *creature, int mons
         makeMove(monster_id, directions, rcmove);
     }
 
-    monster->confused--;
+    monster->confused_amount--;
 }
 
 static void monsterMoveConfused(Monster_t *monster, Creature_t *creature, int monster_id, uint32_t *rcmove) {
@@ -1514,7 +1514,7 @@ static void monsterMoveConfused(Monster_t *monster, Creature_t *creature, int mo
         makeMove(monster_id, directions, rcmove);
     }
 
-    monster->confused--;
+    monster->confused_amount--;
 }
 
 // Move the critters about the dungeon -RAK-
@@ -1538,7 +1538,7 @@ static void monsterMove(int monster_id, uint32_t *rcmove) {
 
     bool do_move = false;
 
-    if (monster->confused) {
+    if (monster->confused_amount) {
         // Creature is confused or undead turned?
         if (creature->cdefense & CD_UNDEAD) {
             monsterMoveUndead(monster, creature, monster_id, rcmove);

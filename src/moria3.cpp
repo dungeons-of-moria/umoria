@@ -852,10 +852,10 @@ static void playerAttackMonster(int y, int x) {
                 (void) sprintf(msg, "%s is unaffected.", name);
             } else {
                 (void) sprintf(msg, "%s appears confused.", name);
-                if (monster->confused) {
-                    monster->confused += 3;
+                if (monster->confused_amount) {
+                    monster->confused_amount += 3;
                 } else {
-                    monster->confused = (uint8_t) (2 + randomNumber(16));
+                    monster->confused_amount = (uint8_t) (2 + randomNumber(16));
                 }
             }
             printMessage(msg);

@@ -249,7 +249,7 @@ typedef struct {
 
     bool lit;
     uint8_t stunned_amount;
-    uint8_t confused;
+    uint8_t confused_amount;
 } Monster_t;
 
 
