@@ -2112,10 +2112,10 @@ void spellLoseEXP(int32_t adjustment) {
 
         Class_t *character_class = &classes[py.misc.class_id];
 
-        if (character_class->spell == SPELL_TYPE_MAGE) {
+        if (character_class->user_mage_spells == SPELL_TYPE_MAGE) {
             playerCalculateAllowedSpellsCount(A_INT);
             playerGainMana(A_INT);
-        } else if (character_class->spell == SPELL_TYPE_PRIEST) {
+        } else if (character_class->user_mage_spells == SPELL_TYPE_PRIEST) {
             playerCalculateAllowedSpellsCount(A_WIS);
             playerGainMana(A_WIS);
         }

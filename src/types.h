@@ -160,24 +160,24 @@ typedef struct {
 
 // Class_t for the generated player character
 typedef struct {
-    const char *title;       // type of class
-    uint8_t adj_hd;          // Adjust hit points
-    uint8_t mdis;            // mod disarming traps
-    uint8_t msrh;            // modifier to searching
-    uint8_t mstl;            // modifier to stealth
-    uint8_t mfos;            // modifier to freq-of-search
-    uint8_t mbth;            // modifier to base to hit
-    uint8_t mbthb;           // modifier to base to hit - bows
-    uint8_t msav;            // Class modifier to save
-    int16_t madj_str;        // Class modifier for strength
-    int16_t madj_int;        // Class modifier for intelligence
-    int16_t madj_wis;        // Class modifier for wisdom
-    int16_t madj_dex;        // Class modifier for dexterity
-    int16_t madj_con;        // Class modifier for constitution
-    int16_t madj_chr;        // Class modifier for charisma
-    uint8_t spell;           // class use mage spells
-    uint8_t m_exp;           // Class experience factor
-    uint8_t first_spell_lev; // First level where class can use spells.
+    const char *title;                   // type of class
+    uint8_t hp_adjustment;               // Adjust hit points
+    uint8_t disarm_traps_mod;            // mod disarming traps
+    uint8_t searching_mod;               // modifier to searching
+    uint8_t stealth_mod;                 // modifier to stealth
+    uint8_t fos_mod;                     // modifier to freq-of-search
+    uint8_t base_to_hit_mod;             // modifier to base to hit
+    uint8_t base_to_hit_mod_bows_mod;    // modifier to base to hit - bows
+    uint8_t saving_throw_mod;            // Class modifier to save
+    int16_t str_modifier;                // Class modifier for strength
+    int16_t int_modifier;                // Class modifier for intelligence
+    int16_t wis_modifier;                // Class modifier for wisdom
+    int16_t dex_modifier;                // Class modifier for dexterity
+    int16_t con_modifier;                // Class modifier for constitution
+    int16_t chr_modifier;                // Class modifier for charisma
+    uint8_t user_mage_spells;            // class use mage spells
+    uint8_t experience_factor;           // Class experience factor
+    uint8_t min_level_for_spell_casting; // First level where class can use spells.
 } Class_t;
 
 // Class Background_t for the generated player character
