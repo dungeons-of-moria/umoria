@@ -1111,7 +1111,7 @@ static void playerBashClosedChest(Inventory_t *item) {
         printMessage("You have destroyed the chest.");
         printMessage("and its contents!");
 
-        item->index = OBJ_RUINED_CHEST;
+        item->id = OBJ_RUINED_CHEST;
         item->flags = 0;
 
         return;

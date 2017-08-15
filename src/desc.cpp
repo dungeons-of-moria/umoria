@@ -326,7 +326,7 @@ void itemDescription(obj_desc_t description, Inventory_t *item, bool add_prefix)
     int indexx = item->subval & (ITEM_SINGLE_STACK_MIN - 1);
 
     // base name, modifier string
-    const char *basenm = game_objects[item->index].name;
+    const char *basenm = game_objects[item->id].name;
     const char *modstr = CNIL;
 
     vtype_t damstr;
@@ -474,11 +474,11 @@ void itemDescription(obj_desc_t description, Inventory_t *item, bool add_prefix)
         case TV_VIS_TRAP:
         case TV_UP_STAIR:
         case TV_DOWN_STAIR:
-            (void) strcpy(description, game_objects[item->index].name);
+            (void) strcpy(description, game_objects[item->id].name);
             (void) strcat(description, ".");
             return;
         case TV_STORE_DOOR:
-            (void) sprintf(description, "the entrance to the %s.", game_objects[item->index].name);
+            (void) sprintf(description, "the entrance to the %s.", game_objects[item->id].name);
             return;
         default:
             (void) strcpy(description, "Error in objdes()");
@@ -495,7 +495,7 @@ void itemDescription(obj_desc_t description, Inventory_t *item, bool add_prefix)
 
     if (append_name) {
         (void) strcat(tmp_val, " of ");
-        (void) strcat(tmp_val, game_objects[item->index].name);
+        (void) strcat(tmp_val, game_objects[item->id].name);
     }
 
     if (item->number != 1) {
@@ -659,7 +659,7 @@ void itemDescription(obj_desc_t description, Inventory_t *item, bool add_prefix)
 void inventoryItemCopyTo(int from_item_id, Inventory_t *to_item) {
     GameObject_t *from = &game_objects[from_item_id];
 
-    to_item->index = (uint16_t) from_item_id;
+    to_item->id = (uint16_t) from_item_id;
     to_item->name2 = SN_NULL;
     to_item->inscrip[0] = '\0';
     to_item->flags = from->flags;

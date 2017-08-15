@@ -26,7 +26,7 @@ void dungeonChangeTrapVisibility(int y, int x) {
 
     // change secret door to closed door
     if (item->tval == TV_SECRET_DOOR) {
-        item->index = OBJ_CLOSED_DOOR;
+        item->id = OBJ_CLOSED_DOOR;
         item->tval = game_objects[OBJ_CLOSED_DOOR].tval;
         item->tchar = game_objects[OBJ_CLOSED_DOOR].tchar;
         dungeonLiteSpot(y, x);

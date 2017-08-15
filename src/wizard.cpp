@@ -251,7 +251,7 @@ void wizardCreateObjects() {
     Inventory_t forge;
     Inventory_t *item = &forge;
 
-    item->index = OBJ_WIZARD;
+    item->id = OBJ_WIZARD;
     item->name2 = 0;
     itemReplaceInscription(item, "wizard item");
     item->ident = ID_KNOWN2 | ID_STORE_BOUGHT;

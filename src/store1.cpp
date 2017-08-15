@@ -56,7 +56,7 @@ int32_t storeItemValue(Inventory_t *item) {
 
 static int32_t getWeaponArmorBuyPrice(Inventory_t *item) {
     if (!spellItemIdentified(item)) {
-        return game_objects[item->index].cost;
+        return game_objects[item->id].cost;
     }
 
     if (item->tval >= TV_BOW && item->tval <= TV_SWORD) {
@@ -76,7 +76,7 @@ static int32_t getWeaponArmorBuyPrice(Inventory_t *item) {
 
 static int32_t getAmmoBuyPrice(Inventory_t *item) {
     if (!spellItemIdentified(item)) {
-        return game_objects[item->index].cost;
+        return game_objects[item->id].cost;
     }
 
     if (item->tohit < 0 || item->todam < 0 || item->toac < 0) {
@@ -114,7 +114,7 @@ static int32_t getRingAmuletBuyPrice(Inventory_t *item) {
     // is cursed or not, if refuse to buy cursed objects here, then
     // player can use this to 'identify' cursed objects
     if (!spellItemIdentified(item)) {
-        return game_objects[item->index].cost;
+        return game_objects[item->id].cost;
     }
 
     return item->cost;
@@ -138,7 +138,7 @@ static int32_t getWandStaffBuyPrice(Inventory_t *item) {
 
 static int32_t getPickShovelBuyPrice(Inventory_t *item) {
     if (!spellItemIdentified(item)) {
-        return game_objects[item->index].cost;
+        return game_objects[item->id].cost;
     }
 
     if (item->p1 < 0) {
@@ -147,7 +147,7 @@ static int32_t getPickShovelBuyPrice(Inventory_t *item) {
 
     // some digging tools start with non-zero p1 values, so only
     // multiply the plusses by 100, make sure result is positive
-    int32_t value = item->cost + (item->p1 - game_objects[item->index].p1) * 100;
+    int32_t value = item->cost + (item->p1 - game_objects[item->id].p1) * 100;
 
     if (value < 0) {
         value = 0;

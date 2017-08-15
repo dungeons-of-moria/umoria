@@ -202,7 +202,7 @@ typedef struct {
 // two many places where `Inventory_t` are copied, which results in dangling
 // pointers, so we use a char array for them instead.
 typedef struct {
-    uint16_t index;             // Index to object_list
+    uint16_t id;                // Index to object_list
     uint8_t name2;              // Object special name
     char inscrip[INSCRIP_SIZE]; // Object inscription
     uint32_t flags;             // Special flags
