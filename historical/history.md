@@ -178,6 +178,8 @@ in part by Umoria.
 
 ## A History of Moria: written by Jim Wilson
 
+_first posted to rec.games.moria on November 27, 1990_
+
 This history is somewhat biased towards the Umoria versions because
 those are the versions that I am most familiar with; info for the
 VMS versions, in particular, may be inaccurate.
