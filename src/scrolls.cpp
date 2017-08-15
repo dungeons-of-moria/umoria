@@ -400,8 +400,8 @@ static bool scrollSummonUndead() {
 }
 
 static void scrollWordOfRecall() {
-    if (py.flags.word_recall == 0) {
-        py.flags.word_recall = (int16_t) (25 + randomNumber(30));
+    if (py.flags.word_of_recall == 0) {
+        py.flags.word_of_recall = (int16_t) (25 + randomNumber(30));
     }
     printMessage("The air about you becomes charged.");
 }

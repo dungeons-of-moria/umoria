@@ -190,7 +190,7 @@ static bool sv_write() {
     wr_short((uint16_t) py.flags.resist_heat);
     wr_short((uint16_t) py.flags.resist_cold);
     wr_short((uint16_t) py.flags.detect_invisible);
-    wr_short((uint16_t) py.flags.word_recall);
+    wr_short((uint16_t) py.flags.word_of_recall);
     wr_short((uint16_t) py.flags.see_infra);
     wr_short((uint16_t) py.flags.tim_infra);
     wr_bool(py.flags.see_inv);
@@ -649,7 +649,7 @@ bool loadGame(bool *generate) {
             rd_short((uint16_t *) &py.flags.resist_heat);
             rd_short((uint16_t *) &py.flags.resist_cold);
             rd_short((uint16_t *) &py.flags.detect_invisible);
-            rd_short((uint16_t *) &py.flags.word_recall);
+            rd_short((uint16_t *) &py.flags.word_of_recall);
             rd_short((uint16_t *) &py.flags.see_infra);
             rd_short((uint16_t *) &py.flags.tim_infra);
             py.flags.see_inv = rd_bool();

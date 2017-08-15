@@ -101,7 +101,7 @@ typedef struct {
         int16_t resist_heat;      // Timed heat resist
         int16_t resist_cold;      // Timed cold resist
         int16_t detect_invisible; // Timed see invisible
-        int16_t word_recall;      // Timed teleport level
+        int16_t word_of_recall;   // Timed teleport level
         int16_t see_infra;        // See warm creatures
         int16_t tim_infra;        // Timed infra vision
         bool see_inv;             // Can see invisible

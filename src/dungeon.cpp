@@ -636,15 +636,15 @@ static void playerUpdateInfraVision() {
 
 // Word-of-Recall  Note: Word-of-Recall is a delayed action
 static void playerUpdateWordOfRecall() {
-    if (py.flags.word_recall <= 0) {
+    if (py.flags.word_of_recall <= 0) {
         return;
     }
 
-    if (py.flags.word_recall == 1) {
+    if (py.flags.word_of_recall == 1) {
         generate_new_level = true;
 
         py.flags.paralysis++;
-        py.flags.word_recall = 0;
+        py.flags.word_of_recall = 0;
 
         if (current_dungeon_level > 0) {
             current_dungeon_level = 0;
@@ -654,7 +654,7 @@ static void playerUpdateWordOfRecall() {
             printMessage("You feel yourself yanked downwards!");
         }
     } else {
-        py.flags.word_recall--;
+        py.flags.word_of_recall--;
     }
 }
 
