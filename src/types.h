@@ -266,8 +266,8 @@ typedef struct {
 
 // InventoryRecord_t data for a store inventory item
 typedef struct {
-    int32_t scost;
-    Inventory_t sitem;
+    int32_t cost;
+    Inventory_t item;
 } InventoryRecord_t;
 
 // Store_t holds all the data for any given store in the game

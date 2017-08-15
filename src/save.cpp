@@ -252,8 +252,8 @@ static bool sv_write() {
         wr_short(st_ptr->good_buy);
         wr_short(st_ptr->bad_buy);
         for (int j = 0; j < st_ptr->store_ctr; j++) {
-            wr_long((uint32_t) st_ptr->store_inven[j].scost);
-            wr_item(&st_ptr->store_inven[j].sitem);
+            wr_long((uint32_t) st_ptr->store_inven[j].cost);
+            wr_item(&st_ptr->store_inven[j].item);
         }
     }
 
@@ -717,8 +717,8 @@ bool loadGame(bool *generate) {
                         goto error;
                     }
                     for (int j = 0; j < st_ptr->store_ctr; j++) {
-                        rd_long((uint32_t *) &st_ptr->store_inven[j].scost);
-                        rd_item(&st_ptr->store_inven[j].sitem);
+                        rd_long((uint32_t *) &st_ptr->store_inven[j].cost);
+                        rd_item(&st_ptr->store_inven[j].item);
                     }
                 }
             }
@@ -880,8 +880,8 @@ bool loadGame(bool *generate) {
                     goto error;
                 }
                 for (int j = 0; j < st_ptr->store_ctr; j++) {
-                    rd_long((uint32_t *) &st_ptr->store_inven[j].scost);
-                    rd_item(&st_ptr->store_inven[j].sitem);
+                    rd_long((uint32_t *) &st_ptr->store_inven[j].cost);
+                    rd_item(&st_ptr->store_inven[j].item);
                 }
             }
         }

@@ -193,7 +193,7 @@ static void displayStoreInventory(int store_id, int item_pos_start) {
     int item_identifier;
 
     for (item_identifier = (item_pos_start % 12); item_pos_start < item_pos_end; item_identifier++) {
-        Inventory_t *item = &store->store_inven[item_pos_start].sitem;
+        Inventory_t *item = &store->store_inven[item_pos_start].item;
 
         // Save the current number of items
         int32_t current_item_count = item->items_count;
@@ -212,7 +212,7 @@ static void displayStoreInventory(int store_id, int item_pos_start) {
         (void) sprintf(msg, "%c) %s", 'a' + item_identifier, description);
         putStringClearToEOL(msg, item_identifier + 5, 0);
 
-        current_item_count = store->store_inven[item_pos_start].scost;
+        current_item_count = store->store_inven[item_pos_start].cost;
 
         if (current_item_count <= 0) {
             int32_t value = -current_item_count;
@@ -245,7 +245,7 @@ static void displayStoreInventory(int store_id, int item_pos_start) {
 
 // Re-displays only a single cost -RAK-
 static void displaySingleCost(int store_id, int item_id) {
-    int cost = stores[store_id].store_inven[item_id].scost;
+    int cost = stores[store_id].store_inven[item_id].cost;
 
     vtype_t msg;
     if (cost < 0) {
@@ -851,7 +851,7 @@ static bool storePurchaseAnItem(int store_id, int *current_top_item_id) {
     item_id = item_id + *current_top_item_id; // true item_id
 
     Inventory_t sell_item;
-    inventoryTakeOneItem(&sell_item, &store->store_inven[item_id].sitem);
+    inventoryTakeOneItem(&sell_item, &store->store_inven[item_id].item);
 
     if (!inventoryCanCarryItemCount(&sell_item)) {
         putStringClearToEOL("You cannot carry that many different items.", 0, 0);
@@ -862,8 +862,8 @@ static bool storePurchaseAnItem(int store_id, int *current_top_item_id) {
     int32_t price;
     bool purchased = false;
 
-    if (store->store_inven[item_id].scost > 0) {
-        price = store->store_inven[item_id].scost;
+    if (store->store_inven[item_id].cost > 0) {
+        price = store->store_inven[item_id].cost;
     } else {
         choice = storePurchaseHaggle(store_id, &price, &sell_item);
     }
@@ -895,8 +895,8 @@ static bool storePurchaseAnItem(int store_id, int *current_top_item_id) {
                 InventoryRecord_t *store_item = &store->store_inven[item_id];
 
                 if (saved_store_counter == store->store_ctr) {
-                    if (store_item->scost < 0) {
-                        store_item->scost = price;
+                    if (store_item->cost < 0) {
+                        store_item->cost = price;
                         displaySingleCost(store_id, item_id);
                     }
                 } else {

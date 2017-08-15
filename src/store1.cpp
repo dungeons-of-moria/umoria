@@ -198,7 +198,7 @@ bool storeCheckPlayerItemsCount(int store_id, Inventory_t *item) {
     bool store_check = false;
 
     for (int i = 0; i < store->store_ctr; i++) {
-        Inventory_t *store_item = &store->store_inven[i].sitem;
+        Inventory_t *store_item = &store->store_inven[i].item;
 
         // note: items with sub_category_id of gte ITEM_SINGLE_STACK_MAX only stack
         // if their `sub_category_id`s match
@@ -219,8 +219,8 @@ static void storeItemInsert(int store_id, int pos, int32_t i_cost, Inventory_t *
         store->store_inven[i + 1] = store->store_inven[i];
     }
 
-    store->store_inven[pos].sitem = *item;
-    store->store_inven[pos].scost = -i_cost;
+    store->store_inven[pos].item = *item;
+    store->store_inven[pos].cost = -i_cost;
     store->store_ctr++;
 }
 
@@ -242,7 +242,7 @@ void storeCarry(int store_id, int *index_id, Inventory_t *item) {
 
     bool flag = false;
     do {
-        Inventory_t *store_item = &store->store_inven[item_id].sitem;
+        Inventory_t *store_item = &store->store_inven[item_id].item;
 
         if (item_category == store_item->category_id) {
             if (item_sub_catory == store_item->sub_category_id && // Adds to other item
@@ -250,12 +250,12 @@ void storeCarry(int store_id, int *index_id, Inventory_t *item) {
                 *index_id = item_id;
                 store_item->items_count += item_num;
 
-                // must set new scost for group items, do this only for items
+                // must set new cost for group items, do this only for items
                 // strictly greater than group_min, not for torches, this
                 // must be recalculated for entire group
                 if (item_sub_catory > ITEM_GROUP_MIN) {
                     (void) storeItemSellPrice(store_id, &dummy, &i_cost, store_item);
-                    store->store_inven[item_id].scost = -i_cost;
+                    store->store_inven[item_id].cost = -i_cost;
                 } else if (store_item->items_count > 24) {
                     // must let group objects (except torches) stack over 24
                     // since there may be more than 24 in the group
@@ -282,7 +282,7 @@ void storeCarry(int store_id, int *index_id, Inventory_t *item) {
 // `only_one_of` is false, an entire slot is destroyed -RAK-
 void storeDestroy(int store_id, int item_id, bool only_one_of) {
     Store_t *store = &stores[store_id];
-    Inventory_t *store_item = &store->store_inven[item_id].sitem;
+    Inventory_t *store_item = &store->store_inven[item_id].item;
 
     int number;
 
@@ -305,8 +305,8 @@ void storeDestroy(int store_id, int item_id, bool only_one_of) {
         for (int i = item_id; i < store->store_ctr - 1; i++) {
             store->store_inven[i] = store->store_inven[i + 1];
         }
-        inventoryItemCopyTo(OBJ_NOTHING, &store->store_inven[store->store_ctr - 1].sitem);
-        store->store_inven[store->store_ctr - 1].scost = 0;
+        inventoryItemCopyTo(OBJ_NOTHING, &store->store_inven[store->store_ctr - 1].item);
+        store->store_inven[store->store_ctr - 1].cost = 0;
         store->store_ctr--;
     }
 }
@@ -326,8 +326,8 @@ void storeInitializeOwners() {
         store->bad_buy = 0;
 
         for (int item_id = 0; item_id < STORE_MAX_DISCRETE_ITEMS; item_id++) {
-            inventoryItemCopyTo(OBJ_NOTHING, &store->store_inven[item_id].sitem);
-            store->store_inven[item_id].scost = 0;
+            inventoryItemCopyTo(OBJ_NOTHING, &store->store_inven[item_id].item);
+            store->store_inven[item_id].cost = 0;
         }
     }
 }
