@@ -553,7 +553,7 @@ void printCharacterSpeed() {
 void printCharacterStudyInstruction() {
     py.flags.status &= ~PY_STUDY;
 
-    if (py.flags.new_spells == 0) {
+    if (py.flags.new_spells_to_learn == 0) {
         putString(&blank_string[BLANK_LENGTH - 5], 23, 59);
     } else {
         putString("Study", 23, 59);
@@ -1563,7 +1563,7 @@ static int numberOfSpellsKnown() {
     return known;
 }
 
-// remember forgotten spells while forgotten spells exist of new_spells positive,
+// remember forgotten spells while forgotten spells exist of new_spells_to_learn positive,
 // remember the spells in the order that they were learned
 static int rememberForgottenSpells(Spell_t *msp_ptr, int allowedSpells, int newSpells, const char *p, int offset) {
     uint32_t mask;
@@ -1622,7 +1622,7 @@ static int learnableSpells(Spell_t *msp_ptr, int newSpells) {
     return newSpells;
 }
 
-// forget spells until new_spells zero or no more spells know,
+// forget spells until new_spells_to_learn zero or no more spells know,
 // spells are forgotten in the opposite order that they were learned
 // NOTE: newSpells is always a negative value
 static void forgetSpells(int newSpells, const char *p, int offset) {
@@ -1679,7 +1679,7 @@ void playerCalculateAllowedSpellsCount(int stat) {
     if (new_spells > 0) {
         new_spells = rememberForgottenSpells(spell, num_allowed, new_spells, magic_type_str, offset);
 
-        // If new spells is still greater than zero
+        // If `new_spells_to_learn` is still greater than zero
         if (new_spells > 0) {
             new_spells = learnableSpells(spell, new_spells);
         }
@@ -1688,14 +1688,14 @@ void playerCalculateAllowedSpellsCount(int stat) {
         new_spells = 0;
     }
 
-    if (new_spells != py.flags.new_spells) {
-        if (new_spells > 0 && py.flags.new_spells == 0) {
+    if (new_spells != py.flags.new_spells_to_learn) {
+        if (new_spells > 0 && py.flags.new_spells_to_learn == 0) {
             vtype_t msg;
             (void) sprintf(msg, "You can learn some new %ss now.", magic_type_str);
             printMessage(msg);
         }
 
-        py.flags.new_spells = (uint8_t) new_spells;
+        py.flags.new_spells_to_learn = (uint8_t) new_spells;
         py.flags.status |= PY_STUDY;
     }
 }
@@ -1746,7 +1746,7 @@ void playerGainSpells() {
         return;
     }
 
-    int new_spells = py.flags.new_spells;
+    int new_spells = py.flags.new_spells_to_learn;
     int diff_spells = 0;
 
     Spell_t *spell = &magic_spells[py.misc.class_id - 1][0];
@@ -1863,9 +1863,9 @@ void playerGainSpells() {
         }
     }
 
-    py.flags.new_spells = (uint8_t) (new_spells + diff_spells);
+    py.flags.new_spells_to_learn = (uint8_t) (new_spells + diff_spells);
 
-    if (py.flags.new_spells == 0) {
+    if (py.flags.new_spells_to_learn == 0) {
         py.flags.status |= PY_STUDY;
     }
 

@@ -211,7 +211,7 @@ static bool sv_write() {
     wr_bool(py.flags.sustain_dex);
     wr_bool(py.flags.sustain_chr);
     wr_bool(py.flags.confuse_monster);
-    wr_byte(py.flags.new_spells);
+    wr_byte(py.flags.new_spells_to_learn);
 
     wr_short((uint16_t) missiles_counter);
     wr_long((uint32_t) current_game_turn);
@@ -670,7 +670,7 @@ bool loadGame(bool *generate) {
             py.flags.sustain_dex = rd_bool();
             py.flags.sustain_chr = rd_bool();
             py.flags.confuse_monster = rd_bool();
-            rd_byte(&py.flags.new_spells);
+            rd_byte(&py.flags.new_spells_to_learn);
 
             rd_short((uint16_t *) &missiles_counter);
             rd_long((uint32_t *) &current_game_turn);
