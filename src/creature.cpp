@@ -1650,7 +1650,7 @@ static void monsterAttackingUpdate(Monster_t *monster, int monster_id, int moves
 
         // Monsters trapped in rock must be given a turn also,
         // so that they will die/dig out immediately.
-        if (monster->lit || monster->distance_from_player <= creatures_list[monster->creature_id].aaf || ((!(creatures_list[monster->creature_id].movement & CM_PHASE)) && cave[monster->y][monster->x].feature_id >= MIN_CAVE_WALL)) {
+        if (monster->lit || monster->distance_from_player <= creatures_list[monster->creature_id].area_affect_radius || ((!(creatures_list[monster->creature_id].movement & CM_PHASE)) && cave[monster->y][monster->x].feature_id >= MIN_CAVE_WALL)) {
             if (monster->sleep_count > 0) {
                 if (py.flags.aggravate) {
                     monster->sleep_count = 0;

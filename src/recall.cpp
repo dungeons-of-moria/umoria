@@ -517,7 +517,7 @@ static void memoryAwareness(Creature_t *creature, Recall_t *memory) {
         }
 
         vtype_t text;
-        (void) sprintf(text, " intruders, which it may notice from %d feet.", 10 * creature->aaf);
+        (void) sprintf(text, " intruders, which it may notice from %d feet.", 10 * creature->area_affect_radius);
         memoryPrint(text);
     }
 }

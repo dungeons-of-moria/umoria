@@ -144,7 +144,7 @@
 //
 //  Sleep (sleep)        :  A measure in turns of how fast creature
 //                          will notice player (on the average).
-//  Area of affect (aaf) :  Max range that creature is able to
+//  Area of affect (area_affect_radius) :  Max range that creature is able to
 //                          "notice" the player.
 
 Creature_t creatures_list[MON_MAX_CREATURES] = {
