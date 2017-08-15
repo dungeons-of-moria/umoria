@@ -255,13 +255,13 @@ typedef struct {
 
 // Owner_t holds data about a given store owner
 typedef struct {
-    const char *owner_name;
+    const char *name;
     int16_t max_cost;
     uint8_t max_inflate;
     uint8_t min_inflate;
-    uint8_t haggle_per;
-    uint8_t owner_race;
-    uint8_t insult_max;
+    uint8_t haggles_per;
+    uint8_t race;
+    uint8_t max_insults;
 } Owner_t;
 
 // InventoryRecord_t data for a store inventory item

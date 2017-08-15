@@ -306,7 +306,7 @@ static bool storeIncreaseInsults(int store_id) {
 
     store->insult_cur++;
 
-    if (store->insult_cur > store_owners[store->owner].insult_max) {
+    if (store->insult_cur > store_owners[store->owner].max_insults) {
         printSpeechGetOutOfMyStore();
         store->insult_cur = 0;
         store->bad_buy++;
@@ -469,7 +469,7 @@ static int storePurchaseHaggle(int store_id, int32_t *price, Inventory_t *item) 
         max_buy = 1;
     }
 
-    int32_t min_per = owner->haggle_per;
+    int32_t min_per = owner->haggles_per;
     int32_t max_per = min_per * 3;
 
     displayStoreHaggleCommands(1);
@@ -627,7 +627,7 @@ static int storeSellHaggle(int store_id, int32_t *price, Inventory_t *item) {
         Owner_t *owner = &store_owners[store->owner];
 
         cost = cost * (200 - playerStatAdjustmentCharisma()) / 100;
-        cost = cost * (200 - race_gold_adjustments[owner->owner_race][py.misc.race_id]) / 100;
+        cost = cost * (200 - race_gold_adjustments[owner->race][py.misc.race_id]) / 100;
 
         if (cost < 1) {
             cost = 1;
@@ -651,7 +651,7 @@ static int storeSellHaggle(int store_id, int32_t *price, Inventory_t *item) {
             min_buy = max_buy;
         }
 
-        min_per = owner->haggle_per;
+        min_per = owner->haggles_per;
         max_per = min_per * 3;
         max_gold = owner->max_cost;
     }
@@ -1039,7 +1039,7 @@ void storeEnter(int store_id) {
     }
 
     int current_top_item_id = 0;
-    displayStore(store_id, store_owners[store->owner].owner_name, current_top_item_id);
+    displayStore(store_id, store_owners[store->owner].name, current_top_item_id);
 
     bool exit_store = false;
     while (!exit_store) {
