@@ -214,9 +214,9 @@ void pray() {
     }
 
     if (!player_free_turn) {
-        if (spell->smana > py.misc.current_mana) {
+        if (spell->mana_required > py.misc.current_mana) {
             printMessage("You faint from fatigue!");
-            py.flags.paralysis = (int16_t) randomNumber((5 * (spell->smana - py.misc.current_mana)));
+            py.flags.paralysis = (int16_t) randomNumber((5 * (spell->mana_required - py.misc.current_mana)));
             py.misc.current_mana = 0;
             py.misc.current_mana_fraction = 0;
             if (randomNumber(3) == 1) {
@@ -224,7 +224,7 @@ void pray() {
                 (void) playerStatRandomDecrease(A_CON);
             }
         } else {
-            py.misc.current_mana -= spell->smana;
+            py.misc.current_mana -= spell->mana_required;
         }
 
         printCharacterCurrentMana();

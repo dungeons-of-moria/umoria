@@ -377,7 +377,7 @@ typedef const char *ClassTitle_t;
 // Note: the names for the spells are stored in spell_names[] array at index i, +31 if priest
 typedef struct {
     uint8_t level_required;
-    uint8_t smana;
+    uint8_t mana_required;
     uint8_t sfail;
     uint8_t sexp; // 1/4 of exp gained for learning spell
 } Spell_t;

@@ -1346,8 +1346,8 @@ static int spellChanceOfSuccess(int spell) {
 
     chance -= 3 * (playerStatAdjustmentWisdomIntelligence(stat) - 1);
 
-    if (s_ptr->smana > py.misc.current_mana) {
-        chance += 5 * (s_ptr->smana - py.misc.current_mana);
+    if (s_ptr->mana_required > py.misc.current_mana) {
+        chance += 5 * (s_ptr->mana_required - py.misc.current_mana);
     }
 
     if (chance > 95) {
@@ -1408,7 +1408,7 @@ void displaySpellsList(int *spell, int number_of_choices, int comment, int non_c
         }
 
         vtype_t out_val;
-        (void) sprintf(out_val, "  %c) %-30s%2d %4d %3d%%%s", spell_char, spell_names[spellID + consecutive_offset], s_ptr->level_required, s_ptr->smana, spellChanceOfSuccess(spellID), p);
+        (void) sprintf(out_val, "  %c) %-30s%2d %4d %3d%%%s", spell_char, spell_names[spellID + consecutive_offset], s_ptr->level_required, s_ptr->mana_required, spellChanceOfSuccess(spellID), p);
         putStringClearToEOL(out_val, 2 + i, col);
     }
 }
@@ -1445,7 +1445,7 @@ bool spellGetId(int *spell, int number_of_choices, int *spell_id, int *spell_cha
                 Spell_t *s_ptr = &magic_spells[py.misc.class_id - 1][*spell_id];
 
                 vtype_t tmp_str;
-                (void) sprintf(tmp_str, "Cast %s (%d mana, %d%% fail)?", spell_names[*spell_id + offset], s_ptr->smana, spellChanceOfSuccess(*spell_id));
+                (void) sprintf(tmp_str, "Cast %s (%d mana, %d%% fail)?", spell_names[*spell_id + offset], s_ptr->mana_required, spellChanceOfSuccess(*spell_id));
                 if (getInputConfirmation(tmp_str)) {
                     spell_found = true;
                 } else {
