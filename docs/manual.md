@@ -100,7 +100,7 @@ In addition to the more visible stats, each character has certain
 abilities which are mainly determined by their race, class, and level,
 but are also modified by their stats. The abilities are *fighting*,
 *throwing/bows*, *saving throw*, *stealth*, *disarming*, *magical
-devices*, *perception*, *searching*, and *infravision*.
+devices*, *perception*, *searching*, and *infra-vision*.
 
 Characters will be assigned an early history, with money and a social
 class based on that history. Starting money is assigned based on
@@ -255,16 +255,16 @@ rangers, and priests are also good at it. This skill is based
 entirely upon race and class, and will never improve unless
 magically enhanced.
 
-#### `Infravision`
+#### `Infra-Vision`
 
-Infravision is the ability to see heat sources. Since most of the
-dungeon is cool or cold, infravision will not allow the character to
-see walls and objects. Infravision will allow a character to see any
+Infra-Vision is the ability to see heat sources. Since most of the
+dungeon is cool or cold, infra-vision will not allow the character to
+see walls and objects. Infra-Vision will allow a character to see any
 warm-blooded creatures up to a certain distance. This ability works
 equally well with or without a light source. The majority of
 *moria*’s creatures are cold-blooded, and will not be detected
 unless lit up by a light source. All non-human races have innate
-infravision ability. Humans can gain infravision only if it is
+infra-vision ability. Humans can gain infra-vision only if it is
 magically enhanced.
 
 
@@ -303,7 +303,7 @@ Halflings, or Hobbits, are very good at bows, throwing, and have
 good saving throws. They also are very good at searching, disarming,
 perception, and stealth; so they make excellent thieves (but prefer
 to be called burglars...). They will be much weaker than humans, and
-no good at bashing. Halflings have fair infravision, so they can
+no good at bashing. Halflings have fair infra-vision, so they can
 detect warm creatures at a distance. Halflings can choose between
 being a warrior, mage, or rogue.
 
@@ -316,7 +316,7 @@ way, so much the better. Gnomes make excellent mages, and have very
 good saving throws. They are good at searching, disarming,
 perception, and stealth. They have lower strength than humans so
 they are not very good at fighting with hand weapons. Gnomes have
-fair infravision, so they can detect warm creatures at a distance. A
+fair infra-vision, so they can detect warm creatures at a distance. A
 gnome may choose between being a warrior, mage, priest, or rogue.
 
 #### `Dwarf`
@@ -326,7 +326,7 @@ dungeons are the natural home of a dwarf, they are excellent choices
 for a warrior or priest. Dwarves tend to be stronger and have higher
 constitutions, but are slower and less intelligent than humans.
 Because they are so headstrong and are somewhat wise, they resist
-spells which are cast on them. Dwarves also have good infravision
+spells which are cast on them. Dwarves also have good infra-vision
 because they live underground. They do have one big drawback though.
 Dwarves are loudmouthed and proud, singing in loud voices, arguing
 with themselves for no good reason, screaming out challenges at
