@@ -12,7 +12,7 @@
 static void trapOpenPit(Inventory_t *t_ptr, int dam) {
     printMessage("You fell into a pit!");
 
-    if (py.flags.ffall) {
+    if (py.flags.free_fall) {
         printMessage("You gently float down.");
         return;
     }
@@ -38,7 +38,7 @@ static void trapArrow(Inventory_t *t_ptr, int dam) {
 static void trapCoveredPit(Inventory_t *t_ptr, int dam, int y, int x) {
     printMessage("You fell into a covered pit.");
 
-    if (py.flags.ffall) {
+    if (py.flags.free_fall) {
         printMessage("You gently float down.");
     } else {
         obj_desc_t description;
@@ -55,7 +55,7 @@ static void trapDoor(Inventory_t *t_ptr, int dam) {
 
     printMessage("You fell through a trap door!");
 
-    if (py.flags.ffall) {
+    if (py.flags.free_fall) {
         printMessage("You gently float down.");
     } else {
         obj_desc_t description;

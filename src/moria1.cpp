@@ -85,7 +85,7 @@ static void playerResetFlags() {
     py.flags.resist_cold = false;
     py.flags.regenerate = false;
     py.flags.resist_light = false;
-    py.flags.ffall = false;
+    py.flags.free_fall = false;
 }
 
 static void playerRecalculateBonusesFromInventory() {
@@ -252,7 +252,7 @@ void playerRecalculateBonuses() {
         py.flags.resist_light = true;
     }
     if (TR_FFALL & item_flags) {
-        py.flags.ffall = true;
+        py.flags.free_fall = true;
     }
 
     playerRecalculateSustainStatsFromInventory();

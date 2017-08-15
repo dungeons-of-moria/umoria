@@ -114,7 +114,7 @@ typedef struct {
         bool resist_acid;         // Resistance to acid
         bool regenerate;          // Regenerate hit pts
         bool resist_light;        // Resistance to light
-        bool ffall;               // No damage falling
+        bool free_fall;           // No damage falling
         bool sustain_str;         // Keep strength
         bool sustain_int;         // Keep intelligence
         bool sustain_wis;         // Keep wisdom
