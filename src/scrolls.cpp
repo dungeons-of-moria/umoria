@@ -133,7 +133,7 @@ static bool scrollEnchantWeaponToDamage() {
         scroll_type = 10;
     }
 
-    if (spellEnchantItem(&item->todam, scroll_type)) {
+    if (spellEnchantItem(&item->to_damage, scroll_type)) {
         item->flags &= ~TR_CURSED;
         playerRecalculateBonuses();
     } else {
@@ -255,7 +255,7 @@ static bool scrollEnchantWeapon() {
     }
 
     for (int i = 0; i < randomNumber(2); i++) {
-        if (spellEnchantItem(&item->todam, scroll_type)) {
+        if (spellEnchantItem(&item->to_damage, scroll_type)) {
             enchanted = true;
         }
     }
@@ -286,7 +286,7 @@ static bool scrollCurseWeapon() {
     itemRemoveMagicNaming(item);
 
     item->to_hit = (int16_t) (-randomNumber(5) - randomNumber(5));
-    item->todam = (int16_t) (-randomNumber(5) - randomNumber(5));
+    item->to_damage = (int16_t) (-randomNumber(5) - randomNumber(5));
     item->toac = 0;
 
     // Must call playerAdjustBonusesForItem() before set (clear) flags, and
@@ -379,7 +379,7 @@ static bool scrollCurseArmor() {
 
     item->flags = TR_CURSED;
     item->to_hit = 0;
-    item->todam = 0;
+    item->to_damage = 0;
     item->toac = (int16_t) (-randomNumber(5) - randomNumber(5));
 
     playerRecalculateBonuses();

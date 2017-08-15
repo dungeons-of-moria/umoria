@@ -1083,7 +1083,7 @@ static void wr_item(Inventory_t *item) {
     wr_byte(item->items_count);
     wr_short(item->weight);
     wr_short((uint16_t) item->to_hit);
-    wr_short((uint16_t) item->todam);
+    wr_short((uint16_t) item->to_damage);
     wr_short((uint16_t) item->ac);
     wr_short((uint16_t) item->toac);
     wr_bytes(item->damage, 2);
@@ -1196,7 +1196,7 @@ static void rd_item(Inventory_t *item) {
     rd_byte(&item->items_count);
     rd_short(&item->weight);
     rd_short((uint16_t *) &item->to_hit);
-    rd_short((uint16_t *) &item->todam);
+    rd_short((uint16_t *) &item->to_damage);
     rd_short((uint16_t *) &item->ac);
     rd_short((uint16_t *) &item->toac);
     rd_bytes(item->damage, 2);

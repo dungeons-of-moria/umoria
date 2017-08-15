@@ -316,7 +316,7 @@ void wizardCreateObjects() {
         return;
     }
     number = atoi(input);
-    item->todam = (int16_t) number;
+    item->to_damage = (int16_t) number;
 
     putStringClearToEOL("AC     : ", 0, 0);
     if (!getStringInput(input, 0, 9, 3)) {

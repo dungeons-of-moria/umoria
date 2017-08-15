@@ -99,7 +99,7 @@ static void playerRecalculateBonusesFromInventory() {
 
             // Bows can't damage. -CJS-
             if (item->category_id != TV_BOW) {
-                py.misc.plusses_to_damage += item->todam;
+                py.misc.plusses_to_damage += item->to_damage;
             }
 
             py.misc.magical_ac += item->toac;
@@ -110,7 +110,7 @@ static void playerRecalculateBonusesFromInventory() {
 
                 // Bows can't damage. -CJS-
                 if (item->category_id != TV_BOW) {
-                    py.misc.display_to_damage += item->todam;
+                    py.misc.display_to_damage += item->to_damage;
                 }
 
                 py.misc.display_to_ac += item->toac;

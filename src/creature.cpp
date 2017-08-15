@@ -524,12 +524,12 @@ static bool executeDisenchantAttack() {
         }
         success = true;
     }
-    if (item->todam > 0) {
-        item->todam -= randomNumber(2);
+    if (item->to_damage > 0) {
+        item->to_damage -= randomNumber(2);
 
         // don't send it below zero
-        if (item->todam < 0) {
-            item->todam = 0;
+        if (item->to_damage < 0) {
+            item->to_damage = 0;
         }
         success = true;
     }

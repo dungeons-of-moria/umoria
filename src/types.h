@@ -214,7 +214,7 @@ typedef struct {
     uint8_t items_count;            // Number of items
     uint16_t weight;                // Weight
     int16_t to_hit;                 // Plusses to hit
-    int16_t todam;                  // Plusses to damage
+    int16_t to_damage;              // Plusses to damage
     int16_t ac;                     // Normal AC
     int16_t toac;                   // Plusses to AC
     uint8_t damage[2];              // Damage when hits
