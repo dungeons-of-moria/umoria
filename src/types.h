@@ -96,7 +96,7 @@ typedef struct {
         int16_t protect_evil;    // Protect VS evil
         int16_t invulnerability; // Increases AC
         int16_t heroism;         // Heroism
-        int16_t shero;           // Super Heroism
+        int16_t super_heroism;   // Super Heroism
         int16_t blessed;         // Blessed
         int16_t resist_heat;     // Timed heat resist
         int16_t resist_cold;     // Timed cold resist
