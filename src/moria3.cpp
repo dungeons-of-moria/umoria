@@ -727,16 +727,16 @@ int monsterTakeHit(int monster_id, int damage) {
     Recall_t *memory = &creature_recall[monster->mptr];
 
     if ((py.flags.blind < 1 && monster->ml) || (creature->cmove & CM_WIN)) {
-        uint32_t tmp = (uint32_t) ((memory->r_cmove & CM_TREASURE) >> CM_TR_SHIFT);
+        uint32_t tmp = (uint32_t) ((memory->movement & CM_TREASURE) >> CM_TR_SHIFT);
 
         if (tmp > ((treasure_flags & CM_TREASURE) >> CM_TR_SHIFT)) {
             treasure_flags = (uint32_t) ((treasure_flags & ~CM_TREASURE) | (tmp << CM_TR_SHIFT));
         }
 
-        memory->r_cmove = (uint32_t) ((memory->r_cmove & ~CM_TREASURE) | treasure_flags);
+        memory->movement = (uint32_t) ((memory->movement & ~CM_TREASURE) | treasure_flags);
 
-        if (memory->r_kills < MAX_SHORT) {
-            memory->r_kills++;
+        if (memory->kills < MAX_SHORT) {
+            memory->kills++;
         }
     }
 
@@ -861,7 +861,7 @@ static void playerAttackMonster(int y, int x) {
             printMessage(msg);
 
             if (monster->ml && randomNumber(4) == 1) {
-                creature_recall[monster->mptr].r_cdefense |= creature->cdefense & CD_NO_SLEEP;
+                creature_recall[monster->mptr].defenses |= creature->cdefense & CD_NO_SLEEP;
             }
         }
 

@@ -137,12 +137,12 @@ bool memoryMonsterKnown(int monster_id) {
 
     Recall_t *memory = &creature_recall[monster_id];
 
-    if (memory->r_cmove || memory->r_cdefense || memory->r_kills || memory->r_spells || memory->r_deaths) {
+    if (memory->movement || memory->defenses || memory->kills || memory->spells || memory->deaths) {
         return true;
     }
 
     for (int i = 0; i < 4; i++) {
-        if (memory->r_attacks[i]) {
+        if (memory->attacks[i]) {
             return true;
         }
     }
@@ -151,8 +151,8 @@ bool memoryMonsterKnown(int monster_id) {
 }
 
 static void memoryWizardModeInit(Recall_t *memory, Creature_t *creature) {
-    memory->r_kills = MAX_SHORT;
-    memory->r_wake = memory->r_ignore = MAX_UCHAR;
+    memory->kills = MAX_SHORT;
+    memory->wake = memory->ignore = MAX_UCHAR;
 
     uint32_t move = (uint32_t) ((creature->cmove & CM_4D2_OBJ) != 0) * 8;
     move += (uint32_t) ((creature->cmove & CM_2D2_OBJ) != 0) * 4;
@@ -160,27 +160,27 @@ static void memoryWizardModeInit(Recall_t *memory, Creature_t *creature) {
     move += (uint32_t) ((creature->cmove & CM_90_RANDOM) != 0);
     move += (uint32_t) ((creature->cmove & CM_60_RANDOM) != 0);
 
-    memory->r_cmove = (uint32_t) ((creature->cmove & ~CM_TREASURE) | (move << CM_TR_SHIFT));
-    memory->r_cdefense = creature->cdefense;
+    memory->movement = (uint32_t) ((creature->cmove & ~CM_TREASURE) | (move << CM_TR_SHIFT));
+    memory->defenses = creature->cdefense;
 
     if (creature->spells & CS_FREQ) {
-        memory->r_spells = (uint32_t) (creature->spells | CS_FREQ);
+        memory->spells = (uint32_t) (creature->spells | CS_FREQ);
     } else {
-        memory->r_spells = creature->spells;
+        memory->spells = creature->spells;
     }
 
     uint8_t *pu = creature->damage;
 
     int attack_id = 0;
     while (*pu != 0 && attack_id < 4) {
-        memory->r_attacks[attack_id] = MAX_UCHAR;
+        memory->attacks[attack_id] = MAX_UCHAR;
         attack_id++;
         pu++;
     }
 
     // A little hack to enable the display of info for Quylthulgs.
-    if (memory->r_cmove & CM_ONLY_MAGIC) {
-        memory->r_attacks[0] = MAX_UCHAR;
+    if (memory->movement & CM_ONLY_MAGIC) {
+        memory->attacks[0] = MAX_UCHAR;
     }
 }
 
@@ -489,7 +489,7 @@ static void memoryWeaknesses(uint32_t defense) {
 
 // Do we know how aware it is?
 static void memoryAwareness(Creature_t *creature, Recall_t *memory) {
-    if (memory->r_wake * memory->r_wake > creature->sleep || memory->r_ignore == MAX_UCHAR || (creature->sleep == 0 && memory->r_kills >= 10)) {
+    if (memory->wake * memory->wake > creature->sleep || memory->ignore == MAX_UCHAR || (creature->sleep == 0 && memory->kills >= 10)) {
         memoryPrint(" It ");
 
         if (creature->sleep > 200) {
@@ -588,7 +588,7 @@ static void memoryAttackNumberAndDamage(Recall_t *memory, Creature_t *creature) 
     int known_attacks = 0;
 
     for (int id = 0; id < 4; id++) {
-        if (memory->r_attacks[id]) {
+        if (memory->attacks[id]) {
             known_attacks++;
         }
     }
@@ -603,7 +603,7 @@ static void memoryAttackNumberAndDamage(Recall_t *memory, Creature_t *creature) 
         int attack_dice, attack_sides;
 
         // don't print out unknown attacks
-        if (!memory->r_attacks[i]) {
+        if (!memory->attacks[i]) {
             continue;
         }
 
@@ -638,7 +638,7 @@ static void memoryAttackNumberAndDamage(Recall_t *memory, Creature_t *creature) 
             memoryPrint(description_attack_type[attack_type]);
 
             if (attack_dice && attack_sides) {
-                if (knowdamage(creature->level, memory->r_attacks[i], attack_dice * attack_sides)) {
+                if (knowdamage(creature->level, memory->attacks[i], attack_dice * attack_sides)) {
                     // Loss of experience
                     if (attack_type == 19) {
                         memoryPrint(" by");
@@ -656,7 +656,7 @@ static void memoryAttackNumberAndDamage(Recall_t *memory, Creature_t *creature) 
 
     if (attack_count) {
         memoryPrint(".");
-    } else if (known_attacks > 0 && memory->r_attacks[0] >= 10) {
+    } else if (known_attacks > 0 && memory->attacks[0] >= 10) {
         memoryPrint(" It has no physical attacks.");
     } else {
         memoryPrint(" Nothing is known about its attack.");
@@ -678,12 +678,12 @@ int memoryRecall(int monster_id) {
     roff_print_line = 0;
     roff_buffer_pointer = roff_buffer;
 
-    uint32_t spells = (uint32_t) (memory->r_spells & creature->spells & ~CS_FREQ);
+    uint32_t spells = (uint32_t) (memory->spells & creature->spells & ~CS_FREQ);
 
     // the CM_WIN property is always known, set it if a win monster
-    uint32_t move = (uint32_t) (memory->r_cmove | (CM_WIN & creature->cmove));
+    uint32_t move = (uint32_t) (memory->movement | (CM_WIN & creature->cmove));
 
-    uint16_t defense = memory->r_cdefense & creature->cdefense;
+    uint16_t defense = memory->defenses & creature->cdefense;
 
     bool known;
 
@@ -692,8 +692,8 @@ int memoryRecall(int monster_id) {
     (void) sprintf(msg, "The %s:\n", creature->name);
     memoryPrint(msg);
 
-    memoryConflictHistory(memory->r_deaths, memory->r_kills);
-    known = memoryDepthFoundAt(creature->level, memory->r_kills);
+    memoryConflictHistory(memory->deaths, memory->kills);
+    known = memoryDepthFoundAt(creature->level, memory->kills);
     known = memoryMovement(move, creature->speed, known);
 
     // Finish off the paragraph with a period!
@@ -701,13 +701,13 @@ int memoryRecall(int monster_id) {
         memoryPrint(".");
     }
 
-    if (memory->r_kills) {
+    if (memory->kills) {
         memoryKillPoints(creature->cdefense, creature->mexp, creature->level);
     }
 
-    memoryMagicSkills(spells, memory->r_spells, creature->spells);
+    memoryMagicSkills(spells, memory->spells, creature->spells);
 
-    memoryKillDifficulty(creature, memory->r_kills);
+    memoryKillDifficulty(creature, memory->kills);
 
     memorySpecialAbilities(move);
 

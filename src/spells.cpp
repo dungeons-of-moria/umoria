@@ -58,7 +58,7 @@ bool monsterSleep(int y, int x) {
 
             if (randomNumber(MON_MAX_LEVELS) < creature->level || (CD_NO_SLEEP & creature->cdefense)) {
                 if (monster->ml && (creature->cdefense & CD_NO_SLEEP)) {
-                    creature_recall[monster->mptr].r_cdefense |= CD_NO_SLEEP;
+                    creature_recall[monster->mptr].defenses |= CD_NO_SLEEP;
                 }
 
                 printMonsterActionText(name, "is unaffected.");
@@ -494,7 +494,7 @@ static void spellLightLineTouchesMonster(int monster_id) {
 
     if (CD_LIGHT & creature->cdefense) {
         if (monster->ml) {
-            creature_recall[monster->mptr].r_cdefense |= CD_LIGHT;
+            creature_recall[monster->mptr].defenses |= CD_LIGHT;
         }
 
         if (monsterTakeHit(monster_id, diceDamageRoll(2, 8) >= 0)) {
@@ -673,12 +673,12 @@ static void spellFireBoltTouchesMonster(Cave_t *tile, int damage, int harm_type,
     if (harm_type & creature->cdefense) {
         damage = damage * 2;
         if (monster->ml) {
-            creature_recall[monster->mptr].r_cdefense |= harm_type;
+            creature_recall[monster->mptr].defenses |= harm_type;
         }
     } else if (weapon_id & creature->spells) {
         damage = damage / 4;
         if (monster->ml) {
-            creature_recall[monster->mptr].r_spells |= weapon_id;
+            creature_recall[monster->mptr].spells |= weapon_id;
         }
     }
 
@@ -796,12 +796,12 @@ void spellFireBall(int y, int x, int direction, int damage_hp, int spell_type, c
                                 if (harm_type & creature->cdefense) {
                                     damage = damage * 2;
                                     if (monster->ml) {
-                                        creature_recall[monster->mptr].r_cdefense |= harm_type;
+                                        creature_recall[monster->mptr].defenses |= harm_type;
                                     }
                                 } else if (weapon_type & creature->spells) {
                                     damage = damage / 4;
                                     if (monster->ml) {
-                                        creature_recall[monster->mptr].r_spells |= weapon_type;
+                                        creature_recall[monster->mptr].spells |= weapon_type;
                                     }
                                 }
 
@@ -909,11 +909,11 @@ void spellBreath(int y, int x, int monster_id, int damage_hp, int spell_type, ch
                             uint32_t treasure_id = monsterDeath((int) monster->fy, (int) monster->fx, creature->cmove);
 
                             if (monster->ml) {
-                                uint32_t tmp = (uint32_t) ((creature_recall[monster->mptr].r_cmove & CM_TREASURE) >> CM_TR_SHIFT);
+                                uint32_t tmp = (uint32_t) ((creature_recall[monster->mptr].movement & CM_TREASURE) >> CM_TR_SHIFT);
                                 if (tmp > ((treasure_id & CM_TREASURE) >> CM_TR_SHIFT)) {
                                     treasure_id = (uint32_t) ((treasure_id & ~CM_TREASURE) | (tmp << CM_TR_SHIFT));
                                 }
-                                creature_recall[monster->mptr].r_cmove = (uint32_t) (treasure_id | (creature_recall[monster->mptr].r_cmove & ~CM_TREASURE));
+                                creature_recall[monster->mptr].movement = (uint32_t) (treasure_id | (creature_recall[monster->mptr].movement & ~CM_TREASURE));
                             }
 
                             // It ate an already processed monster. Handle normally.
@@ -1093,7 +1093,7 @@ bool spellDrainLifeFromMonster(int y, int x, int direction) {
 
                 drained = true;
             } else {
-                creature_recall[monster->mptr].r_cdefense |= CD_UNDEAD;
+                creature_recall[monster->mptr].defenses |= CD_UNDEAD;
             }
         }
     }
@@ -1181,7 +1181,7 @@ bool spellConfuseMonster(int y, int x, int direction) {
 
             if (randomNumber(MON_MAX_LEVELS) < creature->level || (CD_NO_SLEEP & creature->cdefense)) {
                 if (monster->ml && (creature->cdefense & CD_NO_SLEEP)) {
-                    creature_recall[monster->mptr].r_cdefense |= CD_NO_SLEEP;
+                    creature_recall[monster->mptr].defenses |= CD_NO_SLEEP;
                 }
 
                 // Monsters which resisted the attack should wake up.
@@ -1237,7 +1237,7 @@ bool spellSleepMonster(int y, int x, int direction) {
 
             if (randomNumber(MON_MAX_LEVELS) < creature->level || (CD_NO_SLEEP & creature->cdefense)) {
                 if (monster->ml && (creature->cdefense & CD_NO_SLEEP)) {
-                    creature_recall[monster->mptr].r_cdefense |= CD_NO_SLEEP;
+                    creature_recall[monster->mptr].defenses |= CD_NO_SLEEP;
                 }
 
                 printMonsterActionText(name, "is unaffected.");
@@ -1319,11 +1319,11 @@ bool spellWallToMud(int y, int x, int direction) {
                 // Should get these messages even if the monster is not visible.
                 int creature_id = monsterTakeHit((int) tile->cptr, 100);
                 if (creature_id >= 0) {
-                    creature_recall[creature_id].r_cdefense |= CD_STONE;
+                    creature_recall[creature_id].defenses |= CD_STONE;
                     printMonsterActionText(name, "dissolves!");
                     displayCharacterExperience(); // print msg before calling prt_exp
                 } else {
-                    creature_recall[monster->mptr].r_cdefense |= CD_STONE;
+                    creature_recall[monster->mptr].defenses |= CD_STONE;
                     printMonsterActionText(name, "grunts in pain!");
                 }
                 finished = true;
@@ -1717,7 +1717,7 @@ bool spellSleepAllMonsters() {
         if (randomNumber(MON_MAX_LEVELS) < creature->level || (CD_NO_SLEEP & creature->cdefense)) {
             if (monster->ml) {
                 if (creature->cdefense & CD_NO_SLEEP) {
-                    creature_recall[monster->mptr].r_cdefense |= CD_NO_SLEEP;
+                    creature_recall[monster->mptr].defenses |= CD_NO_SLEEP;
                 }
                 printMonsterActionText(name, "is unaffected.");
             }
@@ -1963,7 +1963,7 @@ bool spellDispelCreature(int creature_defense, int damage) {
         if (monster->cdis <= MON_MAX_SIGHT && (creature_defense & creatures_list[monster->mptr].cdefense) && los(char_row, char_col, (int) monster->fy, (int) monster->fx)) {
             Creature_t *creature = &creatures_list[monster->mptr];
 
-            creature_recall[monster->mptr].r_cdefense |= creature_defense;
+            creature_recall[monster->mptr].defenses |= creature_defense;
 
             dispelled = true;
 
@@ -2002,7 +2002,7 @@ bool spellTurnUndead() {
 
             if (py.misc.level + 1 > creature->level || randomNumber(5) == 1) {
                 if (monster->ml) {
-                    creature_recall[monster->mptr].r_cdefense |= CD_UNDEAD;
+                    creature_recall[monster->mptr].defenses |= CD_UNDEAD;
 
                     turned = true;
 

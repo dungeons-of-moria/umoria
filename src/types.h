@@ -225,12 +225,14 @@ typedef struct {
 
 // Recall_t holds the player's known knowledge for any given monster, aka memories
 typedef struct {
-    uint32_t r_cmove;
-    uint32_t r_spells;
-    uint16_t r_kills, r_deaths;
-    uint16_t r_cdefense;
-    uint8_t r_wake, r_ignore;
-    uint8_t r_attacks[MON_MAX_ATTACKS];
+    uint32_t movement;
+    uint32_t spells;
+    uint16_t kills;
+    uint16_t deaths;
+    uint16_t defenses;
+    uint8_t wake;
+    uint8_t ignore;
+    uint8_t attacks[MON_MAX_ATTACKS];
 } Recall_t;
 
 // Monster_t is created for any living monster found on the current dungeon level

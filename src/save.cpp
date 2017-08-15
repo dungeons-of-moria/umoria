@@ -102,18 +102,18 @@ static bool sv_write() {
     for (int i = 0; i < MON_MAX_CREATURES; i++) {
         Recall_t *r_ptr = &creature_recall[i];
 
-        if (r_ptr->r_cmove || r_ptr->r_cdefense || r_ptr->r_kills ||
-            r_ptr->r_spells || r_ptr->r_deaths || r_ptr->r_attacks[0] ||
-            r_ptr->r_attacks[1] || r_ptr->r_attacks[2] || r_ptr->r_attacks[3]) {
+        if (r_ptr->movement || r_ptr->defenses || r_ptr->kills ||
+            r_ptr->spells || r_ptr->deaths || r_ptr->attacks[0] ||
+            r_ptr->attacks[1] || r_ptr->attacks[2] || r_ptr->attacks[3]) {
             wr_short((uint16_t) i);
-            wr_long(r_ptr->r_cmove);
-            wr_long(r_ptr->r_spells);
-            wr_short(r_ptr->r_kills);
-            wr_short(r_ptr->r_deaths);
-            wr_short(r_ptr->r_cdefense);
-            wr_byte(r_ptr->r_wake);
-            wr_byte(r_ptr->r_ignore);
-            wr_bytes(r_ptr->r_attacks, MON_MAX_ATTACKS);
+            wr_long(r_ptr->movement);
+            wr_long(r_ptr->spells);
+            wr_short(r_ptr->kills);
+            wr_short(r_ptr->deaths);
+            wr_short(r_ptr->defenses);
+            wr_byte(r_ptr->wake);
+            wr_byte(r_ptr->ignore);
+            wr_bytes(r_ptr->attacks, MON_MAX_ATTACKS);
         }
     }
 
@@ -536,14 +536,14 @@ bool loadGame(bool *generate) {
                 goto error;
             }
             Recall_t *r_ptr = &creature_recall[uint16_t_tmp];
-            rd_long(&r_ptr->r_cmove);
-            rd_long(&r_ptr->r_spells);
-            rd_short(&r_ptr->r_kills);
-            rd_short(&r_ptr->r_deaths);
-            rd_short(&r_ptr->r_cdefense);
-            rd_byte(&r_ptr->r_wake);
-            rd_byte(&r_ptr->r_ignore);
-            rd_bytes(r_ptr->r_attacks, MON_MAX_ATTACKS);
+            rd_long(&r_ptr->movement);
+            rd_long(&r_ptr->spells);
+            rd_short(&r_ptr->kills);
+            rd_short(&r_ptr->deaths);
+            rd_short(&r_ptr->defenses);
+            rd_byte(&r_ptr->wake);
+            rd_byte(&r_ptr->ignore);
+            rd_bytes(r_ptr->attacks, MON_MAX_ATTACKS);
             rd_short(&uint16_t_tmp);
         }
 
