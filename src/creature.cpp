@@ -631,7 +631,7 @@ static bool executeAttackOnPlayer(Creature_t *creature, Monster_t *monster, int 
             if (playerSavingThrow()) {
                 printMessage("You resist the effects!");
             } else if (py.flags.paralysis < 1) {
-                if (py.flags.free_act) {
+                if (py.flags.free_action) {
                     printMessage("You are unaffected.");
                 } else {
                     py.flags.paralysis = (int16_t) (randomNumber((int) creature->level) + 3);
@@ -1133,7 +1133,7 @@ void monsterExecuteCastingOfSpell(Monster_t *monster, int monster_id, int spell_
             }
             break;
         case 10: // Hold Person
-            if (py.flags.free_act) {
+            if (py.flags.free_action) {
                 printMessage("You are unaffected.");
             } else if (playerSavingThrow()) {
                 printMessage("You resist the effects of the spell.");
@@ -1195,7 +1195,7 @@ void monsterExecuteCastingOfSpell(Monster_t *monster, int monster_id, int spell_
             monsterUpdateVisibility((int) cave[y][x].cptr);
             break;
         case 16: // Slow Person
-            if (py.flags.free_act) {
+            if (py.flags.free_action) {
                 printMessage("You are unaffected.");
             } else if (playerSavingThrow()) {
                 printMessage("You resist the effects of the spell.");

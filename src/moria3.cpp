@@ -74,7 +74,7 @@ static void trapSleepingGas() {
 
     printMessage("A strange white mist surrounds you!");
 
-    if (py.flags.free_act) {
+    if (py.flags.free_action) {
         printMessage("You are unaffected.");
         return;
     }
@@ -188,7 +188,7 @@ static void trapSlowDart(Inventory_t *t_ptr, int dam) {
 
         printMessage("A small dart hits you!");
 
-        if (py.flags.free_act) {
+        if (py.flags.free_action) {
             printMessage("You are unaffected.");
         } else {
             py.flags.slow += randomNumber(20) + 10;
@@ -1057,7 +1057,7 @@ static void chestPoison() {
 static void chestParalysed() {
     printMessage("A puff of yellow gas surrounds you!");
 
-    if (py.flags.free_act) {
+    if (py.flags.free_action) {
         printMessage("You are unaffected.");
         return;
     }

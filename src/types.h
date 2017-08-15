@@ -106,7 +106,7 @@ typedef struct {
         int16_t timed_infra;      // Timed infra vision
         bool see_invisible;       // Can see invisible
         bool teleport;            // Random teleportation
-        bool free_act;            // Never paralyzed
+        bool free_action;         // Never paralyzed
         bool slow_digest;         // Lower food needs
         bool aggravate;           // Aggravate monsters
         bool fire_resist;         // Resistance to fire

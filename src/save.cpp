@@ -195,7 +195,7 @@ static bool sv_write() {
     wr_short((uint16_t) py.flags.timed_infra);
     wr_bool(py.flags.see_invisible);
     wr_bool(py.flags.teleport);
-    wr_bool(py.flags.free_act);
+    wr_bool(py.flags.free_action);
     wr_bool(py.flags.slow_digest);
     wr_bool(py.flags.aggravate);
     wr_bool(py.flags.fire_resist);
@@ -654,7 +654,7 @@ bool loadGame(bool *generate) {
             rd_short((uint16_t *) &py.flags.timed_infra);
             py.flags.see_invisible = rd_bool();
             py.flags.teleport = rd_bool();
-            py.flags.free_act = rd_bool();
+            py.flags.free_action = rd_bool();
             py.flags.slow_digest = rd_bool();
             py.flags.aggravate = rd_bool();
             py.flags.fire_resist = rd_bool();

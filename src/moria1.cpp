@@ -71,7 +71,7 @@ void playerAdjustBonusesForItem(Inventory_t *item, int factor) {
 static void playerResetFlags() {
     py.flags.see_invisible = false;
     py.flags.teleport = false;
-    py.flags.free_act = false;
+    py.flags.free_action = false;
     py.flags.slow_digest = false;
     py.flags.aggravate = false;
     py.flags.sustain_str = false;
@@ -243,7 +243,7 @@ void playerRecalculateBonuses() {
         py.flags.cold_resist = true;
     }
     if (TR_FREE_ACT & item_flags) {
-        py.flags.free_act = true;
+        py.flags.free_action = true;
     }
     if (TR_SEE_INVIS & item_flags) {
         py.flags.see_invisible = true;

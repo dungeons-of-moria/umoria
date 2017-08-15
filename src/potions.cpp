@@ -117,7 +117,7 @@ static bool playerDrinkPotion(uint32_t flags, uint8_t item_id) {
                 }
                 break;
             case 19:
-                if (!py.flags.free_act) {
+                if (!py.flags.free_action) {
                     // paralysis must == 0, otherwise could not drink potion
                     printMessage("You fall asleep.");
                     py.flags.paralysis += randomNumber(4) + 4;
