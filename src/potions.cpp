@@ -219,10 +219,10 @@ static bool playerDrinkPotion(uint32_t flags, uint8_t item_id) {
                 py.flags.invulnerability += randomNumber(10) + 10;
                 break;
             case 37:
-                if (py.flags.hero == 0) {
+                if (py.flags.heroism == 0) {
                     identified = true;
                 }
-                py.flags.hero += randomNumber(25) + 25;
+                py.flags.heroism += randomNumber(25) + 25;
                 break;
             case 38:
                 if (py.flags.shero == 0) {

@@ -149,14 +149,14 @@ static void playerDisableSuperHeroism() {
 
 static void playerUpdateHeroStatus() {
     // Heroism
-    if (py.flags.hero > 0) {
+    if (py.flags.heroism > 0) {
         if ((PY_HERO & py.flags.status) == 0) {
             playerActivateHeroism();
         }
 
-        py.flags.hero--;
+        py.flags.heroism--;
 
-        if (py.flags.hero == 0) {
+        if (py.flags.heroism == 0) {
             playerDisableHeroism();
         }
     }
@@ -305,13 +305,13 @@ static void playerUpdateFearState() {
     }
 
     if ((PY_FEAR & py.flags.status) == 0) {
-        if (py.flags.shero + py.flags.hero > 0) {
+        if (py.flags.shero + py.flags.heroism > 0) {
             py.flags.afraid = 0;
         } else {
             py.flags.status |= PY_FEAR;
             printCharacterFearState();
         }
-    } else if (py.flags.shero + py.flags.hero > 0) {
+    } else if (py.flags.shero + py.flags.heroism > 0) {
         py.flags.afraid = 1;
     }
 

@@ -184,7 +184,7 @@ static bool sv_write() {
     wr_short((uint16_t) py.flags.image);
     wr_short((uint16_t) py.flags.protect_evil);
     wr_short((uint16_t) py.flags.invulnerability);
-    wr_short((uint16_t) py.flags.hero);
+    wr_short((uint16_t) py.flags.heroism);
     wr_short((uint16_t) py.flags.shero);
     wr_short((uint16_t) py.flags.blessed);
     wr_short((uint16_t) py.flags.resist_heat);
@@ -643,7 +643,7 @@ bool loadGame(bool *generate) {
             rd_short((uint16_t *) &py.flags.image);
             rd_short((uint16_t *) &py.flags.protect_evil);
             rd_short((uint16_t *) &py.flags.invulnerability);
-            rd_short((uint16_t *) &py.flags.hero);
+            rd_short((uint16_t *) &py.flags.heroism);
             rd_short((uint16_t *) &py.flags.shero);
             rd_short((uint16_t *) &py.flags.blessed);
             rd_short((uint16_t *) &py.flags.resist_heat);
