@@ -362,7 +362,7 @@ static bool areaAffectStopLookingAtSquares(int i, int dir, int newDir, int y, in
         invisible = false;
     }
 
-    if (c_ptr->fval <= MAX_OPEN_SPACE || invisible) {
+    if (c_ptr->feature_id <= MAX_OPEN_SPACE || invisible) {
         if (find_openarea) {
             // Have we found a break?
             if (i < 0) {

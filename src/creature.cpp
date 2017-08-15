@@ -938,7 +938,7 @@ static void monsterOpenDoor(Cave_t *tile, int16_t monster_hp, uint32_t move_bits
             if (door_is_stuck) {
                 item->misc_use = (int16_t) (1 - randomNumber(2));
             }
-            tile->fval = TILE_CORR_FLOOR;
+            tile->feature_id = TILE_CORR_FLOOR;
             dungeonLiteSpot(y, x);
             *rcmove |= CM_OPEN_DOOR;
             *do_move = false;
@@ -952,7 +952,7 @@ static void monsterOpenDoor(Cave_t *tile, int16_t monster_hp, uint32_t move_bits
 
             // 50% chance of breaking door
             item->misc_use = (int16_t) (1 - randomNumber(2));
-            tile->fval = TILE_CORR_FLOOR;
+            tile->feature_id = TILE_CORR_FLOOR;
             dungeonLiteSpot(y, x);
             printMessage("You hear a door burst open!");
             playerDisturb(1, 0);
@@ -1056,12 +1056,12 @@ static void makeMove(int monster_id, int *directions, uint32_t *rcmove) {
 
         Cave_t *tile = &cave[y][x];
 
-        if (tile->fval == TILE_BOUNDARY_WALL) {
+        if (tile->feature_id == TILE_BOUNDARY_WALL) {
             continue;
         }
 
         // Floor is open?
-        if (tile->fval <= MAX_OPEN_SPACE) {
+        if (tile->feature_id <= MAX_OPEN_SPACE) {
             do_move = true;
         } else if (move_bits & CM_PHASE) {
             // Creature moves through walls?
@@ -1344,7 +1344,7 @@ bool monsterMultiply(int y, int x, int creature_id, int monster_id) {
         if (coordInBounds(pos_y, pos_x) && (pos_y != y || pos_x != x)) {
             Cave_t *tile = &cave[pos_y][pos_x];
 
-            if (tile->fval <= MAX_OPEN_SPACE && tile->treasure_id == 0 && tile->creature_id != 1) {
+            if (tile->feature_id <= MAX_OPEN_SPACE && tile->treasure_id == 0 && tile->creature_id != 1) {
                 // Creature there already?
                 if (tile->creature_id > 1) {
                     // Some critters are cannibalistic!
@@ -1443,7 +1443,7 @@ static void monsterMoveOutOfWall(Monster_t *monster, int monster_id, uint32_t *r
     // of i will fail the comparison.
     for (int y = monster->y + 1; y >= (monster->y - 1); y--) {
         for (int x = monster->x - 1; x <= monster->x + 1; x++) {
-            if (dir != 5 && cave[y][x].fval <= MAX_OPEN_SPACE && cave[y][x].creature_id != 1) {
+            if (dir != 5 && cave[y][x].feature_id <= MAX_OPEN_SPACE && cave[y][x].creature_id != 1) {
                 directions[id++] = dir;
             }
             dir++;
@@ -1464,7 +1464,7 @@ static void monsterMoveOutOfWall(Monster_t *monster, int monster_id, uint32_t *r
     }
 
     // if still in a wall, let it dig itself out, but also apply some more damage
-    if (cave[monster->y][monster->x].fval >= MIN_CAVE_WALL) {
+    if (cave[monster->y][monster->x].feature_id >= MIN_CAVE_WALL) {
         // in case the monster dies, may need to callfix1_delete_monster()
         // instead of delete_monsters()
         hack_monptr = monster_id;
@@ -1531,7 +1531,7 @@ static void monsterMove(int monster_id, uint32_t *rcmove) {
 
     // if in wall, must immediately escape to a clear area
     // then monster movement finished
-    if (!(creature->cmove & CM_PHASE) && cave[monster->y][monster->x].fval >= MIN_CAVE_WALL) {
+    if (!(creature->cmove & CM_PHASE) && cave[monster->y][monster->x].feature_id >= MIN_CAVE_WALL) {
         monsterMoveOutOfWall(monster, monster_id, rcmove);
         return;
     }
@@ -1650,7 +1650,7 @@ static void monsterAttackingUpdate(Monster_t *monster, int monster_id, int moves
 
         // Monsters trapped in rock must be given a turn also,
         // so that they will die/dig out immediately.
-        if (monster->lit || monster->distance_from_player <= creatures_list[monster->creature_id].aaf || ((!(creatures_list[monster->creature_id].cmove & CM_PHASE)) && cave[monster->y][monster->x].fval >= MIN_CAVE_WALL)) {
+        if (monster->lit || monster->distance_from_player <= creatures_list[monster->creature_id].aaf || ((!(creatures_list[monster->creature_id].cmove & CM_PHASE)) && cave[monster->y][monster->x].feature_id >= MIN_CAVE_WALL)) {
             if (monster->sleep_count > 0) {
                 if (py.flags.aggravate) {
                     monster->sleep_count = 0;

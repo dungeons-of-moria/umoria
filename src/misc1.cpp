@@ -228,19 +228,19 @@ int coordDistanceBetween(int y1, int x1, int y2, int x2) {
 int coordWallsNextTo(int y, int x) {
     int walls = 0;
 
-    if (cave[y - 1][x].fval >= MIN_CAVE_WALL) {
+    if (cave[y - 1][x].feature_id >= MIN_CAVE_WALL) {
         walls++;
     }
 
-    if (cave[y + 1][x].fval >= MIN_CAVE_WALL) {
+    if (cave[y + 1][x].feature_id >= MIN_CAVE_WALL) {
         walls++;
     }
 
-    if (cave[y][x - 1].fval >= MIN_CAVE_WALL) {
+    if (cave[y][x - 1].feature_id >= MIN_CAVE_WALL) {
         walls++;
     }
 
-    if (cave[y][x + 1].fval >= MIN_CAVE_WALL) {
+    if (cave[y][x + 1].feature_id >= MIN_CAVE_WALL) {
         walls++;
     }
 
@@ -255,7 +255,7 @@ int coordCorridorWallsNextTo(int y, int x) {
 
     for (int yy = y - 1; yy <= y + 1; yy++) {
         for (int xx = x - 1; xx <= x + 1; xx++) {
-            int tile_id = cave[yy][xx].fval;
+            int tile_id = cave[yy][xx].feature_id;
             int treasure_id = cave[yy][xx].treasure_id;
 
             // should fail if there is already a door present
@@ -314,7 +314,7 @@ bool los(int from_y, int from_x, int to_y, int to_x) {
         }
 
         for (int yy = from_y + 1; yy < to_y; yy++) {
-            if (cave[yy][from_x].fval >= MIN_CLOSED_SPACE) {
+            if (cave[yy][from_x].feature_id >= MIN_CLOSED_SPACE) {
                 return false;
             }
         }
@@ -330,7 +330,7 @@ bool los(int from_y, int from_x, int to_y, int to_x) {
         }
 
         for (int xx = from_x + 1; xx < to_x; xx++) {
-            if (cave[from_y][xx].fval >= MIN_CLOSED_SPACE) {
+            if (cave[from_y][xx].feature_id >= MIN_CLOSED_SPACE) {
                 return false;
             }
         }
@@ -379,7 +379,7 @@ bool los(int from_y, int from_x, int to_y, int to_x) {
             }
 
             while (to_x - xx) {
-                if (cave[yy][xx].fval >= MIN_CLOSED_SPACE) {
+                if (cave[yy][xx].feature_id >= MIN_CLOSED_SPACE) {
                     return false;
                 }
 
@@ -389,7 +389,7 @@ bool los(int from_y, int from_x, int to_y, int to_x) {
                     xx += x_sign;
                 } else if (dy > scale_half) {
                     yy += y_sign;
-                    if (cave[yy][xx].fval >= MIN_CLOSED_SPACE) {
+                    if (cave[yy][xx].feature_id >= MIN_CLOSED_SPACE) {
                         return false;
                     }
                     xx += x_sign;
@@ -420,7 +420,7 @@ bool los(int from_y, int from_x, int to_y, int to_x) {
         }
 
         while (to_y - yy) {
-            if (cave[yy][xx].fval >= MIN_CLOSED_SPACE) {
+            if (cave[yy][xx].feature_id >= MIN_CLOSED_SPACE) {
                 return false;
             }
 
@@ -430,7 +430,7 @@ bool los(int from_y, int from_x, int to_y, int to_x) {
                 yy += y_sign;
             } else if (dx > scale_half) {
                 xx += x_sign;
-                if (cave[yy][xx].fval >= MIN_CLOSED_SPACE) {
+                if (cave[yy][xx].feature_id >= MIN_CLOSED_SPACE) {
                     return false;
                 }
                 yy += y_sign;
@@ -473,11 +473,11 @@ char caveGetTileSymbol(int y, int x) {
         return treasure_list[cave_ptr->treasure_id].sprite;
     }
 
-    if (cave_ptr->fval <= MAX_CAVE_FLOOR) {
+    if (cave_ptr->feature_id <= MAX_CAVE_FLOOR) {
         return '.';
     }
 
-    if (cave_ptr->fval == TILE_GRANITE_WALL || cave_ptr->fval == TILE_BOUNDARY_WALL || !config.highlight_seams) {
+    if (cave_ptr->feature_id == TILE_GRANITE_WALL || cave_ptr->feature_id == TILE_BOUNDARY_WALL || !config.highlight_seams) {
         return '#';
     }
 
@@ -647,7 +647,7 @@ void monsterPlaceWinning() {
     do {
         y = randomNumber(dungeon_height - 2);
         x = randomNumber(dungeon_width - 2);
-    } while ((cave[y][x].fval >= MIN_CLOSED_SPACE) || (cave[y][x].creature_id != 0) || (cave[y][x].treasure_id != 0) || (coordDistanceBetween(y, x, char_row, char_col) <= MON_MAX_SIGHT));
+    } while ((cave[y][x].feature_id >= MIN_CLOSED_SPACE) || (cave[y][x].creature_id != 0) || (cave[y][x].treasure_id != 0) || (coordDistanceBetween(y, x, char_row, char_col) <= MON_MAX_SIGHT));
 
     int creature_id = randomNumber(MON_ENDGAME_MONSTERS) - 1 + monster_levels[MON_MAX_LEVELS];
 
@@ -730,7 +730,7 @@ void monsterPlaceNewWithinDistance(int number, int distance_from_source, bool sl
         do {
             y = randomNumber(dungeon_height - 2);
             x = randomNumber(dungeon_width - 2);
-        } while (cave[y][x].fval >= MIN_CLOSED_SPACE || cave[y][x].creature_id != 0 || coordDistanceBetween(y, x, char_row, char_col) <= distance_from_source);
+        } while (cave[y][x].feature_id >= MIN_CLOSED_SPACE || cave[y][x].creature_id != 0 || coordDistanceBetween(y, x, char_row, char_col) <= distance_from_source);
 
         int l = monsterGetOneSuitableForLevel(current_dungeon_level);
 
@@ -754,7 +754,7 @@ static bool placeMonsterAdjacentTo(int monsterID, int *y, int *x, bool slp) {
         int xx = *x - 2 + randomNumber(3);
 
         if (coordInBounds(yy, xx)) {
-            if (cave[yy][xx].fval <= MAX_OPEN_SPACE && cave[yy][xx].creature_id == 0) {
+            if (cave[yy][xx].feature_id <= MAX_OPEN_SPACE && cave[yy][xx].creature_id == 0) {
                 // Place_monster() should always return true here.
                 if (!monsterPlaceNew(yy, xx, monsterID, slp)) {
                     return false;

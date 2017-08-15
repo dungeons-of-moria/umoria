@@ -302,9 +302,9 @@ typedef struct {
 
 // Cave_t holds data about a specific tile in the dungeon.
 typedef struct {
-    uint8_t creature_id;
-    uint8_t treasure_id;
-    uint8_t fval;
+    uint8_t creature_id; // ID for any creature occupying the tile
+    uint8_t treasure_id; // ID for any treasure item occupying the tile
+    uint8_t feature_id;  // ID of cave feature; walls, floors, open space, etc.
 
     bool lr; // Room should be lit with perm light, walls with this set should be perm lit after tunneled out.
     bool fm; // Field mark, used for traps/doors/stairs, object is hidden if fm is false.

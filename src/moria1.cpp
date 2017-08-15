@@ -1705,8 +1705,8 @@ void dungeonLightRoom(int pos_y, int pos_x) {
             if (tile->lr && !tile->pl) {
                 tile->pl = true;
 
-                if (tile->fval == TILE_DARK_FLOOR) {
-                    tile->fval = TILE_LIGHT_FLOOR;
+                if (tile->feature_id == TILE_DARK_FLOOR) {
+                    tile->feature_id = TILE_LIGHT_FLOOR;
                 }
                 if (!tile->fm && tile->treasure_id != 0) {
                     int treasure_id = treasure_list[tile->treasure_id].category_id;
@@ -1756,7 +1756,7 @@ static void sub1_move_light(int y1, int x1, int y2, int x2) {
                 c_ptr->tl = true;
             }
 
-            if (c_ptr->fval >= MIN_CAVE_WALL) {
+            if (c_ptr->feature_id >= MIN_CAVE_WALL) {
                 c_ptr->pl = true;
             } else if (!c_ptr->fm && c_ptr->treasure_id != 0) {
                 int tval = treasure_list[c_ptr->treasure_id].category_id;

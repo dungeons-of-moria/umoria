@@ -26,7 +26,7 @@ void dungeonSetTrap(int y, int x, int sub_type_id) {
 void dungeonPlaceRubble(int y, int x) {
     int free_treasure_id = popt();
     cave[y][x].treasure_id = (uint8_t) free_treasure_id;
-    cave[y][x].fval = TILE_BLOCKED_FLOOR;
+    cave[y][x].feature_id = TILE_BLOCKED_FLOOR;
     inventoryItemCopyTo(OBJ_RUBBLE, &treasure_list[free_treasure_id]);
 }
 
@@ -133,7 +133,7 @@ void dungeonAllocateAndPlaceObject(bool (*set_function)(int), int object_type, i
         do {
             y = randomNumber(dungeon_height) - 1;
             x = randomNumber(dungeon_width) - 1;
-        } while (!(*set_function)(cave[y][x].fval) || cave[y][x].treasure_id != 0 || (y == char_row && x == char_col));
+        } while (!(*set_function)(cave[y][x].feature_id) || cave[y][x].treasure_id != 0 || (y == char_row && x == char_col));
 
         switch (object_type) {
             case 1:
@@ -164,7 +164,7 @@ void dungeonPlaceRandomObjectNear(int y, int x, int tries) {
             int j = y - 3 + randomNumber(5);
             int k = x - 4 + randomNumber(7);
 
-            if (coordInBounds(j, k) && cave[j][k].fval <= MAX_CAVE_FLOOR && cave[j][k].treasure_id == 0) {
+            if (coordInBounds(j, k) && cave[j][k].feature_id <= MAX_CAVE_FLOOR && cave[j][k].treasure_id == 0) {
                 if (randomNumber(100) < 75) {
                     dungeonPlaceRandomObjectAt(j, k, false);
                 } else {
@@ -2345,7 +2345,7 @@ void playerTeleport(int new_distance) {
             new_y += (char_row - new_y) / 2;
             new_x += (char_col - new_x) / 2;
         }
-    } while (cave[new_y][new_x].fval >= MIN_CLOSED_SPACE || cave[new_y][new_x].creature_id >= 2);
+    } while (cave[new_y][new_x].feature_id >= MIN_CLOSED_SPACE || cave[new_y][new_x].creature_id >= 2);
 
     dungeonMoveCreatureRecord(char_row, char_col, new_y, new_x);
 

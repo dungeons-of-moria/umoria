@@ -144,7 +144,7 @@ void playerTunnel(int direction) {
     Cave_t *tile = &cave[y][x];
     Inventory_t *item = &inventory[EQUIPMENT_WIELD];
 
-    if (!playerCanTunnel(tile->treasure_id, tile->fval)) {
+    if (!playerCanTunnel(tile->treasure_id, tile->feature_id)) {
         return;
     }
 
@@ -157,7 +157,7 @@ void playerTunnel(int direction) {
     if (item->category_id != TV_NOTHING) {
         int diggingAbility = playerDiggingAbility(item);
 
-        if (!dungeonDigAtLocation(y, x, tile->fval, diggingAbility)) {
+        if (!dungeonDigAtLocation(y, x, tile->feature_id, diggingAbility)) {
             // Is there an object in the way?  (Rubble and secret doors)
             if (tile->treasure_id != 0) {
                 if (treasure_list[tile->treasure_id].category_id == TV_RUBBLE) {
@@ -618,7 +618,7 @@ static bool lookSee(int x, int y, bool *transparent) {
     }
 
     Cave_t *tile = &cave[y][x];
-    *transparent = tile->fval <= MAX_OPEN_SPACE;
+    *transparent = tile->feature_id <= MAX_OPEN_SPACE;
 
     if (los_hack_no_query) {
         return false; // Don't look at a direct line of sight. A hack.
@@ -666,10 +666,10 @@ static bool lookSee(int x, int y, bool *transparent) {
             }
         }
 
-        if ((los_rocks_and_objects || msg[0]) && tile->fval >= MIN_CLOSED_SPACE) {
+        if ((los_rocks_and_objects || msg[0]) && tile->feature_id >= MIN_CLOSED_SPACE) {
             const char *wall_description;
 
-            switch (tile->fval) {
+            switch (tile->feature_id) {
                 case TILE_BOUNDARY_WALL:
                 case TILE_GRANITE_WALL:
                 granite:
@@ -825,7 +825,7 @@ static void inventoryDropOrThrowItem(int y, int x, Inventory_t *item) {
     if (randomNumber(10) > 1) {
         for (int k = 0; !flag && k <= 9;) {
             if (coordInBounds(pos_y, pos_x)) {
-                if (cave[pos_y][pos_x].fval <= MAX_OPEN_SPACE && cave[pos_y][pos_x].treasure_id == 0) {
+                if (cave[pos_y][pos_x].feature_id <= MAX_OPEN_SPACE && cave[pos_y][pos_x].treasure_id == 0) {
                     flag = true;
                 }
             }
@@ -908,7 +908,7 @@ void playerThrowItem() {
 
         tile = &cave[y][x];
 
-        if (tile->fval <= MAX_OPEN_SPACE && !flag) {
+        if (tile->feature_id <= MAX_OPEN_SPACE && !flag) {
             if (tile->creature_id > 1) {
                 flag = true;
 
@@ -1084,7 +1084,7 @@ static void playerBashClosedDoor(int y, int x, int dir, Cave_t *tile, Inventory_
         // 50% chance of breaking door
         item->misc_use = (int16_t) (1 - randomNumber(2));
 
-        tile->fval = TILE_CORR_FLOOR;
+        tile->feature_id = TILE_CORR_FLOOR;
 
         if (py.flags.confused == 0) {
             playerMove(dir, false);
@@ -1184,7 +1184,7 @@ void playerBash() {
         return;
     }
 
-    if (tile->fval < MIN_CAVE_WALL) {
+    if (tile->feature_id < MIN_CAVE_WALL) {
         printMessage("You bash at empty space.");
         return;
     }

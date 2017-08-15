@@ -77,8 +77,8 @@ static void dungeonFillEmptyTilesWith(uint8_t rock_type) {
         int x = 1;
 
         for (int j = dungeon_width - 2; j > 0; j--) {
-            if (cave[y][x].fval == TILE_NULL_WALL || cave[y][x].fval == TMP1_WALL || cave[y][x].fval == TMP2_WALL) {
-                cave[y][x].fval = rock_type;
+            if (cave[y][x].feature_id == TILE_NULL_WALL || cave[y][x].feature_id == TMP1_WALL || cave[y][x].feature_id == TMP2_WALL) {
+                cave[y][x].feature_id = rock_type;
             }
             x++;
         }
@@ -104,10 +104,10 @@ static void dungeonPlaceBoundaryWalls() {
         assert((Cave_t *)right_ptr == &cave[i][dungeon_width - 1]);
 #endif
 
-        ((Cave_t *) left_ptr)->fval = TILE_BOUNDARY_WALL;
+        ((Cave_t *) left_ptr)->feature_id = TILE_BOUNDARY_WALL;
         left_ptr++;
 
-        ((Cave_t *) right_ptr)->fval = TILE_BOUNDARY_WALL;
+        ((Cave_t *) right_ptr)->feature_id = TILE_BOUNDARY_WALL;
         right_ptr++;
     }
 
@@ -120,10 +120,10 @@ static void dungeonPlaceBoundaryWalls() {
         assert(top_ptr == &cave[0][i]);
         assert(bottom_ptr == &cave[dungeon_height - 1][i]);
 #endif
-        top_ptr->fval = TILE_BOUNDARY_WALL;
+        top_ptr->feature_id = TILE_BOUNDARY_WALL;
         top_ptr++;
 
-        bottom_ptr->fval = TILE_BOUNDARY_WALL;
+        bottom_ptr->feature_id = TILE_BOUNDARY_WALL;
         bottom_ptr++;
     }
 }
@@ -150,8 +150,8 @@ static void dungeonPlaceStreamerRock(uint8_t rock_type, int chance_of_treasure) 
             int x = pos_x + randomNumber(t1) - t2;
 
             if (coordInBounds(y, x)) {
-                if (cave[y][x].fval == TILE_GRANITE_WALL) {
-                    cave[y][x].fval = rock_type;
+                if (cave[y][x].feature_id == TILE_GRANITE_WALL) {
+                    cave[y][x].feature_id = rock_type;
 
                     if (randomNumber(chance_of_treasure) == 1) {
                         dungeonPlaceGold(y, x);
@@ -166,14 +166,14 @@ static void dungeonPlaceOpenDoor(int y, int x) {
     int cur_pos = popt();
     cave[y][x].treasure_id = (uint8_t) cur_pos;
     inventoryItemCopyTo(OBJ_OPEN_DOOR, &treasure_list[cur_pos]);
-    cave[y][x].fval = TILE_CORR_FLOOR;
+    cave[y][x].feature_id = TILE_CORR_FLOOR;
 }
 
 static void dungeonPlaceBrokenDoor(int y, int x) {
     int cur_pos = popt();
     cave[y][x].treasure_id = (uint8_t) cur_pos;
     inventoryItemCopyTo(OBJ_OPEN_DOOR, &treasure_list[cur_pos]);
-    cave[y][x].fval = TILE_CORR_FLOOR;
+    cave[y][x].feature_id = TILE_CORR_FLOOR;
     treasure_list[cur_pos].misc_use = 1;
 }
 
@@ -181,14 +181,14 @@ static void dungeonPlaceClosedDoor(int y, int x) {
     int cur_pos = popt();
     cave[y][x].treasure_id = (uint8_t) cur_pos;
     inventoryItemCopyTo(OBJ_CLOSED_DOOR, &treasure_list[cur_pos]);
-    cave[y][x].fval = TILE_BLOCKED_FLOOR;
+    cave[y][x].feature_id = TILE_BLOCKED_FLOOR;
 }
 
 static void dungeonPlaceLockedDoor(int y, int x) {
     int cur_pos = popt();
     cave[y][x].treasure_id = (uint8_t) cur_pos;
     inventoryItemCopyTo(OBJ_CLOSED_DOOR, &treasure_list[cur_pos]);
-    cave[y][x].fval = TILE_BLOCKED_FLOOR;
+    cave[y][x].feature_id = TILE_BLOCKED_FLOOR;
     treasure_list[cur_pos].misc_use = (int16_t) (randomNumber(10) + 10);
 }
 
@@ -196,7 +196,7 @@ static void dungeonPlaceStuckDoor(int y, int x) {
     int cur_pos = popt();
     cave[y][x].treasure_id = (uint8_t) cur_pos;
     inventoryItemCopyTo(OBJ_CLOSED_DOOR, &treasure_list[cur_pos]);
-    cave[y][x].fval = TILE_BLOCKED_FLOOR;
+    cave[y][x].feature_id = TILE_BLOCKED_FLOOR;
     treasure_list[cur_pos].misc_use = (int16_t) (-randomNumber(10) - 10);
 }
 
@@ -204,7 +204,7 @@ static void dungeonPlaceSecretDoor(int y, int x) {
     int cur_pos = popt();
     cave[y][x].treasure_id = (uint8_t) cur_pos;
     inventoryItemCopyTo(OBJ_SECRET_DOOR, &treasure_list[cur_pos]);
-    cave[y][x].fval = TILE_BLOCKED_FLOOR;
+    cave[y][x].feature_id = TILE_BLOCKED_FLOOR;
 }
 
 static void dungeonPlaceDoor(int y, int x) {
@@ -273,7 +273,7 @@ static void dungeonPlaceStairs(int stair_type, int number, int walls) {
 
                 do {
                     do {
-                        if (cave[y1][x1].fval <= MAX_OPEN_SPACE && cave[y1][x1].treasure_id == 0 && coordWallsNextTo(y1, x1) >= walls) {
+                        if (cave[y1][x1].feature_id <= MAX_OPEN_SPACE && cave[y1][x1].treasure_id == 0 && coordWallsNextTo(y1, x1) >= walls) {
                             placed = true;
                             if (stair_type == 1) {
                                 dungeonPlaceUpStairs(y1, x1);
@@ -305,7 +305,7 @@ static void dungeonPlaceVaultTrap(int y, int x, int yd, int xd, int number) {
             int y1 = y - yd - 1 + randomNumber(2 * yd + 1);
             int x1 = x - xd - 1 + randomNumber(2 * xd + 1);
 
-            if (cave[y1][x1].fval != TILE_NULL_WALL && cave[y1][x1].fval <= MAX_CAVE_FLOOR && cave[y1][x1].treasure_id == 0) {
+            if (cave[y1][x1].feature_id != TILE_NULL_WALL && cave[y1][x1].feature_id <= MAX_CAVE_FLOOR && cave[y1][x1].treasure_id == 0) {
                 dungeonSetTrap(y1, x1, randomNumber(MAX_TRAPS) - 1);
                 placed = true;
             }
@@ -338,24 +338,24 @@ static void dungeonBuildRoom(int y, int x) {
 
     for (int i = height; i <= depth; i++) {
         for (int j = left; j <= right; j++) {
-            cave[i][j].fval = floor;
+            cave[i][j].feature_id = floor;
             cave[i][j].lr = true;
         }
     }
 
     for (int i = height - 1; i <= depth + 1; i++) {
-        cave[i][left - 1].fval = TILE_GRANITE_WALL;
+        cave[i][left - 1].feature_id = TILE_GRANITE_WALL;
         cave[i][left - 1].lr = true;
 
-        cave[i][right + 1].fval = TILE_GRANITE_WALL;
+        cave[i][right + 1].feature_id = TILE_GRANITE_WALL;
         cave[i][right + 1].lr = true;
     }
 
     for (int i = left; i <= right; i++) {
-        cave[height - 1][i].fval = TILE_GRANITE_WALL;
+        cave[height - 1][i].feature_id = TILE_GRANITE_WALL;
         cave[height - 1][i].lr = true;
 
-        cave[depth + 1][i].fval = TILE_GRANITE_WALL;
+        cave[depth + 1][i].feature_id = TILE_GRANITE_WALL;
         cave[depth + 1][i].lr = true;
     }
 }
@@ -378,30 +378,30 @@ static void dungeonBuildRoomOverlappingRectangles(int y, int x) {
 
         for (int i = height; i <= depth; i++) {
             for (int j = left; j <= right; j++) {
-                cave[i][j].fval = floor;
+                cave[i][j].feature_id = floor;
                 cave[i][j].lr = true;
             }
         }
         for (int i = (height - 1); i <= (depth + 1); i++) {
-            if (cave[i][left - 1].fval != floor) {
-                cave[i][left - 1].fval = TILE_GRANITE_WALL;
+            if (cave[i][left - 1].feature_id != floor) {
+                cave[i][left - 1].feature_id = TILE_GRANITE_WALL;
                 cave[i][left - 1].lr = true;
             }
 
-            if (cave[i][right + 1].fval != floor) {
-                cave[i][right + 1].fval = TILE_GRANITE_WALL;
+            if (cave[i][right + 1].feature_id != floor) {
+                cave[i][right + 1].feature_id = TILE_GRANITE_WALL;
                 cave[i][right + 1].lr = true;
             }
         }
 
         for (int i = left; i <= right; i++) {
-            if (cave[height - 1][i].fval != floor) {
-                cave[height - 1][i].fval = TILE_GRANITE_WALL;
+            if (cave[height - 1][i].feature_id != floor) {
+                cave[height - 1][i].feature_id = TILE_GRANITE_WALL;
                 cave[height - 1][i].lr = true;
             }
 
-            if (cave[depth + 1][i].fval != floor) {
-                cave[depth + 1][i].fval = TILE_GRANITE_WALL;
+            if (cave[depth + 1][i].feature_id != floor) {
+                cave[depth + 1][i].feature_id = TILE_GRANITE_WALL;
                 cave[depth + 1][i].lr = true;
             }
         }
@@ -427,12 +427,12 @@ static void dungeonPlaceRandomSecretDoor(int y, int x, int depth, int height, in
 
 static void dungeonPlaceVault(int y, int x) {
     for (int i = y - 1; i <= y + 1; i++) {
-        cave[i][x - 1].fval = TMP1_WALL;
-        cave[i][x + 1].fval = TMP1_WALL;
+        cave[i][x - 1].feature_id = TMP1_WALL;
+        cave[i][x + 1].feature_id = TMP1_WALL;
     }
 
-    cave[y - 1][x].fval = TMP1_WALL;
-    cave[y + 1][x].fval = TMP1_WALL;
+    cave[y - 1][x].feature_id = TMP1_WALL;
+    cave[y + 1][x].feature_id = TMP1_WALL;
 }
 
 static void dungeonPlaceTreasureVault(int y, int x, int depth, int height, int left, int right) {
@@ -452,7 +452,7 @@ static void dungeonPlaceTreasureVault(int y, int x, int depth, int height, int l
 static void dungeonPlaceInnerPillars(int y, int x) {
     for (int i = y - 1; i <= y + 1; i++) {
         for (int j = x - 1; j <= x + 1; j++) {
-            cave[i][j].fval = TMP1_WALL;
+            cave[i][j].feature_id = TMP1_WALL;
         }
     }
 
@@ -464,13 +464,13 @@ static void dungeonPlaceInnerPillars(int y, int x) {
 
     for (int i = y - 1; i <= y + 1; i++) {
         for (int j = x - 5 - offset; j <= x - 3 - offset; j++) {
-            cave[i][j].fval = TMP1_WALL;
+            cave[i][j].feature_id = TMP1_WALL;
         }
     }
 
     for (int i = y - 1; i <= y + 1; i++) {
         for (int j = x + 3 + offset; j <= x + 5 + offset; j++) {
-            cave[i][j].fval = TMP1_WALL;
+            cave[i][j].feature_id = TMP1_WALL;
         }
     }
 }
@@ -479,7 +479,7 @@ static void dungeonPlaceMazeInsideRoom(int depth, int height, int left, int righ
     for (int y = height; y <= depth; y++) {
         for (int x = left; x <= right; x++) {
             if (0x1 & (x + y)) {
-                cave[y][x].fval = TMP1_WALL;
+                cave[y][x].feature_id = TMP1_WALL;
             }
         }
     }
@@ -487,11 +487,11 @@ static void dungeonPlaceMazeInsideRoom(int depth, int height, int left, int righ
 
 static void dungeonPlaceFourSmallRooms(int y, int x, int depth, int height, int left, int right) {
     for (int i = height; i <= depth; i++) {
-        cave[i][x].fval = TMP1_WALL;
+        cave[i][x].feature_id = TMP1_WALL;
     }
 
     for (int i = left; i <= right; i++) {
-        cave[y][i].fval = TMP1_WALL;
+        cave[y][i].feature_id = TMP1_WALL;
     }
 
     // place random secret door
@@ -530,24 +530,24 @@ static void dungeonBuildRoomWithInnerRooms(int y, int x) {
 
     for (int i = height; i <= depth; i++) {
         for (int j = left; j <= right; j++) {
-            cave[i][j].fval = floor;
+            cave[i][j].feature_id = floor;
             cave[i][j].lr = true;
         }
     }
 
     for (int i = (height - 1); i <= (depth + 1); i++) {
-        cave[i][left - 1].fval = TILE_GRANITE_WALL;
+        cave[i][left - 1].feature_id = TILE_GRANITE_WALL;
         cave[i][left - 1].lr = true;
 
-        cave[i][right + 1].fval = TILE_GRANITE_WALL;
+        cave[i][right + 1].feature_id = TILE_GRANITE_WALL;
         cave[i][right + 1].lr = true;
     }
 
     for (int i = left; i <= right; i++) {
-        cave[height - 1][i].fval = TILE_GRANITE_WALL;
+        cave[height - 1][i].feature_id = TILE_GRANITE_WALL;
         cave[height - 1][i].lr = true;
 
-        cave[depth + 1][i].fval = TILE_GRANITE_WALL;
+        cave[depth + 1][i].feature_id = TILE_GRANITE_WALL;
         cave[depth + 1][i].lr = true;
     }
 
@@ -558,13 +558,13 @@ static void dungeonBuildRoomWithInnerRooms(int y, int x) {
     right = right - 2;
 
     for (int i = (height - 1); i <= (depth + 1); i++) {
-        cave[i][left - 1].fval = TMP1_WALL;
-        cave[i][right + 1].fval = TMP1_WALL;
+        cave[i][left - 1].feature_id = TMP1_WALL;
+        cave[i][right + 1].feature_id = TMP1_WALL;
     }
 
     for (int i = left; i <= right; i++) {
-        cave[height - 1][i].fval = TMP1_WALL;
-        cave[depth + 1][i].fval = TMP1_WALL;
+        cave[height - 1][i].feature_id = TMP1_WALL;
+        cave[depth + 1][i].feature_id = TMP1_WALL;
     }
 
     // Inner room variations
@@ -593,11 +593,11 @@ static void dungeonBuildRoomWithInnerRooms(int y, int x) {
 
             // Inner rooms
             for (int i = x - 5; i <= x + 5; i++) {
-                cave[y - 1][i].fval = TMP1_WALL;
-                cave[y + 1][i].fval = TMP1_WALL;
+                cave[y - 1][i].feature_id = TMP1_WALL;
+                cave[y + 1][i].feature_id = TMP1_WALL;
             }
-            cave[y][x - 5].fval = TMP1_WALL;
-            cave[y][x + 5].fval = TMP1_WALL;
+            cave[y][x - 5].feature_id = TMP1_WALL;
+            cave[y][x + 5].feature_id = TMP1_WALL;
 
             dungeonPlaceSecretDoor(y - 3 + (randomNumber(2) << 1), x - 3);
             dungeonPlaceSecretDoor(y - 3 + (randomNumber(2) << 1), x + 3);
@@ -649,7 +649,7 @@ static void dungeonBuildRoomWithInnerRooms(int y, int x) {
 static void dungeonPlaceLargeMiddlePillar(int y, int x) {
     for (int i = y - 1; i <= y + 1; i++) {
         for (int j = x - 1; j <= x + 1; j++) {
-            cave[i][j].fval = TMP1_WALL;
+            cave[i][j].feature_id = TMP1_WALL;
         }
     }
 }
@@ -668,24 +668,24 @@ static void dungeonBuildRoomCrossShaped(int y, int x) {
 
     for (int i = height; i <= depth; i++) {
         for (int j = left; j <= right; j++) {
-            cave[i][j].fval = floor;
+            cave[i][j].feature_id = floor;
             cave[i][j].lr = true;
         }
     }
 
     for (int i = height - 1; i <= depth + 1; i++) {
-        cave[i][left - 1].fval = TILE_GRANITE_WALL;
+        cave[i][left - 1].feature_id = TILE_GRANITE_WALL;
         cave[i][left - 1].lr = true;
 
-        cave[i][right + 1].fval = TILE_GRANITE_WALL;
+        cave[i][right + 1].feature_id = TILE_GRANITE_WALL;
         cave[i][right + 1].lr = true;
     }
 
     for (int i = left; i <= right; i++) {
-        cave[height - 1][i].fval = TILE_GRANITE_WALL;
+        cave[height - 1][i].feature_id = TILE_GRANITE_WALL;
         cave[height - 1][i].lr = true;
 
-        cave[depth + 1][i].fval = TILE_GRANITE_WALL;
+        cave[depth + 1][i].feature_id = TILE_GRANITE_WALL;
         cave[depth + 1][i].lr = true;
     }
 
@@ -698,31 +698,31 @@ static void dungeonBuildRoomCrossShaped(int y, int x) {
 
     for (int i = height; i <= depth; i++) {
         for (int j = left; j <= right; j++) {
-            cave[i][j].fval = floor;
+            cave[i][j].feature_id = floor;
             cave[i][j].lr = true;
         }
     }
 
     for (int i = height - 1; i <= depth + 1; i++) {
-        if (cave[i][left - 1].fval != floor) {
-            cave[i][left - 1].fval = TILE_GRANITE_WALL;
+        if (cave[i][left - 1].feature_id != floor) {
+            cave[i][left - 1].feature_id = TILE_GRANITE_WALL;
             cave[i][left - 1].lr = true;
         }
 
-        if (cave[i][right + 1].fval != floor) {
-            cave[i][right + 1].fval = TILE_GRANITE_WALL;
+        if (cave[i][right + 1].feature_id != floor) {
+            cave[i][right + 1].feature_id = TILE_GRANITE_WALL;
             cave[i][right + 1].lr = true;
         }
     }
 
     for (int i = left; i <= right; i++) {
-        if (cave[height - 1][i].fval != floor) {
-            cave[height - 1][i].fval = TILE_GRANITE_WALL;
+        if (cave[height - 1][i].feature_id != floor) {
+            cave[height - 1][i].feature_id = TILE_GRANITE_WALL;
             cave[height - 1][i].lr = true;
         }
 
-        if (cave[depth + 1][i].fval != floor) {
-            cave[depth + 1][i].fval = TILE_GRANITE_WALL;
+        if (cave[depth + 1][i].feature_id != floor) {
+            cave[depth + 1][i].feature_id = TILE_GRANITE_WALL;
             cave[depth + 1][i].lr = true;
         }
     }
@@ -754,14 +754,14 @@ static void dungeonBuildRoomCrossShaped(int y, int x) {
             break;
         case 3:
             if (randomNumber(3) == 1) {
-                cave[y - 1][x - 2].fval = TMP1_WALL;
-                cave[y + 1][x - 2].fval = TMP1_WALL;
-                cave[y - 1][x + 2].fval = TMP1_WALL;
-                cave[y + 1][x + 2].fval = TMP1_WALL;
-                cave[y - 2][x - 1].fval = TMP1_WALL;
-                cave[y - 2][x + 1].fval = TMP1_WALL;
-                cave[y + 2][x - 1].fval = TMP1_WALL;
-                cave[y + 2][x + 1].fval = TMP1_WALL;
+                cave[y - 1][x - 2].feature_id = TMP1_WALL;
+                cave[y + 1][x - 2].feature_id = TMP1_WALL;
+                cave[y - 1][x + 2].feature_id = TMP1_WALL;
+                cave[y + 1][x + 2].feature_id = TMP1_WALL;
+                cave[y - 2][x - 1].feature_id = TMP1_WALL;
+                cave[y - 2][x + 1].feature_id = TMP1_WALL;
+                cave[y + 2][x - 1].feature_id = TMP1_WALL;
+                cave[y + 2][x + 1].feature_id = TMP1_WALL;
                 if (randomNumber(3) == 1) {
                     dungeonPlaceSecretDoor(y, x - 2);
                     dungeonPlaceSecretDoor(y, x + 2);
@@ -769,13 +769,13 @@ static void dungeonBuildRoomCrossShaped(int y, int x) {
                     dungeonPlaceSecretDoor(y + 2, x);
                 }
             } else if (randomNumber(3) == 1) {
-                cave[y][x].fval = TMP1_WALL;
-                cave[y - 1][x].fval = TMP1_WALL;
-                cave[y + 1][x].fval = TMP1_WALL;
-                cave[y][x - 1].fval = TMP1_WALL;
-                cave[y][x + 1].fval = TMP1_WALL;
+                cave[y][x].feature_id = TMP1_WALL;
+                cave[y - 1][x].feature_id = TMP1_WALL;
+                cave[y + 1][x].feature_id = TMP1_WALL;
+                cave[y][x - 1].feature_id = TMP1_WALL;
+                cave[y][x + 1].feature_id = TMP1_WALL;
             } else if (randomNumber(3) == 1) {
-                cave[y][x].fval = TMP1_WALL;
+                cave[y][x].feature_id = TMP1_WALL;
             }
             break;
         case 4:
@@ -829,7 +829,7 @@ static void dungeonBuildTunnel(int y_start, int x_start, int y_end, int x_end) {
             tmp_col = x_start + col_dir;
         }
 
-        switch (cave[tmp_row][tmp_col].fval) {
+        switch (cave[tmp_row][tmp_col].feature_id) {
             case TILE_NULL_WALL:
                 y_start = tmp_row;
                 x_start = tmp_col;
@@ -858,8 +858,8 @@ static void dungeonBuildTunnel(int y_start, int x_start, int y_end, int x_end) {
                         if (coordInBounds(y, x)) {
                             // values 11 and 12 are impossible here, dungeonPlaceStreamerRock
                             // is never run before dungeonBuildTunnel
-                            if (cave[y][x].fval == TILE_GRANITE_WALL) {
-                                cave[y][x].fval = TMP2_WALL;
+                            if (cave[y][x].feature_id == TILE_GRANITE_WALL) {
+                                cave[y][x].feature_id = TMP2_WALL;
                             }
                         }
                     }
@@ -905,18 +905,18 @@ static void dungeonBuildTunnel(int y_start, int x_start, int y_end, int x_end) {
     } while ((y_start != y_end || x_start != x_end) && !stop_flag);
 
     for (int i = 0; i < tunnel_index; i++) {
-        cave[tunnels_tk[i].y][tunnels_tk[i].x].fval = TILE_CORR_FLOOR;
+        cave[tunnels_tk[i].y][tunnels_tk[i].x].feature_id = TILE_CORR_FLOOR;
     }
 
     for (int i = 0; i < wall_index; i++) {
         Cave_t *tile = &cave[walls_tk[i].y][walls_tk[i].x];
 
-        if (tile->fval == TMP2_WALL) {
+        if (tile->feature_id == TMP2_WALL) {
             if (randomNumber(100) < DUN_ROOM_DOORS) {
                 dungeonPlaceDoor(walls_tk[i].y, walls_tk[i].x);
             } else {
                 // these have to be doorways to rooms
-                tile->fval = TILE_CORR_FLOOR;
+                tile->feature_id = TILE_CORR_FLOOR;
             }
         }
     }
@@ -924,8 +924,8 @@ static void dungeonBuildTunnel(int y_start, int x_start, int y_end, int x_end) {
 
 static bool dungeonIsNextTo(int y, int x) {
     if (coordCorridorWallsNextTo(y, x) > 2) {
-        bool vertical = cave[y - 1][x].fval >= MIN_CAVE_WALL && cave[y + 1][x].fval >= MIN_CAVE_WALL;
-        bool horizontal = cave[y][x - 1].fval >= MIN_CAVE_WALL && cave[y][x + 1].fval >= MIN_CAVE_WALL;
+        bool vertical = cave[y - 1][x].feature_id >= MIN_CAVE_WALL && cave[y + 1][x].feature_id >= MIN_CAVE_WALL;
+        bool horizontal = cave[y][x - 1].feature_id >= MIN_CAVE_WALL && cave[y][x + 1].feature_id >= MIN_CAVE_WALL;
 
         return vertical || horizontal;
     }
@@ -935,7 +935,7 @@ static bool dungeonIsNextTo(int y, int x) {
 
 // Places door at y, x position if at least 2 walls found
 static void dungeonPlaceDoorIfNextToTwoWalls(int y, int x) {
-    if (cave[y][x].fval == TILE_CORR_FLOOR && randomNumber(100) > DUN_TUNNEL_DOORS && dungeonIsNextTo(y, x)) {
+    if (cave[y][x].feature_id == TILE_CORR_FLOOR && randomNumber(100) > DUN_TUNNEL_DOORS && dungeonIsNextTo(y, x)) {
         dungeonPlaceDoor(y, x);
     }
 }
@@ -949,7 +949,7 @@ static void dungeonNewSpot(int16_t *y, int16_t *x) {
         pos_y = randomNumber(dungeon_height - 2);
         pos_x = randomNumber(dungeon_width - 2);
         tile = &cave[pos_y][pos_x];
-    } while (tile->fval >= MIN_CLOSED_SPACE || tile->creature_id != 0 || tile->treasure_id != 0);
+    } while (tile->feature_id >= MIN_CLOSED_SPACE || tile->creature_id != 0 || tile->treasure_id != 0);
 
     *y = (int16_t) pos_y;
     *x = (int16_t) pos_x;
@@ -1081,7 +1081,7 @@ static void dungeonBuildStore(int store_id, int y, int x) {
 
     for (pos_y = y_height; pos_y <= y_depth; pos_y++) {
         for (pos_x = x_left; pos_x <= x_right; pos_x++) {
-            cave[pos_y][pos_x].fval = TILE_BOUNDARY_WALL;
+            cave[pos_y][pos_x].feature_id = TILE_BOUNDARY_WALL;
         }
     }
 
@@ -1104,7 +1104,7 @@ static void dungeonBuildStore(int store_id, int y, int x) {
         }
     }
 
-    cave[pos_y][pos_x].fval = TILE_CORR_FLOOR;
+    cave[pos_y][pos_x].feature_id = TILE_CORR_FLOOR;
 
     int cur_pos = popt();
     cave[pos_y][pos_x].treasure_id = (uint8_t) cur_pos;
@@ -1159,7 +1159,7 @@ static void lightTown() {
     if (isNighTime()) {
         for (int y = 0; y < dungeon_height; y++) {
             for (int x = 0; x < dungeon_width; x++) {
-                if (cave[y][x].fval != TILE_DARK_FLOOR) {
+                if (cave[y][x].feature_id != TILE_DARK_FLOOR) {
                     cave[y][x].pl = true;
                 }
             }

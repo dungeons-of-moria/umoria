@@ -542,7 +542,7 @@ static int dungeonSummonObject(int y, int x, int amount, int object_type) {
             int pos_x = x - 3 + randomNumber(5);
 
             if (coordInBounds(pos_y, pos_x) && los(y, x, pos_y, pos_x)) {
-                if (cave[pos_y][pos_x].fval <= MAX_OPEN_SPACE && cave[pos_y][pos_x].treasure_id == 0) {
+                if (cave[pos_y][pos_x].feature_id <= MAX_OPEN_SPACE && cave[pos_y][pos_x].treasure_id == 0) {
                     // object_type == 3 -> 50% objects, 50% gold
                     if (object_type == 3 || object_type == 7) {
                         if (randomNumber(100) < 50) {
@@ -579,8 +579,8 @@ static int dungeonSummonObject(int y, int x, int amount, int object_type) {
 int dungeonDeleteObject(int y, int x) {
     Cave_t *tile = &cave[y][x];
 
-    if (tile->fval == TILE_BLOCKED_FLOOR) {
-        tile->fval = TILE_CORR_FLOOR;
+    if (tile->feature_id == TILE_BLOCKED_FLOOR) {
+        tile->feature_id = TILE_CORR_FLOOR;
     }
 
     pusht(tile->treasure_id);
@@ -927,9 +927,9 @@ void playerMove(int direction, bool do_pickup) {
     // a wall is a free turn normally, hence don't give player free turns
     // attacking each wall in an attempt to locate the invisible creature,
     // instead force player to tunnel into walls which always takes a turn
-    if (tile->creature_id < 2 || (!monster->lit && tile->fval >= MIN_CLOSED_SPACE)) {
+    if (tile->creature_id < 2 || (!monster->lit && tile->feature_id >= MIN_CLOSED_SPACE)) {
         // Open floor spot
-        if (tile->fval <= MAX_OPEN_SPACE) {
+        if (tile->feature_id <= MAX_OPEN_SPACE) {
             // Make final assignments of char coords
             int old_row = char_row;
             int old_col = char_col;
@@ -956,7 +956,7 @@ void playerMove(int direction, bool do_pickup) {
                 dungeonSearch(char_row, char_col, py.misc.chance_in_search);
             }
 
-            if (tile->fval == TILE_LIGHT_FLOOR) {
+            if (tile->feature_id == TILE_LIGHT_FLOOR) {
                 // A room of light should be lit.
 
                 if (!tile->pl && !py.flags.blind) {
@@ -967,7 +967,7 @@ void playerMove(int direction, bool do_pickup) {
 
                 for (int row = (char_row - 1); row <= (char_row + 1); row++) {
                     for (int col = (char_col - 1); col <= (char_col + 1); col++) {
-                        if (cave[row][col].fval == TILE_LIGHT_FLOOR && !cave[row][col].pl) {
+                        if (cave[row][col].feature_id == TILE_LIGHT_FLOOR && !cave[row][col].pl) {
                             dungeonLightRoom(row, col);
                         }
                     }
@@ -1144,7 +1144,7 @@ static void openClosedDoor(int y, int x) {
 
     if (item->misc_use == 0) {
         inventoryItemCopyTo(OBJ_OPEN_DOOR, &treasure_list[tile->treasure_id]);
-        tile->fval = TILE_CORR_FLOOR;
+        tile->feature_id = TILE_CORR_FLOOR;
         dungeonLiteSpot(y, x);
         command_count = 0;
     }
@@ -1259,7 +1259,7 @@ void dungeonCloseDoor() {
             if (tile->creature_id == 0) {
                 if (item->misc_use == 0) {
                     inventoryItemCopyTo(OBJ_CLOSED_DOOR, item);
-                    tile->fval = TILE_BLOCKED_FLOOR;
+                    tile->feature_id = TILE_BLOCKED_FLOOR;
                     dungeonLiteSpot(y, x);
                 } else {
                     printMessage("The door appears to be broken.");
@@ -1296,8 +1296,8 @@ int dungeonTunnelWall(int y, int x, int digging_ability, int digging_chance) {
 
         for (int yy = y - 1; yy <= y + 1; yy++) {
             for (int xx = x - 1; xx <= x + 1; xx++) {
-                if (cave[yy][xx].fval <= MAX_CAVE_ROOM) {
-                    tile->fval = cave[yy][xx].fval;
+                if (cave[yy][xx].feature_id <= MAX_CAVE_ROOM) {
+                    tile->feature_id = cave[yy][xx].feature_id;
                     tile->pl = cave[yy][xx].pl;
                     found = true;
                     break;
@@ -1306,12 +1306,12 @@ int dungeonTunnelWall(int y, int x, int digging_ability, int digging_chance) {
         }
 
         if (!found) {
-            tile->fval = TILE_CORR_FLOOR;
+            tile->feature_id = TILE_CORR_FLOOR;
             tile->pl = false;
         }
     } else {
         // should become a corridor space
-        tile->fval = TILE_CORR_FLOOR;
+        tile->feature_id = TILE_CORR_FLOOR;
         tile->pl = false;
     }
 
