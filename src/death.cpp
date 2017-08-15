@@ -80,7 +80,7 @@ void showScoresScreen() {
                 "%-4d%8d %-19.19s %c %-10.10s %-7.7s%3d %-22.22s",
                 rank, score.points, score.name, score.gender,
                 character_races[score.race].name, classes[score.character_class].title,
-                score.lev, score.died_from
+                score.level, score.died_from
             );
             putStringClearToEOL(string, ++i, 0);
             rank++;
@@ -242,9 +242,9 @@ static void highscores() {
     new_entry.uid = 0; // NOTE: do we not want to use `getuid()`? -MRC-
     new_entry.mhp = py.misc.max_hp;
     new_entry.chp = py.misc.current_hp;
-    new_entry.dun_level = (uint8_t) current_dungeon_level;
-    new_entry.lev = (uint8_t) py.misc.level;
-    new_entry.max_dlv = (uint8_t) py.misc.max_dungeon_depth;
+    new_entry.dungeon_depth = (uint8_t) current_dungeon_level;
+    new_entry.level = (uint8_t) py.misc.level;
+    new_entry.deepest_dungeon_depth = (uint8_t) py.misc.max_dungeon_depth;
     new_entry.gender = highScoreGenderLabel();
     new_entry.race = py.misc.race_id;
     new_entry.character_class = py.misc.class_id;

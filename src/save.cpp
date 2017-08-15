@@ -1237,9 +1237,9 @@ void saveHighScore(HighScore_t *score) {
     wr_short((uint16_t) score->uid);
     wr_short((uint16_t) score->mhp);
     wr_short((uint16_t) score->chp);
-    wr_byte(score->dun_level);
-    wr_byte(score->lev);
-    wr_byte(score->max_dlv);
+    wr_byte(score->dungeon_depth);
+    wr_byte(score->level);
+    wr_byte(score->deepest_dungeon_depth);
     wr_byte(score->gender);
     wr_byte(score->race);
     wr_byte(score->character_class);
@@ -1260,9 +1260,9 @@ void readHighScore(HighScore_t *score) {
     rd_short((uint16_t *) &score->uid);
     rd_short((uint16_t *) &score->mhp);
     rd_short((uint16_t *) &score->chp);
-    rd_byte(&score->dun_level);
-    rd_byte(&score->lev);
-    rd_byte(&score->max_dlv);
+    rd_byte(&score->dungeon_depth);
+    rd_byte(&score->level);
+    rd_byte(&score->deepest_dungeon_depth);
     rd_byte(&score->gender);
     rd_byte(&score->race);
     rd_byte(&score->character_class);

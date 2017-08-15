@@ -289,9 +289,9 @@ typedef struct {
     int16_t uid;
     int16_t mhp;
     int16_t chp;
-    uint8_t dun_level;
-    uint8_t lev;
-    uint8_t max_dlv;
+    uint8_t dungeon_depth;
+    uint8_t level;
+    uint8_t deepest_dungeon_depth;
     uint8_t gender;
     uint8_t race;
     uint8_t character_class;
