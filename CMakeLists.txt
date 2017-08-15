@@ -22,6 +22,13 @@ set(SOURCE_FILES_DIR ${PROJECT_SOURCE_DIR}/src)
 include_directories(${SOURCE_FILES_DIR})
 
 set(SOURCE_FILES
+    ${SOURCE_FILES_DIR}/config.h
+    ${SOURCE_FILES_DIR}/constant.h
+    ${SOURCE_FILES_DIR}/curses.h
+    ${SOURCE_FILES_DIR}/externs.h
+    ${SOURCE_FILES_DIR}/headers.h
+    ${SOURCE_FILES_DIR}/types.h
+    ${SOURCE_FILES_DIR}/version.h
     ${SOURCE_FILES_DIR}/main.cpp
     ${SOURCE_FILES_DIR}/moria.cpp
     ${SOURCE_FILES_DIR}/misc1.cpp
