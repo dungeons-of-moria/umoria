@@ -462,7 +462,7 @@ char caveGetTileSymbol(int y, int x) {
     }
 
     if (cave_ptr->creature_id > 1 && monsters[cave_ptr->creature_id].lit) {
-        return creatures_list[monsters[cave_ptr->creature_id].creature_id].cchar;
+        return creatures_list[monsters[cave_ptr->creature_id].creature_id].sprite;
     }
 
     if (!cave_ptr->permanent_light && !cave_ptr->temporary_light && !cave_ptr->field_mark) {
@@ -736,7 +736,7 @@ void monsterPlaceNewWithinDistance(int number, int distance_from_source, bool sl
 
         // Dragons are always created sleeping here,
         // so as to give the player a sporting chance.
-        if (creatures_list[l].cchar == 'd' || creatures_list[l].cchar == 'D') {
+        if (creatures_list[l].sprite == 'd' || creatures_list[l].sprite == 'D') {
             sleeping = true;
         }
 

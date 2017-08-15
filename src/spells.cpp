@@ -180,7 +180,7 @@ bool spellDetectInvisibleCreaturesOnPanel() {
             monster->lit = true;
 
             // works correctly even if hallucinating
-            putChar((char) creatures_list[monster->creature_id].cchar, (int) monster->y, (int) monster->x);
+            putChar((char) creatures_list[monster->creature_id].sprite, (int) monster->y, (int) monster->x);
 
             detected = true;
         }
@@ -466,7 +466,7 @@ bool spellDetectMonsters() {
             detected = true;
 
             // works correctly even if hallucinating
-            putChar((char) creatures_list[monster->creature_id].cchar, (int) monster->y, (int) monster->x);
+            putChar((char) creatures_list[monster->creature_id].sprite, (int) monster->y, (int) monster->x);
         }
     }
 
@@ -1463,7 +1463,7 @@ bool spellBuildWall(int y, int x, int direction) {
                     printMonsterActionText(name, "is embedded in the rock.");
                     displayCharacterExperience();
                 }
-            } else if (creature->cchar == 'E' || creature->cchar == 'X') {
+            } else if (creature->sprite == 'E' || creature->sprite == 'X') {
                 // must be an earth elemental, an earth spirit,
                 // or a Xorn to increase its hit points
                 monster->hp += diceDamageRoll(4, 8);
@@ -1640,7 +1640,7 @@ bool spellGenocide() {
         Monster_t *monster = &monsters[id];
         Creature_t *creature = &creatures_list[monster->creature_id];
 
-        if (creature_char == creatures_list[monster->creature_id].cchar) {
+        if (creature_char == creatures_list[monster->creature_id].sprite) {
             if ((creature->movement & CM_WIN) == 0) {
                 killed = true;
                 dungeonDeleteMonster(id);
@@ -1771,7 +1771,7 @@ bool spellDetectEvil() {
             detected = true;
 
             // works correctly even if hallucinating
-            putChar((char) creatures_list[monster->creature_id].cchar, (int) monster->y, (int) monster->x);
+            putChar((char) creatures_list[monster->creature_id].sprite, (int) monster->y, (int) monster->x);
         }
     }
 
@@ -1876,7 +1876,7 @@ static void earthquakeHitsMonster(int monsterID) {
             printMonsterActionText(name, "is embedded in the rock.");
             displayCharacterExperience();
         }
-    } else if (creature->cchar == 'E' || creature->cchar == 'X') {
+    } else if (creature->sprite == 'E' || creature->sprite == 'X') {
         // must be an earth elemental or an earth spirit, or a
         // Xorn increase its hit points
         monster->hp += diceDamageRoll(4, 8);

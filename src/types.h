@@ -351,9 +351,9 @@ typedef struct {
     uint16_t kill_exp_value;    // Exp value for kill
     uint8_t sleep_counter;      // Inactive counter / 10
     uint8_t area_affect_radius; // Area affect radius
-    uint8_t ac;        // AC
-    uint8_t speed;     // Movement speed+10 (NOTE: +10 so that it can be a uint8_t)
-    uint8_t cchar;     // Character rep.
+    uint8_t ac;                 // AC
+    uint8_t speed;              // Movement speed+10 (NOTE: +10 so that it can be an unsigned int)
+    uint8_t sprite;             // Character representation (cchar)
     uint8_t hd[2];     // Creatures hit die
     uint8_t damage[4]; // Type attack and damage
     uint8_t level;     // Level of creature
