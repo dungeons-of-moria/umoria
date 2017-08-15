@@ -110,7 +110,7 @@ static void displayCharacterRaces(void) {
     for (int i = 0; i < PLAYER_MAX_RACES; i++) {
         char description[80];
 
-        (void) sprintf(description, "%c) %s", i + 'a', character_races[i].trace);
+        (void) sprintf(description, "%c) %s", i + 'a', character_races[i].name);
         putString(description, x, y);
 
         y += 15;
@@ -144,7 +144,7 @@ static void characterChooseRace() {
 
     py.misc.race_id = (uint8_t) race_id;
 
-    putString(character_races[race_id].trace, 3, 15);
+    putString(character_races[race_id].name, 3, 15);
 }
 
 // Will print the history of a character -JWT-

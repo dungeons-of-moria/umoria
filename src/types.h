@@ -128,7 +128,7 @@ typedef struct {
 
 // Race_t for the generated player character
 typedef struct {
-    const char *trace; // Type of race
+    const char *name;       // Type of race
     int16_t str_adjustment; // adjustments
     int16_t int_adjustment;
     int16_t wis_adjustment;

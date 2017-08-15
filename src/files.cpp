@@ -172,7 +172,7 @@ static void writeCharacterSheetToFile(FILE *file1) {
     (void) fprintf(file1, " Age%11s %6d", colon, (int) py.misc.age);
     statsAsString(py.stats.used[A_STR], statDescription);
     (void) fprintf(file1, "   STR : %s\n", statDescription);
-    (void) fprintf(file1, " Race%9s %-23s", colon, character_races[py.misc.race_id].trace);
+    (void) fprintf(file1, " Race%9s %-23s", colon, character_races[py.misc.race_id].name);
     (void) fprintf(file1, " Height%8s %6d", colon, (int) py.misc.height);
     statsAsString(py.stats.used[A_INT], statDescription);
     (void) fprintf(file1, "   INT : %s\n", statDescription);

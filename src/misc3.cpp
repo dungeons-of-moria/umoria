@@ -844,7 +844,7 @@ int playerDamageAdjustment() {
 
 // Prints character-screen info -RAK-
 void printCharacterStatsBlock() {
-    printCharacterInfoInField(character_races[py.misc.race_id].trace, 2, STAT_COLUMN);
+    printCharacterInfoInField(character_races[py.misc.race_id].name, 2, STAT_COLUMN);
     printCharacterInfoInField(classes[py.misc.class_id].title, 3, STAT_COLUMN);
     printCharacterInfoInField(playerTitle(), 4, STAT_COLUMN);
 
@@ -919,7 +919,7 @@ void printCharacterInformation() {
     }
 
     putString(py.misc.name, 2, 15);
-    putString(character_races[py.misc.race_id].trace, 3, 15);
+    putString(character_races[py.misc.race_id].name, 3, 15);
     putString((playerGetGenderLabel()), 4, 15);
     putString(classes[py.misc.class_id].title, 5, 15);
 }
