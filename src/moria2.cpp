@@ -604,7 +604,7 @@ void damageFire(int damage, const char *creature_name) {
 
 // Freeze him to death. -RAK-
 void damageCold(int damage, const char *creature_name) {
-    if (py.flags.cold_resist) {
+    if (py.flags.resist_cold) {
         damage = damage / 3;
     }
 
