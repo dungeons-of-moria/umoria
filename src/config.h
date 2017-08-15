@@ -7,20 +7,22 @@
 // Basic Configuration
 
 // Data files used by Umoria - relative to the executable binary.
-#define MORIA_GPL "LICENSE"
-#define MORIA_TOP "scores.dat"
-#define MORIA_SAV "game.sav"
-#define MORIA_MOR "data/splash.hlp"
-#define MORIA_HELP "data/roglcmds.hlp"
-#define MORIA_ORIG_HELP "data/origcmds.hlp"
-#define MORIA_WIZ_HELP "data/rwizcmds.hlp"
-#define MORIA_OWIZ_HELP "data/owizcmds.hlp"
-#define MORIA_WELCOME "data/welcome.hlp"
-#define MORIA_VER "data/version.hlp"
+#define MORIA_LICENSE "LICENSE"
+#define MORIA_SCORES "scores.dat"
+#define MORIA_SAVE "game.sav"
+
+#define MORIA_HELP "data/help.txt"
+#define MORIA_WIZARD_HELP "data/help_wizard.txt"
+#define MORIA_RL_HELP "data/rl_help.txt"
+#define MORIA_RL_WIZARD_HELP "data/rl_help_wizard.txt"
+
+#define MORIA_SPLASH "data/splash.txt"
+#define MORIA_VERSIONS "data/versions.txt"
+#define MORIA_WELCOME "data/welcome.txt"
 
 // Game configuration
 typedef struct {
-    vtype_t save_game_filename = MORIA_SAV; // The save game filename
+    vtype_t save_game_filename = MORIA_SAVE; // The save game filename
 
     // Game options as set on startup and with `=` set options command -CJS-
     bool display_counts = true;          // Display rest/repeat counts

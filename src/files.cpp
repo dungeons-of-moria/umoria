@@ -18,9 +18,9 @@
 //  so we don't have multiple people trying to write to it at the same time.
 //  Craig Norborg (doc)    Mon Aug 10 16:41:59 EST 1987
 void initializeScoreFile() {
-    highscore_fp = fopen(MORIA_TOP, (char *) "rb+");
+    highscore_fp = fopen(MORIA_SCORES, (char *) "rb+");
     if (highscore_fp == NULL) {
-        (void) fprintf(stderr, "Can't open score file \"%s\"\n", MORIA_TOP);
+        (void) fprintf(stderr, "Can't open score file \"%s\"\n", MORIA_SCORES);
         exit(1);
     }
 }
@@ -29,7 +29,7 @@ void initializeScoreFile() {
 void displaySplashScreen() {
     vtype_t in_line;
 
-    FILE *file1 = fopen(MORIA_MOR, "r");
+    FILE *file1 = fopen(MORIA_SPLASH, "r");
     if (file1 != NULL) {
         clearScreen();
         for (int i = 0; fgets(in_line, 80, file1) != CNIL; i++) {

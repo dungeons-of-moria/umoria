@@ -90,13 +90,13 @@ install(TARGETS umoria
 set(EXECUTABLE_OUTPUT_PATH ./umoria)
 
 set(DATA_FILES
-    ${PROJECT_SOURCE_DIR}/data/origcmds.hlp
-    ${PROJECT_SOURCE_DIR}/data/owizcmds.hlp
-    ${PROJECT_SOURCE_DIR}/data/roglcmds.hlp
-    ${PROJECT_SOURCE_DIR}/data/rwizcmds.hlp
-    ${PROJECT_SOURCE_DIR}/data/splash.hlp
-    ${PROJECT_SOURCE_DIR}/data/version.hlp
-    ${PROJECT_SOURCE_DIR}/data/welcome.hlp
+    ${PROJECT_SOURCE_DIR}/data/help.txt
+    ${PROJECT_SOURCE_DIR}/data/help_wizard.txt
+    ${PROJECT_SOURCE_DIR}/data/rl_help.txt
+    ${PROJECT_SOURCE_DIR}/data/rl_help_wizard.txt
+    ${PROJECT_SOURCE_DIR}/data/splash.txt
+    ${PROJECT_SOURCE_DIR}/data/versions.txt
+    ${PROJECT_SOURCE_DIR}/data/welcome.txt
 )
 file(COPY ${DATA_FILES} DESTINATION ./umoria/data)
 

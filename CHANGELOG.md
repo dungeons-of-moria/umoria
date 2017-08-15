@@ -6,6 +6,7 @@
 - CLI: "Display high scores" flag now changed to `-d`, because  of the game seed.
 - CLI: Remove `-o` and just use the one arg (`-r`) for specifying (forcing)
   the use of roguelike keys (`hjkl`).
+- Renamed the help files. Ex. `owizcmds.hlp` > `help.txt`.
 
 ### Code
 
