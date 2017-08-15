@@ -1671,15 +1671,15 @@ static void monsterAttackingUpdate(Monster_t *monster, int monster_id, int moves
                 }
             }
 
-            if (monster->stunned != 0) {
+            if (monster->stunned_amount != 0) {
                 // NOTE: Balrog = 100*100 = 10000, it always recovers instantly
                 if (randomNumber(5000) < creatures_list[monster->creature_id].level * creatures_list[monster->creature_id].level) {
-                    monster->stunned = 0;
+                    monster->stunned_amount = 0;
                 } else {
-                    monster->stunned--;
+                    monster->stunned_amount--;
                 }
 
-                if (monster->stunned == 0) {
+                if (monster->stunned_amount == 0) {
                     if (monster->lit) {
                         vtype_t msg;
                         (void) sprintf(msg, "The %s ", creatures_list[monster->creature_id].name);
@@ -1687,7 +1687,7 @@ static void monsterAttackingUpdate(Monster_t *monster, int monster_id, int moves
                     }
                 }
             }
-            if ((monster->sleep_count == 0) && (monster->stunned == 0)) {
+            if ((monster->sleep_count == 0) && (monster->stunned_amount == 0)) {
                 monsterMove(monster_id, &rcmove);
             }
         }

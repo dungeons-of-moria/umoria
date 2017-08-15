@@ -248,7 +248,7 @@ typedef struct {
     uint8_t distance_from_player; // Current distance from player
 
     bool lit;
-    uint8_t stunned;
+    uint8_t stunned_amount;
     uint8_t confused;
 } Monster_t;
 

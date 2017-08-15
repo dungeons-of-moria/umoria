@@ -1037,9 +1037,9 @@ static void playerBashAttack(int y, int x) {
             }
 
             if (100 + randomNumber(400) + randomNumber(400) > monster->hp + avg_max_hp) {
-                monster->stunned += randomNumber(3) + 1;
-                if (monster->stunned > 24) {
-                    monster->stunned = 24;
+                monster->stunned_amount += randomNumber(3) + 1;
+                if (monster->stunned_amount > 24) {
+                    monster->stunned_amount = 24;
                 }
 
                 (void) sprintf(msg, "%s appears stunned!", name);

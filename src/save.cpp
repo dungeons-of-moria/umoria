@@ -1101,7 +1101,7 @@ static void wr_monster(Monster_t *mon) {
     wr_byte(mon->x);
     wr_byte(mon->distance_from_player);
     wr_bool(mon->lit);
-    wr_byte(mon->stunned);
+    wr_byte(mon->stunned_amount);
     wr_byte(mon->confused);
 }
 
@@ -1214,7 +1214,7 @@ static void rd_monster(Monster_t *mon) {
     rd_byte(&mon->x);
     rd_byte(&mon->distance_from_player);
     mon->lit = rd_bool();
-    rd_byte(&mon->stunned);
+    rd_byte(&mon->stunned_amount);
     rd_byte(&mon->confused);
 }
 
