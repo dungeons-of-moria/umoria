@@ -74,7 +74,7 @@ extern int16_t char_col;
 extern uint32_t player_base_exp_levels[PLAYER_MAX_LEVEL];
 extern uint16_t player_base_hp_levels[PLAYER_MAX_LEVEL];
 
-extern ClassTitle_t class_titles[PLAYER_MAX_CLASSES][PLAYER_MAX_LEVEL];
+extern ClassRankTitle_t class_rank_titles[PLAYER_MAX_CLASSES][PLAYER_MAX_LEVEL];
 extern Race_t character_races[PLAYER_MAX_RACES];
 extern Background_t character_backgrounds[PLAYER_MAX_BACKGROUNDS];
 

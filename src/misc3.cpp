@@ -367,7 +367,7 @@ char *playerTitle() {
     if (py.misc.level < 1) {
         p = "Babe in arms";
     } else if (py.misc.level <= PLAYER_MAX_LEVEL) {
-        p = class_titles[py.misc.class_id][py.misc.level - 1];
+        p = class_rank_titles[py.misc.class_id][py.misc.level - 1];
     } else if (playerIsMale()) {
         p = "**KING**";
     } else {

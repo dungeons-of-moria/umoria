@@ -20,8 +20,8 @@ int16_t char_col;
 // so that drain life + restore life does not affect hit points.
 uint16_t player_base_hp_levels[PLAYER_MAX_LEVEL];
 
-// Class titles for different levels
-ClassTitle_t class_titles[PLAYER_MAX_CLASSES][PLAYER_MAX_LEVEL] = {
+// Class rank titles for different levels
+ClassRankTitle_t class_rank_titles[PLAYER_MAX_CLASSES][PLAYER_MAX_LEVEL] = {
     // Warrior
     {"Rookie",       "Private",      "Soldier",      "Mercenary",
      "Veteran(1st)", "Veteran(2nd)", "Veteran(3rd)", "Warrior(1st)",

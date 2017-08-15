@@ -368,9 +368,9 @@ typedef struct {
     uint8_t sides;
 } MonsterAttack_t;
 
-// ClassTitle_t is a base game object
+// ClassRankTitle_t is a base game object
 // Holds the base game data for all character Class titles: Novice, Mage (5th), Paladin, etc.
-typedef const char *ClassTitle_t;
+typedef const char *ClassRankTitle_t;
 
 // Spell_t is a base data object.
 // Holds the base game data for a spell

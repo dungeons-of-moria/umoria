@@ -9,7 +9,7 @@
 
 ### Code
 
-- Rename many Player fields on `misc`, `stats`, and `flags`.
+- Rename field names for all structs in `types.h`
 - Rename many constants for better clarity on their purpose.
 - Move the game options globals into a Config_t struct.
 - Refactor `main.cpp` to contain [mostly] just CLI arg parsing, and some
