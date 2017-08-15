@@ -213,7 +213,7 @@ typedef struct {
     uint8_t sub_category_id;        // Sub-category number
     uint8_t items_count;            // Number of items
     uint16_t weight;                // Weight
-    int16_t tohit;                  // Plusses to hit
+    int16_t to_hit;                 // Plusses to hit
     int16_t todam;                  // Plusses to damage
     int16_t ac;                     // Normal AC
     int16_t toac;                   // Plusses to AC

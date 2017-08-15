@@ -60,7 +60,7 @@ static void cursedArmor(Inventory_t *t_ptr, int level) {
 }
 
 static void magicalSword(Inventory_t *t_ptr, int special, int level) {
-    t_ptr->tohit += magicEnchantmentBonus(0, 40, level);
+    t_ptr->to_hit += magicEnchantmentBonus(0, 40, level);
 
     // Magical damage bonus now proportional to weapon base damage
     int damageBonus = t_ptr->damage[0] * t_ptr->damage[1];
@@ -74,7 +74,7 @@ static void magicalSword(Inventory_t *t_ptr, int special, int level) {
         switch (randomNumber(16)) {
             case 1: // Holy Avenger
                 t_ptr->flags |= (TR_SEE_INVIS | TR_SUST_STAT | TR_SLAY_UNDEAD | TR_SLAY_EVIL | TR_STR);
-                t_ptr->tohit += 5;
+                t_ptr->to_hit += 5;
                 t_ptr->todam += 5;
                 t_ptr->toac += randomNumber(4);
 
@@ -87,7 +87,7 @@ static void magicalSword(Inventory_t *t_ptr, int special, int level) {
                 break;
             case 2: // Defender
                 t_ptr->flags |= (TR_FFALL | TR_RES_LIGHT | TR_SEE_INVIS | TR_FREE_ACT | TR_RES_COLD | TR_RES_ACID | TR_RES_FIRE | TR_REGEN | TR_STEALTH);
-                t_ptr->tohit += 3;
+                t_ptr->to_hit += 3;
                 t_ptr->todam += 3;
                 t_ptr->toac += 5 + randomNumber(5);
                 t_ptr->special_name_id = SN_DF;
@@ -100,7 +100,7 @@ static void magicalSword(Inventory_t *t_ptr, int special, int level) {
             case 3:
             case 4: // Slay Animal
                 t_ptr->flags |= TR_SLAY_ANIMAL;
-                t_ptr->tohit += 2;
+                t_ptr->to_hit += 2;
                 t_ptr->todam += 2;
                 t_ptr->special_name_id = SN_SA;
                 t_ptr->cost += 3000;
@@ -108,7 +108,7 @@ static void magicalSword(Inventory_t *t_ptr, int special, int level) {
             case 5:
             case 6: // Slay Dragon
                 t_ptr->flags |= TR_SLAY_DRAGON;
-                t_ptr->tohit += 3;
+                t_ptr->to_hit += 3;
                 t_ptr->todam += 3;
                 t_ptr->special_name_id = SN_SD;
                 t_ptr->cost += 4000;
@@ -116,7 +116,7 @@ static void magicalSword(Inventory_t *t_ptr, int special, int level) {
             case 7:
             case 8: // Slay Evil
                 t_ptr->flags |= TR_SLAY_EVIL;
-                t_ptr->tohit += 3;
+                t_ptr->to_hit += 3;
                 t_ptr->todam += 3;
                 t_ptr->special_name_id = SN_SE;
                 t_ptr->cost += 4000;
@@ -124,7 +124,7 @@ static void magicalSword(Inventory_t *t_ptr, int special, int level) {
             case 9:
             case 10: // Slay Undead
                 t_ptr->flags |= (TR_SEE_INVIS | TR_SLAY_UNDEAD);
-                t_ptr->tohit += 3;
+                t_ptr->to_hit += 3;
                 t_ptr->todam += 3;
                 t_ptr->special_name_id = SN_SU;
                 t_ptr->cost += 5000;
@@ -133,7 +133,7 @@ static void magicalSword(Inventory_t *t_ptr, int special, int level) {
             case 12:
             case 13: // Flame Tongue
                 t_ptr->flags |= TR_FLAME_TONGUE;
-                t_ptr->tohit++;
+                t_ptr->to_hit++;
                 t_ptr->todam += 3;
                 t_ptr->special_name_id = SN_FT;
                 t_ptr->cost += 2000;
@@ -142,7 +142,7 @@ static void magicalSword(Inventory_t *t_ptr, int special, int level) {
             case 15:
             case 16: // Frost Brand
                 t_ptr->flags |= TR_FROST_BRAND;
-                t_ptr->tohit++;
+                t_ptr->to_hit++;
                 t_ptr->todam++;
                 t_ptr->special_name_id = SN_FB;
                 t_ptr->cost += 1200;
@@ -152,7 +152,7 @@ static void magicalSword(Inventory_t *t_ptr, int special, int level) {
 }
 
 static void cursedSword(Inventory_t *t_ptr, int level) {
-    t_ptr->tohit -= magicEnchantmentBonus(1, 55, level);
+    t_ptr->to_hit -= magicEnchantmentBonus(1, 55, level);
 
     // Magical damage bonus now proportional to weapon base damage
     int damageBonus = t_ptr->damage[0] * t_ptr->damage[1];
@@ -163,14 +163,14 @@ static void cursedSword(Inventory_t *t_ptr, int level) {
 }
 
 static void magicalBow(Inventory_t *t_ptr, int level) {
-    t_ptr->tohit += magicEnchantmentBonus(1, 30, level);
+    t_ptr->to_hit += magicEnchantmentBonus(1, 30, level);
 
     // add damage. -CJS-
     t_ptr->todam += magicEnchantmentBonus(1, 20, level);
 }
 
 static void cursedBow(Inventory_t *t_ptr, int level) {
-    t_ptr->tohit -= magicEnchantmentBonus(1, 50, level);
+    t_ptr->to_hit -= magicEnchantmentBonus(1, 50, level);
 
     // add damage. -CJS-
     t_ptr->todam -= magicEnchantmentBonus(1, 30, level);
@@ -202,10 +202,10 @@ static void magicalGloves(Inventory_t *t_ptr, int special, int level) {
         t_ptr->cost += 1000;
     } else {
         t_ptr->ident |= ID_SHOW_HIT_DAM;
-        t_ptr->tohit += 1 + randomNumber(3);
+        t_ptr->to_hit += 1 + randomNumber(3);
         t_ptr->todam += 1 + randomNumber(3);
         t_ptr->special_name_id = SN_SLAYING;
-        t_ptr->cost += (t_ptr->tohit + t_ptr->todam) * 250;
+        t_ptr->cost += (t_ptr->to_hit + t_ptr->todam) * 250;
     }
 }
 
@@ -445,10 +445,10 @@ static void processRings(Inventory_t *t_ptr, int level, int cursed) {
             }
             break;
         case 20: // Increase To-Hit
-            t_ptr->tohit += magicEnchantmentBonus(1, 20, level);
-            t_ptr->cost += t_ptr->tohit * 100;
+            t_ptr->to_hit += magicEnchantmentBonus(1, 20, level);
+            t_ptr->cost += t_ptr->to_hit * 100;
             if (magicShouldBeEnchanted(cursed)) {
-                t_ptr->tohit = -t_ptr->tohit;
+                t_ptr->to_hit = -t_ptr->to_hit;
                 t_ptr->flags |= TR_CURSED;
                 t_ptr->cost = -t_ptr->cost;
             }
@@ -473,10 +473,10 @@ static void processRings(Inventory_t *t_ptr, int level, int cursed) {
         case 30: // Slaying
             t_ptr->ident |= ID_SHOW_HIT_DAM;
             t_ptr->todam += magicEnchantmentBonus(1, 25, level);
-            t_ptr->tohit += magicEnchantmentBonus(1, 25, level);
-            t_ptr->cost += (t_ptr->tohit + t_ptr->todam) * 100;
+            t_ptr->to_hit += magicEnchantmentBonus(1, 25, level);
+            t_ptr->cost += (t_ptr->to_hit + t_ptr->todam) * 100;
             if (magicShouldBeEnchanted(cursed)) {
-                t_ptr->tohit = -t_ptr->tohit;
+                t_ptr->to_hit = -t_ptr->to_hit;
                 t_ptr->todam = -t_ptr->todam;
                 t_ptr->flags |= TR_CURSED;
                 t_ptr->cost = -t_ptr->cost;
@@ -650,7 +650,7 @@ static void cursedCloak(Inventory_t *t_ptr, int level) {
         t_ptr->special_name_id = SN_IRRITATION;
         t_ptr->toac -= magicEnchantmentBonus(1, 10, level);
         t_ptr->ident |= ID_SHOW_HIT_DAM;
-        t_ptr->tohit -= magicEnchantmentBonus(1, 10, level);
+        t_ptr->to_hit -= magicEnchantmentBonus(1, 10, level);
         t_ptr->todam -= magicEnchantmentBonus(1, 10, level);
         t_ptr->cost = 0;
     } else if (magicType == 2) {
@@ -661,7 +661,7 @@ static void cursedCloak(Inventory_t *t_ptr, int level) {
         t_ptr->special_name_id = SN_ENVELOPING;
         t_ptr->toac -= magicEnchantmentBonus(1, 10, level);
         t_ptr->ident |= ID_SHOW_HIT_DAM;
-        t_ptr->tohit -= magicEnchantmentBonus(2, 40, level + 10);
+        t_ptr->to_hit -= magicEnchantmentBonus(2, 40, level + 10);
         t_ptr->todam -= magicEnchantmentBonus(2, 40, level + 10);
         t_ptr->cost = 0;
     }
@@ -720,7 +720,7 @@ static void magicalChests(Inventory_t *t_ptr, int level) {
 }
 
 static void magicalProjectiles(Inventory_t *t_ptr, int special, int level) {
-    t_ptr->tohit += magicEnchantmentBonus(1, 35, level);
+    t_ptr->to_hit += magicEnchantmentBonus(1, 35, level);
     t_ptr->todam += magicEnchantmentBonus(1, 35, level);
 
     // see comment for weapons
@@ -730,14 +730,14 @@ static void magicalProjectiles(Inventory_t *t_ptr, int special, int level) {
             case 2:
             case 3:
                 t_ptr->special_name_id = SN_SLAYING;
-                t_ptr->tohit += 5;
+                t_ptr->to_hit += 5;
                 t_ptr->todam += 5;
                 t_ptr->cost += 20;
                 break;
             case 4:
             case 5:
                 t_ptr->flags |= TR_FLAME_TONGUE;
-                t_ptr->tohit += 2;
+                t_ptr->to_hit += 2;
                 t_ptr->todam += 4;
                 t_ptr->special_name_id = SN_FIRE;
                 t_ptr->cost += 25;
@@ -745,7 +745,7 @@ static void magicalProjectiles(Inventory_t *t_ptr, int special, int level) {
             case 6:
             case 7:
                 t_ptr->flags |= TR_SLAY_EVIL;
-                t_ptr->tohit += 3;
+                t_ptr->to_hit += 3;
                 t_ptr->todam += 3;
                 t_ptr->special_name_id = SN_SLAY_EVIL;
                 t_ptr->cost += 25;
@@ -753,14 +753,14 @@ static void magicalProjectiles(Inventory_t *t_ptr, int special, int level) {
             case 8:
             case 9:
                 t_ptr->flags |= TR_SLAY_ANIMAL;
-                t_ptr->tohit += 2;
+                t_ptr->to_hit += 2;
                 t_ptr->todam += 2;
                 t_ptr->special_name_id = SN_SLAY_ANIMAL;
                 t_ptr->cost += 30;
                 break;
             case 10:
                 t_ptr->flags |= TR_SLAY_DRAGON;
-                t_ptr->tohit += 3;
+                t_ptr->to_hit += 3;
                 t_ptr->todam += 3;
                 t_ptr->special_name_id = SN_DRAGON_SLAYING;
                 t_ptr->cost += 35;
@@ -770,7 +770,7 @@ static void magicalProjectiles(Inventory_t *t_ptr, int special, int level) {
 }
 
 static void cursedProjectiles(Inventory_t *t_ptr, int level) {
-    t_ptr->tohit -= magicEnchantmentBonus(5, 55, level);
+    t_ptr->to_hit -= magicEnchantmentBonus(5, 55, level);
     t_ptr->todam -= magicEnchantmentBonus(5, 55, level);
     t_ptr->flags |= TR_CURSED;
     t_ptr->cost = 0;
@@ -810,7 +810,7 @@ void magicTreasureMagicalAbility(int item_id, int level) {
         case TV_HAFTED:
         case TV_POLEARM:
         case TV_SWORD:
-            // always show tohit/todam values if identified
+            // always show to_hit/todam values if identified
             t_ptr->ident |= ID_SHOW_HIT_DAM;
 
             if (magicShouldBeEnchanted(chance)) {
@@ -820,7 +820,7 @@ void magicTreasureMagicalAbility(int item_id, int level) {
             }
             break;
         case TV_BOW:
-            // always show tohit/todam values if identified
+            // always show to_hit/todam values if identified
             t_ptr->ident |= ID_SHOW_HIT_DAM;
 
             if (magicShouldBeEnchanted(chance)) {
@@ -830,7 +830,7 @@ void magicTreasureMagicalAbility(int item_id, int level) {
             }
             break;
         case TV_DIGGING:
-            // always show tohit/todam values if identified
+            // always show to_hit/todam values if identified
             t_ptr->ident |= ID_SHOW_HIT_DAM;
 
             if (magicShouldBeEnchanted(chance)) {
@@ -916,7 +916,7 @@ void magicTreasureMagicalAbility(int item_id, int level) {
         case TV_BOLT:
         case TV_ARROW:
             if (t_ptr->category_id == TV_SLING_AMMO || t_ptr->category_id == TV_BOLT || t_ptr->category_id == TV_ARROW) {
-                // always show tohit/todam values if identified
+                // always show to_hit/todam values if identified
                 t_ptr->ident |= ID_SHOW_HIT_DAM;
 
                 if (magicShouldBeEnchanted(chance)) {

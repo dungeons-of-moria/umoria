@@ -1082,7 +1082,7 @@ static void wr_item(Inventory_t *item) {
     wr_byte(item->sub_category_id);
     wr_byte(item->items_count);
     wr_short(item->weight);
-    wr_short((uint16_t) item->tohit);
+    wr_short((uint16_t) item->to_hit);
     wr_short((uint16_t) item->todam);
     wr_short((uint16_t) item->ac);
     wr_short((uint16_t) item->toac);
@@ -1195,7 +1195,7 @@ static void rd_item(Inventory_t *item) {
     rd_byte(&item->sub_category_id);
     rd_byte(&item->items_count);
     rd_short(&item->weight);
-    rd_short((uint16_t *) &item->tohit);
+    rd_short((uint16_t *) &item->to_hit);
     rd_short((uint16_t *) &item->todam);
     rd_short((uint16_t *) &item->ac);
     rd_short((uint16_t *) &item->toac);

@@ -150,7 +150,7 @@ static void initializeCharacterInventory() {
         // this makes it spellItemIdentifyAndRemoveRandomInscription and itemSetAsIdentified
         itemIdentifyAsStoreBought(&item);
 
-        // must set this bit to display tohit/todam for stiletto
+        // must set this bit to display to_hit/todam for stiletto
         if (item.category_id == TV_SWORD) {
             item.ident |= ID_SHOW_HIT_DAM;
         }

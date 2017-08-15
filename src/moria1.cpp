@@ -95,7 +95,7 @@ static void playerRecalculateBonusesFromInventory() {
         item = &inventory[i];
 
         if (item->category_id != TV_NOTHING) {
-            py.misc.plusses_to_hit += item->tohit;
+            py.misc.plusses_to_hit += item->to_hit;
 
             // Bows can't damage. -CJS-
             if (item->category_id != TV_BOW) {
@@ -106,7 +106,7 @@ static void playerRecalculateBonusesFromInventory() {
             py.misc.ac += item->ac;
 
             if (spellItemIdentified(item)) {
-                py.misc.display_to_hit += item->tohit;
+                py.misc.display_to_hit += item->to_hit;
 
                 // Bows can't damage. -CJS-
                 if (item->category_id != TV_BOW) {

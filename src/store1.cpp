@@ -60,11 +60,11 @@ static int32_t getWeaponArmorBuyPrice(Inventory_t *item) {
     }
 
     if (item->category_id >= TV_BOW && item->category_id <= TV_SWORD) {
-        if (item->tohit < 0 || item->todam < 0 || item->toac < 0) {
+        if (item->to_hit < 0 || item->todam < 0 || item->toac < 0) {
             return 0;
         }
 
-        return item->cost + (item->tohit + item->todam + item->toac) * 100;
+        return item->cost + (item->to_hit + item->todam + item->toac) * 100;
     }
 
     if (item->toac < 0) {
@@ -79,13 +79,13 @@ static int32_t getAmmoBuyPrice(Inventory_t *item) {
         return game_objects[item->id].cost;
     }
 
-    if (item->tohit < 0 || item->todam < 0 || item->toac < 0) {
+    if (item->to_hit < 0 || item->todam < 0 || item->toac < 0) {
         return 0;
     }
 
     // use 5, because missiles generally appear in groups of 20,
     // so 20 * 5 == 100, which is comparable to weapon bonus above
-    return item->cost + (item->tohit + item->todam + item->toac) * 5;
+    return item->cost + (item->to_hit + item->todam + item->toac) * 5;
 }
 
 static int32_t getPotionScrollBuyPrice(Inventory_t *item) {

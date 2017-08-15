@@ -531,9 +531,9 @@ void itemDescription(obj_desc_t description, Inventory_t *item, bool add_prefix)
     if (spellItemIdentified(item)) {
         // originally used %+d, but several machines don't support it
         if (item->ident & ID_SHOW_HIT_DAM) {
-            (void) sprintf(tmp_str, " (%c%d,%c%d)", (item->tohit < 0) ? '-' : '+', abs(item->tohit), (item->todam < 0) ? '-' : '+', abs(item->todam));
-        } else if (item->tohit != 0) {
-            (void) sprintf(tmp_str, " (%c%d)", (item->tohit < 0) ? '-' : '+', abs(item->tohit));
+            (void) sprintf(tmp_str, " (%c%d,%c%d)", (item->to_hit < 0) ? '-' : '+', abs(item->to_hit), (item->todam < 0) ? '-' : '+', abs(item->todam));
+        } else if (item->to_hit != 0) {
+            (void) sprintf(tmp_str, " (%c%d)", (item->to_hit < 0) ? '-' : '+', abs(item->to_hit));
         } else if (item->todam != 0) {
             (void) sprintf(tmp_str, " (%c%d)", (item->todam < 0) ? '-' : '+', abs(item->todam));
         } else {
@@ -670,7 +670,7 @@ void inventoryItemCopyTo(int from_item_id, Inventory_t *to_item) {
     to_item->sub_category_id = from->subval;
     to_item->items_count = from->number;
     to_item->weight = from->weight;
-    to_item->tohit = from->tohit;
+    to_item->to_hit = from->tohit;
     to_item->todam = from->todam;
     to_item->ac = from->ac;
     to_item->toac = from->toac;

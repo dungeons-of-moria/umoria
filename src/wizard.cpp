@@ -309,7 +309,7 @@ void wizardCreateObjects() {
         return;
     }
     number = atoi(input);
-    item->tohit = (int16_t) number;
+    item->to_hit = (int16_t) number;
 
     putStringClearToEOL("+To dam: ", 0, 0);
     if (!getStringInput(input, 0, 9, 3)) {

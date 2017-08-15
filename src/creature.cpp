@@ -515,12 +515,12 @@ static bool executeDisenchantAttack() {
 
     Inventory_t *item = &inventory[item_id];
 
-    if (item->tohit > 0) {
-        item->tohit -= randomNumber(2);
+    if (item->to_hit > 0) {
+        item->to_hit -= randomNumber(2);
 
         // don't send it below zero
-        if (item->tohit < 0) {
-            item->tohit = 0;
+        if (item->to_hit < 0) {
+            item->to_hit = 0;
         }
         success = true;
     }
