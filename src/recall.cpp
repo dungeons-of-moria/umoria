@@ -489,28 +489,28 @@ static void memoryWeaknesses(uint32_t defense) {
 
 // Do we know how aware it is?
 static void memoryAwareness(Creature_t *creature, Recall_t *memory) {
-    if (memory->wake * memory->wake > creature->sleep || memory->ignore == MAX_UCHAR || (creature->sleep == 0 && memory->kills >= 10)) {
+    if (memory->wake * memory->wake > creature->sleep_counter || memory->ignore == MAX_UCHAR || (creature->sleep_counter == 0 && memory->kills >= 10)) {
         memoryPrint(" It ");
 
-        if (creature->sleep > 200) {
+        if (creature->sleep_counter > 200) {
             memoryPrint("prefers to ignore");
-        } else if (creature->sleep > 95) {
+        } else if (creature->sleep_counter > 95) {
             memoryPrint("pays very little attention to");
-        } else if (creature->sleep > 75) {
+        } else if (creature->sleep_counter > 75) {
             memoryPrint("pays little attention to");
-        } else if (creature->sleep > 45) {
+        } else if (creature->sleep_counter > 45) {
             memoryPrint("tends to overlook");
-        } else if (creature->sleep > 25) {
+        } else if (creature->sleep_counter > 25) {
             memoryPrint("takes quite a while to see");
-        } else if (creature->sleep > 10) {
+        } else if (creature->sleep_counter > 10) {
             memoryPrint("takes a while to see");
-        } else if (creature->sleep > 5) {
+        } else if (creature->sleep_counter > 5) {
             memoryPrint("is fairly observant of");
-        } else if (creature->sleep > 3) {
+        } else if (creature->sleep_counter > 3) {
             memoryPrint("is observant of");
-        } else if (creature->sleep > 1) {
+        } else if (creature->sleep_counter > 1) {
             memoryPrint("is very observant of");
-        } else if (creature->sleep != 0) {
+        } else if (creature->sleep_counter != 0) {
             memoryPrint("is vigilant for");
         } else {
             memoryPrint("is ever vigilant for");

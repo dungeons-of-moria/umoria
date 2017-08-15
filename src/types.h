@@ -349,7 +349,7 @@ typedef struct {
     uint32_t spells;         // Creature spells
     uint16_t defenses;       // Bit field
     uint16_t kill_exp_value; // Exp value for kill
-    uint8_t sleep;     // Inactive counter/10
+    uint8_t sleep_counter;   // Inactive counter / 10
     uint8_t aaf;       // Area affect radius
     uint8_t ac;        // AC
     uint8_t speed;     // Movement speed+10 (NOTE: +10 so that it can be a uint8_t)

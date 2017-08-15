@@ -625,10 +625,10 @@ bool monsterPlaceNew(int y, int x, int creature_id, bool sleeping) {
     cave[y][x].creature_id = (uint8_t) monster_id;
 
     if (sleeping) {
-        if (creatures_list[creature_id].sleep == 0) {
+        if (creatures_list[creature_id].sleep_counter == 0) {
             monster->sleep_count = 0;
         } else {
-            monster->sleep_count = (int16_t) ((creatures_list[creature_id].sleep * 2) + randomNumber((int) creatures_list[creature_id].sleep * 10));
+            monster->sleep_count = (int16_t) ((creatures_list[creature_id].sleep_counter * 2) + randomNumber((int) creatures_list[creature_id].sleep_counter * 10));
         }
     } else {
         monster->sleep_count = 0;
