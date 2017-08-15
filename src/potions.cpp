@@ -249,7 +249,7 @@ static bool playerDrinkPotion(uint32_t flags, uint8_t item_id) {
                 py.flags.resist_cold += randomNumber(10) + 10;
                 break;
             case 43:
-                if (py.flags.detect_inv == 0) {
+                if (py.flags.detect_invisible == 0) {
                     identified = true;
                 }
                 playerDetectInvisible(randomNumber(12) + 12);

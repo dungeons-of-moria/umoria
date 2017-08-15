@@ -584,7 +584,7 @@ static void playerUpdateColdResistance() {
 }
 
 static void playerUpdateDetectInvisible() {
-    if (py.flags.detect_inv <= 0) {
+    if (py.flags.detect_invisible <= 0) {
         return;
     }
 
@@ -596,9 +596,9 @@ static void playerUpdateDetectInvisible() {
         updateMonsters(false);
     }
 
-    py.flags.detect_inv--;
+    py.flags.detect_invisible--;
 
-    if (py.flags.detect_inv == 0) {
+    if (py.flags.detect_invisible == 0) {
         py.flags.status &= ~PY_DET_INV;
 
         // may still be able to see_inv if wearing magic item

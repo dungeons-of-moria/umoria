@@ -2145,7 +2145,7 @@ void playerBless(int adjustment) {
 
 // Detect Invisible for period of time -RAK-
 void playerDetectInvisible(int adjustment) {
-    py.flags.detect_inv += adjustment;
+    py.flags.detect_invisible += adjustment;
 }
 
 static void replace_spot(int y, int x, int typ) {

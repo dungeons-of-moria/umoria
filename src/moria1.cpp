@@ -210,7 +210,7 @@ void playerRecalculateBonuses() {
         py.misc.display_ac += 2;
     }
 
-    if (py.flags.detect_inv > 0) {
+    if (py.flags.detect_invisible > 0) {
         py.flags.see_inv = true;
     }
 
