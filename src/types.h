@@ -208,7 +208,7 @@ typedef struct {
     uint32_t flags;                 // Special flags
     uint8_t category_id;            // Category number (tval)
     uint8_t sprite;                 // Character representation - ASCII symbol (tchar)
-    int16_t p1;                     // Misc. use variable
+    int16_t misc_use;               // Misc. use variable (p1)
     int32_t cost;                   // Cost of item
     uint8_t subval;                 // Sub-category number
     uint8_t number;                 // Number of items
@@ -325,7 +325,7 @@ typedef struct {
     uint32_t flags;    // Special flags
     uint8_t tval;      // Category number
     uint8_t tchar;     // Character representation
-    int16_t p1;        // Misc. use variable
+    int16_t misc_use;  // Misc. use variable (p1)
     int32_t cost;      // Cost of item
     uint8_t subval;    // Sub-category number
     uint8_t number;    // Number of items

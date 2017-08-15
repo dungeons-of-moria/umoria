@@ -329,7 +329,7 @@ void quaff() {
         itemSetAsTried(i_ptr);
     }
 
-    playerIngestFood(i_ptr->p1);
+    playerIngestFood(i_ptr->misc_use);
     itemTypeRemainingCountDescription(item_id);
     inventoryDestroyItem(item_id);
 }

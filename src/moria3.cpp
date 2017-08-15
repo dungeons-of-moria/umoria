@@ -1123,26 +1123,26 @@ static void openClosedDoor(int y, int x) {
     Cave_t *tile = &cave[y][x];
     Inventory_t *item = &treasure_list[tile->tptr];
 
-    if (item->p1 > 0) {
+    if (item->misc_use > 0) {
         // It's locked.
 
         if (py.flags.confused > 0) {
             printMessage("You are too confused to pick the lock.");
-        } else if (playerLockPickingSkill() - item->p1 > randomNumber(100)) {
+        } else if (playerLockPickingSkill() - item->misc_use > randomNumber(100)) {
             printMessage("You have picked the lock.");
             py.misc.exp++;
             displayCharacterExperience();
-            item->p1 = 0;
+            item->misc_use = 0;
         } else {
             printMessageNoCommandInterrupt("You failed to pick the lock.");
         }
-    } else if (item->p1 < 0) {
+    } else if (item->misc_use < 0) {
         // It's stuck
 
         printMessage("It appears to be stuck.");
     }
 
-    if (item->p1 == 0) {
+    if (item->misc_use == 0) {
         inventoryItemCopyTo(OBJ_OPEN_DOOR, &treasure_list[tile->tptr]);
         tile->fval = TILE_CORR_FLOOR;
         dungeonLiteSpot(y, x);
@@ -1257,7 +1257,7 @@ void dungeonCloseDoor() {
     if (tile->tptr != 0) {
         if (item->category_id == TV_OPEN_DOOR) {
             if (tile->cptr == 0) {
-                if (item->p1 == 0) {
+                if (item->misc_use == 0) {
                     inventoryItemCopyTo(OBJ_CLOSED_DOOR, item);
                     tile->fval = TILE_BLOCKED_FLOOR;
                     dungeonLiteSpot(y, x);

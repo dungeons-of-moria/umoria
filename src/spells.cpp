@@ -375,7 +375,7 @@ bool spellSurroundPlayerWithTraps() {
                 dungeonSetTrap(y, x, randomNumber(MAX_TRAPS) - 1);
 
                 // don't let player gain exp from the newly created traps
-                treasure_list[tile->tptr].p1 = 0;
+                treasure_list[tile->tptr].misc_use = 0;
 
                 // open pits are immediately visible, so call dungeonLiteSpot
                 dungeonLiteSpot(y, x);
@@ -580,7 +580,7 @@ bool spellDisarmAllInDirection(int y, int x, int direction) {
                 }
             } else if (item->category_id == TV_CLOSED_DOOR) {
                 // Locked or jammed doors become merely closed.
-                item->p1 = 0;
+                item->misc_use = 0;
             } else if (item->category_id == TV_SECRET_DOOR) {
                 tile->fm = true;
                 dungeonChangeTrapVisibility(y, x);
@@ -991,7 +991,7 @@ bool spellRechargeItem(int number_of_charges) {
     // make it harder to recharge high level, and highly charged wands,
     // note that `fail_chance` can be negative, so check its value before
     // trying to call randomNumber().
-    int fail_chance = number_of_charges + 50 - (int) item->level - item->p1;
+    int fail_chance = number_of_charges + 50 - (int) item->level - item->misc_use;
 
     // Automatic failure.
     if (fail_chance < 19) {
@@ -1005,7 +1005,7 @@ bool spellRechargeItem(int number_of_charges) {
         inventoryDestroyItem(item_id);
     } else {
         number_of_charges = (number_of_charges / (item->level + 2)) + 1;
-        item->p1 += 2 + randomNumber(number_of_charges);
+        item->misc_use += 2 + randomNumber(number_of_charges);
 
         if (spellItemIdentified(item)) {
             spellItemRemoveIdentification(item);

@@ -32,7 +32,7 @@ void playerChangeSpeed(int speed) {
 // Only calculates properties with cumulative effect.  Properties that
 // depend on everything being worn are recalculated by playerRecalculateBonuses() -CJS-
 void playerAdjustBonusesForItem(Inventory_t *item, int factor) {
-    int amount = item->p1 * factor;
+    int amount = item->misc_use * factor;
 
     if (item->flags & TR_STATS) {
         for (int i = 0; i < 6; i++) {
@@ -140,7 +140,7 @@ static void playerRecalculateSustainStatsFromInventory() {
             continue;
         }
 
-        switch (inventory[i].p1) {
+        switch (inventory[i].misc_use) {
             case 1:
                 py.flags.sustain_str = true;
                 break;

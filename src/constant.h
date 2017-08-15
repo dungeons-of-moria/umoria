@@ -430,14 +430,14 @@ constexpr uint8_t ITEM_NEVER_STACK_MAX = 63;
 // single objects, must be power of 2;
 constexpr uint8_t ITEM_SINGLE_STACK_MIN = 64;
 constexpr uint8_t ITEM_SINGLE_STACK_MAX = 192; // see NOTE below
-// these items stack with others only if have same subval and same p1,
+// these items stack with others only if have same subval and same `misc_use`,
 // they are treated as a group for wielding, etc.
 constexpr uint8_t ITEM_GROUP_MIN = 192;
 constexpr uint8_t ITEM_GROUP_MAX = 255;
 
 // NOTE: items with subval = 192 are treated as single objects,
 // but only stack with others of same subval if have the same
-// p1 value, only used for torches.
+// `misc_use` value, only used for torches.
 
 // id's used for object description, stored in objects_identified array
 constexpr uint8_t OD_TRIED = 0x1;

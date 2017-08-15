@@ -297,7 +297,7 @@ void itemRemoveMagicNaming(Inventory_t *item) {
     item->special_name_id = SN_NULL;
 }
 
-// defines for p1_use, determine how the p1 field is printed
+// defines for `misc_use` variable, determine how the Item `misc_use` field is printed
 constexpr int IGNORED = 0;
 constexpr int CHARGES = 1;
 constexpr int PLUSSES = 2;
@@ -305,14 +305,14 @@ constexpr int LIGHT = 3;
 constexpr int FLAGS = 4;
 constexpr int Z_PLUSSES = 5;
 
-int bowDamageValue(int16_t p1) {
-    if (p1 == 1 || p1 == 2) {
+int bowDamageValue(int16_t misc_use) {
+    if (misc_use == 1 || misc_use == 2) {
         return 2;
     }
-    if (p1 == 3 || p1 == 5) {
+    if (misc_use == 3 || misc_use == 5) {
         return 3;
     }
-    if (p1 == 4 || p1 == 6) {
+    if (misc_use == 4 || misc_use == 6) {
         return 4;
     }
     return -1;
@@ -332,7 +332,7 @@ void itemDescription(obj_desc_t description, Inventory_t *item, bool add_prefix)
     vtype_t damstr;
     damstr[0] = '\0';
 
-    int p1_use = IGNORED;
+    int misc_use = IGNORED;
     bool append_name = false;
 
     bool modify = !itemSetColorlessAsIdentifed(item);
@@ -347,21 +347,21 @@ void itemDescription(obj_desc_t description, Inventory_t *item, bool add_prefix)
             (void) sprintf(damstr, " (%dd%d)", item->damage[0], item->damage[1]);
             break;
         case TV_LIGHT:
-            p1_use = LIGHT;
+            misc_use = LIGHT;
             break;
         case TV_SPIKE:
             break;
         case TV_BOW:
-            (void) sprintf(damstr, " (x%d)", bowDamageValue(item->p1));
+            (void) sprintf(damstr, " (x%d)", bowDamageValue(item->misc_use));
             break;
         case TV_HAFTED:
         case TV_POLEARM:
         case TV_SWORD:
             (void) sprintf(damstr, " (%dd%d)", item->damage[0], item->damage[1]);
-            p1_use = FLAGS;
+            misc_use = FLAGS;
             break;
         case TV_DIGGING:
-            p1_use = Z_PLUSSES;
+            misc_use = Z_PLUSSES;
             (void) sprintf(damstr, " (%dd%d)", item->damage[0], item->damage[1]);
             break;
         case TV_BOOTS:
@@ -380,7 +380,7 @@ void itemDescription(obj_desc_t description, Inventory_t *item, bool add_prefix)
                 basenm = "& Amulet";
                 append_name = true;
             }
-            p1_use = PLUSSES;
+            misc_use = PLUSSES;
             break;
         case TV_RING:
             if (modify) {
@@ -390,7 +390,7 @@ void itemDescription(obj_desc_t description, Inventory_t *item, bool add_prefix)
                 basenm = "& Ring";
                 append_name = true;
             }
-            p1_use = PLUSSES;
+            misc_use = PLUSSES;
             break;
         case TV_STAFF:
             if (modify) {
@@ -400,7 +400,7 @@ void itemDescription(obj_desc_t description, Inventory_t *item, bool add_prefix)
                 basenm = "& Staff";
                 append_name = true;
             }
-            p1_use = CHARGES;
+            misc_use = CHARGES;
             break;
         case TV_WAND:
             if (modify) {
@@ -410,7 +410,7 @@ void itemDescription(obj_desc_t description, Inventory_t *item, bool add_prefix)
                 basenm = "& Wand";
                 append_name = true;
             }
-            p1_use = CHARGES;
+            misc_use = CHARGES;
             break;
         case TV_SCROLL1:
         case TV_SCROLL2:
@@ -558,33 +558,33 @@ void itemDescription(obj_desc_t description, Inventory_t *item, bool add_prefix)
         (void) strcat(tmp_val, tmp_str);
     }
 
-    // override defaults, check for p1 flags in the ident field
+    // override defaults, check for `misc_use` flags in the ident field
     if (item->ident & ID_NO_SHOW_P1) {
-        p1_use = IGNORED;
+        misc_use = IGNORED;
     } else if (item->ident & ID_SHOW_P1) {
-        p1_use = Z_PLUSSES;
+        misc_use = Z_PLUSSES;
     }
 
     tmp_str[0] = '\0';
 
-    if (p1_use == LIGHT) {
-        (void) sprintf(tmp_str, " with %d turns of light", item->p1);
-    } else if (p1_use == IGNORED) {
+    if (misc_use == LIGHT) {
+        (void) sprintf(tmp_str, " with %d turns of light", item->misc_use);
+    } else if (misc_use == IGNORED) {
         // NOOP
     } else if (spellItemIdentified(item)) {
-        if (p1_use == Z_PLUSSES) {
+        if (misc_use == Z_PLUSSES) {
             // originally used %+d, but several machines don't support it
-            (void) sprintf(tmp_str, " (%c%d)", (item->p1 < 0) ? '-' : '+', abs(item->p1));
-        } else if (p1_use == CHARGES) {
-            (void) sprintf(tmp_str, " (%d charges)", item->p1);
-        } else if (item->p1 != 0) {
-            if (p1_use == PLUSSES) {
-                (void) sprintf(tmp_str, " (%c%d)", (item->p1 < 0) ? '-' : '+', abs(item->p1));
-            } else if (p1_use == FLAGS) {
+            (void) sprintf(tmp_str, " (%c%d)", (item->misc_use < 0) ? '-' : '+', abs(item->misc_use));
+        } else if (misc_use == CHARGES) {
+            (void) sprintf(tmp_str, " (%d charges)", item->misc_use);
+        } else if (item->misc_use != 0) {
+            if (misc_use == PLUSSES) {
+                (void) sprintf(tmp_str, " (%c%d)", (item->misc_use < 0) ? '-' : '+', abs(item->misc_use));
+            } else if (misc_use == FLAGS) {
                 if (item->flags & TR_STR) {
-                    (void) sprintf(tmp_str, " (%c%d to STR)", (item->p1 < 0) ? '-' : '+', abs(item->p1));
+                    (void) sprintf(tmp_str, " (%c%d to STR)", (item->misc_use < 0) ? '-' : '+', abs(item->misc_use));
                 } else if (item->flags & TR_STEALTH) {
-                    (void) sprintf(tmp_str, " (%c%d to stealth)", (item->p1 < 0) ? '-' : '+', abs(item->p1));
+                    (void) sprintf(tmp_str, " (%c%d to stealth)", (item->misc_use < 0) ? '-' : '+', abs(item->misc_use));
                 }
             }
         }
@@ -665,7 +665,7 @@ void inventoryItemCopyTo(int from_item_id, Inventory_t *to_item) {
     to_item->flags = from->flags;
     to_item->category_id = from->tval;
     to_item->sprite = from->tchar;
-    to_item->p1 = from->p1;
+    to_item->misc_use = from->misc_use;
     to_item->cost = from->cost;
     to_item->subval = from->subval;
     to_item->number = from->number;
@@ -686,7 +686,7 @@ void itemChargesRemainingDescription(int item_id) {
         return;
     }
 
-    int rem_num = inventory[item_id].p1;
+    int rem_num = inventory[item_id].misc_use;
 
     vtype_t out_val;
     (void) sprintf(out_val, "You have %d charges remaining.", rem_num);

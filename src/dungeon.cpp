@@ -39,7 +39,7 @@ static void resetDungeonFlags() {
 
 // Check light status for dungeon setup
 static void playerInitializePlayerLight() {
-    player_carrying_light = (inventory[EQUIPMENT_LIGHT].p1 > 0);
+    player_carrying_light = (inventory[EQUIPMENT_LIGHT].misc_use > 0);
 }
 
 // Check for a maximum level
@@ -54,17 +54,17 @@ static void playerUpdateLightStatus() {
     Inventory_t *i_ptr = &inventory[EQUIPMENT_LIGHT];
 
     if (player_carrying_light) {
-        if (i_ptr->p1 > 0) {
-            i_ptr->p1--;
+        if (i_ptr->misc_use > 0) {
+            i_ptr->misc_use--;
 
-            if (i_ptr->p1 == 0) {
+            if (i_ptr->misc_use == 0) {
                 player_carrying_light = false;
                 printMessage("Your light has gone out!");
                 playerDisturb(0, 1);
 
                 // unlight creatures
                 updateMonsters(false);
-            } else if (i_ptr->p1 < 40 && randomNumber(5) == 1 && py.flags.blind < 1) {
+            } else if (i_ptr->misc_use < 40 && randomNumber(5) == 1 && py.flags.blind < 1) {
                 playerDisturb(0, 0);
                 printMessage("Your light is growing faint.");
             }
@@ -75,8 +75,8 @@ static void playerUpdateLightStatus() {
             // unlight creatures
             updateMonsters(false);
         }
-    } else if (i_ptr->p1 > 0) {
-        i_ptr->p1--;
+    } else if (i_ptr->misc_use > 0) {
+        i_ptr->misc_use--;
         player_carrying_light = true;
         playerDisturb(0, 1);
 
@@ -1999,7 +1999,7 @@ static bool itemEnchanted(Inventory_t *item) {
         return false;
     } else if (item->tohit > 0 || item->todam > 0 || item->toac > 0) {
         return true;
-    } else if ((0x4000107fL & item->flags) && item->p1 > 0) {
+    } else if ((0x4000107fL & item->flags) && item->misc_use > 0) {
         return true;
     } else if (0x07ffe980L & item->flags) {
         return true;
@@ -2149,14 +2149,14 @@ static void dungeonJamDoor() {
 
             printMessageNoCommandInterrupt("You jam the door with a spike.");
 
-            if (item->p1 > 0) {
+            if (item->misc_use > 0) {
                 // Make locked to stuck.
-                item->p1 = -item->p1;
+                item->misc_use = -item->misc_use;
             }
 
             // Successive spikes have a progressively smaller effect.
             // Series is: 0 20 30 37 43 48 52 56 60 64 67 70 ...
-            item->p1 -= 1 + 190 / (10 - item->p1);
+            item->misc_use -= 1 + 190 / (10 - item->misc_use);
 
             if (inventory[item_pos_start].number > 1) {
                 inventory[item_pos_start].number--;
@@ -2194,15 +2194,15 @@ static void inventoryRefillLamp() {
     player_free_turn = false;
 
     Inventory_t *item = &inventory[EQUIPMENT_LIGHT];
-    item->p1 += inventory[item_pos_start].p1;
+    item->misc_use += inventory[item_pos_start].misc_use;
 
-    if (item->p1 > OBJECT_LAMP_MAX_CAPACITY) {
-        item->p1 = OBJECT_LAMP_MAX_CAPACITY;
+    if (item->misc_use > OBJECT_LAMP_MAX_CAPACITY) {
+        item->misc_use = OBJECT_LAMP_MAX_CAPACITY;
         printMessage("Your lamp overflows, spilling oil on the ground.");
         printMessage("Your lamp is full.");
-    } else if (item->p1 > OBJECT_LAMP_MAX_CAPACITY / 2) {
+    } else if (item->misc_use > OBJECT_LAMP_MAX_CAPACITY / 2) {
         printMessage("Your lamp is more than half full.");
-    } else if (item->p1 == OBJECT_LAMP_MAX_CAPACITY / 2) {
+    } else if (item->misc_use == OBJECT_LAMP_MAX_CAPACITY / 2) {
         printMessage("Your lamp is half full.");
     } else {
         printMessage("Your lamp is less than half full.");

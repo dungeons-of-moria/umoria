@@ -337,7 +337,7 @@ void wizardCreateObjects() {
         return;
     }
     number = atoi(input);
-    item->p1 = (int16_t) number;
+    item->misc_use = (int16_t) number;
 
     putStringClearToEOL("Flags (In HEX): ", 0, 0);
     if (!getStringInput(input, 0, 16, 8)) {

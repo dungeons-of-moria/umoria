@@ -130,7 +130,7 @@ static int32_t getWandStaffBuyPrice(Inventory_t *item) {
     }
 
     if (spellItemIdentified(item)) {
-        return item->cost + (item->cost / 20) * item->p1;
+        return item->cost + (item->cost / 20) * item->misc_use;
     }
 
     return item->cost;
@@ -141,13 +141,13 @@ static int32_t getPickShovelBuyPrice(Inventory_t *item) {
         return game_objects[item->id].cost;
     }
 
-    if (item->p1 < 0) {
+    if (item->misc_use < 0) {
         return 0;
     }
 
-    // some digging tools start with non-zero p1 values, so only
+    // some digging tools start with non-zero `misc_use` values, so only
     // multiply the plusses by 100, make sure result is positive
-    int32_t value = item->cost + (item->p1 - game_objects[item->id].p1) * 100;
+    int32_t value = item->cost + (item->misc_use - game_objects[item->id].misc_use) * 100;
 
     if (value < 0) {
         value = 0;
@@ -203,7 +203,7 @@ bool storeCheckPlayerItemsCount(int store_id, Inventory_t *item) {
         // note: items with subval of gte ITEM_SINGLE_STACK_MAX only stack
         // if their subvals match
         if (store_item->category_id == item->category_id && store_item->subval == item->subval && (int) (store_item->number + item->number) < 256 &&
-            (item->subval < ITEM_GROUP_MIN || store_item->p1 == item->p1)) {
+            (item->subval < ITEM_GROUP_MIN || store_item->misc_use == item->misc_use)) {
             store_check = true;
         }
     }
@@ -246,7 +246,7 @@ void storeCarry(int store_id, int *index_id, Inventory_t *item) {
 
         if (item_category == store_item->category_id) {
             if (item_sub_catory == store_item->subval && // Adds to other item
-                item_sub_catory >= ITEM_SINGLE_STACK_MIN && (item_sub_catory < ITEM_GROUP_MIN || store_item->p1 == item->p1)) {
+                item_sub_catory >= ITEM_SINGLE_STACK_MIN && (item_sub_catory < ITEM_GROUP_MIN || store_item->misc_use == item->misc_use)) {
                 *index_id = item_id;
                 store_item->number += item_num;
 

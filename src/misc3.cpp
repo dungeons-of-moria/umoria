@@ -1220,8 +1220,8 @@ bool inventoryCanCarryItemCount(Inventory_t *item) {
         // make sure the number field doesn't overflow
         bool same_number = inventory[i].number + item->number < 256;
 
-        // they always stack (subval < 192), or else they have same p1
-        bool same_group = item->subval < ITEM_GROUP_MIN || inventory[i].p1 == item->p1;
+        // they always stack (subval < 192), or else they have same `misc_use`
+        bool same_group = item->subval < ITEM_GROUP_MIN || inventory[i].misc_use == item->misc_use;
 
         // only stack if both or neither are identified
         bool identification = itemSetColorlessAsIdentifed(&inventory[i]) == itemSetColorlessAsIdentifed(item);
@@ -1303,7 +1303,7 @@ int inventoryCarryItem(Inventory_t *item) {
         Inventory_t *t_ptr = &inventory[locn];
 
         if (typ == t_ptr->category_id && subt == t_ptr->subval && subt >= ITEM_SINGLE_STACK_MIN && ((int) t_ptr->number + (int) item->number) < 256 &&
-            (subt < ITEM_GROUP_MIN || t_ptr->p1 == item->p1) &&
+            (subt < ITEM_GROUP_MIN || t_ptr->misc_use == item->misc_use) &&
             // only stack if both or neither are identified
             known1p == itemSetColorlessAsIdentifed(t_ptr)) {
             t_ptr->number += item->number;

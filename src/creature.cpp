@@ -737,10 +737,10 @@ static bool executeAttackOnPlayer(Creature_t *creature, Monster_t *monster, int 
             break;
         case 23: // Eat light
             item = &inventory[EQUIPMENT_LIGHT];
-            if (item->p1 > 0) {
-                item->p1 -= (250 + randomNumber(250));
-                if (item->p1 < 1) {
-                    item->p1 = 1;
+            if (item->misc_use > 0) {
+                item->misc_use -= (250 + randomNumber(250));
+                if (item->misc_use < 1) {
+                    item->misc_use = 1;
                 }
                 if (py.flags.blind < 1) {
                     printMessage("Your light dims.");
@@ -753,9 +753,9 @@ static bool executeAttackOnPlayer(Creature_t *creature, Monster_t *monster, int 
             break;
         case 24: // Eat charges
             item = &inventory[randomNumber(inventory_count) - 1];
-            if ((item->category_id == TV_STAFF || item->category_id == TV_WAND) && item->p1 > 0) {
-                monster->hp += creature->level * item->p1;
-                item->p1 = 0;
+            if ((item->category_id == TV_STAFF || item->category_id == TV_WAND) && item->misc_use > 0) {
+                monster->hp += creature->level * item->misc_use;
+                item->misc_use = 0;
                 if (!spellItemIdentified(item)) {
                     itemAppendToInscription(item, ID_EMPTY);
                 }
@@ -906,20 +906,20 @@ static void monsterOpenDoor(Cave_t *tile, int16_t monster_hp, uint32_t move_bits
         if (item->category_id == TV_CLOSED_DOOR) {
             *do_turn = true;
 
-            if (item->p1 == 0) {
+            if (item->misc_use == 0) {
                 // Closed doors
 
                 *do_move = true;
-            } else if (item->p1 > 0) {
+            } else if (item->misc_use > 0) {
                 // Locked doors
 
-                if (randomNumber((monster_hp + 1) * (50 + item->p1)) < 40 * (monster_hp - 10 - item->p1)) {
-                    item->p1 = 0;
+                if (randomNumber((monster_hp + 1) * (50 + item->misc_use)) < 40 * (monster_hp - 10 - item->misc_use)) {
+                    item->misc_use = 0;
                 }
-            } else if (item->p1 < 0) {
+            } else if (item->misc_use < 0) {
                 // Stuck doors
 
-                if (randomNumber((monster_hp + 1) * (50 - item->p1)) < 40 * (monster_hp - 10 + item->p1)) {
+                if (randomNumber((monster_hp + 1) * (50 - item->misc_use)) < 40 * (monster_hp - 10 + item->misc_use)) {
                     printMessage("You hear a door burst open!");
                     playerDisturb(1, 0);
                     door_is_stuck = true;
@@ -936,7 +936,7 @@ static void monsterOpenDoor(Cave_t *tile, int16_t monster_hp, uint32_t move_bits
 
             // 50% chance of breaking door
             if (door_is_stuck) {
-                item->p1 = (int16_t) (1 - randomNumber(2));
+                item->misc_use = (int16_t) (1 - randomNumber(2));
             }
             tile->fval = TILE_CORR_FLOOR;
             dungeonLiteSpot(y, x);
@@ -947,11 +947,11 @@ static void monsterOpenDoor(Cave_t *tile, int16_t monster_hp, uint32_t move_bits
         // Creature can not open doors, must bash them
         *do_turn = true;
 
-        if (randomNumber((monster_hp + 1) * (80 + abs(item->p1))) < 40 * (monster_hp - 20 - abs(item->p1))) {
+        if (randomNumber((monster_hp + 1) * (80 + abs(item->misc_use))) < 40 * (monster_hp - 20 - abs(item->misc_use))) {
             inventoryItemCopyTo(OBJ_OPEN_DOOR, item);
 
             // 50% chance of breaking door
-            item->p1 = (int16_t) (1 - randomNumber(2));
+            item->misc_use = (int16_t) (1 - randomNumber(2));
             tile->fval = TILE_CORR_FLOOR;
             dungeonLiteSpot(y, x);
             printMessage("You hear a door burst open!");

@@ -36,7 +36,7 @@ static int playerDiggingAbility(Inventory_t *weapon) {
     int diggingAbility = py.stats.used[A_STR];
 
     if (weapon->flags & TR_TUNNEL) {
-        diggingAbility += 25 + weapon->p1 * 50;
+        diggingAbility += 25 + weapon->misc_use * 50;
     } else {
         diggingAbility += (weapon->damage[0] * weapon->damage[1]) + weapon->tohit + weapon->todam;
 
@@ -202,12 +202,12 @@ static int playerTrapDisarmAbility() {
     return ability;
 }
 
-static void playerDisarmFloorTrap(int y, int x, int total, int level, int dir, int16_t p1) {
+static void playerDisarmFloorTrap(int y, int x, int total, int level, int dir, int16_t misc_use) {
     int confused = py.flags.confused;
 
     if (total + 100 - level > randomNumber(100)) {
         printMessage("You have disarmed the trap.");
-        py.misc.exp += p1;
+        py.misc.exp += misc_use;
         (void) dungeonDeleteObject(y, x);
 
         // make sure we move onto the trap even if confused
@@ -296,7 +296,7 @@ void playerDisarmTrap() {
         Inventory_t *item = &treasure_list[tile->tptr];
 
         if (item->category_id == TV_VIS_TRAP) {
-            playerDisarmFloorTrap(y, x, disarm_ability, item->level, dir, item->p1);
+            playerDisarmFloorTrap(y, x, disarm_ability, item->level, dir, item->misc_use);
         } else if (item->category_id == TV_CHEST) {
             playerDisarmChestTrap(y, x, disarm_ability, item);
         } else {
@@ -755,7 +755,7 @@ static void weaponMissileFacts(Inventory_t *item, int *tbth, int *tpth, int *tda
         return;
     }
 
-    switch (inventory[EQUIPMENT_WIELD].p1) {
+    switch (inventory[EQUIPMENT_WIELD].misc_use) {
         case 1:
             if (item->category_id == TV_SLING_AMMO) { // Sling and ammo
                 *tbth = py.misc.bth_with_bows;
@@ -1076,13 +1076,13 @@ static void playerBashClosedDoor(int y, int x, int dir, Cave_t *tile, Inventory_
     int chance = py.stats.used[A_STR] + py.misc.weight / 2;
 
     // Use (roughly) similar method as for monsters.
-    if (randomNumber(chance * (20 + abs(item->p1))) < 10 * (chance - abs(item->p1))) {
+    if (randomNumber(chance * (20 + abs(item->misc_use))) < 10 * (chance - abs(item->misc_use))) {
         printMessage("The door crashes open!");
 
         inventoryItemCopyTo(OBJ_OPEN_DOOR, &treasure_list[tile->tptr]);
 
         // 50% chance of breaking door
-        item->p1 = (int16_t) (1 - randomNumber(2));
+        item->misc_use = (int16_t) (1 - randomNumber(2));
 
         tile->fval = TILE_CORR_FLOOR;
 
@@ -1131,10 +1131,10 @@ static void playerBashClosedChest(Inventory_t *item) {
 // Bash open a door or chest -RAK-
 // Note: Affected by strength and weight of character
 //
-// For a closed door, p1 is positive if locked; negative if stuck. A disarm spell
+// For a closed door, `misc_use` is positive if locked; negative if stuck. A disarm spell
 // unlocks and unjams doors!
 //
-// For an open door, p1 is positive for a broken door.
+// For an open door, `misc_use` is positive for a broken door.
 //
 // A closed door can be opened - harder if locked. Any door might be bashed open
 // (and thereby broken). Bashing a door is (potentially) faster! You move into the

@@ -23,10 +23,10 @@
 //                   0 - 63:  object can not stack
 //                  64 - 127: dungeon object, can stack with other D object
 //                 128 - 191: unused, previously for store items
-//                 192:       stack with other iff have same p1 value, always
+//                 192:       stack with other iff have same `misc_use` value, always
 //                            treated as individual objects
 //                 193 - 255: object can stack with others iff they have
-//                            the same p1 value, usually considered one group
+//                            the same `misc_use` value, usually considered one group
 //                 Objects which have two type values, e.g. potions and
 //                 scrolls, need to have distinct subvals for
 //                 each item regardless of its category_id
@@ -38,7 +38,7 @@
 //  AC         : objects relative armor class.
 //                 1 is worse than 5 is worse than 10 etc.
 //  To AC      : Magical bonuses to AC.
-//  P1         : Catch all for magical abilities such as
+//  misc_use   : Catch all for magical abilities such as
 //               plusses to strength, minuses to searching.
 //  Flags      : Abilities of object.  Each ability is a
 //               bit.  Bits 1-31 are used. (Signed integer)
@@ -52,11 +52,11 @@
 //  Flags is used to define a function which reading/quaffing
 //  will cause.  Most scrolls and potions have only one bit
 //  set.  Potions will generally have some food value, found
-//  in p1.
+//  in `misc_use`.
 //
 //  Wands and Staffs:
-//  Flags defines a function, p1 contains number of charges
-//  for item.  p1 is set in magicInitializeItemNames() in misc.c.
+//  Flags defines a function, `misc_use` contains number of charges
+//  for item.  `misc_use` is set in magicInitializeItemNames() in misc.c.
 //
 //  Chests:
 //  Traps are added randomly by magicInitializeItemNames() in misc.c.
@@ -466,7 +466,7 @@ GameObject_t game_objects[MAX_OBJECTS_IN_GAME] = {
 
         // Traps are just Nasty treasures.
         // Traps: Level represents the relative difficulty of disarming;
-        // and P1 represents the experienced gained when disarmed
+        // and `misc_use` represents the experienced gained when disarmed
         {"an open pit",                   0x00000000L, TV_VIS_TRAP,     ' ',  1, 0,  1, 1, 0, 0, 0, 0, 0, {2, 6},  50}, // 378
         {"an arrow trap",                 0x00000000L, TV_INVIS_TRAP,   '^',  3, 0,  2, 1, 0, 0, 0, 0, 0, {1, 8},  90}, // 379
         {"a covered pit",                 0x00000000L, TV_INVIS_TRAP,   '^',  2, 0,  3, 1, 0, 0, 0, 0, 0, {2, 6},  60}, // 380

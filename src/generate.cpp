@@ -174,7 +174,7 @@ static void dungeonPlaceBrokenDoor(int y, int x) {
     cave[y][x].tptr = (uint8_t) cur_pos;
     inventoryItemCopyTo(OBJ_OPEN_DOOR, &treasure_list[cur_pos]);
     cave[y][x].fval = TILE_CORR_FLOOR;
-    treasure_list[cur_pos].p1 = 1;
+    treasure_list[cur_pos].misc_use = 1;
 }
 
 static void dungeonPlaceClosedDoor(int y, int x) {
@@ -189,7 +189,7 @@ static void dungeonPlaceLockedDoor(int y, int x) {
     cave[y][x].tptr = (uint8_t) cur_pos;
     inventoryItemCopyTo(OBJ_CLOSED_DOOR, &treasure_list[cur_pos]);
     cave[y][x].fval = TILE_BLOCKED_FLOOR;
-    treasure_list[cur_pos].p1 = (int16_t) (randomNumber(10) + 10);
+    treasure_list[cur_pos].misc_use = (int16_t) (randomNumber(10) + 10);
 }
 
 static void dungeonPlaceStuckDoor(int y, int x) {
@@ -197,7 +197,7 @@ static void dungeonPlaceStuckDoor(int y, int x) {
     cave[y][x].tptr = (uint8_t) cur_pos;
     inventoryItemCopyTo(OBJ_CLOSED_DOOR, &treasure_list[cur_pos]);
     cave[y][x].fval = TILE_BLOCKED_FLOOR;
-    treasure_list[cur_pos].p1 = (int16_t) (-randomNumber(10) - 10);
+    treasure_list[cur_pos].misc_use = (int16_t) (-randomNumber(10) - 10);
 }
 
 static void dungeonPlaceSecretDoor(int y, int x) {

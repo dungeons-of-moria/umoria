@@ -47,7 +47,7 @@ static bool staffPlayerCanUse(Inventory_t *item) {
         return false;
     }
 
-    if (item->p1 < 1) {
+    if (item->misc_use < 1) {
         printMessage("The staff has no charges left.");
         if (!spellItemIdentified(item)) {
             itemAppendToInscription(item, ID_EMPTY);
@@ -61,7 +61,7 @@ static bool staffPlayerCanUse(Inventory_t *item) {
 static bool staffDischarge(Inventory_t *item) {
     bool identified = false;
 
-    item->p1--;
+    item->misc_use--;
 
     uint32_t flags = item->flags;
     while (flags != 0) {

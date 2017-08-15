@@ -199,7 +199,7 @@ void playerEat() {
         itemSetAsTried(item);
     }
 
-    playerIngestFood(item->p1);
+    playerIngestFood(item->misc_use);
 
     py.flags.status &= ~(PY_WEAK | PY_HUNGRY);
 

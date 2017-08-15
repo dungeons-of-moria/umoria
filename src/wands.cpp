@@ -14,7 +14,7 @@ static bool wandDischarge(Inventory_t *item, int direction) {
 
     uint32_t flags = item->flags;
 
-    (item->p1)--; // decrement "use" variable
+    (item->misc_use)--; // decrement "use" variable
 
     while (flags != 0) {
         int kind = getAndClearFirstBit(&flags) + 1;
@@ -169,7 +169,7 @@ void wandAim() {
         return;
     }
 
-    if (item->p1 < 1) {
+    if (item->misc_use < 1) {
         printMessage("The wand has no charges left.");
         if (!spellItemIdentified(item)) {
             itemAppendToInscription(item, ID_EMPTY);
