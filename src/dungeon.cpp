@@ -2180,7 +2180,7 @@ static void dungeonJamDoor() {
 static void inventoryRefillLamp() {
     player_free_turn = true;
 
-    if (inventory[EQUIPMENT_LIGHT].subval != 0) {
+    if (inventory[EQUIPMENT_LIGHT].sub_category_id != 0) {
         printMessage("But you are not using a lamp.");
         return;
     }

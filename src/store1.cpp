@@ -47,7 +47,7 @@ int32_t storeItemValue(Inventory_t *item) {
 
     // Multiply value by number of items if it is a group stack item.
     // Do not include torches here.
-    if (item->subval > ITEM_GROUP_MIN) {
+    if (item->sub_category_id > ITEM_GROUP_MIN) {
         value = value * item->number;
     }
 
@@ -97,7 +97,7 @@ static int32_t getPotionScrollBuyPrice(Inventory_t *item) {
 }
 
 static int32_t getFoodBuyPrice(Inventory_t *item) {
-    if (item->subval < ITEM_SINGLE_STACK_MIN + MAX_MUSHROOMS && !itemSetColorlessAsIdentifed(item)) {
+    if (item->sub_category_id < ITEM_SINGLE_STACK_MIN + MAX_MUSHROOMS && !itemSetColorlessAsIdentifed(item)) {
         return 1;
     }
 
@@ -191,7 +191,7 @@ bool storeCheckPlayerItemsCount(int store_id, Inventory_t *item) {
         return true;
     }
 
-    if (item->subval < ITEM_SINGLE_STACK_MIN) {
+    if (item->sub_category_id < ITEM_SINGLE_STACK_MIN) {
         return false;
     }
 
@@ -200,10 +200,10 @@ bool storeCheckPlayerItemsCount(int store_id, Inventory_t *item) {
     for (int i = 0; i < store->store_ctr; i++) {
         Inventory_t *store_item = &store->store_inven[i].sitem;
 
-        // note: items with subval of gte ITEM_SINGLE_STACK_MAX only stack
-        // if their subvals match
-        if (store_item->category_id == item->category_id && store_item->subval == item->subval && (int) (store_item->number + item->number) < 256 &&
-            (item->subval < ITEM_GROUP_MIN || store_item->misc_use == item->misc_use)) {
+        // note: items with sub_category_id of gte ITEM_SINGLE_STACK_MAX only stack
+        // if their `sub_category_id`s match
+        if (store_item->category_id == item->category_id && store_item->sub_category_id == item->sub_category_id && (int) (store_item->number + item->number) < 256 &&
+            (item->sub_category_id < ITEM_GROUP_MIN || store_item->misc_use == item->misc_use)) {
             store_check = true;
         }
     }
@@ -238,14 +238,14 @@ void storeCarry(int store_id, int *index_id, Inventory_t *item) {
     int item_id = 0;
     int item_num = item->number;
     int item_category = item->category_id;
-    int item_sub_catory = item->subval;
+    int item_sub_catory = item->sub_category_id;
 
     bool flag = false;
     do {
         Inventory_t *store_item = &store->store_inven[item_id].sitem;
 
         if (item_category == store_item->category_id) {
-            if (item_sub_catory == store_item->subval && // Adds to other item
+            if (item_sub_catory == store_item->sub_category_id && // Adds to other item
                 item_sub_catory >= ITEM_SINGLE_STACK_MIN && (item_sub_catory < ITEM_GROUP_MIN || store_item->misc_use == item->misc_use)) {
                 *index_id = item_id;
                 store_item->number += item_num;
@@ -289,7 +289,7 @@ void storeDestroy(int store_id, int item_id, bool only_one_of) {
     // for single stackable objects, only destroy one half on average,
     // this will help ensure that general store and alchemist have
     // reasonable selection of objects
-    if (store_item->subval >= ITEM_SINGLE_STACK_MIN && store_item->subval <= ITEM_SINGLE_STACK_MAX) {
+    if (store_item->sub_category_id >= ITEM_SINGLE_STACK_MIN && store_item->sub_category_id <= ITEM_SINGLE_STACK_MAX) {
         if (only_one_of) {
             number = 1;
         } else {

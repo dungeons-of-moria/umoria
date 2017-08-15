@@ -28,7 +28,7 @@
 //                 193 - 255: object can stack with others iff they have
 //                            the same `misc_use` value, usually considered one group
 //                 Objects which have two type values, e.g. potions and
-//                 scrolls, need to have distinct subvals for
+//                 scrolls, need to have distinct `sub_category_id`s for
 //                 each item regardless of its category_id
 //  Damage     : amount of damage item can cause.
 //  Weight     : relative weight of an item.
@@ -210,7 +210,7 @@ GameObject_t game_objects[MAX_OBJECTS_IN_GAME] = {
         {"Resist Cold",                     0x00200000L, TV_RING,        '=', 0,    250,  9,   1, 2,    0,  0, 0,   0, {0, 0}, 14}, // 141
         {"Feather Falling",                 0x04000000L, TV_RING,        '=', 0,    200,  10,  1, 2,    0,  0, 0,   0, {0, 0}, 7}, // 142
         {"Adornment",                       0x00000000L, TV_RING,        '=', 0,    20,   11,  1, 2,    0,  0, 0,   0, {0, 0}, 7}, // 143
-        // was a ring of adornment, subval = 12 here
+        // was a ring of adornment, sub_category_id = 12 here
         {"& Arrow~",                        0x00000000L, TV_ARROW,        '{',  0, 1,    193, 1, 2, 0, 0, 0,  0, {1, 4}, 15}, // 144
         {"Weakness",                        0x80000001L, TV_RING,         '=', -5, 0,    13,  1, 2, 0, 0, 0,  0, {0, 0}, 7}, // 145
         {"Lordly Protection (FIRE)",        0x00080000L, TV_RING,         '=',  0, 1200, 14,  1, 2, 0, 0, 0,  5, {0, 0}, 50}, // 146
@@ -237,7 +237,7 @@ GameObject_t game_objects[MAX_OBJECTS_IN_GAME] = {
         {"Slow Digestion",                  0x00000080L, TV_AMULET,       '"',  0, 200,  4,   1, 3, 0, 0, 0,  0, {0, 0}, 14}, // 167
         {"Resist Acid",                     0x00100000L, TV_AMULET,       '"',  0, 250,  5,   1, 3, 0, 0, 0,  0, {0, 0}, 24}, // 168
         {"Adornment",                       0x00000000L, TV_AMULET,       '"',  0, 20,   6,   1, 3, 0, 0, 0,  0, {0, 0}, 16}, // 169
-        // was an amulet of adornment here, subval = 7
+        // was an amulet of adornment here, sub_category_id = 7
         {"& Bolt~",                         0x00000000L, TV_BOLT,         '{',  0, 2,    193, 1, 3, 0, 0, 0, 0, {1, 5}, 25}, // 170
         {"the Magi",                        0x01800040L, TV_AMULET,       '"',  0, 5000, 8,   1, 3, 0, 0, 0, 3, {0, 0}, 50}, // 171
         {"DOOM",                            0x8000007FL, TV_AMULET,       '"', -5, 0,    9,   1, 3, 0, 0, 0, 0, {0, 0}, 50}, // 172
@@ -290,7 +290,7 @@ GameObject_t game_objects[MAX_OBJECTS_IN_GAME] = {
         {"Holy Prayer",                     0x00000080L, TV_SCROLL2,      '?',  0, 80,   101, 1, 5, 0, 0, 0, 0, {0, 0}, 24}, // 219
         {"Word-of-Recall",                  0x00000100L, TV_SCROLL2,      '?',  0, 150,  102, 1, 5, 0, 0, 0, 0, {0, 0}, 5}, // 220
         {"*Destruction*",                   0x00000200L, TV_SCROLL2,      '?',  0, 750,  103, 1, 5, 0, 0, 0, 0, {0, 0}, 40}, // 221
-        // SMJ, AJ, Water must be subval 64-66 resp. for itemDescription to work
+        // SMJ, AJ, Water must be sub_category_id 64-66 resp. for itemDescription to work
         {"Slime Mold Juice",                0x30000000L, TV_POTION1,      '!', 400,  2,    64,  1, 4, 0, 0, 0, 0, {1, 1}, 0}, // 222
         {"Apple Juice",                     0x00000000L, TV_POTION1,      '!', 250,  1,    65,  1, 4, 0, 0, 0, 0, {1, 1}, 0}, // 223
         {"Water",                           0x00000000L, TV_POTION1,      '!', 200,  0,    66,  1, 4, 0, 0, 0, 0, {1, 1}, 0}, // 224
@@ -443,7 +443,7 @@ GameObject_t game_objects[MAX_OBJECTS_IN_GAME] = {
         // end store items
 
         // start doors
-        // Secret door must have same subval as closed door in
+        // Secret door must have same sub_category_id as closed door in
         // TRAP_LISTB.  See CHANGE_TRAP. Must use & because of stone_to_mud.
         {"& open door",                   0x00000000L, TV_OPEN_DOOR,   '\'', 0, 0,  1, 1, 0, 0, 0, 0, 0, {1, 1}, 0}, // 367
         {"& closed door",                 0x00000000L, TV_CLOSED_DOOR,  '+', 0, 0, 19, 1, 0, 0, 0, 0, 0, {1, 1}, 0}, // 368

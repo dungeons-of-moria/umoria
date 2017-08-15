@@ -284,7 +284,7 @@ static void magicalHelms(Inventory_t *t_ptr, int special, int level) {
         return;
     }
 
-    if (t_ptr->subval < 6) {
+    if (t_ptr->sub_category_id < 6) {
         t_ptr->ident |= ID_SHOW_P1;
 
         int magicType = randomNumber(3);
@@ -403,7 +403,7 @@ static void cursedHelms(Inventory_t *t_ptr, int special, int level) {
 }
 
 static void processRings(Inventory_t *t_ptr, int level, int cursed) {
-    switch (t_ptr->subval) {
+    switch (t_ptr->sub_category_id) {
         case 0:
         case 1:
         case 2:
@@ -488,7 +488,7 @@ static void processRings(Inventory_t *t_ptr, int level, int cursed) {
 }
 
 static void processAmulets(Inventory_t *t_ptr, int level, int cursed) {
-    if (t_ptr->subval < 2) {
+    if (t_ptr->sub_category_id < 2) {
         if (magicShouldBeEnchanted(cursed)) {
             t_ptr->misc_use = (int16_t) -magicEnchantmentBonus(1, 20, level);
             t_ptr->flags |= TR_CURSED;
@@ -497,7 +497,7 @@ static void processAmulets(Inventory_t *t_ptr, int level, int cursed) {
             t_ptr->misc_use = (int16_t) magicEnchantmentBonus(1, 10, level);
             t_ptr->cost += t_ptr->misc_use * 100;
         }
-    } else if (t_ptr->subval == 2) {
+    } else if (t_ptr->sub_category_id == 2) {
         t_ptr->misc_use = (int16_t) (5 * magicEnchantmentBonus(1, 25, level));
         if (magicShouldBeEnchanted(cursed)) {
             t_ptr->misc_use = -t_ptr->misc_use;
@@ -506,7 +506,7 @@ static void processAmulets(Inventory_t *t_ptr, int level, int cursed) {
         } else {
             t_ptr->cost += 50 * t_ptr->misc_use;
         }
-    } else if (t_ptr->subval == 8) {
+    } else if (t_ptr->sub_category_id == 8) {
         // amulet of the magi is never cursed
         t_ptr->misc_use = (int16_t) (5 * magicEnchantmentBonus(1, 25, level));
         t_ptr->cost += 20 * t_ptr->misc_use;
@@ -857,7 +857,7 @@ void magicTreasureMagicalAbility(int item_id, int level) {
             break;
         case TV_HELM:
             // give crowns a higher chance for magic
-            if (t_ptr->subval >= 6 && t_ptr->subval <= 8) {
+            if (t_ptr->sub_category_id >= 6 && t_ptr->sub_category_id <= 8) {
                 chance += (int) (t_ptr->cost / 100);
                 special += special;
             }
@@ -875,29 +875,29 @@ void magicTreasureMagicalAbility(int item_id, int level) {
             processAmulets(t_ptr, level, cursed);
             break;
         case TV_LIGHT:
-            // Subval should be even for store, odd for dungeon
+            // `sub_category_id` should be even for store, odd for dungeon
             // Dungeon found ones will be partially charged
-            if ((t_ptr->subval % 2) == 1) {
+            if ((t_ptr->sub_category_id % 2) == 1) {
                 t_ptr->misc_use = (int16_t) randomNumber(t_ptr->misc_use);
-                t_ptr->subval -= 1;
+                t_ptr->sub_category_id -= 1;
             }
             break;
         case TV_WAND:
-            magicAmount = wandMagic(t_ptr->subval);
+            magicAmount = wandMagic(t_ptr->sub_category_id);
             if (magicAmount != -1) {
                 t_ptr->misc_use = (uint16_t) magicAmount;
             }
             break;
         case TV_STAFF:
-            magicAmount = staffMagic(t_ptr->subval);
+            magicAmount = staffMagic(t_ptr->sub_category_id);
             if (magicAmount != -1) {
                 t_ptr->misc_use = (uint16_t) magicAmount;
             }
 
             // Change the level the items was first found on value
-            if (t_ptr->subval == 7) {
+            if (t_ptr->sub_category_id == 7) {
                 t_ptr->level = 10;
-            } else if (t_ptr->subval == 22) {
+            } else if (t_ptr->sub_category_id == 22) {
                 t_ptr->level = 5;
             }
             break;
@@ -942,33 +942,33 @@ void magicTreasureMagicalAbility(int item_id, int level) {
             break;
         case TV_FOOD:
             // make sure all food rations have the same level
-            if (t_ptr->subval == 90) {
+            if (t_ptr->sub_category_id == 90) {
                 t_ptr->level = 0;
             }
 
             // give all Elvish waybread the same level
-            if (t_ptr->subval == 92) {
+            if (t_ptr->sub_category_id == 92) {
                 t_ptr->level = 6;
             }
             break;
         case TV_SCROLL1:
-            if (t_ptr->subval == 67) {
+            if (t_ptr->sub_category_id == 67) {
                 // give all identify scrolls the same level
                 t_ptr->level = 1;
-            } else if (t_ptr->subval == 69) {
+            } else if (t_ptr->sub_category_id == 69) {
                 // scroll of light
                 t_ptr->level = 0;
-            } else if (t_ptr->subval == 80) {
+            } else if (t_ptr->sub_category_id == 80) {
                 // scroll of trap detection
                 t_ptr->level = 5;
-            } else if (t_ptr->subval == 81) {
+            } else if (t_ptr->sub_category_id == 81) {
                 // scroll of door/stair location
                 t_ptr->level = 5;
             }
             break;
         case TV_POTION1:
             // cure light
-            if (t_ptr->subval == 76) {
+            if (t_ptr->sub_category_id == 76) {
                 t_ptr->level = 0;
             }
             break;

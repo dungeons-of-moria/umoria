@@ -422,21 +422,21 @@ constexpr uint16_t CD_NO_SLEEP = 0x1000;
 constexpr uint16_t CD_INFRA = 0x2000;
 constexpr uint16_t CD_MAX_HP = 0x4000;
 
-// inventory stacking subvals
+// inventory stacking `sub_category_id`s
 // these never stack
 constexpr uint8_t ITEM_NEVER_STACK_MIN = 0;
 constexpr uint8_t ITEM_NEVER_STACK_MAX = 63;
-// these items always stack with others of same subval, always treated as
+// these items always stack with others of same `sub_category_id`s, always treated as
 // single objects, must be power of 2;
 constexpr uint8_t ITEM_SINGLE_STACK_MIN = 64;
 constexpr uint8_t ITEM_SINGLE_STACK_MAX = 192; // see NOTE below
-// these items stack with others only if have same subval and same `misc_use`,
+// these items stack with others only if have same `sub_category_id`s and same `misc_use`,
 // they are treated as a group for wielding, etc.
 constexpr uint8_t ITEM_GROUP_MIN = 192;
 constexpr uint8_t ITEM_GROUP_MAX = 255;
 
-// NOTE: items with subval = 192 are treated as single objects,
-// but only stack with others of same subval if have the same
+// NOTE: items with `sub_category_id`s = 192 are treated as single objects,
+// but only stack with others of same `sub_category_id`s if have the same
 // `misc_use` value, only used for torches.
 
 // id's used for object description, stored in objects_identified array

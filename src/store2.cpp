@@ -198,7 +198,7 @@ static void displayStoreInventory(int store_id, int item_pos_start) {
         // Save the current number of items
         int32_t current_item_count = item->number;
 
-        if (item->subval >= ITEM_SINGLE_STACK_MIN && item->subval <= ITEM_SINGLE_STACK_MAX) {
+        if (item->sub_category_id >= ITEM_SINGLE_STACK_MIN && item->sub_category_id <= ITEM_SINGLE_STACK_MAX) {
             item->number = 1;
         }
 

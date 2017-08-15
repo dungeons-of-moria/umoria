@@ -1073,7 +1073,7 @@ static void makeMove(int monster_id, int *directions, uint32_t *rcmove) {
         }
 
         // Glyph of warding present?
-        if (do_move && tile->tptr != 0 && treasure_list[tile->tptr].category_id == TV_VIS_TRAP && treasure_list[tile->tptr].subval == 99) {
+        if (do_move && tile->tptr != 0 && treasure_list[tile->tptr].category_id == TV_VIS_TRAP && treasure_list[tile->tptr].sub_category_id == 99) {
             glyphOfWardingProtection(monster->mptr, move_bits, &do_move, &do_turn, y, x);
         }
 

@@ -274,7 +274,7 @@ void wizardCreateObjects() {
         return;
     }
     number = atoi(input);
-    item->subval = (uint8_t) number;
+    item->sub_category_id = (uint8_t) number;
 
     putStringClearToEOL("Weight : ", 0, 0);
     if (!getStringInput(input, 0, 9, 5)) {

@@ -210,7 +210,7 @@ typedef struct {
     uint8_t sprite;                 // Character representation - ASCII symbol (tchar)
     int16_t misc_use;               // Misc. use variable (p1)
     int32_t cost;                   // Cost of item
-    uint8_t subval;                 // Sub-category number
+    uint8_t sub_category_id;        // Sub-category number
     uint8_t number;                 // Number of items
     uint16_t weight;                // Weight
     int16_t tohit;                  // Plusses to hit

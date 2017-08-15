@@ -1110,7 +1110,7 @@ void changeCharacterName() {
 void inventoryDestroyItem(int item_id) {
     Inventory_t *i_ptr = &inventory[item_id];
 
-    if (i_ptr->number > 1 && i_ptr->subval <= ITEM_SINGLE_STACK_MAX) {
+    if (i_ptr->number > 1 && i_ptr->sub_category_id <= ITEM_SINGLE_STACK_MAX) {
         i_ptr->number--;
         inventory_weight -= i_ptr->weight;
     } else {
@@ -1132,7 +1132,7 @@ void inventoryDestroyItem(int item_id) {
 void inventoryTakeOneItem(Inventory_t *to_item, Inventory_t *from_item) {
     *to_item = *from_item;
 
-    if (to_item->number > 1 && to_item->subval >= ITEM_SINGLE_STACK_MIN && to_item->subval <= ITEM_SINGLE_STACK_MAX) {
+    if (to_item->number > 1 && to_item->sub_category_id >= ITEM_SINGLE_STACK_MIN && to_item->sub_category_id <= ITEM_SINGLE_STACK_MAX) {
         to_item->number = 1;
     }
 }
@@ -1209,19 +1209,19 @@ bool inventoryCanCarryItemCount(Inventory_t *item) {
         return true;
     }
 
-    if (item->subval < ITEM_SINGLE_STACK_MIN) {
+    if (item->sub_category_id < ITEM_SINGLE_STACK_MIN) {
         return false;
     }
 
     for (int i = 0; i < inventory_count; i++) {
         bool same_character = inventory[i].category_id == item->category_id;
-        bool same_category = inventory[i].subval == item->subval;
+        bool same_category = inventory[i].sub_category_id == item->sub_category_id;
 
         // make sure the number field doesn't overflow
         bool same_number = inventory[i].number + item->number < 256;
 
-        // they always stack (subval < 192), or else they have same `misc_use`
-        bool same_group = item->subval < ITEM_GROUP_MIN || inventory[i].misc_use == item->misc_use;
+        // they always stack (sub_category_id < 192), or else they have same `misc_use`
+        bool same_group = item->sub_category_id < ITEM_GROUP_MIN || inventory[i].misc_use == item->misc_use;
 
         // only stack if both or neither are identified
         bool identification = itemSetColorlessAsIdentifed(&inventory[i]) == itemSetColorlessAsIdentifed(item);
@@ -1292,7 +1292,7 @@ void playerStrength() {
 // this code must be identical to the inventoryCanCarryItemCount() code above
 int inventoryCarryItem(Inventory_t *item) {
     int typ = item->category_id;
-    int subt = item->subval;
+    int subt = item->sub_category_id;
     bool known1p = itemSetColorlessAsIdentifed(item);
     int always_known1p = (objectPositionOffset(item) == -1);
 
@@ -1302,7 +1302,7 @@ int inventoryCarryItem(Inventory_t *item) {
     for (locn = 0;; locn++) {
         Inventory_t *t_ptr = &inventory[locn];
 
-        if (typ == t_ptr->category_id && subt == t_ptr->subval && subt >= ITEM_SINGLE_STACK_MIN && ((int) t_ptr->number + (int) item->number) < 256 &&
+        if (typ == t_ptr->category_id && subt == t_ptr->sub_category_id && subt >= ITEM_SINGLE_STACK_MIN && ((int) t_ptr->number + (int) item->number) < 256 &&
             (subt < ITEM_GROUP_MIN || t_ptr->misc_use == item->misc_use) &&
             // only stack if both or neither are identified
             known1p == itemSetColorlessAsIdentifed(t_ptr)) {
@@ -1311,7 +1311,7 @@ int inventoryCarryItem(Inventory_t *item) {
             break;
         }
 
-        if ((typ == t_ptr->category_id && subt < t_ptr->subval && always_known1p) || typ > t_ptr->category_id) {
+        if ((typ == t_ptr->category_id && subt < t_ptr->sub_category_id && always_known1p) || typ > t_ptr->category_id) {
             // For items which are always known1p, i.e. never have a 'color',
             // insert them into the inventory in sorted order.
             for (int i = inventory_count - 1; i >= locn; i--) {

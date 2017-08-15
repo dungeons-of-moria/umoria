@@ -225,7 +225,7 @@ static void playerStepsOnTrap(int y, int x) {
 
     int damage = dicePlayerDamageRoll(tile->damage);
 
-    switch (tile->subval) {
+    switch (tile->sub_category_id) {
         case 1:
             // Open pit
             trapOpenPit(tile, damage);

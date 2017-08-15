@@ -125,7 +125,7 @@ int16_t objectPositionOffset(Inventory_t *item) {
         case TV_POTION2:
             return 5;
         case TV_FOOD:
-            if ((item->subval & (ITEM_SINGLE_STACK_MIN - 1)) < MAX_MUSHROOMS) {
+            if ((item->sub_category_id & (ITEM_SINGLE_STACK_MIN - 1)) < MAX_MUSHROOMS) {
                 return 6;
             }
             return -1;
@@ -155,7 +155,7 @@ void itemSetAsIdentified(Inventory_t *item) {
     }
 
     id <<= 6;
-    id += (uint8_t) (item->subval & (ITEM_SINGLE_STACK_MIN - 1));
+    id += (uint8_t) (item->sub_category_id & (ITEM_SINGLE_STACK_MIN - 1));
 
     objects_identified[id] |= OD_KNOWN1;
 
@@ -176,7 +176,7 @@ bool itemSetColorlessAsIdentifed(Inventory_t *item) {
     }
 
     id <<= 6;
-    id += (uint8_t) (item->subval & (ITEM_SINGLE_STACK_MIN - 1));
+    id += (uint8_t) (item->sub_category_id & (ITEM_SINGLE_STACK_MIN - 1));
 
     return isObjectKnown(id);
 }
@@ -220,7 +220,7 @@ static void unsample(Inventory_t *i_ptr) {
     }
 
     id <<= 6;
-    id += (uint8_t) (i_ptr->subval & (ITEM_SINGLE_STACK_MIN - 1));
+    id += (uint8_t) (i_ptr->sub_category_id & (ITEM_SINGLE_STACK_MIN - 1));
 
     // clear the tried flag, since it is now known
     clearObjectTriedFlag(id);
@@ -235,7 +235,7 @@ void itemSetAsTried(Inventory_t *item) {
     }
 
     id <<= 6;
-    id += (uint8_t) (item->subval & (ITEM_SINGLE_STACK_MIN - 1));
+    id += (uint8_t) (item->sub_category_id & (ITEM_SINGLE_STACK_MIN - 1));
 
     setObjectTriedFlag(id);
 }
@@ -256,7 +256,7 @@ void itemIdentify(int *item_id) {
     itemSetAsIdentified(i_ptr);
 
     int x1 = i_ptr->category_id;
-    int x2 = i_ptr->subval;
+    int x2 = i_ptr->sub_category_id;
 
     // no merging possible
     if (x2 < ITEM_SINGLE_STACK_MIN || x2 >= ITEM_GROUP_MIN) {
@@ -269,7 +269,7 @@ void itemIdentify(int *item_id) {
     for (int i = 0; i < inventory_count; i++) {
         t_ptr = &inventory[i];
 
-        if (t_ptr->category_id == x1 && t_ptr->subval == x2 && i != *item_id && ((int) t_ptr->number + (int) i_ptr->number) < 256) {
+        if (t_ptr->category_id == x1 && t_ptr->sub_category_id == x2 && i != *item_id && ((int) t_ptr->number + (int) i_ptr->number) < 256) {
             // make *item_id the smaller number
             if (*item_id > i) {
                 j = *item_id;
@@ -323,7 +323,7 @@ int bowDamageValue(int16_t misc_use) {
 // Note that since out_val can easily exceed 80 characters, itemDescription
 // must always be called with a obj_desc_t as the first parameter.
 void itemDescription(obj_desc_t description, Inventory_t *item, bool add_prefix) {
-    int indexx = item->subval & (ITEM_SINGLE_STACK_MIN - 1);
+    int indexx = item->sub_category_id & (ITEM_SINGLE_STACK_MIN - 1);
 
     // base name, modifier string
     const char *basenm = game_objects[item->id].name;
@@ -621,7 +621,7 @@ void itemDescription(obj_desc_t description, Inventory_t *item, bool add_prefix)
 
     if ((indexx = objectPositionOffset(item)) >= 0) {
         indexx <<= 6;
-        indexx += (item->subval & (ITEM_SINGLE_STACK_MIN - 1));
+        indexx += (item->sub_category_id & (ITEM_SINGLE_STACK_MIN - 1));
 
         // don't print tried string for store bought items
         if ((objects_identified[indexx] & OD_TRIED) && !itemStoreBought(item)) {
@@ -667,7 +667,7 @@ void inventoryItemCopyTo(int from_item_id, Inventory_t *to_item) {
     to_item->sprite = from->tchar;
     to_item->misc_use = from->misc_use;
     to_item->cost = from->cost;
-    to_item->subval = from->subval;
+    to_item->sub_category_id = from->subval;
     to_item->number = from->number;
     to_item->weight = from->weight;
     to_item->tohit = from->tohit;

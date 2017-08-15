@@ -1102,7 +1102,7 @@ static bool selectItemCommands(char *command, char *which, bool selecting) {
                 if (TR_CURSED & inventory[slot].flags) {
                     inventoryItemIsCursedMessage(slot);
                     item = -1;
-                } else if (inventory[item].subval == ITEM_GROUP_MIN && inventory[item].number > 1 && !inventoryCanCarryItemCount(&inventory[slot])) {
+                } else if (inventory[item].sub_category_id == ITEM_GROUP_MIN && inventory[item].number > 1 && !inventoryCanCarryItemCount(&inventory[slot])) {
                     // this can happen if try to wield a torch,
                     // and have more than one in inventory
                     printMessage("You will have to drop something first.");
@@ -1121,7 +1121,7 @@ static bool selectItemCommands(char *command, char *which, bool selecting) {
                 wear_high--;
 
                 // Fix for torches
-                if (i_ptr->number > 1 && i_ptr->subval <= ITEM_SINGLE_STACK_MAX) {
+                if (i_ptr->number > 1 && i_ptr->sub_category_id <= ITEM_SINGLE_STACK_MAX) {
                     i_ptr->number = 1;
                     wear_high++;
                 }
