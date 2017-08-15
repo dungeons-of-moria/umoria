@@ -378,6 +378,6 @@ typedef const char *ClassTitle_t;
 typedef struct {
     uint8_t level_required;
     uint8_t mana_required;
-    uint8_t sfail;
+    uint8_t failure_chance;
     uint8_t sexp; // 1/4 of exp gained for learning spell
 } Spell_t;

@@ -1335,7 +1335,7 @@ int inventoryCarryItem(Inventory_t *item) {
 static int spellChanceOfSuccess(int spell) {
     Spell_t *s_ptr = &magic_spells[py.misc.class_id - 1][spell];
 
-    int chance = s_ptr->sfail - 3 * (py.misc.level - s_ptr->level_required);
+    int chance = s_ptr->failure_chance - 3 * (py.misc.level - s_ptr->level_required);
 
     int stat;
     if (classes[py.misc.class_id].class_to_use_mage_spells == SPELL_TYPE_MAGE) {
