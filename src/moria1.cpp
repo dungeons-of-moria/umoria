@@ -69,7 +69,7 @@ void playerAdjustBonusesForItem(Inventory_t *item, int factor) {
 }
 
 static void playerResetFlags() {
-    py.flags.see_inv = false;
+    py.flags.see_invisible = false;
     py.flags.teleport = false;
     py.flags.free_act = false;
     py.flags.slow_digest = false;
@@ -211,7 +211,7 @@ void playerRecalculateBonuses() {
     }
 
     if (py.flags.detect_invisible > 0) {
-        py.flags.see_inv = true;
+        py.flags.see_invisible = true;
     }
 
     // can't print AC here because might be in a store
@@ -246,7 +246,7 @@ void playerRecalculateBonuses() {
         py.flags.free_act = true;
     }
     if (TR_SEE_INVIS & item_flags) {
-        py.flags.see_inv = true;
+        py.flags.see_invisible = true;
     }
     if (TR_RES_LIGHT & item_flags) {
         py.flags.lght_resist = true;

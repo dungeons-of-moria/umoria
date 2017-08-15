@@ -193,7 +193,7 @@ static bool sv_write() {
     wr_short((uint16_t) py.flags.word_of_recall);
     wr_short((uint16_t) py.flags.see_infra);
     wr_short((uint16_t) py.flags.timed_infra);
-    wr_bool(py.flags.see_inv);
+    wr_bool(py.flags.see_invisible);
     wr_bool(py.flags.teleport);
     wr_bool(py.flags.free_act);
     wr_bool(py.flags.slow_digest);
@@ -652,7 +652,7 @@ bool loadGame(bool *generate) {
             rd_short((uint16_t *) &py.flags.word_of_recall);
             rd_short((uint16_t *) &py.flags.see_infra);
             rd_short((uint16_t *) &py.flags.timed_infra);
-            py.flags.see_inv = rd_bool();
+            py.flags.see_invisible = rd_bool();
             py.flags.teleport = rd_bool();
             py.flags.free_act = rd_bool();
             py.flags.slow_digest = rd_bool();

@@ -590,7 +590,7 @@ static void playerUpdateDetectInvisible() {
 
     if ((PY_DET_INV & py.flags.status) == 0) {
         py.flags.status |= PY_DET_INV;
-        py.flags.see_inv = true;
+        py.flags.see_invisible = true;
 
         // light but don't move creatures
         updateMonsters(false);
@@ -601,7 +601,7 @@ static void playerUpdateDetectInvisible() {
     if (py.flags.detect_invisible == 0) {
         py.flags.status &= ~PY_DET_INV;
 
-        // may still be able to see_inv if wearing magic item
+        // may still be able to see_invisible if wearing magic item
         playerRecalculateBonuses();
 
         // unlight but don't move creatures

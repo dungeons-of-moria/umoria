@@ -19,7 +19,7 @@ static bool monsterIsVisible(Monster_t *monster) {
         // Normal sight.
         if ((CM_INVISIBLE & creature->cmove) == 0) {
             visible = true;
-        } else if (py.flags.see_inv) {
+        } else if (py.flags.see_invisible) {
             visible = true;
             creature_recall[monster->mptr].r_cmove |= CM_INVISIBLE;
         }
