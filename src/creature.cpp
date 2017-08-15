@@ -15,7 +15,7 @@ static bool monsterIsVisible(Monster_t *monster) {
     Cave_t *tile = &cave[monster->y][monster->x];
     Creature_t *creature = &creatures_list[monster->creature_id];
 
-    if (tile->pl || tile->tl || (running_counter && monster->cdis < 2 && player_carrying_light)) {
+    if (tile->pl || tile->tl || (running_counter && monster->distance_from_player < 2 && player_carrying_light)) {
         // Normal sight.
         if ((CM_INVISIBLE & creature->cmove) == 0) {
             visible = true;
@@ -23,7 +23,7 @@ static bool monsterIsVisible(Monster_t *monster) {
             visible = true;
             creature_recall[monster->creature_id].movement |= CM_INVISIBLE;
         }
-    } else if (py.flags.see_infra > 0 && monster->cdis <= py.flags.see_infra && (CD_INFRA & creature->cdefense)) {
+    } else if (py.flags.see_infra > 0 && monster->distance_from_player <= py.flags.see_infra && (CD_INFRA & creature->cdefense)) {
         // Infra vision.
         visible = true;
         creature_recall[monster->creature_id].defenses |= CD_INFRA;
@@ -37,7 +37,7 @@ void monsterUpdateVisibility(int monster_id) {
     bool visible = false;
     Monster_t *m_ptr = &monsters[monster_id];
 
-    if (m_ptr->cdis <= MON_MAX_SIGHT && !(py.flags.status & PY_BLIND) && coordInsidePanel((int) m_ptr->y, (int) m_ptr->x)) {
+    if (m_ptr->distance_from_player <= MON_MAX_SIGHT && !(py.flags.status & PY_BLIND) && coordInsidePanel((int) m_ptr->y, (int) m_ptr->x)) {
         if (wizard_mode) {
             // Wizard sight.
             visible = true;
@@ -1034,7 +1034,7 @@ static void monsterAllowedToMove(Monster_t *monster, uint32_t move_bits, bool *d
 
     monster->y = (uint8_t) y;
     monster->x = (uint8_t) x;
-    monster->cdis = (uint8_t) coordDistanceBetween(char_row, char_col, y, x);
+    monster->distance_from_player = (uint8_t) coordDistanceBetween(char_row, char_col, y, x);
 
     *do_turn = true;
 }
@@ -1096,7 +1096,7 @@ static bool monsterCanCastSpells(Monster_t *monster, uint32_t spells) {
     }
 
     // Must be within certain range
-    if (monster->cdis > MON_MAX_SPELL_CAST_DISTANCE) {
+    if (monster->distance_from_player > MON_MAX_SPELL_CAST_DISTANCE) {
         return false;
     }
 
@@ -1597,7 +1597,7 @@ static void monsterMove(int monster_id, uint32_t *rcmove) {
             makeMove(monster_id, directions, rcmove);
         } else if (creature->cmove & CM_ATTACK_ONLY) {
             // Attack, but don't move
-            if (monster->cdis < 2) {
+            if (monster->distance_from_player < 2) {
                 monsterGetMoveDirection(monster_id, directions);
                 makeMove(monster_id, directions, rcmove);
             } else {
@@ -1605,7 +1605,7 @@ static void monsterMove(int monster_id, uint32_t *rcmove) {
                 // it should have moved, but didn't.
                 *rcmove |= CM_ATTACK_ONLY;
             }
-        } else if ((creature->cmove & CM_ONLY_MAGIC) && monster->cdis < 2) {
+        } else if ((creature->cmove & CM_ONLY_MAGIC) && monster->distance_from_player < 2) {
             // A little hack for Quylthulgs, so that one will eventually
             // notice that they have no physical attacks.
             if (creature_recall[monster->creature_id].attacks[0] < MAX_UCHAR) {
@@ -1650,7 +1650,7 @@ static void monsterAttackingUpdate(Monster_t *monster, int monster_id, int moves
 
         // Monsters trapped in rock must be given a turn also,
         // so that they will die/dig out immediately.
-        if (monster->ml || monster->cdis <= creatures_list[monster->creature_id].aaf || ((!(creatures_list[monster->creature_id].cmove & CM_PHASE)) && cave[monster->y][monster->x].fval >= MIN_CAVE_WALL)) {
+        if (monster->ml || monster->distance_from_player <= creatures_list[monster->creature_id].aaf || ((!(creatures_list[monster->creature_id].cmove & CM_PHASE)) && cave[monster->y][monster->x].fval >= MIN_CAVE_WALL)) {
             if (monster->sleep_count > 0) {
                 if (py.flags.aggravate) {
                     monster->sleep_count = 0;
@@ -1658,7 +1658,7 @@ static void monsterAttackingUpdate(Monster_t *monster, int monster_id, int moves
                     int notice = randomNumber(1024);
 
                     if (notice * notice * notice <= (1L << (29 - py.misc.stealth_factor))) {
-                        monster->sleep_count -= (100 / monster->cdis);
+                        monster->sleep_count -= (100 / monster->distance_from_player);
                         if (monster->sleep_count > 0) {
                             ignore = true;
                         } else {
@@ -1711,7 +1711,7 @@ void updateMonsters(bool attack) {
             continue;
         }
 
-        monster->cdis = (uint8_t) coordDistanceBetween(char_row, char_col, (int) monster->y, (int) monster->x);
+        monster->distance_from_player = (uint8_t) coordDistanceBetween(char_row, char_col, (int) monster->y, (int) monster->x);
 
         // Attack is argument passed to CREATURE
         if (attack) {

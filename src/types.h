@@ -245,7 +245,7 @@ typedef struct {
     // Note: fy, fx, and cdis constrain dungeon size to less than 256 by 256
     uint8_t y;  // Y Pointer into map
     uint8_t x;  // X Pointer into map
-    uint8_t cdis; // Cur dis from player
+    uint8_t distance_from_player; // Current distance from player
 
     bool ml;
     uint8_t stunned;

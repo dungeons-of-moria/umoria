@@ -340,7 +340,7 @@ bool spellAggravateMonsters(int affect_distance) {
         Monster_t *monster = &monsters[id];
         monster->sleep_count = 0;
 
-        if (monster->cdis <= affect_distance && monster->speed < 2) {
+        if (monster->distance_from_player <= affect_distance && monster->speed < 2) {
             monster->speed++;
             aggravated = true;
         }
@@ -1535,7 +1535,7 @@ void spellTeleportAwayMonster(int monster_id, int distance_from_player) {
     // this is necessary, because the creature is
     // not currently visible in its new position.
     monster->ml = false;
-    monster->cdis = (uint8_t) coordDistanceBetween(char_row, char_col, y, x);
+    monster->distance_from_player = (uint8_t) coordDistanceBetween(char_row, char_col, y, x);
 
     monsterUpdateVisibility(monster_id);
 }
@@ -1616,7 +1616,7 @@ bool spellMassGenocide() {
         Monster_t *monster = &monsters[id];
         Creature_t *creature = &creatures_list[monster->creature_id];
 
-        if (monster->cdis <= MON_MAX_SIGHT && (creature->cmove & CM_WIN) == 0) {
+        if (monster->distance_from_player <= MON_MAX_SIGHT && (creature->cmove & CM_WIN) == 0) {
             killed = true;
             dungeonDeleteMonster(id);
         }
@@ -1670,7 +1670,7 @@ bool spellSpeedAllMonsters(int speed) {
         vtype_t name;
         monsterNameDescription(name, monster->ml, creature->name);
 
-        if (monster->cdis > MON_MAX_SIGHT || !los(char_row, char_col, (int) monster->y, (int) monster->x)) {
+        if (monster->distance_from_player > MON_MAX_SIGHT || !los(char_row, char_col, (int) monster->y, (int) monster->x)) {
             continue; // do nothing
         }
 
@@ -1710,7 +1710,7 @@ bool spellSleepAllMonsters() {
         vtype_t name;
         monsterNameDescription(name, monster->ml, creature->name);
 
-        if (monster->cdis > MON_MAX_SIGHT || !los(char_row, char_col, (int) monster->y, (int) monster->x)) {
+        if (monster->distance_from_player > MON_MAX_SIGHT || !los(char_row, char_col, (int) monster->y, (int) monster->x)) {
             continue; // do nothing
         }
 
@@ -1741,7 +1741,7 @@ bool spellMassPolymorph() {
     for (int id = next_free_monster_id - 1; id >= MON_MIN_INDEX_ID; id--) {
         Monster_t *monster = &monsters[id];
 
-        if (monster->cdis <= MON_MAX_SIGHT) {
+        if (monster->distance_from_player <= MON_MAX_SIGHT) {
             Creature_t *creature = &creatures_list[monster->creature_id];
 
             if ((creature->cmove & CM_WIN) == 0) {
@@ -1960,7 +1960,7 @@ bool spellDispelCreature(int creature_defense, int damage) {
     for (int id = next_free_monster_id - 1; id >= MON_MIN_INDEX_ID; id--) {
         Monster_t *monster = &monsters[id];
 
-        if (monster->cdis <= MON_MAX_SIGHT && (creature_defense & creatures_list[monster->creature_id].cdefense) && los(char_row, char_col, (int) monster->y, (int) monster->x)) {
+        if (monster->distance_from_player <= MON_MAX_SIGHT && (creature_defense & creatures_list[monster->creature_id].cdefense) && los(char_row, char_col, (int) monster->y, (int) monster->x)) {
             Creature_t *creature = &creatures_list[monster->creature_id];
 
             creature_recall[monster->creature_id].defenses |= creature_defense;
@@ -1996,7 +1996,7 @@ bool spellTurnUndead() {
         Monster_t *monster = &monsters[id];
         Creature_t *creature = &creatures_list[monster->creature_id];
 
-        if (monster->cdis <= MON_MAX_SIGHT && (CD_UNDEAD & creature->cdefense) && los(char_row, char_col, (int) monster->y, (int) monster->x)) {
+        if (monster->distance_from_player <= MON_MAX_SIGHT && (CD_UNDEAD & creature->cdefense) && los(char_row, char_col, (int) monster->y, (int) monster->x)) {
             vtype_t name;
             monsterNameDescription(name, monster->ml, creature->name);
 

@@ -519,7 +519,7 @@ bool compactMonsters() {
     bool delete_any = false;
     while (!delete_any) {
         for (int i = next_free_monster_id - 1; i >= MON_MIN_INDEX_ID; i--) {
-            if (cur_dis < monsters[i].cdis && randomNumber(3) == 1) {
+            if (cur_dis < monsters[i].distance_from_player && randomNumber(3) == 1) {
                 if (creatures_list[monsters[i].creature_id].cmove & CM_WIN) {
                     // Never compact away the Balrog!!
                 } else if (hack_monptr < i) {
@@ -619,7 +619,7 @@ bool monsterPlaceNew(int y, int x, int creature_id, bool sleeping) {
     // the creatures_list[] speed value is 10 greater, so that it can be a uint8_t
     monster->speed = (int16_t) (creatures_list[creature_id].speed - 10 + py.flags.speed);
     monster->stunned = 0;
-    monster->cdis = (uint8_t) coordDistanceBetween(char_row, char_col, y, x);
+    monster->distance_from_player = (uint8_t) coordDistanceBetween(char_row, char_col, y, x);
     monster->ml = false;
 
     cave[y][x].cptr = (uint8_t) monster_id;
@@ -679,7 +679,7 @@ void monsterPlaceWinning() {
     // the creatures_list speed value is 10 greater, so that it can be a uint8_t
     monster->speed = (int16_t) (creatures_list[creature_id].speed - 10 + py.flags.speed);
     monster->stunned = 0;
-    monster->cdis = (uint8_t) coordDistanceBetween(char_row, char_col, y, x);
+    monster->distance_from_player = (uint8_t) coordDistanceBetween(char_row, char_col, y, x);
 
     cave[y][x].cptr = (uint8_t) monster_id;
 
