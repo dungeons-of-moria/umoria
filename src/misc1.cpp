@@ -611,9 +611,9 @@ bool monsterPlaceNew(int y, int x, int creature_id, bool sleeping) {
     monster->creature_id = (uint16_t) creature_id;
 
     if (creatures_list[creature_id].defenses & CD_MAX_HP) {
-        monster->hp = (int16_t) maxHitPoints(creatures_list[creature_id].hd);
+        monster->hp = (int16_t) maxHitPoints(creatures_list[creature_id].hit_die);
     } else {
-        monster->hp = (int16_t) dicePlayerDamageRoll(creatures_list[creature_id].hd);
+        monster->hp = (int16_t) dicePlayerDamageRoll(creatures_list[creature_id].hit_die);
     }
 
     // the creatures_list[] speed value is 10 greater, so that it can be a uint8_t
@@ -671,9 +671,9 @@ void monsterPlaceWinning() {
     monster->creature_id = (uint16_t) creature_id;
 
     if (creatures_list[creature_id].defenses & CD_MAX_HP) {
-        monster->hp = (int16_t) maxHitPoints(creatures_list[creature_id].hd);
+        monster->hp = (int16_t) maxHitPoints(creatures_list[creature_id].hit_die);
     } else {
-        monster->hp = (int16_t) dicePlayerDamageRoll(creatures_list[creature_id].hd);
+        monster->hp = (int16_t) dicePlayerDamageRoll(creatures_list[creature_id].hit_die);
     }
 
     // the creatures_list speed value is 10 greater, so that it can be a uint8_t

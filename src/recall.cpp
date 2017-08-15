@@ -434,7 +434,7 @@ static void memoryKillDifficulty(Creature_t *creature, uint32_t monster_kills) {
     (void) sprintf(description, " It has an armor rating of %d", creature->ac);
     memoryPrint(description);
 
-    (void) sprintf(description, " and a%s life rating of %dd%d.", ((creature->defenses & CD_MAX_HP) ? " maximized" : ""), creature->hd[0], creature->hd[1]);
+    (void) sprintf(description, " and a%s life rating of %dd%d.", ((creature->defenses & CD_MAX_HP) ? " maximized" : ""), creature->hit_die[0], creature->hit_die[1]);
     memoryPrint(description);
 }
 

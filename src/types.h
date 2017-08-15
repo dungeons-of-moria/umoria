@@ -354,9 +354,9 @@ typedef struct {
     uint8_t ac;                 // AC
     uint8_t speed;              // Movement speed+10 (NOTE: +10 so that it can be an unsigned int)
     uint8_t sprite;             // Character representation (cchar)
-    uint8_t hd[2];     // Creatures hit die
-    uint8_t damage[4]; // Type attack and damage
-    uint8_t level;     // Level of creature
+    uint8_t hit_die[2];         // Creatures hit die
+    uint8_t damage[4];          // Type attack and damage
+    uint8_t level;              // Level of creature
 } Creature_t;
 
 // MonsterAttack_t is a base data object.
