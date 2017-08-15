@@ -254,7 +254,7 @@ void wizardCreateObjects() {
     item->id = OBJ_WIZARD;
     item->special_name_id = 0;
     itemReplaceInscription(item, "wizard item");
-    item->ident = ID_KNOWN2 | ID_STORE_BOUGHT;
+    item->identification = ID_KNOWN2 | ID_STORE_BOUGHT;
 
     putStringClearToEOL("Tval   : ", 0, 0);
     if (!getStringInput(input, 0, 9, 3)) {

@@ -24,7 +24,7 @@ static int32_t getPickShovelBuyPrice(Inventory_t *item);
 int32_t storeItemValue(Inventory_t *item) {
     int32_t value;
 
-    if (item->ident & ID_DAMD) {
+    if (item->identification & ID_DAMD) {
         // don't purchase known cursed items
         value = 0;
     } else if ((item->category_id >= TV_BOW && item->category_id <= TV_SWORD) || (item->category_id >= TV_BOOTS && item->category_id <= TV_SOFT_ARMOR)) {

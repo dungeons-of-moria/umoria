@@ -49,7 +49,7 @@ void itemInscribe() {
 
 // Append an additional comment to an object description. -CJS-
 void itemAppendToInscription(Inventory_t *item, uint8_t item_ident_type) {
-    item->ident |= item_ident_type;
+    item->identification |= item_ident_type;
 }
 
 // Replace any existing comment in an object description with a new one. -CJS-

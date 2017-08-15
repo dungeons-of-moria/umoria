@@ -1995,7 +1995,7 @@ static bool itemEnchanted(Inventory_t *item) {
         return false;
     } else if (spellItemIdentified(item)) {
         return false;
-    } else if (item->ident & ID_MAGIK) {
+    } else if (item->identification & ID_MAGIK) {
         return false;
     } else if (item->to_hit > 0 || item->to_damage > 0 || item->to_ac > 0) {
         return true;

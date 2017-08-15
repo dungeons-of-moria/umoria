@@ -219,7 +219,7 @@ typedef struct {
     int16_t to_ac;                  // Plusses to AC
     uint8_t damage[2];              // Damage when hits
     uint8_t depth_first_found;      // Dungeon level item first found
-    uint8_t ident;                  // Identify information
+    uint8_t identification;         // Identify information
 } Inventory_t;
 
 

@@ -184,34 +184,34 @@ bool itemSetColorlessAsIdentifed(Inventory_t *item) {
 // Remove "Secret" symbol for identity of plusses
 void spellItemIdentifyAndRemoveRandomInscription(Inventory_t *item) {
     unsample(item);
-    item->ident |= ID_KNOWN2;
+    item->identification |= ID_KNOWN2;
 }
 
 bool spellItemIdentified(Inventory_t *item) {
-    return (item->ident & ID_KNOWN2) != 0;
+    return (item->identification & ID_KNOWN2) != 0;
 }
 
 void spellItemRemoveIdentification(Inventory_t *item) {
-    item->ident &= ~ID_KNOWN2;
+    item->identification &= ~ID_KNOWN2;
 }
 
 void itemIdentificationClearEmpty(Inventory_t *item) {
-    item->ident &= ~ID_EMPTY;
+    item->identification &= ~ID_EMPTY;
 }
 
 void itemIdentifyAsStoreBought(Inventory_t *item) {
-    item->ident |= ID_STORE_BOUGHT;
+    item->identification |= ID_STORE_BOUGHT;
     spellItemIdentifyAndRemoveRandomInscription(item);
 }
 
 bool itemStoreBought(Inventory_t *item) {
-    return (item->ident & ID_STORE_BOUGHT) != 0;
+    return (item->identification & ID_STORE_BOUGHT) != 0;
 }
 
 // Remove an automatically generated inscription. -CJS-
 static void unsample(Inventory_t *i_ptr) {
     // this also used to clear ID_DAMD flag, but I think it should remain set
-    i_ptr->ident &= ~(ID_MAGIK | ID_EMPTY);
+    i_ptr->identification &= ~(ID_MAGIK | ID_EMPTY);
 
     int16_t id = objectPositionOffset(i_ptr);
 
@@ -530,7 +530,7 @@ void itemDescription(obj_desc_t description, Inventory_t *item, bool add_prefix)
 
     if (spellItemIdentified(item)) {
         // originally used %+d, but several machines don't support it
-        if (item->ident & ID_SHOW_HIT_DAM) {
+        if (item->identification & ID_SHOW_HIT_DAM) {
             (void) sprintf(tmp_str, " (%c%d,%c%d)", (item->to_hit < 0) ? '-' : '+', abs(item->to_hit), (item->to_damage < 0) ? '-' : '+', abs(item->to_damage));
         } else if (item->to_hit != 0) {
             (void) sprintf(tmp_str, " (%c%d)", (item->to_hit < 0) ? '-' : '+', abs(item->to_hit));
@@ -559,9 +559,9 @@ void itemDescription(obj_desc_t description, Inventory_t *item, bool add_prefix)
     }
 
     // override defaults, check for `misc_use` flags in the ident field
-    if (item->ident & ID_NO_SHOW_P1) {
+    if (item->identification & ID_NO_SHOW_P1) {
         misc_use = IGNORED;
-    } else if (item->ident & ID_SHOW_P1) {
+    } else if (item->identification & ID_SHOW_P1) {
         misc_use = Z_PLUSSES;
     }
 
@@ -629,14 +629,14 @@ void itemDescription(obj_desc_t description, Inventory_t *item, bool add_prefix)
         }
     }
 
-    if (item->ident & (ID_MAGIK | ID_EMPTY | ID_DAMD)) {
-        if (item->ident & ID_MAGIK) {
+    if (item->identification & (ID_MAGIK | ID_EMPTY | ID_DAMD)) {
+        if (item->identification & ID_MAGIK) {
             (void) strcat(tmp_str, "magik ");
         }
-        if (item->ident & ID_EMPTY) {
+        if (item->identification & ID_EMPTY) {
             (void) strcat(tmp_str, "empty ");
         }
-        if (item->ident & ID_DAMD) {
+        if (item->identification & ID_DAMD) {
             (void) strcat(tmp_str, "damned ");
         }
     }
@@ -677,7 +677,7 @@ void inventoryItemCopyTo(int from_item_id, Inventory_t *to_item) {
     to_item->damage[0] = from->damage[0];
     to_item->damage[1] = from->damage[1];
     to_item->depth_first_found = from->level;
-    to_item->ident = 0;
+    to_item->identification = 0;
 }
 
 // Describe number of remaining charges. -RAK-

@@ -152,7 +152,7 @@ static void initializeCharacterInventory() {
 
         // must set this bit to display to_hit/to_damage for stiletto
         if (item.category_id == TV_SWORD) {
-            item.ident |= ID_SHOW_HIT_DAM;
+            item.identification |= ID_SHOW_HIT_DAM;
         }
 
         (void) inventoryCarryItem(&item);
