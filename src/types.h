@@ -129,12 +129,12 @@ typedef struct {
 // Race_t for the generated player character
 typedef struct {
     const char *trace; // Type of race
-    int16_t str_adj;   // adjustments
-    int16_t int_adj;
-    int16_t wis_adj;
-    int16_t dex_adj;
-    int16_t con_adj;
-    int16_t chr_adj;
+    int16_t str_adjustment; // adjustments
+    int16_t int_adjustment;
+    int16_t wis_adjustment;
+    int16_t dex_adjustment;
+    int16_t con_adjustment;
+    int16_t chr_adjustment;
     uint8_t b_age;   // Base age of character
     uint8_t m_age;   // Maximum age of character
     uint8_t m_b_ht;  // base height for males

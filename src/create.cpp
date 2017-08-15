@@ -69,12 +69,12 @@ static void characterGenerateStatsAndRace() {
     Race_t *race = &character_races[py.misc.race_id];
 
     characterGenerateStats();
-    characterChangeStat(A_STR, race->str_adj);
-    characterChangeStat(A_INT, race->int_adj);
-    characterChangeStat(A_WIS, race->wis_adj);
-    characterChangeStat(A_DEX, race->dex_adj);
-    characterChangeStat(A_CON, race->con_adj);
-    characterChangeStat(A_CHR, race->chr_adj);
+    characterChangeStat(A_STR, race->str_adjustment);
+    characterChangeStat(A_INT, race->int_adjustment);
+    characterChangeStat(A_WIS, race->wis_adjustment);
+    characterChangeStat(A_DEX, race->dex_adjustment);
+    characterChangeStat(A_CON, race->con_adjustment);
+    characterChangeStat(A_CHR, race->chr_adjustment);
 
     py.misc.level = 1;
 
