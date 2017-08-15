@@ -441,7 +441,7 @@ bool spellDestroyAdjacentDoorsTraps() {
             } else if (item->tval == TV_CHEST && item->flags != 0) {
                 // destroy traps on chest and unlock
                 item->flags &= ~(CH_TRAPPED | CH_LOCKED);
-                item->name2 = SN_UNLOCKED;
+                item->special_name_id = SN_UNLOCKED;
 
                 destroyed = true;
 
@@ -590,7 +590,7 @@ bool spellDisarmAllInDirection(int y, int x, int direction) {
                 printMessage("Click!");
 
                 item->flags &= ~(CH_TRAPPED | CH_LOCKED);
-                item->name2 = SN_UNLOCKED;
+                item->special_name_id = SN_UNLOCKED;
 
                 spellItemIdentifyAndRemoveRandomInscription(item);
             }
@@ -1362,7 +1362,7 @@ bool spellDestroyDoorsTrapsInDirection(int y, int x, int direction) {
                 printMessage("Click!");
 
                 item->flags &= ~(CH_TRAPPED | CH_LOCKED);
-                item->name2 = SN_UNLOCKED;
+                item->special_name_id = SN_UNLOCKED;
 
                 spellItemIdentifyAndRemoveRandomInscription(item);
             }

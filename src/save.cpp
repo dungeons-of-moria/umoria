@@ -1072,7 +1072,7 @@ static void wr_shorts(uint16_t *s, int count) {
 static void wr_item(Inventory_t *item) {
     DEBUG(fprintf(logfile, "ITEM:\n"));
     wr_short(item->id);
-    wr_byte(item->name2);
+    wr_byte(item->special_name_id);
     wr_string(item->inscrip);
     wr_long(item->flags);
     wr_byte(item->tval);
@@ -1185,7 +1185,7 @@ static void rd_shorts(uint16_t *ptr, int count) {
 static void rd_item(Inventory_t *item) {
     DEBUG(fprintf(logfile, "ITEM:\n"));
     rd_short(&item->id);
-    rd_byte(&item->name2);
+    rd_byte(&item->special_name_id);
     rd_string(item->inscrip);
     rd_long(&item->flags);
     rd_byte(&item->tval);

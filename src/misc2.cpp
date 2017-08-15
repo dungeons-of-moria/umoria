@@ -19,32 +19,32 @@ static void magicalArmor(Inventory_t *t_ptr, int special, int level) {
     switch (randomNumber(9)) {
         case 1:
             t_ptr->flags |= (TR_RES_LIGHT | TR_RES_COLD | TR_RES_ACID | TR_RES_FIRE);
-            t_ptr->name2 = SN_R;
+            t_ptr->special_name_id = SN_R;
             t_ptr->toac += 5;
             t_ptr->cost += 2500;
             break;
         case 2: // Resist Acid
             t_ptr->flags |= TR_RES_ACID;
-            t_ptr->name2 = SN_RA;
+            t_ptr->special_name_id = SN_RA;
             t_ptr->cost += 1000;
             break;
         case 3:
         case 4: // Resist Fire
             t_ptr->flags |= TR_RES_FIRE;
-            t_ptr->name2 = SN_RF;
+            t_ptr->special_name_id = SN_RF;
             t_ptr->cost += 600;
             break;
         case 5:
         case 6: // Resist Cold
             t_ptr->flags |= TR_RES_COLD;
-            t_ptr->name2 = SN_RC;
+            t_ptr->special_name_id = SN_RC;
             t_ptr->cost += 600;
             break;
         case 7:
         case 8:
         case 9: // Resist Lightning
             t_ptr->flags |= TR_RES_LIGHT;
-            t_ptr->name2 = SN_RL;
+            t_ptr->special_name_id = SN_RL;
             t_ptr->cost += 500;
             break;
         default:
@@ -81,7 +81,7 @@ static void magicalSword(Inventory_t *t_ptr, int special, int level) {
                 // the value in p1 is used for strength increase
                 // p1 is also used for sustain stat
                 t_ptr->p1 = (int16_t) randomNumber(4);
-                t_ptr->name2 = SN_HA;
+                t_ptr->special_name_id = SN_HA;
                 t_ptr->cost += t_ptr->p1 * 500;
                 t_ptr->cost += 10000;
                 break;
@@ -90,7 +90,7 @@ static void magicalSword(Inventory_t *t_ptr, int special, int level) {
                 t_ptr->tohit += 3;
                 t_ptr->todam += 3;
                 t_ptr->toac += 5 + randomNumber(5);
-                t_ptr->name2 = SN_DF;
+                t_ptr->special_name_id = SN_DF;
 
                 // the value in p1 is used for stealth
                 t_ptr->p1 = (int16_t) randomNumber(3);
@@ -102,7 +102,7 @@ static void magicalSword(Inventory_t *t_ptr, int special, int level) {
                 t_ptr->flags |= TR_SLAY_ANIMAL;
                 t_ptr->tohit += 2;
                 t_ptr->todam += 2;
-                t_ptr->name2 = SN_SA;
+                t_ptr->special_name_id = SN_SA;
                 t_ptr->cost += 3000;
                 break;
             case 5:
@@ -110,7 +110,7 @@ static void magicalSword(Inventory_t *t_ptr, int special, int level) {
                 t_ptr->flags |= TR_SLAY_DRAGON;
                 t_ptr->tohit += 3;
                 t_ptr->todam += 3;
-                t_ptr->name2 = SN_SD;
+                t_ptr->special_name_id = SN_SD;
                 t_ptr->cost += 4000;
                 break;
             case 7:
@@ -118,7 +118,7 @@ static void magicalSword(Inventory_t *t_ptr, int special, int level) {
                 t_ptr->flags |= TR_SLAY_EVIL;
                 t_ptr->tohit += 3;
                 t_ptr->todam += 3;
-                t_ptr->name2 = SN_SE;
+                t_ptr->special_name_id = SN_SE;
                 t_ptr->cost += 4000;
                 break;
             case 9:
@@ -126,7 +126,7 @@ static void magicalSword(Inventory_t *t_ptr, int special, int level) {
                 t_ptr->flags |= (TR_SEE_INVIS | TR_SLAY_UNDEAD);
                 t_ptr->tohit += 3;
                 t_ptr->todam += 3;
-                t_ptr->name2 = SN_SU;
+                t_ptr->special_name_id = SN_SU;
                 t_ptr->cost += 5000;
                 break;
             case 11:
@@ -135,7 +135,7 @@ static void magicalSword(Inventory_t *t_ptr, int special, int level) {
                 t_ptr->flags |= TR_FLAME_TONGUE;
                 t_ptr->tohit++;
                 t_ptr->todam += 3;
-                t_ptr->name2 = SN_FT;
+                t_ptr->special_name_id = SN_FT;
                 t_ptr->cost += 2000;
                 break;
             case 14:
@@ -144,7 +144,7 @@ static void magicalSword(Inventory_t *t_ptr, int special, int level) {
                 t_ptr->flags |= TR_FROST_BRAND;
                 t_ptr->tohit++;
                 t_ptr->todam++;
-                t_ptr->name2 = SN_FB;
+                t_ptr->special_name_id = SN_FB;
                 t_ptr->cost += 1200;
                 break;
         }
@@ -198,13 +198,13 @@ static void magicalGloves(Inventory_t *t_ptr, int special, int level) {
 
     if (randomNumber(2) == 1) {
         t_ptr->flags |= TR_FREE_ACT;
-        t_ptr->name2 = SN_FREE_ACTION;
+        t_ptr->special_name_id = SN_FREE_ACTION;
         t_ptr->cost += 1000;
     } else {
         t_ptr->ident |= ID_SHOW_HIT_DAM;
         t_ptr->tohit += 1 + randomNumber(3);
         t_ptr->todam += 1 + randomNumber(3);
-        t_ptr->name2 = SN_SLAYING;
+        t_ptr->special_name_id = SN_SLAYING;
         t_ptr->cost += (t_ptr->tohit + t_ptr->todam) * 250;
     }
 }
@@ -213,10 +213,10 @@ static void cursedGloves(Inventory_t *t_ptr, int special, int level) {
     if (magicShouldBeEnchanted(special)) {
         if (randomNumber(2) == 1) {
             t_ptr->flags |= TR_DEX;
-            t_ptr->name2 = SN_CLUMSINESS;
+            t_ptr->special_name_id = SN_CLUMSINESS;
         } else {
             t_ptr->flags |= TR_STR;
-            t_ptr->name2 = SN_WEAKNESS;
+            t_ptr->special_name_id = SN_WEAKNESS;
         }
         t_ptr->ident |= ID_SHOW_P1;
         t_ptr->p1 = (int16_t) -magicEnchantmentBonus(1, 10, level);
@@ -238,11 +238,11 @@ static void magicalBoots(Inventory_t *t_ptr, int special, int level) {
 
     if (magicType > 5) {
         t_ptr->flags |= TR_FFALL;
-        t_ptr->name2 = SN_SLOW_DESCENT;
+        t_ptr->special_name_id = SN_SLOW_DESCENT;
         t_ptr->cost += 250;
     } else if (magicType == 1) {
         t_ptr->flags |= TR_SPEED;
-        t_ptr->name2 = SN_SPEED;
+        t_ptr->special_name_id = SN_SPEED;
         t_ptr->ident |= ID_SHOW_P1;
         t_ptr->p1 = 1;
         t_ptr->cost += 5000;
@@ -251,7 +251,7 @@ static void magicalBoots(Inventory_t *t_ptr, int special, int level) {
         t_ptr->flags |= TR_STEALTH;
         t_ptr->ident |= ID_SHOW_P1;
         t_ptr->p1 = (int16_t) randomNumber(3);
-        t_ptr->name2 = SN_STEALTH;
+        t_ptr->special_name_id = SN_STEALTH;
         t_ptr->cost += 500;
     }
 }
@@ -261,14 +261,14 @@ static void cursedBoots(Inventory_t *t_ptr, int level) {
 
     if (magicType == 1) {
         t_ptr->flags |= TR_SPEED;
-        t_ptr->name2 = SN_SLOWNESS;
+        t_ptr->special_name_id = SN_SLOWNESS;
         t_ptr->ident |= ID_SHOW_P1;
         t_ptr->p1 = -1;
     } else if (magicType == 2) {
         t_ptr->flags |= TR_AGGRAVATE;
-        t_ptr->name2 = SN_NOISE;
+        t_ptr->special_name_id = SN_NOISE;
     } else {
-        t_ptr->name2 = SN_GREAT_MASS;
+        t_ptr->special_name_id = SN_GREAT_MASS;
         t_ptr->weight = (uint16_t) (t_ptr->weight * 5);
     }
 
@@ -292,17 +292,17 @@ static void magicalHelms(Inventory_t *t_ptr, int special, int level) {
         if (magicType == 1) {
             t_ptr->p1 = (int16_t) randomNumber(2);
             t_ptr->flags |= TR_INT;
-            t_ptr->name2 = SN_INTELLIGENCE;
+            t_ptr->special_name_id = SN_INTELLIGENCE;
             t_ptr->cost += t_ptr->p1 * 500;
         } else if (magicType == 2) {
             t_ptr->p1 = (int16_t) randomNumber(2);
             t_ptr->flags |= TR_WIS;
-            t_ptr->name2 = SN_WISDOM;
+            t_ptr->special_name_id = SN_WISDOM;
             t_ptr->cost += t_ptr->p1 * 500;
         } else {
             t_ptr->p1 = (int16_t) (1 + randomNumber(4));
             t_ptr->flags |= TR_INFRA;
-            t_ptr->name2 = SN_INFRAVISION;
+            t_ptr->special_name_id = SN_INFRAVISION;
             t_ptr->cost += t_ptr->p1 * 250;
         }
 
@@ -314,40 +314,40 @@ static void magicalHelms(Inventory_t *t_ptr, int special, int level) {
             t_ptr->ident |= ID_SHOW_P1;
             t_ptr->p1 = (int16_t) randomNumber(3);
             t_ptr->flags |= (TR_FREE_ACT | TR_CON | TR_DEX | TR_STR);
-            t_ptr->name2 = SN_MIGHT;
+            t_ptr->special_name_id = SN_MIGHT;
             t_ptr->cost += 1000 + t_ptr->p1 * 500;
             break;
         case 2:
             t_ptr->ident |= ID_SHOW_P1;
             t_ptr->p1 = (int16_t) randomNumber(3);
             t_ptr->flags |= (TR_CHR | TR_WIS);
-            t_ptr->name2 = SN_LORDLINESS;
+            t_ptr->special_name_id = SN_LORDLINESS;
             t_ptr->cost += 1000 + t_ptr->p1 * 500;
             break;
         case 3:
             t_ptr->ident |= ID_SHOW_P1;
             t_ptr->p1 = (int16_t) randomNumber(3);
             t_ptr->flags |= (TR_RES_LIGHT | TR_RES_COLD | TR_RES_ACID | TR_RES_FIRE | TR_INT);
-            t_ptr->name2 = SN_MAGI;
+            t_ptr->special_name_id = SN_MAGI;
             t_ptr->cost += 3000 + t_ptr->p1 * 500;
             break;
         case 4:
             t_ptr->ident |= ID_SHOW_P1;
             t_ptr->p1 = (int16_t) randomNumber(3);
             t_ptr->flags |= TR_CHR;
-            t_ptr->name2 = SN_BEAUTY;
+            t_ptr->special_name_id = SN_BEAUTY;
             t_ptr->cost += 750;
             break;
         case 5:
             t_ptr->ident |= ID_SHOW_P1;
             t_ptr->p1 = (int16_t) (5 * (1 + randomNumber(4)));
             t_ptr->flags |= (TR_SEE_INVIS | TR_SEARCH);
-            t_ptr->name2 = SN_SEEING;
+            t_ptr->special_name_id = SN_SEEING;
             t_ptr->cost += 1000 + t_ptr->p1 * 100;
             break;
         case 6:
             t_ptr->flags |= TR_REGEN;
-            t_ptr->name2 = SN_REGENERATION;
+            t_ptr->special_name_id = SN_REGENERATION;
             t_ptr->cost += 1500;
             break;
     }
@@ -367,37 +367,37 @@ static void cursedHelms(Inventory_t *t_ptr, int special, int level) {
             t_ptr->ident |= ID_SHOW_P1;
             t_ptr->p1 = (int16_t) -randomNumber(5);
             t_ptr->flags |= TR_INT;
-            t_ptr->name2 = SN_STUPIDITY;
+            t_ptr->special_name_id = SN_STUPIDITY;
             break;
         case 2:
             t_ptr->ident |= ID_SHOW_P1;
             t_ptr->p1 = (int16_t) -randomNumber(5);
             t_ptr->flags |= TR_WIS;
-            t_ptr->name2 = SN_DULLNESS;
+            t_ptr->special_name_id = SN_DULLNESS;
             break;
         case 3:
             t_ptr->flags |= TR_BLIND;
-            t_ptr->name2 = SN_BLINDNESS;
+            t_ptr->special_name_id = SN_BLINDNESS;
             break;
         case 4:
             t_ptr->flags |= TR_TIMID;
-            t_ptr->name2 = SN_TIMIDNESS;
+            t_ptr->special_name_id = SN_TIMIDNESS;
             break;
         case 5:
             t_ptr->ident |= ID_SHOW_P1;
             t_ptr->p1 = (int16_t) -randomNumber(5);
             t_ptr->flags |= TR_STR;
-            t_ptr->name2 = SN_WEAKNESS;
+            t_ptr->special_name_id = SN_WEAKNESS;
             break;
         case 6:
             t_ptr->flags |= TR_TELEPORT;
-            t_ptr->name2 = SN_TELEPORTATION;
+            t_ptr->special_name_id = SN_TELEPORTATION;
             break;
         case 7:
             t_ptr->ident |= ID_SHOW_P1;
             t_ptr->p1 = (int16_t) -randomNumber(5);
             t_ptr->flags |= TR_CHR;
-            t_ptr->name2 = SN_UGLINESS;
+            t_ptr->special_name_id = SN_UGLINESS;
             break;
     }
 }
@@ -628,7 +628,7 @@ static void magicalCloak(Inventory_t *t_ptr, int special, int level) {
     }
 
     if (randomNumber(2) == 1) {
-        t_ptr->name2 = SN_PROTECTION;
+        t_ptr->special_name_id = SN_PROTECTION;
         t_ptr->toac += magicEnchantmentBonus(2, 40, level);
         t_ptr->cost += 250;
         return;
@@ -638,7 +638,7 @@ static void magicalCloak(Inventory_t *t_ptr, int special, int level) {
     t_ptr->ident |= ID_SHOW_P1;
     t_ptr->p1 = (int16_t) randomNumber(3);
     t_ptr->flags |= TR_STEALTH;
-    t_ptr->name2 = SN_STEALTH;
+    t_ptr->special_name_id = SN_STEALTH;
     t_ptr->cost += 500;
 }
 
@@ -647,18 +647,18 @@ static void cursedCloak(Inventory_t *t_ptr, int level) {
 
     if (magicType == 1) {
         t_ptr->flags |= TR_AGGRAVATE;
-        t_ptr->name2 = SN_IRRITATION;
+        t_ptr->special_name_id = SN_IRRITATION;
         t_ptr->toac -= magicEnchantmentBonus(1, 10, level);
         t_ptr->ident |= ID_SHOW_HIT_DAM;
         t_ptr->tohit -= magicEnchantmentBonus(1, 10, level);
         t_ptr->todam -= magicEnchantmentBonus(1, 10, level);
         t_ptr->cost = 0;
     } else if (magicType == 2) {
-        t_ptr->name2 = SN_VULNERABILITY;
+        t_ptr->special_name_id = SN_VULNERABILITY;
         t_ptr->toac -= magicEnchantmentBonus(10, 100, level + 50);
         t_ptr->cost = 0;
     } else {
-        t_ptr->name2 = SN_ENVELOPING;
+        t_ptr->special_name_id = SN_ENVELOPING;
         t_ptr->toac -= magicEnchantmentBonus(1, 10, level);
         t_ptr->ident |= ID_SHOW_HIT_DAM;
         t_ptr->tohit -= magicEnchantmentBonus(2, 40, level + 10);
@@ -673,48 +673,48 @@ static void magicalChests(Inventory_t *t_ptr, int level) {
     switch (randomNumber(level + 4)) {
         case 1:
             t_ptr->flags = 0;
-            t_ptr->name2 = SN_EMPTY;
+            t_ptr->special_name_id = SN_EMPTY;
             break;
         case 2:
             t_ptr->flags |= CH_LOCKED;
-            t_ptr->name2 = SN_LOCKED;
+            t_ptr->special_name_id = SN_LOCKED;
             break;
         case 3:
         case 4:
             t_ptr->flags |= (CH_LOSE_STR | CH_LOCKED);
-            t_ptr->name2 = SN_POISON_NEEDLE;
+            t_ptr->special_name_id = SN_POISON_NEEDLE;
             break;
         case 5:
         case 6:
             t_ptr->flags |= (CH_POISON | CH_LOCKED);
-            t_ptr->name2 = SN_POISON_NEEDLE;
+            t_ptr->special_name_id = SN_POISON_NEEDLE;
             break;
         case 7:
         case 8:
         case 9:
             t_ptr->flags |= (CH_PARALYSED | CH_LOCKED);
-            t_ptr->name2 = SN_GAS_TRAP;
+            t_ptr->special_name_id = SN_GAS_TRAP;
             break;
         case 10:
         case 11:
             t_ptr->flags |= (CH_EXPLODE | CH_LOCKED);
-            t_ptr->name2 = SN_EXPLOSION_DEVICE;
+            t_ptr->special_name_id = SN_EXPLOSION_DEVICE;
             break;
         case 12:
         case 13:
         case 14:
             t_ptr->flags |= (CH_SUMMON | CH_LOCKED);
-            t_ptr->name2 = SN_SUMMONING_RUNES;
+            t_ptr->special_name_id = SN_SUMMONING_RUNES;
             break;
         case 15:
         case 16:
         case 17:
             t_ptr->flags |= (CH_PARALYSED | CH_POISON | CH_LOSE_STR | CH_LOCKED);
-            t_ptr->name2 = SN_MULTIPLE_TRAPS;
+            t_ptr->special_name_id = SN_MULTIPLE_TRAPS;
             break;
         default:
             t_ptr->flags |= (CH_SUMMON | CH_EXPLODE | CH_LOCKED);
-            t_ptr->name2 = SN_MULTIPLE_TRAPS;
+            t_ptr->special_name_id = SN_MULTIPLE_TRAPS;
             break;
     }
 }
@@ -729,7 +729,7 @@ static void magicalProjectiles(Inventory_t *t_ptr, int special, int level) {
             case 1:
             case 2:
             case 3:
-                t_ptr->name2 = SN_SLAYING;
+                t_ptr->special_name_id = SN_SLAYING;
                 t_ptr->tohit += 5;
                 t_ptr->todam += 5;
                 t_ptr->cost += 20;
@@ -739,7 +739,7 @@ static void magicalProjectiles(Inventory_t *t_ptr, int special, int level) {
                 t_ptr->flags |= TR_FLAME_TONGUE;
                 t_ptr->tohit += 2;
                 t_ptr->todam += 4;
-                t_ptr->name2 = SN_FIRE;
+                t_ptr->special_name_id = SN_FIRE;
                 t_ptr->cost += 25;
                 break;
             case 6:
@@ -747,7 +747,7 @@ static void magicalProjectiles(Inventory_t *t_ptr, int special, int level) {
                 t_ptr->flags |= TR_SLAY_EVIL;
                 t_ptr->tohit += 3;
                 t_ptr->todam += 3;
-                t_ptr->name2 = SN_SLAY_EVIL;
+                t_ptr->special_name_id = SN_SLAY_EVIL;
                 t_ptr->cost += 25;
                 break;
             case 8:
@@ -755,14 +755,14 @@ static void magicalProjectiles(Inventory_t *t_ptr, int special, int level) {
                 t_ptr->flags |= TR_SLAY_ANIMAL;
                 t_ptr->tohit += 2;
                 t_ptr->todam += 2;
-                t_ptr->name2 = SN_SLAY_ANIMAL;
+                t_ptr->special_name_id = SN_SLAY_ANIMAL;
                 t_ptr->cost += 30;
                 break;
             case 10:
                 t_ptr->flags |= TR_SLAY_DRAGON;
                 t_ptr->tohit += 3;
                 t_ptr->todam += 3;
-                t_ptr->name2 = SN_DRAGON_SLAYING;
+                t_ptr->special_name_id = SN_DRAGON_SLAYING;
                 t_ptr->cost += 35;
                 break;
         }

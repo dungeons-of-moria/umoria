@@ -294,7 +294,7 @@ void itemIdentify(int *item_id) {
 // If an object has lost magical properties,
 // remove the appropriate portion of the name. -CJS-
 void itemRemoveMagicNaming(Inventory_t *item) {
-    item->name2 = SN_NULL;
+    item->special_name_id = SN_NULL;
 }
 
 // defines for p1_use, determine how the p1 field is printed
@@ -519,9 +519,9 @@ void itemDescription(obj_desc_t description, Inventory_t *item, bool add_prefix)
 
     vtype_t tmp_str;
 
-    if (item->name2 != SN_NULL && spellItemIdentified(item)) {
+    if (item->special_name_id != SN_NULL && spellItemIdentified(item)) {
         (void) strcat(tmp_val, " ");
-        (void) strcat(tmp_val, special_item_names[item->name2]);
+        (void) strcat(tmp_val, special_item_names[item->special_name_id]);
     }
 
     if (damstr[0] != '\0') {
@@ -660,7 +660,7 @@ void inventoryItemCopyTo(int from_item_id, Inventory_t *to_item) {
     GameObject_t *from = &game_objects[from_item_id];
 
     to_item->id = (uint16_t) from_item_id;
-    to_item->name2 = SN_NULL;
+    to_item->special_name_id = SN_NULL;
     to_item->inscrip[0] = '\0';
     to_item->flags = from->flags;
     to_item->tval = from->tval;

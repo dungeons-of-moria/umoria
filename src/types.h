@@ -203,7 +203,7 @@ typedef struct {
 // pointers, so we use a char array for them instead.
 typedef struct {
     uint16_t id;                // Index to object_list
-    uint8_t name2;              // Object special name
+    uint8_t special_name_id;    // Object special name
     char inscrip[INSCRIP_SIZE]; // Object inscription
     uint32_t flags;             // Special flags
     uint8_t tval;               // Category number
