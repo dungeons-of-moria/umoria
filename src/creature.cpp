@@ -753,7 +753,7 @@ static bool executeAttackOnPlayer(Creature_t *creature, Monster_t *monster, int 
             break;
         case 24: // Eat charges
             item = &inventory[randomNumber(inventory_count) - 1];
-            if ((item->tval == TV_STAFF || item->tval == TV_WAND) && item->p1 > 0) {
+            if ((item->category_id == TV_STAFF || item->category_id == TV_WAND) && item->p1 > 0) {
                 monster->hp += creature->level * item->p1;
                 item->p1 = 0;
                 if (!spellItemIdentified(item)) {
@@ -903,7 +903,7 @@ static void monsterOpenDoor(Cave_t *tile, int16_t monster_hp, uint32_t move_bits
     if (move_bits & CM_OPEN_DOOR) {
         bool door_is_stuck = false;
 
-        if (item->tval == TV_CLOSED_DOOR) {
+        if (item->category_id == TV_CLOSED_DOOR) {
             *do_turn = true;
 
             if (item->p1 == 0) {
@@ -926,7 +926,7 @@ static void monsterOpenDoor(Cave_t *tile, int16_t monster_hp, uint32_t move_bits
                     *do_move = true;
                 }
             }
-        } else if (item->tval == TV_SECRET_DOOR) {
+        } else if (item->category_id == TV_SECRET_DOOR) {
             *do_turn = true;
             *do_move = true;
         }
@@ -943,7 +943,7 @@ static void monsterOpenDoor(Cave_t *tile, int16_t monster_hp, uint32_t move_bits
             *rcmove |= CM_OPEN_DOOR;
             *do_move = false;
         }
-    } else if (item->tval == TV_CLOSED_DOOR) {
+    } else if (item->category_id == TV_CLOSED_DOOR) {
         // Creature can not open doors, must bash them
         *do_turn = true;
 
@@ -1018,7 +1018,7 @@ static void monsterAllowedToMove(Monster_t *monster, uint32_t move_bits, bool *d
     if (move_bits & CM_PICKS_UP) {
         uint8_t treasure_id = cave[y][x].tptr;
 
-        if (treasure_id != 0 && treasure_list[treasure_id].tval <= TV_MAX_OBJECT) {
+        if (treasure_id != 0 && treasure_list[treasure_id].category_id <= TV_MAX_OBJECT) {
             *rcmove |= CM_PICKS_UP;
             (void) dungeonDeleteObject(y, x);
         }
@@ -1073,7 +1073,7 @@ static void makeMove(int monster_id, int *directions, uint32_t *rcmove) {
         }
 
         // Glyph of warding present?
-        if (do_move && tile->tptr != 0 && treasure_list[tile->tptr].tval == TV_VIS_TRAP && treasure_list[tile->tptr].subval == 99) {
+        if (do_move && tile->tptr != 0 && treasure_list[tile->tptr].category_id == TV_VIS_TRAP && treasure_list[tile->tptr].subval == 99) {
             glyphOfWardingProtection(monster->mptr, move_bits, &do_move, &do_turn, y, x);
         }
 

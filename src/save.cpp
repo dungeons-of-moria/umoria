@@ -1075,7 +1075,7 @@ static void wr_item(Inventory_t *item) {
     wr_byte(item->special_name_id);
     wr_string(item->inscription);
     wr_long(item->flags);
-    wr_byte(item->tval);
+    wr_byte(item->category_id);
     wr_byte(item->tchar);
     wr_short((uint16_t) item->p1);
     wr_long((uint32_t) item->cost);
@@ -1188,7 +1188,7 @@ static void rd_item(Inventory_t *item) {
     rd_byte(&item->special_name_id);
     rd_string(item->inscription);
     rd_long(&item->flags);
-    rd_byte(&item->tval);
+    rd_byte(&item->category_id);
     rd_byte(&item->tchar);
     rd_short((uint16_t *) &item->p1);
     rd_long((uint32_t *) &item->cost);

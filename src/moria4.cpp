@@ -16,7 +16,7 @@ static bool lookSee(int x, int y, bool *transparent);
 // prevent the player from getting a free attack by trying to tunnel
 // somewhere where it has no effect.
 static bool playerCanTunnel(int treasure_id, int tile_id) {
-    if (tile_id < MIN_CAVE_WALL && (treasure_id == 0 || (treasure_list[treasure_id].tval != TV_RUBBLE && treasure_list[treasure_id].tval != TV_SECRET_DOOR))) {
+    if (tile_id < MIN_CAVE_WALL && (treasure_id == 0 || (treasure_list[treasure_id].category_id != TV_RUBBLE && treasure_list[treasure_id].category_id != TV_SECRET_DOOR))) {
         player_free_turn = true;
 
         if (treasure_id == 0) {
@@ -154,15 +154,15 @@ void playerTunnel(int direction) {
         return;
     }
 
-    if (item->tval != TV_NOTHING) {
+    if (item->category_id != TV_NOTHING) {
         int diggingAbility = playerDiggingAbility(item);
 
         if (!dungeonDigAtLocation(y, x, tile->fval, diggingAbility)) {
             // Is there an object in the way?  (Rubble and secret doors)
             if (tile->tptr != 0) {
-                if (treasure_list[tile->tptr].tval == TV_RUBBLE) {
+                if (treasure_list[tile->tptr].category_id == TV_RUBBLE) {
                     dungeonDigRubble(y, x, diggingAbility);
-                } else if (treasure_list[tile->tptr].tval == TV_SECRET_DOOR) {
+                } else if (treasure_list[tile->tptr].category_id == TV_SECRET_DOOR) {
                     // Found secret door!
                     printMessageNoCommandInterrupt("You tunnel into the granite wall.");
                     dungeonSearch(char_row, char_col, py.misc.chance_in_search);
@@ -288,16 +288,16 @@ void playerDisarmTrap() {
 
     bool no_disarm = false;
 
-    if (tile->cptr > 1 && tile->tptr != 0 && (treasure_list[tile->tptr].tval == TV_VIS_TRAP || treasure_list[tile->tptr].tval == TV_CHEST)) {
+    if (tile->cptr > 1 && tile->tptr != 0 && (treasure_list[tile->tptr].category_id == TV_VIS_TRAP || treasure_list[tile->tptr].category_id == TV_CHEST)) {
         objectBlockedByMonster(tile->cptr);
     } else if (tile->tptr != 0) {
         int disarm_ability = playerTrapDisarmAbility();
 
         Inventory_t *item = &treasure_list[tile->tptr];
 
-        if (item->tval == TV_VIS_TRAP) {
+        if (item->category_id == TV_VIS_TRAP) {
             playerDisarmFloorTrap(y, x, disarm_ability, item->level, dir, item->p1);
-        } else if (item->tval == TV_CHEST) {
+        } else if (item->category_id == TV_CHEST) {
             playerDisarmChestTrap(y, x, disarm_ability, item);
         } else {
             no_disarm = true;
@@ -649,11 +649,11 @@ static bool lookSee(int x, int y, bool *transparent) {
 
     if (tile->tl || tile->pl || tile->fm) {
         if (tile->tptr != 0) {
-            if (treasure_list[tile->tptr].tval == TV_SECRET_DOOR) {
+            if (treasure_list[tile->tptr].category_id == TV_SECRET_DOOR) {
                 goto granite;
             }
 
-            if (los_rocks_and_objects == 0 && treasure_list[tile->tptr].tval != TV_INVIS_TRAP) {
+            if (los_rocks_and_objects == 0 && treasure_list[tile->tptr].category_id != TV_INVIS_TRAP) {
                 obj_desc_t obj_string;
                 itemDescription(obj_string, &treasure_list[tile->tptr], true);
 
@@ -738,7 +738,7 @@ static void weaponMissileFacts(Inventory_t *item, int *tbth, int *tpth, int *tda
     *tpth = py.misc.plusses_to_hit + item->tohit;
 
     // Add this back later if the correct throwing device. -CJS-
-    if (inventory[EQUIPMENT_WIELD].tval != TV_NOTHING) {
+    if (inventory[EQUIPMENT_WIELD].category_id != TV_NOTHING) {
         *tpth -= inventory[EQUIPMENT_WIELD].tohit;
     }
 
@@ -751,13 +751,13 @@ static void weaponMissileFacts(Inventory_t *item, int *tbth, int *tpth, int *tda
     // missile/weapon combo, this makes them much more useful
 
     // Using Bows, slings, or crossbows?
-    if (inventory[EQUIPMENT_WIELD].tval != TV_BOW) {
+    if (inventory[EQUIPMENT_WIELD].category_id != TV_BOW) {
         return;
     }
 
     switch (inventory[EQUIPMENT_WIELD].p1) {
         case 1:
-            if (item->tval == TV_SLING_AMMO) { // Sling and ammo
+            if (item->category_id == TV_SLING_AMMO) { // Sling and ammo
                 *tbth = py.misc.bth_with_bows;
                 *tpth += 2 * inventory[EQUIPMENT_WIELD].tohit;
                 *tdam += inventory[EQUIPMENT_WIELD].todam;
@@ -766,7 +766,7 @@ static void weaponMissileFacts(Inventory_t *item, int *tbth, int *tpth, int *tda
             }
             break;
         case 2:
-            if (item->tval == TV_ARROW) { // Short Bow and Arrow
+            if (item->category_id == TV_ARROW) { // Short Bow and Arrow
                 *tbth = py.misc.bth_with_bows;
                 *tpth += 2 * inventory[EQUIPMENT_WIELD].tohit;
                 *tdam += inventory[EQUIPMENT_WIELD].todam;
@@ -775,7 +775,7 @@ static void weaponMissileFacts(Inventory_t *item, int *tbth, int *tpth, int *tda
             }
             break;
         case 3:
-            if (item->tval == TV_ARROW) { // Long Bow and Arrow
+            if (item->category_id == TV_ARROW) { // Long Bow and Arrow
                 *tbth = py.misc.bth_with_bows;
                 *tpth += 2 * inventory[EQUIPMENT_WIELD].tohit;
                 *tdam += inventory[EQUIPMENT_WIELD].todam;
@@ -784,7 +784,7 @@ static void weaponMissileFacts(Inventory_t *item, int *tbth, int *tpth, int *tda
             }
             break;
         case 4:
-            if (item->tval == TV_ARROW) { // Composite Bow and Arrow
+            if (item->category_id == TV_ARROW) { // Composite Bow and Arrow
                 *tbth = py.misc.bth_with_bows;
                 *tpth += 2 * inventory[EQUIPMENT_WIELD].tohit;
                 *tdam += inventory[EQUIPMENT_WIELD].todam;
@@ -793,7 +793,7 @@ static void weaponMissileFacts(Inventory_t *item, int *tbth, int *tpth, int *tda
             }
             break;
         case 5:
-            if (item->tval == TV_BOLT) { // Light Crossbow and Bolt
+            if (item->category_id == TV_BOLT) { // Light Crossbow and Bolt
                 *tbth = py.misc.bth_with_bows;
                 *tpth += 2 * inventory[EQUIPMENT_WIELD].tohit;
                 *tdam += inventory[EQUIPMENT_WIELD].todam;
@@ -802,7 +802,7 @@ static void weaponMissileFacts(Inventory_t *item, int *tbth, int *tpth, int *tda
             }
             break;
         case 6:
-            if (item->tval == TV_BOLT) { // Heavy Crossbow and Bolt
+            if (item->category_id == TV_BOLT) { // Heavy Crossbow and Bolt
                 *tbth = py.misc.bth_with_bows;
                 *tpth += 2 * inventory[EQUIPMENT_WIELD].tohit;
                 *tdam += inventory[EQUIPMENT_WIELD].todam;
@@ -1172,9 +1172,9 @@ void playerBash() {
     if (tile->tptr != 0) {
         Inventory_t *item = &treasure_list[tile->tptr];
 
-        if (item->tval == TV_CLOSED_DOOR) {
+        if (item->category_id == TV_CLOSED_DOOR) {
             playerBashClosedDoor(y, x, dir, tile, item);
-        } else if (item->tval == TV_CHEST) {
+        } else if (item->category_id == TV_CHEST) {
             playerBashClosedChest(item);
         } else {
             // Can't give free turn, or else player could try directions

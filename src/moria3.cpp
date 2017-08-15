@@ -386,7 +386,7 @@ int castSpellGetId(const char *prompt, int item_id, int *spell_id, int *spell_ch
 static void carry(int y, int x, bool pickup) {
     Inventory_t *item = &treasure_list[cave[y][x].tptr];
 
-    int tileFlags = treasure_list[cave[y][x].tptr].tval;
+    int tileFlags = treasure_list[cave[y][x].tptr].category_id;
 
     if (tileFlags > TV_MAX_PICK_UP) {
         if (tileFlags == TV_INVIS_TRAP || tileFlags == TV_VIS_TRAP || tileFlags == TV_STORE_DOOR) {
@@ -809,7 +809,7 @@ static void playerAttackMonster(int y, int x) {
     }
 
     int blows, total_to_hit;
-    playerCalculateToHitBlows(item->tval, item->weight, &blows, &total_to_hit);
+    playerCalculateToHitBlows(item->category_id, item->weight, &blows, &total_to_hit);
 
     int base_to_hit = playerCalculateBaseToHit(monster->ml, total_to_hit);
 
@@ -828,7 +828,7 @@ static void playerAttackMonster(int y, int x) {
         (void) sprintf(msg, "You hit %s.", name);
         printMessage(msg);
 
-        if (item->tval != TV_NOTHING) {
+        if (item->category_id != TV_NOTHING) {
             damage = dicePlayerDamageRoll(item->damage);
             damage = itemMagicAbilityDamage(item, damage, monster->mptr);
             damage = playerWeaponCriticalBlow((int) item->weight, total_to_hit, damage, CLASS_BTH);
@@ -875,7 +875,7 @@ static void playerAttackMonster(int y, int x) {
         }
 
         // Use missiles up
-        if (item->tval >= TV_SLING_AMMO && item->tval <= TV_SPIKE) {
+        if (item->category_id >= TV_SLING_AMMO && item->category_id <= TV_SPIKE) {
             item->number--;
             inventory_weight -= item->weight;
             py.flags.status |= PY_STR_WGT;
@@ -983,7 +983,7 @@ void playerMove(int direction, bool do_pickup) {
 
                 // if stepped on falling rock trap, and space contains
                 // rubble, then step back into a clear area
-                if (treasure_list[tile->tptr].tval == TV_RUBBLE) {
+                if (treasure_list[tile->tptr].category_id == TV_RUBBLE) {
                     dungeonMoveCreatureRecord(char_row, char_col, old_row, old_col);
                     dungeonMoveCharacterLight(char_row, char_col, old_row, old_col);
 
@@ -993,7 +993,7 @@ void playerMove(int direction, bool do_pickup) {
                     // check to see if we have stepped back onto another trap, if so, set it off
                     uint8_t id = cave[char_row][char_col].tptr;
                     if (id != 0) {
-                        int val = treasure_list[id].tval;
+                        int val = treasure_list[id].category_id;
                         if (val == TV_INVIS_TRAP || val == TV_VIS_TRAP || val == TV_STORE_DOOR) {
                             playerStepsOnTrap(char_row, char_col);
                         }
@@ -1004,9 +1004,9 @@ void playerMove(int direction, bool do_pickup) {
             // Can't move onto floor space
 
             if (!running_counter && tile->tptr != 0) {
-                if (treasure_list[tile->tptr].tval == TV_RUBBLE) {
+                if (treasure_list[tile->tptr].category_id == TV_RUBBLE) {
                     printMessage("There is rubble blocking your way.");
-                } else if (treasure_list[tile->tptr].tval == TV_CLOSED_DOOR) {
+                } else if (treasure_list[tile->tptr].category_id == TV_CLOSED_DOOR) {
                     printMessage("There is a closed door blocking your way.");
                 }
             } else {
@@ -1217,12 +1217,12 @@ void objectOpen() {
     Cave_t *tile = &cave[y][x];
     Inventory_t *item = &treasure_list[tile->tptr];
 
-    if (tile->cptr > 1 && tile->tptr != 0 && (item->tval == TV_CLOSED_DOOR || item->tval == TV_CHEST)) {
+    if (tile->cptr > 1 && tile->tptr != 0 && (item->category_id == TV_CLOSED_DOOR || item->category_id == TV_CHEST)) {
         objectBlockedByMonster(tile->cptr);
     } else if (tile->tptr != 0) {
-        if (item->tval == TV_CLOSED_DOOR) {
+        if (item->category_id == TV_CLOSED_DOOR) {
             openClosedDoor(y, x);
-        } else if (item->tval == TV_CHEST) {
+        } else if (item->category_id == TV_CHEST) {
             openClosedChest(y, x);
         } else {
             no_object = true;
@@ -1255,7 +1255,7 @@ void dungeonCloseDoor() {
     bool no_object = false;
 
     if (tile->tptr != 0) {
-        if (item->tval == TV_OPEN_DOOR) {
+        if (item->category_id == TV_OPEN_DOOR) {
             if (tile->cptr == 0) {
                 if (item->p1 == 0) {
                     inventoryItemCopyTo(OBJ_CLOSED_DOOR, item);

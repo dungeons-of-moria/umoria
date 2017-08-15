@@ -109,7 +109,7 @@ void magicInitializeItemNames() {
 }
 
 int16_t objectPositionOffset(Inventory_t *item) {
-    switch (item->tval) {
+    switch (item->category_id) {
         case TV_AMULET:
             return 0;
         case TV_RING:
@@ -255,7 +255,7 @@ void itemIdentify(int *item_id) {
 
     itemSetAsIdentified(i_ptr);
 
-    int x1 = i_ptr->tval;
+    int x1 = i_ptr->category_id;
     int x2 = i_ptr->subval;
 
     // no merging possible
@@ -269,7 +269,7 @@ void itemIdentify(int *item_id) {
     for (int i = 0; i < inventory_count; i++) {
         t_ptr = &inventory[i];
 
-        if (t_ptr->tval == x1 && t_ptr->subval == x2 && i != *item_id && ((int) t_ptr->number + (int) i_ptr->number) < 256) {
+        if (t_ptr->category_id == x1 && t_ptr->subval == x2 && i != *item_id && ((int) t_ptr->number + (int) i_ptr->number) < 256) {
             // make *item_id the smaller number
             if (*item_id > i) {
                 j = *item_id;
@@ -337,7 +337,7 @@ void itemDescription(obj_desc_t description, Inventory_t *item, bool add_prefix)
 
     bool modify = !itemSetColorlessAsIdentifed(item);
 
-    switch (item->tval) {
+    switch (item->category_id) {
         case TV_MISC:
         case TV_CHEST:
             break;
@@ -543,7 +543,7 @@ void itemDescription(obj_desc_t description, Inventory_t *item, bool add_prefix)
     }
 
     // Crowns have a zero base AC, so make a special test for them.
-    if (item->ac != 0 || item->tval == TV_HELM) {
+    if (item->ac != 0 || item->category_id == TV_HELM) {
         (void) sprintf(tmp_str, " [%d", item->ac);
         (void) strcat(tmp_val, tmp_str);
         if (spellItemIdentified(item)) {
@@ -663,7 +663,7 @@ void inventoryItemCopyTo(int from_item_id, Inventory_t *to_item) {
     to_item->special_name_id = SN_NULL;
     to_item->inscription[0] = '\0';
     to_item->flags = from->flags;
-    to_item->tval = from->tval;
+    to_item->category_id = from->tval;
     to_item->tchar = from->tchar;
     to_item->p1 = from->p1;
     to_item->cost = from->cost;

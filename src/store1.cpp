@@ -27,19 +27,19 @@ int32_t storeItemValue(Inventory_t *item) {
     if (item->ident & ID_DAMD) {
         // don't purchase known cursed items
         value = 0;
-    } else if ((item->tval >= TV_BOW && item->tval <= TV_SWORD) || (item->tval >= TV_BOOTS && item->tval <= TV_SOFT_ARMOR)) {
+    } else if ((item->category_id >= TV_BOW && item->category_id <= TV_SWORD) || (item->category_id >= TV_BOOTS && item->category_id <= TV_SOFT_ARMOR)) {
         value = getWeaponArmorBuyPrice(item);
-    } else if (item->tval >= TV_SLING_AMMO && item->tval <= TV_SPIKE) {
+    } else if (item->category_id >= TV_SLING_AMMO && item->category_id <= TV_SPIKE) {
         value = getAmmoBuyPrice(item);
-    } else if (item->tval == TV_SCROLL1 || item->tval == TV_SCROLL2 || item->tval == TV_POTION1 || item->tval == TV_POTION2) {
+    } else if (item->category_id == TV_SCROLL1 || item->category_id == TV_SCROLL2 || item->category_id == TV_POTION1 || item->category_id == TV_POTION2) {
         value = getPotionScrollBuyPrice(item);
-    } else if (item->tval == TV_FOOD) {
+    } else if (item->category_id == TV_FOOD) {
         value = getFoodBuyPrice(item);
-    } else if (item->tval == TV_AMULET || item->tval == TV_RING) {
+    } else if (item->category_id == TV_AMULET || item->category_id == TV_RING) {
         value = getRingAmuletBuyPrice(item);
-    } else if (item->tval == TV_STAFF || item->tval == TV_WAND) {
+    } else if (item->category_id == TV_STAFF || item->category_id == TV_WAND) {
         value = getWandStaffBuyPrice(item);
-    } else if (item->tval == TV_DIGGING) {
+    } else if (item->category_id == TV_DIGGING) {
         value = getPickShovelBuyPrice(item);
     } else {
         value = item->cost;
@@ -59,7 +59,7 @@ static int32_t getWeaponArmorBuyPrice(Inventory_t *item) {
         return game_objects[item->id].cost;
     }
 
-    if (item->tval >= TV_BOW && item->tval <= TV_SWORD) {
+    if (item->category_id >= TV_BOW && item->category_id <= TV_SWORD) {
         if (item->tohit < 0 || item->todam < 0 || item->toac < 0) {
             return 0;
         }
@@ -122,7 +122,7 @@ static int32_t getRingAmuletBuyPrice(Inventory_t *item) {
 
 static int32_t getWandStaffBuyPrice(Inventory_t *item) {
     if (!itemSetColorlessAsIdentifed(item)) {
-        if (item->tval == TV_WAND) {
+        if (item->category_id == TV_WAND) {
             return 50;
         }
 
@@ -202,7 +202,7 @@ bool storeCheckPlayerItemsCount(int store_id, Inventory_t *item) {
 
         // note: items with subval of gte ITEM_SINGLE_STACK_MAX only stack
         // if their subvals match
-        if (store_item->tval == item->tval && store_item->subval == item->subval && (int) (store_item->number + item->number) < 256 &&
+        if (store_item->category_id == item->category_id && store_item->subval == item->subval && (int) (store_item->number + item->number) < 256 &&
             (item->subval < ITEM_GROUP_MIN || store_item->p1 == item->p1)) {
             store_check = true;
         }
@@ -237,14 +237,14 @@ void storeCarry(int store_id, int *index_id, Inventory_t *item) {
 
     int item_id = 0;
     int item_num = item->number;
-    int item_category = item->tval;
+    int item_category = item->category_id;
     int item_sub_catory = item->subval;
 
     bool flag = false;
     do {
         Inventory_t *store_item = &store->store_inven[item_id].sitem;
 
-        if (item_category == store_item->tval) {
+        if (item_category == store_item->category_id) {
             if (item_sub_catory == store_item->subval && // Adds to other item
                 item_sub_catory >= ITEM_SINGLE_STACK_MIN && (item_sub_catory < ITEM_GROUP_MIN || store_item->p1 == item->p1)) {
                 *index_id = item_id;
@@ -263,7 +263,7 @@ void storeCarry(int store_id, int *index_id, Inventory_t *item) {
                 }
                 flag = true;
             }
-        } else if (item_category > store_item->tval) { // Insert into list
+        } else if (item_category > store_item->category_id) { // Insert into list
             storeItemInsert(store_id, item_id, i_cost, item);
             flag = true;
             *index_id = item_id;

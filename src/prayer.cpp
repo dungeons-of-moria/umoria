@@ -95,7 +95,7 @@ static void playerRecitePrayer(int prayer_type) {
         case 15:
             for (int i = 0; i < PLAYER_INVENTORY_SIZE; i++) {
                 // only clear flag for items that are wielded or worn
-                if (inventory[i].tval >= TV_MIN_WEAR && inventory[i].tval <= TV_MAX_WEAR) {
+                if (inventory[i].category_id >= TV_MIN_WEAR && inventory[i].category_id <= TV_MAX_WEAR) {
                     inventory[i].flags &= ~TR_CURSED;
                 }
             }

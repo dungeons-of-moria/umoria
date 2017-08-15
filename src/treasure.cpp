@@ -29,7 +29,7 @@
 //                            the same p1 value, usually considered one group
 //                 Objects which have two type values, e.g. potions and
 //                 scrolls, need to have distinct subvals for
-//                 each item regardless of its tval
+//                 each item regardless of its category_id
 //  Damage     : amount of damage item can cause.
 //  Weight     : relative weight of an item.
 //  Number     : number of items appearing in group.

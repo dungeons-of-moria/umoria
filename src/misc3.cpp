@@ -1214,7 +1214,7 @@ bool inventoryCanCarryItemCount(Inventory_t *item) {
     }
 
     for (int i = 0; i < inventory_count; i++) {
-        bool same_character = inventory[i].tval == item->tval;
+        bool same_character = inventory[i].category_id == item->category_id;
         bool same_category = inventory[i].subval == item->subval;
 
         // make sure the number field doesn't overflow
@@ -1252,7 +1252,7 @@ bool inventoryCanCarryItem(Inventory_t *item) {
 void playerStrength() {
     Inventory_t *i_ptr = &inventory[EQUIPMENT_WIELD];
 
-    if (i_ptr->tval != TV_NOTHING && py.stats.used[A_STR] * 15 < i_ptr->weight) {
+    if (i_ptr->category_id != TV_NOTHING && py.stats.used[A_STR] * 15 < i_ptr->weight) {
         if (!weapon_is_heavy) {
             printMessage("You have trouble wielding such a heavy weapon.");
             weapon_is_heavy = true;
@@ -1260,7 +1260,7 @@ void playerStrength() {
         }
     } else if (weapon_is_heavy) {
         weapon_is_heavy = false;
-        if (i_ptr->tval != TV_NOTHING) {
+        if (i_ptr->category_id != TV_NOTHING) {
             printMessage("You are strong enough to wield your weapon.");
         }
         playerRecalculateBonuses();
@@ -1291,7 +1291,7 @@ void playerStrength() {
 // item position for a description if needed. -RAK-
 // this code must be identical to the inventoryCanCarryItemCount() code above
 int inventoryCarryItem(Inventory_t *item) {
-    int typ = item->tval;
+    int typ = item->category_id;
     int subt = item->subval;
     bool known1p = itemSetColorlessAsIdentifed(item);
     int always_known1p = (objectPositionOffset(item) == -1);
@@ -1302,7 +1302,7 @@ int inventoryCarryItem(Inventory_t *item) {
     for (locn = 0;; locn++) {
         Inventory_t *t_ptr = &inventory[locn];
 
-        if (typ == t_ptr->tval && subt == t_ptr->subval && subt >= ITEM_SINGLE_STACK_MIN && ((int) t_ptr->number + (int) item->number) < 256 &&
+        if (typ == t_ptr->category_id && subt == t_ptr->subval && subt >= ITEM_SINGLE_STACK_MIN && ((int) t_ptr->number + (int) item->number) < 256 &&
             (subt < ITEM_GROUP_MIN || t_ptr->p1 == item->p1) &&
             // only stack if both or neither are identified
             known1p == itemSetColorlessAsIdentifed(t_ptr)) {
@@ -1311,7 +1311,7 @@ int inventoryCarryItem(Inventory_t *item) {
             break;
         }
 
-        if ((typ == t_ptr->tval && subt < t_ptr->subval && always_known1p) || typ > t_ptr->tval) {
+        if ((typ == t_ptr->category_id && subt < t_ptr->subval && always_known1p) || typ > t_ptr->category_id) {
             // For items which are always known1p, i.e. never have a 'color',
             // insert them into the inventory in sorted order.
             for (int i = inventory_count - 1; i >= locn; i--) {
@@ -1729,7 +1729,7 @@ static uint32_t playerDetermineLearnableSpells() {
     uint32_t spell_flag = 0;
 
     for (int i = 0; i < inventory_count; i++) {
-        if (inventory[i].tval == TV_MAGIC_BOOK) {
+        if (inventory[i].category_id == TV_MAGIC_BOOK) {
             spell_flag |= inventory[i].flags;
         }
     }
@@ -2164,9 +2164,9 @@ int playerAttackBlows(int weight, int *weight_to_hit) {
 // Special damage due to magical abilities of object -RAK-
 int itemMagicAbilityDamage(Inventory_t *item, int total_damage, int monster_id) {
     bool is_ego_weapon = (item->flags & TR_EGO_WEAPON) != 0;
-    bool is_projectile = item->tval >= TV_SLING_AMMO && item->tval <= TV_ARROW;
-    bool is_hafted_sword = item->tval >= TV_HAFTED && item->tval <= TV_SWORD;
-    bool is_flask = item->tval == TV_FLASK;
+    bool is_projectile = item->category_id >= TV_SLING_AMMO && item->category_id <= TV_ARROW;
+    bool is_hafted_sword = item->category_id >= TV_HAFTED && item->category_id <= TV_SWORD;
+    bool is_flask = item->category_id == TV_FLASK;
 
     if (is_ego_weapon && (is_projectile || is_hafted_sword || is_flask)) {
         Creature_t *creature = &creatures_list[monster_id];
@@ -2311,7 +2311,7 @@ bool inventoryFindRange(int item_id_start, int item_id_end, int *j, int *k) {
     bool at_end_of_range = false;
 
     for (int i = 0; i < inventory_count; i++) {
-        int item_id = (int) inventory[i].tval;
+        int item_id = (int) inventory[i].category_id;
 
         if (!at_end_of_range) {
             if (item_id == item_id_start || item_id == item_id_end) {

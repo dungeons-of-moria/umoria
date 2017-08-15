@@ -313,7 +313,7 @@ void quaff() {
         printMessage("You feel less thirsty.");
         identified = true;
     } else {
-        identified = playerDrinkPotion(i_ptr->flags, i_ptr->tval);
+        identified = playerDrinkPotion(i_ptr->flags, i_ptr->category_id);
     }
 
     if (identified) {

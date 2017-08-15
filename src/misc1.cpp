@@ -259,7 +259,7 @@ int coordCorridorWallsNextTo(int y, int x) {
             int treasure_id = cave[yy][xx].tptr;
 
             // should fail if there is already a door present
-            if (tile_id == TILE_CORR_FLOOR && (treasure_id == 0 || treasure_list[treasure_id].tval < TV_MIN_DOORS)) {
+            if (tile_id == TILE_CORR_FLOOR && (treasure_id == 0 || treasure_list[treasure_id].category_id < TV_MIN_DOORS)) {
                 walls++;
             }
         }
@@ -469,7 +469,7 @@ char caveGetTileSymbol(int y, int x) {
         return ' ';
     }
 
-    if (cave_ptr->tptr != 0 && treasure_list[cave_ptr->tptr].tval != TV_INVIS_TRAP) {
+    if (cave_ptr->tptr != 0 && treasure_list[cave_ptr->tptr].category_id != TV_INVIS_TRAP) {
         return treasure_list[cave_ptr->tptr].tchar;
     }
 
@@ -816,7 +816,7 @@ static void compactObjects() {
                 if (cave[y][x].tptr != 0 && coordDistanceBetween(y, x, char_row, char_col) > current_distance) {
                     int chance;
 
-                    switch (treasure_list[cave[y][x].tptr].tval) {
+                    switch (treasure_list[cave[y][x].tptr].category_id) {
                         case TV_VIS_TRAP:
                             chance = 15;
                             break;

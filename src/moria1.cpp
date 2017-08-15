@@ -94,11 +94,11 @@ static void playerRecalculateBonusesFromInventory() {
     for (int i = EQUIPMENT_WIELD; i < EQUIPMENT_LIGHT; i++) {
         item = &inventory[i];
 
-        if (item->tval != TV_NOTHING) {
+        if (item->category_id != TV_NOTHING) {
             py.misc.plusses_to_hit += item->tohit;
 
             // Bows can't damage. -CJS-
-            if (item->tval != TV_BOW) {
+            if (item->category_id != TV_BOW) {
                 py.misc.plusses_to_damage += item->todam;
             }
 
@@ -109,7 +109,7 @@ static void playerRecalculateBonusesFromInventory() {
                 py.misc.display_to_hit += item->tohit;
 
                 // Bows can't damage. -CJS-
-                if (item->tval != TV_BOW) {
+                if (item->category_id != TV_BOW) {
                     py.misc.display_to_damage += item->todam;
                 }
 
@@ -434,7 +434,7 @@ int displayEquipment(bool weighted, int column) {
     // Range of equipment
     int line = 0;
     for (int i = EQUIPMENT_WIELD; i < PLAYER_INVENTORY_SIZE; i++) {
-        if (inventory[i].tval == TV_NOTHING) {
+        if (inventory[i].category_id == TV_NOTHING) {
             continue;
         }
 
@@ -470,7 +470,7 @@ int displayEquipment(bool weighted, int column) {
     // Range of equipment
     line = 0;
     for (int i = EQUIPMENT_WIELD; i < PLAYER_INVENTORY_SIZE; i++) {
-        if (inventory[i].tval == TV_NOTHING) {
+        if (inventory[i].category_id == TV_NOTHING) {
             continue;
         }
 
@@ -728,10 +728,10 @@ static bool inventoryDropItem(char *command, bool selecting) {
 
 static bool inventoryWearWieldItem(bool selecting) {
     // Note: simple loop to get wear_low value
-    for (wear_low = 0; wear_low < inventory_count && inventory[wear_low].tval > TV_MAX_WEAR; wear_low++);
+    for (wear_low = 0; wear_low < inventory_count && inventory[wear_low].category_id > TV_MAX_WEAR; wear_low++);
 
     // Note: simple loop to get wear_high value
-    for (wear_high = wear_low; wear_high < inventory_count && inventory[wear_high].tval >= TV_MIN_WEAR; wear_high++);
+    for (wear_high = wear_low; wear_high < inventory_count && inventory[wear_high].category_id >= TV_MIN_WEAR; wear_high++);
 
     wear_high--;
 
@@ -748,7 +748,7 @@ static bool inventoryWearWieldItem(bool selecting) {
 }
 
 static void inventoryUnwieldItem() {
-    if (inventory[EQUIPMENT_WIELD].tval == TV_NOTHING && inventory[EQUIPMENT_AUX].tval == TV_NOTHING) {
+    if (inventory[EQUIPMENT_WIELD].category_id == TV_NOTHING && inventory[EQUIPMENT_AUX].category_id == TV_NOTHING) {
         printMessage("But you are wielding no weapons.");
         return;
     }
@@ -778,7 +778,7 @@ static void inventoryUnwieldItem() {
     playerAdjustBonusesForItem(&inventory[EQUIPMENT_AUX], -1);  // Subtract bonuses
     playerAdjustBonusesForItem(&inventory[EQUIPMENT_WIELD], 1); // Add bonuses
 
-    if (inventory[EQUIPMENT_WIELD].tval != TV_NOTHING) {
+    if (inventory[EQUIPMENT_WIELD].category_id != TV_NOTHING) {
         obj_desc_t msgLabel;
         (void) strcpy(msgLabel, "Primary weapon   : ");
 
@@ -858,7 +858,7 @@ static int inventoryGetSlotToWearEquipment(int item) {
     int slot;
 
     // Slot for equipment
-    switch (inventory[item].tval) {
+    switch (inventory[item].category_id) {
         case TV_SLING_AMMO:
         case TV_BOLT:
         case TV_ARROW:
@@ -896,9 +896,9 @@ static int inventoryGetSlotToWearEquipment(int item) {
             slot = EQUIPMENT_NECK;
             break;
         case TV_RING:
-            if (inventory[EQUIPMENT_RIGHT].tval == TV_NOTHING) {
+            if (inventory[EQUIPMENT_RIGHT].category_id == TV_NOTHING) {
                 slot = EQUIPMENT_RIGHT;
-            } else if (inventory[EQUIPMENT_LEFT].tval == TV_NOTHING) {
+            } else if (inventory[EQUIPMENT_LEFT].category_id == TV_NOTHING) {
                 slot = EQUIPMENT_LEFT;
             } else {
                 slot = 0;
@@ -1044,7 +1044,7 @@ static bool selectItemCommands(char *command, char *which, bool selecting) {
 
             do {
                 item++;
-                if (inventory[item].tval != TV_NOTHING) {
+                if (inventory[item].category_id != TV_NOTHING) {
                     itemToTakeOff--;
                 }
             } while (itemToTakeOff >= 0);
@@ -1098,7 +1098,7 @@ static bool selectItemCommands(char *command, char *which, bool selecting) {
                 }
             }
 
-            if (item >= 0 && inventory[slot].tval != TV_NOTHING) {
+            if (item >= 0 && inventory[slot].category_id != TV_NOTHING) {
                 if (TR_CURSED & inventory[slot].flags) {
                     inventoryItemIsCursedMessage(slot);
                     item = -1;
@@ -1134,7 +1134,7 @@ static bool selectItemCommands(char *command, char *which, bool selecting) {
                 // Second, add old item to inv and remove
                 // from equipment list, if necessary.
                 i_ptr = &inventory[slot];
-                if (i_ptr->tval != TV_NOTHING) {
+                if (i_ptr->category_id != TV_NOTHING) {
                     int savedCounter = inventory_count;
 
                     itemToTakeOff = inventoryCarryItem(i_ptr);
@@ -1171,7 +1171,7 @@ static bool selectItemCommands(char *command, char *which, bool selecting) {
                 item = 0;
 
                 while (itemToTakeOff != slot) {
-                    if (inventory[itemToTakeOff++].tval != TV_NOTHING) {
+                    if (inventory[itemToTakeOff++].category_id != TV_NOTHING) {
                         item++;
                     }
                 }
@@ -1536,7 +1536,7 @@ bool inventoryGetInputForItemId(int *command_key_id, const char *prompt, int ite
 
                             do {
                                 // Note: a simple loop to find first inventory item
-                                while (inventory[++item_id_start].tval == TV_NOTHING);
+                                while (inventory[++item_id_start].category_id == TV_NOTHING);
 
                                 item_id_end--;
                             } while (item_id_end >= 0);
@@ -1709,7 +1709,7 @@ void dungeonLightRoom(int pos_y, int pos_x) {
                     tile->fval = TILE_LIGHT_FLOOR;
                 }
                 if (!tile->fm && tile->tptr != 0) {
-                    int treasure_id = treasure_list[tile->tptr].tval;
+                    int treasure_id = treasure_list[tile->tptr].category_id;
                     if (treasure_id >= TV_MIN_VISIBLE && treasure_id <= TV_MAX_VISIBLE) {
                         tile->fm = true;
                     }
@@ -1759,7 +1759,7 @@ static void sub1_move_light(int y1, int x1, int y2, int x2) {
             if (c_ptr->fval >= MIN_CAVE_WALL) {
                 c_ptr->pl = true;
             } else if (!c_ptr->fm && c_ptr->tptr != 0) {
-                int tval = treasure_list[c_ptr->tptr].tval;
+                int tval = treasure_list[c_ptr->tptr].category_id;
 
                 if (tval >= TV_MIN_VISIBLE && tval <= TV_MAX_VISIBLE) {
                     c_ptr->fm = true;

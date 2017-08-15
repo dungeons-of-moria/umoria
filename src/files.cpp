@@ -292,7 +292,7 @@ static void writeEquipmentListToFile(FILE *file1) {
     int itemSlotID = 0;
 
     for (int i = EQUIPMENT_WIELD; i < PLAYER_INVENTORY_SIZE; i++) {
-        if (inventory[i].tval == TV_NOTHING) {
+        if (inventory[i].category_id == TV_NOTHING) {
             continue;
         }
 

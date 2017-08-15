@@ -18,16 +18,16 @@ void dungeonChangeTrapVisibility(int y, int x) {
 
     Inventory_t *item = &treasure_list[treasure_id];
 
-    if (item->tval == TV_INVIS_TRAP) {
-        item->tval = TV_VIS_TRAP;
+    if (item->category_id == TV_INVIS_TRAP) {
+        item->category_id = TV_VIS_TRAP;
         dungeonLiteSpot(y, x);
         return;
     }
 
     // change secret door to closed door
-    if (item->tval == TV_SECRET_DOOR) {
+    if (item->category_id == TV_SECRET_DOOR) {
         item->id = OBJ_CLOSED_DOOR;
-        item->tval = game_objects[OBJ_CLOSED_DOOR].tval;
+        item->category_id = game_objects[OBJ_CLOSED_DOOR].tval;
         item->tchar = game_objects[OBJ_CLOSED_DOOR].tchar;
         dungeonLiteSpot(y, x);
     }
@@ -62,7 +62,7 @@ void dungeonSearch(int y, int x, int chance) {
 
             Inventory_t *item = &treasure_list[cave[i][j].tptr];
 
-            if (item->tval == TV_INVIS_TRAP) {
+            if (item->category_id == TV_INVIS_TRAP) {
                 // Trap on floor?
 
                 obj_desc_t description;
@@ -74,14 +74,14 @@ void dungeonSearch(int y, int x, int chance) {
 
                 dungeonChangeTrapVisibility(i, j);
                 playerEndRunning();
-            } else if (item->tval == TV_SECRET_DOOR) {
+            } else if (item->category_id == TV_SECRET_DOOR) {
                 // Secret door?
 
                 printMessage("You have found a secret door.");
 
                 dungeonChangeTrapVisibility(i, j);
                 playerEndRunning();
-            } else if (item->tval == TV_CHEST) {
+            } else if (item->category_id == TV_CHEST) {
                 // Chest is trapped?
 
                 // mask out the treasure bits
@@ -343,7 +343,7 @@ static bool areaAffectStopLookingAtSquares(int i, int dir, int newDir, int y, in
 
     if (player_carrying_light || c_ptr->tl || c_ptr->pl || c_ptr->fm) {
         if (c_ptr->tptr != 0) {
-            int tileID = treasure_list[c_ptr->tptr].tval;
+            int tileID = treasure_list[c_ptr->tptr].category_id;
 
             if (tileID != TV_INVIS_TRAP && tileID != TV_SECRET_DOOR && (tileID != TV_OPEN_DOOR || !config.run_ignore_doors)) {
                 playerEndRunning();
@@ -506,33 +506,33 @@ static int damageMinusAC(uint32_t typ_dam) {
     int itemsCount = 0;
     int items[6];
 
-    if (inventory[EQUIPMENT_BODY].tval != TV_NOTHING) {
+    if (inventory[EQUIPMENT_BODY].category_id != TV_NOTHING) {
         items[itemsCount] = EQUIPMENT_BODY;
         itemsCount++;
     }
 
-    if (inventory[EQUIPMENT_ARM].tval != TV_NOTHING) {
+    if (inventory[EQUIPMENT_ARM].category_id != TV_NOTHING) {
         items[itemsCount] = EQUIPMENT_ARM;
         itemsCount++;
     }
 
-    if (inventory[EQUIPMENT_OUTER].tval != TV_NOTHING) {
+    if (inventory[EQUIPMENT_OUTER].category_id != TV_NOTHING) {
         items[itemsCount] = EQUIPMENT_OUTER;
         itemsCount++;
     }
 
-    if (inventory[EQUIPMENT_HANDS].tval != TV_NOTHING) {
+    if (inventory[EQUIPMENT_HANDS].category_id != TV_NOTHING) {
         items[itemsCount] = EQUIPMENT_HANDS;
         itemsCount++;
     }
 
-    if (inventory[EQUIPMENT_HEAD].tval != TV_NOTHING) {
+    if (inventory[EQUIPMENT_HEAD].category_id != TV_NOTHING) {
         items[itemsCount] = EQUIPMENT_HEAD;
         itemsCount++;
     }
 
     // also affect boots
-    if (inventory[EQUIPMENT_FEET].tval != TV_NOTHING) {
+    if (inventory[EQUIPMENT_FEET].category_id != TV_NOTHING) {
         items[itemsCount] = EQUIPMENT_FEET;
         itemsCount++;
     }

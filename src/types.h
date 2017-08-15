@@ -206,7 +206,7 @@ typedef struct {
     uint8_t special_name_id;        // Object special name
     char inscription[INSCRIP_SIZE]; // Object inscription
     uint32_t flags;                 // Special flags
-    uint8_t tval;                   // Category number
+    uint8_t category_id;            // Category number (tval)
     uint8_t tchar;                  // Character representation
     int16_t p1;                     // Misc. use variable
     int32_t cost;                   // Cost of item

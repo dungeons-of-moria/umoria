@@ -797,7 +797,7 @@ void magicTreasureMagicalAbility(int item_id, int level) {
     // as the object with the lowest level
 
     // Depending on treasure type, it can have certain magical properties
-    switch (t_ptr->tval) {
+    switch (t_ptr->category_id) {
         case TV_SHIELD:
         case TV_HARD_ARMOR:
         case TV_SOFT_ARMOR:
@@ -915,7 +915,7 @@ void magicTreasureMagicalAbility(int item_id, int level) {
         case TV_SPIKE:
         case TV_BOLT:
         case TV_ARROW:
-            if (t_ptr->tval == TV_SLING_AMMO || t_ptr->tval == TV_BOLT || t_ptr->tval == TV_ARROW) {
+            if (t_ptr->category_id == TV_SLING_AMMO || t_ptr->category_id == TV_BOLT || t_ptr->category_id == TV_ARROW) {
                 // always show tohit/todam values if identified
                 t_ptr->ident |= ID_SHOW_HIT_DAM;
 

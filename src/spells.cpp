@@ -82,7 +82,7 @@ bool dungeonDetectTreasureOnPanel() {
         for (int x = panel_col_min; x <= panel_col_max; x++) {
             Cave_t *tile = &cave[y][x];
 
-            if (tile->tptr != 0 && treasure_list[tile->tptr].tval == TV_GOLD && !caveTileVisible(y, x)) {
+            if (tile->tptr != 0 && treasure_list[tile->tptr].category_id == TV_GOLD && !caveTileVisible(y, x)) {
                 tile->fm = true;
                 dungeonLiteSpot(y, x);
                 detected = true;
@@ -101,7 +101,7 @@ bool dungeonDetectObjectOnPanel() {
         for (int x = panel_col_min; x <= panel_col_max; x++) {
             Cave_t *tile = &cave[y][x];
 
-            if (tile->tptr != 0 && treasure_list[tile->tptr].tval < TV_MAX_OBJECT && !caveTileVisible(y, x)) {
+            if (tile->tptr != 0 && treasure_list[tile->tptr].category_id < TV_MAX_OBJECT && !caveTileVisible(y, x)) {
                 tile->fm = true;
                 dungeonLiteSpot(y, x);
                 detected = true;
@@ -124,11 +124,11 @@ bool dungeonDetectTrapOnPanel() {
                 continue;
             }
 
-            if (treasure_list[tile->tptr].tval == TV_INVIS_TRAP) {
+            if (treasure_list[tile->tptr].category_id == TV_INVIS_TRAP) {
                 tile->fm = true;
                 dungeonChangeTrapVisibility(y, x);
                 detected = true;
-            } else if (treasure_list[tile->tptr].tval == TV_CHEST) {
+            } else if (treasure_list[tile->tptr].category_id == TV_CHEST) {
                 Inventory_t *item = &treasure_list[tile->tptr];
                 spellItemIdentifyAndRemoveRandomInscription(item);
             }
@@ -150,13 +150,13 @@ bool dungeonDetectSecretDoorsOnPanel() {
                 continue;
             }
 
-            if (treasure_list[tile->tptr].tval == TV_SECRET_DOOR) {
+            if (treasure_list[tile->tptr].category_id == TV_SECRET_DOOR) {
                 // Secret doors
 
                 tile->fm = true;
                 dungeonChangeTrapVisibility(y, x);
                 detected = true;
-            } else if ((treasure_list[tile->tptr].tval == TV_UP_STAIR || treasure_list[tile->tptr].tval == TV_DOWN_STAIR) && !tile->fm) {
+            } else if ((treasure_list[tile->tptr].category_id == TV_UP_STAIR || treasure_list[tile->tptr].category_id == TV_DOWN_STAIR) && !tile->fm) {
                 // Staircases
 
                 tile->fm = true;
@@ -280,7 +280,7 @@ static void dungeonLightAreaAroundFloorTile(int y, int x) {
 
             if (tile->fval >= MIN_CAVE_WALL) {
                 tile->pl = true;
-            } else if (tile->tptr != 0 && treasure_list[tile->tptr].tval >= TV_MIN_VISIBLE && treasure_list[tile->tptr].tval <= TV_MAX_VISIBLE) {
+            } else if (tile->tptr != 0 && treasure_list[tile->tptr].category_id >= TV_MIN_VISIBLE && treasure_list[tile->tptr].category_id <= TV_MAX_VISIBLE) {
                 tile->fm = true;
             }
         }
@@ -434,11 +434,11 @@ bool spellDestroyAdjacentDoorsTraps() {
 
             Inventory_t *item = &treasure_list[tile->tptr];
 
-            if ((item->tval >= TV_INVIS_TRAP && item->tval <= TV_CLOSED_DOOR && item->tval != TV_RUBBLE) || item->tval == TV_SECRET_DOOR) {
+            if ((item->category_id >= TV_INVIS_TRAP && item->category_id <= TV_CLOSED_DOOR && item->category_id != TV_RUBBLE) || item->category_id == TV_SECRET_DOOR) {
                 if (dungeonDeleteObject(y, x)) {
                     destroyed = true;
                 }
-            } else if (item->tval == TV_CHEST && item->flags != 0) {
+            } else if (item->category_id == TV_CHEST && item->flags != 0) {
                 // destroy traps on chest and unlock
                 item->flags &= ~(CH_TRAPPED | CH_LOCKED);
                 item->special_name_id = SN_UNLOCKED;
@@ -574,18 +574,18 @@ bool spellDisarmAllInDirection(int y, int x, int direction) {
         if (tile->tptr != 0) {
             Inventory_t *item = &treasure_list[tile->tptr];
 
-            if (item->tval == TV_INVIS_TRAP || item->tval == TV_VIS_TRAP) {
+            if (item->category_id == TV_INVIS_TRAP || item->category_id == TV_VIS_TRAP) {
                 if (dungeonDeleteObject(y, x)) {
                     disarmed = true;
                 }
-            } else if (item->tval == TV_CLOSED_DOOR) {
+            } else if (item->category_id == TV_CLOSED_DOOR) {
                 // Locked or jammed doors become merely closed.
                 item->p1 = 0;
-            } else if (item->tval == TV_SECRET_DOOR) {
+            } else if (item->category_id == TV_SECRET_DOOR) {
                 tile->fm = true;
                 dungeonChangeTrapVisibility(y, x);
                 disarmed = true;
-            } else if (item->tval == TV_CHEST && item->flags != 0) {
+            } else if (item->category_id == TV_CHEST && item->flags != 0) {
                 disarmed = true;
                 printMessage("Click!");
 
@@ -1294,7 +1294,7 @@ bool spellWallToMud(int y, int x, int direction) {
                 printMessage(out_val);
             }
 
-            if (treasure_list[tile->tptr].tval == TV_RUBBLE) {
+            if (treasure_list[tile->tptr].category_id == TV_RUBBLE) {
                 (void) dungeonDeleteObject(y, x);
                 if (randomNumber(10) == 1) {
                     dungeonPlaceRandomObjectAt(y, x, false);
@@ -1352,12 +1352,12 @@ bool spellDestroyDoorsTrapsInDirection(int y, int x, int direction) {
         if (tile->tptr != 0) {
             Inventory_t *item = &treasure_list[tile->tptr];
 
-            if (item->tval == TV_INVIS_TRAP || item->tval == TV_CLOSED_DOOR || item->tval == TV_VIS_TRAP || item->tval == TV_OPEN_DOOR || item->tval == TV_SECRET_DOOR) {
+            if (item->category_id == TV_INVIS_TRAP || item->category_id == TV_CLOSED_DOOR || item->category_id == TV_VIS_TRAP || item->category_id == TV_OPEN_DOOR || item->category_id == TV_SECRET_DOOR) {
                 if (dungeonDeleteObject(y, x)) {
                     destroyed = true;
                     printMessage("There is a bright flash of light!");
                 }
-            } else if (item->tval == TV_CHEST && item->flags != 0) {
+            } else if (item->category_id == TV_CHEST && item->flags != 0) {
                 destroyed = true;
                 printMessage("Click!");
 

@@ -21,7 +21,7 @@ bool setFloors(int tile_id) {
 }
 
 bool setCorrodableItems(Inventory_t *item) {
-    switch (item->tval) {
+    switch (item->category_id) {
         case TV_SWORD:
         case TV_HELM:
         case TV_SHIELD:
@@ -34,7 +34,7 @@ bool setCorrodableItems(Inventory_t *item) {
 }
 
 bool setFlammableItems(Inventory_t *item) {
-    switch (item->tval) {
+    switch (item->category_id) {
         case TV_ARROW:
         case TV_BOW:
         case TV_HAFTED:
@@ -55,11 +55,11 @@ bool setFlammableItems(Inventory_t *item) {
 }
 
 bool setFrostDestroyableItems(Inventory_t *item) {
-    return (item->tval == TV_POTION1 || item->tval == TV_POTION2 || item->tval == TV_FLASK);
+    return (item->category_id == TV_POTION1 || item->category_id == TV_POTION2 || item->category_id == TV_FLASK);
 }
 
 bool setAcidAffectedItems(Inventory_t *item) {
-    switch (item->tval) {
+    switch (item->category_id) {
         case TV_MISC:
         case TV_CHEST:
             return true;
@@ -78,7 +78,7 @@ bool setAcidAffectedItems(Inventory_t *item) {
 }
 
 bool setLightningDestroyableItems(Inventory_t *item) {
-    return (item->tval == TV_RING || item->tval == TV_WAND || item->tval == TV_SPIKE);
+    return (item->category_id == TV_RING || item->category_id == TV_WAND || item->category_id == TV_SPIKE);
 }
 
 bool setNull(Inventory_t *item) {
@@ -87,7 +87,7 @@ bool setNull(Inventory_t *item) {
 }
 
 bool setAcidDestroyableItems(Inventory_t *item) {
-    switch (item->tval) {
+    switch (item->category_id) {
         case TV_ARROW:
         case TV_BOW:
         case TV_HAFTED:
@@ -113,7 +113,7 @@ bool setAcidDestroyableItems(Inventory_t *item) {
 }
 
 bool setFireDestroyableItems(Inventory_t *item) {
-    switch (item->tval) {
+    switch (item->category_id) {
         case TV_ARROW:
         case TV_BOW:
         case TV_HAFTED:

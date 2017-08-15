@@ -151,7 +151,7 @@ static void initializeCharacterInventory() {
         itemIdentifyAsStoreBought(&item);
 
         // must set this bit to display tohit/todam for stiletto
-        if (item.tval == TV_SWORD) {
+        if (item.category_id == TV_SWORD) {
             item.ident |= ID_SHOW_HIT_DAM;
         }
 

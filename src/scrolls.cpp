@@ -44,23 +44,23 @@ static int inventoryItemIdOfCursedEquipment() {
     int item_count = 0;
     int items[6];
 
-    if (inventory[EQUIPMENT_BODY].tval != TV_NOTHING) {
+    if (inventory[EQUIPMENT_BODY].category_id != TV_NOTHING) {
         items[item_count++] = EQUIPMENT_BODY;
     }
-    if (inventory[EQUIPMENT_ARM].tval != TV_NOTHING) {
+    if (inventory[EQUIPMENT_ARM].category_id != TV_NOTHING) {
         items[item_count++] = EQUIPMENT_ARM;
     }
-    if (inventory[EQUIPMENT_OUTER].tval != TV_NOTHING) {
+    if (inventory[EQUIPMENT_OUTER].category_id != TV_NOTHING) {
         items[item_count++] = EQUIPMENT_OUTER;
     }
-    if (inventory[EQUIPMENT_HANDS].tval != TV_NOTHING) {
+    if (inventory[EQUIPMENT_HANDS].category_id != TV_NOTHING) {
         items[item_count++] = EQUIPMENT_HANDS;
     }
-    if (inventory[EQUIPMENT_HEAD].tval != TV_NOTHING) {
+    if (inventory[EQUIPMENT_HEAD].category_id != TV_NOTHING) {
         items[item_count++] = EQUIPMENT_HEAD;
     }
     // also enchant boots
-    if (inventory[EQUIPMENT_FEET].tval != TV_NOTHING) {
+    if (inventory[EQUIPMENT_FEET].category_id != TV_NOTHING) {
         items[item_count++] = EQUIPMENT_FEET;
     }
 
@@ -90,7 +90,7 @@ static int inventoryItemIdOfCursedEquipment() {
 static bool scrollEnchantWeaponToHit() {
     Inventory_t *item = &inventory[EQUIPMENT_WIELD];
 
-    if (item->tval == TV_NOTHING) {
+    if (item->category_id == TV_NOTHING) {
         return false;
     }
 
@@ -113,7 +113,7 @@ static bool scrollEnchantWeaponToHit() {
 static bool scrollEnchantWeaponToDamage() {
     Inventory_t *item = &inventory[EQUIPMENT_WIELD];
 
-    if (item->tval == TV_NOTHING) {
+    if (item->category_id == TV_NOTHING) {
         return false;
     }
 
@@ -125,7 +125,7 @@ static bool scrollEnchantWeaponToDamage() {
 
     int16_t scroll_type;
 
-    if (item->tval >= TV_HAFTED && item->tval <= TV_DIGGING) {
+    if (item->category_id >= TV_HAFTED && item->category_id <= TV_DIGGING) {
         scroll_type = item->damage[0] * item->damage[1];
     } else {
         // Bows' and arrows' enchantments should not be
@@ -178,7 +178,7 @@ static int scrollIdentifyItem(int item_id, bool *is_used_up) {
     // move arbitrarily far if an identify scroll was used on
     // another identify scroll, but it always moves down.
     Inventory_t *item = &inventory[item_id];
-    while (item_id > 0 && (item->tval != TV_SCROLL1 || item->flags != 0x00000008)) {
+    while (item_id > 0 && (item->category_id != TV_SCROLL1 || item->flags != 0x00000008)) {
         item_id--;
         item = &inventory[item_id];
     }
@@ -226,7 +226,7 @@ static bool scrollConfuseMonster() {
 static bool scrollEnchantWeapon() {
     Inventory_t *item = &inventory[EQUIPMENT_WIELD];
 
-    if (item->tval == TV_NOTHING) {
+    if (item->category_id == TV_NOTHING) {
         return false;
     }
 
@@ -246,7 +246,7 @@ static bool scrollEnchantWeapon() {
 
     int16_t scroll_type;
 
-    if (item->tval >= TV_HAFTED && item->tval <= TV_DIGGING) {
+    if (item->category_id >= TV_HAFTED && item->category_id <= TV_DIGGING) {
         scroll_type = item->damage[0] * item->damage[1];
     } else {
         // Bows' and arrows' enchantments should not be limited
@@ -273,7 +273,7 @@ static bool scrollEnchantWeapon() {
 static bool scrollCurseWeapon() {
     Inventory_t *item = &inventory[EQUIPMENT_WIELD];
 
-    if (item->tval == TV_NOTHING) {
+    if (item->category_id == TV_NOTHING) {
         return false;
     }
 
@@ -335,29 +335,29 @@ static bool scrollEnchantArmor() {
 static bool scrollCurseArmor() {
     int item_id;
 
-    if (inventory[EQUIPMENT_BODY].tval != TV_NOTHING && randomNumber(4) == 1) {
+    if (inventory[EQUIPMENT_BODY].category_id != TV_NOTHING && randomNumber(4) == 1) {
         item_id = EQUIPMENT_BODY;
-    } else if (inventory[EQUIPMENT_ARM].tval != TV_NOTHING && randomNumber(3) == 1) {
+    } else if (inventory[EQUIPMENT_ARM].category_id != TV_NOTHING && randomNumber(3) == 1) {
         item_id = EQUIPMENT_ARM;
-    } else if (inventory[EQUIPMENT_OUTER].tval != TV_NOTHING && randomNumber(3) == 1) {
+    } else if (inventory[EQUIPMENT_OUTER].category_id != TV_NOTHING && randomNumber(3) == 1) {
         item_id = EQUIPMENT_OUTER;
-    } else if (inventory[EQUIPMENT_HEAD].tval != TV_NOTHING && randomNumber(3) == 1) {
+    } else if (inventory[EQUIPMENT_HEAD].category_id != TV_NOTHING && randomNumber(3) == 1) {
         item_id = EQUIPMENT_HEAD;
-    } else if (inventory[EQUIPMENT_HANDS].tval != TV_NOTHING && randomNumber(3) == 1) {
+    } else if (inventory[EQUIPMENT_HANDS].category_id != TV_NOTHING && randomNumber(3) == 1) {
         item_id = EQUIPMENT_HANDS;
-    } else if (inventory[EQUIPMENT_FEET].tval != TV_NOTHING && randomNumber(3) == 1) {
+    } else if (inventory[EQUIPMENT_FEET].category_id != TV_NOTHING && randomNumber(3) == 1) {
         item_id = EQUIPMENT_FEET;
-    } else if (inventory[EQUIPMENT_BODY].tval != TV_NOTHING) {
+    } else if (inventory[EQUIPMENT_BODY].category_id != TV_NOTHING) {
         item_id = EQUIPMENT_BODY;
-    } else if (inventory[EQUIPMENT_ARM].tval != TV_NOTHING) {
+    } else if (inventory[EQUIPMENT_ARM].category_id != TV_NOTHING) {
         item_id = EQUIPMENT_ARM;
-    } else if (inventory[EQUIPMENT_OUTER].tval != TV_NOTHING) {
+    } else if (inventory[EQUIPMENT_OUTER].category_id != TV_NOTHING) {
         item_id = EQUIPMENT_OUTER;
-    } else if (inventory[EQUIPMENT_HEAD].tval != TV_NOTHING) {
+    } else if (inventory[EQUIPMENT_HEAD].category_id != TV_NOTHING) {
         item_id = EQUIPMENT_HEAD;
-    } else if (inventory[EQUIPMENT_HANDS].tval != TV_NOTHING) {
+    } else if (inventory[EQUIPMENT_HANDS].category_id != TV_NOTHING) {
         item_id = EQUIPMENT_HANDS;
-    } else if (inventory[EQUIPMENT_FEET].tval != TV_NOTHING) {
+    } else if (inventory[EQUIPMENT_FEET].category_id != TV_NOTHING) {
         item_id = EQUIPMENT_FEET;
     } else {
         item_id = 0;
@@ -432,7 +432,7 @@ void readScroll() {
     while (item_flags != 0) {
         int scroll_type = getAndClearFirstBit(&item_flags) + 1;
 
-        if (item->tval == TV_SCROLL2) {
+        if (item->category_id == TV_SCROLL2) {
             scroll_type += 32;
         }
 

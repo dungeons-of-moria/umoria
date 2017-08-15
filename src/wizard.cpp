@@ -261,7 +261,7 @@ void wizardCreateObjects() {
         return;
     }
     number = atoi(input);
-    item->tval = (uint8_t) number;
+    item->category_id = (uint8_t) number;
 
     putStringClearToEOL("Tchar  : ", 0, 0);
     if (!getStringInput(input, 0, 9, 1)) {

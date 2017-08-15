@@ -714,7 +714,7 @@ static void playerDetectEnchantment() {
         // if in equipment list, success 1 out of 10 times
         int chance = (i < 22 ? 50 : 10);
 
-        if (i_ptr->tval != TV_NOTHING && itemEnchanted(i_ptr) && randomNumber(chance) == 1) {
+        if (i_ptr->category_id != TV_NOTHING && itemEnchanted(i_ptr) && randomNumber(chance) == 1) {
             // extern const char *describe_use(int); // FIXME: Why here? We have it in externs.
 
             vtype_t tmp_str;
@@ -1991,7 +1991,7 @@ static void playerRegenerateMana(int percent) {
 // Is an item an enchanted weapon or armor and we don't know? -CJS-
 // only returns true if it is a good enchantment
 static bool itemEnchanted(Inventory_t *item) {
-    if (item->tval < TV_MIN_ENCHANT || item->tval > TV_MAX_ENCHANT || (item->flags & TR_CURSED)) {
+    if (item->category_id < TV_MIN_ENCHANT || item->category_id > TV_MAX_ENCHANT || (item->flags & TR_CURSED)) {
         return false;
     } else if (spellItemIdentified(item)) {
         return false;
@@ -2035,7 +2035,7 @@ static void examineBook() {
         int spell_index[31];
         bool can_read = true;
 
-        uint8_t treasure_type = inventory[item_id].tval;
+        uint8_t treasure_type = inventory[item_id].category_id;
 
         if (classes[py.misc.class_id].class_to_use_mage_spells == SPELL_TYPE_MAGE) {
             if (treasure_type != TV_MAGIC_BOOK) {
@@ -2077,7 +2077,7 @@ static void examineBook() {
 static void dungeonGoUpLevel() {
     uint8_t tile_id = cave[char_row][char_col].tptr;
 
-    if (tile_id != 0 && treasure_list[tile_id].tval == TV_UP_STAIR) {
+    if (tile_id != 0 && treasure_list[tile_id].category_id == TV_UP_STAIR) {
         current_dungeon_level--;
 
         printMessage("You enter a maze of up staircases.");
@@ -2094,7 +2094,7 @@ static void dungeonGoUpLevel() {
 static void dungeonGoDownLevel() {
     uint8_t tile_id = cave[char_row][char_col].tptr;
 
-    if (tile_id != 0 && treasure_list[tile_id].tval == TV_DOWN_STAIR) {
+    if (tile_id != 0 && treasure_list[tile_id].category_id == TV_DOWN_STAIR) {
         current_dungeon_level++;
 
         printMessage("You enter a maze of down staircases.");
@@ -2129,7 +2129,7 @@ static void dungeonJamDoor() {
 
     Inventory_t *item = &treasure_list[tile->tptr];
 
-    uint8_t item_id = item->tval;
+    uint8_t item_id = item->category_id;
     if (item_id != TV_CLOSED_DOOR && item_id != TV_OPEN_DOOR) {
         printMessage("That isn't a door!");
         return;
