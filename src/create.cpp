@@ -84,10 +84,10 @@ static void characterGenerateStatsAndRace() {
     }
 
     py.misc.chance_in_search = race->search_chance_base;
-    py.misc.bth = race->bth;
-    py.misc.bth_with_bows = race->bthb;
+    py.misc.bth = race->base_to_hit;
+    py.misc.bth_with_bows = race->base_to_hit_bows;
     py.misc.freng_of_search = race->fos;
-    py.misc.stealth_factor = race->stl;
+    py.misc.stealth_factor = race->stealth;
     py.misc.saving_throw = race->saving_throw_base;
     py.misc.hit_die = race->hit_points_base;
     py.misc.plusses_to_damage = (int16_t) playerDamageAdjustment();
@@ -95,7 +95,7 @@ static void characterGenerateStatsAndRace() {
     py.misc.magical_ac = 0;
     py.misc.ac = (int16_t) playerArmorClassAdjustment();
     py.misc.experience_factor = race->exp_factor_base;
-    py.flags.see_infra = race->infra;
+    py.flags.see_infra = race->infra_vision;
 }
 
 // Prints a list of the available races: Human, Elf, etc.,
@@ -321,7 +321,7 @@ static int displayRaceClasses(int race_id, int *class_list) {
     putString("Choose a class (? for Help):", 20, 2);
 
     for (int i = 0; i < PLAYER_MAX_CLASSES; i++) {
-        if (character_races[race_id].rtclass & mask) {
+        if (character_races[race_id].classes_bit_field & mask) {
             (void) sprintf(description, "%c) %s", class_id + 'a', classes[i].title);
             putString(description, x, y);
             class_list[class_id] = i;
