@@ -226,7 +226,7 @@ static int playerFoodConsumption() {
 }
 
 static void playerUpdateRegeneration(int amount) {
-    if (py.flags.regenerate) {
+    if (py.flags.regenerate_hp) {
         amount = amount * 3 / 2;
     }
 

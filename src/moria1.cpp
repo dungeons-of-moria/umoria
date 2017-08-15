@@ -83,7 +83,7 @@ static void playerResetFlags() {
     py.flags.resist_fire = false;
     py.flags.resist_acid = false;
     py.flags.resist_cold = false;
-    py.flags.regenerate = false;
+    py.flags.regenerate_hp = false;
     py.flags.resist_light = false;
     py.flags.free_fall = false;
 }
@@ -171,7 +171,7 @@ void playerRecalculateBonuses() {
     if (py.flags.slow_digest) {
         py.flags.food_digested++;
     }
-    if (py.flags.regenerate) {
+    if (py.flags.regenerate_hp) {
         py.flags.food_digested -= 3;
     }
 
@@ -231,7 +231,7 @@ void playerRecalculateBonuses() {
         py.flags.teleport = true;
     }
     if (TR_REGEN & item_flags) {
-        py.flags.regenerate = true;
+        py.flags.regenerate_hp = true;
     }
     if (TR_RES_FIRE & item_flags) {
         py.flags.resist_fire = true;
@@ -261,7 +261,7 @@ void playerRecalculateBonuses() {
     if (py.flags.slow_digest) {
         py.flags.food_digested--;
     }
-    if (py.flags.regenerate) {
+    if (py.flags.regenerate_hp) {
         py.flags.food_digested += 3;
     }
 }

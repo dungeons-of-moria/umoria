@@ -201,7 +201,7 @@ static bool sv_write() {
     wr_bool(py.flags.resist_fire);
     wr_bool(py.flags.resist_cold);
     wr_bool(py.flags.resist_acid);
-    wr_bool(py.flags.regenerate);
+    wr_bool(py.flags.regenerate_hp);
     wr_bool(py.flags.resist_light);
     wr_bool(py.flags.free_fall);
     wr_bool(py.flags.sustain_str);
@@ -660,7 +660,7 @@ bool loadGame(bool *generate) {
             py.flags.resist_fire = rd_bool();
             py.flags.resist_cold = rd_bool();
             py.flags.resist_acid = rd_bool();
-            py.flags.regenerate = rd_bool();
+            py.flags.regenerate_hp = rd_bool();
             py.flags.resist_light = rd_bool();
             py.flags.free_fall = rd_bool();
             py.flags.sustain_str = rd_bool();
