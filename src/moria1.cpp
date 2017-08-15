@@ -102,7 +102,7 @@ static void playerRecalculateBonusesFromInventory() {
                 py.misc.plusses_to_damage += item->to_damage;
             }
 
-            py.misc.magical_ac += item->toac;
+            py.misc.magical_ac += item->to_ac;
             py.misc.ac += item->ac;
 
             if (spellItemIdentified(item)) {
@@ -113,7 +113,7 @@ static void playerRecalculateBonusesFromInventory() {
                     py.misc.display_to_damage += item->to_damage;
                 }
 
-                py.misc.display_to_ac += item->toac;
+                py.misc.display_to_ac += item->to_ac;
                 py.misc.display_ac += item->ac;
             } else if (!(TR_CURSED & item->flags)) {
                 // Base AC values should always be visible,

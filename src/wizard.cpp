@@ -330,7 +330,7 @@ void wizardCreateObjects() {
         return;
     }
     number = atoi(input);
-    item->toac = (int16_t) number;
+    item->to_ac = (int16_t) number;
 
     putStringClearToEOL("P1     : ", 0, 0);
     if (!getStringInput(input, 0, 9, 5)) {

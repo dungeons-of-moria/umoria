@@ -548,13 +548,13 @@ void itemDescription(obj_desc_t description, Inventory_t *item, bool add_prefix)
         (void) strcat(tmp_val, tmp_str);
         if (spellItemIdentified(item)) {
             // originally used %+d, but several machines don't support it
-            (void) sprintf(tmp_str, ",%c%d", (item->toac < 0) ? '-' : '+', abs(item->toac));
+            (void) sprintf(tmp_str, ",%c%d", (item->to_ac < 0) ? '-' : '+', abs(item->to_ac));
             (void) strcat(tmp_val, tmp_str);
         }
         (void) strcat(tmp_val, "]");
-    } else if (item->toac != 0 && spellItemIdentified(item)) {
+    } else if (item->to_ac != 0 && spellItemIdentified(item)) {
         // originally used %+d, but several machines don't support it
-        (void) sprintf(tmp_str, " [%c%d]", (item->toac < 0) ? '-' : '+', abs(item->toac));
+        (void) sprintf(tmp_str, " [%c%d]", (item->to_ac < 0) ? '-' : '+', abs(item->to_ac));
         (void) strcat(tmp_val, tmp_str);
     }
 
@@ -673,7 +673,7 @@ void inventoryItemCopyTo(int from_item_id, Inventory_t *to_item) {
     to_item->to_hit = from->tohit;
     to_item->to_damage = from->todam;
     to_item->ac = from->ac;
-    to_item->toac = from->toac;
+    to_item->to_ac = from->toac;
     to_item->damage[0] = from->damage[0];
     to_item->damage[1] = from->damage[1];
     to_item->level = from->level;

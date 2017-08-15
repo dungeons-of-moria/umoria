@@ -1997,7 +1997,7 @@ static bool itemEnchanted(Inventory_t *item) {
         return false;
     } else if (item->ident & ID_MAGIK) {
         return false;
-    } else if (item->to_hit > 0 || item->to_damage > 0 || item->toac > 0) {
+    } else if (item->to_hit > 0 || item->to_damage > 0 || item->to_ac > 0) {
         return true;
     } else if ((0x4000107fL & item->flags) && item->misc_use > 0) {
         return true;

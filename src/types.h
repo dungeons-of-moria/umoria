@@ -216,7 +216,7 @@ typedef struct {
     int16_t to_hit;                 // Plusses to hit
     int16_t to_damage;              // Plusses to damage
     int16_t ac;                     // Normal AC
-    int16_t toac;                   // Plusses to AC
+    int16_t to_ac;                  // Plusses to AC
     uint8_t damage[2];              // Damage when hits
     uint8_t level;                  // Level item first found
     uint8_t ident;                  // Identify information

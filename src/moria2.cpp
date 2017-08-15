@@ -553,14 +553,14 @@ static int damageMinusAC(uint32_t typ_dam) {
         itemDescription(description, &inventory[itemID], false);
         (void) sprintf(msg, "Your %s resists damage!", description);
         printMessage(msg);
-    } else if (inventory[itemID].ac + inventory[itemID].toac > 0) {
+    } else if (inventory[itemID].ac + inventory[itemID].to_ac > 0) {
         minus = true;
 
         itemDescription(description, &inventory[itemID], false);
         (void) sprintf(msg, "Your %s is damaged!", description);
         printMessage(msg);
 
-        inventory[itemID].toac--;
+        inventory[itemID].to_ac--;
         playerRecalculateBonuses();
     }
 

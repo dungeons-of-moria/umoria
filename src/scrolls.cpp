@@ -158,7 +158,7 @@ static bool scrollEnchantItemToAC() {
     (void) sprintf(msg, "Your %s glows faintly!", desc);
     printMessage(msg);
 
-    if (spellEnchantItem(&item->toac, 10)) {
+    if (spellEnchantItem(&item->to_ac, 10)) {
         item->flags &= ~TR_CURSED;
         playerRecalculateBonuses();
     } else {
@@ -287,7 +287,7 @@ static bool scrollCurseWeapon() {
 
     item->to_hit = (int16_t) (-randomNumber(5) - randomNumber(5));
     item->to_damage = (int16_t) (-randomNumber(5) - randomNumber(5));
-    item->toac = 0;
+    item->to_ac = 0;
 
     // Must call playerAdjustBonusesForItem() before set (clear) flags, and
     // must call playerRecalculateBonuses() after set (clear) flags, so that
@@ -317,7 +317,7 @@ static bool scrollEnchantArmor() {
     bool enchanted = false;
 
     for (int i = 0; i < randomNumber(2) + 1; i++) {
-        if (spellEnchantItem(&item->toac, 10)) {
+        if (spellEnchantItem(&item->to_ac, 10)) {
             enchanted = true;
         }
     }
@@ -380,7 +380,7 @@ static bool scrollCurseArmor() {
     item->flags = TR_CURSED;
     item->to_hit = 0;
     item->to_damage = 0;
-    item->toac = (int16_t) (-randomNumber(5) - randomNumber(5));
+    item->to_ac = (int16_t) (-randomNumber(5) - randomNumber(5));
 
     playerRecalculateBonuses();
 

@@ -10,7 +10,7 @@
 #include "externs.h"
 
 static void magicalArmor(Inventory_t *t_ptr, int special, int level) {
-    t_ptr->toac += magicEnchantmentBonus(1, 30, level);
+    t_ptr->to_ac += magicEnchantmentBonus(1, 30, level);
 
     if (!magicShouldBeEnchanted(special)) {
         return;
@@ -20,7 +20,7 @@ static void magicalArmor(Inventory_t *t_ptr, int special, int level) {
         case 1:
             t_ptr->flags |= (TR_RES_LIGHT | TR_RES_COLD | TR_RES_ACID | TR_RES_FIRE);
             t_ptr->special_name_id = SN_R;
-            t_ptr->toac += 5;
+            t_ptr->to_ac += 5;
             t_ptr->cost += 2500;
             break;
         case 2: // Resist Acid
@@ -54,7 +54,7 @@ static void magicalArmor(Inventory_t *t_ptr, int special, int level) {
 }
 
 static void cursedArmor(Inventory_t *t_ptr, int level) {
-    t_ptr->toac -= magicEnchantmentBonus(1, 40, level);
+    t_ptr->to_ac -= magicEnchantmentBonus(1, 40, level);
     t_ptr->cost = 0;
     t_ptr->flags |= TR_CURSED;
 }
@@ -76,7 +76,7 @@ static void magicalSword(Inventory_t *t_ptr, int special, int level) {
                 t_ptr->flags |= (TR_SEE_INVIS | TR_SUST_STAT | TR_SLAY_UNDEAD | TR_SLAY_EVIL | TR_STR);
                 t_ptr->to_hit += 5;
                 t_ptr->to_damage += 5;
-                t_ptr->toac += randomNumber(4);
+                t_ptr->to_ac += randomNumber(4);
 
                 // the value in `misc_use` is used for strength increase
                 // `misc_use` is also used for sustain stat
@@ -89,7 +89,7 @@ static void magicalSword(Inventory_t *t_ptr, int special, int level) {
                 t_ptr->flags |= (TR_FFALL | TR_RES_LIGHT | TR_SEE_INVIS | TR_FREE_ACT | TR_RES_COLD | TR_RES_ACID | TR_RES_FIRE | TR_REGEN | TR_STEALTH);
                 t_ptr->to_hit += 3;
                 t_ptr->to_damage += 3;
-                t_ptr->toac += 5 + randomNumber(5);
+                t_ptr->to_ac += 5 + randomNumber(5);
                 t_ptr->special_name_id = SN_DF;
 
                 // the value in `misc_use` is used for stealth
@@ -190,7 +190,7 @@ static void cursedDiggingTool(Inventory_t *t_ptr, int level) {
 }
 
 static void magicalGloves(Inventory_t *t_ptr, int special, int level) {
-    t_ptr->toac += magicEnchantmentBonus(1, 20, level);
+    t_ptr->to_ac += magicEnchantmentBonus(1, 20, level);
 
     if (!magicShouldBeEnchanted(special)) {
         return;
@@ -222,13 +222,13 @@ static void cursedGloves(Inventory_t *t_ptr, int special, int level) {
         t_ptr->misc_use = (int16_t) -magicEnchantmentBonus(1, 10, level);
     }
 
-    t_ptr->toac -= magicEnchantmentBonus(1, 40, level);
+    t_ptr->to_ac -= magicEnchantmentBonus(1, 40, level);
     t_ptr->flags |= TR_CURSED;
     t_ptr->cost = 0;
 }
 
 static void magicalBoots(Inventory_t *t_ptr, int special, int level) {
-    t_ptr->toac += magicEnchantmentBonus(1, 20, level);
+    t_ptr->to_ac += magicEnchantmentBonus(1, 20, level);
 
     if (!magicShouldBeEnchanted(special)) {
         return;
@@ -273,12 +273,12 @@ static void cursedBoots(Inventory_t *t_ptr, int level) {
     }
 
     t_ptr->cost = 0;
-    t_ptr->toac -= magicEnchantmentBonus(2, 45, level);
+    t_ptr->to_ac -= magicEnchantmentBonus(2, 45, level);
     t_ptr->flags |= TR_CURSED;
 }
 
 static void magicalHelms(Inventory_t *t_ptr, int special, int level) {
-    t_ptr->toac += magicEnchantmentBonus(1, 20, level);
+    t_ptr->to_ac += magicEnchantmentBonus(1, 20, level);
 
     if (!magicShouldBeEnchanted(special)) {
         return;
@@ -354,7 +354,7 @@ static void magicalHelms(Inventory_t *t_ptr, int special, int level) {
 }
 
 static void cursedHelms(Inventory_t *t_ptr, int special, int level) {
-    t_ptr->toac -= magicEnchantmentBonus(1, 45, level);
+    t_ptr->to_ac -= magicEnchantmentBonus(1, 45, level);
     t_ptr->flags |= TR_CURSED;
     t_ptr->cost = 0;
 
@@ -454,10 +454,10 @@ static void processRings(Inventory_t *t_ptr, int level, int cursed) {
             }
             break;
         case 21: // Protection
-            t_ptr->toac += magicEnchantmentBonus(1, 20, level);
-            t_ptr->cost += t_ptr->toac * 100;
+            t_ptr->to_ac += magicEnchantmentBonus(1, 20, level);
+            t_ptr->cost += t_ptr->to_ac * 100;
             if (magicShouldBeEnchanted(cursed)) {
-                t_ptr->toac = -t_ptr->toac;
+                t_ptr->to_ac = -t_ptr->to_ac;
                 t_ptr->flags |= TR_CURSED;
                 t_ptr->cost = -t_ptr->cost;
             }
@@ -623,18 +623,18 @@ static int staffMagic(uint8_t id) {
 
 static void magicalCloak(Inventory_t *t_ptr, int special, int level) {
     if (!magicShouldBeEnchanted(special)) {
-        t_ptr->toac += magicEnchantmentBonus(1, 20, level);
+        t_ptr->to_ac += magicEnchantmentBonus(1, 20, level);
         return;
     }
 
     if (randomNumber(2) == 1) {
         t_ptr->special_name_id = SN_PROTECTION;
-        t_ptr->toac += magicEnchantmentBonus(2, 40, level);
+        t_ptr->to_ac += magicEnchantmentBonus(2, 40, level);
         t_ptr->cost += 250;
         return;
     }
 
-    t_ptr->toac += magicEnchantmentBonus(1, 20, level);
+    t_ptr->to_ac += magicEnchantmentBonus(1, 20, level);
     t_ptr->ident |= ID_SHOW_P1;
     t_ptr->misc_use = (int16_t) randomNumber(3);
     t_ptr->flags |= TR_STEALTH;
@@ -648,18 +648,18 @@ static void cursedCloak(Inventory_t *t_ptr, int level) {
     if (magicType == 1) {
         t_ptr->flags |= TR_AGGRAVATE;
         t_ptr->special_name_id = SN_IRRITATION;
-        t_ptr->toac -= magicEnchantmentBonus(1, 10, level);
+        t_ptr->to_ac -= magicEnchantmentBonus(1, 10, level);
         t_ptr->ident |= ID_SHOW_HIT_DAM;
         t_ptr->to_hit -= magicEnchantmentBonus(1, 10, level);
         t_ptr->to_damage -= magicEnchantmentBonus(1, 10, level);
         t_ptr->cost = 0;
     } else if (magicType == 2) {
         t_ptr->special_name_id = SN_VULNERABILITY;
-        t_ptr->toac -= magicEnchantmentBonus(10, 100, level + 50);
+        t_ptr->to_ac -= magicEnchantmentBonus(10, 100, level + 50);
         t_ptr->cost = 0;
     } else {
         t_ptr->special_name_id = SN_ENVELOPING;
-        t_ptr->toac -= magicEnchantmentBonus(1, 10, level);
+        t_ptr->to_ac -= magicEnchantmentBonus(1, 10, level);
         t_ptr->ident |= ID_SHOW_HIT_DAM;
         t_ptr->to_hit -= magicEnchantmentBonus(2, 40, level + 10);
         t_ptr->to_damage -= magicEnchantmentBonus(2, 40, level + 10);
