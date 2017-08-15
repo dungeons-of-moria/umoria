@@ -926,10 +926,10 @@ void magicTreasureMagicalAbility(int item_id, int level) {
                 }
             }
 
-            t_ptr->number = 0;
+            t_ptr->items_count = 0;
 
             for (int i = 0; i < 7; i++) {
-                t_ptr->number += randomNumber(6);
+                t_ptr->items_count += randomNumber(6);
             }
 
             if (missiles_counter == MAX_SHORT) {

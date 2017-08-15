@@ -267,7 +267,7 @@ void playerRecalculateBonuses() {
 }
 
 static void inventoryItemWeightText(char *text, int itemID) {
-    int totalWeight = inventory[itemID].weight * inventory[itemID].number;
+    int totalWeight = inventory[itemID].weight * inventory[itemID].items_count;
     int quotient = totalWeight / 10;
     int remainder = totalWeight % 10;
 
@@ -501,7 +501,7 @@ void playerTakeOff(int item_id, int pack_position_id) {
 
     Inventory_t *item = &inventory[item_id];
 
-    inventory_weight -= item->weight * item->number;
+    inventory_weight -= item->weight * item->items_count;
     equipment_count--;
 
     const char *p;
@@ -1102,7 +1102,7 @@ static bool selectItemCommands(char *command, char *which, bool selecting) {
                 if (TR_CURSED & inventory[slot].flags) {
                     inventoryItemIsCursedMessage(slot);
                     item = -1;
-                } else if (inventory[item].sub_category_id == ITEM_GROUP_MIN && inventory[item].number > 1 && !inventoryCanCarryItemCount(&inventory[slot])) {
+                } else if (inventory[item].sub_category_id == ITEM_GROUP_MIN && inventory[item].items_count > 1 && !inventoryCanCarryItemCount(&inventory[slot])) {
                     // this can happen if try to wield a torch,
                     // and have more than one in inventory
                     printMessage("You will have to drop something first.");
@@ -1121,12 +1121,12 @@ static bool selectItemCommands(char *command, char *which, bool selecting) {
                 wear_high--;
 
                 // Fix for torches
-                if (i_ptr->number > 1 && i_ptr->sub_category_id <= ITEM_SINGLE_STACK_MAX) {
-                    i_ptr->number = 1;
+                if (i_ptr->items_count > 1 && i_ptr->sub_category_id <= ITEM_SINGLE_STACK_MAX) {
+                    i_ptr->items_count = 1;
                     wear_high++;
                 }
 
-                inventory_weight += i_ptr->weight * i_ptr->number;
+                inventory_weight += i_ptr->weight * i_ptr->items_count;
 
                 // Subtracts weight
                 inventoryDestroyItem(item);
@@ -1200,7 +1200,7 @@ static bool selectItemCommands(char *command, char *which, bool selecting) {
             // NOTE: initializing to `ESCAPE` as warnings were being given. -MRC-
             char query = ESCAPE;
 
-            if (inventory[item].number > 1) {
+            if (inventory[item].items_count > 1) {
                 obj_desc_t description;
                 itemDescription(description, &inventory[item], true);
                 description[strlen(description) - 1] = '?';

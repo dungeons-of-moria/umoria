@@ -1110,11 +1110,11 @@ void changeCharacterName() {
 void inventoryDestroyItem(int item_id) {
     Inventory_t *i_ptr = &inventory[item_id];
 
-    if (i_ptr->number > 1 && i_ptr->sub_category_id <= ITEM_SINGLE_STACK_MAX) {
-        i_ptr->number--;
+    if (i_ptr->items_count > 1 && i_ptr->sub_category_id <= ITEM_SINGLE_STACK_MAX) {
+        i_ptr->items_count--;
         inventory_weight -= i_ptr->weight;
     } else {
-        inventory_weight -= i_ptr->weight * i_ptr->number;
+        inventory_weight -= i_ptr->weight * i_ptr->items_count;
 
         for (int i = item_id; i < inventory_count - 1; i++) {
             inventory[i] = inventory[i + 1];
@@ -1132,8 +1132,8 @@ void inventoryDestroyItem(int item_id) {
 void inventoryTakeOneItem(Inventory_t *to_item, Inventory_t *from_item) {
     *to_item = *from_item;
 
-    if (to_item->number > 1 && to_item->sub_category_id >= ITEM_SINGLE_STACK_MIN && to_item->sub_category_id <= ITEM_SINGLE_STACK_MAX) {
-        to_item->number = 1;
+    if (to_item->items_count > 1 && to_item->sub_category_id >= ITEM_SINGLE_STACK_MIN && to_item->sub_category_id <= ITEM_SINGLE_STACK_MAX) {
+        to_item->items_count = 1;
     }
 }
 
@@ -1153,8 +1153,8 @@ void inventoryDropItem(int item_id, bool drop_all) {
     if (item_id >= EQUIPMENT_WIELD) {
         playerTakeOff(item_id, -1);
     } else {
-        if (drop_all || i_ptr->number == 1) {
-            inventory_weight -= i_ptr->weight * i_ptr->number;
+        if (drop_all || i_ptr->items_count == 1) {
+            inventory_weight -= i_ptr->weight * i_ptr->items_count;
             inventory_count--;
 
             while (item_id < inventory_count) {
@@ -1164,9 +1164,9 @@ void inventoryDropItem(int item_id, bool drop_all) {
 
             inventoryItemCopyTo(OBJ_NOTHING, &inventory[inventory_count]);
         } else {
-            treasure_list[treasureID].number = 1;
+            treasure_list[treasureID].items_count = 1;
             inventory_weight -= i_ptr->weight;
-            i_ptr->number--;
+            i_ptr->items_count--;
         }
 
         obj_desc_t prt1, prt2;
@@ -1218,7 +1218,7 @@ bool inventoryCanCarryItemCount(Inventory_t *item) {
         bool same_category = inventory[i].sub_category_id == item->sub_category_id;
 
         // make sure the number field doesn't overflow
-        bool same_number = inventory[i].number + item->number < 256;
+        bool same_number = inventory[i].items_count + item->items_count < 256;
 
         // they always stack (sub_category_id < 192), or else they have same `misc_use`
         bool same_group = item->sub_category_id < ITEM_GROUP_MIN || inventory[i].misc_use == item->misc_use;
@@ -1237,7 +1237,7 @@ bool inventoryCanCarryItemCount(Inventory_t *item) {
 // return false if picking up an object would change the players speed
 bool inventoryCanCarryItem(Inventory_t *item) {
     int limit = playerCarryingLoadLimit();
-    int newWeight = item->number * item->weight + inventory_weight;
+    int newWeight = item->items_count * item->weight + inventory_weight;
 
     if (limit < newWeight) {
         limit = newWeight / (limit + 1);
@@ -1302,11 +1302,11 @@ int inventoryCarryItem(Inventory_t *item) {
     for (locn = 0;; locn++) {
         Inventory_t *t_ptr = &inventory[locn];
 
-        if (typ == t_ptr->category_id && subt == t_ptr->sub_category_id && subt >= ITEM_SINGLE_STACK_MIN && ((int) t_ptr->number + (int) item->number) < 256 &&
+        if (typ == t_ptr->category_id && subt == t_ptr->sub_category_id && subt >= ITEM_SINGLE_STACK_MIN && ((int) t_ptr->items_count + (int) item->items_count) < 256 &&
             (subt < ITEM_GROUP_MIN || t_ptr->misc_use == item->misc_use) &&
             // only stack if both or neither are identified
             known1p == itemSetColorlessAsIdentifed(t_ptr)) {
-            t_ptr->number += item->number;
+            t_ptr->items_count += item->items_count;
 
             break;
         }
@@ -1325,7 +1325,7 @@ int inventoryCarryItem(Inventory_t *item) {
         }
     }
 
-    inventory_weight += item->number * item->weight;
+    inventory_weight += item->items_count * item->weight;
     py.flags.status |= PY_STR_WGT;
 
     return locn;

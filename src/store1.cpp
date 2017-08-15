@@ -48,7 +48,7 @@ int32_t storeItemValue(Inventory_t *item) {
     // Multiply value by number of items if it is a group stack item.
     // Do not include torches here.
     if (item->sub_category_id > ITEM_GROUP_MIN) {
-        value = value * item->number;
+        value = value * item->items_count;
     }
 
     return value;
@@ -202,7 +202,7 @@ bool storeCheckPlayerItemsCount(int store_id, Inventory_t *item) {
 
         // note: items with sub_category_id of gte ITEM_SINGLE_STACK_MAX only stack
         // if their `sub_category_id`s match
-        if (store_item->category_id == item->category_id && store_item->sub_category_id == item->sub_category_id && (int) (store_item->number + item->number) < 256 &&
+        if (store_item->category_id == item->category_id && store_item->sub_category_id == item->sub_category_id && (int) (store_item->items_count + item->items_count) < 256 &&
             (item->sub_category_id < ITEM_GROUP_MIN || store_item->misc_use == item->misc_use)) {
             store_check = true;
         }
@@ -236,7 +236,7 @@ void storeCarry(int store_id, int *index_id, Inventory_t *item) {
     Store_t *store = &stores[store_id];
 
     int item_id = 0;
-    int item_num = item->number;
+    int item_num = item->items_count;
     int item_category = item->category_id;
     int item_sub_catory = item->sub_category_id;
 
@@ -248,7 +248,7 @@ void storeCarry(int store_id, int *index_id, Inventory_t *item) {
             if (item_sub_catory == store_item->sub_category_id && // Adds to other item
                 item_sub_catory >= ITEM_SINGLE_STACK_MIN && (item_sub_catory < ITEM_GROUP_MIN || store_item->misc_use == item->misc_use)) {
                 *index_id = item_id;
-                store_item->number += item_num;
+                store_item->items_count += item_num;
 
                 // must set new scost for group items, do this only for items
                 // strictly greater than group_min, not for torches, this
@@ -256,10 +256,10 @@ void storeCarry(int store_id, int *index_id, Inventory_t *item) {
                 if (item_sub_catory > ITEM_GROUP_MIN) {
                     (void) storeItemSellPrice(store_id, &dummy, &i_cost, store_item);
                     store->store_inven[item_id].scost = -i_cost;
-                } else if (store_item->number > 24) {
+                } else if (store_item->items_count > 24) {
                     // must let group objects (except torches) stack over 24
                     // since there may be more than 24 in the group
-                    store_item->number = 24;
+                    store_item->items_count = 24;
                 }
                 flag = true;
             }
@@ -293,14 +293,14 @@ void storeDestroy(int store_id, int item_id, bool only_one_of) {
         if (only_one_of) {
             number = 1;
         } else {
-            number = randomNumber((int) store_item->number);
+            number = randomNumber((int) store_item->items_count);
         }
     } else {
-        number = store_item->number;
+        number = store_item->items_count;
     }
 
-    if (number != store_item->number) {
-        store_item->number -= number;
+    if (number != store_item->items_count) {
+        store_item->items_count -= number;
     } else {
         for (int i = item_id; i < store->store_ctr - 1; i++) {
             store->store_inven[i] = store->store_inven[i + 1];

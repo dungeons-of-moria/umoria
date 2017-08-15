@@ -269,7 +269,7 @@ void itemIdentify(int *item_id) {
     for (int i = 0; i < inventory_count; i++) {
         t_ptr = &inventory[i];
 
-        if (t_ptr->category_id == x1 && t_ptr->sub_category_id == x2 && i != *item_id && ((int) t_ptr->number + (int) i_ptr->number) < 256) {
+        if (t_ptr->category_id == x1 && t_ptr->sub_category_id == x2 && i != *item_id && ((int) t_ptr->items_count + (int) i_ptr->items_count) < 256) {
             // make *item_id the smaller number
             if (*item_id > i) {
                 j = *item_id;
@@ -279,7 +279,7 @@ void itemIdentify(int *item_id) {
 
             printMessage("You combine similar objects from the shop and dungeon.");
 
-            inventory[*item_id].number += inventory[i].number;
+            inventory[*item_id].items_count += inventory[i].items_count;
             inventory_count--;
 
             for (j = i; j < inventory_count; j++) {
@@ -498,7 +498,7 @@ void itemDescription(obj_desc_t description, Inventory_t *item, bool add_prefix)
         (void) strcat(tmp_val, game_objects[item->id].name);
     }
 
-    if (item->number != 1) {
+    if (item->items_count != 1) {
         insertStringIntoString(tmp_val, "ch~", "ches");
         insertStringIntoString(tmp_val, "~", "s");
     } else {
@@ -594,16 +594,16 @@ void itemDescription(obj_desc_t description, Inventory_t *item, bool add_prefix)
     // ampersand is always the first character
     if (tmp_val[0] == '&') {
         // use &tmp_val[1], so that & does not appear in output
-        if (item->number > 1) {
-            (void) sprintf(description, "%d%s", (int) item->number, &tmp_val[1]);
-        } else if (item->number < 1) {
+        if (item->items_count > 1) {
+            (void) sprintf(description, "%d%s", (int) item->items_count, &tmp_val[1]);
+        } else if (item->items_count < 1) {
             (void) sprintf(description, "%s%s", "no more", &tmp_val[1]);
         } else if (isVowel(tmp_val[2])) {
             (void) sprintf(description, "an%s", &tmp_val[1]);
         } else {
             (void) sprintf(description, "a%s", &tmp_val[1]);
         }
-    } else if (item->number < 1) {
+    } else if (item->items_count < 1) {
         // handle 'no more' case specially
 
         // check for "some" at start
@@ -668,7 +668,7 @@ void inventoryItemCopyTo(int from_item_id, Inventory_t *to_item) {
     to_item->misc_use = from->misc_use;
     to_item->cost = from->cost;
     to_item->sub_category_id = from->subval;
-    to_item->number = from->number;
+    to_item->items_count = from->number;
     to_item->weight = from->weight;
     to_item->tohit = from->tohit;
     to_item->todam = from->todam;
@@ -697,12 +697,12 @@ void itemChargesRemainingDescription(int item_id) {
 void itemTypeRemainingCountDescription(int item_id) {
     Inventory_t *i_ptr = &inventory[item_id];
 
-    i_ptr->number--;
+    i_ptr->items_count--;
 
     obj_desc_t tmp_str;
     itemDescription(tmp_str, i_ptr, true);
 
-    i_ptr->number++;
+    i_ptr->items_count++;
 
     // the string already has a dot at the end.
     obj_desc_t out_val;

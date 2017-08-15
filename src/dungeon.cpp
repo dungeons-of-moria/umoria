@@ -2158,8 +2158,8 @@ static void dungeonJamDoor() {
             // Series is: 0 20 30 37 43 48 52 56 60 64 67 70 ...
             item->misc_use -= 1 + 190 / (10 - item->misc_use);
 
-            if (inventory[item_pos_start].number > 1) {
-                inventory[item_pos_start].number--;
+            if (inventory[item_pos_start].items_count > 1) {
+                inventory[item_pos_start].items_count--;
                 inventory_weight -= inventory[item_pos_start].weight;
             } else {
                 inventoryDestroyItem(item_pos_start);

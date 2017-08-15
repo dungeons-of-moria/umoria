@@ -876,11 +876,11 @@ static void playerAttackMonster(int y, int x) {
 
         // Use missiles up
         if (item->category_id >= TV_SLING_AMMO && item->category_id <= TV_SPIKE) {
-            item->number--;
+            item->items_count--;
             inventory_weight -= item->weight;
             py.flags.status |= PY_STR_WGT;
 
-            if (item->number == 0) {
+            if (item->items_count == 0) {
                 equipment_count--;
                 playerAdjustBonusesForItem(item, -1);
                 inventoryItemCopyTo(OBJ_NOTHING, item);

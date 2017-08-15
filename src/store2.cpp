@@ -196,17 +196,17 @@ static void displayStoreInventory(int store_id, int item_pos_start) {
         Inventory_t *item = &store->store_inven[item_pos_start].sitem;
 
         // Save the current number of items
-        int32_t current_item_count = item->number;
+        int32_t current_item_count = item->items_count;
 
         if (item->sub_category_id >= ITEM_SINGLE_STACK_MIN && item->sub_category_id <= ITEM_SINGLE_STACK_MAX) {
-            item->number = 1;
+            item->items_count = 1;
         }
 
         obj_desc_t description;
         itemDescription(description, item, true);
 
         // Restore the number of items
-        item->number = (uint8_t) current_item_count;
+        item->items_count = (uint8_t) current_item_count;
 
         obj_desc_t msg;
         (void) sprintf(msg, "%c) %s", 'a' + item_identifier, description);

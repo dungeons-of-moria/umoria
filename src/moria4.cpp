@@ -715,9 +715,9 @@ static void inventoryThrow(int item_id, Inventory_t *treasure) {
 
     *treasure = *item;
 
-    if (item->number > 1) {
-        treasure->number = 1;
-        item->number--;
+    if (item->items_count > 1) {
+        treasure->items_count = 1;
+        item->items_count--;
         inventory_weight -= item->weight;
         py.flags.status |= PY_STR_WGT;
     } else {

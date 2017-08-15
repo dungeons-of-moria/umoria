@@ -288,7 +288,7 @@ void wizardCreateObjects() {
         return;
     }
     number = atoi(input);
-    item->number = (uint8_t) number;
+    item->items_count = (uint8_t) number;
 
     putStringClearToEOL("Damage (dice): ", 0, 0);
     if (!getStringInput(input, 0, 15, 3)) {
