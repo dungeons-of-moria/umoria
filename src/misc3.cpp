@@ -614,10 +614,10 @@ void playerSetAndUseStat(int stat) {
         playerRecalculateBonuses();
     } else if (stat == A_DEX) {
         playerRecalculateBonuses();
-    } else if (stat == A_INT && classes[py.misc.class_id].user_mage_spells == SPELL_TYPE_MAGE) {
+    } else if (stat == A_INT && classes[py.misc.class_id].class_to_use_mage_spells == SPELL_TYPE_MAGE) {
         playerCalculateAllowedSpellsCount(A_INT);
         playerGainMana(A_INT);
-    } else if (stat == A_WIS && classes[py.misc.class_id].user_mage_spells == SPELL_TYPE_PRIEST) {
+    } else if (stat == A_WIS && classes[py.misc.class_id].class_to_use_mage_spells == SPELL_TYPE_PRIEST) {
         playerCalculateAllowedSpellsCount(A_WIS);
         playerGainMana(A_WIS);
     } else if (stat == A_CON) {
@@ -1331,14 +1331,14 @@ int inventoryCarryItem(Inventory_t *item) {
     return locn;
 }
 
-// Returns spell chance of failure for user_mage_spells -RAK-
+// Returns spell chance of failure for class_to_use_mage_spells -RAK-
 static int spellChanceOfSuccess(int spell) {
     Spell_t *s_ptr = &magic_spells[py.misc.class_id - 1][spell];
 
     int chance = s_ptr->sfail - 3 * (py.misc.level - s_ptr->slevel);
 
     int stat;
-    if (classes[py.misc.class_id].user_mage_spells == SPELL_TYPE_MAGE) {
+    if (classes[py.misc.class_id].class_to_use_mage_spells == SPELL_TYPE_MAGE) {
         stat = A_INT;
     } else {
         stat = A_WIS;
@@ -1370,7 +1370,7 @@ void displaySpellsList(int *spell, int number_of_choices, int comment, int non_c
         col = 31;
     }
 
-    int consecutive_offset = (classes[py.misc.class_id].user_mage_spells == SPELL_TYPE_MAGE ? NAME_OFFSET_SPELLS : NAME_OFFSET_PRAYERS);
+    int consecutive_offset = (classes[py.misc.class_id].class_to_use_mage_spells == SPELL_TYPE_MAGE ? NAME_OFFSET_SPELLS : NAME_OFFSET_PRAYERS);
 
     eraseLine(1, col);
     putString("Name", 1, col + 5);
@@ -1423,7 +1423,7 @@ bool spellGetId(int *spell, int number_of_choices, int *spell_id, int *spell_cha
     bool spell_found = false;
     bool redraw = false;
 
-    int offset = (classes[py.misc.class_id].user_mage_spells == SPELL_TYPE_MAGE ? NAME_OFFSET_SPELLS : NAME_OFFSET_PRAYERS);
+    int offset = (classes[py.misc.class_id].class_to_use_mage_spells == SPELL_TYPE_MAGE ? NAME_OFFSET_SPELLS : NAME_OFFSET_PRAYERS);
 
     char choice;
 
@@ -1431,7 +1431,7 @@ bool spellGetId(int *spell, int number_of_choices, int *spell_id, int *spell_cha
         if (isupper((int) choice)) {
             *spell_id = choice - 'A' + first_spell;
 
-            // verify that this is in spell[], at most 22 entries in user_mage_spells[]
+            // verify that this is in spell[], at most 22 entries in class_to_use_mage_spells[]
             int spellID;
             for (spellID = 0; spellID < number_of_choices; spellID++) {
                 if (*spell_id == spell[spellID]) {
@@ -1455,7 +1455,7 @@ bool spellGetId(int *spell, int number_of_choices, int *spell_id, int *spell_cha
         } else if (islower((int) choice)) {
             *spell_id = choice - 'a' + first_spell;
 
-            // verify that this is in spell[], at most 22 entries in user_mage_spells[]
+            // verify that this is in spell[], at most 22 entries in class_to_use_mage_spells[]
             int spellID;
             for (spellID = 0; spellID < number_of_choices; spellID++) {
                 if (*spell_id == spell[spellID]) {
@@ -1753,7 +1753,7 @@ void playerGainSpells() {
 
     int stat, offset;
 
-    if (classes[py.misc.class_id].user_mage_spells == SPELL_TYPE_MAGE) {
+    if (classes[py.misc.class_id].class_to_use_mage_spells == SPELL_TYPE_MAGE) {
         // People with SPELL_TYPE_MAGE spells can't learn spell_bank if they can't read their books.
         if (!playerCanRead()) {
             return;
@@ -1959,10 +1959,10 @@ static void playerGainLevel() {
 
     Class_t *player_class = &classes[py.misc.class_id];
 
-    if (player_class->user_mage_spells == SPELL_TYPE_MAGE) {
+    if (player_class->class_to_use_mage_spells == SPELL_TYPE_MAGE) {
         playerCalculateAllowedSpellsCount(A_INT);
         playerGainMana(A_INT);
-    } else if (player_class->user_mage_spells == SPELL_TYPE_PRIEST) {
+    } else if (player_class->class_to_use_mage_spells == SPELL_TYPE_PRIEST) {
         playerCalculateAllowedSpellsCount(A_WIS);
         playerGainMana(A_WIS);
     }

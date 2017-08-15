@@ -370,12 +370,12 @@ static void characterGetClass() {
             putString(klass->title, 5, 15);
 
             // Adjust the stats for the class adjustment -RAK-
-            characterChangeStat(A_STR, klass->str_modifier);
-            characterChangeStat(A_INT, klass->int_modifier);
-            characterChangeStat(A_WIS, klass->wis_modifier);
-            characterChangeStat(A_DEX, klass->dex_modifier);
-            characterChangeStat(A_CON, klass->con_modifier);
-            characterChangeStat(A_CHR, klass->chr_modifier);
+            characterChangeStat(A_STR, klass->strength);
+            characterChangeStat(A_INT, klass->intelligence);
+            characterChangeStat(A_WIS, klass->wisdom);
+            characterChangeStat(A_DEX, klass->dexterity);
+            characterChangeStat(A_CON, klass->constitution);
+            characterChangeStat(A_CHR, klass->charisma);
 
             for (int i = 0; i < 6; i++) {
                 py.stats.current[i] = py.stats.max[i];
@@ -395,7 +395,7 @@ static void characterGetClass() {
             py.misc.display_ac = py.misc.ac + py.misc.display_to_ac;
 
             // now set misc stats, do this after setting stats because of playerStatAdjustmentConstitution() for hit-points
-            py.misc.hit_die += klass->hp_adjustment;
+            py.misc.hit_die += klass->hit_points;
             py.misc.max_hp = (int16_t) (playerStatAdjustmentConstitution() + py.misc.hit_die);
             py.misc.current_hp = py.misc.max_hp;
             py.misc.current_hp_fraction = 0;
@@ -414,13 +414,13 @@ static void characterGetClass() {
                 }
             } while (player_base_hp_levels[PLAYER_MAX_LEVEL - 1] < min_value || player_base_hp_levels[PLAYER_MAX_LEVEL - 1] > max_value);
 
-            py.misc.bth += klass->base_to_hit_mod;
-            py.misc.bth_with_bows += klass->base_to_hit_mod_bows_mod; // RAK
-            py.misc.chance_in_search += klass->searching_mod;
-            py.misc.disarm += klass->disarm_traps_mod;
-            py.misc.freng_of_search += klass->fos_mod;
-            py.misc.stealth_factor += klass->stealth_mod;
-            py.misc.saving_throw += klass->saving_throw_mod;
+            py.misc.bth += klass->base_to_hit;
+            py.misc.bth_with_bows += klass->base_to_hit_with_bows; // RAK
+            py.misc.chance_in_search += klass->searching;
+            py.misc.disarm += klass->disarm_traps;
+            py.misc.freng_of_search += klass->fos;
+            py.misc.stealth_factor += klass->stealth;
+            py.misc.saving_throw += klass->saving_throw;
             py.misc.experience_factor += klass->experience_factor;
         } else if (input == '?') {
             displayTextHelpFile(MORIA_WELCOME);
