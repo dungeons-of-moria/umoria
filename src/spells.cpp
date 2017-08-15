@@ -1925,9 +1925,9 @@ void dungeonEarthquake() {
 
 // Evil creatures don't like this. -RAK-
 bool playerProtectEvil() {
-    bool is_protected = py.flags.protevil == 0;
+    bool is_protected = py.flags.protect_evil == 0;
 
-    py.flags.protevil += randomNumber(25) + 3 * py.misc.level;
+    py.flags.protect_evil += randomNumber(25) + 3 * py.misc.level;
 
     return is_protected;
 }

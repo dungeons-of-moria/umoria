@@ -93,7 +93,7 @@ typedef struct {
         int16_t afraid;          // Fear
         int16_t poisoned;        // Poisoned
         int16_t image;           // Hallucinate
-        int16_t protevil;        // Protect VS evil
+        int16_t protect_evil;    // Protect VS evil
         int16_t invuln;          // Increases AC
         int16_t hero;            // Heroism
         int16_t shero;           // Super Heroism

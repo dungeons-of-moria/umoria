@@ -835,7 +835,7 @@ static void monsterAttackPlayer(int monster_id) {
 
         attstr++;
 
-        if (py.flags.protevil > 0 && (creature->cdefense & CD_EVIL) && py.misc.level + 1 > creature->level) {
+        if (py.flags.protect_evil > 0 && (creature->cdefense & CD_EVIL) && py.misc.level + 1 > creature->level) {
             if (monster->ml) {
                 creature_recall[monster->mptr].r_cdefense |= CD_EVIL;
             }

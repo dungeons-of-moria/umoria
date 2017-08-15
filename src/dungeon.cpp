@@ -483,13 +483,13 @@ static void playerUpdateParalysis() {
 
 // Protection from evil counter
 static void playerUpdateEvilProtection() {
-    if (py.flags.protevil <= 0) {
+    if (py.flags.protect_evil <= 0) {
         return;
     }
 
-    py.flags.protevil--;
+    py.flags.protect_evil--;
 
-    if (py.flags.protevil == 0) {
+    if (py.flags.protect_evil == 0) {
         printMessage("You no longer feel safe from evil.");
     }
 }
