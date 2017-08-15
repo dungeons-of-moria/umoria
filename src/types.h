@@ -135,8 +135,8 @@ typedef struct {
     int16_t dex_adjustment;
     int16_t con_adjustment;
     int16_t chr_adjustment;
-    uint8_t b_age;   // Base age of character
-    uint8_t m_age;   // Maximum age of character
+    uint8_t base_age;            // Base age of character
+    uint8_t max_age;             // Maximum age of character
     uint8_t m_b_ht;  // base height for males
     uint8_t m_m_ht;  // mod height for males
     uint8_t m_b_wt;  // base weight for males

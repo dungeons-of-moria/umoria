@@ -293,7 +293,7 @@ static void characterSetGender() {
 // Computes character's age, height, and weight -JWT-
 static void characterSetAgeHeightWeight() {
     int race_id = py.misc.race_id;
-    py.misc.age = (uint16_t) (character_races[race_id].b_age + randomNumber((int) character_races[race_id].m_age));
+    py.misc.age = (uint16_t) (character_races[race_id].base_age + randomNumber((int) character_races[race_id].max_age));
 
     if (playerIsMale()) {
         py.misc.height = (uint16_t) randomNumberNormalDistribution((int) character_races[race_id].m_b_ht, (int) character_races[race_id].m_m_ht);
