@@ -269,11 +269,11 @@ static bool playerDrinkPotion(uint32_t flags, uint8_t item_id) {
                 }
                 break;
             case 47:
-                if (py.flags.tim_infra == 0) {
+                if (py.flags.timed_infra == 0) {
                     printMessage("Your eyes begin to tingle.");
                     identified = true;
                 }
-                py.flags.tim_infra += 100 + randomNumber(100);
+                py.flags.timed_infra += 100 + randomNumber(100);
                 break;
             default:
                 printMessage("Internal error in potion()");

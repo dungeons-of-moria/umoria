@@ -611,7 +611,7 @@ static void playerUpdateDetectInvisible() {
 
 // Timed infra-vision
 static void playerUpdateInfraVision() {
-    if (py.flags.tim_infra <= 0) {
+    if (py.flags.timed_infra <= 0) {
         return;
     }
 
@@ -623,9 +623,9 @@ static void playerUpdateInfraVision() {
         updateMonsters(false);
     }
 
-    py.flags.tim_infra--;
+    py.flags.timed_infra--;
 
-    if (py.flags.tim_infra == 0) {
+    if (py.flags.timed_infra == 0) {
         py.flags.status &= ~PY_TIM_INFRA;
         py.flags.see_infra--;
 

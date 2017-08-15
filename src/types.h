@@ -103,7 +103,7 @@ typedef struct {
         int16_t detect_invisible; // Timed see invisible
         int16_t word_of_recall;   // Timed teleport level
         int16_t see_infra;        // See warm creatures
-        int16_t tim_infra;        // Timed infra vision
+        int16_t timed_infra;      // Timed infra vision
         bool see_inv;             // Can see invisible
         bool teleport;            // Random teleportation
         bool free_act;            // Never paralyzed
