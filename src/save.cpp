@@ -11,10 +11,12 @@
 #include "externs.h"
 #include "version.h"
 
+#include <sstream>
+
 // For debugging the save file code on systems with broken compilers.
 #define DEBUG(x)
 
-DEBUG(static FILE *logfile);
+DEBUG(static FILE *logfile)
 
 static bool _save_char(char *);
 static bool sv_write();
@@ -359,28 +361,29 @@ static bool sv_write() {
 
 // Set up prior to actual save, do the save, then clean up
 bool saveGame() {
-    while (!_save_char(config.save_game_filename)) {
-        vtype_t temp;
+    vtype_t input;
+    std::ostringstream output;
 
-        (void) sprintf(temp, "Save file '%s' fails.", config.save_game_filename);
-        printMessage(temp);
+    while (!_save_char(config.save_game_filename)) {
+        output << "Save file '" << config.save_game_filename << "' fails.";
+        printMessage(output.str().c_str());
 
         int i = 0;
         if (access(config.save_game_filename, 0) < 0 || getInputConfirmation("File exists. Delete old save file?") == 0 || (i = unlink(config.save_game_filename)) < 0) {
             if (i < 0) {
-                (void) sprintf(temp, "Can't delete '%s'", config.save_game_filename);
-                printMessage(temp);
+                output << "Can't delete '" << config.save_game_filename << "'";
+                printMessage(output.str().c_str());
             }
             putStringClearToEOL("New Save file [ESC to give up]:", 0, 0);
-            if (!getStringInput(temp, 0, 31, 45)) {
+            if (!getStringInput(input, 0, 31, 45)) {
                 return false;
             }
-            if (temp[0]) {
-                (void) strcpy(config.save_game_filename, temp);
+            if (input[0]) {
+                (void) strcpy(config.save_game_filename, input);
             }
         }
-        (void) sprintf(temp, "Saving with %s...", config.save_game_filename);
-        putStringClearToEOL(temp, 0, 0);
+        output << "Saving with " << config.save_game_filename << "...";
+        putStringClearToEOL(output.str().c_str(), 0, 0);
     }
 
     return true;
@@ -441,13 +444,13 @@ static bool _save_char(char *fnam) {
             (void) unlink(fnam);
         }
 
-        vtype_t temp;
+        std::ostringstream output;
         if (fd >= 0) {
-            (void) sprintf(temp, "Error writing to file %s", fnam);
+            output << "Error writing to file " << fnam;
         } else {
-            (void) sprintf(temp, "Can't create new file %s", fnam);
+            output << "Can't create new file " << fnam;
         }
-        printMessage(temp);
+        printMessage(output.str().c_str());
 
         return false;
     } else {
@@ -481,9 +484,9 @@ bool loadGame(bool *generate) {
 
     clearScreen();
 
-    vtype_t temp;
-    (void) sprintf(temp, "Save file %s present. Attempting restore.", config.save_game_filename);
-    putString(temp, 23, 0);
+    std::ostringstream filename;
+    filename << "Save file " << config.save_game_filename << " present. Attempting restore.";
+    putString(filename.str().c_str(), 23, 0);
 
     // FIXME: check this if/else logic! -- MRC
     if (current_game_turn >= 0) {
@@ -928,11 +931,9 @@ bool loadGame(bool *generate) {
             from_savefile = 1;
 
             if (panic_save) {
-                (void) sprintf(temp, "This game is from a panic save.  Score will not be added to scoreboard.");
-                printMessage(temp);
+                printMessage("This game is from a panic save.  Score will not be added to scoreboard.");
             } else if (((!noscore) & 0x04) && duplicate_character()) {
-                (void) sprintf(temp, "This character is already on the scoreboard; it will not be scored again.");
-                printMessage(temp);
+                printMessage("This character is already on the scoreboard; it will not be scored again.");
                 noscore |= 0x4;
             }
 
@@ -970,15 +971,10 @@ bool loadGame(bool *generate) {
             }
 
             if (version_maj != CURRENT_VERSION_MAJOR || version_min != CURRENT_VERSION_MINOR) {
-                (void) sprintf(
-                        temp,
-                        "Save file version %d.%d %s on game version %d.%d.",
-                        version_maj,
-                        version_min,
-                        version_min <= CURRENT_VERSION_MINOR ? "accepted" : "risky",
-                        CURRENT_VERSION_MAJOR, CURRENT_VERSION_MINOR
-                );
-                printMessage(temp);
+                std::ostringstream msg;
+                std::string accepted = (version_min <= CURRENT_VERSION_MINOR ? "accepted" : "risky");
+                msg << "Save file version " << version_maj << "." << version_min << " " << accepted << " on game version " << CURRENT_VERSION_MAJOR << "." << CURRENT_VERSION_MINOR << ".";
+                printMessage(msg.str().c_str());
             }
 
             // if false: only restored options and monster memory.

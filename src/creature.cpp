@@ -486,7 +486,6 @@ static void monsterPrintAttackDescription(char *msg, int attack_id) {
 }
 
 static bool executeDisenchantAttack() {
-    bool success = false;
     int item_id;
 
     switch (randomNumber(7)) {
@@ -511,8 +510,11 @@ static bool executeDisenchantAttack() {
         case 7:
             item_id = EQUIPMENT_FEET;
             break;
+        default:
+            return false;
     }
 
+    bool success = false;
     Inventory_t *item = &inventory[item_id];
 
     if (item->to_hit > 0) {

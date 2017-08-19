@@ -898,7 +898,7 @@ void playDungeon() {
 
     // Note: yes, this last input command needs to be persisted
     // over different iterations of the main loop below -MRC-
-    char lastInputCommand;
+    char lastInputCommand = {0};
 
     // Loop until dead,  or new level
     // Exit when `generate_new_level` and `eof_flag` are both set

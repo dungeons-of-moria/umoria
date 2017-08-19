@@ -44,7 +44,8 @@ void displaySplashScreen() {
 // Open and display a text help file
 // File perusal, primitive, but portable -CJS-
 void displayTextHelpFile(const char *filename) {
-    int max_line_length = 80;
+    constexpr uint8_t max_line_length = 80;
+
     char line_buffer[max_line_length];
 
     FILE *file = fopen(filename, "r");

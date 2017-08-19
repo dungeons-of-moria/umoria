@@ -44,6 +44,7 @@
 #include <time.h>
 
 #include <limits>
+#include <string>
 
 #include <sys/stat.h>
 
