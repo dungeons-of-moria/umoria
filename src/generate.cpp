@@ -643,6 +643,8 @@ static void dungeonBuildRoomWithInnerRooms(int y, int x) {
             dungeonPlaceVaultMonster(y - 2, x - 4, randomNumber(2));
             dungeonPlaceVaultMonster(y - 2, x + 4, randomNumber(2));
             break;
+        default:
+            break;
     }
 }
 
@@ -780,6 +782,8 @@ static void dungeonBuildRoomCrossShaped(int y, int x) {
             break;
         case 4:
             // no special feature!
+            break;
+        default:
             break;
     }
 }

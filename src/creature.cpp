@@ -239,6 +239,8 @@ static void monsterGetMoveDirection(int monster_id, int *directions) {
                 directions[4] = 3;
             }
             break;
+        default:
+            break;
     }
 }
 
@@ -254,7 +256,7 @@ static void playerDiedFromString(vtype_t *description, const char *monster_name,
 }
 
 static bool playerTestAttackHits(int attack_id, uint8_t level) {
-    bool success = false;
+    bool success;
 
     switch (attack_id) {
         case 1: // Normal attack
@@ -380,6 +382,7 @@ static bool playerTestAttackHits(int attack_id, uint8_t level) {
             success = true;
             break;
         default:
+            success = false;
             break;
     }
 
@@ -474,6 +477,8 @@ static void monsterPrintAttackDescription(char *msg, int attack_id) {
                     break;
                 case 9:
                     printMessage(strcat(msg, "moons you!!!"));
+                    break;
+                default:
                     break;
             }
             break;

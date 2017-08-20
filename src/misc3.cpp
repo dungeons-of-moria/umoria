@@ -1523,14 +1523,11 @@ static void eliminateKnownSpellsGreaterThanLevel(Spell_t *msp_ptr, const char *p
 }
 
 static int numberOfSpellsAllowed(int stat) {
-    int allowed = 0;
-
     int levels = py.misc.level - classes[py.misc.class_id].min_level_for_spell_casting + 1;
 
+    int allowed;
+
     switch (playerStatAdjustmentWisdomIntelligence(stat)) {
-        case 0:
-            allowed = 0;
-            break;
         case 1:
         case 2:
         case 3:
@@ -1545,6 +1542,9 @@ static int numberOfSpellsAllowed(int stat) {
             break;
         case 7:
             allowed = 5 * levels / 2;
+            break;
+        default:
+            allowed = 0;
             break;
     }
 
@@ -1879,8 +1879,6 @@ static int newMana(int stat) {
     int levels = py.misc.level - classes[py.misc.class_id].min_level_for_spell_casting + 1;
 
     switch (playerStatAdjustmentWisdomIntelligence(stat)) {
-        case 0:
-            return 0;
         case 1:
         case 2:
             return 1 * levels;
@@ -2241,8 +2239,8 @@ int playerWeaponCriticalBlow(int weapon_weight, int plus_to_hit, int damage, int
 
 // Given direction "dir", returns new row, column location -RAK-
 bool playerMovePosition(int dir, int *new_y, int *new_x) {
-    int new_row = 0;
-    int new_col = 0;
+    int new_row;
+    int new_col;
 
     switch (dir) {
         case 1:
@@ -2280,6 +2278,10 @@ bool playerMovePosition(int dir, int *new_y, int *new_x) {
         case 9:
             new_row = *new_y - 1;
             new_col = *new_x + 1;
+            break;
+        default:
+            new_row = 0;
+            new_col = 0;
             break;
     }
 

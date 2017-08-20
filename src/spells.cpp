@@ -951,6 +951,8 @@ void spellBreath(int y, int x, int monster_id, int damage_hp, int spell_type, ch
                             case GF_FIRE:
                                 damageFire(damage, spell_name);
                                 break;
+                            default:
+                                break;
                         }
                     }
                 }
@@ -2171,6 +2173,8 @@ static void replace_spot(int y, int x, int typ) {
         case 9:
         case 12:
             c_ptr->feature_id = TILE_QUARTZ_WALL;
+            break;
+        default:
             break;
     }
 

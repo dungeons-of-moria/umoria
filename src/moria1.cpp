@@ -589,11 +589,11 @@ static int wear_low, wear_high;
 static void displayInventoryScreen(int new_screen) {
     if (new_screen == screen_state) {
         return;
-    } else {
-        screen_state = new_screen;
     }
 
-    int line = 0;
+    screen_state = new_screen;
+
+    int line;
 
     switch (new_screen) {
         case BLANK_SCR:
@@ -625,6 +625,9 @@ static void displayInventoryScreen(int new_screen) {
         case EQUIP_SCR:
             screen_left = displayEquipment(config.show_inventory_weights, screen_left);
             line = equipment_count;
+            break;
+        default:
+            line = 0;
             break;
     }
 

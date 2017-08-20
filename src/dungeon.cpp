@@ -348,7 +348,7 @@ static void playerUpdatePoisonedState() {
         return;
     }
 
-    int damage = 0;
+    int damage;
 
     switch (playerStatAdjustmentConstitution()) {
         case -4:
@@ -375,6 +375,9 @@ static void playerUpdatePoisonedState() {
             break;
         case 6:
             damage = ((current_game_turn % 4) == 0);
+            break;
+        default:
+            damage = 0;
             break;
     }
 

@@ -73,8 +73,9 @@ bool setAcidAffectedItems(Inventory_t *item) {
         case TV_CLOAK:
         case TV_SOFT_ARMOR:
             return (item->flags & TR_RES_ACID) == 0;
+        default:
+            return false;
     }
-    return false;
 }
 
 bool setLightningDestroyableItems(Inventory_t *item) {
