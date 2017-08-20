@@ -513,7 +513,7 @@ constexpr uint8_t SN_SLAY_ANIMAL = 55;
 constexpr uint8_t SN_ARRAY_SIZE = 56; // must be at end of this list
 
 // defines for treasure type values (tval)
-constexpr uint8_t TV_NEVER = -1; // used by find_range() for non-search
+constexpr int8_t TV_NEVER = -1; // used by find_range() for non-search
 constexpr uint8_t TV_NOTHING = 0;
 constexpr uint8_t TV_MISC = 1;
 constexpr uint8_t TV_CHEST = 2;

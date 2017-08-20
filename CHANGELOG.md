@@ -8,6 +8,10 @@
   the use of roguelike keys (`hjkl`).
 - Renamed the help files. Ex. `owizcmds.hlp` > `help.txt`.
 
+### Bug Fixes
+
+- `TV_NEVER` was an unsigned int, but should be signed as it's being given a `-1` value.
+
 ### Code
 
 - Rename field names for all structs in `types.h`
