@@ -135,7 +135,9 @@ static void characterChooseRace() {
 
         if (race_id < PLAYER_MAX_RACES && race_id >= 0) {
             break;
-        } else if (input == '?') {
+        }
+
+        if (input == '?') {
             displayTextHelpFile(MORIA_WELCOME);
         } else {
             terminalBellSound();

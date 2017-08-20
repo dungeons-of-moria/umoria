@@ -252,23 +252,27 @@ static void printNumber(int num, int row, int column) {
 int playerStatAdjustmentWisdomIntelligence(int stat) {
     int value = py.stats.used[stat];
 
+    int adjustment;
+
     if (value > 117) {
-        return 7;
+        adjustment = 7;
     } else if (value > 107) {
-        return 6;
+        adjustment = 6;
     } else if (value > 87) {
-        return 5;
+        adjustment = 5;
     } else if (value > 67) {
-        return 4;
+        adjustment = 4;
     } else if (value > 17) {
-        return 3;
+        adjustment = 3;
     } else if (value > 14) {
-        return 2;
+        adjustment = 2;
     } else if (value > 7) {
-        return 1;
+        adjustment = 1;
     } else {
-        return 0;
+        adjustment = 0;
     }
+
+    return adjustment;
 }
 
 // Adjustment for charisma -RAK-
@@ -763,83 +767,95 @@ int playerToHitAdjustment() {
 int playerArmorClassAdjustment() {
     int stat = py.stats.used[A_DEX];
 
+    int adjustment;
+
     if (stat < 4) {
-        return -4;
+        adjustment = -4;
     } else if (stat == 4) {
-        return -3;
+        adjustment = -3;
     } else if (stat == 5) {
-        return -2;
+        adjustment = -2;
     } else if (stat == 6) {
-        return -1;
+        adjustment = -1;
     } else if (stat < 15) {
-        return 0;
+        adjustment = 0;
     } else if (stat < 18) {
-        return 1;
+        adjustment = 1;
     } else if (stat < 59) {
-        return 2;
+        adjustment = 2;
     } else if (stat < 94) {
-        return 3;
+        adjustment = 3;
     } else if (stat < 117) {
-        return 4;
+        adjustment = 4;
     } else {
-        return 5;
+        adjustment = 5;
     }
+
+    return adjustment;
 }
 
 // Returns a character's adjustment to disarm -RAK-
 int playerDisarmAdjustment() {
     int stat = py.stats.used[A_DEX];
 
+    int adjustment;
+
     if (stat < 4) {
-        return -8;
+        adjustment = -8;
     } else if (stat == 4) {
-        return -6;
+        adjustment = -6;
     } else if (stat == 5) {
-        return -4;
+        adjustment = -4;
     } else if (stat == 6) {
-        return -2;
+        adjustment = -2;
     } else if (stat == 7) {
-        return -1;
+        adjustment = -1;
     } else if (stat < 13) {
-        return 0;
+        adjustment = 0;
     } else if (stat < 16) {
-        return 1;
+        adjustment = 1;
     } else if (stat < 18) {
-        return 2;
+        adjustment = 2;
     } else if (stat < 59) {
-        return 4;
+        adjustment = 4;
     } else if (stat < 94) {
-        return 5;
+        adjustment = 5;
     } else if (stat < 117) {
-        return 6;
+        adjustment = 6;
     } else {
-        return 8;
+        adjustment = 8;
     }
+
+    return adjustment;
 }
 
 // Returns a character's adjustment to damage -JWT-
 int playerDamageAdjustment() {
     int stat = py.stats.used[A_STR];
 
+    int adjustment;
+
     if (stat < 4) {
-        return -2;
+        adjustment = -2;
     } else if (stat < 5) {
-        return -1;
+        adjustment = -1;
     } else if (stat < 16) {
-        return 0;
+        adjustment = 0;
     } else if (stat < 17) {
-        return 1;
+        adjustment = 1;
     } else if (stat < 18) {
-        return 2;
+        adjustment = 2;
     } else if (stat < 94) {
-        return 3;
+        adjustment = 3;
     } else if (stat < 109) {
-        return 4;
+        adjustment = 4;
     } else if (stat < 117) {
-        return 5;
+        adjustment = 5;
     } else {
-        return 6;
+        adjustment = 6;
     }
+
+    return adjustment;
 }
 
 // Prints character-screen info -RAK-
@@ -2107,39 +2123,47 @@ bool enterWizardMode() {
 }
 
 static int playerAttackBlowsDexterity(int dexterity) {
+    int dex;
+
     if (dexterity < 10) {
-        return 0;
+        dex = 0;
     } else if (dexterity < 19) {
-        return 1;
+        dex = 1;
     } else if (dexterity < 68) {
-        return 2;
+        dex = 2;
     } else if (dexterity < 108) {
-        return 3;
+        dex = 3;
     } else if (dexterity < 118) {
-        return 4;
+        dex = 4;
     } else {
-        return 5;
+        dex = 5;
     }
+
+    return dex;
 }
 
 static int playerAttackBlowsStrength(int strength, int weight) {
     int adj_weight = (strength * 10 / weight);
 
+    int str;
+
     if (adj_weight < 2) {
-        return 0;
+        str = 0;
     } else if (adj_weight < 3) {
-        return 1;
+        str = 1;
     } else if (adj_weight < 4) {
-        return 2;
+        str = 2;
     } else if (adj_weight < 5) {
-        return 3;
+        str = 3;
     } else if (adj_weight < 7) {
-        return 4;
+        str = 4;
     } else if (adj_weight < 9) {
-        return 5;
+        str = 5;
     } else {
-        return 6;
+        str = 6;
     }
+
+    return str;
 }
 
 // Weapon weight VS strength and dexterity -RAK-
