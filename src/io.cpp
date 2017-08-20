@@ -499,10 +499,10 @@ void displayDungeonMap() {
     use_value2 mvaddch(0, 0, getBorderTile(TL));
 
     for (int i = 0; i < MAX_WIDTH / RATIO; i++) {
-        (void) addch(getBorderTile(HE));
+        (void) addch((const chtype) getBorderTile(HE));
     }
 
-    (void) addch(getBorderTile(TR));
+    (void) addch((const chtype) getBorderTile(TR));
     map[MAX_WIDTH / RATIO] = '\0';
 
     int myrow = 0;
@@ -549,10 +549,10 @@ void displayDungeonMap() {
     use_value2 mvaddch(orow + 2, 0, getBorderTile(BL));
 
     for (int i = 0; i < MAX_WIDTH / RATIO; i++) {
-        (void) addch(getBorderTile(HE));
+        (void) addch((const chtype) getBorderTile(HE));
     }
 
-    (void) addch(getBorderTile(BR));
+    (void) addch((const chtype) getBorderTile(BR));
 
     use_value2 mvaddstr(23, 23, "Hit any key to continue");
 

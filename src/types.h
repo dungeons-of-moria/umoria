@@ -319,7 +319,7 @@ typedef struct {
 //
 
 
-// GameObject_t is a base data object.
+// GameObject_t is a base data object (treasure_type).
 // Holds base game data for any given item in the game such
 // as: stairs, rubble, secret doors, gold, potions, etc.
 typedef struct {

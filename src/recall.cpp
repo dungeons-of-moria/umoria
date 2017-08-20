@@ -151,7 +151,7 @@ bool memoryMonsterKnown(int monster_id) {
 }
 
 static void memoryWizardModeInit(Recall_t *memory, Creature_t *creature) {
-    memory->kills = MAX_SHORT;
+    memory->kills = (uint16_t) MAX_SHORT;
     memory->wake = memory->ignore = MAX_UCHAR;
 
     uint32_t move = (uint32_t) ((creature->movement & CM_4D2_OBJ) != 0) * 8;
