@@ -400,7 +400,7 @@ static bool _save_char(char *fnam) {
     pack_heaviness = 0;
     bool ok = false;
 
-    fileptr = NULL; // Do not assume it has been init'ed
+    fileptr = nullptr; // Do not assume it has been init'ed
 
     int fd = open(fnam, O_RDWR | O_CREAT | O_EXCL, 0600);
 
@@ -417,7 +417,7 @@ static bool _save_char(char *fnam) {
     DEBUG(logfile = fopen("IO_LOG", "a"));
     DEBUG(fprintf(logfile, "Saving data to %s\n", config.save_game_filename));
 
-    if (fileptr != NULL) {
+    if (fileptr != nullptr) {
         xor_byte = 0;
         wr_byte((uint8_t) CURRENT_VERSION_MAJOR);
         xor_byte = 0;
@@ -503,7 +503,7 @@ bool loadGame(bool *generate) {
         fd = -1; // Make sure it isn't closed again
         fileptr = fopen(config.save_game_filename, "rb");
 
-        if (fileptr == NULL) {
+        if (fileptr == nullptr) {
             goto error;
         }
 
@@ -914,7 +914,7 @@ bool loadGame(bool *generate) {
 
         DEBUG(fclose(logfile));
 
-        if (fileptr != NULL) {
+        if (fileptr != nullptr) {
             if (fclose(fileptr) < 0) {
                 ok = false;
             }

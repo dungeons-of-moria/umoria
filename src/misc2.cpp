@@ -1011,7 +1011,7 @@ static struct {
                {"Highlight and notice mineral seams",    &config.highlight_seams},
                {"Beep for invalid character",            &config.error_beep_sound},
                {"Display rest/repeat counts",            &config.display_counts},
-               {0,                                       0},
+               {nullptr,                                 nullptr},
 };
 
 // Set or unset various boolean config.display_counts -CJS-
@@ -1019,7 +1019,7 @@ void setGameOptions() {
     putStringClearToEOL("  ESC when finished, y/n to set options, <return> or - to move cursor", 0, 0);
 
     int max;
-    for (max = 0; options[max].o_prompt != 0; max++) {
+    for (max = 0; options[max].o_prompt != nullptr; max++) {
         vtype_t string;
         (void) sprintf(string, "%-38s: %s", options[max].o_prompt, (*options[max].o_var ? "yes" : "no "));
         putStringClearToEOL(string, max + 1, 0);

@@ -19,7 +19,7 @@
 //  Craig Norborg (doc)    Mon Aug 10 16:41:59 EST 1987
 void initializeScoreFile() {
     highscore_fp = fopen(MORIA_SCORES, (char *) "rb+");
-    if (highscore_fp == NULL) {
+    if (highscore_fp == nullptr) {
         (void) fprintf(stderr, "Can't open score file \"%s\"\n", MORIA_SCORES);
         exit(1);
     }
@@ -30,7 +30,7 @@ void displaySplashScreen() {
     vtype_t in_line;
 
     FILE *file1 = fopen(MORIA_SPLASH, "r");
-    if (file1 != NULL) {
+    if (file1 != nullptr) {
         clearScreen();
         for (int i = 0; fgets(in_line, 80, file1) != CNIL; i++) {
             putString(in_line, i, 0);
@@ -50,7 +50,7 @@ void displayTextHelpFile(const char *filename) {
 
     FILE *file = fopen(filename, "r");
 
-    if (file == NULL) {
+    if (file == nullptr) {
         (void) sprintf(line_buffer, "Can not find help file \"%s\".\n", filename);
         putStringClearToEOL(line_buffer, 0, 0);
         return;
@@ -113,7 +113,7 @@ void outputRandomLevelObjectsToFile() {
             }
 
             FILE *file1 = fopen(filename1, "w");
-            if (file1 != NULL) {
+            if (file1 != nullptr) {
                 (void) sprintf(tmp_str, "%d", nobj);
                 putStringClearToEOL(strcat(tmp_str, " random objects being produced..."), 0, 0);
 
@@ -344,10 +344,10 @@ bool outputPlayerCharacterToFile(char *filename) {
         (void) close(fd);
         file = fopen(filename, "w");
     } else {
-        file = NULL;
+        file = nullptr;
     }
 
-    if (file == NULL) {
+    if (file == nullptr) {
         if (fd >= 0) {
             (void) close(fd);
         }

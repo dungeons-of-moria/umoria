@@ -31,7 +31,7 @@ void terminalInitialize() {
     }
 
     save_screen = newwin(0, 0, 0, 0);
-    if (save_screen == NULL) {
+    if (save_screen == nullptr) {
         (void) printf("Out of memory in starting up curses.\n");
         exitGame();
     }
@@ -667,7 +667,7 @@ FILE *tfopen(const char *file, const char *mode) {
         return (fopen(expanded, mode));
     }
     errno = ENOENT;
-    return NULL;
+    return nullptr;
 }
 
 // open a file just as does open, but expand a leading ~ into a home directory name
@@ -690,7 +690,7 @@ bool tilde(const char *file, char *expanded) {
 
     if (*file == '~') {
         char user[128];
-        struct passwd *pw = NULL;
+        struct passwd *pw = nullptr;
         int i = 0;
 
         user[0] = '\0';
@@ -702,13 +702,13 @@ bool tilde(const char *file, char *expanded) {
         if (i == 0) {
             char *login = getlogin();
 
-            if (login != NULL) {
+            if (login != nullptr) {
                 (void) strcpy(user, login);
-            } else if ((pw = getpwuid(getuid())) == NULL) {
+            } else if ((pw = getpwuid(getuid())) == nullptr) {
                 return false;
             }
         }
-        if (pw == NULL && (pw = getpwnam(user)) == NULL) {
+        if (pw == nullptr && (pw = getpwnam(user)) == nullptr) {
             return false;
         }
         (void) strcpy(expanded, pw->pw_dir);

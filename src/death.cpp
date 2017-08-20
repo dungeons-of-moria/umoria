@@ -29,7 +29,7 @@ static char *center_string(char *centered_str, const char *in_str) {
 void showScoresScreen() {
     char string[100];
 
-    if ((highscore_fp = fopen(MORIA_SCORES, "rb")) == NULL) {
+    if ((highscore_fp = fopen(MORIA_SCORES, "rb")) == nullptr) {
         sprintf(string, "Error opening score file \"%s\"\n", MORIA_SCORES);
         printMessage(string);
         printMessage(CNIL);
@@ -261,7 +261,7 @@ static void highscores() {
     }
     (void) strcpy(new_entry.died_from, tmp);
 
-    if ((highscore_fp = fopen(MORIA_SCORES, "rb+")) == NULL) {
+    if ((highscore_fp = fopen(MORIA_SCORES, "rb+")) == nullptr) {
         char string[100];
 
         (void) sprintf(string, "Error opening score file \"%s\"\n", MORIA_SCORES);

@@ -2063,7 +2063,7 @@ void intertNumberIntoString(char *to_string, const char *from_string, int32_t nu
 
     while (flag != 0) {
         string = strchr(to_str_tmp, from_string[0]);
-        if (string == 0) {
+        if (string == nullptr) {
             flag = 0;
         } else {
             flag = strncmp(string, from_string, from_len);
