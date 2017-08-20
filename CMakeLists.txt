@@ -77,10 +77,10 @@ set(SOURCE_FILES
 )
 add_executable(umoria ${SOURCE_FILES})
 
-set(OPTIMIZE_FLAGS "-g -O")
-set(CORE_WARNINGS "-Wall -Wextra -Wshadow -Werror")
-set(EXTRA_WARNINGS "-Weffc++ -pedantic -pedantic-errors -Waggregate-return -Wcast-align -Wchar-subscripts -Wcomment -Wdisabled-optimization -Wfloat-equal -Wimport -Winit-self -Winline -Winvalid-pch -Wlong-long -Wmissing-braces -Wmissing-format-attribute -Wmissing-include-dirs -Wmissing-noreturn -Wpacked -Wparentheses -Wpointer-arith -Wredundant-decls -Wreturn-type -Wsequence-point -Wsign-compare -Wstack-protector -Wstrict-aliasing -Wstrict-aliasing=2 -Wswitch -Wswitch-enum -Wtrigraphs -Wunknown-pragmas -Wunreachable-code -Wunused -Wunused-function -Wunused-label -Wunused-parameter -Wunused-value -Wunused-variable -Wvariadic-macros -Wvolatile-register-var -Wwrite-strings")
-set(DESIRABLE_WARNINGS "-Wcast-qual -Wpadded -Wconversion -Wunsafe-loop-optimizations -Wswitch-default -Wformat -Wformat=2 -Wformat-security -Wformat-y2k -Wformat-nonliteral -Wmissing-field-initializers -Wuninitialized")
+set(OPTIMIZE_FLAGS "-g -O0")
+set(CORE_WARNINGS "-Wall -Wextra -Wshadow -Werror -Weffc++ -pedantic -pedantic-errors")
+set(EXTRA_WARNINGS "-Wcast-align -Wdisabled-optimization -Wfloat-equal -Winline -Winvalid-pch -Wmissing-format-attribute -Wmissing-include-dirs -Wmissing-noreturn -Wpacked -Wredundant-decls -Wswitch-default -Wswitch-enum -Wunreachable-code -Wunsafe-loop-optimizations -Wwrite-strings")
+set(STRICT_WARNINGS "-Wcast-qual -Wconversion -Wpadded -Wformat=2")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OPTIMIZE_FLAGS} ${CORE_WARNINGS} ${EXTRA_WARNINGS}")
 
 # Link Curses
