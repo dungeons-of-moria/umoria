@@ -469,13 +469,11 @@ void terminalBellSound() {
 // Display highest priority object in the RATIO by RATIO area
 constexpr int RATIO = 3;
 
-static uint8_t screen_border[2][6] = {{'+', '+', '+', '+', '-', '|'}, // normal chars
-                                      {201, 187, 200, 188, 205, 186}  // graphics chars
-};
+static char screen_border[6] = {'+', '+', '+', '+', '-', '|'};
 
 // character set to use
 static char getBorderTile(uint8_t id) {
-    return screen_border[0][id];
+    return screen_border[id];
 }
 
 void displayDungeonMap() {
