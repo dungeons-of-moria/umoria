@@ -362,17 +362,17 @@ static bool sv_write() {
 // Set up prior to actual save, do the save, then clean up
 bool saveGame() {
     vtype_t input;
-    std::ostringstream output;
+    std::string output;
 
     while (!_save_char(config.save_game_filename)) {
-        output << "Save file '" << config.save_game_filename << "' fails.";
-        printMessage(output.str().c_str());
+        output = "Save file '" + std::string(config.save_game_filename) + "' fails.";
+        printMessage(output.c_str());
 
         int i = 0;
         if (access(config.save_game_filename, 0) < 0 || getInputConfirmation("File exists. Delete old save file?") == 0 || (i = unlink(config.save_game_filename)) < 0) {
             if (i < 0) {
-                output << "Can't delete '" << config.save_game_filename << "'";
-                printMessage(output.str().c_str());
+                output = "Can't delete '" + std::string(config.save_game_filename) + "'";
+                printMessage(output.c_str());
             }
             putStringClearToEOL("New Save file [ESC to give up]:", 0, 0);
             if (!getStringInput(input, 0, 31, 45)) {
@@ -382,8 +382,8 @@ bool saveGame() {
                 (void) strcpy(config.save_game_filename, input);
             }
         }
-        output << "Saving with " << config.save_game_filename << "...";
-        putStringClearToEOL(output.str().c_str(), 0, 0);
+        output = "Saving with '" + std::string(config.save_game_filename) + "'...";
+        putStringClearToEOL(output.c_str(), 0, 0);
     }
 
     return true;
@@ -444,13 +444,13 @@ static bool _save_char(char *fnam) {
             (void) unlink(fnam);
         }
 
-        std::ostringstream output;
+        std::string output;
         if (fd >= 0) {
-            output << "Error writing to file " << fnam;
+            output = "Error writing to file '" + std::string(fnam) + "'";
         } else {
-            output << "Can't create new file " << fnam;
+            output = "Can't create new file '" + std::string(fnam) + "'";
         }
-        printMessage(output.str().c_str());
+        printMessage(output.c_str());
 
         return false;
     } else {
@@ -484,9 +484,8 @@ bool loadGame(bool *generate) {
 
     clearScreen();
 
-    std::ostringstream filename;
-    filename << "Save file " << config.save_game_filename << " present. Attempting restore.";
-    putString(filename.str().c_str(), 23, 0);
+    std::string filename = "Save file '" + std::string(config.save_game_filename) + "' present. Attempting restore.";
+    putString(filename.c_str(), 23, 0);
 
     // FIXME: check this if/else logic! -- MRC
     if (current_game_turn >= 0) {
@@ -971,10 +970,10 @@ bool loadGame(bool *generate) {
             }
 
             if (version_maj != CURRENT_VERSION_MAJOR || version_min != CURRENT_VERSION_MINOR) {
-                std::ostringstream msg;
-                std::string accepted = (version_min <= CURRENT_VERSION_MINOR ? "accepted" : "risky");
-                msg << "Save file version " << version_maj << "." << version_min << " " << accepted << " on game version " << CURRENT_VERSION_MAJOR << "." << CURRENT_VERSION_MINOR << ".";
-                printMessage(msg.str().c_str());
+                std::string msg = "Save file version " + std::to_string(version_maj) + "." + std::to_string(version_min) + " ";
+                msg += (version_min <= CURRENT_VERSION_MINOR ? "accepted" : "risky");
+                msg += " on game version " + std::to_string(CURRENT_VERSION_MAJOR) + "." + std::to_string(CURRENT_VERSION_MINOR) + ".";
+                printMessage(msg.c_str());
             }
 
             // if false: only restored options and monster memory.
