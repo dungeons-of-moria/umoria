@@ -382,7 +382,7 @@ static bool playerTestAttackHits(int attack_id, uint8_t level) {
             success = true;
             break;
         default:
-            success = false;
+
             break;
     }
 
@@ -1103,12 +1103,12 @@ static bool monsterCanCastSpells(Monster_t *monster, uint32_t spells) {
     }
 
     // Must be within certain range
-    if (monster->distance_from_player > MON_MAX_SPELL_CAST_DISTANCE) {
-        return false;
-    }
+    bool within_range = monster->distance_from_player <= MON_MAX_SPELL_CAST_DISTANCE;
 
     // Must have unobstructed Line-Of-Sight
-    return los(char_row, char_col, (int) monster->y, (int) monster->x);
+    bool unobstructed = los(char_row, char_col, (int) monster->y, (int) monster->x);
+
+    return within_range && unobstructed;
 }
 
 void monsterExecuteCastingOfSpell(Monster_t *monster, int monster_id, int spell_id, uint8_t level, vtype_t monster_name, vtype_t death_description) {
