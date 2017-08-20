@@ -42,8 +42,8 @@ static void monsterNameDescriptionLowercase(char *name_description, bool is_lit,
 bool monsterSleep(int y, int x) {
     bool asleep = false;
 
-    for (int row = y - 1; row <= y + 1; row++) {
-        for (int col = x - 1; col <= x + 1; col++) {
+    for (int row = y - 1; row <= y + 1 && row < MAX_HEIGHT; row++) {
+        for (int col = x - 1; col <= x + 1 && col < MAX_WIDTH; col++) {
             uint8_t monster_id = cave[row][col].creature_id;
 
             if (monster_id <= 1) {

@@ -1294,8 +1294,8 @@ int dungeonTunnelWall(int y, int x, int digging_ability, int digging_chance) {
         // it should be TILE_LIGHT_FLOOR or TILE_DARK_FLOOR.
         bool found = false;
 
-        for (int yy = y - 1; yy <= y + 1; yy++) {
-            for (int xx = x - 1; xx <= x + 1; xx++) {
+        for (int yy = y - 1; yy <= y + 1 && yy < MAX_HEIGHT; yy++) {
+            for (int xx = x - 1; xx <= x + 1 && xx < MAX_WIDTH; xx++) {
                 if (cave[yy][xx].feature_id <= MAX_CAVE_ROOM) {
                     tile->feature_id = cave[yy][xx].feature_id;
                     tile->permanent_light = cave[yy][xx].permanent_light;

@@ -899,12 +899,13 @@ void playerThrowItem() {
 
     while (!flag) {
         (void) playerMovePosition(dir, &y, &x);
+
+        if (current_distance + 1 > tdis) {
+            break;
+        }
+
         current_distance++;
         dungeonLiteSpot(old_y, old_x);
-
-        if (current_distance > tdis) {
-            flag = true;
-        }
 
         tile = &cave[y][x];
 

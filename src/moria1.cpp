@@ -806,7 +806,7 @@ static int inventoryGetItemMatchingInscription(char which, char command, int fro
         int m;
 
         // Note: simple loop to get id
-        for (m = from; m <= to && ((inventory[m].inscription[0] != which) || (inventory[m].inscription[1] != '\0')); m++);
+        for (m = from; m <= to && m < PLAYER_INVENTORY_SIZE && ((inventory[m].inscription[0] != which) || (inventory[m].inscription[1] != '\0')); m++);
 
         if (m <= to) {
             item = m;
