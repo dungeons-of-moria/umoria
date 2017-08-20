@@ -778,8 +778,8 @@ static void executeInputCommands(char *command, int *find_count) {
 
                     while (true) {
                         if (lastInputCommand == DELETE || lastInputCommand == CTRL_KEY('H')) {
-                            counter = counter / 10;
-                            (void) sprintf(tmp, "%d", counter);
+                            counter /= 10;
+                            (void) sprintf(tmp, "%d", (int16_t) counter);
                             putStringClearToEOL(tmp, 0, 14);
                         } else if (lastInputCommand >= '0' && lastInputCommand <= '9') {
                             if (counter > 99) {
