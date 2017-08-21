@@ -230,7 +230,7 @@ static void playerUpdateRegeneration(int amount) {
         amount = amount * 3 / 2;
     }
 
-    if ((py.flags.status & PY_SEARCH) || py.flags.rest != 0) {
+    if (((py.flags.status & PY_SEARCH) != 0u) || py.flags.rest != 0) {
         amount = amount * 2;
     }
 
@@ -662,12 +662,12 @@ static void playerUpdateWordOfRecall() {
 }
 
 static void playerUpdateStatusFlags() {
-    if (py.flags.status & PY_SPEED) {
+    if ((py.flags.status & PY_SPEED) != 0u) {
         py.flags.status &= ~PY_SPEED;
         printCharacterSpeed();
     }
 
-    if ((py.flags.status & PY_PARALYSED) && py.flags.paralysis < 1) {
+    if (((py.flags.status & PY_PARALYSED) != 0u) && py.flags.paralysis < 1) {
         printCharacterMovementState();
         py.flags.status &= ~PY_PARALYSED;
     } else if (py.flags.paralysis > 0) {
@@ -684,7 +684,7 @@ static void playerUpdateStatusFlags() {
 
     if ((py.flags.status & PY_STATS) != 0) {
         for (int n = 0; n < 6; n++) {
-            if ((PY_STR << n) & py.flags.status) {
+            if (((PY_STR << n) & py.flags.status) != 0u) {
                 displayCharacterStats(n);
             }
         }
@@ -692,13 +692,13 @@ static void playerUpdateStatusFlags() {
         py.flags.status &= ~PY_STATS;
     }
 
-    if (py.flags.status & PY_HP) {
+    if ((py.flags.status & PY_HP) != 0u) {
         printCharacterMaxHitPoints();
         printCharacterCurrentHitPoints();
         py.flags.status &= ~PY_HP;
     }
 
-    if (py.flags.status & PY_MANA) {
+    if ((py.flags.status & PY_MANA) != 0u) {
         printCharacterCurrentMana();
         py.flags.status &= ~PY_MANA;
     }
@@ -735,21 +735,21 @@ static void executeInputCommands(char *command, int *find_count) {
 
     // Accept a command and execute it
     do {
-        if (py.flags.status & PY_REPEAT) {
+        if ((py.flags.status & PY_REPEAT) != 0u) {
             printCharacterMovementState();
         }
 
         use_last_direction = false;
         player_free_turn = false;
 
-        if (running_counter) {
+        if (running_counter != 0) {
             playerRunAndFind();
             find_count--;
             if (find_count == 0) {
                 playerEndRunning();
             }
             putQIO();
-        } else if (doing_inventory_command) {
+        } else if (doing_inventory_command != 0) {
             inventoryExecuteCommand(doing_inventory_command);
         } else {
             // move the cursor to the players character
@@ -856,16 +856,16 @@ static void executeInputCommands(char *command, int *find_count) {
             doCommand(lastInputCommand);
 
             // Find is counted differently, as the command changes.
-            if (running_counter) {
+            if (running_counter != 0) {
                 *find_count = command_count - 1;
                 command_count = 0;
             } else if (player_free_turn) {
                 command_count = 0;
-            } else if (command_count) {
+            } else if (command_count != 0) {
                 command_count--;
             }
         }
-    } while (player_free_turn && !generate_new_level && !eof_flag);
+    } while (player_free_turn && !generate_new_level && (eof_flag == 0));
 
     *command = lastInputCommand;
 }
@@ -889,7 +889,7 @@ void playDungeon() {
     // must do this after panel_row/col set to -1, because playerSearchOff() will
     // call dungeonResetView(), and so the panel_* variables must be valid before
     // playerSearchOff() is called
-    if (py.flags.status & PY_SEARCH) {
+    if ((py.flags.status & PY_SEARCH) != 0u) {
         playerSearchOff();
     }
 
@@ -939,8 +939,8 @@ void playDungeon() {
         playerUpdateRestingState();
 
         // Check for interrupts to find or rest.
-        int microseconds = (running_counter ? 0 : 10000);
-        if ((command_count > 0 || running_counter || py.flags.rest != 0) && checkForNonBlockingKeyPress(microseconds)) {
+        int microseconds = (running_counter != 0 ? 0 : 10000);
+        if ((command_count > 0 || (running_counter != 0) || py.flags.rest != 0) && checkForNonBlockingKeyPress(microseconds)) {
             playerDisturb(0, 0);
         }
 
@@ -962,11 +962,11 @@ void playDungeon() {
         }
 
         // See if we are too weak to handle the weapon or pack. -CJS-
-        if (py.flags.status & PY_STR_WGT) {
+        if ((py.flags.status & PY_STR_WGT) != 0u) {
             playerStrength();
         }
 
-        if (py.flags.status & PY_STUDY) {
+        if ((py.flags.status & PY_STUDY) != 0u) {
             printCharacterStudyInstruction();
         }
 
@@ -1008,7 +1008,7 @@ void playDungeon() {
         if (!generate_new_level) {
             updateMonsters(true);
         }
-    } while (!generate_new_level && !eof_flag);
+    } while (!generate_new_level && (eof_flag == 0));
 }
 
 static char originalCommands(char command) {
@@ -1443,7 +1443,7 @@ static void commandLocateOnMap() {
 }
 
 static void commandToggleSearch() {
-    if (py.flags.status & PY_SEARCH) {
+    if ((py.flags.status & PY_SEARCH) != 0u) {
         playerSearchOff();
     } else {
         playerSearchOn();
@@ -1994,17 +1994,17 @@ static void playerRegenerateMana(int percent) {
 // Is an item an enchanted weapon or armor and we don't know? -CJS-
 // only returns true if it is a good enchantment
 static bool itemEnchanted(Inventory_t *item) {
-    if (item->category_id < TV_MIN_ENCHANT || item->category_id > TV_MAX_ENCHANT || (item->flags & TR_CURSED)) {
+    if (item->category_id < TV_MIN_ENCHANT || item->category_id > TV_MAX_ENCHANT || ((item->flags & TR_CURSED) != 0u)) {
         return false;
     } else if (spellItemIdentified(item)) {
         return false;
-    } else if (item->identification & ID_MAGIK) {
+    } else if ((item->identification & ID_MAGIK) != 0) {
         return false;
     } else if (item->to_hit > 0 || item->to_damage > 0 || item->to_ac > 0) {
         return true;
-    } else if ((0x4000107fL & item->flags) && item->misc_use > 0) {
+    } else if (((0x4000107fL & item->flags) != 0) && item->misc_use > 0) {
         return true;
-    } else if (0x07ffe980L & item->flags) {
+    } else if ((0x07ffe980L & item->flags) != 0) {
         return true;
     }
     return false;
@@ -2060,7 +2060,7 @@ static void examineBook() {
         uint32_t item_flags = inventory[item_id].flags;
 
         int spell_id = 0;
-        while (item_flags) {
+        while (item_flags != 0u) {
             item_pos_end = getAndClearFirstBit(&item_flags);
 
             if (magic_spells[py.misc.class_id - 1][item_pos_end].level_required < 99) {
