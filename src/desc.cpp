@@ -245,7 +245,7 @@ void itemSetAsTried(Inventory_t *item) {
 void itemIdentify(int *item_id) {
     Inventory_t *i_ptr = &inventory[*item_id];
 
-    if (i_ptr->flags & TR_CURSED) {
+    if ((i_ptr->flags & TR_CURSED) != 0u) {
         itemAppendToInscription(i_ptr, ID_DAMD);
     }
 
@@ -506,7 +506,7 @@ void itemDescription(obj_desc_t description, Inventory_t *item, bool add_prefix)
     }
 
     if (!add_prefix) {
-        if (!strncmp("some", tmp_val, 4)) {
+        if (strncmp("some", tmp_val, 4) == 0) {
             (void) strcpy(description, &tmp_val[5]);
         } else if (tmp_val[0] == '&') {
             // eliminate the '& ' at the beginning
@@ -530,7 +530,7 @@ void itemDescription(obj_desc_t description, Inventory_t *item, bool add_prefix)
 
     if (spellItemIdentified(item)) {
         // originally used %+d, but several machines don't support it
-        if (item->identification & ID_SHOW_HIT_DAM) {
+        if ((item->identification & ID_SHOW_HIT_DAM) != 0) {
             (void) sprintf(tmp_str, " (%c%d,%c%d)", (item->to_hit < 0) ? '-' : '+', abs(item->to_hit), (item->to_damage < 0) ? '-' : '+', abs(item->to_damage));
         } else if (item->to_hit != 0) {
             (void) sprintf(tmp_str, " (%c%d)", (item->to_hit < 0) ? '-' : '+', abs(item->to_hit));
@@ -559,9 +559,9 @@ void itemDescription(obj_desc_t description, Inventory_t *item, bool add_prefix)
     }
 
     // override defaults, check for `misc_use` flags in the ident field
-    if (item->identification & ID_NO_SHOW_P1) {
+    if ((item->identification & ID_NO_SHOW_P1) != 0) {
         misc_use = IGNORED;
-    } else if (item->identification & ID_SHOW_P1) {
+    } else if ((item->identification & ID_SHOW_P1) != 0) {
         misc_use = Z_PLUSSES;
     }
 
@@ -581,9 +581,9 @@ void itemDescription(obj_desc_t description, Inventory_t *item, bool add_prefix)
             if (misc_use == PLUSSES) {
                 (void) sprintf(tmp_str, " (%c%d)", (item->misc_use < 0) ? '-' : '+', abs(item->misc_use));
             } else if (misc_use == FLAGS) {
-                if (item->flags & TR_STR) {
+                if ((item->flags & TR_STR) != 0u) {
                     (void) sprintf(tmp_str, " (%c%d to STR)", (item->misc_use < 0) ? '-' : '+', abs(item->misc_use));
-                } else if (item->flags & TR_STEALTH) {
+                } else if ((item->flags & TR_STEALTH) != 0u) {
                     (void) sprintf(tmp_str, " (%c%d to stealth)", (item->misc_use < 0) ? '-' : '+', abs(item->misc_use));
                 }
             }
@@ -607,7 +607,7 @@ void itemDescription(obj_desc_t description, Inventory_t *item, bool add_prefix)
         // handle 'no more' case specially
 
         // check for "some" at start
-        if (!strncmp("some", tmp_val, 4)) {
+        if (strncmp("some", tmp_val, 4) == 0) {
             (void) sprintf(description, "no more %s", &tmp_val[5]);
         } else {
             // here if no article
@@ -624,19 +624,19 @@ void itemDescription(obj_desc_t description, Inventory_t *item, bool add_prefix)
         indexx += (item->sub_category_id & (ITEM_SINGLE_STACK_MIN - 1));
 
         // don't print tried string for store bought items
-        if ((objects_identified[indexx] & OD_TRIED) && !itemStoreBought(item)) {
+        if (((objects_identified[indexx] & OD_TRIED) != 0) && !itemStoreBought(item)) {
             (void) strcat(tmp_str, "tried ");
         }
     }
 
-    if (item->identification & (ID_MAGIK | ID_EMPTY | ID_DAMD)) {
-        if (item->identification & ID_MAGIK) {
+    if ((item->identification & (ID_MAGIK | ID_EMPTY | ID_DAMD)) != 0) {
+        if ((item->identification & ID_MAGIK) != 0) {
             (void) strcat(tmp_str, "magik ");
         }
-        if (item->identification & ID_EMPTY) {
+        if ((item->identification & ID_EMPTY) != 0) {
             (void) strcat(tmp_str, "empty ");
         }
-        if (item->identification & ID_DAMD) {
+        if ((item->identification & ID_DAMD) != 0) {
             (void) strcat(tmp_str, "damned ");
         }
     }
@@ -648,7 +648,7 @@ void itemDescription(obj_desc_t description, Inventory_t *item, bool add_prefix)
         tmp_str[indexx - 1] = '\0';
     }
 
-    if (tmp_str[0]) {
+    if (tmp_str[0] != 0) {
         (void) sprintf(tmp_val, " {%s}", tmp_str);
         (void) strcat(description, tmp_val);
     }
