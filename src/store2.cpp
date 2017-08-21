@@ -357,7 +357,7 @@ static bool storeGetHaggle(const char *comment, int32_t *new_offer, int num_offe
     while (flag && offer_adjust == 0) {
         putStringClearToEOL(comment, 0, 0);
 
-        if (num_offer && store_last_increment != 0) {
+        if ((num_offer != 0) && store_last_increment != 0) {
             (void) sprintf(default_offer, "[%c%d] ", (store_last_increment < 0) ? '-' : '+', abs(store_last_increment));
             putStringClearToEOL(default_offer, 0, save_comment_len);
             comment_len = save_comment_len + (int) strlen(default_offer);
@@ -375,7 +375,7 @@ static bool storeGetHaggle(const char *comment, int32_t *new_offer, int num_offe
             increment = true;
         }
 
-        if (num_offer && increment) {
+        if ((num_offer != 0) && increment) {
             offer_adjust = (int32_t) atol(msg);
 
             // Don't accept a zero here.  Turn off increment if it was zero
@@ -386,7 +386,7 @@ static bool storeGetHaggle(const char *comment, int32_t *new_offer, int num_offe
             } else {
                 store_last_increment = (int16_t) offer_adjust;
             }
-        } else if (num_offer && *msg == '\0') {
+        } else if ((num_offer != 0) && *msg == '\0') {
             offer_adjust = store_last_increment;
             increment = true;
         } else {
@@ -1081,7 +1081,7 @@ void storeEnter(int store_id) {
                     do {
                         inventoryExecuteCommand(command);
                         command = doing_inventory_command;
-                    } while (command);
+                    } while (command != 0);
 
                     // redisplay store prices if charisma changes
                     if (saved_chr != py.stats.used[A_CHR]) {
