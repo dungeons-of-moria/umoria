@@ -124,7 +124,7 @@ int getAndClearFirstBit(uint32_t *flag) {
     uint32_t mask = 0x1;
 
     for (int i = 0; i < (int) sizeof(*flag) * 8; i++) {
-        if (*flag & mask) {
+        if ((*flag & mask) != 0u) {
             *flag &= ~mask;
             return i;
         }
@@ -378,7 +378,7 @@ bool los(int from_y, int from_x, int to_y, int to_x) {
                 yy = from_y;
             }
 
-            while (to_x - xx) {
+            while ((to_x - xx) != 0) {
                 if (cave[yy][xx].feature_id >= MIN_CLOSED_SPACE) {
                     return false;
                 }
@@ -419,7 +419,7 @@ bool los(int from_y, int from_x, int to_y, int to_x) {
             xx = from_x;
         }
 
-        while (to_y - yy) {
+        while ((to_y - yy) != 0) {
             if (cave[yy][xx].feature_id >= MIN_CLOSED_SPACE) {
                 return false;
             }
@@ -449,11 +449,11 @@ bool los(int from_y, int from_x, int to_y, int to_x) {
 char caveGetTileSymbol(int y, int x) {
     Cave_t *cave_ptr = &cave[y][x];
 
-    if (cave_ptr->creature_id == 1 && (!running_counter || config.run_print_self)) {
+    if (cave_ptr->creature_id == 1 && ((running_counter == 0) || config.run_print_self)) {
         return '@';
     }
 
-    if (py.flags.status & PY_BLIND) {
+    if ((py.flags.status & PY_BLIND) != 0u) {
         return ' ';
     }
 
@@ -520,7 +520,7 @@ bool compactMonsters() {
     while (!delete_any) {
         for (int i = next_free_monster_id - 1; i >= MON_MIN_INDEX_ID; i--) {
             if (cur_dis < monsters[i].distance_from_player && randomNumber(3) == 1) {
-                if (creatures_list[monsters[i].creature_id].movement & CM_WIN) {
+                if ((creatures_list[monsters[i].creature_id].movement & CM_WIN) != 0u) {
                     // Never compact away the Balrog!!
                 } else if (hack_monptr < i) {
                     // in case this is called from within updateMonsters(), this is a horrible
@@ -610,7 +610,7 @@ bool monsterPlaceNew(int y, int x, int creature_id, bool sleeping) {
     monster->x = (uint8_t) x;
     monster->creature_id = (uint16_t) creature_id;
 
-    if (creatures_list[creature_id].defenses & CD_MAX_HP) {
+    if ((creatures_list[creature_id].defenses & CD_MAX_HP) != 0) {
         monster->hp = (int16_t) maxHitPoints(creatures_list[creature_id].hit_die);
     } else {
         monster->hp = (int16_t) dicePlayerDamageRoll(creatures_list[creature_id].hit_die);
@@ -670,7 +670,7 @@ void monsterPlaceWinning() {
     monster->x = (uint8_t) x;
     monster->creature_id = (uint16_t) creature_id;
 
-    if (creatures_list[creature_id].defenses & CD_MAX_HP) {
+    if ((creatures_list[creature_id].defenses & CD_MAX_HP) != 0) {
         monster->hp = (int16_t) maxHitPoints(creatures_list[creature_id].hit_die);
     } else {
         monster->hp = (int16_t) dicePlayerDamageRoll(creatures_list[creature_id].hit_die);
@@ -786,7 +786,7 @@ bool monsterSummonUndead(int *y, int *x) {
     do {
         monster_id = randomNumber(max_levels) - 1;
         for (int i = 0; i <= 19;) {
-            if (creatures_list[monster_id].defenses & CD_UNDEAD) {
+            if ((creatures_list[monster_id].defenses & CD_UNDEAD) != 0) {
                 i = 20;
                 max_levels = 0;
             } else {
