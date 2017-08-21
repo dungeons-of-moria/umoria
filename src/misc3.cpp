@@ -1378,9 +1378,9 @@ static int spellChanceOfSuccess(int spell) {
 // Print list of spells -RAK-
 // if non_consecutive is  -1: spells numbered consecutively from 'a' to 'a'+num
 //                       >=0: spells numbered by offset from non_consecutive
-void displaySpellsList(int *spell, int number_of_choices, int comment, int non_consecutive) {
+void displaySpellsList(int *spell, int number_of_choices, bool comment, int non_consecutive) {
     int col;
-    if (comment != 0) {
+    if (comment) {
         col = 22;
     } else {
         col = 31;
@@ -1402,7 +1402,7 @@ void displaySpellsList(int *spell, int number_of_choices, int comment, int non_c
         Spell_t *s_ptr = &magic_spells[py.misc.class_id - 1][spellID];
 
         const char *p;
-        if (comment == 0) {
+        if (!comment) {
             p = "";
         } else if ((spells_forgotten & (1L << spellID)) != 0) {
             p = " forgotten";

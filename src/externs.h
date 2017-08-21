@@ -334,7 +334,7 @@ bool inventoryCanCarryItemCount(Inventory_t *item);
 bool inventoryCanCarryItem(Inventory_t *item);
 void playerStrength();
 int inventoryCarryItem(Inventory_t *item);
-void displaySpellsList(int *spell, int number_of_choices, int comment, int non_consecutive);
+void displaySpellsList(int *spell, int number_of_choices, bool comment, int non_consecutive);
 bool spellGetId(int *spell, int number_of_choices, int *spell_id, int *spell_chances, const char *prompt, int first_spell);
 void playerCalculateAllowedSpellsCount(int stat);
 void playerGainSpells();
