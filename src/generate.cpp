@@ -478,7 +478,7 @@ static void dungeonPlaceInnerPillars(int y, int x) {
 static void dungeonPlaceMazeInsideRoom(int depth, int height, int left, int right) {
     for (int y = height; y <= depth; y++) {
         for (int x = left; x <= right; x++) {
-            if (0x1 & (x + y)) {
+            if ((0x1 & (x + y)) != 0) {
                 cave[y][x].feature_id = TMP1_WALL;
             }
         }
