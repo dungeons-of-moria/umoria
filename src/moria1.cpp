@@ -9,7 +9,7 @@
 #include "headers.h"
 #include "externs.h"
 
-static int verify(const char *prompt, int item);
+static bool verify(const char *prompt, int item);
 
 // Changes speed of monsters relative to player -RAK-
 // Note: When the player is sped up or slowed down, I simply change
@@ -534,7 +534,7 @@ void playerTakeOff(int item_id, int pack_position_id) {
 
 // Used to verify if this really is the item we wish to -CJS-
 // wear or read.
-static int verify(const char *prompt, int item) {
+static bool verify(const char *prompt, int item) {
     obj_desc_t description;
     itemDescription(description, &inventory[item], true);
 
