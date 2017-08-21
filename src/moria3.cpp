@@ -577,7 +577,7 @@ static int dungeonSummonObject(int y, int x, int amount, int object_type) {
 }
 
 // Deletes object from given location -RAK-
-int dungeonDeleteObject(int y, int x) {
+bool dungeonDeleteObject(int y, int x) {
     Cave_t *tile = &cave[y][x];
 
     if (tile->feature_id == TILE_BLOCKED_FLOOR) {
@@ -591,7 +591,7 @@ int dungeonDeleteObject(int y, int x) {
 
     dungeonLiteSpot(y, x);
 
-    return (caveTileVisible(y, x));
+    return caveTileVisible(y, x);
 }
 
 static int monsterDeathItemDropType(uint32_t flags) {
