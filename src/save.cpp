@@ -369,7 +369,7 @@ bool saveGame() {
         printMessage(output.c_str());
 
         int i = 0;
-        if (access(config.save_game_filename, 0) < 0 || getInputConfirmation("File exists. Delete old save file?") == 0 || (i = unlink(config.save_game_filename)) < 0) {
+        if (access(config.save_game_filename, 0) < 0 || !getInputConfirmation("File exists. Delete old save file?") || (i = unlink(config.save_game_filename)) < 0) {
             if (i < 0) {
                 output = "Can't delete '" + std::string(config.save_game_filename) + "'";
                 printMessage(output.c_str());
