@@ -367,14 +367,14 @@ static void playerUpdatePoisonedState() {
         case 1:
         case 2:
         case 3:
-            damage = ((current_game_turn % 2) == 0);
+            damage = ((current_game_turn % 2) == 0 ? 1 : 0);
             break;
         case 4:
         case 5:
-            damage = ((current_game_turn % 3) == 0);
+            damage = ((current_game_turn % 3) == 0 ? 1 : 0);
             break;
         case 6:
-            damage = ((current_game_turn % 4) == 0);
+            damage = ((current_game_turn % 4) == 0 ? 1 : 0);
             break;
         default:
             damage = 0;
