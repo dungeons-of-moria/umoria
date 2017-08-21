@@ -1310,7 +1310,7 @@ int inventoryCarryItem(Inventory_t *item) {
     int typ = item->category_id;
     int subt = item->sub_category_id;
     bool known1p = itemSetColorlessAsIdentifed(item);
-    int always_known1p = (objectPositionOffset(item) == -1);
+    bool always_known1p = objectPositionOffset(item) == -1;
 
     int locn;
 
@@ -1327,7 +1327,7 @@ int inventoryCarryItem(Inventory_t *item) {
             break;
         }
 
-        if ((typ == t_ptr->category_id && subt < t_ptr->sub_category_id && (always_known1p != 0)) || typ > t_ptr->category_id) {
+        if ((typ == t_ptr->category_id && subt < t_ptr->sub_category_id && always_known1p) || typ > t_ptr->category_id) {
             // For items which are always known1p, i.e. never have a 'color',
             // insert them into the inventory in sorted order.
             for (int i = inventory_count - 1; i >= locn; i--) {
@@ -1656,7 +1656,7 @@ static void forgetSpells(int newSpells, const char *p, int offset) {
             mask = (uint32_t) (1L << orderID);
         }
 
-        if (mask & spells_learnt) {
+        if ((mask & spells_learnt) != 0u) {
             spells_learnt &= ~mask;
             spells_forgotten |= mask;
             newSpells++;
