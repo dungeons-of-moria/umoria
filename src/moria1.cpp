@@ -34,36 +34,36 @@ void playerChangeSpeed(int speed) {
 void playerAdjustBonusesForItem(Inventory_t *item, int factor) {
     int amount = item->misc_use * factor;
 
-    if (item->flags & TR_STATS) {
+    if ((item->flags & TR_STATS) != 0u) {
         for (int i = 0; i < 6; i++) {
-            if ((1 << i) & item->flags) {
+            if (((1 << i) & item->flags) != 0u) {
                 playerStatBoost(i, amount);
             }
         }
     }
 
-    if (TR_SEARCH & item->flags) {
+    if ((TR_SEARCH & item->flags) != 0u) {
         py.misc.chance_in_search += amount;
         py.misc.fos -= amount;
     }
 
-    if (TR_STEALTH & item->flags) {
+    if ((TR_STEALTH & item->flags) != 0u) {
         py.misc.stealth_factor += amount;
     }
 
-    if (TR_SPEED & item->flags) {
+    if ((TR_SPEED & item->flags) != 0u) {
         playerChangeSpeed(-amount);
     }
 
-    if ((TR_BLIND & item->flags) && factor > 0) {
+    if (((TR_BLIND & item->flags) != 0u) && factor > 0) {
         py.flags.blind += 1000;
     }
 
-    if ((TR_TIMID & item->flags) && factor > 0) {
+    if (((TR_TIMID & item->flags) != 0u) && factor > 0) {
         py.flags.afraid += 50;
     }
 
-    if (TR_INFRA & item->flags) {
+    if ((TR_INFRA & item->flags) != 0u) {
         py.flags.see_infra += amount;
     }
 }
@@ -115,7 +115,7 @@ static void playerRecalculateBonusesFromInventory() {
 
                 py.misc.display_to_ac += item->to_ac;
                 py.misc.display_ac += item->ac;
-            } else if (!(TR_CURSED & item->flags)) {
+            } else if ((TR_CURSED & item->flags) == 0u) {
                 // Base AC values should always be visible,
                 // as long as the item is not cursed.
                 py.misc.display_ac += item->ac;
@@ -136,7 +136,7 @@ static uint32_t inventoryCollectAllItemFlags() {
 
 static void playerRecalculateSustainStatsFromInventory() {
     for (int i = EQUIPMENT_WIELD; i < EQUIPMENT_LIGHT; i++) {
-        if (!(TR_SUST_STAT & inventory[i].flags)) {
+        if ((TR_SUST_STAT & inventory[i].flags) == 0u) {
             continue;
         }
 
@@ -221,37 +221,37 @@ void playerRecalculateBonuses() {
 
     uint32_t item_flags = inventoryCollectAllItemFlags();
 
-    if (TR_SLOW_DIGEST & item_flags) {
+    if ((TR_SLOW_DIGEST & item_flags) != 0u) {
         py.flags.slow_digest = true;
     }
-    if (TR_AGGRAVATE & item_flags) {
+    if ((TR_AGGRAVATE & item_flags) != 0u) {
         py.flags.aggravate = true;
     }
-    if (TR_TELEPORT & item_flags) {
+    if ((TR_TELEPORT & item_flags) != 0u) {
         py.flags.teleport = true;
     }
-    if (TR_REGEN & item_flags) {
+    if ((TR_REGEN & item_flags) != 0u) {
         py.flags.regenerate_hp = true;
     }
-    if (TR_RES_FIRE & item_flags) {
+    if ((TR_RES_FIRE & item_flags) != 0u) {
         py.flags.resistant_to_fire = true;
     }
-    if (TR_RES_ACID & item_flags) {
+    if ((TR_RES_ACID & item_flags) != 0u) {
         py.flags.resistant_to_acid = true;
     }
-    if (TR_RES_COLD & item_flags) {
+    if ((TR_RES_COLD & item_flags) != 0u) {
         py.flags.resistant_to_cold = true;
     }
-    if (TR_FREE_ACT & item_flags) {
+    if ((TR_FREE_ACT & item_flags) != 0u) {
         py.flags.free_action = true;
     }
-    if (TR_SEE_INVIS & item_flags) {
+    if ((TR_SEE_INVIS & item_flags) != 0u) {
         py.flags.see_invisible = true;
     }
-    if (TR_RES_LIGHT & item_flags) {
+    if ((TR_RES_LIGHT & item_flags) != 0u) {
         py.flags.resistant_to_light = true;
     }
-    if (TR_FFALL & item_flags) {
+    if ((TR_FFALL & item_flags) != 0u) {
         py.flags.free_fall = true;
     }
 
@@ -294,7 +294,7 @@ int displayInventory(int item_id_start, int item_id_end, bool weighted, int colu
 
     // Generate the descriptions text
     for (int i = item_id_start; i <= item_id_end; i++) {
-        if (mask != CNIL && !mask[i]) {
+        if (mask != CNIL && (mask[i] == 0)) {
             continue;
         }
 
@@ -326,7 +326,7 @@ int displayInventory(int item_id_start, int item_id_end, bool weighted, int colu
 
     // Print the descriptions
     for (int i = item_id_start; i <= item_id_end; i++) {
-        if (mask != CNIL && !mask[i]) {
+        if (mask != CNIL && (mask[i] == 0)) {
             continue;
         }
 
@@ -644,7 +644,7 @@ static void displayInventoryScreen(int new_screen) {
 
 static void setInventoryCommandScreenState(char command) {
     // Take up where we left off after a previous inventory command. -CJS-
-    if (doing_inventory_command) {
+    if (doing_inventory_command != 0) {
         // If the screen has been flushed, we need to redraw. If the command
         // is a simple ' ' to recover the screen, just quit. Otherwise, check
         // and see what the user wants.
@@ -694,7 +694,7 @@ static bool inventoryTakeOffItem(bool selecting) {
         return selecting;
     }
 
-    if (inventory_count >= EQUIPMENT_WIELD && !doing_inventory_command) {
+    if (inventory_count >= EQUIPMENT_WIELD && (doing_inventory_command == 0)) {
         printMessage("You will have to drop something first.");
         return selecting;
     }
@@ -756,7 +756,7 @@ static void inventoryUnwieldItem() {
         return;
     }
 
-    if (TR_CURSED & inventory[EQUIPMENT_WIELD].flags) {
+    if ((TR_CURSED & inventory[EQUIPMENT_WIELD].flags) != 0u) {
         obj_desc_t description;
         itemDescription(description, &inventory[EQUIPMENT_WIELD], false);
 
@@ -923,7 +923,7 @@ static int inventoryGetSlotToWearEquipment(int item) {
                         } else {
                             terminalBellSound();
                         }
-                        if (slot && !verify("Replace", slot)) {
+                        if ((slot != 0) && !verify("Replace", slot)) {
                             slot = 0;
                         }
                     }
@@ -1020,7 +1020,7 @@ static bool selectItemCommands(char *command, char *which, bool selecting) {
         }
 
         // Swap screens (for drop)
-        if (*which == '/' && swap[0]) {
+        if (*which == '/' && (swap[0] != 0)) {
             if (*command == 'd') {
                 *command = 'r';
             } else {
@@ -1052,9 +1052,9 @@ static bool selectItemCommands(char *command, char *which, bool selecting) {
                 }
             } while (itemToTakeOff >= 0);
 
-            if (isupper((int) *which) && !verify((char *) prompt, item)) {
+            if ((isupper((int) *which) != 0) && !verify((char *) prompt, item)) {
                 item = -1;
-            } else if (TR_CURSED & inventory[item].flags) {
+            } else if ((TR_CURSED & inventory[item].flags) != 0u) {
                 item = -1;
                 printMessage("Hmmm, it seems to be cursed.");
             } else if (*command == 't' && !inventoryCanCarryItemCount(&inventory[item])) {
@@ -1092,7 +1092,7 @@ static bool selectItemCommands(char *command, char *which, bool selecting) {
         } else if (*command == 'w') {
             // Wearing. Go to a bit of trouble over replacing existing equipment.
 
-            if (isupper((int) *which) && !verify((char *) prompt, item)) {
+            if ((isupper((int) *which) != 0) && !verify((char *) prompt, item)) {
                 item = -1;
             } else {
                 slot = inventoryGetSlotToWearEquipment(item);
@@ -1102,7 +1102,7 @@ static bool selectItemCommands(char *command, char *which, bool selecting) {
             }
 
             if (item >= 0 && inventory[slot].category_id != TV_NOTHING) {
-                if (TR_CURSED & inventory[slot].flags) {
+                if ((TR_CURSED & inventory[slot].flags) != 0u) {
                     inventoryItemIsCursedMessage(slot);
                     item = -1;
                 } else if (inventory[item].sub_category_id == ITEM_GROUP_MIN && inventory[item].items_count > 1 && !inventoryCanCarryItemCount(&inventory[slot])) {
@@ -1189,7 +1189,7 @@ static bool selectItemCommands(char *command, char *which, bool selecting) {
                 }
                 playerStrength();
 
-                if (i_ptr->flags & TR_CURSED) {
+                if ((i_ptr->flags & TR_CURSED) != 0u) {
                     printMessage("Oops! It feels deathly cold!");
                     itemAppendToInscription(i_ptr, ID_DAMD);
 
@@ -1223,7 +1223,7 @@ static bool selectItemCommands(char *command, char *which, bool selecting) {
                     eraseLine(MSG_LINE, 0);
                     item = -1;
                 }
-            } else if (isupper((int) *which) && !verify((char *) prompt, item)) {
+            } else if ((isupper((int) *which) != 0) && !verify((char *) prompt, item)) {
                 item = -1;
             } else {
                 query = 'y';
@@ -1306,7 +1306,7 @@ void inventoryExecuteCommand(char command) {
     setInventoryCommandScreenState(command);
 
     do {
-        if (isupper((int) command)) {
+        if (isupper((int) command) != 0) {
             command = (char) tolower((int) command);
         }
 
@@ -1526,13 +1526,13 @@ bool inventoryGetInputForItemId(int *command_key_id, const char *prompt, int ite
                         } else {
                             *command_key_id = -1;
                         }
-                    } else if (isupper((int) which)) {
+                    } else if (isupper((int) which) != 0) {
                         *command_key_id = which - 'A';
                     } else {
                         *command_key_id = which - 'a';
                     }
 
-                    if (*command_key_id >= item_id_start && *command_key_id <= item_id_end && (mask == CNIL || mask[*command_key_id])) {
+                    if (*command_key_id >= item_id_start && *command_key_id <= item_id_end && (mask == CNIL || (mask[*command_key_id] != 0))) {
                         if (screen_id == 0) {
                             item_id_start = 21;
                             item_id_end = *command_key_id;
@@ -1547,7 +1547,7 @@ bool inventoryGetInputForItemId(int *command_key_id, const char *prompt, int ite
                             *command_key_id = item_id_start;
                         }
 
-                        if (isupper((int) which) && !verify("Try", *command_key_id)) {
+                        if ((isupper((int) which) != 0) && !verify("Try", *command_key_id)) {
                             screen_id = -1;
                             command_finished = true;
 
@@ -1560,7 +1560,7 @@ bool inventoryGetInputForItemId(int *command_key_id, const char *prompt, int ite
                         command_finished = true;
 
                         item_found = true;
-                    } else if (message) {
+                    } else if (message != nullptr) {
                         printMessage(message);
 
                         // Set command_finished to force redraw of the question.
@@ -1743,10 +1743,10 @@ static void sub1_move_light(int y1, int x1, int y2, int x2) {
                 cave[y][x].temporary_light = false;
             }
         }
-        if (running_counter && !config.run_print_self) {
+        if ((running_counter != 0) && !config.run_print_self) {
             temporary_light_only = false;
         }
-    } else if (!running_counter || config.run_print_self) {
+    } else if ((running_counter == 0) || config.run_print_self) {
         temporary_light_only = true;
     }
 
@@ -1809,11 +1809,11 @@ static void sub3_move_light(int y1, int x1, int y2, int x2) {
         }
 
         temporary_light_only = false;
-    } else if (!running_counter || config.run_print_self) {
+    } else if ((running_counter == 0) || config.run_print_self) {
         putChar(caveGetTileSymbol(y1, x1), y1, x1);
     }
 
-    if (!running_counter || config.run_print_self) {
+    if ((running_counter == 0) || config.run_print_self) {
         putChar('@', y2, x2);
     }
 }
@@ -1834,7 +1834,7 @@ void dungeonMoveCharacterLight(int y1, int x1, int y2, int x2) {
 void playerDisturb(int major_disturbance, int light_disturbance) {
     command_count = 0;
 
-    if (major_disturbance && (py.flags.status & PY_SEARCH)) {
+    if ((major_disturbance != 0) && ((py.flags.status & PY_SEARCH) != 0u)) {
         playerSearchOff();
     }
 
@@ -1842,7 +1842,7 @@ void playerDisturb(int major_disturbance, int light_disturbance) {
         playerRestOff();
     }
 
-    if (light_disturbance || running_counter) {
+    if ((light_disturbance != 0) || (running_counter != 0)) {
         running_counter = 0;
         dungeonResetView();
     }
@@ -1897,7 +1897,7 @@ void playerRestOn() {
     // check for reasonable value, must be positive number
     // in range of a short, or must be -MAX_SHORT
     if (rest_num == -MAX_SHORT || (rest_num > 0 && rest_num < MAX_SHORT)) {
-        if (py.flags.status & PY_SEARCH) {
+        if ((py.flags.status & PY_SEARCH) != 0u) {
             playerSearchOff();
         }
 
