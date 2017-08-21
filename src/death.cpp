@@ -44,7 +44,7 @@ void showScoresScreen() {
     auto patch_level = (uint8_t) getc(highscore_fp);
 
     // Support score files from 5.2.2 to present.
-    if (feof(highscore_fp)) {
+    if (feof(highscore_fp) != 0) {
         ; // An empty score file.
     } else if (version_maj != CURRENT_VERSION_MAJOR ||
                version_min > CURRENT_VERSION_MINOR ||
@@ -70,11 +70,11 @@ void showScoresScreen() {
     int i = 0;
     int rank = 1;
 
-    while (!feof(highscore_fp)) {
+    while (feof(highscore_fp) == 0) {
         i = 1;
         clearScreen();
         // Put twenty scores on each page, on lines 2 through 21.
-        while (!feof(highscore_fp) && i < 21) {
+        while ((feof(highscore_fp) == 0) && i < 21) {
             (void) sprintf(
                 string,
                 "%-4d%8d %-19.19s %c %-10.10s %-7.7s%3d %-22.22s",
@@ -182,7 +182,7 @@ static void printTomb() {
 
         playerRecalculateBonuses();
 
-        if (str[0]) {
+        if (str[0] != 0) {
             if (!outputPlayerCharacterToFile(str)) {
                 goto retry;
             }
@@ -227,7 +227,7 @@ int32_t playerCalculateTotalPoints() {
 static void highscores() {
     clearScreen();
 
-    if (noscore) {
+    if (noscore != 0) {
         return;
     }
 
@@ -255,7 +255,7 @@ static void highscores() {
         if ('n' == *(++tmp)) {
             tmp++;
         }
-        while (isspace(*tmp)) {
+        while (isspace(*tmp) != 0) {
             tmp++;
         }
     }
@@ -282,7 +282,7 @@ static void highscores() {
 
     // If this is a new score file, it should be empty.
     // Write the current version numbers to the score file.
-    if (feof(highscore_fp)) {
+    if (feof(highscore_fp) != 0) {
         // Seek to the beginning of the file just to be safe.
         (void) fseek(highscore_fp, (long) 0, SEEK_SET);
 
@@ -315,7 +315,7 @@ static void highscores() {
     off_t curpos = ftell(highscore_fp);
     readHighScore(&old_entry);
 
-    while (!feof(highscore_fp)) {
+    while (feof(highscore_fp) == 0) {
         if (new_entry.points >= old_entry.points) {
             break;
         }
@@ -326,7 +326,7 @@ static void highscores() {
         // birthdate/gender/race/class are the same, and character_died_from of score file
         // entry is "(saved)"
         if (((new_entry.uid != 0 && new_entry.uid == old_entry.uid) ||
-             (new_entry.uid == 0 && !strcmp(old_entry.died_from, "(saved)") && new_entry.birth_date == old_entry.birth_date)) &&
+             (new_entry.uid == 0 && (strcmp(old_entry.died_from, "(saved)") == 0) && new_entry.birth_date == old_entry.birth_date)) &&
             new_entry.gender == old_entry.gender &&
             new_entry.race == old_entry.race &&
             new_entry.character_class == old_entry.character_class) {
@@ -344,7 +344,7 @@ static void highscores() {
         readHighScore(&old_entry);
     }
 
-    if (feof(highscore_fp)) {
+    if (feof(highscore_fp) != 0) {
         // write out new_entry at end of file
         (void) fseek(highscore_fp, curpos, SEEK_SET);
 
@@ -352,7 +352,7 @@ static void highscores() {
     } else {
         entry = new_entry;
 
-        while (!feof(highscore_fp)) {
+        while (feof(highscore_fp) == 0) {
             (void) fseek(highscore_fp, -(long) sizeof(HighScore_t) - (long) sizeof(char), SEEK_CUR);
 
             saveHighScore(&entry);
@@ -363,7 +363,7 @@ static void highscores() {
             // case when birthdate/gender/race/class are the same, and character_died_from
             // of score file entry is "(saved)"
             if (((new_entry.uid != 0 && new_entry.uid == old_entry.uid) ||
-                 (new_entry.uid == 0 && !strcmp(old_entry.died_from, "(saved)") && new_entry.birth_date == old_entry.birth_date)) &&
+                 (new_entry.uid == 0 && (strcmp(old_entry.died_from, "(saved)") == 0) && new_entry.birth_date == old_entry.birth_date)) &&
                 new_entry.gender == old_entry.gender &&
                 new_entry.race == old_entry.race &&
                 new_entry.character_class == old_entry.character_class) {
@@ -377,7 +377,7 @@ static void highscores() {
             curpos = ftell(highscore_fp);
             readHighScore(&old_entry);
         }
-        if (feof(highscore_fp)) {
+        if (feof(highscore_fp) != 0) {
             (void) fseek(highscore_fp, curpos, SEEK_SET);
 
             saveHighScore(&entry);
