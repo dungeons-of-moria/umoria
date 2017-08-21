@@ -44,7 +44,7 @@ void startMoria(int seed, bool start_new_game, bool use_roguelike_keys) {
     bool result = false;
     bool generate = false;
 
-    if (!start_new_game && !access(config.save_game_filename, 0) && loadGame(&generate)) {
+    if (!start_new_game && (access(config.save_game_filename, 0) == 0) && loadGame(&generate)) {
         result = true;
     }
 
@@ -115,7 +115,7 @@ void startMoria(int seed, bool start_new_game, bool use_roguelike_keys) {
 
         // check for eof here, see getKeyInput() in io.c
         // eof can occur if the process gets a HANGUP signal
-        if (eof_flag) {
+        if (eof_flag != 0) {
             (void) strcpy(character_died_from, "(end of input: saved)");
             if (!saveGame()) {
                 (void) strcpy(character_died_from, "unexpected eof");
