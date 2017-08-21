@@ -100,7 +100,7 @@ static void characterGenerateStatsAndRace() {
 
 // Prints a list of the available races: Human, Elf, etc.,
 // shown during the character creation screens.
-static void displayCharacterRaces(void) {
+static void displayCharacterRaces() {
     clearToBottom(20);
     putString("Choose a race (? for Help):", 20, 2);
 

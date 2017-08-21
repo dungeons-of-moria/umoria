@@ -880,7 +880,7 @@ void playerThrowItem() {
         dir = getRandomDirection();
     }
 
-    Inventory_t thrown_item;
+    Inventory_t thrown_item{};
     inventoryThrow(item_id, &thrown_item);
 
     int tbth, tpth, tdam, tdis;

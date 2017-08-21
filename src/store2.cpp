@@ -850,7 +850,7 @@ static bool storePurchaseAnItem(int store_id, int *current_top_item_id) {
 
     item_id = item_id + *current_top_item_id; // true item_id
 
-    Inventory_t sell_item;
+    Inventory_t sell_item{};
     inventoryTakeOneItem(&sell_item, &store->inventory[item_id].item);
 
     if (!inventoryCanCarryItemCount(&sell_item)) {

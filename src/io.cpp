@@ -598,7 +598,7 @@ bool checkForNonBlockingKeyPress(int microseconds) {
         return false;
     }
 #else
-    struct timeval tbuf;
+    struct timeval tbuf{};
     int ch;
     int smask;
 
@@ -633,8 +633,6 @@ void getDefaultPlayerName(char *buffer) {
         (void)strcpy(buffer, defaultName);
     }
 #else
-    extern char *getlogin();
-
     char *p = getlogin();
 
     if ((p != nullptr) && (p[0] != 0)) {
@@ -723,7 +721,7 @@ bool tilde(const char *file, char *expanded) {
 
 // Check user permissions on Unix based systems,
 // or if on Windows just return. -MRC-
-void checkFilePermissions(void) {
+void checkFilePermissions() {
 #ifndef _WIN32
     if (0 != setuid(getuid())) {
         perror("Can't set permissions correctly!  Setuid call failed.\n");

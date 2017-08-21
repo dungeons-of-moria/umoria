@@ -248,7 +248,7 @@ void wizardCreateObjects() {
 
     printMessage("Warning: This routine can cause a fatal error.");
 
-    Inventory_t forge;
+    Inventory_t forge{};
     Inventory_t *item = &forge;
 
     item->id = OBJ_WIZARD;

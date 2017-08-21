@@ -137,7 +137,7 @@ void startMoria(int seed, bool start_new_game, bool use_roguelike_keys) {
 
 // Init players with some belongings -RAK-
 static void initializeCharacterInventory() {
-    Inventory_t item;
+    Inventory_t item{};
 
     // this is needed for bash to work right, it can't hurt anyway
     for (int i = 0; i < PLAYER_INVENTORY_SIZE; i++) {

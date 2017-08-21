@@ -62,7 +62,7 @@ void showScoresScreen() {
     // set the static fileptr in save.c to the high score file pointer
     setFileptr(highscore_fp);
 
-    HighScore_t score;
+    HighScore_t score{};
     readHighScore(&score);
 
     char input;
@@ -236,7 +236,7 @@ static void highscores() {
         return;
     }
 
-    HighScore_t new_entry;
+    HighScore_t new_entry{};
     new_entry.points = playerCalculateTotalPoints();
     new_entry.birth_date = character_birth_date;
     new_entry.uid = 0; // NOTE: do we not want to use `getuid()`? -MRC-
@@ -309,7 +309,8 @@ static void highscores() {
     // set the static fileptr in save.c to the high score file pointer
     setFileptr(highscore_fp);
 
-    HighScore_t old_entry, entry;
+    HighScore_t old_entry{};
+    HighScore_t entry{};
 
     int i = 0;
     off_t curpos = ftell(highscore_fp);

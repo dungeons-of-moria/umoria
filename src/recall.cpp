@@ -9,7 +9,7 @@
 #include "headers.h"
 #include "externs.h"
 
-static void memoryPrint(const char *);
+static void memoryPrint(const char *p);
 
 static const char *description_attack_type[] = {
         "do something undefined",
@@ -668,7 +668,7 @@ int memoryRecall(int monster_id) {
     Recall_t *memory = &creature_recall[monster_id];
     Creature_t *creature = &creatures_list[monster_id];
 
-    Recall_t saved_memory;
+    Recall_t saved_memory{};
 
     if (wizard_mode) {
         saved_memory = *memory;

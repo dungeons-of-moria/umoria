@@ -453,10 +453,9 @@ static bool _save_char(char *fnam) {
         printMessage(output.c_str());
 
         return false;
-    } else {
-        character_saved = true;
     }
 
+    character_saved = true;
     current_game_turn = -1;
 
     return true;
