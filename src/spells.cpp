@@ -497,7 +497,7 @@ static void spellLightLineTouchesMonster(int monster_id) {
             creature_recall[monster->creature_id].defenses |= CD_LIGHT;
         }
 
-        if (monsterTakeHit(monster_id, diceDamageRoll(2, 8) >= 0)) {
+        if (monsterTakeHit(monster_id, diceDamageRoll(2, 8)) >= 0) {
             printMonsterActionText(name, "shrivels away in the light!");
             displayCharacterExperience();
         } else {

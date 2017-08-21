@@ -11,6 +11,7 @@
 ### Bug Fixes
 
 - `TV_NEVER` was an unsigned int, but should be signed as it's being given a `-1` value.
+- The `monsterTakeHit()` check now correct in `spellLightLineTouchesMonster()`.
 
 ### Code
 
