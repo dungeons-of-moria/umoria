@@ -515,14 +515,14 @@ static bool lookRay(int y, int from, int to) {
     // that (2x-1)/x < from/GRADF <=> x > GRADF(2x-1)/from. This may
     // be called with y=0 whence x will be set to 0. Thus we need a
     // special fix.
-    int x = (int) ((int32_t) GRADF * (2 * y - 1) / from + 1);
+    auto x = (int) ((int32_t) GRADF * (2 * y - 1) / from + 1);
     if (x <= 0) {
         x = 1;
     }
 
     // Find last visible location along this line.
     // Maximum x such that (2x+1)/x > to/GRADF <=> x < GRADF(2x+1)/to
-    int max_x = (int) (((int32_t) GRADF * (2 * y + 1) - 1) / to);
+    auto max_x = (int) (((int32_t) GRADF * (2 * y + 1) - 1) / to);
     if (max_x > MON_MAX_SIGHT) {
         max_x = MON_MAX_SIGHT;
     }

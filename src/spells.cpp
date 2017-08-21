@@ -909,7 +909,7 @@ void spellBreath(int y, int x, int monster_id, int damage_hp, int spell_type, ch
                             uint32_t treasure_id = monsterDeath((int) monster->y, (int) monster->x, creature->movement);
 
                             if (monster->lit) {
-                                uint32_t tmp = (uint32_t) ((creature_recall[monster->creature_id].movement & CM_TREASURE) >> CM_TR_SHIFT);
+                                auto tmp = (uint32_t) ((creature_recall[monster->creature_id].movement & CM_TREASURE) >> CM_TR_SHIFT);
                                 if (tmp > ((treasure_id & CM_TREASURE) >> CM_TR_SHIFT)) {
                                     treasure_id = (uint32_t) ((treasure_id & ~CM_TREASURE) | (tmp << CM_TR_SHIFT));
                                 }

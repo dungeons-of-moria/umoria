@@ -1617,7 +1617,7 @@ static int rememberForgottenSpells(Spell_t *msp_ptr, int allowedSpells, int newS
 // determine which spells player can learn must check all spells here,
 // in gain_spell() we actually check if the books are present
 static int learnableSpells(Spell_t *msp_ptr, int newSpells) {
-    uint32_t spell_flag = (uint32_t) (0x7FFFFFFFL & ~spells_learnt);
+    auto spell_flag = (uint32_t) (0x7FFFFFFFL & ~spells_learnt);
 
     int id = 0;
     uint32_t mask = 0x1;
@@ -2032,8 +2032,8 @@ void playerCalculateHitPoints() {
 
 // Inserts a string into a string
 void insertStringIntoString(char *to_string, const char *from_string, const char *str_to_insert) {
-    int from_len = (int) strlen(from_string);
-    int to_len = (int) strlen(to_string);
+    auto from_len = (int) strlen(from_string);
+    auto to_len = (int) strlen(to_string);
 
     char *bound = to_string + to_len - from_len;
     char *pc;
@@ -2337,7 +2337,7 @@ bool inventoryFindRange(int item_id_start, int item_id_end, int *j, int *k) {
     bool at_end_of_range = false;
 
     for (int i = 0; i < inventory_count; i++) {
-        int item_id = (int) inventory[i].category_id;
+        auto item_id = (int) inventory[i].category_id;
 
         if (!at_end_of_range) {
             if (item_id == item_id_start || item_id == item_id_end) {

@@ -530,7 +530,7 @@ static void memoryLootCarried(uint32_t creature_move, uint32_t memory_move) {
 
     memoryPrint(" It may");
 
-    uint32_t carrying_chance = (uint32_t) ((memory_move & CM_TREASURE) >> CM_TR_SHIFT);
+    auto carrying_chance = (uint32_t) ((memory_move & CM_TREASURE) >> CM_TR_SHIFT);
 
     if (carrying_chance == 1) {
         if ((creature_move & CM_TREASURE) == CM_60_RANDOM) {
@@ -678,10 +678,10 @@ int memoryRecall(int monster_id) {
     roff_print_line = 0;
     roff_buffer_pointer = roff_buffer;
 
-    uint32_t spells = (uint32_t) (memory->spells & creature->spells & ~CS_FREQ);
+    auto spells = (uint32_t) (memory->spells & creature->spells & ~CS_FREQ);
 
     // the CM_WIN property is always known, set it if a win monster
-    uint32_t move = (uint32_t) (memory->movement | (CM_WIN & creature->movement));
+    auto move = (uint32_t) (memory->movement | (CM_WIN & creature->movement));
 
     uint16_t defense = memory->defenses & creature->defenses;
 

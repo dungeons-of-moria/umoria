@@ -727,7 +727,7 @@ int monsterTakeHit(int monster_id, int damage) {
     Recall_t *memory = &creature_recall[monster->creature_id];
 
     if ((py.flags.blind < 1 && monster->lit) || (creature->movement & CM_WIN)) {
-        uint32_t tmp = (uint32_t) ((memory->movement & CM_TREASURE) >> CM_TR_SHIFT);
+        auto tmp = (uint32_t) ((memory->movement & CM_TREASURE) >> CM_TR_SHIFT);
 
         if (tmp > ((treasure_flags & CM_TREASURE) >> CM_TR_SHIFT)) {
             treasure_flags = (uint32_t) ((treasure_flags & ~CM_TREASURE) | (tmp << CM_TR_SHIFT));

@@ -20,7 +20,7 @@ static void date(char *day) {
 
 // Centers a string within a 31 character string -JWT-
 static char *center_string(char *centered_str, const char *in_str) {
-    int i = (int) strlen(in_str);
+    auto i = (int) strlen(in_str);
     int j = 15 - i / 2;
     (void) sprintf(centered_str, "%*s%s%*s", j, "", in_str, 31 - i - j, "");
     return centered_str;
@@ -39,9 +39,9 @@ void showScoresScreen() {
     (void) fseek(highscore_fp, (off_t) 0, SEEK_SET);
 
     // Read version numbers from the score file, and check for validity.
-    uint8_t version_maj = (uint8_t) getc(highscore_fp);
-    uint8_t version_min = (uint8_t) getc(highscore_fp);
-    uint8_t patch_level = (uint8_t) getc(highscore_fp);
+    auto version_maj = (uint8_t) getc(highscore_fp);
+    auto version_min = (uint8_t) getc(highscore_fp);
+    auto patch_level = (uint8_t) getc(highscore_fp);
 
     // Support score files from 5.2.2 to present.
     if (feof(highscore_fp)) {
@@ -153,7 +153,7 @@ static void printTomb() {
     putString("|            killed by            |", 15, 9);
     p = character_died_from;
 
-    int len = (int) strlen(p);
+    auto len = (int) strlen(p);
     p[len] = '.'; // add a trailing period
     p[len + 1] = '\0';
     (void) sprintf(str, "| %s |", center_string(tmp_str, p));
@@ -276,9 +276,9 @@ static void highscores() {
     (void) fseek(highscore_fp, (long) 0, SEEK_SET);
 
     // Read version numbers from the score file, and check for validity.
-    uint8_t version_maj = (uint8_t) getc(highscore_fp);
-    uint8_t version_min = (uint8_t) getc(highscore_fp);
-    uint8_t patch_level = (uint8_t) getc(highscore_fp);
+    auto version_maj = (uint8_t) getc(highscore_fp);
+    auto version_min = (uint8_t) getc(highscore_fp);
+    auto patch_level = (uint8_t) getc(highscore_fp);
 
     // If this is a new score file, it should be empty.
     // Write the current version numbers to the score file.

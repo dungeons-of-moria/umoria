@@ -136,7 +136,7 @@ void wizardCharacterAdjustment() {
     number = (int) strlen(input);
     putStringClearToEOL(input, 0, 0);
     if (getStringInput(input, 0, number, 7)) {
-        int32_t new_gold = (int32_t) atol(input);
+        auto new_gold = (int32_t) atol(input);
         if (new_gold > -1 && (*input != '\0')) {
             py.misc.au = new_gold;
             printCharacterGoldValue();

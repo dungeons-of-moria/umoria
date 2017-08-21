@@ -330,7 +330,7 @@ static bool sv_write() {
         for (int j = 0; j < MAX_WIDTH; j++) {
             Cave_t *c_ptr = &cave[i][j];
 
-            uint8_t char_tmp = (uint8_t) (c_ptr->feature_id | (c_ptr->perma_lit_room << 4) | (c_ptr->field_mark << 5) | (c_ptr->permanent_light << 6) | (c_ptr->temporary_light << 7));
+            auto char_tmp = (uint8_t) (c_ptr->feature_id | (c_ptr->perma_lit_room << 4) | (c_ptr->field_mark << 5) | (c_ptr->permanent_light << 6) | (c_ptr->temporary_light << 7));
 
             if (char_tmp != prev_char || count == MAX_UCHAR) {
                 wr_byte((uint8_t) count);
@@ -426,7 +426,7 @@ static bool _save_char(char *fnam) {
         wr_byte((uint8_t) CURRENT_VERSION_PATCH);
         xor_byte = 0;
 
-        uint8_t char_tmp = (uint8_t) (randomNumber(256) - 1);
+        auto char_tmp = (uint8_t) (randomNumber(256) - 1);
         wr_byte(char_tmp);
         // Note that xor_byte is now equal to char_tmp
 
@@ -1107,14 +1107,14 @@ static bool rd_bool() {
 }
 
 static void rd_byte(uint8_t *ptr) {
-    uint8_t c = (uint8_t) (getc(fileptr) & 0xFF);
+    auto c = (uint8_t) (getc(fileptr) & 0xFF);
     *ptr = c ^ xor_byte;
     xor_byte = c;
     DEBUG(fprintf(logfile, "BYTE:  %02X = %d\n", (int) c, (int) *ptr));
 }
 
 static void rd_short(uint16_t *ptr) {
-    uint8_t c = (uint8_t) (getc(fileptr) & 0xFF);
+    auto c = (uint8_t) (getc(fileptr) & 0xFF);
     uint16_t s = c ^xor_byte;
 
     xor_byte = (uint8_t) (getc(fileptr) & 0xFF);
@@ -1124,7 +1124,7 @@ static void rd_short(uint16_t *ptr) {
 }
 
 static void rd_long(uint32_t *ptr) {
-    uint8_t c = (uint8_t) (getc(fileptr) & 0xFF);
+    auto c = (uint8_t) (getc(fileptr) & 0xFF);
     uint32_t l = c ^xor_byte;
 
     xor_byte = (uint8_t) (getc(fileptr) & 0xFF);
@@ -1142,7 +1142,7 @@ static void rd_bytes(uint8_t *ch_ptr, int count) {
     DEBUG(fprintf(logfile, "%d BYTES:", count));
     uint8_t *ptr = ch_ptr;
     for (int i = 0; i < count; i++) {
-        uint8_t c = (uint8_t) (getc(fileptr) & 0xFF);
+        auto c = (uint8_t) (getc(fileptr) & 0xFF);
         *ptr++ = c ^ xor_byte;
         xor_byte = c;
         DEBUG(fprintf(logfile, "  %02X = %d", (int) c, (int) ptr[-1]));
@@ -1154,7 +1154,7 @@ static void rd_string(char *str) {
     DEBUG(char *s = str);
     DEBUG(fprintf(logfile, "STRING: "));
     do {
-        uint8_t c = (uint8_t) (getc(fileptr) & 0xFF);
+        auto c = (uint8_t) (getc(fileptr) & 0xFF);
         *str = c ^ xor_byte;
         xor_byte = c;
         DEBUG(fprintf(logfile, "%02X ", (int) c));
@@ -1167,7 +1167,7 @@ static void rd_shorts(uint16_t *ptr, int count) {
     uint16_t *sptr = ptr;
 
     for (int i = 0; i < count; i++) {
-        uint8_t c = (uint8_t) (getc(fileptr) & 0xFF);
+        auto c = (uint8_t) (getc(fileptr) & 0xFF);
         uint16_t s = c ^xor_byte;
         xor_byte = (uint8_t) (getc(fileptr) & 0xFF);
         s |= (uint16_t) (c ^ xor_byte) << 8;

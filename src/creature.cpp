@@ -1301,7 +1301,7 @@ static bool monsterCastSpell(int monster_id) {
 
     // Extract all possible spells into spell_choice
     int spell_choice[30];
-    uint32_t spell_flags = (uint32_t) (creature->spells & ~CS_FREQ);
+    auto spell_flags = (uint32_t) (creature->spells & ~CS_FREQ);
 
     int id = 0;
     while (spell_flags != 0) {

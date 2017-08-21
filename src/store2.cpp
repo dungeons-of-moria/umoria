@@ -345,7 +345,7 @@ static bool storeGetHaggle(const char *comment, int32_t *new_offer, int num_offe
 
     bool increment = false;
 
-    int comment_len = (int) strlen(comment);
+    auto comment_len = (int) strlen(comment);
     int save_comment_len = comment_len;
 
     char *p;

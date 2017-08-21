@@ -198,8 +198,8 @@ static bool scrollSummonMonster() {
     bool identified = false;
 
     for (int i = 0; i < randomNumber(3); i++) {
-        int y = (int) char_row;
-        int x = (int) char_col;
+        auto y = (int) char_row;
+        auto x = (int) char_col;
         identified |= monsterSummon(&y, &x, false);
     }
 
