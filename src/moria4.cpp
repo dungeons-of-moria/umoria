@@ -35,7 +35,7 @@ static bool playerCanTunnel(int treasure_id, int tile_id) {
 static int playerDiggingAbility(Inventory_t *weapon) {
     int diggingAbility = py.stats.used[A_STR];
 
-    if (weapon->flags & TR_TUNNEL) {
+    if ((weapon->flags & TR_TUNNEL) != 0u) {
         diggingAbility += 25 + weapon->misc_use * 50;
     } else {
         diggingAbility += (weapon->damage[0] * weapon->damage[1]) + weapon->to_hit + weapon->to_damage;
@@ -241,13 +241,13 @@ static void playerDisarmChestTrap(int y, int x, int total, Inventory_t *item) {
         return;
     }
 
-    if (item->flags & CH_TRAPPED) {
+    if ((item->flags & CH_TRAPPED) != 0u) {
         int level = item->depth_first_found;
 
         if ((total - level) > randomNumber(100)) {
             item->flags &= ~CH_TRAPPED;
 
-            if (item->flags & CH_LOCKED) {
+            if ((item->flags & CH_LOCKED) != 0u) {
                 item->special_name_id = SN_LOCKED;
             } else {
                 item->special_name_id = SN_DISARMED;
@@ -475,7 +475,7 @@ void look() {
         return;
     }
 
-    if (los_num_places_seen) {
+    if (los_num_places_seen != 0) {
         if (dir == 5) {
             printMessage("That's all you see.");
         } else {
@@ -666,7 +666,7 @@ static bool lookSee(int x, int y, bool *transparent) {
             }
         }
 
-        if ((los_rocks_and_objects || msg[0]) && tile->feature_id >= MIN_CLOSED_SPACE) {
+        if (((los_rocks_and_objects != 0) || (msg[0] != 0)) && tile->feature_id >= MIN_CLOSED_SPACE) {
             const char *wall_description;
 
             switch (tile->feature_id) {
@@ -674,7 +674,7 @@ static bool lookSee(int x, int y, bool *transparent) {
                 case TILE_GRANITE_WALL:
                 granite:
                     // Granite is only interesting if it contains something.
-                    if (msg[0]) {
+                    if (msg[0] != 0) {
                         wall_description = "a granite wall";
                     } else {
                         wall_description = CNIL; // In case we jump here
@@ -691,7 +691,7 @@ static bool lookSee(int x, int y, bool *transparent) {
                     break;
             }
 
-            if (wall_description) {
+            if (wall_description != nullptr) {
                 (void) sprintf(msg, "%s %s ---pause---", description, wall_description);
                 putStringClearToEOL(msg, 0, 0);
                 moveCursorRelative(y, x);
@@ -700,7 +700,7 @@ static bool lookSee(int x, int y, bool *transparent) {
         }
     }
 
-    if (msg[0]) {
+    if (msg[0] != 0) {
         los_num_places_seen++;
         if (query == ESCAPE) {
             return true;
@@ -1031,7 +1031,7 @@ static void playerBashAttack(int y, int x) {
 
             // Can not stun Balrog
             int avg_max_hp;
-            if (creature->defenses & CD_MAX_HP) {
+            if ((creature->defenses & CD_MAX_HP) != 0) {
                 avg_max_hp = creature->hit_die[0] * creature->hit_die[1];
             } else {
                 avg_max_hp = (creature->hit_die[0] * (creature->hit_die[1] + 1)) >> 1;
@@ -1118,7 +1118,7 @@ static void playerBashClosedChest(Inventory_t *item) {
         return;
     }
 
-    if ((item->flags & CH_LOCKED) && randomNumber(10) == 1) {
+    if (((item->flags & CH_LOCKED) != 0u) && randomNumber(10) == 1) {
         printMessage("The lock breaks open!");
 
         item->flags &= ~CH_LOCKED;
