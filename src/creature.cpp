@@ -23,7 +23,7 @@ static bool monsterIsVisible(Monster_t *monster) {
             visible = true;
             creature_recall[monster->creature_id].movement |= CM_INVISIBLE;
         }
-    } else if (py.flags.see_infra > 0 && monster->distance_from_player <= py.flags.see_infra && (CD_INFRA & creature->defenses)) {
+    } else if (py.flags.see_infra > 0 && monster->distance_from_player <= py.flags.see_infra && ((CD_INFRA & creature->defenses) != 0)) {
         // Infra vision.
         visible = true;
         creature_recall[monster->creature_id].defenses |= CD_INFRA;
@@ -73,13 +73,17 @@ static int monsterMovementRate(int16_t speed) {
     if (speed > 0) {
         if (py.flags.rest != 0) {
             return 1;
-        } else {
-            return speed;
         }
+        return speed;
     }
 
     // speed must be negative here
-    return ((current_game_turn % (2 - speed)) == 0);
+    int rate = 0;
+    if ((current_game_turn % (2 - speed)) == 0) {
+        rate = 1;
+    };
+
+    return rate;
 }
 
 // Makes sure a new creature gets lit up. -CJS-
