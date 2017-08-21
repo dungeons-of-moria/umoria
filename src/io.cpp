@@ -156,7 +156,7 @@ char getKeyInput() {
 
 // Flush the buffer -RAK-
 void flushInputBuffer() {
-    if (eof_flag) {
+    if (eof_flag != 0) {
         return;
     }
 
@@ -250,13 +250,13 @@ void printMessage(const char *msg) {
         // we want display them together on the same line.  So we
         // don't flush the old message in this case.
 
-        if (msg) {
+        if (msg != nullptr) {
             new_len = (int) strlen(msg);
         } else {
             new_len = 0;
         }
 
-        if (!msg || new_len + old_len + 2 >= 73) {
+        if ((msg == nullptr) || new_len + old_len + 2 >= 73) {
             // ensure that the complete -more- message is visible.
             if (old_len > 73) {
                 old_len = 73;
@@ -280,7 +280,7 @@ void printMessage(const char *msg) {
 
     // Make the null string a special case. -CJS-
 
-    if (!msg) {
+    if (msg == nullptr) {
         message_ready_to_print = false;
         return;
     }
@@ -317,7 +317,7 @@ bool getInputConfirmation(const char *prompt) {
 
     if (x > 73) {
         (void) move(0, 73);
-    } else if (y) {
+    } else if (y != 0) {
         // use `y` to prevent compiler warning.
     }
 
@@ -336,7 +336,7 @@ bool getInputConfirmation(const char *prompt) {
 // Prompts (optional) and returns ord value of input char
 // Function returns false if <ESCAPE> is input
 bool getCommand(const char *prompt, char *command) {
-    if (prompt) {
+    if (prompt != nullptr) {
         putStringClearToEOL(prompt, 0, 0);
     }
     *command = getKeyInput();
@@ -389,7 +389,7 @@ bool getStringInput(char *in_str, int row, int col, int slen) {
                 }
                 break;
             default:
-                if (!isprint(key) || col > end_col) {
+                if ((isprint(key) == 0) || col > end_col) {
                     terminalBellSound();
                 } else {
                     use_value2 mvaddch(row, col, (char) key);
@@ -637,16 +637,16 @@ void getDefaultPlayerName(char *buffer) {
 
     char *p = getlogin();
 
-    if (p && p[0]) {
+    if ((p != nullptr) && (p[0] != 0)) {
         (void) strcpy(buffer, p);
     } else {
         struct passwd *pwline = getpwuid((int) getuid());
-        if (pwline) {
+        if (pwline != nullptr) {
             (void) strcpy(buffer, pwline->pw_name);
         }
     }
 
-    if (!buffer[0]) {
+    if (buffer[0] == 0) {
         (void) strcpy(buffer, defaultName);
     }
 #endif
@@ -682,7 +682,7 @@ int topen(const char *file, int flags, int mode) {
 
 // expands a tilde at the beginning of a file name to a users home directory
 bool tilde(const char *file, char *expanded) {
-    if (!file) {
+    if (file == nullptr) {
         return false;
     }
 
