@@ -254,7 +254,7 @@ static void findRunningBreak(int dir, int row, int col) {
         find_openarea = false;
 
         // a hack to allow angled corridor entry
-        if (dir & 1) {
+        if ((dir & 1) != 0) {
             if (deepLeft && !deepRight) {
                 find_prevdir = cycle[cycleIndex - 1];
             } else if (deepRight && !deepLeft) {
@@ -326,7 +326,7 @@ void playerRunAndFind() {
 
 // Switch off the run flag - and get the light correct. -CJS-
 void playerEndRunning() {
-    if (!running_counter) {
+    if (running_counter == 0) {
         return;
     }
 
@@ -547,7 +547,7 @@ static int damageMinusAC(uint32_t typ_dam) {
 
     obj_desc_t description, msg;
 
-    if (inventory[itemID].flags & typ_dam) {
+    if ((inventory[itemID].flags & typ_dam) != 0u) {
         minus = true;
 
         itemDescription(description, &inventory[itemID], false);
