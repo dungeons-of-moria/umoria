@@ -70,17 +70,17 @@ static int inventoryItemIdOfCursedEquipment() {
         item_id = items[randomNumber(item_count) - 1];
     }
 
-    if (inventory[EQUIPMENT_BODY].flags & TR_CURSED) {
+    if ((inventory[EQUIPMENT_BODY].flags & TR_CURSED) != 0u) {
         item_id = EQUIPMENT_BODY;
-    } else if (inventory[EQUIPMENT_ARM].flags & TR_CURSED) {
+    } else if ((inventory[EQUIPMENT_ARM].flags & TR_CURSED) != 0u) {
         item_id = EQUIPMENT_ARM;
-    } else if (inventory[EQUIPMENT_OUTER].flags & TR_CURSED) {
+    } else if ((inventory[EQUIPMENT_OUTER].flags & TR_CURSED) != 0u) {
         item_id = EQUIPMENT_OUTER;
-    } else if (inventory[EQUIPMENT_HEAD].flags & TR_CURSED) {
+    } else if ((inventory[EQUIPMENT_HEAD].flags & TR_CURSED) != 0u) {
         item_id = EQUIPMENT_HEAD;
-    } else if (inventory[EQUIPMENT_HANDS].flags & TR_CURSED) {
+    } else if ((inventory[EQUIPMENT_HANDS].flags & TR_CURSED) != 0u) {
         item_id = EQUIPMENT_HANDS;
-    } else if (inventory[EQUIPMENT_FEET].flags & TR_CURSED) {
+    } else if ((inventory[EQUIPMENT_FEET].flags & TR_CURSED) != 0u) {
         item_id = EQUIPMENT_FEET;
     }
 
