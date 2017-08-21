@@ -15,7 +15,7 @@ static bool monsterIsVisible(Monster_t *monster) {
     Cave_t *tile = &cave[monster->y][monster->x];
     Creature_t *creature = &creatures_list[monster->creature_id];
 
-    if (tile->permanent_light || tile->temporary_light || (running_counter && monster->distance_from_player < 2 && player_carrying_light)) {
+    if (tile->permanent_light || tile->temporary_light || ((running_counter != 0) && monster->distance_from_player < 2 && player_carrying_light)) {
         // Normal sight.
         if ((CM_INVISIBLE & creature->movement) == 0) {
             visible = true;
@@ -37,7 +37,7 @@ void monsterUpdateVisibility(int monster_id) {
     bool visible = false;
     Monster_t *m_ptr = &monsters[monster_id];
 
-    if (m_ptr->distance_from_player <= MON_MAX_SIGHT && !(py.flags.status & PY_BLIND) && coordInsidePanel((int) m_ptr->y, (int) m_ptr->x)) {
+    if (m_ptr->distance_from_player <= MON_MAX_SIGHT && ((py.flags.status & PY_BLIND) == 0u) && coordInsidePanel((int) m_ptr->y, (int) m_ptr->x)) {
         if (wizard_mode) {
             // Wizard sight.
             visible = true;
@@ -246,7 +246,7 @@ static void monsterGetMoveDirection(int monster_id, int *directions) {
 
 // For "DIED_FROM" string
 static void playerDiedFromString(vtype_t *description, const char *monster_name, uint32_t move) {
-    if (move & CM_WIN) {
+    if ((move & CM_WIN) != 0u) {
         (void) sprintf(*description, "The %s", monster_name);
     } else if (isVowel(monster_name[0])) {
         (void) sprintf(*description, "an %s", monster_name);
@@ -789,11 +789,11 @@ static void monsterConfuseOnAttack(Creature_t *creature, Monster_t *monster, int
 
         vtype_t msg;
 
-        if (randomNumber(MON_MAX_LEVELS) < creature->level || (CD_NO_SLEEP & creature->defenses)) {
+        if (randomNumber(MON_MAX_LEVELS) < creature->level || ((CD_NO_SLEEP & creature->defenses) != 0)) {
             (void) sprintf(msg, "%sis unaffected.", monster_name);
         } else {
             (void) sprintf(msg, "%sappears confused.", monster_name);
-            if (monster->confused_amount) {
+            if (monster->confused_amount != 0u) {
                 monster->confused_amount += 3;
             } else {
                 monster->confused_amount = (uint8_t) (2 + randomNumber(16));
@@ -842,7 +842,7 @@ static void monsterAttackPlayer(int monster_id) {
 
         attstr++;
 
-        if (py.flags.protect_evil > 0 && (creature->defenses & CD_EVIL) && py.misc.level + 1 > creature->level) {
+        if (py.flags.protect_evil > 0 && ((creature->defenses & CD_EVIL) != 0) && py.misc.level + 1 > creature->level) {
             if (monster->lit) {
                 creature_recall[monster->creature_id].defenses |= CD_EVIL;
             }
@@ -907,7 +907,7 @@ static void monsterOpenDoor(Cave_t *tile, int16_t monster_hp, uint32_t move_bits
     Inventory_t *item = &treasure_list[tile->treasure_id];
 
     // Creature can open doors.
-    if (move_bits & CM_OPEN_DOOR) {
+    if ((move_bits & CM_OPEN_DOOR) != 0u) {
         bool door_is_stuck = false;
 
         if (item->category_id == TV_CLOSED_DOOR) {
@@ -980,7 +980,7 @@ static void glyphOfWardingProtection(uint16_t creature_id, uint32_t move_bits, b
 
     // If the creature moves only to attack, don't let it
     // move if the glyph prevents it from attacking
-    if (move_bits & CM_ATTACK_ONLY) {
+    if ((move_bits & CM_ATTACK_ONLY) != 0u) {
         *do_turn = true;
     }
 }
@@ -1000,7 +1000,7 @@ static void monsterMovesOnPlayer(Monster_t *monster, uint8_t creature_id, int mo
         // Creature is attempting to move on other creature?
 
         // Creature eats other creatures?
-        if ((move_bits & CM_EATS_OTHER) && creatures_list[monster->creature_id].kill_exp_value >= creatures_list[monsters[creature_id].creature_id].kill_exp_value) {
+        if (((move_bits & CM_EATS_OTHER) != 0u) && creatures_list[monster->creature_id].kill_exp_value >= creatures_list[monsters[creature_id].creature_id].kill_exp_value) {
             if (monsters[creature_id].lit) {
                 *rcmove |= CM_EATS_OTHER;
             }
@@ -1022,7 +1022,7 @@ static void monsterMovesOnPlayer(Monster_t *monster, uint8_t creature_id, int mo
 
 static void monsterAllowedToMove(Monster_t *monster, uint32_t move_bits, bool *do_turn, uint32_t *rcmove, int y, int x) {
     // Pick up or eat an object
-    if (move_bits & CM_PICKS_UP) {
+    if ((move_bits & CM_PICKS_UP) != 0u) {
         uint8_t treasure_id = cave[y][x].treasure_id;
 
         if (treasure_id != 0 && treasure_list[treasure_id].category_id <= TV_MAX_OBJECT) {
@@ -1070,7 +1070,7 @@ static void makeMove(int monster_id, int *directions, uint32_t *rcmove) {
         // Floor is open?
         if (tile->feature_id <= MAX_OPEN_SPACE) {
             do_move = true;
-        } else if (move_bits & CM_PHASE) {
+        } else if ((move_bits & CM_PHASE) != 0u) {
             // Creature moves through walls?
             do_move = true;
             *rcmove |= CM_PHASE;
@@ -1500,7 +1500,7 @@ static void monsterMoveUndead(Monster_t *monster, Creature_t *creature, int mons
     directions[4] = randomNumber(9);
 
     // don't move him if he is not supposed to move!
-    if (!(creature->movement & CM_ATTACK_ONLY)) {
+    if ((creature->movement & CM_ATTACK_ONLY) == 0u) {
         makeMove(monster_id, directions, rcmove);
     }
 
@@ -1517,7 +1517,7 @@ static void monsterMoveConfused(Monster_t *monster, Creature_t *creature, int mo
     directions[4] = randomNumber(9);
 
     // don't move him if he is not supposed to move!
-    if (!(creature->movement & CM_ATTACK_ONLY)) {
+    if ((creature->movement & CM_ATTACK_ONLY) == 0u) {
         makeMove(monster_id, directions, rcmove);
     }
 
@@ -1532,29 +1532,29 @@ static void monsterMove(int monster_id, uint32_t *rcmove) {
     // Does the critter multiply?
     // rest could be negative, to be safe, only use mod with positive values.
     int rest_period = abs(py.flags.rest);
-    if ((creature->movement & CM_MULTIPLY) && MON_MAX_MULTIPLY_PER_LEVEL >= monster_multiply_total && (rest_period % MON_MULTIPLY_ADJUST) == 0) {
+    if (((creature->movement & CM_MULTIPLY) != 0u) && MON_MAX_MULTIPLY_PER_LEVEL >= monster_multiply_total && (rest_period % MON_MULTIPLY_ADJUST) == 0) {
         monsterMultiplyCritter(monster, monster_id, rcmove);
     }
 
     // if in wall, must immediately escape to a clear area
     // then monster movement finished
-    if (!(creature->movement & CM_PHASE) && cave[monster->y][monster->x].feature_id >= MIN_CAVE_WALL) {
+    if (((creature->movement & CM_PHASE) == 0u) && cave[monster->y][monster->x].feature_id >= MIN_CAVE_WALL) {
         monsterMoveOutOfWall(monster, monster_id, rcmove);
         return;
     }
 
     bool do_move = false;
 
-    if (monster->confused_amount) {
+    if (monster->confused_amount != 0u) {
         // Creature is confused or undead turned?
-        if (creature->defenses & CD_UNDEAD) {
+        if ((creature->defenses & CD_UNDEAD) != 0) {
             monsterMoveUndead(monster, creature, monster_id, rcmove);
         } else {
             monsterMoveConfused(monster, creature, monster_id, rcmove);
         }
 
         do_move = true;
-    } else if (creature->spells & CS_FREQ) {
+    } else if ((creature->spells & CS_FREQ) != 0u) {
         // Creature may cast a spell
         do_move = monsterCastSpell(monster_id);
     }
@@ -1562,7 +1562,7 @@ static void monsterMove(int monster_id, uint32_t *rcmove) {
     int directions[9];
 
     if (!do_move) {
-        if ((creature->movement & CM_75_RANDOM) && randomNumber(100) < 75) {
+        if (((creature->movement & CM_75_RANDOM) != 0u) && randomNumber(100) < 75) {
             // 75% random movement
             directions[0] = randomNumber(9);
             directions[1] = randomNumber(9);
@@ -1571,7 +1571,7 @@ static void monsterMove(int monster_id, uint32_t *rcmove) {
             directions[4] = randomNumber(9);
             *rcmove |= CM_75_RANDOM;
             makeMove(monster_id, directions, rcmove);
-        } else if ((creature->movement & CM_40_RANDOM) && randomNumber(100) < 40) {
+        } else if (((creature->movement & CM_40_RANDOM) != 0u) && randomNumber(100) < 40) {
             // 40% random movement
             directions[0] = randomNumber(9);
             directions[1] = randomNumber(9);
@@ -1580,7 +1580,7 @@ static void monsterMove(int monster_id, uint32_t *rcmove) {
             directions[4] = randomNumber(9);
             *rcmove |= CM_40_RANDOM;
             makeMove(monster_id, directions, rcmove);
-        } else if ((creature->movement & CM_20_RANDOM) && randomNumber(100) < 20) {
+        } else if (((creature->movement & CM_20_RANDOM) != 0u) && randomNumber(100) < 20) {
             // 20% random movement
             directions[0] = randomNumber(9);
             directions[1] = randomNumber(9);
@@ -1589,7 +1589,7 @@ static void monsterMove(int monster_id, uint32_t *rcmove) {
             directions[4] = randomNumber(9);
             *rcmove |= CM_20_RANDOM;
             makeMove(monster_id, directions, rcmove);
-        } else if (creature->movement & CM_MOVE_NORMAL) {
+        } else if ((creature->movement & CM_MOVE_NORMAL) != 0u) {
             // Normal movement
             if (randomNumber(200) == 1) {
                 directions[0] = randomNumber(9);
@@ -1602,7 +1602,7 @@ static void monsterMove(int monster_id, uint32_t *rcmove) {
             }
             *rcmove |= CM_MOVE_NORMAL;
             makeMove(monster_id, directions, rcmove);
-        } else if (creature->movement & CM_ATTACK_ONLY) {
+        } else if ((creature->movement & CM_ATTACK_ONLY) != 0u) {
             // Attack, but don't move
             if (monster->distance_from_player < 2) {
                 monsterGetMoveDirection(monster_id, directions);
@@ -1612,7 +1612,7 @@ static void monsterMove(int monster_id, uint32_t *rcmove) {
                 // it should have moved, but didn't.
                 *rcmove |= CM_ATTACK_ONLY;
             }
-        } else if ((creature->movement & CM_ONLY_MAGIC) && monster->distance_from_player < 2) {
+        } else if (((creature->movement & CM_ONLY_MAGIC) != 0u) && monster->distance_from_player < 2) {
             // A little hack for Quylthulgs, so that one will eventually
             // notice that they have no physical attacks.
             if (creature_recall[monster->creature_id].attacks[0] < MAX_UCHAR) {
@@ -1657,7 +1657,7 @@ static void monsterAttackingUpdate(Monster_t *monster, int monster_id, int moves
 
         // Monsters trapped in rock must be given a turn also,
         // so that they will die/dig out immediately.
-        if (monster->lit || monster->distance_from_player <= creatures_list[monster->creature_id].area_affect_radius || ((!(creatures_list[monster->creature_id].movement & CM_PHASE)) && cave[monster->y][monster->x].feature_id >= MIN_CAVE_WALL)) {
+        if (monster->lit || monster->distance_from_player <= creatures_list[monster->creature_id].area_affect_radius || (((creatures_list[monster->creature_id].movement & CM_PHASE) == 0u) && cave[monster->y][monster->x].feature_id >= MIN_CAVE_WALL)) {
             if (monster->sleep_count > 0) {
                 if (py.flags.aggravate) {
                     monster->sleep_count = 0;
