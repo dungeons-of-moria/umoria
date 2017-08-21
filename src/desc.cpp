@@ -169,10 +169,10 @@ bool itemSetColorlessAsIdentifed(Inventory_t *item) {
     int16_t id = objectPositionOffset(item);
 
     if (id < 0) {
-        return OD_KNOWN1;
+        return OD_KNOWN1 != 0u;
     }
     if (itemStoreBought(item)) {
-        return OD_KNOWN1;
+        return OD_KNOWN1 != 0u;
     }
 
     id <<= 6;
