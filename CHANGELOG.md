@@ -10,8 +10,8 @@
 
 ### Bug Fixes
 
-- `TV_NEVER` was an unsigned int, but should be signed as it's being given a `-1` value.
-- The `monsterTakeHit()` check now correct in `spellLightLineTouchesMonster()`.
+- `TV_NEVER` was an unsigned int, but should be signed as it's being given a `-1` value. https://github.com/dungeons-of-moria/umoria/commit/8c3d1d2133579b3dd8df7bd48552a5cf2a4425ce
+- The `monsterTakeHit()` check is now correct in `spellLightLineTouchesMonster()`. https://github.com/dungeons-of-moria/umoria/commit/b26547dece169fa8af725f9bce87b05c29b61a18
 
 ### Code
 
