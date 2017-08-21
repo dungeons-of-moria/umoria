@@ -352,7 +352,7 @@ int castSpellGetId(const char *prompt, int item_id, int *spell_id, int *spell_ch
     int spell_count = 0;
     int spell_list[31];
 
-    while (flags) {
+    while (flags != 0u) {
         int pos = getAndClearFirstBit(&flags);
 
         if (s_ptr[pos].level_required <= py.misc.level) {
@@ -596,17 +596,17 @@ int dungeonDeleteObject(int y, int x) {
 static int monsterDeathItemDropType(uint32_t flags) {
     int object;
 
-    if (flags & CM_CARRY_OBJ) {
+    if ((flags & CM_CARRY_OBJ) != 0u) {
         object = 1;
     } else {
         object = 0;
     }
 
-    if (flags & CM_CARRY_GOLD) {
+    if ((flags & CM_CARRY_GOLD) != 0u) {
         object += 2;
     }
 
-    if (flags & CM_SMALL_OBJ) {
+    if ((flags & CM_SMALL_OBJ) != 0u) {
         object += 4;
     }
 
@@ -616,23 +616,23 @@ static int monsterDeathItemDropType(uint32_t flags) {
 static int monsterDeathItemDropCount(uint32_t flags) {
     int count = 0;
 
-    if ((flags & CM_60_RANDOM) && randomNumber(100) < 60) {
+    if (((flags & CM_60_RANDOM) != 0u) && randomNumber(100) < 60) {
         count++;
     }
 
-    if ((flags & CM_90_RANDOM) && randomNumber(100) < 90) {
+    if (((flags & CM_90_RANDOM) != 0u) && randomNumber(100) < 90) {
         count++;
     }
 
-    if (flags & CM_1D2_OBJ) {
+    if ((flags & CM_1D2_OBJ) != 0u) {
         count += randomNumber(2);
     }
 
-    if (flags & CM_2D2_OBJ) {
+    if ((flags & CM_2D2_OBJ) != 0u) {
         count += diceDamageRoll(2, 2);
     }
 
-    if (flags & CM_4D2_OBJ) {
+    if ((flags & CM_4D2_OBJ) != 0u) {
         count += diceDamageRoll(4, 2);
     }
 
@@ -656,7 +656,7 @@ uint32_t monsterDeath(int y, int x, uint32_t flags) {
     }
 
     // maybe the player died in mid-turn
-    if ((flags & CM_WIN) && !character_is_dead) {
+    if (((flags & CM_WIN) != 0u) && !character_is_dead) {
         total_winner = true;
 
         printCharacterWinner();
@@ -671,10 +671,10 @@ uint32_t monsterDeath(int y, int x, uint32_t flags) {
 
     uint32_t return_flags = 0;
 
-    if (dropped_item_id & 255) {
+    if ((dropped_item_id & 255) != 0u) {
         return_flags |= CM_CARRY_OBJ;
 
-        if (item_type & 0x04) {
+        if ((item_type & 0x04) != 0) {
             return_flags |= CM_SMALL_OBJ;
         }
     }
@@ -726,7 +726,7 @@ int monsterTakeHit(int monster_id, int damage) {
 
     Recall_t *memory = &creature_recall[monster->creature_id];
 
-    if ((py.flags.blind < 1 && monster->lit) || (creature->movement & CM_WIN)) {
+    if ((py.flags.blind < 1 && monster->lit) || ((creature->movement & CM_WIN) != 0u)) {
         auto tmp = (uint32_t) ((memory->movement & CM_TREASURE) >> CM_TR_SHIFT);
 
         if (tmp > ((treasure_flags & CM_TREASURE) >> CM_TR_SHIFT)) {
@@ -848,11 +848,11 @@ static void playerAttackMonster(int y, int x) {
 
             printMessage("Your hands stop glowing.");
 
-            if ((creature->defenses & CD_NO_SLEEP) || randomNumber(MON_MAX_LEVELS) < creature->level) {
+            if (((creature->defenses & CD_NO_SLEEP) != 0) || randomNumber(MON_MAX_LEVELS) < creature->level) {
                 (void) sprintf(msg, "%s is unaffected.", name);
             } else {
                 (void) sprintf(msg, "%s appears confused.", name);
-                if (monster->confused_amount) {
+                if (monster->confused_amount != 0u) {
                     monster->confused_amount += 3;
                 } else {
                     monster->confused_amount = (uint8_t) (2 + randomNumber(16));
@@ -946,20 +946,20 @@ void playerMove(int direction, bool do_pickup) {
             }
 
             // Check to see if he should stop
-            if (running_counter) {
+            if (running_counter != 0) {
                 playerAreaAffect(direction, char_row, char_col);
             }
 
             // Check to see if he notices something
             // fos may be negative if have good rings of searching
-            if (py.misc.fos <= 1 || randomNumber(py.misc.fos) == 1 || (py.flags.status & PY_SEARCH)) {
+            if (py.misc.fos <= 1 || randomNumber(py.misc.fos) == 1 || ((py.flags.status & PY_SEARCH) != 0u)) {
                 dungeonSearch(char_row, char_col, py.misc.chance_in_search);
             }
 
             if (tile->feature_id == TILE_LIGHT_FLOOR) {
                 // A room of light should be lit.
 
-                if (!tile->permanent_light && !py.flags.blind) {
+                if (!tile->permanent_light && (py.flags.blind == 0)) {
                     dungeonLightRoom(char_row, char_col);
                 }
             } else if (tile->perma_lit_room && py.flags.blind < 1) {
@@ -1003,7 +1003,7 @@ void playerMove(int direction, bool do_pickup) {
         } else {
             // Can't move onto floor space
 
-            if (!running_counter && tile->treasure_id != 0) {
+            if ((running_counter == 0) && tile->treasure_id != 0) {
                 if (treasure_list[tile->treasure_id].category_id == TV_RUBBLE) {
                     printMessage("There is rubble blocking your way.");
                 } else if (treasure_list[tile->treasure_id].category_id == TV_CLOSED_DOOR) {
@@ -1022,7 +1022,7 @@ void playerMove(int direction, bool do_pickup) {
         playerEndRunning();
 
         // if player can see monster, and was in find mode, then nothing
-        if (monster->lit && old_find_flag) {
+        if (monster->lit && (old_find_flag != 0)) {
             // did not do anything this turn
             player_free_turn = true;
         } else {
@@ -1087,23 +1087,23 @@ static void chestExplode(int y, int x) {
 void chestTrap(int y, int x) {
     uint32_t flags = treasure_list[cave[y][x].treasure_id].flags;
 
-    if (flags & CH_LOSE_STR) {
+    if ((flags & CH_LOSE_STR) != 0u) {
         chestLooseStrength();
     }
 
-    if (flags & CH_POISON) {
+    if ((flags & CH_POISON) != 0u) {
         chestPoison();
     }
 
-    if (flags & CH_PARALYSED) {
+    if ((flags & CH_PARALYSED) != 0u) {
         chestParalysed();
     }
 
-    if (flags & CH_SUMMON) {
+    if ((flags & CH_SUMMON) != 0u) {
         chestSummonMonster(y, x);
     }
 
-    if (flags & CH_EXPLODE) {
+    if ((flags & CH_EXPLODE) != 0u) {
         chestExplode(y, x);
     }
 }
@@ -1156,7 +1156,7 @@ static void openClosedChest(int y, int x) {
 
     bool success = false;
 
-    if (CH_LOCKED & item->flags) {
+    if ((CH_LOCKED & item->flags) != 0u) {
         if (py.flags.confused > 0) {
             printMessage("You are too confused to pick the lock.");
         } else if (playerLockPickingSkill() - item->depth_first_found > randomNumber(100)) {
