@@ -54,7 +54,7 @@ static uint32_t start_time; // time that play started
 static bool sv_write() {
     // clear the character_is_dead flag when creating a HANGUP save file,
     // so that player can see tombstone when restart
-    if (eof_flag) {
+    if (eof_flag != 0) {
         character_is_dead = false;
     }
 
@@ -282,7 +282,7 @@ static bool sv_write() {
     // only level specific info follows, this allows characters to be
     // resurrected, the dungeon level info is not needed for a resurrection
     if (character_is_dead) {
-        return !(ferror(fileptr) || fflush(fileptr) == EOF);
+        return !((ferror(fileptr) != 0) || fflush(fileptr) == EOF);
     }
 
     wr_short((uint16_t) current_dungeon_level);
@@ -356,7 +356,7 @@ static bool sv_write() {
         wr_monster(&monsters[i]);
     }
 
-    return !(ferror(fileptr) || fflush(fileptr) == EOF);
+    return !((ferror(fileptr) != 0) || fflush(fileptr) == EOF);
 }
 
 // Set up prior to actual save, do the save, then clean up
@@ -378,7 +378,7 @@ bool saveGame() {
             if (!getStringInput(input, 0, 31, 45)) {
                 return false;
             }
-            if (input[0]) {
+            if (input[0] != 0) {
                 (void) strcpy(config.save_game_filename, input);
             }
         }
@@ -404,7 +404,7 @@ static bool _save_char(char *fnam) {
 
     int fd = open(fnam, O_RDWR | O_CREAT | O_EXCL, 0600);
 
-    if (fd < 0 && access(fnam, 0) >= 0 && (from_savefile || (wizard_mode && getInputConfirmation("Can't make new save file. Overwrite old?")))) {
+    if (fd < 0 && access(fnam, 0) >= 0 && ((from_savefile != 0) || (wizard_mode && getInputConfirmation("Can't make new save file. Overwrite old?")))) {
         (void) chmod(fnam, 0600);
         fd = open(fnam, O_RDWR | O_TRUNC, 0600);
     }
@@ -575,10 +575,10 @@ bool loadGame(bool *generate) {
 
         // Don't allow resurrection of total_winner characters.  It causes
         // problems because the character level is out of the allowed range.
-        if (to_be_wizard && (l & 0x40000000L)) {
+        if (to_be_wizard && ((l & 0x40000000L) != 0)) {
             printMessage("Sorry, this character is retired from moria.");
             printMessage("You can not resurrect a retired character.");
-        } else if (to_be_wizard && (l & 0x80000000L) && getInputConfirmation("Resurrect a dead character?")) {
+        } else if (to_be_wizard && ((l & 0x80000000L) != 0) && getInputConfirmation("Resurrect a dead character?")) {
             l &= ~0x80000000L;
         }
 
@@ -747,7 +747,7 @@ bool loadGame(bool *generate) {
         }
 
         c = getc(fileptr);
-        if (c == EOF || (l & 0x80000000L)) {
+        if (c == EOF || ((l & 0x80000000L) != 0)) {
             if ((l & 0x80000000L) == 0) {
                 if (!to_be_wizard || current_game_turn < 0) {
                     goto error;
@@ -895,7 +895,7 @@ bool loadGame(bool *generate) {
             rd_long(&time_saved);
         }
 
-        if (ferror(fileptr)) {
+        if (ferror(fileptr) != 0) {
             goto error;
         }
 
@@ -965,7 +965,7 @@ bool loadGame(bool *generate) {
                 }
             }
 
-            if (noscore) {
+            if (noscore != 0) {
                 printMessage("This save file cannot be used to get on the score board.");
             }
 
