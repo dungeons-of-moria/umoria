@@ -59,7 +59,7 @@ void displayTextHelpFile(const char *filename) {
     terminalSaveScreen();
 
     char input;
-    while (!feof(file)) {
+    while (feof(file) == 0) {
         clearScreen();
 
         for (int i = 0; i < 23; i++) {
@@ -136,7 +136,7 @@ void outputRandomLevelObjectsToFile() {
                     Inventory_t *i_ptr = &treasure_list[treasureID];
                     itemIdentifyAsStoreBought(i_ptr);
 
-                    if (i_ptr->flags & TR_CURSED) {
+                    if ((i_ptr->flags & TR_CURSED) != 0u) {
                         itemAppendToInscription(i_ptr, ID_DAMD);
                     }
 
