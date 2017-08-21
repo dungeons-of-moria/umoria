@@ -56,8 +56,8 @@ bool monsterSleep(int y, int x) {
             vtype_t name;
             monsterNameDescription(name, monster->lit, creature->name);
 
-            if (randomNumber(MON_MAX_LEVELS) < creature->level || (CD_NO_SLEEP & creature->defenses)) {
-                if (monster->lit && (creature->defenses & CD_NO_SLEEP)) {
+            if (randomNumber(MON_MAX_LEVELS) < creature->level || ((CD_NO_SLEEP & creature->defenses) != 0)) {
+                if (monster->lit && ((creature->defenses & CD_NO_SLEEP) != 0)) {
                     creature_recall[monster->creature_id].defenses |= CD_NO_SLEEP;
                 }
 
@@ -176,7 +176,7 @@ bool spellDetectInvisibleCreaturesOnPanel() {
     for (int id = next_free_monster_id - 1; id >= MON_MIN_INDEX_ID; id--) {
         Monster_t *monster = &monsters[id];
 
-        if (coordInsidePanel((int) monster->y, (int) monster->x) && (CM_INVISIBLE & creatures_list[monster->creature_id].movement)) {
+        if (coordInsidePanel((int) monster->y, (int) monster->x) && ((CM_INVISIBLE & creatures_list[monster->creature_id].movement) != 0u)) {
             monster->lit = true;
 
             // works correctly even if hallucinating
@@ -492,7 +492,7 @@ static void spellLightLineTouchesMonster(int monster_id) {
     vtype_t name;
     monsterNameDescription(name, monster->lit, creature->name);
 
-    if (CD_LIGHT & creature->defenses) {
+    if ((CD_LIGHT & creature->defenses) != 0) {
         if (monster->lit) {
             creature_recall[monster->creature_id].defenses |= CD_LIGHT;
         }
@@ -670,12 +670,12 @@ static void spellFireBoltTouchesMonster(Cave_t *tile, int damage, int harm_type,
     (void) sprintf(msg, "The %s strikes %s.", bolt_name.c_str(), name);
     printMessage(msg);
 
-    if (harm_type & creature->defenses) {
+    if ((harm_type & creature->defenses) != 0) {
         damage = damage * 2;
         if (monster->lit) {
             creature_recall[monster->creature_id].defenses |= harm_type;
         }
-    } else if (weapon_id & creature->spells) {
+    } else if ((weapon_id & creature->spells) != 0u) {
         damage = damage / 4;
         if (monster->lit) {
             creature_recall[monster->creature_id].spells |= weapon_id;
@@ -793,12 +793,12 @@ void spellFireBall(int y, int x, int direction, int damage_hp, int spell_type, c
                                 total_hits++;
                                 int damage = damage_hp;
 
-                                if (harm_type & creature->defenses) {
+                                if ((harm_type & creature->defenses) != 0) {
                                     damage = damage * 2;
                                     if (monster->lit) {
                                         creature_recall[monster->creature_id].defenses |= harm_type;
                                     }
-                                } else if (weapon_type & creature->spells) {
+                                } else if ((weapon_type & creature->spells) != 0u) {
                                     damage = damage / 4;
                                     if (monster->lit) {
                                         creature_recall[monster->creature_id].spells |= weapon_type;
@@ -882,7 +882,7 @@ void spellBreath(int y, int x, int monster_id, int damage_hp, int spell_type, ch
                     // must test status bit, not py.flags.blind here, flag could have
                     // been set by a previous monster, but the breath should still
                     // be visible until the blindness takes effect
-                    if (coordInsidePanel(row, col) && !(py.flags.status & PY_BLIND)) {
+                    if (coordInsidePanel(row, col) && ((py.flags.status & PY_BLIND) == 0u)) {
                         putChar('*', row, col);
                     }
 
@@ -892,9 +892,9 @@ void spellBreath(int y, int x, int monster_id, int damage_hp, int spell_type, ch
 
                         int damage = damage_hp;
 
-                        if (harm_type & creature->defenses) {
+                        if ((harm_type & creature->defenses) != 0) {
                             damage = damage * 2;
-                        } else if (weapon_type & creature->spells) {
+                        } else if ((weapon_type & creature->spells) != 0u) {
                             damage = (damage / 4);
                         }
 
@@ -1181,20 +1181,20 @@ bool spellConfuseMonster(int y, int x, int direction) {
             vtype_t name;
             monsterNameDescription(name, monster->lit, creature->name);
 
-            if (randomNumber(MON_MAX_LEVELS) < creature->level || (CD_NO_SLEEP & creature->defenses)) {
-                if (monster->lit && (creature->defenses & CD_NO_SLEEP)) {
+            if (randomNumber(MON_MAX_LEVELS) < creature->level || ((CD_NO_SLEEP & creature->defenses) != 0)) {
+                if (monster->lit && ((creature->defenses & CD_NO_SLEEP) != 0)) {
                     creature_recall[monster->creature_id].defenses |= CD_NO_SLEEP;
                 }
 
                 // Monsters which resisted the attack should wake up.
                 // Monsters with innate resistance ignore the attack.
-                if (!(CD_NO_SLEEP & creature->defenses)) {
+                if ((CD_NO_SLEEP & creature->defenses) == 0) {
                     monster->sleep_count = 0;
                 }
 
                 printMonsterActionText(name, "is unaffected.");
             } else {
-                if (monster->confused_amount) {
+                if (monster->confused_amount != 0u) {
                     monster->confused_amount += 3;
                 } else {
                     monster->confused_amount = (uint8_t) (2 + randomNumber(16));
@@ -1237,8 +1237,8 @@ bool spellSleepMonster(int y, int x, int direction) {
             vtype_t name;
             monsterNameDescription(name, monster->lit, creature->name);
 
-            if (randomNumber(MON_MAX_LEVELS) < creature->level || (CD_NO_SLEEP & creature->defenses)) {
-                if (monster->lit && (creature->defenses & CD_NO_SLEEP)) {
+            if (randomNumber(MON_MAX_LEVELS) < creature->level || ((CD_NO_SLEEP & creature->defenses) != 0)) {
+                if (monster->lit && ((creature->defenses & CD_NO_SLEEP) != 0)) {
                     creature_recall[monster->creature_id].defenses |= CD_NO_SLEEP;
                 }
 
@@ -1314,7 +1314,7 @@ bool spellWallToMud(int y, int x, int direction) {
             Monster_t *monster = &monsters[tile->creature_id];
             Creature_t *creature = &creatures_list[monster->creature_id];
 
-            if (CD_STONE & creature->defenses) {
+            if ((CD_STONE & creature->defenses) != 0) {
                 vtype_t name;
                 monsterNameDescription(name, monster->lit, creature->name);
 
@@ -1446,10 +1446,10 @@ bool spellBuildWall(int y, int x, int direction) {
             Monster_t *monster = &monsters[tile->creature_id];
             Creature_t *creature = &creatures_list[monster->creature_id];
 
-            if (!(creature->movement & CM_PHASE)) {
+            if ((creature->movement & CM_PHASE) == 0u) {
                 // monster does not move, can't escape the wall
                 int damage;
-                if (creature->movement & CM_ATTACK_ONLY) {
+                if ((creature->movement & CM_ATTACK_ONLY) != 0u) {
                     // this will kill everything
                     damage = 3000;
                 } else {
@@ -1716,9 +1716,9 @@ bool spellSleepAllMonsters() {
             continue; // do nothing
         }
 
-        if (randomNumber(MON_MAX_LEVELS) < creature->level || (CD_NO_SLEEP & creature->defenses)) {
+        if (randomNumber(MON_MAX_LEVELS) < creature->level || ((CD_NO_SLEEP & creature->defenses) != 0)) {
             if (monster->lit) {
-                if (creature->defenses & CD_NO_SLEEP) {
+                if ((creature->defenses & CD_NO_SLEEP) != 0) {
                     creature_recall[monster->creature_id].defenses |= CD_NO_SLEEP;
                 }
                 printMonsterActionText(name, "is unaffected.");
@@ -1767,7 +1767,7 @@ bool spellDetectEvil() {
     for (int id = next_free_monster_id - 1; id >= MON_MIN_INDEX_ID; id--) {
         Monster_t *monster = &monsters[id];
 
-        if (coordInsidePanel((int) monster->y, (int) monster->x) && (CD_EVIL & creatures_list[monster->creature_id].defenses)) {
+        if (coordInsidePanel((int) monster->y, (int) monster->x) && ((CD_EVIL & creatures_list[monster->creature_id].defenses) != 0)) {
             monster->lit = true;
 
             detected = true;
@@ -1860,9 +1860,9 @@ static void earthquakeHitsMonster(int monsterID) {
     Monster_t *monster = &monsters[monsterID];
     Creature_t *creature = &creatures_list[monster->creature_id];
 
-    if (!(creature->movement & CM_PHASE)) {
+    if ((creature->movement & CM_PHASE) == 0u) {
         int damage;
-        if (creature->movement & CM_ATTACK_ONLY) {
+        if ((creature->movement & CM_ATTACK_ONLY) != 0u) {
             // this will kill everything
             damage = 3000;
         } else {
@@ -1962,7 +1962,7 @@ bool spellDispelCreature(int creature_defense, int damage) {
     for (int id = next_free_monster_id - 1; id >= MON_MIN_INDEX_ID; id--) {
         Monster_t *monster = &monsters[id];
 
-        if (monster->distance_from_player <= MON_MAX_SIGHT && (creature_defense & creatures_list[monster->creature_id].defenses) && los(char_row, char_col, (int) monster->y, (int) monster->x)) {
+        if (monster->distance_from_player <= MON_MAX_SIGHT && ((creature_defense & creatures_list[monster->creature_id].defenses) != 0) && los(char_row, char_col, (int) monster->y, (int) monster->x)) {
             Creature_t *creature = &creatures_list[monster->creature_id];
 
             creature_recall[monster->creature_id].defenses |= creature_defense;
@@ -1998,7 +1998,7 @@ bool spellTurnUndead() {
         Monster_t *monster = &monsters[id];
         Creature_t *creature = &creatures_list[monster->creature_id];
 
-        if (monster->distance_from_player <= MON_MAX_SIGHT && (CD_UNDEAD & creature->defenses) && los(char_row, char_col, (int) monster->y, (int) monster->x)) {
+        if (monster->distance_from_player <= MON_MAX_SIGHT && ((CD_UNDEAD & creature->defenses) != 0) && los(char_row, char_col, (int) monster->y, (int) monster->x)) {
             vtype_t name;
             monsterNameDescription(name, monster->lit, creature->name);
 
@@ -2252,7 +2252,7 @@ bool spellRemoveCurseFromAllItems() {
     bool removed = false;
 
     for (int id = EQUIPMENT_WIELD; id <= EQUIPMENT_OUTER; id++) {
-        if (TR_CURSED & inventory[id].flags) {
+        if ((TR_CURSED & inventory[id].flags) != 0u) {
             inventory[id].flags &= ~TR_CURSED;
             playerRecalculateBonuses();
             removed = true;
