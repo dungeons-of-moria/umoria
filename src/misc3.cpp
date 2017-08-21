@@ -433,9 +433,9 @@ void printCharacterCurrentDepth() {
 
 // Prints status of hunger -RAK-
 void printCharacterHungerstatus() {
-    if (PY_WEAK & py.flags.status) {
+    if ((PY_WEAK & py.flags.status) != 0u) {
         putString("Weak  ", 23, 0);
-    } else if (PY_HUNGRY & py.flags.status) {
+    } else if ((PY_HUNGRY & py.flags.status) != 0u) {
         putString("Hungry", 23, 0);
     } else {
         putString(&blank_string[BLANK_LENGTH - 6], 23, 0);
@@ -444,7 +444,7 @@ void printCharacterHungerstatus() {
 
 // Prints Blind status -RAK-
 void printCharacterBlindStatus() {
-    if (PY_BLIND & py.flags.status) {
+    if ((PY_BLIND & py.flags.status) != 0u) {
         putString("Blind", 23, 7);
     } else {
         putString(&blank_string[BLANK_LENGTH - 5], 23, 7);
@@ -453,7 +453,7 @@ void printCharacterBlindStatus() {
 
 // Prints Confusion status -RAK-
 void printCharacterConfusedState() {
-    if (PY_CONFUSED & py.flags.status) {
+    if ((PY_CONFUSED & py.flags.status) != 0u) {
         putString("Confused", 23, 13);
     } else {
         putString(&blank_string[BLANK_LENGTH - 8], 23, 13);
@@ -462,7 +462,7 @@ void printCharacterConfusedState() {
 
 // Prints Fear status -RAK-
 void printCharacterFearState() {
-    if (PY_FEAR & py.flags.status) {
+    if ((PY_FEAR & py.flags.status) != 0u) {
         putString("Afraid", 23, 22);
     } else {
         putString(&blank_string[BLANK_LENGTH - 6], 23, 22);
@@ -471,7 +471,7 @@ void printCharacterFearState() {
 
 // Prints Poisoned status -RAK-
 void printCharacterPoisonedState() {
-    if (PY_POISONED & py.flags.status) {
+    if ((PY_POISONED & py.flags.status) != 0u) {
         putString("Poisoned", 23, 29);
     } else {
         putString(&blank_string[BLANK_LENGTH - 8], 23, 29);
@@ -487,7 +487,7 @@ void printCharacterMovementState() {
         return;
     }
 
-    if (PY_REST & py.flags.status) {
+    if ((PY_REST & py.flags.status) != 0u) {
         char restString[16];
 
         if (py.flags.rest < 0) {
@@ -516,14 +516,14 @@ void printCharacterMovementState() {
 
         putString(repeatString, 23, 38);
 
-        if (PY_SEARCH & py.flags.status) {
+        if ((PY_SEARCH & py.flags.status) != 0u) {
             putString("Search", 23, 38);
         }
 
         return;
     }
 
-    if (PY_SEARCH & py.flags.status) {
+    if ((PY_SEARCH & py.flags.status) != 0u) {
         putString("Searching", 23, 38);
         return;
     }
@@ -537,7 +537,7 @@ void printCharacterSpeed() {
     int speed = py.flags.speed;
 
     // Search mode.
-    if (PY_SEARCH & py.flags.status) {
+    if ((PY_SEARCH & py.flags.status) != 0u) {
         speed--;
     }
 
@@ -566,15 +566,15 @@ void printCharacterStudyInstruction() {
 
 // Prints winner status on display -RAK-
 void printCharacterWinner() {
-    if (noscore & 0x2) {
+    if ((noscore & 0x2) != 0) {
         if (wizard_mode) {
             putString("Is wizard  ", 22, 0);
         } else {
             putString("Was wizard ", 22, 0);
         }
-    } else if (noscore & 0x1) {
+    } else if ((noscore & 0x1) != 0) {
         putString("Resurrected", 22, 0);
-    } else if (noscore & 0x4) {
+    } else if ((noscore & 0x4) != 0) {
         putString("Duplicate", 22, 0);
     } else if (total_winner) {
         putString("*Winner*   ", 22, 0);
@@ -879,27 +879,27 @@ void printCharacterStatsBlock() {
 
     uint32_t status = py.flags.status;
 
-    if ((PY_HUNGRY | PY_WEAK) & status) {
+    if (((PY_HUNGRY | PY_WEAK) & status) != 0u) {
         printCharacterHungerstatus();
     }
 
-    if (PY_BLIND & status) {
+    if ((PY_BLIND & status) != 0u) {
         printCharacterBlindStatus();
     }
 
-    if (PY_CONFUSED & status) {
+    if ((PY_CONFUSED & status) != 0u) {
         printCharacterConfusedState();
     }
 
-    if (PY_FEAR & status) {
+    if ((PY_FEAR & status) != 0u) {
         printCharacterFearState();
     }
 
-    if (PY_POISONED & status) {
+    if ((PY_POISONED & status) != 0u) {
         printCharacterPoisonedState();
     }
 
-    if ((PY_SEARCH | PY_REST) & status) {
+    if (((PY_SEARCH | PY_REST) & status) != 0u) {
         printCharacterMovementState();
     }
 
@@ -1103,7 +1103,7 @@ void changeCharacterName() {
             case 'f':
                 putStringClearToEOL("File name:", 0, 0);
 
-                if (getStringInput(temp, 0, 10, 60) && temp[0]) {
+                if (getStringInput(temp, 0, 10, 60) && (temp[0] != 0)) {
                     if (outputPlayerCharacterToFile(temp)) {
                         flag = true;
                     }
@@ -1327,7 +1327,7 @@ int inventoryCarryItem(Inventory_t *item) {
             break;
         }
 
-        if ((typ == t_ptr->category_id && subt < t_ptr->sub_category_id && always_known1p) || typ > t_ptr->category_id) {
+        if ((typ == t_ptr->category_id && subt < t_ptr->sub_category_id && (always_known1p != 0)) || typ > t_ptr->category_id) {
             // For items which are always known1p, i.e. never have a 'color',
             // insert them into the inventory in sorted order.
             for (int i = inventory_count - 1; i >= locn; i--) {
@@ -1380,7 +1380,7 @@ static int spellChanceOfSuccess(int spell) {
 //                       >=0: spells numbered by offset from non_consecutive
 void displaySpellsList(int *spell, int number_of_choices, int comment, int non_consecutive) {
     int col;
-    if (comment) {
+    if (comment != 0) {
         col = 22;
     } else {
         col = 31;
@@ -1444,7 +1444,7 @@ bool spellGetId(int *spell, int number_of_choices, int *spell_id, int *spell_cha
     char choice;
 
     while (!spell_found && getCommand(str, &choice)) {
-        if (isupper((int) choice)) {
+        if (isupper((int) choice) != 0) {
             *spell_id = choice - 'A' + first_spell;
 
             // verify that this is in spell[], at most 22 entries in class_to_use_mage_spells[]
@@ -1468,7 +1468,7 @@ bool spellGetId(int *spell, int number_of_choices, int *spell_id, int *spell_cha
                     *spell_id = -1;
                 }
             }
-        } else if (islower((int) choice)) {
+        } else if (islower((int) choice) != 0) {
             *spell_id = choice - 'a' + first_spell;
 
             // verify that this is in spell[], at most 22 entries in class_to_use_mage_spells[]
@@ -1491,7 +1491,7 @@ bool spellGetId(int *spell, int number_of_choices, int *spell_id, int *spell_cha
                 redraw = true;
                 displaySpellsList(spell, number_of_choices, false, first_spell);
             }
-        } else if (isalpha((int) choice)) {
+        } else if (isalpha((int) choice) != 0) {
             *spell_id = -2;
         } else {
             *spell_id = -1;
@@ -1522,8 +1522,8 @@ bool spellGetId(int *spell, int number_of_choices, int *spell_id, int *spell_cha
 static void eliminateKnownSpellsGreaterThanLevel(Spell_t *msp_ptr, const char *p, int offset) {
     uint32_t mask = 0x80000000L;
 
-    for (int i = 31; mask; mask >>= 1, i--) {
-        if (mask & spells_learnt) {
+    for (int i = 31; mask != 0u; mask >>= 1, i--) {
+        if ((mask & spells_learnt) != 0u) {
             if (msp_ptr[i].level_required > py.misc.level) {
                 spells_learnt &= ~mask;
                 spells_forgotten |= mask;
@@ -1570,8 +1570,8 @@ static int numberOfSpellsAllowed(int stat) {
 static int numberOfSpellsKnown() {
     int known = 0;
 
-    for (uint32_t mask = 0x1; mask; mask <<= 1) {
-        if (mask & spells_learnt) {
+    for (uint32_t mask = 0x1; mask != 0u; mask <<= 1) {
+        if ((mask & spells_learnt) != 0u) {
             known++;
         }
     }
@@ -1584,7 +1584,7 @@ static int numberOfSpellsKnown() {
 static int rememberForgottenSpells(Spell_t *msp_ptr, int allowedSpells, int newSpells, const char *p, int offset) {
     uint32_t mask;
 
-    for (int n = 0; (spells_forgotten && newSpells && (n < allowedSpells) && (n < 32)); n++) {
+    for (int n = 0; ((spells_forgotten != 0u) && (newSpells != 0) && (n < allowedSpells) && (n < 32)); n++) {
         // orderID is (i+1)th spell learned
         int orderID = spells_learned_order[n];
 
@@ -1596,7 +1596,7 @@ static int rememberForgottenSpells(Spell_t *msp_ptr, int allowedSpells, int newS
             mask = (uint32_t) (1L << orderID);
         }
 
-        if (mask & spells_forgotten) {
+        if ((mask & spells_forgotten) != 0u) {
             if (msp_ptr[orderID].level_required <= py.misc.level) {
                 newSpells--;
                 spells_forgotten &= ~mask;
@@ -1622,8 +1622,8 @@ static int learnableSpells(Spell_t *msp_ptr, int newSpells) {
     int id = 0;
     uint32_t mask = 0x1;
 
-    for (int i = 0; spell_flag; mask <<= 1, i++) {
-        if (spell_flag & mask) {
+    for (int i = 0; spell_flag != 0u; mask <<= 1, i++) {
+        if ((spell_flag & mask) != 0u) {
             spell_flag &= ~mask;
             if (msp_ptr[i].level_required <= py.misc.level) {
                 id++;
@@ -1644,7 +1644,7 @@ static int learnableSpells(Spell_t *msp_ptr, int newSpells) {
 static void forgetSpells(int newSpells, const char *p, int offset) {
     uint32_t mask;
 
-    for (int i = 31; newSpells && spells_learnt; i--) {
+    for (int i = 31; (newSpells != 0) && (spells_learnt != 0u); i--) {
         // orderID is the (i+1)th spell learned
         int orderID = spells_learned_order[i];
 
@@ -1783,7 +1783,7 @@ void playerGainSpells() {
 
     int last_known = lastKnownSpell();
 
-    if (!new_spells) {
+    if (new_spells == 0) {
         vtype_t tmp_str;
         (void) sprintf(tmp_str, "You can't learn any new %ss!", (stat == A_INT ? "spell" : "prayer"));
         printMessage(tmp_str);
@@ -1809,8 +1809,8 @@ void playerGainSpells() {
     int spell_bank[31];
     uint32_t mask = 0x1;
 
-    for (int i = 0; spell_flag; mask <<= 1, i++) {
-        if (spell_flag & mask) {
+    for (int i = 0; spell_flag != 0u; mask <<= 1, i++) {
+        if ((spell_flag & mask) != 0u) {
             spell_flag &= ~mask;
             if (spell[i].level_required <= py.misc.level) {
                 spell_bank[spell_id] = i;
@@ -1834,7 +1834,7 @@ void playerGainSpells() {
         displaySpellsList(spell_bank, spell_id, false, -1);
 
         char query;
-        while (new_spells && getCommand("Learn which spell?", &query)) {
+        while ((new_spells != 0) && getCommand("Learn which spell?", &query)) {
             int c = query - 'a';
 
             // test j < 23 in case i is greater than 22, only 22 spells
@@ -1861,7 +1861,7 @@ void playerGainSpells() {
         terminalRestoreScreen();
     } else {
         // pick a prayer at random
-        while (new_spells) {
+        while (new_spells != 0) {
             int id = randomNumber(spell_id) - 1;
             spells_learnt |= 1L << spell_bank[id];
             spells_learned_order[last_known++] = (uint8_t) spell_bank[id];
@@ -2008,11 +2008,11 @@ void playerCalculateHitPoints() {
         hp = py.misc.level + 1;
     }
 
-    if (py.flags.status & PY_HERO) {
+    if ((py.flags.status & PY_HERO) != 0u) {
         hp += 10;
     }
 
-    if (py.flags.status & PY_SHERO) {
+    if ((py.flags.status & PY_SHERO) != 0u) {
         hp += 20;
     }
 
@@ -2060,7 +2060,7 @@ void insertStringIntoString(char *to_string, const char *from_string, const char
 
         new_string[pc - to_string] = '\0';
 
-        if (str_to_insert) {
+        if (str_to_insert != nullptr) {
             (void) strcat(new_string, str_to_insert);
         }
 
@@ -2083,13 +2083,13 @@ void intertNumberIntoString(char *to_string, const char *from_string, int32_t nu
             flag = 0;
         } else {
             flag = strncmp(string, from_string, from_len);
-            if (flag) {
+            if (flag != 0) {
                 to_str_tmp = string + 1;
             }
         }
     }
 
-    if (string) {
+    if (string != nullptr) {
         vtype_t str1, str2;
 
         (void) strncpy(str1, to_string, string - to_string);
@@ -2108,12 +2108,12 @@ void intertNumberIntoString(char *to_string, const char *from_string, int32_t nu
 bool enterWizardMode() {
     bool answer = false;
 
-    if (!noscore) {
+    if (noscore == 0) {
         printMessage("Wizard mode is for debugging and experimenting.");
         answer = getInputConfirmation("The game will not be scored if you enter wizard mode. Are you sure?");
     }
 
-    if (noscore || answer) {
+    if ((noscore != 0) || answer) {
         noscore |= 0x2;
         wizard_mode = true;
         return true;
@@ -2195,37 +2195,37 @@ int itemMagicAbilityDamage(Inventory_t *item, int total_damage, int monster_id) 
         Recall_t *memory = &creature_recall[monster_id];
 
         // Slay Dragon
-        if ((creature->defenses & CD_DRAGON) && (item->flags & TR_SLAY_DRAGON)) {
+        if (((creature->defenses & CD_DRAGON) != 0) && ((item->flags & TR_SLAY_DRAGON) != 0u)) {
             memory->defenses |= CD_DRAGON;
             return total_damage * 4;
         }
 
         // Slay Undead
-        if ((creature->defenses & CD_UNDEAD) && (item->flags & TR_SLAY_UNDEAD)) {
+        if (((creature->defenses & CD_UNDEAD) != 0) && ((item->flags & TR_SLAY_UNDEAD) != 0u)) {
             memory->defenses |= CD_UNDEAD;
             return total_damage * 3;
         }
 
         // Slay Animal
-        if ((creature->defenses & CD_ANIMAL) && (item->flags & TR_SLAY_ANIMAL)) {
+        if (((creature->defenses & CD_ANIMAL) != 0) && ((item->flags & TR_SLAY_ANIMAL) != 0u)) {
             memory->defenses |= CD_ANIMAL;
             return total_damage * 2;
         }
 
         // Slay Evil
-        if ((creature->defenses & CD_EVIL) && (item->flags & TR_SLAY_EVIL)) {
+        if (((creature->defenses & CD_EVIL) != 0) && ((item->flags & TR_SLAY_EVIL) != 0u)) {
             memory->defenses |= CD_EVIL;
             return total_damage * 2;
         }
 
         // Frost
-        if ((creature->defenses & CD_FROST) && (item->flags & TR_FROST_BRAND)) {
+        if (((creature->defenses & CD_FROST) != 0) && ((item->flags & TR_FROST_BRAND) != 0u)) {
             memory->defenses |= CD_FROST;
             return total_damage * 3 / 2;
         }
 
         // Fire
-        if ((creature->defenses & CD_FIRE) && (item->flags & TR_FLAME_TONGUE)) {
+        if (((creature->defenses & CD_FIRE) != 0) && ((item->flags & TR_FLAME_TONGUE) != 0u)) {
             memory->defenses |= CD_FIRE;
             return total_damage * 3 / 2;
         }
