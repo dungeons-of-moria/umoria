@@ -323,7 +323,7 @@ static int displayRaceClasses(int race_id, int *class_list) {
     putString("Choose a class (? for Help):", 20, 2);
 
     for (int i = 0; i < PLAYER_MAX_CLASSES; i++) {
-        if (character_races[race_id].classes_bit_field & mask) {
+        if ((character_races[race_id].classes_bit_field & mask) != 0u) {
             (void) sprintf(description, "%c) %s", class_id + 'a', classes[i].title);
             putString(description, x, y);
             class_list[class_id] = i;
