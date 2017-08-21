@@ -137,12 +137,12 @@ bool memoryMonsterKnown(int monster_id) {
 
     Recall_t *memory = &creature_recall[monster_id];
 
-    if (memory->movement || memory->defenses || memory->kills || memory->spells || memory->deaths) {
+    if ((memory->movement != 0u) || (memory->defenses != 0u) || (memory->kills != 0u) || (memory->spells != 0u) || (memory->deaths != 0u)) {
         return true;
     }
 
     for (int i = 0; i < 4; i++) {
-        if (memory->attacks[i]) {
+        if (memory->attacks[i] != 0u) {
             return true;
         }
     }
@@ -163,7 +163,7 @@ static void memoryWizardModeInit(Recall_t *memory, Creature_t *creature) {
     memory->movement = (uint32_t) ((creature->movement & ~CM_TREASURE) | (move << CM_TR_SHIFT));
     memory->defenses = creature->defenses;
 
-    if (creature->spells & CS_FREQ) {
+    if ((creature->spells & CS_FREQ) != 0u) {
         memory->spells = (uint32_t) (creature->spells | CS_FREQ);
     } else {
         memory->spells = creature->spells;
@@ -179,7 +179,7 @@ static void memoryWizardModeInit(Recall_t *memory, Creature_t *creature) {
     }
 
     // A little hack to enable the display of info for Quylthulgs.
-    if (memory->movement & CM_ONLY_MAGIC) {
+    if ((memory->movement & CM_ONLY_MAGIC) != 0u) {
         memory->attacks[0] = MAX_UCHAR;
     }
 }
@@ -188,7 +188,7 @@ static void memoryWizardModeInit(Recall_t *memory, Creature_t *creature) {
 static void memoryConflictHistory(uint16_t deaths, uint16_t kills) {
     vtype_t desc;
 
-    if (deaths) {
+    if (deaths != 0u) {
         (void) sprintf(desc, "%d of the contributors to your monster memory %s", deaths, plural(deaths, "has", "have"));
         memoryPrint(desc);
         memoryPrint(" been killed by this creature, and ");
@@ -198,7 +198,7 @@ static void memoryConflictHistory(uint16_t deaths, uint16_t kills) {
             (void) sprintf(desc, "at least %d of the beasts %s been exterminated.", kills, plural(kills, "has", "have"));
             memoryPrint(desc);
         }
-    } else if (kills) {
+    } else if (kills != 0u) {
         (void) sprintf(desc, "At least %d of these creatures %s", kills, plural(kills, "has", "have"));
         memoryPrint(desc);
         memoryPrint(" been killed by contributors to your monster memory.");
@@ -214,7 +214,7 @@ static bool memoryDepthFoundAt(uint8_t level, uint16_t kills) {
     if (level == 0) {
         known = true;
         memoryPrint(" It lives in the town");
-    } else if (kills) {
+    } else if (kills != 0u) {
         known = true;
 
         // The Balrog is a level 100 monster, but appears at 50 feet.
@@ -234,7 +234,7 @@ static bool memoryMovement(uint32_t rc_move, int monster_speed, bool is_known) {
     // the creatures_list speed value is 10 greater, so that it can be a uint8_t
     monster_speed -= 10;
 
-    if (rc_move & CM_ALL_MV_FLAGS) {
+    if ((rc_move & CM_ALL_MV_FLAGS) != 0u) {
         if (is_known) {
             memoryPrint(", and");
         } else {
@@ -244,7 +244,7 @@ static bool memoryMovement(uint32_t rc_move, int monster_speed, bool is_known) {
 
         memoryPrint(" moves");
 
-        if (rc_move & CM_RANDOM_MOVE) {
+        if ((rc_move & CM_RANDOM_MOVE) != 0u) {
             memoryPrint(description_how_much[(rc_move & CM_RANDOM_MOVE) >> 3]);
             memoryPrint(" erratically");
         }
@@ -252,7 +252,7 @@ static bool memoryMovement(uint32_t rc_move, int monster_speed, bool is_known) {
         if (monster_speed == 1) {
             memoryPrint(" at normal speed");
         } else {
-            if (rc_move & CM_RANDOM_MOVE) {
+            if ((rc_move & CM_RANDOM_MOVE) != 0u) {
                 memoryPrint(", and");
             }
 
@@ -274,7 +274,7 @@ static bool memoryMovement(uint32_t rc_move, int monster_speed, bool is_known) {
         }
     }
 
-    if (rc_move & CM_ATTACK_ONLY) {
+    if ((rc_move & CM_ATTACK_ONLY) != 0u) {
         if (is_known) {
             memoryPrint(", but");
         } else {
@@ -285,7 +285,7 @@ static bool memoryMovement(uint32_t rc_move, int monster_speed, bool is_known) {
         memoryPrint(" does not deign to chase intruders");
     }
 
-    if (rc_move & CM_ONLY_MAGIC) {
+    if ((rc_move & CM_ONLY_MAGIC) != 0u) {
         if (is_known) {
             memoryPrint(", but");
         } else {
@@ -304,13 +304,13 @@ static bool memoryMovement(uint32_t rc_move, int monster_speed, bool is_known) {
 static void memoryKillPoints(uint16_t creature_defense, uint16_t monster_exp, uint8_t level) {
     memoryPrint(" A kill of this");
 
-    if (creature_defense & CD_ANIMAL) {
+    if ((creature_defense & CD_ANIMAL) != 0) {
         memoryPrint(" natural");
     }
-    if (creature_defense & CD_EVIL) {
+    if ((creature_defense & CD_EVIL) != 0) {
         memoryPrint(" evil");
     }
-    if (creature_defense & CD_UNDEAD) {
+    if ((creature_defense & CD_UNDEAD) != 0) {
         memoryPrint(" undead");
     }
 
@@ -367,18 +367,18 @@ static void memoryMagicSkills(uint32_t memory_spell_flags, uint32_t monster_spel
 
     uint32_t spell_flags = memory_spell_flags;
 
-    for (int i = 0; spell_flags & CS_BREATHE; i++) {
-        if (spell_flags & (CS_BR_LIGHT << i)) {
+    for (int i = 0; (spell_flags & CS_BREATHE) != 0u; i++) {
+        if ((spell_flags & (CS_BR_LIGHT << i)) != 0u) {
             spell_flags &= ~(CS_BR_LIGHT << i);
 
             if (known) {
-                if (monster_spell_flags & CS_FREQ) {
+                if ((monster_spell_flags & CS_FREQ) != 0u) {
                     memoryPrint(" It can breathe ");
                 } else {
                     memoryPrint(" It is resistant to ");
                 }
                 known = false;
-            } else if (spell_flags & CS_BREATHE) {
+            } else if ((spell_flags & CS_BREATHE) != 0u) {
                 memoryPrint(", ");
             } else {
                 memoryPrint(" and ");
@@ -389,19 +389,19 @@ static void memoryMagicSkills(uint32_t memory_spell_flags, uint32_t monster_spel
 
     known = true;
 
-    for (int i = 0; spell_flags & CS_SPELLS; i++) {
-        if (spell_flags & (CS_TEL_SHORT << i)) {
+    for (int i = 0; (spell_flags & CS_SPELLS) != 0u; i++) {
+        if ((spell_flags & (CS_TEL_SHORT << i)) != 0u) {
             spell_flags &= ~(CS_TEL_SHORT << i);
 
             if (known) {
-                if (memory_spell_flags & CS_BREATHE) {
+                if ((memory_spell_flags & CS_BREATHE) != 0u) {
                     memoryPrint(", and is also");
                 } else {
                     memoryPrint(" It is");
                 }
                 memoryPrint(" magical, casting spells which ");
                 known = false;
-            } else if (spell_flags & CS_SPELLS) {
+            } else if ((spell_flags & CS_SPELLS) != 0u) {
                 memoryPrint(", ");
             } else {
                 memoryPrint(" or ");
@@ -410,7 +410,7 @@ static void memoryMagicSkills(uint32_t memory_spell_flags, uint32_t monster_spel
         }
     }
 
-    if (memory_spell_flags & (CS_BREATHE | CS_SPELLS)) {
+    if ((memory_spell_flags & (CS_BREATHE | CS_SPELLS)) != 0u) {
         // Could offset by level
         if ((monster_spell_flags & CS_FREQ) > 5) {
             vtype_t temp;
@@ -434,7 +434,7 @@ static void memoryKillDifficulty(Creature_t *creature, uint32_t monster_kills) {
     (void) sprintf(description, " It has an armor rating of %d", creature->ac);
     memoryPrint(description);
 
-    (void) sprintf(description, " and a%s life rating of %dd%d.", ((creature->defenses & CD_MAX_HP) ? " maximized" : ""), creature->hit_die[0], creature->hit_die[1]);
+    (void) sprintf(description, " and a%s life rating of %dd%d.", ((creature->defenses & CD_MAX_HP) != 0 ? " maximized" : ""), creature->hit_die[0], creature->hit_die[1]);
     memoryPrint(description);
 }
 
@@ -442,14 +442,14 @@ static void memoryKillDifficulty(Creature_t *creature, uint32_t monster_kills) {
 static void memorySpecialAbilities(uint32_t move) {
     bool known = true;
 
-    for (int i = 0; move & CM_SPECIAL; i++) {
-        if (move & (CM_INVISIBLE << i)) {
+    for (int i = 0; (move & CM_SPECIAL) != 0u; i++) {
+        if ((move & (CM_INVISIBLE << i)) != 0u) {
             move &= ~(CM_INVISIBLE << i);
 
             if (known) {
                 memoryPrint(" It can ");
                 known = false;
-            } else if (move & CM_SPECIAL) {
+            } else if ((move & CM_SPECIAL) != 0u) {
                 memoryPrint(", ");
             } else {
                 memoryPrint(" and ");
@@ -467,13 +467,13 @@ static void memorySpecialAbilities(uint32_t move) {
 static void memoryWeaknesses(uint32_t defense) {
     bool known = true;
 
-    for (int i = 0; defense & CD_WEAKNESS; i++) {
-        if (defense & (CD_FROST << i)) {
+    for (int i = 0; (defense & CD_WEAKNESS) != 0u; i++) {
+        if ((defense & (CD_FROST << i)) != 0u) {
             defense &= ~(CD_FROST << i);
             if (known) {
                 memoryPrint(" It is susceptible to ");
                 known = false;
-            } else if (defense & CD_WEAKNESS) {
+            } else if ((defense & CD_WEAKNESS) != 0u) {
                 memoryPrint(", ");
             } else {
                 memoryPrint(" and ");
@@ -524,7 +524,7 @@ static void memoryAwareness(Creature_t *creature, Recall_t *memory) {
 
 // Do we know what it might carry?
 static void memoryLootCarried(uint32_t creature_move, uint32_t memory_move) {
-    if (!(memory_move & (CM_CARRY_OBJ | CM_CARRY_GOLD))) {
+    if ((memory_move & (CM_CARRY_OBJ | CM_CARRY_GOLD)) == 0u) {
         return;
     }
 
@@ -546,14 +546,14 @@ static void memoryLootCarried(uint32_t creature_move, uint32_t memory_move) {
 
     const char *p;
 
-    if (memory_move & CM_SMALL_OBJ) {
+    if ((memory_move & CM_SMALL_OBJ) != 0u) {
         p = " small objects";
     } else {
         p = " objects";
     }
 
     if (carrying_chance == 1) {
-        if (memory_move & CM_SMALL_OBJ) {
+        if ((memory_move & CM_SMALL_OBJ) != 0u) {
             p = " a small object";
         } else {
             p = " an object";
@@ -566,9 +566,9 @@ static void memoryLootCarried(uint32_t creature_move, uint32_t memory_move) {
         memoryPrint(msg);
     }
 
-    if (memory_move & CM_CARRY_OBJ) {
+    if ((memory_move & CM_CARRY_OBJ) != 0u) {
         memoryPrint(p);
-        if (memory_move & CM_CARRY_GOLD) {
+        if ((memory_move & CM_CARRY_GOLD) != 0u) {
             memoryPrint(" or treasure");
             if (carrying_chance > 1) {
                 memoryPrint("s");
@@ -588,7 +588,7 @@ static void memoryAttackNumberAndDamage(Recall_t *memory, Creature_t *creature) 
     int known_attacks = 0;
 
     for (int id = 0; id < 4; id++) {
-        if (memory->attacks[id]) {
+        if (memory->attacks[id] != 0u) {
             known_attacks++;
         }
     }
@@ -603,7 +603,7 @@ static void memoryAttackNumberAndDamage(Recall_t *memory, Creature_t *creature) 
         int attack_dice, attack_sides;
 
         // don't print out unknown attacks
-        if (!memory->attacks[i]) {
+        if (memory->attacks[i] == 0u) {
             continue;
         }
 
@@ -637,7 +637,7 @@ static void memoryAttackNumberAndDamage(Recall_t *memory, Creature_t *creature) 
 
             memoryPrint(description_attack_type[attack_type]);
 
-            if (attack_dice && attack_sides) {
+            if ((attack_dice != 0) && (attack_sides != 0)) {
                 if (knowdamage(creature->level, memory->attacks[i], attack_dice * attack_sides)) {
                     // Loss of experience
                     if (attack_type == 19) {
@@ -654,7 +654,7 @@ static void memoryAttackNumberAndDamage(Recall_t *memory, Creature_t *creature) 
         }
     }
 
-    if (attack_count) {
+    if (attack_count != 0) {
         memoryPrint(".");
     } else if (known_attacks > 0 && memory->attacks[0] >= 10) {
         memoryPrint(" It has no physical attacks.");
@@ -701,7 +701,7 @@ int memoryRecall(int monster_id) {
         memoryPrint(".");
     }
 
-    if (memory->kills) {
+    if (memory->kills != 0u) {
         memoryKillPoints(creature->defenses, creature->kill_exp_value, creature->level);
     }
 
@@ -713,12 +713,12 @@ int memoryRecall(int monster_id) {
 
     memoryWeaknesses(defense);
 
-    if (defense & CD_INFRA) {
+    if ((defense & CD_INFRA) != 0) {
         memoryPrint(" It is warm blooded");
     }
 
-    if (defense & CD_NO_SLEEP) {
-        if (defense & CD_INFRA) {
+    if ((defense & CD_NO_SLEEP) != 0) {
+        if ((defense & CD_INFRA) != 0) {
             memoryPrint(", and");
         } else {
             memoryPrint(" It");
@@ -726,7 +726,7 @@ int memoryRecall(int monster_id) {
         memoryPrint(" cannot be charmed or slept");
     }
 
-    if (defense & (CD_NO_SLEEP | CD_INFRA)) {
+    if ((defense & (CD_NO_SLEEP | CD_INFRA)) != 0) {
         memoryPrint(".");
     }
 
@@ -737,7 +737,7 @@ int memoryRecall(int monster_id) {
     memoryAttackNumberAndDamage(memory, creature);
 
     // Always know the win creature.
-    if (creature->movement & CM_WIN) {
+    if ((creature->movement & CM_WIN) != 0u) {
         memoryPrint(" Killing one of these wins the game!");
     }
 
@@ -753,7 +753,7 @@ int memoryRecall(int monster_id) {
 
 // Print out strings, filling up lines as we go.
 static void memoryPrint(const char *p) {
-    while (*p) {
+    while (*p != 0) {
         *roff_buffer_pointer = *p;
 
         if (*p == '\n' || roff_buffer_pointer >= roff_buffer + sizeof(roff_buffer) - 1) {
