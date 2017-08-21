@@ -1283,7 +1283,7 @@ void dungeonCloseDoor() {
 
 // Tunneling through real wall: 10, 11, 12 -RAK-
 // Used by TUNNEL and WALL_TO_MUD
-int dungeonTunnelWall(int y, int x, int digging_ability, int digging_chance) {
+bool dungeonTunnelWall(int y, int x, int digging_ability, int digging_chance) {
     if (digging_ability <= digging_chance) {
         return false;
     }

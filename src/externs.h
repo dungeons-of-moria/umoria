@@ -412,7 +412,7 @@ void playerMove(int direction, bool do_pickup);
 void chestTrap(int y, int x);
 void objectOpen();
 void dungeonCloseDoor();
-int dungeonTunnelWall(int y, int x, int digging_ability, int digging_chance);
+bool dungeonTunnelWall(int y, int x, int digging_ability, int digging_chance);
 void objectBlockedByMonster(int monster_id);
 void playerAttackPosition(int y, int x);
 
