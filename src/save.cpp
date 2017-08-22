@@ -161,8 +161,8 @@ static bool sv_write() {
     wr_short(py.misc.current_mana_fraction);
     wr_short((uint16_t) py.misc.current_hp);
     wr_short(py.misc.current_hp_fraction);
-    for (int i = 0; i < 4; i++) {
-        wr_string(py.misc.history[i]);
+    for (auto &entry : py.misc.history) {
+        wr_string(entry);
     }
 
     wr_bytes(py.stats.max, 6);
@@ -234,8 +234,8 @@ static bool sv_write() {
     wr_long(magic_seed);
     wr_long(town_seed);
     wr_short((uint16_t) last_message_id);
-    for (int i = 0; i < MESSAGE_HISTORY_SIZE; i++) {
-        wr_string(messages[i]);
+    for (auto &message : messages) {
+        wr_string(message);
     }
 
     // this indicates 'cheating' if it is a one
@@ -244,8 +244,8 @@ static bool sv_write() {
     wr_short((uint16_t) noscore);
     wr_shorts(player_base_hp_levels, PLAYER_MAX_LEVEL);
 
-    for (int i = 0; i < MAX_STORES; i++) {
-        Store_t *st_ptr = &stores[i];
+    for (auto &store : stores) {
+        Store_t *st_ptr = &store;
 
         wr_long((uint32_t) st_ptr->turns_left_before_closing);
         wr_short((uint16_t) st_ptr->insults_counter);
@@ -326,11 +326,11 @@ static bool sv_write() {
     int count = 0;
     uint8_t prev_char = 0;
 
-    for (int i = 0; i < MAX_HEIGHT; i++) {
-        for (int j = 0; j < MAX_WIDTH; j++) {
-            Cave_t *c_ptr = &cave[i][j];
+    for (int y = 0; y < MAX_HEIGHT; y++) {
+        for (int x = 0; x < MAX_WIDTH; x++) {
+            Cave_t *tile = &cave[y][x];
 
-            auto char_tmp = (uint8_t) (c_ptr->feature_id | (c_ptr->perma_lit_room << 4) | (c_ptr->field_mark << 5) | (c_ptr->permanent_light << 6) | (c_ptr->temporary_light << 7));
+            auto char_tmp = (uint8_t) (tile->feature_id | (tile->perma_lit_room << 4) | (tile->field_mark << 5) | (tile->permanent_light << 6) | (tile->temporary_light << 7));
 
             if (char_tmp != prev_char || count == MAX_UCHAR) {
                 wr_byte((uint8_t) count);
@@ -619,8 +619,8 @@ bool loadGame(bool *generate) {
             rd_short(&py.misc.current_mana_fraction);
             rd_short((uint16_t *) &py.misc.current_hp);
             rd_short(&py.misc.current_hp_fraction);
-            for (int i = 0; i < 4; i++) {
-                rd_string(py.misc.history[i]);
+            for (auto &entry : py.misc.history) {
+                rd_string(entry);
             }
 
             rd_bytes(py.stats.max, 6);
@@ -695,8 +695,8 @@ bool loadGame(bool *generate) {
             rd_long(&magic_seed);
             rd_long(&town_seed);
             rd_short((uint16_t *) &last_message_id);
-            for (int i = 0; i < MESSAGE_HISTORY_SIZE; i++) {
-                rd_string(messages[i]);
+            for (auto &message : messages) {
+                rd_string(message);
             }
 
             rd_short((uint16_t *) &panic_save);
@@ -705,8 +705,8 @@ bool loadGame(bool *generate) {
             rd_shorts(player_base_hp_levels, PLAYER_MAX_LEVEL);
 
             if (version_min >= 2 || (version_min == 1 && patch_level >= 3)) {
-                for (int i = 0; i < MAX_STORES; i++) {
-                    Store_t *st_ptr = &stores[i];
+                for (auto &store : stores) {
+                    Store_t *st_ptr = &store;
 
                     rd_long((uint32_t *) &st_ptr->turns_left_before_closing);
                     rd_short((uint16_t *) &st_ptr->insults_counter);
@@ -868,8 +868,8 @@ bool loadGame(bool *generate) {
         *generate = false; // We have restored a cave - no need to generate.
 
         if ((version_min == 1 && patch_level < 3) || version_min == 0) {
-            for (int i = 0; i < MAX_STORES; i++) {
-                Store_t *st_ptr = &stores[i];
+            for (auto &store : stores) {
+                Store_t *st_ptr = &store;
 
                 rd_long((uint32_t *) &st_ptr->turns_left_before_closing);
                 rd_short((uint16_t *) &st_ptr->insults_counter);

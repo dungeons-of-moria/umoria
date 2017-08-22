@@ -325,9 +325,9 @@ void storeInitializeOwners() {
         store->good_purchases = 0;
         store->bad_purchases = 0;
 
-        for (int item_id = 0; item_id < STORE_MAX_DISCRETE_ITEMS; item_id++) {
-            inventoryItemCopyTo(OBJ_NOTHING, &store->inventory[item_id].item);
-            store->inventory[item_id].cost = 0;
+        for (auto &item : store->inventory) {
+            inventoryItemCopyTo(OBJ_NOTHING, &item.item);
+            item.cost = 0;
         }
     }
 }

@@ -478,12 +478,11 @@ static char getBorderTile(uint8_t id) {
 
 void displayDungeonMap() {
     char map[MAX_WIDTH / RATIO + 1];
-    int priority[256];
-
     char prntscrnbuf[80];
 
-    for (int i = 0; i < 256; i++) {
-        priority[i] = 0;
+    int priority[256];
+    for (int &i : priority) {
+        i = 0;
     }
 
     priority[60] = 5;    // char '<'

@@ -244,8 +244,8 @@ static void writeCharacterSheetToFile(FILE *file1) {
 
     // Write out the character's history
     (void) fprintf(file1, "Character Background\n");
-    for (int i = 0; i < 4; i++) {
-        (void) fprintf(file1, " %s\n", py.misc.history[i]);
+    for (auto &entry : py.misc.history) {
+        (void) fprintf(file1, " %s\n", entry);
     }
 }
 

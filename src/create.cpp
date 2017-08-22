@@ -160,8 +160,8 @@ static void displayCharacterHistory() {
 
 // Clear the previous history strings
 static void playerClearHistory() {
-    for (int i = 0; i < 4; i++) {
-        py.misc.history[i][0] = '\0';
+    for (auto &entry : py.misc.history) {
+        entry[0] = '\0';
     }
 }
 
@@ -344,8 +344,8 @@ static int displayRaceClasses(int race_id, int *class_list) {
 // Gets a character class -JWT-
 static void characterGetClass() {
     int class_list[PLAYER_MAX_CLASSES];
-    for (int id = 0; id < PLAYER_MAX_CLASSES; id++) {
-        class_list[id] = 0;
+    for (int &entry : class_list) {
+        entry = 0;
     }
 
     int class_count = displayRaceClasses(py.misc.race_id, class_list);

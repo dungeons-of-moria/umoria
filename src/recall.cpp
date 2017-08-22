@@ -141,8 +141,8 @@ bool memoryMonsterKnown(int monster_id) {
         return true;
     }
 
-    for (int i = 0; i < 4; i++) {
-        if (memory->attacks[i] != 0u) {
+    for (uint8_t attack : memory->attacks) {
+        if (attack != 0u) {
             return true;
         }
     }
@@ -587,8 +587,8 @@ static void memoryAttackNumberAndDamage(Recall_t *memory, Creature_t *creature) 
     // known_attacks is the total number of known attacks, used for punctuation
     int known_attacks = 0;
 
-    for (int id = 0; id < 4; id++) {
-        if (memory->attacks[id] != 0u) {
+    for (uint8_t attack : memory->attacks) {
+        if (attack != 0u) {
             known_attacks++;
         }
     }

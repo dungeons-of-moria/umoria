@@ -140,8 +140,8 @@ static void initializeCharacterInventory() {
     Inventory_t item{};
 
     // this is needed for bash to work right, it can't hurt anyway
-    for (int i = 0; i < PLAYER_INVENTORY_SIZE; i++) {
-        inventoryItemCopyTo(OBJ_NOTHING, &inventory[i]);
+    for (auto &entry : inventory) {
+        inventoryItemCopyTo(OBJ_NOTHING, &entry);
     }
 
     for (int i = 0; i < 5; i++) {
@@ -159,8 +159,8 @@ static void initializeCharacterInventory() {
     }
 
     // weird place for it, but why not?
-    for (int i = 0; i < 32; i++) {
-        spells_learned_order[i] = 99;
+    for (uint8_t &id : spells_learned_order) {
+        id = 99;
     }
 }
 
@@ -215,8 +215,8 @@ static void initializeTreasureLevels() {
 static void priceAdjust() {
 #if (COST_ADJUSTMENT != 100)
     // round half-way cases up
-    for (int i = 0; i < MAX_OBJECTS_IN_GAME; i++) {
-        game_objects[i].cost = ((game_objects[i].cost * COST_ADJUSTMENT) + 50) / 100;
+    for (auto &item : game_objects) {
+        item.cost = ((item.cost * COST_ADJUSTMENT) + 50) / 100;
     }
 #endif
 }

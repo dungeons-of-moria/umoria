@@ -45,45 +45,45 @@ void magicInitializeItemNames() {
         colors[id] = color;
     }
 
-    for (int i = 0; i < MAX_WOODS; i++) {
+    for (auto &w : woods) {
         id = randomNumber(MAX_WOODS) - 1;
-        const char *wood = woods[i];
-        woods[i] = woods[id];
+        const char *wood = w;
+        w = woods[id];
         woods[id] = wood;
     }
 
-    for (int i = 0; i < MAX_METALS; i++) {
+    for (auto &m : metals) {
         id = randomNumber(MAX_METALS) - 1;
-        const char *metal = metals[i];
-        metals[i] = metals[id];
+        const char *metal = m;
+        m = metals[id];
         metals[id] = metal;
     }
 
-    for (int i = 0; i < MAX_ROCKS; i++) {
+    for (auto &r : rocks) {
         id = randomNumber(MAX_ROCKS) - 1;
-        const char *rock = rocks[i];
-        rocks[i] = rocks[id];
+        const char *rock = r;
+        r = rocks[id];
         rocks[id] = rock;
     }
 
-    for (int i = 0; i < MAX_AMULETS; i++) {
+    for (auto &a : amulets) {
         id = randomNumber(MAX_AMULETS) - 1;
-        const char *amulet = amulets[i];
-        amulets[i] = amulets[id];
+        const char *amulet = a;
+        a = amulets[id];
         amulets[id] = amulet;
     }
 
-    for (int i = 0; i < MAX_MUSHROOMS; i++) {
+    for (auto &m : mushrooms) {
         id = randomNumber(MAX_MUSHROOMS) - 1;
-        const char *mushroom = mushrooms[i];
-        mushrooms[i] = mushrooms[id];
+        const char *mushroom = m;
+        m = mushrooms[id];
         mushrooms[id] = mushroom;
     }
 
     int k;
     vtype_t title;
 
-    for (int h = 0; h < MAX_TITLES; h++) {
+    for (auto &item_title : magic_item_titles) {
         title[0] = '\0';
         k = randomNumber(2) + 1;
 
@@ -102,7 +102,7 @@ void magicInitializeItemNames() {
             title[9] = '\0';
         }
 
-        (void) strcpy(magic_item_titles[h], title);
+        (void) strcpy(item_title, title);
     }
 
     seedResetToOldSeed();

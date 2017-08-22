@@ -175,9 +175,9 @@ static void printTomb() {
     putString("Character record?", 22, 0);
 
     if (getStringInput(str, 22, 18, 60)) {
-        for (int i = 0; i < PLAYER_INVENTORY_SIZE; i++) {
-            itemSetAsIdentified(&inventory[i]);
-            spellItemIdentifyAndRemoveRandomInscription(&inventory[i]);
+        for (auto &item : inventory) {
+            itemSetAsIdentified(&item);
+            spellItemIdentifyAndRemoveRandomInscription(&item);
         }
 
         playerRecalculateBonuses();
@@ -209,8 +209,8 @@ int32_t playerCalculateTotalPoints() {
     int32_t total = py.misc.max_exp + (100 * py.misc.max_dungeon_depth);
     total += py.misc.au / 100;
 
-    for (int i = 0; i < PLAYER_INVENTORY_SIZE; i++) {
-        total += storeItemValue(&inventory[i]);
+    for (auto &item : inventory) {
+        total += storeItemValue(&item);
     }
 
     total += current_dungeon_level * 50;

@@ -1118,16 +1118,16 @@ static void dungeonBuildStore(int store_id, int y, int x) {
 
 // Link all free space in treasure list together
 static void treasureLinker() {
-    for (int i = 0; i < LEVEL_MAX_OBJECTS; i++) {
-        inventoryItemCopyTo(OBJ_NOTHING, &treasure_list[i]);
+    for (auto &item : treasure_list) {
+        inventoryItemCopyTo(OBJ_NOTHING, &item);
     }
     current_treasure_id = MIN_TREASURE_LIST_ID;
 }
 
 // Link all free space in monster list together
 static void monsterLinker() {
-    for (int i = 0; i < MON_TOTAL_ALLOCATIONS; i++) {
-        monsters[i] = blank_monster;
+    for (auto &monster : monsters) {
+        monster = blank_monster;
     }
     next_free_monster_id = MON_MIN_INDEX_ID;
 }
