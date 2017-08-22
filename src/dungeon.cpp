@@ -1305,9 +1305,10 @@ static void commandQuit() {
 static uint8_t calculateMaxMessageCount () {
     uint8_t max_messages = MESSAGE_HISTORY_SIZE;
     if (command_count > 0) {
-        max_messages = command_count;
-        if (max_messages > MESSAGE_HISTORY_SIZE) {
+        if (command_count > MESSAGE_HISTORY_SIZE) {
             max_messages = MESSAGE_HISTORY_SIZE;
+        } else {
+            max_messages = (uint8_t) command_count;
         }
         command_count = 0;
     } else if (last_command != CTRL_KEY('P')) {
