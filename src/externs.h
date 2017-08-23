@@ -197,6 +197,9 @@ void generateCave();
 // help.c
 void displayWorldObjectDescription();
 
+// helpers
+bool stringToNumber(const char *str, int *number);
+
 // io.c
 void terminalInitialize();
 void putString(const char *out_str, int row, int col);

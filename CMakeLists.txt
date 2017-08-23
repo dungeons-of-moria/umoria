@@ -74,6 +74,7 @@ set(SOURCE_FILES
     ${SOURCE_FILES_DIR}/recall.cpp
     ${SOURCE_FILES_DIR}/player.cpp
     ${SOURCE_FILES_DIR}/tables.cpp
+    ${SOURCE_FILES_DIR}/helpers.cpp
 )
 add_executable(umoria ${SOURCE_FILES})
 
