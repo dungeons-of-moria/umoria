@@ -32,20 +32,16 @@
 
 // Headers we can use on all supported systems!
 
-#include <ctype.h>
-#include <errno.h>
-#include <fcntl.h>
-
-#include <stdbool.h>
-#include <stdint.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <time.h>
-
+#include <cctype>
+#include <cerrno>
+#include <cstdint>
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+#include <ctime>
 #include <limits>
-#include <string>
 
+#include <fcntl.h>
 #include <sys/stat.h>
 
 
