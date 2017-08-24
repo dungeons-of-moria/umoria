@@ -103,12 +103,12 @@ int main(int argc, char *argv[]) {
 }
 
 static bool parseGameSeed(const char *argv, uint32_t *seed) {
-    if (isdigit((int) *argv) == 0) {
+    int value;
+
+    if (!stringToNumber(argv, &value)) {
         return false;
     }
-
-    int value = atoi(argv);
-    if (value < 1) {
+    if (value <= 0 || value > MAX_LONG) {
         return false;
     }
 
