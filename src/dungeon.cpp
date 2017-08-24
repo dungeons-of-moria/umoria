@@ -1302,36 +1302,39 @@ static void commandQuit() {
     }
 }
 
-static void commandPreviousMessage() {
-    int maxMessages = MESSAGE_HISTORY_SIZE;
+static uint8_t calculateMaxMessageCount() {
+    uint8_t max_messages = MESSAGE_HISTORY_SIZE;
 
     if (command_count > 0) {
-        maxMessages = command_count;
-        if (maxMessages > MESSAGE_HISTORY_SIZE) {
-            maxMessages = MESSAGE_HISTORY_SIZE;
+        if (command_count < MESSAGE_HISTORY_SIZE) {
+            max_messages = (uint8_t) command_count;
         }
         command_count = 0;
     } else if (last_command != CTRL_KEY('P')) {
-        maxMessages = 1;
+        max_messages = 1;
     }
 
-    int msgID = last_message_id;
+    return max_messages;
+}
 
-    if (maxMessages > 1) {
+static void commandPreviousMessage() {
+    uint8_t max_messages = calculateMaxMessageCount();
+
+    int16_t msgID = last_message_id;
+
+    if (max_messages > 1) {
         terminalSaveScreen();
 
-        int lineNumber = maxMessages;
-
-        while (maxMessages > 0) {
-            maxMessages--;
-
-            putStringClearToEOL(messages[msgID], maxMessages, 0);
+        uint8_t lineNumber = max_messages;
+        for (uint8_t i = max_messages; i > 0; --i) {
+            putStringClearToEOL(messages[msgID], max_messages, 0);
 
             if (msgID == 0) {
                 msgID = MESSAGE_HISTORY_SIZE - 1;
             } else {
                 msgID--;
             }
+
         }
 
         eraseLine(lineNumber, 0);
