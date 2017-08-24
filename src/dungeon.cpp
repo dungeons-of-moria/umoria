@@ -1302,18 +1302,18 @@ static void commandQuit() {
     }
 }
 
-static uint8_t calculateMaxMessageCount () {
+static uint8_t calculateMaxMessageCount() {
     uint8_t max_messages = MESSAGE_HISTORY_SIZE;
+
     if (command_count > 0) {
-        if (command_count > MESSAGE_HISTORY_SIZE) {
-            max_messages = MESSAGE_HISTORY_SIZE;
-        } else {
+        if (command_count < MESSAGE_HISTORY_SIZE) {
             max_messages = (uint8_t) command_count;
         }
         command_count = 0;
     } else if (last_command != CTRL_KEY('P')) {
         max_messages = 1;
     }
+
     return max_messages;
 }
 
