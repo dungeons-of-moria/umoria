@@ -84,77 +84,91 @@ void displayTextHelpFile(const char *filename) {
 // Note that the objects produced is a sampling of objects
 // which be expected to appear on that level.
 void outputRandomLevelObjectsToFile() {
-    obj_desc_t tmp_str;
+    obj_desc_t input = {0};
 
     putStringClearToEOL("Produce objects on what level?: ", 0, 0);
-    if (!getStringInput(tmp_str, 0, 32, 10)) {
+    if (!getStringInput(input, 0, 32, 10)) {
         return;
     }
-    int level = atoi(tmp_str);
+
+    int level;
+    if (!stringToNumber(input, &level)) {
+        return;
+    }
 
     putStringClearToEOL("Produce how many objects?: ", 0, 0);
-    if (!getStringInput(tmp_str, 0, 27, 10)) {
+    if (!getStringInput(input, 0, 27, 10)) {
         return;
     }
-    int nobj = atoi(tmp_str);
 
-    bool small_object = getInputConfirmation("Small objects only?");
-
-    if (nobj > 0 && level > -1 && level < 1201) {
-        if (nobj > 10000) {
-            nobj = 10000;
-        }
-
-        putStringClearToEOL("File name: ", 0, 0);
-        vtype_t filename1;
-        if (getStringInput(filename1, 0, 11, 64)) {
-            if (strlen(filename1) == 0) {
-                return;
-            }
-
-            FILE *file1 = fopen(filename1, "w");
-            if (file1 != nullptr) {
-                (void) sprintf(tmp_str, "%d", nobj);
-                putStringClearToEOL(strcat(tmp_str, " random objects being produced..."), 0, 0);
-
-                putQIO();
-
-                (void) fprintf(file1, "*** Random Object Sampling:\n");
-                (void) fprintf(file1, "*** %d objects\n", nobj);
-                (void) fprintf(file1, "*** For Level %d\n", level);
-                (void) fprintf(file1, "\n");
-                (void) fprintf(file1, "\n");
-
-                int treasureID = popt();
-
-                for (int i = 0; i < nobj; i++) {
-                    int objectID = itemGetRandomObjectId(level, small_object);
-                    inventoryItemCopyTo(sorted_objects[objectID], &treasure_list[treasureID]);
-
-                    magicTreasureMagicalAbility(treasureID, level);
-
-                    Inventory_t *i_ptr = &treasure_list[treasureID];
-                    itemIdentifyAsStoreBought(i_ptr);
-
-                    if ((i_ptr->flags & TR_CURSED) != 0u) {
-                        itemAppendToInscription(i_ptr, ID_DAMD);
-                    }
-
-                    itemDescription(tmp_str, i_ptr, true);
-                    (void) fprintf(file1, "%d %s\n", i_ptr->depth_first_found, tmp_str);
-                }
-
-                pusht((uint8_t) treasureID);
-
-                (void) fclose(file1);
-                putStringClearToEOL("Completed.", 0, 0);
-            } else {
-                putStringClearToEOL("File could not be opened.", 0, 0);
-            }
-        }
-    } else {
-        putStringClearToEOL("Parameters no good.", 0, 0);
+    int count;
+    if (!stringToNumber(input, &count)) {
+        return;
     }
+
+    if (count < 1 || level < 0 || level > 1200) {
+        putStringClearToEOL("Parameters no good.", 0, 0);
+        return;
+    }
+
+    if (count > 10000) {
+        count = 10000;
+    }
+
+    bool small_objects = getInputConfirmation("Small objects only?");
+
+    putStringClearToEOL("File name: ", 0, 0);
+
+    vtype_t filename = {0};
+
+    if (!getStringInput(filename, 0, 11, 64)) {
+        return;
+    }
+    if (strlen(filename) == 0) {
+        return;
+    }
+
+    FILE *file_ptr = fopen(filename, "w");
+    if (file_ptr == nullptr) {
+        putStringClearToEOL("File could not be opened.", 0, 0);
+        return;
+    }
+
+    (void) sprintf(input, "%d", count);
+    putStringClearToEOL(strcat(input, " random objects being produced..."), 0, 0);
+
+    putQIO();
+
+    (void) fprintf(file_ptr, "*** Random Object Sampling:\n");
+    (void) fprintf(file_ptr, "*** %d objects\n", count);
+    (void) fprintf(file_ptr, "*** For Level %d\n", level);
+    (void) fprintf(file_ptr, "\n");
+    (void) fprintf(file_ptr, "\n");
+
+    int treasure_id = popt();
+
+    for (int i = 0; i < count; i++) {
+        int object_id = itemGetRandomObjectId(level, small_objects);
+        inventoryItemCopyTo(sorted_objects[object_id], &treasure_list[treasure_id]);
+
+        magicTreasureMagicalAbility(treasure_id, level);
+
+        Inventory_t *item = &treasure_list[treasure_id];
+        itemIdentifyAsStoreBought(item);
+
+        if ((item->flags & TR_CURSED) != 0u) {
+            itemAppendToInscription(item, ID_DAMD);
+        }
+
+        itemDescription(input, item, true);
+        (void) fprintf(file_ptr, "%d %s\n", item->depth_first_found, input);
+    }
+
+    pusht((uint8_t) treasure_id);
+
+    (void) fclose(file_ptr);
+
+    putStringClearToEOL("Completed.", 0, 0);
 }
 
 // Write character sheet to the file
