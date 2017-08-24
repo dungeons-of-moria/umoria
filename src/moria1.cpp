@@ -1881,22 +1881,23 @@ void playerRestOn() {
         rest_num = command_count;
         command_count = 0;
     } else {
-        putStringClearToEOL("Rest for how long? ", 0, 0);
         rest_num = 0;
+        vtype_t rest_str = {0};
 
-        vtype_t rest_str;
+        putStringClearToEOL("Rest for how long? ", 0, 0);
+
         if (getStringInput(rest_str, 0, 19, 5)) {
             if (rest_str[0] == '*') {
                 rest_num = -MAX_SHORT;
             } else {
-                rest_num = atoi(rest_str);
+                (void) stringToNumber(rest_str, &rest_num);
             }
         }
     }
 
     // check for reasonable value, must be positive number
     // in range of a short, or must be -MAX_SHORT
-    if (rest_num == -MAX_SHORT || (rest_num > 0 && rest_num < MAX_SHORT)) {
+    if (rest_num == -MAX_SHORT || (rest_num > 0 && rest_num <= MAX_SHORT)) {
         if ((py.flags.status & PY_SEARCH) != 0u) {
             playerSearchOff();
         }
