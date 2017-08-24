@@ -1504,16 +1504,17 @@ static void doWizardCommands(char com_val) {
                 }
                 command_count = 0;
             } else {
-                putStringClearToEOL("Go to which level (0-99) ? ", 0, 0);
                 i = -1;
+                vtype_t input = {0};
 
-                vtype_t tmp_str;
-                if (getStringInput(tmp_str, 0, 27, 10)) {
-                    i = atoi(tmp_str);
+                putStringClearToEOL("Go to which level (0-99) ? ", 0, 0);
+
+                if (getStringInput(input, 0, 27, 10)) {
+                    (void) stringToNumber(input, &i);
                 }
             }
 
-            if (i > -1) {
+            if (i >= 0) {
                 current_dungeon_level = (int16_t) i;
                 if (current_dungeon_level > 99) {
                     current_dungeon_level = 99;
