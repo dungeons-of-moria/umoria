@@ -65,10 +65,10 @@ void dungeonSearch(int y, int x, int chance) {
             if (item->category_id == TV_INVIS_TRAP) {
                 // Trap on floor?
 
-                obj_desc_t description;
+                obj_desc_t description = {'\0'};
                 itemDescription(description, item, true);
 
-                obj_desc_t msg;
+                obj_desc_t msg = {'\0'};
                 (void) sprintf(msg, "You have found %s", description);
                 printMessage(msg);
 
@@ -545,7 +545,8 @@ static bool damageMinusAC(uint32_t typ_dam) {
 
     int itemID = items[randomNumber(itemsCount) - 1];
 
-    obj_desc_t description, msg;
+    obj_desc_t description = {'\0'};
+    obj_desc_t msg = {'\0'};
 
     if ((inventory[itemID].flags & typ_dam) != 0u) {
         minus = true;
