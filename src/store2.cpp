@@ -119,7 +119,7 @@ static void printSpeechFinishedHaggling() {
 
 // %A1 is offer, %A2 is asking.
 static void printSpeechSellingHaggle(int32_t offer, int32_t asking, int final) {
-    vtype_t comment;
+    vtype_t comment = {'\0'};
 
     if (final > 0) {
         (void) strcpy(comment, speech_selling_haggle_final[randomNumber(3) - 1]);
@@ -133,7 +133,7 @@ static void printSpeechSellingHaggle(int32_t offer, int32_t asking, int final) {
 }
 
 static void printSpeechBuyingHaggle(int32_t offer, int32_t asking, int final) {
-    vtype_t comment;
+    vtype_t comment = {'\0'};
 
     if (final > 0) {
         (void) strcpy(comment, speech_buying_haggle_final[randomNumber(3) - 1]);
@@ -202,13 +202,13 @@ static void displayStoreInventory(int store_id, int item_pos_start) {
             item->items_count = 1;
         }
 
-        obj_desc_t description;
+        obj_desc_t description = {'\0'};
         itemDescription(description, item, true);
 
         // Restore the number of items
         item->items_count = (uint8_t) current_item_count;
 
-        obj_desc_t msg;
+        obj_desc_t msg = {'\0'};
         (void) sprintf(msg, "%c) %s", 'a' + item_identifier, description);
         putStringClearToEOL(msg, item_identifier + 5, 0);
 
@@ -247,7 +247,7 @@ static void displayStoreInventory(int store_id, int item_pos_start) {
 static void displaySingleCost(int store_id, int item_id) {
     int cost = stores[store_id].inventory[item_id].cost;
 
-    vtype_t msg;
+    vtype_t msg = {'\0'};
     if (cost < 0) {
         int32_t c = -cost;
         c = c * playerStatAdjustmentCharisma() / 100;
@@ -260,7 +260,7 @@ static void displaySingleCost(int store_id, int item_id) {
 
 // Displays players gold -RAK-
 static void displayPlayerRemainingGold() {
-    vtype_t msg;
+    vtype_t msg = {'\0'};
     (void) sprintf(msg, "Gold Remaining : %d", py.misc.au);
     putStringClearToEOL(msg, 18, 17);
 }
@@ -280,7 +280,7 @@ static void displayStore(int store_id, const char *owner_name, int current_top_i
 static bool storeGetItemID(int *item_id, const char *prompt, int item_pos_start, int item_pos_end) {
     *item_id = -1;
 
-    vtype_t msg;
+    vtype_t msg = {'\0'};
     (void) sprintf(msg, "(Items %c-%c, ESC to exit) %s", item_pos_start + 'a', item_pos_end + 'a', prompt);
 
     char command;
@@ -494,7 +494,7 @@ static int storePurchaseHaggle(int store_id, int32_t *price, Inventory_t *item) 
         num_offer = 1;
     }
 
-    vtype_t msg;
+    vtype_t msg = {'\0'};
     bool flag = false;
 
     while (!flag) {
@@ -712,7 +712,7 @@ static int storeSellHaggle(int store_id, int32_t *price, Inventory_t *item) {
             do {
                 loop_flag = true;
 
-                vtype_t msg;
+                vtype_t msg = {'\0'};
                 (void) sprintf(msg, "%s :  %d", comment, current_askin_price);
                 putString(msg, 1, 0);
 
@@ -794,7 +794,7 @@ static int storeSellHaggle(int store_id, int32_t *price, Inventory_t *item) {
                     num_offer++; // enable incremental haggling
                     eraseLine(1, 0);
 
-                    vtype_t msg;
+                    vtype_t msg = {'\0'};
                     (void) sprintf(msg, "Your last bid %d", last_offer);
                     putString(msg, 1, 39);
 
@@ -879,10 +879,10 @@ static bool storePurchaseAnItem(int store_id, int *current_top_item_id) {
 
             storeDestroy(store_id, item_id, true);
 
-            obj_desc_t description;
+            obj_desc_t description = {'\0'};
             itemDescription(description, &inventory[new_item_id], true);
 
-            obj_desc_t msg;
+            obj_desc_t msg = {'\0'};
             (void) sprintf(msg, "You have %s (%c)", description, new_item_id + 'a');
             putStringClearToEOL(msg, 0, 0);
 
@@ -957,10 +957,10 @@ static bool storeSellAnItem(int store_id, int *current_top_item_id) {
     Inventory_t sold_item;
     inventoryTakeOneItem(&sold_item, &inventory[item_id]);
 
-    obj_desc_t description;
+    obj_desc_t description = {'\0'};
     itemDescription(description, &sold_item, true);
 
-    obj_desc_t msg;
+    obj_desc_t msg = {'\0'};
     (void) sprintf(msg, "Selling %s (%c)", description, item_id + 'a');
     printMessage(msg);
 
