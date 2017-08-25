@@ -215,35 +215,35 @@ static void printCharacterInfoInField(const char *info, int row, int column) {
 
 // Print long number with header at given row, column
 static void printHeaderLongNumber(const char *header, int32_t num, int row, int column) {
-    vtype_t str;
+    vtype_t str = {'\0'};
     (void) sprintf(str, "%s: %6d", header, num);
     putString(str, row, column);
 }
 
 // Print long number (7 digits of space) with header at given row, column
 static void printHeaderLongNumber7Spaces(const char *header, int32_t num, int row, int column) {
-    vtype_t str;
+    vtype_t str = {'\0'};
     (void) sprintf(str, "%s: %7d", header, num);
     putString(str, row, column);
 }
 
 // Print number with header at given row, column -RAK-
 static void printHeaderNumber(const char *header, int num, int row, int column) {
-    vtype_t str;
+    vtype_t str = {'\0'};
     (void) sprintf(str, "%s: %6d", header, num);
     putString(str, row, column);
 }
 
 // Print long number at given row, column
 static void printLongNumber(int32_t num, int row, int column) {
-    vtype_t str;
+    vtype_t str = {'\0'};
     (void) sprintf(str, "%6d", num);
     putString(str, row, column);
 }
 
 // Print number at given row, column -RAK-
 static void printNumber(int num, int row, int column) {
-    vtype_t str;
+    vtype_t str = {'\0'};
     (void) sprintf(str, "%6d", num);
     putString(str, row, column);
 }
@@ -418,7 +418,7 @@ void printCharacterGoldValue() {
 
 // Prints depth in stat area -RAK-
 void printCharacterCurrentDepth() {
-    vtype_t depths;
+    vtype_t depths = {'\0'};
 
     int depth = current_dungeon_level * 50;
 
@@ -943,7 +943,7 @@ void printCharacterInformation() {
 // Prints the following information on the screen. -JWT-
 void printCharacterStats() {
     for (int i = 0; i < 6; i++) {
-        vtype_t buf;
+        vtype_t buf = {'\0'};
 
         statsAsString(py.stats.used[i], buf);
         putString(stat_names[i], 2 + i, 61);
@@ -1036,7 +1036,7 @@ void printCharacterAbilities() {
     int xsave = py.misc.saving_throw + playerStatAdjustmentWisdomIntelligence(A_WIS) + (class_level_adj[py.misc.class_id][CLASS_SAVE] * py.misc.level / 3);
     int xdev = py.misc.saving_throw + playerStatAdjustmentWisdomIntelligence(A_INT) + (class_level_adj[py.misc.class_id][CLASS_DEVICE] * py.misc.level / 3);
 
-    vtype_t xinfra;
+    vtype_t xinfra = {'\0'};
     (void) sprintf(xinfra, "%d feet", py.flags.see_infra * 10);
 
     putString("(Miscellaneous Abilities)", 15, 25);
@@ -1087,7 +1087,7 @@ void getCharacterName() {
 
 // Changes the name of the character -JWT-
 void changeCharacterName() {
-    vtype_t temp;
+    vtype_t temp = {'\0'};
     bool flag = false;
 
     printCharacter();
@@ -1185,7 +1185,8 @@ void inventoryDropItem(int item_id, bool drop_all) {
             i_ptr->items_count--;
         }
 
-        obj_desc_t prt1, prt2;
+        obj_desc_t prt1 = {'\0'};
+        obj_desc_t prt2 = {'\0'};
         itemDescription(prt1, &treasure_list[treasureID], true);
         (void) sprintf(prt2, "Dropped %s", prt1);
         printMessage(prt2);
@@ -1423,7 +1424,7 @@ void displaySpellsList(const int *spell, int number_of_choices, bool comment, in
             spell_char = (char) ('a' + spellID - non_consecutive);
         }
 
-        vtype_t out_val;
+        vtype_t out_val = {'\0'};
         (void) sprintf(out_val, "  %c) %-30s%2d %4d %3d%%%s", spell_char, spell_names[spellID + consecutive_offset], s_ptr->level_required, s_ptr->mana_required, spellChanceOfSuccess(spellID), p);
         putStringClearToEOL(out_val, 2 + i, col);
     }
@@ -1433,7 +1434,7 @@ void displaySpellsList(const int *spell, int number_of_choices, bool comment, in
 bool spellGetId(int *spell, int number_of_choices, int *spell_id, int *spell_chances, const char *prompt, int first_spell) {
     *spell_id = -1;
 
-    vtype_t str;
+    vtype_t str = {'\0'};
     (void) sprintf(str, "(Spells %c-%c, *=List, <ESCAPE>=exit) %s", spell[0] + 'a' - first_spell, spell[number_of_choices - 1] + 'a' - first_spell, prompt);
 
     bool spell_found = false;
@@ -1460,7 +1461,7 @@ bool spellGetId(int *spell, int number_of_choices, int *spell_id, int *spell_cha
             } else {
                 Spell_t *s_ptr = &magic_spells[py.misc.class_id - 1][*spell_id];
 
-                vtype_t tmp_str;
+                vtype_t tmp_str = {'\0'};
                 (void) sprintf(tmp_str, "Cast %s (%d mana, %d%% fail)?", spell_names[*spell_id + offset], s_ptr->mana_required, spellChanceOfSuccess(*spell_id));
                 if (getInputConfirmation(tmp_str)) {
                     spell_found = true;
@@ -1499,7 +1500,7 @@ bool spellGetId(int *spell, int number_of_choices, int *spell_id, int *spell_cha
         }
 
         if (*spell_id == -2) {
-            vtype_t tmp_str;
+            vtype_t tmp_str = {'\0'};
             (void) sprintf(tmp_str, "You don't know that %s.", (offset == NAME_OFFSET_SPELLS ? "spell" : "prayer"));
             printMessage(tmp_str);
         }
@@ -1528,7 +1529,7 @@ static void eliminateKnownSpellsGreaterThanLevel(Spell_t *msp_ptr, const char *p
                 spells_learnt &= ~mask;
                 spells_forgotten |= mask;
 
-                vtype_t msg;
+                vtype_t msg = {'\0'};
                 (void) sprintf(msg, "You have forgotten the %s of %s.", p, spell_names[i + offset]);
                 printMessage(msg);
             } else {
@@ -1602,7 +1603,7 @@ static int rememberForgottenSpells(Spell_t *msp_ptr, int allowedSpells, int newS
                 spells_forgotten &= ~mask;
                 spells_learnt |= mask;
 
-                vtype_t msg;
+                vtype_t msg = {'\0'};
                 (void) sprintf(msg, "You have remembered the %s of %s.", p, spell_names[orderID + offset]);
                 printMessage(msg);
             } else {
@@ -1661,7 +1662,7 @@ static void forgetSpells(int newSpells, const char *p, int offset) {
             spells_forgotten |= mask;
             newSpells++;
 
-            vtype_t msg;
+            vtype_t msg = {'\0'};
             (void) sprintf(msg, "You have forgotten the %s of %s.", p, spell_names[orderID + offset]);
             printMessage(msg);
         }
@@ -1706,7 +1707,7 @@ void playerCalculateAllowedSpellsCount(int stat) {
 
     if (new_spells != py.flags.new_spells_to_learn) {
         if (new_spells > 0 && py.flags.new_spells_to_learn == 0) {
-            vtype_t msg;
+            vtype_t msg = {'\0'};
             (void) sprintf(msg, "You can learn some new %ss now.", magic_type_str);
             printMessage(msg);
         }
@@ -1784,7 +1785,7 @@ void playerGainSpells() {
     int last_known = lastKnownSpell();
 
     if (new_spells == 0) {
-        vtype_t tmp_str;
+        vtype_t tmp_str = {'\0'};
         (void) sprintf(tmp_str, "You can't learn any new %ss!", (stat == A_INT ? "spell" : "prayer"));
         printMessage(tmp_str);
 
@@ -1866,7 +1867,7 @@ void playerGainSpells() {
             spells_learnt |= 1L << spell_bank[id];
             spells_learned_order[last_known++] = (uint8_t) spell_bank[id];
 
-            vtype_t tmp_str;
+            vtype_t tmp_str = {'\0'};
             (void) sprintf(tmp_str, "You have learned the prayer of %s.", spell_names[spell_bank[id] + offset]);
             printMessage(tmp_str);
 
@@ -1954,7 +1955,7 @@ void playerGainMana(int stat) {
 static void playerGainLevel() {
     py.misc.level++;
 
-    vtype_t msg;
+    vtype_t msg = {'\0'};
     (void) sprintf(msg, "Welcome to level %d.", (int) py.misc.level);
     printMessage(msg);
 
