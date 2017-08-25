@@ -185,7 +185,7 @@ void playDungeon();
 void playerEat();
 
 // files.c
-void initializeScoreFile();
+bool initializeScoreFile();
 void displaySplashScreen();
 void displayTextHelpFile(const char *filename);
 void outputRandomLevelObjectsToFile();

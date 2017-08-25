@@ -36,7 +36,10 @@ int main(int argc, char *argv[]) {
 
     // call this routine to grab a file pointer to the high score file
     // and prepare things to relinquish setuid privileges
-    initializeScoreFile();
+    if (!initializeScoreFile()) {
+        (void) fprintf(stderr, "Can't open score file \"%s\"\n", MORIA_SCORES);
+        return 1;
+    }
 
     // Make sure we have access to all files -MRC-
     if (!checkFilePermissions()) {

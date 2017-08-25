@@ -17,12 +17,10 @@
 //  when the score is being written out, you must be sure to flock the file
 //  so we don't have multiple people trying to write to it at the same time.
 //  Craig Norborg (doc)    Mon Aug 10 16:41:59 EST 1987
-void initializeScoreFile() {
+bool initializeScoreFile() {
     highscore_fp = fopen(MORIA_SCORES, (char *) "rb+");
-    if (highscore_fp == nullptr) {
-        (void) fprintf(stderr, "Can't open score file \"%s\"\n", MORIA_SCORES);
-        exit(1);
-    }
+
+    return highscore_fp != nullptr;
 }
 
 // Attempt to open and print the file containing the intro splash screen text -RAK-
