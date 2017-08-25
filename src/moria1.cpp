@@ -513,10 +513,10 @@ void playerTakeOff(int item_id, int pack_position_id) {
         p = "Was wearing ";
     }
 
-    obj_desc_t description;
+    obj_desc_t description = {'\0'};
     itemDescription(description, item, true);
 
-    obj_desc_t msg;
+    obj_desc_t msg = {'\0'};
     if (pack_position_id >= 0) {
         (void) sprintf(msg, "%s%s (%c)", p, description, 'a' + pack_position_id);
     } else {
@@ -535,13 +535,13 @@ void playerTakeOff(int item_id, int pack_position_id) {
 // Used to verify if this really is the item we wish to -CJS-
 // wear or read.
 static bool verify(const char *prompt, int item) {
-    obj_desc_t description;
+    obj_desc_t description = {'\0'};
     itemDescription(description, &inventory[item], true);
 
     // change the period to a question mark
     description[strlen(description) - 1] = '?';
 
-    obj_desc_t msg;
+    obj_desc_t msg = {'\0'};
     (void) sprintf(msg, "%s %s", prompt, description);
 
     return getInputConfirmation(msg);
@@ -757,10 +757,10 @@ static void inventoryUnwieldItem() {
     }
 
     if ((TR_CURSED & inventory[EQUIPMENT_WIELD].flags) != 0u) {
-        obj_desc_t description;
+        obj_desc_t description = {'\0'};
         itemDescription(description, &inventory[EQUIPMENT_WIELD], false);
 
-        obj_desc_t msg;
+        obj_desc_t msg = {'\0'};
         (void) sprintf(msg, "The %s you are wielding appears to be cursed.", description);
 
         printMessage(msg);
@@ -782,10 +782,10 @@ static void inventoryUnwieldItem() {
     playerAdjustBonusesForItem(&inventory[EQUIPMENT_WIELD], 1); // Add bonuses
 
     if (inventory[EQUIPMENT_WIELD].category_id != TV_NOTHING) {
-        obj_desc_t msgLabel;
+        obj_desc_t msgLabel = {'\0'};
         (void) strcpy(msgLabel, "Primary weapon   : ");
 
-        obj_desc_t description;
+        obj_desc_t description = {'\0'};
         itemDescription(description, &inventory[EQUIPMENT_WIELD], true);
 
         printMessage(strcat(msgLabel, description));
@@ -940,10 +940,10 @@ static int inventoryGetSlotToWearEquipment(int item) {
 }
 
 static void inventoryItemIsCursedMessage(int itemID) {
-    obj_desc_t description;
+    obj_desc_t description = {'\0'};
     itemDescription(description, &inventory[itemID], false);
 
-    obj_desc_t itemText;
+    obj_desc_t itemText = {'\0'};
     (void) sprintf(itemText, "The %s you are ", description);
 
     if (itemID == EQUIPMENT_HEAD) {
@@ -1000,7 +1000,7 @@ static bool selectItemCommands(char *command, char *which, bool selecting) {
             continue;
         }
 
-        obj_desc_t headingText;
+        obj_desc_t headingText = {'\0'};
         buildCommandHeading(headingText, from, to, swap, *command, prompt);
 
         // Abort everything.
@@ -1166,7 +1166,7 @@ static bool selectItemCommands(char *command, char *which, bool selecting) {
                     text = "You are wearing";
                 }
 
-                obj_desc_t description;
+                obj_desc_t description = {'\0'};
                 itemDescription(description, i_ptr, true);
 
                 // Get the right equipment letter.
@@ -1179,7 +1179,7 @@ static bool selectItemCommands(char *command, char *which, bool selecting) {
                     }
                 }
 
-                obj_desc_t msg;
+                obj_desc_t msg = {'\0'};
                 (void) sprintf(msg, "%s %s (%c)", text, description, 'a' + item);
                 printMessage(msg);
 
@@ -1204,11 +1204,11 @@ static bool selectItemCommands(char *command, char *which, bool selecting) {
             char query = ESCAPE;
 
             if (inventory[item].items_count > 1) {
-                obj_desc_t description;
+                obj_desc_t description = {'\0'};
                 itemDescription(description, &inventory[item], true);
                 description[strlen(description) - 1] = '?';
 
-                obj_desc_t msg;
+                obj_desc_t msg = {'\0'};
                 (void) sprintf(msg, "Drop all %s [y/n]", description);
                 msg[strlen(description) - 1] = '.';
 
@@ -1256,7 +1256,7 @@ static bool selectItemCommands(char *command, char *which, bool selecting) {
 // Put an appropriate header.
 static void inventoryDisplayAppropriateHeader() {
     if (screen_state == INVEN_SCR) {
-        obj_desc_t msg;
+        obj_desc_t msg = {'\0'};
         int weightQuotient = inventory_weight / 10;
         int weightRemainder = inventory_weight % 10;
 
@@ -1422,7 +1422,7 @@ bool inventoryGetInputForItemId(int *command_key_id, const char *prompt, int ite
             }
         }
 
-        vtype_t description;
+        vtype_t description = {'\0'};
 
         if (full) {
             (void) sprintf(
@@ -1882,7 +1882,7 @@ void playerRestOn() {
         command_count = 0;
     } else {
         rest_num = 0;
-        vtype_t rest_str = {0};
+        vtype_t rest_str = {'\0'};
 
         putStringClearToEOL("Rest for how long? ", 0, 0);
 
