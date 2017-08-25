@@ -720,7 +720,7 @@ static void playerDetectEnchantment() {
         if (i_ptr->category_id != TV_NOTHING && itemEnchanted(i_ptr) && randomNumber(chance) == 1) {
             // extern const char *describe_use(int); // FIXME: Why here? We have it in externs.
 
-            vtype_t tmp_str;
+            vtype_t tmp_str = {'\0'};
             (void) sprintf(tmp_str, "There's something about what you are %s...", playerItemWearingDescription(i));
             playerDisturb(0, 0);
             printMessage(tmp_str);
@@ -1397,7 +1397,8 @@ static void commandLocateOnMap() {
     cx = panel_col;
 
     int dir_val;
-    vtype_t out_val, tmp_str;
+    vtype_t out_val = {'\0'};
+    vtype_t tmp_str = {'\0'};
 
     while (true) {
         p_y = panel_row;
@@ -2177,7 +2178,7 @@ static void dungeonJamDoor() {
     } else {
         player_free_turn = false;
 
-        vtype_t msg;
+        vtype_t msg = {'\0'};
         (void) sprintf(msg, "The %s is in your way!", creatures_list[monsters[tile->creature_id].creature_id].name);
         printMessage(msg);
     }
