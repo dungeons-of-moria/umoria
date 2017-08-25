@@ -81,7 +81,7 @@ void magicInitializeItemNames() {
     }
 
     int k;
-    vtype_t title;
+    vtype_t title = {'\0'};
 
     for (auto &item_title : magic_item_titles) {
         title[0] = '\0';
@@ -688,7 +688,7 @@ void itemChargesRemainingDescription(int item_id) {
 
     int rem_num = inventory[item_id].misc_use;
 
-    vtype_t out_val;
+    vtype_t out_val = {'\0'};
     (void) sprintf(out_val, "You have %d charges remaining.", rem_num);
     printMessage(out_val);
 }
@@ -699,13 +699,13 @@ void itemTypeRemainingCountDescription(int item_id) {
 
     i_ptr->items_count--;
 
-    obj_desc_t tmp_str;
+    obj_desc_t tmp_str = {'\0'};
     itemDescription(tmp_str, i_ptr, true);
 
     i_ptr->items_count++;
 
     // the string already has a dot at the end.
-    obj_desc_t out_val;
+    obj_desc_t out_val = {'\0'};
     (void) sprintf(out_val, "You have %s", tmp_str);
     printMessage(out_val);
 }
