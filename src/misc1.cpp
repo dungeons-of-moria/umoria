@@ -14,7 +14,7 @@ static uint32_t old_seed;
 
 static void panelBounds();
 static int popm();
-static int maxHitPoints(uint8_t *array);
+static int maxHitPoints(const uint8_t *array);
 static int monsterGetOneSuitableForLevel(int level);
 
 // gets a new random seed for the random number generator
@@ -591,7 +591,7 @@ static int popm() {
 }
 
 // Gives Max hit points -RAK-
-static int maxHitPoints(uint8_t *array) {
+static int maxHitPoints(const uint8_t *array) {
     return (array[0] * array[1]);
 }
 

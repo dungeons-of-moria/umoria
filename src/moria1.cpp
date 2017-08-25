@@ -280,7 +280,7 @@ static void inventoryItemWeightText(char *text, int itemID) {
 // does not fit, it may be moved left.  The return value is the left edge
 // used. If mask is non-zero, then only display those items which have a
 // non-zero entry in the mask array.
-int displayInventory(int item_id_start, int item_id_end, bool weighted, int column, char *mask) {
+int displayInventory(int item_id_start, int item_id_end, bool weighted, int column, const char *mask) {
     vtype_t descriptions[23];
 
     int len = 79 - column;

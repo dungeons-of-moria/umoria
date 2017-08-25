@@ -1378,7 +1378,7 @@ static int spellChanceOfSuccess(int spell) {
 // Print list of spells -RAK-
 // if non_consecutive is  -1: spells numbered consecutively from 'a' to 'a'+num
 //                       >=0: spells numbered by offset from non_consecutive
-void displaySpellsList(int *spell, int number_of_choices, bool comment, int non_consecutive) {
+void displaySpellsList(const int *spell, int number_of_choices, bool comment, int non_consecutive) {
     int col;
     if (comment) {
         col = 22;
