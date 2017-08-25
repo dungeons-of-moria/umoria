@@ -957,7 +957,8 @@ static void monsterOpenDoor(Cave_t *tile, int16_t monster_hp, uint32_t move_bits
         // Creature can not open doors, must bash them
         *do_turn = true;
 
-        if (randomNumber((monster_hp + 1) * (80 + abs(item->misc_use))) < 40 * (monster_hp - 20 - abs(item->misc_use))) {
+        auto abs_misc_use = (int) std::abs((std::intmax_t) item->misc_use);
+        if (randomNumber((monster_hp + 1) * (80 + abs_misc_use)) < 40 * (monster_hp - 20 - abs_misc_use)) {
             inventoryItemCopyTo(OBJ_OPEN_DOOR, item);
 
             // 50% chance of breaking door
@@ -1532,8 +1533,8 @@ static void monsterMove(int monster_id, uint32_t *rcmove) {
 
     // Does the critter multiply?
     // rest could be negative, to be safe, only use mod with positive values.
-    int rest_period = abs(py.flags.rest);
-    if (((creature->movement & CM_MULTIPLY) != 0u) && MON_MAX_MULTIPLY_PER_LEVEL >= monster_multiply_total && (rest_period % MON_MULTIPLY_ADJUST) == 0) {
+    auto abs_rest_period = (int) std::abs((std::intmax_t) py.flags.rest);
+    if (((creature->movement & CM_MULTIPLY) != 0u) && MON_MAX_MULTIPLY_PER_LEVEL >= monster_multiply_total && (abs_rest_period % MON_MULTIPLY_ADJUST) == 0) {
         monsterMultiplyCritter(monster, monster_id, rcmove);
     }
 
