@@ -529,13 +529,15 @@ void itemDescription(obj_desc_t description, Inventory_t *item, bool add_prefix)
     }
 
     if (spellItemIdentified(item)) {
-        // originally used %+d, but several machines don't support it
+        auto abs_to_hit = (int) std::abs((std::intmax_t) item->to_hit);
+        auto abs_to_damage = (int) std::abs((std::intmax_t) item->to_damage);
+
         if ((item->identification & ID_SHOW_HIT_DAM) != 0) {
-            (void) sprintf(tmp_str, " (%c%d,%c%d)", (item->to_hit < 0) ? '-' : '+', abs(item->to_hit), (item->to_damage < 0) ? '-' : '+', abs(item->to_damage));
+            (void) sprintf(tmp_str, " (%c%d,%c%d)", (item->to_hit < 0) ? '-' : '+', abs_to_hit, (item->to_damage < 0) ? '-' : '+', abs_to_damage);
         } else if (item->to_hit != 0) {
-            (void) sprintf(tmp_str, " (%c%d)", (item->to_hit < 0) ? '-' : '+', abs(item->to_hit));
+            (void) sprintf(tmp_str, " (%c%d)", (item->to_hit < 0) ? '-' : '+', abs_to_hit);
         } else if (item->to_damage != 0) {
-            (void) sprintf(tmp_str, " (%c%d)", (item->to_damage < 0) ? '-' : '+', abs(item->to_damage));
+            (void) sprintf(tmp_str, " (%c%d)", (item->to_damage < 0) ? '-' : '+',abs_to_damage);
         } else {
             tmp_str[0] = '\0';
         }
@@ -543,18 +545,19 @@ void itemDescription(obj_desc_t description, Inventory_t *item, bool add_prefix)
     }
 
     // Crowns have a zero base AC, so make a special test for them.
+    auto abs_to_ac = (int) std::abs((std::intmax_t) item->to_ac);
     if (item->ac != 0 || item->category_id == TV_HELM) {
         (void) sprintf(tmp_str, " [%d", item->ac);
         (void) strcat(tmp_val, tmp_str);
         if (spellItemIdentified(item)) {
             // originally used %+d, but several machines don't support it
-            (void) sprintf(tmp_str, ",%c%d", (item->to_ac < 0) ? '-' : '+', abs(item->to_ac));
+            (void) sprintf(tmp_str, ",%c%d", (item->to_ac < 0) ? '-' : '+', abs_to_ac);
             (void) strcat(tmp_val, tmp_str);
         }
         (void) strcat(tmp_val, "]");
     } else if (item->to_ac != 0 && spellItemIdentified(item)) {
         // originally used %+d, but several machines don't support it
-        (void) sprintf(tmp_str, " [%c%d]", (item->to_ac < 0) ? '-' : '+', abs(item->to_ac));
+        (void) sprintf(tmp_str, " [%c%d]", (item->to_ac < 0) ? '-' : '+', abs_to_ac);
         (void) strcat(tmp_val, tmp_str);
     }
 
@@ -572,19 +575,21 @@ void itemDescription(obj_desc_t description, Inventory_t *item, bool add_prefix)
     } else if (misc_use == IGNORED) {
         // NOOP
     } else if (spellItemIdentified(item)) {
+        auto abs_misc_use = (int) std::abs((std::intmax_t) item->misc_use);
+
         if (misc_use == Z_PLUSSES) {
             // originally used %+d, but several machines don't support it
-            (void) sprintf(tmp_str, " (%c%d)", (item->misc_use < 0) ? '-' : '+', abs(item->misc_use));
+            (void) sprintf(tmp_str, " (%c%d)", (item->misc_use < 0) ? '-' : '+', abs_misc_use);
         } else if (misc_use == CHARGES) {
             (void) sprintf(tmp_str, " (%d charges)", item->misc_use);
         } else if (item->misc_use != 0) {
             if (misc_use == PLUSSES) {
-                (void) sprintf(tmp_str, " (%c%d)", (item->misc_use < 0) ? '-' : '+', abs(item->misc_use));
+                (void) sprintf(tmp_str, " (%c%d)", (item->misc_use < 0) ? '-' : '+', abs_misc_use);
             } else if (misc_use == FLAGS) {
                 if ((item->flags & TR_STR) != 0u) {
-                    (void) sprintf(tmp_str, " (%c%d to STR)", (item->misc_use < 0) ? '-' : '+', abs(item->misc_use));
+                    (void) sprintf(tmp_str, " (%c%d to STR)", (item->misc_use < 0) ? '-' : '+', abs_misc_use);
                 } else if ((item->flags & TR_STEALTH) != 0u) {
-                    (void) sprintf(tmp_str, " (%c%d to stealth)", (item->misc_use < 0) ? '-' : '+', abs(item->misc_use));
+                    (void) sprintf(tmp_str, " (%c%d to stealth)", (item->misc_use < 0) ? '-' : '+', abs_misc_use);
                 }
             }
         }
