@@ -227,7 +227,7 @@ void terminalBellSound();
 void displayDungeonMap();
 bool checkForNonBlockingKeyPress(int microseconds);
 void getDefaultPlayerName(char *buffer);
-void checkFilePermissions();
+bool checkFilePermissions();
 
 #ifndef _WIN32
 // call functions which expand tilde before calling open/fopen

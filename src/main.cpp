@@ -39,7 +39,9 @@ int main(int argc, char *argv[]) {
     initializeScoreFile();
 
     // Make sure we have access to all files -MRC-
-    checkFilePermissions();
+    if (!checkFilePermissions()) {
+        return 1;
+    }
 
     if (!terminalInitialize()) {
         return 1;

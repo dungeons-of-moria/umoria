@@ -724,15 +724,17 @@ bool tilde(const char *file, char *expanded) {
 
 // Check user permissions on Unix based systems,
 // or if on Windows just return. -MRC-
-void checkFilePermissions() {
+bool checkFilePermissions() {
 #ifndef _WIN32
     if (0 != setuid(getuid())) {
         perror("Can't set permissions correctly!  Setuid call failed.\n");
-        exit(0);
+        return false;
     }
     if (0 != setgid(getgid())) {
         perror("Can't set permissions correctly!  Setgid call failed.\n");
-        exit(0);
+        return false;
     }
 #endif
+
+    return true;
 }
