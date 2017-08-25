@@ -1020,9 +1020,9 @@ void setGameOptions() {
 
     int max;
     for (max = 0; options[max].o_prompt != nullptr; max++) {
-        vtype_t string;
-        (void) sprintf(string, "%-38s: %s", options[max].o_prompt, (*options[max].o_var ? "yes" : "no "));
-        putStringClearToEOL(string, max + 1, 0);
+        vtype_t str = {'\0'};
+        (void) sprintf(str, "%-38s: %s", options[max].o_prompt, (*options[max].o_var ? "yes" : "no "));
+        putStringClearToEOL(str, max + 1, 0);
     }
     eraseLine(max + 1, 0);
 
