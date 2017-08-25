@@ -358,7 +358,8 @@ static bool storeGetHaggle(const char *comment, int32_t *new_offer, int num_offe
         putStringClearToEOL(comment, 0, 0);
 
         if ((num_offer != 0) && store_last_increment != 0) {
-            (void) sprintf(default_offer, "[%c%d] ", (store_last_increment < 0) ? '-' : '+', abs(store_last_increment));
+            auto abs_store_last_increment = (int) std::abs((std::intmax_t) store_last_increment);
+            (void) sprintf(default_offer, "[%c%d] ", (store_last_increment < 0) ? '-' : '+', abs_store_last_increment);
             putStringClearToEOL(default_offer, 0, save_comment_len);
             comment_len = save_comment_len + (int) strlen(default_offer);
         }
