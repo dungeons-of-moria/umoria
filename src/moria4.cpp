@@ -1078,7 +1078,8 @@ static void playerBashClosedDoor(int y, int x, int dir, Cave_t *tile, Inventory_
     int chance = py.stats.used[A_STR] + py.misc.weight / 2;
 
     // Use (roughly) similar method as for monsters.
-    if (randomNumber(chance * (20 + abs(item->misc_use))) < 10 * (chance - abs(item->misc_use))) {
+    auto abs_misc_use = (int) std::abs((std::intmax_t) item->misc_use);
+    if (randomNumber(chance * (20 + abs_misc_use)) < 10 * (chance - abs_misc_use)) {
         printMessage("The door crashes open!");
 
         inventoryItemCopyTo(OBJ_OPEN_DOOR, &treasure_list[tile->treasure_id]);
