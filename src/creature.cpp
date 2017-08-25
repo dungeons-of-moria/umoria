@@ -260,7 +260,7 @@ static void playerDiedFromString(vtype_t *description, const char *monster_name,
 }
 
 static bool playerTestAttackHits(int attack_id, uint8_t level) {
-    bool success;
+    bool success = false;
 
     switch (attack_id) {
         case 1: // Normal attack
@@ -386,7 +386,6 @@ static bool playerTestAttackHits(int attack_id, uint8_t level) {
             success = true;
             break;
         default:
-
             break;
     }
 
