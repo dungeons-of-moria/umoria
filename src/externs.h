@@ -201,7 +201,7 @@ void displayWorldObjectDescription();
 bool stringToNumber(const char *str, int *number);
 
 // io.c
-void terminalInitialize();
+bool terminalInitialize();
 void putString(const char *out_str, int row, int col);
 void putQIO();
 void terminalRestore();

@@ -41,7 +41,9 @@ int main(int argc, char *argv[]) {
     // Make sure we have access to all files -MRC-
     checkFilePermissions();
 
-    terminalInitialize();
+    if (!terminalInitialize()) {
+        return 1;
+    }
 
     // check for user interface option
     for (--argc, ++argv; argc > 0 && argv[0][0] == '-'; --argc, ++argv) {

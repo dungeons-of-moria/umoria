@@ -6,6 +6,7 @@
 
 // Terminal I/O code, uses the curses package
 
+#include <cstdlib>
 #include "headers.h"
 #include "curses.h"
 #include "externs.h"
@@ -21,25 +22,28 @@ static void moriaTerminalInitialize();
 static void sleepInSeconds(int seconds);
 
 // initializes the terminal / curses routines
-void terminalInitialize() {
+bool terminalInitialize() {
     initscr();
 
     // Check we have enough screen. -CJS-
     if (LINES < 24 || COLS < 80) {
         (void) printf("Screen too small for moria.\n");
-        exit(1);
+        return false;
     }
 
     save_screen = newwin(0, 0, 0, 0);
     if (save_screen == nullptr) {
         (void) printf("Out of memory in starting up curses.\n");
         exitGame();
+        return false;
     }
 
     moriaTerminalInitialize();
 
     (void) clear();
     (void) refresh();
+
+    return true;
 }
 
 // Set up the terminal into a suitable state -MRC-
