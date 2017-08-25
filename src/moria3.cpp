@@ -17,14 +17,14 @@ static void trapOpenPit(Inventory_t *t_ptr, int dam) {
         return;
     }
 
-    obj_desc_t description;
+    obj_desc_t description = {'\0'};
     itemDescription(description, t_ptr, true);
     playerTakesHit(dam, description);
 }
 
 static void trapArrow(Inventory_t *t_ptr, int dam) {
     if (playerTestBeingHit(125, 0, 0, py.misc.ac + py.misc.magical_ac, CLASS_MISC_HIT)) {
-        obj_desc_t description;
+        obj_desc_t description = {'\0'};
         itemDescription(description, t_ptr, true);
         playerTakesHit(dam, description);
 
@@ -41,7 +41,7 @@ static void trapCoveredPit(Inventory_t *t_ptr, int dam, int y, int x) {
     if (py.flags.free_fall) {
         printMessage("You gently float down.");
     } else {
-        obj_desc_t description;
+        obj_desc_t description = {'\0'};
         itemDescription(description, t_ptr, true);
         playerTakesHit(dam, description);
     }
@@ -58,7 +58,7 @@ static void trapDoor(Inventory_t *t_ptr, int dam) {
     if (py.flags.free_fall) {
         printMessage("You gently float down.");
     } else {
-        obj_desc_t description;
+        obj_desc_t description = {'\0'};
         itemDescription(description, t_ptr, true);
         playerTakesHit(dam, description);
     }
@@ -96,7 +96,7 @@ static void trapStrengthDart(Inventory_t *t_ptr, int dam) {
         if (!py.flags.sustain_str) {
             (void) playerStatRandomDecrease(A_STR);
 
-            obj_desc_t description;
+            obj_desc_t description = {'\0'};
             itemDescription(description, t_ptr, true);
             playerTakesHit(dam, description);
 
@@ -182,7 +182,7 @@ static void trapConfuseGas() {
 
 static void trapSlowDart(Inventory_t *t_ptr, int dam) {
     if (playerTestBeingHit(125, 0, 0, py.misc.ac + py.misc.magical_ac, CLASS_MISC_HIT)) {
-        obj_desc_t description;
+        obj_desc_t description = {'\0'};
         itemDescription(description, t_ptr, true);
         playerTakesHit(dam, description);
 
@@ -203,7 +203,7 @@ static void trapConstitutionDart(Inventory_t *t_ptr, int dam) {
         if (!py.flags.sustain_con) {
             (void) playerStatRandomDecrease(A_CON);
 
-            obj_desc_t description;
+            obj_desc_t description = {'\0'};
             itemDescription(description, t_ptr, true);
             playerTakesHit(dam, description);
 
@@ -397,7 +397,8 @@ static void carry(int y, int x, bool pickup) {
         return;
     }
 
-    obj_desc_t description, msg;
+    obj_desc_t description = {'\0'};
+    obj_desc_t msg = {'\0'};
 
     playerEndRunning();
 
@@ -802,7 +803,7 @@ static void playerAttackMonster(int y, int x) {
     monster->sleep_count = 0;
 
     // Does the player know what he's fighting?
-    vtype_t name;
+    vtype_t name = {'\0'};
     if (!monster->lit) {
         (void) strcpy(name, "it");
     } else {
@@ -815,7 +816,7 @@ static void playerAttackMonster(int y, int x) {
     int base_to_hit = playerCalculateBaseToHit(monster->lit, total_to_hit);
 
     int damage;
-    vtype_t msg;
+    vtype_t msg = {'\0'};
 
     // Loop for number of blows, trying to hit the critter.
     // Note: blows will always be greater than 0 at the start of the loop -MRC-
@@ -1328,7 +1329,8 @@ bool dungeonTunnelWall(int y, int x, int digging_ability, int digging_chance) {
 }
 
 void objectBlockedByMonster(int monster_id) {
-    vtype_t description, msg;
+    vtype_t description = {'\0'};
+    vtype_t msg = {'\0'};
 
     Monster_t *monster = &monsters[monster_id];
     const char *name = creatures_list[monster->creature_id].name;
