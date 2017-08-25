@@ -25,7 +25,7 @@ bool initializeScoreFile() {
 
 // Attempt to open and print the file containing the intro splash screen text -RAK-
 void displaySplashScreen() {
-    vtype_t in_line;
+    vtype_t in_line = {'\0'};
 
     FILE *file1 = fopen(MORIA_SPLASH, "r");
     if (file1 != nullptr) {
@@ -177,7 +177,7 @@ static void writeCharacterSheetToFile(FILE *file1) {
     const char *colon = ":";
     const char *blank = " ";
 
-    vtype_t statDescription;
+    vtype_t statDescription = {'\0'};
 
     (void) fprintf(file1, "%c\n\n", CTRL_KEY('L'));
 
@@ -240,7 +240,7 @@ static void writeCharacterSheetToFile(FILE *file1) {
     int xsave = py.misc.saving_throw + playerStatAdjustmentWisdomIntelligence(A_WIS) + (class_level_adj[py.misc.class_id][CLASS_SAVE] * py.misc.level / 3);
     int xdev = py.misc.saving_throw + playerStatAdjustmentWisdomIntelligence(A_INT) + (class_level_adj[py.misc.class_id][CLASS_DEVICE] * py.misc.level / 3);
 
-    vtype_t xinfra;
+    vtype_t xinfra = {'\0'};
     (void) sprintf(xinfra, "%d feet", py.flags.see_infra * 10);
 
     (void) fprintf(file1, "(Miscellaneous Abilities)\n\n");
@@ -301,7 +301,7 @@ static void writeEquipmentListToFile(FILE *file1) {
         return;
     }
 
-    obj_desc_t description;
+    obj_desc_t description = {'\0'};
     int itemSlotID = 0;
 
     for (int i = EQUIPMENT_WIELD; i < PLAYER_INVENTORY_SIZE; i++) {
@@ -327,7 +327,7 @@ static void writeInventoryToFile(FILE *file1) {
         return;
     }
 
-    obj_desc_t description;
+    obj_desc_t description = {'\0'};
 
     for (int i = 0; i < inventory_count; i++) {
         itemDescription(description, &inventory[i], true);
@@ -339,7 +339,7 @@ static void writeInventoryToFile(FILE *file1) {
 
 // Print the character to a file or device -RAK-
 bool outputPlayerCharacterToFile(char *filename) {
-    vtype_t msg;
+    vtype_t msg = {'\0'};
 
     int fd = open(filename, O_WRONLY | O_CREAT | O_EXCL, 0644);
     if (fd < 0 && errno == EEXIST) {
