@@ -361,7 +361,7 @@ static bool sv_write() {
 
 // Set up prior to actual save, do the save, then clean up
 bool saveGame() {
-    vtype_t input;
+    vtype_t input = {'\0'};
     std::string output;
 
     while (!_save_char(config.save_game_filename)) {
