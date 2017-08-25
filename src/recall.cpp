@@ -186,7 +186,7 @@ static void memoryWizardModeInit(Recall_t *memory, Creature_t *creature) {
 
 // Conflict history.
 static void memoryConflictHistory(uint16_t deaths, uint16_t kills) {
-    vtype_t desc;
+    vtype_t desc = {'\0'};
 
     if (deaths != 0u) {
         (void) sprintf(desc, "%d of the contributors to your monster memory %s", deaths, plural(deaths, "has", "have"));
@@ -222,7 +222,7 @@ static bool memoryDepthFoundAt(uint8_t level, uint16_t kills) {
             level = MON_ENDGAME_LEVEL;
         }
 
-        vtype_t desc;
+        vtype_t desc = {'\0'};
         (void) sprintf(desc, " It is normally found at depths of %d feet", level * 50);
         memoryPrint(desc);
     }
@@ -329,7 +329,7 @@ static void memoryKillPoints(uint16_t creature_defense, uint16_t monster_exp, ui
         plural = 's';
     }
 
-    vtype_t desc;
+    vtype_t desc = {'\0'};
     (void) sprintf(desc, " creature is worth %d.%02d point%c", quotient, remainder, plural);
     memoryPrint(desc);
 
@@ -413,7 +413,7 @@ static void memoryMagicSkills(uint32_t memory_spell_flags, uint32_t monster_spel
     if ((memory_spell_flags & (CS_BREATHE | CS_SPELLS)) != 0u) {
         // Could offset by level
         if ((monster_spell_flags & CS_FREQ) > 5) {
-            vtype_t temp;
+            vtype_t temp = {'\0'};
             (void) sprintf(temp, "; 1 time in %d", creature_spell_flags & CS_FREQ);
             memoryPrint(temp);
         }
@@ -429,7 +429,7 @@ static void memoryKillDifficulty(Creature_t *creature, uint32_t monster_kills) {
         return;
     }
 
-    vtype_t description;
+    vtype_t description = {'\0'};
 
     (void) sprintf(description, " It has an armor rating of %d", creature->ac);
     memoryPrint(description);
@@ -516,7 +516,7 @@ static void memoryAwareness(Creature_t *creature, Recall_t *memory) {
             memoryPrint("is ever vigilant for");
         }
 
-        vtype_t text;
+        vtype_t text = {'\0'};
         (void) sprintf(text, " intruders, which it may notice from %d feet.", 10 * creature->area_affect_radius);
         memoryPrint(text);
     }
@@ -561,7 +561,7 @@ static void memoryLootCarried(uint32_t creature_move, uint32_t memory_move) {
     } else if (carrying_chance == 2) {
         memoryPrint(" one or two");
     } else {
-        vtype_t msg;
+        vtype_t msg = {'\0'};
         (void) sprintf(msg, " up to %d", carrying_chance);
         memoryPrint(msg);
     }
@@ -646,7 +646,7 @@ static void memoryAttackNumberAndDamage(Recall_t *memory, Creature_t *creature) 
                         memoryPrint(" with damage");
                     }
 
-                    vtype_t msg;
+                    vtype_t msg = {'\0'};
                     (void) sprintf(msg, " %dd%d", attack_dice, attack_sides);
                     memoryPrint(msg);
                 }
@@ -688,7 +688,7 @@ int memoryRecall(int monster_id) {
     bool known;
 
     // Start the paragraph for the core monster description
-    vtype_t msg;
+    vtype_t msg = {'\0'};
     (void) sprintf(msg, "The %s:\n", creature->name);
     memoryPrint(msg);
 
