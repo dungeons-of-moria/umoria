@@ -596,7 +596,7 @@ static bool lookRay(int y, int from, int to) {
 
 static bool lookSee(int x, int y, bool *transparent) {
     if (x < 0 || y < 0 || y > x) {
-        obj_desc_t errorMessage;
+        obj_desc_t errorMessage = {'\0'};
         (void) sprintf(errorMessage, "Illegal call to lookSee(%d, %d)", x, y);
         printMessage(errorMessage);
     }
@@ -628,8 +628,7 @@ static bool lookSee(int x, int y, bool *transparent) {
     // a warning. Perhaps we can set it to `ESCAPE` here as default. -MRC-
     char query = ESCAPE;
 
-    obj_desc_t msg;
-    msg[0] = 0;
+    obj_desc_t msg = {'\0'};
 
     if (los_rocks_and_objects == 0 && tile->creature_id > 1 && monsters[tile->creature_id].lit) {
         j = monsters[tile->creature_id].creature_id;
@@ -654,7 +653,7 @@ static bool lookSee(int x, int y, bool *transparent) {
             }
 
             if (los_rocks_and_objects == 0 && treasure_list[tile->treasure_id].category_id != TV_INVIS_TRAP) {
-                obj_desc_t obj_string;
+                obj_desc_t obj_string = {'\0'};
                 itemDescription(obj_string, &treasure_list[tile->treasure_id], true);
 
                 (void) sprintf(msg, "%s %s ---pause---", description, obj_string);
@@ -844,7 +843,8 @@ static void inventoryDropOrThrowItem(int y, int x, Inventory_t *item) {
         treasure_list[cur_pos] = *item;
         dungeonLiteSpot(pos_y, pos_x);
     } else {
-        obj_desc_t description, msg;
+        obj_desc_t description = {'\0'};
+        obj_desc_t msg = {'\0'};
         itemDescription(description, item, false);
 
         (void) sprintf(msg, "The %s disappears.", description);
@@ -928,7 +928,8 @@ void playerThrowItem() {
                 if (playerTestBeingHit(tbth, (int) py.misc.level, tpth, (int) creatures_list[m_ptr->creature_id].ac, CLASS_BTHB)) {
                     int damage = m_ptr->creature_id;
 
-                    obj_desc_t description, msg;
+                    obj_desc_t description = {'\0'};
+                    obj_desc_t msg = {'\0'};
                     itemDescription(description, &thrown_item, false);
 
                     // Does the player know what he's fighting?
@@ -990,7 +991,7 @@ static void playerBashAttack(int y, int x) {
     monster->sleep_count = 0;
 
     // Does the player know what he's fighting?
-    vtype_t name;
+    vtype_t name = {'\0'};
     if (!monster->lit) {
         (void) strcpy(name, "it");
     } else {
@@ -1008,7 +1009,7 @@ static void playerBashAttack(int y, int x) {
     }
 
     if (playerTestBeingHit(base_to_hit, (int) py.misc.level, (int) py.stats.used[A_DEX], (int) creature->ac, CLASS_BTH)) {
-        vtype_t msg;
+        vtype_t msg = {'\0'};
         (void) sprintf(msg, "You hit %s.", name);
         printMessage(msg);
 
@@ -1050,7 +1051,7 @@ static void playerBashAttack(int y, int x) {
             printMessage(msg);
         }
     } else {
-        vtype_t msg;
+        vtype_t msg = {'\0'};
         (void) sprintf(msg, "You miss %s.", name);
         printMessage(msg);
     }
