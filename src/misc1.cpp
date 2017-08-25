@@ -350,14 +350,18 @@ bool los(int from_y, int from_x, int to_y, int to_x) {
         int y_sign;      // sign of delta_y
         int slope;       // slope or 1/slope of LOS
 
-        scale_half = abs(delta_x * delta_y);
+        int delta_multiply = delta_x * delta_y;
+        scale_half = (int) std::abs((std::intmax_t) delta_multiply);
         scale = scale_half << 1;
         x_sign = delta_x < 0 ? -1 : 1;
         y_sign = delta_y < 0 ? -1 : 1;
 
         // Travel from one end of the line to the other, oriented along the longer axis.
 
-        if (abs(delta_x) >= abs(delta_y)) {
+        auto abs_delta_x = (int) std::abs((std::intmax_t) delta_x);
+        auto abs_delta_y = (int) std::abs((std::intmax_t) delta_y);
+
+        if (abs_delta_x >= abs_delta_y) {
             int dy; // "fractional" y position
 
             // We start at the border between the first and second tiles, where
@@ -699,8 +703,8 @@ static int monsterGetOneSuitableForLevel(int level) {
     }
 
     if (randomNumber(MON_CHANCE_OF_NASTY) == 1) {
-        level = level + abs(randomNumberNormalDistribution(0, 4)) + 1;
-
+        auto abs_distribution = (int) std::abs((std::intmax_t) randomNumberNormalDistribution(0, 4));
+        level += abs_distribution + 1;
         if (level > MON_MAX_LEVELS) {
             level = MON_MAX_LEVELS;
         }
@@ -902,8 +906,8 @@ int magicEnchantmentBonus(int base, int max_standard, int level) {
     }
 
     // abs may be a macro, don't call it with randomNumberNormalDistribution() as a parameter
-    int distribution = randomNumberNormalDistribution(0, stand_deviation);
-    int bonus = (abs(distribution) / 10) + base;
+    auto abs_distribution = (int) std::abs((std::intmax_t) randomNumberNormalDistribution(0, stand_deviation));
+    int bonus = (abs_distribution / 10) + base;
 
     if (bonus < base) {
         return base;
