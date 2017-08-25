@@ -791,7 +791,7 @@ static void monsterConfuseOnAttack(Creature_t *creature, Monster_t *monster, int
         printMessage("Your hands stop glowing.");
         py.flags.confuse_monster = false;
 
-        vtype_t msg;
+        vtype_t msg = {'\0'};
 
         if (randomNumber(MON_MAX_LEVELS) < creature->level || ((CD_NO_SLEEP & creature->defenses) != 0)) {
             (void) sprintf(msg, "%sis unaffected.", monster_name);
@@ -823,19 +823,19 @@ static void monsterAttackPlayer(int monster_id) {
     Monster_t *monster = &monsters[monster_id];
     Creature_t *creature = &creatures_list[monster->creature_id];
 
-    vtype_t name;
+    vtype_t name = {'\0'};
     if (!monster->lit) {
         (void) strcpy(name, "It ");
     } else {
         (void) sprintf(name, "The %s ", creature->name);
     }
 
-    vtype_t death_description;
+    vtype_t death_description = {'\0'};
     playerDiedFromString(&death_description, creature->name, creature->movement);
 
     int attype, adesc, adice, asides;
     int attackn = 0;
-    vtype_t description;
+    vtype_t description = {'\0'};
 
     uint8_t *attstr = creature->damage;
     while ((*attstr != 0) && !character_is_dead) {
@@ -1220,7 +1220,7 @@ void monsterExecuteCastingOfSpell(Monster_t *monster, int monster_id, int spell_
             if (py.misc.current_mana > 0) {
                 playerDisturb(1, 0);
 
-                vtype_t msg;
+                vtype_t msg = {'\0'};
                 (void) sprintf(msg, "%sdraws psychic energy from you!", monster_name);
                 printMessage(msg);
 
@@ -1293,14 +1293,14 @@ static bool monsterCastSpell(int monster_id) {
     monsterUpdateVisibility(monster_id);
 
     // Describe the attack
-    vtype_t name;
+    vtype_t name = {'\0'};
     if (monster->lit) {
         (void) sprintf(name, "The %s ", creature->name);
     } else {
         (void) strcpy(name, "It ");
     }
 
-    vtype_t death_description;
+    vtype_t death_description = {'\0'};
     playerDiedFromString(&death_description, creature->name, creature->movement);
 
     // Extract all possible spells into spell_choice
@@ -1690,7 +1690,7 @@ static void monsterAttackingUpdate(Monster_t *monster, int monster_id, int moves
 
                 if (monster->stunned_amount == 0) {
                     if (monster->lit) {
-                        vtype_t msg;
+                        vtype_t msg = {'\0'};
                         (void) sprintf(msg, "The %s ", creatures_list[monster->creature_id].name);
                         printMessage(strcat(msg, "recovers and glares at you."));
                     }
