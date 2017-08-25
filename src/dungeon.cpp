@@ -1320,21 +1320,23 @@ static uint8_t calculateMaxMessageCount() {
 static void commandPreviousMessage() {
     uint8_t max_messages = calculateMaxMessageCount();
 
-    int16_t msgID = last_message_id;
+    int16_t msg_id = last_message_id;
 
     if (max_messages > 1) {
         terminalSaveScreen();
 
         uint8_t lineNumber = max_messages;
-        for (uint8_t i = max_messages; i > 0; --i) {
-            putStringClearToEOL(messages[msgID], max_messages, 0);
 
-            if (msgID == 0) {
-                msgID = MESSAGE_HISTORY_SIZE - 1;
+        while(max_messages > 0) {
+            max_messages--;
+
+            putStringClearToEOL(messages[msg_id], max_messages, 0);
+
+            if (msg_id == 0) {
+                msg_id = MESSAGE_HISTORY_SIZE - 1;
             } else {
-                msgID--;
+                msg_id--;
             }
-
         }
 
         eraseLine(lineNumber, 0);
@@ -1343,7 +1345,7 @@ static void commandPreviousMessage() {
     } else {
         // Distinguish real and recovered messages with a '>'. -CJS-
         putString(">", 0, 0);
-        putStringClearToEOL(messages[msgID], 0, 1);
+        putStringClearToEOL(messages[msg_id], 0, 1);
     }
 }
 
