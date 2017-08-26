@@ -329,7 +329,7 @@ void itemDescription(obj_desc_t description, Inventory_t *item, bool add_prefix)
     const char *basenm = game_objects[item->id].name;
     const char *modstr = CNIL;
 
-    vtype_t damstr;
+    vtype_t damstr = {'\0'};
     damstr[0] = '\0';
 
     int misc_use = IGNORED;
@@ -485,7 +485,7 @@ void itemDescription(obj_desc_t description, Inventory_t *item, bool add_prefix)
             return;
     }
 
-    obj_desc_t tmp_val;
+    obj_desc_t tmp_val = {'\0'};
 
     if (modstr != CNIL) {
         (void) sprintf(tmp_val, basenm, modstr);
@@ -517,7 +517,7 @@ void itemDescription(obj_desc_t description, Inventory_t *item, bool add_prefix)
         return;
     }
 
-    vtype_t tmp_str;
+    vtype_t tmp_str = {'\0'};
 
     if (item->special_name_id != SN_NULL && spellItemIdentified(item)) {
         (void) strcat(tmp_val, " ");
