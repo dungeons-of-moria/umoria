@@ -28,15 +28,10 @@ bool player_free_turn;                  // Player has a free turn, so do not mov
 int running_counter;                    // Used in MORIA for .(dir)
 bool teleport_player;                   // Handle teleport traps
 
-bool player_carrying_light;             // True when player is carrying light
-bool weapon_is_heavy          = false;  // Weapon is too heavy -CJS-
-int pack_heaviness            = 0;      // Heaviness of pack - used to calculate if pack is too heavy -CJS-
-
 bool total_winner             = false;  // Character beat the Balrog
 bool character_generated      = false;  // Don't save score until character generation is finished
 bool character_saved          = false;  // Prevents save on kill after saving a character
 bool character_is_dead        = false;  // True if character has died
-int32_t character_birth_date;           // Unix time for when the character was created
 vtype_t character_died_from;            // What the character died from: starvation, Bat, etc.
 
 char doing_inventory_command  = 0;      // Track inventory commands -CJS-
@@ -75,7 +70,6 @@ int panel_col_prt, panel_row_prt;
 Cave_t cave[MAX_HEIGHT][MAX_WIDTH];
 
 // Player variables
-bool temporary_light_only    = false;  // Track if temporary light about player.
 int32_t character_max_score  = 0;      // Maximum score for a character
 
 // Creature arrays and variables

@@ -210,7 +210,7 @@ static void highscores() {
 
     HighScore_t new_entry{};
     new_entry.points = playerCalculateTotalPoints();
-    new_entry.birth_date = character_birth_date;
+    new_entry.birth_date = py.misc.date_of_birth;
     new_entry.uid = 0; // NOTE: do we not want to use `getuid()`? -MRC-
     new_entry.mhp = py.misc.max_hp;
     new_entry.chp = py.misc.current_hp;

@@ -72,7 +72,7 @@ void startMoria(int seed, bool start_new_game, bool use_roguelike_keys) {
         // Create character
         characterCreate();
 
-        character_birth_date = getCurrentUnixTime();
+        py.misc.date_of_birth = getCurrentUnixTime();
 
         initializeCharacterInventory();
         py.flags.food = 7500;
@@ -88,6 +88,11 @@ void startMoria(int seed, bool start_new_game, bool use_roguelike_keys) {
             clearScreen(); // force out the 'learn prayer' message
             playerGainMana(A_WIS);
         }
+
+        // Set some default values -MRC-
+        py.temporary_light_only = false;
+        py.weapon_is_heavy = false;
+        py.pack_heaviness = 0;
 
         // prevent ^c quit from entering score into scoreboard,
         // and prevent signal from creating panic save until this

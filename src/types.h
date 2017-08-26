@@ -32,6 +32,7 @@ typedef struct {
     struct {
         char name[PLAYER_NAME_SIZE];    // Name of character
         bool gender;                    // Gender of character (Female = 0, Male = 1)
+        int32_t date_of_birth;          // Unix time for when the character was created
         int32_t au;                     // Gold
         int32_t max_exp;                // Max experience
         int32_t exp;                    // Cur experience
@@ -124,6 +125,11 @@ typedef struct {
         bool confuse_monster;        // Glowing hands.
         uint8_t new_spells_to_learn; // Number of spells can learn.
     } flags;
+
+    int pack_heaviness;        // Heaviness of pack - used to calculate if pack is too heavy -CJS-
+    bool carrying_light;       // True when player is carrying light
+    bool temporary_light_only; // Track if temporary light about player.
+    bool weapon_is_heavy;      // Weapon is too heavy -CJS-
 } Player_t;
 
 // Race_t for the generated player character

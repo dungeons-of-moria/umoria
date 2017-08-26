@@ -23,15 +23,10 @@ extern bool player_free_turn;
 extern int running_counter;
 extern bool teleport_player;
 
-extern bool player_carrying_light;
-extern bool weapon_is_heavy;
-extern int pack_heaviness;
-
 extern bool total_winner;
 extern bool character_generated;
 extern bool character_saved;
 extern bool character_is_dead;
-extern int32_t character_birth_date;
 extern vtype_t character_died_from;
 
 extern char doing_inventory_command;
@@ -150,8 +145,6 @@ extern const char *syllables[MAX_SYLLABLES];
 extern uint8_t blows_table[7][6];
 
 extern uint16_t normal_table[NORMAL_TABLE_SIZE];
-
-extern bool temporary_light_only;
 
 
 // Function return values

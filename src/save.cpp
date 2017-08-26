@@ -276,8 +276,8 @@ static bool sv_write() {
     l = (uint32_t) (playerCalculateTotalPoints());
     wr_long(l);
 
-    // put the character_birth_date in the save file
-    wr_long((uint32_t) character_birth_date);
+    // put the date_of_birth in the save file
+    wr_long((uint32_t) py.misc.date_of_birth);
 
     // only level specific info follows, this allows characters to be
     // resurrected, the dungeon level info is not needed for a resurrection
@@ -396,8 +396,8 @@ static bool _save_char(char *fnam) {
 
     putQIO();
     playerDisturb(1, 0);             // Turn off resting and searching.
-    playerChangeSpeed(-pack_heaviness); // Fix the speed
-    pack_heaviness = 0;
+    playerChangeSpeed(-py.pack_heaviness); // Fix the speed
+    py.pack_heaviness = 0;
     bool ok = false;
 
     fileptr = nullptr; // Do not assume it has been init'ed
@@ -712,7 +712,7 @@ bool loadGame(bool *generate) {
             rd_long(&time_saved);
             rd_string(character_died_from);
             rd_long((uint32_t *) &character_max_score);
-            rd_long((uint32_t *) &character_birth_date);
+            rd_long((uint32_t *) &py.misc.date_of_birth);
         }
 
         c = getc(fileptr);
@@ -900,8 +900,8 @@ bool loadGame(bool *generate) {
             }
 
             if (current_game_turn >= 0) { // Only if a full restoration.
-                weapon_is_heavy = false;
-                pack_heaviness = 0;
+                py.weapon_is_heavy = false;
+                py.pack_heaviness = 0;
                 playerStrength();
 
                 // rotate store inventory, depending on how old the save file

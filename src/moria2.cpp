@@ -302,7 +302,7 @@ void playerFindInitialize(int direction) {
     // in this case while moving, so the only problem is on the first turn
     // of find mode, when the initial position of the character must be erased.
     // Hence we must do the erasure here.
-    if (!temporary_light_only && !config.run_print_self) {
+    if (!py.temporary_light_only && !config.run_print_self) {
         putChar(caveGetTileSymbol(char_row, char_col), char_row, char_col);
     }
 
@@ -341,7 +341,7 @@ static bool areaAffectStopLookingAtSquares(int i, int dir, int newDir, int y, in
     // Default: Square unseen. Treat as open.
     bool invisible = true;
 
-    if (player_carrying_light || c_ptr->temporary_light || c_ptr->permanent_light || c_ptr->field_mark) {
+    if (py.carrying_light || c_ptr->temporary_light || c_ptr->permanent_light || c_ptr->field_mark) {
         if (c_ptr->treasure_id != 0) {
             int tileID = treasure_list[c_ptr->treasure_id].category_id;
 

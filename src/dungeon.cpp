@@ -39,7 +39,7 @@ static void resetDungeonFlags() {
 
 // Check light status for dungeon setup
 static void playerInitializePlayerLight() {
-    player_carrying_light = (inventory[EQUIPMENT_LIGHT].misc_use > 0);
+    py.carrying_light = (inventory[EQUIPMENT_LIGHT].misc_use > 0);
 }
 
 // Check for a maximum level
@@ -53,12 +53,12 @@ static void playerUpdateMaxDungeonDepth() {
 static void playerUpdateLightStatus() {
     Inventory_t *i_ptr = &inventory[EQUIPMENT_LIGHT];
 
-    if (player_carrying_light) {
+    if (py.carrying_light) {
         if (i_ptr->misc_use > 0) {
             i_ptr->misc_use--;
 
             if (i_ptr->misc_use == 0) {
-                player_carrying_light = false;
+                py.carrying_light = false;
                 printMessage("Your light has gone out!");
                 playerDisturb(0, 1);
 
@@ -69,7 +69,7 @@ static void playerUpdateLightStatus() {
                 printMessage("Your light is growing faint.");
             }
         } else {
-            player_carrying_light = false;
+            py.carrying_light = false;
             playerDisturb(0, 1);
 
             // unlight creatures
@@ -77,7 +77,7 @@ static void playerUpdateLightStatus() {
         }
     } else if (i_ptr->misc_use > 0) {
         i_ptr->misc_use--;
-        player_carrying_light = true;
+        py.carrying_light = true;
         playerDisturb(0, 1);
 
         // light creatures

@@ -195,7 +195,7 @@ void playerRecalculateBonuses() {
 
     py.misc.display_ac += py.misc.display_to_ac;
 
-    if (weapon_is_heavy) {
+    if (py.weapon_is_heavy) {
         py.misc.display_to_hit += (py.stats.used[A_STR] * 15 - inventory[EQUIPMENT_WIELD].weight);
     }
 
@@ -794,7 +794,7 @@ static void inventoryUnwieldItem() {
     }
 
     // this is a new weapon, so clear the heavy flag
-    weapon_is_heavy = false;
+    py.weapon_is_heavy = false;
     playerStrength();
 }
 
@@ -1185,7 +1185,7 @@ static bool selectItemCommands(char *command, char *which, bool selecting) {
 
                 // this is a new weapon, so clear heavy flag
                 if (slot == EQUIPMENT_WIELD) {
-                    weapon_is_heavy = false;
+                    py.weapon_is_heavy = false;
                 }
                 playerStrength();
 
@@ -1736,7 +1736,7 @@ void dungeonLiteSpot(int y, int x) {
 // Normal movement
 // When FIND_FLAG,  light only permanent features
 static void sub1_move_light(int y1, int x1, int y2, int x2) {
-    if (temporary_light_only) {
+    if (py.temporary_light_only) {
         // Turn off lamp light
         for (int y = y1 - 1; y <= y1 + 1; y++) {
             for (int x = x1 - 1; x <= x1 + 1; x++) {
@@ -1744,10 +1744,10 @@ static void sub1_move_light(int y1, int x1, int y2, int x2) {
             }
         }
         if ((running_counter != 0) && !config.run_print_self) {
-            temporary_light_only = false;
+            py.temporary_light_only = false;
         }
     } else if ((running_counter == 0) || config.run_print_self) {
-        temporary_light_only = true;
+        py.temporary_light_only = true;
     }
 
     for (int y = y2 - 1; y <= y2 + 1; y++) {
@@ -1755,7 +1755,7 @@ static void sub1_move_light(int y1, int x1, int y2, int x2) {
             Cave_t *c_ptr = &cave[y][x];
 
             // only light up if normal movement
-            if (temporary_light_only) {
+            if (py.temporary_light_only) {
                 c_ptr->temporary_light = true;
             }
 
@@ -1800,7 +1800,7 @@ static void sub1_move_light(int y1, int x1, int y2, int x2) {
 // When blinded,  move only the player symbol.
 // With no light,  movement becomes involved.
 static void sub3_move_light(int y1, int x1, int y2, int x2) {
-    if (temporary_light_only) {
+    if (py.temporary_light_only) {
         for (int y = y1 - 1; y <= y1 + 1; y++) {
             for (int x = x1 - 1; x <= x1 + 1; x++) {
                 cave[y][x].temporary_light = false;
@@ -1808,7 +1808,7 @@ static void sub3_move_light(int y1, int x1, int y2, int x2) {
             }
         }
 
-        temporary_light_only = false;
+        py.temporary_light_only = false;
     } else if ((running_counter == 0) || config.run_print_self) {
         putChar(caveGetTileSymbol(y1, x1), y1, x1);
     }
@@ -1821,7 +1821,7 @@ static void sub3_move_light(int y1, int x1, int y2, int x2) {
 // Package for moving the character's light about the screen
 // Four cases : Normal, Finding, Blind, and No light -RAK-
 void dungeonMoveCharacterLight(int y1, int x1, int y2, int x2) {
-    if (py.flags.blind > 0 || !player_carrying_light) {
+    if (py.flags.blind > 0 || !py.carrying_light) {
         sub3_move_light(y1, x1, y2, x2);
     } else {
         sub1_move_light(y1, x1, y2, x2);

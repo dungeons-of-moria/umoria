@@ -1262,7 +1262,7 @@ bool inventoryCanCarryItem(Inventory_t *item) {
         limit = 0;
     }
 
-    return pack_heaviness == limit;
+    return py.pack_heaviness == limit;
 }
 
 // Are we strong enough for the current pack and weapon? -CJS-
@@ -1270,13 +1270,13 @@ void playerStrength() {
     Inventory_t *i_ptr = &inventory[EQUIPMENT_WIELD];
 
     if (i_ptr->category_id != TV_NOTHING && py.stats.used[A_STR] * 15 < i_ptr->weight) {
-        if (!weapon_is_heavy) {
+        if (!py.weapon_is_heavy) {
             printMessage("You have trouble wielding such a heavy weapon.");
-            weapon_is_heavy = true;
+            py.weapon_is_heavy = true;
             playerRecalculateBonuses();
         }
-    } else if (weapon_is_heavy) {
-        weapon_is_heavy = false;
+    } else if (py.weapon_is_heavy) {
+        py.weapon_is_heavy = false;
         if (i_ptr->category_id != TV_NOTHING) {
             printMessage("You are strong enough to wield your weapon.");
         }
@@ -1291,14 +1291,14 @@ void playerStrength() {
         limit = 0;
     }
 
-    if (pack_heaviness != limit) {
-        if (pack_heaviness < limit) {
+    if (py.pack_heaviness != limit) {
+        if (py.pack_heaviness < limit) {
             printMessage("Your pack is so heavy that it slows you down.");
         } else {
             printMessage("You move more easily under the weight of your pack.");
         }
-        playerChangeSpeed(limit - pack_heaviness);
-        pack_heaviness = limit;
+        playerChangeSpeed(limit - py.pack_heaviness);
+        py.pack_heaviness = limit;
     }
 
     py.flags.status &= ~PY_STR_WGT;
