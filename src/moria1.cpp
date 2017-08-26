@@ -382,7 +382,7 @@ const char *playerItemWearingDescription(int body_location) {
     }
 }
 
-static const char *itemPostitionDescription(int positionID, uint16_t weight) {
+static const char *itemPositionDescription(int positionID, uint16_t weight) {
     switch (positionID) {
         case EQUIPMENT_WIELD:
             if (py.stats.used[A_STR] * 15 < weight) {
@@ -439,7 +439,7 @@ int displayEquipment(bool weighted, int column) {
         }
 
         // Get position
-        const char *position_description = itemPostitionDescription(i, inventory[i].weight);
+        const char *position_description = itemPositionDescription(i, inventory[i].weight);
 
         obj_desc_t description = {'\0'};
         itemDescription(description, &inventory[i], true);
