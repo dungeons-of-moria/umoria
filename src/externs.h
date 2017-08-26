@@ -245,6 +245,8 @@ void displayDungeonMap();
 bool checkForNonBlockingKeyPress(int microseconds);
 void getDefaultPlayerName(char *buffer);
 bool checkFilePermissions();
+bool validGameVersion(uint8_t major, uint8_t minor, uint8_t patch);
+bool isCurrentGameVersion(uint8_t major, uint8_t minor, uint8_t patch);
 
 #ifndef _WIN32
 // call functions which expand tilde before calling open/fopen

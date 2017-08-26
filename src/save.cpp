@@ -269,14 +269,14 @@ static bool sv_write() {
     }
     wr_long(l);
 
-    // starting with 5.2, put character_died_from string in save file
+    // put character_died_from string in save file
     wr_string(character_died_from);
 
-    // starting with 5.2.2, put the character_max_score in the save file
+    // put the character_max_score in the save file
     l = (uint32_t) (playerCalculateTotalPoints());
     wr_long(l);
 
-    // starting with 5.2.2, put the character_birth_date in the save file
+    // put the character_birth_date in the save file
     wr_long((uint32_t) character_birth_date);
 
     // only level specific info follows, this allows characters to be
@@ -419,11 +419,11 @@ static bool _save_char(char *fnam) {
 
     if (fileptr != nullptr) {
         xor_byte = 0;
-        wr_byte((uint8_t) CURRENT_VERSION_MAJOR);
+        wr_byte(CURRENT_VERSION_MAJOR);
         xor_byte = 0;
-        wr_byte((uint8_t) CURRENT_VERSION_MINOR);
+        wr_byte(CURRENT_VERSION_MINOR);
         xor_byte = 0;
-        wr_byte((uint8_t) CURRENT_VERSION_PATCH);
+        wr_byte(CURRENT_VERSION_PATCH);
         xor_byte = 0;
 
         auto char_tmp = (uint8_t) (randomNumber(256) - 1);
@@ -521,11 +521,7 @@ bool loadGame(bool *generate) {
         xor_byte = 0;
         rd_byte(&xor_byte);
 
-        // COMPAT support save files from 5.0.14 to 5.0.17.
-        // Support save files from 5.1.0 to present.
-        // As of version 5.4, accept save files even if they have higher version numbers.
-        // The save file format was frozen as of version 5.2.2.
-        if (version_maj != CURRENT_VERSION_MAJOR || (version_min == 0 && patch_level < 14)) {
+        if (!validGameVersion(version_maj, version_min, patch_level)) {
             putStringClearToEOL("Sorry. This save file is from a different version of umoria.", 2, 0);
             goto error;
         }
@@ -548,11 +544,6 @@ bool loadGame(bool *generate) {
             rd_short(&uint16_t_tmp);
         }
 
-        // for save files before 5.2.2, read and ignore log_index (sic)
-        if (version_min < 2 || (version_min == 2 && patch_level < 2)) {
-            rd_short(&uint16_t_tmp);
-        }
-
         uint32_t l;
         rd_long(&l);
 
@@ -565,12 +556,8 @@ bool loadGame(bool *generate) {
         config.show_inventory_weights = (l & 0x40) != 0;
         config.highlight_seams = (l & 0x80) != 0;
         config.run_ignore_doors = (l & 0x100) != 0;
-
-        // save files before 5.2.2 don't have `error_beep_sound`, set it on for compatibility
-        config.error_beep_sound = version_min < 2 || (version_min == 2 && patch_level < 2) || (l & 0x200) != 0;
-
-        // save files before 5.2.2 don't have `display_counts`, set it on for compatibility
-        config.display_counts = version_min < 2 || (version_min == 2 && patch_level < 2) || (l & 0x400) != 0;
+        config.error_beep_sound = (l & 0x200) != 0;
+        config.display_counts = (l & 0x400) != 0;
 
         // Don't allow resurrection of total_winner characters.  It causes
         // problems because the character level is out of the allowed range.
@@ -704,45 +691,28 @@ bool loadGame(bool *generate) {
             rd_short((uint16_t *) &noscore);
             rd_shorts(player_base_hp_levels, PLAYER_MAX_LEVEL);
 
-            if (version_min >= 2 || (version_min == 1 && patch_level >= 3)) {
-                for (auto &store : stores) {
-                    Store_t *st_ptr = &store;
+            for (auto &store : stores) {
+                Store_t *st_ptr = &store;
 
-                    rd_long((uint32_t *) &st_ptr->turns_left_before_closing);
-                    rd_short((uint16_t *) &st_ptr->insults_counter);
-                    rd_byte(&st_ptr->owner);
-                    rd_byte(&st_ptr->store_id);
-                    rd_short(&st_ptr->good_purchases);
-                    rd_short(&st_ptr->bad_purchases);
-                    if (st_ptr->store_id > STORE_MAX_DISCRETE_ITEMS) {
-                        goto error;
-                    }
-                    for (int j = 0; j < st_ptr->store_id; j++) {
-                        rd_long((uint32_t *) &st_ptr->inventory[j].cost);
-                        rd_item(&st_ptr->inventory[j].item);
-                    }
+                rd_long((uint32_t *) &st_ptr->turns_left_before_closing);
+                rd_short((uint16_t *) &st_ptr->insults_counter);
+                rd_byte(&st_ptr->owner);
+                rd_byte(&st_ptr->store_id);
+                rd_short(&st_ptr->good_purchases);
+                rd_short(&st_ptr->bad_purchases);
+                if (st_ptr->store_id > STORE_MAX_DISCRETE_ITEMS) {
+                    goto error;
+                }
+                for (int j = 0; j < st_ptr->store_id; j++) {
+                    rd_long((uint32_t *) &st_ptr->inventory[j].cost);
+                    rd_item(&st_ptr->inventory[j].item);
                 }
             }
 
-            if (version_min >= 2 || (version_min == 1 && patch_level >= 3)) {
-                rd_long(&time_saved);
-            }
-
-            if (version_min >= 2) {
-                rd_string(character_died_from);
-            }
-
-            if (version_min >= 3 || (version_min == 2 && patch_level >= 2)) {
-                rd_long((uint32_t *) &character_max_score);
-            } else {
-                character_max_score = 0;
-            }
-
-            if (version_min >= 3 || (version_min == 2 && patch_level >= 2)) {
-                rd_long((uint32_t *) &character_birth_date);
-            } else {
-                character_birth_date = (int32_t) time((time_t *) 0);
-            }
+            rd_long(&time_saved);
+            rd_string(character_died_from);
+            rd_long((uint32_t *) &character_max_score);
+            rd_long((uint32_t *) &character_birth_date);
         }
 
         c = getc(fileptr);
@@ -867,32 +837,26 @@ bool loadGame(bool *generate) {
 
         *generate = false; // We have restored a cave - no need to generate.
 
-        if ((version_min == 1 && patch_level < 3) || version_min == 0) {
-            for (auto &store : stores) {
-                Store_t *st_ptr = &store;
+        for (auto &store : stores) {
+            Store_t *st_ptr = &store;
 
-                rd_long((uint32_t *) &st_ptr->turns_left_before_closing);
-                rd_short((uint16_t *) &st_ptr->insults_counter);
-                rd_byte(&st_ptr->owner);
-                rd_byte(&st_ptr->store_id);
-                rd_short(&st_ptr->good_purchases);
-                rd_short(&st_ptr->bad_purchases);
-                if (st_ptr->store_id > STORE_MAX_DISCRETE_ITEMS) {
-                    goto error;
-                }
-                for (int j = 0; j < st_ptr->store_id; j++) {
-                    rd_long((uint32_t *) &st_ptr->inventory[j].cost);
-                    rd_item(&st_ptr->inventory[j].item);
-                }
+            rd_long((uint32_t *) &st_ptr->turns_left_before_closing);
+            rd_short((uint16_t *) &st_ptr->insults_counter);
+            rd_byte(&st_ptr->owner);
+            rd_byte(&st_ptr->store_id);
+            rd_short(&st_ptr->good_purchases);
+            rd_short(&st_ptr->bad_purchases);
+            if (st_ptr->store_id > STORE_MAX_DISCRETE_ITEMS) {
+                goto error;
+            }
+            for (int j = 0; j < st_ptr->store_id; j++) {
+                rd_long((uint32_t *) &st_ptr->inventory[j].cost);
+                rd_item(&st_ptr->inventory[j].item);
             }
         }
 
         // read the time that the file was saved
-        if (version_min == 0 && patch_level < 16) {
-            time_saved = 0; // no time in file, clear to zero
-        } else if (version_min == 1 && patch_level < 3) {
-            rd_long(&time_saved);
-        }
+        rd_long(&time_saved);
 
         if (ferror(fileptr) != 0) {
             goto error;
@@ -967,11 +931,11 @@ bool loadGame(bool *generate) {
             if (noscore != 0) {
                 printMessage("This save file cannot be used to get on the score board.");
             }
-
-            if (version_maj != CURRENT_VERSION_MAJOR || version_min != CURRENT_VERSION_MINOR) {
-                std::string msg = "Save file version " + std::to_string(version_maj) + "." + std::to_string(version_min) + " ";
-                msg += (version_min <= CURRENT_VERSION_MINOR ? "accepted" : "risky");
-                msg += " on game version " + std::to_string(CURRENT_VERSION_MAJOR) + "." + std::to_string(CURRENT_VERSION_MINOR) + ".";
+            if (validGameVersion(version_maj, version_min, patch_level) && !isCurrentGameVersion(version_maj, version_min, patch_level)) {
+                std::string msg = "Save file version ";
+                msg += std::to_string(version_maj) + "." + std::to_string(version_min);
+                msg += " accepted on game version ";
+                msg += std::to_string(CURRENT_VERSION_MAJOR) + "." + std::to_string(CURRENT_VERSION_MINOR) + ".";
                 printMessage(msg.c_str());
             }
 

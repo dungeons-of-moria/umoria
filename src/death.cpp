@@ -43,18 +43,10 @@ void showScoresScreen() {
     auto version_min = (uint8_t) getc(highscore_fp);
     auto patch_level = (uint8_t) getc(highscore_fp);
 
-    // Support score files from 5.2.2 to present.
-    if (feof(highscore_fp) != 0) {
-        ; // An empty score file.
-    } else if (version_maj != CURRENT_VERSION_MAJOR ||
-               version_min > CURRENT_VERSION_MINOR ||
-               (version_min == CURRENT_VERSION_MINOR && patch_level > CURRENT_VERSION_PATCH) ||
-               (version_min == 2 && patch_level < 2) ||
-                version_min < 2
-            ) {
+    // If score data present, check if a valid game version
+    if (feof(highscore_fp) == 0 && !validGameVersion(version_maj, version_min, patch_level)) {
         printMessage("Sorry. This score file is from a different version of umoria.");
         printMessage(CNIL);
-
         (void) fclose(highscore_fp);
         return;
     }
@@ -288,14 +280,7 @@ static void highscores() {
 
         // must fseek() before can change read/write mode
         (void) fseek(highscore_fp, (long) 0, SEEK_CUR);
-    } else if (
-            version_maj != CURRENT_VERSION_MAJOR ||
-            version_min > CURRENT_VERSION_MINOR ||
-            (version_min == CURRENT_VERSION_MINOR && patch_level > CURRENT_VERSION_PATCH) ||
-            (version_min == 2 && patch_level < 2) ||
-            version_min < 2
-            ) {
-        // Support score files from 5.2.2 to present.
+    } else if (!validGameVersion(version_maj, version_min, patch_level)) {
         // No need to print a message, a subsequent call to
         // showScoresScreen() will print a message.
         (void) fclose(highscore_fp);
@@ -320,8 +305,8 @@ static void highscores() {
         // under unix, only allow one gender/race/class combo per person,
         // on single user system, allow any number of entries, but try to
         // prevent multiple entries per character by checking for case when
-        // birthdate/gender/race/class are the same, and character_died_from of score file
-        // entry is "(saved)"
+        // birthdate/gender/race/class are the same, and character_died_from
+        // of score file entry is "(saved)"
         if (((new_entry.uid != 0 && new_entry.uid == old_entry.uid) ||
              (new_entry.uid == 0 && (strcmp(old_entry.died_from, "(saved)") == 0) && new_entry.birth_date == old_entry.birth_date)) &&
             new_entry.gender == old_entry.gender &&
@@ -355,9 +340,9 @@ static void highscores() {
             saveHighScore(&entry);
 
             // under unix, only allow one gender/race/class combo per person,
-            // on single user system, allow any number of entries, but try
-            // to prevent multiple entries per character by checking for
-            // case when birthdate/gender/race/class are the same, and character_died_from
+            // on single user system, allow any number of entries, but try to
+            // prevent multiple entries per character by checking for case when
+            // birth_date/gender/race/class are the same, and character_died_from
             // of score file entry is "(saved)"
             if (((new_entry.uid != 0 && new_entry.uid == old_entry.uid) ||
                  (new_entry.uid == 0 && (strcmp(old_entry.died_from, "(saved)") == 0) && new_entry.birth_date == old_entry.birth_date)) &&
