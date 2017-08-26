@@ -37,7 +37,7 @@ void wizardLightUpDungeon() {
 // Wizard routine for gaining on stats -RAK-
 void wizardCharacterAdjustment() {
     int number;
-    vtype_t input;
+    vtype_t input = {'\0'};
 
     putStringClearToEOL("(3 - 118) Strength     = ", 0, 0);
     if (getStringInput(input, 0, 25, 3)) {
