@@ -121,6 +121,13 @@ extern Recall_t creature_recall[MON_MAX_CREATURES]; // Monster memories. -CJS-
 extern Monster_t blank_monster;
 extern int16_t next_free_monster_id;
 extern int16_t monster_multiply_total;
+extern const char *recall_description_attack_type[25];
+extern const char *recall_description_attack_method[20];
+extern const char *recall_description_how_much[8];
+extern const char *recall_description_move[6];
+extern const char *recall_description_spell[15];
+extern const char *recall_description_breath[5];
+extern const char *recall_description_weakness[6];
 
 // Following are arrays for descriptive pieces
 extern const char *colors[MAX_COLORS];

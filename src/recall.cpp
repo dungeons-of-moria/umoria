@@ -11,112 +11,6 @@
 
 static void memoryPrint(const char *p);
 
-static const char *description_attack_type[] = {
-        "do something undefined",
-        "attack",
-        "weaken",
-        "confuse",
-        "terrify",
-        "shoot flames",
-        "shoot acid",
-        "freeze",
-        "shoot lightning",
-        "corrode",
-        "blind",
-        "paralyse",
-        "steal money",
-        "steal things",
-        "poison",
-        "reduce dexterity",
-        "reduce constitution",
-        "drain intelligence",
-        "drain wisdom",
-        "lower experience",
-        "call for help",
-        "disenchant",
-        "eat your food",
-        "absorb light",
-        "absorb charges",
-};
-
-static const char *description_attack_method[] = {
-        "make an undefined advance",
-        "hit",
-        "bite",
-        "claw",
-        "sting",
-        "touch",
-        "kick",
-        "gaze",
-        "breathe",
-        "spit",
-        "wail",
-        "embrace",
-        "crawl on you",
-        "release spores",
-        "beg",
-        "slime you",
-        "crush",
-        "trample",
-        "drool",
-        "insult",
-};
-
-static const char *description_how_much[] = {
-        " not at all",
-        " a bit",
-        "",
-        " quite",
-        " very",
-        " most",
-        " highly",
-        " extremely",
-};
-
-static const char *description_move[] = {
-        "move invisibly",
-        "open doors",
-        "pass through walls",
-        "kill weaker creatures",
-        "pick up objects",
-        "breed explosively",
-};
-
-static const char *description_spell[] = {
-        "teleport short distances",
-        "teleport long distances",
-        "teleport its prey",
-        "cause light wounds",
-        "cause serious wounds",
-        "paralyse its prey",
-        "induce blindness",
-        "confuse",
-        "terrify",
-        "summon a monster",
-        "summon the undead",
-        "slow its prey",
-        "drain mana",
-        "unknown 1",
-        "unknown 2",
-};
-
-static const char *description_breath[] = {
-        "lightning",
-        "poison gases",
-        "acid",
-        "frost",
-        "fire",
-};
-
-static const char *description_weakness[] = {
-        "frost",
-        "fire",
-        "poison",
-        "acid",
-        "bright light",
-        "rock remover",
-};
-
 static vtype_t roff_buffer = {'\0'};        // Line buffer.
 static char *roff_buffer_pointer = nullptr; // Pointer into line buffer.
 static int roff_print_line;                 // Place to print line now being loaded.
@@ -245,7 +139,7 @@ static bool memoryMovement(uint32_t rc_move, int monster_speed, bool is_known) {
         memoryPrint(" moves");
 
         if ((rc_move & CM_RANDOM_MOVE) != 0u) {
-            memoryPrint(description_how_much[(rc_move & CM_RANDOM_MOVE) >> 3]);
+            memoryPrint(recall_description_how_much[(rc_move & CM_RANDOM_MOVE) >> 3]);
             memoryPrint(" erratically");
         }
 
@@ -383,7 +277,7 @@ static void memoryMagicSkills(uint32_t memory_spell_flags, uint32_t monster_spel
             } else {
                 memoryPrint(" and ");
             }
-            memoryPrint(description_breath[i]);
+            memoryPrint(recall_description_breath[i]);
         }
     }
 
@@ -406,7 +300,7 @@ static void memoryMagicSkills(uint32_t memory_spell_flags, uint32_t monster_spel
             } else {
                 memoryPrint(" or ");
             }
-            memoryPrint(description_spell[i]);
+            memoryPrint(recall_description_spell[i]);
         }
     }
 
@@ -425,7 +319,7 @@ static void memoryMagicSkills(uint32_t memory_spell_flags, uint32_t monster_spel
 static void memoryKillDifficulty(Creature_t *creature, uint32_t monster_kills) {
     // the higher the level of the monster, the fewer the kills you need
     // Original knowarmor macro inlined
-        if (monster_kills <= 304u / (4u + creature->level)) {
+    if (monster_kills <= 304u / (4u + creature->level)) {
         return;
     }
 
@@ -454,7 +348,7 @@ static void memorySpecialAbilities(uint32_t move) {
             } else {
                 memoryPrint(" and ");
             }
-            memoryPrint(description_move[i]);
+            memoryPrint(recall_description_move[i]);
         }
     }
 
@@ -478,7 +372,7 @@ static void memoryWeaknesses(uint32_t defense) {
             } else {
                 memoryPrint(" and ");
             }
-            memoryPrint(description_weakness[i]);
+            memoryPrint(recall_description_weakness[i]);
         }
     }
 
@@ -626,7 +520,7 @@ static void memoryAttackNumberAndDamage(Recall_t *memory, Creature_t *creature) 
             attack_description_id = 0;
         }
 
-        memoryPrint(description_attack_method[attack_description_id]);
+        memoryPrint(recall_description_attack_method[attack_description_id]);
 
         if (attack_type != 1 || (attack_dice > 0 && attack_sides > 0)) {
             memoryPrint(" to ");
@@ -635,7 +529,7 @@ static void memoryAttackNumberAndDamage(Recall_t *memory, Creature_t *creature) 
                 attack_type = 0;
             }
 
-            memoryPrint(description_attack_type[attack_type]);
+            memoryPrint(recall_description_attack_type[attack_type]);
 
             if ((attack_dice != 0) && (attack_sides != 0)) {
                 if (knowdamage(creature->level, memory->attacks[i], attack_dice * attack_sides)) {
