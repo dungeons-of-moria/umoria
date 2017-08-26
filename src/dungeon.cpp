@@ -2001,19 +2001,30 @@ static void playerRegenerateMana(int percent) {
 // Is an item an enchanted weapon or armor and we don't know? -CJS-
 // only returns true if it is a good enchantment
 static bool itemEnchanted(Inventory_t *item) {
-    if (item->category_id < TV_MIN_ENCHANT || item->category_id > TV_MAX_ENCHANT || ((item->flags & TR_CURSED) != 0u)) {
+    if (item->category_id < TV_MIN_ENCHANT || item->category_id > TV_MAX_ENCHANT || (item->flags & TR_CURSED) != 0u) {
         return false;
-    } else if (spellItemIdentified(item)) {
+    }
+
+    if (spellItemIdentified(item)) {
         return false;
-    } else if ((item->identification & ID_MAGIK) != 0) {
+    }
+
+    if ((item->identification & ID_MAGIK) != 0) {
         return false;
-    } else if (item->to_hit > 0 || item->to_damage > 0 || item->to_ac > 0) {
-        return true;
-    } else if (((0x4000107fL & item->flags) != 0) && item->misc_use > 0) {
-        return true;
-    } else if ((0x07ffe980L & item->flags) != 0) {
+    }
+
+    if (item->to_hit > 0 || item->to_damage > 0 || item->to_ac > 0) {
         return true;
     }
+
+    if ((0x4000107fL & item->flags) != 0 && item->misc_use > 0) {
+        return true;
+    }
+
+    if ((0x07ffe980L & item->flags) != 0) {
+        return true;
+    }
+
     return false;
 }
 
