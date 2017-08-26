@@ -11,7 +11,7 @@
 #include "headers.h"
 #include "externs.h"
 
-static void printMonsterActionText(const std::string name, const std::string action) {
+static void printMonsterActionText(const std::string &name, const std::string &action) {
     vtype_t msg = {'\0'};
     (void) sprintf(msg, "%s %s", name.c_str(), action.c_str());
     printMessage(msg);
@@ -649,7 +649,7 @@ static void getAreaAffectFlags(int spell_type, uint32_t *weapon_type, int *harm_
 }
 
 // Light up, draw, and check for monster damage when Fire Bolt touches it.
-static void spellFireBoltTouchesMonster(Cave_t *tile, int damage, int harm_type, uint32_t weapon_id, const std::string bolt_name) {
+static void spellFireBoltTouchesMonster(Cave_t *tile, int damage, int harm_type, uint32_t weapon_id, const std::string &bolt_name) {
     Monster_t *monster = &monsters[tile->creature_id];
     Creature_t *creature = &creatures_list[monster->creature_id];
 
