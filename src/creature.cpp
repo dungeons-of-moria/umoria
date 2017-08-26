@@ -1526,6 +1526,70 @@ static void monsterMoveConfused(Monster_t *monster, Creature_t *creature, int mo
     monster->confused_amount--;
 }
 
+static bool monsterDoMove(int monster_id, uint32_t *rcmove, Monster_t *monster, Creature_t *creature) {
+    // Creature is confused or undead turned?
+    if (monster->confused_amount != 0u) {
+        if ((creature->defenses & CD_UNDEAD) != 0) {
+            monsterMoveUndead(monster, creature, monster_id, rcmove);
+        } else {
+            monsterMoveConfused(monster, creature, monster_id, rcmove);
+        }
+        return true;
+    }
+
+    // Creature may cast a spell
+    if ((creature->spells & CS_FREQ) != 0u) {
+        return monsterCastSpell(monster_id);
+    }
+
+    return false;
+}
+
+static void monsterMoveRandomly(int monster_id, uint32_t *rcmove, int randomness) {
+    int directions[9];
+
+    directions[0] = randomNumber(9);
+    directions[1] = randomNumber(9);
+    directions[2] = randomNumber(9);
+    directions[3] = randomNumber(9);
+    directions[4] = randomNumber(9);
+
+    *rcmove |= randomness;
+
+    makeMove(monster_id, directions, rcmove);
+}
+
+static void monsterMoveNormally(int monster_id, uint32_t *rcmove) {
+    int directions[9];
+
+    if (randomNumber(200) == 1) {
+        directions[0] = randomNumber(9);
+        directions[1] = randomNumber(9);
+        directions[2] = randomNumber(9);
+        directions[3] = randomNumber(9);
+        directions[4] = randomNumber(9);
+    } else {
+        monsterGetMoveDirection(monster_id, directions);
+    }
+
+    *rcmove |= CM_MOVE_NORMAL;
+
+    makeMove(monster_id, directions, rcmove);
+}
+
+static void monsterAttackWithoutMoving(int monster_id, uint32_t *rcmove, uint8_t distance_from_player) {
+    int directions[9];
+
+    if (distance_from_player < 2) {
+        monsterGetMoveDirection(monster_id, directions);
+        makeMove(monster_id, directions, rcmove);
+    } else {
+        // Learn that the monster does does not move when
+        // it should have moved, but didn't.
+        *rcmove |= CM_ATTACK_ONLY;
+    }
+}
+
 // Move the critters about the dungeon -RAK-
 static void monsterMove(int monster_id, uint32_t *rcmove) {
     Monster_t *monster = &monsters[monster_id];
@@ -1545,87 +1609,51 @@ static void monsterMove(int monster_id, uint32_t *rcmove) {
         return;
     }
 
-    bool do_move = false;
-
-    if (monster->confused_amount != 0u) {
-        // Creature is confused or undead turned?
-        if ((creature->defenses & CD_UNDEAD) != 0) {
-            monsterMoveUndead(monster, creature, monster_id, rcmove);
-        } else {
-            monsterMoveConfused(monster, creature, monster_id, rcmove);
-        }
-
-        do_move = true;
-    } else if ((creature->spells & CS_FREQ) != 0u) {
-        // Creature may cast a spell
-        do_move = monsterCastSpell(monster_id);
+    if (monsterDoMove(monster_id, rcmove, monster, creature)) {
+        return;
     }
 
-    int directions[9];
+    // 75% random movement
+    if (((creature->movement & CM_75_RANDOM) != 0u) && randomNumber(100) < 75) {
+        monsterMoveRandomly(monster_id, rcmove, CM_75_RANDOM);
+        return;
+    }
 
-    if (!do_move) {
-        if (((creature->movement & CM_75_RANDOM) != 0u) && randomNumber(100) < 75) {
-            // 75% random movement
-            directions[0] = randomNumber(9);
-            directions[1] = randomNumber(9);
-            directions[2] = randomNumber(9);
-            directions[3] = randomNumber(9);
-            directions[4] = randomNumber(9);
-            *rcmove |= CM_75_RANDOM;
-            makeMove(monster_id, directions, rcmove);
-        } else if (((creature->movement & CM_40_RANDOM) != 0u) && randomNumber(100) < 40) {
-            // 40% random movement
-            directions[0] = randomNumber(9);
-            directions[1] = randomNumber(9);
-            directions[2] = randomNumber(9);
-            directions[3] = randomNumber(9);
-            directions[4] = randomNumber(9);
-            *rcmove |= CM_40_RANDOM;
-            makeMove(monster_id, directions, rcmove);
-        } else if (((creature->movement & CM_20_RANDOM) != 0u) && randomNumber(100) < 20) {
-            // 20% random movement
-            directions[0] = randomNumber(9);
-            directions[1] = randomNumber(9);
-            directions[2] = randomNumber(9);
-            directions[3] = randomNumber(9);
-            directions[4] = randomNumber(9);
-            *rcmove |= CM_20_RANDOM;
-            makeMove(monster_id, directions, rcmove);
-        } else if ((creature->movement & CM_MOVE_NORMAL) != 0u) {
-            // Normal movement
-            if (randomNumber(200) == 1) {
-                directions[0] = randomNumber(9);
-                directions[1] = randomNumber(9);
-                directions[2] = randomNumber(9);
-                directions[3] = randomNumber(9);
-                directions[4] = randomNumber(9);
-            } else {
-                monsterGetMoveDirection(monster_id, directions);
-            }
-            *rcmove |= CM_MOVE_NORMAL;
-            makeMove(monster_id, directions, rcmove);
-        } else if ((creature->movement & CM_ATTACK_ONLY) != 0u) {
-            // Attack, but don't move
-            if (monster->distance_from_player < 2) {
-                monsterGetMoveDirection(monster_id, directions);
-                makeMove(monster_id, directions, rcmove);
-            } else {
-                // Learn that the monster does does not move when
-                // it should have moved, but didn't.
-                *rcmove |= CM_ATTACK_ONLY;
-            }
-        } else if (((creature->movement & CM_ONLY_MAGIC) != 0u) && monster->distance_from_player < 2) {
-            // A little hack for Quylthulgs, so that one will eventually
-            // notice that they have no physical attacks.
-            if (creature_recall[monster->creature_id].attacks[0] < MAX_UCHAR) {
-                creature_recall[monster->creature_id].attacks[0]++;
-            }
+    // 40% random movement
+    if (((creature->movement & CM_40_RANDOM) != 0u) && randomNumber(100) < 40) {
+        monsterMoveRandomly(monster_id, rcmove, CM_40_RANDOM);
+        return;
+    }
 
-            // Another little hack for Quylthulgs, so that one can
-            // eventually learn their speed.
-            if (creature_recall[monster->creature_id].attacks[0] > 20) {
-                creature_recall[monster->creature_id].movement |= CM_ONLY_MAGIC;
-            }
+    // 20% random movement
+    if (((creature->movement & CM_20_RANDOM) != 0u) && randomNumber(100) < 20) {
+        monsterMoveRandomly(monster_id, rcmove, CM_20_RANDOM);
+        return;
+    }
+
+    // Normal movement
+    if ((creature->movement & CM_MOVE_NORMAL) != 0u) {
+        monsterMoveNormally(monster_id, rcmove);
+        return;
+    }
+
+    // Attack, but don't move
+    if ((creature->movement & CM_ATTACK_ONLY) != 0u) {
+        monsterAttackWithoutMoving(monster_id, rcmove, monster->distance_from_player);
+        return;
+    }
+
+    if (((creature->movement & CM_ONLY_MAGIC) != 0u) && monster->distance_from_player < 2) {
+        // A little hack for Quylthulgs, so that one will eventually
+        // notice that they have no physical attacks.
+        if (creature_recall[monster->creature_id].attacks[0] < MAX_UCHAR) {
+            creature_recall[monster->creature_id].attacks[0]++;
+        }
+
+        // Another little hack for Quylthulgs, so that one can
+        // eventually learn their speed.
+        if (creature_recall[monster->creature_id].attacks[0] > 20) {
+            creature_recall[monster->creature_id].movement |= CM_ONLY_MAGIC;
         }
     }
 }
