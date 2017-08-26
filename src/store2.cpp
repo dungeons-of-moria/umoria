@@ -348,7 +348,7 @@ static bool storeGetHaggle(const char *comment, int32_t *new_offer, int num_offe
     auto comment_len = (int) strlen(comment);
     int save_comment_len = comment_len;
 
-    char *p;
+    char *p = nullptr;
     vtype_t msg = {'\0'};
     vtype_t default_offer = {'\0'};
 
@@ -660,7 +660,7 @@ static int storeSellHaggle(int store_id, int32_t *price, Inventory_t *item) {
 
     int32_t current_askin_price;
     int32_t final_asking_price = 0;
-    const char *comment;
+    const char *comment = nullptr;
 
     if (!flag) {
         displayStoreHaggleCommands(-1);

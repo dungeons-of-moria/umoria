@@ -504,7 +504,7 @@ void playerTakeOff(int item_id, int pack_position_id) {
     inventory_weight -= item->weight * item->items_count;
     equipment_count--;
 
-    const char *p;
+    const char *p = nullptr;
     if (item_id == EQUIPMENT_WIELD || item_id == EQUIPMENT_AUX) {
         p = "Was wielding ";
     } else if (item_id == EQUIPMENT_LIGHT) {
@@ -960,8 +960,8 @@ static bool selectItemCommands(char *command, char *which, bool selecting) {
     int slot = 0;
 
     int from, to;
-    const char *prompt;
-    const char *swap;
+    const char *prompt = nullptr;
+    const char *swap = nullptr;
 
     while (selecting && player_free_turn) {
         swap = "";
@@ -1157,7 +1157,7 @@ static bool selectItemCommands(char *command, char *which, bool selecting) {
 
                 playerAdjustBonusesForItem(i_ptr, 1);
 
-                const char *text;
+                const char *text = nullptr;
                 if (slot == EQUIPMENT_WIELD) {
                     text = "You are wielding";
                 } else if (slot == EQUIPMENT_LIGHT) {

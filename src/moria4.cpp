@@ -601,7 +601,7 @@ static bool lookSee(int x, int y, bool *transparent) {
         printMessage(errorMessage);
     }
 
-    const char *description;
+    const char *description = nullptr;
     if (x == 0 && y == 0) {
         description = "You are on";
     } else {
@@ -647,6 +647,8 @@ static bool lookSee(int x, int y, bool *transparent) {
     }
 
     if (tile->temporary_light || tile->permanent_light || tile->field_mark) {
+        const char *wall_description;
+
         if (tile->treasure_id != 0) {
             if (treasure_list[tile->treasure_id].category_id == TV_SECRET_DOOR) {
                 goto granite;
@@ -666,8 +668,6 @@ static bool lookSee(int x, int y, bool *transparent) {
         }
 
         if (((los_rocks_and_objects != 0) || (msg[0] != 0)) && tile->feature_id >= MIN_CLOSED_SPACE) {
-            const char *wall_description;
-
             switch (tile->feature_id) {
                 case TILE_BOUNDARY_WALL:
                 case TILE_GRANITE_WALL:

@@ -11,7 +11,7 @@
 #include "version.h"
 
 static void date(char *day) {
-    char *tmp;
+    char *tmp = nullptr;
     time_t clockvar = time((time_t *) 0);
     tmp = ctime(&clockvar);
     tmp[10] = '\0';
@@ -27,11 +27,11 @@ static char *center_string(char *centered_str, const char *in_str) {
 }
 
 void showScoresScreen() {
-    char string[100];
+    char msg[100];
 
     if ((highscore_fp = fopen(MORIA_SCORES, "rb")) == nullptr) {
-        sprintf(string, "Error opening score file \"%s\"\n", MORIA_SCORES);
-        printMessage(string);
+        sprintf(msg, "Error opening score file \"%s\"\n", MORIA_SCORES);
+        printMessage(msg);
         printMessage(CNIL);
         return;
     }
@@ -76,13 +76,13 @@ void showScoresScreen() {
         // Put twenty scores on each page, on lines 2 through 21.
         while ((feof(highscore_fp) == 0) && i < 21) {
             (void) sprintf(
-                string,
+                msg,
                 "%-4d%8d %-19.19s %c %-10.10s %-7.7s%3d %-22.22s",
                 rank, score.points, score.name, score.gender,
                 character_races[score.race].name, classes[score.character_class].title,
                 score.level, score.died_from
             );
-            putStringClearToEOL(string, ++i, 0);
+            putStringClearToEOL(msg, ++i, 0);
             rank++;
             readHighScore(&score);
         }
@@ -105,7 +105,7 @@ bool duplicate_character() {
 
 // Prints the gravestone of the character -RAK-
 static void printTomb() {
-    char *p;
+    char *p = nullptr;
     vtype_t str = {'\0'};
     vtype_t tmp_str = {'\0'};
 
@@ -263,10 +263,10 @@ static void highscores() {
     (void) strcpy(new_entry.died_from, tmp);
 
     if ((highscore_fp = fopen(MORIA_SCORES, "rb+")) == nullptr) {
-        char string[100];
+        char msg[100];
 
-        (void) sprintf(string, "Error opening score file \"%s\"\n", MORIA_SCORES);
-        printMessage(string);
+        (void) sprintf(msg, "Error opening score file \"%s\"\n", MORIA_SCORES);
+        printMessage(msg);
         printMessage(CNIL);
         return;
     }
@@ -391,7 +391,7 @@ static void highscores() {
 
 // Change the player into a King! -RAK-
 static void kingly() {
-    const char *p;
+    const char *p = nullptr;
 
     // Change the character attributes.
     current_dungeon_level = 0;

@@ -6,7 +6,7 @@ bool stringToNumber(const char *str, int *number) {
     // we need to reset `errno`
     errno = 0;
 
-    char *endptr;
+    char *endptr = nullptr;
     long num = strtol(str, &endptr, 10);
 
     if (errno == ERANGE) {

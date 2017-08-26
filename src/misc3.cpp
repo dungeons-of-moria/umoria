@@ -366,7 +366,7 @@ int playerStatAdjustmentConstitution() {
 }
 
 char *playerTitle() {
-    const char *p;
+    const char *p = nullptr;
 
     if (py.misc.level < 1) {
         p = "Babe in arms";
@@ -1402,7 +1402,7 @@ void displaySpellsList(const int *spell, int number_of_choices, bool comment, in
         int spellID = spell[i];
         Spell_t *s_ptr = &magic_spells[py.misc.class_id - 1][spellID];
 
-        const char *p;
+        const char *p = nullptr;
         if (!comment) {
             p = "";
         } else if ((spells_forgotten & (1L << spellID)) != 0) {
@@ -1674,7 +1674,7 @@ static void forgetSpells(int newSpells, const char *p, int offset) {
 void playerCalculateAllowedSpellsCount(int stat) {
     Spell_t *spell = &magic_spells[py.misc.class_id - 1][0];
 
-    const char *magic_type_str;
+    const char *magic_type_str = nullptr;
     int offset;
 
     if (stat == A_INT) {
@@ -2037,7 +2037,7 @@ void insertStringIntoString(char *to_string, const char *from_string, const char
     auto to_len = (int) strlen(to_string);
 
     char *bound = to_string + to_len - from_len;
-    char *pc;
+    char *pc = nullptr;
 
     for (pc = to_string; pc <= bound; pc++) {
         char *temp_obj = pc;
@@ -2074,30 +2074,30 @@ void insertStringIntoString(char *to_string, const char *from_string, const char
 void insertNumberIntoString(char *to_string, const char *from_string, int32_t number, bool show_sign) {
     size_t from_len = strlen(from_string);
     char *to_str_tmp = to_string;
-    char *string;
+    char *str = nullptr;
 
     // must be int for strncmp()
     int flag = 1;
 
     while (flag != 0) {
-        string = strchr(to_str_tmp, from_string[0]);
-        if (string == nullptr) {
+        str = strchr(to_str_tmp, from_string[0]);
+        if (str == nullptr) {
             flag = 0;
         } else {
-            flag = strncmp(string, from_string, from_len);
+            flag = strncmp(str, from_string, from_len);
             if (flag != 0) {
-                to_str_tmp = string + 1;
+                to_str_tmp = str + 1;
             }
         }
     }
 
-    if (string != nullptr) {
+    if (str != nullptr) {
         vtype_t str1 = {'\0'};
         vtype_t str2 = {'\0'};
 
-        (void) strncpy(str1, to_string, string - to_string);
-        str1[string - to_string] = '\0';
-        (void) strcpy(str2, string + from_len);
+        (void) strncpy(str1, to_string, str - to_string);
+        str1[str - to_string] = '\0';
+        (void) strcpy(str2, str + from_len);
 
         if (number >= 0 && show_sign) {
             (void) sprintf(to_string, "%s+%d%s", str1, number, str2);

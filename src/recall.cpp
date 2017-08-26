@@ -117,9 +117,9 @@ static const char *description_weakness[] = {
         "rock remover",
 };
 
-static vtype_t roff_buffer;       // Line buffer.
-static char *roff_buffer_pointer; // Pointer into line buffer.
-static int roff_print_line;       // Place to print line now being loaded.
+static vtype_t roff_buffer = {'\0'};        // Line buffer.
+static char *roff_buffer_pointer = nullptr; // Pointer into line buffer.
+static int roff_print_line;                 // Place to print line now being loaded.
 
 #define plural(c, ss, sp) ((c) == 1 ? (ss) : (sp))
 
@@ -544,7 +544,7 @@ static void memoryLootCarried(uint32_t creature_move, uint32_t memory_move) {
 
     memoryPrint(" carry");
 
-    const char *p;
+    const char *p = nullptr;
 
     if ((memory_move & CM_SMALL_OBJ) != 0u) {
         p = " small objects";
