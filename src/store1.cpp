@@ -9,6 +9,8 @@
 #include "headers.h"
 #include "externs.h"
 
+Store_t stores[MAX_STORES];
+
 static void storeItemInsert(int store_id, int pos, int32_t i_cost, Inventory_t *item);
 static void storeItemCreate(int store_id, int16_t max_cost);
 

@@ -39,6 +39,8 @@ set(SOURCE_FILES
     ${SOURCE_FILES_DIR}/data_player.cpp
     ${SOURCE_FILES_DIR}/data_recall.cpp
     ${SOURCE_FILES_DIR}/data_store_owners.cpp
+    ${SOURCE_FILES_DIR}/data_stores.cpp
+    ${SOURCE_FILES_DIR}/data_tables.cpp
     ${SOURCE_FILES_DIR}/main.cpp
     ${SOURCE_FILES_DIR}/moria.cpp
     ${SOURCE_FILES_DIR}/misc1.cpp
@@ -77,7 +79,6 @@ set(SOURCE_FILES
     ${SOURCE_FILES_DIR}/rnd.cpp
     ${SOURCE_FILES_DIR}/recall.cpp
     ${SOURCE_FILES_DIR}/player.cpp
-    ${SOURCE_FILES_DIR}/tables.cpp
     ${SOURCE_FILES_DIR}/helpers.cpp
 )
 add_executable(umoria ${SOURCE_FILES})

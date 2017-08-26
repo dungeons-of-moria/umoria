@@ -826,6 +826,16 @@ static bool storePurchaseAnItem(int store_id, int *current_top_item_id) {
     return purchased;
 }
 
+// Each store will buy only certain items, based on TVAL
+bool (*store_buy[MAX_STORES])(int) = {
+    setGeneralStoreItems,
+    setArmoryItems,
+    setWeaponsmithItems,
+    setTempleItems,
+    setAlchemistItems,
+    setMagicShopItems,
+};
+
 // Sell an item to the store -RAK-
 static bool storeSellAnItem(int store_id, int *current_top_item_id) {
     int first_item = inventory_count;
