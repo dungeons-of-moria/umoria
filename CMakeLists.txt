@@ -41,6 +41,7 @@ set(SOURCE_FILES
     ${SOURCE_FILES_DIR}/data_store_owners.cpp
     ${SOURCE_FILES_DIR}/data_stores.cpp
     ${SOURCE_FILES_DIR}/data_tables.cpp
+    ${SOURCE_FILES_DIR}/data_treasure.cpp
     ${SOURCE_FILES_DIR}/main.cpp
     ${SOURCE_FILES_DIR}/moria.cpp
     ${SOURCE_FILES_DIR}/misc1.cpp
