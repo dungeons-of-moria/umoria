@@ -298,7 +298,7 @@ int displayInventory(int item_id_start, int item_id_end, bool weighted, int colu
             continue;
         }
 
-        obj_desc_t description;
+        obj_desc_t description = {'\0'};
         itemDescription(description, &inventory[i], true);
 
         // Truncate if too long.
@@ -339,7 +339,7 @@ int displayInventory(int item_id_start, int item_id_end, bool weighted, int colu
         }
 
         if (weighted) {
-            obj_desc_t text;
+            obj_desc_t text = {'\0'};
             inventoryItemWeightText(text, i);
             putStringClearToEOL(text, current_line, 71);
         }
@@ -441,7 +441,7 @@ int displayEquipment(bool weighted, int column) {
         // Get position
         const char *position_description = itemPostitionDescription(i, inventory[i].weight);
 
-        obj_desc_t description;
+        obj_desc_t description = {'\0'};
         itemDescription(description, &inventory[i], true);
 
         // Truncate if necessary
@@ -483,7 +483,7 @@ int displayEquipment(bool weighted, int column) {
         }
 
         if (weighted) {
-            obj_desc_t text;
+            obj_desc_t text = {'\0'};
             inventoryItemWeightText(text, i);
             putStringClearToEOL(text, line + 1, 71);
         }
