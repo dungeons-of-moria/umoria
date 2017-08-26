@@ -2,11 +2,14 @@
 
 ## HEAD
 
+## Notable changes
+
 - CLI: Added an arg to provide a custom game seed value, using `-s`.
 - CLI: "Display high scores" flag now changed to `-d`, because  of the game seed.
 - CLI: Remove `-o` and just use the one arg (`-r`) for specifying (forcing)
   the use of roguelike keys (`hjkl`).
 - Renamed the help files. Ex. `owizcmds.hlp` > `help.txt`.
+- Support only save/score files for Umoria versions 5.2.2 up to 5.7.x.
 
 ### Bug Fixes
 
