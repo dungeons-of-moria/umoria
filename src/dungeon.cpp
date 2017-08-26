@@ -744,8 +744,8 @@ static void executeInputCommands(char *command, int *find_count) {
 
         if (running_counter != 0) {
             playerRunAndFind();
-            find_count--;
-            if (find_count == 0) {
+            *find_count -= 1;
+            if (*find_count == 0) {
                 playerEndRunning();
             }
             putQIO();
