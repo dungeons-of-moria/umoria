@@ -35,6 +35,7 @@ set(SOURCE_FILES
     ${SOURCE_FILES_DIR}/headers.h
     ${SOURCE_FILES_DIR}/types.h
     ${SOURCE_FILES_DIR}/version.h
+    ${SOURCE_FILES_DIR}/data_creatures.cpp
     ${SOURCE_FILES_DIR}/main.cpp
     ${SOURCE_FILES_DIR}/moria.cpp
     ${SOURCE_FILES_DIR}/misc1.cpp
