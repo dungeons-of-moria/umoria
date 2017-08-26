@@ -2091,7 +2091,8 @@ void intertNumberIntoString(char *to_string, const char *from_string, int32_t nu
     }
 
     if (string != nullptr) {
-        vtype_t str1, str2;
+        vtype_t str1 = {'\0'};
+        vtype_t str2 = {'\0'};
 
         (void) strncpy(str1, to_string, string - to_string);
         str1[string - to_string] = '\0';
