@@ -10,8 +10,9 @@
 
 ### Bug Fixes
 
-- `TV_NEVER` was an unsigned int, but should be signed as it's being given a `-1` value. https://github.com/dungeons-of-moria/umoria/commit/8c3d1d2133579b3dd8df7bd48552a5cf2a4425ce
-- The `monsterTakeHit()` check is now correct in `spellLightLineTouchesMonster()`. https://github.com/dungeons-of-moria/umoria/commit/b26547dece169fa8af725f9bce87b05c29b61a18
+- `TV_NEVER` was an unsigned int, but should be signed as it's being given a `-1` value. https://github.com/dungeons-of-moria/umoria/commit/8c3d1d2
+- The `monsterTakeHit()` check is now correct in `spellLightLineTouchesMonster()`. https://github.com/dungeons-of-moria/umoria/commit/b26547d
+- When player was in _Run/Find_ mode, the `find_count` was not being dereferenced, so `playerEndRunning()` would not be called correctly. https://github.com/dungeons-of-moria/umoria/commit/95dc308
 
 ### Code
 
@@ -20,6 +21,7 @@
 - Move the game options globals into a Config_t struct.
 - Refactor `main.cpp` to contain [mostly] just CLI arg parsing, and some
   basic game initialization. All other game logic moved to `moria.cpp`.
+- Lots of clang-tidy based refactoring.
 
 
 ## 5.7.4 (2017-08-06)
