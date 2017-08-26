@@ -98,11 +98,6 @@ void showScoresScreen() {
     (void) fclose(highscore_fp);
 }
 
-bool duplicate_character() {
-    // Only check for duplicate characters under unix.
-    return false;
-}
-
 // Prints the gravestone of the character -RAK-
 static void printTomb() {
     char *p = nullptr;

@@ -169,7 +169,6 @@ void updateMonsters(bool attack);
 
 // death.c
 void showScoresScreen();
-bool duplicate_character();
 int32_t playerCalculateTotalPoints();
 void exitGame();
 uint8_t highScoreGenderLabel();

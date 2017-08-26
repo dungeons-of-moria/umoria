@@ -930,7 +930,7 @@ bool loadGame(bool *generate) {
 
             if (panic_save) {
                 printMessage("This game is from a panic save.  Score will not be added to scoreboard.");
-            } else if (((!noscore) & 0x04) && duplicate_character()) {
+            } else if ((!noscore) & 0x04) {
                 printMessage("This character is already on the scoreboard; it will not be scored again.");
                 noscore |= 0x4;
             }
