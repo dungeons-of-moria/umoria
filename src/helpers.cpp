@@ -145,11 +145,9 @@ uint32_t getCurrentUnixTime() {
 }
 
 void humanDateString(char *day) {
-    char *time_string = nullptr;
-    time_t current_time = time(nullptr);
-    time_string = ctime(&current_time);
-    time_string[10] = '\0';
-    (void) strcpy(day, time_string);
+    time_t current = time(nullptr);
+    struct tm *t = localtime(&current);
+    strftime(day, 10, "%a %b %e", t);
 }
 
 // Centers a string within a 31 character string -JWT-
