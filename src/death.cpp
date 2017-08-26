@@ -11,11 +11,11 @@
 #include "version.h"
 
 static void date(char *day) {
-    char *tmp = nullptr;
-    time_t clockvar = time((time_t *) 0);
-    tmp = ctime(&clockvar);
-    tmp[10] = '\0';
-    (void) strcpy(day, tmp);
+    char *time_string = nullptr;
+    time_t current_time = time(nullptr);
+    time_string = ctime(&current_time);
+    time_string[10] = '\0';
+    (void) strcpy(day, time_string);
 }
 
 // Centers a string within a 31 character string -JWT-

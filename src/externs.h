@@ -216,6 +216,7 @@ void insertNumberIntoString(char *to_string, const char *from_string, int32_t nu
 void insertStringIntoString(char *to_string, const char *from_string, const char *str_to_insert);
 bool isVowel(char ch);
 bool stringToNumber(const char *str, int *number);
+uint32_t getCurrentUnixTime();
 
 // io.c
 bool terminalInitialize();

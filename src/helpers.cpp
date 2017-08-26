@@ -139,3 +139,7 @@ bool stringToNumber(const char *str, int *number) {
     *number = (int) num;
     return true;
 }
+
+uint32_t getCurrentUnixTime() {
+    return static_cast<uint32_t>(time(nullptr));
+}

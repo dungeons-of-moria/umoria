@@ -260,7 +260,7 @@ static bool sv_write() {
     }
 
     // save the current time in the save file
-    l = (uint32_t) time((time_t *) 0);
+    l = getCurrentUnixTime();
 
     if (l < start_time) {
         // someone is messing with the clock!,
@@ -907,7 +907,7 @@ bool loadGame(bool *generate) {
                 // rotate store inventory, depending on how old the save file
                 // is foreach day old (rounded up), call storeMaintenance
                 // calculate age in seconds
-                start_time = (uint32_t) time((time_t *) 0);
+                start_time = getCurrentUnixTime();
 
                 uint32_t age;
 

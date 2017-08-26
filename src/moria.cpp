@@ -72,7 +72,7 @@ void startMoria(int seed, bool start_new_game, bool use_roguelike_keys) {
         // Create character
         characterCreate();
 
-        character_birth_date = (int32_t) time((time_t *) 0);
+        character_birth_date = getCurrentUnixTime();
 
         initializeCharacterInventory();
         py.flags.food = 7500;
