@@ -127,8 +127,8 @@ static void printSpeechSellingHaggle(int32_t offer, int32_t asking, int final) {
         (void) strcpy(comment, speech_selling_haggle[randomNumber(16) - 1]);
     }
 
-    intertNumberIntoString(comment, "%A1", offer, false);
-    intertNumberIntoString(comment, "%A2", asking, false);
+    insertNumberIntoString(comment, "%A1", offer, false);
+    insertNumberIntoString(comment, "%A2", asking, false);
     printMessage(comment);
 }
 
@@ -141,8 +141,8 @@ static void printSpeechBuyingHaggle(int32_t offer, int32_t asking, int final) {
         (void) strcpy(comment, speech_buying_haggle[randomNumber(15) - 1]);
     }
 
-    intertNumberIntoString(comment, "%A1", offer, false);
-    intertNumberIntoString(comment, "%A2", asking, false);
+    insertNumberIntoString(comment, "%A1", offer, false);
+    insertNumberIntoString(comment, "%A2", asking, false);
     printMessage(comment);
 }
 

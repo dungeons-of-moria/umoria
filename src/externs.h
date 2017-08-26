@@ -345,7 +345,7 @@ void playerGainMana(int stat);
 void displayCharacterExperience();
 void playerCalculateHitPoints();
 void insertStringIntoString(char *to_string, const char *from_string, const char *str_to_insert);
-void intertNumberIntoString(char *to_string, const char *from_string, int32_t number, bool show_sign);
+void insertNumberIntoString(char *to_string, const char *from_string, int32_t number, bool show_sign);
 bool enterWizardMode();
 int playerAttackBlows(int weight, int *weight_to_hit);
 int itemMagicAbilityDamage(Inventory_t *item, int total_damage, int monster_id);

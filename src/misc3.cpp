@@ -2070,7 +2070,8 @@ void insertStringIntoString(char *to_string, const char *from_string, const char
     }
 }
 
-void intertNumberIntoString(char *to_string, const char *from_string, int32_t number, bool show_sign) {
+// Insert a long number into a string (was `insert_lnum()` function)
+void insertNumberIntoString(char *to_string, const char *from_string, int32_t number, bool show_sign) {
     size_t from_len = strlen(from_string);
     char *to_str_tmp = to_string;
     char *string;
