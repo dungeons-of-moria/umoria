@@ -38,6 +38,7 @@ set(SOURCE_FILES
     ${SOURCE_FILES_DIR}/data_creatures.cpp
     ${SOURCE_FILES_DIR}/data_player.cpp
     ${SOURCE_FILES_DIR}/data_recall.cpp
+    ${SOURCE_FILES_DIR}/data_store_owners.cpp
     ${SOURCE_FILES_DIR}/main.cpp
     ${SOURCE_FILES_DIR}/moria.cpp
     ${SOURCE_FILES_DIR}/misc1.cpp
