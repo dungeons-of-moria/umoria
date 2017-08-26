@@ -349,7 +349,8 @@ static bool storeGetHaggle(const char *comment, int32_t *new_offer, int num_offe
     int save_comment_len = comment_len;
 
     char *p;
-    vtype_t msg, default_offer;
+    vtype_t msg = {'\0'};
+    vtype_t default_offer = {'\0'};
 
     bool flag = true;
     int32_t offer_adjust = 0;
