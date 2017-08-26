@@ -10,22 +10,6 @@
 #include "externs.h"
 #include "version.h"
 
-static void date(char *day) {
-    char *time_string = nullptr;
-    time_t current_time = time(nullptr);
-    time_string = ctime(&current_time);
-    time_string[10] = '\0';
-    (void) strcpy(day, time_string);
-}
-
-// Centers a string within a 31 character string -JWT-
-static char *center_string(char *centered_str, const char *in_str) {
-    auto i = (int) strlen(in_str);
-    int j = 15 - i / 2;
-    (void) sprintf(centered_str, "%*s%s%*s", j, "", in_str, 31 - i - j, "");
-    return centered_str;
-}
-
 void showScoresScreen() {
     char msg[100];
 
@@ -105,7 +89,7 @@ static void printTomb() {
     putString("/            RIP            \\   \\  :   :     /   \\", 4, 12);
     putString("/", 5, 11);
     putString("\\  : _;,,,;_    :   :", 5, 41);
-    (void) sprintf(str, "/%s\\,;_          _;,,,;_", center_string(tmp_str, py.misc.name));
+    (void) sprintf(str, "/%s\\,;_          _;,,,;_", centerString(tmp_str, py.misc.name));
     putString(str, 6, 10);
     putString("|               the               |   ___", 7, 9);
     if (!total_winner) {
@@ -113,7 +97,7 @@ static void printTomb() {
     } else {
         p = (char *) "Magnificent";
     }
-    (void) sprintf(str, "| %s |  /   \\", center_string(tmp_str, p));
+    (void) sprintf(str, "| %s |  /   \\", centerString(tmp_str, p));
     putString(str, 8, 9);
     putString("|", 9, 9);
     putString("|  :   :", 9, 43);
@@ -124,19 +108,19 @@ static void printTomb() {
     } else {
         p = (char *) "*Queen*";
     }
-    (void) sprintf(str, "| %s | _;,,,;_   ____", center_string(tmp_str, p));
+    (void) sprintf(str, "| %s | _;,,,;_   ____", centerString(tmp_str, p));
     putString(str, 10, 9);
     (void) sprintf(str, "Level : %d", (int) py.misc.level);
-    (void) sprintf(str, "| %s |          /    \\", center_string(tmp_str, str));
+    (void) sprintf(str, "| %s |          /    \\", centerString(tmp_str, str));
     putString(str, 11, 9);
     (void) sprintf(str, "%d Exp", py.misc.exp);
-    (void) sprintf(str, "| %s |          :    :", center_string(tmp_str, str));
+    (void) sprintf(str, "| %s |          :    :", centerString(tmp_str, str));
     putString(str, 12, 9);
     (void) sprintf(str, "%d Au", py.misc.au);
-    (void) sprintf(str, "| %s |          :    :", center_string(tmp_str, str));
+    (void) sprintf(str, "| %s |          :    :", centerString(tmp_str, str));
     putString(str, 13, 9);
     (void) sprintf(str, "Died on Level : %d", current_dungeon_level);
-    (void) sprintf(str, "| %s |         _;,,,,;_", center_string(tmp_str, str));
+    (void) sprintf(str, "| %s |         _;,,,,;_", centerString(tmp_str, str));
     putString(str, 14, 9);
     putString("|            killed by            |", 15, 9);
     p = character_died_from;
@@ -144,13 +128,13 @@ static void printTomb() {
     auto len = (int) strlen(p);
     p[len] = '.'; // add a trailing period
     p[len + 1] = '\0';
-    (void) sprintf(str, "| %s |", center_string(tmp_str, p));
+    (void) sprintf(str, "| %s |", centerString(tmp_str, p));
     putString(str, 16, 9);
     p[len] = '\0'; // strip off the period
 
     char day[11];
-    date(day);
-    (void) sprintf(str, "| %s |", center_string(tmp_str, day));
+    humanDateString(day);
+    (void) sprintf(str, "| %s |", centerString(tmp_str, day));
 
     putString(str, 17, 9);
     putString("*|   *     *     *    *   *     *  | *", 18, 8);

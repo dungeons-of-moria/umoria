@@ -143,3 +143,19 @@ bool stringToNumber(const char *str, int *number) {
 uint32_t getCurrentUnixTime() {
     return static_cast<uint32_t>(time(nullptr));
 }
+
+void humanDateString(char *day) {
+    char *time_string = nullptr;
+    time_t current_time = time(nullptr);
+    time_string = ctime(&current_time);
+    time_string[10] = '\0';
+    (void) strcpy(day, time_string);
+}
+
+// Centers a string within a 31 character string -JWT-
+char *centerString(char *centered_str, const char *in_str) {
+    auto i = (int) strlen(in_str);
+    int j = 15 - i / 2;
+    (void) sprintf(centered_str, "%*s%s%*s", j, "", in_str, 31 - i - j, "");
+    return centered_str;
+}

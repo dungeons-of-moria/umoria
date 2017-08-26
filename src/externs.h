@@ -217,6 +217,8 @@ void insertStringIntoString(char *to_string, const char *from_string, const char
 bool isVowel(char ch);
 bool stringToNumber(const char *str, int *number);
 uint32_t getCurrentUnixTime();
+void humanDateString(char *day);
+char *centerString(char *centered_str, const char *in_str);
 
 // io.c
 bool terminalInitialize();
