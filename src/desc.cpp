@@ -13,24 +13,6 @@ static void unsample(Inventory_t *i_ptr);
 
 char magic_item_titles[MAX_TITLES][10];
 
-bool isVowel(char ch) {
-    switch (ch) {
-        case 'a':
-        case 'e':
-        case 'i':
-        case 'o':
-        case 'u':
-        case 'A':
-        case 'E':
-        case 'I':
-        case 'O':
-        case 'U':
-            return true;
-        default:
-            return false;
-    }
-}
-
 // Initialize all Potions, wands, staves, scrolls, etc.
 void magicInitializeItemNames() {
     int id;

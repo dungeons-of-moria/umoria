@@ -174,7 +174,6 @@ void exitGame();
 uint8_t highScoreGenderLabel();
 
 // desc.c
-bool isVowel(char ch);
 void magicInitializeItemNames();
 int16_t objectPositionOffset(Inventory_t *item);
 void itemSetAsIdentified(Inventory_t *item);
@@ -213,6 +212,9 @@ void generateCave();
 void displayWorldObjectDescription();
 
 // helpers
+void insertNumberIntoString(char *to_string, const char *from_string, int32_t number, bool show_sign);
+void insertStringIntoString(char *to_string, const char *from_string, const char *str_to_insert);
+bool isVowel(char ch);
 bool stringToNumber(const char *str, int *number);
 
 // io.c
@@ -359,8 +361,6 @@ void playerGainSpells();
 void playerGainMana(int stat);
 void displayCharacterExperience();
 void playerCalculateHitPoints();
-void insertStringIntoString(char *to_string, const char *from_string, const char *str_to_insert);
-void insertNumberIntoString(char *to_string, const char *from_string, int32_t number, bool show_sign);
 bool enterWizardMode();
 int playerAttackBlows(int weight, int *weight_to_hit);
 int itemMagicAbilityDamage(Inventory_t *item, int total_damage, int monster_id);
