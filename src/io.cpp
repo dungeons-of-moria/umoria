@@ -69,7 +69,7 @@ void putString(const char *out_str, int row, int col) {
         col = 79;
     }
 
-    vtype_t str;
+    vtype_t str = {'\0'};
     (void) strncpy(str, out_str, (size_t) (79 - col));
     str[79 - col] = '\0';
 
