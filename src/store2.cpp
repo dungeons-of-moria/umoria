@@ -956,7 +956,7 @@ static bool storeSellAnItem(int store_id, int *current_top_item_id) {
         return false;
     }
 
-    Inventory_t sold_item;
+    Inventory_t sold_item{};
     inventoryTakeOneItem(&sold_item, &inventory[item_id]);
 
     obj_desc_t description = {'\0'};
