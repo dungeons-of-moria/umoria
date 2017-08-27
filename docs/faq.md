@@ -2,8 +2,7 @@
 
 _The most common questions, asked by both beginners and others..._
 
-This FAQ relates to Umoria 5.7, released November 2016 and is split into
-three sections:
+This FAQ relates to Umoria 5.7 and is split into three sections:
 
 1. General Information
 2. Game Play - Non-Spoiler Questions
@@ -16,31 +15,28 @@ three sections:
 
 The best place to start is the [Umoria.org](http://umoria.org) website.
 
-**The Game** - Umoria is available for Windows, macOS, and Linux.
-The game files can be found on the
-[Umoria download page](http://umoria.org/download).
+**The Game**: Umoria is available for Windows, macOS and Linux, and can be
+downloaded from the [Umoria download page](http://umoria.org/download).
 
-**Source Code** - the main repository is currently hosted on Github at
+**Source Code**: The main source code repository is currently hosted on Github at
 [github.com/dungeons-of-moria/umoria](https://github.com/dungeons-of-moria/umoria)
 
-If you are interested in Robert A. Koeneke's original VMS Pascal Moria,
-developed 1980-87, then please visit the
-[Dungeons of Moria](https://github.com/dungeons-of-moria) Github page, which
-also includes a few other Pascal ports of Moria, including _Imoria_ and
-_Moria UB_.
+If you're interested in Robert A. Koeneke's original VMS Pascal _Moria_,
+developed 1982-86, then please visit the [Dungeons of Moria](https://github.com/dungeons-of-moria)
+Github page, which also includes a few other Pascal ports of Moria, including
+_Imoria_ and _Moria UB_.
 
 
 ### How do I run the game?
 
 Umoria 5.7 is a terminal/console game. Here is a very brief explanation on
 running the game, however, for more detailed information please visit the
-Umoria.org [download/installation page](http://umoria.org/download).
+Umoria.org [download and installation page](http://umoria.org/download).
 
 **macOS / Linux**
 
-To run the game you must first open the
-terminal application on your system, navigate to the `umoria` directory, and then
-type the `./umoria` command.
+To run the game you must first open the _Terminal_ application on your system,
+navigate to the `umoria` directory, and then enter the `./umoria` command.
 
 **Windows**
 
@@ -62,40 +58,42 @@ Here are the preferred methods for reporting the bug:
 If you have a patch for the bug, please submit a _Pull Request_ to the
 [source code repository on Github](https://github.com/dungeons-of-moria/umoria).
 
+More information can be found in our [CONTRIBUTING](https://github.com/dungeons-of-moria/umoria/blob/master/CONTRIBUTING.md) guide.
+
 
 
 ## 2. Game Play - Non-Spoiler Questions
 
 
-### How does resistance work?  Are two items of resistance cumulative?
+### How does resistance work, and are two items of resistance cumulative?
 
 Resist heat/cold potions and spells give temporary resistance to heat or
 cold. All other resistance items give permanent resistance. Two permanent
 resistances _are not_ cumulative, and two temporary resistances _are_
 cumulative only in duration.
 
-Fire and cold do 1/3 damage if you have single resistance, 1/9 if you have
-double. Acid does 1/2 damage if you have any armor to corrode, 1/3 if you have
-resistance but no armor, and 1/4 if you have resistance and armor. Lightning
-does 1/3 damage if you have resistance.
+Fire and cold do `1/3` damage if you have single resistance, `1/9` if you have
+double. Acid does `1/2` damage if you have any armor to corrode, `1/3` if you have
+resistance but no armor, and `1/4` if you have resistance and armor. Lightning
+does `1/3` damage if you have resistance.
 
-There is no resistance against poison gas.
+**_There is no resistance against poison gas._**
 
 
-### How does speed work? Do you get faster if you are already Very Fast and get another speed item?
+### How does speed work?
 
-`Very Fast` is the highest speed that can be displayed, but if you are fortunate
+_Do you get faster if you are already **Very Fast** and get another speed item?_
+
+**Very Fast** is the highest speed that can be displayed, but if you are fortunate
 enough to find several speed items, you can get still faster. Permanent speed
 items (rings and boots) are cumulative, and temporary speed (potions, spells,
 and staffs) can add one more point to your speed. Multiple uses of temporary
 speed are cumulative only in duration.
 
 
-
 ### How does experience work in Umoria?
 
 _Contribution by Mike Marcelais, North Carolina School of Science And Math._
-
 
 All characters receive experience during the game. Experience determines your
 level, which determines hit points, mana points, spells, abilities, etc. The
@@ -105,8 +103,7 @@ plus a penalty for race and class.
 
 #### Calculating Experience Levels
 
-
-Base Experience
+                      Base Experience
 
     Lv   Exp to Adv     Lv   Exp to Adv     Lv   Exp to Adv
      1      10          14    1,400         27      35,000
@@ -126,7 +123,7 @@ Base Experience
 Maximum level is `40` and maximum experience is `9,999,999`.
 
 There are percent penalties for various races and classes to help even them
-out.  The table below lists all the penalties.
+out. The table below lists all the penalties.
 
     Human       0%
     Half-Elf   10%
@@ -154,7 +151,7 @@ the 40th level: `5,000,000 * 1.25 * 1.40 = 8,750,000` experience.
 
 #### Gaining Experience
 
-There are many ways to gain experience.  This list shows a few.
+There are many ways to gain experience. This list shows a few.
 
 1. Defeating monsters
 2. Disarming traps
@@ -165,11 +162,10 @@ There are many ways to gain experience.  This list shows a few.
 6. Drinking a potion of gain experience or gain level
 
 
-#### Titles
+#### Experience Titles
 
-Each experience level has a title which is displayed under your name
-and class.  Below is a listing of all the titles for each level and
-class.
+Each experience level has a title which is displayed under your name and class.
+Below is a listing of all the titles for each level and class.
 
 ```
        Warrior   |      Mage     |     Priest    |     Rogue     |     Ranger    |   Paladin
@@ -218,7 +214,7 @@ class.
 
 
 
-## 3. Game Play - Spoilers! (W.I.P.)
+## 3. Game Play - Spoilers!
 
 _**WARNING: the information given below contains many spoilers, read at your own peril.**_
 
@@ -231,7 +227,7 @@ _Crowns?  Amulet of the Magi?  Cloak of Protection?_
 
     Cloak of Protection     no special ability, just a larger bonus than usual.
 
-    Ego weapons:
+_Ego weapons:_
 
     (HA) Holy Avenger       +(1-4) str, +(1-4) AC, (SE), (SU),
                             sustain stat, see invisible.
@@ -245,8 +241,11 @@ _Crowns?  Amulet of the Magi?  Cloak of Protection?_
     (FT) Flame Tongue       Damage (x 1.5) vs. monsters harmed by fire.
     (FB) Frost Brand        Damage (x 1.5) vs. monsters harmed by cold.
 
-    A HA which is +1 to strength sustains strength; +2, intelligence; +3,
-    wisdom; +4, constitution (not dexterity).
+    A (HA) is:
+        +1 to strength, sustains strength
+        +2 intelligence
+        +3 wisdom
+        +4 constitution (not dexterity).
 
     Crown of the Magi       +(1-3) int, (RF), (RC), (RA), (RL)
     Crown of Lordliness     +(1-3) wis, chr.
@@ -255,10 +254,10 @@ _Crowns?  Amulet of the Magi?  Cloak of Protection?_
     Crown of Regeneration   Regeneration.
     Crown of Beauty         +(1-3) charisma.
 
-Regeneration lets you recover mana and hit points at 1.5 times the normal rate,
-but also makes you use up food much more quickly.
+**Regeneration** lets you recover mana and hit points at `1.5` times the normal
+rate, but also makes you use up food much more quickly.
 
-Free action prevents you from being slowed or paralyzed by monsters.
+**Free action** prevents you from being slowed or paralyzed by monsters.
 
 
 ### How much damage do spells and wands do?
@@ -276,11 +275,10 @@ Free action prevents you from being slowed or paralyzed by monsters.
     Fire Ball                72
     Wand of Drain Life       75
 
-A wand of wall building will do `4d8` damage to any creature buried in the
-wall (except one that moves through walls), and will kill any immobile
-creature. On the creature's next turn, it will attempt to move out of the
-wall, and if it is unable to do so, it will take `10d8` damage and dig its way
-out.
+A _wand of wall building_ will do `4d8` damage to any creature buried in the
+wall (except one that moves through walls), and will kill any immobile creature.
+On the creatures' next turn, it will attempt to move out of the wall, and if it
+is unable to do so, it will take `10d8` damage and dig its way out.
 
     Wand of Light / Staff of Starlight  2d8 (if sensitive)
     Stone to Mud                        100 (if sensitive)
@@ -293,42 +291,42 @@ out.
 
 ### What does spell Y do?
 
-Non-obvious spell effects:
+Non-obvious spell effects.
 
-**Mage Spells**
+#### Mage Spells
 
-- Phase Door: short-range teleport.
-- Find Hidden Traps/Doors: also detects stairs.
-- Sleep I: sleep one monster in a given direction.
-- Recharge Item I: fewer charges than Recharge Item II, and more likely to fail.
-- Sleep II: sleep all monsters adjacent to player.
-- Sleep III: sleep all monsters with a line of sight to player
+- **Phase Door**: short-range teleport.
+- **Find Hidden Traps/Doors**: also detects stairs.
+- **Sleep I**: sleep one monster in a given direction.
+- **Recharge Item I**: fewer charges than Recharge Item II, and more likely to fail.
+- **Sleep II**: sleep all monsters adjacent to player.
+- **Sleep III**: sleep all monsters with a line of sight to player
   (including invisible ones).
-- Word of Destruction: obliterates everything within 15 spaces of the player;
+- **Word of Destruction**: obliterates everything within 15 spaces of the player;
   Balrog will teleport to another level.
 
-**Priest Spells**
+#### Priest Spells
 
-- Bless: +2 to AC, and +5 to chance to hit (equivalent to +1-2/3 bonus on
-  weapon) for a short time.
-- Blind Creature: blinded creatures wander around confused until they recover.
-- Portal: medium-range teleport.
-- Chant: double duration Bless.
-- Sanctuary: sleep creatures adjacent to player.
-- Protection from Evil: prevents any evil creature of the player's level or
+- **Bless**: `+2` to AC, and `+5` to chance to hit (equivalent to `+1-2/3`
+  bonus on weapon) for a short time.
+- **Blind Creature**: blinded creatures wander around confused until they recover.
+- **Portal**: medium-range teleport.
+- **Chant**: double duration Bless.
+- **Sanctuary**: sleep creatures adjacent to player.
+- **Protection from Evil**: prevents any evil creature of the player's level or
   lower from attacking the player.
-- Earthquake: causes random walls and ceilings in the area to collapse,
+- **Earthquake**: causes random walls and ceilings in the area to collapse,
   possibly injuring anything nearby.
-- Turn Undead: all undead of the player's level or lower, and some of higher
-  level, will attempt to flee.
-- Prayer: quadruple duration Bless.
-- Dispel Undead/Evil: affects all undead/evil within line of sight,
-  damage is from 1 up to 3x player's level, 1-60 from scroll or staff.
-- _Glyph of Warding_: creates a glyph which monsters cannot enter, but have a
-  small chance of breaking.
-- Holy Word: heals player completely, cures poison and fear, and dispels evil
-  for 1 to 4x player's level. Also restores all stats, and makes player
-  invulnerable for 3 turns.
+- **Turn Undead**: all undead of the player's level or lower, and some of
+  higher level, will attempt to flee.
+- **Prayer**: quadruple duration Bless.
+- **Dispel Undead/Evil**: affects all undead/evil within line of sight,
+  damage is from `1` up to `3x` player's level, `1-60` from scroll or staff.
+- **Glyph of Warding**: creates a glyph which monsters cannot enter, but have
+  a small chance of breaking.
+- **Holy Word**: heals player completely, cures poison and fear, and dispels
+  evil for `1` to `4x` player's level. Also restores all stats, and makes
+  player invulnerable for `3` turns.
 
 
 
@@ -336,9 +334,9 @@ Non-obvious spell effects:
 
 _Where important objects are found._
 
-Just 1/12 of items are chosen as if you were on a deeper level, which has
-(current level/50) chance of being level 50; this check is not made in town.
-This affects only the type of item, not its enchantment.
+Just `1/12` of items are chosen as if you were on a deeper level, which has
+(`current level/50`) chance of being level `50`; this check is not made in
+the town. This affects only the type of item, not its enchantment.
 
 Items become somewhat less common as you go deeper than the indicated levels;
 however, if you can survive down there, this is compensated for by the fact
@@ -371,13 +369,12 @@ that there are more treasures on deeper levels.
 
 
 
-
 ### How many attacks can I get with this weapon?
 
 Here is the table for the number of blows for a given strength and dexterity.
 If your strength or dexterity is `18+xx`, that is stored as `18/xx`; thus, for
 example, you need an `18/90` strength to use the bottom row of the table with
-a Katana (12 pounds).
+a Katana (`12 pounds`).
 
 If you don't know the weight of a weapon, set `Show weights in inventory`,
 found in the game options menu.
@@ -395,15 +392,18 @@ found in the game options menu.
   };
 ```
 
+
+
 ### How do you kill an Ancient Multi-Hued Dragon?
 
-Usually, you don't want to try; one gas breath from a full-strength AMHD
-does 693 damage, with no resistance.
+Usually, you don't want to try; one gas breath from a full-strength `AMHD`
+does `693` damage, with no resistance.
 
-If you can get to speed 3 (one permanent speed item, and either another
-permanent speed item or a haste self spell or staff), you can try this
-technique. First, create (or find in a maze room) a wall with one open
-space on all four sides.
+If you can get to speed `3` (one permanent speed item, and either another
+permanent speed item or a haste self spell or staff), you can try the
+following technique.
+
+First, create (or find in a maze room) a wall with one open space on all four sides.
 
      .
     .#.
@@ -415,13 +415,14 @@ can't see you, so it won't breathe, and will instead chase you to another
 side. Now attack once, and hide again, and so on until the dragon is finished.
 
 
+
 ### How do you kill an Emperor Lich?
 
 You can kill an Emperor Lich if you can get to speed 2, which is its speed. A
 Mage or Ranger can do this with the spell of haste self; anyone else needs a
 staff of speed, potion of haste self, or permanent speed item. You will also
-need about 10 cure critical wounds or cure serious wounds potions, and some
-item giving you free action.
+need about `10` _cure critical wounds_ or _cure serious wounds_ potions, and
+some item giving you _free action_.
 
 You also need some ranged spell attack. Liches take double damage from
 lightning, so the spell of lightning bolt or wand of lightning balls is a good
@@ -460,13 +461,13 @@ I do not advise trying this technique against an AMHD; it will probably break
 a glyph before the battle is over, and if your teleport spell fails, or if you
 haven't hasted yourself, the AMHD gets a chance to breathe.
 
-An Emperor Lich has 1520 hit points, plus anything additional that it gains by
-draining mana (6 points per mana point drained) and charges (40 points per
-charge). Never let it attack you in melee, because it can destroy your wands,
-healing itself in the process, as well as draining your experience and
-dexterity.
+An Emperor Lich has `1520 HP` (hit points), plus anything additional that
+it gains by draining mana (6 points per mana point drained) and charges
+(40 points per charge). Never let it attack you in melee, because it can
+destroy your wands, healing itself in the process, as well as draining your
+experience and dexterity.
 
-If you can get to speed 3, faster than the Lich, it is easy to kill; just
+If you can get to speed `3`, faster than the Lich, it is easy to kill; just
 fight, move back, fight, move back, and so on. You will still need a lot of
 cure wounds potions, unless you let it chase you around a pillar, as in the
 AMHD technique.
@@ -478,5 +479,5 @@ Much of this information was included in the original Umoria sources - last
 updated in 2006 - and covered versions from 4.8 to 5.5 of the game. I've tried
 to remove all information that is not relevant to the current game, however,
 there may be incorrect/inconsistent information still present. If you find
-something that needs changing, please let us know (`info@umoria.org`) so it
-can be fixed.
+something that needs changing, please let us know (`info@umoria.org`) and it
+will be fixed.
