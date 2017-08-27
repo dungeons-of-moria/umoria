@@ -14,12 +14,12 @@
 // aligned within the structure to their natural size boundary, so that
 // the structures contain no padding and are minimum size.
 
-constexpr int PLAYER_NAME_SIZE = 27;
-constexpr int MORIA_MESSAGE_SIZE = 80;
-constexpr int OBJECT_DESCRIPTION_SIZE = 160;
+constexpr uint8_t PLAYER_NAME_SIZE = 27;
+constexpr uint8_t MORIA_MESSAGE_SIZE = 80;
+constexpr uint8_t OBJECT_DESCRIPTION_SIZE = 160;
 
 // Size of an inscription in the Inventory_t. Notice alignment, must be 4*x + 1
-constexpr int INSCRIP_SIZE = 13;
+constexpr uint8_t INSCRIP_SIZE = 13;
 
 typedef char vtype_t[MORIA_MESSAGE_SIZE];
 
@@ -126,7 +126,7 @@ typedef struct {
         uint8_t new_spells_to_learn; // Number of spells can learn.
     } flags;
 
-    int pack_heaviness;        // Heaviness of pack - used to calculate if pack is too heavy -CJS-
+    int16_t pack_heaviness;    // Heaviness of pack - used to calculate if pack is too heavy -CJS-
     bool carrying_light;       // True when player is carrying light
     bool temporary_light_only; // Track if temporary light about player.
     bool weapon_is_heavy;      // Weapon is too heavy -CJS-
