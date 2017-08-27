@@ -9,10 +9,6 @@
 #include "headers.h"
 #include "externs.h"
 
-typedef struct {
-    int x, y;
-} Coord_t;
-
 static Coord_t doors_tk[100];
 static int door_index;
 

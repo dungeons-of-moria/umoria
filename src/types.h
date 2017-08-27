@@ -387,3 +387,8 @@ typedef struct {
     uint8_t failure_chance;
     uint8_t exp_gain_for_learning; // 1/4 of exp gained for learning spell
 } Spell_t;
+
+typedef struct {
+    int32_t y;
+    int32_t x;
+} Coord_t;
