@@ -1070,14 +1070,14 @@ static void dungeonGenerate() {
 
 // Builds a store at a row, column coordinate
 static void dungeonBuildStore(int store_id, int y, int x) {
-    int yval = y * 10 + 5;
-    int xval = x * 16 + 16;
-    int y_height = yval - randomNumber(3);
-    int y_depth = yval + randomNumber(4);
-    int x_left = xval - randomNumber(6);
-    int x_right = xval + randomNumber(6);
+    int32_t yval = y * 10 + 5;
+    int32_t xval = x * 16 + 16;
+    int32_t y_height = yval - randomNumber(3);
+    int32_t y_depth = yval + randomNumber(4);
+    int32_t x_left = xval - randomNumber(6);
+    int32_t x_right = xval + randomNumber(6);
 
-    int pos_y, pos_x;
+    int32_t pos_y, pos_x;
 
     for (pos_y = y_height; pos_y <= y_depth; pos_y++) {
         for (pos_x = x_left; pos_x <= x_right; pos_x++) {
@@ -1085,7 +1085,7 @@ static void dungeonBuildStore(int store_id, int y, int x) {
         }
     }
 
-    int tmp = randomNumber(4);
+    int32_t tmp = randomNumber(4);
     if (tmp < 3) {
         pos_y = randomNumber(y_depth - y_height) + y_height - 1;
 
