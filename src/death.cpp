@@ -195,7 +195,6 @@ int32_t playerCalculateTotalPoints() {
     return total;
 }
 
-
 static uint8_t highScoreGenderLabel() {
     if (playerIsMale()) {
         return 'M';
