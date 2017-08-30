@@ -297,8 +297,8 @@ int dicePlayerDamageRoll(uint8_t *notation_array) {
 // Because this function uses (short) ints for all calculations, overflow may
 // occur if deltaX and deltaY exceed 90.
 bool los(int from_y, int from_x, int to_y, int to_x) {
-    int delta_x = to_x - from_x;
-    int delta_y = to_y - from_y;
+    int32_t delta_x = to_x - from_x;
+    int32_t delta_y = to_y - from_y;
 
     // Adjacent?
     if (delta_x < 2 && delta_x > -2 && delta_y < 2 && delta_y > -2) {
@@ -313,7 +313,7 @@ bool los(int from_y, int from_x, int to_y, int to_x) {
             to_y = tmp;
         }
 
-        for (int yy = from_y + 1; yy < to_y; yy++) {
+        for (int32_t yy = from_y + 1; yy < to_y; yy++) {
             if (cave[yy][from_x].feature_id >= MIN_CLOSED_SPACE) {
                 return false;
             }
@@ -329,7 +329,7 @@ bool los(int from_y, int from_x, int to_y, int to_x) {
             to_x = tmp;
         }
 
-        for (int xx = from_x + 1; xx < to_x; xx++) {
+        for (int32_t xx = from_x + 1; xx < to_x; xx++) {
             if (cave[from_y][xx].feature_id >= MIN_CLOSED_SPACE) {
                 return false;
             }
@@ -342,24 +342,24 @@ bool los(int from_y, int from_x, int to_y, int to_x) {
     // In the computations below, dy (or dx) and m are multiplied by a scale factor,
     // scale = abs(delta_x * delta_y * 2), so that we can use integer arithmetic.
     {
-        int xx;          // x position
-        int yy;          // y position
-        int scale;       // above scale factor
-        int scale_half;  // above scale factor / 2
-        int x_sign;      // sign of delta_x
-        int y_sign;      // sign of delta_y
-        int slope;       // slope or 1/slope of LOS
+        int32_t xx;          // x position
+        int32_t yy;          // y position
+        int32_t scale;       // above scale factor
+        int32_t scale_half;  // above scale factor / 2
+        int32_t x_sign;      // sign of delta_x
+        int32_t y_sign;      // sign of delta_y
+        int32_t slope;       // slope or 1/slope of LOS
 
-        int delta_multiply = delta_x * delta_y;
-        scale_half = (int) std::abs((std::intmax_t) delta_multiply);
+        int32_t delta_multiply = delta_x * delta_y;
+        scale_half = (int32_t) std::abs((std::intmax_t) delta_multiply);
         scale = scale_half << 1;
         x_sign = delta_x < 0 ? -1 : 1;
         y_sign = delta_y < 0 ? -1 : 1;
 
         // Travel from one end of the line to the other, oriented along the longer axis.
 
-        auto abs_delta_x = (int) std::abs((std::intmax_t) delta_x);
-        auto abs_delta_y = (int) std::abs((std::intmax_t) delta_y);
+        auto abs_delta_x = (int32_t) std::abs((std::intmax_t) delta_x);
+        auto abs_delta_y = (int32_t) std::abs((std::intmax_t) delta_y);
 
         if (abs_delta_x >= abs_delta_y) {
             int dy; // "fractional" y position
@@ -409,7 +409,7 @@ bool los(int from_y, int from_x, int to_y, int to_x) {
             return true;
         }
 
-        int dx; // "fractional" x position
+        int32_t dx; // "fractional" x position
 
         dx = delta_x * delta_x;
         slope = dx << 1;
