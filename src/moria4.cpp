@@ -180,8 +180,8 @@ void playerTunnel(int direction) {
     printMessage("You dig with your hands, making no progress.");
 }
 
-static int playerTrapDisarmAbility() {
-    int ability = py.misc.disarm;
+static int32_t playerTrapDisarmAbility() {
+    int32_t ability = py.misc.disarm;
     ability += 2;
     ability *= playerDisarmAdjustment();
     ability += playerStatAdjustmentWisdomIntelligence(A_INT);
@@ -275,13 +275,13 @@ static void playerDisarmChestTrap(int y, int x, int total, Inventory_t *item) {
 
 // Disarms a trap -RAK-
 void playerDisarmTrap() {
-    int dir;
+    int32_t dir;
     if (!getDirectionWithMemory(CNIL, &dir)) {
         return;
     }
 
-    int y = char_row;
-    int x = char_col;
+    int32_t y = char_row;
+    int32_t x = char_col;
     (void) playerMovePosition(dir, &y, &x);
 
     Cave_t *tile = &cave[y][x];
@@ -291,7 +291,7 @@ void playerDisarmTrap() {
     if (tile->creature_id > 1 && tile->treasure_id != 0 && (treasure_list[tile->treasure_id].category_id == TV_VIS_TRAP || treasure_list[tile->treasure_id].category_id == TV_CHEST)) {
         objectBlockedByMonster(tile->creature_id);
     } else if (tile->treasure_id != 0) {
-        int disarm_ability = playerTrapDisarmAbility();
+        int32_t disarm_ability = playerTrapDisarmAbility();
 
         Inventory_t *item = &treasure_list[tile->treasure_id];
 
@@ -400,7 +400,7 @@ void look() {
         return;
     }
 
-    int dir;
+    int32_t dir;
     if (!getAllDirections("Look which direction?", &dir)) {
         return;
     }
@@ -515,14 +515,14 @@ static bool lookRay(int y, int from, int to) {
     // that (2x-1)/x < from/GRADF <=> x > GRADF(2x-1)/from. This may
     // be called with y=0 whence x will be set to 0. Thus we need a
     // special fix.
-    auto x = (int) ((int32_t) GRADF * (2 * y - 1) / from + 1);
+    auto x = (int32_t) ((int32_t) GRADF * (2 * y - 1) / from + 1);
     if (x <= 0) {
         x = 1;
     }
 
     // Find last visible location along this line.
     // Maximum x such that (2x+1)/x > to/GRADF <=> x < GRADF(2x+1)/to
-    auto max_x = (int) (((int32_t) GRADF * (2 * y + 1) - 1) / to);
+    auto max_x = (int32_t) (((int32_t) GRADF * (2 * y + 1) - 1) / to);
     if (max_x > MON_MAX_SIGHT) {
         max_x = MON_MAX_SIGHT;
     }
