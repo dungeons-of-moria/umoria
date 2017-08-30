@@ -686,8 +686,13 @@ bool loadGame(bool *generate) {
                 rd_string(message);
             }
 
-            rd_short((uint16_t *) &panic_save);
-            rd_short((uint16_t *) &total_winner);
+            uint16_t panic_save_short;
+            uint16_t total_winner_short;
+            rd_short(&panic_save_short);
+            rd_short(&total_winner_short);
+            panic_save = panic_save_short != 0;
+            total_winner = total_winner_short != 0;
+
             rd_short((uint16_t *) &noscore);
             rd_shorts(player_base_hp_levels, PLAYER_MAX_LEVEL);
 

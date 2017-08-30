@@ -89,7 +89,7 @@ if(NOT CMAKE_BUILD_TYPE)
 endif(NOT CMAKE_BUILD_TYPE)
 
 set(CORE_WARNINGS "-Wall -Wextra -Wpedantic -Wshadow -Werror -pedantic-errors -Weffc++")
-set(EXTRA_WARNINGS "-Wcast-align -Wdisabled-optimization -Wfloat-equal -Winline -Winvalid-pch -Wmissing-format-attribute -Wmissing-include-dirs -Wmissing-noreturn -Wpacked -Wredundant-decls -Wswitch-default -Wswitch-enum -Wunreachable-code -Wwrite-strings")
+set(EXTRA_WARNINGS "-Wcast-align -Wdisabled-optimization -Wfloat-equal -Winline -Winvalid-pch -Wmissing-format-attribute -Wmissing-include-dirs -Wpacked -Wredundant-decls -Wswitch-default -Wswitch-enum -Wunreachable-code -Wwrite-strings")
 set(STRICT_WARNINGS "-Wcast-qual -Wconversion -Wpadded -Wformat=2 -Wstrict-overflow -fno-strict-aliasing")
 
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -g3 -O0 ${CORE_WARNINGS} ${EXTRA_WARNINGS}")
