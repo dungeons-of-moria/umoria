@@ -147,7 +147,7 @@ static void playerDisableSuperHeroism() {
     printCharacterMaxHitPoints();
 }
 
-static void playerUpdateHeroStatus() {
+static void handlePlayerHeriosm () {
     // Heroism
     if (py.flags.heroism > 0) {
         if ((PY_HERO & py.flags.status) == 0) {
@@ -160,7 +160,9 @@ static void playerUpdateHeroStatus() {
             playerDisableHeroism();
         }
     }
+}
 
+static void handlePlayerSuperHeriosm() {
     // Super Heroism
     if (py.flags.super_heroism > 0) {
         if ((PY_SHERO & py.flags.status) == 0) {
@@ -173,6 +175,11 @@ static void playerUpdateHeroStatus() {
             playerDisableSuperHeroism();
         }
     }
+}
+
+static void playerUpdateHeroStatus() {
+    handlePlayerHeriosm();
+    handlePlayerSuperHeriosm();
 }
 
 static int playerFoodConsumption() {
