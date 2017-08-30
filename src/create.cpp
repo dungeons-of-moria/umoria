@@ -279,7 +279,7 @@ static void characterGetHistory() {
 
     // Compute social class for player
 
-    py.misc.social_class = (int16_t) calculateSocialClass(social_class);
+    py.misc.social_class = calculateSocialClass(social_class);
 }
 
 // Gets the character's gender -JWT-
