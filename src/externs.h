@@ -165,7 +165,6 @@ void updateMonsters(bool attack);
 void showScoresScreen();
 int32_t playerCalculateTotalPoints();
 void exitGame();
-uint8_t highScoreGenderLabel();
 
 // desc.c
 void magicInitializeItemNames();

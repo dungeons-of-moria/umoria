@@ -195,6 +195,14 @@ int32_t playerCalculateTotalPoints() {
     return total;
 }
 
+
+static uint8_t highScoreGenderLabel() {
+    if (playerIsMale()) {
+        return 'M';
+    }
+    return 'F';
+}
+
 // Enters a players name on the top twenty list -JWT-
 static void highscores() {
     clearScreen();
@@ -429,11 +437,4 @@ static void kingly() {
     terminalRestore();
 
     exit(0);
-}
-
-uint8_t highScoreGenderLabel() {
-    if (playerIsMale()) {
-        return 'M';
-    }
-    return 'F';
 }
