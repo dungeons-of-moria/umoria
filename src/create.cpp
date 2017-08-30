@@ -158,6 +158,7 @@ static void displayCharacterHistory() {
     }
 }
 
+//For usage in characterGetHistory()
 // Clear the previous history strings
 static void playerClearHistory() {
     for (auto &entry : py.misc.history) {
@@ -165,19 +166,23 @@ static void playerClearHistory() {
     }
 }
 
-// Get the racial history, determines social class -RAK-
-//
-// Assumptions:
-//   - Each race has init history beginning at (race-1)*3+1
-//   - All history parts are in ascending order
-static void characterGetHistory() {
-    int history_id = py.misc.race_id * 3 + 1;
-    int social_class = randomNumber(4);
+//For usage in characterGetHistory()
+static int16_t calculateSocialClass (int social_class) {
+    // Compute social class for player
+    if (social_class > 100) {
+        return 100;
+    } else if (social_class < 1) {
+        return 1;
+    }
+    return (int16_t) social_class;
+}
 
-    char history_block[240];
+//For usage in characterGetHistory()
+static void getBlockOfHistory (char *history_block, int &social_class) {
+    int32_t history_id = py.misc.race_id * 3 + 1;
     history_block[0] = '\0';
 
-    int background_id = 0;
+    int32_t background_id = 0;
 
     // Get a block of history text
     do {
@@ -206,19 +211,20 @@ static void characterGetHistory() {
             }
         }
     } while (history_id >= 1);
+}
 
-    playerClearHistory();
-
+//For usage in characterGetHistory()
+static void processBlockOfHistory (char *const history_block) {
     // Process block of history text for pretty output
-    int cursor_start = 0;
-    int cursor_end = (int) strlen(history_block) - 1;
+    int32_t cursor_start = 0;
+    int32_t cursor_end = (int) strlen(history_block) - 1;
     while (history_block[cursor_end] == ' ') {
         cursor_end--;
     }
 
-    int line_number = 0;
-    int new_cursor_start = 0;
-    int current_cursor_position;
+    int32_t line_number = 0;
+    int32_t new_cursor_start = 0;
+    int32_t current_cursor_position;
 
     bool flag = false;
     while (!flag) {
@@ -250,15 +256,30 @@ static void characterGetHistory() {
         line_number++;
         cursor_start = new_cursor_start;
     }
+}
+
+// Get the racial history, determines social class -RAK-
+//
+// Assumptions:
+//   - Each race has init history beginning at (race-1)*3+1
+//   - All history parts are in ascending order
+static void characterGetHistory() {
+    //Using int for social_class because randomNumber's return type is int
+    int social_class = randomNumber(4);
+
+    char history_block[240];
+
+    // Get a block of history text
+    //social_class and history_block are changed by getBlockOfHistory
+    getBlockOfHistory(history_block, social_class);
+
+    playerClearHistory();
+    //social_class is not changed by processBlockOfHistory
+    processBlockOfHistory(history_block);
 
     // Compute social class for player
-    if (social_class > 100) {
-        social_class = 100;
-    } else if (social_class < 1) {
-        social_class = 1;
-    }
 
-    py.misc.social_class = (int16_t) social_class;
+    py.misc.social_class = (int16_t) calculateSocialClass(social_class);
 }
 
 // Gets the character's gender -JWT-
