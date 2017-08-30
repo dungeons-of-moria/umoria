@@ -182,10 +182,9 @@ static void playerUpdateHeroStatus() {
     handlePlayerSuperHeriosm();
 }
 
-static int playerFoodConsumption() {
+static uint8_t playerFoodConsumptionUnlessAlert() {
     // Regenerate hp and mana
     int regen_amount = PLAYER_REGEN_NORMAL;
-
     if (py.flags.food < PLAYER_FOOD_ALERT) {
         if (py.flags.food < PLAYER_FOOD_WEAK) {
             if (py.flags.food < 0) {
@@ -215,6 +214,11 @@ static int playerFoodConsumption() {
             printCharacterHungerstatus();
         }
     }
+    return regen_amount;
+}
+
+static uint8_t playerFoodConsumption() {
+    int regen_amount = playerFoodConsumptionUnlessAlert();
 
     // Food consumption
     // Note: Sped up characters really burn up the food!
