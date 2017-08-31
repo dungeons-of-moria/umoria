@@ -4,6 +4,7 @@
 
 ## Notable changes
 
+- Add an optimized "release" build (with `-O2` compiler flag).
 - CLI: Added an arg to provide a custom game seed value, using `-s`.
 - CLI: "Display high scores" flag now changed to `-d`, because  of the game seed.
 - CLI: Remove `-o` and just use the one arg (`-r`) for specifying (forcing)
