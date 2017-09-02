@@ -181,10 +181,9 @@ typedef struct {
     char history_block[240];
 } BlockOfHistory;
 
-static BlockOfHistory getBlockOfHistory (const char *const history_block, int social_class) {
+static BlockOfHistory getBlockOfHistory (int social_class) {
     BlockOfHistory result;
     result.social_class = social_class;
-    strcat(result.history_block, history_block);
     int32_t history_id = py.misc.race_id * 3 + 1;
     result.history_block[0] = '\0';
 
@@ -273,10 +272,8 @@ static void characterGetHistory() {
     //Using int for social_class because randomNumber's return type is int
     int32_t social_class = randomNumber(4);
 
-    char history_block[240];
-
     // Get a block of history text
-    BlockOfHistory block = getBlockOfHistory(history_block, social_class);
+    BlockOfHistory block = getBlockOfHistory(social_class);
 
     playerClearHistory();
     processBlockOfHistory(block.history_block);
