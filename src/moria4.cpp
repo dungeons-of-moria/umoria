@@ -180,8 +180,8 @@ void playerTunnel(int direction) {
     printMessage("You dig with your hands, making no progress.");
 }
 
-static int32_t playerTrapDisarmAbility() {
-    int32_t ability = py.misc.disarm;
+static int16_t playerTrapDisarmAbility() {
+    int16_t ability = py.misc.disarm;
     ability += 2;
     ability *= playerDisarmAdjustment();
     ability += playerStatAdjustmentWisdomIntelligence(A_INT);
