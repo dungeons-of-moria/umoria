@@ -145,9 +145,14 @@ uint32_t getCurrentUnixTime() {
 }
 
 void humanDateString(char *day) {
-    time_t current = time(nullptr);
-    struct tm *t = localtime(&current);
-    strftime(day, 10, "%a %b %e", t);
+    time_t now = time(nullptr);
+    struct tm *datetime = localtime(&now);
+
+#ifdef _WIN32
+    strftime(day, 10, "%a %b %d", datetime);
+#else
+    strftime(day, 10, "%a %b %e", datetime);
+#endif
 }
 
 // Centers a string within a 31 character string -JWT-

@@ -40,7 +40,7 @@ classic roguelike game.
 
 ## Notes on Compiling Umoria
 
-At present Umoria has only been tested against `GCC 6.2`, `GCC 7.1.0` and `ncurses 6.0`,
+At present Umoria has only been tested against `GCC 6.2`+, `GCC 7` and `ncurses 6.0`,
 although earlier versions should also work fine. You will require these along
 with `CMake`, the `ZIP` archiving program, and the C++ build tools for your
 system.
@@ -48,28 +48,39 @@ system.
 
 ### macOS and Linux
 
-At the prompt type the following:
+At the command prompt type the following:
 
 ```
   $ cmake .
-  $ make package
+  $ make
+  $ make install
 ```
 
-A `.zip` archive will be created in the directory.
+A `umoria` directory will be created containing the game binary and data files,
+which you can then move to your `home` directory, or other location.
 
 
 ### Windows
 
-MinGW is used to provide GCC and Binutils for the Windows platform. This
-can be installed via the [MSYS2 Installer](http://msys2.github.io/). Once
-installed you will use `pacman` to install `GCC` and `ncurses`.
+MinGW is used to provide GCC and Binutils for compiling on the Windows platform.
+The easiest solution to get set up is to use the [MSYS2 Installer](http://msys2.github.io/).
+Once installed you will use `pacman` to install `GCC`, `ncurses`, and the
+`make`/`cmake` build tools.
 
-- Copy the `makefile.win` to the `src` directory.
-- Rename `makefile.win` to `makefile`.
-- `cd` into the `src` directory.
-- Type `make && make install`
+At present you will need to provide an environment variable for the MinGW system
+you are compiling on. This will be either `mingw64` or `mingw32`.
 
-Currently the game will be installed to `C:\umoria`.
+At the command prompt type the following, being sure to add the correct label
+to `MINGW=`:
+
+```
+  $ MINGW=mingw64 cmake .
+  $ make
+  $ make install
+```
+
+As with the macOS/Linux builds, the files will be installed into a `umoria`
+directory, which you can then move to your games directory.
 
 
 ## Historical Documents

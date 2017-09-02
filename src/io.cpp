@@ -591,16 +591,14 @@ static void sleepInSeconds(int seconds) {
 // the count, with a call made for commands like run or rest.
 bool checkForNonBlockingKeyPress(int microseconds) {
 #ifdef _WIN32
+    (void) microseconds;
+
     // Ugly non-blocking read...Ugh! -MRC-
     timeout(8);
     int result = getch();
     timeout(-1);
 
-    if (result > 0) {
-        return true;
-    } else {
-        return false;
-    }
+    return result > 0;
 #else
     struct timeval tbuf{};
     int ch;

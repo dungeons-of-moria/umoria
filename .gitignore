@@ -1,6 +1,4 @@
-# our game binary
-src/moria
-src/umoria
+.idea
 
 # CMake
 Makefile
@@ -14,8 +12,7 @@ CPackSourceConfig.cmake
 CTestTestfile.cmake
 cmake-build-debug
 cmake-build-release
-
-build
+_CPack_Packages
 
 # Prerequisites
 *.d
@@ -69,7 +66,13 @@ Module.symvers
 Mkfile.old
 dkms.conf
 
+*.cbp
+
+# build directories
 umoria.xcodeproj
-.idea
+umoria
+
+*.gz
+*.zip
 
 .DS_Store
