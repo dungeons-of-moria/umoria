@@ -211,7 +211,7 @@ static void getBlockOfHistory (char *history_block, int &social_class) {
     } while (history_id >= 1);
 }
 
-static void processBlockOfHistory (char *const history_block) {
+static void processBlockOfHistory (const char *const history_block) {
     // Process block of history text for pretty output
     int8_t cursor_start = 0;
     int8_t cursor_end = (int) strlen(history_block) - 1;
