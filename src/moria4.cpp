@@ -280,8 +280,8 @@ void playerDisarmTrap() {
         return;
     }
 
-    int16_t y = char_row;
-    int16_t x = char_col;
+    int32_t y = char_row;
+    int32_t x = char_col;
     (void) playerMovePosition(dir, &y, &x);
 
     Cave_t *tile = &cave[y][x];
