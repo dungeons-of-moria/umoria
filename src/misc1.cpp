@@ -296,7 +296,7 @@ int dicePlayerDamageRoll(uint8_t *notation_array) {
 
 // Because this function uses (short) ints for all calculations, overflow may
 // occur if deltaX and deltaY exceed 90.
-bool los(int from_y, int from_x, int to_y, int to_x) {
+bool los(int32_t from_y, int32_t from_x, int32_t to_y, int32_t to_x) {
     int32_t delta_x = to_x - from_x;
     int32_t delta_y = to_y - from_y;
 
