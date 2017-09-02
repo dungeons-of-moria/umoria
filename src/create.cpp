@@ -213,15 +213,15 @@ static void getBlockOfHistory (char *history_block, int &social_class) {
 
 static void processBlockOfHistory (char *const history_block) {
     // Process block of history text for pretty output
-    int32_t cursor_start = 0;
-    int32_t cursor_end = (int) strlen(history_block) - 1;
+    int8_t cursor_start = 0;
+    int8_t cursor_end = (int) strlen(history_block) - 1;
     while (history_block[cursor_end] == ' ') {
         cursor_end--;
     }
 
-    int32_t line_number = 0;
-    int32_t new_cursor_start = 0;
-    int32_t current_cursor_position;
+    int8_t line_number = 0;
+    int8_t new_cursor_start = 0;
+    int8_t current_cursor_position;
 
     bool flag = false;
     while (!flag) {
