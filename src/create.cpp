@@ -176,9 +176,17 @@ static int16_t calculateSocialClass (int32_t social_class) {
     return (int16_t) social_class;
 }
 
-static void getBlockOfHistory (char *history_block, int &social_class) {
+typedef struct {
+    int32_t social_class;
+    char history_block[240];
+} BlockOfHistory;
+
+static BlockOfHistory getBlockOfHistory (const char *const history_block, int social_class) {
+    BlockOfHistory result;
+    result.social_class = social_class;
+    strcat(result.history_block, history_block);
     int32_t history_id = py.misc.race_id * 3 + 1;
-    history_block[0] = '\0';
+    result.history_block[0] = '\0';
 
     int32_t background_id = 0;
 
@@ -195,8 +203,8 @@ static void getBlockOfHistory (char *history_block, int &social_class) {
 
                 Background_t *background = &character_backgrounds[background_id];
 
-                (void) strcat(history_block, background->info);
-                social_class += background->bonus - 50;
+                (void) strcat(result.history_block, background->info);
+                result.social_class += background->bonus - 50;
 
                 if (history_id > background->next) {
                     background_id = 0;
@@ -209,6 +217,7 @@ static void getBlockOfHistory (char *history_block, int &social_class) {
             }
         }
     } while (history_id >= 1);
+    return result;
 }
 
 static void processBlockOfHistory (const char *const history_block) {
@@ -267,16 +276,14 @@ static void characterGetHistory() {
     char history_block[240];
 
     // Get a block of history text
-    //social_class and history_block are changed by getBlockOfHistory
-    getBlockOfHistory(history_block, social_class);
+    BlockOfHistory block = getBlockOfHistory(history_block, social_class);
 
     playerClearHistory();
-    //social_class is not changed by processBlockOfHistory
-    processBlockOfHistory(history_block);
+    processBlockOfHistory(block.history_block);
 
     // Compute social class for player
 
-    py.misc.social_class = calculateSocialClass(social_class);
+    py.misc.social_class = calculateSocialClass(block.social_class);
 }
 
 // Gets the character's gender -JWT-
