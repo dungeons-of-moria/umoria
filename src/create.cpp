@@ -158,16 +158,7 @@ static void displayCharacterHistory() {
     }
 }
 
-// Clear the previous history strings
-static void playerClearHistory() {
-    for (auto &entry : py.misc.history) {
-        entry[0] = '\0';
-    }
-}
-
-//For usage in characterGetHistory()
 static int16_t calculateSocialClass (int32_t social_class) {
-    // Compute social class for player
     if (social_class > 100) {
         return 100;
     } else if (social_class < 1) {
@@ -181,7 +172,7 @@ typedef struct {
     char history_block[240];
 } BlockOfHistory;
 
-static BlockOfHistory getBlockOfHistory (int social_class) {
+static BlockOfHistory getBlockOfHistory (int32_t social_class) {
     BlockOfHistory result;
     result.social_class = social_class;
     int32_t history_id = py.misc.race_id * 3 + 1;
@@ -189,12 +180,11 @@ static BlockOfHistory getBlockOfHistory (int social_class) {
 
     int32_t background_id = 0;
 
-    // Get a block of history text
     do {
         bool flag = false;
         while (!flag) {
             if (character_backgrounds[background_id].chart == history_id) {
-                int test_roll = randomNumber(100);
+                int32_t test_roll = randomNumber(100);
 
                 while (test_roll > character_backgrounds[background_id].roll) {
                     background_id++;
@@ -219,7 +209,14 @@ static BlockOfHistory getBlockOfHistory (int social_class) {
     return result;
 }
 
+static void playerClearHistory() {
+    for (auto &entry : py.misc.history) {
+        entry[0] = '\0';
+    }
+}
+
 static void processBlockOfHistory (const char *const history_block) {
+    playerClearHistory();
     // Process block of history text for pretty output
     int32_t cursor_start = 0;
     int32_t cursor_end = (int) strlen(history_block) - 1;
@@ -269,16 +266,10 @@ static void processBlockOfHistory (const char *const history_block) {
 //   - Each race has init history beginning at (race-1)*3+1
 //   - All history parts are in ascending order
 static void characterGetHistory() {
-    //Using int for social_class because randomNumber's return type is int
     int32_t social_class = randomNumber(4);
 
-    // Get a block of history text
     BlockOfHistory block = getBlockOfHistory(social_class);
-
-    playerClearHistory();
     processBlockOfHistory(block.history_block);
-
-    // Compute social class for player
 
     py.misc.social_class = calculateSocialClass(block.social_class);
 }
