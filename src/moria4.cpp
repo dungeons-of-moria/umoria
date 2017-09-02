@@ -280,8 +280,8 @@ void playerDisarmTrap() {
         return;
     }
 
-    int32_t y = char_row;
-    int32_t x = char_col;
+    int16_t y = char_row;
+    int16_t x = char_col;
     (void) playerMovePosition(dir, &y, &x);
 
     Cave_t *tile = &cave[y][x];
@@ -291,7 +291,7 @@ void playerDisarmTrap() {
     if (tile->creature_id > 1 && tile->treasure_id != 0 && (treasure_list[tile->treasure_id].category_id == TV_VIS_TRAP || treasure_list[tile->treasure_id].category_id == TV_CHEST)) {
         objectBlockedByMonster(tile->creature_id);
     } else if (tile->treasure_id != 0) {
-        int32_t disarm_ability = playerTrapDisarmAbility();
+        int16_t disarm_ability = playerTrapDisarmAbility();
 
         Inventory_t *item = &treasure_list[tile->treasure_id];
 
