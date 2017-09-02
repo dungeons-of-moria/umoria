@@ -158,7 +158,6 @@ static void displayCharacterHistory() {
     }
 }
 
-//For usage in characterGetHistory()
 // Clear the previous history strings
 static void playerClearHistory() {
     for (auto &entry : py.misc.history) {
