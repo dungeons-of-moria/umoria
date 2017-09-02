@@ -166,7 +166,7 @@ static void playerClearHistory() {
 }
 
 //For usage in characterGetHistory()
-static int16_t calculateSocialClass (int social_class) {
+static int16_t calculateSocialClass (int32_t social_class) {
     // Compute social class for player
     if (social_class > 100) {
         return 100;
@@ -176,7 +176,6 @@ static int16_t calculateSocialClass (int social_class) {
     return (int16_t) social_class;
 }
 
-//For usage in characterGetHistory()
 static void getBlockOfHistory (char *history_block, int &social_class) {
     int32_t history_id = py.misc.race_id * 3 + 1;
     history_block[0] = '\0';
@@ -212,7 +211,6 @@ static void getBlockOfHistory (char *history_block, int &social_class) {
     } while (history_id >= 1);
 }
 
-//For usage in characterGetHistory()
 static void processBlockOfHistory (char *const history_block) {
     // Process block of history text for pretty output
     int32_t cursor_start = 0;
@@ -264,7 +262,7 @@ static void processBlockOfHistory (char *const history_block) {
 //   - All history parts are in ascending order
 static void characterGetHistory() {
     //Using int for social_class because randomNumber's return type is int
-    int social_class = randomNumber(4);
+    int32_t social_class = randomNumber(4);
 
     char history_block[240];
 
