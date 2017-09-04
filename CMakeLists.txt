@@ -1,15 +1,10 @@
-# Current version of Umoria
-set(UMORIA_VERSION_MAJOR 5)
-set(UMORIA_VERSION_MINOR 7)
-set(UMORIA_VERSION_PATCH 4)
-set(UMORIA_VERSION "${UMORIA_VERSION_MAJOR}.${UMORIA_VERSION_MINOR}.${UMORIA_VERSION_PATCH}")
+cmake_minimum_required(VERSION 3.6 FATAL_ERROR)
 
 # Do not allow in-source builds
 if (${CMAKE_SOURCE_DIR} STREQUAL "${PROJECT_SOURCE_DIR}/src")
     message(FATAL_ERROR "CMake generation is not allowed within the source directory!")
 endif ()
 
-cmake_minimum_required(VERSION 3.6 FATAL_ERROR)
 
 #
 # Set a default build type
@@ -200,6 +195,22 @@ install(FILES ${data_files} DESTINATION ${data_dir})
 
 # Build and install the umoria binary
 install(TARGETS umoria DESTINATION ${build_dir})
+
+#
+# Extract the Umoria version number from version.h
+#
+file(STRINGS "${source_dir}/version.h" VERSION_HEADER)
+
+string(REGEX MATCH "CURRENT_VERSION_MAJOR = ([0-9]+);" ${VERSION_HEADER})
+set(UMORIA_VERSION_MAJOR ${CMAKE_MATCH_1})
+
+string(REGEX MATCH "CURRENT_VERSION_MINOR = ([0-9]+);" ${VERSION_HEADER})
+set(UMORIA_VERSION_MINOR ${CMAKE_MATCH_1})
+
+string(REGEX MATCH "CURRENT_VERSION_PATCH = ([0-9]+);" ${VERSION_HEADER})
+set(UMORIA_VERSION_PATCH ${CMAKE_MATCH_1})
+
+set(UMORIA_VERSION "${UMORIA_VERSION_MAJOR}.${UMORIA_VERSION_MINOR}.${UMORIA_VERSION_PATCH}")
 
 
 #
