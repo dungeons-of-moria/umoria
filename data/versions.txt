@@ -3,15 +3,15 @@
 Previous major releases:
 
             2016-11-27 : v5.7.0
-            2015-03-03 : v5.6.0
-            1992-08-12 : v5.5.0
+            2008-10-13 : v5.6.0
+            1994-07-21 : v5.5.2
+            1992-08-13 : v5.5.0
             1991-10-12 : v5.4.0
             1991-03-25 : v5.3.0
-            1991-05-09 : v5.2.0
-            1989-11-02 : v5.0.0
-            1988-05-27 : v4.87
+            1990-05-09 : v5.2.0
+            1989-02-26 : v5.0.0
+            1988-05-26 : v4.87
             1987-10-26 : v4.85
-            1987-05-14 : v4.83
 
 Umoria 5.7.x developed and maintained by Michael R. Cook.
 Bug reports and contributions can be made to the Umoria repository:
