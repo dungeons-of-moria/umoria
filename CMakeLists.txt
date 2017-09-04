@@ -227,40 +227,5 @@ endif ()
 include_directories(${CURSES_INCLUDE_DIR})
 target_link_libraries(umoria ${CURSES_LIBRARIES})
 
-# Install (copy) the data files
-install(FILES ${support_files} DESTINATION ${build_dir})
-install(FILES ${data_files} DESTINATION ${data_dir})
-
 # Build and install the umoria binary
 install(TARGETS umoria DESTINATION ${build_dir})
-
-
-#
-# CPack configuration
-#
-include(InstallRequiredSystemLibraries)
-
-set(CPACK_MONOLITHIC_INSTALL TRUE)
-
-set(CPACK_PACKAGE_NAME "Umoria")
-set(CPACK_PACKAGE_VENDOR "umoria.org")
-set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Umoria: The Dungeons of Moria - A Classic Roguelike Game")
-set(CPACK_PACKAGE_VERSION ${umoria_version})
-set(CPACK_PACKAGE_VERSION_MAJOR ${umoria_version_major})
-set(CPACK_PACKAGE_VERSION_MINOR ${umoria_version_minor})
-set(CPACK_PACKAGE_VERSION_PATCH ${umoria_version_patch})
-
-set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_SOURCE_DIR}/LICENSE")
-set(CPACK_RESOURCE_FILE_README "${CMAKE_SOURCE_DIR}/README.md")
-
-if (_WIN32 AND NOT UNIX)
-    message(FATAL_ERROR "It is not currently possible to build a .zip archive for Windows!")
-endif ()
-
-if (APPLE)
-    set(CPACK_SYSTEM_NAME "macOS")
-endif ()
-
-set(CPACK_GENERATOR "ZIP")
-
-include(CPack)
