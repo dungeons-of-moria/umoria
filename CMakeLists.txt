@@ -153,6 +153,7 @@ set(
         ${PROJECT_SOURCE_DIR}/data/versions.txt
         ${PROJECT_SOURCE_DIR}/data/welcome.txt
 )
+
 # Various support files (readme, etc.)
 set(
         support_files
@@ -161,6 +162,43 @@ set(
         ${PROJECT_SOURCE_DIR}/docs/faq.md
         ${PROJECT_SOURCE_DIR}/LICENSE
 )
+
+
+#
+# Extract the Umoria version number from version.h
+#
+file(STRINGS "${source_dir}/version.h" VERSION_HEADER)
+
+string(REGEX MATCH "CURRENT_VERSION_MAJOR = ([0-9]+);" ${VERSION_HEADER})
+set(umoria_version_major ${CMAKE_MATCH_1})
+
+string(REGEX MATCH "CURRENT_VERSION_MINOR = ([0-9]+);" ${VERSION_HEADER})
+set(umoria_version_minor ${CMAKE_MATCH_1})
+
+string(REGEX MATCH "CURRENT_VERSION_PATCH = ([0-9]+);" ${VERSION_HEADER})
+set(umoria_version_patch ${CMAKE_MATCH_1})
+
+set(umoria_version "${umoria_version_major}.${umoria_version_minor}.${umoria_version_patch}")
+
+
+#
+# Update the data files with the current version number and date
+#
+string(TIMESTAMP current_date "%Y-%m-%d" UTC)
+file(COPY ${data_files} DESTINATION "${data_dir}")
+file(COPY ${support_files} DESTINATION "${build_dir}")
+set(
+        data_files_to_update
+        ${build_dir}/data/splash.txt
+        ${build_dir}/data/versions.txt
+)
+foreach (data_file ${data_files_to_update})
+    FILE(READ ${data_file} content)
+    string(REGEX REPLACE "{{ CURRENT_VERSION }}" "${umoria_version}" content "${content}")
+    string(REGEX REPLACE "{{ RELEASE_DATE }}" "${current_date}" content "${content}")
+    FILE(WRITE ${data_file} ${content})
+endforeach ()
+
 
 # All of the game resource files
 set(resources ${data_files} ${support_files})
@@ -196,22 +234,6 @@ install(FILES ${data_files} DESTINATION ${data_dir})
 # Build and install the umoria binary
 install(TARGETS umoria DESTINATION ${build_dir})
 
-#
-# Extract the Umoria version number from version.h
-#
-file(STRINGS "${source_dir}/version.h" VERSION_HEADER)
-
-string(REGEX MATCH "CURRENT_VERSION_MAJOR = ([0-9]+);" ${VERSION_HEADER})
-set(UMORIA_VERSION_MAJOR ${CMAKE_MATCH_1})
-
-string(REGEX MATCH "CURRENT_VERSION_MINOR = ([0-9]+);" ${VERSION_HEADER})
-set(UMORIA_VERSION_MINOR ${CMAKE_MATCH_1})
-
-string(REGEX MATCH "CURRENT_VERSION_PATCH = ([0-9]+);" ${VERSION_HEADER})
-set(UMORIA_VERSION_PATCH ${CMAKE_MATCH_1})
-
-set(UMORIA_VERSION "${UMORIA_VERSION_MAJOR}.${UMORIA_VERSION_MINOR}.${UMORIA_VERSION_PATCH}")
-
 
 #
 # CPack configuration
@@ -223,10 +245,10 @@ set(CPACK_MONOLITHIC_INSTALL TRUE)
 set(CPACK_PACKAGE_NAME "Umoria")
 set(CPACK_PACKAGE_VENDOR "umoria.org")
 set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Umoria: The Dungeons of Moria - A Classic Roguelike Game")
-set(CPACK_PACKAGE_VERSION ${UMORIA_VERSION})
-set(CPACK_PACKAGE_VERSION_MAJOR ${UMORIA_VERSION_MAJOR})
-set(CPACK_PACKAGE_VERSION_MINOR ${UMORIA_VERSION_MINOR})
-set(CPACK_PACKAGE_VERSION_PATCH ${UMORIA_VERSION_PATCH})
+set(CPACK_PACKAGE_VERSION ${umoria_version})
+set(CPACK_PACKAGE_VERSION_MAJOR ${umoria_version_major})
+set(CPACK_PACKAGE_VERSION_MINOR ${umoria_version_minor})
+set(CPACK_PACKAGE_VERSION_PATCH ${umoria_version_patch})
 
 set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_SOURCE_DIR}/LICENSE")
 set(CPACK_RESOURCE_FILE_README "${CMAKE_SOURCE_DIR}/README.md")
