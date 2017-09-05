@@ -2,25 +2,34 @@
 
 ## HEAD
 
-## Notable changes
 
-- Add an optimized "release" build (with `-O2` compiler flag).
-- CLI: Added an arg to provide a custom game seed value, using `-s`.
-- CLI: "Display high scores" flag now changed to `-d`, because  of the game seed.
+## 5.7.5 (2017-09-05)
+
+### Notable changes
+
+- CLI: Added a parameter to provide a custom game seed value, using `-s`.
+- CLI: Display high scores flag now changed to `-d`, because  of the game seed.
 - CLI: Remove `-o` and just use the one arg (`-r`) for specifying (forcing)
   the use of roguelike keys (`hjkl`).
-- Renamed the help files. Ex. `owizcmds.hlp` > `help.txt`.
-- Support only save/score files for Umoria versions 5.2.2 up to 5.7.x.
+- Renamed the data/help files. E.g. `owizcmds.hlp` > `help.txt`.
+- Support only save/score files for Umoria `5.2.2` up to `5.7.x`.
 
 ### Bug Fixes
 
-- `TV_NEVER` was an unsigned int, but should be signed as it's being given a `-1` value. https://github.com/dungeons-of-moria/umoria/commit/8c3d1d2
-- The `monsterTakeHit()` check is now correct in `spellLightLineTouchesMonster()`. https://github.com/dungeons-of-moria/umoria/commit/b26547d
-- When player was in _Run/Find_ mode, the `find_count` was not being dereferenced, so `playerEndRunning()` would not be called correctly. https://github.com/dungeons-of-moria/umoria/commit/95dc308
+- `TV_NEVER` was an unsigned int, but should be signed as it's being given
+  a `-1` value. [https://github.com/dungeons-of-moria/umoria/commit/8c3d1d2]
+- The `monsterTakeHit()` check is now correct in `spellLightLineTouchesMonster()`.
+  [https://github.com/dungeons-of-moria/umoria/commit/b26547d]
+- When player was in _Run/Find_ mode, the `find_count` was not being
+  dereferenced, so `playerEndRunning()` would not be called correctly.
+  [https://github.com/dungeons-of-moria/umoria/commit/95dc308]
 
 ### Code
 
-- Rename field names for all structs in `types.h`
+- Add an optimized "release" build, with an `-O2` optimization flag.
+- Setting version number in version.h now updates data files automatically, via CMake.
+- Release date in `data/versions.txt` is now set automatically via CMake.
+- Rename field names for all structs in `types.h`.
 - Rename many constants for better clarity on their purpose.
 - Move the game options globals into a Config_t struct.
 - Refactor `main.cpp` to contain [mostly] just CLI arg parsing, and some
