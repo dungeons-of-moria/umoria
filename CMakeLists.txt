@@ -153,6 +153,7 @@ set(
         ${PROJECT_SOURCE_DIR}/data/versions.txt
         ${PROJECT_SOURCE_DIR}/data/welcome.txt
 )
+file(COPY ${data_files} DESTINATION "${data_dir}")
 
 # Various support files (readme, etc.)
 set(
@@ -162,6 +163,7 @@ set(
         ${PROJECT_SOURCE_DIR}/docs/faq.md
         ${PROJECT_SOURCE_DIR}/LICENSE
 )
+file(COPY ${support_files} DESTINATION "${build_dir}")
 
 
 #
@@ -185,8 +187,6 @@ set(umoria_version "${umoria_version_major}.${umoria_version_minor}.${umoria_ver
 # Update the data files with the current version number and date
 #
 string(TIMESTAMP current_date "%Y-%m-%d" UTC)
-file(COPY ${data_files} DESTINATION "${data_dir}")
-file(COPY ${support_files} DESTINATION "${build_dir}")
 set(
         data_files_to_update
         ${build_dir}/data/splash.txt
@@ -210,10 +210,12 @@ add_executable(umoria ${source_files} ${resources})
 # This is horrible, but needed bacause `find_package()` doesn't use the
 # include/lib inside the /mingw32 or /mingw64 directories, and with
 # `ncurses-devel` installed, it won't compile.
-if (_WIN32 AND "$ENV{MINGW}" STREQUAL "")
+if ((MSYS OR MINGW) AND "$ENV{MINGW}" STREQUAL "")
     message(FATAL_ERROR "You must set the MINGW environment variable ('mingw64' or 'mingw32'). Example: MINGW=mingw64 cmake .")
     message(FATAL_ERROR "This will be the directory used for locating the ncurses library files.")
-elseif (_WIN32 AND NOT "$ENV{MINGW}" STREQUAL "")
+elseif ((MSYS OR MINGW) AND NOT "$ENV{MINGW}" STREQUAL "")
+    message(STATUS "NOTE: Configuring build for Windows release...")
+
     # Make the ncurses library static
     set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -static -lpthread")
     set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -static -lpthread")
@@ -221,6 +223,7 @@ elseif (_WIN32 AND NOT "$ENV{MINGW}" STREQUAL "")
     set(CURSES_INCLUDE_DIR "/$ENV{MINGW}/include/")
     set(CURSES_LIBRARIES "/$ENV{MINGW}/lib/libncurses.a")
 else ()
+    message(STATUS "NOTE: Configuring build for macOS/Linux release...")
     find_package(Curses REQUIRED)
 endif ()
 
