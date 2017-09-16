@@ -104,8 +104,8 @@ static void displayCharacterRaces() {
     clearToBottom(20);
     putString("Choose a race (? for Help):", 20, 2);
 
-    int8_t y = 2;
-    int8_t x = 21;
+	uint8_t y = 2;
+	uint8_t x = 21;
 
     for (uint8_t i = 0; i < PLAYER_MAX_RACES; i++) {
         char description[80];
