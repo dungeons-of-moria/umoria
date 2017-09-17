@@ -176,7 +176,7 @@ static BlockOfHistory getBlockOfHistory (int32_t social_class) {
 
     BlockOfHistory result;
     result.social_class = social_class;
-    strcat(result.history_block, history_block);
+	strcat(result.history_block, result.history_block);
     int32_t history_id = py.misc.race_id * 3 + 1;
     result.history_block[0] = '\0';
 
