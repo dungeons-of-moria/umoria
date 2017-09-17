@@ -104,10 +104,10 @@ static void displayCharacterRaces() {
     clearToBottom(20);
     putString("Choose a race (? for Help):", 20, 2);
 
-    int y = 2;
-    int x = 21;
+    uint8_t y = 2;
+    uint8_t x = 21;
 
-    for (int i = 0; i < PLAYER_MAX_RACES; i++) {
+    for (uint8_t i = 0; i < PLAYER_MAX_RACES; i++) {
         char description[80];
 
         (void) sprintf(description, "%c) %s", i + 'a', character_races[i].name);
@@ -158,33 +158,35 @@ static void displayCharacterHistory() {
     }
 }
 
-// Clear the previous history strings
-static void playerClearHistory() {
-    for (auto &entry : py.misc.history) {
-        entry[0] = '\0';
+static int16_t calculateSocialClass (int32_t social_class) {
+    if (social_class > 100) {
+        return 100;
+    } else if (social_class < 1) {
+        return 1;
     }
+    return (int16_t) social_class;
 }
 
-// Get the racial history, determines social class -RAK-
-//
-// Assumptions:
-//   - Each race has init history beginning at (race-1)*3+1
-//   - All history parts are in ascending order
-static void characterGetHistory() {
-    int history_id = py.misc.race_id * 3 + 1;
-    int social_class = randomNumber(4);
-
+typedef struct {
+    int32_t social_class;
     char history_block[240];
-    history_block[0] = '\0';
+} BlockOfHistory;
 
-    int background_id = 0;
+static BlockOfHistory getBlockOfHistory (int32_t social_class) {
 
-    // Get a block of history text
+    BlockOfHistory result;
+    result.social_class = social_class;
+	strcat(result.history_block, result.history_block);
+    int32_t history_id = py.misc.race_id * 3 + 1;
+    result.history_block[0] = '\0';
+
+    int32_t background_id = 0;
+
     do {
         bool flag = false;
         while (!flag) {
             if (character_backgrounds[background_id].chart == history_id) {
-                int test_roll = randomNumber(100);
+                int32_t test_roll = randomNumber(100);
 
                 while (test_roll > character_backgrounds[background_id].roll) {
                     background_id++;
@@ -192,8 +194,8 @@ static void characterGetHistory() {
 
                 Background_t *background = &character_backgrounds[background_id];
 
-                (void) strcat(history_block, background->info);
-                social_class += background->bonus - 50;
+                (void) strcat(result.history_block, background->info);
+                result.social_class += background->bonus - 50;
 
                 if (history_id > background->next) {
                     background_id = 0;
@@ -206,19 +208,27 @@ static void characterGetHistory() {
             }
         }
     } while (history_id >= 1);
+    return result;
+}
 
+static void playerClearHistory() {
+    for (auto &entry : py.misc.history) {
+        entry[0] = '\0';
+    }
+}
+
+static void processBlockOfHistory (const char *const history_block) {
     playerClearHistory();
-
     // Process block of history text for pretty output
-    int cursor_start = 0;
-    int cursor_end = (int) strlen(history_block) - 1;
+    int32_t cursor_start = 0;
+    int32_t cursor_end = (int) strlen(history_block) - 1;
     while (history_block[cursor_end] == ' ') {
         cursor_end--;
     }
 
-    int line_number = 0;
-    int new_cursor_start = 0;
-    int current_cursor_position;
+    int32_t line_number = 0;
+    int32_t new_cursor_start = 0;
+    int32_t current_cursor_position;
 
     bool flag = false;
     while (!flag) {
@@ -250,15 +260,21 @@ static void characterGetHistory() {
         line_number++;
         cursor_start = new_cursor_start;
     }
+}
 
-    // Compute social class for player
-    if (social_class > 100) {
-        social_class = 100;
-    } else if (social_class < 1) {
-        social_class = 1;
-    }
+// Get the racial history, determines social class -RAK-
+//
+// Assumptions:
+//   - Each race has init history beginning at (race-1)*3+1
+//   - All history parts are in ascending order
+static void characterGetHistory() {
+    int32_t social_class = randomNumber(4);
 
-    py.misc.social_class = (int16_t) social_class;
+    playerClearHistory();
+    BlockOfHistory block = getBlockOfHistory(social_class);
+    processBlockOfHistory(block.history_block);
+
+    py.misc.social_class = calculateSocialClass(block.social_class);
 }
 
 // Gets the character's gender -JWT-
