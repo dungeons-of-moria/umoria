@@ -18,26 +18,26 @@
 
 DEBUG(static FILE *logfile)
 
-static bool _save_char(char *);
+static bool _save_char(char *filename);
 static bool sv_write();
-static void wr_bool(bool c);
-static void wr_byte(uint8_t);
-static void wr_short(uint16_t);
-static void wr_long(uint32_t);
-static void wr_bytes(uint8_t *, int);
-static void wr_string(char *);
-static void wr_shorts(uint16_t *, int);
-static void wr_item(Inventory_t *);
-static void wr_monster(Monster_t *);
+static void wr_bool(bool value);
+static void wr_byte(uint8_t value);
+static void wr_short(uint16_t value);
+static void wr_long(uint32_t value);
+static void wr_bytes(uint8_t *value, int count);
+static void wr_string(char *str);
+static void wr_shorts(uint16_t *value, int count);
+static void wr_item(Inventory_t *item);
+static void wr_monster(Monster_t *monster);
 static bool rd_bool();
 static uint8_t rd_byte();
 static uint16_t rd_short();
 static uint32_t rd_long();
-static void rd_bytes(uint8_t *, int);
-static void rd_string(char *);
-static void rd_shorts(uint16_t *, int);
-static void rd_item(Inventory_t *);
-static void rd_monster(Monster_t *);
+static void rd_bytes(uint8_t *value, int count);
+static void rd_string(char *str);
+static void rd_shorts(uint16_t *value, int count);
+static void rd_item(Inventory_t *item);
+static void rd_monster(Monster_t *monster);
 
 // these are used for the save file, to avoid having to pass them to every procedure
 static FILE *fileptr;
@@ -389,24 +389,24 @@ bool saveGame() {
     return true;
 }
 
-static bool _save_char(char *fnam) {
+static bool _save_char(char *filename) {
     if (character_saved) {
         return true; // Nothing to save.
     }
 
     putQIO();
-    playerDisturb(1, 0);             // Turn off resting and searching.
+    playerDisturb(1, 0);                   // Turn off resting and searching.
     playerChangeSpeed(-py.pack_heaviness); // Fix the speed
     py.pack_heaviness = 0;
     bool ok = false;
 
     fileptr = nullptr; // Do not assume it has been init'ed
 
-    int fd = open(fnam, O_RDWR | O_CREAT | O_EXCL, 0600);
+    int fd = open(filename, O_RDWR | O_CREAT | O_EXCL, 0600);
 
-    if (fd < 0 && access(fnam, 0) >= 0 && ((from_savefile != 0) || (wizard_mode && getInputConfirmation("Can't make new save file. Overwrite old?")))) {
-        (void) chmod(fnam, 0600);
-        fd = open(fnam, O_RDWR | O_TRUNC, 0600);
+    if (fd < 0 && access(filename, 0) >= 0 && ((from_savefile != 0) || (wizard_mode && getInputConfirmation("Can't make new save file. Overwrite old?")))) {
+        (void) chmod(filename, 0600);
+        fd = open(filename, O_RDWR | O_TRUNC, 0600);
     }
 
     if (fd >= 0) {
@@ -441,14 +441,14 @@ static bool _save_char(char *fnam) {
 
     if (!ok) {
         if (fd >= 0) {
-            (void) unlink(fnam);
+            (void) unlink(filename);
         }
 
         std::string output;
         if (fd >= 0) {
-            output = "Error writing to file '" + std::string(fnam) + "'";
+            output = "Error writing to file '" + std::string(filename) + "'";
         } else {
-            output = "Can't create new file '" + std::string(fnam) + "'";
+            output = "Can't create new file '" + std::string(filename) + "'";
         }
         printMessage(output.c_str());
 
@@ -958,45 +958,45 @@ bool loadGame(bool *generate) {
     return false; // not reached
 }
 
-static void wr_bool(bool c) {
-    wr_byte((uint8_t) c);
+static void wr_bool(bool value) {
+    wr_byte((uint8_t) value);
 }
 
-static void wr_byte(uint8_t c) {
-    xor_byte ^= c;
+static void wr_byte(uint8_t value) {
+    xor_byte ^= value;
     (void) putc((int) xor_byte, fileptr);
-    DEBUG(fprintf(logfile, "BYTE:  %02X = %d\n", (int) xor_byte, (int) c));
+    DEBUG(fprintf(logfile, "BYTE:  %02X = %d\n", (int) xor_byte, (int) value));
 }
 
-static void wr_short(uint16_t s) {
-    xor_byte ^= (s & 0xFF);
+static void wr_short(uint16_t value) {
+    xor_byte ^= (value & 0xFF);
     (void) putc((int) xor_byte, fileptr);
     DEBUG(fprintf(logfile, "SHORT: %02X", (int) xor_byte));
-    xor_byte ^= ((s >> 8) & 0xFF);
+    xor_byte ^= ((value >> 8) & 0xFF);
     (void) putc((int) xor_byte, fileptr);
-    DEBUG(fprintf(logfile, " %02X = %d\n", (int) xor_byte, (int) s));
+    DEBUG(fprintf(logfile, " %02X = %d\n", (int) xor_byte, (int) value));
 }
 
-static void wr_long(uint32_t l) {
-    xor_byte ^= (l & 0xFF);
+static void wr_long(uint32_t value) {
+    xor_byte ^= (value & 0xFF);
     (void) putc((int) xor_byte, fileptr);
     DEBUG(fprintf(logfile, "LONG:  %02X", (int) xor_byte));
-    xor_byte ^= ((l >> 8) & 0xFF);
+    xor_byte ^= ((value >> 8) & 0xFF);
     (void) putc((int) xor_byte, fileptr);
     DEBUG(fprintf(logfile, " %02X", (int) xor_byte));
-    xor_byte ^= ((l >> 16) & 0xFF);
+    xor_byte ^= ((value >> 16) & 0xFF);
     (void) putc((int) xor_byte, fileptr);
     DEBUG(fprintf(logfile, " %02X", (int) xor_byte));
-    xor_byte ^= ((l >> 24) & 0xFF);
+    xor_byte ^= ((value >> 24) & 0xFF);
     (void) putc((int) xor_byte, fileptr);
-    DEBUG(fprintf(logfile, " %02X = %ld\n", (int) xor_byte, (int32_t) l));
+    DEBUG(fprintf(logfile, " %02X = %ld\n", (int) xor_byte, (int32_t) value));
 }
 
-static void wr_bytes(uint8_t *c, int count) {
+static void wr_bytes(uint8_t *value, int count) {
     uint8_t *ptr;
 
     DEBUG(fprintf(logfile, "%d BYTES:", count));
-    ptr = c;
+    ptr = value;
     for (int i = 0; i < count; i++) {
         xor_byte ^= *ptr++;
         (void) putc((int) xor_byte, fileptr);
@@ -1018,10 +1018,10 @@ static void wr_string(char *str) {
     DEBUG(fprintf(logfile, " %02X = \"%s\"\n", (int) xor_byte, s));
 }
 
-static void wr_shorts(uint16_t *s, int count) {
+static void wr_shorts(uint16_t *value, int count) {
     DEBUG(fprintf(logfile, "%d SHORTS:", count));
 
-    uint16_t *sptr = s;
+    uint16_t *sptr = value;
 
     for (int i = 0; i < count; i++) {
         xor_byte ^= (*sptr & 0xFF);
@@ -1056,18 +1056,18 @@ static void wr_item(Inventory_t *item) {
     wr_byte(item->identification);
 }
 
-static void wr_monster(Monster_t *mon) {
+static void wr_monster(Monster_t *monster) {
     DEBUG(fprintf(logfile, "MONSTER:\n"));
-    wr_short((uint16_t) mon->hp);
-    wr_short((uint16_t) mon->sleep_count);
-    wr_short((uint16_t) mon->speed);
-    wr_short(mon->creature_id);
-    wr_byte(mon->y);
-    wr_byte(mon->x);
-    wr_byte(mon->distance_from_player);
-    wr_bool(mon->lit);
-    wr_byte(mon->stunned_amount);
-    wr_byte(mon->confused_amount);
+    wr_short((uint16_t) monster->hp);
+    wr_short((uint16_t) monster->sleep_count);
+    wr_short((uint16_t) monster->speed);
+    wr_short(monster->creature_id);
+    wr_byte(monster->y);
+    wr_byte(monster->x);
+    wr_byte(monster->distance_from_player);
+    wr_bool(monster->lit);
+    wr_byte(monster->stunned_amount);
+    wr_byte(monster->confused_amount);
 }
 
 static bool rd_bool() {
@@ -1114,9 +1114,9 @@ static uint32_t rd_long() {
     return decoded_long;
 }
 
-static void rd_bytes(uint8_t *ch_ptr, int count) {
+static void rd_bytes(uint8_t *value, int count) {
     DEBUG(fprintf(logfile, "%d BYTES:", count));
-    uint8_t *ptr = ch_ptr;
+    uint8_t *ptr = value;
     for (int i = 0; i < count; i++) {
         auto c = (uint8_t) (getc(fileptr) & 0xFF);
         *ptr++ = c ^ xor_byte;
@@ -1138,9 +1138,9 @@ static void rd_string(char *str) {
     DEBUG(fprintf(logfile, "= \"%s\"\n", s));
 }
 
-static void rd_shorts(uint16_t *ptr, int count) {
+static void rd_shorts(uint16_t *value, int count) {
     DEBUG(fprintf(logfile, "%d SHORTS:", count));
-    uint16_t *sptr = ptr;
+    uint16_t *sptr = value;
 
     for (int i = 0; i < count; i++) {
         auto c = (uint8_t) (getc(fileptr) & 0xFF);
@@ -1175,18 +1175,18 @@ static void rd_item(Inventory_t *item) {
     item->identification = rd_byte();
 }
 
-static void rd_monster(Monster_t *mon) {
+static void rd_monster(Monster_t *monster) {
     DEBUG(fprintf(logfile, "MONSTER:\n"));
-    mon->hp = rd_short();
-    mon->sleep_count = rd_short();
-    mon->speed = rd_short();
-    mon->creature_id = rd_short();
-    mon->y = rd_byte();
-    mon->x = rd_byte();
-    mon->distance_from_player = rd_byte();
-    mon->lit = rd_bool();
-    mon->stunned_amount = rd_byte();
-    mon->confused_amount = rd_byte();
+    monster->hp = rd_short();
+    monster->sleep_count = rd_short();
+    monster->speed = rd_short();
+    monster->creature_id = rd_short();
+    monster->y = rd_byte();
+    monster->x = rd_byte();
+    monster->distance_from_player = rd_byte();
+    monster->lit = rd_bool();
+    monster->stunned_amount = rd_byte();
+    monster->confused_amount = rd_byte();
 }
 
 // functions called from death.c to implement the score file
