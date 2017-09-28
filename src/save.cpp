@@ -30,7 +30,7 @@ static void wr_shorts(uint16_t *, int);
 static void wr_item(Inventory_t *);
 static void wr_monster(Monster_t *);
 static bool rd_bool();
-static void rd_byte(uint8_t *);
+static uint8_t rd_byte();
 static void rd_short(uint16_t *);
 static void rd_long(uint32_t *);
 static void rd_bytes(uint8_t *, int);
@@ -512,14 +512,15 @@ bool loadGame(bool *generate) {
         DEBUG(logfile = fopen("IO_LOG", "a"));
         DEBUG(fprintf(logfile, "Reading data from %s\n", config.save_game_filename));
 
+        // Note: setting these xor_byte is correct!
         xor_byte = 0;
-        rd_byte(&version_maj);
+        version_maj = rd_byte();
         xor_byte = 0;
-        rd_byte(&version_min);
+        version_min = rd_byte();
         xor_byte = 0;
-        rd_byte(&patch_level);
+        patch_level = rd_byte();
         xor_byte = 0;
-        rd_byte(&xor_byte);
+        xor_byte = rd_byte();
 
         if (!validGameVersion(version_maj, version_min, patch_level)) {
             putStringClearToEOL("Sorry. This save file is from a different version of umoria.", 2, 0);
@@ -538,8 +539,8 @@ bool loadGame(bool *generate) {
             rd_short(&r_ptr->kills);
             rd_short(&r_ptr->deaths);
             rd_short(&r_ptr->defenses);
-            rd_byte(&r_ptr->wake);
-            rd_byte(&r_ptr->ignore);
+            r_ptr->wake = rd_byte();
+            r_ptr->ignore = rd_byte();
             rd_bytes(r_ptr->attacks, MON_MAX_ATTACKS);
             rd_short(&uint16_t_tmp);
         }
@@ -598,10 +599,10 @@ bool loadGame(bool *generate) {
             rd_short((uint16_t *) &py.misc.saving_throw);
             rd_short((uint16_t *) &py.misc.social_class);
             rd_short((uint16_t *) &py.misc.stealth_factor);
-            rd_byte(&py.misc.class_id);
-            rd_byte(&py.misc.race_id);
-            rd_byte(&py.misc.hit_die);
-            rd_byte(&py.misc.experience_factor);
+            py.misc.class_id = rd_byte();
+            py.misc.race_id = rd_byte();
+            py.misc.hit_die = rd_byte();
+            py.misc.experience_factor = rd_byte();
             rd_short((uint16_t *) &py.misc.current_mana);
             rd_short(&py.misc.current_mana_fraction);
             rd_short((uint16_t *) &py.misc.current_hp);
@@ -658,7 +659,7 @@ bool loadGame(bool *generate) {
             py.flags.sustain_dex = rd_bool();
             py.flags.sustain_chr = rd_bool();
             py.flags.confuse_monster = rd_bool();
-            rd_byte(&py.flags.new_spells_to_learn);
+            py.flags.new_spells_to_learn = rd_byte();
 
             rd_short((uint16_t *) &missiles_counter);
             rd_long((uint32_t *) &current_game_turn);
@@ -701,8 +702,8 @@ bool loadGame(bool *generate) {
 
                 rd_long((uint32_t *) &st_ptr->turns_left_before_closing);
                 rd_short((uint16_t *) &st_ptr->insults_counter);
-                rd_byte(&st_ptr->owner);
-                rd_byte(&st_ptr->store_id);
+                st_ptr->owner = rd_byte();
+                st_ptr->store_id = rd_byte();
                 rd_short(&st_ptr->good_purchases);
                 rd_short(&st_ptr->bad_purchases);
                 if (st_ptr->store_id > STORE_MAX_DISCRETE_ITEMS) {
@@ -780,37 +781,37 @@ bool loadGame(bool *generate) {
         uint8_t char_tmp, ychar, xchar, count;
 
         // read in the creature ptr info
-        rd_byte(&char_tmp);
+        char_tmp = rd_byte();
         while (char_tmp != 0xFF) {
             ychar = char_tmp;
-            rd_byte(&xchar);
-            rd_byte(&char_tmp);
+            xchar = rd_byte();
+            char_tmp = rd_byte();
             if (xchar > MAX_WIDTH || ychar > MAX_HEIGHT) {
                 goto error;
             }
             cave[ychar][xchar].creature_id = char_tmp;
-            rd_byte(&char_tmp);
+            char_tmp = rd_byte();
         }
 
         // read in the treasure ptr info
-        rd_byte(&char_tmp);
+        char_tmp = rd_byte();
         while (char_tmp != 0xFF) {
             ychar = char_tmp;
-            rd_byte(&xchar);
-            rd_byte(&char_tmp);
+            xchar = rd_byte();
+            char_tmp = rd_byte();
             if (xchar > MAX_WIDTH || ychar > MAX_HEIGHT) {
                 goto error;
             }
             cave[ychar][xchar].treasure_id = char_tmp;
-            rd_byte(&char_tmp);
+            char_tmp = rd_byte();
         }
 
         // read in the rest of the cave info
         c_ptr = &cave[0][0];
         total_count = 0;
         while (total_count != MAX_HEIGHT * MAX_WIDTH) {
-            rd_byte(&count);
-            rd_byte(&char_tmp);
+            count = rd_byte();
+            char_tmp = rd_byte();
             for (int i = count; i > 0; i--) {
                 if (c_ptr >= &cave[MAX_HEIGHT][0]) {
                     goto error;
@@ -847,8 +848,8 @@ bool loadGame(bool *generate) {
 
             rd_long((uint32_t *) &st_ptr->turns_left_before_closing);
             rd_short((uint16_t *) &st_ptr->insults_counter);
-            rd_byte(&st_ptr->owner);
-            rd_byte(&st_ptr->store_id);
+            st_ptr->owner = rd_byte();
+            st_ptr->store_id = rd_byte();
             rd_short(&st_ptr->good_purchases);
             rd_short(&st_ptr->bad_purchases);
             if (st_ptr->store_id > STORE_MAX_DISCRETE_ITEMS) {
@@ -1069,16 +1070,17 @@ static void wr_monster(Monster_t *mon) {
 }
 
 static bool rd_bool() {
-    uint8_t value;
-    rd_byte(&value);
-    return (bool) value;
+    return (bool) rd_byte();
 }
 
-static void rd_byte(uint8_t *ptr) {
+static uint8_t rd_byte() {
     auto c = (uint8_t) (getc(fileptr) & 0xFF);
-    *ptr = c ^ xor_byte;
+    uint8_t decoded_byte = c ^ xor_byte;
     xor_byte = c;
-    DEBUG(fprintf(logfile, "BYTE:  %02X = %d\n", (int) c, (int) *ptr));
+
+    DEBUG(fprintf(logfile, "BYTE:  %02X = %d\n", (int) c, decoded_byte));
+
+    return decoded_byte;
 }
 
 static void rd_short(uint16_t *ptr) {
@@ -1148,23 +1150,23 @@ static void rd_shorts(uint16_t *ptr, int count) {
 static void rd_item(Inventory_t *item) {
     DEBUG(fprintf(logfile, "ITEM:\n"));
     rd_short(&item->id);
-    rd_byte(&item->special_name_id);
+    item->special_name_id = rd_byte();
     rd_string(item->inscription);
     rd_long(&item->flags);
-    rd_byte(&item->category_id);
-    rd_byte(&item->sprite);
+    item->category_id = rd_byte();
+    item->sprite = rd_byte();
     rd_short((uint16_t *) &item->misc_use);
     rd_long((uint32_t *) &item->cost);
-    rd_byte(&item->sub_category_id);
-    rd_byte(&item->items_count);
+    item->sub_category_id = rd_byte();
+    item->items_count = rd_byte();
     rd_short(&item->weight);
     rd_short((uint16_t *) &item->to_hit);
     rd_short((uint16_t *) &item->to_damage);
     rd_short((uint16_t *) &item->ac);
     rd_short((uint16_t *) &item->to_ac);
     rd_bytes(item->damage, 2);
-    rd_byte(&item->depth_first_found);
-    rd_byte(&item->identification);
+    item->depth_first_found = rd_byte();
+    item->identification = rd_byte();
 }
 
 static void rd_monster(Monster_t *mon) {
@@ -1173,12 +1175,12 @@ static void rd_monster(Monster_t *mon) {
     rd_short((uint16_t *) &mon->sleep_count);
     rd_short((uint16_t *) &mon->speed);
     rd_short(&mon->creature_id);
-    rd_byte(&mon->y);
-    rd_byte(&mon->x);
-    rd_byte(&mon->distance_from_player);
+    mon->y = rd_byte();
+    mon->x = rd_byte();
+    mon->distance_from_player = rd_byte();
     mon->lit = rd_bool();
-    rd_byte(&mon->stunned_amount);
-    rd_byte(&mon->confused_amount);
+    mon->stunned_amount = rd_byte();
+    mon->confused_amount = rd_byte();
 }
 
 // functions called from death.c to implement the score file
@@ -1216,19 +1218,19 @@ void readHighScore(HighScore_t *score) {
     DEBUG(fprintf(logfile, "Reading score:\n"));
 
     // Read the encryption byte.
-    rd_byte(&xor_byte);
+    xor_byte = rd_byte();
 
     rd_long((uint32_t *) &score->points);
     rd_long((uint32_t *) &score->birth_date);
     rd_short((uint16_t *) &score->uid);
     rd_short((uint16_t *) &score->mhp);
     rd_short((uint16_t *) &score->chp);
-    rd_byte(&score->dungeon_depth);
-    rd_byte(&score->level);
-    rd_byte(&score->deepest_dungeon_depth);
-    rd_byte(&score->gender);
-    rd_byte(&score->race);
-    rd_byte(&score->character_class);
+    score->dungeon_depth = rd_byte();
+    score->level = rd_byte();
+    score->deepest_dungeon_depth = rd_byte();
+    score->gender = rd_byte();
+    score->race = rd_byte();
+    score->character_class = rd_byte();
     rd_bytes((uint8_t *) score->name, PLAYER_NAME_SIZE);
     rd_bytes((uint8_t *) score->died_from, 25);
     DEBUG(fclose(logfile));
