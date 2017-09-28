@@ -32,7 +32,7 @@ static void wr_monster(Monster_t *);
 static bool rd_bool();
 static uint8_t rd_byte();
 static uint16_t rd_short();
-static void rd_long(uint32_t *);
+static uint32_t rd_long();
 static void rd_bytes(uint8_t *, int);
 static void rd_string(char *);
 static void rd_shorts(uint16_t *, int);
@@ -528,14 +528,16 @@ bool loadGame(bool *generate) {
         }
 
         uint16_t uint16_t_tmp;
+        uint32_t l;
+
         uint16_t_tmp = rd_short();
         while (uint16_t_tmp != 0xFFFF) {
             if (uint16_t_tmp >= MON_MAX_CREATURES) {
                 goto error;
             }
             Recall_t *r_ptr = &creature_recall[uint16_t_tmp];
-            rd_long(&r_ptr->movement);
-            rd_long(&r_ptr->spells);
+            r_ptr->movement = rd_long();
+            r_ptr->spells = rd_long();
             r_ptr->kills = rd_short();
             r_ptr->deaths = rd_short();
             r_ptr->defenses = rd_short();
@@ -545,8 +547,7 @@ bool loadGame(bool *generate) {
             uint16_t_tmp = rd_short();
         }
 
-        uint32_t l;
-        rd_long(&l);
+        l = rd_long();
 
         config.run_cut_corners = (l & 0x1) != 0;
         config.run_examine_corners = (l & 0x2) != 0;
@@ -572,9 +573,9 @@ bool loadGame(bool *generate) {
         if ((l & 0x80000000L) == 0) {
             rd_string(py.misc.name);
             py.misc.gender = rd_bool();
-            rd_long((uint32_t *) &py.misc.au);
-            rd_long((uint32_t *) &py.misc.max_exp);
-            rd_long((uint32_t *) &py.misc.exp);
+            py.misc.au = rd_long();
+            py.misc.max_exp = rd_long();
+            py.misc.exp = rd_long();
             py.misc.exp_fraction = rd_short();
             py.misc.age = rd_short();
             py.misc.height = rd_short();
@@ -616,7 +617,7 @@ bool loadGame(bool *generate) {
             rd_shorts((uint16_t *) py.stats.modified, 6);
             rd_bytes(py.stats.used, 6);
 
-            rd_long(&py.flags.status);
+            py.flags.status = rd_long();
             py.flags.rest = rd_short();
             py.flags.blind = rd_short();
             py.flags.paralysis = rd_short();
@@ -662,7 +663,7 @@ bool loadGame(bool *generate) {
             py.flags.new_spells_to_learn = rd_byte();
 
             missiles_counter = rd_short();
-            rd_long((uint32_t *) &current_game_turn);
+            current_game_turn = rd_long();
             inventory_count = rd_short();
             if (inventory_count > EQUIPMENT_WIELD) {
                 goto error;
@@ -675,13 +676,13 @@ bool loadGame(bool *generate) {
             }
             inventory_weight = rd_short();
             equipment_count = rd_short();
-            rd_long(&spells_learnt);
-            rd_long(&spells_worked);
-            rd_long(&spells_forgotten);
+            spells_learnt = rd_long();
+            spells_worked = rd_long();
+            spells_forgotten = rd_long();
             rd_bytes(spells_learned_order, 32);
             rd_bytes(objects_identified, OBJECT_IDENT_SIZE);
-            rd_long(&magic_seed);
-            rd_long(&town_seed);
+            magic_seed = rd_long();
+            town_seed = rd_long();
             last_message_id = rd_short();
             for (auto &message : messages) {
                 rd_string(message);
@@ -700,7 +701,7 @@ bool loadGame(bool *generate) {
             for (auto &store : stores) {
                 Store_t *st_ptr = &store;
 
-                rd_long((uint32_t *) &st_ptr->turns_left_before_closing);
+                st_ptr->turns_left_before_closing = rd_long();
                 st_ptr->insults_counter = rd_short();
                 st_ptr->owner = rd_byte();
                 st_ptr->store_id = rd_byte();
@@ -710,15 +711,15 @@ bool loadGame(bool *generate) {
                     goto error;
                 }
                 for (int j = 0; j < st_ptr->store_id; j++) {
-                    rd_long((uint32_t *) &st_ptr->inventory[j].cost);
+                    st_ptr->inventory[j].cost = rd_long();
                     rd_item(&st_ptr->inventory[j].item);
                 }
             }
 
-            rd_long(&time_saved);
+            time_saved = rd_long();
             rd_string(character_died_from);
-            rd_long((uint32_t *) &character_max_score);
-            rd_long((uint32_t *) &py.misc.date_of_birth);
+            character_max_score = rd_long();
+            py.misc.date_of_birth = rd_long();
         }
 
         c = getc(fileptr);
@@ -846,7 +847,7 @@ bool loadGame(bool *generate) {
         for (auto &store : stores) {
             Store_t *st_ptr = &store;
 
-            rd_long((uint32_t *) &st_ptr->turns_left_before_closing);
+            st_ptr->turns_left_before_closing = rd_long();
             st_ptr->insults_counter = rd_short();
             st_ptr->owner = rd_byte();
             st_ptr->store_id = rd_byte();
@@ -856,13 +857,13 @@ bool loadGame(bool *generate) {
                 goto error;
             }
             for (int j = 0; j < st_ptr->store_id; j++) {
-                rd_long((uint32_t *) &st_ptr->inventory[j].cost);
+                st_ptr->inventory[j].cost = rd_long();
                 rd_item(&st_ptr->inventory[j].item);
             }
         }
 
         // read the time that the file was saved
-        rd_long(&time_saved);
+        time_saved = rd_long();
 
         if (ferror(fileptr) != 0) {
             goto error;
@@ -1095,19 +1096,22 @@ static uint16_t rd_short() {
     return decoded_int;
 }
 
-static void rd_long(uint32_t *ptr) {
+static uint32_t rd_long() {
     auto c = (uint8_t) (getc(fileptr) & 0xFF);
-    uint32_t l = c ^xor_byte;
+    uint32_t decoded_long = c ^xor_byte;
 
     xor_byte = (uint8_t) (getc(fileptr) & 0xFF);
-    l |= (uint32_t) (c ^ xor_byte) << 8;
+    decoded_long |= (uint32_t) (c ^ xor_byte) << 8;
     DEBUG(fprintf(logfile, "LONG:  %02X %02X ", (int) c, (int) xor_byte));
+
     c = (uint8_t) (getc(fileptr) & 0xFF);
-    l |= (uint32_t) (c ^ xor_byte) << 16;
+    decoded_long |= (uint32_t) (c ^ xor_byte) << 16;
+
     xor_byte = (uint8_t) (getc(fileptr) & 0xFF);
-    l |= (uint32_t) (c ^ xor_byte) << 24;
-    *ptr = l;
-    DEBUG(fprintf(logfile, "%02X %02X = %ld\n", (int) c, (int) xor_byte, (int32_t) l));
+    decoded_long |= (uint32_t) (c ^ xor_byte) << 24;
+    DEBUG(fprintf(logfile, "%02X %02X = %ld\n", (int) c, (int) xor_byte, decoded_long));
+
+    return decoded_long;
 }
 
 static void rd_bytes(uint8_t *ch_ptr, int count) {
@@ -1154,11 +1158,11 @@ static void rd_item(Inventory_t *item) {
     item->id = rd_short();
     item->special_name_id = rd_byte();
     rd_string(item->inscription);
-    rd_long(&item->flags);
+    item->flags = rd_long();
     item->category_id = rd_byte();
     item->sprite = rd_byte();
     item->misc_use = rd_short();
-    rd_long((uint32_t *) &item->cost);
+    item->cost = rd_long();
     item->sub_category_id = rd_byte();
     item->items_count = rd_byte();
     item->weight = rd_short();
@@ -1222,8 +1226,8 @@ void readHighScore(HighScore_t *score) {
     // Read the encryption byte.
     xor_byte = rd_byte();
 
-    rd_long((uint32_t *) &score->points);
-    rd_long((uint32_t *) &score->birth_date);
+    score->points = rd_long();
+    score->birth_date = rd_long();
     score->uid = rd_short();
     score->mhp = rd_short();
     score->chp = rd_short();
