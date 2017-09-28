@@ -31,7 +31,7 @@ static void wr_item(Inventory_t *);
 static void wr_monster(Monster_t *);
 static bool rd_bool();
 static uint8_t rd_byte();
-static void rd_short(uint16_t *);
+static uint16_t rd_short();
 static void rd_long(uint32_t *);
 static void rd_bytes(uint8_t *, int);
 static void rd_string(char *);
@@ -528,7 +528,7 @@ bool loadGame(bool *generate) {
         }
 
         uint16_t uint16_t_tmp;
-        rd_short(&uint16_t_tmp);
+        uint16_t_tmp = rd_short();
         while (uint16_t_tmp != 0xFFFF) {
             if (uint16_t_tmp >= MON_MAX_CREATURES) {
                 goto error;
@@ -536,13 +536,13 @@ bool loadGame(bool *generate) {
             Recall_t *r_ptr = &creature_recall[uint16_t_tmp];
             rd_long(&r_ptr->movement);
             rd_long(&r_ptr->spells);
-            rd_short(&r_ptr->kills);
-            rd_short(&r_ptr->deaths);
-            rd_short(&r_ptr->defenses);
+            r_ptr->kills = rd_short();
+            r_ptr->deaths = rd_short();
+            r_ptr->defenses = rd_short();
             r_ptr->wake = rd_byte();
             r_ptr->ignore = rd_byte();
             rd_bytes(r_ptr->attacks, MON_MAX_ATTACKS);
-            rd_short(&uint16_t_tmp);
+            uint16_t_tmp = rd_short();
         }
 
         uint32_t l;
@@ -575,38 +575,38 @@ bool loadGame(bool *generate) {
             rd_long((uint32_t *) &py.misc.au);
             rd_long((uint32_t *) &py.misc.max_exp);
             rd_long((uint32_t *) &py.misc.exp);
-            rd_short(&py.misc.exp_fraction);
-            rd_short(&py.misc.age);
-            rd_short(&py.misc.height);
-            rd_short(&py.misc.weight);
-            rd_short(&py.misc.level);
-            rd_short(&py.misc.max_dungeon_depth);
-            rd_short((uint16_t *) &py.misc.chance_in_search);
-            rd_short((uint16_t *) &py.misc.fos);
-            rd_short((uint16_t *) &py.misc.bth);
-            rd_short((uint16_t *) &py.misc.bth_with_bows);
-            rd_short((uint16_t *) &py.misc.mana);
-            rd_short((uint16_t *) &py.misc.max_hp);
-            rd_short((uint16_t *) &py.misc.plusses_to_hit);
-            rd_short((uint16_t *) &py.misc.plusses_to_damage);
-            rd_short((uint16_t *) &py.misc.ac);
-            rd_short((uint16_t *) &py.misc.magical_ac);
-            rd_short((uint16_t *) &py.misc.display_to_hit);
-            rd_short((uint16_t *) &py.misc.display_to_damage);
-            rd_short((uint16_t *) &py.misc.display_ac);
-            rd_short((uint16_t *) &py.misc.display_to_ac);
-            rd_short((uint16_t *) &py.misc.disarm);
-            rd_short((uint16_t *) &py.misc.saving_throw);
-            rd_short((uint16_t *) &py.misc.social_class);
-            rd_short((uint16_t *) &py.misc.stealth_factor);
+            py.misc.exp_fraction = rd_short();
+            py.misc.age = rd_short();
+            py.misc.height = rd_short();
+            py.misc.weight = rd_short();
+            py.misc.level = rd_short();
+            py.misc.max_dungeon_depth = rd_short();
+            py.misc.chance_in_search = rd_short();
+            py.misc.fos = rd_short();
+            py.misc.bth = rd_short();
+            py.misc.bth_with_bows = rd_short();
+            py.misc.mana = rd_short();
+            py.misc.max_hp = rd_short();
+            py.misc.plusses_to_hit = rd_short();
+            py.misc.plusses_to_damage = rd_short();
+            py.misc.ac = rd_short();
+            py.misc.magical_ac = rd_short();
+            py.misc.display_to_hit = rd_short();
+            py.misc.display_to_damage = rd_short();
+            py.misc.display_ac = rd_short();
+            py.misc.display_to_ac = rd_short();
+            py.misc.disarm = rd_short();
+            py.misc.saving_throw = rd_short();
+            py.misc.social_class = rd_short();
+            py.misc.stealth_factor = rd_short();
             py.misc.class_id = rd_byte();
             py.misc.race_id = rd_byte();
             py.misc.hit_die = rd_byte();
             py.misc.experience_factor = rd_byte();
-            rd_short((uint16_t *) &py.misc.current_mana);
-            rd_short(&py.misc.current_mana_fraction);
-            rd_short((uint16_t *) &py.misc.current_hp);
-            rd_short(&py.misc.current_hp_fraction);
+            py.misc.current_mana = rd_short();
+            py.misc.current_mana_fraction = rd_short();
+            py.misc.current_hp = rd_short();
+            py.misc.current_hp_fraction = rd_short();
             for (auto &entry : py.misc.history) {
                 rd_string(entry);
             }
@@ -617,30 +617,30 @@ bool loadGame(bool *generate) {
             rd_bytes(py.stats.used, 6);
 
             rd_long(&py.flags.status);
-            rd_short((uint16_t *) &py.flags.rest);
-            rd_short((uint16_t *) &py.flags.blind);
-            rd_short((uint16_t *) &py.flags.paralysis);
-            rd_short((uint16_t *) &py.flags.confused);
-            rd_short((uint16_t *) &py.flags.food);
-            rd_short((uint16_t *) &py.flags.food_digested);
-            rd_short((uint16_t *) &py.flags.protection);
-            rd_short((uint16_t *) &py.flags.speed);
-            rd_short((uint16_t *) &py.flags.fast);
-            rd_short((uint16_t *) &py.flags.slow);
-            rd_short((uint16_t *) &py.flags.afraid);
-            rd_short((uint16_t *) &py.flags.poisoned);
-            rd_short((uint16_t *) &py.flags.image);
-            rd_short((uint16_t *) &py.flags.protect_evil);
-            rd_short((uint16_t *) &py.flags.invulnerability);
-            rd_short((uint16_t *) &py.flags.heroism);
-            rd_short((uint16_t *) &py.flags.super_heroism);
-            rd_short((uint16_t *) &py.flags.blessed);
-            rd_short((uint16_t *) &py.flags.heat_resistance);
-            rd_short((uint16_t *) &py.flags.cold_resistance);
-            rd_short((uint16_t *) &py.flags.detect_invisible);
-            rd_short((uint16_t *) &py.flags.word_of_recall);
-            rd_short((uint16_t *) &py.flags.see_infra);
-            rd_short((uint16_t *) &py.flags.timed_infra);
+            py.flags.rest = rd_short();
+            py.flags.blind = rd_short();
+            py.flags.paralysis = rd_short();
+            py.flags.confused = rd_short();
+            py.flags.food = rd_short();
+            py.flags.food_digested = rd_short();
+            py.flags.protection = rd_short();
+            py.flags.speed = rd_short();
+            py.flags.fast = rd_short();
+            py.flags.slow = rd_short();
+            py.flags.afraid = rd_short();
+            py.flags.poisoned = rd_short();
+            py.flags.image = rd_short();
+            py.flags.protect_evil = rd_short();
+            py.flags.invulnerability = rd_short();
+            py.flags.heroism = rd_short();
+            py.flags.super_heroism = rd_short();
+            py.flags.blessed = rd_short();
+            py.flags.heat_resistance = rd_short();
+            py.flags.cold_resistance = rd_short();
+            py.flags.detect_invisible = rd_short();
+            py.flags.word_of_recall = rd_short();
+            py.flags.see_infra = rd_short();
+            py.flags.timed_infra = rd_short();
             py.flags.see_invisible = rd_bool();
             py.flags.teleport = rd_bool();
             py.flags.free_action = rd_bool();
@@ -661,9 +661,9 @@ bool loadGame(bool *generate) {
             py.flags.confuse_monster = rd_bool();
             py.flags.new_spells_to_learn = rd_byte();
 
-            rd_short((uint16_t *) &missiles_counter);
+            missiles_counter = rd_short();
             rd_long((uint32_t *) &current_game_turn);
-            rd_short((uint16_t *) &inventory_count);
+            inventory_count = rd_short();
             if (inventory_count > EQUIPMENT_WIELD) {
                 goto error;
             }
@@ -673,8 +673,8 @@ bool loadGame(bool *generate) {
             for (int i = EQUIPMENT_WIELD; i < PLAYER_INVENTORY_SIZE; i++) {
                 rd_item(&inventory[i]);
             }
-            rd_short((uint16_t *) &inventory_weight);
-            rd_short((uint16_t *) &equipment_count);
+            inventory_weight = rd_short();
+            equipment_count = rd_short();
             rd_long(&spells_learnt);
             rd_long(&spells_worked);
             rd_long(&spells_forgotten);
@@ -682,30 +682,30 @@ bool loadGame(bool *generate) {
             rd_bytes(objects_identified, OBJECT_IDENT_SIZE);
             rd_long(&magic_seed);
             rd_long(&town_seed);
-            rd_short((uint16_t *) &last_message_id);
+            last_message_id = rd_short();
             for (auto &message : messages) {
                 rd_string(message);
             }
 
             uint16_t panic_save_short;
             uint16_t total_winner_short;
-            rd_short(&panic_save_short);
-            rd_short(&total_winner_short);
+            panic_save_short = rd_short();
+            total_winner_short = rd_short();
             panic_save = panic_save_short != 0;
             total_winner = total_winner_short != 0;
 
-            rd_short((uint16_t *) &noscore);
+            noscore = rd_short();
             rd_shorts(player_base_hp_levels, PLAYER_MAX_LEVEL);
 
             for (auto &store : stores) {
                 Store_t *st_ptr = &store;
 
                 rd_long((uint32_t *) &st_ptr->turns_left_before_closing);
-                rd_short((uint16_t *) &st_ptr->insults_counter);
+                st_ptr->insults_counter = rd_short();
                 st_ptr->owner = rd_byte();
                 st_ptr->store_id = rd_byte();
-                rd_short(&st_ptr->good_purchases);
-                rd_short(&st_ptr->bad_purchases);
+                st_ptr->good_purchases = rd_short();
+                st_ptr->bad_purchases = rd_short();
                 if (st_ptr->store_id > STORE_MAX_DISCRETE_ITEMS) {
                     goto error;
                 }
@@ -769,14 +769,14 @@ bool loadGame(bool *generate) {
         // only level specific info should follow,
         // not present for dead characters
 
-        rd_short((uint16_t *) &current_dungeon_level);
-        rd_short((uint16_t *) &char_row);
-        rd_short((uint16_t *) &char_col);
-        rd_short((uint16_t *) &monster_multiply_total);
-        rd_short((uint16_t *) &dungeon_height);
-        rd_short((uint16_t *) &dungeon_width);
-        rd_short((uint16_t *) &max_panel_rows);
-        rd_short((uint16_t *) &max_panel_cols);
+        current_dungeon_level = rd_short();
+        char_row = rd_short();
+        char_col = rd_short();
+        monster_multiply_total = rd_short();
+        dungeon_height = rd_short();
+        dungeon_width = rd_short();
+        max_panel_rows = rd_short();
+        max_panel_cols = rd_short();
 
         uint8_t char_tmp, ychar, xchar, count;
 
@@ -826,14 +826,14 @@ bool loadGame(bool *generate) {
             total_count += count;
         }
 
-        rd_short((uint16_t *) &current_treasure_id);
+        current_treasure_id = rd_short();
         if (current_treasure_id > LEVEL_MAX_OBJECTS) {
             goto error;
         }
         for (int i = MIN_TREASURE_LIST_ID; i < current_treasure_id; i++) {
             rd_item(&treasure_list[i]);
         }
-        rd_short((uint16_t *) &next_free_monster_id);
+        next_free_monster_id = rd_short();
         if (next_free_monster_id > MON_TOTAL_ALLOCATIONS) {
             goto error;
         }
@@ -847,11 +847,11 @@ bool loadGame(bool *generate) {
             Store_t *st_ptr = &store;
 
             rd_long((uint32_t *) &st_ptr->turns_left_before_closing);
-            rd_short((uint16_t *) &st_ptr->insults_counter);
+            st_ptr->insults_counter = rd_short();
             st_ptr->owner = rd_byte();
             st_ptr->store_id = rd_byte();
-            rd_short(&st_ptr->good_purchases);
-            rd_short(&st_ptr->bad_purchases);
+            st_ptr->good_purchases = rd_short();
+            st_ptr->bad_purchases = rd_short();
             if (st_ptr->store_id > STORE_MAX_DISCRETE_ITEMS) {
                 goto error;
             }
@@ -1083,14 +1083,16 @@ static uint8_t rd_byte() {
     return decoded_byte;
 }
 
-static void rd_short(uint16_t *ptr) {
+static uint16_t rd_short() {
     auto c = (uint8_t) (getc(fileptr) & 0xFF);
-    uint16_t s = c ^xor_byte;
+    uint16_t decoded_int = c ^xor_byte;
 
     xor_byte = (uint8_t) (getc(fileptr) & 0xFF);
-    s |= (uint16_t) (c ^ xor_byte) << 8;
-    *ptr = s;
-    DEBUG(fprintf(logfile, "SHORT: %02X %02X = %d\n", (int) c, (int) xor_byte, (int) s));
+    decoded_int |= (uint16_t) (c ^ xor_byte) << 8;
+
+    DEBUG(fprintf(logfile, "SHORT: %02X %02X = %d\n", (int) c, (int) xor_byte, decoded_int));
+
+    return decoded_int;
 }
 
 static void rd_long(uint32_t *ptr) {
@@ -1149,21 +1151,21 @@ static void rd_shorts(uint16_t *ptr, int count) {
 
 static void rd_item(Inventory_t *item) {
     DEBUG(fprintf(logfile, "ITEM:\n"));
-    rd_short(&item->id);
+    item->id = rd_short();
     item->special_name_id = rd_byte();
     rd_string(item->inscription);
     rd_long(&item->flags);
     item->category_id = rd_byte();
     item->sprite = rd_byte();
-    rd_short((uint16_t *) &item->misc_use);
+    item->misc_use = rd_short();
     rd_long((uint32_t *) &item->cost);
     item->sub_category_id = rd_byte();
     item->items_count = rd_byte();
-    rd_short(&item->weight);
-    rd_short((uint16_t *) &item->to_hit);
-    rd_short((uint16_t *) &item->to_damage);
-    rd_short((uint16_t *) &item->ac);
-    rd_short((uint16_t *) &item->to_ac);
+    item->weight = rd_short();
+    item->to_hit = rd_short();
+    item->to_damage = rd_short();
+    item->ac = rd_short();
+    item->to_ac = rd_short();
     rd_bytes(item->damage, 2);
     item->depth_first_found = rd_byte();
     item->identification = rd_byte();
@@ -1171,10 +1173,10 @@ static void rd_item(Inventory_t *item) {
 
 static void rd_monster(Monster_t *mon) {
     DEBUG(fprintf(logfile, "MONSTER:\n"));
-    rd_short((uint16_t *) &mon->hp);
-    rd_short((uint16_t *) &mon->sleep_count);
-    rd_short((uint16_t *) &mon->speed);
-    rd_short(&mon->creature_id);
+    mon->hp = rd_short();
+    mon->sleep_count = rd_short();
+    mon->speed = rd_short();
+    mon->creature_id = rd_short();
     mon->y = rd_byte();
     mon->x = rd_byte();
     mon->distance_from_player = rd_byte();
@@ -1222,9 +1224,9 @@ void readHighScore(HighScore_t *score) {
 
     rd_long((uint32_t *) &score->points);
     rd_long((uint32_t *) &score->birth_date);
-    rd_short((uint16_t *) &score->uid);
-    rd_short((uint16_t *) &score->mhp);
-    rd_short((uint16_t *) &score->chp);
+    score->uid = rd_short();
+    score->mhp = rd_short();
+    score->chp = rd_short();
     score->dungeon_depth = rd_byte();
     score->level = rd_byte();
     score->deepest_dungeon_depth = rd_byte();
