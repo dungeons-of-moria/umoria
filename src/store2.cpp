@@ -84,36 +84,36 @@ static void displayStoreHaggleCommands(int haggle_type) {
 
 // Displays a store's inventory -RAK-
 static void displayStoreInventory(int store_id, int item_pos_start) {
-    Store_t *store = &stores[store_id];
+    Store_t &store = stores[store_id];
 
     int item_pos_end = ((item_pos_start / 12) + 1) * 12;
-    if (item_pos_end > store->store_id) {
-        item_pos_end = store->store_id;
+    if (item_pos_end > store.store_id) {
+        item_pos_end = store.store_id;
     }
 
     int item_identifier;
 
     for (item_identifier = (item_pos_start % 12); item_pos_start < item_pos_end; item_identifier++) {
-        Inventory_t *item = &store->inventory[item_pos_start].item;
+        Inventory_t &item = store.inventory[item_pos_start].item;
 
         // Save the current number of items
-        int32_t current_item_count = item->items_count;
+        int32_t current_item_count = item.items_count;
 
-        if (item->sub_category_id >= ITEM_SINGLE_STACK_MIN && item->sub_category_id <= ITEM_SINGLE_STACK_MAX) {
-            item->items_count = 1;
+        if (item.sub_category_id >= ITEM_SINGLE_STACK_MIN && item.sub_category_id <= ITEM_SINGLE_STACK_MAX) {
+            item.items_count = 1;
         }
 
         obj_desc_t description = {'\0'};
-        itemDescription(description, item, true);
+        itemDescription(description, &item, true);
 
         // Restore the number of items
-        item->items_count = (uint8_t) current_item_count;
+        item.items_count = (uint8_t) current_item_count;
 
         obj_desc_t msg = {'\0'};
         (void) sprintf(msg, "%c) %s", 'a' + item_identifier, description);
         putStringClearToEOL(msg, item_identifier + 5, 0);
 
-        current_item_count = store->inventory[item_pos_start].cost;
+        current_item_count = store.inventory[item_pos_start].cost;
 
         if (current_item_count <= 0) {
             int32_t value = -current_item_count;
@@ -137,7 +137,7 @@ static void displayStoreInventory(int store_id, int item_pos_start) {
         }
     }
 
-    if (store->store_id > 12) {
+    if (store.store_id > 12) {
         putString("- cont. -", 17, 60);
     } else {
         eraseLine(17, 60);
