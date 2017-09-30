@@ -225,20 +225,20 @@ void itemSetAsTried(Inventory_t *item) {
 // Somethings been identified.
 // Extra complexity by CJS so that it can merge store/dungeon objects when appropriate.
 void itemIdentify(int *item_id) {
-    Inventory_t *item = &inventory[*item_id];
+    Inventory_t &item = inventory[*item_id];
 
-    if ((item->flags & TR_CURSED) != 0u) {
-        itemAppendToInscription(item, ID_DAMD);
+    if ((item.flags & TR_CURSED) != 0u) {
+        itemAppendToInscription(&item, ID_DAMD);
     }
 
-    if (itemSetColorlessAsIdentified(item->category_id, item->sub_category_id, item->identification)) {
+    if (itemSetColorlessAsIdentified(item.category_id, item.sub_category_id, item.identification)) {
         return;
     }
 
-    itemSetAsIdentified(item->category_id, item->sub_category_id);
+    itemSetAsIdentified(item.category_id, item.sub_category_id);
 
-    int x1 = item->category_id;
-    int x2 = item->sub_category_id;
+    int x1 = item.category_id;
+    int x2 = item.sub_category_id;
 
     // no merging possible
     if (x2 < ITEM_SINGLE_STACK_MIN || x2 >= ITEM_GROUP_MIN) {
@@ -246,12 +246,11 @@ void itemIdentify(int *item_id) {
     }
 
     int j;
-    Inventory_t *t_ptr;
 
     for (int i = 0; i < inventory_count; i++) {
-        t_ptr = &inventory[i];
+        Inventory_t &t_ptr = inventory[i];
 
-        if (t_ptr->category_id == x1 && t_ptr->sub_category_id == x2 && i != *item_id && ((int) t_ptr->items_count + (int) item->items_count) < 256) {
+        if (t_ptr.category_id == x1 && t_ptr.sub_category_id == x2 && i != *item_id && ((int) t_ptr.items_count + (int) item.items_count) < 256) {
             // make *item_id the smaller number
             if (*item_id > i) {
                 j = *item_id;
@@ -682,14 +681,14 @@ void itemChargesRemainingDescription(int item_id) {
 
 // Describe amount of item remaining. -RAK-
 void itemTypeRemainingCountDescription(int item_id) {
-    Inventory_t *i_ptr = &inventory[item_id];
+    Inventory_t &item = inventory[item_id];
 
-    i_ptr->items_count--;
+    item.items_count--;
 
     obj_desc_t tmp_str = {'\0'};
-    itemDescription(tmp_str, i_ptr, true);
+    itemDescription(tmp_str, &item, true);
 
-    i_ptr->items_count++;
+    item.items_count++;
 
     // the string already has a dot at the end.
     obj_desc_t out_val = {'\0'};
