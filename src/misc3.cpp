@@ -1124,13 +1124,13 @@ void changeCharacterName() {
 
 // Destroy an item in the inventory -RAK-
 void inventoryDestroyItem(int item_id) {
-    Inventory_t *i_ptr = &inventory[item_id];
+    Inventory_t &item = inventory[item_id];
 
-    if (i_ptr->items_count > 1 && i_ptr->sub_category_id <= ITEM_SINGLE_STACK_MAX) {
-        i_ptr->items_count--;
-        inventory_weight -= i_ptr->weight;
+    if (item.items_count > 1 && item.sub_category_id <= ITEM_SINGLE_STACK_MAX) {
+        item.items_count--;
+        inventory_weight -= item.weight;
     } else {
-        inventory_weight -= i_ptr->weight * i_ptr->items_count;
+        inventory_weight -= item.weight * item.items_count;
 
         for (int i = item_id; i < inventory_count - 1; i++) {
             inventory[i] = inventory[i + 1];
@@ -1161,16 +1161,16 @@ void inventoryDropItem(int item_id, bool drop_all) {
 
     int treasureID = popt();
 
-    Inventory_t *i_ptr = &inventory[item_id];
-    treasure_list[treasureID] = *i_ptr;
+    Inventory_t &item = inventory[item_id];
+    treasure_list[treasureID] = item;
 
     cave[char_row][char_col].treasure_id = (uint8_t) treasureID;
 
     if (item_id >= EQUIPMENT_WIELD) {
         playerTakeOff(item_id, -1);
     } else {
-        if (drop_all || i_ptr->items_count == 1) {
-            inventory_weight -= i_ptr->weight * i_ptr->items_count;
+        if (drop_all || item.items_count == 1) {
+            inventory_weight -= item.weight * item.items_count;
             inventory_count--;
 
             while (item_id < inventory_count) {
@@ -1181,8 +1181,8 @@ void inventoryDropItem(int item_id, bool drop_all) {
             inventoryItemCopyTo(OBJ_NOTHING, &inventory[inventory_count]);
         } else {
             treasure_list[treasureID].items_count = 1;
-            inventory_weight -= i_ptr->weight;
-            i_ptr->items_count--;
+            inventory_weight -= item.weight;
+            item.items_count--;
         }
 
         obj_desc_t prt1 = {'\0'};
@@ -1270,9 +1270,9 @@ bool inventoryCanCarryItem(Inventory_t *item) {
 
 // Are we strong enough for the current pack and weapon? -CJS-
 void playerStrength() {
-    Inventory_t *i_ptr = &inventory[EQUIPMENT_WIELD];
+    Inventory_t &item = inventory[EQUIPMENT_WIELD];
 
-    if (i_ptr->category_id != TV_NOTHING && py.stats.used[A_STR] * 15 < i_ptr->weight) {
+    if (item.category_id != TV_NOTHING && py.stats.used[A_STR] * 15 < item.weight) {
         if (!py.weapon_is_heavy) {
             printMessage("You have trouble wielding such a heavy weapon.");
             py.weapon_is_heavy = true;
@@ -1280,7 +1280,7 @@ void playerStrength() {
         }
     } else if (py.weapon_is_heavy) {
         py.weapon_is_heavy = false;
-        if (i_ptr->category_id != TV_NOTHING) {
+        if (item.category_id != TV_NOTHING) {
             printMessage("You are strong enough to wield your weapon.");
         }
         playerRecalculateBonuses();
@@ -1301,7 +1301,7 @@ void playerStrength() {
             printMessage("You move more easily under the weight of your pack.");
         }
         playerChangeSpeed(limit - py.pack_heaviness);
-        py.pack_heaviness = limit;
+        py.pack_heaviness = (int16_t) limit;
     }
 
     py.flags.status &= ~PY_STR_WGT;
