@@ -251,33 +251,33 @@ void wizardCreateObjects() {
     printMessage("Warning: This routine can cause a fatal error.");
 
     Inventory_t forge{};
-    Inventory_t *item = &forge;
+    Inventory_t &item = forge;
 
-    item->id = OBJ_WIZARD;
-    item->special_name_id = 0;
-    itemReplaceInscription(item, "wizard item");
-    item->identification = ID_KNOWN2 | ID_STORE_BOUGHT;
+    item.id = OBJ_WIZARD;
+    item.special_name_id = 0;
+    itemReplaceInscription(&item, "wizard item");
+    item.identification = ID_KNOWN2 | ID_STORE_BOUGHT;
 
     putStringClearToEOL("Tval   : ", 0, 0);
     if (!getStringInput(input, 0, 9, 3)) {
         return;
     }
     if (stringToNumber(input, number)) {
-        item->category_id = (uint8_t) number;
+        item.category_id = (uint8_t) number;
     }
 
     putStringClearToEOL("Tchar  : ", 0, 0);
     if (!getStringInput(input, 0, 9, 1)) {
         return;
     }
-    item->sprite = (uint8_t) input[0];
+    item.sprite = (uint8_t) input[0];
 
     putStringClearToEOL("Subval : ", 0, 0);
     if (!getStringInput(input, 0, 9, 5)) {
         return;
     }
     if (stringToNumber(input, number)) {
-        item->sub_category_id = (uint8_t) number;
+        item.sub_category_id = (uint8_t) number;
     }
 
     putStringClearToEOL("Weight : ", 0, 0);
@@ -285,7 +285,7 @@ void wizardCreateObjects() {
         return;
     }
     if (stringToNumber(input, number)) {
-        item->weight = (uint16_t) number;
+        item.weight = (uint16_t) number;
     }
 
     putStringClearToEOL("Number : ", 0, 0);
@@ -293,7 +293,7 @@ void wizardCreateObjects() {
         return;
     }
     if (stringToNumber(input, number)) {
-        item->items_count = (uint8_t) number;
+        item.items_count = (uint8_t) number;
     }
 
     putStringClearToEOL("Damage (dice): ", 0, 0);
@@ -301,7 +301,7 @@ void wizardCreateObjects() {
         return;
     }
     if (stringToNumber(input, number)) {
-        item->damage[0] = (uint8_t) number;
+        item.damage[0] = (uint8_t) number;
     }
 
     putStringClearToEOL("Damage (sides): ", 0, 0);
@@ -309,7 +309,7 @@ void wizardCreateObjects() {
         return;
     }
     if (stringToNumber(input, number)) {
-        item->damage[1] = (uint8_t) number;
+        item.damage[1] = (uint8_t) number;
     }
 
     putStringClearToEOL("+To hit: ", 0, 0);
@@ -317,7 +317,7 @@ void wizardCreateObjects() {
         return;
     }
     if (stringToNumber(input, number)) {
-        item->to_hit = (int16_t) number;
+        item.to_hit = (int16_t) number;
     }
 
     putStringClearToEOL("+To dam: ", 0, 0);
@@ -325,7 +325,7 @@ void wizardCreateObjects() {
         return;
     }
     if (stringToNumber(input, number)) {
-        item->to_damage = (int16_t) number;
+        item.to_damage = (int16_t) number;
     }
 
     putStringClearToEOL("AC     : ", 0, 0);
@@ -333,7 +333,7 @@ void wizardCreateObjects() {
         return;
     }
     if (stringToNumber(input, number)) {
-        item->ac = (int16_t) number;
+        item.ac = (int16_t) number;
     }
 
     putStringClearToEOL("+To AC : ", 0, 0);
@@ -341,7 +341,7 @@ void wizardCreateObjects() {
         return;
     }
     if (stringToNumber(input, number)) {
-        item->to_ac = (int16_t) number;
+        item.to_ac = (int16_t) number;
     }
 
     putStringClearToEOL("P1     : ", 0, 0);
@@ -349,7 +349,7 @@ void wizardCreateObjects() {
         return;
     }
     if (stringToNumber(input, number)) {
-        item->misc_use = (int16_t) number;
+        item.misc_use = (int16_t) number;
     }
 
     putStringClearToEOL("Flags (In HEX): ", 0, 0);
@@ -365,14 +365,14 @@ void wizardCreateObjects() {
 
     int32_t input_number;
     (void) sscanf(input, pattern, &input_number);
-    item->flags = (uint32_t) input_number;
+    item.flags = (uint32_t) input_number;
 
     putStringClearToEOL("Cost : ", 0, 0);
     if (!getStringInput(input, 0, 9, 8)) {
         return;
     }
     if (stringToNumber(input, input_number)) {
-        item->cost = input_number;
+        item.cost = input_number;
     }
 
     putStringClearToEOL("Level : ", 0, 0);
@@ -380,21 +380,21 @@ void wizardCreateObjects() {
         return;
     }
     if (stringToNumber(input, number)) {
-        item->depth_first_found = (uint8_t) number;
+        item.depth_first_found = (uint8_t) number;
     }
 
     if (getInputConfirmation("Allocate?")) {
         // delete object first if any, before call popt()
-        Cave_t *tile = &cave[char_row][char_col];
+        Cave_t &tile = cave[char_row][char_col];
 
-        if (tile->treasure_id != 0) {
+        if (tile.treasure_id != 0) {
             (void) dungeonDeleteObject(char_row, char_col);
         }
 
         number = popt();
 
         treasure_list[number] = forge;
-        tile->treasure_id = (uint8_t) number;
+        tile.treasure_id = (uint8_t) number;
 
         printMessage("Allocated.");
     } else {
