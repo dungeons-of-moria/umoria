@@ -125,7 +125,7 @@ void wandAim() {
     }
 
     int item_pos_start, item_pos_end;
-    if (!inventoryFindRange(TV_WAND, TV_NEVER, &item_pos_start, &item_pos_end)) {
+    if (!inventoryFindRange(TV_WAND, TV_NEVER, item_pos_start, item_pos_end)) {
         printMessage("You are not carrying any wands.");
         return;
     }

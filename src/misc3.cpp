@@ -2257,9 +2257,9 @@ bool playerSavingThrow() {
 }
 
 // Finds range of item in inventory list -RAK-
-bool inventoryFindRange(int item_id_start, int item_id_end, int *j, int *k) {
-    *j = -1;
-    *k = -1;
+bool inventoryFindRange(int item_id_start, int item_id_end, int &j, int &k) {
+    j = -1;
+    k = -1;
 
     bool at_end_of_range = false;
 
@@ -2269,18 +2269,18 @@ bool inventoryFindRange(int item_id_start, int item_id_end, int *j, int *k) {
         if (!at_end_of_range) {
             if (item_id == item_id_start || item_id == item_id_end) {
                 at_end_of_range = true;
-                *j = i;
+                j = i;
             }
         } else {
             if (item_id != item_id_start && item_id != item_id_end) {
-                *k = i - 1;
+                k = i - 1;
                 break;
             }
         }
     }
 
-    if (at_end_of_range && *k == -1) {
-        *k = inventory_count - 1;
+    if (at_end_of_range && k == -1) {
+        k = inventory_count - 1;
     }
 
     return at_end_of_range;

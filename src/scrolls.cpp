@@ -11,7 +11,7 @@
 
 // Note: naming of all the scroll functions needs verifying -MRC-
 
-static bool playerCanReadScroll(int *item_pos_start, int *item_pos_end) {
+static bool playerCanReadScroll(int &item_pos_start, int &item_pos_end) {
     if (py.flags.blind > 0) {
         printMessage("You can't see to read the scroll.");
         return false;
@@ -418,7 +418,7 @@ void readScroll() {
     player_free_turn = true;
 
     int item_pos_start, item_pos_end;
-    if (!playerCanReadScroll(&item_pos_start, &item_pos_end)) {
+    if (!playerCanReadScroll(item_pos_start, item_pos_end)) {
         return;
     }
 

@@ -2031,7 +2031,7 @@ static bool itemEnchanted(Inventory_t *item) {
 // Examine a Book -RAK-
 static void examineBook() {
     int item_pos_start, item_pos_end;
-    if (!inventoryFindRange(TV_MAGIC_BOOK, TV_PRAYER_BOOK, &item_pos_start, &item_pos_end)) {
+    if (!inventoryFindRange(TV_MAGIC_BOOK, TV_PRAYER_BOOK, item_pos_start, item_pos_end)) {
         printMessage("You are not carrying any books.");
         return;
     }
@@ -2165,7 +2165,7 @@ static void dungeonJamDoor() {
 
     if (tile->creature_id == 0) {
         int item_pos_start, item_pos_end;
-        if (inventoryFindRange(TV_SPIKE, TV_NEVER, &item_pos_start, &item_pos_end)) {
+        if (inventoryFindRange(TV_SPIKE, TV_NEVER, item_pos_start, item_pos_end)) {
             player_free_turn = false;
 
             printMessageNoCommandInterrupt("You jam the door with a spike.");
@@ -2207,7 +2207,7 @@ static void inventoryRefillLamp() {
     }
 
     int item_pos_start, item_pos_end;
-    if (!inventoryFindRange(TV_FLASK, TV_NEVER, &item_pos_start, &item_pos_end)) {
+    if (!inventoryFindRange(TV_FLASK, TV_NEVER, item_pos_start, item_pos_end)) {
         printMessage("You have no oil.");
         return;
     }

@@ -9,7 +9,7 @@
 #include "headers.h"
 #include "externs.h"
 
-static bool playerCanPray(int *item_pos_begin, int *item_pos_end) {
+static bool playerCanPray(int &item_pos_begin, int &item_pos_end) {
     if (py.flags.blind > 0) {
         printMessage("You can't see to read your prayer!");
         return false;
@@ -176,7 +176,7 @@ void pray() {
     player_free_turn = true;
 
     int item_pos_begin, item_pos_end;
-    if (!playerCanPray(&item_pos_begin, &item_pos_end)) {
+    if (!playerCanPray(item_pos_begin, item_pos_end)) {
         return;
     }
 

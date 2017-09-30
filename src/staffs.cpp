@@ -9,7 +9,7 @@
 #include "headers.h"
 #include "externs.h"
 
-static bool staffPlayerIsCarrying(int *item_pos_start, int *item_pos_end) {
+static bool staffPlayerIsCarrying(int &item_pos_start, int &item_pos_end) {
     if (inventory_count == 0) {
         printMessage("But you are not carrying anything.");
         return false;
@@ -177,7 +177,7 @@ void useStaff() {
     player_free_turn = true;
 
     int item_pos_start, item_pos_end;
-    if (!staffPlayerIsCarrying(&item_pos_start, &item_pos_end)) {
+    if (!staffPlayerIsCarrying(item_pos_start, item_pos_end)) {
         return;
     }
 

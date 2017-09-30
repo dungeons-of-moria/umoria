@@ -975,7 +975,7 @@ void spellBreath(int y, int x, int monster_id, int damage_hp, int spell_type, ch
 // Recharge a wand, staff, or rod.  Sometimes the item breaks. -RAK-
 bool spellRechargeItem(int number_of_charges) {
     int item_pos_start, item_pos_end;
-    if (!inventoryFindRange(TV_STAFF, TV_WAND, &item_pos_start, &item_pos_end)) {
+    if (!inventoryFindRange(TV_STAFF, TV_WAND, item_pos_start, item_pos_end)) {
         printMessage("You have nothing to recharge.");
         return false;
     }
