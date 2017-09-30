@@ -1311,7 +1311,7 @@ int inventoryCarryItem(Inventory_t *item) {
     int typ = item->category_id;
     int subt = item->sub_category_id;
     bool known1p = itemSetColorlessAsIdentifed(item);
-    bool always_known1p = objectPositionOffset(item) == -1;
+    bool always_known1p = objectPositionOffset(item->category_id, item->sub_category_id) == -1;
 
     int locn;
 

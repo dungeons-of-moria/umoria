@@ -9,7 +9,7 @@
 #include "headers.h"
 #include "externs.h"
 
-static void unsample(Inventory_t *i_ptr);
+static void unsample(Inventory_t *item);
 
 char magic_item_titles[MAX_TITLES][10];
 
@@ -90,8 +90,8 @@ void magicInitializeItemNames() {
     seedResetToOldSeed();
 }
 
-int16_t objectPositionOffset(Inventory_t *item) {
-    switch (item->category_id) {
+int16_t objectPositionOffset(int category_id, int sub_category_id) {
+    switch (category_id) {
         case TV_AMULET:
             return 0;
         case TV_RING:
@@ -107,7 +107,7 @@ int16_t objectPositionOffset(Inventory_t *item) {
         case TV_POTION2:
             return 5;
         case TV_FOOD:
-            if ((item->sub_category_id & (ITEM_SINGLE_STACK_MIN - 1)) < MAX_MUSHROOMS) {
+            if ((sub_category_id & (ITEM_SINGLE_STACK_MIN - 1)) < MAX_MUSHROOMS) {
                 return 6;
             }
             return -1;
@@ -130,7 +130,7 @@ static bool isObjectKnown(int16_t id) {
 
 // Remove "Secret" symbol for identity of object
 void itemSetAsIdentified(Inventory_t *item) {
-    int16_t id = objectPositionOffset(item);
+    int16_t id = objectPositionOffset(item->category_id, item->sub_category_id);
 
     if (id < 0) {
         return;
@@ -148,7 +148,7 @@ void itemSetAsIdentified(Inventory_t *item) {
 // Items which don't have a 'color' are always known / itemSetAsIdentified(),
 // so that they can be carried in order in the inventory.
 bool itemSetColorlessAsIdentifed(Inventory_t *item) {
-    int16_t id = objectPositionOffset(item);
+    int16_t id = objectPositionOffset(item->category_id, item->sub_category_id);
 
     if (id < 0) {
         return OD_KNOWN1 != 0u;
@@ -191,18 +191,18 @@ bool itemStoreBought(Inventory_t *item) {
 }
 
 // Remove an automatically generated inscription. -CJS-
-static void unsample(Inventory_t *i_ptr) {
+static void unsample(Inventory_t *item) {
     // this also used to clear ID_DAMD flag, but I think it should remain set
-    i_ptr->identification &= ~(ID_MAGIK | ID_EMPTY);
+    item->identification &= ~(ID_MAGIK | ID_EMPTY);
 
-    int16_t id = objectPositionOffset(i_ptr);
+    int16_t id = objectPositionOffset(item->category_id, item->sub_category_id);
 
     if (id < 0) {
         return;
     }
 
     id <<= 6;
-    id += (uint8_t) (i_ptr->sub_category_id & (ITEM_SINGLE_STACK_MIN - 1));
+    id += (uint8_t) (item->sub_category_id & (ITEM_SINGLE_STACK_MIN - 1));
 
     // clear the tried flag, since it is now known
     clearObjectTriedFlag(id);
@@ -210,7 +210,7 @@ static void unsample(Inventory_t *i_ptr) {
 
 // Somethings been sampled -CJS-
 void itemSetAsTried(Inventory_t *item) {
-    int16_t id = objectPositionOffset(item);
+    int16_t id = objectPositionOffset(item->category_id, item->sub_category_id);
 
     if (id < 0) {
         return;
@@ -606,7 +606,7 @@ void itemDescription(obj_desc_t description, Inventory_t *item, bool add_prefix)
 
     tmp_str[0] = '\0';
 
-    if ((indexx = objectPositionOffset(item)) >= 0) {
+    if ((indexx = objectPositionOffset(item->category_id, item->sub_category_id)) >= 0) {
         indexx <<= 6;
         indexx += (item->sub_category_id & (ITEM_SINGLE_STACK_MIN - 1));
 
