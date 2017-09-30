@@ -462,8 +462,8 @@ int32_t rnd();
 bool saveGame();
 bool loadGame(bool &generate);
 void setFileptr(FILE *file);
-void saveHighScore(HighScore_t *score);
-void readHighScore(HighScore_t *score);
+void saveHighScore(const HighScore_t &score);
+void readHighScore(HighScore_t &score);
 
 // scores.cpp
 void recordNewHighScore();

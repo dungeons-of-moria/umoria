@@ -94,7 +94,7 @@ void recordNewHighScore() {
 
     int i = 0;
     off_t curpos = ftell(highscore_fp);
-    readHighScore(&old_entry);
+    readHighScore(old_entry);
 
     while (feof(highscore_fp) == 0) {
         if (new_entry.points >= old_entry.points) {
@@ -122,21 +122,21 @@ void recordNewHighScore() {
         }
 
         curpos = ftell(highscore_fp);
-        readHighScore(&old_entry);
+        readHighScore(old_entry);
     }
 
     if (feof(highscore_fp) != 0) {
         // write out new_entry at end of file
         (void) fseek(highscore_fp, curpos, SEEK_SET);
 
-        saveHighScore(&new_entry);
+        saveHighScore(new_entry);
     } else {
         entry = new_entry;
 
         while (feof(highscore_fp) == 0) {
             (void) fseek(highscore_fp, -(long) sizeof(HighScore_t) - (long) sizeof(char), SEEK_CUR);
 
-            saveHighScore(&entry);
+            saveHighScore(entry);
 
             // under unix, only allow one gender/race/class combo per person,
             // on single user system, allow any number of entries, but try to
@@ -156,12 +156,12 @@ void recordNewHighScore() {
             (void) fseek(highscore_fp, (long) 0, SEEK_CUR);
 
             curpos = ftell(highscore_fp);
-            readHighScore(&old_entry);
+            readHighScore(old_entry);
         }
         if (feof(highscore_fp) != 0) {
             (void) fseek(highscore_fp, curpos, SEEK_SET);
 
-            saveHighScore(&entry);
+            saveHighScore(entry);
         }
     }
 
@@ -197,7 +197,7 @@ void showScoresScreen() {
     setFileptr(highscore_fp);
 
     HighScore_t score{};
-    readHighScore(&score);
+    readHighScore(score);
 
     char input;
 
@@ -218,7 +218,7 @@ void showScoresScreen() {
             );
             putStringClearToEOL(msg, ++i, 0);
             rank++;
-            readHighScore(&score);
+            readHighScore(score);
         }
         putStringClearToEOL("Rank  Points Name              Sex Race       Class  Lvl Killed By", 0, 0);
         eraseLine(1, 0);

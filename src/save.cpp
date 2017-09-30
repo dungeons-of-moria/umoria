@@ -1196,48 +1196,48 @@ void setFileptr(FILE *file) {
     fileptr = file;
 }
 
-void saveHighScore(HighScore_t *score) {
+void saveHighScore(const HighScore_t &score) {
     DEBUG(logfile = fopen("IO_LOG", "a"));
     DEBUG(fprintf(logfile, "Saving score:\n"));
 
     // Save the encryption byte for robustness.
     wr_byte(xor_byte);
 
-    wr_long((uint32_t) score->points);
-    wr_long((uint32_t) score->birth_date);
-    wr_short((uint16_t) score->uid);
-    wr_short((uint16_t) score->mhp);
-    wr_short((uint16_t) score->chp);
-    wr_byte(score->dungeon_depth);
-    wr_byte(score->level);
-    wr_byte(score->deepest_dungeon_depth);
-    wr_byte(score->gender);
-    wr_byte(score->race);
-    wr_byte(score->character_class);
-    wr_bytes((uint8_t *) score->name, PLAYER_NAME_SIZE);
-    wr_bytes((uint8_t *) score->died_from, 25);
+    wr_long((uint32_t) score.points);
+    wr_long((uint32_t) score.birth_date);
+    wr_short((uint16_t) score.uid);
+    wr_short((uint16_t) score.mhp);
+    wr_short((uint16_t) score.chp);
+    wr_byte(score.dungeon_depth);
+    wr_byte(score.level);
+    wr_byte(score.deepest_dungeon_depth);
+    wr_byte(score.gender);
+    wr_byte(score.race);
+    wr_byte(score.character_class);
+    wr_bytes((uint8_t *) score.name, PLAYER_NAME_SIZE);
+    wr_bytes((uint8_t *) score.died_from, 25);
     DEBUG(fclose(logfile));
 }
 
-void readHighScore(HighScore_t *score) {
+void readHighScore(HighScore_t &score) {
     DEBUG(logfile = fopen("IO_LOG", "a"));
     DEBUG(fprintf(logfile, "Reading score:\n"));
 
     // Read the encryption byte.
     xor_byte = rd_byte();
 
-    score->points = rd_long();
-    score->birth_date = rd_long();
-    score->uid = rd_short();
-    score->mhp = rd_short();
-    score->chp = rd_short();
-    score->dungeon_depth = rd_byte();
-    score->level = rd_byte();
-    score->deepest_dungeon_depth = rd_byte();
-    score->gender = rd_byte();
-    score->race = rd_byte();
-    score->character_class = rd_byte();
-    rd_bytes((uint8_t *) score->name, PLAYER_NAME_SIZE);
-    rd_bytes((uint8_t *) score->died_from, 25);
+    score.points = rd_long();
+    score.birth_date = rd_long();
+    score.uid = rd_short();
+    score.mhp = rd_short();
+    score.chp = rd_short();
+    score.dungeon_depth = rd_byte();
+    score.level = rd_byte();
+    score.deepest_dungeon_depth = rd_byte();
+    score.gender = rd_byte();
+    score.race = rd_byte();
+    score.character_class = rd_byte();
+    rd_bytes((uint8_t *) score.name, PLAYER_NAME_SIZE);
+    rd_bytes((uint8_t *) score.died_from, 25);
     DEBUG(fclose(logfile));
 }
