@@ -558,7 +558,7 @@ bool spellSlowPoison();
 void playerBless(int adjustment);
 void playerDetectInvisible(int adjustment);
 void spellDestroyArea(int y, int x);
-bool spellEnchantItem(int16_t *plusses, int16_t max_bonus_limit);
+bool spellEnchantItem(int16_t &plusses, int16_t max_bonus_limit);
 bool spellRemoveCurseFromAllItems();
 bool spellRestorePlayerLevels();
 
