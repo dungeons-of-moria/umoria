@@ -462,7 +462,7 @@ static bool _save_char(char *filename) {
 }
 
 // Certain checks are omitted for the wizard. -CJS-
-bool loadGame(bool *generate) {
+bool loadGame(bool &generate) {
     int c;
     Cave_t *c_ptr;
     uint32_t time_saved = 0;
@@ -470,7 +470,7 @@ bool loadGame(bool *generate) {
     uint8_t version_min = 0;
     uint8_t patch_level = 0;
 
-    *generate = true;
+    generate = true;
     int fd = -1;
     int total_count = 0;
 
@@ -842,7 +842,7 @@ bool loadGame(bool *generate) {
             rd_monster(&monsters[i]);
         }
 
-        *generate = false; // We have restored a cave - no need to generate.
+        generate = false; // We have restored a cave - no need to generate.
 
         for (auto &store : stores) {
             Store_t *st_ptr = &store;
