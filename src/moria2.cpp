@@ -16,19 +16,19 @@ static bool damageMinusAC(uint32_t typ_dam);
 void dungeonChangeTrapVisibility(int y, int x) {
     uint8_t treasure_id = cave[y][x].treasure_id;
 
-    Inventory_t *item = &treasure_list[treasure_id];
+    Inventory_t &item = treasure_list[treasure_id];
 
-    if (item->category_id == TV_INVIS_TRAP) {
-        item->category_id = TV_VIS_TRAP;
+    if (item.category_id == TV_INVIS_TRAP) {
+        item.category_id = TV_VIS_TRAP;
         dungeonLiteSpot(y, x);
         return;
     }
 
     // change secret door to closed door
-    if (item->category_id == TV_SECRET_DOOR) {
-        item->id = OBJ_CLOSED_DOOR;
-        item->category_id = game_objects[OBJ_CLOSED_DOOR].category_id;
-        item->sprite = game_objects[OBJ_CLOSED_DOOR].sprite;
+    if (item.category_id == TV_SECRET_DOOR) {
+        item.id = OBJ_CLOSED_DOOR;
+        item.category_id = game_objects[OBJ_CLOSED_DOOR].category_id;
+        item.sprite = game_objects[OBJ_CLOSED_DOOR].sprite;
         dungeonLiteSpot(y, x);
     }
 }
@@ -60,13 +60,13 @@ void dungeonSearch(int y, int x, int chance) {
 
             // Search for hidden objects
 
-            Inventory_t *item = &treasure_list[cave[i][j].treasure_id];
+            Inventory_t &item = treasure_list[cave[i][j].treasure_id];
 
-            if (item->category_id == TV_INVIS_TRAP) {
+            if (item.category_id == TV_INVIS_TRAP) {
                 // Trap on floor?
 
                 obj_desc_t description = {'\0'};
-                itemDescription(description, item, true);
+                itemDescription(description, &item, true);
 
                 obj_desc_t msg = {'\0'};
                 (void) sprintf(msg, "You have found %s", description);
@@ -74,20 +74,20 @@ void dungeonSearch(int y, int x, int chance) {
 
                 dungeonChangeTrapVisibility(i, j);
                 playerEndRunning();
-            } else if (item->category_id == TV_SECRET_DOOR) {
+            } else if (item.category_id == TV_SECRET_DOOR) {
                 // Secret door?
 
                 printMessage("You have found a secret door.");
 
                 dungeonChangeTrapVisibility(i, j);
                 playerEndRunning();
-            } else if (item->category_id == TV_CHEST) {
+            } else if (item.category_id == TV_CHEST) {
                 // Chest is trapped?
 
                 // mask out the treasure bits
-                if ((item->flags & CH_TRAPPED) > 1) {
-                    if (!spellItemIdentified(item)) {
-                        spellItemIdentifyAndRemoveRandomInscription(item);
+                if ((item.flags & CH_TRAPPED) > 1) {
+                    if (!spellItemIdentified(&item)) {
+                        spellItemIdentifyAndRemoveRandomInscription(&item);
                         printMessage("You have discovered a trap on the chest!");
                     } else {
                         printMessage("The chest is trapped!");
