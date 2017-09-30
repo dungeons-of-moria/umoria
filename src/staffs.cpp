@@ -189,25 +189,25 @@ void useStaff() {
     // From here on player uses up a turn
     player_free_turn = false;
 
-    Inventory_t *item = &inventory[item_id];
+    Inventory_t &item = inventory[item_id];
 
-    if (!staffPlayerCanUse(item)) {
+    if (!staffPlayerCanUse(&item)) {
         return;
     }
 
-    bool identified = staffDischarge(item);
+    bool identified = staffDischarge(&item);
 
     if (identified) {
-        if (!itemSetColorlessAsIdentified(item->category_id, item->sub_category_id, item->identification)) {
+        if (!itemSetColorlessAsIdentified(item.category_id, item.sub_category_id, item.identification)) {
             // round half-way case up
-            py.misc.exp += (item->depth_first_found + (py.misc.level >> 1)) / py.misc.level;
+            py.misc.exp += (item.depth_first_found + (py.misc.level >> 1)) / py.misc.level;
 
             displayCharacterExperience();
 
             itemIdentify(&item_id);
         }
-    } else if (!itemSetColorlessAsIdentified(item->category_id, item->sub_category_id, item->identification)) {
-        itemSetAsTried(item);
+    } else if (!itemSetColorlessAsIdentified(item.category_id, item.sub_category_id, item.identification)) {
+        itemSetAsTried(&item);
     }
 
     itemChargesRemainingDescription(item_id);
