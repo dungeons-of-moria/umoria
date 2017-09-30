@@ -307,29 +307,29 @@ void quaff() {
     player_free_turn = false;
 
     bool identified;
-    Inventory_t *item = &inventory[item_id];
+    Inventory_t &item = inventory[item_id];
 
-    if (item->flags == 0) {
+    if (item.flags == 0) {
         printMessage("You feel less thirsty.");
         identified = true;
     } else {
-        identified = playerDrinkPotion(item->flags, item->category_id);
+        identified = playerDrinkPotion(item.flags, item.category_id);
     }
 
     if (identified) {
-        if (!itemSetColorlessAsIdentified(item->category_id, item->sub_category_id, item->identification)) {
+        if (!itemSetColorlessAsIdentified(item.category_id, item.sub_category_id, item.identification)) {
             // round half-way case up
-            py.misc.exp += (item->depth_first_found + (py.misc.level >> 1)) / py.misc.level;
+            py.misc.exp += (item.depth_first_found + (py.misc.level >> 1)) / py.misc.level;
             displayCharacterExperience();
 
             itemIdentify(&item_id);
-            item = &inventory[item_id];
+            item = inventory[item_id];
         }
-    } else if (!itemSetColorlessAsIdentified(item->category_id, item->sub_category_id, item->identification)) {
-        itemSetAsTried(item);
+    } else if (!itemSetColorlessAsIdentified(item.category_id, item.sub_category_id, item.identification)) {
+        itemSetAsTried(&item);
     }
 
-    playerIngestFood(item->misc_use);
+    playerIngestFood(item.misc_use);
     itemTypeRemainingCountDescription(item_id);
     inventoryDestroyItem(item_id);
 }
