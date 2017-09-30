@@ -385,7 +385,7 @@ int castSpellGetId(const char *prompt, int item_id, int &spell_id, int &spell_ch
 // on the TVAL of the object. Traps are set off, money and most objects
 // are picked up. Some objects, such as open doors, just sit there.
 static void carry(int y, int x, bool pickup) {
-    Inventory_t *item = &treasure_list[cave[y][x].treasure_id];
+    Inventory_t &item = treasure_list[cave[y][x].treasure_id];
 
     int tileFlags = treasure_list[cave[y][x].treasure_id].category_id;
 
@@ -404,10 +404,10 @@ static void carry(int y, int x, bool pickup) {
 
     // There's GOLD in them thar hills!
     if (tileFlags == TV_GOLD) {
-        py.misc.au += item->cost;
+        py.misc.au += item.cost;
 
-        itemDescription(description, item, true);
-        (void) sprintf(msg, "You have found %d gold pieces worth of %s", item->cost, description);
+        itemDescription(description, &item, true);
+        (void) sprintf(msg, "You have found %d gold pieces worth of %s", item.cost, description);
 
         printCharacterGoldValue();
         (void) dungeonDeleteObject(y, x);
@@ -418,10 +418,10 @@ static void carry(int y, int x, bool pickup) {
     }
 
     // Too many objects?
-    if (inventoryCanCarryItemCount(item)) {
+    if (inventoryCanCarryItemCount(&item)) {
         // Okay,  pick it up
         if (pickup && config.prompt_to_pickup) {
-            itemDescription(description, item, true);
+            itemDescription(description, &item, true);
 
             // change the period to a question mark
             description[strlen(description) - 1] = '?';
@@ -430,8 +430,8 @@ static void carry(int y, int x, bool pickup) {
         }
 
         // Check to see if it will change the players speed.
-        if (pickup && !inventoryCanCarryItem(item)) {
-            itemDescription(description, item, true);
+        if (pickup && !inventoryCanCarryItem(&item)) {
+            itemDescription(description, &item, true);
 
             // change the period to a question mark
             description[strlen(description) - 1] = '?';
@@ -441,7 +441,7 @@ static void carry(int y, int x, bool pickup) {
 
         // Attempt to pick up an object.
         if (pickup) {
-            int locn = inventoryCarryItem(item);
+            int locn = inventoryCarryItem(&item);
 
             itemDescription(description, &inventory[locn], true);
             (void) sprintf(msg, "You have %s (%c)", description, locn + 'a');
@@ -449,7 +449,7 @@ static void carry(int y, int x, bool pickup) {
             (void) dungeonDeleteObject(y, x);
         }
     } else {
-        itemDescription(description, item, true);
+        itemDescription(description, &item, true);
         (void) sprintf(msg, "You can't carry %s", description);
         printMessage(msg);
     }
@@ -796,24 +796,24 @@ static int playerCalculateBaseToHit(bool creatureLit, int tot_tohit) {
 static void playerAttackMonster(int y, int x) {
     int creature_id = cave[y][x].creature_id;
 
-    Monster_t *monster = &monsters[creature_id];
-    Creature_t *creature = &creatures_list[monster->creature_id];
-    Inventory_t *item = &inventory[EQUIPMENT_WIELD];
+    Monster_t &monster = monsters[creature_id];
+    Creature_t &creature = creatures_list[monster.creature_id];
+    Inventory_t &item = inventory[EQUIPMENT_WIELD];
 
-    monster->sleep_count = 0;
+    monster.sleep_count = 0;
 
     // Does the player know what he's fighting?
     vtype_t name = {'\0'};
-    if (!monster->lit) {
+    if (!monster.lit) {
         (void) strcpy(name, "it");
     } else {
-        (void) sprintf(name, "the %s", creature->name);
+        (void) sprintf(name, "the %s", creature.name);
     }
 
     int blows, total_to_hit;
-    playerCalculateToHitBlows(item->category_id, item->weight, blows, total_to_hit);
+    playerCalculateToHitBlows(item.category_id, item.weight, blows, total_to_hit);
 
-    int base_to_hit = playerCalculateBaseToHit(monster->lit, total_to_hit);
+    int base_to_hit = playerCalculateBaseToHit(monster.lit, total_to_hit);
 
     int damage;
     vtype_t msg = {'\0'};
@@ -821,7 +821,7 @@ static void playerAttackMonster(int y, int x) {
     // Loop for number of blows, trying to hit the critter.
     // Note: blows will always be greater than 0 at the start of the loop -MRC-
     for (int i = blows; i > 0; i--) {
-        if (!playerTestBeingHit(base_to_hit, (int) py.misc.level, total_to_hit, (int) creature->ac, CLASS_BTH)) {
+        if (!playerTestBeingHit(base_to_hit, (int) py.misc.level, total_to_hit, (int) creature.ac, CLASS_BTH)) {
             (void) sprintf(msg, "You miss %s.", name);
             printMessage(msg);
             continue;
@@ -830,10 +830,10 @@ static void playerAttackMonster(int y, int x) {
         (void) sprintf(msg, "You hit %s.", name);
         printMessage(msg);
 
-        if (item->category_id != TV_NOTHING) {
-            damage = dicePlayerDamageRoll(item->damage);
-            damage = itemMagicAbilityDamage(item, damage, monster->creature_id);
-            damage = playerWeaponCriticalBlow((int) item->weight, total_to_hit, damage, CLASS_BTH);
+        if (item.category_id != TV_NOTHING) {
+            damage = dicePlayerDamageRoll(item.damage);
+            damage = itemMagicAbilityDamage(&item, damage, monster.creature_id);
+            damage = playerWeaponCriticalBlow((int) item.weight, total_to_hit, damage, CLASS_BTH);
         } else {
             // Bare hands!?
             damage = diceDamageRoll(1, 1);
@@ -850,20 +850,20 @@ static void playerAttackMonster(int y, int x) {
 
             printMessage("Your hands stop glowing.");
 
-            if (((creature->defenses & CD_NO_SLEEP) != 0) || randomNumber(MON_MAX_LEVELS) < creature->level) {
+            if (((creature.defenses & CD_NO_SLEEP) != 0) || randomNumber(MON_MAX_LEVELS) < creature.level) {
                 (void) sprintf(msg, "%s is unaffected.", name);
             } else {
                 (void) sprintf(msg, "%s appears confused.", name);
-                if (monster->confused_amount != 0u) {
-                    monster->confused_amount += 3;
+                if (monster.confused_amount != 0u) {
+                    monster.confused_amount += 3;
                 } else {
-                    monster->confused_amount = (uint8_t) (2 + randomNumber(16));
+                    monster.confused_amount = (uint8_t) (2 + randomNumber(16));
                 }
             }
             printMessage(msg);
 
-            if (monster->lit && randomNumber(4) == 1) {
-                creature_recall[monster->creature_id].defenses |= creature->defenses & CD_NO_SLEEP;
+            if (monster.lit && randomNumber(4) == 1) {
+                creature_recall[monster.creature_id].defenses |= creature.defenses & CD_NO_SLEEP;
             }
         }
 
@@ -877,15 +877,15 @@ static void playerAttackMonster(int y, int x) {
         }
 
         // Use missiles up
-        if (item->category_id >= TV_SLING_AMMO && item->category_id <= TV_SPIKE) {
-            item->items_count--;
-            inventory_weight -= item->weight;
+        if (item.category_id >= TV_SLING_AMMO && item.category_id <= TV_SPIKE) {
+            item.items_count--;
+            inventory_weight -= item.weight;
             py.flags.status |= PY_STR_WGT;
 
-            if (item->items_count == 0) {
+            if (item.items_count == 0) {
                 equipment_count--;
-                playerAdjustBonusesForItem(item, -1);
-                inventoryItemCopyTo(OBJ_NOTHING, item);
+                playerAdjustBonusesForItem(&item, -1);
+                inventoryItemCopyTo(OBJ_NOTHING, &item);
                 playerRecalculateBonuses();
             }
         }
@@ -1122,49 +1122,49 @@ static int16_t playerLockPickingSkill() {
 }
 
 static void openClosedDoor(int y, int x) {
-    Cave_t *tile = &cave[y][x];
-    Inventory_t *item = &treasure_list[tile->treasure_id];
+    Cave_t &tile = cave[y][x];
+    Inventory_t &item = treasure_list[tile.treasure_id];
 
-    if (item->misc_use > 0) {
+    if (item.misc_use > 0) {
         // It's locked.
 
         if (py.flags.confused > 0) {
             printMessage("You are too confused to pick the lock.");
-        } else if (playerLockPickingSkill() - item->misc_use > randomNumber(100)) {
+        } else if (playerLockPickingSkill() - item.misc_use > randomNumber(100)) {
             printMessage("You have picked the lock.");
             py.misc.exp++;
             displayCharacterExperience();
-            item->misc_use = 0;
+            item.misc_use = 0;
         } else {
             printMessageNoCommandInterrupt("You failed to pick the lock.");
         }
-    } else if (item->misc_use < 0) {
+    } else if (item.misc_use < 0) {
         // It's stuck
 
         printMessage("It appears to be stuck.");
     }
 
-    if (item->misc_use == 0) {
-        inventoryItemCopyTo(OBJ_OPEN_DOOR, &treasure_list[tile->treasure_id]);
-        tile->feature_id = TILE_CORR_FLOOR;
+    if (item.misc_use == 0) {
+        inventoryItemCopyTo(OBJ_OPEN_DOOR, &treasure_list[tile.treasure_id]);
+        tile.feature_id = TILE_CORR_FLOOR;
         dungeonLiteSpot(y, x);
         command_count = 0;
     }
 }
 
 static void openClosedChest(int y, int x) {
-    Cave_t *tile = &cave[y][x];
-    Inventory_t *item = &treasure_list[tile->treasure_id];
+    Cave_t &tile = cave[y][x];
+    Inventory_t &item = treasure_list[tile.treasure_id];
 
     bool success = false;
 
-    if ((CH_LOCKED & item->flags) != 0u) {
+    if ((CH_LOCKED & item.flags) != 0u) {
         if (py.flags.confused > 0) {
             printMessage("You are too confused to pick the lock.");
-        } else if (playerLockPickingSkill() - item->depth_first_found > randomNumber(100)) {
+        } else if (playerLockPickingSkill() - item.depth_first_found > randomNumber(100)) {
             printMessage("You have picked the lock.");
 
-            py.misc.exp += item->depth_first_found;
+            py.misc.exp += item.depth_first_found;
             displayCharacterExperience();
 
             success = true;
@@ -1176,29 +1176,29 @@ static void openClosedChest(int y, int x) {
     }
 
     if (success) {
-        item->flags &= ~CH_LOCKED;
-        item->special_name_id = SN_EMPTY;
-        spellItemIdentifyAndRemoveRandomInscription(item);
-        item->cost = 0;
+        item.flags &= ~CH_LOCKED;
+        item.special_name_id = SN_EMPTY;
+        spellItemIdentifyAndRemoveRandomInscription(&item);
+        item.cost = 0;
     }
 
     // Was chest still trapped?
-    if ((CH_LOCKED & item->flags) != 0) {
+    if ((CH_LOCKED & item.flags) != 0) {
         return;
     }
 
     // Oh, yes it was...   (Snicker)
     chestTrap(y, x);
 
-    if (tile->treasure_id != 0) {
+    if (tile.treasure_id != 0) {
         // Chest treasure is allocated as if a creature had been killed.
         // clear the cursed chest/monster win flag, so that people
         // can not win by opening a cursed chest
-        treasure_list[tile->treasure_id].flags &= ~TR_CURSED;
+        treasure_list[tile.treasure_id].flags &= ~TR_CURSED;
 
-        (void) monsterDeath(y, x, treasure_list[tile->treasure_id].flags);
+        (void) monsterDeath(y, x, treasure_list[tile.treasure_id].flags);
 
-        treasure_list[tile->treasure_id].flags = 0;
+        treasure_list[tile.treasure_id].flags = 0;
     }
 }
 
@@ -1216,15 +1216,15 @@ void objectOpen() {
 
     bool no_object = false;
 
-    Cave_t *tile = &cave[y][x];
-    Inventory_t *item = &treasure_list[tile->treasure_id];
+    Cave_t &tile = cave[y][x];
+    Inventory_t &item = treasure_list[tile.treasure_id];
 
-    if (tile->creature_id > 1 && tile->treasure_id != 0 && (item->category_id == TV_CLOSED_DOOR || item->category_id == TV_CHEST)) {
-        objectBlockedByMonster(tile->creature_id);
-    } else if (tile->treasure_id != 0) {
-        if (item->category_id == TV_CLOSED_DOOR) {
+    if (tile.creature_id > 1 && tile.treasure_id != 0 && (item.category_id == TV_CLOSED_DOOR || item.category_id == TV_CHEST)) {
+        objectBlockedByMonster(tile.creature_id);
+    } else if (tile.treasure_id != 0) {
+        if (item.category_id == TV_CLOSED_DOOR) {
             openClosedDoor(y, x);
-        } else if (item->category_id == TV_CHEST) {
+        } else if (item.category_id == TV_CHEST) {
             openClosedChest(y, x);
         } else {
             no_object = true;
@@ -1251,23 +1251,23 @@ void dungeonCloseDoor() {
     int x = char_col;
     (void) playerMovePosition(dir, y, x);
 
-    Cave_t *tile = &cave[y][x];
-    Inventory_t *item = &treasure_list[tile->treasure_id];
+    Cave_t &tile = cave[y][x];
+    Inventory_t &item = treasure_list[tile.treasure_id];
 
     bool no_object = false;
 
-    if (tile->treasure_id != 0) {
-        if (item->category_id == TV_OPEN_DOOR) {
-            if (tile->creature_id == 0) {
-                if (item->misc_use == 0) {
-                    inventoryItemCopyTo(OBJ_CLOSED_DOOR, item);
-                    tile->feature_id = TILE_BLOCKED_FLOOR;
+    if (tile.treasure_id != 0) {
+        if (item.category_id == TV_OPEN_DOOR) {
+            if (tile.creature_id == 0) {
+                if (item.misc_use == 0) {
+                    inventoryItemCopyTo(OBJ_CLOSED_DOOR, &item);
+                    tile.feature_id = TILE_BLOCKED_FLOOR;
                     dungeonLiteSpot(y, x);
                 } else {
                     printMessage("The door appears to be broken.");
                 }
             } else {
-                objectBlockedByMonster(tile->creature_id);
+                objectBlockedByMonster(tile.creature_id);
             }
         } else {
             no_object = true;
