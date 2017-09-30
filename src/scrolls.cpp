@@ -88,21 +88,21 @@ static int inventoryItemIdOfCursedEquipment() {
 }
 
 static bool scrollEnchantWeaponToHit() {
-    Inventory_t *item = &inventory[EQUIPMENT_WIELD];
+    Inventory_t &item = inventory[EQUIPMENT_WIELD];
 
-    if (item->category_id == TV_NOTHING) {
+    if (item.category_id == TV_NOTHING) {
         return false;
     }
 
     obj_desc_t msg = {'\0'};
     obj_desc_t desc = {'\0'};
-    itemDescription(desc, item, false);
+    itemDescription(desc, &item, false);
 
     (void) sprintf(msg, "Your %s glows faintly!", desc);
     printMessage(msg);
 
-    if (spellEnchantItem(item->to_hit, 10)) {
-        item->flags &= ~TR_CURSED;
+    if (spellEnchantItem(item.to_hit, 10)) {
+        item.flags &= ~TR_CURSED;
         playerRecalculateBonuses();
     } else {
         printMessage("The enchantment fails.");
@@ -112,31 +112,31 @@ static bool scrollEnchantWeaponToHit() {
 }
 
 static bool scrollEnchantWeaponToDamage() {
-    Inventory_t *item = &inventory[EQUIPMENT_WIELD];
+    Inventory_t &item = inventory[EQUIPMENT_WIELD];
 
-    if (item->category_id == TV_NOTHING) {
+    if (item.category_id == TV_NOTHING) {
         return false;
     }
 
     obj_desc_t msg = {'\0'};
     obj_desc_t desc = {'\0'};
-    itemDescription(desc, item, false);
+    itemDescription(desc, &item, false);
 
     (void) sprintf(msg, "Your %s glows faintly!", desc);
     printMessage(msg);
 
     int16_t scroll_type;
 
-    if (item->category_id >= TV_HAFTED && item->category_id <= TV_DIGGING) {
-        scroll_type = item->damage[0] * item->damage[1];
+    if (item.category_id >= TV_HAFTED && item.category_id <= TV_DIGGING) {
+        scroll_type = item.damage[0] * item.damage[1];
     } else {
         // Bows' and arrows' enchantments should not be
         // limited by their low base damages
         scroll_type = 10;
     }
 
-    if (spellEnchantItem(item->to_damage, scroll_type)) {
-        item->flags &= ~TR_CURSED;
+    if (spellEnchantItem(item.to_damage, scroll_type)) {
+        item.flags &= ~TR_CURSED;
         playerRecalculateBonuses();
     } else {
         printMessage("The enchantment fails.");
@@ -152,17 +152,17 @@ static bool scrollEnchantItemToAC() {
         return false;
     }
 
-    Inventory_t *item = &inventory[item_id];
+    Inventory_t &item = inventory[item_id];
 
     obj_desc_t msg = {'\0'};
     obj_desc_t desc = {'\0'};
-    itemDescription(desc, item, false);
+    itemDescription(desc, &item, false);
 
     (void) sprintf(msg, "Your %s glows faintly!", desc);
     printMessage(msg);
 
-    if (spellEnchantItem(item->to_ac, 10)) {
-        item->flags &= ~TR_CURSED;
+    if (spellEnchantItem(item.to_ac, 10)) {
+        item.flags &= ~TR_CURSED;
         playerRecalculateBonuses();
     } else {
         printMessage("The enchantment fails.");
@@ -180,10 +180,10 @@ static int scrollIdentifyItem(int item_id, bool *is_used_up) {
     // to move to a different place.  Check for that here.  It can
     // move arbitrarily far if an identify scroll was used on
     // another identify scroll, but it always moves down.
-    Inventory_t *item = &inventory[item_id];
-    while (item_id > 0 && (item->category_id != TV_SCROLL1 || item->flags != 0x00000008)) {
+    Inventory_t &item = inventory[item_id];
+    while (item_id > 0 && (item.category_id != TV_SCROLL1 || item.flags != 0x00000008)) {
         item_id--;
-        item = &inventory[item_id];
+        item = inventory[item_id];
     }
 
     return item_id;
@@ -227,15 +227,15 @@ static bool scrollConfuseMonster() {
 }
 
 static bool scrollEnchantWeapon() {
-    Inventory_t *item = &inventory[EQUIPMENT_WIELD];
+    Inventory_t &item = inventory[EQUIPMENT_WIELD];
 
-    if (item->category_id == TV_NOTHING) {
+    if (item.category_id == TV_NOTHING) {
         return false;
     }
 
     obj_desc_t msg = {'\0'};
     obj_desc_t desc = {'\0'};
-    itemDescription(desc, item, false);
+    itemDescription(desc, &item, false);
 
     (void) sprintf(msg, "Your %s glows brightly!", desc);
     printMessage(msg);
@@ -243,15 +243,15 @@ static bool scrollEnchantWeapon() {
     bool enchanted = false;
 
     for (int i = 0; i < randomNumber(2); i++) {
-        if (spellEnchantItem(item->to_hit, 10)) {
+        if (spellEnchantItem(item.to_hit, 10)) {
             enchanted = true;
         }
     }
 
     int16_t scroll_type;
 
-    if (item->category_id >= TV_HAFTED && item->category_id <= TV_DIGGING) {
-        scroll_type = item->damage[0] * item->damage[1];
+    if (item.category_id >= TV_HAFTED && item.category_id <= TV_DIGGING) {
+        scroll_type = item.damage[0] * item.damage[1];
     } else {
         // Bows' and arrows' enchantments should not be limited
         // by their low base damages
@@ -259,13 +259,13 @@ static bool scrollEnchantWeapon() {
     }
 
     for (int i = 0; i < randomNumber(2); i++) {
-        if (spellEnchantItem(item->to_damage, scroll_type)) {
+        if (spellEnchantItem(item.to_damage, scroll_type)) {
             enchanted = true;
         }
     }
 
     if (enchanted) {
-        item->flags &= ~TR_CURSED;
+        item.flags &= ~TR_CURSED;
         playerRecalculateBonuses();
     } else {
         printMessage("The enchantment fails.");
@@ -275,30 +275,30 @@ static bool scrollEnchantWeapon() {
 }
 
 static bool scrollCurseWeapon() {
-    Inventory_t *item = &inventory[EQUIPMENT_WIELD];
+    Inventory_t &item = inventory[EQUIPMENT_WIELD];
 
-    if (item->category_id == TV_NOTHING) {
+    if (item.category_id == TV_NOTHING) {
         return false;
     }
 
     obj_desc_t msg = {'\0'};
     obj_desc_t desc = {'\0'};
-    itemDescription(desc, item, false);
+    itemDescription(desc, &item, false);
 
     (void) sprintf(msg, "Your %s glows black, fades.", desc);
     printMessage(msg);
 
-    itemRemoveMagicNaming(item);
+    itemRemoveMagicNaming(&item);
 
-    item->to_hit = (int16_t) (-randomNumber(5) - randomNumber(5));
-    item->to_damage = (int16_t) (-randomNumber(5) - randomNumber(5));
-    item->to_ac = 0;
+    item.to_hit = (int16_t) (-randomNumber(5) - randomNumber(5));
+    item.to_damage = (int16_t) (-randomNumber(5) - randomNumber(5));
+    item.to_ac = 0;
 
     // Must call playerAdjustBonusesForItem() before set (clear) flags, and
     // must call playerRecalculateBonuses() after set (clear) flags, so that
     // all attributes will be properly turned off.
-    playerAdjustBonusesForItem(item, -1);
-    item->flags = TR_CURSED;
+    playerAdjustBonusesForItem(&item, -1);
+    item.flags = TR_CURSED;
     playerRecalculateBonuses();
 
     return true;
@@ -311,11 +311,11 @@ static bool scrollEnchantArmor() {
         return false;
     }
 
-    Inventory_t *item = &inventory[item_id];
+    Inventory_t &item = inventory[item_id];
 
     obj_desc_t msg = {'\0'};
     obj_desc_t desc = {'\0'};
-    itemDescription(desc, item, false);
+    itemDescription(desc, &item, false);
 
     (void) sprintf(msg, "Your %s glows brightly!", desc);
     printMessage(msg);
@@ -323,13 +323,13 @@ static bool scrollEnchantArmor() {
     bool enchanted = false;
 
     for (int i = 0; i < randomNumber(2) + 1; i++) {
-        if (spellEnchantItem(item->to_ac, 10)) {
+        if (spellEnchantItem(item.to_ac, 10)) {
             enchanted = true;
         }
     }
 
     if (enchanted) {
-        item->flags &= ~TR_CURSED;
+        item.flags &= ~TR_CURSED;
         playerRecalculateBonuses();
     } else {
         printMessage("The enchantment fails.");
@@ -373,21 +373,21 @@ static bool scrollCurseArmor() {
         return false;
     }
 
-    Inventory_t *item = &inventory[item_id];
+    Inventory_t &item = inventory[item_id];
 
     obj_desc_t msg = {'\0'};
     obj_desc_t desc = {'\0'};
-    itemDescription(desc, item, false);
+    itemDescription(desc, &item, false);
 
     (void) sprintf(msg, "Your %s glows black, fades.", desc);
     printMessage(msg);
 
-    itemRemoveMagicNaming(item);
+    itemRemoveMagicNaming(&item);
 
-    item->flags = TR_CURSED;
-    item->to_hit = 0;
-    item->to_damage = 0;
-    item->to_ac = (int16_t) (-randomNumber(5) - randomNumber(5));
+    item.flags = TR_CURSED;
+    item.to_hit = 0;
+    item.to_damage = 0;
+    item.to_ac = (int16_t) (-randomNumber(5) - randomNumber(5));
 
     playerRecalculateBonuses();
 
@@ -433,13 +433,13 @@ void readScroll() {
     bool used_up = true;
     bool identified = false;
 
-    Inventory_t *item = &inventory[item_id];
-    uint32_t item_flags = item->flags;
+    Inventory_t &item = inventory[item_id];
+    uint32_t item_flags = item.flags;
 
     while (item_flags != 0) {
         int scroll_type = getAndClearFirstBit(item_flags) + 1;
 
-        if (item->category_id == TV_SCROLL2) {
+        if (item.category_id == TV_SCROLL2) {
             scroll_type += 32;
         }
 
@@ -590,18 +590,18 @@ void readScroll() {
         }
     }
 
-    item = &inventory[item_id];
+    item = inventory[item_id];
 
     if (identified) {
-        if (!itemSetColorlessAsIdentified(item->category_id, item->sub_category_id, item->identification)) {
+        if (!itemSetColorlessAsIdentified(item.category_id, item.sub_category_id, item.identification)) {
             // round half-way case up
-            py.misc.exp += (item->depth_first_found + (py.misc.level >> 1)) / py.misc.level;
+            py.misc.exp += (item.depth_first_found + (py.misc.level >> 1)) / py.misc.level;
             displayCharacterExperience();
 
             itemIdentify(&item_id);
         }
-    } else if (!itemSetColorlessAsIdentified(item->category_id, item->sub_category_id, item->identification)) {
-        itemSetAsTried(item);
+    } else if (!itemSetColorlessAsIdentified(item.category_id, item.sub_category_id, item.identification)) {
+        itemSetAsTried(&item);
     }
 
     if (used_up) {
