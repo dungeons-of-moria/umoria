@@ -1031,7 +1031,7 @@ static char originalCommands(char command) {
         case '$':
             break;
         case '.':
-            if (getDirectionWithMemory(CNIL, &direction)) {
+            if (getDirectionWithMemory(CNIL, direction)) {
                 switch (direction) {
                     case 1:
                         command = 'B';
@@ -1121,7 +1121,7 @@ static char originalCommands(char command) {
             command = '#';
             break;
         case 'T':
-            if (getDirectionWithMemory(CNIL, &direction)) {
+            if (getDirectionWithMemory(CNIL, direction)) {
                 switch (direction) {
                     case 1:
                         command = CTRL_KEY('B');
@@ -1249,7 +1249,7 @@ static bool moveWithoutPickup(char *command) {
     // Save current command_count as getDirectionWithMemory() may change it
     int countSave = command_count;
 
-    if (getDirectionWithMemory(CNIL, &dir_val)) {
+    if (getDirectionWithMemory(CNIL, dir_val)) {
         // Restore command_count
         command_count = countSave;
 
@@ -1414,7 +1414,7 @@ static void commandLocateOnMap() {
 
         (void) sprintf(out_val, "Map sector [%d,%d], which is%s your sector. Look which direction?", p_y, p_x, tmp_str);
 
-        if (!getDirectionWithMemory(out_val, &dir_val)) {
+        if (!getDirectionWithMemory(out_val, dir_val)) {
             break;
         }
 
@@ -2136,7 +2136,7 @@ static void dungeonJamDoor() {
     int x = char_col;
 
     int direction;
-    if (!getDirectionWithMemory(CNIL, &direction)) {
+    if (!getDirectionWithMemory(CNIL, direction)) {
         return;
     }
     (void) playerMovePosition(direction, y, x);

@@ -73,7 +73,7 @@ static void playerRecitePrayer(int prayer_type) {
             (void) spellSlowPoison();
             break;
         case 9:
-            if (getDirectionWithMemory(CNIL, &dir)) {
+            if (getDirectionWithMemory(CNIL, dir)) {
                 (void) spellConfuseMonster(char_row, char_col, dir);
             }
             break;
@@ -108,7 +108,7 @@ static void playerRecitePrayer(int prayer_type) {
             (void) playerCurePoison();
             break;
         case 18:
-            if (getDirectionWithMemory(CNIL, &dir)) {
+            if (getDirectionWithMemory(CNIL, dir)) {
                 spellFireBall(char_row, char_col, dir, (diceDamageRoll(3, 6) + py.misc.level), GF_HOLY_ORB, "Black Sphere");
             }
             break;

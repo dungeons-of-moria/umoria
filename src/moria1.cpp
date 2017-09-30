@@ -1619,12 +1619,12 @@ static char mapRoguelikeKeysToKeypad(char command) {
 
 // Prompts for a direction -RAK-
 // Direction memory added, for repeated commands.  -CJS
-bool getDirectionWithMemory(char *prompt, int *direction) {
+bool getDirectionWithMemory(char *prompt, int &direction) {
     static char prev_dir; // Direction memory. -CJS-
 
     // used in counted commands. -CJS-
     if (use_last_direction) {
-        *direction = prev_dir;
+        direction = prev_dir;
         return true;
     }
 
@@ -1651,7 +1651,7 @@ bool getDirectionWithMemory(char *prompt, int *direction) {
 
         if (command >= '1' && command <= '9' && command != '5') {
             prev_dir = command - '0';
-            *direction = prev_dir;
+            direction = prev_dir;
             return true;
         }
 
@@ -1661,7 +1661,7 @@ bool getDirectionWithMemory(char *prompt, int *direction) {
 
 // Similar to getDirectionWithMemory(), except that no memory exists,
 // and it is allowed to enter the null direction. -CJS-
-bool getAllDirections(const char *prompt, int *direction) {
+bool getAllDirections(const char *prompt, int &direction) {
     char command;
 
     while (true) {
@@ -1675,7 +1675,7 @@ bool getAllDirections(const char *prompt, int *direction) {
         }
 
         if (command >= '1' && command <= '9') {
-            *direction = command - '0';
+            direction = command - '0';
             return true;
         }
 

@@ -138,7 +138,7 @@ void wandAim() {
     player_free_turn = false;
 
     int direction;
-    if (!getDirectionWithMemory(CNIL, &direction)) {
+    if (!getDirectionWithMemory(CNIL, direction)) {
         return;
     }
 

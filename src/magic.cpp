@@ -38,7 +38,7 @@ static void castSpell(int spellID) {
 
     switch (spellID) {
         case 1:
-            if (getDirectionWithMemory(CNIL, &dir)) {
+            if (getDirectionWithMemory(CNIL, dir)) {
                 spellFireBolt(char_row, char_col, dir, diceDamageRoll(2, 6), GF_MAGIC_MISSILE, spell_names[0]);
             }
             break;
@@ -59,17 +59,17 @@ static void castSpell(int spellID) {
             (void) dungeonDetectTrapOnPanel();
             break;
         case 7:
-            if (getDirectionWithMemory(CNIL, &dir)) {
+            if (getDirectionWithMemory(CNIL, dir)) {
                 spellFireBall(char_row, char_col, dir, 12, GF_POISON_GAS, spell_names[6]);
             }
             break;
         case 8:
-            if (getDirectionWithMemory(CNIL, &dir)) {
+            if (getDirectionWithMemory(CNIL, dir)) {
                 (void) spellConfuseMonster(char_row, char_col, dir);
             }
             break;
         case 9:
-            if (getDirectionWithMemory(CNIL, &dir)) {
+            if (getDirectionWithMemory(CNIL, dir)) {
                 spellFireBolt(char_row, char_col, dir, diceDamageRoll(4, 8), GF_LIGHTNING, spell_names[8]);
             }
             break;
@@ -77,7 +77,7 @@ static void castSpell(int spellID) {
             (void) spellDestroyAdjacentDoorsTraps();
             break;
         case 11:
-            if (getDirectionWithMemory(CNIL, &dir)) {
+            if (getDirectionWithMemory(CNIL, dir)) {
                 (void) spellSleepMonster(char_row, char_col, dir);
             }
             break;
@@ -93,12 +93,12 @@ static void castSpell(int spellID) {
             }
             break;
         case 15:
-            if (getDirectionWithMemory(CNIL, &dir)) {
+            if (getDirectionWithMemory(CNIL, dir)) {
                 spellFireBolt(char_row, char_col, dir, diceDamageRoll(6, 8), GF_FROST, spell_names[14]);
             }
             break;
         case 16:
-            if (getDirectionWithMemory(CNIL, &dir)) {
+            if (getDirectionWithMemory(CNIL, dir)) {
                 (void) spellWallToMud(char_row, char_col, dir);
             }
             break;
@@ -112,7 +112,7 @@ static void castSpell(int spellID) {
             (void) monsterSleep(char_row, char_col);
             break;
         case 20:
-            if (getDirectionWithMemory(CNIL, &dir)) {
+            if (getDirectionWithMemory(CNIL, dir)) {
                 (void) spellPolymorphMonster(char_row, char_col, dir);
             }
             break;
@@ -123,17 +123,17 @@ static void castSpell(int spellID) {
             (void) spellSleepAllMonsters();
             break;
         case 23:
-            if (getDirectionWithMemory(CNIL, &dir)) {
+            if (getDirectionWithMemory(CNIL, dir)) {
                 spellFireBolt(char_row, char_col, dir, diceDamageRoll(9, 8), GF_FIRE, spell_names[22]);
             }
             break;
         case 24:
-            if (getDirectionWithMemory(CNIL, &dir)) {
+            if (getDirectionWithMemory(CNIL, dir)) {
                 (void) spellSpeedMonster(char_row, char_col, dir, -1);
             }
             break;
         case 25:
-            if (getDirectionWithMemory(CNIL, &dir)) {
+            if (getDirectionWithMemory(CNIL, dir)) {
                 spellFireBall(char_row, char_col, dir, 48, GF_FROST, spell_names[24]);
             }
             break;
@@ -141,7 +141,7 @@ static void castSpell(int spellID) {
             (void) spellRechargeItem(60);
             break;
         case 27:
-            if (getDirectionWithMemory(CNIL, &dir)) {
+            if (getDirectionWithMemory(CNIL, dir)) {
                 (void) spellTeleportAwayMonsterInDirection(char_row, char_col, dir);
             }
             break;
@@ -149,7 +149,7 @@ static void castSpell(int spellID) {
             py.flags.fast += randomNumber(20) + py.misc.level;
             break;
         case 29:
-            if (getDirectionWithMemory(CNIL, &dir)) {
+            if (getDirectionWithMemory(CNIL, dir)) {
                 spellFireBall(char_row, char_col, dir, 72, GF_FIRE, spell_names[28]);
             }
             break;

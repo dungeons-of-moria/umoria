@@ -1206,7 +1206,7 @@ static void openClosedChest(int y, int x) {
 void objectOpen() {
     int dir;
 
-    if (!getDirectionWithMemory(CNIL, &dir)) {
+    if (!getDirectionWithMemory(CNIL, dir)) {
         return;
     }
 
@@ -1243,7 +1243,7 @@ void objectOpen() {
 void dungeonCloseDoor() {
     int dir;
 
-    if (!getDirectionWithMemory(CNIL, &dir)) {
+    if (!getDirectionWithMemory(CNIL, dir)) {
         return;
     }
 

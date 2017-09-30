@@ -276,7 +276,7 @@ static void playerDisarmChestTrap(int y, int x, int total, Inventory_t *item) {
 // Disarms a trap -RAK-
 void playerDisarmTrap() {
     int dir;
-    if (!getDirectionWithMemory(CNIL, &dir)) {
+    if (!getDirectionWithMemory(CNIL, dir)) {
         return;
     }
 
@@ -401,7 +401,7 @@ void look() {
     }
 
     int dir;
-    if (!getAllDirections("Look which direction?", &dir)) {
+    if (!getAllDirections("Look which direction?", dir)) {
         return;
     }
 
@@ -869,7 +869,7 @@ void playerThrowItem() {
     }
 
     int dir;
-    if (!getDirectionWithMemory(CNIL, &dir)) {
+    if (!getDirectionWithMemory(CNIL, dir)) {
         return;
     }
 
@@ -1152,7 +1152,7 @@ static void playerBashClosedChest(Inventory_t *item) {
 // A creature with no such ability will attempt to bash a non-secret door.
 void playerBash() {
     int dir;
-    if (!getDirectionWithMemory(CNIL, &dir)) {
+    if (!getDirectionWithMemory(CNIL, dir)) {
         return;
     }
 
