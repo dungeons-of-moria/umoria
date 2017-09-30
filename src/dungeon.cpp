@@ -51,20 +51,20 @@ static void playerUpdateMaxDungeonDepth() {
 
 // Check light status
 static void playerUpdateLightStatus() {
-    Inventory_t *i_ptr = &inventory[EQUIPMENT_LIGHT];
+    Inventory_t &item = inventory[EQUIPMENT_LIGHT];
 
     if (py.carrying_light) {
-        if (i_ptr->misc_use > 0) {
-            i_ptr->misc_use--;
+        if (item.misc_use > 0) {
+            item.misc_use--;
 
-            if (i_ptr->misc_use == 0) {
+            if (item.misc_use == 0) {
                 py.carrying_light = false;
                 printMessage("Your light has gone out!");
                 playerDisturb(0, 1);
 
                 // unlight creatures
                 updateMonsters(false);
-            } else if (i_ptr->misc_use < 40 && randomNumber(5) == 1 && py.flags.blind < 1) {
+            } else if (item.misc_use < 40 && randomNumber(5) == 1 && py.flags.blind < 1) {
                 playerDisturb(0, 0);
                 printMessage("Your light is growing faint.");
             }
@@ -75,8 +75,8 @@ static void playerUpdateLightStatus() {
             // unlight creatures
             updateMonsters(false);
         }
-    } else if (i_ptr->misc_use > 0) {
-        i_ptr->misc_use--;
+    } else if (item.misc_use > 0) {
+        item.misc_use--;
         py.carrying_light = true;
         playerDisturb(0, 1);
 
@@ -711,20 +711,20 @@ static void playerDetectEnchantment() {
             i = 22;
         }
 
-        Inventory_t *i_ptr = &inventory[i];
+        Inventory_t &item = inventory[i];
 
         // if in inventory, succeed 1 out of 50 times,
         // if in equipment list, success 1 out of 10 times
         int chance = (i < 22 ? 50 : 10);
 
-        if (i_ptr->category_id != TV_NOTHING && itemEnchanted(i_ptr) && randomNumber(chance) == 1) {
+        if (item.category_id != TV_NOTHING && itemEnchanted(&item) && randomNumber(chance) == 1) {
             // extern const char *describe_use(int); // FIXME: Why here? We have it in externs.
 
             vtype_t tmp_str = {'\0'};
             (void) sprintf(tmp_str, "There's something about what you are %s...", playerItemWearingDescription(i));
             playerDisturb(0, 0);
             printMessage(tmp_str);
-            itemAppendToInscription(i_ptr, ID_MAGIK);
+            itemAppendToInscription(&item, ID_MAGIK);
         }
     }
 }
@@ -2148,9 +2148,9 @@ static void dungeonJamDoor() {
         return;
     }
 
-    Inventory_t *item = &treasure_list[tile->treasure_id];
+    Inventory_t &item = treasure_list[tile->treasure_id];
 
-    uint8_t item_id = item->category_id;
+    uint8_t item_id = item.category_id;
     if (item_id != TV_CLOSED_DOOR && item_id != TV_OPEN_DOOR) {
         printMessage("That isn't a door!");
         return;
@@ -2170,14 +2170,14 @@ static void dungeonJamDoor() {
 
             printMessageNoCommandInterrupt("You jam the door with a spike.");
 
-            if (item->misc_use > 0) {
+            if (item.misc_use > 0) {
                 // Make locked to stuck.
-                item->misc_use = -item->misc_use;
+                item.misc_use = -item.misc_use;
             }
 
             // Successive spikes have a progressively smaller effect.
             // Series is: 0 20 30 37 43 48 52 56 60 64 67 70 ...
-            item->misc_use -= 1 + 190 / (10 - item->misc_use);
+            item.misc_use -= 1 + 190 / (10 - item.misc_use);
 
             if (inventory[item_pos_start].items_count > 1) {
                 inventory[item_pos_start].items_count--;
@@ -2214,16 +2214,16 @@ static void inventoryRefillLamp() {
 
     player_free_turn = false;
 
-    Inventory_t *item = &inventory[EQUIPMENT_LIGHT];
-    item->misc_use += inventory[item_pos_start].misc_use;
+    Inventory_t &item = inventory[EQUIPMENT_LIGHT];
+    item.misc_use += inventory[item_pos_start].misc_use;
 
-    if (item->misc_use > OBJECT_LAMP_MAX_CAPACITY) {
-        item->misc_use = OBJECT_LAMP_MAX_CAPACITY;
+    if (item.misc_use > OBJECT_LAMP_MAX_CAPACITY) {
+        item.misc_use = OBJECT_LAMP_MAX_CAPACITY;
         printMessage("Your lamp overflows, spilling oil on the ground.");
         printMessage("Your lamp is full.");
-    } else if (item->misc_use > OBJECT_LAMP_MAX_CAPACITY / 2) {
+    } else if (item.misc_use > OBJECT_LAMP_MAX_CAPACITY / 2) {
         printMessage("Your lamp is more than half full.");
-    } else if (item->misc_use == OBJECT_LAMP_MAX_CAPACITY / 2) {
+    } else if (item.misc_use == OBJECT_LAMP_MAX_CAPACITY / 2) {
         printMessage("Your lamp is half full.");
     } else {
         printMessage("Your lamp is less than half full.");
