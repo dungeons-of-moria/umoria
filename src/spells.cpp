@@ -118,19 +118,19 @@ bool dungeonDetectTrapOnPanel() {
 
     for (int y = panel_row_min; y <= panel_row_max; y++) {
         for (int x = panel_col_min; x <= panel_col_max; x++) {
-            Cave_t *tile = &cave[y][x];
+            Cave_t &tile = cave[y][x];
 
-            if (tile->treasure_id == 0) {
+            if (tile.treasure_id == 0) {
                 continue;
             }
 
-            if (treasure_list[tile->treasure_id].category_id == TV_INVIS_TRAP) {
-                tile->field_mark = true;
+            if (treasure_list[tile.treasure_id].category_id == TV_INVIS_TRAP) {
+                tile.field_mark = true;
                 dungeonChangeTrapVisibility(y, x);
                 detected = true;
-            } else if (treasure_list[tile->treasure_id].category_id == TV_CHEST) {
-                Inventory_t *item = &treasure_list[tile->treasure_id];
-                spellItemIdentifyAndRemoveRandomInscription(item);
+            } else if (treasure_list[tile.treasure_id].category_id == TV_CHEST) {
+                Inventory_t &item = treasure_list[tile.treasure_id];
+                spellItemIdentifyAndRemoveRandomInscription(&item);
             }
         }
     }
@@ -314,11 +314,11 @@ bool spellIdentifyItem() {
 
     itemIdentify(&item_id);
 
-    Inventory_t *item = &inventory[item_id];
-    spellItemIdentifyAndRemoveRandomInscription(item);
+    Inventory_t &item = inventory[item_id];
+    spellItemIdentifyAndRemoveRandomInscription(&item);
 
     obj_desc_t description = {'\0'};
-    itemDescription(description, item, true);
+    itemDescription(description, &item, true);
 
     obj_desc_t msg = {'\0'};
     if (item_id >= EQUIPMENT_WIELD) {
@@ -426,27 +426,27 @@ bool spellDestroyAdjacentDoorsTraps() {
 
     for (int y = char_row - 1; y <= char_row + 1; y++) {
         for (int x = char_col - 1; x <= char_col + 1; x++) {
-            Cave_t *tile = &cave[y][x];
+            Cave_t &tile = cave[y][x];
 
-            if (tile->treasure_id == 0) {
+            if (tile.treasure_id == 0) {
                 continue;
             }
 
-            Inventory_t *item = &treasure_list[tile->treasure_id];
+            Inventory_t &item = treasure_list[tile.treasure_id];
 
-            if ((item->category_id >= TV_INVIS_TRAP && item->category_id <= TV_CLOSED_DOOR && item->category_id != TV_RUBBLE) || item->category_id == TV_SECRET_DOOR) {
+            if ((item.category_id >= TV_INVIS_TRAP && item.category_id <= TV_CLOSED_DOOR && item.category_id != TV_RUBBLE) || item.category_id == TV_SECRET_DOOR) {
                 if (dungeonDeleteObject(y, x)) {
                     destroyed = true;
                 }
-            } else if (item->category_id == TV_CHEST && item->flags != 0) {
+            } else if (item.category_id == TV_CHEST && item.flags != 0) {
                 // destroy traps on chest and unlock
-                item->flags &= ~(CH_TRAPPED | CH_LOCKED);
-                item->special_name_id = SN_UNLOCKED;
+                item.flags &= ~(CH_TRAPPED | CH_LOCKED);
+                item.special_name_id = SN_UNLOCKED;
 
                 destroyed = true;
 
                 printMessage("You have disarmed the chest.");
-                spellItemIdentifyAndRemoveRandomInscription(item);
+                spellItemIdentifyAndRemoveRandomInscription(&item);
             }
         }
     }
@@ -572,27 +572,27 @@ bool spellDisarmAllInDirection(int y, int x, int direction) {
         // note, must continue up to and including the first non open space,
         // because secret doors have feature_id greater than MAX_OPEN_SPACE
         if (tile->treasure_id != 0) {
-            Inventory_t *item = &treasure_list[tile->treasure_id];
+            Inventory_t &item = treasure_list[tile->treasure_id];
 
-            if (item->category_id == TV_INVIS_TRAP || item->category_id == TV_VIS_TRAP) {
+            if (item.category_id == TV_INVIS_TRAP || item.category_id == TV_VIS_TRAP) {
                 if (dungeonDeleteObject(y, x)) {
                     disarmed = true;
                 }
-            } else if (item->category_id == TV_CLOSED_DOOR) {
+            } else if (item.category_id == TV_CLOSED_DOOR) {
                 // Locked or jammed doors become merely closed.
-                item->misc_use = 0;
-            } else if (item->category_id == TV_SECRET_DOOR) {
+                item.misc_use = 0;
+            } else if (item.category_id == TV_SECRET_DOOR) {
                 tile->field_mark = true;
                 dungeonChangeTrapVisibility(y, x);
                 disarmed = true;
-            } else if (item->category_id == TV_CHEST && item->flags != 0) {
+            } else if (item.category_id == TV_CHEST && item.flags != 0) {
                 disarmed = true;
                 printMessage("Click!");
 
-                item->flags &= ~(CH_TRAPPED | CH_LOCKED);
-                item->special_name_id = SN_UNLOCKED;
+                item.flags &= ~(CH_TRAPPED | CH_LOCKED);
+                item.special_name_id = SN_UNLOCKED;
 
-                spellItemIdentifyAndRemoveRandomInscription(item);
+                spellItemIdentifyAndRemoveRandomInscription(&item);
             }
         }
 
@@ -985,7 +985,7 @@ bool spellRechargeItem(int number_of_charges) {
         return false;
     }
 
-    Inventory_t *item = &inventory[item_id];
+    Inventory_t &item = inventory[item_id];
 
     // recharge  I = recharge(20) = 1/6  failure for empty 10th level wand
     // recharge II = recharge(60) = 1/10 failure for empty 10th level wand
@@ -993,7 +993,7 @@ bool spellRechargeItem(int number_of_charges) {
     // make it harder to recharge high level, and highly charged wands,
     // note that `fail_chance` can be negative, so check its value before
     // trying to call randomNumber().
-    int fail_chance = number_of_charges + 50 - (int) item->depth_first_found - item->misc_use;
+    int fail_chance = number_of_charges + 50 - (int) item.depth_first_found - item.misc_use;
 
     // Automatic failure.
     if (fail_chance < 19) {
@@ -1006,14 +1006,14 @@ bool spellRechargeItem(int number_of_charges) {
         printMessage("There is a bright flash of light.");
         inventoryDestroyItem(item_id);
     } else {
-        number_of_charges = (number_of_charges / (item->depth_first_found + 2)) + 1;
-        item->misc_use += 2 + randomNumber(number_of_charges);
+        number_of_charges = (number_of_charges / (item.depth_first_found + 2)) + 1;
+        item.misc_use += 2 + randomNumber(number_of_charges);
 
-        if (spellItemIdentified(item)) {
-            spellItemRemoveIdentification(item);
+        if (spellItemIdentified(&item)) {
+            spellItemRemoveIdentification(&item);
         }
 
-        itemIdentificationClearEmpty(item);
+        itemIdentificationClearEmpty(&item);
     }
 
     return true;
@@ -1352,21 +1352,21 @@ bool spellDestroyDoorsTrapsInDirection(int y, int x, int direction) {
 
         // must move into first closed spot, as it might be a secret door
         if (tile->treasure_id != 0) {
-            Inventory_t *item = &treasure_list[tile->treasure_id];
+            Inventory_t &item = treasure_list[tile->treasure_id];
 
-            if (item->category_id == TV_INVIS_TRAP || item->category_id == TV_CLOSED_DOOR || item->category_id == TV_VIS_TRAP || item->category_id == TV_OPEN_DOOR || item->category_id == TV_SECRET_DOOR) {
+            if (item.category_id == TV_INVIS_TRAP || item.category_id == TV_CLOSED_DOOR || item.category_id == TV_VIS_TRAP || item.category_id == TV_OPEN_DOOR || item.category_id == TV_SECRET_DOOR) {
                 if (dungeonDeleteObject(y, x)) {
                     destroyed = true;
                     printMessage("There is a bright flash of light!");
                 }
-            } else if (item->category_id == TV_CHEST && item->flags != 0) {
+            } else if (item.category_id == TV_CHEST && item.flags != 0) {
                 destroyed = true;
                 printMessage("Click!");
 
-                item->flags &= ~(CH_TRAPPED | CH_LOCKED);
-                item->special_name_id = SN_UNLOCKED;
+                item.flags &= ~(CH_TRAPPED | CH_LOCKED);
+                item.special_name_id = SN_UNLOCKED;
 
-                spellItemIdentifyAndRemoveRandomInscription(item);
+                spellItemIdentifyAndRemoveRandomInscription(&item);
             }
         }
     } while ((distance <= OBJECT_BOLTS_MAX_RANGE) || tile->feature_id <= MAX_OPEN_SPACE);
