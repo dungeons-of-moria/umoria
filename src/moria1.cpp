@@ -89,36 +89,34 @@ static void playerResetFlags() {
 }
 
 static void playerRecalculateBonusesFromInventory() {
-    Inventory_t *item;
-
     for (int i = EQUIPMENT_WIELD; i < EQUIPMENT_LIGHT; i++) {
-        item = &inventory[i];
+        Inventory_t &item = inventory[i];
 
-        if (item->category_id != TV_NOTHING) {
-            py.misc.plusses_to_hit += item->to_hit;
+        if (item.category_id != TV_NOTHING) {
+            py.misc.plusses_to_hit += item.to_hit;
 
             // Bows can't damage. -CJS-
-            if (item->category_id != TV_BOW) {
-                py.misc.plusses_to_damage += item->to_damage;
+            if (item.category_id != TV_BOW) {
+                py.misc.plusses_to_damage += item.to_damage;
             }
 
-            py.misc.magical_ac += item->to_ac;
-            py.misc.ac += item->ac;
+            py.misc.magical_ac += item.to_ac;
+            py.misc.ac += item.ac;
 
-            if (spellItemIdentified(item)) {
-                py.misc.display_to_hit += item->to_hit;
+            if (spellItemIdentified(&item)) {
+                py.misc.display_to_hit += item.to_hit;
 
                 // Bows can't damage. -CJS-
-                if (item->category_id != TV_BOW) {
-                    py.misc.display_to_damage += item->to_damage;
+                if (item.category_id != TV_BOW) {
+                    py.misc.display_to_damage += item.to_damage;
                 }
 
-                py.misc.display_to_ac += item->to_ac;
-                py.misc.display_ac += item->ac;
-            } else if ((TR_CURSED & item->flags) == 0u) {
+                py.misc.display_to_ac += item.to_ac;
+                py.misc.display_ac += item.ac;
+            } else if ((TR_CURSED & item.flags) == 0u) {
                 // Base AC values should always be visible,
                 // as long as the item is not cursed.
-                py.misc.display_ac += item->ac;
+                py.misc.display_ac += item.ac;
             }
         }
     }
@@ -499,9 +497,9 @@ int displayEquipment(bool weighted, int column) {
 void playerTakeOff(int item_id, int pack_position_id) {
     py.flags.status |= PY_STR_WGT;
 
-    Inventory_t *item = &inventory[item_id];
+    Inventory_t &item = inventory[item_id];
 
-    inventory_weight -= item->weight * item->items_count;
+    inventory_weight -= item.weight * item.items_count;
     equipment_count--;
 
     const char *p = nullptr;
@@ -514,7 +512,7 @@ void playerTakeOff(int item_id, int pack_position_id) {
     }
 
     obj_desc_t description = {'\0'};
-    itemDescription(description, item, true);
+    itemDescription(description, &item, true);
 
     obj_desc_t msg = {'\0'};
     if (pack_position_id >= 0) {
@@ -526,10 +524,10 @@ void playerTakeOff(int item_id, int pack_position_id) {
 
     // For secondary weapon
     if (item_id != EQUIPMENT_AUX) {
-        playerAdjustBonusesForItem(item, -1);
+        playerAdjustBonusesForItem(&item, -1);
     }
 
-    inventoryItemCopyTo(OBJ_NOTHING, item);
+    inventoryItemCopyTo(OBJ_NOTHING, &item);
 }
 
 // Used to verify if this really is the item we wish to -CJS-
@@ -1031,9 +1029,9 @@ static bool selectItemCommands(char *command, char *which, bool selecting) {
         }
 
         // look for item whose inscription matches "which"
-        int item = inventoryGetItemMatchingInscription(*which, *command, from, to);
+        int item_id = inventoryGetItemMatchingInscription(*which, *command, from, to);
 
-        if (item < from || item > to) {
+        if (item_id < from || item_id > to) {
             terminalBellSound();
             continue;
         }
@@ -1042,43 +1040,43 @@ static bool selectItemCommands(char *command, char *which, bool selecting) {
 
         if (*command == 'r' || *command == 't') {
             // Get its place in the equipment list.
-            itemToTakeOff = item;
-            item = 21;
+            itemToTakeOff = item_id;
+            item_id = 21;
 
             do {
-                item++;
-                if (inventory[item].category_id != TV_NOTHING) {
+                item_id++;
+                if (inventory[item_id].category_id != TV_NOTHING) {
                     itemToTakeOff--;
                 }
             } while (itemToTakeOff >= 0);
 
-            if ((isupper((int) *which) != 0) && !verify((char *) prompt, item)) {
-                item = -1;
-            } else if ((TR_CURSED & inventory[item].flags) != 0u) {
-                item = -1;
+            if ((isupper((int) *which) != 0) && !verify((char *) prompt, item_id)) {
+                item_id = -1;
+            } else if ((TR_CURSED & inventory[item_id].flags) != 0u) {
+                item_id = -1;
                 printMessage("Hmmm, it seems to be cursed.");
-            } else if (*command == 't' && !inventoryCanCarryItemCount(&inventory[item])) {
+            } else if (*command == 't' && !inventoryCanCarryItemCount(&inventory[item_id])) {
                 if (cave[char_row][char_col].treasure_id != 0) {
-                    item = -1;
+                    item_id = -1;
                     printMessage("You can't carry it.");
                 } else if (getInputConfirmation("You can't carry it.  Drop it?")) {
                     *command = 'r';
                 } else {
-                    item = -1;
+                    item_id = -1;
                 }
             }
 
-            if (item >= 0) {
+            if (item_id >= 0) {
                 if (*command == 'r') {
-                    inventoryDropItem(item, true);
+                    inventoryDropItem(item_id, true);
                     // As a safety measure, set the player's inven
                     // weight to 0, when the last object is dropped.
                     if (inventory_count == 0 && equipment_count == 0) {
                         inventory_weight = 0;
                     }
                 } else {
-                    slot = inventoryCarryItem(&inventory[item]);
-                    playerTakeOff(item, slot);
+                    slot = inventoryCarryItem(&inventory[item_id]);
+                    playerTakeOff(item_id, slot);
                 }
 
                 playerStrength();
@@ -1092,55 +1090,55 @@ static bool selectItemCommands(char *command, char *which, bool selecting) {
         } else if (*command == 'w') {
             // Wearing. Go to a bit of trouble over replacing existing equipment.
 
-            if ((isupper((int) *which) != 0) && !verify((char *) prompt, item)) {
-                item = -1;
+            if ((isupper((int) *which) != 0) && !verify((char *) prompt, item_id)) {
+                item_id = -1;
             } else {
-                slot = inventoryGetSlotToWearEquipment(item);
+                slot = inventoryGetSlotToWearEquipment(item_id);
                 if (slot == -1) {
-                    item = -1;
+                    item_id = -1;
                 }
             }
 
-            if (item >= 0 && inventory[slot].category_id != TV_NOTHING) {
+            if (item_id >= 0 && inventory[slot].category_id != TV_NOTHING) {
                 if ((TR_CURSED & inventory[slot].flags) != 0u) {
                     inventoryItemIsCursedMessage(slot);
-                    item = -1;
-                } else if (inventory[item].sub_category_id == ITEM_GROUP_MIN && inventory[item].items_count > 1 && !inventoryCanCarryItemCount(&inventory[slot])) {
+                    item_id = -1;
+                } else if (inventory[item_id].sub_category_id == ITEM_GROUP_MIN && inventory[item_id].items_count > 1 && !inventoryCanCarryItemCount(&inventory[slot])) {
                     // this can happen if try to wield a torch,
                     // and have more than one in inventory
                     printMessage("You will have to drop something first.");
-                    item = -1;
+                    item_id = -1;
                 }
             }
 
             // OK. Wear it.
-            if (item >= 0) {
+            if (item_id >= 0) {
                 player_free_turn = false;
 
                 // first remove new item from inventory
-                Inventory_t savedItem = inventory[item];
-                Inventory_t *i_ptr = &savedItem;
+                Inventory_t savedItem = inventory[item_id];
+                Inventory_t *item = &savedItem;
 
                 wear_high--;
 
                 // Fix for torches
-                if (i_ptr->items_count > 1 && i_ptr->sub_category_id <= ITEM_SINGLE_STACK_MAX) {
-                    i_ptr->items_count = 1;
+                if (item->items_count > 1 && item->sub_category_id <= ITEM_SINGLE_STACK_MAX) {
+                    item->items_count = 1;
                     wear_high++;
                 }
 
-                inventory_weight += i_ptr->weight * i_ptr->items_count;
+                inventory_weight += item->weight * item->items_count;
 
                 // Subtracts weight
-                inventoryDestroyItem(item);
+                inventoryDestroyItem(item_id);
 
                 // Second, add old item to inv and remove
                 // from equipment list, if necessary.
-                i_ptr = &inventory[slot];
-                if (i_ptr->category_id != TV_NOTHING) {
+                item = &inventory[slot];
+                if (item->category_id != TV_NOTHING) {
                     int savedCounter = inventory_count;
 
-                    itemToTakeOff = inventoryCarryItem(i_ptr);
+                    itemToTakeOff = inventoryCarryItem(item);
 
                     // If item removed did not stack with anything
                     // in inventory, then increment wear_high.
@@ -1152,10 +1150,10 @@ static bool selectItemCommands(char *command, char *which, bool selecting) {
                 }
 
                 // third, wear new item
-                *i_ptr = savedItem;
+                *item = savedItem;
                 equipment_count++;
 
-                playerAdjustBonusesForItem(i_ptr, 1);
+                playerAdjustBonusesForItem(item, 1);
 
                 const char *text = nullptr;
                 if (slot == EQUIPMENT_WIELD) {
@@ -1167,20 +1165,20 @@ static bool selectItemCommands(char *command, char *which, bool selecting) {
                 }
 
                 obj_desc_t description = {'\0'};
-                itemDescription(description, i_ptr, true);
+                itemDescription(description, item, true);
 
                 // Get the right equipment letter.
                 itemToTakeOff = EQUIPMENT_WIELD;
-                item = 0;
+                item_id = 0;
 
                 while (itemToTakeOff != slot) {
                     if (inventory[itemToTakeOff++].category_id != TV_NOTHING) {
-                        item++;
+                        item_id++;
                     }
                 }
 
                 obj_desc_t msg = {'\0'};
-                (void) sprintf(msg, "%s %s (%c)", text, description, 'a' + item);
+                (void) sprintf(msg, "%s %s (%c)", text, description, 'a' + item_id);
                 printMessage(msg);
 
                 // this is a new weapon, so clear heavy flag
@@ -1189,12 +1187,12 @@ static bool selectItemCommands(char *command, char *which, bool selecting) {
                 }
                 playerStrength();
 
-                if ((i_ptr->flags & TR_CURSED) != 0u) {
+                if ((item->flags & TR_CURSED) != 0u) {
                     printMessage("Oops! It feels deathly cold!");
-                    itemAppendToInscription(i_ptr, ID_DAMD);
+                    itemAppendToInscription(item, ID_DAMD);
 
                     // To force a cost of 0, even if unidentified.
-                    i_ptr->cost = -1;
+                    item->cost = -1;
                 }
             }
         } else {
@@ -1203,9 +1201,9 @@ static bool selectItemCommands(char *command, char *which, bool selecting) {
             // NOTE: initializing to `ESCAPE` as warnings were being given. -MRC-
             char query = ESCAPE;
 
-            if (inventory[item].items_count > 1) {
+            if (inventory[item_id].items_count > 1) {
                 obj_desc_t description = {'\0'};
-                itemDescription(description, &inventory[item], true);
+                itemDescription(description, &inventory[item_id], true);
                 description[strlen(description) - 1] = '?';
 
                 obj_desc_t msg = {'\0'};
@@ -1221,18 +1219,18 @@ static bool selectItemCommands(char *command, char *which, bool selecting) {
                         terminalBellSound();
                     }
                     eraseLine(MSG_LINE, 0);
-                    item = -1;
+                    item_id = -1;
                 }
-            } else if ((isupper((int) *which) != 0) && !verify((char *) prompt, item)) {
-                item = -1;
+            } else if ((isupper((int) *which) != 0) && !verify((char *) prompt, item_id)) {
+                item_id = -1;
             } else {
                 query = 'y';
             }
 
-            if (item >= 0) {
+            if (item_id >= 0) {
                 player_free_turn = false;
 
-                inventoryDropItem(item, query == 'y');
+                inventoryDropItem(item_id, query == 'y');
                 playerStrength();
             }
 
