@@ -33,8 +33,8 @@ void playerEat() {
 
     bool identified = false;
 
-    Inventory_t *item = &inventory[item_id];
-    uint32_t item_flags = item->flags;
+    Inventory_t &item = inventory[item_id];
+    uint32_t item_flags = item.flags;
 
     while (item_flags != 0) {
         int food_id = getAndClearFirstBit(item_flags) + 1;
@@ -42,27 +42,27 @@ void playerEat() {
         // Foods
         switch (food_id) {
             case 1:
-                py.flags.poisoned += randomNumber(10) + item->depth_first_found;
+                py.flags.poisoned += randomNumber(10) + item.depth_first_found;
                 identified = true;
                 break;
             case 2:
-                py.flags.blind += randomNumber(250) + 10 * item->depth_first_found + 100;
+                py.flags.blind += randomNumber(250) + 10 * item.depth_first_found + 100;
                 drawCavePanel();
                 printMessage("A veil of darkness surrounds you.");
                 identified = true;
                 break;
             case 3:
-                py.flags.afraid += randomNumber(10) + item->depth_first_found;
+                py.flags.afraid += randomNumber(10) + item.depth_first_found;
                 printMessage("You feel terrified!");
                 identified = true;
                 break;
             case 4:
-                py.flags.confused += randomNumber(10) + item->depth_first_found;
+                py.flags.confused += randomNumber(10) + item.depth_first_found;
                 printMessage("You feel drugged.");
                 identified = true;
                 break;
             case 5:
-                py.flags.image += randomNumber(200) + 25 * item->depth_first_found + 200;
+                py.flags.image += randomNumber(200) + 25 * item.depth_first_found + 200;
                 printMessage("You feel drugged.");
                 identified = true;
                 break;
@@ -185,21 +185,21 @@ void playerEat() {
     }
 
     if (identified) {
-        if (!itemSetColorlessAsIdentified(item->category_id, item->sub_category_id, item->identification)) {
+        if (!itemSetColorlessAsIdentified(item.category_id, item.sub_category_id, item.identification)) {
             // use identified it, gain experience
             // round half-way case up
-            py.misc.exp += (item->depth_first_found + (py.misc.level >> 1)) / py.misc.level;
+            py.misc.exp += (item.depth_first_found + (py.misc.level >> 1)) / py.misc.level;
 
             displayCharacterExperience();
 
             itemIdentify(&item_id);
-            item = &inventory[item_id];
+            item = inventory[item_id];
         }
-    } else if (!itemSetColorlessAsIdentified(item->category_id, item->sub_category_id, item->identification)) {
-        itemSetAsTried(item);
+    } else if (!itemSetColorlessAsIdentified(item.category_id, item.sub_category_id, item.identification)) {
+        itemSetAsTried(&item);
     }
 
-    playerIngestFood(item->misc_use);
+    playerIngestFood(item.misc_use);
 
     py.flags.status &= ~(PY_WEAK | PY_HUNGRY);
 
