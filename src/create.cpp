@@ -66,15 +66,15 @@ static void characterChangeStat(int stat, int16_t amount) {
 // generate all stats and modify for race. needed in a separate
 // module so looping of character selection would be allowed -RGM-
 static void characterGenerateStatsAndRace() {
-    Race_t *race = &character_races[py.misc.race_id];
+    Race_t &race = character_races[py.misc.race_id];
 
     characterGenerateStats();
-    characterChangeStat(A_STR, race->str_adjustment);
-    characterChangeStat(A_INT, race->int_adjustment);
-    characterChangeStat(A_WIS, race->wis_adjustment);
-    characterChangeStat(A_DEX, race->dex_adjustment);
-    characterChangeStat(A_CON, race->con_adjustment);
-    characterChangeStat(A_CHR, race->chr_adjustment);
+    characterChangeStat(A_STR, race.str_adjustment);
+    characterChangeStat(A_INT, race.int_adjustment);
+    characterChangeStat(A_WIS, race.wis_adjustment);
+    characterChangeStat(A_DEX, race.dex_adjustment);
+    characterChangeStat(A_CON, race.con_adjustment);
+    characterChangeStat(A_CHR, race.chr_adjustment);
 
     py.misc.level = 1;
 
@@ -83,19 +83,19 @@ static void characterGenerateStatsAndRace() {
         playerSetAndUseStat(i);
     }
 
-    py.misc.chance_in_search = race->search_chance_base;
-    py.misc.bth = race->base_to_hit;
-    py.misc.bth_with_bows = race->base_to_hit_bows;
-    py.misc.fos = race->fos;
-    py.misc.stealth_factor = race->stealth;
-    py.misc.saving_throw = race->saving_throw_base;
-    py.misc.hit_die = race->hit_points_base;
+    py.misc.chance_in_search = race.search_chance_base;
+    py.misc.bth = race.base_to_hit;
+    py.misc.bth_with_bows = race.base_to_hit_bows;
+    py.misc.fos = race.fos;
+    py.misc.stealth_factor = race.stealth;
+    py.misc.saving_throw = race.saving_throw_base;
+    py.misc.hit_die = race.hit_points_base;
     py.misc.plusses_to_damage = (int16_t) playerDamageAdjustment();
     py.misc.plusses_to_hit = (int16_t) playerToHitAdjustment();
     py.misc.magical_ac = 0;
     py.misc.ac = (int16_t) playerArmorClassAdjustment();
-    py.misc.experience_factor = race->exp_factor_base;
-    py.flags.see_infra = race->infra_vision;
+    py.misc.experience_factor = race.exp_factor_base;
+    py.flags.see_infra = race.infra_vision;
 }
 
 // Prints a list of the available races: Human, Elf, etc.,
@@ -190,16 +190,16 @@ static void characterGetHistory() {
                     background_id++;
                 }
 
-                Background_t *background = &character_backgrounds[background_id];
+                Background_t &background = character_backgrounds[background_id];
 
-                (void) strcat(history_block, background->info);
-                social_class += background->bonus - 50;
+                (void) strcat(history_block, background.info);
+                social_class += background.bonus - 50;
 
-                if (history_id > background->next) {
+                if (history_id > background.next) {
                     background_id = 0;
                 }
 
-                history_id = background->next;
+                history_id = background.next;
                 flag = true;
             } else {
                 background_id++;
@@ -366,18 +366,18 @@ static void characterGetClass() {
 
             py.misc.class_id = (uint8_t) class_list[class_id];
 
-            Class_t *klass = &classes[py.misc.class_id];
+            Class_t &klass = classes[py.misc.class_id];
 
             clearToBottom(20);
-            putString(klass->title, 5, 15);
+            putString(klass.title, 5, 15);
 
             // Adjust the stats for the class adjustment -RAK-
-            characterChangeStat(A_STR, klass->strength);
-            characterChangeStat(A_INT, klass->intelligence);
-            characterChangeStat(A_WIS, klass->wisdom);
-            characterChangeStat(A_DEX, klass->dexterity);
-            characterChangeStat(A_CON, klass->constitution);
-            characterChangeStat(A_CHR, klass->charisma);
+            characterChangeStat(A_STR, klass.strength);
+            characterChangeStat(A_INT, klass.intelligence);
+            characterChangeStat(A_WIS, klass.wisdom);
+            characterChangeStat(A_DEX, klass.dexterity);
+            characterChangeStat(A_CON, klass.constitution);
+            characterChangeStat(A_CHR, klass.charisma);
 
             for (int i = 0; i < 6; i++) {
                 py.stats.current[i] = py.stats.max[i];
@@ -397,7 +397,7 @@ static void characterGetClass() {
             py.misc.display_ac = py.misc.ac + py.misc.display_to_ac;
 
             // now set misc stats, do this after setting stats because of playerStatAdjustmentConstitution() for hit-points
-            py.misc.hit_die += klass->hit_points;
+            py.misc.hit_die += klass.hit_points;
             py.misc.max_hp = (int16_t) (playerStatAdjustmentConstitution() + py.misc.hit_die);
             py.misc.current_hp = py.misc.max_hp;
             py.misc.current_hp_fraction = 0;
@@ -416,14 +416,14 @@ static void characterGetClass() {
                 }
             } while (player_base_hp_levels[PLAYER_MAX_LEVEL - 1] < min_value || player_base_hp_levels[PLAYER_MAX_LEVEL - 1] > max_value);
 
-            py.misc.bth += klass->base_to_hit;
-            py.misc.bth_with_bows += klass->base_to_hit_with_bows; // RAK
-            py.misc.chance_in_search += klass->searching;
-            py.misc.disarm += klass->disarm_traps;
-            py.misc.fos += klass->fos;
-            py.misc.stealth_factor += klass->stealth;
-            py.misc.saving_throw += klass->saving_throw;
-            py.misc.experience_factor += klass->experience_factor;
+            py.misc.bth += klass.base_to_hit;
+            py.misc.bth_with_bows += klass.base_to_hit_with_bows; // RAK
+            py.misc.chance_in_search += klass.searching;
+            py.misc.disarm += klass.disarm_traps;
+            py.misc.fos += klass.fos;
+            py.misc.stealth_factor += klass.stealth;
+            py.misc.saving_throw += klass.saving_throw;
+            py.misc.experience_factor += klass.experience_factor;
         } else if (input == '?') {
             displayTextHelpFile(MORIA_WELCOME);
         } else {
