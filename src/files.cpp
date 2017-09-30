@@ -151,15 +151,15 @@ void outputRandomLevelObjectsToFile() {
 
         magicTreasureMagicalAbility(treasure_id, level);
 
-        Inventory_t *item = &treasure_list[treasure_id];
-        itemIdentifyAsStoreBought(item);
+        Inventory_t &item = treasure_list[treasure_id];
+        itemIdentifyAsStoreBought(&item);
 
-        if ((item->flags & TR_CURSED) != 0u) {
-            itemAppendToInscription(item, ID_DAMD);
+        if ((item.flags & TR_CURSED) != 0u) {
+            itemAppendToInscription(&item, ID_DAMD);
         }
 
-        itemDescription(input, item, true);
-        (void) fprintf(file_ptr, "%d %s\n", item->depth_first_found, input);
+        itemDescription(input, &item, true);
+        (void) fprintf(file_ptr, "%d %s\n", item.depth_first_found, input);
     }
 
     pusht((uint8_t) treasure_id);
