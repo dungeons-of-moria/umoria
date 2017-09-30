@@ -141,28 +141,28 @@ void playerTunnel(int direction) {
     int x = char_col;
     (void) playerMovePosition(direction, y, x);
 
-    Cave_t *tile = &cave[y][x];
-    Inventory_t *item = &inventory[EQUIPMENT_WIELD];
+    Cave_t &tile = cave[y][x];
+    Inventory_t &item = inventory[EQUIPMENT_WIELD];
 
-    if (!playerCanTunnel(tile->treasure_id, tile->feature_id)) {
+    if (!playerCanTunnel(tile.treasure_id, tile.feature_id)) {
         return;
     }
 
-    if (tile->creature_id > 1) {
-        objectBlockedByMonster(tile->creature_id);
+    if (tile.creature_id > 1) {
+        objectBlockedByMonster(tile.creature_id);
         playerAttackPosition(y, x);
         return;
     }
 
-    if (item->category_id != TV_NOTHING) {
-        int diggingAbility = playerDiggingAbility(item);
+    if (item.category_id != TV_NOTHING) {
+        int diggingAbility = playerDiggingAbility(&item);
 
-        if (!dungeonDigAtLocation(y, x, tile->feature_id, diggingAbility)) {
+        if (!dungeonDigAtLocation(y, x, tile.feature_id, diggingAbility)) {
             // Is there an object in the way?  (Rubble and secret doors)
-            if (tile->treasure_id != 0) {
-                if (treasure_list[tile->treasure_id].category_id == TV_RUBBLE) {
+            if (tile.treasure_id != 0) {
+                if (treasure_list[tile.treasure_id].category_id == TV_RUBBLE) {
                     dungeonDigRubble(y, x, diggingAbility);
-                } else if (treasure_list[tile->treasure_id].category_id == TV_SECRET_DOOR) {
+                } else if (treasure_list[tile.treasure_id].category_id == TV_SECRET_DOOR) {
                     // Found secret door!
                     printMessageNoCommandInterrupt("You tunnel into the granite wall.");
                     dungeonSearch(char_row, char_col, py.misc.chance_in_search);
@@ -284,21 +284,21 @@ void playerDisarmTrap() {
     int x = char_col;
     (void) playerMovePosition(dir, y, x);
 
-    Cave_t *tile = &cave[y][x];
+    Cave_t &tile = cave[y][x];
 
     bool no_disarm = false;
 
-    if (tile->creature_id > 1 && tile->treasure_id != 0 && (treasure_list[tile->treasure_id].category_id == TV_VIS_TRAP || treasure_list[tile->treasure_id].category_id == TV_CHEST)) {
-        objectBlockedByMonster(tile->creature_id);
-    } else if (tile->treasure_id != 0) {
+    if (tile.creature_id > 1 && tile.treasure_id != 0 && (treasure_list[tile.treasure_id].category_id == TV_VIS_TRAP || treasure_list[tile.treasure_id].category_id == TV_CHEST)) {
+        objectBlockedByMonster(tile.creature_id);
+    } else if (tile.treasure_id != 0) {
         int disarm_ability = playerTrapDisarmAbility();
 
-        Inventory_t *item = &treasure_list[tile->treasure_id];
+        Inventory_t &item = treasure_list[tile.treasure_id];
 
-        if (item->category_id == TV_VIS_TRAP) {
-            playerDisarmFloorTrap(y, x, disarm_ability, item->depth_first_found, dir, item->misc_use);
-        } else if (item->category_id == TV_CHEST) {
-            playerDisarmChestTrap(y, x, disarm_ability, item);
+        if (item.category_id == TV_VIS_TRAP) {
+            playerDisarmFloorTrap(y, x, disarm_ability, item.depth_first_found, dir, item.misc_use);
+        } else if (item.category_id == TV_CHEST) {
+            playerDisarmChestTrap(y, x, disarm_ability, &item);
         } else {
             no_disarm = true;
         }
@@ -1165,20 +1165,20 @@ void playerBash() {
     int x = char_col;
     (void) playerMovePosition(dir, y, x);
 
-    Cave_t *tile = &cave[y][x];
+    Cave_t &tile = cave[y][x];
 
-    if (tile->creature_id > 1) {
+    if (tile.creature_id > 1) {
         playerBashPosition(y, x);
         return;
     }
 
-    if (tile->treasure_id != 0) {
-        Inventory_t *item = &treasure_list[tile->treasure_id];
+    if (tile.treasure_id != 0) {
+        Inventory_t &item = treasure_list[tile.treasure_id];
 
-        if (item->category_id == TV_CLOSED_DOOR) {
-            playerBashClosedDoor(y, x, dir, tile, item);
-        } else if (item->category_id == TV_CHEST) {
-            playerBashClosedChest(item);
+        if (item.category_id == TV_CLOSED_DOOR) {
+            playerBashClosedDoor(y, x, dir, &tile, &item);
+        } else if (item.category_id == TV_CHEST) {
+            playerBashClosedChest(&item);
         } else {
             // Can't give free turn, or else player could try directions
             // until he found invisible creature
@@ -1187,7 +1187,7 @@ void playerBash() {
         return;
     }
 
-    if (tile->feature_id < MIN_CAVE_WALL) {
+    if (tile.feature_id < MIN_CAVE_WALL) {
         printMessage("You bash at empty space.");
         return;
     }
