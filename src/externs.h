@@ -351,7 +351,7 @@ bool inventoryCanCarryItem(Inventory_t *item);
 void playerStrength();
 int inventoryCarryItem(Inventory_t *item);
 void displaySpellsList(const int *spell, int number_of_choices, bool comment, int non_consecutive);
-bool spellGetId(int *spell, int number_of_choices, int *spell_id, int *spell_chances, const char *prompt, int first_spell);
+bool spellGetId(int *spells, int number_of_choices, int &spell_id, int &spell_chance, const char *prompt, int first_spell);
 void playerCalculateAllowedSpellsCount(int stat);
 void playerGainSpells();
 void playerGainMana(int stat);
@@ -415,7 +415,7 @@ void damageLightningBolt(int damage, const char *creature_name);
 void damageAcid(int damage, const char *creature_name);
 
 // moria3.c
-int castSpellGetId(const char *prompt, int item_id, int *spell_id, int *spell_chance);
+int castSpellGetId(const char *prompt, int item_id, int &spell_id, int &spell_chance);
 void dungeonDeleteMonster(int id);
 void dungeonDeleteMonsterFix1(int id);
 void dungeonDeleteMonsterFix2(int id);

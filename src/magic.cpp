@@ -184,8 +184,7 @@ void getAndCastMagicSpell() {
     }
 
     int choice, chance;
-
-    int result = castSpellGetId("Cast which spell?", item_val, &choice, &chance);
+    int result = castSpellGetId("Cast which spell?", item_val, choice, chance);
     if (result < 0) {
         printMessage("You don't know any spells in that book.");
         return;

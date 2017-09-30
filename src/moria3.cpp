@@ -341,7 +341,7 @@ static void playerStepsOnTrap(int y, int x) {
 // returns -1 if no spells in book
 // returns  1 if choose a spell in book to cast
 // returns  0 if don't choose a spell, i.e. exit with an escape
-int castSpellGetId(const char *prompt, int item_id, int *spell_id, int *spell_chance) {
+int castSpellGetId(const char *prompt, int item_id, int &spell_id, int &spell_chance) {
     // NOTE: `flags` gets set again, since getAndClearFirstBit modified it
     uint32_t flags = inventory[item_id].flags;
     int first_spell = getAndClearFirstBit(flags);
@@ -370,7 +370,7 @@ int castSpellGetId(const char *prompt, int item_id, int *spell_id, int *spell_ch
         result = 1;
     }
 
-    if ((result != 0) && magic_spells[py.misc.class_id - 1][*spell_id].mana_required > py.misc.current_mana) {
+    if ((result != 0) && magic_spells[py.misc.class_id - 1][spell_id].mana_required > py.misc.current_mana) {
         if (classes[py.misc.class_id].class_to_use_mage_spells == SPELL_TYPE_MAGE) {
             result = (int) getInputConfirmation("You summon your limited strength to cast this one! Confirm?");
         } else {

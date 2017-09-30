@@ -1431,11 +1431,11 @@ void displaySpellsList(const int *spell, int number_of_choices, bool comment, in
 }
 
 // Returns spell pointer -RAK-
-bool spellGetId(int *spell, int number_of_choices, int *spell_id, int *spell_chances, const char *prompt, int first_spell) {
-    *spell_id = -1;
+bool spellGetId(int *spells, int number_of_choices, int &spell_id, int &spell_chance, const char *prompt, int first_spell) {
+    spell_id = -1;
 
     vtype_t str = {'\0'};
-    (void) sprintf(str, "(Spells %c-%c, *=List, <ESCAPE>=exit) %s", spell[0] + 'a' - first_spell, spell[number_of_choices - 1] + 'a' - first_spell, prompt);
+    (void) sprintf(str, "(Spells %c-%c, *=List, <ESCAPE>=exit) %s", spells[0] + 'a' - first_spell, spells[number_of_choices - 1] + 'a' - first_spell, prompt);
 
     bool spell_found = false;
     bool redraw = false;
@@ -1446,42 +1446,42 @@ bool spellGetId(int *spell, int number_of_choices, int *spell_id, int *spell_cha
 
     while (!spell_found && getCommand(str, &choice)) {
         if (isupper((int) choice) != 0) {
-            *spell_id = choice - 'A' + first_spell;
+            spell_id = choice - 'A' + first_spell;
 
-            // verify that this is in spell[], at most 22 entries in class_to_use_mage_spells[]
+            // verify that this is in spells[], at most 22 entries in class_to_use_mage_spells[]
             int spellID;
             for (spellID = 0; spellID < number_of_choices; spellID++) {
-                if (*spell_id == spell[spellID]) {
+                if (spell_id == spells[spellID]) {
                     break;
                 }
             }
 
             if (spellID == number_of_choices) {
-                *spell_id = -2;
+                spell_id = -2;
             } else {
-                Spell_t *s_ptr = &magic_spells[py.misc.class_id - 1][*spell_id];
+                Spell_t *s_ptr = &magic_spells[py.misc.class_id - 1][spell_id];
 
                 vtype_t tmp_str = {'\0'};
-                (void) sprintf(tmp_str, "Cast %s (%d mana, %d%% fail)?", spell_names[*spell_id + offset], s_ptr->mana_required, spellChanceOfSuccess(*spell_id));
+                (void) sprintf(tmp_str, "Cast %s (%d mana, %d%% fail)?", spell_names[spell_id + offset], s_ptr->mana_required, spellChanceOfSuccess(spell_id));
                 if (getInputConfirmation(tmp_str)) {
                     spell_found = true;
                 } else {
-                    *spell_id = -1;
+                    spell_id = -1;
                 }
             }
         } else if (islower((int) choice) != 0) {
-            *spell_id = choice - 'a' + first_spell;
+            spell_id = choice - 'a' + first_spell;
 
-            // verify that this is in spell[], at most 22 entries in class_to_use_mage_spells[]
+            // verify that this is in spells[], at most 22 entries in class_to_use_mage_spells[]
             int spellID;
             for (spellID = 0; spellID < number_of_choices; spellID++) {
-                if (*spell_id == spell[spellID]) {
+                if (spell_id == spells[spellID]) {
                     break;
                 }
             }
 
             if (spellID == number_of_choices) {
-                *spell_id = -2;
+                spell_id = -2;
             } else {
                 spell_found = true;
             }
@@ -1490,16 +1490,16 @@ bool spellGetId(int *spell, int number_of_choices, int *spell_id, int *spell_cha
             if (!redraw) {
                 terminalSaveScreen();
                 redraw = true;
-                displaySpellsList(spell, number_of_choices, false, first_spell);
+                displaySpellsList(spells, number_of_choices, false, first_spell);
             }
         } else if (isalpha((int) choice) != 0) {
-            *spell_id = -2;
+            spell_id = -2;
         } else {
-            *spell_id = -1;
+            spell_id = -1;
             terminalBellSound();
         }
 
-        if (*spell_id == -2) {
+        if (spell_id == -2) {
             vtype_t tmp_str = {'\0'};
             (void) sprintf(tmp_str, "You don't know that %s.", (offset == NAME_OFFSET_SPELLS ? "spell" : "prayer"));
             printMessage(tmp_str);
@@ -1513,7 +1513,7 @@ bool spellGetId(int *spell, int number_of_choices, int *spell_id, int *spell_cha
     eraseLine(MSG_LINE, 0);
 
     if (spell_found) {
-        *spell_chances = spellChanceOfSuccess(*spell_id);
+        spell_chance = spellChanceOfSuccess(spell_id);
     }
 
     return spell_found;
