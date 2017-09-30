@@ -120,12 +120,12 @@ int randomNumberNormalDistribution(int mean, int standard) {
 }
 
 // Returns position of first set bit and clears that bit -RAK-
-int getAndClearFirstBit(uint32_t *flag) {
+int getAndClearFirstBit(uint32_t &flag) {
     uint32_t mask = 0x1;
 
-    for (int i = 0; i < (int) sizeof(*flag) * 8; i++) {
-        if ((*flag & mask) != 0u) {
-            *flag &= ~mask;
+    for (int i = 0; i < (int) sizeof(flag) * 8; i++) {
+        if ((flag & mask) != 0u) {
+            flag &= ~mask;
             return i;
         }
         mask <<= 1;

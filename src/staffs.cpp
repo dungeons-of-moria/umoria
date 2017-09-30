@@ -65,7 +65,7 @@ static bool staffDischarge(Inventory_t *item) {
 
     uint32_t flags = item->flags;
     while (flags != 0) {
-        int staff_type = getAndClearFirstBit(&flags) + 1;
+        int staff_type = getAndClearFirstBit(flags) + 1;
 
         switch (staff_type) {
             case 1:

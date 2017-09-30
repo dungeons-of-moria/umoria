@@ -344,7 +344,7 @@ static void playerStepsOnTrap(int y, int x) {
 int castSpellGetId(const char *prompt, int item_id, int *spell_id, int *spell_chance) {
     // NOTE: `flags` gets set again, since getAndClearFirstBit modified it
     uint32_t flags = inventory[item_id].flags;
-    int first_spell = getAndClearFirstBit(&flags);
+    int first_spell = getAndClearFirstBit(flags);
     flags = inventory[item_id].flags & spells_learnt;
 
     Spell_t *s_ptr = magic_spells[py.misc.class_id - 1];
@@ -353,7 +353,7 @@ int castSpellGetId(const char *prompt, int item_id, int *spell_id, int *spell_ch
     int spell_list[31];
 
     while (flags != 0u) {
-        int pos = getAndClearFirstBit(&flags);
+        int pos = getAndClearFirstBit(flags);
 
         if (s_ptr[pos].level_required <= py.misc.level) {
             spell_list[spell_count] = pos;

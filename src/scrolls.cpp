@@ -437,7 +437,7 @@ void readScroll() {
     uint32_t item_flags = item->flags;
 
     while (item_flags != 0) {
-        int scroll_type = getAndClearFirstBit(&item_flags) + 1;
+        int scroll_type = getAndClearFirstBit(item_flags) + 1;
 
         if (item->category_id == TV_SCROLL2) {
             scroll_type += 32;

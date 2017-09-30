@@ -37,7 +37,7 @@ void playerEat() {
     uint32_t item_flags = item->flags;
 
     while (item_flags != 0) {
-        int food_id = getAndClearFirstBit(&item_flags) + 1;
+        int food_id = getAndClearFirstBit(item_flags) + 1;
 
         // Foods
         switch (food_id) {

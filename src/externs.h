@@ -261,7 +261,7 @@ void seedSet(uint32_t seed);
 void seedResetToOldSeed();
 int randomNumber(int max);
 int randomNumberNormalDistribution(int mean, int standard);
-int getAndClearFirstBit(uint32_t *flag);
+int getAndClearFirstBit(uint32_t &flag);
 bool coordInBounds(int y, int x);
 bool coordOutsidePanel(int y, int x, bool force);
 bool coordInsidePanel(int y, int x);

@@ -13,7 +13,7 @@ static bool playerDrinkPotion(uint32_t flags, uint8_t item_id) {
     bool identified = false;
 
     while (flags != 0) {
-        int potion_id = getAndClearFirstBit(&flags) + 1;
+        int potion_id = getAndClearFirstBit(flags) + 1;
 
         if (item_id == TV_POTION2) {
             potion_id += 32;

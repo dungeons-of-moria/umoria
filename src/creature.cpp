@@ -1309,7 +1309,7 @@ static bool monsterCastSpell(int monster_id) {
 
     int id = 0;
     while (spell_flags != 0) {
-        spell_choice[id] = getAndClearFirstBit(&spell_flags);
+        spell_choice[id] = getAndClearFirstBit(spell_flags);
         id++;
     }
 

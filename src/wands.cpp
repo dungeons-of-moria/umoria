@@ -17,7 +17,7 @@ static bool wandDischarge(Inventory_t *item, int direction) {
     (item->misc_use)--; // decrement "use" variable
 
     while (flags != 0) {
-        int kind = getAndClearFirstBit(&flags) + 1;
+        int kind = getAndClearFirstBit(flags) + 1;
         int y = char_row;
         int x = char_col;
 
