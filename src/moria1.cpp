@@ -1890,7 +1890,7 @@ void playerRestOn() {
             if (rest_str[0] == '*') {
                 rest_num = -MAX_SHORT;
             } else {
-                (void) stringToNumber(rest_str, &rest_num);
+                (void) stringToNumber(rest_str, rest_num);
             }
         }
     }

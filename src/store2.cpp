@@ -279,7 +279,7 @@ static bool storeGetHaggle(const char *comment, int32_t *new_offer, int num_offe
         }
 
         if ((num_offer != 0) && increment) {
-            stringToNumber(msg, &offer_adjust);
+            stringToNumber(msg, offer_adjust);
 
             // Don't accept a zero here.  Turn off increment if it was zero
             // because a zero will not exit.  This can be zero if the user
@@ -293,7 +293,7 @@ static bool storeGetHaggle(const char *comment, int32_t *new_offer, int num_offe
             offer_adjust = store_last_increment;
             increment = true;
         } else {
-            stringToNumber(msg, &offer_adjust);
+            stringToNumber(msg, offer_adjust);
         }
 
         // don't allow incremental haggling, if player has not made an offer yet

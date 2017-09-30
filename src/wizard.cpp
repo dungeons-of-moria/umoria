@@ -41,7 +41,7 @@ void wizardCharacterAdjustment() {
 
     putStringClearToEOL("(3 - 118) Strength     = ", 0, 0);
     if (getStringInput(input, 0, 25, 3)) {
-        bool valid_number = stringToNumber(input, &number);
+        bool valid_number = stringToNumber(input, number);
         if (valid_number && number > 2 && number < 119) {
             py.stats.max[A_STR] = (uint8_t) number;
             (void) playerStatRestore(A_STR);
@@ -52,7 +52,7 @@ void wizardCharacterAdjustment() {
 
     putStringClearToEOL("(3 - 118) Intelligence = ", 0, 0);
     if (getStringInput(input, 0, 25, 3)) {
-        bool valid_number = stringToNumber(input, &number);
+        bool valid_number = stringToNumber(input, number);
         if (valid_number && number > 2 && number < 119) {
             py.stats.max[A_INT] = (uint8_t) number;
             (void) playerStatRestore(A_INT);
@@ -63,7 +63,7 @@ void wizardCharacterAdjustment() {
 
     putStringClearToEOL("(3 - 118) Wisdom       = ", 0, 0);
     if (getStringInput(input, 0, 25, 3)) {
-        bool valid_number = stringToNumber(input, &number);
+        bool valid_number = stringToNumber(input, number);
         if (valid_number && number > 2 && number < 119) {
             py.stats.max[A_WIS] = (uint8_t) number;
             (void) playerStatRestore(A_WIS);
@@ -74,7 +74,7 @@ void wizardCharacterAdjustment() {
 
     putStringClearToEOL("(3 - 118) Dexterity    = ", 0, 0);
     if (getStringInput(input, 0, 25, 3)) {
-        bool valid_number = stringToNumber(input, &number);
+        bool valid_number = stringToNumber(input, number);
         if (valid_number && number > 2 && number < 119) {
             py.stats.max[A_DEX] = (uint8_t) number;
             (void) playerStatRestore(A_DEX);
@@ -85,7 +85,7 @@ void wizardCharacterAdjustment() {
 
     putStringClearToEOL("(3 - 118) Constitution = ", 0, 0);
     if (getStringInput(input, 0, 25, 3)) {
-        bool valid_number = stringToNumber(input, &number);
+        bool valid_number = stringToNumber(input, number);
         if (valid_number && number > 2 && number < 119) {
             py.stats.max[A_CON] = (uint8_t) number;
             (void) playerStatRestore(A_CON);
@@ -96,7 +96,7 @@ void wizardCharacterAdjustment() {
 
     putStringClearToEOL("(3 - 118) Charisma     = ", 0, 0);
     if (getStringInput(input, 0, 25, 3)) {
-        bool valid_number = stringToNumber(input, &number);
+        bool valid_number = stringToNumber(input, number);
         if (valid_number && number > 2 && number < 119) {
             py.stats.max[A_CHR] = (uint8_t) number;
             (void) playerStatRestore(A_CHR);
@@ -107,7 +107,7 @@ void wizardCharacterAdjustment() {
 
     putStringClearToEOL("(1 - 32767) Hit points = ", 0, 0);
     if (getStringInput(input, 0, 25, 5)) {
-        bool valid_number = stringToNumber(input, &number);
+        bool valid_number = stringToNumber(input, number);
         if (valid_number && number > 0 && number <= MAX_SHORT) {
             py.misc.max_hp = (int16_t) number;
             py.misc.current_hp = (int16_t) number;
@@ -121,7 +121,7 @@ void wizardCharacterAdjustment() {
 
     putStringClearToEOL("(0 - 32767) Mana       = ", 0, 0);
     if (getStringInput(input, 0, 25, 5)) {
-        bool valid_number = stringToNumber(input, &number);
+        bool valid_number = stringToNumber(input, number);
         if (valid_number && number > -1 && number <= MAX_SHORT) {
             py.misc.mana = (int16_t) number;
             py.misc.current_mana = (int16_t) number;
@@ -137,7 +137,7 @@ void wizardCharacterAdjustment() {
     putStringClearToEOL(input, 0, 0);
     if (getStringInput(input, 0, number, 7)) {
         int new_gold;
-        bool valid_number = stringToNumber(input, &new_gold);
+        bool valid_number = stringToNumber(input, new_gold);
         if (valid_number && new_gold > -1) {
             py.misc.au = new_gold;
             printCharacterGoldValue();
@@ -151,7 +151,7 @@ void wizardCharacterAdjustment() {
     putStringClearToEOL(input, 0, 0);
     if (getStringInput(input, 0, number, 3)) {
         int new_gold;
-        bool valid_number = stringToNumber(input, &new_gold);
+        bool valid_number = stringToNumber(input, new_gold);
         if (valid_number && number > -1 && number < 201) {
             py.misc.chance_in_search = (int16_t) number;
         }
@@ -163,7 +163,7 @@ void wizardCharacterAdjustment() {
     number = (int) strlen(input);
     putStringClearToEOL(input, 0, 0);
     if (getStringInput(input, 0, number, 3)) {
-        bool valid_number = stringToNumber(input, &number);
+        bool valid_number = stringToNumber(input, number);
         if (valid_number && number > -2 && number < 19) {
             py.misc.stealth_factor = (int16_t) number;
         }
@@ -175,7 +175,7 @@ void wizardCharacterAdjustment() {
     number = (int) strlen(input);
     putStringClearToEOL(input, 0, 0);
     if (getStringInput(input, 0, number, 3)) {
-        bool valid_number = stringToNumber(input, &number);
+        bool valid_number = stringToNumber(input, number);
         if (valid_number && number > -1 && number < 201) {
             py.misc.disarm = (int16_t) number;
         }
@@ -187,7 +187,7 @@ void wizardCharacterAdjustment() {
     number = (int) strlen(input);
     putStringClearToEOL(input, 0, 0);
     if (getStringInput(input, 0, number, 3)) {
-        bool valid_number = stringToNumber(input, &number);
+        bool valid_number = stringToNumber(input, number);
         if (valid_number && number > -1 && number < 201) {
             py.misc.saving_throw = (int16_t) number;
         }
@@ -199,7 +199,7 @@ void wizardCharacterAdjustment() {
     number = (int) strlen(input);
     putStringClearToEOL(input, 0, 0);
     if (getStringInput(input, 0, number, 3)) {
-        bool valid_number = stringToNumber(input, &number);
+        bool valid_number = stringToNumber(input, number);
         if (valid_number && number > -1 && number < 201) {
             py.misc.bth = (int16_t) number;
         }
@@ -211,7 +211,7 @@ void wizardCharacterAdjustment() {
     number = (int) strlen(input);
     putStringClearToEOL(input, 0, 0);
     if (getStringInput(input, 0, number, 3)) {
-        bool valid_number = stringToNumber(input, &number);
+        bool valid_number = stringToNumber(input, number);
         if (valid_number && number > -1 && number < 201) {
             py.misc.bth_with_bows = (int16_t) number;
         }
@@ -223,7 +223,7 @@ void wizardCharacterAdjustment() {
     number = (int) strlen(input);
     putStringClearToEOL(input, 0, 0);
     if (getStringInput(input, 0, number, 3)) {
-        bool valid_number = stringToNumber(input, &number);
+        bool valid_number = stringToNumber(input, number);
         if (valid_number && number > -1) {
             py.misc.weight = (uint16_t) number;
         }
@@ -262,7 +262,7 @@ void wizardCreateObjects() {
     if (!getStringInput(input, 0, 9, 3)) {
         return;
     }
-    if (stringToNumber(input, &number)) {
+    if (stringToNumber(input, number)) {
         item->category_id = (uint8_t) number;
     }
 
@@ -276,7 +276,7 @@ void wizardCreateObjects() {
     if (!getStringInput(input, 0, 9, 5)) {
         return;
     }
-    if (stringToNumber(input, &number)) {
+    if (stringToNumber(input, number)) {
         item->sub_category_id = (uint8_t) number;
     }
 
@@ -284,7 +284,7 @@ void wizardCreateObjects() {
     if (!getStringInput(input, 0, 9, 5)) {
         return;
     }
-    if (stringToNumber(input, &number)) {
+    if (stringToNumber(input, number)) {
         item->weight = (uint16_t) number;
     }
 
@@ -292,7 +292,7 @@ void wizardCreateObjects() {
     if (!getStringInput(input, 0, 9, 5)) {
         return;
     }
-    if (stringToNumber(input, &number)) {
+    if (stringToNumber(input, number)) {
         item->items_count = (uint8_t) number;
     }
 
@@ -300,7 +300,7 @@ void wizardCreateObjects() {
     if (!getStringInput(input, 0, 15, 3)) {
         return;
     }
-    if (stringToNumber(input, &number)) {
+    if (stringToNumber(input, number)) {
         item->damage[0] = (uint8_t) number;
     }
 
@@ -308,7 +308,7 @@ void wizardCreateObjects() {
     if (!getStringInput(input, 0, 16, 3)) {
         return;
     }
-    if (stringToNumber(input, &number)) {
+    if (stringToNumber(input, number)) {
         item->damage[1] = (uint8_t) number;
     }
 
@@ -316,7 +316,7 @@ void wizardCreateObjects() {
     if (!getStringInput(input, 0, 9, 3)) {
         return;
     }
-    if (stringToNumber(input, &number)) {
+    if (stringToNumber(input, number)) {
         item->to_hit = (int16_t) number;
     }
 
@@ -324,7 +324,7 @@ void wizardCreateObjects() {
     if (!getStringInput(input, 0, 9, 3)) {
         return;
     }
-    if (stringToNumber(input, &number)) {
+    if (stringToNumber(input, number)) {
         item->to_damage = (int16_t) number;
     }
 
@@ -332,7 +332,7 @@ void wizardCreateObjects() {
     if (!getStringInput(input, 0, 9, 3)) {
         return;
     }
-    if (stringToNumber(input, &number)) {
+    if (stringToNumber(input, number)) {
         item->ac = (int16_t) number;
     }
 
@@ -340,7 +340,7 @@ void wizardCreateObjects() {
     if (!getStringInput(input, 0, 9, 3)) {
         return;
     }
-    if (stringToNumber(input, &number)) {
+    if (stringToNumber(input, number)) {
         item->to_ac = (int16_t) number;
     }
 
@@ -348,7 +348,7 @@ void wizardCreateObjects() {
     if (!getStringInput(input, 0, 9, 5)) {
         return;
     }
-    if (stringToNumber(input, &number)) {
+    if (stringToNumber(input, number)) {
         item->misc_use = (int16_t) number;
     }
 
@@ -371,7 +371,7 @@ void wizardCreateObjects() {
     if (!getStringInput(input, 0, 9, 8)) {
         return;
     }
-    if (stringToNumber(input, &input_number)) {
+    if (stringToNumber(input, input_number)) {
         item->cost = input_number;
     }
 
@@ -379,7 +379,7 @@ void wizardCreateObjects() {
     if (!getStringInput(input, 0, 10, 3)) {
         return;
     }
-    if (stringToNumber(input, &number)) {
+    if (stringToNumber(input, number)) {
         item->depth_first_found = (uint8_t) number;
     }
 

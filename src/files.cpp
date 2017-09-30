@@ -90,7 +90,7 @@ void outputRandomLevelObjectsToFile() {
     }
 
     int level;
-    if (!stringToNumber(input, &level)) {
+    if (!stringToNumber(input, level)) {
         return;
     }
 
@@ -100,7 +100,7 @@ void outputRandomLevelObjectsToFile() {
     }
 
     int count;
-    if (!stringToNumber(input, &count)) {
+    if (!stringToNumber(input, count)) {
         return;
     }
 

@@ -1513,7 +1513,7 @@ static void doWizardCommands(char com_val) {
                 putStringClearToEOL("Go to which level (0-99) ? ", 0, 0);
 
                 if (getStringInput(input, 0, 27, 10)) {
-                    (void) stringToNumber(input, &i);
+                    (void) stringToNumber(input, i);
                 }
             }
 

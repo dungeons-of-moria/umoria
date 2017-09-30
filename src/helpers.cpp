@@ -104,7 +104,7 @@ bool isVowel(char ch) {
 }
 
 // http://rus.har.mn/blog/2014-05-19/strtol-error-checking/
-bool stringToNumber(const char *str, int *number) {
+bool stringToNumber(const char *str, int &number) {
     // we need to reset `errno`
     errno = 0;
 
@@ -136,7 +136,7 @@ bool stringToNumber(const char *str, int *number) {
         return false;
     }
 
-    *number = (int) num;
+    number = (int) num;
     return true;
 }
 
