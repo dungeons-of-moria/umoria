@@ -203,7 +203,7 @@ static bool scrollSummonMonster() {
     for (int i = 0; i < randomNumber(3); i++) {
         auto y = (int) char_row;
         auto x = (int) char_col;
-        identified |= monsterSummon(&y, &x, false);
+        identified |= monsterSummon(y, x, false);
     }
 
     return identified;
@@ -400,7 +400,7 @@ static bool scrollSummonUndead() {
     for (int i = 0; i < randomNumber(3); i++) {
         int y = char_row;
         int x = char_col;
-        identified |= monsterSummonUndead(&y, &x);
+        identified |= monsterSummonUndead(y, x);
     }
 
     return identified;

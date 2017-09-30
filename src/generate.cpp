@@ -316,7 +316,7 @@ static void dungeonPlaceVaultMonster(int y, int x, int number) {
     for (int i = 0; i < number; i++) {
         pos_y = y;
         pos_x = x;
-        (void) monsterSummon(&pos_y, &pos_x, true);
+        (void) monsterSummon(pos_y, pos_x, true);
     }
 }
 

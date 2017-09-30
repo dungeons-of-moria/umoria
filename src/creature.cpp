@@ -1189,7 +1189,7 @@ void monsterExecuteCastingOfSpell(Monster_t *monster, int monster_id, int spell_
 
             // in case compact_monster() is called,it needs monster_id
             hack_monptr = monster_id;
-            (void) monsterSummon(&y, &x, false);
+            (void) monsterSummon(y, x, false);
             hack_monptr = -1;
             monsterUpdateVisibility((int) cave[y][x].creature_id);
             break;
@@ -1201,7 +1201,7 @@ void monsterExecuteCastingOfSpell(Monster_t *monster, int monster_id, int spell_
 
             // in case compact_monster() is called,it needs monster_id
             hack_monptr = monster_id;
-            (void) monsterSummonUndead(&y, &x);
+            (void) monsterSummonUndead(y, x);
             hack_monptr = -1;
             monsterUpdateVisibility((int) cave[y][x].creature_id);
             break;

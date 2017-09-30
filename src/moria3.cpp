@@ -143,7 +143,7 @@ static void trapSummonMonster(int y, int x) {
     for (int i = 0; i < num; i++) {
         int ty = y;
         int tx = x;
-        (void) monsterSummon(&ty, &tx, false);
+        (void) monsterSummon(ty, tx, false);
     }
 }
 
@@ -1072,7 +1072,7 @@ static void chestSummonMonster(int y, int x) {
     for (int i = 0; i < 3; i++) {
         int cy = y;
         int cx = x;
-        (void) monsterSummon(&cy, &cx, false);
+        (void) monsterSummon(cy, cx, false);
     }
 }
 

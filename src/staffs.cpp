@@ -97,7 +97,7 @@ static bool staffDischarge(Inventory_t *item) {
                 for (int i = 0; i < randomNumber(4); i++) {
                     int y = char_row;
                     int x = char_col;
-                    identified |= monsterSummon(&y, &x, false);
+                    identified |= monsterSummon(y, x, false);
                 }
                 break;
             case 10:

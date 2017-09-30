@@ -750,12 +750,12 @@ void monsterPlaceNewWithinDistance(int number, int distance_from_source, bool sl
     }
 }
 
-static bool placeMonsterAdjacentTo(int monsterID, int *y, int *x, bool slp) {
+static bool placeMonsterAdjacentTo(int monsterID, int &y, int &x, bool slp) {
     bool placed = false;
 
     for (int i = 0; i <= 9; i++) {
-        int yy = *y - 2 + randomNumber(3);
-        int xx = *x - 2 + randomNumber(3);
+        int yy = y - 2 + randomNumber(3);
+        int xx = x - 2 + randomNumber(3);
 
         if (coordInBounds(yy, xx)) {
             if (cave[yy][xx].feature_id <= MAX_OPEN_SPACE && cave[yy][xx].creature_id == 0) {
@@ -764,8 +764,8 @@ static bool placeMonsterAdjacentTo(int monsterID, int *y, int *x, bool slp) {
                     return false;
                 }
 
-                *y = yy;
-                *x = xx;
+                y = yy;
+                x = xx;
 
                 placed = true;
                 i = 9;
@@ -777,13 +777,13 @@ static bool placeMonsterAdjacentTo(int monsterID, int *y, int *x, bool slp) {
 }
 
 // Places creature adjacent to given location -RAK-
-bool monsterSummon(int *y, int *x, bool sleeping) {
+bool monsterSummon(int &y, int &x, bool sleeping) {
     int monster_id = monsterGetOneSuitableForLevel(current_dungeon_level + MON_SUMMONED_LEVEL_ADJUST);
     return placeMonsterAdjacentTo(monster_id, y, x, sleeping);
 }
 
 // Places undead adjacent to given location -RAK-
-bool monsterSummonUndead(int *y, int *x) {
+bool monsterSummonUndead(int &y, int &x) {
     int monster_id;
     int max_levels = monster_levels[MON_MAX_LEVELS];
 

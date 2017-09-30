@@ -1563,7 +1563,7 @@ static void doWizardCommands(char com_val) {
         case '&': // & = summon
             y = char_row;
             x = char_col;
-            (void) monsterSummon(&y, &x, true);
+            (void) monsterSummon(y, x, true);
 
             updateMonsters(false);
             break;
