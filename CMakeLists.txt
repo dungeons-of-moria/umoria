@@ -109,6 +109,7 @@ set(
         ${source_dir}/potions.cpp
         ${source_dir}/prayer.cpp
         ${source_dir}/save.cpp
+        ${source_dir}/scores.cpp
         ${source_dir}/staffs.cpp
         ${source_dir}/wands.cpp
         ${source_dir}/scrolls.cpp

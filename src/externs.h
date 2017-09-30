@@ -162,10 +162,7 @@ bool monsterMultiply(int y, int x, int creatureID, int monsterID);
 void updateMonsters(bool attack);
 
 // death.c
-void showScoresScreen();
-int32_t playerCalculateTotalPoints();
 void exitGame();
-uint8_t highScoreGenderLabel();
 
 // desc.c
 void magicInitializeItemNames();
@@ -467,6 +464,12 @@ bool loadGame(bool *generate);
 void setFileptr(FILE *file);
 void saveHighScore(HighScore_t *score);
 void readHighScore(HighScore_t *score);
+
+// scores.cpp
+void recordNewHighScore();
+void showScoresScreen();
+uint8_t highScoreGenderLabel();
+int32_t playerCalculateTotalPoints();
 
 // scrolls.c
 void readScroll();
