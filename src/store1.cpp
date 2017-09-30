@@ -343,17 +343,17 @@ static void storeItemCreate(int store_id, int16_t max_cost) {
         inventoryItemCopyTo(id, &treasure_list[free_id]);
         magicTreasureMagicalAbility(free_id, LEVEL_TOWN_OBJECTS);
 
-        Inventory_t *item = &treasure_list[free_id];
+        Inventory_t &item = treasure_list[free_id];
 
-        if (storeCheckPlayerItemsCount(store_id, item)) {
+        if (storeCheckPlayerItemsCount(store_id, &item)) {
             // Item must be good: cost > 0.
-            if (item->cost > 0 && item->cost < max_cost) {
+            if (item.cost > 0 && item.cost < max_cost) {
                 // equivalent to calling spellIdentifyItem(),
                 // except will not change the objects_identified array.
-                itemIdentifyAsStoreBought(item);
+                itemIdentifyAsStoreBought(&item);
 
                 int dummy;
-                storeCarry(store_id, dummy, item);
+                storeCarry(store_id, dummy, &item);
 
                 tries = 10;
             }
