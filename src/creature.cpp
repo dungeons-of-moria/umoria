@@ -523,32 +523,32 @@ static bool executeDisenchantAttack() {
     }
 
     bool success = false;
-    Inventory_t *item = &inventory[item_id];
+    Inventory_t &item = inventory[item_id];
 
-    if (item->to_hit > 0) {
-        item->to_hit -= randomNumber(2);
+    if (item.to_hit > 0) {
+        item.to_hit -= randomNumber(2);
 
         // don't send it below zero
-        if (item->to_hit < 0) {
-            item->to_hit = 0;
+        if (item.to_hit < 0) {
+            item.to_hit = 0;
         }
         success = true;
     }
-    if (item->to_damage > 0) {
-        item->to_damage -= randomNumber(2);
+    if (item.to_damage > 0) {
+        item.to_damage -= randomNumber(2);
 
         // don't send it below zero
-        if (item->to_damage < 0) {
-            item->to_damage = 0;
+        if (item.to_damage < 0) {
+            item.to_damage = 0;
         }
         success = true;
     }
-    if (item->to_ac > 0) {
-        item->to_ac -= randomNumber(2);
+    if (item.to_ac > 0) {
+        item.to_ac -= randomNumber(2);
 
         // don't send it below zero
-        if (item->to_ac < 0) {
-            item->to_ac = 0;
+        if (item.to_ac < 0) {
+            item.to_ac = 0;
         }
         success = true;
     }
@@ -907,62 +907,62 @@ static void monsterAttackPlayer(int monster_id) {
 }
 
 static void monsterOpenDoor(Cave_t *tile, int16_t monster_hp, uint32_t move_bits, bool *do_turn, bool *do_move, uint32_t *rcmove, int y, int x) {
-    Inventory_t *item = &treasure_list[tile->treasure_id];
+    Inventory_t &item = treasure_list[tile->treasure_id];
 
     // Creature can open doors.
     if ((move_bits & CM_OPEN_DOOR) != 0u) {
         bool door_is_stuck = false;
 
-        if (item->category_id == TV_CLOSED_DOOR) {
+        if (item.category_id == TV_CLOSED_DOOR) {
             *do_turn = true;
 
-            if (item->misc_use == 0) {
+            if (item.misc_use == 0) {
                 // Closed doors
 
                 *do_move = true;
-            } else if (item->misc_use > 0) {
+            } else if (item.misc_use > 0) {
                 // Locked doors
 
-                if (randomNumber((monster_hp + 1) * (50 + item->misc_use)) < 40 * (monster_hp - 10 - item->misc_use)) {
-                    item->misc_use = 0;
+                if (randomNumber((monster_hp + 1) * (50 + item.misc_use)) < 40 * (monster_hp - 10 - item.misc_use)) {
+                    item.misc_use = 0;
                 }
-            } else if (item->misc_use < 0) {
+            } else if (item.misc_use < 0) {
                 // Stuck doors
 
-                if (randomNumber((monster_hp + 1) * (50 - item->misc_use)) < 40 * (monster_hp - 10 + item->misc_use)) {
+                if (randomNumber((monster_hp + 1) * (50 - item.misc_use)) < 40 * (monster_hp - 10 + item.misc_use)) {
                     printMessage("You hear a door burst open!");
                     playerDisturb(1, 0);
                     door_is_stuck = true;
                     *do_move = true;
                 }
             }
-        } else if (item->category_id == TV_SECRET_DOOR) {
+        } else if (item.category_id == TV_SECRET_DOOR) {
             *do_turn = true;
             *do_move = true;
         }
 
         if (*do_move) {
-            inventoryItemCopyTo(OBJ_OPEN_DOOR, item);
+            inventoryItemCopyTo(OBJ_OPEN_DOOR, &item);
 
             // 50% chance of breaking door
             if (door_is_stuck) {
-                item->misc_use = (int16_t) (1 - randomNumber(2));
+                item.misc_use = (int16_t) (1 - randomNumber(2));
             }
             tile->feature_id = TILE_CORR_FLOOR;
             dungeonLiteSpot(y, x);
             *rcmove |= CM_OPEN_DOOR;
             *do_move = false;
         }
-    } else if (item->category_id == TV_CLOSED_DOOR) {
+    } else if (item.category_id == TV_CLOSED_DOOR) {
         // Creature can not open doors, must bash them
         *do_turn = true;
 
-        auto abs_misc_use = (int) std::abs((std::intmax_t) item->misc_use);
+        auto abs_misc_use = (int) std::abs((std::intmax_t) item.misc_use);
         if (randomNumber((monster_hp + 1) * (80 + abs_misc_use)) < 40 * (monster_hp - 20 - abs_misc_use)) {
-            inventoryItemCopyTo(OBJ_OPEN_DOOR, item);
+            inventoryItemCopyTo(OBJ_OPEN_DOOR, &item);
 
             // 50% chance of breaking door
-            item->misc_use = (int16_t) (1 - randomNumber(2));
+            item.misc_use = (int16_t) (1 - randomNumber(2));
             tile->feature_id = TILE_CORR_FLOOR;
             dungeonLiteSpot(y, x);
             printMessage("You hear a door burst open!");
