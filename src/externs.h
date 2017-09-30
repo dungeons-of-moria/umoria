@@ -384,7 +384,7 @@ const char *playerItemWearingDescription(int body_location);
 int displayEquipment(bool weighted, int column);
 void playerTakeOff(int item_id, int pack_position_id);
 void inventoryExecuteCommand(char command);
-bool inventoryGetInputForItemId(int *command_key_id, const char *prompt, int item_id_start, int item_id_end, char *mask, const char *message);
+bool inventoryGetInputForItemId(int &command_key_id, const char *prompt, int item_id_start, int item_id_end, char *mask, const char *message);
 bool playerNoLight();
 bool getDirectionWithMemory(char *prompt, int *direction);
 bool getAllDirections(const char *prompt, int *direction);

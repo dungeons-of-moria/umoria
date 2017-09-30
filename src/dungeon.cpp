@@ -2052,7 +2052,7 @@ static void examineBook() {
     }
 
     int item_id;
-    if (inventoryGetInputForItemId(&item_id, "Which Book?", item_pos_start, item_pos_end, CNIL, CNIL)) {
+    if (inventoryGetInputForItemId(item_id, "Which Book?", item_pos_start, item_pos_end, CNIL, CNIL)) {
         int spell_index[31];
         bool can_read = true;
 

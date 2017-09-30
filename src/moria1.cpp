@@ -1388,7 +1388,7 @@ void inventoryExecuteCommand(char command) {
 }
 
 // Get the ID of an item and return the CTR value of it -RAK-
-bool inventoryGetInputForItemId(int *command_key_id, const char *prompt, int item_id_start, int item_id_end, char *mask, const char *message) {
+bool inventoryGetInputForItemId(int &command_key_id, const char *prompt, int item_id_start, int item_id_end, char *mask, const char *message) {
     int screen_id = 1;
     bool full = false;
 
@@ -1408,7 +1408,7 @@ bool inventoryGetInputForItemId(int *command_key_id, const char *prompt, int ite
         return false;
     }
 
-    *command_key_id = 0;
+    command_key_id = 0;
 
     bool item_found = false;
     bool redraw_screen = false;
@@ -1522,20 +1522,20 @@ bool inventoryGetInputForItemId(int *command_key_id, const char *prompt, int ite
                         for (m = item_id_start; m < EQUIPMENT_WIELD && (inventory[m].inscription[0] != which || inventory[m].inscription[1] != '\0'); m++);
 
                         if (m < EQUIPMENT_WIELD) {
-                            *command_key_id = m;
+                            command_key_id = m;
                         } else {
-                            *command_key_id = -1;
+                            command_key_id = -1;
                         }
                     } else if (isupper((int) which) != 0) {
-                        *command_key_id = which - 'A';
+                        command_key_id = which - 'A';
                     } else {
-                        *command_key_id = which - 'a';
+                        command_key_id = which - 'a';
                     }
 
-                    if (*command_key_id >= item_id_start && *command_key_id <= item_id_end && (mask == CNIL || (mask[*command_key_id] != 0))) {
+                    if (command_key_id >= item_id_start && command_key_id <= item_id_end && (mask == CNIL || (mask[command_key_id] != 0))) {
                         if (screen_id == 0) {
                             item_id_start = 21;
-                            item_id_end = *command_key_id;
+                            item_id_end = command_key_id;
 
                             do {
                                 // Note: a simple loop to find first inventory item
@@ -1544,10 +1544,10 @@ bool inventoryGetInputForItemId(int *command_key_id, const char *prompt, int ite
                                 item_id_end--;
                             } while (item_id_end >= 0);
 
-                            *command_key_id = item_id_start;
+                            command_key_id = item_id_start;
                         }
 
-                        if ((isupper((int) which) != 0) && !verify("Try", *command_key_id)) {
+                        if ((isupper((int) which) != 0) && !verify("Try", command_key_id)) {
                             screen_id = -1;
                             command_finished = true;
 

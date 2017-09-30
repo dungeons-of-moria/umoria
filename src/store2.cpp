@@ -863,7 +863,7 @@ static bool storeSellAnItem(int store_id, int *current_top_item_id) {
     }
 
     int item_id;
-    if (!inventoryGetInputForItemId(&item_id, "Which one? ", first_item, last_item, mask, "I do not buy such items.")) {
+    if (!inventoryGetInputForItemId(item_id, "Which one? ", first_item, last_item, mask, "I do not buy such items.")) {
         return false;
     }
 

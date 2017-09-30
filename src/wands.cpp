@@ -131,7 +131,7 @@ void wandAim() {
     }
 
     int item_id;
-    if (!inventoryGetInputForItemId(&item_id, "Aim which wand?", item_pos_start, item_pos_end, CNIL, CNIL)) {
+    if (!inventoryGetInputForItemId(item_id, "Aim which wand?", item_pos_start, item_pos_end, CNIL, CNIL)) {
         return;
     }
 

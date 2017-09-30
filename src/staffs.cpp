@@ -182,7 +182,7 @@ void useStaff() {
     }
 
     int item_id;
-    if (!inventoryGetInputForItemId(&item_id, "Use which staff?", item_pos_start, item_pos_end, CNIL, CNIL)) {
+    if (!inventoryGetInputForItemId(item_id, "Use which staff?", item_pos_start, item_pos_end, CNIL, CNIL)) {
         return;
     }
 

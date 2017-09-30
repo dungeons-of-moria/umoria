@@ -864,7 +864,7 @@ void playerThrowItem() {
     }
 
     int item_id;
-    if (!inventoryGetInputForItemId(&item_id, "Fire/Throw which one?", 0, inventory_count - 1, CNIL, CNIL)) {
+    if (!inventoryGetInputForItemId(item_id, "Fire/Throw which one?", 0, inventory_count - 1, CNIL, CNIL)) {
         return;
     }
 

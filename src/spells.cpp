@@ -308,7 +308,7 @@ void spellMapCurrentArea() {
 // Identify an object -RAK-
 bool spellIdentifyItem() {
     int item_id;
-    if (!inventoryGetInputForItemId(&item_id, "Item you wish identified?", 0, PLAYER_INVENTORY_SIZE, CNIL, CNIL)) {
+    if (!inventoryGetInputForItemId(item_id, "Item you wish identified?", 0, PLAYER_INVENTORY_SIZE, CNIL, CNIL)) {
         return false;
     }
 
@@ -981,7 +981,7 @@ bool spellRechargeItem(int number_of_charges) {
     }
 
     int item_id;
-    if (!inventoryGetInputForItemId(&item_id, "Recharge which item?", item_pos_start, item_pos_end, CNIL, CNIL)) {
+    if (!inventoryGetInputForItemId(item_id, "Recharge which item?", item_pos_start, item_pos_end, CNIL, CNIL)) {
         return false;
     }
 
