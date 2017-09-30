@@ -147,10 +147,10 @@ void wandAim() {
         direction = getRandomDirection();
     }
 
-    Inventory_t *item = &inventory[item_id];
+    Inventory_t &item = inventory[item_id];
 
     int player_class_lev_adj = class_level_adj[py.misc.class_id][CLASS_DEVICE] * py.misc.level / 3;
-    int chance = py.misc.saving_throw + playerStatAdjustmentWisdomIntelligence(A_INT) - (int) item->depth_first_found + player_class_lev_adj;
+    int chance = py.misc.saving_throw + playerStatAdjustmentWisdomIntelligence(A_INT) - (int) item.depth_first_found + player_class_lev_adj;
 
     if (py.flags.confused > 0) {
         chance = chance / 2;
@@ -169,26 +169,26 @@ void wandAim() {
         return;
     }
 
-    if (item->misc_use < 1) {
+    if (item.misc_use < 1) {
         printMessage("The wand has no charges left.");
-        if (!spellItemIdentified(item)) {
-            itemAppendToInscription(item, ID_EMPTY);
+        if (!spellItemIdentified(&item)) {
+            itemAppendToInscription(&item, ID_EMPTY);
         }
         return;
     }
 
-    bool identified = wandDischarge(item, direction);
+    bool identified = wandDischarge(&item, direction);
 
     if (identified) {
-        if (!itemSetColorlessAsIdentified(item->category_id, item->sub_category_id, item->identification)) {
+        if (!itemSetColorlessAsIdentified(item.category_id, item.sub_category_id, item.identification)) {
             // round half-way case up
-            py.misc.exp += (item->depth_first_found + (py.misc.level >> 1)) / py.misc.level;
+            py.misc.exp += (item.depth_first_found + (py.misc.level >> 1)) / py.misc.level;
             displayCharacterExperience();
 
             itemIdentify(&item_id);
         }
-    } else if (!itemSetColorlessAsIdentified(item->category_id, item->sub_category_id, item->identification)) {
-        itemSetAsTried(item);
+    } else if (!itemSetColorlessAsIdentified(item.category_id, item.sub_category_id, item.identification)) {
+        itemSetAsTried(&item);
     }
 
     itemChargesRemainingDescription(item_id);
