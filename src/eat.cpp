@@ -185,7 +185,7 @@ void playerEat() {
     }
 
     if (identified) {
-        if (!itemSetColorlessAsIdentifed(item)) {
+        if (!itemSetColorlessAsIdentified(item->category_id, item->sub_category_id, item->identification)) {
             // use identified it, gain experience
             // round half-way case up
             py.misc.exp += (item->depth_first_found + (py.misc.level >> 1)) / py.misc.level;
@@ -195,7 +195,7 @@ void playerEat() {
             itemIdentify(&item_id);
             item = &inventory[item_id];
         }
-    } else if (!itemSetColorlessAsIdentifed(item)) {
+    } else if (!itemSetColorlessAsIdentified(item->category_id, item->sub_category_id, item->identification)) {
         itemSetAsTried(item);
     }
 

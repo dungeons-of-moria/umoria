@@ -147,18 +147,18 @@ void itemSetAsIdentified(int category_id, int sub_category_id) {
 
 // Items which don't have a 'color' are always known / itemSetAsIdentified(),
 // so that they can be carried in order in the inventory.
-bool itemSetColorlessAsIdentifed(Inventory_t *item) {
-    int16_t id = objectPositionOffset(item->category_id, item->sub_category_id);
+bool itemSetColorlessAsIdentified(int category_id, int sub_category_id, int identification) {
+    int16_t id = objectPositionOffset(category_id, sub_category_id);
 
     if (id < 0) {
         return OD_KNOWN1 != 0u;
     }
-    if (itemStoreBought(item)) {
+    if (itemStoreBought(identification)) {
         return OD_KNOWN1 != 0u;
     }
 
     id <<= 6;
-    id += (uint8_t) (item->sub_category_id & (ITEM_SINGLE_STACK_MIN - 1));
+    id += (uint8_t) (sub_category_id & (ITEM_SINGLE_STACK_MIN - 1));
 
     return isObjectKnown(id);
 }
@@ -186,8 +186,8 @@ void itemIdentifyAsStoreBought(Inventory_t *item) {
     spellItemIdentifyAndRemoveRandomInscription(item);
 }
 
-bool itemStoreBought(Inventory_t *item) {
-    return (item->identification & ID_STORE_BOUGHT) != 0;
+bool itemStoreBought(int identification) {
+    return (identification & ID_STORE_BOUGHT) != 0;
 }
 
 // Remove an automatically generated inscription. -CJS-
@@ -231,7 +231,7 @@ void itemIdentify(int *item_id) {
         itemAppendToInscription(item, ID_DAMD);
     }
 
-    if (itemSetColorlessAsIdentifed(item)) {
+    if (itemSetColorlessAsIdentified(item->category_id, item->sub_category_id, item->identification)) {
         return;
     }
 
@@ -317,7 +317,7 @@ void itemDescription(obj_desc_t description, Inventory_t *item, bool add_prefix)
     int misc_use = IGNORED;
     bool append_name = false;
 
-    bool modify = !itemSetColorlessAsIdentifed(item);
+    bool modify = !itemSetColorlessAsIdentified(item->category_id, item->sub_category_id, item->identification);
 
     switch (item->category_id) {
         case TV_MISC:
@@ -611,7 +611,7 @@ void itemDescription(obj_desc_t description, Inventory_t *item, bool add_prefix)
         indexx += (item->sub_category_id & (ITEM_SINGLE_STACK_MIN - 1));
 
         // don't print tried string for store bought items
-        if (((objects_identified[indexx] & OD_TRIED) != 0) && !itemStoreBought(item)) {
+        if (((objects_identified[indexx] & OD_TRIED) != 0) && !itemStoreBought(item->identification)) {
             (void) strcat(tmp_str, "tried ");
         }
     }

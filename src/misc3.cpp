@@ -1241,7 +1241,10 @@ bool inventoryCanCarryItemCount(Inventory_t *item) {
         bool same_group = item->sub_category_id < ITEM_GROUP_MIN || inventory[i].misc_use == item->misc_use;
 
         // only stack if both or neither are identified
-        bool identification = itemSetColorlessAsIdentifed(&inventory[i]) == itemSetColorlessAsIdentifed(item);
+        // TODO(cook): is it correct that they should be equal to each other, regardless of true/false value?
+        bool inventory_item_is_colorless = itemSetColorlessAsIdentified(inventory[i].category_id, inventory[i].sub_category_id, inventory[i].identification);
+        bool item_is_colorless = itemSetColorlessAsIdentified(item->category_id, item->sub_category_id, item->identification);
+        bool identification = inventory_item_is_colorless == item_is_colorless;
 
         if (same_character && same_category && same_number && same_group && identification) {
             return true;
@@ -1310,7 +1313,7 @@ void playerStrength() {
 int inventoryCarryItem(Inventory_t *item) {
     int typ = item->category_id;
     int subt = item->sub_category_id;
-    bool known1p = itemSetColorlessAsIdentifed(item);
+    bool known1p = itemSetColorlessAsIdentified(item->category_id, item->sub_category_id, item->identification);
     bool always_known1p = objectPositionOffset(item->category_id, item->sub_category_id) == -1;
 
     int locn;
@@ -1322,7 +1325,7 @@ int inventoryCarryItem(Inventory_t *item) {
         if (typ == t_ptr->category_id && subt == t_ptr->sub_category_id && subt >= ITEM_SINGLE_STACK_MIN && ((int) t_ptr->items_count + (int) item->items_count) < 256 &&
             (subt < ITEM_GROUP_MIN || t_ptr->misc_use == item->misc_use) &&
             // only stack if both or neither are identified
-            known1p == itemSetColorlessAsIdentifed(t_ptr)) {
+            known1p == itemSetColorlessAsIdentified(t_ptr->category_id, t_ptr->sub_category_id, t_ptr->identification)) {
             t_ptr->items_count += item->items_count;
 
             break;

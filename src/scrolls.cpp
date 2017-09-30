@@ -593,14 +593,14 @@ void readScroll() {
     item = &inventory[item_id];
 
     if (identified) {
-        if (!itemSetColorlessAsIdentifed(item)) {
+        if (!itemSetColorlessAsIdentified(item->category_id, item->sub_category_id, item->identification)) {
             // round half-way case up
             py.misc.exp += (item->depth_first_found + (py.misc.level >> 1)) / py.misc.level;
             displayCharacterExperience();
 
             itemIdentify(&item_id);
         }
-    } else if (!itemSetColorlessAsIdentifed(item)) {
+    } else if (!itemSetColorlessAsIdentified(item->category_id, item->sub_category_id, item->identification)) {
         itemSetAsTried(item);
     }
 

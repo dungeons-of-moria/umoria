@@ -91,7 +91,7 @@ static int32_t getAmmoBuyPrice(Inventory_t *item) {
 }
 
 static int32_t getPotionScrollBuyPrice(Inventory_t *item) {
-    if (!itemSetColorlessAsIdentifed(item)) {
+    if (!itemSetColorlessAsIdentified(item->category_id, item->sub_category_id, item->identification)) {
         return 20;
     }
 
@@ -99,7 +99,7 @@ static int32_t getPotionScrollBuyPrice(Inventory_t *item) {
 }
 
 static int32_t getFoodBuyPrice(Inventory_t *item) {
-    if (item->sub_category_id < ITEM_SINGLE_STACK_MIN + MAX_MUSHROOMS && !itemSetColorlessAsIdentifed(item)) {
+    if (item->sub_category_id < ITEM_SINGLE_STACK_MIN + MAX_MUSHROOMS && !itemSetColorlessAsIdentified(item->category_id, item->sub_category_id, item->identification)) {
         return 1;
     }
 
@@ -108,7 +108,7 @@ static int32_t getFoodBuyPrice(Inventory_t *item) {
 
 static int32_t getRingAmuletBuyPrice(Inventory_t *item) {
     // player does not know what type of ring/amulet this is
-    if (!itemSetColorlessAsIdentifed(item)) {
+    if (!itemSetColorlessAsIdentified(item->category_id, item->sub_category_id, item->identification)) {
         return 45;
     }
 
@@ -123,7 +123,7 @@ static int32_t getRingAmuletBuyPrice(Inventory_t *item) {
 }
 
 static int32_t getWandStaffBuyPrice(Inventory_t *item) {
-    if (!itemSetColorlessAsIdentifed(item)) {
+    if (!itemSetColorlessAsIdentified(item->category_id, item->sub_category_id, item->identification)) {
         if (item->category_id == TV_WAND) {
             return 50;
         }
