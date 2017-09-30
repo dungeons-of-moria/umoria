@@ -354,7 +354,7 @@ static int storePurchaseHaggle(int store_id, int32_t *price, Inventory_t *item) 
     Owner_t *owner = &store_owners[store->owner];
 
     int32_t max_sell, min_sell;
-    int32_t cost = storeItemSellPrice(store_id, &min_sell, &max_sell, item);
+    int32_t cost = storeItemSellPrice(store_id, min_sell, max_sell, item);
 
     max_sell = max_sell * playerStatAdjustmentCharisma() / 100;
     if (max_sell <= 0) {
@@ -906,21 +906,21 @@ static bool storeSellAnItem(int store_id, int *current_top_item_id) {
         (void) sprintf(msg, "You've sold %s", description);
         printMessage(msg);
 
-        int item_pos;
-        storeCarry(store_id, &item_pos, &sold_item);
+        int item_pos_id;
+        storeCarry(store_id, item_pos_id, &sold_item);
 
         playerStrength();
 
-        if (item_pos >= 0) {
-            if (item_pos < 12) {
+        if (item_pos_id >= 0) {
+            if (item_pos_id < 12) {
                 if (*current_top_item_id < 12) {
-                    displayStoreInventory(store_id, item_pos);
+                    displayStoreInventory(store_id, item_pos_id);
                 } else {
                     *current_top_item_id = 0;
                     displayStoreInventory(store_id, *current_top_item_id);
                 }
             } else if (*current_top_item_id > 11) {
-                displayStoreInventory(store_id, item_pos);
+                displayStoreInventory(store_id, item_pos_id);
             } else {
                 *current_top_item_id = 12;
                 displayStoreInventory(store_id, *current_top_item_id);
