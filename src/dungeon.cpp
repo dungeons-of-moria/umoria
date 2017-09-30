@@ -2139,7 +2139,7 @@ static void dungeonJamDoor() {
     if (!getDirectionWithMemory(CNIL, &direction)) {
         return;
     }
-    (void) playerMovePosition(direction, &y, &x);
+    (void) playerMovePosition(direction, y, x);
 
     Cave_t *tile = &cave[y][x];
 

@@ -155,7 +155,7 @@ static void dungeonPlaceStreamerRock(uint8_t rock_type, int chance_of_treasure) 
                 }
             }
         }
-    } while (playerMovePosition(dir, &pos_y, &pos_x));
+    } while (playerMovePosition(dir, pos_y, pos_x));
 }
 
 static void dungeonPlaceOpenDoor(int y, int x) {

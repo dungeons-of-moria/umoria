@@ -211,7 +211,7 @@ static int find_direction; // Keep a record of which way we are going.
 // Do we see a wall? Used in running. -CJS-
 static bool playerCanSeeDungeonWall(int dir, int y, int x) {
     // check to see if movement there possible
-    if (!playerMovePosition(dir, &y, &x)) {
+    if (!playerMovePosition(dir, y, x)) {
         return true;
     }
 
@@ -223,7 +223,7 @@ static bool playerCanSeeDungeonWall(int dir, int y, int x) {
 // Do we see anything? Used in running. -CJS-
 static bool playerSeeNothing(int dir, int y, int x) {
     // check to see if movement there possible
-    return playerMovePosition(dir, &y, &x) && caveGetTileSymbol(y, x) == ' ';
+    return playerMovePosition(dir, y, x) && caveGetTileSymbol(y, x) == ' ';
 }
 
 static void findRunningBreak(int dir, int row, int col) {
@@ -280,7 +280,7 @@ void playerFindInitialize(int direction) {
     int y = char_row;
     int x = char_col;
 
-    if (!playerMovePosition(direction, &y, &x)) {
+    if (!playerMovePosition(direction, y, x)) {
         running_counter = 0;
     } else {
         running_counter = 1;
@@ -441,7 +441,7 @@ void playerAreaAffect(int direction, int y, int x) {
         int col = x;
 
         // Objects player can see (Including doors?) cause a stop.
-        if (playerMovePosition(new_dir, &row, &col)) {
+        if (playerMovePosition(new_dir, row, col)) {
             areaAffectStopLookingAtSquares(i, direction, new_dir, row, col, &check_dir, &option, &option2);
         }
     }
@@ -473,7 +473,7 @@ void playerAreaAffect(int direction, int y, int x) {
     int row = y;
     int col = x;
 
-    (void) playerMovePosition(option, &row, &col);
+    (void) playerMovePosition(option, row, col);
 
     if (!playerCanSeeDungeonWall(option, row, col) || !playerCanSeeDungeonWall(check_dir, row, col)) {
         // Don't see that it is closed off.  This could be a

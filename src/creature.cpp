@@ -1063,7 +1063,7 @@ static void makeMove(int monster_id, int *directions, uint32_t *rcmove) {
         // Get new position
         int y = monster->y;
         int x = monster->x;
-        (void) playerMovePosition(directions[i], &y, &x);
+        (void) playerMovePosition(directions[i], y, x);
 
         Cave_t *tile = &cave[y][x];
 

@@ -515,7 +515,7 @@ void spellLightLine(int x, int y, int direction) {
         Cave_t *tile = &cave[y][x];
 
         if (distance > OBJECT_BOLTS_MAX_RANGE || tile->feature_id >= MIN_CLOSED_SPACE) {
-            (void) playerMovePosition(direction, &y, &x);
+            (void) playerMovePosition(direction, y, x);
             finished = true;
             continue; // we're done here, break out of the loop
         }
@@ -541,7 +541,7 @@ void spellLightLine(int x, int y, int direction) {
         }
 
         // move must be at end because want to light up current spot
-        (void) playerMovePosition(direction, &y, &x);
+        (void) playerMovePosition(direction, y, x);
         distance++;
     }
 }
@@ -597,7 +597,7 @@ bool spellDisarmAllInDirection(int y, int x, int direction) {
         }
 
         // move must be at end because want to light up current spot
-        (void) playerMovePosition(direction, &y, &x);
+        (void) playerMovePosition(direction, y, x);
 
         distance++;
     } while (distance <= OBJECT_BOLTS_MAX_RANGE && tile->feature_id <= MAX_OPEN_SPACE);
@@ -706,7 +706,7 @@ void spellFireBolt(int y, int x, int direction, int damage_hp, int spell_type, c
         int old_y = y;
         int old_x = x;
 
-        (void) playerMovePosition(direction, &y, &x);
+        (void) playerMovePosition(direction, y, x);
         distance++;
 
         Cave_t *tile = &cave[y][x];
@@ -748,7 +748,7 @@ void spellFireBall(int y, int x, int direction, int damage_hp, int spell_type, c
         int old_y = y;
         int old_x = x;
 
-        (void) playerMovePosition(direction, &y, &x);
+        (void) playerMovePosition(direction, y, x);
         distance++;
 
         dungeonLiteSpot(old_y, old_x);
@@ -1026,7 +1026,7 @@ bool spellChangeMonsterHitPoints(int y, int x, int direction, int damage_hp) {
     bool finished = false;
 
     while (!finished) {
-        (void) playerMovePosition(direction, &y, &x);
+        (void) playerMovePosition(direction, y, x);
         distance++;
 
         Cave_t *tile = &cave[y][x];
@@ -1066,7 +1066,7 @@ bool spellDrainLifeFromMonster(int y, int x, int direction) {
     bool finished = false;
 
     while (!finished) {
-        (void) playerMovePosition(direction, &y, &x);
+        (void) playerMovePosition(direction, y, x);
         distance++;
 
         Cave_t *tile = &cave[y][x];
@@ -1111,7 +1111,7 @@ bool spellSpeedMonster(int y, int x, int direction, int speed) {
     bool finished = false;
 
     while (!finished) {
-        (void) playerMovePosition(direction, &y, &x);
+        (void) playerMovePosition(direction, y, x);
         distance++;
 
         Cave_t *tile = &cave[y][x];
@@ -1162,7 +1162,7 @@ bool spellConfuseMonster(int y, int x, int direction) {
     bool finished = false;
 
     while (!finished) {
-        (void) playerMovePosition(direction, &y, &x);
+        (void) playerMovePosition(direction, y, x);
         distance++;
 
         Cave_t *tile = &cave[y][x];
@@ -1218,7 +1218,7 @@ bool spellSleepMonster(int y, int x, int direction) {
     bool finished = false;
 
     while (!finished) {
-        (void) playerMovePosition(direction, &y, &x);
+        (void) playerMovePosition(direction, y, x);
         distance++;
 
         Cave_t *tile = &cave[y][x];
@@ -1263,7 +1263,7 @@ bool spellWallToMud(int y, int x, int direction) {
     bool finished = false;
 
     while (!finished) {
-        (void) playerMovePosition(direction, &y, &x);
+        (void) playerMovePosition(direction, y, x);
         distance++;
 
         Cave_t *tile = &cave[y][x];
@@ -1345,7 +1345,7 @@ bool spellDestroyDoorsTrapsInDirection(int y, int x, int direction) {
     Cave_t *tile;
 
     do {
-        (void) playerMovePosition(direction, &y, &x);
+        (void) playerMovePosition(direction, y, x);
         distance++;
 
         tile = &cave[y][x];
@@ -1382,7 +1382,7 @@ bool spellPolymorphMonster(int y, int x, int direction) {
     bool finished = false;
 
     while (!finished) {
-        (void) playerMovePosition(direction, &y, &x);
+        (void) playerMovePosition(direction, y, x);
         distance++;
 
         Cave_t *tile = &cave[y][x];
@@ -1426,7 +1426,7 @@ bool spellBuildWall(int y, int x, int direction) {
     bool finished = false;
 
     while (!finished) {
-        (void) playerMovePosition(direction, &y, &x);
+        (void) playerMovePosition(direction, y, x);
         distance++;
 
         Cave_t *tile = &cave[y][x];
@@ -1491,7 +1491,7 @@ bool spellCloneMonster(int y, int x, int direction) {
     bool finished = false;
 
     while (!finished) {
-        (void) playerMovePosition(direction, &y, &x);
+        (void) playerMovePosition(direction, y, x);
         distance++;
 
         Cave_t *tile = &cave[y][x];
@@ -1586,7 +1586,7 @@ bool spellTeleportAwayMonsterInDirection(int y, int x, int direction) {
     bool finished = false;
 
     while (!finished) {
-        (void) playerMovePosition(direction, &y, &x);
+        (void) playerMovePosition(direction, y, x);
         distance++;
 
         Cave_t *tile = &cave[y][x];

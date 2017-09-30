@@ -139,7 +139,7 @@ void playerTunnel(int direction) {
 
     int y = char_row;
     int x = char_col;
-    (void) playerMovePosition(direction, &y, &x);
+    (void) playerMovePosition(direction, y, x);
 
     Cave_t *tile = &cave[y][x];
     Inventory_t *item = &inventory[EQUIPMENT_WIELD];
@@ -282,7 +282,7 @@ void playerDisarmTrap() {
 
     int y = char_row;
     int x = char_col;
-    (void) playerMovePosition(dir, &y, &x);
+    (void) playerMovePosition(dir, y, x);
 
     Cave_t *tile = &cave[y][x];
 
@@ -898,7 +898,7 @@ void playerThrowItem() {
     bool flag = false;
 
     while (!flag) {
-        (void) playerMovePosition(dir, &y, &x);
+        (void) playerMovePosition(dir, y, x);
 
         if (current_distance + 1 > tdis) {
             break;
@@ -1163,7 +1163,7 @@ void playerBash() {
 
     int y = char_row;
     int x = char_col;
-    (void) playerMovePosition(dir, &y, &x);
+    (void) playerMovePosition(dir, y, x);
 
     Cave_t *tile = &cave[y][x];
 
