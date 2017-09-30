@@ -129,15 +129,15 @@ static bool isObjectKnown(int16_t id) {
 }
 
 // Remove "Secret" symbol for identity of object
-void itemSetAsIdentified(Inventory_t *item) {
-    int16_t id = objectPositionOffset(item->category_id, item->sub_category_id);
+void itemSetAsIdentified(int category_id, int sub_category_id) {
+    int16_t id = objectPositionOffset(category_id, sub_category_id);
 
     if (id < 0) {
         return;
     }
 
     id <<= 6;
-    id += (uint8_t) (item->sub_category_id & (ITEM_SINGLE_STACK_MIN - 1));
+    id += (uint8_t) (sub_category_id & (ITEM_SINGLE_STACK_MIN - 1));
 
     objects_identified[id] |= OD_KNOWN1;
 
@@ -225,20 +225,20 @@ void itemSetAsTried(Inventory_t *item) {
 // Somethings been identified.
 // Extra complexity by CJS so that it can merge store/dungeon objects when appropriate.
 void itemIdentify(int *item_id) {
-    Inventory_t *i_ptr = &inventory[*item_id];
+    Inventory_t *item = &inventory[*item_id];
 
-    if ((i_ptr->flags & TR_CURSED) != 0u) {
-        itemAppendToInscription(i_ptr, ID_DAMD);
+    if ((item->flags & TR_CURSED) != 0u) {
+        itemAppendToInscription(item, ID_DAMD);
     }
 
-    if (itemSetColorlessAsIdentifed(i_ptr)) {
+    if (itemSetColorlessAsIdentifed(item)) {
         return;
     }
 
-    itemSetAsIdentified(i_ptr);
+    itemSetAsIdentified(item->category_id, item->sub_category_id);
 
-    int x1 = i_ptr->category_id;
-    int x2 = i_ptr->sub_category_id;
+    int x1 = item->category_id;
+    int x2 = item->sub_category_id;
 
     // no merging possible
     if (x2 < ITEM_SINGLE_STACK_MIN || x2 >= ITEM_GROUP_MIN) {
@@ -251,7 +251,7 @@ void itemIdentify(int *item_id) {
     for (int i = 0; i < inventory_count; i++) {
         t_ptr = &inventory[i];
 
-        if (t_ptr->category_id == x1 && t_ptr->sub_category_id == x2 && i != *item_id && ((int) t_ptr->items_count + (int) i_ptr->items_count) < 256) {
+        if (t_ptr->category_id == x1 && t_ptr->sub_category_id == x2 && i != *item_id && ((int) t_ptr->items_count + (int) item->items_count) < 256) {
             // make *item_id the smaller number
             if (*item_id > i) {
                 j = *item_id;

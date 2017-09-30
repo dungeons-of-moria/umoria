@@ -167,7 +167,7 @@ void exitGame();
 // desc.c
 void magicInitializeItemNames();
 int16_t objectPositionOffset(int category_id, int sub_category_id);
-void itemSetAsIdentified(Inventory_t *item);
+void itemSetAsIdentified(int category_id, int sub_category_id);
 bool itemSetColorlessAsIdentifed(Inventory_t *item);
 void spellItemIdentifyAndRemoveRandomInscription(Inventory_t *item);
 bool spellItemIdentified(Inventory_t *item);
