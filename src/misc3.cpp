@@ -2094,13 +2094,13 @@ static int playerAttackBlowsStrength(int strength, int weight) {
 }
 
 // Weapon weight VS strength and dexterity -RAK-
-int playerAttackBlows(int weight, int *weight_to_hit) {
-    *weight_to_hit = 0;
+int playerAttackBlows(int weight, int &weight_to_hit) {
+    weight_to_hit = 0;
 
     int player_strength = py.stats.used[A_STR];
 
     if (player_strength * 15 < weight) {
-        *weight_to_hit = player_strength * 15 - weight;
+        weight_to_hit = player_strength * 15 - weight;
         return 1;
     }
 

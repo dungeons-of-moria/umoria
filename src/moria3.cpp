@@ -759,22 +759,22 @@ int monsterTakeHit(int monster_id, int damage) {
     return m_take_hit;
 }
 
-static void playerCalculateToHitBlows(int weaponID, int weaponWeight, int *blows, int *tot_tohit) {
-    if (weaponID != TV_NOTHING) {
+static void playerCalculateToHitBlows(int weapon_id, int weapon_weight, int &blows, int &total_to_hit) {
+    if (weapon_id != TV_NOTHING) {
         // Proper weapon
-        *blows = playerAttackBlows(weaponWeight, tot_tohit);
+        blows = playerAttackBlows(weapon_weight, total_to_hit);
     } else {
         // Bare hands?
-        *blows = 2;
-        *tot_tohit = -3;
+        blows = 2;
+        total_to_hit = -3;
     }
 
     // Fix for arrows
-    if (weaponID >= TV_SLING_AMMO && weaponID <= TV_SPIKE) {
-        *blows = 1;
+    if (weapon_id >= TV_SLING_AMMO && weapon_id <= TV_SPIKE) {
+        blows = 1;
     }
 
-    *tot_tohit += py.misc.plusses_to_hit;
+    total_to_hit += py.misc.plusses_to_hit;
 }
 
 static int playerCalculateBaseToHit(bool creatureLit, int tot_tohit) {
@@ -811,7 +811,7 @@ static void playerAttackMonster(int y, int x) {
     }
 
     int blows, total_to_hit;
-    playerCalculateToHitBlows(item->category_id, item->weight, &blows, &total_to_hit);
+    playerCalculateToHitBlows(item->category_id, item->weight, blows, total_to_hit);
 
     int base_to_hit = playerCalculateBaseToHit(monster->lit, total_to_hit);
 
