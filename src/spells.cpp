@@ -130,7 +130,7 @@ bool dungeonDetectTrapOnPanel() {
                 detected = true;
             } else if (treasure_list[tile.treasure_id].category_id == TV_CHEST) {
                 Inventory_t &item = treasure_list[tile.treasure_id];
-                spellItemIdentifyAndRemoveRandomInscription(&item);
+                spellItemIdentifyAndRemoveRandomInscription(item);
             }
         }
     }
@@ -315,7 +315,7 @@ bool spellIdentifyItem() {
     itemIdentify(&item_id);
 
     Inventory_t &item = inventory[item_id];
-    spellItemIdentifyAndRemoveRandomInscription(&item);
+    spellItemIdentifyAndRemoveRandomInscription(item);
 
     obj_desc_t description = {'\0'};
     itemDescription(description, &item, true);
@@ -446,7 +446,7 @@ bool spellDestroyAdjacentDoorsTraps() {
                 destroyed = true;
 
                 printMessage("You have disarmed the chest.");
-                spellItemIdentifyAndRemoveRandomInscription(&item);
+                spellItemIdentifyAndRemoveRandomInscription(item);
             }
         }
     }
@@ -592,7 +592,7 @@ bool spellDisarmAllInDirection(int y, int x, int direction) {
                 item.flags &= ~(CH_TRAPPED | CH_LOCKED);
                 item.special_name_id = SN_UNLOCKED;
 
-                spellItemIdentifyAndRemoveRandomInscription(&item);
+                spellItemIdentifyAndRemoveRandomInscription(item);
             }
         }
 
@@ -1366,7 +1366,7 @@ bool spellDestroyDoorsTrapsInDirection(int y, int x, int direction) {
                 item.flags &= ~(CH_TRAPPED | CH_LOCKED);
                 item.special_name_id = SN_UNLOCKED;
 
-                spellItemIdentifyAndRemoveRandomInscription(&item);
+                spellItemIdentifyAndRemoveRandomInscription(item);
             }
         }
     } while ((distance <= OBJECT_BOLTS_MAX_RANGE) || tile->feature_id <= MAX_OPEN_SPACE);

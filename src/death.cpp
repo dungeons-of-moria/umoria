@@ -84,7 +84,7 @@ static void printTomb() {
     if (getStringInput(str, 22, 18, 60)) {
         for (auto &item : inventory) {
             itemSetAsIdentified(item.category_id, item.sub_category_id);
-            spellItemIdentifyAndRemoveRandomInscription(&item);
+            spellItemIdentifyAndRemoveRandomInscription(item);
         }
 
         playerRecalculateBonuses();

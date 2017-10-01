@@ -164,9 +164,9 @@ bool itemSetColorlessAsIdentified(int category_id, int sub_category_id, int iden
 }
 
 // Remove "Secret" symbol for identity of plusses
-void spellItemIdentifyAndRemoveRandomInscription(Inventory_t *item) {
-    unsample(*item);
-    item->identification |= ID_KNOWN2;
+void spellItemIdentifyAndRemoveRandomInscription(Inventory_t &item) {
+    unsample(item);
+    item.identification |= ID_KNOWN2;
 }
 
 bool spellItemIdentified(Inventory_t *item) {
@@ -183,7 +183,7 @@ void itemIdentificationClearEmpty(Inventory_t *item) {
 
 void itemIdentifyAsStoreBought(Inventory_t *item) {
     item->identification |= ID_STORE_BOUGHT;
-    spellItemIdentifyAndRemoveRandomInscription(item);
+    spellItemIdentifyAndRemoveRandomInscription(*item);
 }
 
 bool itemStoreBought(int identification) {

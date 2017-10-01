@@ -255,7 +255,7 @@ static void playerDisarmChestTrap(int y, int x, int total, Inventory_t *item) {
 
             printMessage("You have disarmed the chest.");
 
-            spellItemIdentifyAndRemoveRandomInscription(item);
+            spellItemIdentifyAndRemoveRandomInscription(*item);
             py.misc.exp += level;
 
             displayCharacterExperience();
@@ -263,7 +263,7 @@ static void playerDisarmChestTrap(int y, int x, int total, Inventory_t *item) {
             printMessageNoCommandInterrupt("You failed to disarm the chest.");
         } else {
             printMessage("You set a trap off!");
-            spellItemIdentifyAndRemoveRandomInscription(item);
+            spellItemIdentifyAndRemoveRandomInscription(*item);
             chestTrap(y, x);
         }
         return;

@@ -87,7 +87,7 @@ void dungeonSearch(int y, int x, int chance) {
                 // mask out the treasure bits
                 if ((item.flags & CH_TRAPPED) > 1) {
                     if (!spellItemIdentified(&item)) {
-                        spellItemIdentifyAndRemoveRandomInscription(&item);
+                        spellItemIdentifyAndRemoveRandomInscription(item);
                         printMessage("You have discovered a trap on the chest!");
                     } else {
                         printMessage("The chest is trapped!");

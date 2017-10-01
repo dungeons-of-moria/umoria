@@ -899,7 +899,7 @@ static bool storeSellAnItem(int store_id, int *current_top_item_id) {
         inventoryTakeOneItem(&sold_item, &inventory[item_id]);
 
         // call spellItemIdentifyAndRemoveRandomInscription for store item, so charges/pluses are known
-        spellItemIdentifyAndRemoveRandomInscription(&sold_item);
+        spellItemIdentifyAndRemoveRandomInscription(sold_item);
         inventoryDestroyItem(item_id);
 
         itemDescription(description, &sold_item, true);
