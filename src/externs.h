@@ -171,7 +171,7 @@ void itemSetAsIdentified(int category_id, int sub_category_id);
 bool itemSetColorlessAsIdentified(int category_id, int sub_category_id, int identification);
 void spellItemIdentifyAndRemoveRandomInscription(Inventory_t &item);
 bool spellItemIdentified(const Inventory_t &item);
-void spellItemRemoveIdentification(Inventory_t *item);
+void spellItemRemoveIdentification(Inventory_t &item);
 void itemIdentificationClearEmpty(Inventory_t *item);
 void itemIdentifyAsStoreBought(Inventory_t *item);
 bool itemStoreBought(int identification);

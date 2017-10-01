@@ -173,8 +173,8 @@ bool spellItemIdentified(const Inventory_t &item) {
     return (item.identification & ID_KNOWN2) != 0;
 }
 
-void spellItemRemoveIdentification(Inventory_t *item) {
-    item->identification &= ~ID_KNOWN2;
+void spellItemRemoveIdentification(Inventory_t &item) {
+    item.identification &= ~ID_KNOWN2;
 }
 
 void itemIdentificationClearEmpty(Inventory_t *item) {

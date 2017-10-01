@@ -1010,7 +1010,7 @@ bool spellRechargeItem(int number_of_charges) {
         item.misc_use += 2 + randomNumber(number_of_charges);
 
         if (spellItemIdentified(item)) {
-            spellItemRemoveIdentification(&item);
+            spellItemRemoveIdentification(item);
         }
 
         itemIdentificationClearEmpty(&item);
