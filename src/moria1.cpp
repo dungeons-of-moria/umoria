@@ -103,7 +103,7 @@ static void playerRecalculateBonusesFromInventory() {
             py.misc.magical_ac += item.to_ac;
             py.misc.ac += item.ac;
 
-            if (spellItemIdentified(&item)) {
+            if (spellItemIdentified(item)) {
                 py.misc.display_to_hit += item.to_hit;
 
                 // Bows can't damage. -CJS-

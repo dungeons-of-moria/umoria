@@ -2005,7 +2005,7 @@ static bool itemEnchanted(Inventory_t &item) {
         return false;
     }
 
-    if (spellItemIdentified(&item)) {
+    if (spellItemIdentified(item)) {
         return false;
     }
 

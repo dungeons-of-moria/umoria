@@ -1009,7 +1009,7 @@ bool spellRechargeItem(int number_of_charges) {
         number_of_charges = (number_of_charges / (item.depth_first_found + 2)) + 1;
         item.misc_use += 2 + randomNumber(number_of_charges);
 
-        if (spellItemIdentified(&item)) {
+        if (spellItemIdentified(item)) {
             spellItemRemoveIdentification(&item);
         }
 

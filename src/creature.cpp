@@ -586,7 +586,7 @@ static bool inventoryDiminishChargesAttack(uint8_t creature_level, int16_t &mons
     if (has_charges && item.misc_use > 0) {
         monster_hp += creature_level * item.misc_use;
         item.misc_use = 0;
-        if (!spellItemIdentified(&item)) {
+        if (!spellItemIdentified(item)) {
             itemAppendToInscription(&item, ID_EMPTY);
         }
         printMessage("Energy drains from your pack!");

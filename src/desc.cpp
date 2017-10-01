@@ -169,8 +169,8 @@ void spellItemIdentifyAndRemoveRandomInscription(Inventory_t &item) {
     item.identification |= ID_KNOWN2;
 }
 
-bool spellItemIdentified(Inventory_t *item) {
-    return (item->identification & ID_KNOWN2) != 0;
+bool spellItemIdentified(const Inventory_t &item) {
+    return (item.identification & ID_KNOWN2) != 0;
 }
 
 void spellItemRemoveIdentification(Inventory_t *item) {
@@ -500,7 +500,7 @@ void itemDescription(obj_desc_t description, Inventory_t *item, bool add_prefix)
 
     vtype_t tmp_str = {'\0'};
 
-    if (item->special_name_id != SN_NULL && spellItemIdentified(item)) {
+    if (item->special_name_id != SN_NULL && spellItemIdentified(*item)) {
         (void) strcat(tmp_val, " ");
         (void) strcat(tmp_val, special_item_names[item->special_name_id]);
     }
@@ -509,7 +509,7 @@ void itemDescription(obj_desc_t description, Inventory_t *item, bool add_prefix)
         (void) strcat(tmp_val, damstr);
     }
 
-    if (spellItemIdentified(item)) {
+    if (spellItemIdentified(*item)) {
         auto abs_to_hit = (int) std::abs((std::intmax_t) item->to_hit);
         auto abs_to_damage = (int) std::abs((std::intmax_t) item->to_damage);
 
@@ -530,13 +530,13 @@ void itemDescription(obj_desc_t description, Inventory_t *item, bool add_prefix)
     if (item->ac != 0 || item->category_id == TV_HELM) {
         (void) sprintf(tmp_str, " [%d", item->ac);
         (void) strcat(tmp_val, tmp_str);
-        if (spellItemIdentified(item)) {
+        if (spellItemIdentified(*item)) {
             // originally used %+d, but several machines don't support it
             (void) sprintf(tmp_str, ",%c%d", (item->to_ac < 0) ? '-' : '+', abs_to_ac);
             (void) strcat(tmp_val, tmp_str);
         }
         (void) strcat(tmp_val, "]");
-    } else if (item->to_ac != 0 && spellItemIdentified(item)) {
+    } else if (item->to_ac != 0 && spellItemIdentified(*item)) {
         // originally used %+d, but several machines don't support it
         (void) sprintf(tmp_str, " [%c%d]", (item->to_ac < 0) ? '-' : '+', abs_to_ac);
         (void) strcat(tmp_val, tmp_str);
@@ -555,7 +555,7 @@ void itemDescription(obj_desc_t description, Inventory_t *item, bool add_prefix)
         (void) sprintf(tmp_str, " with %d turns of light", item->misc_use);
     } else if (misc_use == IGNORED) {
         // NOOP
-    } else if (spellItemIdentified(item)) {
+    } else if (spellItemIdentified(*item)) {
         auto abs_misc_use = (int) std::abs((std::intmax_t) item->misc_use);
 
         if (misc_use == Z_PLUSSES) {
@@ -668,7 +668,7 @@ void inventoryItemCopyTo(int from_item_id, Inventory_t *to_item) {
 
 // Describe number of remaining charges. -RAK-
 void itemChargesRemainingDescription(int item_id) {
-    if (!spellItemIdentified(&inventory[item_id])) {
+    if (!spellItemIdentified(inventory[item_id])) {
         return;
     }
 

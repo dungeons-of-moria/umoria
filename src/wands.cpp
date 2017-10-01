@@ -171,7 +171,7 @@ void wandAim() {
 
     if (item.misc_use < 1) {
         printMessage("The wand has no charges left.");
-        if (!spellItemIdentified(&item)) {
+        if (!spellItemIdentified(item)) {
             itemAppendToInscription(&item, ID_EMPTY);
         }
         return;

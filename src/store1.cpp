@@ -57,7 +57,7 @@ int32_t storeItemValue(Inventory_t *item) {
 }
 
 static int32_t getWeaponArmorBuyPrice(Inventory_t *item) {
-    if (!spellItemIdentified(item)) {
+    if (!spellItemIdentified(*item)) {
         return game_objects[item->id].cost;
     }
 
@@ -77,7 +77,7 @@ static int32_t getWeaponArmorBuyPrice(Inventory_t *item) {
 }
 
 static int32_t getAmmoBuyPrice(Inventory_t *item) {
-    if (!spellItemIdentified(item)) {
+    if (!spellItemIdentified(*item)) {
         return game_objects[item->id].cost;
     }
 
@@ -115,7 +115,7 @@ static int32_t getRingAmuletBuyPrice(Inventory_t *item) {
     // player knows what type of ring, but does not know whether it
     // is cursed or not, if refuse to buy cursed objects here, then
     // player can use this to 'identify' cursed objects
-    if (!spellItemIdentified(item)) {
+    if (!spellItemIdentified(*item)) {
         return game_objects[item->id].cost;
     }
 
@@ -131,7 +131,7 @@ static int32_t getWandStaffBuyPrice(Inventory_t *item) {
         return 70;
     }
 
-    if (spellItemIdentified(item)) {
+    if (spellItemIdentified(*item)) {
         return item->cost + (item->cost / 20) * item->misc_use;
     }
 
@@ -139,7 +139,7 @@ static int32_t getWandStaffBuyPrice(Inventory_t *item) {
 }
 
 static int32_t getPickShovelBuyPrice(Inventory_t *item) {
-    if (!spellItemIdentified(item)) {
+    if (!spellItemIdentified(*item)) {
         return game_objects[item->id].cost;
     }
 

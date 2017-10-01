@@ -49,7 +49,7 @@ static bool staffPlayerCanUse(Inventory_t *item) {
 
     if (item->misc_use < 1) {
         printMessage("The staff has no charges left.");
-        if (!spellItemIdentified(item)) {
+        if (!spellItemIdentified(*item)) {
             itemAppendToInscription(item, ID_EMPTY);
         }
         return false;
