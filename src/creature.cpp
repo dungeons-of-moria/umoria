@@ -1491,7 +1491,7 @@ static void monsterMoveOutOfWall(const Monster_t &monster, int monster_id, uint3
 }
 
 // Undead only get confused from turn undead, so they should flee
-static void monsterMoveUndead(Monster_t *monster, Creature_t *creature, int monster_id, uint32_t *rcmove) {
+static void monsterMoveUndead(Creature_t &creature, int monster_id, uint32_t &rcmove) {
     int directions[9];
     monsterGetMoveDirection(monster_id, directions);
 
@@ -1502,14 +1502,12 @@ static void monsterMoveUndead(Monster_t *monster, Creature_t *creature, int mons
     directions[4] = randomNumber(9);
 
     // don't move him if he is not supposed to move!
-    if ((creature->movement & CM_ATTACK_ONLY) == 0u) {
-        makeMove(monster_id, directions, *rcmove);
+    if ((creature.movement & CM_ATTACK_ONLY) == 0u) {
+        makeMove(monster_id, directions, rcmove);
     }
-
-    monster->confused_amount--;
 }
 
-static void monsterMoveConfused(Monster_t *monster, Creature_t *creature, int monster_id, uint32_t *rcmove) {
+static void monsterMoveConfused(Creature_t &creature, int monster_id, uint32_t &rcmove) {
     int directions[9];
 
     directions[0] = randomNumber(9);
@@ -1519,26 +1517,25 @@ static void monsterMoveConfused(Monster_t *monster, Creature_t *creature, int mo
     directions[4] = randomNumber(9);
 
     // don't move him if he is not supposed to move!
-    if ((creature->movement & CM_ATTACK_ONLY) == 0u) {
-        makeMove(monster_id, directions, *rcmove);
+    if ((creature.movement & CM_ATTACK_ONLY) == 0u) {
+        makeMove(monster_id, directions, rcmove);
     }
-
-    monster->confused_amount--;
 }
 
-static bool monsterDoMove(int monster_id, uint32_t *rcmove, Monster_t *monster, Creature_t *creature) {
+static bool monsterDoMove(int monster_id, uint32_t &rcmove, Monster_t &monster, Creature_t &creature) {
     // Creature is confused or undead turned?
-    if (monster->confused_amount != 0u) {
-        if ((creature->defenses & CD_UNDEAD) != 0) {
-            monsterMoveUndead(monster, creature, monster_id, rcmove);
+    if (monster.confused_amount != 0u) {
+        if ((creature.defenses & CD_UNDEAD) != 0) {
+            monsterMoveUndead(creature, monster_id, rcmove);
         } else {
-            monsterMoveConfused(monster, creature, monster_id, rcmove);
+            monsterMoveConfused(creature, monster_id, rcmove);
         }
+        monster.confused_amount--;
         return true;
     }
 
     // Creature may cast a spell
-    if ((creature->spells & CS_FREQ) != 0u) {
+    if ((creature.spells & CS_FREQ) != 0u) {
         return monsterCastSpell(monster_id);
     }
 
@@ -1609,7 +1606,7 @@ static void monsterMove(int monster_id, uint32_t *rcmove) {
         return;
     }
 
-    if (monsterDoMove(monster_id, rcmove, &monster, &creature)) {
+    if (monsterDoMove(monster_id, *rcmove, monster, creature)) {
         return;
     }
 
