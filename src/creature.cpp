@@ -1433,12 +1433,12 @@ static void monsterMultiplyCritter(const Monster_t &monster, int monster_id, uin
     }
 }
 
-static void monsterMoveOutOfWall(Monster_t *monster, int monster_id, uint32_t *rcmove) {
+static void monsterMoveOutOfWall(const Monster_t &monster, int monster_id, uint32_t &rcmove) {
     // If the monster is already dead, don't kill it again!
     // This can happen for monsters moving faster than the player. They
     // will get multiple moves, but should not if they die on the first
     // move.  This is only a problem for monsters stuck in rock.
-    if (monster->hp < 0) {
+    if (monster.hp < 0) {
         return;
     }
 
@@ -1450,8 +1450,8 @@ static void monsterMoveOutOfWall(Monster_t *monster, int monster_id, uint32_t *r
     // Do not allow attack against the player.
     // Must cast y-1 to signed int, so that a negative value
     // of i will fail the comparison.
-    for (int y = monster->y + 1; y >= (monster->y - 1); y--) {
-        for (int x = monster->x - 1; x <= monster->x + 1; x++) {
+    for (int y = monster.y + 1; y >= (monster.y - 1); y--) {
+        for (int x = monster.x - 1; x <= monster.x + 1; x++) {
             if (dir != 5 && cave[y][x].feature_id <= MAX_OPEN_SPACE && cave[y][x].creature_id != 1) {
                 directions[id++] = dir;
             }
@@ -1469,11 +1469,11 @@ static void monsterMoveOutOfWall(Monster_t *monster, int monster_id, uint32_t *r
         directions[dir] = saved_id;
 
         // this can only fail if directions[0] has a rune of protection
-        makeMove(monster_id, directions, *rcmove);
+        makeMove(monster_id, directions, rcmove);
     }
 
     // if still in a wall, let it dig itself out, but also apply some more damage
-    if (cave[monster->y][monster->x].feature_id >= MIN_CAVE_WALL) {
+    if (cave[monster.y][monster.x].feature_id >= MIN_CAVE_WALL) {
         // in case the monster dies, may need to callfix1_delete_monster()
         // instead of delete_monsters()
         hack_monptr = monster_id;
@@ -1485,7 +1485,7 @@ static void monsterMoveOutOfWall(Monster_t *monster, int monster_id, uint32_t *r
             displayCharacterExperience();
         } else {
             printMessage("A creature digs itself out from the rock!");
-            (void) dungeonTunnelWall((int) monster->y, (int) monster->x, 1, 0);
+            (void) dungeonTunnelWall((int) monster.y, (int) monster.x, 1, 0);
         }
     }
 }
@@ -1605,7 +1605,7 @@ static void monsterMove(int monster_id, uint32_t *rcmove) {
     // if in wall, must immediately escape to a clear area
     // then monster movement finished
     if (((creature.movement & CM_PHASE) == 0u) && cave[monster.y][monster.x].feature_id >= MIN_CAVE_WALL) {
-        monsterMoveOutOfWall(&monster, monster_id, rcmove);
+        monsterMoveOutOfWall(monster, monster_id, *rcmove);
         return;
     }
 
