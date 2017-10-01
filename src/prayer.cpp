@@ -200,7 +200,7 @@ void pray() {
         return;
     }
 
-    Spell_t *spell = &magic_spells[py.misc.class_id - 1][choice];
+    Spell_t &spell = magic_spells[py.misc.class_id - 1][choice];
 
     // NOTE: at least one function called by `playerRecitePrayer()` sets `player_free_turn = true`,
     // e.g. `spellCreateFood()`, so this check is required. -MRC-
@@ -208,16 +208,16 @@ void pray() {
     playerRecitePrayer(choice);
     if (!player_free_turn) {
         if ((spells_worked & (1L << choice)) == 0) {
-            py.misc.exp += spell->exp_gain_for_learning << 2;
+            py.misc.exp += spell.exp_gain_for_learning << 2;
             displayCharacterExperience();
             spells_worked |= (1L << choice);
         }
     }
 
     if (!player_free_turn) {
-        if (spell->mana_required > py.misc.current_mana) {
+        if (spell.mana_required > py.misc.current_mana) {
             printMessage("You faint from fatigue!");
-            py.flags.paralysis = (int16_t) randomNumber((5 * (spell->mana_required - py.misc.current_mana)));
+            py.flags.paralysis = (int16_t) randomNumber((5 * (spell.mana_required - py.misc.current_mana)));
             py.misc.current_mana = 0;
             py.misc.current_mana_fraction = 0;
             if (randomNumber(3) == 1) {
@@ -225,7 +225,7 @@ void pray() {
                 (void) playerStatRandomDecrease(A_CON);
             }
         } else {
-            py.misc.current_mana -= spell->mana_required;
+            py.misc.current_mana -= spell.mana_required;
         }
 
         printCharacterCurrentMana();
