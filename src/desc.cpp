@@ -224,8 +224,8 @@ void itemSetAsTried(const Inventory_t &item) {
 
 // Somethings been identified.
 // Extra complexity by CJS so that it can merge store/dungeon objects when appropriate.
-void itemIdentify(int *item_id) {
-    Inventory_t &item = inventory[*item_id];
+void itemIdentify(int &item_id) {
+    Inventory_t &item = inventory[item_id];
 
     if ((item.flags & TR_CURSED) != 0u) {
         itemAppendToInscription(&item, ID_DAMD);
@@ -250,17 +250,17 @@ void itemIdentify(int *item_id) {
     for (int i = 0; i < inventory_count; i++) {
         Inventory_t &t_ptr = inventory[i];
 
-        if (t_ptr.category_id == x1 && t_ptr.sub_category_id == x2 && i != *item_id && ((int) t_ptr.items_count + (int) item.items_count) < 256) {
+        if (t_ptr.category_id == x1 && t_ptr.sub_category_id == x2 && i != item_id && ((int) t_ptr.items_count + (int) item.items_count) < 256) {
             // make *item_id the smaller number
-            if (*item_id > i) {
-                j = *item_id;
-                *item_id = i;
+            if (item_id > i) {
+                j = item_id;
+                item_id = i;
                 i = j;
             }
 
             printMessage("You combine similar objects from the shop and dungeon.");
 
-            inventory[*item_id].items_count += inventory[i].items_count;
+            inventory[item_id].items_count += inventory[i].items_count;
             inventory_count--;
 
             for (j = i; j < inventory_count; j++) {

@@ -598,7 +598,7 @@ void readScroll() {
             py.misc.exp += (item.depth_first_found + (py.misc.level >> 1)) / py.misc.level;
             displayCharacterExperience();
 
-            itemIdentify(&item_id);
+            itemIdentify(item_id);
         }
     } else if (!itemSetColorlessAsIdentified(item.category_id, item.sub_category_id, item.identification)) {
         itemSetAsTried(item);

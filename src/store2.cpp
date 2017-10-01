@@ -893,7 +893,7 @@ static bool storeSellAnItem(int store_id, int *current_top_item_id) {
         py.misc.au += price;
 
         // identify object in inventory to set objects_identified array
-        itemIdentify(&item_id);
+        itemIdentify(item_id);
 
         // retake sold_item so that it will be identified
         inventoryTakeOneItem(&sold_item, &inventory[item_id]);

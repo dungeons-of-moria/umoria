@@ -312,7 +312,7 @@ bool spellIdentifyItem() {
         return false;
     }
 
-    itemIdentify(&item_id);
+    itemIdentify(item_id);
 
     Inventory_t &item = inventory[item_id];
     spellItemIdentifyAndRemoveRandomInscription(item);
