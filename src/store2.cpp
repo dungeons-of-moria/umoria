@@ -756,7 +756,7 @@ static bool storePurchaseAnItem(int store_id, int *current_top_item_id) {
     Inventory_t sell_item{};
     inventoryTakeOneItem(&sell_item, &store.inventory[item_id].item);
 
-    if (!inventoryCanCarryItemCount(&sell_item)) {
+    if (!inventoryCanCarryItemCount(sell_item)) {
         putStringClearToEOL("You cannot carry that many different items.", 0, 0);
         return false;
     }

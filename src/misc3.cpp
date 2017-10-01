@@ -432,7 +432,7 @@ void printCharacterCurrentDepth() {
 }
 
 // Prints status of hunger -RAK-
-void printCharacterHungerstatus() {
+void printCharacterHungerStatus() {
     if ((PY_WEAK & py.flags.status) != 0u) {
         putString("Weak  ", 23, 0);
     } else if ((PY_HUNGRY & py.flags.status) != 0u) {
@@ -880,7 +880,7 @@ void printCharacterStatsBlock() {
     uint32_t status = py.flags.status;
 
     if (((PY_HUNGRY | PY_WEAK) & status) != 0u) {
-        printCharacterHungerstatus();
+        printCharacterHungerStatus();
     }
 
     if ((PY_BLIND & status) != 0u) {
@@ -1221,29 +1221,29 @@ int playerCarryingLoadLimit() {
 }
 
 // this code must be identical to the inventoryCarryItem() code below
-bool inventoryCanCarryItemCount(Inventory_t *item) {
+bool inventoryCanCarryItemCount(const Inventory_t &item) {
     if (inventory_count < EQUIPMENT_WIELD) {
         return true;
     }
 
-    if (item->sub_category_id < ITEM_SINGLE_STACK_MIN) {
+    if (item.sub_category_id < ITEM_SINGLE_STACK_MIN) {
         return false;
     }
 
     for (int i = 0; i < inventory_count; i++) {
-        bool same_character = inventory[i].category_id == item->category_id;
-        bool same_category = inventory[i].sub_category_id == item->sub_category_id;
+        bool same_character = inventory[i].category_id == item.category_id;
+        bool same_category = inventory[i].sub_category_id == item.sub_category_id;
 
         // make sure the number field doesn't overflow
-        bool same_number = inventory[i].items_count + item->items_count < 256;
+        bool same_number = inventory[i].items_count + item.items_count < 256;
 
         // they always stack (sub_category_id < 192), or else they have same `misc_use`
-        bool same_group = item->sub_category_id < ITEM_GROUP_MIN || inventory[i].misc_use == item->misc_use;
+        bool same_group = item.sub_category_id < ITEM_GROUP_MIN || inventory[i].misc_use == item.misc_use;
 
         // only stack if both or neither are identified
         // TODO(cook): is it correct that they should be equal to each other, regardless of true/false value?
         bool inventory_item_is_colorless = itemSetColorlessAsIdentified(inventory[i].category_id, inventory[i].sub_category_id, inventory[i].identification);
-        bool item_is_colorless = itemSetColorlessAsIdentified(item->category_id, item->sub_category_id, item->identification);
+        bool item_is_colorless = itemSetColorlessAsIdentified(item.category_id, item.sub_category_id, item.identification);
         bool identification = inventory_item_is_colorless == item_is_colorless;
 
         if (same_character && same_category && same_number && same_group && identification) {

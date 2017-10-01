@@ -1055,7 +1055,7 @@ static bool selectItemCommands(char *command, char *which, bool selecting) {
             } else if ((TR_CURSED & inventory[item_id].flags) != 0u) {
                 item_id = -1;
                 printMessage("Hmmm, it seems to be cursed.");
-            } else if (*command == 't' && !inventoryCanCarryItemCount(&inventory[item_id])) {
+            } else if (*command == 't' && !inventoryCanCarryItemCount(inventory[item_id])) {
                 if (cave[char_row][char_col].treasure_id != 0) {
                     item_id = -1;
                     printMessage("You can't carry it.");
@@ -1103,7 +1103,7 @@ static bool selectItemCommands(char *command, char *which, bool selecting) {
                 if ((TR_CURSED & inventory[slot].flags) != 0u) {
                     inventoryItemIsCursedMessage(slot);
                     item_id = -1;
-                } else if (inventory[item_id].sub_category_id == ITEM_GROUP_MIN && inventory[item_id].items_count > 1 && !inventoryCanCarryItemCount(&inventory[slot])) {
+                } else if (inventory[item_id].sub_category_id == ITEM_GROUP_MIN && inventory[item_id].items_count > 1 && !inventoryCanCarryItemCount(inventory[slot])) {
                     // this can happen if try to wield a torch,
                     // and have more than one in inventory
                     printMessage("You will have to drop something first.");

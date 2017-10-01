@@ -203,7 +203,7 @@ void playerEat() {
 
     py.flags.status &= ~(PY_WEAK | PY_HUNGRY);
 
-    printCharacterHungerstatus();
+    printCharacterHungerStatus();
 
     itemTypeRemainingCountDescription(item_id);
     inventoryDestroyItem(item_id);
