@@ -785,28 +785,28 @@ static bool executeAttackOnPlayer(uint8_t creature_level, int16_t &monster_hp, i
     return noticed;
 }
 
-static void monsterConfuseOnAttack(Creature_t *creature, Monster_t *monster, int attack_type, vtype_t monster_name, bool visible) {
+static void monsterConfuseOnAttack(Creature_t &creature, Monster_t &monster, int attack_type, vtype_t monster_name, bool visible) {
     if (py.flags.confuse_monster && attack_type != 99) {
         printMessage("Your hands stop glowing.");
         py.flags.confuse_monster = false;
 
         vtype_t msg = {'\0'};
 
-        if (randomNumber(MON_MAX_LEVELS) < creature->level || ((CD_NO_SLEEP & creature->defenses) != 0)) {
+        if (randomNumber(MON_MAX_LEVELS) < creature.level || ((CD_NO_SLEEP & creature.defenses) != 0)) {
             (void) sprintf(msg, "%sis unaffected.", monster_name);
         } else {
             (void) sprintf(msg, "%sappears confused.", monster_name);
-            if (monster->confused_amount != 0u) {
-                monster->confused_amount += 3;
+            if (monster.confused_amount != 0u) {
+                monster.confused_amount += 3;
             } else {
-                monster->confused_amount = (uint8_t) (2 + randomNumber(16));
+                monster.confused_amount = (uint8_t) (2 + randomNumber(16));
             }
         }
 
         printMessage(msg);
 
         if (visible && !character_is_dead && randomNumber(4) == 1) {
-            creature_recall[monster->creature_id].defenses |= creature->defenses & CD_NO_SLEEP;
+            creature_recall[monster.creature_id].defenses |= creature.defenses & CD_NO_SLEEP;
         }
     }
 
@@ -877,7 +877,7 @@ static void monsterAttackPlayer(int monster_id) {
             // Moved here from monsterMove, so that monster only confused if it
             // actually hits. A monster that has been repelled has not hit
             // the player, so it should not be confused.
-            monsterConfuseOnAttack(&creature, &monster, adesc, name, visible);
+            monsterConfuseOnAttack(creature, monster, adesc, name, visible);
 
             // increase number of attacks if notice true, or if visible and
             // had previously noticed the attack (in which case all this does
