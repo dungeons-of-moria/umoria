@@ -267,7 +267,7 @@ void itemIdentify(int &item_id) {
                 inventory[j] = inventory[j + 1];
             }
 
-            inventoryItemCopyTo(OBJ_NOTHING, &inventory[j]);
+            inventoryItemCopyTo(OBJ_NOTHING, inventory[j]);
         }
     }
 }
@@ -645,28 +645,28 @@ void itemDescription(obj_desc_t description, const Inventory_t &item, bool add_p
     (void) strcat(description, ".");
 }
 
-void inventoryItemCopyTo(int from_item_id, Inventory_t *to_item) {
+void inventoryItemCopyTo(int from_item_id, Inventory_t &to_item) {
     GameObject_t &from = game_objects[from_item_id];
 
-    to_item->id = (uint16_t) from_item_id;
-    to_item->special_name_id = SN_NULL;
-    to_item->inscription[0] = '\0';
-    to_item->flags = from.flags;
-    to_item->category_id = from.category_id;
-    to_item->sprite = from.sprite;
-    to_item->misc_use = from.misc_use;
-    to_item->cost = from.cost;
-    to_item->sub_category_id = from.sub_category_id;
-    to_item->items_count = from.items_count;
-    to_item->weight = from.weight;
-    to_item->to_hit = from.to_hit;
-    to_item->to_damage = from.to_damage;
-    to_item->ac = from.ac;
-    to_item->to_ac = from.to_ac;
-    to_item->damage[0] = from.damage[0];
-    to_item->damage[1] = from.damage[1];
-    to_item->depth_first_found = from.depth_first_found;
-    to_item->identification = 0;
+    to_item.id = (uint16_t) from_item_id;
+    to_item.special_name_id = SN_NULL;
+    to_item.inscription[0] = '\0';
+    to_item.flags = from.flags;
+    to_item.category_id = from.category_id;
+    to_item.sprite = from.sprite;
+    to_item.misc_use = from.misc_use;
+    to_item.cost = from.cost;
+    to_item.sub_category_id = from.sub_category_id;
+    to_item.items_count = from.items_count;
+    to_item.weight = from.weight;
+    to_item.to_hit = from.to_hit;
+    to_item.to_damage = from.to_damage;
+    to_item.ac = from.ac;
+    to_item.to_ac = from.to_ac;
+    to_item.damage[0] = from.damage[0];
+    to_item.damage[1] = from.damage[1];
+    to_item.depth_first_found = from.depth_first_found;
+    to_item.identification = 0;
 }
 
 // Describe number of remaining charges. -RAK-

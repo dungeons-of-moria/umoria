@@ -19,7 +19,7 @@ static int spellChanceOfSuccess(int spell_id);
 void dungeonSetTrap(int y, int x, int sub_type_id) {
     int free_treasure_id = popt();
     cave[y][x].treasure_id = (uint8_t) free_treasure_id;
-    inventoryItemCopyTo(OBJ_TRAP_LIST + sub_type_id, &treasure_list[free_treasure_id]);
+    inventoryItemCopyTo(OBJ_TRAP_LIST + sub_type_id, treasure_list[free_treasure_id]);
 }
 
 // Places rubble at location y, x -RAK-
@@ -27,7 +27,7 @@ void dungeonPlaceRubble(int y, int x) {
     int free_treasure_id = popt();
     cave[y][x].treasure_id = (uint8_t) free_treasure_id;
     cave[y][x].feature_id = TILE_BLOCKED_FLOOR;
-    inventoryItemCopyTo(OBJ_RUBBLE, &treasure_list[free_treasure_id]);
+    inventoryItemCopyTo(OBJ_RUBBLE, treasure_list[free_treasure_id]);
 }
 
 // Places a treasure (Gold or Gems) at given row, column -RAK-
@@ -45,7 +45,7 @@ void dungeonPlaceGold(int y, int x) {
     }
 
     cave[y][x].treasure_id = (uint8_t) free_treasure_id;
-    inventoryItemCopyTo(OBJ_GOLD_LIST + gold_type_id, &treasure_list[free_treasure_id]);
+    inventoryItemCopyTo(OBJ_GOLD_LIST + gold_type_id, treasure_list[free_treasure_id]);
     treasure_list[free_treasure_id].cost += (8L * (int32_t) randomNumber((int) treasure_list[free_treasure_id].cost)) + randomNumber(8);
 
     if (cave[y][x].creature_id == 1) {
@@ -114,7 +114,7 @@ void dungeonPlaceRandomObjectAt(int y, int x, bool must_be_small) {
     cave[y][x].treasure_id = (uint8_t) free_treasure_id;
 
     int object_id = itemGetRandomObjectId(current_dungeon_level, must_be_small);
-    inventoryItemCopyTo(sorted_objects[object_id], &treasure_list[free_treasure_id]);
+    inventoryItemCopyTo(sorted_objects[object_id], treasure_list[free_treasure_id]);
 
     magicTreasureMagicalAbility(free_treasure_id, current_dungeon_level);
 
@@ -1136,7 +1136,7 @@ void inventoryDestroyItem(int item_id) {
             inventory[i] = inventory[i + 1];
         }
 
-        inventoryItemCopyTo(OBJ_NOTHING, &inventory[inventory_count - 1]);
+        inventoryItemCopyTo(OBJ_NOTHING, inventory[inventory_count - 1]);
         inventory_count--;
     }
 
@@ -1178,7 +1178,7 @@ void inventoryDropItem(int item_id, bool drop_all) {
                 item_id++;
             }
 
-            inventoryItemCopyTo(OBJ_NOTHING, &inventory[inventory_count]);
+            inventoryItemCopyTo(OBJ_NOTHING, inventory[inventory_count]);
         } else {
             treasure_list[treasureID].items_count = 1;
             inventory_weight -= item.weight;

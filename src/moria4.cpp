@@ -1082,7 +1082,7 @@ static void playerBashClosedDoor(int y, int x, int dir, Cave_t *tile, Inventory_
     if (randomNumber(chance * (20 + abs_misc_use)) < 10 * (chance - abs_misc_use)) {
         printMessage("The door crashes open!");
 
-        inventoryItemCopyTo(OBJ_OPEN_DOOR, &treasure_list[tile->treasure_id]);
+        inventoryItemCopyTo(OBJ_OPEN_DOOR, treasure_list[tile->treasure_id]);
 
         // 50% chance of breaking door
         item->misc_use = (int16_t) (1 - randomNumber(2));

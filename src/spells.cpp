@@ -409,7 +409,7 @@ bool spellSurroundPlayerWithDoors() {
                 tile.feature_id = TILE_BLOCKED_FLOOR;
                 tile.treasure_id = (uint8_t) free_id;
 
-                inventoryItemCopyTo(OBJ_CLOSED_DOOR, &treasure_list[free_id]);
+                inventoryItemCopyTo(OBJ_CLOSED_DOOR, treasure_list[free_id]);
                 dungeonLiteSpot(y, x);
 
                 created = true;
@@ -1950,7 +1950,7 @@ void spellCreateFood() {
     }
 
     dungeonPlaceRandomObjectAt(char_row, char_col, false);
-    inventoryItemCopyTo(OBJ_MUSH, &treasure_list[tile.treasure_id]);
+    inventoryItemCopyTo(OBJ_MUSH, treasure_list[tile.treasure_id]);
 }
 
 // Attempts to destroy a type of creature.  Success depends on
@@ -2025,7 +2025,7 @@ void spellWardingGlyph() {
     if (cave[char_row][char_col].treasure_id == 0) {
         int free_id = popt();
         cave[char_row][char_col].treasure_id = (uint8_t) free_id;
-        inventoryItemCopyTo(OBJ_SCARE_MON, &treasure_list[free_id]);
+        inventoryItemCopyTo(OBJ_SCARE_MON, treasure_list[free_id]);
     }
 }
 

@@ -886,7 +886,7 @@ static void playerAttackMonster(int y, int x) {
             if (item.items_count == 0) {
                 equipment_count--;
                 playerAdjustBonusesForItem(&item, -1);
-                inventoryItemCopyTo(OBJ_NOTHING, &item);
+                inventoryItemCopyTo(OBJ_NOTHING, item);
                 playerRecalculateBonuses();
             }
         }
@@ -1146,7 +1146,7 @@ static void openClosedDoor(int y, int x) {
     }
 
     if (item.misc_use == 0) {
-        inventoryItemCopyTo(OBJ_OPEN_DOOR, &treasure_list[tile.treasure_id]);
+        inventoryItemCopyTo(OBJ_OPEN_DOOR, treasure_list[tile.treasure_id]);
         tile.feature_id = TILE_CORR_FLOOR;
         dungeonLiteSpot(y, x);
         command_count = 0;
@@ -1261,7 +1261,7 @@ void dungeonCloseDoor() {
         if (item.category_id == TV_OPEN_DOOR) {
             if (tile.creature_id == 0) {
                 if (item.misc_use == 0) {
-                    inventoryItemCopyTo(OBJ_CLOSED_DOOR, &item);
+                    inventoryItemCopyTo(OBJ_CLOSED_DOOR, item);
                     tile.feature_id = TILE_BLOCKED_FLOOR;
                     dungeonLiteSpot(y, x);
                 } else {

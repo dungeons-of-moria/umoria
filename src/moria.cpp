@@ -146,11 +146,11 @@ static void initializeCharacterInventory() {
 
     // this is needed for bash to work right, it can't hurt anyway
     for (auto &entry : inventory) {
-        inventoryItemCopyTo(OBJ_NOTHING, &entry);
+        inventoryItemCopyTo(OBJ_NOTHING, entry);
     }
 
     for (int i = 0; i < 5; i++) {
-        inventoryItemCopyTo(class_base_provisions[py.misc.class_id][i], &item);
+        inventoryItemCopyTo(class_base_provisions[py.misc.class_id][i], item);
 
         // this makes it spellItemIdentifyAndRemoveRandomInscription and itemSetAsIdentified
         itemIdentifyAsStoreBought(item);

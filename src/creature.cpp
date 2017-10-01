@@ -958,7 +958,7 @@ static void monsterOpenDoor(Cave_t &tile, int16_t monster_hp, uint32_t move_bits
         }
 
         if (do_move) {
-            inventoryItemCopyTo(OBJ_OPEN_DOOR, &item);
+            inventoryItemCopyTo(OBJ_OPEN_DOOR, item);
 
             // 50% chance of breaking door
             if (door_is_stuck) {
@@ -975,7 +975,7 @@ static void monsterOpenDoor(Cave_t &tile, int16_t monster_hp, uint32_t move_bits
 
         auto abs_misc_use = (int) std::abs((std::intmax_t) item.misc_use);
         if (randomNumber((monster_hp + 1) * (80 + abs_misc_use)) < 40 * (monster_hp - 20 - abs_misc_use)) {
-            inventoryItemCopyTo(OBJ_OPEN_DOOR, &item);
+            inventoryItemCopyTo(OBJ_OPEN_DOOR, item);
 
             // 50% chance of breaking door
             item.misc_use = (int16_t) (1 - randomNumber(2));

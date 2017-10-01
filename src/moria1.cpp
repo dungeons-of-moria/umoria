@@ -527,7 +527,7 @@ void playerTakeOff(int item_id, int pack_position_id) {
         playerAdjustBonusesForItem(&item, -1);
     }
 
-    inventoryItemCopyTo(OBJ_NOTHING, &item);
+    inventoryItemCopyTo(OBJ_NOTHING, item);
 }
 
 // Used to verify if this really is the item we wish to -CJS-

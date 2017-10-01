@@ -307,7 +307,7 @@ void storeDestroy(int store_id, int item_id, bool only_one_of) {
         for (int i = item_id; i < store.store_id - 1; i++) {
             store.inventory[i] = store.inventory[i + 1];
         }
-        inventoryItemCopyTo(OBJ_NOTHING, &store.inventory[store.store_id - 1].item);
+        inventoryItemCopyTo(OBJ_NOTHING, store.inventory[store.store_id - 1].item);
         store.inventory[store.store_id - 1].cost = 0;
         store.store_id--;
     }
@@ -328,7 +328,7 @@ void storeInitializeOwners() {
         store.bad_purchases = 0;
 
         for (auto &item : store.inventory) {
-            inventoryItemCopyTo(OBJ_NOTHING, &item.item);
+            inventoryItemCopyTo(OBJ_NOTHING, item.item);
             item.cost = 0;
         }
     }
@@ -340,7 +340,7 @@ static void storeItemCreate(int store_id, int16_t max_cost) {
 
     for (int tries = 0; tries <= 3; tries++) {
         int id = store_choices[store_id][randomNumber(STORE_MAX_ITEM_TYPES) - 1];
-        inventoryItemCopyTo(id, &treasure_list[free_id]);
+        inventoryItemCopyTo(id, treasure_list[free_id]);
         magicTreasureMagicalAbility(free_id, LEVEL_TOWN_OBJECTS);
 
         Inventory_t &item = treasure_list[free_id];

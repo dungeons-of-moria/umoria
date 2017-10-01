@@ -147,7 +147,7 @@ void outputRandomLevelObjectsToFile() {
 
     for (int i = 0; i < count; i++) {
         int object_id = itemGetRandomObjectId(level, small_objects);
-        inventoryItemCopyTo(sorted_objects[object_id], &treasure_list[treasure_id]);
+        inventoryItemCopyTo(sorted_objects[object_id], treasure_list[treasure_id]);
 
         magicTreasureMagicalAbility(treasure_id, level);
 

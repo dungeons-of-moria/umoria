@@ -888,7 +888,7 @@ void pusht(uint8_t treasure_id) {
     }
     current_treasure_id--;
 
-    inventoryItemCopyTo(OBJ_NOTHING, &treasure_list[current_treasure_id]);
+    inventoryItemCopyTo(OBJ_NOTHING, treasure_list[current_treasure_id]);
 }
 
 // Should the object be enchanted -RAK-
