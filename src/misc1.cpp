@@ -451,9 +451,9 @@ bool los(int from_y, int from_x, int to_y, int to_x) {
 
 // Returns symbol for given row, column -RAK-
 char caveGetTileSymbol(int y, int x) {
-    Cave_t *cave_ptr = &cave[y][x];
+    Cave_t &cave_ptr = cave[y][x];
 
-    if (cave_ptr->creature_id == 1 && ((running_counter == 0) || config.run_print_self)) {
+    if (cave_ptr.creature_id == 1 && ((running_counter == 0) || config.run_print_self)) {
         return '@';
     }
 
@@ -465,23 +465,23 @@ char caveGetTileSymbol(int y, int x) {
         return (uint8_t) (randomNumber(95) + 31);
     }
 
-    if (cave_ptr->creature_id > 1 && monsters[cave_ptr->creature_id].lit) {
-        return creatures_list[monsters[cave_ptr->creature_id].creature_id].sprite;
+    if (cave_ptr.creature_id > 1 && monsters[cave_ptr.creature_id].lit) {
+        return creatures_list[monsters[cave_ptr.creature_id].creature_id].sprite;
     }
 
-    if (!cave_ptr->permanent_light && !cave_ptr->temporary_light && !cave_ptr->field_mark) {
+    if (!cave_ptr.permanent_light && !cave_ptr.temporary_light && !cave_ptr.field_mark) {
         return ' ';
     }
 
-    if (cave_ptr->treasure_id != 0 && treasure_list[cave_ptr->treasure_id].category_id != TV_INVIS_TRAP) {
-        return treasure_list[cave_ptr->treasure_id].sprite;
+    if (cave_ptr.treasure_id != 0 && treasure_list[cave_ptr.treasure_id].category_id != TV_INVIS_TRAP) {
+        return treasure_list[cave_ptr.treasure_id].sprite;
     }
 
-    if (cave_ptr->feature_id <= MAX_CAVE_FLOOR) {
+    if (cave_ptr.feature_id <= MAX_CAVE_FLOOR) {
         return '.';
     }
 
-    if (cave_ptr->feature_id == TILE_GRANITE_WALL || cave_ptr->feature_id == TILE_BOUNDARY_WALL || !config.highlight_seams) {
+    if (cave_ptr.feature_id == TILE_GRANITE_WALL || cave_ptr.feature_id == TILE_BOUNDARY_WALL || !config.highlight_seams) {
         return '#';
     }
 
@@ -608,34 +608,34 @@ bool monsterPlaceNew(int y, int x, int creature_id, bool sleeping) {
         return false;
     }
 
-    Monster_t *monster = &monsters[monster_id];
+    Monster_t &monster = monsters[monster_id];
 
-    monster->y = (uint8_t) y;
-    monster->x = (uint8_t) x;
-    monster->creature_id = (uint16_t) creature_id;
+    monster.y = (uint8_t) y;
+    monster.x = (uint8_t) x;
+    monster.creature_id = (uint16_t) creature_id;
 
     if ((creatures_list[creature_id].defenses & CD_MAX_HP) != 0) {
-        monster->hp = (int16_t) maxHitPoints(creatures_list[creature_id].hit_die);
+        monster.hp = (int16_t) maxHitPoints(creatures_list[creature_id].hit_die);
     } else {
-        monster->hp = (int16_t) dicePlayerDamageRoll(creatures_list[creature_id].hit_die);
+        monster.hp = (int16_t) dicePlayerDamageRoll(creatures_list[creature_id].hit_die);
     }
 
     // the creatures_list[] speed value is 10 greater, so that it can be a uint8_t
-    monster->speed = (int16_t) (creatures_list[creature_id].speed - 10 + py.flags.speed);
-    monster->stunned_amount = 0;
-    monster->distance_from_player = (uint8_t) coordDistanceBetween(char_row, char_col, y, x);
-    monster->lit = false;
+    monster.speed = (int16_t) (creatures_list[creature_id].speed - 10 + py.flags.speed);
+    monster.stunned_amount = 0;
+    monster.distance_from_player = (uint8_t) coordDistanceBetween(char_row, char_col, y, x);
+    monster.lit = false;
 
     cave[y][x].creature_id = (uint8_t) monster_id;
 
     if (sleeping) {
         if (creatures_list[creature_id].sleep_counter == 0) {
-            monster->sleep_count = 0;
+            monster.sleep_count = 0;
         } else {
-            monster->sleep_count = (int16_t) ((creatures_list[creature_id].sleep_counter * 2) + randomNumber((int) creatures_list[creature_id].sleep_counter * 10));
+            monster.sleep_count = (int16_t) ((creatures_list[creature_id].sleep_counter * 2) + randomNumber((int) creatures_list[creature_id].sleep_counter * 10));
         }
     } else {
-        monster->sleep_count = 0;
+        monster.sleep_count = 0;
     }
 
     return true;
@@ -668,26 +668,26 @@ void monsterPlaceWinning() {
         abort();
     }
 
-    Monster_t *monster = &monsters[monster_id];
+    Monster_t &monster = monsters[monster_id];
 
-    monster->y = (uint8_t) y;
-    monster->x = (uint8_t) x;
-    monster->creature_id = (uint16_t) creature_id;
+    monster.y = (uint8_t) y;
+    monster.x = (uint8_t) x;
+    monster.creature_id = (uint16_t) creature_id;
 
     if ((creatures_list[creature_id].defenses & CD_MAX_HP) != 0) {
-        monster->hp = (int16_t) maxHitPoints(creatures_list[creature_id].hit_die);
+        monster.hp = (int16_t) maxHitPoints(creatures_list[creature_id].hit_die);
     } else {
-        monster->hp = (int16_t) dicePlayerDamageRoll(creatures_list[creature_id].hit_die);
+        monster.hp = (int16_t) dicePlayerDamageRoll(creatures_list[creature_id].hit_die);
     }
 
     // the creatures_list speed value is 10 greater, so that it can be a uint8_t
-    monster->speed = (int16_t) (creatures_list[creature_id].speed - 10 + py.flags.speed);
-    monster->stunned_amount = 0;
-    monster->distance_from_player = (uint8_t) coordDistanceBetween(char_row, char_col, y, x);
+    monster.speed = (int16_t) (creatures_list[creature_id].speed - 10 + py.flags.speed);
+    monster.stunned_amount = 0;
+    monster.distance_from_player = (uint8_t) coordDistanceBetween(char_row, char_col, y, x);
 
     cave[y][x].creature_id = (uint8_t) monster_id;
 
-    monster->sleep_count = 0;
+    monster.sleep_count = 0;
 }
 
 // Return a monster suitable to be placed at a given level. This
