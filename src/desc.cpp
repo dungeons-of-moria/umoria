@@ -274,8 +274,8 @@ void itemIdentify(int &item_id) {
 
 // If an object has lost magical properties,
 // remove the appropriate portion of the name. -CJS-
-void itemRemoveMagicNaming(Inventory_t *item) {
-    item->special_name_id = SN_NULL;
+void itemRemoveMagicNaming(Inventory_t &item) {
+    item.special_name_id = SN_NULL;
 }
 
 // defines for `misc_use` variable, determine how the Item `misc_use` field is printed

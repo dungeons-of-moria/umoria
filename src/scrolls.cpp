@@ -288,7 +288,7 @@ static bool scrollCurseWeapon() {
     (void) sprintf(msg, "Your %s glows black, fades.", desc);
     printMessage(msg);
 
-    itemRemoveMagicNaming(&item);
+    itemRemoveMagicNaming(item);
 
     item.to_hit = (int16_t) (-randomNumber(5) - randomNumber(5));
     item.to_damage = (int16_t) (-randomNumber(5) - randomNumber(5));
@@ -382,7 +382,7 @@ static bool scrollCurseArmor() {
     (void) sprintf(msg, "Your %s glows black, fades.", desc);
     printMessage(msg);
 
-    itemRemoveMagicNaming(&item);
+    itemRemoveMagicNaming(item);
 
     item.flags = TR_CURSED;
     item.to_hit = 0;
