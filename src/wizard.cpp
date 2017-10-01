@@ -20,10 +20,9 @@ void wizardLightUpDungeon() {
             if (cave[y][x].feature_id <= MAX_CAVE_FLOOR) {
                 for (int yy = y - 1; yy <= y + 1; yy++) {
                     for (int xx = x - 1; xx <= x + 1; xx++) {
-                        Cave_t *tile = &cave[yy][xx];
-                        tile->permanent_light = flag;
+                        cave[yy][xx].permanent_light = flag;
                         if (!flag) {
-                            tile->field_mark = false;
+                            cave[yy][xx].field_mark = false;
                         }
                     }
                 }
