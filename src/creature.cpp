@@ -849,34 +849,33 @@ static void monsterAttackPlayer(int monster_id) {
     vtype_t death_description = {'\0'};
     playerDiedFromString(&death_description, creature.name, creature.movement);
 
-    int attype, adesc, adice, asides;
-    int attackn = 0;
+    int attack_type, attack_desc, attack_dice, attack_sides;
+    int attack_counter = 0;
     vtype_t description = {'\0'};
 
-    uint8_t *attstr = creature.damage;
-    while ((*attstr != 0) && !character_is_dead) {
-        attype = monster_attacks[*attstr].type_id;
-        adesc = monster_attacks[*attstr].description_id;
-        adice = monster_attacks[*attstr].dice;
-        asides = monster_attacks[*attstr].sides;
+    for (auto &damage_type_id : creature.damage) {
+        if (damage_type_id == 0 || character_is_dead) break;
 
-        attstr++;
+        attack_type = monster_attacks[damage_type_id].type_id;
+        attack_desc = monster_attacks[damage_type_id].description_id;
+        attack_dice = monster_attacks[damage_type_id].dice;
+        attack_sides = monster_attacks[damage_type_id].sides;
 
         if (py.flags.protect_evil > 0 && ((creature.defenses & CD_EVIL) != 0) && py.misc.level + 1 > creature.level) {
             if (monster.lit) {
                 creature_recall[monster.creature_id].defenses |= CD_EVIL;
             }
-            attype = 99;
-            adesc = 99;
+            attack_type = 99;
+            attack_desc = 99;
         }
 
-        if (playerTestAttackHits(attype, creature.level)) {
+        if (playerTestAttackHits(attack_type, creature.level)) {
             playerDisturb(1, 0);
 
             // can not strcat to name because the creature may have multiple attacks.
             (void) strcpy(description, name);
 
-            monsterPrintAttackDescription(description, adesc);
+            monsterPrintAttackDescription(description, attack_desc);
 
             // always fail to notice attack if creature invisible, set notice
             // and visible here since creature may be visible when attacking
@@ -888,35 +887,35 @@ static void monsterAttackPlayer(int monster_id) {
                 notice = false;
             }
 
-            int damage = diceDamageRoll(adice, asides);
-            notice = executeAttackOnPlayer(creature.level, monster.hp, monster_id, attype, damage, death_description, notice);
+            int damage = diceDamageRoll(attack_dice, attack_sides);
+            notice = executeAttackOnPlayer(creature.level, monster.hp, monster_id, attack_type, damage, death_description, notice);
 
             // Moved here from monsterMove, so that monster only confused if it
             // actually hits. A monster that has been repelled has not hit
             // the player, so it should not be confused.
-            monsterConfuseOnAttack(creature, monster, adesc, name, visible);
+            monsterConfuseOnAttack(creature, monster, attack_desc, name, visible);
 
             // increase number of attacks if notice true, or if visible and
             // had previously noticed the attack (in which case all this does
             // is help player learn damage), note that in the second case do
             // not increase attacks if creature repelled (no damage done)
-            if ((notice || (visible && creature_recall[monster.creature_id].attacks[attackn] != 0 && attype != 99)) && creature_recall[monster.creature_id].attacks[attackn] < MAX_UCHAR) {
-                creature_recall[monster.creature_id].attacks[attackn]++;
+            if ((notice || (visible && creature_recall[monster.creature_id].attacks[attack_counter] != 0 && attack_type != 99)) && creature_recall[monster.creature_id].attacks[attack_counter] < MAX_UCHAR) {
+                creature_recall[monster.creature_id].attacks[attack_counter]++;
             }
 
             if (character_is_dead && creature_recall[monster.creature_id].deaths < MAX_SHORT) {
                 creature_recall[monster.creature_id].deaths++;
             }
         } else {
-            if ((adesc >= 1 && adesc <= 3) || adesc == 6) {
+            if ((attack_desc >= 1 && attack_desc <= 3) || attack_desc == 6) {
                 playerDisturb(1, 0);
                 (void) strcpy(description, name);
                 printMessage(strcat(description, "misses you."));
             }
         }
 
-        if (attackn < MON_MAX_ATTACKS - 1) {
-            attackn++;
+        if (attack_counter < MON_MAX_ATTACKS - 1) {
+            attack_counter++;
         } else {
             break;
         }
