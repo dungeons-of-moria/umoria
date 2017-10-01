@@ -177,8 +177,8 @@ void spellItemRemoveIdentification(Inventory_t &item) {
     item.identification &= ~ID_KNOWN2;
 }
 
-void itemIdentificationClearEmpty(Inventory_t *item) {
-    item->identification &= ~ID_EMPTY;
+void itemIdentificationClearEmpty(Inventory_t &item) {
+    item.identification &= ~ID_EMPTY;
 }
 
 void itemIdentifyAsStoreBought(Inventory_t *item) {

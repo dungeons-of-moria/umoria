@@ -1013,7 +1013,7 @@ bool spellRechargeItem(int number_of_charges) {
             spellItemRemoveIdentification(item);
         }
 
-        itemIdentificationClearEmpty(&item);
+        itemIdentificationClearEmpty(item);
     }
 
     return true;
