@@ -12,18 +12,18 @@
 static bool monsterIsVisible(Monster_t *monster) {
     bool visible = false;
 
-    Cave_t *tile = &cave[monster->y][monster->x];
-    Creature_t *creature = &creatures_list[monster->creature_id];
+    Cave_t &tile = cave[monster->y][monster->x];
+    Creature_t &creature = creatures_list[monster->creature_id];
 
-    if (tile->permanent_light || tile->temporary_light || ((running_counter != 0) && monster->distance_from_player < 2 && py.carrying_light)) {
+    if (tile.permanent_light || tile.temporary_light || ((running_counter != 0) && monster->distance_from_player < 2 && py.carrying_light)) {
         // Normal sight.
-        if ((CM_INVISIBLE & creature->movement) == 0) {
+        if ((CM_INVISIBLE & creature.movement) == 0) {
             visible = true;
         } else if (py.flags.see_invisible) {
             visible = true;
             creature_recall[monster->creature_id].movement |= CM_INVISIBLE;
         }
-    } else if (py.flags.see_infra > 0 && monster->distance_from_player <= py.flags.see_infra && ((CD_INFRA & creature->defenses) != 0)) {
+    } else if (py.flags.see_infra > 0 && monster->distance_from_player <= py.flags.see_infra && ((CD_INFRA & creature.defenses) != 0)) {
         // Infra vision.
         visible = true;
         creature_recall[monster->creature_id].defenses |= CD_INFRA;
@@ -35,31 +35,31 @@ static bool monsterIsVisible(Monster_t *monster) {
 // Updates screen when monsters move about -RAK-
 void monsterUpdateVisibility(int monster_id) {
     bool visible = false;
-    Monster_t *m_ptr = &monsters[monster_id];
+    Monster_t &monster = monsters[monster_id];
 
-    if (m_ptr->distance_from_player <= MON_MAX_SIGHT && ((py.flags.status & PY_BLIND) == 0u) && coordInsidePanel((int) m_ptr->y, (int) m_ptr->x)) {
+    if (monster.distance_from_player <= MON_MAX_SIGHT && ((py.flags.status & PY_BLIND) == 0u) && coordInsidePanel((int) monster.y, (int) monster.x)) {
         if (wizard_mode) {
             // Wizard sight.
             visible = true;
-        } else if (los(char_row, char_col, (int) m_ptr->y, (int) m_ptr->x)) {
-            visible = monsterIsVisible(m_ptr);
+        } else if (los(char_row, char_col, (int) monster.y, (int) monster.x)) {
+            visible = monsterIsVisible(&monster);
         }
     }
 
     if (visible) {
         // Light it up.
-        if (!m_ptr->lit) {
+        if (!monster.lit) {
             playerDisturb(1, 0);
-            m_ptr->lit = true;
-            dungeonLiteSpot((int) m_ptr->y, (int) m_ptr->x);
+            monster.lit = true;
+            dungeonLiteSpot((int) monster.y, (int) monster.x);
 
             // notify inventoryExecuteCommand()
             screen_has_changed = true;
         }
-    } else if (m_ptr->lit) {
+    } else if (monster.lit) {
         // Turn it off.
-        m_ptr->lit = false;
-        dungeonLiteSpot((int) m_ptr->y, (int) m_ptr->x);
+        monster.lit = false;
+        dungeonLiteSpot((int) monster.y, (int) monster.x);
 
         // notify inventoryExecuteCommand()
         screen_has_changed = true;
@@ -819,24 +819,24 @@ static void monsterAttackPlayer(int monster_id) {
         return;
     }
 
-    Monster_t *monster = &monsters[monster_id];
-    Creature_t *creature = &creatures_list[monster->creature_id];
+    Monster_t &monster = monsters[monster_id];
+    Creature_t &creature = creatures_list[monster.creature_id];
 
     vtype_t name = {'\0'};
-    if (!monster->lit) {
+    if (!monster.lit) {
         (void) strcpy(name, "It ");
     } else {
-        (void) sprintf(name, "The %s ", creature->name);
+        (void) sprintf(name, "The %s ", creature.name);
     }
 
     vtype_t death_description = {'\0'};
-    playerDiedFromString(&death_description, creature->name, creature->movement);
+    playerDiedFromString(&death_description, creature.name, creature.movement);
 
     int attype, adesc, adice, asides;
     int attackn = 0;
     vtype_t description = {'\0'};
 
-    uint8_t *attstr = creature->damage;
+    uint8_t *attstr = creature.damage;
     while ((*attstr != 0) && !character_is_dead) {
         attype = monster_attacks[*attstr].type_id;
         adesc = monster_attacks[*attstr].description_id;
@@ -845,15 +845,15 @@ static void monsterAttackPlayer(int monster_id) {
 
         attstr++;
 
-        if (py.flags.protect_evil > 0 && ((creature->defenses & CD_EVIL) != 0) && py.misc.level + 1 > creature->level) {
-            if (monster->lit) {
-                creature_recall[monster->creature_id].defenses |= CD_EVIL;
+        if (py.flags.protect_evil > 0 && ((creature.defenses & CD_EVIL) != 0) && py.misc.level + 1 > creature.level) {
+            if (monster.lit) {
+                creature_recall[monster.creature_id].defenses |= CD_EVIL;
             }
             attype = 99;
             adesc = 99;
         }
 
-        if (playerTestAttackHits(attype, creature->level)) {
+        if (playerTestAttackHits(attype, creature.level)) {
             playerDisturb(1, 0);
 
             // can not strcat to name because the creature may have multiple attacks.
@@ -866,29 +866,29 @@ static void monsterAttackPlayer(int monster_id) {
             // and then teleport afterwards (becoming effectively invisible)
             bool notice = true;
             bool visible = true;
-            if (!monster->lit) {
+            if (!monster.lit) {
                 visible = false;
                 notice = false;
             }
 
             int damage = diceDamageRoll(adice, asides);
-            notice = executeAttackOnPlayer(creature, monster, monster_id, attype, damage, death_description, notice);
+            notice = executeAttackOnPlayer(&creature, &monster, monster_id, attype, damage, death_description, notice);
 
             // Moved here from monsterMove, so that monster only confused if it
             // actually hits. A monster that has been repelled has not hit
             // the player, so it should not be confused.
-            monsterConfuseOnAttack(creature, monster, adesc, name, visible);
+            monsterConfuseOnAttack(&creature, &monster, adesc, name, visible);
 
             // increase number of attacks if notice true, or if visible and
             // had previously noticed the attack (in which case all this does
             // is help player learn damage), note that in the second case do
             // not increase attacks if creature repelled (no damage done)
-            if ((notice || (visible && creature_recall[monster->creature_id].attacks[attackn] != 0 && attype != 99)) && creature_recall[monster->creature_id].attacks[attackn] < MAX_UCHAR) {
-                creature_recall[monster->creature_id].attacks[attackn]++;
+            if ((notice || (visible && creature_recall[monster.creature_id].attacks[attackn] != 0 && attype != 99)) && creature_recall[monster.creature_id].attacks[attackn] < MAX_UCHAR) {
+                creature_recall[monster.creature_id].attacks[attackn]++;
             }
 
-            if (character_is_dead && creature_recall[monster->creature_id].deaths < MAX_SHORT) {
-                creature_recall[monster->creature_id].deaths++;
+            if (character_is_dead && creature_recall[monster.creature_id].deaths < MAX_SHORT) {
+                creature_recall[monster.creature_id].deaths++;
             }
         } else {
             if ((adesc >= 1 && adesc <= 3) || adesc == 6) {
@@ -1055,47 +1055,47 @@ static void makeMove(int monster_id, int *directions, uint32_t *rcmove) {
     bool do_turn = false;
     bool do_move = false;
 
-    Monster_t *monster = &monsters[monster_id];
-    uint32_t move_bits = creatures_list[monster->creature_id].movement;
+    Monster_t &monster = monsters[monster_id];
+    uint32_t move_bits = creatures_list[monster.creature_id].movement;
 
     // Up to 5 attempts at moving, give up.
     for (int i = 0; !do_turn && i < 5; i++) {
         // Get new position
-        int y = monster->y;
-        int x = monster->x;
+        int y = monster.y;
+        int x = monster.x;
         (void) playerMovePosition(directions[i], y, x);
 
-        Cave_t *tile = &cave[y][x];
+        Cave_t &tile = cave[y][x];
 
-        if (tile->feature_id == TILE_BOUNDARY_WALL) {
+        if (tile.feature_id == TILE_BOUNDARY_WALL) {
             continue;
         }
 
         // Floor is open?
-        if (tile->feature_id <= MAX_OPEN_SPACE) {
+        if (tile.feature_id <= MAX_OPEN_SPACE) {
             do_move = true;
         } else if ((move_bits & CM_PHASE) != 0u) {
             // Creature moves through walls?
             do_move = true;
             *rcmove |= CM_PHASE;
-        } else if (tile->treasure_id != 0) {
+        } else if (tile.treasure_id != 0) {
             // Creature can open doors?
-            monsterOpenDoor(tile, monster->hp, move_bits, &do_turn, &do_move, rcmove, y, x);
+            monsterOpenDoor(&tile, monster.hp, move_bits, &do_turn, &do_move, rcmove, y, x);
         }
 
         // Glyph of warding present?
-        if (do_move && tile->treasure_id != 0 && treasure_list[tile->treasure_id].category_id == TV_VIS_TRAP && treasure_list[tile->treasure_id].sub_category_id == 99) {
-            glyphOfWardingProtection(monster->creature_id, move_bits, &do_move, &do_turn, y, x);
+        if (do_move && tile.treasure_id != 0 && treasure_list[tile.treasure_id].category_id == TV_VIS_TRAP && treasure_list[tile.treasure_id].sub_category_id == 99) {
+            glyphOfWardingProtection(monster.creature_id, move_bits, &do_move, &do_turn, y, x);
         }
 
         // Creature has attempted to move on player?
         if (do_move) {
-            monsterMovesOnPlayer(monster, tile->creature_id, monster_id, move_bits, &do_move, &do_turn, rcmove, y, x);
+            monsterMovesOnPlayer(&monster, tile.creature_id, monster_id, move_bits, &do_move, &do_turn, rcmove, y, x);
         }
 
         // Creature has been allowed move.
         if (do_move) {
-            monsterAllowedToMove(monster, move_bits, &do_turn, rcmove, y, x);
+            monsterAllowedToMove(&monster, move_bits, &do_turn, rcmove, y, x);
         }
     }
 }
@@ -1280,10 +1280,10 @@ static bool monsterCastSpell(int monster_id) {
         return false;
     }
 
-    Monster_t *monster = &monsters[monster_id];
-    Creature_t *creature = &creatures_list[monster->creature_id];
+    Monster_t &monster = monsters[monster_id];
+    Creature_t &creature = creatures_list[monster.creature_id];
 
-    if (!monsterCanCastSpells(monster, creature->spells)) {
+    if (!monsterCanCastSpells(&monster, creature.spells)) {
         return false;
     }
 
@@ -1294,18 +1294,18 @@ static bool monsterCastSpell(int monster_id) {
 
     // Describe the attack
     vtype_t name = {'\0'};
-    if (monster->lit) {
-        (void) sprintf(name, "The %s ", creature->name);
+    if (monster.lit) {
+        (void) sprintf(name, "The %s ", creature.name);
     } else {
         (void) strcpy(name, "It ");
     }
 
     vtype_t death_description = {'\0'};
-    playerDiedFromString(&death_description, creature->name, creature->movement);
+    playerDiedFromString(&death_description, creature.name, creature.movement);
 
     // Extract all possible spells into spell_choice
     int spell_choice[30];
-    auto spell_flags = (uint32_t) (creature->spells & ~CS_FREQ);
+    auto spell_flags = (uint32_t) (creature.spells & ~CS_FREQ);
 
     int id = 0;
     while (spell_flags != 0) {
@@ -1328,15 +1328,15 @@ static bool monsterCastSpell(int monster_id) {
         printMessage(name);
     }
 
-    monsterExecuteCastingOfSpell(monster, monster_id, thrown_spell, creature->level, name, death_description);
+    monsterExecuteCastingOfSpell(&monster, monster_id, thrown_spell, creature.level, name, death_description);
 
-    if (monster->lit) {
-        creature_recall[monster->creature_id].spells |= 1L << (thrown_spell - 1);
-        if ((creature_recall[monster->creature_id].spells & CS_FREQ) != CS_FREQ) {
-            creature_recall[monster->creature_id].spells++;
+    if (monster.lit) {
+        creature_recall[monster.creature_id].spells |= 1L << (thrown_spell - 1);
+        if ((creature_recall[monster.creature_id].spells & CS_FREQ) != CS_FREQ) {
+            creature_recall[monster.creature_id].spells++;
         }
-        if (character_is_dead && creature_recall[monster->creature_id].deaths < MAX_SHORT) {
-            creature_recall[monster->creature_id].deaths++;
+        if (character_is_dead && creature_recall[monster.creature_id].deaths < MAX_SHORT) {
+            creature_recall[monster.creature_id].deaths++;
         }
     }
 
@@ -1353,26 +1353,26 @@ bool monsterMultiply(int y, int x, int creature_id, int monster_id) {
         // don't create a new creature on top of the old one, that
         // causes invincible/invisible creatures to appear.
         if (coordInBounds(pos_y, pos_x) && (pos_y != y || pos_x != x)) {
-            Cave_t *tile = &cave[pos_y][pos_x];
+            Cave_t &tile = cave[pos_y][pos_x];
 
-            if (tile->feature_id <= MAX_OPEN_SPACE && tile->treasure_id == 0 && tile->creature_id != 1) {
+            if (tile.feature_id <= MAX_OPEN_SPACE && tile.treasure_id == 0 && tile.creature_id != 1) {
                 // Creature there already?
-                if (tile->creature_id > 1) {
+                if (tile.creature_id > 1) {
                     // Some critters are cannibalistic!
                     bool cannibalistic = (creatures_list[creature_id].movement & CM_EATS_OTHER) != 0;
 
                     // Check the experience level -CJS-
-                    bool experienced = creatures_list[creature_id].kill_exp_value >= creatures_list[monsters[tile->creature_id].creature_id].kill_exp_value;
+                    bool experienced = creatures_list[creature_id].kill_exp_value >= creatures_list[monsters[tile.creature_id].creature_id].kill_exp_value;
 
                     if (cannibalistic && experienced) {
                         // It ate an already processed monster. Handle * normally.
-                        if (monster_id < tile->creature_id) {
-                            dungeonDeleteMonster((int) tile->creature_id);
+                        if (monster_id < tile.creature_id) {
+                            dungeonDeleteMonster((int) tile.creature_id);
                         } else {
                             // If it eats this monster, an already processed
                             // monster will take its place, causing all kinds
                             // of havoc. Delay the kill a bit.
-                            dungeonDeleteMonsterFix1((int) tile->creature_id);
+                            dungeonDeleteMonsterFix1((int) tile.creature_id);
                         }
 
                         // in case compact_monster() is called, it needs monster_id.
@@ -1592,68 +1592,68 @@ static void monsterAttackWithoutMoving(int monster_id, uint32_t *rcmove, uint8_t
 
 // Move the critters about the dungeon -RAK-
 static void monsterMove(int monster_id, uint32_t *rcmove) {
-    Monster_t *monster = &monsters[monster_id];
-    Creature_t *creature = &creatures_list[monster->creature_id];
+    Monster_t &monster = monsters[monster_id];
+    Creature_t &creature = creatures_list[monster.creature_id];
 
     // Does the critter multiply?
     // rest could be negative, to be safe, only use mod with positive values.
     auto abs_rest_period = (int) std::abs((std::intmax_t) py.flags.rest);
-    if (((creature->movement & CM_MULTIPLY) != 0u) && MON_MAX_MULTIPLY_PER_LEVEL >= monster_multiply_total && (abs_rest_period % MON_MULTIPLY_ADJUST) == 0) {
-        monsterMultiplyCritter(monster, monster_id, rcmove);
+    if (((creature.movement & CM_MULTIPLY) != 0u) && MON_MAX_MULTIPLY_PER_LEVEL >= monster_multiply_total && (abs_rest_period % MON_MULTIPLY_ADJUST) == 0) {
+        monsterMultiplyCritter(&monster, monster_id, rcmove);
     }
 
     // if in wall, must immediately escape to a clear area
     // then monster movement finished
-    if (((creature->movement & CM_PHASE) == 0u) && cave[monster->y][monster->x].feature_id >= MIN_CAVE_WALL) {
-        monsterMoveOutOfWall(monster, monster_id, rcmove);
+    if (((creature.movement & CM_PHASE) == 0u) && cave[monster.y][monster.x].feature_id >= MIN_CAVE_WALL) {
+        monsterMoveOutOfWall(&monster, monster_id, rcmove);
         return;
     }
 
-    if (monsterDoMove(monster_id, rcmove, monster, creature)) {
+    if (monsterDoMove(monster_id, rcmove, &monster, &creature)) {
         return;
     }
 
     // 75% random movement
-    if (((creature->movement & CM_75_RANDOM) != 0u) && randomNumber(100) < 75) {
+    if (((creature.movement & CM_75_RANDOM) != 0u) && randomNumber(100) < 75) {
         monsterMoveRandomly(monster_id, rcmove, CM_75_RANDOM);
         return;
     }
 
     // 40% random movement
-    if (((creature->movement & CM_40_RANDOM) != 0u) && randomNumber(100) < 40) {
+    if (((creature.movement & CM_40_RANDOM) != 0u) && randomNumber(100) < 40) {
         monsterMoveRandomly(monster_id, rcmove, CM_40_RANDOM);
         return;
     }
 
     // 20% random movement
-    if (((creature->movement & CM_20_RANDOM) != 0u) && randomNumber(100) < 20) {
+    if (((creature.movement & CM_20_RANDOM) != 0u) && randomNumber(100) < 20) {
         monsterMoveRandomly(monster_id, rcmove, CM_20_RANDOM);
         return;
     }
 
     // Normal movement
-    if ((creature->movement & CM_MOVE_NORMAL) != 0u) {
+    if ((creature.movement & CM_MOVE_NORMAL) != 0u) {
         monsterMoveNormally(monster_id, rcmove);
         return;
     }
 
     // Attack, but don't move
-    if ((creature->movement & CM_ATTACK_ONLY) != 0u) {
-        monsterAttackWithoutMoving(monster_id, rcmove, monster->distance_from_player);
+    if ((creature.movement & CM_ATTACK_ONLY) != 0u) {
+        monsterAttackWithoutMoving(monster_id, rcmove, monster.distance_from_player);
         return;
     }
 
-    if (((creature->movement & CM_ONLY_MAGIC) != 0u) && monster->distance_from_player < 2) {
+    if (((creature.movement & CM_ONLY_MAGIC) != 0u) && monster.distance_from_player < 2) {
         // A little hack for Quylthulgs, so that one will eventually
         // notice that they have no physical attacks.
-        if (creature_recall[monster->creature_id].attacks[0] < MAX_UCHAR) {
-            creature_recall[monster->creature_id].attacks[0]++;
+        if (creature_recall[monster.creature_id].attacks[0] < MAX_UCHAR) {
+            creature_recall[monster.creature_id].attacks[0]++;
         }
 
         // Another little hack for Quylthulgs, so that one can
         // eventually learn their speed.
-        if (creature_recall[monster->creature_id].attacks[0] > 20) {
-            creature_recall[monster->creature_id].movement |= CM_ONLY_MAGIC;
+        if (creature_recall[monster.creature_id].attacks[0] > 20) {
+            creature_recall[monster.creature_id].movement |= CM_ONLY_MAGIC;
         }
     }
 }
@@ -1663,19 +1663,19 @@ static void memoryUpdateRecall(Monster_t *monster, bool wake, bool ignore, int r
         return;
     }
 
-    Recall_t *memory = &creature_recall[monster->creature_id];
+    Recall_t &memory = creature_recall[monster->creature_id];
 
     if (wake) {
-        if (memory->wake < MAX_UCHAR) {
-            memory->wake++;
+        if (memory.wake < MAX_UCHAR) {
+            memory.wake++;
         }
     } else if (ignore) {
-        if (memory->ignore < MAX_UCHAR) {
-            memory->ignore++;
+        if (memory.ignore < MAX_UCHAR) {
+            memory.ignore++;
         }
     }
 
-    memory->movement |= rcmove;
+    memory.movement |= rcmove;
 }
 
 static void monsterAttackingUpdate(Monster_t *monster, int monster_id, int moves) {
@@ -1738,26 +1738,26 @@ static void monsterAttackingUpdate(Monster_t *monster, int monster_id, int moves
 void updateMonsters(bool attack) {
     // Process the monsters
     for (int id = next_free_monster_id - 1; id >= MON_MIN_INDEX_ID && !character_is_dead; id--) {
-        Monster_t *monster = &monsters[id];
+        Monster_t &monster = monsters[id];
 
         // Get rid of an eaten/breathed on monster.  Note: Be sure not to
         // process this monster. This is necessary because we can't delete
         // monsters while scanning the monsters here.
-        if (monster->hp < 0) {
+        if (monster.hp < 0) {
             dungeonDeleteMonsterFix2(id);
             continue;
         }
 
-        monster->distance_from_player = (uint8_t) coordDistanceBetween(char_row, char_col, (int) monster->y, (int) monster->x);
+        monster.distance_from_player = (uint8_t) coordDistanceBetween(char_row, char_col, (int) monster.y, (int) monster.x);
 
         // Attack is argument passed to CREATURE
         if (attack) {
-            int moves = monsterMovementRate(monster->speed);
+            int moves = monsterMovementRate(monster.speed);
 
             if (moves <= 0) {
                 monsterUpdateVisibility(id);
             } else {
-                monsterAttackingUpdate(monster, id, moves);
+                monsterAttackingUpdate(&monster, id, moves);
             }
         } else {
             monsterUpdateVisibility(id);
@@ -1766,7 +1766,7 @@ void updateMonsters(bool attack) {
         // Get rid of an eaten/breathed on monster. This is necessary because
         // we can't delete monsters while scanning the monsters here.
         // This monster may have been killed during monsterMove().
-        if (monster->hp < 0) {
+        if (monster.hp < 0) {
             dungeonDeleteMonsterFix2(id);
             continue;
         }
