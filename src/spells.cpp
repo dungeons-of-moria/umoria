@@ -318,7 +318,7 @@ bool spellIdentifyItem() {
     spellItemIdentifyAndRemoveRandomInscription(item);
 
     obj_desc_t description = {'\0'};
-    itemDescription(description, &item, true);
+    itemDescription(description, item, true);
 
     obj_desc_t msg = {'\0'};
     if (item_id >= EQUIPMENT_WIELD) {
@@ -1289,7 +1289,7 @@ bool spellWallToMud(int y, int x, int direction) {
                 turned = true;
 
                 obj_desc_t description = {'\0'};
-                itemDescription(description, &treasure_list[tile.treasure_id], false);
+                itemDescription(description, treasure_list[tile.treasure_id], false);
 
                 obj_desc_t out_val = {'\0'};
                 (void) sprintf(out_val, "The %s turns into mud.", description);

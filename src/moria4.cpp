@@ -656,7 +656,7 @@ static bool lookSee(int x, int y, bool *transparent) {
 
             if (los_rocks_and_objects == 0 && treasure_list[tile.treasure_id].category_id != TV_INVIS_TRAP) {
                 obj_desc_t obj_string = {'\0'};
-                itemDescription(obj_string, &treasure_list[tile.treasure_id], true);
+                itemDescription(obj_string, treasure_list[tile.treasure_id], true);
 
                 (void) sprintf(msg, "%s %s ---pause---", description, obj_string);
                 description = "It is in";
@@ -845,7 +845,7 @@ static void inventoryDropOrThrowItem(int y, int x, Inventory_t *item) {
     } else {
         obj_desc_t description = {'\0'};
         obj_desc_t msg = {'\0'};
-        itemDescription(description, item, false);
+        itemDescription(description, *item, false);
 
         (void) sprintf(msg, "The %s disappears.", description);
         printMessage(msg);
@@ -929,7 +929,7 @@ void playerThrowItem() {
 
                     obj_desc_t description = {'\0'};
                     obj_desc_t msg = {'\0'};
-                    itemDescription(description, &thrown_item, false);
+                    itemDescription(description, thrown_item, false);
 
                     // Does the player know what he's fighting?
                     if (!m_ptr.lit) {

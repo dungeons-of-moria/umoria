@@ -18,14 +18,14 @@ static void trapOpenPit(Inventory_t *t_ptr, int dam) {
     }
 
     obj_desc_t description = {'\0'};
-    itemDescription(description, t_ptr, true);
+    itemDescription(description, *t_ptr, true);
     playerTakesHit(dam, description);
 }
 
 static void trapArrow(Inventory_t *t_ptr, int dam) {
     if (playerTestBeingHit(125, 0, 0, py.misc.ac + py.misc.magical_ac, CLASS_MISC_HIT)) {
         obj_desc_t description = {'\0'};
-        itemDescription(description, t_ptr, true);
+        itemDescription(description, *t_ptr, true);
         playerTakesHit(dam, description);
 
         printMessage("An arrow hits you.");
@@ -42,7 +42,7 @@ static void trapCoveredPit(Inventory_t *t_ptr, int dam, int y, int x) {
         printMessage("You gently float down.");
     } else {
         obj_desc_t description = {'\0'};
-        itemDescription(description, t_ptr, true);
+        itemDescription(description, *t_ptr, true);
         playerTakesHit(dam, description);
     }
 
@@ -59,7 +59,7 @@ static void trapDoor(Inventory_t *t_ptr, int dam) {
         printMessage("You gently float down.");
     } else {
         obj_desc_t description = {'\0'};
-        itemDescription(description, t_ptr, true);
+        itemDescription(description, *t_ptr, true);
         playerTakesHit(dam, description);
     }
 
@@ -97,7 +97,7 @@ static void trapStrengthDart(Inventory_t *t_ptr, int dam) {
             (void) playerStatRandomDecrease(A_STR);
 
             obj_desc_t description = {'\0'};
-            itemDescription(description, t_ptr, true);
+            itemDescription(description, *t_ptr, true);
             playerTakesHit(dam, description);
 
             printMessage("A small dart weakens you!");
@@ -183,7 +183,7 @@ static void trapConfuseGas() {
 static void trapSlowDart(Inventory_t *t_ptr, int dam) {
     if (playerTestBeingHit(125, 0, 0, py.misc.ac + py.misc.magical_ac, CLASS_MISC_HIT)) {
         obj_desc_t description = {'\0'};
-        itemDescription(description, t_ptr, true);
+        itemDescription(description, *t_ptr, true);
         playerTakesHit(dam, description);
 
         printMessage("A small dart hits you!");
@@ -204,7 +204,7 @@ static void trapConstitutionDart(Inventory_t *t_ptr, int dam) {
             (void) playerStatRandomDecrease(A_CON);
 
             obj_desc_t description = {'\0'};
-            itemDescription(description, t_ptr, true);
+            itemDescription(description, *t_ptr, true);
             playerTakesHit(dam, description);
 
             printMessage("A small dart saps your health!");
@@ -407,7 +407,7 @@ static void carry(int y, int x, bool pickup) {
     if (tileFlags == TV_GOLD) {
         py.misc.au += item.cost;
 
-        itemDescription(description, &item, true);
+        itemDescription(description, item, true);
         (void) sprintf(msg, "You have found %d gold pieces worth of %s", item.cost, description);
 
         printCharacterGoldValue();
@@ -422,7 +422,7 @@ static void carry(int y, int x, bool pickup) {
     if (inventoryCanCarryItemCount(&item)) {
         // Okay,  pick it up
         if (pickup && config.prompt_to_pickup) {
-            itemDescription(description, &item, true);
+            itemDescription(description, item, true);
 
             // change the period to a question mark
             description[strlen(description) - 1] = '?';
@@ -432,7 +432,7 @@ static void carry(int y, int x, bool pickup) {
 
         // Check to see if it will change the players speed.
         if (pickup && !inventoryCanCarryItem(&item)) {
-            itemDescription(description, &item, true);
+            itemDescription(description, item, true);
 
             // change the period to a question mark
             description[strlen(description) - 1] = '?';
@@ -444,13 +444,13 @@ static void carry(int y, int x, bool pickup) {
         if (pickup) {
             int locn = inventoryCarryItem(&item);
 
-            itemDescription(description, &inventory[locn], true);
+            itemDescription(description, inventory[locn], true);
             (void) sprintf(msg, "You have %s (%c)", description, locn + 'a');
             printMessage(msg);
             (void) dungeonDeleteObject(y, x);
         }
     } else {
-        itemDescription(description, &item, true);
+        itemDescription(description, item, true);
         (void) sprintf(msg, "You can't carry %s", description);
         printMessage(msg);
     }

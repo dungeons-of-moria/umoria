@@ -1187,7 +1187,7 @@ void inventoryDropItem(int item_id, bool drop_all) {
 
         obj_desc_t prt1 = {'\0'};
         obj_desc_t prt2 = {'\0'};
-        itemDescription(prt1, &treasure_list[treasureID], true);
+        itemDescription(prt1, treasure_list[treasureID], true);
         (void) sprintf(prt2, "Dropped %s", prt1);
         printMessage(prt2);
     }

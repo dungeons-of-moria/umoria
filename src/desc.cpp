@@ -299,15 +299,15 @@ int bowDamageValue(int16_t misc_use) {
     return -1;
 }
 
-// Returns a description of item for inventory
-// `pref` indicates that there should be an article added (prefix).
+// Set the `description` for an inventory item.
+// The `add_prefix` param indicates that an article must be added.
 // Note that since out_val can easily exceed 80 characters, itemDescription
 // must always be called with a obj_desc_t as the first parameter.
-void itemDescription(obj_desc_t description, Inventory_t *item, bool add_prefix) {
-    int indexx = item->sub_category_id & (ITEM_SINGLE_STACK_MIN - 1);
+void itemDescription(obj_desc_t description, const Inventory_t &item, bool add_prefix) {
+    int indexx = item.sub_category_id & (ITEM_SINGLE_STACK_MIN - 1);
 
     // base name, modifier string
-    const char *basenm = game_objects[item->id].name;
+    const char *basenm = game_objects[item.id].name;
     const char *modstr = CNIL;
 
     vtype_t damstr = {'\0'};
@@ -316,16 +316,16 @@ void itemDescription(obj_desc_t description, Inventory_t *item, bool add_prefix)
     int misc_use = IGNORED;
     bool append_name = false;
 
-    bool modify = !itemSetColorlessAsIdentified(item->category_id, item->sub_category_id, item->identification);
+    bool modify = !itemSetColorlessAsIdentified(item.category_id, item.sub_category_id, item.identification);
 
-    switch (item->category_id) {
+    switch (item.category_id) {
         case TV_MISC:
         case TV_CHEST:
             break;
         case TV_SLING_AMMO:
         case TV_BOLT:
         case TV_ARROW:
-            (void) sprintf(damstr, " (%dd%d)", item->damage[0], item->damage[1]);
+            (void) sprintf(damstr, " (%dd%d)", item.damage[0], item.damage[1]);
             break;
         case TV_LIGHT:
             misc_use = LIGHT;
@@ -333,17 +333,17 @@ void itemDescription(obj_desc_t description, Inventory_t *item, bool add_prefix)
         case TV_SPIKE:
             break;
         case TV_BOW:
-            (void) sprintf(damstr, " (x%d)", bowDamageValue(item->misc_use));
+            (void) sprintf(damstr, " (x%d)", bowDamageValue(item.misc_use));
             break;
         case TV_HAFTED:
         case TV_POLEARM:
         case TV_SWORD:
-            (void) sprintf(damstr, " (%dd%d)", item->damage[0], item->damage[1]);
+            (void) sprintf(damstr, " (%dd%d)", item.damage[0], item.damage[1]);
             misc_use = FLAGS;
             break;
         case TV_DIGGING:
             misc_use = Z_PLUSSES;
-            (void) sprintf(damstr, " (%dd%d)", item->damage[0], item->damage[1]);
+            (void) sprintf(damstr, " (%dd%d)", item.damage[0], item.damage[1]);
             break;
         case TV_BOOTS:
         case TV_GLOVES:
@@ -455,11 +455,11 @@ void itemDescription(obj_desc_t description, Inventory_t *item, bool add_prefix)
         case TV_VIS_TRAP:
         case TV_UP_STAIR:
         case TV_DOWN_STAIR:
-            (void) strcpy(description, game_objects[item->id].name);
+            (void) strcpy(description, game_objects[item.id].name);
             (void) strcat(description, ".");
             return;
         case TV_STORE_DOOR:
-            (void) sprintf(description, "the entrance to the %s.", game_objects[item->id].name);
+            (void) sprintf(description, "the entrance to the %s.", game_objects[item.id].name);
             return;
         default:
             (void) strcpy(description, "Error in objdes()");
@@ -476,10 +476,10 @@ void itemDescription(obj_desc_t description, Inventory_t *item, bool add_prefix)
 
     if (append_name) {
         (void) strcat(tmp_val, " of ");
-        (void) strcat(tmp_val, game_objects[item->id].name);
+        (void) strcat(tmp_val, game_objects[item.id].name);
     }
 
-    if (item->items_count != 1) {
+    if (item.items_count != 1) {
         insertStringIntoString(tmp_val, "ch~", "ches");
         insertStringIntoString(tmp_val, "~", "s");
     } else {
@@ -500,25 +500,28 @@ void itemDescription(obj_desc_t description, Inventory_t *item, bool add_prefix)
 
     vtype_t tmp_str = {'\0'};
 
-    if (item->special_name_id != SN_NULL && spellItemIdentified(*item)) {
+    // TODO(cook): `spellItemIdentified()` is called several times in this
+    // function, but `item` is immutable, so we should be able to call and
+    // assign it once, then use that value everywhere below.
+    if (item.special_name_id != SN_NULL && spellItemIdentified(item)) {
         (void) strcat(tmp_val, " ");
-        (void) strcat(tmp_val, special_item_names[item->special_name_id]);
+        (void) strcat(tmp_val, special_item_names[item.special_name_id]);
     }
 
     if (damstr[0] != '\0') {
         (void) strcat(tmp_val, damstr);
     }
 
-    if (spellItemIdentified(*item)) {
-        auto abs_to_hit = (int) std::abs((std::intmax_t) item->to_hit);
-        auto abs_to_damage = (int) std::abs((std::intmax_t) item->to_damage);
+    if (spellItemIdentified(item)) {
+        auto abs_to_hit = (int) std::abs((std::intmax_t) item.to_hit);
+        auto abs_to_damage = (int) std::abs((std::intmax_t) item.to_damage);
 
-        if ((item->identification & ID_SHOW_HIT_DAM) != 0) {
-            (void) sprintf(tmp_str, " (%c%d,%c%d)", (item->to_hit < 0) ? '-' : '+', abs_to_hit, (item->to_damage < 0) ? '-' : '+', abs_to_damage);
-        } else if (item->to_hit != 0) {
-            (void) sprintf(tmp_str, " (%c%d)", (item->to_hit < 0) ? '-' : '+', abs_to_hit);
-        } else if (item->to_damage != 0) {
-            (void) sprintf(tmp_str, " (%c%d)", (item->to_damage < 0) ? '-' : '+', abs_to_damage);
+        if ((item.identification & ID_SHOW_HIT_DAM) != 0) {
+            (void) sprintf(tmp_str, " (%c%d,%c%d)", (item.to_hit < 0) ? '-' : '+', abs_to_hit, (item.to_damage < 0) ? '-' : '+', abs_to_damage);
+        } else if (item.to_hit != 0) {
+            (void) sprintf(tmp_str, " (%c%d)", (item.to_hit < 0) ? '-' : '+', abs_to_hit);
+        } else if (item.to_damage != 0) {
+            (void) sprintf(tmp_str, " (%c%d)", (item.to_damage < 0) ? '-' : '+', abs_to_damage);
         } else {
             tmp_str[0] = '\0';
         }
@@ -526,51 +529,51 @@ void itemDescription(obj_desc_t description, Inventory_t *item, bool add_prefix)
     }
 
     // Crowns have a zero base AC, so make a special test for them.
-    auto abs_to_ac = (int) std::abs((std::intmax_t) item->to_ac);
-    if (item->ac != 0 || item->category_id == TV_HELM) {
-        (void) sprintf(tmp_str, " [%d", item->ac);
+    auto abs_to_ac = (int) std::abs((std::intmax_t) item.to_ac);
+    if (item.ac != 0 || item.category_id == TV_HELM) {
+        (void) sprintf(tmp_str, " [%d", item.ac);
         (void) strcat(tmp_val, tmp_str);
-        if (spellItemIdentified(*item)) {
+        if (spellItemIdentified(item)) {
             // originally used %+d, but several machines don't support it
-            (void) sprintf(tmp_str, ",%c%d", (item->to_ac < 0) ? '-' : '+', abs_to_ac);
+            (void) sprintf(tmp_str, ",%c%d", (item.to_ac < 0) ? '-' : '+', abs_to_ac);
             (void) strcat(tmp_val, tmp_str);
         }
         (void) strcat(tmp_val, "]");
-    } else if (item->to_ac != 0 && spellItemIdentified(*item)) {
+    } else if (item.to_ac != 0 && spellItemIdentified(item)) {
         // originally used %+d, but several machines don't support it
-        (void) sprintf(tmp_str, " [%c%d]", (item->to_ac < 0) ? '-' : '+', abs_to_ac);
+        (void) sprintf(tmp_str, " [%c%d]", (item.to_ac < 0) ? '-' : '+', abs_to_ac);
         (void) strcat(tmp_val, tmp_str);
     }
 
     // override defaults, check for `misc_use` flags in the ident field
-    if ((item->identification & ID_NO_SHOW_P1) != 0) {
+    if ((item.identification & ID_NO_SHOW_P1) != 0) {
         misc_use = IGNORED;
-    } else if ((item->identification & ID_SHOW_P1) != 0) {
+    } else if ((item.identification & ID_SHOW_P1) != 0) {
         misc_use = Z_PLUSSES;
     }
 
     tmp_str[0] = '\0';
 
     if (misc_use == LIGHT) {
-        (void) sprintf(tmp_str, " with %d turns of light", item->misc_use);
+        (void) sprintf(tmp_str, " with %d turns of light", item.misc_use);
     } else if (misc_use == IGNORED) {
         // NOOP
-    } else if (spellItemIdentified(*item)) {
-        auto abs_misc_use = (int) std::abs((std::intmax_t) item->misc_use);
+    } else if (spellItemIdentified(item)) {
+        auto abs_misc_use = (int) std::abs((std::intmax_t) item.misc_use);
 
         if (misc_use == Z_PLUSSES) {
             // originally used %+d, but several machines don't support it
-            (void) sprintf(tmp_str, " (%c%d)", (item->misc_use < 0) ? '-' : '+', abs_misc_use);
+            (void) sprintf(tmp_str, " (%c%d)", (item.misc_use < 0) ? '-' : '+', abs_misc_use);
         } else if (misc_use == CHARGES) {
-            (void) sprintf(tmp_str, " (%d charges)", item->misc_use);
-        } else if (item->misc_use != 0) {
+            (void) sprintf(tmp_str, " (%d charges)", item.misc_use);
+        } else if (item.misc_use != 0) {
             if (misc_use == PLUSSES) {
-                (void) sprintf(tmp_str, " (%c%d)", (item->misc_use < 0) ? '-' : '+', abs_misc_use);
+                (void) sprintf(tmp_str, " (%c%d)", (item.misc_use < 0) ? '-' : '+', abs_misc_use);
             } else if (misc_use == FLAGS) {
-                if ((item->flags & TR_STR) != 0u) {
-                    (void) sprintf(tmp_str, " (%c%d to STR)", (item->misc_use < 0) ? '-' : '+', abs_misc_use);
-                } else if ((item->flags & TR_STEALTH) != 0u) {
-                    (void) sprintf(tmp_str, " (%c%d to stealth)", (item->misc_use < 0) ? '-' : '+', abs_misc_use);
+                if ((item.flags & TR_STR) != 0u) {
+                    (void) sprintf(tmp_str, " (%c%d to STR)", (item.misc_use < 0) ? '-' : '+', abs_misc_use);
+                } else if ((item.flags & TR_STEALTH) != 0u) {
+                    (void) sprintf(tmp_str, " (%c%d to stealth)", (item.misc_use < 0) ? '-' : '+', abs_misc_use);
                 }
             }
         }
@@ -580,16 +583,16 @@ void itemDescription(obj_desc_t description, Inventory_t *item, bool add_prefix)
     // ampersand is always the first character
     if (tmp_val[0] == '&') {
         // use &tmp_val[1], so that & does not appear in output
-        if (item->items_count > 1) {
-            (void) sprintf(description, "%d%s", (int) item->items_count, &tmp_val[1]);
-        } else if (item->items_count < 1) {
+        if (item.items_count > 1) {
+            (void) sprintf(description, "%d%s", (int) item.items_count, &tmp_val[1]);
+        } else if (item.items_count < 1) {
             (void) sprintf(description, "%s%s", "no more", &tmp_val[1]);
         } else if (isVowel(tmp_val[2])) {
             (void) sprintf(description, "an%s", &tmp_val[1]);
         } else {
             (void) sprintf(description, "a%s", &tmp_val[1]);
         }
-    } else if (item->items_count < 1) {
+    } else if (item.items_count < 1) {
         // handle 'no more' case specially
 
         // check for "some" at start
@@ -605,30 +608,30 @@ void itemDescription(obj_desc_t description, Inventory_t *item, bool add_prefix)
 
     tmp_str[0] = '\0';
 
-    if ((indexx = objectPositionOffset(item->category_id, item->sub_category_id)) >= 0) {
+    if ((indexx = objectPositionOffset(item.category_id, item.sub_category_id)) >= 0) {
         indexx <<= 6;
-        indexx += (item->sub_category_id & (ITEM_SINGLE_STACK_MIN - 1));
+        indexx += (item.sub_category_id & (ITEM_SINGLE_STACK_MIN - 1));
 
         // don't print tried string for store bought items
-        if (((objects_identified[indexx] & OD_TRIED) != 0) && !itemStoreBought(item->identification)) {
+        if (((objects_identified[indexx] & OD_TRIED) != 0) && !itemStoreBought(item.identification)) {
             (void) strcat(tmp_str, "tried ");
         }
     }
 
-    if ((item->identification & (ID_MAGIK | ID_EMPTY | ID_DAMD)) != 0) {
-        if ((item->identification & ID_MAGIK) != 0) {
+    if ((item.identification & (ID_MAGIK | ID_EMPTY | ID_DAMD)) != 0) {
+        if ((item.identification & ID_MAGIK) != 0) {
             (void) strcat(tmp_str, "magik ");
         }
-        if ((item->identification & ID_EMPTY) != 0) {
+        if ((item.identification & ID_EMPTY) != 0) {
             (void) strcat(tmp_str, "empty ");
         }
-        if ((item->identification & ID_DAMD) != 0) {
+        if ((item.identification & ID_DAMD) != 0) {
             (void) strcat(tmp_str, "damned ");
         }
     }
 
-    if (item->inscription[0] != '\0') {
-        (void) strcat(tmp_str, item->inscription);
+    if (item.inscription[0] != '\0') {
+        (void) strcat(tmp_str, item.inscription);
     } else if ((indexx = (int) strlen(tmp_str)) > 0) {
         // remove the extra blank at the end
         tmp_str[indexx - 1] = '\0';
@@ -686,7 +689,7 @@ void itemTypeRemainingCountDescription(int item_id) {
     item.items_count--;
 
     obj_desc_t tmp_str = {'\0'};
-    itemDescription(tmp_str, &item, true);
+    itemDescription(tmp_str, item, true);
 
     item.items_count++;
 

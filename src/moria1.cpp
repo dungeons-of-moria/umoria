@@ -297,7 +297,7 @@ int displayInventory(int item_id_start, int item_id_end, bool weighted, int colu
         }
 
         obj_desc_t description = {'\0'};
-        itemDescription(description, &inventory[i], true);
+        itemDescription(description, inventory[i], true);
 
         // Truncate if too long.
         description[lim] = 0;
@@ -440,7 +440,7 @@ int displayEquipment(bool weighted, int column) {
         const char *position_description = itemPositionDescription(i, inventory[i].weight);
 
         obj_desc_t description = {'\0'};
-        itemDescription(description, &inventory[i], true);
+        itemDescription(description, inventory[i], true);
 
         // Truncate if necessary
         description[lim] = 0;
@@ -512,7 +512,7 @@ void playerTakeOff(int item_id, int pack_position_id) {
     }
 
     obj_desc_t description = {'\0'};
-    itemDescription(description, &item, true);
+    itemDescription(description, item, true);
 
     obj_desc_t msg = {'\0'};
     if (pack_position_id >= 0) {
@@ -534,7 +534,7 @@ void playerTakeOff(int item_id, int pack_position_id) {
 // wear or read.
 static bool verify(const char *prompt, int item) {
     obj_desc_t description = {'\0'};
-    itemDescription(description, &inventory[item], true);
+    itemDescription(description, inventory[item], true);
 
     // change the period to a question mark
     description[strlen(description) - 1] = '?';
@@ -756,7 +756,7 @@ static void inventoryUnwieldItem() {
 
     if ((TR_CURSED & inventory[EQUIPMENT_WIELD].flags) != 0u) {
         obj_desc_t description = {'\0'};
-        itemDescription(description, &inventory[EQUIPMENT_WIELD], false);
+        itemDescription(description, inventory[EQUIPMENT_WIELD], false);
 
         obj_desc_t msg = {'\0'};
         (void) sprintf(msg, "The %s you are wielding appears to be cursed.", description);
@@ -784,7 +784,7 @@ static void inventoryUnwieldItem() {
         (void) strcpy(msgLabel, "Primary weapon   : ");
 
         obj_desc_t description = {'\0'};
-        itemDescription(description, &inventory[EQUIPMENT_WIELD], true);
+        itemDescription(description, inventory[EQUIPMENT_WIELD], true);
 
         printMessage(strcat(msgLabel, description));
     } else {
@@ -939,7 +939,7 @@ static int inventoryGetSlotToWearEquipment(int item) {
 
 static void inventoryItemIsCursedMessage(int itemID) {
     obj_desc_t description = {'\0'};
-    itemDescription(description, &inventory[itemID], false);
+    itemDescription(description, inventory[itemID], false);
 
     obj_desc_t itemText = {'\0'};
     (void) sprintf(itemText, "The %s you are ", description);
@@ -1203,7 +1203,7 @@ static bool selectItemCommands(char *command, char *which, bool selecting) {
 
             if (inventory[item_id].items_count > 1) {
                 obj_desc_t description = {'\0'};
-                itemDescription(description, &inventory[item_id], true);
+                itemDescription(description, inventory[item_id], true);
                 description[strlen(description) - 1] = '?';
 
                 obj_desc_t msg = {'\0'};

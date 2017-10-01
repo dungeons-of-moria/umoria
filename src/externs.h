@@ -178,7 +178,7 @@ bool itemStoreBought(int identification);
 void itemSetAsTried(const Inventory_t &item);
 void itemIdentify(int &item_id);
 void itemRemoveMagicNaming(Inventory_t &item);
-void itemDescription(obj_desc_t description, Inventory_t *item, bool add_prefix);
+void itemDescription(obj_desc_t description, const Inventory_t &item, bool add_prefix);
 void inventoryItemCopyTo(int from_item_id, Inventory_t *to_item);
 void itemChargesRemainingDescription(int item_id);
 void itemTypeRemainingCountDescription(int item_id);

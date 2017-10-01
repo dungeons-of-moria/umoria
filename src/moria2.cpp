@@ -66,7 +66,7 @@ void dungeonSearch(int y, int x, int chance) {
                 // Trap on floor?
 
                 obj_desc_t description = {'\0'};
-                itemDescription(description, &item, true);
+                itemDescription(description, item, true);
 
                 obj_desc_t msg = {'\0'};
                 (void) sprintf(msg, "You have found %s", description);
@@ -551,13 +551,13 @@ static bool damageMinusAC(uint32_t typ_dam) {
     if ((inventory[itemID].flags & typ_dam) != 0u) {
         minus = true;
 
-        itemDescription(description, &inventory[itemID], false);
+        itemDescription(description, inventory[itemID], false);
         (void) sprintf(msg, "Your %s resists damage!", description);
         printMessage(msg);
     } else if (inventory[itemID].ac + inventory[itemID].to_ac > 0) {
         minus = true;
 
-        itemDescription(description, &inventory[itemID], false);
+        itemDescription(description, inventory[itemID], false);
         (void) sprintf(msg, "Your %s is damaged!", description);
         printMessage(msg);
 

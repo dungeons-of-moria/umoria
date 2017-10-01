@@ -104,7 +104,7 @@ static void displayStoreInventory(int store_id, int item_pos_start) {
         }
 
         obj_desc_t description = {'\0'};
-        itemDescription(description, &item, true);
+        itemDescription(description, item, true);
 
         // Restore the number of items
         item.items_count = (uint8_t) current_item_count;
@@ -783,7 +783,7 @@ static bool storePurchaseAnItem(int store_id, int *current_top_item_id) {
             storeDestroy(store_id, item_id, true);
 
             obj_desc_t description = {'\0'};
-            itemDescription(description, &inventory[new_item_id], true);
+            itemDescription(description, inventory[new_item_id], true);
 
             obj_desc_t msg = {'\0'};
             (void) sprintf(msg, "You have %s (%c)", description, new_item_id + 'a');
@@ -871,7 +871,7 @@ static bool storeSellAnItem(int store_id, int *current_top_item_id) {
     inventoryTakeOneItem(&sold_item, &inventory[item_id]);
 
     obj_desc_t description = {'\0'};
-    itemDescription(description, &sold_item, true);
+    itemDescription(description, sold_item, true);
 
     obj_desc_t msg = {'\0'};
     (void) sprintf(msg, "Selling %s (%c)", description, item_id + 'a');
@@ -902,7 +902,7 @@ static bool storeSellAnItem(int store_id, int *current_top_item_id) {
         spellItemIdentifyAndRemoveRandomInscription(sold_item);
         inventoryDestroyItem(item_id);
 
-        itemDescription(description, &sold_item, true);
+        itemDescription(description, sold_item, true);
         (void) sprintf(msg, "You've sold %s", description);
         printMessage(msg);
 

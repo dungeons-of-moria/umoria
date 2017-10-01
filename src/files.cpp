@@ -158,7 +158,7 @@ void outputRandomLevelObjectsToFile() {
             itemAppendToInscription(&item, ID_DAMD);
         }
 
-        itemDescription(input, &item, true);
+        itemDescription(input, item, true);
         (void) fprintf(file_ptr, "%d %s\n", item.depth_first_found, input);
     }
 
@@ -309,7 +309,7 @@ static void writeEquipmentListToFile(FILE *file1) {
             continue;
         }
 
-        itemDescription(description, &inventory[i], true);
+        itemDescription(description, inventory[i], true);
         (void) fprintf(file1, "  %c) %-19s: %s\n", itemSlotID + 'a', equipmentPlacementDescription(i), description);
 
         itemSlotID++;
@@ -330,7 +330,7 @@ static void writeInventoryToFile(FILE *file1) {
     obj_desc_t description = {'\0'};
 
     for (int i = 0; i < inventory_count; i++) {
-        itemDescription(description, &inventory[i], true);
+        itemDescription(description, inventory[i], true);
         (void) fprintf(file1, "%c) %s\n", i + 'a', description);
     }
 

@@ -96,7 +96,7 @@ static bool scrollEnchantWeaponToHit() {
 
     obj_desc_t msg = {'\0'};
     obj_desc_t desc = {'\0'};
-    itemDescription(desc, &item, false);
+    itemDescription(desc, item, false);
 
     (void) sprintf(msg, "Your %s glows faintly!", desc);
     printMessage(msg);
@@ -120,7 +120,7 @@ static bool scrollEnchantWeaponToDamage() {
 
     obj_desc_t msg = {'\0'};
     obj_desc_t desc = {'\0'};
-    itemDescription(desc, &item, false);
+    itemDescription(desc, item, false);
 
     (void) sprintf(msg, "Your %s glows faintly!", desc);
     printMessage(msg);
@@ -156,7 +156,7 @@ static bool scrollEnchantItemToAC() {
 
     obj_desc_t msg = {'\0'};
     obj_desc_t desc = {'\0'};
-    itemDescription(desc, &item, false);
+    itemDescription(desc, item, false);
 
     (void) sprintf(msg, "Your %s glows faintly!", desc);
     printMessage(msg);
@@ -235,7 +235,7 @@ static bool scrollEnchantWeapon() {
 
     obj_desc_t msg = {'\0'};
     obj_desc_t desc = {'\0'};
-    itemDescription(desc, &item, false);
+    itemDescription(desc, item, false);
 
     (void) sprintf(msg, "Your %s glows brightly!", desc);
     printMessage(msg);
@@ -283,7 +283,7 @@ static bool scrollCurseWeapon() {
 
     obj_desc_t msg = {'\0'};
     obj_desc_t desc = {'\0'};
-    itemDescription(desc, &item, false);
+    itemDescription(desc, item, false);
 
     (void) sprintf(msg, "Your %s glows black, fades.", desc);
     printMessage(msg);
@@ -315,7 +315,7 @@ static bool scrollEnchantArmor() {
 
     obj_desc_t msg = {'\0'};
     obj_desc_t desc = {'\0'};
-    itemDescription(desc, &item, false);
+    itemDescription(desc, item, false);
 
     (void) sprintf(msg, "Your %s glows brightly!", desc);
     printMessage(msg);
@@ -377,7 +377,7 @@ static bool scrollCurseArmor() {
 
     obj_desc_t msg = {'\0'};
     obj_desc_t desc = {'\0'};
-    itemDescription(desc, &item, false);
+    itemDescription(desc, item, false);
 
     (void) sprintf(msg, "Your %s glows black, fades.", desc);
     printMessage(msg);

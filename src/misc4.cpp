@@ -22,7 +22,7 @@ void itemInscribe() {
     }
 
     obj_desc_t msg = {'\0'};
-    itemDescription(msg, &inventory[item_id], true);
+    itemDescription(msg, inventory[item_id], true);
 
     obj_desc_t inscription = {'\0'};
     (void) sprintf(inscription, "Inscribing %s", msg);
