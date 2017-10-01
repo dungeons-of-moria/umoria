@@ -102,20 +102,17 @@ static bool sv_write() {
     }
 
     for (int i = 0; i < MON_MAX_CREATURES; i++) {
-        Recall_t *r_ptr = &creature_recall[i];
-
-        if (r_ptr->movement || r_ptr->defenses || r_ptr->kills ||
-            r_ptr->spells || r_ptr->deaths || r_ptr->attacks[0] ||
-            r_ptr->attacks[1] || r_ptr->attacks[2] || r_ptr->attacks[3]) {
+        Recall_t &r = creature_recall[i];
+        if (r.movement || r.defenses || r.kills || r.spells || r.deaths || r.attacks[0] || r.attacks[1] || r.attacks[2] || r.attacks[3]) {
             wr_short((uint16_t) i);
-            wr_long(r_ptr->movement);
-            wr_long(r_ptr->spells);
-            wr_short(r_ptr->kills);
-            wr_short(r_ptr->deaths);
-            wr_short(r_ptr->defenses);
-            wr_byte(r_ptr->wake);
-            wr_byte(r_ptr->ignore);
-            wr_bytes(r_ptr->attacks, MON_MAX_ATTACKS);
+            wr_long(r.movement);
+            wr_long(r.spells);
+            wr_short(r.kills);
+            wr_short(r.deaths);
+            wr_short(r.defenses);
+            wr_byte(r.wake);
+            wr_byte(r.ignore);
+            wr_bytes(r.attacks, MON_MAX_ATTACKS);
         }
     }
 
@@ -245,17 +242,15 @@ static bool sv_write() {
     wr_shorts(player_base_hp_levels, PLAYER_MAX_LEVEL);
 
     for (auto &store : stores) {
-        Store_t *st_ptr = &store;
-
-        wr_long((uint32_t) st_ptr->turns_left_before_closing);
-        wr_short((uint16_t) st_ptr->insults_counter);
-        wr_byte(st_ptr->owner);
-        wr_byte(st_ptr->store_id);
-        wr_short(st_ptr->good_purchases);
-        wr_short(st_ptr->bad_purchases);
-        for (int j = 0; j < st_ptr->store_id; j++) {
-            wr_long((uint32_t) st_ptr->inventory[j].cost);
-            wr_item(&st_ptr->inventory[j].item);
+        wr_long((uint32_t) store.turns_left_before_closing);
+        wr_short((uint16_t) store.insults_counter);
+        wr_byte(store.owner);
+        wr_byte(store.store_id);
+        wr_short(store.good_purchases);
+        wr_short(store.bad_purchases);
+        for (int j = 0; j < store.store_id; j++) {
+            wr_long((uint32_t) store.inventory[j].cost);
+            wr_item(&store.inventory[j].item);
         }
     }
 
@@ -296,11 +291,10 @@ static bool sv_write() {
 
     for (int i = 0; i < MAX_HEIGHT; i++) {
         for (int j = 0; j < MAX_WIDTH; j++) {
-            Cave_t *c_ptr = &cave[i][j];
-            if (c_ptr->creature_id != 0) {
+            if (cave[i][j].creature_id != 0) {
                 wr_byte((uint8_t) i);
                 wr_byte((uint8_t) j);
-                wr_byte(c_ptr->creature_id);
+                wr_byte(cave[i][j].creature_id);
             }
         }
     }
@@ -310,11 +304,10 @@ static bool sv_write() {
 
     for (int i = 0; i < MAX_HEIGHT; i++) {
         for (int j = 0; j < MAX_WIDTH; j++) {
-            Cave_t *c_ptr = &cave[i][j];
-            if (c_ptr->treasure_id != 0) {
+            if (cave[i][j].treasure_id != 0) {
                 wr_byte((uint8_t) i);
                 wr_byte((uint8_t) j);
-                wr_byte(c_ptr->treasure_id);
+                wr_byte(cave[i][j].treasure_id);
             }
         }
     }
@@ -328,9 +321,9 @@ static bool sv_write() {
 
     for (int y = 0; y < MAX_HEIGHT; y++) {
         for (int x = 0; x < MAX_WIDTH; x++) {
-            Cave_t *tile = &cave[y][x];
+            Cave_t &tile = cave[y][x];
 
-            auto char_tmp = (uint8_t) (tile->feature_id | (tile->perma_lit_room << 4) | (tile->field_mark << 5) | (tile->permanent_light << 6) | (tile->temporary_light << 7));
+            auto char_tmp = (uint8_t) (tile.feature_id | (tile.perma_lit_room << 4) | (tile.field_mark << 5) | (tile.permanent_light << 6) | (tile.temporary_light << 7));
 
             if (char_tmp != prev_char || count == MAX_UCHAR) {
                 wr_byte((uint8_t) count);
@@ -463,8 +456,8 @@ static bool _save_char(char *filename) {
 
 // Certain checks are omitted for the wizard. -CJS-
 bool loadGame(bool &generate) {
+    Cave_t *tile;
     int c;
-    Cave_t *c_ptr;
     uint32_t time_saved = 0;
     uint8_t version_maj = 0;
     uint8_t version_min = 0;
@@ -535,15 +528,15 @@ bool loadGame(bool &generate) {
             if (uint16_t_tmp >= MON_MAX_CREATURES) {
                 goto error;
             }
-            Recall_t *r_ptr = &creature_recall[uint16_t_tmp];
-            r_ptr->movement = rd_long();
-            r_ptr->spells = rd_long();
-            r_ptr->kills = rd_short();
-            r_ptr->deaths = rd_short();
-            r_ptr->defenses = rd_short();
-            r_ptr->wake = rd_byte();
-            r_ptr->ignore = rd_byte();
-            rd_bytes(r_ptr->attacks, MON_MAX_ATTACKS);
+            Recall_t &memory = creature_recall[uint16_t_tmp];
+            memory.movement = rd_long();
+            memory.spells = rd_long();
+            memory.kills = rd_short();
+            memory.deaths = rd_short();
+            memory.defenses = rd_short();
+            memory.wake = rd_byte();
+            memory.ignore = rd_byte();
+            rd_bytes(memory.attacks, MON_MAX_ATTACKS);
             uint16_t_tmp = rd_short();
         }
 
@@ -699,20 +692,18 @@ bool loadGame(bool &generate) {
             rd_shorts(player_base_hp_levels, PLAYER_MAX_LEVEL);
 
             for (auto &store : stores) {
-                Store_t *st_ptr = &store;
-
-                st_ptr->turns_left_before_closing = rd_long();
-                st_ptr->insults_counter = rd_short();
-                st_ptr->owner = rd_byte();
-                st_ptr->store_id = rd_byte();
-                st_ptr->good_purchases = rd_short();
-                st_ptr->bad_purchases = rd_short();
-                if (st_ptr->store_id > STORE_MAX_DISCRETE_ITEMS) {
+                store.turns_left_before_closing = rd_long();
+                store.insults_counter = rd_short();
+                store.owner = rd_byte();
+                store.store_id = rd_byte();
+                store.good_purchases = rd_short();
+                store.bad_purchases = rd_short();
+                if (store.store_id > STORE_MAX_DISCRETE_ITEMS) {
                     goto error;
                 }
-                for (int j = 0; j < st_ptr->store_id; j++) {
-                    st_ptr->inventory[j].cost = rd_long();
-                    rd_item(&st_ptr->inventory[j].item);
+                for (int j = 0; j < store.store_id; j++) {
+                    store.inventory[j].cost = rd_long();
+                    rd_item(&store.inventory[j].item);
                 }
             }
 
@@ -808,21 +799,21 @@ bool loadGame(bool &generate) {
         }
 
         // read in the rest of the cave info
-        c_ptr = &cave[0][0];
+        tile = &cave[0][0];
         total_count = 0;
         while (total_count != MAX_HEIGHT * MAX_WIDTH) {
             count = rd_byte();
             char_tmp = rd_byte();
             for (int i = count; i > 0; i--) {
-                if (c_ptr >= &cave[MAX_HEIGHT][0]) {
+                if (tile >= &cave[MAX_HEIGHT][0]) {
                     goto error;
                 }
-                c_ptr->feature_id = (uint8_t) (char_tmp & 0xF);
-                c_ptr->perma_lit_room = (bool) ((char_tmp >> 4) & 0x1);
-                c_ptr->field_mark = (bool) ((char_tmp >> 5) & 0x1);
-                c_ptr->permanent_light = (bool) ((char_tmp >> 6) & 0x1);
-                c_ptr->temporary_light = (bool) ((char_tmp >> 7) & 0x1);
-                c_ptr++;
+                tile->feature_id = (uint8_t) (char_tmp & 0xF);
+                tile->perma_lit_room = (bool) ((char_tmp >> 4) & 0x1);
+                tile->field_mark = (bool) ((char_tmp >> 5) & 0x1);
+                tile->permanent_light = (bool) ((char_tmp >> 6) & 0x1);
+                tile->temporary_light = (bool) ((char_tmp >> 7) & 0x1);
+                tile++;
             }
             total_count += count;
         }
@@ -845,20 +836,18 @@ bool loadGame(bool &generate) {
         generate = false; // We have restored a cave - no need to generate.
 
         for (auto &store : stores) {
-            Store_t *st_ptr = &store;
-
-            st_ptr->turns_left_before_closing = rd_long();
-            st_ptr->insults_counter = rd_short();
-            st_ptr->owner = rd_byte();
-            st_ptr->store_id = rd_byte();
-            st_ptr->good_purchases = rd_short();
-            st_ptr->bad_purchases = rd_short();
-            if (st_ptr->store_id > STORE_MAX_DISCRETE_ITEMS) {
+            store.turns_left_before_closing = rd_long();
+            store.insults_counter = rd_short();
+            store.owner = rd_byte();
+            store.store_id = rd_byte();
+            store.good_purchases = rd_short();
+            store.bad_purchases = rd_short();
+            if (store.store_id > STORE_MAX_DISCRETE_ITEMS) {
                 goto error;
             }
-            for (int j = 0; j < st_ptr->store_id; j++) {
-                st_ptr->inventory[j].cost = rd_long();
-                rd_item(&st_ptr->inventory[j].item);
+            for (int j = 0; j < store.store_id; j++) {
+                store.inventory[j].cost = rd_long();
+                rd_item(&store.inventory[j].item);
             }
         }
 
@@ -1076,7 +1065,7 @@ static bool rd_bool() {
 
 static uint8_t rd_byte() {
     auto c = (uint8_t) (getc(fileptr) & 0xFF);
-    uint8_t decoded_byte = c ^ xor_byte;
+    uint8_t decoded_byte = c ^xor_byte;
     xor_byte = c;
 
     DEBUG(fprintf(logfile, "BYTE:  %02X = %d\n", (int) c, decoded_byte));
