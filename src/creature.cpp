@@ -556,7 +556,7 @@ static bool executeDisenchantAttack() {
     return success;
 }
 
-static bool executeAttackOnPlayer(Creature_t *creature, Monster_t *monster, int monster_id, int attack_type, int damage, vtype_t death_description, bool noticed) {
+static bool executeAttackOnPlayer(uint8_t creature_level, int16_t &monster_hp, int monster_id, int attack_type, int damage, vtype_t death_description, bool noticed) {
     int item_pos_start;
     int item_pos_end;
     int32_t gold;
@@ -584,7 +584,7 @@ static bool executeAttackOnPlayer(Creature_t *creature, Monster_t *monster, int 
             if (randomNumber(2) == 1) {
                 if (py.flags.confused < 1) {
                     printMessage("You feel confused.");
-                    py.flags.confused += randomNumber((int) creature->level);
+                    py.flags.confused += randomNumber((int) creature_level);
                 } else {
                     noticed = false;
                 }
@@ -599,7 +599,7 @@ static bool executeAttackOnPlayer(Creature_t *creature, Monster_t *monster, int 
                 printMessage("You resist the effects!");
             } else if (py.flags.afraid < 1) {
                 printMessage("You are suddenly afraid!");
-                py.flags.afraid += 3 + randomNumber((int) creature->level);
+                py.flags.afraid += 3 + randomNumber((int) creature_level);
             } else {
                 py.flags.afraid += 3;
                 noticed = false;
@@ -629,7 +629,7 @@ static bool executeAttackOnPlayer(Creature_t *creature, Monster_t *monster, int 
         case 10: // Blindness attack
             playerTakesHit(damage, death_description);
             if (py.flags.blind < 1) {
-                py.flags.blind += 10 + randomNumber((int) creature->level);
+                py.flags.blind += 10 + randomNumber((int) creature_level);
                 printMessage("Your eyes begin to sting.");
             } else {
                 py.flags.blind += 5;
@@ -644,7 +644,7 @@ static bool executeAttackOnPlayer(Creature_t *creature, Monster_t *monster, int 
                 if (py.flags.free_action) {
                     printMessage("You are unaffected.");
                 } else {
-                    py.flags.paralysis = (int16_t) (randomNumber((int) creature->level) + 3);
+                    py.flags.paralysis = (int16_t) (randomNumber((int) creature_level) + 3);
                     printMessage("You are paralyzed.");
                 }
             } else {
@@ -684,7 +684,7 @@ static bool executeAttackOnPlayer(Creature_t *creature, Monster_t *monster, int 
         case 14: // Poison
             playerTakesHit(damage, death_description);
             printMessage("You feel very sick.");
-            py.flags.poisoned += randomNumber((int) creature->level) + 5;
+            py.flags.poisoned += randomNumber((int) creature_level) + 5;
             break;
         case 15: // Lose dexterity
             playerTakesHit(damage, death_description);
@@ -764,7 +764,7 @@ static bool executeAttackOnPlayer(Creature_t *creature, Monster_t *monster, int 
         case 24: // Eat charges
             item = &inventory[randomNumber(inventory_count) - 1];
             if ((item->category_id == TV_STAFF || item->category_id == TV_WAND) && item->misc_use > 0) {
-                monster->hp += creature->level * item->misc_use;
+                monster_hp += creature_level * item->misc_use;
                 item->misc_use = 0;
                 if (!spellItemIdentified(item)) {
                     itemAppendToInscription(item, ID_EMPTY);
@@ -872,7 +872,7 @@ static void monsterAttackPlayer(int monster_id) {
             }
 
             int damage = diceDamageRoll(adice, asides);
-            notice = executeAttackOnPlayer(&creature, &monster, monster_id, attype, damage, death_description, notice);
+            notice = executeAttackOnPlayer(creature.level, monster.hp, monster_id, attype, damage, death_description, notice);
 
             // Moved here from monsterMove, so that monster only confused if it
             // actually hits. A monster that has been repelled has not hit
