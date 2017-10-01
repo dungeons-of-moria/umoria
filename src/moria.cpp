@@ -153,7 +153,7 @@ static void initializeCharacterInventory() {
         inventoryItemCopyTo(class_base_provisions[py.misc.class_id][i], &item);
 
         // this makes it spellItemIdentifyAndRemoveRandomInscription and itemSetAsIdentified
-        itemIdentifyAsStoreBought(&item);
+        itemIdentifyAsStoreBought(item);
 
         // must set this bit to display to_hit/to_damage for stiletto
         if (item.category_id == TV_SWORD) {

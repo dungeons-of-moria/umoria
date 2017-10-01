@@ -181,9 +181,9 @@ void itemIdentificationClearEmpty(Inventory_t &item) {
     item.identification &= ~ID_EMPTY;
 }
 
-void itemIdentifyAsStoreBought(Inventory_t *item) {
-    item->identification |= ID_STORE_BOUGHT;
-    spellItemIdentifyAndRemoveRandomInscription(*item);
+void itemIdentifyAsStoreBought(Inventory_t &item) {
+    item.identification |= ID_STORE_BOUGHT;
+    spellItemIdentifyAndRemoveRandomInscription(item);
 }
 
 bool itemStoreBought(int identification) {

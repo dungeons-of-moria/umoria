@@ -350,7 +350,7 @@ static void storeItemCreate(int store_id, int16_t max_cost) {
             if (item.cost > 0 && item.cost < max_cost) {
                 // equivalent to calling spellIdentifyItem(),
                 // except will not change the objects_identified array.
-                itemIdentifyAsStoreBought(&item);
+                itemIdentifyAsStoreBought(item);
 
                 int dummy;
                 storeCarry(store_id, dummy, &item);

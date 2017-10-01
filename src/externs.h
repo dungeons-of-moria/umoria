@@ -173,7 +173,7 @@ void spellItemIdentifyAndRemoveRandomInscription(Inventory_t &item);
 bool spellItemIdentified(const Inventory_t &item);
 void spellItemRemoveIdentification(Inventory_t &item);
 void itemIdentificationClearEmpty(Inventory_t &item);
-void itemIdentifyAsStoreBought(Inventory_t *item);
+void itemIdentifyAsStoreBought(Inventory_t &item);
 bool itemStoreBought(int identification);
 void itemSetAsTried(Inventory_t *item);
 void itemIdentify(int *item_id);
