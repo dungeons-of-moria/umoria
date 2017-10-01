@@ -10,7 +10,7 @@
 #include "externs.h"
 #include "version.h"
 
-static bool parseGameSeed(const char *argv, uint32_t *seed);
+static bool parseGameSeed(const char *argv, uint32_t &seed);
 
 static const char *usage_instructions = R"(
 Usage:
@@ -79,7 +79,7 @@ int main(int argc, char *argv[]) {
                 --argc;
                 ++argv;
 
-                if (!parseGameSeed(argv[0], &seed)) {
+                if (!parseGameSeed(argv[0], seed)) {
                     terminalRestore();
                     printf("Game seed must be a decimal number between 1 and 2147483647\n");
                     return -1;
@@ -109,7 +109,7 @@ int main(int argc, char *argv[]) {
     return 0;
 }
 
-static bool parseGameSeed(const char *argv, uint32_t *seed) {
+static bool parseGameSeed(const char *argv, uint32_t &seed) {
     int value;
 
     if (!stringToNumber(argv, value)) {
@@ -119,7 +119,7 @@ static bool parseGameSeed(const char *argv, uint32_t *seed) {
         return false;
     }
 
-    *seed = (uint32_t) value;
+    seed = (uint32_t) value;
 
     return true;
 }
