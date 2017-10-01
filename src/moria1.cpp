@@ -1701,18 +1701,18 @@ void dungeonLightRoom(int pos_y, int pos_x) {
 
     for (int y = top; y <= bottom; y++) {
         for (int x = left; x <= right; x++) {
-            Cave_t *tile = &cave[y][x];
+            Cave_t &tile = cave[y][x];
 
-            if (tile->perma_lit_room && !tile->permanent_light) {
-                tile->permanent_light = true;
+            if (tile.perma_lit_room && !tile.permanent_light) {
+                tile.permanent_light = true;
 
-                if (tile->feature_id == TILE_DARK_FLOOR) {
-                    tile->feature_id = TILE_LIGHT_FLOOR;
+                if (tile.feature_id == TILE_DARK_FLOOR) {
+                    tile.feature_id = TILE_LIGHT_FLOOR;
                 }
-                if (!tile->field_mark && tile->treasure_id != 0) {
-                    int treasure_id = treasure_list[tile->treasure_id].category_id;
+                if (!tile.field_mark && tile.treasure_id != 0) {
+                    int treasure_id = treasure_list[tile.treasure_id].category_id;
                     if (treasure_id >= TV_MIN_VISIBLE && treasure_id <= TV_MAX_VISIBLE) {
-                        tile->field_mark = true;
+                        tile.field_mark = true;
                     }
                 }
                 putChar(caveGetTileSymbol(y, x), y, x);
@@ -1750,20 +1750,20 @@ static void sub1_move_light(int y1, int x1, int y2, int x2) {
 
     for (int y = y2 - 1; y <= y2 + 1; y++) {
         for (int x = x2 - 1; x <= x2 + 1; x++) {
-            Cave_t *c_ptr = &cave[y][x];
+            Cave_t &tile = cave[y][x];
 
             // only light up if normal movement
             if (py.temporary_light_only) {
-                c_ptr->temporary_light = true;
+                tile.temporary_light = true;
             }
 
-            if (c_ptr->feature_id >= MIN_CAVE_WALL) {
-                c_ptr->permanent_light = true;
-            } else if (!c_ptr->field_mark && c_ptr->treasure_id != 0) {
-                int tval = treasure_list[c_ptr->treasure_id].category_id;
+            if (tile.feature_id >= MIN_CAVE_WALL) {
+                tile.permanent_light = true;
+            } else if (!tile.field_mark && tile.treasure_id != 0) {
+                int tval = treasure_list[tile.treasure_id].category_id;
 
                 if (tval >= TV_MIN_VISIBLE && tval <= TV_MAX_VISIBLE) {
-                    c_ptr->field_mark = true;
+                    tile.field_mark = true;
                 }
             }
         }
