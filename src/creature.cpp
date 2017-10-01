@@ -1655,12 +1655,12 @@ static void monsterMove(int monster_id, uint32_t &rcmove) {
     }
 }
 
-static void memoryUpdateRecall(Monster_t *monster, bool wake, bool ignore, int rcmove) {
-    if (!monster->lit) {
+static void memoryUpdateRecall(Monster_t &monster, bool wake, bool ignore, int rcmove) {
+    if (!monster.lit) {
         return;
     }
 
-    Recall_t &memory = creature_recall[monster->creature_id];
+    Recall_t &memory = creature_recall[monster.creature_id];
 
     if (wake) {
         if (memory.wake < MAX_UCHAR) {
