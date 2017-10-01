@@ -730,7 +730,7 @@ static void playerDetectEnchantment() {
 }
 
 // Accept a command and execute it
-static void executeInputCommands(char *command, int *find_count) {
+static void executeInputCommands(char *command, int &find_count) {
     char lastInputCommand = *command;
 
     // Accept a command and execute it
@@ -744,8 +744,8 @@ static void executeInputCommands(char *command, int *find_count) {
 
         if (running_counter != 0) {
             playerRunAndFind();
-            *find_count -= 1;
-            if (*find_count == 0) {
+            find_count -= 1;
+            if (find_count == 0) {
                 playerEndRunning();
             }
             putQIO();
@@ -857,7 +857,7 @@ static void executeInputCommands(char *command, int *find_count) {
 
             // Find is counted differently, as the command changes.
             if (running_counter != 0) {
-                *find_count = command_count - 1;
+                find_count = command_count - 1;
                 command_count = 0;
             } else if (player_free_turn) {
                 command_count = 0;
@@ -991,7 +991,7 @@ void playDungeon() {
 
         // Accept a command?
         if (py.flags.paralysis < 1 && py.flags.rest == 0 && !character_is_dead) {
-            executeInputCommands(&lastInputCommand, &find_count);
+            executeInputCommands(&lastInputCommand, find_count);
         } else {
             // if paralyzed, resting, or dead, flush output
             // but first move the cursor onto the player, for aesthetics
