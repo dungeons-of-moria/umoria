@@ -195,7 +195,7 @@ void getAndCastMagicSpell() {
 
     player_free_turn = false;
 
-    Spell_t *m_ptr = &magic_spells[py.misc.class_id - 1][choice];
+    Spell_t &magic_spell = magic_spells[py.misc.class_id - 1][choice];
 
     if (randomNumber(100) < chance) {
         printMessage("You failed to get the spell off!");
@@ -203,17 +203,17 @@ void getAndCastMagicSpell() {
         castSpell(choice + 1);
 
         if ((spells_worked & (1L << choice)) == 0) {
-            py.misc.exp += m_ptr->exp_gain_for_learning << 2;
+            py.misc.exp += magic_spell.exp_gain_for_learning << 2;
             spells_worked |= (1L << choice);
 
             displayCharacterExperience();
         }
     }
 
-    if (m_ptr->mana_required > py.misc.current_mana) {
+    if (magic_spell.mana_required > py.misc.current_mana) {
         printMessage("You faint from the effort!");
 
-        py.flags.paralysis = (int16_t) randomNumber((5 * (m_ptr->mana_required - py.misc.current_mana)));
+        py.flags.paralysis = (int16_t) randomNumber((5 * (magic_spell.mana_required - py.misc.current_mana)));
         py.misc.current_mana = 0;
         py.misc.current_mana_fraction = 0;
 
@@ -222,7 +222,7 @@ void getAndCastMagicSpell() {
             (void) playerStatRandomDecrease(A_CON);
         }
     } else {
-        py.misc.current_mana -= m_ptr->mana_required;
+        py.misc.current_mana -= magic_spell.mana_required;
     }
 
     printCharacterCurrentMana();
