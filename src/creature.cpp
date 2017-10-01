@@ -9,24 +9,24 @@
 #include "headers.h"
 #include "externs.h"
 
-static bool monsterIsVisible(Monster_t *monster) {
+static bool monsterIsVisible(Monster_t &monster) {
     bool visible = false;
 
-    Cave_t &tile = cave[monster->y][monster->x];
-    Creature_t &creature = creatures_list[monster->creature_id];
+    Cave_t &tile = cave[monster.y][monster.x];
+    Creature_t &creature = creatures_list[monster.creature_id];
 
-    if (tile.permanent_light || tile.temporary_light || ((running_counter != 0) && monster->distance_from_player < 2 && py.carrying_light)) {
+    if (tile.permanent_light || tile.temporary_light || ((running_counter != 0) && monster.distance_from_player < 2 && py.carrying_light)) {
         // Normal sight.
         if ((CM_INVISIBLE & creature.movement) == 0) {
             visible = true;
         } else if (py.flags.see_invisible) {
             visible = true;
-            creature_recall[monster->creature_id].movement |= CM_INVISIBLE;
+            creature_recall[monster.creature_id].movement |= CM_INVISIBLE;
         }
-    } else if (py.flags.see_infra > 0 && monster->distance_from_player <= py.flags.see_infra && ((CD_INFRA & creature.defenses) != 0)) {
+    } else if (py.flags.see_infra > 0 && monster.distance_from_player <= py.flags.see_infra && ((CD_INFRA & creature.defenses) != 0)) {
         // Infra vision.
         visible = true;
-        creature_recall[monster->creature_id].defenses |= CD_INFRA;
+        creature_recall[monster.creature_id].defenses |= CD_INFRA;
     }
 
     return visible;
@@ -42,7 +42,7 @@ void monsterUpdateVisibility(int monster_id) {
             // Wizard sight.
             visible = true;
         } else if (los(char_row, char_col, (int) monster.y, (int) monster.x)) {
-            visible = monsterIsVisible(&monster);
+            visible = monsterIsVisible(monster);
         }
     }
 
