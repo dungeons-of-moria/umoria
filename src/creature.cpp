@@ -906,8 +906,8 @@ static void monsterAttackPlayer(int monster_id) {
     }
 }
 
-static void monsterOpenDoor(Cave_t *tile, int16_t monster_hp, uint32_t move_bits, bool *do_turn, bool *do_move, uint32_t *rcmove, int y, int x) {
-    Inventory_t &item = treasure_list[tile->treasure_id];
+static void monsterOpenDoor(Cave_t &tile, int16_t monster_hp, uint32_t move_bits, bool *do_turn, bool *do_move, uint32_t *rcmove, int y, int x) {
+    Inventory_t &item = treasure_list[tile.treasure_id];
 
     // Creature can open doors.
     if ((move_bits & CM_OPEN_DOOR) != 0u) {
@@ -948,7 +948,7 @@ static void monsterOpenDoor(Cave_t *tile, int16_t monster_hp, uint32_t move_bits
             if (door_is_stuck) {
                 item.misc_use = (int16_t) (1 - randomNumber(2));
             }
-            tile->feature_id = TILE_CORR_FLOOR;
+            tile.feature_id = TILE_CORR_FLOOR;
             dungeonLiteSpot(y, x);
             *rcmove |= CM_OPEN_DOOR;
             *do_move = false;
@@ -963,7 +963,7 @@ static void monsterOpenDoor(Cave_t *tile, int16_t monster_hp, uint32_t move_bits
 
             // 50% chance of breaking door
             item.misc_use = (int16_t) (1 - randomNumber(2));
-            tile->feature_id = TILE_CORR_FLOOR;
+            tile.feature_id = TILE_CORR_FLOOR;
             dungeonLiteSpot(y, x);
             printMessage("You hear a door burst open!");
             playerDisturb(1, 0);
@@ -1080,7 +1080,7 @@ static void makeMove(int monster_id, int *directions, uint32_t *rcmove) {
             *rcmove |= CM_PHASE;
         } else if (tile.treasure_id != 0) {
             // Creature can open doors?
-            monsterOpenDoor(&tile, monster.hp, move_bits, &do_turn, &do_move, rcmove, y, x);
+            monsterOpenDoor(tile, monster.hp, move_bits, &do_turn, &do_move, rcmove, y, x);
         }
 
         // Glyph of warding present?
