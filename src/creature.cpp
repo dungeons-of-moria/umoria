@@ -1675,7 +1675,7 @@ static void memoryUpdateRecall(Monster_t &monster, bool wake, bool ignore, int r
     memory.movement |= rcmove;
 }
 
-static void monsterAttackingUpdate(Monster_t *monster, int monster_id, int moves) {
+static void monsterAttackingUpdate(Monster_t &monster, int monster_id, int moves) {
     for (int i = moves; i > 0; i--) {
         bool wake = false;
         bool ignore = false;
@@ -1684,44 +1684,44 @@ static void monsterAttackingUpdate(Monster_t *monster, int monster_id, int moves
 
         // Monsters trapped in rock must be given a turn also,
         // so that they will die/dig out immediately.
-        if (monster->lit || monster->distance_from_player <= creatures_list[monster->creature_id].area_affect_radius || (((creatures_list[monster->creature_id].movement & CM_PHASE) == 0u) && cave[monster->y][monster->x].feature_id >= MIN_CAVE_WALL)) {
-            if (monster->sleep_count > 0) {
+        if (monster.lit || monster.distance_from_player <= creatures_list[monster.creature_id].area_affect_radius || (((creatures_list[monster.creature_id].movement & CM_PHASE) == 0u) && cave[monster.y][monster.x].feature_id >= MIN_CAVE_WALL)) {
+            if (monster.sleep_count > 0) {
                 if (py.flags.aggravate) {
-                    monster->sleep_count = 0;
+                    monster.sleep_count = 0;
                 } else if ((py.flags.rest == 0 && py.flags.paralysis < 1) || (randomNumber(50) == 1)) {
                     int notice = randomNumber(1024);
 
                     if (notice * notice * notice <= (1L << (29 - py.misc.stealth_factor))) {
-                        monster->sleep_count -= (100 / monster->distance_from_player);
-                        if (monster->sleep_count > 0) {
+                        monster.sleep_count -= (100 / monster.distance_from_player);
+                        if (monster.sleep_count > 0) {
                             ignore = true;
                         } else {
                             wake = true;
 
                             // force it to be exactly zero
-                            monster->sleep_count = 0;
+                            monster.sleep_count = 0;
                         }
                     }
                 }
             }
 
-            if (monster->stunned_amount != 0) {
+            if (monster.stunned_amount != 0) {
                 // NOTE: Balrog = 100*100 = 10000, it always recovers instantly
-                if (randomNumber(5000) < creatures_list[monster->creature_id].level * creatures_list[monster->creature_id].level) {
-                    monster->stunned_amount = 0;
+                if (randomNumber(5000) < creatures_list[monster.creature_id].level * creatures_list[monster.creature_id].level) {
+                    monster.stunned_amount = 0;
                 } else {
-                    monster->stunned_amount--;
+                    monster.stunned_amount--;
                 }
 
-                if (monster->stunned_amount == 0) {
-                    if (monster->lit) {
+                if (monster.stunned_amount == 0) {
+                    if (monster.lit) {
                         vtype_t msg = {'\0'};
-                        (void) sprintf(msg, "The %s ", creatures_list[monster->creature_id].name);
+                        (void) sprintf(msg, "The %s ", creatures_list[monster.creature_id].name);
                         printMessage(strcat(msg, "recovers and glares at you."));
                     }
                 }
             }
-            if ((monster->sleep_count == 0) && (monster->stunned_amount == 0)) {
+            if ((monster.sleep_count == 0) && (monster.stunned_amount == 0)) {
                 monsterMove(monster_id, rcmove);
             }
         }
@@ -1754,7 +1754,7 @@ void updateMonsters(bool attack) {
             if (moves <= 0) {
                 monsterUpdateVisibility(id);
             } else {
-                monsterAttackingUpdate(&monster, id, moves);
+                monsterAttackingUpdate(monster, id, moves);
             }
         } else {
             monsterUpdateVisibility(id);
