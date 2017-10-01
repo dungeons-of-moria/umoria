@@ -1332,7 +1332,7 @@ static void commandPreviousMessage() {
     uint8_t lineNumber = max_messages;
     int16_t msg_id = last_message_id;
 
-    while(max_messages > 0) {
+    while (max_messages > 0) {
         max_messages--;
 
         putStringClearToEOL(messages[msg_id], max_messages, 0);
@@ -2141,14 +2141,14 @@ static void dungeonJamDoor() {
     }
     (void) playerMovePosition(direction, y, x);
 
-    Cave_t *tile = &cave[y][x];
+    Cave_t &tile = cave[y][x];
 
-    if (tile->treasure_id == 0) {
+    if (tile.treasure_id == 0) {
         printMessage("That isn't a door!");
         return;
     }
 
-    Inventory_t &item = treasure_list[tile->treasure_id];
+    Inventory_t &item = treasure_list[tile.treasure_id];
 
     uint8_t item_id = item.category_id;
     if (item_id != TV_CLOSED_DOOR && item_id != TV_OPEN_DOOR) {
@@ -2163,7 +2163,7 @@ static void dungeonJamDoor() {
 
     // If we reach here, the door is closed and we can try to jam it -MRC-
 
-    if (tile->creature_id == 0) {
+    if (tile.creature_id == 0) {
         int item_pos_start, item_pos_end;
         if (inventoryFindRange(TV_SPIKE, TV_NEVER, item_pos_start, item_pos_end)) {
             player_free_turn = false;
@@ -2192,7 +2192,7 @@ static void dungeonJamDoor() {
         player_free_turn = false;
 
         vtype_t msg = {'\0'};
-        (void) sprintf(msg, "The %s is in your way!", creatures_list[monsters[tile->creature_id].creature_id].name);
+        (void) sprintf(msg, "The %s is in your way!", creatures_list[monsters[tile.creature_id].creature_id].name);
         printMessage(msg);
     }
 }
