@@ -809,7 +809,7 @@ void magicTreasureMagicalAbility(int item_id, int level) {
 
     int magicAmount;
 
-    Inventory_t *t_ptr = &treasure_list[item_id];
+    Inventory_t &item = treasure_list[item_id];
 
     // some objects appear multiple times in the game_objects with different
     // levels, this is to make the object occur more often, however, for
@@ -817,139 +817,139 @@ void magicTreasureMagicalAbility(int item_id, int level) {
     // as the object with the lowest level
 
     // Depending on treasure type, it can have certain magical properties
-    switch (t_ptr->category_id) {
+    switch (item.category_id) {
         case TV_SHIELD:
         case TV_HARD_ARMOR:
         case TV_SOFT_ARMOR:
             if (magicShouldBeEnchanted(chance)) {
-                magicalArmor(t_ptr, special, level);
+                magicalArmor(&item, special, level);
             } else if (magicShouldBeEnchanted(cursed)) {
-                cursedArmor(t_ptr, level);
+                cursedArmor(&item, level);
             }
             break;
         case TV_HAFTED:
         case TV_POLEARM:
         case TV_SWORD:
             // always show to_hit/to_damage values if identified
-            t_ptr->identification |= ID_SHOW_HIT_DAM;
+            item.identification |= ID_SHOW_HIT_DAM;
 
             if (magicShouldBeEnchanted(chance)) {
-                magicalSword(t_ptr, special, level);
+                magicalSword(&item, special, level);
             } else if (magicShouldBeEnchanted(cursed)) {
-                cursedSword(t_ptr, level);
+                cursedSword(&item, level);
             }
             break;
         case TV_BOW:
             // always show to_hit/to_damage values if identified
-            t_ptr->identification |= ID_SHOW_HIT_DAM;
+            item.identification |= ID_SHOW_HIT_DAM;
 
             if (magicShouldBeEnchanted(chance)) {
-                magicalBow(t_ptr, level);
+                magicalBow(&item, level);
             } else if (magicShouldBeEnchanted(cursed)) {
-                cursedBow(t_ptr, level);
+                cursedBow(&item, level);
             }
             break;
         case TV_DIGGING:
             // always show to_hit/to_damage values if identified
-            t_ptr->identification |= ID_SHOW_HIT_DAM;
+            item.identification |= ID_SHOW_HIT_DAM;
 
             if (magicShouldBeEnchanted(chance)) {
                 if (randomNumber(3) < 3) {
-                    magicalDiggingTool(t_ptr, level);
+                    magicalDiggingTool(&item, level);
                 } else {
-                    cursedDiggingTool(t_ptr, level);
+                    cursedDiggingTool(&item, level);
                 }
             }
             break;
         case TV_GLOVES:
             if (magicShouldBeEnchanted(chance)) {
-                magicalGloves(t_ptr, special, level);
+                magicalGloves(&item, special, level);
             } else if (magicShouldBeEnchanted(cursed)) {
-                cursedGloves(t_ptr, special, level);
+                cursedGloves(&item, special, level);
             }
             break;
         case TV_BOOTS:
             if (magicShouldBeEnchanted(chance)) {
-                magicalBoots(t_ptr, special, level);
+                magicalBoots(&item, special, level);
             } else if (magicShouldBeEnchanted(cursed)) {
-                cursedBoots(t_ptr, level);
+                cursedBoots(&item, level);
             }
             break;
         case TV_HELM:
             // give crowns a higher chance for magic
-            if (t_ptr->sub_category_id >= 6 && t_ptr->sub_category_id <= 8) {
-                chance += (int) (t_ptr->cost / 100);
+            if (item.sub_category_id >= 6 && item.sub_category_id <= 8) {
+                chance += (int) (item.cost / 100);
                 special += special;
             }
 
             if (magicShouldBeEnchanted(chance)) {
-                magicalHelms(t_ptr, special, level);
+                magicalHelms(&item, special, level);
             } else if (magicShouldBeEnchanted(cursed)) {
-                cursedHelms(t_ptr, special, level);
+                cursedHelms(&item, special, level);
             }
             break;
         case TV_RING:
-            processRings(t_ptr, level, cursed);
+            processRings(&item, level, cursed);
             break;
         case TV_AMULET:
-            processAmulets(t_ptr, level, cursed);
+            processAmulets(&item, level, cursed);
             break;
         case TV_LIGHT:
             // `sub_category_id` should be even for store, odd for dungeon
             // Dungeon found ones will be partially charged
-            if ((t_ptr->sub_category_id % 2) == 1) {
-                t_ptr->misc_use = (int16_t) randomNumber(t_ptr->misc_use);
-                t_ptr->sub_category_id -= 1;
+            if ((item.sub_category_id % 2) == 1) {
+                item.misc_use = (int16_t) randomNumber(item.misc_use);
+                item.sub_category_id -= 1;
             }
             break;
         case TV_WAND:
-            magicAmount = wandMagic(t_ptr->sub_category_id);
+            magicAmount = wandMagic(item.sub_category_id);
             if (magicAmount != -1) {
-                t_ptr->misc_use = (uint16_t) magicAmount;
+                item.misc_use = (uint16_t) magicAmount;
             }
             break;
         case TV_STAFF:
-            magicAmount = staffMagic(t_ptr->sub_category_id);
+            magicAmount = staffMagic(item.sub_category_id);
             if (magicAmount != -1) {
-                t_ptr->misc_use = (uint16_t) magicAmount;
+                item.misc_use = (uint16_t) magicAmount;
             }
 
             // Change the level the items was first found on value
-            if (t_ptr->sub_category_id == 7) {
-                t_ptr->depth_first_found = 10;
-            } else if (t_ptr->sub_category_id == 22) {
-                t_ptr->depth_first_found = 5;
+            if (item.sub_category_id == 7) {
+                item.depth_first_found = 10;
+            } else if (item.sub_category_id == 22) {
+                item.depth_first_found = 5;
             }
             break;
         case TV_CLOAK:
             if (magicShouldBeEnchanted(chance)) {
-                magicalCloak(t_ptr, special, level);
+                magicalCloak(&item, special, level);
             } else if (magicShouldBeEnchanted(cursed)) {
-                cursedCloak(t_ptr, level);
+                cursedCloak(&item, level);
             }
             break;
         case TV_CHEST:
-            magicalChests(t_ptr, level);
+            magicalChests(&item, level);
             break;
         case TV_SLING_AMMO:
         case TV_SPIKE:
         case TV_BOLT:
         case TV_ARROW:
-            if (t_ptr->category_id == TV_SLING_AMMO || t_ptr->category_id == TV_BOLT || t_ptr->category_id == TV_ARROW) {
+            if (item.category_id == TV_SLING_AMMO || item.category_id == TV_BOLT || item.category_id == TV_ARROW) {
                 // always show to_hit/to_damage values if identified
-                t_ptr->identification |= ID_SHOW_HIT_DAM;
+                item.identification |= ID_SHOW_HIT_DAM;
 
                 if (magicShouldBeEnchanted(chance)) {
-                    magicalProjectiles(t_ptr, special, level);
+                    magicalProjectiles(&item, special, level);
                 } else if (magicShouldBeEnchanted(cursed)) {
-                    cursedProjectiles(t_ptr, level);
+                    cursedProjectiles(&item, level);
                 }
             }
 
-            t_ptr->items_count = 0;
+            item.items_count = 0;
 
             for (int i = 0; i < 7; i++) {
-                t_ptr->items_count += randomNumber(6);
+                item.items_count += randomNumber(6);
             }
 
             if (missiles_counter == MAX_SHORT) {
@@ -958,38 +958,38 @@ void magicTreasureMagicalAbility(int item_id, int level) {
                 missiles_counter++;
             }
 
-            t_ptr->misc_use = missiles_counter;
+            item.misc_use = missiles_counter;
             break;
         case TV_FOOD:
             // make sure all food rations have the same level
-            if (t_ptr->sub_category_id == 90) {
-                t_ptr->depth_first_found = 0;
+            if (item.sub_category_id == 90) {
+                item.depth_first_found = 0;
             }
 
             // give all Elvish waybread the same level
-            if (t_ptr->sub_category_id == 92) {
-                t_ptr->depth_first_found = 6;
+            if (item.sub_category_id == 92) {
+                item.depth_first_found = 6;
             }
             break;
         case TV_SCROLL1:
-            if (t_ptr->sub_category_id == 67) {
+            if (item.sub_category_id == 67) {
                 // give all identify scrolls the same level
-                t_ptr->depth_first_found = 1;
-            } else if (t_ptr->sub_category_id == 69) {
+                item.depth_first_found = 1;
+            } else if (item.sub_category_id == 69) {
                 // scroll of light
-                t_ptr->depth_first_found = 0;
-            } else if (t_ptr->sub_category_id == 80) {
+                item.depth_first_found = 0;
+            } else if (item.sub_category_id == 80) {
                 // scroll of trap detection
-                t_ptr->depth_first_found = 5;
-            } else if (t_ptr->sub_category_id == 81) {
+                item.depth_first_found = 5;
+            } else if (item.sub_category_id == 81) {
                 // scroll of door/stair location
-                t_ptr->depth_first_found = 5;
+                item.depth_first_found = 5;
             }
             break;
         case TV_POTION1:
             // cure light
-            if (t_ptr->sub_category_id == 76) {
-                t_ptr->depth_first_found = 0;
+            if (item.sub_category_id == 76) {
+                item.depth_first_found = 0;
             }
             break;
         default:
