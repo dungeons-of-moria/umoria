@@ -9,8 +9,8 @@
 #include "headers.h"
 #include "externs.h"
 
-static void magicalArmor(Inventory_t *t_ptr, int special, int level) {
-    t_ptr->to_ac += magicEnchantmentBonus(1, 30, level);
+static void magicalArmor(Inventory_t &item, int special, int level) {
+    item.to_ac += magicEnchantmentBonus(1, 30, level);
 
     if (!magicShouldBeEnchanted(special)) {
         return;
@@ -18,34 +18,34 @@ static void magicalArmor(Inventory_t *t_ptr, int special, int level) {
 
     switch (randomNumber(9)) {
         case 1:
-            t_ptr->flags |= (TR_RES_LIGHT | TR_RES_COLD | TR_RES_ACID | TR_RES_FIRE);
-            t_ptr->special_name_id = SN_R;
-            t_ptr->to_ac += 5;
-            t_ptr->cost += 2500;
+            item.flags |= (TR_RES_LIGHT | TR_RES_COLD | TR_RES_ACID | TR_RES_FIRE);
+            item.special_name_id = SN_R;
+            item.to_ac += 5;
+            item.cost += 2500;
             break;
         case 2: // Resist Acid
-            t_ptr->flags |= TR_RES_ACID;
-            t_ptr->special_name_id = SN_RA;
-            t_ptr->cost += 1000;
+            item.flags |= TR_RES_ACID;
+            item.special_name_id = SN_RA;
+            item.cost += 1000;
             break;
         case 3:
         case 4: // Resist Fire
-            t_ptr->flags |= TR_RES_FIRE;
-            t_ptr->special_name_id = SN_RF;
-            t_ptr->cost += 600;
+            item.flags |= TR_RES_FIRE;
+            item.special_name_id = SN_RF;
+            item.cost += 600;
             break;
         case 5:
         case 6: // Resist Cold
-            t_ptr->flags |= TR_RES_COLD;
-            t_ptr->special_name_id = SN_RC;
-            t_ptr->cost += 600;
+            item.flags |= TR_RES_COLD;
+            item.special_name_id = SN_RC;
+            item.cost += 600;
             break;
         case 7:
         case 8:
         case 9: // Resist Lightning
-            t_ptr->flags |= TR_RES_LIGHT;
-            t_ptr->special_name_id = SN_RL;
-            t_ptr->cost += 500;
+            item.flags |= TR_RES_LIGHT;
+            item.special_name_id = SN_RL;
+            item.cost += 500;
             break;
         default:
             // Do not apply any special magic
@@ -53,19 +53,19 @@ static void magicalArmor(Inventory_t *t_ptr, int special, int level) {
     }
 }
 
-static void cursedArmor(Inventory_t *t_ptr, int level) {
-    t_ptr->to_ac -= magicEnchantmentBonus(1, 40, level);
-    t_ptr->cost = 0;
-    t_ptr->flags |= TR_CURSED;
+static void cursedArmor(Inventory_t &item, int level) {
+    item.to_ac -= magicEnchantmentBonus(1, 40, level);
+    item.cost = 0;
+    item.flags |= TR_CURSED;
 }
 
-static void magicalSword(Inventory_t *t_ptr, int special, int level) {
-    t_ptr->to_hit += magicEnchantmentBonus(0, 40, level);
+static void magicalSword(Inventory_t &item, int special, int level) {
+    item.to_hit += magicEnchantmentBonus(0, 40, level);
 
     // Magical damage bonus now proportional to weapon base damage
-    int damageBonus = t_ptr->damage[0] * t_ptr->damage[1];
+    int damageBonus = item.damage[0] * item.damage[1];
 
-    t_ptr->to_damage += magicEnchantmentBonus(0, 4 * damageBonus, damageBonus * level / 10);
+    item.to_damage += magicEnchantmentBonus(0, 4 * damageBonus, damageBonus * level / 10);
 
     // the 3*special/2 is needed because weapons are not as common as
     // before change to treasure distribution, this helps keep same
@@ -73,79 +73,79 @@ static void magicalSword(Inventory_t *t_ptr, int special, int level) {
     if (magicShouldBeEnchanted(3 * special / 2)) {
         switch (randomNumber(16)) {
             case 1: // Holy Avenger
-                t_ptr->flags |= (TR_SEE_INVIS | TR_SUST_STAT | TR_SLAY_UNDEAD | TR_SLAY_EVIL | TR_STR);
-                t_ptr->to_hit += 5;
-                t_ptr->to_damage += 5;
-                t_ptr->to_ac += randomNumber(4);
+                item.flags |= (TR_SEE_INVIS | TR_SUST_STAT | TR_SLAY_UNDEAD | TR_SLAY_EVIL | TR_STR);
+                item.to_hit += 5;
+                item.to_damage += 5;
+                item.to_ac += randomNumber(4);
 
                 // the value in `misc_use` is used for strength increase
                 // `misc_use` is also used for sustain stat
-                t_ptr->misc_use = (int16_t) randomNumber(4);
-                t_ptr->special_name_id = SN_HA;
-                t_ptr->cost += t_ptr->misc_use * 500;
-                t_ptr->cost += 10000;
+                item.misc_use = (int16_t) randomNumber(4);
+                item.special_name_id = SN_HA;
+                item.cost += item.misc_use * 500;
+                item.cost += 10000;
                 break;
             case 2: // Defender
-                t_ptr->flags |= (TR_FFALL | TR_RES_LIGHT | TR_SEE_INVIS | TR_FREE_ACT | TR_RES_COLD | TR_RES_ACID | TR_RES_FIRE | TR_REGEN | TR_STEALTH);
-                t_ptr->to_hit += 3;
-                t_ptr->to_damage += 3;
-                t_ptr->to_ac += 5 + randomNumber(5);
-                t_ptr->special_name_id = SN_DF;
+                item.flags |= (TR_FFALL | TR_RES_LIGHT | TR_SEE_INVIS | TR_FREE_ACT | TR_RES_COLD | TR_RES_ACID | TR_RES_FIRE | TR_REGEN | TR_STEALTH);
+                item.to_hit += 3;
+                item.to_damage += 3;
+                item.to_ac += 5 + randomNumber(5);
+                item.special_name_id = SN_DF;
 
                 // the value in `misc_use` is used for stealth
-                t_ptr->misc_use = (int16_t) randomNumber(3);
-                t_ptr->cost += t_ptr->misc_use * 500;
-                t_ptr->cost += 7500;
+                item.misc_use = (int16_t) randomNumber(3);
+                item.cost += item.misc_use * 500;
+                item.cost += 7500;
                 break;
             case 3:
             case 4: // Slay Animal
-                t_ptr->flags |= TR_SLAY_ANIMAL;
-                t_ptr->to_hit += 2;
-                t_ptr->to_damage += 2;
-                t_ptr->special_name_id = SN_SA;
-                t_ptr->cost += 3000;
+                item.flags |= TR_SLAY_ANIMAL;
+                item.to_hit += 2;
+                item.to_damage += 2;
+                item.special_name_id = SN_SA;
+                item.cost += 3000;
                 break;
             case 5:
             case 6: // Slay Dragon
-                t_ptr->flags |= TR_SLAY_DRAGON;
-                t_ptr->to_hit += 3;
-                t_ptr->to_damage += 3;
-                t_ptr->special_name_id = SN_SD;
-                t_ptr->cost += 4000;
+                item.flags |= TR_SLAY_DRAGON;
+                item.to_hit += 3;
+                item.to_damage += 3;
+                item.special_name_id = SN_SD;
+                item.cost += 4000;
                 break;
             case 7:
             case 8: // Slay Evil
-                t_ptr->flags |= TR_SLAY_EVIL;
-                t_ptr->to_hit += 3;
-                t_ptr->to_damage += 3;
-                t_ptr->special_name_id = SN_SE;
-                t_ptr->cost += 4000;
+                item.flags |= TR_SLAY_EVIL;
+                item.to_hit += 3;
+                item.to_damage += 3;
+                item.special_name_id = SN_SE;
+                item.cost += 4000;
                 break;
             case 9:
             case 10: // Slay Undead
-                t_ptr->flags |= (TR_SEE_INVIS | TR_SLAY_UNDEAD);
-                t_ptr->to_hit += 3;
-                t_ptr->to_damage += 3;
-                t_ptr->special_name_id = SN_SU;
-                t_ptr->cost += 5000;
+                item.flags |= (TR_SEE_INVIS | TR_SLAY_UNDEAD);
+                item.to_hit += 3;
+                item.to_damage += 3;
+                item.special_name_id = SN_SU;
+                item.cost += 5000;
                 break;
             case 11:
             case 12:
             case 13: // Flame Tongue
-                t_ptr->flags |= TR_FLAME_TONGUE;
-                t_ptr->to_hit++;
-                t_ptr->to_damage += 3;
-                t_ptr->special_name_id = SN_FT;
-                t_ptr->cost += 2000;
+                item.flags |= TR_FLAME_TONGUE;
+                item.to_hit++;
+                item.to_damage += 3;
+                item.special_name_id = SN_FT;
+                item.cost += 2000;
                 break;
             case 14:
             case 15:
             case 16: // Frost Brand
-                t_ptr->flags |= TR_FROST_BRAND;
-                t_ptr->to_hit++;
-                t_ptr->to_damage++;
-                t_ptr->special_name_id = SN_FB;
-                t_ptr->cost += 1200;
+                item.flags |= TR_FROST_BRAND;
+                item.to_hit++;
+                item.to_damage++;
+                item.special_name_id = SN_FB;
+                item.cost += 1200;
                 break;
             default:
                 break;
@@ -153,84 +153,84 @@ static void magicalSword(Inventory_t *t_ptr, int special, int level) {
     }
 }
 
-static void cursedSword(Inventory_t *t_ptr, int level) {
-    t_ptr->to_hit -= magicEnchantmentBonus(1, 55, level);
+static void cursedSword(Inventory_t &item, int level) {
+    item.to_hit -= magicEnchantmentBonus(1, 55, level);
 
     // Magical damage bonus now proportional to weapon base damage
-    int damageBonus = t_ptr->damage[0] * t_ptr->damage[1];
+    int damageBonus = item.damage[0] * item.damage[1];
 
-    t_ptr->to_damage -= magicEnchantmentBonus(1, 11 * damageBonus / 2, damageBonus * level / 10);
-    t_ptr->flags |= TR_CURSED;
-    t_ptr->cost = 0;
+    item.to_damage -= magicEnchantmentBonus(1, 11 * damageBonus / 2, damageBonus * level / 10);
+    item.flags |= TR_CURSED;
+    item.cost = 0;
 }
 
-static void magicalBow(Inventory_t *t_ptr, int level) {
-    t_ptr->to_hit += magicEnchantmentBonus(1, 30, level);
+static void magicalBow(Inventory_t &item, int level) {
+    item.to_hit += magicEnchantmentBonus(1, 30, level);
 
     // add damage. -CJS-
-    t_ptr->to_damage += magicEnchantmentBonus(1, 20, level);
+    item.to_damage += magicEnchantmentBonus(1, 20, level);
 }
 
-static void cursedBow(Inventory_t *t_ptr, int level) {
-    t_ptr->to_hit -= magicEnchantmentBonus(1, 50, level);
+static void cursedBow(Inventory_t &item, int level) {
+    item.to_hit -= magicEnchantmentBonus(1, 50, level);
 
     // add damage. -CJS-
-    t_ptr->to_damage -= magicEnchantmentBonus(1, 30, level);
+    item.to_damage -= magicEnchantmentBonus(1, 30, level);
 
-    t_ptr->flags |= TR_CURSED;
-    t_ptr->cost = 0;
+    item.flags |= TR_CURSED;
+    item.cost = 0;
 }
 
-static void magicalDiggingTool(Inventory_t *t_ptr, int level) {
-    t_ptr->misc_use += magicEnchantmentBonus(0, 25, level);
+static void magicalDiggingTool(Inventory_t &item, int level) {
+    item.misc_use += magicEnchantmentBonus(0, 25, level);
 }
 
-static void cursedDiggingTool(Inventory_t *t_ptr, int level) {
-    t_ptr->misc_use = (int16_t) -magicEnchantmentBonus(1, 30, level);
-    t_ptr->cost = 0;
-    t_ptr->flags |= TR_CURSED;
+static void cursedDiggingTool(Inventory_t &item, int level) {
+    item.misc_use = (int16_t) -magicEnchantmentBonus(1, 30, level);
+    item.cost = 0;
+    item.flags |= TR_CURSED;
 }
 
-static void magicalGloves(Inventory_t *t_ptr, int special, int level) {
-    t_ptr->to_ac += magicEnchantmentBonus(1, 20, level);
+static void magicalGloves(Inventory_t &item, int special, int level) {
+    item.to_ac += magicEnchantmentBonus(1, 20, level);
 
     if (!magicShouldBeEnchanted(special)) {
         return;
     }
 
     if (randomNumber(2) == 1) {
-        t_ptr->flags |= TR_FREE_ACT;
-        t_ptr->special_name_id = SN_FREE_ACTION;
-        t_ptr->cost += 1000;
+        item.flags |= TR_FREE_ACT;
+        item.special_name_id = SN_FREE_ACTION;
+        item.cost += 1000;
     } else {
-        t_ptr->identification |= ID_SHOW_HIT_DAM;
-        t_ptr->to_hit += 1 + randomNumber(3);
-        t_ptr->to_damage += 1 + randomNumber(3);
-        t_ptr->special_name_id = SN_SLAYING;
-        t_ptr->cost += (t_ptr->to_hit + t_ptr->to_damage) * 250;
+        item.identification |= ID_SHOW_HIT_DAM;
+        item.to_hit += 1 + randomNumber(3);
+        item.to_damage += 1 + randomNumber(3);
+        item.special_name_id = SN_SLAYING;
+        item.cost += (item.to_hit + item.to_damage) * 250;
     }
 }
 
-static void cursedGloves(Inventory_t *t_ptr, int special, int level) {
+static void cursedGloves(Inventory_t &item, int special, int level) {
     if (magicShouldBeEnchanted(special)) {
         if (randomNumber(2) == 1) {
-            t_ptr->flags |= TR_DEX;
-            t_ptr->special_name_id = SN_CLUMSINESS;
+            item.flags |= TR_DEX;
+            item.special_name_id = SN_CLUMSINESS;
         } else {
-            t_ptr->flags |= TR_STR;
-            t_ptr->special_name_id = SN_WEAKNESS;
+            item.flags |= TR_STR;
+            item.special_name_id = SN_WEAKNESS;
         }
-        t_ptr->identification |= ID_SHOW_P1;
-        t_ptr->misc_use = (int16_t) -magicEnchantmentBonus(1, 10, level);
+        item.identification |= ID_SHOW_P1;
+        item.misc_use = (int16_t) -magicEnchantmentBonus(1, 10, level);
     }
 
-    t_ptr->to_ac -= magicEnchantmentBonus(1, 40, level);
-    t_ptr->flags |= TR_CURSED;
-    t_ptr->cost = 0;
+    item.to_ac -= magicEnchantmentBonus(1, 40, level);
+    item.flags |= TR_CURSED;
+    item.cost = 0;
 }
 
-static void magicalBoots(Inventory_t *t_ptr, int special, int level) {
-    t_ptr->to_ac += magicEnchantmentBonus(1, 20, level);
+static void magicalBoots(Inventory_t &item, int special, int level) {
+    item.to_ac += magicEnchantmentBonus(1, 20, level);
 
     if (!magicShouldBeEnchanted(special)) {
         return;
@@ -239,134 +239,134 @@ static void magicalBoots(Inventory_t *t_ptr, int special, int level) {
     int magicType = randomNumber(12);
 
     if (magicType > 5) {
-        t_ptr->flags |= TR_FFALL;
-        t_ptr->special_name_id = SN_SLOW_DESCENT;
-        t_ptr->cost += 250;
+        item.flags |= TR_FFALL;
+        item.special_name_id = SN_SLOW_DESCENT;
+        item.cost += 250;
     } else if (magicType == 1) {
-        t_ptr->flags |= TR_SPEED;
-        t_ptr->special_name_id = SN_SPEED;
-        t_ptr->identification |= ID_SHOW_P1;
-        t_ptr->misc_use = 1;
-        t_ptr->cost += 5000;
+        item.flags |= TR_SPEED;
+        item.special_name_id = SN_SPEED;
+        item.identification |= ID_SHOW_P1;
+        item.misc_use = 1;
+        item.cost += 5000;
     } else {
         // 2 - 5
-        t_ptr->flags |= TR_STEALTH;
-        t_ptr->identification |= ID_SHOW_P1;
-        t_ptr->misc_use = (int16_t) randomNumber(3);
-        t_ptr->special_name_id = SN_STEALTH;
-        t_ptr->cost += 500;
+        item.flags |= TR_STEALTH;
+        item.identification |= ID_SHOW_P1;
+        item.misc_use = (int16_t) randomNumber(3);
+        item.special_name_id = SN_STEALTH;
+        item.cost += 500;
     }
 }
 
-static void cursedBoots(Inventory_t *t_ptr, int level) {
+static void cursedBoots(Inventory_t &item, int level) {
     int magicType = randomNumber(3);
 
     switch (magicType) {
         case 1:
-            t_ptr->flags |= TR_SPEED;
-            t_ptr->special_name_id = SN_SLOWNESS;
-            t_ptr->identification |= ID_SHOW_P1;
-            t_ptr->misc_use = -1;
+            item.flags |= TR_SPEED;
+            item.special_name_id = SN_SLOWNESS;
+            item.identification |= ID_SHOW_P1;
+            item.misc_use = -1;
             break;
         case 2:
-            t_ptr->flags |= TR_AGGRAVATE;
-            t_ptr->special_name_id = SN_NOISE;
+            item.flags |= TR_AGGRAVATE;
+            item.special_name_id = SN_NOISE;
             break;
         default:
-            t_ptr->special_name_id = SN_GREAT_MASS;
-            t_ptr->weight = (uint16_t) (t_ptr->weight * 5);
+            item.special_name_id = SN_GREAT_MASS;
+            item.weight = (uint16_t) (item.weight * 5);
             break;
     }
 
-    t_ptr->cost = 0;
-    t_ptr->to_ac -= magicEnchantmentBonus(2, 45, level);
-    t_ptr->flags |= TR_CURSED;
+    item.cost = 0;
+    item.to_ac -= magicEnchantmentBonus(2, 45, level);
+    item.flags |= TR_CURSED;
 }
 
-static void magicalHelms(Inventory_t *t_ptr, int special, int level) {
-    t_ptr->to_ac += magicEnchantmentBonus(1, 20, level);
+static void magicalHelms(Inventory_t &item, int special, int level) {
+    item.to_ac += magicEnchantmentBonus(1, 20, level);
 
     if (!magicShouldBeEnchanted(special)) {
         return;
     }
 
-    if (t_ptr->sub_category_id < 6) {
-        t_ptr->identification |= ID_SHOW_P1;
+    if (item.sub_category_id < 6) {
+        item.identification |= ID_SHOW_P1;
 
         int magicType = randomNumber(3);
 
         switch (magicType) {
             case 1:
-                t_ptr->misc_use = (int16_t) randomNumber(2);
-                t_ptr->flags |= TR_INT;
-                t_ptr->special_name_id = SN_INTELLIGENCE;
-                t_ptr->cost += t_ptr->misc_use * 500;
+                item.misc_use = (int16_t) randomNumber(2);
+                item.flags |= TR_INT;
+                item.special_name_id = SN_INTELLIGENCE;
+                item.cost += item.misc_use * 500;
                 break;
             case 2:
-                t_ptr->misc_use = (int16_t) randomNumber(2);
-                t_ptr->flags |= TR_WIS;
-                t_ptr->special_name_id = SN_WISDOM;
-                t_ptr->cost += t_ptr->misc_use * 500;
+                item.misc_use = (int16_t) randomNumber(2);
+                item.flags |= TR_WIS;
+                item.special_name_id = SN_WISDOM;
+                item.cost += item.misc_use * 500;
                 break;
             default:
-                t_ptr->misc_use = (int16_t) (1 + randomNumber(4));
-                t_ptr->flags |= TR_INFRA;
-                t_ptr->special_name_id = SN_INFRAVISION;
-                t_ptr->cost += t_ptr->misc_use * 250;
+                item.misc_use = (int16_t) (1 + randomNumber(4));
+                item.flags |= TR_INFRA;
+                item.special_name_id = SN_INFRAVISION;
+                item.cost += item.misc_use * 250;
         }
         return;
     }
 
     switch (randomNumber(6)) {
         case 1:
-            t_ptr->identification |= ID_SHOW_P1;
-            t_ptr->misc_use = (int16_t) randomNumber(3);
-            t_ptr->flags |= (TR_FREE_ACT | TR_CON | TR_DEX | TR_STR);
-            t_ptr->special_name_id = SN_MIGHT;
-            t_ptr->cost += 1000 + t_ptr->misc_use * 500;
+            item.identification |= ID_SHOW_P1;
+            item.misc_use = (int16_t) randomNumber(3);
+            item.flags |= (TR_FREE_ACT | TR_CON | TR_DEX | TR_STR);
+            item.special_name_id = SN_MIGHT;
+            item.cost += 1000 + item.misc_use * 500;
             break;
         case 2:
-            t_ptr->identification |= ID_SHOW_P1;
-            t_ptr->misc_use = (int16_t) randomNumber(3);
-            t_ptr->flags |= (TR_CHR | TR_WIS);
-            t_ptr->special_name_id = SN_LORDLINESS;
-            t_ptr->cost += 1000 + t_ptr->misc_use * 500;
+            item.identification |= ID_SHOW_P1;
+            item.misc_use = (int16_t) randomNumber(3);
+            item.flags |= (TR_CHR | TR_WIS);
+            item.special_name_id = SN_LORDLINESS;
+            item.cost += 1000 + item.misc_use * 500;
             break;
         case 3:
-            t_ptr->identification |= ID_SHOW_P1;
-            t_ptr->misc_use = (int16_t) randomNumber(3);
-            t_ptr->flags |= (TR_RES_LIGHT | TR_RES_COLD | TR_RES_ACID | TR_RES_FIRE | TR_INT);
-            t_ptr->special_name_id = SN_MAGI;
-            t_ptr->cost += 3000 + t_ptr->misc_use * 500;
+            item.identification |= ID_SHOW_P1;
+            item.misc_use = (int16_t) randomNumber(3);
+            item.flags |= (TR_RES_LIGHT | TR_RES_COLD | TR_RES_ACID | TR_RES_FIRE | TR_INT);
+            item.special_name_id = SN_MAGI;
+            item.cost += 3000 + item.misc_use * 500;
             break;
         case 4:
-            t_ptr->identification |= ID_SHOW_P1;
-            t_ptr->misc_use = (int16_t) randomNumber(3);
-            t_ptr->flags |= TR_CHR;
-            t_ptr->special_name_id = SN_BEAUTY;
-            t_ptr->cost += 750;
+            item.identification |= ID_SHOW_P1;
+            item.misc_use = (int16_t) randomNumber(3);
+            item.flags |= TR_CHR;
+            item.special_name_id = SN_BEAUTY;
+            item.cost += 750;
             break;
         case 5:
-            t_ptr->identification |= ID_SHOW_P1;
-            t_ptr->misc_use = (int16_t) (5 * (1 + randomNumber(4)));
-            t_ptr->flags |= (TR_SEE_INVIS | TR_SEARCH);
-            t_ptr->special_name_id = SN_SEEING;
-            t_ptr->cost += 1000 + t_ptr->misc_use * 100;
+            item.identification |= ID_SHOW_P1;
+            item.misc_use = (int16_t) (5 * (1 + randomNumber(4)));
+            item.flags |= (TR_SEE_INVIS | TR_SEARCH);
+            item.special_name_id = SN_SEEING;
+            item.cost += 1000 + item.misc_use * 100;
             break;
         case 6:
-            t_ptr->flags |= TR_REGEN;
-            t_ptr->special_name_id = SN_REGENERATION;
-            t_ptr->cost += 1500;
+            item.flags |= TR_REGEN;
+            item.special_name_id = SN_REGENERATION;
+            item.cost += 1500;
             break;
         default:
             break;
     }
 }
 
-static void cursedHelms(Inventory_t *t_ptr, int special, int level) {
-    t_ptr->to_ac -= magicEnchantmentBonus(1, 45, level);
-    t_ptr->flags |= TR_CURSED;
-    t_ptr->cost = 0;
+static void cursedHelms(Inventory_t &item, int special, int level) {
+    item.to_ac -= magicEnchantmentBonus(1, 45, level);
+    item.flags |= TR_CURSED;
+    item.cost = 0;
 
     if (!magicShouldBeEnchanted(special)) {
         return;
@@ -374,104 +374,104 @@ static void cursedHelms(Inventory_t *t_ptr, int special, int level) {
 
     switch (randomNumber(7)) {
         case 1:
-            t_ptr->identification |= ID_SHOW_P1;
-            t_ptr->misc_use = (int16_t) -randomNumber(5);
-            t_ptr->flags |= TR_INT;
-            t_ptr->special_name_id = SN_STUPIDITY;
+            item.identification |= ID_SHOW_P1;
+            item.misc_use = (int16_t) -randomNumber(5);
+            item.flags |= TR_INT;
+            item.special_name_id = SN_STUPIDITY;
             break;
         case 2:
-            t_ptr->identification |= ID_SHOW_P1;
-            t_ptr->misc_use = (int16_t) -randomNumber(5);
-            t_ptr->flags |= TR_WIS;
-            t_ptr->special_name_id = SN_DULLNESS;
+            item.identification |= ID_SHOW_P1;
+            item.misc_use = (int16_t) -randomNumber(5);
+            item.flags |= TR_WIS;
+            item.special_name_id = SN_DULLNESS;
             break;
         case 3:
-            t_ptr->flags |= TR_BLIND;
-            t_ptr->special_name_id = SN_BLINDNESS;
+            item.flags |= TR_BLIND;
+            item.special_name_id = SN_BLINDNESS;
             break;
         case 4:
-            t_ptr->flags |= TR_TIMID;
-            t_ptr->special_name_id = SN_TIMIDNESS;
+            item.flags |= TR_TIMID;
+            item.special_name_id = SN_TIMIDNESS;
             break;
         case 5:
-            t_ptr->identification |= ID_SHOW_P1;
-            t_ptr->misc_use = (int16_t) -randomNumber(5);
-            t_ptr->flags |= TR_STR;
-            t_ptr->special_name_id = SN_WEAKNESS;
+            item.identification |= ID_SHOW_P1;
+            item.misc_use = (int16_t) -randomNumber(5);
+            item.flags |= TR_STR;
+            item.special_name_id = SN_WEAKNESS;
             break;
         case 6:
-            t_ptr->flags |= TR_TELEPORT;
-            t_ptr->special_name_id = SN_TELEPORTATION;
+            item.flags |= TR_TELEPORT;
+            item.special_name_id = SN_TELEPORTATION;
             break;
         case 7:
-            t_ptr->identification |= ID_SHOW_P1;
-            t_ptr->misc_use = (int16_t) -randomNumber(5);
-            t_ptr->flags |= TR_CHR;
-            t_ptr->special_name_id = SN_UGLINESS;
+            item.identification |= ID_SHOW_P1;
+            item.misc_use = (int16_t) -randomNumber(5);
+            item.flags |= TR_CHR;
+            item.special_name_id = SN_UGLINESS;
             break;
         default:
             return;
     }
 }
 
-static void processRings(Inventory_t *t_ptr, int level, int cursed) {
-    switch (t_ptr->sub_category_id) {
+static void processRings(Inventory_t &item, int level, int cursed) {
+    switch (item.sub_category_id) {
         case 0:
         case 1:
         case 2:
         case 3:
             if (magicShouldBeEnchanted(cursed)) {
-                t_ptr->misc_use = (int16_t) -magicEnchantmentBonus(1, 20, level);
-                t_ptr->flags |= TR_CURSED;
-                t_ptr->cost = -t_ptr->cost;
+                item.misc_use = (int16_t) -magicEnchantmentBonus(1, 20, level);
+                item.flags |= TR_CURSED;
+                item.cost = -item.cost;
             } else {
-                t_ptr->misc_use = (int16_t) magicEnchantmentBonus(1, 10, level);
-                t_ptr->cost += t_ptr->misc_use * 100;
+                item.misc_use = (int16_t) magicEnchantmentBonus(1, 10, level);
+                item.cost += item.misc_use * 100;
             }
             break;
         case 4:
             if (magicShouldBeEnchanted(cursed)) {
-                t_ptr->misc_use = (int16_t) -randomNumber(3);
-                t_ptr->flags |= TR_CURSED;
-                t_ptr->cost = -t_ptr->cost;
+                item.misc_use = (int16_t) -randomNumber(3);
+                item.flags |= TR_CURSED;
+                item.cost = -item.cost;
             } else {
-                t_ptr->misc_use = 1;
+                item.misc_use = 1;
             }
             break;
         case 5:
-            t_ptr->misc_use = (int16_t) (5 * magicEnchantmentBonus(1, 20, level));
-            t_ptr->cost += t_ptr->misc_use * 50;
+            item.misc_use = (int16_t) (5 * magicEnchantmentBonus(1, 20, level));
+            item.cost += item.misc_use * 50;
             if (magicShouldBeEnchanted(cursed)) {
-                t_ptr->misc_use = -t_ptr->misc_use;
-                t_ptr->flags |= TR_CURSED;
-                t_ptr->cost = -t_ptr->cost;
+                item.misc_use = -item.misc_use;
+                item.flags |= TR_CURSED;
+                item.cost = -item.cost;
             }
             break;
         case 19: // Increase damage
-            t_ptr->to_damage += magicEnchantmentBonus(1, 20, level);
-            t_ptr->cost += t_ptr->to_damage * 100;
+            item.to_damage += magicEnchantmentBonus(1, 20, level);
+            item.cost += item.to_damage * 100;
             if (magicShouldBeEnchanted(cursed)) {
-                t_ptr->to_damage = -t_ptr->to_damage;
-                t_ptr->flags |= TR_CURSED;
-                t_ptr->cost = -t_ptr->cost;
+                item.to_damage = -item.to_damage;
+                item.flags |= TR_CURSED;
+                item.cost = -item.cost;
             }
             break;
         case 20: // Increase To-Hit
-            t_ptr->to_hit += magicEnchantmentBonus(1, 20, level);
-            t_ptr->cost += t_ptr->to_hit * 100;
+            item.to_hit += magicEnchantmentBonus(1, 20, level);
+            item.cost += item.to_hit * 100;
             if (magicShouldBeEnchanted(cursed)) {
-                t_ptr->to_hit = -t_ptr->to_hit;
-                t_ptr->flags |= TR_CURSED;
-                t_ptr->cost = -t_ptr->cost;
+                item.to_hit = -item.to_hit;
+                item.flags |= TR_CURSED;
+                item.cost = -item.cost;
             }
             break;
         case 21: // Protection
-            t_ptr->to_ac += magicEnchantmentBonus(1, 20, level);
-            t_ptr->cost += t_ptr->to_ac * 100;
+            item.to_ac += magicEnchantmentBonus(1, 20, level);
+            item.cost += item.to_ac * 100;
             if (magicShouldBeEnchanted(cursed)) {
-                t_ptr->to_ac = -t_ptr->to_ac;
-                t_ptr->flags |= TR_CURSED;
-                t_ptr->cost = -t_ptr->cost;
+                item.to_ac = -item.to_ac;
+                item.flags |= TR_CURSED;
+                item.cost = -item.cost;
             }
             break;
         case 24:
@@ -480,18 +480,18 @@ static void processRings(Inventory_t *t_ptr, int level, int cursed) {
         case 27:
         case 28:
         case 29:
-            t_ptr->identification |= ID_NO_SHOW_P1;
+            item.identification |= ID_NO_SHOW_P1;
             break;
         case 30: // Slaying
-            t_ptr->identification |= ID_SHOW_HIT_DAM;
-            t_ptr->to_damage += magicEnchantmentBonus(1, 25, level);
-            t_ptr->to_hit += magicEnchantmentBonus(1, 25, level);
-            t_ptr->cost += (t_ptr->to_hit + t_ptr->to_damage) * 100;
+            item.identification |= ID_SHOW_HIT_DAM;
+            item.to_damage += magicEnchantmentBonus(1, 25, level);
+            item.to_hit += magicEnchantmentBonus(1, 25, level);
+            item.cost += (item.to_hit + item.to_damage) * 100;
             if (magicShouldBeEnchanted(cursed)) {
-                t_ptr->to_hit = -t_ptr->to_hit;
-                t_ptr->to_damage = -t_ptr->to_damage;
-                t_ptr->flags |= TR_CURSED;
-                t_ptr->cost = -t_ptr->cost;
+                item.to_hit = -item.to_hit;
+                item.to_damage = -item.to_damage;
+                item.flags |= TR_CURSED;
+                item.cost = -item.cost;
             }
             break;
         default:
@@ -499,29 +499,29 @@ static void processRings(Inventory_t *t_ptr, int level, int cursed) {
     }
 }
 
-static void processAmulets(Inventory_t *t_ptr, int level, int cursed) {
-    if (t_ptr->sub_category_id < 2) {
+static void processAmulets(Inventory_t &item, int level, int cursed) {
+    if (item.sub_category_id < 2) {
         if (magicShouldBeEnchanted(cursed)) {
-            t_ptr->misc_use = (int16_t) -magicEnchantmentBonus(1, 20, level);
-            t_ptr->flags |= TR_CURSED;
-            t_ptr->cost = -t_ptr->cost;
+            item.misc_use = (int16_t) -magicEnchantmentBonus(1, 20, level);
+            item.flags |= TR_CURSED;
+            item.cost = -item.cost;
         } else {
-            t_ptr->misc_use = (int16_t) magicEnchantmentBonus(1, 10, level);
-            t_ptr->cost += t_ptr->misc_use * 100;
+            item.misc_use = (int16_t) magicEnchantmentBonus(1, 10, level);
+            item.cost += item.misc_use * 100;
         }
-    } else if (t_ptr->sub_category_id == 2) {
-        t_ptr->misc_use = (int16_t) (5 * magicEnchantmentBonus(1, 25, level));
+    } else if (item.sub_category_id == 2) {
+        item.misc_use = (int16_t) (5 * magicEnchantmentBonus(1, 25, level));
         if (magicShouldBeEnchanted(cursed)) {
-            t_ptr->misc_use = -t_ptr->misc_use;
-            t_ptr->cost = -t_ptr->cost;
-            t_ptr->flags |= TR_CURSED;
+            item.misc_use = -item.misc_use;
+            item.cost = -item.cost;
+            item.flags |= TR_CURSED;
         } else {
-            t_ptr->cost += 50 * t_ptr->misc_use;
+            item.cost += 50 * item.misc_use;
         }
-    } else if (t_ptr->sub_category_id == 8) {
+    } else if (item.sub_category_id == 8) {
         // amulet of the magi is never cursed
-        t_ptr->misc_use = (int16_t) (5 * magicEnchantmentBonus(1, 25, level));
-        t_ptr->cost += 20 * t_ptr->misc_use;
+        item.misc_use = (int16_t) (5 * magicEnchantmentBonus(1, 25, level));
+        item.cost += 20 * item.misc_use;
     }
 }
 
@@ -633,113 +633,113 @@ static int staffMagic(uint8_t id) {
     }
 }
 
-static void magicalCloak(Inventory_t *t_ptr, int special, int level) {
+static void magicalCloak(Inventory_t &item, int special, int level) {
     if (!magicShouldBeEnchanted(special)) {
-        t_ptr->to_ac += magicEnchantmentBonus(1, 20, level);
+        item.to_ac += magicEnchantmentBonus(1, 20, level);
         return;
     }
 
     if (randomNumber(2) == 1) {
-        t_ptr->special_name_id = SN_PROTECTION;
-        t_ptr->to_ac += magicEnchantmentBonus(2, 40, level);
-        t_ptr->cost += 250;
+        item.special_name_id = SN_PROTECTION;
+        item.to_ac += magicEnchantmentBonus(2, 40, level);
+        item.cost += 250;
         return;
     }
 
-    t_ptr->to_ac += magicEnchantmentBonus(1, 20, level);
-    t_ptr->identification |= ID_SHOW_P1;
-    t_ptr->misc_use = (int16_t) randomNumber(3);
-    t_ptr->flags |= TR_STEALTH;
-    t_ptr->special_name_id = SN_STEALTH;
-    t_ptr->cost += 500;
+    item.to_ac += magicEnchantmentBonus(1, 20, level);
+    item.identification |= ID_SHOW_P1;
+    item.misc_use = (int16_t) randomNumber(3);
+    item.flags |= TR_STEALTH;
+    item.special_name_id = SN_STEALTH;
+    item.cost += 500;
 }
 
-static void cursedCloak(Inventory_t *t_ptr, int level) {
+static void cursedCloak(Inventory_t &item, int level) {
     int magicType = randomNumber(3);
 
     switch (magicType) {
         case 1:
-            t_ptr->flags |= TR_AGGRAVATE;
-            t_ptr->special_name_id = SN_IRRITATION;
-            t_ptr->to_ac -= magicEnchantmentBonus(1, 10, level);
-            t_ptr->identification |= ID_SHOW_HIT_DAM;
-            t_ptr->to_hit -= magicEnchantmentBonus(1, 10, level);
-            t_ptr->to_damage -= magicEnchantmentBonus(1, 10, level);
-            t_ptr->cost = 0;
+            item.flags |= TR_AGGRAVATE;
+            item.special_name_id = SN_IRRITATION;
+            item.to_ac -= magicEnchantmentBonus(1, 10, level);
+            item.identification |= ID_SHOW_HIT_DAM;
+            item.to_hit -= magicEnchantmentBonus(1, 10, level);
+            item.to_damage -= magicEnchantmentBonus(1, 10, level);
+            item.cost = 0;
             break;
         case 2:
-            t_ptr->special_name_id = SN_VULNERABILITY;
-            t_ptr->to_ac -= magicEnchantmentBonus(10, 100, level + 50);
-            t_ptr->cost = 0;
+            item.special_name_id = SN_VULNERABILITY;
+            item.to_ac -= magicEnchantmentBonus(10, 100, level + 50);
+            item.cost = 0;
             break;
         default:
-            t_ptr->special_name_id = SN_ENVELOPING;
-            t_ptr->to_ac -= magicEnchantmentBonus(1, 10, level);
-            t_ptr->identification |= ID_SHOW_HIT_DAM;
-            t_ptr->to_hit -= magicEnchantmentBonus(2, 40, level + 10);
-            t_ptr->to_damage -= magicEnchantmentBonus(2, 40, level + 10);
-            t_ptr->cost = 0;
+            item.special_name_id = SN_ENVELOPING;
+            item.to_ac -= magicEnchantmentBonus(1, 10, level);
+            item.identification |= ID_SHOW_HIT_DAM;
+            item.to_hit -= magicEnchantmentBonus(2, 40, level + 10);
+            item.to_damage -= magicEnchantmentBonus(2, 40, level + 10);
+            item.cost = 0;
             break;
     }
 
-    t_ptr->flags |= TR_CURSED;
+    item.flags |= TR_CURSED;
 }
 
-static void magicalChests(Inventory_t *t_ptr, int level) {
+static void magicalChests(Inventory_t &item, int level) {
     int magicType = randomNumber(level + 4);
 
     switch (magicType) {
         case 1:
-            t_ptr->flags = 0;
-            t_ptr->special_name_id = SN_EMPTY;
+            item.flags = 0;
+            item.special_name_id = SN_EMPTY;
             break;
         case 2:
-            t_ptr->flags |= CH_LOCKED;
-            t_ptr->special_name_id = SN_LOCKED;
+            item.flags |= CH_LOCKED;
+            item.special_name_id = SN_LOCKED;
             break;
         case 3:
         case 4:
-            t_ptr->flags |= (CH_LOSE_STR | CH_LOCKED);
-            t_ptr->special_name_id = SN_POISON_NEEDLE;
+            item.flags |= (CH_LOSE_STR | CH_LOCKED);
+            item.special_name_id = SN_POISON_NEEDLE;
             break;
         case 5:
         case 6:
-            t_ptr->flags |= (CH_POISON | CH_LOCKED);
-            t_ptr->special_name_id = SN_POISON_NEEDLE;
+            item.flags |= (CH_POISON | CH_LOCKED);
+            item.special_name_id = SN_POISON_NEEDLE;
             break;
         case 7:
         case 8:
         case 9:
-            t_ptr->flags |= (CH_PARALYSED | CH_LOCKED);
-            t_ptr->special_name_id = SN_GAS_TRAP;
+            item.flags |= (CH_PARALYSED | CH_LOCKED);
+            item.special_name_id = SN_GAS_TRAP;
             break;
         case 10:
         case 11:
-            t_ptr->flags |= (CH_EXPLODE | CH_LOCKED);
-            t_ptr->special_name_id = SN_EXPLOSION_DEVICE;
+            item.flags |= (CH_EXPLODE | CH_LOCKED);
+            item.special_name_id = SN_EXPLOSION_DEVICE;
             break;
         case 12:
         case 13:
         case 14:
-            t_ptr->flags |= (CH_SUMMON | CH_LOCKED);
-            t_ptr->special_name_id = SN_SUMMONING_RUNES;
+            item.flags |= (CH_SUMMON | CH_LOCKED);
+            item.special_name_id = SN_SUMMONING_RUNES;
             break;
         case 15:
         case 16:
         case 17:
-            t_ptr->flags |= (CH_PARALYSED | CH_POISON | CH_LOSE_STR | CH_LOCKED);
-            t_ptr->special_name_id = SN_MULTIPLE_TRAPS;
+            item.flags |= (CH_PARALYSED | CH_POISON | CH_LOSE_STR | CH_LOCKED);
+            item.special_name_id = SN_MULTIPLE_TRAPS;
             break;
         default:
-            t_ptr->flags |= (CH_SUMMON | CH_EXPLODE | CH_LOCKED);
-            t_ptr->special_name_id = SN_MULTIPLE_TRAPS;
+            item.flags |= (CH_SUMMON | CH_EXPLODE | CH_LOCKED);
+            item.special_name_id = SN_MULTIPLE_TRAPS;
             break;
     }
 }
 
-static void magicalProjectiles(Inventory_t *t_ptr, int special, int level) {
-    t_ptr->to_hit += magicEnchantmentBonus(1, 35, level);
-    t_ptr->to_damage += magicEnchantmentBonus(1, 35, level);
+static void magicalProjectiles(Inventory_t &item, int special, int level) {
+    item.to_hit += magicEnchantmentBonus(1, 35, level);
+    item.to_damage += magicEnchantmentBonus(1, 35, level);
 
     // see comment for weapons
     if (magicShouldBeEnchanted(3 * special / 2)) {
@@ -747,41 +747,41 @@ static void magicalProjectiles(Inventory_t *t_ptr, int special, int level) {
             case 1:
             case 2:
             case 3:
-                t_ptr->special_name_id = SN_SLAYING;
-                t_ptr->to_hit += 5;
-                t_ptr->to_damage += 5;
-                t_ptr->cost += 20;
+                item.special_name_id = SN_SLAYING;
+                item.to_hit += 5;
+                item.to_damage += 5;
+                item.cost += 20;
                 break;
             case 4:
             case 5:
-                t_ptr->flags |= TR_FLAME_TONGUE;
-                t_ptr->to_hit += 2;
-                t_ptr->to_damage += 4;
-                t_ptr->special_name_id = SN_FIRE;
-                t_ptr->cost += 25;
+                item.flags |= TR_FLAME_TONGUE;
+                item.to_hit += 2;
+                item.to_damage += 4;
+                item.special_name_id = SN_FIRE;
+                item.cost += 25;
                 break;
             case 6:
             case 7:
-                t_ptr->flags |= TR_SLAY_EVIL;
-                t_ptr->to_hit += 3;
-                t_ptr->to_damage += 3;
-                t_ptr->special_name_id = SN_SLAY_EVIL;
-                t_ptr->cost += 25;
+                item.flags |= TR_SLAY_EVIL;
+                item.to_hit += 3;
+                item.to_damage += 3;
+                item.special_name_id = SN_SLAY_EVIL;
+                item.cost += 25;
                 break;
             case 8:
             case 9:
-                t_ptr->flags |= TR_SLAY_ANIMAL;
-                t_ptr->to_hit += 2;
-                t_ptr->to_damage += 2;
-                t_ptr->special_name_id = SN_SLAY_ANIMAL;
-                t_ptr->cost += 30;
+                item.flags |= TR_SLAY_ANIMAL;
+                item.to_hit += 2;
+                item.to_damage += 2;
+                item.special_name_id = SN_SLAY_ANIMAL;
+                item.cost += 30;
                 break;
             case 10:
-                t_ptr->flags |= TR_SLAY_DRAGON;
-                t_ptr->to_hit += 3;
-                t_ptr->to_damage += 3;
-                t_ptr->special_name_id = SN_DRAGON_SLAYING;
-                t_ptr->cost += 35;
+                item.flags |= TR_SLAY_DRAGON;
+                item.to_hit += 3;
+                item.to_damage += 3;
+                item.special_name_id = SN_DRAGON_SLAYING;
+                item.cost += 35;
                 break;
             default:
                 break;
@@ -789,11 +789,11 @@ static void magicalProjectiles(Inventory_t *t_ptr, int special, int level) {
     }
 }
 
-static void cursedProjectiles(Inventory_t *t_ptr, int level) {
-    t_ptr->to_hit -= magicEnchantmentBonus(5, 55, level);
-    t_ptr->to_damage -= magicEnchantmentBonus(5, 55, level);
-    t_ptr->flags |= TR_CURSED;
-    t_ptr->cost = 0;
+static void cursedProjectiles(Inventory_t &item, int level) {
+    item.to_hit -= magicEnchantmentBonus(5, 55, level);
+    item.to_damage -= magicEnchantmentBonus(5, 55, level);
+    item.flags |= TR_CURSED;
+    item.cost = 0;
 }
 
 // Chance of treasure having magic abilities -RAK-
@@ -822,9 +822,9 @@ void magicTreasureMagicalAbility(int item_id, int level) {
         case TV_HARD_ARMOR:
         case TV_SOFT_ARMOR:
             if (magicShouldBeEnchanted(chance)) {
-                magicalArmor(&item, special, level);
+                magicalArmor(item, special, level);
             } else if (magicShouldBeEnchanted(cursed)) {
-                cursedArmor(&item, level);
+                cursedArmor(item, level);
             }
             break;
         case TV_HAFTED:
@@ -834,9 +834,9 @@ void magicTreasureMagicalAbility(int item_id, int level) {
             item.identification |= ID_SHOW_HIT_DAM;
 
             if (magicShouldBeEnchanted(chance)) {
-                magicalSword(&item, special, level);
+                magicalSword(item, special, level);
             } else if (magicShouldBeEnchanted(cursed)) {
-                cursedSword(&item, level);
+                cursedSword(item, level);
             }
             break;
         case TV_BOW:
@@ -844,9 +844,9 @@ void magicTreasureMagicalAbility(int item_id, int level) {
             item.identification |= ID_SHOW_HIT_DAM;
 
             if (magicShouldBeEnchanted(chance)) {
-                magicalBow(&item, level);
+                magicalBow(item, level);
             } else if (magicShouldBeEnchanted(cursed)) {
-                cursedBow(&item, level);
+                cursedBow(item, level);
             }
             break;
         case TV_DIGGING:
@@ -855,24 +855,24 @@ void magicTreasureMagicalAbility(int item_id, int level) {
 
             if (magicShouldBeEnchanted(chance)) {
                 if (randomNumber(3) < 3) {
-                    magicalDiggingTool(&item, level);
+                    magicalDiggingTool(item, level);
                 } else {
-                    cursedDiggingTool(&item, level);
+                    cursedDiggingTool(item, level);
                 }
             }
             break;
         case TV_GLOVES:
             if (magicShouldBeEnchanted(chance)) {
-                magicalGloves(&item, special, level);
+                magicalGloves(item, special, level);
             } else if (magicShouldBeEnchanted(cursed)) {
-                cursedGloves(&item, special, level);
+                cursedGloves(item, special, level);
             }
             break;
         case TV_BOOTS:
             if (magicShouldBeEnchanted(chance)) {
-                magicalBoots(&item, special, level);
+                magicalBoots(item, special, level);
             } else if (magicShouldBeEnchanted(cursed)) {
-                cursedBoots(&item, level);
+                cursedBoots(item, level);
             }
             break;
         case TV_HELM:
@@ -883,16 +883,16 @@ void magicTreasureMagicalAbility(int item_id, int level) {
             }
 
             if (magicShouldBeEnchanted(chance)) {
-                magicalHelms(&item, special, level);
+                magicalHelms(item, special, level);
             } else if (magicShouldBeEnchanted(cursed)) {
-                cursedHelms(&item, special, level);
+                cursedHelms(item, special, level);
             }
             break;
         case TV_RING:
-            processRings(&item, level, cursed);
+            processRings(item, level, cursed);
             break;
         case TV_AMULET:
-            processAmulets(&item, level, cursed);
+            processAmulets(item, level, cursed);
             break;
         case TV_LIGHT:
             // `sub_category_id` should be even for store, odd for dungeon
@@ -923,13 +923,13 @@ void magicTreasureMagicalAbility(int item_id, int level) {
             break;
         case TV_CLOAK:
             if (magicShouldBeEnchanted(chance)) {
-                magicalCloak(&item, special, level);
+                magicalCloak(item, special, level);
             } else if (magicShouldBeEnchanted(cursed)) {
-                cursedCloak(&item, level);
+                cursedCloak(item, level);
             }
             break;
         case TV_CHEST:
-            magicalChests(&item, level);
+            magicalChests(item, level);
             break;
         case TV_SLING_AMMO:
         case TV_SPIKE:
@@ -940,9 +940,9 @@ void magicTreasureMagicalAbility(int item_id, int level) {
                 item.identification |= ID_SHOW_HIT_DAM;
 
                 if (magicShouldBeEnchanted(chance)) {
-                    magicalProjectiles(&item, special, level);
+                    magicalProjectiles(item, special, level);
                 } else if (magicShouldBeEnchanted(cursed)) {
-                    cursedProjectiles(&item, level);
+                    cursedProjectiles(item, level);
                 }
             }
 
