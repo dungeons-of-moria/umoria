@@ -228,7 +228,7 @@ void itemIdentify(int &item_id) {
     Inventory_t &item = inventory[item_id];
 
     if ((item.flags & TR_CURSED) != 0u) {
-        itemAppendToInscription(&item, ID_DAMD);
+        itemAppendToInscription(item, ID_DAMD);
     }
 
     if (itemSetColorlessAsIdentified(item.category_id, item.sub_category_id, item.identification)) {

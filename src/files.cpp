@@ -155,7 +155,7 @@ void outputRandomLevelObjectsToFile() {
         itemIdentifyAsStoreBought(item);
 
         if ((item.flags & TR_CURSED) != 0u) {
-            itemAppendToInscription(&item, ID_DAMD);
+            itemAppendToInscription(item, ID_DAMD);
         }
 
         itemDescription(input, item, true);

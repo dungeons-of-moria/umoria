@@ -1189,7 +1189,7 @@ static bool selectItemCommands(char *command, char *which, bool selecting) {
 
                 if ((item->flags & TR_CURSED) != 0u) {
                     printMessage("Oops! It feels deathly cold!");
-                    itemAppendToInscription(item, ID_DAMD);
+                    itemAppendToInscription(*item, ID_DAMD);
 
                     // To force a cost of 0, even if unidentified.
                     item->cost = -1;

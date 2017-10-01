@@ -724,7 +724,7 @@ static void playerDetectEnchantment() {
             (void) sprintf(tmp_str, "There's something about what you are %s...", playerItemWearingDescription(i));
             playerDisturb(0, 0);
             printMessage(tmp_str);
-            itemAppendToInscription(&item, ID_MAGIK);
+            itemAppendToInscription(item, ID_MAGIK);
         }
     }
 }
