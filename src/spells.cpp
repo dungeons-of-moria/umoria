@@ -50,20 +50,20 @@ bool monsterSleep(int y, int x) {
                 continue;
             }
 
-            Monster_t *monster = &monsters[monster_id];
-            Creature_t *creature = &creatures_list[monster->creature_id];
+            Monster_t &monster = monsters[monster_id];
+            Creature_t &creature = creatures_list[monster.creature_id];
 
             vtype_t name = {'\0'};
-            monsterNameDescription(name, monster->lit, creature->name);
+            monsterNameDescription(name, monster.lit, creature.name);
 
-            if (randomNumber(MON_MAX_LEVELS) < creature->level || ((CD_NO_SLEEP & creature->defenses) != 0)) {
-                if (monster->lit && ((creature->defenses & CD_NO_SLEEP) != 0)) {
-                    creature_recall[monster->creature_id].defenses |= CD_NO_SLEEP;
+            if (randomNumber(MON_MAX_LEVELS) < creature.level || ((CD_NO_SLEEP & creature.defenses) != 0)) {
+                if (monster.lit && ((creature.defenses & CD_NO_SLEEP) != 0)) {
+                    creature_recall[monster.creature_id].defenses |= CD_NO_SLEEP;
                 }
 
                 printMonsterActionText(name, "is unaffected.");
             } else {
-                monster->sleep_count = 500;
+                monster.sleep_count = 500;
                 asleep = true;
 
                 printMonsterActionText(name, "falls asleep.");
@@ -80,10 +80,10 @@ bool dungeonDetectTreasureOnPanel() {
 
     for (int y = panel_row_min; y <= panel_row_max; y++) {
         for (int x = panel_col_min; x <= panel_col_max; x++) {
-            Cave_t *tile = &cave[y][x];
+            Cave_t &tile = cave[y][x];
 
-            if (tile->treasure_id != 0 && treasure_list[tile->treasure_id].category_id == TV_GOLD && !caveTileVisible(y, x)) {
-                tile->field_mark = true;
+            if (tile.treasure_id != 0 && treasure_list[tile.treasure_id].category_id == TV_GOLD && !caveTileVisible(y, x)) {
+                tile.field_mark = true;
                 dungeonLiteSpot(y, x);
                 detected = true;
             }
@@ -99,10 +99,10 @@ bool dungeonDetectObjectOnPanel() {
 
     for (int y = panel_row_min; y <= panel_row_max; y++) {
         for (int x = panel_col_min; x <= panel_col_max; x++) {
-            Cave_t *tile = &cave[y][x];
+            Cave_t &tile = cave[y][x];
 
-            if (tile->treasure_id != 0 && treasure_list[tile->treasure_id].category_id < TV_MAX_OBJECT && !caveTileVisible(y, x)) {
-                tile->field_mark = true;
+            if (tile.treasure_id != 0 && treasure_list[tile.treasure_id].category_id < TV_MAX_OBJECT && !caveTileVisible(y, x)) {
+                tile.field_mark = true;
                 dungeonLiteSpot(y, x);
                 detected = true;
             }
@@ -144,22 +144,22 @@ bool dungeonDetectSecretDoorsOnPanel() {
 
     for (int y = panel_row_min; y <= panel_row_max; y++) {
         for (int x = panel_col_min; x <= panel_col_max; x++) {
-            Cave_t *tile = &cave[y][x];
+            Cave_t &tile = cave[y][x];
 
-            if (tile->treasure_id == 0) {
+            if (tile.treasure_id == 0) {
                 continue;
             }
 
-            if (treasure_list[tile->treasure_id].category_id == TV_SECRET_DOOR) {
+            if (treasure_list[tile.treasure_id].category_id == TV_SECRET_DOOR) {
                 // Secret doors
 
-                tile->field_mark = true;
+                tile.field_mark = true;
                 dungeonChangeTrapVisibility(y, x);
                 detected = true;
-            } else if ((treasure_list[tile->treasure_id].category_id == TV_UP_STAIR || treasure_list[tile->treasure_id].category_id == TV_DOWN_STAIR) && !tile->field_mark) {
+            } else if ((treasure_list[tile.treasure_id].category_id == TV_UP_STAIR || treasure_list[tile.treasure_id].category_id == TV_DOWN_STAIR) && !tile.field_mark) {
                 // Staircases
 
-                tile->field_mark = true;
+                tile.field_mark = true;
                 dungeonLiteSpot(y, x);
                 detected = true;
             }
@@ -174,13 +174,13 @@ bool spellDetectInvisibleCreaturesOnPanel() {
     bool detected = false;
 
     for (int id = next_free_monster_id - 1; id >= MON_MIN_INDEX_ID; id--) {
-        Monster_t *monster = &monsters[id];
+        Monster_t &monster = monsters[id];
 
-        if (coordInsidePanel((int) monster->y, (int) monster->x) && ((CM_INVISIBLE & creatures_list[monster->creature_id].movement) != 0u)) {
-            monster->lit = true;
+        if (coordInsidePanel((int) monster.y, (int) monster.x) && ((CM_INVISIBLE & creatures_list[monster.creature_id].movement) != 0u)) {
+            monster.lit = true;
 
             // works correctly even if hallucinating
-            putChar((char) creatures_list[monster->creature_id].sprite, (int) monster->y, (int) monster->x);
+            putChar((char) creatures_list[monster.creature_id].sprite, (int) monster.y, (int) monster.x);
 
             detected = true;
         }
@@ -238,11 +238,11 @@ bool spellDarkenArea(int y, int x) {
 
         for (int row = start_row; row <= end_row; row++) {
             for (int col = start_col; col <= end_col; col++) {
-                Cave_t *tile = &cave[row][col];
+                Cave_t &tile = cave[row][col];
 
-                if (tile->perma_lit_room && tile->feature_id <= MAX_CAVE_FLOOR) {
-                    tile->permanent_light = false;
-                    tile->feature_id = TILE_DARK_FLOOR;
+                if (tile.perma_lit_room && tile.feature_id <= MAX_CAVE_FLOOR) {
+                    tile.permanent_light = false;
+                    tile.feature_id = TILE_DARK_FLOOR;
 
                     dungeonLiteSpot(row, col);
 
@@ -255,11 +255,11 @@ bool spellDarkenArea(int y, int x) {
     } else {
         for (int row = y - 1; row <= y + 1; row++) {
             for (int col = x - 1; col <= x + 1; col++) {
-                Cave_t *tile = &cave[row][col];
+                Cave_t &tile = cave[row][col];
 
-                if (tile->feature_id == TILE_CORR_FLOOR && tile->permanent_light) {
+                if (tile.feature_id == TILE_CORR_FLOOR && tile.permanent_light) {
                     // permanent_light could have been set by star-lite wand, etc
-                    tile->permanent_light = false;
+                    tile.permanent_light = false;
                     darkened = true;
                 }
             }
@@ -276,12 +276,12 @@ bool spellDarkenArea(int y, int x) {
 static void dungeonLightAreaAroundFloorTile(int y, int x) {
     for (int yy = y - 1; yy <= y + 1; yy++) {
         for (int xx = x - 1; xx <= x + 1; xx++) {
-            Cave_t *tile = &cave[yy][xx];
+            Cave_t &tile = cave[yy][xx];
 
-            if (tile->feature_id >= MIN_CAVE_WALL) {
-                tile->permanent_light = true;
-            } else if (tile->treasure_id != 0 && treasure_list[tile->treasure_id].category_id >= TV_MIN_VISIBLE && treasure_list[tile->treasure_id].category_id <= TV_MAX_VISIBLE) {
-                tile->field_mark = true;
+            if (tile.feature_id >= MIN_CAVE_WALL) {
+                tile.permanent_light = true;
+            } else if (tile.treasure_id != 0 && treasure_list[tile.treasure_id].category_id >= TV_MIN_VISIBLE && treasure_list[tile.treasure_id].category_id <= TV_MAX_VISIBLE) {
+                tile.field_mark = true;
             }
         }
     }
@@ -337,11 +337,11 @@ bool spellAggravateMonsters(int affect_distance) {
     bool aggravated = false;
 
     for (int id = next_free_monster_id - 1; id >= MON_MIN_INDEX_ID; id--) {
-        Monster_t *monster = &monsters[id];
-        monster->sleep_count = 0;
+        Monster_t &monster = monsters[id];
+        monster.sleep_count = 0;
 
-        if (monster->distance_from_player <= affect_distance && monster->speed < 2) {
-            monster->speed++;
+        if (monster.distance_from_player <= affect_distance && monster.speed < 2) {
+            monster.speed++;
             aggravated = true;
         }
     }
@@ -365,17 +365,17 @@ bool spellSurroundPlayerWithTraps() {
                 continue;
             }
 
-            Cave_t *tile = &cave[y][x];
+            Cave_t &tile = cave[y][x];
 
-            if (tile->feature_id <= MAX_CAVE_FLOOR) {
-                if (tile->treasure_id != 0) {
+            if (tile.feature_id <= MAX_CAVE_FLOOR) {
+                if (tile.treasure_id != 0) {
                     (void) dungeonDeleteObject(y, x);
                 }
 
                 dungeonSetTrap(y, x, randomNumber(MAX_TRAPS) - 1);
 
                 // don't let player gain exp from the newly created traps
-                treasure_list[tile->treasure_id].misc_use = 0;
+                treasure_list[tile.treasure_id].misc_use = 0;
 
                 // open pits are immediately visible, so call dungeonLiteSpot
                 dungeonLiteSpot(y, x);
@@ -398,16 +398,16 @@ bool spellSurroundPlayerWithDoors() {
                 continue;
             }
 
-            Cave_t *tile = &cave[y][x];
+            Cave_t &tile = cave[y][x];
 
-            if (tile->feature_id <= MAX_CAVE_FLOOR) {
-                if (tile->treasure_id != 0) {
+            if (tile.feature_id <= MAX_CAVE_FLOOR) {
+                if (tile.treasure_id != 0) {
                     (void) dungeonDeleteObject(y, x);
                 }
 
                 int free_id = popt();
-                tile->feature_id = TILE_BLOCKED_FLOOR;
-                tile->treasure_id = (uint8_t) free_id;
+                tile.feature_id = TILE_BLOCKED_FLOOR;
+                tile.treasure_id = (uint8_t) free_id;
 
                 inventoryItemCopyTo(OBJ_CLOSED_DOOR, &treasure_list[free_id]);
                 dungeonLiteSpot(y, x);
@@ -459,14 +459,14 @@ bool spellDetectMonsters() {
     bool detected = false;
 
     for (int id = next_free_monster_id - 1; id >= MON_MIN_INDEX_ID; id--) {
-        Monster_t *monster = &monsters[id];
+        Monster_t &monster = monsters[id];
 
-        if (coordInsidePanel((int) monster->y, (int) monster->x) && (CM_INVISIBLE & creatures_list[monster->creature_id].movement) == 0) {
-            monster->lit = true;
+        if (coordInsidePanel((int) monster.y, (int) monster.x) && (CM_INVISIBLE & creatures_list[monster.creature_id].movement) == 0) {
+            monster.lit = true;
             detected = true;
 
             // works correctly even if hallucinating
-            putChar((char) creatures_list[monster->creature_id].sprite, (int) monster->y, (int) monster->x);
+            putChar((char) creatures_list[monster.creature_id].sprite, (int) monster.y, (int) monster.x);
         }
     }
 
@@ -483,18 +483,18 @@ bool spellDetectMonsters() {
 
 // Update monster when light line spell touches it.
 static void spellLightLineTouchesMonster(int monster_id) {
-    Monster_t *monster = &monsters[monster_id];
-    Creature_t *creature = &creatures_list[monster->creature_id];
+    Monster_t &monster = monsters[monster_id];
+    Creature_t &creature = creatures_list[monster.creature_id];
 
     // light up and draw monster
     monsterUpdateVisibility(monster_id);
 
     vtype_t name = {'\0'};
-    monsterNameDescription(name, monster->lit, creature->name);
+    monsterNameDescription(name, monster.lit, creature.name);
 
-    if ((CD_LIGHT & creature->defenses) != 0) {
-        if (monster->lit) {
-            creature_recall[monster->creature_id].defenses |= CD_LIGHT;
+    if ((CD_LIGHT & creature.defenses) != 0) {
+        if (monster.lit) {
+            creature_recall[monster.creature_id].defenses |= CD_LIGHT;
         }
 
         if (monsterTakeHit(monster_id, diceDamageRoll(2, 8)) >= 0) {
@@ -512,19 +512,19 @@ void spellLightLine(int x, int y, int direction) {
     bool finished = false;
 
     while (!finished) {
-        Cave_t *tile = &cave[y][x];
+        Cave_t &tile = cave[y][x];
 
-        if (distance > OBJECT_BOLTS_MAX_RANGE || tile->feature_id >= MIN_CLOSED_SPACE) {
+        if (distance > OBJECT_BOLTS_MAX_RANGE || tile.feature_id >= MIN_CLOSED_SPACE) {
             (void) playerMovePosition(direction, y, x);
             finished = true;
             continue; // we're done here, break out of the loop
         }
 
-        if (!tile->permanent_light && !tile->temporary_light) {
+        if (!tile.permanent_light && !tile.temporary_light) {
             // set permanent_light so that dungeonLiteSpot will work
-            tile->permanent_light = true;
+            tile.permanent_light = true;
 
-            if (tile->feature_id == TILE_LIGHT_FLOOR) {
+            if (tile.feature_id == TILE_LIGHT_FLOOR) {
                 if (coordInsidePanel(y, x)) {
                     dungeonLightRoom(y, x);
                 }
@@ -534,10 +534,10 @@ void spellLightLine(int x, int y, int direction) {
         }
 
         // set permanent_light in case temporary_light was true above
-        tile->permanent_light = true;
+        tile.permanent_light = true;
 
-        if (tile->creature_id > 1) {
-            spellLightLineTouchesMonster((int) tile->creature_id);
+        if (tile.creature_id > 1) {
+            spellLightLineTouchesMonster((int) tile.creature_id);
         }
 
         // move must be at end because want to light up current spot
@@ -650,8 +650,8 @@ static void getAreaAffectFlags(int spell_type, uint32_t *weapon_type, int *harm_
 
 // Light up, draw, and check for monster damage when Fire Bolt touches it.
 static void spellFireBoltTouchesMonster(Cave_t *tile, int damage, int harm_type, uint32_t weapon_id, const std::string &bolt_name) {
-    Monster_t *monster = &monsters[tile->creature_id];
-    Creature_t *creature = &creatures_list[monster->creature_id];
+    Monster_t &monster = monsters[tile->creature_id];
+    Creature_t &creature = creatures_list[monster.creature_id];
 
     // light up monster and draw monster, temporarily set
     // permanent_light so that monsterUpdateVisibility() will work
@@ -664,25 +664,25 @@ static void spellFireBoltTouchesMonster(Cave_t *tile, int damage, int harm_type,
     putQIO();
 
     vtype_t name = {'\0'};
-    monsterNameDescriptionLowercase(name, monster->lit, creature->name);
+    monsterNameDescriptionLowercase(name, monster.lit, creature.name);
 
     vtype_t msg = {'\0'};
     (void) sprintf(msg, "The %s strikes %s.", bolt_name.c_str(), name);
     printMessage(msg);
 
-    if ((harm_type & creature->defenses) != 0) {
+    if ((harm_type & creature.defenses) != 0) {
         damage = damage * 2;
-        if (monster->lit) {
-            creature_recall[monster->creature_id].defenses |= harm_type;
+        if (monster.lit) {
+            creature_recall[monster.creature_id].defenses |= harm_type;
         }
-    } else if ((weapon_id & creature->spells) != 0u) {
+    } else if ((weapon_id & creature.spells) != 0u) {
         damage = damage / 4;
-        if (monster->lit) {
-            creature_recall[monster->creature_id].spells |= weapon_id;
+        if (monster.lit) {
+            creature_recall[monster.creature_id].spells |= weapon_id;
         }
     }
 
-    monsterNameDescription(name, monster->lit, creature->name);
+    monsterNameDescription(name, monster.lit, creature.name);
 
     if (monsterTakeHit((int) tile->creature_id, damage) >= 0) {
         printMonsterActionText(name, "dies in a fit of agony.");
@@ -709,18 +709,18 @@ void spellFireBolt(int y, int x, int direction, int damage_hp, int spell_type, c
         (void) playerMovePosition(direction, y, x);
         distance++;
 
-        Cave_t *tile = &cave[y][x];
+        Cave_t &tile = cave[y][x];
 
         dungeonLiteSpot(old_y, old_x);
 
-        if (distance > OBJECT_BOLTS_MAX_RANGE || tile->feature_id >= MIN_CLOSED_SPACE) {
+        if (distance > OBJECT_BOLTS_MAX_RANGE || tile.feature_id >= MIN_CLOSED_SPACE) {
             finished = true;
             continue; // we're done here, break out of the loop
         }
 
-        if (tile->creature_id > 1) {
+        if (tile.creature_id > 1) {
             finished = true;
-            spellFireBoltTouchesMonster(tile, damage_hp, harm_type, weapon_type, spell_name);
+            spellFireBoltTouchesMonster(&tile, damage_hp, harm_type, weapon_type, spell_name);
         } else if (coordInsidePanel(y, x) && py.flags.blind < 1) {
             putChar('*', y, x);
 
@@ -758,12 +758,12 @@ void spellFireBall(int y, int x, int direction, int damage_hp, int spell_type, c
             continue;
         }
 
-        Cave_t *tile = &cave[y][x];
+        Cave_t &tile = cave[y][x];
 
-        if (tile->feature_id >= MIN_CLOSED_SPACE || tile->creature_id > 1) {
+        if (tile.feature_id >= MIN_CLOSED_SPACE || tile.creature_id > 1) {
             finished = true;
 
-            if (tile->feature_id >= MIN_CLOSED_SPACE) {
+            if (tile.feature_id >= MIN_CLOSED_SPACE) {
                 y = old_y;
                 x = old_x;
             }
@@ -774,43 +774,43 @@ void spellFireBall(int y, int x, int direction, int damage_hp, int spell_type, c
             for (int row = y - max_distance; row <= y + max_distance; row++) {
                 for (int col = x - max_distance; col <= x + max_distance; col++) {
                     if (coordInBounds(row, col) && coordDistanceBetween(y, x, row, col) <= max_distance && los(y, x, row, col)) {
-                        tile = &cave[row][col];
+                        tile = cave[row][col];
 
-                        if (tile->treasure_id != 0 && (*destroy)(&treasure_list[tile->treasure_id])) {
+                        if (tile.treasure_id != 0 && (*destroy)(&treasure_list[tile.treasure_id])) {
                             (void) dungeonDeleteObject(row, col);
                         }
 
-                        if (tile->feature_id <= MAX_OPEN_SPACE) {
-                            if (tile->creature_id > 1) {
-                                Monster_t *monster = &monsters[tile->creature_id];
-                                Creature_t *creature = &creatures_list[monster->creature_id];
+                        if (tile.feature_id <= MAX_OPEN_SPACE) {
+                            if (tile.creature_id > 1) {
+                                Monster_t &monster = monsters[tile.creature_id];
+                                Creature_t &creature = creatures_list[monster.creature_id];
 
                                 // lite up creature if visible, temp set permanent_light so that monsterUpdateVisibility works
-                                bool saved_lit_status = tile->permanent_light;
-                                tile->permanent_light = true;
-                                monsterUpdateVisibility((int) tile->creature_id);
+                                bool saved_lit_status = tile.permanent_light;
+                                tile.permanent_light = true;
+                                monsterUpdateVisibility((int) tile.creature_id);
 
                                 total_hits++;
                                 int damage = damage_hp;
 
-                                if ((harm_type & creature->defenses) != 0) {
+                                if ((harm_type & creature.defenses) != 0) {
                                     damage = damage * 2;
-                                    if (monster->lit) {
-                                        creature_recall[monster->creature_id].defenses |= harm_type;
+                                    if (monster.lit) {
+                                        creature_recall[monster.creature_id].defenses |= harm_type;
                                     }
-                                } else if ((weapon_type & creature->spells) != 0u) {
+                                } else if ((weapon_type & creature.spells) != 0u) {
                                     damage = damage / 4;
-                                    if (monster->lit) {
-                                        creature_recall[monster->creature_id].spells |= weapon_type;
+                                    if (monster.lit) {
+                                        creature_recall[monster.creature_id].spells |= weapon_type;
                                     }
                                 }
 
                                 damage = (damage / (coordDistanceBetween(row, col, y, x) + 1));
 
-                                if (monsterTakeHit((int) tile->creature_id, damage) >= 0) {
+                                if (monsterTakeHit((int) tile.creature_id, damage) >= 0) {
                                     total_kills++;
                                 }
-                                tile->permanent_light = saved_lit_status;
+                                tile.permanent_light = saved_lit_status;
                             } else if (coordInsidePanel(row, col) && py.flags.blind < 1) {
                                 putChar('*', row, col);
                             }
@@ -872,13 +872,13 @@ void spellBreath(int y, int x, int monster_id, int damage_hp, int spell_type, ch
     for (int row = y - 2; row <= y + 2; row++) {
         for (int col = x - 2; col <= x + 2; col++) {
             if (coordInBounds(row, col) && coordDistanceBetween(y, x, row, col) <= max_distance && los(y, x, row, col)) {
-                Cave_t *tile = &cave[row][col];
+                Cave_t &tile = cave[row][col];
 
-                if (tile->treasure_id != 0 && (*destroy)(&treasure_list[tile->treasure_id])) {
+                if (tile.treasure_id != 0 && (*destroy)(&treasure_list[tile.treasure_id])) {
                     (void) dungeonDeleteObject(row, col);
                 }
 
-                if (tile->feature_id <= MAX_OPEN_SPACE) {
+                if (tile.feature_id <= MAX_OPEN_SPACE) {
                     // must test status bit, not py.flags.blind here, flag could have
                     // been set by a previous monster, but the breath should still
                     // be visible until the blindness takes effect
@@ -886,15 +886,15 @@ void spellBreath(int y, int x, int monster_id, int damage_hp, int spell_type, ch
                         putChar('*', row, col);
                     }
 
-                    if (tile->creature_id > 1) {
-                        Monster_t *monster = &monsters[tile->creature_id];
-                        Creature_t *creature = &creatures_list[monster->creature_id];
+                    if (tile.creature_id > 1) {
+                        Monster_t &monster = monsters[tile.creature_id];
+                        Creature_t &creature = creatures_list[monster.creature_id];
 
                         int damage = damage_hp;
 
-                        if ((harm_type & creature->defenses) != 0) {
+                        if ((harm_type & creature.defenses) != 0) {
                             damage = damage * 2;
-                        } else if ((weapon_type & creature->spells) != 0u) {
+                        } else if ((weapon_type & creature.spells) != 0u) {
                             damage = (damage / 4);
                         }
 
@@ -902,31 +902,31 @@ void spellBreath(int y, int x, int monster_id, int damage_hp, int spell_type, ch
 
                         // can not call monsterTakeHit here, since player does not
                         // get experience for kill
-                        monster->hp = (int16_t) (monster->hp - damage);
-                        monster->sleep_count = 0;
+                        monster.hp = (int16_t) (monster.hp - damage);
+                        monster.sleep_count = 0;
 
-                        if (monster->hp < 0) {
-                            uint32_t treasure_id = monsterDeath((int) monster->y, (int) monster->x, creature->movement);
+                        if (monster.hp < 0) {
+                            uint32_t treasure_id = monsterDeath((int) monster.y, (int) monster.x, creature.movement);
 
-                            if (monster->lit) {
-                                auto tmp = (uint32_t) ((creature_recall[monster->creature_id].movement & CM_TREASURE) >> CM_TR_SHIFT);
+                            if (monster.lit) {
+                                auto tmp = (uint32_t) ((creature_recall[monster.creature_id].movement & CM_TREASURE) >> CM_TR_SHIFT);
                                 if (tmp > ((treasure_id & CM_TREASURE) >> CM_TR_SHIFT)) {
                                     treasure_id = (uint32_t) ((treasure_id & ~CM_TREASURE) | (tmp << CM_TR_SHIFT));
                                 }
-                                creature_recall[monster->creature_id].movement = (uint32_t) (treasure_id | (creature_recall[monster->creature_id].movement & ~CM_TREASURE));
+                                creature_recall[monster.creature_id].movement = (uint32_t) (treasure_id | (creature_recall[monster.creature_id].movement & ~CM_TREASURE));
                             }
 
                             // It ate an already processed monster. Handle normally.
-                            if (monster_id < tile->creature_id) {
-                                dungeonDeleteMonster((int) tile->creature_id);
+                            if (monster_id < tile.creature_id) {
+                                dungeonDeleteMonster((int) tile.creature_id);
                             } else {
                                 // If it eats this monster, an already processed monster
                                 // will take its place, causing all kinds of havoc.
                                 // Delay the kill a bit.
-                                dungeonDeleteMonsterFix1((int) tile->creature_id);
+                                dungeonDeleteMonsterFix1((int) tile.creature_id);
                             }
                         }
-                    } else if (tile->creature_id == 1) {
+                    } else if (tile.creature_id == 1) {
                         int damage = (damage_hp / (coordDistanceBetween(row, col, y, x) + 1));
 
                         // let's do at least one point of damage
@@ -1029,23 +1029,23 @@ bool spellChangeMonsterHitPoints(int y, int x, int direction, int damage_hp) {
         (void) playerMovePosition(direction, y, x);
         distance++;
 
-        Cave_t *tile = &cave[y][x];
+        Cave_t &tile = cave[y][x];
 
-        if (distance > OBJECT_BOLTS_MAX_RANGE || tile->feature_id >= MIN_CLOSED_SPACE) {
+        if (distance > OBJECT_BOLTS_MAX_RANGE || tile.feature_id >= MIN_CLOSED_SPACE) {
             finished = true;
             continue;
         }
 
-        if (tile->creature_id > 1) {
+        if (tile.creature_id > 1) {
             finished = true;
 
-            Monster_t *monster = &monsters[tile->creature_id];
-            Creature_t *creature = &creatures_list[monster->creature_id];
+            Monster_t &monster = monsters[tile.creature_id];
+            Creature_t &creature = creatures_list[monster.creature_id];
 
             vtype_t name = {'\0'};
-            monsterNameDescription(name, monster->lit, creature->name);
+            monsterNameDescription(name, monster.lit, creature.name);
 
-            if (monsterTakeHit((int) tile->creature_id, damage_hp) >= 0) {
+            if (monsterTakeHit((int) tile.creature_id, damage_hp) >= 0) {
                 printMonsterActionText(name, "dies in a fit of agony.");
                 displayCharacterExperience();
             } else if (damage_hp > 0) {
@@ -1069,24 +1069,24 @@ bool spellDrainLifeFromMonster(int y, int x, int direction) {
         (void) playerMovePosition(direction, y, x);
         distance++;
 
-        Cave_t *tile = &cave[y][x];
+        Cave_t &tile = cave[y][x];
 
-        if (distance > OBJECT_BOLTS_MAX_RANGE || tile->feature_id >= MIN_CLOSED_SPACE) {
+        if (distance > OBJECT_BOLTS_MAX_RANGE || tile.feature_id >= MIN_CLOSED_SPACE) {
             finished = true;
             continue;
         }
 
-        if (tile->creature_id > 1) {
+        if (tile.creature_id > 1) {
             finished = true;
 
-            Monster_t *monster = &monsters[tile->creature_id];
-            Creature_t *creature = &creatures_list[monster->creature_id];
+            Monster_t &monster = monsters[tile.creature_id];
+            Creature_t &creature = creatures_list[monster.creature_id];
 
-            if ((creature->defenses & CD_UNDEAD) == 0) {
+            if ((creature.defenses & CD_UNDEAD) == 0) {
                 vtype_t name = {'\0'};
-                monsterNameDescription(name, monster->lit, creature->name);
+                monsterNameDescription(name, monster.lit, creature.name);
 
-                if (monsterTakeHit((int) tile->creature_id, 75) >= 0) {
+                if (monsterTakeHit((int) tile.creature_id, 75) >= 0) {
                     printMonsterActionText(name, "dies in a fit of agony.");
                     displayCharacterExperience();
                 } else {
@@ -1095,7 +1095,7 @@ bool spellDrainLifeFromMonster(int y, int x, int direction) {
 
                 drained = true;
             } else {
-                creature_recall[monster->creature_id].defenses |= CD_UNDEAD;
+                creature_recall[monster.creature_id].defenses |= CD_UNDEAD;
             }
         }
     }
@@ -1114,38 +1114,38 @@ bool spellSpeedMonster(int y, int x, int direction, int speed) {
         (void) playerMovePosition(direction, y, x);
         distance++;
 
-        Cave_t *tile = &cave[y][x];
+        Cave_t &tile = cave[y][x];
 
-        if (distance > OBJECT_BOLTS_MAX_RANGE || tile->feature_id >= MIN_CLOSED_SPACE) {
+        if (distance > OBJECT_BOLTS_MAX_RANGE || tile.feature_id >= MIN_CLOSED_SPACE) {
             finished = true;
             continue;
         }
 
-        if (tile->creature_id > 1) {
+        if (tile.creature_id > 1) {
             finished = true;
 
-            Monster_t *monster = &monsters[tile->creature_id];
-            Creature_t *creature = &creatures_list[monster->creature_id];
+            Monster_t &monster = monsters[tile.creature_id];
+            Creature_t &creature = creatures_list[monster.creature_id];
 
             vtype_t name = {'\0'};
-            monsterNameDescription(name, monster->lit, creature->name);
+            monsterNameDescription(name, monster.lit, creature.name);
 
             if (speed > 0) {
-                monster->speed += speed;
-                monster->sleep_count = 0;
+                monster.speed += speed;
+                monster.sleep_count = 0;
 
                 changed = true;
 
                 printMonsterActionText(name, "starts moving faster.");
-            } else if (randomNumber(MON_MAX_LEVELS) > creature->level) {
-                monster->speed += speed;
-                monster->sleep_count = 0;
+            } else if (randomNumber(MON_MAX_LEVELS) > creature.level) {
+                monster.speed += speed;
+                monster.sleep_count = 0;
 
                 changed = true;
 
                 printMonsterActionText(name, "starts moving slower.");
             } else {
-                monster->sleep_count = 0;
+                monster.sleep_count = 0;
 
                 printMonsterActionText(name, "is unaffected.");
             }
@@ -1165,41 +1165,41 @@ bool spellConfuseMonster(int y, int x, int direction) {
         (void) playerMovePosition(direction, y, x);
         distance++;
 
-        Cave_t *tile = &cave[y][x];
+        Cave_t &tile = cave[y][x];
 
-        if (distance > OBJECT_BOLTS_MAX_RANGE || tile->feature_id >= MIN_CLOSED_SPACE) {
+        if (distance > OBJECT_BOLTS_MAX_RANGE || tile.feature_id >= MIN_CLOSED_SPACE) {
             finished = true;
             continue;
         }
 
-        if (tile->creature_id > 1) {
+        if (tile.creature_id > 1) {
             finished = true;
 
-            Monster_t *monster = &monsters[tile->creature_id];
-            Creature_t *creature = &creatures_list[monster->creature_id];
+            Monster_t &monster = monsters[tile.creature_id];
+            Creature_t &creature = creatures_list[monster.creature_id];
 
             vtype_t name = {'\0'};
-            monsterNameDescription(name, monster->lit, creature->name);
+            monsterNameDescription(name, monster.lit, creature.name);
 
-            if (randomNumber(MON_MAX_LEVELS) < creature->level || ((CD_NO_SLEEP & creature->defenses) != 0)) {
-                if (monster->lit && ((creature->defenses & CD_NO_SLEEP) != 0)) {
-                    creature_recall[monster->creature_id].defenses |= CD_NO_SLEEP;
+            if (randomNumber(MON_MAX_LEVELS) < creature.level || ((CD_NO_SLEEP & creature.defenses) != 0)) {
+                if (monster.lit && ((creature.defenses & CD_NO_SLEEP) != 0)) {
+                    creature_recall[monster.creature_id].defenses |= CD_NO_SLEEP;
                 }
 
                 // Monsters which resisted the attack should wake up.
                 // Monsters with innate resistance ignore the attack.
-                if ((CD_NO_SLEEP & creature->defenses) == 0) {
-                    monster->sleep_count = 0;
+                if ((CD_NO_SLEEP & creature.defenses) == 0) {
+                    monster.sleep_count = 0;
                 }
 
                 printMonsterActionText(name, "is unaffected.");
             } else {
-                if (monster->confused_amount != 0u) {
-                    monster->confused_amount += 3;
+                if (monster.confused_amount != 0u) {
+                    monster.confused_amount += 3;
                 } else {
-                    monster->confused_amount = (uint8_t) (2 + randomNumber(16));
+                    monster.confused_amount = (uint8_t) (2 + randomNumber(16));
                 }
-                monster->sleep_count = 0;
+                monster.sleep_count = 0;
 
                 confused = true;
 
@@ -1221,30 +1221,30 @@ bool spellSleepMonster(int y, int x, int direction) {
         (void) playerMovePosition(direction, y, x);
         distance++;
 
-        Cave_t *tile = &cave[y][x];
+        Cave_t &tile = cave[y][x];
 
-        if (distance > OBJECT_BOLTS_MAX_RANGE || tile->feature_id >= MIN_CLOSED_SPACE) {
+        if (distance > OBJECT_BOLTS_MAX_RANGE || tile.feature_id >= MIN_CLOSED_SPACE) {
             finished = true;
             continue;
         }
 
-        if (tile->creature_id > 1) {
+        if (tile.creature_id > 1) {
             finished = true;
 
-            Monster_t *monster = &monsters[tile->creature_id];
-            Creature_t *creature = &creatures_list[monster->creature_id];
+            Monster_t &monster = monsters[tile.creature_id];
+            Creature_t &creature = creatures_list[monster.creature_id];
 
             vtype_t name = {'\0'};
-            monsterNameDescription(name, monster->lit, creature->name);
+            monsterNameDescription(name, monster.lit, creature.name);
 
-            if (randomNumber(MON_MAX_LEVELS) < creature->level || ((CD_NO_SLEEP & creature->defenses) != 0)) {
-                if (monster->lit && ((creature->defenses & CD_NO_SLEEP) != 0)) {
-                    creature_recall[monster->creature_id].defenses |= CD_NO_SLEEP;
+            if (randomNumber(MON_MAX_LEVELS) < creature.level || ((CD_NO_SLEEP & creature.defenses) != 0)) {
+                if (monster.lit && ((creature.defenses & CD_NO_SLEEP) != 0)) {
+                    creature_recall[monster.creature_id].defenses |= CD_NO_SLEEP;
                 }
 
                 printMonsterActionText(name, "is unaffected.");
             } else {
-                monster->sleep_count = 500;
+                monster.sleep_count = 500;
 
                 asleep = true;
 
@@ -1266,14 +1266,14 @@ bool spellWallToMud(int y, int x, int direction) {
         (void) playerMovePosition(direction, y, x);
         distance++;
 
-        Cave_t *tile = &cave[y][x];
+        Cave_t &tile = cave[y][x];
 
         // note, this ray can move through walls as it turns them to mud
         if (distance == OBJECT_BOLTS_MAX_RANGE) {
             finished = true;
         }
 
-        if (tile->feature_id >= MIN_CAVE_WALL && tile->feature_id != TILE_BOUNDARY_WALL) {
+        if (tile.feature_id >= MIN_CAVE_WALL && tile.feature_id != TILE_BOUNDARY_WALL) {
             finished = true;
 
             (void) dungeonTunnelWall(y, x, 1, 0);
@@ -1282,21 +1282,21 @@ bool spellWallToMud(int y, int x, int direction) {
                 turned = true;
                 printMessage("The wall turns into mud.");
             }
-        } else if (tile->treasure_id != 0 && tile->feature_id >= MIN_CLOSED_SPACE) {
+        } else if (tile.treasure_id != 0 && tile.feature_id >= MIN_CLOSED_SPACE) {
             finished = true;
 
             if (coordInsidePanel(y, x) && caveTileVisible(y, x)) {
                 turned = true;
 
                 obj_desc_t description = {'\0'};
-                itemDescription(description, &treasure_list[tile->treasure_id], false);
+                itemDescription(description, &treasure_list[tile.treasure_id], false);
 
                 obj_desc_t out_val = {'\0'};
                 (void) sprintf(out_val, "The %s turns into mud.", description);
                 printMessage(out_val);
             }
 
-            if (treasure_list[tile->treasure_id].category_id == TV_RUBBLE) {
+            if (treasure_list[tile.treasure_id].category_id == TV_RUBBLE) {
                 (void) dungeonDeleteObject(y, x);
                 if (randomNumber(10) == 1) {
                     dungeonPlaceRandomObjectAt(y, x, false);
@@ -1310,22 +1310,22 @@ bool spellWallToMud(int y, int x, int direction) {
             }
         }
 
-        if (tile->creature_id > 1) {
-            Monster_t *monster = &monsters[tile->creature_id];
-            Creature_t *creature = &creatures_list[monster->creature_id];
+        if (tile.creature_id > 1) {
+            Monster_t &monster = monsters[tile.creature_id];
+            Creature_t &creature = creatures_list[monster.creature_id];
 
-            if ((CD_STONE & creature->defenses) != 0) {
+            if ((CD_STONE & creature.defenses) != 0) {
                 vtype_t name = {'\0'};
-                monsterNameDescription(name, monster->lit, creature->name);
+                monsterNameDescription(name, monster.lit, creature.name);
 
                 // Should get these messages even if the monster is not visible.
-                int creature_id = monsterTakeHit((int) tile->creature_id, 100);
+                int creature_id = monsterTakeHit((int) tile.creature_id, 100);
                 if (creature_id >= 0) {
                     creature_recall[creature_id].defenses |= CD_STONE;
                     printMonsterActionText(name, "dissolves!");
                     displayCharacterExperience(); // print msg before calling prt_exp
                 } else {
-                    creature_recall[monster->creature_id].defenses |= CD_STONE;
+                    creature_recall[monster.creature_id].defenses |= CD_STONE;
                     printMonsterActionText(name, "grunts in pain!");
                 }
                 finished = true;
@@ -1385,32 +1385,32 @@ bool spellPolymorphMonster(int y, int x, int direction) {
         (void) playerMovePosition(direction, y, x);
         distance++;
 
-        Cave_t *tile = &cave[y][x];
+        Cave_t &tile = cave[y][x];
 
-        if (distance > OBJECT_BOLTS_MAX_RANGE || tile->feature_id >= MIN_CLOSED_SPACE) {
+        if (distance > OBJECT_BOLTS_MAX_RANGE || tile.feature_id >= MIN_CLOSED_SPACE) {
             finished = true;
             continue;
         }
 
-        if (tile->creature_id > 1) {
-            Monster_t *monster = &monsters[tile->creature_id];
-            Creature_t *creature = &creatures_list[monster->creature_id];
+        if (tile.creature_id > 1) {
+            Monster_t &monster = monsters[tile.creature_id];
+            Creature_t &creature = creatures_list[monster.creature_id];
 
-            if (randomNumber(MON_MAX_LEVELS) > creature->level) {
+            if (randomNumber(MON_MAX_LEVELS) > creature.level) {
                 finished = true;
 
-                dungeonDeleteMonster((int) tile->creature_id);
+                dungeonDeleteMonster((int) tile.creature_id);
 
                 // Place_monster() should always return true here.
                 morphed = monsterPlaceNew(y, x, randomNumber(monster_levels[MON_MAX_LEVELS] - monster_levels[0]) - 1 + monster_levels[0], false);
 
-                // don't test tile->field_mark here, only permanent_light/temporary_light
-                if (morphed && coordInsidePanel(y, x) && (tile->temporary_light || tile->permanent_light)) {
+                // don't test tile.field_mark here, only permanent_light/temporary_light
+                if (morphed && coordInsidePanel(y, x) && (tile.temporary_light || tile.permanent_light)) {
                     morphed = true;
                 }
             } else {
                 vtype_t name = {'\0'};
-                monsterNameDescription(name, monster->lit, creature->name);
+                monsterNameDescription(name, monster.lit, creature.name);
                 printMonsterActionText(name, "is unaffected.");
             }
         }
@@ -1429,27 +1429,27 @@ bool spellBuildWall(int y, int x, int direction) {
         (void) playerMovePosition(direction, y, x);
         distance++;
 
-        Cave_t *tile = &cave[y][x];
+        Cave_t &tile = cave[y][x];
 
-        if (distance > OBJECT_BOLTS_MAX_RANGE || tile->feature_id >= MIN_CLOSED_SPACE) {
+        if (distance > OBJECT_BOLTS_MAX_RANGE || tile.feature_id >= MIN_CLOSED_SPACE) {
             finished = true;
             continue; // we're done here, break out of the loop
         }
 
-        if (tile->treasure_id != 0) {
+        if (tile.treasure_id != 0) {
             (void) dungeonDeleteObject(y, x);
         }
 
-        if (tile->creature_id > 1) {
+        if (tile.creature_id > 1) {
             finished = true;
 
-            Monster_t *monster = &monsters[tile->creature_id];
-            Creature_t *creature = &creatures_list[monster->creature_id];
+            Monster_t &monster = monsters[tile.creature_id];
+            Creature_t &creature = creatures_list[monster.creature_id];
 
-            if ((creature->movement & CM_PHASE) == 0u) {
+            if ((creature.movement & CM_PHASE) == 0u) {
                 // monster does not move, can't escape the wall
                 int damage;
-                if ((creature->movement & CM_ATTACK_ONLY) != 0u) {
+                if ((creature.movement & CM_ATTACK_ONLY) != 0u) {
                     // this will kill everything
                     damage = 3000;
                 } else {
@@ -1457,26 +1457,26 @@ bool spellBuildWall(int y, int x, int direction) {
                 }
 
                 vtype_t name = {'\0'};
-                monsterNameDescription(name, monster->lit, creature->name);
+                monsterNameDescription(name, monster.lit, creature.name);
 
                 printMonsterActionText(name, "wails out in pain!");
 
-                if (monsterTakeHit((int) tile->creature_id, damage) >= 0) {
+                if (monsterTakeHit((int) tile.creature_id, damage) >= 0) {
                     printMonsterActionText(name, "is embedded in the rock.");
                     displayCharacterExperience();
                 }
-            } else if (creature->sprite == 'E' || creature->sprite == 'X') {
+            } else if (creature.sprite == 'E' || creature.sprite == 'X') {
                 // must be an earth elemental, an earth spirit,
                 // or a Xorn to increase its hit points
-                monster->hp += diceDamageRoll(4, 8);
+                monster.hp += diceDamageRoll(4, 8);
             }
         }
 
-        tile->feature_id = TILE_MAGMA_WALL;
-        tile->field_mark = false;
+        tile.feature_id = TILE_MAGMA_WALL;
+        tile.field_mark = false;
 
         // Permanently light this wall if it is lit by player's lamp.
-        tile->permanent_light = (tile->temporary_light || tile->permanent_light);
+        tile.permanent_light = (tile.temporary_light || tile.permanent_light);
         dungeonLiteSpot(y, x);
 
         built = true;
@@ -1494,15 +1494,15 @@ bool spellCloneMonster(int y, int x, int direction) {
         (void) playerMovePosition(direction, y, x);
         distance++;
 
-        Cave_t *tile = &cave[y][x];
+        Cave_t &tile = cave[y][x];
 
-        if (distance > OBJECT_BOLTS_MAX_RANGE || tile->feature_id >= MIN_CLOSED_SPACE) {
+        if (distance > OBJECT_BOLTS_MAX_RANGE || tile.feature_id >= MIN_CLOSED_SPACE) {
             finished = true;
-        } else if (tile->creature_id > 1) {
-            monsters[tile->creature_id].sleep_count = 0;
+        } else if (tile.creature_id > 1) {
+            monsters[tile.creature_id].sleep_count = 0;
 
             // monptr of 0 is safe here, since can't reach here from creatures
-            return monsterMultiply(y, x, (int) monsters[tile->creature_id].creature_id, 0);
+            return monsterMultiply(y, x, (int) monsters[tile.creature_id].creature_id, 0);
         }
     }
 
@@ -1513,12 +1513,12 @@ bool spellCloneMonster(int y, int x, int direction) {
 void spellTeleportAwayMonster(int monster_id, int distance_from_player) {
     int y, x;
     int counter = 0;
-    Monster_t *monster = &monsters[monster_id];
+    Monster_t &monster = monsters[monster_id];
 
     do {
         do {
-            y = monster->y + (randomNumber(2 * distance_from_player + 1) - (distance_from_player + 1));
-            x = monster->x + (randomNumber(2 * distance_from_player + 1) - (distance_from_player + 1));
+            y = monster.y + (randomNumber(2 * distance_from_player + 1) - (distance_from_player + 1));
+            x = monster.x + (randomNumber(2 * distance_from_player + 1) - (distance_from_player + 1));
         } while (!coordInBounds(y, x));
 
         counter++;
@@ -1528,16 +1528,16 @@ void spellTeleportAwayMonster(int monster_id, int distance_from_player) {
         }
     } while ((cave[y][x].feature_id >= MIN_CLOSED_SPACE) || (cave[y][x].creature_id != 0));
 
-    dungeonMoveCreatureRecord((int) monster->y, (int) monster->x, y, x);
-    dungeonLiteSpot((int) monster->y, (int) monster->x);
+    dungeonMoveCreatureRecord((int) monster.y, (int) monster.x, y, x);
+    dungeonLiteSpot((int) monster.y, (int) monster.x);
 
-    monster->y = (uint8_t) y;
-    monster->x = (uint8_t) x;
+    monster.y = (uint8_t) y;
+    monster.x = (uint8_t) x;
 
     // this is necessary, because the creature is
     // not currently visible in its new position.
-    monster->lit = false;
-    monster->distance_from_player = (uint8_t) coordDistanceBetween(char_row, char_col, y, x);
+    monster.lit = false;
+    monster.distance_from_player = (uint8_t) coordDistanceBetween(char_row, char_col, y, x);
 
     monsterUpdateVisibility(monster_id);
 }
@@ -1562,8 +1562,7 @@ void spellTeleportPlayerTo(int y, int x) {
 
     for (int row = char_row - 1; row <= char_row + 1; row++) {
         for (int col = char_col - 1; col <= char_col + 1; col++) {
-            Cave_t *tile = &cave[row][col];
-            tile->temporary_light = false;
+            cave[row][col].temporary_light = false;
             dungeonLiteSpot(row, col);
         }
     }
@@ -1589,18 +1588,18 @@ bool spellTeleportAwayMonsterInDirection(int y, int x, int direction) {
         (void) playerMovePosition(direction, y, x);
         distance++;
 
-        Cave_t *tile = &cave[y][x];
+        Cave_t &tile = cave[y][x];
 
-        if (distance > OBJECT_BOLTS_MAX_RANGE || tile->feature_id >= MIN_CLOSED_SPACE) {
+        if (distance > OBJECT_BOLTS_MAX_RANGE || tile.feature_id >= MIN_CLOSED_SPACE) {
             finished = true;
             continue;
         }
 
-        if (tile->creature_id > 1) {
+        if (tile.creature_id > 1) {
             // wake it up
-            monsters[tile->creature_id].sleep_count = 0;
+            monsters[tile.creature_id].sleep_count = 0;
 
-            spellTeleportAwayMonster((int) tile->creature_id, MON_MAX_SIGHT);
+            spellTeleportAwayMonster((int) tile.creature_id, MON_MAX_SIGHT);
 
             teleported = true;
         }
@@ -1615,10 +1614,10 @@ bool spellMassGenocide() {
     bool killed = false;
 
     for (int id = next_free_monster_id - 1; id >= MON_MIN_INDEX_ID; id--) {
-        Monster_t *monster = &monsters[id];
-        Creature_t *creature = &creatures_list[monster->creature_id];
+        Monster_t &monster = monsters[id];
+        Creature_t &creature = creatures_list[monster.creature_id];
 
-        if (monster->distance_from_player <= MON_MAX_SIGHT && (creature->movement & CM_WIN) == 0) {
+        if (monster.distance_from_player <= MON_MAX_SIGHT && (creature.movement & CM_WIN) == 0) {
             killed = true;
             dungeonDeleteMonster(id);
         }
@@ -1639,11 +1638,11 @@ bool spellGenocide() {
     bool killed = false;
 
     for (int id = next_free_monster_id - 1; id >= MON_MIN_INDEX_ID; id--) {
-        Monster_t *monster = &monsters[id];
-        Creature_t *creature = &creatures_list[monster->creature_id];
+        Monster_t &monster = monsters[id];
+        Creature_t &creature = creatures_list[monster.creature_id];
 
-        if (creature_char == creatures_list[monster->creature_id].sprite) {
-            if ((creature->movement & CM_WIN) == 0) {
+        if (creature_char == creatures_list[monster.creature_id].sprite) {
+            if ((creature.movement & CM_WIN) == 0) {
                 killed = true;
                 dungeonDeleteMonster(id);
             } else {
@@ -1651,7 +1650,7 @@ bool spellGenocide() {
                 // know the names of the creatures he did not destroy,
                 // this message makes no sense otherwise
                 vtype_t msg = {'\0'};
-                (void) sprintf(msg, "The %s is unaffected.", creature->name);
+                (void) sprintf(msg, "The %s is unaffected.", creature.name);
                 printMessage(msg);
             }
         }
@@ -1666,34 +1665,34 @@ bool spellSpeedAllMonsters(int speed) {
     bool speedy = false;
 
     for (int id = next_free_monster_id - 1; id >= MON_MIN_INDEX_ID; id--) {
-        Monster_t *monster = &monsters[id];
-        Creature_t *creature = &creatures_list[monster->creature_id];
+        Monster_t &monster = monsters[id];
+        Creature_t &creature = creatures_list[monster.creature_id];
 
         vtype_t name = {'\0'};
-        monsterNameDescription(name, monster->lit, creature->name);
+        monsterNameDescription(name, monster.lit, creature.name);
 
-        if (monster->distance_from_player > MON_MAX_SIGHT || !los(char_row, char_col, (int) monster->y, (int) monster->x)) {
+        if (monster.distance_from_player > MON_MAX_SIGHT || !los(char_row, char_col, (int) monster.y, (int) monster.x)) {
             continue; // do nothing
         }
 
         if (speed > 0) {
-            monster->speed += speed;
-            monster->sleep_count = 0;
+            monster.speed += speed;
+            monster.sleep_count = 0;
 
-            if (monster->lit) {
+            if (monster.lit) {
                 speedy = true;
                 printMonsterActionText(name, "starts moving faster.");
             }
-        } else if (randomNumber(MON_MAX_LEVELS) > creature->level) {
-            monster->speed += speed;
-            monster->sleep_count = 0;
+        } else if (randomNumber(MON_MAX_LEVELS) > creature.level) {
+            monster.speed += speed;
+            monster.sleep_count = 0;
 
-            if (monster->lit) {
+            if (monster.lit) {
                 speedy = true;
                 printMonsterActionText(name, "starts moving slower.");
             }
-        } else if (monster->lit) {
-            monster->sleep_count = 0;
+        } else if (monster.lit) {
+            monster.sleep_count = 0;
             printMonsterActionText(name, "is unaffected.");
         }
     }
@@ -1706,26 +1705,26 @@ bool spellSleepAllMonsters() {
     bool asleep = false;
 
     for (int id = next_free_monster_id - 1; id >= MON_MIN_INDEX_ID; id--) {
-        Monster_t *monster = &monsters[id];
-        Creature_t *creature = &creatures_list[monster->creature_id];
+        Monster_t &monster = monsters[id];
+        Creature_t &creature = creatures_list[monster.creature_id];
 
         vtype_t name = {'\0'};
-        monsterNameDescription(name, monster->lit, creature->name);
+        monsterNameDescription(name, monster.lit, creature.name);
 
-        if (monster->distance_from_player > MON_MAX_SIGHT || !los(char_row, char_col, (int) monster->y, (int) monster->x)) {
+        if (monster.distance_from_player > MON_MAX_SIGHT || !los(char_row, char_col, (int) monster.y, (int) monster.x)) {
             continue; // do nothing
         }
 
-        if (randomNumber(MON_MAX_LEVELS) < creature->level || ((CD_NO_SLEEP & creature->defenses) != 0)) {
-            if (monster->lit) {
-                if ((creature->defenses & CD_NO_SLEEP) != 0) {
-                    creature_recall[monster->creature_id].defenses |= CD_NO_SLEEP;
+        if (randomNumber(MON_MAX_LEVELS) < creature.level || ((CD_NO_SLEEP & creature.defenses) != 0)) {
+            if (monster.lit) {
+                if ((creature.defenses & CD_NO_SLEEP) != 0) {
+                    creature_recall[monster.creature_id].defenses |= CD_NO_SLEEP;
                 }
                 printMonsterActionText(name, "is unaffected.");
             }
         } else {
-            monster->sleep_count = 500;
-            if (monster->lit) {
+            monster.sleep_count = 500;
+            if (monster.lit) {
                 asleep = true;
                 printMonsterActionText(name, "falls asleep.");
             }
@@ -1741,14 +1740,14 @@ bool spellMassPolymorph() {
     bool morphed = false;
 
     for (int id = next_free_monster_id - 1; id >= MON_MIN_INDEX_ID; id--) {
-        Monster_t *monster = &monsters[id];
+        Monster_t &monster = monsters[id];
 
-        if (monster->distance_from_player <= MON_MAX_SIGHT) {
-            Creature_t *creature = &creatures_list[monster->creature_id];
+        if (monster.distance_from_player <= MON_MAX_SIGHT) {
+            Creature_t &creature = creatures_list[monster.creature_id];
 
-            if ((creature->movement & CM_WIN) == 0) {
-                int y = monster->y;
-                int x = monster->x;
+            if ((creature.movement & CM_WIN) == 0) {
+                int y = monster.y;
+                int x = monster.x;
                 dungeonDeleteMonster(id);
 
                 // Place_monster() should always return true here.
@@ -1765,15 +1764,15 @@ bool spellDetectEvil() {
     bool detected = false;
 
     for (int id = next_free_monster_id - 1; id >= MON_MIN_INDEX_ID; id--) {
-        Monster_t *monster = &monsters[id];
+        Monster_t &monster = monsters[id];
 
-        if (coordInsidePanel((int) monster->y, (int) monster->x) && ((CD_EVIL & creatures_list[monster->creature_id].defenses) != 0)) {
-            monster->lit = true;
+        if (coordInsidePanel((int) monster.y, (int) monster.x) && ((CD_EVIL & creatures_list[monster.creature_id].defenses) != 0)) {
+            monster.lit = true;
 
             detected = true;
 
             // works correctly even if hallucinating
-            putChar((char) creatures_list[monster->creature_id].sprite, (int) monster->y, (int) monster->x);
+            putChar((char) creatures_list[monster.creature_id].sprite, (int) monster.y, (int) monster.x);
         }
     }
 
@@ -1857,12 +1856,12 @@ bool playerRemoveFear() {
 }
 
 static void earthquakeHitsMonster(int monsterID) {
-    Monster_t *monster = &monsters[monsterID];
-    Creature_t *creature = &creatures_list[monster->creature_id];
+    Monster_t &monster = monsters[monsterID];
+    Creature_t &creature = creatures_list[monster.creature_id];
 
-    if ((creature->movement & CM_PHASE) == 0u) {
+    if ((creature.movement & CM_PHASE) == 0u) {
         int damage;
-        if ((creature->movement & CM_ATTACK_ONLY) != 0u) {
+        if ((creature.movement & CM_ATTACK_ONLY) != 0u) {
             // this will kill everything
             damage = 3000;
         } else {
@@ -1870,7 +1869,7 @@ static void earthquakeHitsMonster(int monsterID) {
         }
 
         vtype_t name = {'\0'};
-        monsterNameDescription(name, monster->lit, creature->name);
+        monsterNameDescription(name, monster.lit, creature.name);
 
         printMonsterActionText(name, "wails out in pain!");
 
@@ -1878,10 +1877,10 @@ static void earthquakeHitsMonster(int monsterID) {
             printMonsterActionText(name, "is embedded in the rock.");
             displayCharacterExperience();
         }
-    } else if (creature->sprite == 'E' || creature->sprite == 'X') {
+    } else if (creature.sprite == 'E' || creature.sprite == 'X') {
         // must be an earth elemental or an earth spirit, or a
         // Xorn increase its hit points
-        monster->hp += diceDamageRoll(4, 8);
+        monster.hp += diceDamageRoll(4, 8);
     }
 }
 
@@ -1892,32 +1891,32 @@ void dungeonEarthquake() {
     for (int y = char_row - 8; y <= char_row + 8; y++) {
         for (int x = char_col - 8; x <= char_col + 8; x++) {
             if ((y != char_row || x != char_col) && coordInBounds(y, x) && randomNumber(8) == 1) {
-                Cave_t *c_ptr = &cave[y][x];
+                Cave_t &tile = cave[y][x];
 
-                if (c_ptr->treasure_id != 0) {
+                if (tile.treasure_id != 0) {
                     (void) dungeonDeleteObject(y, x);
                 }
 
-                if (c_ptr->creature_id > 1) {
-                    earthquakeHitsMonster(c_ptr->creature_id);
+                if (tile.creature_id > 1) {
+                    earthquakeHitsMonster(tile.creature_id);
                 }
 
-                if (c_ptr->feature_id >= MIN_CAVE_WALL && c_ptr->feature_id != TILE_BOUNDARY_WALL) {
-                    c_ptr->feature_id = TILE_CORR_FLOOR;
-                    c_ptr->permanent_light = false;
-                    c_ptr->field_mark = false;
-                } else if (c_ptr->feature_id <= MAX_CAVE_FLOOR) {
+                if (tile.feature_id >= MIN_CAVE_WALL && tile.feature_id != TILE_BOUNDARY_WALL) {
+                    tile.feature_id = TILE_CORR_FLOOR;
+                    tile.permanent_light = false;
+                    tile.field_mark = false;
+                } else if (tile.feature_id <= MAX_CAVE_FLOOR) {
                     int tmp = randomNumber(10);
 
                     if (tmp < 6) {
-                        c_ptr->feature_id = TILE_QUARTZ_WALL;
+                        tile.feature_id = TILE_QUARTZ_WALL;
                     } else if (tmp < 9) {
-                        c_ptr->feature_id = TILE_MAGMA_WALL;
+                        tile.feature_id = TILE_MAGMA_WALL;
                     } else {
-                        c_ptr->feature_id = TILE_GRANITE_WALL;
+                        tile.feature_id = TILE_GRANITE_WALL;
                     }
 
-                    c_ptr->field_mark = false;
+                    tile.field_mark = false;
                 }
                 dungeonLiteSpot(y, x);
             }
@@ -1938,10 +1937,10 @@ bool playerProtectEvil() {
 void spellCreateFood() {
     // Note: must take reference to this location as dungeonPlaceRandomObjectAt()
     // below, changes the tile values.
-    Cave_t *tile = &cave[char_row][char_col];
+    Cave_t &tile = cave[char_row][char_col];
 
     // take no action here, don't want to destroy object under player
-    if (tile->treasure_id != 0) {
+    if (tile.treasure_id != 0) {
         // set player_free_turn so that scroll/spell points won't be used
         player_free_turn = true;
 
@@ -1951,7 +1950,7 @@ void spellCreateFood() {
     }
 
     dungeonPlaceRandomObjectAt(char_row, char_col, false);
-    inventoryItemCopyTo(OBJ_MUSH, &treasure_list[tile->treasure_id]);
+    inventoryItemCopyTo(OBJ_MUSH, &treasure_list[tile.treasure_id]);
 }
 
 // Attempts to destroy a type of creature.  Success depends on
@@ -1960,17 +1959,17 @@ bool spellDispelCreature(int creature_defense, int damage) {
     bool dispelled = false;
 
     for (int id = next_free_monster_id - 1; id >= MON_MIN_INDEX_ID; id--) {
-        Monster_t *monster = &monsters[id];
+        Monster_t &monster = monsters[id];
 
-        if (monster->distance_from_player <= MON_MAX_SIGHT && ((creature_defense & creatures_list[monster->creature_id].defenses) != 0) && los(char_row, char_col, (int) monster->y, (int) monster->x)) {
-            Creature_t *creature = &creatures_list[monster->creature_id];
+        if (monster.distance_from_player <= MON_MAX_SIGHT && ((creature_defense & creatures_list[monster.creature_id].defenses) != 0) && los(char_row, char_col, (int) monster.y, (int) monster.x)) {
+            Creature_t &creature = creatures_list[monster.creature_id];
 
-            creature_recall[monster->creature_id].defenses |= creature_defense;
+            creature_recall[monster.creature_id].defenses |= creature_defense;
 
             dispelled = true;
 
             vtype_t name = {'\0'};
-            monsterNameDescription(name, monster->lit, creature->name);
+            monsterNameDescription(name, monster.lit, creature.name);
 
             int hit = monsterTakeHit(id, randomNumber(damage));
 
@@ -1995,24 +1994,24 @@ bool spellTurnUndead() {
     bool turned = false;
 
     for (int id = next_free_monster_id - 1; id >= MON_MIN_INDEX_ID; id--) {
-        Monster_t *monster = &monsters[id];
-        Creature_t *creature = &creatures_list[monster->creature_id];
+        Monster_t &monster = monsters[id];
+        Creature_t &creature = creatures_list[monster.creature_id];
 
-        if (monster->distance_from_player <= MON_MAX_SIGHT && ((CD_UNDEAD & creature->defenses) != 0) && los(char_row, char_col, (int) monster->y, (int) monster->x)) {
+        if (monster.distance_from_player <= MON_MAX_SIGHT && ((CD_UNDEAD & creature.defenses) != 0) && los(char_row, char_col, (int) monster.y, (int) monster.x)) {
             vtype_t name = {'\0'};
-            monsterNameDescription(name, monster->lit, creature->name);
+            monsterNameDescription(name, monster.lit, creature.name);
 
-            if (py.misc.level + 1 > creature->level || randomNumber(5) == 1) {
-                if (monster->lit) {
-                    creature_recall[monster->creature_id].defenses |= CD_UNDEAD;
+            if (py.misc.level + 1 > creature.level || randomNumber(5) == 1) {
+                if (monster.lit) {
+                    creature_recall[monster.creature_id].defenses |= CD_UNDEAD;
 
                     turned = true;
 
                     printMonsterActionText(name, "runs frantically!");
                 }
 
-                monster->confused_amount = (uint8_t) py.misc.level;
-            } else if (monster->lit) {
+                monster.confused_amount = (uint8_t) py.misc.level;
+            } else if (monster.lit) {
                 printMonsterActionText(name, "is unaffected.");
             }
         }
@@ -2112,12 +2111,12 @@ void spellLoseEXP(int32_t adjustment) {
 
         playerCalculateHitPoints();
 
-        Class_t *character_class = &classes[py.misc.class_id];
+        Class_t &character_class = classes[py.misc.class_id];
 
-        if (character_class->class_to_use_mage_spells == SPELL_TYPE_MAGE) {
+        if (character_class.class_to_use_mage_spells == SPELL_TYPE_MAGE) {
             playerCalculateAllowedSpellsCount(A_INT);
             playerGainMana(A_INT);
-        } else if (character_class->class_to_use_mage_spells == SPELL_TYPE_PRIEST) {
+        } else if (character_class.class_to_use_mage_spells == SPELL_TYPE_PRIEST) {
             playerCalculateAllowedSpellsCount(A_WIS);
             playerGainMana(A_WIS);
         }
@@ -2151,43 +2150,43 @@ void playerDetectInvisible(int adjustment) {
 }
 
 static void replace_spot(int y, int x, int typ) {
-    Cave_t *c_ptr = &cave[y][x];
+    Cave_t &tile = cave[y][x];
 
     switch (typ) {
         case 1:
         case 2:
         case 3:
-            c_ptr->feature_id = TILE_CORR_FLOOR;
+            tile.feature_id = TILE_CORR_FLOOR;
             break;
         case 4:
         case 7:
         case 10:
-            c_ptr->feature_id = TILE_GRANITE_WALL;
+            tile.feature_id = TILE_GRANITE_WALL;
             break;
         case 5:
         case 8:
         case 11:
-            c_ptr->feature_id = TILE_MAGMA_WALL;
+            tile.feature_id = TILE_MAGMA_WALL;
             break;
         case 6:
         case 9:
         case 12:
-            c_ptr->feature_id = TILE_QUARTZ_WALL;
+            tile.feature_id = TILE_QUARTZ_WALL;
             break;
         default:
             break;
     }
 
-    c_ptr->permanent_light = false;
-    c_ptr->field_mark = false;
-    c_ptr->perma_lit_room = false; // this is no longer part of a room
+    tile.permanent_light = false;
+    tile.field_mark = false;
+    tile.perma_lit_room = false; // this is no longer part of a room
 
-    if (c_ptr->treasure_id != 0) {
+    if (tile.treasure_id != 0) {
         (void) dungeonDeleteObject(y, x);
     }
 
-    if (c_ptr->creature_id > 1) {
-        dungeonDeleteMonster((int) c_ptr->creature_id);
+    if (tile.creature_id > 1) {
+        dungeonDeleteMonster((int) tile.creature_id);
     }
 }
 
