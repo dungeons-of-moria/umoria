@@ -1542,7 +1542,7 @@ static bool monsterDoMove(int monster_id, uint32_t &rcmove, Monster_t &monster, 
     return false;
 }
 
-static void monsterMoveRandomly(int monster_id, uint32_t *rcmove, int randomness) {
+static void monsterMoveRandomly(int monster_id, uint32_t &rcmove, int randomness) {
     int directions[9];
 
     directions[0] = randomNumber(9);
@@ -1551,12 +1551,12 @@ static void monsterMoveRandomly(int monster_id, uint32_t *rcmove, int randomness
     directions[3] = randomNumber(9);
     directions[4] = randomNumber(9);
 
-    *rcmove |= randomness;
+    rcmove |= randomness;
 
-    makeMove(monster_id, directions, *rcmove);
+    makeMove(monster_id, directions, rcmove);
 }
 
-static void monsterMoveNormally(int monster_id, uint32_t *rcmove) {
+static void monsterMoveNormally(int monster_id, uint32_t &rcmove) {
     int directions[9];
 
     if (randomNumber(200) == 1) {
@@ -1569,26 +1569,26 @@ static void monsterMoveNormally(int monster_id, uint32_t *rcmove) {
         monsterGetMoveDirection(monster_id, directions);
     }
 
-    *rcmove |= CM_MOVE_NORMAL;
+    rcmove |= CM_MOVE_NORMAL;
 
-    makeMove(monster_id, directions, *rcmove);
+    makeMove(monster_id, directions, rcmove);
 }
 
-static void monsterAttackWithoutMoving(int monster_id, uint32_t *rcmove, uint8_t distance_from_player) {
+static void monsterAttackWithoutMoving(int monster_id, uint32_t &rcmove, uint8_t distance_from_player) {
     int directions[9];
 
     if (distance_from_player < 2) {
         monsterGetMoveDirection(monster_id, directions);
-        makeMove(monster_id, directions, *rcmove);
+        makeMove(monster_id, directions, rcmove);
     } else {
         // Learn that the monster does does not move when
         // it should have moved, but didn't.
-        *rcmove |= CM_ATTACK_ONLY;
+        rcmove |= CM_ATTACK_ONLY;
     }
 }
 
 // Move the critters about the dungeon -RAK-
-static void monsterMove(int monster_id, uint32_t *rcmove) {
+static void monsterMove(int monster_id, uint32_t &rcmove) {
     Monster_t &monster = monsters[monster_id];
     Creature_t &creature = creatures_list[monster.creature_id];
 
@@ -1596,17 +1596,17 @@ static void monsterMove(int monster_id, uint32_t *rcmove) {
     // rest could be negative, to be safe, only use mod with positive values.
     auto abs_rest_period = (int) std::abs((std::intmax_t) py.flags.rest);
     if (((creature.movement & CM_MULTIPLY) != 0u) && MON_MAX_MULTIPLY_PER_LEVEL >= monster_multiply_total && (abs_rest_period % MON_MULTIPLY_ADJUST) == 0) {
-        monsterMultiplyCritter(monster, monster_id, *rcmove);
+        monsterMultiplyCritter(monster, monster_id, rcmove);
     }
 
     // if in wall, must immediately escape to a clear area
     // then monster movement finished
     if (((creature.movement & CM_PHASE) == 0u) && cave[monster.y][monster.x].feature_id >= MIN_CAVE_WALL) {
-        monsterMoveOutOfWall(monster, monster_id, *rcmove);
+        monsterMoveOutOfWall(monster, monster_id, rcmove);
         return;
     }
 
-    if (monsterDoMove(monster_id, *rcmove, monster, creature)) {
+    if (monsterDoMove(monster_id, rcmove, monster, creature)) {
         return;
     }
 
@@ -1722,7 +1722,7 @@ static void monsterAttackingUpdate(Monster_t *monster, int monster_id, int moves
                 }
             }
             if ((monster->sleep_count == 0) && (monster->stunned_amount == 0)) {
-                monsterMove(monster_id, &rcmove);
+                monsterMove(monster_id, rcmove);
             }
         }
 
