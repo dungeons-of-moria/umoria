@@ -442,7 +442,7 @@ static void carry(int y, int x, bool pickup) {
 
         // Attempt to pick up an object.
         if (pickup) {
-            int locn = inventoryCarryItem(&item);
+            int locn = inventoryCarryItem(item);
 
             itemDescription(description, inventory[locn], true);
             (void) sprintf(msg, "You have %s (%c)", description, locn + 'a');

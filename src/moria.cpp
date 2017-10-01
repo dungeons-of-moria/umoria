@@ -160,7 +160,7 @@ static void initializeCharacterInventory() {
             item.identification |= ID_SHOW_HIT_DAM;
         }
 
-        (void) inventoryCarryItem(&item);
+        (void) inventoryCarryItem(item);
     }
 
     // weird place for it, but why not?

@@ -1310,45 +1310,44 @@ void playerStrength() {
 // Add an item to players inventory.  Return the
 // item position for a description if needed. -RAK-
 // this code must be identical to the inventoryCanCarryItemCount() code above
-int inventoryCarryItem(Inventory_t *item) {
-    int typ = item->category_id;
-    int subt = item->sub_category_id;
-    bool known1p = itemSetColorlessAsIdentified(item->category_id, item->sub_category_id, item->identification);
-    bool always_known1p = objectPositionOffset(item->category_id, item->sub_category_id) == -1;
+int inventoryCarryItem(Inventory_t &new_item) {
+    bool is_known = itemSetColorlessAsIdentified(new_item.category_id, new_item.sub_category_id, new_item.identification);
+    bool is_always_known = objectPositionOffset(new_item.category_id, new_item.sub_category_id) == -1;
 
-    int locn;
+    int slot_id;
 
     // Now, check to see if player can carry object
-    for (locn = 0;; locn++) {
-        Inventory_t &loc_item = inventory[locn];
+    for (slot_id = 0; slot_id < PLAYER_INVENTORY_SIZE; slot_id++) {
+        Inventory_t &item = inventory[slot_id];
 
-        if (typ == loc_item.category_id && subt == loc_item.sub_category_id && subt >= ITEM_SINGLE_STACK_MIN && ((int) loc_item.items_count + (int) item->items_count) < 256 &&
-            (subt < ITEM_GROUP_MIN || loc_item.misc_use == item->misc_use) &&
-            // only stack if both or neither are identified
-            known1p == itemSetColorlessAsIdentified(loc_item.category_id, loc_item.sub_category_id, loc_item.identification)) {
-            loc_item.items_count += item->items_count;
+        bool is_same_category = new_item.category_id == item.category_id && new_item.sub_category_id == item.sub_category_id;
+        bool not_too_many_items = int(item.items_count + new_item.items_count) < 256;
 
+        // only stack if both or neither are identified
+        bool same_known_status = itemSetColorlessAsIdentified(item.category_id, item.sub_category_id, item.identification) == is_known;
+
+        if (is_same_category && new_item.sub_category_id >= ITEM_SINGLE_STACK_MIN && not_too_many_items &&
+            (new_item.sub_category_id < ITEM_GROUP_MIN || item.misc_use == new_item.misc_use) && same_known_status) {
+            item.items_count += new_item.items_count;
             break;
         }
 
-        if ((typ == loc_item.category_id && subt < loc_item.sub_category_id && always_known1p) || typ > loc_item.category_id) {
-            // For items which are always known1p, i.e. never have a 'color',
+        if ((is_same_category && is_always_known) || new_item.category_id > item.category_id) {
+            // For items which are always `is_known`, i.e. never have a 'color',
             // insert them into the inventory in sorted order.
-            for (int i = inventory_count - 1; i >= locn; i--) {
+            for (int i = inventory_count - 1; i >= slot_id; i--) {
                 inventory[i + 1] = inventory[i];
             }
-
-            inventory[locn] = *item;
+            inventory[slot_id] = new_item;
             inventory_count++;
-
             break;
         }
     }
 
-    inventory_weight += item->items_count * item->weight;
+    inventory_weight += new_item.items_count * new_item.weight;
     py.flags.status |= PY_STR_WGT;
 
-    return locn;
+    return slot_id;
 }
 
 // Returns spell chance of failure for class_to_use_mage_spells -RAK-
