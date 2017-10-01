@@ -617,8 +617,8 @@ static bool lookSee(int x, int y, bool *transparent) {
         return false;
     }
 
-    Cave_t *tile = &cave[y][x];
-    *transparent = tile->feature_id <= MAX_OPEN_SPACE;
+    Cave_t &tile = cave[y][x];
+    *transparent = tile.feature_id <= MAX_OPEN_SPACE;
 
     if (los_hack_no_query) {
         return false; // Don't look at a direct line of sight. A hack.
@@ -630,8 +630,8 @@ static bool lookSee(int x, int y, bool *transparent) {
 
     obj_desc_t msg = {'\0'};
 
-    if (los_rocks_and_objects == 0 && tile->creature_id > 1 && monsters[tile->creature_id].lit) {
-        j = monsters[tile->creature_id].creature_id;
+    if (los_rocks_and_objects == 0 && tile.creature_id > 1 && monsters[tile.creature_id].lit) {
+        j = monsters[tile.creature_id].creature_id;
         (void) sprintf(msg, "%s %s %s. [(r)ecall]", description, isVowel(creatures_list[j].name[0]) ? "an" : "a", creatures_list[j].name);
         description = "It is on";
         putStringClearToEOL(msg, 0, 0);
@@ -646,17 +646,17 @@ static bool lookSee(int x, int y, bool *transparent) {
         }
     }
 
-    if (tile->temporary_light || tile->permanent_light || tile->field_mark) {
+    if (tile.temporary_light || tile.permanent_light || tile.field_mark) {
         const char *wall_description;
 
-        if (tile->treasure_id != 0) {
-            if (treasure_list[tile->treasure_id].category_id == TV_SECRET_DOOR) {
+        if (tile.treasure_id != 0) {
+            if (treasure_list[tile.treasure_id].category_id == TV_SECRET_DOOR) {
                 goto granite;
             }
 
-            if (los_rocks_and_objects == 0 && treasure_list[tile->treasure_id].category_id != TV_INVIS_TRAP) {
+            if (los_rocks_and_objects == 0 && treasure_list[tile.treasure_id].category_id != TV_INVIS_TRAP) {
                 obj_desc_t obj_string = {'\0'};
-                itemDescription(obj_string, &treasure_list[tile->treasure_id], true);
+                itemDescription(obj_string, &treasure_list[tile.treasure_id], true);
 
                 (void) sprintf(msg, "%s %s ---pause---", description, obj_string);
                 description = "It is in";
@@ -667,8 +667,8 @@ static bool lookSee(int x, int y, bool *transparent) {
             }
         }
 
-        if (((los_rocks_and_objects != 0) || (msg[0] != 0)) && tile->feature_id >= MIN_CLOSED_SPACE) {
-            switch (tile->feature_id) {
+        if (((los_rocks_and_objects != 0) || (msg[0] != 0)) && tile.feature_id >= MIN_CLOSED_SPACE) {
+            switch (tile.feature_id) {
                 case TILE_BOUNDARY_WALL:
                 case TILE_GRANITE_WALL:
                 granite:
@@ -894,7 +894,6 @@ void playerThrowItem() {
     int old_x = char_col;
     int current_distance = 0;
 
-    Cave_t *tile;
     bool flag = false;
 
     while (!flag) {
@@ -907,33 +906,33 @@ void playerThrowItem() {
         current_distance++;
         dungeonLiteSpot(old_y, old_x);
 
-        tile = &cave[y][x];
+        Cave_t &tile = cave[y][x];
 
-        if (tile->feature_id <= MAX_OPEN_SPACE && !flag) {
-            if (tile->creature_id > 1) {
+        if (tile.feature_id <= MAX_OPEN_SPACE && !flag) {
+            if (tile.creature_id > 1) {
                 flag = true;
 
-                Monster_t *m_ptr = &monsters[tile->creature_id];
+                Monster_t &m_ptr = monsters[tile.creature_id];
 
                 tbth -= current_distance;
 
                 // if monster not lit, make it much more difficult to hit, subtract
                 // off most bonuses, and reduce bth_with_bows depending on distance.
-                if (!m_ptr->lit) {
+                if (!m_ptr.lit) {
                     tbth /= current_distance + 2;
                     tbth -= py.misc.level * class_level_adj[py.misc.class_id][CLASS_BTHB] / 2;
                     tbth -= tpth * (BTH_PER_PLUS_TO_HIT_ADJUST - 1);
                 }
 
-                if (playerTestBeingHit(tbth, (int) py.misc.level, tpth, (int) creatures_list[m_ptr->creature_id].ac, CLASS_BTHB)) {
-                    int damage = m_ptr->creature_id;
+                if (playerTestBeingHit(tbth, (int) py.misc.level, tpth, (int) creatures_list[m_ptr.creature_id].ac, CLASS_BTHB)) {
+                    int damage = m_ptr.creature_id;
 
                     obj_desc_t description = {'\0'};
                     obj_desc_t msg = {'\0'};
                     itemDescription(description, &thrown_item, false);
 
                     // Does the player know what he's fighting?
-                    if (!m_ptr->lit) {
+                    if (!m_ptr.lit) {
                         (void) sprintf(msg, "You hear a cry as the %s finds a mark.", description);
                         visible = false;
                     } else {
@@ -949,7 +948,7 @@ void playerThrowItem() {
                         tdam = 0;
                     }
 
-                    damage = monsterTakeHit((int) tile->creature_id, tdam);
+                    damage = monsterTakeHit((int) tile.creature_id, tdam);
 
                     if (damage >= 0) {
                         if (!visible) {
@@ -964,9 +963,9 @@ void playerThrowItem() {
                     inventoryDropOrThrowItem(old_y, old_x, &thrown_item);
                 }
             } else {
-                // do not test tile->field_mark here
+                // do not test tile.field_mark here
 
-                if (coordInsidePanel(y, x) && py.flags.blind < 1 && (tile->temporary_light || tile->permanent_light)) {
+                if (coordInsidePanel(y, x) && py.flags.blind < 1 && (tile.temporary_light || tile.permanent_light)) {
                     putChar(tile_char, y, x);
                     putQIO(); // show object moving
                 }
@@ -985,30 +984,31 @@ void playerThrowItem() {
 // Used to be part of bash above.
 static void playerBashAttack(int y, int x) {
     int monster_id = cave[y][x].creature_id;
-    Monster_t *monster = &monsters[monster_id];
-    Creature_t *creature = &creatures_list[monster->creature_id];
 
-    monster->sleep_count = 0;
+    Monster_t &monster = monsters[monster_id];
+    Creature_t &creature = creatures_list[monster.creature_id];
+
+    monster.sleep_count = 0;
 
     // Does the player know what he's fighting?
     vtype_t name = {'\0'};
-    if (!monster->lit) {
+    if (!monster.lit) {
         (void) strcpy(name, "it");
     } else {
-        (void) sprintf(name, "the %s", creature->name);
+        (void) sprintf(name, "the %s", creature.name);
     }
 
     int base_to_hit = py.stats.used[A_STR];
     base_to_hit += inventory[EQUIPMENT_ARM].weight / 2;
     base_to_hit += py.misc.weight / 10;
 
-    if (!monster->lit) {
+    if (!monster.lit) {
         base_to_hit /= 2;
         base_to_hit -= py.stats.used[A_DEX] * (BTH_PER_PLUS_TO_HIT_ADJUST - 1);
         base_to_hit -= py.misc.level * class_level_adj[py.misc.class_id][CLASS_BTH] / 2;
     }
 
-    if (playerTestBeingHit(base_to_hit, (int) py.misc.level, (int) py.stats.used[A_DEX], (int) creature->ac, CLASS_BTH)) {
+    if (playerTestBeingHit(base_to_hit, (int) py.misc.level, (int) py.stats.used[A_DEX], (int) creature.ac, CLASS_BTH)) {
         vtype_t msg = {'\0'};
         (void) sprintf(msg, "You hit %s.", name);
         printMessage(msg);
@@ -1032,16 +1032,16 @@ static void playerBashAttack(int y, int x) {
 
             // Can not stun Balrog
             int avg_max_hp;
-            if ((creature->defenses & CD_MAX_HP) != 0) {
-                avg_max_hp = creature->hit_die[0] * creature->hit_die[1];
+            if ((creature.defenses & CD_MAX_HP) != 0) {
+                avg_max_hp = creature.hit_die[0] * creature.hit_die[1];
             } else {
-                avg_max_hp = (creature->hit_die[0] * (creature->hit_die[1] + 1)) >> 1;
+                avg_max_hp = (creature.hit_die[0] * (creature.hit_die[1] + 1)) >> 1;
             }
 
-            if (100 + randomNumber(400) + randomNumber(400) > monster->hp + avg_max_hp) {
-                monster->stunned_amount += randomNumber(3) + 1;
-                if (monster->stunned_amount > 24) {
-                    monster->stunned_amount = 24;
+            if (100 + randomNumber(400) + randomNumber(400) > monster.hp + avg_max_hp) {
+                monster.stunned_amount += randomNumber(3) + 1;
+                if (monster.stunned_amount > 24) {
+                    monster.stunned_amount = 24;
                 }
 
                 (void) sprintf(msg, "%s appears stunned!", name);
