@@ -14,7 +14,7 @@ static void doCommand(char command);
 static bool validCountCommand(char command);
 static void playerRegenerateHitPoints(int percent);
 static void playerRegenerateMana(int percent);
-static bool itemEnchanted(Inventory_t *item);
+static bool itemEnchanted(Inventory_t &item); // TODO(cook) make it `const Inventory_t &item`
 static void examineBook();
 static void dungeonGoUpLevel();
 static void dungeonGoDownLevel();
@@ -717,7 +717,7 @@ static void playerDetectEnchantment() {
         // if in equipment list, success 1 out of 10 times
         int chance = (i < 22 ? 50 : 10);
 
-        if (item.category_id != TV_NOTHING && itemEnchanted(&item) && randomNumber(chance) == 1) {
+        if (item.category_id != TV_NOTHING && itemEnchanted(item) && randomNumber(chance) == 1) {
             // extern const char *describe_use(int); // FIXME: Why here? We have it in externs.
 
             vtype_t tmp_str = {'\0'};
@@ -2000,28 +2000,28 @@ static void playerRegenerateMana(int percent) {
 
 // Is an item an enchanted weapon or armor and we don't know? -CJS-
 // only returns true if it is a good enchantment
-static bool itemEnchanted(Inventory_t *item) {
-    if (item->category_id < TV_MIN_ENCHANT || item->category_id > TV_MAX_ENCHANT || (item->flags & TR_CURSED) != 0u) {
+static bool itemEnchanted(Inventory_t &item) {
+    if (item.category_id < TV_MIN_ENCHANT || item.category_id > TV_MAX_ENCHANT || (item.flags & TR_CURSED) != 0u) {
         return false;
     }
 
-    if (spellItemIdentified(item)) {
+    if (spellItemIdentified(&item)) {
         return false;
     }
 
-    if ((item->identification & ID_MAGIK) != 0) {
+    if ((item.identification & ID_MAGIK) != 0) {
         return false;
     }
 
-    if (item->to_hit > 0 || item->to_damage > 0 || item->to_ac > 0) {
+    if (item.to_hit > 0 || item.to_damage > 0 || item.to_ac > 0) {
         return true;
     }
 
-    if ((0x4000107fL & item->flags) != 0 && item->misc_use > 0) {
+    if ((0x4000107fL & item.flags) != 0 && item.misc_use > 0) {
         return true;
     }
 
-    if ((0x07ffe980L & item->flags) != 0) {
+    if ((0x07ffe980L & item.flags) != 0) {
         return true;
     }
 
