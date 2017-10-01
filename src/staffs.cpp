@@ -207,7 +207,7 @@ void useStaff() {
             itemIdentify(&item_id);
         }
     } else if (!itemSetColorlessAsIdentified(item.category_id, item.sub_category_id, item.identification)) {
-        itemSetAsTried(&item);
+        itemSetAsTried(item);
     }
 
     itemChargesRemainingDescription(item_id);

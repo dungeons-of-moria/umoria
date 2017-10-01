@@ -175,7 +175,7 @@ void spellItemRemoveIdentification(Inventory_t &item);
 void itemIdentificationClearEmpty(Inventory_t &item);
 void itemIdentifyAsStoreBought(Inventory_t &item);
 bool itemStoreBought(int identification);
-void itemSetAsTried(Inventory_t *item);
+void itemSetAsTried(const Inventory_t &item);
 void itemIdentify(int *item_id);
 void itemRemoveMagicNaming(Inventory_t *item);
 void itemDescription(obj_desc_t description, Inventory_t *item, bool add_prefix);

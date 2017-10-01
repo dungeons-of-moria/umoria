@@ -209,15 +209,15 @@ static void unsample(Inventory_t &item) {
 }
 
 // Somethings been sampled -CJS-
-void itemSetAsTried(Inventory_t *item) {
-    int16_t id = objectPositionOffset(item->category_id, item->sub_category_id);
+void itemSetAsTried(const Inventory_t &item) {
+    int16_t id = objectPositionOffset(item.category_id, item.sub_category_id);
 
     if (id < 0) {
         return;
     }
 
     id <<= 6;
-    id += (uint8_t) (item->sub_category_id & (ITEM_SINGLE_STACK_MIN - 1));
+    id += (uint8_t) (item.sub_category_id & (ITEM_SINGLE_STACK_MIN - 1));
 
     setObjectTriedFlag(id);
 }

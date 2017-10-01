@@ -326,7 +326,7 @@ void quaff() {
             item = inventory[item_id];
         }
     } else if (!itemSetColorlessAsIdentified(item.category_id, item.sub_category_id, item.identification)) {
-        itemSetAsTried(&item);
+        itemSetAsTried(item);
     }
 
     playerIngestFood(item.misc_use);
