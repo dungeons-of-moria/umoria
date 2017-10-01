@@ -48,15 +48,15 @@ static void pickCorrectDirection(int &row_dir, int &col_dir, int y1, int x1, int
 }
 
 // Chance of wandering direction
-static void chanceOfRandomDirection(int *y, int *x) {
+static void chanceOfRandomDirection(int &y, int &x) {
     int direction = randomNumber(4);
 
     if (direction < 3) {
-        *x = 0;
-        *y = -3 + (direction << 1); // direction=1 -> *y=-1; direction=2 -> *y=1
+        x = 0;
+        y = -3 + (direction << 1); // direction=1 -> y=-1; direction=2 -> y=1
     } else {
-        *y = 0;
-        *x = -7 + (direction << 1); // direction=3 -> *x=-1; direction=4 -> *x=1
+        y = 0;
+        x = -7 + (direction << 1); // direction=3 -> x=-1; direction=4 -> x=1
     }
 }
 
@@ -810,7 +810,7 @@ static void dungeonBuildTunnel(int y_start, int x_start, int y_end, int x_end) {
 
         if (randomNumber(100) > DUN_DIR_CHANGE) {
             if (randomNumber(DUN_RANDOM_DIR) == 1) {
-                chanceOfRandomDirection(&row_dir, &col_dir);
+                chanceOfRandomDirection(row_dir, col_dir);
             } else {
                 pickCorrectDirection(row_dir, col_dir, y_start, x_start, y_end, x_end);
             }
@@ -821,7 +821,7 @@ static void dungeonBuildTunnel(int y_start, int x_start, int y_end, int x_end) {
 
         while (!coordInBounds(tmp_row, tmp_col)) {
             if (randomNumber(DUN_RANDOM_DIR) == 1) {
-                chanceOfRandomDirection(&row_dir, &col_dir);
+                chanceOfRandomDirection(row_dir, col_dir);
             } else {
                 pickCorrectDirection(row_dir, col_dir, y_start, x_start, y_end, x_end);
             }
