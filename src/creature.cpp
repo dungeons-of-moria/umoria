@@ -9,7 +9,7 @@
 #include "headers.h"
 #include "externs.h"
 
-static bool monsterIsVisible(Monster_t &monster) {
+static bool monsterIsVisible(const Monster_t &monster) {
     bool visible = false;
 
     Cave_t &tile = cave[monster.y][monster.x];
@@ -785,7 +785,7 @@ static bool executeAttackOnPlayer(uint8_t creature_level, int16_t &monster_hp, i
     return noticed;
 }
 
-static void monsterConfuseOnAttack(Creature_t &creature, Monster_t &monster, int attack_type, vtype_t monster_name, bool visible) {
+static void monsterConfuseOnAttack(const Creature_t &creature, Monster_t &monster, int attack_type, vtype_t monster_name, bool visible) {
     if (py.flags.confuse_monster && attack_type != 99) {
         printMessage("Your hands stop glowing.");
         py.flags.confuse_monster = false;
@@ -989,7 +989,7 @@ static void glyphOfWardingProtection(uint16_t creature_id, uint32_t move_bits, b
     }
 }
 
-static void monsterMovesOnPlayer(Monster_t &monster, uint8_t creature_id, int monster_id, uint32_t move_bits, bool &do_move, bool &do_turn, uint32_t &rcmove, int y, int x) {
+static void monsterMovesOnPlayer(const Monster_t &monster, uint8_t creature_id, int monster_id, uint32_t move_bits, bool &do_move, bool &do_turn, uint32_t &rcmove, int y, int x) {
     if (creature_id == 1) {
         // if the monster is not lit, must call monsterUpdateVisibility, it
         // may be faster than character, and hence could have
@@ -1100,17 +1100,17 @@ static void makeMove(int monster_id, int *directions, uint32_t &rcmove) {
     }
 }
 
-static bool monsterCanCastSpells(Monster_t *monster, uint32_t spells) {
+static bool monsterCanCastSpells(const Monster_t &monster, uint32_t spells) {
     // 1 in x chance of casting spell
     if (randomNumber((int) (spells & CS_FREQ)) != 1) {
         return false;
     }
 
     // Must be within certain range
-    bool within_range = monster->distance_from_player <= MON_MAX_SPELL_CAST_DISTANCE;
+    bool within_range = monster.distance_from_player <= MON_MAX_SPELL_CAST_DISTANCE;
 
     // Must have unobstructed Line-Of-Sight
-    bool unobstructed = los(char_row, char_col, (int) monster->y, (int) monster->x);
+    bool unobstructed = los(char_row, char_col, (int) monster.y, (int) monster.x);
 
     return within_range && unobstructed;
 }
@@ -1283,7 +1283,7 @@ static bool monsterCastSpell(int monster_id) {
     Monster_t &monster = monsters[monster_id];
     Creature_t &creature = creatures_list[monster.creature_id];
 
-    if (!monsterCanCastSpells(&monster, creature.spells)) {
+    if (!monsterCanCastSpells(monster, creature.spells)) {
         return false;
     }
 
