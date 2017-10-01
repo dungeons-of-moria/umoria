@@ -29,13 +29,13 @@ bool memoryMonsterKnown(int monster_id) {
         return true;
     }
 
-    Recall_t *memory = &creature_recall[monster_id];
+    Recall_t &memory = creature_recall[monster_id];
 
-    if ((memory->movement != 0u) || (memory->defenses != 0u) || (memory->kills != 0u) || (memory->spells != 0u) || (memory->deaths != 0u)) {
+    if ((memory.movement != 0u) || (memory.defenses != 0u) || (memory.kills != 0u) || (memory.spells != 0u) || (memory.deaths != 0u)) {
         return true;
     }
 
-    for (uint8_t attack : memory->attacks) {
+    for (uint8_t attack : memory.attacks) {
         if (attack != 0u) {
             return true;
         }
@@ -63,6 +63,7 @@ static void memoryWizardModeInit(Recall_t *memory, Creature_t *creature) {
         memory->spells = creature->spells;
     }
 
+    // TODO(cook) damage is not being used/updated, is this correct? If so, it needs refactoring.
     uint8_t *pu = creature->damage;
 
     int attack_id = 0;
@@ -559,49 +560,49 @@ static void memoryAttackNumberAndDamage(Recall_t *memory, Creature_t *creature) 
 
 // Print out what we have discovered about this monster.
 int memoryRecall(int monster_id) {
-    Recall_t *memory = &creature_recall[monster_id];
-    Creature_t *creature = &creatures_list[monster_id];
+    Recall_t &memory = creature_recall[monster_id];
+    Creature_t &creature = creatures_list[monster_id];
 
     Recall_t saved_memory{};
 
     if (wizard_mode) {
-        saved_memory = *memory;
-        memoryWizardModeInit(memory, creature);
+        saved_memory = memory;
+        memoryWizardModeInit(&memory, &creature);
     }
 
     roff_print_line = 0;
     roff_buffer_pointer = roff_buffer;
 
-    auto spells = (uint32_t) (memory->spells & creature->spells & ~CS_FREQ);
+    auto spells = (uint32_t) (memory.spells & creature.spells & ~CS_FREQ);
 
     // the CM_WIN property is always known, set it if a win monster
-    auto move = (uint32_t) (memory->movement | (CM_WIN & creature->movement));
+    auto move = (uint32_t) (memory.movement | (CM_WIN & creature.movement));
 
-    uint16_t defense = memory->defenses & creature->defenses;
+    uint16_t defense = memory.defenses & creature.defenses;
 
     bool known;
 
     // Start the paragraph for the core monster description
     vtype_t msg = {'\0'};
-    (void) sprintf(msg, "The %s:\n", creature->name);
+    (void) sprintf(msg, "The %s:\n", creature.name);
     memoryPrint(msg);
 
-    memoryConflictHistory(memory->deaths, memory->kills);
-    known = memoryDepthFoundAt(creature->level, memory->kills);
-    known = memoryMovement(move, creature->speed, known);
+    memoryConflictHistory(memory.deaths, memory.kills);
+    known = memoryDepthFoundAt(creature.level, memory.kills);
+    known = memoryMovement(move, creature.speed, known);
 
     // Finish off the paragraph with a period!
     if (known) {
         memoryPrint(".");
     }
 
-    if (memory->kills != 0u) {
-        memoryKillPoints(creature->defenses, creature->kill_exp_value, creature->level);
+    if (memory.kills != 0u) {
+        memoryKillPoints(creature.defenses, creature.kill_exp_value, creature.level);
     }
 
-    memoryMagicSkills(spells, memory->spells, creature->spells);
+    memoryMagicSkills(spells, memory.spells, creature.spells);
 
-    memoryKillDifficulty(creature, memory->kills);
+    memoryKillDifficulty(&creature, memory.kills);
 
     memorySpecialAbilities(move);
 
@@ -624,14 +625,14 @@ int memoryRecall(int monster_id) {
         memoryPrint(".");
     }
 
-    memoryAwareness(creature, memory);
+    memoryAwareness(&creature, &memory);
 
-    memoryLootCarried(creature->movement, move);
+    memoryLootCarried(creature.movement, move);
 
-    memoryAttackNumberAndDamage(memory, creature);
+    memoryAttackNumberAndDamage(&memory, &creature);
 
     // Always know the win creature.
-    if ((creature->movement & CM_WIN) != 0u) {
+    if ((creature.movement & CM_WIN) != 0u) {
         memoryPrint(" Killing one of these wins the game!");
     }
 
@@ -639,7 +640,7 @@ int memoryRecall(int monster_id) {
     putStringClearToEOL("--pause--", roff_print_line, 0);
 
     if (wizard_mode) {
-        *memory = saved_memory;
+        memory = saved_memory;
     }
 
     return getKeyInput();
