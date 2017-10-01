@@ -9,7 +9,7 @@
 #include "headers.h"
 #include "externs.h"
 
-static void unsample(Inventory_t *item);
+static void unsample(Inventory_t &item);
 
 char magic_item_titles[MAX_TITLES][10];
 
@@ -165,7 +165,7 @@ bool itemSetColorlessAsIdentified(int category_id, int sub_category_id, int iden
 
 // Remove "Secret" symbol for identity of plusses
 void spellItemIdentifyAndRemoveRandomInscription(Inventory_t *item) {
-    unsample(item);
+    unsample(*item);
     item->identification |= ID_KNOWN2;
 }
 
@@ -191,18 +191,18 @@ bool itemStoreBought(int identification) {
 }
 
 // Remove an automatically generated inscription. -CJS-
-static void unsample(Inventory_t *item) {
+static void unsample(Inventory_t &item) {
     // this also used to clear ID_DAMD flag, but I think it should remain set
-    item->identification &= ~(ID_MAGIK | ID_EMPTY);
+    item.identification &= ~(ID_MAGIK | ID_EMPTY);
 
-    int16_t id = objectPositionOffset(item->category_id, item->sub_category_id);
+    int16_t id = objectPositionOffset(item.category_id, item.sub_category_id);
 
     if (id < 0) {
         return;
     }
 
     id <<= 6;
-    id += (uint8_t) (item->sub_category_id & (ITEM_SINGLE_STACK_MIN - 1));
+    id += (uint8_t) (item.sub_category_id & (ITEM_SINGLE_STACK_MIN - 1));
 
     // clear the tried flag, since it is now known
     clearObjectTriedFlag(id);
