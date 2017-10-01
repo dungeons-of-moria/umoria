@@ -818,10 +818,10 @@ bool loadGame(bool *generate) {
                     goto error;
                 }
                 c_ptr->feature_id = (uint8_t) (char_tmp & 0xF);
-                c_ptr->perma_lit_room = (char_tmp >> 4) != 0;
-                c_ptr->field_mark = (char_tmp >> 5) != 0;
-                c_ptr->permanent_light = (char_tmp >> 6) != 0;
-                c_ptr->temporary_light = (char_tmp >> 7) != 0;
+                c_ptr->perma_lit_room = (bool) ((char_tmp >> 4) & 0x1);
+                c_ptr->field_mark = (bool) ((char_tmp >> 5) & 0x1);
+                c_ptr->permanent_light = (bool) ((char_tmp >> 6) & 0x1);
+                c_ptr->temporary_light = (bool) ((char_tmp >> 7) & 0x1);
                 c_ptr++;
             }
             total_count += count;
