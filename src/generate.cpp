@@ -941,7 +941,7 @@ static void dungeonPlaceDoorIfNextToTwoWalls(int y, int x) {
 }
 
 // Returns random co-ordinates -RAK-
-static void dungeonNewSpot(int16_t *y, int16_t *x) {
+static void dungeonNewSpot(int16_t &y, int16_t &x) {
     int pos_y, pos_x;
     Cave_t *tile;
 
@@ -951,8 +951,8 @@ static void dungeonNewSpot(int16_t *y, int16_t *x) {
         tile = &cave[pos_y][pos_x];
     } while (tile->feature_id >= MIN_CLOSED_SPACE || tile->creature_id != 0 || tile->treasure_id != 0);
 
-    *y = (int16_t) pos_y;
-    *x = (int16_t) pos_x;
+    y = (int16_t) pos_y;
+    x = (int16_t) pos_x;
 }
 
 // Cave logic flow for generation of new dungeon
@@ -1054,7 +1054,7 @@ static void dungeonGenerate() {
     dungeonPlaceStairs(1, randomNumber(2), 3);
 
     // Set up the character coords, used by monsterPlaceNewWithinDistance, monsterPlaceWinning
-    dungeonNewSpot(&char_row, &char_col);
+    dungeonNewSpot(char_row, char_col);
 
     monsterPlaceNewWithinDistance((randomNumber(8) + MON_MIN_PER_LEVEL + alloc_level), 0, true);
     dungeonAllocateAndPlaceObject(setCorridors, 3, randomNumber(alloc_level));
@@ -1191,7 +1191,7 @@ static void townGeneration() {
     seedResetToOldSeed();
 
     // Set up the character coords, used by monsterPlaceNewWithinDistance below
-    dungeonNewSpot(&char_row, &char_col);
+    dungeonNewSpot(char_row, char_col);
 
     lightTown();
 
