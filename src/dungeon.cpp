@@ -14,7 +14,7 @@ static void doCommand(char command);
 static bool validCountCommand(char command);
 static void playerRegenerateHitPoints(int percent);
 static void playerRegenerateMana(int percent);
-static bool itemEnchanted(Inventory_t &item); // TODO(cook) make it `const Inventory_t &item`
+static bool itemEnchanted(const Inventory_t &item);
 static void examineBook();
 static void dungeonGoUpLevel();
 static void dungeonGoDownLevel();
@@ -2000,7 +2000,7 @@ static void playerRegenerateMana(int percent) {
 
 // Is an item an enchanted weapon or armor and we don't know? -CJS-
 // only returns true if it is a good enchantment
-static bool itemEnchanted(Inventory_t &item) {
+static bool itemEnchanted(const Inventory_t &item) {
     if (item.category_id < TV_MIN_ENCHANT || item.category_id > TV_MAX_ENCHANT || (item.flags & TR_CURSED) != 0u) {
         return false;
     }
