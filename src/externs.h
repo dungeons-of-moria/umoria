@@ -359,7 +359,7 @@ void displayCharacterExperience();
 void playerCalculateHitPoints();
 bool enterWizardMode();
 int playerAttackBlows(int weight, int &weight_to_hit);
-int itemMagicAbilityDamage(Inventory_t *item, int total_damage, int monster_id);
+int itemMagicAbilityDamage(const Inventory_t &item, int total_damage, int monster_id);
 int playerWeaponCriticalBlow(int weapon_weight, int plus_to_hit, int damage, int attack_type_id);
 bool playerMovePosition(int dir, int &new_y, int &new_x);
 bool playerSavingThrow();

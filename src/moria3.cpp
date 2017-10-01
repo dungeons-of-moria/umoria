@@ -833,7 +833,7 @@ static void playerAttackMonster(int y, int x) {
 
         if (item.category_id != TV_NOTHING) {
             damage = dicePlayerDamageRoll(item.damage);
-            damage = itemMagicAbilityDamage(&item, damage, monster.creature_id);
+            damage = itemMagicAbilityDamage(item, damage, monster.creature_id);
             damage = playerWeaponCriticalBlow((int) item.weight, total_to_hit, damage, CLASS_BTH);
         } else {
             // Bare hands!?

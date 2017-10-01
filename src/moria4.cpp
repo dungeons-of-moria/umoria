@@ -941,7 +941,7 @@ void playerThrowItem() {
                     }
                     printMessage(msg);
 
-                    tdam = itemMagicAbilityDamage(&thrown_item, tdam, damage);
+                    tdam = itemMagicAbilityDamage(thrown_item, tdam, damage);
                     tdam = playerWeaponCriticalBlow((int) thrown_item.weight, tpth, tdam, CLASS_BTHB);
 
                     if (tdam < 0) {
