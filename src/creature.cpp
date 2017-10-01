@@ -906,7 +906,7 @@ static void monsterAttackPlayer(int monster_id) {
     }
 }
 
-static void monsterOpenDoor(Cave_t &tile, int16_t monster_hp, uint32_t move_bits, bool *do_turn, bool *do_move, uint32_t *rcmove, int y, int x) {
+static void monsterOpenDoor(Cave_t &tile, int16_t monster_hp, uint32_t move_bits, bool &do_turn, bool &do_move, uint32_t &rcmove, int y, int x) {
     Inventory_t &item = treasure_list[tile.treasure_id];
 
     // Creature can open doors.
@@ -914,12 +914,12 @@ static void monsterOpenDoor(Cave_t &tile, int16_t monster_hp, uint32_t move_bits
         bool door_is_stuck = false;
 
         if (item.category_id == TV_CLOSED_DOOR) {
-            *do_turn = true;
+            do_turn = true;
 
             if (item.misc_use == 0) {
                 // Closed doors
 
-                *do_move = true;
+                do_move = true;
             } else if (item.misc_use > 0) {
                 // Locked doors
 
@@ -933,15 +933,15 @@ static void monsterOpenDoor(Cave_t &tile, int16_t monster_hp, uint32_t move_bits
                     printMessage("You hear a door burst open!");
                     playerDisturb(1, 0);
                     door_is_stuck = true;
-                    *do_move = true;
+                    do_move = true;
                 }
             }
         } else if (item.category_id == TV_SECRET_DOOR) {
-            *do_turn = true;
-            *do_move = true;
+            do_turn = true;
+            do_move = true;
         }
 
-        if (*do_move) {
+        if (do_move) {
             inventoryItemCopyTo(OBJ_OPEN_DOOR, &item);
 
             // 50% chance of breaking door
@@ -950,12 +950,12 @@ static void monsterOpenDoor(Cave_t &tile, int16_t monster_hp, uint32_t move_bits
             }
             tile.feature_id = TILE_CORR_FLOOR;
             dungeonLiteSpot(y, x);
-            *rcmove |= CM_OPEN_DOOR;
-            *do_move = false;
+            rcmove |= CM_OPEN_DOOR;
+            do_move = false;
         }
     } else if (item.category_id == TV_CLOSED_DOOR) {
         // Creature can not open doors, must bash them
-        *do_turn = true;
+        do_turn = true;
 
         auto abs_misc_use = (int) std::abs((std::intmax_t) item.misc_use);
         if (randomNumber((monster_hp + 1) * (80 + abs_misc_use)) < 40 * (monster_hp - 20 - abs_misc_use)) {
@@ -1080,7 +1080,7 @@ static void makeMove(int monster_id, int *directions, uint32_t *rcmove) {
             *rcmove |= CM_PHASE;
         } else if (tile.treasure_id != 0) {
             // Creature can open doors?
-            monsterOpenDoor(tile, monster.hp, move_bits, &do_turn, &do_move, rcmove, y, x);
+            monsterOpenDoor(tile, monster.hp, move_bits, do_turn, do_move, *rcmove, y, x);
         }
 
         // Glyph of warding present?
