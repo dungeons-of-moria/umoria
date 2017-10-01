@@ -59,7 +59,7 @@ void itemReplaceInscription(Inventory_t *item, const char *inscription) {
 
 // We need to reset the view of things. -CJS-
 void dungeonResetView() {
-    Cave_t *tile = &cave[char_row][char_col];
+    Cave_t &tile = cave[char_row][char_col];
 
     // Check for new panel
     if (coordOutsidePanel(char_row, char_col, false)) {
@@ -70,15 +70,15 @@ void dungeonResetView() {
     dungeonMoveCharacterLight(char_row, char_col, char_row, char_col);
 
     // A room of light should be lit.
-    if (tile->feature_id == TILE_LIGHT_FLOOR) {
-        if (py.flags.blind < 1 && !tile->permanent_light) {
+    if (tile.feature_id == TILE_LIGHT_FLOOR) {
+        if (py.flags.blind < 1 && !tile.permanent_light) {
             dungeonLightRoom(char_row, char_col);
         }
         return;
     }
 
     // In doorway of light-room?
-    if (tile->perma_lit_room && py.flags.blind < 1) {
+    if (tile.perma_lit_room && py.flags.blind < 1) {
         for (int i = char_row - 1; i <= char_row + 1; i++) {
             for (int j = char_col - 1; j <= char_col + 1; j++) {
                 if (cave[i][j].feature_id == TILE_LIGHT_FLOOR && !cave[i][j].permanent_light) {
