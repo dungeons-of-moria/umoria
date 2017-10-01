@@ -21,28 +21,28 @@ static uint8_t dungeonFloorTileForLevel() {
 }
 
 // Always picks a correct direction
-static void pickCorrectDirection(int *row_dir, int *col_dir, int y1, int x1, int y2, int x2) {
+static void pickCorrectDirection(int &row_dir, int &col_dir, int y1, int x1, int y2, int x2) {
     if (y1 < y2) {
-        *row_dir = 1;
+        row_dir = 1;
     } else if (y1 == y2) {
-        *row_dir = 0;
+        row_dir = 0;
     } else {
-        *row_dir = -1;
+        row_dir = -1;
     }
 
     if (x1 < x2) {
-        *col_dir = 1;
+        col_dir = 1;
     } else if (x1 == x2) {
-        *col_dir = 0;
+        col_dir = 0;
     } else {
-        *col_dir = -1;
+        col_dir = -1;
     }
 
-    if (*row_dir != 0 && *col_dir != 0) {
+    if (row_dir != 0 && col_dir != 0) {
         if (randomNumber(2) == 1) {
-            *row_dir = 0;
+            row_dir = 0;
         } else {
-            *col_dir = 0;
+            col_dir = 0;
         }
     }
 }
@@ -799,7 +799,7 @@ static void dungeonBuildTunnel(int y_start, int x_start, int y_end, int x_end) {
     int wall_index = 0;
 
     int row_dir, col_dir;
-    pickCorrectDirection(&row_dir, &col_dir, y_start, x_start, y_end, x_end);
+    pickCorrectDirection(row_dir, col_dir, y_start, x_start, y_end, x_end);
 
     do {
         // prevent infinite loops, just in case
@@ -812,7 +812,7 @@ static void dungeonBuildTunnel(int y_start, int x_start, int y_end, int x_end) {
             if (randomNumber(DUN_RANDOM_DIR) == 1) {
                 chanceOfRandomDirection(&row_dir, &col_dir);
             } else {
-                pickCorrectDirection(&row_dir, &col_dir, y_start, x_start, y_end, x_end);
+                pickCorrectDirection(row_dir, col_dir, y_start, x_start, y_end, x_end);
             }
         }
 
@@ -823,7 +823,7 @@ static void dungeonBuildTunnel(int y_start, int x_start, int y_end, int x_end) {
             if (randomNumber(DUN_RANDOM_DIR) == 1) {
                 chanceOfRandomDirection(&row_dir, &col_dir);
             } else {
-                pickCorrectDirection(&row_dir, &col_dir, y_start, x_start, y_end, x_end);
+                pickCorrectDirection(row_dir, col_dir, y_start, x_start, y_end, x_end);
             }
             tmp_row = y_start + row_dir;
             tmp_col = x_start + col_dir;
