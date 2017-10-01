@@ -13,7 +13,7 @@ static const char *stat_names[] = {"STR : ", "INT : ", "WIS : ", "DEX : ", "CON 
 #define BLANK_LENGTH 24
 static char blank_string[] = "                        ";
 
-static int spellChanceOfSuccess(int spell);
+static int spellChanceOfSuccess(int spell_id);
 
 // Places a particular trap at location y, x -RAK-
 void dungeonSetTrap(int y, int x, int sub_type_id) {
@@ -1320,18 +1320,18 @@ int inventoryCarryItem(Inventory_t *item) {
 
     // Now, check to see if player can carry object
     for (locn = 0;; locn++) {
-        Inventory_t *t_ptr = &inventory[locn];
+        Inventory_t &loc_item = inventory[locn];
 
-        if (typ == t_ptr->category_id && subt == t_ptr->sub_category_id && subt >= ITEM_SINGLE_STACK_MIN && ((int) t_ptr->items_count + (int) item->items_count) < 256 &&
-            (subt < ITEM_GROUP_MIN || t_ptr->misc_use == item->misc_use) &&
+        if (typ == loc_item.category_id && subt == loc_item.sub_category_id && subt >= ITEM_SINGLE_STACK_MIN && ((int) loc_item.items_count + (int) item->items_count) < 256 &&
+            (subt < ITEM_GROUP_MIN || loc_item.misc_use == item->misc_use) &&
             // only stack if both or neither are identified
-            known1p == itemSetColorlessAsIdentified(t_ptr->category_id, t_ptr->sub_category_id, t_ptr->identification)) {
-            t_ptr->items_count += item->items_count;
+            known1p == itemSetColorlessAsIdentified(loc_item.category_id, loc_item.sub_category_id, loc_item.identification)) {
+            loc_item.items_count += item->items_count;
 
             break;
         }
 
-        if ((typ == t_ptr->category_id && subt < t_ptr->sub_category_id && always_known1p) || typ > t_ptr->category_id) {
+        if ((typ == loc_item.category_id && subt < loc_item.sub_category_id && always_known1p) || typ > loc_item.category_id) {
             // For items which are always known1p, i.e. never have a 'color',
             // insert them into the inventory in sorted order.
             for (int i = inventory_count - 1; i >= locn; i--) {
@@ -1352,10 +1352,10 @@ int inventoryCarryItem(Inventory_t *item) {
 }
 
 // Returns spell chance of failure for class_to_use_mage_spells -RAK-
-static int spellChanceOfSuccess(int spell) {
-    Spell_t *s_ptr = &magic_spells[py.misc.class_id - 1][spell];
+static int spellChanceOfSuccess(int spell_id) {
+    Spell_t &spell = magic_spells[py.misc.class_id - 1][spell_id];
 
-    int chance = s_ptr->failure_chance - 3 * (py.misc.level - s_ptr->level_required);
+    int chance = spell.failure_chance - 3 * (py.misc.level - spell.level_required);
 
     int stat;
     if (classes[py.misc.class_id].class_to_use_mage_spells == SPELL_TYPE_MAGE) {
@@ -1366,8 +1366,8 @@ static int spellChanceOfSuccess(int spell) {
 
     chance -= 3 * (playerStatAdjustmentWisdomIntelligence(stat) - 1);
 
-    if (s_ptr->mana_required > py.misc.current_mana) {
-        chance += 5 * (s_ptr->mana_required - py.misc.current_mana);
+    if (spell.mana_required > py.misc.current_mana) {
+        chance += 5 * (spell.mana_required - py.misc.current_mana);
     }
 
     if (chance > 95) {
@@ -1382,7 +1382,7 @@ static int spellChanceOfSuccess(int spell) {
 // Print list of spells -RAK-
 // if non_consecutive is  -1: spells numbered consecutively from 'a' to 'a'+num
 //                       >=0: spells numbered by offset from non_consecutive
-void displaySpellsList(const int *spell, int number_of_choices, bool comment, int non_consecutive) {
+void displaySpellsList(const int *spell_ids, int number_of_choices, bool comment, int non_consecutive) {
     int col;
     if (comment) {
         col = 22;
@@ -1402,17 +1402,17 @@ void displaySpellsList(const int *spell, int number_of_choices, bool comment, in
     }
 
     for (int i = 0; i < number_of_choices; i++) {
-        int spellID = spell[i];
-        Spell_t *s_ptr = &magic_spells[py.misc.class_id - 1][spellID];
+        int spell_id = spell_ids[i];
+        Spell_t &spell = magic_spells[py.misc.class_id - 1][spell_id];
 
         const char *p = nullptr;
         if (!comment) {
             p = "";
-        } else if ((spells_forgotten & (1L << spellID)) != 0) {
+        } else if ((spells_forgotten & (1L << spell_id)) != 0) {
             p = " forgotten";
-        } else if ((spells_learnt & (1L << spellID)) == 0) {
+        } else if ((spells_learnt & (1L << spell_id)) == 0) {
             p = " unknown";
-        } else if ((spells_worked & (1L << spellID)) == 0) {
+        } else if ((spells_worked & (1L << spell_id)) == 0) {
             p = " untried";
         } else {
             p = "";
@@ -1424,21 +1424,21 @@ void displaySpellsList(const int *spell, int number_of_choices, bool comment, in
         if (non_consecutive == -1) {
             spell_char = (char) ('a' + i);
         } else {
-            spell_char = (char) ('a' + spellID - non_consecutive);
+            spell_char = (char) ('a' + spell_id - non_consecutive);
         }
 
         vtype_t out_val = {'\0'};
-        (void) sprintf(out_val, "  %c) %-30s%2d %4d %3d%%%s", spell_char, spell_names[spellID + consecutive_offset], s_ptr->level_required, s_ptr->mana_required, spellChanceOfSuccess(spellID), p);
+        (void) sprintf(out_val, "  %c) %-30s%2d %4d %3d%%%s", spell_char, spell_names[spell_id + consecutive_offset], spell.level_required, spell.mana_required, spellChanceOfSuccess(spell_id), p);
         putStringClearToEOL(out_val, 2 + i, col);
     }
 }
 
 // Returns spell pointer -RAK-
-bool spellGetId(int *spells, int number_of_choices, int &spell_id, int &spell_chance, const char *prompt, int first_spell) {
+bool spellGetId(int *spell_ids, int number_of_choices, int &spell_id, int &spell_chance, const char *prompt, int first_spell) {
     spell_id = -1;
 
     vtype_t str = {'\0'};
-    (void) sprintf(str, "(Spells %c-%c, *=List, <ESCAPE>=exit) %s", spells[0] + 'a' - first_spell, spells[number_of_choices - 1] + 'a' - first_spell, prompt);
+    (void) sprintf(str, "(Spells %c-%c, *=List, <ESCAPE>=exit) %s", spell_ids[0] + 'a' - first_spell, spell_ids[number_of_choices - 1] + 'a' - first_spell, prompt);
 
     bool spell_found = false;
     bool redraw = false;
@@ -1452,20 +1452,20 @@ bool spellGetId(int *spells, int number_of_choices, int &spell_id, int &spell_ch
             spell_id = choice - 'A' + first_spell;
 
             // verify that this is in spells[], at most 22 entries in class_to_use_mage_spells[]
-            int spellID;
-            for (spellID = 0; spellID < number_of_choices; spellID++) {
-                if (spell_id == spells[spellID]) {
+            int test_spell_id;
+            for (test_spell_id = 0; test_spell_id < number_of_choices; test_spell_id++) {
+                if (spell_id == spell_ids[test_spell_id]) {
                     break;
                 }
             }
 
-            if (spellID == number_of_choices) {
+            if (test_spell_id == number_of_choices) {
                 spell_id = -2;
             } else {
-                Spell_t *s_ptr = &magic_spells[py.misc.class_id - 1][spell_id];
+                Spell_t &spell = magic_spells[py.misc.class_id - 1][spell_id];
 
                 vtype_t tmp_str = {'\0'};
-                (void) sprintf(tmp_str, "Cast %s (%d mana, %d%% fail)?", spell_names[spell_id + offset], s_ptr->mana_required, spellChanceOfSuccess(spell_id));
+                (void) sprintf(tmp_str, "Cast %s (%d mana, %d%% fail)?", spell_names[spell_id + offset], spell.mana_required, spellChanceOfSuccess(spell_id));
                 if (getInputConfirmation(tmp_str)) {
                     spell_found = true;
                 } else {
@@ -1476,14 +1476,14 @@ bool spellGetId(int *spells, int number_of_choices, int &spell_id, int &spell_ch
             spell_id = choice - 'a' + first_spell;
 
             // verify that this is in spells[], at most 22 entries in class_to_use_mage_spells[]
-            int spellID;
-            for (spellID = 0; spellID < number_of_choices; spellID++) {
-                if (spell_id == spells[spellID]) {
+            int test_spell_id;
+            for (test_spell_id = 0; test_spell_id < number_of_choices; test_spell_id++) {
+                if (spell_id == spell_ids[test_spell_id]) {
                     break;
                 }
             }
 
-            if (spellID == number_of_choices) {
+            if (test_spell_id == number_of_choices) {
                 spell_id = -2;
             } else {
                 spell_found = true;
@@ -1493,7 +1493,7 @@ bool spellGetId(int *spells, int number_of_choices, int &spell_id, int &spell_ch
             if (!redraw) {
                 terminalSaveScreen();
                 redraw = true;
-                displaySpellsList(spells, number_of_choices, false, first_spell);
+                displaySpellsList(spell_ids, number_of_choices, false, first_spell);
             }
         } else if (isalpha((int) choice) != 0) {
             spell_id = -2;
@@ -1675,7 +1675,7 @@ static void forgetSpells(int newSpells, const char *p, int offset) {
 // calculate number of spells player should have, and
 // learn forget spells until that number is met -JEW-
 void playerCalculateAllowedSpellsCount(int stat) {
-    Spell_t *spell = &magic_spells[py.misc.class_id - 1][0];
+    Spell_t &spell = magic_spells[py.misc.class_id - 1][0];
 
     const char *magic_type_str = nullptr;
     int offset;
@@ -1689,7 +1689,7 @@ void playerCalculateAllowedSpellsCount(int stat) {
     }
 
     // check to see if know any spells greater than level, eliminate them
-    eliminateKnownSpellsGreaterThanLevel(spell, magic_type_str, offset);
+    eliminateKnownSpellsGreaterThanLevel(&spell, magic_type_str, offset);
 
     // calc number of spells allowed
     int num_allowed = numberOfSpellsAllowed(stat);
@@ -1697,11 +1697,11 @@ void playerCalculateAllowedSpellsCount(int stat) {
     int new_spells = num_allowed - num_known;
 
     if (new_spells > 0) {
-        new_spells = rememberForgottenSpells(spell, num_allowed, new_spells, magic_type_str, offset);
+        new_spells = rememberForgottenSpells(&spell, num_allowed, new_spells, magic_type_str, offset);
 
         // If `new_spells_to_learn` is still greater than zero
         if (new_spells > 0) {
-            new_spells = learnableSpells(spell, new_spells);
+            new_spells = learnableSpells(&spell, new_spells);
         }
     } else if (new_spells < 0) {
         forgetSpells(new_spells, magic_type_str, offset);
@@ -1769,7 +1769,8 @@ void playerGainSpells() {
     int new_spells = py.flags.new_spells_to_learn;
     int diff_spells = 0;
 
-    Spell_t *spell = &magic_spells[py.misc.class_id - 1][0];
+    // TODO(cook) move access to `magic_spells[]` directly to the for loop it's used in, below?
+    Spell_t *spells = &magic_spells[py.misc.class_id - 1][0];
 
     int stat, offset;
 
@@ -1816,7 +1817,7 @@ void playerGainSpells() {
     for (int i = 0; spell_flag != 0u; mask <<= 1, i++) {
         if ((spell_flag & mask) != 0u) {
             spell_flag &= ~mask;
-            if (spell[i].level_required <= py.misc.level) {
+            if (spells[i].level_required <= py.misc.level) {
                 spell_bank[spell_id] = i;
                 spell_id++;
             }
@@ -1975,12 +1976,12 @@ static void playerGainLevel() {
     printCharacterLevel();
     printCharacterTitle();
 
-    Class_t *player_class = &classes[py.misc.class_id];
+    Class_t &player_class = classes[py.misc.class_id];
 
-    if (player_class->class_to_use_mage_spells == SPELL_TYPE_MAGE) {
+    if (player_class.class_to_use_mage_spells == SPELL_TYPE_MAGE) {
         playerCalculateAllowedSpellsCount(A_INT);
         playerGainMana(A_INT);
-    } else if (player_class->class_to_use_mage_spells == SPELL_TYPE_PRIEST) {
+    } else if (player_class.class_to_use_mage_spells == SPELL_TYPE_PRIEST) {
         playerCalculateAllowedSpellsCount(A_WIS);
         playerGainMana(A_WIS);
     }
@@ -2121,42 +2122,42 @@ int itemMagicAbilityDamage(Inventory_t *item, int total_damage, int monster_id) 
     bool is_flask = item->category_id == TV_FLASK;
 
     if (is_ego_weapon && (is_projectile || is_hafted_sword || is_flask)) {
-        Creature_t *creature = &creatures_list[monster_id];
-        Recall_t *memory = &creature_recall[monster_id];
+        Creature_t &creature = creatures_list[monster_id];
+        Recall_t &memory = creature_recall[monster_id];
 
         // Slay Dragon
-        if (((creature->defenses & CD_DRAGON) != 0) && ((item->flags & TR_SLAY_DRAGON) != 0u)) {
-            memory->defenses |= CD_DRAGON;
+        if (((creature.defenses & CD_DRAGON) != 0) && ((item->flags & TR_SLAY_DRAGON) != 0u)) {
+            memory.defenses |= CD_DRAGON;
             return total_damage * 4;
         }
 
         // Slay Undead
-        if (((creature->defenses & CD_UNDEAD) != 0) && ((item->flags & TR_SLAY_UNDEAD) != 0u)) {
-            memory->defenses |= CD_UNDEAD;
+        if (((creature.defenses & CD_UNDEAD) != 0) && ((item->flags & TR_SLAY_UNDEAD) != 0u)) {
+            memory.defenses |= CD_UNDEAD;
             return total_damage * 3;
         }
 
         // Slay Animal
-        if (((creature->defenses & CD_ANIMAL) != 0) && ((item->flags & TR_SLAY_ANIMAL) != 0u)) {
-            memory->defenses |= CD_ANIMAL;
+        if (((creature.defenses & CD_ANIMAL) != 0) && ((item->flags & TR_SLAY_ANIMAL) != 0u)) {
+            memory.defenses |= CD_ANIMAL;
             return total_damage * 2;
         }
 
         // Slay Evil
-        if (((creature->defenses & CD_EVIL) != 0) && ((item->flags & TR_SLAY_EVIL) != 0u)) {
-            memory->defenses |= CD_EVIL;
+        if (((creature.defenses & CD_EVIL) != 0) && ((item->flags & TR_SLAY_EVIL) != 0u)) {
+            memory.defenses |= CD_EVIL;
             return total_damage * 2;
         }
 
         // Frost
-        if (((creature->defenses & CD_FROST) != 0) && ((item->flags & TR_FROST_BRAND) != 0u)) {
-            memory->defenses |= CD_FROST;
+        if (((creature.defenses & CD_FROST) != 0) && ((item->flags & TR_FROST_BRAND) != 0u)) {
+            memory.defenses |= CD_FROST;
             return total_damage * 3 / 2;
         }
 
         // Fire
-        if (((creature->defenses & CD_FIRE) != 0) && ((item->flags & TR_FLAME_TONGUE) != 0u)) {
-            memory->defenses |= CD_FIRE;
+        if (((creature.defenses & CD_FIRE) != 0) && ((item->flags & TR_FLAME_TONGUE) != 0u)) {
+            memory.defenses |= CD_FIRE;
             return total_damage * 3 / 2;
         }
     }
