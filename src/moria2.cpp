@@ -335,15 +335,15 @@ void playerEndRunning() {
     dungeonMoveCharacterLight(char_row, char_col, char_row, char_col);
 }
 
-static bool areaAffectStopLookingAtSquares(int i, int dir, int newDir, int y, int x, int *check_dir, int *option, int *option2) {
-    Cave_t *c_ptr = &cave[y][x];
+static bool areaAffectStopLookingAtSquares(int i, int dir, int new_dir, int y, int x, int *check_dir, int *option1, int *option2) {
+    Cave_t &tile = cave[y][x];
 
     // Default: Square unseen. Treat as open.
     bool invisible = true;
 
-    if (py.carrying_light || c_ptr->temporary_light || c_ptr->permanent_light || c_ptr->field_mark) {
-        if (c_ptr->treasure_id != 0) {
-            int tileID = treasure_list[c_ptr->treasure_id].category_id;
+    if (py.carrying_light || tile.temporary_light || tile.permanent_light || tile.field_mark) {
+        if (tile.treasure_id != 0) {
+            int tileID = treasure_list[tile.treasure_id].category_id;
 
             if (tileID != TV_INVIS_TRAP && tileID != TV_SECRET_DOOR && (tileID != TV_OPEN_DOOR || !config.run_ignore_doors)) {
                 playerEndRunning();
@@ -354,7 +354,7 @@ static bool areaAffectStopLookingAtSquares(int i, int dir, int newDir, int y, in
         // Also Creatures
         // The monster should be visible since monsterUpdateVisibility() checks
         // for the special case of being in find mode
-        if (c_ptr->creature_id > 1 && monsters[c_ptr->creature_id].lit) {
+        if (tile.creature_id > 1 && monsters[tile.creature_id].lit) {
             playerEndRunning();
             return true;
         }
@@ -362,7 +362,7 @@ static bool areaAffectStopLookingAtSquares(int i, int dir, int newDir, int y, in
         invisible = false;
     }
 
-    if (c_ptr->feature_id <= MAX_OPEN_SPACE || invisible) {
+    if (tile.feature_id <= MAX_OPEN_SPACE || invisible) {
         if (find_openarea) {
             // Have we found a break?
             if (i < 0) {
@@ -376,27 +376,27 @@ static bool areaAffectStopLookingAtSquares(int i, int dir, int newDir, int y, in
                     return true;
                 }
             }
-        } else if (*option == 0) {
+        } else if (*option1 == 0) {
             // The first new direction.
-            *option = newDir;
+            *option1 = new_dir;
         } else if (*option2 != 0) {
             // Three new directions. STOP.
             playerEndRunning();
             return true;
-        } else if (*option != cycle[chome[dir] + i - 1]) {
+        } else if (*option1 != cycle[chome[dir] + i - 1]) {
             // If not adjacent to prev, STOP
             playerEndRunning();
             return true;
         } else {
             // Two adjacent choices. Make option2 the diagonal, and
             // remember the other diagonal adjacent to the first option.
-            if ((newDir & 1) == 1) {
+            if ((new_dir & 1) == 1) {
                 *check_dir = cycle[chome[dir] + i - 2];
-                *option2 = newDir;
+                *option2 = new_dir;
             } else {
                 *check_dir = cycle[chome[dir] + i + 1];
-                *option2 = *option;
-                *option = newDir;
+                *option2 = *option1;
+                *option1 = new_dir;
             }
         }
     } else if (find_openarea) {
