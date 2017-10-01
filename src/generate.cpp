@@ -909,14 +909,14 @@ static void dungeonBuildTunnel(int y_start, int x_start, int y_end, int x_end) {
     }
 
     for (int i = 0; i < wall_index; i++) {
-        Cave_t *tile = &cave[walls_tk[i].y][walls_tk[i].x];
+        Cave_t &tile = cave[walls_tk[i].y][walls_tk[i].x];
 
-        if (tile->feature_id == TMP2_WALL) {
+        if (tile.feature_id == TMP2_WALL) {
             if (randomNumber(100) < DUN_ROOM_DOORS) {
                 dungeonPlaceDoor(walls_tk[i].y, walls_tk[i].x);
             } else {
                 // these have to be doorways to rooms
-                tile->feature_id = TILE_CORR_FLOOR;
+                tile.feature_id = TILE_CORR_FLOOR;
             }
         }
     }
