@@ -221,26 +221,26 @@ static void playerStepsOnTrap(int y, int x) {
     playerEndRunning();
     dungeonChangeTrapVisibility(y, x);
 
-    Inventory_t *tile = &treasure_list[cave[y][x].treasure_id];
+    Inventory_t &item = treasure_list[cave[y][x].treasure_id];
 
-    int damage = dicePlayerDamageRoll(tile->damage);
+    int damage = dicePlayerDamageRoll(item.damage);
 
-    switch (tile->sub_category_id) {
+    switch (item.sub_category_id) {
         case 1:
             // Open pit
-            trapOpenPit(tile, damage);
+            trapOpenPit(&item, damage);
             break;
         case 2:
             // Arrow trap
-            trapArrow(tile, damage);
+            trapArrow(&item, damage);
             break;
         case 3:
             // Covered pit
-            trapCoveredPit(tile, damage, y, x);
+            trapCoveredPit(&item, damage, y, x);
             break;
         case 4:
             // Trap door
-            trapDoor(tile, damage);
+            trapDoor(&item, damage);
             break;
         case 5:
             // Sleep gas
@@ -252,7 +252,7 @@ static void playerStepsOnTrap(int y, int x) {
             break;
         case 7:
             // STR Dart
-            trapStrengthDart(tile, damage);
+            trapStrengthDart(&item, damage);
             break;
         case 8:
             // Teleport
@@ -292,11 +292,11 @@ static void playerStepsOnTrap(int y, int x) {
             break;
         case 17:
             // Slow Dart
-            trapSlowDart(tile, damage);
+            trapSlowDart(&item, damage);
             break;
         case 18:
             // CON Dart
-            trapConstitutionDart(tile, damage);
+            trapConstitutionDart(&item, damage);
             break;
         case 19:
             // Secret Door
@@ -347,7 +347,8 @@ int castSpellGetId(const char *prompt, int item_id, int &spell_id, int &spell_ch
     int first_spell = getAndClearFirstBit(flags);
     flags = inventory[item_id].flags & spells_learnt;
 
-    Spell_t *s_ptr = magic_spells[py.misc.class_id - 1];
+    // TODO(cook) move access to `magic_spells[]` directly to the for loop it's used in, below?
+    Spell_t *spells = magic_spells[py.misc.class_id - 1];
 
     int spell_count = 0;
     int spell_list[31];
@@ -355,7 +356,7 @@ int castSpellGetId(const char *prompt, int item_id, int &spell_id, int &spell_ch
     while (flags != 0u) {
         int pos = getAndClearFirstBit(flags);
 
-        if (s_ptr[pos].level_required <= py.misc.level) {
+        if (spells[pos].level_required <= py.misc.level) {
             spell_list[spell_count] = pos;
             spell_count++;
         }
@@ -457,19 +458,19 @@ static void carry(int y, int x, bool pickup) {
 
 // Deletes a monster entry from the level -RAK-
 void dungeonDeleteMonster(int id) {
-    Monster_t *monster = &monsters[id];
+    Monster_t &monster = monsters[id];
 
-    cave[monster->y][monster->x].creature_id = 0;
+    cave[monster.y][monster.x].creature_id = 0;
 
-    if (monster->lit) {
-        dungeonLiteSpot((int) monster->y, (int) monster->x);
+    if (monster.lit) {
+        dungeonLiteSpot((int) monster.y, (int) monster.x);
     }
 
     int last_id = next_free_monster_id - 1;
 
     if (id != last_id) {
-        monster = &monsters[last_id];
-        cave[monster->y][monster->x].creature_id = (uint8_t) id;
+        monster = monsters[last_id];
+        cave[monster.y][monster.x].creature_id = (uint8_t) id;
         monsters[id] = monsters[last_id];
     }
 
@@ -491,17 +492,17 @@ void dungeonDeleteMonster(int id) {
 // the monster record and reduce next_free_monster_id, this is called in breathe, and
 // a couple of places in creatures.c
 void dungeonDeleteMonsterFix1(int id) {
-    Monster_t *monster = &monsters[id];
+    Monster_t &monster = monsters[id];
 
     // force the hp negative to ensure that the monster is dead, for example,
     // if the monster was just eaten by another, it will still have positive
     // hit points
-    monster->hp = -1;
+    monster.hp = -1;
 
-    cave[monster->y][monster->x].creature_id = 0;
+    cave[monster.y][monster.x].creature_id = 0;
 
-    if (monster->lit) {
-        dungeonLiteSpot((int) monster->y, (int) monster->x);
+    if (monster.lit) {
+        dungeonLiteSpot((int) monster.y, (int) monster.x);
     }
 
     if (monster_multiply_total > 0) {
@@ -579,16 +580,16 @@ static int dungeonSummonObject(int y, int x, int amount, int object_type) {
 
 // Deletes object from given location -RAK-
 bool dungeonDeleteObject(int y, int x) {
-    Cave_t *tile = &cave[y][x];
+    Cave_t &tile = cave[y][x];
 
-    if (tile->feature_id == TILE_BLOCKED_FLOOR) {
-        tile->feature_id = TILE_CORR_FLOOR;
+    if (tile.feature_id == TILE_BLOCKED_FLOOR) {
+        tile.feature_id = TILE_CORR_FLOOR;
     }
 
-    pusht(tile->treasure_id);
+    pusht(tile.treasure_id);
 
-    tile->treasure_id = 0;
-    tile->field_mark = false;
+    tile.treasure_id = 0;
+    tile.field_mark = false;
 
     dungeonLiteSpot(y, x);
 
@@ -714,39 +715,39 @@ static void playerGainKillExperience(Creature_t *c_ptr) {
 // Decreases monsters hit points and deletes monster if needed.
 // (Picking on my babies.) -RAK-
 int monsterTakeHit(int monster_id, int damage) {
-    Monster_t *monster = &monsters[monster_id];
-    Creature_t *creature = &creatures_list[monster->creature_id];
+    Monster_t &monster = monsters[monster_id];
+    Creature_t &creature = creatures_list[monster.creature_id];
 
-    monster->sleep_count = 0;
-    monster->hp -= damage;
+    monster.sleep_count = 0;
+    monster.hp -= damage;
 
-    if (monster->hp >= 0) {
+    if (monster.hp >= 0) {
         return -1;
     }
 
-    uint32_t treasure_flags = monsterDeath((int) monster->y, (int) monster->x, creature->movement);
+    uint32_t treasure_flags = monsterDeath((int) monster.y, (int) monster.x, creature.movement);
 
-    Recall_t *memory = &creature_recall[monster->creature_id];
+    Recall_t &memory = creature_recall[monster.creature_id];
 
-    if ((py.flags.blind < 1 && monster->lit) || ((creature->movement & CM_WIN) != 0u)) {
-        auto tmp = (uint32_t) ((memory->movement & CM_TREASURE) >> CM_TR_SHIFT);
+    if ((py.flags.blind < 1 && monster.lit) || ((creature.movement & CM_WIN) != 0u)) {
+        auto tmp = (uint32_t) ((memory.movement & CM_TREASURE) >> CM_TR_SHIFT);
 
         if (tmp > ((treasure_flags & CM_TREASURE) >> CM_TR_SHIFT)) {
             treasure_flags = (uint32_t) ((treasure_flags & ~CM_TREASURE) | (tmp << CM_TR_SHIFT));
         }
 
-        memory->movement = (uint32_t) ((memory->movement & ~CM_TREASURE) | treasure_flags);
+        memory.movement = (uint32_t) ((memory.movement & ~CM_TREASURE) | treasure_flags);
 
-        if (memory->kills < MAX_SHORT) {
-            memory->kills++;
+        if (memory.kills < MAX_SHORT) {
+            memory.kills++;
         }
     }
 
-    playerGainKillExperience(creature);
+    playerGainKillExperience(&creature);
 
     // can't call displayCharacterExperience() here, as that would result in "new level"
     // message appearing before "monster dies" message.
-    int m_take_hit = monster->creature_id;
+    int m_take_hit = monster.creature_id;
 
     // in case this is called from within updateMonsters(), this is a horrible
     // hack, the monsters/updateMonsters() code needs to be rewritten.
@@ -921,17 +922,17 @@ void playerMove(int direction, bool do_pickup) {
         return;
     }
 
-    Cave_t *tile = &cave[y][x];
-    Monster_t *monster = &monsters[tile->creature_id];
+    Cave_t &tile = cave[y][x];
+    Monster_t &monster = monsters[tile.creature_id];
 
     // if there is no creature, or an unlit creature in the walls then...
     // disallow attacks against unlit creatures in walls because moving into
     // a wall is a free turn normally, hence don't give player free turns
     // attacking each wall in an attempt to locate the invisible creature,
     // instead force player to tunnel into walls which always takes a turn
-    if (tile->creature_id < 2 || (!monster->lit && tile->feature_id >= MIN_CLOSED_SPACE)) {
+    if (tile.creature_id < 2 || (!monster.lit && tile.feature_id >= MIN_CLOSED_SPACE)) {
         // Open floor spot
-        if (tile->feature_id <= MAX_OPEN_SPACE) {
+        if (tile.feature_id <= MAX_OPEN_SPACE) {
             // Make final assignments of char coords
             int old_row = char_row;
             int old_col = char_col;
@@ -958,13 +959,13 @@ void playerMove(int direction, bool do_pickup) {
                 dungeonSearch(char_row, char_col, py.misc.chance_in_search);
             }
 
-            if (tile->feature_id == TILE_LIGHT_FLOOR) {
+            if (tile.feature_id == TILE_LIGHT_FLOOR) {
                 // A room of light should be lit.
 
-                if (!tile->permanent_light && (py.flags.blind == 0)) {
+                if (!tile.permanent_light && (py.flags.blind == 0)) {
                     dungeonLightRoom(char_row, char_col);
                 }
-            } else if (tile->perma_lit_room && py.flags.blind < 1) {
+            } else if (tile.perma_lit_room && py.flags.blind < 1) {
                 // In doorway of light-room?
 
                 for (int row = (char_row - 1); row <= (char_row + 1); row++) {
@@ -980,12 +981,12 @@ void playerMove(int direction, bool do_pickup) {
             dungeonMoveCharacterLight(old_row, old_col, char_row, char_col);
 
             // An object is beneath him.
-            if (tile->treasure_id != 0) {
+            if (tile.treasure_id != 0) {
                 carry(char_row, char_col, do_pickup);
 
                 // if stepped on falling rock trap, and space contains
                 // rubble, then step back into a clear area
-                if (treasure_list[tile->treasure_id].category_id == TV_RUBBLE) {
+                if (treasure_list[tile.treasure_id].category_id == TV_RUBBLE) {
                     dungeonMoveCreatureRecord(char_row, char_col, old_row, old_col);
                     dungeonMoveCharacterLight(char_row, char_col, old_row, old_col);
 
@@ -1005,10 +1006,10 @@ void playerMove(int direction, bool do_pickup) {
         } else {
             // Can't move onto floor space
 
-            if ((running_counter == 0) && tile->treasure_id != 0) {
-                if (treasure_list[tile->treasure_id].category_id == TV_RUBBLE) {
+            if ((running_counter == 0) && tile.treasure_id != 0) {
+                if (treasure_list[tile.treasure_id].category_id == TV_RUBBLE) {
                     printMessage("There is rubble blocking your way.");
-                } else if (treasure_list[tile->treasure_id].category_id == TV_CLOSED_DOOR) {
+                } else if (treasure_list[tile.treasure_id].category_id == TV_CLOSED_DOOR) {
                     printMessage("There is a closed door blocking your way.");
                 }
             } else {
@@ -1024,7 +1025,7 @@ void playerMove(int direction, bool do_pickup) {
         playerEndRunning();
 
         // if player can see monster, and was in find mode, then nothing
-        if (monster->lit && (old_find_flag != 0)) {
+        if (monster.lit && (old_find_flag != 0)) {
             // did not do anything this turn
             player_free_turn = true;
         } else {
@@ -1289,9 +1290,9 @@ bool dungeonTunnelWall(int y, int x, int digging_ability, int digging_chance) {
         return false;
     }
 
-    Cave_t *tile = &cave[y][x];
+    Cave_t &tile = cave[y][x];
 
-    if (tile->perma_lit_room) {
+    if (tile.perma_lit_room) {
         // Should become a room space, check to see whether
         // it should be TILE_LIGHT_FLOOR or TILE_DARK_FLOOR.
         bool found = false;
@@ -1299,8 +1300,8 @@ bool dungeonTunnelWall(int y, int x, int digging_ability, int digging_chance) {
         for (int yy = y - 1; yy <= y + 1 && yy < MAX_HEIGHT; yy++) {
             for (int xx = x - 1; xx <= x + 1 && xx < MAX_WIDTH; xx++) {
                 if (cave[yy][xx].feature_id <= MAX_CAVE_ROOM) {
-                    tile->feature_id = cave[yy][xx].feature_id;
-                    tile->permanent_light = cave[yy][xx].permanent_light;
+                    tile.feature_id = cave[yy][xx].feature_id;
+                    tile.permanent_light = cave[yy][xx].permanent_light;
                     found = true;
                     break;
                 }
@@ -1308,18 +1309,18 @@ bool dungeonTunnelWall(int y, int x, int digging_ability, int digging_chance) {
         }
 
         if (!found) {
-            tile->feature_id = TILE_CORR_FLOOR;
-            tile->permanent_light = false;
+            tile.feature_id = TILE_CORR_FLOOR;
+            tile.permanent_light = false;
         }
     } else {
         // should become a corridor space
-        tile->feature_id = TILE_CORR_FLOOR;
-        tile->permanent_light = false;
+        tile.feature_id = TILE_CORR_FLOOR;
+        tile.permanent_light = false;
     }
 
-    tile->field_mark = false;
+    tile.field_mark = false;
 
-    if (coordInsidePanel(y, x) && (tile->temporary_light || tile->permanent_light) && tile->treasure_id != 0) {
+    if (coordInsidePanel(y, x) && (tile.temporary_light || tile.permanent_light) && tile.treasure_id != 0) {
         printMessage("You have found something!");
     }
 
@@ -1332,10 +1333,10 @@ void objectBlockedByMonster(int monster_id) {
     vtype_t description = {'\0'};
     vtype_t msg = {'\0'};
 
-    Monster_t *monster = &monsters[monster_id];
-    const char *name = creatures_list[monster->creature_id].name;
+    Monster_t &monster = monsters[monster_id];
+    const char *name = creatures_list[monster.creature_id].name;
 
-    if (monster->lit) {
+    if (monster.lit) {
         (void) sprintf(description, "The %s", name);
     } else {
         (void) strcpy(description, "Something");
