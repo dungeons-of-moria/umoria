@@ -971,7 +971,7 @@ static void monsterOpenDoor(Cave_t &tile, int16_t monster_hp, uint32_t move_bits
     }
 }
 
-static void glyphOfWardingProtection(uint16_t creature_id, uint32_t move_bits, bool *do_move, bool *do_turn, int y, int x) {
+static void glyphOfWardingProtection(uint16_t creature_id, uint32_t move_bits, bool &do_move, bool &do_turn, int y, int x) {
     if (randomNumber(OBJECTS_RUNE_PROTECTION) < creatures_list[creature_id].level) {
         if (y == char_row && x == char_col) {
             printMessage("The rune of protection is broken!");
@@ -980,12 +980,12 @@ static void glyphOfWardingProtection(uint16_t creature_id, uint32_t move_bits, b
         return;
     }
 
-    *do_move = false;
+    do_move = false;
 
     // If the creature moves only to attack, don't let it
     // move if the glyph prevents it from attacking
     if ((move_bits & CM_ATTACK_ONLY) != 0u) {
-        *do_turn = true;
+        do_turn = true;
     }
 }
 
@@ -1085,7 +1085,7 @@ static void makeMove(int monster_id, int *directions, uint32_t *rcmove) {
 
         // Glyph of warding present?
         if (do_move && tile.treasure_id != 0 && treasure_list[tile.treasure_id].category_id == TV_VIS_TRAP && treasure_list[tile.treasure_id].sub_category_id == 99) {
-            glyphOfWardingProtection(monster.creature_id, move_bits, &do_move, &do_turn, y, x);
+            glyphOfWardingProtection(monster.creature_id, move_bits, do_move, do_turn, y, x);
         }
 
         // Creature has attempted to move on player?
