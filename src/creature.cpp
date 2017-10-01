@@ -989,24 +989,24 @@ static void glyphOfWardingProtection(uint16_t creature_id, uint32_t move_bits, b
     }
 }
 
-static void monsterMovesOnPlayer(Monster_t *monster, uint8_t creature_id, int monster_id, uint32_t move_bits, bool *do_move, bool *do_turn, uint32_t *rcmove, int y, int x) {
+static void monsterMovesOnPlayer(Monster_t &monster, uint8_t creature_id, int monster_id, uint32_t move_bits, bool &do_move, bool &do_turn, uint32_t &rcmove, int y, int x) {
     if (creature_id == 1) {
         // if the monster is not lit, must call monsterUpdateVisibility, it
         // may be faster than character, and hence could have
         // just moved next to character this same turn.
-        if (!monster->lit) {
+        if (!monster.lit) {
             monsterUpdateVisibility(monster_id);
         }
         monsterAttackPlayer(monster_id);
-        *do_move = false;
-        *do_turn = true;
-    } else if (creature_id > 1 && (y != monster->y || x != monster->x)) {
+        do_move = false;
+        do_turn = true;
+    } else if (creature_id > 1 && (y != monster.y || x != monster.x)) {
         // Creature is attempting to move on other creature?
 
         // Creature eats other creatures?
-        if (((move_bits & CM_EATS_OTHER) != 0u) && creatures_list[monster->creature_id].kill_exp_value >= creatures_list[monsters[creature_id].creature_id].kill_exp_value) {
+        if (((move_bits & CM_EATS_OTHER) != 0u) && creatures_list[monster.creature_id].kill_exp_value >= creatures_list[monsters[creature_id].creature_id].kill_exp_value) {
             if (monsters[creature_id].lit) {
-                *rcmove |= CM_EATS_OTHER;
+                rcmove |= CM_EATS_OTHER;
             }
 
             // It ate an already processed monster. Handle normally.
@@ -1019,7 +1019,7 @@ static void monsterMovesOnPlayer(Monster_t *monster, uint8_t creature_id, int mo
                 dungeonDeleteMonsterFix1((int) creature_id);
             }
         } else {
-            *do_move = false;
+            do_move = false;
         }
     }
 }
@@ -1090,7 +1090,7 @@ static void makeMove(int monster_id, int *directions, uint32_t *rcmove) {
 
         // Creature has attempted to move on player?
         if (do_move) {
-            monsterMovesOnPlayer(&monster, tile.creature_id, monster_id, move_bits, &do_move, &do_turn, rcmove, y, x);
+            monsterMovesOnPlayer(monster, tile.creature_id, monster_id, move_bits, do_move, do_turn, *rcmove, y, x);
         }
 
         // Creature has been allowed move.
