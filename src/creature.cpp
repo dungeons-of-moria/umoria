@@ -1115,7 +1115,7 @@ static bool monsterCanCastSpells(const Monster_t &monster, uint32_t spells) {
     return within_range && unobstructed;
 }
 
-void monsterExecuteCastingOfSpell(Monster_t *monster, int monster_id, int spell_id, uint8_t level, vtype_t monster_name, vtype_t death_description) {
+void monsterExecuteCastingOfSpell(Monster_t &monster, int monster_id, int spell_id, uint8_t level, vtype_t monster_name, vtype_t death_description) {
     int y, x;
 
     // Cast the spell.
@@ -1127,7 +1127,7 @@ void monsterExecuteCastingOfSpell(Monster_t *monster, int monster_id, int spell_
             spellTeleportAwayMonster(monster_id, MON_MAX_SIGHT);
             break;
         case 7: // Teleport To
-            spellTeleportPlayerTo((int) monster->y, (int) monster->x);
+            spellTeleportPlayerTo((int) monster.y, (int) monster.x);
             break;
         case 8: // Light Wound
             if (playerSavingThrow()) {
@@ -1224,7 +1224,7 @@ void monsterExecuteCastingOfSpell(Monster_t *monster, int monster_id, int spell_
                 (void) sprintf(msg, "%sdraws psychic energy from you!", monster_name);
                 printMessage(msg);
 
-                if (monster->lit) {
+                if (monster.lit) {
                     (void) sprintf(msg, "%sappears healthier.", monster_name);
                     printMessage(msg);
                 }
@@ -1238,33 +1238,33 @@ void monsterExecuteCastingOfSpell(Monster_t *monster, int monster_id, int spell_
                     py.misc.current_mana -= r1;
                 }
                 printCharacterCurrentMana();
-                monster->hp += 6 * (r1);
+                monster.hp += 6 * (r1);
             }
             break;
         case 20: // Breath Light
             (void) strcat(monster_name, "breathes lightning.");
             printMessage(monster_name);
-            spellBreath(char_row, char_col, monster_id, (monster->hp / 4), GF_LIGHTNING, death_description);
+            spellBreath(char_row, char_col, monster_id, (monster.hp / 4), GF_LIGHTNING, death_description);
             break;
         case 21: // Breath Gas
             (void) strcat(monster_name, "breathes gas.");
             printMessage(monster_name);
-            spellBreath(char_row, char_col, monster_id, (monster->hp / 3), GF_POISON_GAS, death_description);
+            spellBreath(char_row, char_col, monster_id, (monster.hp / 3), GF_POISON_GAS, death_description);
             break;
         case 22: // Breath Acid
             (void) strcat(monster_name, "breathes acid.");
             printMessage(monster_name);
-            spellBreath(char_row, char_col, monster_id, (monster->hp / 3), GF_ACID, death_description);
+            spellBreath(char_row, char_col, monster_id, (monster.hp / 3), GF_ACID, death_description);
             break;
         case 23: // Breath Frost
             (void) strcat(monster_name, "breathes frost.");
             printMessage(monster_name);
-            spellBreath(char_row, char_col, monster_id, (monster->hp / 3), GF_FROST, death_description);
+            spellBreath(char_row, char_col, monster_id, (monster.hp / 3), GF_FROST, death_description);
             break;
         case 24: // Breath Fire
             (void) strcat(monster_name, "breathes fire.");
             printMessage(monster_name);
-            spellBreath(char_row, char_col, monster_id, (monster->hp / 3), GF_FIRE, death_description);
+            spellBreath(char_row, char_col, monster_id, (monster.hp / 3), GF_FIRE, death_description);
             break;
         default:
             (void) strcat(monster_name, "cast unknown spell.");
@@ -1328,7 +1328,7 @@ static bool monsterCastSpell(int monster_id) {
         printMessage(name);
     }
 
-    monsterExecuteCastingOfSpell(&monster, monster_id, thrown_spell, creature.level, name, death_description);
+    monsterExecuteCastingOfSpell(monster, monster_id, thrown_spell, creature.level, name, death_description);
 
     if (monster.lit) {
         creature_recall[monster.creature_id].spells |= 1L << (thrown_spell - 1);
