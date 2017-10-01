@@ -168,15 +168,15 @@ int32_t storeItemSellPrice(int store_id, int32_t &min_price, int32_t &max_price,
         return 0;
     }
 
-    Owner_t *owner = &store_owners[stores[store_id].owner];
+    Owner_t &owner = store_owners[stores[store_id].owner];
 
-    price = price * race_gold_adjustments[owner->race][py.misc.race_id] / 100;
+    price = price * race_gold_adjustments[owner.race][py.misc.race_id] / 100;
     if (price < 1) {
         price = 1;
     }
 
-    max_price = price * owner->max_inflate / 100;
-    min_price = price * owner->min_inflate / 100;
+    max_price = price * owner.max_inflate / 100;
+    min_price = price * owner.min_inflate / 100;
 
     if (min_price > max_price) {
         min_price = max_price;
@@ -187,9 +187,9 @@ int32_t storeItemSellPrice(int store_id, int32_t &min_price, int32_t &max_price,
 
 // Check to see if he will be carrying too many objects -RAK-
 bool storeCheckPlayerItemsCount(int store_id, Inventory_t *item) {
-    Store_t *store = &stores[store_id];
+    Store_t &store = stores[store_id];
 
-    if (store->store_id < STORE_MAX_DISCRETE_ITEMS) {
+    if (store.store_id < STORE_MAX_DISCRETE_ITEMS) {
         return true;
     }
 
@@ -199,13 +199,13 @@ bool storeCheckPlayerItemsCount(int store_id, Inventory_t *item) {
 
     bool store_check = false;
 
-    for (int i = 0; i < store->store_id; i++) {
-        Inventory_t *store_item = &store->inventory[i].item;
+    for (int i = 0; i < store.store_id; i++) {
+        Inventory_t &store_item = store.inventory[i].item;
 
         // note: items with sub_category_id of gte ITEM_SINGLE_STACK_MAX only stack
         // if their `sub_category_id`s match
-        if (store_item->category_id == item->category_id && store_item->sub_category_id == item->sub_category_id && (int) (store_item->items_count + item->items_count) < 256 &&
-            (item->sub_category_id < ITEM_GROUP_MIN || store_item->misc_use == item->misc_use)) {
+        if (store_item.category_id == item->category_id && store_item.sub_category_id == item->sub_category_id && (int) (store_item.items_count + item->items_count) < 256 &&
+            (item->sub_category_id < ITEM_GROUP_MIN || store_item.misc_use == item->misc_use)) {
             store_check = true;
         }
     }
@@ -215,15 +215,15 @@ bool storeCheckPlayerItemsCount(int store_id, Inventory_t *item) {
 
 // Insert INVEN_MAX at given location
 static void storeItemInsert(int store_id, int pos, int32_t i_cost, Inventory_t *item) {
-    Store_t *store = &stores[store_id];
+    Store_t &store = stores[store_id];
 
-    for (int i = store->store_id - 1; i >= pos; i--) {
-        store->inventory[i + 1] = store->inventory[i];
+    for (int i = store.store_id - 1; i >= pos; i--) {
+        store.inventory[i + 1] = store.inventory[i];
     }
 
-    store->inventory[pos].item = *item;
-    store->inventory[pos].cost = -i_cost;
-    store->store_id++;
+    store.inventory[pos].item = *item;
+    store.inventory[pos].cost = -i_cost;
+    store.store_id++;
 }
 
 // Add the item in INVEN_MAX to stores inventory. -RAK-
@@ -235,7 +235,7 @@ void storeCarry(int store_id, int &index_id, Inventory_t *item) {
         return;
     }
 
-    Store_t *store = &stores[store_id];
+    Store_t &store = stores[store_id];
 
     int item_id = 0;
     int item_num = item->items_count;
@@ -244,72 +244,72 @@ void storeCarry(int store_id, int &index_id, Inventory_t *item) {
 
     bool flag = false;
     do {
-        Inventory_t *store_item = &store->inventory[item_id].item;
+        Inventory_t &store_item = store.inventory[item_id].item;
 
-        if (item_category == store_item->category_id) {
-            if (item_sub_catory == store_item->sub_category_id && // Adds to other item
-                item_sub_catory >= ITEM_SINGLE_STACK_MIN && (item_sub_catory < ITEM_GROUP_MIN || store_item->misc_use == item->misc_use)) {
+        if (item_category == store_item.category_id) {
+            if (item_sub_catory == store_item.sub_category_id && // Adds to other item
+                item_sub_catory >= ITEM_SINGLE_STACK_MIN && (item_sub_catory < ITEM_GROUP_MIN || store_item.misc_use == item->misc_use)) {
                 index_id = item_id;
-                store_item->items_count += item_num;
+                store_item.items_count += item_num;
 
                 // must set new cost for group items, do this only for items
                 // strictly greater than group_min, not for torches, this
                 // must be recalculated for entire group
                 if (item_sub_catory > ITEM_GROUP_MIN) {
-                    (void) storeItemSellPrice(store_id, dummy, item_cost, store_item);
-                    store->inventory[item_id].cost = -item_cost;
-                } else if (store_item->items_count > 24) {
+                    (void) storeItemSellPrice(store_id, dummy, item_cost, &store_item);
+                    store.inventory[item_id].cost = -item_cost;
+                } else if (store_item.items_count > 24) {
                     // must let group objects (except torches) stack over 24
                     // since there may be more than 24 in the group
-                    store_item->items_count = 24;
+                    store_item.items_count = 24;
                 }
                 flag = true;
             }
-        } else if (item_category > store_item->category_id) { // Insert into list
+        } else if (item_category > store_item.category_id) { // Insert into list
             storeItemInsert(store_id, item_id, item_cost, item);
             flag = true;
             index_id = item_id;
         }
         item_id++;
-    } while (item_id < store->store_id && !flag);
+    } while (item_id < store.store_id && !flag);
 
     // Becomes last item in list
     if (!flag) {
-        storeItemInsert(store_id, (int) store->store_id, item_cost, item);
-        index_id = store->store_id - 1;
+        storeItemInsert(store_id, (int) store.store_id, item_cost, item);
+        index_id = store.store_id - 1;
     }
 }
 
 // Destroy an item in the stores inventory.  Note that if
 // `only_one_of` is false, an entire slot is destroyed -RAK-
 void storeDestroy(int store_id, int item_id, bool only_one_of) {
-    Store_t *store = &stores[store_id];
-    Inventory_t *store_item = &store->inventory[item_id].item;
+    Store_t &store = stores[store_id];
+    Inventory_t &store_item = store.inventory[item_id].item;
 
     int number;
 
     // for single stackable objects, only destroy one half on average,
     // this will help ensure that general store and alchemist have
     // reasonable selection of objects
-    if (store_item->sub_category_id >= ITEM_SINGLE_STACK_MIN && store_item->sub_category_id <= ITEM_SINGLE_STACK_MAX) {
+    if (store_item.sub_category_id >= ITEM_SINGLE_STACK_MIN && store_item.sub_category_id <= ITEM_SINGLE_STACK_MAX) {
         if (only_one_of) {
             number = 1;
         } else {
-            number = randomNumber((int) store_item->items_count);
+            number = randomNumber((int) store_item.items_count);
         }
     } else {
-        number = store_item->items_count;
+        number = store_item.items_count;
     }
 
-    if (number != store_item->items_count) {
-        store_item->items_count -= number;
+    if (number != store_item.items_count) {
+        store_item.items_count -= number;
     } else {
-        for (int i = item_id; i < store->store_id - 1; i++) {
-            store->inventory[i] = store->inventory[i + 1];
+        for (int i = item_id; i < store.store_id - 1; i++) {
+            store.inventory[i] = store.inventory[i + 1];
         }
-        inventoryItemCopyTo(OBJ_NOTHING, &store->inventory[store->store_id - 1].item);
-        store->inventory[store->store_id - 1].cost = 0;
-        store->store_id--;
+        inventoryItemCopyTo(OBJ_NOTHING, &store.inventory[store.store_id - 1].item);
+        store.inventory[store.store_id - 1].cost = 0;
+        store.store_id--;
     }
 }
 
@@ -318,16 +318,16 @@ void storeInitializeOwners() {
     int count = MAX_OWNERS / MAX_STORES;
 
     for (int store_id = 0; store_id < MAX_STORES; store_id++) {
-        Store_t *store = &stores[store_id];
+        Store_t &store = stores[store_id];
 
-        store->owner = (uint8_t) (MAX_STORES * (randomNumber(count) - 1) + store_id);
-        store->insults_counter = 0;
-        store->turns_left_before_closing = 0;
-        store->store_id = 0;
-        store->good_purchases = 0;
-        store->bad_purchases = 0;
+        store.owner = (uint8_t) (MAX_STORES * (randomNumber(count) - 1) + store_id);
+        store.insults_counter = 0;
+        store.turns_left_before_closing = 0;
+        store.store_id = 0;
+        store.good_purchases = 0;
+        store.bad_purchases = 0;
 
-        for (auto &item : store->inventory) {
+        for (auto &item : store.inventory) {
             inventoryItemCopyTo(OBJ_NOTHING, &item.item);
             item.cost = 0;
         }
@@ -366,26 +366,26 @@ static void storeItemCreate(int store_id, int16_t max_cost) {
 // Initialize and up-keep the store's inventory. -RAK-
 void storeMaintenance() {
     for (int store_id = 0; store_id < MAX_STORES; store_id++) {
-        Store_t *store = &stores[store_id];
+        Store_t &store = stores[store_id];
 
-        store->insults_counter = 0;
-        if (store->store_id >= STORE_MIN_AUTO_SELL_ITEMS) {
+        store.insults_counter = 0;
+        if (store.store_id >= STORE_MIN_AUTO_SELL_ITEMS) {
             int turnaround = randomNumber(STORE_STOCK_TURN_AROUND);
-            if (store->store_id >= STORE_MAX_AUTO_BUY_ITEMS) {
-                turnaround += 1 + store->store_id - STORE_MAX_AUTO_BUY_ITEMS;
+            if (store.store_id >= STORE_MAX_AUTO_BUY_ITEMS) {
+                turnaround += 1 + store.store_id - STORE_MAX_AUTO_BUY_ITEMS;
             }
             while (--turnaround >= 0) {
-                storeDestroy(store_id, randomNumber((int) store->store_id) - 1, false);
+                storeDestroy(store_id, randomNumber((int) store.store_id) - 1, false);
             }
         }
 
-        if (store->store_id <= STORE_MAX_AUTO_BUY_ITEMS) {
+        if (store.store_id <= STORE_MAX_AUTO_BUY_ITEMS) {
             int turnaround = randomNumber(STORE_STOCK_TURN_AROUND);
-            if (store->store_id < STORE_MIN_AUTO_SELL_ITEMS) {
-                turnaround += STORE_MIN_AUTO_SELL_ITEMS - store->store_id;
+            if (store.store_id < STORE_MIN_AUTO_SELL_ITEMS) {
+                turnaround += STORE_MIN_AUTO_SELL_ITEMS - store.store_id;
             }
 
-            int16_t max_cost = store_owners[store->owner].max_cost;
+            int16_t max_cost = store_owners[store.owner].max_cost;
 
             while (--turnaround >= 0) {
                 storeItemCreate(store_id, max_cost);
@@ -396,29 +396,29 @@ void storeMaintenance() {
 
 // eliminate need to bargain if player has haggled well in the past -DJB-
 bool storeNoNeedToBargain(int store_id, int32_t min_price) {
-    Store_t *store = &stores[store_id];
+    Store_t &store = stores[store_id];
 
-    if (store->good_purchases == MAX_SHORT) {
+    if (store.good_purchases == MAX_SHORT) {
         return true;
     }
 
-    int bargain_record = (store->good_purchases - 3 * store->bad_purchases - 5);
+    int bargain_record = (store.good_purchases - 3 * store.bad_purchases - 5);
 
     return ((bargain_record > 0) && ((int32_t) bargain_record * (int32_t) bargain_record > min_price / 50));
 }
 
 // update the bargain info -DJB-
 void storeUpdateBargainInfo(int store_id, int32_t price, int32_t min_price) {
-    Store_t *store = &stores[store_id];
+    Store_t &store = stores[store_id];
 
     if (min_price > 9) {
         if (price == min_price) {
-            if (store->good_purchases < MAX_SHORT) {
-                store->good_purchases++;
+            if (store.good_purchases < MAX_SHORT) {
+                store.good_purchases++;
             }
         } else {
-            if (store->bad_purchases < MAX_SHORT) {
-                store->bad_purchases++;
+            if (store.bad_purchases < MAX_SHORT) {
+                store.bad_purchases++;
             }
         }
     }
