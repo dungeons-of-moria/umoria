@@ -556,11 +556,51 @@ static bool executeDisenchantAttack() {
     return success;
 }
 
+static bool inventoryDiminishLightAttack(bool noticed) {
+    Inventory_t &item = inventory[EQUIPMENT_LIGHT];
+
+    if (item.misc_use > 0) {
+        item.misc_use -= (250 + randomNumber(250));
+
+        if (item.misc_use < 1) {
+            item.misc_use = 1;
+        }
+
+        if (py.flags.blind < 1) {
+            printMessage("Your light dims.");
+        } else {
+            noticed = false;
+        }
+    } else {
+        noticed = false;
+    }
+
+    return noticed;
+}
+
+static bool inventoryDiminishChargesAttack(uint8_t creature_level, int16_t &monster_hp, bool noticed) {
+    Inventory_t &item = inventory[randomNumber(inventory_count) - 1];
+
+    bool has_charges = item.category_id == TV_STAFF || item.category_id == TV_WAND;
+
+    if (has_charges && item.misc_use > 0) {
+        monster_hp += creature_level * item.misc_use;
+        item.misc_use = 0;
+        if (!spellItemIdentified(&item)) {
+            itemAppendToInscription(&item, ID_EMPTY);
+        }
+        printMessage("Energy drains from your pack!");
+    } else {
+        noticed = false;
+    }
+
+    return noticed;
+}
+
 static bool executeAttackOnPlayer(uint8_t creature_level, int16_t &monster_hp, int monster_id, int attack_type, int damage, vtype_t death_description, bool noticed) {
     int item_pos_start;
     int item_pos_end;
     int32_t gold;
-    Inventory_t *item;
 
     switch (attack_type) {
         case 1: // Normal attack
@@ -746,33 +786,10 @@ static bool executeAttackOnPlayer(uint8_t creature_level, int16_t &monster_hp, i
             }
             break;
         case 23: // Eat light
-            item = &inventory[EQUIPMENT_LIGHT];
-            if (item->misc_use > 0) {
-                item->misc_use -= (250 + randomNumber(250));
-                if (item->misc_use < 1) {
-                    item->misc_use = 1;
-                }
-                if (py.flags.blind < 1) {
-                    printMessage("Your light dims.");
-                } else {
-                    noticed = false;
-                }
-            } else {
-                noticed = false;
-            }
+            noticed = inventoryDiminishLightAttack(noticed);
             break;
         case 24: // Eat charges
-            item = &inventory[randomNumber(inventory_count) - 1];
-            if ((item->category_id == TV_STAFF || item->category_id == TV_WAND) && item->misc_use > 0) {
-                monster_hp += creature_level * item->misc_use;
-                item->misc_use = 0;
-                if (!spellItemIdentified(item)) {
-                    itemAppendToInscription(item, ID_EMPTY);
-                }
-                printMessage("Energy drains from your pack!");
-            } else {
-                noticed = false;
-            }
+            noticed = inventoryDiminishChargesAttack(creature_level, monster_hp, noticed);
             break;
         case 99:
             noticed = false;
