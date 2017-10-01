@@ -254,7 +254,7 @@ void wizardCreateObjects() {
 
     item.id = OBJ_WIZARD;
     item.special_name_id = 0;
-    itemReplaceInscription(&item, "wizard item");
+    itemReplaceInscription(item, "wizard item");
     item.identification = ID_KNOWN2 | ID_STORE_BOUGHT;
 
     putStringClearToEOL("Tval   : ", 0, 0);
