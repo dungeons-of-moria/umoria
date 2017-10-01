@@ -2,6 +2,16 @@
 
 ## HEAD
 
+### Bug Fixes
+
+- When compiling on Windows/MinGW, the OS was not being detected correctly.
+- Load Cave tiles correctly (lit status values). A previous refactoring broke
+  loading of pre-5.7 saves.
+
+### Code
+
+- _Pass by Value_ and _Pass by Reference_ refactoring.
+
 
 ## 5.7.5 (2017-09-05)
 
