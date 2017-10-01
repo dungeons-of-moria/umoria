@@ -203,15 +203,15 @@ static bool storeGetItemID(int *item_id, const char *prompt, int item_pos_start,
 
 // Increase the insult counter and get angry if too many -RAK-
 static bool storeIncreaseInsults(int store_id) {
-    Store_t *store = &stores[store_id];
+    Store_t &store = stores[store_id];
 
-    store->insults_counter++;
+    store.insults_counter++;
 
-    if (store->insults_counter > store_owners[store->owner].max_insults) {
+    if (store.insults_counter > store_owners[store.owner].max_insults) {
         printSpeechGetOutOfMyStore();
-        store->insults_counter = 0;
-        store->bad_purchases++;
-        store->turns_left_before_closing = current_game_turn + 2500 + randomNumber(2500);
+        store.insults_counter = 0;
+        store.bad_purchases++;
+        store.turns_left_before_closing = current_game_turn + 2500 + randomNumber(2500);
         return true;
     }
 
@@ -350,8 +350,8 @@ static int storePurchaseHaggle(int store_id, int32_t *price, Inventory_t *item) 
     int purchase = 0;
     int final_flag = 0;
 
-    Store_t *store = &stores[store_id];
-    Owner_t *owner = &store_owners[store->owner];
+    Store_t &store = stores[store_id];
+    Owner_t &owner = store_owners[store.owner];
 
     int32_t max_sell, min_sell;
     int32_t cost = storeItemSellPrice(store_id, min_sell, max_sell, item);
@@ -367,12 +367,12 @@ static int storePurchaseHaggle(int store_id, int32_t *price, Inventory_t *item) 
     }
 
     // cast max_inflate to signed so that subtraction works correctly
-    int32_t max_buy = cost * (200 - (int) owner->max_inflate) / 100;
+    int32_t max_buy = cost * (200 - (int) owner.max_inflate) / 100;
     if (max_buy <= 0) {
         max_buy = 1;
     }
 
-    int32_t min_per = owner->haggles_per;
+    int32_t min_per = owner.haggles_per;
     int32_t max_per = min_per * 3;
 
     displayStoreHaggleCommands(1);
@@ -520,27 +520,27 @@ static int storeSellHaggle(int store_id, int32_t *price, Inventory_t *item) {
     int sell = 0;
     int final_flag = 0;
 
-    Store_t *store = &stores[store_id];
+    Store_t &store = stores[store_id];
     int32_t cost = storeItemValue(item);
 
     if (cost < 1) {
         sell = 3;
         flag = true;
     } else {
-        Owner_t *owner = &store_owners[store->owner];
+        Owner_t &owner = store_owners[store.owner];
 
         cost = cost * (200 - playerStatAdjustmentCharisma()) / 100;
-        cost = cost * (200 - race_gold_adjustments[owner->race][py.misc.race_id]) / 100;
+        cost = cost * (200 - race_gold_adjustments[owner.race][py.misc.race_id]) / 100;
 
         if (cost < 1) {
             cost = 1;
         }
 
-        max_sell = cost * owner->max_inflate / 100;
+        max_sell = cost * owner.max_inflate / 100;
 
         // cast max_inflate to signed so that subtraction works correctly
-        max_buy = cost * (200 - (int) owner->max_inflate) / 100;
-        min_buy = cost * (200 - owner->min_inflate) / 100;
+        max_buy = cost * (200 - (int) owner.max_inflate) / 100;
+        min_buy = cost * (200 - owner.min_inflate) / 100;
 
         if (min_buy < 1) {
             min_buy = 1;
@@ -554,9 +554,9 @@ static int storeSellHaggle(int store_id, int32_t *price, Inventory_t *item) {
             min_buy = max_buy;
         }
 
-        min_per = owner->haggles_per;
+        min_per = owner.haggles_per;
         max_per = min_per * 3;
-        max_gold = owner->max_cost;
+        max_gold = owner.max_cost;
     }
 
     int32_t current_askin_price;
@@ -736,15 +736,15 @@ static int storeItemsToDisplay(int store_counter, int current_top_item_id) {
 
 // Buy an item from a store -RAK-
 static bool storePurchaseAnItem(int store_id, int *current_top_item_id) {
-    Store_t *store = &stores[store_id];
+    Store_t &store = stores[store_id];
 
-    if (store->store_id < 1) {
+    if (store.store_id < 1) {
         printMessage("I am currently out of stock.");
         return false;
     }
 
     int item_id;
-    int item_count = storeItemsToDisplay(store->store_id, *current_top_item_id);
+    int item_count = storeItemsToDisplay(store.store_id, *current_top_item_id);
     if (!storeGetItemID(&item_id, "Which item are you interested in? ", 0, item_count)) {
         return false;
     }
@@ -754,7 +754,7 @@ static bool storePurchaseAnItem(int store_id, int *current_top_item_id) {
     item_id = item_id + *current_top_item_id; // true item_id
 
     Inventory_t sell_item{};
-    inventoryTakeOneItem(&sell_item, &store->inventory[item_id].item);
+    inventoryTakeOneItem(&sell_item, &store.inventory[item_id].item);
 
     if (!inventoryCanCarryItemCount(&sell_item)) {
         putStringClearToEOL("You cannot carry that many different items.", 0, 0);
@@ -765,8 +765,8 @@ static bool storePurchaseAnItem(int store_id, int *current_top_item_id) {
     int32_t price;
     bool purchased = false;
 
-    if (store->inventory[item_id].cost > 0) {
-        price = store->inventory[item_id].cost;
+    if (store.inventory[item_id].cost > 0) {
+        price = store.inventory[item_id].cost;
     } else {
         choice = storePurchaseHaggle(store_id, &price, &sell_item);
     }
@@ -778,7 +778,7 @@ static bool storePurchaseAnItem(int store_id, int *current_top_item_id) {
             py.misc.au -= price;
 
             int new_item_id = inventoryCarryItem(&sell_item);
-            int saved_store_counter = store->store_id;
+            int saved_store_counter = store.store_id;
 
             storeDestroy(store_id, item_id, true);
 
@@ -791,15 +791,15 @@ static bool storePurchaseAnItem(int store_id, int *current_top_item_id) {
 
             playerStrength();
 
-            if (*current_top_item_id >= store->store_id) {
+            if (*current_top_item_id >= store.store_id) {
                 *current_top_item_id = 0;
                 displayStoreInventory(store_id, *current_top_item_id);
             } else {
-                InventoryRecord_t *store_item = &store->inventory[item_id];
+                InventoryRecord_t &store_item = store.inventory[item_id];
 
-                if (saved_store_counter == store->store_id) {
-                    if (store_item->cost < 0) {
-                        store_item->cost = price;
+                if (saved_store_counter == store.store_id) {
+                    if (store_item.cost < 0) {
+                        store_item.cost = price;
                         displaySingleCost(store_id, item_id);
                     }
                 } else {
@@ -944,15 +944,15 @@ static bool storeSellAnItem(int store_id, int *current_top_item_id) {
 
 // Entering a store -RAK-
 void storeEnter(int store_id) {
-    Store_t *store = &stores[store_id];
+    Store_t &store = stores[store_id];
 
-    if (store->turns_left_before_closing >= current_game_turn) {
+    if (store.turns_left_before_closing >= current_game_turn) {
         printMessage("The doors are locked.");
         return;
     }
 
     int current_top_item_id = 0;
-    displayStore(store_id, store_owners[store->owner].name, current_top_item_id);
+    displayStore(store_id, store_owners[store.owner].name, current_top_item_id);
 
     bool exit_store = false;
     while (!exit_store) {
@@ -968,7 +968,7 @@ void storeEnter(int store_id) {
             switch (command) {
                 case 'b':
                     if (current_top_item_id == 0) {
-                        if (store->store_id > 12) {
+                        if (store.store_id > 12) {
                             current_top_item_id = 12;
                             displayStoreInventory(store_id, current_top_item_id);
                         } else {
