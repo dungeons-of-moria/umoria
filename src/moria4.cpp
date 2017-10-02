@@ -1072,22 +1072,22 @@ static void playerBashPosition(int y, int x) {
     playerBashAttack(y, x);
 }
 
-static void playerBashClosedDoor(int y, int x, int dir, Cave_t *tile, Inventory_t *item) {
+static void playerBashClosedDoor(int y, int x, int dir, Cave_t &tile, Inventory_t &item) {
     printMessageNoCommandInterrupt("You smash into the door!");
 
     int chance = py.stats.used[A_STR] + py.misc.weight / 2;
 
     // Use (roughly) similar method as for monsters.
-    auto abs_misc_use = (int) std::abs((std::intmax_t) item->misc_use);
+    auto abs_misc_use = (int) std::abs((std::intmax_t) item.misc_use);
     if (randomNumber(chance * (20 + abs_misc_use)) < 10 * (chance - abs_misc_use)) {
         printMessage("The door crashes open!");
 
-        inventoryItemCopyTo(OBJ_OPEN_DOOR, treasure_list[tile->treasure_id]);
+        inventoryItemCopyTo(OBJ_OPEN_DOOR, treasure_list[tile.treasure_id]);
 
         // 50% chance of breaking door
-        item->misc_use = (int16_t) (1 - randomNumber(2));
+        item.misc_use = (int16_t) (1 - randomNumber(2));
 
-        tile->feature_id = TILE_CORR_FLOOR;
+        tile.feature_id = TILE_CORR_FLOOR;
 
         if (py.flags.confused == 0) {
             playerMove(dir, false);
@@ -1176,7 +1176,7 @@ void playerBash() {
         Inventory_t &item = treasure_list[tile.treasure_id];
 
         if (item.category_id == TV_CLOSED_DOOR) {
-            playerBashClosedDoor(y, x, dir, &tile, &item);
+            playerBashClosedDoor(y, x, dir, tile, item);
         } else if (item.category_id == TV_CHEST) {
             playerBashClosedChest(&item);
         } else {
