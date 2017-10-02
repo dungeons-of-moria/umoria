@@ -477,12 +477,12 @@ static void memoryLootCarried(uint32_t creature_move, uint32_t memory_move) {
     }
 }
 
-static void memoryAttackNumberAndDamage(Recall_t *memory, Creature_t *creature) {
+static void memoryAttackNumberAndDamage(const Recall_t &memory, Creature_t &creature) {
     // We know about attacks it has used on us, and maybe the damage they do.
     // known_attacks is the total number of known attacks, used for punctuation
     int known_attacks = 0;
 
-    for (uint8_t attack : memory->attacks) {
+    for (uint8_t attack : memory.attacks) {
         if (attack != 0u) {
             known_attacks++;
         }
@@ -491,14 +491,14 @@ static void memoryAttackNumberAndDamage(Recall_t *memory, Creature_t *creature) 
     // attack_count counts the attacks as printed, used for punctuation
     int attack_count = 0;
 
-    uint8_t *pu = creature->damage;
+    uint8_t *pu = creature.damage;
 
     for (int i = 0; *pu != 0 && i < 4; pu++, i++) {
         int attack_type, attack_description_id;
         int attack_dice, attack_sides;
 
         // don't print out unknown attacks
-        if (memory->attacks[i] == 0u) {
+        if (memory.attacks[i] == 0u) {
             continue;
         }
 
@@ -533,7 +533,7 @@ static void memoryAttackNumberAndDamage(Recall_t *memory, Creature_t *creature) 
             memoryPrint(recall_description_attack_type[attack_type]);
 
             if ((attack_dice != 0) && (attack_sides != 0)) {
-                if (knowdamage(creature->level, memory->attacks[i], attack_dice * attack_sides)) {
+                if (knowdamage(creature.level, memory.attacks[i], attack_dice * attack_sides)) {
                     // Loss of experience
                     if (attack_type == 19) {
                         memoryPrint(" by");
@@ -551,7 +551,7 @@ static void memoryAttackNumberAndDamage(Recall_t *memory, Creature_t *creature) 
 
     if (attack_count != 0) {
         memoryPrint(".");
-    } else if (known_attacks > 0 && memory->attacks[0] >= 10) {
+    } else if (known_attacks > 0 && memory.attacks[0] >= 10) {
         memoryPrint(" It has no physical attacks.");
     } else {
         memoryPrint(" Nothing is known about its attack.");
@@ -629,7 +629,7 @@ int memoryRecall(int monster_id) {
 
     memoryLootCarried(creature.movement, move);
 
-    memoryAttackNumberAndDamage(&memory, &creature);
+    memoryAttackNumberAndDamage(memory, creature);
 
     // Always know the win creature.
     if ((creature.movement & CM_WIN) != 0u) {
