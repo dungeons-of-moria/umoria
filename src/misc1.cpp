@@ -451,7 +451,7 @@ bool los(int from_y, int from_x, int to_y, int to_x) {
 
 // Returns symbol for given row, column -RAK-
 char caveGetTileSymbol(int y, int x) {
-    Cave_t &cave_ptr = cave[y][x];
+    const Cave_t &cave_ptr = cave[y][x];
 
     if (cave_ptr.creature_id == 1 && ((running_counter == 0) || config.run_print_self)) {
         return '@';
