@@ -178,8 +178,8 @@ static void displayStore(int store_id, const char *owner_name, int current_top_i
 }
 
 // Get the ID of a store item and return it's value -RAK-
-static bool storeGetItemID(int *item_id, const char *prompt, int item_pos_start, int item_pos_end) {
-    *item_id = -1;
+static bool storeGetItemID(int &item_id, const char *prompt, int item_pos_start, int item_pos_end) {
+    item_id = -1;
 
     vtype_t msg = {'\0'};
     (void) sprintf(msg, "(Items %c-%c, ESC to exit) %s", item_pos_start + 'a', item_pos_end + 'a', prompt);
@@ -191,7 +191,7 @@ static bool storeGetItemID(int *item_id, const char *prompt, int item_pos_start,
         command -= 'a';
         if (command >= item_pos_start && command <= item_pos_end) {
             item_found = true;
-            *item_id = command;
+            item_id = command;
             break;
         }
         terminalBellSound();
@@ -745,7 +745,7 @@ static bool storePurchaseAnItem(int store_id, int *current_top_item_id) {
 
     int item_id;
     int item_count = storeItemsToDisplay(store.store_id, *current_top_item_id);
-    if (!storeGetItemID(&item_id, "Which item are you interested in? ", 0, item_count)) {
+    if (!storeGetItemID(item_id, "Which item are you interested in? ", 0, item_count)) {
         return false;
     }
 
