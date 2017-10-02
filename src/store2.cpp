@@ -907,7 +907,7 @@ static bool storeSellAnItem(int store_id, int *current_top_item_id) {
         printMessage(msg);
 
         int item_pos_id;
-        storeCarry(store_id, item_pos_id, &sold_item);
+        storeCarry(store_id, item_pos_id, sold_item);
 
         playerStrength();
 

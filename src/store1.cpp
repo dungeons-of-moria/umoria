@@ -227,20 +227,20 @@ static void storeItemInsert(int store_id, int pos, int32_t i_cost, Inventory_t *
 }
 
 // Add the item in INVEN_MAX to stores inventory. -RAK-
-void storeCarry(int store_id, int &index_id, Inventory_t *item) {
+void storeCarry(int store_id, int &index_id, Inventory_t &item) {
     index_id = -1;
 
     int32_t item_cost, dummy;
-    if (storeItemSellPrice(store_id, dummy, item_cost, *item) < 1) {
+    if (storeItemSellPrice(store_id, dummy, item_cost, item) < 1) {
         return;
     }
 
     Store_t &store = stores[store_id];
 
     int item_id = 0;
-    int item_num = item->items_count;
-    int item_category = item->category_id;
-    int item_sub_catory = item->sub_category_id;
+    int item_num = item.items_count;
+    int item_category = item.category_id;
+    int item_sub_catory = item.sub_category_id;
 
     bool flag = false;
     do {
@@ -248,7 +248,7 @@ void storeCarry(int store_id, int &index_id, Inventory_t *item) {
 
         if (item_category == store_item.category_id) {
             if (item_sub_catory == store_item.sub_category_id && // Adds to other item
-                item_sub_catory >= ITEM_SINGLE_STACK_MIN && (item_sub_catory < ITEM_GROUP_MIN || store_item.misc_use == item->misc_use)) {
+                item_sub_catory >= ITEM_SINGLE_STACK_MIN && (item_sub_catory < ITEM_GROUP_MIN || store_item.misc_use == item.misc_use)) {
                 index_id = item_id;
                 store_item.items_count += item_num;
 
@@ -266,7 +266,7 @@ void storeCarry(int store_id, int &index_id, Inventory_t *item) {
                 flag = true;
             }
         } else if (item_category > store_item.category_id) { // Insert into list
-            storeItemInsert(store_id, item_id, item_cost, item);
+            storeItemInsert(store_id, item_id, item_cost, &item);
             flag = true;
             index_id = item_id;
         }
@@ -275,7 +275,7 @@ void storeCarry(int store_id, int &index_id, Inventory_t *item) {
 
     // Becomes last item in list
     if (!flag) {
-        storeItemInsert(store_id, (int) store.store_id, item_cost, item);
+        storeItemInsert(store_id, (int) store.store_id, item_cost, &item);
         index_id = store.store_id - 1;
     }
 }
@@ -353,7 +353,7 @@ static void storeItemCreate(int store_id, int16_t max_cost) {
                 itemIdentifyAsStoreBought(item);
 
                 int dummy;
-                storeCarry(store_id, dummy, &item);
+                storeCarry(store_id, dummy, item);
 
                 tries = 10;
             }
