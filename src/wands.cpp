@@ -9,12 +9,13 @@
 #include "headers.h"
 #include "externs.h"
 
-static bool wandDischarge(Inventory_t *item, int direction) {
+static bool wandDischarge(Inventory_t &item, int direction) {
     bool identified = false;
 
-    uint32_t flags = item->flags;
+    uint32_t flags = item.flags;
 
-    (item->misc_use)--; // decrement "use" variable
+    // decrement "use" variable
+    item.misc_use--;
 
     while (flags != 0) {
         int kind = getAndClearFirstBit(flags) + 1;
@@ -177,7 +178,7 @@ void wandAim() {
         return;
     }
 
-    bool identified = wandDischarge(&item, direction);
+    bool identified = wandDischarge(item, direction);
 
     if (identified) {
         if (!itemSetColorlessAsIdentified(item.category_id, item.sub_category_id, item.identification)) {
