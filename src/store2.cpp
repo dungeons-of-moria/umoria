@@ -837,7 +837,7 @@ bool (*store_buy[MAX_STORES])(int) = {
 };
 
 // Sell an item to the store -RAK-
-static bool storeSellAnItem(int store_id, int *current_top_item_id) {
+static bool storeSellAnItem(int store_id, int &current_top_item_id) {
     int first_item = inventory_count;
     int last_item = -1;
 
@@ -913,17 +913,17 @@ static bool storeSellAnItem(int store_id, int *current_top_item_id) {
 
         if (item_pos_id >= 0) {
             if (item_pos_id < 12) {
-                if (*current_top_item_id < 12) {
+                if (current_top_item_id < 12) {
                     displayStoreInventory(store_id, item_pos_id);
                 } else {
-                    *current_top_item_id = 0;
-                    displayStoreInventory(store_id, *current_top_item_id);
+                    current_top_item_id = 0;
+                    displayStoreInventory(store_id, current_top_item_id);
                 }
-            } else if (*current_top_item_id > 11) {
+            } else if (current_top_item_id > 11) {
                 displayStoreInventory(store_id, item_pos_id);
             } else {
-                *current_top_item_id = 12;
-                displayStoreInventory(store_id, *current_top_item_id);
+                current_top_item_id = 12;
+                displayStoreInventory(store_id, current_top_item_id);
             }
         }
         displayPlayerRemainingGold();
@@ -1007,7 +1007,7 @@ void storeEnter(int store_id) {
                     exit_store = storePurchaseAnItem(store_id, current_top_item_id);
                     break;
                 case 's':
-                    exit_store = storeSellAnItem(store_id, &current_top_item_id);
+                    exit_store = storeSellAnItem(store_id, current_top_item_id);
                     break;
                 default:
                     terminalBellSound();
