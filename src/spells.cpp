@@ -606,41 +606,41 @@ bool spellDisarmAllInDirection(int y, int x, int direction) {
 }
 
 // Return flags for given type area affect -RAK-
-static void getAreaAffectFlags(int spell_type, uint32_t *weapon_type, int *harm_type, bool (**destroy)(Inventory_t *)) {
+static void getAreaAffectFlags(int spell_type, uint32_t &weapon_type, int &harm_type, bool (**destroy)(Inventory_t *)) {
     switch (spell_type) {
         case GF_MAGIC_MISSILE:
-            *weapon_type = 0;
-            *harm_type = 0;
+            weapon_type = 0;
+            harm_type = 0;
             *destroy = setNull;
             break;
         case GF_LIGHTNING:
-            *weapon_type = CS_BR_LIGHT;
-            *harm_type = CD_LIGHT;
+            weapon_type = CS_BR_LIGHT;
+            harm_type = CD_LIGHT;
             *destroy = setLightningDestroyableItems;
             break;
         case GF_POISON_GAS:
-            *weapon_type = CS_BR_GAS;
-            *harm_type = CD_POISON;
+            weapon_type = CS_BR_GAS;
+            harm_type = CD_POISON;
             *destroy = setNull;
             break;
         case GF_ACID:
-            *weapon_type = CS_BR_ACID;
-            *harm_type = CD_ACID;
+            weapon_type = CS_BR_ACID;
+            harm_type = CD_ACID;
             *destroy = setAcidDestroyableItems;
             break;
         case GF_FROST:
-            *weapon_type = CS_BR_FROST;
-            *harm_type = CD_FROST;
+            weapon_type = CS_BR_FROST;
+            harm_type = CD_FROST;
             *destroy = setFrostDestroyableItems;
             break;
         case GF_FIRE:
-            *weapon_type = CS_BR_FIRE;
-            *harm_type = CD_FIRE;
+            weapon_type = CS_BR_FIRE;
+            harm_type = CD_FIRE;
             *destroy = setFireDestroyableItems;
             break;
         case GF_HOLY_ORB:
-            *weapon_type = 0;
-            *harm_type = CD_EVIL;
+            weapon_type = 0;
+            harm_type = CD_EVIL;
             *destroy = setNull;
             break;
         default:
@@ -697,7 +697,7 @@ void spellFireBolt(int y, int x, int direction, int damage_hp, int spell_type, c
     bool (*dummy)(Inventory_t *);
     int harm_type = 0;
     uint32_t weapon_type;
-    getAreaAffectFlags(spell_type, &weapon_type, &harm_type, &dummy);
+    getAreaAffectFlags(spell_type, weapon_type, harm_type, &dummy);
 
     int distance = 0;
     bool finished = false;
@@ -739,7 +739,7 @@ void spellFireBall(int y, int x, int direction, int damage_hp, int spell_type, c
     bool (*destroy)(Inventory_t *);
     int harm_type;
     uint32_t weapon_type;
-    getAreaAffectFlags(spell_type, &weapon_type, &harm_type, &destroy);
+    getAreaAffectFlags(spell_type, weapon_type, harm_type, &destroy);
 
     int distance = 0;
 
@@ -867,7 +867,7 @@ void spellBreath(int y, int x, int monster_id, int damage_hp, int spell_type, ch
     bool (*destroy)(Inventory_t *);
     int harm_type;
     uint32_t weapon_type;
-    getAreaAffectFlags(spell_type, &weapon_type, &harm_type, &destroy);
+    getAreaAffectFlags(spell_type, weapon_type, harm_type, &destroy);
 
     for (int row = y - 2; row <= y + 2; row++) {
         for (int col = x - 2; col <= x + 2; col++) {
