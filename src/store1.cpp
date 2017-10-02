@@ -14,142 +14,142 @@ Store_t stores[MAX_STORES];
 static void storeItemInsert(int store_id, int pos, int32_t i_cost, Inventory_t *item);
 static void storeItemCreate(int store_id, int16_t max_cost);
 
-static int32_t getWeaponArmorBuyPrice(Inventory_t *item);
-static int32_t getAmmoBuyPrice(Inventory_t *item);
-static int32_t getPotionScrollBuyPrice(Inventory_t *item);
-static int32_t getFoodBuyPrice(Inventory_t *item);
-static int32_t getRingAmuletBuyPrice(Inventory_t *item);
-static int32_t getWandStaffBuyPrice(Inventory_t *item);
-static int32_t getPickShovelBuyPrice(Inventory_t *item);
+static int32_t getWeaponArmorBuyPrice(const Inventory_t &item);
+static int32_t getAmmoBuyPrice(const Inventory_t &item);
+static int32_t getPotionScrollBuyPrice(const Inventory_t &item);
+static int32_t getFoodBuyPrice(const Inventory_t &item);
+static int32_t getRingAmuletBuyPrice(const Inventory_t &item);
+static int32_t getWandStaffBuyPrice(const Inventory_t &item);
+static int32_t getPickShovelBuyPrice(const Inventory_t &item);
 
 // Returns the value for any given object -RAK-
-int32_t storeItemValue(Inventory_t *item) {
+int32_t storeItemValue(const Inventory_t &item) {
     int32_t value;
 
-    if ((item->identification & ID_DAMD) != 0) {
+    if ((item.identification & ID_DAMD) != 0) {
         // don't purchase known cursed items
         value = 0;
-    } else if ((item->category_id >= TV_BOW && item->category_id <= TV_SWORD) || (item->category_id >= TV_BOOTS && item->category_id <= TV_SOFT_ARMOR)) {
+    } else if ((item.category_id >= TV_BOW && item.category_id <= TV_SWORD) || (item.category_id >= TV_BOOTS && item.category_id <= TV_SOFT_ARMOR)) {
         value = getWeaponArmorBuyPrice(item);
-    } else if (item->category_id >= TV_SLING_AMMO && item->category_id <= TV_SPIKE) {
+    } else if (item.category_id >= TV_SLING_AMMO && item.category_id <= TV_SPIKE) {
         value = getAmmoBuyPrice(item);
-    } else if (item->category_id == TV_SCROLL1 || item->category_id == TV_SCROLL2 || item->category_id == TV_POTION1 || item->category_id == TV_POTION2) {
+    } else if (item.category_id == TV_SCROLL1 || item.category_id == TV_SCROLL2 || item.category_id == TV_POTION1 || item.category_id == TV_POTION2) {
         value = getPotionScrollBuyPrice(item);
-    } else if (item->category_id == TV_FOOD) {
+    } else if (item.category_id == TV_FOOD) {
         value = getFoodBuyPrice(item);
-    } else if (item->category_id == TV_AMULET || item->category_id == TV_RING) {
+    } else if (item.category_id == TV_AMULET || item.category_id == TV_RING) {
         value = getRingAmuletBuyPrice(item);
-    } else if (item->category_id == TV_STAFF || item->category_id == TV_WAND) {
+    } else if (item.category_id == TV_STAFF || item.category_id == TV_WAND) {
         value = getWandStaffBuyPrice(item);
-    } else if (item->category_id == TV_DIGGING) {
+    } else if (item.category_id == TV_DIGGING) {
         value = getPickShovelBuyPrice(item);
     } else {
-        value = item->cost;
+        value = item.cost;
     }
 
     // Multiply value by number of items if it is a group stack item.
     // Do not include torches here.
-    if (item->sub_category_id > ITEM_GROUP_MIN) {
-        value = value * item->items_count;
+    if (item.sub_category_id > ITEM_GROUP_MIN) {
+        value = value * item.items_count;
     }
 
     return value;
 }
 
-static int32_t getWeaponArmorBuyPrice(Inventory_t *item) {
-    if (!spellItemIdentified(*item)) {
-        return game_objects[item->id].cost;
+static int32_t getWeaponArmorBuyPrice(const Inventory_t &item) {
+    if (!spellItemIdentified(item)) {
+        return game_objects[item.id].cost;
     }
 
-    if (item->category_id >= TV_BOW && item->category_id <= TV_SWORD) {
-        if (item->to_hit < 0 || item->to_damage < 0 || item->to_ac < 0) {
+    if (item.category_id >= TV_BOW && item.category_id <= TV_SWORD) {
+        if (item.to_hit < 0 || item.to_damage < 0 || item.to_ac < 0) {
             return 0;
         }
 
-        return item->cost + (item->to_hit + item->to_damage + item->to_ac) * 100;
+        return item.cost + (item.to_hit + item.to_damage + item.to_ac) * 100;
     }
 
-    if (item->to_ac < 0) {
+    if (item.to_ac < 0) {
         return 0;
     }
 
-    return item->cost + item->to_ac * 100;
+    return item.cost + item.to_ac * 100;
 }
 
-static int32_t getAmmoBuyPrice(Inventory_t *item) {
-    if (!spellItemIdentified(*item)) {
-        return game_objects[item->id].cost;
+static int32_t getAmmoBuyPrice(const Inventory_t &item) {
+    if (!spellItemIdentified(item)) {
+        return game_objects[item.id].cost;
     }
 
-    if (item->to_hit < 0 || item->to_damage < 0 || item->to_ac < 0) {
+    if (item.to_hit < 0 || item.to_damage < 0 || item.to_ac < 0) {
         return 0;
     }
 
     // use 5, because missiles generally appear in groups of 20,
     // so 20 * 5 == 100, which is comparable to weapon bonus above
-    return item->cost + (item->to_hit + item->to_damage + item->to_ac) * 5;
+    return item.cost + (item.to_hit + item.to_damage + item.to_ac) * 5;
 }
 
-static int32_t getPotionScrollBuyPrice(Inventory_t *item) {
-    if (!itemSetColorlessAsIdentified(item->category_id, item->sub_category_id, item->identification)) {
+static int32_t getPotionScrollBuyPrice(const Inventory_t &item) {
+    if (!itemSetColorlessAsIdentified(item.category_id, item.sub_category_id, item.identification)) {
         return 20;
     }
 
-    return item->cost;
+    return item.cost;
 }
 
-static int32_t getFoodBuyPrice(Inventory_t *item) {
-    if (item->sub_category_id < ITEM_SINGLE_STACK_MIN + MAX_MUSHROOMS && !itemSetColorlessAsIdentified(item->category_id, item->sub_category_id, item->identification)) {
+static int32_t getFoodBuyPrice(const Inventory_t &item) {
+    if (item.sub_category_id < ITEM_SINGLE_STACK_MIN + MAX_MUSHROOMS && !itemSetColorlessAsIdentified(item.category_id, item.sub_category_id, item.identification)) {
         return 1;
     }
 
-    return item->cost;
+    return item.cost;
 }
 
-static int32_t getRingAmuletBuyPrice(Inventory_t *item) {
+static int32_t getRingAmuletBuyPrice(const Inventory_t &item) {
     // player does not know what type of ring/amulet this is
-    if (!itemSetColorlessAsIdentified(item->category_id, item->sub_category_id, item->identification)) {
+    if (!itemSetColorlessAsIdentified(item.category_id, item.sub_category_id, item.identification)) {
         return 45;
     }
 
     // player knows what type of ring, but does not know whether it
     // is cursed or not, if refuse to buy cursed objects here, then
     // player can use this to 'identify' cursed objects
-    if (!spellItemIdentified(*item)) {
-        return game_objects[item->id].cost;
+    if (!spellItemIdentified(item)) {
+        return game_objects[item.id].cost;
     }
 
-    return item->cost;
+    return item.cost;
 }
 
-static int32_t getWandStaffBuyPrice(Inventory_t *item) {
-    if (!itemSetColorlessAsIdentified(item->category_id, item->sub_category_id, item->identification)) {
-        if (item->category_id == TV_WAND) {
+static int32_t getWandStaffBuyPrice(const Inventory_t &item) {
+    if (!itemSetColorlessAsIdentified(item.category_id, item.sub_category_id, item.identification)) {
+        if (item.category_id == TV_WAND) {
             return 50;
         }
 
         return 70;
     }
 
-    if (spellItemIdentified(*item)) {
-        return item->cost + (item->cost / 20) * item->misc_use;
+    if (spellItemIdentified(item)) {
+        return item.cost + (item.cost / 20) * item.misc_use;
     }
 
-    return item->cost;
+    return item.cost;
 }
 
-static int32_t getPickShovelBuyPrice(Inventory_t *item) {
-    if (!spellItemIdentified(*item)) {
-        return game_objects[item->id].cost;
+static int32_t getPickShovelBuyPrice(const Inventory_t &item) {
+    if (!spellItemIdentified(item)) {
+        return game_objects[item.id].cost;
     }
 
-    if (item->misc_use < 0) {
+    if (item.misc_use < 0) {
         return 0;
     }
 
     // some digging tools start with non-zero `misc_use` values, so only
     // multiply the plusses by 100, make sure result is positive
-    int32_t value = item->cost + (item->misc_use - game_objects[item->id].misc_use) * 100;
+    int32_t value = item.cost + (item.misc_use - game_objects[item.id].misc_use) * 100;
 
     if (value < 0) {
         value = 0;
@@ -160,7 +160,7 @@ static int32_t getPickShovelBuyPrice(Inventory_t *item) {
 
 // Asking price for an item -RAK-
 int32_t storeItemSellPrice(int store_id, int32_t &min_price, int32_t &max_price, Inventory_t *item) {
-    int32_t price = storeItemValue(item);
+    int32_t price = storeItemValue(*item);
 
     // check `item->cost` in case it is cursed, check `price` in case it is damaged
     // don't let the item get into the store inventory

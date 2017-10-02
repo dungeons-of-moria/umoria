@@ -521,7 +521,7 @@ static int storeSellHaggle(int store_id, int32_t *price, Inventory_t *item) {
     int final_flag = 0;
 
     Store_t &store = stores[store_id];
-    int32_t cost = storeItemValue(item);
+    int32_t cost = storeItemValue(*item);
 
     if (cost < 1) {
         sell = 3;
