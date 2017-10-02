@@ -1109,21 +1109,21 @@ static void playerBashClosedDoor(int y, int x, int dir, Cave_t &tile, Inventory_
     }
 }
 
-static void playerBashClosedChest(Inventory_t *item) {
+static void playerBashClosedChest(Inventory_t &item) {
     if (randomNumber(10) == 1) {
         printMessage("You have destroyed the chest.");
         printMessage("and its contents!");
 
-        item->id = OBJ_RUINED_CHEST;
-        item->flags = 0;
+        item.id = OBJ_RUINED_CHEST;
+        item.flags = 0;
 
         return;
     }
 
-    if (((item->flags & CH_LOCKED) != 0u) && randomNumber(10) == 1) {
+    if (((item.flags & CH_LOCKED) != 0u) && randomNumber(10) == 1) {
         printMessage("The lock breaks open!");
 
-        item->flags &= ~CH_LOCKED;
+        item.flags &= ~CH_LOCKED;
 
         return;
     }
@@ -1178,7 +1178,7 @@ void playerBash() {
         if (item.category_id == TV_CLOSED_DOOR) {
             playerBashClosedDoor(y, x, dir, tile, item);
         } else if (item.category_id == TV_CHEST) {
-            playerBashClosedChest(&item);
+            playerBashClosedChest(item);
         } else {
             // Can't give free turn, or else player could try directions
             // until he found invisible creature
