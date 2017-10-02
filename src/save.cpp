@@ -28,7 +28,7 @@ static void wr_bytes(uint8_t *value, int count);
 static void wr_string(char *str);
 static void wr_shorts(uint16_t *value, int count);
 static void wr_item(Inventory_t &item);
-static void wr_monster(Monster_t *monster);
+static void wr_monster(Monster_t &monster);
 static bool rd_bool();
 static uint8_t rd_byte();
 static uint16_t rd_short();
@@ -346,7 +346,7 @@ static bool sv_write() {
     }
     wr_short((uint16_t) next_free_monster_id);
     for (int i = MON_MIN_INDEX_ID; i < next_free_monster_id; i++) {
-        wr_monster(&monsters[i]);
+        wr_monster(monsters[i]);
     }
 
     return !((ferror(fileptr) != 0) || fflush(fileptr) == EOF);
@@ -1045,18 +1045,18 @@ static void wr_item(Inventory_t &item) {
     wr_byte(item.identification);
 }
 
-static void wr_monster(Monster_t *monster) {
+static void wr_monster(Monster_t &monster) {
     DEBUG(fprintf(logfile, "MONSTER:\n"));
-    wr_short((uint16_t) monster->hp);
-    wr_short((uint16_t) monster->sleep_count);
-    wr_short((uint16_t) monster->speed);
-    wr_short(monster->creature_id);
-    wr_byte(monster->y);
-    wr_byte(monster->x);
-    wr_byte(monster->distance_from_player);
-    wr_bool(monster->lit);
-    wr_byte(monster->stunned_amount);
-    wr_byte(monster->confused_amount);
+    wr_short((uint16_t) monster.hp);
+    wr_short((uint16_t) monster.sleep_count);
+    wr_short((uint16_t) monster.speed);
+    wr_short(monster.creature_id);
+    wr_byte(monster.y);
+    wr_byte(monster.x);
+    wr_byte(monster.distance_from_player);
+    wr_bool(monster.lit);
+    wr_byte(monster.stunned_amount);
+    wr_byte(monster.confused_amount);
 }
 
 static bool rd_bool() {
