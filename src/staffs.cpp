@@ -23,10 +23,10 @@ static bool staffPlayerIsCarrying(int &item_pos_start, int &item_pos_end) {
     return true;
 }
 
-static bool staffPlayerCanUse(Inventory_t *item) {
+static bool staffPlayerCanUse(Inventory_t &item) {
     int chance = py.misc.saving_throw;
     chance += playerStatAdjustmentWisdomIntelligence(A_INT);
-    chance -= item->depth_first_found - 5;
+    chance -= item.depth_first_found - 5;
     chance += class_level_adj[py.misc.class_id][CLASS_DEVICE] * py.misc.level / 3;
 
     if (py.flags.confused > 0) {
@@ -47,10 +47,10 @@ static bool staffPlayerCanUse(Inventory_t *item) {
         return false;
     }
 
-    if (item->misc_use < 1) {
+    if (item.misc_use < 1) {
         printMessage("The staff has no charges left.");
-        if (!spellItemIdentified(*item)) {
-            itemAppendToInscription(*item, ID_EMPTY);
+        if (!spellItemIdentified(item)) {
+            itemAppendToInscription(item, ID_EMPTY);
         }
         return false;
     }
@@ -191,7 +191,7 @@ void useStaff() {
 
     Inventory_t &item = inventory[item_id];
 
-    if (!staffPlayerCanUse(&item)) {
+    if (!staffPlayerCanUse(item)) {
         return;
     }
 
