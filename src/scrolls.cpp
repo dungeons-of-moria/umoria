@@ -171,10 +171,10 @@ static bool scrollEnchantItemToAC() {
     return true;
 }
 
-static int scrollIdentifyItem(int item_id, bool *is_used_up) {
+static int scrollIdentifyItem(int item_id, bool &is_used_up) {
     printMessage("This is an identify scroll.");
 
-    *is_used_up = spellIdentifyItem();
+    is_used_up = spellIdentifyItem();
 
     // The identify may merge objects, causing the identify scroll
     // to move to a different place.  Check for that here.  It can
@@ -454,7 +454,7 @@ void readScroll() {
                 identified = scrollEnchantItemToAC();
                 break;
             case 4:
-                item_id = scrollIdentifyItem(item_id, &used_up);
+                item_id = scrollIdentifyItem(item_id, used_up);
                 identified = true;
                 break;
             case 5:
