@@ -1270,7 +1270,7 @@ bool inventoryCanCarryItem(const Inventory_t &item) {
 
 // Are we strong enough for the current pack and weapon? -CJS-
 void playerStrength() {
-    Inventory_t &item = inventory[EQUIPMENT_WIELD];
+    const Inventory_t &item = inventory[EQUIPMENT_WIELD];
 
     if (item.category_id != TV_NOTHING && py.stats.used[A_STR] * 15 < item.weight) {
         if (!py.weapon_is_heavy) {
@@ -1352,7 +1352,7 @@ int inventoryCarryItem(Inventory_t &new_item) {
 
 // Returns spell chance of failure for class_to_use_mage_spells -RAK-
 static int spellChanceOfSuccess(int spell_id) {
-    Spell_t &spell = magic_spells[py.misc.class_id - 1][spell_id];
+    const Spell_t &spell = magic_spells[py.misc.class_id - 1][spell_id];
 
     int chance = spell.failure_chance - 3 * (py.misc.level - spell.level_required);
 
@@ -1402,7 +1402,7 @@ void displaySpellsList(const int *spell_ids, int number_of_choices, bool comment
 
     for (int i = 0; i < number_of_choices; i++) {
         int spell_id = spell_ids[i];
-        Spell_t &spell = magic_spells[py.misc.class_id - 1][spell_id];
+        const Spell_t &spell = magic_spells[py.misc.class_id - 1][spell_id];
 
         const char *p = nullptr;
         if (!comment) {
@@ -1461,7 +1461,7 @@ bool spellGetId(int *spell_ids, int number_of_choices, int &spell_id, int &spell
             if (test_spell_id == number_of_choices) {
                 spell_id = -2;
             } else {
-                Spell_t &spell = magic_spells[py.misc.class_id - 1][spell_id];
+                const Spell_t &spell = magic_spells[py.misc.class_id - 1][spell_id];
 
                 vtype_t tmp_str = {'\0'};
                 (void) sprintf(tmp_str, "Cast %s (%d mana, %d%% fail)?", spell_names[spell_id + offset], spell.mana_required, spellChanceOfSuccess(spell_id));
@@ -1975,7 +1975,7 @@ static void playerGainLevel() {
     printCharacterLevel();
     printCharacterTitle();
 
-    Class_t &player_class = classes[py.misc.class_id];
+    const Class_t &player_class = classes[py.misc.class_id];
 
     if (player_class.class_to_use_mage_spells == SPELL_TYPE_MAGE) {
         playerCalculateAllowedSpellsCount(A_INT);
@@ -2121,7 +2121,7 @@ int itemMagicAbilityDamage(const Inventory_t &item, int total_damage, int monste
     bool is_flask = item.category_id == TV_FLASK;
 
     if (is_ego_weapon && (is_projectile || is_hafted_sword || is_flask)) {
-        Creature_t &creature = creatures_list[monster_id];
+        const Creature_t &creature = creatures_list[monster_id];
         Recall_t &memory = creature_recall[monster_id];
 
         // Slay Dragon
