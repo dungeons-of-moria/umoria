@@ -735,7 +735,7 @@ static int storeItemsToDisplay(int store_counter, int current_top_item_id) {
 }
 
 // Buy an item from a store -RAK-
-static bool storePurchaseAnItem(int store_id, int *current_top_item_id) {
+static bool storePurchaseAnItem(int store_id, int &current_top_item_id) {
     Store_t &store = stores[store_id];
 
     if (store.store_id < 1) {
@@ -744,14 +744,14 @@ static bool storePurchaseAnItem(int store_id, int *current_top_item_id) {
     }
 
     int item_id;
-    int item_count = storeItemsToDisplay(store.store_id, *current_top_item_id);
+    int item_count = storeItemsToDisplay(store.store_id, current_top_item_id);
     if (!storeGetItemID(item_id, "Which item are you interested in? ", 0, item_count)) {
         return false;
     }
 
     // Get the item number to be bought
 
-    item_id = item_id + *current_top_item_id; // true item_id
+    item_id = item_id + current_top_item_id; // true item_id
 
     Inventory_t sell_item{};
     inventoryTakeOneItem(&sell_item, &store.inventory[item_id].item);
@@ -791,9 +791,9 @@ static bool storePurchaseAnItem(int store_id, int *current_top_item_id) {
 
             playerStrength();
 
-            if (*current_top_item_id >= store.store_id) {
-                *current_top_item_id = 0;
-                displayStoreInventory(store_id, *current_top_item_id);
+            if (current_top_item_id >= store.store_id) {
+                current_top_item_id = 0;
+                displayStoreInventory(store_id, current_top_item_id);
             } else {
                 InventoryRecord_t &store_item = store.inventory[item_id];
 
@@ -1004,7 +1004,7 @@ void storeEnter(int store_id) {
                     player_free_turn = false; // No free moves here. -CJS-
                     break;
                 case 'p':
-                    exit_store = storePurchaseAnItem(store_id, &current_top_item_id);
+                    exit_store = storePurchaseAnItem(store_id, current_top_item_id);
                     break;
                 case 's':
                     exit_store = storeSellAnItem(store_id, &current_top_item_id);
