@@ -187,7 +187,7 @@ int32_t storeItemSellPrice(int store_id, int32_t &min_price, int32_t &max_price,
 
 // Check to see if he will be carrying too many objects -RAK-
 bool storeCheckPlayerItemsCount(int store_id, const Inventory_t &item) {
-    Store_t &store = stores[store_id];
+    const Store_t &store = stores[store_id];
 
     if (store.store_id < STORE_MAX_DISCRETE_ITEMS) {
         return true;
@@ -200,7 +200,7 @@ bool storeCheckPlayerItemsCount(int store_id, const Inventory_t &item) {
     bool store_check = false;
 
     for (int i = 0; i < store.store_id; i++) {
-        Inventory_t &store_item = store.inventory[i].item;
+        const Inventory_t &store_item = store.inventory[i].item;
 
         // note: items with sub_category_id of gte ITEM_SINGLE_STACK_MAX only stack
         // if their `sub_category_id`s match
@@ -396,7 +396,7 @@ void storeMaintenance() {
 
 // eliminate need to bargain if player has haggled well in the past -DJB-
 bool storeNoNeedToBargain(int store_id, int32_t min_price) {
-    Store_t &store = stores[store_id];
+    const Store_t &store = stores[store_id];
 
     if (store.good_purchases == MAX_SHORT) {
         return true;
