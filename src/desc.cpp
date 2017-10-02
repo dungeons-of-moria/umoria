@@ -248,7 +248,7 @@ void itemIdentify(int &item_id) {
     int j;
 
     for (int i = 0; i < inventory_count; i++) {
-        Inventory_t &t_ptr = inventory[i];
+        const Inventory_t &t_ptr = inventory[i];
 
         if (t_ptr.category_id == x1 && t_ptr.sub_category_id == x2 && i != item_id && ((int) t_ptr.items_count + (int) item.items_count) < 256) {
             // make *item_id the smaller number
@@ -646,7 +646,7 @@ void itemDescription(obj_desc_t description, const Inventory_t &item, bool add_p
 }
 
 void inventoryItemCopyTo(int from_item_id, Inventory_t &to_item) {
-    GameObject_t &from = game_objects[from_item_id];
+    const GameObject_t &from = game_objects[from_item_id];
 
     to_item.id = (uint16_t) from_item_id;
     to_item.special_name_id = SN_NULL;
