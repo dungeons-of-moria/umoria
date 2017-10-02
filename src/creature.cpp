@@ -12,8 +12,8 @@
 static bool monsterIsVisible(const Monster_t &monster) {
     bool visible = false;
 
-    Cave_t &tile = cave[monster.y][monster.x];
-    Creature_t &creature = creatures_list[monster.creature_id];
+    const Cave_t &tile = cave[monster.y][monster.x];
+    const Creature_t &creature = creatures_list[monster.creature_id];
 
     if (tile.permanent_light || tile.temporary_light || ((running_counter != 0) && monster.distance_from_player < 2 && py.carrying_light)) {
         // Normal sight.
@@ -837,7 +837,7 @@ static void monsterAttackPlayer(int monster_id) {
     }
 
     Monster_t &monster = monsters[monster_id];
-    Creature_t &creature = creatures_list[monster.creature_id];
+    const Creature_t &creature = creatures_list[monster.creature_id];
 
     vtype_t name = {'\0'};
     if (!monster.lit) {
@@ -1297,7 +1297,7 @@ static bool monsterCastSpell(int monster_id) {
     }
 
     Monster_t &monster = monsters[monster_id];
-    Creature_t &creature = creatures_list[monster.creature_id];
+    const Creature_t &creature = creatures_list[monster.creature_id];
 
     if (!monsterCanCastSpells(monster, creature.spells)) {
         return false;
@@ -1369,7 +1369,7 @@ bool monsterMultiply(int y, int x, int creature_id, int monster_id) {
         // don't create a new creature on top of the old one, that
         // causes invincible/invisible creatures to appear.
         if (coordInBounds(pos_y, pos_x) && (pos_y != y || pos_x != x)) {
-            Cave_t &tile = cave[pos_y][pos_x];
+            const Cave_t &tile = cave[pos_y][pos_x];
 
             if (tile.feature_id <= MAX_OPEN_SPACE && tile.treasure_id == 0 && tile.creature_id != 1) {
                 // Creature there already?
