@@ -725,25 +725,25 @@ static void inventoryThrow(int item_id, Inventory_t *treasure) {
 }
 
 // Obtain the hit and damage bonuses and the maximum distance for a thrown missile.
-static void weaponMissileFacts(Inventory_t *item, int *tbth, int *tpth, int *tdam, int *tdis) {
-    int weight = item->weight;
+static void weaponMissileFacts(Inventory_t &item, int &base_to_hit, int &plus_to_hit, int &damage, int &distance) {
+    int weight = item.weight;
     if (weight < 1) {
         weight = 1;
     }
 
     // Throwing objects
-    *tdam = dicePlayerDamageRoll(item->damage) + item->to_damage;
-    *tbth = py.misc.bth_with_bows * 75 / 100;
-    *tpth = py.misc.plusses_to_hit + item->to_hit;
+    damage = dicePlayerDamageRoll(item.damage) + item.to_damage;
+    base_to_hit = py.misc.bth_with_bows * 75 / 100;
+    plus_to_hit = py.misc.plusses_to_hit + item.to_hit;
 
     // Add this back later if the correct throwing device. -CJS-
     if (inventory[EQUIPMENT_WIELD].category_id != TV_NOTHING) {
-        *tpth -= inventory[EQUIPMENT_WIELD].to_hit;
+        plus_to_hit -= inventory[EQUIPMENT_WIELD].to_hit;
     }
 
-    *tdis = (((py.stats.used[A_STR] + 20) * 10) / weight);
-    if (*tdis > 10) {
-        *tdis = 10;
+    distance = (((py.stats.used[A_STR] + 20) * 10) / weight);
+    if (distance > 10) {
+        distance = 10;
     }
 
     // multiply damage bonuses instead of adding, when have proper
@@ -756,57 +756,57 @@ static void weaponMissileFacts(Inventory_t *item, int *tbth, int *tpth, int *tda
 
     switch (inventory[EQUIPMENT_WIELD].misc_use) {
         case 1:
-            if (item->category_id == TV_SLING_AMMO) { // Sling and ammo
-                *tbth = py.misc.bth_with_bows;
-                *tpth += 2 * inventory[EQUIPMENT_WIELD].to_hit;
-                *tdam += inventory[EQUIPMENT_WIELD].to_damage;
-                *tdam = *tdam * 2;
-                *tdis = 20;
+            if (item.category_id == TV_SLING_AMMO) { // Sling and ammo
+                base_to_hit = py.misc.bth_with_bows;
+                plus_to_hit += 2 * inventory[EQUIPMENT_WIELD].to_hit;
+                damage += inventory[EQUIPMENT_WIELD].to_damage;
+                damage = damage * 2;
+                distance = 20;
             }
             break;
         case 2:
-            if (item->category_id == TV_ARROW) { // Short Bow and Arrow
-                *tbth = py.misc.bth_with_bows;
-                *tpth += 2 * inventory[EQUIPMENT_WIELD].to_hit;
-                *tdam += inventory[EQUIPMENT_WIELD].to_damage;
-                *tdam = *tdam * 2;
-                *tdis = 25;
+            if (item.category_id == TV_ARROW) { // Short Bow and Arrow
+                base_to_hit = py.misc.bth_with_bows;
+                plus_to_hit += 2 * inventory[EQUIPMENT_WIELD].to_hit;
+                damage += inventory[EQUIPMENT_WIELD].to_damage;
+                damage = damage * 2;
+                distance = 25;
             }
             break;
         case 3:
-            if (item->category_id == TV_ARROW) { // Long Bow and Arrow
-                *tbth = py.misc.bth_with_bows;
-                *tpth += 2 * inventory[EQUIPMENT_WIELD].to_hit;
-                *tdam += inventory[EQUIPMENT_WIELD].to_damage;
-                *tdam = *tdam * 3;
-                *tdis = 30;
+            if (item.category_id == TV_ARROW) { // Long Bow and Arrow
+                base_to_hit = py.misc.bth_with_bows;
+                plus_to_hit += 2 * inventory[EQUIPMENT_WIELD].to_hit;
+                damage += inventory[EQUIPMENT_WIELD].to_damage;
+                damage = damage * 3;
+                distance = 30;
             }
             break;
         case 4:
-            if (item->category_id == TV_ARROW) { // Composite Bow and Arrow
-                *tbth = py.misc.bth_with_bows;
-                *tpth += 2 * inventory[EQUIPMENT_WIELD].to_hit;
-                *tdam += inventory[EQUIPMENT_WIELD].to_damage;
-                *tdam = *tdam * 4;
-                *tdis = 35;
+            if (item.category_id == TV_ARROW) { // Composite Bow and Arrow
+                base_to_hit = py.misc.bth_with_bows;
+                plus_to_hit += 2 * inventory[EQUIPMENT_WIELD].to_hit;
+                damage += inventory[EQUIPMENT_WIELD].to_damage;
+                damage = damage * 4;
+                distance = 35;
             }
             break;
         case 5:
-            if (item->category_id == TV_BOLT) { // Light Crossbow and Bolt
-                *tbth = py.misc.bth_with_bows;
-                *tpth += 2 * inventory[EQUIPMENT_WIELD].to_hit;
-                *tdam += inventory[EQUIPMENT_WIELD].to_damage;
-                *tdam = *tdam * 3;
-                *tdis = 25;
+            if (item.category_id == TV_BOLT) { // Light Crossbow and Bolt
+                base_to_hit = py.misc.bth_with_bows;
+                plus_to_hit += 2 * inventory[EQUIPMENT_WIELD].to_hit;
+                damage += inventory[EQUIPMENT_WIELD].to_damage;
+                damage = damage * 3;
+                distance = 25;
             }
             break;
         case 6:
-            if (item->category_id == TV_BOLT) { // Heavy Crossbow and Bolt
-                *tbth = py.misc.bth_with_bows;
-                *tpth += 2 * inventory[EQUIPMENT_WIELD].to_hit;
-                *tdam += inventory[EQUIPMENT_WIELD].to_damage;
-                *tdam = *tdam * 4;
-                *tdis = 35;
+            if (item.category_id == TV_BOLT) { // Heavy Crossbow and Bolt
+                base_to_hit = py.misc.bth_with_bows;
+                plus_to_hit += 2 * inventory[EQUIPMENT_WIELD].to_hit;
+                damage += inventory[EQUIPMENT_WIELD].to_damage;
+                damage = damage * 4;
+                distance = 35;
             }
             break;
         default:
@@ -884,7 +884,7 @@ void playerThrowItem() {
     inventoryThrow(item_id, &thrown_item);
 
     int tbth, tpth, tdam, tdis;
-    weaponMissileFacts(&thrown_item, &tbth, &tpth, &tdam, &tdis);
+    weaponMissileFacts(thrown_item, tbth, tpth, tdam, tdis);
 
     char tile_char = thrown_item.sprite;
     bool visible;
