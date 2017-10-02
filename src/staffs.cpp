@@ -58,12 +58,12 @@ static bool staffPlayerCanUse(Inventory_t &item) {
     return true;
 }
 
-static bool staffDischarge(Inventory_t *item) {
+static bool staffDischarge(Inventory_t &item) {
     bool identified = false;
 
-    item->misc_use--;
+    item.misc_use--;
 
-    uint32_t flags = item->flags;
+    uint32_t flags = item.flags;
     while (flags != 0) {
         int staff_type = getAndClearFirstBit(flags) + 1;
 
@@ -195,7 +195,7 @@ void useStaff() {
         return;
     }
 
-    bool identified = staffDischarge(&item);
+    bool identified = staffDischarge(item);
 
     if (identified) {
         if (!itemSetColorlessAsIdentified(item.category_id, item.sub_category_id, item.identification)) {
