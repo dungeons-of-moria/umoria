@@ -36,7 +36,7 @@ static uint32_t rd_long();
 static void rd_bytes(uint8_t *value, int count);
 static void rd_string(char *str);
 static void rd_shorts(uint16_t *value, int count);
-static void rd_item(Inventory_t *item);
+static void rd_item(Inventory_t &item);
 static void rd_monster(Monster_t *monster);
 
 // these are used for the save file, to avoid having to pass them to every procedure
@@ -662,10 +662,10 @@ bool loadGame(bool &generate) {
                 goto error;
             }
             for (int i = 0; i < inventory_count; i++) {
-                rd_item(&inventory[i]);
+                rd_item(inventory[i]);
             }
             for (int i = EQUIPMENT_WIELD; i < PLAYER_INVENTORY_SIZE; i++) {
-                rd_item(&inventory[i]);
+                rd_item(inventory[i]);
             }
             inventory_weight = rd_short();
             equipment_count = rd_short();
@@ -703,7 +703,7 @@ bool loadGame(bool &generate) {
                 }
                 for (int j = 0; j < store.store_id; j++) {
                     store.inventory[j].cost = rd_long();
-                    rd_item(&store.inventory[j].item);
+                    rd_item(store.inventory[j].item);
                 }
             }
 
@@ -823,7 +823,7 @@ bool loadGame(bool &generate) {
             goto error;
         }
         for (int i = MIN_TREASURE_LIST_ID; i < current_treasure_id; i++) {
-            rd_item(&treasure_list[i]);
+            rd_item(treasure_list[i]);
         }
         next_free_monster_id = rd_short();
         if (next_free_monster_id > MON_TOTAL_ALLOCATIONS) {
@@ -847,7 +847,7 @@ bool loadGame(bool &generate) {
             }
             for (int j = 0; j < store.store_id; j++) {
                 store.inventory[j].cost = rd_long();
-                rd_item(&store.inventory[j].item);
+                rd_item(store.inventory[j].item);
             }
         }
 
@@ -1142,26 +1142,26 @@ static void rd_shorts(uint16_t *value, int count) {
     DEBUG(fprintf(logfile, "\n"));
 }
 
-static void rd_item(Inventory_t *item) {
+static void rd_item(Inventory_t &item) {
     DEBUG(fprintf(logfile, "ITEM:\n"));
-    item->id = rd_short();
-    item->special_name_id = rd_byte();
-    rd_string(item->inscription);
-    item->flags = rd_long();
-    item->category_id = rd_byte();
-    item->sprite = rd_byte();
-    item->misc_use = rd_short();
-    item->cost = rd_long();
-    item->sub_category_id = rd_byte();
-    item->items_count = rd_byte();
-    item->weight = rd_short();
-    item->to_hit = rd_short();
-    item->to_damage = rd_short();
-    item->ac = rd_short();
-    item->to_ac = rd_short();
-    rd_bytes(item->damage, 2);
-    item->depth_first_found = rd_byte();
-    item->identification = rd_byte();
+    item.id = rd_short();
+    item.special_name_id = rd_byte();
+    rd_string(item.inscription);
+    item.flags = rd_long();
+    item.category_id = rd_byte();
+    item.sprite = rd_byte();
+    item.misc_use = rd_short();
+    item.cost = rd_long();
+    item.sub_category_id = rd_byte();
+    item.items_count = rd_byte();
+    item.weight = rd_short();
+    item.to_hit = rd_short();
+    item.to_damage = rd_short();
+    item.ac = rd_short();
+    item.to_ac = rd_short();
+    rd_bytes(item.damage, 2);
+    item.depth_first_found = rd_byte();
+    item.identification = rd_byte();
 }
 
 static void rd_monster(Monster_t *monster) {
