@@ -195,7 +195,7 @@ void getAndCastMagicSpell() {
 
     player_free_turn = false;
 
-    Spell_t &magic_spell = magic_spells[py.misc.class_id - 1][choice];
+    const Spell_t &magic_spell = magic_spells[py.misc.class_id - 1][choice];
 
     if (randomNumber(100) < chance) {
         printMessage("You failed to get the spell off!");
