@@ -90,7 +90,7 @@ static void playerResetFlags() {
 
 static void playerRecalculateBonusesFromInventory() {
     for (int i = EQUIPMENT_WIELD; i < EQUIPMENT_LIGHT; i++) {
-        Inventory_t &item = inventory[i];
+        const Inventory_t &item = inventory[i];
 
         if (item.category_id != TV_NOTHING) {
             py.misc.plusses_to_hit += item.to_hit;
