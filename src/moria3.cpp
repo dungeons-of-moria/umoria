@@ -716,7 +716,7 @@ static void playerGainKillExperience(const Creature_t &creature) {
 // (Picking on my babies.) -RAK-
 int monsterTakeHit(int monster_id, int damage) {
     Monster_t &monster = monsters[monster_id];
-    Creature_t &creature = creatures_list[monster.creature_id];
+    const Creature_t &creature = creatures_list[monster.creature_id];
 
     monster.sleep_count = 0;
     monster.hp -= damage;
@@ -798,7 +798,7 @@ static void playerAttackMonster(int y, int x) {
     int creature_id = cave[y][x].creature_id;
 
     Monster_t &monster = monsters[creature_id];
-    Creature_t &creature = creatures_list[monster.creature_id];
+    const Creature_t &creature = creatures_list[monster.creature_id];
     Inventory_t &item = inventory[EQUIPMENT_WIELD];
 
     monster.sleep_count = 0;
@@ -922,8 +922,8 @@ void playerMove(int direction, bool do_pickup) {
         return;
     }
 
-    Cave_t &tile = cave[y][x];
-    Monster_t &monster = monsters[tile.creature_id];
+    const Cave_t &tile = cave[y][x];
+    const Monster_t &monster = monsters[tile.creature_id];
 
     // if there is no creature, or an unlit creature in the walls then...
     // disallow attacks against unlit creatures in walls because moving into
@@ -1154,7 +1154,7 @@ static void openClosedDoor(int y, int x) {
 }
 
 static void openClosedChest(int y, int x) {
-    Cave_t &tile = cave[y][x];
+    const Cave_t &tile = cave[y][x];
     Inventory_t &item = treasure_list[tile.treasure_id];
 
     bool success = false;
@@ -1217,8 +1217,8 @@ void objectOpen() {
 
     bool no_object = false;
 
-    Cave_t &tile = cave[y][x];
-    Inventory_t &item = treasure_list[tile.treasure_id];
+    const Cave_t &tile = cave[y][x];
+    const Inventory_t &item = treasure_list[tile.treasure_id];
 
     if (tile.creature_id > 1 && tile.treasure_id != 0 && (item.category_id == TV_CLOSED_DOOR || item.category_id == TV_CHEST)) {
         objectBlockedByMonster(tile.creature_id);
@@ -1333,7 +1333,7 @@ void objectBlockedByMonster(int monster_id) {
     vtype_t description = {'\0'};
     vtype_t msg = {'\0'};
 
-    Monster_t &monster = monsters[monster_id];
+    const Monster_t &monster = monsters[monster_id];
     const char *name = creatures_list[monster.creature_id].name;
 
     if (monster.lit) {
