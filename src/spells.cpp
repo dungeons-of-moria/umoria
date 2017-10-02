@@ -51,7 +51,7 @@ bool monsterSleep(int y, int x) {
             }
 
             Monster_t &monster = monsters[monster_id];
-            Creature_t &creature = creatures_list[monster.creature_id];
+            const Creature_t &creature = creatures_list[monster.creature_id];
 
             vtype_t name = {'\0'};
             monsterNameDescription(name, monster.lit, creature.name);
@@ -365,7 +365,7 @@ bool spellSurroundPlayerWithTraps() {
                 continue;
             }
 
-            Cave_t &tile = cave[y][x];
+            const Cave_t &tile = cave[y][x];
 
             if (tile.feature_id <= MAX_CAVE_FLOOR) {
                 if (tile.treasure_id != 0) {
@@ -426,7 +426,7 @@ bool spellDestroyAdjacentDoorsTraps() {
 
     for (int y = char_row - 1; y <= char_row + 1; y++) {
         for (int x = char_col - 1; x <= char_col + 1; x++) {
-            Cave_t &tile = cave[y][x];
+            const Cave_t &tile = cave[y][x];
 
             if (tile.treasure_id == 0) {
                 continue;
@@ -483,8 +483,8 @@ bool spellDetectMonsters() {
 
 // Update monster when light line spell touches it.
 static void spellLightLineTouchesMonster(int monster_id) {
-    Monster_t &monster = monsters[monster_id];
-    Creature_t &creature = creatures_list[monster.creature_id];
+    const Monster_t &monster = monsters[monster_id];
+    const Creature_t &creature = creatures_list[monster.creature_id];
 
     // light up and draw monster
     monsterUpdateVisibility(monster_id);
@@ -650,8 +650,8 @@ static void getAreaAffectFlags(int spell_type, uint32_t &weapon_type, int &harm_
 
 // Light up, draw, and check for monster damage when Fire Bolt touches it.
 static void spellFireBoltTouchesMonster(Cave_t &tile, int damage, int harm_type, uint32_t weapon_id, const std::string &bolt_name) {
-    Monster_t &monster = monsters[tile.creature_id];
-    Creature_t &creature = creatures_list[monster.creature_id];
+    const Monster_t &monster = monsters[tile.creature_id];
+    const Creature_t &creature = creatures_list[monster.creature_id];
 
     // light up monster and draw monster, temporarily set
     // permanent_light so that monsterUpdateVisibility() will work
@@ -782,8 +782,8 @@ void spellFireBall(int y, int x, int direction, int damage_hp, int spell_type, c
 
                         if (tile.feature_id <= MAX_OPEN_SPACE) {
                             if (tile.creature_id > 1) {
-                                Monster_t &monster = monsters[tile.creature_id];
-                                Creature_t &creature = creatures_list[monster.creature_id];
+                                const Monster_t &monster = monsters[tile.creature_id];
+                                const Creature_t &creature = creatures_list[monster.creature_id];
 
                                 // lite up creature if visible, temp set permanent_light so that monsterUpdateVisibility works
                                 bool saved_lit_status = tile.permanent_light;
@@ -872,7 +872,7 @@ void spellBreath(int y, int x, int monster_id, int damage_hp, int spell_type, ch
     for (int row = y - 2; row <= y + 2; row++) {
         for (int col = x - 2; col <= x + 2; col++) {
             if (coordInBounds(row, col) && coordDistanceBetween(y, x, row, col) <= max_distance && los(y, x, row, col)) {
-                Cave_t &tile = cave[row][col];
+                const Cave_t &tile = cave[row][col];
 
                 if (tile.treasure_id != 0 && (*destroy)(&treasure_list[tile.treasure_id])) {
                     (void) dungeonDeleteObject(row, col);
@@ -888,7 +888,7 @@ void spellBreath(int y, int x, int monster_id, int damage_hp, int spell_type, ch
 
                     if (tile.creature_id > 1) {
                         Monster_t &monster = monsters[tile.creature_id];
-                        Creature_t &creature = creatures_list[monster.creature_id];
+                        const Creature_t &creature = creatures_list[monster.creature_id];
 
                         int damage = damage_hp;
 
@@ -1029,7 +1029,7 @@ bool spellChangeMonsterHitPoints(int y, int x, int direction, int damage_hp) {
         (void) playerMovePosition(direction, y, x);
         distance++;
 
-        Cave_t &tile = cave[y][x];
+        const Cave_t &tile = cave[y][x];
 
         if (distance > OBJECT_BOLTS_MAX_RANGE || tile.feature_id >= MIN_CLOSED_SPACE) {
             finished = true;
@@ -1039,8 +1039,8 @@ bool spellChangeMonsterHitPoints(int y, int x, int direction, int damage_hp) {
         if (tile.creature_id > 1) {
             finished = true;
 
-            Monster_t &monster = monsters[tile.creature_id];
-            Creature_t &creature = creatures_list[monster.creature_id];
+            const Monster_t &monster = monsters[tile.creature_id];
+            const Creature_t &creature = creatures_list[monster.creature_id];
 
             vtype_t name = {'\0'};
             monsterNameDescription(name, monster.lit, creature.name);
@@ -1069,7 +1069,7 @@ bool spellDrainLifeFromMonster(int y, int x, int direction) {
         (void) playerMovePosition(direction, y, x);
         distance++;
 
-        Cave_t &tile = cave[y][x];
+        const Cave_t &tile = cave[y][x];
 
         if (distance > OBJECT_BOLTS_MAX_RANGE || tile.feature_id >= MIN_CLOSED_SPACE) {
             finished = true;
@@ -1079,8 +1079,8 @@ bool spellDrainLifeFromMonster(int y, int x, int direction) {
         if (tile.creature_id > 1) {
             finished = true;
 
-            Monster_t &monster = monsters[tile.creature_id];
-            Creature_t &creature = creatures_list[monster.creature_id];
+            const Monster_t &monster = monsters[tile.creature_id];
+            const Creature_t &creature = creatures_list[monster.creature_id];
 
             if ((creature.defenses & CD_UNDEAD) == 0) {
                 vtype_t name = {'\0'};
@@ -1114,7 +1114,7 @@ bool spellSpeedMonster(int y, int x, int direction, int speed) {
         (void) playerMovePosition(direction, y, x);
         distance++;
 
-        Cave_t &tile = cave[y][x];
+        const Cave_t &tile = cave[y][x];
 
         if (distance > OBJECT_BOLTS_MAX_RANGE || tile.feature_id >= MIN_CLOSED_SPACE) {
             finished = true;
@@ -1125,7 +1125,7 @@ bool spellSpeedMonster(int y, int x, int direction, int speed) {
             finished = true;
 
             Monster_t &monster = monsters[tile.creature_id];
-            Creature_t &creature = creatures_list[monster.creature_id];
+            const Creature_t &creature = creatures_list[monster.creature_id];
 
             vtype_t name = {'\0'};
             monsterNameDescription(name, monster.lit, creature.name);
@@ -1165,7 +1165,7 @@ bool spellConfuseMonster(int y, int x, int direction) {
         (void) playerMovePosition(direction, y, x);
         distance++;
 
-        Cave_t &tile = cave[y][x];
+        const Cave_t &tile = cave[y][x];
 
         if (distance > OBJECT_BOLTS_MAX_RANGE || tile.feature_id >= MIN_CLOSED_SPACE) {
             finished = true;
@@ -1176,7 +1176,7 @@ bool spellConfuseMonster(int y, int x, int direction) {
             finished = true;
 
             Monster_t &monster = monsters[tile.creature_id];
-            Creature_t &creature = creatures_list[monster.creature_id];
+            const Creature_t &creature = creatures_list[monster.creature_id];
 
             vtype_t name = {'\0'};
             monsterNameDescription(name, monster.lit, creature.name);
@@ -1221,7 +1221,7 @@ bool spellSleepMonster(int y, int x, int direction) {
         (void) playerMovePosition(direction, y, x);
         distance++;
 
-        Cave_t &tile = cave[y][x];
+        const Cave_t &tile = cave[y][x];
 
         if (distance > OBJECT_BOLTS_MAX_RANGE || tile.feature_id >= MIN_CLOSED_SPACE) {
             finished = true;
@@ -1232,7 +1232,7 @@ bool spellSleepMonster(int y, int x, int direction) {
             finished = true;
 
             Monster_t &monster = monsters[tile.creature_id];
-            Creature_t &creature = creatures_list[monster.creature_id];
+            const Creature_t &creature = creatures_list[monster.creature_id];
 
             vtype_t name = {'\0'};
             monsterNameDescription(name, monster.lit, creature.name);
@@ -1266,7 +1266,7 @@ bool spellWallToMud(int y, int x, int direction) {
         (void) playerMovePosition(direction, y, x);
         distance++;
 
-        Cave_t &tile = cave[y][x];
+        const Cave_t &tile = cave[y][x];
 
         // note, this ray can move through walls as it turns them to mud
         if (distance == OBJECT_BOLTS_MAX_RANGE) {
@@ -1311,8 +1311,8 @@ bool spellWallToMud(int y, int x, int direction) {
         }
 
         if (tile.creature_id > 1) {
-            Monster_t &monster = monsters[tile.creature_id];
-            Creature_t &creature = creatures_list[monster.creature_id];
+            const Monster_t &monster = monsters[tile.creature_id];
+            const Creature_t &creature = creatures_list[monster.creature_id];
 
             if ((CD_STONE & creature.defenses) != 0) {
                 vtype_t name = {'\0'};
@@ -1385,7 +1385,7 @@ bool spellPolymorphMonster(int y, int x, int direction) {
         (void) playerMovePosition(direction, y, x);
         distance++;
 
-        Cave_t &tile = cave[y][x];
+        const Cave_t &tile = cave[y][x];
 
         if (distance > OBJECT_BOLTS_MAX_RANGE || tile.feature_id >= MIN_CLOSED_SPACE) {
             finished = true;
@@ -1393,8 +1393,8 @@ bool spellPolymorphMonster(int y, int x, int direction) {
         }
 
         if (tile.creature_id > 1) {
-            Monster_t &monster = monsters[tile.creature_id];
-            Creature_t &creature = creatures_list[monster.creature_id];
+            const Monster_t &monster = monsters[tile.creature_id];
+            const Creature_t &creature = creatures_list[monster.creature_id];
 
             if (randomNumber(MON_MAX_LEVELS) > creature.level) {
                 finished = true;
@@ -1444,7 +1444,7 @@ bool spellBuildWall(int y, int x, int direction) {
             finished = true;
 
             Monster_t &monster = monsters[tile.creature_id];
-            Creature_t &creature = creatures_list[monster.creature_id];
+            const Creature_t &creature = creatures_list[monster.creature_id];
 
             if ((creature.movement & CM_PHASE) == 0u) {
                 // monster does not move, can't escape the wall
@@ -1494,7 +1494,7 @@ bool spellCloneMonster(int y, int x, int direction) {
         (void) playerMovePosition(direction, y, x);
         distance++;
 
-        Cave_t &tile = cave[y][x];
+        const Cave_t &tile = cave[y][x];
 
         if (distance > OBJECT_BOLTS_MAX_RANGE || tile.feature_id >= MIN_CLOSED_SPACE) {
             finished = true;
@@ -1588,7 +1588,7 @@ bool spellTeleportAwayMonsterInDirection(int y, int x, int direction) {
         (void) playerMovePosition(direction, y, x);
         distance++;
 
-        Cave_t &tile = cave[y][x];
+        const Cave_t &tile = cave[y][x];
 
         if (distance > OBJECT_BOLTS_MAX_RANGE || tile.feature_id >= MIN_CLOSED_SPACE) {
             finished = true;
@@ -1614,8 +1614,8 @@ bool spellMassGenocide() {
     bool killed = false;
 
     for (int id = next_free_monster_id - 1; id >= MON_MIN_INDEX_ID; id--) {
-        Monster_t &monster = monsters[id];
-        Creature_t &creature = creatures_list[monster.creature_id];
+        const Monster_t &monster = monsters[id];
+        const Creature_t &creature = creatures_list[monster.creature_id];
 
         if (monster.distance_from_player <= MON_MAX_SIGHT && (creature.movement & CM_WIN) == 0) {
             killed = true;
@@ -1638,8 +1638,8 @@ bool spellGenocide() {
     bool killed = false;
 
     for (int id = next_free_monster_id - 1; id >= MON_MIN_INDEX_ID; id--) {
-        Monster_t &monster = monsters[id];
-        Creature_t &creature = creatures_list[monster.creature_id];
+        const Monster_t &monster = monsters[id];
+        const Creature_t &creature = creatures_list[monster.creature_id];
 
         if (creature_char == creatures_list[monster.creature_id].sprite) {
             if ((creature.movement & CM_WIN) == 0) {
@@ -1666,7 +1666,7 @@ bool spellSpeedAllMonsters(int speed) {
 
     for (int id = next_free_monster_id - 1; id >= MON_MIN_INDEX_ID; id--) {
         Monster_t &monster = monsters[id];
-        Creature_t &creature = creatures_list[monster.creature_id];
+        const Creature_t &creature = creatures_list[monster.creature_id];
 
         vtype_t name = {'\0'};
         monsterNameDescription(name, monster.lit, creature.name);
@@ -1706,7 +1706,7 @@ bool spellSleepAllMonsters() {
 
     for (int id = next_free_monster_id - 1; id >= MON_MIN_INDEX_ID; id--) {
         Monster_t &monster = monsters[id];
-        Creature_t &creature = creatures_list[monster.creature_id];
+        const Creature_t &creature = creatures_list[monster.creature_id];
 
         vtype_t name = {'\0'};
         monsterNameDescription(name, monster.lit, creature.name);
@@ -1740,10 +1740,10 @@ bool spellMassPolymorph() {
     bool morphed = false;
 
     for (int id = next_free_monster_id - 1; id >= MON_MIN_INDEX_ID; id--) {
-        Monster_t &monster = monsters[id];
+        const Monster_t &monster = monsters[id];
 
         if (monster.distance_from_player <= MON_MAX_SIGHT) {
-            Creature_t &creature = creatures_list[monster.creature_id];
+            const Creature_t &creature = creatures_list[monster.creature_id];
 
             if ((creature.movement & CM_WIN) == 0) {
                 int y = monster.y;
@@ -1857,7 +1857,7 @@ bool playerRemoveFear() {
 
 static void earthquakeHitsMonster(int monsterID) {
     Monster_t &monster = monsters[monsterID];
-    Creature_t &creature = creatures_list[monster.creature_id];
+    const Creature_t &creature = creatures_list[monster.creature_id];
 
     if ((creature.movement & CM_PHASE) == 0u) {
         int damage;
@@ -1937,7 +1937,7 @@ bool playerProtectEvil() {
 void spellCreateFood() {
     // Note: must take reference to this location as dungeonPlaceRandomObjectAt()
     // below, changes the tile values.
-    Cave_t &tile = cave[char_row][char_col];
+    const Cave_t &tile = cave[char_row][char_col];
 
     // take no action here, don't want to destroy object under player
     if (tile.treasure_id != 0) {
@@ -1959,10 +1959,10 @@ bool spellDispelCreature(int creature_defense, int damage) {
     bool dispelled = false;
 
     for (int id = next_free_monster_id - 1; id >= MON_MIN_INDEX_ID; id--) {
-        Monster_t &monster = monsters[id];
+        const Monster_t &monster = monsters[id];
 
         if (monster.distance_from_player <= MON_MAX_SIGHT && ((creature_defense & creatures_list[monster.creature_id].defenses) != 0) && los(char_row, char_col, (int) monster.y, (int) monster.x)) {
-            Creature_t &creature = creatures_list[monster.creature_id];
+            const Creature_t &creature = creatures_list[monster.creature_id];
 
             creature_recall[monster.creature_id].defenses |= creature_defense;
 
@@ -1995,7 +1995,7 @@ bool spellTurnUndead() {
 
     for (int id = next_free_monster_id - 1; id >= MON_MIN_INDEX_ID; id--) {
         Monster_t &monster = monsters[id];
-        Creature_t &creature = creatures_list[monster.creature_id];
+        const Creature_t &creature = creatures_list[monster.creature_id];
 
         if (monster.distance_from_player <= MON_MAX_SIGHT && ((CD_UNDEAD & creature.defenses) != 0) && los(char_row, char_col, (int) monster.y, (int) monster.x)) {
             vtype_t name = {'\0'};
@@ -2111,7 +2111,7 @@ void spellLoseEXP(int32_t adjustment) {
 
         playerCalculateHitPoints();
 
-        Class_t &character_class = classes[py.misc.class_id];
+        const Class_t &character_class = classes[py.misc.class_id];
 
         if (character_class.class_to_use_mage_spells == SPELL_TYPE_MAGE) {
             playerCalculateAllowedSpellsCount(A_INT);
