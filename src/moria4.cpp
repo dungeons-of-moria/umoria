@@ -10,7 +10,7 @@
 #include "externs.h"
 
 static bool lookRay(int y, int from, int to);
-static bool lookSee(int x, int y, bool *transparent);
+static bool lookSee(int x, int y, bool &transparent);
 
 // Don't let the player tunnel somewhere illegal, this is necessary to
 // prevent the player from getting a free attack by trying to tunnel
@@ -412,7 +412,7 @@ void look() {
     los_hack_no_query = false;
 
     bool dummy;
-    if (lookSee(0, 0, &dummy)) {
+    if (lookSee(0, 0, dummy)) {
         return;
     }
 
@@ -538,7 +538,7 @@ static bool lookRay(int y, int from, int to) {
 
     bool transparent;
 
-    if (lookSee(x, y, &transparent)) {
+    if (lookSee(x, y, transparent)) {
         return true;
     }
 
@@ -571,7 +571,7 @@ static bool lookRay(int y, int from, int to) {
 
             x++;
 
-            if (lookSee(x, y, &transparent)) {
+            if (lookSee(x, y, transparent)) {
                 return true;
             }
         } while (!transparent);
@@ -587,14 +587,14 @@ static bool lookRay(int y, int from, int to) {
 
             x++;
 
-            if (lookSee(x, y, &transparent)) {
+            if (lookSee(x, y, transparent)) {
                 return true;
             }
         } while (transparent);
     }
 }
 
-static bool lookSee(int x, int y, bool *transparent) {
+static bool lookSee(int x, int y, bool &transparent) {
     if (x < 0 || y < 0 || y > x) {
         obj_desc_t errorMessage = {'\0'};
         (void) sprintf(errorMessage, "Illegal call to lookSee(%d, %d)", x, y);
@@ -613,12 +613,12 @@ static bool lookSee(int x, int y, bool *transparent) {
     x = j;
 
     if (!coordInsidePanel(y, x)) {
-        *transparent = false;
+        transparent = false;
         return false;
     }
 
     Cave_t &tile = cave[y][x];
-    *transparent = tile.feature_id <= MAX_OPEN_SPACE;
+    transparent = tile.feature_id <= MAX_OPEN_SPACE;
 
     if (los_hack_no_query) {
         return false; // Don't look at a direct line of sight. A hack.
