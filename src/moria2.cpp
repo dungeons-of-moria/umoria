@@ -336,7 +336,7 @@ void playerEndRunning() {
 }
 
 static bool areaAffectStopLookingAtSquares(int i, int dir, int new_dir, int y, int x, int &check_dir, int &option1, int &option2) {
-    Cave_t &tile = cave[y][x];
+    const Cave_t &tile = cave[y][x];
 
     // Default: Square unseen. Treat as open.
     bool invisible = true;
