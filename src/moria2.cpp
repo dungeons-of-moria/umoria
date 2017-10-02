@@ -335,7 +335,7 @@ void playerEndRunning() {
     dungeonMoveCharacterLight(char_row, char_col, char_row, char_col);
 }
 
-static bool areaAffectStopLookingAtSquares(int i, int dir, int new_dir, int y, int x, int *check_dir, int *option1, int *option2) {
+static bool areaAffectStopLookingAtSquares(int i, int dir, int new_dir, int y, int x, int &check_dir, int &option1, int &option2) {
     Cave_t &tile = cave[y][x];
 
     // Default: Square unseen. Treat as open.
@@ -376,14 +376,14 @@ static bool areaAffectStopLookingAtSquares(int i, int dir, int new_dir, int y, i
                     return true;
                 }
             }
-        } else if (*option1 == 0) {
+        } else if (option1 == 0) {
             // The first new direction.
-            *option1 = new_dir;
-        } else if (*option2 != 0) {
+            option1 = new_dir;
+        } else if (option2 != 0) {
             // Three new directions. STOP.
             playerEndRunning();
             return true;
-        } else if (*option1 != cycle[chome[dir] + i - 1]) {
+        } else if (option1 != cycle[chome[dir] + i - 1]) {
             // If not adjacent to prev, STOP
             playerEndRunning();
             return true;
@@ -391,12 +391,12 @@ static bool areaAffectStopLookingAtSquares(int i, int dir, int new_dir, int y, i
             // Two adjacent choices. Make option2 the diagonal, and
             // remember the other diagonal adjacent to the first option.
             if ((new_dir & 1) == 1) {
-                *check_dir = cycle[chome[dir] + i - 2];
-                *option2 = new_dir;
+                check_dir = cycle[chome[dir] + i - 2];
+                option2 = new_dir;
             } else {
-                *check_dir = cycle[chome[dir] + i + 1];
-                *option2 = *option1;
-                *option1 = new_dir;
+                check_dir = cycle[chome[dir] + i + 1];
+                option2 = option1;
+                option1 = new_dir;
             }
         }
     } else if (find_openarea) {
@@ -442,7 +442,7 @@ void playerAreaAffect(int direction, int y, int x) {
 
         // Objects player can see (Including doors?) cause a stop.
         if (playerMovePosition(new_dir, row, col)) {
-            areaAffectStopLookingAtSquares(i, direction, new_dir, row, col, &check_dir, &option, &option2);
+            areaAffectStopLookingAtSquares(i, direction, new_dir, row, col, check_dir, option, option2);
         }
     }
 
