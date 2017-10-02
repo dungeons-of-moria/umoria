@@ -66,7 +66,7 @@ static void characterChangeStat(int stat, int16_t amount) {
 // generate all stats and modify for race. needed in a separate
 // module so looping of character selection would be allowed -RGM-
 static void characterGenerateStatsAndRace() {
-    Race_t &race = character_races[py.misc.race_id];
+    const Race_t &race = character_races[py.misc.race_id];
 
     characterGenerateStats();
     characterChangeStat(A_STR, race.str_adjustment);
@@ -190,7 +190,7 @@ static void characterGetHistory() {
                     background_id++;
                 }
 
-                Background_t &background = character_backgrounds[background_id];
+                const Background_t &background = character_backgrounds[background_id];
 
                 (void) strcat(history_block, background.info);
                 social_class += background.bonus - 50;
@@ -366,7 +366,7 @@ static void characterGetClass() {
 
             py.misc.class_id = (uint8_t) class_list[class_id];
 
-            Class_t &klass = classes[py.misc.class_id];
+            const Class_t &klass = classes[py.misc.class_id];
 
             clearToBottom(20);
             putString(klass.title, 5, 15);
