@@ -37,7 +37,7 @@ static void rd_bytes(uint8_t *value, int count);
 static void rd_string(char *str);
 static void rd_shorts(uint16_t *value, int count);
 static void rd_item(Inventory_t &item);
-static void rd_monster(Monster_t *monster);
+static void rd_monster(Monster_t &monster);
 
 // these are used for the save file, to avoid having to pass them to every procedure
 static FILE *fileptr;
@@ -830,7 +830,7 @@ bool loadGame(bool &generate) {
             goto error;
         }
         for (int i = MON_MIN_INDEX_ID; i < next_free_monster_id; i++) {
-            rd_monster(&monsters[i]);
+            rd_monster(monsters[i]);
         }
 
         generate = false; // We have restored a cave - no need to generate.
@@ -1164,18 +1164,18 @@ static void rd_item(Inventory_t &item) {
     item.identification = rd_byte();
 }
 
-static void rd_monster(Monster_t *monster) {
+static void rd_monster(Monster_t &monster) {
     DEBUG(fprintf(logfile, "MONSTER:\n"));
-    monster->hp = rd_short();
-    monster->sleep_count = rd_short();
-    monster->speed = rd_short();
-    monster->creature_id = rd_short();
-    monster->y = rd_byte();
-    monster->x = rd_byte();
-    monster->distance_from_player = rd_byte();
-    monster->lit = rd_bool();
-    monster->stunned_amount = rd_byte();
-    monster->confused_amount = rd_byte();
+    monster.hp = rd_short();
+    monster.sleep_count = rd_short();
+    monster.speed = rd_short();
+    monster.creature_id = rd_short();
+    monster.y = rd_byte();
+    monster.x = rd_byte();
+    monster.distance_from_player = rd_byte();
+    monster.lit = rd_bool();
+    monster.stunned_amount = rd_byte();
+    monster.confused_amount = rd_byte();
 }
 
 // functions called from death.c to implement the score file
