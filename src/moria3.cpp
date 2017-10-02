@@ -9,7 +9,7 @@
 #include "headers.h"
 #include "externs.h"
 
-static void trapOpenPit(Inventory_t *t_ptr, int dam) {
+static void trapOpenPit(const Inventory_t &item, int dam) {
     printMessage("You fell into a pit!");
 
     if (py.flags.free_fall) {
@@ -18,14 +18,14 @@ static void trapOpenPit(Inventory_t *t_ptr, int dam) {
     }
 
     obj_desc_t description = {'\0'};
-    itemDescription(description, *t_ptr, true);
+    itemDescription(description, item, true);
     playerTakesHit(dam, description);
 }
 
-static void trapArrow(Inventory_t *t_ptr, int dam) {
+static void trapArrow(const Inventory_t &item, int dam) {
     if (playerTestBeingHit(125, 0, 0, py.misc.ac + py.misc.magical_ac, CLASS_MISC_HIT)) {
         obj_desc_t description = {'\0'};
-        itemDescription(description, *t_ptr, true);
+        itemDescription(description, item, true);
         playerTakesHit(dam, description);
 
         printMessage("An arrow hits you.");
@@ -35,21 +35,21 @@ static void trapArrow(Inventory_t *t_ptr, int dam) {
     printMessage("An arrow barely misses you.");
 }
 
-static void trapCoveredPit(Inventory_t *t_ptr, int dam, int y, int x) {
+static void trapCoveredPit(const Inventory_t &item, int dam, int y, int x) {
     printMessage("You fell into a covered pit.");
 
     if (py.flags.free_fall) {
         printMessage("You gently float down.");
     } else {
         obj_desc_t description = {'\0'};
-        itemDescription(description, *t_ptr, true);
+        itemDescription(description, item, true);
         playerTakesHit(dam, description);
     }
 
     dungeonSetTrap(y, x, 0);
 }
 
-static void trapDoor(Inventory_t *t_ptr, int dam) {
+static void trapDoor(const Inventory_t &item, int dam) {
     generate_new_level = true;
     current_dungeon_level++;
 
@@ -59,7 +59,7 @@ static void trapDoor(Inventory_t *t_ptr, int dam) {
         printMessage("You gently float down.");
     } else {
         obj_desc_t description = {'\0'};
-        itemDescription(description, *t_ptr, true);
+        itemDescription(description, item, true);
         playerTakesHit(dam, description);
     }
 
@@ -91,13 +91,13 @@ static void trapHiddenObject(int y, int x) {
     printMessage("Hmmm, there was something under this rock.");
 }
 
-static void trapStrengthDart(Inventory_t *t_ptr, int dam) {
+static void trapStrengthDart(const Inventory_t &item, int dam) {
     if (playerTestBeingHit(125, 0, 0, py.misc.ac + py.misc.magical_ac, CLASS_MISC_HIT)) {
         if (!py.flags.sustain_str) {
             (void) playerStatRandomDecrease(A_STR);
 
             obj_desc_t description = {'\0'};
-            itemDescription(description, *t_ptr, true);
+            itemDescription(description, item, true);
             playerTakesHit(dam, description);
 
             printMessage("A small dart weakens you!");
@@ -180,10 +180,10 @@ static void trapConfuseGas() {
     py.flags.confused += randomNumber(15) + 15;
 }
 
-static void trapSlowDart(Inventory_t *t_ptr, int dam) {
+static void trapSlowDart(const Inventory_t &item, int dam) {
     if (playerTestBeingHit(125, 0, 0, py.misc.ac + py.misc.magical_ac, CLASS_MISC_HIT)) {
         obj_desc_t description = {'\0'};
-        itemDescription(description, *t_ptr, true);
+        itemDescription(description, item, true);
         playerTakesHit(dam, description);
 
         printMessage("A small dart hits you!");
@@ -198,13 +198,13 @@ static void trapSlowDart(Inventory_t *t_ptr, int dam) {
     }
 }
 
-static void trapConstitutionDart(Inventory_t *t_ptr, int dam) {
+static void trapConstitutionDart(const Inventory_t &item, int dam) {
     if (playerTestBeingHit(125, 0, 0, py.misc.ac + py.misc.magical_ac, CLASS_MISC_HIT)) {
         if (!py.flags.sustain_con) {
             (void) playerStatRandomDecrease(A_CON);
 
             obj_desc_t description = {'\0'};
-            itemDescription(description, *t_ptr, true);
+            itemDescription(description, item, true);
             playerTakesHit(dam, description);
 
             printMessage("A small dart saps your health!");
@@ -228,19 +228,19 @@ static void playerStepsOnTrap(int y, int x) {
     switch (item.sub_category_id) {
         case 1:
             // Open pit
-            trapOpenPit(&item, damage);
+            trapOpenPit(item, damage);
             break;
         case 2:
             // Arrow trap
-            trapArrow(&item, damage);
+            trapArrow(item, damage);
             break;
         case 3:
             // Covered pit
-            trapCoveredPit(&item, damage, y, x);
+            trapCoveredPit(item, damage, y, x);
             break;
         case 4:
             // Trap door
-            trapDoor(&item, damage);
+            trapDoor(item, damage);
             break;
         case 5:
             // Sleep gas
@@ -252,7 +252,7 @@ static void playerStepsOnTrap(int y, int x) {
             break;
         case 7:
             // STR Dart
-            trapStrengthDart(&item, damage);
+            trapStrengthDart(item, damage);
             break;
         case 8:
             // Teleport
@@ -292,11 +292,11 @@ static void playerStepsOnTrap(int y, int x) {
             break;
         case 17:
             // Slow Dart
-            trapSlowDart(&item, damage);
+            trapSlowDart(item, damage);
             break;
         case 18:
             // CON Dart
-            trapConstitutionDart(&item, damage);
+            trapConstitutionDart(item, damage);
             break;
         case 19:
             // Secret Door
