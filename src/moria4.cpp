@@ -141,7 +141,7 @@ void playerTunnel(int direction) {
     int x = char_col;
     (void) playerMovePosition(direction, y, x);
 
-    Cave_t &tile = cave[y][x];
+    const Cave_t &tile = cave[y][x];
     Inventory_t &item = inventory[EQUIPMENT_WIELD];
 
     if (!playerCanTunnel(tile.treasure_id, tile.feature_id)) {
@@ -284,7 +284,7 @@ void playerDisarmTrap() {
     int x = char_col;
     (void) playerMovePosition(dir, y, x);
 
-    Cave_t &tile = cave[y][x];
+    const Cave_t &tile = cave[y][x];
 
     bool no_disarm = false;
 
@@ -617,7 +617,7 @@ static bool lookSee(int x, int y, bool &transparent) {
         return false;
     }
 
-    Cave_t &tile = cave[y][x];
+    const Cave_t &tile = cave[y][x];
     transparent = tile.feature_id <= MAX_OPEN_SPACE;
 
     if (los_hack_no_query) {
@@ -906,13 +906,13 @@ void playerThrowItem() {
         current_distance++;
         dungeonLiteSpot(old_y, old_x);
 
-        Cave_t &tile = cave[y][x];
+        const Cave_t &tile = cave[y][x];
 
         if (tile.feature_id <= MAX_OPEN_SPACE && !flag) {
             if (tile.creature_id > 1) {
                 flag = true;
 
-                Monster_t &m_ptr = monsters[tile.creature_id];
+                const Monster_t &m_ptr = monsters[tile.creature_id];
 
                 tbth -= current_distance;
 
@@ -986,7 +986,7 @@ static void playerBashAttack(int y, int x) {
     int monster_id = cave[y][x].creature_id;
 
     Monster_t &monster = monsters[monster_id];
-    Creature_t &creature = creatures_list[monster.creature_id];
+    const Creature_t &creature = creatures_list[monster.creature_id];
 
     monster.sleep_count = 0;
 
