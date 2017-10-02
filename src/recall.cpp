@@ -29,7 +29,7 @@ bool memoryMonsterKnown(int monster_id) {
         return true;
     }
 
-    Recall_t &memory = creature_recall[monster_id];
+    const Recall_t &memory = creature_recall[monster_id];
 
     if ((memory.movement != 0u) || (memory.defenses != 0u) || (memory.kills != 0u) || (memory.spells != 0u) || (memory.deaths != 0u)) {
         return true;
