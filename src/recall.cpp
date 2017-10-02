@@ -44,38 +44,38 @@ bool memoryMonsterKnown(int monster_id) {
     return false;
 }
 
-static void memoryWizardModeInit(Recall_t *memory, Creature_t *creature) {
-    memory->kills = (uint16_t) MAX_SHORT;
-    memory->wake = memory->ignore = MAX_UCHAR;
+static void memoryWizardModeInit(Recall_t &memory, Creature_t &creature) {
+    memory.kills = (uint16_t) MAX_SHORT;
+    memory.wake = memory.ignore = MAX_UCHAR;
 
-    uint32_t move = (uint32_t) ((creature->movement & CM_4D2_OBJ) != 0) * 8;
-    move += (uint32_t) ((creature->movement & CM_2D2_OBJ) != 0) * 4;
-    move += (uint32_t) ((creature->movement & CM_1D2_OBJ) != 0) * 2;
-    move += (uint32_t) ((creature->movement & CM_90_RANDOM) != 0);
-    move += (uint32_t) ((creature->movement & CM_60_RANDOM) != 0);
+    uint32_t move = (uint32_t) ((creature.movement & CM_4D2_OBJ) != 0) * 8;
+    move += (uint32_t) ((creature.movement & CM_2D2_OBJ) != 0) * 4;
+    move += (uint32_t) ((creature.movement & CM_1D2_OBJ) != 0) * 2;
+    move += (uint32_t) ((creature.movement & CM_90_RANDOM) != 0);
+    move += (uint32_t) ((creature.movement & CM_60_RANDOM) != 0);
 
-    memory->movement = (uint32_t) ((creature->movement & ~CM_TREASURE) | (move << CM_TR_SHIFT));
-    memory->defenses = creature->defenses;
+    memory.movement = (uint32_t) ((creature.movement & ~CM_TREASURE) | (move << CM_TR_SHIFT));
+    memory.defenses = creature.defenses;
 
-    if ((creature->spells & CS_FREQ) != 0u) {
-        memory->spells = (uint32_t) (creature->spells | CS_FREQ);
+    if ((creature.spells & CS_FREQ) != 0u) {
+        memory.spells = (uint32_t) (creature.spells | CS_FREQ);
     } else {
-        memory->spells = creature->spells;
+        memory.spells = creature.spells;
     }
 
     // TODO(cook) damage is not being used/updated, is this correct? If so, it needs refactoring.
-    uint8_t *pu = creature->damage;
+    uint8_t *pu = creature.damage;
 
     int attack_id = 0;
     while (*pu != 0 && attack_id < 4) {
-        memory->attacks[attack_id] = MAX_UCHAR;
+        memory.attacks[attack_id] = MAX_UCHAR;
         attack_id++;
         pu++;
     }
 
     // A little hack to enable the display of info for Quylthulgs.
-    if ((memory->movement & CM_ONLY_MAGIC) != 0u) {
-        memory->attacks[0] = MAX_UCHAR;
+    if ((memory.movement & CM_ONLY_MAGIC) != 0u) {
+        memory.attacks[0] = MAX_UCHAR;
     }
 }
 
@@ -567,7 +567,7 @@ int memoryRecall(int monster_id) {
 
     if (wizard_mode) {
         saved_memory = memory;
-        memoryWizardModeInit(&memory, &creature);
+        memoryWizardModeInit(memory, creature);
     }
 
     roff_print_line = 0;
