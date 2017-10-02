@@ -317,13 +317,13 @@ static bool storeGetHaggle(const char *comment, int32_t &new_offer, int num_offe
     return flag;
 }
 
-static int storeReceiveOffer(int store_id, const char *comment, int32_t *new_offer, int32_t last_offer, int num_offer, int factor) {
+static int storeReceiveOffer(int store_id, const char *comment, int32_t &new_offer, int32_t last_offer, int num_offer, int factor) {
     int receive = 0;
     bool success = false;
 
     while (!success) {
-        if (storeGetHaggle(comment, *new_offer, num_offer)) {
-            if (*new_offer * factor >= last_offer * factor) {
+        if (storeGetHaggle(comment, new_offer, num_offer)) {
+            if (new_offer * factor >= last_offer * factor) {
                 success = true;
             } else if (storeHaggleInsults(store_id)) {
                 receive = 2;
@@ -331,7 +331,7 @@ static int storeReceiveOffer(int store_id, const char *comment, int32_t *new_off
             } else {
                 // new_offer rejected, reset new_offer so that incremental
                 // haggling works correctly
-                *new_offer = last_offer;
+                new_offer = last_offer;
             }
         } else {
             receive = 1;
@@ -408,7 +408,7 @@ static int storePurchaseHaggle(int store_id, int32_t *price, Inventory_t *item) 
             (void) sprintf(msg, "%s :  %d", comment, current_asking_price);
             putString(msg, 1, 0);
 
-            purchase = storeReceiveOffer(store_id, "What do you offer? ", &new_offer, last_offer, num_offer, 1);
+            purchase = storeReceiveOffer(store_id, "What do you offer? ", new_offer, last_offer, num_offer, 1);
 
             if (purchase != 0) {
                 flag = true;
@@ -619,7 +619,7 @@ static int storeSellHaggle(int store_id, int32_t *price, Inventory_t *item) {
                 (void) sprintf(msg, "%s :  %d", comment, current_askin_price);
                 putString(msg, 1, 0);
 
-                sell = storeReceiveOffer(store_id, "What price do you ask? ", &new_offer, last_offer, num_offer, -1);
+                sell = storeReceiveOffer(store_id, "What price do you ask? ", new_offer, last_offer, num_offer, -1);
 
                 if (sell != 0) {
                     flag = true;
