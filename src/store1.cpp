@@ -159,16 +159,16 @@ static int32_t getPickShovelBuyPrice(const Inventory_t &item) {
 }
 
 // Asking price for an item -RAK-
-int32_t storeItemSellPrice(int store_id, int32_t &min_price, int32_t &max_price, Inventory_t *item) {
-    int32_t price = storeItemValue(*item);
+int32_t storeItemSellPrice(int store_id, int32_t &min_price, int32_t &max_price, const Inventory_t &item) {
+    int32_t price = storeItemValue(item);
 
-    // check `item->cost` in case it is cursed, check `price` in case it is damaged
+    // check `item.cost` in case it is cursed, check `price` in case it is damaged
     // don't let the item get into the store inventory
-    if (item->cost < 1 || price < 1) {
+    if (item.cost < 1 || price < 1) {
         return 0;
     }
 
-    Owner_t &owner = store_owners[stores[store_id].owner];
+    const Owner_t &owner = store_owners[stores[store_id].owner];
 
     price = price * race_gold_adjustments[owner.race][py.misc.race_id] / 100;
     if (price < 1) {
@@ -231,7 +231,7 @@ void storeCarry(int store_id, int &index_id, Inventory_t *item) {
     index_id = -1;
 
     int32_t item_cost, dummy;
-    if (storeItemSellPrice(store_id, dummy, item_cost, item) < 1) {
+    if (storeItemSellPrice(store_id, dummy, item_cost, *item) < 1) {
         return;
     }
 
@@ -256,7 +256,7 @@ void storeCarry(int store_id, int &index_id, Inventory_t *item) {
                 // strictly greater than group_min, not for torches, this
                 // must be recalculated for entire group
                 if (item_sub_catory > ITEM_GROUP_MIN) {
-                    (void) storeItemSellPrice(store_id, dummy, item_cost, &store_item);
+                    (void) storeItemSellPrice(store_id, dummy, item_cost, store_item);
                     store.inventory[item_id].cost = -item_cost;
                 } else if (store_item.items_count > 24) {
                     // must let group objects (except torches) stack over 24
