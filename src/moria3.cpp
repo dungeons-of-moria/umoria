@@ -885,7 +885,7 @@ static void playerAttackMonster(int y, int x) {
 
             if (item.items_count == 0) {
                 equipment_count--;
-                playerAdjustBonusesForItem(&item, -1);
+                playerAdjustBonusesForItem(item, -1);
                 inventoryItemCopyTo(OBJ_NOTHING, item);
                 playerRecalculateBonuses();
             }

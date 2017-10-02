@@ -377,7 +377,7 @@ void startMoria(int seed, bool start_new_game, bool use_roguelike_keys);
 
 // moria1.c
 void playerChangeSpeed(int speed);
-void playerAdjustBonusesForItem(Inventory_t *item, int factor);
+void playerAdjustBonusesForItem(const Inventory_t &item, int factor);
 void playerRecalculateBonuses();
 int displayInventory(int item_id_start, int item_id_end, bool weighted, int column, const char *mask);
 const char *playerItemWearingDescription(int body_location);

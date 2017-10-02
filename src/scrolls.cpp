@@ -297,7 +297,7 @@ static bool scrollCurseWeapon() {
     // Must call playerAdjustBonusesForItem() before set (clear) flags, and
     // must call playerRecalculateBonuses() after set (clear) flags, so that
     // all attributes will be properly turned off.
-    playerAdjustBonusesForItem(&item, -1);
+    playerAdjustBonusesForItem(item, -1);
     item.flags = TR_CURSED;
     playerRecalculateBonuses();
 

@@ -31,39 +31,39 @@ void playerChangeSpeed(int speed) {
 //
 // Only calculates properties with cumulative effect.  Properties that
 // depend on everything being worn are recalculated by playerRecalculateBonuses() -CJS-
-void playerAdjustBonusesForItem(Inventory_t *item, int factor) {
-    int amount = item->misc_use * factor;
+void playerAdjustBonusesForItem(const Inventory_t &item, int factor) {
+    int amount = item.misc_use * factor;
 
-    if ((item->flags & TR_STATS) != 0u) {
+    if ((item.flags & TR_STATS) != 0u) {
         for (int i = 0; i < 6; i++) {
-            if (((1 << i) & item->flags) != 0u) {
+            if (((1 << i) & item.flags) != 0u) {
                 playerStatBoost(i, amount);
             }
         }
     }
 
-    if ((TR_SEARCH & item->flags) != 0u) {
+    if ((TR_SEARCH & item.flags) != 0u) {
         py.misc.chance_in_search += amount;
         py.misc.fos -= amount;
     }
 
-    if ((TR_STEALTH & item->flags) != 0u) {
+    if ((TR_STEALTH & item.flags) != 0u) {
         py.misc.stealth_factor += amount;
     }
 
-    if ((TR_SPEED & item->flags) != 0u) {
+    if ((TR_SPEED & item.flags) != 0u) {
         playerChangeSpeed(-amount);
     }
 
-    if (((TR_BLIND & item->flags) != 0u) && factor > 0) {
+    if (((TR_BLIND & item.flags) != 0u) && factor > 0) {
         py.flags.blind += 1000;
     }
 
-    if (((TR_TIMID & item->flags) != 0u) && factor > 0) {
+    if (((TR_TIMID & item.flags) != 0u) && factor > 0) {
         py.flags.afraid += 50;
     }
 
-    if ((TR_INFRA & item->flags) != 0u) {
+    if ((TR_INFRA & item.flags) != 0u) {
         py.flags.see_infra += amount;
     }
 }
@@ -524,7 +524,7 @@ void playerTakeOff(int item_id, int pack_position_id) {
 
     // For secondary weapon
     if (item_id != EQUIPMENT_AUX) {
-        playerAdjustBonusesForItem(&item, -1);
+        playerAdjustBonusesForItem(item, -1);
     }
 
     inventoryItemCopyTo(OBJ_NOTHING, item);
@@ -776,8 +776,8 @@ static void inventoryUnwieldItem() {
         screen_left = displayEquipment(config.show_inventory_weights, screen_left);
     }
 
-    playerAdjustBonusesForItem(&inventory[EQUIPMENT_AUX], -1);  // Subtract bonuses
-    playerAdjustBonusesForItem(&inventory[EQUIPMENT_WIELD], 1); // Add bonuses
+    playerAdjustBonusesForItem(inventory[EQUIPMENT_AUX], -1);  // Subtract bonuses
+    playerAdjustBonusesForItem(inventory[EQUIPMENT_WIELD], 1); // Add bonuses
 
     if (inventory[EQUIPMENT_WIELD].category_id != TV_NOTHING) {
         obj_desc_t msgLabel = {'\0'};
@@ -1153,7 +1153,7 @@ static bool selectItemCommands(char *command, char *which, bool selecting) {
                 *item = savedItem;
                 equipment_count++;
 
-                playerAdjustBonusesForItem(item, 1);
+                playerAdjustBonusesForItem(*item, 1);
 
                 const char *text = nullptr;
                 if (slot == EQUIPMENT_WIELD) {
