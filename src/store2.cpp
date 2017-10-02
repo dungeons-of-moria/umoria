@@ -505,7 +505,7 @@ static int storePurchaseHaggle(int store_id, int32_t &price, const Inventory_t &
 }
 
 // Haggling routine -RAK-
-static int storeSellHaggle(int store_id, int32_t *price, Inventory_t *item) {
+static int storeSellHaggle(int store_id, int32_t &price, const Inventory_t &item) {
     int32_t max_gold = 0;
     int32_t min_per = 0;
     int32_t max_per = 0;
@@ -516,12 +516,12 @@ static int storeSellHaggle(int store_id, int32_t *price, Inventory_t *item) {
     bool flag = false;
     bool did_not_haggle = false;
 
-    *price = 0;
+    price = 0;
     int sell = 0;
     int final_flag = 0;
 
     Store_t &store = stores[store_id];
-    int32_t cost = storeItemValue(*item);
+    int32_t cost = storeItemValue(item);
 
     if (cost < 1) {
         sell = 3;
@@ -638,7 +638,7 @@ static int storeSellHaggle(int store_id, int32_t *price, Inventory_t *item) {
                         }
                     } else if (new_offer == current_askin_price) {
                         flag = true;
-                        *price = new_offer;
+                        price = new_offer;
                     } else {
                         loop_flag = false;
                     }
@@ -689,7 +689,7 @@ static int storeSellHaggle(int store_id, int32_t *price, Inventory_t *item) {
                     }
                 } else if (new_offer <= current_askin_price) {
                     flag = true;
-                    *price = new_offer;
+                    price = new_offer;
                 }
 
                 if (!flag) {
@@ -715,7 +715,7 @@ static int storeSellHaggle(int store_id, int32_t *price, Inventory_t *item) {
 
     // update bargaining info
     if (sell == 0 && !did_not_haggle) {
-        storeUpdateBargainInfo(store_id, *price, final_asking_price);
+        storeUpdateBargainInfo(store_id, price, final_asking_price);
     }
 
     return sell;
@@ -885,7 +885,7 @@ static bool storeSellAnItem(int store_id, int *current_top_item_id) {
     int32_t price;
     bool sold = false;
 
-    int choice = storeSellHaggle(store_id, &price, &sold_item);
+    int choice = storeSellHaggle(store_id, price, sold_item);
 
     if (choice == 0) {
         printSpeechFinishedHaggling();
