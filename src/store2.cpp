@@ -877,7 +877,7 @@ static bool storeSellAnItem(int store_id, int *current_top_item_id) {
     (void) sprintf(msg, "Selling %s (%c)", description, item_id + 'a');
     printMessage(msg);
 
-    if (!storeCheckPlayerItemsCount(store_id, &sold_item)) {
+    if (!storeCheckPlayerItemsCount(store_id, sold_item)) {
         printMessage("I have not the room in my store to keep it.");
         return false;
     }

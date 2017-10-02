@@ -186,14 +186,14 @@ int32_t storeItemSellPrice(int store_id, int32_t &min_price, int32_t &max_price,
 }
 
 // Check to see if he will be carrying too many objects -RAK-
-bool storeCheckPlayerItemsCount(int store_id, Inventory_t *item) {
+bool storeCheckPlayerItemsCount(int store_id, const Inventory_t &item) {
     Store_t &store = stores[store_id];
 
     if (store.store_id < STORE_MAX_DISCRETE_ITEMS) {
         return true;
     }
 
-    if (item->sub_category_id < ITEM_SINGLE_STACK_MIN) {
+    if (item.sub_category_id < ITEM_SINGLE_STACK_MIN) {
         return false;
     }
 
@@ -204,8 +204,8 @@ bool storeCheckPlayerItemsCount(int store_id, Inventory_t *item) {
 
         // note: items with sub_category_id of gte ITEM_SINGLE_STACK_MAX only stack
         // if their `sub_category_id`s match
-        if (store_item.category_id == item->category_id && store_item.sub_category_id == item->sub_category_id && (int) (store_item.items_count + item->items_count) < 256 &&
-            (item->sub_category_id < ITEM_GROUP_MIN || store_item.misc_use == item->misc_use)) {
+        if (store_item.category_id == item.category_id && store_item.sub_category_id == item.sub_category_id && (int) (store_item.items_count + item.items_count) < 256 &&
+            (item.sub_category_id < ITEM_GROUP_MIN || store_item.misc_use == item.misc_use)) {
             store_check = true;
         }
     }
@@ -345,7 +345,7 @@ static void storeItemCreate(int store_id, int16_t max_cost) {
 
         Inventory_t &item = treasure_list[free_id];
 
-        if (storeCheckPlayerItemsCount(store_id, &item)) {
+        if (storeCheckPlayerItemsCount(store_id, item)) {
             // Item must be good: cost > 0.
             if (item.cost > 0 && item.cost < max_cost) {
                 // equivalent to calling spellIdentifyItem(),
