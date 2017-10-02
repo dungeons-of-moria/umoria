@@ -239,7 +239,7 @@ static bool storeHaggleInsults(int store_id) {
     return false;
 }
 
-static bool storeGetHaggle(const char *comment, int32_t *new_offer, int num_offer) {
+static bool storeGetHaggle(const char *comment, int32_t &new_offer, int num_offer) {
     if (num_offer == 0) {
         store_last_increment = 0;
     }
@@ -306,9 +306,9 @@ static bool storeGetHaggle(const char *comment, int32_t *new_offer, int num_offe
 
     if (flag) {
         if (increment) {
-            *new_offer += offer_adjust;
+            new_offer += offer_adjust;
         } else {
-            *new_offer = offer_adjust;
+            new_offer = offer_adjust;
         }
     } else {
         eraseLine(0, 0);
@@ -322,7 +322,7 @@ static int storeReceiveOffer(int store_id, const char *comment, int32_t *new_off
     bool success = false;
 
     while (!success) {
-        if (storeGetHaggle(comment, new_offer, num_offer)) {
+        if (storeGetHaggle(comment, *new_offer, num_offer)) {
             if (*new_offer * factor >= last_offer * factor) {
                 success = true;
             } else if (storeHaggleInsults(store_id)) {
