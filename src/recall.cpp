@@ -317,19 +317,19 @@ static void memoryMagicSkills(uint32_t memory_spell_flags, uint32_t monster_spel
 }
 
 // Do we know how hard they are to kill? Armor class, hit die.
-static void memoryKillDifficulty(Creature_t *creature, uint32_t monster_kills) {
+static void memoryKillDifficulty(const Creature_t &creature, uint32_t monster_kills) {
     // the higher the level of the monster, the fewer the kills you need
     // Original knowarmor macro inlined
-    if (monster_kills <= 304u / (4u + creature->level)) {
+    if (monster_kills <= 304u / (4u + creature.level)) {
         return;
     }
 
     vtype_t description = {'\0'};
 
-    (void) sprintf(description, " It has an armor rating of %d", creature->ac);
+    (void) sprintf(description, " It has an armor rating of %d", creature.ac);
     memoryPrint(description);
 
-    (void) sprintf(description, " and a%s life rating of %dd%d.", ((creature->defenses & CD_MAX_HP) != 0 ? " maximized" : ""), creature->hit_die[0], creature->hit_die[1]);
+    (void) sprintf(description, " and a%s life rating of %dd%d.", ((creature.defenses & CD_MAX_HP) != 0 ? " maximized" : ""), creature.hit_die[0], creature.hit_die[1]);
     memoryPrint(description);
 }
 
@@ -602,7 +602,7 @@ int memoryRecall(int monster_id) {
 
     memoryMagicSkills(spells, memory.spells, creature.spells);
 
-    memoryKillDifficulty(&creature, memory.kills);
+    memoryKillDifficulty(creature, memory.kills);
 
     memorySpecialAbilities(move);
 
