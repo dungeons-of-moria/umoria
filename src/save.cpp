@@ -27,7 +27,7 @@ static void wr_long(uint32_t value);
 static void wr_bytes(uint8_t *value, int count);
 static void wr_string(char *str);
 static void wr_shorts(uint16_t *value, int count);
-static void wr_item(Inventory_t *item);
+static void wr_item(Inventory_t &item);
 static void wr_monster(Monster_t *monster);
 static bool rd_bool();
 static uint8_t rd_byte();
@@ -216,10 +216,10 @@ static bool sv_write() {
     wr_long((uint32_t) current_game_turn);
     wr_short((uint16_t) inventory_count);
     for (int i = 0; i < inventory_count; i++) {
-        wr_item(&inventory[i]);
+        wr_item(inventory[i]);
     }
     for (int i = EQUIPMENT_WIELD; i < PLAYER_INVENTORY_SIZE; i++) {
-        wr_item(&inventory[i]);
+        wr_item(inventory[i]);
     }
     wr_short((uint16_t) inventory_weight);
     wr_short((uint16_t) equipment_count);
@@ -250,7 +250,7 @@ static bool sv_write() {
         wr_short(store.bad_purchases);
         for (int j = 0; j < store.store_id; j++) {
             wr_long((uint32_t) store.inventory[j].cost);
-            wr_item(&store.inventory[j].item);
+            wr_item(store.inventory[j].item);
         }
     }
 
@@ -342,7 +342,7 @@ static bool sv_write() {
 
     wr_short((uint16_t) current_treasure_id);
     for (int i = MIN_TREASURE_LIST_ID; i < current_treasure_id; i++) {
-        wr_item(&treasure_list[i]);
+        wr_item(treasure_list[i]);
     }
     wr_short((uint16_t) next_free_monster_id);
     for (int i = MON_MIN_INDEX_ID; i < next_free_monster_id; i++) {
@@ -1023,26 +1023,26 @@ static void wr_shorts(uint16_t *value, int count) {
     DEBUG(fprintf(logfile, "\n"));
 }
 
-static void wr_item(Inventory_t *item) {
+static void wr_item(Inventory_t &item) {
     DEBUG(fprintf(logfile, "ITEM:\n"));
-    wr_short(item->id);
-    wr_byte(item->special_name_id);
-    wr_string(item->inscription);
-    wr_long(item->flags);
-    wr_byte(item->category_id);
-    wr_byte(item->sprite);
-    wr_short((uint16_t) item->misc_use);
-    wr_long((uint32_t) item->cost);
-    wr_byte(item->sub_category_id);
-    wr_byte(item->items_count);
-    wr_short(item->weight);
-    wr_short((uint16_t) item->to_hit);
-    wr_short((uint16_t) item->to_damage);
-    wr_short((uint16_t) item->ac);
-    wr_short((uint16_t) item->to_ac);
-    wr_bytes(item->damage, 2);
-    wr_byte(item->depth_first_found);
-    wr_byte(item->identification);
+    wr_short(item.id);
+    wr_byte(item.special_name_id);
+    wr_string(item.inscription);
+    wr_long(item.flags);
+    wr_byte(item.category_id);
+    wr_byte(item.sprite);
+    wr_short((uint16_t) item.misc_use);
+    wr_long((uint32_t) item.cost);
+    wr_byte(item.sub_category_id);
+    wr_byte(item.items_count);
+    wr_short(item.weight);
+    wr_short((uint16_t) item.to_hit);
+    wr_short((uint16_t) item.to_damage);
+    wr_short((uint16_t) item.ac);
+    wr_short((uint16_t) item.to_ac);
+    wr_bytes(item.damage, 2);
+    wr_byte(item.depth_first_found);
+    wr_byte(item.identification);
 }
 
 static void wr_monster(Monster_t *monster) {
