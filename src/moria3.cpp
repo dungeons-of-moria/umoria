@@ -692,8 +692,8 @@ uint32_t monsterDeath(int y, int x, uint32_t flags) {
     return return_flags | number_of_items;
 }
 
-static void playerGainKillExperience(Creature_t *c_ptr) {
-    uint16_t exp = c_ptr->kill_exp_value * c_ptr->level;
+static void playerGainKillExperience(const Creature_t &creature) {
+    uint16_t exp = creature.kill_exp_value * creature.level;
 
     int32_t quotient = exp / py.misc.level;
     int32_t remainder = exp % py.misc.level;
@@ -743,7 +743,7 @@ int monsterTakeHit(int monster_id, int damage) {
         }
     }
 
-    playerGainKillExperience(&creature);
+    playerGainKillExperience(creature);
 
     // can't call displayCharacterExperience() here, as that would result in "new level"
     // message appearing before "monster dies" message.
