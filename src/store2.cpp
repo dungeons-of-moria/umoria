@@ -350,8 +350,8 @@ static int storePurchaseHaggle(int store_id, int32_t &price, const Inventory_t &
     int purchase = 0;
     int final_flag = 0;
 
-    Store_t &store = stores[store_id];
-    Owner_t &owner = store_owners[store.owner];
+    const Store_t &store = stores[store_id];
+    const Owner_t &owner = store_owners[store.owner];
 
     int32_t max_sell, min_sell;
     int32_t cost = storeItemSellPrice(store_id, min_sell, max_sell, item);
@@ -520,14 +520,14 @@ static int storeSellHaggle(int store_id, int32_t &price, const Inventory_t &item
     int sell = 0;
     int final_flag = 0;
 
-    Store_t &store = stores[store_id];
+    const Store_t &store = stores[store_id];
     int32_t cost = storeItemValue(item);
 
     if (cost < 1) {
         sell = 3;
         flag = true;
     } else {
-        Owner_t &owner = store_owners[store.owner];
+        const Owner_t &owner = store_owners[store.owner];
 
         cost = cost * (200 - playerStatAdjustmentCharisma()) / 100;
         cost = cost * (200 - race_gold_adjustments[owner.race][py.misc.race_id]) / 100;
@@ -944,7 +944,7 @@ static bool storeSellAnItem(int store_id, int &current_top_item_id) {
 
 // Entering a store -RAK-
 void storeEnter(int store_id) {
-    Store_t &store = stores[store_id];
+    const Store_t &store = stores[store_id];
 
     if (store.turns_left_before_closing >= current_game_turn) {
         printMessage("The doors are locked.");
