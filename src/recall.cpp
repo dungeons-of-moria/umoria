@@ -44,7 +44,7 @@ bool memoryMonsterKnown(int monster_id) {
     return false;
 }
 
-static void memoryWizardModeInit(Recall_t &memory, Creature_t &creature) {
+static void memoryWizardModeInit(Recall_t &memory, const Creature_t &creature) {
     memory.kills = (uint16_t) MAX_SHORT;
     memory.wake = memory.ignore = MAX_UCHAR;
 
@@ -63,14 +63,9 @@ static void memoryWizardModeInit(Recall_t &memory, Creature_t &creature) {
         memory.spells = creature.spells;
     }
 
-    // TODO(cook) damage is not being used/updated, is this correct? If so, it needs refactoring.
-    uint8_t *pu = creature.damage;
-
-    int attack_id = 0;
-    while (*pu != 0 && attack_id < 4) {
-        memory.attacks[attack_id] = MAX_UCHAR;
-        attack_id++;
-        pu++;
+    for (int i = 0; i < MON_MAX_ATTACKS; i++) {
+        if (creature.damage[i] == 0) break;
+        memory.attacks[i] = MAX_UCHAR;
     }
 
     // A little hack to enable the display of info for Quylthulgs.
@@ -477,7 +472,7 @@ static void memoryLootCarried(uint32_t creature_move, uint32_t memory_move) {
     }
 }
 
-static void memoryAttackNumberAndDamage(const Recall_t &memory, Creature_t &creature) {
+static void memoryAttackNumberAndDamage(const Recall_t &memory, const Creature_t &creature) {
     // We know about attacks it has used on us, and maybe the damage they do.
     // known_attacks is the total number of known attacks, used for punctuation
     int known_attacks = 0;
@@ -491,9 +486,10 @@ static void memoryAttackNumberAndDamage(const Recall_t &memory, Creature_t &crea
     // attack_count counts the attacks as printed, used for punctuation
     int attack_count = 0;
 
-    uint8_t *pu = creature.damage;
+    for (int i = 0; i < MON_MAX_ATTACKS; i++) {
+        int attack_id = creature.damage[i];
+        if (attack_id == 0) break;
 
-    for (int i = 0; *pu != 0 && i < 4; pu++, i++) {
         int attack_type, attack_description_id;
         int attack_dice, attack_sides;
 
@@ -502,10 +498,10 @@ static void memoryAttackNumberAndDamage(const Recall_t &memory, Creature_t &crea
             continue;
         }
 
-        attack_type = monster_attacks[*pu].type_id;
-        attack_description_id = monster_attacks[*pu].description_id;
-        attack_dice = monster_attacks[*pu].dice;
-        attack_sides = monster_attacks[*pu].sides;
+        attack_type = monster_attacks[attack_id].type_id;
+        attack_description_id = monster_attacks[attack_id].description_id;
+        attack_dice = monster_attacks[attack_id].dice;
+        attack_sides = monster_attacks[attack_id].sides;
 
         attack_count++;
 
@@ -561,7 +557,7 @@ static void memoryAttackNumberAndDamage(const Recall_t &memory, Creature_t &crea
 // Print out what we have discovered about this monster.
 int memoryRecall(int monster_id) {
     Recall_t &memory = creature_recall[monster_id];
-    Creature_t &creature = creatures_list[monster_id];
+    const Creature_t &creature = creatures_list[monster_id];
 
     Recall_t saved_memory{};
 
