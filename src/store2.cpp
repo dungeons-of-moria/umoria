@@ -343,10 +343,10 @@ static int storeReceiveOffer(int store_id, const char *comment, int32_t &new_off
 }
 
 // Haggling routine -RAK-
-static int storePurchaseHaggle(int store_id, int32_t *price, Inventory_t *item) {
+static int storePurchaseHaggle(int store_id, int32_t &price, const Inventory_t &item) {
     bool did_not_haggle = false;
 
-    *price = 0;
+    price = 0;
     int purchase = 0;
     int final_flag = 0;
 
@@ -354,7 +354,7 @@ static int storePurchaseHaggle(int store_id, int32_t *price, Inventory_t *item) 
     Owner_t &owner = store_owners[store.owner];
 
     int32_t max_sell, min_sell;
-    int32_t cost = storeItemSellPrice(store_id, min_sell, max_sell, *item);
+    int32_t cost = storeItemSellPrice(store_id, min_sell, max_sell, item);
 
     max_sell = max_sell * playerStatAdjustmentCharisma() / 100;
     if (max_sell <= 0) {
@@ -426,7 +426,7 @@ static int storePurchaseHaggle(int store_id, int32_t *price, Inventory_t *item) 
                     }
                 } else if (new_offer == current_asking_price) {
                     flag = true;
-                    *price = new_offer;
+                    price = new_offer;
                 } else {
                     loop_flag = false;
                 }
@@ -477,7 +477,7 @@ static int storePurchaseHaggle(int store_id, int32_t *price, Inventory_t *item) 
                 }
             } else if (new_offer >= current_asking_price) {
                 flag = true;
-                *price = new_offer;
+                price = new_offer;
             }
             if (!flag) {
                 last_offer = new_offer;
@@ -498,7 +498,7 @@ static int storePurchaseHaggle(int store_id, int32_t *price, Inventory_t *item) 
 
     // update bargaining info
     if (purchase == 0 && !did_not_haggle) {
-        storeUpdateBargainInfo(store_id, *price, final_asking_price);
+        storeUpdateBargainInfo(store_id, price, final_asking_price);
     }
 
     return purchase;
@@ -768,7 +768,7 @@ static bool storePurchaseAnItem(int store_id, int *current_top_item_id) {
     if (store.inventory[item_id].cost > 0) {
         price = store.inventory[item_id].cost;
     } else {
-        choice = storePurchaseHaggle(store_id, &price, &sell_item);
+        choice = storePurchaseHaggle(store_id, price, sell_item);
     }
 
     if (choice == 0) {
