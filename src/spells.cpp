@@ -649,16 +649,16 @@ static void getAreaAffectFlags(int spell_type, uint32_t &weapon_type, int &harm_
 }
 
 // Light up, draw, and check for monster damage when Fire Bolt touches it.
-static void spellFireBoltTouchesMonster(Cave_t *tile, int damage, int harm_type, uint32_t weapon_id, const std::string &bolt_name) {
-    Monster_t &monster = monsters[tile->creature_id];
+static void spellFireBoltTouchesMonster(Cave_t &tile, int damage, int harm_type, uint32_t weapon_id, const std::string &bolt_name) {
+    Monster_t &monster = monsters[tile.creature_id];
     Creature_t &creature = creatures_list[monster.creature_id];
 
     // light up monster and draw monster, temporarily set
     // permanent_light so that monsterUpdateVisibility() will work
-    bool saved_lit_status = tile->permanent_light;
-    tile->permanent_light = true;
-    monsterUpdateVisibility((int) tile->creature_id);
-    tile->permanent_light = saved_lit_status;
+    bool saved_lit_status = tile.permanent_light;
+    tile.permanent_light = true;
+    monsterUpdateVisibility((int) tile.creature_id);
+    tile.permanent_light = saved_lit_status;
 
     // draw monster and clear previous bolt
     putQIO();
@@ -684,7 +684,7 @@ static void spellFireBoltTouchesMonster(Cave_t *tile, int damage, int harm_type,
 
     monsterNameDescription(name, monster.lit, creature.name);
 
-    if (monsterTakeHit((int) tile->creature_id, damage) >= 0) {
+    if (monsterTakeHit((int) tile.creature_id, damage) >= 0) {
         printMonsterActionText(name, "dies in a fit of agony.");
         displayCharacterExperience();
     } else if (damage > 0) {
@@ -720,7 +720,7 @@ void spellFireBolt(int y, int x, int direction, int damage_hp, int spell_type, c
 
         if (tile.creature_id > 1) {
             finished = true;
-            spellFireBoltTouchesMonster(&tile, damage_hp, harm_type, weapon_type, spell_name);
+            spellFireBoltTouchesMonster(tile, damage_hp, harm_type, weapon_type, spell_name);
         } else if (coordInsidePanel(y, x) && py.flags.blind < 1) {
             putChar('*', y, x);
 
