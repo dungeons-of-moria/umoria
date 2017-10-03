@@ -1647,7 +1647,7 @@ bool spellGenocide() {
                 dungeonDeleteMonster(id);
             } else {
                 // genocide is a powerful spell, so we will let the player
-                // know the names of the creatures he did not destroy,
+                // know the names of the creatures they did not destroy,
                 // this message makes no sense otherwise
                 vtype_t msg = {'\0'};
                 (void) sprintf(msg, "The %s is unaffected.", creature.name);

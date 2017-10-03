@@ -1517,7 +1517,7 @@ static void monsterMoveUndead(Creature_t &creature, int monster_id, uint32_t &rc
     directions[3] = randomNumber(9); // May attack only if cornered
     directions[4] = randomNumber(9);
 
-    // don't move him if he is not supposed to move!
+    // don't move if it's is not supposed to move!
     if ((creature.movement & CM_ATTACK_ONLY) == 0u) {
         makeMove(monster_id, directions, rcmove);
     }
@@ -1532,7 +1532,7 @@ static void monsterMoveConfused(Creature_t &creature, int monster_id, uint32_t &
     directions[3] = randomNumber(9);
     directions[4] = randomNumber(9);
 
-    // don't move him if he is not supposed to move!
+    // don't move if it's is not supposed to move!
     if ((creature.movement & CM_ATTACK_ONLY) == 0u) {
         makeMove(monster_id, directions, rcmove);
     }

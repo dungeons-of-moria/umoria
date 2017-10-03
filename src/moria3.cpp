@@ -803,7 +803,7 @@ static void playerAttackMonster(int y, int x) {
 
     monster.sleep_count = 0;
 
-    // Does the player know what he's fighting?
+    // Does the player know what they're fighting?
     vtype_t name = {'\0'};
     if (!monster.lit) {
         (void) strcpy(name, "it");
@@ -948,12 +948,12 @@ void playerMove(int direction, bool do_pickup) {
                 drawDungeonPanel();
             }
 
-            // Check to see if he should stop
+            // Check to see if they should stop
             if (py.running_tracker != 0) {
                 playerAreaAffect(direction, char_row, char_col);
             }
 
-            // Check to see if he notices something
+            // Check to see if they've noticed something
             // fos may be negative if have good rings of searching
             if (py.misc.fos <= 1 || randomNumber(py.misc.fos) == 1 || ((py.flags.status & PY_SEARCH) != 0u)) {
                 dungeonSearch(char_row, char_col, py.misc.chance_in_search);
@@ -980,7 +980,7 @@ void playerMove(int direction, bool do_pickup) {
             // Move the light source
             dungeonMoveCharacterLight(old_row, old_col, char_row, char_col);
 
-            // An object is beneath him.
+            // An object is beneath them.
             if (tile.treasure_id != 0) {
                 carry(char_row, char_col, do_pickup);
 

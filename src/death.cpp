@@ -126,7 +126,7 @@ static void kingly() {
     py.misc.max_exp += 5000000L;
     py.misc.exp = py.misc.max_exp;
 
-    // Let the player know that he did good.
+    // Let the player know they did good.
     clearScreen();
     putString("#", 1, 34);
     putString("#####", 2, 32);

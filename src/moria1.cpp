@@ -1936,7 +1936,7 @@ void playerRestOff() {
 bool playerTestBeingHit(int base_to_hit, int level, int plus_to_hit, int armor_class, int attack_type_id) {
     playerDisturb(1, 0);
 
-    // plus_to_hit could be less than 0 if player wielding weapon too heavy for him
+    // `plus_to_hit` could be less than 0 if player wielding weapon too heavy for them
     int hit_chance = base_to_hit + plus_to_hit * BTH_PER_PLUS_TO_HIT_ADJUST + (level * class_level_adj[py.misc.class_id][attack_type_id]);
 
     // always miss 1 out of 20, always hit 1 out of 20

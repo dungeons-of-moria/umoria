@@ -185,7 +185,7 @@ int32_t storeItemSellPrice(int store_id, int32_t &min_price, int32_t &max_price,
     return price;
 }
 
-// Check to see if he will be carrying too many objects -RAK-
+// Check to see if they will be carrying too many objects -RAK-
 bool storeCheckPlayerItemsCount(int store_id, const Inventory_t &item) {
     const Store_t &store = stores[store_id];
 

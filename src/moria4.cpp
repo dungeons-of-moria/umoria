@@ -931,7 +931,7 @@ void playerThrowItem() {
                     obj_desc_t msg = {'\0'};
                     itemDescription(description, thrown_item, false);
 
-                    // Does the player know what he's fighting?
+                    // Does the player know what they're fighting?
                     if (!m_ptr.lit) {
                         (void) sprintf(msg, "You hear a cry as the %s finds a mark.", description);
                         visible = false;
@@ -990,7 +990,7 @@ static void playerBashAttack(int y, int x) {
 
     monster.sleep_count = 0;
 
-    // Does the player know what he's fighting?
+    // Does the player know what they're fighting?
     vtype_t name = {'\0'};
     if (!monster.lit) {
         (void) strcpy(name, "it");
@@ -1180,8 +1180,8 @@ void playerBash() {
         } else if (item.category_id == TV_CHEST) {
             playerBashClosedChest(item);
         } else {
-            // Can't give free turn, or else player could try directions
-            // until he found invisible creature
+            // Can't give free turn, or else player could try
+            // directions until they find the invisible creature
             printMessage("You bash it, but nothing interesting happens.");
         }
         return;

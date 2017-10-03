@@ -725,12 +725,12 @@ bool loadGame(bool &generate) {
                     py.misc.current_hp_fraction = 0;
                 }
 
-                // don't let him starve to death immediately
+                // don't let them starve to death immediately
                 if (py.flags.food < 0) {
                     py.flags.food = 0;
                 }
 
-                // don't let him die of poison again immediately
+                // don't let them immediately die of poison again
                 if (py.flags.poisoned > 1) {
                     py.flags.poisoned = 1;
                 }
@@ -738,8 +738,7 @@ bool loadGame(bool &generate) {
                 current_dungeon_level = 0; // Resurrect on the town level.
                 character_generated = true;
 
-                // set noscore to indicate a resurrection, and don't enter
-                // wizard mode
+                // set `noscore` to indicate a resurrection, and don't enter wizard mode
                 to_be_wizard = false;
                 noscore |= 0x1;
             } else {

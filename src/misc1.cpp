@@ -564,7 +564,7 @@ void playerIngestFood(int amount) {
         printMessage("You are bloated from overeating.");
 
         // Calculate how much of amount is responsible for the bloating. Give the
-        // player food credit for 1/50, and slow him for that many turns also.
+        // player food credit for 1/50, and also slow them for that many turns.
         int extra = py.flags.food - PLAYER_FOOD_MAX;
         if (extra > amount) {
             extra = amount;
