@@ -353,17 +353,17 @@ bool getCommand(const char *prompt, char &command) {
 
 // Gets a string terminated by <RETURN>
 // Function returns false if <ESCAPE> is input
-bool getStringInput(char *in_str, int row, int col, int slen) {
-    (void) move(row, col);
+bool getStringInput(char *in_str, Coord_t coords, int slen) {
+    (void) move(coords.y, coords.x);
 
     for (int i = slen; i > 0; i--) {
         (void) addch(' ');
     }
 
-    (void) move(row, col);
+    (void) move(coords.y, coords.x);
 
-    int start_col = col;
-    int end_col = col + slen - 1;
+    int start_col = coords.x;
+    int end_col = coords.x + slen - 1;
 
     if (end_col > 79) {
         end_col = 79;
@@ -386,20 +386,20 @@ bool getStringInput(char *in_str, int row, int col, int slen) {
                 break;
             case DELETE:
             case CTRL_KEY('H'):
-                if (col > start_col) {
-                    col--;
-                    putString(" ", Coord_t{row, col});
-                    moveCursor(Coord_t{row, col});
+                if (coords.x > start_col) {
+                    coords.x--;
+                    putString(" ", coords);
+                    moveCursor(coords);
                     *--p = '\0';
                 }
                 break;
             default:
-                if ((isprint(key) == 0) || col > end_col) {
+                if ((isprint(key) == 0) || coords.x > end_col) {
                     terminalBellSound();
                 } else {
-                    use_value2 mvaddch(row, col, (char) key);
+                    use_value2 mvaddch(coords.y, coords.x, (char) key);
                     *p++ = (char) key;
-                    col++;
+                    coords.x++;
                 }
                 break;
         }

@@ -81,7 +81,7 @@ static void printTomb() {
     putString("(ESC to abort, return to print on screen, or file name)", Coord_t{23, 0});
     putString("Character record?", Coord_t{22, 0});
 
-    if (getStringInput(str, 22, 18, 60)) {
+    if (getStringInput(str, Coord_t{22, 18}, 60)) {
         for (auto &item : inventory) {
             itemSetAsIdentified(item.category_id, item.sub_category_id);
             spellItemIdentifyAndRemoveRandomInscription(item);

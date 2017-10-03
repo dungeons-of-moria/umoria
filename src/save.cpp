@@ -368,7 +368,7 @@ bool saveGame() {
                 printMessage(output.c_str());
             }
             putStringClearToEOL("New Save file [ESC to give up]:", Coord_t{0, 0});
-            if (!getStringInput(input, 0, 31, 45)) {
+            if (!getStringInput(input, Coord_t{0, 31}, 45)) {
                 return false;
             }
             if (input[0] != 0) {

@@ -228,7 +228,7 @@ void moveCursor(Coord_t coords);
 void printMessage(const char *msg);
 bool getInputConfirmation(const char *prompt);
 bool getCommand(const char *prompt, char &command);
-bool getStringInput(char *in_str, int row, int col, int slen);
+bool getStringInput(char *in_str, Coord_t coords, int slen);
 void waitForContinueKey(int line_number);
 void waitAndConfirmCharacterCreation(int line_number, int delay);
 void terminalSaveScreen();

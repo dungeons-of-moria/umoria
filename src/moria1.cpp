@@ -1884,7 +1884,7 @@ void playerRestOn() {
 
         putStringClearToEOL("Rest for how long? ", Coord_t{0, 0});
 
-        if (getStringInput(rest_str, 0, 19, 5)) {
+        if (getStringInput(rest_str, Coord_t{0, 19}, 5)) {
             if (rest_str[0] == '*') {
                 rest_num = -MAX_SHORT;
             } else {

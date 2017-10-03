@@ -42,7 +42,7 @@ void itemInscribe() {
 
     putStringClearToEOL(inscription, Coord_t{0, 0});
 
-    if (getStringInput(inscription, 0, (int) strlen(inscription), msg_len)) {
+    if (getStringInput(inscription, Coord_t{0, (int) strlen(inscription)}, msg_len)) {
         itemReplaceInscription(inventory[item_id], inscription);
     }
 }

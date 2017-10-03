@@ -85,7 +85,7 @@ void outputRandomLevelObjectsToFile() {
     obj_desc_t input = {0};
 
     putStringClearToEOL("Produce objects on what level?: ", Coord_t{0, 0});
-    if (!getStringInput(input, 0, 32, 10)) {
+    if (!getStringInput(input, Coord_t{0, 32}, 10)) {
         return;
     }
 
@@ -95,7 +95,7 @@ void outputRandomLevelObjectsToFile() {
     }
 
     putStringClearToEOL("Produce how many objects?: ", Coord_t{0, 0});
-    if (!getStringInput(input, 0, 27, 10)) {
+    if (!getStringInput(input, Coord_t{0, 27}, 10)) {
         return;
     }
 
@@ -119,7 +119,7 @@ void outputRandomLevelObjectsToFile() {
 
     vtype_t filename = {0};
 
-    if (!getStringInput(filename, 0, 11, 64)) {
+    if (!getStringInput(filename, Coord_t{0, 11}, 64)) {
         return;
     }
     if (strlen(filename) == 0) {

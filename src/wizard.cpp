@@ -39,7 +39,7 @@ void wizardCharacterAdjustment() {
     vtype_t input = {'\0'};
 
     putStringClearToEOL("(3 - 118) Strength     = ", Coord_t{0, 0});
-    if (getStringInput(input, 0, 25, 3)) {
+    if (getStringInput(input, Coord_t{0, 25}, 3)) {
         bool valid_number = stringToNumber(input, number);
         if (valid_number && number > 2 && number < 119) {
             py.stats.max[A_STR] = (uint8_t) number;
@@ -50,7 +50,7 @@ void wizardCharacterAdjustment() {
     }
 
     putStringClearToEOL("(3 - 118) Intelligence = ", Coord_t{0, 0});
-    if (getStringInput(input, 0, 25, 3)) {
+    if (getStringInput(input, Coord_t{0, 25}, 3)) {
         bool valid_number = stringToNumber(input, number);
         if (valid_number && number > 2 && number < 119) {
             py.stats.max[A_INT] = (uint8_t) number;
@@ -61,7 +61,7 @@ void wizardCharacterAdjustment() {
     }
 
     putStringClearToEOL("(3 - 118) Wisdom       = ", Coord_t{0, 0});
-    if (getStringInput(input, 0, 25, 3)) {
+    if (getStringInput(input, Coord_t{0, 25}, 3)) {
         bool valid_number = stringToNumber(input, number);
         if (valid_number && number > 2 && number < 119) {
             py.stats.max[A_WIS] = (uint8_t) number;
@@ -72,7 +72,7 @@ void wizardCharacterAdjustment() {
     }
 
     putStringClearToEOL("(3 - 118) Dexterity    = ", Coord_t{0, 0});
-    if (getStringInput(input, 0, 25, 3)) {
+    if (getStringInput(input, Coord_t{0, 25}, 3)) {
         bool valid_number = stringToNumber(input, number);
         if (valid_number && number > 2 && number < 119) {
             py.stats.max[A_DEX] = (uint8_t) number;
@@ -83,7 +83,7 @@ void wizardCharacterAdjustment() {
     }
 
     putStringClearToEOL("(3 - 118) Constitution = ", Coord_t{0, 0});
-    if (getStringInput(input, 0, 25, 3)) {
+    if (getStringInput(input, Coord_t{0, 25}, 3)) {
         bool valid_number = stringToNumber(input, number);
         if (valid_number && number > 2 && number < 119) {
             py.stats.max[A_CON] = (uint8_t) number;
@@ -94,7 +94,7 @@ void wizardCharacterAdjustment() {
     }
 
     putStringClearToEOL("(3 - 118) Charisma     = ", Coord_t{0, 0});
-    if (getStringInput(input, 0, 25, 3)) {
+    if (getStringInput(input, Coord_t{0, 25}, 3)) {
         bool valid_number = stringToNumber(input, number);
         if (valid_number && number > 2 && number < 119) {
             py.stats.max[A_CHR] = (uint8_t) number;
@@ -105,7 +105,7 @@ void wizardCharacterAdjustment() {
     }
 
     putStringClearToEOL("(1 - 32767) Hit points = ", Coord_t{0, 0});
-    if (getStringInput(input, 0, 25, 5)) {
+    if (getStringInput(input, Coord_t{0, 25}, 5)) {
         bool valid_number = stringToNumber(input, number);
         if (valid_number && number > 0 && number <= MAX_SHORT) {
             py.misc.max_hp = (int16_t) number;
@@ -119,7 +119,7 @@ void wizardCharacterAdjustment() {
     }
 
     putStringClearToEOL("(0 - 32767) Mana       = ", Coord_t{0, 0});
-    if (getStringInput(input, 0, 25, 5)) {
+    if (getStringInput(input, Coord_t{0, 25}, 5)) {
         bool valid_number = stringToNumber(input, number);
         if (valid_number && number > -1 && number <= MAX_SHORT) {
             py.misc.mana = (int16_t) number;
@@ -134,7 +134,7 @@ void wizardCharacterAdjustment() {
     (void) sprintf(input, "Current=%d  Gold = ", py.misc.au);
     number = (int) strlen(input);
     putStringClearToEOL(input, Coord_t{0, 0});
-    if (getStringInput(input, 0, number, 7)) {
+    if (getStringInput(input, Coord_t{0, number}, 7)) {
         int new_gold;
         bool valid_number = stringToNumber(input, new_gold);
         if (valid_number && new_gold > -1) {
@@ -148,7 +148,7 @@ void wizardCharacterAdjustment() {
     (void) sprintf(input, "Current=%d  (0-200) Searching = ", py.misc.chance_in_search);
     number = (int) strlen(input);
     putStringClearToEOL(input, Coord_t{0, 0});
-    if (getStringInput(input, 0, number, 3)) {
+    if (getStringInput(input, Coord_t{0, number}, 3)) {
         int new_gold;
         bool valid_number = stringToNumber(input, new_gold);
         if (valid_number && number > -1 && number < 201) {
@@ -161,7 +161,7 @@ void wizardCharacterAdjustment() {
     (void) sprintf(input, "Current=%d  (-1-18) Stealth = ", py.misc.stealth_factor);
     number = (int) strlen(input);
     putStringClearToEOL(input, Coord_t{0, 0});
-    if (getStringInput(input, 0, number, 3)) {
+    if (getStringInput(input, Coord_t{0, number}, 3)) {
         bool valid_number = stringToNumber(input, number);
         if (valid_number && number > -2 && number < 19) {
             py.misc.stealth_factor = (int16_t) number;
@@ -173,7 +173,7 @@ void wizardCharacterAdjustment() {
     (void) sprintf(input, "Current=%d  (0-200) Disarming = ", py.misc.disarm);
     number = (int) strlen(input);
     putStringClearToEOL(input, Coord_t{0, 0});
-    if (getStringInput(input, 0, number, 3)) {
+    if (getStringInput(input, Coord_t{0, number}, 3)) {
         bool valid_number = stringToNumber(input, number);
         if (valid_number && number > -1 && number < 201) {
             py.misc.disarm = (int16_t) number;
@@ -185,7 +185,7 @@ void wizardCharacterAdjustment() {
     (void) sprintf(input, "Current=%d  (0-100) Save = ", py.misc.saving_throw);
     number = (int) strlen(input);
     putStringClearToEOL(input, Coord_t{0, 0});
-    if (getStringInput(input, 0, number, 3)) {
+    if (getStringInput(input, Coord_t{0, number}, 3)) {
         bool valid_number = stringToNumber(input, number);
         if (valid_number && number > -1 && number < 201) {
             py.misc.saving_throw = (int16_t) number;
@@ -197,7 +197,7 @@ void wizardCharacterAdjustment() {
     (void) sprintf(input, "Current=%d  (0-200) Base to hit = ", py.misc.bth);
     number = (int) strlen(input);
     putStringClearToEOL(input, Coord_t{0, 0});
-    if (getStringInput(input, 0, number, 3)) {
+    if (getStringInput(input, Coord_t{0, number}, 3)) {
         bool valid_number = stringToNumber(input, number);
         if (valid_number && number > -1 && number < 201) {
             py.misc.bth = (int16_t) number;
@@ -209,7 +209,7 @@ void wizardCharacterAdjustment() {
     (void) sprintf(input, "Current=%d  (0-200) Bows/Throwing = ", py.misc.bth_with_bows);
     number = (int) strlen(input);
     putStringClearToEOL(input, Coord_t{0, 0});
-    if (getStringInput(input, 0, number, 3)) {
+    if (getStringInput(input, Coord_t{0, number}, 3)) {
         bool valid_number = stringToNumber(input, number);
         if (valid_number && number > -1 && number < 201) {
             py.misc.bth_with_bows = (int16_t) number;
@@ -221,7 +221,7 @@ void wizardCharacterAdjustment() {
     (void) sprintf(input, "Current=%d  Weight = ", py.misc.weight);
     number = (int) strlen(input);
     putStringClearToEOL(input, Coord_t{0, 0});
-    if (getStringInput(input, 0, number, 3)) {
+    if (getStringInput(input, Coord_t{0, number}, 3)) {
         bool valid_number = stringToNumber(input, number);
         if (valid_number && number > -1) {
             py.misc.weight = (uint16_t) number;
@@ -258,7 +258,7 @@ void wizardCreateObjects() {
     item.identification = ID_KNOWN2 | ID_STORE_BOUGHT;
 
     putStringClearToEOL("Tval   : ", Coord_t{0, 0});
-    if (!getStringInput(input, 0, 9, 3)) {
+    if (!getStringInput(input, Coord_t{0, 9}, 3)) {
         return;
     }
     if (stringToNumber(input, number)) {
@@ -266,13 +266,13 @@ void wizardCreateObjects() {
     }
 
     putStringClearToEOL("Tchar  : ", Coord_t{0, 0});
-    if (!getStringInput(input, 0, 9, 1)) {
+    if (!getStringInput(input, Coord_t{0, 9}, 1)) {
         return;
     }
     item.sprite = (uint8_t) input[0];
 
     putStringClearToEOL("Subval : ", Coord_t{0, 0});
-    if (!getStringInput(input, 0, 9, 5)) {
+    if (!getStringInput(input, Coord_t{0, 9}, 5)) {
         return;
     }
     if (stringToNumber(input, number)) {
@@ -280,7 +280,7 @@ void wizardCreateObjects() {
     }
 
     putStringClearToEOL("Weight : ", Coord_t{0, 0});
-    if (!getStringInput(input, 0, 9, 5)) {
+    if (!getStringInput(input, Coord_t{0, 9}, 5)) {
         return;
     }
     if (stringToNumber(input, number)) {
@@ -288,7 +288,7 @@ void wizardCreateObjects() {
     }
 
     putStringClearToEOL("Number : ", Coord_t{0, 0});
-    if (!getStringInput(input, 0, 9, 5)) {
+    if (!getStringInput(input, Coord_t{0, 9}, 5)) {
         return;
     }
     if (stringToNumber(input, number)) {
@@ -296,7 +296,7 @@ void wizardCreateObjects() {
     }
 
     putStringClearToEOL("Damage (dice): ", Coord_t{0, 0});
-    if (!getStringInput(input, 0, 15, 3)) {
+    if (!getStringInput(input, Coord_t{0, 15}, 3)) {
         return;
     }
     if (stringToNumber(input, number)) {
@@ -304,7 +304,7 @@ void wizardCreateObjects() {
     }
 
     putStringClearToEOL("Damage (sides): ", Coord_t{0, 0});
-    if (!getStringInput(input, 0, 16, 3)) {
+    if (!getStringInput(input, Coord_t{0, 16}, 3)) {
         return;
     }
     if (stringToNumber(input, number)) {
@@ -312,7 +312,7 @@ void wizardCreateObjects() {
     }
 
     putStringClearToEOL("+To hit: ", Coord_t{0, 0});
-    if (!getStringInput(input, 0, 9, 3)) {
+    if (!getStringInput(input, Coord_t{0, 9}, 3)) {
         return;
     }
     if (stringToNumber(input, number)) {
@@ -320,7 +320,7 @@ void wizardCreateObjects() {
     }
 
     putStringClearToEOL("+To dam: ", Coord_t{0, 0});
-    if (!getStringInput(input, 0, 9, 3)) {
+    if (!getStringInput(input, Coord_t{0, 9}, 3)) {
         return;
     }
     if (stringToNumber(input, number)) {
@@ -328,7 +328,7 @@ void wizardCreateObjects() {
     }
 
     putStringClearToEOL("AC     : ", Coord_t{0, 0});
-    if (!getStringInput(input, 0, 9, 3)) {
+    if (!getStringInput(input, Coord_t{0, 9}, 3)) {
         return;
     }
     if (stringToNumber(input, number)) {
@@ -336,7 +336,7 @@ void wizardCreateObjects() {
     }
 
     putStringClearToEOL("+To AC : ", Coord_t{0, 0});
-    if (!getStringInput(input, 0, 9, 3)) {
+    if (!getStringInput(input, Coord_t{0, 9}, 3)) {
         return;
     }
     if (stringToNumber(input, number)) {
@@ -344,7 +344,7 @@ void wizardCreateObjects() {
     }
 
     putStringClearToEOL("P1     : ", Coord_t{0, 0});
-    if (!getStringInput(input, 0, 9, 5)) {
+    if (!getStringInput(input, Coord_t{0, 9}, 5)) {
         return;
     }
     if (stringToNumber(input, number)) {
@@ -352,7 +352,7 @@ void wizardCreateObjects() {
     }
 
     putStringClearToEOL("Flags (In HEX): ", Coord_t{0, 0});
-    if (!getStringInput(input, 0, 16, 8)) {
+    if (!getStringInput(input, Coord_t{0, 16}, 8)) {
         return;
     }
 
@@ -367,7 +367,7 @@ void wizardCreateObjects() {
     item.flags = (uint32_t) input_number;
 
     putStringClearToEOL("Cost : ", Coord_t{0, 0});
-    if (!getStringInput(input, 0, 9, 8)) {
+    if (!getStringInput(input, Coord_t{0, 9}, 8)) {
         return;
     }
     if (stringToNumber(input, input_number)) {
@@ -375,7 +375,7 @@ void wizardCreateObjects() {
     }
 
     putStringClearToEOL("Level : ", Coord_t{0, 0});
-    if (!getStringInput(input, 0, 10, 3)) {
+    if (!getStringInput(input, Coord_t{0, 10}, 3)) {
         return;
     }
     if (stringToNumber(input, number)) {

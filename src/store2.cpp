@@ -266,7 +266,7 @@ static bool storeGetHaggle(const char *comment, int32_t &new_offer, int num_offe
             comment_len = save_comment_len + (int) strlen(default_offer);
         }
 
-        if (!getStringInput(msg, 0, comment_len, 40)) {
+        if (!getStringInput(msg, Coord_t{0, comment_len}, 40)) {
             flag = false;
         }
 

@@ -1077,7 +1077,7 @@ void getCharacterName() {
 
     putString(&blank_string[BLANK_LENGTH - 23], Coord_t{2, 15});
 
-    if (!getStringInput(py.misc.name, 2, 15, 23) || py.misc.name[0] == 0) {
+    if (!getStringInput(py.misc.name, Coord_t{2, 15}, 23) || py.misc.name[0] == 0) {
         getDefaultPlayerName(py.misc.name);
         putString(py.misc.name, Coord_t{2, 15});
     }
@@ -1103,7 +1103,7 @@ void changeCharacterName() {
             case 'f':
                 putStringClearToEOL("File name:", Coord_t{0, 0});
 
-                if (getStringInput(temp, 0, 10, 60) && (temp[0] != 0)) {
+                if (getStringInput(temp, Coord_t{0, 10}, 60) && (temp[0] != 0)) {
                     if (outputPlayerCharacterToFile(temp)) {
                         flag = true;
                     }
