@@ -220,7 +220,7 @@ void flushInputBuffer();
 void eraseLine(Coord_t coords);
 void clearScreen();
 void clearToBottom(int row);
-void putChar(char ch, int row, int col);
+void putChar(char ch, Coord_t coords);
 void moveCursorRelative(int row, int col);
 void printMessageNoCommandInterrupt(const char *msg);
 void putStringClearToEOL(const char *str, int row, int col);

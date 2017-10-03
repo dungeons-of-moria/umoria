@@ -966,7 +966,7 @@ void playerThrowItem() {
                 // do not test tile.field_mark here
 
                 if (coordInsidePanel(y, x) && py.flags.blind < 1 && (tile.temporary_light || tile.permanent_light)) {
-                    putChar(tile_char, y, x);
+                    putChar(tile_char, Coord_t{y, x});
                     putQIO(); // show object moving
                 }
             }

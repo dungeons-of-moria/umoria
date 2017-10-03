@@ -193,12 +193,12 @@ void clearToBottom(int row) {
 
 // Outputs a char to a given interpolated y, x position -RAK-
 // sign bit of a character used to indicate standout mode. -CJS
-void putChar(char ch, int row, int col) {
+void putChar(char ch, Coord_t coords) {
     // Real coords convert to screen positions
-    row -= panel_row_prt;
-    col -= panel_col_prt;
+    coords.y -= panel_row_prt;
+    coords.x -= panel_col_prt;
 
-    if (mvaddch(row, col, ch) == ERR) {
+    if (mvaddch(coords.y, coords.x, ch) == ERR) {
         abort();
     }
 }
