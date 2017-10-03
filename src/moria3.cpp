@@ -949,7 +949,7 @@ void playerMove(int direction, bool do_pickup) {
             }
 
             // Check to see if he should stop
-            if (running_counter != 0) {
+            if (py.running_tracker != 0) {
                 playerAreaAffect(direction, char_row, char_col);
             }
 
@@ -1006,7 +1006,7 @@ void playerMove(int direction, bool do_pickup) {
         } else {
             // Can't move onto floor space
 
-            if ((running_counter == 0) && tile.treasure_id != 0) {
+            if ((py.running_tracker == 0) && tile.treasure_id != 0) {
                 if (treasure_list[tile.treasure_id].category_id == TV_RUBBLE) {
                     printMessage("There is rubble blocking your way.");
                 } else if (treasure_list[tile.treasure_id].category_id == TV_CLOSED_DOOR) {
@@ -1020,7 +1020,7 @@ void playerMove(int direction, bool do_pickup) {
     } else {
         // Attacking a creature!
 
-        int old_find_flag = running_counter;
+        int old_find_flag = py.running_tracker;
 
         playerEndRunning();
 

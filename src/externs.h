@@ -20,7 +20,6 @@ extern bool generate_new_level;
 extern bool screen_has_changed;
 
 extern bool player_free_turn;
-extern int running_counter;
 extern bool teleport_player;
 
 extern bool total_winner;

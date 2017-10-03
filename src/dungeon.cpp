@@ -31,7 +31,7 @@ static void inventoryRefillLamp();
 static void resetDungeonFlags() {
     command_count = 0;
     generate_new_level = false;
-    running_counter = 0;
+    py.running_tracker = 0;
     teleport_player = false;
     monster_multiply_total = 0;
     cave[char_row][char_col].creature_id = 1;
@@ -807,7 +807,7 @@ static void executeInputCommands(char &command, int &find_count) {
         use_last_direction = false;
         player_free_turn = false;
 
-        if (running_counter != 0) {
+        if (py.running_tracker != 0) {
             playerRunAndFind();
             find_count -= 1;
 
@@ -873,7 +873,7 @@ static void executeInputCommands(char &command, int &find_count) {
         doCommand(lastInputCommand);
 
         // Find is counted differently, as the command changes.
-        if (running_counter != 0) {
+        if (py.running_tracker != 0) {
             find_count = command_count - 1;
             command_count = 0;
         } else if (player_free_turn) {
@@ -955,8 +955,8 @@ void playDungeon() {
         playerUpdateRestingState();
 
         // Check for interrupts to find or rest.
-        int microseconds = (running_counter != 0 ? 0 : 10000);
-        if ((command_count > 0 || (running_counter != 0) || py.flags.rest != 0) && checkForNonBlockingKeyPress(microseconds)) {
+        int microseconds = (py.running_tracker != 0 ? 0 : 10000);
+        if ((command_count > 0 || (py.running_tracker != 0) || py.flags.rest != 0) && checkForNonBlockingKeyPress(microseconds)) {
             playerDisturb(0, 0);
         }
 

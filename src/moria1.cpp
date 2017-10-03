@@ -1741,10 +1741,10 @@ static void sub1_move_light(int y1, int x1, int y2, int x2) {
                 cave[y][x].temporary_light = false;
             }
         }
-        if ((running_counter != 0) && !config.run_print_self) {
+        if ((py.running_tracker != 0) && !config.run_print_self) {
             py.temporary_light_only = false;
         }
-    } else if ((running_counter == 0) || config.run_print_self) {
+    } else if ((py.running_tracker == 0) || config.run_print_self) {
         py.temporary_light_only = true;
     }
 
@@ -1807,11 +1807,11 @@ static void sub3_move_light(int y1, int x1, int y2, int x2) {
         }
 
         py.temporary_light_only = false;
-    } else if ((running_counter == 0) || config.run_print_self) {
+    } else if ((py.running_tracker == 0) || config.run_print_self) {
         putChar(caveGetTileSymbol(y1, x1), y1, x1);
     }
 
-    if ((running_counter == 0) || config.run_print_self) {
+    if ((py.running_tracker == 0) || config.run_print_self) {
         putChar('@', y2, x2);
     }
 }
@@ -1840,8 +1840,8 @@ void playerDisturb(int major_disturbance, int light_disturbance) {
         playerRestOff();
     }
 
-    if ((light_disturbance != 0) || (running_counter != 0)) {
-        running_counter = 0;
+    if ((light_disturbance != 0) || (py.running_tracker != 0)) {
+        py.running_tracker = 0;
         dungeonResetView();
     }
 

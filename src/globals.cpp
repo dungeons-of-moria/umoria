@@ -25,7 +25,6 @@ bool generate_new_level;                // True will generate a new level on nex
 bool screen_has_changed       = false;  // Track screen changes for inventory commands
 
 bool player_free_turn;                  // Player has a free turn, so do not move creatures
-int running_counter;                    // Used in MORIA for .(dir)
 bool teleport_player;                   // Handle teleport traps
 
 bool total_winner             = false;  // Character beat the Balrog

@@ -127,8 +127,9 @@ typedef struct {
     } flags;
 
     int16_t pack_heaviness;    // Heaviness of pack - used to calculate if pack is too heavy -CJS-
+    uint8_t running_tracker;   // Tracker for number of turns taken during one run cycle
     bool carrying_light;       // True when player is carrying light
-    bool temporary_light_only; // Track if temporary light about player.
+    bool temporary_light_only; // Track if temporary light about player
     bool weapon_is_heavy;      // Weapon is too heavy -CJS-
 } Player_t;
 

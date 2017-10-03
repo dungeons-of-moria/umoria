@@ -281,9 +281,9 @@ void playerFindInitialize(int direction) {
     int x = char_col;
 
     if (!playerMovePosition(direction, y, x)) {
-        running_counter = 0;
+        py.running_tracker = 0;
     } else {
-        running_counter = 1;
+        py.running_tracker = 1;
 
         find_direction = direction;
         find_prevdir = direction;
@@ -308,14 +308,14 @@ void playerFindInitialize(int direction) {
 
     playerMove(direction, true);
 
-    if (running_counter == 0) {
+    if (py.running_tracker == 0) {
         command_count = 0;
     }
 }
 
 void playerRunAndFind() {
     // prevent infinite loops in find mode, will stop after moving 100 times
-    if (running_counter++ > 100) {
+    if (py.running_tracker++ > 100) {
         printMessage("You stop running to catch your breath.");
         playerEndRunning();
         return;
@@ -326,11 +326,11 @@ void playerRunAndFind() {
 
 // Switch off the run flag - and get the light correct. -CJS-
 void playerEndRunning() {
-    if (running_counter == 0) {
+    if (py.running_tracker == 0) {
         return;
     }
 
-    running_counter = 0;
+    py.running_tracker = 0;
 
     dungeonMoveCharacterLight(char_row, char_col, char_row, char_col);
 }
