@@ -212,46 +212,47 @@ char *centerString(char *centered_str, const char *in_str);
 
 // io.c
 bool terminalInitialize();
-void putString(const char *out_str, Coord_t coords);
-void putQIO();
 void terminalRestore();
-char getKeyInput();
-void flushInputBuffer();
-void eraseLine(Coord_t coords);
-void clearScreen();
-void clearToBottom(int row);
-void putChar(char ch, Coord_t coords);
-void moveCursorRelative(Coord_t coords);
-void printMessageNoCommandInterrupt(const char *msg);
-void putStringClearToEOL(const char *str, Coord_t coords);
-void moveCursor(Coord_t coords);
-void printMessage(const char *msg);
-bool getInputConfirmation(const char *prompt);
-bool getCommand(const char *prompt, char &command);
-bool getStringInput(char *in_str, Coord_t coords, int slen);
-void waitForContinueKey(int line_number);
-void waitAndConfirmCharacterCreation(int line_number, int delay);
 void terminalSaveScreen();
 void terminalRestoreScreen();
 void terminalBellSound();
-void displayDungeonMap();
-bool checkForNonBlockingKeyPress(int microseconds);
-void getDefaultPlayerName(char *buffer);
-bool checkFilePermissions();
-bool validGameVersion(uint8_t major, uint8_t minor, uint8_t patch);
-bool isCurrentGameVersion(uint8_t major, uint8_t minor, uint8_t patch);
+void putQIO();
+void flushInputBuffer();
+void clearScreen();
+void clearToBottom(int row);
+void moveCursor(Coord_t coords);
+void moveCursorRelative(Coord_t coords);
+void putChar(char ch, Coord_t coords);
+void putString(const char *out_str, Coord_t coords);
+void putStringClearToEOL(const char *str, Coord_t coords);
+void eraseLine(Coord_t coords);
 void messageLinePrintMessage(std::string message);
 void messageLineClear();
+void printMessage(const char *msg);
+void printMessageNoCommandInterrupt(const char *msg);
+char getKeyInput();
+bool getCommand(const char *prompt, char &command);
+bool getStringInput(char *in_str, Coord_t coords, int slen);
+bool getInputConfirmation(const char *prompt);
+void waitForContinueKey(int line_number);
+void waitAndConfirmCharacterCreation(int line_number, int delay);
+bool checkForNonBlockingKeyPress(int microseconds);
+void getDefaultPlayerName(char *buffer);
+bool validGameVersion(uint8_t major, uint8_t minor, uint8_t patch);
+bool isCurrentGameVersion(uint8_t major, uint8_t minor, uint8_t patch);
+void displayDungeonMap();
 
 #ifndef _WIN32
 // call functions which expand tilde before calling open/fopen
 #define open topen
 #define fopen tfopen
 
-bool tilde(const char *file, char *expanded);
 FILE *tfopen(const char *file, const char *mode);
 int topen(const char *file, int flags, int mode);
+bool tilde(const char *file, char *expanded);
 #endif
+
+bool checkFilePermissions();
 
 // magic.c
 void getAndCastMagicSpell();

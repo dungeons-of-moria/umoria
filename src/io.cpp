@@ -19,8 +19,21 @@ static bool curses_on = false;
 // Spare window for saving the screen. -CJS-
 static WINDOW *save_screen;
 
-static void moriaTerminalInitialize();
-static void sleepInSeconds(int seconds);
+// Set up the terminal into a suitable state -MRC-
+static void moriaTerminalInitialize() {
+    raw();                 // <curses.h> disable control characters. I.e. Ctrl-C does not work!
+    // cbreak();           // <curses.h> use raw() instead as it disables Ctrl chars
+    noecho();              // <curses.h> do not echo typed characters
+    nonl();                // <curses.h> disable translation return/newline for detection of return key
+    keypad(stdscr, false); // <curses.h> disable keypad input as we handle that ourselves
+    // curs_set(0);        // <curses.h> sets the appearance of the cursor based on the value of visibility
+
+#ifdef __APPLE__
+    set_escdelay(50);      // <curses.h> default delay on macOS is 1 second, let's do something about that!
+#endif
+
+    curses_on = true;
+}
 
 // initializes the terminal / curses routines
 bool terminalInitialize() {
@@ -47,46 +60,6 @@ bool terminalInitialize() {
     return true;
 }
 
-// Set up the terminal into a suitable state -MRC-
-static void moriaTerminalInitialize() {
-    raw();                 // <curses.h> disable control characters. I.e. Ctrl-C does not work!
-    // cbreak();           // <curses.h> use raw() instead as it disables Ctrl chars
-    noecho();              // <curses.h> do not echo typed characters
-    nonl();                // <curses.h> disable translation return/newline for detection of return key
-    keypad(stdscr, false); // <curses.h> disable keypad input as we handle that ourselves
-    // curs_set(0);        // <curses.h> sets the appearance of the cursor based on the value of visibility
-
-#ifdef __APPLE__
-    set_escdelay(50);      // <curses.h> default delay on macOS is 1 second, let's do something about that!
-#endif
-
-    curses_on = true;
-}
-
-// Dump IO to buffer -RAK-
-void putString(const char *out_str, Coord_t coords) {
-    // truncate the string, to make sure that it won't go past right edge of screen.
-    if (coords.x > 79) {
-        coords.x = 79;
-    }
-
-    vtype_t str = {'\0'};
-    (void) strncpy(str, out_str, (size_t) (79 - coords.x));
-    str[79 - coords.x] = '\0';
-
-    if (mvaddstr(coords.y, coords.x, str) == ERR) {
-        abort();
-    }
-}
-
-// Dump the IO buffer to terminal -RAK-
-void putQIO() {
-    // Let inventoryExecuteCommand() know something has changed.
-    screen_has_changed = true;
-
-    (void) refresh();
-}
-
 // Put the terminal in the original mode. -CJS-
 void terminalRestore() {
     if (!curses_on) {
@@ -109,54 +82,30 @@ void terminalRestore() {
     curses_on = false;
 }
 
-// Returns a single character input from the terminal. -CJS-
-//
-// This silently consumes ^R to redraw the screen and reset the
-// terminal, so that this operation can always be performed at
-// any input prompt. getKeyInput() never returns ^R.
-char getKeyInput() {
-    putQIO();         // Dump IO buffer
-    command_count = 0; // Just to be safe -CJS-
+void terminalSaveScreen() {
+    overwrite(stdscr, save_screen);
+}
 
-    while (true) {
-        int ch = getch();
+void terminalRestoreScreen() {
+    overwrite(save_screen, stdscr);
+    touchwin(stdscr);
+}
 
-        // some machines may not sign extend.
-        if (ch == EOF) {
-            // avoid infinite loops while trying to call getKeyInput() for a -more- prompt.
-            message_ready_to_print = false;
+void terminalBellSound() {
+    putQIO();
 
-            eof_flag++;
-
-            (void) refresh();
-
-            if (!character_generated || character_saved) {
-                exitGame();
-            }
-
-            playerDisturb(1, 0);
-
-            if (eof_flag > 100) {
-                // just in case, to make sure that the process eventually dies
-                panic_save = true;
-
-                (void) strcpy(character_died_from, "(end of input: panic saved)");
-                if (!saveGame()) {
-                    (void) strcpy(character_died_from, "panic: unexpected eof");
-                    character_is_dead = true;
-                }
-                exitGame();
-            }
-            return ESCAPE;
-        }
-
-        if (ch != CTRL_KEY('R')) {
-            return (char) ch;
-        }
-
-        (void) wrefresh(curscr);
-        moriaTerminalInitialize();
+    // The player can turn off beeps if they find them annoying.
+    if (config.error_beep_sound) {
+        (void) write(1, "\007", 1);
     }
+}
+
+// Dump the IO buffer to terminal -RAK-
+void putQIO() {
+    // Let inventoryExecuteCommand() know something has changed.
+    screen_has_changed = true;
+
+    (void) refresh();
 }
 
 // Flush the buffer -RAK-
@@ -166,16 +115,6 @@ void flushInputBuffer() {
     }
 
     while (checkForNonBlockingKeyPress(0));
-}
-
-// Clears given line of text -RAK-
-void eraseLine(Coord_t coords) {
-    if (coords.y == MSG_LINE && message_ready_to_print) {
-        printMessage(CNIL);
-    }
-
-    (void) move(coords.y, coords.x);
-    clrtoeol();
 }
 
 // Clears screen
@@ -191,16 +130,9 @@ void clearToBottom(int row) {
     clrtobot();
 }
 
-// Outputs a char to a given interpolated y, x position -RAK-
-// sign bit of a character used to indicate standout mode. -CJS
-void putChar(char ch, Coord_t coords) {
-    // Real coords convert to screen positions
-    coords.y -= panel_row_prt;
-    coords.x -= panel_col_prt;
-
-    if (mvaddch(coords.y, coords.x, ch) == ERR) {
-        abort();
-    }
+// move cursor to a given y, x position
+void moveCursor(Coord_t coords) {
+    (void) move(coords.y, coords.x);
 }
 
 // Moves the cursor to a given interpolated y, x position -RAK-
@@ -214,15 +146,32 @@ void moveCursorRelative(Coord_t coords) {
     }
 }
 
-// Print a message so as not to interrupt a counted command. -CJS-
-void printMessageNoCommandInterrupt(const char *msg) {
-    // Save command count value
-    int i = command_count;
+// Outputs a char to a given interpolated y, x position -RAK-
+// sign bit of a character used to indicate standout mode. -CJS
+void putChar(char ch, Coord_t coords) {
+    // Real coords convert to screen positions
+    coords.y -= panel_row_prt;
+    coords.x -= panel_col_prt;
 
-    printMessage(msg);
+    if (mvaddch(coords.y, coords.x, ch) == ERR) {
+        abort();
+    }
+}
 
-    // Restore count value
-    command_count = i;
+// Dump IO to buffer -RAK-
+void putString(const char *out_str, Coord_t coords) {
+    // truncate the string, to make sure that it won't go past right edge of screen.
+    if (coords.x > 79) {
+        coords.x = 79;
+    }
+
+    vtype_t str = {'\0'};
+    (void) strncpy(str, out_str, (size_t) (79 - coords.x));
+    str[79 - coords.x] = '\0';
+
+    if (mvaddstr(coords.y, coords.x, str) == ERR) {
+        abort();
+    }
 }
 
 // Outputs a line to a given y, x position -RAK-
@@ -236,9 +185,53 @@ void putStringClearToEOL(const char *str, Coord_t coords) {
     putString(str, coords);
 }
 
-// move cursor to a given y, x position
-void moveCursor(Coord_t coords) {
+// Clears given line of text -RAK-
+void eraseLine(Coord_t coords) {
+    if (coords.y == MSG_LINE && message_ready_to_print) {
+        printMessage(CNIL);
+    }
+
     (void) move(coords.y, coords.x);
+    clrtoeol();
+}
+
+static Coord_t currentCursorPosition() {
+    int y, x;
+    getyx(stdscr, y, x);
+    return Coord_t{y, x};
+}
+
+// messageLinePrintMessage will print a line of text to the message line (0,0).
+// first clearing the line of any text!
+void messageLinePrintMessage(std::string message) {
+    // save current cursor position
+    Coord_t coords = currentCursorPosition();
+
+    // move to beginning of message line, and clear it
+    move(0, 0);
+    clrtoeol();
+
+    // truncate message if it's too long!
+    message.resize(79);
+
+    addstr(message.c_str());
+
+    // restore cursor to old position
+    move(coords.y, coords.x);
+}
+
+// deleteMessageLine will delete all text from the message line (0,0).
+// The current cursor position will be maintained.
+void messageLineClear() {
+    // save current cursor position
+    Coord_t coords = currentCursorPosition();
+
+    // move to beginning of message line, and clear it
+    move(0, 0);
+    clrtoeol();
+
+    // restore cursor to old position
+    move(coords.y, coords.x);
 }
 
 // Outputs message to top line of screen
@@ -313,29 +306,65 @@ void printMessage(const char *msg) {
     }
 }
 
-// Used to verify a choice - user gets the chance to abort choice. -CJS-
-bool getInputConfirmation(const char *prompt) {
-    putStringClearToEOL(prompt, Coord_t{0, 0});
+// Print a message so as not to interrupt a counted command. -CJS-
+void printMessageNoCommandInterrupt(const char *msg) {
+    // Save command count value
+    int i = command_count;
 
-    int y, x;
-    getyx(stdscr, y, x);
+    printMessage(msg);
 
-    if (x > 73) {
-        (void) move(0, 73);
-    } else if (y != 0) {
-        // use `y` to prevent compiler warning.
+    // Restore count value
+    command_count = i;
+}
+
+// Returns a single character input from the terminal. -CJS-
+//
+// This silently consumes ^R to redraw the screen and reset the
+// terminal, so that this operation can always be performed at
+// any input prompt. getKeyInput() never returns ^R.
+char getKeyInput() {
+    putQIO();         // Dump IO buffer
+    command_count = 0; // Just to be safe -CJS-
+
+    while (true) {
+        int ch = getch();
+
+        // some machines may not sign extend.
+        if (ch == EOF) {
+            // avoid infinite loops while trying to call getKeyInput() for a -more- prompt.
+            message_ready_to_print = false;
+
+            eof_flag++;
+
+            (void) refresh();
+
+            if (!character_generated || character_saved) {
+                exitGame();
+            }
+
+            playerDisturb(1, 0);
+
+            if (eof_flag > 100) {
+                // just in case, to make sure that the process eventually dies
+                panic_save = true;
+
+                (void) strcpy(character_died_from, "(end of input: panic saved)");
+                if (!saveGame()) {
+                    (void) strcpy(character_died_from, "panic: unexpected eof");
+                    character_is_dead = true;
+                }
+                exitGame();
+            }
+            return ESCAPE;
+        }
+
+        if (ch != CTRL_KEY('R')) {
+            return (char) ch;
+        }
+
+        (void) wrefresh(curscr);
+        moriaTerminalInitialize();
     }
-
-    (void) addstr(" [y/n]");
-
-    char input = ' ';
-    while (input == ' ') {
-        input = getKeyInput();
-    }
-
-    messageLineClear();
-
-    return (input == 'Y' || input == 'y');
 }
 
 // Prompts (optional) and returns ord value of input char
@@ -418,11 +447,44 @@ bool getStringInput(char *in_str, Coord_t coords, int slen) {
     return true;
 }
 
+// Used to verify a choice - user gets the chance to abort choice. -CJS-
+bool getInputConfirmation(const char *prompt) {
+    putStringClearToEOL(prompt, Coord_t{0, 0});
+
+    int y, x;
+    getyx(stdscr, y, x);
+
+    if (x > 73) {
+        (void) move(0, 73);
+    } else if (y != 0) {
+        // use `y` to prevent compiler warning.
+    }
+
+    (void) addstr(" [y/n]");
+
+    char input = ' ';
+    while (input == ' ') {
+        input = getKeyInput();
+    }
+
+    messageLineClear();
+
+    return (input == 'Y' || input == 'y');
+}
+
 // Pauses for user response before returning -RAK-
 void waitForContinueKey(int line_number) {
     putStringClearToEOL("[Press any key to continue.]", Coord_t{line_number, 23});
     (void) getKeyInput();
     eraseLine(Coord_t{line_number, 0});
+}
+
+static void sleepInSeconds(int seconds) {
+#ifdef _WIN32
+    Sleep(seconds * 1000);
+#else
+    sleep((unsigned int) seconds);
+#endif
 }
 
 // Pauses for user response before returning -RAK-
@@ -444,22 +506,102 @@ void waitAndConfirmCharacterCreation(int line_number, int delay) {
     eraseLine(Coord_t{line_number, 0});
 }
 
-void terminalSaveScreen() {
-    overwrite(stdscr, save_screen);
-}
+// Provides for a timeout on input. Does a non-blocking read, consuming the data if
+// any, and then returns 1 if data was read, zero otherwise.
+//
+// Porting:
+//
+// In systems without the select call, but with a sleep for fractional numbers of
+// seconds, one could sleep for the time and then check for input.
+//
+// In systems which can only sleep for whole number of seconds, you might sleep by
+// writing a lot of nulls to the terminal, and waiting for them to drain, or you
+// might hack a static accumulation of times to wait. When the accumulation reaches
+// a certain point, sleep for a second. There would need to be a way of resetting
+// the count, with a call made for commands like run or rest.
+bool checkForNonBlockingKeyPress(int microseconds) {
+#ifdef _WIN32
+    (void) microseconds;
 
-void terminalRestoreScreen() {
-    overwrite(save_screen, stdscr);
-    touchwin(stdscr);
-}
+    // Ugly non-blocking read...Ugh! -MRC-
+    timeout(8);
+    int result = getch();
+    timeout(-1);
 
-void terminalBellSound() {
-    putQIO();
+    return result > 0;
+#else
+    struct timeval tbuf{};
+    int ch;
+    int smask;
 
-    // The player can turn off beeps if they find them annoying.
-    if (config.error_beep_sound) {
-        (void) write(1, "\007", 1);
+    // Return true if a read on descriptor 1 will not block.
+    tbuf.tv_sec = 0;
+    tbuf.tv_usec = microseconds;
+
+    smask = 1; // i.e. (1 << 0)
+    if (select(1, (fd_set *) &smask, (fd_set *) 0, (fd_set *) 0, &tbuf) == 1) {
+        ch = getch();
+        // check for EOF errors here, select sometimes works even when EOF
+        if (ch == -1) {
+            eof_flag++;
+            return false;
+        }
+        return true;
     }
+
+    return false;
+#endif
+}
+
+// Find a default user name from the system.
+void getDefaultPlayerName(char *buffer) {
+    // Gotta have some name
+    const char *defaultName = "X";
+
+#ifdef _WIN32
+    unsigned long bufCharCount = PLAYER_NAME_SIZE;
+
+    if (!GetUserName(buffer, &bufCharCount)) {
+        (void)strcpy(buffer, defaultName);
+    }
+#else
+    char *p = getlogin();
+
+    if ((p != nullptr) && (p[0] != 0)) {
+        (void) strcpy(buffer, p);
+    } else {
+        struct passwd *pwline = getpwuid((int) getuid());
+        if (pwline != nullptr) {
+            (void) strcpy(buffer, pwline->pw_name);
+        }
+    }
+
+    if (buffer[0] == 0) {
+        (void) strcpy(buffer, defaultName);
+    }
+#endif
+}
+
+// Support for Umoria 5.2.2 up to 5.7.x.
+// The save file format was frozen as of version 5.2.2.
+bool validGameVersion(uint8_t major, uint8_t minor, uint8_t patch) {
+    if (major != 5) {
+        return false;
+    }
+
+    if (minor < 2) {
+        return false;
+    }
+
+    if (minor == 2 && patch < 2) {
+        return false;
+    }
+
+    return minor <= 7;
+}
+
+bool isCurrentGameVersion(uint8_t major, uint8_t minor, uint8_t patch) {
+    return major == CURRENT_VERSION_MAJOR && minor == CURRENT_VERSION_MINOR && patch == CURRENT_VERSION_PATCH;
 }
 
 // definitions used by displayDungeonMap()
@@ -568,90 +710,6 @@ void displayDungeonMap() {
     terminalRestoreScreen();
 }
 
-static void sleepInSeconds(int seconds) {
-#ifdef _WIN32
-    Sleep(seconds * 1000);
-#else
-    sleep((unsigned int) seconds);
-#endif
-}
-
-// Provides for a timeout on input. Does a non-blocking read, consuming the data if
-// any, and then returns 1 if data was read, zero otherwise.
-//
-// Porting:
-//
-// In systems without the select call, but with a sleep for fractional numbers of
-// seconds, one could sleep for the time and then check for input.
-//
-// In systems which can only sleep for whole number of seconds, you might sleep by
-// writing a lot of nulls to the terminal, and waiting for them to drain, or you
-// might hack a static accumulation of times to wait. When the accumulation reaches
-// a certain point, sleep for a second. There would need to be a way of resetting
-// the count, with a call made for commands like run or rest.
-bool checkForNonBlockingKeyPress(int microseconds) {
-#ifdef _WIN32
-    (void) microseconds;
-
-    // Ugly non-blocking read...Ugh! -MRC-
-    timeout(8);
-    int result = getch();
-    timeout(-1);
-
-    return result > 0;
-#else
-    struct timeval tbuf{};
-    int ch;
-    int smask;
-
-    // Return true if a read on descriptor 1 will not block.
-    tbuf.tv_sec = 0;
-    tbuf.tv_usec = microseconds;
-
-    smask = 1; // i.e. (1 << 0)
-    if (select(1, (fd_set *) &smask, (fd_set *) 0, (fd_set *) 0, &tbuf) == 1) {
-        ch = getch();
-        // check for EOF errors here, select sometimes works even when EOF
-        if (ch == -1) {
-            eof_flag++;
-            return false;
-        }
-        return true;
-    }
-
-    return false;
-#endif
-}
-
-// Find a default user name from the system.
-void getDefaultPlayerName(char *buffer) {
-    // Gotta have some name
-    const char *defaultName = "X";
-
-#ifdef _WIN32
-    unsigned long bufCharCount = PLAYER_NAME_SIZE;
-
-    if (!GetUserName(buffer, &bufCharCount)) {
-        (void)strcpy(buffer, defaultName);
-    }
-#else
-    char *p = getlogin();
-
-    if ((p != nullptr) && (p[0] != 0)) {
-        (void) strcpy(buffer, p);
-    } else {
-        struct passwd *pwline = getpwuid((int) getuid());
-        if (pwline != nullptr) {
-            (void) strcpy(buffer, pwline->pw_name);
-        }
-    }
-
-    if (buffer[0] == 0) {
-        (void) strcpy(buffer, defaultName);
-    }
-#endif
-}
-
 #ifndef _WIN32
 // On unix based systems we should expand `~` to the users home path,
 // otherwise on Windows we can ignore all of this. -MRC-
@@ -736,65 +794,4 @@ bool checkFilePermissions() {
 #endif
 
     return true;
-}
-
-// Support for Umoria 5.2.2 up to 5.7.x.
-// The save file format was frozen as of version 5.2.2.
-bool validGameVersion(uint8_t major, uint8_t minor, uint8_t patch) {
-    if (major != 5) {
-        return false;
-    }
-
-    if (minor < 2) {
-        return false;
-    }
-
-    if (minor == 2 && patch < 2) {
-        return false;
-    }
-
-    return minor <= 7;
-}
-
-bool isCurrentGameVersion(uint8_t major, uint8_t minor, uint8_t patch) {
-    return major == CURRENT_VERSION_MAJOR && minor == CURRENT_VERSION_MINOR && patch == CURRENT_VERSION_PATCH;
-}
-
-static Coord_t currentCursorPosition() {
-    int y, x;
-    getyx(stdscr, y, x);
-    return Coord_t{y, x};
-}
-
-// messageLinePrintMessage will print a line of text to the message line (0,0).
-// first clearing the line of any text!
-void messageLinePrintMessage(std::string message) {
-    // save current cursor position
-    Coord_t coords = currentCursorPosition();
-
-    // move to beginning of message line, and clear it
-    move(0, 0);
-    clrtoeol();
-
-    // truncate message if it's too long!
-    message.resize(79);
-
-    addstr(message.c_str());
-
-    // restore cursor to old position
-    move(coords.y, coords.x);
-}
-
-// deleteMessageLine will delete all text from the message line (0,0).
-// The current cursor position will be maintained.
-void messageLineClear() {
-    // save current cursor position
-    Coord_t coords = currentCursorPosition();
-
-    // move to beginning of message line, and clear it
-    move(0, 0);
-    clrtoeol();
-
-    // restore cursor to old position
-    move(coords.y, coords.x);
 }
