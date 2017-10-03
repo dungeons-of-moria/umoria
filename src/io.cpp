@@ -133,6 +133,12 @@ void moveCursor(Coord_t coords) {
     (void) move(coords.y, coords.x);
 }
 
+void addChar(char ch, Coord_t coords) {
+    if (mvaddch(coords.y, coords.x, ch) == ERR) {
+        abort();
+    }
+}
+
 // Dump IO to buffer -RAK-
 void putString(const char *out_str, Coord_t coords) {
     // truncate the string, to make sure that it won't go past right edge of screen.
@@ -477,7 +483,7 @@ void waitForContinueKey(int line_number) {
     eraseLine(Coord_t{line_number, 0});
 }
 
-static void sleepInSeconds(int seconds) {
+static void sleep_in_seconds(int seconds) {
 #ifdef _WIN32
     Sleep(seconds * 1000);
 #else
@@ -495,7 +501,7 @@ void waitAndConfirmCharacterCreation(int line_number, int delay) {
         eraseLine(Coord_t{line_number, 0});
 
         if (delay > 0) {
-            sleepInSeconds(delay);
+            sleep_in_seconds(delay);
         }
 
         exitGame();
@@ -600,112 +606,6 @@ bool validGameVersion(uint8_t major, uint8_t minor, uint8_t patch) {
 
 bool isCurrentGameVersion(uint8_t major, uint8_t minor, uint8_t patch) {
     return major == CURRENT_VERSION_MAJOR && minor == CURRENT_VERSION_MINOR && patch == CURRENT_VERSION_PATCH;
-}
-
-// definitions used by displayDungeonMap()
-// index into border character array
-#define TL 0 // top left
-#define TR 1
-#define BL 2
-#define BR 3
-#define HE 4 // horizontal edge
-#define VE 5
-
-// Display highest priority object in the RATIO by RATIO area
-constexpr int RATIO = 3;
-
-static char screen_border[6] = {'+', '+', '+', '+', '-', '|'};
-
-// character set to use
-static char getBorderTile(uint8_t id) {
-    return screen_border[id];
-}
-
-void displayDungeonMap() {
-    char map[MAX_WIDTH / RATIO + 1];
-    char prntscrnbuf[80];
-
-    int priority[256];
-    for (int &i : priority) {
-        i = 0;
-    }
-
-    priority[60] = 5;    // char '<'
-    priority[62] = 5;    // char '>'
-    priority[64] = 10;   // char '@'
-    priority[35] = -5;   // char '#'
-    priority[46] = -10;  // char '.'
-    priority[92] = -3;   // char '\'
-    priority[32] = -15;  // char ' '
-
-    terminalSaveScreen();
-    clearScreen();
-    mvaddch(0, 0, getBorderTile(TL));
-
-    for (int i = 0; i < MAX_WIDTH / RATIO; i++) {
-        (void) addch((const chtype) getBorderTile(HE));
-    }
-
-    (void) addch((const chtype) getBorderTile(TR));
-    map[MAX_WIDTH / RATIO] = '\0';
-
-    int myrow = 0;
-    int mycol = 0;
-    int orow = -1;
-
-    for (int i = 0; i < MAX_HEIGHT; i++) {
-        int row = i / RATIO;
-        if (row != orow) {
-            if (orow >= 0) {
-                // can not use mvprintw() on IBM PC, because PC-Curses is horribly
-                // written, and mvprintw() causes the fp emulation library to be
-                // linked with PC-Moria, makes the program 10K bigger
-                (void) sprintf(prntscrnbuf, "%c%s%c", getBorderTile(VE), map, getBorderTile(VE));
-                mvaddstr(orow + 1, 0, prntscrnbuf);
-            }
-
-            for (int j = 0; j < MAX_WIDTH / RATIO; j++) {
-                map[j] = ' ';
-            }
-
-            orow = row;
-        }
-
-        for (int j = 0; j < MAX_WIDTH; j++) {
-            int col = j / RATIO;
-            char tmpChar = caveGetTileSymbol(i, j);
-            if (priority[(uint8_t) map[col]] < priority[(uint8_t) tmpChar]) {
-                map[col] = tmpChar;
-            }
-
-            if (map[col] == '@') {
-                mycol = col + 1; // account for border
-                myrow = row + 1;
-            }
-        }
-    }
-
-    if (orow >= 0) {
-        (void) sprintf(prntscrnbuf, "%c%s%c", getBorderTile(VE), map, getBorderTile(VE));
-        mvaddstr(orow + 1, 0, prntscrnbuf);
-    }
-
-    mvaddch(orow + 2, 0, getBorderTile(BL));
-
-    for (int i = 0; i < MAX_WIDTH / RATIO; i++) {
-        (void) addch((const chtype) getBorderTile(HE));
-    }
-
-    (void) addch((const chtype) getBorderTile(BR));
-
-    mvaddstr(23, 23, "Hit any key to continue");
-
-    if (mycol > 0) {
-        (void) move(myrow, mycol);
-    }
-
-    (void) getKeyInput();
-    terminalRestoreScreen();
 }
 
 #ifndef _WIN32

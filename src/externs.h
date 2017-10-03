@@ -184,6 +184,7 @@ void itemTypeRemainingCountDescription(int item_id);
 
 // dungeon.c
 void playDungeon();
+void dungeonDisplayMap();
 
 // eat.c
 void playerEat();
@@ -221,6 +222,7 @@ void flushInputBuffer();
 void clearScreen();
 void clearToBottom(int row);
 void moveCursor(Coord_t coords);
+void addChar(char ch, Coord_t coords);
 void putString(const char *out_str, Coord_t coords);
 void putStringClearToEOL(const char *str, Coord_t coords);
 void eraseLine(Coord_t coords);
@@ -240,7 +242,6 @@ bool checkForNonBlockingKeyPress(int microseconds);
 void getDefaultPlayerName(char *buffer);
 bool validGameVersion(uint8_t major, uint8_t minor, uint8_t patch);
 bool isCurrentGameVersion(uint8_t major, uint8_t minor, uint8_t patch);
-void displayDungeonMap();
 
 #ifndef _WIN32
 // call functions which expand tilde before calling open/fopen
