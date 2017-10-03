@@ -1715,7 +1715,7 @@ void dungeonLightRoom(int pos_y, int pos_x) {
                         tile.field_mark = true;
                     }
                 }
-                putChar(caveGetTileSymbol(y, x), Coord_t{y, x});
+                panelPutTile(caveGetTileSymbol(y, x), Coord_t{y, x});
             }
         }
     }
@@ -1728,7 +1728,7 @@ void dungeonLiteSpot(int y, int x) {
     }
 
     char symbol = caveGetTileSymbol(y, x);
-    putChar(symbol, Coord_t{y, x});
+    panelPutTile(symbol, Coord_t{y, x});
 }
 
 // Normal movement
@@ -1790,7 +1790,7 @@ static void sub1_move_light(int y1, int x1, int y2, int x2) {
     for (int y = top; y <= bottom; y++) {
         // Leftmost to rightmost do
         for (int x = left; x <= right; x++) {
-            putChar(caveGetTileSymbol(y, x), Coord_t{y, x});
+            panelPutTile(caveGetTileSymbol(y, x), Coord_t{y, x});
         }
     }
 }
@@ -1802,17 +1802,17 @@ static void sub3_move_light(int y1, int x1, int y2, int x2) {
         for (int y = y1 - 1; y <= y1 + 1; y++) {
             for (int x = x1 - 1; x <= x1 + 1; x++) {
                 cave[y][x].temporary_light = false;
-                putChar(caveGetTileSymbol(y, x), Coord_t{y, x});
+                panelPutTile(caveGetTileSymbol(y, x), Coord_t{y, x});
             }
         }
 
         py.temporary_light_only = false;
     } else if ((py.running_tracker == 0) || config.run_print_self) {
-        putChar(caveGetTileSymbol(y1, x1), Coord_t{y1, x1});
+        panelPutTile(caveGetTileSymbol(y1, x1), Coord_t{y1, x1});
     }
 
     if ((py.running_tracker == 0) || config.run_print_self) {
-        putChar('@', Coord_t{y2, x2});
+        panelPutTile('@', Coord_t{y2, x2});
     }
 }
 

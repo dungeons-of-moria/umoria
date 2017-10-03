@@ -507,7 +507,7 @@ void drawDungeonPanel() {
         for (int x = panel_col_min; x <= panel_col_max; x++) {
             char ch = caveGetTileSymbol(y, x);
             if (ch != ' ') {
-                putChar(ch, Coord_t{y, x});
+                panelPutTile(ch, Coord_t{y, x});
             }
         }
     }

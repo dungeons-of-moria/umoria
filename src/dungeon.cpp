@@ -825,7 +825,7 @@ static void executeInputCommands(char &command, int &find_count) {
         }
 
         // move the cursor to the players character
-        moveCursorRelative(Coord_t{char_row, char_col});
+        panelMoveCursor(Coord_t{char_row, char_col});
 
         message_ready_to_print = false;
 
@@ -846,7 +846,7 @@ static void executeInputCommands(char &command, int &find_count) {
             }
 
             // move cursor to player char again, in case it moved
-            moveCursorRelative(Coord_t{char_row, char_col});
+            panelMoveCursor(Coord_t{char_row, char_col});
 
             // Commands are always converted to rogue form. -CJS-
             if (!config.use_roguelike_keys) {
@@ -867,7 +867,7 @@ static void executeInputCommands(char &command, int &find_count) {
 
         // Flash the message line.
         messageLineClear();
-        moveCursorRelative(Coord_t{char_row, char_col});
+        panelMoveCursor(Coord_t{char_row, char_col});
         putQIO();
 
         doCommand(lastInputCommand);
@@ -1011,7 +1011,7 @@ void playDungeon() {
         } else {
             // if paralyzed, resting, or dead, flush output
             // but first move the cursor onto the player, for aesthetics
-            moveCursorRelative(Coord_t{char_row, char_col});
+            panelMoveCursor(Coord_t{char_row, char_col});
             putQIO();
         }
 

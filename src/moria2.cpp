@@ -303,7 +303,7 @@ void playerFindInitialize(int direction) {
     // of find mode, when the initial position of the character must be erased.
     // Hence we must do the erasure here.
     if (!py.temporary_light_only && !config.run_print_self) {
-        putChar(caveGetTileSymbol(char_row, char_col), Coord_t{char_row, char_col});
+        panelPutTile(caveGetTileSymbol(char_row, char_col), Coord_t{char_row, char_col});
     }
 
     playerMove(direction, true);

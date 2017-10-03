@@ -178,7 +178,7 @@ bool spellDetectInvisibleCreaturesOnPanel() {
             monster.lit = true;
 
             // works correctly even if hallucinating
-            putChar((char) creatures_list[monster.creature_id].sprite, Coord_t{monster.y, monster.x});
+            panelPutTile((char) creatures_list[monster.creature_id].sprite, Coord_t{monster.y, monster.x});
 
             detected = true;
         }
@@ -464,7 +464,7 @@ bool spellDetectMonsters() {
             detected = true;
 
             // works correctly even if hallucinating
-            putChar((char) creatures_list[monster.creature_id].sprite, Coord_t{monster.y, monster.x});
+            panelPutTile((char) creatures_list[monster.creature_id].sprite, Coord_t{monster.y, monster.x});
         }
     }
 
@@ -720,7 +720,7 @@ void spellFireBolt(int y, int x, int direction, int damage_hp, int spell_type, c
             finished = true;
             spellFireBoltTouchesMonster(tile, damage_hp, harm_type, weapon_type, spell_name);
         } else if (coordInsidePanel(y, x) && py.flags.blind < 1) {
-            putChar('*', Coord_t{y, x});
+            panelPutTile('*', Coord_t{y, x});
 
             // show the bolt
             putQIO();
@@ -810,7 +810,7 @@ void spellFireBall(int y, int x, int direction, int damage_hp, int spell_type, c
                                 }
                                 tile.permanent_light = saved_lit_status;
                             } else if (coordInsidePanel(row, col) && py.flags.blind < 1) {
-                                putChar('*', Coord_t{row, col});
+                                panelPutTile('*', Coord_t{row, col});
                             }
                         }
                     }
@@ -849,7 +849,7 @@ void spellFireBall(int y, int x, int direction, int damage_hp, int spell_type, c
             }
             // End ball hitting.
         } else if (coordInsidePanel(y, x) && py.flags.blind < 1) {
-            putChar('*', Coord_t{y, x});
+            panelPutTile('*', Coord_t{y, x});
 
             // show bolt
             putQIO();
@@ -881,7 +881,7 @@ void spellBreath(int y, int x, int monster_id, int damage_hp, int spell_type, ch
                     // been set by a previous monster, but the breath should still
                     // be visible until the blindness takes effect
                     if (coordInsidePanel(row, col) && ((py.flags.status & PY_BLIND) == 0u)) {
-                        putChar('*', Coord_t{row, col});
+                        panelPutTile('*', Coord_t{row, col});
                     }
 
                     if (tile.creature_id > 1) {
@@ -1770,7 +1770,7 @@ bool spellDetectEvil() {
             detected = true;
 
             // works correctly even if hallucinating
-            putChar((char) creatures_list[monster.creature_id].sprite, Coord_t{monster.y, monster.x});
+            panelPutTile((char) creatures_list[monster.creature_id].sprite, Coord_t{monster.y, monster.x});
         }
     }
 

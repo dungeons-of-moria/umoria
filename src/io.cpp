@@ -133,29 +133,6 @@ void moveCursor(Coord_t coords) {
     (void) move(coords.y, coords.x);
 }
 
-// Moves the cursor to a given interpolated y, x position -RAK-
-void moveCursorRelative(Coord_t coords) {
-    // Real coords convert to screen positions
-    coords.y -= panel_row_prt;
-    coords.x -= panel_col_prt;
-
-    if (move(coords.y, coords.x) == ERR) {
-        abort();
-    }
-}
-
-// Outputs a char to a given interpolated y, x position -RAK-
-// sign bit of a character used to indicate standout mode. -CJS
-void putChar(char ch, Coord_t coords) {
-    // Real coords convert to screen positions
-    coords.y -= panel_row_prt;
-    coords.x -= panel_col_prt;
-
-    if (mvaddch(coords.y, coords.x, ch) == ERR) {
-        abort();
-    }
-}
-
 // Dump IO to buffer -RAK-
 void putString(const char *out_str, Coord_t coords) {
     // truncate the string, to make sure that it won't go past right edge of screen.
@@ -191,6 +168,29 @@ void eraseLine(Coord_t coords) {
 
     (void) move(coords.y, coords.x);
     clrtoeol();
+}
+
+// Moves the cursor to a given interpolated y, x position -RAK-
+void panelMoveCursor(Coord_t coords) {
+    // Real coords convert to screen positions
+    coords.y -= panel_row_prt;
+    coords.x -= panel_col_prt;
+
+    if (move(coords.y, coords.x) == ERR) {
+        abort();
+    }
+}
+
+// Outputs a char to a given interpolated y, x position -RAK-
+// sign bit of a character used to indicate standout mode. -CJS
+void panelPutTile(char ch, Coord_t coords) {
+    // Real coords convert to screen positions
+    coords.y -= panel_row_prt;
+    coords.x -= panel_col_prt;
+
+    if (mvaddch(coords.y, coords.x, ch) == ERR) {
+        abort();
+    }
 }
 
 static Coord_t currentCursorPosition() {

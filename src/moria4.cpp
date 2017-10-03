@@ -636,7 +636,7 @@ static bool lookSee(int x, int y, bool &transparent) {
         description = "It is on";
         putStringClearToEOL(msg, Coord_t{0, 0});
 
-        moveCursorRelative(Coord_t{y, x});
+        panelMoveCursor(Coord_t{y, x});
         query = getKeyInput();
 
         if (query == 'r' || query == 'R') {
@@ -662,7 +662,7 @@ static bool lookSee(int x, int y, bool &transparent) {
                 description = "It is in";
                 putStringClearToEOL(msg, Coord_t{0, 0});
 
-                moveCursorRelative(Coord_t{y, x});
+                panelMoveCursor(Coord_t{y, x});
                 query = getKeyInput();
             }
         }
@@ -693,7 +693,7 @@ static bool lookSee(int x, int y, bool &transparent) {
             if (wall_description != nullptr) {
                 (void) sprintf(msg, "%s %s ---pause---", description, wall_description);
                 putStringClearToEOL(msg, Coord_t{0, 0});
-                moveCursorRelative(Coord_t{y, x});
+                panelMoveCursor(Coord_t{y, x});
                 query = getKeyInput();
             }
         }
@@ -966,7 +966,7 @@ void playerThrowItem() {
                 // do not test tile.field_mark here
 
                 if (coordInsidePanel(y, x) && py.flags.blind < 1 && (tile.temporary_light || tile.permanent_light)) {
-                    putChar(tile_char, Coord_t{y, x});
+                    panelPutTile(tile_char, Coord_t{y, x});
                     putQIO(); // show object moving
                 }
             }
