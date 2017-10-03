@@ -138,7 +138,7 @@ static void displayStoreInventory(int store_id, int item_pos_start) {
     }
 
     if (store.store_id > 12) {
-        putString("- cont. -", 17, 60);
+        putString("- cont. -", Coord_t{17, 60});
     } else {
         eraseLine(17, 60);
     }
@@ -169,9 +169,9 @@ static void displayPlayerRemainingGold() {
 // Displays store -RAK-
 static void displayStore(int store_id, const char *owner_name, int current_top_item_id) {
     clearScreen();
-    putString(owner_name, 3, 9);
-    putString("Item", 4, 3);
-    putString("Asking Price", 4, 60);
+    putString(owner_name, Coord_t{3, 9});
+    putString("Item", Coord_t{4, 3});
+    putString("Asking Price", Coord_t{4, 60});
     displayPlayerRemainingGold();
     displayStoreCommands();
     displayStoreInventory(store_id, current_top_item_id);
@@ -406,7 +406,7 @@ static int storePurchaseHaggle(int store_id, int32_t &price, const Inventory_t &
             loop_flag = true;
 
             (void) sprintf(msg, "%s :  %d", comment, current_asking_price);
-            putString(msg, 1, 0);
+            putString(msg, Coord_t{1, 0});
 
             purchase = storeReceiveOffer(store_id, "What do you offer? ", new_offer, last_offer, num_offer, 1);
 
@@ -484,7 +484,7 @@ static int storePurchaseHaggle(int store_id, int32_t &price, const Inventory_t &
                 num_offer++; // enable incremental haggling
                 eraseLine(1, 0);
                 (void) sprintf(msg, "Your last offer : %d", last_offer);
-                putString(msg, 1, 39);
+                putString(msg, Coord_t{1, 39});
                 printSpeechSellingHaggle(last_offer, current_asking_price, final_flag);
 
                 // If the current increment would take you over the store's
@@ -617,7 +617,7 @@ static int storeSellHaggle(int store_id, int32_t &price, const Inventory_t &item
 
                 vtype_t msg = {'\0'};
                 (void) sprintf(msg, "%s :  %d", comment, current_askin_price);
-                putString(msg, 1, 0);
+                putString(msg, Coord_t{1, 0});
 
                 sell = storeReceiveOffer(store_id, "What price do you ask? ", new_offer, last_offer, num_offer, -1);
 
@@ -699,7 +699,7 @@ static int storeSellHaggle(int store_id, int32_t &price, const Inventory_t &item
 
                     vtype_t msg = {'\0'};
                     (void) sprintf(msg, "Your last bid %d", last_offer);
-                    putString(msg, 1, 39);
+                    putString(msg, Coord_t{1, 39});
 
                     printSpeechBuyingHaggle(current_askin_price, last_offer, final_flag);
 

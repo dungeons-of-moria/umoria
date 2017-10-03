@@ -477,7 +477,7 @@ bool loadGame(bool &generate) {
     clearScreen();
 
     std::string filename = "Save file '" + std::string(config.save_game_filename) + "' present. Attempting restore.";
-    putString(filename.c_str(), 23, 0);
+    putString(filename.c_str(), Coord_t{23, 0});
 
     // FIXME: check this if/else logic! -- MRC
     if (current_game_turn >= 0) {

@@ -102,21 +102,21 @@ static void characterGenerateStatsAndRace() {
 // shown during the character creation screens.
 static void displayCharacterRaces() {
     clearToBottom(20);
-    putString("Choose a race (? for Help):", 20, 2);
+    putString("Choose a race (? for Help):", Coord_t{20, 2});
 
-    int y = 2;
-    int x = 21;
+    int y = 21;
+    int x = 2;
 
     for (int i = 0; i < PLAYER_MAX_RACES; i++) {
         char description[80];
 
         (void) sprintf(description, "%c) %s", i + 'a', character_races[i].name);
-        putString(description, x, y);
+        putString(description, Coord_t{y, x});
 
-        y += 15;
-        if (y > 70) {
-            y = 2;
-            x++;
+        x += 15;
+        if (x > 70) {
+            x = 2;
+            y++;
         }
     }
 }
@@ -146,12 +146,12 @@ static void characterChooseRace() {
 
     py.misc.race_id = (uint8_t) race_id;
 
-    putString(character_races[race_id].name, 3, 15);
+    putString(character_races[race_id].name, Coord_t{3, 15});
 }
 
 // Will print the history of a character -JWT-
 static void displayCharacterHistory() {
-    putString("Character Background", 14, 27);
+    putString("Character Background", Coord_t{14, 27});
 
     for (int i = 0; i < 4; i++) {
         putStringClearToEOL(py.misc.history[i], i + 15, 10);
@@ -264,8 +264,8 @@ static void characterGetHistory() {
 // Gets the character's gender -JWT-
 static void characterSetGender() {
     clearToBottom(20);
-    putString("Choose a sex (? for Help):", 20, 2);
-    putString("m) Male       f) Female", 21, 2);
+    putString("Choose a sex (? for Help):", Coord_t{20, 2});
+    putString("m) Male       f) Female", Coord_t{21, 2});
 
     char input;
     bool is_set = false;
@@ -278,11 +278,11 @@ static void characterSetGender() {
 
         if (input == 'f' || input == 'F') {
             playerSetGender(false);
-            putString("Female", 4, 15);
+            putString("Female", Coord_t{4, 15});
             is_set = true;
         } else if (input == 'm' || input == 'M') {
             playerSetGender(true);
-            putString("Male", 4, 15);
+            putString("Male", Coord_t{4, 15});
             is_set = true;
         } else if (input == '?') {
             displayTextHelpFile(MORIA_WELCOME);
@@ -311,8 +311,8 @@ static void characterSetAgeHeightWeight() {
 // Prints the classes for a given race: Rogue, Mage, Priest, etc.,
 // shown during the character creation screens.
 static int displayRaceClasses(int race_id, int *class_list) {
-    int y = 2;
-    int x = 21;
+    int y = 21;
+    int x = 2;
 
     int class_id = 0;
 
@@ -320,18 +320,18 @@ static int displayRaceClasses(int race_id, int *class_list) {
     uint32_t mask = 0x1;
 
     clearToBottom(20);
-    putString("Choose a class (? for Help):", 20, 2);
+    putString("Choose a class (? for Help):", Coord_t{20, 2});
 
     for (int i = 0; i < PLAYER_MAX_CLASSES; i++) {
         if ((character_races[race_id].classes_bit_field & mask) != 0u) {
             (void) sprintf(description, "%c) %s", class_id + 'a', classes[i].title);
-            putString(description, x, y);
+            putString(description, Coord_t{y, x});
             class_list[class_id] = i;
 
-            y += 15;
-            if (y > 70) {
-                y = 2;
-                x++;
+            x += 15;
+            if (x > 70) {
+                x = 2;
+                y++;
             }
             class_id++;
         }
@@ -369,7 +369,7 @@ static void characterGetClass() {
             const Class_t &klass = classes[py.misc.class_id];
 
             clearToBottom(20);
-            putString(klass.title, 5, 15);
+            putString(klass.title, Coord_t{5, 15});
 
             // Adjust the stats for the class adjustment -RAK-
             characterChangeStat(A_STR, klass.strength);
@@ -482,7 +482,7 @@ void characterCreate() {
     printCharacterStats();
 
     clearToBottom(20);
-    putString("Hit space to re-roll or ESC to accept characteristics: ", 20, 2);
+    putString("Hit space to re-roll or ESC to accept characteristics: ", Coord_t{20, 2});
 
     bool exit_flag = true;
     while (exit_flag) {

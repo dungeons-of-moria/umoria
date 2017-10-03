@@ -212,7 +212,7 @@ char *centerString(char *centered_str, const char *in_str);
 
 // io.c
 bool terminalInitialize();
-void putString(const char *out_str, int row, int col);
+void putString(const char *out_str, Coord_t coords);
 void putQIO();
 void terminalRestore();
 char getKeyInput();

@@ -332,7 +332,7 @@ int displayInventory(int item_id_start, int item_id_end, bool weighted, int colu
         if (column == 0) {
             putStringClearToEOL(descriptions[i], current_line, column);
         } else {
-            putString("  ", current_line, column);
+            putString("  ", Coord_t{current_line, column});
             putStringClearToEOL(descriptions[i], current_line, column + 2);
         }
 
@@ -476,7 +476,7 @@ int displayEquipment(bool weighted, int column) {
         if (column == 0) {
             putStringClearToEOL(descriptions[line], line + 1, column);
         } else {
-            putString("  ", line + 1, column);
+            putString("  ", Coord_t{line + 1, column});
             putStringClearToEOL(descriptions[line], line + 1, column + 2);
         }
 
@@ -1371,7 +1371,7 @@ void inventoryExecuteCommand(char command) {
         } else {
             inventoryDisplayAppropriateHeader();
 
-            putString("e/i/t/w/x/d/?/ESC:", screen_base, 60);
+            putString("e/i/t/w/x/d/?/ESC:", Coord_t{screen_base, 60});
             command = getKeyInput();
 
             eraseLine(screen_base, screen_left);

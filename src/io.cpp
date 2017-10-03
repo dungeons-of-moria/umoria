@@ -64,17 +64,17 @@ static void moriaTerminalInitialize() {
 }
 
 // Dump IO to buffer -RAK-
-void putString(const char *out_str, int row, int col) {
+void putString(const char *out_str, Coord_t coords) {
     // truncate the string, to make sure that it won't go past right edge of screen.
-    if (col > 79) {
-        col = 79;
+    if (coords.x > 79) {
+        coords.x = 79;
     }
 
     vtype_t str = {'\0'};
-    (void) strncpy(str, out_str, (size_t) (79 - col));
-    str[79 - col] = '\0';
+    (void) strncpy(str, out_str, (size_t) (79 - coords.x));
+    str[79 - coords.x] = '\0';
 
-    if (mvaddstr(row, col, str) == ERR) {
+    if (mvaddstr(coords.y, coords.x, str) == ERR) {
         abort();
     }
 }
@@ -233,7 +233,7 @@ void putStringClearToEOL(const char *str, int row, int col) {
 
     (void) move(row, col);
     clrtoeol();
-    putString(str, row, col);
+    putString(str, Coord_t{row, col});
 }
 
 // move cursor to a given y, x position
@@ -267,7 +267,7 @@ void printMessage(const char *msg) {
                 old_len = 73;
             }
 
-            putString(" -more-", MSG_LINE, old_len);
+            putString(" -more-", Coord_t{MSG_LINE, old_len});
 
             char in_char;
             do {
@@ -297,11 +297,11 @@ void printMessage(const char *msg) {
     // display them on the same line.
 
     if (combine_messages) {
-        putString(msg, MSG_LINE, old_len + 2);
+        putString(msg, Coord_t{MSG_LINE, old_len + 2});
         strcat(messages[last_message_id], "  ");
         strcat(messages[last_message_id], msg);
     } else {
-        putString(msg, MSG_LINE, 0);
+        putString(msg, Coord_t{MSG_LINE, 0});
         last_message_id++;
 
         if (last_message_id >= MESSAGE_HISTORY_SIZE) {
@@ -388,7 +388,7 @@ bool getStringInput(char *in_str, int row, int col, int slen) {
             case CTRL_KEY('H'):
                 if (col > start_col) {
                     col--;
-                    putString(" ", row, col);
+                    putString(" ", Coord_t{row, col});
                     moveCursor(Coord_t{row, col});
                     *--p = '\0';
                 }

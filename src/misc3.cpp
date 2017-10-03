@@ -200,52 +200,52 @@ void statsAsString(uint8_t stat, char *stat_string) {
 void displayCharacterStats(int stat) {
     char text[7];
     statsAsString(py.stats.used[stat], text);
-    putString(stat_names[stat], 6 + stat, STAT_COLUMN);
-    putString(text, 6 + stat, STAT_COLUMN + 6);
+    putString(stat_names[stat], Coord_t{6 + stat, STAT_COLUMN});
+    putString(text, Coord_t{6 + stat, STAT_COLUMN + 6});
 }
 
 // Print character info in given row, column -RAK-
 // The longest title is 13 characters, so only pad to 13
 static void printCharacterInfoInField(const char *info, int row, int column) {
     // blank out the current field space
-    putString(&blank_string[BLANK_LENGTH - 13], row, column);
+    putString(&blank_string[BLANK_LENGTH - 13], Coord_t{row, column});
 
-    putString(info, row, column);
+    putString(info, Coord_t{row, column});
 }
 
 // Print long number with header at given row, column
 static void printHeaderLongNumber(const char *header, int32_t num, int row, int column) {
     vtype_t str = {'\0'};
     (void) sprintf(str, "%s: %6d", header, num);
-    putString(str, row, column);
+    putString(str, Coord_t{row, column});
 }
 
 // Print long number (7 digits of space) with header at given row, column
 static void printHeaderLongNumber7Spaces(const char *header, int32_t num, int row, int column) {
     vtype_t str = {'\0'};
     (void) sprintf(str, "%s: %7d", header, num);
-    putString(str, row, column);
+    putString(str, Coord_t{row, column});
 }
 
 // Print number with header at given row, column -RAK-
 static void printHeaderNumber(const char *header, int num, int row, int column) {
     vtype_t str = {'\0'};
     (void) sprintf(str, "%s: %6d", header, num);
-    putString(str, row, column);
+    putString(str, Coord_t{row, column});
 }
 
 // Print long number at given row, column
 static void printLongNumber(int32_t num, int row, int column) {
     vtype_t str = {'\0'};
     (void) sprintf(str, "%6d", num);
-    putString(str, row, column);
+    putString(str, Coord_t{row, column});
 }
 
 // Print number at given row, column -RAK-
 static void printNumber(int num, int row, int column) {
     vtype_t str = {'\0'};
     (void) sprintf(str, "%6d", num);
-    putString(str, row, column);
+    putString(str, Coord_t{row, column});
 }
 
 // Adjustment for wisdom/intelligence -JWT-
@@ -434,47 +434,47 @@ void printCharacterCurrentDepth() {
 // Prints status of hunger -RAK-
 void printCharacterHungerStatus() {
     if ((PY_WEAK & py.flags.status) != 0u) {
-        putString("Weak  ", 23, 0);
+        putString("Weak  ", Coord_t{23, 0});
     } else if ((PY_HUNGRY & py.flags.status) != 0u) {
-        putString("Hungry", 23, 0);
+        putString("Hungry", Coord_t{23, 0});
     } else {
-        putString(&blank_string[BLANK_LENGTH - 6], 23, 0);
+        putString(&blank_string[BLANK_LENGTH - 6], Coord_t{23, 0});
     }
 }
 
 // Prints Blind status -RAK-
 void printCharacterBlindStatus() {
     if ((PY_BLIND & py.flags.status) != 0u) {
-        putString("Blind", 23, 7);
+        putString("Blind", Coord_t{23, 7});
     } else {
-        putString(&blank_string[BLANK_LENGTH - 5], 23, 7);
+        putString(&blank_string[BLANK_LENGTH - 5], Coord_t{23, 7});
     }
 }
 
 // Prints Confusion status -RAK-
 void printCharacterConfusedState() {
     if ((PY_CONFUSED & py.flags.status) != 0u) {
-        putString("Confused", 23, 13);
+        putString("Confused", Coord_t{23, 13});
     } else {
-        putString(&blank_string[BLANK_LENGTH - 8], 23, 13);
+        putString(&blank_string[BLANK_LENGTH - 8], Coord_t{23, 13});
     }
 }
 
 // Prints Fear status -RAK-
 void printCharacterFearState() {
     if ((PY_FEAR & py.flags.status) != 0u) {
-        putString("Afraid", 23, 22);
+        putString("Afraid", Coord_t{23, 22});
     } else {
-        putString(&blank_string[BLANK_LENGTH - 6], 23, 22);
+        putString(&blank_string[BLANK_LENGTH - 6], Coord_t{23, 22});
     }
 }
 
 // Prints Poisoned status -RAK-
 void printCharacterPoisonedState() {
     if ((PY_POISONED & py.flags.status) != 0u) {
-        putString("Poisoned", 23, 29);
+        putString("Poisoned", Coord_t{23, 29});
     } else {
-        putString(&blank_string[BLANK_LENGTH - 8], 23, 29);
+        putString(&blank_string[BLANK_LENGTH - 8], Coord_t{23, 29});
     }
 }
 
@@ -483,7 +483,7 @@ void printCharacterMovementState() {
     py.flags.status &= ~PY_REPEAT;
 
     if (py.flags.paralysis > 1) {
-        putString("Paralysed", 23, 38);
+        putString("Paralysed", Coord_t{23, 38});
         return;
     }
 
@@ -498,7 +498,7 @@ void printCharacterMovementState() {
             (void) strcpy(restString, "Rest");
         }
 
-        putString(restString, 23, 38);
+        putString(restString, Coord_t{23, 38});
 
         return;
     }
@@ -514,22 +514,22 @@ void printCharacterMovementState() {
 
         py.flags.status |= PY_REPEAT;
 
-        putString(repeatString, 23, 38);
+        putString(repeatString, Coord_t{23, 38});
 
         if ((PY_SEARCH & py.flags.status) != 0u) {
-            putString("Search", 23, 38);
+            putString("Search", Coord_t{23, 38});
         }
 
         return;
     }
 
     if ((PY_SEARCH & py.flags.status) != 0u) {
-        putString("Searching", 23, 38);
+        putString("Searching", Coord_t{23, 38});
         return;
     }
 
     // "repeat 999" is 10 characters
-    putString(&blank_string[BLANK_LENGTH - 10], 23, 38);
+    putString(&blank_string[BLANK_LENGTH - 10], Coord_t{23, 38});
 }
 
 // Prints the speed of a character. -CJS-
@@ -542,15 +542,15 @@ void printCharacterSpeed() {
     }
 
     if (speed > 1) {
-        putString("Very Slow", 23, 49);
+        putString("Very Slow", Coord_t{23, 49});
     } else if (speed == 1) {
-        putString("Slow     ", 23, 49);
+        putString("Slow     ", Coord_t{23, 49});
     } else if (speed == 0) {
-        putString(&blank_string[BLANK_LENGTH - 9], 23, 49);
+        putString(&blank_string[BLANK_LENGTH - 9], Coord_t{23, 49});
     } else if (speed == -1) {
-        putString("Fast     ", 23, 49);
+        putString("Fast     ", Coord_t{23, 49});
     } else {
-        putString("Very Fast", 23, 49);
+        putString("Very Fast", Coord_t{23, 49});
     }
 }
 
@@ -558,9 +558,9 @@ void printCharacterStudyInstruction() {
     py.flags.status &= ~PY_STUDY;
 
     if (py.flags.new_spells_to_learn == 0) {
-        putString(&blank_string[BLANK_LENGTH - 5], 23, 59);
+        putString(&blank_string[BLANK_LENGTH - 5], Coord_t{23, 59});
     } else {
-        putString("Study", 23, 59);
+        putString("Study", Coord_t{23, 59});
     }
 }
 
@@ -568,16 +568,16 @@ void printCharacterStudyInstruction() {
 void printCharacterWinner() {
     if ((noscore & 0x2) != 0) {
         if (wizard_mode) {
-            putString("Is wizard  ", 22, 0);
+            putString("Is wizard  ", Coord_t{22, 0});
         } else {
-            putString("Was wizard ", 22, 0);
+            putString("Was wizard ", Coord_t{22, 0});
         }
     } else if ((noscore & 0x1) != 0) {
-        putString("Resurrected", 22, 0);
+        putString("Resurrected", Coord_t{22, 0});
     } else if ((noscore & 0x4) != 0) {
-        putString("Duplicate", 22, 0);
+        putString("Duplicate", Coord_t{22, 0});
     } else if (total_winner) {
-        putString("*Winner*   ", 22, 0);
+        putString("*Winner*   ", Coord_t{22, 0});
     }
 }
 
@@ -925,19 +925,19 @@ void drawCavePanel() {
 void printCharacterInformation() {
     clearScreen();
 
-    putString("Name        :", 2, 1);
-    putString("Race        :", 3, 1);
-    putString("Sex         :", 4, 1);
-    putString("Class       :", 5, 1);
+    putString("Name        :", Coord_t{2, 1});
+    putString("Race        :", Coord_t{3, 1});
+    putString("Sex         :", Coord_t{4, 1});
+    putString("Class       :", Coord_t{5, 1});
 
     if (!character_generated) {
         return;
     }
 
-    putString(py.misc.name, 2, 15);
-    putString(character_races[py.misc.race_id].name, 3, 15);
-    putString((playerGetGenderLabel()), 4, 15);
-    putString(classes[py.misc.class_id].title, 5, 15);
+    putString(py.misc.name, Coord_t{2, 15});
+    putString(character_races[py.misc.race_id].name, Coord_t{3, 15});
+    putString((playerGetGenderLabel()), Coord_t{4, 15});
+    putString(classes[py.misc.class_id].title, Coord_t{5, 15});
 }
 
 // Prints the following information on the screen. -JWT-
@@ -946,12 +946,12 @@ void printCharacterStats() {
         vtype_t buf = {'\0'};
 
         statsAsString(py.stats.used[i], buf);
-        putString(stat_names[i], 2 + i, 61);
-        putString(buf, 2 + i, 66);
+        putString(stat_names[i], Coord_t{2 + i, 61});
+        putString(buf, Coord_t{2 + i, 66});
 
         if (py.stats.max[i] > py.stats.current[i]) {
             statsAsString(py.stats.max[i], buf);
-            putString(buf, 2 + i, 73);
+            putString(buf, Coord_t{2 + i, 73});
         }
     }
 
@@ -1039,27 +1039,27 @@ void printCharacterAbilities() {
     vtype_t xinfra = {'\0'};
     (void) sprintf(xinfra, "%d feet", py.flags.see_infra * 10);
 
-    putString("(Miscellaneous Abilities)", 15, 25);
-    putString("Fighting    :", 16, 1);
-    putString(statRating(12, xbth), 16, 15);
-    putString("Bows/Throw  :", 17, 1);
-    putString(statRating(12, xbthb), 17, 15);
-    putString("Saving Throw:", 18, 1);
-    putString(statRating(6, xsave), 18, 15);
+    putString("(Miscellaneous Abilities)", Coord_t{15, 25});
+    putString("Fighting    :", Coord_t{16, 1});
+    putString(statRating(12, xbth), Coord_t{16, 15});
+    putString("Bows/Throw  :", Coord_t{17, 1});
+    putString(statRating(12, xbthb), Coord_t{17, 15});
+    putString("Saving Throw:", Coord_t{18, 1});
+    putString(statRating(6, xsave), Coord_t{18, 15});
 
-    putString("Stealth     :", 16, 28);
-    putString(statRating(1, xstl), 16, 42);
-    putString("Disarming   :", 17, 28);
-    putString(statRating(8, xdis), 17, 42);
-    putString("Magic Device:", 18, 28);
-    putString(statRating(6, xdev), 18, 42);
+    putString("Stealth     :", Coord_t{16, 28});
+    putString(statRating(1, xstl), Coord_t{16, 42});
+    putString("Disarming   :", Coord_t{17, 28});
+    putString(statRating(8, xdis), Coord_t{17, 42});
+    putString("Magic Device:", Coord_t{18, 28});
+    putString(statRating(6, xdev), Coord_t{18, 42});
 
-    putString("Perception  :", 16, 55);
-    putString(statRating(3, xfos), 16, 69);
-    putString("Searching   :", 17, 55);
-    putString(statRating(6, xsrh), 17, 69);
-    putString("Infra-Vision:", 18, 55);
-    putString(xinfra, 18, 69);
+    putString("Perception  :", Coord_t{16, 55});
+    putString(statRating(3, xfos), Coord_t{16, 69});
+    putString("Searching   :", Coord_t{17, 55});
+    putString(statRating(6, xsrh), Coord_t{17, 69});
+    putString("Infra-Vision:", Coord_t{18, 55});
+    putString(xinfra, Coord_t{18, 69});
 }
 
 // Used to display the character on the screen. -RAK-
@@ -1075,11 +1075,11 @@ void printCharacter() {
 void getCharacterName() {
     putStringClearToEOL("Enter your player's name  [press <RETURN> when finished]", 21, 2);
 
-    putString(&blank_string[BLANK_LENGTH - 23], 2, 15);
+    putString(&blank_string[BLANK_LENGTH - 23], Coord_t{2, 15});
 
     if (!getStringInput(py.misc.name, 2, 15, 23) || py.misc.name[0] == 0) {
         getDefaultPlayerName(py.misc.name);
-        putString(py.misc.name, 2, 15);
+        putString(py.misc.name, Coord_t{2, 15});
     }
 
     clearToBottom(20);
@@ -1392,8 +1392,8 @@ void displaySpellsList(const int *spell_ids, int number_of_choices, bool comment
     int consecutive_offset = (classes[py.misc.class_id].class_to_use_mage_spells == SPELL_TYPE_MAGE ? NAME_OFFSET_SPELLS : NAME_OFFSET_PRAYERS);
 
     eraseLine(1, col);
-    putString("Name", 1, col + 5);
-    putString("Lv Mana Fail", 1, col + 35);
+    putString("Name", Coord_t{1, col + 5});
+    putString("Lv Mana Fail", Coord_t{1, col + 35});
 
     // only show the first 22 choices
     if (number_of_choices > 22) {

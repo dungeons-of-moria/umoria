@@ -1051,7 +1051,7 @@ void setGameOptions() {
                 break;
             case 'y':
             case 'Y':
-                putString("yes", optionID + 1, 40);
+                putString("yes", Coord_t{optionID + 1, 40});
 
                 *options[optionID].o_var = true;
 
@@ -1063,7 +1063,7 @@ void setGameOptions() {
                 break;
             case 'n':
             case 'N':
-                putString("no ", optionID + 1, 40);
+                putString("no ", Coord_t{optionID + 1, 40});
 
                 *options[optionID].o_var = false;
 

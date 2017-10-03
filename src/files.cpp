@@ -31,7 +31,7 @@ void displaySplashScreen() {
     if (file1 != nullptr) {
         clearScreen();
         for (int i = 0; fgets(in_line, 80, file1) != CNIL; i++) {
-            putString(in_line, i, 0);
+            putString(in_line, Coord_t{i, 0});
         }
         waitForContinueKey(23);
 
@@ -62,7 +62,7 @@ void displayTextHelpFile(const char *filename) {
 
         for (int i = 0; i < 23; i++) {
             if (fgets(line_buffer, max_line_length - 1, file) != CNIL) {
-                putString(line_buffer, i, 0);
+                putString(line_buffer, Coord_t{i, 0});
             }
         }
 

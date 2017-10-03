@@ -16,26 +16,26 @@ static void printTomb() {
     vtype_t tmp_str = {'\0'};
 
     clearScreen();
-    putString("_______________________", 1, 15);
-    putString("/", 2, 14);
-    putString("\\         ___", 2, 38);
-    putString("/", 3, 13);
-    putString("\\ ___   /   \\      ___", 3, 39);
-    putString("/            RIP            \\   \\  :   :     /   \\", 4, 12);
-    putString("/", 5, 11);
-    putString("\\  : _;,,,;_    :   :", 5, 41);
+    putString("_______________________", Coord_t{1, 15});
+    putString("/", Coord_t{2, 14});
+    putString("\\         ___", Coord_t{2, 38});
+    putString("/", Coord_t{3, 13});
+    putString("\\ ___   /   \\      ___", Coord_t{3, 39});
+    putString("/            RIP            \\   \\  :   :     /   \\", Coord_t{4, 12});
+    putString("/", Coord_t{5, 11});
+    putString("\\  : _;,,,;_    :   :", Coord_t{5, 41});
     (void) sprintf(str, "/%s\\,;_          _;,,,;_", centerString(tmp_str, py.misc.name));
-    putString(str, 6, 10);
-    putString("|               the               |   ___", 7, 9);
+    putString(str, Coord_t{6, 10});
+    putString("|               the               |   ___", Coord_t{7, 9});
     if (!total_winner) {
         p = playerTitle();
     } else {
         p = (char *) "Magnificent";
     }
     (void) sprintf(str, "| %s |  /   \\", centerString(tmp_str, p));
-    putString(str, 8, 9);
-    putString("|", 9, 9);
-    putString("|  :   :", 9, 43);
+    putString(str, Coord_t{8, 9});
+    putString("|", Coord_t{9, 9});
+    putString("|  :   :", Coord_t{9, 43});
     if (!total_winner) {
         p = (char *) classes[py.misc.class_id].title;
     } else if (playerIsMale()) {
@@ -44,42 +44,42 @@ static void printTomb() {
         p = (char *) "*Queen*";
     }
     (void) sprintf(str, "| %s | _;,,,;_   ____", centerString(tmp_str, p));
-    putString(str, 10, 9);
+    putString(str, Coord_t{10, 9});
     (void) sprintf(str, "Level : %d", (int) py.misc.level);
     (void) sprintf(str, "| %s |          /    \\", centerString(tmp_str, str));
-    putString(str, 11, 9);
+    putString(str, Coord_t{11, 9});
     (void) sprintf(str, "%d Exp", py.misc.exp);
     (void) sprintf(str, "| %s |          :    :", centerString(tmp_str, str));
-    putString(str, 12, 9);
+    putString(str, Coord_t{12, 9});
     (void) sprintf(str, "%d Au", py.misc.au);
     (void) sprintf(str, "| %s |          :    :", centerString(tmp_str, str));
-    putString(str, 13, 9);
+    putString(str, Coord_t{13, 9});
     (void) sprintf(str, "Died on Level : %d", current_dungeon_level);
     (void) sprintf(str, "| %s |         _;,,,,;_", centerString(tmp_str, str));
-    putString(str, 14, 9);
-    putString("|            killed by            |", 15, 9);
+    putString(str, Coord_t{14, 9});
+    putString("|            killed by            |", Coord_t{15, 9});
     p = character_died_from;
 
     auto len = (int) strlen(p);
     p[len] = '.'; // add a trailing period
     p[len + 1] = '\0';
     (void) sprintf(str, "| %s |", centerString(tmp_str, p));
-    putString(str, 16, 9);
+    putString(str, Coord_t{16, 9});
     p[len] = '\0'; // strip off the period
 
     char day[11];
     humanDateString(day);
     (void) sprintf(str, "| %s |", centerString(tmp_str, day));
 
-    putString(str, 17, 9);
-    putString("*|   *     *     *    *   *     *  | *", 18, 8);
-    putString("________)/\\\\_)_/___(\\/___(//_\\)/_\\//__\\\\(/_|_)_______", 19, 0);
+    putString(str, Coord_t{17, 9});
+    putString("*|   *     *     *    *   *     *  | *", Coord_t{18, 8});
+    putString("________)/\\\\_)_/___(\\/___(//_\\)/_\\//__\\\\(/_|_)_______", Coord_t{19, 0});
 
     retry:
     flushInputBuffer();
 
-    putString("(ESC to abort, return to print on screen, or file name)", 23, 0);
-    putString("Character record?", 22, 0);
+    putString("(ESC to abort, return to print on screen, or file name)", Coord_t{23, 0});
+    putString("Character record?", Coord_t{22, 0});
 
     if (getStringInput(str, 22, 18, 60)) {
         for (auto &item : inventory) {
@@ -96,7 +96,7 @@ static void printTomb() {
         } else {
             clearScreen();
             printCharacter();
-            putString("Type ESC to skip the inventory:", 23, 0);
+            putString("Type ESC to skip the inventory:", Coord_t{23, 0});
             if (getKeyInput() != ESCAPE) {
                 clearScreen();
                 printMessage("You are using:");
@@ -128,25 +128,25 @@ static void kingly() {
 
     // Let the player know they did good.
     clearScreen();
-    putString("#", 1, 34);
-    putString("#####", 2, 32);
-    putString("#", 3, 34);
-    putString(",,,  $$$  ,,,", 4, 28);
-    putString(",,=$   \"$$$$$\"   $=,,", 5, 24);
-    putString(",$$        $$$        $$,", 6, 22);
-    putString("*>         <*>         <*", 7, 22);
-    putString("$$         $$$         $$", 8, 22);
-    putString("\"$$        $$$        $$\"", 9, 22);
-    putString("\"$$       $$$       $$\"", 10, 23);
+    putString("#", Coord_t{1, 34});
+    putString("#####", Coord_t{2, 32});
+    putString("#", Coord_t{3, 34});
+    putString(",,,  $$$  ,,,", Coord_t{4, 28});
+    putString(",,=$   \"$$$$$\"   $=,,", Coord_t{5, 24});
+    putString(",$$        $$$        $$,", Coord_t{6, 22});
+    putString("*>         <*>         <*", Coord_t{7, 22});
+    putString("$$         $$$         $$", Coord_t{8, 22});
+    putString("\"$$        $$$        $$\"", Coord_t{9, 22});
+    putString("\"$$       $$$       $$\"", Coord_t{10, 23});
     p = "*#########*#########*";
-    putString(p, 11, 24);
-    putString(p, 12, 24);
-    putString("Veni, Vidi, Vici!", 15, 26);
-    putString("I came, I saw, I conquered!", 16, 21);
+    putString(p, Coord_t{11, 24});
+    putString(p, Coord_t{12, 24});
+    putString("Veni, Vidi, Vici!", Coord_t{15, 26});
+    putString("I came, I saw, I conquered!", Coord_t{16, 21});
     if (playerIsMale()) {
-        putString("All Hail the Mighty King!", 17, 22);
+        putString("All Hail the Mighty King!", Coord_t{17, 22});
     } else {
-        putString("All Hail the Mighty Queen!", 17, 22);
+        putString("All Hail the Mighty Queen!", Coord_t{17, 22});
     }
     flushInputBuffer();
     waitForContinueKey(23);

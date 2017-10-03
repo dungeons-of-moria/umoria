@@ -1338,7 +1338,7 @@ static void commandPreviousMessage() {
 
     if (max_messages <= 1) {
         // Distinguish real and recovered messages with a '>'. -CJS-
-        putString(">", 0, 0);
+        putString(">", Coord_t{0, 0});
         putStringClearToEOL(messages[last_message_id], 0, 1);
         return;
     }

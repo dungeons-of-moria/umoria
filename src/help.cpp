@@ -219,7 +219,7 @@ static void printKnownMonsterMemories(char command) {
     for (int i = MON_MAX_CREATURES - 1; i >= 0; i--) {
         if (creatures_list[i].sprite == command && memoryMonsterKnown(i)) {
             if (n == 0) {
-                putString("You recall those details? [y/n]", 0, 40);
+                putString("You recall those details? [y/n]", Coord_t{0, 40});
                 query = getKeyInput();
 
                 if (query != 'y' && query != 'Y') {
