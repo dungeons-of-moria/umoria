@@ -224,7 +224,7 @@ void putChar(char ch, int row, int col);
 void moveCursorRelative(int row, int col);
 void printMessageNoCommandInterrupt(const char *msg);
 void putStringClearToEOL(const char *str, int row, int col);
-void moveCursor(int y, int x);
+void moveCursor(Coord_t coords);
 void printMessage(const char *msg);
 bool getInputConfirmation(const char *prompt);
 bool getCommand(const char *prompt, char &command);

@@ -956,7 +956,7 @@ void storeEnter(int store_id) {
 
     bool exit_store = false;
     while (!exit_store) {
-        moveCursor(20, 9);
+        moveCursor(Coord_t{20, 9});
 
         // clear the msg flag just like we do in dungeon.c
         message_ready_to_print = false;

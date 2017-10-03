@@ -237,8 +237,8 @@ void putStringClearToEOL(const char *str, int row, int col) {
 }
 
 // move cursor to a given y, x position
-void moveCursor(int y, int x) {
-    (void) move(y, x);
+void moveCursor(Coord_t coords) {
+    (void) move(coords.y, coords.x);
 }
 
 // Outputs message to top line of screen
@@ -389,7 +389,7 @@ bool getStringInput(char *in_str, int row, int col, int slen) {
                 if (col > start_col) {
                     col--;
                     putString(" ", row, col);
-                    moveCursor(row, col);
+                    moveCursor(Coord_t{row, col});
                     *--p = '\0';
                 }
                 break;

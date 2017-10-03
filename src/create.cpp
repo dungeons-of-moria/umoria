@@ -128,7 +128,7 @@ static void characterChooseRace() {
     int race_id = 0;
 
     while (true) {
-        moveCursor(20, 30);
+        moveCursor(Coord_t{20, 30});
 
         char input = getKeyInput();
         race_id = input - 'a';
@@ -271,7 +271,7 @@ static void characterSetGender() {
     bool is_set = false;
 
     while (!is_set) {
-        moveCursor(20, 29);
+        moveCursor(Coord_t{20, 29});
 
         // speed not important here
         input = getKeyInput();
@@ -356,7 +356,7 @@ static void characterGetClass() {
     bool is_set = false;
 
     while (!is_set) {
-        moveCursor(20, 31);
+        moveCursor(Coord_t{20, 31});
 
         char input = getKeyInput();
         int class_id = input - 'a';
@@ -486,7 +486,7 @@ void characterCreate() {
 
     bool exit_flag = true;
     while (exit_flag) {
-        moveCursor(20, 56);
+        moveCursor(Coord_t{20, 56});
 
         char input = getKeyInput();
 

@@ -1028,7 +1028,7 @@ void setGameOptions() {
 
     int optionID = 0;
     while (true) {
-        moveCursor(optionID + 1, 40);
+        moveCursor(Coord_t{optionID + 1, 40});
 
         switch (getKeyInput()) {
             case ESCAPE:
