@@ -1512,7 +1512,7 @@ bool spellGetId(int *spell_ids, int number_of_choices, int &spell_id, int &spell
         terminalRestoreScreen();
     }
 
-    eraseLine(Coord_t{MSG_LINE, 0});
+    messageLineClear();
 
     if (spell_found) {
         spell_chance = spellChanceOfSuccess(spell_id);

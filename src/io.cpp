@@ -301,7 +301,7 @@ void printMessage(const char *msg) {
         strcat(messages[last_message_id], "  ");
         strcat(messages[last_message_id], msg);
     } else {
-        putString(msg, Coord_t{MSG_LINE, 0});
+        messageLinePrintMessage(msg);
         last_message_id++;
 
         if (last_message_id >= MESSAGE_HISTORY_SIZE) {
@@ -333,7 +333,7 @@ bool getInputConfirmation(const char *prompt) {
         input = getKeyInput();
     }
 
-    eraseLine(Coord_t{0, 0});
+    messageLineClear();
 
     return (input == 'Y' || input == 'y');
 }
@@ -346,7 +346,7 @@ bool getCommand(const char *prompt, char &command) {
     }
     command = getKeyInput();
 
-    eraseLine(Coord_t{MSG_LINE, 0});
+    messageLineClear();
 
     return command != ESCAPE;
 }
@@ -758,4 +758,43 @@ bool validGameVersion(uint8_t major, uint8_t minor, uint8_t patch) {
 
 bool isCurrentGameVersion(uint8_t major, uint8_t minor, uint8_t patch) {
     return major == CURRENT_VERSION_MAJOR && minor == CURRENT_VERSION_MINOR && patch == CURRENT_VERSION_PATCH;
+}
+
+static Coord_t currentCursorPosition() {
+    int y, x;
+    getyx(stdscr, y, x);
+    return Coord_t{y, x};
+}
+
+// messageLinePrintMessage will print a line of text to the message line (0,0).
+// first clearing the line of any text!
+void messageLinePrintMessage(std::string message) {
+    // save current cursor position
+    Coord_t coords = currentCursorPosition();
+
+    // move to beginning of message line, and clear it
+    move(0, 0);
+    clrtoeol();
+
+    // truncate message if it's too long!
+    message.resize(79);
+
+    addstr(message.c_str());
+
+    // restore cursor to old position
+    move(coords.y, coords.x);
+}
+
+// deleteMessageLine will delete all text from the message line (0,0).
+// The current cursor position will be maintained.
+void messageLineClear() {
+    // save current cursor position
+    Coord_t coords = currentCursorPosition();
+
+    // move to beginning of message line, and clear it
+    move(0, 0);
+    clrtoeol();
+
+    // restore cursor to old position
+    move(coords.y, coords.x);
 }

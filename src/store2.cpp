@@ -196,7 +196,7 @@ static bool storeGetItemID(int &item_id, const char *prompt, int item_pos_start,
         }
         terminalBellSound();
     }
-    eraseLine(Coord_t{MSG_LINE, 0});
+    messageLineClear();
 
     return item_found;
 }
@@ -311,7 +311,7 @@ static bool storeGetHaggle(const char *comment, int32_t &new_offer, int num_offe
             new_offer = offer_adjust;
         }
     } else {
-        eraseLine(Coord_t{0, 0});
+        messageLineClear();
     }
 
     return flag;

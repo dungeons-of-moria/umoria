@@ -1218,7 +1218,7 @@ static bool selectItemCommands(char *command, char *which, bool selecting) {
                     if (query != ESCAPE) {
                         terminalBellSound();
                     }
-                    eraseLine(Coord_t{MSG_LINE, 0});
+                    messageLineClear();
                     item_id = -1;
                 }
             } else if ((isupper((int) *which) != 0) && !verify((char *) prompt, item_id)) {
@@ -1575,7 +1575,7 @@ bool inventoryGetInputForItemId(int &command_key_id, const char *prompt, int ite
         terminalRestoreScreen();
     }
 
-    eraseLine(Coord_t{MSG_LINE, 0});
+    messageLineClear();
 
     return item_found;
 }
@@ -1915,7 +1915,7 @@ void playerRestOn() {
     if (rest_num != 0) {
         printMessage("Invalid rest count.");
     }
-    eraseLine(Coord_t{MSG_LINE, 0});
+    messageLineClear();
 
     player_free_turn = true;
 }
