@@ -729,9 +729,74 @@ static void playerDetectEnchantment() {
     }
 }
 
+static int getCommandRepeatCount(char &lastInputCommand) {
+    putStringClearToEOL("Repeat count:", 0, 0);
+
+    if (lastInputCommand == '#') {
+        lastInputCommand = '0';
+    }
+
+    char text_buffer[8];
+    int repeat_count = 0;
+
+    while (true) {
+        if (lastInputCommand == DELETE || lastInputCommand == CTRL_KEY('H')) {
+            repeat_count /= 10;
+            (void) sprintf(text_buffer, "%d", (int16_t) repeat_count);
+            putStringClearToEOL(text_buffer, 0, 14);
+        } else if (lastInputCommand >= '0' && lastInputCommand <= '9') {
+            if (repeat_count > 99) {
+                terminalBellSound();
+            } else {
+                repeat_count = repeat_count * 10 + lastInputCommand - '0';
+                (void) sprintf(text_buffer, "%d", repeat_count);
+                putStringClearToEOL(text_buffer, 0, 14);
+            }
+        } else {
+            break;
+        }
+        lastInputCommand = getKeyInput();
+    }
+
+    if (repeat_count == 0) {
+        repeat_count = 99;
+        (void) sprintf(text_buffer, "%d", repeat_count);
+        putStringClearToEOL(text_buffer, 0, 14);
+    }
+
+    // a special hack to allow numbers as commands
+    if (lastInputCommand == ' ') {
+        putStringClearToEOL("Command:", 0, 20);
+        lastInputCommand = getKeyInput();
+    }
+
+    return repeat_count;
+}
+
+static char parseAlternateCtrlInput(char lastInputCommand) {
+    if (command_count > 0) {
+        printCharacterMovementState();
+    }
+
+    if (getCommand("Control-", &lastInputCommand)) {
+        if (lastInputCommand >= 'A' && lastInputCommand <= 'Z') {
+            lastInputCommand -= 'A' - 1;
+        } else if (lastInputCommand >= 'a' && lastInputCommand <= 'z') {
+            lastInputCommand -= 'a' - 1;
+        } else {
+            lastInputCommand = ' ';
+            printMessage("Type ^ <letter> for a control char");
+        }
+    } else {
+        lastInputCommand = ' ';
+    }
+
+    return lastInputCommand;
+}
+
 // Accept a command and execute it
-static void executeInputCommands(char *command, int &find_count) {
-    char lastInputCommand = *command;
+static void executeInputCommands(char &command, int &find_count) {
+    char lastInputCommand = command;
 
     // Accept a command and execute it
     do {
@@ -745,129 +810,80 @@ static void executeInputCommands(char *command, int &find_count) {
         if (running_counter != 0) {
             playerRunAndFind();
             find_count -= 1;
+
             if (find_count == 0) {
                 playerEndRunning();
             }
+
             putQIO();
-        } else if (doing_inventory_command != 0) {
+            continue;
+        }
+
+        if (doing_inventory_command != 0) {
             inventoryExecuteCommand(doing_inventory_command);
+            continue;
+        }
+
+        // move the cursor to the players character
+        moveCursorRelative(char_row, char_col);
+
+        message_ready_to_print = false;
+
+        if (command_count > 0) {
+            use_last_direction = true;
         } else {
-            // move the cursor to the players character
-            moveCursorRelative(char_row, char_col);
+            lastInputCommand = getKeyInput();
 
-            if (command_count > 0) {
-                message_ready_to_print = false;
-                use_last_direction = true;
-            } else {
-                message_ready_to_print = false;
-                lastInputCommand = getKeyInput();
-
-                int counter = 0;
-
-                // Get a count for a command.
-                if ((config.use_roguelike_keys && lastInputCommand >= '0' && lastInputCommand <= '9') || (!config.use_roguelike_keys && lastInputCommand == '#')) {
-                    char tmp[8];
-
-                    putStringClearToEOL("Repeat count:", 0, 0);
-
-                    if (lastInputCommand == '#') {
-                        lastInputCommand = '0';
-                    }
-
-                    counter = 0;
-
-                    while (true) {
-                        if (lastInputCommand == DELETE || lastInputCommand == CTRL_KEY('H')) {
-                            counter /= 10;
-                            (void) sprintf(tmp, "%d", (int16_t) counter);
-                            putStringClearToEOL(tmp, 0, 14);
-                        } else if (lastInputCommand >= '0' && lastInputCommand <= '9') {
-                            if (counter > 99) {
-                                terminalBellSound();
-                            } else {
-                                counter = counter * 10 + lastInputCommand - '0';
-                                (void) sprintf(tmp, "%d", counter);
-                                putStringClearToEOL(tmp, 0, 14);
-                            }
-                        } else {
-                            break;
-                        }
-                        lastInputCommand = getKeyInput();
-                    }
-
-                    if (counter == 0) {
-                        counter = 99;
-                        (void) sprintf(tmp, "%d", counter);
-                        putStringClearToEOL(tmp, 0, 14);
-                    }
-
-                    // a special hack to allow numbers as commands
-                    if (lastInputCommand == ' ') {
-                        putStringClearToEOL("Command:", 0, 20);
-                        lastInputCommand = getKeyInput();
-                    }
-                }
-
-                // Another way of typing control codes -CJS-
-                if (lastInputCommand == '^') {
-                    if (command_count > 0) {
-                        printCharacterMovementState();
-                    }
-
-                    if (getCommand("Control-", &lastInputCommand)) {
-                        if (lastInputCommand >= 'A' && lastInputCommand <= 'Z') {
-                            lastInputCommand -= 'A' - 1;
-                        } else if (lastInputCommand >= 'a' && lastInputCommand <= 'z') {
-                            lastInputCommand -= 'a' - 1;
-                        } else {
-                            lastInputCommand = ' ';
-                            printMessage("Type ^ <letter> for a control char");
-                        }
-                    } else {
-                        lastInputCommand = ' ';
-                    }
-                }
-
-                // move cursor to player char again, in case it moved
-                moveCursorRelative(char_row, char_col);
-
-                // Commands are always converted to rogue form. -CJS-
-                if (!config.use_roguelike_keys) {
-                    lastInputCommand = originalCommands(lastInputCommand);
-                }
-
-                if (counter > 0) {
-                    if (!validCountCommand(lastInputCommand)) {
-                        player_free_turn = true;
-                        lastInputCommand = ' ';
-                        printMessage("Invalid command with a count.");
-                    } else {
-                        command_count = counter;
-                        printCharacterMovementState();
-                    }
-                }
+            // Get a count for a command.
+            int repeat_count = 0;
+            if ((config.use_roguelike_keys && lastInputCommand >= '0' && lastInputCommand <= '9') || (!config.use_roguelike_keys && lastInputCommand == '#')) {
+                repeat_count = getCommandRepeatCount(lastInputCommand);
             }
 
-            // Flash the message line.
-            eraseLine(MSG_LINE, 0);
-            moveCursorRelative(char_row, char_col);
-            putQIO();
-
-            doCommand(lastInputCommand);
-
-            // Find is counted differently, as the command changes.
-            if (running_counter != 0) {
-                find_count = command_count - 1;
-                command_count = 0;
-            } else if (player_free_turn) {
-                command_count = 0;
-            } else if (command_count != 0) {
-                command_count--;
+            // Another way of typing control codes -CJS-
+            if (lastInputCommand == '^') {
+                lastInputCommand = parseAlternateCtrlInput(lastInputCommand);
             }
+
+            // move cursor to player char again, in case it moved
+            moveCursorRelative(char_row, char_col);
+
+            // Commands are always converted to rogue form. -CJS-
+            if (!config.use_roguelike_keys) {
+                lastInputCommand = originalCommands(lastInputCommand);
+            }
+
+            if (repeat_count > 0) {
+                if (!validCountCommand(lastInputCommand)) {
+                    player_free_turn = true;
+                    lastInputCommand = ' ';
+                    printMessage("Invalid command with a count.");
+                } else {
+                    command_count = repeat_count;
+                    printCharacterMovementState();
+                }
+            }
+        }
+
+        // Flash the message line.
+        eraseLine(MSG_LINE, 0);
+        moveCursorRelative(char_row, char_col);
+        putQIO();
+
+        doCommand(lastInputCommand);
+
+        // Find is counted differently, as the command changes.
+        if (running_counter != 0) {
+            find_count = command_count - 1;
+            command_count = 0;
+        } else if (player_free_turn) {
+            command_count = 0;
+        } else if (command_count != 0) {
+            command_count--;
         }
     } while (player_free_turn && !generate_new_level && (eof_flag == 0));
 
-    *command = lastInputCommand;
+    command = lastInputCommand;
 }
 
 // Main procedure for dungeon. -RAK-
@@ -991,7 +1007,7 @@ void playDungeon() {
 
         // Accept a command?
         if (py.flags.paralysis < 1 && py.flags.rest == 0 && !character_is_dead) {
-            executeInputCommands(&lastInputCommand, find_count);
+            executeInputCommands(lastInputCommand, find_count);
         } else {
             // if paralyzed, resting, or dead, flush output
             // but first move the cursor onto the player, for aesthetics
