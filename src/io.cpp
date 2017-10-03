@@ -12,8 +12,6 @@
 #include "externs.h"
 #include "version.h"
 
-#define use_value2
-
 static bool curses_on = false;
 
 // Spare window for saving the screen. -CJS-
@@ -426,7 +424,7 @@ bool getStringInput(char *in_str, Coord_t coords, int slen) {
                 if ((isprint(key) == 0) || coords.x > end_col) {
                     terminalBellSound();
                 } else {
-                    use_value2 mvaddch(coords.y, coords.x, (char) key);
+                    mvaddch(coords.y, coords.x, (char) key);
                     *p++ = (char) key;
                     coords.x++;
                 }
@@ -642,7 +640,7 @@ void displayDungeonMap() {
 
     terminalSaveScreen();
     clearScreen();
-    use_value2 mvaddch(0, 0, getBorderTile(TL));
+    mvaddch(0, 0, getBorderTile(TL));
 
     for (int i = 0; i < MAX_WIDTH / RATIO; i++) {
         (void) addch((const chtype) getBorderTile(HE));
@@ -663,7 +661,7 @@ void displayDungeonMap() {
                 // written, and mvprintw() causes the fp emulation library to be
                 // linked with PC-Moria, makes the program 10K bigger
                 (void) sprintf(prntscrnbuf, "%c%s%c", getBorderTile(VE), map, getBorderTile(VE));
-                use_value2 mvaddstr(orow + 1, 0, prntscrnbuf);
+                mvaddstr(orow + 1, 0, prntscrnbuf);
             }
 
             for (int j = 0; j < MAX_WIDTH / RATIO; j++) {
@@ -689,10 +687,10 @@ void displayDungeonMap() {
 
     if (orow >= 0) {
         (void) sprintf(prntscrnbuf, "%c%s%c", getBorderTile(VE), map, getBorderTile(VE));
-        use_value2 mvaddstr(orow + 1, 0, prntscrnbuf);
+        mvaddstr(orow + 1, 0, prntscrnbuf);
     }
 
-    use_value2 mvaddch(orow + 2, 0, getBorderTile(BL));
+    mvaddch(orow + 2, 0, getBorderTile(BL));
 
     for (int i = 0; i < MAX_WIDTH / RATIO; i++) {
         (void) addch((const chtype) getBorderTile(HE));
@@ -700,7 +698,7 @@ void displayDungeonMap() {
 
     (void) addch((const chtype) getBorderTile(BR));
 
-    use_value2 mvaddstr(23, 23, "Hit any key to continue");
+    mvaddstr(23, 23, "Hit any key to continue");
 
     if (mycol > 0) {
         (void) move(myrow, mycol);
