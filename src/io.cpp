@@ -204,12 +204,12 @@ void putChar(char ch, Coord_t coords) {
 }
 
 // Moves the cursor to a given interpolated y, x position -RAK-
-void moveCursorRelative(int row, int col) {
+void moveCursorRelative(Coord_t coords) {
     // Real coords convert to screen positions
-    row -= panel_row_prt;
-    col -= panel_col_prt;
+    coords.y -= panel_row_prt;
+    coords.x -= panel_col_prt;
 
-    if (move(row, col) == ERR) {
+    if (move(coords.y, coords.x) == ERR) {
         abort();
     }
 }
