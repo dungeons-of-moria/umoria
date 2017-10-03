@@ -907,7 +907,7 @@ static int inventoryGetSlotToWearEquipment(int item) {
                 // Rings. Give choice over where they go.
                 do {
                     char query;
-                    if (!getCommand("Put ring on which hand (l/r/L/R)?", &query)) {
+                    if (!getCommand("Put ring on which hand (l/r/L/R)?", query)) {
                         slot = -1;
                     } else if (query == 'l') {
                         slot = EQUIPMENT_LEFT;
@@ -1002,7 +1002,7 @@ static bool selectItemCommands(char *command, char *which, bool selecting) {
         buildCommandHeading(headingText, from, to, swap, *command, prompt);
 
         // Abort everything.
-        if (!getCommand(headingText, which)) {
+        if (!getCommand(headingText, *which)) {
             *which = ESCAPE;
             selecting = false;
             continue; // can we just return false from the function? -MRC-
@@ -1636,7 +1636,7 @@ bool getDirectionWithMemory(char *prompt, int &direction) {
         // Don't end a counted command. -CJS-
         int save = command_count;
 
-        if (!getCommand(prompt, &command)) {
+        if (!getCommand(prompt, command)) {
             player_free_turn = true;
             return false;
         }
@@ -1663,7 +1663,7 @@ bool getAllDirections(const char *prompt, int &direction) {
     char command;
 
     while (true) {
-        if (!getCommand(prompt, &command)) {
+        if (!getCommand(prompt, command)) {
             player_free_turn = true;
             return false;
         }

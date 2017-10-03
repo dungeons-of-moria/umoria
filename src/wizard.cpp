@@ -230,7 +230,7 @@ void wizardCharacterAdjustment() {
         return;
     }
 
-    while (getCommand("Alter speed? (+/-)", input)) {
+    while (getCommand("Alter speed? (+/-)", *input)) {
         if (*input == '+') {
             playerChangeSpeed(-1);
         } else if (*input == '-') {

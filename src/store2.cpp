@@ -187,7 +187,7 @@ static bool storeGetItemID(int &item_id, const char *prompt, int item_pos_start,
     char command;
     bool item_found = false;
 
-    while (getCommand(msg, &command)) {
+    while (getCommand(msg, command)) {
         command -= 'a';
         if (command >= item_pos_start && command <= item_pos_end) {
             item_found = true;
@@ -962,7 +962,7 @@ void storeEnter(int store_id) {
         message_ready_to_print = false;
 
         char command;
-        if (getCommand(CNIL, &command)) {
+        if (getCommand(CNIL, command)) {
             int saved_chr;
 
             switch (command) {

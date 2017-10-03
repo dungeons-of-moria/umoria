@@ -242,7 +242,7 @@ static void printKnownMonsterMemories(char command) {
 
 void displayWorldObjectDescription() {
     char command;
-    if (!getCommand("Enter character to be identified :", &command)) {
+    if (!getCommand("Enter character to be identified :", command)) {
         return;
     }
 

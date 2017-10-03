@@ -1631,7 +1631,7 @@ bool spellMassGenocide() {
 // NOTE : Winning creatures can not be killed by genocide.
 bool spellGenocide() {
     char creature_char;
-    if (!getCommand("Which type of creature do you wish exterminated?", &creature_char)) {
+    if (!getCommand("Which type of creature do you wish exterminated?", creature_char)) {
         return false;
     }
 

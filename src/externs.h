@@ -228,7 +228,7 @@ void putStringClearToEOL(const char *str, int row, int col);
 void moveCursor(int y, int x);
 void printMessage(const char *msg);
 bool getInputConfirmation(const char *prompt);
-bool getCommand(const char *prompt, char *command);
+bool getCommand(const char *prompt, char &command);
 bool getStringInput(char *in_str, int row, int col, int slen);
 void waitForContinueKey(int line_number);
 void waitAndConfirmCharacterCreation(int line_number, int delay);

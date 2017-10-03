@@ -778,7 +778,7 @@ static char parseAlternateCtrlInput(char lastInputCommand) {
         printCharacterMovementState();
     }
 
-    if (getCommand("Control-", &lastInputCommand)) {
+    if (getCommand("Control-", lastInputCommand)) {
         if (lastInputCommand >= 'A' && lastInputCommand <= 'Z') {
             lastInputCommand -= 'A' - 1;
         } else if (lastInputCommand >= 'a' && lastInputCommand <= 'z') {

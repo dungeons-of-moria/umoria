@@ -1446,7 +1446,7 @@ bool spellGetId(int *spell_ids, int number_of_choices, int &spell_id, int &spell
 
     char choice;
 
-    while (!spell_found && getCommand(str, &choice)) {
+    while (!spell_found && getCommand(str, choice)) {
         if (isupper((int) choice) != 0) {
             spell_id = choice - 'A' + first_spell;
 
@@ -1838,7 +1838,7 @@ void playerGainSpells() {
         displaySpellsList(spell_bank, spell_id, false, -1);
 
         char query;
-        while ((new_spells != 0) && getCommand("Learn which spell?", &query)) {
+        while ((new_spells != 0) && getCommand("Learn which spell?", query)) {
             int c = query - 'a';
 
             // test j < 23 in case i is greater than 22, only 22 spells
