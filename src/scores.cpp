@@ -221,7 +221,7 @@ void showScoresScreen() {
             readHighScore(score);
         }
         putStringClearToEOL("Rank  Points Name              Sex Race       Class  Lvl Killed By", 0, 0);
-        eraseLine(1, 0);
+        eraseLine(Coord_t{1, 0});
         putStringClearToEOL("[Press any key to continue.]", 23, 23);
         input = getKeyInput();
         if (input == ESCAPE) {

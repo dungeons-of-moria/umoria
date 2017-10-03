@@ -183,7 +183,7 @@ void exitGame() {
         recordNewHighScore();
         showScoresScreen();
     }
-    eraseLine(23, 0);
+    eraseLine(Coord_t{23, 0});
     terminalRestore();
 
     exit(0);

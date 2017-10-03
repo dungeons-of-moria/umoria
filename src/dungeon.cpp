@@ -866,7 +866,7 @@ static void executeInputCommands(char &command, int &find_count) {
         }
 
         // Flash the message line.
-        eraseLine(MSG_LINE, 0);
+        eraseLine(Coord_t{MSG_LINE, 0});
         moveCursorRelative(char_row, char_col);
         putQIO();
 
@@ -1360,7 +1360,7 @@ static void commandPreviousMessage() {
         }
     }
 
-    eraseLine(lineNumber, 0);
+    eraseLine(Coord_t{lineNumber, 0});
     waitForContinueKey(lineNumber);
     terminalRestoreScreen();
 }
@@ -1498,7 +1498,7 @@ static void doWizardCommands(char com_val) {
             break;
         case CTRL_KEY('E'): // ^E = wizchar
             wizardCharacterAdjustment();
-            eraseLine(MSG_LINE, 0);
+            eraseLine(Coord_t{MSG_LINE, 0});
             break;
         case CTRL_KEY('F'): // ^F = genocide
             (void) spellMassGenocide();
@@ -1540,7 +1540,7 @@ static void doWizardCommands(char com_val) {
                 }
                 generate_new_level = true;
             } else {
-                eraseLine(MSG_LINE, 0);
+                eraseLine(Coord_t{MSG_LINE, 0});
             }
             break;
         case CTRL_KEY('O'): // ^O = objects

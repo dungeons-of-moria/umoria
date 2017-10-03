@@ -79,7 +79,7 @@ static void displayStoreHaggleCommands(int haggle_type) {
     }
 
     putStringClearToEOL("ESC) Quit Haggling.", 22, 0);
-    eraseLine(23, 0); // clear last line
+    eraseLine(Coord_t{23, 0}); // clear last line
 }
 
 // Displays a store's inventory -RAK-
@@ -133,14 +133,14 @@ static void displayStoreInventory(int store_id, int item_pos_start) {
     if (item_identifier < 12) {
         for (int i = 0; i < (11 - item_identifier + 1); i++) {
             // clear remaining lines
-            eraseLine(i + item_identifier + 5, 0);
+            eraseLine(Coord_t{i + item_identifier + 5, 0});
         }
     }
 
     if (store.store_id > 12) {
         putString("- cont. -", Coord_t{17, 60});
     } else {
-        eraseLine(17, 60);
+        eraseLine(Coord_t{17, 60});
     }
 }
 
@@ -196,7 +196,7 @@ static bool storeGetItemID(int &item_id, const char *prompt, int item_pos_start,
         }
         terminalBellSound();
     }
-    eraseLine(MSG_LINE, 0);
+    eraseLine(Coord_t{MSG_LINE, 0});
 
     return item_found;
 }
@@ -311,7 +311,7 @@ static bool storeGetHaggle(const char *comment, int32_t &new_offer, int num_offe
             new_offer = offer_adjust;
         }
     } else {
-        eraseLine(0, 0);
+        eraseLine(Coord_t{0, 0});
     }
 
     return flag;
@@ -482,7 +482,7 @@ static int storePurchaseHaggle(int store_id, int32_t &price, const Inventory_t &
             if (!flag) {
                 last_offer = new_offer;
                 num_offer++; // enable incremental haggling
-                eraseLine(1, 0);
+                eraseLine(Coord_t{1, 0});
                 (void) sprintf(msg, "Your last offer : %d", last_offer);
                 putString(msg, Coord_t{1, 39});
                 printSpeechSellingHaggle(last_offer, current_asking_price, final_flag);
@@ -695,7 +695,7 @@ static int storeSellHaggle(int store_id, int32_t &price, const Inventory_t &item
                 if (!flag) {
                     last_offer = new_offer;
                     num_offer++; // enable incremental haggling
-                    eraseLine(1, 0);
+                    eraseLine(Coord_t{1, 0});
 
                     vtype_t msg = {'\0'};
                     (void) sprintf(msg, "Your last bid %d", last_offer);
@@ -821,7 +821,7 @@ static bool storePurchaseAnItem(int store_id, int &current_top_item_id) {
 
     // Less intuitive, but looks better here than in storePurchaseHaggle.
     displayStoreCommands();
-    eraseLine(1, 0);
+    eraseLine(Coord_t{1, 0});
 
     return purchased;
 }
@@ -936,7 +936,7 @@ static bool storeSellAnItem(int store_id, int &current_top_item_id) {
     }
 
     // Less intuitive, but looks better here than in storeSellHaggle.
-    eraseLine(1, 0);
+    eraseLine(Coord_t{1, 0});
     displayStoreCommands();
 
     return sold;

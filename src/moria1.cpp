@@ -488,7 +488,7 @@ int displayEquipment(bool weighted, int column) {
 
         line++;
     }
-    eraseLine(line + 1, column);
+    eraseLine(Coord_t{line + 1, column});
 
     return column;
 }
@@ -631,12 +631,12 @@ static void displayInventoryScreen(int new_screen) {
 
     if (line >= screen_base) {
         screen_base = line + 1;
-        eraseLine(screen_base, screen_left);
+        eraseLine(Coord_t{screen_base, screen_left});
         return;
     }
 
     while (++line <= screen_base) {
-        eraseLine(line, screen_left);
+        eraseLine(Coord_t{line, screen_left});
     }
 }
 
@@ -1218,7 +1218,7 @@ static bool selectItemCommands(char *command, char *which, bool selecting) {
                     if (query != ESCAPE) {
                         terminalBellSound();
                     }
-                    eraseLine(MSG_LINE, 0);
+                    eraseLine(Coord_t{MSG_LINE, 0});
                     item_id = -1;
                 }
             } else if ((isupper((int) *which) != 0) && !verify((char *) prompt, item_id)) {
@@ -1293,7 +1293,7 @@ static void inventoryDisplayAppropriateHeader() {
         putStringClearToEOL("Allowed commands:", 0, 0);
     }
 
-    eraseLine(screen_base, screen_left);
+    eraseLine(Coord_t{screen_base, screen_left});
 }
 
 // This does all the work.
@@ -1374,7 +1374,7 @@ void inventoryExecuteCommand(char command) {
             putString("e/i/t/w/x/d/?/ESC:", Coord_t{screen_base, 60});
             command = getKeyInput();
 
-            eraseLine(screen_base, screen_left);
+            eraseLine(Coord_t{screen_base, screen_left});
         }
     } while (command != ESCAPE);
 
@@ -1476,7 +1476,7 @@ bool inventoryGetInputForItemId(int &command_key_id, const char *prompt, int ite
 
                                     while (item_id_end < inventory_count) {
                                         item_id_end++;
-                                        eraseLine(item_id_end, 0);
+                                        eraseLine(Coord_t{item_id_end, 0});
                                     }
                                 }
                                 item_id_end = equipment_count - 1;
@@ -1496,7 +1496,7 @@ bool inventoryGetInputForItemId(int &command_key_id, const char *prompt, int ite
 
                                     while (item_id_end < equipment_count) {
                                         item_id_end++;
-                                        eraseLine(item_id_end, 0);
+                                        eraseLine(Coord_t{item_id_end, 0});
                                     }
                                 }
                                 item_id_end = inventory_count - 1;
@@ -1575,7 +1575,7 @@ bool inventoryGetInputForItemId(int &command_key_id, const char *prompt, int ite
         terminalRestoreScreen();
     }
 
-    eraseLine(MSG_LINE, 0);
+    eraseLine(Coord_t{MSG_LINE, 0});
 
     return item_found;
 }
@@ -1915,7 +1915,7 @@ void playerRestOn() {
     if (rest_num != 0) {
         printMessage("Invalid rest count.");
     }
-    eraseLine(MSG_LINE, 0);
+    eraseLine(Coord_t{MSG_LINE, 0});
 
     player_free_turn = true;
 }

@@ -217,7 +217,7 @@ void putQIO();
 void terminalRestore();
 char getKeyInput();
 void flushInputBuffer();
-void eraseLine(int row, int col);
+void eraseLine(Coord_t coords);
 void clearScreen();
 void clearToBottom(int row);
 void putChar(char ch, int row, int col);

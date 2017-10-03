@@ -169,12 +169,12 @@ void flushInputBuffer() {
 }
 
 // Clears given line of text -RAK-
-void eraseLine(int row, int col) {
-    if (row == MSG_LINE && message_ready_to_print) {
+void eraseLine(Coord_t coords) {
+    if (coords.y == MSG_LINE && message_ready_to_print) {
         printMessage(CNIL);
     }
 
-    (void) move(row, col);
+    (void) move(coords.y, coords.x);
     clrtoeol();
 }
 
@@ -333,7 +333,7 @@ bool getInputConfirmation(const char *prompt) {
         input = getKeyInput();
     }
 
-    eraseLine(0, 0);
+    eraseLine(Coord_t{0, 0});
 
     return (input == 'Y' || input == 'y');
 }
@@ -346,7 +346,7 @@ bool getCommand(const char *prompt, char &command) {
     }
     command = getKeyInput();
 
-    eraseLine(MSG_LINE, 0);
+    eraseLine(Coord_t{MSG_LINE, 0});
 
     return command != ESCAPE;
 }
@@ -422,7 +422,7 @@ bool getStringInput(char *in_str, int row, int col, int slen) {
 void waitForContinueKey(int line_number) {
     putStringClearToEOL("[Press any key to continue.]", line_number, 23);
     (void) getKeyInput();
-    eraseLine(line_number, 0);
+    eraseLine(Coord_t{line_number, 0});
 }
 
 // Pauses for user response before returning -RAK-
@@ -432,7 +432,7 @@ void waitAndConfirmCharacterCreation(int line_number, int delay) {
     putStringClearToEOL("[Press any key to continue, or Q to exit.]", line_number, 10);
 
     if (getKeyInput() == 'Q') {
-        eraseLine(line_number, 0);
+        eraseLine(Coord_t{line_number, 0});
 
         if (delay > 0) {
             sleepInSeconds(delay);
@@ -441,7 +441,7 @@ void waitAndConfirmCharacterCreation(int line_number, int delay) {
         exitGame();
     }
 
-    eraseLine(line_number, 0);
+    eraseLine(Coord_t{line_number, 0});
 }
 
 void terminalSaveScreen() {

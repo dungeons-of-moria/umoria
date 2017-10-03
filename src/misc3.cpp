@@ -1391,7 +1391,7 @@ void displaySpellsList(const int *spell_ids, int number_of_choices, bool comment
 
     int consecutive_offset = (classes[py.misc.class_id].class_to_use_mage_spells == SPELL_TYPE_MAGE ? NAME_OFFSET_SPELLS : NAME_OFFSET_PRAYERS);
 
-    eraseLine(1, col);
+    eraseLine(Coord_t{1, col});
     putString("Name", Coord_t{1, col + 5});
     putString("Lv Mana Fail", Coord_t{1, col + 35});
 
@@ -1512,7 +1512,7 @@ bool spellGetId(int *spell_ids, int number_of_choices, int &spell_id, int &spell
         terminalRestoreScreen();
     }
 
-    eraseLine(MSG_LINE, 0);
+    eraseLine(Coord_t{MSG_LINE, 0});
 
     if (spell_found) {
         spell_chance = spellChanceOfSuccess(spell_id);
@@ -1855,7 +1855,7 @@ void playerGainSpells() {
 
                 spell_id--;
 
-                eraseLine(c + 1, 31);
+                eraseLine(Coord_t{c + 1, 31});
                 displaySpellsList(spell_bank, spell_id, false, -1);
             } else {
                 terminalBellSound();

@@ -1024,7 +1024,7 @@ void setGameOptions() {
         (void) sprintf(str, "%-38s: %s", options[max].o_prompt, (*options[max].o_var ? "yes" : "no "));
         putStringClearToEOL(str, max + 1, 0);
     }
-    eraseLine(max + 1, 0);
+    eraseLine(Coord_t{max + 1, 0});
 
     int optionID = 0;
     while (true) {

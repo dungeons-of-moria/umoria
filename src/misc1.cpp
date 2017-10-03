@@ -501,7 +501,7 @@ void drawDungeonPanel() {
 
     // Top to bottom
     for (int y = panel_row_min; y <= panel_row_max; y++) {
-        eraseLine(line++, 13);
+        eraseLine(Coord_t{line++, 13});
 
         // Left to right
         for (int x = panel_col_min; x <= panel_col_max; x++) {
