@@ -330,16 +330,16 @@ int displayInventory(int item_id_start, int item_id_end, bool weighted, int colu
 
         // don't need first two spaces if in first column
         if (column == 0) {
-            putStringClearToEOL(descriptions[i], current_line, column);
+            putStringClearToEOL(descriptions[i], Coord_t{current_line, column});
         } else {
             putString("  ", Coord_t{current_line, column});
-            putStringClearToEOL(descriptions[i], current_line, column + 2);
+            putStringClearToEOL(descriptions[i], Coord_t{current_line, column + 2});
         }
 
         if (weighted) {
             obj_desc_t text = {'\0'};
             inventoryItemWeightText(text, i);
-            putStringClearToEOL(text, current_line, 71);
+            putStringClearToEOL(text, Coord_t{current_line, 71});
         }
 
         current_line++;
@@ -474,16 +474,16 @@ int displayEquipment(bool weighted, int column) {
 
         // don't need first two spaces when using whole screen
         if (column == 0) {
-            putStringClearToEOL(descriptions[line], line + 1, column);
+            putStringClearToEOL(descriptions[line], Coord_t{line + 1, column});
         } else {
             putString("  ", Coord_t{line + 1, column});
-            putStringClearToEOL(descriptions[line], line + 1, column + 2);
+            putStringClearToEOL(descriptions[line], Coord_t{line + 1, column + 2});
         }
 
         if (weighted) {
             obj_desc_t text = {'\0'};
             inventoryItemWeightText(text, i);
-            putStringClearToEOL(text, line + 1, 71);
+            putStringClearToEOL(text, Coord_t{line + 1, 71});
         }
 
         line++;
@@ -602,13 +602,13 @@ static void displayInventoryScreen(int new_screen) {
                 screen_left = 52;
             }
 
-            putStringClearToEOL("  ESC: exit", 1, screen_left);
-            putStringClearToEOL("  w  : wear or wield object", 2, screen_left);
-            putStringClearToEOL("  t  : take off item", 3, screen_left);
-            putStringClearToEOL("  d  : drop object", 4, screen_left);
-            putStringClearToEOL("  x  : exchange weapons", 5, screen_left);
-            putStringClearToEOL("  i  : inventory of pack", 6, screen_left);
-            putStringClearToEOL("  e  : list used equipment", 7, screen_left);
+            putStringClearToEOL("  ESC: exit", Coord_t{1, screen_left});
+            putStringClearToEOL("  w  : wear or wield object", Coord_t{2, screen_left});
+            putStringClearToEOL("  t  : take off item", Coord_t{3, screen_left});
+            putStringClearToEOL("  d  : drop object", Coord_t{4, screen_left});
+            putStringClearToEOL("  x  : exchange weapons", Coord_t{5, screen_left});
+            putStringClearToEOL("  i  : inventory of pack", Coord_t{6, screen_left});
+            putStringClearToEOL("  e  : list used equipment", Coord_t{7, screen_left});
 
             line = 7;
             break;
@@ -1210,7 +1210,7 @@ static bool selectItemCommands(char *command, char *which, bool selecting) {
                 (void) sprintf(msg, "Drop all %s [y/n]", description);
                 msg[strlen(description) - 1] = '.';
 
-                putStringClearToEOL(msg, 0, 0);
+                putStringClearToEOL(msg, Coord_t{0, 0});
 
                 query = getKeyInput();
 
@@ -1276,21 +1276,21 @@ static void inventoryDisplayAppropriateHeader() {
             );
         }
 
-        putStringClearToEOL(msg, 0, 0);
+        putStringClearToEOL(msg, Coord_t{0, 0});
     } else if (screen_state == WEAR_SCR) {
         if (wear_high < wear_low) {
-            putStringClearToEOL("You have nothing you could wield.", 0, 0);
+            putStringClearToEOL("You have nothing you could wield.", Coord_t{0, 0});
         } else {
-            putStringClearToEOL("You could wield -", 0, 0);
+            putStringClearToEOL("You could wield -", Coord_t{0, 0});
         }
     } else if (screen_state == EQUIP_SCR) {
         if (equipment_count == 0) {
-            putStringClearToEOL("You are not using anything.", 0, 0);
+            putStringClearToEOL("You are not using anything.", Coord_t{0, 0});
         } else {
-            putStringClearToEOL("You are using -", 0, 0);
+            putStringClearToEOL("You are using -", Coord_t{0, 0});
         }
     } else {
-        putStringClearToEOL("Allowed commands:", 0, 0);
+        putStringClearToEOL("Allowed commands:", Coord_t{0, 0});
     }
 
     eraseLine(Coord_t{screen_base, screen_left});
@@ -1402,7 +1402,7 @@ bool inventoryGetInputForItemId(int &command_key_id, const char *prompt, int ite
     }
 
     if (inventory_count < 1 && (!full || equipment_count < 1)) {
-        putStringClearToEOL("You are not carrying anything.", 0, 0);
+        putStringClearToEOL("You are not carrying anything.", Coord_t{0, 0});
         return false;
     }
 
@@ -1446,7 +1446,7 @@ bool inventoryGetInputForItemId(int &command_key_id, const char *prompt, int ite
             );
         }
 
-        putStringClearToEOL(description, 0, 0);
+        putStringClearToEOL(description, Coord_t{0, 0});
 
         bool command_finished = false;
 
@@ -1465,7 +1465,7 @@ bool inventoryGetInputForItemId(int &command_key_id, const char *prompt, int ite
                     if (full) {
                         if (screen_id > 0) {
                             if (equipment_count == 0) {
-                                putStringClearToEOL("But you're not using anything -more-", 0, 0);
+                                putStringClearToEOL("But you're not using anything -more-", Coord_t{0, 0});
                                 (void) getKeyInput();
                             } else {
                                 screen_id = 0;
@@ -1482,10 +1482,10 @@ bool inventoryGetInputForItemId(int &command_key_id, const char *prompt, int ite
                                 item_id_end = equipment_count - 1;
                             }
 
-                            putStringClearToEOL(description, 0, 0);
+                            putStringClearToEOL(description, Coord_t{0, 0});
                         } else {
                             if (inventory_count == 0) {
-                                putStringClearToEOL("But you're not carrying anything -more-", 0, 0);
+                                putStringClearToEOL("But you're not carrying anything -more-", Coord_t{0, 0});
                                 (void) getKeyInput();
                             } else {
                                 screen_id = 1;
@@ -1882,7 +1882,7 @@ void playerRestOn() {
         rest_num = 0;
         vtype_t rest_str = {'\0'};
 
-        putStringClearToEOL("Rest for how long? ", 0, 0);
+        putStringClearToEOL("Rest for how long? ", Coord_t{0, 0});
 
         if (getStringInput(rest_str, 0, 19, 5)) {
             if (rest_str[0] == '*') {
@@ -1905,7 +1905,7 @@ void playerRestOn() {
         printCharacterMovementState();
         py.flags.food_digested--;
 
-        putStringClearToEOL("Press any key to stop resting...", 0, 0);
+        putStringClearToEOL("Press any key to stop resting...", Coord_t{0, 0});
         putQIO();
 
         return;

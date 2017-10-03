@@ -226,14 +226,14 @@ void printMessageNoCommandInterrupt(const char *msg) {
 }
 
 // Outputs a line to a given y, x position -RAK-
-void putStringClearToEOL(const char *str, int row, int col) {
-    if (row == MSG_LINE && message_ready_to_print) {
+void putStringClearToEOL(const char *str, Coord_t coords) {
+    if (coords.y == MSG_LINE && message_ready_to_print) {
         printMessage(CNIL);
     }
 
-    (void) move(row, col);
+    (void) move(coords.y, coords.x);
     clrtoeol();
-    putString(str, Coord_t{row, col});
+    putString(str, coords);
 }
 
 // move cursor to a given y, x position
@@ -315,7 +315,7 @@ void printMessage(const char *msg) {
 
 // Used to verify a choice - user gets the chance to abort choice. -CJS-
 bool getInputConfirmation(const char *prompt) {
-    putStringClearToEOL(prompt, 0, 0);
+    putStringClearToEOL(prompt, Coord_t{0, 0});
 
     int y, x;
     getyx(stdscr, y, x);
@@ -342,7 +342,7 @@ bool getInputConfirmation(const char *prompt) {
 // Function returns false if <ESCAPE> is input
 bool getCommand(const char *prompt, char &command) {
     if (prompt != nullptr) {
-        putStringClearToEOL(prompt, 0, 0);
+        putStringClearToEOL(prompt, Coord_t{0, 0});
     }
     command = getKeyInput();
 
@@ -420,7 +420,7 @@ bool getStringInput(char *in_str, int row, int col, int slen) {
 
 // Pauses for user response before returning -RAK-
 void waitForContinueKey(int line_number) {
-    putStringClearToEOL("[Press any key to continue.]", line_number, 23);
+    putStringClearToEOL("[Press any key to continue.]", Coord_t{line_number, 23});
     (void) getKeyInput();
     eraseLine(Coord_t{line_number, 0});
 }
@@ -429,7 +429,7 @@ void waitForContinueKey(int line_number) {
 // NOTE: Delay is for players trying to roll up "perfect"
 // characters.  Make them wait a bit.
 void waitAndConfirmCharacterCreation(int line_number, int delay) {
-    putStringClearToEOL("[Press any key to continue, or Q to exit.]", line_number, 10);
+    putStringClearToEOL("[Press any key to continue, or Q to exit.]", Coord_t{line_number, 10});
 
     if (getKeyInput() == 'Q') {
         eraseLine(Coord_t{line_number, 0});

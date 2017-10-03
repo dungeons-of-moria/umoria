@@ -216,13 +216,14 @@ void showScoresScreen() {
                     character_races[score.race].name, classes[score.character_class].title,
                     score.level, score.died_from
             );
-            putStringClearToEOL(msg, ++i, 0);
+            i++;
+            putStringClearToEOL(msg, Coord_t{i, 0});
             rank++;
             readHighScore(score);
         }
-        putStringClearToEOL("Rank  Points Name              Sex Race       Class  Lvl Killed By", 0, 0);
+        putStringClearToEOL("Rank  Points Name              Sex Race       Class  Lvl Killed By", Coord_t{0, 0});
         eraseLine(Coord_t{1, 0});
-        putStringClearToEOL("[Press any key to continue.]", 23, 23);
+        putStringClearToEOL("[Press any key to continue.]", Coord_t{23, 23});
         input = getKeyInput();
         if (input == ESCAPE) {
             break;

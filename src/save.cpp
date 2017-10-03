@@ -367,7 +367,7 @@ bool saveGame() {
                 output = "Can't delete '" + std::string(config.save_game_filename) + "'";
                 printMessage(output.c_str());
             }
-            putStringClearToEOL("New Save file [ESC to give up]:", 0, 0);
+            putStringClearToEOL("New Save file [ESC to give up]:", Coord_t{0, 0});
             if (!getStringInput(input, 0, 31, 45)) {
                 return false;
             }
@@ -376,7 +376,7 @@ bool saveGame() {
             }
         }
         output = "Saving with '" + std::string(config.save_game_filename) + "'...";
-        putStringClearToEOL(output.c_str(), 0, 0);
+        putStringClearToEOL(output.c_str(), Coord_t{0, 0});
     }
 
     return true;
@@ -499,7 +499,7 @@ bool loadGame(bool &generate) {
             goto error;
         }
 
-        putStringClearToEOL("Restoring Memory...", 0, 0);
+        putStringClearToEOL("Restoring Memory...", Coord_t{0, 0});
         putQIO();
 
         DEBUG(logfile = fopen("IO_LOG", "a"));
@@ -516,7 +516,7 @@ bool loadGame(bool &generate) {
         xor_byte = rd_byte();
 
         if (!validGameVersion(version_maj, version_min, patch_level)) {
-            putStringClearToEOL("Sorry. This save file is from a different version of umoria.", 2, 0);
+            putStringClearToEOL("Sorry. This save file is from a different version of umoria.", Coord_t{2, 0});
             goto error;
         }
 
@@ -719,7 +719,7 @@ bool loadGame(bool &generate) {
                 if (!to_be_wizard || current_game_turn < 0) {
                     goto error;
                 }
-                putStringClearToEOL("Attempting a resurrection!", 0, 0);
+                putStringClearToEOL("Attempting a resurrection!", Coord_t{0, 0});
                 if (py.misc.current_hp < 0) {
                     py.misc.current_hp = 0;
                     py.misc.current_hp_fraction = 0;
@@ -754,7 +754,7 @@ bool loadGame(bool &generate) {
             goto error;
         }
 
-        putStringClearToEOL("Restoring Character...", 0, 0);
+        putStringClearToEOL("Restoring Character...", Coord_t{0, 0});
         putQIO();
 
         // only level specific info should follow,
@@ -939,7 +939,7 @@ bool loadGame(bool &generate) {
         }
     }
     current_game_turn = -1;
-    putStringClearToEOL("Please try again without that save file.", 1, 0);
+    putStringClearToEOL("Please try again without that save file.", Coord_t{1, 0});
 
     exitGame();
 

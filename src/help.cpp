@@ -246,7 +246,7 @@ void displayWorldObjectDescription() {
         return;
     }
 
-    putStringClearToEOL(asciiCharacterDescription(command), 0, 0);
+    putStringClearToEOL(asciiCharacterDescription(command), Coord_t{0, 0});
 
     printKnownMonsterMemories(command);
 }

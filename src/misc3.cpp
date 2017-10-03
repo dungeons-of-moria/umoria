@@ -428,7 +428,7 @@ void printCharacterCurrentDepth() {
         (void) sprintf(depths, "%d feet", depth);
     }
 
-    putStringClearToEOL(depths, 23, 65);
+    putStringClearToEOL(depths, Coord_t{23, 65});
 }
 
 // Prints status of hunger -RAK-
@@ -1003,7 +1003,7 @@ void printCharacterLevelExperience() {
     printHeaderLongNumber7Spaces("Max Exp    ", py.misc.max_exp, 11, 28);
 
     if (py.misc.level >= PLAYER_MAX_LEVEL) {
-        putStringClearToEOL("Exp to Adv.: *******", 12, 28);
+        putStringClearToEOL("Exp to Adv.: *******", Coord_t{12, 28});
     } else {
         printHeaderLongNumber7Spaces("Exp to Adv.", (int32_t) (player_base_exp_levels[py.misc.level - 1] * py.misc.experience_factor / 100), 12, 28);
     }
@@ -1073,7 +1073,7 @@ void printCharacter() {
 
 // Gets a name for the character -JWT-
 void getCharacterName() {
-    putStringClearToEOL("Enter your player's name  [press <RETURN> when finished]", 21, 2);
+    putStringClearToEOL("Enter your player's name  [press <RETURN> when finished]", Coord_t{21, 2});
 
     putString(&blank_string[BLANK_LENGTH - 23], Coord_t{2, 15});
 
@@ -1093,7 +1093,7 @@ void changeCharacterName() {
     printCharacter();
 
     while (!flag) {
-        putStringClearToEOL("<f>ile character description. <c>hange character name.", 21, 2);
+        putStringClearToEOL("<f>ile character description. <c>hange character name.", Coord_t{21, 2});
 
         switch (getKeyInput()) {
             case 'c':
@@ -1101,7 +1101,7 @@ void changeCharacterName() {
                 flag = true;
                 break;
             case 'f':
-                putStringClearToEOL("File name:", 0, 0);
+                putStringClearToEOL("File name:", Coord_t{0, 0});
 
                 if (getStringInput(temp, 0, 10, 60) && (temp[0] != 0)) {
                     if (outputPlayerCharacterToFile(temp)) {
@@ -1428,7 +1428,7 @@ void displaySpellsList(const int *spell_ids, int number_of_choices, bool comment
 
         vtype_t out_val = {'\0'};
         (void) sprintf(out_val, "  %c) %-30s%2d %4d %3d%%%s", spell_char, spell_names[spell_id + consecutive_offset], spell.level_required, spell.mana_required, spellChanceOfSuccess(spell_id), p);
-        putStringClearToEOL(out_val, 2 + i, col);
+        putStringClearToEOL(out_val, Coord_t{2 + i, col});
     }
 }
 

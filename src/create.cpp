@@ -154,7 +154,7 @@ static void displayCharacterHistory() {
     putString("Character Background", Coord_t{14, 27});
 
     for (int i = 0; i < 4; i++) {
-        putStringClearToEOL(py.misc.history[i], i + 15, 10);
+        putStringClearToEOL(py.misc.history[i], Coord_t{i + 15, 10});
     }
 }
 

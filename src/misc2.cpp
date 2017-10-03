@@ -1016,13 +1016,13 @@ static struct {
 
 // Set or unset various boolean config.display_counts -CJS-
 void setGameOptions() {
-    putStringClearToEOL("  ESC when finished, y/n to set options, <return> or - to move cursor", 0, 0);
+    putStringClearToEOL("  ESC when finished, y/n to set options, <return> or - to move cursor", Coord_t{0, 0});
 
     int max;
     for (max = 0; options[max].o_prompt != nullptr; max++) {
         vtype_t str = {'\0'};
         (void) sprintf(str, "%-38s: %s", options[max].o_prompt, (*options[max].o_var ? "yes" : "no "));
-        putStringClearToEOL(str, max + 1, 0);
+        putStringClearToEOL(str, Coord_t{max + 1, 0});
     }
     eraseLine(Coord_t{max + 1, 0});
 

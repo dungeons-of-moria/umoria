@@ -40,7 +40,7 @@ void itemInscribe() {
         msg_len = 12;
     }
 
-    putStringClearToEOL(inscription, 0, 0);
+    putStringClearToEOL(inscription, Coord_t{0, 0});
 
     if (getStringInput(inscription, 0, (int) strlen(inscription), msg_len)) {
         itemReplaceInscription(inventory[item_id], inscription);

@@ -64,21 +64,21 @@ static void printSpeechSorry() {
 
 // Displays the set of commands -RAK-
 static void displayStoreCommands() {
-    putStringClearToEOL("You may:", 20, 0);
-    putStringClearToEOL(" p) Purchase an item.           b) Browse store's inventory.", 21, 0);
-    putStringClearToEOL(" s) Sell an item.               i/e/t/w/x) Inventory/Equipment Lists.", 22, 0);
-    putStringClearToEOL("ESC) Exit from Building.        ^R) Redraw the screen.", 23, 0);
+    putStringClearToEOL("You may:", Coord_t{20, 0});
+    putStringClearToEOL(" p) Purchase an item.           b) Browse store's inventory.", Coord_t{21, 0});
+    putStringClearToEOL(" s) Sell an item.               i/e/t/w/x) Inventory/Equipment Lists.", Coord_t{22, 0});
+    putStringClearToEOL("ESC) Exit from Building.        ^R) Redraw the screen.", Coord_t{23, 0});
 }
 
 // Displays the set of commands -RAK-
 static void displayStoreHaggleCommands(int haggle_type) {
     if (haggle_type == -1) {
-        putStringClearToEOL("Specify an asking-price in gold pieces.", 21, 0);
+        putStringClearToEOL("Specify an asking-price in gold pieces.", Coord_t{21, 0});
     } else {
-        putStringClearToEOL("Specify an offer in gold pieces.", 21, 0);
+        putStringClearToEOL("Specify an offer in gold pieces.", Coord_t{21, 0});
     }
 
-    putStringClearToEOL("ESC) Quit Haggling.", 22, 0);
+    putStringClearToEOL("ESC) Quit Haggling.", Coord_t{22, 0});
     eraseLine(Coord_t{23, 0}); // clear last line
 }
 
@@ -111,7 +111,7 @@ static void displayStoreInventory(int store_id, int item_pos_start) {
 
         obj_desc_t msg = {'\0'};
         (void) sprintf(msg, "%c) %s", 'a' + item_identifier, description);
-        putStringClearToEOL(msg, item_identifier + 5, 0);
+        putStringClearToEOL(msg, Coord_t{item_identifier + 5, 0});
 
         current_item_count = store.inventory[item_pos_start].cost;
 
@@ -126,7 +126,7 @@ static void displayStoreInventory(int store_id, int item_pos_start) {
             (void) sprintf(msg, "%9d [Fixed]", current_item_count);
         }
 
-        putStringClearToEOL(msg, item_identifier + 5, 59);
+        putStringClearToEOL(msg, Coord_t{item_identifier + 5, 59});
         item_pos_start++;
     }
 
@@ -156,14 +156,14 @@ static void displaySingleCost(int store_id, int item_id) {
     } else {
         (void) sprintf(msg, "%9d [Fixed]", cost);
     }
-    putStringClearToEOL(msg, (item_id % 12) + 5, 59);
+    putStringClearToEOL(msg, Coord_t{(item_id % 12) + 5, 59});
 }
 
 // Displays players gold -RAK-
 static void displayPlayerRemainingGold() {
     vtype_t msg = {'\0'};
     (void) sprintf(msg, "Gold Remaining : %d", py.misc.au);
-    putStringClearToEOL(msg, 18, 17);
+    putStringClearToEOL(msg, Coord_t{18, 17});
 }
 
 // Displays store -RAK-
@@ -257,12 +257,12 @@ static bool storeGetHaggle(const char *comment, int32_t &new_offer, int num_offe
     int32_t offer_adjust = 0;
 
     while (flag && offer_adjust == 0) {
-        putStringClearToEOL(comment, 0, 0);
+        putStringClearToEOL(comment, Coord_t{0, 0});
 
         if ((num_offer != 0) && store_last_increment != 0) {
             auto abs_store_last_increment = (int) std::abs((std::intmax_t) store_last_increment);
             (void) sprintf(default_offer, "[%c%d] ", (store_last_increment < 0) ? '-' : '+', abs_store_last_increment);
-            putStringClearToEOL(default_offer, 0, save_comment_len);
+            putStringClearToEOL(default_offer, Coord_t{0, save_comment_len});
             comment_len = save_comment_len + (int) strlen(default_offer);
         }
 
@@ -757,7 +757,7 @@ static bool storePurchaseAnItem(int store_id, int &current_top_item_id) {
     inventoryTakeOneItem(&sell_item, &store.inventory[item_id].item);
 
     if (!inventoryCanCarryItemCount(sell_item)) {
-        putStringClearToEOL("You cannot carry that many different items.", 0, 0);
+        putStringClearToEOL("You cannot carry that many different items.", Coord_t{0, 0});
         return false;
     }
 
@@ -787,7 +787,7 @@ static bool storePurchaseAnItem(int store_id, int &current_top_item_id) {
 
             obj_desc_t msg = {'\0'};
             (void) sprintf(msg, "You have %s (%c)", description, new_item_id + 'a');
-            putStringClearToEOL(msg, 0, 0);
+            putStringClearToEOL(msg, Coord_t{0, 0});
 
             playerStrength();
 

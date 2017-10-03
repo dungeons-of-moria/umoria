@@ -38,7 +38,7 @@ void wizardCharacterAdjustment() {
     int number;
     vtype_t input = {'\0'};
 
-    putStringClearToEOL("(3 - 118) Strength     = ", 0, 0);
+    putStringClearToEOL("(3 - 118) Strength     = ", Coord_t{0, 0});
     if (getStringInput(input, 0, 25, 3)) {
         bool valid_number = stringToNumber(input, number);
         if (valid_number && number > 2 && number < 119) {
@@ -49,7 +49,7 @@ void wizardCharacterAdjustment() {
         return;
     }
 
-    putStringClearToEOL("(3 - 118) Intelligence = ", 0, 0);
+    putStringClearToEOL("(3 - 118) Intelligence = ", Coord_t{0, 0});
     if (getStringInput(input, 0, 25, 3)) {
         bool valid_number = stringToNumber(input, number);
         if (valid_number && number > 2 && number < 119) {
@@ -60,7 +60,7 @@ void wizardCharacterAdjustment() {
         return;
     }
 
-    putStringClearToEOL("(3 - 118) Wisdom       = ", 0, 0);
+    putStringClearToEOL("(3 - 118) Wisdom       = ", Coord_t{0, 0});
     if (getStringInput(input, 0, 25, 3)) {
         bool valid_number = stringToNumber(input, number);
         if (valid_number && number > 2 && number < 119) {
@@ -71,7 +71,7 @@ void wizardCharacterAdjustment() {
         return;
     }
 
-    putStringClearToEOL("(3 - 118) Dexterity    = ", 0, 0);
+    putStringClearToEOL("(3 - 118) Dexterity    = ", Coord_t{0, 0});
     if (getStringInput(input, 0, 25, 3)) {
         bool valid_number = stringToNumber(input, number);
         if (valid_number && number > 2 && number < 119) {
@@ -82,7 +82,7 @@ void wizardCharacterAdjustment() {
         return;
     }
 
-    putStringClearToEOL("(3 - 118) Constitution = ", 0, 0);
+    putStringClearToEOL("(3 - 118) Constitution = ", Coord_t{0, 0});
     if (getStringInput(input, 0, 25, 3)) {
         bool valid_number = stringToNumber(input, number);
         if (valid_number && number > 2 && number < 119) {
@@ -93,7 +93,7 @@ void wizardCharacterAdjustment() {
         return;
     }
 
-    putStringClearToEOL("(3 - 118) Charisma     = ", 0, 0);
+    putStringClearToEOL("(3 - 118) Charisma     = ", Coord_t{0, 0});
     if (getStringInput(input, 0, 25, 3)) {
         bool valid_number = stringToNumber(input, number);
         if (valid_number && number > 2 && number < 119) {
@@ -104,7 +104,7 @@ void wizardCharacterAdjustment() {
         return;
     }
 
-    putStringClearToEOL("(1 - 32767) Hit points = ", 0, 0);
+    putStringClearToEOL("(1 - 32767) Hit points = ", Coord_t{0, 0});
     if (getStringInput(input, 0, 25, 5)) {
         bool valid_number = stringToNumber(input, number);
         if (valid_number && number > 0 && number <= MAX_SHORT) {
@@ -118,7 +118,7 @@ void wizardCharacterAdjustment() {
         return;
     }
 
-    putStringClearToEOL("(0 - 32767) Mana       = ", 0, 0);
+    putStringClearToEOL("(0 - 32767) Mana       = ", Coord_t{0, 0});
     if (getStringInput(input, 0, 25, 5)) {
         bool valid_number = stringToNumber(input, number);
         if (valid_number && number > -1 && number <= MAX_SHORT) {
@@ -133,7 +133,7 @@ void wizardCharacterAdjustment() {
 
     (void) sprintf(input, "Current=%d  Gold = ", py.misc.au);
     number = (int) strlen(input);
-    putStringClearToEOL(input, 0, 0);
+    putStringClearToEOL(input, Coord_t{0, 0});
     if (getStringInput(input, 0, number, 7)) {
         int new_gold;
         bool valid_number = stringToNumber(input, new_gold);
@@ -147,7 +147,7 @@ void wizardCharacterAdjustment() {
 
     (void) sprintf(input, "Current=%d  (0-200) Searching = ", py.misc.chance_in_search);
     number = (int) strlen(input);
-    putStringClearToEOL(input, 0, 0);
+    putStringClearToEOL(input, Coord_t{0, 0});
     if (getStringInput(input, 0, number, 3)) {
         int new_gold;
         bool valid_number = stringToNumber(input, new_gold);
@@ -160,7 +160,7 @@ void wizardCharacterAdjustment() {
 
     (void) sprintf(input, "Current=%d  (-1-18) Stealth = ", py.misc.stealth_factor);
     number = (int) strlen(input);
-    putStringClearToEOL(input, 0, 0);
+    putStringClearToEOL(input, Coord_t{0, 0});
     if (getStringInput(input, 0, number, 3)) {
         bool valid_number = stringToNumber(input, number);
         if (valid_number && number > -2 && number < 19) {
@@ -172,7 +172,7 @@ void wizardCharacterAdjustment() {
 
     (void) sprintf(input, "Current=%d  (0-200) Disarming = ", py.misc.disarm);
     number = (int) strlen(input);
-    putStringClearToEOL(input, 0, 0);
+    putStringClearToEOL(input, Coord_t{0, 0});
     if (getStringInput(input, 0, number, 3)) {
         bool valid_number = stringToNumber(input, number);
         if (valid_number && number > -1 && number < 201) {
@@ -184,7 +184,7 @@ void wizardCharacterAdjustment() {
 
     (void) sprintf(input, "Current=%d  (0-100) Save = ", py.misc.saving_throw);
     number = (int) strlen(input);
-    putStringClearToEOL(input, 0, 0);
+    putStringClearToEOL(input, Coord_t{0, 0});
     if (getStringInput(input, 0, number, 3)) {
         bool valid_number = stringToNumber(input, number);
         if (valid_number && number > -1 && number < 201) {
@@ -196,7 +196,7 @@ void wizardCharacterAdjustment() {
 
     (void) sprintf(input, "Current=%d  (0-200) Base to hit = ", py.misc.bth);
     number = (int) strlen(input);
-    putStringClearToEOL(input, 0, 0);
+    putStringClearToEOL(input, Coord_t{0, 0});
     if (getStringInput(input, 0, number, 3)) {
         bool valid_number = stringToNumber(input, number);
         if (valid_number && number > -1 && number < 201) {
@@ -208,7 +208,7 @@ void wizardCharacterAdjustment() {
 
     (void) sprintf(input, "Current=%d  (0-200) Bows/Throwing = ", py.misc.bth_with_bows);
     number = (int) strlen(input);
-    putStringClearToEOL(input, 0, 0);
+    putStringClearToEOL(input, Coord_t{0, 0});
     if (getStringInput(input, 0, number, 3)) {
         bool valid_number = stringToNumber(input, number);
         if (valid_number && number > -1 && number < 201) {
@@ -220,7 +220,7 @@ void wizardCharacterAdjustment() {
 
     (void) sprintf(input, "Current=%d  Weight = ", py.misc.weight);
     number = (int) strlen(input);
-    putStringClearToEOL(input, 0, 0);
+    putStringClearToEOL(input, Coord_t{0, 0});
     if (getStringInput(input, 0, number, 3)) {
         bool valid_number = stringToNumber(input, number);
         if (valid_number && number > -1) {
@@ -257,7 +257,7 @@ void wizardCreateObjects() {
     itemReplaceInscription(item, "wizard item");
     item.identification = ID_KNOWN2 | ID_STORE_BOUGHT;
 
-    putStringClearToEOL("Tval   : ", 0, 0);
+    putStringClearToEOL("Tval   : ", Coord_t{0, 0});
     if (!getStringInput(input, 0, 9, 3)) {
         return;
     }
@@ -265,13 +265,13 @@ void wizardCreateObjects() {
         item.category_id = (uint8_t) number;
     }
 
-    putStringClearToEOL("Tchar  : ", 0, 0);
+    putStringClearToEOL("Tchar  : ", Coord_t{0, 0});
     if (!getStringInput(input, 0, 9, 1)) {
         return;
     }
     item.sprite = (uint8_t) input[0];
 
-    putStringClearToEOL("Subval : ", 0, 0);
+    putStringClearToEOL("Subval : ", Coord_t{0, 0});
     if (!getStringInput(input, 0, 9, 5)) {
         return;
     }
@@ -279,7 +279,7 @@ void wizardCreateObjects() {
         item.sub_category_id = (uint8_t) number;
     }
 
-    putStringClearToEOL("Weight : ", 0, 0);
+    putStringClearToEOL("Weight : ", Coord_t{0, 0});
     if (!getStringInput(input, 0, 9, 5)) {
         return;
     }
@@ -287,7 +287,7 @@ void wizardCreateObjects() {
         item.weight = (uint16_t) number;
     }
 
-    putStringClearToEOL("Number : ", 0, 0);
+    putStringClearToEOL("Number : ", Coord_t{0, 0});
     if (!getStringInput(input, 0, 9, 5)) {
         return;
     }
@@ -295,7 +295,7 @@ void wizardCreateObjects() {
         item.items_count = (uint8_t) number;
     }
 
-    putStringClearToEOL("Damage (dice): ", 0, 0);
+    putStringClearToEOL("Damage (dice): ", Coord_t{0, 0});
     if (!getStringInput(input, 0, 15, 3)) {
         return;
     }
@@ -303,7 +303,7 @@ void wizardCreateObjects() {
         item.damage[0] = (uint8_t) number;
     }
 
-    putStringClearToEOL("Damage (sides): ", 0, 0);
+    putStringClearToEOL("Damage (sides): ", Coord_t{0, 0});
     if (!getStringInput(input, 0, 16, 3)) {
         return;
     }
@@ -311,7 +311,7 @@ void wizardCreateObjects() {
         item.damage[1] = (uint8_t) number;
     }
 
-    putStringClearToEOL("+To hit: ", 0, 0);
+    putStringClearToEOL("+To hit: ", Coord_t{0, 0});
     if (!getStringInput(input, 0, 9, 3)) {
         return;
     }
@@ -319,7 +319,7 @@ void wizardCreateObjects() {
         item.to_hit = (int16_t) number;
     }
 
-    putStringClearToEOL("+To dam: ", 0, 0);
+    putStringClearToEOL("+To dam: ", Coord_t{0, 0});
     if (!getStringInput(input, 0, 9, 3)) {
         return;
     }
@@ -327,7 +327,7 @@ void wizardCreateObjects() {
         item.to_damage = (int16_t) number;
     }
 
-    putStringClearToEOL("AC     : ", 0, 0);
+    putStringClearToEOL("AC     : ", Coord_t{0, 0});
     if (!getStringInput(input, 0, 9, 3)) {
         return;
     }
@@ -335,7 +335,7 @@ void wizardCreateObjects() {
         item.ac = (int16_t) number;
     }
 
-    putStringClearToEOL("+To AC : ", 0, 0);
+    putStringClearToEOL("+To AC : ", Coord_t{0, 0});
     if (!getStringInput(input, 0, 9, 3)) {
         return;
     }
@@ -343,7 +343,7 @@ void wizardCreateObjects() {
         item.to_ac = (int16_t) number;
     }
 
-    putStringClearToEOL("P1     : ", 0, 0);
+    putStringClearToEOL("P1     : ", Coord_t{0, 0});
     if (!getStringInput(input, 0, 9, 5)) {
         return;
     }
@@ -351,7 +351,7 @@ void wizardCreateObjects() {
         item.misc_use = (int16_t) number;
     }
 
-    putStringClearToEOL("Flags (In HEX): ", 0, 0);
+    putStringClearToEOL("Flags (In HEX): ", Coord_t{0, 0});
     if (!getStringInput(input, 0, 16, 8)) {
         return;
     }
@@ -366,7 +366,7 @@ void wizardCreateObjects() {
     (void) sscanf(input, pattern, &input_number);
     item.flags = (uint32_t) input_number;
 
-    putStringClearToEOL("Cost : ", 0, 0);
+    putStringClearToEOL("Cost : ", Coord_t{0, 0});
     if (!getStringInput(input, 0, 9, 8)) {
         return;
     }
@@ -374,7 +374,7 @@ void wizardCreateObjects() {
         item.cost = input_number;
     }
 
-    putStringClearToEOL("Level : ", 0, 0);
+    putStringClearToEOL("Level : ", Coord_t{0, 0});
     if (!getStringInput(input, 0, 10, 3)) {
         return;
     }

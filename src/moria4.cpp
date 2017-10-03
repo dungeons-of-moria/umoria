@@ -634,7 +634,7 @@ static bool lookSee(int x, int y, bool &transparent) {
         j = monsters[tile.creature_id].creature_id;
         (void) sprintf(msg, "%s %s %s. [(r)ecall]", description, isVowel(creatures_list[j].name[0]) ? "an" : "a", creatures_list[j].name);
         description = "It is on";
-        putStringClearToEOL(msg, 0, 0);
+        putStringClearToEOL(msg, Coord_t{0, 0});
 
         moveCursorRelative(Coord_t{y, x});
         query = getKeyInput();
@@ -660,7 +660,7 @@ static bool lookSee(int x, int y, bool &transparent) {
 
                 (void) sprintf(msg, "%s %s ---pause---", description, obj_string);
                 description = "It is in";
-                putStringClearToEOL(msg, 0, 0);
+                putStringClearToEOL(msg, Coord_t{0, 0});
 
                 moveCursorRelative(Coord_t{y, x});
                 query = getKeyInput();
@@ -692,7 +692,7 @@ static bool lookSee(int x, int y, bool &transparent) {
 
             if (wall_description != nullptr) {
                 (void) sprintf(msg, "%s %s ---pause---", description, wall_description);
-                putStringClearToEOL(msg, 0, 0);
+                putStringClearToEOL(msg, Coord_t{0, 0});
                 moveCursorRelative(Coord_t{y, x});
                 query = getKeyInput();
             }

@@ -50,7 +50,7 @@ void displayTextHelpFile(const char *filename) {
 
     if (file == nullptr) {
         (void) sprintf(line_buffer, "Can not find help file \"%s\".\n", filename);
-        putStringClearToEOL(line_buffer, 0, 0);
+        putStringClearToEOL(line_buffer, Coord_t{0, 0});
         return;
     }
 
@@ -66,7 +66,7 @@ void displayTextHelpFile(const char *filename) {
             }
         }
 
-        putStringClearToEOL("[Press any key to continue.]", 23, 23);
+        putStringClearToEOL("[Press any key to continue.]", Coord_t{23, 23});
         input = getKeyInput();
         if (input == ESCAPE) {
             break;
@@ -84,7 +84,7 @@ void displayTextHelpFile(const char *filename) {
 void outputRandomLevelObjectsToFile() {
     obj_desc_t input = {0};
 
-    putStringClearToEOL("Produce objects on what level?: ", 0, 0);
+    putStringClearToEOL("Produce objects on what level?: ", Coord_t{0, 0});
     if (!getStringInput(input, 0, 32, 10)) {
         return;
     }
@@ -94,7 +94,7 @@ void outputRandomLevelObjectsToFile() {
         return;
     }
 
-    putStringClearToEOL("Produce how many objects?: ", 0, 0);
+    putStringClearToEOL("Produce how many objects?: ", Coord_t{0, 0});
     if (!getStringInput(input, 0, 27, 10)) {
         return;
     }
@@ -105,7 +105,7 @@ void outputRandomLevelObjectsToFile() {
     }
 
     if (count < 1 || level < 0 || level > 1200) {
-        putStringClearToEOL("Parameters no good.", 0, 0);
+        putStringClearToEOL("Parameters no good.", Coord_t{0, 0});
         return;
     }
 
@@ -115,7 +115,7 @@ void outputRandomLevelObjectsToFile() {
 
     bool small_objects = getInputConfirmation("Small objects only?");
 
-    putStringClearToEOL("File name: ", 0, 0);
+    putStringClearToEOL("File name: ", Coord_t{0, 0});
 
     vtype_t filename = {0};
 
@@ -128,12 +128,12 @@ void outputRandomLevelObjectsToFile() {
 
     FILE *file_ptr = fopen(filename, "w");
     if (file_ptr == nullptr) {
-        putStringClearToEOL("File could not be opened.", 0, 0);
+        putStringClearToEOL("File could not be opened.", Coord_t{0, 0});
         return;
     }
 
     (void) sprintf(input, "%d", count);
-    putStringClearToEOL(strcat(input, " random objects being produced..."), 0, 0);
+    putStringClearToEOL(strcat(input, " random objects being produced..."), Coord_t{0, 0});
 
     putQIO();
 
@@ -166,12 +166,12 @@ void outputRandomLevelObjectsToFile() {
 
     (void) fclose(file_ptr);
 
-    putStringClearToEOL("Completed.", 0, 0);
+    putStringClearToEOL("Completed.", Coord_t{0, 0});
 }
 
 // Write character sheet to the file
 static void writeCharacterSheetToFile(FILE *file1) {
-    putStringClearToEOL("Writing character sheet...", 0, 0);
+    putStringClearToEOL("Writing character sheet...", Coord_t{0, 0});
     putQIO();
 
     const char *colon = ":";
@@ -374,7 +374,7 @@ bool outputPlayerCharacterToFile(char *filename) {
 
     (void) fclose(file);
 
-    putStringClearToEOL("Completed.", 0, 0);
+    putStringClearToEOL("Completed.", Coord_t{0, 0});
 
     return true;
 }

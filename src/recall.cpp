@@ -633,7 +633,7 @@ int memoryRecall(int monster_id) {
     }
 
     memoryPrint("\n");
-    putStringClearToEOL("--pause--", roff_print_line, 0);
+    putStringClearToEOL("--pause--", Coord_t{roff_print_line, 0});
 
     if (wizard_mode) {
         memory = saved_memory;
@@ -655,7 +655,7 @@ static void memoryPrint(const char *p) {
                 }
             }
             *q = 0;
-            putStringClearToEOL(roff_buffer, roff_print_line, 0);
+            putStringClearToEOL(roff_buffer, Coord_t{roff_print_line, 0});
             roff_print_line++;
 
             char *r = roff_buffer;

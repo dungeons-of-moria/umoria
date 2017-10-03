@@ -730,7 +730,7 @@ static void playerDetectEnchantment() {
 }
 
 static int getCommandRepeatCount(char &lastInputCommand) {
-    putStringClearToEOL("Repeat count:", 0, 0);
+    putStringClearToEOL("Repeat count:", Coord_t{0, 0});
 
     if (lastInputCommand == '#') {
         lastInputCommand = '0';
@@ -743,14 +743,14 @@ static int getCommandRepeatCount(char &lastInputCommand) {
         if (lastInputCommand == DELETE || lastInputCommand == CTRL_KEY('H')) {
             repeat_count /= 10;
             (void) sprintf(text_buffer, "%d", (int16_t) repeat_count);
-            putStringClearToEOL(text_buffer, 0, 14);
+            putStringClearToEOL(text_buffer, Coord_t{0, 14});
         } else if (lastInputCommand >= '0' && lastInputCommand <= '9') {
             if (repeat_count > 99) {
                 terminalBellSound();
             } else {
                 repeat_count = repeat_count * 10 + lastInputCommand - '0';
                 (void) sprintf(text_buffer, "%d", repeat_count);
-                putStringClearToEOL(text_buffer, 0, 14);
+                putStringClearToEOL(text_buffer, Coord_t{0, 14});
             }
         } else {
             break;
@@ -761,12 +761,12 @@ static int getCommandRepeatCount(char &lastInputCommand) {
     if (repeat_count == 0) {
         repeat_count = 99;
         (void) sprintf(text_buffer, "%d", repeat_count);
-        putStringClearToEOL(text_buffer, 0, 14);
+        putStringClearToEOL(text_buffer, Coord_t{0, 14});
     }
 
     // a special hack to allow numbers as commands
     if (lastInputCommand == ' ') {
-        putStringClearToEOL("Command:", 0, 20);
+        putStringClearToEOL("Command:", Coord_t{0, 20});
         lastInputCommand = getKeyInput();
     }
 
@@ -1339,7 +1339,7 @@ static void commandPreviousMessage() {
     if (max_messages <= 1) {
         // Distinguish real and recovered messages with a '>'. -CJS-
         putString(">", Coord_t{0, 0});
-        putStringClearToEOL(messages[last_message_id], 0, 1);
+        putStringClearToEOL(messages[last_message_id], Coord_t{0, 1});
         return;
     }
 
@@ -1351,7 +1351,7 @@ static void commandPreviousMessage() {
     while (max_messages > 0) {
         max_messages--;
 
-        putStringClearToEOL(messages[msg_id], max_messages, 0);
+        putStringClearToEOL(messages[msg_id], Coord_t{max_messages, 0});
 
         if (msg_id == 0) {
             msg_id = MESSAGE_HISTORY_SIZE - 1;
@@ -1526,7 +1526,7 @@ static void doWizardCommands(char com_val) {
                 i = -1;
                 vtype_t input = {0};
 
-                putStringClearToEOL("Go to which level (0-99) ? ", 0, 0);
+                putStringClearToEOL("Go to which level (0-99) ? ", Coord_t{0, 0});
 
                 if (getStringInput(input, 0, 27, 10)) {
                     (void) stringToNumber(input, i);
@@ -1588,9 +1588,9 @@ static void doWizardCommands(char com_val) {
             break;
         default:
             if (config.use_roguelike_keys) {
-                putStringClearToEOL("Type '?' or '\\' for help.", 0, 0);
+                putStringClearToEOL("Type '?' or '\\' for help.", Coord_t{0, 0});
             } else {
-                putStringClearToEOL("Type '?' or ^H for help.", 0, 0);
+                putStringClearToEOL("Type '?' or ^H for help.", Coord_t{0, 0});
             }
     }
 }
@@ -1849,7 +1849,7 @@ static void doCommand(char command) {
             if (wizard_mode) {
                 doWizardCommands(command);
             } else {
-                putStringClearToEOL("Type '?' for help.", 0, 0);
+                putStringClearToEOL("Type '?' for help.", Coord_t{0, 0});
             }
     }
     last_command = command;
