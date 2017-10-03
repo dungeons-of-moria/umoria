@@ -6,8 +6,6 @@
 
 // Player/creature spells, breaths, wands, scrolls, etc. code
 
-#include <string>
-
 #include "headers.h"
 #include "externs.h"
 
