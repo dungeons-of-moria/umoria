@@ -458,19 +458,19 @@ static void carry(int y, int x, bool pickup) {
 
 // Deletes a monster entry from the level -RAK-
 void dungeonDeleteMonster(int id) {
-    Monster_t &monster = monsters[id];
+    Monster_t *monster = &monsters[id];
 
-    cave[monster.y][monster.x].creature_id = 0;
+    cave[monster->y][monster->x].creature_id = 0;
 
-    if (monster.lit) {
-        dungeonLiteSpot((int) monster.y, (int) monster.x);
+    if (monster->lit) {
+        dungeonLiteSpot((int) monster->y, (int) monster->x);
     }
 
     int last_id = next_free_monster_id - 1;
 
     if (id != last_id) {
-        monster = monsters[last_id];
-        cave[monster.y][monster.x].creature_id = (uint8_t) id;
+        monster = &monsters[last_id];
+        cave[monster->y][monster->x].creature_id = (uint8_t) id;
         monsters[id] = monsters[last_id];
     }
 

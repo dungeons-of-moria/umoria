@@ -756,12 +756,12 @@ void spellFireBall(int y, int x, int direction, int damage_hp, int spell_type, c
             continue;
         }
 
-        Cave_t &tile = cave[y][x];
+        Cave_t *tile = &cave[y][x];
 
-        if (tile.feature_id >= MIN_CLOSED_SPACE || tile.creature_id > 1) {
+        if (tile->feature_id >= MIN_CLOSED_SPACE || tile->creature_id > 1) {
             finished = true;
 
-            if (tile.feature_id >= MIN_CLOSED_SPACE) {
+            if (tile->feature_id >= MIN_CLOSED_SPACE) {
                 y = old_y;
                 x = old_x;
             }
@@ -772,21 +772,21 @@ void spellFireBall(int y, int x, int direction, int damage_hp, int spell_type, c
             for (int row = y - max_distance; row <= y + max_distance; row++) {
                 for (int col = x - max_distance; col <= x + max_distance; col++) {
                     if (coordInBounds(row, col) && coordDistanceBetween(y, x, row, col) <= max_distance && los(y, x, row, col)) {
-                        tile = cave[row][col];
+                        tile = &cave[row][col];
 
-                        if (tile.treasure_id != 0 && (*destroy)(&treasure_list[tile.treasure_id])) {
+                        if (tile->treasure_id != 0 && (*destroy)(&treasure_list[tile->treasure_id])) {
                             (void) dungeonDeleteObject(row, col);
                         }
 
-                        if (tile.feature_id <= MAX_OPEN_SPACE) {
-                            if (tile.creature_id > 1) {
-                                const Monster_t &monster = monsters[tile.creature_id];
+                        if (tile->feature_id <= MAX_OPEN_SPACE) {
+                            if (tile->creature_id > 1) {
+                                const Monster_t &monster = monsters[tile->creature_id];
                                 const Creature_t &creature = creatures_list[monster.creature_id];
 
                                 // lite up creature if visible, temp set permanent_light so that monsterUpdateVisibility works
-                                bool saved_lit_status = tile.permanent_light;
-                                tile.permanent_light = true;
-                                monsterUpdateVisibility((int) tile.creature_id);
+                                bool saved_lit_status = tile->permanent_light;
+                                tile->permanent_light = true;
+                                monsterUpdateVisibility((int) tile->creature_id);
 
                                 total_hits++;
                                 int damage = damage_hp;
@@ -805,10 +805,10 @@ void spellFireBall(int y, int x, int direction, int damage_hp, int spell_type, c
 
                                 damage = (damage / (coordDistanceBetween(row, col, y, x) + 1));
 
-                                if (monsterTakeHit((int) tile.creature_id, damage) >= 0) {
+                                if (monsterTakeHit((int) tile->creature_id, damage) >= 0) {
                                     total_kills++;
                                 }
-                                tile.permanent_light = saved_lit_status;
+                                tile->permanent_light = saved_lit_status;
                             } else if (coordInsidePanel(row, col) && py.flags.blind < 1) {
                                 panelPutTile('*', Coord_t{row, col});
                             }

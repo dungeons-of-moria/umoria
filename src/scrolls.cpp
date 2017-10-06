@@ -180,10 +180,10 @@ static int scrollIdentifyItem(int item_id, bool &is_used_up) {
     // to move to a different place.  Check for that here.  It can
     // move arbitrarily far if an identify scroll was used on
     // another identify scroll, but it always moves down.
-    Inventory_t &item = inventory[item_id];
-    while (item_id > 0 && (item.category_id != TV_SCROLL1 || item.flags != 0x00000008)) {
+    Inventory_t *item = &inventory[item_id];
+    while (item_id > 0 && (item->category_id != TV_SCROLL1 || item->flags != 0x00000008)) {
         item_id--;
-        item = inventory[item_id];
+        item = &inventory[item_id];
     }
 
     return item_id;
@@ -433,13 +433,13 @@ void readScroll() {
     bool used_up = true;
     bool identified = false;
 
-    Inventory_t &item = inventory[item_id];
-    uint32_t item_flags = item.flags;
+    Inventory_t *item = &inventory[item_id];
+    uint32_t item_flags = item->flags;
 
     while (item_flags != 0) {
         int scroll_type = getAndClearFirstBit(item_flags) + 1;
 
-        if (item.category_id == TV_SCROLL2) {
+        if (item->category_id == TV_SCROLL2) {
             scroll_type += 32;
         }
 
@@ -590,18 +590,18 @@ void readScroll() {
         }
     }
 
-    item = inventory[item_id];
+    item = &inventory[item_id];
 
     if (identified) {
-        if (!itemSetColorlessAsIdentified(item.category_id, item.sub_category_id, item.identification)) {
+        if (!itemSetColorlessAsIdentified(item->category_id, item->sub_category_id, item->identification)) {
             // round half-way case up
-            py.misc.exp += (item.depth_first_found + (py.misc.level >> 1)) / py.misc.level;
+            py.misc.exp += (item->depth_first_found + (py.misc.level >> 1)) / py.misc.level;
             displayCharacterExperience();
 
             itemIdentify(item_id);
         }
-    } else if (!itemSetColorlessAsIdentified(item.category_id, item.sub_category_id, item.identification)) {
-        itemSetAsTried(item);
+    } else if (!itemSetColorlessAsIdentified(item->category_id, item->sub_category_id, item->identification)) {
+        itemSetAsTried(*item);
     }
 
     if (used_up) {
