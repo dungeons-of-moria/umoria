@@ -104,8 +104,8 @@ static void displayCharacterRaces() {
     clearToBottom(20);
     putString("Choose a race (? for Help):", 20, 2);
 
-	uint8_t y = 2;
-	uint8_t x = 21;
+    uint8_t y = 2;
+    uint8_t x = 21;
 
     for (uint8_t i = 0; i < PLAYER_MAX_RACES; i++) {
         char description[80];
@@ -171,6 +171,7 @@ typedef struct {
     int32_t social_class;
     char history_block[240];
 } BlockOfHistory;
+<<<<<<< HEAD
 
 static BlockOfHistory getBlockOfHistory (int32_t social_class) {
     BlockOfHistory result;
@@ -178,6 +179,17 @@ static BlockOfHistory getBlockOfHistory (int32_t social_class) {
     int32_t history_id = py.misc.race_id * 3 + 1;
     result.history_block[0] = '\0';
 
+=======
+
+static BlockOfHistory getBlockOfHistory (int32_t social_class) {
+
+    BlockOfHistory result;
+    result.social_class = social_class;
+	strcat(result.history_block, result.history_block);
+    int32_t history_id = py.misc.race_id * 3 + 1;
+    result.history_block[0] = '\0';
+
+>>>>>>> 09294a7c30c209a5c41c84ac5e62c10819553f8a
     int32_t background_id = 0;
 
     do {
@@ -268,6 +280,10 @@ static void processBlockOfHistory (const char *const history_block) {
 static void characterGetHistory() {
     int32_t social_class = randomNumber(4);
 
+<<<<<<< HEAD
+=======
+    playerClearHistory();
+>>>>>>> 09294a7c30c209a5c41c84ac5e62c10819553f8a
     BlockOfHistory block = getBlockOfHistory(social_class);
     processBlockOfHistory(block.history_block);
 
