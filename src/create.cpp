@@ -29,7 +29,7 @@ static void characterGenerateStats() {
 }
 
 // Changes stats by given amount -JWT-
-static void characterChangeStat(int stat, int16_t amount) {
+static void playerChangeStat(int stat, int16_t amount) {
     int new_stat = py.stats.max[stat];
 
     if (amount < 0) {
@@ -69,12 +69,12 @@ static void characterGenerateStatsAndRace() {
     const Race_t &race = character_races[py.misc.race_id];
 
     characterGenerateStats();
-    characterChangeStat(A_STR, race.str_adjustment);
-    characterChangeStat(A_INT, race.int_adjustment);
-    characterChangeStat(A_WIS, race.wis_adjustment);
-    characterChangeStat(A_DEX, race.dex_adjustment);
-    characterChangeStat(A_CON, race.con_adjustment);
-    characterChangeStat(A_CHR, race.chr_adjustment);
+    playerChangeStat(A_STR, race.str_adjustment);
+    playerChangeStat(A_INT, race.int_adjustment);
+    playerChangeStat(A_WIS, race.wis_adjustment);
+    playerChangeStat(A_DEX, race.dex_adjustment);
+    playerChangeStat(A_CON, race.con_adjustment);
+    playerChangeStat(A_CHR, race.chr_adjustment);
 
     py.misc.level = 1;
 
@@ -372,12 +372,12 @@ static void characterGetClass() {
             putString(klass.title, Coord_t{5, 15});
 
             // Adjust the stats for the class adjustment -RAK-
-            characterChangeStat(A_STR, klass.strength);
-            characterChangeStat(A_INT, klass.intelligence);
-            characterChangeStat(A_WIS, klass.wisdom);
-            characterChangeStat(A_DEX, klass.dexterity);
-            characterChangeStat(A_CON, klass.constitution);
-            characterChangeStat(A_CHR, klass.charisma);
+            playerChangeStat(A_STR, klass.strength);
+            playerChangeStat(A_INT, klass.intelligence);
+            playerChangeStat(A_WIS, klass.wisdom);
+            playerChangeStat(A_DEX, klass.dexterity);
+            playerChangeStat(A_CON, klass.constitution);
+            playerChangeStat(A_CHR, klass.charisma);
 
             for (int i = 0; i < 6; i++) {
                 py.stats.current[i] = py.stats.max[i];
