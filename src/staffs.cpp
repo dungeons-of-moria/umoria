@@ -9,7 +9,7 @@
 #include "headers.h"
 #include "externs.h"
 
-static enum Spells {
+enum Spells {
     LIGHT_AREA = 1,
     DETECT_SECRET_DOORS,
     DETECT_TRAPS,
