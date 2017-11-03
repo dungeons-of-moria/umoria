@@ -187,17 +187,27 @@ set(umoria_version "${umoria_version_major}.${umoria_version_minor}.${umoria_ver
 #
 # Update the data files with the current version number and date
 #
-string(TIMESTAMP current_date "%Y-%m-%d" UTC)
+
+# Fetch release date from CHANGELOG if it's there :-)
+file(READ "${PROJECT_SOURCE_DIR}/CHANGELOG.md" changelog)
+string(REGEX MATCH "## ${umoria_version} \\(([0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9])\\)" results ${changelog})
+list(LENGTH results match_count)
+if (match_count EQUAL 0)
+    string(TIMESTAMP current_date "%Y-%m-%d" UTC)
+else ()
+    set(current_date ${CMAKE_MATCH_1})
+endif ()
+
 set(
         data_files_to_update
         ${build_dir}/data/splash.txt
         ${build_dir}/data/versions.txt
 )
 foreach (data_file ${data_files_to_update})
-    FILE(READ ${data_file} content)
+    file(READ ${data_file} content)
     string(REGEX REPLACE "{{ CURRENT_VERSION }}" "${umoria_version}" content "${content}")
     string(REGEX REPLACE "{{ RELEASE_DATE }}" "${current_date}" content "${content}")
-    FILE(WRITE ${data_file} ${content})
+    file(WRITE ${data_file} ${content})
 endforeach ()
 
 
