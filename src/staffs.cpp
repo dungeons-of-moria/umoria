@@ -9,6 +9,33 @@
 #include "headers.h"
 #include "externs.h"
 
+static enum Spells {
+    LIGHT_AREA = 1,
+    DETECT_SECRET_DOORS,
+    DETECT_TRAPS,
+    DETECT_TREASURE,
+    DETECT_OBJECTS,
+    TELEPORT_PLAYER,
+    EARTHQUAKE,
+    SUMMON_MONSTER,
+    DESTROY_AREA = 10,
+    STARLITE,
+    MONSTERS_FASTER,
+    MONSTERS_SLOWER,
+    SLEEP_MONSTERS,
+    CHANGE_PLAYER_HP,
+    DETECT_INVISIBLE_CREATURES,
+    PLAYER_FASTER,
+    PLAYER_SLOWER,
+    MASS_POLYMORPH,
+    REMOVE_CURSE,
+    DETECT_EVIL,
+    CURE_PLAYER,
+    DISPEL_CREATURE,
+    DARKEN_AREA = 25,
+    STORE_BOUGHT_FLAG = 32
+};
+
 static bool staffPlayerIsCarrying(int &item_pos_start, int &item_pos_end) {
     if (inventory_count == 0) {
         printMessage("But you are not carrying anything.");
@@ -68,30 +95,30 @@ static bool staffDischarge(Inventory_t &item) {
         int staff_type = getAndClearFirstBit(flags) + 1;
 
         switch (staff_type) {
-            case 1:
+            case LIGHT_AREA:
                 identified = spellLightArea(char_row, char_col);
                 break;
-            case 2:
+            case DETECT_SECRET_DOORS:
                 identified = dungeonDetectSecretDoorsOnPanel();
                 break;
-            case 3:
+            case DETECT_TRAPS:
                 identified = dungeonDetectTrapOnPanel();
                 break;
-            case 4:
+            case DETECT_TREASURE:
                 identified = dungeonDetectTreasureOnPanel();
                 break;
-            case 5:
+            case DETECT_OBJECTS:
                 identified = dungeonDetectObjectOnPanel();
                 break;
-            case 6:
+            case TELEPORT_PLAYER:
                 playerTeleport(100);
                 identified = true;
                 break;
-            case 7:
+            case EARTHQUAKE:
                 identified = true;
                 dungeonEarthquake();
                 break;
-            case 8:
+            case SUMMON_MONSTER:
                 identified = false;
 
                 for (int i = 0; i < randomNumber(4); i++) {
@@ -100,45 +127,45 @@ static bool staffDischarge(Inventory_t &item) {
                     identified |= monsterSummon(y, x, false);
                 }
                 break;
-            case 10:
+            case DESTROY_AREA:
                 identified = true;
                 spellDestroyArea(char_row, char_col);
                 break;
-            case 11:
+            case STARLITE:
                 identified = true;
                 spellStarlite(char_row, char_col);
                 break;
-            case 12:
+            case MONSTERS_FASTER:
                 identified = spellSpeedAllMonsters(1);
                 break;
-            case 13:
+            case MONSTERS_SLOWER:
                 identified = spellSpeedAllMonsters(-1);
                 break;
-            case 14:
+            case SLEEP_MONSTERS:
                 identified = spellSleepAllMonsters();
                 break;
-            case 15:
+            case CHANGE_PLAYER_HP:
                 identified = spellChangePlayerHitPoints(randomNumber(8));
                 break;
-            case 16:
+            case DETECT_INVISIBLE_CREATURES:
                 identified = spellDetectInvisibleCreaturesOnPanel();
                 break;
-            case 17:
+            case PLAYER_FASTER:
                 if (py.flags.fast == 0) {
                     identified = true;
                 }
                 py.flags.fast += randomNumber(30) + 15;
                 break;
-            case 18:
+            case PLAYER_SLOWER:
                 if (py.flags.slow == 0) {
                     identified = true;
                 }
                 py.flags.slow += randomNumber(30) + 15;
                 break;
-            case 19:
+            case MASS_POLYMORPH:
                 identified = spellMassPolymorph();
                 break;
-            case 20:
+            case REMOVE_CURSE:
                 if (spellRemoveCurseFromAllItems()) {
                     if (py.flags.blind < 1) {
                         printMessage("The staff glows blue for a moment..");
@@ -146,21 +173,21 @@ static bool staffDischarge(Inventory_t &item) {
                     identified = true;
                 }
                 break;
-            case 21:
+            case DETECT_EVIL:
                 identified = spellDetectEvil();
                 break;
-            case 22:
+            case CURE_PLAYER:
                 if (playerCureBlindness() || playerCurePoison() || playerCureConfusion()) {
                     identified = true;
                 }
                 break;
-            case 23:
+            case DISPEL_CREATURE:
                 identified = spellDispelCreature(CD_EVIL, 60);
                 break;
-            case 25:
+            case DARKEN_AREA:
                 identified = spellDarkenArea(char_row, char_col);
                 break;
-            case 32:
+            case STORE_BOUGHT_FLAG:
                 // store bought flag
                 break;
             default:
