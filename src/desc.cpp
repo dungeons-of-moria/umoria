@@ -224,9 +224,7 @@ void itemSetAsTried(const Inventory_t &item) {
 
 // Somethings been identified.
 // Extra complexity by CJS so that it can merge store/dungeon objects when appropriate.
-void itemIdentify(int &item_id) {
-    Inventory_t &item = inventory[item_id];
-
+void itemIdentify(Inventory_t &item, int &item_id) {
     if ((item.flags & TR_CURSED) != 0u) {
         itemAppendToInscription(item, ID_DAMD);
     }
