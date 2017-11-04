@@ -944,7 +944,7 @@ void playerMove(int direction, bool do_pickup) {
             dungeonMoveCreatureRecord(old_row, old_col, char_row, char_col);
 
             // Check for new panel
-            if (coordOutsidePanel(char_row, char_col, false)) {
+            if (coordOutsidePanel(Coord_t{char_row, char_col}, false)) {
                 drawDungeonPanel();
             }
 

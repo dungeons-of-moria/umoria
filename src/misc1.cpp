@@ -156,12 +156,12 @@ static void panelBounds() {
 // Given an row (y) and col (x), this routine detects -RAK-
 // when a move off the screen has occurred and figures new borders.
 // `force` forces the panel bounds to be recalculated, useful for 'W'here.
-bool coordOutsidePanel(int y, int x, bool force) {
+bool coordOutsidePanel(Coord_t coord, bool force) {
     int row = panel_row;
     int col = panel_col;
 
-    if (force || y < panel_row_min + 2 || y > panel_row_max - 2) {
-        row = (y - SCREEN_HEIGHT / 4) / (SCREEN_HEIGHT / 2);
+    if (force || coord.y < panel_row_min + 2 || coord.y > panel_row_max - 2) {
+        row = (coord.y - SCREEN_HEIGHT / 4) / (SCREEN_HEIGHT / 2);
 
         if (row > max_panel_rows) {
             row = max_panel_rows;
@@ -170,8 +170,8 @@ bool coordOutsidePanel(int y, int x, bool force) {
         }
     }
 
-    if (force || x < panel_col_min + 3 || x > panel_col_max - 3) {
-        col = ((x - SCREEN_WIDTH / 4) / (SCREEN_WIDTH / 2));
+    if (force || coord.x < panel_col_min + 3 || coord.x > panel_col_max - 3) {
+        col = ((coord.x - SCREEN_WIDTH / 4) / (SCREEN_WIDTH / 2));
         if (col > max_panel_cols) {
             col = max_panel_cols;
         } else if (col < 0) {

@@ -1405,7 +1405,7 @@ static void commandLocateOnMap() {
 
     int y = char_row;
     int x = char_col;
-    if (coordOutsidePanel(y, x, true)) {
+    if (coordOutsidePanel(Coord_t{y, x}, true)) {
         drawDungeonPanel();
     }
 
@@ -1451,7 +1451,7 @@ static void commandLocateOnMap() {
                 break;
             }
 
-            if (coordOutsidePanel(y, x, true)) {
+            if (coordOutsidePanel(Coord_t{y, x}, true)) {
                 drawDungeonPanel();
                 break;
             }
@@ -1459,7 +1459,7 @@ static void commandLocateOnMap() {
     }
 
     // Move to a new panel - but only if really necessary.
-    if (coordOutsidePanel(char_row, char_col, false)) {
+    if (coordOutsidePanel(Coord_t{char_row, char_col}, false)) {
         drawDungeonPanel();
     }
 }
