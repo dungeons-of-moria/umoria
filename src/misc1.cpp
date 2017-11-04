@@ -225,22 +225,22 @@ int coordDistanceBetween(Coord_t coord_a, Coord_t coord_b) {
 // Checks points north, south, east, and west for a wall -RAK-
 // note that y,x is always coordInBounds(), i.e. 0 < y < dungeon_height-1,
 // and 0 < x < dungeon_width-1
-int coordWallsNextTo(int y, int x) {
+int coordWallsNextTo(Coord_t coord) {
     int walls = 0;
 
-    if (cave[y - 1][x].feature_id >= MIN_CAVE_WALL) {
+    if (cave[coord.y - 1][coord.x].feature_id >= MIN_CAVE_WALL) {
         walls++;
     }
 
-    if (cave[y + 1][x].feature_id >= MIN_CAVE_WALL) {
+    if (cave[coord.y + 1][coord.x].feature_id >= MIN_CAVE_WALL) {
         walls++;
     }
 
-    if (cave[y][x - 1].feature_id >= MIN_CAVE_WALL) {
+    if (cave[coord.y][coord.x - 1].feature_id >= MIN_CAVE_WALL) {
         walls++;
     }
 
-    if (cave[y][x + 1].feature_id >= MIN_CAVE_WALL) {
+    if (cave[coord.y][coord.x + 1].feature_id >= MIN_CAVE_WALL) {
         walls++;
     }
 

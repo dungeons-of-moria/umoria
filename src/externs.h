@@ -269,7 +269,7 @@ bool coordInBounds(Coord_t coord);
 bool coordOutsidePanel(Coord_t coord, bool force);
 bool coordInsidePanel(Coord_t coord);
 int coordDistanceBetween(Coord_t coord_a, Coord_t coord_b);
-int coordWallsNextTo(int y, int x);
+int coordWallsNextTo(Coord_t coord);
 int coordCorridorWallsNextTo(int y, int x);
 int diceDamageRoll(int dice, int sides);
 int dicePlayerDamageRoll(uint8_t *notation_array);

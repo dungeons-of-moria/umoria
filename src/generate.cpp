@@ -269,7 +269,7 @@ static void dungeonPlaceStairs(int stair_type, int number, int walls) {
 
                 do {
                     do {
-                        if (cave[y1][x1].feature_id <= MAX_OPEN_SPACE && cave[y1][x1].treasure_id == 0 && coordWallsNextTo(y1, x1) >= walls) {
+                        if (cave[y1][x1].feature_id <= MAX_OPEN_SPACE && cave[y1][x1].treasure_id == 0 && coordWallsNextTo(Coord_t{y1, x1}) >= walls) {
                             placed = true;
                             if (stair_type == 1) {
                                 dungeonPlaceUpStairs(y1, x1);
