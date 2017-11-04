@@ -80,7 +80,7 @@ bool dungeonDetectTreasureOnPanel() {
         for (int x = panel_col_min; x <= panel_col_max; x++) {
             Cave_t &tile = cave[y][x];
 
-            if (tile.treasure_id != 0 && treasure_list[tile.treasure_id].category_id == TV_GOLD && !caveTileVisible(y, x)) {
+            if (tile.treasure_id != 0 && treasure_list[tile.treasure_id].category_id == TV_GOLD && !caveTileVisible(Coord_t{y, x})) {
                 tile.field_mark = true;
                 dungeonLiteSpot(y, x);
                 detected = true;
@@ -99,7 +99,7 @@ bool dungeonDetectObjectOnPanel() {
         for (int x = panel_col_min; x <= panel_col_max; x++) {
             Cave_t &tile = cave[y][x];
 
-            if (tile.treasure_id != 0 && treasure_list[tile.treasure_id].category_id < TV_MAX_OBJECT && !caveTileVisible(y, x)) {
+            if (tile.treasure_id != 0 && treasure_list[tile.treasure_id].category_id < TV_MAX_OBJECT && !caveTileVisible(Coord_t{y, x})) {
                 tile.field_mark = true;
                 dungeonLiteSpot(y, x);
                 detected = true;
@@ -244,7 +244,7 @@ bool spellDarkenArea(int y, int x) {
 
                     dungeonLiteSpot(row, col);
 
-                    if (!caveTileVisible(row, col)) {
+                    if (!caveTileVisible(Coord_t{row, col})) {
                         darkened = true;
                     }
                 }
@@ -1276,14 +1276,14 @@ bool spellWallToMud(int y, int x, int direction) {
 
             (void) dungeonTunnelWall(y, x, 1, 0);
 
-            if (caveTileVisible(y, x)) {
+            if (caveTileVisible(Coord_t{y, x})) {
                 turned = true;
                 printMessage("The wall turns into mud.");
             }
         } else if (tile.treasure_id != 0 && tile.feature_id >= MIN_CLOSED_SPACE) {
             finished = true;
 
-            if (coordInsidePanel(Coord_t{y, x}) && caveTileVisible(y, x)) {
+            if (coordInsidePanel(Coord_t{y, x}) && caveTileVisible(Coord_t{y, x})) {
                 turned = true;
 
                 obj_desc_t description = {'\0'};
@@ -1298,7 +1298,7 @@ bool spellWallToMud(int y, int x, int direction) {
                 (void) dungeonDeleteObject(y, x);
                 if (randomNumber(10) == 1) {
                     dungeonPlaceRandomObjectAt(y, x, false);
-                    if (caveTileVisible(y, x)) {
+                    if (caveTileVisible(Coord_t{y, x})) {
                         printMessage("You have found something!");
                     }
                 }

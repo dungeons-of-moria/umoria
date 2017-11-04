@@ -95,7 +95,7 @@ static void dungeonDigRubble(int y, int x, int digging_ability) {
         if (randomNumber(10) == 1) {
             dungeonPlaceRandomObjectAt(y, x, false);
 
-            if (caveTileVisible(y, x)) {
+            if (caveTileVisible(Coord_t{y, x})) {
                 printMessage("You have found something!");
             }
         }

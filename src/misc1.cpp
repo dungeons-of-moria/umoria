@@ -491,8 +491,8 @@ char caveGetTileSymbol(Coord_t coord) {
 }
 
 // Tests a spot for light or field mark status -RAK-
-bool caveTileVisible(int y, int x) {
-    return cave[y][x].permanent_light || cave[y][x].temporary_light || cave[y][x].field_mark;
+bool caveTileVisible(Coord_t coord) {
+    return cave[coord.y][coord.x].permanent_light || cave[coord.y][coord.x].temporary_light || cave[coord.y][coord.x].field_mark;
 }
 
 // Prints the map of the dungeon -RAK-

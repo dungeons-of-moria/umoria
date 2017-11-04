@@ -563,7 +563,7 @@ static int dungeonSummonObject(int y, int x, int amount, int object_type) {
 
                     dungeonLiteSpot(pos_y, pos_x);
 
-                    if (caveTileVisible(pos_y, pos_x)) {
+                    if (caveTileVisible(Coord_t{pos_y, pos_x})) {
                         result += real_type;
                     }
 
@@ -593,7 +593,7 @@ bool dungeonDeleteObject(int y, int x) {
 
     dungeonLiteSpot(y, x);
 
-    return caveTileVisible(y, x);
+    return caveTileVisible(Coord_t{y, x});
 }
 
 static int monsterDeathItemDropType(uint32_t flags) {

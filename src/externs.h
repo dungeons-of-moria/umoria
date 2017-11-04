@@ -275,7 +275,7 @@ int diceDamageRoll(int dice, int sides);
 int dicePlayerDamageRoll(uint8_t *notation_array);
 bool los(int from_y, int from_x, int to_y, int to_x);
 char caveGetTileSymbol(Coord_t coord);
-bool caveTileVisible(int y, int x);
+bool caveTileVisible(Coord_t coord);
 void drawDungeonPanel();
 bool compactMonsters();
 void playerIngestFood(int amount);
