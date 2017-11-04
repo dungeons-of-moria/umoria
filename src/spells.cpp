@@ -174,7 +174,7 @@ bool spellDetectInvisibleCreaturesOnPanel() {
     for (int id = next_free_monster_id - 1; id >= MON_MIN_INDEX_ID; id--) {
         Monster_t &monster = monsters[id];
 
-        if (coordInsidePanel((int) monster.y, (int) monster.x) && ((CM_INVISIBLE & creatures_list[monster.creature_id].movement) != 0u)) {
+        if (coordInsidePanel(Coord_t{monster.y, monster.x}) && ((CM_INVISIBLE & creatures_list[monster.creature_id].movement) != 0u)) {
             monster.lit = true;
 
             // works correctly even if hallucinating
@@ -459,7 +459,7 @@ bool spellDetectMonsters() {
     for (int id = next_free_monster_id - 1; id >= MON_MIN_INDEX_ID; id--) {
         Monster_t &monster = monsters[id];
 
-        if (coordInsidePanel((int) monster.y, (int) monster.x) && (CM_INVISIBLE & creatures_list[monster.creature_id].movement) == 0) {
+        if (coordInsidePanel(Coord_t{monster.y, monster.x}) && (CM_INVISIBLE & creatures_list[monster.creature_id].movement) == 0) {
             monster.lit = true;
             detected = true;
 
@@ -523,7 +523,7 @@ void spellLightLine(int x, int y, int direction) {
             tile.permanent_light = true;
 
             if (tile.feature_id == TILE_LIGHT_FLOOR) {
-                if (coordInsidePanel(y, x)) {
+                if (coordInsidePanel(Coord_t{y, x})) {
                     dungeonLightRoom(y, x);
                 }
             } else {
@@ -719,7 +719,7 @@ void spellFireBolt(int y, int x, int direction, int damage_hp, int spell_type, c
         if (tile.creature_id > 1) {
             finished = true;
             spellFireBoltTouchesMonster(tile, damage_hp, harm_type, weapon_type, spell_name);
-        } else if (coordInsidePanel(y, x) && py.flags.blind < 1) {
+        } else if (coordInsidePanel(Coord_t{y, x}) && py.flags.blind < 1) {
             panelPutTile('*', Coord_t{y, x});
 
             // show the bolt
@@ -809,7 +809,7 @@ void spellFireBall(int y, int x, int direction, int damage_hp, int spell_type, c
                                     total_kills++;
                                 }
                                 tile->permanent_light = saved_lit_status;
-                            } else if (coordInsidePanel(row, col) && py.flags.blind < 1) {
+                            } else if (coordInsidePanel(Coord_t{row, col}) && py.flags.blind < 1) {
                                 panelPutTile('*', Coord_t{row, col});
                             }
                         }
@@ -822,7 +822,7 @@ void spellFireBall(int y, int x, int direction, int damage_hp, int spell_type, c
 
             for (int row = (y - 2); row <= (y + 2); row++) {
                 for (int col = (x - 2); col <= (x + 2); col++) {
-                    if (coordInBounds(Coord_t{row, col}) && coordInsidePanel(row, col) && coordDistanceBetween(y, x, row, col) <= max_distance) {
+                    if (coordInBounds(Coord_t{row, col}) && coordInsidePanel(Coord_t{row, col}) && coordDistanceBetween(y, x, row, col) <= max_distance) {
                         dungeonLiteSpot(row, col);
                     }
                 }
@@ -848,7 +848,7 @@ void spellFireBall(int y, int x, int direction, int damage_hp, int spell_type, c
                 displayCharacterExperience();
             }
             // End ball hitting.
-        } else if (coordInsidePanel(y, x) && py.flags.blind < 1) {
+        } else if (coordInsidePanel(Coord_t{y, x}) && py.flags.blind < 1) {
             panelPutTile('*', Coord_t{y, x});
 
             // show bolt
@@ -880,7 +880,7 @@ void spellBreath(int y, int x, int monster_id, int damage_hp, int spell_type, ch
                     // must test status bit, not py.flags.blind here, flag could have
                     // been set by a previous monster, but the breath should still
                     // be visible until the blindness takes effect
-                    if (coordInsidePanel(row, col) && ((py.flags.status & PY_BLIND) == 0u)) {
+                    if (coordInsidePanel(Coord_t{row, col}) && ((py.flags.status & PY_BLIND) == 0u)) {
                         panelPutTile('*', Coord_t{row, col});
                     }
 
@@ -963,7 +963,7 @@ void spellBreath(int y, int x, int monster_id, int damage_hp, int spell_type, ch
 
     for (int row = (y - 2); row <= (y + 2); row++) {
         for (int col = (x - 2); col <= (x + 2); col++) {
-            if (coordInBounds(Coord_t{row, col}) && coordInsidePanel(row, col) && coordDistanceBetween(y, x, row, col) <= max_distance) {
+            if (coordInBounds(Coord_t{row, col}) && coordInsidePanel(Coord_t{row, col}) && coordDistanceBetween(y, x, row, col) <= max_distance) {
                 dungeonLiteSpot(row, col);
             }
         }
@@ -1283,7 +1283,7 @@ bool spellWallToMud(int y, int x, int direction) {
         } else if (tile.treasure_id != 0 && tile.feature_id >= MIN_CLOSED_SPACE) {
             finished = true;
 
-            if (coordInsidePanel(y, x) && caveTileVisible(y, x)) {
+            if (coordInsidePanel(Coord_t{y, x}) && caveTileVisible(y, x)) {
                 turned = true;
 
                 obj_desc_t description = {'\0'};
@@ -1403,7 +1403,7 @@ bool spellPolymorphMonster(int y, int x, int direction) {
                 morphed = monsterPlaceNew(y, x, randomNumber(monster_levels[MON_MAX_LEVELS] - monster_levels[0]) - 1 + monster_levels[0], false);
 
                 // don't test tile.field_mark here, only permanent_light/temporary_light
-                if (morphed && coordInsidePanel(y, x) && (tile.temporary_light || tile.permanent_light)) {
+                if (morphed && coordInsidePanel(Coord_t{y, x}) && (tile.temporary_light || tile.permanent_light)) {
                     morphed = true;
                 }
             } else {
@@ -1764,7 +1764,7 @@ bool spellDetectEvil() {
     for (int id = next_free_monster_id - 1; id >= MON_MIN_INDEX_ID; id--) {
         Monster_t &monster = monsters[id];
 
-        if (coordInsidePanel((int) monster.y, (int) monster.x) && ((CD_EVIL & creatures_list[monster.creature_id].defenses) != 0)) {
+        if (coordInsidePanel(Coord_t{monster.y, monster.x}) && ((CD_EVIL & creatures_list[monster.creature_id].defenses) != 0)) {
             monster.lit = true;
 
             detected = true;

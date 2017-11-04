@@ -1320,7 +1320,7 @@ bool dungeonTunnelWall(int y, int x, int digging_ability, int digging_chance) {
 
     tile.field_mark = false;
 
-    if (coordInsidePanel(y, x) && (tile.temporary_light || tile.permanent_light) && tile.treasure_id != 0) {
+    if (coordInsidePanel(Coord_t{y, x}) && (tile.temporary_light || tile.permanent_light) && tile.treasure_id != 0) {
         printMessage("You have found something!");
     }
 

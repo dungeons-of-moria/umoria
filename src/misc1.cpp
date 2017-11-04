@@ -197,9 +197,9 @@ bool coordOutsidePanel(Coord_t coord, bool force) {
 }
 
 // Is the given coordinate within the screen panel boundaries -RAK-
-bool coordInsidePanel(int y, int x) {
-    bool valid_y = y >= panel_row_min && y <= panel_row_max;
-    bool valid_x = x >= panel_col_min && x <= panel_col_max;
+bool coordInsidePanel(Coord_t coord) {
+    bool valid_y = coord.y >= panel_row_min && coord.y <= panel_row_max;
+    bool valid_x = coord.x >= panel_col_min && coord.x <= panel_col_max;
 
     return valid_y && valid_x;
 }

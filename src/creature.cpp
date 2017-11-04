@@ -37,7 +37,7 @@ void monsterUpdateVisibility(int monster_id) {
     bool visible = false;
     Monster_t &monster = monsters[monster_id];
 
-    if (monster.distance_from_player <= MON_MAX_SIGHT && ((py.flags.status & PY_BLIND) == 0u) && coordInsidePanel((int) monster.y, (int) monster.x)) {
+    if (monster.distance_from_player <= MON_MAX_SIGHT && ((py.flags.status & PY_BLIND) == 0u) && coordInsidePanel(Coord_t{monster.y, monster.x})) {
         if (wizard_mode) {
             // Wizard sight.
             visible = true;

@@ -612,7 +612,7 @@ static bool lookSee(int x, int y, bool &transparent) {
     y = char_row + los_fyx * x + los_fyy * y;
     x = j;
 
-    if (!coordInsidePanel(y, x)) {
+    if (!coordInsidePanel(Coord_t{y, x})) {
         transparent = false;
         return false;
     }
@@ -965,7 +965,7 @@ void playerThrowItem() {
             } else {
                 // do not test tile.field_mark here
 
-                if (coordInsidePanel(y, x) && py.flags.blind < 1 && (tile.temporary_light || tile.permanent_light)) {
+                if (coordInsidePanel(Coord_t{y, x}) && py.flags.blind < 1 && (tile.temporary_light || tile.permanent_light)) {
                     panelPutTile(tile_char, Coord_t{y, x});
                     putQIO(); // show object moving
                 }

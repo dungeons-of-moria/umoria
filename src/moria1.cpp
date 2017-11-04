@@ -1723,7 +1723,7 @@ void dungeonLightRoom(int pos_y, int pos_x) {
 
 // Lights up given location -RAK-
 void dungeonLiteSpot(int y, int x) {
-    if (!coordInsidePanel(y, x)) {
+    if (!coordInsidePanel(Coord_t{y, x})) {
         return;
     }
 
