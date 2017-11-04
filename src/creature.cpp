@@ -1061,7 +1061,7 @@ static void monsterAllowedToMove(Monster_t &monster, uint32_t move_bits, bool &d
 
     monster.y = (uint8_t) y;
     monster.x = (uint8_t) x;
-    monster.distance_from_player = (uint8_t) coordDistanceBetween(char_row, char_col, y, x);
+    monster.distance_from_player = (uint8_t) coordDistanceBetween(Coord_t{char_row, char_col}, Coord_t{y, x});
 
     do_turn = true;
 }
@@ -1761,7 +1761,7 @@ void updateMonsters(bool attack) {
             continue;
         }
 
-        monster.distance_from_player = (uint8_t) coordDistanceBetween(char_row, char_col, (int) monster.y, (int) monster.x);
+        monster.distance_from_player = (uint8_t) coordDistanceBetween(Coord_t{char_row, char_col}, Coord_t{monster.y, monster.x});
 
         // Attack is argument passed to CREATURE
         if (attack) {

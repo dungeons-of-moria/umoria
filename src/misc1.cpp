@@ -205,13 +205,13 @@ bool coordInsidePanel(Coord_t coord) {
 }
 
 // Distance between two points -RAK-
-int coordDistanceBetween(int y1, int x1, int y2, int x2) {
-    int dy = y1 - y2;
+int coordDistanceBetween(Coord_t coord_a, Coord_t coord_b) {
+    int dy = coord_a.y - coord_b.y;
     if (dy < 0) {
         dy = -dy;
     }
 
-    int dx = x1 - x2;
+    int dx = coord_a.x - coord_b.x;
     if (dx < 0) {
         dx = -dx;
     }
@@ -623,7 +623,7 @@ bool monsterPlaceNew(int y, int x, int creature_id, bool sleeping) {
     // the creatures_list[] speed value is 10 greater, so that it can be a uint8_t
     monster.speed = (int16_t) (creatures_list[creature_id].speed - 10 + py.flags.speed);
     monster.stunned_amount = 0;
-    monster.distance_from_player = (uint8_t) coordDistanceBetween(char_row, char_col, y, x);
+    monster.distance_from_player = (uint8_t) coordDistanceBetween(Coord_t{char_row, char_col}, Coord_t{y, x});
     monster.lit = false;
 
     cave[y][x].creature_id = (uint8_t) monster_id;
@@ -651,7 +651,7 @@ void monsterPlaceWinning() {
     do {
         y = randomNumber(dungeon_height - 2);
         x = randomNumber(dungeon_width - 2);
-    } while ((cave[y][x].feature_id >= MIN_CLOSED_SPACE) || (cave[y][x].creature_id != 0) || (cave[y][x].treasure_id != 0) || (coordDistanceBetween(y, x, char_row, char_col) <= MON_MAX_SIGHT));
+    } while ((cave[y][x].feature_id >= MIN_CLOSED_SPACE) || (cave[y][x].creature_id != 0) || (cave[y][x].treasure_id != 0) || (coordDistanceBetween(Coord_t{y, x}, Coord_t{char_row, char_col}) <= MON_MAX_SIGHT));
 
     int creature_id = randomNumber(MON_ENDGAME_MONSTERS) - 1 + monster_levels[MON_MAX_LEVELS];
 
@@ -683,7 +683,7 @@ void monsterPlaceWinning() {
     // the creatures_list speed value is 10 greater, so that it can be a uint8_t
     monster.speed = (int16_t) (creatures_list[creature_id].speed - 10 + py.flags.speed);
     monster.stunned_amount = 0;
-    monster.distance_from_player = (uint8_t) coordDistanceBetween(char_row, char_col, y, x);
+    monster.distance_from_player = (uint8_t) coordDistanceBetween(Coord_t{char_row, char_col}, Coord_t{y, x});
 
     cave[y][x].creature_id = (uint8_t) monster_id;
 
@@ -734,7 +734,7 @@ void monsterPlaceNewWithinDistance(int number, int distance_from_source, bool sl
         do {
             y = randomNumber(dungeon_height - 2);
             x = randomNumber(dungeon_width - 2);
-        } while (cave[y][x].feature_id >= MIN_CLOSED_SPACE || cave[y][x].creature_id != 0 || coordDistanceBetween(y, x, char_row, char_col) <= distance_from_source);
+        } while (cave[y][x].feature_id >= MIN_CLOSED_SPACE || cave[y][x].creature_id != 0 || coordDistanceBetween(Coord_t{y, x}, Coord_t{char_row, char_col}) <= distance_from_source);
 
         int l = monsterGetOneSuitableForLevel(current_dungeon_level);
 
@@ -817,7 +817,7 @@ static void compactObjects() {
     while (counter <= 0) {
         for (int y = 0; y < dungeon_height; y++) {
             for (int x = 0; x < dungeon_width; x++) {
-                if (cave[y][x].treasure_id != 0 && coordDistanceBetween(y, x, char_row, char_col) > current_distance) {
+                if (cave[y][x].treasure_id != 0 && coordDistanceBetween(Coord_t{y, x}, Coord_t{char_row, char_col}) > current_distance) {
                     int chance;
 
                     switch (treasure_list[cave[y][x].treasure_id].category_id) {

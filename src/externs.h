@@ -268,7 +268,7 @@ int getAndClearFirstBit(uint32_t &flag);
 bool coordInBounds(Coord_t coord);
 bool coordOutsidePanel(Coord_t coord, bool force);
 bool coordInsidePanel(Coord_t coord);
-int coordDistanceBetween(int y1, int x1, int y2, int x2);
+int coordDistanceBetween(Coord_t coord_a, Coord_t coord_b);
 int coordWallsNextTo(int y, int x);
 int coordCorridorWallsNextTo(int y, int x);
 int diceDamageRoll(int dice, int sides);

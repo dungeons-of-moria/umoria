@@ -771,7 +771,7 @@ void spellFireBall(int y, int x, int direction, int damage_hp, int spell_type, c
             // The explosion.
             for (int row = y - max_distance; row <= y + max_distance; row++) {
                 for (int col = x - max_distance; col <= x + max_distance; col++) {
-                    if (coordInBounds(Coord_t{row, col}) && coordDistanceBetween(y, x, row, col) <= max_distance && los(y, x, row, col)) {
+                    if (coordInBounds(Coord_t{row, col}) && coordDistanceBetween(Coord_t{y, x}, Coord_t{row, col}) <= max_distance && los(y, x, row, col)) {
                         tile = &cave[row][col];
 
                         if (tile->treasure_id != 0 && (*destroy)(&treasure_list[tile->treasure_id])) {
@@ -803,7 +803,7 @@ void spellFireBall(int y, int x, int direction, int damage_hp, int spell_type, c
                                     }
                                 }
 
-                                damage = (damage / (coordDistanceBetween(row, col, y, x) + 1));
+                                damage = (damage / (coordDistanceBetween(Coord_t{row, col}, Coord_t{y, x}) + 1));
 
                                 if (monsterTakeHit((int) tile->creature_id, damage) >= 0) {
                                     total_kills++;
@@ -822,7 +822,7 @@ void spellFireBall(int y, int x, int direction, int damage_hp, int spell_type, c
 
             for (int row = (y - 2); row <= (y + 2); row++) {
                 for (int col = (x - 2); col <= (x + 2); col++) {
-                    if (coordInBounds(Coord_t{row, col}) && coordInsidePanel(Coord_t{row, col}) && coordDistanceBetween(y, x, row, col) <= max_distance) {
+                    if (coordInBounds(Coord_t{row, col}) && coordInsidePanel(Coord_t{row, col}) && coordDistanceBetween(Coord_t{y, x}, Coord_t{row, col}) <= max_distance) {
                         dungeonLiteSpot(row, col);
                     }
                 }
@@ -869,7 +869,7 @@ void spellBreath(int y, int x, int monster_id, int damage_hp, int spell_type, ch
 
     for (int row = y - 2; row <= y + 2; row++) {
         for (int col = x - 2; col <= x + 2; col++) {
-            if (coordInBounds(Coord_t{row, col}) && coordDistanceBetween(y, x, row, col) <= max_distance && los(y, x, row, col)) {
+            if (coordInBounds(Coord_t{row, col}) && coordDistanceBetween(Coord_t{y, x}, Coord_t{row, col}) <= max_distance && los(y, x, row, col)) {
                 const Cave_t &tile = cave[row][col];
 
                 if (tile.treasure_id != 0 && (*destroy)(&treasure_list[tile.treasure_id])) {
@@ -896,7 +896,7 @@ void spellBreath(int y, int x, int monster_id, int damage_hp, int spell_type, ch
                             damage = (damage / 4);
                         }
 
-                        damage = (damage / (coordDistanceBetween(row, col, y, x) + 1));
+                        damage = (damage / (coordDistanceBetween(Coord_t{row, col}, Coord_t{y, x}) + 1));
 
                         // can not call monsterTakeHit here, since player does not
                         // get experience for kill
@@ -925,7 +925,7 @@ void spellBreath(int y, int x, int monster_id, int damage_hp, int spell_type, ch
                             }
                         }
                     } else if (tile.creature_id == 1) {
-                        int damage = (damage_hp / (coordDistanceBetween(row, col, y, x) + 1));
+                        int damage = (damage_hp / (coordDistanceBetween(Coord_t{row, col}, Coord_t{y, x}) + 1));
 
                         // let's do at least one point of damage
                         // prevents randomNumber(0) problem with damagePoisonedGas, also
@@ -963,7 +963,7 @@ void spellBreath(int y, int x, int monster_id, int damage_hp, int spell_type, ch
 
     for (int row = (y - 2); row <= (y + 2); row++) {
         for (int col = (x - 2); col <= (x + 2); col++) {
-            if (coordInBounds(Coord_t{row, col}) && coordInsidePanel(Coord_t{row, col}) && coordDistanceBetween(y, x, row, col) <= max_distance) {
+            if (coordInBounds(Coord_t{row, col}) && coordInsidePanel(Coord_t{row, col}) && coordDistanceBetween(Coord_t{y, x}, Coord_t{row, col}) <= max_distance) {
                 dungeonLiteSpot(row, col);
             }
         }
@@ -1535,7 +1535,7 @@ void spellTeleportAwayMonster(int monster_id, int distance_from_player) {
     // this is necessary, because the creature is
     // not currently visible in its new position.
     monster.lit = false;
-    monster.distance_from_player = (uint8_t) coordDistanceBetween(char_row, char_col, y, x);
+    monster.distance_from_player = (uint8_t) coordDistanceBetween(Coord_t{char_row, char_col}, Coord_t{y, x});
 
     monsterUpdateVisibility(monster_id);
 }
@@ -2197,7 +2197,7 @@ void spellDestroyArea(int y, int x) {
         for (int pos_y = y - 15; pos_y <= y + 15; pos_y++) {
             for (int pos_x = x - 15; pos_x <= x + 15; pos_x++) {
                 if (coordInBounds(Coord_t{pos_y, pos_x}) && cave[pos_y][pos_x].feature_id != TILE_BOUNDARY_WALL) {
-                    int distance = coordDistanceBetween(pos_y, pos_x, y, x);
+                    int distance = coordDistanceBetween(Coord_t{pos_y, pos_x}, Coord_t{y, x});
 
                     // clear player's spot, but don't put wall there
                     if (distance == 0) {

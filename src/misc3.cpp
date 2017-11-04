@@ -2297,7 +2297,7 @@ void playerTeleport(int new_distance) {
         new_y = randomNumber(dungeon_height) - 1;
         new_x = randomNumber(dungeon_width) - 1;
 
-        while (coordDistanceBetween(new_y, new_x, char_row, char_col) > new_distance) {
+        while (coordDistanceBetween(Coord_t{new_y, new_x}, Coord_t{char_row, char_col}) > new_distance) {
             new_y += (char_row - new_y) / 2;
             new_x += (char_col - new_x) / 2;
         }
