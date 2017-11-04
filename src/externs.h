@@ -274,7 +274,7 @@ int coordCorridorWallsNextTo(Coord_t coord);
 int diceDamageRoll(int dice, int sides);
 int dicePlayerDamageRoll(uint8_t *notation_array);
 bool los(int from_y, int from_x, int to_y, int to_x);
-char caveGetTileSymbol(int y, int x);
+char caveGetTileSymbol(Coord_t coord);
 bool caveTileVisible(int y, int x);
 void drawDungeonPanel();
 bool compactMonsters();

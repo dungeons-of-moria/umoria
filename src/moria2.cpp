@@ -215,7 +215,7 @@ static bool playerCanSeeDungeonWall(int dir, int y, int x) {
         return true;
     }
 
-    char c = caveGetTileSymbol(y, x);
+    char c = caveGetTileSymbol(Coord_t{y, x});
 
     return c == '#' || c == '%';
 }
@@ -223,7 +223,7 @@ static bool playerCanSeeDungeonWall(int dir, int y, int x) {
 // Do we see anything? Used in running. -CJS-
 static bool playerSeeNothing(int dir, int y, int x) {
     // check to see if movement there possible
-    return playerMovePosition(dir, y, x) && caveGetTileSymbol(y, x) == ' ';
+    return playerMovePosition(dir, y, x) && caveGetTileSymbol(Coord_t{y, x}) == ' ';
 }
 
 static void findRunningBreak(int dir, int row, int col) {
@@ -303,7 +303,7 @@ void playerFindInitialize(int direction) {
     // of find mode, when the initial position of the character must be erased.
     // Hence we must do the erasure here.
     if (!py.temporary_light_only && !config.run_print_self) {
-        panelPutTile(caveGetTileSymbol(char_row, char_col), Coord_t{char_row, char_col});
+        panelPutTile(caveGetTileSymbol(Coord_t{char_row, char_col}), Coord_t{char_row, char_col});
     }
 
     playerMove(direction, true);

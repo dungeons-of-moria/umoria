@@ -2307,7 +2307,7 @@ void dungeonDisplayMap() {
 
         for (uint8_t x = 0; x < MAX_WIDTH; x++) {
             uint8_t col = x / RATIO;
-            char cave_char = caveGetTileSymbol(y, x);
+            char cave_char = caveGetTileSymbol(Coord_t{y, x});
             if (priority[(uint8_t) map[col]] < priority[(uint8_t) cave_char]) {
                 map[col] = cave_char;
             }

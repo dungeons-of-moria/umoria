@@ -450,10 +450,10 @@ bool los(int from_y, int from_x, int to_y, int to_x) {
 }
 
 // Returns symbol for given row, column -RAK-
-char caveGetTileSymbol(int y, int x) {
-    const Cave_t &cave_ptr = cave[y][x];
+char caveGetTileSymbol(Coord_t coord) {
+    const Cave_t &tile = cave[coord.y][coord.x];
 
-    if (cave_ptr.creature_id == 1 && ((py.running_tracker == 0) || config.run_print_self)) {
+    if (tile.creature_id == 1 && ((py.running_tracker == 0) || config.run_print_self)) {
         return '@';
     }
 
@@ -465,23 +465,23 @@ char caveGetTileSymbol(int y, int x) {
         return (uint8_t) (randomNumber(95) + 31);
     }
 
-    if (cave_ptr.creature_id > 1 && monsters[cave_ptr.creature_id].lit) {
-        return creatures_list[monsters[cave_ptr.creature_id].creature_id].sprite;
+    if (tile.creature_id > 1 && monsters[tile.creature_id].lit) {
+        return creatures_list[monsters[tile.creature_id].creature_id].sprite;
     }
 
-    if (!cave_ptr.permanent_light && !cave_ptr.temporary_light && !cave_ptr.field_mark) {
+    if (!tile.permanent_light && !tile.temporary_light && !tile.field_mark) {
         return ' ';
     }
 
-    if (cave_ptr.treasure_id != 0 && treasure_list[cave_ptr.treasure_id].category_id != TV_INVIS_TRAP) {
-        return treasure_list[cave_ptr.treasure_id].sprite;
+    if (tile.treasure_id != 0 && treasure_list[tile.treasure_id].category_id != TV_INVIS_TRAP) {
+        return treasure_list[tile.treasure_id].sprite;
     }
 
-    if (cave_ptr.feature_id <= MAX_CAVE_FLOOR) {
+    if (tile.feature_id <= MAX_CAVE_FLOOR) {
         return '.';
     }
 
-    if (cave_ptr.feature_id == TILE_GRANITE_WALL || cave_ptr.feature_id == TILE_BOUNDARY_WALL || !config.highlight_seams) {
+    if (tile.feature_id == TILE_GRANITE_WALL || tile.feature_id == TILE_BOUNDARY_WALL || !config.highlight_seams) {
         return '#';
     }
 
@@ -505,7 +505,7 @@ void drawDungeonPanel() {
 
         // Left to right
         for (int x = panel_col_min; x <= panel_col_max; x++) {
-            char ch = caveGetTileSymbol(y, x);
+            char ch = caveGetTileSymbol(Coord_t{y, x});
             if (ch != ' ') {
                 panelPutTile(ch, Coord_t{y, x});
             }
