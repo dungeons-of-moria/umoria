@@ -923,7 +923,7 @@ static void dungeonBuildTunnel(int y_start, int x_start, int y_end, int x_end) {
 }
 
 static bool dungeonIsNextTo(int y, int x) {
-    if (coordCorridorWallsNextTo(y, x) > 2) {
+    if (coordCorridorWallsNextTo(Coord_t{y, x}) > 2) {
         bool vertical = cave[y - 1][x].feature_id >= MIN_CAVE_WALL && cave[y + 1][x].feature_id >= MIN_CAVE_WALL;
         bool horizontal = cave[y][x - 1].feature_id >= MIN_CAVE_WALL && cave[y][x + 1].feature_id >= MIN_CAVE_WALL;
 

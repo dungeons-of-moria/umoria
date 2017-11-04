@@ -250,11 +250,11 @@ int coordWallsNextTo(Coord_t coord) {
 // Checks all adjacent spots for corridors -RAK-
 // note that y, x is always coordInBounds(), hence no need to check that
 // j, k are coordInBounds(), even if they are 0 or cur_x-1 is still works
-int coordCorridorWallsNextTo(int y, int x) {
+int coordCorridorWallsNextTo(Coord_t coord) {
     int walls = 0;
 
-    for (int yy = y - 1; yy <= y + 1; yy++) {
-        for (int xx = x - 1; xx <= x + 1; xx++) {
+    for (int yy = coord.y - 1; yy <= coord.y + 1; yy++) {
+        for (int xx = coord.x - 1; xx <= coord.x + 1; xx++) {
             int tile_id = cave[yy][xx].feature_id;
             int treasure_id = cave[yy][xx].treasure_id;
 
