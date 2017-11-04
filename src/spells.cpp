@@ -294,7 +294,7 @@ void spellMapCurrentArea() {
 
     for (int y = row_min; y <= row_max; y++) {
         for (int x = col_min; x <= col_max; x++) {
-            if (coordInBounds(y, x) && cave[y][x].feature_id <= MAX_CAVE_FLOOR) {
+            if (coordInBounds(Coord_t{y, x}) && cave[y][x].feature_id <= MAX_CAVE_FLOOR) {
                 dungeonLightAreaAroundFloorTile(y, x);
             }
         }
@@ -771,7 +771,7 @@ void spellFireBall(int y, int x, int direction, int damage_hp, int spell_type, c
             // The explosion.
             for (int row = y - max_distance; row <= y + max_distance; row++) {
                 for (int col = x - max_distance; col <= x + max_distance; col++) {
-                    if (coordInBounds(row, col) && coordDistanceBetween(y, x, row, col) <= max_distance && los(y, x, row, col)) {
+                    if (coordInBounds(Coord_t{row, col}) && coordDistanceBetween(y, x, row, col) <= max_distance && los(y, x, row, col)) {
                         tile = &cave[row][col];
 
                         if (tile->treasure_id != 0 && (*destroy)(&treasure_list[tile->treasure_id])) {
@@ -822,7 +822,7 @@ void spellFireBall(int y, int x, int direction, int damage_hp, int spell_type, c
 
             for (int row = (y - 2); row <= (y + 2); row++) {
                 for (int col = (x - 2); col <= (x + 2); col++) {
-                    if (coordInBounds(row, col) && coordInsidePanel(row, col) && coordDistanceBetween(y, x, row, col) <= max_distance) {
+                    if (coordInBounds(Coord_t{row, col}) && coordInsidePanel(row, col) && coordDistanceBetween(y, x, row, col) <= max_distance) {
                         dungeonLiteSpot(row, col);
                     }
                 }
@@ -869,7 +869,7 @@ void spellBreath(int y, int x, int monster_id, int damage_hp, int spell_type, ch
 
     for (int row = y - 2; row <= y + 2; row++) {
         for (int col = x - 2; col <= x + 2; col++) {
-            if (coordInBounds(row, col) && coordDistanceBetween(y, x, row, col) <= max_distance && los(y, x, row, col)) {
+            if (coordInBounds(Coord_t{row, col}) && coordDistanceBetween(y, x, row, col) <= max_distance && los(y, x, row, col)) {
                 const Cave_t &tile = cave[row][col];
 
                 if (tile.treasure_id != 0 && (*destroy)(&treasure_list[tile.treasure_id])) {
@@ -963,7 +963,7 @@ void spellBreath(int y, int x, int monster_id, int damage_hp, int spell_type, ch
 
     for (int row = (y - 2); row <= (y + 2); row++) {
         for (int col = (x - 2); col <= (x + 2); col++) {
-            if (coordInBounds(row, col) && coordInsidePanel(row, col) && coordDistanceBetween(y, x, row, col) <= max_distance) {
+            if (coordInBounds(Coord_t{row, col}) && coordInsidePanel(row, col) && coordDistanceBetween(y, x, row, col) <= max_distance) {
                 dungeonLiteSpot(row, col);
             }
         }
@@ -1517,7 +1517,7 @@ void spellTeleportAwayMonster(int monster_id, int distance_from_player) {
         do {
             y = monster.y + (randomNumber(2 * distance_from_player + 1) - (distance_from_player + 1));
             x = monster.x + (randomNumber(2 * distance_from_player + 1) - (distance_from_player + 1));
-        } while (!coordInBounds(y, x));
+        } while (!coordInBounds(Coord_t{y, x}));
 
         counter++;
         if (counter > 9) {
@@ -1554,7 +1554,7 @@ void spellTeleportPlayerTo(int y, int x) {
             counter = 0;
             distance++;
         }
-    } while (!coordInBounds(to_y, to_x) || (cave[to_y][to_x].feature_id >= MIN_CLOSED_SPACE) || (cave[to_y][to_x].creature_id >= 2));
+    } while (!coordInBounds(Coord_t{to_y, to_x}) || (cave[to_y][to_x].feature_id >= MIN_CLOSED_SPACE) || (cave[to_y][to_x].creature_id >= 2));
 
     dungeonMoveCreatureRecord(char_row, char_col, to_y, to_x);
 
@@ -1888,7 +1888,7 @@ static void earthquakeHitsMonster(int monsterID) {
 void dungeonEarthquake() {
     for (int y = char_row - 8; y <= char_row + 8; y++) {
         for (int x = char_col - 8; x <= char_col + 8; x++) {
-            if ((y != char_row || x != char_col) && coordInBounds(y, x) && randomNumber(8) == 1) {
+            if ((y != char_row || x != char_col) && coordInBounds(Coord_t{y, x}) && randomNumber(8) == 1) {
                 Cave_t &tile = cave[y][x];
 
                 if (tile.treasure_id != 0) {
@@ -2196,7 +2196,7 @@ void spellDestroyArea(int y, int x) {
     if (current_dungeon_level > 0) {
         for (int pos_y = y - 15; pos_y <= y + 15; pos_y++) {
             for (int pos_x = x - 15; pos_x <= x + 15; pos_x++) {
-                if (coordInBounds(pos_y, pos_x) && cave[pos_y][pos_x].feature_id != TILE_BOUNDARY_WALL) {
+                if (coordInBounds(Coord_t{pos_y, pos_x}) && cave[pos_y][pos_x].feature_id != TILE_BOUNDARY_WALL) {
                     int distance = coordDistanceBetween(pos_y, pos_x, y, x);
 
                     // clear player's spot, but don't put wall there

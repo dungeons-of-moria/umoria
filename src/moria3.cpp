@@ -544,7 +544,7 @@ static int dungeonSummonObject(int y, int x, int amount, int object_type) {
             int pos_y = y - 3 + randomNumber(5);
             int pos_x = x - 3 + randomNumber(5);
 
-            if (coordInBounds(pos_y, pos_x) && los(y, x, pos_y, pos_x)) {
+            if (coordInBounds(Coord_t{pos_y, pos_x}) && los(y, x, pos_y, pos_x)) {
                 if (cave[pos_y][pos_x].feature_id <= MAX_OPEN_SPACE && cave[pos_y][pos_x].treasure_id == 0) {
                     // object_type == 3 -> 50% objects, 50% gold
                     if (object_type == 3 || object_type == 7) {

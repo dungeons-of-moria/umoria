@@ -145,7 +145,7 @@ static void dungeonPlaceStreamerRock(uint8_t rock_type, int chance_of_treasure) 
             int y = pos_y + randomNumber(t1) - t2;
             int x = pos_x + randomNumber(t1) - t2;
 
-            if (coordInBounds(y, x)) {
+            if (coordInBounds(Coord_t{y, x})) {
                 if (cave[y][x].feature_id == TILE_GRANITE_WALL) {
                     cave[y][x].feature_id = rock_type;
 
@@ -819,7 +819,7 @@ static void dungeonBuildTunnel(int y_start, int x_start, int y_end, int x_end) {
         int tmp_row = y_start + row_dir;
         int tmp_col = x_start + col_dir;
 
-        while (!coordInBounds(tmp_row, tmp_col)) {
+        while (!coordInBounds(Coord_t{tmp_row, tmp_col})) {
             if (randomNumber(DUN_RANDOM_DIR) == 1) {
                 chanceOfRandomDirection(row_dir, col_dir);
             } else {
@@ -855,7 +855,7 @@ static void dungeonBuildTunnel(int y_start, int x_start, int y_end, int x_end) {
 
                 for (int y = y_start - 1; y <= y_start + 1; y++) {
                     for (int x = x_start - 1; x <= x_start + 1; x++) {
-                        if (coordInBounds(y, x)) {
+                        if (coordInBounds(Coord_t{y, x})) {
                             // values 11 and 12 are impossible here, dungeonPlaceStreamerRock
                             // is never run before dungeonBuildTunnel
                             if (cave[y][x].feature_id == TILE_GRANITE_WALL) {

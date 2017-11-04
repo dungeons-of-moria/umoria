@@ -164,7 +164,7 @@ void dungeonPlaceRandomObjectNear(int y, int x, int tries) {
             int j = y - 3 + randomNumber(5);
             int k = x - 4 + randomNumber(7);
 
-            if (coordInBounds(j, k) && cave[j][k].feature_id <= MAX_CAVE_FLOOR && cave[j][k].treasure_id == 0) {
+            if (coordInBounds(Coord_t{j, k}) && cave[j][k].feature_id <= MAX_CAVE_FLOOR && cave[j][k].treasure_id == 0) {
                 if (randomNumber(100) < 75) {
                     dungeonPlaceRandomObjectAt(j, k, false);
                 } else {

@@ -823,7 +823,7 @@ static void inventoryDropOrThrowItem(int y, int x, Inventory_t *item) {
 
     if (randomNumber(10) > 1) {
         for (int k = 0; !flag && k <= 9;) {
-            if (coordInBounds(pos_y, pos_x)) {
+            if (coordInBounds(Coord_t{pos_y, pos_x})) {
                 if (cave[pos_y][pos_x].feature_id <= MAX_OPEN_SPACE && cave[pos_y][pos_x].treasure_id == 0) {
                     flag = true;
                 }

@@ -1368,7 +1368,7 @@ bool monsterMultiply(int y, int x, int creature_id, int monster_id) {
 
         // don't create a new creature on top of the old one, that
         // causes invincible/invisible creatures to appear.
-        if (coordInBounds(pos_y, pos_x) && (pos_y != y || pos_x != x)) {
+        if (coordInBounds(Coord_t{pos_y, pos_x}) && (pos_y != y || pos_x != x)) {
             const Cave_t &tile = cave[pos_y][pos_x];
 
             if (tile.feature_id <= MAX_OPEN_SPACE && tile.treasure_id == 0 && tile.creature_id != 1) {
@@ -1430,7 +1430,7 @@ static void monsterMultiplyCritter(const Monster_t &monster, int monster_id, uin
 
     for (int y = monster.y - 1; y <= monster.y + 1; y++) {
         for (int x = monster.x - 1; x <= monster.x + 1; x++) {
-            if (coordInBounds(y, x) && (cave[y][x].creature_id > 1)) {
+            if (coordInBounds(Coord_t{y, x}) && (cave[y][x].creature_id > 1)) {
                 counter++;
             }
         }

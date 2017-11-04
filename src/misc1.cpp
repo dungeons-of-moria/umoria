@@ -136,9 +136,9 @@ int getAndClearFirstBit(uint32_t &flag) {
 }
 
 // Checks a co-ordinate for in bounds status -RAK-
-bool coordInBounds(int y, int x) {
-    bool valid_y = y > 0 && y < dungeon_height - 1;
-    bool valid_x = x > 0 && x < dungeon_width - 1;
+bool coordInBounds(Coord_t coord) {
+    bool valid_y = coord.y > 0 && coord.y < dungeon_height - 1;
+    bool valid_x = coord.x > 0 && coord.x < dungeon_width - 1;
 
     return valid_y && valid_x;
 }
@@ -757,7 +757,7 @@ static bool placeMonsterAdjacentTo(int monsterID, int &y, int &x, bool slp) {
         int yy = y - 2 + randomNumber(3);
         int xx = x - 2 + randomNumber(3);
 
-        if (coordInBounds(yy, xx)) {
+        if (coordInBounds(Coord_t{yy, xx})) {
             if (cave[yy][xx].feature_id <= MAX_OPEN_SPACE && cave[yy][xx].creature_id == 0) {
                 // Place_monster() should always return true here.
                 if (!monsterPlaceNew(yy, xx, monsterID, slp)) {
