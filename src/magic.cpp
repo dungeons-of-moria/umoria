@@ -9,6 +9,41 @@
 #include "headers.h"
 #include "externs.h"
 
+// names based on spell_names[62] in data_player.cpp
+enum class MageSpellTypes {
+    magic_missile = 1,
+    detect_monsters,
+    phase_door,
+    light_area,
+    cure_light_wounds,
+    find_hidden_traps_doors,
+    stinking_cloud,
+    confusion,
+    lightning_bolt,
+    trap_door_destruction,
+    sleep_i,
+    cure_poison,
+    teleport_self,
+    remove_curse,
+    frost_bolt,
+    wall_to_mud,
+    create_food,
+    recharge_item_1,
+    sleep_ii,
+    polymorph_other,
+    identify_item,
+    sleep_iii,
+    fire_bolt,
+    speed_monster,
+    frost_ball,
+    recharge_item_ii,
+    teleport_other,
+    haste_self,
+    fire_ball,
+    word_of_destruction,
+    genocide,
+};
+
 static bool canReadSpells() {
     if (py.flags.blind > 0) {
         printMessage("You can't see to read your spell book!");
@@ -33,130 +68,130 @@ static bool canReadSpells() {
     return true;
 }
 
-static void castSpell(int spellID) {
+static void castSpell(int spell_id) {
     int dir;
 
-    switch (spellID) {
-        case 1:
+    switch ((MageSpellTypes) spell_id) {
+        case MageSpellTypes::magic_missile :
             if (getDirectionWithMemory(CNIL, dir)) {
                 spellFireBolt(char_row, char_col, dir, diceDamageRoll(2, 6), GF_MAGIC_MISSILE, spell_names[0]);
             }
             break;
-        case 2:
+        case MageSpellTypes::detect_monsters:
             (void) spellDetectMonsters();
             break;
-        case 3:
+        case MageSpellTypes::phase_door:
             playerTeleport(10);
             break;
-        case 4:
+        case MageSpellTypes::light_area:
             (void) spellLightArea(char_row, char_col);
             break;
-        case 5:
+        case MageSpellTypes::cure_light_wounds:
             (void) spellChangePlayerHitPoints(diceDamageRoll(4, 4));
             break;
-        case 6:
+        case MageSpellTypes::find_hidden_traps_doors:
             (void) dungeonDetectSecretDoorsOnPanel();
             (void) dungeonDetectTrapOnPanel();
             break;
-        case 7:
+        case MageSpellTypes::stinking_cloud:
             if (getDirectionWithMemory(CNIL, dir)) {
                 spellFireBall(char_row, char_col, dir, 12, GF_POISON_GAS, spell_names[6]);
             }
             break;
-        case 8:
+        case MageSpellTypes::confusion:
             if (getDirectionWithMemory(CNIL, dir)) {
                 (void) spellConfuseMonster(char_row, char_col, dir);
             }
             break;
-        case 9:
+        case MageSpellTypes::lightning_bolt:
             if (getDirectionWithMemory(CNIL, dir)) {
                 spellFireBolt(char_row, char_col, dir, diceDamageRoll(4, 8), GF_LIGHTNING, spell_names[8]);
             }
             break;
-        case 10:
+        case MageSpellTypes::trap_door_destruction:
             (void) spellDestroyAdjacentDoorsTraps();
             break;
-        case 11:
+        case MageSpellTypes::sleep_i:
             if (getDirectionWithMemory(CNIL, dir)) {
                 (void) spellSleepMonster(char_row, char_col, dir);
             }
             break;
-        case 12:
+        case MageSpellTypes::cure_poison:
             (void) playerCurePoison();
             break;
-        case 13:
+        case MageSpellTypes::teleport_self:
             playerTeleport((py.misc.level * 5));
             break;
-        case 14:
+        case MageSpellTypes::remove_curse:
             for (int id = 22; id < PLAYER_INVENTORY_SIZE; id++) {
                 inventory[id].flags = (uint32_t) (inventory[id].flags & ~TR_CURSED);
             }
             break;
-        case 15:
+        case MageSpellTypes::frost_bolt:
             if (getDirectionWithMemory(CNIL, dir)) {
                 spellFireBolt(char_row, char_col, dir, diceDamageRoll(6, 8), GF_FROST, spell_names[14]);
             }
             break;
-        case 16:
+        case MageSpellTypes::wall_to_mud:
             if (getDirectionWithMemory(CNIL, dir)) {
                 (void) spellWallToMud(char_row, char_col, dir);
             }
             break;
-        case 17:
+        case MageSpellTypes::create_food:
             spellCreateFood();
             break;
-        case 18:
+        case MageSpellTypes::recharge_item_1:
             (void) spellRechargeItem(20);
             break;
-        case 19:
+        case MageSpellTypes::sleep_ii:
             (void) monsterSleep(char_row, char_col);
             break;
-        case 20:
+        case MageSpellTypes::polymorph_other:
             if (getDirectionWithMemory(CNIL, dir)) {
                 (void) spellPolymorphMonster(char_row, char_col, dir);
             }
             break;
-        case 21:
+        case MageSpellTypes::identify_item:
             (void) spellIdentifyItem();
             break;
-        case 22:
+        case MageSpellTypes::sleep_iii:
             (void) spellSleepAllMonsters();
             break;
-        case 23:
+        case MageSpellTypes::fire_bolt:
             if (getDirectionWithMemory(CNIL, dir)) {
                 spellFireBolt(char_row, char_col, dir, diceDamageRoll(9, 8), GF_FIRE, spell_names[22]);
             }
             break;
-        case 24:
+        case MageSpellTypes::speed_monster:
             if (getDirectionWithMemory(CNIL, dir)) {
                 (void) spellSpeedMonster(char_row, char_col, dir, -1);
             }
             break;
-        case 25:
+        case MageSpellTypes::frost_ball:
             if (getDirectionWithMemory(CNIL, dir)) {
                 spellFireBall(char_row, char_col, dir, 48, GF_FROST, spell_names[24]);
             }
             break;
-        case 26:
+        case MageSpellTypes::recharge_item_ii:
             (void) spellRechargeItem(60);
             break;
-        case 27:
+        case MageSpellTypes::teleport_other:
             if (getDirectionWithMemory(CNIL, dir)) {
                 (void) spellTeleportAwayMonsterInDirection(char_row, char_col, dir);
             }
             break;
-        case 28:
+        case MageSpellTypes::haste_self:
             py.flags.fast += randomNumber(20) + py.misc.level;
             break;
-        case 29:
+        case MageSpellTypes::fire_ball:
             if (getDirectionWithMemory(CNIL, dir)) {
                 spellFireBall(char_row, char_col, dir, 72, GF_FIRE, spell_names[28]);
             }
             break;
-        case 30:
+        case MageSpellTypes::word_of_destruction:
             spellDestroyArea(char_row, char_col);
             break;
-        case 31:
+        case MageSpellTypes::genocide:
             (void) spellGenocide();
             break;
         default:

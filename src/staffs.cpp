@@ -9,31 +9,34 @@
 #include "headers.h"
 #include "externs.h"
 
-enum Spells {
-    LIGHT_AREA = 1,
-    DETECT_SECRET_DOORS,
-    DETECT_TRAPS,
-    DETECT_TREASURE,
-    DETECT_OBJECTS,
-    TELEPORT_PLAYER,
-    EARTHQUAKE,
-    SUMMON_MONSTER,
-    DESTROY_AREA = 10,
-    STARLITE,
-    MONSTERS_FASTER,
-    MONSTERS_SLOWER,
-    SLEEP_MONSTERS,
-    CHANGE_PLAYER_HP,
-    DETECT_INVISIBLE_CREATURES,
-    PLAYER_FASTER,
-    PLAYER_SLOWER,
-    MASS_POLYMORPH,
-    REMOVE_CURSE,
-    DETECT_EVIL,
-    CURE_PLAYER,
-    DISPEL_CREATURE,
-    DARKEN_AREA = 25,
-    STORE_BOUGHT_FLAG = 32
+enum class StaffSpellTypes {
+    light = 1,
+    detect_doors_stairs,
+    trap_location,
+    treasure_location,
+    object_location,
+    teleportation,
+    earthquakes,
+    summoning,
+    // skipping 9
+    destruction = 10,
+    starlight,
+    haste_monsters,
+    slow_monsters,
+    sleep_monsters,
+    cure_light_wounds,
+    detect_invisible,
+    speed,
+    slowness,
+    mass_polymorph,
+    remove_curse,
+    detect_evil,
+    curing,
+    dispel_evil,
+    // skipping 24
+    darkness = 25,
+    // skipping lots...
+    store_bought_flag = 32,
 };
 
 static bool staffPlayerIsCarrying(int &item_pos_start, int &item_pos_end) {
@@ -92,33 +95,31 @@ static bool staffDischarge(Inventory_t &item) {
 
     uint32_t flags = item.flags;
     while (flags != 0) {
-        int staff_type = getAndClearFirstBit(flags) + 1;
-
-        switch (staff_type) {
-            case LIGHT_AREA:
+        switch ((StaffSpellTypes) (getAndClearFirstBit(flags) + 1)) {
+            case StaffSpellTypes::light:
                 identified = spellLightArea(char_row, char_col);
                 break;
-            case DETECT_SECRET_DOORS:
+            case StaffSpellTypes::detect_doors_stairs:
                 identified = dungeonDetectSecretDoorsOnPanel();
                 break;
-            case DETECT_TRAPS:
+            case StaffSpellTypes::trap_location:
                 identified = dungeonDetectTrapOnPanel();
                 break;
-            case DETECT_TREASURE:
+            case StaffSpellTypes::treasure_location:
                 identified = dungeonDetectTreasureOnPanel();
                 break;
-            case DETECT_OBJECTS:
+            case StaffSpellTypes::object_location:
                 identified = dungeonDetectObjectOnPanel();
                 break;
-            case TELEPORT_PLAYER:
+            case StaffSpellTypes::teleportation:
                 playerTeleport(100);
                 identified = true;
                 break;
-            case EARTHQUAKE:
+            case StaffSpellTypes::earthquakes:
                 identified = true;
                 dungeonEarthquake();
                 break;
-            case SUMMON_MONSTER:
+            case StaffSpellTypes::summoning:
                 identified = false;
 
                 for (int i = 0; i < randomNumber(4); i++) {
@@ -127,45 +128,45 @@ static bool staffDischarge(Inventory_t &item) {
                     identified |= monsterSummon(y, x, false);
                 }
                 break;
-            case DESTROY_AREA:
+            case StaffSpellTypes::destruction:
                 identified = true;
                 spellDestroyArea(char_row, char_col);
                 break;
-            case STARLITE:
+            case StaffSpellTypes::starlight:
                 identified = true;
                 spellStarlite(char_row, char_col);
                 break;
-            case MONSTERS_FASTER:
+            case StaffSpellTypes::haste_monsters:
                 identified = spellSpeedAllMonsters(1);
                 break;
-            case MONSTERS_SLOWER:
+            case StaffSpellTypes::slow_monsters:
                 identified = spellSpeedAllMonsters(-1);
                 break;
-            case SLEEP_MONSTERS:
+            case StaffSpellTypes::sleep_monsters:
                 identified = spellSleepAllMonsters();
                 break;
-            case CHANGE_PLAYER_HP:
+            case StaffSpellTypes::cure_light_wounds:
                 identified = spellChangePlayerHitPoints(randomNumber(8));
                 break;
-            case DETECT_INVISIBLE_CREATURES:
+            case StaffSpellTypes::detect_invisible:
                 identified = spellDetectInvisibleCreaturesOnPanel();
                 break;
-            case PLAYER_FASTER:
+            case StaffSpellTypes::speed:
                 if (py.flags.fast == 0) {
                     identified = true;
                 }
                 py.flags.fast += randomNumber(30) + 15;
                 break;
-            case PLAYER_SLOWER:
+            case StaffSpellTypes::slowness:
                 if (py.flags.slow == 0) {
                     identified = true;
                 }
                 py.flags.slow += randomNumber(30) + 15;
                 break;
-            case MASS_POLYMORPH:
+            case StaffSpellTypes::mass_polymorph:
                 identified = spellMassPolymorph();
                 break;
-            case REMOVE_CURSE:
+            case StaffSpellTypes::remove_curse:
                 if (spellRemoveCurseFromAllItems()) {
                     if (py.flags.blind < 1) {
                         printMessage("The staff glows blue for a moment..");
@@ -173,21 +174,21 @@ static bool staffDischarge(Inventory_t &item) {
                     identified = true;
                 }
                 break;
-            case DETECT_EVIL:
+            case StaffSpellTypes::detect_evil:
                 identified = spellDetectEvil();
                 break;
-            case CURE_PLAYER:
+            case StaffSpellTypes::curing:
                 if (playerCureBlindness() || playerCurePoison() || playerCureConfusion()) {
                     identified = true;
                 }
                 break;
-            case DISPEL_CREATURE:
+            case StaffSpellTypes::dispel_evil:
                 identified = spellDispelCreature(CD_EVIL, 60);
                 break;
-            case DARKEN_AREA:
+            case StaffSpellTypes::darkness:
                 identified = spellDarkenArea(char_row, char_col);
                 break;
-            case STORE_BOUGHT_FLAG:
+            case StaffSpellTypes::store_bought_flag:
                 // store bought flag
                 break;
             default:
