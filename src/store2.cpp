@@ -83,9 +83,7 @@ static void displayStoreHaggleCommands(int haggle_type) {
 }
 
 // Displays a store's inventory -RAK-
-static void displayStoreInventory(int store_id, int item_pos_start) {
-    Store_t &store = stores[store_id];
-
+static void displayStoreInventory(Store_t &store, int item_pos_start) {
     int item_pos_end = ((item_pos_start / 12) + 1) * 12;
     if (item_pos_end > store.store_id) {
         item_pos_end = store.store_id;
@@ -167,14 +165,14 @@ static void displayPlayerRemainingGold() {
 }
 
 // Displays store -RAK-
-static void displayStore(int store_id, const char *owner_name, int current_top_item_id) {
+static void displayStore(Store_t &store, const char *owner_name, int current_top_item_id) {
     clearScreen();
     putString(owner_name, Coord_t{3, 9});
     putString("Item", Coord_t{4, 3});
     putString("Asking Price", Coord_t{4, 60});
     displayPlayerRemainingGold();
     displayStoreCommands();
-    displayStoreInventory(store_id, current_top_item_id);
+    displayStoreInventory(store, current_top_item_id);
 }
 
 // Get the ID of a store item and return it's value -RAK-
@@ -793,7 +791,7 @@ static bool storePurchaseAnItem(int store_id, int &current_top_item_id) {
 
             if (current_top_item_id >= store.store_id) {
                 current_top_item_id = 0;
-                displayStoreInventory(store_id, current_top_item_id);
+                displayStoreInventory(stores[store_id], current_top_item_id);
             } else {
                 InventoryRecord_t &store_item = store.inventory[item_id];
 
@@ -803,7 +801,7 @@ static bool storePurchaseAnItem(int store_id, int &current_top_item_id) {
                         displaySingleCost(store_id, item_id);
                     }
                 } else {
-                    displayStoreInventory(store_id, item_id);
+                    displayStoreInventory(stores[store_id], item_id);
                 }
             }
             displayPlayerRemainingGold();
@@ -914,16 +912,16 @@ static bool storeSellAnItem(int store_id, int &current_top_item_id) {
         if (item_pos_id >= 0) {
             if (item_pos_id < 12) {
                 if (current_top_item_id < 12) {
-                    displayStoreInventory(store_id, item_pos_id);
+                    displayStoreInventory(stores[store_id], item_pos_id);
                 } else {
                     current_top_item_id = 0;
-                    displayStoreInventory(store_id, current_top_item_id);
+                    displayStoreInventory(stores[store_id], current_top_item_id);
                 }
             } else if (current_top_item_id > 11) {
-                displayStoreInventory(store_id, item_pos_id);
+                displayStoreInventory(stores[store_id], item_pos_id);
             } else {
                 current_top_item_id = 12;
-                displayStoreInventory(store_id, current_top_item_id);
+                displayStoreInventory(stores[store_id], current_top_item_id);
             }
         }
         displayPlayerRemainingGold();
@@ -952,7 +950,7 @@ void storeEnter(int store_id) {
     }
 
     int current_top_item_id = 0;
-    displayStore(store_id, store_owners[store.owner].name, current_top_item_id);
+    displayStore(stores[store_id], store_owners[store.owner].name, current_top_item_id);
 
     bool exit_store = false;
     while (!exit_store) {
@@ -970,13 +968,13 @@ void storeEnter(int store_id) {
                     if (current_top_item_id == 0) {
                         if (store.store_id > 12) {
                             current_top_item_id = 12;
-                            displayStoreInventory(store_id, current_top_item_id);
+                            displayStoreInventory(stores[store_id], current_top_item_id);
                         } else {
                             printMessage("Entire inventory is shown.");
                         }
                     } else {
                         current_top_item_id = 0;
-                        displayStoreInventory(store_id, current_top_item_id);
+                        displayStoreInventory(stores[store_id], current_top_item_id);
                     }
                     break;
                 case 'E':
@@ -998,7 +996,7 @@ void storeEnter(int store_id) {
 
                     // redisplay store prices if charisma changes
                     if (saved_chr != py.stats.used[A_CHR]) {
-                        displayStoreInventory(store_id, current_top_item_id);
+                        displayStoreInventory(stores[store_id], current_top_item_id);
                     }
 
                     player_free_turn = false; // No free moves here. -CJS-
