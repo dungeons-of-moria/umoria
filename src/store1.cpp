@@ -159,7 +159,7 @@ static int32_t getPickShovelBuyPrice(const Inventory_t &item) {
 }
 
 // Asking price for an item -RAK-
-int32_t storeItemSellPrice(int store_id, int32_t &min_price, int32_t &max_price, const Inventory_t &item) {
+int32_t storeItemSellPrice(const Store_t &store, int32_t &min_price, int32_t &max_price, const Inventory_t &item) {
     int32_t price = storeItemValue(item);
 
     // check `item.cost` in case it is cursed, check `price` in case it is damaged
@@ -168,7 +168,7 @@ int32_t storeItemSellPrice(int store_id, int32_t &min_price, int32_t &max_price,
         return 0;
     }
 
-    const Owner_t &owner = store_owners[stores[store_id].owner];
+    const Owner_t &owner = store_owners[store.owner];
 
     price = price * race_gold_adjustments[owner.race][py.misc.race_id] / 100;
     if (price < 1) {
@@ -186,9 +186,7 @@ int32_t storeItemSellPrice(int store_id, int32_t &min_price, int32_t &max_price,
 }
 
 // Check to see if they will be carrying too many objects -RAK-
-bool storeCheckPlayerItemsCount(int store_id, const Inventory_t &item) {
-    const Store_t &store = stores[store_id];
-
+bool storeCheckPlayerItemsCount(const Store_t &store, const Inventory_t &item) {
     if (store.store_id < STORE_MAX_DISCRETE_ITEMS) {
         return true;
     }
@@ -230,12 +228,12 @@ static void storeItemInsert(int store_id, int pos, int32_t i_cost, Inventory_t *
 void storeCarry(int store_id, int &index_id, Inventory_t &item) {
     index_id = -1;
 
+    Store_t &store = stores[store_id];
+
     int32_t item_cost, dummy;
-    if (storeItemSellPrice(store_id, dummy, item_cost, item) < 1) {
+    if (storeItemSellPrice(store, dummy, item_cost, item) < 1) {
         return;
     }
-
-    Store_t &store = stores[store_id];
 
     int item_id = 0;
     int item_num = item.items_count;
@@ -256,7 +254,7 @@ void storeCarry(int store_id, int &index_id, Inventory_t &item) {
                 // strictly greater than group_min, not for torches, this
                 // must be recalculated for entire group
                 if (item_sub_catory > ITEM_GROUP_MIN) {
-                    (void) storeItemSellPrice(store_id, dummy, item_cost, store_item);
+                    (void) storeItemSellPrice(store, dummy, item_cost, store_item);
                     store.inventory[item_id].cost = -item_cost;
                 } else if (store_item.items_count > 24) {
                     // must let group objects (except torches) stack over 24
@@ -345,7 +343,7 @@ static void storeItemCreate(int store_id, int16_t max_cost) {
 
         Inventory_t &item = treasure_list[free_id];
 
-        if (storeCheckPlayerItemsCount(store_id, item)) {
+        if (storeCheckPlayerItemsCount(stores[store_id], item)) {
             // Item must be good: cost > 0.
             if (item.cost > 0 && item.cost < max_cost) {
                 // equivalent to calling spellIdentifyItem(),
@@ -395,9 +393,7 @@ void storeMaintenance() {
 }
 
 // eliminate need to bargain if player has haggled well in the past -DJB-
-bool storeNoNeedToBargain(int store_id, int32_t min_price) {
-    const Store_t &store = stores[store_id];
-
+bool storeNoNeedToBargain(const Store_t &store, int32_t min_price) {
     if (store.good_purchases == MAX_SHORT) {
         return true;
     }
@@ -408,8 +404,8 @@ bool storeNoNeedToBargain(int store_id, int32_t min_price) {
 }
 
 // update the bargain info -DJB-
-void storeUpdateBargainInfo(int store_id, int32_t price, int32_t min_price) {
-    Store_t &store = stores[store_id];
+void storeUpdateBargainInfo(Store_t &store, int32_t price, int32_t min_price) {
+    // Store_t &store = stores[store_id];
 
     if (min_price > 9) {
         if (price == min_price) {
