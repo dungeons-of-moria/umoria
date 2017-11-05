@@ -352,7 +352,7 @@ static int storePurchaseHaggle(int store_id, int32_t &price, const Inventory_t &
     const Owner_t &owner = store_owners[store.owner];
 
     int32_t max_sell, min_sell;
-    int32_t cost = storeItemSellPrice(store_id, min_sell, max_sell, item);
+    int32_t cost = storeItemSellPrice(store, min_sell, max_sell, item);
 
     max_sell = max_sell * playerStatAdjustmentCharisma() / 100;
     if (max_sell <= 0) {
@@ -384,7 +384,7 @@ static int storePurchaseHaggle(int store_id, int32_t &price, const Inventory_t &
     const char *comment = "Asking";
 
     // go right to final price if player has bargained well
-    if (storeNoNeedToBargain(store_id, final_asking_price)) {
+    if (storeNoNeedToBargain(stores[store_id], final_asking_price)) {
         printMessage("After a long bargaining session, you agree upon the price.");
         current_asking_price = min_sell;
         comment = "Final offer";
@@ -496,7 +496,7 @@ static int storePurchaseHaggle(int store_id, int32_t &price, const Inventory_t &
 
     // update bargaining info
     if (purchase == 0 && !did_not_haggle) {
-        storeUpdateBargainInfo(store_id, price, final_asking_price);
+        storeUpdateBargainInfo(stores[store_id], price, final_asking_price);
     }
 
     return purchase;
@@ -587,7 +587,7 @@ static int storeSellHaggle(int store_id, int32_t &price, const Inventory_t &item
             comment = "Offer";
 
             // go right to final price if player has bargained well
-            if (storeNoNeedToBargain(store_id, final_asking_price)) {
+            if (storeNoNeedToBargain(stores[store_id], final_asking_price)) {
                 printMessage("After a long bargaining session, you agree upon the price.");
                 current_askin_price = final_asking_price;
                 comment = "Final offer";
@@ -713,7 +713,7 @@ static int storeSellHaggle(int store_id, int32_t &price, const Inventory_t &item
 
     // update bargaining info
     if (sell == 0 && !did_not_haggle) {
-        storeUpdateBargainInfo(store_id, price, final_asking_price);
+        storeUpdateBargainInfo(stores[store_id], price, final_asking_price);
     }
 
     return sell;
@@ -875,7 +875,7 @@ static bool storeSellAnItem(int store_id, int &current_top_item_id) {
     (void) sprintf(msg, "Selling %s (%c)", description, item_id + 'a');
     printMessage(msg);
 
-    if (!storeCheckPlayerItemsCount(store_id, sold_item)) {
+    if (!storeCheckPlayerItemsCount(stores[store_id], sold_item)) {
         printMessage("I have not the room in my store to keep it.");
         return false;
     }

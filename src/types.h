@@ -282,7 +282,7 @@ typedef struct {
     int32_t turns_left_before_closing;
     int16_t insults_counter;
     uint8_t owner;
-    uint8_t store_id;
+    uint8_t store_id; // TODO(cook): is this an unique items in stock counter?
     uint16_t good_purchases;
     uint16_t bad_purchases;
     InventoryRecord_t inventory[STORE_MAX_DISCRETE_ITEMS];
