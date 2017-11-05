@@ -8,8 +8,10 @@
 ### Bug Fixes
 
 - When compiling on Windows/MinGW, the OS was not being detected correctly.
+  https://github.com/dungeons-of-moria/umoria/commit/3811bcd
 - Now load cave tiles correctly (the `lit` status values), as a previous
   refactoring broke loading of pre-5.7 saves.
+  https://github.com/dungeons-of-moria/umoria/commit/219f350
 
 ### Code
 
