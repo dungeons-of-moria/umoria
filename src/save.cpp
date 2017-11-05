@@ -245,10 +245,10 @@ static bool sv_write() {
         wr_long((uint32_t) store.turns_left_before_closing);
         wr_short((uint16_t) store.insults_counter);
         wr_byte(store.owner_id);
-        wr_byte(store.store_id);
+        wr_byte(store.unique_items_counter);
         wr_short(store.good_purchases);
         wr_short(store.bad_purchases);
-        for (int j = 0; j < store.store_id; j++) {
+        for (int j = 0; j < store.unique_items_counter; j++) {
             wr_long((uint32_t) store.inventory[j].cost);
             wr_item(store.inventory[j].item);
         }
@@ -695,13 +695,13 @@ bool loadGame(bool &generate) {
                 store.turns_left_before_closing = rd_long();
                 store.insults_counter = rd_short();
                 store.owner_id = rd_byte();
-                store.store_id = rd_byte();
+                store.unique_items_counter = rd_byte();
                 store.good_purchases = rd_short();
                 store.bad_purchases = rd_short();
-                if (store.store_id > STORE_MAX_DISCRETE_ITEMS) {
+                if (store.unique_items_counter > STORE_MAX_DISCRETE_ITEMS) {
                     goto error;
                 }
-                for (int j = 0; j < store.store_id; j++) {
+                for (int j = 0; j < store.unique_items_counter; j++) {
                     store.inventory[j].cost = rd_long();
                     rd_item(store.inventory[j].item);
                 }
@@ -838,13 +838,13 @@ bool loadGame(bool &generate) {
             store.turns_left_before_closing = rd_long();
             store.insults_counter = rd_short();
             store.owner_id = rd_byte();
-            store.store_id = rd_byte();
+            store.unique_items_counter = rd_byte();
             store.good_purchases = rd_short();
             store.bad_purchases = rd_short();
-            if (store.store_id > STORE_MAX_DISCRETE_ITEMS) {
+            if (store.unique_items_counter > STORE_MAX_DISCRETE_ITEMS) {
                 goto error;
             }
-            for (int j = 0; j < store.store_id; j++) {
+            for (int j = 0; j < store.unique_items_counter; j++) {
                 store.inventory[j].cost = rd_long();
                 rd_item(store.inventory[j].item);
             }

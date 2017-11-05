@@ -187,7 +187,7 @@ int32_t storeItemSellPrice(const Store_t &store, int32_t &min_price, int32_t &ma
 
 // Check to see if they will be carrying too many objects -RAK-
 bool storeCheckPlayerItemsCount(const Store_t &store, const Inventory_t &item) {
-    if (store.store_id < STORE_MAX_DISCRETE_ITEMS) {
+    if (store.unique_items_counter < STORE_MAX_DISCRETE_ITEMS) {
         return true;
     }
 
@@ -197,7 +197,7 @@ bool storeCheckPlayerItemsCount(const Store_t &store, const Inventory_t &item) {
 
     bool store_check = false;
 
-    for (int i = 0; i < store.store_id; i++) {
+    for (int i = 0; i < store.unique_items_counter; i++) {
         const Inventory_t &store_item = store.inventory[i].item;
 
         // note: items with sub_category_id of gte ITEM_SINGLE_STACK_MAX only stack
@@ -215,13 +215,13 @@ bool storeCheckPlayerItemsCount(const Store_t &store, const Inventory_t &item) {
 static void storeItemInsert(int store_id, int pos, int32_t i_cost, Inventory_t *item) {
     Store_t &store = stores[store_id];
 
-    for (int i = store.store_id - 1; i >= pos; i--) {
+    for (int i = store.unique_items_counter - 1; i >= pos; i--) {
         store.inventory[i + 1] = store.inventory[i];
     }
 
     store.inventory[pos].item = *item;
     store.inventory[pos].cost = -i_cost;
-    store.store_id++;
+    store.unique_items_counter++;
 }
 
 // Add the item in INVEN_MAX to stores inventory. -RAK-
@@ -269,12 +269,12 @@ void storeCarry(int store_id, int &index_id, Inventory_t &item) {
             index_id = item_id;
         }
         item_id++;
-    } while (item_id < store.store_id && !flag);
+    } while (item_id < store.unique_items_counter && !flag);
 
     // Becomes last item in list
     if (!flag) {
-        storeItemInsert(store_id, (int) store.store_id, item_cost, &item);
-        index_id = store.store_id - 1;
+        storeItemInsert(store_id, (int) store.unique_items_counter, item_cost, &item);
+        index_id = store.unique_items_counter - 1;
     }
 }
 
@@ -302,12 +302,12 @@ void storeDestroy(int store_id, int item_id, bool only_one_of) {
     if (number != store_item.items_count) {
         store_item.items_count -= number;
     } else {
-        for (int i = item_id; i < store.store_id - 1; i++) {
+        for (int i = item_id; i < store.unique_items_counter - 1; i++) {
             store.inventory[i] = store.inventory[i + 1];
         }
-        inventoryItemCopyTo(OBJ_NOTHING, store.inventory[store.store_id - 1].item);
-        store.inventory[store.store_id - 1].cost = 0;
-        store.store_id--;
+        inventoryItemCopyTo(OBJ_NOTHING, store.inventory[store.unique_items_counter - 1].item);
+        store.inventory[store.unique_items_counter - 1].cost = 0;
+        store.unique_items_counter--;
     }
 }
 
@@ -321,7 +321,7 @@ void storeInitializeOwners() {
         store.owner_id = (uint8_t) (MAX_STORES * (randomNumber(count) - 1) + store_id);
         store.insults_counter = 0;
         store.turns_left_before_closing = 0;
-        store.store_id = 0;
+        store.unique_items_counter = 0;
         store.good_purchases = 0;
         store.bad_purchases = 0;
 
@@ -367,20 +367,20 @@ void storeMaintenance() {
         Store_t &store = stores[store_id];
 
         store.insults_counter = 0;
-        if (store.store_id >= STORE_MIN_AUTO_SELL_ITEMS) {
+        if (store.unique_items_counter >= STORE_MIN_AUTO_SELL_ITEMS) {
             int turnaround = randomNumber(STORE_STOCK_TURN_AROUND);
-            if (store.store_id >= STORE_MAX_AUTO_BUY_ITEMS) {
-                turnaround += 1 + store.store_id - STORE_MAX_AUTO_BUY_ITEMS;
+            if (store.unique_items_counter >= STORE_MAX_AUTO_BUY_ITEMS) {
+                turnaround += 1 + store.unique_items_counter - STORE_MAX_AUTO_BUY_ITEMS;
             }
             while (--turnaround >= 0) {
-                storeDestroy(store_id, randomNumber((int) store.store_id) - 1, false);
+                storeDestroy(store_id, randomNumber((int) store.unique_items_counter) - 1, false);
             }
         }
 
-        if (store.store_id <= STORE_MAX_AUTO_BUY_ITEMS) {
+        if (store.unique_items_counter <= STORE_MAX_AUTO_BUY_ITEMS) {
             int turnaround = randomNumber(STORE_STOCK_TURN_AROUND);
-            if (store.store_id < STORE_MIN_AUTO_SELL_ITEMS) {
-                turnaround += STORE_MIN_AUTO_SELL_ITEMS - store.store_id;
+            if (store.unique_items_counter < STORE_MIN_AUTO_SELL_ITEMS) {
+                turnaround += STORE_MIN_AUTO_SELL_ITEMS - store.unique_items_counter;
             }
 
             int16_t max_cost = store_owners[store.owner_id].max_cost;
@@ -405,8 +405,6 @@ bool storeNoNeedToBargain(const Store_t &store, int32_t min_price) {
 
 // update the bargain info -DJB-
 void storeUpdateBargainInfo(Store_t &store, int32_t price, int32_t min_price) {
-    // Store_t &store = stores[store_id];
-
     if (min_price > 9) {
         if (price == min_price) {
             if (store.good_purchases < MAX_SHORT) {

@@ -85,8 +85,8 @@ static void displayStoreHaggleCommands(int haggle_type) {
 // Displays a store's inventory -RAK-
 static void displayStoreInventory(Store_t &store, int item_pos_start) {
     int item_pos_end = ((item_pos_start / 12) + 1) * 12;
-    if (item_pos_end > store.store_id) {
-        item_pos_end = store.store_id;
+    if (item_pos_end > store.unique_items_counter) {
+        item_pos_end = store.unique_items_counter;
     }
 
     int item_identifier;
@@ -135,7 +135,7 @@ static void displayStoreInventory(Store_t &store, int item_pos_start) {
         }
     }
 
-    if (store.store_id > 12) {
+    if (store.unique_items_counter > 12) {
         putString("- cont. -", Coord_t{17, 60});
     } else {
         eraseLine(Coord_t{17, 60});
@@ -736,13 +736,13 @@ static int storeItemsToDisplay(int store_counter, int current_top_item_id) {
 static bool storePurchaseAnItem(int store_id, int &current_top_item_id) {
     Store_t &store = stores[store_id];
 
-    if (store.store_id < 1) {
+    if (store.unique_items_counter < 1) {
         printMessage("I am currently out of stock.");
         return false;
     }
 
     int item_id;
-    int item_count = storeItemsToDisplay(store.store_id, current_top_item_id);
+    int item_count = storeItemsToDisplay(store.unique_items_counter, current_top_item_id);
     if (!storeGetItemID(item_id, "Which item are you interested in? ", 0, item_count)) {
         return false;
     }
@@ -776,7 +776,7 @@ static bool storePurchaseAnItem(int store_id, int &current_top_item_id) {
             py.misc.au -= price;
 
             int new_item_id = inventoryCarryItem(sell_item);
-            int saved_store_counter = store.store_id;
+            int saved_store_counter = store.unique_items_counter;
 
             storeDestroy(store_id, item_id, true);
 
@@ -789,13 +789,13 @@ static bool storePurchaseAnItem(int store_id, int &current_top_item_id) {
 
             playerStrength();
 
-            if (current_top_item_id >= store.store_id) {
+            if (current_top_item_id >= store.unique_items_counter) {
                 current_top_item_id = 0;
                 displayStoreInventory(stores[store_id], current_top_item_id);
             } else {
                 InventoryRecord_t &store_item = store.inventory[item_id];
 
-                if (saved_store_counter == store.store_id) {
+                if (saved_store_counter == store.unique_items_counter) {
                     if (store_item.cost < 0) {
                         store_item.cost = price;
                         displaySingleCost(store_id, item_id);
@@ -966,7 +966,7 @@ void storeEnter(int store_id) {
             switch (command) {
                 case 'b':
                     if (current_top_item_id == 0) {
-                        if (store.store_id > 12) {
+                        if (store.unique_items_counter > 12) {
                             current_top_item_id = 12;
                             displayStoreInventory(stores[store_id], current_top_item_id);
                         } else {
