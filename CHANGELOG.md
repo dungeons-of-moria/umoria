@@ -2,15 +2,20 @@
 
 ## HEAD
 
+
+## 5.7.6 (2017-11-05)
+
 ### Bug Fixes
 
 - When compiling on Windows/MinGW, the OS was not being detected correctly.
-- Load Cave tiles correctly (lit status values). A previous refactoring broke
-  loading of pre-5.7 saves.
+- Now load cave tiles correctly (the `lit` status values), as a previous
+  refactoring broke loading of pre-5.7 saves.
 
 ### Code
 
-- _Pass by Value_ and _Pass by Reference_ refactoring.
+- _Pass by Value_ and _Pass by Reference_ major refactoring.
+- Replace "magic numbers" with ENUMs, in `staffs.cpp`.
+- Use `Coord_t` instead of `y`/`x` values in various coordinated related functions.
 
 
 ## 5.7.5 (2017-09-05)
