@@ -149,8 +149,8 @@ static void initializeCharacterInventory() {
         inventoryItemCopyTo(OBJ_NOTHING, entry);
     }
 
-    for (int i = 0; i < 5; i++) {
-        inventoryItemCopyTo(class_base_provisions[py.misc.class_id][i], item);
+    for (auto item_id : class_base_provisions[py.misc.class_id]) {
+        inventoryItemCopyTo(item_id, item);
 
         // this makes it spellItemIdentifyAndRemoveRandomInscription and itemSetAsIdentified
         itemIdentifyAsStoreBought(item);
@@ -171,8 +171,8 @@ static void initializeCharacterInventory() {
 
 // Initializes M_LEVEL array for use with PLACE_MONSTER -RAK-
 static void initializeMonsterLevels() {
-    for (int i = 0; i <= MON_MAX_LEVELS; i++) {
-        monster_levels[i] = 0;
+    for (auto &level : monster_levels) {
+        level = 0;
     }
 
     for (int i = 0; i < MON_MAX_CREATURES - MON_ENDGAME_MONSTERS; i++) {
@@ -186,8 +186,8 @@ static void initializeMonsterLevels() {
 
 // Initializes T_LEVEL array for use with PLACE_OBJECT -RAK-
 static void initializeTreasureLevels() {
-    for (int i = 0; i <= TREASURE_MAX_LEVELS; i++) {
-        treasure_levels[i] = 0;
+    for (auto &level : treasure_levels) {
+        level = 0;
     }
 
     for (int i = 0; i < MAX_DUNGEON_OBJECTS; i++) {
@@ -201,9 +201,9 @@ static void initializeTreasureLevels() {
     // now produce an array with object indexes sorted by level,
     // by using the info in treasure_levels, this is an O(n) sort!
     // this is not a stable sort, but that does not matter
-    int indexes[TREASURE_MAX_LEVELS + 1];
-    for (int i = 0; i <= TREASURE_MAX_LEVELS; i++) {
-        indexes[i] = 1;
+    int indexes[TREASURE_MAX_LEVELS + 1] = {};
+    for (auto &i : indexes) {
+        i = 1;
     }
 
     for (int i = 0; i < MAX_DUNGEON_OBJECTS; i++) {
