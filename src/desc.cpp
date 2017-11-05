@@ -276,14 +276,6 @@ void itemRemoveMagicNaming(Inventory_t &item) {
     item.special_name_id = SN_NULL;
 }
 
-// defines for `misc_use` variable, determine how the Item `misc_use` field is printed
-constexpr int IGNORED = 0;
-constexpr int CHARGES = 1;
-constexpr int PLUSSES = 2;
-constexpr int LIGHT = 3;
-constexpr int FLAGS = 4;
-constexpr int Z_PLUSSES = 5;
-
 int bowDamageValue(int16_t misc_use) {
     if (misc_use == 1 || misc_use == 2) {
         return 2;
@@ -296,6 +288,11 @@ int bowDamageValue(int16_t misc_use) {
     }
     return -1;
 }
+
+// determines how the `item.misc_use` field is printed
+enum class ItemMiscUse {
+    ignored, charges, plusses, light, flags, z_plusses,
+};
 
 // Set the `description` for an inventory item.
 // The `add_prefix` param indicates that an article must be added.
@@ -311,10 +308,9 @@ void itemDescription(obj_desc_t description, const Inventory_t &item, bool add_p
     vtype_t damstr = {'\0'};
     damstr[0] = '\0';
 
-    int misc_use = IGNORED;
     bool append_name = false;
-
     bool modify = !itemSetColorlessAsIdentified(item.category_id, item.sub_category_id, item.identification);
+    ItemMiscUse misc_type = ItemMiscUse::ignored;
 
     switch (item.category_id) {
         case TV_MISC:
@@ -326,7 +322,7 @@ void itemDescription(obj_desc_t description, const Inventory_t &item, bool add_p
             (void) sprintf(damstr, " (%dd%d)", item.damage[0], item.damage[1]);
             break;
         case TV_LIGHT:
-            misc_use = LIGHT;
+            misc_type = ItemMiscUse::light;
             break;
         case TV_SPIKE:
             break;
@@ -337,10 +333,10 @@ void itemDescription(obj_desc_t description, const Inventory_t &item, bool add_p
         case TV_POLEARM:
         case TV_SWORD:
             (void) sprintf(damstr, " (%dd%d)", item.damage[0], item.damage[1]);
-            misc_use = FLAGS;
+            misc_type = ItemMiscUse::flags;
             break;
         case TV_DIGGING:
-            misc_use = Z_PLUSSES;
+            misc_type = ItemMiscUse::z_plusses;
             (void) sprintf(damstr, " (%dd%d)", item.damage[0], item.damage[1]);
             break;
         case TV_BOOTS:
@@ -359,7 +355,7 @@ void itemDescription(obj_desc_t description, const Inventory_t &item, bool add_p
                 basenm = "& Amulet";
                 append_name = true;
             }
-            misc_use = PLUSSES;
+            misc_type = ItemMiscUse::plusses;
             break;
         case TV_RING:
             if (modify) {
@@ -369,7 +365,7 @@ void itemDescription(obj_desc_t description, const Inventory_t &item, bool add_p
                 basenm = "& Ring";
                 append_name = true;
             }
-            misc_use = PLUSSES;
+            misc_type = ItemMiscUse::plusses;
             break;
         case TV_STAFF:
             if (modify) {
@@ -379,7 +375,7 @@ void itemDescription(obj_desc_t description, const Inventory_t &item, bool add_p
                 basenm = "& Staff";
                 append_name = true;
             }
-            misc_use = CHARGES;
+            misc_type = ItemMiscUse::charges;
             break;
         case TV_WAND:
             if (modify) {
@@ -389,7 +385,7 @@ void itemDescription(obj_desc_t description, const Inventory_t &item, bool add_p
                 basenm = "& Wand";
                 append_name = true;
             }
-            misc_use = CHARGES;
+            misc_type = ItemMiscUse::charges;
             break;
         case TV_SCROLL1:
         case TV_SCROLL2:
@@ -543,31 +539,31 @@ void itemDescription(obj_desc_t description, const Inventory_t &item, bool add_p
         (void) strcat(tmp_val, tmp_str);
     }
 
-    // override defaults, check for `misc_use` flags in the ident field
+    // override defaults, check for `misc_type` flags in the `item.identification` field
     if ((item.identification & ID_NO_SHOW_P1) != 0) {
-        misc_use = IGNORED;
+        misc_type = ItemMiscUse::ignored;
     } else if ((item.identification & ID_SHOW_P1) != 0) {
-        misc_use = Z_PLUSSES;
+        misc_type = ItemMiscUse::z_plusses;
     }
 
     tmp_str[0] = '\0';
 
-    if (misc_use == LIGHT) {
+    if (misc_type == ItemMiscUse::light) {
         (void) sprintf(tmp_str, " with %d turns of light", item.misc_use);
-    } else if (misc_use == IGNORED) {
+    } else if (misc_type == ItemMiscUse::ignored) {
         // NOOP
     } else if (spellItemIdentified(item)) {
         auto abs_misc_use = (int) std::abs((std::intmax_t) item.misc_use);
 
-        if (misc_use == Z_PLUSSES) {
+        if (misc_type == ItemMiscUse::z_plusses) {
             // originally used %+d, but several machines don't support it
             (void) sprintf(tmp_str, " (%c%d)", (item.misc_use < 0) ? '-' : '+', abs_misc_use);
-        } else if (misc_use == CHARGES) {
+        } else if (misc_type == ItemMiscUse::charges) {
             (void) sprintf(tmp_str, " (%d charges)", item.misc_use);
         } else if (item.misc_use != 0) {
-            if (misc_use == PLUSSES) {
+            if (misc_type == ItemMiscUse::plusses) {
                 (void) sprintf(tmp_str, " (%c%d)", (item.misc_use < 0) ? '-' : '+', abs_misc_use);
-            } else if (misc_use == FLAGS) {
+            } else if (misc_type == ItemMiscUse::flags) {
                 if ((item.flags & TR_STR) != 0u) {
                     (void) sprintf(tmp_str, " (%c%d to STR)", (item.misc_use < 0) ? '-' : '+', abs_misc_use);
                 } else if ((item.flags & TR_STEALTH) != 0u) {
