@@ -9,102 +9,127 @@
 #include "headers.h"
 #include "externs.h"
 
+enum class WandSpellTypes {
+    light = 1,
+    lightning_bolt,
+    frost_bolt,
+    fire_bolt,
+    stone_to_mud,
+    polymorph,
+    heal_monster,
+    haste_monster,
+    slow_monster,
+    confuse_monster,
+    sleep_monster,
+    drain_life,
+    trap_door_destruction,
+    magic_missile,
+    wall_building,
+    clone_monster,
+    teleport_away,
+    disarming,
+    lightning_ball,
+    cold_ball,
+    fire_ball,
+    stinking_cloud,
+    acid_ball,
+    wonder,
+};
+
 static bool wandDischarge(Inventory_t &item, int direction) {
-    bool identified = false;
-
-    uint32_t flags = item.flags;
-
     // decrement "use" variable
     item.misc_use--;
 
+    bool identified = false;
+    uint32_t flags = item.flags;
+
     while (flags != 0) {
-        int kind = getAndClearFirstBit(flags) + 1;
         int y = char_row;
         int x = char_col;
 
         // Wand types
-        switch (kind) {
-            case 1:
+        switch ((WandSpellTypes) (getAndClearFirstBit(flags) + 1)) {
+            case WandSpellTypes::light:
                 printMessage("A line of blue shimmering light appears.");
                 spellLightLine(char_col, char_row, direction);
                 identified = true;
                 break;
-            case 2:
+            case WandSpellTypes::lightning_bolt:
                 spellFireBolt(y, x, direction, diceDamageRoll(4, 8), GF_LIGHTNING, spell_names[8]);
                 identified = true;
                 break;
-            case 3:
+            case WandSpellTypes::frost_bolt:
                 spellFireBolt(y, x, direction, diceDamageRoll(6, 8), GF_FROST, spell_names[14]);
                 identified = true;
                 break;
-            case 4:
+            case WandSpellTypes::fire_bolt:
                 spellFireBolt(y, x, direction, diceDamageRoll(9, 8), GF_FIRE, spell_names[22]);
                 identified = true;
                 break;
-            case 5:
+            case WandSpellTypes::stone_to_mud:
                 identified = spellWallToMud(y, x, direction);
                 break;
-            case 6:
+            case WandSpellTypes::polymorph:
                 identified = spellPolymorphMonster(y, x, direction);
                 break;
-            case 7:
+            case WandSpellTypes::heal_monster:
                 identified = spellChangeMonsterHitPoints(y, x, direction, -diceDamageRoll(4, 6));
                 break;
-            case 8:
+            case WandSpellTypes::haste_monster:
                 identified = spellSpeedMonster(y, x, direction, 1);
                 break;
-            case 9:
+            case WandSpellTypes::slow_monster:
                 identified = spellSpeedMonster(y, x, direction, -1);
                 break;
-            case 10:
+            case WandSpellTypes::confuse_monster:
                 identified = spellConfuseMonster(y, x, direction);
                 break;
-            case 11:
+            case WandSpellTypes::sleep_monster:
                 identified = spellSleepMonster(y, x, direction);
                 break;
-            case 12:
+            case WandSpellTypes::drain_life:
                 identified = spellDrainLifeFromMonster(y, x, direction);
                 break;
-            case 13:
+            case WandSpellTypes::trap_door_destruction:
                 identified = spellDestroyDoorsTrapsInDirection(y, x, direction);
                 break;
-            case 14:
+            case WandSpellTypes::magic_missile:
                 spellFireBolt(y, x, direction, diceDamageRoll(2, 6), GF_MAGIC_MISSILE, spell_names[0]);
                 identified = true;
                 break;
-            case 15:
+            case WandSpellTypes::wall_building:
                 identified = spellBuildWall(y, x, direction);
                 break;
-            case 16:
+            case WandSpellTypes::clone_monster:
                 identified = spellCloneMonster(y, x, direction);
                 break;
-            case 17:
+            case WandSpellTypes::teleport_away:
                 identified = spellTeleportAwayMonsterInDirection(y, x, direction);
                 break;
-            case 18:
+            case WandSpellTypes::disarming:
                 identified = spellDisarmAllInDirection(y, x, direction);
                 break;
-            case 19:
+            case WandSpellTypes::lightning_ball:
                 spellFireBall(y, x, direction, 32, GF_LIGHTNING, "Lightning Ball");
                 identified = true;
                 break;
-            case 20:
+            case WandSpellTypes::cold_ball:
                 spellFireBall(y, x, direction, 48, GF_FROST, "Cold Ball");
                 identified = true;
                 break;
-            case 21:
+            case WandSpellTypes::fire_ball:
                 spellFireBall(y, x, direction, 72, GF_FIRE, spell_names[28]);
                 identified = true;
                 break;
-            case 22:
+            case WandSpellTypes::stinking_cloud:
                 spellFireBall(y, x, direction, 12, GF_POISON_GAS, spell_names[6]);
                 identified = true;
                 break;
-            case 23:
+            case WandSpellTypes::acid_ball:
                 spellFireBall(y, x, direction, 60, GF_ACID, "Acid Ball");
                 identified = true;
                 break;
-            case 24:
+            case WandSpellTypes::wonder:
                 flags = (uint32_t) (1L << (randomNumber(23) - 1));
                 break;
             default:
