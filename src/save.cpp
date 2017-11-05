@@ -244,7 +244,7 @@ static bool sv_write() {
     for (auto &store : stores) {
         wr_long((uint32_t) store.turns_left_before_closing);
         wr_short((uint16_t) store.insults_counter);
-        wr_byte(store.owner);
+        wr_byte(store.owner_id);
         wr_byte(store.store_id);
         wr_short(store.good_purchases);
         wr_short(store.bad_purchases);
@@ -694,7 +694,7 @@ bool loadGame(bool &generate) {
             for (auto &store : stores) {
                 store.turns_left_before_closing = rd_long();
                 store.insults_counter = rd_short();
-                store.owner = rd_byte();
+                store.owner_id = rd_byte();
                 store.store_id = rd_byte();
                 store.good_purchases = rd_short();
                 store.bad_purchases = rd_short();
@@ -837,7 +837,7 @@ bool loadGame(bool &generate) {
         for (auto &store : stores) {
             store.turns_left_before_closing = rd_long();
             store.insults_counter = rd_short();
-            store.owner = rd_byte();
+            store.owner_id = rd_byte();
             store.store_id = rd_byte();
             store.good_purchases = rd_short();
             store.bad_purchases = rd_short();

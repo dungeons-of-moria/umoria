@@ -168,7 +168,7 @@ int32_t storeItemSellPrice(const Store_t &store, int32_t &min_price, int32_t &ma
         return 0;
     }
 
-    const Owner_t &owner = store_owners[store.owner];
+    const Owner_t &owner = store_owners[store.owner_id];
 
     price = price * race_gold_adjustments[owner.race][py.misc.race_id] / 100;
     if (price < 1) {
@@ -318,7 +318,7 @@ void storeInitializeOwners() {
     for (int store_id = 0; store_id < MAX_STORES; store_id++) {
         Store_t &store = stores[store_id];
 
-        store.owner = (uint8_t) (MAX_STORES * (randomNumber(count) - 1) + store_id);
+        store.owner_id = (uint8_t) (MAX_STORES * (randomNumber(count) - 1) + store_id);
         store.insults_counter = 0;
         store.turns_left_before_closing = 0;
         store.store_id = 0;
@@ -383,7 +383,7 @@ void storeMaintenance() {
                 turnaround += STORE_MIN_AUTO_SELL_ITEMS - store.store_id;
             }
 
-            int16_t max_cost = store_owners[store.owner].max_cost;
+            int16_t max_cost = store_owners[store.owner_id].max_cost;
 
             while (--turnaround >= 0) {
                 storeItemCreate(store_id, max_cost);
