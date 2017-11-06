@@ -216,6 +216,35 @@ static void trapConstitutionDart(const Inventory_t &item, int dam) {
     }
 }
 
+enum class TrapTypes {
+    open_pit = 1,
+    arrow_pit,
+    covered_pit,
+    trap_door,
+    sleeping_gas,
+    hidden_object,
+    dart_of_str,
+    teleport,
+    rockfall,
+    corroding_gas,
+    summon_monster,
+    fire_trap,
+    acid_trap,
+    poison_gas,
+    blinding_gas,
+    confuse_gas,
+    slow_dart,
+    dart_of_con,
+    secret_door,
+    scare_monster = 99,
+    general_store = 101,
+    armory,
+    weaponsmith,
+    temple,
+    alchemist,
+    magic_shop,
+};
+
 // Player hit a trap.  (Chuckle) -RAK-
 static void playerStepsOnTrap(int y, int x) {
     playerEndRunning();
@@ -225,109 +254,83 @@ static void playerStepsOnTrap(int y, int x) {
 
     int damage = dicePlayerDamageRoll(item.damage);
 
-    switch (item.sub_category_id) {
-        case 1:
-            // Open pit
+    switch ((TrapTypes) item.sub_category_id) {
+        case TrapTypes::open_pit:
             trapOpenPit(item, damage);
             break;
-        case 2:
-            // Arrow trap
+        case TrapTypes::arrow_pit:
             trapArrow(item, damage);
             break;
-        case 3:
-            // Covered pit
+        case TrapTypes::covered_pit:
             trapCoveredPit(item, damage, y, x);
             break;
-        case 4:
-            // Trap door
+        case TrapTypes::trap_door:
             trapDoor(item, damage);
             break;
-        case 5:
-            // Sleep gas
+        case TrapTypes::sleeping_gas:
             trapSleepingGas();
             break;
-        case 6:
-            // Hid Obj
+        case TrapTypes::hidden_object:
             trapHiddenObject(y, x);
             break;
-        case 7:
-            // STR Dart
+        case TrapTypes::dart_of_str:
             trapStrengthDart(item, damage);
             break;
-        case 8:
-            // Teleport
+        case TrapTypes::teleport:
             trapTeleport(y, x);
             break;
-        case 9:
-            // Rockfall
+        case TrapTypes::rockfall:
             trapRockfall(y, x, damage);
             break;
-        case 10:
-            // Corrode gas
+        case TrapTypes::corroding_gas:
             trapCorrodeGas();
             break;
-        case 11:
-            // Summon mon
+        case TrapTypes::summon_monster:
             trapSummonMonster(y, x);
             break;
-        case 12:
-            // Fire trap
+        case TrapTypes::fire_trap:
             trapFire(damage);
             break;
-        case 13:
-            // Acid trap
+        case TrapTypes::acid_trap:
             trapAcid(damage);
             break;
-        case 14:
-            // Poison gas
+        case TrapTypes::poison_gas:
             trapPoisonGas(damage);
             break;
-        case 15:
-            // Blind Gas
+        case TrapTypes::blinding_gas:
             trapBlindGas();
             break;
-        case 16:
-            // Confuse Gas
+        case TrapTypes::confuse_gas:
             trapConfuseGas();
             break;
-        case 17:
-            // Slow Dart
+        case TrapTypes::slow_dart:
             trapSlowDart(item, damage);
             break;
-        case 18:
-            // CON Dart
+        case TrapTypes::dart_of_con:
             trapConstitutionDart(item, damage);
             break;
-        case 19:
-            // Secret Door
+        case TrapTypes::secret_door:
             break;
-        case 99:
-            // Scare Mon
+        case TrapTypes::scare_monster:
             break;
 
             // Town level traps are special, the stores.
-        case 101:
-            // General
+        case TrapTypes::general_store:
             storeEnter(0);
             break;
-        case 102:
-            // Armory
+        case TrapTypes::armory:
             storeEnter(1);
             break;
-        case 103:
-            // Weaponsmith
+        case TrapTypes::weaponsmith:
             storeEnter(2);
             break;
-        case 104:
-            // Temple
+        case TrapTypes::temple:
             storeEnter(3);
             break;
-        case 105:
-            // Alchemy
+        case TrapTypes::alchemist:
             storeEnter(4);
             break;
-        case 106:
-            // Magic-User
+        case TrapTypes::magic_shop:
             storeEnter(5);
             break;
 
