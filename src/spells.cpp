@@ -10,9 +10,7 @@
 #include "externs.h"
 
 static void printMonsterActionText(const std::string &name, const std::string &action) {
-    vtype_t msg = {'\0'};
-    (void) sprintf(msg, "%s %s", name.c_str(), action.c_str());
-    printMessage(msg);
+    printMessage((name + " " + action).c_str());
 }
 
 // Following are spell procedure/functions -RAK-
@@ -20,20 +18,11 @@ static void printMonsterActionText(const std::string &name, const std::string &a
 // staves routines, and are occasionally called from other areas.
 // Now included are creature spells also.           -RAK
 
-static void monsterNameDescription(char *name_description, bool is_lit, const char *real_name) {
-    if (!is_lit) {
-        (void) strcpy(name_description, "It");
-    } else {
-        (void) sprintf(name_description, "The %s", real_name);
+static std::string monsterNameDescription(const std::string &real_name, bool is_lit) {
+    if (is_lit) {
+        return "The " + real_name;
     }
-}
-
-static void monsterNameDescriptionLowercase(char *name_description, bool is_lit, const char *real_name) {
-    if (!is_lit) {
-        (void) strcpy(name_description, "it");
-    } else {
-        (void) sprintf(name_description, "the %s", real_name);
-    }
+    return "It";
 }
 
 // Sleep creatures adjacent to player -RAK-
@@ -51,8 +40,7 @@ bool monsterSleep(int y, int x) {
             Monster_t &monster = monsters[monster_id];
             const Creature_t &creature = creatures_list[monster.creature_id];
 
-            vtype_t name = {'\0'};
-            monsterNameDescription(name, monster.lit, creature.name);
+            auto name = monsterNameDescription(creature.name, monster.lit);
 
             if (randomNumber(MON_MAX_LEVELS) < creature.level || ((CD_NO_SLEEP & creature.defenses) != 0)) {
                 if (monster.lit && ((creature.defenses & CD_NO_SLEEP) != 0)) {
@@ -487,8 +475,7 @@ static void spellLightLineTouchesMonster(int monster_id) {
     // light up and draw monster
     monsterUpdateVisibility(monster_id);
 
-    vtype_t name = {'\0'};
-    monsterNameDescription(name, monster.lit, creature.name);
+    auto name = monsterNameDescription(creature.name, monster.lit);
 
     if ((CD_LIGHT & creature.defenses) != 0) {
         if (monster.lit) {
@@ -646,13 +633,24 @@ static void getAreaAffectFlags(int spell_type, uint32_t &weapon_type, int &harm_
     }
 }
 
+static void printBoltStrikesMonsterMessage(const Creature_t &creature, const std::string &bolt_name, bool is_lit) {
+    std::string monster_name;
+    if (is_lit) {
+        monster_name = "the " + std::string(creature.name);
+    } else {
+        monster_name = "it";
+    }
+    std::string msg = "The " + bolt_name + " strikes " + monster_name + ".";
+    printMessage(msg.c_str());
+}
+
 // Light up, draw, and check for monster damage when Fire Bolt touches it.
 static void spellFireBoltTouchesMonster(Cave_t &tile, int damage, int harm_type, uint32_t weapon_id, const std::string &bolt_name) {
     const Monster_t &monster = monsters[tile.creature_id];
     const Creature_t &creature = creatures_list[monster.creature_id];
 
     // light up monster and draw monster, temporarily set
-    // permanent_light so that monsterUpdateVisibility() will work
+    // permanent_light so that `monsterUpdateVisibility()` will work
     bool saved_lit_status = tile.permanent_light;
     tile.permanent_light = true;
     monsterUpdateVisibility((int) tile.creature_id);
@@ -661,12 +659,7 @@ static void spellFireBoltTouchesMonster(Cave_t &tile, int damage, int harm_type,
     // draw monster and clear previous bolt
     putQIO();
 
-    vtype_t name = {'\0'};
-    monsterNameDescriptionLowercase(name, monster.lit, creature.name);
-
-    vtype_t msg = {'\0'};
-    (void) sprintf(msg, "The %s strikes %s.", bolt_name.c_str(), name);
-    printMessage(msg);
+    printBoltStrikesMonsterMessage(creature, bolt_name, monster.lit);
 
     if ((harm_type & creature.defenses) != 0) {
         damage = damage * 2;
@@ -680,7 +673,7 @@ static void spellFireBoltTouchesMonster(Cave_t &tile, int damage, int harm_type,
         }
     }
 
-    monsterNameDescription(name, monster.lit, creature.name);
+    auto name = monsterNameDescription(creature.name, monster.lit);
 
     if (monsterTakeHit((int) tile.creature_id, damage) >= 0) {
         printMonsterActionText(name, "dies in a fit of agony.");
@@ -691,7 +684,7 @@ static void spellFireBoltTouchesMonster(Cave_t &tile, int damage, int harm_type,
 }
 
 // Shoot a bolt in a given direction -RAK-
-void spellFireBolt(int y, int x, int direction, int damage_hp, int spell_type, char *spell_name) {
+void spellFireBolt(int y, int x, int direction, int damage_hp, int spell_type, const std::string &spell_name) {
     bool (*dummy)(Inventory_t *);
     int harm_type = 0;
     uint32_t weapon_type;
@@ -729,7 +722,7 @@ void spellFireBolt(int y, int x, int direction, int damage_hp, int spell_type, c
 }
 
 // Shoot a ball in a given direction.  Note that balls have an area affect. -RAK-
-void spellFireBall(int y, int x, int direction, int damage_hp, int spell_type, const char *spell_name) {
+void spellFireBall(int y, int x, int direction, int damage_hp, int spell_type, const std::string &spell_name) {
     int total_hits = 0;
     int total_kills = 0;
     int max_distance = 2;
@@ -829,13 +822,10 @@ void spellFireBall(int y, int x, int direction, int damage_hp, int spell_type, c
             }
             // End  explosion.
 
-            vtype_t msg = {'\0'};
             if (total_hits == 1) {
-                (void) sprintf(msg, "The %s envelops a creature!", spell_name);
-                printMessage(msg);
+                printMessage(("The " + spell_name + " envelops a creature!").c_str());
             } else if (total_hits > 1) {
-                (void) sprintf(msg, "The %s envelops several creatures!", spell_name);
-                printMessage(msg);
+                printMessage(("The " + spell_name + " envelops several creatures!").c_str());
             }
 
             if (total_kills == 1) {
@@ -859,7 +849,7 @@ void spellFireBall(int y, int x, int direction, int damage_hp, int spell_type, c
 
 // Breath weapon works like a spellFireBall(), but affects the player.
 // Note the area affect. -RAK-
-void spellBreath(int y, int x, int monster_id, int damage_hp, int spell_type, char *spell_name) {
+void spellBreath(int y, int x, int monster_id, int damage_hp, int spell_type, const std::string &spell_name) {
     int max_distance = 2;
 
     bool (*destroy)(Inventory_t *);
@@ -935,19 +925,19 @@ void spellBreath(int y, int x, int monster_id, int damage_hp, int spell_type, ch
 
                         switch (spell_type) {
                             case GF_LIGHTNING:
-                                damageLightningBolt(damage, spell_name);
+                                damageLightningBolt(damage, spell_name.c_str());
                                 break;
                             case GF_POISON_GAS:
-                                damagePoisonedGas(damage, spell_name);
+                                damagePoisonedGas(damage, spell_name.c_str());
                                 break;
                             case GF_ACID:
-                                damageAcid(damage, spell_name);
+                                damageAcid(damage, spell_name.c_str());
                                 break;
                             case GF_FROST:
-                                damageCold(damage, spell_name);
+                                damageCold(damage, spell_name.c_str());
                                 break;
                             case GF_FIRE:
-                                damageFire(damage, spell_name);
+                                damageFire(damage, spell_name.c_str());
                                 break;
                             default:
                                 break;
@@ -1040,8 +1030,7 @@ bool spellChangeMonsterHitPoints(int y, int x, int direction, int damage_hp) {
             const Monster_t &monster = monsters[tile.creature_id];
             const Creature_t &creature = creatures_list[monster.creature_id];
 
-            vtype_t name = {'\0'};
-            monsterNameDescription(name, monster.lit, creature.name);
+            auto name = monsterNameDescription(creature.name, monster.lit);
 
             if (monsterTakeHit((int) tile.creature_id, damage_hp) >= 0) {
                 printMonsterActionText(name, "dies in a fit of agony.");
@@ -1081,8 +1070,7 @@ bool spellDrainLifeFromMonster(int y, int x, int direction) {
             const Creature_t &creature = creatures_list[monster.creature_id];
 
             if ((creature.defenses & CD_UNDEAD) == 0) {
-                vtype_t name = {'\0'};
-                monsterNameDescription(name, monster.lit, creature.name);
+                auto name = monsterNameDescription(creature.name, monster.lit);
 
                 if (monsterTakeHit((int) tile.creature_id, 75) >= 0) {
                     printMonsterActionText(name, "dies in a fit of agony.");
@@ -1125,8 +1113,7 @@ bool spellSpeedMonster(int y, int x, int direction, int speed) {
             Monster_t &monster = monsters[tile.creature_id];
             const Creature_t &creature = creatures_list[monster.creature_id];
 
-            vtype_t name = {'\0'};
-            monsterNameDescription(name, monster.lit, creature.name);
+            auto name = monsterNameDescription(creature.name, monster.lit);
 
             if (speed > 0) {
                 monster.speed += speed;
@@ -1176,8 +1163,7 @@ bool spellConfuseMonster(int y, int x, int direction) {
             Monster_t &monster = monsters[tile.creature_id];
             const Creature_t &creature = creatures_list[monster.creature_id];
 
-            vtype_t name = {'\0'};
-            monsterNameDescription(name, monster.lit, creature.name);
+            auto name = monsterNameDescription(creature.name, monster.lit);
 
             if (randomNumber(MON_MAX_LEVELS) < creature.level || ((CD_NO_SLEEP & creature.defenses) != 0)) {
                 if (monster.lit && ((creature.defenses & CD_NO_SLEEP) != 0)) {
@@ -1232,8 +1218,7 @@ bool spellSleepMonster(int y, int x, int direction) {
             Monster_t &monster = monsters[tile.creature_id];
             const Creature_t &creature = creatures_list[monster.creature_id];
 
-            vtype_t name = {'\0'};
-            monsterNameDescription(name, monster.lit, creature.name);
+            auto name = monsterNameDescription(creature.name, monster.lit);
 
             if (randomNumber(MON_MAX_LEVELS) < creature.level || ((CD_NO_SLEEP & creature.defenses) != 0)) {
                 if (monster.lit && ((creature.defenses & CD_NO_SLEEP) != 0)) {
@@ -1313,8 +1298,7 @@ bool spellWallToMud(int y, int x, int direction) {
             const Creature_t &creature = creatures_list[monster.creature_id];
 
             if ((CD_STONE & creature.defenses) != 0) {
-                vtype_t name = {'\0'};
-                monsterNameDescription(name, monster.lit, creature.name);
+                auto name = monsterNameDescription(creature.name, monster.lit);
 
                 // Should get these messages even if the monster is not visible.
                 int creature_id = monsterTakeHit((int) tile.creature_id, 100);
@@ -1407,8 +1391,7 @@ bool spellPolymorphMonster(int y, int x, int direction) {
                     morphed = true;
                 }
             } else {
-                vtype_t name = {'\0'};
-                monsterNameDescription(name, monster.lit, creature.name);
+                auto name = monsterNameDescription(creature.name, monster.lit);
                 printMonsterActionText(name, "is unaffected.");
             }
         }
@@ -1454,8 +1437,7 @@ bool spellBuildWall(int y, int x, int direction) {
                     damage = diceDamageRoll(4, 8);
                 }
 
-                vtype_t name = {'\0'};
-                monsterNameDescription(name, monster.lit, creature.name);
+                auto name = monsterNameDescription(creature.name, monster.lit);
 
                 printMonsterActionText(name, "wails out in pain!");
 
@@ -1647,9 +1629,7 @@ bool spellGenocide() {
                 // genocide is a powerful spell, so we will let the player
                 // know the names of the creatures they did not destroy,
                 // this message makes no sense otherwise
-                vtype_t msg = {'\0'};
-                (void) sprintf(msg, "The %s is unaffected.", creature.name);
-                printMessage(msg);
+                printMessage(("The " + std::string(creature.name) + " is unaffected.").c_str());
             }
         }
     }
@@ -1666,8 +1646,7 @@ bool spellSpeedAllMonsters(int speed) {
         Monster_t &monster = monsters[id];
         const Creature_t &creature = creatures_list[monster.creature_id];
 
-        vtype_t name = {'\0'};
-        monsterNameDescription(name, monster.lit, creature.name);
+        auto name = monsterNameDescription(creature.name, monster.lit);
 
         if (monster.distance_from_player > MON_MAX_SIGHT || !los(char_row, char_col, (int) monster.y, (int) monster.x)) {
             continue; // do nothing
@@ -1706,8 +1685,7 @@ bool spellSleepAllMonsters() {
         Monster_t &monster = monsters[id];
         const Creature_t &creature = creatures_list[monster.creature_id];
 
-        vtype_t name = {'\0'};
-        monsterNameDescription(name, monster.lit, creature.name);
+        auto name = monsterNameDescription(creature.name, monster.lit);
 
         if (monster.distance_from_player > MON_MAX_SIGHT || !los(char_row, char_col, (int) monster.y, (int) monster.x)) {
             continue; // do nothing
@@ -1866,8 +1844,7 @@ static void earthquakeHitsMonster(int monsterID) {
             damage = diceDamageRoll(4, 8);
         }
 
-        vtype_t name = {'\0'};
-        monsterNameDescription(name, monster.lit, creature.name);
+        auto name = monsterNameDescription(creature.name, monster.lit);
 
         printMonsterActionText(name, "wails out in pain!");
 
@@ -1966,8 +1943,7 @@ bool spellDispelCreature(int creature_defense, int damage) {
 
             dispelled = true;
 
-            vtype_t name = {'\0'};
-            monsterNameDescription(name, monster.lit, creature.name);
+            auto name = monsterNameDescription(creature.name, monster.lit);
 
             int hit = monsterTakeHit(id, randomNumber(damage));
 
@@ -1996,8 +1972,7 @@ bool spellTurnUndead() {
         const Creature_t &creature = creatures_list[monster.creature_id];
 
         if (monster.distance_from_player <= MON_MAX_SIGHT && ((CD_UNDEAD & creature.defenses) != 0) && los(char_row, char_col, (int) monster.y, (int) monster.x)) {
-            vtype_t name = {'\0'};
-            monsterNameDescription(name, monster.lit, creature.name);
+            auto name = monsterNameDescription(creature.name, monster.lit);
 
             if (py.misc.level + 1 > creature.level || randomNumber(5) == 1) {
                 if (monster.lit) {
