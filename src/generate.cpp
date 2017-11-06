@@ -506,13 +506,21 @@ static void dungeonPlaceFourSmallRooms(int y, int x, int depth, int height, int 
     }
 }
 
-// Builds an unusual room at a row, column coordinate -RAK-
 // Type 2 unusual rooms all have an inner room:
 //   1 - Just an inner room with one door
 //   2 - An inner room within an inner room
 //   3 - An inner room with pillar(s)
 //   4 - Inner room has a maze
 //   5 - A set of four inner rooms
+enum class InnerRoomTypes {
+    plain = 1,
+    treasure_vault,
+    pillars,
+    maze,
+    four_small_rooms,
+};
+
+// Builds a type 2 unusual room at a row, column coordinate -RAK-
 static void dungeonBuildRoomWithInnerRooms(int y, int x) {
     uint8_t floor = dungeonFloorTileForLevel();
 
@@ -564,12 +572,12 @@ static void dungeonBuildRoomWithInnerRooms(int y, int x) {
     }
 
     // Inner room variations
-    switch (randomNumber(5)) {
-        case 1: // Just an inner room.
+    switch ((InnerRoomTypes) randomNumber(5)) {
+        case InnerRoomTypes::plain:
             dungeonPlaceRandomSecretDoor(y, x, depth, height, left, right);
             dungeonPlaceVaultMonster(y, x, 1);
             break;
-        case 2: // Treasure Vault
+        case InnerRoomTypes::treasure_vault:
             dungeonPlaceTreasureVault(y, x, depth, height, left, right);
 
             // Guard the treasure well
@@ -578,7 +586,7 @@ static void dungeonBuildRoomWithInnerRooms(int y, int x) {
             // If the monsters don't get 'em.
             dungeonPlaceVaultTrap(y, x, 4, 10, 2 + randomNumber(3));
             break;
-        case 3: // Inner pillar(s).
+        case InnerRoomTypes::pillars:
             dungeonPlaceRandomSecretDoor(y, x, depth, height, left, right);
 
             dungeonPlaceInnerPillars(y, x);
@@ -609,7 +617,7 @@ static void dungeonBuildRoomWithInnerRooms(int y, int x) {
             dungeonPlaceVaultMonster(y, x - 2, randomNumber(2));
             dungeonPlaceVaultMonster(y, x + 2, randomNumber(2));
             break;
-        case 4: // Maze inside.
+        case InnerRoomTypes::maze:
             dungeonPlaceRandomSecretDoor(y, x, depth, height, left, right);
 
             dungeonPlaceMazeInsideRoom(depth, height, left, right);
@@ -627,7 +635,7 @@ static void dungeonBuildRoomWithInnerRooms(int y, int x) {
                 dungeonPlaceRandomObjectNear(y, x, 1);
             }
             break;
-        case 5: // Four small rooms.
+        case InnerRoomTypes::four_small_rooms:
             dungeonPlaceFourSmallRooms(y, x, depth, height, left, right);
 
             // Treasure in each one.
