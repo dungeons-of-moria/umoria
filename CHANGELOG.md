@@ -3,6 +3,13 @@
 ## HEAD
 
 
+### Bug Fixes
+
+- Game loading fix where shops data was being read twice, and the second time
+  resulted in incorrect data. Oops! Broken during save game refactor:
+  https://github.com/dungeons-of-moria/umoria/commit/ce2c756
+
+
 ## 5.7.6 (2017-11-05)
 
 ### Bug Fixes

@@ -834,25 +834,6 @@ bool loadGame(bool &generate) {
 
         generate = false; // We have restored a cave - no need to generate.
 
-        for (auto &store : stores) {
-            store.turns_left_before_closing = rd_long();
-            store.insults_counter = rd_short();
-            store.owner_id = rd_byte();
-            store.unique_items_counter = rd_byte();
-            store.good_purchases = rd_short();
-            store.bad_purchases = rd_short();
-            if (store.unique_items_counter > STORE_MAX_DISCRETE_ITEMS) {
-                goto error;
-            }
-            for (int j = 0; j < store.unique_items_counter; j++) {
-                store.inventory[j].cost = rd_long();
-                rd_item(store.inventory[j].item);
-            }
-        }
-
-        // read the time that the file was saved
-        time_saved = rd_long();
-
         if (ferror(fileptr) != 0) {
             goto error;
         }
