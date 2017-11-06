@@ -453,7 +453,7 @@ void quaff();
 void pray();
 
 // recall.c
-bool memoryMonsterKnown(int monster_id);
+bool memoryMonsterKnown(const Recall_t &memory);
 int memoryRecall(int monster_id);
 
 // rnd.c

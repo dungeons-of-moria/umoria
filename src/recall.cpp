@@ -24,12 +24,10 @@ static int roff_print_line;                 // Place to print line now being loa
 #define knowdamage(l, a, d) ((4 + (l)) * (a) > 80 * (d))
 
 // Do we know anything about this monster?
-bool memoryMonsterKnown(int monster_id) {
+bool memoryMonsterKnown(const Recall_t &memory) {
     if (wizard_mode) {
         return true;
     }
-
-    const Recall_t &memory = creature_recall[monster_id];
 
     if ((memory.movement != 0u) || (memory.defenses != 0u) || (memory.kills != 0u) || (memory.spells != 0u) || (memory.deaths != 0u)) {
         return true;
