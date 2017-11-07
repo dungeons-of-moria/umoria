@@ -3,6 +3,8 @@
 ## HEAD
 
 
+## 5.7.7 (2017-11-07)
+
 ### Bug Fixes
 
 - Game loading fix where shops data was being read twice, and the second time
