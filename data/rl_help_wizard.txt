@@ -1,15 +1,15 @@
-*  - Wizard light.
-:  - Map area.
-\  - Wizard Help.
-^A - Remove Curse and Cure all maladies.
-^D - Down/Up n levels.
-^E - Change character.
-^F - Delete monsters.
-^G - Allocate treasures.
-^I - Identify.
-^O - Print random objects sample.
-^T - Teleport player.
-^W - Wizard password on/off.
-@  - Create any object *CAN CAUSE FATAL ERROR*
-+  - Gain experience.
-&  - Summon monster.
+\  - Wizard Help
+:  - Map area (panel)
+*  - Wizard light
+^A - Cure all maladies and remove curses
+^D - Jump to depth # (level)
+^E - Edit character stats
+^F - Vanquish monsters within sight
+^G - Generate random items
+^I - Identify an item
+^O - Print random objects sample to file
+^T - Teleport player randomly
+^W - Wizard mode on/off
++  - Gain experience
+&  - Summon random monster
+@  - Create an object *CAN CAUSE FATAL ERROR*

@@ -1476,7 +1476,8 @@ static void doWizardCommands(char com_val) {
     int i, y, x;
 
     switch (com_val) {
-        case CTRL_KEY('A'): // ^A = Cure all
+        case CTRL_KEY('A'):
+            // Cure all!
             (void) spellRemoveCurseFromAllItems();
             (void) playerCureBlindness();
             (void) playerCureConfusion();
@@ -1496,14 +1497,17 @@ static void doWizardCommands(char com_val) {
                 py.flags.image = 1;
             }
             break;
-        case CTRL_KEY('E'): // ^E = wizchar
+        case CTRL_KEY('E'):
+            // Edit Character
             wizardCharacterAdjustment();
             messageLineClear();
             break;
-        case CTRL_KEY('F'): // ^F = genocide
+        case CTRL_KEY('F'):
+            // Mass Genocide, vnaquish all monstsers
             (void) spellMassGenocide();
             break;
-        case CTRL_KEY('G'): // ^G = treasure
+        case CTRL_KEY('G'):
+            // Generate random items
             if (command_count > 0) {
                 i = command_count;
                 command_count = 0;
@@ -1514,7 +1518,8 @@ static void doWizardCommands(char com_val) {
 
             drawDungeonPanel();
             break;
-        case CTRL_KEY('D'): // ^D = up/down
+        case CTRL_KEY('D'):
+            // Go up/down to specified depth
             if (command_count > 0) {
                 if (command_count > 99) {
                     i = 0;
@@ -1543,29 +1548,36 @@ static void doWizardCommands(char com_val) {
                 messageLineClear();
             }
             break;
-        case CTRL_KEY('O'): // ^O = objects
+        case CTRL_KEY('O'):
+            // Print random level object to a file
             outputRandomLevelObjectsToFile();
             break;
-        case '\\': // \ wizard help
+        case '\\':
+            // Display wizard help
             if (config.use_roguelike_keys) {
                 displayTextHelpFile(MORIA_RL_WIZARD_HELP);
             } else {
                 displayTextHelpFile(MORIA_WIZARD_HELP);
             }
             break;
-        case CTRL_KEY('I'): // ^I = identify
+        case CTRL_KEY('I'):
+            // Identify an item
             (void) spellIdentifyItem();
             break;
         case '*':
+            // Light up entire dungeon
             wizardLightUpDungeon();
             break;
         case ':':
+            // Light up current panel
             spellMapCurrentArea();
             break;
-        case CTRL_KEY('T'): // ^T = teleport
+        case CTRL_KEY('T'):
+            // Random player teleportation
             playerTeleport(100);
             break;
         case '+':
+            // Increase Experience
             if (command_count > 0) {
                 py.misc.exp = command_count;
                 command_count = 0;
@@ -1576,7 +1588,8 @@ static void doWizardCommands(char com_val) {
             }
             displayCharacterExperience();
             break;
-        case '&': // & = summon
+        case '&':
+            // Summon a random monster
             y = char_row;
             x = char_col;
             (void) monsterSummon(y, x, true);
@@ -1584,6 +1597,8 @@ static void doWizardCommands(char com_val) {
             updateMonsters(false);
             break;
         case '@':
+            // Generate an object
+            // NOTE: every field from the struct needs to be filled correctly
             wizardCreateObjects();
             break;
         default:
