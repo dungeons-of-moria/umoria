@@ -9,6 +9,8 @@
 #include "headers.h"
 #include "externs.h"
 
+#include <sstream>
+
 // Light up the dungeon -RAK-
 void wizardLightUpDungeon() {
     bool flag;
@@ -239,6 +241,63 @@ void wizardCharacterAdjustment() {
             break;
         }
         printCharacterSpeed();
+    }
+}
+
+// Request user input to get the array index of the `game_objects[]`
+static bool wizardRequestObjectId(int &id, const std::string &label, int start_id, int end_id) {
+    std::ostringstream id_str;
+    id_str << start_id << "-" << end_id;
+
+    std::string msg = label + " ID (" + id_str.str() + "): ";
+    putStringClearToEOL(msg.c_str(), Coord_t{0, 0});
+
+    vtype_t input = {0};
+    if (!getStringInput(input, Coord_t{0, (int) msg.length()}, 3)) {
+        return false;
+    }
+
+    int given_id;
+    if (!stringToNumber(input, given_id)) {
+        return false;
+    }
+
+    if (given_id < start_id || given_id > end_id) {
+        putStringClearToEOL(("Invalid ID. Must be " + id_str.str()).c_str(), Coord_t{0, 0});
+        return false;
+    }
+    id = given_id;
+
+    return true;
+}
+
+// Simplified wizard routine for creating an object
+void wizardGenerateObject() {
+    int id;
+    if (!wizardRequestObjectId(id, "Dungeon/Store object", 0, 366)) return;
+
+    for (int i = 0; i < 10; i++) {
+        int j = char_row - 3 + randomNumber(5);
+        int k = char_col - 4 + randomNumber(7);
+
+        if (coordInBounds(Coord_t{j, k}) && cave[j][k].feature_id <= MAX_CAVE_FLOOR && cave[j][k].treasure_id == 0) {
+            // delete any object at location, before call popt()
+            Cave_t &tile = cave[j][k];
+            if (tile.treasure_id != 0) {
+                (void) dungeonDeleteObject(j, k);
+            }
+
+            // place the object
+            int free_treasure_id = popt();
+            cave[j][k].treasure_id = (uint8_t) free_treasure_id;
+            inventoryItemCopyTo(id, treasure_list[free_treasure_id]);
+            magicTreasureMagicalAbility(free_treasure_id, current_dungeon_level);
+
+            // auto identify the item
+            itemIdentify(treasure_list[free_treasure_id], free_treasure_id);
+
+            i = 9;
+        }
     }
 }
 

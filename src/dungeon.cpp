@@ -1503,7 +1503,7 @@ static void doWizardCommands(char com_val) {
             messageLineClear();
             break;
         case CTRL_KEY('F'):
-            // Mass Genocide, vnaquish all monstsers
+            // Mass Genocide, vanquish all monsters
             (void) spellMassGenocide();
             break;
         case CTRL_KEY('G'):
@@ -1575,6 +1575,11 @@ static void doWizardCommands(char com_val) {
         case CTRL_KEY('T'):
             // Random player teleportation
             playerTeleport(100);
+            break;
+        case '%':
+            // Generate a dungeon item!
+            wizardGenerateObject();
+            drawDungeonPanel();
             break;
         case '+':
             // Increase Experience

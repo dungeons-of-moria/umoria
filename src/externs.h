@@ -588,4 +588,5 @@ void wandAim();
 // wizard.c
 void wizardLightUpDungeon();
 void wizardCharacterAdjustment();
+void wizardGenerateObject();
 void wizardCreateObjects();
