@@ -156,7 +156,7 @@ and macOS.
 
 
 
-## 5.6.0 (2015-02)
+## 5.6.0 (2008-10-13)
 
 Umoria is released under a new GPL v2 license. More information is available
 on the [free-moria](http://free-moria.sourceforge.net/) website.
