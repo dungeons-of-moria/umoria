@@ -12,4 +12,5 @@
 ^U - Summon random monster
 ^W - Wizard mode on/off
 +  - Gain experience
+%  - Generate a dungeon item
 @  - Create an object *CAN CAUSE FATAL ERROR*
