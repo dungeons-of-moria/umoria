@@ -2,6 +2,13 @@
 
 ## HEAD
 
+- Improve _Wizard Mode_ help files.
+- Easier item creation in _Wizard Mode_ (inspired by Bmoria).
+
+### Code
+
+- Simpler display of _death_ screens (`death_tomb.txt`, `death_royal.txt` files).
+
 
 ## 5.7.7 (2017-11-07)
 
