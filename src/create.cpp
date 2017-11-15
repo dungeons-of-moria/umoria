@@ -165,6 +165,15 @@ static void playerClearHistory() {
     }
 }
 
+static int16_t calculateSocialClass (int16_t social_class) {
+    if (social_class > 100) {
+        return 100;
+    } else if (social_class < 1) {
+        return 1;
+    }
+    return social_class;
+}
+
 // Get the racial history, determines social class -RAK-
 //
 // Assumptions:
@@ -172,7 +181,7 @@ static void playerClearHistory() {
 //   - All history parts are in ascending order
 static void characterGetHistory() {
     int history_id = py.misc.race_id * 3 + 1;
-    int social_class = randomNumber(4);
+    int16_t social_class = calculateSocialClass((int16_t) randomNumber(4));
 
     char history_block[240];
     history_block[0] = '\0';
@@ -251,14 +260,7 @@ static void characterGetHistory() {
         cursor_start = new_cursor_start;
     }
 
-    // Compute social class for player
-    if (social_class > 100) {
-        social_class = 100;
-    } else if (social_class < 1) {
-        social_class = 1;
-    }
-
-    py.misc.social_class = (int16_t) social_class;
+    py.misc.social_class = social_class;
 }
 
 // Gets the character's gender -JWT-
