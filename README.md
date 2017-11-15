@@ -5,7 +5,7 @@ written by Robert Alan Koeneke, with v1.0 released in 1983. The game was
 originally written in VMS Pascal before being ported to the C language and
 released as _Umoria_ in 1988. Moria has had many variants over the years, with
 [_Angband_](http://rephial.org/) being the most well known, and was also an
-inspiration for one the most commercially successful roguelike-like games,
+inspiration for one the most commercially successful action roguelike games,
 _Diablo_!
 
 Supported Platforms:
@@ -19,19 +19,21 @@ _* other Linux distros may work, but have not yet been tested._
 
 ## Umoria Restoration Release: v5.7
 
-The main focus of the `v5.7` release is to provide support for Windows and
-macOS users, while at the same time removing support for the many outdated
-computer system such as, MS DOS, "Classic" Mac OS (pre OS X), Amiga, and
-Atari ST.
+The main focus of the `v5.7` release is to provide support for the three
+main systems: Windows, macOS, and Linux. Support for all other outdated
+computer systems such as, MS DOS, "Classic" Mac OS (pre OS X), Amiga, and
+Atari ST has been removed.
 
 _Note: there are no gameplay changes in this release._
 
-A great deal of _code restoration_ has also been undertaken to aid future
-development of the game. This included tasks such as reformatting the source
-code with the help of `clang-tidy` and `clang-format`, modernizing the code
-to use standard C types, and fixing all warnings while compiling against recent
-versions of GCC. Full details of all changes can be found in the
-[CHANGELOG](CHANGELOG.md), and by browsing the commit history.
+A great deal of _code restoration_ is also currently being undertaken in the
+hope to aid future development of the game. Examples of tasks completed so far
+includes, reformatting the source code with the help of `clang-tidy` and
+`clang-format`, modernizing the code to use standard C types, and fixing all
+warnings while compiling against recent versions of GCC.
+
+Full details of all changes can be found in the [CHANGELOG](CHANGELOG.md), and
+by browsing the commit history.
 
 Due to its lack of Windows and Mac support, Moria was unplayable for many
 people. Hopefully these changes will give more people a chance to play this
@@ -42,8 +44,7 @@ classic roguelike game.
 
 At present Umoria has only been tested against `GCC 6.2`+, `GCC 7` and `ncurses 6.0`,
 although earlier versions should also work fine. You will require these along
-with `CMake`, the `ZIP` archiving program, and the C++ build tools for your
-system.
+with `CMake` and the C++ build tools for your system.
 
 
 ### macOS and Linux
@@ -91,7 +92,7 @@ CHANGELOG which tracks all the code changes made between versions 4.81 and
 5.5.2 (1987-2008).
 
 If you'd like to learn more on the development history of Umoria, these can
-make interesting reading.
+make for interesting reading.
 
 
 ## Code of Conduct and Contributions
@@ -109,6 +110,5 @@ Umoria is released under the [General Public License version 2](LICENSE) (GPL v2
 In 2007 Ben Asselstine and Ben Shadwick started the
 [_free-moria_](http://free-moria.sourceforge.net/) project to re-license
 UMoria 5.5.2 under GPL v2 by obtaining permission from all the contributing
-authors. Some eight years later, they finally succeeded in their goal and in
-early 2015 the Moria maintainer, David Grabiner, released Umoria 5.6 under a
-GPL v2 license.
+authors. A year later, they finally succeeded in their goal and in late 2008
+the Moria maintainer, David Grabiner, released Umoria 5.6 under a GPL v2 license.
