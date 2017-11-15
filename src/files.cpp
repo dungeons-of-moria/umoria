@@ -78,6 +78,29 @@ void displayTextHelpFile(const char *filename) {
     terminalRestoreScreen();
 }
 
+// Open and display a "death" text file
+void displayDeathFile(const char *filename) {
+    constexpr uint8_t max_line_length = 80;
+
+    char line_buffer[max_line_length];
+
+    FILE *file = fopen(filename, "r");
+    if (file == nullptr) {
+        (void) sprintf(line_buffer, "Can not find help file \"%s\".\n", filename);
+        putStringClearToEOL(line_buffer, Coord_t{0, 0});
+        return;
+    }
+
+    clearScreen();
+
+    for (int i = 0; i < 23 && feof(file) == 0; i++) {
+        if (fgets(line_buffer, max_line_length - 1, file) != CNIL) {
+            putString(line_buffer, Coord_t{i, 0});
+        }
+    }
+    (void) fclose(file);
+}
+
 // Prints a list of random objects to a file. -RAK-
 // Note that the objects produced is a sampling of objects
 // which be expected to appear on that level.

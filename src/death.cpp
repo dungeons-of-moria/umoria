@@ -10,70 +10,49 @@
 #include "externs.h"
 
 // Prints the gravestone of the character -RAK-
-static void printTomb() {
-    char *p = nullptr;
-    vtype_t str = {'\0'};
-    vtype_t tmp_str = {'\0'};
+void printTomb() {
+    displayDeathFile(DEATH_TOMB);
 
-    clearScreen();
-    putString("_______________________", Coord_t{1, 15});
-    putString("/", Coord_t{2, 14});
-    putString("\\         ___", Coord_t{2, 38});
-    putString("/", Coord_t{3, 13});
-    putString("\\ ___   /   \\      ___", Coord_t{3, 39});
-    putString("/            RIP            \\   \\  :   :     /   \\", Coord_t{4, 12});
-    putString("/", Coord_t{5, 11});
-    putString("\\  : _;,,,;_    :   :", Coord_t{5, 41});
-    (void) sprintf(str, "/%s\\,;_          _;,,,;_", centerString(tmp_str, py.misc.name));
-    putString(str, Coord_t{6, 10});
-    putString("|               the               |   ___", Coord_t{7, 9});
+    std::string text;
+
+    text = std::string(py.misc.name);
+    putString(text.c_str(), Coord_t{6, (int) (26 - text.length() / 2)});
+
     if (!total_winner) {
-        p = playerTitle();
+        text = playerTitle();
     } else {
-        p = (char *) "Magnificent";
+        text = "Magnificent";
     }
-    (void) sprintf(str, "| %s |  /   \\", centerString(tmp_str, p));
-    putString(str, Coord_t{8, 9});
-    putString("|", Coord_t{9, 9});
-    putString("|  :   :", Coord_t{9, 43});
+    putString(text.c_str(), Coord_t{8, (int) (26 - text.length() / 2)});
+
     if (!total_winner) {
-        p = (char *) classes[py.misc.class_id].title;
+        text = classes[py.misc.class_id].title;
     } else if (playerIsMale()) {
-        p = (char *) "*King*";
+        text = "*King*";
     } else {
-        p = (char *) "*Queen*";
+        text = "*Queen*";
     }
-    (void) sprintf(str, "| %s | _;,,,;_   ____", centerString(tmp_str, p));
-    putString(str, Coord_t{10, 9});
-    (void) sprintf(str, "Level : %d", (int) py.misc.level);
-    (void) sprintf(str, "| %s |          /    \\", centerString(tmp_str, str));
-    putString(str, Coord_t{11, 9});
-    (void) sprintf(str, "%d Exp", py.misc.exp);
-    (void) sprintf(str, "| %s |          :    :", centerString(tmp_str, str));
-    putString(str, Coord_t{12, 9});
-    (void) sprintf(str, "%d Au", py.misc.au);
-    (void) sprintf(str, "| %s |          :    :", centerString(tmp_str, str));
-    putString(str, Coord_t{13, 9});
-    (void) sprintf(str, "Died on Level : %d", current_dungeon_level);
-    (void) sprintf(str, "| %s |         _;,,,,;_", centerString(tmp_str, str));
-    putString(str, Coord_t{14, 9});
-    putString("|            killed by            |", Coord_t{15, 9});
-    p = character_died_from;
+    putString(text.c_str(), Coord_t{10, (int) (26 - text.length() / 2)});
 
-    auto len = (int) strlen(p);
-    p[len] = '.'; // add a trailing period
-    p[len + 1] = '\0';
-    (void) sprintf(str, "| %s |", centerString(tmp_str, p));
-    putString(str, Coord_t{16, 9});
-    p[len] = '\0'; // strip off the period
+    text = std::to_string(py.misc.level);
+    putString(text.c_str(), Coord_t{11, 30});
+
+    text = std::to_string(py.misc.exp) + " Exp";
+    putString(text.c_str(), Coord_t{12, (int) (26 - text.length() / 2)});
+
+    text = std::to_string(py.misc.au) + " Au";
+    putString(text.c_str(), Coord_t{13, (int) (26 - text.length() / 2)});
+
+    text = std::to_string(current_dungeon_level);
+    putString(text.c_str(), Coord_t{14, 34});
+
+    text = std::string(character_died_from);
+    putString(text.c_str(), Coord_t{16, (int) (26 - text.length() / 2)});
 
     char day[11];
     humanDateString(day);
-    (void) sprintf(str, "| %s |", centerString(tmp_str, day));
-
-    putString(str, Coord_t{17, 9});
-    putString("*|   *     *     *    *   *     *  | *", Coord_t{18, 8});
-    putString("________)/\\\\_)_/___(\\/___(//_\\)/_\\//__\\\\(/_|_)_______", Coord_t{19, 0});
+    text = std::string(day);
+    putString(text.c_str(), Coord_t{17, (int) (26 - text.length() / 2)});
 
     retry:
     flushInputBuffer();
@@ -81,6 +60,7 @@ static void printTomb() {
     putString("(ESC to abort, return to print on screen, or file name)", Coord_t{23, 0});
     putString("Character record?", Coord_t{22, 0});
 
+    vtype_t str = {'\0'};
     if (getStringInput(str, Coord_t{22, 18}, 60)) {
         for (auto &item : inventory) {
             itemSetAsIdentified(item.category_id, item.sub_category_id);
@@ -111,10 +91,20 @@ static void printTomb() {
     }
 }
 
+// Let the player know they did good.
+static void printCrown() {
+    displayDeathFile(DEATH_ROYAL);
+    if (playerIsMale()) {
+        putString("King!", Coord_t{17, 45});
+    } else {
+        putString("Queen!", Coord_t{17, 45});
+    }
+    flushInputBuffer();
+    waitForContinueKey(23);
+}
+
 // Change the player into a King! -RAK-
 static void kingly() {
-    const char *p = nullptr;
-
     // Change the character attributes.
     current_dungeon_level = 0;
     (void) strcpy(character_died_from, "Ripe Old Age");
@@ -126,30 +116,7 @@ static void kingly() {
     py.misc.max_exp += 5000000L;
     py.misc.exp = py.misc.max_exp;
 
-    // Let the player know they did good.
-    clearScreen();
-    putString("#", Coord_t{1, 34});
-    putString("#####", Coord_t{2, 32});
-    putString("#", Coord_t{3, 34});
-    putString(",,,  $$$  ,,,", Coord_t{4, 28});
-    putString(",,=$   \"$$$$$\"   $=,,", Coord_t{5, 24});
-    putString(",$$        $$$        $$,", Coord_t{6, 22});
-    putString("*>         <*>         <*", Coord_t{7, 22});
-    putString("$$         $$$         $$", Coord_t{8, 22});
-    putString("\"$$        $$$        $$\"", Coord_t{9, 22});
-    putString("\"$$       $$$       $$\"", Coord_t{10, 23});
-    p = "*#########*#########*";
-    putString(p, Coord_t{11, 24});
-    putString(p, Coord_t{12, 24});
-    putString("Veni, Vidi, Vici!", Coord_t{15, 26});
-    putString("I came, I saw, I conquered!", Coord_t{16, 21});
-    if (playerIsMale()) {
-        putString("All Hail the Mighty King!", Coord_t{17, 22});
-    } else {
-        putString("All Hail the Mighty Queen!", Coord_t{17, 22});
-    }
-    flushInputBuffer();
-    waitForContinueKey(23);
+    printCrown();
 }
 
 // What happens upon dying -RAK-

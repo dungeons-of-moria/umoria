@@ -153,6 +153,8 @@ set(
         ${PROJECT_SOURCE_DIR}/data/splash.txt
         ${PROJECT_SOURCE_DIR}/data/versions.txt
         ${PROJECT_SOURCE_DIR}/data/welcome.txt
+        ${PROJECT_SOURCE_DIR}/data/death_tomb.txt
+        ${PROJECT_SOURCE_DIR}/data/death_royal.txt
 )
 file(COPY ${data_files} DESTINATION "${data_dir}")
 

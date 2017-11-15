@@ -20,6 +20,9 @@
 #define MORIA_VERSIONS "data/versions.txt"
 #define MORIA_WELCOME "data/welcome.txt"
 
+#define DEATH_TOMB "data/death_tomb.txt"
+#define DEATH_ROYAL "data/death_royal.txt"
+
 // Game configuration
 typedef struct {
     vtype_t save_game_filename = MORIA_SAVE; // The save game filename

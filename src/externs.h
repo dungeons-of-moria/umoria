@@ -193,6 +193,7 @@ void playerEat();
 bool initializeScoreFile();
 void displaySplashScreen();
 void displayTextHelpFile(const char *filename);
+void displayDeathFile(const char *filename);
 void outputRandomLevelObjectsToFile();
 bool outputPlayerCharacterToFile(char *filename);
 
