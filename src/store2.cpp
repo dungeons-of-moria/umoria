@@ -209,7 +209,7 @@ static bool storeIncreaseInsults(int store_id) {
         printSpeechGetOutOfMyStore();
         store.insults_counter = 0;
         store.bad_purchases++;
-        store.turns_left_before_closing = dg.current_game_turn + 2500 + randomNumber(2500);
+        store.turns_left_before_closing = dg.game_turn + 2500 + randomNumber(2500);
         return true;
     }
 
@@ -944,7 +944,7 @@ static bool storeSellAnItem(int store_id, int &current_top_item_id) {
 void storeEnter(int store_id) {
     const Store_t &store = stores[store_id];
 
-    if (store.turns_left_before_closing >= dg.current_game_turn) {
+    if (store.turns_left_before_closing >= dg.game_turn) {
         printMessage("The doors are locked.");
         return;
     }

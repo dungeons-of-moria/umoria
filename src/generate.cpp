@@ -12,9 +12,9 @@
 static Coord_t doors_tk[100];
 static int door_index;
 
-// Returns a Dark/Light floor tile based on dg.current_dungeon_level, and random number
+// Returns a Dark/Light floor tile based on dg.current_level, and random number
 static uint8_t dungeonFloorTileForLevel() {
-    if (dg.current_dungeon_level <= randomNumber(25)) {
+    if (dg.current_level <= randomNumber(25)) {
         return TILE_LIGHT_FLOOR;
     }
     return TILE_DARK_FLOOR;
@@ -990,7 +990,7 @@ static void dungeonGenerate() {
             if (room_map[row][col]) {
                 y_locations[location_id] = (int16_t) (row * (SCREEN_HEIGHT >> 1) + QUART_HEIGHT);
                 x_locations[location_id] = (int16_t) (col * (SCREEN_WIDTH >> 1) + QUART_WIDTH);
-                if (dg.current_dungeon_level > randomNumber(DUN_UNUSUAL_ROOMS)) {
+                if (dg.current_level > randomNumber(DUN_UNUSUAL_ROOMS)) {
                     int room_type = randomNumber(3);
 
                     if (room_type == 1) {
@@ -1051,7 +1051,7 @@ static void dungeonGenerate() {
         dungeonPlaceDoorIfNextToTwoWalls(doors_tk[i].y + 1, doors_tk[i].x);
     }
 
-    int alloc_level = (dg.current_dungeon_level / 3);
+    int alloc_level = (dg.current_level / 3);
     if (alloc_level < 2) {
         alloc_level = 2;
     } else if (alloc_level > 10) {
@@ -1071,7 +1071,7 @@ static void dungeonGenerate() {
     dungeonAllocateAndPlaceObject(setFloors, 4, randomNumberNormalDistribution(LEVEL_TOTAL_GOLD_AND_GEMS, 3));
     dungeonAllocateAndPlaceObject(setFloors, 1, randomNumber(alloc_level));
 
-    if (dg.current_dungeon_level >= MON_ENDGAME_LEVEL) {
+    if (dg.current_level >= MON_ENDGAME_LEVEL) {
         monsterPlaceWinning();
     }
 }
@@ -1159,7 +1159,7 @@ static void dungeonPlaceTownStores() {
 }
 
 static bool isNighTime() {
-    return (0x1 & (dg.current_game_turn / 5000)) != 0;
+    return (0x1 & (dg.game_turn / 5000)) != 0;
 }
 
 // Light town based on whether it is Night time, or day time.
@@ -1224,7 +1224,7 @@ void generateCave() {
     dg.height = MAX_HEIGHT;
     dg.width = MAX_WIDTH;
 
-    if (dg.current_dungeon_level == 0) {
+    if (dg.current_level == 0) {
         dg.height = SCREEN_HEIGHT;
         dg.width = SCREEN_WIDTH;
     }
@@ -1235,7 +1235,7 @@ void generateCave() {
     dg.panel_row = dg.max_panel_rows;
     dg.panel_col = dg.max_panel_cols;
 
-    if (dg.current_dungeon_level == 0) {
+    if (dg.current_level == 0) {
         townGeneration();
     } else {
         dungeonGenerate();

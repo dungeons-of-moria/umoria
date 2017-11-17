@@ -37,7 +37,12 @@ typedef struct {
     // Floor definitions
     Cave_t cave[MAX_HEIGHT][MAX_WIDTH];
 
-    int16_t current_dungeon_level; // Current dungeon level
-    int32_t current_game_turn;     // Current turn of game
-    bool generate_new_level;       // True will generate a new level on next loop iteration
+    // The current dungeon level
+    int16_t current_level;
+
+    // Current turn of the game
+    int32_t game_turn;
+
+    // A `true` value means a new level will be generated on next loop iteration
+    bool generate_new_level;
 } Dungeon_t;

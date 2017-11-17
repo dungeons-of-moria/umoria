@@ -29,7 +29,7 @@ void recordNewHighScore() {
     new_entry.uid = 0; // NOTE: do we not want to use `getuid()`? -MRC-
     new_entry.mhp = py.misc.max_hp;
     new_entry.chp = py.misc.current_hp;
-    new_entry.dungeon_depth = (uint8_t) dg.current_dungeon_level;
+    new_entry.dungeon_depth = (uint8_t) dg.current_level;
     new_entry.level = (uint8_t) py.misc.level;
     new_entry.deepest_dungeon_depth = (uint8_t) py.misc.max_dungeon_depth;
     new_entry.gender = highScoreGenderLabel();
@@ -249,7 +249,7 @@ int32_t playerCalculateTotalPoints() {
         total += storeItemValue(item);
     }
 
-    total += dg.current_dungeon_level * 50;
+    total += dg.current_level * 50;
 
     // Don't ever let the score decrease from one save to the next.
     if (character_max_score > total) {

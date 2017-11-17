@@ -51,7 +51,7 @@ static void trapCoveredPit(const Inventory_t &item, int dam, int y, int x) {
 
 static void trapDoor(const Inventory_t &item, int dam) {
     dg.generate_new_level = true;
-    dg.current_dungeon_level++;
+    dg.current_level++;
 
     printMessage("You fell through a trap door!");
 

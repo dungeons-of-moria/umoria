@@ -291,7 +291,7 @@ void wizardGenerateObject() {
             int free_treasure_id = popt();
             dg.cave[j][k].treasure_id = (uint8_t) free_treasure_id;
             inventoryItemCopyTo(id, treasure_list[free_treasure_id]);
-            magicTreasureMagicalAbility(free_treasure_id, dg.current_dungeon_level);
+            magicTreasureMagicalAbility(free_treasure_id, dg.current_level);
 
             // auto identify the item
             itemIdentify(treasure_list[free_treasure_id], free_treasure_id);

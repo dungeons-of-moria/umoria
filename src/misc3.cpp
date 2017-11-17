@@ -34,10 +34,10 @@ void dungeonPlaceRubble(int y, int x) {
 void dungeonPlaceGold(int y, int x) {
     int free_treasure_id = popt();
 
-    int gold_type_id = ((randomNumber(dg.current_dungeon_level + 2) + 2) / 2) - 1;
+    int gold_type_id = ((randomNumber(dg.current_level + 2) + 2) / 2) - 1;
 
     if (randomNumber(TREASURE_CHANCE_OF_GREAT_ITEM) == 1) {
-        gold_type_id += randomNumber(dg.current_dungeon_level + 1);
+        gold_type_id += randomNumber(dg.current_level + 1);
     }
 
     if (gold_type_id >= MAX_GOLD_TYPES) {
@@ -113,10 +113,10 @@ void dungeonPlaceRandomObjectAt(int y, int x, bool must_be_small) {
 
     dg.cave[y][x].treasure_id = (uint8_t) free_treasure_id;
 
-    int object_id = itemGetRandomObjectId(dg.current_dungeon_level, must_be_small);
+    int object_id = itemGetRandomObjectId(dg.current_level, must_be_small);
     inventoryItemCopyTo(sorted_objects[object_id], treasure_list[free_treasure_id]);
 
-    magicTreasureMagicalAbility(free_treasure_id, dg.current_dungeon_level);
+    magicTreasureMagicalAbility(free_treasure_id, dg.current_level);
 
     if (dg.cave[y][x].creature_id == 1) {
         printMessage("You feel something roll beneath your feet."); // -CJS-
@@ -420,7 +420,7 @@ void printCharacterGoldValue() {
 void printCharacterCurrentDepth() {
     vtype_t depths = {'\0'};
 
-    int depth = dg.current_dungeon_level * 50;
+    int depth = dg.current_level * 50;
 
     if (depth == 0) {
         (void) strcpy(depths, "Town level");

@@ -48,8 +48,8 @@ static void playerInitializePlayerLight() {
 
 // Check for a maximum level
 static void playerUpdateMaxDungeonDepth() {
-    if (dg.current_dungeon_level > py.misc.max_dungeon_depth) {
-        py.misc.max_dungeon_depth = (uint16_t) dg.current_dungeon_level;
+    if (dg.current_level > py.misc.max_dungeon_depth) {
+        py.misc.max_dungeon_depth = (uint16_t) dg.current_level;
     }
 }
 
@@ -371,14 +371,14 @@ static void playerUpdatePoisonedState() {
         case 1:
         case 2:
         case 3:
-            damage = ((dg.current_game_turn % 2) == 0 ? 1 : 0);
+            damage = ((dg.game_turn % 2) == 0 ? 1 : 0);
             break;
         case 4:
         case 5:
-            damage = ((dg.current_game_turn % 3) == 0 ? 1 : 0);
+            damage = ((dg.game_turn % 3) == 0 ? 1 : 0);
             break;
         case 6:
-            damage = ((dg.current_game_turn % 4) == 0 ? 1 : 0);
+            damage = ((dg.game_turn % 4) == 0 ? 1 : 0);
             break;
         default:
             damage = 0;
@@ -653,11 +653,11 @@ static void playerUpdateWordOfRecall() {
         py.flags.paralysis++;
         py.flags.word_of_recall = 0;
 
-        if (dg.current_dungeon_level > 0) {
-            dg.current_dungeon_level = 0;
+        if (dg.current_level > 0) {
+            dg.current_level = 0;
             printMessage("You feel yourself yanked upwards!");
         } else if (py.misc.max_dungeon_depth != 0) {
-            dg.current_dungeon_level = py.misc.max_dungeon_depth;
+            dg.current_level = py.misc.max_dungeon_depth;
             printMessage("You feel yourself yanked downwards!");
         }
     } else {
@@ -927,10 +927,10 @@ void playDungeon() {
     // Exit when `dg.generate_new_level` and `eof_flag` are both set
     do {
         // Increment turn counter
-        dg.current_game_turn++;
+        dg.game_turn++;
 
         // turn over the store contents every, say, 1000 turns
-        if (dg.current_dungeon_level != 0 && dg.current_game_turn % 1000 == 0) {
+        if (dg.current_level != 0 && dg.game_turn % 1000 == 0) {
             storeMaintenance();
         }
 
@@ -996,7 +996,7 @@ void playDungeon() {
         // for 1st level char, check once every 2160 turns
         // for 40th level char, check once every 416 turns
         int chance = 10 + 750 / (5 + py.misc.level);
-        if ((dg.current_game_turn & 0xF) == 0 && py.flags.confused == 0 && randomNumber(chance) == 1) {
+        if ((dg.game_turn & 0xF) == 0 && py.flags.confused == 0 && randomNumber(chance) == 1) {
             playerDetectEnchantment();
         }
 
@@ -1543,9 +1543,9 @@ static void doWizardCommands(char com_val) {
             }
 
             if (i >= 0) {
-                dg.current_dungeon_level = (int16_t) i;
-                if (dg.current_dungeon_level > 99) {
-                    dg.current_dungeon_level = 99;
+                dg.current_level = (int16_t) i;
+                if (dg.current_level > 99) {
+                    dg.current_level = 99;
                 }
                 dg.generate_new_level = true;
             } else {
@@ -2139,7 +2139,7 @@ static void dungeonGoUpLevel() {
     uint8_t tile_id = dg.cave[char_row][char_col].treasure_id;
 
     if (tile_id != 0 && treasure_list[tile_id].category_id == TV_UP_STAIR) {
-        dg.current_dungeon_level--;
+        dg.current_level--;
 
         printMessage("You enter a maze of up staircases.");
         printMessage("You pass through a one-way door.");
@@ -2156,7 +2156,7 @@ static void dungeonGoDownLevel() {
     uint8_t tile_id = dg.cave[char_row][char_col].treasure_id;
 
     if (tile_id != 0 && treasure_list[tile_id].category_id == TV_DOWN_STAIR) {
-        dg.current_dungeon_level++;
+        dg.current_level++;
 
         printMessage("You enter a maze of down staircases.");
         printMessage("You pass through a one-way door.");

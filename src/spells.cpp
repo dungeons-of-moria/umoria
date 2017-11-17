@@ -194,7 +194,7 @@ bool spellLightArea(int y, int x) {
     // NOTE: this is not changed anywhere. A bug or correct? -MRC-
     bool lit = true;
 
-    if (dg.cave[y][x].perma_lit_room && dg.current_dungeon_level > 0) {
+    if (dg.cave[y][x].perma_lit_room && dg.current_level > 0) {
         dungeonLightRoom(y, x);
     }
 
@@ -214,7 +214,7 @@ bool spellLightArea(int y, int x) {
 bool spellDarkenArea(int y, int x) {
     bool darkened = false;
 
-    if (dg.cave[y][x].perma_lit_room && dg.current_dungeon_level > 0) {
+    if (dg.cave[y][x].perma_lit_room && dg.current_level > 0) {
         int half_height = (SCREEN_HEIGHT / 2);
         int half_width = (SCREEN_WIDTH / 2);
         int start_row = (y / half_height) * half_height + 1;
@@ -1860,7 +1860,7 @@ static void earthquakeHitsMonster(int monsterID) {
 }
 
 // This is a fun one.  In a given block, pick some walls and
-// turn them into open spots.  Pick some open spots and dg.current_game_turn
+// turn them into open spots.  Pick some open spots and dg.game_turn
 // them into walls.  An "Earthquake" effect. -RAK-
 void dungeonEarthquake() {
     for (int y = char_row - 8; y <= char_row + 8; y++) {
@@ -2168,7 +2168,7 @@ static void replace_spot(int y, int x, int typ) {
 //   Winning creatures that are deleted will be considered as teleporting to another level.
 //   This will NOT win the game.
 void spellDestroyArea(int y, int x) {
-    if (dg.current_dungeon_level > 0) {
+    if (dg.current_level > 0) {
         for (int pos_y = y - 15; pos_y <= y + 15; pos_y++) {
             for (int pos_x = x - 15; pos_x <= x + 15; pos_x++) {
                 if (coordInBounds(Coord_t{pos_y, pos_x}) && dg.cave[pos_y][pos_x].feature_id != TILE_BOUNDARY_WALL) {

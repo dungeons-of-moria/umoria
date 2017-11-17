@@ -736,7 +736,7 @@ void monsterPlaceNewWithinDistance(int number, int distance_from_source, bool sl
             x = randomNumber(dg.width - 2);
         } while (dg.cave[y][x].feature_id >= MIN_CLOSED_SPACE || dg.cave[y][x].creature_id != 0 || coordDistanceBetween(Coord_t{y, x}, Coord_t{char_row, char_col}) <= distance_from_source);
 
-        int l = monsterGetOneSuitableForLevel(dg.current_dungeon_level);
+        int l = monsterGetOneSuitableForLevel(dg.current_level);
 
         // Dragons are always created sleeping here,
         // so as to give the player a sporting chance.
@@ -778,7 +778,7 @@ static bool placeMonsterAdjacentTo(int monsterID, int &y, int &x, bool slp) {
 
 // Places creature adjacent to given location -RAK-
 bool monsterSummon(int &y, int &x, bool sleeping) {
-    int monster_id = monsterGetOneSuitableForLevel(dg.current_dungeon_level + MON_SUMMONED_LEVEL_ADJUST);
+    int monster_id = monsterGetOneSuitableForLevel(dg.current_level + MON_SUMMONED_LEVEL_ADJUST);
     return placeMonsterAdjacentTo(monster_id, y, x, sleeping);
 }
 
