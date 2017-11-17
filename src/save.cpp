@@ -286,8 +286,8 @@ static bool sv_write() {
     wr_short((uint16_t) monster_multiply_total);
     wr_short((uint16_t) dg.height);
     wr_short((uint16_t) dg.width);
-    wr_short((uint16_t) dg.panel.max_panel_rows);
-    wr_short((uint16_t) dg.panel.max_panel_cols);
+    wr_short((uint16_t) dg.panel.max_rows);
+    wr_short((uint16_t) dg.panel.max_cols);
 
     for (int i = 0; i < MAX_HEIGHT; i++) {
         for (int j = 0; j < MAX_WIDTH; j++) {
@@ -766,8 +766,8 @@ bool loadGame(bool &generate) {
         monster_multiply_total = rd_short();
         dg.height = rd_short();
         dg.width = rd_short();
-        dg.panel.max_panel_rows = rd_short();
-        dg.panel.max_panel_cols = rd_short();
+        dg.panel.max_rows = rd_short();
+        dg.panel.max_cols = rd_short();
 
         uint8_t char_tmp, ychar, xchar, count;
 

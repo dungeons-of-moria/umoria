@@ -901,12 +901,12 @@ void playDungeon() {
     int find_count = 0;
 
     // Ensure we display the panel. Used to do this with a global var. -CJS-
-    dg.panel.panel_row = dg.panel.panel_col = -1;
+    dg.panel.row = dg.panel.col = -1;
 
     // Light up the area around character
     dungeonResetView();
 
-    // must do this after `dg.panel.panel_row` / `dg.panel.panel_col` set to -1, because playerSearchOff() will
+    // must do this after `dg.panel.row` / `dg.panel.col` set to -1, because playerSearchOff() will
     // call dungeonResetView(), and so the panel_* variables must be valid before
     // playerSearchOff() is called
     if ((py.flags.status & PY_SEARCH) != 0u) {
@@ -1415,16 +1415,16 @@ static void commandLocateOnMap() {
 
     int cy, cx, p_y, p_x;
 
-    cy = dg.panel.panel_row;
-    cx = dg.panel.panel_col;
+    cy = dg.panel.row;
+    cx = dg.panel.col;
 
     int dir_val;
     vtype_t out_val = {'\0'};
     vtype_t tmp_str = {'\0'};
 
     while (true) {
-        p_y = dg.panel.panel_row;
-        p_x = dg.panel.panel_col;
+        p_y = dg.panel.row;
+        p_x = dg.panel.col;
 
         if (p_y == cy && p_x == cx) {
             tmp_str[0] = '\0';
