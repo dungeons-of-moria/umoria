@@ -407,14 +407,14 @@ static void characterGetClass() {
             // if it is within 1/8 of average value.
             min_value = (PLAYER_MAX_LEVEL * 3 / 8 * (py.misc.hit_die - 1)) + PLAYER_MAX_LEVEL;
             max_value = (PLAYER_MAX_LEVEL * 5 / 8 * (py.misc.hit_die - 1)) + PLAYER_MAX_LEVEL;
-            player_base_hp_levels[0] = py.misc.hit_die;
+            py.base_hp_levels[0] = py.misc.hit_die;
 
             do {
                 for (int i = 1; i < PLAYER_MAX_LEVEL; i++) {
-                    player_base_hp_levels[i] = (uint16_t) randomNumber((int) py.misc.hit_die);
-                    player_base_hp_levels[i] += player_base_hp_levels[i - 1];
+                    py.base_hp_levels[i] = (uint16_t) randomNumber((int) py.misc.hit_die);
+                    py.base_hp_levels[i] += py.base_hp_levels[i - 1];
                 }
-            } while (player_base_hp_levels[PLAYER_MAX_LEVEL - 1] < min_value || player_base_hp_levels[PLAYER_MAX_LEVEL - 1] > max_value);
+            } while (py.base_hp_levels[PLAYER_MAX_LEVEL - 1] < min_value || py.base_hp_levels[PLAYER_MAX_LEVEL - 1] > max_value);
 
             py.misc.bth += klass.base_to_hit;
             py.misc.bth_with_bows += klass.base_to_hit_with_bows; // RAK

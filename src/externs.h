@@ -51,7 +51,6 @@ extern bool wizard_mode;
 // Following are player variables
 extern Player_t py;
 extern uint32_t player_base_exp_levels[PLAYER_MAX_LEVEL];
-extern uint16_t player_base_hp_levels[PLAYER_MAX_LEVEL];
 
 extern ClassRankTitle_t class_rank_titles[PLAYER_MAX_CLASSES][PLAYER_MAX_LEVEL];
 extern Race_t character_races[PLAYER_MAX_RACES];

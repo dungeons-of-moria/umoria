@@ -239,7 +239,7 @@ static bool sv_write() {
     wr_short((uint16_t) panic_save);
     wr_short((uint16_t) total_winner);
     wr_short((uint16_t) noscore);
-    wr_shorts(player_base_hp_levels, PLAYER_MAX_LEVEL);
+    wr_shorts(py.base_hp_levels, PLAYER_MAX_LEVEL);
 
     for (auto &store : stores) {
         wr_long((uint32_t) store.turns_left_before_closing);
@@ -689,7 +689,7 @@ bool loadGame(bool &generate) {
             total_winner = total_winner_short != 0;
 
             noscore = rd_short();
-            rd_shorts(player_base_hp_levels, PLAYER_MAX_LEVEL);
+            rd_shorts(py.base_hp_levels, PLAYER_MAX_LEVEL);
 
             for (auto &store : stores) {
                 store.turns_left_before_closing = rd_long();

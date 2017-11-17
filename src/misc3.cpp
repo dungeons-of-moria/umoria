@@ -2005,7 +2005,7 @@ void displayCharacterExperience() {
 
 // Calculate the players hit points
 void playerCalculateHitPoints() {
-    int hp = player_base_hp_levels[py.misc.level - 1] + (playerStatAdjustmentConstitution() * py.misc.level);
+    int hp = py.base_hp_levels[py.misc.level - 1] + (playerStatAdjustmentConstitution() * py.misc.level);
 
     // Always give at least one point per level + 1
     if (hp < (py.misc.level + 1)) {

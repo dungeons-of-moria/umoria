@@ -11,10 +11,6 @@
 // Player record for most player related info
 Player_t py = Player_t{};
 
-// calculated base hp values for player at each level, store them
-// so that drain life + restore life does not affect hit points.
-uint16_t player_base_hp_levels[PLAYER_MAX_LEVEL];
-
 bool playerIsMale() {
     return py.misc.gender;
 }

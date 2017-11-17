@@ -114,6 +114,10 @@ typedef struct {
     int16_t row;
     int16_t col;
 
+    // calculated base hp values at each level, store them so that
+    // drain life + restore life does not affect hit points.
+    uint16_t base_hp_levels[PLAYER_MAX_LEVEL];
+
     int16_t pack_heaviness;    // Heaviness of pack - used to calculate if pack is too heavy -CJS-
     uint8_t running_tracker;   // Tracker for number of turns taken during one run cycle
     bool carrying_light;       // True when player is carrying light
