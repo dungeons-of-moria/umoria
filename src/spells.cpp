@@ -64,8 +64,8 @@ bool monsterSleep(int y, int x) {
 bool dungeonDetectTreasureOnPanel() {
     bool detected = false;
 
-    for (int y = dg.panel.row_min; y <= dg.panel.row_max; y++) {
-        for (int x = dg.panel.col_min; x <= dg.panel.col_max; x++) {
+    for (int y = dg.panel.top; y <= dg.panel.bottom; y++) {
+        for (int x = dg.panel.left; x <= dg.panel.right; x++) {
             Tile_t &tile = dg.floor[y][x];
 
             if (tile.treasure_id != 0 && treasure_list[tile.treasure_id].category_id == TV_GOLD && !caveTileVisible(Coord_t{y, x})) {
@@ -83,8 +83,8 @@ bool dungeonDetectTreasureOnPanel() {
 bool dungeonDetectObjectOnPanel() {
     bool detected = false;
 
-    for (int y = dg.panel.row_min; y <= dg.panel.row_max; y++) {
-        for (int x = dg.panel.col_min; x <= dg.panel.col_max; x++) {
+    for (int y = dg.panel.top; y <= dg.panel.bottom; y++) {
+        for (int x = dg.panel.left; x <= dg.panel.right; x++) {
             Tile_t &tile = dg.floor[y][x];
 
             if (tile.treasure_id != 0 && treasure_list[tile.treasure_id].category_id < TV_MAX_OBJECT && !caveTileVisible(Coord_t{y, x})) {
@@ -102,8 +102,8 @@ bool dungeonDetectObjectOnPanel() {
 bool dungeonDetectTrapOnPanel() {
     bool detected = false;
 
-    for (int y = dg.panel.row_min; y <= dg.panel.row_max; y++) {
-        for (int x = dg.panel.col_min; x <= dg.panel.col_max; x++) {
+    for (int y = dg.panel.top; y <= dg.panel.bottom; y++) {
+        for (int x = dg.panel.left; x <= dg.panel.right; x++) {
             Tile_t &tile = dg.floor[y][x];
 
             if (tile.treasure_id == 0) {
@@ -128,8 +128,8 @@ bool dungeonDetectTrapOnPanel() {
 bool dungeonDetectSecretDoorsOnPanel() {
     bool detected = false;
 
-    for (int y = dg.panel.row_min; y <= dg.panel.row_max; y++) {
-        for (int x = dg.panel.col_min; x <= dg.panel.col_max; x++) {
+    for (int y = dg.panel.top; y <= dg.panel.bottom; y++) {
+        for (int x = dg.panel.left; x <= dg.panel.right; x++) {
             Tile_t &tile = dg.floor[y][x];
 
             if (tile.treasure_id == 0) {
@@ -275,10 +275,10 @@ static void dungeonLightAreaAroundFloorTile(int y, int x) {
 
 // Map the current area plus some -RAK-
 void spellMapCurrentArea() {
-    int row_min = dg.panel.row_min - randomNumber(10);
-    int row_max = dg.panel.row_max + randomNumber(10);
-    int col_min = dg.panel.col_min - randomNumber(20);
-    int col_max = dg.panel.col_max + randomNumber(20);
+    int row_min = dg.panel.top - randomNumber(10);
+    int row_max = dg.panel.bottom + randomNumber(10);
+    int col_min = dg.panel.left - randomNumber(20);
+    int col_max = dg.panel.right + randomNumber(20);
 
     for (int y = row_min; y <= row_max; y++) {
         for (int x = col_min; x <= col_max; x++) {

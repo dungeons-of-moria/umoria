@@ -1208,10 +1208,10 @@ static void townGeneration() {
 
 // Generates a random dungeon level -RAK-
 void generateCave() {
-    dg.panel.row_min = 0;
-    dg.panel.row_max = 0;
-    dg.panel.col_min = 0;
-    dg.panel.col_max = 0;
+    dg.panel.top = 0;
+    dg.panel.bottom = 0;
+    dg.panel.left = 0;
+    dg.panel.right = 0;
 
     char_row = -1;
     char_col = -1;

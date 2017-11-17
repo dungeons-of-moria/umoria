@@ -25,10 +25,10 @@ typedef struct {
     int row;
     int col;
 
-    int row_min;
-    int row_max;
-    int col_min;
-    int col_max;
+    int top;
+    int bottom;
+    int left;
+    int right;
 
     int col_prt;
     int row_prt;
