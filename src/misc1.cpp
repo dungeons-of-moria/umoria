@@ -145,43 +145,43 @@ bool coordInBounds(Coord_t coord) {
 
 // Calculates current boundaries -RAK-
 static void panelBounds() {
-    dg.panel_row_min = dg.panel_row * (SCREEN_HEIGHT / 2);
-    dg.panel_row_max = dg.panel_row_min + SCREEN_HEIGHT - 1;
-    dg.panel_row_prt = dg.panel_row_min - 1;
-    dg.panel_col_min = dg.panel_col * (SCREEN_WIDTH / 2);
-    dg.panel_col_max = dg.panel_col_min + SCREEN_WIDTH - 1;
-    dg.panel_col_prt = dg.panel_col_min - 13;
+    dg.panel.panel_row_min = dg.panel.panel_row * (SCREEN_HEIGHT / 2);
+    dg.panel.panel_row_max = dg.panel.panel_row_min + SCREEN_HEIGHT - 1;
+    dg.panel.panel_row_prt = dg.panel.panel_row_min - 1;
+    dg.panel.panel_col_min = dg.panel.panel_col * (SCREEN_WIDTH / 2);
+    dg.panel.panel_col_max = dg.panel.panel_col_min + SCREEN_WIDTH - 1;
+    dg.panel.panel_col_prt = dg.panel.panel_col_min - 13;
 }
 
 // Given an row (y) and col (x), this routine detects -RAK-
 // when a move off the screen has occurred and figures new borders.
 // `force` forces the panel bounds to be recalculated, useful for 'W'here.
 bool coordOutsidePanel(Coord_t coord, bool force) {
-    int row = dg.panel_row;
-    int col = dg.panel_col;
+    int row = dg.panel.panel_row;
+    int col = dg.panel.panel_col;
 
-    if (force || coord.y < dg.panel_row_min + 2 || coord.y > dg.panel_row_max - 2) {
+    if (force || coord.y < dg.panel.panel_row_min + 2 || coord.y > dg.panel.panel_row_max - 2) {
         row = (coord.y - SCREEN_HEIGHT / 4) / (SCREEN_HEIGHT / 2);
 
-        if (row > dg.max_panel_rows) {
-            row = dg.max_panel_rows;
+        if (row > dg.panel.max_panel_rows) {
+            row = dg.panel.max_panel_rows;
         } else if (row < 0) {
             row = 0;
         }
     }
 
-    if (force || coord.x < dg.panel_col_min + 3 || coord.x > dg.panel_col_max - 3) {
+    if (force || coord.x < dg.panel.panel_col_min + 3 || coord.x > dg.panel.panel_col_max - 3) {
         col = ((coord.x - SCREEN_WIDTH / 4) / (SCREEN_WIDTH / 2));
-        if (col > dg.max_panel_cols) {
-            col = dg.max_panel_cols;
+        if (col > dg.panel.max_panel_cols) {
+            col = dg.panel.max_panel_cols;
         } else if (col < 0) {
             col = 0;
         }
     }
 
-    if (row != dg.panel_row || col != dg.panel_col) {
-        dg.panel_row = row;
-        dg.panel_col = col;
+    if (row != dg.panel.panel_row || col != dg.panel.panel_col) {
+        dg.panel.panel_row = row;
+        dg.panel.panel_col = col;
         panelBounds();
 
         // stop movement if any
@@ -198,8 +198,8 @@ bool coordOutsidePanel(Coord_t coord, bool force) {
 
 // Is the given coordinate within the screen panel boundaries -RAK-
 bool coordInsidePanel(Coord_t coord) {
-    bool valid_y = coord.y >= dg.panel_row_min && coord.y <= dg.panel_row_max;
-    bool valid_x = coord.x >= dg.panel_col_min && coord.x <= dg.panel_col_max;
+    bool valid_y = coord.y >= dg.panel.panel_row_min && coord.y <= dg.panel.panel_row_max;
+    bool valid_x = coord.x >= dg.panel.panel_col_min && coord.x <= dg.panel.panel_col_max;
 
     return valid_y && valid_x;
 }
@@ -500,11 +500,11 @@ void drawDungeonPanel() {
     int line = 1;
 
     // Top to bottom
-    for (int y = dg.panel_row_min; y <= dg.panel_row_max; y++) {
+    for (int y = dg.panel.panel_row_min; y <= dg.panel.panel_row_max; y++) {
         eraseLine(Coord_t{line++, 13});
 
         // Left to right
-        for (int x = dg.panel_col_min; x <= dg.panel_col_max; x++) {
+        for (int x = dg.panel.panel_col_min; x <= dg.panel.panel_col_max; x++) {
             char ch = caveGetTileSymbol(Coord_t{y, x});
             if (ch != ' ') {
                 panelPutTile(ch, Coord_t{y, x});

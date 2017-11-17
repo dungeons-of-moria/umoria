@@ -179,8 +179,8 @@ void eraseLine(Coord_t coords) {
 // Moves the cursor to a given interpolated y, x position -RAK-
 void panelMoveCursor(Coord_t coords) {
     // Real coords convert to screen positions
-    coords.y -= dg.panel_row_prt;
-    coords.x -= dg.panel_col_prt;
+    coords.y -= dg.panel.panel_row_prt;
+    coords.x -= dg.panel.panel_col_prt;
 
     if (move(coords.y, coords.x) == ERR) {
         abort();
@@ -191,8 +191,8 @@ void panelMoveCursor(Coord_t coords) {
 // sign bit of a character used to indicate standout mode. -CJS
 void panelPutTile(char ch, Coord_t coords) {
     // Real coords convert to screen positions
-    coords.y -= dg.panel_row_prt;
-    coords.x -= dg.panel_col_prt;
+    coords.y -= dg.panel.panel_row_prt;
+    coords.x -= dg.panel.panel_col_prt;
 
     if (mvaddch(coords.y, coords.x, ch) == ERR) {
         abort();

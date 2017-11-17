@@ -16,12 +16,9 @@ typedef struct {
     bool temporary_light : 1; // Temporary light, used for player's lamp light,etc.
 } Tile_t;
 
+// Panel_t holds data about a screen panel (the dungeon display)
+// Screen panels calculated from the dungeon/screen dimensions
 typedef struct {
-    // Dungeon size is either just big enough for town level, or the whole dungeon itself
-    int16_t height;
-    int16_t width;
-
-    // Screen panels calculated from the dungeon/screen dimensions
     int16_t max_panel_rows;
     int16_t max_panel_cols;
 
@@ -33,16 +30,24 @@ typedef struct {
     int panel_col_max;
     int panel_col_prt;
     int panel_row_prt;
+} Panel_t;
 
-    // Floor definitions
-    Tile_t floor[MAX_HEIGHT][MAX_WIDTH];
+typedef struct {
+    // Dungeon size is either just big enough for town level, or the whole dungeon itself
+    int16_t height;
+    int16_t width;
 
-    // The current dungeon level
-    int16_t current_level;
+    Panel_t panel;
 
     // Current turn of the game
     int32_t game_turn;
 
+    // The current dungeon level
+    int16_t current_level;
+
     // A `true` value means a new level will be generated on next loop iteration
     bool generate_new_level;
+
+    // Floor definitions
+    Tile_t floor[MAX_HEIGHT][MAX_WIDTH];
 } Dungeon_t;

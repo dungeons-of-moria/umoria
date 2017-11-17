@@ -1208,10 +1208,10 @@ static void townGeneration() {
 
 // Generates a random dungeon level -RAK-
 void generateCave() {
-    dg.panel_row_min = 0;
-    dg.panel_row_max = 0;
-    dg.panel_col_min = 0;
-    dg.panel_col_max = 0;
+    dg.panel.panel_row_min = 0;
+    dg.panel.panel_row_max = 0;
+    dg.panel.panel_col_min = 0;
+    dg.panel.panel_col_max = 0;
 
     char_row = -1;
     char_col = -1;
@@ -1229,11 +1229,11 @@ void generateCave() {
         dg.width = SCREEN_WIDTH;
     }
 
-    dg.max_panel_rows = (int16_t) ((dg.height / SCREEN_HEIGHT) * 2 - 2);
-    dg.max_panel_cols = (int16_t) ((dg.width / SCREEN_WIDTH) * 2 - 2);
+    dg.panel.max_panel_rows = (int16_t) ((dg.height / SCREEN_HEIGHT) * 2 - 2);
+    dg.panel.max_panel_cols = (int16_t) ((dg.width / SCREEN_WIDTH) * 2 - 2);
 
-    dg.panel_row = dg.max_panel_rows;
-    dg.panel_col = dg.max_panel_cols;
+    dg.panel.panel_row = dg.panel.max_panel_rows;
+    dg.panel.panel_col = dg.panel.max_panel_cols;
 
     if (dg.current_level == 0) {
         townGeneration();
