@@ -59,7 +59,7 @@ void itemReplaceInscription(Inventory_t &item, const char *inscription) {
 
 // We need to reset the view of things. -CJS-
 void dungeonResetView() {
-    const Cave_t &tile = dg.floor[char_row][char_col];
+    const Tile_t &tile = dg.floor[char_row][char_col];
 
     // Check for new panel
     if (coordOutsidePanel(Coord_t{char_row, char_col}, false)) {

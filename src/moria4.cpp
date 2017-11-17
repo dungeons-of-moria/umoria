@@ -141,7 +141,7 @@ void playerTunnel(int direction) {
     int x = char_col;
     (void) playerMovePosition(direction, y, x);
 
-    const Cave_t &tile = dg.floor[y][x];
+    const Tile_t &tile = dg.floor[y][x];
     Inventory_t &item = inventory[EQUIPMENT_WIELD];
 
     if (!playerCanTunnel(tile.treasure_id, tile.feature_id)) {
@@ -284,7 +284,7 @@ void playerDisarmTrap() {
     int x = char_col;
     (void) playerMovePosition(dir, y, x);
 
-    const Cave_t &tile = dg.floor[y][x];
+    const Tile_t &tile = dg.floor[y][x];
 
     bool no_disarm = false;
 
@@ -617,7 +617,7 @@ static bool lookSee(int x, int y, bool &transparent) {
         return false;
     }
 
-    const Cave_t &tile = dg.floor[y][x];
+    const Tile_t &tile = dg.floor[y][x];
     transparent = tile.feature_id <= MAX_OPEN_SPACE;
 
     if (los_hack_no_query) {
@@ -906,7 +906,7 @@ void playerThrowItem() {
         current_distance++;
         dungeonLiteSpot(old_y, old_x);
 
-        const Cave_t &tile = dg.floor[y][x];
+        const Tile_t &tile = dg.floor[y][x];
 
         if (tile.feature_id <= MAX_OPEN_SPACE && !flag) {
             if (tile.creature_id > 1) {
@@ -1072,7 +1072,7 @@ static void playerBashPosition(int y, int x) {
     playerBashAttack(y, x);
 }
 
-static void playerBashClosedDoor(int y, int x, int dir, Cave_t &tile, Inventory_t &item) {
+static void playerBashClosedDoor(int y, int x, int dir, Tile_t &tile, Inventory_t &item) {
     printMessageNoCommandInterrupt("You smash into the door!");
 
     int chance = py.stats.used[A_STR] + py.misc.weight / 2;
@@ -1165,7 +1165,7 @@ void playerBash() {
     int x = char_col;
     (void) playerMovePosition(dir, y, x);
 
-    Cave_t &tile = dg.floor[y][x];
+    Tile_t &tile = dg.floor[y][x];
 
     if (tile.creature_id > 1) {
         playerBashPosition(y, x);

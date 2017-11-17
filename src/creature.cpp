@@ -12,7 +12,7 @@
 static bool monsterIsVisible(const Monster_t &monster) {
     bool visible = false;
 
-    const Cave_t &tile = dg.floor[monster.y][monster.x];
+    const Tile_t &tile = dg.floor[monster.y][monster.x];
     const Creature_t &creature = creatures_list[monster.creature_id];
 
     if (tile.permanent_light || tile.temporary_light || ((py.running_tracker != 0) && monster.distance_from_player < 2 && py.carrying_light)) {
@@ -922,7 +922,7 @@ static void monsterAttackPlayer(int monster_id) {
     }
 }
 
-static void monsterOpenDoor(Cave_t &tile, int16_t monster_hp, uint32_t move_bits, bool &do_turn, bool &do_move, uint32_t &rcmove, int y, int x) {
+static void monsterOpenDoor(Tile_t &tile, int16_t monster_hp, uint32_t move_bits, bool &do_turn, bool &do_move, uint32_t &rcmove, int y, int x) {
     Inventory_t &item = treasure_list[tile.treasure_id];
 
     // Creature can open doors.
@@ -1081,7 +1081,7 @@ static void makeMove(int monster_id, int *directions, uint32_t &rcmove) {
         int x = monster.x;
         (void) playerMovePosition(directions[i], y, x);
 
-        Cave_t &tile = dg.floor[y][x];
+        Tile_t &tile = dg.floor[y][x];
 
         if (tile.feature_id == TILE_BOUNDARY_WALL) {
             continue;
@@ -1369,7 +1369,7 @@ bool monsterMultiply(int y, int x, int creature_id, int monster_id) {
         // don't create a new creature on top of the old one, that
         // causes invincible/invisible creatures to appear.
         if (coordInBounds(Coord_t{pos_y, pos_x}) && (pos_y != y || pos_x != x)) {
-            const Cave_t &tile = dg.floor[pos_y][pos_x];
+            const Tile_t &tile = dg.floor[pos_y][pos_x];
 
             if (tile.feature_id <= MAX_OPEN_SPACE && tile.treasure_id == 0 && tile.creature_id != 1) {
                 // Creature there already?

@@ -1701,7 +1701,7 @@ void dungeonLightRoom(int pos_y, int pos_x) {
 
     for (int y = top; y <= bottom; y++) {
         for (int x = left; x <= right; x++) {
-            Cave_t &tile = dg.floor[y][x];
+            Tile_t &tile = dg.floor[y][x];
 
             if (tile.perma_lit_room && !tile.permanent_light) {
                 tile.permanent_light = true;
@@ -1750,7 +1750,7 @@ static void sub1_move_light(int y1, int x1, int y2, int x2) {
 
     for (int y = y2 - 1; y <= y2 + 1; y++) {
         for (int x = x2 - 1; x <= x2 + 1; x++) {
-            Cave_t &tile = dg.floor[y][x];
+            Tile_t &tile = dg.floor[y][x];
 
             // only light up if normal movement
             if (py.temporary_light_only) {

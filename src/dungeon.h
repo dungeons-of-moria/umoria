@@ -4,7 +4,7 @@
 // ABSOLUTELY NO WARRANTY. See https://www.gnu.org/licenses/gpl-2.0.html
 // for further details.
 
-// Cave_t holds data about a specific tile in the dungeon.
+// Tile_t holds data about a specific tile in the dungeon.
 typedef struct {
     uint8_t creature_id; // ID for any creature occupying the tile
     uint8_t treasure_id; // ID for any treasure item occupying the tile
@@ -14,7 +14,7 @@ typedef struct {
     bool field_mark      : 1; // Field mark, used for traps/doors/stairs, object is hidden if fm is false.
     bool permanent_light : 1; // Permanent light, used for walls and lighted rooms.
     bool temporary_light : 1; // Temporary light, used for player's lamp light,etc.
-} Cave_t;
+} Tile_t;
 
 typedef struct {
     // Dungeon size is either just big enough for town level, or the whole dungeon itself
@@ -35,7 +35,7 @@ typedef struct {
     int panel_row_prt;
 
     // Floor definitions
-    Cave_t floor[MAX_HEIGHT][MAX_WIDTH];
+    Tile_t floor[MAX_HEIGHT][MAX_WIDTH];
 
     // The current dungeon level
     int16_t current_level;

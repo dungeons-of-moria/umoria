@@ -87,29 +87,29 @@ static void dungeonFillEmptyTilesWith(uint8_t rock_type) {
 
 // Places indestructible rock around edges of dungeon -RAK-
 static void dungeonPlaceBoundaryWalls() {
-    Cave_t(*left_ptr)[MAX_WIDTH];
-    Cave_t(*right_ptr)[MAX_WIDTH];
+    Tile_t(*left_ptr)[MAX_WIDTH];
+    Tile_t(*right_ptr)[MAX_WIDTH];
 
     // put permanent wall on leftmost row and rightmost row
-    left_ptr = (Cave_t(*)[MAX_WIDTH]) &dg.floor[0][0];
-    right_ptr = (Cave_t(*)[MAX_WIDTH]) &dg.floor[0][dg.width - 1];
+    left_ptr = (Tile_t(*)[MAX_WIDTH]) &dg.floor[0][0];
+    right_ptr = (Tile_t(*)[MAX_WIDTH]) &dg.floor[0][dg.width - 1];
 
     for (int i = 0; i < dg.height; i++) {
 #ifdef DEBUG
-        assert((Cave_t *)left_ptr == &floor[i][0]);
-        assert((Cave_t *)right_ptr == &floor[i][dg.width - 1]);
+        assert((Tile_t *)left_ptr == &floor[i][0]);
+        assert((Tile_t *)right_ptr == &floor[i][dg.width - 1]);
 #endif
 
-        ((Cave_t *) left_ptr)->feature_id = TILE_BOUNDARY_WALL;
+        ((Tile_t *) left_ptr)->feature_id = TILE_BOUNDARY_WALL;
         left_ptr++;
 
-        ((Cave_t *) right_ptr)->feature_id = TILE_BOUNDARY_WALL;
+        ((Tile_t *) right_ptr)->feature_id = TILE_BOUNDARY_WALL;
         right_ptr++;
     }
 
     // put permanent wall on top row and bottom row
-    Cave_t *top_ptr = &dg.floor[0][0];
-    Cave_t *bottom_ptr = &dg.floor[dg.height - 1][0];
+    Tile_t *top_ptr = &dg.floor[0][0];
+    Tile_t *bottom_ptr = &dg.floor[dg.height - 1][0];
 
     for (int i = 0; i < dg.width; i++) {
 #ifdef DEBUG
@@ -917,7 +917,7 @@ static void dungeonBuildTunnel(int y_start, int x_start, int y_end, int x_end) {
     }
 
     for (int i = 0; i < wall_index; i++) {
-        Cave_t &tile = dg.floor[walls_tk[i].y][walls_tk[i].x];
+        Tile_t &tile = dg.floor[walls_tk[i].y][walls_tk[i].x];
 
         if (tile.feature_id == TMP2_WALL) {
             if (randomNumber(100) < DUN_ROOM_DOORS) {
@@ -951,7 +951,7 @@ static void dungeonPlaceDoorIfNextToTwoWalls(int y, int x) {
 // Returns random co-ordinates -RAK-
 static void dungeonNewSpot(int16_t &y, int16_t &x) {
     int pos_y, pos_x;
-    Cave_t *tile;
+    Tile_t *tile;
 
     do {
         pos_y = randomNumber(dg.height - 2);

@@ -321,7 +321,7 @@ static bool sv_write() {
 
     for (int y = 0; y < MAX_HEIGHT; y++) {
         for (int x = 0; x < MAX_WIDTH; x++) {
-            Cave_t &tile = dg.floor[y][x];
+            Tile_t &tile = dg.floor[y][x];
 
             auto char_tmp = (uint8_t) (tile.feature_id | (tile.perma_lit_room << 4) | (tile.field_mark << 5) | (tile.permanent_light << 6) | (tile.temporary_light << 7));
 
@@ -456,7 +456,7 @@ static bool _save_char(char *filename) {
 
 // Certain checks are omitted for the wizard. -CJS-
 bool loadGame(bool &generate) {
-    Cave_t *tile;
+    Tile_t *tile;
     int c;
     uint32_t time_saved = 0;
     uint8_t version_maj = 0;

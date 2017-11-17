@@ -583,7 +583,7 @@ static int dungeonSummonObject(int y, int x, int amount, int object_type) {
 
 // Deletes object from given location -RAK-
 bool dungeonDeleteObject(int y, int x) {
-    Cave_t &tile = dg.floor[y][x];
+    Tile_t &tile = dg.floor[y][x];
 
     if (tile.feature_id == TILE_BLOCKED_FLOOR) {
         tile.feature_id = TILE_CORR_FLOOR;
@@ -925,7 +925,7 @@ void playerMove(int direction, bool do_pickup) {
         return;
     }
 
-    const Cave_t &tile = dg.floor[y][x];
+    const Tile_t &tile = dg.floor[y][x];
     const Monster_t &monster = monsters[tile.creature_id];
 
     // if there is no creature, or an unlit creature in the walls then...
@@ -1126,7 +1126,7 @@ static int16_t playerLockPickingSkill() {
 }
 
 static void openClosedDoor(int y, int x) {
-    Cave_t &tile = dg.floor[y][x];
+    Tile_t &tile = dg.floor[y][x];
     Inventory_t &item = treasure_list[tile.treasure_id];
 
     if (item.misc_use > 0) {
@@ -1157,7 +1157,7 @@ static void openClosedDoor(int y, int x) {
 }
 
 static void openClosedChest(int y, int x) {
-    const Cave_t &tile = dg.floor[y][x];
+    const Tile_t &tile = dg.floor[y][x];
     Inventory_t &item = treasure_list[tile.treasure_id];
 
     bool success = false;
@@ -1220,7 +1220,7 @@ void objectOpen() {
 
     bool no_object = false;
 
-    const Cave_t &tile = dg.floor[y][x];
+    const Tile_t &tile = dg.floor[y][x];
     const Inventory_t &item = treasure_list[tile.treasure_id];
 
     if (tile.creature_id > 1 && tile.treasure_id != 0 && (item.category_id == TV_CLOSED_DOOR || item.category_id == TV_CHEST)) {
@@ -1255,7 +1255,7 @@ void dungeonCloseDoor() {
     int x = char_col;
     (void) playerMovePosition(dir, y, x);
 
-    Cave_t &tile = dg.floor[y][x];
+    Tile_t &tile = dg.floor[y][x];
     Inventory_t &item = treasure_list[tile.treasure_id];
 
     bool no_object = false;
@@ -1293,7 +1293,7 @@ bool dungeonTunnelWall(int y, int x, int digging_ability, int digging_chance) {
         return false;
     }
 
-    Cave_t &tile = dg.floor[y][x];
+    Tile_t &tile = dg.floor[y][x];
 
     if (tile.perma_lit_room) {
         // Should become a room space, check to see whether

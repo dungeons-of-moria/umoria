@@ -282,7 +282,7 @@ void wizardGenerateObject() {
 
         if (coordInBounds(Coord_t{j, k}) && dg.floor[j][k].feature_id <= MAX_CAVE_FLOOR && dg.floor[j][k].treasure_id == 0) {
             // delete any object at location, before call popt()
-            Cave_t &tile = dg.floor[j][k];
+            Tile_t &tile = dg.floor[j][k];
             if (tile.treasure_id != 0) {
                 (void) dungeonDeleteObject(j, k);
             }
@@ -443,7 +443,7 @@ void wizardCreateObjects() {
 
     if (getInputConfirmation("Allocate?")) {
         // delete object first if any, before call popt()
-        Cave_t &tile = dg.floor[char_row][char_col];
+        Tile_t &tile = dg.floor[char_row][char_col];
 
         if (tile.treasure_id != 0) {
             (void) dungeonDeleteObject(char_row, char_col);

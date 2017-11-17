@@ -451,7 +451,7 @@ bool los(int from_y, int from_x, int to_y, int to_x) {
 
 // Returns symbol for given row, column -RAK-
 char caveGetTileSymbol(Coord_t coord) {
-    const Cave_t &tile = dg.floor[coord.y][coord.x];
+    const Tile_t &tile = dg.floor[coord.y][coord.x];
 
     if (tile.creature_id == 1 && ((py.running_tracker == 0) || config.run_print_self)) {
         return '@';

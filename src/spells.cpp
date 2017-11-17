@@ -66,7 +66,7 @@ bool dungeonDetectTreasureOnPanel() {
 
     for (int y = dg.panel_row_min; y <= dg.panel_row_max; y++) {
         for (int x = dg.panel_col_min; x <= dg.panel_col_max; x++) {
-            Cave_t &tile = dg.floor[y][x];
+            Tile_t &tile = dg.floor[y][x];
 
             if (tile.treasure_id != 0 && treasure_list[tile.treasure_id].category_id == TV_GOLD && !caveTileVisible(Coord_t{y, x})) {
                 tile.field_mark = true;
@@ -85,7 +85,7 @@ bool dungeonDetectObjectOnPanel() {
 
     for (int y = dg.panel_row_min; y <= dg.panel_row_max; y++) {
         for (int x = dg.panel_col_min; x <= dg.panel_col_max; x++) {
-            Cave_t &tile = dg.floor[y][x];
+            Tile_t &tile = dg.floor[y][x];
 
             if (tile.treasure_id != 0 && treasure_list[tile.treasure_id].category_id < TV_MAX_OBJECT && !caveTileVisible(Coord_t{y, x})) {
                 tile.field_mark = true;
@@ -104,7 +104,7 @@ bool dungeonDetectTrapOnPanel() {
 
     for (int y = dg.panel_row_min; y <= dg.panel_row_max; y++) {
         for (int x = dg.panel_col_min; x <= dg.panel_col_max; x++) {
-            Cave_t &tile = dg.floor[y][x];
+            Tile_t &tile = dg.floor[y][x];
 
             if (tile.treasure_id == 0) {
                 continue;
@@ -130,7 +130,7 @@ bool dungeonDetectSecretDoorsOnPanel() {
 
     for (int y = dg.panel_row_min; y <= dg.panel_row_max; y++) {
         for (int x = dg.panel_col_min; x <= dg.panel_col_max; x++) {
-            Cave_t &tile = dg.floor[y][x];
+            Tile_t &tile = dg.floor[y][x];
 
             if (tile.treasure_id == 0) {
                 continue;
@@ -224,7 +224,7 @@ bool spellDarkenArea(int y, int x) {
 
         for (int row = start_row; row <= end_row; row++) {
             for (int col = start_col; col <= end_col; col++) {
-                Cave_t &tile = dg.floor[row][col];
+                Tile_t &tile = dg.floor[row][col];
 
                 if (tile.perma_lit_room && tile.feature_id <= MAX_CAVE_FLOOR) {
                     tile.permanent_light = false;
@@ -241,7 +241,7 @@ bool spellDarkenArea(int y, int x) {
     } else {
         for (int row = y - 1; row <= y + 1; row++) {
             for (int col = x - 1; col <= x + 1; col++) {
-                Cave_t &tile = dg.floor[row][col];
+                Tile_t &tile = dg.floor[row][col];
 
                 if (tile.feature_id == TILE_CORR_FLOOR && tile.permanent_light) {
                     // permanent_light could have been set by star-lite wand, etc
@@ -262,7 +262,7 @@ bool spellDarkenArea(int y, int x) {
 static void dungeonLightAreaAroundFloorTile(int y, int x) {
     for (int yy = y - 1; yy <= y + 1; yy++) {
         for (int xx = x - 1; xx <= x + 1; xx++) {
-            Cave_t &tile = dg.floor[yy][xx];
+            Tile_t &tile = dg.floor[yy][xx];
 
             if (tile.feature_id >= MIN_CAVE_WALL) {
                 tile.permanent_light = true;
@@ -351,7 +351,7 @@ bool spellSurroundPlayerWithTraps() {
                 continue;
             }
 
-            const Cave_t &tile = dg.floor[y][x];
+            const Tile_t &tile = dg.floor[y][x];
 
             if (tile.feature_id <= MAX_CAVE_FLOOR) {
                 if (tile.treasure_id != 0) {
@@ -384,7 +384,7 @@ bool spellSurroundPlayerWithDoors() {
                 continue;
             }
 
-            Cave_t &tile = dg.floor[y][x];
+            Tile_t &tile = dg.floor[y][x];
 
             if (tile.feature_id <= MAX_CAVE_FLOOR) {
                 if (tile.treasure_id != 0) {
@@ -412,7 +412,7 @@ bool spellDestroyAdjacentDoorsTraps() {
 
     for (int y = char_row - 1; y <= char_row + 1; y++) {
         for (int x = char_col - 1; x <= char_col + 1; x++) {
-            const Cave_t &tile = dg.floor[y][x];
+            const Tile_t &tile = dg.floor[y][x];
 
             if (tile.treasure_id == 0) {
                 continue;
@@ -497,7 +497,7 @@ void spellLightLine(int x, int y, int direction) {
     bool finished = false;
 
     while (!finished) {
-        Cave_t &tile = dg.floor[y][x];
+        Tile_t &tile = dg.floor[y][x];
 
         if (distance > OBJECT_BOLTS_MAX_RANGE || tile.feature_id >= MIN_CLOSED_SPACE) {
             (void) playerMovePosition(direction, y, x);
@@ -549,7 +549,7 @@ bool spellDisarmAllInDirection(int y, int x, int direction) {
     int distance = 0;
     bool disarmed = false;
 
-    Cave_t *tile;
+    Tile_t *tile;
 
     do {
         tile = &dg.floor[y][x];
@@ -645,7 +645,7 @@ static void printBoltStrikesMonsterMessage(const Creature_t &creature, const std
 }
 
 // Light up, draw, and check for monster damage when Fire Bolt touches it.
-static void spellFireBoltTouchesMonster(Cave_t &tile, int damage, int harm_type, uint32_t weapon_id, const std::string &bolt_name) {
+static void spellFireBoltTouchesMonster(Tile_t &tile, int damage, int harm_type, uint32_t weapon_id, const std::string &bolt_name) {
     const Monster_t &monster = monsters[tile.creature_id];
     const Creature_t &creature = creatures_list[monster.creature_id];
 
@@ -700,7 +700,7 @@ void spellFireBolt(int y, int x, int direction, int damage_hp, int spell_type, c
         (void) playerMovePosition(direction, y, x);
         distance++;
 
-        Cave_t &tile = dg.floor[y][x];
+        Tile_t &tile = dg.floor[y][x];
 
         dungeonLiteSpot(old_y, old_x);
 
@@ -749,7 +749,7 @@ void spellFireBall(int y, int x, int direction, int damage_hp, int spell_type, c
             continue;
         }
 
-        Cave_t *tile = &dg.floor[y][x];
+        Tile_t *tile = &dg.floor[y][x];
 
         if (tile->feature_id >= MIN_CLOSED_SPACE || tile->creature_id > 1) {
             finished = true;
@@ -860,7 +860,7 @@ void spellBreath(int y, int x, int monster_id, int damage_hp, int spell_type, co
     for (int row = y - 2; row <= y + 2; row++) {
         for (int col = x - 2; col <= x + 2; col++) {
             if (coordInBounds(Coord_t{row, col}) && coordDistanceBetween(Coord_t{y, x}, Coord_t{row, col}) <= max_distance && los(y, x, row, col)) {
-                const Cave_t &tile = dg.floor[row][col];
+                const Tile_t &tile = dg.floor[row][col];
 
                 if (tile.treasure_id != 0 && (*destroy)(&treasure_list[tile.treasure_id])) {
                     (void) dungeonDeleteObject(row, col);
@@ -1017,7 +1017,7 @@ bool spellChangeMonsterHitPoints(int y, int x, int direction, int damage_hp) {
         (void) playerMovePosition(direction, y, x);
         distance++;
 
-        const Cave_t &tile = dg.floor[y][x];
+        const Tile_t &tile = dg.floor[y][x];
 
         if (distance > OBJECT_BOLTS_MAX_RANGE || tile.feature_id >= MIN_CLOSED_SPACE) {
             finished = true;
@@ -1056,7 +1056,7 @@ bool spellDrainLifeFromMonster(int y, int x, int direction) {
         (void) playerMovePosition(direction, y, x);
         distance++;
 
-        const Cave_t &tile = dg.floor[y][x];
+        const Tile_t &tile = dg.floor[y][x];
 
         if (distance > OBJECT_BOLTS_MAX_RANGE || tile.feature_id >= MIN_CLOSED_SPACE) {
             finished = true;
@@ -1100,7 +1100,7 @@ bool spellSpeedMonster(int y, int x, int direction, int speed) {
         (void) playerMovePosition(direction, y, x);
         distance++;
 
-        const Cave_t &tile = dg.floor[y][x];
+        const Tile_t &tile = dg.floor[y][x];
 
         if (distance > OBJECT_BOLTS_MAX_RANGE || tile.feature_id >= MIN_CLOSED_SPACE) {
             finished = true;
@@ -1150,7 +1150,7 @@ bool spellConfuseMonster(int y, int x, int direction) {
         (void) playerMovePosition(direction, y, x);
         distance++;
 
-        const Cave_t &tile = dg.floor[y][x];
+        const Tile_t &tile = dg.floor[y][x];
 
         if (distance > OBJECT_BOLTS_MAX_RANGE || tile.feature_id >= MIN_CLOSED_SPACE) {
             finished = true;
@@ -1205,7 +1205,7 @@ bool spellSleepMonster(int y, int x, int direction) {
         (void) playerMovePosition(direction, y, x);
         distance++;
 
-        const Cave_t &tile = dg.floor[y][x];
+        const Tile_t &tile = dg.floor[y][x];
 
         if (distance > OBJECT_BOLTS_MAX_RANGE || tile.feature_id >= MIN_CLOSED_SPACE) {
             finished = true;
@@ -1249,7 +1249,7 @@ bool spellWallToMud(int y, int x, int direction) {
         (void) playerMovePosition(direction, y, x);
         distance++;
 
-        const Cave_t &tile = dg.floor[y][x];
+        const Tile_t &tile = dg.floor[y][x];
 
         // note, this ray can move through walls as it turns them to mud
         if (distance == OBJECT_BOLTS_MAX_RANGE) {
@@ -1324,7 +1324,7 @@ bool spellDestroyDoorsTrapsInDirection(int y, int x, int direction) {
 
     int distance = 0;
 
-    Cave_t *tile;
+    Tile_t *tile;
 
     do {
         (void) playerMovePosition(direction, y, x);
@@ -1367,7 +1367,7 @@ bool spellPolymorphMonster(int y, int x, int direction) {
         (void) playerMovePosition(direction, y, x);
         distance++;
 
-        const Cave_t &tile = dg.floor[y][x];
+        const Tile_t &tile = dg.floor[y][x];
 
         if (distance > OBJECT_BOLTS_MAX_RANGE || tile.feature_id >= MIN_CLOSED_SPACE) {
             finished = true;
@@ -1410,7 +1410,7 @@ bool spellBuildWall(int y, int x, int direction) {
         (void) playerMovePosition(direction, y, x);
         distance++;
 
-        Cave_t &tile = dg.floor[y][x];
+        Tile_t &tile = dg.floor[y][x];
 
         if (distance > OBJECT_BOLTS_MAX_RANGE || tile.feature_id >= MIN_CLOSED_SPACE) {
             finished = true;
@@ -1474,7 +1474,7 @@ bool spellCloneMonster(int y, int x, int direction) {
         (void) playerMovePosition(direction, y, x);
         distance++;
 
-        const Cave_t &tile = dg.floor[y][x];
+        const Tile_t &tile = dg.floor[y][x];
 
         if (distance > OBJECT_BOLTS_MAX_RANGE || tile.feature_id >= MIN_CLOSED_SPACE) {
             finished = true;
@@ -1568,7 +1568,7 @@ bool spellTeleportAwayMonsterInDirection(int y, int x, int direction) {
         (void) playerMovePosition(direction, y, x);
         distance++;
 
-        const Cave_t &tile = dg.floor[y][x];
+        const Tile_t &tile = dg.floor[y][x];
 
         if (distance > OBJECT_BOLTS_MAX_RANGE || tile.feature_id >= MIN_CLOSED_SPACE) {
             finished = true;
@@ -1866,7 +1866,7 @@ void dungeonEarthquake() {
     for (int y = char_row - 8; y <= char_row + 8; y++) {
         for (int x = char_col - 8; x <= char_col + 8; x++) {
             if ((y != char_row || x != char_col) && coordInBounds(Coord_t{y, x}) && randomNumber(8) == 1) {
-                Cave_t &tile = dg.floor[y][x];
+                Tile_t &tile = dg.floor[y][x];
 
                 if (tile.treasure_id != 0) {
                     (void) dungeonDeleteObject(y, x);
@@ -1912,7 +1912,7 @@ bool playerProtectEvil() {
 void spellCreateFood() {
     // Note: must take reference to this location as dungeonPlaceRandomObjectAt()
     // below, changes the tile values.
-    const Cave_t &tile = dg.floor[char_row][char_col];
+    const Tile_t &tile = dg.floor[char_row][char_col];
 
     // take no action here, don't want to destroy object under player
     if (tile.treasure_id != 0) {
@@ -2123,7 +2123,7 @@ void playerDetectInvisible(int adjustment) {
 }
 
 static void replace_spot(int y, int x, int typ) {
-    Cave_t &tile = dg.floor[y][x];
+    Tile_t &tile = dg.floor[y][x];
 
     switch (typ) {
         case 1:
