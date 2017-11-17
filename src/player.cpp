@@ -15,11 +15,6 @@ Player_t py = Player_t{};
 // so that drain life + restore life does not affect hit points.
 uint16_t player_base_hp_levels[PLAYER_MAX_LEVEL];
 
-uint32_t spells_learnt = 0;       // bit mask of spells learned
-uint32_t spells_worked = 0;       // bit mask of spells tried and worked
-uint32_t spells_forgotten = 0;    // bit mask of spells learned but forgotten
-uint8_t spells_learned_order[32]; // order spells learned/remembered/forgotten
-
 bool playerIsMale() {
     return py.misc.gender;
 }

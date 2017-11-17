@@ -1407,11 +1407,11 @@ void displaySpellsList(const int *spell_ids, int number_of_choices, bool comment
         const char *p = nullptr;
         if (!comment) {
             p = "";
-        } else if ((spells_forgotten & (1L << spell_id)) != 0) {
+        } else if ((py.flags.spells_forgotten & (1L << spell_id)) != 0) {
             p = " forgotten";
-        } else if ((spells_learnt & (1L << spell_id)) == 0) {
+        } else if ((py.flags.spells_learnt & (1L << spell_id)) == 0) {
             p = " unknown";
-        } else if ((spells_worked & (1L << spell_id)) == 0) {
+        } else if ((py.flags.spells_worked & (1L << spell_id)) == 0) {
             p = " untried";
         } else {
             p = "";
@@ -1526,10 +1526,10 @@ static void eliminateKnownSpellsGreaterThanLevel(Spell_t *msp_ptr, const char *p
     uint32_t mask = 0x80000000L;
 
     for (int i = 31; mask != 0u; mask >>= 1, i--) {
-        if ((mask & spells_learnt) != 0u) {
+        if ((mask & py.flags.spells_learnt) != 0u) {
             if (msp_ptr[i].level_required > py.misc.level) {
-                spells_learnt &= ~mask;
-                spells_forgotten |= mask;
+                py.flags.spells_learnt &= ~mask;
+                py.flags.spells_forgotten |= mask;
 
                 vtype_t msg = {'\0'};
                 (void) sprintf(msg, "You have forgotten the %s of %s.", p, spell_names[i + offset]);
@@ -1574,7 +1574,7 @@ static int numberOfSpellsKnown() {
     int known = 0;
 
     for (uint32_t mask = 0x1; mask != 0u; mask <<= 1) {
-        if ((mask & spells_learnt) != 0u) {
+        if ((mask & py.flags.spells_learnt) != 0u) {
             known++;
         }
     }
@@ -1587,9 +1587,9 @@ static int numberOfSpellsKnown() {
 static int rememberForgottenSpells(Spell_t *msp_ptr, int allowedSpells, int newSpells, const char *p, int offset) {
     uint32_t mask;
 
-    for (int n = 0; ((spells_forgotten != 0u) && (newSpells != 0) && (n < allowedSpells) && (n < 32)); n++) {
+    for (int n = 0; ((py.flags.spells_forgotten != 0u) && (newSpells != 0) && (n < allowedSpells) && (n < 32)); n++) {
         // orderID is (i+1)th spell learned
-        int orderID = spells_learned_order[n];
+        int orderID = py.flags.spells_learned_order[n];
 
         // shifting by amounts greater than number of bits in long gives
         // an undefined result, so don't shift for unknown spells
@@ -1599,11 +1599,11 @@ static int rememberForgottenSpells(Spell_t *msp_ptr, int allowedSpells, int newS
             mask = (uint32_t) (1L << orderID);
         }
 
-        if ((mask & spells_forgotten) != 0u) {
+        if ((mask & py.flags.spells_forgotten) != 0u) {
             if (msp_ptr[orderID].level_required <= py.misc.level) {
                 newSpells--;
-                spells_forgotten &= ~mask;
-                spells_learnt |= mask;
+                py.flags.spells_forgotten &= ~mask;
+                py.flags.spells_learnt |= mask;
 
                 vtype_t msg = {'\0'};
                 (void) sprintf(msg, "You have remembered the %s of %s.", p, spell_names[orderID + offset]);
@@ -1620,7 +1620,7 @@ static int rememberForgottenSpells(Spell_t *msp_ptr, int allowedSpells, int newS
 // determine which spells player can learn must check all spells here,
 // in gain_spell() we actually check if the books are present
 static int learnableSpells(Spell_t *msp_ptr, int newSpells) {
-    auto spell_flag = (uint32_t) (0x7FFFFFFFL & ~spells_learnt);
+    auto spell_flag = (uint32_t) (0x7FFFFFFFL & ~py.flags.spells_learnt);
 
     int id = 0;
     uint32_t mask = 0x1;
@@ -1647,9 +1647,9 @@ static int learnableSpells(Spell_t *msp_ptr, int newSpells) {
 static void forgetSpells(int newSpells, const char *p, int offset) {
     uint32_t mask;
 
-    for (int i = 31; (newSpells != 0) && (spells_learnt != 0u); i--) {
+    for (int i = 31; (newSpells != 0) && (py.flags.spells_learnt != 0u); i--) {
         // orderID is the (i+1)th spell learned
-        int orderID = spells_learned_order[i];
+        int orderID = py.flags.spells_learned_order[i];
 
         // shifting by amounts greater than number of bits in long gives
         // an undefined result, so don't shift for unknown spells
@@ -1659,9 +1659,9 @@ static void forgetSpells(int newSpells, const char *p, int offset) {
             mask = (uint32_t) (1L << orderID);
         }
 
-        if ((mask & spells_learnt) != 0u) {
-            spells_learnt &= ~mask;
-            spells_forgotten |= mask;
+        if ((mask & py.flags.spells_learnt) != 0u) {
+            py.flags.spells_learnt &= ~mask;
+            py.flags.spells_forgotten |= mask;
             newSpells++;
 
             vtype_t msg = {'\0'};
@@ -1735,7 +1735,7 @@ static bool playerCanRead() {
 
 static int lastKnownSpell() {
     for (int last_known = 0; last_known < 32; last_known++) {
-        if (spells_learned_order[last_known] == 99) {
+        if (py.flags.spells_learned_order[last_known] == 99) {
             return last_known;
         }
     }
@@ -1807,7 +1807,7 @@ void playerGainSpells() {
     }
 
     // clear bits for spells already learned
-    spell_flag &= ~spells_learnt;
+    spell_flag &= ~py.flags.spells_learnt;
 
     int spell_id = 0;
     int spell_bank[31];
@@ -1846,8 +1846,8 @@ void playerGainSpells() {
             if (c >= 0 && c < spell_id && c < 22) {
                 new_spells--;
 
-                spells_learnt |= 1L << spell_bank[c];
-                spells_learned_order[last_known++] = (uint8_t) spell_bank[c];
+                py.flags.spells_learnt |= 1L << spell_bank[c];
+                py.flags.spells_learned_order[last_known++] = (uint8_t) spell_bank[c];
 
                 for (; c <= spell_id - 1; c++) {
                     spell_bank[c] = spell_bank[c + 1];
@@ -1867,8 +1867,8 @@ void playerGainSpells() {
         // pick a prayer at random
         while (new_spells != 0) {
             int id = randomNumber(spell_id) - 1;
-            spells_learnt |= 1L << spell_bank[id];
-            spells_learned_order[last_known++] = (uint8_t) spell_bank[id];
+            py.flags.spells_learnt |= 1L << spell_bank[id];
+            py.flags.spells_learned_order[last_known++] = (uint8_t) spell_bank[id];
 
             vtype_t tmp_str = {'\0'};
             (void) sprintf(tmp_str, "You have learned the prayer of %s.", spell_names[spell_bank[id] + offset]);
@@ -1919,7 +1919,7 @@ static int newMana(int stat) {
 
 // Gain some mana if you know at least one spell -RAK-
 void playerGainMana(int stat) {
-    if (spells_learnt != 0) {
+    if (py.flags.spells_learnt != 0) {
         int new_mana = newMana(stat);
 
         // increment mana by one, so that first level chars have 2 mana

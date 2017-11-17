@@ -33,6 +33,11 @@ void startMoria(int seed, bool start_new_game, bool use_roguelike_keys) {
     // Init the store inventories
     storeInitializeOwners();
 
+    // initialize some player fields - may or may not be needed -MRC-
+    py.flags.spells_learnt = 0;
+    py.flags.spells_worked = 0;
+    py.flags.spells_forgotten = 0;
+
     // If -n is not passed, the calling routine will know
     // save file name, hence, this code is not necessary.
 
@@ -164,7 +169,7 @@ static void initializeCharacterInventory() {
     }
 
     // weird place for it, but why not?
-    for (uint8_t &id : spells_learned_order) {
+    for (uint8_t &id : py.flags.spells_learned_order) {
         id = 99;
     }
 }

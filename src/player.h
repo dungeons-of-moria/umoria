@@ -102,7 +102,12 @@ typedef struct {
         bool sustain_dex;            // Keep dexterity
         bool sustain_chr;            // Keep charisma
         bool confuse_monster;        // Glowing hands.
-        uint8_t new_spells_to_learn; // Number of spells can learn.
+
+        uint8_t new_spells_to_learn;      // Number of spells can learn.
+        uint32_t spells_learnt;           // bit mask of spells learned
+        uint32_t spells_worked;           // bit mask of spells tried and worked
+        uint32_t spells_forgotten;        // bit mask of spells learned but forgotten
+        uint8_t spells_learned_order[32]; // order spells learned/remembered/forgotten
     } flags;
 
     // location in dungeon

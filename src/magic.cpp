@@ -237,9 +237,9 @@ void getAndCastMagicSpell() {
     } else {
         castSpell(choice + 1);
 
-        if ((spells_worked & (1L << choice)) == 0) {
+        if ((py.flags.spells_worked & (1L << choice)) == 0) {
             py.misc.exp += magic_spell.exp_gain_for_learning << 2;
-            spells_worked |= (1L << choice);
+            py.flags.spells_worked |= (1L << choice);
 
             displayCharacterExperience();
         }

@@ -223,10 +223,10 @@ static bool sv_write() {
     }
     wr_short((uint16_t) inventory_weight);
     wr_short((uint16_t) equipment_count);
-    wr_long(spells_learnt);
-    wr_long(spells_worked);
-    wr_long(spells_forgotten);
-    wr_bytes(spells_learned_order, 32);
+    wr_long(py.flags.spells_learnt);
+    wr_long(py.flags.spells_worked);
+    wr_long(py.flags.spells_forgotten);
+    wr_bytes(py.flags.spells_learned_order, 32);
     wr_bytes(objects_identified, OBJECT_IDENT_SIZE);
     wr_long(magic_seed);
     wr_long(town_seed);
@@ -669,10 +669,10 @@ bool loadGame(bool &generate) {
             }
             inventory_weight = rd_short();
             equipment_count = rd_short();
-            spells_learnt = rd_long();
-            spells_worked = rd_long();
-            spells_forgotten = rd_long();
-            rd_bytes(spells_learned_order, 32);
+            py.flags.spells_learnt = rd_long();
+            py.flags.spells_worked = rd_long();
+            py.flags.spells_forgotten = rd_long();
+            rd_bytes(py.flags.spells_learned_order, 32);
             rd_bytes(objects_identified, OBJECT_IDENT_SIZE);
             magic_seed = rd_long();
             town_seed = rd_long();

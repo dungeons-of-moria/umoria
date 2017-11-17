@@ -348,7 +348,7 @@ int castSpellGetId(const char *prompt, int item_id, int &spell_id, int &spell_ch
     // NOTE: `flags` gets set again, since getAndClearFirstBit modified it
     uint32_t flags = inventory[item_id].flags;
     int first_spell = getAndClearFirstBit(flags);
-    flags = inventory[item_id].flags & spells_learnt;
+    flags = inventory[item_id].flags & py.flags.spells_learnt;
 
     // TODO(cook) move access to `magic_spells[]` directly to the for loop it's used in, below?
     Spell_t *spells = magic_spells[py.misc.class_id - 1];
