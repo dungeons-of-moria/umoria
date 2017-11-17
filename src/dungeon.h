@@ -19,9 +19,6 @@ typedef struct {
 // Panel_t holds data about a screen panel (the dungeon display)
 // Screen panels calculated from the dungeon/screen dimensions
 typedef struct {
-    int16_t max_rows;
-    int16_t max_cols;
-
     int row;
     int col;
 
@@ -32,6 +29,9 @@ typedef struct {
 
     int col_prt;
     int row_prt;
+
+    int16_t max_rows;
+    int16_t max_cols;
 } Panel_t;
 
 typedef struct {
