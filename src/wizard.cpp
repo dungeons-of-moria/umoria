@@ -17,8 +17,8 @@ void wizardLightUpDungeon() {
 
     flag = !dg.cave[char_row][char_col].permanent_light;
 
-    for (int y = 0; y < dg.dungeon_height; y++) {
-        for (int x = 0; x < dg.dungeon_width; x++) {
+    for (int y = 0; y < dg.height; y++) {
+        for (int x = 0; x < dg.width; x++) {
             if (dg.cave[y][x].feature_id <= MAX_CAVE_FLOOR) {
                 for (int yy = y - 1; yy <= y + 1; yy++) {
                     for (int xx = x - 1; xx <= x + 1; xx++) {

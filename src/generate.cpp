@@ -69,10 +69,10 @@ static void dungeonBlankEntireCave() {
 // Note: 9 is a temporary value.
 static void dungeonFillEmptyTilesWith(uint8_t rock_type) {
     // no need to check the border of the cave
-    for (int y = dg.dungeon_height - 2; y > 0; y--) {
+    for (int y = dg.height - 2; y > 0; y--) {
         int x = 1;
 
-        for (int j = dg.dungeon_width - 2; j > 0; j--) {
+        for (int j = dg.width - 2; j > 0; j--) {
             if (dg.cave[y][x].feature_id == TILE_NULL_WALL || dg.cave[y][x].feature_id == TMP1_WALL || dg.cave[y][x].feature_id == TMP2_WALL) {
                 dg.cave[y][x].feature_id = rock_type;
             }
@@ -92,12 +92,12 @@ static void dungeonPlaceBoundaryWalls() {
 
     // put permanent wall on leftmost row and rightmost row
     left_ptr = (Cave_t(*)[MAX_WIDTH]) &dg.cave[0][0];
-    right_ptr = (Cave_t(*)[MAX_WIDTH]) &dg.cave[0][dg.dungeon_width - 1];
+    right_ptr = (Cave_t(*)[MAX_WIDTH]) &dg.cave[0][dg.width - 1];
 
-    for (int i = 0; i < dg.dungeon_height; i++) {
+    for (int i = 0; i < dg.height; i++) {
 #ifdef DEBUG
         assert((Cave_t *)left_ptr == &cave[i][0]);
-        assert((Cave_t *)right_ptr == &cave[i][dg.dungeon_width - 1]);
+        assert((Cave_t *)right_ptr == &cave[i][dg.width - 1]);
 #endif
 
         ((Cave_t *) left_ptr)->feature_id = TILE_BOUNDARY_WALL;
@@ -109,12 +109,12 @@ static void dungeonPlaceBoundaryWalls() {
 
     // put permanent wall on top row and bottom row
     Cave_t *top_ptr = &dg.cave[0][0];
-    Cave_t *bottom_ptr = &dg.cave[dg.dungeon_height - 1][0];
+    Cave_t *bottom_ptr = &dg.cave[dg.height - 1][0];
 
-    for (int i = 0; i < dg.dungeon_width; i++) {
+    for (int i = 0; i < dg.width; i++) {
 #ifdef DEBUG
         assert(top_ptr == &cave[0][i]);
-        assert(bottom_ptr == &cave[dg.dungeon_height - 1][i]);
+        assert(bottom_ptr == &cave[dg.height - 1][i]);
 #endif
         top_ptr->feature_id = TILE_BOUNDARY_WALL;
         top_ptr++;
@@ -127,8 +127,8 @@ static void dungeonPlaceBoundaryWalls() {
 // Places "streamers" of rock through dungeon -RAK-
 static void dungeonPlaceStreamerRock(uint8_t rock_type, int chance_of_treasure) {
     // Choose starting point and direction
-    int pos_y = (dg.dungeon_height / 2) + 11 - randomNumber(23);
-    int pos_x = (dg.dungeon_width / 2) + 16 - randomNumber(33);
+    int pos_y = (dg.height / 2) + 11 - randomNumber(23);
+    int pos_x = (dg.width / 2) + 16 - randomNumber(33);
 
     // Get random direction. Numbers 1-4, 6-9
     int dir = randomNumber(8);
@@ -260,10 +260,10 @@ static void dungeonPlaceStairs(int stair_type, int number, int walls) {
             do {
                 // Note:
                 // don't let y1/x1 be zero,
-                // don't let y2/x2 be equal to dg.dungeon_height-1/dg.dungeon_width-1,
+                // don't let y2/x2 be equal to dg.height-1/dg.width-1,
                 // these values are always BOUNDARY_ROCK.
-                int y1 = randomNumber(dg.dungeon_height - 14);
-                int x1 = randomNumber(dg.dungeon_width - 14);
+                int y1 = randomNumber(dg.height - 14);
+                int x1 = randomNumber(dg.width - 14);
                 int y2 = y1 + 12;
                 int x2 = x1 + 12;
 
@@ -954,8 +954,8 @@ static void dungeonNewSpot(int16_t &y, int16_t &x) {
     Cave_t *tile;
 
     do {
-        pos_y = randomNumber(dg.dungeon_height - 2);
-        pos_x = randomNumber(dg.dungeon_width - 2);
+        pos_y = randomNumber(dg.height - 2);
+        pos_x = randomNumber(dg.width - 2);
         tile = &dg.cave[pos_y][pos_x];
     } while (tile->feature_id >= MIN_CLOSED_SPACE || tile->creature_id != 0 || tile->treasure_id != 0);
 
@@ -966,8 +966,8 @@ static void dungeonNewSpot(int16_t &y, int16_t &x) {
 // Cave logic flow for generation of new dungeon
 static void dungeonGenerate() {
     // Room initialization
-    int row_rooms = 2 * (dg.dungeon_height / SCREEN_HEIGHT);
-    int col_rooms = 2 * (dg.dungeon_width / SCREEN_WIDTH);
+    int row_rooms = 2 * (dg.height / SCREEN_HEIGHT);
+    int col_rooms = 2 * (dg.width / SCREEN_WIDTH);
 
     bool room_map[20][20];
     for (int row = 0; row < row_rooms; row++) {
@@ -1165,8 +1165,8 @@ static bool isNighTime() {
 // Light town based on whether it is Night time, or day time.
 static void lightTown() {
     if (isNighTime()) {
-        for (int y = 0; y < dg.dungeon_height; y++) {
-            for (int x = 0; x < dg.dungeon_width; x++) {
+        for (int y = 0; y < dg.height; y++) {
+            for (int x = 0; x < dg.width; x++) {
                 if (dg.cave[y][x].feature_id != TILE_DARK_FLOOR) {
                     dg.cave[y][x].permanent_light = true;
                 }
@@ -1175,8 +1175,8 @@ static void lightTown() {
         monsterPlaceNewWithinDistance(MON_MIN_TOWNSFOLK_NIGHT, 3, true);
     } else {
         // ...it is day time
-        for (int y = 0; y < dg.dungeon_height; y++) {
-            for (int x = 0; x < dg.dungeon_width; x++) {
+        for (int y = 0; y < dg.height; y++) {
+            for (int x = 0; x < dg.width; x++) {
                 dg.cave[y][x].permanent_light = true;
             }
         }
@@ -1221,16 +1221,16 @@ void generateCave() {
     dungeonBlankEntireCave();
 
     // We're in the dungeon more than the town, so let's default to that -MRC-
-    dg.dungeon_height = MAX_HEIGHT;
-    dg.dungeon_width = MAX_WIDTH;
+    dg.height = MAX_HEIGHT;
+    dg.width = MAX_WIDTH;
 
     if (dg.current_dungeon_level == 0) {
-        dg.dungeon_height = SCREEN_HEIGHT;
-        dg.dungeon_width = SCREEN_WIDTH;
+        dg.height = SCREEN_HEIGHT;
+        dg.width = SCREEN_WIDTH;
     }
 
-    dg.max_panel_rows = (int16_t) ((dg.dungeon_height / SCREEN_HEIGHT) * 2 - 2);
-    dg.max_panel_cols = (int16_t) ((dg.dungeon_width / SCREEN_WIDTH) * 2 - 2);
+    dg.max_panel_rows = (int16_t) ((dg.height / SCREEN_HEIGHT) * 2 - 2);
+    dg.max_panel_cols = (int16_t) ((dg.width / SCREEN_WIDTH) * 2 - 2);
 
     dg.panel_row = dg.max_panel_rows;
     dg.panel_col = dg.max_panel_cols;

@@ -137,8 +137,8 @@ int getAndClearFirstBit(uint32_t &flag) {
 
 // Checks a co-ordinate for in bounds status -RAK-
 bool coordInBounds(Coord_t coord) {
-    bool valid_y = coord.y > 0 && coord.y < dg.dungeon_height - 1;
-    bool valid_x = coord.x > 0 && coord.x < dg.dungeon_width - 1;
+    bool valid_y = coord.y > 0 && coord.y < dg.height - 1;
+    bool valid_x = coord.x > 0 && coord.x < dg.width - 1;
 
     return valid_y && valid_x;
 }
@@ -223,8 +223,8 @@ int coordDistanceBetween(Coord_t coord_a, Coord_t coord_b) {
 }
 
 // Checks points north, south, east, and west for a wall -RAK-
-// note that y,x is always coordInBounds(), i.e. 0 < y < dg.dungeon_height-1,
-// and 0 < x < dg.dungeon_width-1
+// note that y,x is always coordInBounds(), i.e. 0 < y < dg.height-1,
+// and 0 < x < dg.width-1
 int coordWallsNextTo(Coord_t coord) {
     int walls = 0;
 
@@ -649,8 +649,8 @@ void monsterPlaceWinning() {
 
     int y, x;
     do {
-        y = randomNumber(dg.dungeon_height - 2);
-        x = randomNumber(dg.dungeon_width - 2);
+        y = randomNumber(dg.height - 2);
+        x = randomNumber(dg.width - 2);
     } while ((dg.cave[y][x].feature_id >= MIN_CLOSED_SPACE) || (dg.cave[y][x].creature_id != 0) || (dg.cave[y][x].treasure_id != 0) || (coordDistanceBetween(Coord_t{y, x}, Coord_t{char_row, char_col}) <= MON_MAX_SIGHT));
 
     int creature_id = randomNumber(MON_ENDGAME_MONSTERS) - 1 + monster_levels[MON_MAX_LEVELS];
@@ -732,8 +732,8 @@ void monsterPlaceNewWithinDistance(int number, int distance_from_source, bool sl
 
     for (int i = 0; i < number; i++) {
         do {
-            y = randomNumber(dg.dungeon_height - 2);
-            x = randomNumber(dg.dungeon_width - 2);
+            y = randomNumber(dg.height - 2);
+            x = randomNumber(dg.width - 2);
         } while (dg.cave[y][x].feature_id >= MIN_CLOSED_SPACE || dg.cave[y][x].creature_id != 0 || coordDistanceBetween(Coord_t{y, x}, Coord_t{char_row, char_col}) <= distance_from_source);
 
         int l = monsterGetOneSuitableForLevel(dg.current_dungeon_level);
@@ -815,8 +815,8 @@ static void compactObjects() {
     int current_distance = 66;
 
     while (counter <= 0) {
-        for (int y = 0; y < dg.dungeon_height; y++) {
-            for (int x = 0; x < dg.dungeon_width; x++) {
+        for (int y = 0; y < dg.height; y++) {
+            for (int x = 0; x < dg.width; x++) {
                 if (dg.cave[y][x].treasure_id != 0 && coordDistanceBetween(Coord_t{y, x}, Coord_t{char_row, char_col}) > current_distance) {
                     int chance;
 
@@ -878,8 +878,8 @@ void pusht(uint8_t treasure_id) {
         treasure_list[treasure_id] = treasure_list[current_treasure_id - 1];
 
         // must change the treasure_id in the cave of the object just moved
-        for (int y = 0; y < dg.dungeon_height; y++) {
-            for (int x = 0; x < dg.dungeon_width; x++) {
+        for (int y = 0; y < dg.height; y++) {
+            for (int x = 0; x < dg.width; x++) {
                 if (dg.cave[y][x].treasure_id == current_treasure_id - 1) {
                     dg.cave[y][x].treasure_id = treasure_id;
                 }

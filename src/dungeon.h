@@ -17,9 +17,9 @@ typedef struct {
 } Cave_t;
 
 typedef struct {
-    // Dungeon size is either big enough for town level, or the dungeon itself
-    int16_t dungeon_height;
-    int16_t dungeon_width;
+    // Dungeon size is either just big enough for town level, or the whole dungeon itself
+    int16_t height;
+    int16_t width;
 
     // Screen panels calculated from the dungeon/screen dimensions
     int16_t max_panel_rows;

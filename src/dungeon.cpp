@@ -1446,7 +1446,7 @@ static void commandLocateOnMap() {
             x += ((dir_val - 1) % 3 - 1) * SCREEN_WIDTH / 2;
             y -= ((dir_val - 1) / 3 - 1) * SCREEN_HEIGHT / 2;
 
-            if (x < 0 || y < 0 || x >= dg.dungeon_width || y >= dg.dungeon_width) {
+            if (x < 0 || y < 0 || x >= dg.width || y >= dg.width) {
                 printMessage("You've gone past the end of your map.");
 
                 x -= ((dir_val - 1) % 3 - 1) * SCREEN_WIDTH / 2;

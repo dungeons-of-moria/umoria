@@ -284,8 +284,8 @@ static bool sv_write() {
     wr_short((uint16_t) char_row);
     wr_short((uint16_t) char_col);
     wr_short((uint16_t) monster_multiply_total);
-    wr_short((uint16_t) dg.dungeon_height);
-    wr_short((uint16_t) dg.dungeon_width);
+    wr_short((uint16_t) dg.height);
+    wr_short((uint16_t) dg.width);
     wr_short((uint16_t) dg.max_panel_rows);
     wr_short((uint16_t) dg.max_panel_cols);
 
@@ -764,8 +764,8 @@ bool loadGame(bool &generate) {
         char_row = rd_short();
         char_col = rd_short();
         monster_multiply_total = rd_short();
-        dg.dungeon_height = rd_short();
-        dg.dungeon_width = rd_short();
+        dg.height = rd_short();
+        dg.width = rd_short();
         dg.max_panel_rows = rd_short();
         dg.max_panel_cols = rd_short();
 

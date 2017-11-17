@@ -131,8 +131,8 @@ void dungeonAllocateAndPlaceObject(bool (*set_function)(int), int object_type, i
         // don't put an object beneath the player, this could cause
         // problems if player is standing under rubble, or on a trap.
         do {
-            y = randomNumber(dg.dungeon_height) - 1;
-            x = randomNumber(dg.dungeon_width) - 1;
+            y = randomNumber(dg.height) - 1;
+            x = randomNumber(dg.width) - 1;
         } while (!(*set_function)(dg.cave[y][x].feature_id) || dg.cave[y][x].treasure_id != 0 || (y == char_row && x == char_col));
 
         switch (object_type) {
@@ -2241,7 +2241,7 @@ bool playerMovePosition(int dir, int &new_y, int &new_x) {
 
     bool can_move = false;
 
-    if (new_row >= 0 && new_row < dg.dungeon_height && new_col >= 0 && new_col < dg.dungeon_width) {
+    if (new_row >= 0 && new_row < dg.height && new_col >= 0 && new_col < dg.width) {
         new_y = new_row;
         new_x = new_col;
         can_move = true;
@@ -2294,8 +2294,8 @@ void playerTeleport(int new_distance) {
     int new_y, new_x;
 
     do {
-        new_y = randomNumber(dg.dungeon_height) - 1;
-        new_x = randomNumber(dg.dungeon_width) - 1;
+        new_y = randomNumber(dg.height) - 1;
+        new_x = randomNumber(dg.width) - 1;
 
         while (coordDistanceBetween(Coord_t{new_y, new_x}, Coord_t{char_row, char_col}) > new_distance) {
             new_y += (char_row - new_y) / 2;
