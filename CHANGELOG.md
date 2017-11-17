@@ -8,6 +8,8 @@
 ### Code
 
 - Simpler display of _death_ screens (`death_tomb.txt`, `death_royal.txt` files).
+- Create a Dungeon_t and put all dungeon related globals here.
+- Move more Player globals to the Player_t struct.
 
 
 ## 5.7.7 (2017-11-07)
