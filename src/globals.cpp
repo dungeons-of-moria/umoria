@@ -18,10 +18,6 @@ FILE *highscore_fp;        // High score file pointer
 // Game options as set on startup and with `=` set options command -CJS-
 Config_t config = Config_t{};
 
-int16_t current_dungeon_level = 0;      // Current dungeon level
-int32_t current_game_turn     = -1;     // Current turn of game
-
-bool generate_new_level;                // True will generate a new level on next loop iteration
 bool screen_has_changed       = false;  // Track screen changes for inventory commands
 
 bool player_free_turn;                  // Player has a free turn, so do not move creatures
@@ -53,20 +49,6 @@ int16_t noscore               = 0;      // Don't save a score for this game. -CJ
 
 bool to_be_wizard             = false;  // Player requests to be Wizard - used during startup, when -w option used
 bool wizard_mode              = false;  // Character is a Wizard when true
-
-// Dungeon size is either big enough for town level, or the dungeon itself
-int16_t dungeon_height;
-int16_t dungeon_width;
-
-// Screen panels calculated from the dungeon/screen dimensions
-int16_t max_panel_rows, max_panel_cols;
-int panel_row, panel_col;
-int panel_row_min, panel_row_max;
-int panel_col_min, panel_col_max;
-int panel_col_prt, panel_row_prt;
-
-// Floor definitions
-Cave_t cave[MAX_HEIGHT][MAX_WIDTH];
 
 // Player variables
 int32_t character_max_score  = 0;      // Maximum score for a character

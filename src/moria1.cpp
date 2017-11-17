@@ -1966,5 +1966,5 @@ void playerTakesHit(int damage, const char *creature_name_label) {
         total_winner = false;
     }
 
-    generate_new_level = true;
+    dg.generate_new_level = true;
 }

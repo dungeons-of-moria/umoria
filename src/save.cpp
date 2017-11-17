@@ -213,7 +213,7 @@ static bool sv_write() {
     wr_byte(py.flags.new_spells_to_learn);
 
     wr_short((uint16_t) missiles_counter);
-    wr_long((uint32_t) current_game_turn);
+    wr_long((uint32_t) dg.current_game_turn);
     wr_short((uint16_t) inventory_count);
     for (int i = 0; i < inventory_count; i++) {
         wr_item(inventory[i]);
@@ -280,14 +280,14 @@ static bool sv_write() {
         return !((ferror(fileptr) != 0) || fflush(fileptr) == EOF);
     }
 
-    wr_short((uint16_t) current_dungeon_level);
+    wr_short((uint16_t) dg.current_dungeon_level);
     wr_short((uint16_t) char_row);
     wr_short((uint16_t) char_col);
     wr_short((uint16_t) monster_multiply_total);
-    wr_short((uint16_t) dungeon_height);
-    wr_short((uint16_t) dungeon_width);
-    wr_short((uint16_t) max_panel_rows);
-    wr_short((uint16_t) max_panel_cols);
+    wr_short((uint16_t) dg.dungeon_height);
+    wr_short((uint16_t) dg.dungeon_width);
+    wr_short((uint16_t) dg.max_panel_rows);
+    wr_short((uint16_t) dg.max_panel_cols);
 
     for (int i = 0; i < MAX_HEIGHT; i++) {
         for (int j = 0; j < MAX_WIDTH; j++) {
@@ -449,7 +449,7 @@ static bool _save_char(char *filename) {
     }
 
     character_saved = true;
-    current_game_turn = -1;
+    dg.current_game_turn = -1;
 
     return true;
 }
@@ -480,7 +480,7 @@ bool loadGame(bool &generate) {
     putString(filename.c_str(), Coord_t{23, 0});
 
     // FIXME: check this if/else logic! -- MRC
-    if (current_game_turn >= 0) {
+    if (dg.current_game_turn >= 0) {
         printMessage("IMPOSSIBLE! Attempt to restore while still alive!");
     } else if ((fd = open(config.save_game_filename, O_RDONLY, 0)) < 0 && (chmod(config.save_game_filename, 0400) < 0 || (fd = open(config.save_game_filename, O_RDONLY, 0)) < 0)) {
         // Allow restoring a file belonging to someone else, if we can delete it.
@@ -488,7 +488,7 @@ bool loadGame(bool &generate) {
 
         printMessage("Can't open file for reading.");
     } else {
-        current_game_turn = -1;
+        dg.current_game_turn = -1;
         bool ok = true;
 
         (void) close(fd);
@@ -656,7 +656,7 @@ bool loadGame(bool &generate) {
             py.flags.new_spells_to_learn = rd_byte();
 
             missiles_counter = rd_short();
-            current_game_turn = rd_long();
+            dg.current_game_turn = rd_long();
             inventory_count = rd_short();
             if (inventory_count > EQUIPMENT_WIELD) {
                 goto error;
@@ -716,7 +716,7 @@ bool loadGame(bool &generate) {
         c = getc(fileptr);
         if (c == EOF || ((l & 0x80000000L) != 0)) {
             if ((l & 0x80000000L) == 0) {
-                if (!to_be_wizard || current_game_turn < 0) {
+                if (!to_be_wizard || dg.current_game_turn < 0) {
                     goto error;
                 }
                 putStringClearToEOL("Attempting a resurrection!", Coord_t{0, 0});
@@ -735,7 +735,7 @@ bool loadGame(bool &generate) {
                     py.flags.poisoned = 1;
                 }
 
-                current_dungeon_level = 0; // Resurrect on the town level.
+                dg.current_dungeon_level = 0; // Resurrect on the town level.
                 character_generated = true;
 
                 // set `noscore` to indicate a resurrection, and don't enter wizard mode
@@ -745,7 +745,7 @@ bool loadGame(bool &generate) {
                 // Make sure that this message is seen, since it is a bit
                 // more interesting than the other messages.
                 printMessage("Restoring Memory of a departed spirit...");
-                current_game_turn = -1;
+                dg.current_game_turn = -1;
             }
             putQIO();
             goto closefiles;
@@ -760,14 +760,14 @@ bool loadGame(bool &generate) {
         // only level specific info should follow,
         // not present for dead characters
 
-        current_dungeon_level = rd_short();
+        dg.current_dungeon_level = rd_short();
         char_row = rd_short();
         char_col = rd_short();
         monster_multiply_total = rd_short();
-        dungeon_height = rd_short();
-        dungeon_width = rd_short();
-        max_panel_rows = rd_short();
-        max_panel_cols = rd_short();
+        dg.dungeon_height = rd_short();
+        dg.dungeon_width = rd_short();
+        dg.max_panel_rows = rd_short();
+        dg.max_panel_cols = rd_short();
 
         uint8_t char_tmp, ychar, xchar, count;
 
@@ -838,7 +838,7 @@ bool loadGame(bool &generate) {
             goto error;
         }
 
-        if (current_game_turn < 0) {
+        if (dg.current_game_turn < 0) {
             error:
             ok = false; // Assume bad data.
         } else {
@@ -875,7 +875,7 @@ bool loadGame(bool &generate) {
                 noscore |= 0x4;
             }
 
-            if (current_game_turn >= 0) { // Only if a full restoration.
+            if (dg.current_game_turn >= 0) { // Only if a full restoration.
                 py.weapon_is_heavy = false;
                 py.pack_heaviness = 0;
                 playerStrength();
@@ -916,10 +916,10 @@ bool loadGame(bool &generate) {
             }
 
             // if false: only restored options and monster memory.
-            return current_game_turn >= 0;
+            return dg.current_game_turn >= 0;
         }
     }
-    current_game_turn = -1;
+    dg.current_game_turn = -1;
     putStringClearToEOL("Please try again without that save file.", Coord_t{1, 0});
 
     exitGame();

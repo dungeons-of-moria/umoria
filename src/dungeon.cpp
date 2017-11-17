@@ -9,6 +9,10 @@
 #include "headers.h"
 #include "externs.h"
 
+// The Dungeon global
+// Yup, this initialization is ugly, we'll fix...eventually! -MRC-
+Dungeon_t dg = Dungeon_t{0, 0, Panel_t{}, -1, 0, true, Tile_t{}};
+
 static char originalCommands(char command);
 static void doCommand(char command);
 static bool validCountCommand(char command);
@@ -30,7 +34,7 @@ static void inventoryRefillLamp();
 // Reset flags and initialize variables
 static void resetDungeonFlags() {
     command_count = 0;
-    generate_new_level = false;
+    dg.generate_new_level = false;
     py.running_tracker = 0;
     teleport_player = false;
     monster_multiply_total = 0;
@@ -44,8 +48,8 @@ static void playerInitializePlayerLight() {
 
 // Check for a maximum level
 static void playerUpdateMaxDungeonDepth() {
-    if (current_dungeon_level > py.misc.max_dungeon_depth) {
-        py.misc.max_dungeon_depth = (uint16_t) current_dungeon_level;
+    if (dg.current_dungeon_level > py.misc.max_dungeon_depth) {
+        py.misc.max_dungeon_depth = (uint16_t) dg.current_dungeon_level;
     }
 }
 
@@ -367,14 +371,14 @@ static void playerUpdatePoisonedState() {
         case 1:
         case 2:
         case 3:
-            damage = ((current_game_turn % 2) == 0 ? 1 : 0);
+            damage = ((dg.current_game_turn % 2) == 0 ? 1 : 0);
             break;
         case 4:
         case 5:
-            damage = ((current_game_turn % 3) == 0 ? 1 : 0);
+            damage = ((dg.current_game_turn % 3) == 0 ? 1 : 0);
             break;
         case 6:
-            damage = ((current_game_turn % 4) == 0 ? 1 : 0);
+            damage = ((dg.current_game_turn % 4) == 0 ? 1 : 0);
             break;
         default:
             damage = 0;
@@ -644,16 +648,16 @@ static void playerUpdateWordOfRecall() {
     }
 
     if (py.flags.word_of_recall == 1) {
-        generate_new_level = true;
+        dg.generate_new_level = true;
 
         py.flags.paralysis++;
         py.flags.word_of_recall = 0;
 
-        if (current_dungeon_level > 0) {
-            current_dungeon_level = 0;
+        if (dg.current_dungeon_level > 0) {
+            dg.current_dungeon_level = 0;
             printMessage("You feel yourself yanked upwards!");
         } else if (py.misc.max_dungeon_depth != 0) {
-            current_dungeon_level = py.misc.max_dungeon_depth;
+            dg.current_dungeon_level = py.misc.max_dungeon_depth;
             printMessage("You feel yourself yanked downwards!");
         }
     } else {
@@ -881,7 +885,7 @@ static void executeInputCommands(char &command, int &find_count) {
         } else if (command_count != 0) {
             command_count--;
         }
-    } while (player_free_turn && !generate_new_level && (eof_flag == 0));
+    } while (player_free_turn && !dg.generate_new_level && (eof_flag == 0));
 
     command = lastInputCommand;
 }
@@ -897,12 +901,12 @@ void playDungeon() {
     int find_count = 0;
 
     // Ensure we display the panel. Used to do this with a global var. -CJS-
-    panel_row = panel_col = -1;
+    dg.panel_row = dg.panel_col = -1;
 
     // Light up the area around character
     dungeonResetView();
 
-    // must do this after panel_row/col set to -1, because playerSearchOff() will
+    // must do this after `dg.panel_row` / `dg.panel_col` set to -1, because playerSearchOff() will
     // call dungeonResetView(), and so the panel_* variables must be valid before
     // playerSearchOff() is called
     if ((py.flags.status & PY_SEARCH) != 0u) {
@@ -920,13 +924,13 @@ void playDungeon() {
     char lastInputCommand = {0};
 
     // Loop until dead,  or new level
-    // Exit when `generate_new_level` and `eof_flag` are both set
+    // Exit when `dg.generate_new_level` and `eof_flag` are both set
     do {
         // Increment turn counter
-        current_game_turn++;
+        dg.current_game_turn++;
 
         // turn over the store contents every, say, 1000 turns
-        if (current_dungeon_level != 0 && current_game_turn % 1000 == 0) {
+        if (dg.current_dungeon_level != 0 && dg.current_game_turn % 1000 == 0) {
             storeMaintenance();
         }
 
@@ -992,7 +996,7 @@ void playDungeon() {
         // for 1st level char, check once every 2160 turns
         // for 40th level char, check once every 416 turns
         int chance = 10 + 750 / (5 + py.misc.level);
-        if ((current_game_turn & 0xF) == 0 && py.flags.confused == 0 && randomNumber(chance) == 1) {
+        if ((dg.current_game_turn & 0xF) == 0 && py.flags.confused == 0 && randomNumber(chance) == 1) {
             playerDetectEnchantment();
         }
 
@@ -1021,10 +1025,10 @@ void playDungeon() {
         }
 
         // Move the creatures
-        if (!generate_new_level) {
+        if (!dg.generate_new_level) {
             updateMonsters(true);
         }
-    } while (!generate_new_level && (eof_flag == 0));
+    } while (!dg.generate_new_level && (eof_flag == 0));
 }
 
 static char originalCommands(char command) {
@@ -1312,7 +1316,7 @@ static void commandQuit() {
 
     if (getInputConfirmation("Do you really want to quit?")) {
         character_is_dead = true;
-        generate_new_level = true;
+        dg.generate_new_level = true;
 
         (void) strcpy(character_died_from, "Quitting");
     }
@@ -1411,16 +1415,16 @@ static void commandLocateOnMap() {
 
     int cy, cx, p_y, p_x;
 
-    cy = panel_row;
-    cx = panel_col;
+    cy = dg.panel_row;
+    cx = dg.panel_col;
 
     int dir_val;
     vtype_t out_val = {'\0'};
     vtype_t tmp_str = {'\0'};
 
     while (true) {
-        p_y = panel_row;
-        p_x = panel_col;
+        p_y = dg.panel_row;
+        p_x = dg.panel_col;
 
         if (p_y == cy && p_x == cx) {
             tmp_str[0] = '\0';
@@ -1442,7 +1446,7 @@ static void commandLocateOnMap() {
             x += ((dir_val - 1) % 3 - 1) * SCREEN_WIDTH / 2;
             y -= ((dir_val - 1) / 3 - 1) * SCREEN_HEIGHT / 2;
 
-            if (x < 0 || y < 0 || x >= dungeon_width || y >= dungeon_width) {
+            if (x < 0 || y < 0 || x >= dg.dungeon_width || y >= dg.dungeon_width) {
                 printMessage("You've gone past the end of your map.");
 
                 x -= ((dir_val - 1) % 3 - 1) * SCREEN_WIDTH / 2;
@@ -1539,11 +1543,11 @@ static void doWizardCommands(char com_val) {
             }
 
             if (i >= 0) {
-                current_dungeon_level = (int16_t) i;
-                if (current_dungeon_level > 99) {
-                    current_dungeon_level = 99;
+                dg.current_dungeon_level = (int16_t) i;
+                if (dg.current_dungeon_level > 99) {
+                    dg.current_dungeon_level = 99;
                 }
-                generate_new_level = true;
+                dg.generate_new_level = true;
             } else {
                 messageLineClear();
             }
@@ -2135,12 +2139,12 @@ static void dungeonGoUpLevel() {
     uint8_t tile_id = cave[char_row][char_col].treasure_id;
 
     if (tile_id != 0 && treasure_list[tile_id].category_id == TV_UP_STAIR) {
-        current_dungeon_level--;
+        dg.current_dungeon_level--;
 
         printMessage("You enter a maze of up staircases.");
         printMessage("You pass through a one-way door.");
 
-        generate_new_level = true;
+        dg.generate_new_level = true;
     } else {
         printMessage("I see no up staircase here.");
         player_free_turn = true;
@@ -2152,12 +2156,12 @@ static void dungeonGoDownLevel() {
     uint8_t tile_id = cave[char_row][char_col].treasure_id;
 
     if (tile_id != 0 && treasure_list[tile_id].category_id == TV_DOWN_STAIR) {
-        current_dungeon_level++;
+        dg.current_dungeon_level++;
 
         printMessage("You enter a maze of down staircases.");
         printMessage("You pass through a one-way door.");
 
-        generate_new_level = true;
+        dg.generate_new_level = true;
     } else {
         printMessage("I see no down staircase here.");
         player_free_turn = true;

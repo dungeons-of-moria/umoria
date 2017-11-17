@@ -137,51 +137,51 @@ int getAndClearFirstBit(uint32_t &flag) {
 
 // Checks a co-ordinate for in bounds status -RAK-
 bool coordInBounds(Coord_t coord) {
-    bool valid_y = coord.y > 0 && coord.y < dungeon_height - 1;
-    bool valid_x = coord.x > 0 && coord.x < dungeon_width - 1;
+    bool valid_y = coord.y > 0 && coord.y < dg.dungeon_height - 1;
+    bool valid_x = coord.x > 0 && coord.x < dg.dungeon_width - 1;
 
     return valid_y && valid_x;
 }
 
 // Calculates current boundaries -RAK-
 static void panelBounds() {
-    panel_row_min = panel_row * (SCREEN_HEIGHT / 2);
-    panel_row_max = panel_row_min + SCREEN_HEIGHT - 1;
-    panel_row_prt = panel_row_min - 1;
-    panel_col_min = panel_col * (SCREEN_WIDTH / 2);
-    panel_col_max = panel_col_min + SCREEN_WIDTH - 1;
-    panel_col_prt = panel_col_min - 13;
+    dg.panel_row_min = dg.panel_row * (SCREEN_HEIGHT / 2);
+    dg.panel_row_max = dg.panel_row_min + SCREEN_HEIGHT - 1;
+    dg.panel_row_prt = dg.panel_row_min - 1;
+    dg.panel_col_min = dg.panel_col * (SCREEN_WIDTH / 2);
+    dg.panel_col_max = dg.panel_col_min + SCREEN_WIDTH - 1;
+    dg.panel_col_prt = dg.panel_col_min - 13;
 }
 
 // Given an row (y) and col (x), this routine detects -RAK-
 // when a move off the screen has occurred and figures new borders.
 // `force` forces the panel bounds to be recalculated, useful for 'W'here.
 bool coordOutsidePanel(Coord_t coord, bool force) {
-    int row = panel_row;
-    int col = panel_col;
+    int row = dg.panel_row;
+    int col = dg.panel_col;
 
-    if (force || coord.y < panel_row_min + 2 || coord.y > panel_row_max - 2) {
+    if (force || coord.y < dg.panel_row_min + 2 || coord.y > dg.panel_row_max - 2) {
         row = (coord.y - SCREEN_HEIGHT / 4) / (SCREEN_HEIGHT / 2);
 
-        if (row > max_panel_rows) {
-            row = max_panel_rows;
+        if (row > dg.max_panel_rows) {
+            row = dg.max_panel_rows;
         } else if (row < 0) {
             row = 0;
         }
     }
 
-    if (force || coord.x < panel_col_min + 3 || coord.x > panel_col_max - 3) {
+    if (force || coord.x < dg.panel_col_min + 3 || coord.x > dg.panel_col_max - 3) {
         col = ((coord.x - SCREEN_WIDTH / 4) / (SCREEN_WIDTH / 2));
-        if (col > max_panel_cols) {
-            col = max_panel_cols;
+        if (col > dg.max_panel_cols) {
+            col = dg.max_panel_cols;
         } else if (col < 0) {
             col = 0;
         }
     }
 
-    if (row != panel_row || col != panel_col) {
-        panel_row = row;
-        panel_col = col;
+    if (row != dg.panel_row || col != dg.panel_col) {
+        dg.panel_row = row;
+        dg.panel_col = col;
         panelBounds();
 
         // stop movement if any
@@ -198,8 +198,8 @@ bool coordOutsidePanel(Coord_t coord, bool force) {
 
 // Is the given coordinate within the screen panel boundaries -RAK-
 bool coordInsidePanel(Coord_t coord) {
-    bool valid_y = coord.y >= panel_row_min && coord.y <= panel_row_max;
-    bool valid_x = coord.x >= panel_col_min && coord.x <= panel_col_max;
+    bool valid_y = coord.y >= dg.panel_row_min && coord.y <= dg.panel_row_max;
+    bool valid_x = coord.x >= dg.panel_col_min && coord.x <= dg.panel_col_max;
 
     return valid_y && valid_x;
 }
@@ -223,8 +223,8 @@ int coordDistanceBetween(Coord_t coord_a, Coord_t coord_b) {
 }
 
 // Checks points north, south, east, and west for a wall -RAK-
-// note that y,x is always coordInBounds(), i.e. 0 < y < dungeon_height-1,
-// and 0 < x < dungeon_width-1
+// note that y,x is always coordInBounds(), i.e. 0 < y < dg.dungeon_height-1,
+// and 0 < x < dg.dungeon_width-1
 int coordWallsNextTo(Coord_t coord) {
     int walls = 0;
 
@@ -500,11 +500,11 @@ void drawDungeonPanel() {
     int line = 1;
 
     // Top to bottom
-    for (int y = panel_row_min; y <= panel_row_max; y++) {
+    for (int y = dg.panel_row_min; y <= dg.panel_row_max; y++) {
         eraseLine(Coord_t{line++, 13});
 
         // Left to right
-        for (int x = panel_col_min; x <= panel_col_max; x++) {
+        for (int x = dg.panel_col_min; x <= dg.panel_col_max; x++) {
             char ch = caveGetTileSymbol(Coord_t{y, x});
             if (ch != ' ') {
                 panelPutTile(ch, Coord_t{y, x});
@@ -649,8 +649,8 @@ void monsterPlaceWinning() {
 
     int y, x;
     do {
-        y = randomNumber(dungeon_height - 2);
-        x = randomNumber(dungeon_width - 2);
+        y = randomNumber(dg.dungeon_height - 2);
+        x = randomNumber(dg.dungeon_width - 2);
     } while ((cave[y][x].feature_id >= MIN_CLOSED_SPACE) || (cave[y][x].creature_id != 0) || (cave[y][x].treasure_id != 0) || (coordDistanceBetween(Coord_t{y, x}, Coord_t{char_row, char_col}) <= MON_MAX_SIGHT));
 
     int creature_id = randomNumber(MON_ENDGAME_MONSTERS) - 1 + monster_levels[MON_MAX_LEVELS];
@@ -732,11 +732,11 @@ void monsterPlaceNewWithinDistance(int number, int distance_from_source, bool sl
 
     for (int i = 0; i < number; i++) {
         do {
-            y = randomNumber(dungeon_height - 2);
-            x = randomNumber(dungeon_width - 2);
+            y = randomNumber(dg.dungeon_height - 2);
+            x = randomNumber(dg.dungeon_width - 2);
         } while (cave[y][x].feature_id >= MIN_CLOSED_SPACE || cave[y][x].creature_id != 0 || coordDistanceBetween(Coord_t{y, x}, Coord_t{char_row, char_col}) <= distance_from_source);
 
-        int l = monsterGetOneSuitableForLevel(current_dungeon_level);
+        int l = monsterGetOneSuitableForLevel(dg.current_dungeon_level);
 
         // Dragons are always created sleeping here,
         // so as to give the player a sporting chance.
@@ -778,7 +778,7 @@ static bool placeMonsterAdjacentTo(int monsterID, int &y, int &x, bool slp) {
 
 // Places creature adjacent to given location -RAK-
 bool monsterSummon(int &y, int &x, bool sleeping) {
-    int monster_id = monsterGetOneSuitableForLevel(current_dungeon_level + MON_SUMMONED_LEVEL_ADJUST);
+    int monster_id = monsterGetOneSuitableForLevel(dg.current_dungeon_level + MON_SUMMONED_LEVEL_ADJUST);
     return placeMonsterAdjacentTo(monster_id, y, x, sleeping);
 }
 
@@ -815,8 +815,8 @@ static void compactObjects() {
     int current_distance = 66;
 
     while (counter <= 0) {
-        for (int y = 0; y < dungeon_height; y++) {
-            for (int x = 0; x < dungeon_width; x++) {
+        for (int y = 0; y < dg.dungeon_height; y++) {
+            for (int x = 0; x < dg.dungeon_width; x++) {
                 if (cave[y][x].treasure_id != 0 && coordDistanceBetween(Coord_t{y, x}, Coord_t{char_row, char_col}) > current_distance) {
                     int chance;
 
@@ -878,8 +878,8 @@ void pusht(uint8_t treasure_id) {
         treasure_list[treasure_id] = treasure_list[current_treasure_id - 1];
 
         // must change the treasure_id in the cave of the object just moved
-        for (int y = 0; y < dungeon_height; y++) {
-            for (int x = 0; x < dungeon_width; x++) {
+        for (int y = 0; y < dg.dungeon_height; y++) {
+            for (int x = 0; x < dg.dungeon_width; x++) {
                 if (cave[y][x].treasure_id == current_treasure_id - 1) {
                     cave[y][x].treasure_id = treasure_id;
                 }

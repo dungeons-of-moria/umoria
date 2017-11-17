@@ -34,10 +34,10 @@ void dungeonPlaceRubble(int y, int x) {
 void dungeonPlaceGold(int y, int x) {
     int free_treasure_id = popt();
 
-    int gold_type_id = ((randomNumber(current_dungeon_level + 2) + 2) / 2) - 1;
+    int gold_type_id = ((randomNumber(dg.current_dungeon_level + 2) + 2) / 2) - 1;
 
     if (randomNumber(TREASURE_CHANCE_OF_GREAT_ITEM) == 1) {
-        gold_type_id += randomNumber(current_dungeon_level + 1);
+        gold_type_id += randomNumber(dg.current_dungeon_level + 1);
     }
 
     if (gold_type_id >= MAX_GOLD_TYPES) {
@@ -113,10 +113,10 @@ void dungeonPlaceRandomObjectAt(int y, int x, bool must_be_small) {
 
     cave[y][x].treasure_id = (uint8_t) free_treasure_id;
 
-    int object_id = itemGetRandomObjectId(current_dungeon_level, must_be_small);
+    int object_id = itemGetRandomObjectId(dg.current_dungeon_level, must_be_small);
     inventoryItemCopyTo(sorted_objects[object_id], treasure_list[free_treasure_id]);
 
-    magicTreasureMagicalAbility(free_treasure_id, current_dungeon_level);
+    magicTreasureMagicalAbility(free_treasure_id, dg.current_dungeon_level);
 
     if (cave[y][x].creature_id == 1) {
         printMessage("You feel something roll beneath your feet."); // -CJS-
@@ -131,8 +131,8 @@ void dungeonAllocateAndPlaceObject(bool (*set_function)(int), int object_type, i
         // don't put an object beneath the player, this could cause
         // problems if player is standing under rubble, or on a trap.
         do {
-            y = randomNumber(dungeon_height) - 1;
-            x = randomNumber(dungeon_width) - 1;
+            y = randomNumber(dg.dungeon_height) - 1;
+            x = randomNumber(dg.dungeon_width) - 1;
         } while (!(*set_function)(cave[y][x].feature_id) || cave[y][x].treasure_id != 0 || (y == char_row && x == char_col));
 
         switch (object_type) {
@@ -420,7 +420,7 @@ void printCharacterGoldValue() {
 void printCharacterCurrentDepth() {
     vtype_t depths = {'\0'};
 
-    int depth = current_dungeon_level * 50;
+    int depth = dg.current_dungeon_level * 50;
 
     if (depth == 0) {
         (void) strcpy(depths, "Town level");
@@ -2241,7 +2241,7 @@ bool playerMovePosition(int dir, int &new_y, int &new_x) {
 
     bool can_move = false;
 
-    if (new_row >= 0 && new_row < dungeon_height && new_col >= 0 && new_col < dungeon_width) {
+    if (new_row >= 0 && new_row < dg.dungeon_height && new_col >= 0 && new_col < dg.dungeon_width) {
         new_y = new_row;
         new_x = new_col;
         can_move = true;
@@ -2294,8 +2294,8 @@ void playerTeleport(int new_distance) {
     int new_y, new_x;
 
     do {
-        new_y = randomNumber(dungeon_height) - 1;
-        new_x = randomNumber(dungeon_width) - 1;
+        new_y = randomNumber(dg.dungeon_height) - 1;
+        new_x = randomNumber(dg.dungeon_width) - 1;
 
         while (coordDistanceBetween(Coord_t{new_y, new_x}, Coord_t{char_row, char_col}) > new_distance) {
             new_y += (char_row - new_y) / 2;

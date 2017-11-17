@@ -64,8 +64,8 @@ bool monsterSleep(int y, int x) {
 bool dungeonDetectTreasureOnPanel() {
     bool detected = false;
 
-    for (int y = panel_row_min; y <= panel_row_max; y++) {
-        for (int x = panel_col_min; x <= panel_col_max; x++) {
+    for (int y = dg.panel_row_min; y <= dg.panel_row_max; y++) {
+        for (int x = dg.panel_col_min; x <= dg.panel_col_max; x++) {
             Cave_t &tile = cave[y][x];
 
             if (tile.treasure_id != 0 && treasure_list[tile.treasure_id].category_id == TV_GOLD && !caveTileVisible(Coord_t{y, x})) {
@@ -83,8 +83,8 @@ bool dungeonDetectTreasureOnPanel() {
 bool dungeonDetectObjectOnPanel() {
     bool detected = false;
 
-    for (int y = panel_row_min; y <= panel_row_max; y++) {
-        for (int x = panel_col_min; x <= panel_col_max; x++) {
+    for (int y = dg.panel_row_min; y <= dg.panel_row_max; y++) {
+        for (int x = dg.panel_col_min; x <= dg.panel_col_max; x++) {
             Cave_t &tile = cave[y][x];
 
             if (tile.treasure_id != 0 && treasure_list[tile.treasure_id].category_id < TV_MAX_OBJECT && !caveTileVisible(Coord_t{y, x})) {
@@ -102,8 +102,8 @@ bool dungeonDetectObjectOnPanel() {
 bool dungeonDetectTrapOnPanel() {
     bool detected = false;
 
-    for (int y = panel_row_min; y <= panel_row_max; y++) {
-        for (int x = panel_col_min; x <= panel_col_max; x++) {
+    for (int y = dg.panel_row_min; y <= dg.panel_row_max; y++) {
+        for (int x = dg.panel_col_min; x <= dg.panel_col_max; x++) {
             Cave_t &tile = cave[y][x];
 
             if (tile.treasure_id == 0) {
@@ -128,8 +128,8 @@ bool dungeonDetectTrapOnPanel() {
 bool dungeonDetectSecretDoorsOnPanel() {
     bool detected = false;
 
-    for (int y = panel_row_min; y <= panel_row_max; y++) {
-        for (int x = panel_col_min; x <= panel_col_max; x++) {
+    for (int y = dg.panel_row_min; y <= dg.panel_row_max; y++) {
+        for (int x = dg.panel_col_min; x <= dg.panel_col_max; x++) {
             Cave_t &tile = cave[y][x];
 
             if (tile.treasure_id == 0) {
@@ -194,7 +194,7 @@ bool spellLightArea(int y, int x) {
     // NOTE: this is not changed anywhere. A bug or correct? -MRC-
     bool lit = true;
 
-    if (cave[y][x].perma_lit_room && current_dungeon_level > 0) {
+    if (cave[y][x].perma_lit_room && dg.current_dungeon_level > 0) {
         dungeonLightRoom(y, x);
     }
 
@@ -214,7 +214,7 @@ bool spellLightArea(int y, int x) {
 bool spellDarkenArea(int y, int x) {
     bool darkened = false;
 
-    if (cave[y][x].perma_lit_room && current_dungeon_level > 0) {
+    if (cave[y][x].perma_lit_room && dg.current_dungeon_level > 0) {
         int half_height = (SCREEN_HEIGHT / 2);
         int half_width = (SCREEN_WIDTH / 2);
         int start_row = (y / half_height) * half_height + 1;
@@ -275,10 +275,10 @@ static void dungeonLightAreaAroundFloorTile(int y, int x) {
 
 // Map the current area plus some -RAK-
 void spellMapCurrentArea() {
-    int row_min = panel_row_min - randomNumber(10);
-    int row_max = panel_row_max + randomNumber(10);
-    int col_min = panel_col_min - randomNumber(20);
-    int col_max = panel_col_max + randomNumber(20);
+    int row_min = dg.panel_row_min - randomNumber(10);
+    int row_max = dg.panel_row_max + randomNumber(10);
+    int col_min = dg.panel_col_min - randomNumber(20);
+    int col_max = dg.panel_col_max + randomNumber(20);
 
     for (int y = row_min; y <= row_max; y++) {
         for (int x = col_min; x <= col_max; x++) {
@@ -1860,7 +1860,7 @@ static void earthquakeHitsMonster(int monsterID) {
 }
 
 // This is a fun one.  In a given block, pick some walls and
-// turn them into open spots.  Pick some open spots and current_game_turn
+// turn them into open spots.  Pick some open spots and dg.current_game_turn
 // them into walls.  An "Earthquake" effect. -RAK-
 void dungeonEarthquake() {
     for (int y = char_row - 8; y <= char_row + 8; y++) {
@@ -2168,7 +2168,7 @@ static void replace_spot(int y, int x, int typ) {
 //   Winning creatures that are deleted will be considered as teleporting to another level.
 //   This will NOT win the game.
 void spellDestroyArea(int y, int x) {
-    if (current_dungeon_level > 0) {
+    if (dg.current_dungeon_level > 0) {
         for (int pos_y = y - 15; pos_y <= y + 15; pos_y++) {
             for (int pos_x = x - 15; pos_x <= x + 15; pos_x++) {
                 if (coordInBounds(Coord_t{pos_y, pos_x}) && cave[pos_y][pos_x].feature_id != TILE_BOUNDARY_WALL) {

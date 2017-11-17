@@ -43,7 +43,7 @@ void printTomb() {
     text = std::to_string(py.misc.au) + " Au";
     putString(text.c_str(), Coord_t{13, (int) (26 - text.length() / 2)});
 
-    text = std::to_string(current_dungeon_level);
+    text = std::to_string(dg.current_dungeon_level);
     putString(text.c_str(), Coord_t{14, 34});
 
     text = std::string(character_died_from);
@@ -106,7 +106,7 @@ static void printCrown() {
 // Change the player into a King! -RAK-
 static void kingly() {
     // Change the character attributes.
-    current_dungeon_level = 0;
+    dg.current_dungeon_level = 0;
     (void) strcpy(character_died_from, "Ripe Old Age");
 
     (void) spellRestorePlayerLevels();
@@ -129,7 +129,7 @@ void exitGame() {
 
     // If the game has been saved, then save sets turn back to -1,
     // which inhibits the printing of the tomb.
-    if (current_game_turn >= 0) {
+    if (dg.current_game_turn >= 0) {
         if (total_winner) {
             kingly();
         }

@@ -11,12 +11,10 @@ extern int hack_monptr;
 extern FILE *highscore_fp;
 
 extern Config_t config;
+extern Dungeon_t dg;
 
-extern int16_t current_dungeon_level;
 extern int32_t character_max_score;
-extern int32_t current_game_turn;
 
-extern bool generate_new_level;
 extern bool screen_has_changed;
 
 extern bool player_free_turn;
@@ -49,15 +47,6 @@ extern int16_t noscore;
 
 extern bool to_be_wizard;
 extern bool wizard_mode;
-
-extern int16_t dungeon_height;
-extern int16_t dungeon_width;
-
-extern int16_t max_panel_rows, max_panel_cols;
-extern int panel_row, panel_col;
-extern int panel_row_min, panel_row_max;
-extern int panel_col_min, panel_col_max;
-extern int panel_col_prt, panel_row_prt;
 
 // Following are all floor definitions
 extern Cave_t cave[MAX_HEIGHT][MAX_WIDTH];

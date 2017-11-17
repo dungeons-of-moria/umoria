@@ -210,11 +210,11 @@ static bool scrollSummonMonster() {
 }
 
 static void scrollTeleportLevel() {
-    current_dungeon_level += (-3) + 2 * randomNumber(2);
-    if (current_dungeon_level < 1) {
-        current_dungeon_level = 1;
+    dg.current_dungeon_level += (-3) + 2 * randomNumber(2);
+    if (dg.current_dungeon_level < 1) {
+        dg.current_dungeon_level = 1;
     }
-    generate_new_level = true;
+    dg.generate_new_level = true;
 }
 
 static bool scrollConfuseMonster() {

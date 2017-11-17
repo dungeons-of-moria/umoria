@@ -50,4 +50,5 @@
 
 #include "constant.h"
 #include "types.h"
+#include "dungeon.h"
 #include "config.h"

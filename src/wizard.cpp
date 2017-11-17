@@ -17,8 +17,8 @@ void wizardLightUpDungeon() {
 
     flag = !cave[char_row][char_col].permanent_light;
 
-    for (int y = 0; y < dungeon_height; y++) {
-        for (int x = 0; x < dungeon_width; x++) {
+    for (int y = 0; y < dg.dungeon_height; y++) {
+        for (int x = 0; x < dg.dungeon_width; x++) {
             if (cave[y][x].feature_id <= MAX_CAVE_FLOOR) {
                 for (int yy = y - 1; yy <= y + 1; yy++) {
                     for (int xx = x - 1; xx <= x + 1; xx++) {
@@ -291,7 +291,7 @@ void wizardGenerateObject() {
             int free_treasure_id = popt();
             cave[j][k].treasure_id = (uint8_t) free_treasure_id;
             inventoryItemCopyTo(id, treasure_list[free_treasure_id]);
-            magicTreasureMagicalAbility(free_treasure_id, current_dungeon_level);
+            magicTreasureMagicalAbility(free_treasure_id, dg.current_dungeon_level);
 
             // auto identify the item
             itemIdentify(treasure_list[free_treasure_id], free_treasure_id);
