@@ -80,6 +80,7 @@ set(
         ${source_dir}/headers.h
         ${source_dir}/types.h
         ${source_dir}/dungeon.h
+        ${source_dir}/player.h
         ${source_dir}/version.h
         ${source_dir}/data_creatures.cpp
         ${source_dir}/data_player.cpp
