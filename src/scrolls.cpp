@@ -201,8 +201,8 @@ static bool scrollSummonMonster() {
     bool identified = false;
 
     for (int i = 0; i < randomNumber(3); i++) {
-        auto y = (int) char_row;
-        auto x = (int) char_col;
+        auto y = (int) py.row;
+        auto x = (int) py.col;
         identified |= monsterSummon(y, x, false);
     }
 
@@ -398,8 +398,8 @@ static bool scrollSummonUndead() {
     bool identified = false;
 
     for (int i = 0; i < randomNumber(3); i++) {
-        int y = char_row;
-        int x = char_col;
+        int y = py.row;
+        int x = py.col;
         identified |= monsterSummonUndead(y, x);
     }
 
@@ -461,7 +461,7 @@ void readScroll() {
                 identified = scrollRemoveCurse();
                 break;
             case 6:
-                identified = spellLightArea(char_row, char_col);
+                identified = spellLightArea(py.row, py.col);
                 break;
             case 7:
                 identified = scrollSummonMonster();
@@ -486,7 +486,7 @@ void readScroll() {
                 identified = true;
                 break;
             case 13:
-                identified = monsterSleep(char_row, char_col);
+                identified = monsterSleep(py.row, py.col);
                 break;
             case 14:
                 spellWardingGlyph();
@@ -537,7 +537,7 @@ void readScroll() {
                 identified = true;
                 break;
             case 27:
-                identified = spellDarkenArea(char_row, char_col);
+                identified = spellDarkenArea(py.row, py.col);
                 break;
             case 28:
                 identified = playerProtectEvil();
@@ -581,7 +581,7 @@ void readScroll() {
                 identified = true;
                 break;
             case 42:
-                spellDestroyArea(char_row, char_col);
+                spellDestroyArea(py.row, py.col);
                 identified = true;
                 break;
             default:

@@ -105,6 +105,10 @@ typedef struct {
         uint8_t new_spells_to_learn; // Number of spells can learn.
     } flags;
 
+    // location in dungeon
+    int16_t row;
+    int16_t col;
+
     int16_t pack_heaviness;    // Heaviness of pack - used to calculate if pack is too heavy -CJS-
     uint8_t running_tracker;   // Tracker for number of turns taken during one run cycle
     bool carrying_light;       // True when player is carrying light

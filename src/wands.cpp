@@ -44,14 +44,14 @@ static bool wandDischarge(Inventory_t &item, int direction) {
     uint32_t flags = item.flags;
 
     while (flags != 0) {
-        int y = char_row;
-        int x = char_col;
+        int y = py.row;
+        int x = py.col;
 
         // Wand types
         switch ((WandSpellTypes) (getAndClearFirstBit(flags) + 1)) {
             case WandSpellTypes::light:
                 printMessage("A line of blue shimmering light appears.");
-                spellLightLine(char_col, char_row, direction);
+                spellLightLine(py.col, py.row, direction);
                 identified = true;
                 break;
             case WandSpellTypes::lightning_bolt:

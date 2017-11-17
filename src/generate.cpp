@@ -1062,7 +1062,7 @@ static void dungeonGenerate() {
     dungeonPlaceStairs(1, randomNumber(2), 3);
 
     // Set up the character coords, used by monsterPlaceNewWithinDistance, monsterPlaceWinning
-    dungeonNewSpot(char_row, char_col);
+    dungeonNewSpot(py.row, py.col);
 
     monsterPlaceNewWithinDistance((randomNumber(8) + MON_MIN_PER_LEVEL + alloc_level), 0, true);
     dungeonAllocateAndPlaceObject(setCorridors, 3, randomNumber(alloc_level));
@@ -1199,7 +1199,7 @@ static void townGeneration() {
     seedResetToOldSeed();
 
     // Set up the character coords, used by monsterPlaceNewWithinDistance below
-    dungeonNewSpot(char_row, char_col);
+    dungeonNewSpot(py.row, py.col);
 
     lightTown();
 
@@ -1213,8 +1213,8 @@ void generateCave() {
     dg.panel.left = 0;
     dg.panel.right = 0;
 
-    char_row = -1;
-    char_col = -1;
+    py.row = -1;
+    py.col = -1;
 
     treasureLinker();
     monsterLinker();

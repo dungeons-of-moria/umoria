@@ -97,7 +97,7 @@ static bool staffDischarge(Inventory_t &item) {
     while (flags != 0) {
         switch ((StaffSpellTypes) (getAndClearFirstBit(flags) + 1)) {
             case StaffSpellTypes::light:
-                identified = spellLightArea(char_row, char_col);
+                identified = spellLightArea(py.row, py.col);
                 break;
             case StaffSpellTypes::detect_doors_stairs:
                 identified = dungeonDetectSecretDoorsOnPanel();
@@ -123,18 +123,18 @@ static bool staffDischarge(Inventory_t &item) {
                 identified = false;
 
                 for (int i = 0; i < randomNumber(4); i++) {
-                    int y = char_row;
-                    int x = char_col;
+                    int y = py.row;
+                    int x = py.col;
                     identified |= monsterSummon(y, x, false);
                 }
                 break;
             case StaffSpellTypes::destruction:
                 identified = true;
-                spellDestroyArea(char_row, char_col);
+                spellDestroyArea(py.row, py.col);
                 break;
             case StaffSpellTypes::starlight:
                 identified = true;
-                spellStarlite(char_row, char_col);
+                spellStarlite(py.row, py.col);
                 break;
             case StaffSpellTypes::haste_monsters:
                 identified = spellSpeedAllMonsters(1);
@@ -186,7 +186,7 @@ static bool staffDischarge(Inventory_t &item) {
                 identified = spellDispelCreature(CD_EVIL, 60);
                 break;
             case StaffSpellTypes::darkness:
-                identified = spellDarkenArea(char_row, char_col);
+                identified = spellDarkenArea(py.row, py.col);
                 break;
             case StaffSpellTypes::store_bought_flag:
                 // store bought flag

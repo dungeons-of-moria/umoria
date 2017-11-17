@@ -710,7 +710,7 @@ static bool inventoryDropItem(char *command, bool selecting) {
         return selecting;
     }
 
-    if (dg.floor[char_row][char_col].treasure_id != 0) {
+    if (dg.floor[py.row][py.col].treasure_id != 0) {
         printMessage("There's no room to drop anything here.");
         return selecting;
     }
@@ -1056,7 +1056,7 @@ static bool selectItemCommands(char *command, char *which, bool selecting) {
                 item_id = -1;
                 printMessage("Hmmm, it seems to be cursed.");
             } else if (*command == 't' && !inventoryCanCarryItemCount(inventory[item_id])) {
-                if (dg.floor[char_row][char_col].treasure_id != 0) {
+                if (dg.floor[py.row][py.col].treasure_id != 0) {
                     item_id = -1;
                     printMessage("You can't carry it.");
                 } else if (getInputConfirmation("You can't carry it.  Drop it?")) {
@@ -1586,7 +1586,7 @@ bool inventoryGetInputForItemId(int &command_key_id, const char *prompt, int ite
 
 // Returns true if player has no light -RAK-
 bool playerNoLight() {
-    return !dg.floor[char_row][char_col].temporary_light && !dg.floor[char_row][char_col].permanent_light;
+    return !dg.floor[py.row][py.col].temporary_light && !dg.floor[py.row][py.col].permanent_light;
 }
 
 // map roguelike direction commands into numbers

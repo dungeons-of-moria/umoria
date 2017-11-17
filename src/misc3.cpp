@@ -133,7 +133,7 @@ void dungeonAllocateAndPlaceObject(bool (*set_function)(int), int object_type, i
         do {
             y = randomNumber(dg.height) - 1;
             x = randomNumber(dg.width) - 1;
-        } while (!(*set_function)(dg.floor[y][x].feature_id) || dg.floor[y][x].treasure_id != 0 || (y == char_row && x == char_col));
+        } while (!(*set_function)(dg.floor[y][x].feature_id) || dg.floor[y][x].treasure_id != 0 || (y == py.row && x == py.col));
 
         switch (object_type) {
             case 1:
@@ -1155,8 +1155,8 @@ void inventoryTakeOneItem(Inventory_t *to_item, Inventory_t *from_item) {
 
 // Drops an item from inventory to given location -RAK-
 void inventoryDropItem(int item_id, bool drop_all) {
-    if (dg.floor[char_row][char_col].treasure_id != 0) {
-        (void) dungeonDeleteObject(char_row, char_col);
+    if (dg.floor[py.row][py.col].treasure_id != 0) {
+        (void) dungeonDeleteObject(py.row, py.col);
     }
 
     int treasureID = popt();
@@ -1164,7 +1164,7 @@ void inventoryDropItem(int item_id, bool drop_all) {
     Inventory_t &item = inventory[item_id];
     treasure_list[treasureID] = item;
 
-    dg.floor[char_row][char_col].treasure_id = (uint8_t) treasureID;
+    dg.floor[py.row][py.col].treasure_id = (uint8_t) treasureID;
 
     if (item_id >= EQUIPMENT_WIELD) {
         playerTakeOff(item_id, -1);
@@ -2297,25 +2297,25 @@ void playerTeleport(int new_distance) {
         new_y = randomNumber(dg.height) - 1;
         new_x = randomNumber(dg.width) - 1;
 
-        while (coordDistanceBetween(Coord_t{new_y, new_x}, Coord_t{char_row, char_col}) > new_distance) {
-            new_y += (char_row - new_y) / 2;
-            new_x += (char_col - new_x) / 2;
+        while (coordDistanceBetween(Coord_t{new_y, new_x}, Coord_t{py.row, py.col}) > new_distance) {
+            new_y += (py.row - new_y) / 2;
+            new_x += (py.col - new_x) / 2;
         }
     } while (dg.floor[new_y][new_x].feature_id >= MIN_CLOSED_SPACE || dg.floor[new_y][new_x].creature_id >= 2);
 
-    dungeonMoveCreatureRecord(char_row, char_col, new_y, new_x);
+    dungeonMoveCreatureRecord(py.row, py.col, new_y, new_x);
 
-    for (int y = char_row - 1; y <= char_row + 1; y++) {
-        for (int x = char_col - 1; x <= char_col + 1; x++) {
+    for (int y = py.row - 1; y <= py.row + 1; y++) {
+        for (int x = py.col - 1; x <= py.col + 1; x++) {
             dg.floor[y][x].temporary_light = false;
             dungeonLiteSpot(y, x);
         }
     }
 
-    dungeonLiteSpot(char_row, char_col);
+    dungeonLiteSpot(py.row, py.col);
 
-    char_row = (int16_t) new_y;
-    char_col = (int16_t) new_x;
+    py.row = (int16_t) new_y;
+    py.col = (int16_t) new_x;
 
     dungeonResetView();
     updateMonsters(false);

@@ -38,7 +38,7 @@ static void resetDungeonFlags() {
     py.running_tracker = 0;
     teleport_player = false;
     monster_multiply_total = 0;
-    dg.floor[char_row][char_col].creature_id = 1;
+    dg.floor[py.row][py.col].creature_id = 1;
 }
 
 // Check light status for dungeon setup
@@ -829,7 +829,7 @@ static void executeInputCommands(char &command, int &find_count) {
         }
 
         // move the cursor to the players character
-        panelMoveCursor(Coord_t{char_row, char_col});
+        panelMoveCursor(Coord_t{py.row, py.col});
 
         message_ready_to_print = false;
 
@@ -850,7 +850,7 @@ static void executeInputCommands(char &command, int &find_count) {
             }
 
             // move cursor to player char again, in case it moved
-            panelMoveCursor(Coord_t{char_row, char_col});
+            panelMoveCursor(Coord_t{py.row, py.col});
 
             // Commands are always converted to rogue form. -CJS-
             if (!config.use_roguelike_keys) {
@@ -871,7 +871,7 @@ static void executeInputCommands(char &command, int &find_count) {
 
         // Flash the message line.
         messageLineClear();
-        panelMoveCursor(Coord_t{char_row, char_col});
+        panelMoveCursor(Coord_t{py.row, py.col});
         putQIO();
 
         doCommand(lastInputCommand);
@@ -1015,7 +1015,7 @@ void playDungeon() {
         } else {
             // if paralyzed, resting, or dead, flush output
             // but first move the cursor onto the player, for aesthetics
-            panelMoveCursor(Coord_t{char_row, char_col});
+            panelMoveCursor(Coord_t{py.row, py.col});
             putQIO();
         }
 
@@ -1407,8 +1407,8 @@ static void commandLocateOnMap() {
         return;
     }
 
-    int y = char_row;
-    int x = char_col;
+    int y = py.row;
+    int x = py.col;
     if (coordOutsidePanel(Coord_t{y, x}, true)) {
         drawDungeonPanel();
     }
@@ -1463,7 +1463,7 @@ static void commandLocateOnMap() {
     }
 
     // Move to a new panel - but only if really necessary.
-    if (coordOutsidePanel(Coord_t{char_row, char_col}, false)) {
+    if (coordOutsidePanel(Coord_t{py.row, py.col}, false)) {
         drawDungeonPanel();
     }
 }
@@ -1518,7 +1518,7 @@ static void doWizardCommands(char com_val) {
             } else {
                 i = 1;
             }
-            dungeonPlaceRandomObjectNear(char_row, char_col, i);
+            dungeonPlaceRandomObjectNear(py.row, py.col, i);
 
             drawDungeonPanel();
             break;
@@ -1599,8 +1599,8 @@ static void doWizardCommands(char com_val) {
             break;
         case '&':
             // Summon a random monster
-            y = char_row;
-            x = char_col;
+            y = py.row;
+            x = py.col;
             (void) monsterSummon(y, x, true);
 
             updateMonsters(false);
@@ -1848,7 +1848,7 @@ static void doCommand(char command) {
             readScroll();
             break;
         case 's': // (s)earch for a turn
-            dungeonSearch(char_row, char_col, py.misc.chance_in_search);
+            dungeonSearch(py.row, py.col, py.misc.chance_in_search);
             break;
         case 'T': // (T)ake off something  (t)ake off
             inventoryExecuteCommand('t');
@@ -2136,7 +2136,7 @@ static void examineBook() {
 
 // Go up one level -RAK-
 static void dungeonGoUpLevel() {
-    uint8_t tile_id = dg.floor[char_row][char_col].treasure_id;
+    uint8_t tile_id = dg.floor[py.row][py.col].treasure_id;
 
     if (tile_id != 0 && treasure_list[tile_id].category_id == TV_UP_STAIR) {
         dg.current_level--;
@@ -2153,7 +2153,7 @@ static void dungeonGoUpLevel() {
 
 // Go down one level -RAK-
 static void dungeonGoDownLevel() {
-    uint8_t tile_id = dg.floor[char_row][char_col].treasure_id;
+    uint8_t tile_id = dg.floor[py.row][py.col].treasure_id;
 
     if (tile_id != 0 && treasure_list[tile_id].category_id == TV_DOWN_STAIR) {
         dg.current_level++;
@@ -2172,8 +2172,8 @@ static void dungeonGoDownLevel() {
 static void dungeonJamDoor() {
     player_free_turn = true;
 
-    int y = char_row;
-    int x = char_col;
+    int y = py.row;
+    int x = py.col;
 
     int direction;
     if (!getDirectionWithMemory(CNIL, direction)) {

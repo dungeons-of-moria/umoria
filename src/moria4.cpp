@@ -137,8 +137,8 @@ void playerTunnel(int direction) {
         direction = randomNumber(9);
     }
 
-    int y = char_row;
-    int x = char_col;
+    int y = py.row;
+    int x = py.col;
     (void) playerMovePosition(direction, y, x);
 
     const Tile_t &tile = dg.floor[y][x];
@@ -165,7 +165,7 @@ void playerTunnel(int direction) {
                 } else if (treasure_list[tile.treasure_id].category_id == TV_SECRET_DOOR) {
                     // Found secret door!
                     printMessageNoCommandInterrupt("You tunnel into the granite wall.");
-                    dungeonSearch(char_row, char_col, py.misc.chance_in_search);
+                    dungeonSearch(py.row, py.col, py.misc.chance_in_search);
                 } else {
                     abort();
                 }
@@ -280,8 +280,8 @@ void playerDisarmTrap() {
         return;
     }
 
-    int y = char_row;
-    int x = char_col;
+    int y = py.row;
+    int x = py.col;
     (void) playerMovePosition(dir, y, x);
 
     const Tile_t &tile = dg.floor[y][x];
@@ -358,8 +358,8 @@ void playerDisarmTrap() {
 
   The others map coords in the ray frame to dungeon coords.
 
-  dungeon y = char_row   + los_fyx * (ray x)  + los_fyy * (ray y)
-  dungeon x = char_col   + los_fxx * (ray x)  + los_fxy * (ray y)
+  dungeon y = py.row   + los_fyx * (ray x)  + los_fyy * (ray y)
+  dungeon x = py.col   + los_fxx * (ray x)  + los_fxy * (ray y)
 */
 static int los_fxx, los_fxy, los_fyx, los_fyy;
 static int los_num_places_seen;
@@ -608,8 +608,8 @@ static bool lookSee(int x, int y, bool &transparent) {
         description = "You see";
     }
 
-    int j = char_col + los_fxx * x + los_fxy * y;
-    y = char_row + los_fyx * x + los_fyy * y;
+    int j = py.col + los_fxx * x + los_fxy * y;
+    y = py.row + los_fyx * x + los_fyy * y;
     x = j;
 
     if (!coordInsidePanel(Coord_t{y, x})) {
@@ -888,10 +888,10 @@ void playerThrowItem() {
 
     char tile_char = thrown_item.sprite;
     bool visible;
-    int y = char_row;
-    int x = char_col;
-    int old_y = char_row;
-    int old_x = char_col;
+    int y = py.row;
+    int x = py.col;
+    int old_y = py.row;
+    int old_x = py.col;
     int current_distance = 0;
 
     bool flag = false;
@@ -1161,8 +1161,8 @@ void playerBash() {
         dir = getRandomDirection();
     }
 
-    int y = char_row;
-    int x = char_col;
+    int y = py.row;
+    int x = py.col;
     (void) playerMovePosition(dir, y, x);
 
     Tile_t &tile = dg.floor[y][x];

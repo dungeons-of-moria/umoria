@@ -59,28 +59,28 @@ void itemReplaceInscription(Inventory_t &item, const char *inscription) {
 
 // We need to reset the view of things. -CJS-
 void dungeonResetView() {
-    const Tile_t &tile = dg.floor[char_row][char_col];
+    const Tile_t &tile = dg.floor[py.row][py.col];
 
     // Check for new panel
-    if (coordOutsidePanel(Coord_t{char_row, char_col}, false)) {
+    if (coordOutsidePanel(Coord_t{py.row, py.col}, false)) {
         drawDungeonPanel();
     }
 
     // Move the light source
-    dungeonMoveCharacterLight(char_row, char_col, char_row, char_col);
+    dungeonMoveCharacterLight(py.row, py.col, py.row, py.col);
 
     // A room of light should be lit.
     if (tile.feature_id == TILE_LIGHT_FLOOR) {
         if (py.flags.blind < 1 && !tile.permanent_light) {
-            dungeonLightRoom(char_row, char_col);
+            dungeonLightRoom(py.row, py.col);
         }
         return;
     }
 
     // In doorway of light-room?
     if (tile.perma_lit_room && py.flags.blind < 1) {
-        for (int i = char_row - 1; i <= char_row + 1; i++) {
-            for (int j = char_col - 1; j <= char_col + 1; j++) {
+        for (int i = py.row - 1; i <= py.row + 1; i++) {
+            for (int j = py.col - 1; j <= py.col + 1; j++) {
                 if (dg.floor[i][j].feature_id == TILE_LIGHT_FLOOR && !dg.floor[i][j].permanent_light) {
                     dungeonLightRoom(i, j);
                 }

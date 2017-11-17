@@ -41,7 +41,7 @@ void monsterUpdateVisibility(int monster_id) {
         if (wizard_mode) {
             // Wizard sight.
             visible = true;
-        } else if (los(char_row, char_col, (int) monster.y, (int) monster.x)) {
+        } else if (los(py.row, py.col, (int) monster.y, (int) monster.x)) {
             visible = monsterIsVisible(monster);
         }
     }
@@ -101,8 +101,8 @@ static bool monsterMakeVisible(int y, int x) {
 static void monsterGetMoveDirection(int monster_id, int *directions) {
     int ay, ax, movement;
 
-    int y = monsters[monster_id].y - char_row;
-    int x = monsters[monster_id].x - char_col;
+    int y = monsters[monster_id].y - py.row;
+    int x = monsters[monster_id].x - py.col;
 
     if (y < 0) {
         movement = 8;
@@ -989,7 +989,7 @@ static void monsterOpenDoor(Tile_t &tile, int16_t monster_hp, uint32_t move_bits
 
 static void glyphOfWardingProtection(uint16_t creature_id, uint32_t move_bits, bool &do_move, bool &do_turn, int y, int x) {
     if (randomNumber(OBJECTS_RUNE_PROTECTION) < creatures_list[creature_id].level) {
-        if (y == char_row && x == char_col) {
+        if (y == py.row && x == py.col) {
             printMessage("The rune of protection is broken!");
         }
         (void) dungeonDeleteObject(y, x);
@@ -1061,7 +1061,7 @@ static void monsterAllowedToMove(Monster_t &monster, uint32_t move_bits, bool &d
 
     monster.y = (uint8_t) y;
     monster.x = (uint8_t) x;
-    monster.distance_from_player = (uint8_t) coordDistanceBetween(Coord_t{char_row, char_col}, Coord_t{y, x});
+    monster.distance_from_player = (uint8_t) coordDistanceBetween(Coord_t{py.row, py.col}, Coord_t{y, x});
 
     do_turn = true;
 }
@@ -1126,7 +1126,7 @@ static bool monsterCanCastSpells(const Monster_t &monster, uint32_t spells) {
     bool within_range = monster.distance_from_player <= MON_MAX_SPELL_CAST_DISTANCE;
 
     // Must have unobstructed Line-Of-Sight
-    bool unobstructed = los(char_row, char_col, (int) monster.y, (int) monster.x);
+    bool unobstructed = los(py.row, py.col, (int) monster.y, (int) monster.x);
 
     return within_range && unobstructed;
 }
@@ -1200,8 +1200,8 @@ void monsterExecuteCastingOfSpell(Monster_t &monster, int monster_id, int spell_
         case 14: // Summon Monster
             (void) strcat(monster_name, "magically summons a monster!");
             printMessage(monster_name);
-            y = char_row;
-            x = char_col;
+            y = py.row;
+            x = py.col;
 
             // in case compact_monster() is called,it needs monster_id
             hack_monptr = monster_id;
@@ -1212,8 +1212,8 @@ void monsterExecuteCastingOfSpell(Monster_t &monster, int monster_id, int spell_
         case 15: // Summon Undead
             (void) strcat(monster_name, "magically summons an undead!");
             printMessage(monster_name);
-            y = char_row;
-            x = char_col;
+            y = py.row;
+            x = py.col;
 
             // in case compact_monster() is called,it needs monster_id
             hack_monptr = monster_id;
@@ -1260,27 +1260,27 @@ void monsterExecuteCastingOfSpell(Monster_t &monster, int monster_id, int spell_
         case 20: // Breath Light
             (void) strcat(monster_name, "breathes lightning.");
             printMessage(monster_name);
-            spellBreath(char_row, char_col, monster_id, (monster.hp / 4), GF_LIGHTNING, death_description);
+            spellBreath(py.row, py.col, monster_id, (monster.hp / 4), GF_LIGHTNING, death_description);
             break;
         case 21: // Breath Gas
             (void) strcat(monster_name, "breathes gas.");
             printMessage(monster_name);
-            spellBreath(char_row, char_col, monster_id, (monster.hp / 3), GF_POISON_GAS, death_description);
+            spellBreath(py.row, py.col, monster_id, (monster.hp / 3), GF_POISON_GAS, death_description);
             break;
         case 22: // Breath Acid
             (void) strcat(monster_name, "breathes acid.");
             printMessage(monster_name);
-            spellBreath(char_row, char_col, monster_id, (monster.hp / 3), GF_ACID, death_description);
+            spellBreath(py.row, py.col, monster_id, (monster.hp / 3), GF_ACID, death_description);
             break;
         case 23: // Breath Frost
             (void) strcat(monster_name, "breathes frost.");
             printMessage(monster_name);
-            spellBreath(char_row, char_col, monster_id, (monster.hp / 3), GF_FROST, death_description);
+            spellBreath(py.row, py.col, monster_id, (monster.hp / 3), GF_FROST, death_description);
             break;
         case 24: // Breath Fire
             (void) strcat(monster_name, "breathes fire.");
             printMessage(monster_name);
-            spellBreath(char_row, char_col, monster_id, (monster.hp / 3), GF_FIRE, death_description);
+            spellBreath(py.row, py.col, monster_id, (monster.hp / 3), GF_FIRE, death_description);
             break;
         default:
             (void) strcat(monster_name, "cast unknown spell.");
@@ -1761,7 +1761,7 @@ void updateMonsters(bool attack) {
             continue;
         }
 
-        monster.distance_from_player = (uint8_t) coordDistanceBetween(Coord_t{char_row, char_col}, Coord_t{monster.y, monster.x});
+        monster.distance_from_player = (uint8_t) coordDistanceBetween(Coord_t{py.row, py.col}, Coord_t{monster.y, monster.x});
 
         // Attack is argument passed to CREATURE
         if (attack) {

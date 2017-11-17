@@ -96,7 +96,7 @@ static void playerRecitePrayer(int prayer_type) {
             (void) playerRemoveFear();
             break;
         case PriestSpellTypes::call_light:
-            (void) spellLightArea(char_row, char_col);
+            (void) spellLightArea(py.row, py.col);
             break;
         case PriestSpellTypes::find_traps:
             (void) dungeonDetectTrapOnPanel();
@@ -109,7 +109,7 @@ static void playerRecitePrayer(int prayer_type) {
             break;
         case PriestSpellTypes::blind_creature:
             if (getDirectionWithMemory(CNIL, dir)) {
-                (void) spellConfuseMonster(char_row, char_col, dir);
+                (void) spellConfuseMonster(py.row, py.col, dir);
             }
             break;
         case PriestSpellTypes::portal:
@@ -122,7 +122,7 @@ static void playerRecitePrayer(int prayer_type) {
             playerBless(randomNumber(24) + 24);
             break;
         case PriestSpellTypes::sanctuary:
-            (void) monsterSleep(char_row, char_col);
+            (void) monsterSleep(py.row, py.col);
             break;
         case PriestSpellTypes::create_food:
             spellCreateFood();
@@ -144,7 +144,7 @@ static void playerRecitePrayer(int prayer_type) {
             break;
         case PriestSpellTypes::orb_of_draining:
             if (getDirectionWithMemory(CNIL, dir)) {
-                spellFireBall(char_row, char_col, dir, (diceDamageRoll(3, 6) + py.misc.level), GF_HOLY_ORB, "Black Sphere");
+                spellFireBall(py.row, py.col, dir, (diceDamageRoll(3, 6) + py.misc.level), GF_HOLY_ORB, "Black Sphere");
             }
             break;
         case PriestSpellTypes::cure_serious_wounds:

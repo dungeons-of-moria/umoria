@@ -341,13 +341,13 @@ bool spellAggravateMonsters(int affect_distance) {
 
 // Surround the fool with traps (chuckle) -RAK-
 bool spellSurroundPlayerWithTraps() {
-    for (int y = char_row - 1; y <= char_row + 1; y++) {
-        for (int x = char_col - 1; x <= char_col + 1; x++) {
+    for (int y = py.row - 1; y <= py.row + 1; y++) {
+        for (int x = py.col - 1; x <= py.col + 1; x++) {
             // Don't put a trap under the player, since this can lead to
             // strange situations, e.g. falling through a trap door while
             // trying to rest, setting off a falling rock trap and ending
             // up under the rock.
-            if (y == char_row && x == char_col) {
+            if (y == py.row && x == py.col) {
                 continue;
             }
 
@@ -377,10 +377,10 @@ bool spellSurroundPlayerWithTraps() {
 bool spellSurroundPlayerWithDoors() {
     bool created = false;
 
-    for (int y = char_row - 1; y <= char_row + 1; y++) {
-        for (int x = char_col - 1; x <= char_col + 1; x++) {
+    for (int y = py.row - 1; y <= py.row + 1; y++) {
+        for (int x = py.col - 1; x <= py.col + 1; x++) {
             // Don't put a door under the player!
-            if (y == char_row && x == char_col) {
+            if (y == py.row && x == py.col) {
                 continue;
             }
 
@@ -410,8 +410,8 @@ bool spellSurroundPlayerWithDoors() {
 bool spellDestroyAdjacentDoorsTraps() {
     bool destroyed = false;
 
-    for (int y = char_row - 1; y <= char_row + 1; y++) {
-        for (int x = char_col - 1; x <= char_col + 1; x++) {
+    for (int y = py.row - 1; y <= py.row + 1; y++) {
+        for (int x = py.col - 1; x <= py.col + 1; x++) {
             const Tile_t &tile = dg.floor[y][x];
 
             if (tile.treasure_id == 0) {
@@ -1517,7 +1517,7 @@ void spellTeleportAwayMonster(int monster_id, int distance_from_player) {
     // this is necessary, because the creature is
     // not currently visible in its new position.
     monster.lit = false;
-    monster.distance_from_player = (uint8_t) coordDistanceBetween(Coord_t{char_row, char_col}, Coord_t{y, x});
+    monster.distance_from_player = (uint8_t) coordDistanceBetween(Coord_t{py.row, py.col}, Coord_t{y, x});
 
     monsterUpdateVisibility(monster_id);
 }
@@ -1538,19 +1538,19 @@ void spellTeleportPlayerTo(int y, int x) {
         }
     } while (!coordInBounds(Coord_t{to_y, to_x}) || (dg.floor[to_y][to_x].feature_id >= MIN_CLOSED_SPACE) || (dg.floor[to_y][to_x].creature_id >= 2));
 
-    dungeonMoveCreatureRecord(char_row, char_col, to_y, to_x);
+    dungeonMoveCreatureRecord(py.row, py.col, to_y, to_x);
 
-    for (int row = char_row - 1; row <= char_row + 1; row++) {
-        for (int col = char_col - 1; col <= char_col + 1; col++) {
+    for (int row = py.row - 1; row <= py.row + 1; row++) {
+        for (int col = py.col - 1; col <= py.col + 1; col++) {
             dg.floor[row][col].temporary_light = false;
             dungeonLiteSpot(row, col);
         }
     }
 
-    dungeonLiteSpot(char_row, char_col);
+    dungeonLiteSpot(py.row, py.col);
 
-    char_row = (int16_t) to_y;
-    char_col = (int16_t) to_x;
+    py.row = (int16_t) to_y;
+    py.col = (int16_t) to_x;
 
     dungeonResetView();
 
@@ -1648,7 +1648,7 @@ bool spellSpeedAllMonsters(int speed) {
 
         auto name = monsterNameDescription(creature.name, monster.lit);
 
-        if (monster.distance_from_player > MON_MAX_SIGHT || !los(char_row, char_col, (int) monster.y, (int) monster.x)) {
+        if (monster.distance_from_player > MON_MAX_SIGHT || !los(py.row, py.col, (int) monster.y, (int) monster.x)) {
             continue; // do nothing
         }
 
@@ -1687,7 +1687,7 @@ bool spellSleepAllMonsters() {
 
         auto name = monsterNameDescription(creature.name, monster.lit);
 
-        if (monster.distance_from_player > MON_MAX_SIGHT || !los(char_row, char_col, (int) monster.y, (int) monster.x)) {
+        if (monster.distance_from_player > MON_MAX_SIGHT || !los(py.row, py.col, (int) monster.y, (int) monster.x)) {
             continue; // do nothing
         }
 
@@ -1863,9 +1863,9 @@ static void earthquakeHitsMonster(int monsterID) {
 // turn them into open spots.  Pick some open spots and dg.game_turn
 // them into walls.  An "Earthquake" effect. -RAK-
 void dungeonEarthquake() {
-    for (int y = char_row - 8; y <= char_row + 8; y++) {
-        for (int x = char_col - 8; x <= char_col + 8; x++) {
-            if ((y != char_row || x != char_col) && coordInBounds(Coord_t{y, x}) && randomNumber(8) == 1) {
+    for (int y = py.row - 8; y <= py.row + 8; y++) {
+        for (int x = py.col - 8; x <= py.col + 8; x++) {
+            if ((y != py.row || x != py.col) && coordInBounds(Coord_t{y, x}) && randomNumber(8) == 1) {
                 Tile_t &tile = dg.floor[y][x];
 
                 if (tile.treasure_id != 0) {
@@ -1912,7 +1912,7 @@ bool playerProtectEvil() {
 void spellCreateFood() {
     // Note: must take reference to this location as dungeonPlaceRandomObjectAt()
     // below, changes the tile values.
-    const Tile_t &tile = dg.floor[char_row][char_col];
+    const Tile_t &tile = dg.floor[py.row][py.col];
 
     // take no action here, don't want to destroy object under player
     if (tile.treasure_id != 0) {
@@ -1924,7 +1924,7 @@ void spellCreateFood() {
         return;
     }
 
-    dungeonPlaceRandomObjectAt(char_row, char_col, false);
+    dungeonPlaceRandomObjectAt(py.row, py.col, false);
     inventoryItemCopyTo(OBJ_MUSH, treasure_list[tile.treasure_id]);
 }
 
@@ -1936,7 +1936,7 @@ bool spellDispelCreature(int creature_defense, int damage) {
     for (int id = next_free_monster_id - 1; id >= MON_MIN_INDEX_ID; id--) {
         const Monster_t &monster = monsters[id];
 
-        if (monster.distance_from_player <= MON_MAX_SIGHT && ((creature_defense & creatures_list[monster.creature_id].defenses) != 0) && los(char_row, char_col, (int) monster.y, (int) monster.x)) {
+        if (monster.distance_from_player <= MON_MAX_SIGHT && ((creature_defense & creatures_list[monster.creature_id].defenses) != 0) && los(py.row, py.col, (int) monster.y, (int) monster.x)) {
             const Creature_t &creature = creatures_list[monster.creature_id];
 
             creature_recall[monster.creature_id].defenses |= creature_defense;
@@ -1971,7 +1971,7 @@ bool spellTurnUndead() {
         Monster_t &monster = monsters[id];
         const Creature_t &creature = creatures_list[monster.creature_id];
 
-        if (monster.distance_from_player <= MON_MAX_SIGHT && ((CD_UNDEAD & creature.defenses) != 0) && los(char_row, char_col, (int) monster.y, (int) monster.x)) {
+        if (monster.distance_from_player <= MON_MAX_SIGHT && ((CD_UNDEAD & creature.defenses) != 0) && los(py.row, py.col, (int) monster.y, (int) monster.x)) {
             auto name = monsterNameDescription(creature.name, monster.lit);
 
             if (py.misc.level + 1 > creature.level || randomNumber(5) == 1) {
@@ -1995,9 +1995,9 @@ bool spellTurnUndead() {
 
 // Leave a glyph of warding. Creatures will not pass over! -RAK-
 void spellWardingGlyph() {
-    if (dg.floor[char_row][char_col].treasure_id == 0) {
+    if (dg.floor[py.row][py.col].treasure_id == 0) {
         int free_id = popt();
-        dg.floor[char_row][char_col].treasure_id = (uint8_t) free_id;
+        dg.floor[py.row][py.col].treasure_id = (uint8_t) free_id;
         inventoryItemCopyTo(OBJ_SCARE_MON, treasure_list[free_id]);
     }
 }

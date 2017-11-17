@@ -50,8 +50,6 @@ extern bool wizard_mode;
 
 // Following are player variables
 extern Player_t py;
-extern int16_t char_row;
-extern int16_t char_col;
 extern uint32_t player_base_exp_levels[PLAYER_MAX_LEVEL];
 extern uint16_t player_base_hp_levels[PLAYER_MAX_LEVEL];
 

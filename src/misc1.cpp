@@ -623,7 +623,7 @@ bool monsterPlaceNew(int y, int x, int creature_id, bool sleeping) {
     // the creatures_list[] speed value is 10 greater, so that it can be a uint8_t
     monster.speed = (int16_t) (creatures_list[creature_id].speed - 10 + py.flags.speed);
     monster.stunned_amount = 0;
-    monster.distance_from_player = (uint8_t) coordDistanceBetween(Coord_t{char_row, char_col}, Coord_t{y, x});
+    monster.distance_from_player = (uint8_t) coordDistanceBetween(Coord_t{py.row, py.col}, Coord_t{y, x});
     monster.lit = false;
 
     dg.floor[y][x].creature_id = (uint8_t) monster_id;
@@ -651,7 +651,7 @@ void monsterPlaceWinning() {
     do {
         y = randomNumber(dg.height - 2);
         x = randomNumber(dg.width - 2);
-    } while ((dg.floor[y][x].feature_id >= MIN_CLOSED_SPACE) || (dg.floor[y][x].creature_id != 0) || (dg.floor[y][x].treasure_id != 0) || (coordDistanceBetween(Coord_t{y, x}, Coord_t{char_row, char_col}) <= MON_MAX_SIGHT));
+    } while ((dg.floor[y][x].feature_id >= MIN_CLOSED_SPACE) || (dg.floor[y][x].creature_id != 0) || (dg.floor[y][x].treasure_id != 0) || (coordDistanceBetween(Coord_t{y, x}, Coord_t{py.row, py.col}) <= MON_MAX_SIGHT));
 
     int creature_id = randomNumber(MON_ENDGAME_MONSTERS) - 1 + monster_levels[MON_MAX_LEVELS];
 
@@ -683,7 +683,7 @@ void monsterPlaceWinning() {
     // the creatures_list speed value is 10 greater, so that it can be a uint8_t
     monster.speed = (int16_t) (creatures_list[creature_id].speed - 10 + py.flags.speed);
     monster.stunned_amount = 0;
-    monster.distance_from_player = (uint8_t) coordDistanceBetween(Coord_t{char_row, char_col}, Coord_t{y, x});
+    monster.distance_from_player = (uint8_t) coordDistanceBetween(Coord_t{py.row, py.col}, Coord_t{y, x});
 
     dg.floor[y][x].creature_id = (uint8_t) monster_id;
 
@@ -734,7 +734,7 @@ void monsterPlaceNewWithinDistance(int number, int distance_from_source, bool sl
         do {
             y = randomNumber(dg.height - 2);
             x = randomNumber(dg.width - 2);
-        } while (dg.floor[y][x].feature_id >= MIN_CLOSED_SPACE || dg.floor[y][x].creature_id != 0 || coordDistanceBetween(Coord_t{y, x}, Coord_t{char_row, char_col}) <= distance_from_source);
+        } while (dg.floor[y][x].feature_id >= MIN_CLOSED_SPACE || dg.floor[y][x].creature_id != 0 || coordDistanceBetween(Coord_t{y, x}, Coord_t{py.row, py.col}) <= distance_from_source);
 
         int l = monsterGetOneSuitableForLevel(dg.current_level);
 
@@ -817,7 +817,7 @@ static void compactObjects() {
     while (counter <= 0) {
         for (int y = 0; y < dg.height; y++) {
             for (int x = 0; x < dg.width; x++) {
-                if (dg.floor[y][x].treasure_id != 0 && coordDistanceBetween(Coord_t{y, x}, Coord_t{char_row, char_col}) > current_distance) {
+                if (dg.floor[y][x].treasure_id != 0 && coordDistanceBetween(Coord_t{y, x}, Coord_t{py.row, py.col}) > current_distance) {
                     int chance;
 
                     switch (treasure_list[dg.floor[y][x].treasure_id].category_id) {
