@@ -710,7 +710,7 @@ static bool inventoryDropItem(char *command, bool selecting) {
         return selecting;
     }
 
-    if (dg.cave[char_row][char_col].treasure_id != 0) {
+    if (dg.floor[char_row][char_col].treasure_id != 0) {
         printMessage("There's no room to drop anything here.");
         return selecting;
     }
@@ -1056,7 +1056,7 @@ static bool selectItemCommands(char *command, char *which, bool selecting) {
                 item_id = -1;
                 printMessage("Hmmm, it seems to be cursed.");
             } else if (*command == 't' && !inventoryCanCarryItemCount(inventory[item_id])) {
-                if (dg.cave[char_row][char_col].treasure_id != 0) {
+                if (dg.floor[char_row][char_col].treasure_id != 0) {
                     item_id = -1;
                     printMessage("You can't carry it.");
                 } else if (getInputConfirmation("You can't carry it.  Drop it?")) {
@@ -1586,7 +1586,7 @@ bool inventoryGetInputForItemId(int &command_key_id, const char *prompt, int ite
 
 // Returns true if player has no light -RAK-
 bool playerNoLight() {
-    return !dg.cave[char_row][char_col].temporary_light && !dg.cave[char_row][char_col].permanent_light;
+    return !dg.floor[char_row][char_col].temporary_light && !dg.floor[char_row][char_col].permanent_light;
 }
 
 // map roguelike direction commands into numbers
@@ -1684,9 +1684,9 @@ bool getAllDirections(const char *prompt, int &direction) {
 // Moves creature record from one space to another -RAK-
 // this always works correctly, even if y1==y2 and x1==x2
 void dungeonMoveCreatureRecord(int y1, int x1, int y2, int x2) {
-    int id = dg.cave[y1][x1].creature_id;
-    dg.cave[y1][x1].creature_id = 0;
-    dg.cave[y2][x2].creature_id = (uint8_t) id;
+    int id = dg.floor[y1][x1].creature_id;
+    dg.floor[y1][x1].creature_id = 0;
+    dg.floor[y2][x2].creature_id = (uint8_t) id;
 }
 
 // Room is lit, make it appear -RAK-
@@ -1701,7 +1701,7 @@ void dungeonLightRoom(int pos_y, int pos_x) {
 
     for (int y = top; y <= bottom; y++) {
         for (int x = left; x <= right; x++) {
-            Cave_t &tile = dg.cave[y][x];
+            Cave_t &tile = dg.floor[y][x];
 
             if (tile.perma_lit_room && !tile.permanent_light) {
                 tile.permanent_light = true;
@@ -1738,7 +1738,7 @@ static void sub1_move_light(int y1, int x1, int y2, int x2) {
         // Turn off lamp light
         for (int y = y1 - 1; y <= y1 + 1; y++) {
             for (int x = x1 - 1; x <= x1 + 1; x++) {
-                dg.cave[y][x].temporary_light = false;
+                dg.floor[y][x].temporary_light = false;
             }
         }
         if ((py.running_tracker != 0) && !config.run_print_self) {
@@ -1750,7 +1750,7 @@ static void sub1_move_light(int y1, int x1, int y2, int x2) {
 
     for (int y = y2 - 1; y <= y2 + 1; y++) {
         for (int x = x2 - 1; x <= x2 + 1; x++) {
-            Cave_t &tile = dg.cave[y][x];
+            Cave_t &tile = dg.floor[y][x];
 
             // only light up if normal movement
             if (py.temporary_light_only) {
@@ -1801,7 +1801,7 @@ static void sub3_move_light(int y1, int x1, int y2, int x2) {
     if (py.temporary_light_only) {
         for (int y = y1 - 1; y <= y1 + 1; y++) {
             for (int x = x1 - 1; x <= x1 + 1; x++) {
-                dg.cave[y][x].temporary_light = false;
+                dg.floor[y][x].temporary_light = false;
                 panelPutTile(caveGetTileSymbol(Coord_t{y, x}), Coord_t{y, x});
             }
         }

@@ -18,15 +18,15 @@ static int spellChanceOfSuccess(int spell_id);
 // Places a particular trap at location y, x -RAK-
 void dungeonSetTrap(int y, int x, int sub_type_id) {
     int free_treasure_id = popt();
-    dg.cave[y][x].treasure_id = (uint8_t) free_treasure_id;
+    dg.floor[y][x].treasure_id = (uint8_t) free_treasure_id;
     inventoryItemCopyTo(OBJ_TRAP_LIST + sub_type_id, treasure_list[free_treasure_id]);
 }
 
 // Places rubble at location y, x -RAK-
 void dungeonPlaceRubble(int y, int x) {
     int free_treasure_id = popt();
-    dg.cave[y][x].treasure_id = (uint8_t) free_treasure_id;
-    dg.cave[y][x].feature_id = TILE_BLOCKED_FLOOR;
+    dg.floor[y][x].treasure_id = (uint8_t) free_treasure_id;
+    dg.floor[y][x].feature_id = TILE_BLOCKED_FLOOR;
     inventoryItemCopyTo(OBJ_RUBBLE, treasure_list[free_treasure_id]);
 }
 
@@ -44,11 +44,11 @@ void dungeonPlaceGold(int y, int x) {
         gold_type_id = MAX_GOLD_TYPES - 1;
     }
 
-    dg.cave[y][x].treasure_id = (uint8_t) free_treasure_id;
+    dg.floor[y][x].treasure_id = (uint8_t) free_treasure_id;
     inventoryItemCopyTo(OBJ_GOLD_LIST + gold_type_id, treasure_list[free_treasure_id]);
     treasure_list[free_treasure_id].cost += (8L * (int32_t) randomNumber((int) treasure_list[free_treasure_id].cost)) + randomNumber(8);
 
-    if (dg.cave[y][x].creature_id == 1) {
+    if (dg.floor[y][x].creature_id == 1) {
         printMessage("You feel something roll beneath your feet.");
     }
 }
@@ -111,14 +111,14 @@ int itemGetRandomObjectId(int level, bool must_be_small) {
 void dungeonPlaceRandomObjectAt(int y, int x, bool must_be_small) {
     int free_treasure_id = popt();
 
-    dg.cave[y][x].treasure_id = (uint8_t) free_treasure_id;
+    dg.floor[y][x].treasure_id = (uint8_t) free_treasure_id;
 
     int object_id = itemGetRandomObjectId(dg.current_level, must_be_small);
     inventoryItemCopyTo(sorted_objects[object_id], treasure_list[free_treasure_id]);
 
     magicTreasureMagicalAbility(free_treasure_id, dg.current_level);
 
-    if (dg.cave[y][x].creature_id == 1) {
+    if (dg.floor[y][x].creature_id == 1) {
         printMessage("You feel something roll beneath your feet."); // -CJS-
     }
 }
@@ -133,7 +133,7 @@ void dungeonAllocateAndPlaceObject(bool (*set_function)(int), int object_type, i
         do {
             y = randomNumber(dg.height) - 1;
             x = randomNumber(dg.width) - 1;
-        } while (!(*set_function)(dg.cave[y][x].feature_id) || dg.cave[y][x].treasure_id != 0 || (y == char_row && x == char_col));
+        } while (!(*set_function)(dg.floor[y][x].feature_id) || dg.floor[y][x].treasure_id != 0 || (y == char_row && x == char_col));
 
         switch (object_type) {
             case 1:
@@ -164,7 +164,7 @@ void dungeonPlaceRandomObjectNear(int y, int x, int tries) {
             int j = y - 3 + randomNumber(5);
             int k = x - 4 + randomNumber(7);
 
-            if (coordInBounds(Coord_t{j, k}) && dg.cave[j][k].feature_id <= MAX_CAVE_FLOOR && dg.cave[j][k].treasure_id == 0) {
+            if (coordInBounds(Coord_t{j, k}) && dg.floor[j][k].feature_id <= MAX_CAVE_FLOOR && dg.floor[j][k].treasure_id == 0) {
                 if (randomNumber(100) < 75) {
                     dungeonPlaceRandomObjectAt(j, k, false);
                 } else {
@@ -1155,7 +1155,7 @@ void inventoryTakeOneItem(Inventory_t *to_item, Inventory_t *from_item) {
 
 // Drops an item from inventory to given location -RAK-
 void inventoryDropItem(int item_id, bool drop_all) {
-    if (dg.cave[char_row][char_col].treasure_id != 0) {
+    if (dg.floor[char_row][char_col].treasure_id != 0) {
         (void) dungeonDeleteObject(char_row, char_col);
     }
 
@@ -1164,7 +1164,7 @@ void inventoryDropItem(int item_id, bool drop_all) {
     Inventory_t &item = inventory[item_id];
     treasure_list[treasureID] = item;
 
-    dg.cave[char_row][char_col].treasure_id = (uint8_t) treasureID;
+    dg.floor[char_row][char_col].treasure_id = (uint8_t) treasureID;
 
     if (item_id >= EQUIPMENT_WIELD) {
         playerTakeOff(item_id, -1);
@@ -2301,13 +2301,13 @@ void playerTeleport(int new_distance) {
             new_y += (char_row - new_y) / 2;
             new_x += (char_col - new_x) / 2;
         }
-    } while (dg.cave[new_y][new_x].feature_id >= MIN_CLOSED_SPACE || dg.cave[new_y][new_x].creature_id >= 2);
+    } while (dg.floor[new_y][new_x].feature_id >= MIN_CLOSED_SPACE || dg.floor[new_y][new_x].creature_id >= 2);
 
     dungeonMoveCreatureRecord(char_row, char_col, new_y, new_x);
 
     for (int y = char_row - 1; y <= char_row + 1; y++) {
         for (int x = char_col - 1; x <= char_col + 1; x++) {
-            dg.cave[y][x].temporary_light = false;
+            dg.floor[y][x].temporary_light = false;
             dungeonLiteSpot(y, x);
         }
     }

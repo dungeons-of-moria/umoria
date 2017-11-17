@@ -291,10 +291,10 @@ static bool sv_write() {
 
     for (int i = 0; i < MAX_HEIGHT; i++) {
         for (int j = 0; j < MAX_WIDTH; j++) {
-            if (dg.cave[i][j].creature_id != 0) {
+            if (dg.floor[i][j].creature_id != 0) {
                 wr_byte((uint8_t) i);
                 wr_byte((uint8_t) j);
-                wr_byte(dg.cave[i][j].creature_id);
+                wr_byte(dg.floor[i][j].creature_id);
             }
         }
     }
@@ -304,10 +304,10 @@ static bool sv_write() {
 
     for (int i = 0; i < MAX_HEIGHT; i++) {
         for (int j = 0; j < MAX_WIDTH; j++) {
-            if (dg.cave[i][j].treasure_id != 0) {
+            if (dg.floor[i][j].treasure_id != 0) {
                 wr_byte((uint8_t) i);
                 wr_byte((uint8_t) j);
-                wr_byte(dg.cave[i][j].treasure_id);
+                wr_byte(dg.floor[i][j].treasure_id);
             }
         }
     }
@@ -321,7 +321,7 @@ static bool sv_write() {
 
     for (int y = 0; y < MAX_HEIGHT; y++) {
         for (int x = 0; x < MAX_WIDTH; x++) {
-            Cave_t &tile = dg.cave[y][x];
+            Cave_t &tile = dg.floor[y][x];
 
             auto char_tmp = (uint8_t) (tile.feature_id | (tile.perma_lit_room << 4) | (tile.field_mark << 5) | (tile.permanent_light << 6) | (tile.temporary_light << 7));
 
@@ -780,7 +780,7 @@ bool loadGame(bool &generate) {
             if (xchar > MAX_WIDTH || ychar > MAX_HEIGHT) {
                 goto error;
             }
-            dg.cave[ychar][xchar].creature_id = char_tmp;
+            dg.floor[ychar][xchar].creature_id = char_tmp;
             char_tmp = rd_byte();
         }
 
@@ -793,18 +793,18 @@ bool loadGame(bool &generate) {
             if (xchar > MAX_WIDTH || ychar > MAX_HEIGHT) {
                 goto error;
             }
-            dg.cave[ychar][xchar].treasure_id = char_tmp;
+            dg.floor[ychar][xchar].treasure_id = char_tmp;
             char_tmp = rd_byte();
         }
 
         // read in the rest of the cave info
-        tile = &dg.cave[0][0];
+        tile = &dg.floor[0][0];
         total_count = 0;
         while (total_count != MAX_HEIGHT * MAX_WIDTH) {
             count = rd_byte();
             char_tmp = rd_byte();
             for (int i = count; i > 0; i--) {
-                if (tile >= &dg.cave[MAX_HEIGHT][0]) {
+                if (tile >= &dg.floor[MAX_HEIGHT][0]) {
                     goto error;
                 }
                 tile->feature_id = (uint8_t) (char_tmp & 0xF);

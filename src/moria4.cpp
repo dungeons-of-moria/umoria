@@ -141,7 +141,7 @@ void playerTunnel(int direction) {
     int x = char_col;
     (void) playerMovePosition(direction, y, x);
 
-    const Cave_t &tile = dg.cave[y][x];
+    const Cave_t &tile = dg.floor[y][x];
     Inventory_t &item = inventory[EQUIPMENT_WIELD];
 
     if (!playerCanTunnel(tile.treasure_id, tile.feature_id)) {
@@ -284,7 +284,7 @@ void playerDisarmTrap() {
     int x = char_col;
     (void) playerMovePosition(dir, y, x);
 
-    const Cave_t &tile = dg.cave[y][x];
+    const Cave_t &tile = dg.floor[y][x];
 
     bool no_disarm = false;
 
@@ -617,7 +617,7 @@ static bool lookSee(int x, int y, bool &transparent) {
         return false;
     }
 
-    const Cave_t &tile = dg.cave[y][x];
+    const Cave_t &tile = dg.floor[y][x];
     transparent = tile.feature_id <= MAX_OPEN_SPACE;
 
     if (los_hack_no_query) {
@@ -824,7 +824,7 @@ static void inventoryDropOrThrowItem(int y, int x, Inventory_t *item) {
     if (randomNumber(10) > 1) {
         for (int k = 0; !flag && k <= 9;) {
             if (coordInBounds(Coord_t{pos_y, pos_x})) {
-                if (dg.cave[pos_y][pos_x].feature_id <= MAX_OPEN_SPACE && dg.cave[pos_y][pos_x].treasure_id == 0) {
+                if (dg.floor[pos_y][pos_x].feature_id <= MAX_OPEN_SPACE && dg.floor[pos_y][pos_x].treasure_id == 0) {
                     flag = true;
                 }
             }
@@ -839,7 +839,7 @@ static void inventoryDropOrThrowItem(int y, int x, Inventory_t *item) {
 
     if (flag) {
         int cur_pos = popt();
-        dg.cave[pos_y][pos_x].treasure_id = (uint8_t) cur_pos;
+        dg.floor[pos_y][pos_x].treasure_id = (uint8_t) cur_pos;
         treasure_list[cur_pos] = *item;
         dungeonLiteSpot(pos_y, pos_x);
     } else {
@@ -906,7 +906,7 @@ void playerThrowItem() {
         current_distance++;
         dungeonLiteSpot(old_y, old_x);
 
-        const Cave_t &tile = dg.cave[y][x];
+        const Cave_t &tile = dg.floor[y][x];
 
         if (tile.feature_id <= MAX_OPEN_SPACE && !flag) {
             if (tile.creature_id > 1) {
@@ -983,7 +983,7 @@ void playerThrowItem() {
 // Make a bash attack on someone. -CJS-
 // Used to be part of bash above.
 static void playerBashAttack(int y, int x) {
-    int monster_id = dg.cave[y][x].creature_id;
+    int monster_id = dg.floor[y][x].creature_id;
 
     Monster_t &monster = monsters[monster_id];
     const Creature_t &creature = creatures_list[monster.creature_id];
@@ -1165,7 +1165,7 @@ void playerBash() {
     int x = char_col;
     (void) playerMovePosition(dir, y, x);
 
-    Cave_t &tile = dg.cave[y][x];
+    Cave_t &tile = dg.floor[y][x];
 
     if (tile.creature_id > 1) {
         playerBashPosition(y, x);

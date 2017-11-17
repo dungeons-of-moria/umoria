@@ -15,16 +15,16 @@
 void wizardLightUpDungeon() {
     bool flag;
 
-    flag = !dg.cave[char_row][char_col].permanent_light;
+    flag = !dg.floor[char_row][char_col].permanent_light;
 
     for (int y = 0; y < dg.height; y++) {
         for (int x = 0; x < dg.width; x++) {
-            if (dg.cave[y][x].feature_id <= MAX_CAVE_FLOOR) {
+            if (dg.floor[y][x].feature_id <= MAX_CAVE_FLOOR) {
                 for (int yy = y - 1; yy <= y + 1; yy++) {
                     for (int xx = x - 1; xx <= x + 1; xx++) {
-                        dg.cave[yy][xx].permanent_light = flag;
+                        dg.floor[yy][xx].permanent_light = flag;
                         if (!flag) {
-                            dg.cave[yy][xx].field_mark = false;
+                            dg.floor[yy][xx].field_mark = false;
                         }
                     }
                 }
@@ -280,16 +280,16 @@ void wizardGenerateObject() {
         int j = char_row - 3 + randomNumber(5);
         int k = char_col - 4 + randomNumber(7);
 
-        if (coordInBounds(Coord_t{j, k}) && dg.cave[j][k].feature_id <= MAX_CAVE_FLOOR && dg.cave[j][k].treasure_id == 0) {
+        if (coordInBounds(Coord_t{j, k}) && dg.floor[j][k].feature_id <= MAX_CAVE_FLOOR && dg.floor[j][k].treasure_id == 0) {
             // delete any object at location, before call popt()
-            Cave_t &tile = dg.cave[j][k];
+            Cave_t &tile = dg.floor[j][k];
             if (tile.treasure_id != 0) {
                 (void) dungeonDeleteObject(j, k);
             }
 
             // place the object
             int free_treasure_id = popt();
-            dg.cave[j][k].treasure_id = (uint8_t) free_treasure_id;
+            dg.floor[j][k].treasure_id = (uint8_t) free_treasure_id;
             inventoryItemCopyTo(id, treasure_list[free_treasure_id]);
             magicTreasureMagicalAbility(free_treasure_id, dg.current_level);
 
@@ -443,7 +443,7 @@ void wizardCreateObjects() {
 
     if (getInputConfirmation("Allocate?")) {
         // delete object first if any, before call popt()
-        Cave_t &tile = dg.cave[char_row][char_col];
+        Cave_t &tile = dg.floor[char_row][char_col];
 
         if (tile.treasure_id != 0) {
             (void) dungeonDeleteObject(char_row, char_col);

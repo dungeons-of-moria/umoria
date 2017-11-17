@@ -250,7 +250,7 @@ static void playerStepsOnTrap(int y, int x) {
     playerEndRunning();
     dungeonChangeTrapVisibility(y, x);
 
-    Inventory_t &item = treasure_list[dg.cave[y][x].treasure_id];
+    Inventory_t &item = treasure_list[dg.floor[y][x].treasure_id];
 
     int damage = dicePlayerDamageRoll(item.damage);
 
@@ -389,9 +389,9 @@ int castSpellGetId(const char *prompt, int item_id, int &spell_id, int &spell_ch
 // on the TVAL of the object. Traps are set off, money and most objects
 // are picked up. Some objects, such as open doors, just sit there.
 static void carry(int y, int x, bool pickup) {
-    Inventory_t &item = treasure_list[dg.cave[y][x].treasure_id];
+    Inventory_t &item = treasure_list[dg.floor[y][x].treasure_id];
 
-    int tileFlags = treasure_list[dg.cave[y][x].treasure_id].category_id;
+    int tileFlags = treasure_list[dg.floor[y][x].treasure_id].category_id;
 
     if (tileFlags > TV_MAX_PICK_UP) {
         if (tileFlags == TV_INVIS_TRAP || tileFlags == TV_VIS_TRAP || tileFlags == TV_STORE_DOOR) {
@@ -463,7 +463,7 @@ static void carry(int y, int x, bool pickup) {
 void dungeonDeleteMonster(int id) {
     Monster_t *monster = &monsters[id];
 
-    dg.cave[monster->y][monster->x].creature_id = 0;
+    dg.floor[monster->y][monster->x].creature_id = 0;
 
     if (monster->lit) {
         dungeonLiteSpot((int) monster->y, (int) monster->x);
@@ -473,7 +473,7 @@ void dungeonDeleteMonster(int id) {
 
     if (id != last_id) {
         monster = &monsters[last_id];
-        dg.cave[monster->y][monster->x].creature_id = (uint8_t) id;
+        dg.floor[monster->y][monster->x].creature_id = (uint8_t) id;
         monsters[id] = monsters[last_id];
     }
 
@@ -502,7 +502,7 @@ void dungeonDeleteMonsterFix1(int id) {
     // hit points
     monster.hp = -1;
 
-    dg.cave[monster.y][monster.x].creature_id = 0;
+    dg.floor[monster.y][monster.x].creature_id = 0;
 
     if (monster.lit) {
         dungeonLiteSpot((int) monster.y, (int) monster.x);
@@ -521,7 +521,7 @@ void dungeonDeleteMonsterFix2(int id) {
     if (id != last_id) {
         int y = monsters[last_id].y;
         int x = monsters[last_id].x;
-        dg.cave[y][x].creature_id = (uint8_t) id;
+        dg.floor[y][x].creature_id = (uint8_t) id;
 
         monsters[id] = monsters[last_id];
     }
@@ -548,7 +548,7 @@ static int dungeonSummonObject(int y, int x, int amount, int object_type) {
             int pos_x = x - 3 + randomNumber(5);
 
             if (coordInBounds(Coord_t{pos_y, pos_x}) && los(y, x, pos_y, pos_x)) {
-                if (dg.cave[pos_y][pos_x].feature_id <= MAX_OPEN_SPACE && dg.cave[pos_y][pos_x].treasure_id == 0) {
+                if (dg.floor[pos_y][pos_x].feature_id <= MAX_OPEN_SPACE && dg.floor[pos_y][pos_x].treasure_id == 0) {
                     // object_type == 3 -> 50% objects, 50% gold
                     if (object_type == 3 || object_type == 7) {
                         if (randomNumber(100) < 50) {
@@ -583,7 +583,7 @@ static int dungeonSummonObject(int y, int x, int amount, int object_type) {
 
 // Deletes object from given location -RAK-
 bool dungeonDeleteObject(int y, int x) {
-    Cave_t &tile = dg.cave[y][x];
+    Cave_t &tile = dg.floor[y][x];
 
     if (tile.feature_id == TILE_BLOCKED_FLOOR) {
         tile.feature_id = TILE_CORR_FLOOR;
@@ -798,7 +798,7 @@ static int playerCalculateBaseToHit(bool creatureLit, int tot_tohit) {
 
 // Player attacks a (poor, defenseless) creature -RAK-
 static void playerAttackMonster(int y, int x) {
-    int creature_id = dg.cave[y][x].creature_id;
+    int creature_id = dg.floor[y][x].creature_id;
 
     Monster_t &monster = monsters[creature_id];
     const Creature_t &creature = creatures_list[monster.creature_id];
@@ -925,7 +925,7 @@ void playerMove(int direction, bool do_pickup) {
         return;
     }
 
-    const Cave_t &tile = dg.cave[y][x];
+    const Cave_t &tile = dg.floor[y][x];
     const Monster_t &monster = monsters[tile.creature_id];
 
     // if there is no creature, or an unlit creature in the walls then...
@@ -973,7 +973,7 @@ void playerMove(int direction, bool do_pickup) {
 
                 for (int row = (char_row - 1); row <= (char_row + 1); row++) {
                     for (int col = (char_col - 1); col <= (char_col + 1); col++) {
-                        if (dg.cave[row][col].feature_id == TILE_LIGHT_FLOOR && !dg.cave[row][col].permanent_light) {
+                        if (dg.floor[row][col].feature_id == TILE_LIGHT_FLOOR && !dg.floor[row][col].permanent_light) {
                             dungeonLightRoom(row, col);
                         }
                     }
@@ -997,7 +997,7 @@ void playerMove(int direction, bool do_pickup) {
                     char_col = (int16_t) old_col;
 
                     // check to see if we have stepped back onto another trap, if so, set it off
-                    uint8_t id = dg.cave[char_row][char_col].treasure_id;
+                    uint8_t id = dg.floor[char_row][char_col].treasure_id;
                     if (id != 0) {
                         int val = treasure_list[id].category_id;
                         if (val == TV_INVIS_TRAP || val == TV_VIS_TRAP || val == TV_STORE_DOOR) {
@@ -1091,7 +1091,7 @@ static void chestExplode(int y, int x) {
 // Chests have traps too. -RAK-
 // Note: Chest traps are based on the FLAGS value
 void chestTrap(int y, int x) {
-    uint32_t flags = treasure_list[dg.cave[y][x].treasure_id].flags;
+    uint32_t flags = treasure_list[dg.floor[y][x].treasure_id].flags;
 
     if ((flags & CH_LOSE_STR) != 0u) {
         chestLooseStrength();
@@ -1126,7 +1126,7 @@ static int16_t playerLockPickingSkill() {
 }
 
 static void openClosedDoor(int y, int x) {
-    Cave_t &tile = dg.cave[y][x];
+    Cave_t &tile = dg.floor[y][x];
     Inventory_t &item = treasure_list[tile.treasure_id];
 
     if (item.misc_use > 0) {
@@ -1157,7 +1157,7 @@ static void openClosedDoor(int y, int x) {
 }
 
 static void openClosedChest(int y, int x) {
-    const Cave_t &tile = dg.cave[y][x];
+    const Cave_t &tile = dg.floor[y][x];
     Inventory_t &item = treasure_list[tile.treasure_id];
 
     bool success = false;
@@ -1220,7 +1220,7 @@ void objectOpen() {
 
     bool no_object = false;
 
-    const Cave_t &tile = dg.cave[y][x];
+    const Cave_t &tile = dg.floor[y][x];
     const Inventory_t &item = treasure_list[tile.treasure_id];
 
     if (tile.creature_id > 1 && tile.treasure_id != 0 && (item.category_id == TV_CLOSED_DOOR || item.category_id == TV_CHEST)) {
@@ -1255,7 +1255,7 @@ void dungeonCloseDoor() {
     int x = char_col;
     (void) playerMovePosition(dir, y, x);
 
-    Cave_t &tile = dg.cave[y][x];
+    Cave_t &tile = dg.floor[y][x];
     Inventory_t &item = treasure_list[tile.treasure_id];
 
     bool no_object = false;
@@ -1293,7 +1293,7 @@ bool dungeonTunnelWall(int y, int x, int digging_ability, int digging_chance) {
         return false;
     }
 
-    Cave_t &tile = dg.cave[y][x];
+    Cave_t &tile = dg.floor[y][x];
 
     if (tile.perma_lit_room) {
         // Should become a room space, check to see whether
@@ -1302,9 +1302,9 @@ bool dungeonTunnelWall(int y, int x, int digging_ability, int digging_chance) {
 
         for (int yy = y - 1; yy <= y + 1 && yy < MAX_HEIGHT; yy++) {
             for (int xx = x - 1; xx <= x + 1 && xx < MAX_WIDTH; xx++) {
-                if (dg.cave[yy][xx].feature_id <= MAX_CAVE_ROOM) {
-                    tile.feature_id = dg.cave[yy][xx].feature_id;
-                    tile.permanent_light = dg.cave[yy][xx].permanent_light;
+                if (dg.floor[yy][xx].feature_id <= MAX_CAVE_ROOM) {
+                    tile.feature_id = dg.floor[yy][xx].feature_id;
+                    tile.permanent_light = dg.floor[yy][xx].permanent_light;
                     found = true;
                     break;
                 }

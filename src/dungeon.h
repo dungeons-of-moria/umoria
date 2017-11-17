@@ -35,7 +35,7 @@ typedef struct {
     int panel_row_prt;
 
     // Floor definitions
-    Cave_t cave[MAX_HEIGHT][MAX_WIDTH];
+    Cave_t floor[MAX_HEIGHT][MAX_WIDTH];
 
     // The current dungeon level
     int16_t current_level;
