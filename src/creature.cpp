@@ -12,7 +12,7 @@
 static bool monsterIsVisible(const Monster_t &monster) {
     bool visible = false;
 
-    const Cave_t &tile = cave[monster.y][monster.x];
+    const Cave_t &tile = dg.cave[monster.y][monster.x];
     const Creature_t &creature = creatures_list[monster.creature_id];
 
     if (tile.permanent_light || tile.temporary_light || ((py.running_tracker != 0) && monster.distance_from_player < 2 && py.carrying_light)) {
@@ -88,7 +88,7 @@ static int monsterMovementRate(int16_t speed) {
 
 // Makes sure a new creature gets lit up. -CJS-
 static bool monsterMakeVisible(int y, int x) {
-    int monster_id = cave[y][x].creature_id;
+    int monster_id = dg.cave[y][x].creature_id;
     if (monster_id <= 1) {
         return false;
     }
@@ -1043,7 +1043,7 @@ static void monsterMovesOnPlayer(const Monster_t &monster, uint8_t creature_id, 
 static void monsterAllowedToMove(Monster_t &monster, uint32_t move_bits, bool &do_turn, uint32_t &rcmove, int y, int x) {
     // Pick up or eat an object
     if ((move_bits & CM_PICKS_UP) != 0u) {
-        uint8_t treasure_id = cave[y][x].treasure_id;
+        uint8_t treasure_id = dg.cave[y][x].treasure_id;
 
         if (treasure_id != 0 && treasure_list[treasure_id].category_id <= TV_MAX_OBJECT) {
             rcmove |= CM_PICKS_UP;
@@ -1081,7 +1081,7 @@ static void makeMove(int monster_id, int *directions, uint32_t &rcmove) {
         int x = monster.x;
         (void) playerMovePosition(directions[i], y, x);
 
-        Cave_t &tile = cave[y][x];
+        Cave_t &tile = dg.cave[y][x];
 
         if (tile.feature_id == TILE_BOUNDARY_WALL) {
             continue;
@@ -1207,7 +1207,7 @@ void monsterExecuteCastingOfSpell(Monster_t &monster, int monster_id, int spell_
             hack_monptr = monster_id;
             (void) monsterSummon(y, x, false);
             hack_monptr = -1;
-            monsterUpdateVisibility((int) cave[y][x].creature_id);
+            monsterUpdateVisibility((int) dg.cave[y][x].creature_id);
             break;
         case 15: // Summon Undead
             (void) strcat(monster_name, "magically summons an undead!");
@@ -1219,7 +1219,7 @@ void monsterExecuteCastingOfSpell(Monster_t &monster, int monster_id, int spell_
             hack_monptr = monster_id;
             (void) monsterSummonUndead(y, x);
             hack_monptr = -1;
-            monsterUpdateVisibility((int) cave[y][x].creature_id);
+            monsterUpdateVisibility((int) dg.cave[y][x].creature_id);
             break;
         case 16: // Slow Person
             if (py.flags.free_action) {
@@ -1369,7 +1369,7 @@ bool monsterMultiply(int y, int x, int creature_id, int monster_id) {
         // don't create a new creature on top of the old one, that
         // causes invincible/invisible creatures to appear.
         if (coordInBounds(Coord_t{pos_y, pos_x}) && (pos_y != y || pos_x != x)) {
-            const Cave_t &tile = cave[pos_y][pos_x];
+            const Cave_t &tile = dg.cave[pos_y][pos_x];
 
             if (tile.feature_id <= MAX_OPEN_SPACE && tile.treasure_id == 0 && tile.creature_id != 1) {
                 // Creature there already?
@@ -1430,7 +1430,7 @@ static void monsterMultiplyCritter(const Monster_t &monster, int monster_id, uin
 
     for (int y = monster.y - 1; y <= monster.y + 1; y++) {
         for (int x = monster.x - 1; x <= monster.x + 1; x++) {
-            if (coordInBounds(Coord_t{y, x}) && (cave[y][x].creature_id > 1)) {
+            if (coordInBounds(Coord_t{y, x}) && (dg.cave[y][x].creature_id > 1)) {
                 counter++;
             }
         }
@@ -1468,7 +1468,7 @@ static void monsterMoveOutOfWall(const Monster_t &monster, int monster_id, uint3
     // of i will fail the comparison.
     for (int y = monster.y + 1; y >= (monster.y - 1); y--) {
         for (int x = monster.x - 1; x <= monster.x + 1; x++) {
-            if (dir != 5 && cave[y][x].feature_id <= MAX_OPEN_SPACE && cave[y][x].creature_id != 1) {
+            if (dir != 5 && dg.cave[y][x].feature_id <= MAX_OPEN_SPACE && dg.cave[y][x].creature_id != 1) {
                 directions[id++] = dir;
             }
             dir++;
@@ -1489,7 +1489,7 @@ static void monsterMoveOutOfWall(const Monster_t &monster, int monster_id, uint3
     }
 
     // if still in a wall, let it dig itself out, but also apply some more damage
-    if (cave[monster.y][monster.x].feature_id >= MIN_CAVE_WALL) {
+    if (dg.cave[monster.y][monster.x].feature_id >= MIN_CAVE_WALL) {
         // in case the monster dies, may need to callfix1_delete_monster()
         // instead of delete_monsters()
         hack_monptr = monster_id;
@@ -1617,7 +1617,7 @@ static void monsterMove(int monster_id, uint32_t &rcmove) {
 
     // if in wall, must immediately escape to a clear area
     // then monster movement finished
-    if (((creature.movement & CM_PHASE) == 0u) && cave[monster.y][monster.x].feature_id >= MIN_CAVE_WALL) {
+    if (((creature.movement & CM_PHASE) == 0u) && dg.cave[monster.y][monster.x].feature_id >= MIN_CAVE_WALL) {
         monsterMoveOutOfWall(monster, monster_id, rcmove);
         return;
     }
@@ -1700,7 +1700,7 @@ static void monsterAttackingUpdate(Monster_t &monster, int monster_id, int moves
 
         // Monsters trapped in rock must be given a turn also,
         // so that they will die/dig out immediately.
-        if (monster.lit || monster.distance_from_player <= creatures_list[monster.creature_id].area_affect_radius || (((creatures_list[monster.creature_id].movement & CM_PHASE) == 0u) && cave[monster.y][monster.x].feature_id >= MIN_CAVE_WALL)) {
+        if (monster.lit || monster.distance_from_player <= creatures_list[monster.creature_id].area_affect_radius || (((creatures_list[monster.creature_id].movement & CM_PHASE) == 0u) && dg.cave[monster.y][monster.x].feature_id >= MIN_CAVE_WALL)) {
             if (monster.sleep_count > 0) {
                 if (py.flags.aggravate) {
                     monster.sleep_count = 0;

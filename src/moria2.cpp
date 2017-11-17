@@ -14,7 +14,7 @@ static bool damageMinusAC(uint32_t typ_dam);
 // Change a trap from invisible to visible -RAK-
 // Note: Secret doors are handled here
 void dungeonChangeTrapVisibility(int y, int x) {
-    uint8_t treasure_id = cave[y][x].treasure_id;
+    uint8_t treasure_id = dg.cave[y][x].treasure_id;
 
     Inventory_t &item = treasure_list[treasure_id];
 
@@ -54,13 +54,13 @@ void dungeonSearch(int y, int x, int chance) {
                 continue;
             }
 
-            if (cave[i][j].treasure_id == 0) {
+            if (dg.cave[i][j].treasure_id == 0) {
                 continue;
             }
 
             // Search for hidden objects
 
-            Inventory_t &item = treasure_list[cave[i][j].treasure_id];
+            Inventory_t &item = treasure_list[dg.cave[i][j].treasure_id];
 
             if (item.category_id == TV_INVIS_TRAP) {
                 // Trap on floor?
@@ -336,7 +336,7 @@ void playerEndRunning() {
 }
 
 static bool areaAffectStopLookingAtSquares(int i, int dir, int new_dir, int y, int x, int &check_dir, int &option1, int &option2) {
-    const Cave_t &tile = cave[y][x];
+    const Cave_t &tile = dg.cave[y][x];
 
     // Default: Square unseen. Treat as open.
     bool invisible = true;

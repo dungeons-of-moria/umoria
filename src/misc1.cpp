@@ -228,19 +228,19 @@ int coordDistanceBetween(Coord_t coord_a, Coord_t coord_b) {
 int coordWallsNextTo(Coord_t coord) {
     int walls = 0;
 
-    if (cave[coord.y - 1][coord.x].feature_id >= MIN_CAVE_WALL) {
+    if (dg.cave[coord.y - 1][coord.x].feature_id >= MIN_CAVE_WALL) {
         walls++;
     }
 
-    if (cave[coord.y + 1][coord.x].feature_id >= MIN_CAVE_WALL) {
+    if (dg.cave[coord.y + 1][coord.x].feature_id >= MIN_CAVE_WALL) {
         walls++;
     }
 
-    if (cave[coord.y][coord.x - 1].feature_id >= MIN_CAVE_WALL) {
+    if (dg.cave[coord.y][coord.x - 1].feature_id >= MIN_CAVE_WALL) {
         walls++;
     }
 
-    if (cave[coord.y][coord.x + 1].feature_id >= MIN_CAVE_WALL) {
+    if (dg.cave[coord.y][coord.x + 1].feature_id >= MIN_CAVE_WALL) {
         walls++;
     }
 
@@ -255,8 +255,8 @@ int coordCorridorWallsNextTo(Coord_t coord) {
 
     for (int yy = coord.y - 1; yy <= coord.y + 1; yy++) {
         for (int xx = coord.x - 1; xx <= coord.x + 1; xx++) {
-            int tile_id = cave[yy][xx].feature_id;
-            int treasure_id = cave[yy][xx].treasure_id;
+            int tile_id = dg.cave[yy][xx].feature_id;
+            int treasure_id = dg.cave[yy][xx].treasure_id;
 
             // should fail if there is already a door present
             if (tile_id == TILE_CORR_FLOOR && (treasure_id == 0 || treasure_list[treasure_id].category_id < TV_MIN_DOORS)) {
@@ -314,7 +314,7 @@ bool los(int from_y, int from_x, int to_y, int to_x) {
         }
 
         for (int yy = from_y + 1; yy < to_y; yy++) {
-            if (cave[yy][from_x].feature_id >= MIN_CLOSED_SPACE) {
+            if (dg.cave[yy][from_x].feature_id >= MIN_CLOSED_SPACE) {
                 return false;
             }
         }
@@ -330,7 +330,7 @@ bool los(int from_y, int from_x, int to_y, int to_x) {
         }
 
         for (int xx = from_x + 1; xx < to_x; xx++) {
-            if (cave[from_y][xx].feature_id >= MIN_CLOSED_SPACE) {
+            if (dg.cave[from_y][xx].feature_id >= MIN_CLOSED_SPACE) {
                 return false;
             }
         }
@@ -383,7 +383,7 @@ bool los(int from_y, int from_x, int to_y, int to_x) {
             }
 
             while ((to_x - xx) != 0) {
-                if (cave[yy][xx].feature_id >= MIN_CLOSED_SPACE) {
+                if (dg.cave[yy][xx].feature_id >= MIN_CLOSED_SPACE) {
                     return false;
                 }
 
@@ -393,7 +393,7 @@ bool los(int from_y, int from_x, int to_y, int to_x) {
                     xx += x_sign;
                 } else if (dy > scale_half) {
                     yy += y_sign;
-                    if (cave[yy][xx].feature_id >= MIN_CLOSED_SPACE) {
+                    if (dg.cave[yy][xx].feature_id >= MIN_CLOSED_SPACE) {
                         return false;
                     }
                     xx += x_sign;
@@ -424,7 +424,7 @@ bool los(int from_y, int from_x, int to_y, int to_x) {
         }
 
         while ((to_y - yy) != 0) {
-            if (cave[yy][xx].feature_id >= MIN_CLOSED_SPACE) {
+            if (dg.cave[yy][xx].feature_id >= MIN_CLOSED_SPACE) {
                 return false;
             }
 
@@ -434,7 +434,7 @@ bool los(int from_y, int from_x, int to_y, int to_x) {
                 yy += y_sign;
             } else if (dx > scale_half) {
                 xx += x_sign;
-                if (cave[yy][xx].feature_id >= MIN_CLOSED_SPACE) {
+                if (dg.cave[yy][xx].feature_id >= MIN_CLOSED_SPACE) {
                     return false;
                 }
                 yy += y_sign;
@@ -451,7 +451,7 @@ bool los(int from_y, int from_x, int to_y, int to_x) {
 
 // Returns symbol for given row, column -RAK-
 char caveGetTileSymbol(Coord_t coord) {
-    const Cave_t &tile = cave[coord.y][coord.x];
+    const Cave_t &tile = dg.cave[coord.y][coord.x];
 
     if (tile.creature_id == 1 && ((py.running_tracker == 0) || config.run_print_self)) {
         return '@';
@@ -492,7 +492,7 @@ char caveGetTileSymbol(Coord_t coord) {
 
 // Tests a spot for light or field mark status -RAK-
 bool caveTileVisible(Coord_t coord) {
-    return cave[coord.y][coord.x].permanent_light || cave[coord.y][coord.x].temporary_light || cave[coord.y][coord.x].field_mark;
+    return dg.cave[coord.y][coord.x].permanent_light || dg.cave[coord.y][coord.x].temporary_light || dg.cave[coord.y][coord.x].field_mark;
 }
 
 // Prints the map of the dungeon -RAK-
@@ -626,7 +626,7 @@ bool monsterPlaceNew(int y, int x, int creature_id, bool sleeping) {
     monster.distance_from_player = (uint8_t) coordDistanceBetween(Coord_t{char_row, char_col}, Coord_t{y, x});
     monster.lit = false;
 
-    cave[y][x].creature_id = (uint8_t) monster_id;
+    dg.cave[y][x].creature_id = (uint8_t) monster_id;
 
     if (sleeping) {
         if (creatures_list[creature_id].sleep_counter == 0) {
@@ -651,7 +651,7 @@ void monsterPlaceWinning() {
     do {
         y = randomNumber(dg.dungeon_height - 2);
         x = randomNumber(dg.dungeon_width - 2);
-    } while ((cave[y][x].feature_id >= MIN_CLOSED_SPACE) || (cave[y][x].creature_id != 0) || (cave[y][x].treasure_id != 0) || (coordDistanceBetween(Coord_t{y, x}, Coord_t{char_row, char_col}) <= MON_MAX_SIGHT));
+    } while ((dg.cave[y][x].feature_id >= MIN_CLOSED_SPACE) || (dg.cave[y][x].creature_id != 0) || (dg.cave[y][x].treasure_id != 0) || (coordDistanceBetween(Coord_t{y, x}, Coord_t{char_row, char_col}) <= MON_MAX_SIGHT));
 
     int creature_id = randomNumber(MON_ENDGAME_MONSTERS) - 1 + monster_levels[MON_MAX_LEVELS];
 
@@ -685,7 +685,7 @@ void monsterPlaceWinning() {
     monster.stunned_amount = 0;
     monster.distance_from_player = (uint8_t) coordDistanceBetween(Coord_t{char_row, char_col}, Coord_t{y, x});
 
-    cave[y][x].creature_id = (uint8_t) monster_id;
+    dg.cave[y][x].creature_id = (uint8_t) monster_id;
 
     monster.sleep_count = 0;
 }
@@ -734,7 +734,7 @@ void monsterPlaceNewWithinDistance(int number, int distance_from_source, bool sl
         do {
             y = randomNumber(dg.dungeon_height - 2);
             x = randomNumber(dg.dungeon_width - 2);
-        } while (cave[y][x].feature_id >= MIN_CLOSED_SPACE || cave[y][x].creature_id != 0 || coordDistanceBetween(Coord_t{y, x}, Coord_t{char_row, char_col}) <= distance_from_source);
+        } while (dg.cave[y][x].feature_id >= MIN_CLOSED_SPACE || dg.cave[y][x].creature_id != 0 || coordDistanceBetween(Coord_t{y, x}, Coord_t{char_row, char_col}) <= distance_from_source);
 
         int l = monsterGetOneSuitableForLevel(dg.current_dungeon_level);
 
@@ -758,7 +758,7 @@ static bool placeMonsterAdjacentTo(int monsterID, int &y, int &x, bool slp) {
         int xx = x - 2 + randomNumber(3);
 
         if (coordInBounds(Coord_t{yy, xx})) {
-            if (cave[yy][xx].feature_id <= MAX_OPEN_SPACE && cave[yy][xx].creature_id == 0) {
+            if (dg.cave[yy][xx].feature_id <= MAX_OPEN_SPACE && dg.cave[yy][xx].creature_id == 0) {
                 // Place_monster() should always return true here.
                 if (!monsterPlaceNew(yy, xx, monsterID, slp)) {
                     return false;
@@ -817,10 +817,10 @@ static void compactObjects() {
     while (counter <= 0) {
         for (int y = 0; y < dg.dungeon_height; y++) {
             for (int x = 0; x < dg.dungeon_width; x++) {
-                if (cave[y][x].treasure_id != 0 && coordDistanceBetween(Coord_t{y, x}, Coord_t{char_row, char_col}) > current_distance) {
+                if (dg.cave[y][x].treasure_id != 0 && coordDistanceBetween(Coord_t{y, x}, Coord_t{char_row, char_col}) > current_distance) {
                     int chance;
 
-                    switch (treasure_list[cave[y][x].treasure_id].category_id) {
+                    switch (treasure_list[dg.cave[y][x].treasure_id].category_id) {
                         case TV_VIS_TRAP:
                             chance = 15;
                             break;
@@ -880,8 +880,8 @@ void pusht(uint8_t treasure_id) {
         // must change the treasure_id in the cave of the object just moved
         for (int y = 0; y < dg.dungeon_height; y++) {
             for (int x = 0; x < dg.dungeon_width; x++) {
-                if (cave[y][x].treasure_id == current_treasure_id - 1) {
-                    cave[y][x].treasure_id = treasure_id;
+                if (dg.cave[y][x].treasure_id == current_treasure_id - 1) {
+                    dg.cave[y][x].treasure_id = treasure_id;
                 }
             }
         }

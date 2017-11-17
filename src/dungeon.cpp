@@ -38,7 +38,7 @@ static void resetDungeonFlags() {
     py.running_tracker = 0;
     teleport_player = false;
     monster_multiply_total = 0;
-    cave[char_row][char_col].creature_id = 1;
+    dg.cave[char_row][char_col].creature_id = 1;
 }
 
 // Check light status for dungeon setup
@@ -2136,7 +2136,7 @@ static void examineBook() {
 
 // Go up one level -RAK-
 static void dungeonGoUpLevel() {
-    uint8_t tile_id = cave[char_row][char_col].treasure_id;
+    uint8_t tile_id = dg.cave[char_row][char_col].treasure_id;
 
     if (tile_id != 0 && treasure_list[tile_id].category_id == TV_UP_STAIR) {
         dg.current_dungeon_level--;
@@ -2153,7 +2153,7 @@ static void dungeonGoUpLevel() {
 
 // Go down one level -RAK-
 static void dungeonGoDownLevel() {
-    uint8_t tile_id = cave[char_row][char_col].treasure_id;
+    uint8_t tile_id = dg.cave[char_row][char_col].treasure_id;
 
     if (tile_id != 0 && treasure_list[tile_id].category_id == TV_DOWN_STAIR) {
         dg.current_dungeon_level++;
@@ -2181,7 +2181,7 @@ static void dungeonJamDoor() {
     }
     (void) playerMovePosition(direction, y, x);
 
-    const Cave_t &tile = cave[y][x];
+    const Cave_t &tile = dg.cave[y][x];
 
     if (tile.treasure_id == 0) {
         printMessage("That isn't a door!");

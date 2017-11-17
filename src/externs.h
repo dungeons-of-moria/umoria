@@ -48,9 +48,6 @@ extern int16_t noscore;
 extern bool to_be_wizard;
 extern bool wizard_mode;
 
-// Following are all floor definitions
-extern Cave_t cave[MAX_HEIGHT][MAX_WIDTH];
-
 // Following are player variables
 extern Player_t py;
 extern int16_t char_row;
