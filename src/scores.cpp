@@ -247,8 +247,8 @@ int32_t playerCalculateTotalPoints() {
     total += dg.current_level * 50;
 
     // Don't ever let the score decrease from one save to the next.
-    if (character_max_score > total) {
-        return character_max_score;
+    if (py.max_score > total) {
+        return py.max_score;
     }
 
     return total;

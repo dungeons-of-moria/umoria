@@ -14,8 +14,6 @@ extern Config_t config;
 extern Game_t game;
 extern Dungeon_t dg;
 
-extern int32_t character_max_score;
-
 extern bool screen_has_changed;
 
 extern bool teleport_player;

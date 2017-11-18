@@ -32,8 +32,5 @@ int16_t missiles_counter      = 0;      // Counter for missiles
 int eof_flag                  = 0;      // Is used to signal EOF/HANGUP condition
 bool panic_save               = false;  // True if playing from a panic save
 
-// Player variables
-int32_t character_max_score  = 0;      // Maximum score for a character
-
 // Creature arrays and variables
 Recall_t creature_recall[MON_MAX_CREATURES]; // Monster memories

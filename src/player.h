@@ -123,4 +123,6 @@ typedef struct {
     bool carrying_light;       // True when player is carrying light
     bool temporary_light_only; // Track if temporary light about player
     bool weapon_is_heavy;      // Weapon is too heavy -CJS-
+
+    int32_t max_score = 0; // Maximum score attained
 } Player_t;

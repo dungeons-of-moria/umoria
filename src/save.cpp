@@ -267,7 +267,7 @@ static bool sv_write() {
     // put game.character_died_from string in save file
     wr_string(game.character_died_from);
 
-    // put the character_max_score in the save file
+    // put the max_score in the save file
     l = (uint32_t) (playerCalculateTotalPoints());
     wr_long(l);
 
@@ -710,7 +710,7 @@ bool loadGame(bool &generate) {
 
             time_saved = rd_long();
             rd_string(game.character_died_from);
-            character_max_score = rd_long();
+            py.max_score = rd_long();
             py.misc.date_of_birth = rd_long();
         }
 
