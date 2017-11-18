@@ -37,7 +37,7 @@ int main(int argc, char *argv[]) {
     // call this routine to grab a file pointer to the high score file
     // and prepare things to relinquish setuid privileges
     if (!initializeScoreFile()) {
-        (void) fprintf(stderr, "Can't open score file \"%s\"\n", MORIA_SCORES);
+        (void) fprintf(stderr, "Can't open score file \"%s\"\n", config.files.scores.c_str());
         return 1;
     }
 
@@ -101,7 +101,8 @@ int main(int argc, char *argv[]) {
 
     // Auto-restart of saved file
     if (argv[0] != CNIL) {
-        (void) strcpy(config.save_game_filename, argv[0]);
+        // (void) strcpy(config.files.save_game, argv[0]);
+        config.files.save_game = argv[0];
     }
 
     startMoria(seed, new_game, roguelike_keys);

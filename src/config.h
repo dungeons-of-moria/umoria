@@ -6,28 +6,31 @@
 
 // Basic Configuration
 
-// Data files used by Umoria - relative to the executable binary.
-#define MORIA_LICENSE "LICENSE"
-#define MORIA_SCORES "scores.dat"
-#define MORIA_SAVE "game.sav"
+// Data files used by Umoria
+// NOTE: use relative paths to the executable binary.
+typedef struct {
+    std::string splash_screen = "data/splash.txt";
+    std::string welcome_screen = "data/welcome.txt";
 
-#define MORIA_HELP "data/help.txt"
-#define MORIA_WIZARD_HELP "data/help_wizard.txt"
-#define MORIA_RL_HELP "data/rl_help.txt"
-#define MORIA_RL_WIZARD_HELP "data/rl_help_wizard.txt"
+    std::string license = "LICENSE";
+    std::string versions_history = "data/versions.txt";
 
-#define MORIA_SPLASH "data/splash.txt"
-#define MORIA_VERSIONS "data/versions.txt"
-#define MORIA_WELCOME "data/welcome.txt"
+    std::string help = "data/help.txt";
+    std::string help_wizard = "data/help_wizard.txt";
+    std::string help_roguelike = "data/rl_help.txt";
+    std::string help_roguelike_wizard = "data/rl_help_wizard.txt";
 
-#define DEATH_TOMB "data/death_tomb.txt"
-#define DEATH_ROYAL "data/death_royal.txt"
+    std::string death_tomb = "data/death_tomb.txt";
+    std::string death_royal = "data/death_royal.txt";
+
+    std::string save_game = "game.sav";
+    std::string scores = "scores.dat";
+} Files_t;
 
 // Game configuration
+// TODO: We would like to store this data in external config files, but for now
+// TODO: this works, and is good preparation for that change in the future.
 typedef struct {
-    vtype_t save_game_filename = MORIA_SAVE; // The save game filename
-
-    // Game options as set on startup and with `=` set options command -CJS-
     bool display_counts = true;          // Display rest/repeat counts
     bool find_bound = false;             // Print yourself on a run (slower)
     bool run_cut_corners = true;         // Cut corners while running
@@ -39,4 +42,6 @@ typedef struct {
     bool use_roguelike_keys = false;     // Use classic Roguelike keys
     bool show_inventory_weights = false; // Display weights in inventory
     bool error_beep_sound = true;        // Beep for invalid characters
+
+    Files_t files = Files_t{};
 } Config_t;

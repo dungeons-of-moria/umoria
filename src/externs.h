@@ -171,8 +171,8 @@ void playerEat();
 // files.c
 bool initializeScoreFile();
 void displaySplashScreen();
-void displayTextHelpFile(const char *filename);
-void displayDeathFile(const char *filename);
+void displayTextHelpFile(const std::string &filename);
+void displayDeathFile(const std::string &filename);
 void outputRandomLevelObjectsToFile();
 bool outputPlayerCharacterToFile(char *filename);
 

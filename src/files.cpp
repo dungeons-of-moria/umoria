@@ -18,7 +18,7 @@
 //  so we don't have multiple people trying to write to it at the same time.
 //  Craig Norborg (doc)    Mon Aug 10 16:41:59 EST 1987
 bool initializeScoreFile() {
-    highscore_fp = fopen(MORIA_SCORES, (char *) "rb+");
+    highscore_fp = fopen(config.files.scores.c_str(), (char *) "rb+");
 
     return highscore_fp != nullptr;
 }
@@ -27,7 +27,7 @@ bool initializeScoreFile() {
 void displaySplashScreen() {
     vtype_t in_line = {'\0'};
 
-    FILE *file1 = fopen(MORIA_SPLASH, "r");
+    FILE *file1 = fopen(config.files.splash_screen.c_str(), "r");
     if (file1 != nullptr) {
         clearScreen();
         for (int i = 0; fgets(in_line, 80, file1) != CNIL; i++) {
@@ -41,15 +41,15 @@ void displaySplashScreen() {
 
 // Open and display a text help file
 // File perusal, primitive, but portable -CJS-
-void displayTextHelpFile(const char *filename) {
+void displayTextHelpFile(const std::string &filename) {
     constexpr uint8_t max_line_length = 80;
 
     char line_buffer[max_line_length];
 
-    FILE *file = fopen(filename, "r");
+    FILE *file = fopen(filename.c_str(), "r");
 
     if (file == nullptr) {
-        (void) sprintf(line_buffer, "Can not find help file \"%s\".\n", filename);
+        (void) sprintf(line_buffer, "Can not find help file \"%s\".\n", filename.c_str());
         putStringClearToEOL(line_buffer, Coord_t{0, 0});
         return;
     }
@@ -79,14 +79,14 @@ void displayTextHelpFile(const char *filename) {
 }
 
 // Open and display a "death" text file
-void displayDeathFile(const char *filename) {
+void displayDeathFile(const std::string &filename) {
     constexpr uint8_t max_line_length = 80;
 
     char line_buffer[max_line_length];
 
-    FILE *file = fopen(filename, "r");
+    FILE *file = fopen(filename.c_str(), "r");
     if (file == nullptr) {
-        (void) sprintf(line_buffer, "Can not find help file \"%s\".\n", filename);
+        (void) sprintf(line_buffer, "Can not find help file \"%s\".\n", filename.c_str());
         putStringClearToEOL(line_buffer, Coord_t{0, 0});
         return;
     }

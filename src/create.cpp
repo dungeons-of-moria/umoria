@@ -138,7 +138,7 @@ static void characterChooseRace() {
         }
 
         if (input == '?') {
-            displayTextHelpFile(MORIA_WELCOME);
+            displayTextHelpFile(config.files.welcome_screen);
         } else {
             terminalBellSound();
         }
@@ -285,7 +285,7 @@ static void characterSetGender() {
             putString("Male", Coord_t{4, 15});
             is_set = true;
         } else if (input == '?') {
-            displayTextHelpFile(MORIA_WELCOME);
+            displayTextHelpFile(config.files.welcome_screen);
         } else {
             terminalBellSound();
         }
@@ -425,7 +425,7 @@ static void characterGetClass() {
             py.misc.saving_throw += klass.saving_throw;
             py.misc.experience_factor += klass.experience_factor;
         } else if (input == '?') {
-            displayTextHelpFile(MORIA_WELCOME);
+            displayTextHelpFile(config.files.welcome_screen);
         } else {
             terminalBellSound();
         }

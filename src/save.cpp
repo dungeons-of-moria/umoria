@@ -18,7 +18,7 @@
 
 DEBUG(static FILE *logfile)
 
-static bool _save_char(char *filename);
+static bool _save_char(const std::string &filename);
 static bool sv_write();
 static void wr_bool(bool value);
 static void wr_byte(uint8_t value);
@@ -357,14 +357,14 @@ bool saveGame() {
     vtype_t input = {'\0'};
     std::string output;
 
-    while (!_save_char(config.save_game_filename)) {
-        output = "Save file '" + std::string(config.save_game_filename) + "' fails.";
+    while (!_save_char(config.files.save_game)) {
+        output = "Save file '" + config.files.save_game + "' fails.";
         printMessage(output.c_str());
 
         int i = 0;
-        if (access(config.save_game_filename, 0) < 0 || !getInputConfirmation("File exists. Delete old save file?") || (i = unlink(config.save_game_filename)) < 0) {
+        if (access(config.files.save_game.c_str(), 0) < 0 || !getInputConfirmation("File exists. Delete old save file?") || (i = unlink(config.files.save_game.c_str())) < 0) {
             if (i < 0) {
-                output = "Can't delete '" + std::string(config.save_game_filename) + "'";
+                output = "Can't delete '" + config.files.save_game + "'";
                 printMessage(output.c_str());
             }
             putStringClearToEOL("New Save file [ESC to give up]:", Coord_t{0, 0});
@@ -372,17 +372,18 @@ bool saveGame() {
                 return false;
             }
             if (input[0] != 0) {
-                (void) strcpy(config.save_game_filename, input);
+                // (void) strcpy(config.files.save_game, input);
+                config.files.save_game = input;
             }
         }
-        output = "Saving with '" + std::string(config.save_game_filename) + "'...";
+        output = "Saving with '" + config.files.save_game + "'...";
         putStringClearToEOL(output.c_str(), Coord_t{0, 0});
     }
 
     return true;
 }
 
-static bool _save_char(char *filename) {
+static bool _save_char(const std::string &filename) {
     if (character_saved) {
         return true; // Nothing to save.
     }
@@ -395,20 +396,20 @@ static bool _save_char(char *filename) {
 
     fileptr = nullptr; // Do not assume it has been init'ed
 
-    int fd = open(filename, O_RDWR | O_CREAT | O_EXCL, 0600);
+    int fd = open(filename.c_str(), O_RDWR | O_CREAT | O_EXCL, 0600);
 
-    if (fd < 0 && access(filename, 0) >= 0 && ((from_savefile != 0) || (wizard_mode && getInputConfirmation("Can't make new save file. Overwrite old?")))) {
-        (void) chmod(filename, 0600);
-        fd = open(filename, O_RDWR | O_TRUNC, 0600);
+    if (fd < 0 && access(filename.c_str(), 0) >= 0 && ((from_savefile != 0) || (wizard_mode && getInputConfirmation("Can't make new save file. Overwrite old?")))) {
+        (void) chmod(filename.c_str(), 0600);
+        fd = open(filename.c_str(), O_RDWR | O_TRUNC, 0600);
     }
 
     if (fd >= 0) {
         (void) close(fd);
-        fileptr = fopen(config.save_game_filename, "wb");
+        fileptr = fopen(config.files.save_game.c_str(), "wb");
     }
 
     DEBUG(logfile = fopen("IO_LOG", "a"));
-    DEBUG(fprintf(logfile, "Saving data to %s\n", config.save_game_filename));
+    DEBUG(fprintf(logfile, "Saving data to %s\n", config.files.save_game));
 
     if (fileptr != nullptr) {
         xor_byte = 0;
@@ -434,14 +435,14 @@ static bool _save_char(char *filename) {
 
     if (!ok) {
         if (fd >= 0) {
-            (void) unlink(filename);
+            (void) unlink(filename.c_str());
         }
 
         std::string output;
         if (fd >= 0) {
-            output = "Error writing to file '" + std::string(filename) + "'";
+            output = "Error writing to file '" + filename + "'";
         } else {
-            output = "Can't create new file '" + std::string(filename) + "'";
+            output = "Can't create new file '" + filename + "'";
         }
         printMessage(output.c_str());
 
@@ -469,20 +470,20 @@ bool loadGame(bool &generate) {
 
     // Not required for Mac, because the file name is obtained through a dialog.
     // There is no way for a nonexistent file to be specified. -BS-
-    if (access(config.save_game_filename, 0) != 0) {
+    if (access(config.files.save_game.c_str(), 0) != 0) {
         printMessage("Save file does not exist.");
         return false; // Don't bother with messages here. File absent.
     }
 
     clearScreen();
 
-    std::string filename = "Save file '" + std::string(config.save_game_filename) + "' present. Attempting restore.";
+    std::string filename = "Save file '" + config.files.save_game + "' present. Attempting restore.";
     putString(filename.c_str(), Coord_t{23, 0});
 
     // FIXME: check this if/else logic! -- MRC
     if (dg.game_turn >= 0) {
         printMessage("IMPOSSIBLE! Attempt to restore while still alive!");
-    } else if ((fd = open(config.save_game_filename, O_RDONLY, 0)) < 0 && (chmod(config.save_game_filename, 0400) < 0 || (fd = open(config.save_game_filename, O_RDONLY, 0)) < 0)) {
+    } else if ((fd = open(config.files.save_game.c_str(), O_RDONLY, 0)) < 0 && (chmod(config.files.save_game.c_str(), 0400) < 0 || (fd = open(config.files.save_game.c_str(), O_RDONLY, 0)) < 0)) {
         // Allow restoring a file belonging to someone else, if we can delete it.
         // Hence first try to read without doing a chmod.
 
@@ -493,7 +494,7 @@ bool loadGame(bool &generate) {
 
         (void) close(fd);
         fd = -1; // Make sure it isn't closed again
-        fileptr = fopen(config.save_game_filename, "rb");
+        fileptr = fopen(config.files.save_game.c_str(), "rb");
 
         if (fileptr == nullptr) {
             goto error;
@@ -503,7 +504,7 @@ bool loadGame(bool &generate) {
         putQIO();
 
         DEBUG(logfile = fopen("IO_LOG", "a"));
-        DEBUG(fprintf(logfile, "Reading data from %s\n", config.save_game_filename));
+        DEBUG(fprintf(logfile, "Reading data from %s\n", config.files.save_game));
 
         // Note: setting these xor_byte is correct!
         xor_byte = 0;

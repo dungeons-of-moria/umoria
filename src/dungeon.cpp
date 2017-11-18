@@ -1559,9 +1559,9 @@ static void doWizardCommands(char com_val) {
         case '\\':
             // Display wizard help
             if (config.use_roguelike_keys) {
-                displayTextHelpFile(MORIA_RL_WIZARD_HELP);
+                displayTextHelpFile(config.files.help_roguelike_wizard);
             } else {
-                displayTextHelpFile(MORIA_WIZARD_HELP);
+                displayTextHelpFile(config.files.help_wizard);
             }
             break;
         case CTRL_KEY('I'):
@@ -1632,7 +1632,7 @@ static void doCommand(char command) {
             player_free_turn = true;
             break;
         case CTRL_KEY('V'): // (^V)iew license
-            displayTextHelpFile(MORIA_LICENSE);
+            displayTextHelpFile(config.files.license);
             player_free_turn = true;
             break;
         case CTRL_KEY('W'): // (^W)izard mode
@@ -1730,9 +1730,9 @@ static void doCommand(char command) {
             break;
         case '?': // (?) help with commands
             if (config.use_roguelike_keys) {
-                displayTextHelpFile(MORIA_RL_HELP);
+                displayTextHelpFile(config.files.help_roguelike);
             } else {
-                displayTextHelpFile(MORIA_HELP);
+                displayTextHelpFile(config.files.help);
             }
             player_free_turn = true;
             break;
@@ -1857,7 +1857,7 @@ static void doCommand(char command) {
             useStaff();
             break;
         case 'v': // (v)ersion of game
-            displayTextHelpFile(MORIA_VERSIONS);
+            displayTextHelpFile(config.files.versions_history);
             player_free_turn = true;
             break;
         case 'w': // (w)ear or wield

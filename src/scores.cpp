@@ -48,10 +48,10 @@ void recordNewHighScore() {
     }
     (void) strcpy(new_entry.died_from, tmp);
 
-    if ((highscore_fp = fopen(MORIA_SCORES, "rb+")) == nullptr) {
+    if ((highscore_fp = fopen(config.files.scores.c_str(), "rb+")) == nullptr) {
         char msg[100];
 
-        (void) sprintf(msg, "Error opening score file \"%s\"\n", MORIA_SCORES);
+        (void) sprintf(msg, "Error opening score file \"%s\"\n", config.files.scores.c_str());
         printMessage(msg);
         printMessage(CNIL);
         return;
@@ -171,8 +171,8 @@ void recordNewHighScore() {
 void showScoresScreen() {
     char msg[100];
 
-    if ((highscore_fp = fopen(MORIA_SCORES, "rb")) == nullptr) {
-        sprintf(msg, "Error opening score file \"%s\"\n", MORIA_SCORES);
+    if ((highscore_fp = fopen(config.files.scores.c_str(), "rb")) == nullptr) {
+        sprintf(msg, "Error opening score file \"%s\"\n", config.files.scores.c_str());
         printMessage(msg);
         printMessage(CNIL);
         return;

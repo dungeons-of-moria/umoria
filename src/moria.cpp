@@ -49,7 +49,7 @@ void startMoria(int seed, bool start_new_game, bool use_roguelike_keys) {
     bool result = false;
     bool generate = false;
 
-    if (!start_new_game && (access(config.save_game_filename, 0) == 0) && loadGame(generate)) {
+    if (!start_new_game && (access(config.files.save_game.c_str(), 0) == 0) && loadGame(generate)) {
         result = true;
     }
 
