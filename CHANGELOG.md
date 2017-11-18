@@ -4,12 +4,15 @@
 
 - Improve _Wizard Mode_ help files.
 - Easier item creation in _Wizard Mode_ (inspired by Bmoria).
+- Change `[Press any key to continue.]` to `[ press any key to continue ]`,
+  and any variations, as it looks clearer.
 
 ### Code
 
 - Simpler display of _death_ screens (`death_tomb.txt`, `death_royal.txt` files).
-- Create a Dungeon_t and put all dungeon related globals here.
-- Move more Player globals to the Player_t struct.
+- Create a `Dungeon_t` and put all dungeon related globals here.
+- Move more Player globals to the `Player_t` struct.
+- Started replacing `char *` with `std::string`.
 
 
 ## 5.7.7 (2017-11-07)

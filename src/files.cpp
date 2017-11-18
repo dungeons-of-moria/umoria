@@ -63,7 +63,7 @@ void displayTextHelpFile(const std::string &filename) {
             }
         }
 
-        putStringClearToEOL("[Press any key to continue.]", Coord_t{23, 23});
+        putStringClearToEOL("[ press any key to continue ]", Coord_t{23, 23});
         input = getKeyInput();
         if (input == ESCAPE) {
             break;

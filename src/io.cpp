@@ -478,7 +478,7 @@ bool getInputConfirmation(const std::string &prompt) {
 
 // Pauses for user response before returning -RAK-
 void waitForContinueKey(int line_number) {
-    putStringClearToEOL("[Press any key to continue.]", Coord_t{line_number, 23});
+    putStringClearToEOL("[ press any key to continue ]", Coord_t{line_number, 23});
     (void) getKeyInput();
     eraseLine(Coord_t{line_number, 0});
 }
@@ -495,7 +495,7 @@ static void sleep_in_seconds(int seconds) {
 // NOTE: Delay is for players trying to roll up "perfect"
 // characters.  Make them wait a bit.
 void waitAndConfirmCharacterCreation(int line_number, int delay) {
-    putStringClearToEOL("[Press any key to continue, or Q to exit.]", Coord_t{line_number, 10});
+    putStringClearToEOL("[ press any key to continue, or Q to exit ]", Coord_t{line_number, 17});
 
     if (getKeyInput() == 'Q') {
         eraseLine(Coord_t{line_number, 0});
