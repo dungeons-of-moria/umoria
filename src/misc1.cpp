@@ -27,10 +27,10 @@ void seedsInitialize(uint32_t seed) {
         clock_var = seed;
     }
 
-    magic_seed = (int32_t) clock_var;
+    game.magic_seed = (int32_t) clock_var;
 
     clock_var += 8762;
-    town_seed = (int32_t) clock_var;
+    game.town_seed = (int32_t) clock_var;
 
     clock_var += 113452L;
     setRandomSeed(clock_var);
@@ -643,7 +643,7 @@ bool monsterPlaceNew(int y, int x, int creature_id, bool sleeping) {
 
 // Places a monster at given location -RAK-
 void monsterPlaceWinning() {
-    if (total_winner) {
+    if (game.total_winner) {
         return;
     }
 

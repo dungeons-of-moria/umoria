@@ -143,7 +143,7 @@ static bool wandDischarge(Inventory_t &item, int direction) {
 
 // Wands for the aiming.
 void wandAim() {
-    player_free_turn = true;
+    game.player_free_turn = true;
 
     if (inventory_count == 0) {
         printMessage("But you are not carrying anything.");
@@ -161,7 +161,7 @@ void wandAim() {
         return;
     }
 
-    player_free_turn = false;
+    game.player_free_turn = false;
 
     int direction;
     if (!getDirectionWithMemory(CNIL, direction)) {

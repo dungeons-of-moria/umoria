@@ -87,7 +87,7 @@ int main(int argc, char *argv[]) {
 
                 break;
             case 'w':
-                to_be_wizard = true;
+                game.to_be_wizard = true;
                 break;
             default:
                 terminalRestore();

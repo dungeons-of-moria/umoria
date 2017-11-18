@@ -208,7 +208,7 @@ static void playerRecitePrayer(int prayer_type) {
 
 // Pray like HELL. -RAK-
 void pray() {
-    player_free_turn = true;
+    game.player_free_turn = true;
 
     int item_pos_begin, item_pos_end;
     if (!playerCanPray(item_pos_begin, item_pos_end)) {
@@ -239,9 +239,9 @@ void pray() {
 
     // NOTE: at least one function called by `playerRecitePrayer()` sets `player_free_turn = true`,
     // e.g. `spellCreateFood()`, so this check is required. -MRC-
-    player_free_turn = false;
+    game.player_free_turn = false;
     playerRecitePrayer(choice);
-    if (!player_free_turn) {
+    if (!game.player_free_turn) {
         if ((py.flags.spells_worked & (1L << choice)) == 0) {
             py.misc.exp += spell.exp_gain_for_learning << 2;
             displayCharacterExperience();
@@ -249,7 +249,7 @@ void pray() {
         }
     }
 
-    if (!player_free_turn) {
+    if (!game.player_free_turn) {
         if (spell.mana_required > py.misc.current_mana) {
             printMessage("You faint from fatigue!");
             py.flags.paralysis = (int16_t) randomNumber((5 * (spell.mana_required - py.misc.current_mana)));

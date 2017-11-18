@@ -1186,7 +1186,7 @@ static void lightTown() {
 
 // Town logic flow for generation of new town
 static void townGeneration() {
-    seedSet(town_seed);
+    seedSet(game.town_seed);
 
     dungeonPlaceTownStores();
 

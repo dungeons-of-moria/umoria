@@ -52,10 +52,10 @@ static uint32_t start_time; // time that play started
 // and completely rewritten again! for portability by -JEW-
 
 static bool sv_write() {
-    // clear the character_is_dead flag when creating a HANGUP save file,
+    // clear the game.character_is_dead flag when creating a HANGUP save file,
     // so that player can see tombstone when restart
     if (eof_flag != 0) {
-        character_is_dead = false;
+        game.character_is_dead = false;
     }
 
     uint32_t l = 0;
@@ -93,11 +93,11 @@ static bool sv_write() {
     if (config.display_counts) {
         l |= 0x400;
     }
-    if (character_is_dead) {
+    if (game.character_is_dead) {
         // Sign bit
         l |= 0x80000000L;
     }
-    if (total_winner) {
+    if (game.total_winner) {
         l |= 0x40000000L;
     }
 
@@ -228,8 +228,8 @@ static bool sv_write() {
     wr_long(py.flags.spells_forgotten);
     wr_bytes(py.flags.spells_learned_order, 32);
     wr_bytes(objects_identified, OBJECT_IDENT_SIZE);
-    wr_long(magic_seed);
-    wr_long(town_seed);
+    wr_long(game.magic_seed);
+    wr_long(game.town_seed);
     wr_short((uint16_t) last_message_id);
     for (auto &message : messages) {
         wr_string(message);
@@ -237,8 +237,8 @@ static bool sv_write() {
 
     // this indicates 'cheating' if it is a one
     wr_short((uint16_t) panic_save);
-    wr_short((uint16_t) total_winner);
-    wr_short((uint16_t) noscore);
+    wr_short((uint16_t) game.total_winner);
+    wr_short((uint16_t) game.noscore);
     wr_shorts(py.base_hp_levels, PLAYER_MAX_LEVEL);
 
     for (auto &store : stores) {
@@ -264,8 +264,8 @@ static bool sv_write() {
     }
     wr_long(l);
 
-    // put character_died_from string in save file
-    wr_string(character_died_from);
+    // put game.character_died_from string in save file
+    wr_string(game.character_died_from);
 
     // put the character_max_score in the save file
     l = (uint32_t) (playerCalculateTotalPoints());
@@ -276,7 +276,7 @@ static bool sv_write() {
 
     // only level specific info follows, this allows characters to be
     // resurrected, the dungeon level info is not needed for a resurrection
-    if (character_is_dead) {
+    if (game.character_is_dead) {
         return !((ferror(fileptr) != 0) || fflush(fileptr) == EOF);
     }
 
@@ -384,7 +384,7 @@ bool saveGame() {
 }
 
 static bool _save_char(const std::string &filename) {
-    if (character_saved) {
+    if (game.character_saved) {
         return true; // Nothing to save.
     }
 
@@ -398,7 +398,7 @@ static bool _save_char(const std::string &filename) {
 
     int fd = open(filename.c_str(), O_RDWR | O_CREAT | O_EXCL, 0600);
 
-    if (fd < 0 && access(filename.c_str(), 0) >= 0 && ((from_savefile != 0) || (wizard_mode && getInputConfirmation("Can't make new save file. Overwrite old?")))) {
+    if (fd < 0 && access(filename.c_str(), 0) >= 0 && ((from_savefile != 0) || (game.wizard_mode && getInputConfirmation("Can't make new save file. Overwrite old?")))) {
         (void) chmod(filename.c_str(), 0600);
         fd = open(filename.c_str(), O_RDWR | O_TRUNC, 0600);
     }
@@ -449,7 +449,7 @@ static bool _save_char(const std::string &filename) {
         return false;
     }
 
-    character_saved = true;
+    game.character_saved = true;
     dg.game_turn = -1;
 
     return true;
@@ -555,12 +555,12 @@ bool loadGame(bool &generate) {
         config.error_beep_sound = (l & 0x200) != 0;
         config.display_counts = (l & 0x400) != 0;
 
-        // Don't allow resurrection of total_winner characters.  It causes
+        // Don't allow resurrection of game.total_winner characters.  It causes
         // problems because the character level is out of the allowed range.
-        if (to_be_wizard && ((l & 0x40000000L) != 0)) {
+        if (game.to_be_wizard && ((l & 0x40000000L) != 0)) {
             printMessage("Sorry, this character is retired from moria.");
             printMessage("You can not resurrect a retired character.");
-        } else if (to_be_wizard && ((l & 0x80000000L) != 0) && getInputConfirmation("Resurrect a dead character?")) {
+        } else if (game.to_be_wizard && ((l & 0x80000000L) != 0) && getInputConfirmation("Resurrect a dead character?")) {
             l &= ~0x80000000L;
         }
 
@@ -675,8 +675,8 @@ bool loadGame(bool &generate) {
             py.flags.spells_forgotten = rd_long();
             rd_bytes(py.flags.spells_learned_order, 32);
             rd_bytes(objects_identified, OBJECT_IDENT_SIZE);
-            magic_seed = rd_long();
-            town_seed = rd_long();
+            game.magic_seed = rd_long();
+            game.town_seed = rd_long();
             last_message_id = rd_short();
             for (auto &message : messages) {
                 rd_string(message);
@@ -687,9 +687,9 @@ bool loadGame(bool &generate) {
             panic_save_short = rd_short();
             total_winner_short = rd_short();
             panic_save = panic_save_short != 0;
-            total_winner = total_winner_short != 0;
+            game.total_winner = total_winner_short != 0;
 
-            noscore = rd_short();
+            game.noscore = rd_short();
             rd_shorts(py.base_hp_levels, PLAYER_MAX_LEVEL);
 
             for (auto &store : stores) {
@@ -709,7 +709,7 @@ bool loadGame(bool &generate) {
             }
 
             time_saved = rd_long();
-            rd_string(character_died_from);
+            rd_string(game.character_died_from);
             character_max_score = rd_long();
             py.misc.date_of_birth = rd_long();
         }
@@ -717,7 +717,7 @@ bool loadGame(bool &generate) {
         c = getc(fileptr);
         if (c == EOF || ((l & 0x80000000L) != 0)) {
             if ((l & 0x80000000L) == 0) {
-                if (!to_be_wizard || dg.game_turn < 0) {
+                if (!game.to_be_wizard || dg.game_turn < 0) {
                     goto error;
                 }
                 putStringClearToEOL("Attempting a resurrection!", Coord_t{0, 0});
@@ -737,11 +737,11 @@ bool loadGame(bool &generate) {
                 }
 
                 dg.current_level = 0; // Resurrect on the town level.
-                character_generated = true;
+                game.character_generated = true;
 
                 // set `noscore` to indicate a resurrection, and don't enter wizard mode
-                to_be_wizard = false;
-                noscore |= 0x1;
+                game.to_be_wizard = false;
+                game.noscore |= 0x1;
             } else {
                 // Make sure that this message is seen, since it is a bit
                 // more interesting than the other messages.
@@ -845,9 +845,9 @@ bool loadGame(bool &generate) {
         } else {
             // don't overwrite the killed by string if character is dead
             if (py.misc.current_hp >= 0) {
-                (void) strcpy(character_died_from, "(alive and well)");
+                (void) strcpy(game.character_died_from, "(alive and well)");
             }
-            character_generated = true;
+            game.character_generated = true;
         }
 
         closefiles:
@@ -871,9 +871,9 @@ bool loadGame(bool &generate) {
 
             if (panic_save) {
                 printMessage("This game is from a panic save.  Score will not be added to scoreboard.");
-            } else if ((!noscore) & 0x04) {
+            } else if ((!game.noscore) & 0x04) {
                 printMessage("This character is already on the scoreboard; it will not be scored again.");
-                noscore |= 0x4;
+                game.noscore |= 0x4;
             }
 
             if (dg.game_turn >= 0) { // Only if a full restoration.
@@ -905,7 +905,7 @@ bool loadGame(bool &generate) {
                 }
             }
 
-            if (noscore != 0) {
+            if (game.noscore != 0) {
                 printMessage("This save file cannot be used to get on the score board.");
             }
             if (validGameVersion(version_maj, version_min, patch_level) && !isCurrentGameVersion(version_maj, version_min, patch_level)) {

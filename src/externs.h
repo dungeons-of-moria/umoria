@@ -11,25 +11,14 @@ extern int hack_monptr;
 extern FILE *highscore_fp;
 
 extern Config_t config;
+extern Game_t game;
 extern Dungeon_t dg;
 
 extern int32_t character_max_score;
 
 extern bool screen_has_changed;
 
-extern bool player_free_turn;
 extern bool teleport_player;
-
-extern bool total_winner;
-extern bool character_generated;
-extern bool character_saved;
-extern bool character_is_dead;
-extern vtype_t character_died_from;
-
-extern char doing_inventory_command;
-extern char last_command;
-extern int command_count;
-extern bool use_last_direction;
 
 extern bool message_ready_to_print;
 extern vtype_t messages[MESSAGE_HISTORY_SIZE];
@@ -38,15 +27,8 @@ extern int16_t last_message_id;
 // Converted to uint16_t when saving the game.
 extern int16_t missiles_counter;
 
-extern uint32_t magic_seed;
-extern uint32_t town_seed;
-
 extern int eof_flag;
 extern bool panic_save;
-extern int16_t noscore;
-
-extern bool to_be_wizard;
-extern bool wizard_mode;
 
 // Following are player variables
 extern Player_t py;

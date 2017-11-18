@@ -660,8 +660,8 @@ uint32_t monsterDeath(int y, int x, uint32_t flags) {
     }
 
     // maybe the player died in mid-turn
-    if (((flags & CM_WIN) != 0u) && !character_is_dead) {
-        total_winner = true;
+    if (((flags & CM_WIN) != 0u) && !game.character_is_dead) {
+        game.total_winner = true;
 
         printCharacterWinner();
 
@@ -1016,7 +1016,7 @@ void playerMove(int direction, bool do_pickup) {
             } else {
                 playerEndRunning();
             }
-            player_free_turn = true;
+            game.player_free_turn = true;
         }
     } else {
         // Attacking a creature!
@@ -1028,7 +1028,7 @@ void playerMove(int direction, bool do_pickup) {
         // if player can see monster, and was in find mode, then nothing
         if (monster.lit && (old_find_flag != 0)) {
             // did not do anything this turn
-            player_free_turn = true;
+            game.player_free_turn = true;
         } else {
             playerAttackPosition(y, x);
         }
@@ -1150,7 +1150,7 @@ static void openClosedDoor(int y, int x) {
         inventoryItemCopyTo(OBJ_OPEN_DOOR, treasure_list[tile.treasure_id]);
         tile.feature_id = TILE_CORR_FLOOR;
         dungeonLiteSpot(y, x);
-        command_count = 0;
+        game.command_count = 0;
     }
 }
 
@@ -1236,7 +1236,7 @@ void objectOpen() {
     }
 
     if (no_object) {
-        player_free_turn = true;
+        game.player_free_turn = true;
         printMessage("I do not see anything you can open there.");
     }
 }
@@ -1279,7 +1279,7 @@ void dungeonCloseDoor() {
     }
 
     if (no_object) {
-        player_free_turn = true;
+        game.player_free_turn = true;
         printMessage("I do not see anything you can close there.");
     }
 }

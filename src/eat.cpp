@@ -36,7 +36,7 @@ enum class FoodMagicTypes {
 
 // Eat some food. -RAK-
 void playerEat() {
-    player_free_turn = true;
+    game.player_free_turn = true;
 
     if (inventory_count == 0) {
         printMessage("But you are not carrying anything.");
@@ -54,7 +54,7 @@ void playerEat() {
         return;
     }
 
-    player_free_turn = false;
+    game.player_free_turn = false;
 
     bool identified = false;
 

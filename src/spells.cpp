@@ -1917,7 +1917,7 @@ void spellCreateFood() {
     // take no action here, don't want to destroy object under player
     if (tile.treasure_id != 0) {
         // set player_free_turn so that scroll/spell points won't be used
-        player_free_turn = true;
+        game.player_free_turn = true;
 
         printMessage("There is already an object under you.");
 

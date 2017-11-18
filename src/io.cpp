@@ -287,7 +287,7 @@ void printMessage(const char *msg) {
         return;
     }
 
-    command_count = 0;
+    game.command_count = 0;
     message_ready_to_print = true;
 
     // If the new message and the old message are short enough,
@@ -313,12 +313,12 @@ void printMessage(const char *msg) {
 // Print a message so as not to interrupt a counted command. -CJS-
 void printMessageNoCommandInterrupt(const std::string &msg) {
     // Save command count value
-    int i = command_count;
+    int i = game.command_count;
 
     printMessage(msg.c_str());
 
     // Restore count value
-    command_count = i;
+    game.command_count = i;
 }
 
 // Returns a single character input from the terminal. -CJS-
@@ -328,7 +328,7 @@ void printMessageNoCommandInterrupt(const std::string &msg) {
 // any input prompt. getKeyInput() never returns ^R.
 char getKeyInput() {
     putQIO();         // Dump IO buffer
-    command_count = 0; // Just to be safe -CJS-
+    game.command_count = 0; // Just to be safe -CJS-
 
     while (true) {
         int ch = getch();
@@ -342,7 +342,7 @@ char getKeyInput() {
 
             (void) refresh();
 
-            if (!character_generated || character_saved) {
+            if (!game.character_generated || game.character_saved) {
                 exitGame();
             }
 
@@ -352,10 +352,10 @@ char getKeyInput() {
                 // just in case, to make sure that the process eventually dies
                 panic_save = true;
 
-                (void) strcpy(character_died_from, "(end of input: panic saved)");
+                (void) strcpy(game.character_died_from, "(end of input: panic saved)");
                 if (!saveGame()) {
-                    (void) strcpy(character_died_from, "panic: unexpected eof");
-                    character_is_dead = true;
+                    (void) strcpy(game.character_died_from, "panic: unexpected eof");
+                    game.character_is_dead = true;
                 }
                 exitGame();
             }

@@ -202,7 +202,7 @@ static bool staffDischarge(Inventory_t &item) {
 
 // Use a staff. -RAK-
 void useStaff() {
-    player_free_turn = true;
+    game.player_free_turn = true;
 
     int item_pos_start, item_pos_end;
     if (!staffPlayerIsCarrying(item_pos_start, item_pos_end)) {
@@ -215,7 +215,7 @@ void useStaff() {
     }
 
     // From here on player uses up a turn
-    player_free_turn = false;
+    game.player_free_turn = false;
 
     Inventory_t &item = inventory[item_id];
 

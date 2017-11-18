@@ -503,11 +503,11 @@ void printCharacterMovementState() {
         return;
     }
 
-    if (command_count > 0) {
+    if (game.command_count > 0) {
         char repeatString[16];
 
         if (config.display_counts) {
-            (void) sprintf(repeatString, "Repeat %-3d", command_count);
+            (void) sprintf(repeatString, "Repeat %-3d", game.command_count);
         } else {
             (void) strcpy(repeatString, "Repeat");
         }
@@ -566,17 +566,17 @@ void printCharacterStudyInstruction() {
 
 // Prints winner status on display -RAK-
 void printCharacterWinner() {
-    if ((noscore & 0x2) != 0) {
-        if (wizard_mode) {
+    if ((game.noscore & 0x2) != 0) {
+        if (game.wizard_mode) {
             putString("Is wizard  ", Coord_t{22, 0});
         } else {
             putString("Was wizard ", Coord_t{22, 0});
         }
-    } else if ((noscore & 0x1) != 0) {
+    } else if ((game.noscore & 0x1) != 0) {
         putString("Resurrected", Coord_t{22, 0});
-    } else if ((noscore & 0x4) != 0) {
+    } else if ((game.noscore & 0x4) != 0) {
         putString("Duplicate", Coord_t{22, 0});
-    } else if (total_winner) {
+    } else if (game.total_winner) {
         putString("*Winner*   ", Coord_t{22, 0});
     }
 }
@@ -930,7 +930,7 @@ void printCharacterInformation() {
     putString("Sex         :", Coord_t{4, 1});
     putString("Class       :", Coord_t{5, 1});
 
-    if (!character_generated) {
+    if (!game.character_generated) {
         return;
     }
 
@@ -1792,7 +1792,7 @@ void playerGainSpells() {
         (void) sprintf(tmp_str, "You can't learn any new %ss!", (stat == A_INT ? "spell" : "prayer"));
         printMessage(tmp_str);
 
-        player_free_turn = true;
+        game.player_free_turn = true;
         return;
     }
 
@@ -2038,14 +2038,14 @@ void playerCalculateHitPoints() {
 bool enterWizardMode() {
     bool answer = false;
 
-    if (noscore == 0) {
+    if (game.noscore == 0) {
         printMessage("Wizard mode is for debugging and experimenting.");
         answer = getInputConfirmation("The game will not be scored if you enter wizard mode. Are you sure?");
     }
 
-    if ((noscore != 0) || answer) {
-        noscore |= 0x2;
-        wizard_mode = true;
+    if ((game.noscore != 0) || answer) {
+        game.noscore |= 0x2;
+        game.wizard_mode = true;
         return true;
     }
 

@@ -14,7 +14,7 @@
 void recordNewHighScore() {
     clearScreen();
 
-    if (noscore != 0) {
+    if (game.noscore != 0) {
         return;
     }
 
@@ -37,7 +37,7 @@ void recordNewHighScore() {
     new_entry.character_class = py.misc.class_id;
     (void) strcpy(new_entry.name, py.misc.name);
 
-    char *tmp = character_died_from;
+    char *tmp = game.character_died_from;
     if ('a' == *tmp) {
         if ('n' == *(++tmp)) {
             tmp++;
@@ -101,7 +101,7 @@ void recordNewHighScore() {
         // under unix, only allow one gender/race/class combo per person,
         // on single user system, allow any number of entries, but try to
         // prevent multiple entries per character by checking for case when
-        // birthdate/gender/race/class are the same, and character_died_from
+        // birthdate/gender/race/class are the same, and game.character_died_from
         // of score file entry is "(saved)"
         if (((new_entry.uid != 0 && new_entry.uid == old_entry.uid) ||
              (new_entry.uid == 0 && (strcmp(old_entry.died_from, "(saved)") == 0) && new_entry.birth_date == old_entry.birth_date)) &&
@@ -138,7 +138,7 @@ void recordNewHighScore() {
             // under unix, only allow one gender/race/class combo per person,
             // on single user system, allow any number of entries, but try to
             // prevent multiple entries per character by checking for case when
-            // birth_date/gender/race/class are the same, and character_died_from
+            // birth_date/gender/race/class are the same, and game.character_died_from
             // of score file entry is "(saved)"
             if (((new_entry.uid != 0 && new_entry.uid == old_entry.uid) ||
                  (new_entry.uid == 0 && (strcmp(old_entry.died_from, "(saved)") == 0) && new_entry.birth_date == old_entry.birth_date)) &&

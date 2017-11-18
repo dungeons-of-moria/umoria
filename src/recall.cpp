@@ -25,7 +25,7 @@ static int roff_print_line;                 // Place to print line now being loa
 
 // Do we know anything about this monster?
 bool memoryMonsterKnown(const Recall_t &memory) {
-    if (wizard_mode) {
+    if (game.wizard_mode) {
         return true;
     }
 
@@ -559,7 +559,7 @@ int memoryRecall(int monster_id) {
 
     Recall_t saved_memory{};
 
-    if (wizard_mode) {
+    if (game.wizard_mode) {
         saved_memory = memory;
         memoryWizardModeInit(memory, creature);
     }
@@ -633,7 +633,7 @@ int memoryRecall(int monster_id) {
     memoryPrint("\n");
     putStringClearToEOL("--pause--", Coord_t{roff_print_line, 0});
 
-    if (wizard_mode) {
+    if (game.wizard_mode) {
         memory = saved_memory;
     }
 

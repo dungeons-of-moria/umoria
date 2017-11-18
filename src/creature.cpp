@@ -38,7 +38,7 @@ void monsterUpdateVisibility(int monster_id) {
     Monster_t &monster = monsters[monster_id];
 
     if (monster.distance_from_player <= MON_MAX_SIGHT && ((py.flags.status & PY_BLIND) == 0u) && coordInsidePanel(Coord_t{monster.y, monster.x})) {
-        if (wizard_mode) {
+        if (game.wizard_mode) {
             // Wizard sight.
             visible = true;
         } else if (los(py.row, py.col, (int) monster.y, (int) monster.x)) {
@@ -822,7 +822,7 @@ static void monsterConfuseOnAttack(const Creature_t &creature, Monster_t &monste
 
         printMessage(msg);
 
-        if (visible && !character_is_dead && randomNumber(4) == 1) {
+        if (visible && !game.character_is_dead && randomNumber(4) == 1) {
             creature_recall[monster.creature_id].defenses |= creature.defenses & CD_NO_SLEEP;
         }
     }
@@ -832,7 +832,7 @@ static void monsterConfuseOnAttack(const Creature_t &creature, Monster_t &monste
 // Make an attack on the player (chuckle.) -RAK-
 static void monsterAttackPlayer(int monster_id) {
     // don't beat a dead body!
-    if (character_is_dead) {
+    if (game.character_is_dead) {
         return;
     }
 
@@ -854,7 +854,7 @@ static void monsterAttackPlayer(int monster_id) {
     vtype_t description = {'\0'};
 
     for (auto &damage_type_id : creature.damage) {
-        if (damage_type_id == 0 || character_is_dead) break;
+        if (damage_type_id == 0 || game.character_is_dead) break;
 
         attack_type = monster_attacks[damage_type_id].type_id;
         attack_desc = monster_attacks[damage_type_id].description_id;
@@ -903,7 +903,7 @@ static void monsterAttackPlayer(int monster_id) {
                 creature_recall[monster.creature_id].attacks[attack_counter]++;
             }
 
-            if (character_is_dead && creature_recall[monster.creature_id].deaths < MAX_SHORT) {
+            if (game.character_is_dead && creature_recall[monster.creature_id].deaths < MAX_SHORT) {
                 creature_recall[monster.creature_id].deaths++;
             }
         } else {
@@ -1292,7 +1292,7 @@ void monsterExecuteCastingOfSpell(Monster_t &monster, int monster_id, int spell_
 //   castSpellGetId = true if creature changes position
 //   return true (took_turn) if creature casts a spell
 static bool monsterCastSpell(int monster_id) {
-    if (character_is_dead) {
+    if (game.character_is_dead) {
         return false;
     }
 
@@ -1351,7 +1351,7 @@ static bool monsterCastSpell(int monster_id) {
         if ((creature_recall[monster.creature_id].spells & CS_FREQ) != CS_FREQ) {
             creature_recall[monster.creature_id].spells++;
         }
-        if (character_is_dead && creature_recall[monster.creature_id].deaths < MAX_SHORT) {
+        if (game.character_is_dead && creature_recall[monster.creature_id].deaths < MAX_SHORT) {
             creature_recall[monster.creature_id].deaths++;
         }
     }
@@ -1750,7 +1750,7 @@ static void monsterAttackingUpdate(Monster_t &monster, int monster_id, int moves
 // Creatures movement and attacking are done from here -RAK-
 void updateMonsters(bool attack) {
     // Process the monsters
-    for (int id = next_free_monster_id - 1; id >= MON_MIN_INDEX_ID && !character_is_dead; id--) {
+    for (int id = next_free_monster_id - 1; id >= MON_MIN_INDEX_ID && !game.character_is_dead; id--) {
         Monster_t &monster = monsters[id];
 
         // Get rid of an eaten/breathed on monster.  Note: Be sure not to

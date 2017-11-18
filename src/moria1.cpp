@@ -551,10 +551,10 @@ static bool verify(const char *prompt, int item) {
 //
 // It is intended that this function be called several times in succession,
 // as some commands take up a turn, and the rest of moria must proceed in the
-// interim. A global variable is provided, doing_inventory_command, which is normally
+// interim. A global variable is provided, game.doing_inventory_command, which is normally
 // zero; however if on return from inventoryExecuteCommand() it is expected that
 // inventoryExecuteCommand() should be called *again*, (being still in inventory command
-// input mode), then doing_inventory_command is set to the inventory command character
+// input mode), then game.doing_inventory_command is set to the inventory command character
 // which should be used in the next call to inventoryExecuteCommand().
 //
 // On return, the screen is restored, but not flushed. Provided no flush of
@@ -642,13 +642,13 @@ static void displayInventoryScreen(int new_screen) {
 
 static void setInventoryCommandScreenState(char command) {
     // Take up where we left off after a previous inventory command. -CJS-
-    if (doing_inventory_command != 0) {
+    if (game.doing_inventory_command != 0) {
         // If the screen has been flushed, we need to redraw. If the command
         // is a simple ' ' to recover the screen, just quit. Otherwise, check
         // and see what the user wants.
         if (screen_has_changed) {
             if (command == ' ' || !getInputConfirmation("Continuing with inventory command?")) {
-                doing_inventory_command = 0;
+                game.doing_inventory_command = 0;
                 return;
             }
             screen_left = 50;
@@ -692,7 +692,7 @@ static bool inventoryTakeOffItem(bool selecting) {
         return selecting;
     }
 
-    if (inventory_count >= EQUIPMENT_WIELD && (doing_inventory_command == 0)) {
+    if (inventory_count >= EQUIPMENT_WIELD && (game.doing_inventory_command == 0)) {
         printMessage("You will have to drop something first.");
         return selecting;
     }
@@ -766,7 +766,7 @@ static void inventoryUnwieldItem() {
         return;
     }
 
-    player_free_turn = false;
+    game.player_free_turn = false;
 
     Inventory_t savedItem = inventory[EQUIPMENT_AUX];
     inventory[EQUIPMENT_AUX] = inventory[EQUIPMENT_WIELD];
@@ -961,7 +961,7 @@ static bool selectItemCommands(char *command, char *which, bool selecting) {
     const char *prompt = nullptr;
     const char *swap = nullptr;
 
-    while (selecting && player_free_turn) {
+    while (selecting && game.player_free_turn) {
         swap = "";
 
         if (*command == 'w') {
@@ -1081,7 +1081,7 @@ static bool selectItemCommands(char *command, char *which, bool selecting) {
 
                 playerStrength();
 
-                player_free_turn = false;
+                game.player_free_turn = false;
 
                 if (*command == 'r') {
                     selecting = false;
@@ -1113,7 +1113,7 @@ static bool selectItemCommands(char *command, char *which, bool selecting) {
 
             // OK. Wear it.
             if (item_id >= 0) {
-                player_free_turn = false;
+                game.player_free_turn = false;
 
                 // first remove new item from inventory
                 Inventory_t savedItem = inventory[item_id];
@@ -1228,7 +1228,7 @@ static bool selectItemCommands(char *command, char *which, bool selecting) {
             }
 
             if (item_id >= 0) {
-                player_free_turn = false;
+                game.player_free_turn = false;
 
                 inventoryDropItem(item_id, query == 'y');
                 playerStrength();
@@ -1243,7 +1243,7 @@ static bool selectItemCommands(char *command, char *which, bool selecting) {
             }
         }
 
-        if (!player_free_turn && screen_state == BLANK_SCR) {
+        if (!game.player_free_turn && screen_state == BLANK_SCR) {
             selecting = false;
         }
     }
@@ -1298,7 +1298,7 @@ static void inventoryDisplayAppropriateHeader() {
 
 // This does all the work.
 void inventoryExecuteCommand(char command) {
-    player_free_turn = true;
+    game.player_free_turn = true;
 
     terminalSaveScreen();
     setInventoryCommandScreenState(command);
@@ -1341,9 +1341,9 @@ void inventoryExecuteCommand(char command) {
                 break;
         }
 
-        // Clear the doing_inventory_command flag here, instead of at beginning, so that
+        // Clear the game.doing_inventory_command flag here, instead of at beginning, so that
         // can use it to control when messages above appear.
-        doing_inventory_command = 0;
+        game.doing_inventory_command = 0;
 
         // Keep looking for objects to drop/wear/take off/throw off
         char which = 'z';
@@ -1352,13 +1352,13 @@ void inventoryExecuteCommand(char command) {
 
         if (which == ESCAPE || screen_state == BLANK_SCR) {
             command = ESCAPE;
-        } else if (!player_free_turn) {
+        } else if (!game.player_free_turn) {
             // Save state for recovery if they want to call us again next turn.
             // Otherwise, set a dummy command to recover screen.
             if (selecting) {
-                doing_inventory_command = command;
+                game.doing_inventory_command = command;
             } else {
-                doing_inventory_command = ' ';
+                game.doing_inventory_command = ' ';
             }
 
             // flush last message before clearing screen_has_changed and exiting
@@ -1458,7 +1458,7 @@ bool inventoryGetInputForItemId(int &command_key_id, const char *prompt, int ite
                     screen_id = -1;
                     command_finished = true;
 
-                    player_free_turn = true;
+                    game.player_free_turn = true;
 
                     break;
                 case '/':
@@ -1549,7 +1549,7 @@ bool inventoryGetInputForItemId(int &command_key_id, const char *prompt, int ite
                             screen_id = -1;
                             command_finished = true;
 
-                            player_free_turn = true;
+                            game.player_free_turn = true;
 
                             break;
                         }
@@ -1621,7 +1621,7 @@ bool getDirectionWithMemory(char *prompt, int &direction) {
     static char prev_dir; // Direction memory. -CJS-
 
     // used in counted commands. -CJS-
-    if (use_last_direction) {
+    if (game.use_last_direction) {
         direction = prev_dir;
         return true;
     }
@@ -1634,14 +1634,14 @@ bool getDirectionWithMemory(char *prompt, int &direction) {
 
     while (true) {
         // Don't end a counted command. -CJS-
-        int save = command_count;
+        int save = game.command_count;
 
         if (!getCommand(prompt, command)) {
-            player_free_turn = true;
+            game.player_free_turn = true;
             return false;
         }
 
-        command_count = save;
+        game.command_count = save;
 
         if (config.use_roguelike_keys) {
             command = mapRoguelikeKeysToKeypad(command);
@@ -1664,7 +1664,7 @@ bool getAllDirections(const char *prompt, int &direction) {
 
     while (true) {
         if (!getCommand(prompt, command)) {
-            player_free_turn = true;
+            game.player_free_turn = true;
             return false;
         }
 
@@ -1830,7 +1830,7 @@ void dungeonMoveCharacterLight(int y1, int x1, int y2, int x2) {
 // The first arg indicates a major disturbance, which affects search.
 // The second arg indicates a light change.
 void playerDisturb(int major_disturbance, int light_disturbance) {
-    command_count = 0;
+    game.command_count = 0;
 
     if ((major_disturbance != 0) && ((py.flags.status & PY_SEARCH) != 0u)) {
         playerSearchOff();
@@ -1875,9 +1875,9 @@ void playerSearchOff() {
 void playerRestOn() {
     int rest_num;
 
-    if (command_count > 0) {
-        rest_num = command_count;
-        command_count = 0;
+    if (game.command_count > 0) {
+        rest_num = game.command_count;
+        game.command_count = 0;
     } else {
         rest_num = 0;
         vtype_t rest_str = {'\0'};
@@ -1917,7 +1917,7 @@ void playerRestOn() {
     }
     messageLineClear();
 
-    player_free_turn = true;
+    game.player_free_turn = true;
 }
 
 void playerRestOff() {
@@ -1946,7 +1946,7 @@ bool playerTestBeingHit(int base_to_hit, int level, int plus_to_hit, int armor_c
     return (die != 1 && (die == 20 || (hit_chance > 0 && randomNumber(hit_chance) > armor_class)));
 }
 
-// Decreases players hit points and sets character_is_dead flag if necessary -RAK-
+// Decreases players hit points and sets game.character_is_dead flag if necessary -RAK-
 void playerTakesHit(int damage, const char *creature_name_label) {
     if (py.flags.invulnerability > 0) {
         damage = 0;
@@ -1958,12 +1958,12 @@ void playerTakesHit(int damage, const char *creature_name_label) {
         return;
     }
 
-    if (!character_is_dead) {
-        character_is_dead = true;
+    if (!game.character_is_dead) {
+        game.character_is_dead = true;
 
-        (void) strcpy(character_died_from, creature_name_label);
+        (void) strcpy(game.character_died_from, creature_name_label);
 
-        total_winner = false;
+        game.total_winner = false;
     }
 
     dg.generate_new_level = true;

@@ -33,7 +33,7 @@ static void inventoryRefillLamp();
 
 // Reset flags and initialize variables
 static void resetDungeonFlags() {
-    command_count = 0;
+    game.command_count = 0;
     dg.generate_new_level = false;
     py.running_tracker = 0;
     teleport_player = false;
@@ -778,7 +778,7 @@ static int getCommandRepeatCount(char &lastInputCommand) {
 }
 
 static char parseAlternateCtrlInput(char lastInputCommand) {
-    if (command_count > 0) {
+    if (game.command_count > 0) {
         printCharacterMovementState();
     }
 
@@ -808,8 +808,8 @@ static void executeInputCommands(char &command, int &find_count) {
             printCharacterMovementState();
         }
 
-        use_last_direction = false;
-        player_free_turn = false;
+        game.use_last_direction = false;
+        game.player_free_turn = false;
 
         if (py.running_tracker != 0) {
             playerRunAndFind();
@@ -823,8 +823,8 @@ static void executeInputCommands(char &command, int &find_count) {
             continue;
         }
 
-        if (doing_inventory_command != 0) {
-            inventoryExecuteCommand(doing_inventory_command);
+        if (game.doing_inventory_command != 0) {
+            inventoryExecuteCommand(game.doing_inventory_command);
             continue;
         }
 
@@ -833,8 +833,8 @@ static void executeInputCommands(char &command, int &find_count) {
 
         message_ready_to_print = false;
 
-        if (command_count > 0) {
-            use_last_direction = true;
+        if (game.command_count > 0) {
+            game.use_last_direction = true;
         } else {
             lastInputCommand = getKeyInput();
 
@@ -859,11 +859,11 @@ static void executeInputCommands(char &command, int &find_count) {
 
             if (repeat_count > 0) {
                 if (!validCountCommand(lastInputCommand)) {
-                    player_free_turn = true;
+                    game.player_free_turn = true;
                     lastInputCommand = ' ';
                     printMessage("Invalid command with a count.");
                 } else {
-                    command_count = repeat_count;
+                    game.command_count = repeat_count;
                     printCharacterMovementState();
                 }
             }
@@ -878,14 +878,14 @@ static void executeInputCommands(char &command, int &find_count) {
 
         // Find is counted differently, as the command changes.
         if (py.running_tracker != 0) {
-            find_count = command_count - 1;
-            command_count = 0;
-        } else if (player_free_turn) {
-            command_count = 0;
-        } else if (command_count != 0) {
-            command_count--;
+            find_count = game.command_count - 1;
+            game.command_count = 0;
+        } else if (game.player_free_turn) {
+            game.command_count = 0;
+        } else if (game.command_count != 0) {
+            game.command_count--;
         }
-    } while (player_free_turn && !dg.generate_new_level && (eof_flag == 0));
+    } while (game.player_free_turn && !dg.generate_new_level && (eof_flag == 0));
 
     command = lastInputCommand;
 }
@@ -960,7 +960,7 @@ void playDungeon() {
 
         // Check for interrupts to find or rest.
         int microseconds = (py.running_tracker != 0 ? 0 : 10000);
-        if ((command_count > 0 || (py.running_tracker != 0) || py.flags.rest != 0) && checkForNonBlockingKeyPress(microseconds)) {
+        if ((game.command_count > 0 || (py.running_tracker != 0) || py.flags.rest != 0) && checkForNonBlockingKeyPress(microseconds)) {
             playerDisturb(0, 0);
         }
 
@@ -1010,7 +1010,7 @@ void playDungeon() {
         }
 
         // Accept a command?
-        if (py.flags.paralysis < 1 && py.flags.rest == 0 && !character_is_dead) {
+        if (py.flags.paralysis < 1 && py.flags.rest == 0 && !game.character_is_dead) {
             executeInputCommands(lastInputCommand, find_count);
         } else {
             // if paralyzed, resting, or dead, flush output
@@ -1266,12 +1266,12 @@ static bool moveWithoutPickup(char *command) {
 
     int dir_val;
 
-    // Save current command_count as getDirectionWithMemory() may change it
-    int countSave = command_count;
+    // Save current game.command_count as getDirectionWithMemory() may change it
+    int countSave = game.command_count;
 
     if (getDirectionWithMemory(CNIL, dir_val)) {
-        // Restore command_count
-        command_count = countSave;
+        // Restore game.command_count
+        game.command_count = countSave;
 
         switch (dir_val) {
             case 1:
@@ -1315,22 +1315,22 @@ static void commandQuit() {
     flushInputBuffer();
 
     if (getInputConfirmation("Do you really want to quit?")) {
-        character_is_dead = true;
+        game.character_is_dead = true;
         dg.generate_new_level = true;
 
-        (void) strcpy(character_died_from, "Quitting");
+        (void) strcpy(game.character_died_from, "Quitting");
     }
 }
 
 static uint8_t calculateMaxMessageCount() {
     uint8_t max_messages = MESSAGE_HISTORY_SIZE;
 
-    if (command_count > 0) {
-        if (command_count < MESSAGE_HISTORY_SIZE) {
-            max_messages = (uint8_t) command_count;
+    if (game.command_count > 0) {
+        if (game.command_count < MESSAGE_HISTORY_SIZE) {
+            max_messages = (uint8_t) game.command_count;
         }
-        command_count = 0;
-    } else if (last_command != CTRL_KEY('P')) {
+        game.command_count = 0;
+    } else if (game.last_command != CTRL_KEY('P')) {
         max_messages = 1;
     }
 
@@ -1370,8 +1370,8 @@ static void commandPreviousMessage() {
 }
 
 static void commandFlipWizardMode() {
-    if (wizard_mode) {
-        wizard_mode = false;
+    if (game.wizard_mode) {
+        game.wizard_mode = false;
         printMessage("Wizard mode off.");
     } else if (enterWizardMode()) {
         printMessage("Wizard mode on.");
@@ -1381,7 +1381,7 @@ static void commandFlipWizardMode() {
 }
 
 static void commandSaveAndExit() {
-    if (total_winner) {
+    if (game.total_winner) {
         printMessage("You are a Total Winner,  your character must be retired.");
 
         if (config.use_roguelike_keys) {
@@ -1390,14 +1390,14 @@ static void commandSaveAndExit() {
             printMessage("Use <Control>-K when you are ready to quit.");
         }
     } else {
-        (void) strcpy(character_died_from, "(saved)");
+        (void) strcpy(game.character_died_from, "(saved)");
         printMessage("Saving game...");
 
         if (saveGame()) {
             exitGame();
         }
 
-        (void) strcpy(character_died_from, "(alive and well)");
+        (void) strcpy(game.character_died_from, "(alive and well)");
     }
 }
 
@@ -1512,9 +1512,9 @@ static void doWizardCommands(char com_val) {
             break;
         case CTRL_KEY('G'):
             // Generate random items
-            if (command_count > 0) {
-                i = command_count;
-                command_count = 0;
+            if (game.command_count > 0) {
+                i = game.command_count;
+                game.command_count = 0;
             } else {
                 i = 1;
             }
@@ -1524,13 +1524,13 @@ static void doWizardCommands(char com_val) {
             break;
         case CTRL_KEY('D'):
             // Go up/down to specified depth
-            if (command_count > 0) {
-                if (command_count > 99) {
+            if (game.command_count > 0) {
+                if (game.command_count > 99) {
                     i = 0;
                 } else {
-                    i = command_count;
+                    i = game.command_count;
                 }
-                command_count = 0;
+                game.command_count = 0;
             } else {
                 i = -1;
                 vtype_t input = {0};
@@ -1587,9 +1587,9 @@ static void doWizardCommands(char com_val) {
             break;
         case '+':
             // Increase Experience
-            if (command_count > 0) {
-                py.misc.exp = command_count;
-                command_count = 0;
+            if (game.command_count > 0) {
+                py.misc.exp = game.command_count;
+                game.command_count = 0;
             } else if (py.misc.exp == 0) {
                 py.misc.exp = 1;
             } else {
@@ -1625,42 +1625,42 @@ static void doCommand(char command) {
     switch (command) {
         case 'Q': // (Q)uit    (^K)ill
             commandQuit();
-            player_free_turn = true;
+            game.player_free_turn = true;
             break;
         case CTRL_KEY('P'): // (^P)revious message.
             commandPreviousMessage();
-            player_free_turn = true;
+            game.player_free_turn = true;
             break;
         case CTRL_KEY('V'): // (^V)iew license
             displayTextHelpFile(config.files.license);
-            player_free_turn = true;
+            game.player_free_turn = true;
             break;
         case CTRL_KEY('W'): // (^W)izard mode
             commandFlipWizardMode();
-            player_free_turn = true;
+            game.player_free_turn = true;
             break;
         case CTRL_KEY('X'): // e(^X)it and save
             commandSaveAndExit();
-            player_free_turn = true;
+            game.player_free_turn = true;
             break;
         case '=': // (=) set options
             terminalSaveScreen();
             setGameOptions();
             terminalRestoreScreen();
-            player_free_turn = true;
+            game.player_free_turn = true;
             break;
         case '{': // ({) inscribe an object
             itemInscribe();
-            player_free_turn = true;
+            game.player_free_turn = true;
             break;
         case '!': // (!) escape to the shell
         case '$':
             // escaping to shell disabled -MRC-
-            player_free_turn = true;
+            game.player_free_turn = true;
             break;
         case ESCAPE: // (ESC)   do nothing.
         case ' ':    // (space) do nothing.
-            player_free_turn = true;
+            game.player_free_turn = true;
             break;
         case 'b': // (b) down, left  (1)
             playerMove(1, do_pickup);
@@ -1712,13 +1712,13 @@ static void doCommand(char command) {
             break;
         case '/': // (/) identify a symbol
             displayWorldObjectDescription();
-            player_free_turn = true;
+            game.player_free_turn = true;
             break;
         case '.': // (.) stay in one place (5)
             playerMove(5, do_pickup);
 
-            if (command_count > 1) {
-                command_count--;
+            if (game.command_count > 1) {
+                game.command_count--;
                 playerRestOn();
             }
             break;
@@ -1734,7 +1734,7 @@ static void doCommand(char command) {
             } else {
                 displayTextHelpFile(config.files.help);
             }
-            player_free_turn = true;
+            game.player_free_turn = true;
             break;
         case 'f': // (f)orce    (B)ash
             playerBash();
@@ -1743,7 +1743,7 @@ static void doCommand(char command) {
             terminalSaveScreen();
             changeCharacterName();
             terminalRestoreScreen();
-            player_free_turn = true;
+            game.player_free_turn = true;
             break;
         case 'D': // (D)isarm trap
             playerDisarmTrap();
@@ -1761,18 +1761,18 @@ static void doCommand(char command) {
             terminalSaveScreen();
             showScoresScreen();
             terminalRestoreScreen();
-            player_free_turn = true;
+            game.player_free_turn = true;
             break;
         case 'W': // (W)here are we on the map  (L)ocate on map
             commandLocateOnMap();
-            player_free_turn = true;
+            game.player_free_turn = true;
             break;
         case 'R': // (R)est a while
             playerRestOn();
             break;
         case '#': // (#) search toggle  (S)earch toggle
             commandToggleSearch();
-            player_free_turn = true;
+            game.player_free_turn = true;
             break;
         case CTRL_KEY('B'): // (^B) tunnel down left  (T 1)
             playerTunnel(1);
@@ -1804,11 +1804,11 @@ static void doCommand(char command) {
             break;
         case 'M':
             dungeonDisplayMap();
-            player_free_turn = true;
+            game.player_free_turn = true;
             break;
         case 'P': // (P)eruse a book  (B)rowse in a book
             examineBook();
-            player_free_turn = true;
+            game.player_free_turn = true;
             break;
         case 'c': // (c)lose an object
             dungeonCloseDoor();
@@ -1830,7 +1830,7 @@ static void doCommand(char command) {
             break;
         case 'x': // e(x)amine surrounds  (l)ook about
             look();
-            player_free_turn = true;
+            game.player_free_turn = true;
             break;
         case 'm': // (m)agic spells
             getAndCastMagicSpell();
@@ -1858,7 +1858,7 @@ static void doCommand(char command) {
             break;
         case 'v': // (v)ersion of game
             displayTextHelpFile(config.files.versions_history);
-            player_free_turn = true;
+            game.player_free_turn = true;
             break;
         case 'w': // (w)ear or wield
             inventoryExecuteCommand('w');
@@ -1868,15 +1868,15 @@ static void doCommand(char command) {
             break;
         default:
             // Wizard commands are free moves
-            player_free_turn = true;
+            game.player_free_turn = true;
 
-            if (wizard_mode) {
+            if (game.wizard_mode) {
                 doWizardCommands(command);
             } else {
                 putStringClearToEOL("Type '?' for help.", Coord_t{0, 0});
             }
     }
-    last_command = command;
+    game.last_command = command;
 }
 
 // Check whether this command will accept a count. -CJS-
@@ -2147,7 +2147,7 @@ static void dungeonGoUpLevel() {
         dg.generate_new_level = true;
     } else {
         printMessage("I see no up staircase here.");
-        player_free_turn = true;
+        game.player_free_turn = true;
     }
 }
 
@@ -2164,13 +2164,13 @@ static void dungeonGoDownLevel() {
         dg.generate_new_level = true;
     } else {
         printMessage("I see no down staircase here.");
-        player_free_turn = true;
+        game.player_free_turn = true;
     }
 }
 
 // Jam a closed door -RAK-
 static void dungeonJamDoor() {
-    player_free_turn = true;
+    game.player_free_turn = true;
 
     int y = py.row;
     int x = py.col;
@@ -2206,7 +2206,7 @@ static void dungeonJamDoor() {
     if (tile.creature_id == 0) {
         int item_pos_start, item_pos_end;
         if (inventoryFindRange(TV_SPIKE, TV_NEVER, item_pos_start, item_pos_end)) {
-            player_free_turn = false;
+            game.player_free_turn = false;
 
             printMessageNoCommandInterrupt("You jam the door with a spike.");
 
@@ -2229,7 +2229,7 @@ static void dungeonJamDoor() {
             printMessage("But you have no spikes.");
         }
     } else {
-        player_free_turn = false;
+        game.player_free_turn = false;
 
         vtype_t msg = {'\0'};
         (void) sprintf(msg, "The %s is in your way!", creatures_list[monsters[tile.creature_id].creature_id].name);
@@ -2239,7 +2239,7 @@ static void dungeonJamDoor() {
 
 // Refill the players lamp -RAK-
 static void inventoryRefillLamp() {
-    player_free_turn = true;
+    game.player_free_turn = true;
 
     if (inventory[EQUIPMENT_LIGHT].sub_category_id != 0) {
         printMessage("But you are not using a lamp.");
@@ -2252,7 +2252,7 @@ static void inventoryRefillLamp() {
         return;
     }
 
-    player_free_turn = false;
+    game.player_free_turn = false;
 
     Inventory_t &item = inventory[EQUIPMENT_LIGHT];
     item.misc_use += inventory[item_pos_start].misc_use;

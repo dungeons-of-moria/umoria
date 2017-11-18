@@ -60,7 +60,7 @@ void startMoria(int seed, bool start_new_game, bool use_roguelike_keys) {
 
     // enter wizard mode before showing the character display, but must wait
     // until after loadGame() in case it was just a resurrection
-    if (to_be_wizard) {
+    if (game.to_be_wizard) {
         if (!enterWizardMode()) {
             exitGame();
         }
@@ -71,7 +71,7 @@ void startMoria(int seed, bool start_new_game, bool use_roguelike_keys) {
 
         // could be restoring a dead character after a signal or HANGUP
         if (py.misc.current_hp < 0) {
-            character_is_dead = true;
+            game.character_is_dead = true;
         }
     } else {
         // Create character
@@ -102,7 +102,7 @@ void startMoria(int seed, bool start_new_game, bool use_roguelike_keys) {
         // prevent ^c quit from entering score into scoreboard,
         // and prevent signal from creating panic save until this
         // point, all info needed for save file is now valid.
-        character_generated = true;
+        game.character_generated = true;
         generate = true;
     }
 
@@ -119,24 +119,24 @@ void startMoria(int seed, bool start_new_game, bool use_roguelike_keys) {
     }
 
     // Loop till dead, or exit
-    while (!character_is_dead) {
+    while (!game.character_is_dead) {
         // Dungeon logic
         playDungeon();
 
         // check for eof here, see getKeyInput() in io.c
         // eof can occur if the process gets a HANGUP signal
         if (eof_flag != 0) {
-            (void) strcpy(character_died_from, "(end of input: saved)");
+            (void) strcpy(game.character_died_from, "(end of input: saved)");
             if (!saveGame()) {
-                (void) strcpy(character_died_from, "unexpected eof");
+                (void) strcpy(game.character_died_from, "unexpected eof");
             }
 
             // should not reach here, but if we do, this guarantees exit
-            character_is_dead = true;
+            game.character_is_dead = true;
         }
 
         // New level if not dead
-        if (!character_is_dead) {
+        if (!game.character_is_dead) {
             generateCave();
         }
     }

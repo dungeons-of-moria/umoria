@@ -201,7 +201,7 @@ static void castSpell(int spell_id) {
 
 // Throw a magic spell -RAK-
 void getAndCastMagicSpell() {
-    player_free_turn = true;
+    game.player_free_turn = true;
 
     if (!canReadSpells()) {
         return;
@@ -228,7 +228,7 @@ void getAndCastMagicSpell() {
         return;
     }
 
-    player_free_turn = false;
+    game.player_free_turn = false;
 
     const Spell_t &magic_spell = magic_spells[py.misc.class_id - 1][choice];
 

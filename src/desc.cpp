@@ -17,7 +17,7 @@ char magic_item_titles[MAX_TITLES][10];
 void magicInitializeItemNames() {
     int id;
 
-    seedSet(magic_seed);
+    seedSet(game.magic_seed);
 
     // The first 3 entries for colors are fixed, (slime & apple juice, water)
     for (int i = 3; i < MAX_COLORS; i++) {

@@ -991,7 +991,7 @@ void storeEnter(int store_id) {
 
                     do {
                         inventoryExecuteCommand(command);
-                        command = doing_inventory_command;
+                        command = game.doing_inventory_command;
                     } while (command != 0);
 
                     // redisplay store prices if charisma changes
@@ -999,7 +999,7 @@ void storeEnter(int store_id) {
                         displayStoreInventory(stores[store_id], current_top_item_id);
                     }
 
-                    player_free_turn = false; // No free moves here. -CJS-
+                    game.player_free_turn = false; // No free moves here. -CJS-
                     break;
                 case 'p':
                     exit_store = storePurchaseAnItem(store_id, current_top_item_id);

@@ -17,7 +17,7 @@ static bool lookSee(int x, int y, bool &transparent);
 // somewhere where it has no effect.
 static bool playerCanTunnel(int treasure_id, int tile_id) {
     if (tile_id < MIN_CAVE_WALL && (treasure_id == 0 || (treasure_list[treasure_id].category_id != TV_RUBBLE && treasure_list[treasure_id].category_id != TV_SECRET_DOOR))) {
-        player_free_turn = true;
+        game.player_free_turn = true;
 
         if (treasure_id == 0) {
             printMessage("Tunnel through what?  Empty air?!?");
@@ -235,7 +235,7 @@ static void playerDisarmFloorTrap(int y, int x, int total, int level, int dir, i
 
 static void playerDisarmChestTrap(int y, int x, int total, Inventory_t *item) {
     if (!spellItemIdentified(*item)) {
-        player_free_turn = true;
+        game.player_free_turn = true;
         printMessage("I don't see a trap.");
 
         return;
@@ -270,7 +270,7 @@ static void playerDisarmChestTrap(int y, int x, int total, Inventory_t *item) {
     }
 
     printMessage("The chest was not trapped.");
-    player_free_turn = true;
+    game.player_free_turn = true;
 }
 
 // Disarms a trap -RAK-
@@ -308,7 +308,7 @@ void playerDisarmTrap() {
 
     if (no_disarm) {
         printMessage("I do not see anything to disarm there.");
-        player_free_turn = true;
+        game.player_free_turn = true;
     }
 }
 
@@ -859,7 +859,7 @@ static void inventoryDropOrThrowItem(int y, int x, Inventory_t *item) {
 void playerThrowItem() {
     if (inventory_count == 0) {
         printMessage("But you are not carrying anything.");
-        player_free_turn = true;
+        game.player_free_turn = true;
         return;
     }
 
@@ -1104,7 +1104,7 @@ static void playerBashClosedDoor(int y, int x, int dir, Tile_t &tile, Inventory_
         return;
     }
 
-    if (command_count == 0) {
+    if (game.command_count == 0) {
         printMessage("The door holds firm.");
     }
 }

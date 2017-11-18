@@ -309,7 +309,7 @@ void playerFindInitialize(int direction) {
     playerMove(direction, true);
 
     if (py.running_tracker == 0) {
-        command_count = 0;
+        game.command_count = 0;
     }
 }
 
