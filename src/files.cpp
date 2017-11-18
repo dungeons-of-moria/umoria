@@ -42,21 +42,18 @@ void displaySplashScreen() {
 // Open and display a text help file
 // File perusal, primitive, but portable -CJS-
 void displayTextHelpFile(const std::string &filename) {
-    constexpr uint8_t max_line_length = 80;
-
-    char line_buffer[max_line_length];
-
     FILE *file = fopen(filename.c_str(), "r");
-
     if (file == nullptr) {
-        (void) sprintf(line_buffer, "Can not find help file \"%s\".\n", filename.c_str());
-        putStringClearToEOL(line_buffer, Coord_t{0, 0});
+        putStringClearToEOL(("Can not find help file '" + filename + "'.").c_str(), Coord_t{0, 0});
         return;
     }
 
     terminalSaveScreen();
 
+    constexpr uint8_t max_line_length = 80;
+    char line_buffer[max_line_length];
     char input;
+
     while (feof(file) == 0) {
         clearScreen();
 
@@ -80,18 +77,16 @@ void displayTextHelpFile(const std::string &filename) {
 
 // Open and display a "death" text file
 void displayDeathFile(const std::string &filename) {
-    constexpr uint8_t max_line_length = 80;
-
-    char line_buffer[max_line_length];
-
     FILE *file = fopen(filename.c_str(), "r");
     if (file == nullptr) {
-        (void) sprintf(line_buffer, "Can not find help file \"%s\".\n", filename.c_str());
-        putStringClearToEOL(line_buffer, Coord_t{0, 0});
+        putStringClearToEOL(("Can not find help file '" + filename + "'.").c_str(), Coord_t{0, 0});
         return;
     }
 
     clearScreen();
+
+    constexpr uint8_t max_line_length = 80;
+    char line_buffer[max_line_length];
 
     for (int i = 0; i < 23 && feof(file) == 0; i++) {
         if (fgets(line_buffer, max_line_length - 1, file) != CNIL) {

@@ -37,7 +37,7 @@ int main(int argc, char *argv[]) {
     // call this routine to grab a file pointer to the high score file
     // and prepare things to relinquish setuid privileges
     if (!initializeScoreFile()) {
-        (void) fprintf(stderr, "Can't open score file \"%s\"\n", config.files.scores.c_str());
+        std::cerr << "Can't open score file '" << config.files.scores << "'\n";
         return 1;
     }
 

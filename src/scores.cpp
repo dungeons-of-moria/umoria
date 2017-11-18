@@ -49,10 +49,7 @@ void recordNewHighScore() {
     (void) strcpy(new_entry.died_from, tmp);
 
     if ((highscore_fp = fopen(config.files.scores.c_str(), "rb+")) == nullptr) {
-        char msg[100];
-
-        (void) sprintf(msg, "Error opening score file \"%s\"\n", config.files.scores.c_str());
-        printMessage(msg);
+        printMessage(("Error opening score file '" + config.files.scores + "'.").c_str());
         printMessage(CNIL);
         return;
     }
@@ -169,11 +166,8 @@ void recordNewHighScore() {
 }
 
 void showScoresScreen() {
-    char msg[100];
-
     if ((highscore_fp = fopen(config.files.scores.c_str(), "rb")) == nullptr) {
-        sprintf(msg, "Error opening score file \"%s\"\n", config.files.scores.c_str());
-        printMessage(msg);
+        printMessage(("Error opening score file '" + config.files.scores + "'.").c_str());
         printMessage(CNIL);
         return;
     }
@@ -200,6 +194,7 @@ void showScoresScreen() {
     readHighScore(score);
 
     char input;
+    char msg[100];
 
     int i = 0;
     int rank = 1;
