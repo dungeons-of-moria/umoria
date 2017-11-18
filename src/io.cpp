@@ -311,11 +311,11 @@ void printMessage(const char *msg) {
 }
 
 // Print a message so as not to interrupt a counted command. -CJS-
-void printMessageNoCommandInterrupt(const char *msg) {
+void printMessageNoCommandInterrupt(const std::string &msg) {
     // Save command count value
     int i = command_count;
 
-    printMessage(msg);
+    printMessage(msg.c_str());
 
     // Restore count value
     command_count = i;

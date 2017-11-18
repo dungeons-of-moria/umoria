@@ -211,7 +211,7 @@ void panelPutTile(char ch, Coord_t coords);
 void messageLinePrintMessage(std::string message);
 void messageLineClear();
 void printMessage(const char *msg);
-void printMessageNoCommandInterrupt(const char *msg);
+void printMessageNoCommandInterrupt(const std::string &msg);
 char getKeyInput();
 bool getCommand(const char *prompt, char &command);
 bool getStringInput(char *in_str, Coord_t coords, int slen);
