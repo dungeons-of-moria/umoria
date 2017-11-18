@@ -204,7 +204,7 @@ void clearToBottom(int row);
 void moveCursor(Coord_t coords);
 void addChar(char ch, Coord_t coords);
 void putString(const char *out_str, Coord_t coords);
-void putStringClearToEOL(const char *str, Coord_t coords);
+void putStringClearToEOL(const std::string &str, Coord_t coords);
 void eraseLine(Coord_t coords);
 void panelMoveCursor(Coord_t coords);
 void panelPutTile(char ch, Coord_t coords);

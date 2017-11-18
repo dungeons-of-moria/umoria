@@ -250,7 +250,7 @@ static bool wizardRequestObjectId(int &id, const std::string &label, int start_i
     id_str << start_id << "-" << end_id;
 
     std::string msg = label + " ID (" + id_str.str() + "): ";
-    putStringClearToEOL(msg.c_str(), Coord_t{0, 0});
+    putStringClearToEOL(msg, Coord_t{0, 0});
 
     vtype_t input = {0};
     if (!getStringInput(input, Coord_t{0, (int) msg.length()}, 3)) {
@@ -263,7 +263,7 @@ static bool wizardRequestObjectId(int &id, const std::string &label, int start_i
     }
 
     if (given_id < start_id || given_id > end_id) {
-        putStringClearToEOL(("Invalid ID. Must be " + id_str.str()).c_str(), Coord_t{0, 0});
+        putStringClearToEOL("Invalid ID. Must be " + id_str.str(), Coord_t{0, 0});
         return false;
     }
     id = given_id;

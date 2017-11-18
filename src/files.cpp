@@ -44,7 +44,7 @@ void displaySplashScreen() {
 void displayTextHelpFile(const std::string &filename) {
     FILE *file = fopen(filename.c_str(), "r");
     if (file == nullptr) {
-        putStringClearToEOL(("Can not find help file '" + filename + "'.").c_str(), Coord_t{0, 0});
+        putStringClearToEOL("Can not find help file '" + filename + "'.", Coord_t{0, 0});
         return;
     }
 
@@ -79,7 +79,7 @@ void displayTextHelpFile(const std::string &filename) {
 void displayDeathFile(const std::string &filename) {
     FILE *file = fopen(filename.c_str(), "r");
     if (file == nullptr) {
-        putStringClearToEOL(("Can not find help file '" + filename + "'.").c_str(), Coord_t{0, 0});
+        putStringClearToEOL("Can not find help file '" + filename + "'.", Coord_t{0, 0});
         return;
     }
 

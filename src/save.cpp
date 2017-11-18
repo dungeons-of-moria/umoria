@@ -377,7 +377,7 @@ bool saveGame() {
             }
         }
         output = "Saving with '" + config.files.save_game + "'...";
-        putStringClearToEOL(output.c_str(), Coord_t{0, 0});
+        putStringClearToEOL(output, Coord_t{0, 0});
     }
 
     return true;

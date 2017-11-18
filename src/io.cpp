@@ -156,14 +156,14 @@ void putString(const char *out_str, Coord_t coords) {
 }
 
 // Outputs a line to a given y, x position -RAK-
-void putStringClearToEOL(const char *str, Coord_t coords) {
+void putStringClearToEOL(const std::string &str, Coord_t coords) {
     if (coords.y == MSG_LINE && message_ready_to_print) {
         printMessage(CNIL);
     }
 
     (void) move(coords.y, coords.x);
     clrtoeol();
-    putString(str, coords);
+    putString(str.c_str(), coords);
 }
 
 // Clears given line of text -RAK-
