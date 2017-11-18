@@ -429,8 +429,7 @@ static void carry(int y, int x, bool pickup) {
 
             // change the period to a question mark
             description[strlen(description) - 1] = '?';
-            (void) sprintf(msg, "Pick up %s", description);
-            pickup = getInputConfirmation(msg);
+            pickup = getInputConfirmation("Pick up " + std::string(description));
         }
 
         // Check to see if it will change the players speed.
@@ -439,8 +438,7 @@ static void carry(int y, int x, bool pickup) {
 
             // change the period to a question mark
             description[strlen(description) - 1] = '?';
-            (void) sprintf(msg, "Exceed your weight limit to pick up %s", description);
-            pickup = getInputConfirmation(msg);
+            pickup = getInputConfirmation("Exceed your weight limit to pick up " + std::string(description));
         }
 
         // Attempt to pick up an object.

@@ -357,12 +357,9 @@ static void writeInventoryToFile(FILE *file1) {
 
 // Print the character to a file or device -RAK-
 bool outputPlayerCharacterToFile(char *filename) {
-    vtype_t msg = {'\0'};
-
     int fd = open(filename, O_WRONLY | O_CREAT | O_EXCL, 0644);
     if (fd < 0 && errno == EEXIST) {
-        (void) sprintf(msg, "Replace existing file %s?", filename);
-        if (getInputConfirmation(msg)) {
+        if (getInputConfirmation("Replace existing file " + std::string(filename) + "?")) {
             fd = open(filename, O_WRONLY, 0644);
         }
     }
@@ -381,6 +378,7 @@ bool outputPlayerCharacterToFile(char *filename) {
         if (fd >= 0) {
             (void) close(fd);
         }
+        vtype_t msg = {'\0'};
         (void) sprintf(msg, "Can't open file %s:", filename);
         printMessage(msg);
         return false;

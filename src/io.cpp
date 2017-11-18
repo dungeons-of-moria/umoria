@@ -452,7 +452,7 @@ bool getStringInput(char *in_str, Coord_t coords, int slen) {
 }
 
 // Used to verify a choice - user gets the chance to abort choice. -CJS-
-bool getInputConfirmation(const char *prompt) {
+bool getInputConfirmation(const std::string &prompt) {
     putStringClearToEOL(prompt, Coord_t{0, 0});
 
     int y, x;

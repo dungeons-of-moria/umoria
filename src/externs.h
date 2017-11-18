@@ -215,7 +215,7 @@ void printMessageNoCommandInterrupt(const std::string &msg);
 char getKeyInput();
 bool getCommand(const std::string &prompt, char &command);
 bool getStringInput(char *in_str, Coord_t coords, int slen);
-bool getInputConfirmation(const char *prompt);
+bool getInputConfirmation(const std::string &prompt);
 void waitForContinueKey(int line_number);
 void waitAndConfirmCharacterCreation(int line_number, int delay);
 bool checkForNonBlockingKeyPress(int microseconds);
