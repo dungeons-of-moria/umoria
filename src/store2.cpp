@@ -960,7 +960,7 @@ void storeEnter(int store_id) {
         message_ready_to_print = false;
 
         char command;
-        if (getCommand(CNIL, command)) {
+        if (getCommand("", command)) {
             int saved_chr;
 
             switch (command) {

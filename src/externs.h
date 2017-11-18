@@ -213,7 +213,7 @@ void messageLineClear();
 void printMessage(const char *msg);
 void printMessageNoCommandInterrupt(const std::string &msg);
 char getKeyInput();
-bool getCommand(const char *prompt, char &command);
+bool getCommand(const std::string &prompt, char &command);
 bool getStringInput(char *in_str, Coord_t coords, int slen);
 bool getInputConfirmation(const char *prompt);
 void waitForContinueKey(int line_number);

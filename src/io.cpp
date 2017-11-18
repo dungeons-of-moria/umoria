@@ -373,8 +373,8 @@ char getKeyInput() {
 
 // Prompts (optional) and returns ord value of input char
 // Function returns false if <ESCAPE> is input
-bool getCommand(const char *prompt, char &command) {
-    if (prompt != nullptr) {
+bool getCommand(const std::string &prompt, char &command) {
+    if (!prompt.empty()) {
         putStringClearToEOL(prompt, Coord_t{0, 0});
     }
     command = getKeyInput();
