@@ -4,10 +4,13 @@
 // ABSOLUTELY NO WARRANTY. See https://www.gnu.org/licenses/gpl-2.0.html
 // for further details.
 
-// Print out monster memory info -CJS-
+// Monster memory info -CJS-
 
 #include "headers.h"
 #include "externs.h"
+
+// Monster memories
+Recall_t creature_recall[MON_MAX_CREATURES];
 
 static void memoryPrint(const char *p);
 
