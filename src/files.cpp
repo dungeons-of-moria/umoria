@@ -314,7 +314,7 @@ static const char *equipmentPlacementDescription(int itemID) {
 static void writeEquipmentListToFile(FILE *file1) {
     (void) fprintf(file1, "\n  [Character's Equipment List]\n\n");
 
-    if (equipment_count == 0) {
+    if (py.equipment_count == 0) {
         (void) fprintf(file1, "  Character has no equipment in use.\n");
         return;
     }
@@ -340,14 +340,14 @@ static void writeEquipmentListToFile(FILE *file1) {
 static void writeInventoryToFile(FILE *file1) {
     (void) fprintf(file1, "  [General Inventory List]\n\n");
 
-    if (inventory_count == 0) {
+    if (py.inventory_count == 0) {
         (void) fprintf(file1, "  Character has no objects in inventory.\n");
         return;
     }
 
     obj_desc_t description = {'\0'};
 
-    for (int i = 0; i < inventory_count; i++) {
+    for (int i = 0; i < py.inventory_count; i++) {
         itemDescription(description, inventory[i], true);
         (void) fprintf(file1, "%c) %s\n", i + 'a', description);
     }

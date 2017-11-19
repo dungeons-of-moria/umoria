@@ -38,7 +38,7 @@ enum class FoodMagicTypes {
 void playerEat() {
     game.player_free_turn = true;
 
-    if (inventory_count == 0) {
+    if (py.inventory_count == 0) {
         printMessage("But you are not carrying anything.");
         return;
     }

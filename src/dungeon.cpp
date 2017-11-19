@@ -711,7 +711,7 @@ static void playerUpdateStatusFlags() {
 // Allow for a slim chance of detect enchantment -CJS-
 static void playerDetectEnchantment() {
     for (int i = 0; i < PLAYER_INVENTORY_SIZE; i++) {
-        if (i == inventory_count) {
+        if (i == py.inventory_count) {
             i = 22;
         }
 
@@ -2221,7 +2221,7 @@ static void dungeonJamDoor() {
 
             if (inventory[item_pos_start].items_count > 1) {
                 inventory[item_pos_start].items_count--;
-                inventory_weight -= inventory[item_pos_start].weight;
+                py.inventory_weight -= inventory[item_pos_start].weight;
             } else {
                 inventoryDestroyItem(item_pos_start);
             }

@@ -27,7 +27,7 @@ static bool playerCanReadScroll(int &item_pos_start, int &item_pos_end) {
         return false;
     }
 
-    if (inventory_count == 0) {
+    if (py.inventory_count == 0) {
         printMessage("You are not carrying anything!");
         return false;
     }

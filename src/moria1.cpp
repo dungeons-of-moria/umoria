@@ -499,8 +499,8 @@ void playerTakeOff(int item_id, int pack_position_id) {
 
     Inventory_t &item = inventory[item_id];
 
-    inventory_weight -= item.weight * item.items_count;
-    equipment_count--;
+    py.inventory_weight -= item.weight * item.items_count;
+    py.equipment_count--;
 
     const char *p = nullptr;
     if (item_id == EQUIPMENT_WIELD || item_id == EQUIPMENT_AUX) {
@@ -613,8 +613,8 @@ static void displayInventoryScreen(int new_screen) {
             line = 7;
             break;
         case INVEN_SCR:
-            screen_left = displayInventory(0, inventory_count - 1, config.show_inventory_weights, screen_left, CNIL);
-            line = inventory_count;
+            screen_left = displayInventory(0, py.inventory_count - 1, config.show_inventory_weights, screen_left, CNIL);
+            line = py.inventory_count;
             break;
         case WEAR_SCR:
             screen_left = displayInventory(wear_low, wear_high, config.show_inventory_weights, screen_left, CNIL);
@@ -622,7 +622,7 @@ static void displayInventoryScreen(int new_screen) {
             break;
         case EQUIP_SCR:
             screen_left = displayEquipment(config.show_inventory_weights, screen_left);
-            line = equipment_count;
+            line = py.equipment_count;
             break;
         default:
             line = 0;
@@ -670,7 +670,7 @@ static void setInventoryCommandScreenState(char command) {
 }
 
 static void displayInventory() {
-    if (inventory_count == 0) {
+    if (py.inventory_count == 0) {
         printMessage("You are not carrying anything.");
     } else {
         displayInventoryScreen(INVEN_SCR);
@@ -678,7 +678,7 @@ static void displayInventory() {
 }
 
 static void displayEquipment() {
-    if (equipment_count == 0) {
+    if (py.equipment_count == 0) {
         printMessage("You are not using any equipment.");
     } else {
         displayInventoryScreen(EQUIP_SCR);
@@ -686,13 +686,13 @@ static void displayEquipment() {
 }
 
 static bool inventoryTakeOffItem(bool selecting) {
-    if (equipment_count == 0) {
+    if (py.equipment_count == 0) {
         printMessage("You are not using any equipment.");
         // don't print message restarting inven command after taking off something, it is confusing
         return selecting;
     }
 
-    if (inventory_count >= EQUIPMENT_WIELD && (game.doing_inventory_command == 0)) {
+    if (py.inventory_count >= EQUIPMENT_WIELD && (game.doing_inventory_command == 0)) {
         printMessage("You will have to drop something first.");
         return selecting;
     }
@@ -705,7 +705,7 @@ static bool inventoryTakeOffItem(bool selecting) {
 }
 
 static bool inventoryDropItem(char *command, bool selecting) {
-    if (inventory_count == 0 && equipment_count == 0) {
+    if (py.inventory_count == 0 && py.equipment_count == 0) {
         printMessage("But you're not carrying anything.");
         return selecting;
     }
@@ -715,7 +715,7 @@ static bool inventoryDropItem(char *command, bool selecting) {
         return selecting;
     }
 
-    if ((screen_state == EQUIP_SCR && equipment_count > 0) || inventory_count == 0) {
+    if ((screen_state == EQUIP_SCR && py.equipment_count > 0) || py.inventory_count == 0) {
         if (screen_state != BLANK_SCR) {
             displayInventoryScreen(EQUIP_SCR);
         }
@@ -729,10 +729,10 @@ static bool inventoryDropItem(char *command, bool selecting) {
 
 static bool inventoryWearWieldItem(bool selecting) {
     // Note: simple loop to get wear_low value
-    for (wear_low = 0; wear_low < inventory_count && inventory[wear_low].category_id > TV_MAX_WEAR; wear_low++);
+    for (wear_low = 0; wear_low < py.inventory_count && inventory[wear_low].category_id > TV_MAX_WEAR; wear_low++);
 
     // Note: simple loop to get wear_high value
-    for (wear_high = wear_low; wear_high < inventory_count && inventory[wear_high].category_id >= TV_MIN_WEAR; wear_high++);
+    for (wear_high = wear_low; wear_high < py.inventory_count && inventory[wear_high].category_id >= TV_MIN_WEAR; wear_high++);
 
     wear_high--;
 
@@ -971,14 +971,14 @@ static bool selectItemCommands(char *command, char *which, bool selecting) {
         } else {
             from = 0;
             if (*command == 'd') {
-                to = inventory_count - 1;
+                to = py.inventory_count - 1;
                 prompt = "Drop";
 
-                if (equipment_count > 0) {
+                if (py.equipment_count > 0) {
                     swap = ", / for Equip";
                 }
             } else {
-                to = equipment_count - 1;
+                to = py.equipment_count - 1;
 
                 if (*command == 't') {
                     prompt = "Take off";
@@ -986,7 +986,7 @@ static bool selectItemCommands(char *command, char *which, bool selecting) {
                     // command == 'r'
 
                     prompt = "Throw off";
-                    if (inventory_count > 0) {
+                    if (py.inventory_count > 0) {
                         swap = ", / for Inven";
                     }
                 }
@@ -1071,8 +1071,8 @@ static bool selectItemCommands(char *command, char *which, bool selecting) {
                     inventoryDropItem(item_id, true);
                     // As a safety measure, set the player's inven
                     // weight to 0, when the last object is dropped.
-                    if (inventory_count == 0 && equipment_count == 0) {
-                        inventory_weight = 0;
+                    if (py.inventory_count == 0 && py.equipment_count == 0) {
+                        py.inventory_weight = 0;
                     }
                 } else {
                     slot = inventoryCarryItem(inventory[item_id]);
@@ -1127,7 +1127,7 @@ static bool selectItemCommands(char *command, char *which, bool selecting) {
                     wear_high++;
                 }
 
-                inventory_weight += item->weight * item->items_count;
+                py.inventory_weight += item->weight * item->items_count;
 
                 // Subtracts weight
                 inventoryDestroyItem(item_id);
@@ -1136,13 +1136,13 @@ static bool selectItemCommands(char *command, char *which, bool selecting) {
                 // from equipment list, if necessary.
                 item = &inventory[slot];
                 if (item->category_id != TV_NOTHING) {
-                    int savedCounter = inventory_count;
+                    int savedCounter = py.inventory_count;
 
                     itemToTakeOff = inventoryCarryItem(*item);
 
                     // If item removed did not stack with anything
                     // in inventory, then increment wear_high.
-                    if (inventory_count != savedCounter) {
+                    if (py.inventory_count != savedCounter) {
                         wear_high++;
                     }
 
@@ -1151,7 +1151,7 @@ static bool selectItemCommands(char *command, char *which, bool selecting) {
 
                 // third, wear new item
                 *item = savedItem;
-                equipment_count++;
+                py.equipment_count++;
 
                 playerAdjustBonusesForItem(*item, 1);
 
@@ -1238,8 +1238,8 @@ static bool selectItemCommands(char *command, char *which, bool selecting) {
 
             // As a safety measure, set the player's inven weight
             // to 0, when the last object is dropped.
-            if (inventory_count == 0 && equipment_count == 0) {
-                inventory_weight = 0;
+            if (py.inventory_count == 0 && py.equipment_count == 0) {
+                py.inventory_weight = 0;
             }
         }
 
@@ -1255,14 +1255,14 @@ static bool selectItemCommands(char *command, char *which, bool selecting) {
 static void inventoryDisplayAppropriateHeader() {
     if (screen_state == INVEN_SCR) {
         obj_desc_t msg = {'\0'};
-        int weightQuotient = inventory_weight / 10;
-        int weightRemainder = inventory_weight % 10;
+        int weightQuotient = py.inventory_weight / 10;
+        int weightRemainder = py.inventory_weight % 10;
 
-        if (!config.show_inventory_weights || inventory_count == 0) {
+        if (!config.show_inventory_weights || py.inventory_count == 0) {
             (void) sprintf(msg, "You are carrying %d.%d pounds. In your pack there is %s",
                            weightQuotient,
                            weightRemainder,
-                           (inventory_count == 0 ? "nothing." : "-")
+                           (py.inventory_count == 0 ? "nothing." : "-")
             );
         } else {
             int limitQuotient = playerCarryingLoadLimit() / 10;
@@ -1284,7 +1284,7 @@ static void inventoryDisplayAppropriateHeader() {
             putStringClearToEOL("You could wield -", Coord_t{0, 0});
         }
     } else if (screen_state == EQUIP_SCR) {
-        if (equipment_count == 0) {
+        if (py.equipment_count == 0) {
             putStringClearToEOL("You are not using anything.", Coord_t{0, 0});
         } else {
             putStringClearToEOL("You are using -", Coord_t{0, 0});
@@ -1393,15 +1393,15 @@ bool inventoryGetInputForItemId(int &command_key_id, const char *prompt, int ite
     if (item_id_end > EQUIPMENT_WIELD) {
         full = true;
 
-        if (inventory_count == 0) {
+        if (py.inventory_count == 0) {
             screen_id = 0;
-            item_id_end = equipment_count - 1;
+            item_id_end = py.equipment_count - 1;
         } else {
-            item_id_end = inventory_count - 1;
+            item_id_end = py.inventory_count - 1;
         }
     }
 
-    if (inventory_count < 1 && (!full || equipment_count < 1)) {
+    if (py.inventory_count < 1 && (!full || py.equipment_count < 1)) {
         putStringClearToEOL("You are not carrying anything.", Coord_t{0, 0});
         return false;
     }
@@ -1464,7 +1464,7 @@ bool inventoryGetInputForItemId(int &command_key_id, const char *prompt, int ite
                 case '/':
                     if (full) {
                         if (screen_id > 0) {
-                            if (equipment_count == 0) {
+                            if (py.equipment_count == 0) {
                                 putStringClearToEOL("But you're not using anything -more-", Coord_t{0, 0});
                                 (void) getKeyInput();
                             } else {
@@ -1472,19 +1472,19 @@ bool inventoryGetInputForItemId(int &command_key_id, const char *prompt, int ite
                                 command_finished = true;
 
                                 if (redraw_screen) {
-                                    item_id_end = equipment_count;
+                                    item_id_end = py.equipment_count;
 
-                                    while (item_id_end < inventory_count) {
+                                    while (item_id_end < py.inventory_count) {
                                         item_id_end++;
                                         eraseLine(Coord_t{item_id_end, 0});
                                     }
                                 }
-                                item_id_end = equipment_count - 1;
+                                item_id_end = py.equipment_count - 1;
                             }
 
                             putStringClearToEOL(description, Coord_t{0, 0});
                         } else {
-                            if (inventory_count == 0) {
+                            if (py.inventory_count == 0) {
                                 putStringClearToEOL("But you're not carrying anything -more-", Coord_t{0, 0});
                                 (void) getKeyInput();
                             } else {
@@ -1492,14 +1492,14 @@ bool inventoryGetInputForItemId(int &command_key_id, const char *prompt, int ite
                                 command_finished = true;
 
                                 if (redraw_screen) {
-                                    item_id_end = inventory_count;
+                                    item_id_end = py.inventory_count;
 
-                                    while (item_id_end < equipment_count) {
+                                    while (item_id_end < py.equipment_count) {
                                         item_id_end++;
                                         eraseLine(Coord_t{item_id_end, 0});
                                     }
                                 }
-                                item_id_end = inventory_count - 1;
+                                item_id_end = py.inventory_count - 1;
                             }
                         }
                     }

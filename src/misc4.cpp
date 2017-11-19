@@ -11,7 +11,7 @@
 
 // Add a comment to an object description. -CJS-
 void itemInscribe() {
-    if (inventory_count == 0 && equipment_count == 0) {
+    if (py.inventory_count == 0 && py.equipment_count == 0) {
         printMessage("You are not carrying anything to inscribe.");
         return;
     }

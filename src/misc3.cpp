@@ -1128,16 +1128,16 @@ void inventoryDestroyItem(int item_id) {
 
     if (item.items_count > 1 && item.sub_category_id <= ITEM_SINGLE_STACK_MAX) {
         item.items_count--;
-        inventory_weight -= item.weight;
+        py.inventory_weight -= item.weight;
     } else {
-        inventory_weight -= item.weight * item.items_count;
+        py.inventory_weight -= item.weight * item.items_count;
 
-        for (int i = item_id; i < inventory_count - 1; i++) {
+        for (int i = item_id; i < py.inventory_count - 1; i++) {
             inventory[i] = inventory[i + 1];
         }
 
-        inventoryItemCopyTo(OBJ_NOTHING, inventory[inventory_count - 1]);
-        inventory_count--;
+        inventoryItemCopyTo(OBJ_NOTHING, inventory[py.inventory_count - 1]);
+        py.inventory_count--;
     }
 
     py.flags.status |= PY_STR_WGT;
@@ -1170,18 +1170,18 @@ void inventoryDropItem(int item_id, bool drop_all) {
         playerTakeOff(item_id, -1);
     } else {
         if (drop_all || item.items_count == 1) {
-            inventory_weight -= item.weight * item.items_count;
-            inventory_count--;
+            py.inventory_weight -= item.weight * item.items_count;
+            py.inventory_count--;
 
-            while (item_id < inventory_count) {
+            while (item_id < py.inventory_count) {
                 inventory[item_id] = inventory[item_id + 1];
                 item_id++;
             }
 
-            inventoryItemCopyTo(OBJ_NOTHING, inventory[inventory_count]);
+            inventoryItemCopyTo(OBJ_NOTHING, inventory[py.inventory_count]);
         } else {
             treasure_list[treasureID].items_count = 1;
-            inventory_weight -= item.weight;
+            py.inventory_weight -= item.weight;
             item.items_count--;
         }
 
@@ -1199,7 +1199,7 @@ void inventoryDropItem(int item_id, bool drop_all) {
 int inventoryDamageItem(bool (*item_type)(Inventory_t *), int chance_percentage) {
     int damage = 0;
 
-    for (int i = 0; i < inventory_count; i++) {
+    for (int i = 0; i < py.inventory_count; i++) {
         if ((*item_type)(&inventory[i]) && randomNumber(100) < chance_percentage) {
             inventoryDestroyItem(i);
             damage++;
@@ -1222,7 +1222,7 @@ int playerCarryingLoadLimit() {
 
 // this code must be identical to the inventoryCarryItem() code below
 bool inventoryCanCarryItemCount(const Inventory_t &item) {
-    if (inventory_count < EQUIPMENT_WIELD) {
+    if (py.inventory_count < EQUIPMENT_WIELD) {
         return true;
     }
 
@@ -1230,7 +1230,7 @@ bool inventoryCanCarryItemCount(const Inventory_t &item) {
         return false;
     }
 
-    for (int i = 0; i < inventory_count; i++) {
+    for (int i = 0; i < py.inventory_count; i++) {
         bool same_character = inventory[i].category_id == item.category_id;
         bool same_category = inventory[i].sub_category_id == item.sub_category_id;
 
@@ -1257,7 +1257,7 @@ bool inventoryCanCarryItemCount(const Inventory_t &item) {
 // return false if picking up an object would change the players speed
 bool inventoryCanCarryItem(const Inventory_t &item) {
     int limit = playerCarryingLoadLimit();
-    int newWeight = item.items_count * item.weight + inventory_weight;
+    int newWeight = item.items_count * item.weight + py.inventory_weight;
 
     if (limit < newWeight) {
         limit = newWeight / (limit + 1);
@@ -1288,8 +1288,8 @@ void playerStrength() {
 
     int limit = playerCarryingLoadLimit();
 
-    if (limit < inventory_weight) {
-        limit = inventory_weight / (limit + 1);
+    if (limit < py.inventory_weight) {
+        limit = py.inventory_weight / (limit + 1);
     } else {
         limit = 0;
     }
@@ -1335,16 +1335,16 @@ int inventoryCarryItem(Inventory_t &new_item) {
         if ((is_same_category && is_always_known) || new_item.category_id > item.category_id) {
             // For items which are always `is_known`, i.e. never have a 'color',
             // insert them into the inventory in sorted order.
-            for (int i = inventory_count - 1; i >= slot_id; i--) {
+            for (int i = py.inventory_count - 1; i >= slot_id; i--) {
                 inventory[i + 1] = inventory[i];
             }
             inventory[slot_id] = new_item;
-            inventory_count++;
+            py.inventory_count++;
             break;
         }
     }
 
-    inventory_weight += new_item.items_count * new_item.weight;
+    py.inventory_weight += new_item.items_count * new_item.weight;
     py.flags.status |= PY_STR_WGT;
 
     return slot_id;
@@ -1747,7 +1747,7 @@ static int lastKnownSpell() {
 static uint32_t playerDetermineLearnableSpells() {
     uint32_t spell_flag = 0;
 
-    for (int i = 0; i < inventory_count; i++) {
+    for (int i = 0; i < py.inventory_count; i++) {
         if (inventory[i].category_id == TV_MAGIC_BOOK) {
             spell_flag |= inventory[i].flags;
         }
@@ -2266,7 +2266,7 @@ bool inventoryFindRange(int item_id_start, int item_id_end, int &j, int &k) {
 
     bool at_end_of_range = false;
 
-    for (int i = 0; i < inventory_count; i++) {
+    for (int i = 0; i < py.inventory_count; i++) {
         auto item_id = (int) inventory[i].category_id;
 
         if (!at_end_of_range) {
@@ -2283,7 +2283,7 @@ bool inventoryFindRange(int item_id_start, int item_id_end, int &j, int &k) {
     }
 
     if (at_end_of_range && k == -1) {
-        k = inventory_count - 1;
+        k = py.inventory_count - 1;
     }
 
     return at_end_of_range;

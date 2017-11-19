@@ -118,11 +118,18 @@ typedef struct {
     // drain life + restore life does not affect hit points.
     uint16_t base_hp_levels[PLAYER_MAX_LEVEL];
 
-    int16_t pack_heaviness;    // Heaviness of pack - used to calculate if pack is too heavy -CJS-
     uint8_t running_tracker;   // Tracker for number of turns taken during one run cycle
-    bool carrying_light;       // True when player is carrying light
     bool temporary_light_only; // Track if temporary light about player
-    bool weapon_is_heavy;      // Weapon is too heavy -CJS-
 
     int32_t max_score = 0; // Maximum score attained
+
+    // TODO: create a pack/inventory object?
+    int16_t inventory_count = 0;
+    int16_t inventory_weight = 0; // Current carried weight
+    int16_t pack_heaviness;       // Heaviness of pack - used to calculate if pack is too heavy -CJS-
+
+    // TODO: create an equipment object?
+    int16_t equipment_count = 0; // Number of equipped items
+    bool weapon_is_heavy;        // Weapon is too heavy -CJS-
+    bool carrying_light;         // `true` when player is carrying light
 } Player_t;

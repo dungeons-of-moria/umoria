@@ -17,7 +17,4 @@ Inventory_t treasure_list[LEVEL_MAX_OBJECTS];
 Inventory_t inventory[PLAYER_INVENTORY_SIZE];
 
 // Treasure related values
-int16_t inventory_count = 0;   // Total different objects
-int16_t inventory_weight = 0;  // Current carried weight
-int16_t equipment_count = 0;   // Current equipment count
 int16_t current_treasure_id;   // Current treasure heap ptr

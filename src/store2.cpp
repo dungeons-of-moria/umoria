@@ -836,12 +836,12 @@ bool (*store_buy[MAX_STORES])(int) = {
 
 // Sell an item to the store -RAK-
 static bool storeSellAnItem(int store_id, int &current_top_item_id) {
-    int first_item = inventory_count;
+    int first_item = py.inventory_count;
     int last_item = -1;
 
     char mask[EQUIPMENT_WIELD];
 
-    for (int counter = 0; counter < inventory_count; counter++) {
+    for (int counter = 0; counter < py.inventory_count; counter++) {
         int flag = (*store_buy[store_id])(inventory[counter].category_id);
 
         mask[counter] = (char) flag;

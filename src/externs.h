@@ -70,9 +70,6 @@ extern Inventory_t inventory[PLAYER_INVENTORY_SIZE];
 extern char *special_item_names[SN_ARRAY_SIZE];
 extern int16_t sorted_objects[MAX_DUNGEON_OBJECTS];
 
-extern int16_t inventory_count;
-extern int16_t inventory_weight;
-extern int16_t equipment_count;
 extern int16_t current_treasure_id;
 
 // Following are creature arrays and variables
