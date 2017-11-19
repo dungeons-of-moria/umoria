@@ -29,11 +29,13 @@ static void characterGenerateStats() {
 }
 
 // Changes stats by given amount -JWT-
-static void playerChangeStat(int stat, int16_t amount) {
-    int new_stat = py.stats.max[stat];
+// During character creation we adjust player stats based
+// on their Race and Class...with a little randomness!
+static void createModifyPlayerStat(uint8_t &stat, int16_t adjustment) {
+    auto new_stat = stat;
 
-    if (amount < 0) {
-        for (int i = 0; i > amount; i--) {
+    if (adjustment < 0) {
+        for (int i = 0; i > adjustment; i--) {
             if (new_stat > 108) {
                 new_stat--;
             } else if (new_stat > 88) {
@@ -48,7 +50,7 @@ static void playerChangeStat(int stat, int16_t amount) {
             }
         }
     } else {
-        for (int i = 0; i < amount; i++) {
+        for (int i = 0; i < adjustment; i++) {
             if (new_stat < 18) {
                 new_stat++;
             } else if (new_stat < 88) {
@@ -60,7 +62,8 @@ static void playerChangeStat(int stat, int16_t amount) {
             }
         }
     }
-    py.stats.max[stat] = (uint8_t) new_stat;
+
+    stat = new_stat;
 }
 
 // generate all stats and modify for race. needed in a separate
@@ -69,12 +72,12 @@ static void characterGenerateStatsAndRace() {
     const Race_t &race = character_races[py.misc.race_id];
 
     characterGenerateStats();
-    playerChangeStat(A_STR, race.str_adjustment);
-    playerChangeStat(A_INT, race.int_adjustment);
-    playerChangeStat(A_WIS, race.wis_adjustment);
-    playerChangeStat(A_DEX, race.dex_adjustment);
-    playerChangeStat(A_CON, race.con_adjustment);
-    playerChangeStat(A_CHR, race.chr_adjustment);
+    createModifyPlayerStat(py.stats.max[A_STR], race.str_adjustment);
+    createModifyPlayerStat(py.stats.max[A_INT], race.int_adjustment);
+    createModifyPlayerStat(py.stats.max[A_WIS], race.wis_adjustment);
+    createModifyPlayerStat(py.stats.max[A_DEX], race.dex_adjustment);
+    createModifyPlayerStat(py.stats.max[A_CON], race.con_adjustment);
+    createModifyPlayerStat(py.stats.max[A_CHR], race.chr_adjustment);
 
     py.misc.level = 1;
 
@@ -372,12 +375,12 @@ static void characterGetClass() {
             putString(klass.title, Coord_t{5, 15});
 
             // Adjust the stats for the class adjustment -RAK-
-            playerChangeStat(A_STR, klass.strength);
-            playerChangeStat(A_INT, klass.intelligence);
-            playerChangeStat(A_WIS, klass.wisdom);
-            playerChangeStat(A_DEX, klass.dexterity);
-            playerChangeStat(A_CON, klass.constitution);
-            playerChangeStat(A_CHR, klass.charisma);
+            createModifyPlayerStat(py.stats.max[A_STR], klass.strength);
+            createModifyPlayerStat(py.stats.max[A_INT], klass.intelligence);
+            createModifyPlayerStat(py.stats.max[A_WIS], klass.wisdom);
+            createModifyPlayerStat(py.stats.max[A_DEX], klass.dexterity);
+            createModifyPlayerStat(py.stats.max[A_CON], klass.constitution);
+            createModifyPlayerStat(py.stats.max[A_CHR], klass.charisma);
 
             for (int i = 0; i < 6; i++) {
                 py.stats.current[i] = py.stats.max[i];
