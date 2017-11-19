@@ -338,7 +338,7 @@ static bool playerDrinkPotion(uint32_t flags, uint8_t item_type) {
 void quaff() {
     game.player_free_turn = true;
 
-    if (py.inventory_count == 0) {
+    if (py.unique_inventory_items == 0) {
         printMessage("But you are not carrying anything.");
         return;
     }

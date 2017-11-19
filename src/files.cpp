@@ -340,14 +340,14 @@ static void writeEquipmentListToFile(FILE *file1) {
 static void writeInventoryToFile(FILE *file1) {
     (void) fprintf(file1, "  [General Inventory List]\n\n");
 
-    if (py.inventory_count == 0) {
+    if (py.unique_inventory_items == 0) {
         (void) fprintf(file1, "  Character has no objects in inventory.\n");
         return;
     }
 
     obj_desc_t description = {'\0'};
 
-    for (int i = 0; i < py.inventory_count; i++) {
+    for (int i = 0; i < py.unique_inventory_items; i++) {
         itemDescription(description, inventory[i], true);
         (void) fprintf(file1, "%c) %s\n", i + 'a', description);
     }

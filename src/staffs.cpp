@@ -40,7 +40,7 @@ enum class StaffSpellTypes {
 };
 
 static bool staffPlayerIsCarrying(int &item_pos_start, int &item_pos_end) {
-    if (py.inventory_count == 0) {
+    if (py.unique_inventory_items == 0) {
         printMessage("But you are not carrying anything.");
         return false;
     }

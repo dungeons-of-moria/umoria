@@ -214,8 +214,8 @@ static bool sv_write() {
 
     wr_short((uint16_t) missiles_counter);
     wr_long((uint32_t) dg.game_turn);
-    wr_short((uint16_t) py.inventory_count);
-    for (int i = 0; i < py.inventory_count; i++) {
+    wr_short((uint16_t) py.unique_inventory_items);
+    for (int i = 0; i < py.unique_inventory_items; i++) {
         wr_item(inventory[i]);
     }
     for (int i = EQUIPMENT_WIELD; i < PLAYER_INVENTORY_SIZE; i++) {
@@ -658,11 +658,11 @@ bool loadGame(bool &generate) {
 
             missiles_counter = rd_short();
             dg.game_turn = rd_long();
-            py.inventory_count = rd_short();
-            if (py.inventory_count > EQUIPMENT_WIELD) {
+            py.unique_inventory_items = rd_short();
+            if (py.unique_inventory_items > EQUIPMENT_WIELD) {
                 goto error;
             }
-            for (int i = 0; i < py.inventory_count; i++) {
+            for (int i = 0; i < py.unique_inventory_items; i++) {
                 rd_item(inventory[i]);
             }
             for (int i = EQUIPMENT_WIELD; i < PLAYER_INVENTORY_SIZE; i++) {

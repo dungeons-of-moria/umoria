@@ -324,7 +324,7 @@ static bool playerTestAttackHits(int attack_id, uint8_t level) {
             }
             break;
         case 13: // Steal Object
-            if (playerTestBeingHit(2, (int) level, 0, (int) py.misc.level, CLASS_MISC_HIT) && py.inventory_count > 0) {
+            if (playerTestBeingHit(2, (int) level, 0, (int) py.misc.level, CLASS_MISC_HIT) && py.unique_inventory_items > 0) {
                 success = true;
             }
             break;
@@ -378,7 +378,7 @@ static bool playerTestAttackHits(int attack_id, uint8_t level) {
             break;
         case 24: // Eat charges
             // check to make sure an object exists
-            if (playerTestBeingHit(15, (int) level, 0, py.misc.ac + py.misc.magical_ac, CLASS_MISC_HIT) && py.inventory_count > 0) {
+            if (playerTestBeingHit(15, (int) level, 0, py.misc.ac + py.misc.magical_ac, CLASS_MISC_HIT) && py.unique_inventory_items > 0) {
                 success = true;
             }
             break;
@@ -579,7 +579,7 @@ static bool inventoryDiminishLightAttack(bool noticed) {
 }
 
 static bool inventoryDiminishChargesAttack(uint8_t creature_level, int16_t &monster_hp, bool noticed) {
-    Inventory_t &item = inventory[randomNumber(py.inventory_count) - 1];
+    Inventory_t &item = inventory[randomNumber(py.unique_inventory_items) - 1];
 
     bool has_charges = item.category_id == TV_STAFF || item.category_id == TV_WAND;
 
@@ -713,7 +713,7 @@ static bool executeAttackOnPlayer(uint8_t creature_level, int16_t &monster_hp, i
             if (py.flags.paralysis < 1 && randomNumber(124) < py.stats.used[A_DEX]) {
                 printMessage("You grab hold of your backpack!");
             } else {
-                inventoryDestroyItem(randomNumber(py.inventory_count) - 1);
+                inventoryDestroyItem(randomNumber(py.unique_inventory_items) - 1);
                 printMessage("Your backpack feels lighter.");
             }
             if (randomNumber(2) == 1) {

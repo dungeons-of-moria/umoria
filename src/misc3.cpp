@@ -1132,12 +1132,12 @@ void inventoryDestroyItem(int item_id) {
     } else {
         py.inventory_weight -= item.weight * item.items_count;
 
-        for (int i = item_id; i < py.inventory_count - 1; i++) {
+        for (int i = item_id; i < py.unique_inventory_items - 1; i++) {
             inventory[i] = inventory[i + 1];
         }
 
-        inventoryItemCopyTo(OBJ_NOTHING, inventory[py.inventory_count - 1]);
-        py.inventory_count--;
+        inventoryItemCopyTo(OBJ_NOTHING, inventory[py.unique_inventory_items - 1]);
+        py.unique_inventory_items--;
     }
 
     py.flags.status |= PY_STR_WGT;
@@ -1171,14 +1171,14 @@ void inventoryDropItem(int item_id, bool drop_all) {
     } else {
         if (drop_all || item.items_count == 1) {
             py.inventory_weight -= item.weight * item.items_count;
-            py.inventory_count--;
+            py.unique_inventory_items--;
 
-            while (item_id < py.inventory_count) {
+            while (item_id < py.unique_inventory_items) {
                 inventory[item_id] = inventory[item_id + 1];
                 item_id++;
             }
 
-            inventoryItemCopyTo(OBJ_NOTHING, inventory[py.inventory_count]);
+            inventoryItemCopyTo(OBJ_NOTHING, inventory[py.unique_inventory_items]);
         } else {
             treasure_list[treasureID].items_count = 1;
             py.inventory_weight -= item.weight;
@@ -1199,7 +1199,7 @@ void inventoryDropItem(int item_id, bool drop_all) {
 int inventoryDamageItem(bool (*item_type)(Inventory_t *), int chance_percentage) {
     int damage = 0;
 
-    for (int i = 0; i < py.inventory_count; i++) {
+    for (int i = 0; i < py.unique_inventory_items; i++) {
         if ((*item_type)(&inventory[i]) && randomNumber(100) < chance_percentage) {
             inventoryDestroyItem(i);
             damage++;
@@ -1222,7 +1222,7 @@ int playerCarryingLoadLimit() {
 
 // this code must be identical to the inventoryCarryItem() code below
 bool inventoryCanCarryItemCount(const Inventory_t &item) {
-    if (py.inventory_count < EQUIPMENT_WIELD) {
+    if (py.unique_inventory_items < EQUIPMENT_WIELD) {
         return true;
     }
 
@@ -1230,7 +1230,7 @@ bool inventoryCanCarryItemCount(const Inventory_t &item) {
         return false;
     }
 
-    for (int i = 0; i < py.inventory_count; i++) {
+    for (int i = 0; i < py.unique_inventory_items; i++) {
         bool same_character = inventory[i].category_id == item.category_id;
         bool same_category = inventory[i].sub_category_id == item.sub_category_id;
 
@@ -1335,11 +1335,11 @@ int inventoryCarryItem(Inventory_t &new_item) {
         if ((is_same_category && is_always_known) || new_item.category_id > item.category_id) {
             // For items which are always `is_known`, i.e. never have a 'color',
             // insert them into the inventory in sorted order.
-            for (int i = py.inventory_count - 1; i >= slot_id; i--) {
+            for (int i = py.unique_inventory_items - 1; i >= slot_id; i--) {
                 inventory[i + 1] = inventory[i];
             }
             inventory[slot_id] = new_item;
-            py.inventory_count++;
+            py.unique_inventory_items++;
             break;
         }
     }
@@ -1747,7 +1747,7 @@ static int lastKnownSpell() {
 static uint32_t playerDetermineLearnableSpells() {
     uint32_t spell_flag = 0;
 
-    for (int i = 0; i < py.inventory_count; i++) {
+    for (int i = 0; i < py.unique_inventory_items; i++) {
         if (inventory[i].category_id == TV_MAGIC_BOOK) {
             spell_flag |= inventory[i].flags;
         }
@@ -2266,7 +2266,7 @@ bool inventoryFindRange(int item_id_start, int item_id_end, int &j, int &k) {
 
     bool at_end_of_range = false;
 
-    for (int i = 0; i < py.inventory_count; i++) {
+    for (int i = 0; i < py.unique_inventory_items; i++) {
         auto item_id = (int) inventory[i].category_id;
 
         if (!at_end_of_range) {
@@ -2283,7 +2283,7 @@ bool inventoryFindRange(int item_id_start, int item_id_end, int &j, int &k) {
     }
 
     if (at_end_of_range && k == -1) {
-        k = py.inventory_count - 1;
+        k = py.unique_inventory_items - 1;
     }
 
     return at_end_of_range;

@@ -145,7 +145,7 @@ static bool wandDischarge(Inventory_t &item, int direction) {
 void wandAim() {
     game.player_free_turn = true;
 
-    if (py.inventory_count == 0) {
+    if (py.unique_inventory_items == 0) {
         printMessage("But you are not carrying anything.");
         return;
     }

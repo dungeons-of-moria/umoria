@@ -245,7 +245,7 @@ void itemIdentify(Inventory_t &item, int &item_id) {
 
     int j;
 
-    for (int i = 0; i < py.inventory_count; i++) {
+    for (int i = 0; i < py.unique_inventory_items; i++) {
         const Inventory_t &t_ptr = inventory[i];
 
         if (t_ptr.category_id == x1 && t_ptr.sub_category_id == x2 && i != item_id && ((int) t_ptr.items_count + (int) item.items_count) < 256) {
@@ -259,9 +259,9 @@ void itemIdentify(Inventory_t &item, int &item_id) {
             printMessage("You combine similar objects from the shop and dungeon.");
 
             inventory[item_id].items_count += inventory[i].items_count;
-            py.inventory_count--;
+            py.unique_inventory_items--;
 
-            for (j = i; j < py.inventory_count; j++) {
+            for (j = i; j < py.unique_inventory_items; j++) {
                 inventory[j] = inventory[j + 1];
             }
 

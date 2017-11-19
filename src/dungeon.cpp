@@ -711,7 +711,7 @@ static void playerUpdateStatusFlags() {
 // Allow for a slim chance of detect enchantment -CJS-
 static void playerDetectEnchantment() {
     for (int i = 0; i < PLAYER_INVENTORY_SIZE; i++) {
-        if (i == py.inventory_count) {
+        if (i == py.unique_inventory_items) {
             i = 22;
         }
 
