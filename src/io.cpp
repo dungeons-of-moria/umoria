@@ -483,31 +483,12 @@ void waitForContinueKey(int line_number) {
     eraseLine(Coord_t{line_number, 0});
 }
 
-static void sleep_in_seconds(int seconds) {
+void sleep_in_seconds(int seconds) {
 #ifdef _WIN32
     Sleep(seconds * 1000);
 #else
     sleep((unsigned int) seconds);
 #endif
-}
-
-// Pauses for user response before returning -RAK-
-// NOTE: Delay is for players trying to roll up "perfect"
-// characters.  Make them wait a bit.
-void waitAndConfirmCharacterCreation(int line_number, int delay) {
-    putStringClearToEOL("[ press any key to continue, or Q to exit ]", Coord_t{line_number, 17});
-
-    if (getKeyInput() == 'Q') {
-        eraseLine(Coord_t{line_number, 0});
-
-        if (delay > 0) {
-            sleep_in_seconds(delay);
-        }
-
-        exitGame();
-    }
-
-    eraseLine(Coord_t{line_number, 0});
 }
 
 // Provides for a timeout on input. Does a non-blocking read, consuming the data if

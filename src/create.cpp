@@ -470,6 +470,31 @@ static void playerCalculateStartGold() {
     py.misc.au = new_gold;
 }
 
+// Pauses for user response before returning -RAK-
+// NOTE: Delay is for players trying to roll up "perfect"
+// characters.  Make them wait a bit.
+static void waitAndConfirmCharacterCreation() {
+    auto line_number = 23;
+
+    // This delay may be reduced, but is recommended to keep players from
+    // continuously rolling up characters, which can be VERY expensive CPU wise.
+    auto delay = PLAYER_EXIT_PAUSE;
+
+    putStringClearToEOL("[ press any key to continue, or Q to exit ]", Coord_t{line_number, 17});
+
+    if (getKeyInput() == 'Q') {
+        eraseLine(Coord_t{line_number, 0});
+
+        if (delay > 0) {
+            sleep_in_seconds(delay);
+        }
+
+        exitGame();
+    }
+
+    eraseLine(Coord_t{line_number, 0});
+}
+
 // Main Character Creation Routine -JWT-
 void characterCreate() {
     printCharacterInformation();
@@ -509,7 +534,5 @@ void characterCreate() {
     printCharacterAbilities();
     getCharacterName();
 
-    // This delay may be reduced, but is recommended to keep players from
-    // continuously rolling up characters, which can be VERY expensive CPU wise.
-    waitAndConfirmCharacterCreation(23, PLAYER_EXIT_PAUSE);
+    waitAndConfirmCharacterCreation();
 }
