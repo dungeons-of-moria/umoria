@@ -174,7 +174,6 @@ constexpr uint8_t PLAYER_REGEN_NORMAL = 197;        // Regen factor*2^16 when fu
 constexpr uint16_t PLAYER_REGEN_HPBASE = 1442;      // Min amount hp regen*2^16
 constexpr uint16_t PLAYER_REGEN_MNBASE = 524;       // Min amount mana regen*2^16
 constexpr uint8_t PLAYER_WEIGHT_CAP = 130;          // "#"*(1/10 pounds) per strength point
-constexpr uint8_t PLAYER_EXIT_PAUSE = 2;            // Pause time before player can re-roll
 
 // class level adjustment constants
 constexpr uint8_t CLASS_BTH = 0;
