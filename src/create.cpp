@@ -477,36 +477,30 @@ void characterCreate() {
     characterSetGender();
 
     // here we start a loop giving a player a choice of characters -RGM-
-    characterGenerateStatsAndRace();
-    characterGetHistory();
-    characterSetAgeHeightWeight();
-    displayCharacterHistory();
-    printCharacterVitalStatistics();
-    printCharacterStats();
+    auto done = false;
+    while (!done) {
+        characterGenerateStatsAndRace();
+        characterGetHistory();
+        characterSetAgeHeightWeight();
+        displayCharacterHistory();
+        printCharacterVitalStatistics();
+        printCharacterStats();
 
-    clearToBottom(20);
-    putString("Hit space to re-roll or ESC to accept characteristics: ", Coord_t{20, 2});
+        clearToBottom(20);
+        putString("Hit space to re-roll or ESC to accept characteristics: ", Coord_t{20, 2});
 
-    bool exit_flag = true;
-    while (exit_flag) {
-        moveCursor(Coord_t{20, 56});
-
-        char input = getKeyInput();
-
-        if (input == ESCAPE) {
-            exit_flag = false;
-        } else if (input == ' ') {
-            characterGenerateStatsAndRace();
-            characterGetHistory();
-            characterSetAgeHeightWeight();
-            displayCharacterHistory();
-            printCharacterVitalStatistics();
-            printCharacterStats();
-        } else {
-            terminalBellSound();
+        while (true) {
+            auto input = getKeyInput();
+            if (input == ESCAPE) {
+                done = true;
+                break;
+            } else if (input == ' ') {
+                break;
+            } else {
+                terminalBellSound();
+            }
         }
     }
-    // done with stats generation
 
     characterGetClass();
     playerCalculateStartGold();
